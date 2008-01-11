@@ -182,7 +182,8 @@ DayMan.prototype.synchronizeGroups = function(){
     this.totalEventVisible = this.MAX_EVENT_VISIBLE;
   }
   for (var i=0; i<this.events.length; i++) {
-    if (this.previousDay && this.previousDay.isInvisibleEventExist(this.events[i]) >= 0) {
+    if (this.previousDay && 
+        this.previousDay.isInvisibleEventExist(this.events[i]) >= 0) {
       this.invisibleGroup.push(this.events[i]);
     } else if(this.visibleGroup.length < this.totalEventVisible) {
       this.visibleGroup.push(this.events[i]);
@@ -199,6 +200,17 @@ DayMan.prototype.reIndex = function() {
   master : for (var i=0; i<this.visibleGroup.length; i++) {
     var eventTmp = this.visibleGroup[i];
     var eventIndex = i;
+    // check cross event conflic
+    if (this.previousDay && 
+        this.previousDay.visibleGroup[(this.MAX_EVENT_VISIBLE - 1)] == eventTmp &&
+        this.invisibleGroup.length > 0) {
+      this.invisibleGroup.push(eventTmp);
+      this.invisibleGroup = this.invisibleGroup.reverse();
+      this.visibleGroup.push(this.invisibleGroup.pop());
+      this.invisibleGroup = this.invisibleGroup.reverse();
+      continue;
+    } 
+    
     // check cross event
     if (this.previousDay) {
       eventIndex = this.previousDay.isVisibleEventExist(eventTmp);
@@ -463,33 +475,37 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
   }
   // Draw visible events
   for (var i=0; i<dayObj.visibleGroup.length; i++) {
-    if (!dayObj.visibleGroup[i] || 
-        (dayObj.previousDay && dayObj.previousDay.isVisibleEventExist(dayObj.visibleGroup[i]) >= 0)) {
+    var eventObj = dayObj.visibleGroup[i];
+    if (!eventObj || 
+        (dayObj.previousDay && 
+        dayObj.previousDay.isVisibleEventExist(eventObj) >= 0)) {
       continue;
     }
-    var eventObj = dayObj.visibleGroup[i];
     var startTime = eventObj.weekStartTimeIndex[weekObj.weekIndex];
     var endTime = eventObj.endTime > weekObj.endWeek ? weekObj.endWeek : eventObj.endTime;
     var delta = (new Date(parseInt(endTime))) - (new Date(parseInt(startTime)));
-    if (eventObj.toString().indexOf('event13') != -1) {
-//      debugger;
-    }
     delta /= (1000 * 60 * 60 *24);
-    if (delta > 1 && dayObj.nextDay) {
-      var tmp = dayObj;
-      var cnt = 1;
+    if (delta > 1 && 
+        dayObj.nextDay && 
+        i == (dayObj.MAX_EVENT_VISIBLE - 1)) {
+      if (eventObj.toString().indexOf('event1') != -1) {
+//        debugger;
+      }
+      var tmp = dayObj.nextDay;
+      var cnt = 0;
       while (tmp.nextDay && cnt<delta) {
-        if (tmp.nextDay.isInvisibleEventExist(eventObj) >= 0) {
+        if (tmp.isInvisibleEventExist(eventObj) >= 0) {
           break;
         }
         cnt++;
+        tmp = tmp.nextDay;
+      }
+      if (eventObj.toString().indexOf('event1') != -1) {
+//        debugger;
       }
       endTime = parseInt(startTime) + ((1000 * 60 * 60 * 24) * cnt);
     }
     dayInfo.eventTop = dayInfo.top + ((this.EVENT_BAR_HEIGH) * i);
-    if (eventObj.toString().indexOf('event13') != -1) {
-//      debugger;
-    }
     this.drawEvent(eventObj, startTime, endTime, weekObj.weekIndex, i, dayInfo);
   }
   
@@ -594,6 +610,9 @@ GUIMan.prototype.toggleMore = function() {
  */
 GUIMan.prototype.drawEvent = function(eventObj, startTime, endTime, weekIndex, eventIndex, dayInfo){
   var eventNode = eventObj.rootNode;
+  if (eventObj.toString().indexOf('event1') != -1) {
+//    debugger;
+  }
   if (eventNode.getAttribute('used')) {
     eventNode = eventNode.cloneNode(true);
     eventNode.setAttribute('eventclone', 'true');
@@ -612,7 +631,9 @@ GUIMan.prototype.drawEvent = function(eventObj, startTime, endTime, weekIndex, e
   endTime = new Date(parseInt(endTime));
   var endDay = endTime.getDay();
   // fix date
-  var delta = (endTime - startTime) / (1000 * 60 * 60 * 24);
+  var delta = ((new Date(parseInt(eventObj.endTime))) - (new Date(parseInt(eventObj.startTime))));
+//  delta = endTime - startTime;
+  delta /= (1000 * 60 * 60 * 24);
   if (delta > 1) {
     endDay ++;
     delta = endDay - startDay;
