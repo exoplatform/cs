@@ -1,4 +1,4 @@
-eXo.require('eXo.webui.UIContextMenu') ;
+eXo.require('eXo.cs.UIContextMenu','/csResources/javascript/') ;
 function UICalendarPortlet() {
 }
 
@@ -864,34 +864,21 @@ UICalendarPortlet.prototype.getEventsForFilter = function(events) {
 		}		
 	}
 	return el ;
-} ;	
-
-UICalendarPortlet.prototype.initFilter = function(obj, type){
-	if (type == 1) {
-		var checkbox = eXo.core.DOMUtil.findFirstChildByClass(obj, "input", "checkbox") ;
-		eXo.calendar.UICalendarPortlet.filterByCalendar(checkbox.name,checkbox.checked) ;
-		eXo.calendar.UICalendarPortlet.checkCategoryFilter() ;
-	} else if (type == 2) {
-		
-	} else {
-		return ;
-	}
 } ;
 
-UICalendarPortlet.prototype.filterByGroup = function(obj) { 
+UICalendarPortlet.prototype.filterByGroup = function() { 
 	var DOMUtil = eXo.core.DOMUtil ;
-	var uiVtab = DOMUtil.findAncestorByClass(obj, "CalendarSelectedFlatStyle") ;
-	var uiVTabContent = DOMUtil.findNextElementByTagName(uiVtab, "div") ;
-	var checkboxes = uiVTabContent.getElementsByTagName("input") ;
-	var checked = obj.checked ;
+	var uiVtab = DOMUtil.findAncestorByClass(this, "UIVTab") ;
+	var checkboxes = DOMUtil.findDescendantsByClass(uiVtab, "input","checkbox") ;	
+	var checked = this.checked ;
 	var len = checkboxes.length ;
 	for(var i = 0 ; i < len ; i ++) {
 		checkboxes[i].checked = checked ;
-		eXo.calendar.UICalendarPortlet.filterByCalendar(checkboxes[i].name, checked) ;
+		eXo.calendar.UICalendarPortlet.runFilterByCalendar(checkboxes[i].name, checked) ;
 	}
 } ;
 
-UICalendarPortlet.prototype.filterByCalendar = function(calendarId, status) {
+UICalendarPortlet.prototype.runFilterByCalendar = function(calid, checked) {
 	var uiCalendarViewContainer = document.getElementById("UICalendarViewContainer") ;
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
 	if (!uiCalendarViewContainer) return ;
@@ -901,8 +888,8 @@ UICalendarPortlet.prototype.filterByCalendar = function(calendarId, status) {
 	if (!events) return ;
 	var len = events.length ;
 	for(var i = 0 ; i < len ; i ++){
-		if (events[i].getAttribute("calId") == calendarId) {
-			if (status) {
+		if (events[i].getAttribute("calId") == calid) {
+			if (checked) {
 				events[i].style.display = "block" ;
 			}
 			else {
@@ -911,10 +898,37 @@ UICalendarPortlet.prototype.filterByCalendar = function(calendarId, status) {
 		}
 	}
 	try {	//TODO: review order javascript file loading
-		//if (document.getElementById("UIMonthView")) eXo.calendar.UIMonthView.init() ;
 		if (document.getElementById("UIDayViewGrid")) UICalendarPortlet.showEvent() ;
 		if (document.getElementById("UIWeekViewGrid")) eXo.calendar.UIWeekView.init() ;
-		//this.blockEvents = this.getBlockElements(uiCalendarViewContainer, className) ;
+	}
+	catch(e) {} ;
+
+} ;
+
+UICalendarPortlet.prototype.filterByCalendar = function() {
+	var calid = this.name ;
+	var checked = this.checked ;
+	var uiCalendarViewContainer = document.getElementById("UICalendarViewContainer") ;
+	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
+	if (!uiCalendarViewContainer) return ;
+	var className = "EventBoxes" ;
+	if (document.getElementById("UIWeekViewGrid")) className = "WeekViewEventBoxes" ; // TODO : review event box gettting
+	var events = eXo.core.DOMUtil.findDescendantsByClass(uiCalendarViewContainer, "div", className) ;
+	if (!events) return ;
+	var len = events.length ;
+	for(var i = 0 ; i < len ; i ++){
+		if (events[i].getAttribute("calId") == calid) {
+			if (checked) {
+				events[i].style.display = "block" ;
+			}
+			else {
+				events[i].style.display = "none" ;
+			}
+		}
+	}
+	try {	//TODO: review order javascript file loading
+		if (document.getElementById("UIDayViewGrid")) UICalendarPortlet.showEvent() ;
+		if (document.getElementById("UIWeekViewGrid")) eXo.calendar.UIWeekView.init() ;
 	}
 	catch(e) {} ;
 
@@ -953,6 +967,20 @@ UICalendarPortlet.prototype.filterByCategory = function(selectobj) {
 UICalendarPortlet.prototype.getFilterForm = function(form) {
 	if(typeof(form) == "string") form = document.getElementById(form) ;
 	this.filterForm = form ;
+	var CalendarGroup = eXo.core.DOMUtil.findDescendantsByClass(form, "input","CalendarGroup") ;
+	var CalendarItem = null ;
+	var uvTab = null ;
+	var len = CalendarGroup.length ;
+	var clen = 0 ;
+	for(var i = 0 ; i < len ; i ++) {
+		CalendarGroup[i].onclick = eXo.calendar.UICalendarPortlet.filterByGroup ;
+		uiVtab = eXo.core.DOMUtil.findAncestorByClass(CalendarGroup[i], "UIVTab") ;
+		CalendarItem = eXo.core.DOMUtil.findDescendantsByClass(uiVtab, "input","checkbox") ;
+		var clen = CalendarItem.length ;
+		for(var j = 0 ; j < clen ; j ++) {
+			CalendarItem[j].onclick = eXo.calendar.UICalendarPortlet.filterByCalendar ;
+		}
+	}
 } ;
 
 UICalendarPortlet.prototype.getFilterSelect = function(form) {
@@ -973,7 +1001,7 @@ UICalendarPortlet.prototype.checkCalendarFilter = function() {
 	var checkbox = null ;
 	for(var i = 0 ; i < len ; i ++) {
 		checkbox = eXo.core.DOMUtil.findFirstDescendantByClass(calendarItem[i], "div", "CheckBox") ;
-		this.initFilter(checkbox, 1) ;
+		this.filterByCalendar(checkbox.name, checkbox.checked) ;
 	}
 } ;
 
