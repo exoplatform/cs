@@ -1,4 +1,3 @@
-alert("TESTS") ;
 function UIContextMenu(){
 	this.menus = new Array,
 	this.attachedElement = null ;
