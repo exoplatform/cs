@@ -488,9 +488,6 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
     if (delta > 1 && 
         dayObj.nextDay && 
         i == (dayObj.MAX_EVENT_VISIBLE - 1)) {
-      if (eventObj.toString().indexOf('event1') != -1) {
-//        debugger;
-      }
       var tmp = dayObj.nextDay;
       var cnt = 0;
       while (tmp.nextDay && cnt<delta) {
@@ -499,9 +496,6 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
         }
         cnt++;
         tmp = tmp.nextDay;
-      }
-      if (eventObj.toString().indexOf('event1') != -1) {
-//        debugger;
       }
       endTime = parseInt(startTime) + ((1000 * 60 * 60 * 24) * cnt);
     }
@@ -610,9 +604,6 @@ GUIMan.prototype.toggleMore = function() {
  */
 GUIMan.prototype.drawEvent = function(eventObj, startTime, endTime, weekIndex, eventIndex, dayInfo){
   var eventNode = eventObj.rootNode;
-  if (eventObj.toString().indexOf('event1') != -1) {
-//    debugger;
-  }
   if (eventNode.getAttribute('used')) {
     eventNode = eventNode.cloneNode(true);
     eventNode.setAttribute('eventclone', 'true');
