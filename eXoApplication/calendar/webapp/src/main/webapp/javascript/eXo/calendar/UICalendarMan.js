@@ -254,6 +254,11 @@ WeekMan.prototype.putEvents2Days = function(){
     var endWeekTime = eventObj.endTime > this.endWeek ? this.endWeek : eventObj.endTime;
     var startDay = (new Date(parseInt(startWeekTime))).getDay();
     var endDay = (new Date(parseInt(endWeekTime))).getDay();
+    // fix date
+    var delta = (new Date(parseInt(eventObj.endTime))).getDate() - (new Date(parseInt(eventObj.startTime))).getDate();
+    if (delta == 1) {
+      endDay = startDay;
+    }
     for (var j=startDay; j<=endDay; j++) {
       this.days[j].events.push(eventObj);
     }
@@ -354,8 +359,8 @@ EventMan.prototype.sortByWeek = function(){
     var currentWeek = this.weeks[i];
     if (currentWeek.events.length > 1) {
       currentWeek.sortEvents();
-      currentWeek.putEvents2Days();
     }
+    currentWeek.putEvents2Days();
   }
 };
 
@@ -393,7 +398,7 @@ GUIMan.prototype.scrollTo = function() {
   var events = eXo.calendar.UICalendarMan.EventMan.events; 
   for(var i=0 ; i<events.length ; i++) {
     if(events[i].eventId == lastUpdatedId) {
-      this.rowContainerDay.scrollTop = events[i].rootNode.offsetTop - 16;
+      this.rowContainerDay.scrollTop = events[i].rootNode.offsetTop - 17;
       return ;
     }
   }
@@ -461,10 +466,16 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
     var startTime = eventObj.weekStartTimeIndex[weekObj.weekIndex];
     var endTime = eventObj.endTime > weekObj.endWeek ? weekObj.endWeek : eventObj.endTime;
     var delta = (new Date(parseInt(endTime))).getDate() - (new Date(parseInt(startTime))).getDate();
-    if (delta > 1 && 
-        dayObj.nextDay && 
-        dayObj.nextDay.isInvisibleEventExist(eventObj) >= 0) {
-      endTime = startTime;
+    if (delta > 1 && dayObj.nextDay) {
+      var tmp = dayObj;
+      var cnt = 1;
+      while (tmp.nextDay && cnt<delta) {
+        if (tmp.nextDay.isInvisibleEventExist(eventObj) >= 0) {
+          break;
+        }
+        cnt++;
+      }
+      endTime = parseInt(startTime) + ((1000 * 60 * 60 * 24) * cnt);
     }
     dayInfo.eventTop = dayInfo.top + ((this.EVENT_BAR_HEIGH) * i);
     this.drawEvent(eventObj, startTime, endTime, weekObj.weekIndex, i, dayInfo);
@@ -587,8 +598,13 @@ GUIMan.prototype.drawEvent = function(eventObj, startTime, endTime, weekIndex, e
   var leftPos = dayInfo.left;
   endTime = new Date(parseInt(endTime));
   var endDay = endTime.getDay();
-  endDay ++ ;
-  var eventLen = ((endDay - startDay) * (dayInfo.width)) - 1;
+  // fix date
+  var delta = endTime.getDate() - startTime.getDate();
+  if (delta > 1) {
+    endDay ++;
+  }
+  delta = endDay - startDay;
+  var eventLen = (delta * (dayInfo.width)) - delta;
   with (eventNode.style) {
     top = topPos + 'px';
     left = leftPos + 'px';
@@ -637,9 +653,9 @@ GUIMan.prototype.initHighlighter = function(form) {
 
 GUIMan.prototype.callbackHighlighter = function() {
   var Highlighter = eXo.calendar.Highlighter ;
-  var startTime = parseInt(Highlighter.firstCell.getAttribute("startTime")) ;
-  var endTime = parseInt(Highlighter.lastCell.getAttribute("startTime"))  + 24*60*60*1000 ;
-  eXo.webui.UIForm.submitEvent("UIMonthView" ,'QuickAdd','&objectId=Event&startTime=' + startTime + '&finishTime=' + endTime) ; 
+  var startTime = parseInt(Highlighter.firstCell.getAttribute('startTime'));
+  var endTime = parseInt(Highlighter.lastCell.getAttribute('startTime'));
+  eXo.webui.UIForm.submitEvent('UIMonthView' ,'QuickAdd','&objectId=Event&startTime=' + startTime + '&finishTime=' + endTime); 
 } ;
 
 eXo.calendar.UICalendarMan = {

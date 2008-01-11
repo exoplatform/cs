@@ -66,13 +66,31 @@ UICalendarDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj,
   }
   eXo.core.Browser.setOpacity(tmpNode, 50) ;
 //  clickBlock.parentNode.appendChild(tmpNode);
-  document.body.appendChild(tmpNode);
+  var UIMonthViewNode = document.createElement('div');
+  UIMonthViewNode.className = 'UIMonthView';
+  var EventMonthContentNode = document.createElement('div');
+  EventMonthContentNode.className = 'EventMonthContent';
+  
+  with (UIMonthViewNode.style) {
+    position = 'absolute';
+    padding = '0px';
+    margin = '0px';
+  }
+  with (EventMonthContentNode.style) {
+    position = 'absolute';
+    padding = '0px';
+    margin = '0px';
+  }
+  
+  EventMonthContentNode.appendChild(tmpNode);
+  UIMonthViewNode.appendChild(EventMonthContentNode);
+  document.body.appendChild(UIMonthViewNode);
   
   this.DragDrop.initCallback = this.initCallback ;
   this.DragDrop.dragCallback = this.dragCallback ;
   this.DragDrop.dropCallback = this.dropCallback ;
   
-  this.DragDrop.init(dropableObjs, clickBlock, tmpNode, e) ;
+  this.DragDrop.init(dropableObjs, clickBlock, UIMonthViewNode, e) ;
   return false ;
 } ;
 
@@ -84,8 +102,8 @@ UICalendarDragDrop.prototype.synDragObjectPos = function(dndEvent) {
     }
   }
   var dragObject = dndEvent.dragObject ;
-  var mouseX = eXo.core.Browser.findMouseXInPage(dndEvent.backupMouseEvent) ;
-  var mouseY = eXo.core.Browser.findMouseYInPage(dndEvent.backupMouseEvent) ;
+  var mouseX = eXo.core.Browser.findMouseXInClient(dndEvent.backupMouseEvent) ;
+  var mouseY = eXo.core.Browser.findMouseYInClient(dndEvent.backupMouseEvent) ;
   dragObject.style.top = mouseY + 'px' ;
   dragObject.style.left = mouseX + 'px' ;
 } ;
