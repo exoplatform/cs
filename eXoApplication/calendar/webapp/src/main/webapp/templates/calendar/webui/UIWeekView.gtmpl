@@ -20,7 +20,7 @@
 	workingStart = uicomponent.getCalendarSetting().getWorkingTimeBegin() ;
   rcontext.getJavascriptManager().importJavascript('eXo.calendar.UIWeekView','/calendar/javascript/') ;
   int defaultTimeInterval = uicomponent.getDefaultTimeInterval() ;
-  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.setting(' + defaultTimeInterval + ', "' + workingStart + '") ;') ;
+  //rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.setting(' + defaultTimeInterval + ', "' + workingStart + '") ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UIWeekView.init() ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkFilter() ;') ;
 	rcontext.getJavascriptManager().addJavascript('eXo.calendar.UIWeekView.initSelection() ;') ;

@@ -1,6 +1,5 @@
 eXo.require('eXo.webui.UIContextMenu') ;
 function UICalendarPortlet() {
-	//this.clearSessionTimeout() ;
 }
 
 /* utility method */
@@ -112,13 +111,14 @@ UICalendarPortlet.prototype.getWeekNumber = function(now) {
 /* common method */
 
 UICalendarPortlet.prototype.setting = function() {
-	// paras 1: time interval, paras 2: working time, paras 3: time format type 
+	// paras 1: time interval, paras 2: working time, paras 3: time format type, paras 4: portletid
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
-	UICalendarPortlet.interval = ((arguments.length > 0) && (isNaN(parseInt(arguments[0])) == false )) ? parseInt(arguments[0]) : parseInt(15) ;
+	this.interval = ((arguments.length > 0) && (isNaN(parseInt(arguments[0])) == false )) ? parseInt(arguments[0]) : parseInt(15) ;
 	var workingStart =  ((arguments.length > 1) && (isNaN(parseInt(arguments[1])) == false ) && (arguments[1] != "null")) ? arguments[1] : "" ;
 	workingStart = Date.parse("1/1/2007 " + workingStart) ;
-	UICalendarPortlet.workingStart = UICalendarPortlet.timeToMin(workingStart) ;
-	UICalendarPortlet.timeFormat = (arguments.length > 2) ? (new String(arguments[2])).trim() : null ;
+	this.workingStart = UICalendarPortlet.timeToMin(workingStart) ;
+	this.timeFormat = (arguments.length > 2) ? (new String(arguments[2])).trim() : null ;
+	this.portletName = arguments[3] ;
 } ;
 
 UICalendarPortlet.prototype.setFocus = function(obj, events, container) {
@@ -182,7 +182,7 @@ UICalendarPortlet.prototype.show = function(obj, evt) {
 	var _e = window.event || evt ;
 	_e.cancelBubble = true ;
 	var DOMUtil = eXo.core.DOMUtil ;
-	var uiCalendarPortlet =	document.getElementById("UICalendarPortlet") ;
+	var uiCalendarPortlet =	document.getElementById(this.portletName) ;
 	var contentContainer = DOMUtil.findFirstDescendantByClass(uiCalendarPortlet, "div", "ContentContainer") ;
 	var	uiPopupCategory = DOMUtil.findNextElementByTagName(contentContainer,  "div") ;
 	var newPos = {
@@ -699,8 +699,10 @@ UICalendarPortlet.prototype.adjustTime = function(currentStart, currentEnd, obj)
 
 /* for showing context menu */
 
-UICalendarPortlet.prototype.showContextMenu = function() {	
+UICalendarPortlet.prototype.showContextMenu = function(compid) {	
 	var UIContextMenu = eXo.webui.UIContextMenu ;
+	this.portletName = compid ;
+	UIContextMenu.portletName = this.portletName ;
 	var config = {
 		'preventDefault':false, 
 		'preventForms':false
@@ -869,7 +871,6 @@ UICalendarPortlet.prototype.initFilter = function(obj, type){
 		var checkbox = eXo.core.DOMUtil.findFirstChildByClass(obj, "input", "checkbox") ;
 		eXo.calendar.UICalendarPortlet.filterByCalendar(checkbox.name,checkbox.checked) ;
 		eXo.calendar.UICalendarPortlet.checkCategoryFilter() ;
-
 	} else if (type == 2) {
 		
 	} else {
@@ -963,7 +964,6 @@ UICalendarPortlet.prototype.getFilterSelect = function(form) {
 
 UICalendarPortlet.prototype.checkFilter = function() {
 	this.checkCalendarFilter() ;
-	//this.checkCategoryFilter() ;
 } ;
 
 UICalendarPortlet.prototype.checkCalendarFilter = function() {
@@ -997,12 +997,12 @@ UICalendarPortlet.prototype.swapMenu = function(oldmenu, clickobj) {
 	if (arguments.length > 2) { // Customize position of menu with an object that have 2 properties x, y 
 		menuX = arguments[2].x ;
 		menuY = arguments[2].y ;
-	}	
-	if(document.getElementById("tmpMenuElement")) document.getElementById("UIPortalApplication").removeChild(document.getElementById("tmpMenuElement")) ;
+	}
+	if(document.getElementById("tmpMenuElement")) document.getElementById(UICalendarPortlet.portletName).removeChild(document.getElementById("tmpMenuElement")) ;
 	var tmpMenuElement = oldmenu.cloneNode(true) ;
 	tmpMenuElement.setAttribute("id","tmpMenuElement") ;
 	UICalendarPortlet.menuElement = tmpMenuElement ;
-	document.getElementById("UIPortalApplication").appendChild(tmpMenuElement) ;
+	document.getElementById(UICalendarPortlet.portletName).appendChild(tmpMenuElement) ;
 	
 	
 	UICalendarPortlet.menuElement.style.top = menuY + "px" ;

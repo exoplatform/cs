@@ -13,8 +13,8 @@
   String timeFormat = calendarSetting.getTimeFormat() ;
 	def rcontext = _ctx.getRequestContext() ;
   rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarPortlet','/calendar/javascript/') ;
-  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showContextMenu() ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.setting(' + timeStep + ', "' + workingStart + '", "' + timeFormat +'") ;') ;
+  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showContextMenu("'+ uicomponent.id +'") ;') ;
   rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICombobox','/calendar/javascript/') ;
   rcontext.getJavascriptManager().importJavascript('eXo.calendar.Highlighter','/calendar/javascript/') ;
 %>
