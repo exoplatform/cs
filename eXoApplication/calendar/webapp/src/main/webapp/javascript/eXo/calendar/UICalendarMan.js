@@ -1,3 +1,7 @@
+/**
+ * @author Uoc Nguyen
+ */
+
 function QuickSortObject(){
   this.processArray = false;
   this.desc = false;
@@ -255,7 +259,8 @@ WeekMan.prototype.putEvents2Days = function(){
     var startDay = (new Date(parseInt(startWeekTime))).getDay();
     var endDay = (new Date(parseInt(endWeekTime))).getDay();
     // fix date
-    var delta = (new Date(parseInt(eventObj.endTime))).getDate() - (new Date(parseInt(eventObj.startTime))).getDate();
+    var delta = (new Date(parseInt(eventObj.endTime))) - (new Date(parseInt(eventObj.startTime)));
+    delta /= (1000 * 60 * 60 * 24);
     if (delta == 1) {
       endDay = startDay;
     }
@@ -465,7 +470,11 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
     var eventObj = dayObj.visibleGroup[i];
     var startTime = eventObj.weekStartTimeIndex[weekObj.weekIndex];
     var endTime = eventObj.endTime > weekObj.endWeek ? weekObj.endWeek : eventObj.endTime;
-    var delta = (new Date(parseInt(endTime))).getDate() - (new Date(parseInt(startTime))).getDate();
+    var delta = (new Date(parseInt(endTime))) - (new Date(parseInt(startTime)));
+    if (eventObj.toString().indexOf('event13') != -1) {
+//      debugger;
+    }
+    delta /= (1000 * 60 * 60 *24);
     if (delta > 1 && dayObj.nextDay) {
       var tmp = dayObj;
       var cnt = 1;
@@ -478,6 +487,9 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
       endTime = parseInt(startTime) + ((1000 * 60 * 60 * 24) * cnt);
     }
     dayInfo.eventTop = dayInfo.top + ((this.EVENT_BAR_HEIGH) * i);
+    if (eventObj.toString().indexOf('event13') != -1) {
+//      debugger;
+    }
     this.drawEvent(eventObj, startTime, endTime, weekObj.weekIndex, i, dayInfo);
   }
   
@@ -599,11 +611,13 @@ GUIMan.prototype.drawEvent = function(eventObj, startTime, endTime, weekIndex, e
   endTime = new Date(parseInt(endTime));
   var endDay = endTime.getDay();
   // fix date
-  var delta = endTime.getDate() - startTime.getDate();
+  var delta = (endTime - startTime) / (1000 * 60 * 60 * 24);
   if (delta > 1) {
     endDay ++;
+    delta = endDay - startDay;
+  } else {
+    delta = 1;
   }
-  delta = endDay - startDay;
   var eventLen = (delta * (dayInfo.width)) - delta;
   with (eventNode.style) {
     top = topPos + 'px';
@@ -654,7 +668,7 @@ GUIMan.prototype.initHighlighter = function(form) {
 GUIMan.prototype.callbackHighlighter = function() {
   var Highlighter = eXo.calendar.Highlighter ;
   var startTime = parseInt(Highlighter.firstCell.getAttribute('startTime'));
-  var endTime = parseInt(Highlighter.lastCell.getAttribute('startTime'));
+  var endTime = parseInt(Highlighter.lastCell.getAttribute('startTime')) + (1000 * 60 * 60 * 24);
   eXo.webui.UIForm.submitEvent('UIMonthView' ,'QuickAdd','&objectId=Event&startTime=' + startTime + '&finishTime=' + endTime); 
 } ;
 
