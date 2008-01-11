@@ -1,4 +1,4 @@
-eXo.require('eXo.webui.UIContextMenu') ;
+eXo.require('eXo.cs.UIContextMenu','/csResources/javascript/') ;
 function UIMailPortlet(){
 };
 
