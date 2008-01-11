@@ -1004,14 +1004,13 @@ public class JCRDataStorage{
         if (property.equals(Utils.EXO_STAR)) {
           msgNode.setProperty(Utils.EXO_STAR, ! msgNode.getProperty(Utils.EXO_STAR).getBoolean());
         } else if (property.equals(Utils.EXO_ISUNREAD)) {
-          boolean isUnread = msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean();
+          Boolean isUnread = msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean();
           msgNode.setProperty(Utils.EXO_ISUNREAD, !isUnread);
           
-          Boolean isRootConversation = msgNode.getProperty(Utils.EXO_ISROOT).getBoolean();
           Node currentFolderNode = folderHome.getNode(msgNode.getProperty(Utils.EXO_FOLDERS).getValues()[0].getString());
-          if (isUnread && isRootConversation) {
+          if (isUnread) {
             currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() - 1));
-          } else if (! isUnread && isRootConversation) {
+          } else {
             currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() + 1));
           }
           currentFolderNode.getSession().save();
