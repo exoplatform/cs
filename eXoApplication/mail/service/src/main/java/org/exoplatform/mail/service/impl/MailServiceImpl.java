@@ -22,7 +22,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Properties;
@@ -32,7 +31,6 @@ import javax.activation.DataHandler;
 import javax.jcr.Node;
 import javax.mail.AuthenticationFailedException;
 import javax.mail.Flags;
-import javax.mail.Header;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Part;
@@ -418,9 +416,9 @@ public class MailServiceImpl implements MailService{
   }
   
   private void saveMessage(SessionProvider sProvider, javax.mail.Message msg, Node messagesNode, String accId, String username, String folderId) throws Exception {
-    String messageId = getMessageId(msg) ;
-  	Node node = messagesNode.addNode(messageId, Utils.EXO_MESSAGE) ;
-    node.setProperty(Utils.EXO_ID, messageId);
+    Message newMsg = new Message();
+  	Node node = messagesNode.addNode(newMsg.getId(), Utils.EXO_MESSAGE) ;
+    node.setProperty(Utils.EXO_ID, newMsg.getId());
   	node.setProperty(Utils.EXO_ACCOUNT, accId);
     node.setProperty(Utils.EXO_FROM, InternetAddress.toString(msg.getFrom()));
     node.setProperty(Utils.EXO_TO, InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.TO)));
@@ -457,9 +455,9 @@ public class MailServiceImpl implements MailService{
       setPart(msg, node);
     }
     
-    node.setProperty(Utils.EXO_MESSAGEIDS, new String[] {messageId});
+    node.setProperty(Utils.EXO_MESSAGEIDS, new String[] {newMsg.getId()});
     node.setProperty(Utils.EXO_ADDRESSES, new String[] {});
-    node.setProperty(Utils.EXO_ROOT, messageId);
+    node.setProperty(Utils.EXO_ROOT, newMsg.getId());
   	
     Node folderHomeNode = storage_.getFolderHome(sProvider, username, accId) ;
     if (folderHomeNode.hasNode(folderId)) { 
@@ -468,27 +466,7 @@ public class MailServiceImpl implements MailService{
       folderNode.setProperty(Utils.EXO_TOTALMESSAGE , folderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() + 1) ;
     }
   }
-  
-  public String getMessageId(javax.mail.Message message) {
-    String messageid = "";
-    try {
-      // Retrieve message id from headers
-      Enumeration e = message.getAllHeaders();
-      while (messageid.equals(""))
-      {
-        Header header = (Header) e.nextElement();
-        if (header.getName().equals("Message-ID"))
-        {
-          messageid = header.getValue();
-        }
-      }
-    } catch (Exception e) {
-      System.out.println("Error in getMessageId()" + e);
-    }
-    return messageid;
-  }
-  
-  
+
   private long getPriority(javax.mail.Message msg) throws Exception {
     String[] xPriority = msg.getHeader("X-Priority");
     String[] importance = msg.getHeader("Importance");
