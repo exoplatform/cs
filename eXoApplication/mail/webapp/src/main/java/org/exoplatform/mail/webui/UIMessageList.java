@@ -92,7 +92,8 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UIMessageList.AddContactActionListener.class),
         @EventConfig(listeners = UIMessageList.ImportActionListener.class),
         @EventConfig(listeners = UIMessageList.ExportActionListener.class),
-        @EventConfig(listeners = UIMessageList.SortActionListener.class)
+        @EventConfig(listeners = UIMessageList.SortActionListener.class),
+        @EventConfig(listeners = UIMessageList.RefreshActionListener.class)
     }
 )
 
@@ -877,12 +878,10 @@ public class UIMessageList extends UIForm {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ; 
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
-      MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
-      String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      uiMessageList.setMessagePageList(mailSrv.getMessagePageListByFolder(SessionsUtils.getSessionProvider(), username, accountId, uiMessageList.selectedFolderId_));
+      uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class));
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
     }
   }
   

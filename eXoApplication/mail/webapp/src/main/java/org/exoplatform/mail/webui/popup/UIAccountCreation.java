@@ -300,7 +300,6 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
           UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class);
           uiSelectAccount.updateAccount();
           uiSelectAccount.setSelectedValue(acc.getId());
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UINavigationContainer.class)); 
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet); 
           mailSvr.checkMail(username, acc.getId()) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UINavigationContainer.class)); 
