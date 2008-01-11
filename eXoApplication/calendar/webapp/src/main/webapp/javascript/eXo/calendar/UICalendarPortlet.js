@@ -771,7 +771,6 @@ UICalendarPortlet.prototype.weekViewCallback = function(evt) {
 	var map = null ;
 	var obj = null ;
 	var items = DOMUtil.findDescendantsByTagName(UIContextMenu.menuElement,"a") ;
-	//if (DOMUtil.hasClass(src,"EventContainerBorder") || DOMUtil.hasClass(src,"EventContainerBar") || DOMUtil.hasClass(src,"EventContainer") || DOMUtil.hasClass(src,"ResizeEventContainer") || (src.tagName.toLowerCase() == "p")) {
 	if (DOMUtil.findAncestorByClass(src, "WeekViewEventBoxes") || DOMUtil.hasClass(src, "WeekViewEventBoxes")) {
 		var obj = (DOMUtil.findAncestorByClass(src, "WeekViewEventBoxes"))? DOMUtil.findAncestorByClass(src, "WeekViewEventBoxes") : src ;
 		var eventId = obj.getAttribute("eventid") ;
@@ -873,8 +872,9 @@ UICalendarPortlet.prototype.filterByGroup = function() {
 	var checked = this.checked ;
 	var len = checkboxes.length ;
 	for(var i = 0 ; i < len ; i ++) {
-		checkboxes[i].checked = checked ;
 		eXo.calendar.UICalendarPortlet.runFilterByCalendar(checkboxes[i].name, checked) ;
+		if (checkboxes[i].checked == checked) continue ;
+		checkboxes[i].checked = checked ;
 	}
 } ;
 
@@ -934,21 +934,20 @@ UICalendarPortlet.prototype.filterByCalendar = function() {
 
 } ;
 
-UICalendarPortlet.prototype.initFilterByCategory = function(obj) {
-	var selectbox = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "select", "selectbox") ;
-	var onchange = selectbox.getAttribute("onchange") ;
-	if (!onchange) selectbox.onchange = new Function("eXo.calendar.UICalendarPortlet.filterByCategory(this)") ;
-} ;
+//UICalendarPortlet.prototype.initFilterByCategory = function(obj) {
+//	var selectbox = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "select", "selectbox") ;
+//	var onchange = selectbox.getAttribute("onchange") ;
+//	if (!onchange) selectbox.onchange = new Function("eXo.calendar.UICalendarPortlet.filterByCategory(this)") ;
+//} ;
 
-UICalendarPortlet.prototype.filterByCategory = function(selectobj) {
+UICalendarPortlet.prototype.filterByCategory = function() {
 	var uiCalendarViewContainer = document.getElementById("UICalendarViewContainer") ;
 	if (!uiCalendarViewContainer) return ;
-	if(typeof(selectobj) == "string") selectobj = document.getElementById(selectobj) ;
-	var category = selectobj.options[selectobj.selectedIndex].value ;
+	var category = this.options[this.selectedIndex].value ;
 	var className = "EventBoxes" ;
 	if (document.getElementById("UIWeekViewGrid")) className = "WeekViewEventBoxes" ; // TODO : review event box gettting
 	var allEvents = eXo.core.DOMUtil.findDescendantsByClass(uiCalendarViewContainer, "div", className) ;
-	var events = this.getEventsForFilter(allEvents) ;
+	var events = eXo.calendar.UICalendarPortlet.getEventsForFilter(allEvents) ;
 	if (!events) return ;
 	var len = events.length ;
 	for(var i = 0 ; i < len ; i ++){
@@ -967,7 +966,7 @@ UICalendarPortlet.prototype.filterByCategory = function(selectobj) {
 UICalendarPortlet.prototype.getFilterForm = function(form) {
 	if(typeof(form) == "string") form = document.getElementById(form) ;
 	this.filterForm = form ;
-	var CalendarGroup = eXo.core.DOMUtil.findDescendantsByClass(form, "input","CalendarGroup") ;
+	var CalendarGroup = eXo.core.DOMUtil.findDescendantsByClass(form, "input","CalendarGroup") ;	
 	var CalendarItem = null ;
 	var uvTab = null ;
 	var len = CalendarGroup.length ;
@@ -987,6 +986,8 @@ UICalendarPortlet.prototype.getFilterSelect = function(form) {
 	if(typeof(form) == "string") form = document.getElementById(form) ;
 	var eventCategory = eXo.core.DOMUtil.findFirstDescendantByClass(form, "div", "EventCategory") ;
 	select = eXo.core.DOMUtil.findDescendantsByTagName(eventCategory, "select")[0] ;
+	var onchange = select.getAttribute("onchange") ;
+	if (!onchange) select.onchange = eXo.calendar.UICalendarPortlet.filterByCategory ;
 	this.filterSelect = select ;
 } ;
 
@@ -996,12 +997,10 @@ UICalendarPortlet.prototype.checkFilter = function() {
 
 UICalendarPortlet.prototype.checkCalendarFilter = function() {
 	if(!this.filterForm) return ;
-	var calendarItem = eXo.core.DOMUtil.findDescendantsByClass(this.filterForm, "div", "CalendarItem") ;
-	var len = calendarItem.length ;
-	var checkbox = null ;
-	for(var i = 0 ; i < len ; i ++) {
-		checkbox = eXo.core.DOMUtil.findFirstDescendantByClass(calendarItem[i], "div", "CheckBox") ;
-		this.filterByCalendar(checkbox.name, checkbox.checked) ;
+	var checkbox = eXo.core.DOMUtil.findDescendantsByClass(this.filterForm, "input", "checkbox") ;
+	var len = checkbox.length ;
+	for(var i = 0 ; i < len ; i ++) {		
+		this.runFilterByCalendar(checkbox[i].name, checkbox[i].checked) ;
 	}
 } ;
 
