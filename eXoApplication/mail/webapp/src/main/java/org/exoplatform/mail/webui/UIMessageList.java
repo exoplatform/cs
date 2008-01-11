@@ -183,7 +183,9 @@ public class UIMessageList extends UIForm {
   }
   
   public void updateList() throws Exception {
-    updateList(pageList_.getCurrentPage());
+    long page = pageList_.getCurrentPage();
+    if (pageList_ == null) page = 1 ;
+    updateList(page);
   }
   
   public void updateList(long page) throws Exception {
