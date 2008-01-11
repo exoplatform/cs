@@ -503,7 +503,7 @@ UICalendarPortlet.prototype.showEvent = function() {
 } ;
 
 UICalendarPortlet.prototype.browserResizeCallback = function() {
-	if (eXo.calendar.UICalendarPortlet.items) return ;
+	if (!eXo.calendar.UICalendarPortlet.items) return ;
 	eXo.calendar.UICalendarPortlet.adjustWidth(eXo.calendar.UICalendarPortlet.items) ;
 }
 
