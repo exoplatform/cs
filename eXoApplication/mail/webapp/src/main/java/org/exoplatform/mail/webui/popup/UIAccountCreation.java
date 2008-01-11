@@ -283,6 +283,9 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
       try {
         uiAccCreation.saveForm(uiPortlet.getCurrentUser(), acc) ;
+        UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class);
+        uiSelectAccount.updateAccount();
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectAccount); 
         uiAccCreation.getAncestorOfType(UIPopupAction.class).deActivate() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiAccCreation.getAncestorOfType(UIPopupAction.class)) ;
       } catch (Exception e) {
@@ -298,7 +301,6 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
           mailSvr.updateCurrentAccount(SessionsUtils.getSessionProvider(), username, acc.getId());
           uiPortlet.findFirstComponentOfType(UIMessageList.class).init(acc.getId());
           UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class);
-          uiSelectAccount.updateAccount();
           uiSelectAccount.setSelectedValue(acc.getId());
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet); 
           mailSvr.checkMail(username, acc.getId()) ;
