@@ -30,8 +30,10 @@ import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIFolderForm;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UIRenameFolderForm;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -114,6 +116,14 @@ public class UIFolderContainer extends UIContainer {
   static public class AddFolderActionListener extends EventListener<UIFolderContainer> {
     public void execute(Event<UIFolderContainer> event) throws Exception {
       UIFolderContainer uiFolder = event.getSource() ;
+      UIMailPortlet uiPortlet = uiFolder.getAncestorOfType(UIMailPortlet.class);
+      UIApplication uiApp = uiFolder.getAncestorOfType(UIApplication.class) ;
+      String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
+      if(Utils.isEmptyField(accId)) {
+        uiApp.addMessage(new ApplicationMessage("UIFolderContainer.msg.account-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       UIPopupAction uiPopup = uiFolder.getAncestorOfType(UIMailPortlet.class).getChild(UIPopupAction.class) ;
       uiPopup.activate(UIFolderForm.class, 450) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder.getAncestorOfType(UIMailPortlet.class)) ;

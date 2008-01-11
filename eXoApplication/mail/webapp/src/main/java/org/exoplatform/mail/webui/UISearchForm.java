@@ -57,9 +57,16 @@ public class UISearchForm extends UIForm {
   static  public class SearchActionListener extends EventListener<UISearchForm> {
     public void execute(Event<UISearchForm> event) throws Exception {
       UISearchForm uiSearchForm = event.getSource();
+      UIMailPortlet uiPortlet = uiSearchForm.getAncestorOfType(UIMailPortlet.class) ;
       String text = uiSearchForm.getUIStringInput(FIELD_SEARCHVALUE).getValue();
       MessageFilter filter = new MessageFilter("Search"); 
       UIApplication uiApp = uiSearchForm.getAncestorOfType(UIApplication.class) ;
+      String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
+      if(Utils.isEmptyField(accId)) {
+        uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.account-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       if(text == null || text.length() == 0) {
         uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.no-text-to-search", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -77,8 +84,6 @@ public class UISearchForm extends UIForm {
         filter.setSearchQuery(searchQuery);
       }
       filter.setAccountId(MailUtils.getAccountId());      
-      
-      UIMailPortlet uiPortlet = uiSearchForm.getAncestorOfType(UIMailPortlet.class) ;
       
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);      
       String username = uiPortlet.getCurrentUser();
@@ -100,6 +105,13 @@ public class UISearchForm extends UIForm {
     public void execute(Event<UISearchForm> event) throws Exception {
       UISearchForm uiSearchForm = event.getSource() ;
       UIMailPortlet uiPortlet = uiSearchForm.getAncestorOfType(UIMailPortlet.class) ;
+      UIApplication uiApp = uiSearchForm.getAncestorOfType(UIApplication.class) ;
+      String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
+      if(Utils.isEmptyField(accId)) {
+        uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.account-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
       UIAdvancedSearchForm uiAdvanceSearch = uiPopupAction.createUIComponent(UIAdvancedSearchForm.class, null, null);
       uiPopupAction.activate(uiAdvanceSearch, 600, 0 , false);    

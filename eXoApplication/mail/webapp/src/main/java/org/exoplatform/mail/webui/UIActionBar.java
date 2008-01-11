@@ -74,11 +74,9 @@ public class UIActionBar extends UIContainer {
       UIActionBar uiActionBar = event.getSource() ;
       UIMailPortlet uiPortlet = uiActionBar.getAncestorOfType(UIMailPortlet.class) ;
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
-      UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
-      UISelectAccount uiSelect = uiNavigation.getChild(UISelectAccount.class) ;
       MailService mailSvr = uiActionBar.getApplicationComponent(MailService.class) ;
       UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
-      String accId = uiSelect.getSelectedValue() ;
+      String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
       if(Utils.isEmptyField(accId)) {
         uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -172,6 +170,13 @@ public class UIActionBar extends UIContainer {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ; 
       UIMailPortlet uiPortlet = uiActionBar.getAncestorOfType(UIMailPortlet.class);
+      UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
+      String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
+      if(Utils.isEmptyField(accId)) {
+        uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       UIPopupAction uiPopupAction = uiPortlet.findFirstComponentOfType(UIPopupAction.class);
       UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class, null, "UIPopupActionFilterContainer");
       uiPopupAction.activate(uiPopupContainer, 600, 0, false) ;
@@ -185,6 +190,13 @@ public class UIActionBar extends UIContainer {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ; 
       UIMailPortlet mailPortlet = uiActionBar.getParent() ;
+      UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
+      String accId = mailPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
+      if(Utils.isEmptyField(accId)) {
+        uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       UIPopupAction uiPopupAction = mailPortlet.getChild(UIPopupAction.class) ;
       UIMailSettings uiMailSetting = uiPopupAction.activate(UIMailSettings.class, 750) ;
       MailService mailSrv = uiActionBar.getApplicationComponent(MailService.class);
