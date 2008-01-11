@@ -151,7 +151,7 @@ public class UIFolderContainer extends UIContainer {
       uiMessageList.setSelectedTagId(null);
       uiMessageList.init(accountId);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent()) ;
     }
   }
   

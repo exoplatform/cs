@@ -475,11 +475,15 @@ public class JCRDataStorage{
   
   public void updateCurrentAccount(SessionProvider sProvider, String username, String accountId) throws Exception{
   	Node mailHome = getMailHomeNode(sProvider, username) ;
+    Node mailSetting = null;
     if (mailHome.hasNode(Utils.EXO_MAIL_SETTING)) {
-    	Node mailSetting = mailHome.getNode(Utils.EXO_MAIL_SETTING) ;
-    	mailSetting.setProperty(Utils.EXO_DEFAULT_ACCOUNT, accountId) ;
-    	mailSetting.save() ;
+      mailSetting = mailHome.getNode(Utils.EXO_MAIL_SETTING);
+    } else {
+      mailSetting = mailHome.addNode(Utils.EXO_MAIL_SETTING, Utils.EXO_MAIL_SETTING);
     }
+    mailSetting = mailHome.getNode(Utils.EXO_MAIL_SETTING) ;
+    mailSetting.setProperty(Utils.EXO_DEFAULT_ACCOUNT, accountId) ;
+    mailHome.getSession().save() ;
   }
   
   public void saveMessage(SessionProvider sProvider, String username, String accountId, Message message, boolean isNew) throws Exception {

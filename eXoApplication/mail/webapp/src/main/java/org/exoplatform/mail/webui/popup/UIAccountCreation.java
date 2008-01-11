@@ -21,6 +21,7 @@ import java.util.Map;
 
 import javax.mail.AuthenticationFailedException;
 
+import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
@@ -28,6 +29,8 @@ import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.Selector;
 import org.exoplatform.mail.webui.UIMailPortlet;
+import org.exoplatform.mail.webui.UIMessageArea;
+import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UINavigationContainer;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.WizardStep;
@@ -178,7 +181,7 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
     MailService mailSvr = getApplicationComponent(MailService.class) ;
     UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class) ;
     String username = uiPortlet.getCurrentUser() ;
-    mailSvr.checkNewMessage(SessionsUtils.getSessionProvider(), username, accountId) ;
+    mailSvr.checkMail(username, accountId) ;
   }
 
   protected void resetForm() {
@@ -280,9 +283,6 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
       try {
         uiAccCreation.saveForm(uiPortlet.getCurrentUser(), acc) ;
-        uiNavigation.getChild(UISelectAccount.class).refreshItems() ;
-        uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.create-acc-successfully", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         uiAccCreation.getAncestorOfType(UIPopupAction.class).deActivate() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiAccCreation.getAncestorOfType(UIPopupAction.class)) ;
       } catch (Exception e) {
@@ -293,7 +293,18 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       } 
       if(uiAccWs5.isGetmail()) {
         try {
-          uiAccCreation.getMail(acc.getId()) ;
+          MailService mailSvr = MailUtils.getMailService() ;
+          String username = uiPortlet.getCurrentUser() ;
+          mailSvr.updateCurrentAccount(SessionsUtils.getSessionProvider(), username, acc.getId());
+          uiPortlet.findFirstComponentOfType(UIMessageList.class).init(acc.getId());
+          UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class);
+          uiSelectAccount.updateAccount();
+          uiSelectAccount.setSelectedValue(acc.getId());
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UINavigationContainer.class)); 
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet); 
+          mailSvr.checkMail(username, acc.getId()) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UINavigationContainer.class)); 
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class)); 
         } catch (AuthenticationFailedException afe) {
           uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.userName-password-incorrect", null, ApplicationMessage.ERROR)) ;
           uiAccCreation.viewStep(4) ;
