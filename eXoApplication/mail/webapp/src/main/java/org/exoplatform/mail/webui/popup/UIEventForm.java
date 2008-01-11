@@ -508,7 +508,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
           }else if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)){
             CalendarUtils.getCalendarService().saveEventToSharedCalendar(SessionsUtils.getSystemProvider(), username, calendarId, calendarEvent, uiForm.isAddNew_) ;
           }else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)){
-            CalendarUtils.getCalendarService().saveGroupEvent(SessionsUtils.getSystemProvider(), calendarId, calendarEvent, uiForm.isAddNew_) ;          
+            CalendarUtils.getCalendarService().savePublicEvent(SessionsUtils.getSystemProvider(), calendarId, calendarEvent, uiForm.isAddNew_) ;          
           }
           uiForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;

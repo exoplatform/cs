@@ -107,12 +107,13 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     setCalendarName(cal.getName()) ;
     boolean canEdit = false ;
     if(cal.getEditPermission() != null) {
-      for(String editPerm : cal.getEditPermission() ) {
+      canEdit = Arrays.asList(cal.getEditPermission()).contains(username) ;
+      /*for(String editPerm : cal.getEditPermission() ) {
         if(editPerm !=null && editPerm.equals(username)) {
           canEdit = true ;
           break ;
         }
-      }
+      }*/
     }
     setCanEdit(canEdit) ;
   }

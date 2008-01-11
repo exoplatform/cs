@@ -109,7 +109,8 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     List<SelectItemOption<String>> toOptions = CalendarUtils.getTimesSelectBoxOptions(calendarSetting.getTimeFormat(),calendarSetting.getTimeFormat()) ;
     getUIFormCombobox(FIELD_FROM_TIME).setOptions(fromOptions) ;
     getUIFormCombobox(FIELD_TO_TIME).setOptions(toOptions) ;
-    java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
+    UIMiniCalendar miniCalendar = getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
+    java.util.Calendar cal = miniCalendar.getCurrentCalendar() ;
     if(startTime != null) cal.setTimeInMillis(Long.parseLong(startTime)) ;
     else {
       cal.set(java.util.Calendar.MINUTE, (cal.get(java.util.Calendar.MINUTE)/CalendarUtils.DEFAULT_TIMEITERVAL)*CalendarUtils.DEFAULT_TIMEITERVAL) ;
@@ -160,7 +161,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
       UIFormComboBox timeFile = getChildById(FIELD_TO_TIME) ;
       if(getIsAllDay()) {
         DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
-        return CalendarUtils.getBeginDay(df.parse(toField.getValue())).getTime();
+        return CalendarUtils.getEndDay(df.parse(toField.getValue())).getTime();
       } 
       DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT + " " + timeFormat) ;
       return df.parse(toField.getValue() + " " + timeFile.getValue() ) ;
@@ -248,6 +249,12 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
       } else if(from.equals(to)) {
         to = CalendarUtils.getEndDay(from).getTime() ;
       } 
+      if(uiForm.getIsAllDay()) {
+        java.util.Calendar tempCal = CalendarUtils.getInstanceTempCalendar() ;
+        tempCal.setTime(to) ;
+        tempCal.add(java.util.Calendar.MILLISECOND, -1) ;
+        to = tempCal.getTime() ;
+      }
       try {
         CalendarEvent calEvent = new CalendarEvent() ;
         calEvent.setSummary(uiForm.getEventSummary()) ;
@@ -268,7 +275,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         }else if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)){
           CalendarUtils.getCalendarService().saveEventToSharedCalendar(SessionsUtils.getSystemProvider(), username, calEvent.getCalendarId(), calEvent, true) ;
         }else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)){
-          CalendarUtils.getCalendarService().saveGroupEvent(SessionsUtils.getSystemProvider(), calEvent.getCalendarId(), calEvent, true) ;          
+          CalendarUtils.getCalendarService().savePublicEvent(SessionsUtils.getSystemProvider(), calEvent.getCalendarId(), calEvent, true) ;          
         }
         UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
         uiPopupAction.deActivate() ;

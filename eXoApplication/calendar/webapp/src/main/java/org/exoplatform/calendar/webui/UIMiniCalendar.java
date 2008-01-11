@@ -97,6 +97,9 @@ public class UIMiniCalendar extends UICalendarView  {
     temCal.set(java.util.Calendar.DATE, getDaysInMonth()) ;
     return getEndDay(temCal) ;
   }
+  public Calendar getCurrentCalendar() {
+    return calendar_ ;
+  }
   static  public class MoveNextActionListener extends EventListener<UIMiniCalendar> {
     public void execute(Event<UIMiniCalendar> event) throws Exception {
       UIMiniCalendar miniCal = event.getSource() ;

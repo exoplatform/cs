@@ -133,7 +133,8 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
         taskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_CATEGORY).setRendered(false) ;
       }
     } else {
-      java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
+      UIMiniCalendar miniCalendar = getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
+      java.util.Calendar cal = miniCalendar.getCurrentCalendar() ;
       int beginMinute = (cal.get(java.util.Calendar.MINUTE)/CalendarUtils.DEFAULT_TIMEITERVAL)*CalendarUtils.DEFAULT_TIMEITERVAL ;
       cal.set(java.util.Calendar.MINUTE, beginMinute) ;
       setEventFromDate(cal.getTime(), calSetting.getTimeFormat()) ;
@@ -283,7 +284,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     UIFormDateTimeInput toField = taskDetailTab.getChildById(UITaskDetailTab.FIELD_TO) ;
     if(getEventAllDate()) {
       DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
-      return CalendarUtils.getBeginDay(df.parse(toField.getValue())).getTime();
+      return CalendarUtils.getEndDay(df.parse(toField.getValue())).getTime();
     } 
     DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT + " " + timeFormat) ;
     return df.parse(toField.getValue() + " " + timeField.getValue()) ;
@@ -576,6 +577,12 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
         } else if(from.equals(to)) {
           to = CalendarUtils.getEndDay(from).getTime() ;
         } 
+        if(uiForm.getEventAllDate()) {
+          java.util.Calendar tempCal = CalendarUtils.getInstanceTempCalendar() ;
+          tempCal.setTime(to) ;
+          tempCal.add(java.util.Calendar.MILLISECOND, -1) ;
+          to = tempCal.getTime() ;
+        }
         calendarEvent.setCalType(uiForm.calType_) ;
         calendarEvent.setFromDateTime(from) ;
         calendarEvent.setToDateTime(to);
@@ -592,7 +599,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
           }else if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)){
             CalendarUtils.getCalendarService().saveEventToSharedCalendar(SessionsUtils.getSystemProvider(), username, calendarId, calendarEvent, uiForm.isAddNew_) ;
           }else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)){
-            CalendarUtils.getCalendarService().saveGroupEvent(SessionsUtils.getSystemProvider(), calendarId, calendarEvent, uiForm.isAddNew_) ;          
+            CalendarUtils.getCalendarService().savePublicEvent(SessionsUtils.getSystemProvider(), calendarId, calendarEvent, uiForm.isAddNew_) ;          
           }
           CalendarView calendarView = (CalendarView)uiViewContainer.getRenderedChild() ;
           if (calendarView instanceof UIListContainer)((UIListContainer)calendarView).setDisplaySearchResult(false) ;

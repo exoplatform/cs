@@ -336,7 +336,7 @@ public interface CalendarService {
    * @param isNew
    * @throws Exception
    */  
-  public void saveGroupEvent(SessionProvider sProvider, String calendarId, CalendarEvent event, boolean isNew) throws Exception ;
+  public void savePublicEvent(SessionProvider sProvider, String calendarId, CalendarEvent event, boolean isNew) throws Exception ;
   /**
    * This method should:
    * 1. Get calendar service root node by current user

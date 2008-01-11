@@ -116,7 +116,7 @@ public class UIWeekView extends UICalendarView {
       while(i++ < 7) {
         String key = keyGen(c.get(Calendar.DATE), c.get(Calendar.MONTH), c.get(Calendar.YEAR)) ;
         if(isSameDate(c.getTime(), beginEvent) && (isSameDate(c.getTime(), endEvent)) || c.getTime().equals(endEvent)) {
-          if(eventAmount > 0 && eventAmount < CalendarUtils.MILISECONS_OF_DAY) {
+          if(eventAmount > 0 && eventAmount < CalendarUtils.MILISECONS_OF_DAY -1) {
             eventData_.get(key).put(event.getId(), event) ;
             dataMap_.put(event.getId(), event) ;
             iter.remove() ;
@@ -319,7 +319,7 @@ public class UIWeekView extends UICalendarView {
         }else if(calType.equals(CalendarUtils.SHARED_TYPE)){
           calendarService.saveEventToSharedCalendar(SessionsUtils.getSystemProvider(), username, calendarId, eventCalendar, false) ;
         }else if(calType.equals(CalendarUtils.PUBLIC_TYPE)){
-          calendarService.saveGroupEvent(SessionsUtils.getSystemProvider(), calendarId, eventCalendar, false) ;          
+          calendarService.savePublicEvent(SessionsUtils.getSystemProvider(), calendarId, eventCalendar, false) ;          
         }
         calendarview.setLastUpdatedEventId(eventId) ;
         calendarview.refresh() ;
@@ -367,7 +367,7 @@ public class UIWeekView extends UICalendarView {
           }else if(calType.equals(CalendarUtils.SHARED_TYPE)){
             calendarService.saveEventToSharedCalendar(SessionsUtils.getSystemProvider(), username, calendarId, eventCalendar, false) ;
           }else if(calType.equals(CalendarUtils.PUBLIC_TYPE)){
-            calendarService.saveGroupEvent(SessionsUtils.getSystemProvider(), calendarId, eventCalendar, false) ;          
+            calendarService.savePublicEvent(SessionsUtils.getSystemProvider(), calendarId, eventCalendar, false) ;          
           }
           calendarview.setLastUpdatedEventId(eventId) ;
           calendarview.refresh() ;

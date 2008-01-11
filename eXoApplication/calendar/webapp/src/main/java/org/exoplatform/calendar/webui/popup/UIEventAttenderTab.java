@@ -49,7 +49,7 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
   final public static String FIELD_CURRENTATTENDER = "currentAttender".intern() ;
 
   protected Map<String, String> parMap_ = new HashMap<String, String>() ;
-  private Calendar calendar_ ;
+  public Calendar calendar_ ;
   public UIEventAttenderTab(String arg0) {
     super(arg0);
     setComponentConfig(getClass(), null) ;

@@ -146,8 +146,8 @@ public class CalendarServiceImpl implements CalendarService{
   public List<CalendarEvent> getPublicEvents(SessionProvider sProvider, EventQuery eventQuery) throws Exception {
     return storage_.getPublicEvents(sProvider, eventQuery) ;
   }
-  public void saveGroupEvent(SessionProvider sProvider, String calendarId, CalendarEvent event, boolean isNew) throws Exception {
-    storage_.saveGroupEvent(sProvider, calendarId, event, isNew) ;
+  public void savePublicEvent(SessionProvider sProvider, String calendarId, CalendarEvent event, boolean isNew) throws Exception {
+    storage_.savePublicEvent(sProvider, calendarId, event, isNew) ;
   }  
   public CalendarEvent removeGroupEvent(SessionProvider sProvider, String calendarId, String eventId) throws Exception {
     return storage_.removeGroupEvent(sProvider, calendarId, eventId);

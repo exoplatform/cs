@@ -118,13 +118,13 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     UIFormInputWithActions defaultCalendarsTab = getChildById(DEFAULT_CALENDAR_TAB) ;    
     List<String> settedCalendars = new ArrayList<String>() ;
     if(calendarSetting != null && calendarSetting.getDefaultPrivateCalendars() != null) {
-      settedCalendars.addAll(new ArrayList<String>(Arrays.asList(calendarSetting.getDefaultPrivateCalendars()))) ;
+      settedCalendars.addAll(Arrays.asList(calendarSetting.getDefaultPrivateCalendars())) ;
     }
     if(calendarSetting != null && calendarSetting.getDefaultPublicCalendars() != null) {
-      settedCalendars.addAll(new ArrayList<String>(Arrays.asList(calendarSetting.getDefaultPublicCalendars()))) ;
+      settedCalendars.addAll(Arrays.asList(calendarSetting.getDefaultPublicCalendars())) ;
     }
     if(calendarSetting != null && calendarSetting.getDefaultSharedCalendars() != null) {
-      settedCalendars.addAll(new ArrayList<String>(Arrays.asList(calendarSetting.getDefaultSharedCalendars()))) ;
+      settedCalendars.addAll(Arrays.asList(calendarSetting.getDefaultSharedCalendars())) ;
     }
     List<Calendar> privateCals = getPrivateCalendars(cservice, username) ;
     defaultCalendarsTab.addChild(new UIFormInputInfo(DEFAULT_CALENDARS, DEFAULT_CALENDARS, getLabel(DEFAULT_CALENDARS_NOTE))) ;

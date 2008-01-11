@@ -7,7 +7,7 @@
 	%>
 <div class="$uicomponent.id" oncontextmenu="return false;" id="$uicomponent.id">
 	<%
-	timeStep = 15 ; // timeStep that period of time is changed when you drag or resize event in Day View, is capable of changing by user's Seting.
+	timeStep = uicomponent.getCalendarSetting().getTimeInterval() ; // timeStep that period of time is changed when you drag or resize event in Day View, is capable of changing by user's Seting.
   workingStart = uicomponent.getCalendarSetting().getWorkingTimeBegin() ;
   CalendarSetting calendarSetting = uicomponent.getCalendarSetting() ;
   String timeFormat = calendarSetting.getTimeFormat() ;

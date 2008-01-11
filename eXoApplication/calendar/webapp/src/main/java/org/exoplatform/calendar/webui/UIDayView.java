@@ -81,7 +81,7 @@ public class UIDayView extends UICalendarView {
     allDayEvent_.clear() ;
     Calendar begin = getBeginDay(new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getCurrentDay())) ;
     Calendar end = getEndDay(new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getCurrentDay())) ;
-   
+    end.add(Calendar.MILLISECOND, -1) ;
     List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
     CalendarService calendarService = getApplicationComponent(CalendarService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
@@ -176,7 +176,7 @@ public class UIDayView extends UICalendarView {
           }else if(ce.getCalType().equals(CalendarUtils.SHARED_TYPE)){
             CalendarUtils.getCalendarService().saveEventToSharedCalendar(SessionsUtils.getSystemProvider(), username, calendarId, ce, false) ;
           }else if(ce.getCalType().equals(CalendarUtils.PUBLIC_TYPE)){
-            CalendarUtils.getCalendarService().saveGroupEvent(SessionsUtils.getSystemProvider(), calendarId, ce, false) ;          
+            CalendarUtils.getCalendarService().savePublicEvent(SessionsUtils.getSystemProvider(), calendarId, ce, false) ;          
           }
         } catch (Exception e) {
           e.printStackTrace() ;

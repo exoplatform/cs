@@ -217,7 +217,7 @@ public class UIMonthView extends UICalendarView {
           }else if(calEvent.getCalType().equals(CalendarUtils.SHARED_TYPE)){
             CalendarUtils.getCalendarService().saveEventToSharedCalendar(SessionsUtils.getSystemProvider(), username, calendarId, calEvent, false) ;
           }else if(calEvent.getCalType().equals(CalendarUtils.PUBLIC_TYPE)){
-            CalendarUtils.getCalendarService().saveGroupEvent(SessionsUtils.getSystemProvider(), calendarId, calEvent, false) ;          
+            CalendarUtils.getCalendarService().savePublicEvent(SessionsUtils.getSystemProvider(), calendarId, calEvent, false) ;          
           }
           UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
           uiMiniCalendar.updateMiniCal() ;
