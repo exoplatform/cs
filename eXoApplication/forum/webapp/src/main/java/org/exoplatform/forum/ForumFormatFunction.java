@@ -252,10 +252,11 @@ public class ForumFormatFunction {
 		l = s.length() ;
 		while (true) {
 			j = i ; isWrite = true ;
-			i = i + s.substring(i , l).indexOf("http:") ;
+			i = i + s.substring(i , l).indexOf("ttp://") ;
 			if(i <= j || i >= l)break ;
 			if(i > 1 && s.charAt(i-1) == '"') continue ;
 			buffer = new StringBuffer() ;
+			buffer.append("h");
 			while (true) {
 	     char c = s.charAt(i);
 	     	if(c == '"') {isWrite = false ; break ;}
@@ -282,22 +283,4 @@ public class ForumFormatFunction {
     }
 	  return s ;
   }
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }

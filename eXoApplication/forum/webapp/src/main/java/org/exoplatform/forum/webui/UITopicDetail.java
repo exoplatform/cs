@@ -318,7 +318,7 @@ public class UITopicDetail extends UIForm	{
 	static public class PrintActionListener extends EventListener<UITopicDetail> {
 		@Override
     public void execute(Event<UITopicDetail> event) throws Exception {
-			UITopicDetail topicDetail = event.getSource() ;
+//			UITopicDetail topicDetail = event.getSource() ;
 		}
 	}
 
@@ -420,7 +420,7 @@ public class UITopicDetail extends UIForm	{
 	static public class PrintPageActionListener extends EventListener<UITopicDetail> {
 		@Override
     public void execute(Event<UITopicDetail> event) throws Exception {
-			UITopicDetail topicDetail = event.getSource() ;
+//			UITopicDetail topicDetail = event.getSource() ;
 		}
 	}
 
@@ -563,23 +563,20 @@ public class UITopicDetail extends UIForm	{
 	}
 
 	static public class SplitTopicActionListener extends EventListener<UITopicDetail> {
-		@Override
     public void execute(Event<UITopicDetail> event) throws Exception {
-			UITopicDetail topicDetail = event.getSource() ;
+//			UITopicDetail topicDetail = event.getSource() ;
 		}
 	}
 
 	static public class SetApproveTopicActionListener extends EventListener<UITopicDetail> {
-		@Override
     public void execute(Event<UITopicDetail> event) throws Exception {
-			UITopicDetail topicDetail = event.getSource() ;
+//			UITopicDetail topicDetail = event.getSource() ;
 		}
 	}
 
 	static public class SetUnApproveTopicActionListener extends EventListener<UITopicDetail> {
-		@Override
     public void execute(Event<UITopicDetail> event) throws Exception {
-			UITopicDetail topicDetail = event.getSource() ;
+//			UITopicDetail topicDetail = event.getSource() ;
 		}
 	}
 
@@ -601,13 +598,11 @@ public class UITopicDetail extends UIForm	{
 
 	//---------------------------------	Post Menu	 --------------------------------------//
 	static public class MergePostActionListener extends EventListener<UITopicDetail> {
-		@Override
     public void execute(Event<UITopicDetail> event) throws Exception {
 		}
 	}
 
 	static public class MovePostActionListener extends EventListener<UITopicDetail> {
-		@Override
     @SuppressWarnings("unchecked")
 		public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
@@ -635,31 +630,26 @@ public class UITopicDetail extends UIForm	{
 	}
 
 	static public class SetApprovePostActionListener extends EventListener<UITopicDetail> {
-		@Override
     public void execute(Event<UITopicDetail> event) throws Exception {
 		}
 	}
 	
 	static public class SetUnApprovePostActionListener extends EventListener<UITopicDetail> {
-		@Override
     public void execute(Event<UITopicDetail> event) throws Exception {
 		}
 	}
 
 	static public class SetApproveAttachmentActionListener extends EventListener<UITopicDetail> {
-		@Override
     public void execute(Event<UITopicDetail> event) throws Exception {
 		}
 	}
 	
 	static public class SetUnApproveAttachmentActionListener extends EventListener<UITopicDetail> {
-		@Override
     public void execute(Event<UITopicDetail> event) throws Exception {
 		}
 	}
 	
 	static public class DeletePostActionListener extends EventListener<UITopicDetail> {
-		@Override
     @SuppressWarnings("unchecked")
 		public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
@@ -683,14 +673,5 @@ public class UITopicDetail extends UIForm	{
 			}
 		}
 	}
-
-
-
-
-
-
-
-
-
 
 }

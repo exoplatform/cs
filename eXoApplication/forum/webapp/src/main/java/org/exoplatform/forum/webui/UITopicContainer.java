@@ -145,7 +145,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 		this.forumId = forum.getId() ;
 		this.categoryId = categoryId ;
 		this.page = 1;
-		this.isGoPage = false ;
+		this.isGoPage = true ;
 		getChild(UIForumPageIterator.class).setSelectPage(this.page) ;
 		this.getAncestorOfType(UIForumPortlet.class).getChild(UIBreadcumbs.class).setUpdataPath((categoryId + "/" + forumId)) ;
 	}
@@ -154,6 +154,9 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 		this.forumId = forumId ;
 		this.categoryId = categoryId ;
 		this.isUpdate = true ;
+		this.page = 1;
+		this.isGoPage = true ;
+		getChild(UIForumPageIterator.class).setSelectPage(this.page) ;
 		if(!isBreadcumbs) {
 			this.getAncestorOfType(UIForumPortlet.class).getChild(UIBreadcumbs.class).setUpdataPath((categoryId + "/" + forumId)) ;
 		}
