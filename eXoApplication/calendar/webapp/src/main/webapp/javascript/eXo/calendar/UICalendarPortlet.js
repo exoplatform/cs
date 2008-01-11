@@ -967,18 +967,15 @@ UICalendarPortlet.prototype.getFilterForm = function(form) {
 	if(typeof(form) == "string") form = document.getElementById(form) ;
 	this.filterForm = form ;
 	var CalendarGroup = eXo.core.DOMUtil.findDescendantsByClass(form, "input","CalendarGroup") ;	
-	var CalendarItem = null ;
+	var CalendarItem = eXo.core.DOMUtil.findDescendantsByClass(form, "input","checkbox") ;
 	var uvTab = null ;
 	var len = CalendarGroup.length ;
-	var clen = 0 ;
+	var clen = CalendarItem.length ;
 	for(var i = 0 ; i < len ; i ++) {
 		CalendarGroup[i].onclick = eXo.calendar.UICalendarPortlet.filterByGroup ;
-		uiVtab = eXo.core.DOMUtil.findAncestorByClass(CalendarGroup[i], "UIVTab") ;
-		CalendarItem = eXo.core.DOMUtil.findDescendantsByClass(uiVtab, "input","checkbox") ;
-		var clen = CalendarItem.length ;
-		for(var j = 0 ; j < clen ; j ++) {
-			CalendarItem[j].onclick = eXo.calendar.UICalendarPortlet.filterByCalendar ;
-		}
+	}
+	for(var j = 0 ; j < clen ; j ++) {
+		CalendarItem[j].onclick = eXo.calendar.UICalendarPortlet.filterByCalendar ;
 	}
 } ;
 
