@@ -62,7 +62,6 @@
 
 .UICalendarPortlet .ViewEventIcon {
 	background: url('icons/ViewEventIcon.gif') no-repeat left center;
-	border: 1px solid red;
 }
 
 .UICalendarPortlet .EditEventIcon {
