@@ -129,7 +129,8 @@ public class UIMessageList extends UIForm {
     filter.setAccountId(accountId);
     if (accountId != null){
       //if(filter.getFolder() == null || (filter.getFolder() != null && (!filter.getFolder()[0].equals(selectedFolderId_)) ||  pageList_ == null)) {
-        selectedFolderId_ = Utils.createFolderId(accountId, Utils.FD_INBOX, false);
+        if (filter.getFolder() == null) selectedFolderId_ = Utils.createFolderId(accountId, Utils.FD_INBOX, false);
+        selectedFolderId_ = filter.getFolder()[0];
         filter.setFolder(new String[] { selectedFolderId_ });
         setMessagePageList(mailSrv.getMessagePageListByFolder(SessionsUtils.getSessionProvider(), username, accountId, selectedFolderId_));
       //}
