@@ -31,6 +31,7 @@ import org.exoplatform.mail.webui.Selector;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
+import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UINavigationContainer;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.WizardStep;
@@ -285,7 +286,9 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
         uiAccCreation.saveForm(uiPortlet.getCurrentUser(), acc) ;
         UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class);
         uiSelectAccount.updateAccount();
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectAccount); 
+        uiPortlet.findFirstComponentOfType(UIMessageList.class).init(acc.getId());
+        uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null);
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
         uiAccCreation.getAncestorOfType(UIPopupAction.class).deActivate() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiAccCreation.getAncestorOfType(UIPopupAction.class)) ;
       } catch (Exception e) {
