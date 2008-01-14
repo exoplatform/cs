@@ -98,12 +98,14 @@ public class VCardImportExport implements ContactImportExport {
   	if(privateAddress.size() > 0) {
   		ContactFilter filter = new ContactFilter() ;
   		filter.setCategories(privateAddress.toArray(new String[]{})) ;
-  		contactList.addAll(storage_.getContactPageListByGroup(sProvider, username, filter, false).getAll()) ;
+  		contactList.addAll(storage_.getContactPageListByGroup(
+          sProvider, username, filter, JCRDataStorage.PRIVATE).getAll()) ;
   	}
   	if(publicAddress.size() > 0) {
   		ContactFilter filter = new ContactFilter() ;
   		filter.setCategories(publicAddress.toArray(new String[]{})) ;
-  		contactList.addAll(storage_.getContactPageListByGroup(sProvider, username, filter, true).getAll()) ;
+  		contactList.addAll(storage_.getContactPageListByGroup(
+          sProvider, username, filter, JCRDataStorage.PUBLIC).getAll()) ;
   	}
   	if(contactList.size() > 0) {
   		return exportContact(username, contactList) ;

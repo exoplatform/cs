@@ -26,6 +26,7 @@ import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.webui.popup.UICategoryForm;
 import org.exoplatform.contact.webui.popup.UICategorySelect;
 import org.exoplatform.contact.webui.popup.UIContactForm;
@@ -144,11 +145,11 @@ public class UIAddressBooks extends UIComponent {
         if (privateGroup.containsKey(addressBookId)) {
           uiExportForm.setSelectedGroup(privateGroup.get(addressBookId)) ;
           contacts = contactService.getContactPageListByGroup(
-              sessionProvider, username, filter, false).getAll().toArray(new Contact[] {});
+              sessionProvider, username, addressBookId).getAll().toArray(new Contact[] {});
         } else if (uiAddressBook.publicGroupMap_.containsKey(addressBookId)){        
           uiExportForm.setSelectedGroup(addressBookId) ;
-          contacts = contactService.getContactPageListByGroup(
-              sessionProvider, username, filter, true).getAll().toArray(new Contact[] {});
+          contacts = contactService.getPublicContactsByAddressBook(
+              sessionProvider, addressBookId).getAll().toArray(new Contact[] {});
         } else {
           uiExportForm.setSelectedGroup(uiAddressBook.sharedGroupMap_.get(addressBookId)) ;
           contacts = contactService.getSharedContactsByAddressBook(

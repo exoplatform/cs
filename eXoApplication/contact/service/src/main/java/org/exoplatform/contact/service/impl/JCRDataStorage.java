@@ -226,20 +226,39 @@ public class JCRDataStorage{
     return contacts;
   }
 
-  public ContactPageList getContactPageListByGroup(SessionProvider sProvider, String username, ContactFilter filter, boolean isPublic) throws Exception {
-    QueryManager qm ;
-    if (isPublic) {
-      Node publicContactHomeNode = getPublicContactHome(sProvider) ;
-      filter.setAccountPath(publicContactHomeNode.getPath()) ;
-      qm = publicContactHomeNode.getSession().getWorkspace().getQueryManager();
-    } else {
+  public ContactPageList getContactPageListByGroup(SessionProvider sProvider, String username, ContactFilter filter, String type) throws Exception {
+    QueryManager qm = null ;
+    if (type.equals(PRIVATE)) {
       Node contactHomeNode = getUserContactHome(sProvider, username);
       filter.setAccountPath(contactHomeNode.getPath()) ;
       qm = contactHomeNode.getSession().getWorkspace().getQueryManager();
+    } else if (type.equals(PUBLIC)) {
+      Node publicContactHomeNode = getPublicContactHome(sProvider) ;
+      filter.setAccountPath(publicContactHomeNode.getPath()) ;
+      qm = publicContactHomeNode.getSession().getWorkspace().getQueryManager();
+    } else if (type.equals(SHARED)) {
+      Node sharedAddressBookHome = getSharedAddressBookHome(SessionProvider.createSystemProvider()) ;
+      if(sharedAddressBookHome.hasNode(username)) {
+        Node userNode = sharedAddressBookHome.getNode(username) ;
+        PropertyIterator iter = userNode.getReferences() ;
+        Node addressBook ;
+        while(iter.hasNext()) {
+          addressBook = iter.nextProperty().getParent() ;
+          if(addressBook.getProperty("exo:id").getString().equals(filter.getCategories()[0])) {
+            Node contacts = addressBook.getParent().getParent().getNode(CONTACTS) ;
+            filter.setAccountPath(contacts.getPath()) ;
+            qm = contacts.getSession().getWorkspace().getQueryManager() ;
+            break ;
+          }      
+        }
+      }
+    }      
+    if (qm != null) {
+      Query query = qm.createQuery(filter.getStatement(), Query.XPATH);  
+      QueryResult result = query.execute();    
+      return new ContactPageList(username, result.getNodes(), 10, filter.getStatement(), true, "0") ; 
     }
-    Query query = qm.createQuery(filter.getStatement(), Query.XPATH);  
-    QueryResult result = query.execute();    
-    return new ContactPageList(username, result.getNodes(), 10, filter.getStatement(), true, "0") ;
+    return null ;
   }
   
   // don't use ?

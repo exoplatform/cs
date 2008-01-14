@@ -64,8 +64,8 @@ public class ContactServiceImpl implements ContactService {
     return storage_.getContactPageListByGroup(sProvider, username, groupId);
   }
 
-  public ContactPageList getContactPageListByGroup(SessionProvider sProvider, String username, ContactFilter filter, boolean isPublic) throws Exception {
-    return storage_.getContactPageListByGroup(sProvider, username, filter, isPublic) ;
+  public ContactPageList getContactPageListByGroup(SessionProvider sProvider, String username, ContactFilter filter, String type) throws Exception {
+    return storage_.getContactPageListByGroup(sProvider, username, filter, type) ;
   }
   
   public List<String> getAllEmailAddressByGroup(SessionProvider sProvider, String username, String groupId) throws Exception {

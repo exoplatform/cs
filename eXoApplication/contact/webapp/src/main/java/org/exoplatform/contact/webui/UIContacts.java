@@ -31,6 +31,7 @@ import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.JCRPageList;
 import org.exoplatform.contact.service.Tag;
+import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.webui.popup.UIContactPreviewForm;
 import org.exoplatform.contact.webui.popup.UIExportForm;
 import org.exoplatform.contact.webui.popup.UIMoveContactsForm;
@@ -581,10 +582,16 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         filter.setAscending(uiContacts.isAscending_);
         filter.setOrderBy(uiContacts.getSortedBy());
         filter.setCategories(new String[] { group } ) ;
-        boolean isPublic = ContactUtils.isPublicGroup(group) ;
-//        if(isPublic){
-      	pageList = ContactUtils.getContactService().getContactPageListByGroup(
-            SessionsUtils.getSystemProvider(),ContactUtils.getCurrentUser(), filter, isPublic) ;
+
+        String type = null;
+        UIAddressBooks addressBooks = uiContacts.getAncestorOfType(
+            UIWorkingContainer.class).findFirstComponentOfType(UIAddressBooks.class) ;
+        if (addressBooks.getPrivateGroupMap().containsKey(group)) type = JCRDataStorage.PRIVATE ;
+        else if (addressBooks.getSharedGroups().containsKey(group)) type = JCRDataStorage.SHARED ;
+        else if (addressBooks.getPublicGroupMap().containsKey(group)) type = JCRDataStorage.PUBLIC ;
+        if(type != null)
+          pageList = ContactUtils.getContactService().getContactPageListByGroup(
+            SessionsUtils.getSystemProvider(),ContactUtils.getCurrentUser(), filter, type) ;
         /*}else {
         	pageList = ContactUtils.getContactService().getContactPageListByGroup(
             SessionsUtils.getSessionProvider(),  ContactUtils.getCurrentUser(), filter, isPublic) ;

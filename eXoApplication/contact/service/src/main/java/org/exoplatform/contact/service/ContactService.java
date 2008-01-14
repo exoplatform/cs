@@ -36,7 +36,7 @@ public interface ContactService {
   public List<Contact> removeContacts(SessionProvider sProvider, String username, List<String> contactIds) throws Exception ;
   public void moveContacts(SessionProvider sysProvider, String username, List<Contact> contacts, String addressType ) throws Exception ;
   //public ContactPageList getContactPageListByTag(SessionProvider sProvider, String username, ContactFilter filter) throws Exception ;
-  public ContactPageList getContactPageListByGroup(SessionProvider sProvider, String username, ContactFilter filter, boolean isPublic) throws Exception;
+  public ContactPageList getContactPageListByGroup(SessionProvider sProvider, String username, ContactFilter filter, String type) throws Exception;
   public DataPageList searchContact(SessionProvider sProvider, String username, ContactFilter filter) throws Exception ;
   
   public ContactPageList getPublicContactsByAddressBook(SessionProvider sProvider, String addressBookId) throws Exception ;
