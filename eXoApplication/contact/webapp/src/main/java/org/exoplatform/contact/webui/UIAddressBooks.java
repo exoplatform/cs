@@ -323,6 +323,7 @@ public class UIAddressBooks extends UIComponent {
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class);
       uiContacts.setContacts(ContactUtils.getContactService().getContactPageListByGroup(
           SessionsUtils.getSessionProvider(), ContactUtils.getCurrentUser(), groupId));
+      uiContacts.setSortedBy(UIContacts.fullName) ;
       uiContacts.setSelectedGroup(groupId);
       uiContacts.setSelectedTag(null);
       uiContacts.setDisplaySearchResult(false) ;
@@ -340,6 +341,7 @@ public class UIAddressBooks extends UIComponent {
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class);
       uiContacts.setContacts(ContactUtils.getContactService()
           .getPublicContactsByAddressBook(SessionsUtils.getSystemProvider(), groupId));
+      uiContacts.setSortedBy(UIContacts.fullName) ;
       uiContacts.setSelectedGroup(groupId);
       uiContacts.setSelectedTag(null);
       uiContacts.setDisplaySearchResult(false) ;
@@ -357,6 +359,7 @@ public class UIAddressBooks extends UIComponent {
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class);
       uiContacts.setContacts(ContactUtils.getContactService().getSharedContactsByAddressBook(
           SessionsUtils.getSystemProvider(),ContactUtils.getCurrentUser(), groupId));
+      uiContacts.setSortedBy(UIContacts.fullName) ;
       uiContacts.setSelectedGroup(groupId);
       uiContacts.setSelectedTag(null);
       uiContacts.setDisplaySearchResult(false) ;

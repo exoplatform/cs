@@ -11,7 +11,7 @@
 	<div class="MoveContainer">
 	<% if (!uicomponent.isDND()) { %>	
 		<div class="PrivateAdress">
-			<div class="TitleMoveContactsForm">Private Address Books:</div>
+			<div class="TitleMoveContactsForm">To Private Address Books:</div>
 			<div class="MoveContactsFormContainer">
 				<%  Map map = uicomponent.getPrivateGroupMap() ;
 						for(groupId in map.keySet()) {
@@ -26,7 +26,7 @@
 		</div>	
 		
 		<div class="PrivateAdress">
-			<div class="TitleMoveContactsForm">Shared Address Books</div>
+			<div class="TitleMoveContactsForm">To Shared Address Books</div>
 			<div class="MoveContactsFormContainer">
 				<% 
 	      	Map sharedGroups = uicomponent.getSharedGroupMap() ;
@@ -44,7 +44,7 @@
 		
 		<% String fieldName; %>
 		<div class="UIForm PublicAdress">
-			<div class="TitleMoveContactsForm">Public Address Books</div>
+			<div class="TitleMoveContactsForm">To Public Address Books</div>
 		  <div class="HorizontalLayout">
 		    <div class="FormContainer">
 		      <table class="UIFormGrid">

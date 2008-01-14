@@ -100,7 +100,7 @@ public class UIProfileInputSet extends UIFormInputWithActions {
     int thisYear = Integer.parseInt(strDate) ;
     List<SelectItemOption<String>> yearOptions = new ArrayList<SelectItemOption<String>>() ;
     yearOptions.add(new SelectItemOption<String>("- "+FIELD_YEAR+" -", FIELD_YEAR)) ;
-    for (int i = 1900; i <= thisYear; i ++) {
+    for (int i = thisYear; i >= 1900; i --) {
       String year = i + "" ;
       yearOptions.add(new SelectItemOption<String>(year, year)) ;
     }

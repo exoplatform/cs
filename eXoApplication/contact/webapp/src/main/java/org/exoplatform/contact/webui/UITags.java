@@ -95,6 +95,7 @@ public class UITags extends UIComponent {
         Collections.sort(contacts, new FullNameComparator()) ;          
         pageList.setList(contacts) ;      
       }
+      uiContacts.setSortedBy(UIContacts.fullName) ;
       uiContacts.setContacts(pageList) ;
       uiContacts.setSelectedGroup(null) ;
       uiContacts.setSelectedTag(tagId) ;

@@ -102,7 +102,8 @@
 	  		        	<%
 	  		        		String fullName = uicomponent.fullName ;
 			    		      String sortedByName = uicomponent.event("Sort",fullName);
-			              String classArrowName = "UpArrow1Icon";
+			              String classArrowName = "";
+			              if (uicomponent.isNameSorted())  classArrowName = "UpArrow1Icon";
 			              group = uicomponent.getSelectedGroup() ;
 			              if (uicomponent.getSortedBy().equals(fullName)) {
 			              	if (!ContactUtils.isEmpty(group)) {
@@ -126,6 +127,7 @@
 			    		      String sortedByEmail = uicomponent.event("Sort",emailAddress);
 			              String classArrowEmail = "";
 			              if (uicomponent.getSortedBy().equals(emailAddress)) {
+			                uicomponent.setDefaultNameSorted(false) ;
 			                if (!ContactUtils.isEmpty(group)) {
 			                	if (uicomponent.isAscending()) classArrowEmail = "UpArrow1Icon";
 			                	else classArrowEmail = "DownArrow1Icon"
@@ -147,6 +149,7 @@
 			    		      String sortedByOrganition = uicomponent.event("Sort",jobTitle);
 			              String classArrowOrganition = "";
 			              if (uicomponent.getSortedBy().equals(jobTitle)) {  
+			              	uicomponent.setDefaultNameSorted(false) ;
 			                if (!ContactUtils.isEmpty(group)) {
 			                	if (uicomponent.isAscending()) classArrowOrganition = "UpArrow1Icon";
 			                	else classArrowOrganition = "DownArrow1Icon"

@@ -816,8 +816,10 @@ public class JCRDataStorage{
     contactNode.setProperty("exo:tags", contact.getTags());
     contactNode.setProperty("exo:editPermission", contact.getEditPermission());
 
-    dateTime.setTime(contact.getLastUpdated()) ;
-    contactNode.setProperty("exo:lastUpdated", dateTime);
+    if (contact.getLastUpdated() != null) {
+      dateTime.setTime(contact.getLastUpdated()) ;
+      contactNode.setProperty("exo:lastUpdated", dateTime);
+    }
     contactNode.setProperty("exo:isShared", contact.isShared());
     
 //  save image to contact

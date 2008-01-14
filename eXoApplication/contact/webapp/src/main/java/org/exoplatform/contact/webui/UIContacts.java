@@ -49,7 +49,6 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 
@@ -70,8 +69,8 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UIContacts.MoveContactsActionListener.class),
         @EventConfig(listeners = UIContacts.DNDContactsActionListener.class),
         @EventConfig(listeners = UIContacts.DNDContactsToTagActionListener.class),
-        @EventConfig(phase=Phase.DECODE, listeners = UIContacts
-          .DeleteContactsActionListener.class, confirm="UIContacts.msg.confirm-delete-contact"),
+        @EventConfig(listeners = UIContacts.DeleteContactsActionListener.class
+            , confirm="UIContacts.msg.confirm-delete"),
         @EventConfig(listeners = UIContacts.SelectedContactActionListener.class), 
         @EventConfig(listeners = UIContacts.ViewDetailsActionListener.class),
         @EventConfig(listeners = UIContacts.SortActionListener.class),
@@ -100,6 +99,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   public static String emailAddress = "emailAddress".intern() ;
   public static String jobTitle = "jobTitle".intern() ;
   private boolean isSearchResult = false ;
+  private boolean defaultNameSorted = true ;
   
   public UIContacts() throws Exception { } 
   public String[] getActions() { return new String[] {"Cancel"} ; }
@@ -125,6 +125,9 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   public boolean isAscName() { return FullNameComparator.isAsc ; }
   public boolean isAscEmail() { return EmailComparator.isAsc ; }
   public boolean isAscJob() { return JobTitleComparator.isAsc ; }
+  public void setDefaultNameSorted(boolean name) { defaultNameSorted = name ; }
+  public boolean isNameSorted() { return defaultNameSorted ; }
+  
   public void setContact(List<Contact> contacts, boolean isUpdate) throws Exception{
     pageList_.setContact(contacts, isUpdate) ; 
   }
@@ -579,13 +582,16 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         filter.setOrderBy(uiContacts.getSortedBy());
         filter.setCategories(new String[] { group } ) ;
         boolean isPublic = ContactUtils.isPublicGroup(group) ;
-        if(isPublic){
-        	pageList = ContactUtils.getContactService().getContactPageListByGroup(SessionsUtils.getSystemProvider(), 
-              ContactUtils.getCurrentUser(), filter, isPublic) ;
-        }else {
-        	pageList = ContactUtils.getContactService().getContactPageListByGroup(SessionsUtils.getSessionProvider(), 
-              ContactUtils.getCurrentUser(), filter, isPublic) ;
-        }
+//        if(isPublic){
+      	pageList = ContactUtils.getContactService().getContactPageListByGroup(
+            SessionsUtils.getSystemProvider(),ContactUtils.getCurrentUser(), filter, isPublic) ;
+        /*}else {
+        	pageList = ContactUtils.getContactService().getContactPageListByGroup(
+            SessionsUtils.getSessionProvider(),  ContactUtils.getCurrentUser(), filter, isPublic) ;
+        }*/
+//        
+//        if (pageList == null || pageList.getAll().size() == 0)
+//          pageList = 
         
       } else {      //if (!ContactUtils.isEmpty(uiContacts.getSelectedTag())) {
           pageList = uiContacts.pageList_ ;
