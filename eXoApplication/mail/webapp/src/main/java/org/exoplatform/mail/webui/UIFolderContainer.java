@@ -60,11 +60,12 @@ public class UIFolderContainer extends UIContainer {
   private String currentFolder_ = null ;
   public int i = 1;
   
-  public UIFolderContainer() throws Exception {
-    String accountId = MailUtils.getAccountId();
+  public UIFolderContainer() throws Exception { }
+
+  public void init(String accountId) throws Exception {
     currentFolder_ = Utils.createFolderId(accountId, Utils.FD_INBOX, false);
   }
-
+  
   public String getSelectedFolder(){ return currentFolder_ ; }
   public void setSelectedFolder(String folderId) { currentFolder_ = folderId ;}
   

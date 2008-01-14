@@ -16,6 +16,9 @@
  */
 package org.exoplatform.mail.webui;
 
+import org.exoplatform.mail.SessionsUtils;
+import org.exoplatform.mail.service.MailService;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
 
@@ -32,8 +35,16 @@ public class UINavigationContainer extends UIContainer  {
   
   public UINavigationContainer() throws Exception {
     addChild(UISearchForm.class, null, null) ;
-    addChild(UISelectAccount.class, null, null) ;
-    addChild(UIFolderContainer.class, null, null) ;
+    UISelectAccount uiSelectAccount = createUIComponent(UISelectAccount.class, null, null);
+    addChild(uiSelectAccount) ;
+    MailService mailSvr = getApplicationComponent(MailService.class) ;
+    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    String defaultAcc = mailSvr.getCurrentAccount(SessionsUtils.getSessionProvider(), username);
+    uiSelectAccount.setSelectedValue(defaultAcc);
+    UIFolderContainer uiFolderContainer = createUIComponent(UIFolderContainer.class, null, null);
+    String accountId = uiSelectAccount.getSelectedValue();
+    uiFolderContainer.init(accountId);
+    addChild(uiFolderContainer) ;
     addChild(UITagContainer.class, null, null) ;
   }
 
