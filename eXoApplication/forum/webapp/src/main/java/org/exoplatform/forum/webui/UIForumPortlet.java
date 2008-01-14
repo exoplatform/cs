@@ -100,29 +100,29 @@ public class UIForumPortlet extends UIPortletApplication {
 		context.addUIComponentToUpdateByAjax(popupAction) ;
 	}
 	
-
   @SuppressWarnings("deprecation")
 	public void initOption() throws Exception {
   	String userId = ForumUtils.getCurrentUser() ;
-		if(userId == null || userId.length() <= 0) {
-			Date dateHost = new Date() ;
-			timeZone = dateHost.getTimezoneOffset()/ 60 ;
-			shortDateformat = "mm/dd/yyyy";
-			longDateformat = "ddd,mmm,dd,yyyy";
-			timeFormat = "12h";
-			maxTopic = 10 ;
-			maxPost = 10 ;
-			//isShowForumJump = false ;
-		} else {
+		Date dateHost = new Date() ;
+		timeZone = dateHost.getTimezoneOffset()/ 60 ;
+		shortDateformat = "mm/dd/yyyy";
+		longDateformat = "ddd,mmm,dd,yyyy";
+		timeFormat = "12h";
+		maxTopic = 10 ;
+		maxPost = 10 ;
+		//isShowForumJump = false ;
+		if(userId != null || userId.length() > 0) {
 			ForumOption forumOption = new ForumOption() ;
 			forumOption = forumService.getOption(ForumUtils.getSystemProvider(), ForumUtils.getCurrentUser()) ;
-			timeZone = forumOption.getTimeZone() ;
-			shortDateformat = forumOption.getShortDateFormat() ;
-			longDateformat = forumOption.getLongDateFormat() ;
-			timeFormat = forumOption.getTimeFormat() ;
-			maxTopic = forumOption.getMaxTopicInPage() ;
-			maxPost = forumOption.getMaxPostInPage() ;
-		//	isShowForumJump = false ;
+			if(forumOption != null) {
+				timeZone = forumOption.getTimeZone() ;
+				shortDateformat = forumOption.getShortDateFormat() ;
+				longDateformat = forumOption.getLongDateFormat() ;
+				timeFormat = forumOption.getTimeFormat() ;
+				maxTopic = forumOption.getMaxTopicInPage() ;
+				maxPost = forumOption.getMaxPostInPage() ;
+				//	isShowForumJump = false ;
+			}
 		}
 		UICategoryContainer categoryContainer = getChild(UICategoryContainer.class);
 		categoryContainer.getChild(UICategories.class).setFormat(timeZone, shortDateformat, longDateformat, timeFormat);
