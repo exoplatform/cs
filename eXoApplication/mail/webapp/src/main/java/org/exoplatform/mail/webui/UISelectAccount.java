@@ -23,6 +23,7 @@ import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIAccountCreation;
 import org.exoplatform.mail.webui.popup.UIAccountList;
@@ -161,7 +162,12 @@ public class UISelectAccount extends UIForm {
       MailService mailSrv = MailUtils.getMailService();
       String username = MailUtils.getCurrentUser();
       mailSrv.updateCurrentAccount(SessionsUtils.getSessionProvider(), username, accId);
-      uiPortlet.findFirstComponentOfType(UIMessageList.class).init(accId);
+      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
+      MessageFilter filter = new MessageFilter("Folder");
+      filter.setAccountId(accId);
+      filter.setFolder(new String[] {Utils.createFolderId(accId, Utils.FD_INBOX, false)}) ;
+      uiMessageList.setMessageFilter(filter);
+      uiMessageList.init(accId);
       uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
     }

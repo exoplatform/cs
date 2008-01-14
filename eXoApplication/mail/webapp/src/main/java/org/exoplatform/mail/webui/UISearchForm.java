@@ -16,7 +16,6 @@
  */
 package org.exoplatform.mail.webui;
 
-import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MessageFilter;
@@ -83,7 +82,7 @@ public class UISearchForm extends UIForm {
         " or (jcr:contains(@" + Utils.EXO_BODY + ", '" + text + "'))";
         filter.setSearchQuery(searchQuery);
       }
-      filter.setAccountId(MailUtils.getAccountId());      
+      filter.setAccountId(accId);      
       
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);      
       String username = uiPortlet.getCurrentUser();

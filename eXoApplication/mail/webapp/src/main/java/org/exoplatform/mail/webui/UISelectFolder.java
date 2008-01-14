@@ -89,7 +89,7 @@ public class UISelectFolder extends UIFormInputSet {
   public List<Folder> getSubFolders(String parentPath) throws Exception {
     MailService mailSvr = MailUtils.getMailService();
     String username = MailUtils.getCurrentUser() ;
-    String accountId = MailUtils.getAccountId() ;
+    String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
     List<Folder> subFolders = new ArrayList<Folder>();
     for (Folder f : mailSvr.getSubFolders(SessionsUtils.getSessionProvider(), username, accountId, parentPath)) {
       subFolders.add(f);
@@ -101,7 +101,7 @@ public class UISelectFolder extends UIFormInputSet {
     List<Folder> folders = new ArrayList<Folder>() ;
     MailService mailSvr = getApplicationComponent(MailService.class) ;
     String username = MailUtils.getCurrentUser() ;
-    String accountId = MailUtils.getAccountId() ;
+    String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
     try {
       folders.addAll(mailSvr.getFolders(SessionsUtils.getSessionProvider(), username, accountId, isPersonal)) ;
     } catch (Exception e){
