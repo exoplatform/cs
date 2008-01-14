@@ -544,7 +544,7 @@ public class UIMessageList extends UIForm {
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       List<Message> appliedMsgList = new ArrayList<Message>();
       if (msgId != null) { 
-        appliedMsgList.add(mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId));
+        appliedMsgList.add(uiMessageList.messageList_.get(msgId));
       } else {
         appliedMsgList = uiMessageList.getCheckedMessage();
       }
@@ -761,7 +761,7 @@ public class UIMessageList extends UIForm {
      }       
      uiMessageList.updateList();     
      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class)) ;
-     event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
+     event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList);
     }
   }
   
@@ -881,7 +881,8 @@ public class UIMessageList extends UIForm {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ; 
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
-      uiMessageList.updateList();
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      uiMessageList.init(accountId);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class));
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
     }

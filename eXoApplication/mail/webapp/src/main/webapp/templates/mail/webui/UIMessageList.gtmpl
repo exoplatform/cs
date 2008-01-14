@@ -276,8 +276,7 @@
     		  <th style="width: 24px;">
     		    <a hreft = ""><div class="AttachmentIcon" title="Attchments"><span></span></div></a>
     		  </th>
-    		  <th style="width: 24px; border-right: 1px solid #f8f8f8;"></th>
-   	      <th style="padding-left: 8px;">
+   	      <th style="padding-left: 24px;">
        	   <%
              String sortedBySubject = uicomponent.event("Sort",Utils.EXO_SUBJECT);
            	   String classArrowSubject = "";
@@ -359,7 +358,7 @@
     				  <a href="$actionLink"><div class="AttachmentIcon"><span></span></div></a>
     				  <%}%>
     				</td>
-    				<td class="$readStatus" colspan="2">
+    				<td class="$readStatus">
              <% 
                if (msg.getTags() != null && msg.getTags().length > 0) {
                  String colorCss = "";
@@ -375,8 +374,8 @@
                %>
                  <a href="$actionLink" title="$title" style="display: block; float: left; margin-right: 3px;"><div class="IconTag $colorCss"><span></span></div></a>
               <%}%>
-              <a href="$actionLink" style="float: left;"><%=msg.getSubject()%></a></td>
-              <div style="clear: left;"><spam></spam></div>
+              <a href="$actionLink" style="float: left;"><%=msg.getSubject()%></a>
+              <div style="clear: left;"><spam></spam></div></td>             
     				<td class="text">( <%= (msg.isRootConversation()) ? uicomponent.getConversations(msg).size() : 1 %> )</td>
     				<td class="$readStatus">
     				  <a href="$actionLink">

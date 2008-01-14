@@ -36,7 +36,7 @@
 <!--  Start DecoratorBox ViewBoxStyle -->
     <% 
     int msgIndex = 0;
-    for (Message msg : uicomponent.getConversations()) {%>
+    if (msgRoot != null) { Message msg = msgRoot; %>
 		<div class="DecoratorBox" previewId="<%=msg.getId()%>">
       <%
         String styleCollapse = "block";
