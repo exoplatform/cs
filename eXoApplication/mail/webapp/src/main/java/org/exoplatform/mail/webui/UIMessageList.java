@@ -127,7 +127,7 @@ public class UIMessageList extends UIForm {
     MessageFilter filter = getMessageFilter();
     if (filter == null) filter = new MessageFilter("Folder");
     filter.setAccountId(accountId);
-    if (accountId != null){
+    if (accountId != null && accountId != ""){
       //if(filter.getFolder() == null || (filter.getFolder() != null && (!filter.getFolder()[0].equals(selectedFolderId_)) ||  pageList_ == null)) {
         if (filter.getFolder() == null) selectedFolderId_ = Utils.createFolderId(accountId, Utils.FD_INBOX, false);
         selectedFolderId_ = filter.getFolder()[0];
@@ -466,8 +466,6 @@ public class UIMessageList extends UIForm {
       UIMessageList uiMessageList = event.getSource() ; 
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class) ;
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      MailService mailSvr = uiMessageList.getApplicationComponent(MailService.class) ;
-      String username = uiPortlet.getCurrentUser() ;
       String accId = uiPortlet.getChild(UINavigationContainer.class).getChild(UISelectAccount.class).getSelectedValue() ;
       
       // Verify
@@ -485,7 +483,7 @@ public class UIMessageList extends UIForm {
       UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
       
       Message message ;
-      if (msgId != null) message = message = uiMessageList.messageList_.get(msgId) ; 
+      if (msgId != null) message = uiMessageList.messageList_.get(msgId) ; 
       else  message = uiMessageList.getCheckedMessage().get(0);
       uiComposeForm.init(accId, message, uiComposeForm.MESSAGE_REPLY_ALL);
       uiPopupContainer.addChild(uiComposeForm) ;
@@ -500,8 +498,6 @@ public class UIMessageList extends UIForm {
       UIMessageList uiMessageList = event.getSource() ; 
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class) ;
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      MailService mailSvr = uiMessageList.getApplicationComponent(MailService.class) ;
-      String username = uiPortlet.getCurrentUser() ;
       String accId = uiPortlet.getChild(UINavigationContainer.class).getChild(UISelectAccount.class).getSelectedValue() ;
       
       // Verify
@@ -519,7 +515,7 @@ public class UIMessageList extends UIForm {
       UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
       
       Message message ;
-      if (msgId != null) message = message = uiMessageList.messageList_.get(msgId) ;
+      if (msgId != null) message = uiMessageList.messageList_.get(msgId) ;
       else  message = uiMessageList.getCheckedMessage().get(0);
       uiComposeForm.init(accId, message, uiComposeForm.MESSAGE_FOWARD);
       uiPopupContainer.addChild(uiComposeForm) ;

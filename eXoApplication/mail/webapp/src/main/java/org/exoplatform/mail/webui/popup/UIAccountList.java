@@ -107,7 +107,8 @@ public class UIAccountList extends UIGrid  implements UIPopupComponent{
       System.out.println("=====>>> DeleteActionListener");
       UIAccountList uiAccountList = event.getSource() ;
       UIMailPortlet uiPortlet = uiAccountList.getAncestorOfType(UIMailPortlet.class) ;
-      String currAccountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;
+      String currAccountId = uiSelectAccount.getSelectedValue();
       String accId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIApplication uiApp = uiAccountList.getAncestorOfType(UIApplication.class) ;
       MailService mailSvr = uiAccountList.getApplicationComponent(MailService.class) ;
@@ -116,10 +117,13 @@ public class UIAccountList extends UIGrid  implements UIPopupComponent{
       Account account = mailSvr.getAccountById(SessionsUtils.getSessionProvider(), username, accId) ;
       try {
         mailSvr.removeAccount(SessionsUtils.getSessionProvider(), username, account) ;
-        UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;
         uiSelectAccount.refreshItems() ;
         uiAccountList.updateGrid() ;
         if (currAccountId.equals(accId)) {
+          if (mailSvr.getAccounts(SessionsUtils.getSessionProvider(), username).size() == 0) {
+            uiSelectAccount.setSelectedValue("");
+            mailSvr.updateCurrentAccount(SessionsUtils.getSessionProvider(), username, "");
+          }
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ; 
         } else {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiAccountList.getAncestorOfType(UIPopupAction.class)) ;
