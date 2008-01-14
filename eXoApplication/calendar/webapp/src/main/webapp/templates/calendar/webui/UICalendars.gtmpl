@@ -212,10 +212,10 @@
 		<!-- end public calendars -->
 	</div>
 	<% /*Begin Popup Menu - Calendar group*/ %>
-	     <!-- <div class="UIPopupCategory" style="display: none;">
-	      	<div class="PopupCategoryDecorator">-->
+	      <div class="UIPopupCategory" style="display: none;">
+	      	<div class="PopupCategoryDecorator">
 	      
-		        <div class="UIRightClickPopupMenu" style="display: none ;">
+		        <div class="UIRightClickPopupMenu" style="display: block ;">
 		        	<div class="UIContextMenuContainer">
 							  <div class="TopLeftRightClickPopupMenu">
 		      			<div class="TopRightRightClickPopupMenu">
@@ -261,15 +261,15 @@
 	  					</div>
 	  				</div>
 	  			
-			   <!-- </div>
-			  </div>-->
+			    </div>
+			  </div>
 		<% /*End Popup Menu*/ %>
 	<% /*Begin Popup Menu - Calendar*/ %>
 <!--	  <div style="position: relative;">-->
-	      <!--<div class="UIPopupCategory" style="display: none;">
-	      	<div class="PopupCategoryDecorator">-->
+	      <div class="UIPopupCategory" style="display: none;">
+	      	<div class="PopupCategoryDecorator">
 	      
-		        <div class="UIRightClickPopupMenu" style="display: none;">
+		        <div class="UIRightClickPopupMenu" style="display: block;">
 		        	<div class="UIContextMenuContainer">
 							  <div class="TopLeftRightClickPopupMenu">
 		      			<div class="TopRightRightClickPopupMenu">
@@ -334,8 +334,8 @@
 	  					</div>
 	  				</div>
 	  			
-			  <!--  </div>
-			  </div>-->
+			    </div>
+			  </div>
 <!--			</div>-->
 		<% /*End Popup Menu*/ %>
 <%uiform.end()%>
