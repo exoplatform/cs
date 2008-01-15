@@ -74,21 +74,21 @@
   	<table>
   		<tbody>
   			<tr>
-		    <%
-		    	int size = uicomponent.getAllDayEvents().values().size() ;
-		    	for(ce in uicomponent.getAllDayEvents().values()) {
-				 	actionLink =  uicomponent.event("SaveEvent",ce.getId()+"&calendarId="+ce.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
-				  long precent = (100 / size) ;
-				  color = uicomponent.getColors().get(ce.getCalendarId()) ;
-		    %>
-   			<td width="$precent%" class="$color">
-	    		<div unselectable="on" class="EventContainerBorder EventBoxes"  calType="$ce.calType" eventCat="$ce.eventCategoryId" eventid="<%=ce.getId()%>" calid="<%=ce.getCalendarId()%>" actionlink="$actionLink">
-	          <div class="EventContainer $color" style="height:25px;" title="<%=dtf.format(ce.getFromDateTime())%>:-><%=dtf.format(ce.getToDateTime())%>">
-	          	<%=ce.getSummary()%>
+			    <%
+			    	int size = uicomponent.getAllDayEvents().values().size() ;
+			    	for(ce in uicomponent.getAllDayEvents().values()) {
+					 	actionLink =  uicomponent.event("SaveEvent",ce.getId()+"&calendarId="+ce.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
+					  long precent = (99 / size) ;
+					  color = uicomponent.getColors().get(ce.getCalendarId()) ;
+			    %>
+   				<td width="$precent%">
+		    		<div unselectable="on" class="EventContainerBorder EventBoxes $color" style="height:20px;border:solid 1px white;" calType="$ce.calType" eventCat="$ce.eventCategoryId" eventid="<%=ce.getId()%>" calid="<%=ce.getCalendarId()%>" actionlink="$actionLink">
+		          <div class="EventContainer"  title="<%=dtf.format(ce.getFromDateTime())%>:-><%=dtf.format(ce.getToDateTime())%>">
+		          	<%=ce.getSummary()%>
+		          </div>
 	          </div>
-          </div>
-    		</td>
-    <%}%>
+    			</td>
+	    	<%}%>
     </tr>
     </tbody>
     </table>
