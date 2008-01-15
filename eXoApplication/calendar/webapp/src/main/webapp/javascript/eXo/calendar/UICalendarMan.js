@@ -681,7 +681,8 @@ GUIMan.prototype.initHighlighter = function(form) {
 GUIMan.prototype.callbackHighlighter = function() {
   var Highlighter = eXo.calendar.Highlighter ;
   var startTime = parseInt(Highlighter.firstCell.getAttribute('startTime'));
-  var endTime = parseInt(Highlighter.lastCell.getAttribute('startTime')) + (1000 * 60 * 60 * 24);
+  var endTime = parseInt(Highlighter.lastCell.getAttribute('startTime')) + (1000 * 60 * 60 * 24) - 1;
+//  var endTime = parseInt(Highlighter.lastCell.getAttribute('startTime')) - 1;
   eXo.webui.UIForm.submitEvent('UIMonthView' ,'QuickAdd','&objectId=Event&startTime=' + startTime + '&finishTime=' + endTime); 
 } ;
 
