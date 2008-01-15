@@ -374,7 +374,7 @@
                %>
                  <a href="$actionLink" title="$title" style="display: block; float: left; margin-right: 3px;"><div class="IconTag $colorCss"><span></span></div></a>
               <%}%>
-              <a href="$actionLink" style="float: left;"><%=msg.getSubject()%></a>
+              <a href="$actionLink" style=""><%=msg.getSubject()%></a>
               <div style="clear: left;"><spam></spam></div></td>             
     				<td class="text">( <%= (msg.isRootConversation()) ? uicomponent.getConversations(msg).size() : 1 %> )</td>
     				<td class="$readStatus">

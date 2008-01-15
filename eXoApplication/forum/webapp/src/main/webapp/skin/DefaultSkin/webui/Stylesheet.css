@@ -11,8 +11,11 @@
 @import url('UIForumPageIterator/Stylesheet.css') ;
 
 /**************************** UIActionForum *********************************/
+.UIForumPortlet .UIActionForum {
+	padding: 2px 3px;
+}
+
 .UIForumPortlet .UIActionForum .ActionButton {
-	margin: 2px 3px 0px 3px;
 	float: left;
 }
  
