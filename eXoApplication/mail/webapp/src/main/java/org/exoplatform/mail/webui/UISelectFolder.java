@@ -36,9 +36,11 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 public class UISelectFolder extends UIFormInputSet {
   final public static String SELECT_FOLDER = "folder" ;
   public String level = "" ;
+  public String accountId_ = "";
   
-  public UISelectFolder(String id) throws Exception {  
-    setId(id);
+  public UISelectFolder(String accountId) throws Exception {  
+    setId("UISelectFolder");
+    accountId_ = accountId ;
     addUIFormInput(new UIFormSelectBox(SELECT_FOLDER, SELECT_FOLDER, getOptions()));
   }
   
@@ -52,6 +54,7 @@ public class UISelectFolder extends UIFormInputSet {
   
   public List<SelectItemOption<String>> getOptions() throws Exception {
     List<SelectItemOption<String>> optionList = new ArrayList<SelectItemOption<String>>();  
+    optionList.add(new SelectItemOption<String>("All Folder", ""));
     for (Folder cf : getDefaultFolders()) {
       optionList.add(new SelectItemOption<String>(cf.getName(), cf.getId()));
     }
@@ -89,9 +92,8 @@ public class UISelectFolder extends UIFormInputSet {
   public List<Folder> getSubFolders(String parentPath) throws Exception {
     MailService mailSvr = MailUtils.getMailService();
     String username = MailUtils.getCurrentUser() ;
-    String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
     List<Folder> subFolders = new ArrayList<Folder>();
-    for (Folder f : mailSvr.getSubFolders(SessionsUtils.getSessionProvider(), username, accountId, parentPath)) {
+    for (Folder f : mailSvr.getSubFolders(SessionsUtils.getSessionProvider(), username, accountId_, parentPath)) {
       subFolders.add(f);
     }
     return subFolders ;
@@ -101,9 +103,8 @@ public class UISelectFolder extends UIFormInputSet {
     List<Folder> folders = new ArrayList<Folder>() ;
     MailService mailSvr = getApplicationComponent(MailService.class) ;
     String username = MailUtils.getCurrentUser() ;
-    String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
     try {
-      folders.addAll(mailSvr.getFolders(SessionsUtils.getSessionProvider(), username, accountId, isPersonal)) ;
+      folders.addAll(mailSvr.getFolders(SessionsUtils.getSessionProvider(), username, accountId_, isPersonal)) ;
     } catch (Exception e){
       //e.printStackTrace() ;
     }

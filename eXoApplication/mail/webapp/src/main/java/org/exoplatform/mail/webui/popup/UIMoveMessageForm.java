@@ -56,8 +56,10 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
   public static String folderId="";
   public List<Message> messageList=new ArrayList<Message>();  
   
-  public UIMoveMessageForm() throws Exception { 
-    addUIFormInput(new UISelectFolder("UISelectFolder"));
+  public UIMoveMessageForm() throws Exception { }
+  
+  public void init(String accountId) throws Exception {
+    addUIFormInput(new UISelectFolder(accountId));
   }
   
   public void setMessageList(List<Message> messageList){

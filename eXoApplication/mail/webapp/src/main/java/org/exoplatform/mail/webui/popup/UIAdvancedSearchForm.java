@@ -82,8 +82,10 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
   public List<Contact> getToContacts(){ return ToContacts; }  
   public void setToContacts(List<Contact> contactList){ ToContacts = contactList; } 
   
-  public UIAdvancedSearchForm() throws Exception {
-    addUIFormInput(new UISelectFolder("UISelectFolder"));
+  public UIAdvancedSearchForm() throws Exception {}
+  
+  public void init(String accountId) throws Exception {
+    addUIFormInput(new UISelectFolder(accountId));
     
     addUIFormInput(new UIFormStringInput(FIELD_TO_SEARCH, null, null)) ;  
     addUIFormInput(new UIFormStringInput(FIELD_FROM_SEARCH, null, null)) ;  

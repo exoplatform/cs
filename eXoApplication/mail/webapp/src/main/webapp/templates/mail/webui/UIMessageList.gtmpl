@@ -239,7 +239,7 @@
   </div>  
   <% /* End popup menu for the message*/ %>
   <%
-		if(MailUtils.isChecking(MailUtils.getCurrentUser(), MailUtils.getAccountId())) {
+		if(MailUtils.isChecking(MailUtils.getCurrentUser(), uicomponent.getAccountId())) {
 			%>
 				<div style="background: yellow; padding: 2px 0px 5px 10px;">
 					<div class="LoadingIcon"><span></span></div>

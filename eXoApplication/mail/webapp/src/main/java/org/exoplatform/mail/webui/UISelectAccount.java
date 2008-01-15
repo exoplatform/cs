@@ -73,9 +73,13 @@ public class UISelectAccount extends UIForm {
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     List<Account> accountList = new ArrayList<Account>(); 
     accountList =  mailSvr.getAccounts(SessionsUtils.getSessionProvider(), username) ;
+    String defaultAcc = mailSvr.getCurrentAccount(SessionsUtils.getSessionProvider(), username);
     List<SelectItemOption<String>>  options = new ArrayList<SelectItemOption<String>>() ;
     for(Account acc : accountList) {
       SelectItemOption<String> option = new SelectItemOption<String>(acc.getLabel(), acc.getId());
+      if (defaultAcc != null && acc.getId().equals(defaultAcc)) {
+        option.setSelected(true);
+      }
       options.add(option) ;
     }
     return options ;

@@ -327,6 +327,7 @@ public class UIMessagePreview extends UIComponent {
       MailService mailSrv = MailUtils.getMailService();
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);     
       UIMoveMessageForm uiMoveMessageForm = uiMessagePreview.createUIComponent(UIMoveMessageForm.class,null, null);
+      uiMoveMessageForm.init(accountId);
       List<Message> msgList = new ArrayList<Message>();
       msgList.add(mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId));
       uiMoveMessageForm.setMessageList(msgList);

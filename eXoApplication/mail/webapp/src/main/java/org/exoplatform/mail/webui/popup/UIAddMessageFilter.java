@@ -76,7 +76,9 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
   
   private MessageFilter currentFilter ;
   
-  public UIAddMessageFilter() throws Exception {
+  public UIAddMessageFilter() throws Exception {}
+  
+  public void init(String accountId) throws Exception {
     addUIFormInput(new UIFormStringInput(FILTER_NAME, FILTER_NAME , null));
     addUIFormInput(new UIFormStringInput(FILTER_FROM, FILTER_FROM , null));
     addUIFormInput(new UIFormStringInput(FILTER_TO, FILTER_TO , null));
@@ -111,10 +113,9 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
     options4.add(new SelectItemOption<String>("ends with", String.valueOf(Utils.CONDITION_ENDS_WITH)));
     addUIFormInput(new UIFormSelectBox(FILTER_SUBJECT_CONDITION, FILTER_SUBJECT_CONDITION, options4));
     String username = MailUtils.getCurrentUser();
-    String accountId = MailUtils.getAccountId();
     MailService mailSrv = MailUtils.getMailService();
     
-    addUIFormInput(new UISelectFolder("UISelectFolder"));
+    addUIFormInput(new UISelectFolder(accountId));
     
     List<SelectItemOption<String>> tagList = new ArrayList<SelectItemOption<String>>();   
     tagList.add(new SelectItemOption<String>("-- Choose tag --", ""));       

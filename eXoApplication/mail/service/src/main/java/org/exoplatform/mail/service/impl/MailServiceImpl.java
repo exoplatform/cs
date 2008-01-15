@@ -22,6 +22,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Properties;
@@ -345,7 +346,6 @@ public class MailServiceImpl implements MailService{
   }
   
   public List<Message> checkNewMessage(SessionProvider sProvider, String username, String accountId) throws Exception {
-    Calendar checkTime = GregorianCalendar.getInstance();
     Account account = getAccountById(sProvider, username, accountId) ;
     System.out.println(" #### Getting mail from " + account.getIncomingHost() + " ... !");
     List<Message> messageList = new ArrayList<Message>();
@@ -404,8 +404,12 @@ public class MailServiceImpl implements MailService{
           i ++ ;          
           System.out.println(" ####  " + i + " messages saved");
         }
-        
-        storage_.execActionFilter(sProvider, username, accountId, checkTime);
+        Calendar cc = GregorianCalendar.getInstance();
+        javax.mail.Message firstMsg = vector.get(0) ;
+        if (firstMsg.getReceivedDate() != null)
+        cc.setTime(firstMsg.getReceivedDate());
+        else cc.setTime(firstMsg.getSentDate());
+        storage_.execActionFilter(sProvider, username, accountId, cc);
         folder.close(true);      
         store.close();
       }
@@ -426,10 +430,14 @@ public class MailServiceImpl implements MailService{
     node.setProperty(Utils.EXO_BCC, InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.BCC)));
     node.setProperty(Utils.EXO_REPLYTO, InternetAddress.toString(msg.getReplyTo()));
     node.setProperty(Utils.EXO_SUBJECT, msg.getSubject());
-    
     Calendar gc = GregorianCalendar.getInstance();
+    if (msg.getReceivedDate() != null)
+      gc.setTime(msg.getReceivedDate());
+    else gc.setTime(msg.getSentDate());
     node.setProperty(Utils.EXO_RECEIVEDDATE, gc);
-    node.setProperty(Utils.EXO_SENDDATE, gc); //TODO send date
+    Calendar sc = GregorianCalendar.getInstance();
+    sc.setTime(msg.getSentDate());
+    node.setProperty(Utils.EXO_SENDDATE, sc); //TODO send date
     
     node.setProperty(Utils.EXO_CONTENT_TYPE, msg.getContentType());
     node.setProperty(Utils.EXO_SIZE, msg.getSize());

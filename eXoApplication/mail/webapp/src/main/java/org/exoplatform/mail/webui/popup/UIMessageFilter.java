@@ -144,9 +144,13 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
   static  public class AddFilterActionListener extends EventListener<UIMessageFilter> {
     public void execute(Event<UIMessageFilter> event) throws Exception {
       UIMessageFilter uiMessageFilter = event.getSource() ;
+      UIMailPortlet mailPortlet = uiMessageFilter.getAncestorOfType(UIMailPortlet.class);
       UIPopupActionContainer uiActionContainer = uiMessageFilter.getAncestorOfType(UIPopupActionContainer.class) ;
       UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
-      uiChildPopup.activate(UIAddMessageFilter.class, 650) ;
+      UIAddMessageFilter uiAddMessageFilter = uiChildPopup.createUIComponent(UIAddMessageFilter.class, null, null);
+      String accountId = mailPortlet.getChild(UINavigationContainer.class).getChild(UISelectAccount.class).getSelectedValue() ;
+      uiAddMessageFilter.init(accountId);
+      uiChildPopup.activate(uiAddMessageFilter, 650, 0, false) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
     }
   }
@@ -165,6 +169,9 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
       UIPopupActionContainer uiActionContainer = uiMessageFilter.getAncestorOfType(UIPopupActionContainer.class) ;
       UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
       UIAddMessageFilter uiEditMessageFilter = uiChildPopup.createUIComponent(UIAddMessageFilter.class, null, null);
+      UIMailPortlet mailPortlet = uiMessageFilter.getAncestorOfType(UIMailPortlet.class);
+      String accountId = mailPortlet.getChild(UINavigationContainer.class).getChild(UISelectAccount.class).getSelectedValue() ;
+      uiEditMessageFilter.init(accountId);
       uiChildPopup.activate(uiEditMessageFilter, 650, 0, false) ;
       uiEditMessageFilter.setCurrentFilter(filter);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
