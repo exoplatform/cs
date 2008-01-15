@@ -9,19 +9,6 @@ Highlighter.prototype.getPos = function(cell) {
 	}
 } ;
 
-Highlighter.prototype.getMousePos = function(evt) {
-	var Highlighter = eXo.calendar.Highlighter ;
-	var _e = window.event || evt ;
-	var cell = Highlighter.cell ;
-	var len = cell.length ;
-	for(var i = 0 ; i < len ; i ++) {
-		if (Highlighter.isInCell(cell[i], _e)) {
-			Highlighter.currentCell = cell[i] ;
-			return Highlighter.getPos(cell[i]) ;
-		}
-	}
-} ;
-
 Highlighter.prototype.isInCell = function(cell, _e) {
 	var Highlighter = eXo.calendar.Highlighter ;
 	var cellX = eXo.core.Browser.findPosXInContainer(cell, Highlighter.container) ;
@@ -33,6 +20,19 @@ Highlighter.prototype.isInCell = function(cell, _e) {
 	&& (mouseY > cellY) && (mouseY < (cellY + cell.offsetHeight))
 	) { return true ;}
 	return false ;
+} ;
+
+Highlighter.prototype.getMousePos = function(evt) {
+	var Highlighter = eXo.calendar.Highlighter ;
+	var _e = window.event || evt ;
+	var cell = Highlighter.cell ;
+	var len = cell.length ;
+	for(var i = 0 ; i < len ; i ++) {
+		if (Highlighter.isInCell(cell[i], _e)) {
+			Highlighter.currentCell = cell[i] ;
+			return Highlighter.getPos(Highlighter.currentCell) ;
+		}
+	}
 } ;
 
 Highlighter.prototype.hideAll = function() {
@@ -91,10 +91,11 @@ Highlighter.prototype.start = function(evt) {
 	Highlighter.startBlock = Highlighter.block[pos.y] ;
 	Highlighter.startBlock.style.display = "block" ;
 	Highlighter.container = Highlighter.startBlock.offsetParent ;
-	var x = eXo.core.Browser.findPosXInContainer(Highlighter.startCell, Highlighter.container) ;
-	var y = eXo.core.Browser.findPosYInContainer(Highlighter.startCell, Highlighter.container) ;
-	Highlighter.startBlock.style.top = y + "px" ;
+	var fixleftIE = (document.all && document.getElementById("UIWeekView"))? 6 : 0 ; //TODO : No hard code 
+	var x = eXo.core.Browser.findPosXInContainer(Highlighter.startCell, Highlighter.container) -  fixleftIE ;
+	var y = eXo.core.Browser.findPosYInContainer(Highlighter.startCell, Highlighter.container) - document.getElementById(eXo.calendar.UICalendarPortlet.portletName).parentNode.scrollTop ;
 	Highlighter.startBlock.style.left = x + "px" ;
+	Highlighter.startBlock.style.top = y + "px" ;
 	Highlighter.startBlock.style.width = Highlighter.dimension.x + "px" ;
 	Highlighter.startBlock.style.height = Highlighter.dimension.y + "px" ;
 	document.onmousemove = Highlighter.execute ;
@@ -108,6 +109,7 @@ Highlighter.prototype.execute = function(evt) {
 	var Highlighter = eXo.calendar.Highlighter ;
 	var _e = window.event || evt ;	
 	var sPos = Highlighter.getPos(Highlighter.startCell) ;
+	var fixleftIE = (document.all && document.getElementById("UIWeekView"))? 6 : 0 ; //TODO : No hard code 
 	try{
 		var cPos = Highlighter.getMousePos(_e) ;		
 		var len = cPos.y - sPos.y ;	
@@ -124,12 +126,12 @@ Highlighter.prototype.execute = function(evt) {
 			startBlock = Highlighter.startBlock ;
 			Highlighter.hideAll(startBlock) ;
 			if (diff > 0) {
-				startBlock.style.left = eXo.core.Browser.findPosXInContainer(Highlighter.startCell, Highlighter.container) + "px" ;
+				startBlock.style.left = eXo.core.Browser.findPosXInContainer(Highlighter.startCell, Highlighter.container) - fixleftIE + "px" ;
 				startBlock.style.width = (diff + 1)*Highlighter.dimension.x + "px" ;
 				Highlighter.firstCell = Highlighter.startCell ;
 				Highlighter.lastCell  = Highlighter.currentCell ;
 			} else {
-				startBlock.style.left = eXo.core.Browser.findPosXInContainer(Highlighter.startCell, Highlighter.container) + diff*Highlighter.dimension.x + "px" ;
+				startBlock.style.left = eXo.core.Browser.findPosXInContainer(Highlighter.startCell, Highlighter.container) + diff*Highlighter.dimension.x - fixleftIE + "px" ;
 			 	startBlock.style.width = (1 - diff)*Highlighter.dimension.x + "px" ;
 			 	Highlighter.lastCell = Highlighter.startCell ;
 				Highlighter.firstCell  = Highlighter.currentCell ;
@@ -161,7 +163,7 @@ Highlighter.prototype.execute = function(evt) {
 			}
 			startBlock.style.display = "block" ;
 			startBlock.style.top = startY + "px" ;
-			startBlock.style.left = startX + "px" ;
+			startBlock.style.left = startX - fixleftIE + "px" ;
 			startBlock.style.width = startWidth + "px" ;
 			startBlock.style.height = Highlighter.dimension.y + "px" ;
 			if(Math.abs(len) >= 1) {
@@ -175,7 +177,7 @@ Highlighter.prototype.execute = function(evt) {
 			}
 			endBlock.style.display  = "block" ;
 			endBlock.style.top  = parseInt(Highlighter.block[lastIndex - 1].style.top) + Highlighter.dimension.y + "px" ;
-			endBlock.style.left  = eXo.core.Browser.findPosXInContainer(Highlighter.cell[0], Highlighter.container) + "px" ;
+			endBlock.style.left  = eXo.core.Browser.findPosXInContainer(Highlighter.cell[0], Highlighter.container) - fixleftIE + "px" ;
 			endBlock.style.width = endX + "px" ;
 			endBlock.style.height = Highlighter.dimension.y + "px" ;
 			Highlighter.hideBlock(startIndex, lastIndex) ;

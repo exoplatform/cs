@@ -118,8 +118,8 @@ UIWeekView.prototype.showInCol = function(obj) {
 	if (len <= 0) return ;
 	var UIWeekView = eXo.calendar.UIWeekView ;
 	var container = (eXo.core.Browser.isFF()) ? UIWeekView.container : items[0].offsetParent ;
-	var left = obj.offsetLeft ;
-	var width = (obj.offsetWidth - 2) ;
+	var left = parseFloat(obj.offsetLeft/container.offsetWidth)*100 ;
+	var width = 100*(obj.offsetWidth - 2)/container.offsetWidth ;
 	items = eXo.calendar.UICalendarPortlet.sortByAttribute(items, "starttime") ;
 	//UIWeekView.adjustWidth(items, width, left) ;
 	eXo.calendar.UICalendarPortlet.adjustWidth(items, width, left) ;

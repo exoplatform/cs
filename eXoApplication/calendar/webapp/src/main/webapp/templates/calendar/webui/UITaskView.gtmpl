@@ -8,10 +8,11 @@
 	String currentDayName = uicomponent.getDayName(uicomponent.getDayOfWeek(currentYear, currentMonth, currentDay)) ;
 	String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT) ;
  	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS) ;
- 		monthViewAction = uicomponent.TYPE_MONTH +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=1" ;
+	monthViewAction = uicomponent.TYPE_MONTH +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=1" ;
 	yearViewAction = uicomponent.TYPE_YEAR +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=1" ;
-	
 	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
+	def rcontext = _ctx.getRequestContext() ;
+	rcontext.getJavascriptManager().addJavascript('eXo.webui.CheckBox.init("'+uiform.id+'") ;') ;	
 %>
 <div class="TitleBar Result">
 	    <table>
@@ -41,10 +42,10 @@
 				</body>
 			</table>
 		</div>
-<div class="UITaskView">
-		<div class="TaskListContainer">
+<div class="UIListView">
+		<!--<div class="TaskListContainer">
 			<div class="UIListView">
-				<div class="TaskList">
+				<div class="TaskList">-->
 					<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
   					<thead>
   						<tr>
@@ -92,12 +93,11 @@
 			  				%>
   	   			 </tbody>
 					</table>
-				</div>
-			</div>			
-		</div>
-	</div>	
 	<%_ctx.include("app:/templates/calendar/webui/UIPageIterator.gtmpl");%>
-	<div class="ResizeReadingPane"><span></span></div>
+			<!--	</div>
+			</div>			
+		</div>-->
+	</div>	
 		<% /*Begin Popup Menu*/ %>
 	<div class="UIRightClickPopupMenu" id="UIListViewEventRightMenu" exocallback="eXo.calendar.UICalendarPortlet.listViewCallack">
 		<div class="UIContextMenuContainer">

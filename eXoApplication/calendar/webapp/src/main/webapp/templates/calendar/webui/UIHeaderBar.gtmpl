@@ -70,7 +70,7 @@ rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.ge
 		<a href="<%=uicomponent.event("AddCategory")%>">
 			<div class="AddCategoryIcon"><span></span></div>
 		</a>
-		<div class="EventCategory" onclick="eXo.calendar.UICalendarPortlet.initFilterByCategory(this) ;">
+		<div class="EventCategory">
 			<% 
 				uiform.renderField("eventCategories") ;
 			%>			

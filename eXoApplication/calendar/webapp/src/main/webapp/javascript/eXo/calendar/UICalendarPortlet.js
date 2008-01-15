@@ -1,4 +1,5 @@
 eXo.require('eXo.cs.UIContextMenu','/csResources/javascript/') ;
+eXo.require('eXo.cs.CSUtils','/csResources/javascript/') ;
 function UICalendarPortlet() {
 }
 
@@ -177,13 +178,13 @@ UICalendarPortlet.prototype.show = function(obj, evt) {
 	var _e = window.event || evt ;
 	_e.cancelBubble = true ;
 	var DOMUtil = eXo.core.DOMUtil ;
-	var uiCalendarPortlet =	document.getElementById(this.portletName) ;
-	var contentContainer = DOMUtil.findFirstDescendantByClass(uiCalendarPortlet, "div", "ContentContainer") ;
+	var portlet =	document.getElementById(this.portletName).parentNode ;
+	var contentContainer = DOMUtil.findFirstDescendantByClass(portlet, "div", "ContentContainer") ;
 	var	uiPopupCategory = DOMUtil.findNextElementByTagName(contentContainer,  "div") ;
-//	var newPos = {
-//		"x" : eXo.core.Browser.findPosX(obj) ,
-//		"y" : eXo.core.Browser.findPosY(obj) + obj.offsetHeight - contentContainer.scrollTop
-//	}
+	var newPos = {
+		"x" : eXo.core.Browser.findPosX(obj) ,
+		"y" : eXo.core.Browser.findPosY(obj) + obj.offsetHeight - contentContainer.scrollTop - portlet.scrollTop
+	}
 	if (DOMUtil.findAncestorByClass(obj, "CalendarItem")) uiPopupCategory = DOMUtil.findNextElementByTagName(uiPopupCategory,  "div") ;
 	if (!uiPopupCategory) return ;
 	var value = "" ;
@@ -215,8 +216,8 @@ UICalendarPortlet.prototype.show = function(obj, evt) {
 		items[i].href = String(items[i].href).replace(/objectId\s*=.*(?='|")/, value) ;
 	}	
 	
-	//eXo.calendar.UICalendarPortlet.swapMenu(uiPopupCategory, obj, newPos) ;
-	eXo.calendar.UICalendarPortlet.swapMenu(uiPopupCategory, obj) ;
+	eXo.calendar.UICalendarPortlet.swapMenu(uiPopupCategory, obj, newPos) ;
+	//eXo.calendar.UICalendarPortlet.swapMenu(uiPopupCategory, obj) ;
 	if (calType && (calType != "0") ) {
 		var actions = DOMUtil.findDescendantsByTagName(eXo.calendar.UICalendarPortlet.menuElement, "a") ;
 		for(var j = 0 ; j < actions.length ; j ++) {
@@ -396,54 +397,14 @@ UICalendarPortlet.prototype.getInterval = function(el) {
 } ;
 
 UICalendarPortlet.prototype.adjustWidth = function(el,totalWidth) {
-	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
-	var inter = UICalendarPortlet.getInterval(el) ;
-	if (el.length <= 0) return ;
-	var width = "" ;
-	for(var i = 0 ; i < inter.length ; i ++) {
-		var offsetLeft = parseFloat(0) ;
-		if(arguments.length > 2) {
-			offsetLeft = parseFloat(arguments[2]) ;
-		} 
-		var len = (inter[i+1] - inter[i]) ;
-		if(isNaN(len)) continue ;
-		var mark = null ;
-		if (i > 0){
-			for(var l = 0 ; l < inter[i] ; l ++) {
-				if((el[inter[i]].offsetTop > el[l].offsetTop) && (el[inter[i]].offsetTop < (el[l].offsetTop + el[l].offsetHeight))) {
-					mark = l ;					
-				}
-			}			
-			if (mark != null) {
-				offsetLeft = parseFloat(el[mark].style.left) + parseFloat(el[mark].style.width) ;
-			}
-		}
-		var n = 0 ;
-		for(var j = inter[i]; j < inter[i+1] ; j++) {
-			if(mark != null) {				
-				width = parseFloat((totalWidth + offsetLeft - parseFloat(el[mark].style.left) - parseFloat(el[mark].style.width))/len) ;
-			} else {
-				width = parseFloat(totalWidth/len) ;
-			}
-			el[j].style.width = width + "px" ;
-			if (el[j-1]&&(len > 1)) el[j].style.left = offsetLeft + parseFloat(el[j-1].style.width)*n +  "px" ;
-			else {
-				el[j].style.left = offsetLeft +  "px" ;
-			}
-			n++ ;
-		}
-	}	
 //	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
 //	var inter = UICalendarPortlet.getInterval(el) ;
 //	if (el.length <= 0) return ;
 //	var width = "" ;
 //	for(var i = 0 ; i < inter.length ; i ++) {
-//		var totalWidth = (arguments.length > 1) ? arguments[1] : parseFloat(100) ;
 //		var offsetLeft = parseFloat(0) ;
-//		var left = parseFloat(0) ;
 //		if(arguments.length > 2) {
 //			offsetLeft = parseFloat(arguments[2]) ;
-//			left = arguments[2] ;
 //		} 
 //		var len = (inter[i+1] - inter[i]) ;
 //		if(isNaN(len)) continue ;
@@ -461,18 +422,60 @@ UICalendarPortlet.prototype.adjustWidth = function(el,totalWidth) {
 //		var n = 0 ;
 //		for(var j = inter[i]; j < inter[i+1] ; j++) {
 //			if(mark != null) {				
-//				width = parseFloat((totalWidth + left - parseFloat(el[mark].style.left) - parseFloat(el[mark].style.width))/len) ;
+//				width = parseFloat((totalWidth + offsetLeft - parseFloat(el[mark].style.left) - parseFloat(el[mark].style.width))/len) ;
 //			} else {
 //				width = parseFloat(totalWidth/len) ;
 //			}
-//			UICalendarPortlet.setWidth(el[j], width) ;
-//			if (el[j-1]&&(len > 1)) el[j].style.left = offsetLeft + parseFloat(el[j-1].style.width)*n +  "%" ;
+//			el[j].style.width = width + "px" ;
+//			if (el[j-1]&&(len > 1)) el[j].style.left = offsetLeft + parseFloat(el[j-1].style.width)*n +  "px" ;
 //			else {
-//				el[j].style.left = offsetLeft +  "%" ;
+//				el[j].style.left = offsetLeft +  "px" ;
 //			}
 //			n++ ;
 //		}
 //	}
+/* --- o0o --- */	
+
+	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
+	var inter = UICalendarPortlet.getInterval(el) ;
+	if (el.length <= 0) return ;
+	var width = "" ;
+	for(var i = 0 ; i < inter.length ; i ++) {
+		var totalWidth = (arguments.length > 1) ? arguments[1] : parseFloat(100) ;
+		var offsetLeft = parseFloat(0) ;
+		var left = parseFloat(0) ;
+		if(arguments.length > 2) {
+			offsetLeft = parseFloat(arguments[2]) ;
+			left = arguments[2] ;
+		} 
+		var len = (inter[i+1] - inter[i]) ;
+		if(isNaN(len)) continue ;
+		var mark = null ;
+		if (i > 0){
+			for(var l = 0 ; l < inter[i] ; l ++) {
+				if((el[inter[i]].offsetTop > el[l].offsetTop) && (el[inter[i]].offsetTop < (el[l].offsetTop + el[l].offsetHeight))) {
+					mark = l ;					
+				}
+			}			
+			if (mark != null) {
+				offsetLeft = parseFloat(el[mark].style.left) + parseFloat(el[mark].style.width) ;
+			}
+		}
+		var n = 0 ;
+		for(var j = inter[i]; j < inter[i+1] ; j++) {
+			if(mark != null) {				
+				width = parseFloat((totalWidth + left - parseFloat(el[mark].style.left) - parseFloat(el[mark].style.width))/len) ;
+			} else {
+				width = parseFloat(totalWidth/len) ;
+			}
+			UICalendarPortlet.setWidth(el[j], width) ;
+			if (el[j-1]&&(len > 1)) el[j].style.left = offsetLeft + parseFloat(el[j-1].style.width)*n +  "%" ;
+			else {
+				el[j].style.left = offsetLeft +  "%" ;
+			}
+			n++ ;
+		}
+	}
 } ;
 
 UICalendarPortlet.prototype.showEvent = function() {
@@ -491,7 +494,7 @@ UICalendarPortlet.prototype.showEvent = function() {
 		marker.onmousedown = eXo.calendar.UIResizeEvent.init ;
 	}
 	this.items = el ;
-	this.adjustWidth(this.items, this.viewer.offsetWidth) ;
+	this.adjustWidth(this.items) ;
 	this.setFocus(this.viewer, el, EventDayContainer) ;
 } ;
 
@@ -1099,7 +1102,7 @@ UISelection.prototype.start = function(evt) {
 		}
 		
 		UISelection.startTime = src.getAttribute("startTime") ;
-		UISelection.startX = eXo.core.Browser.findPosXInContainer(src, UISelection.container) ;		
+		UISelection.startX = eXo.core.Browser.findPosXInContainer(src, UISelection.container) - document.getElementById(eXo.calendar.UICalendarPortlet.portletName).parentNode.scrollTop;		
 		UISelection.block.style.display = "block" ;
 		UISelection.startY = eXo.core.Browser.findPosYInContainer(src, UISelection.container) ;
 		UISelection.block.style.width = src.offsetWidth  + "px" ;

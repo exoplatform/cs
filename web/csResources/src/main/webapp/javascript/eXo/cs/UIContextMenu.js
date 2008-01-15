@@ -38,7 +38,6 @@ UIContextMenu.prototype.init = function(conf) {
 			UIContextMenu.preventForms = conf.preventForms;
 		}
 		document.oncontextmenu = UIContextMenu.show;
-
 	}
 } ;
 
@@ -123,7 +122,6 @@ UIContextMenu.prototype.show = function(evt) {
 	var _e = window.event || evt
 	var UIContextMenu = eXo.webui.UIContextMenu ;
 	var menuElementId = UIContextMenu.getMenuElementId(_e) ;
-
 	if (menuElementId) {
 		UIContextMenu.menuElement = document.getElementById(menuElementId) ;
 		var callback = UIContextMenu.getCallback(menuElementId) ;
@@ -149,11 +147,13 @@ UIContextMenu.prototype.show = function(evt) {
 		UIContextMenu.menuElement.style.left = left + "px" ;
 		UIContextMenu.menuElement.style.top = top + "px" ;
 		UIContextMenu.menuElement.style.display = 'block' ;
+		eXo.core.DOMUtil.addClass(UIContextMenu.menuElement, UIContextMenu.portletName) ;
 		UIContextMenu.menuElement.onmouseover = UIContextMenu.autoHide ;
 		UIContextMenu.menuElement.onmouseout = UIContextMenu.autoHide ;		
 		if (!UIContextMenu.IE) {			
-			if(UIContextMenu.portletName) document.getElementById(UIContextMenu.portletName).appendChild(UIContextMenu.menuElement) ;
-			else document.body.appendChild(UIContextMenu.menuElement) ;
+			//if(UIContextMenu.portletName) document.getElementById(UIContextMenu.portletName).appendChild(UIContextMenu.menuElement) ;
+			//else document.body.appendChild(UIContextMenu.menuElement) ;
+			document.body.appendChild(UIContextMenu.menuElement) ;
 		}
 		return false ;
 	}

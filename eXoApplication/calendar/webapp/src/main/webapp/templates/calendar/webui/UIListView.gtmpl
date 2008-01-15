@@ -102,7 +102,6 @@
 		  }
 		%>
 	</div>
-	<div class="ResizeReadingPane"><span></span></div>
 	<%if(isDisplaySearchResult) {%>
 	<div class="UIAction"> 
 		<table class="ActionContainer" align="center">

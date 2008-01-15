@@ -17,6 +17,8 @@
 	DateFormat df = new SimpleDateFormat(dateTimeFormat) ;
 	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
 	selectedEvent = uicomponent.getSelectedEvent() ;
+	def rcontext = _ctx.getRequestContext() ;
+	rcontext.getJavascriptManager().addJavascript('eXo.webui.CheckBox.init("'+uiform.id+'") ;') ;
 %>
 	<div class="TitleBar Result">
 	    <table>
@@ -84,9 +86,8 @@
   				%>
   	   	</tbody>
 		</table>
-	</div>
 	<%_ctx.include("app:/templates/calendar/webui/UIPageIterator.gtmpl");%>
-	<div class="ResizeReadingPane"><span></span></div>
+	</div>
 		<% /*Begin Popup Menu*/ %>
 	<div class="UIRightClickPopupMenu" id="UIListViewEventRightMenu" exocallback="eXo.calendar.UICalendarPortlet.listViewCallack">
 		<div class="UIContextMenuContainer">

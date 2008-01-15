@@ -185,7 +185,8 @@ UIContactPortlet.prototype.adddressPrint = function (){
 	var UIPortalApplication = document.getElementById("UIPortalApplication") ;
 	var UIContactContainer = document.getElementById("UIContactContainer") ;
 	var div = document.createElement("div") ;
-	div.className = "UIPrintContainer" ;
+	UIContactContainer.removeAttribute("class") ;
+	div.className = "UIPrintContainer UIContactPortlet" ;
 	div.appendChild(UIContactContainer.cloneNode(true)) ;
 	var uiAction = DOMUtil.findFirstDescendantByClass(div, "div", "UIAction") ;
 	DOMUtil.addClass(uiAction, "Printable") ;

@@ -1,6 +1,9 @@
 <%
  import org.exoplatform.services.organization.User;
- uiform.begin() %>
+ uiform.begin()
+ def rcontext = _ctx.getRequestContext() ;
+ rcontext.getJavascriptManager().addJavascript('eXo.webui.CheckBox.init("'+uiform.id+'") ;') ;
+%> 
 <div class="UISelectUserForm">
   <div class="SelectUserContainer">
   	<%if(uicomponent.isShowSearch()){%>
