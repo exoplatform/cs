@@ -7,6 +7,7 @@ function CheckBox() {
 CheckBox.prototype.init = function(cont) {
 	if(typeof(cont) == "string") cont = document.getElementById(cont) ;
 	var checkboxes = eXo.core.DOMUtil.findDescendantsByClass(cont, "input", "checkbox") ;
+	if(checkboxes.length <=0) return ;
 	this.allItems = checkboxes[0] ;
 	this.items = checkboxes.slice(1) ;
 	this.allItems.onclick = eXo.cs.CheckBox.checkAll ;
@@ -97,7 +98,15 @@ function Utils() {
 }
 
 Utils.prototype.showHidePane = function(clickobj, beforeobj, afterobj) {
-	
-}
+	if(typeof(beforeobj) == "string") beforeobj = document.getElementById(beforeobj) ;
+	if(typeof(afterobj) == "string") afterobj = document.getElementById(afterobj) ;
+	if(beforeobj.style.display != "none") {
+		beforeobj.style.display = "none" ;
+		clickobj.className = "MinimizeButton"
+	} else {
+		beforeobj.style.display = "block" ;
+		clickobj.className = "MaximizeButton"
+	}
+} ;
 
 eXo.cs.Spliter = new Spliter() ;
