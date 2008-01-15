@@ -60,6 +60,7 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 	public static final String FIELD_MAXTOPICS_SELECTBOX = "MaximumThreads" ;
 	public static final String FIELD_MAXPOSTS_SELECTBOX = "MaximumPosts" ;
 	public static final String FIELD_FORUMJUMP_CHECKBOX = "ShowForumJump" ;
+	public static final String FIELD_TIMEZONE = "timeZone" ;
 	
 	private ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
 	private static final String[] timeZone = {
@@ -96,6 +97,7 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 		} ;
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	public UIForumOptionForm() throws Exception {
+		
 		List<SelectItemOption<String>> list ;
 		list = new ArrayList<SelectItemOption<String>>() ;
 		for(String string : timeZone) {
@@ -161,6 +163,7 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 		addUIFormInput(maximumThreads) ;
 		addUIFormInput(maximumPosts) ;
 		addUIFormInput(isShowForumJump) ;
+		
 	}
 	
 	public UIFormSelectBoxForum getUIFormSelectBoxForum(String name) {
@@ -196,6 +199,7 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 			getUIFormSelectBox(FIELD_TIMEFORMAT_SELECTBOX).setValue(("id" + forumOption.getTimeFormat())) ;
 			getUIFormSelectBox(FIELD_MAXTOPICS_SELECTBOX).setValue(("id" + forumOption.getMaxTopicInPage())) ;
 			getUIFormSelectBox(FIELD_MAXPOSTS_SELECTBOX).setValue(("id" + forumOption.getMaxPostInPage())) ;
+			getUIFormCheckBoxInput(FIELD_FORUMJUMP_CHECKBOX).setChecked(forumOption.getIsShowForumJump());
 		}
 	}
 	
@@ -209,6 +213,7 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 			String shortDateFormat = uiForm.getUIFormSelectBox(FIELD_SHORTDATEFORMAT_SELECTBOX).getValue();
 			String longDateFormat = uiForm.getUIFormSelectBox(FIELD_LONGDATEFORMAT_SELECTBOX).getValue();
 			String timeFormat = uiForm.getUIFormSelectBox(FIELD_TIMEFORMAT_SELECTBOX).getValue().substring(2);
+			boolean isJump = (Boolean)uiForm.getUIFormCheckBoxInput(FIELD_FORUMJUMP_CHECKBOX).getValue() ;
 			String userName = ForumUtils.getCurrentUser() ;
 			UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
 			if(userName != null && userName.length() > 0) {
@@ -220,7 +225,7 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 				forumOption.setLongDateFormat(longDateFormat);
 				forumOption.setMaxPostInPage(maxPost);
 				forumOption.setMaxTopicInPage(maxTopic);
-				forumOption.setIsShowForumJump(false);
+				forumOption.setIsShowForumJump(isJump);
 				uiForm.forumService.saveOption(ForumUtils.getSystemProvider(), forumOption);
 				forumPortlet.initOption() ;
 			}

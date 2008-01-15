@@ -43,20 +43,20 @@ public class UIForumPortlet extends UIPortletApplication {
 	private	ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
 	private boolean isCategoryRendered = true;
 	private boolean isForumRendered = false;
-	private boolean isPostRendered = false;
+	private boolean isTagRendered = false;
+	private boolean isJumpRendered = false;
 	private double timeZone ;
 	private String shortDateformat ;
 	private String longDateformat ;
 	private String timeFormat ;
 	private long maxTopic ;
 	private long maxPost ;
-//	private boolean isShowForumJump = false ;
 	public UIForumPortlet() throws Exception {
 		addChild(UIBreadcumbs.class, null, null) ;
 		addChild(UICategoryContainer.class, null, null).setRendered(isCategoryRendered) ;
 		addChild(UIForumContainer.class, null, null).setRendered(isForumRendered) ;
-		addChild(UITopicsTag.class, null, null).setRendered(isPostRendered) ;
-		addChild(UIForumLinks.class, null, null).setRendered(isForumRendered) ;
+		addChild(UITopicsTag.class, null, null).setRendered(isTagRendered) ;
+		addChild(UIForumLinks.class, null, null) ;
 		addChild(UIPopupAction.class, null, null) ;
 		initOption();
 		String []newStr = ForumUtils.getUserGroups() ;
@@ -69,23 +69,30 @@ public class UIForumPortlet extends UIPortletApplication {
 		if(selected == 1) {
 			isCategoryRendered = true ;
 			isForumRendered = false ;
-			isPostRendered = false ;
+			isTagRendered = false ;
 		} else {
 			if(selected == 2) {
 				isForumRendered = true ;
 				isCategoryRendered = false ;
-				isPostRendered = false ;
+				isTagRendered = false ;
 			} else {
-				isPostRendered = true ;
+				isTagRendered = true ;
 				isForumRendered = false ;
 				isCategoryRendered = false ;
 			}
 		}
-		getChild(UICategoryContainer.class).setRendered(isCategoryRendered) ;
-		getChild(UIForumContainer.class).setRendered(isForumRendered) ;
-		getChild(UITopicsTag.class).setRendered(isPostRendered) ;
+		UICategoryContainer categoryContainer = getChild(UICategoryContainer.class).setRendered(isCategoryRendered) ;
+		categoryContainer.setIsRenderJump(isJumpRendered) ;
+		UIForumContainer forumContainer = getChild(UIForumContainer.class).setRendered(isForumRendered) ;
+		forumContainer.setIsRenderJump(isJumpRendered) ;
+		getChild(UITopicsTag.class).setRendered(isTagRendered) ;
 	}
 	
+	@SuppressWarnings("unused")
+  private boolean  getIsJumpRendered() {
+		return isJumpRendered ;
+	}
+
 	public void renderPopupMessages() throws Exception {
 		UIPopupMessages popupMess = getUIPopupMessages();
 		if(popupMess == null)	return ;
@@ -110,10 +117,10 @@ public class UIForumPortlet extends UIPortletApplication {
 		timeFormat = "12h";
 		maxTopic = 10 ;
 		maxPost = 10 ;
-		//isShowForumJump = false ;
+		isJumpRendered = true ;
 		if(userId != null || userId.length() > 0) {
 			ForumOption forumOption = new ForumOption() ;
-			forumOption = forumService.getOption(ForumUtils.getSystemProvider(), ForumUtils.getCurrentUser()) ;
+			forumOption = forumService.getOption(ForumUtils.getSystemProvider(), userId) ;
 			if(forumOption != null) {
 				timeZone = forumOption.getTimeZone() ;
 				shortDateformat = forumOption.getShortDateFormat() ;
@@ -121,7 +128,7 @@ public class UIForumPortlet extends UIPortletApplication {
 				timeFormat = forumOption.getTimeFormat() ;
 				maxTopic = forumOption.getMaxTopicInPage() ;
 				maxPost = forumOption.getMaxPostInPage() ;
-				//	isShowForumJump = false ;
+				isJumpRendered = forumOption.getIsShowForumJump() ;
 			}
 		}
 		UICategoryContainer categoryContainer = getChild(UICategoryContainer.class);

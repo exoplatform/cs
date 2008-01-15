@@ -31,11 +31,6 @@ public class ForumUtils {
   static public String getCurrentUser() throws Exception {
     return Util.getPortalRequestContext().getRemoteUser() ; 
   }
-//  public static boolean isAnonim() {
-//    String userId = Util.getPortalRequestContext().getRemoteUser() ;
-//    if(userId == null) return true ;   
-//    return false ;
-//  }
   
   public static boolean isAnonim() throws Exception {
     String userId = getCurrentUser() ;

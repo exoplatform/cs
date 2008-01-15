@@ -39,8 +39,7 @@
 	float: right;
 }
 
-
-.UIForumPortlet .UIForumPortlet .UIForumContainer .ContentContainer .UITopicList .Title {
+.UIForumPortlet .UIForumContainer .ContentContainer .UITopicList .Title {
 	color: #204aa0;
 	font-size: 12px; font-weight: bold;
 }

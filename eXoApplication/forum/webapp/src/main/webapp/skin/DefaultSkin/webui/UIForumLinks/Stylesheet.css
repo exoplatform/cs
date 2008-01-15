@@ -40,10 +40,10 @@
 	font-weight: bold;
 }
 
-.UIForumPortlet .UIForumPortlet .optionSelected {
+.UIForumPortlet .optionSelected {
 	background-color: #8eb3da ;
 }
 
-.UIForumPortlet .UIForumPortlet .timeZone {
+.UIForumPortlet .timeZone {
 	line-height: 16px;
 }
