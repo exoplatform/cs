@@ -70,7 +70,6 @@ Spliter.prototype.doResize = function(e , markerobj, beforeAreaObj, afterAreaObj
   if (!this.afterArea) {
     this.afterArea = eXo.core.DOMUtil.findNextElementByTagName(marker, "div") ; 
   }
-//  debugger;
   this.beforeArea.style.height = this.beforeArea.offsetHeight + "px" ;
   this.afterArea.style.height = this.afterArea.offsetHeight + "px" ;  
   this.beforeY = this.beforeArea.offsetHeight ;
@@ -94,5 +93,11 @@ Spliter.prototype.clear = function() {
   document.onmousemove = null ;
 } ;
 
+function Utils() {	
+}
 
-eXo.webui.Spliter = new Spliter() ;
+Utils.prototype.showHidePane = function(clickobj, beforeobj, afterobj) {
+	
+}
+
+eXo.cs.Spliter = new Spliter() ;
