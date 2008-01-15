@@ -34,6 +34,7 @@ import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UIFormComboBox;
 import org.exoplatform.calendar.webui.UIListContainer;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
+import org.exoplatform.calendar.webui.UIMonthView;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -116,7 +117,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
       cal.set(java.util.Calendar.MINUTE, (cal.get(java.util.Calendar.MINUTE)/CalendarUtils.DEFAULT_TIMEITERVAL)*CalendarUtils.DEFAULT_TIMEITERVAL) ;
     }
     setEventFromDate(cal.getTime(), calendarSetting.getTimeFormat()) ;
-    if(endTime != null )cal.setTimeInMillis(Long.parseLong(endTime)) ; 
+    if(endTime != null ) cal.setTimeInMillis(Long.parseLong(endTime)) ; 
     else {
       cal.add(java.util.Calendar.MINUTE, CalendarUtils.DEFAULT_TIMEITERVAL*2) ;
     }

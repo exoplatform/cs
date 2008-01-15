@@ -17,6 +17,7 @@
 package org.exoplatform.calendar.webui.popup;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -132,11 +133,13 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     addChild(sharing) ;
   }
 
+  @SuppressWarnings("unchecked")
   private List<SelectItemOption<String>> getColors() {
     List<SelectItemOption<String>> colors = new ArrayList<SelectItemOption<String>>() ;
     for(String color : Calendar.COLORS) {
       colors.add(new SelectItemOption<String>(color, color)) ;
     }
+    Collections.sort(colors, new CalendarUtils.SelectComparator()) ;
     return colors;
   }
 

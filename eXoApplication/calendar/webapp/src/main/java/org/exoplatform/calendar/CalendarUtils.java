@@ -22,6 +22,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -33,7 +35,6 @@ import javax.jcr.PathNotFoundException;
 import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
-import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
@@ -163,12 +164,14 @@ public class CalendarUtils {
 		}
 		return options ;
 	}
-	public static List<SelectItemOption<String>> getLocaleSelectBoxOptions(Locale[] locale) {
+	@SuppressWarnings("unchecked")
+  public static List<SelectItemOption<String>> getLocaleSelectBoxOptions(Locale[] locale) {
 		List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-		for(Locale local : locale) {
+    for(Locale local :  locale) {
 			String country = local.getISO3Country() ;
-			if( country != null && country.trim().length() > 0) options.add(new SelectItemOption<String>(local.getDisplayCountry() , country)) ;
-		}
+			if( country != null && country.trim().length() > 0)  options.add(new SelectItemOption<String>(local.getDisplayCountry() + "(" +local.getDisplayLanguage()+")" ,country)) ;
+		}  
+    Collections.sort(options, new SelectComparator()) ;
 		return options ;
 	}
 	public static String parse(Date date, String timeFormat) throws Exception {
@@ -273,4 +276,12 @@ public class CalendarUtils {
       + "/" ;
       return url ;
     }
+   
+   static public class SelectComparator implements Comparator{
+     public int compare(Object o1, Object o2) throws ClassCastException {
+       String name1 = ((SelectItemOption) o1).getLabel() ;
+       String name2 = ((SelectItemOption) o2).getLabel() ;
+       return name1.compareToIgnoreCase(name2) ;
+     }
+   }
 }

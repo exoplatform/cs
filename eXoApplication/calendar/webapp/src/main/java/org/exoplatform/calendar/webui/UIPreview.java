@@ -139,8 +139,8 @@ public class UIPreview extends UICalendarView implements UIPopupComponent {
         DownloadService dservice = (DownloadService)PortalContainer.getInstance().getComponentInstanceOfType(DownloadService.class);
         dresource.setDownloadName(attach.getName());
         String downloadLink = dservice.getDownloadLink(dservice.addDownloadResource(dresource));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPreview) ;
         event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + downloadLink + "');");
-        System.out.println("come there ?");
       }
       /* 
       String downloadLink = uiPreview.getDownloadLink(attach) ;
