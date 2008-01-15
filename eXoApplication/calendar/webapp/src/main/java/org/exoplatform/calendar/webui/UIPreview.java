@@ -140,7 +140,7 @@ public class UIPreview extends UICalendarView implements UIPopupComponent {
         dresource.setDownloadName(attach.getName());
         String downloadLink = dservice.getDownloadLink(dservice.addDownloadResource(dresource));
         event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + downloadLink + "');");
-        
+        System.out.println("come there ?");
       }
       /* 
       String downloadLink = uiPreview.getDownloadLink(attach) ;

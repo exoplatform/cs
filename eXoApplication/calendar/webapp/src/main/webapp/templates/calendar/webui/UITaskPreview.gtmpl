@@ -46,7 +46,7 @@ uiform.begin() ;
 						         <%}%>
 						         <div class="Actions" style="">
 							         <a class="IconHolder ViewAttachmentIcon" style="padding-left:15px;"> View </a> 
-							         <a href="<%=uicomponent.getDownloadLink(attachFile)%>" class="IconHolder DownLoadAttachmentIcon" style="padding-left:15px;"> Dowload </a>
+							         <a href="<%=uicomponent.event("Download",attachFile.getId())%>" class="IconHolder DownLoadAttachmentIcon" style="padding-left:15px;"> Dowload </a>
 						         </div> 
 						         <div style="clear:left;"><span></span></div>
 						         <%}%> 
