@@ -40,8 +40,7 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UIContactPreview extends UIComponent  {
   private Contact contact_ = null ; 
-  private boolean isMaximized_ = false ;
-  
+  private boolean isMaximized_ = false ;  
   public UIContactPreview() throws Exception { }
   
   public void setContact(Contact c) { contact_ = c; }

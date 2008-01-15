@@ -57,6 +57,10 @@ public class ContactPageList extends JCRPageList {
       if(isQuery_) {
         QueryManager qm = session.getWorkspace().getQueryManager() ;
         Query query = qm.createQuery(value_, Query.XPATH);
+        
+        
+        //System.out.println("\n\n statement1:" + query.getStatement() + "\n\n");
+        
         QueryResult result = query.execute();
         iter_ = result.getNodes();
       } else {
@@ -171,6 +175,9 @@ public class ContactPageList extends JCRPageList {
       if(isQuery_) {
         QueryManager qm = session.getWorkspace().getQueryManager() ;
         Query query = qm.createQuery(value_, Query.XPATH);
+        
+        //System.out.println("\n\n statement 2:" + query.getStatement() + "\n\n");
+        
         QueryResult result = query.execute();
         iter_ = result.getNodes();
       } else {
@@ -186,6 +193,9 @@ public class ContactPageList extends JCRPageList {
     while (iter_.hasNext()) {
       Node contactNode = iter_.nextNode();
       contact = getContact(contactNode, contactType_);
+      
+      //System.out.println("\n\n haha:" + contact.getFullName() + "\n");
+      
       contacts.add(contact);
     }
     return contacts; 

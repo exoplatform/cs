@@ -255,7 +255,10 @@ public class JCRDataStorage{
     }      
     if (qm != null) {
       Query query = qm.createQuery(filter.getStatement(), Query.XPATH);  
-      QueryResult result = query.execute();    
+      QueryResult result = query.execute(); 
+      
+      
+      
       return new ContactPageList(username, result.getNodes(), 10, filter.getStatement(), true, "0") ; 
     }
     return null ;

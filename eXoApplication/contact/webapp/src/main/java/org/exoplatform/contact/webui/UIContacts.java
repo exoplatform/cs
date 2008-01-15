@@ -71,7 +71,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UIContacts.DNDContactsActionListener.class),
         @EventConfig(listeners = UIContacts.DNDContactsToTagActionListener.class),
         @EventConfig(listeners = UIContacts.DeleteContactsActionListener.class
-            , confirm="UIContacts.msg.confirm-delete"),
+            , confirm = "UIContacts.msg.confirm-delete"),
         @EventConfig(listeners = UIContacts.SelectedContactActionListener.class), 
         @EventConfig(listeners = UIContacts.ViewDetailsActionListener.class),
         @EventConfig(listeners = UIContacts.SortActionListener.class),
@@ -252,7 +252,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           .findFirstComponentOfType(UIAddressBooks.class).getPrivateGroupMap()) ;
       uiCategorySelect.addCategories() ;
       uiCategorySelect.setValue(contact.getAddressBook()[0]) ;
-      uiCategorySelect.disableSelect() ;
+      if (contact.getContactType().equals("1"))  uiCategorySelect.disableSelect() ;
       uiContactForm.setValues(contact);
       uiContactForm.setNew(false) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
@@ -421,7 +421,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIContacts uiContacts = event.getSource();
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
       List<String> contactIds = new ArrayList<String>();
-      if (!ContactUtils.isEmpty(contactId)) contactIds.add(contactId) ;
+      if (!ContactUtils.isEmpty(contactId) && !contactId.toString().equals("null")) contactIds.add(contactId) ;
       else {
         contactIds = uiContacts.getCheckedContacts() ;
         if (contactIds.size() == 0) {
@@ -589,6 +589,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         if (addressBooks.getPrivateGroupMap().containsKey(group)) type = JCRDataStorage.PRIVATE ;
         else if (addressBooks.getSharedGroups().containsKey(group)) type = JCRDataStorage.SHARED ;
         else if (addressBooks.getPublicGroupMap().containsKey(group)) type = JCRDataStorage.PUBLIC ;
+        
         if(type != null)
           pageList = ContactUtils.getContactService().getContactPageListByGroup(
             SessionsUtils.getSystemProvider(),ContactUtils.getCurrentUser(), filter, type) ;
@@ -599,6 +600,11 @@ public class UIContacts extends UIForm implements UIPopupComponent {
 //        
 //        if (pageList == null || pageList.getAll().size() == 0)
 //          pageList = 
+        
+        /*List<Contact> contacts = pageList.getAll() ;
+        for (Contact contact : contacts) {
+          System.out.println("\n\n c :" + contact.getFullName() + "\n\n");
+        }*/
         
       } else {      //if (!ContactUtils.isEmpty(uiContacts.getSelectedTag())) {
           pageList = uiContacts.pageList_ ;

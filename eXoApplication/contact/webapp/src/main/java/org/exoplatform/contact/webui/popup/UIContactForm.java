@@ -33,6 +33,7 @@ import org.exoplatform.contact.webui.UIContactPreview;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UIWorkingContainer;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -221,12 +222,11 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
     fieldInput.setValue(sb.toString()) ;
     setSelectedTab(shareTab.getId()) ;
   }
-  
   public void setNew(boolean isNew) { isNew_ = isNew ; }
   
   public void setValues(Contact contact) throws Exception {
     contact_ = contact ;
-    if(contact.isShared()) {
+    if(contact.getContactType() == "2") {
       String[] categories = contact.getAddressBook();
       for (String category : categories) {
         UIFormCheckBoxInput checkBoxInput = getUIFormCheckBoxInput(category) ;
@@ -241,11 +241,13 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
       }   
       getUIStringInput(FIELD_EDITPERMISSION).setValue(editPermissionBuffer.toString());
     }
-    String[] sharedBox = FIELD_SHAREDCONTACT_BOX ;
+    /*
+    String[] sharedBox = FIELD_SHAREDCONTACT_BOX ;    
     for (String group : sharedBox) {
       getUIFormCheckBoxInput(group).setEnable(false) ;
-    }
+    }    
     getUIStringInput(FIELD_EDITPERMISSION).setEditable(false) ;
+    */
     UIProfileInputSet profileTab = getChildById(INPUT_PROFILETAB) ;
     profileTab.setFieldFirstName(contact.getFirstName());
     profileTab.setFieldLastName(contact.getLastName());
@@ -373,42 +375,61 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
 
       ContactService contactService = ContactUtils.getContactService();  
       String username = ContactUtils.getCurrentUser() ;
-
-      if (isNew) {
-        List<String> publicGroups = uiContactForm.getCheckedPublicGroup() ;
-        if (publicGroups.size() > 0) {
-          contact.setAddressBook(publicGroups.toArray(new String[] {})) ;
-          String editPermission = uiContactForm.getUIStringInput(FIELD_EDITPERMISSION).getValue() ;
-          if (!ContactUtils.isEmpty(editPermission))
-            contact.setEditPermission(editPermission.split(","));
-          contact.setShared(true) ;
-          contactService.savePublicContact(SessionsUtils.getSystemProvider(), contact, true);
-        } else {       
-          UIPopupContainer popupContainer = uiContactForm.getParent() ;
-          UICategorySelect uiCategorySelect = popupContainer.getChild(UICategorySelect.class); 
-          String category = uiCategorySelect.getSelectedCategory();
-          if (ContactUtils.isEmpty(category)) {
-            uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.selectGroup-required", null, 
-                ApplicationMessage.WARNING)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-            return ;
-          }
-          contact.setAddressBook(new String[] { category });
-          if (uiContactForm.isShared) {
-            contactService.saveContactToSharedAddressBook(
-                SessionsUtils.getSessionProvider(), username, category, contact, true) ;
-          } else {            
-            contactService.saveContact(SessionsUtils.getSessionProvider(), username, contact, true);
-          }
-        }
+      SessionProvider sessionProvider = SessionsUtils.getSystemProvider() ;
+      
+      List<String> publicGroups = uiContactForm.getCheckedPublicGroup() ;
+      UIPopupContainer popupContainer = uiContactForm.getParent() ;
+      UICategorySelect uiCategorySelect = popupContainer.getChild(UICategorySelect.class); 
+      String category = uiCategorySelect.getSelectedCategory();
+      if (publicGroups.size() < 1 && ContactUtils.isEmpty(category)) {
+        uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.selectGroup-required", null, 
+            ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      } else if (publicGroups.size() > 0) {
+        contact.setAddressBook(publicGroups.toArray(new String[] {})) ;
+        String editPermission = uiContactForm.getUIStringInput(FIELD_EDITPERMISSION).getValue() ;
+        if (!ContactUtils.isEmpty(editPermission))
+          contact.setEditPermission(editPermission.split(","));
+        contact.setShared(true) ;
       } else {
-        if (contact.getContactType().equals("0")) 
-          contactService.saveContact(SessionsUtils.getSessionProvider(), username, contact, false) ;
-        else if(contact.getContactType().equals("1")) 
-          contactService.saveContactToSharedAddressBook(
-              SessionsUtils.getSystemProvider(), username, contact.getAddressBook()[0], contact, false) ;
-        else if(contact.getContactType().equals("2")) 
-          contactService.savePublicContact(SessionsUtils.getSystemProvider(), contact, false) ;
+        contact.setAddressBook(new String[] { category });
+      }
+      
+      if (isNew) {        
+        if (publicGroups.size() > 0) {
+          contactService.savePublicContact(sessionProvider, contact, true);
+        } else if (uiContactForm.isShared) {
+            contactService.saveContactToSharedAddressBook(sessionProvider, username, category, contact, true) ;
+          } else {            
+            contactService.saveContact(sessionProvider, username, contact, true);
+          }
+      } else { 
+        List<Contact> contacts = new ArrayList<Contact>() ;
+        contacts.add(contact) ;
+        String contactType = contact.getContactType() ;
+        
+        if (contactType.equals("0")) {
+          if (publicGroups.size() > 0) {
+            contactService.moveContacts(sessionProvider, username, contacts, "2") ;
+          } else {
+            contactService.saveContact(sessionProvider, username, contact, false) ;
+          }
+        } else if (contactType.equals("1")) {
+          if (publicGroups.size() > 0) {
+            contactService.moveContacts(sessionProvider, username, contacts, "2") ;
+          } else {
+            contactService.saveContactToSharedAddressBook(
+                sessionProvider, username, contact.getAddressBook()[0], contact, false) ;
+          }
+        } else if (contactType.equals("2")) {
+          if (publicGroups.size() > 0) {
+            contactService.savePublicContact(sessionProvider, contact, false) ;
+          } else {
+            contactService.saveContact(sessionProvider, username, contact, false) ;
+          }          
+        }      
+        
       }
       UIContactPortlet uiContactPortlet = uiContactForm.getAncestorOfType(UIContactPortlet.class) ;
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
@@ -418,10 +439,11 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
       	contacts.add(contact) ;
       	uiContacts.setContact(contacts, true) ;
       }
-      uiContacts.updateList() ;
+      
       String selectedContact = uiContacts.getSelectedContact() ;
       if (!ContactUtils.isEmpty(selectedContact) && selectedContact.equals(contact.getId())) 
         uiContactPreview.setContact(contact) ;
+      uiContacts.updateList() ;
       uiContactPortlet.cancelAction() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet.getChild(UIWorkingContainer.class)) ;
     }
