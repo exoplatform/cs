@@ -10,11 +10,7 @@ UIContactPortlet.prototype.toggleSelectAll = function(handler) {
     var eLst = eXo.core.DOMUtil.findDescendantsByClass(rootElement, 'input', 'checkbox') ;
     var curState = handler.checked ;
     for (var i=0; i<eLst.length; i++) {
-      if (curState) {
-        eLst[i].checked = true ;
-      } else {
-        eLst[i].checked = false ;
-      }
+       eLst[i].checked = curState ;
     }
   }
 } ;
