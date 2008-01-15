@@ -147,7 +147,7 @@
 					        %>
 					        <td actionLink="$actionUpdate" class='CalendarContentNomal UICellBlock' startTime='$dateTime' > 
 					        	<div class='DayBox $clazz' >
-						        <a href="<%=uicomponent.event("GotoDate",dayActionLink)%>">
+						        <a href="<%=uicomponent.event("GotoDate",dayActionLink)%>" onmousedown="event.cancelBubble = true ;">
 						         <%=sdf.format(calendar.getTime())%> 
 										</a>
 									 </div><div class='DayContent'><span></span></div>
@@ -156,7 +156,7 @@
 					        dayOfMonth++ ;
 					      } else {
 					      	%>
-					        <td  actionLink="$actionUpdate" startTime='$dateTime' class='CalendarContentDisable  UICellBlock'> <div class='DisableDay'><span></span></div>
+					        <td actionLink="$actionUpdate" startTime='$dateTime' class='CalendarContentDisable  UICellBlock'> <div class='DisableDay'><span></span></div>
 					        	<div class='DayContent'> 
 								 		<%=sdtf.format(calendar.getTime())%>
 								 		</div>
