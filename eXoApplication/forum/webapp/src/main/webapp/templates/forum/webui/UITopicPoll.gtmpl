@@ -22,9 +22,38 @@
 	  			</div>
 	  			<div class="CollapseButton" title="Collapse" onclick="eXo.forum.UIForumPortlet.expandCollapse(this) ;"><span></span></div>
 	  			<div class="SeparatorLine"><span></span></div>
-	  			<a class="Icon ClosePoll" href="javascript:if(confirm('$confirmDelete')){<%=uicomponent.event("RemovePoll");}%>"><%=_ctx.appRes("UITopicPoll.label.ClosePoll"); %></a>
+	  			
+	  			<div class="ContentAction">
+						<div class="DefaultStyle Forum" onmouseover="eXo.forum.UIForumPortlet.OverButton(this)" onmouseout="eXo.forum.UIForumPortlet.OverButton(this)">
+							<a href="javascript:if(confirm('$confirmDelete')){<%=uicomponent.event("RemovePoll");}%>">
+								<div class="LeftOverButton">
+									<div class="RightOverButton">
+										<div class="CenterOverButton">
+											<div class="StatusIcon ClosePoll">
+												<%=_ctx.appRes("UITopicPoll.label.ClosePoll"); %>
+											</div>
+										</div>
+									</div>
+								</div>
+							</a>
+						</div>
+					</div>
 	  			<div class="SeparatorLine"><span></span></div>
-	  			<a class="Icon EditPoll" href="<%=uicomponent.event("EditPoll")%>"><%=_ctx.appRes("UITopicPoll.label.EditPoll"); %></a>
+	  			<div class="ContentAction">
+						<div class="DefaultStyle Forum" onmouseover="eXo.forum.UIForumPortlet.OverButton(this)" onmouseout="eXo.forum.UIForumPortlet.OverButton(this)">
+							<a href="<%=uicomponent.event("EditPoll")%>">
+								<div class="LeftOverButton">
+									<div class="RightOverButton">
+										<div class="CenterOverButton">
+											<div class="StatusIcon EditPoll">
+												<%=_ctx.appRes("UITopicPoll.label.EditPoll"); %>
+											</div>
+										</div>
+									</div>
+								</div>
+							</a>
+						</div>
+					</div>
 	  			<div style="clear: both"><span></span></div>
 	  		</div>
 	  	</div>

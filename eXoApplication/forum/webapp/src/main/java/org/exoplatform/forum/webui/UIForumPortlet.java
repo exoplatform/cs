@@ -56,7 +56,7 @@ public class UIForumPortlet extends UIPortletApplication {
 		addChild(UICategoryContainer.class, null, null).setRendered(isCategoryRendered) ;
 		addChild(UIForumContainer.class, null, null).setRendered(isForumRendered) ;
 		addChild(UITopicsTag.class, null, null).setRendered(isTagRendered) ;
-		addChild(UIForumLinks.class, null, null) ;
+		addChild(UIForumLinks.class, null, null).setRendered(false) ;
 		addChild(UIPopupAction.class, null, null) ;
 		initOption();
 		String []newStr = ForumUtils.getUserGroups() ;

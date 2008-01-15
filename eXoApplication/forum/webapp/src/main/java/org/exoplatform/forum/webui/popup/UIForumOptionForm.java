@@ -193,6 +193,7 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 				timeZone = 0.0 ;
 				mark = "";
 			}
+			System.out.println(getLabel(FIELD_TIMEZONE));
 			getUIFormSelectBoxForum(FIELD_TIMEZONE_SELECTBOX).setValue(mark + timeZone + "0") ;
 			getUIFormSelectBox(FIELD_SHORTDATEFORMAT_SELECTBOX).setValue(forumOption.getShortDateFormat()) ;
 			getUIFormSelectBox(FIELD_LONGDATEFORMAT_SELECTBOX).setValue(forumOption.getLongDateFormat()) ;
