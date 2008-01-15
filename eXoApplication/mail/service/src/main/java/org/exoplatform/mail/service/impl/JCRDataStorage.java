@@ -996,13 +996,14 @@ public class JCRDataStorage{
   }
   
   public void toggleMessageProperty(SessionProvider sProvider, String username, String accountId, List<String> msgList, String property) throws Exception {
+    Node mailHome = getMailHomeNode(sProvider, username) ;
     Node messageHome = getMessageHome(sProvider, username, accountId);
     Node folderHome = getFolderHome(sProvider, username, accountId);
     for (String msgId : msgList) {
       if (messageHome.hasNode(msgId)) {
         Node msgNode = messageHome.getNode(msgId) ;
         if (property.equals(Utils.EXO_STAR)) {
-          msgNode.setProperty(Utils.EXO_STAR, ! msgNode.getProperty(Utils.EXO_STAR).getBoolean());
+          msgNode.setProperty(Utils.EXO_STAR, !msgNode.getProperty(Utils.EXO_STAR).getBoolean());
         } else if (property.equals(Utils.EXO_ISUNREAD)) {
           Boolean isUnread = msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean();
           msgNode.setProperty(Utils.EXO_ISUNREAD, !isUnread);
@@ -1017,7 +1018,7 @@ public class JCRDataStorage{
         }
       }
     }
-    messageHome.getSession().save();
+    mailHome.getSession().save();
   }
     
   public String getFolderHomePath(SessionProvider sProvider, String username, String accountId) throws Exception {
