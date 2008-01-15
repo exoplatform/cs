@@ -1,5 +1,4 @@
- 
-<%
+ <%
 	import org.exoplatform.contact.service.ContactGroup;
 	import org.exoplatform.contact.service.Tag;
 	import org.exoplatform.contact.service.ContactService;
@@ -11,14 +10,15 @@
 	import java.util.HashMap;
 	import java.util.Map;
 	
+	uiform.begin() ;
 	def rcontext = _ctx.getRequestContext() ; 
   rcontext.getJavascriptManager().importJavascript("eXo.cs.FormHelper","/csResources/javascript") ;
-  rcontext.getJavascriptManager().importJavascript('eXo.cs.TableMan','/csResources/javascript/');
-  rcontext.getJavascriptManager().importJavascript('eXo.cs.TableDnD','/csResources/javascript/');
+  //rcontext.getJavascriptManager().importJavascript('eXo.cs.TableMan','/csResources/javascript/');
+  //rcontext.getJavascriptManager().importJavascript('eXo.cs.TableDnD','/csResources/javascript/');
 	rcontext.getJavascriptManager().importJavascript("eXo.contact.UIContactDragDrop","/contact/javascript") ;
 	rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactDragDrop.init() ;") ;
   //rcontext.getJavascriptManager().addOnLoadJavascript('eXo.cs.TableDnD.init(\'UIListUsers\')');
-	uiform.begin()
+  rcontext.getJavascriptManager().addOnLoadJavascript('eXo.webui.CheckBox.init("' + uiform.id + '")') ;
 	boolean isDisplaySearchResult = uicomponent.isDisplaySearchResult() ;
 	JCRPageList pageList = uicomponent.getContactPageList();
   String cssPreviousPage = "FloatBlockHidden";
@@ -45,6 +45,7 @@
 	if(uicomponent.getViewContactsList()) {
 		if(isDisplaySearchResult) {
 %>
+			
 			<div class="Result">
 				<div class="TitleSearch">Search result</div>
 	<% } else { %>
@@ -94,7 +95,7 @@
 	  				<thead>
 	  					<tr>
 	  			      <th style="width: 23px; padding-left: 7px;" class="text">
-	  			      	<input type="checkbox" class="checkbox" title="Check all" value="4" onclick="eXo.contact.UIContactPortlet.toggleSelectAll(this) ;"/>
+	  			      	<input type="checkbox" class="checkbox" title="Check all" value="4"/>
 	  			      </th>
 	  						<th style="width: 24px;" class="text"><div class="Icon BlueTag"><span></span></div></th>
 	  		        <th style="width: 24%; padding-left: 7px;" class="text">
