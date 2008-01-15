@@ -382,4 +382,8 @@ UIContactPortlet.prototype.showTrTimer = function(e) {
   e.style.display = 'table-row' ;  
 } ;
 
+UIContactPortlet.prototype.showMap = function(/*String*/ address, /*String*/ message) {
+	eXo.core.Topic.publish("UIContactPortlet", "/eXo/portlet/map/displayAddress", {address:address, text:message});
+}
+
 eXo.contact.UIContactPortlet = new UIContactPortlet() ;

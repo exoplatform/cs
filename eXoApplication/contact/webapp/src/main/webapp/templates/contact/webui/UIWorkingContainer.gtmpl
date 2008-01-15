@@ -1,6 +1,6 @@
 <%
 	import org.exoplatform.contact.webui.UINavigationContainer;
-		import org.exoplatform.contact.webui.UIContactContainer;
+	import org.exoplatform.contact.webui.UIContactContainer;
 %>
 
 
