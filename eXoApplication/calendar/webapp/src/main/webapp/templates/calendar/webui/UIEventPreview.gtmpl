@@ -13,7 +13,7 @@ uiform.begin() ;
 	<%if(!uicomponent.isShowPopup()){%>
 		<div class="ViewBar">
 		  <div class="Label">Event detail</div> 
-		  <div class="MaximizeButton" title="View full - size event"><span></span></div>
+		  <div class="MaximizeButton" title="View full - size event" onclick = "eXo.cs.Utils.showHidePane(this,document.getElementById('UIListUsers').parentNode,'<%=uicomponent.getId()%>')"><span></span></div>
 		  <div style="clear: both"><span></span></div>
 		</div>
 	<%}%>

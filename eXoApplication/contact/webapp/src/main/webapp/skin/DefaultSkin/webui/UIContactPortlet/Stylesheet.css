@@ -560,12 +560,33 @@
 	padding-left: 20px;
 	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/ContactIcon.gif') no-repeat left center;
 }
+/*
+.UIContactPortlet .UIContactContainer .UIContactPreview .MaximizeContactPane {
+  float: right;
+	width: 30px;
+	height: 25px;
+	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/MaximizeReadingPane.gif') no-repeat center;
+}
 
 .UIContactPortlet .UIContactContainer .UIContactPreview .MaximizeContactPane {
   float: right;
 	width: 30px;
 	height: 25px;
 	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/MaximizeReadingPane.gif') no-repeat center;
+}*/
+
+.UIContactPortlet .UIContactContainer .UIContactPreview .MaximizeButton {
+  float: right;
+	width: 30px;
+	height: 25px;
+	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/MaximizeReadingPane.gif') no-repeat center;
+}
+
+.UIContactPortlet .UIContactContainer .UIContactPreview .MinimizeButton {
+  float: right;
+	width: 30px;
+	height: 25px;
+	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/MinimumReadingPane.gif') no-repeat center;
 }
 
 .UIContactPortlet .UIContactContainer .UIContactPreview .LastUpdated {

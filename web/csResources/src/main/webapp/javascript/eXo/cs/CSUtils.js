@@ -97,6 +97,8 @@ Spliter.prototype.clear = function() {
 function Utils() {	
 }
 
+eXo.cs.Utils = new Utils() ;
+
 Utils.prototype.showHidePane = function(clickobj, beforeobj, afterobj) {
 	if(typeof(beforeobj) == "string") beforeobj = document.getElementById(beforeobj) ;
 	if(typeof(afterobj) == "string") afterobj = document.getElementById(afterobj) ;

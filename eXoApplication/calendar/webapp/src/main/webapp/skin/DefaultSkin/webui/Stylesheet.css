@@ -1188,6 +1188,12 @@
 	cursor: pointer;
 }
 
+.UIPreview .ViewBar .MinimizeButton {
+	float: right;
+	margin: 7px 0px 0px 0px;
+	cursor: pointer;
+}
+
 .UIPreview .AttachmentIcon {
 	margin: 3px;
 	width: 16px; height: 16px;

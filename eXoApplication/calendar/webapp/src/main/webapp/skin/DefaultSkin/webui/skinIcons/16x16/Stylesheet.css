@@ -56,6 +56,11 @@
 	width: 17px; height: 16px;
 }
 
+.UICalendarPortlet .MinimizeButton {
+	background: url('icons/MinimizeReadingPane.gif') no-repeat;
+	width: 17px; height: 16px;
+}
+
 .UICalendarPortlet .ViewOnCalendar {
 	background: url('icons/ViewOnCalendar.gif') no-repeat;
 }

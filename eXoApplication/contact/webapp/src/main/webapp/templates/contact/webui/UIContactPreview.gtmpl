@@ -12,8 +12,9 @@
 <% if(contact != null) { %>	
 	<div class="ContactPreviewBar" >
 		<div class="Subject">Contact Details</div>
-		<a class="MaximizeContactPane" title="Maximize Reading Pane"  href="<%=uicomponent.event("MaximizeContactPane")%>">
-		</a>
+		<div class="MaximizeButton" title="View full - size task" onclick = "eXo.cs.Utils.showHidePane(this,document.getElementById('UIListUsers').parentNode,'<%=uicomponent.getId()%>')"><span></span></div>
+		<!--<a class="MaximizeContactPane" title="Maximize Reading Pane"  href="<%=uicomponent.event("MaximizeContactPane")%>">
+		</a>-->
 		<span class="LastUpdated">
 				<%java.util.Date lastUpdated = contact.getLastUpdated() %>
 				Last updated: <%=(lastUpdated == null) ? "_" : lastUpdated%>
