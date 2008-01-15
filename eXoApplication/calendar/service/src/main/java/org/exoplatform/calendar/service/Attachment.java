@@ -16,6 +16,7 @@
  **/
 package org.exoplatform.calendar.service;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Calendar;
 
@@ -39,7 +40,8 @@ public class Attachment  {
   private String name ;
   private String mimeType ;
   private long size ;
-  private InputStream data ;
+  //private InputStream data ;
+  private  byte[] data ;
   private Calendar lastModified ;
   private String workspace ;
   public Attachment() {
@@ -60,7 +62,7 @@ public class Attachment  {
 
 
   public InputStream getInputStream() throws Exception {
-    if(data != null && data.available() >0 ) return data ;
+    if(data != null) return new ByteArrayInputStream(data) ;  
     Node attachmentData ;
     try{
       attachmentData = (Node)getSesison().getItem(getId()) ;      
@@ -84,7 +86,13 @@ public class Attachment  {
     RepositoryService repoService = (RepositoryService)PortalContainer.getInstance().getComponentInstanceOfType(RepositoryService.class) ;
     return repoService.getDefaultRepository().getSystemSession(workspace) ;
   }
-  public void setInputStream(InputStream input) {data = input ;}
+  public void setInputStream(InputStream input) throws Exception {
+    if (input != null) {
+      data = new byte[input.available()] ; 
+      input.read(data) ;
+    }
+    else data = null ;
+  }
 
   public void setLastModified(Calendar lastModified) {
     this.lastModified = lastModified;

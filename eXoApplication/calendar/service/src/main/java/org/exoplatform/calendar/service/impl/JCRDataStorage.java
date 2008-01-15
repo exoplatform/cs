@@ -1192,7 +1192,7 @@ public class JCRDataStorage{
             if(contentNode.hasProperty(Utils.JCR_MIMETYPE)) attachment.setMimeType(contentNode.getProperty(Utils.JCR_MIMETYPE).getString()) ;
             if(contentNode.hasProperty(Utils.JCR_DATA)) {
               InputStream  inputStream = contentNode.getProperty(Utils.JCR_DATA).getStream() ;
-              attachment.setInputStream(inputStream) ;
+              /*attachment.setInputStream(inputStream) ;*/
               attachment.setSize(inputStream.available()) ;
             }
             //attachment.setId(contentNode.getPath()) ;

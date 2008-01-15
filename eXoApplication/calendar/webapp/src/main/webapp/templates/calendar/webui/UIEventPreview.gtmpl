@@ -39,8 +39,10 @@ uiform.begin() ;
 		         </div>
 		         <%if(attachFile.getMimeType().startsWith("image"))  {
 		         		String rndString = String.valueOf(new Date().getTime());
+		         		String src = uicomponent.getDownloadLink(attachFile) ;
+		         		///${uicomponent.getPortalName()}/jcr?workspace=${attachFile.workspace}&hash=${rndString}&path=${attachFile.getDataPath()}
 		         %>
-		         	<img src="/${uicomponent.getPortalName()}/jcr?workspace=${attachFile.workspace}&hash=${rndString}&path=${attachFile.getDataPath()}" class="Img" />
+		         	<img src="$src" class="Img" />
 		         <%}%>
 		         <div class="Actions" style="white-space: nowrap;">
 			         <a href="#" class="IconHolder ViewAttachmentIcon" style="padding-left:15px;"> View </a> 
