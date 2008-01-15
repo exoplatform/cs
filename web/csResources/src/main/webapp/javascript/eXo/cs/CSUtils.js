@@ -1,3 +1,6 @@
+if(!eXo.cs){
+	eXo.cs = {} ;
+}
 function CheckBox() {
 } ;
 
@@ -6,17 +9,17 @@ CheckBox.prototype.init = function(cont) {
 	var checkboxes = eXo.core.DOMUtil.findDescendantsByClass(cont, "input", "checkbox") ;
 	this.allItems = checkboxes[0] ;
 	this.items = checkboxes.slice(1) ;
-	this.allItems.onclick = eXo.webui.CheckBox.checkAll ;
+	this.allItems.onclick = eXo.cs.CheckBox.checkAll ;
 	var len = this.items.length ;
 	this.checkedItem = 0 ;
 	for(var i = 0 ; i < len ; i ++) {
 		if(this.items[i].checked) this.checkedItem++ ;
-		this.items[i].onclick = eXo.webui.CheckBox.check ;
+		this.items[i].onclick = eXo.cs.CheckBox.check ;
 	}
 } ;
 
 CheckBox.prototype.checkAll = function() {
-	var CheckBox = eXo.webui.CheckBox ;
+	var CheckBox = eXo.cs.CheckBox ;
 	var checked = this.checked ;
 	var items = CheckBox.items ;
 	var len = items.length ;
@@ -28,7 +31,7 @@ CheckBox.prototype.checkAll = function() {
 } ;
 
 CheckBox.prototype.check = function() {
-	var CheckBox = eXo.webui.CheckBox ;
+	var CheckBox = eXo.cs.CheckBox ;
 	var checked = this.checked ;
 	var len = CheckBox.items.length ;
 	if (!checked) {
@@ -41,7 +44,7 @@ CheckBox.prototype.check = function() {
 	}
 } ;
 
-eXo.webui.CheckBox = new CheckBox() ;
+eXo.cs.CheckBox = new CheckBox() ;
 
 /***************************************************************************************/
 
@@ -72,13 +75,13 @@ Spliter.prototype.doResize = function(e , markerobj, beforeAreaObj, afterAreaObj
   this.afterArea.style.height = this.afterArea.offsetHeight + "px" ;  
   this.beforeY = this.beforeArea.offsetHeight ;
   this.afterY = this.afterArea.offsetHeight ;
-  document.onmousemove = eXo.webui.Spliter.adjustHeight ;  
-  document.onmouseup = eXo.webui.Spliter.clear ;
+  document.onmousemove = eXo.cs.Spliter.adjustHeight ;  
+  document.onmouseup = eXo.cs.Spliter.clear ;
 } ;
 
 Spliter.prototype.adjustHeight = function(evt) {
   evt = (window.event) ? window.event : evt ;
-  var Spliter = eXo.webui.Spliter ;
+  var Spliter = eXo.cs.Spliter ;
   var delta = evt.clientY - Spliter.posY ;
   var afterHeight = (Spliter.afterY - delta) ;
   var beforeHeight = (Spliter.beforeY + delta) ;
@@ -90,5 +93,6 @@ Spliter.prototype.adjustHeight = function(evt) {
 Spliter.prototype.clear = function() {
   document.onmousemove = null ;
 } ;
+
 
 eXo.webui.Spliter = new Spliter() ;

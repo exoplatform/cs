@@ -8,7 +8,7 @@ CalendarEvent event = uicomponent.getEvent() ;
 color = uicomponent.getColors().get(event.getCalendarId()) ;
 uiform.begin() ;
 %>
-<div class="ResizeReadingPane" onmousedown="eXo.webui.Spliter.doResize(event, this, document.getElementById('UIListUsers').parentNode,document.getElementById('UIPreview')) ;"><span></span></div>
+<div class="ResizeReadingPane" onmousedown="eXo.cs.Spliter.doResize(event, this, document.getElementById('UIListUsers').parentNode,document.getElementById('UIPreview')) ;"><span></span></div>
 <div class="UIPreview" id="<%=uicomponent.getId()%>">
 	<%if(!uicomponent.isShowPopup()){%>
 		<div class="ViewBar">

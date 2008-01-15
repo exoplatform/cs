@@ -12,7 +12,7 @@
 	yearViewAction = uicomponent.TYPE_YEAR +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=1" ;
 	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
 	def rcontext = _ctx.getRequestContext() ;
-	rcontext.getJavascriptManager().addJavascript('eXo.webui.CheckBox.init("'+uiform.id+'") ;') ;	
+	rcontext.getJavascriptManager().addJavascript('eXo.cs.CheckBox.init("'+uiform.id+'") ;') ;	
 %>
 <div class="TitleBar Result">
 	    <table>

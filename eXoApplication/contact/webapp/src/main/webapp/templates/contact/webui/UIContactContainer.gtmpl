@@ -8,7 +8,7 @@
 <!--  Start UIContacts-->
 	<% uicomponent.renderChild(UIContacts.class) ;%>			
 <!--  End UIContacts -->
-			<div class="ResizeReadingPane" onmousedown = "eXo.webui.Spliter.doResize(event, this, document.getElementById('UIListUsers').parentNode, 'UIContactPreview') ;"><span></span></div>
+			<div class="ResizeReadingPane" onmousedown = "eXo.cs.Spliter.doResize(event, this, document.getElementById('UIListUsers').parentNode, 'UIContactPreview') ;"><span></span></div>
 		
 <!--  Start UIContactPreview-->
 	<% uicomponent.renderChild(UIContactPreview.class) ;%>		
