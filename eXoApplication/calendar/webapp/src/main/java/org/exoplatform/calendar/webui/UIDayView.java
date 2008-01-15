@@ -92,12 +92,15 @@ public class UIDayView extends UICalendarView {
     Iterator<CalendarEvent> iter = events.iterator() ;
     while (iter.hasNext()) {
       CalendarEvent ce = iter.next() ;
-      if(ce.getFromDateTime().after(begin.getTime()) && ce.getToDateTime().before(end.getTime())) {
+      long eventAmount = ce.getToDateTime().getTime() - ce.getFromDateTime().getTime() ;
+      if (isSameDate(ce.getFromDateTime(), getCurrentDate())
+          && isSameDate(ce.getToDateTime(), getCurrentDate())
+          && eventAmount < CalendarUtils.MILISECONS_OF_DAY) {
         eventData_.put(ce.getId(), ce) ;
         iter.remove() ;
       } 
     }
-    iter = events.iterator() ;
+    /*iter = events.iterator() ;
     while (iter.hasNext()) {
       CalendarEvent ce = iter.next() ;
       if(ce.getFromDateTime().equals(begin.getTime()) && ce.getToDateTime().before(end.getTime())) {
@@ -112,7 +115,7 @@ public class UIDayView extends UICalendarView {
         eventData_.put(ce.getId(), ce) ;
         iter.remove() ;
       } 
-    }
+    }*/
     for(CalendarEvent ce : events){
       allDayEvent_.put(ce.getId(), ce) ;
     } 
