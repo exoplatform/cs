@@ -283,7 +283,10 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   }
 
   public String getFieldSubjectValue() {
-    return getUIStringInput(FIELD_SUBJECT).getValue() ;
+    String subject = getUIStringInput(FIELD_SUBJECT).getValue() ;
+    if (subject !=null )
+      return subject ;
+    else return "" ;
   }
   public void setFieldSubjectValue(String value) {
     getUIStringInput(FIELD_SUBJECT).setValue(value) ;
@@ -405,7 +408,20 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       String usename = uiPortlet.getCurrentUser() ;
       MailService mailSvr = uiForm.getApplicationComponent(MailService.class) ;
       UIPopupAction uiChildPopup = uiForm.getAncestorOfType(UIPopupAction.class) ;
-      Message message = uiForm.getNewMessage() ;      
+      Message message = uiForm.getNewMessage() ;   
+      if (Utils.isEmptyField(uiForm.getFieldToValue())) {
+        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.to-field-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      } else if (Utils.isEmptyField(uiForm.getFieldSubjectValue())){
+        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.subject-field-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      } else if (Utils.isEmptyField(uiForm.getFieldContentValue())){
+        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.content-field-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       try {
         mailSvr.sendMessage(SessionsUtils.getSessionProvider(), usename, message) ;
         uiChildPopup.deActivate() ;
@@ -419,17 +435,14 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       try {
         MailSetting mailSetting = mailSvr.getMailSetting(SessionsUtils.getSessionProvider(), usename);
         if (mailSetting.saveMessageInSent()) {
-          System.out.println("=-===========================");
           message.setFolders(new String[]{Utils.createFolderId(accountId, Utils.FD_SENT, false)}) ;
         }
         if (uiForm.fromDrafts()) {
-          System.out.println("=-==========================from=");
           Folder drafts = mailSvr.getFolder(SessionsUtils.getSessionProvider(), usename, accountId, Utils.createFolderId(accountId, Utils.FD_DRAFTS, false));
           drafts.setTotalMessage(drafts.getTotalMessage() - 1);
           mailSvr.saveFolder(SessionsUtils.getSessionProvider(), usename, accountId, drafts);
           mailSvr.saveMessage(SessionsUtils.getSessionProvider(), usename, accountId, message, false) ;      
         } else {
-          System.out.println("=-========ddd==================from=");
           mailSvr.saveMessage(SessionsUtils.getSessionProvider(), usename, accountId, message, true) ;    
         }
       } catch (Exception e) {
@@ -460,7 +473,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         if (! uiForm.fromDrafts()) {
           mailSvr.saveMessage(SessionsUtils.getSessionProvider(), usename, accountId, message, true) ;
           Folder drafts = mailSvr.getFolder(SessionsUtils.getSessionProvider(), usename, accountId, Utils.createFolderId(accountId, Utils.FD_DRAFTS, false));
-          System.out.println("==================>>.");
           drafts.setTotalMessage(drafts.getTotalMessage() + 1);
           mailSvr.saveFolder(SessionsUtils.getSessionProvider(), usename, accountId, drafts);
         } else {
