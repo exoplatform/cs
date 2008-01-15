@@ -101,7 +101,7 @@
 								</div>
 								<div>
 									<div class="<%=(uicomponent.getPriority(event.getPriority()) == null)? "" :  uicomponent.getPriority(event.getPriority())%>PriorityIcon" style="float:left;"><span></span></div>
-									$event.summary
+									<div class="EventLabel">$event.summary</div>
 								</div>
 							</div>
 						</div>

@@ -97,6 +97,7 @@ QuickSortObject.prototype.partitionProcess = function(begin, end, pivotIndex){
 eXo.core.QuickSortObject = new QuickSortObject();
 
 function EventObject(){
+  this.LABEL_MAX_LEN = 10;
   this.calId = false;
   this.calType = false;
   this.endTime = false;
@@ -116,6 +117,7 @@ EventObject.prototype.init = function(rootNode){
   }
   rootNode = typeof(rootNode) == 'string' ? document.getElementById(rootNode) : rootNode;
   this.rootNode = rootNode;
+  this.rootNode.style['cursor'] = 'pointer';
   this.startIndex = this.rootNode.getAttribute('startindex');
   this.calType = this.rootNode.getAttribute('caltype');
   this.eventId = this.rootNode.getAttribute('eventid');
@@ -124,6 +126,17 @@ EventObject.prototype.init = function(rootNode){
   this.startTime = this.rootNode.getAttribute('starttime');
   this.endTime = this.rootNode.getAttribute('endtime');
   this.name = this.rootNode.textContent.trim();
+  var eventLabelNode = eXo.core.DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', 'EventLabel');
+  eventLabelNode.innerHTML = this.getLabel();
+  this.rootNode.setAttribute('title', this.name);
+};
+
+EventObject.prototype.getLabel = function() {
+  if (this.name.length > this.LABEL_MAX_LEN) {
+    return this.name.substring(0, this.LABEL_MAX_LEN) + '...';
+  } else {
+    return this.name;
+  }
 };
 
 EventObject.prototype.toString = function(){
@@ -392,8 +405,9 @@ function GUIMan(){
  * @param {EventMan} eventMan
  */
 GUIMan.prototype.init = function(){
-  if (eXo.calendar.UICalendarMan.EventMan.events.length > 0) {
-    this.EVENT_BAR_HEIGH = eXo.calendar.UICalendarMan.EventMan.events[0].rootNode.offsetHeight - 1;
+  var events = eXo.calendar.UICalendarMan.EventMan.events;
+  if (events.length > 0) {
+    this.EVENT_BAR_HEIGH = events[0].rootNode.offsetHeight - 1;
   }
   var DOMUtil = eXo.core.DOMUtil;
   this.rowContainerDay = DOMUtil.findFirstDescendantByClass(eXo.calendar.UICalendarMan.EventMan.rootNode, 'div', 'RowContainerDay');

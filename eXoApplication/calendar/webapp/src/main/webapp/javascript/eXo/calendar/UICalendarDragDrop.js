@@ -1,6 +1,37 @@
 /**
  * @author uocnb
  */
+
+// Create new method for special context
+DragDrop.prototype.findDropableTarget4Cal = function(dndEvent, dropableTargets, mouseEvent) {
+  if(dropableTargets == null) return null ;
+  var UICalendarDragDropObj = eXo.calendar.UICalendarDragDrop;
+  var additionX = UICalendarDragDropObj.RowContainerDay.scrollLeft;
+  var additionY = UICalendarDragDropObj.RowContainerDay.scrollTop;
+  var mousexInPage = eXo.core.Browser.findMouseXInPage(mouseEvent) + additionX ;
+  var mouseyInPage = eXo.core.Browser.findMouseYInPage(mouseEvent) + additionY ;
+  
+  var clickObject = dndEvent.clickObject ;
+  var dragObject = dndEvent.dragObject ;
+  var foundTarget = null ;
+  var len = dropableTargets.length ;
+  for(var i = 0 ; i < len ; i++) {
+    var ele =  dropableTargets[i] ;
+    
+    if(dragObject != ele && this.isIn(mousexInPage, mouseyInPage, ele)) {
+      if(foundTarget == null) {
+        foundTarget = ele ;
+      } else {
+        if(this.isAncestor(foundTarget, ele)) {
+          foundTarget = ele ;
+        }
+      } 
+    }
+  }
+  
+  return foundTarget ;
+} ;
+
 function UICalendarDragDrop() {
   this.scKey = 'background' ;
   this.scValue = '#c0c0c0' ;
@@ -18,6 +49,7 @@ function UICalendarDragDrop() {
 UICalendarDragDrop.prototype.init = function(tableData, events) {
   this.tableData = tableData;
   this.events = events;
+  this.RowContainerDay = eXo.core.DOMUtil.findAncestorByClass((this.tableData[0])[0], 'RowContainerDay');
   this.getAllDropableSets() ;
   this.regDnDItem() ;
 } ;
@@ -130,6 +162,12 @@ UICalendarDragDrop.prototype.dragCallback = function(dndEvent) {
 
   eXo.calendar.UICalendarDragDrop.synDragObjectPos(dndEvent) ;
   
+  // Re-find target
+  var foundTarget = 
+      eXo.core.DragDrop.findDropableTarget4Cal(dndEvent, eXo.core.DragDrop.dropableTargets, dndEvent.backupMouseEvent) ;
+  var junkMove =  eXo.core.DragDrop.isJunkMove(dragObject, foundTarget) ;
+  dndEvent.update(foundTarget, junkMove) ;
+  
   if (dndEvent.foundTargetObject) {
     if (this.foundTargetObjectCatch != dndEvent.foundTargetObject) {
       if(this.foundTargetObjectCatch) {
@@ -148,6 +186,12 @@ UICalendarDragDrop.prototype.dragCallback = function(dndEvent) {
 } ;
 
 UICalendarDragDrop.prototype.dropCallback = function(dndEvent) {
+  // Re-find target
+  var foundTarget = 
+      eXo.core.DragDrop.findDropableTarget4Cal(dndEvent, eXo.core.DragDrop.dropableTargets, dndEvent.backupMouseEvent) ;
+  var junkMove =  eXo.core.DragDrop.isJunkMove(dndEvent.dragObject, foundTarget) ;
+  dndEvent.update(foundTarget, junkMove) ;
+  
   eXo.core.DOMUtil.removeElement(dndEvent.dragObject);
   if (this.foundTargetObjectCatch) {
     this.foundTargetObjectCatch.style[eXo.calendar.UICalendarDragDrop.scKey] = this.foundTargetObjectCatchStyle ;
