@@ -168,7 +168,7 @@
             <div class="ItemIcon AddFolderIcon"> New Subfoder </div>
           </a>  
 	        <a class="MenuItem" href="<%=uicomponent.event("EmptyFolder", "id")%>">   
-	          <div class="ItemIcon EmptyIcon"> Empty </div>
+	          <div class="ItemIcon EmptyIcon"> Empty Folder</div>
 	        </a>
 	      </div>
 	    </div>
