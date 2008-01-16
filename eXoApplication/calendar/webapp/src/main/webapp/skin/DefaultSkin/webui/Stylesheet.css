@@ -160,7 +160,9 @@
 
 .UICalendarPortlet .CalendarWorkingWorkspace .LayoutSwitcherIcon {
 	padding-left: 0px;
-	width: 22px; height: 18px;
+	width: 22px; height: 20px;
+	margin-top: 1px;
+	margin-left: 4px;
 }
 
 .UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar .DownArrow1Icon {

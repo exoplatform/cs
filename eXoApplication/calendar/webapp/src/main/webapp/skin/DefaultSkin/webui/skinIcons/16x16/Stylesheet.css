@@ -119,7 +119,7 @@
 	background: url('icons/FeedIcon.gif') no-repeat;
 }
 
-.UICalendarPortlet .EditIcon {
+.UICalendarPortlet .EditTask {
 	background: url('icons/EditTask.gif') no-repeat;
 	width: 16px;height: 16px;
 }
@@ -269,7 +269,7 @@
 }
 
 .UICalendarPortlet .ShowMinicalendar {
-	background: url('icons/ShowMinicalendar.gif') no-repeat;
+	background: url('icons/ShowMinicalendar.gif') no-repeat left center;
 }
 
 .UICalendarPortlet .HidenMinicalendar {
