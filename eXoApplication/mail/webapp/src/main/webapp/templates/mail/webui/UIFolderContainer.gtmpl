@@ -199,11 +199,12 @@
           String pid = cf.getId() ;
           String name = cf.getName();
           long pUnreadMess = cf.getNumberOfUnreadMessage();
-          String pCssClass = "CloseFolder NormalLabel" ;
+          String pCssClass = "CloseFolder" ;
+          String selectedClass = "NormalLabel";
           String pActionLink = uicomponent.event('ChangeFolder', pid);
-          //if(pid.equals(uicomponent.getSelectedFolder())) pCssClass = "OpenFolder SelectedLabel" ;
+          if(pid.equals(uicomponent.getSelectedFolder())) selectedClass = "SelectedLabel" ;
           StringBuilder builder = new StringBuilder() ;
-          builder.append("<div class=\"IconFolder Folder $pCssClass\" onClick=\"javascript:eXo.mail.UIMailPortlet.collapseExpandFolder(this)\" folder=\"").append(pid).append("\">");
+          builder.append("<div class=\"IconFolder Folder $selectedClass $pCssClass\" onClick=\"javascript:eXo.mail.UIMailPortlet.collapseExpandFolder(this)\" folder=\"").append(pid).append("\">");
           builder.append("<a class=\"FolderLink\" href=\"$pActionLink\" folder=\"").append(pid).append("\">");
           builder.append(name);
           if(pUnreadMess > 0) builder.append("<span class=\"MailQuantity\">($pUnreadMess)</span>");
@@ -224,11 +225,12 @@
       String pid = cf.getId() ;
       String name = cf.getName();
       long pUnreadMess = cf.getNumberOfUnreadMessage();
-      String pCssClass = "CloseFolder NormalLabel" ;
+      String pCssClass = "CloseFolder" ;
       String pActionLink = uicomponent.event('ChangeFolder', pid);
-      //if(pid.equals(uicomponent.getSelectedFolder())) pCssClass = "OpenFolder SelectedLabel" ;
+      String selectedClass = "NormalLabel";
+      if(pid.equals(uicomponent.getSelectedFolder())) selectedClass = "SelectedLabel" ;
       StringBuilder builder = new StringBuilder() ;
-      builder.append("<div class=\"IconFolder Folder $pCssClass\" onClick=\"javascript:eXo.mail.UIMailPortlet.collapseExpandFolder(this)\" folder=\"").append(pid).append("\">");
+      builder.append("<div class=\"IconFolder Folder $selectedClass $pCssClass\" onClick=\"javascript:eXo.mail.UIMailPortlet.collapseExpandFolder(this)\" folder=\"").append(pid).append("\">");
       builder.append("<a class=\"FolderLink\" onclick=\"\" href=\"$pActionLink\" folder=\"").append(pid).append("\">");
       builder.append(name);
       if(pUnreadMess > 0) builder.append("<span class=\"MailQuantity\">($pUnreadMess)</span>");
@@ -240,7 +242,6 @@
       }
     }
   }
-  
   //printNodes(uicomponent.getCustomerFolderPath());  
 %>
 </div>
