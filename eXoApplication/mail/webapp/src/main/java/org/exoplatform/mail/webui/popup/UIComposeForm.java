@@ -229,7 +229,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           String replyWithAtt = mailSetting.getReplyMessageWith();
           setFieldToValue(msg.getReplyTo());
           setFieldSubjectValue("Re: " + msg.getSubject());
-          setFieldContentValue(msg.getMessageBody());
+          String content = getReplyContent(msg);   
+          setFieldContentValue(content);
           if (replyWithAtt.equals(MailSetting.REPLY_WITH_ATTACH)) {
             for (Attachment att : msg.getAttachments()) {
               attachments_.add(att);
@@ -244,7 +245,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           if (msg.getMessageCc() != null) replyAll += "," + msg.getMessageCc();
           if (msg.getMessageBcc() != null) replyAll += "," + msg.getMessageBcc();
           setFieldToValue(replyAll);
-          setFieldContentValue(msg.getMessageBody());
+          String replyContent = getReplyContent(msg);
+          setFieldContentValue(replyContent);
           if (replyWithAtt.equals(MailSetting.REPLY_WITH_ATTACH)) {
             for (Attachment att : msg.getAttachments()) {
               attachments_.add(att);
@@ -255,11 +257,11 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         case MESSAGE_FOWARD : 
           String forwardWithAtt = mailSetting.getReplyMessageWith();
           setFieldSubjectValue("Fwd: " + msg.getSubject());
-          String forwardedText = "\n\n\n-------- Original Message --------\n" +
-              "Subject: " + msg.getSubject() + "\nDate: " + msg.getSendDate() + 
-              "\nFrom: " + msg.getFrom() + 
-              "\nTo: " + msg.getMessageTo() + 
-              "\n\n" + msg.getMessageBody();         
+          String forwardedText = "<br><br>-------- Original Message --------<br>" +
+              "Subject: " + msg.getSubject() + "<br>Date: " + msg.getSendDate() + 
+              "<br> From: " + msg.getFrom() + 
+              "<br> To: " + msg.getMessageTo() + 
+              "<br><br>" + msg.getMessageBody();         
           setFieldContentValue(forwardedText);
           setFieldToValue("");
           if (forwardWithAtt.equals(MailSetting.FORWARD_WITH_ATTACH)) {
@@ -273,6 +275,15 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           break;
       }
     }
+  }
+  
+  public String getReplyContent(Message msg) {
+    String content = msg.getMessageBody();
+    if (isVisualEditor) {
+      content = "<br><br><div> On Jan 15, 2008 2:34 PM, " + msg.getFrom() + " wrote: <br>" ;
+      content += "<blockquote style=\"border-left:1px #cccccc solid ; padding-left: 5px;\">" + msg.getMessageBody() + "</blockquote></div>" ;
+    }
+    return content ;
   }
   
   public long getPriority() { return priority_; }  
@@ -354,7 +365,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   
   private Message getNewMessage() throws Exception {
     Message message = getMessage();
-    if (getMessage() == null) { message = new Message(); }
+    if (!fromDrafts()) { message = new Message(); }
     UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
     String usename = uiPortlet.getCurrentUser() ;
     MailService mailSvr = this.getApplicationComponent(MailService.class) ;
