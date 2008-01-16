@@ -1156,7 +1156,13 @@ public class JCRDataStorage{
       filter.setAccountPath(contactHome.getPath()) ;
       qm = contactHome.getSession().getWorkspace().getQueryManager() ;      
       query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
+      
+     // System.out.println("\n\n query:" + query.getStatement() + "\n\n");
+      
       NodeIterator it = query.execute().getNodes() ;
+      
+      //System.out.println("\n\n size:" + it.getSize() + "\n\n");
+      
       while(it.hasNext()) {
         contacts.add(getContact(it.nextNode(), "0")) ;        
       }

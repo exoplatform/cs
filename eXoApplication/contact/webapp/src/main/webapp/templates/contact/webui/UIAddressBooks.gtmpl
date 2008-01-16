@@ -134,6 +134,18 @@
 			              Add Contact
 			            </div>
 				        </a>
+				        
+				        <a class="MenuItem" href="<%=uicomponent.event("CopyAddress", "id")%>">   
+			            <div class="ItemIcon ContactIcon">
+			              Copy All Contacts
+			            </div>
+				        </a>
+				        <a class="MenuItem" href="<%=uicomponent.event("PasteAddress", "id")%>">   
+			            <div class="ItemIcon ContactIcon">
+			              Paste Contacts
+			            </div>
+				        </a>
+
 				        <a class="MenuItem" href="<%=uicomponent.event("ShareGroup", "id")%>">   
 			            <div class="ItemIcon ShareIcon">
 			              Share

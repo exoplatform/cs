@@ -320,6 +320,15 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       }      
       ContactService contactService = ContactUtils.getContactService(); 
       contactService.addTag(SessionsUtils.getSystemProvider(), ContactUtils.getCurrentUser(), contactIds, tagId);
+      if(uiContacts.isDisplaySearchResult()) {
+        List<Contact> contacts = new ArrayList<Contact>() ;
+        for (String contactId : contactIds) {
+         Contact contact = uiContacts.contactMap.get(contactId) ;
+         contact.setTags(new String[] {tagId}) ;
+         contacts.add(contact) ;
+        }
+        uiContacts.setContact(contacts, true) ;
+      }
       uiContacts.updateList() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
     }
@@ -421,8 +430,9 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIContacts uiContacts = event.getSource();
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
       List<String> contactIds = new ArrayList<String>();
-      if (!ContactUtils.isEmpty(contactId) && !contactId.toString().equals("null")) contactIds.add(contactId) ;
-      else {
+      if (!ContactUtils.isEmpty(contactId) && !contactId.toString().equals("null")) {
+        contactIds.add(contactId) ;
+      } else {
         contactIds = uiContacts.getCheckedContacts() ;
         if (contactIds.size() == 0) {
           UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
@@ -441,7 +451,6 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       ContactService contactService = ContactUtils.getContactService() ;
       String username = ContactUtils.getCurrentUser() ;
       contactService.removeContacts(SessionsUtils.getSystemProvider(), username, contactIds) ;
-      
       if(uiContacts.isSearchResult) {
       	List<Contact> contacts = new ArrayList<Contact>();
         for(String id : contactIds) {
@@ -573,14 +582,15 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       String sortedBy = event.getRequestContext().getRequestParameter(OBJECTID) ;
       uiContacts.setAscending(!uiContacts.isAscending_);
       uiContacts.setSortedBy(sortedBy);
-
+      uiContacts.setDefaultNameSorted(false) ;
+      
       JCRPageList pageList = null ;
       String group = uiContacts.selectedGroup ;
       if (!ContactUtils.isEmpty(group)) {
         ContactFilter filter = new ContactFilter() ;
         filter.setViewQuery(uiContacts.getViewQuery());        
         filter.setAscending(uiContacts.isAscending_);
-        filter.setOrderBy(uiContacts.getSortedBy());
+        filter.setOrderBy(sortedBy);
         filter.setCategories(new String[] { group } ) ;
 
         String type = null;

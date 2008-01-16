@@ -16,6 +16,7 @@
  */
 package org.exoplatform.contact.webui;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +27,6 @@ import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
-import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.webui.popup.UICategoryForm;
 import org.exoplatform.contact.webui.popup.UICategorySelect;
 import org.exoplatform.contact.webui.popup.UIContactForm;
@@ -53,6 +53,8 @@ import org.exoplatform.webui.event.EventListener;
 
 @ComponentConfig(template = "app:/templates/contact/webui/UIAddressBooks.gtmpl", events = {
     @EventConfig(listeners = UIAddressBooks.AddContactActionListener.class),
+    @EventConfig(listeners = UIAddressBooks.CopyAddressActionListener.class),
+    @EventConfig(listeners = UIAddressBooks.PasteAddressActionListener.class),
     @EventConfig(listeners = UIAddressBooks.AddAddressActionListener.class),
     @EventConfig(listeners = UIAddressBooks.ImportAddressActionListener.class), 
     @EventConfig(listeners = UIAddressBooks.ExportAddressActionListener.class),
@@ -73,6 +75,8 @@ public class UIAddressBooks extends UIComponent {
   private Map<String, String> publicGroupMap_ = new HashMap<String, String>() ;
   private Map<String, String> sharedGroupMap_ = new HashMap<String, String>() ;
   private String defaultGroup ;
+  private List<Contact> copyContacts = null ;
+  //private String copyAddress = null ;
   public UIAddressBooks() throws Exception { }
 
   public List<ContactGroup> getGroups() throws Exception {
@@ -122,6 +126,59 @@ public class UIAddressBooks extends UIComponent {
       UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class);
       uiPopupAction.activate(UICategoryForm.class, 500) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
+    }
+  }
+  
+  static public class CopyAddressActionListener extends EventListener<UIAddressBooks> {
+    public void execute(Event<UIAddressBooks> event) throws Exception {
+      UIAddressBooks uiAddressBook = event.getSource();
+      String addressBookId = event.getRequestContext().getRequestParameter(OBJECTID);
+      //uiAddressBook.copyAddress = addressBookId 
+      List<Contact> contacts ;
+      ContactService contactService = ContactUtils.getContactService() ;
+      String username = ContactUtils.getCurrentUser() ;
+      SessionProvider sessionProvider = SessionsUtils.getSessionProvider() ;      
+      if (uiAddressBook.privateGroupMap_.containsKey(addressBookId))
+        contacts = contactService.getContactPageListByGroup(sessionProvider, username, addressBookId).getAll() ;
+      else if (uiAddressBook.sharedGroupMap_.containsKey(addressBookId))
+        contacts = contactService.getSharedContactsByAddressBook(sessionProvider, username, addressBookId).getAll();        
+      else 
+        contacts = contactService.getPublicContactsByAddressBook(sessionProvider, addressBookId).getAll() ;
+      uiAddressBook.copyContacts = contacts ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent()) ;
+    }
+  }
+  
+  static public class PasteAddressActionListener extends EventListener<UIAddressBooks> {
+    public void execute(Event<UIAddressBooks> event) throws Exception {
+      UIAddressBooks uiAddressBook = event.getSource();
+      if (uiAddressBook.copyContacts.size() < 1) return ;
+      String addressBookId = event.getRequestContext().getRequestParameter(OBJECTID);
+      ContactService contactService = ContactUtils.getContactService() ;
+      String username = ContactUtils.getCurrentUser() ;
+      SessionProvider sessionProvider = SessionsUtils.getSessionProvider() ;      
+     
+      if (uiAddressBook.privateGroupMap_.containsKey(addressBookId)) {
+        for (Contact contact : uiAddressBook.copyContacts) {
+          contact.setAddressBook(new String[] {addressBookId}) ;
+          contactService.saveContact(sessionProvider, username, contact, true) ;
+        }
+      } else if (uiAddressBook.sharedGroupMap_.containsKey(addressBookId)) {
+        for (Contact contact : uiAddressBook.copyContacts) {
+          contact.setAddressBook(new String[] {addressBookId}) ;
+          contactService.saveContactToSharedAddressBook(
+              sessionProvider, username, addressBookId, contact, true) ;
+        }
+      } else {
+        for (Contact contact : uiAddressBook.copyContacts) {
+          contact.setAddressBook(new String[] {addressBookId}) ;
+          contactService.savePublicContact(sessionProvider, contact, true) ;        
+        }
+      }      
+      UIContacts uiContacts = uiAddressBook
+        .getAncestorOfType(UIWorkingContainer.class).findFirstComponentOfType(UIContacts.class) ;
+      uiContacts.updateList() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
     }
   }
   
@@ -328,6 +385,7 @@ public class UIAddressBooks extends UIComponent {
       uiContacts.setSelectedGroup(groupId);
       uiContacts.setSelectedTag(null);
       uiContacts.setDisplaySearchResult(false) ;
+      uiContacts.setDefaultNameSorted(true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer);
     }
   }
@@ -346,6 +404,7 @@ public class UIAddressBooks extends UIComponent {
       uiContacts.setSelectedGroup(groupId);
       uiContacts.setSelectedTag(null);
       uiContacts.setDisplaySearchResult(false) ;
+      uiContacts.setDefaultNameSorted(true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer);
     }
   }
@@ -364,6 +423,7 @@ public class UIAddressBooks extends UIComponent {
       uiContacts.setSelectedGroup(groupId);
       uiContacts.setSelectedTag(null);
       uiContacts.setDisplaySearchResult(false) ;
+      uiContacts.setDefaultNameSorted(true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer);
     }
   }  
