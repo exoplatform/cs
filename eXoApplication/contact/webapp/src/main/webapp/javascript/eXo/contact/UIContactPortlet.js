@@ -182,9 +182,10 @@ UIContactPortlet.prototype.adddressPrint = function (){
 	var UIPortalApplication = document.getElementById("UIPortalApplication") ;
 	var UIContactContainer = document.getElementById("UIContactContainer") ;
 	var div = document.createElement("div") ;
-	UIContactContainer.removeAttribute("class") ;
 	div.className = "UIPrintContainer UIContactPortlet" ;
-	div.appendChild(UIContactContainer.cloneNode(true)) ;
+	var printContainer = UIContactContainer.cloneNode(true) ;
+	printContainer.removeAttribute("class") ;
+	div.appendChild(printContainer) ;
 	var uiAction = DOMUtil.findFirstDescendantByClass(div, "div", "UIAction") ;
 	DOMUtil.addClass(uiAction, "Printable") ;
 	UIPortalApplication.style.display = "none" ;
