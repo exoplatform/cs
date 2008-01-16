@@ -365,53 +365,66 @@ public class MailServiceImpl implements MailService{
       }
       
       Session session = Session.getDefaultInstance(props);
-      URLName storeURL = new URLName(account.getProtocol(), account.getIncomingHost(), Integer.valueOf(account.getIncomingPort()), account.getIncomingFolder(), account.getIncomingUser(), account.getIncomingPassword()) ;
-      Store store = session.getStore(storeURL) ;
-      store.connect();
-      
-      javax.mail.Folder folder = store.getFolder(account.getIncomingFolder());
-      folder.open(javax.mail.Folder.READ_WRITE);
-
-      javax.mail.Message[] messages = folder.getMessages() ;
-      Vector<javax.mail.Message> vector = new Vector<javax.mail.Message>();
-      Node messageHome = storage_.getMessageHome(sProvider, username, accountId) ;
-      for (int i=1 ; i< messages.length; i++) {
-        if (!messages[i].isSet(Flags.Flag.SEEN)) vector.add(messages[i]); 
-        messages[i].setFlag(Flags.Flag.SEEN, true); 
-      }  
-
-      totalNew = vector.size() ;
-      
-      System.out.println(" #### Folder contains " + totalNew + " messages !");
-      
-      if (totalNew > 0) {
-        int i = 0 ;
-        //SpamFilter spamFilter = getSpamFilter(sProvider, username, account.getId());
-        String folderId = Utils.createFolderId(accountId, account.getIncomingFolder(), false) ;
-        Folder storeFolder = storage_.getFolder(sProvider, username, account.getId(), folderId) ;
-        if(storeFolder == null) {
-          storeFolder = new Folder() ;
-          storeFolder.setId(folderId);
-          storeFolder.setName(account.getIncomingFolder()) ;
-          storeFolder.setLabel(account.getIncomingFolder()) ;
-          storeFolder.setPersonalFolder(false) ;
-          storage_.saveFolder(sProvider, username, account.getId(), storeFolder) ;
+      String[] incomingFolders = account.getIncomingFolder().split(",") ;
+      for (String incomingFolder : incomingFolders) {
+        incomingFolder = incomingFolder.trim() ;
+        URLName storeURL = new URLName(account.getProtocol(), account.getIncomingHost(), Integer.valueOf(account.getIncomingPort()), incomingFolder, account.getIncomingUser(), account.getIncomingPassword()) ;
+        Store store = session.getStore(storeURL) ;
+        store.connect();
+        javax.mail.Folder folder = store.getFolder(storeURL.getFile());
+        if (!folder.exists()) {
+          System.out.println(" #### Folder " + incomingFolder + " is not exists !");
+          continue ;
+        } else {
+          System.out.println(" #### Getting mails from folder " + incomingFolder + " !");
         }
-        while (i < totalNew) {
-          javax.mail.Message msg = vector.get(i) ;          
-          saveMessage(sProvider, msg, messageHome, account.getId(), username, folderId) ;
-          messageHome.getSession().save() ;
-          i ++ ;          
-          System.out.println(" ####  " + i + " messages saved");
+        folder.open(javax.mail.Folder.READ_WRITE);
+
+        javax.mail.Message[] messages = folder.getMessages() ;
+        Vector<javax.mail.Message> vector = new Vector<javax.mail.Message>();
+        Node messageHome = storage_.getMessageHome(sProvider, username, accountId) ;
+        for (int i=1 ; i< messages.length; i++) {
+          if (!messages[i].isSet(Flags.Flag.SEEN)) vector.add(messages[i]); 
+          messages[i].setFlag(Flags.Flag.SEEN, true); 
+        }  
+
+        totalNew = vector.size() ;
+
+        System.out.println(" #### Folder contains " + totalNew + " messages !");
+
+        if (totalNew > 0) {
+          int i = 0 ;
+          //SpamFilter spamFilter = getSpamFilter(sProvider, username, account.getId());
+          String folderId = Utils.createFolderId(accountId, incomingFolder, false) ;
+          Folder storeFolder = storage_.getFolder(sProvider, username, account.getId(), folderId) ;
+          if(storeFolder == null) {
+            storeFolder = new Folder() ;
+            folderId = Utils.createFolderId(accountId, incomingFolder, true) ;
+            storeFolder.setId(folderId);
+            storeFolder.setName(incomingFolder) ;
+            storeFolder.setLabel(incomingFolder) ;
+            storeFolder.setPersonalFolder(true) ;
+            storage_.saveFolder(sProvider, username, account.getId(), storeFolder) ;
+          }
+          while (i < totalNew) {
+            javax.mail.Message msg = vector.get(i) ;      
+            try {
+              saveMessage(sProvider, msg, messageHome, account.getId(), username, folderId) ;
+            } catch(Exception e) {
+              continue ;
+            }  
+            i ++ ;          
+            System.out.println(" ####  " + i + " messages saved");
+          }
+          Calendar cc = GregorianCalendar.getInstance();
+          javax.mail.Message firstMsg = vector.get(0) ;
+          if (firstMsg.getReceivedDate() != null)
+            cc.setTime(firstMsg.getReceivedDate());
+          else cc.setTime(firstMsg.getSentDate());
+          storage_.execActionFilter(sProvider, username, accountId, cc);
+          folder.close(true);      
+          store.close();
         }
-        Calendar cc = GregorianCalendar.getInstance();
-        javax.mail.Message firstMsg = vector.get(0) ;
-        if (firstMsg.getReceivedDate() != null)
-        cc.setTime(firstMsg.getReceivedDate());
-        else cc.setTime(firstMsg.getSentDate());
-        storage_.execActionFilter(sProvider, username, accountId, cc);
-        folder.close(true);      
-        store.close();
       }
     }  catch (Exception e) { 
       e.printStackTrace();
@@ -473,6 +486,7 @@ public class MailServiceImpl implements MailService{
       folderNode.setProperty(Utils.EXO_UNREADMESSAGES, folderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() + 1) ;
       folderNode.setProperty(Utils.EXO_TOTALMESSAGE , folderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() + 1) ;
     }
+    messagesNode.getSession().save() ;
   }
 
   private long getPriority(javax.mail.Message msg) throws Exception {

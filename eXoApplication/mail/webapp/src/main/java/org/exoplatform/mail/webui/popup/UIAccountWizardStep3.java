@@ -46,6 +46,7 @@ public class UIAccountWizardStep3 extends UIFormInputSet  implements WizardStep{
   public static final String FIELD_STOREFOLDER = "storeFolder" ;
   
   public static final String DEFAULT_POP_SERVER = "pop.gmail.com".intern() ;
+  public static final String DEFAULT_IMAP_SERVER = "imap.gmail.com".intern() ;
   public static final String DEFAULT_SMTP_SERVER = "smtp.gmail.com".intern() ;
   public static final String DEFAULT_POP_PORT = "110".intern() ;
   public static final String DEFAULT_SMTP_PORT = "25".intern() ;
@@ -85,6 +86,7 @@ public class UIAccountWizardStep3 extends UIFormInputSet  implements WizardStep{
   
   protected void setDefaultValue(String serverType, boolean isSSL) {
     if(serverType.equals(Utils.POP3)) {
+      getUIStringInput(FIELD_INCOMING_SERVER).setValue(DEFAULT_POP_SERVER) ;
       if(isSSL) {
         getUIStringInput(FIELD_INCOMINGPORT).setValue(DEFAULT_POPSSL_PORT) ;
         getUIStringInput(FIELD_OUTGOINGPORT).setValue(DEFAULT_SMTPSSL_PORT) ;
@@ -93,6 +95,7 @@ public class UIAccountWizardStep3 extends UIFormInputSet  implements WizardStep{
         getUIStringInput(FIELD_OUTGOINGPORT).setValue(DEFAULT_SMTP_PORT) ;
       }
     } else {
+      getUIStringInput(FIELD_INCOMING_SERVER).setValue(DEFAULT_IMAP_SERVER) ;
       if(isSSL) {
         getUIStringInput(FIELD_INCOMINGPORT).setValue(DEFAULT_IMAPSSL_PORT) ;
         getUIStringInput(FIELD_OUTGOINGPORT).setValue(DEFAULT_SMTP_PORT) ;
