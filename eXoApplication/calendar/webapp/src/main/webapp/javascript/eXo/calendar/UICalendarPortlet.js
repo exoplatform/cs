@@ -740,21 +740,21 @@ UICalendarPortlet.prototype.dayViewCallback = function(evt){
 		} ;
 	}
 	else{		
-		src = eXo.core.DOMUtil.findAncestorByClass(src, "EventBoxes") ;
+		src = (eXo.core.DOMUtil.hasClass(src, "EventBoxes"))? src : eXo.core.DOMUtil.findAncestorByClass(src, "EventBoxes") ;
 		var eventId = src.getAttribute("eventid") ;
 		var calendarId = src.getAttribute("calid") ;
 		var calType = src.getAttribute("calType") ;
-		map = {
-			"objectId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"objectId="+eventId ,
-			"calendarId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"calendarId="+calendarId
-		} ;
-		if (calType) {
+//		map = {
+//			"objectId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"objectId="+eventId ,
+//			"calendarId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"calendarId="+calendarId
+//		} ;
+//		if (calType) {
 			map = {
 				"objectId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"objectId=" + eventId ,
 				"calendarId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"calendarId=" + calendarId,
 				"calType\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"calType=" + calType
 			} ;
-		}
+//		}
 	}
 	eXo.webui.UIContextMenu.changeAction(eXo.webui.UIContextMenu.menuElement, map) ;
 } ;
