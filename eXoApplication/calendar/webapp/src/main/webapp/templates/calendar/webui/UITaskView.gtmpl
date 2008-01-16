@@ -20,7 +20,7 @@
 					<tr>
 						<td>
 							<a href="$linkDayPrevious">
-								<div class="BackIcon" title="Previous day"><span></span></div>
+								<div class="BackIcon" title="<%=_ctx.appRes('UIDayView.label.previousDay')%>"><span></span></div>
 							</a>
 						</td>
 						<td>
@@ -35,7 +35,7 @@
 						</td>
 						<td>
 							<a href="$linkDayNext">
-								<div class="NextIcon" title="Next day"><span></span></div>
+								<div class="NextIcon" title="<%=_ctx.appRes('UIDayView.label.nextDay')%>"><span></span></div>
 							</a>
 						</td>
 					</tr>
@@ -43,19 +43,16 @@
 			</table>
 		</div>
 <div class="UIListView">
-		<!--<div class="TaskListContainer">
-			<div class="UIListView">
-				<div class="TaskList">-->
 					<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
   					<thead>
   						<tr>
-								<th style="width: 30px;"><input type="checkbox" class="checkbox" title="Check all" value="4"/></th>
-  			       	<th style="width: 24px;"><div class="AttachmentIcon" title="Attachment of event"><span></span></div></th>
-  		          <th >Task</th>
-  		          <th >Priority</th>
-  		          <th >Status</th>
-  		          <th >Duedate</th>
- 	      	      <th >Task delegation</th>
+								<th style="width: 30px;"><input type="checkbox" class="checkbox" title="<%=uiform.getLabel('CheckAll')%>" value="4"/></th>
+  			       	<th style="width: 24px;"><div class="AttachmentIcon"><span></span></div></th>
+  		          <th ><%=uiform.getLabel('Task')%></th>
+  		          <th ><%=uiform.getLabel('Priority')%></th>
+  		          <th ><%=uiform.getLabel('Status')%></th>
+  		          <th ><%=uiform.getLabel('DueDate')%></th>
+ 	      	      <th ><%=uiform.getLabel('TaskDelegation')%></th>
   	 	        </tr>
   	 	      </thead>
   	 	      	<tbody>
@@ -82,7 +79,7 @@
 										 def amount = event.getToDateTime().getTime() - event.getFromDateTime().getTime();
 										 long days = (((amount/1000)/60)/60)/24 ; 
 										%>
-										$days days
+										$days <%=uiform.getLabel('days')%>
 										</td>
 										<td class="text">
 											<%=(event.getTaskDelegator() == null)? "": event.getTaskDelegator()%>
@@ -94,9 +91,6 @@
   	   			 </tbody>
 					</table>
 	<%_ctx.include("app:/templates/calendar/webui/UIPageIterator.gtmpl");%>
-			<!--	</div>
-			</div>			
-		</div>-->
 	</div>	
 		<% /*Begin Popup Menu*/ %>
 	<div class="UIRightClickPopupMenu" id="UIListViewEventRightMenu" exocallback="eXo.calendar.UICalendarPortlet.listViewCallack">
@@ -118,7 +112,8 @@
 		        %>
 		        <a href="$link">
 		          <div class="ItemIcon $icon">
-		            $act</div>
+		            <%=_ctx.appRes("ContextMenu.label."+act)%>
+		           </div>
 		        </a>
 		        <%}%>
 		      </div>

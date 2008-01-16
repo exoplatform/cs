@@ -17,7 +17,9 @@
 	boolean isDisplaySearchResult = uicomponent.isDisplaySearchResult() ;
 	if(isDisplaySearchResult) {
 %> 
-	<div class="Result">Search result</div>
+	<div class="Result">
+		<%=uiform.getLabel('searchResult')%>
+	</div>
 <%
 	}else {
 		_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
@@ -28,22 +30,22 @@
 					<tr>
 						<td>
 							<a href="$linkDayPrevious">
-								<div class="BackIcon" title="Previous day"><span></span></div>
+								<div class="BackIcon" title="<%=_ctx.appRes('UIDayView.label.previousDay')%>"><span></span></div>
 							</a>
 						</td>
 						<td>
 							<div class="Title">
-							<a href="<%=uicomponent.event("GotoDate",monthViewAction)%>">
+							<a href="<%=uicomponent.event('GotoDate',monthViewAction)%>">
 								$currentMonthName
 							</a>, $currentDay, 
-							<a href="<%=uicomponent.event("GotoDate",yearViewAction)%>">
+							<a href="<%=uicomponent.event('GotoDate',yearViewAction)%>">
 								$currentYear
 							</a>
 							</div>
 						</td>
 						<td>
 							<a href="$linkDayNext">
-								<div class="NextIcon" title="Next day"><span></span></div>
+								<div class="NextIcon" title="<%=_ctx.appRes('UIDayView.label.nextDay')%>"><span></span></div>
 							</a>
 						</td>
 					</tr>
@@ -59,9 +61,15 @@
   			<tr>
   				<th style="width: 24px;"></th>
   			  <th style="width: 24px;"><div class="AttachmentIcon" title="Attachment of event">&nbsp;</div></th>
-  		    <th >Summary</th>
- 	      	<th >Start</th>
- 	      	<th >End</th>
+  		    <th >
+  		    	<%=uiform.getLabel('Summary')%>
+  		    </th>
+ 	      	<th >
+ 	      		<%=uiform.getLabel('Start')%>
+ 	      	</th>
+ 	      	<th >
+ 	      		<%=uiform.getLabel('End')%>
+ 	      	</th>
   	 	  </tr>
   	 	</thead>
   	 	  <tbody>
@@ -95,7 +103,9 @@
 		<%if(uicomponent.getEvents().size() <= 0) { %>
 		<table>
 			<tr>
-				<td class="Null">Have no data </td>
+				<td class="Null">
+					<%=uiform.getLabel('noData')%> 
+				</td>
 			</tr>
 		</table>
 		<%} else { 
@@ -108,15 +118,11 @@
 		<table class="ActionContainer" align="center">
 			<tr>
 				<td align="center">
-		      <% 
-		        	 String actionLabel = "Close Search" ; //_ctx.appRes(uicomponent.getName() + ".action." + action) ;
-		           String link = uicomponent.event("CloseSearch") ;
-		  		%>
-		  		<a href="$link" class="ActionButton LightBlueStyle">
+		  		<a href="<%= uicomponent.event('CloseSearch')%>" class="ActionButton LightBlueStyle">
 		        <div class="ButtonLeft">
 		          <div class="ButtonRight">
 		            <div class="ButtonMiddle">
-		              $actionLabel
+		              <%=uiform.getLabel('CloseSearch')%> 
 		            </div>
 		          </div>
 		        </div>
@@ -146,7 +152,8 @@
 		        %>
 		        <a href="$link">
 		          <div class="ItemIcon $icon">
-		            $act</div>
+		            <%=_ctx.appRes("ContextMenu.label."+act)%>
+		          </div>
 		        </a>
 		        <%}%>
 		      </div>

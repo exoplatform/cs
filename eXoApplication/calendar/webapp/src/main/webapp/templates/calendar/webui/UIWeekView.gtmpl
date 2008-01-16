@@ -45,7 +45,7 @@
 				<tr>
 					<td>
 						<a href="$linkDayPrevious">
-							<div class="BackIcon" title="Previous month"><span></span></div>
+							<div class="BackIcon" title="<%=uiform.getLabel('previousWeek')%>"><span></span></div>
 						</a>
 					</td>
 					<td>
@@ -57,7 +57,7 @@
 					</td>
 					<td>
 						<a href="$linkDayNext">
-							<div class="NextIcon" title="Next month"><span></span></div>
+							<div class="NextIcon" title="<%=uiform.getLabel('nextWeek')"><span></span></div>
 						</a>
 					</td>
 				</tr>
@@ -99,8 +99,8 @@
 							<td ><div  style="width: 55px;"><span></span></div></td>
 							<td colspan="7" class="EventAllday"><div style="position: relative ;">
 								<% for (event in uicomponent.getEventList().values()) {
-									begindate =  event.getFromDateTime().getTime() ; //tf.format(event.fromDateTime) ;
-									enddate = event.getToDateTime().getTime() ;//tf.format(event.toDateTime) ;
+									begindate =  event.getFromDateTime().getTime() ;  
+									enddate = event.getToDateTime().getTime() ; 
 									leftClass = "LeftResizeEvent ResizableSign" ;
 									if(event.fromDateTime.before(uicomponent.getBeginDateOfWeek().getTime())){
 									  leftClass = "LeftContinueEvent" ;
@@ -109,8 +109,8 @@
 									if(event.toDateTime.after(uicomponent.getEndDateOfWeek().getTime())){
 									  rightClass = "RightContinueEvent" ;
 									}  		
-								  long 	startTime = event.getFromDateTime().getTime() ; // cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) ;
-								  long	finishTime = event.getToDateTime().getTime() ; // cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) ;
+								  long 	startTime = event.getFromDateTime().getTime() ;  
+								  long	finishTime = event.getToDateTime().getTime() ;  
 									color = uicomponent.getColors().get(event.getCalendarId()) ;
 									title = tf.format(event.getFromDateTime()) + "->" + tf.format(event.getToDateTime())+ ":&#013; " + event.summary ;
 									actionLink =  uicomponent.event("SaveEvent",event.getId()+"&calendarId="+event.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
@@ -119,7 +119,6 @@
 										 	<div class="$leftClass"><span></span></div>
 										 	<div class="EventAlldayContent" style="float: left;">
 											 	<%=event.summary%>
-											 	<%//=tf.format(event.fromDateTime)%>
 											 </div>
 										 	<div class="$rightClass"><span></span></div>
 										 	<div style="clear: left;"><span></span></div>
@@ -240,16 +239,21 @@
 			      				icon = act + "EventIcon" ;
 			      			%>
 			      				<a href="$link" style="display:none;" class="EventActionMenu">
-			          				<div class="ItemIcon $icon">$act</div>
+			          				<div class="ItemIcon $icon">
+			          				 <%=_ctx.appRes("ContextMenu.label."+act)%>
+			          				</div>
 			      			  </a>
 			      			<%}%>
 				      			 <a href="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_EVENT&startTime=beginTime")%>">
-					           <div class="ItemIcon QuickAddEvent"> Add new event </div>
+						           <div class="ItemIcon QuickAddEvent">
+						           	<%=_ctx.appRes("ContextMenu.label.addEvent")%>
+						           </div>
 					           </a>
-					        
-					          <a href="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_TASK&startTime=beginTime")%>">
-					            <div class="ItemIcon QuickAddTask">Add new task</div>
-					          </a>
+						         <a href="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_TASK&startTime=beginTime")%>">
+						            <div class="ItemIcon QuickAddTask">
+						            	<%=_ctx.appRes("ContextMenu.label.addTask")%>
+						            </div>
+						         </a>
 									</div>
 		      		</div>
 		    		</div>

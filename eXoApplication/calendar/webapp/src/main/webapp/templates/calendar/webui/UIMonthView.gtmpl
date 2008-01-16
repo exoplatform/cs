@@ -39,7 +39,7 @@
 					<tr>
 						<td>
 							<a href="$linkDayPrevious">
-								<div class="BackIcon" title="Previous month"><span></span></div>
+								<div class="BackIcon" title="<%=uiform.getLabel('previousMonth')%>"><span></span></div>
 							</a>
 						</td>
 						<td>
@@ -51,7 +51,7 @@
 						</td>
 						<td>
 							<a href="$linkDayNext">
-								<div class="NextIcon" title="Next month"><span></span></div>
+								<div class="NextIcon" title="<%=uiform.getLabel('nextMonth')%>"><span></span></div>
 							</a
 						</td>
 					</tr>
@@ -189,10 +189,14 @@
 			          <div class="MiddleRightRightClickPopupMenu">
               		<div class="UIRightPopupMenuContainer">
           			  	<a href="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_EVENT&startTime=beginTime")%>">
-					           <div class="ItemIcon QuickAddEvent"> Add new event </div>
+					           <div class="ItemIcon QuickAddEvent">
+					            	<%=_ctx.appRes("ContextMenu.label.addEvent")%>
+					            </div>
 					          </a>
 					          <a href="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_TASK&startTime=beginTime")%>">
-					            <div class="ItemIcon QuickAddTask">Add new task</div>
+					            <div class="ItemIcon QuickAddTask">
+					            	<%=_ctx.appRes("ContextMenu.label.addTask")%>
+					            </div>
 					          </a>
 									</div>
 	          		</div>
@@ -224,7 +228,9 @@
               				icon = act + "EventIcon" ;
               			%>
               				<a href="$link">
-	              				<div class="ItemIcon $icon">$act</div>
+	              				<div class="ItemIcon $icon">
+													<%=_ctx.appRes("ContextMenu.label."+act)%>
+												</div>
               			  </a>
               			<%}%>
 									</div>

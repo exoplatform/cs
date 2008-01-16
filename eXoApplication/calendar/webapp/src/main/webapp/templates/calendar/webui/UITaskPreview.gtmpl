@@ -13,7 +13,9 @@ uiform.begin() ;
 	<div class="UIPreview" id="<%=uicomponent.getId()%>">
 	<%if(!uicomponent.isShowPopup()){%>
 		<div class="ViewBar">
-			<div class="Label">Task detail</div> 
+			<div class="Label">
+			 <%=uiform.getLabel('taskDetail')%>
+			</div> 
 			<div class="MaximizeButton" title="View full - size task" onclick = "eXo.cs.Utils.showHidePane(this,document.getElementById('UIListUsers').parentNode,'<%=uicomponent.getId()%>')"><span></span></div>
 			<div style="clear: both"><span></span></div>
 		</div>
@@ -39,14 +41,15 @@ uiform.begin() ;
 						         </div>
 						         <%if(attachFile.getMimeType().startsWith("image")) {
 						         		String rndString = String.valueOf(new Date().getTime());
-						         		String src = uicomponent.getDownloadLink(attachFile) ;
-						         		//${uicomponent.getPortalName()}/jcr?workspace=${attachFile.workspace}&hash=${rndString}&path=${attachFile.getDataPath()}
+						         		String src = "/${uicomponent.getPortalName()}/jcr?workspace=${attachFile.workspace}&hash=${rndString}&path=${attachFile.getDataPath()}" ;
 						         %>
 						         	<img src="$src" class="Img" />
 						         <%}%>
 						         <div class="Actions" style="">
 							         <a class="IconHolder ViewAttachmentIcon" style="padding-left:15px;"> View </a> 
-							         <a href="<%=uicomponent.event("Download",attachFile.getId())%>" class="IconHolder DownLoadAttachmentIcon" style="padding-left:15px;"> Dowload </a>
+							         <a href="<%=uicomponent.event("Download",attachFile.getId())%>" class="IconHolder DownLoadAttachmentIcon" style="padding-left:15px;">
+							         		<%=uiform.getLabel('Download')%>
+							         </a>
 						         </div> 
 						         <div style="clear:left;"><span></span></div>
 						         <%}%> 
@@ -54,27 +57,39 @@ uiform.begin() ;
         							<div class="TaskDescription"><%=task.getSummary()%></div>
         							<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
 			        					<tr>
-			        						<td class="Text">Status:              </td>
+			        						<td class="Text">
+			        							<%=uiform.getLabel('Status')%>
+			        						</td>
 			        						<td class="Text"><%=(task.getEventState()==null)?"" : task.getEventState()%></td>
 			        					</tr>	
 			        					<tr>
-			        						<td class="Text">Priority:     </td>
+			        						<td class="Text">
+			        							<%=uiform.getLabel('Priority')%>
+			        						</td>
 			        						<td class="Text"><%=(uicomponent.getPriority(task.getPriority()) ==null)? "" : uicomponent.getPriority(task.getPriority())%></td>
 			        					</tr>	
 			        					<tr>
-			        						<td class="Text">Start Date:    </td>
+			        						<td class="Text">
+			        							<%=uiform.getLabel('StartDate')%>
+			        						</td>
 			        						<td class="Text"><%=df.format(task.getFromDateTime())%></td>
 			        					</tr>	
 			        					<tr>
-			        						<td class="Text">Due Date:  </td>
+			        						<td class="Text">
+			        							<%=uiform.getLabel('DueDate')%>
+			        						</td>
 			        						<td class="Text"><%=df.format(task.getToDateTime())%></td>
 			        					</tr>	
 			        					<tr>
-			        						<td class="Text">Task delegation:  </td>
+			        						<td class="Text">
+			        							<%=uiform.getLabel('TaskDelegation')%>
+			        						</td>
 			        						<td class="Text"><%=(task.getTaskDelegator() ==null)? "" : task.getTaskDelegator()%></td>
 			        					</tr>	
 			        					<tr>
-			        						<td class="Text">Reminder:  </td>
+			        						<td class="Text">
+			        							<%=uiform.getLabel('Reminder')%>
+			        						</td>
 					               	<td class="Text">
 			        						<%	               	 
 					               	 	 for(reminder in task.getReminders()) {
@@ -89,18 +104,24 @@ uiform.begin() ;
 					               	</td>
 			        					</tr>	
 			        					<tr>
-			        						<td class="Text">Note:  </td>
+			        						<td class="Text">
+			        							<%=uiform.getLabel('Note')%>
+			        						</td>
 			        						<td class="Text"><%=(task.getDescription()==null)?"" : task.getDescription()%></td>
 			        					</tr>	
 				        			</table>
 				        			<%if(!uicomponent.isShowPopup()){%>
 				        			<div class="ActionsContainer">
 												<a href="<%=uicomponent.event("Edit",task.getId()+"&"+uicomponent.CALENDARID+"="+task.getCalendarId()+"&calType=" +task.getCalType())%>" class="ControlButton">
-													<div class="IconHolder EditTaskIcon"> Edit Task </div>
+													<div class="IconHolder EditTaskIcon">
+														<%=uiform.getLabel('EditTask')%>
+													</div>
 												</a>
 												<div class="SeparatorDotLine"><span></span></div>
 												<a href="<%=uicomponent.event("Delete",uicomponent.id,task.getId()+"&"+uicomponent.CALENDARID+"="+task.getCalendarId()+"&calType=" +task.getCalType())%>" class="ControlButton">
-													<div class="IconHolder DeleteTaskIcon"> Delete Task </div>
+													<div class="IconHolder DeleteTaskIcon">
+														<%=uiform.getLabel('DeleteTask')%>
+													</div>
 												</a>
 												<div style="clear:left;"><span></span></div>
 				        			</div>

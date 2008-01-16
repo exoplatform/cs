@@ -15,13 +15,17 @@
               <div class="MiddleBar">
                 <div class="UISearchForm">
                   <div class="QuickSet">
-                    <div class="SearchTitle">Search:</div>
+                    <div class="SearchTitle">
+                    	<%=uiform.getLabel('Search')%>
+                    </div>
                     <%uiform.renderField(uiform.FIELD_KEYWORD)%>
                     <a class="SearchIcon" href="<%=uicomponent.event('Search')%>" title="Quick Search"><span></span></a>
                   </div>  
                 </div>
                 <div class="AddressesGroup">
-                  <div class="AddressLabel">Addresses from group:</div>
+                  <div class="AddressLabel">
+                  		<%=uiform.getLabel('Addresses')%>
+                  	</div>
                    <%uiform.renderField(uiform.FIELD_GROUP)%>
                   <div style="clear: left"><span></span></div>
                 </div>
@@ -42,7 +46,9 @@
                 <th style="width: 30px;" class="BorderAddress"><input type="checkbox" class="checkbox" value="4" /></th>
                 <th class="BorderAddress">
                   <div class="BlueDownArrowIcon">
-                    <div class="Label">Name</div>
+                    <div class="Label">
+                   	<%=uiform.getLabel('Name')%>
+                    </div>
                   </div>
                 </th>
               </tr>
@@ -78,7 +84,9 @@
          <a href="<%=uicomponent.event(action)%>" class="ActionButton LightBlueStyle">
             <div class="ButtonLeft">
               <div class="ButtonRight">
-                <div class="ButtonMiddle">$action</div>
+                <div class="ButtonMiddle">
+                	<%=uiform.getLabel(action)%>
+                </div>
               </div>
             </div>
           </a>

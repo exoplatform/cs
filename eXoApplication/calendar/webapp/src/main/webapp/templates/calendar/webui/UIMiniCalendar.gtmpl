@@ -24,7 +24,7 @@
 	<div class="MiniCalendarContainer">
 		<div class="YearSelector">
 			<a href="$linkYearNext" class="RightControlButton">
-				<div class="NextYearSelector" title="Previous Year"><span></span></div>
+				<div class="NextYearSelector" title="<%=_ctx.appRes('UIYearView.label.nextYear')%>"><span></span></div>
 			</a>
 			<div class="MonthSelector RightControlButton">
 				<table>
@@ -32,7 +32,7 @@
 						<tr>
 							<td>
 								<a href="$linkDayPrevious">
-									<div class="PreviousMonthSelector" title="Previous month"><span></span></div>
+									<div class="PreviousMonthSelector" title="<%=_ctx.appRes('UIMonthView.label.previousMonth')%>"><span></span></div>
 								</a>
 							</td>
 							<td>
@@ -51,7 +51,7 @@
 							</td>
 							<td>
 								<a href="$linkDayNext">
-									<div class="NextMonthSelector" title="Next month"><span></span></div>
+									<div class="NextMonthSelector" title="<%=_ctx.appRes('UIMonthView.label.nextMonth')%>"><span></span></div>
 								</a>
 							</td>
 						</tr>
@@ -59,7 +59,7 @@
 				</table>
 			</div>
 			<a href="$linkYearPrevious" class="RightControlButton">
-				<div class="PreviousYearSelector" title="Previous Year"><span></span></div>
+				<div class="PreviousYearSelector" title="<%=_ctx.appRes('UIYearView.label.previousYear')%>"><span></span></div>
 			</a>
 			<div style="clear: right;"><span></span></div>
 		</div>
@@ -127,7 +127,6 @@
 				      }
 				     calendar.add(Calendar.DATE, 1) ;
 				    }
-				     //dayOfMonth++ ;
 				    println "</tr>" ;
 	  			}	
 	  			 

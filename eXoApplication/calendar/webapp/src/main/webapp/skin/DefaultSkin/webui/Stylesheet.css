@@ -1049,7 +1049,7 @@
 	font-weight: bolder;
 }
 .UIYearView .MonthList .Highlight a{
-	color: red;
+	font-weight:bold;
 }
 /*====================Event List View=====================*/
 

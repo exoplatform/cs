@@ -26,7 +26,7 @@
 					<tr>
 						<td>
 							<a href="$linkDayPrevious">
-								<div class="BackIcon" title="Previous day"><span></span></div>
+								<div class="BackIcon" title="<%=_ctx.appRes('UIDayView.label.previousDay')%>"><span></span></div>
 							</a>
 						</td>
 						<td>
@@ -41,7 +41,7 @@
 						</td>
 						<td>
 							<a href="$linkDayNext">
-								<div class="NextIcon" title="Next day"><span></span></div>
+								<div class="NextIcon" title="<%=_ctx.appRes('UIDayView.label.nextDay')%>"><span></span></div>
 							</a>
 						</td>
 					</tr>
@@ -52,12 +52,12 @@
 		<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
   		<thead>
   			<tr>
-					<th style="width: 30px;"><input type="checkbox" class="checkbox" title="Check all" value="4"/></th>
+					<th style="width: 30px;"><input type="checkbox" class="checkbox" title="<%=uiform.getLabel('CheckAll')%>" value="4"/></th>
   			  <th style="width: 24px;"><div class="AttachmentIcon" title="Attachment of event"><span></span></div></th>
-  		    <th >Event</th>
- 	      	<th >Start</th>
- 	      	<th >End</th>
- 	      	<th >Event description</th>
+  		    <th><%=uiform.getLabel('Event')%></th>
+ 	      	<th><%=uiform.getLabel('Start')%></th>
+ 	      	<th><%=uiform.getLabel('End')%></th>
+ 	      	<th><%=uiform.getLabel('EventDescription')%></th>
   	 	  </tr>
   	 	</thead>
   	 	  <tbody>
@@ -108,7 +108,8 @@
 		        %>
 		        <a href="$link">
 		          <div class="ItemIcon $icon">
-		            $act</div>
+		             <%=_ctx.appRes("ContextMenu.label."+act)%>
+		           </div>
 		        </a>
 		        <%}%>
 		      </div>

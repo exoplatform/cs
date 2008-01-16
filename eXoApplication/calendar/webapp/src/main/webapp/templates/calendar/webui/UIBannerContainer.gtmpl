@@ -1,8 +1,0 @@
-<%
-	//import org.exoplatform.calendar.webui.UISearchForm ;
-%>
-<div class="UIBannerContainer">
-	<div class="LeftHorizontalLine">
-		<div class="RepeatHorizontalLine">a Powerful, Open-source Calendar</div>					
-	</div>
-</div>

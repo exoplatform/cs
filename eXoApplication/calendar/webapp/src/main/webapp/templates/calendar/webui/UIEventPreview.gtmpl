@@ -12,8 +12,10 @@ uiform.begin() ;
 <div class="UIPreview" id="<%=uicomponent.getId()%>">
 	<%if(!uicomponent.isShowPopup()){%>
 		<div class="ViewBar">
-		  <div class="Label">Event detail</div> 
-		  <div class="MaximizeButton" title="View full - size event" onclick = "eXo.cs.Utils.showHidePane(this,document.getElementById('UIListUsers').parentNode,'<%=uicomponent.getId()%>')"><span></span></div>
+		  <div class="Label">
+		   <%=uiform.getLabel('eventDetail')%>
+		  </div> 
+		  <div class="MaximizeButton" title="<%=uiform.getLabel('fullSize')%>" onclick = "eXo.cs.Utils.showHidePane(this,document.getElementById('UIListUsers').parentNode,'<%=uicomponent.getId()%>')"><span></span></div>
 		  <div style="clear: both"><span></span></div>
 		</div>
 	<%}%>
@@ -31,8 +33,12 @@ uiform.begin() ;
 	      <table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
 	       <tr>
 	        <td style="border-right: 1px solid #c7c7c7;width: 185px;">
-	         <div class="Text">From: <span style="color: #1756d5;"><%=df.format(event.getFromDateTime())%></span> </div>
-	         <div class="Text">To:   <span style="color: #1756d5;"><%=df.format(event.getToDateTime())%></span> </div>
+	         <div class="Text">
+	         	 <%=uiform.getLabel('From')%><span style="color: #1756d5;"><%=df.format(event.getFromDateTime())%></span> 
+	         </div>
+	         <div class="Text">
+	         	<%=uiform.getLabel('To')%><span style="color: #1756d5;"><%=df.format(event.getToDateTime())%></span> 
+	         </div>
 	         <%for(attachFile in  event.getAttachment()){%>
 		         <div class="AttachmentIcon"  style="white-space: nowrap;">
 		          $attachFile.name  
@@ -40,14 +46,17 @@ uiform.begin() ;
 		         </div>
 		         <%if(attachFile.getMimeType().startsWith("image"))  {
 		         		String rndString = String.valueOf(new Date().getTime());
-		         		String src = uicomponent.getDownloadLink(attachFile) ;
-		         		///${uicomponent.getPortalName()}/jcr?workspace=${attachFile.workspace}&hash=${rndString}&path=${attachFile.getDataPath()}
+		         		String src = "/${uicomponent.getPortalName()}/jcr?workspace=${attachFile.workspace}&hash=${rndString}&path=${attachFile.getDataPath()}" ;
 		         %>
 		         	<img src="$src" class="Img" />
 		         <%}%>
 		         <div class="Actions" style="white-space: nowrap;">
-			         <a href="#" class="IconHolder ViewAttachmentIcon" style="padding-left:15px;"> View </a> 
-			         <a href="<%=uicomponent.event("Download",attachFile.getId())%>" class="IconHolder DownLoadAttachmentIcon" style="padding-left:15px;"> Dowload </a>
+			         <a href="#" class="IconHolder ViewAttachmentIcon" style="padding-left:15px;">
+			         	<%=uiform.getLabel('View')%>
+			         </a> 
+			         <a href="<%=uicomponent.event("Download",attachFile.getId())%>" class="IconHolder DownLoadAttachmentIcon" style="padding-left:15px;">
+			         	<%=uiform.getLabel('Download')%>
+			         </a>
 		         </div> 
 		         <div style="clear:left;"><span></span></div>
 	         <%}%>
@@ -60,22 +69,24 @@ uiform.begin() ;
 	             <table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
 	              <tr>
 	               <td style="width: 26px;"></td>
-	               <td class="Text" style="width: 100px;">Place:</td>
+	               <td class="Text" style="width: 100px;">
+	               		<%=uiform.getLabel('Place')%>
+	               </td>
 	               <td class="Text"><%=(event.getLocation() == null)? "" : event.getLocation()%></td>
 	              </tr> 
 	              <tr>
 	               <td ></td>
-	               <td class="Text">Repeat Event:         </td>
+	               <td class="Text"><%=uiform.getLabel('RepeatEvent')%></td>
 	               <td class="Text"><%=(event.getRepeatType() == null)? "" : event.getRepeatType()%></td>
 	              </tr> 
 	              <tr>
 	               <td ></td>
-	               <td class="Text">Description:            </td>
+	               <td class="Text"><%=uiform.getLabel('Description')%></td>
 	               <td class="Text"><%=(event.getDescription() == null)? "" : event.getDescription()%></td>
 	              </tr> 
 	              <tr>
 	               <td ></td>
-	               <td class="Text">Event Reminder:      </td>
+	               <td class="Text"><%=uiform.getLabel('EventReminder')%></td>
 	               <td class="Text">
 	               <%	               	 
 	               	 	 for(reminder in event.getReminders()) {
@@ -87,22 +98,25 @@ uiform.begin() ;
 	               			 <%		 		 
 	               	 	 }	               	 
 	               %>
-	               
 	               </td>
 	              </tr> 	              
 	              <tr>
 	               <td ></td>
-	               <td class="Text">Event Sharing:</td>
+	               <td class="Text">
+	               	<%=uiform.getLabel('EventSharing')%>
+	               </td>
 	               <td class="Text"><%=(event.isPrivate() == null)? "" : !event.isPrivate()%></td>
 	              </tr> 
 	              <tr>
 	               <td ></td>
-	               <td class="Text">Show this event as:  </td>
+	               <td class="Text"><%=uiform.getLabel('ShowAs')%></td>
 	               <td class="Text"><%=(event.getStatus() == null)? "" : event.getStatus()%></td>
 	              </tr> 
 	              <tr>
 	               <td ></td>
-	               <td class="Text">Invitation:   </td>
+	               <td class="Text">
+	               	<%=uiform.getLabel('Invitation')%>
+	               </td>
 	               <td class="Text">
 		               <%
 		               		for(invit in event.getInvitation()) {
@@ -113,7 +127,9 @@ uiform.begin() ;
 	              </tr>                    
 	              <tr>
 	               <td ></td>
-	               <td class="Text">Participant:   </td>
+	               <td class="Text">
+	               	<%=uiform.getLabel('Participant')%>
+	               </td>
 	               <td class="Text">
 		               <%
 		               		for(par in event.getParticipant()) {
@@ -126,15 +142,21 @@ uiform.begin() ;
 	             <%if(!uicomponent.isShowPopup()){%>
 	             <div class="ActionsContainer">
 	              <a class="ControlButton"  style="color:gray;">
-			           <div class="IconHolder ViewOnCalendar" > View On Calendar </div>
+			           <div class="IconHolder ViewOnCalendar" > 
+			           	 <%=uiform.getLabel('ViewOnCalendar')%>
+			           </div>
 			          </a>
 			          <div class="SeparatorDotLine"><span></span></div>
 			          <a href="<%=uicomponent.event("Edit",event.getId()+"&"+uicomponent.CALENDARID+"="+event.getCalendarId()+"&calType=" +event.getCalType())%>" class="ControlButton">
-			           <div class="IconHolder EditEventIcon"> Edit event </div>
+			           <div class="IconHolder EditEventIcon">
+			           	 <%=uiform.getLabel('EditEvent')%>
+			           </div>
 			          </a>
 			          <div class="SeparatorDotLine"><span></span></div>
 			          <a href="<%=uicomponent.event("Delete",uicomponent.id,event.getId()+"&"+uicomponent.CALENDARID+"="+event.getCalendarId()+"&calType=" +event.getCalType())%>" class="ControlButton">
-			           <div class="IconHolder DeleteEventIcon"> Delete event </div>
+			           <div class="IconHolder DeleteEventIcon">
+			           	 <%=uiform.getLabel('DeleteEvent')%>
+			            </div>
 			          </a>
 			          <div style="clear:left;"><span></span></div>
 	             </div>

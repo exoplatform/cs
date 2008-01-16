@@ -43,6 +43,14 @@
       </tr>
       <tr>
         <td class="FieldLabel">
+          <%=uiForm.getLabel(uicomponent.FIELD_DESCRIPTION)%>
+        </td>
+        <td class="FieldComponent">
+          <%uiForm.renderField(uicomponent.FIELD_DESCRIPTION)%>
+        </td>
+      </tr>
+      <tr>
+        <td class="FieldLabel">
           <%=uiForm.getLabel(uicomponent.FIELD_DELEGATION)%>
         </td>
         <td class="FieldComponent">
@@ -133,14 +141,6 @@
           	uiForm.renderField(uicomponent.FIELD_ATTACHMENTS) ;
           	renderActions(uicomponent.FIELD_ATTACHMENTS) ;
           %>
-        </td>
-      </tr>
-      <tr>
-        <td class="FieldLabel">
-          <%=uiForm.getLabel(uicomponent.FIELD_DESCRIPTION)%>
-        </td>
-        <td class="FieldComponent">
-          <%uiForm.renderField(uicomponent.FIELD_DESCRIPTION)%>
         </td>
       </tr>
     </tbody>

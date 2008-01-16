@@ -55,9 +55,9 @@
             	<tr class="TitleBar">
 								<td>
 									<div class="LeftSide">
-										<a href="<%=uiForm.event("MovePrevious")%>"><img src="/eXoResources/skin/sharedImages/Blank.gif" class="BackIcon" title="Back day"></a>
+										<a href="<%=uiForm.event("MovePrevious")%>"><img src="/eXoResources/skin/sharedImages/Blank.gif" class="BackIcon" title="<%=_ctx.appRes('UIDayView.label.previousDay')%>"></a>
 										<span class="Title"><%=df.format(uicomponent.calendar_.getTime())%></span>
-										<a href="<%=uiForm.event("MoveNext")%>"><img src="/eXoResources/skin/sharedImages/Blank.gif" class="NextIcon" title="Next day"></a>
+										<a href="<%=uiForm.event("MoveNext")%>"><img src="/eXoResources/skin/sharedImages/Blank.gif" class="NextIcon" title="<%=_ctx.appRes('UIDayView.label.nextDay')%>"></a>
 									</div>
 								</td>
 								
@@ -80,9 +80,11 @@
             	<tr>
 								<td>
 									<div class="LeftSide">
-										<a href="<%=uiForm.event("DeleteUser")%>"><div class="DeleteUserIcon" title="Delete username"><span></span></div></a>
-										<a href="<%=uiForm.event("AddParticipant",uicomponent.id)%>"><div class="AddUserIcon" title="Add username"><span></span></div></a>
-										<div class="Title">Participants</div>
+										<a href="<%=uiForm.event("DeleteUser")%>"><div class="DeleteUserIcon" title="<%=uiForm.getLabel('DeleteUsername')%>"><span></span></div></a>
+										<a href="<%=uiForm.event("AddParticipant",uicomponent.id)%>"><div class="AddUserIcon" title="<%=uiForm.getLabel('AddUsername')%>"><span></span></div></a>
+										<div class="Title">
+											<%=uiForm.getLabel('Participants')%>
+										</div>
 										<div style="clear: both">
 									</div>
 								</td>
@@ -123,9 +125,13 @@
       			</tbody>
       		</table>
       		<div class="ThiefBox">
-      			<div class="Label">Busy time</div>
+      			<div class="Label">
+      				<%=uiForm.getLabel('BusyTimes')%>
+      			</div>
       			<div class="BusyTime"><span></span></div>
-      			<div class="Label">Free time</div>
+      			<div class="Label">
+      				<%=uiForm.getLabel('FreeTimes')%>
+      			</div>
       			<div class="FreeTime"><span></span></div>
       			<div style="clear: right;"><span></span></div>
       		</div>

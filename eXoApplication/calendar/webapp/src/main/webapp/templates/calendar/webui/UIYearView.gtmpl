@@ -16,15 +16,15 @@
 				<tr>
 					<td>
 						<a href="$linkDayPrevious">
-							<div class="BackIcon" title="Previous Year"><span></span></div>
+							<div class="BackIcon" title="<%=uiform.getLabel('previousYear')%>"><span></span></div>
 						</a>
 					</td>
 					<td>
-						<div class="Title">Year $currentYear</div>
+						<div class="Title"><%=uiform.getLabel('year')%> $currentYear</div>
 					</td>
 					<td>
 						<a href="$linkDayNext">
-							<div class="NextIcon" title="Next Year"><span></span></div>
+							<div class="NextIcon" title="<%=uiform.getLabel('nextYear')%>"><span></span></div>
 						</a>
 					</td>
 				</tr>
