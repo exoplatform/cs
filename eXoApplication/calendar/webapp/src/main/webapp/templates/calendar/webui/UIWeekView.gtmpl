@@ -13,8 +13,8 @@
 	int currentMonth = uicomponent.getCurrentMonth() ;
  	int currentYear = uicomponent.getCurrentYear() ;
 	timeInterval = uicomponent.getTimeInterval() ;
- 	String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT) ;
- 	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS) ;
+ 	String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT, String.valueOf(Calendar.WEEK_OF_YEAR)) ;
+ 	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS, String.valueOf(Calendar.WEEK_OF_YEAR)) ;
  	int weekNumber = uicomponent.getCurrentWeek() ;
  	def rcontext = _ctx.getRequestContext() ;
 	workingStart = uicomponent.getCalendarSetting().getWorkingTimeBegin() ;

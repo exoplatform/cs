@@ -5,11 +5,13 @@
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.getFilterForm("' + uiform.id + '") ;') ;
   //rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkFilter() ;') ;
 %>
-<div class="UICalendars" >
+<div class="$uicomponent.id" >
 <%uiform.begin()%>
 	<div class="TitleBar">
-		<div class="Title">Calendars</div>
-		<div class="ActionsButton" title="Calendar actions" onclick="eXo.calendar.UICalendarPortlet.showMainMenu(this, event);">
+		<div class="Title">
+			<%=uiform.getLabel("calendars")%>
+		</div>
+		<div class="ActionsButton" title="<%=uiform.getLabel("calendarActions")%>" onclick="eXo.calendar.UICalendarPortlet.showMainMenu(this, event);">
 			<% /*Begin Popup Menu - Main */ %>
 	     
 			        <div class="UIRightClickPopupMenu" style="display: none ;">
@@ -24,37 +26,37 @@
 		              		<div class="UIRightPopupMenuContainer">
 			                   <a class="MenuItem" href="<%=uicomponent.event("AddCalendarCategory")%>">   
 			                    <div class="ItemIcon AddGroupIcon">
-			                      Add group
+			                      <%=uiform.getLabel("AddGroup")%>
 			                    </div>
 			                   </a>
 			                   <a class="MenuItem" href="<%=uicomponent.event("AddCalendar")%>">   
 			                    <div class="ItemIcon AddCalendarIcon">
-			                      Add calendar
+			                      <%=uiform.getLabel("AddCalendar")%>
 			                    </div>
 			                   </a>
 			                    <a class="MenuItem" href="<%=uicomponent.event("AddEventCategory")%>">   
 			                    <div class="ItemIcon AddCategoryIcon">
-			                      Add event category
+			                      <%=uiform.getLabel("AddEventCategory")%>
 			                    </div>
 			                   </a>
 			                   <a class="MenuItem" href="<%=uicomponent.event("ImportCalendar")%>">   
 			                    <div class="ItemIcon ImportCalendarIcon">
-			                      Import calendar
+			                      <%=uiform.getLabel("ImportCalendar")%>
 			                    </div>
 			                   </a>
 			                   <a class="MenuItem" href="<%=uicomponent.event("GenerateRss")%>">   
 			                    <div class="ItemIcon GenerateRssIcon">
-			                      Generate RSS
+			                      <%=uiform.getLabel("GenerateRss")%>
 			                    </div>
 			                   </a>
 			                   <a class="MenuItem" href="<%=uicomponent.event("GenerateCalDav")%>">   
 			                    <div class="ItemIcon CalDavIcon">
-			                      Generate CalDAV
+			                      <%=uiform.getLabel("GenerateCalDav")%>
 			                    </div>
 			                   </a>
 			                   <a class="MenuItem" href="<%=uicomponent.event("CalendarSetting")%>">   
 			                    <div class="ItemIcon SettingCalendarIcon">
-			                      Calendar setting
+			                      <%=uiform.getLabel("CalendarSetting")%>
 			                    </div>
 			                   </a>
 		              		</div>
@@ -76,8 +78,10 @@
 	<!-- start private calendars -->
 		<div class="MyCalendar">
 			<div class="CalendarTitle">
-				<div class="CollapserFlatStyle" title="Collapser my calendar"><span></span></div>
-				<div class="Label">My calendars</div>
+				<div class="CollapserFlatStyle"><span></span></div>
+				<div class="Label">
+					<%=_ctx.appRes("UICalendarSettingForm.label.privateCalendar")%>
+				</div>
 			</div>
 			<div class="MyCalendarContainer">
 				<%
@@ -88,10 +92,10 @@
   				<div class="CalendarSelectedFlatStyle">
   					<div class="GroupItem">
   						<div class="GroupColor1">
-  							<div title="Collapser calendar group" class="CollapserFlatStyle"><span></span></div>
+  							<div class="CollapserFlatStyle"><span></span></div>
   							<div class="CheckBox"><input class="CalendarGroup" type="checkbox"/></div>
   							<div class="CalendarGroupIcon"><a>$groupData.name</a></div>
-  							<div class="DownArrow1Icon"  id="$groupData.id" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
+  							<div class="DownArrow1Icon" title="<%=uiform.getLabel('groupActions')%>"  id="$groupData.id" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
   							<div style="clear: both;"><span></span></div>
   						</div>
   					</div>
@@ -107,7 +111,7 @@
   						<div class="$calendar.calendarColor">
   							<div class="CheckBox"><%uiform.renderField(calId)%></div>
   							<div class="CalendarIcon"><a>$calendar.name</a></div>
-  							<div class="DownArrow1Icon"  calColor="$calendar.calendarColor" id="$calId" calType="0" title="Calendar actions" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
+  							<div class="DownArrow1Icon"  calColor="$calendar.calendarColor" id="$calId" calType="0" title="<%=uiform.getLabel("calendarActions")%>" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
   							<div style="clear: both"><span></span></div>
   						</div>
   					</div>
@@ -125,8 +129,10 @@
 		<!-- shared calendars -->
 		<div class="MyCalendar">
 			<div class="CalendarTitle">
-				<div class="CollapserFlatStyle" title="Collapser my calendar"><span></span></div>
-				<div class="Label">Shared calendars</div>
+			<div class="CollapserFlatStyle"><span></span></div>
+				<div class="Label">
+					<%=_ctx.appRes("UICalendarSettingForm.label.sharedCalendar")%>
+				</div>
 			</div>
 			<div class="MyCalendarContainer">
 				<%
@@ -145,7 +151,7 @@
   						<div class="$calendar.calendarColor">
   							<div class="CheckBox"><%uiform.renderField(calendar.getId())%></div>
   							<div class="CalendarIcon"><a><%=calendar.getName()%></a></div>
-  							<div class="DownArrow1Icon" calColor="$calendar.calendarColor" id="$calId" calType="1" title="Calendar actions" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
+  							<div class="DownArrow1Icon" calColor="$calendar.calendarColor" id="$calId" calType="1" title="<%=uiform.getLabel("calendarActions")%>" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
   							<div style="clear:both;"><span></span></div>
   						</div>
   					</div>
@@ -165,7 +171,9 @@
 		<div class="MyCalendar">
 			<div class="CalendarTitle">
 				<div class="CollapserFlatStyle" title="Collapser my calendar"><span></span></div>
-				<div class="Label">Public calendars</div>
+				<div class="Label">
+					<%=_ctx.appRes("UICalendarSettingForm.label.publicCalendar")%>
+				</div>
 			</div>
 			<div class="MyCalendarContainer">
 				<%
@@ -176,7 +184,7 @@
   				<div class="CalendarSelectedFlatStyle">
   					<div class="GroupItem">
   						<div class="GroupColor1">
-  							<div title="Collapser calendar group" class="CollapserFlatStyle"><span></span></div>
+  							<div title="Collapser calendar group" class="CollapserFlatStyle" title="<%=uiform.getLabel("groupActions")%>"><span></span></div>
   							<div class="CheckBox"><input class="CalendarGroup" type="checkbox"/></div>
   							<div class="CalendarGroupIcon"><a><%=groupData.getName()%></a></div>
   							<div style="clear: both"><span></span></div>
@@ -194,7 +202,7 @@
   						<div class="$calendar.calendarColor">
   							<div class="CheckBox"><%uiform.renderField(calendar.getId())%></div>
   							<div class="CalendarIcon"><a><%=calendar.getName()%></a></div>
-  							<div class="DownArrow1Icon" calColor="$calendar.calendarColor" id="$calId" calType="2" title="Calendar actions" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
+  							<div class="DownArrow1Icon" calColor="$calendar.calendarColor" id="$calId" calType="2" title="<%=uiform.getLabel("calendarActions")%>" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
   							<div style="clear: both"><span></span></div>
   						</div>
   					</div>
@@ -227,27 +235,27 @@
 		          		<div class="UIRightPopupMenuContainer">
 		          				 <a class="MenuItem" href="<%=uicomponent.event("AddCalendar","id")%>">   
 		                    <div class="ItemIcon AddCalendarIcon">
-		                      Add calendar
+		                       <%=uiform.getLabel("AddCalendar")%>
 		                    </div>
 		                   </a>
 		          				<a class="MenuItem" href="<%=uicomponent.event("EditGroup","id")%>">   
 		                    <div class="ItemIcon EditGroupIcon">
-		                      Edit group
+		                     	<%=uiform.getLabel("EditGroup")%>
 		                    </div>
 		                   </a>	
 		                   <a class="MenuItem" href="<%=uicomponent.event("DeleteGroup",uicomponent.id,"id")%>">   
 		                    <div class="ItemIcon DeleteGroupIcon">
-		                      Delete group
+		                      <%=uiform.getLabel("DeleteGroup")%>
 		                    </div>
 		                   </a>	
 		                   <a class="MenuItem" href="<%=uicomponent.event("ImportCalendar")%>">   
 		                    <div class="ItemIcon ImportCalendarIcon">
-		                      Import calendar
+		                      <%=uiform.getLabel("ImportCalendar")%>
 		                    </div>
 		                   </a>
 		                   <a class="MenuItem" href="<%=uicomponent.event("ExportCalendars","id")%>">   
 		                    <div class="ItemIcon ExportCalendarIcon">
-		                      Export Calendar
+		                      <%=uiform.getLabel("ExportCalendars")%>
 		                    </div>
 		                   </a>
 		          		</div>
@@ -265,7 +273,6 @@
 			  </div>
 		<% /*End Popup Menu*/ %>
 	<% /*Begin Popup Menu - Calendar*/ %>
-<!--	  <div style="position: relative;">-->
 	      <div class="UIPopupCategory" style="display: none;">
 	      	<div class="PopupCategoryDecorator">
 	      
@@ -281,37 +288,37 @@
 		          		<div class="UIRightPopupMenuContainer" >
 		                   <a class="MenuItem" href="<%=uicomponent.event("AddEvent","id")%>">   
 		                    <div class="ItemIcon AddNewEvent">
-		                      Add event
+		                    	<%=uiform.getLabel("AddEvent")%>
 		                    </div>
 		                   </a>
 		                   <a class="MenuItem" href="<%=uicomponent.event("AddTask","id")%>">   
 		                    <div class="ItemIcon AddNewTask">
-		                      Add task
+		                    	<%=uiform.getLabel("AddTask")%>
 		                    </div>
 		                   </a>
 		                   <a class="MenuItem" href="<%=uicomponent.event("EditCalendar","id")%>">   
 		                    <div class="ItemIcon  EditCalendarIcon">
-		                      Edit Calendar
+		                    	<%=uiform.getLabel("EditCalendar")%>
 		                    </div>
 		                   </a>
 		                   <a class="MenuItem" href="<%=uicomponent.event("RemoveCalendar",uicomponent.id,"id")%>">   
 		                    <div class="ItemIcon RemoveCalendarIcon">
-		                      Remove Calendar
+		                    	<%=uiform.getLabel("RemoveCalendar")%>
 		                    </div>
 		                   </a>
 		                   <a class="MenuItem" href="<%=uicomponent.event("ExportCalendar","id")%>">   
 		                    <div class="ItemIcon ExportCalendarIcon">
-		                      Export Calendar
+		                    	<%=uiform.getLabel("ExportCalendar")%>
 		                    </div>
 		                   </a>
 		                   <a class="MenuItem" style="color: gray;">   
 		                    <div class="ItemIcon  SendMailCalendarIcon">
-		                      Send to friend
+		                    	<%=uiform.getLabel("SendMailCalendar")%>
 		                    </div>
 		                   </a>
 		                   <a class="MenuItem" href="<%=uicomponent.event("ShareCalendar","id")%>">   
 		                    <div class="ItemIcon  SharedCalendarIcon">
-		                      Shared calendar
+		                    	<%=uiform.getLabel("ShareCalendar")%>
 		                    </div>
 		                   </a>		
 		          		</div>
@@ -336,7 +343,6 @@
 	  			
 			    </div>
 			  </div>
-<!--			</div>-->
 		<% /*End Popup Menu*/ %>
 <%uiform.end()%>
 </div>

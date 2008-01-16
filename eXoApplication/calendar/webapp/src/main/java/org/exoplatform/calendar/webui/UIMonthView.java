@@ -26,7 +26,6 @@ import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.SessionsUtils;
-import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventQuery;
@@ -59,8 +58,8 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
       @EventConfig(listeners = UICalendarView.DeleteActionListener.class, confirm="UICalendarVIew.msg.confirm-delete"),
       @EventConfig(listeners = UICalendarView.GotoDateActionListener.class), 
       @EventConfig(listeners = UICalendarView.QuickAddActionListener.class), 
-      @EventConfig(listeners = UIMonthView.MoveNextActionListener.class), 
-      @EventConfig(listeners = UIMonthView.MovePreviousActionListener.class),
+      @EventConfig(listeners = UICalendarView.MoveNextActionListener.class), 
+      @EventConfig(listeners = UICalendarView.MovePreviousActionListener.class),
       @EventConfig(listeners = UICalendarView.SwitchViewActionListener.class),
       @EventConfig(listeners = UIMonthView.UpdateEventActionListener.class)
     }
@@ -149,12 +148,6 @@ public class UIMonthView extends UICalendarView {
     return getEndDay(temCal) ;
   }
 
-  protected void monthNext(int months) {
-    calendar_.add(java.util.Calendar.MONTH, months) ;
-  }
-  protected void monthBack(int months) {
-    calendar_.add(java.util.Calendar.MONTH, months) ;
-  }
   protected List<CalendarEvent> getSelectedEvents() {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
     for(String id : dataMap_.keySet()) {
@@ -165,22 +158,6 @@ public class UIMonthView extends UICalendarView {
   }
   public LinkedHashMap<String, CalendarEvent> getDataMap() {
     return dataMap_ ;
-  }
-  static  public class MoveNextActionListener extends EventListener<UIMonthView> {
-    public void execute(Event<UIMonthView> event) throws Exception {
-      UIMonthView calendarview = event.getSource() ;
-      calendarview.monthNext(1) ;
-      calendarview.refresh() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
-    }
-  }
-  static  public class MovePreviousActionListener extends EventListener<UIMonthView> {
-    public void execute(Event<UIMonthView> event) throws Exception {
-      UIMonthView calendarview = event.getSource() ;
-      calendarview.monthBack(-1) ;
-      calendarview.refresh() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
-    }
   }
   static  public class ChangeViewActionListener extends EventListener<UIMonthView> {
     public void execute(Event<UIMonthView> event) throws Exception {

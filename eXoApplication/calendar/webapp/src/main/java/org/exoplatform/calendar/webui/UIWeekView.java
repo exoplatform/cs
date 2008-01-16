@@ -61,8 +61,8 @@ import org.exoplatform.webui.event.EventListener;
       @EventConfig(listeners = UICalendarView.DeleteActionListener.class, confirm="UICalendarVIew.msg.confirm-delete"),
       @EventConfig(listeners = UIWeekView.UpdateEventActionListener.class),
       @EventConfig(listeners = UIWeekView.SaveEventActionListener.class),
-      @EventConfig(listeners = UIWeekView.MoveNextActionListener.class), 
-      @EventConfig(listeners = UIWeekView.MovePreviousActionListener.class)
+      @EventConfig(listeners = UICalendarView.MoveNextActionListener.class), 
+      @EventConfig(listeners = UICalendarView.MovePreviousActionListener.class)
     }
 
 )
@@ -92,12 +92,6 @@ public class UIWeekView extends UICalendarView {
       eventData_.put(key, list) ;
       c.add(Calendar.DATE, 1) ;
     }
-
-    /* for(Calendar c : getDaysOfWeek()) {
-      Map<String, CalendarEvent> list = new HashMap<String, CalendarEvent>() ;
-      String key = keyGen(c.get(Calendar.DATE), c.get(Calendar.MONTH), c.get(Calendar.YEAR)) ;
-      eventData_.put(key, list) ;
-    }*/
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     EventQuery eventQuery = new EventQuery() ;
@@ -127,10 +121,6 @@ public class UIWeekView extends UICalendarView {
       dataMap_.put(ce.getId(), ce) ;
     } 
   }
-  protected void moveTo(int weeks) {
-    calendar_.add(Calendar.WEEK_OF_YEAR, weeks) ;
-  }
-
   public java.util.Calendar getBeginDateOfWeek() throws Exception{
     java.util.Calendar temCal = CalendarUtils.getInstanceTempCalendar() ;
     temCal.setTime(calendar_.getTime()) ;
@@ -206,23 +196,6 @@ public class UIWeekView extends UICalendarView {
     }
   }
 
-  static  public class MoveNextActionListener extends EventListener<UIWeekView> {
-    public void execute(Event<UIWeekView> event) throws Exception {
-      UIWeekView calendarview = event.getSource() ;
-      calendarview.moveTo(1) ;
-      calendarview.refresh() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
-    }
-  }
-
-  static  public class MovePreviousActionListener extends EventListener<UIWeekView> {
-    public void execute(Event<UIWeekView> event) throws Exception {
-      UIWeekView calendarview = event.getSource() ;
-      calendarview.moveTo(-1) ;
-      calendarview.refresh() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
-    }
-  }
   static  public class UpdateEventActionListener extends EventListener<UIWeekView> {
     public void execute(Event<UIWeekView> event) throws Exception {
       UIWeekView calendarview = event.getSource() ;

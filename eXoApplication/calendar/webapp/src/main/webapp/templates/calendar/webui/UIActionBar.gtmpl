@@ -4,18 +4,26 @@
 			<div class="LeftBar">
 				<div class="RightBar">
 					<div class="CenterBar">
-						<div class="Title ControlButton">Quick add:</div>
+						<div class="Title ControlButton">
+							<%=_ctx.appRes(uicomponent.id + ".label.QuickAdd")%>
+						</div>
 						<a href="<%=uicomponent.event("QuickAddEvent","Event")%>" class="ControlButton">
-							<div class="IconHolder QuickAddEvent">Event</div>
+							<div class="IconHolder QuickAddEvent">
+								<%=_ctx.appRes(uicomponent.id + ".label.Event")%>
+							</div>
 						</a>
 						<a href="<%=uicomponent.event("QuickAddEvent","Task")%>" class="ControlButton">
-							<div class="IconHolder AddNewTask">Task</div>
+							<div class="IconHolder AddNewTask">
+								<%=_ctx.appRes(uicomponent.id + ".label.Task")%>
+							</div>
 						</a>
 						<div class="SeparatorLine"><span></span></div>
-						<div class="Title ControlButton">Calendar View:</div>
+						<div class="Title ControlButton">
+							<%=_ctx.appRes(uicomponent.id + ".label.CalendarView")%>
+						</div>
 						<div class="SelectButton" onclick="eXo.calendar.UICalendarPortlet.showView(this, event);">
 							<div class="IconHolder <%=uicomponent.getCurrentView()%>Icon">
-								<div class="DownArrow1Icon" ><%=_ctx.appRes("UIActionBar.label." + uicomponent.getCurrentView())%></div>
+								<div class="DownArrow1Icon" ><%=_ctx.appRes(uicomponent.id + ".label." + uicomponent.getCurrentView())%></div>
 							</div>
 							<% /*Begin Popup Menu*/ %>
 							<!--<div style="position: relative; top: -21px ;">
@@ -34,7 +42,7 @@
 				              				if(!viewType.equals(uicomponent.getCurrentView())) {
 				              				icon = viewType + "Icon" ;
 				              				actionLink = uicomponent.event("ChangeView", viewType) ;
-				              				String label = _ctx.appRes("UIActionBar.label." + viewType) ;
+				              				String label = _ctx.appRes(uicomponent.id + ".label." + viewType) ;
 				              				if(!viewType.equals("UIScheduleView")) {
 				              			%>
 															<a class="MenuItem" href="$actionLink">   
@@ -68,20 +76,26 @@
 						</div>
 						<div class="SeparatorLine"><span></span></div>
 						<a href="<%=uicomponent.event("Setting")%>" class="ControlButton">
-							<div class="IconHolder SettingCalendarIcon">Calendar Setting </div>
+							<div class="IconHolder SettingCalendarIcon">
+								<%=_ctx.appRes(uicomponent.id + ".label.CalendarSettings")%>
+							</div>
 						</a>
 						<div class="SeparatorLine"><span></span></div>
 						<a href="<%=uicomponent.event("RSS")%>" class="ControlButton">
-							<div class="IconHolder RssIcon">RSS</div>
+							<div class="IconHolder RssIcon">
+								<%=_ctx.appRes(uicomponent.id + ".label.RSS")%>
+							</div>
 						</a>
 						<div class="SeparatorLine"><span></span></div>
 						<a class="ControlButton" style="color:gray;">
-							<div class="IconHolder PrintCalendarIcon">Print </div>
+							<div class="IconHolder PrintCalendarIcon">
+								<%=_ctx.appRes(uicomponent.id + ".label.Print")%>
+							</div>
 						</a>
 						<div class="SeparatorLine"><span></span></div>
 						<div class="ControlButton" onclick="eXo.calendar.UICalendarPortlet.showView(this, event);">
 						<a class="ControlButton">
-							<div class="IconHolder LayoutSwitcherIcon" title="Show/Hide Navigation Pane"><span></span></div>
+							<div class="IconHolder LayoutSwitcherIcon" title="<%=_ctx.appRes(uicomponent.id + '.label.ShowHide')%>"><span></span></div>
 						</a>
 							<% /*Begin Popup Menu*/ %>
 							<!--<div style="position: relative; top: -21px ;">
@@ -98,17 +112,17 @@
 				              		<div class="UIRightPopupMenuContainer">
 														<a class="MenuItem" href="javascript:eXo.calendar.UICalendarPortlet.switchLayout(0)" >   
 					                    <div class="ItemIcon HidenAllCalendar">
-					                       Show/Hide all
+					                       <%=_ctx.appRes(uicomponent.id + '.label.ShowHideAll')%>
 					                    </div>
 				                    </a>
 				                    <a class="MenuItem" href="javascript:eXo.calendar.UICalendarPortlet.switchLayout(1)" >   
 					                    <div class="ItemIcon ShowMinicalendar">
-					                       Mini Calendar
+					                    	<%=_ctx.appRes(uicomponent.id + '.label.ShowHideMinicalendar')%>
 					                    </div>
 				                    </a>
 				                    <a class="MenuItem" href="javascript:eXo.calendar.UICalendarPortlet.switchLayout(2)" >
 					                    <div class="ItemIcon HidenMinicalendar">
-					                      Calendar list
+					                      <%=_ctx.appRes(uicomponent.id + '.label.ShowHideCalendarList')%>
 					                    </div>
 				                    </a>
 													</div>
@@ -126,7 +140,9 @@
 		      		<% /*End Popup Menu*/ %>
 		      		</div>
 						<a href="<%=uicomponent.event("Today")%>" class="RightControlButton">
-							<div class="IconHolder TodayIcon">Today</div>
+							<div class="IconHolder TodayIcon">
+								<%=_ctx.appRes(uicomponent.id + '.label.Today')%>
+							</div>
 						</a>
 						<div class="SeparatorLine RightLine"><span></span></div>
 						<div style="clear: both;"><span></span></div>

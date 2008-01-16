@@ -18,8 +18,8 @@
 	String currentDayName = uicomponent.getDayName(uicomponent.getDayOfWeek(currentYear, currentMonth, currentDay)) ;
 
  	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
- 	String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT) ;
- 	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS) ;
+ 	String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT, String.valueOf(Calendar.DATE)) ;
+ 	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS, String.valueOf(Calendar.DATE)) ;
  	monthViewAction = uicomponent.TYPE_MONTH +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=1" ;
 	yearViewAction = uicomponent.TYPE_YEAR +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=1" ;
 	dateFormat = uicomponent.getDateFormat() ;

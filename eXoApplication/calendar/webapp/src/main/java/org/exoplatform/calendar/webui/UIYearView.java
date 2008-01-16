@@ -20,12 +20,10 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
-
-import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventQuery;
@@ -33,8 +31,6 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
-import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 
 /**
  * Created by The eXo Platform SARL
@@ -49,9 +45,9 @@ import org.exoplatform.webui.event.EventListener;
       @EventConfig(listeners = UICalendarView.AddEventActionListener.class),  
       @EventConfig(listeners = UICalendarView.DeleteEventActionListener.class),
       @EventConfig(listeners = UICalendarView.AddCategoryActionListener.class),
-      @EventConfig(listeners = UIYearView.MoveNextActionListener.class), 
+      @EventConfig(listeners = UICalendarView.MoveNextActionListener.class), 
       @EventConfig(listeners = UICalendarView.GotoDateActionListener.class),
-      @EventConfig(listeners = UIYearView.MovePreviousActionListener.class)
+      @EventConfig(listeners = UICalendarView.MovePreviousActionListener.class)
     }
 
 )
@@ -91,24 +87,5 @@ public class UIYearView extends UICalendarView {
     // TODO Auto-generated method stub
     return null;
   }
-
-  static  public class MoveNextActionListener extends EventListener<UIYearView> {
-    public void execute(Event<UIYearView> event) throws Exception {
-      UIYearView calendarview = event.getSource() ;
-      calendarview.yearNext(1) ;
-      calendarview.refresh() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
-    }
-  }
-
-  static  public class MovePreviousActionListener extends EventListener<UIYearView> {
-    public void execute(Event<UIYearView> event) throws Exception {
-      UIYearView calendarview = event.getSource() ;
-      calendarview.yearBack(-1) ;
-      calendarview.refresh() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
-    }
-  }
-
 
 }

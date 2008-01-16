@@ -59,8 +59,8 @@ import org.exoplatform.webui.form.UIFormSelectBox;
       @EventConfig(listeners = UICalendarView.DeleteActionListener.class, confirm="UICalendarVIew.msg.confirm-delete"),
       @EventConfig(listeners = UIListView.CloseSearchActionListener.class),
       @EventConfig(listeners = UIListView.ViewDetailActionListener.class),
-      @EventConfig(listeners = UIListView.MoveNextActionListener.class), 
-      @EventConfig(listeners = UIListView.MovePreviousActionListener.class), 
+      @EventConfig(listeners = UICalendarView.MoveNextActionListener.class), 
+      @EventConfig(listeners = UICalendarView.MovePreviousActionListener.class), 
       @EventConfig(listeners = UIListView.ShowPageActionListener.class ),
       @EventConfig(listeners = UIListView.OnchangeActionListener.class )   
 
@@ -234,26 +234,6 @@ public class UIListView extends UICalendarView {
         uiPreview.setEvent(null) ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiListView.getParent());           
-    }
-  }
-  static  public class MoveNextActionListener extends EventListener<UIListView> {
-    public void execute(Event<UIListView> event) throws Exception {
-      UIListView calendarview = event.getSource() ;
-      calendarview.calendar_.add(Calendar.DATE, 1) ;
-      calendarview.refresh() ;
-      UIListContainer uiListContainer =  calendarview.getParent() ;
-      uiListContainer.refresh() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiListContainer) ;
-    }
-  }
-  static  public class MovePreviousActionListener extends EventListener<UIListView> {
-    public void execute(Event<UIListView> event) throws Exception {
-      UIListView calendarview = event.getSource() ;
-      calendarview.calendar_.add(Calendar.DATE, -1) ;
-      calendarview.refresh() ;
-      UIListContainer uiListContainer =  calendarview.getParent() ;
-      uiListContainer.refresh() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiListContainer) ;
     }
   }
 }

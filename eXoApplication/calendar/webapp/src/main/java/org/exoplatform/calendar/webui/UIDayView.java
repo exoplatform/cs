@@ -57,8 +57,8 @@ import org.exoplatform.webui.event.EventListener;
       @EventConfig(listeners = UICalendarView.GotoDateActionListener.class),
       @EventConfig(listeners = UICalendarView.SwitchViewActionListener.class),
       @EventConfig(listeners = UICalendarView.QuickAddActionListener.class), 
-      @EventConfig(listeners = UIDayView.MoveNextActionListener.class), 
-      @EventConfig(listeners = UIDayView.MovePreviousActionListener.class), 
+      @EventConfig(listeners = UICalendarView.MoveNextActionListener.class), 
+      @EventConfig(listeners = UICalendarView.MovePreviousActionListener.class), 
       @EventConfig(listeners = UIDayView.SaveEventActionListener.class)
     }
 )
@@ -70,10 +70,6 @@ public class UIDayView extends UICalendarView {
   public UIDayView() throws Exception{
     super() ;
   }
-  protected void moveDateTo(int days) {
-    calendar_.add(Calendar.DATE, days) ;
-  }
-
   @Override
   public void refresh() throws Exception {
     System.out.println("\n\n>>>>>>>>>> DAY VIEW") ;
@@ -100,22 +96,6 @@ public class UIDayView extends UICalendarView {
         iter.remove() ;
       } 
     }
-    /*iter = events.iterator() ;
-    while (iter.hasNext()) {
-      CalendarEvent ce = iter.next() ;
-      if(ce.getFromDateTime().equals(begin.getTime()) && ce.getToDateTime().before(end.getTime())) {
-        eventData_.put(ce.getId(), ce) ;
-        iter.remove() ;
-      } 
-    }
-    iter = events.iterator() ;
-    while (iter.hasNext()) {
-      CalendarEvent ce = iter.next() ;
-      if(ce.getFromDateTime().after(begin.getTime()) && ce.getToDateTime().equals(end.getTime())) {
-        eventData_.put(ce.getId(), ce) ;
-        iter.remove() ;
-      } 
-    }*/
     for(CalendarEvent ce : events){
       allDayEvent_.put(ce.getId(), ce) ;
     } 
@@ -129,24 +109,6 @@ public class UIDayView extends UICalendarView {
     dataMap.putAll(allDayEvent_) ;
     return dataMap ;
   }
-
-  static  public class MoveNextActionListener extends EventListener<UIDayView> {
-    public void execute(Event<UIDayView> event) throws Exception {
-      UIDayView calendarview = event.getSource() ;
-      calendarview.moveDateTo(1) ;
-      calendarview.refresh() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
-    }
-  }
-  static  public class MovePreviousActionListener extends EventListener<UIDayView> {
-    public void execute(Event<UIDayView> event) throws Exception {
-      UIDayView calendarview = event.getSource() ;
-      calendarview.moveDateTo(-1) ;
-      calendarview.refresh() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
-    }
-  }
-
   static  public class SaveEventActionListener extends EventListener<UIDayView> {
     public void execute(Event<UIDayView> event) throws Exception {
       UIDayView calendarview = event.getSource() ;

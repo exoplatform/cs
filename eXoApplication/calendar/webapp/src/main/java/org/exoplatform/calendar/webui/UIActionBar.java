@@ -16,7 +16,6 @@
  **/
 package org.exoplatform.calendar.webui;
 
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.exoplatform.calendar.CalendarUtils;
@@ -24,7 +23,6 @@ import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
-import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.webui.popup.UICalendarSettingForm;
 import org.exoplatform.calendar.webui.popup.UIFeed;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
@@ -119,10 +117,14 @@ public class UIActionBar extends UIContainer  {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ;     
       UICalendarPortlet uiPortlet = uiActionBar.getAncestorOfType(UICalendarPortlet.class) ;
+      UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
       UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
       CalendarView renderedChild = (CalendarView)uiViewContainer.getRenderedChild() ;
       renderedChild.setCurrentCalendar(CalendarUtils.getInstanceTempCalendar()) ;
       renderedChild.refresh() ;
+      uiMiniCalendar.setCurrentCalendar(CalendarUtils.getInstanceTempCalendar()) ;
+      uiMiniCalendar.updateMiniCal() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
     }
   }  
