@@ -26,8 +26,6 @@
 								<div class="DownArrow1Icon" ><%=_ctx.appRes(uicomponent.id + ".label." + uicomponent.getCurrentView())%></div>
 							</div>
 							<% /*Begin Popup Menu*/ %>
-							<!--<div style="position: relative; top: -21px ;">
-		      			<div class="UIPopupCategory" style="display: none; z-index: 10000;">-->
 		      				<div class="UIRightClickPopupMenu" style="display: none;">
 		      					<div class="UIContextMenuContainer">
 										  <div class="TopLeftRightClickPopupMenu">
@@ -70,8 +68,6 @@
 							      </div>
 				      			</div>
 							    </div>
-		      			<!--</div>
-		      		</div>-->
 		      		<% /*End Popup Menu*/ %>
 						</div>
 						<div class="SeparatorLine"><span></span></div>
@@ -98,8 +94,6 @@
 							<div class="IconHolder LayoutSwitcherIcon" title="<%=_ctx.appRes(uicomponent.id + '.label.ShowHide')%>"><span></span></div>
 						</a>
 							<% /*Begin Popup Menu*/ %>
-							<!--<div style="position: relative; top: -21px ;">
-		      			<div class="UIPopupCategory" style="display: none; z-index: 10000;">-->
 		      				<div class="UIRightClickPopupMenu" style="display: none;">
 		      					<div class="UIContextMenuContainer">
 										  <div class="TopLeftRightClickPopupMenu">
@@ -135,8 +129,6 @@
 							      </div>
 				      			</div>
 							    </div>
-		      			<!--</div>
-		      		</div>-->
 		      		<% /*End Popup Menu*/ %>
 		      		</div>
 						<a href="<%=uicomponent.event("Today")%>" class="RightControlButton">

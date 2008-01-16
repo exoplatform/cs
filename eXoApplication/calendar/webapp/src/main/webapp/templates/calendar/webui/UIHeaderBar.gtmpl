@@ -6,16 +6,22 @@ rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.ge
 %>
 <div class="UIHeaderBar ListBar">
 		<a href="<%=uicomponent.event("AddEvent",uicomponent.TYPE_EVENT)%>" class="ControlButton">
-			<div class="IconHolder AddNewEvent"> Add event </div>
+			<div class="IconHolder AddNewEvent">
+				<%=_ctx.appRes("UIHeaderBar.label.AddEvent")%>
+			</div>
 		</a>
 		<div class="SeparatorLine"><span></span></div>
 		<a href="<%=uicomponent.event("AddEvent", uicomponent.TYPE_TASK)%>" class="ControlButton">
-			<div class="IconHolder AddNewTask"> Add task </div>
+			<div class="IconHolder AddNewTask">
+				<%=_ctx.appRes("UIHeaderBar.label.AddTask")%>
+			</div>
 		</a>
 		<%if((uicomponent instanceof UIListView) || (uicomponent instanceof UIMonthView)){%>
 			<div class="SeparatorLine"><span></span></div>
 			<a href="<%=uicomponent.event("DeleteEvent")%>" class="ControlButton">
-				<div class="IconHolder DeleteEventIcon"> Delete event </div>
+				<div class="IconHolder DeleteEventIcon">
+					<%=_ctx.appRes("UIHeaderBar.label.Delete")%>
+				</div>
 			</a>
 		<%}%>
 		<%if(uicomponent instanceof UIListView){%>
@@ -75,6 +81,8 @@ rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.ge
 				uiform.renderField("eventCategories") ;
 			%>			
 		</div>
-		<div class="Label">Show category:</div> 
+		<div class="Label">
+			<%=_ctx.appRes("UIHeaderBar.label.eventCategory")%>
+		</div> 
 		<div style="clear: both;"><span></span></div>
 </div>
