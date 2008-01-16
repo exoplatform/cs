@@ -397,8 +397,10 @@ public class MailServiceImpl implements MailService{
           String folderId = Utils.createFolderId(accountId, incomingFolder, false) ;
           Folder storeFolder = storage_.getFolder(sProvider, username, account.getId(), folderId) ;
           if(storeFolder == null) {
-            storeFolder = new Folder() ;
             folderId = Utils.createFolderId(accountId, incomingFolder, true) ;
+            Folder storeUserFolder = storage_.getFolder(sProvider, username, account.getId(), folderId) ;
+            if (storeUserFolder != null) storeFolder = storeUserFolder ;
+            else storeFolder = new Folder() ;
             storeFolder.setId(folderId);
             storeFolder.setName(incomingFolder) ;
             storeFolder.setLabel(incomingFolder) ;

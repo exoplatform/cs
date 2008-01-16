@@ -206,6 +206,7 @@
           builder.append("<div class=\"IconFolder Folder $pCssClass\" onClick=\"javascript:eXo.mail.UIMailPortlet.collapseExpandFolder(this)\" folder=\"").append(pid).append("\">");
           builder.append("<a class=\"FolderLink\" href=\"$pActionLink\" folder=\"").append(pid).append("\">");
           builder.append(name);
+          if(pUnreadMess > 0) builder.append("<span class=\"MailQuantity\">($pUnreadMess)</span>");
           builder.append("</a>");
           builder.append("</div>")
           println(builder.toString());
@@ -230,6 +231,7 @@
       builder.append("<div class=\"IconFolder Folder $pCssClass\" onClick=\"javascript:eXo.mail.UIMailPortlet.collapseExpandFolder(this)\" folder=\"").append(pid).append("\">");
       builder.append("<a class=\"FolderLink\" onclick=\"\" href=\"$pActionLink\" folder=\"").append(pid).append("\">");
       builder.append(name);
+      if(pUnreadMess > 0) builder.append("<span class=\"MailQuantity\">($pUnreadMess)</span>");
       builder.append("</a>");
       builder.append("</div>")
       println(builder.toString());
