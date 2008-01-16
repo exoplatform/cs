@@ -22,7 +22,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Properties;
@@ -460,7 +459,7 @@ public class MailServiceImpl implements MailService{
     
     node.setProperty(Utils.EXO_PRIORITY, getPriority(msg));
     
-    String[] folderIds = { Utils.createFolderId(accId, Utils.FD_INBOX, false) };
+    String[] folderIds = { folderId };
     
 //    if ( spamFilter.checkSpam(msg) ) {
 //      folderIds = new String[] { Utils.createFolderId(accId, Utils.FD_SPAM, false) } ;
