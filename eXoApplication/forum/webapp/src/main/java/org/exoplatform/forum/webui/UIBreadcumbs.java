@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.forum.ForumUtils;
+import org.exoplatform.forum.ForumSessionUtils;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumService;
@@ -52,7 +52,7 @@ public class UIBreadcumbs extends UIContainer {
 	private String forumHomePath_ ;
 	public static final String FIELD_FORUMHOME_BREADCUMBS = "forumHome" ;
 	public UIBreadcumbs()throws Exception {
-		forumHomePath_ = forumService.getForumHomePath(ForumUtils.getSystemProvider()) ;
+		forumHomePath_ = forumService.getForumHomePath(ForumSessionUtils.getSystemProvider()) ;
 		breadcumbs_.add("eXo Forum") ;
 		path_.add("ForumService") ;
 	}
@@ -72,19 +72,19 @@ public class UIBreadcumbs extends UIContainer {
 				if(t == 0) {
 					tempPath = string;
 					if(string.indexOf("ategory")> 0) {
-						Category category = (Category)forumService.getObjectNameByPath(ForumUtils.getSystemProvider(), pathNode);
+						Category category = (Category)forumService.getObjectNameByPath(ForumSessionUtils.getSystemProvider(), pathNode);
 						breadcumbs_.add(category.getCategoryName()) ;
 					} else {
-						Tag tag = (Tag)forumService.getObjectNameByPath(ForumUtils.getSystemProvider(), pathNode);
+						Tag tag = (Tag)forumService.getObjectNameByPath(ForumSessionUtils.getSystemProvider(), pathNode);
 						breadcumbs_.add(tag.getName()) ;
 					}
 				}else if(t == 1) {
 					tempPath = tempPath + "/" + string ;
-					Forum forum = (Forum)forumService.getObjectNameByPath(ForumUtils.getSystemProvider(), pathNode);
+					Forum forum = (Forum)forumService.getObjectNameByPath(ForumSessionUtils.getSystemProvider(), pathNode);
 					breadcumbs_.add(forum.getForumName()) ;
 				}else if(t == 2) {
 					tempPath = tempPath + "/" + string ;
-					Topic topic = (Topic)forumService.getObjectNameByPath(ForumUtils.getSystemProvider(), pathNode);
+					Topic topic = (Topic)forumService.getObjectNameByPath(ForumSessionUtils.getSystemProvider(), pathNode);
 					breadcumbs_.add(topic.getTopicName()) ;
 				}
 				path_.add(tempPath) ;

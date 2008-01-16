@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.forum.ForumUtils;
+import org.exoplatform.forum.ForumSessionUtils;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumService;
@@ -56,7 +56,6 @@ public class UIMovePostForm extends UIForm implements UIPopupComponent {
 	private ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
 	private String topicId ;
 	private List<Post> posts ;
-	
 	public UIMovePostForm() throws Exception {
 		
 	}
@@ -75,7 +74,7 @@ public class UIMovePostForm extends UIForm implements UIPopupComponent {
 	
 	@SuppressWarnings("unused")
 	private List<Category> getCategories() throws Exception {
-		return this.forumService.getCategories(ForumUtils.getSystemProvider()) ;
+		return this.forumService.getCategories(ForumSessionUtils.getSystemProvider()) ;
 	}
 	
 	@SuppressWarnings("unused")
@@ -86,13 +85,13 @@ public class UIMovePostForm extends UIForm implements UIPopupComponent {
 
 	@SuppressWarnings("unused")
 	private List<Forum> getForums(String categoryId) throws Exception {
-		return this.forumService.getForums(ForumUtils.getSystemProvider(), categoryId) ;
+		return this.forumService.getForums(ForumSessionUtils.getSystemProvider(), categoryId) ;
 	}
 
 	@SuppressWarnings("unused")
 	private List<Topic> getTopics(String categoryId, String forumId) throws Exception {
 		List<Topic> topics = new ArrayList<Topic>() ;
-		for(Topic topic : this.forumService.getTopics(ForumUtils.getSystemProvider(), categoryId, forumId)) {
+		for(Topic topic : this.forumService.getTopics(ForumSessionUtils.getSystemProvider(), categoryId, forumId)) {
 			if(topic.getId().equalsIgnoreCase(this.topicId)) continue ;
 			topics.add(topic) ;
 		}
@@ -100,14 +99,13 @@ public class UIMovePostForm extends UIForm implements UIPopupComponent {
 	}
 	
 	static	public class SaveActionListener extends EventListener<UIMovePostForm> {
-		@Override
     public void execute(Event<UIMovePostForm> event) throws Exception {
 			UIMovePostForm uiForm = event.getSource() ;
 			String topicPath = event.getRequestContext().getRequestParameter(OBJECTID) ;
 			if(topicPath != null && topicPath.length() > 0) {
 				List<Post> posts = uiForm.posts ;
 				for (Post post : posts) {
-					uiForm.forumService.movePost(ForumUtils.getSystemProvider(), post.getId(), post.getPath(), topicPath) ;
+					uiForm.forumService.movePost(ForumSessionUtils.getSystemProvider(), post.getId(), post.getPath(), topicPath) ;
 				}
 				UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
 				forumPortlet.cancelAction() ;
@@ -121,12 +119,10 @@ public class UIMovePostForm extends UIForm implements UIPopupComponent {
 	}
 	
 	static	public class CancelActionListener extends EventListener<UIMovePostForm> {
-		@Override
     public void execute(Event<UIMovePostForm> event) throws Exception {
 			UIMovePostForm uiForm = event.getSource() ;
 			UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
 			forumPortlet.cancelAction() ;
 		}
 	}
-	
 }

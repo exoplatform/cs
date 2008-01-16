@@ -46,13 +46,11 @@ public class UIUserTitleManagerForm extends UIForm {
 	}
 	
 	static	public class SaveActionListener extends EventListener<UIUserTitleManagerForm> {
-		@Override
     public void execute(Event<UIUserTitleManagerForm> event) throws Exception {
 			UIUserTitleManagerForm uiForm = event.getSource() ;
 		}
 	}
 	static	public class CancelActionListener extends EventListener<UIUserTitleManagerForm> {
-		@Override
     public void execute(Event<UIUserTitleManagerForm> event) throws Exception {
 			UIUserTitleManagerForm uiForm = event.getSource() ;
 		}

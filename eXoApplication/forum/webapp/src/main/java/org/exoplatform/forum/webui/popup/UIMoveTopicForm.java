@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.forum.ForumUtils;
+import org.exoplatform.forum.ForumSessionUtils;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumService;
@@ -77,7 +77,7 @@ public class UIMoveTopicForm extends UIForm implements UIPopupComponent {
 	
 	@SuppressWarnings("unused")
 	private List<Category> getCategories() throws Exception {
-		return this.forumService.getCategories(ForumUtils.getSystemProvider()) ;
+		return this.forumService.getCategories(ForumSessionUtils.getSystemProvider()) ;
 	}
 	
 	@SuppressWarnings("unused")
@@ -89,7 +89,7 @@ public class UIMoveTopicForm extends UIForm implements UIPopupComponent {
 	@SuppressWarnings("unused")
 	private List<Forum> getForums(String categoryId) throws Exception {
 		List<Forum> forums = new ArrayList<Forum>() ;
-		for(Forum forum : this.forumService.getForums(ForumUtils.getSystemProvider(), categoryId)) {
+		for(Forum forum : this.forumService.getForums(ForumSessionUtils.getSystemProvider(), categoryId)) {
 			if(forum.getId().equalsIgnoreCase(this.forumId)) continue ;
 			forums.add(forum) ;
 		}
@@ -97,14 +97,13 @@ public class UIMoveTopicForm extends UIForm implements UIPopupComponent {
 	}
 	
 	static	public class SaveActionListener extends EventListener<UIMoveTopicForm> {
-		@Override
     public void execute(Event<UIMoveTopicForm> event) throws Exception {
 			UIMoveTopicForm uiForm = event.getSource() ;
 			String forumPath = event.getRequestContext().getRequestParameter(OBJECTID) ;
 			if(forumPath != null && forumPath.length() > 0) {
 				List<Topic> topics = uiForm.topics ;
 				for (Topic topic : topics) {
-					uiForm.forumService.moveTopic(ForumUtils.getSystemProvider(), topic.getId(), topic.getPath(), forumPath) ;
+					uiForm.forumService.moveTopic(ForumSessionUtils.getSystemProvider(), topic.getId(), topic.getPath(), forumPath) ;
 				}
 				UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
 				forumPortlet.cancelAction() ;
@@ -124,12 +123,10 @@ public class UIMoveTopicForm extends UIForm implements UIPopupComponent {
 	}
 	
 	static	public class CancelActionListener extends EventListener<UIMoveTopicForm> {
-		@Override
     public void execute(Event<UIMoveTopicForm> event) throws Exception {
 			UIMoveTopicForm uiForm = event.getSource() ;
 			UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
 			forumPortlet.cancelAction() ;
 		}
 	}
-	
 }

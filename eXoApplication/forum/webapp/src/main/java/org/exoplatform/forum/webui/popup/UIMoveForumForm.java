@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.forum.ForumUtils;
+import org.exoplatform.forum.ForumSessionUtils;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumService;
@@ -73,7 +73,7 @@ public class UIMoveForumForm extends UIForm implements UIPopupComponent {
 	private List<Category> getCategories() throws Exception {
 		ForumService forumService =	(ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
 		List<Category> categorys =	new ArrayList<Category>();
-		for (Category category :forumService.getCategories(ForumUtils.getSystemProvider())) {
+		for (Category category :forumService.getCategories(ForumSessionUtils.getSystemProvider())) {
 			if( !category.getId().equals(categoryId_) ) {
 				categorys.add(category) ;
 			}
@@ -93,7 +93,6 @@ public class UIMoveForumForm extends UIForm implements UIPopupComponent {
 	}
 	
 	static	public class SaveActionListener extends EventListener<UIMoveForumForm> {
-		@Override
     public void execute(Event<UIMoveForumForm> event) throws Exception {
 			UIMoveForumForm uiForm = event.getSource() ;
 			String categoryId = event.getRequestContext().getRequestParameter(OBJECTID)	;
@@ -107,7 +106,7 @@ public class UIMoveForumForm extends UIForm implements UIPopupComponent {
 			}
 			List<Forum> forums = uiForm.forums_ ;
 			for (Forum forum : forums) {
-				forumService.moveForum(ForumUtils.getSystemProvider(), forum.getId(), forum.getPath(), categoryPath) ;
+				forumService.moveForum(ForumSessionUtils.getSystemProvider(), forum.getId(), forum.getPath(), categoryPath) ;
 			}
 			UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
 			forumPortlet.cancelAction() ;
@@ -127,7 +126,6 @@ public class UIMoveForumForm extends UIForm implements UIPopupComponent {
 	}
  
 	static	public class CancelActionListener extends EventListener<UIMoveForumForm> {
-		@Override
     public void execute(Event<UIMoveForumForm> event) throws Exception {
 			UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
 			forumPortlet.cancelAction() ;

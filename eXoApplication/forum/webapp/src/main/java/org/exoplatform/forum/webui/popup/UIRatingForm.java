@@ -17,7 +17,7 @@
 package org.exoplatform.forum.webui.popup;
 
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.forum.ForumUtils;
+import org.exoplatform.forum.ForumSessionUtils;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.Topic;
 import org.exoplatform.forum.webui.UIForumPortlet;
@@ -65,13 +65,12 @@ public class UIRatingForm extends UIForm implements UIPopupComponent {
 	}
 	
 	static	public class VoteTopicActionListener extends EventListener<UIRatingForm> {
-		@Override
     public void execute(Event<UIRatingForm> event) throws Exception {
 			UIRatingForm uiForm = event.getSource() ;
 			String vote = event.getRequestContext().getRequestParameter(OBJECTID)	;
 			Topic topic = uiForm.topic ;
 			
-			String userName = ForumUtils.getCurrentUser() ;
+			String userName = ForumSessionUtils.getCurrentUser() ;
 			String[] Vote = topic.getUserVoteRating() ;
 			int k = Vote.length ;
 			Double voteRating = topic.getVoteRating() ;
@@ -84,14 +83,13 @@ public class UIRatingForm extends UIForm implements UIPopupComponent {
 			topic.setVoteRating(voteRating) ;
 			topic.setUserVoteRating(temp) ;
 			ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
-			forumService.saveTopic(ForumUtils.getSystemProvider(), uiForm.categoryId, uiForm.forumId, topic, false) ;
+			forumService.saveTopic(ForumSessionUtils.getSystemProvider(), uiForm.categoryId, uiForm.forumId, topic, false) ;
 			UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
 			forumPortlet.cancelAction() ;
 		}
 	}
 	
 	static	public class CancelActionListener extends EventListener<UIRatingForm> {
-		@Override
     public void execute(Event<UIRatingForm> event) throws Exception {
 			UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
 			forumPortlet.cancelAction() ;

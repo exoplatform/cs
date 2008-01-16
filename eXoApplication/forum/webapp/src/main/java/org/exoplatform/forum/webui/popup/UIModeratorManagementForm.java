@@ -40,22 +40,17 @@ import org.exoplatform.webui.form.UIForm;
     }
 )
 public class UIModeratorManagementForm extends UIForm implements UIPopupComponent {
-  
-  
   public UIModeratorManagementForm() throws Exception {
     
   }
-  
   public void activate() throws Exception {
 		// TODO Auto-generated method stub
-		
 	}
 	public void deActivate() throws Exception {
 		// TODO Auto-generated method stub
 	}
   
   static  public class SaveActionListener extends EventListener<UIModeratorManagementForm> {
-    @Override
     public void execute(Event<UIModeratorManagementForm> event) throws Exception {
       UIModeratorManagementForm uiForm = event.getSource() ;
       UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
@@ -64,7 +59,6 @@ public class UIModeratorManagementForm extends UIForm implements UIPopupComponen
   }
   
   static  public class CancelActionListener extends EventListener<UIModeratorManagementForm> {
-    @Override
     public void execute(Event<UIModeratorManagementForm> event) throws Exception {
       UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
       forumPortlet.cancelAction() ;

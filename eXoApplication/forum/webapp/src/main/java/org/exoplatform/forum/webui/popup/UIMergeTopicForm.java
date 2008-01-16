@@ -39,20 +39,14 @@ import org.exoplatform.webui.form.UIForm;
 		}
 )
 public class UIMergeTopicForm extends UIForm {
-	
-	
 	public UIMergeTopicForm() {
-		
 	}
-	
 	static	public class SaveActionListener extends EventListener<UIMergeTopicForm> {
-		@Override
     public void execute(Event<UIMergeTopicForm> event) throws Exception {
 			UIMergeTopicForm uiForm = event.getSource() ;
 		}
 	}
 	static	public class CancelActionListener extends EventListener<UIMergeTopicForm> {
-		@Override
     public void execute(Event<UIMergeTopicForm> event) throws Exception {
 			UIMergeTopicForm uiForm = event.getSource() ;
 		}

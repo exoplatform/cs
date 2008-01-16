@@ -19,7 +19,7 @@ package org.exoplatform.forum.webui;
 import java.util.Date;
 
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.forum.ForumUtils;
+import org.exoplatform.forum.ForumSessionUtils;
 import org.exoplatform.forum.service.ForumOption;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.webui.popup.UIPopupAction;
@@ -59,7 +59,7 @@ public class UIForumPortlet extends UIPortletApplication {
 		addChild(UIForumLinks.class, null, null).setRendered(false) ;
 		addChild(UIPopupAction.class, null, null) ;
 		initOption();
-		String []newStr = ForumUtils.getUserGroups() ;
+		String []newStr = ForumSessionUtils.getUserGroups() ;
 		for (String string : newStr) {
       System.out.println("\n" + string);
     }
@@ -109,7 +109,7 @@ public class UIForumPortlet extends UIPortletApplication {
 	
   @SuppressWarnings("deprecation")
 	public void initOption() throws Exception {
-  	String userId = ForumUtils.getCurrentUser() ;
+  	String userId = ForumSessionUtils.getCurrentUser() ;
 		Date dateHost = new Date() ;
 		timeZone = dateHost.getTimezoneOffset()/ 60 ;
 		shortDateformat = "mm/dd/yyyy";
@@ -120,7 +120,7 @@ public class UIForumPortlet extends UIPortletApplication {
 		isJumpRendered = true ;
 		if(userId != null || userId.length() > 0) {
 			ForumOption forumOption = new ForumOption() ;
-			forumOption = forumService.getOption(ForumUtils.getSystemProvider(), userId) ;
+			forumOption = forumService.getOption(ForumSessionUtils.getSystemProvider(), userId) ;
 			if(forumOption != null) {
 				timeZone = forumOption.getTimeZone() ;
 				shortDateformat = forumOption.getShortDateFormat() ;

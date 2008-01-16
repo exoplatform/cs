@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.TreeMap;
 
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.forum.ForumFormatFunction;
-import org.exoplatform.forum.ForumUtils;
+import org.exoplatform.forum.ForumFormatUtils;
+import org.exoplatform.forum.ForumSessionUtils;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.JCRPageList;
 import org.exoplatform.forum.service.Tag;
@@ -91,17 +91,17 @@ public class UITopicsTag extends UIForm {
   }
 	@SuppressWarnings({ "deprecation", "unused" })
 	private String getTime(Date myDate) {
-		return ForumFormatFunction.getFormatTime(timeFormat, myDate) ;
+		return ForumFormatUtils.getFormatTime(timeFormat, myDate) ;
 	}
 	@SuppressWarnings({ "deprecation", "unused" })
   private String getShortDate(Date myDate) {
 		myDate.setMinutes(myDate.getMinutes() - (int)(timeZone*60));
-		return ForumFormatFunction.getFormatDate(shortDateformat, myDate) ;
+		return ForumFormatUtils.getFormatDate(shortDateformat, myDate) ;
 	}
 	@SuppressWarnings({ "deprecation", "unused" })
 	private String getLongDate(Date myDate) {
 		myDate.setMinutes(myDate.getMinutes() - (int)(timeZone*60));
-		return ForumFormatFunction.getFormatDate(longDateformat, myDate) ;
+		return ForumFormatUtils.getFormatDate(longDateformat, myDate) ;
 	}
 	public void setMaxItemInPage(long maxTopic, long maxPost) {
 		this.maxTopic = maxTopic ;
@@ -110,7 +110,7 @@ public class UITopicsTag extends UIForm {
 	
 	@SuppressWarnings("unused")
   private void getListTopicTag() throws Exception {
-		this.listTopic = forumService.getTopicsByTag(ForumUtils.getSystemProvider(), this.tagId) ;
+		this.listTopic = forumService.getTopicsByTag(ForumSessionUtils.getSystemProvider(), this.tagId) ;
 		this.listTopic.setPageSize(this.maxTopic) ;
 		this.getChild(UIForumPageIterator.class).updatePageList(this.listTopic) ;
 		if(this.isUpdateTopicTag) { 
@@ -123,7 +123,7 @@ public class UITopicsTag extends UIForm {
 	@SuppressWarnings("unused")
   private long getMaxPagePost(String Id) throws Exception {
 		String Ids[] = Id.split("/") ;
-		JCRPageList pageListPost = this.forumService.getPosts(ForumUtils.getSystemProvider(), Ids[(Ids.length - 3)], Ids[(Ids.length - 2)], Ids[(Ids.length - 1)])	; 
+		JCRPageList pageListPost = this.forumService.getPosts(ForumSessionUtils.getSystemProvider(), Ids[(Ids.length - 3)], Ids[(Ids.length - 2)], Ids[(Ids.length - 1)])	; 
 		pageListPost.setPageSize(this.maxPost) ;
 		this.mapPostPage.put(Ids[(Ids.length - 1)], pageListPost) ; 
 		return pageListPost.getAvailablePage();
@@ -138,7 +138,7 @@ public class UITopicsTag extends UIForm {
   private List<Topic> getTopicsTag() throws Exception {
 		getListTopicTag() ;
 		this.page = this.getChild(UIForumPageIterator.class).getPageSelected() ;
-		this.topics = forumService.getPage(page, this.listTopic, ForumUtils.getSystemProvider()) ;
+		this.topics = forumService.getPage(page, this.listTopic, ForumSessionUtils.getSystemProvider()) ;
 		for(Topic topic : this.topics) {
 			if(getUIFormCheckBoxInput(topic.getId()) != null) {
 				getUIFormCheckBoxInput(topic.getId()).setChecked(false) ;
@@ -152,7 +152,7 @@ public class UITopicsTag extends UIForm {
 	@SuppressWarnings("unused")
   private Tag getTagById() throws Exception {
 		if(this.isUpdateTag) {
-			this.tag = forumService.getTag(ForumUtils.getSystemProvider(), this.tagId) ;
+			this.tag = forumService.getTag(ForumSessionUtils.getSystemProvider(), this.tagId) ;
 			this.isUpdateTag = false ;
 		}
 		return this.tag ;
@@ -161,12 +161,12 @@ public class UITopicsTag extends UIForm {
 	@SuppressWarnings("unused")
 	private String[] getStarNumber(Topic topic) throws Exception {
 		double voteRating = topic.getVoteRating() ;
-		return ForumFormatFunction.getStarNumber(voteRating) ;
+		return ForumFormatUtils.getStarNumber(voteRating) ;
 	}
 	
 	@SuppressWarnings("unused")
 	private String getStringCleanHtmlCode(String sms) {
-		return ForumFormatFunction.getStringCleanHtmlCode(sms);
+		return ForumFormatUtils.getStringCleanHtmlCode(sms);
 	}
 	
 	@SuppressWarnings("unused")
@@ -179,7 +179,7 @@ public class UITopicsTag extends UIForm {
 	    	++t;
 	    }
     }
-		return this.forumService.getTagsByTopic(ForumUtils.getSystemProvider(), ids);
+		return this.forumService.getTagsByTopic(ForumSessionUtils.getSystemProvider(), ids);
 	}
 	
 	private Topic getTopic(String topicId) throws Exception {
@@ -191,7 +191,6 @@ public class UITopicsTag extends UIForm {
 	}
 	
 	static public class OpenTopicActionListener extends EventListener<UITopicsTag> {
-		@Override
     public void execute(Event<UITopicsTag> event) throws Exception {
 			UITopicsTag uiTopicsTag = event.getSource();
 			String idAndNumber = event.getRequestContext().getRequestParameter(OBJECTID) ;
@@ -218,7 +217,6 @@ public class UITopicsTag extends UIForm {
 	}
 	
 	static public class OpenTopicsTagActionListener extends EventListener<UITopicsTag> {
-		@Override
     public void execute(Event<UITopicsTag> event) throws Exception {
 			UITopicsTag topicsTag = event.getSource() ;
 			String tagId = event.getRequestContext().getRequestParameter(OBJECTID) ;
@@ -230,7 +228,6 @@ public class UITopicsTag extends UIForm {
 	}
 	
 	static public class EditTagActionListener extends EventListener<UITopicsTag> {
-		@Override
     public void execute(Event<UITopicsTag> event) throws Exception {
 			UITopicsTag topicsTag = event.getSource() ;
 			UIForumPortlet forumPortlet = topicsTag.getParent() ;
@@ -244,7 +241,6 @@ public class UITopicsTag extends UIForm {
 	}
 	
 	static public class RemoveTopicActionListener extends EventListener<UITopicsTag> {
-		@Override
     @SuppressWarnings("unchecked")
     public void execute(Event<UITopicsTag> event) throws Exception {
 			UITopicsTag topicsTag = event.getSource() ;
@@ -255,7 +251,7 @@ public class UITopicsTag extends UIForm {
 				if(child instanceof UIFormCheckBoxInput) {
 					if(((UIFormCheckBoxInput)child).isChecked()) {
 						topicPath = topicsTag.getTopic(child.getName()).getPath() ;
-						topicsTag.forumService.removeTopicInTag(ForumUtils.getSystemProvider(), 
+						topicsTag.forumService.removeTopicInTag(ForumSessionUtils.getSystemProvider(), 
 								topicsTag.tagId,topicPath ) ;
 						hasCheck = true ;
 					}
@@ -274,11 +270,10 @@ public class UITopicsTag extends UIForm {
 	}
 	
 	static public class RemoveTagActionListener extends EventListener<UITopicsTag> {
-		@Override
     public void execute(Event<UITopicsTag> event) throws Exception {
 			UITopicsTag topicsTag = event.getSource() ;
 			UIForumPortlet forumPortlet = topicsTag.getParent() ;
-			topicsTag.forumService.removeTag(ForumUtils.getSystemProvider(), topicsTag.tagId) ;
+			topicsTag.forumService.removeTag(ForumSessionUtils.getSystemProvider(), topicsTag.tagId) ;
 			forumPortlet.updateIsRendered(1) ;
 			UICategoryContainer categoryContainer = forumPortlet.getChild(UICategoryContainer.class) ;
 			categoryContainer.updateIsRender(true) ;
@@ -286,5 +281,4 @@ public class UITopicsTag extends UIForm {
 			event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
 		}
 	}
-
 }

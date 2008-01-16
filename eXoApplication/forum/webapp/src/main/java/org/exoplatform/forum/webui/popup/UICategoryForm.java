@@ -19,7 +19,7 @@ package org.exoplatform.forum.webui.popup;
 import java.util.Date;
 
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.forum.ForumUtils;
+import org.exoplatform.forum.ForumSessionUtils;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.webui.EmptyNameValidator;
@@ -97,14 +97,13 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
 	}
 	
 	static	public class SaveActionListener extends EventListener<UICategoryForm> {
-		@Override
     public void execute(Event<UICategoryForm> event) throws Exception {
 			UICategoryForm uiForm = event.getSource() ;
 			String categoryTitle = uiForm.getUIStringInput(FIELD_CATEGORYTITLE_INPUT).getValue();
 			String categoryOrder = uiForm.getUIStringInput(FIELD_CATEGORYORDER_INPUT).getValue();
 			String description = uiForm.getUIFormTextAreaInput(FIELD_DESCRIPTION_TEXTAREA).getValue();
 			String userPrivate = uiForm.getUIStringInput(FIELD_USERPRIVATE_INPUT).getValue();
-			String userName = ForumUtils.getCurrentUser();
+			String userName = ForumSessionUtils.getCurrentUser();
 			Category cat = new Category();
 			cat.setOwner(userName) ;
 			cat.setCategoryName(categoryTitle.trim()) ;
@@ -120,14 +119,14 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
 			
 			if(uiForm.categoryId.length() > 0) {
 				cat.setId(uiForm.categoryId) ;
-				forumService.saveCategory(ForumUtils.getSystemProvider(), cat, false);
+				forumService.saveCategory(ForumSessionUtils.getSystemProvider(), cat, false);
 				forumPortlet.cancelAction() ;
 				UICategory uiCategory = forumPortlet.getChild(UICategoryContainer.class).getChild(UICategory.class) ;
 				WebuiRequestContext context = event.getRequestContext() ;
 				context.addUIComponentToUpdateByAjax(forumPortlet.getChild(UIBreadcumbs.class)) ;
 				context.addUIComponentToUpdateByAjax(uiCategory) ;
 			} else {
-				forumService.saveCategory(ForumUtils.getSystemProvider(), cat, true);
+				forumService.saveCategory(ForumSessionUtils.getSystemProvider(), cat, true);
 				forumPortlet.cancelAction() ;
 				UICategories uiCategories = forumPortlet.findFirstComponentOfType(UICategories.class) ;
 				event.getRequestContext().addUIComponentToUpdateByAjax(uiCategories) ;
@@ -137,12 +136,9 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
 	}
 	
 	static	public class CancelActionListener extends EventListener<UICategoryForm> {
-		@Override
     public void execute(Event<UICategoryForm> event) throws Exception {
 			UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
 			forumPortlet.cancelAction() ;
 		}
 	}
-
-	
 }

@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.forum.ForumUtils;
+import org.exoplatform.forum.ForumSessionUtils;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.Tag;
 import org.exoplatform.forum.webui.EmptyNameValidator;
@@ -117,7 +117,6 @@ public class UIAddTagForm extends UIForm implements UIPopupComponent {
 	
 	
 	static	public class SaveActionListener extends EventListener<UIAddTagForm> {
-		@Override
     public void execute(Event<UIAddTagForm> event) throws Exception {
 			UIAddTagForm uiForm = event.getSource() ;
 			UIFormStringInput tagNameInput = uiForm.getUIStringInput(FIELD_TAGNAME_INPUT) ;
@@ -132,11 +131,11 @@ public class UIAddTagForm extends UIForm implements UIPopupComponent {
 			ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
 			if(uiForm.isUpdate) {
 				newTag.setId(uiForm.tagId); 
-				forumService.saveTag(ForumUtils.getSystemProvider(), newTag, false);
+				forumService.saveTag(ForumSessionUtils.getSystemProvider(), newTag, false);
 			} else {
-				String userName = ForumUtils.getCurrentUser() ;
+				String userName = ForumSessionUtils.getCurrentUser() ;
 				newTag.setOwner(userName) ;
-				forumService.saveTag(ForumUtils.getSystemProvider(), newTag, true);
+				forumService.saveTag(ForumSessionUtils.getSystemProvider(), newTag, true);
 			}
 			if(uiForm.isTopicTag) {
 				UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class);
@@ -156,7 +155,6 @@ public class UIAddTagForm extends UIForm implements UIPopupComponent {
 	}
 	
 	static	public class CancelActionListener extends EventListener<UIAddTagForm> {
-		@Override
     public void execute(Event<UIAddTagForm> event) throws Exception {
 			UIAddTagForm uiForm = event.getSource() ;
 			if(uiForm.isTopicTag) {

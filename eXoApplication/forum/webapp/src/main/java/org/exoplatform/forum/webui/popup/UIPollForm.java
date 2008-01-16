@@ -21,7 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.forum.ForumUtils;
+import org.exoplatform.forum.ForumSessionUtils;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.Poll;
 import org.exoplatform.forum.webui.UIForumPortlet;
@@ -121,7 +121,6 @@ public class UIPollForm extends UIForm implements UIPopupComponent {
 	}
 	
 	static	public class SaveActionListener extends EventListener<UIPollForm> {
-		@Override
     @SuppressWarnings("unchecked")
 		public void execute(Event<UIPollForm> event) throws Exception {
 			UIPollForm uiForm = event.getSource() ;
@@ -154,7 +153,7 @@ public class UIPollForm extends UIForm implements UIPopupComponent {
 			}
 			if(sizeOption >= 2 && sizeOption <= 10) {
 				String[] newUser = new String[] {};
-				String userName = ForumUtils.getCurrentUser() ;
+				String userName = ForumSessionUtils.getCurrentUser() ;
 				String[] vote = new String[sizeOption]	;
 				if(uiForm.isUpdate) {
 					String[] oldVote = uiForm.poll.getVote() ;
@@ -213,9 +212,9 @@ public class UIPollForm extends UIForm implements UIPopupComponent {
 				if(uiForm.isUpdate) {
 					poll.setId(uiForm.getId()) ;
 					if(newUser.length > 0) poll.setUserVote(newUser) ;
-					forumService.savePoll(ForumUtils.getSystemProvider(), id[id.length - 3], id[id.length - 2], id[id.length - 1], poll, false, false) ;
+					forumService.savePoll(ForumSessionUtils.getSystemProvider(), id[id.length - 3], id[id.length - 2], id[id.length - 1], poll, false, false) ;
 				} else {
-					forumService.savePoll(ForumUtils.getSystemProvider(), id[id.length - 3], id[id.length - 2], id[id.length - 1], poll, true, false) ;
+					forumService.savePoll(ForumSessionUtils.getSystemProvider(), id[id.length - 3], id[id.length - 2], id[id.length - 1], poll, true, false) ;
 				}
 				UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
 				forumPortlet.cancelAction() ;
@@ -234,7 +233,6 @@ public class UIPollForm extends UIForm implements UIPopupComponent {
 	}
 
 	static	public class RefreshActionListener extends EventListener<UIPollForm> {
-		@Override
     public void execute(Event<UIPollForm> event) throws Exception {
 			UIPollForm uiForm = event.getSource() ;
 			List<String> list = new ArrayList<String>() ;
@@ -248,7 +246,6 @@ public class UIPollForm extends UIForm implements UIPopupComponent {
 	}
 	
 	static	public class CancelActionListener extends EventListener<UIPollForm> {
-		@Override
     public void execute(Event<UIPollForm> event) throws Exception {
 			UIPollForm uiForm = event.getSource() ;
 			UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;

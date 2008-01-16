@@ -21,8 +21,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.forum.ForumFormatFunction;
-import org.exoplatform.forum.ForumUtils;
+import org.exoplatform.forum.ForumFormatUtils;
+import org.exoplatform.forum.ForumSessionUtils;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumService;
@@ -86,7 +86,7 @@ public class UIForumForm extends UIForm implements UIPopupComponent {
 	
 	@SuppressWarnings("unchecked")
 	public UIForumForm() throws Exception {
-		List<Category> categorys = forumService.getCategories(ForumUtils.getSystemProvider());
+		List<Category> categorys = forumService.getCategories(ForumSessionUtils.getSystemProvider());
 		List<SelectItemOption<String>> list = new ArrayList<SelectItemOption<String>>() ;
 		for (Category category :categorys) {
 			list.add(new SelectItemOption<String>(category.getCategoryName(), category.getId())) ;
@@ -147,11 +147,11 @@ public class UIForumForm extends UIForm implements UIPopupComponent {
 	}
 	
 	private String[] splitForForum (String str) throws Exception {
-		return ForumFormatFunction.splitForForum(str);
+		return ForumFormatUtils.splitForForum(str);
 	}
 	
 	private String unSplitForForum (String[] str) throws Exception {
-		return ForumFormatFunction.unSplitForForum(str) ;
+		return ForumFormatUtils.unSplitForForum(str) ;
 	}
 	
 	public void setForumValue(Forum forum, boolean isUpdate) throws Exception {
@@ -190,7 +190,6 @@ public class UIForumForm extends UIForm implements UIPopupComponent {
 	}
 	
 	static	public class SaveActionListener extends EventListener<UIForumForm> {
-		@Override
     public void execute(Event<UIForumForm> event) throws Exception {
 			UIForumForm uiForm = event.getSource() ;
 			UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
@@ -204,19 +203,15 @@ public class UIForumForm extends UIForm implements UIPopupComponent {
 			String description = uiForm.getUIFormTextAreaInput(FIELD_DESCRIPTION_TEXTAREA).getValue().trim();
 			String[] notifyWhenAddTopic = uiForm.splitForForum(uiForm.getUIFormTextAreaInput(FIELD_NOTIFYWHENADDTOPIC_MULTIVALUE).getValue()) ;
 			String[] notifyWhenAddPost = uiForm.splitForForum(uiForm.getUIFormTextAreaInput(FIELD_NOTIFYWHENADDPOST_MULTIVALUE).getValue()) ;
-			
 			String[] setModerator = uiForm.splitForForum(uiForm.getUIStringInput(FIELD_MODERATOR_INPUT).getValue()) ;
 			String[] setViewer = uiForm.splitForForum(uiForm.getUIStringInput(FIELD_VIEWER_INPUT).getValue()) ; 
 			String[] setTopicable = uiForm.splitForForum(uiForm.getUIStringInput(FIELD_TOPICABLE_INPUT).getValue()) ; 
 			String[] setPostable = uiForm.splitForForum(uiForm.getUIStringInput(FIELD_POSTABLE_INPUT).getValue()) ; 
-			
-			
 			Boolean	ModerateTopic = (Boolean) uiForm.getUIFormCheckBoxInput(FIELD_MODERATETHREAD_CHECKBOX).getValue();
 			Boolean	ModeratePost = (Boolean) uiForm.getUIFormCheckBoxInput(FIELD_MODERATEPOST_CHECKBOX).getValue();
 			
-			String userName = Util.getPortalRequestContext().getRemoteUser() ;
+			String userName = ForumSessionUtils.getCurrentUser() ;
 			Forum newForum = new Forum();
-			
 			newForum.setForumName(forumTitle);
 			newForum.setOwner(userName);
 			newForum.setForumOrder(Integer.valueOf(forumOrder).intValue());
@@ -228,7 +223,6 @@ public class UIForumForm extends UIForm implements UIPopupComponent {
 			newForum.setModifiedDate(new Date());
 			newForum.setPostCount(0);
 			newForum.setTopicCount(0);
-			
 			newForum.setNotifyWhenAddPost(notifyWhenAddPost);
 			newForum.setNotifyWhenAddTopic(notifyWhenAddTopic);
 			newForum.setIsModeratePost(ModeratePost);
@@ -239,7 +233,6 @@ public class UIForumForm extends UIForm implements UIPopupComponent {
 			if(forumStatus.equals("locked")) {
 				newForum.setIsLock(true) ;
 			}
-			
 			newForum.setModerators(setModerator);
 			newForum.setCreateTopicRole(setPostable);
 			newForum.setViewForumRole(setViewer);
@@ -248,10 +241,10 @@ public class UIForumForm extends UIForm implements UIPopupComponent {
 			ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
 			if(uiForm.forumId.length() > 0)	{
 				newForum.setId(uiForm.forumId);
-				forumService.saveForum(ForumUtils.getSystemProvider(), categoryId, newForum, false);
+				forumService.saveForum(ForumSessionUtils.getSystemProvider(), categoryId, newForum, false);
 			}
 			else {
-				forumService.saveForum(ForumUtils.getSystemProvider(), categoryId, newForum, true);
+				forumService.saveForum(ForumSessionUtils.getSystemProvider(), categoryId, newForum, true);
 			}
 			forumPortlet.getChild(UIForumLinks.class).setUpdateForumLinks() ;
 			forumPortlet.cancelAction() ;
@@ -273,7 +266,6 @@ public class UIForumForm extends UIForm implements UIPopupComponent {
 	}
 	
 	static	public class CancelActionListener extends EventListener<UIForumForm> {
-		@Override
     public void execute(Event<UIForumForm> event) throws Exception {
 			UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
 			forumPortlet.cancelAction() ;

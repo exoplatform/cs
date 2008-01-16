@@ -17,7 +17,7 @@
 package org.exoplatform.forum.webui;
 
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.forum.ForumUtils;
+import org.exoplatform.forum.ForumSessionUtils;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -47,7 +47,7 @@ public class UIForumDescription extends UIContainer	{
 	@SuppressWarnings("unused")
 	private Forum getForum() throws Exception {
 		ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
-		return forumService.getForum(ForumUtils.getSystemProvider(), categoryId, forumId);
+		return forumService.getForum(ForumSessionUtils.getSystemProvider(), categoryId, forumId);
 	}
 	
 }

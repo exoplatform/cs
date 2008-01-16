@@ -34,6 +34,4 @@ public class UIAdvancedSearch extends UIContainer	{
 	public UIAdvancedSearch() throws Exception {
 		// Add components of advanced search here 
 	}
-
-	
 }

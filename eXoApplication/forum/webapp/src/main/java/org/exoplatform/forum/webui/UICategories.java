@@ -20,8 +20,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.forum.ForumFormatFunction;
-import org.exoplatform.forum.ForumUtils;
+import org.exoplatform.forum.ForumFormatUtils;
+import org.exoplatform.forum.ForumSessionUtils;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumService;
@@ -65,23 +65,23 @@ public class UICategories extends UIContainer	{
   }
 	@SuppressWarnings({ "deprecation", "unused" })
   private String getTime(Date myDate) {
-		return ForumFormatFunction.getFormatTime(timeFormat, myDate) ;
+		return ForumFormatUtils.getFormatTime(timeFormat, myDate) ;
 	}
 	@SuppressWarnings({ "deprecation", "unused" })
   private String getShortDate(Date myDate) {
 		int minute = (int)(timeZone*60);
 		myDate.setMinutes(myDate.getMinutes() - minute);
-		return ForumFormatFunction.getFormatDate(shortDateformat, myDate) ;
+		return ForumFormatUtils.getFormatDate(shortDateformat, myDate) ;
 	}
 	@SuppressWarnings({ "deprecation", "unused" })
 	private String getLongDate(Date myDate) {
 		int minute = (int)(timeZone*60) ;
 		myDate.setMinutes(myDate.getMinutes() - minute);
-		return ForumFormatFunction.getFormatDate(longDateformat, myDate) ;
+		return ForumFormatUtils.getFormatDate(longDateformat, myDate) ;
 	}
 	private List<Category> getCategoryList() throws Exception {
 		this.getAncestorOfType(UIForumPortlet.class).getChild(UIBreadcumbs.class).setUpdataPath("ForumService") ;
-		List<Category> categoryList = forumService.getCategories(ForumUtils.getSystemProvider());
+		List<Category> categoryList = forumService.getCategories(ForumSessionUtils.getSystemProvider());
 		if(categoryList.size() > 0)
 			((UICategoryContainer)getParent()).getChild(UIForumActionBar.class).setHasCategory(true) ;
 		else 
@@ -90,13 +90,13 @@ public class UICategories extends UIContainer	{
 	}	
 	
 	private List<Forum> getForumList(String categoryId) throws Exception {
-		List<Forum> forumList = forumService.getForums(ForumUtils.getSystemProvider(), categoryId);
+		List<Forum> forumList = forumService.getForums(ForumSessionUtils.getSystemProvider(), categoryId);
 		return forumList;
 	}
 	
 	@SuppressWarnings("unused")
 	private Topic getLastTopic(String topicPath) throws Exception {
-		return forumService.getTopicByPath(ForumUtils.getSystemProvider(), topicPath) ;
+		return forumService.getTopicByPath(ForumSessionUtils.getSystemProvider(), topicPath) ;
 	}
 	
 	private Category getCategory(String categoryId) throws Exception {
@@ -107,7 +107,6 @@ public class UICategories extends UIContainer	{
 	}
 	
 	static public class OpenCategoryActionListener extends EventListener<UICategories> {
-		@Override
     public void execute(Event<UICategories> event) throws Exception {
 			UICategories uiContainer = event.getSource();
 			String categoryId = event.getRequestContext().getRequestParameter(OBJECTID)	;
@@ -120,7 +119,6 @@ public class UICategories extends UIContainer	{
 	}
 	
 	static public class OpenForumLinkActionListener extends EventListener<UICategories> {
-		@Override
     public void execute(Event<UICategories> event) throws Exception {
 			UICategories uiContainer = event.getSource();
 			String forumId = event.getRequestContext().getRequestParameter(OBJECTID)	;
@@ -138,7 +136,6 @@ public class UICategories extends UIContainer	{
 	}
 	
 	static public class OpenLastTopicLinkActionListener extends EventListener<UICategories> {
-		@Override
     public void execute(Event<UICategories> event) throws Exception {
 			UICategories uiContainer = event.getSource();
 			String Id = event.getRequestContext().getRequestParameter(OBJECTID)	;

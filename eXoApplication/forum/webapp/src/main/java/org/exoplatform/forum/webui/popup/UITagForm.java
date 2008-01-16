@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.forum.ForumUtils;
+import org.exoplatform.forum.ForumSessionUtils;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.Tag;
 import org.exoplatform.forum.webui.UIForumPortlet;
@@ -86,7 +86,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
 	@SuppressWarnings("unused")
   private List<Tag> getAllTag() throws Exception {
 		if(this.isUpdateList) {
-			List<Tag> tags = forumService.getTags(ForumUtils.getSystemProvider());
+			List<Tag> tags = forumService.getTags(ForumSessionUtils.getSystemProvider());
 			this.tags_.clear() ;
 			boolean isAdd = true ;
 			for (Tag tag : tags) {
@@ -120,7 +120,6 @@ public class UITagForm extends UIForm implements UIPopupComponent {
   }
 	
 	static  public class AddTagActionListener extends EventListener<UITagForm> {
-		@Override
     public void execute(Event<UITagForm> event) throws Exception {
 			UITagForm uiForm = event.getSource() ;
 			UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
@@ -132,7 +131,6 @@ public class UITagForm extends UIForm implements UIPopupComponent {
 	}
 	
 	static  public class EditTagActionListener extends EventListener<UITagForm> {
-		@Override
     public void execute(Event<UITagForm> event) throws Exception {
 			UITagForm uiForm = event.getSource() ;
 			UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
@@ -146,17 +144,15 @@ public class UITagForm extends UIForm implements UIPopupComponent {
 	}
 	
 	static  public class DeleteActionListener extends EventListener<UITagForm> {
-		@Override
     public void execute(Event<UITagForm> event) throws Exception {
 			UITagForm uiForm = event.getSource() ;
-			uiForm.forumService.removeTag(ForumUtils.getSystemProvider(), uiForm.IdSelected);
+			uiForm.forumService.removeTag(ForumSessionUtils.getSystemProvider(), uiForm.IdSelected);
 			uiForm.isUpdateList = true ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
 		}
 	}
 
 	static  public class SelectedActionListener extends EventListener<UITagForm> {
-		@Override
     public void execute(Event<UITagForm> event) throws Exception {
 			UITagForm uiForm = event.getSource() ;
 			uiForm.IdSelected = event.getRequestContext().getRequestParameter(OBJECTID);
@@ -165,11 +161,10 @@ public class UITagForm extends UIForm implements UIPopupComponent {
 	}
 
 	static  public class SaveActionListener extends EventListener<UITagForm> {
-		@Override
     public void execute(Event<UITagForm> event) throws Exception {
 			UITagForm uiForm = event.getSource() ;
 			if(uiForm.IdSelected != null && uiForm.IdSelected.length() > 0 && uiForm.topicPath != null && uiForm.topicPath.length() > 0) {
-				uiForm.forumService.addTopicInTag(ForumUtils.getSystemProvider(), uiForm.IdSelected, uiForm.topicPath);
+				uiForm.forumService.addTopicInTag(ForumSessionUtils.getSystemProvider(), uiForm.IdSelected, uiForm.topicPath);
 			}
 			UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
 			forumPortlet.findFirstComponentOfType(UITopicDetail.class).setIsEditTopic(true) ;
@@ -179,7 +174,6 @@ public class UITagForm extends UIForm implements UIPopupComponent {
 	}
 	
 	static	public class CancelActionListener extends EventListener<UITagForm> {
-		@Override
     public void execute(Event<UITagForm> event) throws Exception {
 			UITagForm uiForm = event.getSource() ;
 			UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;

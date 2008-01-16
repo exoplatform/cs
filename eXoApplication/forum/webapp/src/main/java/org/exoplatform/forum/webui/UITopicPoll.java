@@ -21,8 +21,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.forum.ForumFormatFunction;
-import org.exoplatform.forum.ForumUtils;
+import org.exoplatform.forum.ForumFormatUtils;
+import org.exoplatform.forum.ForumSessionUtils;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.Poll;
 import org.exoplatform.forum.service.Topic;
@@ -81,17 +81,17 @@ public class UITopicPoll extends UIForm	{
   }
 	@SuppressWarnings({ "deprecation", "unused" })
 	private String getTime(Date myDate) {
-		return ForumFormatFunction.getFormatTime(timeFormat, myDate) ;
+		return ForumFormatUtils.getFormatTime(timeFormat, myDate) ;
 	}
 	@SuppressWarnings({ "deprecation", "unused" })
   private String getShortDate(Date myDate) {
 		myDate.setMinutes(myDate.getMinutes() - (int)(timeZone*60));
-		return ForumFormatFunction.getFormatDate(shortDateformat, myDate) ;
+		return ForumFormatUtils.getFormatDate(shortDateformat, myDate) ;
 	}
 	@SuppressWarnings({ "deprecation", "unused" })
 	private String getLongDate(Date myDate) {
 		myDate.setMinutes(myDate.getMinutes() - (int)(timeZone*60));
-		return ForumFormatFunction.getFormatDate(longDateformat, myDate) ;
+		return ForumFormatUtils.getFormatDate(longDateformat, myDate) ;
 	}
 	public void updatePoll(String categoryId, String forumId, Topic topic) throws Exception {
 		this.categoryId = categoryId; 
@@ -126,11 +126,11 @@ public class UITopicPoll extends UIForm	{
 	private Poll getPoll() throws Exception {
 		if(categoryId != null && categoryId.length() > 0) {
 			if(this.isEditPoll) {
-				this.topic = forumService.getTopic(ForumUtils.getSystemProvider(), categoryId, forumId, topicId, false) ;
+				this.topic = forumService.getTopic(ForumSessionUtils.getSystemProvider(), categoryId, forumId, topicId, false) ;
 				this.isEditPoll = false ;
 			}
 			if(this.topic.getIsPoll()) {
-				Poll poll = forumService.getPoll(ForumUtils.getSystemProvider(), categoryId, forumId, topicId) ; 
+				Poll poll = forumService.getPoll(ForumSessionUtils.getSystemProvider(), categoryId, forumId, topicId) ; 
 				poll_ = poll ;
 				this.init() ;
 				return poll ;
@@ -141,11 +141,11 @@ public class UITopicPoll extends UIForm	{
 	
 	@SuppressWarnings("unused")
 	private boolean getIsVoted() throws Exception {
-		Poll poll = forumService.getPoll(ForumUtils.getSystemProvider(), categoryId, forumId, topicId) ;
+		Poll poll = forumService.getPoll(ForumSessionUtils.getSystemProvider(), categoryId, forumId, topicId) ;
 		if(this.isMultiCheck) {
 			return false ;
 		}
-		String userVote = ForumUtils.getCurrentUser() ;
+		String userVote = ForumSessionUtils.getCurrentUser() ;
 		String[] userVotes = poll.getUserVote() ;
 		for (String string : userVotes) {
 			string = string.substring(0, string.length() - 2) ;
@@ -183,7 +183,6 @@ public class UITopicPoll extends UIForm	{
 	}
 	
 	static public class VoteActionListener extends EventListener<UITopicPoll> {
-		@Override
     public void execute(Event<UITopicPoll> event) throws Exception {
 			UITopicPoll topicPoll = event.getSource() ;
 			UIFormRadioBoxInput radioInput = null ;
@@ -212,7 +211,7 @@ public class UITopicPoll extends UIForm	{
 					size = temporary.length ;
 				}
 				String[] setUserVote ; int index = 0 ;
-				String userVote = ForumUtils.getCurrentUser() ;
+				String userVote = ForumSessionUtils.getCurrentUser() ;
 				if(topicPoll.isMultiCheck) {
 					setUserVote = new String[size] ;
 					for (int t = 0; t < size; t++) {
@@ -253,7 +252,7 @@ public class UITopicPoll extends UIForm	{
 				poll.setId(topicPoll.poll_.getId()) ;
 				poll.setVote(votes) ;
 				poll.setUserVote(setUserVote) ;
-				topicPoll.forumService.savePoll(ForumUtils.getSystemProvider(), topicPoll.categoryId, topicPoll.forumId, topicPoll.topicId, poll, false, true) ;
+				topicPoll.forumService.savePoll(ForumSessionUtils.getSystemProvider(), topicPoll.categoryId, topicPoll.forumId, topicPoll.topicId, poll, false, true) ;
 				topicPoll.isMultiCheck = false ;
 				event.getRequestContext().addUIComponentToUpdateByAjax(topicPoll.getParent()) ;
 			}
@@ -261,7 +260,6 @@ public class UITopicPoll extends UIForm	{
 	}
 	
 	static public class EditPollActionListener extends EventListener<UITopicPoll> {
-		@Override
     public void execute(Event<UITopicPoll> event) throws Exception {
 			UITopicPoll topicPoll = event.getSource() ;
 			UIForumPortlet forumPortlet = topicPoll.getAncestorOfType(UIForumPortlet.class) ;
@@ -276,10 +274,9 @@ public class UITopicPoll extends UIForm	{
 	}
 
 	static public class RemovePollActionListener extends EventListener<UITopicPoll> {
-		@Override
     public void execute(Event<UITopicPoll> event) throws Exception {
 			UITopicPoll topicPoll = event.getSource() ;
-			topicPoll.forumService.removePoll(ForumUtils.getSystemProvider(), topicPoll.categoryId, topicPoll.forumId, topicPoll.topicId) ;
+			topicPoll.forumService.removePoll(ForumSessionUtils.getSystemProvider(), topicPoll.categoryId, topicPoll.forumId, topicPoll.topicId) ;
 			topicPoll.removeChild(UIFormRadioBoxInput.class) ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(topicPoll.getParent()) ;
 			topicPoll.isEditPoll = false ;
@@ -287,7 +284,6 @@ public class UITopicPoll extends UIForm	{
 	}
 
 	static public class VoteAgainPollActionListener extends EventListener<UITopicPoll> {
-		@Override
     public void execute(Event<UITopicPoll> event) throws Exception {
 			UITopicPoll topicPoll = event.getSource() ;
 			topicPoll.isMultiCheck = true ;
@@ -296,5 +292,4 @@ public class UITopicPoll extends UIForm	{
 			event.getRequestContext().addUIComponentToUpdateByAjax(topicPoll) ;
 		}
 	}
-	
 }

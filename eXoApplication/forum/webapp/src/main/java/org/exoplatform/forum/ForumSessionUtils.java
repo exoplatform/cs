@@ -24,7 +24,7 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.impl.GroupImpl;
 
-public class ForumUtils {
+public class ForumSessionUtils {
   public static String SYSTEM_SUFFIX = ":/" + SystemIdentity.SYSTEM ;
   public static String ANONIM_SUFFIX = ":/" + SystemIdentity.ANONIM ;
 

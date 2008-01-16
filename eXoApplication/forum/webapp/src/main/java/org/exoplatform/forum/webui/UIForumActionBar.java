@@ -54,7 +54,6 @@ public class UIForumActionBar extends UIContainer	{
 	  this.hasCategory = hasCategory ;
   }
 	static public class AddCategoryActionListener extends EventListener<UIForumActionBar> {
-		@Override
     public void execute(Event<UIForumActionBar> event) throws Exception {
 			UIForumActionBar uiActionBar = event.getSource() ;
 			UIForumPortlet forumPortlet = uiActionBar.getAncestorOfType(UIForumPortlet.class) ;
@@ -65,7 +64,6 @@ public class UIForumActionBar extends UIContainer	{
 	}	
 	
 	static public class AddForumActionListener extends EventListener<UIForumActionBar> {
-		@Override
     @SuppressWarnings("unchecked")
 		public void execute(Event<UIForumActionBar> event) throws Exception {
 			UIForumActionBar uiActionBar = event.getSource() ;
@@ -87,7 +85,6 @@ public class UIForumActionBar extends UIContainer	{
 	} 
 	
 	static public class ManageModeratorActionListener extends EventListener<UIForumActionBar> {
-		@Override
     public void execute(Event<UIForumActionBar> event) throws Exception {
 			UIForumActionBar uiActionBar = event.getSource() ;
 				UIForumPortlet forumPortlet = uiActionBar.getAncestorOfType(UIForumPortlet.class) ;

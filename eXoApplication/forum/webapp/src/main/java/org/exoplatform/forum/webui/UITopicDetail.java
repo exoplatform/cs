@@ -21,8 +21,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.forum.ForumFormatFunction;
-import org.exoplatform.forum.ForumUtils;
+import org.exoplatform.forum.ForumFormatUtils;
+import org.exoplatform.forum.ForumSessionUtils;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.JCRPageList;
 import org.exoplatform.forum.service.Post;
@@ -131,17 +131,17 @@ public class UITopicDetail extends UIForm	{
   }
 	@SuppressWarnings({ "deprecation", "unused" })
 	private String getTime(Date myDate) {
-		return ForumFormatFunction.getFormatTime(timeFormat, myDate) ;
+		return ForumFormatUtils.getFormatTime(timeFormat, myDate) ;
 	}
 	@SuppressWarnings({ "deprecation", "unused" })
   private String getShortDate(Date myDate) {
 		myDate.setMinutes(myDate.getMinutes() - (int)(timeZone*60));
-		return ForumFormatFunction.getFormatDate(shortDateformat, myDate) ;
+		return ForumFormatUtils.getFormatDate(shortDateformat, myDate) ;
 	}
 	@SuppressWarnings({ "deprecation", "unused" })
 	private String getLongDate(Date myDate) {
 		myDate.setMinutes(myDate.getMinutes() - (int)(timeZone*60));
-		return ForumFormatFunction.getFormatDate(longDateformat, myDate) ;
+		return ForumFormatUtils.getFormatDate(longDateformat, myDate) ;
 	}
 	
 	public void setUpdateTopic(String categoryId, String forumId, String topicId, boolean viewTopic) throws Exception {
@@ -151,7 +151,7 @@ public class UITopicDetail extends UIForm	{
 		this.viewTopic = viewTopic ;
 		this.isUpdatePageList = false ;
 		this.getAncestorOfType(UIForumPortlet.class).getChild(UIBreadcumbs.class).setUpdataPath((categoryId + "/" + forumId + "/" + topicId)) ;
-		this.topic = forumService.getTopic(ForumUtils.getSystemProvider(), categoryId, forumId, topicId, viewTopic) ;
+		this.topic = forumService.getTopic(ForumSessionUtils.getSystemProvider(), categoryId, forumId, topicId, viewTopic) ;
 	}
 	@SuppressWarnings("unused")
 	private String getIdPostView() {
@@ -170,7 +170,7 @@ public class UITopicDetail extends UIForm	{
 	
 	@SuppressWarnings("unused")
   private String convertLinkHTML(String s) {
-	  return ForumFormatFunction.convertLinkHTML(s) ;
+	  return ForumFormatUtils.convertLinkHTML(s) ;
   }
 	
 	public void setUpdateContainer(String categoryId, String forumId, Topic topic, long numberPage) throws Exception {
@@ -182,9 +182,9 @@ public class UITopicDetail extends UIForm	{
 		this.pageSelect = numberPage ;
 		this.isGopage = true ;
 		this.isEditTopic = false ;
-		String userName = ForumUtils.getCurrentUser() ;
+		String userName = ForumSessionUtils.getCurrentUser() ;
 		if(!userName.equals(this.userName)) {
-			this.topic = forumService.getTopic(ForumUtils.getSystemProvider(), categoryId, forumId, topic.getId(), true) ;
+			this.topic = forumService.getTopic(ForumSessionUtils.getSystemProvider(), categoryId, forumId, topic.getId(), true) ;
 			this.userName = userName ;
 		} else this.topic = topic ;
 		this.getChild(UIForumPageIterator.class).setSelectPage(numberPage) ;
@@ -203,7 +203,7 @@ public class UITopicDetail extends UIForm	{
 	private Topic getTopic() throws Exception {
 		try {
 			if(this.isEditTopic) {
-				this.topic = forumService.getTopic(ForumUtils.getSystemProvider(), categoryId, forumId, topicId, viewTopic) ;
+				this.topic = forumService.getTopic(ForumSessionUtils.getSystemProvider(), categoryId, forumId, topicId, viewTopic) ;
 				this.isEditTopic = false ;
 			}
 			return this.topic ;
@@ -221,7 +221,7 @@ public class UITopicDetail extends UIForm	{
 		if(this.isUpdatePageList) {
 			this.isUpdatePageList = false ;
 		} else {
-			this.pageList = forumService.getPosts(ForumUtils.getSystemProvider(), categoryId, forumId, topicId) ;
+			this.pageList = forumService.getPosts(ForumSessionUtils.getSystemProvider(), categoryId, forumId, topicId) ;
 		}
 		if(this.maxPost > 0)
 			pageList.setPageSize(this.maxPost) ;
@@ -237,7 +237,7 @@ public class UITopicDetail extends UIForm	{
 			this.pageSelect = this.getChild(UIForumPageIterator.class).getPageSelected() ;
 		}
 		if(this.pageList == null || this.pageSelect < 1) return null ;
-		this.posts = forumService.getPage(this.pageSelect, this.pageList, ForumUtils.getSystemProvider()) ;
+		this.posts = forumService.getPage(this.pageSelect, this.pageList, ForumSessionUtils.getSystemProvider()) ;
 		for (Post post : this.posts) {
 			if(getUIFormCheckBoxInput(post.getId()) != null) {
 				getUIFormCheckBoxInput(post.getId()).setChecked(false) ;
@@ -258,7 +258,6 @@ public class UITopicDetail extends UIForm	{
 	}
 	
 	static public class AddPostActionListener extends EventListener<UITopicDetail> {
-		@Override
     public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 			UIForumPortlet forumPortlet = topicDetail.getAncestorOfType(UIForumPortlet.class) ;
@@ -276,10 +275,9 @@ public class UITopicDetail extends UIForm	{
 	}
 
 	static public class RatingTopicActionListener extends EventListener<UITopicDetail> {
-		@Override
     public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
-			String userName = ForumUtils.getCurrentUser() ;
+			String userName = ForumSessionUtils.getCurrentUser() ;
 			String[] userVoteRating = topicDetail.topic.getUserVoteRating() ;
 			boolean erro = false ;
 			for (String string : userVoteRating) {
@@ -302,7 +300,6 @@ public class UITopicDetail extends UIForm	{
 	}
 	
 	static public class AddTagTopicActionListener extends EventListener<UITopicDetail> {
-		@Override
     public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 			UIForumPortlet forumPortlet = topicDetail.getAncestorOfType(UIForumPortlet.class) ;
@@ -316,14 +313,12 @@ public class UITopicDetail extends UIForm	{
 	}
 
 	static public class PrintActionListener extends EventListener<UITopicDetail> {
-		@Override
     public void execute(Event<UITopicDetail> event) throws Exception {
 //			UITopicDetail topicDetail = event.getSource() ;
 		}
 	}
 
 	static public class GoNumberPageActionListener extends EventListener<UITopicDetail> {
-		@Override
     public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 			UIFormStringInput stringInput1 = topicDetail.getUIStringInput("gopage1") ;
@@ -354,7 +349,6 @@ public class UITopicDetail extends UIForm	{
 	}
 
 	static public class EditActionListener extends EventListener<UITopicDetail> {
-		@Override
     public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 			String postId = event.getRequestContext().getRequestParameter(OBJECTID) ;
@@ -372,17 +366,15 @@ public class UITopicDetail extends UIForm	{
 	}
 	
 	static public class DeleteActionListener extends EventListener<UITopicDetail> {
-		@Override
     public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 			String postId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-			topicDetail.forumService.removePost(ForumUtils.getSystemProvider(), topicDetail.categoryId, topicDetail.forumId, topicDetail.topicId, postId) ;
+			topicDetail.forumService.removePost(ForumSessionUtils.getSystemProvider(), topicDetail.categoryId, topicDetail.forumId, topicDetail.topicId, postId) ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(topicDetail.getParent()) ;
 		}
 	}
 	
 	static public class QuoteActionListener extends EventListener<UITopicDetail> {
-		@Override
     public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 			String postId = event.getRequestContext().getRequestParameter(OBJECTID) ;
@@ -401,7 +393,6 @@ public class UITopicDetail extends UIForm	{
 	}
 //--------------------------------	 Topic Menu		-------------------------------------------//
 	static public class EditTopicActionListener extends EventListener<UITopicDetail> {
-		@Override
     public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 			UIForumPortlet forumPortlet = topicDetail.getAncestorOfType(UIForumPortlet.class) ;
@@ -418,14 +409,12 @@ public class UITopicDetail extends UIForm	{
 	}
 	
 	static public class PrintPageActionListener extends EventListener<UITopicDetail> {
-		@Override
     public void execute(Event<UITopicDetail> event) throws Exception {
 //			UITopicDetail topicDetail = event.getSource() ;
 		}
 	}
 
 	static public class AddPollActionListener extends EventListener<UITopicDetail> {
-		@Override
     public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 			Topic topic = topicDetail.topic ;
@@ -439,13 +428,12 @@ public class UITopicDetail extends UIForm	{
 	}
 
 	static public class SetOpenTopicActionListener extends EventListener<UITopicDetail> {
-		@Override
     public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 			Topic topic = topicDetail.topic ;
 			if(topic.getIsClosed()) {
 				topic.setIsClosed(false) ;
-				topicDetail.forumService.saveTopic(ForumUtils.getSystemProvider(), topicDetail.categoryId, topicDetail.forumId, topic, false) ;
+				topicDetail.forumService.saveTopic(ForumSessionUtils.getSystemProvider(), topicDetail.categoryId, topicDetail.forumId, topic, false) ;
 				topicDetail.viewTopic = false ;
 				topicDetail.isEditTopic = true ;
 				event.getRequestContext().addUIComponentToUpdateByAjax(topicDetail) ;
@@ -457,13 +445,12 @@ public class UITopicDetail extends UIForm	{
 	}
 
 	static public class SetCloseTopicActionListener extends EventListener<UITopicDetail> {
-		@Override
     public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 			Topic topic = topicDetail.topic ;
 			if(!topic.getIsClosed()) {
 				topic.setIsClosed(true) ;
-				topicDetail.forumService.saveTopic(ForumUtils.getSystemProvider(), topicDetail.categoryId, topicDetail.forumId, topic, false) ;
+				topicDetail.forumService.saveTopic(ForumSessionUtils.getSystemProvider(), topicDetail.categoryId, topicDetail.forumId, topic, false) ;
 				topicDetail.viewTopic = false ;
 				topicDetail.isEditTopic = true ;
 				event.getRequestContext().addUIComponentToUpdateByAjax(topicDetail) ;
@@ -475,13 +462,12 @@ public class UITopicDetail extends UIForm	{
 	}
 
 	static public class SetLockedTopicActionListener extends EventListener<UITopicDetail> {
-		@Override
     public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 			Topic topic = topicDetail.topic ;
 			if(!topic.getIsLock()) {
 				topic.setIsLock(true) ;
-				topicDetail.forumService.saveTopic(ForumUtils.getSystemProvider(), topicDetail.categoryId, topicDetail.forumId, topic, false) ;
+				topicDetail.forumService.saveTopic(ForumSessionUtils.getSystemProvider(), topicDetail.categoryId, topicDetail.forumId, topic, false) ;
 				topicDetail.viewTopic = false ;
 				topicDetail.isEditTopic = true ;
 				event.getRequestContext().addUIComponentToUpdateByAjax(topicDetail) ;
@@ -493,13 +479,12 @@ public class UITopicDetail extends UIForm	{
 	}
 
 	static public class SetUnLockTopicActionListener extends EventListener<UITopicDetail> {
-		@Override
     public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 			Topic topic = topicDetail.topic ;
 			if(topic.getIsLock()) {
 				topic.setIsLock(false) ;
-				topicDetail.forumService.saveTopic(ForumUtils.getSystemProvider(), topicDetail.categoryId, topicDetail.forumId, topic, false) ;
+				topicDetail.forumService.saveTopic(ForumSessionUtils.getSystemProvider(), topicDetail.categoryId, topicDetail.forumId, topic, false) ;
 				topicDetail.viewTopic = false ;
 				topicDetail.isEditTopic = true ;
 				event.getRequestContext().addUIComponentToUpdateByAjax(topicDetail) ;
@@ -511,7 +496,6 @@ public class UITopicDetail extends UIForm	{
 	}
 
 	static public class SetMoveTopicActionListener extends EventListener<UITopicDetail> {
-		@Override
     public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 			UIForumPortlet forumPortlet = topicDetail.getAncestorOfType(UIForumPortlet.class) ;
@@ -527,13 +511,12 @@ public class UITopicDetail extends UIForm	{
 	}
 	
 	static public class SetStickTopicActionListener extends EventListener<UITopicDetail> {
-		@Override
     public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 			Topic topic = topicDetail.topic ;
 			if(!topic.getIsSticky()) {
 				topic.setIsSticky(true) ;
-				topicDetail.forumService.saveTopic(ForumUtils.getSystemProvider(), topicDetail.categoryId, topicDetail.forumId, topic, false) ;
+				topicDetail.forumService.saveTopic(ForumSessionUtils.getSystemProvider(), topicDetail.categoryId, topicDetail.forumId, topic, false) ;
 				topicDetail.viewTopic = false ;
 				topicDetail.isEditTopic = true ;
 				event.getRequestContext().addUIComponentToUpdateByAjax(topicDetail) ;
@@ -545,13 +528,12 @@ public class UITopicDetail extends UIForm	{
 	}
 
 	static public class SetUnStickTopicActionListener extends EventListener<UITopicDetail> {
-		@Override
     public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 			Topic topic = topicDetail.topic ;
 			if(topic.getIsSticky()) {
 				topic.setIsSticky(false) ;
-				topicDetail.forumService.saveTopic(ForumUtils.getSystemProvider(), topicDetail.categoryId, topicDetail.forumId, topic, false) ;
+				topicDetail.forumService.saveTopic(ForumSessionUtils.getSystemProvider(), topicDetail.categoryId, topicDetail.forumId, topic, false) ;
 				topicDetail.viewTopic = false ;
 				topicDetail.isEditTopic = true ;
 				event.getRequestContext().addUIComponentToUpdateByAjax(topicDetail) ;
@@ -581,11 +563,10 @@ public class UITopicDetail extends UIForm	{
 	}
 
 	static public class SetDeleteTopicActionListener extends EventListener<UITopicDetail> {
-		@Override
     public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 			Topic topic = topicDetail.topic ;
-			topicDetail.forumService.removeTopic(ForumUtils.getSystemProvider(), topicDetail.categoryId, topicDetail.forumId, topic.getId()) ;
+			topicDetail.forumService.removeTopic(ForumSessionUtils.getSystemProvider(), topicDetail.categoryId, topicDetail.forumId, topic.getId()) ;
 			UIForumPortlet forumPortlet = topicDetail.getAncestorOfType(UIForumPortlet.class) ;
 			UIForumContainer uiForumContainer = forumPortlet.getChild(UIForumContainer.class) ;
 			uiForumContainer.setIsRenderChild(true) ;
@@ -664,7 +645,7 @@ public class UITopicDetail extends UIForm	{
 			}
 			if(posts.size() > 0) {
 				for(Post post : posts) {
-					topicDetail.forumService.removePost(ForumUtils.getSystemProvider(), topicDetail.categoryId, topicDetail.forumId, topicDetail.topicId, post.getId()) ;
+					topicDetail.forumService.removePost(ForumSessionUtils.getSystemProvider(), topicDetail.categoryId, topicDetail.forumId, topicDetail.topicId, post.getId()) ;
 					event.getRequestContext().addUIComponentToUpdateByAjax(topicDetail) ;
 				}
 			} else {

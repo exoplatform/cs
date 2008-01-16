@@ -40,5 +40,4 @@ public class UIPopupContainer extends UIContainer implements UIPopupComponent {
 	public void deActivate() throws Exception {
 		// TODO Auto-generated method stub
 	}
-
 }

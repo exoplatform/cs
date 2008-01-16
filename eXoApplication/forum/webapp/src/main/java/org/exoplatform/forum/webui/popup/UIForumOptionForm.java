@@ -21,8 +21,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.forum.ForumFormatFunction;
-import org.exoplatform.forum.ForumUtils;
+import org.exoplatform.forum.ForumFormatUtils;
+import org.exoplatform.forum.ForumSessionUtils;
 import org.exoplatform.forum.service.ForumOption;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.webui.UIFormSelectBoxForum;
@@ -63,49 +63,32 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 	public static final String FIELD_TIMEZONE = "timeZone" ;
 	
 	private ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
-	private static final String[] timeZone = {
-			"(GMT -12:00) Eniwetok, Kwajalein", 
-			"(GMT -11:00) Midway Island, Samoa", 
-			"(GMT -10:00) Hawaii", 
-			"(GMT -9:00) Alaska", 
-			"(GMT -8:00) Pacific Time (US &amp; Canada)", 
-			"(GMT -7:00) Mountain Time (US &amp; Canada)", 
-			"(GMT -6:00) Central Time (US &amp; Canada), Mexico City", 
-			"(GMT -5:00) Eastern Time (US &amp; Canada), Bogota, Lima", 
-			"(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz", 
-			"(GMT -3:30) Newfoundland", 
-			"(GMT -3:00) Brazil, Buenos Aires, Georgetown", 
-			"(GMT -2:00) Mid-Atlantic", 
-			"(GMT -1:00) Azores, Cape Verde Islands", 
-			"(GMT	0:00) Greenwich Mean Time: Dublin, London, Lisbon, Casablanca", 
-			"(GMT +1:00) Brussels, Copenhagen, Madrid, Paris", 
-			"(GMT +2:00) Kaliningrad, South Africa", 
-			"(GMT +3:00) Baghdad, Riyadh, Moscow, St. Petersburg", 
-			"(GMT +3:30) Tehran", 
-			"(GMT +4:00) Abu Dhabi, Muscat, Baku, Tbilisi", 
-			"(GMT +4:30) Kabul", 
-			"(GMT +5:00) Ekaterinburg, Islamabad, Karachi, Tashkent", 
-			"(GMT +5:30) Bombay, Calcutta, Madras, New Delhi", 
-			"(GMT +6:00) Almaty, Dhaka, Colombo", 
-			"(GMT +7:00) Bangkok, Ha Noi, Jakarta", 
-			"(GMT +8:00) Beijing, Perth, Singapore, Hong Kong", 
-			"(GMT +9:00) Tokyo, Seoul, Osaka, Sapporo, Yakutsk", 
-			"(GMT +9:30) Adelaide, Darwin", 
-			"(GMT +10:00) Eastern Australia, Guam, Vladivostok", 
-			"(GMT +11:00) Magadan, Solomon Islands, New Caledonia", 
-			"(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka", 
-		} ;
-	@SuppressWarnings({ "unchecked", "deprecation" })
 	public UIForumOptionForm() throws Exception {
-		
+	}
+	
+	@SuppressWarnings({ "unchecked", "deprecation" })
+  private void add() throws Exception {
+		String userName = ForumSessionUtils.getCurrentUser() ;
+		ForumOption forumOption = new ForumOption() ;
+		forumOption = forumService.getOption(ForumSessionUtils.getSystemProvider(), userName) ;
+		boolean isForumOption = false ;
+		if(forumOption != null) {
+			isForumOption = true ;
+		}
 		List<SelectItemOption<String>> list ;
+		String []timeZone1 = getLabel(FIELD_TIMEZONE).split("/") ;
 		list = new ArrayList<SelectItemOption<String>>() ;
-		for(String string : timeZone) {
-			list.add(new SelectItemOption<String>(string + "/timeZone", ForumFormatFunction.getTimeZoneNumberInString(string))) ;
+		for(String string : timeZone1) {
+			list.add(new SelectItemOption<String>(string + "/timeZone", ForumFormatUtils.getTimeZoneNumberInString(string))) ;
 		}
 		UIFormSelectBoxForum timeZone = new UIFormSelectBoxForum(FIELD_TIMEZONE_SELECTBOX, FIELD_TIMEZONE_SELECTBOX, list) ;
 		Date date = new Date() ;
-		double timeZoneMyHost = date.getTimezoneOffset()/ 60 ;
+		double timeZoneMyHost ;
+		if(isForumOption) {
+			timeZoneMyHost = forumOption.getTimeZone() ;
+		} else {
+			timeZoneMyHost = date.getTimezoneOffset()/ 60 ;
+		}
 		String mark = "+";
 		if(timeZoneMyHost < 0) {
 			timeZoneMyHost = -timeZoneMyHost ;
@@ -116,46 +99,66 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 			mark = "";
 		}
 		timeZone.setValue(mark + timeZoneMyHost + "0");
-
 		list = new ArrayList<SelectItemOption<String>>() ;
 		String []format = new String[] {"m-d-yyyy", "m-d-yy", "mm-dd-yy", "mm-dd-yyyy","yyyy-mm-dd", "yy-mm-dd", "dd-mm-yyyy", "dd-mm-yy",
 				"m/d/yyyy", "m/d/yy", "mm/dd/yy", "mm/dd/yyyy","yyyy/mm/dd", "yy/mm/dd", "dd/mm/yyyy", "dd/mm/yy"} ;
 		for (String frm : format) {
-			list.add(new SelectItemOption<String>((frm +" ("  + ForumFormatFunction.getFormatDate(frm, date)+")"), frm)) ;
+			list.add(new SelectItemOption<String>((frm +" ("  + ForumFormatUtils.getFormatDate(frm, date)+")"), frm)) ;
     }
 		UIFormSelectBox shortdateFormat = new UIFormSelectBox(FIELD_SHORTDATEFORMAT_SELECTBOX, FIELD_SHORTDATEFORMAT_SELECTBOX, list) ;
-		shortdateFormat.setDefaultValue("m-d-yyyy");
-
+		if(isForumOption) {
+			shortdateFormat.setValue(forumOption.getShortDateFormat());
+		} else {
+			shortdateFormat.setValue("m-d-yyyy");
+		}
 		list = new ArrayList<SelectItemOption<String>>() ;
 		format = new String[] {"ddd, MMMM dd, yyyy", "dddd, MMMM dd, yyyy", "dddd, dd MMMM, yyyy", "MMMM dd, yyyy", "dd MMMM, yyyy"};
 		String []idFormat = new String[] {"ddd,mmm,dd,yyyy", "dddd,mmm,dd,yyyy", "dddd,dd,mmm,yyyy", "mmm,dd,yyyy", "dd,mmm,yyyy"} ;
 		for (int i = 0; i < idFormat.length; i++) {
-			list.add(new SelectItemOption<String>((format[i] +" (" + ForumFormatFunction.getFormatDate(idFormat[i], date)+")"), idFormat[i])) ;
+			list.add(new SelectItemOption<String>((format[i] +" (" + ForumFormatUtils.getFormatDate(idFormat[i], date)+")"), idFormat[i])) ;
     }
 		UIFormSelectBox longDateFormat = new UIFormSelectBox(FIELD_LONGDATEFORMAT_SELECTBOX, FIELD_LONGDATEFORMAT_SELECTBOX, list) ;
-		longDateFormat.setDefaultValue("ddd,mmm,dd,yyyy");
-
+		if(isForumOption) {
+			longDateFormat.setValue(forumOption.getLongDateFormat());
+		} else {
+			longDateFormat.setValue("ddd,mmm,dd,yyyy");
+		}
 		list = new ArrayList<SelectItemOption<String>>() ;
 		list.add(new SelectItemOption<String>("12-hour format", "id12h")) ;
 		list.add(new SelectItemOption<String>("24-hour format", "id24h")) ;
 		UIFormSelectBox timeFormat = new UIFormSelectBox(FIELD_TIMEFORMAT_SELECTBOX, FIELD_TIMEFORMAT_SELECTBOX, list) ;
-		timeFormat.setDefaultValue("id12h");
-
+		if(isForumOption) {
+			timeFormat.setValue("id" + forumOption.getTimeFormat());
+		} else {
+			timeFormat.setValue("id12h");
+		}
 		list = new ArrayList<SelectItemOption<String>>() ;
 		for(int i=5; i <= 35; i = i + 5) {
 			list.add(new SelectItemOption<String>(String.valueOf(i),("id" + i))) ;
 		}
 		UIFormSelectBox maximumThreads = new UIFormSelectBox(FIELD_MAXTOPICS_SELECTBOX, FIELD_MAXTOPICS_SELECTBOX, list) ;
-		maximumThreads.setValue("id10");
-
+		if(isForumOption) {
+			maximumThreads.setValue("id" + forumOption.getMaxTopicInPage());
+		} else {
+			maximumThreads.setValue("id10");
+		}
 		list = new ArrayList<SelectItemOption<String>>() ;
 		for(int i=5; i <= 45; i = i + 5) {
 			list.add(new SelectItemOption<String>(String.valueOf(i), ("id" + i))) ;
 		}
 		UIFormSelectBox maximumPosts = new UIFormSelectBox(FIELD_MAXPOSTS_SELECTBOX, FIELD_MAXPOSTS_SELECTBOX, list) ;
-		maximumPosts.setValue("id10");
-		UIFormCheckBoxInput isShowForumJump = new UIFormCheckBoxInput<Boolean>(FIELD_FORUMJUMP_CHECKBOX, FIELD_FORUMJUMP_CHECKBOX, false);
-	
+		if(isForumOption) {
+			maximumPosts.setValue("id" + forumOption.getMaxPostInPage());
+		} else {
+			maximumPosts.setValue("id10");
+		}
+		boolean isJump = false ;
+		if(isForumOption) {
+			isJump = forumOption.getIsShowForumJump() ;
+		}
+		UIFormCheckBoxInput isShowForumJump = new UIFormCheckBoxInput<Boolean>(FIELD_FORUMJUMP_CHECKBOX, FIELD_FORUMJUMP_CHECKBOX, isJump);
+		isShowForumJump.setChecked(isJump) ;
+		
 		addUIFormInput(timeZone) ;
 		addUIFormInput(shortdateFormat) ;
 		addUIFormInput(longDateFormat) ;
@@ -163,49 +166,20 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 		addUIFormInput(maximumThreads) ;
 		addUIFormInput(maximumPosts) ;
 		addUIFormInput(isShowForumJump) ;
-		
-	}
+  }
 	
 	public UIFormSelectBoxForum getUIFormSelectBoxForum(String name) {
 		return	findComponentById(name) ;
 	}
   
 	public void activate() throws Exception {
-		// TODO Auto-generated method stub
-		setUpdate() ;
+		add() ;
 	}
 	public void deActivate() throws Exception {
 		// TODO Auto-generated method stub
 	}
 	
-	public void setUpdate() throws Exception {
-		String userName = ForumUtils.getCurrentUser() ;
-		ForumOption forumOption = new ForumOption() ;
-		forumOption = forumService.getOption(ForumUtils.getSystemProvider(), userName) ;
-		if(forumOption != null) {
-			double timeZone = forumOption.getTimeZone();
-			String mark = "+";
-			if(timeZone < 0) {
-				timeZone = -timeZone ;
-			} else if(timeZone > 0){
-				mark = "-" ;
-			} else {
-				timeZone = 0.0 ;
-				mark = "";
-			}
-			System.out.println(getLabel(FIELD_TIMEZONE));
-			getUIFormSelectBoxForum(FIELD_TIMEZONE_SELECTBOX).setValue(mark + timeZone + "0") ;
-			getUIFormSelectBox(FIELD_SHORTDATEFORMAT_SELECTBOX).setValue(forumOption.getShortDateFormat()) ;
-			getUIFormSelectBox(FIELD_LONGDATEFORMAT_SELECTBOX).setValue(forumOption.getLongDateFormat()) ;
-			getUIFormSelectBox(FIELD_TIMEFORMAT_SELECTBOX).setValue(("id" + forumOption.getTimeFormat())) ;
-			getUIFormSelectBox(FIELD_MAXTOPICS_SELECTBOX).setValue(("id" + forumOption.getMaxTopicInPage())) ;
-			getUIFormSelectBox(FIELD_MAXPOSTS_SELECTBOX).setValue(("id" + forumOption.getMaxPostInPage())) ;
-			getUIFormCheckBoxInput(FIELD_FORUMJUMP_CHECKBOX).setChecked(forumOption.getIsShowForumJump());
-		}
-	}
-	
 	static	public class SaveActionListener extends EventListener<UIForumOptionForm> {
-		@Override
     public void execute(Event<UIForumOptionForm> event) throws Exception {
 			UIForumOptionForm uiForm = event.getSource() ;
 			long maxTopic = Long.parseLong(uiForm.getUIFormSelectBox(FIELD_MAXTOPICS_SELECTBOX).getValue().substring(2)) ;
@@ -215,7 +189,7 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 			String longDateFormat = uiForm.getUIFormSelectBox(FIELD_LONGDATEFORMAT_SELECTBOX).getValue();
 			String timeFormat = uiForm.getUIFormSelectBox(FIELD_TIMEFORMAT_SELECTBOX).getValue().substring(2);
 			boolean isJump = (Boolean)uiForm.getUIFormCheckBoxInput(FIELD_FORUMJUMP_CHECKBOX).getValue() ;
-			String userName = ForumUtils.getCurrentUser() ;
+			String userName = ForumSessionUtils.getCurrentUser() ;
 			UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
 			if(userName != null && userName.length() > 0) {
 				ForumOption forumOption = new ForumOption() ;
@@ -227,7 +201,7 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 				forumOption.setMaxPostInPage(maxPost);
 				forumOption.setMaxTopicInPage(maxTopic);
 				forumOption.setIsShowForumJump(isJump);
-				uiForm.forumService.saveOption(ForumUtils.getSystemProvider(), forumOption);
+				uiForm.forumService.saveOption(ForumSessionUtils.getSystemProvider(), forumOption);
 				forumPortlet.initOption() ;
 			}
 			forumPortlet.cancelAction() ;
@@ -236,7 +210,6 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 	}
 	
 	static	public class CancelActionListener extends EventListener<UIForumOptionForm> {
-		@Override
     public void execute(Event<UIForumOptionForm> event) throws Exception {
 			UIForumOptionForm uiForm = event.getSource() ;
 			UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;

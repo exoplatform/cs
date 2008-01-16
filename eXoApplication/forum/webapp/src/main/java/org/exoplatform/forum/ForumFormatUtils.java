@@ -32,7 +32,7 @@ import java.util.TreeMap;
  * Dec 21, 2007 5:35:54 PM 
  */
 
-public class ForumFormatFunction {
+public class ForumFormatUtils {
 
 	@SuppressWarnings("deprecation")
   public static String getFormatTime(String format, Date myDate) {

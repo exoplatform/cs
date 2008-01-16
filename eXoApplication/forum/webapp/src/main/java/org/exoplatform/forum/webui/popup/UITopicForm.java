@@ -21,8 +21,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.forum.ForumFormatFunction;
-import org.exoplatform.forum.ForumUtils;
+import org.exoplatform.forum.ForumFormatUtils;
+import org.exoplatform.forum.ForumSessionUtils;
 import org.exoplatform.forum.service.BufferAttachment;
 import org.exoplatform.forum.service.ForumAttachment;
 import org.exoplatform.forum.service.ForumService;
@@ -205,11 +205,11 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
 	
 	
 	private String[] splitForForum (String str) throws Exception {
-		return ForumFormatFunction.splitForForum(str);
+		return ForumFormatUtils.splitForForum(str);
 	}
 	
 	private String unSplitForForum (String[] str) throws Exception {
-		return ForumFormatFunction.unSplitForForum(str) ;
+		return ForumFormatUtils.unSplitForForum(str) ;
 	}
 	
 	public void setUpdateTopic(Topic topic, boolean isUpdate) throws Exception {
@@ -235,7 +235,6 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
 	}
 	
 	static	public class PreviewThreadActionListener extends EventListener<UITopicForm> {
-		@Override
     public void execute(Event<UITopicForm> event) throws Exception {
 			UITopicForm uiForm = event.getSource() ;
 			int t = 0, k = 1 ;
@@ -247,7 +246,7 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
 			t = messenger.length() ;
 			if(topicTitle.length() <= 3) {k = 0;}
 			if(t >= 20 && k != 0) {
-				String userName = ForumUtils.getCurrentUser() ;
+				String userName = ForumSessionUtils.getCurrentUser() ;
 				Post postNew = new Post();
 				postNew.setOwner(userName);
 				postNew.setSubject(topicTitle);
@@ -282,7 +281,6 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
 	}
 	
 	static	public class SubmitThreadActionListener extends EventListener<UITopicForm> {
-		@Override
     public void execute(Event<UITopicForm> event) throws Exception {
 			UITopicForm uiForm = event.getSource() ;
 			UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
@@ -307,7 +305,7 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
 				String[] canView = uiForm.splitForForum(uiForm.getUIStringInput(FIELD_CANVIEW_INPUT).getValue()) ;
 				String[] canPost = uiForm.splitForForum(uiForm.getUIStringInput(FIELD_CANPOST_INPUT).getValue()) ;
 				
-				String userName = ForumUtils.getCurrentUser() ;
+				String userName = ForumSessionUtils.getCurrentUser() ;
 				Topic topicNew = new Topic();
 				topicNew.setOwner(userName);
 				topicNew.setTopicName(topicTitle);
@@ -339,12 +337,12 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
 				ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
 				if(uiForm.topicId != null && uiForm.topicId.length() > 0) {
 					topicNew.setId(uiForm.topicId);
-					forumService.saveTopic(ForumUtils.getSystemProvider(), uiForm.categoryId, uiForm.forumId, topicNew, false);
+					forumService.saveTopic(ForumSessionUtils.getSystemProvider(), uiForm.categoryId, uiForm.forumId, topicNew, false);
 					forumPortlet.getChild(UIBreadcumbs.class).setUpdataPath((uiForm.categoryId + "/" + uiForm.forumId + "/" + uiForm.topicId)) ;
 				} else {
 					topicNew.setVoteRating(0.0) ;
 					topicNew.setUserVoteRating(new String[] {}) ;
-					forumService.saveTopic(ForumUtils.getSystemProvider(), uiForm.categoryId, uiForm.forumId, topicNew, true);
+					forumService.saveTopic(ForumSessionUtils.getSystemProvider(), uiForm.categoryId, uiForm.forumId, topicNew, true);
 				}
 				forumPortlet.cancelAction() ;
 				WebuiRequestContext context = RequestContext.getCurrentInstance() ;
@@ -364,7 +362,6 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
 	}
 	
 	static public class AttachmentActionListener extends EventListener<UITopicForm> {
-		@Override
     public void execute(Event<UITopicForm> event) throws Exception {
 			UITopicForm uiForm = event.getSource() ;
 			UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
@@ -376,7 +373,6 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
 	}
 	
 	static public class RemoveAttachmentActionListener extends EventListener<UITopicForm> {
-		@Override
     public void execute(Event<UITopicForm> event) throws Exception {
 			UITopicForm uiTopicForm = event.getSource() ;
 			String attFileId = event.getRequestContext().getRequestParameter(OBJECTID);
@@ -393,7 +389,6 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
 	
 	
 	static	public class CancelActionListener extends EventListener<UITopicForm> {
-		@Override
     public void execute(Event<UITopicForm> event) throws Exception {
 			UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
 			forumPortlet.cancelAction() ;
