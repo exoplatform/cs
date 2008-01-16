@@ -47,28 +47,16 @@ import org.exoplatform.webui.form.UIForm;
     }
 )
 public class UIPrintPreview extends UIForm implements UIPopupComponent {
-  private String printMessage_ ;
+  private Message printMessage_ ;
   
   public UIPrintPreview() { }
   
-  public String getPrintMessageId() throws Exception {
-    return printMessage_;
-  }
-  
-  public void setPrintMessageId(String msgId) throws Exception {
-    printMessage_ = msgId ;
-  }
-  
   public Message getPrintMessage() throws Exception {
-    String msgId = getPrintMessageId();
-    String username = MailUtils.getCurrentUser();
-    String accountId = MailUtils.getAccountId();
-    MailService mailSrv = MailUtils.getMailService();
-    try {
-      return mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId);
-    } catch(Exception e) {
-      return null ;
-    }
+    return printMessage_ ;
+  }
+  
+  public void setPrintMessage(Message msg) throws Exception {
+    printMessage_ = msg ;
   }
   
   public DownloadService getDownloadService() { 

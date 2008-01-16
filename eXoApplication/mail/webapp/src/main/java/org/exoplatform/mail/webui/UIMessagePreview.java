@@ -240,9 +240,10 @@ public class UIMessagePreview extends UIComponent {
       UIMessagePreview uiMessagePreview = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class);
+      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
       UIPrintPreview uiPrintPreview = uiPopup.activate(UIPrintPreview.class, 700) ;
-      uiPrintPreview.setPrintMessageId(msgId) ;
+      uiPrintPreview.setPrintMessage(uiMessageList.messageList_.get(msgId)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessagePreview.class));
     }
