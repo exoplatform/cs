@@ -105,8 +105,8 @@
 			      		<% /*End Popup Menu*/ %>
 						</div>
 						
-						<div class="SelectButton">
-							<div class="IconHolder CustomLayoutIcon" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+						<div class="SelectButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+							<div class="IconHolder CustomLayoutIcon">
 								<div class="DownArrow1Icon">Custom Layout View</div>
 								<% /*Begin Popup Menu*/ %>
 									<div style="position: relative;">
