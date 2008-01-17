@@ -38,14 +38,14 @@
                 :
               </div>
               <div class="Field">
-                <%uiForm.renderField(uicomponent.FIELD_FROM_TIME)%>
+               <%uiForm.renderField(uicomponent.FIELD_TO_TIME)%>
               </div>
               <div class="Label">
                 <%=_ctx.appRes(uiForm.id + ".label." + uicomponent.FIELD_FROM_TIME)%>
                 :
               </div>
               <div class="Field">
-                <%uiForm.renderField(uicomponent.FIELD_TO_TIME)%>
+               <%uiForm.renderField(uicomponent.FIELD_FROM_TIME)%>
               </div>
               <div class="Label">
                 <%=_ctx.appRes(uiForm.id + ".label." + uicomponent.FIELD_TO_TIME)%>
@@ -59,7 +59,7 @@
               <span></span>
             </div>
           </div>
-          <table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0" exocallback="eXo.calendar.UICalendarPortlet.callbackSelectionX() ;">
+          <table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0" dateValalue="<%=uicomponent.getDateValue()%>" exocallback="eXo.calendar.UICalendarPortlet.callbackSelectionX() ;">
             <tbody>
               <tr class="TitleBar">
                 <td>

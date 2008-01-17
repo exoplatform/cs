@@ -34,6 +34,7 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
+import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 
 /**
@@ -44,7 +45,6 @@ import org.exoplatform.webui.form.UIFormInputWithActions;
  */
 @ComponentConfig(template = "app:/templates/calendar/webui/UIPopup/UIEventAttenderTab.gtmpl")
 public class UIEventAttenderTab extends UIFormInputWithActions {
-  final public static String FIELD_DATE = "date".intern() ;
   final public static String FIELD_FROM_TIME = "timeFrom".intern() ;
   final public static String FIELD_TO_TIME = "timeTo".intern();
   final public static String FIELD_CHECK_TIME = "checkTime".intern();
@@ -111,6 +111,10 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
 
   protected String[] getParticipants() { return parMap_.keySet().toArray(new String[]{}) ; } 
 
+  protected String getDateValue() {
+    DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
+    return df.format(calendar_.getTime()) ;
+  }
   protected void moveNextDay() throws Exception{
     calendar_.add(Calendar.DATE, 1) ;
     StringBuilder values = new StringBuilder(); 
