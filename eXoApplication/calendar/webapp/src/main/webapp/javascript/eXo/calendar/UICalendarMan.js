@@ -397,6 +397,9 @@ EventMan.prototype.initMonth = function(rootNode){
   var allEvents = DOMUtil.findDescendantsByClass(rootNode, 'div', 'DayContentContainer');
   // Create and init all event
   for (var i = 0; i < allEvents.length; i++) {
+    if (allEvents[i].style.display == 'none') {
+      continue;
+    }
     var eventObj = new EventObject();
     eventObj.init(allEvents[i]);
     this.events[i] = eventObj;
@@ -420,6 +423,9 @@ EventMan.prototype.initWeek = function(rootNode) {
   var allEvents = DOMUtil.findDescendantsByClass(rootNode, 'div', 'EventContainer');
   // Create and init all event
   for (var i = 0; i < allEvents.length; i++) {
+    if (allEvents[i].style.display == 'none') {
+      continue;
+    }
     var eventObj = new EventObject();
     eventObj.init(allEvents[i]);
     this.events[i] = eventObj;
@@ -497,6 +503,9 @@ GUIMan.prototype.initMonth = function(){
     var eventLabelNode = eXo.core.DOMUtil.findFirstDescendantByClass(eventObj.rootNode, 'div', 'EventLabel');
     eventLabelNode.innerHTML = eventObj.getLabel();
     eventObj.rootNode.setAttribute('title', eventObj.name);
+    for (var j=0; j<eventObj.cloneNodes.length; j++) {
+      DOMUtil.removeElement(eventObj.cloneNodes[j]);
+    }
   }
   this.rowContainerDay = DOMUtil.findFirstDescendantByClass(eXo.calendar.UICalendarMan.EventMan.rootNode, 'div', 'RowContainerDay');
   var rows = eXo.calendar.UICalendarMan.EventMan.UIMonthViewGrid.getElementsByTagName('tr');
@@ -523,6 +532,7 @@ GUIMan.prototype.initWeek = function() {
     var eventLabelNode = eXo.core.DOMUtil.findFirstDescendantByClass(eventObj.rootNode, 'div', 'EventAlldayContent');
     eventLabelNode.innerHTML = eventObj.getLabel();
 //    eventObj.rootNode.setAttribute('title', eventObj.name);
+    eventObj.rootNode.setAttribute('used', 'false');
   }
   this.eventAlldayNode = DOMUtil.findFirstDescendantByClass(EventMan.rootNode, 'td', 'EventAllday');
   this.dayNodes = EventMan.dayNodes;
@@ -652,6 +662,11 @@ GUIMan.prototype.cancelEvent = function(event) {
 
 GUIMan.prototype.paintMonth = function(){
   var weeks = eXo.calendar.UICalendarMan.EventMan.weeks;
+  // Remove old more node if exist
+  var moreNodes = eXo.core.DOMUtil.findDescendantsByClass(this.rowContainerDay, 'div', 'MoreEvent');
+  for (var i=0; i<moreNodes.length; i++) {
+    eXo.core.DOMUtil.removeElement(moreNodes[i]);
+  }
   for (var i=0; i<weeks.length; i++) {
     var curentWeek = weeks[i];
     if (curentWeek.events.length > 0) {
@@ -739,7 +754,7 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
       }
       cnt ++;
       var eventNode = eventObj.rootNode;
-      if (eventNode.getAttribute('used')) {
+      if (eventNode.getAttribute('used') == 'true') {
         eventNode = eventNode.cloneNode(true);
         eventNode.setAttribute('eventclone', 'true');
         this.rowContainerDay.appendChild(eventNode);
@@ -809,7 +824,7 @@ GUIMan.prototype.toggleMore = function() {
  */
 GUIMan.prototype.drawEventByDay = function(eventObj, startTime, endTime, dayInfo){
   var eventNode = eventObj.rootNode;
-  if (eventNode.getAttribute('used')) {
+  if (eventNode.getAttribute('used') == 'true') {
     eventNode = eventNode.cloneNode(true);
     eventNode.setAttribute('eventclone', 'true');
     // Remove checkbox on clone event
