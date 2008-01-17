@@ -391,7 +391,7 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
         String editPermission = uiContactForm.getUIStringInput(FIELD_EDITPERMISSION).getValue() ;
         if (!ContactUtils.isEmpty(editPermission))
           contact.setEditPermission(editPermission.split(","));
-        contact.setShared(true) ;
+        //contact.setShared(true) ;
       } else {
         contact.setAddressBook(new String[] { category });
       }

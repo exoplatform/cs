@@ -197,7 +197,7 @@ public class JCRDataStorage{
     if(contactNode.hasProperty("exo:tags")) contact.setTags(ValuesToStrings(contactNode.getProperty("exo:tags").getValues()));
     if(contactNode.hasProperty("exo:editPermission")) contact.setEditPermission(ValuesToStrings(contactNode.getProperty("exo:editPermission").getValues()));
     if(contactNode.hasProperty("exo:lastUpdated"))contact.setLastUpdated(contactNode.getProperty("exo:lastUpdated").getDate().getTime());
-    if(contactNode.hasProperty("exo:isShared")) contact.setShared(contactNode.getProperty("exo:isShared").getBoolean());
+    //if(contactNode.hasProperty("exo:isShared")) contact.setShared(contactNode.getProperty("exo:isShared").getBoolean());
     contact.setPath(contactNode.getPath()) ;
     if(contactNode.hasNode("image")){
       Node image = contactNode.getNode("image");
@@ -841,7 +841,7 @@ public class JCRDataStorage{
       dateTime.setTime(contact.getLastUpdated()) ;
       contactNode.setProperty("exo:lastUpdated", dateTime);
     }
-    contactNode.setProperty("exo:isShared", contact.isShared());
+    //contactNode.setProperty("exo:isShared", contact.isShared());
     
 //  save image to contact
     ContactAttachment attachment = contact.getAttachment() ;
@@ -1221,7 +1221,7 @@ public class JCRDataStorage{
               QueryManager qm = sharedHome.getSession().getWorkspace().getQueryManager();
               StringBuffer queryString = new StringBuffer("/jcr:root" + addressBook.getParent().getParent().getNode(CONTACTS).getPath() 
                                                           + "//element(*,exo:contact)[(@exo:categories='").
-                                                          append(srcAddress).append("')]") ;                 
+                                                          append(srcAddress).append("')]") ;
               Query query = qm.createQuery(queryString.toString(), Query.XPATH);
               QueryResult result = query.execute();
               iter = result.getNodes() ;
@@ -1249,10 +1249,9 @@ public class JCRDataStorage{
         copyProperties(srcNode, newNode) ;
         newNode.setProperty("exo:id", contactId);
         newNode.setProperty("exo:categories", new String[] { destAddress });
-        // save after while loop ? 
       } 
       contactHome.getSession().save();
-    } else if (destType.equals(sharedHome)) {
+    } else if (destType.equals(SHARED)) {
       while (iter.hasNext()) {
         if(sharedHome.hasNode(username)) {
           PropertyIterator sharedIter = sharedHome.getNode(username).getReferences() ;
@@ -1348,7 +1347,7 @@ public class JCRDataStorage{
       destNode.setProperty("exo:lastUpdated", dateTime);
     }*/
     if (srcNode.hasProperty("exo:lastUpdated")) destNode.setProperty("exo:lastUpdated", srcNode.getProperty("exo:lastUpdated").getDate());
-    if (srcNode.hasProperty("exo:isShared")) destNode.setProperty("exo:isShared", srcNode.getProperty("exo:isShared").getBoolean());
+    //if (srcNode.hasProperty("exo:isShared")) destNode.setProperty("exo:isShared", srcNode.getProperty("exo:isShared").getBoolean());
     
 //  save image to srcNode
     if (srcNode.hasNode("image")) {

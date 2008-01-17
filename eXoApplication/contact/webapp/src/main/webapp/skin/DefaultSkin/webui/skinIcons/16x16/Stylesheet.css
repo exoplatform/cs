@@ -125,6 +125,14 @@
 	background: url('icons/DeleteIcon.gif') no-repeat left center;
 }
 
+.UIContactPortlet .CopyIcon {
+	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/CopyIcon.gif') no-repeat left center;
+}
+
+.UIContactPortlet .PasteIcon {
+	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/PasteIcon.gif') no-repeat left center;
+}
+
 .UIContactPortlet .MoveNavigationIcon {
 	background: url('icons/MoveNavigationIcon.gif') no-repeat left center;
 }

@@ -142,6 +142,19 @@ UIContactPortlet.prototype.addressBookCallback = function(evt) {
 		}
 	}
 	
+	var canPaste = a.getAttribute("canPaste") ;
+	if (canPaste == "false") {
+		for(var i = 0 ; i < itemLength ; i ++) {
+			if (DOMUtil.hasClass(menuItems[i],"PasteIcon")) {
+				if (menuItems[i].parentNode.getAttribute("oldHref")) continue ;
+				menuItems[i].parentNode.setAttribute("oldHref", menuItems[i].parentNode.href) ;
+				menuItems[i].parentNode.href = "javascript: void(0) ;" ;
+				menuItems[i].parentNode.setAttribute("oldColor", DOMUtil.getStyle(menuItems[i].parentNode, "color")) ;
+				menuItems[i].parentNode.style.color = "#cccccc" ;
+			}
+		}
+	}
+	
 } ;
 
 UIContactPortlet.prototype.tagCallback = function(evt) {

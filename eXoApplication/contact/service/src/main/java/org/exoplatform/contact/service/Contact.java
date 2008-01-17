@@ -81,7 +81,7 @@ public class Contact {
   private String[] addressBook ;
   private String[] tags ;
   private String[] editPermission ;
-  private boolean isShared = false ;
+  //private boolean isShared = false ;
   private ContactAttachment attachment ;
   private Date lastUpdated ;
   
@@ -218,8 +218,8 @@ public class Contact {
   public void setAttachment(ContactAttachment attachment) { this.attachment = attachment; }
   public ContactAttachment getAttachment() { return attachment; }
 
-  public void setShared(boolean isShared) { this.isShared = isShared; }
-  public boolean isShared() { return isShared ; }
+/*  public void setShared(boolean isShared) { this.isShared = isShared; }
+  public boolean isShared() { return isShared ; }*/
   
   public Date getLastUpdated()  { return lastUpdated ; }
   public void   setLastUpdated(Date s) { lastUpdated = s ; }

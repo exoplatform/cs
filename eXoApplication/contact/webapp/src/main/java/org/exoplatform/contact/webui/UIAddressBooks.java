@@ -114,7 +114,11 @@ public class UIAddressBooks extends UIComponent {
     if (!groupId.equals(selectedGroup)) return true ;    
     return getAncestorOfType(UIWorkingContainer.class)
       .findFirstComponentOfType(UIContacts.class).getViewContactsList() ;
-  }  
+  }
+  public boolean canPaste() {
+    if (!ContactUtils.isEmpty(copyAddress)) return true ;
+    else return false ;
+  }
   public boolean isDefault(String groupId) { return groupId.equals(defaultGroup) ; }
   
   static public class AddAddressActionListener extends EventListener<UIAddressBooks> {
@@ -132,18 +136,20 @@ public class UIAddressBooks extends UIComponent {
       UIAddressBooks uiAddressBook = event.getSource();
       String addressBookId = event.getRequestContext().getRequestParameter(OBJECTID);
       uiAddressBook.copyAddress = addressBookId ;
-     
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent()) ;
     }
   }
   
   static public class PasteAddressActionListener extends EventListener<UIAddressBooks> {
     public void execute(Event<UIAddressBooks> event) throws Exception {
       UIAddressBooks uiAddressBook = event.getSource();
-      
       String destAddress = event.getRequestContext().getRequestParameter(OBJECTID);
       String srcAddress = uiAddressBook.copyAddress ; 
       if (destAddress.equals(srcAddress)){
-        System.out.println("\n\n hehehe \n\n");
+        UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.invalidAddress", null,
+          ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
       String srcType ;
@@ -155,9 +161,6 @@ public class UIAddressBooks extends UIComponent {
       SessionProvider sessionProvider = SessionsUtils.getSessionProvider() ;      
      
       if (uiAddressBook.privateGroupMap_.containsKey(destAddress)) {
-        System.out.println("\n\n 111111 \n\n");
-        
-        
         contactService.pasteAddressBook(sessionProvider, username, srcAddress, srcType, destAddress, "0") ;
       } else if (uiAddressBook.sharedGroupMap_.containsKey(destAddress)) {
         contactService.pasteAddressBook(sessionProvider, username, srcAddress, srcType, destAddress, "1") ;
