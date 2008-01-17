@@ -411,13 +411,14 @@ UIWeekView.prototype.initAllday = function() {
 		resizeMark = eXo.core.DOMUtil.getChildrenByTagName(eventAllday[i], "div") ;
 		if (eXo.core.DOMUtil.hasClass(resizeMark[0], "ResizableSign")) resizeMark[0].onmousedown = UIWeekView.initAllDayLeftResize ;
 		if (eXo.core.DOMUtil.hasClass(resizeMark[2], "ResizableSign")) resizeMark[2].onmousedown = UIWeekView.initAllDayRightResize ; 
+    eventAllday[i].onmousedown = eXo.calendar.UIWeekView.initAlldayDND ;
 	}
 	var EventAlldayContainer = eXo.core.DOMUtil.findFirstDescendantByClass(uiWeekViewGridAllDay,"td","EventAllday") ;
-	EventAlldayContainer.style.height = eventAllday.length * eventAllday[0].offsetHeight + "px" ;
+//	EventAlldayContainer.style.height = eventAllday.length * eventAllday[0].offsetHeight + "px" ;
 	this.weekdays = eXo.core.DOMUtil.findDescendantsByTagName(uiWeekViewGridAllDay, "th") ;
 	this.startWeek = 	UIWeekView.weekdays[1] ;
 	this.endWeek = 	UIWeekView.weekdays[7] ;
-	this.setPosition(eventAllday) ;
+//	this.setPosition(eventAllday) ;
 } ;
 
 UIWeekView.prototype.sortByWidth = function(obj) {
