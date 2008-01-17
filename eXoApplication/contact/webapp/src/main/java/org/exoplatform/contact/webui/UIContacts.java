@@ -410,12 +410,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         for (String contactId : contactIds) {
           uiContacts.contactMap.get(contactId).setContactType(type) ;
         }
-      }
-      
-      
-      
-      
-      
+      } 
       uiContacts.updateList() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
       
