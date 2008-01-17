@@ -951,15 +951,15 @@ public class JCRDataStorage{
         } else if (property.equals(Utils.EXO_ISUNREAD)) {
           Boolean isUnread = msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean();
           msgNode.setProperty(Utils.EXO_ISUNREAD, !isUnread);
+          msgNode.getSession().save();
           
-          msgNode.save();
           Node currentFolderNode = folderHome.getNode(msgNode.getProperty(Utils.EXO_FOLDERS).getValues()[0].getString());
           if (isUnread) 
             currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() - 1));
           else 
             currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() + 1));
           
-          currentFolderNode.save();
+          currentFolderNode.getSession().save();
         }
       }
     }
