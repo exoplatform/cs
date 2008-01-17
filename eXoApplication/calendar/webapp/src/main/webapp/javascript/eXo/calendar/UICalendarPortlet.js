@@ -1244,6 +1244,8 @@ UICalendarPortlet.prototype.callbackSelectionX = function() {
 	var len = Math.abs(Highlighter.firstCell.cellIndex - Highlighter.lastCell.cellIndex - 1) ;
 	var start = (Highlighter.firstCell.cellIndex - 1)*15 ;
 	var end = start + len*15 ;
+	var timeTable = DOMUtil.findAncestorByTagName(Highlighter.firstCell, "table") ;
+	var dateValue = timeTable.getAttribute("datevalue") ;
 	var uiTabContentContainer = DOMUtil.findAncestorByClass(Highlighter.startCell, "UITabContentContainer") ;
 	var UIComboboxInputs = DOMUtil.findDescendantsByClass(uiTabContentContainer, "input","UIComboboxInput") ;
 	var len = UIComboboxInputs.length ;
@@ -1251,6 +1253,11 @@ UICalendarPortlet.prototype.callbackSelectionX = function() {
 	var timeFormat = this.getTimeFormat(UIComboboxInputs[0]) ;
 	start = this.minToTime(start, timeFormat) ;
 	end = this.minToTime(end, timeFormat) ;
+	if(dateValue) {
+		var DateContainer = DOMUtil.findAncestorByTagName(uiTabContentContainer, "form") ;
+		DateContainer.from.value = dateValue ;
+		DateContainer.to.value = dateValue ;		
+	}
 	for(var i = 0 ; i < len ; i ++) {
 		name = UIComboboxInputs[i].name.toLowerCase() ;
 		if (name.indexOf("from") >= 0) UIComboboxInputs[i].value = start ;
