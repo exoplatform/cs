@@ -338,7 +338,7 @@ public class JCRDataStorage{
         for (int i = 0; i < propFolders.length; i++) {
           String folderId = propFolders[i].getString() ;
           if (currentFolderId.equals(folderId)) folderIds[i] = destFolderId ;
-          else folderIds[i] = propFolders[i].getString();
+          else folderIds[i] = folderId;
         }
         msgNode.setProperty(Utils.EXO_FOLDERS, folderIds);
         
