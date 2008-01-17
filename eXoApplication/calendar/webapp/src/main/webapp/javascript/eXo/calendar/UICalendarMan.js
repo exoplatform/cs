@@ -860,7 +860,7 @@ GUIMan.prototype.drawEventByDay = function(eventObj, startTime, endTime, dayInfo
   eventNode.setAttribute('used', 'true');
 };
 
-GUIMan.prototype.setDynamicSizeMonth = function() {
+GUIMan.prototype.setDynamicSize4Month = function() {
   var DOMUtil = eXo.core.DOMUtil;
   var events = eXo.calendar.UICalendarMan.EventMan.events;
   var cellWidth = (this.tableData[0])[0].offsetWidth - 1;
