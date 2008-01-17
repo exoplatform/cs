@@ -70,6 +70,7 @@ public interface ContactService {
   public void removeContactTag(SessionProvider sProvider, String username, List<String>contactIds, List<String> tags) throws Exception ;
   public void updateTag(SessionProvider sProvider, String username,Tag tag) throws Exception ;
   
+  public void pasteAddressBook(SessionProvider sProvider, String srcAddress, String srcType, String destAddress, String destType) throws Exception ;
   public ContactImportExport getContactImportExports(String type) ;
   public String[] getImportExportType() throws Exception ;
   

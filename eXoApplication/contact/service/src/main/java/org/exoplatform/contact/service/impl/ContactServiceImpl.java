@@ -186,6 +186,9 @@ public class ContactServiceImpl implements ContactService {
     return storage_.getPublicContactsByAddressBook(sProvider, groupId) ;
   }
   
+  public void pasteAddressBook(SessionProvider sProvider, String srcAddress, String srcType, String destAddress, String destType) throws Exception {
+  	
+  }
   
   public ContactImportExport getContactImportExports(String type) {
     return contactImportExport_.get(type) ;

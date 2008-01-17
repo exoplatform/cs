@@ -1197,4 +1197,8 @@ public class JCRDataStorage{
     
     return new DataPageList(contacts, 10, null, false) ;    
   }
+  
+  public void pasteAddressBook(SessionProvider sProvider, String srcAddress, String srcType, String destAddress, String destType) throws Exception {
+  	
+  }
 }
