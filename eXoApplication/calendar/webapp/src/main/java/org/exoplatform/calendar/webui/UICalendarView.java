@@ -299,7 +299,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     return CalendarUtils.isSameDate(value1, value2) ;
   }
   public void setCurrentCalendar(Calendar value) {calendar_ = value ;}
-  protected Calendar getCurrentCalendar() {return calendar_ ;}
+  public Calendar getCurrentCalendar() {return calendar_ ;}
   protected Date getCurrentDate() {return calendar_.getTime() ;} 
   protected void setCurrentDate(Date value) {calendar_.setTime(value) ;} 
 

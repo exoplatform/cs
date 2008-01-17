@@ -44,6 +44,7 @@ import org.exoplatform.webui.form.UIFormInputWithActions;
  */
 @ComponentConfig(template = "app:/templates/calendar/webui/UIPopup/UIEventAttenderTab.gtmpl")
 public class UIEventAttenderTab extends UIFormInputWithActions {
+  final public static String FIELD_DATE = "date".intern() ;
   final public static String FIELD_FROM_TIME = "timeFrom".intern() ;
   final public static String FIELD_TO_TIME = "timeTo".intern();
   final public static String FIELD_CHECK_TIME = "checkTime".intern();

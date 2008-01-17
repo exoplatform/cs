@@ -78,4 +78,8 @@ public class UIListContainer extends UIContainer implements CalendarView {
 
   public boolean isDisplaySearchResult() {return getChild(UIListView.class).isDisplaySearchResult() ;}
   public void setDisplaySearchResult(boolean show) {getChild(UIListView.class).setDisplaySearchResult(show) ;}
+
+  public Calendar getCurrentCalendar() {
+    return  getChild(UIListView.class).getCurrentCalendar() ;
+  }
 }
