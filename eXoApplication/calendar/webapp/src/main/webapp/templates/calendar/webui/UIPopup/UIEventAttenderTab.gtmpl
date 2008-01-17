@@ -119,14 +119,13 @@
               </tr>
               <% Map parMap = uicomponent.getMap() ; %>
               <%for(String p in uicomponent.getParticipants()) {%>
-              <tr busytime="<%=parMap.get(p) ;%>">
+              <tr busytime="<%=parMap.get(p);%>" userTimeZone="<%=uicomponent.getUserTimeZone(p)%>">
                 <td>
                   <div class="LeftSide">
                     <div class="Input">
                       <%uiForm.renderField(p)%>
                     </div>
-                    <div class="Title">
-                      $p</div>
+                    <div class="Title">$p</div>
                     <div style="clear: left;">
                       <span></span>
                     </div>

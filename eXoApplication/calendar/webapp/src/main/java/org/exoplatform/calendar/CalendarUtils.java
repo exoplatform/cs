@@ -102,10 +102,8 @@ public class CalendarUtils {
     Calendar  calendar = GregorianCalendar.getInstance() ;
     calendar.setLenient(false) ;
     try {
-      //CalendarSetting setting = getCalendarService().getCalendarSetting(SessionsUtils.getSessionProvider(), getCurrentUser()) ;
-      //System.out.println("setting " + setting.getTimeZone() +" "+ setting.getLocation());
-      //calendar.setTimeZone(TimeZone.getTimeZone(setting.getTimeZone())) ;
-      //System.out.println("\n\n calendar by zone "  + calendar.getTime());
+     /* CalendarSetting setting = getCalendarService().getCalendarSetting(SessionsUtils.getSessionProvider(), getCurrentUser()) ;
+      calendar.setTimeZone(TimeZone.getTimeZone(setting.getTimeZone())) ;*/
     } catch (Exception e) {
       e.printStackTrace() ;
     }
@@ -284,6 +282,11 @@ public class CalendarUtils {
     String.format("%s",portletRequestContext.getRequest().getServerPort()) 
     + "/" ;
     return url ;
+  }
+  static public String getTimeZone(String timezone) {
+    TimeZone timeZone = TimeZone.getTimeZone(timezone) ;
+    int rawOffset = timeZone.getRawOffset() / 60000;
+    return String.valueOf(rawOffset) ;
   }
 
   static public class SelectComparator implements Comparator{

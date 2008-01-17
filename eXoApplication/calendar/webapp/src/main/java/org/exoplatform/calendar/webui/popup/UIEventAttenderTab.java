@@ -102,8 +102,8 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
       Map<String, String> parsMap = 
         CalendarUtils.getCalendarService().checkFreeBusy(SessionsUtils.getSystemProvider(), eventQuery) ;
       parMap_.putAll(parsMap) ;
+      System.out.println("parsMap " + parsMap.values().toString());
     }
-
   }
 
 
@@ -168,5 +168,8 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
   public void processRender(WebuiRequestContext arg0) throws Exception {
     super.processRender(arg0);
   }
-
+  public String getUserTimeZone(String username) throws Exception {
+   String timeZone = CalendarUtils.getCalendarService().getCalendarSetting(SessionsUtils.getSessionProvider(), username).getTimeZone() ;
+    return CalendarUtils.getTimeZone(timeZone) ;
+  }
 }
