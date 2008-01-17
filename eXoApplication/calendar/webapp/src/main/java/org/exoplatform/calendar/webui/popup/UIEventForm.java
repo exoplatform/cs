@@ -379,12 +379,14 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   }
   protected void setEventFromDate(Date date, String timeFormat) {
     UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
+    UIEventAttenderTab eventAttenderTab = getChildById(TAB_EVENTATTENDER) ;
     UIFormDateTimeInput fromField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_FROM) ;
     UIFormComboBox timeField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_FROM_TIME) ;
     DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     fromField.setValue(df.format(date)) ;
     df = new SimpleDateFormat(timeFormat) ;
     timeField.setValue(df.format(date)) ;
+    eventAttenderTab.setEventFromDate(date, timeFormat) ;
   }
 
   protected Date getEventToDate(String timeFormat) throws Exception {
@@ -400,12 +402,14 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   }
   protected void setEventToDate(Date date, String timeFormat) {
     UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
+    UIEventAttenderTab eventAttenderTab = getChildById(TAB_EVENTATTENDER) ;
     UIFormDateTimeInput toField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_TO) ;
     UIFormComboBox timeField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_TO_TIME) ;
     DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     toField.setValue(df.format(date)) ;
     df = new SimpleDateFormat(timeFormat) ;
     timeField.setValue(df.format(date)) ;
+    eventAttenderTab.setEventToDate(date, timeFormat) ;
   }
 
   protected String getEventToDateValue () {

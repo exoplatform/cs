@@ -16,8 +16,11 @@
  **/
 package org.exoplatform.calendar.webui.popup;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,51 +71,51 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
   protected UIFormComboBox getUIFormComboBox(String id) {
     return findComponentById(id) ;
   }
-  
+
   protected void updateParticipants(String values) throws Exception{
-  	Map<String, String> tmpMap = new HashMap<String, String>() ;
-  	tmpMap.putAll(parMap_) ;
-  	for(String id : parMap_.keySet()) {
-  		removeChildById(id) ;
-  	}
-  	List<String> newPars = new ArrayList<String>() ;
-  	parMap_.clear() ;
-  	if(values != null && values.length() > 0) {
-  		for(String par : values.split(",")) {
-  			String vl = tmpMap.get(par) ;
-  			parMap_.put(par, vl) ;
-  			if(vl == null) newPars.add(par) ;  			
-  		}
-  	}
-  	
-  	for(String id : parMap_.keySet()) {
-  		addUIFormInput(new UIFormCheckBoxInput<Boolean>(id, id, false)) ;
-  	}
-  	boolean isCheckFreeTime = getUIFormCheckBoxInput(FIELD_CHECK_TIME).isChecked() ;
-  	if(newPars.size() > 0 && isCheckFreeTime) {
-  		EventQuery eventQuery = new EventQuery() ;
-    	eventQuery.setFromDate(CalendarUtils.getBeginDay(calendar_)) ;
-    	eventQuery.setToDate(CalendarUtils.getEndDay(calendar_)) ;
-    	eventQuery.setParticipants(newPars.toArray(new String[]{})) ;
-    	eventQuery.setNodeType("exo:calendarPublicEvent") ;
-    	Map<String, String> parsMap = 
-    		CalendarUtils.getCalendarService().checkFreeBusy(SessionsUtils.getSystemProvider(), eventQuery) ;
-    	parMap_.putAll(parsMap) ;
-  	}
-  	
+    Map<String, String> tmpMap = new HashMap<String, String>() ;
+    tmpMap.putAll(parMap_) ;
+    for(String id : parMap_.keySet()) {
+      removeChildById(id) ;
+    }
+    List<String> newPars = new ArrayList<String>() ;
+    parMap_.clear() ;
+    if(values != null && values.length() > 0) {
+      for(String par : values.split(",")) {
+        String vl = tmpMap.get(par) ;
+        parMap_.put(par, vl) ;
+        if(vl == null) newPars.add(par) ;  			
+      }
+    }
+
+    for(String id : parMap_.keySet()) {
+      addUIFormInput(new UIFormCheckBoxInput<Boolean>(id, id, false)) ;
+    }
+    boolean isCheckFreeTime = getUIFormCheckBoxInput(FIELD_CHECK_TIME).isChecked() ;
+    if(newPars.size() > 0 && isCheckFreeTime) {
+      EventQuery eventQuery = new EventQuery() ;
+      eventQuery.setFromDate(CalendarUtils.getBeginDay(calendar_)) ;
+      eventQuery.setToDate(CalendarUtils.getEndDay(calendar_)) ;
+      eventQuery.setParticipants(newPars.toArray(new String[]{})) ;
+      eventQuery.setNodeType("exo:calendarPublicEvent") ;
+      Map<String, String> parsMap = 
+        CalendarUtils.getCalendarService().checkFreeBusy(SessionsUtils.getSystemProvider(), eventQuery) ;
+      parMap_.putAll(parsMap) ;
+    }
+
   }
 
-  
+
   private Map<String, String> getMap(){ return parMap_ ; }
-  
+
   protected String[] getParticipants() { return parMap_.keySet().toArray(new String[]{}) ; } 
 
   protected void moveNextDay() throws Exception{
     calendar_.add(Calendar.DATE, 1) ;
     StringBuilder values = new StringBuilder(); 
     for(String par : parMap_.keySet()) {
-    	if(values != null && values.length() > 0) values.append(",") ;
-    	values.append(par) ;    	
+      if(values != null && values.length() > 0) values.append(",") ;
+      values.append(par) ;    	
     }
     parMap_.clear() ;
     updateParticipants(values.toString()) ;
@@ -121,13 +124,13 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
     calendar_.add(Calendar.DATE, -1) ;
     StringBuilder values = new StringBuilder(); 
     for(String par : parMap_.keySet()) {
-    	if(values != null && values.length() > 0) values.append(",") ;
-    	values.append(par) ;    	
+      if(values != null && values.length() > 0) values.append(",") ;
+      values.append(par) ;    	
     }
     parMap_.clear() ;
     updateParticipants(values.toString()) ;
   }
-  
+
   private UIForm getParentFrom() {
     return getAncestorOfType(UIForm.class) ;
   }
@@ -139,7 +142,20 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
   private String getFromFieldValue() {
     return getUIFormComboBox(FIELD_FROM_TIME).getValue() ;
   }
-
+  protected void setEventFromDate(Date date, String timeFormat) {
+    UIFormComboBox timeField = getChildById(FIELD_FROM_TIME) ;
+    DateFormat df = new SimpleDateFormat(timeFormat) ;
+    timeField.setValue(df.format(date)) ;
+  }
+  private boolean getEventAllDate() {
+    return false;
+  }
+  protected void setEventToDate(Date date, String timeFormat) {
+    UIFormComboBox timeField = getChildById(FIELD_TO_TIME) ;
+    DateFormat df = new SimpleDateFormat(timeFormat) ;
+    timeField.setValue(df.format(date)) ;
+  }  
+  
   private boolean isAllDateFieldChecked() {
     return getUIFormCheckBoxInput(FIELD_DATEALL).isChecked() ;
   }
@@ -147,6 +163,5 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
   public void processRender(WebuiRequestContext arg0) throws Exception {
     super.processRender(arg0);
   }
-
 
 }

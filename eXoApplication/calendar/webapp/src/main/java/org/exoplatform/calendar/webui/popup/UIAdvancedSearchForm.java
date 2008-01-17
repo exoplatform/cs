@@ -16,7 +16,10 @@
  **/
 package org.exoplatform.calendar.webui.popup;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -108,10 +111,8 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     }
     addChild(new UIFormSelectBox(CATEGORY, CATEGORY, options)) ;
     addChild(new UIFormSelectBox(PRIORITY, PRIORITY, getPriority())) ;
-    java.util.Calendar calendar = CalendarUtils.getInstanceTempCalendar() ;
-    addChild( new UIFormDateTimeInput(FROMDATE, FROMDATE, calendar.getTime(), false)) ;
-    calendar.add(java.util.Calendar.DATE, 1) ;
-    addChild(new UIFormDateTimeInput(TODATE, TODATE, calendar.getTime(), false)) ;
+    addChild( new UIFormDateTimeInput(FROMDATE, FROMDATE, null, false)) ;
+    addChild(new UIFormDateTimeInput(TODATE, TODATE, null, false)) ;
   }
   public void activate() throws Exception {}
   public void deActivate() throws Exception {
@@ -120,6 +121,32 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
   public void setSearchValue(String searchValue) {
     getUIStringInput(TEXT).setValue(searchValue) ;
   }  
+  public String getFromDateValue() {
+    return getUIFormDateTimeInput(FROMDATE).getValue() ;
+  }
+  public String getToDateValue() {
+    return getUIFormDateTimeInput(TODATE).getValue() ;
+  }
+  public Date getFromDate() {
+    DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
+    if(getFromDateValue() != null) 
+      try {
+        return df.parse(getFromDateValue()) ;
+      }  catch (Exception e) {
+        return null ;
+      }
+      return null ;
+  }
+  public Date getToDate() {
+    DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
+    if(getToDateValue() != null) 
+      try {
+        return df.parse(getToDateValue()) ;
+      }  catch (Exception e) {
+        return null ;
+      }
+      return null ;
+  }
   private List<SelectItemOption<String>> getPriority() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     options.add(new SelectItemOption<String>("", "")) ;
@@ -142,24 +169,20 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
   static  public class SearchActionListener extends EventListener<UIAdvancedSearchForm> {
     public void execute(Event<UIAdvancedSearchForm> event) throws Exception {
       UIAdvancedSearchForm uiForm = event.getSource() ;
+
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;   
-      if(!CalendarUtils.isEmpty(uiForm.getUIFormDateTimeInput(uiForm.FROMDATE).getValue()) && 
-          uiForm.getUIFormDateTimeInput(uiForm.FROMDATE).getCalendar() == null){
+      if(!CalendarUtils.isEmpty(uiForm.getFromDateValue()) && uiForm.getFromDate() == null){
         uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.from-date-time-invalid", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }  
-      if(!CalendarUtils.isEmpty(uiForm.getUIFormDateTimeInput(uiForm.TODATE).getValue()) &&
-          uiForm.getUIFormDateTimeInput(uiForm.TODATE).getCalendar() == null)  {
+      if(!CalendarUtils.isEmpty(uiForm.getToDateValue()) && uiForm.getToDate() == null)  {
         uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.to-date-time-invalid", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      if(uiForm.getUIFormDateTimeInput(uiForm.FROMDATE).getCalendar() != null &&
-          uiForm.getUIFormDateTimeInput(uiForm.TODATE).getCalendar() != null
-      ) {
-        if(uiForm.getUIFormDateTimeInput(uiForm.FROMDATE).getCalendar().getTimeInMillis() >= 
-          uiForm.getUIFormDateTimeInput(uiForm.TODATE).getCalendar().getTimeInMillis()) {
+      if(uiForm.getFromDate() != null && uiForm.getToDate() != null) {
+        if(uiForm.getFromDate().after(uiForm.getToDate())){
           uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.date-time-invalid", null)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
@@ -173,8 +196,22 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
         if(calendarId != null && calendarId.trim().length() > 0) query.setCalendarId(new String[]{calendarId}) ;
         String categoryId = uiForm.getUIFormSelectBox(UIAdvancedSearchForm.CATEGORY).getValue() ;
         if(categoryId != null && categoryId.trim().length() > 0) query.setCategoryId(new String[]{categoryId}) ;
-        query.setFromDate(uiForm.getUIFormDateTimeInput(UIAdvancedSearchForm.FROMDATE).getCalendar()) ;
-        query.setToDate(uiForm.getUIFormDateTimeInput(UIAdvancedSearchForm.TODATE).getCalendar()) ;
+        java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
+        if(uiForm.getFromDate() != null && uiForm.getToDate() != null) {
+          cal.setTime(uiForm.getFromDate()) ;
+          query.setFromDate(CalendarUtils.getBeginDay(cal)) ;
+          cal.setTime(uiForm.getToDate()) ;
+          query.setToDate(CalendarUtils.getEndDay(cal)) ;
+        } else if (uiForm.getFromDate() !=null) {
+          cal.setTime(uiForm.getFromDate()) ;
+          query.setFromDate(CalendarUtils.getBeginDay(cal)) ;
+          query.setToDate(CalendarUtils.getEndDay(cal)) ;
+        } else if (uiForm.getToDate() !=null) {
+          cal.setTime(uiForm.getToDate()) ;
+          query.setFromDate(CalendarUtils.getBeginDay(cal)) ;
+          query.setToDate(CalendarUtils.getEndDay(cal)) ;
+        }
+
         String priority = uiForm.getUIFormSelectBox(UIAdvancedSearchForm.PRIORITY).getValue() ;
         if(priority != null && priority.trim().length() > 0) query.setPriority(priority) ;
         String username = CalendarUtils.getCurrentUser() ;

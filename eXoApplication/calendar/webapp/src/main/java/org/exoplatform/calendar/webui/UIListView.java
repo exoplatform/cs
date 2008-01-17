@@ -72,6 +72,7 @@ public class UIListView extends UICalendarView {
   private String selectedEvent_ = null ;
   private boolean isShowEventAndTask = true ;
   private boolean isSearchResult = false ;
+  private String lastViewId_ = null ;
   //private long currentPage_ = 1 ;
   public UIListView() throws Exception{
     if(getEvents().length > 0 ) {
@@ -200,6 +201,13 @@ public class UIListView extends UICalendarView {
       if(checkbox != null && checkbox.isChecked()) events.add(ce) ;
     }
     return events ; 
+  }
+  public void setLastViewId(String lastViewId_) {
+    this.lastViewId_ = lastViewId_;
+  }
+
+  public String getLastViewId() {
+    return lastViewId_;
   }
   static public class CloseSearchActionListener extends EventListener<UIListView> {
     public void execute(Event<UIListView> event) throws Exception {
