@@ -280,7 +280,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   public String getReplyContent(Message msg) {
     String content = msg.getMessageBody();
     if (isVisualEditor) {
-      content = "<br><br><div> On Jan 15, 2008 2:34 PM, " + msg.getFrom() + " wrote: <br>" ;
+      content = "<br><br><div> On " + Utils.formatDate("MMM dd, yyyy HH:mm aaa", msg.getSendDate()) + ", " + msg.getFrom() + " wrote: <br>" ;
       content += "<blockquote style=\"border-left:1px #cccccc solid ; margin-left: 10px; padding-left: 5px;\">" + msg.getMessageBody() + "</blockquote></div>" ;
     }
     return content ;
