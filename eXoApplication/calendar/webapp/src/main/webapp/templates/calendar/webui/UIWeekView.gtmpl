@@ -39,38 +39,44 @@
 	DateFormat wf = new  SimpleDateFormat("EEE, dd/MMM") ;
 %>
 <div class="UIWeekView">
-	<div class="TitleBar">	
-		<table>
-			<body>
-				<tr>
-					<td>
-						<a href="$linkDayPrevious">
-							<div class="BackIcon" title="<%=uiform.getLabel('previousWeek')%>"><span></span></div>
-						</a>
-					</td>
-					<td>
-						<div class="Title">Week $weekNumber,
-							<a href="<%=uicomponent.event("GotoDate",yearViewAction)%>">
-									$currentYear
-							</a>
-						</div>
-					</td>
-					<td>
-						<a href="$linkDayNext">
-							<div class="NextIcon" title="<%=uiform.getLabel('nextWeek')"><span></span></div>
-						</a>
-					</td>
-				</tr>
-			</body>
-		</table>	
-	</div>
-	<div class="EventWeekContainer" >
-		<div class="EventWeekBar">
-			<table class="UIGrid" id="UIWeekViewGridAllDay" cellspacing="0" borderspacing="0" eXoCallback="eXo.calendar.UIWeekView.callbackSelectionX();">
-				<thead>
-					<tr>
-						<th style="width: 55px;"></th>
-						<%			
+  <div class="TitleBar">
+    <table>
+      <tbody>
+        <tr>
+          <td>
+            <a href="$linkDayPrevious">
+              <div class="BackIcon" title="<%=uiform.getLabel('previousWeek')%>">
+                <span></span>
+              </div>
+            </a>
+          </td>
+          <td>
+            <div class="Title">
+              <%=uiform.getLabel('Week')%>
+              $weekNumber, <a href="<%=uicomponent.event('GotoDate',yearViewAction)%>">$currentYear
+              </a>
+            </div>
+          </td>
+          <td>
+            <a href="$linkDayNext">
+              <div class="NextIcon" title="<%=uiform.getLabel('nextWeek')%>">
+                <span></span>
+              </div>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="EventWeekContainer">
+    <div class="EventWeekBar">
+      <table class="UIGrid" id="UIWeekViewGridAllDay" cellspacing="0" borderspacing="0"
+        exocallback="eXo.calendar.UIWeekView.callbackSelectionX();">
+        <thead>
+          <tr>
+            <th style="width: 55px;">
+            </th>
+            <%			
 							cl = uicomponent.getBeginDateOfWeek() ;				
 						  t = 0 ; 
 							while(t++ <7) {
@@ -84,21 +90,28 @@
 							  if(cl.get(Calendar.DAY_OF_WEEK) == 1){
 							   styleCss = "color:red;" ;
 							  }
-						%>
-							<th class="$cssClass UICellBlock" startTime="<%=cl.getTimeInMillis()%>">
-								<a href="$actionLink" style="$styleCss"><%=wf.format(cl.getTime())%></a>
-							</th>
-						<%
+            %>
+            <th class="$cssClass UICellBlock" starttime="<%=cl.getTimeInMillis()%>">
+              <a href="$actionLink" style="$styleCss">
+                <%=wf.format(cl.getTime())%>
+              </a>
+            </th>
+            <%
 							cl.add(Calendar.DATE,1) ;
 						 }
-						%>
-					</tr>
-				</thead>
-				<tbody >
-					<tr>
-							<td ><div  style="width: 55px;"><span></span></div></td>
-							<td colspan="7" class="EventAllday"><div style="position: relative ;">
-								<% for (event in uicomponent.getEventList().values()) {
+            %>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div style="width: 55px;">
+                <span></span>
+              </div>
+            </td>
+            <td colspan="7" class="EventAllday">
+              <div style="position: relative;">
+                <% for (event in uicomponent.getEventList().values()) {
 									begindate =  event.getFromDateTime().getTime() ;  
 									enddate = event.getToDateTime().getTime() ; 
 									leftClass = "LeftResizeEvent ResizableSign" ;
@@ -114,25 +127,34 @@
 									color = uicomponent.getColors().get(event.getCalendarId()) ;
 									title = tf.format(event.getFromDateTime()) + "->" + tf.format(event.getToDateTime())+ ":&#013; " + event.summary ;
 									actionLink =  uicomponent.event("SaveEvent",event.getId()+"&calendarId="+event.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
-								%>	
-										 <div class="EventContainer EventAlldayContainer WeekViewEventBoxes $color" eventCat="$event.eventCategoryId" style="position: absolute ; border: solid 1px grey ;" calType="$event.calType"  eventid="$event.id" calid="$event.calendarId" starttime="$begindate" endtime="$enddate"  style="height: 22px;" title="$title" actionlink="$actionLink">
-										 	<div class="$leftClass"><span></span></div>
-										 	<div class="EventAlldayContent" style="float: left;">
-											 	<%=event.summary%>
-											 </div>
-										 	<div class="$rightClass"><span></span></div>
-										 	<div style="clear: left;"><span></span></div>
-										 </div>
-								<%}%>
-							</div></td>
-					</tr>
-						
-				</tbody>
-			</table>
-		</div>
-		<div class="EventWeekContent" style="position: relative ;">
-			<div class="EventBoard">
-			<%
+                %>
+                <div class="EventContainer EventAlldayContainer WeekViewEventBoxes $color" eventcat="$event.eventCategoryId"
+                  style="position: absolute; border: solid 1px grey;" caltype="$event.calType" eventid="$event.id"
+                  calid="$event.calendarId" starttime="$begindate" endtime="$enddate" style="height: 22px;"
+                  title="$title" actionlink="$actionLink">
+                  <div class="$leftClass">
+                    <span></span>
+                  </div>
+                  <div class="EventAlldayContent" style="float: left;">
+                    <%=event.summary%>
+                  </div>
+                  <div class="$rightClass">
+                    <span></span>
+                  </div>
+                  <div style="clear: left;">
+                    <span></span>
+                  </div>
+                </div>
+                <%}%>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="EventWeekContent" style="position: relative;">
+      <div class="EventBoard">
+        <%
 				cl = uicomponent.getBeginDateOfWeek() ;				
 			  t = 0 ; 
 				while(t++ <7) {
@@ -155,24 +177,38 @@
 					  endTime = cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) ;
 						color = uicomponent.getColors().get(event.getCalendarId()) ;
 						actionLink =  uicomponent.event("UpdateEvent",event.getId()+"&calendarId="+event.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
-				%>
-
-							<div class="EventContainerBorder WeekViewEventBoxes $color" eventIndex="$dayOfWeek" style="position:absolute ;" eventCat="$event.eventCategoryId" calType="$event.calType" eventid="$event.id" calid="$event.calendarId" actionlink="$actionLink" unselectable="on" starttime="$beginTime" endtime="$endTime">
-								<div class="<%=(uicomponent.getPriority(event.getPriority()) == null)? "" :  uicomponent.getPriority(event.getPriority())%>PriorityIcon" style="float:left;"><span></span></div>
-								<div class="EventContainerBar EventTitle" title="$begindate -> $enddate " ><p unselectable="on">$begin -> $end</p></div>
-								<div style="clear:left;"><span></span></div>
-								<div class="EventContainer">$event.summary</div>
-								<div class="ResizeEventContainer" unselectable="on"><span></span></div>
-							</div>
-						<% }
+        %>
+        <div class="EventContainerBorder WeekViewEventBoxes $color" eventindex="$dayOfWeek"
+          style="position: absolute;" eventcat="$event.eventCategoryId" caltype="$event.calType"
+          eventid="$event.id" calid="$event.calendarId" actionlink="$actionLink" unselectable="on"
+          starttime="$beginTime" endtime="$endTime">
+          <div class="<%=(uicomponent.getPriority(event.getPriority()) == null)? "" :  uicomponent.getPriority(event.getPriority())%>PriorityIcon"
+            style="float: left;">
+            <span></span>
+          </div>
+          <div class="EventContainerBar EventTitle" title="$begindate -> $enddate ">
+            <p unselectable="on">
+              $begin -> $end</p>
+          </div>
+          <div style="clear: left;">
+            <span></span>
+          </div>
+          <div class="EventContainer">
+            $event.summary</div>
+          <div class="ResizeEventContainer" unselectable="on">
+            <span></span>
+          </div>
+        </div>
+        <% }
 							}
 					cl.add(Calendar.DATE, 1) ;
 					}
-						%>
-			</div>
-			<table class="UIGrid" id="UIWeekViewGrid" lastUpdatedId="<%=uicomponent.getLastUpdatedEventId()%>" cellspacing="0" borderspacing="0">
-				<tbody >
-					<% 
+        %>
+      </div>
+      <table class="UIGrid" id="UIWeekViewGrid" lastupdatedid="<%=uicomponent.getLastUpdatedEventId()%>"
+        cellspacing="0" borderspacing="0">
+        <tbody>
+          <% 
 					boolean flag = false ;
 					style = "" ;
 					if(isShowWorkingTime) {style = "WorkOffTime" ;}	
@@ -183,12 +219,14 @@
         		}
 						if(flag) {styleClass = "TdDotLine" ;}
 						else {styleClass = "TdLine"}
-					%>
-					<tr class="$style">
-						<td class="TdTime">
-							<div  class="TdTime"><%if(!flag) {println time;}%></div>
-						</td>
-						<%
+          %>
+          <tr class="$style">
+            <td class="TdTime">
+              <div class="TdTime">
+                <%if(!flag) {println time;}%>
+              </div>
+            </td>
+            <%
 					 		cl = uicomponent.getBeginDateOfWeek() ;				
 						  t = 0 ; 
 							while(t++ <7) {
@@ -202,67 +240,66 @@
 					 		  } else {
 					 		  	cssClass = "Weekday" ;
 					 		  }
-					 	%>
-					 	 		<td startTime="<%=cl.getTimeInMillis()%>" eventIndex="$dayOfWeek" class="$styleClass $cssClass $style">
-									<span></span>
-								</td>
-					 	<%		
+            %>
+            <td starttime="<%=cl.getTimeInMillis()%>" eventindex="$dayOfWeek" class="$styleClass $cssClass $style">
+              <span></span>
+            </td>
+            <%		
 					 			cl.add(Calendar.DATE, 1) ;
 					 		}
 					 	flag = ! flag ;
 					 }
-					 %>
-					 
-					</tr>	
-					 
-				</tbody>
-			</table>
-		</div>
-	</div>
-</div> 
-<%uiform.end();%>	 
-  		<% /*Begin Popup Menu*/ %>
-  			
-  				<div class="UIRightClickPopupMenu" id="UIWeekViewRightMenu" eXoCallback="eXo.calendar.UICalendarPortlet.weekViewCallback">
-  					<div class="UIContextMenuContainer">
-						  <div class="TopLeftRightClickPopupMenu">
-				  			<div class="TopRightRightClickPopupMenu">
-				    			<div class="TopCenterRightClickPopupMenu"><span></span></div>
-				  			</div>
-							</div> 
-			        <div class="MiddleLeftRightClickPopupMenu">
-			          <div class="MiddleRightRightClickPopupMenu">
-			      			<div class="UIRightPopupMenuContainer">
-			      			<%
+            %>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<%uiform.end();%>
+<% /*Begin Popup Menu*/ %>
+<div class="UIRightClickPopupMenu" id="UIWeekViewRightMenu" exocallback="eXo.calendar.UICalendarPortlet.weekViewCallback">
+  <div class="UIContextMenuContainer">
+    <div class="TopLeftRightClickPopupMenu">
+      <div class="TopRightRightClickPopupMenu">
+        <div class="TopCenterRightClickPopupMenu">
+          <span></span>
+        </div>
+      </div>
+    </div>
+    <div class="MiddleLeftRightClickPopupMenu">
+      <div class="MiddleRightRightClickPopupMenu">
+        <div class="UIRightPopupMenuContainer">
+          <%
 			      				for(String act : uicomponent.getQuickEditMenu()) {
 			      				link = uicomponent.event(act,uicomponent.id,"id&$uicomponent.CALENDARID=calId&calType=caltype") ;
 			      				icon = act + "EventIcon" ;
-			      			%>
-			      				<a href="$link" style="display:none;" class="EventActionMenu">
-			          				<div class="ItemIcon $icon">
-			          				 <%=_ctx.appRes("ContextMenu.label."+act)%>
-			          				</div>
-			      			  </a>
-			      			<%}%>
-				      			 <a href="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_EVENT&startTime=beginTime")%>">
-						           <div class="ItemIcon QuickAddEvent">
-						           	<%=_ctx.appRes("ContextMenu.label.addEvent")%>
-						           </div>
-					           </a>
-						         <a href="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_TASK&startTime=beginTime")%>">
-						            <div class="ItemIcon QuickAddTask">
-						            	<%=_ctx.appRes("ContextMenu.label.addTask")%>
-						            </div>
-						         </a>
-									</div>
-		      		</div>
-		    		</div>
-			      <div class="BottomLeftRightClickPopupMenu">
-			        <div class="BottomRightRightClickPopupMenu">
-			          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
-			        </div>
-			      </div>
-  					</div>
-  				</div>
-
-  		<% /*End Popup Menu*/ %>
+          %>
+          <a href="$link" style="display: none;" class="EventActionMenu">
+            <div class="ItemIcon $icon">
+              <%=_ctx.appRes("ContextMenu.label."+act)%>
+            </div>
+          </a>
+          <%}%>
+          <a href="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_EVENT&startTime=beginTime")%>">
+            <div class="ItemIcon QuickAddEvent">
+              <%=_ctx.appRes("ContextMenu.label.addEvent")%>
+            </div>
+          </a><a href="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_TASK&startTime=beginTime")%>">
+            <div class="ItemIcon QuickAddTask">
+              <%=_ctx.appRes("ContextMenu.label.addTask")%>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="BottomLeftRightClickPopupMenu">
+      <div class="BottomRightRightClickPopupMenu">
+        <div class="BottomCenterRightClickPopupMenu">
+          <span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% /*End Popup Menu*/ %>
