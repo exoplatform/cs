@@ -4,81 +4,81 @@
 	background: #f7f7f7;
 }
 
-.UIForumPortlet .UIViewTopic .ViewContainer {
+.UIViewTopic .ViewContainer {
 	border: 1px solid white;
 	padding: 10px;
 }
 
-.UIForumPortlet .UIViewTopic .PostViewTitle {
+.UIViewTopic .PostViewTitle {
 	border-bottom: 1px solid #d8d8d8;
 	padding: 5px 0px 3px 0px;
 }
 
-.UIForumPortlet .UIViewTopic .PostViewIcon {
+.UIViewTopic .PostViewIcon {
 	font-weight: bold; font-size: 12px;
 	font-family: arial;
 	line-height: 20px;
 	padding-left: 20px;
 }
 
-.UIForumPortlet .UIViewTopic .PostTime {
+.UIViewTopic .PostTime {
 	padding: 2px 0px 0px 20px;
 }
 
-.UIForumPortlet .UIViewTopic .PostContent {
+.UIViewTopic .PostContent {
 	padding: 0px 5px;
 	min-height: 100px;
 }
 
-.UIForumPortlet .UIViewTopic a {
+.UIViewTopic a {
 	color: blue;
 }
 
-.UIForumPortlet .UIViewTopic .AttachmentContainer .AttachmentTitle {
-	background: #e7e7e7 url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/AttachmentIcon.gif') no-repeat 3px center;
+.UIViewTopic .AttachmentContainer .AttachmentTitle {
+	background: #e7e7e7 url('../skinIcons/16x16/icons/AttachmentIcon.gif') no-repeat 3px center;
 	padding-left: 20px;
 	line-height: 25px;
 	font-weight: bold;
 	white-space: nowrap;
 }
 
-.UIForumPortlet .UIViewTopic .AttachmentContainer .AttachmentBox {
+.UIViewTopic .AttachmentContainer .AttachmentBox {
 	float: left;
 	padding: 15px;
 	width: 40%;
 }
 
-.UIForumPortlet .UIViewTopic .AttachmentContainer .LabelBox {
+.UIViewTopic .AttachmentContainer .LabelBox {
 	float: left;
 }
 
-.UIForumPortlet .UIViewTopic .AttachmentContainer .Image {
+.UIViewTopic .AttachmentContainer .Image {
 	float: left;
 	margin: 0px 10px 0px 0px;
 }
 
-.UIForumPortlet .UIViewTopic .AttachmentContainer .AttachmentIcon {
+.UIViewTopic .AttachmentContainer .AttachmentIcon {
 	float: left;
 	height: 20px; 
 	width: 20px;
 }
 
-.UIForumPortlet .UIViewTopic .AttachmentContainer .AttachmentLabel {
+.UIViewTopic .AttachmentContainer .AttachmentLabel {
 	color: #1555b5;
 	line-height: 20px;
 	font-weight: bold;
 	float: left;
 }
 
-.UIForumPortlet .UIViewTopic .AttachmentContainer .AttachmentInfo {
+.UIViewTopic .AttachmentContainer .AttachmentInfo {
 	float: right;
 }
 
-.UIForumPortlet .UIViewTopic .AttachmentContainer .Action {
+.UIViewTopic .AttachmentContainer .Action {
 	padding-top: 50px;
 }
 
-.UIForumPortlet .UIViewTopic .AttachmentContainer .Action .Icon {
+.UIViewTopic .AttachmentContainer .Action .Icon {
 	float: left;
 	color: #1555b5;
 	padding-left: 20px;
@@ -87,10 +87,10 @@
 	cursor: pointer;
 }
 
-.UIForumPortlet .UIViewTopic .AttachmentContainer .Action .View {
+.UIViewTopic .AttachmentContainer .Action .View {
 	background: url('icons/16x16/ViewIcon.gif') no-repeat left center;
 }
 
-.UIForumPortlet .UIViewTopic .AttachmentContainer .Size {
+.UIViewTopic .AttachmentContainer .Size {
 	padding-left: 25px;
 }

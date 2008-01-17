@@ -1,39 +1,39 @@
 .UIForumPortlet .UICategories {
 }
 
-.UIForumPortlet .UICategories .UIForumWorkingWorkspace {
+.UICategories .UIForumWorkingWorkspace {
 	width: auto;
 	padding: 0px 10px;
 }
 
 /**************************** UICategories ForumToolBar *********************************/
 
-.UIForumPortlet .UIForumCategory .ForumToolbar {
+.UIForumCategory .ForumToolbar {
 	margin: 5px 0px 0px 0px;
 }
 
-.UIForumPortlet .UIForumCategory .ForumToolbar a {
+.UIForumCategory .ForumToolbar a {
 	color: black;
 }
 
-.UIForumPortlet .UIForumCategory .ForumToolbar a:hover {
+.UIForumCategory .ForumToolbar a:hover {
 	color: #126ca5;
 }
 
-.UIForumPortlet .UIForumCategory .ForumToolbar .ToolbarActionsContainer {
+.UIForumCategory .ForumToolbar .ToolbarActionsContainer {
 	float: right;
 	width: 137px;
 	margin: 2px 0px 0px 0px;
 }
 
-.UIForumPortlet .UIForumCategory .ForumToolbar .ManageCategoryButton {
+.UIForumCategory .ForumToolbar .ManageCategoryButton {
 	cursor: pointer;
 	padding-left: 22px;
 	line-height: 22px;
 	height: 22px;
 }
 
-.UIForumPortlet .UIForumCategory .ForumToolbar .SeparatorLine {
+.UIForumCategory .ForumToolbar .SeparatorLine {
 	float: right;
 	width: 2px; height: 19px;
 	margin: 0px 5px 0px 5px;

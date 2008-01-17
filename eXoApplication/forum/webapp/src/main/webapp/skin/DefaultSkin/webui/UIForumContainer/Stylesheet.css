@@ -3,7 +3,7 @@
 }
 
 .UIForumPortlet .UIForumContainer .AddTheradIcon {
-	background: url('icons/16x16/AddNewThreadIcon.gif') left center;
+	background: url('../skinIcons/16x16/icons/AddNewThreadIcon.gif') left center;
 }
 
 .UIForumPortlet .UIForumContainer .LockActionForum {

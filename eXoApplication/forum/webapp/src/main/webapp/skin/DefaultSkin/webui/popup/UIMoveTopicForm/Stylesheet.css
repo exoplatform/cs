@@ -1,52 +1,51 @@
-.UIForumPortlet .UIMoveTopicForm {
+.UIMoveTopicForm {
 	padding: 10px;
 	background: #ffffff;
 }
 
-.UIForumPortlet .UIMoveTopicForm .TitleMoveThreads {
+.UIMoveTopicForm .TitleMoveThreads {
 	padding-left: 10px;
 	line-height: 20px;
 }
 
-.UIForumPortlet .UIMoveTopicForm .UITree {
+.UIMoveTopicForm .UITree {
 	border: 1px solid #a5a5a5;
 	padding: 3px 1px;
 	overflow-y: auto;
 	height: 235px;
 }
 
-.UIForumPortlet .UIMovePostForm .UITree {
+.UIMovePostForm .UITree {
 	height: 300px;
 }
 
-.UIForumPortlet .UIMoveTopicForm .UITree .TreeContainer {
+.UIMoveTopicForm .UITree .TreeContainer {
 	background: none;
 }
 
-.UIForumPortlet .UIMoveTopicForm .UITree .TreeContainer .Node {
+.UIMoveTopicForm .TreeContainer .Node {
 	width: auto;
 	padding: 0px 0px 0px 20px;
 }
 
-.UIForumPortlet .UIMoveTopicForm .UITree .TreeContainer .Node .NodeLabel a {
+.UIMoveTopicForm .TreeContainer .Node .NodeLabel a {
 	font-weight: normal;
 	color: #272727;
 	margin: 0px;
 	line-height: 22px;
 }
 
-.UIForumPortlet .UIMoveTopicForm .UITree .TreeContainer .Node .Icon {
+.UIMoveTopicForm .TreeContainer .Node .Icon {
 	height: 22px; width: 22px;
-	margin: 0px;
+	margin: 0px; float: left ;
 }
 
-.UIForumPortlet .UIMoveTopicForm .UITree .TreeContainer .Node .NodeLabel a:hover {
+.UIMoveTopicForm .TreeContainer .Node .NodeLabel a:hover {
 	color: #058ee6;
 }
 
-.UIForumPortlet .UIMoveTopicForm .UITree .TreeContainer .Selected {
+.UIMoveTopicForm .TreeContainer .Selected {
 	background: #d8d9ee;
 	margin: 0px;
 	height: 22px;
 }
-

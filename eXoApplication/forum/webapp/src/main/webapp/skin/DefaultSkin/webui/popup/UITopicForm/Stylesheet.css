@@ -1,80 +1,74 @@
-.UIForumPortlet .UITopicForm {
+.UITopicForm {
 	width: 620px;
 	padding: 10px;
 }
 
-.UIForumPortlet .UITopicForm .UIFormInputSet .UIFormGrid td.FieldLabel {
+.UITopicForm .UIFormInputSet .UIFormGrid td.FieldLabel {
 	text-align: left ;
 }
 
-.UIForumPortlet .UITopicForm .UIForm .HorizontalLayout .ThreadContent input {
+.UITopicForm .UIForm .HorizontalLayout .ThreadContent input {
 	width: 430px;
 }
 
-.UIForumPortlet .UITopicForm .UIForm .HorizontalLayout .ThreadContent checkbox {
+.UITopicForm .UIForm .HorizontalLayout .ThreadContent checkbox {
 	padding-left: 5px;
 }
 
-.UIForumPortlet .UITopicForm .UIForm .HorizontalLayout .ThreadContent textarea { 
-	width: 430px; 
-	height: 205px;
+.UITopicForm .UIForm .HorizontalLayout .ThreadContent textarea { 
+	width: 430px; height: 205px;
 }
 
-.UIForumPortlet .UITopicForm .UIForm .HorizontalLayout .ThreadOptions checkbox {
+.UITopicForm .UIForm .HorizontalLayout .ThreadOptions checkbox {
 	padding-left: 5px;
 }
 
-.UIForumPortlet .UITopicForm .ThreadPermission .AddIcon16x16 {
-	width: 16px;
-	height: 16px;
+.UITopicForm .ThreadPermission .AddIcon16x16 {
+	width: 16px; height: 16px;
 	margin: 0px 0px 0px 250px;
 	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/BlueCirclePlus.gif') ;
 	cursor: pointer;
 }
 
-.UIForumPortlet .UITopicForm .HorizontalLayout .ThreadPermission .SelectUserIcon {
-	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/SmallUserIcon.gif') no-repeat;
+.UITopicForm .HorizontalLayout .ThreadPermission .SelectUserIcon {
+	background: url('../skinIcons/16x16/icons/SmallUserIcon.gif') no-repeat;
 }
 
-.UIForumPortlet .UITopicForm .HorizontalLayout .ThreadPermission .SelectMemberIcon {
-	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/SmallGroupIcon.gif') no-repeat;
+.UITopicForm .HorizontalLayout .ThreadPermission .SelectMemberIcon {
+	background: url('../skinIcons/16x16/icons/SmallGroupIcon.gif') no-repeat;
 }
 
-.UIForumPortlet .UITopicForm .HorizontalLayout .ThreadPermission .AddAnyIcon {
-	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/SmallMemberIcon.gif') no-repeat;
+.UITopicForm .HorizontalLayout .ThreadPermission .AddAnyIcon {
+	background: url('../skinIcons/16x16/icons/SmallMemberIcon.gif') no-repeat;
 }
 
-.UIForumPortlet .UITopicForm .HorizontalLayout .ThreadPermission .FormContainer {
+.UITopicForm .HorizontalLayout .ThreadPermission .FormContainer {
 	border: none;	
 	padding:0px 15px;
 }
 
-.UIForumPortlet .UITopicForm .UITabContent {
+.UITopicForm .UITabContent {
 	height: 280px;
 }
 
-.UIForumPortlet .UITopicForm .UIFormTabPane .ThreadPermission .HorizontalLayout {
+.UITopicForm .UIFormTabPane .ThreadPermission .HorizontalLayout {
 	border:1px solid #B7B7B7;
 	padding-top: 8px;
 }
 
-.UIForumPortlet .UITopicForm .UIFormWithTitle {
+.UITopicForm .UIFormWithTitle {
 	margin: auto;
 	padding-top: 5px;
 }
 
-.UIForumPortlet .UITopicForm .HorizontalLayout .ThreadPermission td.FieldLabel {
+.UITopicForm .HorizontalLayout .ThreadPermission td.FieldLabel {
 	width: 100px;
 }
 
-.UIForumPortlet .UITopicForm .ThreadPermission input {
+.UITopicForm .ThreadPermission input {
 	float: left ;
 }
 
-.UIForumPortlet .UITopicForm #messageContent___Frame {
-	height: 200px ;
-	width: 435px; 
+.UITopicForm #messageContent___Frame {
+	height: 200px ;	width: 435px; 
 }
-
-
-

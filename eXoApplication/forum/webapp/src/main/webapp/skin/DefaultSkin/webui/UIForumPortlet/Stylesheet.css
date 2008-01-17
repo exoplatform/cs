@@ -151,8 +151,7 @@
 .UIForumPortlet .UIForumActionBar .SeparatorLine {
 	float: left;
 	background: url('background/SeparatorLineToolbar1x27.gif') no-repeat ;
-	height: 27px;
-	width: 2px;
+	height: 27px;	width: 2px;
 }
 
 .UIForumPortlet .UIForumActionBar .AddCategory {
@@ -166,9 +165,7 @@
 	cursor: pointer ;
 }
 
-
 /******************************************** UIForumDescription ****************************************/
-
 .UIForumPortlet .UIForumDescription {
 	border: 1px solid #cdcdcd;
 	line-height: 16px;
@@ -193,7 +190,6 @@
 }
 
 /******************************************** ForumContains ****************************************/
-
 .UIForumPortlet .ForumContains {
 	border: 1px solid #cdcdcd;
 	line-height: 42px; 
@@ -215,7 +211,6 @@
 }
 
 /*=============================Content UICategoriesSummary====================*/
-
 .UIForumPortlet .UICategoriesSummary {
 	padding: 3px 10px;
 }
@@ -275,8 +270,7 @@
 
 .UIForumPortlet .ContentContainer .LastPostIcon {
 	float: left;
-	width: 18px;
-	height: 18px;
+	width: 18px;	height: 18px;
 }
 
 .UIForumPortlet .ContentContainer .ForumQuantity {

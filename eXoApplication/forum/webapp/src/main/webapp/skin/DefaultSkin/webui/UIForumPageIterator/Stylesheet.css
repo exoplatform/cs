@@ -1,90 +1,90 @@
-.UIForumPortlet .UIForumPageIterator {    
+.UIForumPageIterator {    
 	float:right;
 	margin: 0px ;
 	width: 420px;
 	padding: 3px 0px 0px 0px ;
 }
 
-.UIForumPortlet .UIForumPageIterator .PageIteratorContainer {    
+.UIForumPageIterator .PageIteratorContainer {    
   float: right ;
   overflow: hidden; 
 }
 
-.UIForumPortlet .UIForumPageIterator .PageIteratorContainer .LeftPageIteratorBlock{    
+.UIForumPageIterator .PageIteratorContainer .LeftPageIteratorBlock{    
   line-height: 18px ; 
   float: right ;
   margin-right: 15px;
 }
 
-.UIForumPortlet .UIForumPageIterator .PageIteratorContainer .RightPageIteratorBlock{    
+.UIForumPageIterator .PageIteratorContainer .RightPageIteratorBlock{    
   float: right ;
 }
 
-.UIForumPortlet .UIForumPageIterator .Icon {
+.UIForumPageIterator .Icon {
   float: left ;
   margin: 0px 2px 0px 0px ;
   width: 18px ; height: 17px ;
 }
 
-.UIForumPortlet .UIForumPageIterator .TotalPages {
+.UIForumPageIterator .TotalPages {
   float: left ;
   line-height: 16px ; 
 }
 
-.UIForumPortlet .UIForumPageIterator .PagesTotalNumber {
+.UIForumPageIterator .PagesTotalNumber {
   float: left ;
   line-height: 17px ; 
   color: #0183f1;
   margin-left: 5px;
 }
 
-.UIForumPortlet .UIForumPageIterator .LastTopPageIcon {
+.UIForumPageIterator .LastTopPageIcon {
   vertical-align: middle ;
   background: url('background/ScrollDoubleBackArrows.gif') no-repeat ;
   cursor: pointer ;
 }
 
-.UIForumPortlet .UIForumPageIterator .NextTopPageIcon {
+.UIForumPageIterator .NextTopPageIcon {
   background: url('background/ScrollDoubleNextArrows.gif') no-repeat ;
   cursor: pointer ;
 }
 
-.UIForumPortlet .UIForumPageIterator .LastPageIcon {
+.UIForumPageIterator .LastPageIcon {
   background: url('background/ScrollSingleBackArrow.gif') no-repeat ;
   cursor: pointer ; 
 }
 
-.UIForumPortlet .UIForumPageIterator .NextPageIcon {
+.UIForumPageIterator .NextPageIcon {
   background: url('background/ScrollSingleNextArrow.gif') no-repeat ;
   cursor: pointer ;
 }
 
-.UIForumPortlet .UIForumPageIterator .DisableLastTopPageIcon {
+.UIForumPageIterator .DisableLastTopPageIcon {
   vertical-align: middle ;
   background: url('background/DoubleBackArrows.gif') no-repeat ;
 }
 
-.UIForumPortlet .UIForumPageIterator .DisableNextTopPageIcon {
+.UIForumPageIterator .DisableNextTopPageIcon {
   background: url('background/DoubleNextArrows.gif') no-repeat ;
 }
 
-.UIForumPortlet .UIForumPageIterator .DisableLastPageIcon {
+.UIForumPageIterator .DisableLastPageIcon {
   background: url('background/SingleBackArrow.gif') no-repeat ;
 }
 
-.UIForumPortlet .UIForumPageIterator .DisableNextPageIcon {
+.UIForumPageIterator .DisableNextPageIcon {
   background: url('background/SingleNextArrow.gif') no-repeat ;
 }
 /* End */
 
-.UIForumPortlet .UIForumPageIterator .Number {
+.UIForumPageIterator .Number {
   float: left ;
   text-align: center;
   margin: 0px 2px 0px 0px;
   line-height: 17px;
 }
 
-.UIForumPortlet .UIForumPageIterator .PageSelected {
+.UIForumPageIterator .PageSelected {
   line-height: 15px;
   height: 15px ;
   border: 1px solid #dfdfdf;
@@ -94,7 +94,7 @@
   cursor: default;
 }
 
-.UIForumPortlet .UIForumPageIterator .PageNormal {
+.UIForumPageIterator .PageNormal {
 	margin: 0px 0px 0px 0px ;
   padding: 1px 7px;
   border: 1px solid #dfdfdf;
@@ -102,11 +102,11 @@
   background: white;
 }
 
-.UIForumPortlet .UIForumPageIterator .Number a {
+.UIForumPageIterator .Number a {
   padding: 1px 6px 1px 7px;
 }
 
-.UIForumPortlet .UIForumPageIterator .Number a:hover {
+.UIForumPageIterator .Number a:hover {
   padding: 1px 6px 1px 7px;
   color: #058ee6 ;
   border: 1px solid #777777;

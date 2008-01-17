@@ -1,41 +1,41 @@
-.UIForumPortlet .UIForumLinks {
+.UIForumLinks {
 	margin: 0px 10px;
 }
 
-.UIForumPortlet .UIForumLinks .HorizontalLayout {
+.UIForumLinks .HorizontalLayout {
 	width: 360px;
 	border: none;
 	float: right;
 }
 
-.UIForumPortlet .UIForumLinks .HorizontalLayout .UIFormGrid td.FieldLabel {
+.UIForumLinks .HorizontalLayout .UIFormGrid td.FieldLabel {
 	line-height: 20px;
 	white-space:nowrap;
 	padding: 0px 4px;
 }
 
-.UIForumPortlet .UIForumLinks .HorizontalLayout .UIFormGrid .UIActionForum {
+.UIForumLinks .HorizontalLayout .UIFormGrid .UIActionForum {
 	float: left;
 	margin-left: 4px;
 }
 
-.UIForumPortlet .UIForumLinks .UIForm .HorizontalLayout select {
+.UIForumLinks .UIForm .HorizontalLayout select {
 	float:left;
 	text-align:left;
 	white-space:nowrap;
 }
 
-.UIForumPortlet .UIForumLinks .categoryLink {
+.UIForumLinks .categoryLink {
 	line-height: 16px;
 	background: #eaf2fb ;
 }
 
-.UIForumPortlet .UIForumLinks .forumLink {
+.UIForumLinks .forumLink {
 	line-height: 16px;
 	white-space:nowrap;
 }
 
-.UIForumPortlet .UIForumLinks .hompage {
+.UIForumLinks .hompage {
 	line-height: 16px;
 	font-weight: bold;
 }

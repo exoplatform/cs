@@ -1,65 +1,64 @@
-.UIForumPortlet .UIModeratorsManagementForm {
+.UIModeratorsManagementForm {
 	padding: 10px;
 	background:#ffffff;
 }
 
-.UIForumPortlet .UIModeratorsManagementForm .ModeratorsManagementContainer {
+.UIModeratorsManagementForm .ModeratorsManagementContainer {
 	border: 1px solid #b7b7b7;
 }
 
-.UIForumPortlet .UIModeratorsManagementForm .ModeratorsManagementContainer .ManagementContent {
+.UIModeratorsManagementForm .ModeratorsManagementContainer .ManagementContent {
 	background: #f3f3f3;
 	padding: 10px;
 }
 
-.UIForumPortlet .UIModeratorsManagementForm .ModeratorsManagement .HorizontalLayout {
+.UIModeratorsManagementForm .ModeratorsManagement .HorizontalLayout {
 	border: none;
 	padding: 5px;
 }
 
-.UIForumPortlet .UIModeratorsManagementForm .ModeratorsGroup {
+.UIModeratorsManagementForm .ModeratorsGroup {
 	padding: 5px;
 }
 
-.UIForumPortlet .UIModeratorsManagementForm .ModeratorsGroup .UIFormWithTitle {
+.UIModeratorsManagementForm .ModeratorsGroup .UIFormWithTitle {
 	margin: 10px auto 0px auto;
 }
 
-.UIForumPortlet .UIModeratorsManagementForm .ModeratorsGroup .HorizontalLayout .UIFormInputSet {
+.UIModeratorsManagementForm .ModeratorsGroup .HorizontalLayout .UIFormInputSet {
 	padding: 0px;
 }
 
-.UIForumPortlet .UIModeratorsManagementForm .ModeratorsGroup .UIFormInputSet .FormContainer {
+.UIModeratorsManagementForm .ModeratorsGroup .UIFormInputSet .FormContainer {
 	border: none;
 	padding: 0px;
 }
 
-.UIForumPortlet .UIModeratorsManagementForm .ModeratorsGroup .UIGrid .OverflowContainer {
+.UIModeratorsManagementForm .ModeratorsGroup .UIGrid .OverflowContainer {
 	width: 50px;
 }
 
-.UIForumPortlet .UIModeratorsManagementForm .ModeratorsGroup .UIFormGrid td.FieldLabel {
+.UIModeratorsManagementForm .ModeratorsGroup .UIFormGrid td.FieldLabel {
 	width: 100px;
 }
 
-.UIForumPortlet .UIModeratorsManagementForm .ModeratorsGroup .UIFormGrid input.radio {
+.UIModeratorsManagementForm .ModeratorsGroup .UIFormGrid input.radio {
 	margin: 0px;	
 }
 
-.UIForumPortlet .UIModeratorsManagementForm .ModeratorsGroup .AddIcon16x16 {
-	width: 16px;
-	height: 16px;
+.UIModeratorsManagementForm .ModeratorsGroup .AddIcon16x16 {
+	width: 16px;	height: 16px;
 	margin: 0px 2px;
 }
 
-.UIForumPortlet .UIModeratorsManagementForm .ModeratorsGroup .SelectUserIcon {
-	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/SmallUserIcon.gif') no-repeat;
+.UIModeratorsManagementForm .ModeratorsGroup .SelectUserIcon {
+	background: url('../skinIcons/16x16/icons/SmallUserIcon.gif') no-repeat;
 }
 
-.UIForumPortlet .UIModeratorsManagementForm .ModeratorsGroup .SelectMemberIcon {
-	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/SmallGroupIcon.gif') no-repeat;
+.UIModeratorsManagementForm .ModeratorsGroup .SelectMemberIcon {
+	background: url('../skinIcons/16x16/icons/SmallGroupIcon.gif') no-repeat;
 }
 
-.UIForumPortlet .UIModeratorsManagementForm .ModeratorsGroup .AddAnyIcon {
-	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/SmallMemberIcon.gif') no-repeat;
+.UIModeratorsManagementForm .ModeratorsGroup .AddAnyIcon {
+	background: url('../skinIcons/16x16/icons/SmallMemberIcon.gif') no-repeat;
 }

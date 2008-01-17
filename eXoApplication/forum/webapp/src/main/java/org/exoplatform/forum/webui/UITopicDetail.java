@@ -244,14 +244,16 @@ public class UITopicDetail extends UIForm	{
 			this.pageSelect = this.getChild(UIForumPageIterator.class).getPageSelected() ;
 		}
 		if(this.pageList == null || this.pageSelect < 1) return null ;
-		this.posts = forumService.getPage(this.pageSelect, this.pageList, ForumSessionUtils.getSystemProvider()) ;
-		for (Post post : this.posts) {
-			if(getUIFormCheckBoxInput(post.getId()) != null) {
-				getUIFormCheckBoxInput(post.getId()).setChecked(false) ;
-			}else {
-				addUIFormInput(new UIFormCheckBoxInput(post.getId(), post.getId(), false) );
+		this.posts = (List<Post>)forumService.getPage(this.pageSelect, this.pageList, ForumSessionUtils.getSystemProvider()) ;
+		if(this.posts.size() > 0 && this.posts != null) {
+			for (Post post : this.posts) {
+				if(getUIFormCheckBoxInput(post.getId()) != null) {
+					getUIFormCheckBoxInput(post.getId()).setChecked(false) ;
+				}else {
+					addUIFormInput(new UIFormCheckBoxInput(post.getId(), post.getId(), false) );
+				}
+				this.IdLastPost = post.getId() ;
 			}
-			this.IdLastPost = post.getId() ;
 		}
 		this.isGopage = false ;
 		return this.posts ;

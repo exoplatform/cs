@@ -1,73 +1,57 @@
-.UIForumPortlet .UIForumForm {
+.UIForumForm {
 	padding: 10px;
 	background: #f7f7f7;
 }
 
-.UIForumPortlet .UIForumForm .AddForum .HorizontalLayout {
+.UIForumForm .AddForum .HorizontalLayout {
 	border: none;
 	padding: 5px;
 }
 
-.UIForumPortlet .UIForumForm .HorizontalLayout .NewForum {
+.UIForumForm .HorizontalLayout .NewForum {
 	width: 400px;
 	padding: 15px 0px;
 }
 
-.UIForumPortlet .UIForumForm .HorizontalLayout .NewForum textarea {
+.UIForumForm .HorizontalLayout .NewForum textarea {
 	height: 100px;
 }
 
-.UIForumPortlet .UIForumForm .HorizontalLayout .ModerationOptions  {
+.UIForumForm .HorizontalLayout .ModerationOptions  {
 	width: 510px;
 	padding: 20px 0px 60px 0px;
 }
 
-.UIForumPortlet .UIForumForm .HorizontalLayout .ModerationOptions textarea {
+.UIForumForm .HorizontalLayout .ModerationOptions textarea {
 	width: 340px;
 	height: 40px;
 }
 
-.UIForumPortlet .UIForumForm .ForumPermission {
+.UIForumForm .ForumPermission {
 	padding: 5px;
 }
 
-.UIForumPortlet .UIForumForm .ForumPermission .AddIcon16x16 {
-	width: 16px;
-	height: 16px;
+.UIForumForm .ForumPermission .AddIcon16x16 {
+	width: 16px; height: 16px;
 	margin: 0px 0px 0px 250px;
 	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/BlueCirclePlus.gif') ;
 	cursor: pointer;
 }
 
-.UIForumPortlet .UIForumForm .ForumPermission input {
+.UIForumForm .ForumPermission input {
 	float: left ;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .UIForumForm .ForumPermission .SelectUserIcon {
-	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/SmallUserIcon.gif') no-repeat;
+	background: url('../skinIcons/16x16/icons/SmallUserIcon.gif') no-repeat;
 }
 
 .UIForumForm .ForumPermission .SelectMemberIcon {
-	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/SmallGroupIcon.gif') no-repeat;
+	background: url('../skinIcons/16x16/icons/SmallGroupIcon.gif') no-repeat;
 }
 
 .UIForumForm .ForumPermission .AddAnyIcon {
-	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/SmallMemberIcon.gif') no-repeat;
+	background: url('../skinIcons/16x16/icons/SmallMemberIcon.gif') no-repeat;
 }
 
 .UIForumForm .ForumPermission .UIAction {

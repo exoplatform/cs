@@ -79,7 +79,7 @@
 }
 
 .UITopicDetail .MemberContent .BusyIcon {
-	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/BusyIcon.gif') no-repeat center;
+	background: url('../skinIcons/16x16/icons/BusyIcon.gif') no-repeat center;
 }
 
 .UITopicDetail .MemberContent .Name {
@@ -116,8 +116,7 @@
 	color: #2c2c2c;
 }
 
-/************************************** PostViewContainer ***********************************/
-
+/************************************** PostViewContainer ********************************/
 .UITopicDetail .PostViewContainer {
 	color: #2c2c2c;
 	border-left: solid 1px #c4c4c4;
@@ -225,7 +224,6 @@
 }
 
 /***************************************** Quote ****************************************/
-
 .UITopicDetail .PostViewContainer .QuoteContent {
 	padding: 10px;
 }
@@ -261,23 +259,20 @@
 .UIForumPortlet .UIRatingForm .VoteFormContainer .RatedVote {
 	float: left ;
 	background: url('../skinIcons/16x16/icons/SmallGreyStar.gif') no-repeat center;
-	height: 22px;
-	width: 22px;
+	height: 22px;	width: 22px;
 	cursor: pointer;
 }
 
 .UIForumPortlet .UIRatingForm .VoteFormContainer .OverVote {
 	float: left ;
 	background: url('../skinIcons/16x16/icons/SmallYellowStar.gif') no-repeat center;
-	height: 22px;
-	width: 22px;
+	height: 22px;	width: 22px;
 	cursor: pointer;
 }
 
 .UIForumPortlet .UIRatingForm .VoteFormContainer .NormalVote {
 	float: left ;
 	background: url('../skinIcons/16x16/icons/SmallGreyStar.gif') no-repeat center;
-	height: 22px;
-	width: 22px;
+	height: 22px;	width: 22px;
 	cursor: pointer;
 }

@@ -218,19 +218,19 @@
 }
 
 /******************************	End OverButton	***************************************/
-.UIRightClickPopupMenu .UIRightPopupMenuContainer .DisableMenuItem {
+.UIForumPortlet .UIRightClickPopupMenu .DisableMenuItem {
 	color:#cccccc ;	
 }
 
-.UIRightClickPopupMenu .UIRightPopupMenuContainer a:hover.DisableMenuItem {
+.UIForumPortlet .UIRightClickPopupMenu a:hover.DisableMenuItem {
 	color:#cccccc ;	
 }
 
-.SelectedItem {
+.UIForumPortlet .SelectedItem {
 	background: #ffffcc ;
 }
 
-.DisableLabel {
+.UIForumPortlet .DisableLabel {
 	opacity:0.3;
 }
 
@@ -239,7 +239,7 @@
 	margin: 0px;
 }
 
-.ClassQuote {
+.UIForumPortlet .ClassQuote {
 	border: solid 1px #d8d8d8 ;
 	padding: 8px 5px;
 	background: #ededf7 ;
