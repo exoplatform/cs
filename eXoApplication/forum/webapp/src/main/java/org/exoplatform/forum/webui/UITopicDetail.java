@@ -21,8 +21,10 @@ import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.download.DownloadService;
 import org.exoplatform.forum.ForumFormatUtils;
 import org.exoplatform.forum.ForumSessionUtils;
+import org.exoplatform.forum.service.ForumAttachment;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.JCRPageList;
 import org.exoplatform.forum.service.Post;
@@ -210,6 +212,11 @@ public class UITopicDetail extends UIForm	{
 		} catch (Exception e) {
 			return null ;
 		}
+	}
+	@SuppressWarnings("unused")
+  private String getFileSource(ForumAttachment attachment) throws Exception {
+		DownloadService dservice = getApplicationComponent(DownloadService.class) ;
+		return ForumSessionUtils.getFileSource(attachment, dservice);
 	}
 	
 	public void setMaxPostInPage(long maxPost) {

@@ -16,7 +16,15 @@
  ***************************************************************************/
 package org.exoplatform.forum;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
+import javax.jcr.PathNotFoundException;
+
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.download.DownloadService;
+import org.exoplatform.download.InputStreamDownloadResource;
+import org.exoplatform.forum.service.ForumAttachment;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.access.SystemIdentity;
 import org.exoplatform.services.jcr.ext.app.SessionProviderService;
@@ -75,6 +83,26 @@ public class ForumSessionUtils {
         return sessionProvider ;
       }
     }   
+  }
+  
+  public static String getFileSource(ForumAttachment attachment, DownloadService dservice) throws Exception {    
+    if (attachment != null) {
+      try {
+        InputStream input = attachment.getInputStream() ;
+        byte[] imageBytes = null ;
+        if (input != null) {
+          imageBytes = new byte[input.available()] ;
+          input.read(imageBytes) ;
+          ByteArrayInputStream byteImage = new ByteArrayInputStream(imageBytes) ;
+          InputStreamDownloadResource dresource = new InputStreamDownloadResource(byteImage, "image") ;
+          dresource.setDownloadName(attachment.getName()) ;
+          return  dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;        
+        }
+      } catch (PathNotFoundException ex) {
+        return null ;
+      }
+    }
+    return null ;
   }
   
   public static String[] getUserGroups() throws Exception{

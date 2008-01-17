@@ -102,12 +102,24 @@
 	background: url('icons/ThreadIcon.gif') no-repeat left center;
 }
 
-.UIForumPortlet .WordIcon {
+.UIForumPortlet .mswordIcon {
 	background: url('icons/WordIcon.gif') no-repeat left center;
 }
 
-.UIForumPortlet .PPTIcon {
+.UIForumPortlet .pptIcon {
 	background: url('icons/PPTIcon.gif') no-repeat left center;
+}
+
+.UIForumPortlet .pdfIcon {
+	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/MiscIcons/AcrobatFile.gif') no-repeat center;
+}
+
+.UIForumPortlet .mpegIcon {
+	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/MiscIcons/Music.gif') no-repeat center;
+}
+
+.UIForumPortlet .octet-streamIcon {
+	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/OfficeIcons/Page.gif') no-repeat center;
 }
 
 .UIForumPortlet .PNGIcon {
