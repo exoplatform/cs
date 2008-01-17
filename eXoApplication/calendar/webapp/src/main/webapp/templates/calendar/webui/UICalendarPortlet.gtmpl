@@ -19,11 +19,11 @@
 %>
   <div class="ApplicationMinWidth">
   	<div class="UICalendarPortlet">
-<!-- Start Mail Working Workspace -->
+<!-- Start Calendar Working Workspace -->
 	    <div class="CalendarWorkingWorkspace">
-<!-- Start Mail Action Bar -->
+<!-- Start Calendar Action Bar -->
 		    <%uicomponent.renderChild(UIActionBar.class)%>
-<!-- End Mail Action Bar -->
+<!-- End Calendar Action Bar -->
 <!-- Start Calendar Working Container -->
 				<%uicomponent.renderChild(UICalendarWorkingContainer.class)%>
 <!-- End Calendar Working Container-->

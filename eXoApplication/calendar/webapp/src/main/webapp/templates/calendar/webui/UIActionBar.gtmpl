@@ -23,7 +23,7 @@
 						</div>
 						<div class="SelectButton" onclick="eXo.calendar.UICalendarPortlet.showView(this, event);">
 							<div class="IconHolder <%=uicomponent.getCurrentView()%>Icon">
-								<div class="DownArrow1Icon" ><%=_ctx.appRes(uicomponent.id + ".label." + uicomponent.getCurrentView())%></div>
+								<div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.id + ".label." + uicomponent.getCurrentView())%></div>
 							</div>
 							<% /*Begin Popup Menu*/ %>
 		      				<div class="UIRightClickPopupMenu" style="display: none;">

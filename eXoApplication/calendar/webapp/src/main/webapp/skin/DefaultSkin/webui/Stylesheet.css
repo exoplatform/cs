@@ -31,24 +31,6 @@
 	margin: 7px;
 }
 
-.UICalendarPortlet .UIBannerContainer {
-  background: #fbfbfb url('background/BgBanner457x62.gif') no-repeat left;
-  height: 62px;
-  padding-left: 235px;
-}
-
-.UICalendarPortlet .UIBannerContainer .LeftHorizontalLine {
-  background: url('background/LeftHorizontalLine44x2.gif') no-repeat left bottom;	
-  padding-left: 44px;
-  height: 34px;
-}
-
-.UICalendarPortlet .UIBannerContainer .RepeatHorizontalLine {
-	font-size: 13px; font-family: tahoma;
-	color: #5f5f5f; font-weight: bold;
-  background: url('background/RepeatHorizontalLine1x2.gif') repeat-x bottom;	
-  height: 22px; padding-top: 12px;
-}
 /*==============================UISearchForm================================*/
 .UICalendarPortlet .UICalendarContainer .UISearchForm {
   background: url('background/SearchForm1x34.gif') repeat-x;	
@@ -63,13 +45,13 @@
 	float: right;
 	line-height: 20px;
 	margin: 5px 0px;
-	color: #595b6a; 
+	color: #555; 
 }
 
 .UICalendarPortlet .UICalendarContainer .UISearchForm input {
-	width: 100px;
+	width: 110px;
 	float: right;
-	margin: 6px 8px;
+	margin: 6px 5px;
 }
 
 .UICalendarPortlet .UICalendarContainer .Search {
@@ -89,15 +71,11 @@
 }
 
 /*==============================Calendar Working Container================================*/
-
 .UICalendarPortlet .CalendarWorkingWorkspace {
 	padding: 10px 5px;
 }
 
-
 /*=========================Calendar ControlBar======================================*/
-
-
 .UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar .Title {
 	margin: 8px 4px 0px 4px;
 	font-weight: bold;
@@ -116,7 +94,6 @@
 	float: left;
 	line-height: 20px;
 }
-
 
 .UICalendarPortlet .CalendarWorkingWorkspace .RightControlButton {
 	float: right;
@@ -147,7 +124,7 @@
 
 .UICalendarPortlet .CalendarWorkingWorkspace .SeparatorLine {
   float: left;
-  margin: 3px 5px 2px 5px;
+  margin: 3px 3px 0px 3px;
 }
 
 .UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar .NextIcon {
@@ -166,7 +143,7 @@
 .UICalendarPortlet .CalendarWorkingWorkspace .IconHolder {
 	line-height: 18px;
 	margin: 5px 7px 0px 7px;
-	padding-left: 26px;
+	padding-left: 22px;
 }
 
 .UICalendarPortlet .CalendarWorkingWorkspace .LayoutSwitcherIcon {
@@ -178,10 +155,10 @@
 
 .UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar .DownArrow1Icon {
 	line-height: 23px;
-	padding-right: 16px; 
+	padding-right: 14px; 
 	cursor: pointer;
-	*width: 60px;
-	*white-space: nowrap;
+	width: 60px;
+	white-space: nowrap;
 }
 
 /*==================Calendar Working Container===================*/
@@ -204,9 +181,9 @@
 
 .UICalendarPortlet .UICalendarWorkingContainer .SeparatorLine {
   float: left;
-  margin: 2px 5px 0px 5px;
-  background: url('background/SeparatorLine2x23.gif') no-repeat ;	
-  height: 23px; width: 2px;
+  margin: 4px 3px 0px 3px;
+  background: url('background/SeparatorLine2x1.gif') repeat-y ;	
+  height: 18px; width: 2px;
 }
 .UICalendarContainer {
 	float: left;
@@ -349,7 +326,6 @@
 }
 
 /*===========================Calendars====================*/
-
 .UICalendars {
 	background-color: #ffffff;
 	border: 1px solid #c7c7c7;
@@ -515,7 +491,6 @@
 }
 
 /*====================View Calendar =====================*/
-
 .UICalendarViewContainer {
 
 	margin-left: 243px;
@@ -533,9 +508,7 @@
 	width: auto;
 }
 
-
 /*======================== Day view ==========================*/
-
 .UIDayView  {
 	border-bottom: 1px solid #c7c7c7;
 }
@@ -553,7 +526,7 @@
 }
 
 .UIDayView .EventDayContent {
-	background-color: #ffffff;
+	background-color: #fff;
 	border-left: 1px solid #c7c7c7;
 	*border-left: none;
 }
@@ -615,10 +588,12 @@
 }
 
 .UIDayView .EventDayContent .EventContainerBar{
-	border:1px solid #ffffff;
+	border:1px solid #fff;
 	border-bottom: none;
 	cursor: move;
 	-moz-user-select : none ;
+	padding: 0px 2px;
+	font-size: 10px;
 }
 
 .UIDayView .EventDayContent .EventContainer{
@@ -626,12 +601,13 @@
 	border-top: none;
 	border-bottom: none;
 	overflow: hidden ;
+	padding: 1px 2px;
 }
 
 .UIDayView .EventDayContent .ResizeEventContainer{
 	background:transparent;
 	width: 10%;
-	height: 2px;
+	height: 1px;
 	margin:auto;
 	border-top : solid 1px gray ;
 	border-bottom : solid 1px gray ;
@@ -642,8 +618,8 @@
 	*width: 97%;  /* fixed for IE */
 	border-top: none;
 }
-.UIDayView .TitleBar .Day{
-	 
+
+.UIDayView .TitleBar .Day { 
 }
 
 .UIDayView .TitleBar .Today{
@@ -1111,7 +1087,6 @@
 	margin: 3px 6px 0px 3px;
 }
 
-
 .UIListView  table {
 	width: 99.4%;
 	background-color: #ffffff;
@@ -1318,6 +1293,7 @@
 	border-top: 1px solid #c7c7c7;
 	padding: 2px 6px;
 }
+
 .UIMonthView .EventMonthContent  .DisableDay {
 	text-align: right;
 	border-top: 1px solid #c7c7c7;
@@ -1777,7 +1753,7 @@
 .SandyBrown {background-color: #F4A460;}    
 .SeaGreen {background-color: #2E8B57;}    
 .SeaShell {background-color: #FFF5EE;}    
-.Sienna {background-color: #A0522D;}    
+.Sienna {background-color: #A0522D; color:#fff;}    
 .Silver {background-color: #C0C0C0;}    
 .SkyBlue {background-color: #87CEEB;}
 .Thistle {background-color: #D8BFD8;}    
