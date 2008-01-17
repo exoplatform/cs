@@ -338,7 +338,7 @@ public class UIMessageList extends UIForm {
         }
         mailSrv.toggleMessageProperty(SessionsUtils.getSessionProvider(), username, accountId, msgList, Utils.EXO_STAR);
       }
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
     }
   }
   
@@ -661,7 +661,7 @@ public class UIMessageList extends UIForm {
         }
       }
       mailSrv.toggleMessageProperty(SessionsUtils.getSessionProvider(), username, accountId, msgList, Utils.EXO_ISUNREAD);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageList.class));
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class));
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class));
     }
   }
@@ -683,7 +683,7 @@ public class UIMessageList extends UIForm {
         }
       }
       mailSrv.toggleMessageProperty(SessionsUtils.getSessionProvider(), username, accountId, msgList, Utils.EXO_ISUNREAD);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageList.class));
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class));
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class));
     }
   }
