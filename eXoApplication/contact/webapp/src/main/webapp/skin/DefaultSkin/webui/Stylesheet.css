@@ -17,8 +17,19 @@
 @import url("UIWelcomeContact/Stylesheet.css") ;
 @import url("skinIcons/24x24/Stylesheet.css") ;
 
+.UIWindow .UIContactPortlet {
+	margin: 0px;
+	border: none;
+}
+
+.UIContactPortlet {
+	background: white;
+	border: 1px solid #b7b7b7;
+	margin: 7px;
+}
 
 /***************************** PopUp ****************************/
+
 
 /*-----------------------UITagInfo-------------------*/
 

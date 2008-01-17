@@ -333,7 +333,7 @@
 }
 
 .UIMailPortlet .MarkAll {
-	background: url('icons/MarkAll.gif') no-repeat left left center;
+	background: url('icons/MarkAll.gif') no-repeat left center;
 }
 
 .UIMailPortlet .RemoveFolderIcon {

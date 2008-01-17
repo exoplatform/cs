@@ -20,6 +20,17 @@
 @import url("UICombobox/Stylesheet.css");
 /*=========================== MailBanner ==================================*/
 
+.UIWindow .UICalendarPortlet {
+	margin: 0px;
+	border: none;
+}
+
+.UICalendarPortlet {
+	background: white;
+	border: 1px solid #b7b7b7;
+	margin: 7px;
+}
+
 .UICalendarPortlet .UIBannerContainer {
   background: #fbfbfb url('background/BgBanner457x62.gif') no-repeat left;
   height: 62px;
