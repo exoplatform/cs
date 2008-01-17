@@ -128,36 +128,30 @@ public class JCRDataStorage{
   
   public MailSetting getMailSetting(SessionProvider sProvider, String username) throws Exception {
     Node homeNode = getMailHomeNode(sProvider, username);
-    NodeIterator it = homeNode.getNodes();
-    Node mailSettingNode = null;
-    while (it.hasNext()) {
-      Node node = it.nextNode();
-      if (node.isNodeType(Utils.EXO_MAIL_SETTING)) {
-        mailSettingNode = node;
-      }
+    Node settingNode = null;
+    if (homeNode.hasNode(Utils.KEY_MAIL_SETTING)) settingNode = homeNode.getNode(Utils.KEY_MAIL_SETTING) ;
+    MailSetting setting = new MailSetting();
+    if (settingNode != null ){
+      if (settingNode.hasProperty(Utils.EXO_NUMBER_OF_CONVERSATION)) 
+        setting.setShowNumberMessage((settingNode.getProperty(Utils.EXO_NUMBER_OF_CONVERSATION).getLong()));
+      if (settingNode.hasProperty(Utils.EXO_PERIOD_CHECKMAIL_AUTO)) 
+        setting.setPeriodCheckMailAuto((settingNode.getProperty(Utils.EXO_PERIOD_CHECKMAIL_AUTO).getLong()));
+      if (settingNode.hasProperty(Utils.EXO_DEFAULT_ACCOUNT)) 
+        setting.setDefaultAccount((settingNode.getProperty(Utils.EXO_DEFAULT_ACCOUNT).getString()));
+      if (settingNode.hasProperty(Utils.EXO_EDITOR)) 
+        setting.setTypeOfEditor((settingNode.getProperty(Utils.EXO_EDITOR).getString()));
+      if (settingNode.hasProperty(Utils.EXO_FORMAT_WHEN_REPLYFORWARD)) 
+        setting.setFormatWhenReplyForward((settingNode.getProperty(Utils.EXO_FORMAT_WHEN_REPLYFORWARD).getString()));
+      if (settingNode.hasProperty(Utils.EXO_REPLY_MESSAGE_WITH)) 
+        setting.setReplyMessageWith((settingNode.getProperty(Utils.EXO_REPLY_MESSAGE_WITH).getString()));
+      if (settingNode.hasProperty(Utils.EXO_FORWARD_MESSAGE_WITH)) 
+        setting.setForwardMessageWith((settingNode.getProperty(Utils.EXO_FORWARD_MESSAGE_WITH).getString()));
+      if (settingNode.hasProperty(Utils.EXO_PREFIX_MESSAGE_WITH)) 
+        setting.setPrefixMessageWith((settingNode.getProperty(Utils.EXO_PREFIX_MESSAGE_WITH).getString()));
+      if (settingNode.hasProperty(Utils.EXO_SAVE_SENT_MESSAGE)) 
+        setting.setSaveMessageInSent((settingNode.getProperty(Utils.EXO_SAVE_SENT_MESSAGE).getBoolean()));
     }
-    MailSetting mailSetting = new MailSetting();
-    if (mailSettingNode !=null ){
-      if (mailSettingNode.hasProperty(Utils.EXO_NUMBER_OF_CONVERSATION)) 
-        mailSetting.setShowNumberMessage((mailSettingNode.getProperty(Utils.EXO_NUMBER_OF_CONVERSATION).getLong()));
-      if (mailSettingNode.hasProperty(Utils.EXO_PERIOD_CHECKMAIL_AUTO)) 
-        mailSetting.setPeriodCheckMailAuto((mailSettingNode.getProperty(Utils.EXO_PERIOD_CHECKMAIL_AUTO).getLong()));
-      if (mailSettingNode.hasProperty(Utils.EXO_DEFAULT_ACCOUNT)) 
-        mailSetting.setDefaultAccount((mailSettingNode.getProperty(Utils.EXO_DEFAULT_ACCOUNT).getString()));
-      if (mailSettingNode.hasProperty(Utils.EXO_EDITOR)) 
-        mailSetting.setTypeOfEditor((mailSettingNode.getProperty(Utils.EXO_EDITOR).getString()));
-      if (mailSettingNode.hasProperty(Utils.EXO_FORMAT_WHEN_REPLYFORWARD)) 
-        mailSetting.setFormatWhenReplyForward((mailSettingNode.getProperty(Utils.EXO_FORMAT_WHEN_REPLYFORWARD).getString()));
-      if (mailSettingNode.hasProperty(Utils.EXO_REPLY_MESSAGE_WITH)) 
-        mailSetting.setReplyMessageWith((mailSettingNode.getProperty(Utils.EXO_REPLY_MESSAGE_WITH).getString()));
-      if (mailSettingNode.hasProperty(Utils.EXO_FORWARD_MESSAGE_WITH)) 
-        mailSetting.setForwardMessageWith((mailSettingNode.getProperty(Utils.EXO_FORWARD_MESSAGE_WITH).getString()));
-      if (mailSettingNode.hasProperty(Utils.EXO_PREFIX_MESSAGE_WITH)) 
-        mailSetting.setPrefixMessageWith((mailSettingNode.getProperty(Utils.EXO_PREFIX_MESSAGE_WITH).getString()));
-      if (mailSettingNode.hasProperty(Utils.EXO_SAVE_SENT_MESSAGE)) 
-        mailSetting.setSaveMessageInSent((mailSettingNode.getProperty(Utils.EXO_SAVE_SENT_MESSAGE).getBoolean()));
-    }
-    return mailSetting; 
+    return setting; 
   }
 
   public MessagePageList getMessages(SessionProvider sProvider, String username, MessageFilter filter) throws Exception {
@@ -336,69 +330,25 @@ public class JCRDataStorage{
     if (messageHome.hasNode(msgId)) {
       Node msgNode = messageHome.getNode(msgId) ;
       if (msgNode.hasProperty(Utils.EXO_FOLDERS)) {
-        Boolean isRootConversation = msgNode.getProperty(Utils.EXO_ISROOT).getBoolean();
-        
         Boolean isUnread = msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean();
         Node currentFolderNode = getFolderNodeById(sProvider, username, accountId, currentFolderId);
         Node destFolderNode = getFolderNodeById(sProvider, username, accountId, destFolderId);
         Value[] propFolders = msgNode.getProperty(Utils.EXO_FOLDERS).getValues();
         String[] folderIds = new String[propFolders.length];
         for (int i = 0; i < propFolders.length; i++) {
-          folderIds[i] = propFolders[i].getString();
+          String folderId = propFolders[i].getString() ;
+          if (currentFolderId.equals(folderId)) folderIds[i] = destFolderId ;
+          else folderIds[i] = propFolders[i].getString();
         }
-        List<String> folderList = new ArrayList<String>(Arrays.asList(folderIds)); 
-        folderList.remove(currentFolderId);
-        folderList.add(destFolderId);
-        folderIds = folderList.toArray(new String[folderList.size()]);
         msgNode.setProperty(Utils.EXO_FOLDERS, folderIds);
         
-        if (isRootConversation) {
-          if (msgNode.hasProperty(Utils.EXO_MESSAGEIDS)) {
-            Value[] propMessageIds = msgNode.getProperty(Utils.EXO_MESSAGEIDS).getValues();
-            if (propMessageIds != null && propMessageIds.length > 1 ) {
-              List<String> messageIds = new ArrayList<String>();
-              for (int i = 0; i < propMessageIds.length; i++) {
-                String msgConverId  = propMessageIds[i].getString();
-                messageIds.add(msgConverId);
-              }
-              messageIds.remove(msgId);  
-              Node newRoot = messageHome.getNode(messageIds.get(messageIds.size() - 1));
-              newRoot.setProperty(Utils.EXO_ISUNREAD, false);
-              newRoot.setProperty(Utils.EXO_ISROOT, true);
-              newRoot.setProperty(Utils.EXO_ADDRESSES, msgNode.getProperty(Utils.EXO_ADDRESSES).getValues());
-              newRoot.setProperty(Utils.EXO_MESSAGEIDS, messageIds.toArray(new String[]{}));
-              for (String msgNewConverId : messageIds) {
-                Node conversation = messageHome.getNode(msgNewConverId);
-                conversation.setProperty(Utils.EXO_ROOT, newRoot.getProperty(Utils.EXO_ID).getString());
-              }
-              msgNode.setProperty(Utils.EXO_ADDRESSES, new String[] {});
-              msgNode.setProperty(Utils.EXO_MESSAGEIDS, new String[] {msgId});
-            }
-          }
-          // Update number of unread messages
-          if (isUnread) {
-            currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() - 1));
-            destFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (destFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() + 1));
-          }
-          currentFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (currentFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() - 1));
-          destFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (destFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() + 1));
-        } else {
-          msgNode.setProperty(Utils.EXO_ISROOT, true);
-          if (isUnread) {
-            destFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (destFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() + 1));
-          }
-          destFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (destFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() + 1));
-          msgNode.setProperty(Utils.EXO_MESSAGEIDS, new String[] {msgId});
-          Node rootMsg = messageHome.getNode(msgNode.getProperty(Utils.EXO_ROOT).getString());
-          Value[] propMessageIds = rootMsg.getProperty(Utils.EXO_MESSAGEIDS).getValues();
-          List<String> messageIds = new ArrayList<String>();
-          for (int i = 0; i < propMessageIds.length; i++) {
-            String msgConverId  = propMessageIds[i].getString();
-            messageIds.add(msgConverId);
-          }
-          messageIds.remove(msgId);
-          rootMsg.setProperty(Utils.EXO_MESSAGEIDS, messageIds.toArray(new String[]{}));
+        // Update number of unread messages
+        if (isUnread) {
+          currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() - 1));
+          destFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (destFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() + 1));
         }
+        currentFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (currentFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() - 1));
+        destFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (destFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() + 1));
       }
     }
     messageHome.getSession().save();
@@ -440,30 +390,29 @@ public class JCRDataStorage{
   
   public void saveMailSetting(SessionProvider sProvider, String username, MailSetting newSetting) throws Exception {
     Node mailHome = getMailHomeNode(sProvider, username) ;
-    Node mailSetting = null;
-    if (mailHome.hasNode(Utils.EXO_MAIL_SETTING)) {
-      mailSetting = mailHome.getNode(Utils.EXO_MAIL_SETTING);
-    } else {
-      mailSetting = mailHome.addNode(Utils.EXO_MAIL_SETTING, Utils.EXO_MAIL_SETTING);
+    Node settingNode = null;
+    if (mailHome.hasNode(Utils.KEY_MAIL_SETTING)) settingNode = mailHome.getNode(Utils.KEY_MAIL_SETTING);
+    else settingNode = mailHome.addNode(Utils.KEY_MAIL_SETTING, Utils.EXO_MAIL_SETTING);
+   
+    if (settingNode != null) {
+      settingNode.setProperty(Utils.EXO_NUMBER_OF_CONVERSATION, newSetting.getShowNumberMessage());
+      settingNode.setProperty(Utils.EXO_PERIOD_CHECKMAIL_AUTO, newSetting.getPeriodCheckMailAuto());
+      settingNode.setProperty(Utils.EXO_DEFAULT_ACCOUNT, newSetting.getDefaultAccount());
+      settingNode.setProperty(Utils.EXO_FORMAT_WHEN_REPLYFORWARD, newSetting.getFormatWhenReplyForward());
+      settingNode.setProperty(Utils.EXO_EDITOR, newSetting.getTypeOfEditor());
+      settingNode.setProperty(Utils.EXO_REPLY_MESSAGE_WITH, newSetting.getReplyMessageWith());
+      settingNode.setProperty(Utils.EXO_FORWARD_MESSAGE_WITH, newSetting.getForwardMessageWith());
+      settingNode.setProperty(Utils.EXO_PREFIX_MESSAGE_WITH, newSetting.getPrefixMessageWith());
+      settingNode.setProperty(Utils.EXO_SAVE_SENT_MESSAGE, newSetting.saveMessageInSent());
+      // saves change
+      mailHome.getSession().save();
     }
-    
-    mailSetting.setProperty(Utils.EXO_NUMBER_OF_CONVERSATION, newSetting.getShowNumberMessage());
-    mailSetting.setProperty(Utils.EXO_PERIOD_CHECKMAIL_AUTO, newSetting.getPeriodCheckMailAuto());
-    mailSetting.setProperty(Utils.EXO_DEFAULT_ACCOUNT, newSetting.getDefaultAccount());
-    mailSetting.setProperty(Utils.EXO_FORMAT_WHEN_REPLYFORWARD, newSetting.getFormatWhenReplyForward());
-    mailSetting.setProperty(Utils.EXO_EDITOR, newSetting.getTypeOfEditor());
-    mailSetting.setProperty(Utils.EXO_REPLY_MESSAGE_WITH, newSetting.getReplyMessageWith());
-    mailSetting.setProperty(Utils.EXO_FORWARD_MESSAGE_WITH, newSetting.getForwardMessageWith());
-    mailSetting.setProperty(Utils.EXO_PREFIX_MESSAGE_WITH, newSetting.getPrefixMessageWith());
-    mailSetting.setProperty(Utils.EXO_SAVE_SENT_MESSAGE, newSetting.saveMessageInSent());
-    
-    mailHome.getSession().save();
   }
   
   public String getCurrentAccount(SessionProvider sProvider, String username) throws Exception{
   	Node mailHome = getMailHomeNode(sProvider, username) ;
-    if (mailHome.hasNode(Utils.EXO_MAIL_SETTING)) {
-    	Node mailSetting = mailHome.getNode(Utils.EXO_MAIL_SETTING) ;
+    if (mailHome.hasNode(Utils.KEY_MAIL_SETTING)) {
+    	Node mailSetting = mailHome.getNode(Utils.KEY_MAIL_SETTING) ;
     	if(mailSetting.hasProperty(Utils.EXO_DEFAULT_ACCOUNT)) 
     		return mailSetting.getProperty(Utils.EXO_DEFAULT_ACCOUNT).getString() ;
     } 
@@ -476,12 +425,8 @@ public class JCRDataStorage{
   public void updateCurrentAccount(SessionProvider sProvider, String username, String accountId) throws Exception{
   	Node mailHome = getMailHomeNode(sProvider, username) ;
     Node mailSetting = null;
-    if (mailHome.hasNode(Utils.EXO_MAIL_SETTING)) {
-      mailSetting = mailHome.getNode(Utils.EXO_MAIL_SETTING);
-    } else {
-      mailSetting = mailHome.addNode(Utils.EXO_MAIL_SETTING, Utils.EXO_MAIL_SETTING);
-    }
-    mailSetting = mailHome.getNode(Utils.EXO_MAIL_SETTING) ;
+    if (mailHome.hasNode(Utils.KEY_MAIL_SETTING)) mailSetting = mailHome.getNode(Utils.KEY_MAIL_SETTING);
+    else mailSetting = mailHome.addNode(Utils.KEY_MAIL_SETTING, Utils.EXO_MAIL_SETTING);
     mailSetting.setProperty(Utils.EXO_DEFAULT_ACCOUNT, accountId) ;
     mailHome.getSession().save() ;
   }

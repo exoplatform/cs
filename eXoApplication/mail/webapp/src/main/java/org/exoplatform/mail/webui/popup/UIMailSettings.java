@@ -198,8 +198,7 @@ public class UIMailSettings extends UIForm implements UIPopupComponent {
       mailSetting.setForwardMessageWith(uiMailSetting.getForwardMessageWith());
       mailSetting.setPrefixMessageWith(uiMailSetting.getPrefixMessageWith());
       mailSetting.setSaveMessageInSent(uiMailSetting.saveMessageInSent());
-      MailService mailService = uiMailSetting.getApplicationComponent(MailService.class);
-      mailService.saveMailSetting(SessionsUtils.getSessionProvider(), username, mailSetting);
+      mailSrv.saveMailSetting(SessionsUtils.getSessionProvider(), username, mailSetting);
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       uiMessageList.setMessagePageList(mailSrv.getMessages(SessionsUtils.getSessionProvider(), username, uiMessageList.getMessageFilter()));
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));

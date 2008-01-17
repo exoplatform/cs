@@ -76,6 +76,7 @@ public class Utils {
   public static final String KEY_MESSAGE = "Messages".intern() ;
   public static final String KEY_TAGS = "Tags".intern() ;
   public static final String KEY_FILTER = "Filter".intern() ;
+  public static final String KEY_MAIL_SETTING = "MailSetting".intern();
   public static final String KEY_SPAM_FILTER = "SpamFilter".intern() ;
   public static final String KEY_ACCOUNT = "account".intern() ;
   public static final String KEY_HEADER = "mailHeader".intern() ;
