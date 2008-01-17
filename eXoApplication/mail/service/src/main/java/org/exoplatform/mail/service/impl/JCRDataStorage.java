@@ -954,11 +954,11 @@ public class JCRDataStorage{
           msgNode.getSession().save();
           
           Node currentFolderNode = folderHome.getNode(msgNode.getProperty(Utils.EXO_FOLDERS).getValues()[0].getString());
-          if (isUnread) 
+          if (isUnread) {
             currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() - 1));
-          else 
+          } else { 
             currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() + 1));
-          
+          }
           currentFolderNode.getSession().save();
         }
       }

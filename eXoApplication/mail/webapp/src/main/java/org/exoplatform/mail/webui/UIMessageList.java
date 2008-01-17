@@ -677,6 +677,7 @@ public class UIMessageList extends UIForm {
       List<String> msgList = new ArrayList<String>();
       for (Message msg : appliedList) {
         if (!msg.isUnread()) {
+          msgList.add(msg.getId());
           msg.setUnread(true);
           uiMessageList.messageList_.put(msg.getId(), msg);
         }
