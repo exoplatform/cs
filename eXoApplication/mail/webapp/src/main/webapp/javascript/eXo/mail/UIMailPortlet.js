@@ -412,30 +412,76 @@ UIMailPortlet.prototype.showHideField = function(chk,fields) {
 	}
 } ;
 
-UIMailPortlet.prototype.collapseExpandFolder = function(obj) {
+UIMailPortlet.prototype.collapseExpandFolder = function(obj, folderState) {
 	var DOMUtil = eXo.core.DOMUtil;
-	var divChild = DOMUtil.findNextElementByTagName(obj, "div");
+	var colExpContainerNode = DOMUtil.findNextElementByTagName(obj, "div");
 	
 	var objClass = obj.className;
-	if (objClass.indexOf(" OpenFolder") > -1) { 
-		objClass = objClass.replace(" OpenFolder", "");
-		objClass = objClass + " CloseFolder" ;
-		obj.className = objClass ;
-    } else if (objClass.indexOf(" CloseFolder") > -1) { 
-		objClass = objClass.replace(" CloseFolder", "");
-		objClass = objClass + " OpenFolder" ;
-		obj.className = objClass ;
-    }	
+  var folderId = obj.getAttribute('folder');
+  if (!folderState) {
+    if (objClass.indexOf(" OpenFolder") != -1) { 
+      obj.className = objClass.replace('OpenFolder', 'CloseFolder');
+      folderState = '0';
+    } else if (objClass.indexOf(" CloseFolder") != -1) { 
+      obj.className = objClass.replace('CloseFolder', 'OpenFolder');
+      folderState = '1';
+    }
+  } else if (folderState == '1') {
+    obj.className = objClass.replace('CloseFolder', 'OpenFolder');
+  } else if (folderState == '0') {
+    obj.className = objClass.replace('OpenFolder', 'CloseFolder');
+  }
+  
+  var collapseContainerNode = DOMUtil.findAncestorByClass(obj, 'Collapse');
+  while (collapseContainerNode) {
+    collapseContainerNode.className = 'Expand';
+    var tmpNode = DOMUtil.findPreviousElementByTagName(collapseContainerNode, 'div');
+    if (tmpNode) {
+      tmpNode.className = tmpNode.className.replace('CloseFolder', 'OpenFolder');
+    }
+    collapseContainerNode = DOMUtil.findAncestorByClass(collapseContainerNode, 'Collapse');
+  }
     
-    if (divChild != null) {
-		var childClass = divChild.className ;
-		if (childClass.indexOf("Expand") > -1) {
-			divChild.className = "Collapse" ;
- 		} else if (childClass.indexOf("Collapse") > -1){
-			divChild.className = "Expand" ;
-		} 
-	} 
-}
+  if (colExpContainerNode != null) {
+  	if (folderState == '0') {
+  		colExpContainerNode.className = "Collapse" ;
+  	} else if (folderState == '1'){
+  		colExpContainerNode.className = "Expand" ;
+  	} 
+	}
+  eXo.mail.UIMailPortlet.updateFolderState(folderId, folderState);
+};
+
+UIMailPortlet.prototype.updateFolderState = function(folderId, folderState) {
+  if (!this.uiFolderContainerNode) {
+    this.uiFolderContainerNode = document.getElementById('UIFolderContainer');
+  }
+  // Save state to cookie
+  var dateExpire = new Date();
+  dateExpire.setYear(dateExpire.getYear() + 49);
+  eXo.core.Browser.setCookie('lastfoldershow', folderId, dateExpire);
+  eXo.core.Browser.setCookie('folderstate', folderState, dateExpire);
+};
+
+UIMailPortlet.prototype.restoreFolderState = function() {
+  var folderId = eXo.core.Browser.getCookie('lastfoldershow');
+  if (!folderId) {
+    return;
+  }
+  var folderState = eXo.core.Browser.getCookie('folderstate');
+  if (!this.uiFolderContainerNode) {
+    this.uiFolderContainerNode = document.getElementById('UIFolderContainer');
+  }
+  var folderNodes = eXo.core.DOMUtil.findDescendantsByClass(this.uiFolderContainerNode, 'div', 'Folder');
+  for (var i=0; i<folderNodes.length; i++) {
+    var folderIdTmp = folderNodes[i].getAttribute('folder');
+    if (folderId == folderIdTmp) {
+      this.collapseExpandFolder(folderNodes[i], folderState);
+      break;
+    }
+  }
+};
+
 // Check all
 function CheckBox() {
 }

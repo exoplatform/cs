@@ -3,6 +3,7 @@
   import org.exoplatform.mail.service.Utils;
   import org.exoplatform.mail.MailUtils;
   def rcontext = _ctx.getRequestContext() ;
+  rcontext.getJavascriptManager().addOnLoadJavascript('eXo.mail.UIMailPortlet.restoreFolderState()');  
 	String compId = uicomponent.getId() ;
 %>
 <div class="UIFolderContainer" id="<%=uicomponent.getId()%>">
