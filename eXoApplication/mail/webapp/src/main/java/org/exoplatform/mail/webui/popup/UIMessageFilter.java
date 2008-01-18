@@ -64,10 +64,15 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
   public static final String CONDITION_START_WITH = "starts with".intern();
   
   private String selectedFilterId ;
+  private String accountId_ ;
   
-  public UIMessageFilter() throws Exception {
-    if (getFilters().size() > 0) {
-      setSelectedFilterId(getFilters().get(0).getId());
+  public UIMessageFilter() throws Exception { }
+  
+  public void init(String accountId) throws Exception {
+    accountId_ = accountId;
+    List<MessageFilter> filterList = getFilters() ;
+    if (filterList != null && filterList.size() > 0) {
+      setSelectedFilterId(filterList.get(0).getId());
     }
   }
   
@@ -87,9 +92,8 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
   
   public List<MessageFilter> getFilters() throws Exception {
     String username = MailUtils.getCurrentUser();
-    String accountId = getAncestorOfType(UIMailPortlet.class).getChild(UINavigationContainer.class).getChild(UISelectAccount.class).getSelectedValue() ;
     MailService mailSrv = MailUtils.getMailService();
-    return mailSrv.getFilters(SessionsUtils.getSessionProvider(), username, accountId);
+    return mailSrv.getFilters(SessionsUtils.getSessionProvider(), username, accountId_);
   }
   
   public Folder getFolder() throws Exception {

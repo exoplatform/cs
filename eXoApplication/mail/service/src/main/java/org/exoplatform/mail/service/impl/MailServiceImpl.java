@@ -663,25 +663,10 @@ public class MailServiceImpl implements MailService{
   }
   
   public void importMessage(SessionProvider sProvider, String username, String accountId, String folderId, InputStream inputStream, String type) throws Exception {
-    /*Properties props = System.getProperties();
-    Session session = Session.getDefaultInstance(props, null);
-    MimeMessage mimeMessage = new MimeMessage(session, inputStream);
-    Message message = new Message();
-    message.setAccountId(accountId);
-    message = Utils.mergeFromMimeMessage(message, mimeMessage);
-    message.setFolders(new String[] {folderId});
-    saveMessage(sProvider, username, accountId, message, true);*/
   	emlImportExport_.importMessage(sProvider, username, accountId, folderId, inputStream, type) ;
   }
   
   public OutputStream exportMessage(SessionProvider sProvider, String username, String accountId, String messageId) throws Exception {
-    /*Properties props = System.getProperties();
-    Session session = Session.getDefaultInstance(props, null);
-    Message message = getMessageById(sProvider, username, accountId, messageId);
-    MimeMessage mimeMessage = new MimeMessage(session);
-    mimeMessage = Utils.mergeToMimeMessage(message, mimeMessage);
-    OutputStream outputStream = new ByteArrayOutputStream();
-    mimeMessage.writeTo(outputStream);*/
     return emlImportExport_.exportMessage(sProvider, username, accountId, messageId) ; 
   }
   

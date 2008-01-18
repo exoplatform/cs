@@ -181,6 +181,7 @@ public class UIActionBar extends UIContainer {
       UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class, null, "UIPopupActionFilterContainer");
       uiPopupAction.activate(uiPopupContainer, 600, 0, false) ;
       UIMessageFilter uiMessageFilter = uiPopupContainer.createUIComponent(UIMessageFilter.class, null, null);
+      uiMessageFilter.init(accId) ;
       uiPopupContainer.addChild(uiMessageFilter) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
