@@ -388,6 +388,9 @@ function EventMan(){}
  * @param {Object} rootNode
  */
 EventMan.prototype.initMonth = function(rootNode){
+  if (this.events) {
+    this.cleanUp();
+  }
   this.events = new Array();
   this.weeks = new Array();
   rootNode = typeof(rootNode) == 'string' ? document.getElementById(rootNode) : rootNode;
@@ -407,6 +410,21 @@ EventMan.prototype.initMonth = function(rootNode){
   this.UIMonthViewGrid = document.getElementById('UIMonthViewGrid');
   this.groupByWeek();
   this.sortByWeek();
+};
+
+EventMan.prototype.cleanUp = function() {
+  var DOMUtil = eXo.core.DOMUtil;
+  for (var i=0; i<this.events.length; i++) {
+    var eventObj = this.events[i];
+    for (var j=0; j<eventObj.cloneNodes.length; j++) {
+      DOMUtil.removeElement(eventObj.cloneNodes[j]);
+    }
+    eventObj.rootNode.setAttribute('used', 'false');
+  }
+  var moreNodes = eXo.core.DOMUtil.findDescendantsByClass(this.rootNode, 'div', 'MoreEvent');
+  for (var i=0; i<moreNodes.length; i++) {
+    DOMUtil.removeElement(moreNodes[i]);
+  }
 };
 
 /**
@@ -503,9 +521,6 @@ GUIMan.prototype.initMonth = function(){
     var eventLabelNode = eXo.core.DOMUtil.findFirstDescendantByClass(eventObj.rootNode, 'div', 'EventLabel');
     eventLabelNode.innerHTML = eventObj.getLabel();
     eventObj.rootNode.setAttribute('title', eventObj.name);
-    for (var j=0; j<eventObj.cloneNodes.length; j++) {
-      DOMUtil.removeElement(eventObj.cloneNodes[j]);
-    }
   }
   this.rowContainerDay = DOMUtil.findFirstDescendantByClass(eXo.calendar.UICalendarMan.EventMan.rootNode, 'div', 'RowContainerDay');
   var rows = eXo.calendar.UICalendarMan.EventMan.UIMonthViewGrid.getElementsByTagName('tr');
@@ -664,10 +679,6 @@ GUIMan.prototype.cancelEvent = function(event) {
 GUIMan.prototype.paintMonth = function(){
   var weeks = eXo.calendar.UICalendarMan.EventMan.weeks;
   // Remove old more node if exist
-  var moreNodes = eXo.core.DOMUtil.findDescendantsByClass(this.rowContainerDay, 'div', 'MoreEvent');
-  for (var i=0; i<moreNodes.length; i++) {
-    eXo.core.DOMUtil.removeElement(moreNodes[i]);
-  }
   for (var i=0; i<weeks.length; i++) {
     var curentWeek = weeks[i];
     if (curentWeek.events.length > 0) {
