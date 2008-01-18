@@ -299,11 +299,9 @@
 }
 
 .UIContactPortlet .UIContactContainer .DecoratorBox {
-	*padding-left:3px;
 }
 
 .UIContactPortlet .UIContactContainer .ViewBoxStyle {
-	border: 1px solid #c7c7c7;
 }
 
 .UIContactPortlet .UIContactContainer .MessageNotice {
@@ -455,7 +453,7 @@
 
 .UIContactPortlet .UIContactContainer .UIGrid {
 	border-top: none;
-	*width: 99.7%; 
+	_width: 99.6%; 
 	background: #ffffff;
 }
 
@@ -534,7 +532,6 @@
 .UIContactPortlet .UIContactContainer .UIContactPreview {
 	border: 1px solid #c0c0c0;
 	background: #ffffff;
-	width: 98.7%;
 }
 
 .UIContactPortlet .UIContactContainer .UIContactPreview .ViewBoxStyle {
