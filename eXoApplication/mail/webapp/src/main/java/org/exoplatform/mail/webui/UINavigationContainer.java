@@ -16,7 +16,10 @@
  */
 package org.exoplatform.mail.webui;
 
+import java.util.List;
+
 import org.exoplatform.mail.SessionsUtils;
+import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -39,7 +42,9 @@ public class UINavigationContainer extends UIContainer  {
     addChild(uiSelectAccount) ;
     MailService mailSvr = getApplicationComponent(MailService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
-    String defaultAcc = mailSvr.getCurrentAccount(SessionsUtils.getSessionProvider(), username);
+    String defaultAcc = mailSvr.getMailSetting(SessionsUtils.getSessionProvider(), username).getDefaultAccount();
+    List<Account> accounts = mailSvr.getAccounts(SessionsUtils.getSessionProvider(), username);
+    if (defaultAcc == null && accounts.size() > 0) defaultAcc = accounts.get(0).getId();
     uiSelectAccount.setSelectedValue(defaultAcc);
     UIFolderContainer uiFolderContainer = createUIComponent(UIFolderContainer.class, null, null);
     String accountId = uiSelectAccount.getSelectedValue();

@@ -39,7 +39,10 @@ public class UIMailPortlet extends UIPortletApplication {
 //    addChild(UIBannerContainer.class, null, null) ;
     addChild(UIActionBar.class, null, null) ;
     addChild(UINavigationContainer.class, null, null) ;
-    addChild(UIMessageArea.class, null, null) ;
+    String accId = getChild(UINavigationContainer.class).getChild(UISelectAccount.class).getSelectedValue();
+    UIMessageArea uiMessageArea = createUIComponent(UIMessageArea.class, null, null);
+    uiMessageArea.init(accId);
+    addChild(uiMessageArea);
     addChild(UIPopupAction.class, null, null) ;
     //addChild(UIMailContainer.class, null, null) ;
   }

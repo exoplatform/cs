@@ -31,6 +31,7 @@ import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIMailPortlet;
+import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -90,7 +91,7 @@ public class UIExportForm extends UIForm implements UIPopupComponent {
       UIMailPortlet uiPortlet = uiExportForm.getAncestorOfType(UIMailPortlet.class);
       String msgExport = uiExportForm.getExportMessage().getId();
       String username = MailUtils.getCurrentUser();
-      String accountId = MailUtils.getAccountId();
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailSrv = MailUtils.getMailService();      
       ByteArrayOutputStream outputStream = (ByteArrayOutputStream)mailSrv.exportMessage(SessionsUtils.getSessionProvider(), username, accountId, msgExport);
       ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());

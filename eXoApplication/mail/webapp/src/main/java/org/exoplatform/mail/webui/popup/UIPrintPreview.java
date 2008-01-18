@@ -24,6 +24,7 @@ import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
+import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -65,7 +66,7 @@ public class UIPrintPreview extends UIForm implements UIPopupComponent {
   
   public Account getAccount() throws Exception {
     String username = MailUtils.getCurrentUser();
-    String accountId = MailUtils.getAccountId();
+    String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
     MailService mailSrv = MailUtils.getMailService();
     try {
       return mailSrv.getAccountById(SessionsUtils.getSessionProvider(), username, accountId);

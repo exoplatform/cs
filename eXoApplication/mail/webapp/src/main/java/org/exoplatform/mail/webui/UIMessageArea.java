@@ -31,8 +31,11 @@ import org.exoplatform.webui.core.UIContainer;
 )
 public class UIMessageArea extends UIContainer  {
   
-  public UIMessageArea() throws Exception {
+  public UIMessageArea() throws Exception {}
+  
+  public void init(String accId) throws Exception {
     UIMessageList uiMessageList = createUIComponent(UIMessageList.class, null, null);
+    uiMessageList.init(accId);
     addChild(uiMessageList);
     addChild(UIMessagePreview.class, null, null);
   }

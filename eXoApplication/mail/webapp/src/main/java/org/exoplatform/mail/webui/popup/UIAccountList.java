@@ -122,7 +122,6 @@ public class UIAccountList extends UIGrid  implements UIPopupComponent{
         if (currAccountId.equals(accId)) {
           if (mailSvr.getAccounts(SessionsUtils.getSessionProvider(), username).size() == 0) {
             uiSelectAccount.setSelectedValue("");
-            mailSvr.updateCurrentAccount(SessionsUtils.getSessionProvider(), username, "");
           }
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ; 
         } else {

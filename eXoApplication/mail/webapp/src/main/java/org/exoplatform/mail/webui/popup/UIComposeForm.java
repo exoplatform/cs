@@ -124,7 +124,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     for(Account acc : mailSrv.getAccounts(SessionsUtils.getSessionProvider(), username)) {
       SelectItemOption<String> itemOption = new SelectItemOption<String>(acc.getUserDisplayName() + " &lt;" + acc.getEmailAddress() + 
           "&gt;", acc.getUserDisplayName() + "<" + acc.getEmailAddress() + ">");
-      if (acc.getId().equals(MailUtils.getAccountId())) { itemOption.setSelected(true); }
+      if (acc.getId().equals(accountId)) { itemOption.setSelected(true); }
       options.add(itemOption) ;
     }
     addUIFormInput(new UIFormSelectBox(FIELD_FROM, FIELD_FROM, options)) ;

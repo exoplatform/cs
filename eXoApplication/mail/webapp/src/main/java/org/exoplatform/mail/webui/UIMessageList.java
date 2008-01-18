@@ -109,15 +109,7 @@ public class UIMessageList extends UIForm {
   private String accountId_;
   public LinkedHashMap<String, Message> messageList_ = new LinkedHashMap<String, Message>();
   
-  public UIMessageList() throws Exception {
-    MessageFilter filter = new MessageFilter("Folder"); 
-    String accId = MailUtils.getAccountId() ;
-    filter.setAccountId(accId);
-    selectedFolderId_ = Utils.createFolderId(accId, Utils.FD_INBOX, false);
-    filter.setFolder(new String[] {selectedFolderId_});
-    setMessageFilter(filter);
-    init(accId) ;
-  }
+  public UIMessageList() throws Exception {}
   
   public void init(String accountId) throws Exception {
     accountId_ = accountId ;
@@ -126,12 +118,13 @@ public class UIMessageList extends UIForm {
     MailService mailSrv = MailUtils.getMailService();
     MessageFilter filter = getMessageFilter();
     if (filter == null) filter = new MessageFilter("Folder");
-    filter.setAccountId(accountId);
     if (accountId != null && accountId != ""){
+        filter.setAccountId(accountId);
       //if(filter.getFolder() == null || (filter.getFolder() != null && (!filter.getFolder()[0].equals(selectedFolderId_)) ||  pageList_ == null)) {
-        if (filter.getFolder() == null) selectedFolderId_ = Utils.createFolderId(accountId, Utils.FD_INBOX, false);
-        selectedFolderId_ = filter.getFolder()[0];
-        filter.setFolder(new String[] { selectedFolderId_ });
+        if (filter.getFolder() == null) {        
+          selectedFolderId_ = Utils.createFolderId(accountId, Utils.FD_INBOX, false);
+          filter.setFolder(new String[] { selectedFolderId_ });
+        } else selectedFolderId_ = filter.getFolder()[0];
         setMessagePageList(mailSrv.getMessagePageListByFolder(SessionsUtils.getSessionProvider(), username, accountId, selectedFolderId_));
       //}
     }
@@ -602,7 +595,7 @@ public class UIMessageList extends UIForm {
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class) ;
       String username = MailUtils.getCurrentUser();
-      String accountId = MailUtils.getAccountId();
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailSrv = MailUtils.getMailService();
       List<Message> checkedMessageList = new ArrayList<Message>();
       if (msgId != null) { 
@@ -800,10 +793,11 @@ public class UIMessageList extends UIForm {
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
       UIImportForm uiImportForm = uiPopup.createUIComponent(UIImportForm.class, null, null);
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      uiImportForm.init(accountId);
       if (uiMessageList.getSelectedFolderId() != null) {
         uiImportForm.setSelectedFolder(uiMessageList.getSelectedFolderId());
       } else {
-        String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
         uiImportForm.setSelectedFolder(Utils.createFolderId(accountId, Utils.FD_INBOX, false));
       }
       uiPopup.activate(uiImportForm, 600, 0, true);

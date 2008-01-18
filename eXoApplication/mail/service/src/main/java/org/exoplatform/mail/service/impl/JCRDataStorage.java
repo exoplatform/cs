@@ -65,7 +65,11 @@ public class JCRDataStorage{
   private Node getMailHomeNode(SessionProvider sProvider, String username) throws Exception {
     Node userApp = nodeHierarchyCreator_.getUserApplicationNode(sProvider, username) ;
   	if(userApp.hasNode(MAIL_SERVICE)) return userApp.getNode(MAIL_SERVICE) ;
-  	return userApp.addNode(MAIL_SERVICE, Utils.NT_UNSTRUCTURED) ;
+    else {
+      userApp.addNode(MAIL_SERVICE, Utils.NT_UNSTRUCTURED) ;
+      userApp.save();
+    }
+  	return userApp.getNode(MAIL_SERVICE) ;
   }
   
   public Account getAccountById(SessionProvider sProvider, String username, String id) throws Exception {
@@ -409,28 +413,6 @@ public class JCRDataStorage{
     }
   }
   
-  public String getCurrentAccount(SessionProvider sProvider, String username) throws Exception{
-  	Node mailHome = getMailHomeNode(sProvider, username) ;
-    if (mailHome.hasNode(Utils.KEY_MAIL_SETTING)) {
-    	Node mailSetting = mailHome.getNode(Utils.KEY_MAIL_SETTING) ;
-    	if(mailSetting.hasProperty(Utils.EXO_DEFAULT_ACCOUNT)) 
-    		return mailSetting.getProperty(Utils.EXO_DEFAULT_ACCOUNT).getString() ;
-    } 
-    if (getAccounts(sProvider, username).size() > 0) {
-      return getAccounts(sProvider, username).get(0).getId();
-    }
-  	return null ;
-  }
-  
-  public void updateCurrentAccount(SessionProvider sProvider, String username, String accountId) throws Exception{
-  	Node mailHome = getMailHomeNode(sProvider, username) ;
-    Node mailSetting = null;
-    if (mailHome.hasNode(Utils.KEY_MAIL_SETTING)) mailSetting = mailHome.getNode(Utils.KEY_MAIL_SETTING);
-    else mailSetting = mailHome.addNode(Utils.KEY_MAIL_SETTING, Utils.EXO_MAIL_SETTING);
-    mailSetting.setProperty(Utils.EXO_DEFAULT_ACCOUNT, accountId) ;
-    mailHome.getSession().save() ;
-  }
-  
   public void saveMessage(SessionProvider sProvider, String username, String accountId, Message message, boolean isNew) throws Exception {
     Node homeMsg = getMessageHome(sProvider, username, accountId);
     Node nodeMsg = null;
@@ -648,7 +630,10 @@ public class JCRDataStorage{
   public Node getFilterHome(SessionProvider sProvider, String username, String accountId) throws Exception {
     Node accountHome = getMailHomeNode(sProvider, username).getNode(accountId);
     if(accountHome.hasNode(Utils.KEY_FILTER)) return accountHome.getNode(Utils.KEY_FILTER) ;
-    else return accountHome.addNode(Utils.KEY_FILTER, Utils.NT_UNSTRUCTURED) ;
+    else {
+      accountHome.addNode(Utils.KEY_FILTER, Utils.NT_UNSTRUCTURED) ;
+      accountHome.save() ;
+    } return accountHome.getNode(Utils.KEY_FILTER) ;
   }
   
   public List<MessageFilter> getFilters(SessionProvider sProvider, String username, String accountId) throws Exception {
@@ -951,7 +936,7 @@ public class JCRDataStorage{
         } else if (property.equals(Utils.EXO_ISUNREAD)) {
           Boolean isUnread = msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean();
           msgNode.setProperty(Utils.EXO_ISUNREAD, !isUnread);
-          msgNode.getSession().save();
+          msgNode.save();
           
           Node currentFolderNode = folderHome.getNode(msgNode.getProperty(Utils.EXO_FOLDERS).getValues()[0].getString());
           if (isUnread) {
@@ -959,7 +944,7 @@ public class JCRDataStorage{
           } else { 
             currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() + 1));
           }
-          currentFolderNode.getSession().save();
+          currentFolderNode.save();
         }
       }
     }

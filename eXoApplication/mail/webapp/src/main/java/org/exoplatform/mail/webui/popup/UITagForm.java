@@ -190,7 +190,7 @@ public class UITagForm extends UIForm implements UIPopupComponent{
       UITagForm uiTagForm = event.getSource(); 
       UIMailPortlet uiPortlet = uiTagForm.getAncestorOfType(UIMailPortlet.class);
       String username = MailUtils.getCurrentUser();
-      String accountId = MailUtils.getAccountId();
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailSrv = uiTagForm.getApplicationComponent(MailService.class);
       List<String> tagList = new ArrayList<String>();
       for (Tag tag : uiTagForm.getCheckedTags()) {

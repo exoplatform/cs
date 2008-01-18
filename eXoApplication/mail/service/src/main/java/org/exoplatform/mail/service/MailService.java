@@ -317,8 +317,6 @@ public interface MailService {
    * @throws Exception
    */
   public void saveMailSetting(SessionProvider sProvider, String username, MailSetting newSetting) throws Exception;
-  public String getCurrentAccount(SessionProvider sProvider, String username) throws Exception;
-  public void updateCurrentAccount(SessionProvider sProvider, String username, String accountId) throws Exception;
   
   public void importMessage(SessionProvider sProvider, String username, String accountId, String folderId, InputStream inputStream, String type) throws Exception;
   public OutputStream exportMessage(SessionProvider sProvider, String username,String accountId, String messageId) throws Exception;

@@ -87,21 +87,21 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
   
   public List<MessageFilter> getFilters() throws Exception {
     String username = MailUtils.getCurrentUser();
-    String accountId = MailUtils.getAccountId();
+    String accountId = getAncestorOfType(UIMailPortlet.class).getChild(UINavigationContainer.class).getChild(UISelectAccount.class).getSelectedValue() ;
     MailService mailSrv = MailUtils.getMailService();
     return mailSrv.getFilters(SessionsUtils.getSessionProvider(), username, accountId);
   }
   
   public Folder getFolder() throws Exception {
     String username = MailUtils.getCurrentUser();
-    String accountId = MailUtils.getAccountId();
+    String accountId = getAncestorOfType(UIMailPortlet.class).getChild(UINavigationContainer.class).getChild(UISelectAccount.class).getSelectedValue() ;
     MailService mailSrv = MailUtils.getMailService();
     return mailSrv.getFolder(SessionsUtils.getSessionProvider(), username, accountId, getSelectedFilter().getApplyFolder());
   }
   
   public Tag getTag() throws Exception {
     String username = MailUtils.getCurrentUser();
-    String accountId = MailUtils.getAccountId();
+    String accountId = getAncestorOfType(UIMailPortlet.class).getChild(UINavigationContainer.class).getChild(UISelectAccount.class).getSelectedValue() ;
     MailService mailSrv = MailUtils.getMailService();
     return mailSrv.getTag(SessionsUtils.getSessionProvider(), username, accountId, getSelectedFilter().getApplyTag());
   }
@@ -148,7 +148,7 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
       UIPopupActionContainer uiActionContainer = uiMessageFilter.getAncestorOfType(UIPopupActionContainer.class) ;
       UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
       UIAddMessageFilter uiAddMessageFilter = uiChildPopup.createUIComponent(UIAddMessageFilter.class, null, null);
-      String accountId = mailPortlet.getChild(UINavigationContainer.class).getChild(UISelectAccount.class).getSelectedValue() ;
+      String accountId = mailPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       uiAddMessageFilter.init(accountId);
       uiChildPopup.activate(uiAddMessageFilter, 650, 0, false) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
@@ -170,7 +170,7 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
       UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
       UIAddMessageFilter uiEditMessageFilter = uiChildPopup.createUIComponent(UIAddMessageFilter.class, null, null);
       UIMailPortlet mailPortlet = uiMessageFilter.getAncestorOfType(UIMailPortlet.class);
-      String accountId = mailPortlet.getChild(UINavigationContainer.class).getChild(UISelectAccount.class).getSelectedValue() ;
+      String accountId = mailPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       uiEditMessageFilter.init(accountId);
       uiChildPopup.activate(uiEditMessageFilter, 650, 0, false) ;
       uiEditMessageFilter.setCurrentFilter(filter);
@@ -184,7 +184,7 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
       UIMailPortlet mailPortlet = uiMessageFilter.getAncestorOfType(UIMailPortlet.class);
       String filterId = uiMessageFilter.getSelectedFilterId();
       String username = MailUtils.getCurrentUser();
-      String accountId = mailPortlet.getChild(UINavigationContainer.class).getChild(UISelectAccount.class).getSelectedValue() ;
+      String accountId = mailPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailServ = MailUtils.getMailService();
       try {
         mailServ.removeFilter(SessionsUtils.getSessionProvider(), username, accountId, filterId);

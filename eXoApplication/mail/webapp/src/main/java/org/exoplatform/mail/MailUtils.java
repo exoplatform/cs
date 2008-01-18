@@ -51,14 +51,6 @@ public class MailUtils {
     return Util.getPortalRequestContext().getRemoteUser() ; 
   }
   
-  static public String getAccountId() throws Exception { 
-  	return getMailService().getCurrentAccount(SessionsUtils.getSessionProvider(), getCurrentUser()) ;
-  }
-  
-  static public void setAccountId(String accId) throws Exception { 
-  	getMailService().updateCurrentAccount(SessionsUtils.getSessionProvider(), getCurrentUser(), accId) ;
-  }
-  
   public static String getImageSource(Contact contact, DownloadService dservice) throws Exception {    
     ContactAttachment contactAttachment = contact.getAttachment();
     if (contactAttachment != null) {

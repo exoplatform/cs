@@ -19,7 +19,6 @@ package org.exoplatform.mail.webui;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
@@ -28,8 +27,8 @@ import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIAccountCreation;
 import org.exoplatform.mail.webui.popup.UIAccountList;
 import org.exoplatform.mail.webui.popup.UIAccountSetting;
-import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
+import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -73,7 +72,7 @@ public class UISelectAccount extends UIForm {
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     List<Account> accountList = new ArrayList<Account>(); 
     accountList =  mailSvr.getAccounts(SessionsUtils.getSessionProvider(), username) ;
-    String defaultAcc = mailSvr.getCurrentAccount(SessionsUtils.getSessionProvider(), username);
+    String defaultAcc = mailSvr.getMailSetting(SessionsUtils.getSessionProvider(), username).getDefaultAccount();
     List<SelectItemOption<String>>  options = new ArrayList<SelectItemOption<String>>() ;
     for(Account acc : accountList) {
       SelectItemOption<String> option = new SelectItemOption<String>(acc.getLabel(), acc.getId());
@@ -161,9 +160,6 @@ public class UISelectAccount extends UIForm {
       UISelectAccount uiSelectAcc = event.getSource() ;
       UIMailPortlet uiPortlet = uiSelectAcc.getAncestorOfType(UIMailPortlet.class);
       String accId = uiSelectAcc.getSelectedValue() ;
-      MailService mailSrv = MailUtils.getMailService();
-      String username = MailUtils.getCurrentUser();
-      mailSrv.updateCurrentAccount(SessionsUtils.getSessionProvider(), username, accId);
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
       MessageFilter filter = new MessageFilter("Folder");
       filter.setAccountId(accId);

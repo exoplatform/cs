@@ -19,7 +19,6 @@ package org.exoplatform.mail.webui.popup;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
@@ -27,6 +26,7 @@ import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
+import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.UISelectFolder;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -79,7 +79,7 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
       UIMailPortlet uiPortlet = uiMoveMessageForm.getAncestorOfType(UIMailPortlet.class) ;
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType((UIMessageList.class));
       String username = uiPortlet.getCurrentUser() ;
-      String accountId =  MailUtils.getAccountId();
+      String accountId =  uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       String destFolder = uiMoveMessageForm.getChild(UISelectFolder.class).getSelectedValue();
       for(Message message: uiMoveMessageForm.getMessageList()) {
          mailSrv.moveMessages(SessionsUtils.getSessionProvider(), username, accountId, message.getId(), message.getFolders()[0], destFolder);

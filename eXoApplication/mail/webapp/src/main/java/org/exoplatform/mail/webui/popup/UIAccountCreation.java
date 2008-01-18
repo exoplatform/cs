@@ -259,8 +259,7 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       isSSL = uiAccWs3.getIsSSL() ;
       incomingUserName = uiAccWs4.getUserName() ;
       incomingPassword = uiAccWs4.getPassword() ;
-      Account acc = null ;
-      acc = new Account() ;
+      Account acc = new Account() ;
 
       if(!uiAccWs4.getIsSavePass()) incomingPassword = null ;
 
@@ -289,7 +288,9 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
         uiSelectAccount.updateAccount();
         uiSelectAccount.setSelectedValue(acc.getId());
         uiPortlet.findFirstComponentOfType(UIFolderContainer.class).init(acc.getId());
-        uiPortlet.findFirstComponentOfType(UIMessageList.class).init(acc.getId());
+        UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
+        uiMessageList.setMessageFilter(null);
+        uiMessageList.init(acc.getId());
         uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
         uiAccCreation.getAncestorOfType(UIPopupAction.class).deActivate() ;
@@ -304,7 +305,6 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
         try {
           MailService mailSvr = MailUtils.getMailService() ;
           String username = uiPortlet.getCurrentUser() ;
-          mailSvr.updateCurrentAccount(SessionsUtils.getSessionProvider(), username, acc.getId());
           uiPortlet.findFirstComponentOfType(UIMessageList.class).init(acc.getId());
           UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class);
           uiSelectAccount.setSelectedValue(acc.getId());
