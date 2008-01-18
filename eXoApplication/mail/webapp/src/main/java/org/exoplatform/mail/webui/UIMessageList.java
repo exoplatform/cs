@@ -160,6 +160,10 @@ public class UIMessageList extends UIForm {
     return (getSelectedFolderId() != null) ? getSelectedFolderId().equals(Utils.createFolderId(accountId_, Utils.FD_DRAFTS, false)) : false ;
   }
   
+  public boolean selectedSentFolder() throws Exception {
+    return (getSelectedFolderId() != null) ? getSelectedFolderId().equals(Utils.createFolderId(accountId_, Utils.FD_SENT, false)) : false ;
+  }
+  
   public String getViewQuery() {return viewQuery_ ;}
   public void setViewQuery(String view) {viewQuery_ = view ;}
   
@@ -755,8 +759,8 @@ public class UIMessageList extends UIForm {
       String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ; 
       MailService mailSrv = MailUtils.getMailService();
       String username = MailUtils.getCurrentUser();
-      String accountId = uiMessageList.getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       for(Message message : uiMessageList.getCheckedMessage()) {
         mailSrv.moveMessages(SessionsUtils.getSessionProvider(), username, accountId, message.getId(), message.getFolders()[0], folderId);
      }       

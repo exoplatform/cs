@@ -2,6 +2,7 @@
  import org.exoplatform.mail.service.Message;
  import org.exoplatform.mail.service.Utils;
  import org.exoplatform.mail.service.Tag ;
+ import javax.mail.internet.InternetAddress;
  import org.exoplatform.mail.service.MessagePageList;
  import org.exoplatform.mail.MailUtils;
  String compId = uicomponent.getId() ; 
@@ -266,12 +267,20 @@
     		    <%
     		      String sortedBySender = uicomponent.event("Sort",Utils.EXO_FROM);
               String classArrowFrom = "";
+              String head = "Sender" ;
+              if (uicomponent.selectedSentFolder() || uicomponent.selectedDraftFolder()) {
+                sortedBySender = uicomponent.event("Sort",Utils.EXO_TO);
+                head = "To" ;
+              }
               if (uicomponent.getSortedBy().equals(Utils.EXO_FROM)) {
                 if (uicomponent.isAscending()) classArrowFrom = "UpArrow1Icon";
-                else classArrowFrom = "DownArrow1Icon"
+                else classArrowFrom = "DownArrow1Icon" ;
+              } else if (uicomponent.getSortedBy().equals(Utils.EXO_TO)) {
+                if (uicomponent.isAscending()) classArrowFrom = "UpArrow1Icon";
+                else classArrowFrom = "DownArrow1Icon" ;
               }
     		    %>
-    		  	<a href = "$sortedBySender"><div class="$classArrowFrom" title="Sort by sender">Sender</div></a>
+    		  	<a href = "$sortedBySender"><div class="$classArrowFrom" title="Sort by sender">$head</div></a>
     		  </th>
     		  <th style="width: 24px;">
     		    <a hreft = ""><div class="AttachmentIcon" title="Attchments"><span></span></div></a>
@@ -343,7 +352,20 @@
     	  		</td>
     				<td style="padding: 0px auto;"><a href="$actionAddStar" ><div class="$starClass"><span></span></div></a></td>
             <td class="$readStatus">
-               <a href="$actionLink"> <%= Utils.getPersonal(Utils.getInternetAddress(msg.getFrom())[0]) %> </a>
+              <%
+                String sender = "";
+                if (uicomponent.selectedSentFolder() || uicomponent.selectedDraftFolder()) {
+                  InternetAddress[] toAddress = InternetAddress.parse(msg.getMessageTo());
+                  for (j in 0..(toAddress.length-1)) {
+                    InternetAddress address = toAddress[j];
+                    if (j > 0) sender += ",";
+                    sender += Utils.getPersonal(address);
+                  }
+                } else {
+                  sender = Utils.getPersonal(Utils.getInternetAddress(msg.getFrom())[0]) ;
+                }
+              %>
+              <a href="$actionLink"> $sender </a>
             </td>
     				<td style="padding: 0px auto;">
     				  <% 
