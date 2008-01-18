@@ -54,8 +54,13 @@
 	background: url('icons/LeftArrowIcon.gif') no-repeat ;
 }
 
+.UIForumPortlet .FieldComponent .AttachmentIcon {
+	width: 20px;
+	height: 16px;
+}
+
 .UIForumPortlet .AttachmentIcon {
-	background: url('icons/AttachmentIcon.gif') no-repeat ;
+	background: url('icons/AttachmentIcon.gif') no-repeat left;
 }
 
 .UIForumPortlet .ExpandButton {

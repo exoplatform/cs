@@ -100,28 +100,28 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 		}
 		timeZone.setValue(mark + timeZoneMyHost + "0");
 		list = new ArrayList<SelectItemOption<String>>() ;
-		String []format = new String[] {"m-d-yyyy", "m-d-yy", "mm-dd-yy", "mm-dd-yyyy","yyyy-mm-dd", "yy-mm-dd", "dd-mm-yyyy", "dd-mm-yy",
-				"m/d/yyyy", "m/d/yy", "mm/dd/yy", "mm/dd/yyyy","yyyy/mm/dd", "yy/mm/dd", "dd/mm/yyyy", "dd/mm/yy"} ;
+		String []format = new String[] {"M-D-yyyy", "M-D-yy", "MM-DD-yy", "MM-DD-yyyy","yyyy-MM-DD", "yy-MM-DD", "DD-MM-yyyy", "DD-MM-yy",
+				"M/D/yyyy", "M/D/yy", "MM/DD/yy", "MM/DD/yyyy","yyyy/MM/DD", "yy/MM/DD", "DD/MM/yyyy", "DD/MM/yy"} ;
 		for (String frm : format) {
-			list.add(new SelectItemOption<String>((frm +" ("  + ForumFormatUtils.getFormatDate(frm, date)+")"), frm)) ;
+			list.add(new SelectItemOption<String>((frm.toLowerCase() +" ("  + ForumFormatUtils.getFormatDate(frm, date)+")"), frm)) ;
     }
 		UIFormSelectBox shortdateFormat = new UIFormSelectBox(FIELD_SHORTDATEFORMAT_SELECTBOX, FIELD_SHORTDATEFORMAT_SELECTBOX, list) ;
 		if(isForumOption) {
 			shortdateFormat.setValue(forumOption.getShortDateFormat());
 		} else {
-			shortdateFormat.setValue("m-d-yyyy");
+			shortdateFormat.setValue("M-D-yyyy");
 		}
 		list = new ArrayList<SelectItemOption<String>>() ;
-		format = new String[] {"ddd, MMMM dd, yyyy", "dddd, MMMM dd, yyyy", "dddd, dd MMMM, yyyy", "MMMM dd, yyyy", "dd MMMM, yyyy"};
-		String []idFormat = new String[] {"ddd,mmm,dd,yyyy", "dddd,mmm,dd,yyyy", "dddd,dd,mmm,yyyy", "mmm,dd,yyyy", "dd,mmm,yyyy"} ;
-		for (int i = 0; i < idFormat.length; i++) {
-			list.add(new SelectItemOption<String>((format[i] +" (" + ForumFormatUtils.getFormatDate(idFormat[i], date)+")"), idFormat[i])) ;
-    }
+		format = new String[] {"DDD,MMMM DD,yyyy", "DDDD,MMMM DD,yyyy", "DDDD,DD MMMM,yyyy", "DDD,MMM DD,yyyy", "DDDD,MMM DD,yyyy", "DDDD,DD MMM,yyyy",
+				 								"MMMM DD,yyyy", "DD MMMM,yyyy","MMM DD,yyyy", "DD MMM,yyyy"} ;
+		for (String idFrm : format) {
+			list.add(new SelectItemOption<String>((idFrm.toLowerCase() +" (" + ForumFormatUtils.getFormatDate(idFrm, date)+")"), idFrm)) ;
+		}
 		UIFormSelectBox longDateFormat = new UIFormSelectBox(FIELD_LONGDATEFORMAT_SELECTBOX, FIELD_LONGDATEFORMAT_SELECTBOX, list) ;
 		if(isForumOption) {
 			longDateFormat.setValue(forumOption.getLongDateFormat());
 		} else {
-			longDateFormat.setValue("ddd,mmm,dd,yyyy");
+			longDateFormat.setValue("DDD,MMMM DD,yyyy");
 		}
 		list = new ArrayList<SelectItemOption<String>>() ;
 		list.add(new SelectItemOption<String>("12-hour format", "id12h")) ;

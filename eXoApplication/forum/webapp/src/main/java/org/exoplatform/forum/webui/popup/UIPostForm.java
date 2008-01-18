@@ -87,9 +87,9 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
 	public UIPostForm() throws Exception {
 		UIFormStringInput postTitle = new UIFormStringInput(FIELD_POSTTITLE_INPUT, FIELD_POSTTITLE_INPUT, null);
 		postTitle.addValidator(EmptyNameValidator.class) ;
+		addUIFormInput(postTitle);
 		//UIFormTextAreaInput messenger = new UIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA, FIELD_MESSENGER_TEXTAREA, null);
 		//messenger.addValidator(EmptyNameValidator.class) ;
-		addUIFormInput(postTitle);
 		//addUIFormInput(messenger);
 		
 		UIFormInputIconSelector uiIconSelector = new UIFormInputIconSelector("Icon", "Icon") ;
@@ -116,8 +116,8 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
 			ActionData fileUpload = new ActionData() ;
 			fileUpload.setActionListener("") ;
 			fileUpload.setActionType(ActionData.TYPE_ICON) ;
-			fileUpload.setCssIconClass("AttachmentIcon ZipFileIcon") ;
-			fileUpload.setActionName(attachdata.getName() + " ("+attachdata.getSize()+" Kb)" ) ;
+			fileUpload.setCssIconClass("AttachmentIcon") ;
+			fileUpload.setActionName(attachdata.getName() + " ("+attachdata.getSize()/1024 +" Kb)" ) ;
 			fileUpload.setShowLabel(true) ;
 			uploadedFiles.add(fileUpload) ;
 			ActionData removeAction = new ActionData() ;
@@ -172,8 +172,8 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
 				if(index > 0) {
 					messenger = this.temp + this.style + messenger.substring(index, messenger.length());
 				}
-//				this.attachments_ = post.getAttachments();
-//				this.refreshUploadFileList();
+				this.attachments_ = post.getAttachments();
+				this.refreshUploadFileList();
 				getChild(UIFormWYSIWYGInput.class).setValue(messenger);
 				getChild(UIFormInputIconSelector.class).setSelectedIcon(post.getIcon());
 			}
