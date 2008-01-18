@@ -73,6 +73,8 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UIContacts.DeleteContactsActionListener.class
             , confirm = "UIContacts.msg.confirm-delete"),
         @EventConfig(listeners = UIContacts.SelectedContactActionListener.class), 
+        @EventConfig(listeners = UIContacts.CopyContactActionListener.class),
+        //@EventConfig(listeners = UIContacts.PasteContactActionListener.class),
         @EventConfig(listeners = UIContacts.ViewDetailsActionListener.class),
         @EventConfig(listeners = UIContacts.SortActionListener.class),
         @EventConfig(listeners = UIContacts.FirstPageActionListener.class),
@@ -101,6 +103,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   public static String jobTitle = "jobTitle".intern() ;
   private boolean isSearchResult = false ;
   private boolean defaultNameSorted = true ;
+  private List<Contact> copyContacts = new ArrayList<Contact>();
   
   public UIContacts() throws Exception { } 
   public String[] getActions() { return new String[] {"Cancel"} ; }
@@ -228,6 +231,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     }
     return true ;
   }
+  public List<Contact> getCopyContacts() { return copyContacts ; } 
   
   static public class EditContactActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
@@ -670,34 +674,6 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       uiContacts.setDisplaySearchResult(false) ;
       uiContacts.setContacts(null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
-      
-      /*
-      ContactService contactService = ContactUtils.getContactService();
-      String username = ContactUtils.getCurrentUser() ;
-      String group = uiContacts.selectedGroup ;  
-      UIWorkingContainer uiWorkingContainer = uiContacts.getAncestorOfType(UIWorkingContainer.class) ;
-      UIAddressBooks addressBooks = uiWorkingContainer.findFirstComponentOfType(UIAddressBooks.class) ;
-      UITags uiTags = uiWorkingContainer.findFirstComponentOfType(UITags.class) ;
-      if (!ContactUtils.isEmpty(group)) {        
-        addressBooks.setSelectedGroup(group) ;
-        if (ContactUtils.isPublicGroup(group)) {
-          uiContacts.setContacts(contactService.getSharedContactsByGroup(SessionsUtils.getSystemProvider(), group)); 
-        } else {
-          uiContacts.setContacts(contactService.getContactPageListByGroup(SessionsUtils.getSessionProvider(), username, group));
-        }
-      } else if (!ContactUtils.isEmpty(uiContacts.selectedTag_)) {
-        uiTags.setSelectedTag(uiContacts.selectedTag_) ;
-        uiContacts.setContacts(ContactUtils.getContactService()
-          .getContactPageListByTag(SessionsUtils.getSystemProvider(), username, uiContacts.selectedTag_)) ;
-      } else {
-        uiContacts.setContacts(null) ;
-      } 
-      
-      uiContacts.setViewContactsList(uiContacts.getListBeforeSearch()) ;
-      
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
->>>>>>> .r22506
-       */
     }
   }
   
@@ -718,4 +694,26 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     }
   }
   
+  static public class CopyContactActionListener extends EventListener<UIContacts> {
+    public void execute(Event<UIContacts> event) throws Exception {
+      UIContacts uiContacts = event.getSource() ;
+      uiContacts.getAncestorOfType(UIWorkingContainer.class)
+        .findFirstComponentOfType(UIAddressBooks.class).setCopyAddress(null) ;      
+      List<String> checkedContact = uiContacts.getCheckedContacts() ;
+      for (String contactId : checkedContact) {
+        uiContacts.copyContacts.add(uiContacts.contactMap.get(contactId)) ;
+      }      
+    }
+  }
+  /*
+  static public class PasteContactActionListener extends EventListener<UIContacts> {
+    public void execute(Event<UIContacts> event) throws Exception {
+      UIContacts uiContacts = event.getSource() ;
+      ContactUtils.getContactService().pasteContacts(SessionsUtils.getSystemProvider()
+          , ContactUtils.getCurrentUser(), uiContacts.selectedGroup, "0", uiContacts.copyContacts) ;
+      uiContacts.updateList() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+    }
+  }
+  */
 }

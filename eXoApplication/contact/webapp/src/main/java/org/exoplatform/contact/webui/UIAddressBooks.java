@@ -54,6 +54,7 @@ import org.exoplatform.webui.event.EventListener;
     @EventConfig(listeners = UIAddressBooks.AddContactActionListener.class),
     @EventConfig(listeners = UIAddressBooks.CopyAddressActionListener.class),
     @EventConfig(listeners = UIAddressBooks.PasteAddressActionListener.class),
+    @EventConfig(listeners = UIAddressBooks.PasteContactsActionListener.class),
     @EventConfig(listeners = UIAddressBooks.AddAddressActionListener.class),
     @EventConfig(listeners = UIAddressBooks.ImportAddressActionListener.class), 
     @EventConfig(listeners = UIAddressBooks.ExportAddressActionListener.class),
@@ -115,10 +116,13 @@ public class UIAddressBooks extends UIComponent {
     return getAncestorOfType(UIWorkingContainer.class)
       .findFirstComponentOfType(UIContacts.class).getViewContactsList() ;
   }
-  public boolean canPaste() {
-    if (!ContactUtils.isEmpty(copyAddress)) return true ;
-    else return false ;
+  public int canPaste() {
+    if (!ContactUtils.isEmpty(copyAddress)) return 1 ;
+    else if (getAncestorOfType(UIWorkingContainer.class)
+        .findFirstComponentOfType(UIContacts.class).getCopyContacts().size() > 0) return 2 ;
+    else return 0 ;
   }
+  public void setCopyAddress(String add) { copyAddress = add ; }
   public boolean isDefault(String groupId) { return groupId.equals(defaultGroup) ; }
   
   static public class AddAddressActionListener extends EventListener<UIAddressBooks> {
@@ -136,7 +140,7 @@ public class UIAddressBooks extends UIComponent {
       UIAddressBooks uiAddressBook = event.getSource();
       String addressBookId = event.getRequestContext().getRequestParameter(OBJECTID);
       uiAddressBook.copyAddress = addressBookId ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent()) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent()) ;
     }
   }
   
@@ -155,24 +159,40 @@ public class UIAddressBooks extends UIComponent {
       String srcType ;
       if (uiAddressBook.privateGroupMap_.containsKey(srcAddress)) srcType = "0" ;
       else if (uiAddressBook.sharedGroupMap_.containsKey(srcAddress)) srcType = "1" ;
-      else srcType = "2" ;      
+      else srcType = "2" ; 
+      String destType ;
+      if (uiAddressBook.privateGroupMap_.containsKey(destAddress)) destType = "0" ;
+      else if (uiAddressBook.sharedGroupMap_.containsKey(destAddress)) destType = "1" ;
+      else destType = "2" ;
       ContactService contactService = ContactUtils.getContactService() ;
       String username = ContactUtils.getCurrentUser() ;
       SessionProvider sessionProvider = SessionsUtils.getSessionProvider() ;      
-     
-      if (uiAddressBook.privateGroupMap_.containsKey(destAddress)) {
-        contactService.pasteAddressBook(sessionProvider, username, srcAddress, srcType, destAddress, "0") ;
-      } else if (uiAddressBook.sharedGroupMap_.containsKey(destAddress)) {
-        contactService.pasteAddressBook(sessionProvider, username, srcAddress, srcType, destAddress, "1") ;
-      } else {
-        contactService.pasteAddressBook(sessionProvider, username, srcAddress, srcType, destAddress, "2") ;
-      }      
+      contactService.pasteAddressBook(sessionProvider, username, srcAddress, srcType, destAddress, destType) ;
+            
       UIContacts uiContacts = uiAddressBook
         .getAncestorOfType(UIWorkingContainer.class).findFirstComponentOfType(UIContacts.class) ;
       uiContacts.updateList() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
     }
   }
+  
+  static public class PasteContactsActionListener extends EventListener<UIAddressBooks> {
+    public void execute(Event<UIAddressBooks> event) throws Exception {
+      UIAddressBooks uiAddressBook = event.getSource();
+      UIContacts uiContacts = uiAddressBook
+        .getAncestorOfType(UIWorkingContainer.class).findFirstComponentOfType(UIContacts.class) ;
+      String destAddress = event.getRequestContext().getRequestParameter(OBJECTID);
+      String destType ;
+      if (uiAddressBook.privateGroupMap_.containsKey(destAddress)) destType = "0" ;
+      else if (uiAddressBook.sharedGroupMap_.containsKey(destAddress)) destType = "1" ;
+      else destType = "2" ;
+      ContactUtils.getContactService().pasteContacts(SessionsUtils.getSystemProvider()
+      , ContactUtils.getCurrentUser(), destAddress, destType, uiContacts.getCopyContacts()) ;
+      uiContacts.updateList() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
+    }
+  }
+  
   
   static public class ExportAddressActionListener extends EventListener<UIAddressBooks> {
     public void execute(Event<UIAddressBooks> event) throws Exception {
@@ -341,6 +361,8 @@ public class UIAddressBooks extends UIComponent {
     public void execute(Event<UIAddressBooks> event) throws Exception {
       UIAddressBooks uiAddressBook = event.getSource();
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID);
+      
+      if (groupId.equals(uiAddressBook.copyAddress)) uiAddressBook.copyAddress = null ;
       ContactService contactService = ContactUtils.getContactService();
       String username = ContactUtils.getCurrentUser();
       UIWorkingContainer workingContainer = uiAddressBook.getAncestorOfType(UIWorkingContainer.class);

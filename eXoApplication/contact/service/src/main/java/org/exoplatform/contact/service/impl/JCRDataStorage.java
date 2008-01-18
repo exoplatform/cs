@@ -443,6 +443,7 @@ public class JCRDataStorage{
       		if(contact.getContactType().equals(PRIVATE)) {
       			privateContactHome.getSession().move(privateContactHome.getPath() +"/" + contact.getId(), 
                                                 publicContactHome.getPath() +"/" + contact.getId()) ;
+            
       			publicContactHome.getNode(contact.getId()).setProperty("exo:categories", contact.getAddressBook()) ;      			
       			
       		}else if(contact.getContactType().equals(SHARED)) {
@@ -724,7 +725,7 @@ public class JCRDataStorage{
     StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
                                                 + "//element(*,exo:contact)[@exo:categories='")
                                                 .append(groupId).append("']")
-                                                .append("order by @exo:fullname ascending");
+                                                .append("order by @exo:fullName ascending");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
     QueryResult result = query.execute();
     return new ContactPageList(null, result.getNodes(), 10, queryString.toString(), true, "2") ;
@@ -1193,10 +1194,63 @@ public class JCRDataStorage{
         }
       }      
     }
-    
     return new DataPageList(contacts, 10, null, false) ;    
   }
 
+  private void copyNodes(SessionProvider sProvider, String username,Node srcHomeNode, NodeIterator iter, String destAddress, String destType ) throws Exception {
+    if (destType.equals(PRIVATE)) {
+      Node contactHomeNode = getUserContactHome(sProvider, username);
+      while (iter.hasNext()) {
+        Node oldNode = iter.nextNode() ;
+        String newId = "Contact" + IdGenerator.generate() ;
+        contactHomeNode.getSession().getWorkspace().copy(srcHomeNode.getPath() + "/"
+             + oldNode.getProperty("exo:id").getString(), contactHomeNode.getPath() + "/" + newId) ;
+        Node newNode = contactHomeNode.getNode(newId) ;
+        newNode.setProperty("exo:categories", new String [] {destAddress}) ;
+        newNode.setProperty("exo:id", newId) ;
+      }
+      contactHomeNode.getSession().save() ;
+    } else if (destType.equals(SHARED)) {
+      Node sharedHome = getSharedAddressBookHome(SessionProvider.createSystemProvider()) ;
+      while (iter.hasNext()) {
+        Node oldNode = iter.nextNode() ;
+        String newId = "Contact" + IdGenerator.generate() ;
+        if(sharedHome.hasNode(username)) {
+          PropertyIterator sharedIter = sharedHome.getNode(username).getReferences() ;
+          while(sharedIter.hasNext()) {
+            try{
+              Node addressBook = sharedIter.nextProperty().getParent() ; 
+              if(destAddress.equals(addressBook.getProperty("exo:id").getString())) {
+                Node sharedContacts = addressBook.getParent().getParent().getNode(CONTACTS) ;
+                sharedContacts.getSession().getWorkspace().copy(srcHomeNode.getPath() + "/"
+                    + oldNode.getProperty("exo:id").getString(), sharedContacts.getPath() + "/" + newId) ;
+                Node newNode = sharedContacts.getNode(newId) ;
+                newNode.setProperty("exo:categories", new String [] {destAddress}) ;  
+                newNode.setProperty("exo:id", newId) ;
+                break ;
+              }                
+            } catch (Exception e) {
+              e.printStackTrace() ;
+            }
+          }  
+        } 
+      }
+      sharedHome.getSession().save() ;
+    } else { // destType = Public ;
+      Node publicContactHome = getPublicContactHome(sProvider);
+      while (iter.hasNext()) {
+        Node oldNode = iter.nextNode() ;
+        String newId = "Contact" + IdGenerator.generate() ;          
+        publicContactHome.getSession().getWorkspace().copy(srcHomeNode.getPath() + "/"
+             + oldNode.getProperty("exo:id").getString(), publicContactHome.getPath() + "/" + newId) ;
+        Node newNode = publicContactHome.getNode(newId) ;
+        newNode.setProperty("exo:categories", new String [] {destAddress}) ;
+        newNode.setProperty("exo:id", newId) ;
+      }
+      publicContactHome.getSession().save() ;        
+    }  
+    
+  }
   public void pasteAddressBook(SessionProvider sProvider, String username, String srcAddress, String srcType, String destAddress, String destType) throws Exception {
     Node contactHome = getUserContactHome(sProvider, username);
     Node publicContactHome = getPublicContactHome(sProvider);
@@ -1210,28 +1264,33 @@ public class JCRDataStorage{
                                                   append("']");
       Query query = qm.createQuery(queryString.toString(), Query.XPATH);
       QueryResult result = query.execute();
-      iter = result.getNodes() ;  
-    } else if (srcType.equals(SHARED)) {
-      if(sharedHome.hasNode(username)) {
-        PropertyIterator sharedIter = sharedHome.getNode(username).getReferences() ;
-        while(sharedIter.hasNext()) {
-          try{
-            Node addressBook = sharedIter.nextProperty().getParent() ; 
-            if(srcAddress.equals(addressBook.getProperty("exo:id").getString())) {
-              QueryManager qm = sharedHome.getSession().getWorkspace().getQueryManager();
-              StringBuffer queryString = new StringBuffer("/jcr:root" + addressBook.getParent().getParent().getNode(CONTACTS).getPath() 
-                                                          + "//element(*,exo:contact)[(@exo:categories='").
-                                                          append(srcAddress).append("')]") ;
-              Query query = qm.createQuery(queryString.toString(), Query.XPATH);
-              QueryResult result = query.execute();
-              iter = result.getNodes() ;
-              break ;
-            }
-          }catch (Exception e) {
-            e.printStackTrace() ;
+      iter = result.getNodes() ;
+      copyNodes(sProvider, username, contactHome, iter, destAddress, destType) ;
+      
+    } else if (srcType.equals(SHARED) && sharedHome.hasNode(username)) {
+      PropertyIterator sharedIter = sharedHome.getNode(username).getReferences() ;
+      Node sharedContacts = null ;
+      while(sharedIter.hasNext()) {
+        try{
+          Node addressBook = sharedIter.nextProperty().getParent() ; 
+          if(srcAddress.equals(addressBook.getProperty("exo:id").getString())) {
+            QueryManager qm = sharedHome.getSession().getWorkspace().getQueryManager();
+            sharedContacts = addressBook.getParent().getParent().getNode(CONTACTS) ;
+            StringBuffer queryString = new StringBuffer("/jcr:root" + sharedContacts.getPath() 
+                                                        + "//element(*,exo:contact)[(@exo:categories='").
+                                                        append(srcAddress).append("')]") ;
+            Query query = qm.createQuery(queryString.toString(), Query.XPATH);
+            QueryResult result = query.execute();
+            iter = result.getNodes() ;
+            break ;
           }
+        }catch (Exception e) {
+          e.printStackTrace() ;
         }
       }
+      if (sharedContacts != null)
+        copyNodes(sProvider, username, sharedContacts, iter, destAddress, destType) ;
+      
     } else {
       QueryManager qm = publicContactHome.getSession().getWorkspace().getQueryManager();
       StringBuffer queryString = new StringBuffer("/jcr:root" + publicContactHome.getPath() 
@@ -1240,132 +1299,30 @@ public class JCRDataStorage{
       Query query = qm.createQuery(queryString.toString(), Query.XPATH);
       QueryResult result = query.execute();
       iter = result.getNodes() ; 
+      copyNodes(sProvider, username, publicContactHome, iter, destAddress, destType) ;
     }
-    if (destType.equals(PRIVATE)) {
-      while (iter.hasNext()) {
-        Node srcNode = iter.nextNode() ;
-        String contactId = "Contact" + IdGenerator.generate() ;
-        Node newNode = contactHome.addNode(contactId, "exo:contact");  
-        copyProperties(srcNode, newNode) ;
-        newNode.setProperty("exo:id", contactId);
-        newNode.setProperty("exo:categories", new String[] { destAddress });
-      } 
-      contactHome.getSession().save();
-    } else if (destType.equals(SHARED)) {
-      while (iter.hasNext()) {
-        if(sharedHome.hasNode(username)) {
-          PropertyIterator sharedIter = sharedHome.getNode(username).getReferences() ;
-          while(sharedIter.hasNext()) {
-            try{
-              Node addressBook = sharedIter.nextProperty().getParent() ; 
-              if(destAddress.equals(addressBook.getProperty("exo:id").getString())) {
-                Node contactNode = iter.nextNode() ;
-                String contactId = "Contact" + IdGenerator.generate() ;
-                Node sharedContactHome = addressBook.getParent().getParent().getNode(CONTACTS) ;
-                Node newNode = sharedContactHome.addNode(contactId, "exo:contact") ;
-                copyProperties(contactNode, newNode) ;
-                newNode.setProperty("exo:id", contactId);
-                newNode.setProperty("exo:categories", new String[] { destAddress }); 
-                sharedContactHome.save();
-                break ;
-              }
-            }catch (Exception e) {
-              e.printStackTrace() ;
-            }
-          }
-        }
-      }
-    } else {
-      while (iter.hasNext()) {
-        Node contactNode = iter.nextNode() ;
-        String contactId = "Contact" + IdGenerator.generate() ;
-        Node newNode = publicContactHome.addNode(contactId, "exo:contact"); 
-        copyProperties(contactNode, newNode) ;
-        newNode.setProperty("exo:id", contactId);
-        newNode.setProperty("exo:categories", new String[] { destAddress });
-        // save after while loop ?        
-      }
-      publicContactHome.getSession().save();
-    } 
   }
   
-  private void copyProperties(Node srcNode, Node destNode) throws Exception {
-    if (srcNode.hasProperty("exo:fullName")) destNode.setProperty("exo:fullName", srcNode.getProperty("exo:fullName").getString());
-    if (srcNode.hasProperty("exo:firstName"))destNode.setProperty("exo:firstName", srcNode.getProperty("exo:firstName").getString());
-    if (srcNode.hasProperty("exo:lastName")) destNode.setProperty("exo:lastName", srcNode.getProperty("exo:lastName").getString());
-    if (srcNode.hasProperty("exo:nickName")) destNode.setProperty("exo:nickName", srcNode.getProperty("exo:nickName").getString());
-    if (srcNode.hasProperty("exo:gender")) destNode.setProperty("exo:gender", srcNode.getProperty("exo:gender").getString()) ; 
-    /*
-    GregorianCalendar dateTime = new GregorianCalendar() ;
-    Date birthday = srcNode.getProperty("exo:birthday").getDate().getTime() ;
-    if (birthday != null) {
-      dateTime.setTime(birthday) ;    
-      destNode.setProperty("exo:birthday", dateTime) ;
-    }*/
-    if (srcNode.hasProperty("exo:birthday")) destNode.setProperty("exo:birthday", srcNode.getProperty("exo:birthday").getDate()) ;
-    if (srcNode.hasProperty("exo:jobTitle")) destNode.setProperty("exo:jobTitle", srcNode.getProperty("exo:jobTitle").getString());
-    if (srcNode.hasProperty("exo:emailAddress")) destNode.setProperty("exo:emailAddress", srcNode.getProperty("exo:emailAddress").getString());
-    
-    if (srcNode.hasProperty("exo:exoId")) destNode.setProperty("exo:exoId", srcNode.getProperty("exo:exoId").getString());
-    if (srcNode.hasProperty("exo:googleId")) destNode.setProperty("exo:googleId", srcNode.getProperty("exo:googleId").getString());
-    if (srcNode.hasProperty("exo:msnId")) destNode.setProperty("exo:msnId", srcNode.getProperty("exo:msnId").getString());
-    if (srcNode.hasProperty("exo:aolId")) destNode.setProperty("exo:aolId", srcNode.getProperty("exo:aolId").getString());
-    if (srcNode.hasProperty("exo:yahooId")) destNode.setProperty("exo:yahooId", srcNode.getProperty("exo:yahooId").getString());
-    if (srcNode.hasProperty("exo:icrId")) destNode.setProperty("exo:icrId", srcNode.getProperty("exo:icrId").getString());
-    if (srcNode.hasProperty("exo:skypeId")) destNode.setProperty("exo:skypeId", srcNode.getProperty("exo:skypeId").getString());
-    if (srcNode.hasProperty("exo:icqId")) destNode.setProperty("exo:icqId", srcNode.getProperty("exo:icqId").getString());
-    
-    if (srcNode.hasProperty("exo:homeAddress")) destNode.setProperty("exo:homeAddress", srcNode.getProperty("exo:homeAddress").getString());
-    if (srcNode.hasProperty("exo:homeCity")) destNode.setProperty("exo:homeCity", srcNode.getProperty("exo:homeCity").getString());
-    if (srcNode.hasProperty("exo:homeState_province")) destNode.setProperty("exo:homeState_province", srcNode.getProperty("exo:homeState_province").getString());
-    if (srcNode.hasProperty("exo:homePostalCode")) destNode.setProperty("exo:homePostalCode", srcNode.getProperty("exo:homePostalCode").getString());
-    if (srcNode.hasProperty("exo:homeCountry")) destNode.setProperty("exo:homeCountry", srcNode.getProperty("exo:homeCountry").getString());
-    if (srcNode.hasProperty("exo:homePhone1")) destNode.setProperty("exo:homePhone1", srcNode.getProperty("exo:homePhone1").getString());
-    if (srcNode.hasProperty("exo:homePhone2")) destNode.setProperty("exo:homePhone2", srcNode.getProperty("exo:homePhone2").getString());
-    if (srcNode.hasProperty("exo:homeFax")) destNode.setProperty("exo:homeFax", srcNode.getProperty("exo:homeFax").getString());
-    if (srcNode.hasProperty("exo:personalSite")) destNode.setProperty("exo:personalSite", srcNode.getProperty("exo:personalSite").getString());
-    
-    if (srcNode.hasProperty("exo:workAddress")) destNode.setProperty("exo:workAddress", srcNode.getProperty("exo:workAddress").getString());
-    if (srcNode.hasProperty("exo:workCity")) destNode.setProperty("exo:workCity", srcNode.getProperty("exo:workCity").getString());
-    if (srcNode.hasProperty("exo:workState_province")) destNode.setProperty("exo:workState_province", srcNode.getProperty("exo:workState_province").getString());
-    if (srcNode.hasProperty("exo:workPostalCode")) destNode.setProperty("exo:workPostalCode", srcNode.getProperty("exo:workPostalCode").getString());
-    if (srcNode.hasProperty("exo:workCountry")) destNode.setProperty("exo:workCountry", srcNode.getProperty("exo:workCountry").getString());
-    if (srcNode.hasProperty("exo:workPhone1")) destNode.setProperty("exo:workPhone1", srcNode.getProperty("exo:workPhone1").getString());
-    if (srcNode.hasProperty("exo:workPhone2")) destNode.setProperty("exo:workPhone2", srcNode.getProperty("exo:workPhone2").getString());
-    if (srcNode.hasProperty("exo:workFax")) destNode.setProperty("exo:workFax", srcNode.getProperty("exo:workFax").getString());
-    if (srcNode.hasProperty("exo:mobilePhone")) destNode.setProperty("exo:mobilePhone", srcNode.getProperty("exo:mobilePhone").getString());
-    if (srcNode.hasProperty("exo:webPage")) destNode.setProperty("exo:webPage", srcNode.getProperty("exo:webPage").getString());
-    
-    if (srcNode.hasProperty("exo:note")) destNode.setProperty("exo:note", srcNode.getProperty("exo:note").getString());
-    if (srcNode.hasProperty("exo:tags")) destNode.setProperty("exo:tags", ValuesToStrings(srcNode.getProperty("exo:tags").getValues()));
-    if (srcNode.hasProperty("exo:editPermission")) destNode.setProperty("exo:editPermission", ValuesToStrings(srcNode.getProperty("exo:editPermission").getValues()));
-
-    /*
-    Date lastUpdated = srcNode.getProperty("exo:lastUpdated").getDate().getTime() ;
-    if (lastUpdated != null) {
-      dateTime.setTime(lastUpdated) ;
-      destNode.setProperty("exo:lastUpdated", dateTime);
-    }*/
-    if (srcNode.hasProperty("exo:lastUpdated")) destNode.setProperty("exo:lastUpdated", srcNode.getProperty("exo:lastUpdated").getDate());
-    //if (srcNode.hasProperty("exo:isShared")) destNode.setProperty("exo:isShared", srcNode.getProperty("exo:isShared").getBoolean());
-    
-//  save image to srcNode
-    if (srcNode.hasNode("image")) {
-      Node srcNodeFile = srcNode.getNode("image") ;
-      if (srcNodeFile.hasNode("jcr:content")) {
-        Node srcNodeContent = srcNodeFile.getNode("jcr:content") ;
-        
-        Node nodeFile = null ;
-        if (destNode.hasNode("image")) nodeFile = destNode.getNode("image") ;
-        else nodeFile = destNode.addNode("image", "nt:file");
-        Node nodeContent = null ;
-        if (nodeFile.hasNode("jcr:content")) nodeContent = nodeFile.getNode("jcr:content") ;
-        else nodeContent = nodeFile.addNode("jcr:content", "nt:resource") ;
-        
-        if (srcNodeContent.hasProperty("jcr:mimeType")) nodeContent.setProperty("jcr:mimeType", srcNodeContent.getProperty("jcr:mimeType").getString()) ;
-        if (srcNodeContent.hasProperty("jcr:data")) nodeContent.setProperty("jcr:data", srcNodeContent.getProperty("jcr:data").getStream());
-        nodeContent.setProperty("jcr:lastModified", Calendar.getInstance().getTimeInMillis());
-      } 
-    } else if (destNode.hasNode("image")) destNode.getNode("image").remove() ;
+  public void pasteContacts(SessionProvider sProvider, String username, String destAddress, String destType, List<Contact> contacts) throws Exception {
+    if (destType.equals(PRIVATE)) {
+      for (Contact contact : contacts) {
+        contact.setId("Contact" + IdGenerator.generate()) ;
+        contact.setAddressBook(new String[] {destAddress}) ;
+        saveContact(sProvider, username, contact, true) ;         
+      }      
+    } else if (destType.equals(SHARED)) {
+      for (Contact contact : contacts) {
+        contact.setId("Contact" + IdGenerator.generate()) ;
+        contact.setAddressBook(new String[] {destAddress}) ;
+        saveContactToSharedAddressBook(sProvider, username, destAddress, contact, true) ;
+      }
+    } else {
+      for (Contact contact : contacts) {
+        contact.setId("Contact" + IdGenerator.generate()) ;
+        contact.setAddressBook(new String[] {destAddress}) ;
+        savePublicContact(sProvider, contact, true) ;
+      }
+    }
   }
+  
 }

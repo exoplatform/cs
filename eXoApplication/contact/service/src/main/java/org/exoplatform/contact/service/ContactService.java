@@ -71,6 +71,7 @@ public interface ContactService {
   public void updateTag(SessionProvider sProvider, String username,Tag tag) throws Exception ;
   
   public void pasteAddressBook(SessionProvider sProvider, String username, String srcAddress, String srcType, String destAddress, String destType) throws Exception ;
+  public void pasteContacts(SessionProvider sProvider, String username, String destAddress, String destType, List<Contact> contacts) throws Exception ;
   public ContactImportExport getContactImportExports(String type) ;
   public String[] getImportExportType() throws Exception ;
   

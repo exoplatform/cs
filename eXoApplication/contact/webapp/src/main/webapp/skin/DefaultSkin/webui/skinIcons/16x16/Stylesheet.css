@@ -126,7 +126,7 @@
 }
 
 .UIContactPortlet .CopyIcon {
-	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/CopyIcon.gif') no-repeat left center;
+	background: url('icons/CopyIcon.gif') no-repeat left center;
 }
 
 .UIContactPortlet .PasteIcon {

@@ -48,6 +48,10 @@
 	background: url('icons/PrintIcon.gif') no-repeat left center;
 }
 
+.UIContactPortlet .CopyIcon {
+	background: url('icons/CopyIcon.gif') no-repeat left center;
+}
+
 .UIContactPortlet .ViewIcon {
 	background: url('icons/ViewIcon.gif') no-repeat left center;
 }
