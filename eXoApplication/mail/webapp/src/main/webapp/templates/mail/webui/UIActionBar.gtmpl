@@ -51,27 +51,27 @@
 				        			</div>
 							        <div class="MiddleLeftRightClickPopupMenu">
 							          <div class="MiddleRightRightClickPopupMenu">
-				              		<div class="UIRightPopupMenuContainer">
-														<a class="MenuItem" href="javascript:eXo.mail.UIMailPortlet.switchLayout(0)">   
+				              		<div class="UIRightPopupMenuContainer" id='_CSMailLayoutSwitchMenu'>
+														<div class="MenuItem" onclick="eXo.mail.UIMailPortlet.switchLayout(0)">   
 					                    <div class="ItemIcon DefaultLayoutIcon">
 					                      Default 
 					                    </div>
-				                    </a>
-				                    <a class="MenuItem" href="javascript:eXo.mail.UIMailPortlet.switchLayout(1)">   
+				                    </div>
+				                    <div class="MenuItem" onclick="javascript:eXo.mail.UIMailPortlet.switchLayout(1)">   
 					                    <div class="ItemIcon HideFolderListIcon">
 					                      Hide Navigator Pane
 					                    </div>
-				                    </a>
-				                    <a class="MenuItem" href="javascript:eXo.mail.UIMailPortlet.switchLayout(2)">   
+				                    </div>
+				                    <div class="MenuItem" onclick="javascript:eXo.mail.UIMailPortlet.switchLayout(2)">   
 					                    <div class="ItemIcon HideMessagesPaneIcon">
 					                      Hide Messages Pane
 					                    </div>
-				                    </a>
-				                    <a class="MenuItem" href="javascript:eXo.mail.UIMailPortlet.switchLayout(3)">   
+				                    </div>
+				                    <div class="MenuItem" onclick="javascript:eXo.mail.UIMailPortlet.switchLayout(3)">   
 					                    <div class="ItemIcon HideReadingPaneIcon">
 					                      Hide Preview Pane
 					                    </div>
-				                    </a>
+				                    </div>
 													</div>
 					          		</div>
 					        		</div>

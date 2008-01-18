@@ -20,21 +20,6 @@ UIMailPortlet.prototype.showContextMenu = function(compid) {
 	UIContextMenu.attach('TrashIcon', 'UITrashFolderPopupMenu') ;
 } ;
 
-//UIMailPortlet.prototype.init = function(container) {	
-//	if(typeof(container) == "string") container = document.getElementById(container) ;
-//	var checks = eXo.core.DOMUtil.findDescendantsByClass(container, "input", "checkbox") ;
-//	var len = checks.length ;
-//	this.datatable = eXo.core.DOMUtil.getChildrenByTagName(container, "tbody")[0] ;
-//	this.checkall = checks[0] ;
-//	this.checkbox = checks.slice(1) ;
-//	this.rows = new Array() ;
-//	checks[0].onclick = eXo.mail.UIMailPortlet.checkAll ;
-//	for(var i = 1 ; i < len ; i++) {
-//		checks[i].onclick = eXo.mail.UIMailPortlet.selectItem ;
-//		this.rows.push(eXo.core.DOMUtil.findAncestorByTagName(checks[i], "tr")) ;
-//	}
-//} ;;
-
 UIMailPortlet.prototype.msgPopupMenuCallback = function(evt) {
 	var UIContextMenu = eXo.webui.UIContextMenu ;
 	var DOMUtil = eXo.core.DOMUtil ;
@@ -105,48 +90,6 @@ UIMailPortlet.prototype.tagListPopupMenuCallback = function(evt) {
 	eXo.webui.UIContextMenu.changeAction(UIContextMenu.menuElement, tagName) ;
 } 
 
-//UIMailPortlet.prototype.selectItem = function() {
-//	var UIMailPortlet = eXo.mail.UIMailPortlet ;
-//	var isCheck = this.checked ;
-//	var tr = eXo.core.DOMUtil.findAncestorByTagName(this,"tr") ;
-//	if(!isCheck) {
-//		tr.className = tr.className.replace("SelectedItem", "") ;
-//		UIMailPortlet.checkall.checked = false ;
-//	}
-//	else {
-//		tr.className += "SelectedItem" ;	
-//		UIMailPortlet.checkall.checked = UIMailPortlet.isAll() ;
-//	}
-//} ;
-//UIMailPortlet.prototype.isAll = function() {
-//	var items = eXo.mail.UIMailPortlet.checkbox ;
-//	var len = items.length ;
-//	for(var i = 0 ; i < len ; i ++) {
-//		if(!items[i].checked) return false ;
-//	}
-//	return true ;
-//} ;
-//UIMailPortlet.prototype.checkAll = function() {
-//	var DOMUtil = eXo.core.DOMUtil ;
-//	var ck = eXo.mail.UIMailPortlet.checkbox ;
-//	var rows = eXo.mail.UIMailPortlet.rows ;
-//	var len = ck.length ;
-//	var isCheck = this.checked ;
-//	if(isCheck) eXo.mail.UIMailPortlet.datatable.setAttribute("class","MessageContainerAll") ;
-//	else eXo.mail.UIMailPortlet.datatable.setAttribute("class","MessageContainer") ;
-//	for(var i = 0 ; i < len ; i ++) {
-//		ck[i].checked = isCheck ;
-//		if(ck[i].checked) rows[i].className += "SelectedItem" ;
-//		else rows[i].className = rows[i].className.replace("SelectedItem", "") ;
-//	}
-//} ;
-
-//UIMailPortlet.prototype.setClass = function(obj, isCheck) {
-//	try{
-//		if(isCheck) obj.className = obj.className + " SelectedItem" ;
-//		else obj.className = obj.className.replace("SelectedItem", "");		
-//	} catch(e) {alert(e.message) ;}
-//} ;
 UIMailPortlet.prototype.readMessage = function() {} ;
 
 UIMailPortlet.prototype.showPrintPreview = function(obj1) {
@@ -189,12 +132,13 @@ UIMailPortlet.prototype.switchLayout = function(layout) {
 	var	layout3 = document.getElementById("SpliterResizableArea") ;
 	var resizePane = document.getElementById("ResizeReadingPane");
 	var workingarea = document.getElementById("UIMessageArea");
-		
+	var layoutState = false;
+    
 	switch(layout) {
 		case 0 :
 			if (layout1.style.display == "none") {
 				layout1.style.display = "block" ;
-				workingarea.style.marginLeft = "225px"	;			
+				workingarea.style.marginLeft = "225px"	;
 			}
 			
 			if (layout2.style.display == "none") {
@@ -208,20 +152,20 @@ UIMailPortlet.prototype.switchLayout = function(layout) {
 			if (resizePane.style.display == "none") {
 				resizePane.style.display = "block";
 			}
-			Browser.setCookie("UINavigationContainer", "block", 30);
-			Browser.setCookie("SpliterResizableArea", "block", 30);
 			layout2.style.height = "220px" ;
-			Browser.setCookie("ResizeReadingPane", "block", 30);
-			Browser.setCookie("uiMessageListResizableArea", "block", 30)	
+			Browser.setCookie("layout1", "1", 30);
+			Browser.setCookie("layout2", "1", 30);
+			Browser.setCookie("layout3", "1", 30);
 			break ;
 		case 1 :
 			if (layout1.style.display == "none") {
 				layout1.style.display = "block" ;
-				Browser.setCookie("UINavigationContainer", "block", 30)
-				 workingarea.style.marginLeft = "225px"	;			
+				Browser.setCookie("layout1", "1", 30);
+				workingarea.style.marginLeft = "225px"	;		
+        layoutState = true;
 			} else {
 				layout1.style.display = "none" ;
-				Browser.setCookie("UINavigationContainer", "none", 30)
+				Browser.setCookie("layout1", "0", 30);
 				if(layout1.style.display == "none") {
 					workingarea.style.marginLeft = "0px"	;
 				}
@@ -230,70 +174,68 @@ UIMailPortlet.prototype.switchLayout = function(layout) {
 		case 2 :
 			if (layout2.style.display == "none") {
 				layout2.style.display = "block" ;
-				Browser.setCookie("uiMessageListResizableArea", "block", 30)
+				Browser.setCookie("layout2", "1", 30);
 				if (layout3.style.display != "none" && layout2.style.display != "none") {
 					resizePane.style.display = "block";
-					Browser.setCookie("ResizeReadingPane", "block", 30)
 				}
+        layoutState = true;
 			} else {				
 				layout2.style.display = "none" ;
 				resizePane.style.display = "none";
-				Browser.setCookie("ResizeReadingPane", "none", 30)
-				Browser.setCookie("uiMessageListResizableArea", "none", 30)
+				Browser.setCookie("layout2", "0", 30);
 			}
 			break ;
 		case 3 :
 			if (layout3.style.display == "none") {
 				layout3.style.display = "block" ;
 				layout2.style.height = "220px" ;
-				Browser.setCookie("SpliterResizableArea", "block", 30)
+				Browser.setCookie("layout3", "1", 30);
 				if (layout3.style.display != "none" && layout2.style.display != "none") {
 					resizePane.style.display = "block";
-					Browser.setCookie("ResizeReadingPane", "block", 30)
 				}
-
+        layoutState = true;
 			} else {				
 				layout3.style.display = "none" ;	
 				layout2.style.height = "100%" ;			
-			    resizePane.style.display = "none";
-			    Browser.setCookie("ResizeReadingPane", "none", 30)
-			    Browser.setCookie("SpliterResizableArea", "none", 30)	
+		    resizePane.style.display = "none";
+        Browser.setCookie("layout3", "0", 30);
 			}
 			break ;
 	}
+  var csMailLayoutSwitchMenuNode = document.getElementById('_CSMailLayoutSwitchMenu');
+  var menuItems = eXo.core.DOMUtil.findDescendantsByClass(csMailLayoutSwitchMenuNode, 'div', 'MenuItem');
+  var menuItemTexts = eXo.core.DOMUtil.findDescendantsByClass(csMailLayoutSwitchMenuNode, 'div', 'ItemIcon');
+  var fontWeight = false;
+  for (var i=0; i<menuItems.length; i++) {
+    if (menuItemTexts[i]) {
+      if (layout == 0 ||
+          (layoutState && i == layout)) {
+        menuItemTexts[i].innerHTML = menuItemTexts[i].innerHTML.replace('Show', 'Hide');        
+      } else if (!layoutState && i == layout){        
+        menuItemTexts[i].innerHTML = menuItemTexts[i].innerHTML.replace('Hide', 'Show');
+      }
+    }
+    if (i==layout) {
+      menuItems[i].style.fontWeight = 'bold';
+    } else {
+      menuItems[i].style.fontWeight = 'normal';
+    }
+  }
 } ;
 
 UIMailPortlet.prototype.checkLayout = function() {
-	var Browser = eXo.core.Browser ;
-	var	layout1 = document.getElementById("UINavigationContainer") ;
-	var	layout2 = document.getElementById("uiMessageListResizableArea") ;
-	var	layout3 = document.getElementById("SpliterResizableArea") ;
-	var resizePane = document.getElementById("ResizeReadingPane");
-	var workingarea = document.getElementById("UIMessageArea");
-	var	uiMessageList = Browser.getCookie("uiMessageListResizableArea") ;
-	var	uiNavigationContainer = Browser.getCookie("UINavigationContainer") ;
-	var	SpliterResizableArea = Browser.getCookie("SpliterResizableArea") ;
-	var	ResizeReadingPane = Browser.getCookie("ResizeReadingPane") ;
-	if (uiMessageList != null) {
-		layout1.style.display = uiNavigationContainer;
-		layout2.style.display = uiMessageList;
-		layout3.style.display = SpliterResizableArea;
-		resizePane.style.display = ResizeReadingPane;
-	} else {
-		layout1.style.display = "block";
-		layout2.style.display = "block";
-		layout3.style.display = "block";
-		resizePane.style.display = "block";
-	}
-	if(layout1.style.display == "none") {
-		workingarea.style.marginLeft = "0px"	;
-	}
-	
-	if(layout3.style.display == "block") {
-		layout2.style.height = "220px" ;
-	} else {
-		layout2.style.height = "100%" ;
-	}
+  var layout1State = parseInt(eXo.core.Browser.getCookie('layout1'));
+  var layout2State = parseInt(eXo.core.Browser.getCookie('layout2'));
+  var layout3State = parseInt(eXo.core.Browser.getCookie('layout3'));
+  if (layout1State == 0) {    
+    eXo.mail.UIMailPortlet.switchLayout(1);
+  }
+  if (layout2State == 0) {    
+    eXo.mail.UIMailPortlet.switchLayout(2);
+  }
+  if (layout3State == 0) {    
+    eXo.mail.UIMailPortlet.switchLayout(3);
+  }
 } ;
 
 UIMailPortlet.prototype.showHide = function(add) {	
