@@ -25,6 +25,7 @@ import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIMailPortlet;
+import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -108,20 +109,21 @@ public class UIAccountList extends UIGrid  implements UIPopupComponent{
       UIAccountList uiAccountList = event.getSource() ;
       UIMailPortlet uiPortlet = uiAccountList.getAncestorOfType(UIMailPortlet.class) ;
       UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;
+      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       String currAccountId = uiSelectAccount.getSelectedValue();
       String accId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIApplication uiApp = uiAccountList.getAncestorOfType(UIApplication.class) ;
       MailService mailSvr = uiAccountList.getApplicationComponent(MailService.class) ;
       String username = event.getRequestContext().getRemoteUser() ;
 
-      Account account = mailSvr.getAccountById(SessionsUtils.getSessionProvider(), username, accId) ;
       try {
-        mailSvr.removeAccount(SessionsUtils.getSessionProvider(), username, account) ;
+        mailSvr.removeAccount(SessionsUtils.getSessionProvider(), username, accId) ;
         uiSelectAccount.refreshItems() ;
         uiAccountList.updateGrid() ;
         if (currAccountId.equals(accId)) {
           if (mailSvr.getAccounts(SessionsUtils.getSessionProvider(), username).size() == 0) {
             uiSelectAccount.setSelectedValue("");
+            uiMessageList.init("");
           }
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ; 
         } else {

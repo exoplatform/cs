@@ -271,9 +271,9 @@ public class UIAccountSetting extends UIFormTabPane {
       String username = uiPortlet.getCurrentUser();
       MailService mailServ = uiPortlet.getApplicationComponent(MailService.class);
       try {
-        Account account = mailServ.getAccountById(SessionsUtils.getSessionProvider(), username, uiAccountSetting.getSelectedAccountId());
-        mailServ.removeAccount(SessionsUtils.getSessionProvider(), username, account);
-        uiAccountSetting.setSelectedAccountId(uiAccountSetting.getAccounts().get(0).getId());
+        mailServ.removeAccount(SessionsUtils.getSessionProvider(), username, uiAccountSetting.getSelectedAccountId());
+        if (uiAccountSetting.getAccounts().size() > 0)
+          uiAccountSetting.setSelectedAccountId(uiAccountSetting.getAccounts().get(0).getId());
         uiAccountSetting.fillField();
         event.getRequestContext().addUIComponentToUpdateByAjax(uiAccountSetting.getAncestorOfType(UIPopupActionContainer.class)) ;
       } catch(Exception e) {

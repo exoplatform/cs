@@ -127,7 +127,7 @@ public class UIMessageList extends UIForm {
         } else selectedFolderId_ = filter.getFolder()[0];
         setMessagePageList(mailSrv.getMessagePageListByFolder(SessionsUtils.getSessionProvider(), username, accountId, selectedFolderId_));
       //}
-    }
+    } else messageList_.clear();
     setMessageFilter(filter);
   }
   

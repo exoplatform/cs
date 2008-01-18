@@ -146,10 +146,9 @@ public class UISelectAccount extends UIForm {
       } else {
         UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
         UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class) ;
-        UIPopupActionContainer uiAccContainer = uiPortlet.createUIComponent(UIPopupActionContainer.class, null, null) ;
+        UIPopupActionContainer uiAccContainer =  uiPopup.activate(UIPopupActionContainer.class, 700) ;
         uiAccContainer.setId("UIPopupDeleteAccountContainer") ;
         uiAccContainer.addChild(UIAccountList.class, null, null) ;
-        uiPopup.activate(uiAccContainer, 700, 500, true) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
       }
     }

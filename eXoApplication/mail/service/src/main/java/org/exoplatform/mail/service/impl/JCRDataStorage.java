@@ -269,11 +269,13 @@ public class JCRDataStorage{
     return msg ;
   }
 
-  public void removeAccount(SessionProvider sProvider, String username, Account account) throws Exception {
-    Node accountHome = getMailHomeNode(sProvider, username) ;
+  public void removeAccount(SessionProvider sProvider, String username, String accountId) throws Exception {
+    Node homeNode = getMailHomeNode(sProvider, username) ;
     // gets the specified account, and removes it
-    accountHome.getNode(account.getId()).remove();    
-    accountHome.getSession().save() ;
+    if (homeNode.hasNode(accountId)) {
+      homeNode.getNode(accountId).remove() ;
+      homeNode.getSession().save() ;
+    }
   }
 
   public void removeMessage(SessionProvider sProvider, String username, String accountId, String messageId) throws Exception {

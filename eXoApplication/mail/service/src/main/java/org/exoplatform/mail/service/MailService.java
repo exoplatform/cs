@@ -87,7 +87,7 @@ public interface MailService {
    * @param account
    * @throws Exception
    */
-  public void removeAccount(SessionProvider sProvider, String username, Account account) throws Exception ;
+  public void removeAccount(SessionProvider sProvider, String username, String accountId) throws Exception ;
   /**
    * This method should: 
    * @param username

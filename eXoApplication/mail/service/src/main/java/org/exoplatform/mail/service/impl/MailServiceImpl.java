@@ -109,8 +109,8 @@ public class MailServiceImpl implements MailService{
     saveAccount(sProvider, username, account, false);
   }
 
-  public void removeAccount(SessionProvider sProvider, String username, Account account) throws Exception {
-    storage_.removeAccount(sProvider, username, account);
+  public void removeAccount(SessionProvider sProvider, String username, String accountId) throws Exception {
+    storage_.removeAccount(sProvider, username, accountId);
   }
 
   public Folder getFolder(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception {
