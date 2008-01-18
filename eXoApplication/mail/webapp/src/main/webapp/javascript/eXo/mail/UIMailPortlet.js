@@ -215,11 +215,6 @@ UIMailPortlet.prototype.switchLayout = function(layout) {
         menuItemTexts[i].innerHTML = menuItemTexts[i].innerHTML.replace('Hide', 'Show');
       }
     }
-    if (i==layout) {
-      menuItems[i].style.fontWeight = 'bold';
-    } else {
-      menuItems[i].style.fontWeight = 'normal';
-    }
   }
 } ;
 
