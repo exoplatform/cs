@@ -45,7 +45,7 @@ QuickSortObject.prototype.swap = function(x, y){
  */
 QuickSortObject.prototype.qSortRecursive = function(begin, end){
   if (!this.processArray || begin >= end - 1) 
-return;
+    return;
   var pivotIndex = begin + Math.floor(Math.random() * (end - begin - 1));
   var partionIndex = this.partitionProcess(begin, end, pivotIndex);
   this.qSortRecursive(begin, partionIndex);
@@ -405,7 +405,7 @@ EventMan.prototype.initMonth = function(rootNode){
     }
     var eventObj = new EventObject();
     eventObj.init(allEvents[i]);
-    this.events[i] = eventObj;
+    this.events.push(eventObj);
   }
   this.UIMonthViewGrid = document.getElementById('UIMonthViewGrid');
   this.groupByWeek();
@@ -416,10 +416,14 @@ EventMan.prototype.cleanUp = function() {
   var DOMUtil = eXo.core.DOMUtil;
   for (var i=0; i<this.events.length; i++) {
     var eventObj = this.events[i];
+    if (!eventObj) {
+      continue;
+    }
     for (var j=0; j<eventObj.cloneNodes.length; j++) {
       DOMUtil.removeElement(eventObj.cloneNodes[j]);
     }
     eventObj.rootNode.setAttribute('used', 'false');
+    this.events[i] = null;
   }
   var moreNodes = eXo.core.DOMUtil.findDescendantsByClass(this.rootNode, 'div', 'MoreEvent');
   for (var i=0; i<moreNodes.length; i++) {
@@ -440,13 +444,13 @@ EventMan.prototype.initWeek = function(rootNode) {
   // Parse all event node to event object
   var allEvents = DOMUtil.findDescendantsByClass(rootNode, 'div', 'EventContainer');
   // Create and init all event
-  for (var i = 0; i < allEvents.length; i++) {
+  for (var i=0; i < allEvents.length; i++) {
     if (allEvents[i].style.display == 'none') {
       continue;
     }
     var eventObj = new EventObject();
     eventObj.init(allEvents[i]);
-    this.events[i] = eventObj;
+    this.events.push(eventObj);
   }
   this.dayNodes = DOMUtil.findDescendantsByClass(this.rootNode, 'th', 'UICellBlock');
   this.week = new WeekMan();
@@ -494,9 +498,9 @@ EventMan.prototype.groupByWeek = function(){
 EventMan.prototype.sortByWeek = function(){
   for (var i = 0; i < this.weeks.length; i++) {
     var currentWeek = this.weeks[i];
-    if (currentWeek.events.length > 1) {
+//    if (currentWeek.events.length > 1) {
       currentWeek.sortEvents();
-    }
+//    }
     currentWeek.putEvents2Days();
   }
 };
@@ -513,7 +517,9 @@ function GUIMan(){
 GUIMan.prototype.initMonth = function(){
   var events = eXo.calendar.UICalendarMan.EventMan.events;
   if (events.length > 0) {
-    this.EVENT_BAR_HEIGH = events[0].rootNode.offsetHeight - 1;
+    if (events[0]) {
+      this.EVENT_BAR_HEIGH = events[0].rootNode.offsetHeight - 1;
+    }
   }
   var DOMUtil = eXo.core.DOMUtil;
   for (var i=0; i<events.length; i++) {
@@ -539,14 +545,15 @@ GUIMan.prototype.initWeek = function() {
   var EventMan = eXo.calendar.UICalendarMan.EventMan;
   var events = EventMan.events;
   if (events.length > 0) {
-    this.EVENT_BAR_HEIGH = events[0].rootNode.offsetHeight + 1;
+    if (events[0]) {
+      this.EVENT_BAR_HEIGH = events[0].rootNode.offsetHeight + 1;
+    }
   }
   var DOMUtil = eXo.core.DOMUtil;
   for (var i=0; i<events.length; i++) {
     var eventObj = events[i];
     var eventLabelNode = eXo.core.DOMUtil.findFirstDescendantByClass(eventObj.rootNode, 'div', 'EventAlldayContent');
     eventLabelNode.innerHTML = eventObj.getLabel();
-//    eventObj.rootNode.setAttribute('title', eventObj.name);
     eventObj.rootNode.setAttribute('used', 'false');
   }
   this.eventAlldayNode = DOMUtil.findFirstDescendantByClass(EventMan.rootNode, 'td', 'EventAllday');
