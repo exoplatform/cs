@@ -1,4 +1,5 @@
-	<%
+	<script type="text/javascript" language="JavaScript" src="/calendar/javascript/eXo/calendar/UICalendarMan.js"></script>
+  <%
 	import java.text.DateFormat;
 	import java.text.SimpleDateFormat;
 	import java.util.Calendar;
@@ -8,7 +9,7 @@
 	uiform.begin() ;
 	def rcontext = _ctx.getRequestContext() ;  
   rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarDragDrop','/calendar/javascript/') ;
-  rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarMan','/calendar/javascript/') ;
+  //rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarMan','/calendar/javascript/') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarMan.initMonth() ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarMan.GUIMan.initHighlighter("' + uiform.id + '") ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkFilter() ;') ;

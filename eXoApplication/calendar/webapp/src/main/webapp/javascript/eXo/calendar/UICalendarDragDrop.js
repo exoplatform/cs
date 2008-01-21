@@ -68,7 +68,7 @@ UICalendarDragDrop.prototype.regDnDItem = function() {
   for (var i=0; i<this.events.length; i++) {
     this.events[i].rootNode.onmousedown = this.dndTrigger;
     for (var j = 0; j < this.events[i].cloneNodes.length; j++) {
-      this.events[i].cloneNodes[j] = this.dndTrigger;
+      this.events[i].cloneNodes[j].onmousedown = this.dndTrigger;
     }    
   } ; 
 } ;
