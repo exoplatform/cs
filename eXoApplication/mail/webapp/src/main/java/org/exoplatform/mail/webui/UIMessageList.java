@@ -770,8 +770,11 @@ public class UIMessageList extends UIForm {
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       Message msg = uiMessageList.messageList_.get(msgId);
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
-      UIAddContactForm uiAddContactForm = uiPopup.createUIComponent(UIAddContactForm.class, null, null);
-      uiPopup.activate(uiAddContactForm, 560, 0, true);
+      UIPopupActionContainer uiPopupContainer = uiPopup.createUIComponent(UIPopupActionContainer.class, null, null) ;
+      uiPopup.activate(uiPopupContainer, 730, 0, true);
+      
+      UIAddContactForm uiAddContactForm = uiPopupContainer.createUIComponent(UIAddContactForm.class, null, null);
+      uiPopupContainer.addChild(uiAddContactForm);
       InternetAddress[] addresses  = Utils.getInternetAddress(msg.getFrom());
       String personal = Utils.getPersonal(addresses[0]);
       String firstName = personal;

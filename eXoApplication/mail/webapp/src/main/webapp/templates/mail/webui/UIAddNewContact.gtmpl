@@ -1,3 +1,4 @@
+<% uiform.begin()%> 
 <div class="UIAddNewContact"> 
 
 	<div class="UIForm AddGroupContact">
@@ -7,8 +8,7 @@
 					<tr>
 						<td class="FieldLabel">Address Book</td>
 						<td class="FieldComponent">
-							<select class="selectbox">
-							</select>
+							<% uicomponent.renderField(uicomponent.SELECT_GROUP)%>
 							<a href="#" title="Add Address Book"><img class="AddNewNodeIcon" src="/eXoResources/skin/DefaultSkin/background/Blank.gif"/></a> 
 						</td>						
 					</tr>
@@ -105,30 +105,25 @@
 </div>
 
 <div class="UIAction">
-	<table align="center" class="ActionContainer">
-		<tbody>
-			<tr>
- 			 	<td align="center">
-					<a class="ActionButton LightBlueStyle" href="#">
-						<div class="ButtonLeft">
-							<div class="ButtonRight">
-								<div class="ButtonMiddle">
-								 Save
-								</div>
-							</div>
-						</div>
-					</a>
-					<a class="ActionButton LightBlueStyle" href="#">
-						<div class="ButtonLeft">
-							<div class="ButtonRight">
-								<div class="ButtonMiddle">
-								 Reset
-								</div>
-							</div>
-						</div>
-					</a>
-	 			</td>
-			</tr>
-		</tbody>
-	</table>
+  <table class="ActionContainer" align="center">
+    <tr>
+      <td align="center">
+        <% for(action in uicomponent.getActions()) { 
+               String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
+               String link = uicomponent.event(action) ;
+        %>
+        <a href="$link" class="ActionButton LightBlueStyle">
+        <div class="ButtonLeft">
+          <div class="ButtonRight">
+            <div class="ButtonMiddle">
+              $actionLabel
+                </div>
+              </div>
+          </div>
+        </a>
+        <%}%>
+      </td>
+    </tr>
+  </table>
 </div>
+<% uiform.begin()%> 

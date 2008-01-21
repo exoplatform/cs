@@ -46,6 +46,7 @@ import org.exoplatform.webui.form.UIFormSelectBox;
     template =  "app:/templates/mail/webui/UIAddressBookForm.gtmpl",
     events = {  
       @EventConfig(listeners = UIAddressBookForm.AddGroupActionListener.class),
+      @EventConfig(listeners = UIAddressBookForm.AddContactActionListener.class),
       @EventConfig(listeners = UIAddressBookForm.SelectContactActionListener.class),
       @EventConfig(listeners = UIAddressBookForm.DeleteContactActionListener.class),
       @EventConfig(listeners = UIAddressBookForm.CloseActionListener.class)
@@ -95,6 +96,19 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
       UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
       uiChildPopup.activate(UIAddGroupForm.class, 650) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
+    }
+  }
+  
+  static public class AddContactActionListener extends EventListener<UIAddressBookForm> {
+    public void execute(Event<UIAddressBookForm> event) throws Exception {
+      UIAddressBookForm uiAddressBookForm = event.getSource() ;
+      UIPopupActionContainer uiActionContainer = uiAddressBookForm.getParent() ;
+      UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
+      UIPopupActionContainer uiPopupContainer = uiChildPopup.activate(UIPopupActionContainer.class, 730) ;
+      uiPopupContainer.setId("UIPopupActionAddressBookContainer");
+      //UIAddContactForm uiAddContactForm = uiPopupContainer.createUIComponent(UIAddContactForm.class, null, null);
+      uiPopupContainer.addChild(UIAddContactForm.class, null, null) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
     }
   }
   

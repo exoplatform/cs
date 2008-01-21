@@ -17,6 +17,7 @@
 package org.exoplatform.mail.webui.popup;
 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
@@ -41,6 +42,13 @@ public class UIPopupActionContainer extends UIContainer implements UIPopupCompon
   public void deActivate() throws Exception {
     // TODO Auto-generated method stub
     
+  }
+  public UIComponent setId(String id) {
+    super.setId(id) ;
+    UIPopupAction uiPopupAction = getChild(UIPopupAction.class) ;
+    uiPopupAction.setId("UIChildPopup" + id);
+    uiPopupAction.getChild(UIPopupWindow.class).setId("UIChildPopupWindow" + id) ;
+    return this ;
   }
 
 }

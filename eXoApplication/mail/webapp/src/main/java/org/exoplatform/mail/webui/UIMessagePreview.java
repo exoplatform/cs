@@ -260,7 +260,7 @@ public class UIMessagePreview extends UIComponent {
       Message msg = mailServ.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId);
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
       UIAddContactForm uiAddContactForm = uiPopup.createUIComponent(UIAddContactForm.class, null, null);
-      uiPopup.activate(uiAddContactForm, 560, 0, true);
+      uiPopup.activate(uiAddContactForm, 730, 0, true);
       InternetAddress[] addresses  = Utils.getInternetAddress(msg.getFrom());
       String personal = Utils.getPersonal(addresses[0]);
       String firstName = personal;

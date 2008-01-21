@@ -12,17 +12,17 @@
           <div class="LeftBar">
             <div class="RightBar">
               <div class="CenterBar">
-                <a class="ControlButton" href="<%=uicomponent.event("AddGroup")%>">
+                <!-- <a class="ControlButton" href="<%=uicomponent.event("AddGroup")%>">
                   <div class="IconHolder AddGroup">
                     <div class="Label">Add New Group</div>
                   </div>
-                </a>
-                <a class="ControlButton" href="#">
+                </a> -->
+                <a class="ControlButton" href="<%=uicomponent.event("AddContact")%>">
                   <div class="IconHolder AddContact">
                     <div class="Label"> Add New Contact </div>
                   </div>
                 </a>
-                <a class="ControlButton" href="#">
+                <!--  <a class="ControlButton" href="#">
                   <div class="IconHolder EditContact">
                     <div class="Label"> Edit Contact </div>
                   </div>
@@ -32,7 +32,7 @@
                     <div class="Label">Delete</div>
                   </div>
                 </a>
-                <!-- 
+                
                 <div class="SearchForm">
                   <a href="#"><div title="Search" class="Search"><span/></div></a>
                   <input type="text" name="search" id="search" class="Input"/>
@@ -129,6 +129,11 @@
                               <div class="Info"><%= (selectedContact.getGender() != null) ? selectedContact.getGender() : "_"%></div>
                               <div style="clear: left;"><span/></div>
                             </div>
+                            <div class="InfoItem">
+                              <div class="InfoLabel">Job Title:</div>
+                              <div class="Info"><%= (selectedContact.getJobTitle() != null) ? selectedContact.getJobTitle() : "_"%></div>
+                              <div style="clear: left;"><span/></div>
+                            </div>
                           </div>
                           <div class="RightContent">
                             <div class="InfoItem">
@@ -146,173 +151,6 @@
                             </div>                                                  
                           </div>
                           <div style="clear: left;"><span/></div>
-                        </div>
-                      </div>
-                      
-                      <div class="InfoContainer">
-                        <div class="TitleInfo">Work</div>
-                        <div class="Content">
-                          <div class="LeftContent">
-                            <div class="InfoItem">
-                              <div class="InfoLabel">Address:</div>
-                              <div class="Info"><%= (selectedContact.getWorkAddress() != null) ? selectedContact.getWorkAddress() : "_"%></div>
-                              <div style="clear: left;"><span/></div>
-                            </div>
-                            <div class="InfoItem">
-                              <div class="InfoLabel">City:</div>
-                              <div class="Info"><%= (selectedContact.getWorkCity() != null) ? selectedContact.getWorkCity() : "_"%></div>
-                              <div style="clear: left;"><span/></div>
-                            </div>
-                            <div class="InfoItem">
-                              <div class="InfoLabel">State/Province:</div>
-                              <div class="Info"><%= (selectedContact.getWorkStateProvince() != null) ? selectedContact.getWorkStateProvince() : "_"%></div>
-                              <div style="clear: left;"><span/></div>
-                            </div>
-                            <div class="InfoItem">
-                              <div class="InfoLabel">Postal Code:</div>
-                              <div class="Info"><%= (selectedContact.getWorkPostalCode() != null) ? selectedContact.getWorkPostalCode() : "_"%></div>
-                              <div style="clear: left;"><span/></div>
-                            </div>
-                            <div class="InfoItem">
-                              <div class="InfoLabel">Country:</div>
-                              <div class="Info"><%= (selectedContact.getWorkCountry() != null) ? selectedContact.getWorkCountry() : "_"%></div>
-                              <div style="clear: left;"><span/></div>
-                            </div>
-                          </div>
-                          <div class="RightContent">
-                            <div class="InfoItem">
-                              <div class="InfoLabel">Work Phone 1:</div>
-                              <div class="Info"><%= (selectedContact.getWorkPhone1() != null) ? selectedContact.getWorkPhone1() : "_"%></div>
-                            </div>                          
-                            <div class="InfoItem">
-                              <div class="InfoLabel">Work Phone 2:</div>
-                              <div class="Info"><%= (selectedContact.getWorkPhone2() != null) ? selectedContact.getWorkPhone2() : "_"%></div>
-                            </div>                          
-                            <div class="InfoItem">
-                              <div class="InfoLabel">Work Fax:</div>
-                              <div class="Info"><%= (selectedContact.getWorkFax() != null) ? selectedContact.getWorkFax() : "_"%></div>
-                            </div>                          
-                            <div class="InfoItem">
-                              <div class="InfoLabel">Mobile Phone:</div>
-                              <div class="Info"><%= (selectedContact.getMobilePhone() != null) ? selectedContact.getMobilePhone() : "_"%></div>
-                            </div>                          
-                            <div class="InfoItem">
-                              <div class="InfoLabel">Web Page:</div>
-                              <div class="Info"><%= (selectedContact.getWebPage() != null) ? selectedContact.getWebPage() : "_"%></div>
-                              <div style="clear: left;"><span/></div>
-                            </div>                          
-                          </div>
-                          <div style="clear: left;"><span/></div>
-                        </div>
-                      </div>
-                      
-                      <div class="InfoContainer">
-                        <div class="TitleInfo">Instant Messaging Contacts</div>
-                        <div class="Content">
-                          <div class="LeftContent">
-                            <div class="InfoItem">
-                              <div class="InfoLabel">eXo Chat:</div>
-                              <div class="Info"><%= (selectedContact.getExoId() != null) ? selectedContact.getExoId() : "_"%></div>
-                              <div style="clear: left;"><span/></div>
-                            </div>
-                            <div class="InfoItem">
-                              <div class="InfoLabel">Google:</div>
-                              <div class="Info"><%= (selectedContact.getGoogleId() != null) ? selectedContact.getGoogleId() : "_"%></div>
-                              <div style="clear: left;"><span/></div>
-                            </div>
-                            <div class="InfoItem">
-                              <div class="InfoLabel">MSN:</div>
-                              <div class="Info"><%= (selectedContact.getMsnId() != null) ? selectedContact.getMsnId() : "_"%></div>
-                              <div style="clear: left;"><span/></div>
-                            </div>
-                            <div class="InfoItem">
-                              <div class="InfoLabel">AOL/AIM:</div>
-                              <div class="Info"><%= (selectedContact.getAolId() != null) ? selectedContact.getAolId() : "_"%></div>
-                              <div style="clear: left;"><span/></div>
-                            </div>
-                          </div>
-                          <div class="RightContent">
-                            <div class="InfoItem">
-                              <div class="InfoLabel1">Yahoo!:</div>
-                              <div class="Info1"><%= (selectedContact.getYahooId() != null) ? selectedContact.getYahooId() : "_"%></div>
-                            </div>                          
-                            <div class="InfoItem">
-                              <div class="InfoLabel1">ICR:</div>
-                              <div class="Info1"><%= (selectedContact.getIcrId() != null) ? selectedContact.getIcrId() : "_"%></div>
-                            </div>                          
-                            <div class="InfoItem">
-                              <div class="InfoLabel1">Skype:</div>
-                              <div class="Info1"><%= (selectedContact.getSkypeId() != null) ? selectedContact.getSkypeId() : "_"%></div>
-                            </div>                          
-                            <div class="InfoItem">
-                              <div class="InfoLabel1">ICQ:</div>
-                              <div class="Info1"><%= (selectedContact.getIcqId() != null) ? selectedContact.getIcqId() : "_"%></div>
-                              <div style="clear: left;"><span/></div>
-                            </div>                          
-                          </div>
-                          <div style="clear: left;"><span/></div>
-                        </div>
-                      </div>
-                      <div class="InfoContainer">
-                        <div class="TitleInfo">Home</div>
-                        <div class="Content">
-                          <div class="LeftContent">
-                            <div class="InfoItem">
-                              <div class="InfoLabel">Street:</div>
-                              <div class="Info"><%= (selectedContact.getHomeAddress() != null) ? selectedContact.getHomeAddress() : "_"%></div>
-                              <div style="clear: left;"><span/></div>
-                            </div>
-                            <div class="InfoItem">
-                              <div class="InfoLabel">City:</div>
-                              <div class="Info"><%= (selectedContact.getHomeCity() != null) ? selectedContact.getHomeCity() : "_"%></div>
-                              <div style="clear: left;"><span/></div>
-                            </div>
-                            <div class="InfoItem">
-                              <div class="InfoLabel">State/Province:</div>
-                              <div class="Info"><%= (selectedContact.getHomeState_province() != null) ? selectedContact.getHomeState_province() : "_"%></div>
-                              <div style="clear: left;"><span/></div>
-                            </div>
-                            <div class="InfoItem">
-                              <div class="InfoLabel">Postal Code:</div>
-                              <div class="Info"><%= (selectedContact.getHomePostalCode() != null) ? selectedContact.getHomePostalCode() : "_"%></div>
-                              <div style="clear: left;"><span/></div>
-                            </div>
-                            <div class="InfoItem">
-                              <div class="InfoLabel">Country/Region:</div>
-                              <div class="Info"><%= (selectedContact.getHomeCountry() != null) ? selectedContact.getHomeCountry() : "_"%></div>
-                              <div style="clear: left;"><span/></div>
-                            </div>
-                          </div>
-                          <div class="RightContent">
-                            <div class="InfoItem">
-                              <div class="InfoLabel">Home Phone 1:</div>
-                              <div class="Info"><%= (selectedContact.getHomePhone1() != null) ? selectedContact.getHomePhone1() : "_"%></div>
-                            </div>                          
-                            <div class="InfoItem">
-                              <div class="InfoLabel">Home Phone 2:</div>
-                              <div class="Info"><%= (selectedContact.getHomePhone2() != null) ? selectedContact.getHomePhone2() : "_"%></div>
-                            </div>                          
-                            <div class="InfoItem">
-                              <div class="InfoLabel">Home Fax:</div>
-                              <div class="Info"><%= (selectedContact.getHomeFax() != null) ? selectedContact.getHomeFax() : "_"%></div>
-                            </div>                          
-                            <div class="InfoItem">
-                              <div class="InfoLabel">Web Page:</div>
-                              <div class="Info"><%= (selectedContact.getPersonalSite() != null) ? selectedContact.getPersonalSite() : "_"%></div>
-                            </div>                          
-                          </div>
-                          <div style="clear: left;"><span/></div>
-                        </div>
-                      </div>
-                      
-                      <div class="InfoContainer">
-                        <div class="TitleInfo">Note</div>
-                        <div class="Content">
-                          <div class="LeftContent">               
-                            <div class="Member">
-                              <div class="Job"><%= (selectedContact.getNote() != null) ? selectedContact.getNote() : "_"%></div>
-                            </div>  
-                          </div>
                         </div>
                       </div>
                       <div style="clear: left;"><span/></div>

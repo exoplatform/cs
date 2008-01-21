@@ -83,6 +83,11 @@ public class UIAddGroupForm extends UIForm implements UIPopupComponent{
         contactSrv.saveGroup(SessionsUtils.getSessionProvider(), username, group, true);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.getChild(UIPopupAction.class)) ;
       }
+      UIAddContactForm uiAddContact = uiPortlet.findFirstComponentOfType(UIAddContactForm.class);
+      uiAddContact.refreshGroupList();
+      UIPopupAction uiPopupAction = uiAddGroupForm.getAncestorOfType(UIPopupAction.class) ; 
+      uiPopupAction.deActivate() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
   

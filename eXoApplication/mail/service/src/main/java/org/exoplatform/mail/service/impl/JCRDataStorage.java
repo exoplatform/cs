@@ -743,8 +743,6 @@ public class JCRDataStorage{
     	accountNode.save() ;
     }
     return accountNode.getNode(Utils.KEY_TAGS) ;     
-    /*if(accountNode.hasNode(Utils.KEY_TAGS)) return accountNode.getNode(Utils.KEY_TAGS) ;
-    else return accountNode.addNode(Utils.KEY_TAGS, Utils.NT_UNSTRUCTURED) ;    */
   }
 
   public void addTag(SessionProvider sProvider, String username, String accountId, List<String> messageIds, List<Tag> tagList)
