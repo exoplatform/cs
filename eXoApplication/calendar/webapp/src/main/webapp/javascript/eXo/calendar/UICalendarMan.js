@@ -322,7 +322,6 @@ WeekMan.prototype.putEvents2Days = function(){
   }
   
   this.createDays();
-
   // Put events to days
   for (var i=0; i<this.events.length; i++) {
     var eventObj = this.events[i];
@@ -471,7 +470,7 @@ EventMan.prototype.initWeek = function(rootNode) {
   this.dayNodes = DOMUtil.findDescendantsByClass(this.rootNode, 'th', 'UICellBlock');
   this.week = new WeekMan();
   this.week.weekIndex = 0;
-  this.week.startWeek = this.dayNodes[0].getAttribute('starttime');
+  this.week.startWeek = parseInt(this.dayNodes[0].getAttribute('starttime'));
   this.week.endWeek = parseInt(this.dayNodes[this.dayNodes.length - 1].getAttribute('starttime')) + (1000 * 60 * 60 * 24) -1;
   this.week.events = this.events;
   this.week.resetEventWeekIndex();
@@ -622,11 +621,9 @@ GUIMan.prototype.paintWeek = function() {
  */
 GUIMan.prototype.drawEventByMiliseconds = function(eventObj, startTime, endTime, dayInfo) {
   var eventNode = eventObj.rootNode;
-  startTime = new Date(startTime);
-  endTime = new Date(endTime);
   var topPos = dayInfo.eventTop ;
   var leftPos = dayInfo.left;
-  delta = endTime - startTime;
+  delta = (new Date(endTime)) - (new Date(startTime));
   delta /= (1000 * 60 * 60 * 24);
   var eventLen = Math.round(delta * (dayInfo.width)) - 2;
   with (eventNode.style) {
