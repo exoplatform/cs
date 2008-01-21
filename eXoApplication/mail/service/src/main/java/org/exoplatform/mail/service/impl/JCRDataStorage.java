@@ -720,29 +720,32 @@ public class JCRDataStorage{
 
   public Node getMessageHome(SessionProvider sProvider, String username, String accountId) throws Exception {
     Node accountHome = getMailHomeNode(sProvider, username).getNode(accountId);
-    if(accountHome.hasNode(Utils.KEY_MESSAGE)) return accountHome.getNode(Utils.KEY_MESSAGE) ;
-    else return accountHome.addNode(Utils.KEY_MESSAGE, Utils.NT_UNSTRUCTURED) ;
+    if(!accountHome.hasNode(Utils.KEY_MESSAGE)) {
+    	accountHome.addNode(Utils.KEY_MESSAGE, Utils.NT_UNSTRUCTURED) ;
+    	accountHome.save() ;
+    }
+    return accountHome.getNode(Utils.KEY_MESSAGE) ;
   }
 
   public Node getFolderHome(SessionProvider sProvider, String username, String accountId) throws Exception {
     Node accountHome = getMailHomeNode(sProvider, username).getNode(accountId);
-    if (accountHome.hasNode(Utils.KEY_FOLDERS)) return accountHome.getNode(Utils.KEY_FOLDERS);
-    else return accountHome.addNode(Utils.KEY_FOLDERS, Utils.NT_UNSTRUCTURED);
+    if (!accountHome.hasNode(Utils.KEY_FOLDERS)) {
+    	accountHome.addNode(Utils.KEY_FOLDERS, Utils.NT_UNSTRUCTURED);
+    	accountHome.save() ;
+    }
+    return accountHome.getNode(Utils.KEY_FOLDERS);    
   }
 
   public Node getTagHome(SessionProvider sProvider, String username, String accountId) throws Exception {
     Node accountNode = getMailHomeNode(sProvider, username).getNode(accountId);
-    if(accountNode.hasNode(Utils.KEY_TAGS)) return accountNode.getNode(Utils.KEY_TAGS) ;
-    else return accountNode.addNode(Utils.KEY_TAGS, Utils.NT_UNSTRUCTURED) ;    
+    if(!accountNode.hasNode(Utils.KEY_TAGS)) {
+    	accountNode.addNode(Utils.KEY_TAGS, Utils.NT_UNSTRUCTURED) ;
+    	accountNode.save() ;
+    }
+    return accountNode.getNode(Utils.KEY_TAGS) ;     
+    /*if(accountNode.hasNode(Utils.KEY_TAGS)) return accountNode.getNode(Utils.KEY_TAGS) ;
+    else return accountNode.addNode(Utils.KEY_TAGS, Utils.NT_UNSTRUCTURED) ;    */
   }
-
-  /*public Session getJCRSession() throws Exception {
-    SessionProvider sessionProvider = SessionProvider.createSystemProvider() ;
-    String defaultWS = 
-      repositoryService_.getDefaultRepository().getConfiguration().getDefaultWorkspaceName() ;
-    return sessionProvider.getSession(defaultWS, repositoryService_.getCurrentRepository()) ;
-  }*/
-
 
   public void addTag(SessionProvider sProvider, String username, String accountId, List<String> messageIds, List<Tag> tagList)
   throws Exception {    
