@@ -73,12 +73,13 @@ UIMailDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj, e) 
   var uiGridNode = document.createElement('table') ;
   uiGridNode.className = 'UIGrid' ;
   with(tmpNode.style) {
+    background = 'yellow' ;
     border = 'solid 1px #A5A5A5' ;
     position = 'absolute' ;
     width = blockWidth + 'px' ;
     display = 'none' ;
   }
-  
+  eXo.core.Browser.setOpacity(tmpNode, 80) ;
   var selectedItems = eXo.cs.FormHelper.getSelectedElementByClass(
                         document.getElementById('UIListUsers'), this.msgItemClass, dragBlock) ;
   if (selectedItems.length > 0) {

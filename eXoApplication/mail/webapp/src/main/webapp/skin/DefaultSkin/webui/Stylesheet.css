@@ -215,6 +215,7 @@
 
 .UIMailPortlet .UINavigationContainer .UIFolderContainer a {
 	display: block;
+	border: solid 1px white ;
 }
 
 .UIMailPortlet .UINavigationContainer .UIFolderContainer .Icon {
