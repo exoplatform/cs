@@ -449,7 +449,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           uiEventForm.update(CalendarUtils.PRIVATE_TYPE, null) ;
           uiEventForm.setSelectedCategory(value) ;
         }
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
+        //event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiParenPopup) ;     
       }
     }
@@ -563,7 +563,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         uiPreview.setEvent(eventCalendar) ;
         uiPreview.setShowPopup(true) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView.getParent()) ;
+        //event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView.getParent()) ;
       }
     }
   }
@@ -607,8 +607,8 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           uiEventForm.initForm(uiPortlet.getCalendarSetting(), eventCalendar) ;
           uiEventForm.setSelectedCalendarId(calendarId) ;
           uiPopupContainer.addChild(uiEventForm) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView.getParent()) ;
+          //event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+          //event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView.getParent()) ;
 
         } else if(CalendarEvent.TYPE_TASK.equals(eventCalendar.getEventType())) {
           uiPopupContainer.setId(UIPopupContainer.UITASKPOPUP) ;
@@ -632,11 +632,11 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           uiTaskForm.initForm(uiPortlet.getCalendarSetting(),eventCalendar) ;
           uiTaskForm.setSelectedCalendarId(calendarId) ;
           uiPopupContainer.addChild(uiTaskForm) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView.getParent()) ;
+          //event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView.getParent()) ;
         } else {
           System.out.println("\n\n event type is not supported ! ");
         }
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       } else {
         System.out.println("\n\n event not found !");
       }
