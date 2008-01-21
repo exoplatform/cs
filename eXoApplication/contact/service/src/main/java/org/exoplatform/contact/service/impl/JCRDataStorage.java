@@ -498,7 +498,6 @@ public class JCRDataStorage{
 
   public void saveGroup(SessionProvider sProvider, String username, ContactGroup group, boolean isNew) throws Exception {
     Node groupHomeNode = getUserContactGroupHome(sProvider, username);
-    Node sharedAddressBookHome = getSharedAddressBookHome(sProvider) ;
     Node groupNode = null ;
     if (isNew) {
       groupNode = groupHomeNode.addNode(group.getId(), "exo:contactGroup");
@@ -506,7 +505,7 @@ public class JCRDataStorage{
     } else if (groupHomeNode.hasNode(group.getId())){
       groupNode = groupHomeNode.getNode(group.getId());
     } else {
-      
+    	Node sharedAddressBookHome = getSharedAddressBookHome(SessionProvider.createSystemProvider()) ;
       if(sharedAddressBookHome.hasNode(username)) {
         Node userNode = sharedAddressBookHome.getNode(username) ;
         PropertyIterator iter = userNode.getReferences() ;
@@ -518,13 +517,14 @@ public class JCRDataStorage{
             break ;
           }
         }      
-      }   
+      }
+      sharedAddressBookHome.getSession().save() ;
     }
     if (groupNode != null) {
       groupNode.setProperty("exo:name", group.getName());
       groupNode.setProperty("exo:description", group.getDescription());
       groupHomeNode.getSession().save();
-      sharedAddressBookHome.getSession().save() ;
+      
     }
     
   }

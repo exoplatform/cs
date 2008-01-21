@@ -5,7 +5,7 @@
   "http://java.sun.com/dtd/web-app_2_3.dtd">
 
 <web-app>
-  <display-name>eXoApplicationMail</display-name>
+  <display-name>mail</display-name>
 
   <listener>
     <listener-class>org.exoplatform.services.portletcontainer.impl.servlet.PortletApplicationListener</listener-class>
