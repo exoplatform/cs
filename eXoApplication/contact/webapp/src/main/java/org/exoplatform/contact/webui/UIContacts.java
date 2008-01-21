@@ -697,12 +697,14 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   static public class CopyContactActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource() ;
-      uiContacts.getAncestorOfType(UIWorkingContainer.class)
-        .findFirstComponentOfType(UIAddressBooks.class).setCopyAddress(null) ;      
+      UIAddressBooks uiAddressBooks = uiContacts.getAncestorOfType(
+          UIWorkingContainer.class).findFirstComponentOfType(UIAddressBooks.class) ;     
+      uiAddressBooks.setCopyAddress(null) ;
       List<String> checkedContact = uiContacts.getCheckedContacts() ;
       for (String contactId : checkedContact) {
         uiContacts.copyContacts.add(uiContacts.contactMap.get(contactId)) ;
       }      
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBooks) ;
     }
   }
   /*

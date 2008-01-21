@@ -132,6 +132,7 @@ public class UIAddressBooks extends UIComponent {
       UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class);
       uiPopupAction.activate(UICategoryForm.class, 500) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());
     }
   }
   
@@ -140,7 +141,7 @@ public class UIAddressBooks extends UIComponent {
       UIAddressBooks uiAddressBook = event.getSource();
       String addressBookId = event.getRequestContext().getRequestParameter(OBJECTID);
       uiAddressBook.copyAddress = addressBookId ;
-      //event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent()) ;
     }
   }
   
@@ -255,6 +256,7 @@ public class UIAddressBooks extends UIComponent {
         uiExportForm.updateList();
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());
     }
   }
   
@@ -304,6 +306,7 @@ public class UIAddressBooks extends UIComponent {
       uiCategorySelect.setValue(groupId) ; 
       
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());
     }
   }
 
@@ -317,6 +320,7 @@ public class UIAddressBooks extends UIComponent {
       uiCategoryForm.setValues(groupId) ;
       uiCategoryForm.setNew(false) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());
     }
   }
   
@@ -335,6 +339,7 @@ public class UIAddressBooks extends UIComponent {
       if (contactGroup != null) {
         uiSharedForm.init(null, contactGroup, true) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());
       }
     }
   }
@@ -354,6 +359,7 @@ public class UIAddressBooks extends UIComponent {
       uiSendEmail.setEmails(addresses);
       uiPopupAction.activate(uiSendEmail, 700, 0, true);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());
     }
   }
 
