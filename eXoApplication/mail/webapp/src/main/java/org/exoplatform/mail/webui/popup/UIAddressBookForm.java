@@ -105,8 +105,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
       UIPopupActionContainer uiActionContainer = uiAddressBookForm.getParent() ;
       UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
       UIPopupActionContainer uiPopupContainer = uiChildPopup.activate(UIPopupActionContainer.class, 730) ;
-      uiPopupContainer.setId("UIPopupActionAddressBookContainer");
-      //UIAddContactForm uiAddContactForm = uiPopupContainer.createUIComponent(UIAddContactForm.class, null, null);
+      uiPopupContainer.setId("UIAddContactContainer");
       uiPopupContainer.addChild(UIAddContactForm.class, null, null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
     }
