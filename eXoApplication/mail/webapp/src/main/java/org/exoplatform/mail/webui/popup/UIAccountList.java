@@ -121,14 +121,20 @@ public class UIAccountList extends UIGrid  implements UIPopupComponent{
         uiSelectAccount.refreshItems() ;
         uiAccountList.updateGrid() ;
         if (currAccountId.equals(accId)) {
-          if (mailSvr.getAccounts(SessionsUtils.getSessionProvider(), username).size() == 0) {
+          List<Account> accounts = mailSvr.getAccounts(SessionsUtils.getSessionProvider(), username);
+          if (accounts.size() == 0) {
             uiSelectAccount.setSelectedValue("");
             uiMessageList.init("");
+          } else {
+            String selectedAcc = accounts.get(0).getId();
+            uiSelectAccount.setSelectedValue(selectedAcc);
+            uiMessageList.setMessageFilter(null);
+            uiMessageList.init(selectedAcc);
           }
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ; 
         } else {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiAccountList.getAncestorOfType(UIPopupAction.class)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectAccount) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectAccount);
         }
       } catch (Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIAccountList.msg.remove-accout-error", null)) ;
