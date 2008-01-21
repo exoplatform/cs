@@ -145,5 +145,4 @@ public class UIForumPortlet extends UIPortletApplication {
 		topicsTag.setMaxItemInPage(maxTopic, maxPost);
 		topicsTag.setFormat(timeZone, shortDateformat, longDateformat, timeFormat);
   }
-
 }

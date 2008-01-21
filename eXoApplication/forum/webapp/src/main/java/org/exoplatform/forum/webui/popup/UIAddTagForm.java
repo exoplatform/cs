@@ -115,7 +115,6 @@ public class UIAddTagForm extends UIForm implements UIPopupComponent {
 		return	findComponentById(name) ;
 	}
 	
-	
 	static	public class SaveActionListener extends EventListener<UIAddTagForm> {
     public void execute(Event<UIAddTagForm> event) throws Exception {
 			UIAddTagForm uiForm = event.getSource() ;
@@ -167,5 +166,4 @@ public class UIAddTagForm extends UIForm implements UIPopupComponent {
 			}
 		}
 	}
-	
 }

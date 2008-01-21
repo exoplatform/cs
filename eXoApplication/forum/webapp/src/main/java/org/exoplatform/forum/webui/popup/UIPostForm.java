@@ -200,7 +200,6 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
 	}
 		
 	static	public class PreviewPostActionListener extends EventListener<UIPostForm> {
-		@Override
     public void execute(Event<UIPostForm> event) throws Exception {
 			UIPostForm uiForm = event.getSource() ;
 			int t = 0, k = 1 ;
@@ -248,7 +247,6 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
 	}
 	
 	static	public class SubmitPostActionListener extends EventListener<UIPostForm> {
-		@Override
     public void execute(Event<UIPostForm> event) throws Exception {
 			UIPostForm uiForm = event.getSource() ;
 			int t = 0, k = 1 ;

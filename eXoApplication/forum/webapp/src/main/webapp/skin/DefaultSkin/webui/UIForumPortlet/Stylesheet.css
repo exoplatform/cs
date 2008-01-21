@@ -6,26 +6,8 @@
 *html .UIForumPortlet {
 	height: 470px;
 }
- 
-/******************************************** ForumBanner ****************************************/
-.UIForumPortlet .ForumBanner {
-	background: url('background/BgBanner1x66.gif') repeat-x top;	
-}
-
-.UIForumPortlet .ForumBanner .LeftBanner {
-	background: url('background/Logo223x66.gif') no-repeat left top;	
-	height: 66px;
-	padding-left: 223px;
-}
-
-.UIForumPortlet .ForumBanner .BannerTitle {
-	color: #ffa200;
-	font-size: 14px; font-weight: bold;
-	padding: 12px 0px 0px 40px;
-}
 
 /**************************** UISearchForm **************************/
-
 .UIForumPortlet .UISearchForm .SearchForm {
 	padding-right: 13px;
 }

@@ -387,12 +387,10 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
 		}
 	}
 	
-	
 	static	public class CancelActionListener extends EventListener<UITopicForm> {
     public void execute(Event<UITopicForm> event) throws Exception {
 			UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
 			forumPortlet.cancelAction() ;
 		}
 	}
-	
 }

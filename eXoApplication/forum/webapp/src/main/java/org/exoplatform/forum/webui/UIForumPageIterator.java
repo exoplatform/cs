@@ -46,7 +46,6 @@ public class UIForumPageIterator extends UIContainer {
 	private int endTabPage = 0;
 	private int beginTabPage = 0;
 	public UIForumPageIterator () throws Exception {
-		
 	}
 	
 	public void updatePageList(JCRPageList pageList ) {
@@ -98,7 +97,6 @@ public class UIForumPageIterator extends UIContainer {
 	}
 		
 	static public class GoPageActionListener extends EventListener<UIForumPageIterator> {
-		@Override
     public void execute(Event<UIForumPageIterator> event) throws Exception {
 			UIForumPageIterator forumPageIterator = event.getSource() ;
 			String stateClick = event.getRequestContext().getRequestParameter(OBJECTID).trim() ;
@@ -133,6 +131,4 @@ public class UIForumPageIterator extends UIContainer {
 			}
 		}
 	}
-	
-	
 }
