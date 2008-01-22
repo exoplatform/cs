@@ -1,6 +1,7 @@
 <%  
 	import org.exoplatform.forum.webui.UITopicPoll ;
 	import org.exoplatform.forum.service.Poll ;
+	import org.exoplatform.forum.ForumSessionUtils; 
 	import java.util.GregorianCalendar;
 %>
 <div class="UITopicPoll">
@@ -9,6 +10,7 @@
 		String question = poll.getQuestion() ;
 		int timeOut = (int)poll.getTimeOut() ;
 		boolean displayVoted = uicomponent.getIsVoted();
+		boolean isShowMenu = ForumSessionUtils.isAnonim();
 		String confirmDelete =  _ctx.appRes("UITopicPoll.msg.confirmClose"); 
 	%>
 	<% uiform.begin() %>
@@ -21,8 +23,8 @@
 	  				<span>${question}?</span>
 	  			</div>
 	  			<div class="CollapseButton" title="Collapse" onclick="eXo.forum.UIForumPortlet.expandCollapse(this) ;"><span></span></div>
+	  		<% if(!isShowMenu) { %>	
 	  			<div class="SeparatorLine"><span></span></div>
-	  			
 	  			<div class="ContentAction">
 						<div class="DefaultStyle Forum" onmouseover="eXo.forum.UIForumPortlet.OverButton(this)" onmouseout="eXo.forum.UIForumPortlet.OverButton(this)">
 							<a href="javascript:if(confirm('$confirmDelete')){<%=uicomponent.event("RemovePoll");}%>">
@@ -54,6 +56,7 @@
 							</a>
 						</div>
 					</div>
+				<% } %>
 	  			<div style="clear: both"><span></span></div>
 	  		</div>
 	  	</div>
@@ -170,7 +173,7 @@
 									  	</tbody>
 										</table>
 										<div class="TotalVotes"><%=_ctx.appRes("UITopicPoll.label.TotalVoters"); %>: $sum</div>
-									<% if(poll.getIsMultiCheck()) { %>
+										<% if(poll.getIsMultiCheck() && !isShowMenu) { %>
 			   						<div class="UIAction"> 
 							        <table class="ActionContainer" align="center">
 							          <tr>

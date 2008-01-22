@@ -146,6 +146,7 @@ public class UITopicPoll extends UIForm	{
 			return false ;
 		}
 		String userVote = ForumSessionUtils.getCurrentUser() ;
+		if(userVote == null  || userVote.length() <= 0) return true ;
 		String[] userVotes = poll.getUserVote() ;
 		for (String string : userVotes) {
 			string = string.substring(0, string.length() - 2) ;
