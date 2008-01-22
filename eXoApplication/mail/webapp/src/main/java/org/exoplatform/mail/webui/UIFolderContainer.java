@@ -195,7 +195,7 @@ public class UIFolderContainer extends UIContainer {
       uiMessageList.init(accountId);
       uiFolder.setSelectedFolder(Utils.createFolderId(accountId, Utils.FD_INBOX, false));
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent()) ;
     }
   }
   
@@ -241,7 +241,7 @@ public class UIFolderContainer extends UIContainer {
         uiMessageList.messageList_.put(msg.getId(), msg);
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent()) ;
     }
   }
 }
