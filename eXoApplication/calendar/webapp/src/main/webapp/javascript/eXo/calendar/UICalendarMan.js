@@ -433,7 +433,10 @@ EventMan.prototype.cleanUp = function() {
       if (checkBoxTmp) {
         checkBoxTmp.style.display = null;
       }
-      rowContainerDay.appendChild(eventNode);
+      var bodyNode = eXo.core.DOMUtil.findAncestorByTagName(eventObj.rootNode, 'body');
+      if (bodyNode) {
+      	rowContainerDay.appendChild(eventNode);
+      }
     }
     this.events[i] = null;
   }

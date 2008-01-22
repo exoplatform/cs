@@ -118,6 +118,14 @@ UIContextMenu.prototype.getReturnValue = function(evt) {
 	return returnValue;
 } ;
 
+UIContextMenu.prototype.hasChild = function(root, obj) {
+	if(typeof(obj) == "string") obj = document.getElementById(obj) ;
+	var children = eXo.core.DOMUtil.findChildrenByClass(root, "div", "UIRightClickPopupMenu") ;
+	var len = children.length ;
+	if (len > 0) return children ;
+	return false ;
+} ;
+
 UIContextMenu.prototype.show = function(evt) {
 	var _e = window.event || evt
 	var UIContextMenu = eXo.webui.UIContextMenu ;
@@ -150,9 +158,20 @@ UIContextMenu.prototype.show = function(evt) {
 		eXo.core.DOMUtil.addClass(UIContextMenu.menuElement, UIContextMenu.portletName) ;
 		UIContextMenu.menuElement.onmouseover = UIContextMenu.autoHide ;
 		UIContextMenu.menuElement.onmouseout = UIContextMenu.autoHide ;		
-		if (!UIContextMenu.IE) {			
-			//if(UIContextMenu.portletName) document.getElementById(UIContextMenu.portletName).appendChild(UIContextMenu.menuElement) ;
-			//else document.body.appendChild(UIContextMenu.menuElement) ;
+		if (!UIContextMenu.IE) {
+			/* Clean up cache menu in body */
+			try{				
+				if(UIContextMenu.hasChild(document.body, menuElementId)) {
+					var popup = UIContextMenu.hasChild(document.body, menuElementId) ;
+					var len = popup.length ;
+					for(var i = 0 ; i < len ; i++) {
+						document.body.removeChild(popup[i]) ;
+					}
+				}
+			} catch(e) {
+				alert(e.message) ;		
+			}
+			/* ---------------------- */
 			document.body.appendChild(UIContextMenu.menuElement) ;
 		}
 		return false ;

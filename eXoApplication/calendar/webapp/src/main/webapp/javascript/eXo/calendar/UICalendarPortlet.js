@@ -14,8 +14,8 @@ UICalendarPortlet.prototype.setStyle = function(object,styles) {
 UICalendarPortlet.prototype.timeToMin = function(milliseconds) {
 	if (typeof(milliseconds) == "string") milliseconds = parseInt(milliseconds) ;
 	var d = new Date(milliseconds) ;
-	var hour = d.getHours();
-	var min = d.getMinutes();
+	var hour = d.getHours() ;
+	var min = d.getMinutes() ;
   var min = hour*60 + min ;
 	return min ;
 }	;
@@ -955,8 +955,12 @@ UICalendarPortlet.prototype.filterByCategory = function() {
 		}
 		else events[i].style.display = "none" ;
 	}
+	if (document.getElementById("UIMonthView")) eXo.calendar.UICalendarMan.initMonth() ;
 	if (document.getElementById("UIDayViewGrid")) eXo.calendar.UICalendarPortlet.showEvent() ;
-	if (document.getElementById("UIWeekViewGrid")) eXo.calendar.UIWeekView.init() ;
+	if (document.getElementById("UIWeekViewGrid")) {
+		eXo.calendar.UICalendarMan.GUIMan.init() ;
+		eXo.calendar.UIWeekView.init() ;
+	}
 } ;
 
 UICalendarPortlet.prototype.getFilterForm = function(form) {
@@ -1192,14 +1196,15 @@ UICalendarPortlet.prototype.parseTime = function(string) {
 
 UICalendarPortlet.prototype.showBusyTime = function(tr) {
 	var stringTime = tr.getAttribute("busytime") ;
+	var localize = (tr.getAttribute("usertimezone")) ? parseInt(tr.getAttribute("usertimezone")) : 0 ;
 	if (!stringTime) return ;
 	var time = this.parseTime(stringTime) ;
 	var len = time.length ;
 	var from = null ;
 	var to = null ;
 	for(var i = 0 ; i < len ; i ++) {
-		from = parseInt(time[i].from) ;
-		to = parseInt(time[i].to) ;
+		from = parseInt(time[i].from) - localize ;
+		to = parseInt(time[i].to) - localize ;
 		this.setBusyTime(from, to, tr)
 	}
 } ;
