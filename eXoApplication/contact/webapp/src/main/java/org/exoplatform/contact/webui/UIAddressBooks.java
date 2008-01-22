@@ -118,9 +118,6 @@ public class UIAddressBooks extends UIComponent {
       .findFirstComponentOfType(UIContacts.class).getViewContactsList() ;
   }
   public boolean canPaste() {
-    System.out.println("\n\n add:" + copyAddress );
-    System.out.println("\n\n cc:" + copyContacts.size());
-    
     if (!ContactUtils.isEmpty(copyAddress) || copyContacts.size() > 0 ) return true ;
     return false ;
   }
