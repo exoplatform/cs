@@ -43,7 +43,7 @@ public interface ContactService {
   public List<GroupContactData> getPublicContacts(SessionProvider sProvider, String[] groupIds) throws Exception ;
   public List<String> getPublicAddressBookContacts(SessionProvider sProvider, String[] groupIds) throws Exception ;
   public Contact getPublicContact(String contactId) throws Exception ;
-  public void savePublicContact(SessionProvider sProvider, Contact contact, boolean isNew) throws Exception ;
+  public void savePublicContact(Contact contact, boolean isNew) throws Exception ;
   public Contact removePublicContact(SessionProvider sProvider, String contactId) throws Exception ;
   
   public List<ContactGroup> getGroups(SessionProvider sProvider, String username) throws Exception ;
@@ -52,7 +52,7 @@ public interface ContactService {
   public ContactGroup removeGroup(SessionProvider sProvider, String username, String groupId) throws Exception ;
   
   public void shareAddressBook(SessionProvider sProvider, String username, String addressBookId, List<String> receiverUsers) throws Exception ;
-  public ContactGroup getSharedGroup(SessionProvider sProvider, String username, String groupId) throws Exception ;
+  public ContactGroup getSharedGroup(String username, String groupId) throws Exception ;
   public List<String> getSharedAddressBooks(SessionProvider sProvider, String username) throws Exception ;
   public ContactPageList getSharedContactsByAddressBook(SessionProvider sProvider, String username, String addressBookId) throws Exception ;
   public void removeSharedAddressBook(SessionProvider sProvider, String username, String addressBookId) throws Exception ;

@@ -124,7 +124,7 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       	contact.setAddressBook(new String[]{addressBookId}) ;
       	contacts.add(contact) ;
       }
-      ContactUtils.getContactService().moveContacts(SessionsUtils.getSystemProvider()
+      ContactUtils.getContactService().moveContacts(SessionsUtils.getSessionProvider()
         , ContactUtils.getCurrentUser(), contacts, type) ;
 
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
@@ -168,7 +168,7 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       }
       ContactService contactService = ContactUtils.getContactService() ;
       String username = ContactUtils.getCurrentUser() ;
-      SessionProvider sessionProvider = SessionsUtils.getSystemProvider() ; 
+      SessionProvider sessionProvider = SessionsUtils.getSessionProvider() ;
       contactService.moveContacts(sessionProvider, username, contacts, type) ;
       
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;

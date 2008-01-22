@@ -147,8 +147,8 @@ public class ContactServiceImpl implements ContactService {
     return storage_.removePublicContact(sProvider, contactId);
   }
 
-  public void savePublicContact(SessionProvider sProvider, Contact contact, boolean isNew) throws Exception {
-    storage_.savePublicContact(sProvider, contact, isNew);
+  public void savePublicContact(Contact contact, boolean isNew) throws Exception {
+    storage_.savePublicContact(contact, isNew);
   } 
   
   public Tag getTag(SessionProvider sProvider, String username, String tagName) throws Exception {
@@ -205,8 +205,8 @@ public class ContactServiceImpl implements ContactService {
   public DataPageList searchContact(SessionProvider sProvider, String username, ContactFilter filter) throws Exception {
     return storage_.searchContact(sProvider, username, filter) ;
   }
-  public ContactGroup getSharedGroup(SessionProvider sProvider, String username, String groupId) throws Exception {
-    return storage_.getSharedGroup(sProvider, username, groupId) ;
+  public ContactGroup getSharedGroup(String username, String groupId) throws Exception {
+    return storage_.getSharedGroup(username, groupId) ;
   }
   
 }

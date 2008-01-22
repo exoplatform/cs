@@ -80,7 +80,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
     SessionProvider sessionProvider = SessionsUtils.getSessionProvider() ;
     ContactGroup contactGroup = contactService.getGroup(sessionProvider, username, groupId) ;
     if (contactGroup == null) {
-      contactGroup = contactService.getSharedGroup(sessionProvider, username, groupId) ;      
+      contactGroup = contactService.getSharedGroup(username, groupId) ;      
     }   
     if (contactGroup != null) {
       groupId_ = groupId ;

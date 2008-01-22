@@ -406,7 +406,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       }      
       if(contacts.size() == 0) return ;
       ContactService contactService = ContactUtils.getContactService() ;
-      SessionProvider sessionProvider = SessionProvider.createSystemProvider() ;
+      SessionProvider sessionProvider = SessionsUtils.getSessionProvider() ;
       String username = ContactUtils.getCurrentUser() ;
       contactService.moveContacts(
           sessionProvider, username, contacts, type); 

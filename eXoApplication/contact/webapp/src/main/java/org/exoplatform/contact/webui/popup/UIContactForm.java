@@ -398,7 +398,7 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
       
       if (isNew) {        
         if (publicGroups.size() > 0) {
-          contactService.savePublicContact(sessionProvider, contact, true);
+          contactService.savePublicContact(contact, true);
         } else if (uiContactForm.isShared) {
             contactService.saveContactToSharedAddressBook(sessionProvider, username, category, contact, true) ;
           } else {            
@@ -424,7 +424,7 @@ public class UIContactForm extends UIFormTabPane implements UISelector {
           }
         } else if (contactType.equals("2")) {
           if (publicGroups.size() > 0) {
-            contactService.savePublicContact(sessionProvider, contact, false) ;
+            contactService.savePublicContact(contact, false) ;
           } else {
             contactService.saveContact(sessionProvider, username, contact, false) ;
           }          

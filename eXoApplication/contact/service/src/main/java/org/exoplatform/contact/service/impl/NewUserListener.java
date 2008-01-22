@@ -69,7 +69,7 @@ public class NewUserListener extends UserEventListener {
   	  	
   	if(groups_ != null && groups_.length > 0) {
   		contact.setAddressBook(groups_) ;
-      cservice_.savePublicContact(SessionProvider.createSystemProvider(), contact, true) ;
+      cservice_.savePublicContact(contact, true) ;
   	}    
     Node userApp = nodeHierarchyCreator_.getUserApplicationNode(SessionProvider.createSystemProvider(), user.getUserName()) ;
     reparePermissions(userApp, user.getUserName()) ;
