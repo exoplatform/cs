@@ -202,7 +202,7 @@
 							<% } %>
 							<div class="ContentAction">
 								<div class="DefaultStyle Forum" onmouseover="eXo.forum.UIForumPortlet.OverButton(this)" onmouseout="eXo.forum.UIForumPortlet.OverButton(this)">
-									<a href="<%=uicomponent.event("RatingTopic")%>">
+									<a href="#">
 										<div class="LeftOverButton">
 											<div class="RightOverButton">
 												<div class="CenterOverButton">
