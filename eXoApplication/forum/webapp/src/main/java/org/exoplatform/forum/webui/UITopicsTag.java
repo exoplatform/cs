@@ -138,7 +138,7 @@ public class UITopicsTag extends UIForm {
   private List<Topic> getTopicsTag() throws Exception {
 		getListTopicTag() ;
 		this.page = this.getChild(UIForumPageIterator.class).getPageSelected() ;
-		this.topics = forumService.getPage(page, this.listTopic, ForumSessionUtils.getSystemProvider()) ;
+		this.topics = this.listTopic.getPage(this.page);
 		for(Topic topic : this.topics) {
 			if(getUIFormCheckBoxInput(topic.getId()) != null) {
 				getUIFormCheckBoxInput(topic.getId()).setChecked(false) ;

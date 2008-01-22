@@ -95,7 +95,6 @@ public class UIForumActionBar extends UIContainer	{
 	}	
 	
 	static public class ForumOptionActionListener extends EventListener<UIForumActionBar> {
-		@Override
     public void execute(Event<UIForumActionBar> event) throws Exception {
 			UIForumActionBar uiActionBar = event.getSource() ;
 			UIForumPortlet forumPortlet = uiActionBar.getAncestorOfType(UIForumPortlet.class) ;

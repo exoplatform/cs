@@ -26,6 +26,10 @@ import javax.jcr.Value;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
+
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 /**
  * @author Hung Nguyen (hung.nguyen@exoplatform.com)
  * @since July 25, 2007
@@ -45,8 +49,9 @@ public class ForumPageList extends JCRPageList {
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected void populateCurrentPage(long page, Session session) throws Exception	{
+	protected void populateCurrentPage(long page) throws Exception	{
 		if(iter_ == null) {
+			Session session = this.getJCRSession() ;
 			if(isQuery_) {
 				QueryManager qm = session.getWorkspace().getQueryManager() ;
 				Query query = qm.createQuery(value_, Query.XPATH);
@@ -192,6 +197,12 @@ public class ForumPageList extends JCRPageList {
 	@SuppressWarnings("unchecked")
 	public List getAll() throws Exception { return null; }
 
-
+	private Session getJCRSession() throws Exception {
+    RepositoryService  repositoryService = (RepositoryService)PortalContainer.getComponent(RepositoryService.class) ;
+    SessionProvider sessionProvider = SessionProvider.createSystemProvider() ;
+    String defaultWS = 
+      repositoryService.getDefaultRepository().getConfiguration().getDefaultWorkspaceName() ;
+    return sessionProvider.getSession(defaultWS, repositoryService.getCurrentRepository()) ;
+  }
 
 }

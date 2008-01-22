@@ -132,13 +132,8 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 		this.maxPost = maxPost ;
 	}
 	
-	
-	public void activate() throws Exception {
-	}
-	
-	public void deActivate() throws Exception {
-		// TODO Auto-generated method stub
-	}
+	public void activate() throws Exception {}
+	public void deActivate() throws Exception {}
 	
 	public void setUpdateForum(String categoryId, Forum forum) throws Exception {
 		this.forum = forum ;
@@ -199,7 +194,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 		if(!this.isGoPage) {
 			this.page = this.getChild(UIForumPageIterator.class).getPageSelected() ;
 		}
-		this.topicList = this.forumService.getPage(this.page, this.pageList, ForumSessionUtils.getSystemProvider());
+		this.topicList = this.pageList.getPage(this.page);
 		for(Topic topic : this.topicList) {
 			if(getUIFormCheckBoxInput(topic.getId()) != null) {
 				getUIFormCheckBoxInput(topic.getId()).setChecked(false) ;

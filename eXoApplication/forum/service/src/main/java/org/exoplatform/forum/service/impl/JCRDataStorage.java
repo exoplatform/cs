@@ -775,7 +775,6 @@ public class JCRDataStorage{
 				String pollId = topicId.replaceFirst("topic", "poll") ;
 				topicNode.getNode(pollId).remove() ;
 				topicNode.setProperty("exo:isPoll", false) ;
-				//forumHomeNode.save() ;
 				forumHomeNode.getSession().save() ;
 				return poll;
 			}
@@ -1010,16 +1009,6 @@ public class JCRDataStorage{
 		forumHomeNode.getSession().save() ;
   }
 	
-	
-	@SuppressWarnings("unchecked")
-	public List getPage(long page, JCRPageList pageList, SessionProvider sProvider) throws Exception {
-		try {
-			return pageList.getPage(page, getForumHomeNode(sProvider).getSession()) ;
-		} catch (Exception e) {
-			return null ;
-		}
-	}
-
 	private String [] ValuesToStrings(Value[] Val) throws Exception {
 		if(Val.length == 1) return new String[]{Val[0].getString()} ;
 		String[] Str = new String[Val.length] ;

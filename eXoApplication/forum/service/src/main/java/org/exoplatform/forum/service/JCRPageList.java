@@ -18,8 +18,6 @@ package org.exoplatform.forum.service;
 
 import java.util.List;
 
-import javax.jcr.Session;
-
 import org.exoplatform.commons.exception.ExoMessageException;
 /**
  * @author Tuan Nguyen (tuan08@users.sourceforge.net)
@@ -27,7 +25,6 @@ import org.exoplatform.commons.exception.ExoMessageException;
  * @version $Id: PageList.java,v 1.2 2004/10/25 03:36:58 tuan08 Exp $
  */
 abstract public class JCRPageList {
-	//final static public PageList EMPTY_LIST = new ObjectPageList(new ArrayList(), 10) ;
 	
 	private long pageSize_ ;
 	protected long available_ = 0;
@@ -50,18 +47,18 @@ abstract public class JCRPageList {
 	
 	public long getAvailablePage() { return availablePage_ ; }
 	
-	public List currentPage(Session session) throws Exception {
+	public List currentPage() throws Exception {
 		if(currentListPage_ == null) {
-			populateCurrentPage(currentPage_, session) ;
+			populateCurrentPage(currentPage_) ;
 		}
 		return currentListPage_	;
 	}
 	
-	abstract protected void populateCurrentPage(long page, Session session) throws Exception	 ;
+	abstract protected void populateCurrentPage(long page) throws Exception	 ;
 	
-	public List getPage(long page, Session session) throws Exception	 {
+	public List getPage(long page) throws Exception	 {
 		checkAndSetPage(page) ;
-		populateCurrentPage(page, session) ;
+		populateCurrentPage(page) ;
 		return currentListPage_ ;
 	}
 	
@@ -84,17 +81,6 @@ abstract public class JCRPageList {
 			long pages = available / pageSize_ ;
 			if ( available % pageSize_ > 0) pages++ ;
 			availablePage_ = pages ;
-			//currentPage_ =	1 ;
 		}
 	}
-	
-	/*public long getFrom() { 
-		return (currentPage_ - 1) * pageSize_ ; 
-	}
-	
-	public long getTo() { 
-		long to = currentPage_	* pageSize_ ; 
-		if (to > available_ ) to = available_ ;
-		return to ;
-	}*/
 }

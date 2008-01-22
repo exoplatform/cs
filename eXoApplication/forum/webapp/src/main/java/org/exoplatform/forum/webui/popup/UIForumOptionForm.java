@@ -67,7 +67,7 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 	}
 	
 	@SuppressWarnings({ "unchecked", "deprecation" })
-  private void add() throws Exception {
+  private void initForumOption() throws Exception {
 		String userName = ForumSessionUtils.getCurrentUser() ;
 		ForumOption forumOption = new ForumOption() ;
 		forumOption = forumService.getOption(ForumSessionUtils.getSystemProvider(), userName) ;
@@ -173,10 +173,9 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 	}
   
 	public void activate() throws Exception {
-		add() ;
+		initForumOption() ;
 	}
 	public void deActivate() throws Exception {
-		// TODO Auto-generated method stub
 	}
 	
 	static	public class SaveActionListener extends EventListener<UIForumOptionForm> {

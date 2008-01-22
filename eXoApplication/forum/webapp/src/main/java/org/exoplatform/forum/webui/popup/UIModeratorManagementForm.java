@@ -41,14 +41,10 @@ import org.exoplatform.webui.form.UIForm;
 )
 public class UIModeratorManagementForm extends UIForm implements UIPopupComponent {
   public UIModeratorManagementForm() throws Exception {
-    
   }
-  public void activate() throws Exception {
-		// TODO Auto-generated method stub
-	}
-	public void deActivate() throws Exception {
-		// TODO Auto-generated method stub
-	}
+  
+  public void activate() throws Exception {}
+	public void deActivate() throws Exception {}
   
   static  public class SaveActionListener extends EventListener<UIModeratorManagementForm> {
     public void execute(Event<UIModeratorManagementForm> event) throws Exception {

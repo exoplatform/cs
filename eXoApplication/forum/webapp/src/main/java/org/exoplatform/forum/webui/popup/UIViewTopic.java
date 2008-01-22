@@ -53,13 +53,9 @@ public class UIViewTopic extends UIForm implements UIPopupComponent {
 	private Post getPostView() throws Exception {
 		return post ;
 	}
-	public void activate() throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-	public void deActivate() throws Exception {
-		// TODO Auto-generated method stub
-	}
+
+	public void activate() throws Exception {}
+	public void deActivate() throws Exception {}
 	
 	static	public class CloseActionListener extends EventListener<UIViewTopic> {
     public void execute(Event<UIViewTopic> event) throws Exception {

@@ -59,15 +59,10 @@ public class UIMoveTopicForm extends UIForm implements UIPopupComponent {
 	private boolean isFormTopic = false ;
 	
 	public UIMoveTopicForm() throws Exception {
-		
 	}
 	
-	public void activate() throws Exception {
-		// TODO Auto-generated method stub
-	}
-	public void deActivate() throws Exception {
-		// TODO Auto-generated method stub
-	}
+	public void activate() throws Exception {}
+	public void deActivate() throws Exception {}
 	
 	public void updateTopic(String forumId, List<Topic> topics, boolean isFormTopic) {
 		this.forumId = forumId ;

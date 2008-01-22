@@ -116,7 +116,7 @@ public class UITopicDetail extends UIForm	{
 	private String longDateformat ;
 	private String timeFormat ;
 	
-	private String userName = "" ;
+	private String userName = " " ;
 	public UITopicDetail() throws Exception {
 		addUIFormInput( new UIFormStringInput("gopage1", null)) ;
 		addUIFormInput( new UIFormStringInput("gopage2", null)) ;
@@ -185,9 +185,11 @@ public class UITopicDetail extends UIForm	{
 		this.isGopage = true ;
 		this.isEditTopic = false ;
 		String userName = ForumSessionUtils.getCurrentUser() ;
-		if(!userName.equals(this.userName)) {
-			this.topic = forumService.getTopic(ForumSessionUtils.getSystemProvider(), categoryId, forumId, topic.getId(), true) ;
-			this.userName = userName ;
+		if(userName !=null && userName.length() > 0) {
+			if(!userName.equals(this.userName)) {
+				this.topic = forumService.getTopic(ForumSessionUtils.getSystemProvider(), categoryId, forumId, topic.getId(), true) ;
+				this.userName = userName ;
+			} else this.topic = topic ;
 		} else this.topic = topic ;
 		this.getChild(UIForumPageIterator.class).setSelectPage(numberPage) ;
 		this.getAncestorOfType(UIForumPortlet.class).getChild(UIBreadcumbs.class).setUpdataPath((categoryId + "/" + forumId + "/" + topicId)) ;
@@ -244,7 +246,7 @@ public class UITopicDetail extends UIForm	{
 			this.pageSelect = this.getChild(UIForumPageIterator.class).getPageSelected() ;
 		}
 		if(this.pageList == null || this.pageSelect < 1) return null ;
-		this.posts = (List<Post>)forumService.getPage(this.pageSelect, this.pageList, ForumSessionUtils.getSystemProvider()) ;
+		this.posts = this.pageList.getPage(this.pageSelect) ;
 		if(this.posts.size() > 0 && this.posts != null) {
 			for (Post post : this.posts) {
 				if(getUIFormCheckBoxInput(post.getId()) != null) {

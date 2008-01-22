@@ -4,12 +4,16 @@
 	import org.exoplatform.forum.service.Forum ;
 	import org.exoplatform.forum.webui.UIForumPageIterator ;
 	import org.exoplatform.forum.service.JCRPageList ;
+	import org.exoplatform.forum.ForumFormatUtils ;
+	import java.util.GregorianCalendar;
 %>
 <%	
 	uicomponent.initPage() ;
 	Forum forum = uicomponent.getForum() ;
 	String forumName = forum.getForumName();
+	String datestr = ForumFormatUtils.getFormatDate("DDD/MMM/DD/yyyy/yy", new Date()) ;
 %>
+		$datestr ;
 <div class="UITopicContainer">
 	<% uiform.begin() %>
 	<div class="ButtomAndPageListContainer">

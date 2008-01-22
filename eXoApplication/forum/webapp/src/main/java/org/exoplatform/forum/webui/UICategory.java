@@ -81,7 +81,6 @@ public class UICategory extends UIForm	{
 	private	ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
 	private List<Forum> forums = new ArrayList<Forum>() ;
 	public UICategory() throws Exception {
-		
 	}
 	
 	public void setFormat(double timeZone, String shortDateformat, String longDateformat, String timeFormat) {

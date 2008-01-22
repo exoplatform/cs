@@ -117,7 +117,6 @@ public class UIPollForm extends UIForm implements UIPopupComponent {
 	}
 	
 	public void deActivate() throws Exception {
-		// TODO Auto-generated method stub
 	}
 	
 	static	public class SaveActionListener extends EventListener<UIPollForm> {

@@ -78,13 +78,8 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
 		addUIFormInput(description);
 	}
 	
-	public void activate() throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-	public void deActivate() throws Exception {
-		// TODO Auto-generated method stub
-	}
+	public void activate() throws Exception {}
+	public void deActivate() throws Exception {}
 	
 	public void setCategoryValue(Category category, boolean isUpdate) {
 		if(isUpdate) {

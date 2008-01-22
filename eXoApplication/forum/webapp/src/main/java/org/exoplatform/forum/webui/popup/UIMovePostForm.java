@@ -57,15 +57,10 @@ public class UIMovePostForm extends UIForm implements UIPopupComponent {
 	private String topicId ;
 	private List<Post> posts ;
 	public UIMovePostForm() throws Exception {
-		
 	}
 	
-	public void activate() throws Exception {
-		// TODO Auto-generated method stub
-	}
-	public void deActivate() throws Exception {
-		// TODO Auto-generated method stub
-	}
+	public void activate() throws Exception {}
+	public void deActivate() throws Exception {}
 	
 	public void updatePost(String topicId, List<Post> posts) {
 		this.topicId = topicId ;

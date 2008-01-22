@@ -68,8 +68,6 @@ public interface DataStorage {
 	public Poll removePoll(String categoryId, String forumId, String topicId)throws Exception;
 
 	public Object getObjectNameByPath(String path) throws Exception ;
-	@SuppressWarnings("unchecked")
-	public List getPage(long page, JCRPageList pageList) throws Exception ;
 	public List<ForumLinkData> getAllLink() throws Exception ;
 	
 	public void addTopicInTag(SessionProvider sProvider, String tagId, String topicPath) throws Exception ;

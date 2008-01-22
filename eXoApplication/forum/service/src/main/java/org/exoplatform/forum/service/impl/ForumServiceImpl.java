@@ -137,11 +137,6 @@ public class ForumServiceImpl implements ForumService{
 		return storage_.getObjectNameByPath(sProvider, path);
 	}
 	
-	@SuppressWarnings("unchecked")
-  public List getPage(long page, JCRPageList pageList, SessionProvider sProvider) throws Exception {
-		return storage_.getPage(page, pageList, sProvider) ;
-	}
-	
 	public List<ForumLinkData> getAllLink(SessionProvider sProvider)throws Exception {
 		return storage_.getAllLink(sProvider) ;
 	}

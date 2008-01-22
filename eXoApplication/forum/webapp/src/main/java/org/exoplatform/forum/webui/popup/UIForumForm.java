@@ -138,12 +138,8 @@ public class UIForumForm extends UIForm implements UIPopupComponent {
 		addUIFormInput(postable) ;
 	}
 	
-	public void activate() throws Exception {
-		// TODO Auto-generated method stub
-	}
-	public void deActivate() throws Exception {
-		// TODO Auto-generated method stub
-	}
+	public void activate() throws Exception {}
+	public void deActivate() throws Exception {}
 	
 	private String[] splitForForum (String str) throws Exception {
 		return ForumFormatUtils.splitForForum(str);
