@@ -26,6 +26,7 @@ import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageList;
+import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -110,6 +111,7 @@ public class UIAccountList extends UIGrid  implements UIPopupComponent{
       UIMailPortlet uiPortlet = uiAccountList.getAncestorOfType(UIMailPortlet.class) ;
       UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
+      UIMessagePreview uiMessagePreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class);
       String currAccountId = uiSelectAccount.getSelectedValue();
       String accId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIApplication uiApp = uiAccountList.getAncestorOfType(UIApplication.class) ;
@@ -123,7 +125,7 @@ public class UIAccountList extends UIGrid  implements UIPopupComponent{
         if (currAccountId.equals(accId)) {
           List<Account> accounts = mailSvr.getAccounts(SessionsUtils.getSessionProvider(), username);
           if (accounts.size() == 0) {
-            uiSelectAccount.setSelectedValue("");
+            uiSelectAccount.setSelectedValue(null);
             uiMessageList.init("");
           } else {
             String selectedAcc = accounts.get(0).getId();
@@ -131,6 +133,7 @@ public class UIAccountList extends UIGrid  implements UIPopupComponent{
             uiMessageList.setMessageFilter(null);
             uiMessageList.init(selectedAcc);
           }
+          uiMessagePreview.setMessage(null);
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ; 
         } else {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiAccountList.getAncestorOfType(UIPopupAction.class)) ;
