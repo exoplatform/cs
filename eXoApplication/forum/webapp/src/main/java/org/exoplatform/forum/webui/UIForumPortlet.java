@@ -118,7 +118,7 @@ public class UIForumPortlet extends UIPortletApplication {
 		maxTopic = 10 ;
 		maxPost = 10 ;
 		isJumpRendered = true ;
-		if(userId != null || userId.length() > 0) {
+		if(userId != null && userId.length() > 0) {
 			ForumOption forumOption = new ForumOption() ;
 			forumOption = forumService.getOption(ForumSessionUtils.getSystemProvider(), userId) ;
 			if(forumOption != null) {
