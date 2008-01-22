@@ -101,7 +101,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
     List<SelectItemOption<String>> genderOptions = new ArrayList<SelectItemOption<String>>() ;
     genderOptions.add(new SelectItemOption<String>(MALE, MALE));
     genderOptions.add(new SelectItemOption<String>(FEMALE, FEMALE));
-    addUIFormInput(new UIFormRadioBoxInput(GENDER, GENDER, genderOptions));    
+    addUIFormInput(new UIFormRadioBoxInput(GENDER, MALE, genderOptions));
     addUIFormInput(new UIFormInputInfo(BIRTHDAY, BIRTHDAY, null)) ;
     
     List<SelectItemOption<String>> datesOptions = new ArrayList<SelectItemOption<String>>() ;

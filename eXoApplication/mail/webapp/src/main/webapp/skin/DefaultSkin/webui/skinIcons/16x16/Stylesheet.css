@@ -159,6 +159,10 @@
 	background: url('icons/HideReadingPane.gif') no-repeat left 6px;
 }
 
+.UIMailPortlet .EditDraftIcon {
+	background: url('icons/EditDraftsIcon.gif') no-repeat left;
+}
+
 .UIMailPortlet .PrintIcon {
 	background: url('icons/PrintIcon.gif') no-repeat center;
 	width: 2px; height: 26px;
