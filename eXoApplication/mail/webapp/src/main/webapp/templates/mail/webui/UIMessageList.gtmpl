@@ -200,6 +200,11 @@
       <div class="MiddleLeftRightClickPopupMenu">
         <div class="MiddleRightRightClickPopupMenu">
           <div class="UIRightPopupMenuContainer">
+            <% if (uicomponent.selectedDraftFolder()) { %> 
+            <a class="MenuItem" href="<%=uicomponent.event("EditDraft", "id")%>">   
+              <div class="ItemIcon PrintMailIcon"> Edit Draft </div>
+            </a>
+            <% } %>
             <a class="MenuItem" href="<%=uicomponent.event("Print", "id")%>">   
               <div class="ItemIcon PrintMailIcon"> Print </div>
             </a>

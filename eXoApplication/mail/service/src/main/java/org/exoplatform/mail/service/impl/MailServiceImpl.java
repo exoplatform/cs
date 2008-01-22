@@ -393,7 +393,7 @@ public class MailServiceImpl implements MailService{
 
         if (totalNew > 0) {
           int i = 0 ;
-          //SpamFilter spamFilter = getSpamFilter(sProvider, username, account.getId());
+          SpamFilter spamFilter = getSpamFilter(sProvider, username, account.getId());
           String folderId = Utils.createFolderId(accountId, incomingFolder, false) ;
           Folder storeFolder = storage_.getFolder(sProvider, username, account.getId(), folderId) ;
           if(storeFolder == null) {
@@ -410,7 +410,7 @@ public class MailServiceImpl implements MailService{
           while (i < totalNew) {
             javax.mail.Message msg = vector.get(i) ;      
             try {
-              saveMessage(sProvider, msg, messageHome, account.getId(), username, folderId) ;
+              saveMessage(sProvider, msg, messageHome, account.getId(), username, folderId, spamFilter) ;
             } catch(Exception e) {
               continue ;
             }  
@@ -433,7 +433,7 @@ public class MailServiceImpl implements MailService{
     return messageList;
   }
   
-  private void saveMessage(SessionProvider sProvider, javax.mail.Message msg, Node messagesNode, String accId, String username, String folderId) throws Exception {
+  private void saveMessage(SessionProvider sProvider, javax.mail.Message msg, Node messagesNode, String accId, String username, String folderId, SpamFilter spamFilter) throws Exception {
     Message newMsg = new Message();
   	Node node = messagesNode.addNode(newMsg.getId(), Utils.EXO_MESSAGE) ;
     node.setProperty(Utils.EXO_ID, newMsg.getId());
@@ -463,9 +463,9 @@ public class MailServiceImpl implements MailService{
     
     String[] folderIds = { folderId };
     
-//    if ( spamFilter.checkSpam(msg) ) {
-//      folderIds = new String[] { Utils.createFolderId(accId, Utils.FD_SPAM, false) } ;
-//    }
+    if ( spamFilter.checkSpam(msg) ) {
+      folderIds = new String[] { Utils.createFolderId(accId, Utils.FD_SPAM, false) } ;
+    }
     
     //storage_.groupConversation(sProvider, username, accId, newMsg) ;
     

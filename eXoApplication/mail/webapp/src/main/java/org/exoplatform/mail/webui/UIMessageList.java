@@ -63,6 +63,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
     events = {
         @EventConfig(listeners = UIMessageList.SelectMessageActionListener.class),
         @EventConfig(listeners = UIMessageList.ReadActionListener.class),
+        @EventConfig(listeners = UIMessageList.EditDraftActionListener.class),
         @EventConfig(listeners = UIMessageList.AddStarActionListener.class),
         @EventConfig(listeners = UIMessageList.RemoveStarActionListener.class),
         @EventConfig(listeners = UIMessageList.ReplyActionListener.class),
@@ -279,32 +280,39 @@ public class UIMessageList extends UIForm {
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       
       Message msg = uiMessageList.messageList_.get(msgId);
-      if (uiMessageList.selectedDraftFolder()) {
-        UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
-        UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 850) ;
-        UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
-        uiComposeForm.init(accountId, msg, uiComposeForm.MESSAGE_IN_DRAFT);
-        uiPopupContainer.addChild(uiComposeForm) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;  
-      } else {
-        if (msg != null && msg.isUnread()) {
-          List<String> msgIds  = new ArrayList<String>();
-          msgIds.add(msgId);
-          MailUtils.getMailService().toggleMessageProperty(SessionsUtils.getSessionProvider(), username, accountId, msgIds, Utils.EXO_ISUNREAD);
-          msg.setUnread(false);
-          uiMessageList.setSelectedMessageId(msgId);
-          uiMessageList.messageList_.put(msg.getId(), msg);
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer); 
-        }
-        uiMessagePreview.setMessage(msg);
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());       
+      if (msg != null && msg.isUnread()) {
+        List<String> msgIds  = new ArrayList<String>();
+        msgIds.add(msgId);
+        MailUtils.getMailService().toggleMessageProperty(SessionsUtils.getSessionProvider(), username, accountId, msgIds, Utils.EXO_ISUNREAD);
+        msg.setUnread(false);
+        uiMessageList.setSelectedMessageId(msgId);
+        uiMessageList.messageList_.put(msg.getId(), msg);
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer); 
       }
+      uiMessagePreview.setMessage(msg);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());       
     }
   }
   
   static public class ReadActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
-      //TODO : implement this function
+
+    }
+  }
+  
+  static public class EditDraftActionListener extends EventListener<UIMessageList> {
+    public void execute(Event<UIMessageList> event) throws Exception {
+      String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UIMessageList uiMessageList = event.getSource();
+      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      Message msg = uiMessageList.messageList_.get(msgId);
+      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
+      UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 850) ;
+      UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
+      uiComposeForm.init(accountId, msg, uiComposeForm.MESSAGE_IN_DRAFT);
+      uiPopupContainer.addChild(uiComposeForm) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;  
     }
   }
   
