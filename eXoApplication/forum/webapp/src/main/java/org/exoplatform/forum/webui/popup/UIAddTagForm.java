@@ -103,13 +103,8 @@ public class UIAddTagForm extends UIForm implements UIPopupComponent {
 		this.isTopicTag = b ;
 	}
 	
-	public void activate() throws Exception {
-		// TODO Auto-generated method stub
-	}
-
-	public void deActivate() throws Exception {
-		// TODO Auto-generated method stub
-	}
+	public void activate() throws Exception {}
+	public void deActivate() throws Exception {}
 	
 	public UIFormSelectBoxForum getUIFormSelectBoxForum(String name) {
 		return	findComponentById(name) ;

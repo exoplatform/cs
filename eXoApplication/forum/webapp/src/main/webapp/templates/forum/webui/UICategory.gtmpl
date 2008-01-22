@@ -2,7 +2,8 @@
 	import org.exoplatform.forum.service.Category; 
 	import org.exoplatform.forum.service.Forum; 
 	import org.exoplatform.forum.service.Topic; 
-	import org.exoplatform.forum.service.Post; 
+	import org.exoplatform.forum.service.Post;
+	import org.exoplatform.forum.ForumSessionUtils; 
 	import java.util.GregorianCalendar;
 %>
 <% Category category = uicomponent.getCategory(); %>
@@ -14,6 +15,10 @@
 				<div class="CenterBar CategoryDetectPosition">
 					<div class="Title"><%=category.getCategoryName()%></div>
 					<div class="CollapseButton" title="Collapse" onclick="eXo.forum.UIForumPortlet.expandCollapse(this) ;"><span></span></div>
+					<%
+						boolean isShowMenu = !ForumSessionUtils.isAnonim();
+						if(isShowMenu){ 
+					%>
 					<div class="SeparatorLine"><span></span></div>
 					<div class="ToolbarActionsContainer" onclick="eXo.forum.UIForumPortlet.checkAction(this, event, 3);">
 						<div style="position: relative;">
@@ -80,6 +85,7 @@
 						<% /*End Popup Menu*/ %>
 						</div>
 					</div>
+					<% } %>
 					<div style="clear: both;"><span></span></div>
 				</div>
 			</div>

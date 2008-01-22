@@ -16,6 +16,7 @@
  ***************************************************************************/
 package org.exoplatform.forum.webui;
 
+import org.exoplatform.forum.ForumSessionUtils;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
 
@@ -32,7 +33,9 @@ import org.exoplatform.webui.core.UIContainer;
 public class UICategoryContainer extends UIContainer	{
 	boolean isRenderJump = true;
 	public UICategoryContainer() throws Exception {
-		addChild(UIForumActionBar.class, null, null).setRendered(true);
+		boolean isRenderBar = !ForumSessionUtils.isAnonim() ;
+		System.out.println(isRenderBar);
+		addChild(UIForumActionBar.class, null, null).setRendered(isRenderBar);
 		addChild(UICategories.class, null, null).setRendered(true) ;
 		addChild(UICategory.class, null, null).setRendered(false) ;
 		addChild(UICategoriesSummary.class, null, null);
@@ -40,8 +43,11 @@ public class UICategoryContainer extends UIContainer	{
 	public void setIsRenderJump(boolean isRenderJump) {
 		this.isRenderJump = isRenderJump ;
   }
-	public void updateIsRender(boolean isRender) {
-		getChild(UIForumActionBar.class).setRendered(isRender);
+	public void updateIsRender(boolean isRender) throws Exception {
+		boolean isRenderBar = !ForumSessionUtils.isAnonim() ;
+		if(isRender) {
+			getChild(UIForumActionBar.class).setRendered(isRenderBar);
+		}
 		getChild(UICategories.class).setRendered(isRender) ;
 		getChild(UICategory.class).setRendered(!isRender) ;
 		this.findFirstComponentOfType(UICategoryInfo.class).setRendered(isRender) ;

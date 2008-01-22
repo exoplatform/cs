@@ -5,19 +5,19 @@
 	import org.exoplatform.forum.webui.UIForumPageIterator ;
 	import org.exoplatform.forum.service.JCRPageList ;
 	import org.exoplatform.forum.ForumFormatUtils ;
+	import org.exoplatform.forum.ForumSessionUtils; 
 	import java.util.GregorianCalendar;
 %>
 <%	
 	uicomponent.initPage() ;
 	Forum forum = uicomponent.getForum() ;
 	String forumName = forum.getForumName();
-	String datestr = ForumFormatUtils.getFormatDate("DDD/MMM/DD/yyyy/yy", new Date()) ;
+	boolean isShowMenu = ForumSessionUtils.isAnonim();
 %>
-		$datestr ;
 <div class="UITopicContainer">
 	<% uiform.begin() %>
 	<div class="ButtomAndPageListContainer">
-	<% if(forum.getIsLock()) { %>
+	<% if(forum.getIsLock() || isShowMenu) { %>
 		<div class="LockActionForum UIActionForum" style="float: left;">
 	<% } else { %>
 		<div class="UIActionForum" style="float: left;">
@@ -27,7 +27,7 @@
 					<div class="ButtonLeft">
 						<div class="ButtonRight">
 							<div class="ButtonMiddle">
-							<% if(forum.getIsLock()) { %>
+							<% if(forum.getIsLock() || isShowMenu) { %>
 									<div class="IconButton LockIcon" title="<%= _ctx.appRes("UITopicContainer.tooltip.forumClosePosting"); %>"><span class="LockLabel"></span>New Thread</div>
 							<% } else { %>
 								<a href="<%=uicomponent.event("AddTopic")%>">
@@ -98,6 +98,7 @@
 					<div class="RightBar">
 						<div class="CenterBar" style="padding-right: 10px;">
 							<div class="Title"><span style="font-weight: normal;">Thread in forum: </span>$forumName</div>
+						<% if(!isShowMenu) { %>	
 							<div class="ContentAction" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 								<div class="DefaultStyle Forum" onmouseover="eXo.forum.UIForumPortlet.OverButton(this)" onmouseout="eXo.forum.UIForumPortlet.OverButton(this)">
 									<div class="LeftOverButton">
@@ -165,6 +166,7 @@
 								</div>
 							</div>
 							<div class="SeparatorLine"><span></span></div>
+						<% } %>
 							<div class="ContentAction">
 								<div class="DefaultStyle Forum" onmouseover="eXo.forum.UIForumPortlet.OverButton(this)" onmouseout="eXo.forum.UIForumPortlet.OverButton(this)">
 									<a href="<%=uicomponent.event("SearchForum")%>">
@@ -180,6 +182,7 @@
 									</a>
 								</div>
 							</div>
+						<% if(!isShowMenu) { %>	
 							<div class="SeparatorLine"><span></span></div>
 							<div class="ContentAction" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 								<div style="position: relative;">
@@ -252,6 +255,7 @@
 								<% /*End Popup Menu*/ %>
 								</div>
 							</div>
+						<% } %>	
 							<div style="clear: both;"><span></span></div>
 						</div>
 					</div>
@@ -389,7 +393,7 @@
 		</div>
 	</div>
 	<div class="ButtomAndPageListContainer">
-		<% if(forum.getIsLock()) { %>
+		<% if(forum.getIsLock() || isShowMenu) { %>
 			<div class="LockActionForum UIActionForum" style="float: left;">
 		<% } else { %>
 			<div class="UIActionForum" style="float: left;">
@@ -399,7 +403,7 @@
 					<div class="ButtonLeft">
 						<div class="ButtonRight">
 							<div class="ButtonMiddle">
-							<% if(forum.getIsLock()) { %>
+							<% if(forum.getIsLock() || isShowMenu) { %>
 								<div class="IconButton LockIcon" title="Forum is Closed for Posting"><span class="LockLabel"></span>New Thread</div>
 							<% } else { %>
 								<a href="<%=uicomponent.event("AddTopic")%>">

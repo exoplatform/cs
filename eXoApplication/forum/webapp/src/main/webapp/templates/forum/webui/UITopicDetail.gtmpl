@@ -4,6 +4,7 @@
 	import org.exoplatform.forum.webui.UIForumPageIterator ;
 	import org.exoplatform.forum.service.Post ;
 	import org.exoplatform.forum.service.Topic ;
+  import org.exoplatform.forum.ForumSessionUtils; 
 	import org.exoplatform.web.application.JavascriptManager;
   def rcontext = _ctx.getRequestContext() ;
   JavascriptManager jsmanager = rcontext.getJavascriptManager();
@@ -11,13 +12,14 @@
 <%
 	uicomponent.initPage() ;	
 	Topic topic = uicomponent.getTopic() ;
+	boolean isShowMenu = ForumSessionUtils.isAnonim();
 %>
 
 <div class="UITopicDetail">
 <% uiform.begin() %>
 	<% if(topic != null) {%>
 	<div class="ButtomAndPageListContainer">
-	<% if(topic.getIsLock()) { %>
+	<% if(topic.getIsLock() || isShowMenu) { %>
 		<div class="LockActionForum UIActionForum" style="float: left;">
 	<% } else { %>
 		<div class="UIActionForum" style="float: left;">
@@ -27,7 +29,7 @@
 					<div class="ButtonLeft">
 						<div class="ButtonRight">
 							<div class="ButtonMiddle">
-							<% if(topic.getIsLock()) { %>
+							<% if(topic.getIsLock() || isShowMenu) { %>
 									<div class="IconButton LockIcon" title="You can not reply this thread."><span class="LockLabel"></span>Post Reply</div>
 							<% } else { %>
 								<a href="<%=uicomponent.event("AddPost")%>">
@@ -97,6 +99,7 @@
 				<div class="RightBar">
 					<div class="CenterBar">
 						<div class="ToolbarActionsContainer">
+						<% if(!isShowMenu) { %>	
 							<div class="ContentAction" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 								<div class="DefaultStyle Forum" onmouseover="eXo.forum.UIForumPortlet.OverButton(this)" onmouseout="eXo.forum.UIForumPortlet.OverButton(this)">
 									<div class="LeftOverButton">
@@ -196,6 +199,7 @@
 								</div>
 							</div>
 							<div class="SeparatorLine"><span></span></div>
+							<% } %>
 							<div class="ContentAction">
 								<div class="DefaultStyle Forum" onmouseover="eXo.forum.UIForumPortlet.OverButton(this)" onmouseout="eXo.forum.UIForumPortlet.OverButton(this)">
 									<a href="<%=uicomponent.event("RatingTopic")%>">
@@ -211,6 +215,7 @@
 									</a>
 								</div>
 							</div>
+						<% if(!isShowMenu) { %>	
 							<div class="SeparatorLine"><span></span></div>
 							<div class="ContentAction" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 								<div style="position: relative;">
@@ -286,6 +291,7 @@
 								<% /*End Popup Menu*/ %>
 								</div>
 							</div>
+						<% } %>	
 							<div style="clear: right;"><span></span></div>
 						</div>
 					</div>
@@ -423,6 +429,7 @@
 								<div class="ButtonContainer">
 									<div class="UIActionForum">
 									<%
+									if(!isShowMenu) {
 										String[] actions = ["Edit", "Delete", "Quote"] ; 
 										for(action in actions) {
 											String title = _ctx.appRes(uicomponent.getName() + ".title." + action);
@@ -445,6 +452,7 @@
 											</div>
 										</div>
 										<% } %>
+									<% } %>
 									</div>
 								</div>
 								<div style="clear: both"><span></span></div>
@@ -465,7 +473,7 @@
 	</div>	
 <!-- End PostsInThreadContainer -->
 	<div class="ButtomAndPageListContainer">
-		<% if(topic.getIsLock()) { %>
+		<% if(topic.getIsLock() || isShowMenu) { %>
 		<div class="LockActionForum UIActionForum" style="float: left;">
 	<% } else { %>
 		<div class="UIActionForum" style="float: left;">
@@ -475,7 +483,7 @@
 					<div class="ButtonLeft">
 						<div class="ButtonRight">
 							<div class="ButtonMiddle">
-							<% if(topic.getIsLock()) { %>
+							<% if(topic.getIsLock() || isShowMenu) { %>
 									<div class="IconButton LockIcon" title="You can not reply this thread."><span class="LockLabel"></span>Post Reply</div>
 							<% } else { %>
 								<a href="<%=uicomponent.event("AddPost")%>">
