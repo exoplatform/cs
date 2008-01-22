@@ -1033,8 +1033,7 @@ public class JCRDataStorage{
     }
     tagHomeNode.getSession().save() ;
     Node contactHomeNode = getUserContactHome(sysProvider, username);
-    Node publicContactHomeNode = getPublicContactHome(sysProvider);
-    
+    Node publicContactHomeNode = getPublicContactHome(SessionProvider.createSystemProvider());
     // hoang hung add
     Node sharedHome = getSharedAddressBookHome(SessionProvider.createSystemProvider()) ; 
     Node contactNode = null ;
