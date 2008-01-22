@@ -1,7 +1,7 @@
 <% 
 	import org.exoplatform.contact.service.ContactGroup;
 	import java.util.Map;
-  int canPaste = uicomponent.canPaste() ;
+  
 %>
 
 <div class="UIAddressBooks" id="<%=uicomponent.getId()%>">
@@ -147,11 +147,11 @@
  
 								 <% 
 									String color = "";
-									if(canPaste == 1) {
+									if(uicomponent.canPaste() == true) {
 										actionlink = uicomponent.event("PasteContacts", "id") ;
 									} else {
 										actionlink = "javascript: void(0);" ;
-										color = "style=color : #cccccc ;" ;
+										color = "style='color : #cccccc ;'" ;
 									}
 								%>
 				        <a class="MenuItem" href="$actionlink">   

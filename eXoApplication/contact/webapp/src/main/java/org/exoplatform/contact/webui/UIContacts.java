@@ -32,6 +32,7 @@ import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.JCRPageList;
 import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.service.impl.JCRDataStorage;
+import org.exoplatform.contact.webui.popup.UIComposeForm;
 import org.exoplatform.contact.webui.popup.UIContactPreviewForm;
 import org.exoplatform.contact.webui.popup.UIExportForm;
 import org.exoplatform.contact.webui.popup.UIMoveContactsForm;
@@ -65,6 +66,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
     template =  "app:/templates/contact/webui/UIContacts.gtmpl",
     events = {
         @EventConfig(listeners = UIContacts.EditContactActionListener.class),
+        @EventConfig(listeners = UIContacts.SendEmailActionListener.class),
         @EventConfig(listeners = UIContacts.InstantMessageActionListener.class),
         @EventConfig(listeners = UIContacts.TagActionListener.class),
         @EventConfig(listeners = UIContacts.MoveContactsActionListener.class),
@@ -103,7 +105,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   public static String jobTitle = "jobTitle".intern() ;
   private boolean isSearchResult = false ;
   private boolean defaultNameSorted = true ;
-  private List<Contact> copyContacts = new ArrayList<Contact>();
+  
   
   public UIContacts() throws Exception { } 
   public String[] getActions() { return new String[] {"Cancel"} ; }
@@ -231,7 +233,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     }
     return true ;
   }
-  public List<Contact> getCopyContacts() { return copyContacts ; } 
+   
   
   static public class EditContactActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
@@ -701,21 +703,26 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           UIWorkingContainer.class).findFirstComponentOfType(UIAddressBooks.class) ;     
       uiAddressBooks.setCopyAddress(null) ;
       List<String> checkedContact = uiContacts.getCheckedContacts() ;
+      List<Contact> copyContacts = new ArrayList<Contact>();
       for (String contactId : checkedContact) {
-        uiContacts.copyContacts.add(uiContacts.contactMap.get(contactId)) ;
-      }      
+        copyContacts.add(uiContacts.contactMap.get(contactId)) ;
+      }  
+      uiAddressBooks.setCopyContacts(copyContacts) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBooks) ;
     }
   }
-  /*
-  static public class PasteContactActionListener extends EventListener<UIContacts> {
+ 
+  static public class SendEmailActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource() ;
-      ContactUtils.getContactService().pasteContacts(SessionsUtils.getSystemProvider()
-          , ContactUtils.getCurrentUser(), uiContacts.selectedGroup, "0", uiContacts.copyContacts) ;
-      uiContacts.updateList() ;
+      String contactId = event.getRequestContext().getRequestParameter(OBJECTID);      
+      UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
+      UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
+      UIComposeForm uiComposeForm = popupAction.activate(UIComposeForm.class, 850) ;  
+      uiComposeForm.init(uiContacts.contactMap.get(contactId).getEmailAddress()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;  
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
     }
   }
-  */
+  
 }

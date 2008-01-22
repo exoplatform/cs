@@ -16,6 +16,7 @@
 @import url("popup/UIImportForm/Stylesheet.css") ;
 @import url("UIWelcomeContact/Stylesheet.css") ;
 @import url("skinIcons/24x24/Stylesheet.css") ;
+@import url("UIComposeForm/Stylesheet.css") ;
 
 .UIWindow .UIContactPortlet {
 	margin: 0px;
@@ -84,4 +85,8 @@
 .UIContactPortlet .SelectMemberIcon {
 	width : 16px ;
 	height : 16px ;
+}
+
+.UIMailPortlet .UIMessageCompose table {
+	background: none;
 }
