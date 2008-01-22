@@ -254,13 +254,14 @@ public class UIMessagePreview extends UIComponent {
       UIMessagePreview uiMessagePreview = event.getSource() ;   
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class);
-      String username = MailUtils.getCurrentUser();
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      MailService mailServ = MailUtils.getMailService() ;
-      Message msg = mailServ.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId);
+      
+      Message msg = uiPortlet.findFirstComponentOfType(UIMessageList.class).messageList_.get(msgId);
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
-      UIAddContactForm uiAddContactForm = uiPopup.createUIComponent(UIAddContactForm.class, null, null);
-      uiPopup.activate(uiAddContactForm, 730, 0, true);
+      UIPopupActionContainer uiPopupContainer = uiPopup.createUIComponent(UIPopupActionContainer.class, null, null) ;
+      uiPopup.activate(uiPopupContainer, 730, 0, true);
+      
+      UIAddContactForm uiAddContactForm = uiPopupContainer.createUIComponent(UIAddContactForm.class, null, null);
+      uiPopupContainer.addChild(uiAddContactForm);
       InternetAddress[] addresses  = Utils.getInternetAddress(msg.getFrom());
       String personal = Utils.getPersonal(addresses[0]);
       String firstName = personal;
@@ -272,8 +273,7 @@ public class UIMessagePreview extends UIComponent {
       uiAddContactForm.setFirstNameField(firstName);
       uiAddContactForm.setLastNameField(lastName);
       uiAddContactForm.setEmailField(addresses[0].getAddress());
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);   
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessagePreview.class));
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);
     }
   }
   
@@ -285,11 +285,8 @@ public class UIMessagePreview extends UIComponent {
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
       UIExportForm uiExportForm = uiPopup.createUIComponent(UIExportForm.class, null, null);
       uiPopup.activate(uiExportForm, 600, 0, true);
-      String username = uiPortlet.getCurrentUser();
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      MailService mailServ = MailUtils.getMailService();
       try {
-      Message msg = mailServ.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId);
+        Message msg = uiPortlet.findFirstComponentOfType(UIMessageList.class).messageList_.get(msgId);
       uiExportForm.setExportMessage(msg);
       } catch (Exception e) { }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);  
@@ -310,7 +307,7 @@ public class UIMessagePreview extends UIComponent {
       List<Tag> listTags = mailSrv.getTags(SessionsUtils.getSessionProvider(), username, accountId);
       uiPopupAction.activate(uiTagForm, 600, 0, true);
       List<Message> msgList = new ArrayList<Message>();
-      msgList.add(mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId));
+      msgList.add(uiPortlet.findFirstComponentOfType(UIMessageList.class).messageList_.get(msgId));
       uiTagForm.setMessageList(msgList);
       uiTagForm.setTagList(listTags) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
@@ -323,14 +320,12 @@ public class UIMessagePreview extends UIComponent {
       UIMessagePreview uiMessagePreview = event.getSource() ;    
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class);
-      String username = MailUtils.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      MailService mailSrv = MailUtils.getMailService();
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);     
       UIMoveMessageForm uiMoveMessageForm = uiMessagePreview.createUIComponent(UIMoveMessageForm.class,null, null);
       uiMoveMessageForm.init(accountId);
       List<Message> msgList = new ArrayList<Message>();
-      msgList.add(mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId));
+      msgList.add(uiPortlet.findFirstComponentOfType(UIMessageList.class).messageList_.get(msgId));
       uiMoveMessageForm.setMessageList(msgList);
       uiPopupAction.activate(uiMoveMessageForm, 600, 0, true);             
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);        

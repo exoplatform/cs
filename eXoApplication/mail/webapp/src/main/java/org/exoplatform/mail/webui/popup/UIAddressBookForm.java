@@ -17,7 +17,9 @@
 package org.exoplatform.mail.webui.popup;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
@@ -45,7 +47,6 @@ import org.exoplatform.webui.form.UIFormSelectBox;
     lifecycle = UIFormLifecycle.class,
     template =  "app:/templates/mail/webui/UIAddressBookForm.gtmpl",
     events = {  
-      @EventConfig(listeners = UIAddressBookForm.AddGroupActionListener.class),
       @EventConfig(listeners = UIAddressBookForm.AddContactActionListener.class),
       @EventConfig(listeners = UIAddressBookForm.SelectContactActionListener.class),
       @EventConfig(listeners = UIAddressBookForm.DeleteContactActionListener.class),
@@ -53,9 +54,11 @@ import org.exoplatform.webui.form.UIFormSelectBox;
     }
 )
 public class UIAddressBookForm extends UIForm implements UIPopupComponent{
-  public final static String ALL_GROUP = "All Group".intern();
+  public final static String ALL_GROUP = "All group".intern();
   public final static String SELECT_GROUP = "select-group".intern();
   private Contact selectedContact ;
+  Map<String, Contact> contactMap_ = new HashMap<String, Contact>() ;
+  List<Contact> contactList_ = new ArrayList<Contact>();
   
   public UIAddressBookForm() throws Exception {
     String username = MailUtils.getCurrentUser();
@@ -67,7 +70,12 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
     }
     UIFormSelectBox uiSelectGroup = new UIFormSelectBox(SELECT_GROUP, SELECT_GROUP, options);
     addUIFormInput(uiSelectGroup);
-    if (getContacts().size() > 0) selectedContact = getContacts().get(0);
+    
+    List<Contact> contactList = contactSrv.getAllContact(SessionsUtils.getSessionProvider(), username);
+    for (Contact ct : contactList) contactMap_.put(ct.getId(), ct);
+    contactList_ = new ArrayList<Contact>(contactMap_.values());
+    
+    if (contactList_.size() > 0) selectedContact = contactList_.get(0);
   }
   
   public Contact getSelectedContact() { return this.selectedContact; }
@@ -77,27 +85,14 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
     return getApplicationComponent(DownloadService.class) ; 
   }
   
-  public List<Contact> getContacts() throws Exception {
-    String username = MailUtils.getCurrentUser();
-    ContactService contactSrv = getApplicationComponent(ContactService.class);
-    return contactSrv.getAllContact(SessionsUtils.getSessionProvider(), username);
-  }
+  public List<Contact> getContacts() throws Exception { return contactList_ ;}
+  
   
   public String[] getActions() { return new String[] {"Close"}; }
   
   public void activate() throws Exception { }
 
   public void deActivate() throws Exception { }
-  
-  static public class AddGroupActionListener extends EventListener<UIAddressBookForm> {
-    public void execute(Event<UIAddressBookForm> event) throws Exception {
-      UIAddressBookForm uiAddressBookForm = event.getSource() ;
-      UIPopupActionContainer uiActionContainer = uiAddressBookForm.getAncestorOfType(UIPopupActionContainer.class) ;
-      UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
-      uiChildPopup.activate(UIAddGroupForm.class, 650) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
-    }
-  }
   
   static public class AddContactActionListener extends EventListener<UIAddressBookForm> {
     public void execute(Event<UIAddressBookForm> event) throws Exception {
@@ -113,13 +108,11 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
   
   static public class SelectContactActionListener extends EventListener<UIAddressBookForm> {
     public void execute(Event<UIAddressBookForm> event) throws Exception {
-      UIAddressBookForm uiAddressBookForm = event.getSource() ;
+      UIAddressBookForm uiAddressBook = event.getSource() ;
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
-      UIMailPortlet mailPortlet = uiAddressBookForm.getAncestorOfType(UIMailPortlet.class);
-      String username = MailUtils.getCurrentUser();
-      ContactService contactSrv = uiAddressBookForm.getApplicationComponent(ContactService.class);
-      uiAddressBookForm.setSelectedContact(contactSrv.getContact(SessionsUtils.getSessionProvider(), username, contactId));
-      event.getRequestContext().addUIComponentToUpdateByAjax(mailPortlet.getChild(UIPopupAction.class)) ;
+      UIMailPortlet uiPortlet = uiAddressBook.getAncestorOfType(UIMailPortlet.class);
+      uiAddressBook.setSelectedContact(uiAddressBook.contactMap_.get(contactId));
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.getChild(UIPopupAction.class)) ;
     }
   }
   
@@ -134,7 +127,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
         List<String> contactIds = new ArrayList<String>();
         contactIds.add(contact.getId());
         contactServ.removeContacts(SessionsUtils.getSessionProvider(), username, contactIds);
-        if (uiAddressBookForm.getContacts().size() > 0) uiAddressBookForm.selectedContact = uiAddressBookForm.getContacts().get(0);
+        if (uiAddressBookForm.contactList_.size() > 0) uiAddressBookForm.selectedContact = uiAddressBookForm.contactList_.get(0);
         event.getRequestContext().addUIComponentToUpdateByAjax(mailPortlet.getChild(UIPopupAction.class)) ;
       } catch(Exception e) {
         e.printStackTrace();
