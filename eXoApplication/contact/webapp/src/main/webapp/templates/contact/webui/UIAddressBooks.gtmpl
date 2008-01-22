@@ -93,7 +93,7 @@
 				String actionLink  = uicomponent.event("SelectSharedGroup", group) ;				
 				if(group.equals(uicomponent.getSelectedGroup()))	cssClass = "Selected" ;
 	 %>
-		<div id="$group" class="ItemList $cssClass" addressType="1" isList="<%=uicomponent.getListView(group)%>" canPaste = 1>
+		<div id="$group" class="ItemList $cssClass" addressType="1" isList="<%=uicomponent.getListView(group)%>" >
 			<a  href="$actionLink" class="IconHolder AddressIcon" >
 				<%= sharedGroups.get(group) %>
 			</a>

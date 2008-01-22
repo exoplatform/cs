@@ -132,8 +132,8 @@ public class ContactServiceImpl implements ContactService {
     return storage_.getSharedContacts(sProvider, username, contactId) ;
   }
   
-  public Contact getPublicContact(SessionProvider sProvider, String contactId) throws Exception {
-    return storage_.getPublicContact(sProvider, contactId);
+  public Contact getPublicContact(String contactId) throws Exception {
+    return storage_.getPublicContact(contactId);
   }
 
   public List<GroupContactData> getPublicContacts(SessionProvider sProvider, String[] groupIds) throws Exception {

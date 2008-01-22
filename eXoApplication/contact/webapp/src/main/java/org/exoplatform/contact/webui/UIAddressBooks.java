@@ -321,8 +321,7 @@ public class UIAddressBooks extends UIComponent {
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
       UIPopupContainer uiPopupContainer = popupAction.activate(UIPopupContainer.class, 600) ;
       uiPopupContainer.setId("UIPermissionSelectPopup") ;
-      UISharedForm uiSharedForm = uiPopupContainer.addChild(UISharedForm.class, null, null) ;
-      
+      UISharedForm uiSharedForm = uiPopupContainer.addChild(UISharedForm.class, null, null) ;      
       ContactGroup contactGroup = ContactUtils.getContactService()
         .getGroup(SessionsUtils.getSessionProvider(), ContactUtils.getCurrentUser(), groupId) ;
       if (contactGroup != null) {

@@ -42,7 +42,7 @@ public interface ContactService {
   public ContactPageList getPublicContactsByAddressBook(SessionProvider sProvider, String addressBookId) throws Exception ;
   public List<GroupContactData> getPublicContacts(SessionProvider sProvider, String[] groupIds) throws Exception ;
   public List<String> getPublicAddressBookContacts(SessionProvider sProvider, String[] groupIds) throws Exception ;
-  public Contact getPublicContact(SessionProvider sProvider, String contactId) throws Exception ;
+  public Contact getPublicContact(String contactId) throws Exception ;
   public void savePublicContact(SessionProvider sProvider, Contact contact, boolean isNew) throws Exception ;
   public Contact removePublicContact(SessionProvider sProvider, String contactId) throws Exception ;
   

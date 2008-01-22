@@ -360,7 +360,9 @@ public class JCRDataStorage{
 
   public List<Contact> removeContacts(SessionProvider sysProvider, String username, List<String> contactIds) throws Exception {
     Node contactHomeNode = getUserContactHome(sysProvider, username);
-    Node publicContactHomeNode = getPublicContactHome(sysProvider) ;
+    
+    // edited
+    Node publicContactHomeNode = getPublicContactHome(SessionProvider.createSystemProvider()) ;
     Node sharedHome = getSharedAddressBookHome(SessionProvider.createSystemProvider()) ; 
     List<Contact> contacts = new ArrayList<Contact>() ;
     Contact contact ;
@@ -374,7 +376,7 @@ public class JCRDataStorage{
           contacts.add(contact) ;
         }
       }else if(publicContactHomeNode.hasNode(contactId)){        
-        contact = getPublicContact(sysProvider, contactId);
+        contact = getPublicContact(contactId);
         if(canRemove(username, contact)) {
           publicContactHomeNode.getNode(contactId).remove();
           publicContactHomeNode.getSession().save();
@@ -498,6 +500,7 @@ public class JCRDataStorage{
 
   public void saveGroup(SessionProvider sProvider, String username, ContactGroup group, boolean isNew) throws Exception {
     Node groupHomeNode = getUserContactGroupHome(sProvider, username);
+    Node sharedAddressBookHome = getSharedAddressBookHome(SessionProvider.createSystemProvider()) ;
     Node groupNode = null ;
     if (isNew) {
       groupNode = groupHomeNode.addNode(group.getId(), "exo:contactGroup");
@@ -505,7 +508,6 @@ public class JCRDataStorage{
     } else if (groupHomeNode.hasNode(group.getId())){
       groupNode = groupHomeNode.getNode(group.getId());
     } else {
-    	Node sharedAddressBookHome = getSharedAddressBookHome(SessionProvider.createSystemProvider()) ;
       if(sharedAddressBookHome.hasNode(username)) {
         Node userNode = sharedAddressBookHome.getNode(username) ;
         PropertyIterator iter = userNode.getReferences() ;
@@ -517,16 +519,14 @@ public class JCRDataStorage{
             break ;
           }
         }      
-      }
-      sharedAddressBookHome.getSession().save() ;
+      }      
     }
     if (groupNode != null) {
       groupNode.setProperty("exo:name", group.getName());
       groupNode.setProperty("exo:description", group.getDescription());
       groupHomeNode.getSession().save();
-      
+      sharedAddressBookHome.getSession().save() ;
     }
-    
   }
   
   private Node getSharedAddressBookHome(SessionProvider sProvider) throws Exception {
@@ -708,8 +708,8 @@ public class JCRDataStorage{
     }
   } 
   
-  public Contact getPublicContact(SessionProvider sysProvider, String contactId) throws Exception {
-    Node contactHomeNode = getPublicContactHome(sysProvider);
+  public Contact getPublicContact(String contactId) throws Exception {
+    Node contactHomeNode = getPublicContactHome(SessionProvider.createSystemProvider());
     if(contactHomeNode.hasNode(contactId)) {
       Node contactNode = contactHomeNode.getNode(contactId);
       Contact contact = new Contact();
@@ -720,7 +720,7 @@ public class JCRDataStorage{
   }
 
   public ContactPageList getPublicContactsByAddressBook(SessionProvider sysProvider, String groupId) throws Exception {
-    Node contactHome = getPublicContactHome(sysProvider);
+    Node contactHome = getPublicContactHome(SessionProvider.createSystemProvider());
     QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
                                                 + "//element(*,exo:contact)[@exo:categories='")
@@ -767,7 +767,7 @@ public class JCRDataStorage{
   public Contact removePublicContact(SessionProvider sysProvider, String contactId) throws Exception {
     Node contactHomeNode = getPublicContactHome(sysProvider);
     if (contactHomeNode.hasNode(contactId)) {
-      Contact contact = getPublicContact(sysProvider, contactId);
+      Contact contact = getPublicContact(contactId);
       contactHomeNode.getNode(contactId).remove();
       contactHomeNode.getSession().save();
       return contact;

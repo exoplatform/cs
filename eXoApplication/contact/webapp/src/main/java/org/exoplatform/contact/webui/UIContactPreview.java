@@ -20,10 +20,7 @@ import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 
 /**
  * Created by The eXo Platform SARL
@@ -33,10 +30,7 @@ import org.exoplatform.webui.event.EventListener;
  */
 
 @ComponentConfig(
-    template =  "app:/templates/contact/webui/UIContactPreview.gtmpl",
-    events = {
-        @EventConfig(listeners = UIContactPreview.MaximizeContactPaneActionListener.class)
-    }
+    template =  "app:/templates/contact/webui/UIContactPreview.gtmpl"
 )
 public class UIContactPreview extends UIComponent  {
   private Contact contact_ = null ; 
@@ -51,22 +45,6 @@ public class UIContactPreview extends UIComponent  {
   
   public String getImageSource() throws Exception {
     return ContactUtils.getImageSource(contact_, getApplicationComponent(DownloadService.class)) ; 
-  }
-
-  static public class MaximizeContactPaneActionListener extends EventListener<UIContactPreview> {
-    public void execute(Event<UIContactPreview> event) throws Exception {
-      UIContactPreview uiContactPreview = event.getSource() ;
-      UIContactContainer uiContactContainer = uiContactPreview.getParent() ;
-      UIContacts uiContacts = uiContactContainer.getChild(UIContacts.class) ;
-      if (uiContactPreview.getIsMaximize()) {
-        uiContacts.setRendered(true) ;
-        uiContactPreview.setIsMaximized(false) ;
-      } else {
-        uiContacts.setRendered(false) ;
-        uiContactPreview.setIsMaximized(true) ;
-      }
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContactContainer) ;
-    }
   }
 
 }

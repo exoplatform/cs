@@ -227,7 +227,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     SessionProvider sessionProvider = SessionsUtils.getSessionProvider() ;
     for (String contactId : contactIds) {
       if (contactService.getContact(sessionProvider, username, contactId) == null
-          && contactService.getPublicContact(sessionProvider, contactId) == null
+          && contactService.getPublicContact(contactId) == null
           && contactService.getSharedContacts(sessionProvider, username, contactId) == null) 
         return false ;
     }
