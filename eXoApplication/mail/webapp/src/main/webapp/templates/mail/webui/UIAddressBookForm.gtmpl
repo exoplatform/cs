@@ -97,6 +97,7 @@
               </div>
               <%
                 Contact selectedContact = uicomponent.getSelectedContact();
+                if (selectedContact != null) {
               %>
               <div class="MiddleLeftViewBoxStyle">
                 <div class="MiddleRightViewBoxStyle">
@@ -160,6 +161,7 @@
                   </div>  
                 </div>
               </div>
+              <% } %>
               <div class="BottomLeftViewBoxStyle">
                 <div class="BottomRightViewBoxStyle">
                   <div class="BottomCenterViewBoxStyle"><span></span></div>                   

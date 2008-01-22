@@ -224,11 +224,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
         uiApp.addMessage(new ApplicationMessage("UIAddContactForm.msg.name-required", null, ApplicationMessage.INFO)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
-      } else if (MailUtils.isFieldEmpty(email)) {  
-        uiApp.addMessage(new ApplicationMessage("UIAddContactForm.msg.email-required", null, ApplicationMessage.INFO)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ; 
-      } 
+      }
         
       Contact contact = new Contact();
       contact.setAddressBook(new String[] {groupId});
@@ -254,8 +250,10 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
         contactSrv.saveContact(SessionsUtils.getSessionProvider(), uiPortlet.getCurrentUser(), contact, true);
         UIAddressBookForm uiAddress = uiPortlet.findFirstComponentOfType(UIAddressBookForm.class);
         if (uiAddress != null) {
-          uiAddress.addContact(contact);
+          uiAddress.updateGroup(groupId);
+          uiAddress.refrestContactList(groupId);
           uiAddress.setSelectedContact(contact);
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiAddress) ;
         }
         uiContact.getAncestorOfType(UIPopupAction.class).deActivate() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
