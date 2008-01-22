@@ -34,7 +34,6 @@ public class UICategoryContainer extends UIContainer	{
 	boolean isRenderJump = true;
 	public UICategoryContainer() throws Exception {
 		boolean isRenderBar = !ForumSessionUtils.isAnonim() ;
-		System.out.println(isRenderBar);
 		addChild(UIForumActionBar.class, null, null).setRendered(isRenderBar);
 		addChild(UICategories.class, null, null).setRendered(true) ;
 		addChild(UICategory.class, null, null).setRendered(false) ;
