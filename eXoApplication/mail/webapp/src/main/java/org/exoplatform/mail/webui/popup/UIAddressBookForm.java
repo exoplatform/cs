@@ -87,6 +87,10 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
   
   public List<Contact> getContacts() throws Exception { return contactList_ ;}
   
+  public void addContact(Contact ct) throws Exception {
+    contactMap_.put(ct.getId(), ct);
+    contactList_.add(ct);
+  }
   
   public String[] getActions() { return new String[] {"Close"}; }
   
