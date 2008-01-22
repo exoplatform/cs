@@ -164,6 +164,7 @@ public class UITopicPoll extends UIForm	{
 		Poll poll = poll_ ;
 		String[] voteNumber = poll.getVote() ;
 		long size = poll.getUserVote().length	;
+		if(size == 0) size = 1;
 		String[] infoVote = new String[(voteNumber.length + 1)] ;
 		int i = 0;
 		for (String string : voteNumber) {
