@@ -100,6 +100,7 @@ public class JCRDataStorage{
   }  
 
   private Node getPublicCalendarServiceHome(SessionProvider sProvider) throws Exception {
+    sProvider = SessionProvider.createSystemProvider() ;
     Node publicApp = nodeHierarchyCreator_.getPublicApplicationNode(sProvider)  ;
     if(publicApp.hasNode(CALENDAR_APP)) return publicApp.getNode(CALENDAR_APP) ;
     else {
@@ -144,6 +145,7 @@ public class JCRDataStorage{
   }
 
   private Node getPublicCalendarHome(SessionProvider sProvider) throws Exception {
+    //sProvider = SessionProvider.createSystemProvider() ;
     Node calendarServiceHome = getPublicCalendarServiceHome(sProvider) ;
     if(calendarServiceHome.hasNode(CALENDARS)) return calendarServiceHome.getNode(CALENDARS) ;
     else {
@@ -302,6 +304,7 @@ public class JCRDataStorage{
   }
 
   public Calendar getGroupCalendar(SessionProvider sProvider, String calendarId) throws Exception {
+    //sProvider = SessionProvider.createSystemProvider() ;
     Node calendarNode = getPublicCalendarHome(sProvider).getNode(calendarId) ;
     return getCalendar(new String[]{calendarId}, null, calendarNode, true) ;
   }

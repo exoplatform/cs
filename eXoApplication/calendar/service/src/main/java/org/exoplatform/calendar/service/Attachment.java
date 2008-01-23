@@ -22,6 +22,7 @@ import java.util.Calendar;
 
 import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
+import javax.jcr.PathNotFoundException;
 import javax.jcr.Session;
 
 import org.exoplatform.container.PortalContainer;
@@ -41,7 +42,7 @@ public class Attachment  {
   private String mimeType ;
   private long size ;
   //private InputStream data ;
-  private  byte[] data ;
+  private  byte[] imageBytes ;
   private Calendar lastModified ;
   private String workspace ;
   public Attachment() {
@@ -60,18 +61,6 @@ public class Attachment  {
   public String getName() { return name ; }
   public void setName(String name_) { this.name = name_ ; }
 
-
-  public InputStream getInputStream() throws Exception {
-    if(data != null) return new ByteArrayInputStream(data) ;  
-    Node attachmentData ;
-    try{
-      attachmentData = (Node)getSesison().getItem(getId()) ;      
-    }catch (ItemNotFoundException e) {
-      e.printStackTrace() ;
-      return null ;
-    }
-    return attachmentData.getNode("jcr:content").getProperty("jcr:data").getStream() ;
-  }
   public String getDataPath() throws Exception {
     Node attachmentData ;
     try{
@@ -88,12 +77,24 @@ public class Attachment  {
   }
   public void setInputStream(InputStream input) throws Exception {
     if (input != null) {
-      data = new byte[input.available()] ; 
-      input.read(data) ;
+      imageBytes = new byte[input.available()] ; 
+      input.read(imageBytes) ;
     }
-    else data = null ;
+    else imageBytes = null ;
   }
-
+  public InputStream getInputStream() throws Exception { 
+    if(imageBytes != null) return new ByteArrayInputStream(imageBytes) ;  
+    Node attachment ;
+    try{
+      attachment = (Node)getSesison().getItem(getId()) ;      
+    }catch (ItemNotFoundException e) {  
+      return null ;
+    } catch (PathNotFoundException ex) {
+      return  null;
+    }
+    return attachment.getNode("jcr:content").getProperty("jcr:data").getStream() ;
+  }
+  
   public void setLastModified(Calendar lastModified) {
     this.lastModified = lastModified;
   }
