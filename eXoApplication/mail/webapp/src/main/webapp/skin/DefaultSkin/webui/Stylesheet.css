@@ -53,20 +53,13 @@
   background: white;
 }
 
-.UIMailPortlet .SearchForm .SearchActions {
-	width: 20px;
-	height: 20px;
-	float: left;
-	display: block;
-	padding-left: 3px;
-}
-
 .UIMailPortlet .SearchForm .Input {
-	border: none;
-	float: left;
+	float: right;
+	background: #ffffff url('skinIcons/16x16/icons/SearchActions.gif') no-repeat left center ;	
 	width: 110px;
 	font-size: 11px;
-	padding: 4px 0px 0px 2px;
+	padding: 4px 0px 0px 20px;
+	margin: 6px;
 }
 
 .UIMailPortlet .SearchForm .Search {
@@ -387,7 +380,8 @@
 
 .UIMailPortlet .MailWorkingWorkspace .MailContainer .UIMessageArea {
 	background: white;
-	border-top: none;
+	border-top: none; 
+	*width: 99.5%;
 }
 
 .UIMailPortlet .UIMessageArea .UIMessageActionsBar {
@@ -622,6 +616,7 @@
 	overflow-x: hidden ;
 	background: white;
 	border: 1px solid #c0c0c0;
+	*width: 99.5%;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessagePreview { }
