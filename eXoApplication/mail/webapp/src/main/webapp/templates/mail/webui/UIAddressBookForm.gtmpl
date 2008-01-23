@@ -22,14 +22,16 @@
                     <div class="Label"> Add New Contact </div>
                   </div>
                 </a>
-                <!--  <a class="ControlButton" href="#">
-                  <div class="IconHolder EditContact">
-                    <div class="Label"> Edit Contact </div>
-                  </div>
-                </a>
                 <a class="ControlButton" href="<%=uicomponent.event("DeleteContact")%>">
                   <div class="IconHolder DeleteContact">
                     <div class="Label">Delete</div>
+                  </div>
+                </a>
+                
+                <!--  
+                <a class="ControlButton" href="#">
+                  <div class="IconHolder EditContact">
+                    <div class="Label"> Edit Contact </div>
                   </div>
                 </a>
                 
@@ -97,7 +99,6 @@
               </div>
               <%
                 Contact selectedContact = uicomponent.getSelectedContact();
-                if (selectedContact != null) {
               %>
               <div class="MiddleLeftViewBoxStyle">
                 <div class="MiddleRightViewBoxStyle">
@@ -161,7 +162,6 @@
                   </div>  
                 </div>
               </div>
-              <% } %>
               <div class="BottomLeftViewBoxStyle">
                 <div class="BottomRightViewBoxStyle">
                   <div class="BottomCenterViewBoxStyle"><span></span></div>                   

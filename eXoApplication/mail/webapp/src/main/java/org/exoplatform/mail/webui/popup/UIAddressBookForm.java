@@ -145,16 +145,16 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
   
   static public class DeleteContactActionListener extends EventListener<UIAddressBookForm> {
     public void execute(Event<UIAddressBookForm> event) throws Exception {
-      UIAddressBookForm uiAddressBookForm = event.getSource() ;
-      UIMailPortlet mailPortlet = uiAddressBookForm.getAncestorOfType(UIMailPortlet.class);
-      Contact contact = uiAddressBookForm.getSelectedContact();
+      UIAddressBookForm uiAddressBook = event.getSource() ;
+      UIMailPortlet mailPortlet = uiAddressBook.getAncestorOfType(UIMailPortlet.class);
+      Contact contact = uiAddressBook.getSelectedContact();
       String username = MailUtils.getCurrentUser();
-      ContactService contactServ = uiAddressBookForm.getApplicationComponent(ContactService.class);
+      ContactService contactServ = uiAddressBook.getApplicationComponent(ContactService.class);
       try {
         List<String> contactIds = new ArrayList<String>();
         contactIds.add(contact.getId());
         contactServ.removeContacts(SessionsUtils.getSessionProvider(), username, contactIds);
-        if (uiAddressBookForm.contactList_.size() > 0) uiAddressBookForm.selectedContact = uiAddressBookForm.contactList_.get(0);
+        uiAddressBook.refrestContactList(uiAddressBook.getUIFormSelectBox(SELECT_GROUP).getValue());
         event.getRequestContext().addUIComponentToUpdateByAjax(mailPortlet.getChild(UIPopupAction.class)) ;
       } catch(Exception e) {
         e.printStackTrace();
