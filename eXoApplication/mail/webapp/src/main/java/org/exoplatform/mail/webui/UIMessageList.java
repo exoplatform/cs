@@ -726,8 +726,6 @@ public class UIMessageList extends UIForm {
       List<String> msgIdList = new ArrayList<String>();
       for (Message message : uiMessageList.getCheckedMessage()) {
         msgIdList.add(message.getId());
-        message.setUnread(true);
-        uiMessageList.messageList_.put(message.getId(), message);
       }
       mailSrv.addTag(SessionsUtils.getSessionProvider(), username, accountId, msgIdList, tagList);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent()) ;

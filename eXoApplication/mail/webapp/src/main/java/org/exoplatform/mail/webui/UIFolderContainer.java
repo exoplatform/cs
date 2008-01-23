@@ -192,6 +192,7 @@ public class UIFolderContainer extends UIContainer {
       mailService.removeUserFolder(SessionsUtils.getSessionProvider(), username, account, folder);     
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
       UIFolderContainer uiFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
+      uiMessageList.setMessageFilter(null);
       uiMessageList.init(accountId);
       uiFolder.setSelectedFolder(Utils.createFolderId(accountId, Utils.FD_INBOX, false));
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;

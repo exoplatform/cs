@@ -930,7 +930,6 @@ public class JCRDataStorage{
   
   public void toggleMessageProperty(SessionProvider sProvider, String username, String accountId, List<String> msgList, String property) throws Exception {
     Node messageHome = getMessageHome(sProvider, username, accountId);
-    Node folderHome = getFolderHome(sProvider, username, accountId);
     for (String msgId : msgList) {
       if (messageHome.hasNode(msgId)) {
         Node msgNode = messageHome.getNode(msgId) ;
@@ -941,7 +940,7 @@ public class JCRDataStorage{
           msgNode.setProperty(Utils.EXO_ISUNREAD, !isUnread);
           msgNode.save();
           
-          Node currentFolderNode = folderHome.getNode(msgNode.getProperty(Utils.EXO_FOLDERS).getValues()[0].getString());
+          Node currentFolderNode = getFolderNodeById(sProvider, username, accountId, msgNode.getProperty(Utils.EXO_FOLDERS).getValues()[0].getString());
           if (isUnread) {
             currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() - 1));
           } else { 
