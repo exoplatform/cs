@@ -22,7 +22,9 @@ import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
+import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.UISelectFolder;
 import org.exoplatform.upload.UploadResource;
@@ -80,7 +82,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent {
       UploadResource uploadResource = uiUploadInput.getUploadResource();
       UIApplication  uiApp = uiImport.getAncestorOfType(UIApplication.class);
       if(uploadResource == null) {
-        uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.fileName-error", null, 
+        uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.upload-error", null, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
@@ -90,12 +92,23 @@ public class UIImportForm extends UIForm implements UIPopupComponent {
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
       String username = uiPortlet.getCurrentUser() ;
       String folderId = uiImport.getChild(UISelectFolder.class).getSelectedValue();
-      mailSrv.importMessage(SessionsUtils.getSessionProvider(), username, accountId, folderId, inputStream, type);
+      try {
+        mailSrv.importMessage(SessionsUtils.getSessionProvider(), username, accountId, folderId, inputStream, type);
+      } catch(Exception e) {
+        uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.import-messages-error", null, 
+            ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      } 
       Folder folder = mailSrv.getFolder(SessionsUtils.getSessionProvider(), username, accountId, folderId);
       folder.setNumberOfUnreadMessage(folder.getNumberOfUnreadMessage() + 1);
       folder.setTotalMessage(folder.getTotalMessage() + 1);
       mailSrv.saveFolder(SessionsUtils.getSessionProvider(), username, accountId, folder);
       uiPortlet.cancelAction() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class)) ;
+      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
+      uiMessageList.updateList();
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList);
     }
   }
   

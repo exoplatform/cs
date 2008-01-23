@@ -73,7 +73,7 @@ UIMailDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj, e) 
   var uiGridNode = document.createElement('table') ;
   uiGridNode.className = 'UIGrid' ;
   with(tmpNode.style) {
-    background = 'yellow' ;
+    background = '#ffe98f;' ;
     border = 'solid 1px #A5A5A5' ;
     position = 'absolute' ;
     width = blockWidth + 'px' ;
