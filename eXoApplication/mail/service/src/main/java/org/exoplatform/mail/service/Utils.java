@@ -245,7 +245,11 @@ public class Utils {
   public static InternetAddress[] getInternetAddress(String addressList) throws Exception {
     if (addressList == null || addressList == "") 
       return new InternetAddress[1];
-    return InternetAddress.parse(addressList);
+    try {
+      return InternetAddress.parse(addressList);
+    } catch (Exception e) {
+      return new InternetAddress[1];
+    }
   }
   
   public static String createFolderId(String accountId, String folderName, boolean isPersonal) {

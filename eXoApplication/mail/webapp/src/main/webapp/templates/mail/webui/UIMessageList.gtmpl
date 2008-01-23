@@ -360,12 +360,14 @@
               <%
                 String sender = "";
                 if (uicomponent.selectedSentFolder() || uicomponent.selectedDraftFolder()) {
+                  try {
                   InternetAddress[] toAddress = InternetAddress.parse(msg.getMessageTo());
                   for (j in 0..(toAddress.length-1)) {
                     InternetAddress address = toAddress[j];
                     if (j > 0) sender += ",";
                     sender += Utils.getPersonal(address);
                   }
+                  } catch(Exception) {}
                 } else {
                   sender = Utils.getPersonal(Utils.getInternetAddress(msg.getFrom())[0]) ;
                 }

@@ -73,13 +73,19 @@
                       <div class="Title">To:</div>
                       <div class="LinkAddress"> 
                         <%
-                          InternetAddress[] toAddress1 = InternetAddress.parse(msg.getMessageTo());
-                          for (i in 0..(toAddress1.length-1)) {
-                            InternetAddress address1 = toAddress1[i];
-                            if (i > 0) print ",";
+                          try {
+                            InternetAddress[] toAddress1 = InternetAddress.parse(msg.getMessageTo());
+                            for (i in 0..(toAddress1.length-1)) {
+                              InternetAddress address1 = toAddress1[i];
+                              if (i > 0) print ",";
                         %>
-                          <span><%=Utils.getPersonal(address1)%> </span> &lt; <%=address1.getAddress()%> &gt; 
-                        <%}%>                     
+                              <span><%=Utils.getPersonal(address1)%> </span> &lt; <%=address1.getAddress()%> &gt; 
+                        <%
+                            } 
+                          } catch (Exception e) {
+                        %>   
+                          <%=msg.getMessageTo()%>
+                        <% } %>
                       </div>
   										<div style="clear: left;"><span></span></div>
   									</div>
@@ -113,13 +119,19 @@
                     <div class="Title">To:</div>
                     <div class="LinkAddress"> 
                       <%
+                        try { 
                         InternetAddress[] toAddress = InternetAddress.parse(msg.getMessageTo());
-                        for (i in 0..(toAddress.length-1)) {
-                          InternetAddress address = toAddress[i];
-                          if (i > 0) print ",";
+                          for (i in 0..(toAddress.length-1)) {
+                            InternetAddress address = toAddress[i];
+                              if (i > 0) print ",";
                       %>
-                        <span><%=Utils.getPersonal(address)%> </span> &lt; <%=address.getAddress()%> &gt; 
-                      <%}%>                     
+                              <span><%=Utils.getPersonal(address)%> </span> &lt; <%=address.getAddress()%> &gt; 
+                      <%
+                          } 
+                        } catch (Exception e) { 
+                      %>   
+                        <%=msg.getMessageTo()%>
+                      <% } %>
                     </div>
                     <div style="clear: left;"><span></span></div>
                   </div>
