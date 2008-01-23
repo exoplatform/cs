@@ -13,7 +13,7 @@
   jsmanager.addOnLoadJavascript("eXo.mail.UIMailPortlet.showPrintPreview(document.getElementById('printWrapper'))");
 %>
 
-<div id="printWrapper">
+<div id="printWrapper" class="printWrapper">
 <% uiform.begin() %>
 <!--  Start PrintPriview -->
   <%

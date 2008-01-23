@@ -23,7 +23,6 @@ import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.webui.UIMailPortlet;
-import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -92,10 +91,10 @@ public class UIPrintPreview extends UIForm implements UIPopupComponent {
       UIPrintPreview uiPrintPreview = event.getSource();
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
       context.getJavascriptManager().importJavascript("eXo.mail.UIMailPortlet","/mail/javascript/");
-      context.getJavascriptManager().addJavascript("eXo.mail.UIMailPortlet.closePrint()");
+      context.getJavascriptManager().addJavascript("eXo.mail.UIMailPortlet.closePrint() ;");
       uiPrintPreview.getAncestorOfType(UIMailPortlet.class).cancelAction();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPrintPreview.getAncestorOfType(UIPopupAction.class)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPrintPreview.getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UIMessageArea.class)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPrintPreview.getAncestorOfType(UIMailPortlet.class)) ;
     }
   }
 }

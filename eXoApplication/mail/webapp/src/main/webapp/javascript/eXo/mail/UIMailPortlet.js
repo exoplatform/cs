@@ -120,8 +120,13 @@ UIMailPortlet.prototype.printMessage = function() {
 } ;
 
 UIMailPortlet.prototype.closePrint = function() {
-	document.getElementById("UIPortalApplication").style.display = "block";
-	document.getElementById("printWrapper").style.display = "none";
+	var DOMUtil = eXo.core.DOMUtil ;
+    var uiPortalApplication = document.getElementById("UIPortalApplication");
+    uiPortalApplication.style.display = "block" ;	
+	for(var i = 0 ; i < document.body.childNodes.length ; i++) {
+		if(document.body.childNodes[i].className == "UIMailPortlet") DOMUtil.removeElement(document.body.childNodes[i]) ;		
+	}
+	//document.body.removeChild(uiMailPortlet);
 } ;
 
 UIMailPortlet.prototype.switchLayout = function(layout) {	

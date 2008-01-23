@@ -624,9 +624,7 @@
 	border: 1px solid #c0c0c0;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .UIMessagePreview {
-	background: #ffffff;
-}
+.UIMailPortlet .MailWorkingWorkspace .UIMessagePreview { }
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessagePreview .ReadingPaneDetails {
 	overflow: auto;
@@ -980,6 +978,15 @@
 }
 
 /*=======================Print Priview Mail========================*/
+.UIMailPortlet .MailWorkingWorkspace .UIMessagePreview .printWrapper {
+    left: 0px; 
+    top: -7px; 
+    width: 100%; 
+    position: absolute; 
+    height: 100%;
+    background: #ffffff;
+}
+
 .UIMailPortlet .PrintPreview {
 	padding: 8px;
 	border-bottom:1px solid #BBBBBB; 
