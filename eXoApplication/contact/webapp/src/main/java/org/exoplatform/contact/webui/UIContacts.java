@@ -437,14 +437,16 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         contactIds = uiContacts.getCheckedContacts() ;
         if (contactIds.size() == 0) {
           UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-required", null)) ;
+          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-required", null,
+              ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
         }
       }
       if (uiContacts.isSearchResult && !uiContacts.checkExistContacts(contactIds)){
         UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-deleted", null)) ;
+        uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-deleted", null,
+            ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
@@ -715,11 +717,36 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   static public class SendEmailActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource() ;
-      String contactId = event.getRequestContext().getRequestParameter(OBJECTID);      
+      String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
+      String emails = null ;
+      if (!ContactUtils.isEmpty(contactId)) {
+        emails = uiContacts.contactMap.get(contactId).getEmailAddress() ;
+      } else {
+        List<String> contactIds = uiContacts.getCheckedContacts() ;
+        if (contactIds.size() < 1) {
+          UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-required", null,
+              ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
+        StringBuffer buffer = new StringBuffer(uiContacts.contactMap.get(contactIds.get(0)).getEmailAddress()) ; 
+        for (int i = 1; i < contactIds.size(); i ++) {
+          buffer.append(", " + uiContacts.contactMap.get(contactIds.get(i)).getEmailAddress()) ;
+        }
+        emails = buffer.toString() ;
+      }
+      if (ContactUtils.isEmpty(emails)) {
+        UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIContacts.msg.no-email-found", null,
+            ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;        
+      }
       UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
       UIComposeForm uiComposeForm = popupAction.activate(UIComposeForm.class, 850) ;  
-      uiComposeForm.init(uiContacts.contactMap.get(contactId).getEmailAddress()) ;
+      uiComposeForm.init(emails) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;  
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
     }

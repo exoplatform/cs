@@ -180,11 +180,13 @@
 			              Edit
 			            </div>
 				        </a>
-				        <!--a class="MenuItem" href="#"-->   
-			            <div style="color : #cccccc ;" class="ItemIcon EmailIcon">
+				        
+				        <a class="MenuItem" href="<%=uicomponent.event("SendEmail", "id")%>">   
+			            <div class="ItemIcon EmailIcon">
 			              Send Email
 			            </div>
-				        <!--/a-->
+				        </a>
+				        
 				        <a class="MenuItem" href="<%=uicomponent.event("DeleteGroup", "id")%>">   
 			            <div class="ItemIcon DeleteIcon">
 			              Delete

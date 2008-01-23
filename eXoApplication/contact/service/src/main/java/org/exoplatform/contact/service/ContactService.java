@@ -45,6 +45,7 @@ public interface ContactService {
   public Contact getPublicContact(String contactId) throws Exception ;
   public void savePublicContact(Contact contact, boolean isNew) throws Exception ;
   public Contact removePublicContact(SessionProvider sProvider, String contactId) throws Exception ;
+  public List<String> getAllEmailByPublicGroup(String username, String groupId) throws Exception ;
   
   public List<ContactGroup> getGroups(SessionProvider sProvider, String username) throws Exception ;
   public ContactGroup getGroup(SessionProvider sProvider, String username, String groupId) throws Exception ;
@@ -58,8 +59,7 @@ public interface ContactService {
   public void removeSharedAddressBook(SessionProvider sProvider, String username, String addressBookId) throws Exception ;
   public void saveContactToSharedAddressBook(SessionProvider sProvider, String username, String addressBookId, Contact contact, boolean isNew) throws Exception ;
   public Contact getSharedContacts(SessionProvider sProvider, String username, String contactId) throws Exception ;
-  //public List<Contact> shareContacts(SessionProvider sProvider, String username, List<String> contactIds, String[] groupIds) throws Exception;
-  //public List<GroupContactData> getPublicContacts(SessionProvider sProvider, String[] groupIds) throws Exception ;
+  public List<String> getAllEmailBySharedGroup(String username, String addressBookId) throws Exception ;
   
   public List<Tag> getTags(SessionProvider sProvider, String username) throws Exception ;
   public Tag getTag(SessionProvider sProvider, String username, String tagId) throws Exception ;

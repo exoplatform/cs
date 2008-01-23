@@ -295,8 +295,7 @@ public class JCRDataStorage{
     QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
                                                 + "//element(*,exo:contact)[@exo:categories='")
-                                                .append(groupId).append("']");
-                                                
+                                                .append(groupId).append("']");                                                
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
     QueryResult result = query.execute();
     NodeIterator it = result.getNodes();
@@ -309,6 +308,58 @@ public class JCRDataStorage{
     }
     return address ;
   }
+  
+  public List<String> getAllEmailByPublicGroup(String username, String groupId) throws Exception {
+    Node publicContactHome = getPublicContactHome(SessionProvider.createSystemProvider()) ;
+    QueryManager qm = publicContactHome.getSession().getWorkspace().getQueryManager();
+    StringBuffer queryString = new StringBuffer("/jcr:root" + publicContactHome.getPath() 
+                                                + "//element(*,exo:contact)[@exo:categories='")
+                                                .append(groupId).append("']");                                                
+    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
+    QueryResult result = query.execute();
+    NodeIterator it = result.getNodes();
+    List<String> address = new ArrayList<String>();
+    Node contact = null ;
+    while (it.hasNext()){
+      contact = it.nextNode();
+      if(contact.hasProperty("exo:emailAddress"))
+        address.add(contact.getProperty("exo:emailAddress").getString());
+    }
+    return address ;
+  }
+  
+  public List<String> getAllEmailBySharedGroup(String username, String addressBookId) throws Exception {
+    Node sharedHome = getSharedAddressBookHome(SessionProvider.createSystemProvider()) ;
+    if(sharedHome.hasNode(username)) {
+      PropertyIterator iter = sharedHome.getNode(username).getReferences() ;
+      while(iter.hasNext()) {
+        try{
+          Node addressBook = iter.nextProperty().getParent() ; 
+          if(addressBookId.equals(addressBook.getProperty("exo:id").getString())) {
+            QueryManager qm = sharedHome.getSession().getWorkspace().getQueryManager();
+            StringBuffer queryString = new StringBuffer("/jcr:root" + addressBook.getParent().getParent().getNode(CONTACTS).getPath() 
+                                                        + "//element(*,exo:contact)[(@exo:categories='").
+                                                        append(addressBookId).append("')]") ;
+            Query query = qm.createQuery(queryString.toString(), Query.XPATH);
+            QueryResult result = query.execute();
+            NodeIterator it = result.getNodes();
+            List<String> address = new ArrayList<String>();
+            Node contact = null ;
+            while (it.hasNext()){
+              contact = it.nextNode();
+              if(contact.hasProperty("exo:emailAddress"))
+                address.add(contact.getProperty("exo:emailAddress").getString());
+            }
+            return address ;    
+          }
+        }catch (Exception e) {
+          e.printStackTrace() ;
+        }
+      }
+    }
+    return null ;
+  }
+  
   private ContactGroup getGroup(Node contactGroupNode) throws Exception {
     ContactGroup contactGroup = new ContactGroup();
     if (contactGroupNode.hasProperty("exo:id")) 

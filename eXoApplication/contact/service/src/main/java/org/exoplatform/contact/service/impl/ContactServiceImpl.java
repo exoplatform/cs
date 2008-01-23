@@ -208,5 +208,10 @@ public class ContactServiceImpl implements ContactService {
   public ContactGroup getSharedGroup(String username, String groupId) throws Exception {
     return storage_.getSharedGroup(username, groupId) ;
   }
-  
+  public List<String> getAllEmailBySharedGroup(String username, String addressBookId) throws Exception {
+    return storage_.getAllEmailBySharedGroup(username, addressBookId) ;
+  }
+  public List<String> getAllEmailByPublicGroup(String username, String groupId) throws Exception { 
+    return storage_.getAllEmailByPublicGroup(username, groupId) ;
+  }
 }
