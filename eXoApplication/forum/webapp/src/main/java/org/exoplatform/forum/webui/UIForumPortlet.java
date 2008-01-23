@@ -112,8 +112,8 @@ public class UIForumPortlet extends UIPortletApplication {
   	String userId = ForumSessionUtils.getCurrentUser() ;
 		Date dateHost = new Date() ;
 		timeZone = dateHost.getTimezoneOffset()/ 60 ;
-		shortDateformat = "mm/dd/yyyy";
-		longDateformat = "ddd,mmm,dd,yyyy";
+		shortDateformat = "MM/DD/yyyy";
+		longDateformat = "DDD,MMM,DD,yyyy";
 		timeFormat = "12h";
 		maxTopic = 10 ;
 		maxPost = 10 ;
