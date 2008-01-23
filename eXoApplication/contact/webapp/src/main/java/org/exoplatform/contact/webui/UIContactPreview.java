@@ -18,9 +18,14 @@ package org.exoplatform.contact.webui;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
+import org.exoplatform.contact.webui.popup.UIComposeForm;
+import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.event.EventListener;
 
 /**
  * Created by The eXo Platform SARL
@@ -30,7 +35,10 @@ import org.exoplatform.webui.core.UIComponent;
  */
 
 @ComponentConfig(
-    template =  "app:/templates/contact/webui/UIContactPreview.gtmpl"
+    template =  "app:/templates/contact/webui/UIContactPreview.gtmpl",
+    events = {
+        @EventConfig(listeners = UIContactPreview.SendEmailActionListener.class)
+    }
 )
 public class UIContactPreview extends UIComponent  {
   private Contact contact_ = null ; 
@@ -47,4 +55,19 @@ public class UIContactPreview extends UIComponent  {
     return ContactUtils.getImageSource(contact_, getApplicationComponent(DownloadService.class)) ; 
   }
 
+  static public class SendEmailActionListener extends EventListener<UIContactPreview> {
+    public void execute(Event<UIContactPreview> event) throws Exception {
+      UIContactPreview uiContactPreview = event.getSource() ;
+      String email = event.getRequestContext().getRequestParameter(OBJECTID);
+      if (!ContactUtils.isEmpty(email)) {
+        UIContactPortlet contactPortlet = uiContactPreview.getAncestorOfType(UIContactPortlet.class) ;
+        UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
+        UIComposeForm uiComposeForm = popupAction.activate(UIComposeForm.class, 850) ;  
+        uiComposeForm.init(email) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;  
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPreview.getParent()) ;
+        
+      }
+    }
+  }
 }
