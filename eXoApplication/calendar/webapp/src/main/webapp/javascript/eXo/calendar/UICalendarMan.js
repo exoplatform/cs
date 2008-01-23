@@ -588,10 +588,12 @@ GUIMan.prototype.paintWeek = function() {
     var dayNode = this.dayNodes[i];
     var dayInfo = {
       width : dayNode.offsetWidth - 1,
-      top : 0
+      top : 0,
+      startTime : parseInt(dayNode.getAttribute('starttime'))
     }
     dayInfo.pixelPerUnit = dayInfo.width / 100;
     dayInfo.left = dayInfo.width * i;
+
     for (var j=0; j<dayObj.visibleGroup.length; j++) {
       var eventObj = dayObj.visibleGroup[j];
       if (!eventObj ||
@@ -605,6 +607,7 @@ GUIMan.prototype.paintWeek = function() {
         endTime = weekObj.endWeek;
       }
       dayInfo.eventTop = dayInfo.top + ((this.EVENT_BAR_HEIGH) * j);
+      dayInfo.eventShiftRightPercent = (((new Date(startTime) - (new Date(dayInfo.startTime)))) / (1000 * 60 * 60 * 24)) * 100;
       this.drawEventByMiliseconds(eventObj, startTime, endTime, dayInfo);
     }
     // update max event rows
@@ -625,10 +628,11 @@ GUIMan.prototype.paintWeek = function() {
 GUIMan.prototype.drawEventByMiliseconds = function(eventObj, startTime, endTime, dayInfo) {
   var eventNode = eventObj.rootNode;
   var topPos = dayInfo.eventTop ;
-  var leftPos = dayInfo.left;
+//  var leftPos = dayInfo.left;
   delta = (new Date(endTime)) - (new Date(startTime));
   delta /= (1000 * 60 * 60 * 24);
-  var eventLen = Math.round(delta * (dayInfo.width)) - 2;
+  var eventLen = parseFloat(delta * (dayInfo.width)) - 2;
+  var leftPos = dayInfo.left + ((dayInfo.eventShiftRightPercent * dayInfo.width) / 100) + 1;
   with (eventNode.style) {
     position = 'absolute';
     top = topPos + 'px';
@@ -866,8 +870,13 @@ GUIMan.prototype.drawEventByDay = function(eventObj, startTime, endTime, dayInfo
   }
   var topPos = dayInfo.eventTop ;
   var leftPos = dayInfo.left;
-  var delta = ((new Date(endTime)) - (new Date(startTime)));
-  delta /= (1000 * 60 * 60 * 24);
+  endTime = new Date(endTime);
+  startTime = new Date(startTime);
+  var delta = endTime.getDay() - startTime.getDay();
+  if (startTime.getDay() != endTime.getDay()) {
+    delta ++ ;
+  }
+  delta = (delta < 1) ? 1 : delta;
   var eventLen = (Math.round(delta) * (dayInfo.width));
   with (eventNode.style) {
     top = topPos + 'px';
