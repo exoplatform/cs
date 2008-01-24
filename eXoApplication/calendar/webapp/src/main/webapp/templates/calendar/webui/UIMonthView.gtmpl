@@ -25,13 +25,18 @@
 	timeFormat = uicomponent.getTimeFormat() ;
 	dateTimeFormat = uicomponent.getDateTimeFormat() ;
 	DateFormat df = new SimpleDateFormat(dateFormat) ;
+	df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
 	DateFormat sdf = new  SimpleDateFormat("d") ;
+	sdf.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
 	DateFormat sdtf = new  SimpleDateFormat("MMM/dd") ;
+	sdtf.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
 	DateFormat tf = new SimpleDateFormat(timeFormat) ;
+	tf.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
 	DateFormat dtf = new SimpleDateFormat(dateTimeFormat) ;
+	dtf.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
 	DateFormat wf = new  SimpleDateFormat("EEE, dd/MMM") ;
+	wf.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
 	%>
-		
 	<div class="UIMonthView">
 		<div class="TitleBar">
 			<table>
@@ -113,7 +118,8 @@
 				<tbody>
 				
 					<%
-					  calendar = uicomponent.getBeginDateOfMonthView() ;
+					  temcalendar = CalendarUtils.getInstanceTempCalendar() ;//uicomponent.getBeginDateOfMonthView() ;
+					  temcalendar.setTime(uicomponent.getBeginDateOfMonthView().getTime()) ;
 						week = 0 ; 
 						table = "" ;
 						clazz ="" ;
@@ -132,7 +138,7 @@
 					        validDay = 0;
 					      }
 					      display = "" ;
-					     	dateTime = calendar.getTimeInMillis() ; // new GregorianCalendar(currentYear,currentMonth,dayOfMonth).getTimeInMillis() ;
+					     	dateTime = temcalendar.getTimeInMillis() ;  
 						    actionUpdate = uicomponent.event('UpdateEvent', dateTime + '&' + uicomponent.EVENTID + '=event&' + uicomponent.CALENDARID + '=cal&' + uicomponent.CALTYPE + '=caltype') ;
 					      dayActionLink = uicomponent.TYPE_DAY +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=" + dayOfMonth ;
 					      if (validDay) { 
@@ -148,7 +154,7 @@
 					        <td actionLink="$actionUpdate" class='CalendarContentNomal UICellBlock' startTime='$dateTime' > 
 					        	<div class='DayBox $clazz' >
 						        <a href="<%=uicomponent.event("GotoDate",dayActionLink)%>" onmousedown="event.cancelBubble = true ;">
-						         <%=sdf.format(calendar.getTime())%> 
+						         <%=sdf.format(temcalendar.getTime())%> 
 										</a>
 									 </div><div class='DayContent'><span></span></div>
 									</td> 
@@ -158,12 +164,12 @@
 					      	%>
 					        <td actionLink="$actionUpdate" startTime='$dateTime' class='CalendarContentDisable  UICellBlock'> <div class='DisableDay'><span></span></div>
 					        	<div class='DayContent'> 
-								 		<%=sdtf.format(calendar.getTime())%>
+								 		<%=sdtf.format(temcalendar.getTime())%>
 								 		</div>
 								 	</td>
 					     <%
 					      }
-					    calendar.add(Calendar.DATE, 1) ;
+					    temcalendar.add(Calendar.DATE, 1) ;
 					    }
 					    println "</tr>" ;
 		  			}	
@@ -175,6 +181,7 @@
 			</div>
 		</div>
 	</div>
+	<%=uicomponent.getCurrentCalendar().getTime()%>
 <%uiform.end();%>
 <% /*Begin Popup Menu*/ %>
   			
