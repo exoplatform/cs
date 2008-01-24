@@ -1014,26 +1014,45 @@ UICalendarPortlet.prototype.showView = function(obj, evt) {
 } ;
 
 UICalendarPortlet.prototype.swapMenu = function(oldmenu, clickobj) {
+  var DOMUtil = eXo.core.DOMUtil ;
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
 	var portlet = document.getElementById(UICalendarPortlet.portletName).parentNode ;
+  var uiDesktop = document.getElementById("UIPageDesktop") ;
+  var uiWindow = DOMUtil.findAncestorByClass(portlet, "UIWindow") ;
+  var uiWorkSpaceWidth = (document.getElementById("UIControlWorkspace"))? document.getElementById("UIControlWorkspace").offsetWidth : 0 ;
 	var Browser = eXo.core.Browser ;
-	var menuX = Browser.findPosX(clickobj) ;
+	var menuX = Browser.findPosX(clickobj) - uiWorkSpaceWidth ;
 	var menuY = Browser.findPosY(clickobj) + clickobj.offsetHeight -  portlet.scrollTop ;
-	if (arguments.length > 2) { // Customize position of menu with an object that have 2 properties x, y 
-		menuX = arguments[2].x ;
-		menuY = arguments[2].y ;
-	}
-	if(document.getElementById("tmpMenuElement")) document.body.removeChild(document.getElementById("tmpMenuElement")) ; //document.getElementById(UICalendarPortlet.portletName).removeChild(document.getElementById("tmpMenuElement")) ;
+  if(uiDesktop) {
+    menuX = menuX - uiWindow.offsetLeft ;
+    menuY = menuY - uiWindow.offsetTop ;
+  }  
+//	if (arguments.length > 2) { // Customize position of menu with an object that have 2 properties x, y 
+//		menuX = arguments[2].x ;
+//		menuY = arguments[2].y ;
+//	}
+	//if(document.getElementById("tmpMenuElement")) document.body.removeChild(document.getElementById("tmpMenuElement")) ; //document.getElementById(UICalendarPortlet.portletName).removeChild(document.getElementById("tmpMenuElement")) ;
+  if(document.getElementById("tmpMenuElement")) document.getElementById(UICalendarPortlet.portletName).removeChild(document.getElementById("tmpMenuElement")) ;
 	var tmpMenuElement = oldmenu.cloneNode(true) ;
-	eXo.core.DOMUtil.addClass(tmpMenuElement, "UICalendarPortlet") ;
+	DOMUtil.addClass(tmpMenuElement, "UICalendarPortlet") ;
 	tmpMenuElement.setAttribute("id","tmpMenuElement") ;
 	UICalendarPortlet.menuElement = tmpMenuElement ;
-	document.body.appendChild(tmpMenuElement) ;//document.getElementById(UICalendarPortlet.portletName).appendChild(tmpMenuElement) ;
-	
-	
+	//document.body.appendChild(tmpMenuElement) ;//document.getElementById(UICalendarPortlet.portletName).appendChild(tmpMenuElement) ;
+  document.getElementById(UICalendarPortlet.portletName).appendChild(tmpMenuElement) ;	
 	UICalendarPortlet.menuElement.style.top = menuY + "px" ;
 	UICalendarPortlet.menuElement.style.left = menuX + "px" ;	
 	UICalendarPortlet.showHide(UICalendarPortlet.menuElement) ;
+  if(uiDesktop) {    
+    var uiRightClick = (DOMUtil.findFirstDescendantByClass(UICalendarPortlet.menuElement, "div", "UIRightClickPopupMenu")) ? DOMUtil.findFirstDescendantByClass(UICalendarPortlet.menuElement, "div", "UIRightClickPopupMenu") : UICalendarPortlet.menuElement ;
+    var mnuBottom = eXo.core.Browser.findPosYInContainer(UICalendarPortlet.menuElement, uiDesktop) + uiRightClick.offsetHeight ;
+    var widBottom = uiWindow.offsetTop + uiWindow.offsetHeight ;
+    if(mnuBottom > widBottom) {
+      menuY -= (mnuBottom - widBottom - clickobj.offsetHeight - 30) ;
+      UICalendarPortlet.menuElement.style.top = menuY + "px" ;
+    }
+    window.status = mnuBottom + "-" + widBottom  + "-" + uiRightClick.offsetParent.className + "-" + uiWindow.offsetParent.className ;
+  }  
+
 	//UICalendarPortlet.menuElement = null ;
 } ;
 UICalendarPortlet.prototype.isAllday = function(form) {
