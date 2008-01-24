@@ -805,6 +805,7 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
       }
       cnt ++;
       var eventNode = eventObj.rootNode;
+      var checkboxState = 'none';
       if (eventNode.getAttribute('used') == 'true') {
         eventNode = eventNode.cloneNode(true);
         eventNode.setAttribute('eventclone', 'true');
@@ -823,11 +824,12 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
         eXo.core.DOMUtil.removeElement(eventObj.rootNode);
         eventNode.setAttribute('moremaster', 'true');
         eventObj.rootNode = eventNode;
+        checkboxState = null;
       }
       // Remove checkbox on clone event
       try {
         var checkBoxTmp = eventNode.getElementsByTagName('input')[0];
-        checkBoxTmp.style.display = 'none';
+        checkBoxTmp.style.display = checkboxState;
       } catch(e) {}
       moreContainerNode.appendChild(eventNode);
       var topPos = this.EVENT_BAR_HEIGH * i;
