@@ -157,6 +157,10 @@ public class ForumServiceImpl implements ForumService{
 		storage_.savePoll(sProvider, categoryId, forumId, topicId, poll, isNew, isVote) ;
 	}
 
+	public void setClosedPoll(SessionProvider sProvider, String categoryId, String forumId, String topicId, Poll poll) throws Exception {
+		storage_.setClosedPoll(sProvider, categoryId, forumId, topicId, poll) ;
+	}
+	
 	public void addTopicInTag(SessionProvider sProvider, String tagId, String topicPath) throws Exception {
 		storage_.addTopicInTag(sProvider, tagId, topicPath) ;
 	}

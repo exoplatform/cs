@@ -39,6 +39,9 @@
 			<propertyDefinition name="exo:isMultiCheck" requiredType="boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
 				<valueConstraints/>
 			</propertyDefinition>
+			<propertyDefinition name="exo:isClosed" requiredType="boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+				<valueConstraints/>
+			</propertyDefinition>
 		</propertyDefinitions>
  	 	</nodeType> 
 

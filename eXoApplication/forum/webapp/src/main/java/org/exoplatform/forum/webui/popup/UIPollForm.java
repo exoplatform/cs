@@ -205,7 +205,7 @@ public class UIPollForm extends UIForm implements UIPopupComponent {
 				poll.setVote(vote) ;
 				poll.setTimeOut(timeOut) ;
 				poll.setUserVote(new String[] {}) ;
-				
+				poll.setIsClosed(false);
 				String[] id = uiForm.TopicPath.trim().split("/") ;
 				ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
 				if(uiForm.isUpdate) {

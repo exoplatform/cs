@@ -16,17 +16,17 @@
 		  	String link = uicomponent.event("Save", category.getPath());
 		%>
 	    <div class="Node">
-	     	<div class="Icon ForumIcon"><span></span></div>  
-	     	<div class="NodeLabel">    
-	     		<div class="NodeSelected"><a href="$link">$categoryName</a></div> 
-	      </div> 		  
+	     	<div class="Icon ForumIcon"><span></span></div>
+	     	<div class="NodeLabel">
+	     		<div class="NodeSelected"><a href="$link">$categoryName</a></div>
+	      </div>
 	      <div style="clear: left;"><span></span></div>
 		  </div>
-		<% } %>	
-		 </div>  
+		<% } %>
+		 </div>
 	</div>
 	
-  <div class="UIAction"> 
+  <div class="UIAction">
     <table class="ActionContainer" align="center">
 		  <tr>
 			  <td align="center">
@@ -39,7 +39,7 @@
 	    		</a>
       	</td>
 			</tr>
- 	  </table> 
+ 	  </table>
 	</div>
 	<%uiform.end()%>
 </div>

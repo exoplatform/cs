@@ -51,10 +51,11 @@ import org.exoplatform.webui.form.UIFormRadioBoxInput;
 		lifecycle = UIFormLifecycle.class ,
 		template =	"app:/templates/forum/webui/UITopicPoll.gtmpl", 
 		events = {
-			@EventConfig(listeners = UITopicPoll.VoteActionListener.class ),	
-			@EventConfig(listeners = UITopicPoll.EditPollActionListener.class ) ,
-			@EventConfig(listeners = UITopicPoll.RemovePollActionListener.class ),
-			@EventConfig(listeners = UITopicPoll.VoteAgainPollActionListener.class )
+			@EventConfig(listeners = UITopicPoll.VoteActionListener.class),	
+			@EventConfig(listeners = UITopicPoll.EditPollActionListener.class) ,
+			@EventConfig(listeners = UITopicPoll.RemovePollActionListener.class),
+			@EventConfig(listeners = UITopicPoll.ClosedPollActionListener.class),
+			@EventConfig(listeners = UITopicPoll.VoteAgainPollActionListener.class)
 		}
 )
 public class UITopicPoll extends UIForm	{
@@ -141,7 +142,7 @@ public class UITopicPoll extends UIForm	{
 	
 	@SuppressWarnings("unused")
 	private boolean getIsVoted() throws Exception {
-		Poll poll = forumService.getPoll(ForumSessionUtils.getSystemProvider(), categoryId, forumId, topicId) ;
+		if(poll_.getIsClosed()) return true ;
 		String userVote = ForumSessionUtils.getCurrentUser() ;
 		if(userVote == null  || userVote.length() <= 0) return true ;
 		if(poll_.getTimeOut() > 0) {
@@ -151,7 +152,7 @@ public class UITopicPoll extends UIForm	{
 		if(this.isMultiCheck) {
 			return false ;
 		}
-		String[] userVotes = poll.getUserVote() ;
+		String[] userVotes = poll_.getUserVote() ;
 		for (String string : userVotes) {
 			string = string.substring(0, string.length() - 2) ;
 			if(string.equalsIgnoreCase(userVote)) return true ;
@@ -290,9 +291,19 @@ public class UITopicPoll extends UIForm	{
 	static public class VoteAgainPollActionListener extends EventListener<UITopicPoll> {
     public void execute(Event<UITopicPoll> event) throws Exception {
 			UITopicPoll topicPoll = event.getSource() ;
-			topicPoll.isMultiCheck = true ;
-			topicPoll.removeChild(UIFormRadioBoxInput.class) ;
+			topicPoll.isMultiCheck = false ;
 			topicPoll.init() ;
+			event.getRequestContext().addUIComponentToUpdateByAjax(topicPoll) ;
+		}
+	}
+
+	static public class ClosedPollActionListener extends EventListener<UITopicPoll> {
+		public void execute(Event<UITopicPoll> event) throws Exception {
+			UITopicPoll topicPoll = event.getSource() ;
+			Poll poll = topicPoll.poll_ ;
+			poll.setIsClosed(!poll.getIsClosed()) ;
+			topicPoll.forumService.setClosedPoll(ForumSessionUtils.getSystemProvider(), topicPoll.categoryId, topicPoll.forumId, topicPoll.topicId, poll) ;
+			topicPoll.isMultiCheck = false ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(topicPoll) ;
 		}
 	}

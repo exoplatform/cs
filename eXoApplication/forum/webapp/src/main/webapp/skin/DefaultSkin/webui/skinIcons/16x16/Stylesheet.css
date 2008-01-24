@@ -91,11 +91,19 @@
 	background: url('icons/DownLoadIcon.gif') no-repeat left;
 }
 
-.UIForumPortlet .ClosePoll {
+.UIForumPortlet .ClosePollIcon {
 	background: url('icons/ClosePollIcon.gif') no-repeat left center;
 }
 
-.UIForumPortlet .EditPoll {
+.UIForumPortlet .OpenPollIcon {
+	background: url('icons/OpenPollIcon.gif') no-repeat left center;
+}
+
+.UIForumPortlet .DeletePollIcon {
+	background: url('icons/DeletePollIcon.gif') no-repeat left center;
+}
+
+.UIForumPortlet .EditPollIcon {
 	background: url('icons/EditPollIcon.gif')  no-repeat left center;
 }
 

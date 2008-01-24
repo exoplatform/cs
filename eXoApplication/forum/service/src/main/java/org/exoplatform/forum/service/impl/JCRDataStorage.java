@@ -763,6 +763,7 @@ public class JCRDataStorage{
 				
 				if(pollNode.hasProperty("exo:userVote")) pollNew.setUserVote(ValuesToStrings(pollNode.getProperty("exo:userVote").getValues())) ;
 				if(pollNode.hasProperty("exo:isMultiCheck")) pollNew.setIsMultiCheck(pollNode.getProperty("exo:isMultiCheck").getBoolean()) ;
+				if(pollNode.hasProperty("exo:isClosed")) pollNew.setIsClosed(pollNode.getProperty("exo:isClosed").getBoolean()) ;
 				return pollNew ;
 			}
 		}
@@ -822,14 +823,31 @@ public class JCRDataStorage{
 					pollNode.setProperty("exo:question", poll.getQuestion()) ;
 					pollNode.setProperty("exo:option", poll.getOption()) ;
 					pollNode.setProperty("exo:isMultiCheck", poll.getIsMultiCheck()) ;
+					pollNode.setProperty("exo:isClosed", poll.getIsClosed()) ;
 				}
 				//forumHomeNode.save() ;
 				forumHomeNode.getSession().save() ;
 			}
 		}
 	}
-
 	
+	public void setClosedPoll(SessionProvider sProvider, String categoryId, String forumId, String topicId, Poll poll) throws Exception {
+		Node forumHomeNode = getForumHomeNode(sProvider) ;
+		if(forumHomeNode.hasNode(categoryId)) {
+			Node CategoryNode = forumHomeNode.getNode(categoryId) ;
+			if(CategoryNode.hasNode(forumId)) {
+				Node forumNode = CategoryNode.getNode(forumId) ;
+				Node topicNode = forumNode.getNode(topicId) ;
+				String pollId = topicId.replaceFirst("topic", "poll") ;
+				if(topicNode.hasNode(pollId)) {
+					Node pollNode = topicNode.getNode(pollId) ;
+					pollNode.setProperty("exo:isClosed", poll.getIsClosed()) ;
+					forumHomeNode.save() ;
+					forumHomeNode.getSession().save() ;
+				}
+			}
+		}
+  }
 	
 	public void addTopicInTag(SessionProvider sProvider, String tagId, String topicPath) throws Exception {
 		Node forumHomeNode = getForumHomeNode(sProvider) ;

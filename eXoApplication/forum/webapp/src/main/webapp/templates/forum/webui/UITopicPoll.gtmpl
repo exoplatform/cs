@@ -32,9 +32,31 @@
 								<div class="LeftOverButton">
 									<div class="RightOverButton">
 										<div class="CenterOverButton">
-											<div class="StatusIcon ClosePoll">
+											<div class="StatusIcon DeletePollIcon">
+												<%=_ctx.appRes("UITopicPoll.label.RemovePoll"); %>
+											</div>
+										</div>
+									</div>
+								</div>
+							</a>
+						</div>
+					</div>
+	  			<div class="SeparatorLine"><span></span></div>
+	  			<div class="ContentAction">
+						<div class="DefaultStyle Forum" onmouseover="eXo.forum.UIForumPortlet.OverButton(this)" onmouseout="eXo.forum.UIForumPortlet.OverButton(this)">
+							<a href="<%=uicomponent.event("ClosedPoll");%>">
+								<div class="LeftOverButton">
+									<div class="RightOverButton">
+										<div class="CenterOverButton">
+										<% if(poll.getIsClosed()){ %>
+											<div class="StatusIcon OpenPollIcon">
+												<%=_ctx.appRes("UITopicPoll.label.OpenPoll"); %>
+											</div>
+										<% } else { %>
+											<div class="StatusIcon ClosePollIcon">
 												<%=_ctx.appRes("UITopicPoll.label.ClosePoll"); %>
 											</div>
+										<% } %>
 										</div>
 									</div>
 								</div>
@@ -48,7 +70,7 @@
 								<div class="LeftOverButton">
 									<div class="RightOverButton">
 										<div class="CenterOverButton">
-											<div class="StatusIcon EditPoll">
+											<div class="StatusIcon EditPollIcon">
 												<%=_ctx.appRes("UITopicPoll.label.EditPoll"); %>
 											</div>
 										</div>

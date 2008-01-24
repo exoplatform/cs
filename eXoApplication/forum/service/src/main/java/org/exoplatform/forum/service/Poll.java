@@ -37,6 +37,7 @@ public class Poll {
 	private String[] vote;
 	private String[] userVote;
 	private boolean isMultiCheck = false ;
+	private boolean isClosed = false ;
 	
 	
 	public Poll() {
@@ -89,4 +90,7 @@ public class Poll {
 	
 	public boolean getIsMultiCheck() { return isMultiCheck;}
 	public void setIsMultiCheck(boolean isMultiCheck) { this.isMultiCheck = isMultiCheck;}
+
+	public boolean getIsClosed() { return isClosed;}
+	public void setIsClosed(boolean isClosed) { this.isClosed = isClosed;}
 }
