@@ -125,6 +125,7 @@ public class JCRDataStorage{
   }
 
   private Node getPublicRoot(SessionProvider sysProvider) throws Exception {
+    sysProvider = SessionProvider.createSystemProvider() ;
     return nodeHierarchyCreator_.getPublicApplicationNode(sysProvider) ;
   }
 
@@ -1505,12 +1506,30 @@ public class JCRDataStorage{
     boolean isVictory = false ;
     long milisOfDay = 24 * 60 * 60 * 1000 ;
     long beginDay = fromDate.getTimeInMillis() / milisOfDay ;
+    //System.out.println("\n\n fromDate " + fromDate.getTime());
     long endDay = toDate.getTimeInMillis() / milisOfDay ;
+    //System.out.println("\n\n toDate " + toDate.getTime());
     while(it.hasNext()) {
       Node eventNode = it.nextNode() ;
       start = new Long(1) ;
-      long fromDay = eventNode.getProperty("exo:fromDateTime").getDate().getTimeInMillis() / milisOfDay  + 1;
-      long toDay = eventNode.getProperty("exo:toDateTime").getDate().getTimeInMillis() / milisOfDay + 1;
+      /*System.out.println("\n\n event form " + eventNode.getProperty("exo:fromDateTime").getDate().getTime());
+      System.out.println("\n\n event to " + eventNode.getProperty("exo:toDateTime").getDate().getTime());*/
+      long millis = eventNode.getProperty("exo:fromDateTime").getDate().getTimeInMillis() ;
+      long fromDay ;
+      long toDay ;
+      if(millis % milisOfDay == 0) {
+        fromDay = millis / milisOfDay;
+      }else {
+        fromDay = millis / milisOfDay  + 1;
+      }
+      millis = eventNode.getProperty("exo:toDateTime").getDate().getTimeInMillis() ;
+      if(millis % milisOfDay == 0) {
+        toDay = millis / milisOfDay ;
+      }
+      else {
+        toDay = millis / milisOfDay + 1 ;
+      }
+      //long toDay = eventNode.getProperty("exo:toDateTime").getDate().getTimeInMillis() / milisOfDay + 1;
       if(fromDay < beginDay) {
         if(toDay < endDay ) {
           end = toDay - beginDay ;          
@@ -1526,16 +1545,18 @@ public class JCRDataStorage{
             end = endDay - beginDay ;
             isVictory = true ;
           }
-        }else {
+        } else {
           start = fromDay - beginDay ;
           if(toDay < endDay) {
             end = start + (toDay - fromDay) ;            
           }else {
             end = start + (endDay - fromDay) ;
           }
+          //System.out.println("\n\n end " + end);
         }
       }
       for (int i = start.intValue(); i <= end.intValue(); i ++) {
+      // System.out.println("\n\n I " + i);
         data.put(i, VALUE) ;            
       }
       if (isVictory) break ;
