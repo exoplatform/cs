@@ -389,7 +389,7 @@ public class UICategory extends UIForm	{
 				UIMoveForumForm moveForumForm = popupAction.createUIComponent(UIMoveForumForm.class, null, null) ;
 				moveForumForm.setListForum(forums, uiCategory.categoryId);
 				moveForumForm.setForumUpdate(false) ;
-				popupAction.activate(moveForumForm, 315, 360) ;
+				popupAction.activate(moveForumForm, 315, 365) ;
 				event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
 				uiCategory.isEditForum = true ;
 			} else {

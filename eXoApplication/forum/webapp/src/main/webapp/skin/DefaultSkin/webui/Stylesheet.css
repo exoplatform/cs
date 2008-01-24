@@ -26,6 +26,10 @@
 	padding: 2px 3px;
 }
 
+.UIForumPortlet .UIForumLinks .UIActionForum {
+	padding: 0px;
+}
+
 .UIForumPortlet .UIActionForum .ActionButton {
 	float: left;
 }

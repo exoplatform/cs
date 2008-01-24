@@ -402,7 +402,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 			UIMoveForumForm moveForumForm = popupAction.createUIComponent(UIMoveForumForm.class, null, null) ;
 			moveForumForm.setListForum(forums, uiTopicContainer.categoryId);
 			moveForumForm.setForumUpdate(true) ;
-			popupAction.activate(moveForumForm, 400, 165) ;
+			popupAction.activate(moveForumForm, 315, 365) ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
 		}
 	}	
