@@ -770,15 +770,18 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
       cursor = 'pointer';
       zIndex = '1';
     }
-    moreNode.onclick = this.toggleMore;
+    moreNode.onclick = this.showMore;
     var moreContainerNode = document.createElement('div');
     with (moreContainerNode.style) {
+      backgroundColor = '#fff';
       position = 'absolute';
       display = 'none';
       top = '0px';
       left = '0px';
     }
     moreContainerNode.className = 'MoreContainer';
+    moreContainerNode.onmousemove = this.showMore;
+    moreContainerNode.onmouseout = this.hideMore;
     // Create invisible event
     var cnt = 0
     for (var i=0; i<dayObj.invisibleGroup.length; i++) {
@@ -829,21 +832,54 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
   }
 };
 
-GUIMan.prototype.toggleMore = function() {
+GUIMan.prototype.showMore = function() {
+  if (this.className.indexOf('MoreContainer') != -1) {
+    if (this.style.display == 'none') {
+      this.style.display = 'block';
+    }
+    return;
+  }
   var moreNode = this;
   var GUIMan = eXo.calendar.UICalendarMan.GUIMan;
+  if (GUIMan.hideMoreTimeoutId) {
+    window.clearTimeout(GUIMan.hideMoreTimeoutId);
+    GUIMan.hideMoreTimeoutId = false;
+  }
+  /*
   if (GUIMan.preMoreNode && GUIMan.preMoreNode != moreNode) {
     var moreContainerNode = eXo.core.DOMUtil.findFirstDescendantByClass(GUIMan.preMoreNode, 'div', 'MoreContainer');
     moreContainerNode.style.display = 'none';
   }
   GUIMan.preMoreNode = moreNode;
+  */
   var moreContainerNode = eXo.core.DOMUtil.findFirstDescendantByClass(moreNode, 'div', 'MoreContainer');
   if (!moreContainerNode.style.display || 
       moreContainerNode.style.display == 'none') {
-        
     moreContainerNode.style.display = 'block';
-  } else {
-    moreContainerNode.style.display = 'none';
+  }
+};
+
+
+GUIMan.prototype.hideMore = function() {
+  var GUIMan = eXo.calendar.UICalendarMan.GUIMan;
+  /*
+  if (!GUIMan.backupNode) {
+    GUIMan.backupNode = this;
+    if (GUIMan.hideMoreTimeoutId) {
+      window.clearTimeout(GUIMan.hideMoreTimeoutId);
+      GUIMan.hideMoreTimeoutId = false;
+    }
+    GUIMan.hideMoreTimeoutId = window.setTimeout(GUIMan.hideMore, 2500);
+    return;
+  }
+  if (GUIMan.backupNode &&
+      GUIMan.backupNode.style.display != 'none') {
+    GUIMan.backupNode.style.display = 'none';
+  }
+  GUIMan.backupNode = false;
+  */
+  if (this.style.display != 'none') {
+    this.style.display = 'none';
   }
 };
 
