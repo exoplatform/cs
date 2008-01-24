@@ -367,6 +367,7 @@ public class JCRDataStorage{
     String accId = account.getId() ;
     if (isNew) { // creates the node
       newAccount = mailHome.addNode(accId, Utils.EXO_ACCOUNT);
+      mailHome.save();
       newAccount.setProperty(Utils.EXO_ID, accId);
     } else { // gets the specified account
       newAccount = mailHome.getNode(accId);
