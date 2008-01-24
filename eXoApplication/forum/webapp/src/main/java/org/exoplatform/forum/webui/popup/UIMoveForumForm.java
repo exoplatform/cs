@@ -70,7 +70,8 @@ public class UIMoveForumForm extends UIForm implements UIPopupComponent {
 		this.isForumUpdate = isForumUpdate ;
 	}
 	
-	private List<Category> getCategories() throws Exception {
+	@SuppressWarnings("unused")
+  private List<Category> getCategories() throws Exception {
 		ForumService forumService =	(ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
 		List<Category> categorys =	new ArrayList<Category>();
 		for (Category category :forumService.getCategories(ForumSessionUtils.getSystemProvider())) {
@@ -95,19 +96,11 @@ public class UIMoveForumForm extends UIForm implements UIPopupComponent {
 	static	public class SaveActionListener extends EventListener<UIMoveForumForm> {
     public void execute(Event<UIMoveForumForm> event) throws Exception {
 			UIMoveForumForm uiForm = event.getSource() ;
-			String categoryId = event.getRequestContext().getRequestParameter(OBJECTID)	;
 			ForumService forumService =	(ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
-			String categoryPath = "";
-			List<Category> categorys = uiForm.getCategories() ;
-			for (Category category :categorys) {
-				if( category.getId().equals(categoryId) ) {
-					categoryPath = category.getPath() ;
-				}
-			}
+			String categoryPath = event.getRequestContext().getRequestParameter(OBJECTID);
 			List<Forum> forums = uiForm.forums_ ;
-			for (Forum forum : forums) {
-				forumService.moveForum(ForumSessionUtils.getSystemProvider(), forum.getId(), forum.getPath(), categoryPath) ;
-			}
+			String categoryId = categoryPath.substring((categoryPath.lastIndexOf("/")+1))	;
+			forumService.moveForum(ForumSessionUtils.getSystemProvider(), forums, categoryPath) ;
 			UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
 			forumPortlet.cancelAction() ;
 			if(uiForm.isForumUpdate) {

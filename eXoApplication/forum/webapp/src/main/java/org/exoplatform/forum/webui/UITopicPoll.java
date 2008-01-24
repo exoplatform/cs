@@ -142,19 +142,19 @@ public class UITopicPoll extends UIForm	{
 	@SuppressWarnings("unused")
 	private boolean getIsVoted() throws Exception {
 		Poll poll = forumService.getPoll(ForumSessionUtils.getSystemProvider(), categoryId, forumId, topicId) ;
+		String userVote = ForumSessionUtils.getCurrentUser() ;
+		if(userVote == null  || userVote.length() <= 0) return true ;
+		if(poll_.getTimeOut() > 0) {
+			Date today = new Date() ;
+			if((today.getTime() - this.poll_.getCreatedDate().getTime()) >= poll_.getTimeOut()*86400000) return true ;
+		}
 		if(this.isMultiCheck) {
 			return false ;
 		}
-		String userVote = ForumSessionUtils.getCurrentUser() ;
-		if(userVote == null  || userVote.length() <= 0) return true ;
 		String[] userVotes = poll.getUserVote() ;
 		for (String string : userVotes) {
 			string = string.substring(0, string.length() - 2) ;
 			if(string.equalsIgnoreCase(userVote)) return true ;
-		}
-		if(poll_.getTimeOut() > 0) {
-		Date today = new Date() ;
-		if((today.getTime() - this.poll_.getCreatedDate().getTime()) >= poll_.getTimeOut()*86400000) return true ;
 		}
 		return false ;
 	}
@@ -280,8 +280,10 @@ public class UITopicPoll extends UIForm	{
 			UITopicPoll topicPoll = event.getSource() ;
 			topicPoll.forumService.removePoll(ForumSessionUtils.getSystemProvider(), topicPoll.categoryId, topicPoll.forumId, topicPoll.topicId) ;
 			topicPoll.removeChild(UIFormRadioBoxInput.class) ;
-			event.getRequestContext().addUIComponentToUpdateByAjax(topicPoll.getParent()) ;
+			UITopicDetailContainer topicDetailContainer = (UITopicDetailContainer)topicPoll.getParent() ;
+			topicDetailContainer.getChild(UITopicDetail.class).setIsEditTopic(true) ;
 			topicPoll.isEditPoll = false ;
+			event.getRequestContext().addUIComponentToUpdateByAjax(topicDetailContainer) ;
 		}
 	}
 

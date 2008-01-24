@@ -65,8 +65,8 @@ public class ForumServiceImpl implements ForumService{
 		storage_.saveForum(sProvider, categoryId, forum, isNew);
 	}
 
-	public void moveForum(SessionProvider sProvider, String forumId, String forumPath, String destCategoryPath) throws Exception {
-		storage_.moveForum(sProvider, forumId, forumPath, destCategoryPath);
+	public void moveForum(SessionProvider sProvider, List<Forum> forums, String destCategoryPath) throws Exception {
+		storage_.moveForum(sProvider, forums, destCategoryPath);
 	}
 	
 	public Forum getForum(SessionProvider sProvider, String categoryId, String forumId) throws Exception {
@@ -105,8 +105,8 @@ public class ForumServiceImpl implements ForumService{
 		return storage_.getTopics(sProvider, categoryId, forumId);
 	}
 	
-	public void moveTopic(SessionProvider sProvider, String topicId, String	topicPath, String destForumPath) throws Exception {
-		storage_.moveTopic(sProvider, topicId, topicPath, destForumPath);
+	public void moveTopic(SessionProvider sProvider, List<Topic> topics, String destForumPath) throws Exception {
+		storage_.moveTopic(sProvider, topics, destForumPath);
 	}
 	
 	public Topic removeTopic(SessionProvider sProvider, String categoryId, String forumId, String topicId) throws Exception {
@@ -125,8 +125,8 @@ public class ForumServiceImpl implements ForumService{
 		return storage_.getPosts(sProvider, categoryId, forumId, topicId);
 	}
 	
-	public void movePost(SessionProvider sProvider, String postId, String postPath, String destTopicPath) throws Exception {
-		storage_.movePost(sProvider, postId, postPath, destTopicPath);
+	public void movePost(SessionProvider sProvider, List<Post> posts, String destTopicPath) throws Exception {
+		storage_.movePost(sProvider, posts, destTopicPath);
 	}
 	
 	public Post removePost(SessionProvider sProvider, String categoryId, String forumId, String topicId, String postId) throws Exception {

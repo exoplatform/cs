@@ -4,16 +4,17 @@
 	import org.exoplatform.forum.ForumSessionUtils; 
 	import java.util.GregorianCalendar;
 %>
-<div class="UITopicPoll">
-	<%  
+	<% 
+		uiform.begin() ; 
 		Poll poll = uicomponent.getPoll() ;
+		if(poll != null) {
 		String question = poll.getQuestion() ;
 		int timeOut = (int)poll.getTimeOut() ;
 		boolean displayVoted = uicomponent.getIsVoted();
-		boolean isShowMenu = ForumSessionUtils.isAnonim();
+		boolean isAnonim = ForumSessionUtils.isAnonim();
 		String confirmDelete =  _ctx.appRes("UITopicPoll.msg.confirmClose"); 
 	%>
-	<% uiform.begin() %>
+<div class="UITopicPoll">
 	<div class="ForumToolbar">
 	  <div class="LeftBar">
 	  	<div class="RightBar">
@@ -23,7 +24,7 @@
 	  				<span>${question}?</span>
 	  			</div>
 	  			<div class="CollapseButton" title="Collapse" onclick="eXo.forum.UIForumPortlet.expandCollapse(this) ;"><span></span></div>
-	  		<% if(!isShowMenu) { %>	
+	  		<% if(!isAnonim) { %>	
 	  			<div class="SeparatorLine"><span></span></div>
 	  			<div class="ContentAction">
 						<div class="DefaultStyle Forum" onmouseover="eXo.forum.UIForumPortlet.OverButton(this)" onmouseout="eXo.forum.UIForumPortlet.OverButton(this)">
@@ -65,12 +66,18 @@
 	
 	<div class="TopicPollContainer">
 		<% 
+		boolean isCheck = poll.getIsMultiCheck() ;
 		if(timeOut > 0) {
 			Date dateOut = poll.getCreatedDate() ;
+			Date today = new Date() ;
 			dateOut.setDate(dateOut.getDate() + timeOut);
-			String timeOutDate = uicomponent.getLongDate(dateOut) + ", " + uicomponent.getTime(dateOut) ;
+			String timeOutDate =_ctx.appRes("UITopicPoll.label.timeOutPoll") + uicomponent.getLongDate(dateOut) + ", " + uicomponent.getTime(dateOut) ;
+			if(dateOut.getDate() < today.getDate()) {
+				timeOutDate = " Poll is Closed !" ;
+				isCheck = false ;
+			}
 		%>
-		<div class="PollTime"><%=_ctx.appRes("UITopicPoll.label.timeOutPoll")%>$timeOutDate</div>
+		<div class="PollTime">$timeOutDate</div>
 		<% } %>
 		<div class="UIFormTabPane">
 		  <div class="UITabPane">
@@ -96,7 +103,7 @@
 								            </tr>
 										      </table>
 
-										      <div class="UIAction"> 
+										      <div class="UIAction">
 										        <table class="ActionContainer" align="center">
 										          <tr>
 										          	<td align="center">
@@ -110,7 +117,7 @@
 										                </div>
 																	</a>
 										          	</td>
-										          </tr>          
+										          </tr>
 										        </table>
 										      </div>
 										      
@@ -143,8 +150,8 @@
 								  			 	 color = colors[i] ;
 								  			 	 vote = number[1] ;
 								  			 	 percent = number[0] ;
-								  			 	 if(percent.length() > 5) percent = percent.substring(0, 5) ;
-								  			 	 if(percent.indexOf("00.") > 0) percent = percent.substring(0, 3) ;
+								  			 	 if(percent.length() >5) percent = percent.substring(0, 5) ;
+								  			 	 if(percent.indexOf("00.") >0) percent = percent.substring(0, 3) ;
 								  		%>
 									 				<tr class="$classCss">
 									  				<td class="text">$option</td>
@@ -173,8 +180,8 @@
 									  	</tbody>
 										</table>
 										<div class="TotalVotes"><%=_ctx.appRes("UITopicPoll.label.TotalVoters"); %>: $sum</div>
-										<% if(poll.getIsMultiCheck() && !isShowMenu) { %>
-			   						<div class="UIAction"> 
+										<% if( isCheck && !isAnonim) { %>
+			   						<div class="UIAction">
 							        <table class="ActionContainer" align="center">
 							          <tr>
 							          	<td align="center">
@@ -188,7 +195,7 @@
 							                </div>
 														</a>
 							          	</td>
-							          </tr>          
+							          </tr>         
 							        </table>
 							      </div>
 							     <% } %>
@@ -200,10 +207,12 @@
 				    </div>
 				    
 				  </div>
-				</div>  
-		  </div>  
+				</div>
+		  </div>
 		</div>
 		
 	</div>
-  <%uiform.end()%>
 </div>
+	<% } 
+	uiform.end() ;
+	%>

@@ -37,39 +37,40 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
  * Jul 2, 2007	
  */
 public interface DataStorage {
-	public List<Category> getCategories() throws Exception;
-	public Category getCategory(String categoryId) throws Exception;
-	public void saveCategory(Category category, boolean isNew)throws Exception;
-	public Category removeCategory(String categoryId)throws Exception;	
-	
-	public List<Forum> getForums(String categoryId)throws Exception;
-	public Forum getForum(String categoryId, String forumId)throws Exception;	
-	public void saveForum(String categoryId, Forum forum, boolean isNew) throws Exception;
-	public Forum removeForum(String categoryId, String forumId)throws Exception;
-	public void moveForum(String forumId, String forumPath, String destCategoryPath) throws Exception;
-	
-	public JCRPageList getPageTopic(String categoryId, String forumId) throws Exception;
-	public List<Topic> getTopics(String categoryId, String forumId) throws Exception;
-	public Topic getTopic(String categoryId, String forumId, String topicId, boolean viewTopic) throws Exception;
-	public Topic getTopicByPath(String topicPath) throws Exception;
-	public TopicView getTopicView(String categoryId, String forumId, String topicId) throws Exception;
-	public void saveTopic(String categoryId, String forumId, Topic topic, boolean isNew) throws Exception;
-	public Topic removeTopic(String categoryId, String forumId, String topicId) throws Exception;
-	public void moveTopic(String topicId, String	topicPath, String destForumPath) throws Exception;
-	
-	public JCRPageList getPosts(String categoryId, String forumId, String topicId)throws Exception;
-	public Post getPost(String categoryId, String forumId, String topicId, String postId)throws Exception;
-	public void savePost(String categoryId, String forumId, String topicId, Post post, boolean isNew)throws Exception;
-	public Post removePost(String categoryId, String forumId, String topicId, String postId)throws Exception;
-	public void movePost(String postId, String postPath, String destTopicPath) throws Exception ;
+	public List<Category> getCategories(SessionProvider sProvider) throws Exception;
+	public Category getCategory(SessionProvider sProvider, String categoryId) throws Exception;
+	public void saveCategory(SessionProvider sProvider, Category category, boolean isNew)throws Exception;
+	public Category removeCategory(SessionProvider sProvider, String categoryId)throws Exception;	
 
-	public Poll getPoll(String categoryId, String forumId, String topicId)throws Exception;
-	public void savePoll(String categoryId, String forumId, String topicId, Poll poll, boolean isNew, boolean isVote)throws Exception;
-	public Poll removePoll(String categoryId, String forumId, String topicId)throws Exception;
-
-	public Object getObjectNameByPath(String path) throws Exception ;
-	public List<ForumLinkData> getAllLink() throws Exception ;
+	public List<Forum> getForums(SessionProvider sProvider, String categoryId)throws Exception;
+	public Forum getForum(SessionProvider sProvider, String categoryId, String forumId)throws Exception;	
+	public void saveForum(SessionProvider sProvider, String categoryId, Forum forum, boolean isNew) throws Exception;
+	public Forum removeForum(SessionProvider sProvider, String categoryId, String forumId)throws Exception;	
+	public void moveForum(SessionProvider sProvider, List<Forum> forums, String destCategoryPath)throws Exception;	
 	
+	public JCRPageList getPageTopic(SessionProvider sProvider, String categoryId, String forumId) throws Exception;
+	public List<Topic> getTopics(SessionProvider sProvider, String categoryId, String forumId) throws Exception;
+	public Topic getTopic(SessionProvider sProvider, String categoryId, String forumId, String topicId, boolean viewTopic) throws Exception;		
+	public Topic getTopicByPath(SessionProvider sProvider, String topicPath) throws Exception;
+	public TopicView getTopicView(SessionProvider sProvider, String categoryId, String forumId, String topicId) throws Exception;
+	public void saveTopic(SessionProvider sProvider, String categoryId, String forumId, Topic topic, boolean isNew) throws Exception;
+	public Topic removeTopic(SessionProvider sProvider, String categoryId, String forumId, String topicId) throws Exception;
+	public void moveTopic(SessionProvider sProvider, List<Topic> topics, String destForumPath) throws Exception;
+	
+	public JCRPageList getPosts(SessionProvider sProvider, String categoryId, String forumId, String topicId)throws Exception;
+	public Post getPost(SessionProvider sProvider, String categoryId, String forumId, String topicId, String postId)throws Exception;
+	public void savePost(SessionProvider sProvider, String categoryId, String forumId, String topicId, Post post, boolean isNew)throws Exception;
+	public Post removePost(SessionProvider sProvider, String categoryId, String forumId, String topicId, String postId)throws Exception;
+	public void movePost(SessionProvider sProvider, List<Post> posts, String destTopicPath) throws Exception ;
+	
+	public Poll getPoll(SessionProvider sProvider, String categoryId, String forumId, String topicId)throws Exception;
+	public void savePoll(SessionProvider sProvider, String categoryId, String forumId, String topicId, Poll poll, boolean isNew, boolean isVote)throws Exception;
+	public Poll removePoll(SessionProvider sProvider, String categoryId, String forumId, String topicId)throws Exception;
+	
+	public Object getObjectNameByPath(SessionProvider sProvider, String path) throws Exception ;
+	public List<ForumLinkData> getAllLink(SessionProvider sProvider)throws Exception ;
+	public String getForumHomePath(SessionProvider sProvider) throws Exception ;
+
 	public void addTopicInTag(SessionProvider sProvider, String tagId, String topicPath) throws Exception ;
 	public void removeTopicInTag(SessionProvider sProvider, String tagId, String topicPath) throws Exception ;
 	public Tag getTag(SessionProvider sProvider, String tagId) throws Exception ;

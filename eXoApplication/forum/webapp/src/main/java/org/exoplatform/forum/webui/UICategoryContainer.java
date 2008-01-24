@@ -44,8 +44,8 @@ public class UICategoryContainer extends UIContainer	{
   }
 	public void updateIsRender(boolean isRender) throws Exception {
 		boolean isRenderBar = !ForumSessionUtils.isAnonim() ;
-		if(isRender) {
-			getChild(UIForumActionBar.class).setRendered(isRenderBar);
+		if(isRenderBar) {
+			getChild(UIForumActionBar.class).setRendered(isRender);
 		}
 		getChild(UICategories.class).setRendered(isRender) ;
 		getChild(UICategory.class).setRendered(!isRender) ;

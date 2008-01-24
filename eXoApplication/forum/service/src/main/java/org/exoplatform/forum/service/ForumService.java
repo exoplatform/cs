@@ -126,7 +126,7 @@ public interface ForumService {
 	 * @return
 	 * @throws Exception
 	 */
-	public void moveForum(SessionProvider sProvider, String forumId, String forumPath, String destCategoryPath)throws Exception;	
+	public void moveForum(SessionProvider sProvider, List<Forum> forums, String destCategoryPath)throws Exception;	
 	/**
 	 * This method should: 
 	 * 1. Implement a JCRPageList in jcrext module
@@ -221,7 +221,7 @@ public interface ForumService {
 	 * @return
 	 * @throws Exception
 	 */
-	public void moveTopic(SessionProvider sProvider, String topicId, String	topicPath, String destForumPath) throws Exception;
+	public void moveTopic(SessionProvider sProvider, List<Topic> topics, String destForumPath) throws Exception;
 	/**
 	 * This method should: 
 	 * 1. Check the user permission
@@ -260,7 +260,7 @@ public interface ForumService {
 	 */
 	public void savePost(SessionProvider sProvider, String categoryId, String forumId, String topicId, Post post, boolean isNew)throws Exception;
 	public Post removePost(SessionProvider sProvider, String categoryId, String forumId, String topicId, String postId)throws Exception;
-	public void movePost(SessionProvider sProvider, String postId, String postPath, String destTopicPath) throws Exception ;
+	public void movePost(SessionProvider sProvider, List<Post> posts, String destTopicPath) throws Exception ;
 	
 	public Poll getPoll(SessionProvider sProvider, String categoryId, String forumId, String topicId)throws Exception;
 	public void savePoll(SessionProvider sProvider, String categoryId, String forumId, String topicId, Poll poll, boolean isNew, boolean isVote)throws Exception;

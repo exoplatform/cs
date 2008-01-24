@@ -13,7 +13,7 @@
 			List categories = uicomponent.getCategories(); 
 			for(category in categories) {
 		  	String categoryName = category.getCategoryName() ;
-		  	String link = uicomponent.event("Save", category.getId());
+		  	String link = uicomponent.event("Save", category.getPath());
 		%>
 	    <div class="Node">
 	     	<div class="Icon ForumIcon"><span></span></div>  
@@ -30,14 +30,10 @@
     <table class="ActionContainer" align="center">
 		  <tr>
 			  <td align="center">
-    <% String action = "Cancel";
-    	 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action); 
-       String link = uicomponent.event(action) ;
-    %>
-	    		<a href="$link" class="ActionButton LightBlueStyle">
+	    		<a href="<%=uicomponent.event("Cancel");%>" class="ActionButton LightBlueStyle">
 		  	  	<div class="ButtonLeft">
 		    	  	<div class="ButtonRight">
-		      	  	<div class="ButtonMiddle">$actionLabel</div>
+		      	  	<div class="ButtonMiddle"><%=_ctx.appRes(uicomponent.getName() + ".action.Cancel");%></div>
 		        	</div>
 		      	</div>
 	    		</a>

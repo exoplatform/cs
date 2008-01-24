@@ -599,7 +599,7 @@ public class UITopicDetail extends UIForm	{
 		public void execute(Event<UITopicDetail> event) throws Exception {
 			UITopicDetail topicDetail = event.getSource() ;
 			UIForumPortlet forumPortlet = topicDetail.getAncestorOfType(UIForumPortlet.class) ;
-			List <Post> posts = new ArrayList<Post>();
+			List<Post> posts = new ArrayList<Post>();
 			List<UIComponent> children = topicDetail.getChildren() ;
 			for(UIComponent child : children) {
 				if(child instanceof UIFormCheckBoxInput) {
