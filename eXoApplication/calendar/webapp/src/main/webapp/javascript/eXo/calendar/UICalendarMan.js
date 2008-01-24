@@ -137,6 +137,20 @@ EventObject.prototype.init = function(rootNode){
   }
 };
 
+EventObject.prototype.updateIndicator = function(nodeObj, hasBefore, hasAfter) {
+  var labelStr = this.name;
+  if (hasBefore) {
+    labelStr = '>> ' + labelStr;
+  }
+  if (hasAfter) {
+    labelStr += ' >>';
+  }
+  var labelNode = eXo.core.DOMUtil.findFirstDescendantByClass(nodeObj, 'div', 'EventLabel');
+  if (labelNode) {
+    labelNode.innerHTML = labelStr;
+  }
+};
+
 EventObject.prototype.getLabel = function() {
   if (this.name.length > this.LABEL_MAX_LEN) {
     return this.name.substring(0, this.LABEL_MAX_LEN) + '...';
@@ -795,6 +809,15 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
         eventNode = eventNode.cloneNode(true);
         eventNode.setAttribute('eventclone', 'true');
         eventObj.cloneNodes.push(eventNode);
+        var hasBefore = true;
+        var hasAfter = true;
+        if (i >= (dayObj.invisibleGroup.length - 1)) {
+          hasAfter = false;
+        }
+        if (cnt == 0) {
+          hasBefore = false;
+        }
+        eventObj.updateIndicator(eventObj.cloneNodes[eventObj.cloneNodes.length - 1], hasBefore, hasAfter);
       } else {
         eventNode = eventNode.cloneNode(true);
         eXo.core.DOMUtil.removeElement(eventObj.rootNode);
