@@ -75,14 +75,21 @@ public class UIActionBar extends UIContainer {
       UIMailPortlet uiPortlet = uiActionBar.getAncestorOfType(UIMailPortlet.class) ;
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       MailService mailSvr = uiActionBar.getApplicationComponent(MailService.class) ;
+      String username =  MailUtils.getCurrentUser() ;
       UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
       String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
       if(Utils.isEmptyField(accId)) {
         uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
+      } else {
+        Account acc = mailSvr.getAccountById(SessionsUtils.getSessionProvider(), username, accId);
+        if (!Utils.checkConnection(acc)) {
+          uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.conection-false", null)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
       }
-      String username =  uiPortlet.getCurrentUser() ;
       try {
       	if(MailUtils.isChecking(username, accId)) {
       		System.out.println("####  You are checking mail ");
