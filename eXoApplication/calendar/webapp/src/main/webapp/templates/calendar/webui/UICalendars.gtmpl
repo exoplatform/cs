@@ -179,6 +179,8 @@
 				<%
 					List publicCalendars = uicomponent.getPublicCalendars() ;
 					for(groupData in publicCalendars) {
+					title = groupData.getName() ;
+					label = title.substring(title.lastIndexOf("/") + 1) ;  
 				%>
 				<div class="UIVTab">  	
   				<div class="CalendarSelectedFlatStyle">
@@ -186,7 +188,7 @@
   						<div class="GroupColor1">
   							<div title="Collapser calendar group" class="CollapserFlatStyle" title="<%=uiform.getLabel("groupActions")%>"><span></span></div>
   							<div class="CheckBox"><input class="CalendarGroup" type="checkbox"/></div>
-  							<div class="CalendarGroupIcon"><a><%=groupData.getName()%></a></div>
+  							<div class="CalendarGroupIcon"><a title="$title">$label</a></div>
   							<div style="clear: both"><span></span></div>
   						</div>
   					</div>

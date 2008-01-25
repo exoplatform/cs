@@ -59,10 +59,10 @@ import org.exoplatform.webui.event.EventListener;
       @EventConfig(listeners = UICalendarView.ViewActionListener.class),
       @EventConfig(listeners = UICalendarView.EditActionListener.class), 
       @EventConfig(listeners = UICalendarView.DeleteActionListener.class, confirm="UICalendarVIew.msg.confirm-delete"),
-      @EventConfig(listeners = UIWeekView.UpdateEventActionListener.class),
-      @EventConfig(listeners = UIWeekView.SaveEventActionListener.class),
       @EventConfig(listeners = UICalendarView.MoveNextActionListener.class), 
-      @EventConfig(listeners = UICalendarView.MovePreviousActionListener.class)
+      @EventConfig(listeners = UICalendarView.MovePreviousActionListener.class),
+      @EventConfig(listeners = UIWeekView.UpdateEventActionListener.class),
+      @EventConfig(listeners = UIWeekView.SaveEventActionListener.class)
     }
 
 )
@@ -162,7 +162,7 @@ public class UIWeekView extends UICalendarView {
     return dataMap_ ;
   }
 
-  static  public class QuickAddActionListener extends EventListener<UIWeekView> {
+ /* static  public class QuickAddActionListener extends EventListener<UIWeekView> {
     public void execute(Event<UIWeekView> event) throws Exception {
       System.out.println("QuickAddActionListener");
       UIWeekView calendarview = event.getSource() ;
@@ -194,7 +194,7 @@ public class UIWeekView extends UICalendarView {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
-  }
+  }*/
 
   static  public class UpdateEventActionListener extends EventListener<UIWeekView> {
     public void execute(Event<UIWeekView> event) throws Exception {
@@ -216,22 +216,22 @@ public class UIWeekView extends UICalendarView {
         eventCalendar = calendarService.getGroupEvent(calendarId, eventId) ;
       }*/
       if(eventCalendar != null) {
-        Calendar calBegin = CalendarUtils.getInstanceTempCalendar() ;
-        Calendar calEnd = CalendarUtils.getInstanceTempCalendar() ;
-        calBegin.setTimeInMillis(Long.parseLong(currentDate)) ;
-        calEnd.setTimeInMillis(Long.parseLong(currentDate)) ;
-
+        Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
+        cal.setTimeInMillis(Long.parseLong(currentDate)) ;
+       /* Calendar calBegin = cal ;
+        Calendar calEnd = cal ;*/
+       /* calBegin.setTimeInMillis(Long.parseLong(currentDate)) ;
+        calEnd.setTimeInMillis(Long.parseLong(currentDate)) ;*/
         int hoursBg = (Integer.parseInt(startTime)/60) ;
         int minutesBg = (Integer.parseInt(startTime)%60) ;
-
         int hoursEnd = (Integer.parseInt(finishTime)/60) ;
         int minutesEnd = (Integer.parseInt(finishTime)%60) ;
-        calBegin.set(Calendar.HOUR_OF_DAY, hoursBg) ;
-        calBegin.set(Calendar.MINUTE, minutesBg) ;
-        eventCalendar.setFromDateTime(calBegin.getTime()) ;
-        calEnd.set(Calendar.HOUR_OF_DAY, hoursEnd) ;
-        calEnd.set(Calendar.MINUTE, minutesEnd) ;
-        eventCalendar.setToDateTime(calEnd.getTime()) ;
+        cal.set(Calendar.HOUR_OF_DAY, hoursBg) ;
+        cal.set(Calendar.MINUTE, minutesBg) ;
+        eventCalendar.setFromDateTime(cal.getTime()) ;
+        cal.set(Calendar.HOUR_OF_DAY, hoursEnd) ;
+        cal.set(Calendar.MINUTE, minutesEnd) ;
+        eventCalendar.setToDateTime(cal.getTime()) ;
         if(eventCalendar.getToDateTime().before(eventCalendar.getFromDateTime())) {
           System.out.println("\n\n UIWeekView updateEvent to date must after from date");
           return ;

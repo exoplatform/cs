@@ -82,9 +82,9 @@ public class UIListView extends UICalendarView {
 
   public String getTemplate() {
     if( getViewType().equals(TYPE_TASK)) {
-      return "app:/templates/calendar/webui/UITaskView.gtmpl" ;
+      return "app:/templates/calendar/webui/UIListTask.gtmpl" ;
     } else if(getViewType().equals(TYPE_EVENT)) {
-      return "app:/templates/calendar/webui/UIEventView.gtmpl" ;
+      return "app:/templates/calendar/webui/UIListEvent.gtmpl" ;
     } else {
       return "app:/templates/calendar/webui/UIListView.gtmpl" ;
     }
@@ -182,11 +182,12 @@ public class UIListView extends UICalendarView {
       CalendarEvent calendarEvent = null ;
       if(uiListView.getDataMap() != null) {
         calendarEvent = uiListView.getDataMap().get(eventId) ;
-        uiListView.setLastUpdatedEventId(eventId) ;
         if(calendarEvent != null) {
+          uiListView.setLastUpdatedEventId(eventId) ;
           uiListView.setSelectedEvent(calendarEvent.getId()) ;
           uiPreview.setEvent(calendarEvent);
         } else {
+          uiListView.setLastUpdatedEventId(eventId) ;
           uiListView.setSelectedEvent(null) ;
           uiPreview.setEvent(null);
         } 

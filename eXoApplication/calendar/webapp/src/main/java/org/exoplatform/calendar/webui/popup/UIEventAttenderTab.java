@@ -113,6 +113,7 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
 
   protected String getDateValue() {
     DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
+    df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
     return df.format(calendar_.getTime()) ;
   }
   protected void moveNextDay() throws Exception{
@@ -150,6 +151,7 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
   protected void setEventFromDate(Date date, String timeFormat) {
     UIFormComboBox timeField = getChildById(FIELD_FROM_TIME) ;
     DateFormat df = new SimpleDateFormat(timeFormat) ;
+    df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
     timeField.setValue(df.format(date)) ;
   }
   private boolean getEventAllDate() {
@@ -158,6 +160,7 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
   protected void setEventToDate(Date date, String timeFormat) {
     UIFormComboBox timeField = getChildById(FIELD_TO_TIME) ;
     DateFormat df = new SimpleDateFormat(timeFormat) ;
+    df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
     timeField.setValue(df.format(date)) ;
   }  
   
@@ -169,7 +172,7 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
     super.processRender(arg0);
   }
   public String getUserTimeZone(String username) throws Exception {
-   String timeZone = CalendarUtils.getCalendarService().getCalendarSetting(SessionsUtils.getSessionProvider(), username).getTimeZone() ;
+   String timeZone = CalendarUtils.getCalendarService().getCalendarSetting(SessionsUtils.getSystemProvider(), username).getTimeZone() ;
     return CalendarUtils.getTimeZone(timeZone) ;
   }
 }

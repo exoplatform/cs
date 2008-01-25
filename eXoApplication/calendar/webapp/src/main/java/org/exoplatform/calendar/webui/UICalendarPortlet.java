@@ -16,6 +16,8 @@
  **/
 package org.exoplatform.calendar.webui;
 
+import java.util.TimeZone;
+
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.CalendarSetting;
@@ -51,6 +53,9 @@ public class UICalendarPortlet extends UIPortletApplication {
   }
   public void setCalendarSetting(CalendarSetting setting) throws Exception{
     calendarSetting_ = setting; 
+  }
+  public String getSettingTimeZone() throws Exception {
+    return String.valueOf(TimeZone.getTimeZone(getCalendarSetting().getTimeZone()).getRawOffset()/1000/60) ;
   }
   public void cancelAction() throws Exception {
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;

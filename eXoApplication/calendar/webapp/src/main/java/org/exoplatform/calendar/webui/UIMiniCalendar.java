@@ -61,6 +61,8 @@ public class UIMiniCalendar extends UICalendarView  {
     EventQuery eventQuery = new EventQuery() ;
     eventQuery.setFromDate(getBeginDateOfMonth()) ;
     eventQuery.setToDate(getEndDateOfMonth()) ;
+    System.out.println("\n\n eventQueryFrom " + eventQuery.getFromDate().getTime());
+    System.out.println("\n\n eventQueryTo " + eventQuery.getToDate().getTime());
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     dataMap = calendarService.searchHightLightEvent(SessionsUtils.getSystemProvider(), CalendarUtils.getCurrentUser(), eventQuery, getPublicCalendars());
   }
@@ -97,9 +99,9 @@ public class UIMiniCalendar extends UICalendarView  {
     temCal.set(java.util.Calendar.DATE, getDaysInMonth()) ;
     return getEndDay(temCal) ;
   }
-  public Calendar getCurrentCalendar() {
+ /* public Calendar getCurrentCalendar() {
     return calendar_ ;
-  }
+  }*/
   static  public class MoveNextActionListener extends EventListener<UIMiniCalendar> {
     public void execute(Event<UIMiniCalendar> event) throws Exception {
       UIMiniCalendar miniCal = event.getSource() ;

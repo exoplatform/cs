@@ -75,8 +75,8 @@ public class UIDayView extends UICalendarView {
     System.out.println("\n\n>>>>>>>>>> DAY VIEW") ;
     eventData_.clear() ;
     allDayEvent_.clear() ;
-    Calendar begin = getBeginDay(new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getCurrentDay())) ;
-    Calendar end = getEndDay(new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getCurrentDay())) ;
+    Calendar begin = getBeginDay(getCurrentCalendar()) ; //getBeginDay(new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getCurrentDay())) ;
+    Calendar end = getEndDay(getCurrentCalendar()) ;//getEndDay(new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getCurrentDay())) ;
     end.add(Calendar.MILLISECOND, -1) ;
     List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
     CalendarService calendarService = getApplicationComponent(CalendarService.class) ;
@@ -84,6 +84,9 @@ public class UIDayView extends UICalendarView {
     EventQuery eventQuery = new EventQuery() ;
     eventQuery.setFromDate(begin) ;
     eventQuery.setToDate(end) ;
+  /*  System.out.println("\n\n " + begin.getTime());
+    System.out.println("\n\n " + end.getTime());
+    System.out.println("eventQuery " + eventQuery.getQueryStatement());*/
     events = calendarService.getEvent(SessionsUtils.getSystemProvider(), username, eventQuery, getPublicCalendars()) ;
     Iterator<CalendarEvent> iter = events.iterator() ;
     while (iter.hasNext()) {
@@ -125,15 +128,19 @@ public class UIDayView extends UICalendarView {
 
           int hoursEnd = (Integer.parseInt(endTime)/60) ;
           int minutesEnd = (Integer.parseInt(endTime)%60) ;
-          Calendar cal = calendarview.getBeginDay(new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(), calendarview.getCurrentDay())) ;
+          
+          Calendar cal = CalendarUtils.getInstanceTempCalendar()  ; //calendarview.getBeginDay(new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(), calendarview.getCurrentDay())) ;
+          cal.setTime(calendarview.getCurrentDate()) ;
+          //cal.setTimeInMillis(Long.parseLong(startTime)) ;
           cal.set(Calendar.HOUR_OF_DAY, hoursBg) ;
-          cal.set(Calendar.MINUTE, minutesBg) ;
+          cal.set(Calendar.MINUTE, minutesBg) ; 
           ce.setFromDateTime(cal.getTime());
           cal.set(Calendar.HOUR_OF_DAY, hoursEnd) ;
-          cal.set(Calendar.MINUTE, minutesEnd) ;
+          cal.set(Calendar.MINUTE, minutesEnd) ; 
+          //cal.setTimeInMillis(Long.parseLong(endTime)) ;
           ce.setToDateTime(cal.getTime()) ;        
           if(ce.getToDateTime().before(ce.getFromDateTime())) {
-            System.out.println("\n\n UIDayView updateEvent to date must after from date");
+            //System.out.println("\n\n UIDayView updateEvent to date must after from date");
             return ;
           }
           if(ce.getCalType().equals(CalendarUtils.PRIVATE_TYPE)) {

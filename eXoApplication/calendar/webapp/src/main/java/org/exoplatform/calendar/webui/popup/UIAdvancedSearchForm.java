@@ -63,6 +63,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
     template = "system:/groovy/webui/form/UIForm.gtmpl",
     events = {
       @EventConfig(listeners = UIAdvancedSearchForm.SearchActionListener.class),
+      @EventConfig(listeners = UIAdvancedSearchForm.OnchageActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIAdvancedSearchForm.CancelActionListener.class, phase = Phase.DECODE)
     }
 )
@@ -75,13 +76,16 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
   final static  private String STATE = "state" ;
   final static  private String FROMDATE = "fromDate" ;
   final static  private String TODATE = "toDate" ;
+  
   public UIAdvancedSearchForm() throws Exception{
     addChild(new UIFormStringInput(TEXT, TEXT, null)) ;
     List<SelectItemOption<String>> types = new ArrayList<SelectItemOption<String>>() ;
     types.add(new SelectItemOption<String>("Event and Task", "")) ;
     types.add(new SelectItemOption<String>(CalendarEvent.TYPE_EVENT, CalendarEvent.TYPE_EVENT)) ;
     types.add(new SelectItemOption<String>(CalendarEvent.TYPE_TASK, CalendarEvent.TYPE_TASK)) ;
-    addChild(new UIFormSelectBox(TYPE, TYPE, types)) ;
+    UIFormSelectBox type =  new UIFormSelectBox(TYPE, TYPE, types) ;
+    type.setOnChange("Onchage") ;
+    addChild(type) ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     String username = CalendarUtils.getCurrentUser() ;
     CalendarService cservice = CalendarUtils.getCalendarService() ;
@@ -110,6 +114,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
       options.add(new SelectItemOption<String>(cat.getName(), cat.getName())) ;
     }
     addChild(new UIFormSelectBox(CATEGORY, CATEGORY, options)) ;
+    addChild(new UIFormSelectBox(STATE, STATE, getStatus()).setRendered(false)) ;
     addChild(new UIFormSelectBox(PRIORITY, PRIORITY, getPriority())) ;
     addChild( new UIFormDateTimeInput(FROMDATE, FROMDATE, null, false)) ;
     addChild(new UIFormDateTimeInput(TODATE, TODATE, null, false)) ;
@@ -129,6 +134,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
   }
   public Date getFromDate() {
     DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
+    df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
     if(getFromDateValue() != null) 
       try {
         return df.parse(getFromDateValue()) ;
@@ -139,6 +145,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
   }
   public Date getToDate() {
     DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
+    df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
     if(getToDateValue() != null) 
       try {
         return df.parse(getToDateValue()) ;
@@ -155,6 +162,14 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     options.add(new SelectItemOption<String>("low", "3")) ;
     return options ;
   }
+  
+  private List<SelectItemOption<String>> getStatus() {
+    List<SelectItemOption<String>> status = new ArrayList<SelectItemOption<String>>() ;
+    for(String taskStatus : CalendarEvent.TASK_STATUS) {
+      status.add(new SelectItemOption<String>(taskStatus, taskStatus)) ;
+    }
+    return status ;
+  }
   public String[] getPublicCalendars() throws Exception{
     String[] groups = CalendarUtils.getUserGroups(CalendarUtils.getCurrentUser()) ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
@@ -165,6 +180,12 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
       }
     }
     return map.values().toArray(new String[map.values().size()] ) ;
+  }
+  public boolean isSearchTask() {
+    return getUIFormSelectBox(TYPE).getValue().equals(CalendarEvent.TYPE_TASK) ; 
+  }
+  public String getTaskState() {
+   return getUIFormSelectBox(STATE).getValue() ;
   }
   static  public class SearchActionListener extends EventListener<UIAdvancedSearchForm> {
     public void execute(Event<UIAdvancedSearchForm> event) throws Exception {
@@ -192,6 +213,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
         EventQuery query = new EventQuery() ;
         query.setText(uiForm.getUIStringInput(UIAdvancedSearchForm.TEXT).getValue()) ;
         query.setEventType(uiForm.getUIFormSelectBox(UIAdvancedSearchForm.TYPE).getValue()) ;
+        if(uiForm.isSearchTask()) query.setState(uiForm.getTaskState()) ; 
         String calendarId = uiForm.getUIFormSelectBox(UIAdvancedSearchForm.CALENDAR).getValue() ;
         if(calendarId != null && calendarId.trim().length() > 0) query.setCalendarId(new String[]{calendarId}) ;
         String categoryId = uiForm.getUIFormSelectBox(UIAdvancedSearchForm.CATEGORY).getValue() ;
@@ -237,6 +259,13 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
       } catch (Exception e) {
         e.printStackTrace() ;
       }
+    }
+  }
+  static  public class OnchageActionListener extends EventListener<UIAdvancedSearchForm> {
+    public void execute(Event<UIAdvancedSearchForm> event) throws Exception {
+      UIAdvancedSearchForm uiForm = event.getSource() ;
+      uiForm.getUIFormSelectBox(STATE).setRendered(uiForm.isSearchTask()) ;
+       
     }
   }
   static  public class CancelActionListener extends EventListener<UIAdvancedSearchForm> {

@@ -102,20 +102,26 @@ public class CalendarUtils {
     Calendar  calendar = GregorianCalendar.getInstance() ;
     calendar.setLenient(false) ;
     try {
-     /* CalendarSetting setting = getCalendarService().getCalendarSetting(SessionsUtils.getSessionProvider(), getCurrentUser()) ;
-      calendar.setTimeZone(TimeZone.getTimeZone(setting.getTimeZone())) ;*/
+      CalendarSetting setting = getCalendarService().getCalendarSetting(SessionsUtils.getSessionProvider(), getCurrentUser()) ;
+      calendar.setTimeZone(TimeZone.getTimeZone(setting.getTimeZone())) ; 
     } catch (Exception e) {
       e.printStackTrace() ;
     }
     int gmtoffset = calendar.get(Calendar.DST_OFFSET) + calendar.get(Calendar.ZONE_OFFSET);
-    calendar.setTimeInMillis(System.currentTimeMillis() - gmtoffset) ;
+    calendar.setTimeInMillis(System.currentTimeMillis() - gmtoffset) ; 
     return  calendar;
   }
   public static List<SelectItemOption<String>> getTimesSelectBoxOptions(String timeFormat) {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    Calendar cal = getBeginDay(GregorianCalendar.getInstance()) ;
+    Calendar cal = getInstanceTempCalendar() ;
+    cal.set(Calendar.HOUR_OF_DAY, 0) ;
+    cal.set(Calendar.MINUTE, 0) ;
+    cal.set(Calendar.MILLISECOND, 0) ;
+    
     DateFormat df = new SimpleDateFormat(timeFormat) ;
+    df.setCalendar(cal) ;
     DateFormat df2 = new SimpleDateFormat(TIMEFORMAT) ;
+    df.setCalendar(cal) ;
     int time = 0 ;
     while (time ++ < 24*60/(15)) {
       options.add(new SelectItemOption<String>(df.format(cal.getTime()), df2.format(cal.getTime()))) ;
@@ -125,9 +131,16 @@ public class CalendarUtils {
   }
   public static List<SelectItemOption<String>> getTimesSelectBoxOptions(String labelFormat, String valueFormat) {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    Calendar cal = getBeginDay(GregorianCalendar.getInstance()) ;
+    Calendar cal = getInstanceTempCalendar() ;
+    cal.set(Calendar.DST_OFFSET, 0) ;
+    cal.set(Calendar.HOUR_OF_DAY, 0) ;
+    cal.set(Calendar.MINUTE, 0) ;
+    cal.set(Calendar.MILLISECOND, 0) ;
+    
     DateFormat dfLabel = new SimpleDateFormat(labelFormat) ;
+    dfLabel.setCalendar(cal) ;
     DateFormat dfValue = new SimpleDateFormat(valueFormat) ;
+    dfValue.setCalendar(cal) ;
     int time = 0 ;
     while (time ++ < 24*60/(15)) {
       options.add(new SelectItemOption<String>(dfLabel.format(cal.getTime()), dfValue.format(cal.getTime()))) ;
@@ -137,9 +150,15 @@ public class CalendarUtils {
   }
   public static List<SelectItemOption<String>> getTimesSelectBoxOptions(String timeFormat, int timeInteval) {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    Calendar cal = getBeginDay(GregorianCalendar.getInstance()) ;
+    Calendar cal = getInstanceTempCalendar() ;
+    cal.set(Calendar.HOUR_OF_DAY, 0) ;
+    cal.set(Calendar.MINUTE, 0) ;
+    cal.set(Calendar.MILLISECOND, 0) ;
+    
     DateFormat df = new SimpleDateFormat(timeFormat) ;
+    df.setCalendar(cal) ;
     DateFormat df2 = new SimpleDateFormat(TIMEFORMAT) ;
+    df2.setCalendar(cal) ;
     int time = 0 ;
     while (time ++ < 24*60/(timeInteval)) {
       options.add(new SelectItemOption<String>(df.format(cal.getTime()), df2.format(cal.getTime()))) ;
@@ -245,6 +264,8 @@ public class CalendarUtils {
     cal.setTime(date) ;
     return getEndDay(cal) ;
   }
+  
+  
   public static String getDataSource(Attachment attach, DownloadService dservice) throws Exception {      
     if (attach != null) {
       try {

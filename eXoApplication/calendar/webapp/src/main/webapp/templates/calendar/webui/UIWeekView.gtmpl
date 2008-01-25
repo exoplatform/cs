@@ -37,6 +37,7 @@
 	boolean isShowWorkingTime = uicomponent.isShowWorkingTime() ;
 	DateFormat df = new SimpleDateFormat(dateFormat) ;
 	DateFormat tf = new SimpleDateFormat(timeFormat) ;
+	tf.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
 	DateFormat dtf = new SimpleDateFormat(dateTimeFormat) ;
 	DateFormat wf = new  SimpleDateFormat("EEE, dd/MMM") ;
 %>
@@ -92,6 +93,7 @@
 							  if(cl.get(Calendar.DAY_OF_WEEK) == 1){
 							   styleCss = "color:red;" ;
 							  }
+							 	wf.setCalendar(cl) ;
             %>
             <th class="$cssClass UICellBlock" starttime="<%=cl.getTimeInMillis()%>">
               <a href="$actionLink" style="$styleCss">
@@ -174,7 +176,7 @@
 						enddate = dtf.format(event.toDateTime) ;
 						cal = CalendarUtils.getInstanceTempCalendar() ;
 					 	cal.setTime(event.getFromDateTime()) ;
-					   beginTime = cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) ;
+					  beginTime = cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) ;
 					  cal.setTime(event.getToDateTime()) ;
 					  endTime = cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) ;
 						color = uicomponent.getColors().get(event.getCalendarId()) ;
@@ -188,7 +190,7 @@
             style="float: left;">
             <span></span>
           </div>
-          <div class="EventContainerBar EventTitle" title="$begindate -> $enddate ">
+          <div class="EventContainerBar EventTitle" title="<%=uiform.getLabel('moveEvent')%>">
             <p unselectable="on">
               $begin -> $end</p>
           </div>
@@ -232,7 +234,9 @@
 					 		cl = uicomponent.getBeginDateOfWeek() ;				
 						  t = 0 ; 
 							while(t++ <7) {
+								df.setCalendar(cl) ;
 					 			startTime = df.format(cl.getTime()) + " " + time;
+					 			dtf.setCalendar(cl) ;
 					 			cl.setTime(dtf.parse(startTime)) ;
 					 			dayOfWeek = cl.get(Calendar.DAY_OF_WEEK) ;
 					 		  if(dayOfWeek == uicomponent.getDayOfWeek(currentYear, currentMonth, currentDay)){	
@@ -243,7 +247,7 @@
 					 		  	cssClass = "Weekday" ;
 					 		  }
             %>
-            <td starttime="<%=cl.getTimeInMillis()%>" eventindex="$dayOfWeek" class="$styleClass $cssClass $style">
+            <td startTime="<%=cl.getTimeInMillis()%>" eventindex="$dayOfWeek" class="$styleClass $cssClass $style">
               <span></span>
             </td>
             <%		

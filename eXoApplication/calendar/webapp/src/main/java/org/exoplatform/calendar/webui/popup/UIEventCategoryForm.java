@@ -16,6 +16,8 @@
  **/
 package org.exoplatform.calendar.webui.popup;
 
+import java.util.List;
+
 import javax.jcr.RepositoryException;
 
 import org.exoplatform.calendar.CalendarUtils;
@@ -35,6 +37,7 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.validator.EmptyFieldValidator;
@@ -124,6 +127,8 @@ public class UIEventCategoryForm extends UIForm {
         UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
         UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
         uiViewContainer.refresh() ;
+        uiViewContainer.updateCategory() ;
+        
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;

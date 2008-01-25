@@ -186,10 +186,13 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     getUIFormCheckBoxInput(ISSHOWWORKINGTIME).setChecked(value) ;
   }
   protected String getWorkingBegin() throws Exception {
-    java.util.Calendar cal = GregorianCalendar.getInstance() ;
+    java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
     DateFormat dateFormat = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     DateFormat timeFormat = new SimpleDateFormat(getTimeFormat()) ;
     DateFormat dateTimeFormat = new SimpleDateFormat(CalendarUtils.DATETIMEFORMAT) ;
+    dateFormat.setCalendar(cal) ;
+    timeFormat.setCalendar(cal) ;
+    dateTimeFormat.setCalendar(cal) ;
     String value = getUIFormSelectBox(WORKINGTIME_BEGIN).getValue() ;
     String date = dateFormat.format(cal.getTime()) + " " + value ;
     cal.setTime(dateTimeFormat.parse(date)); 
@@ -210,6 +213,9 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     DateFormat dateFormat = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     DateFormat timeFormat = new SimpleDateFormat(CalendarUtils.TIMEFORMAT) ;
     DateFormat dateTimeFormat = new SimpleDateFormat(format) ;
+    dateFormat.setCalendar(cal) ;
+    timeFormat.setCalendar(cal) ;
+    dateTimeFormat.setCalendar(cal) ;
     String date = dateFormat.format(cal.getTime()) + " " + value ;
     cal.setTime(dateTimeFormat.parse(date)); 
     getUIFormSelectBox(WORKINGTIME_BEGIN).setValue(timeFormat.format(cal.getTime())) ;
@@ -219,6 +225,9 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     DateFormat dateFormat = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     DateFormat timeFormat = new SimpleDateFormat(getTimeFormat()) ;
     DateFormat dateTimeFormat = new SimpleDateFormat(CalendarUtils.DATETIMEFORMAT) ;
+    dateFormat.setCalendar(cal) ;
+    timeFormat.setCalendar(cal) ;
+    dateTimeFormat.setCalendar(cal) ;
     String value = getUIFormSelectBox(WORKINGTIME_END).getValue() ;
     String date = dateFormat.format(cal.getTime()) + " " + value ;
     cal.setTime(dateTimeFormat.parse(date)); 
@@ -229,6 +238,8 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     java.util.Calendar cal = CalendarUtils.getBeginDay(CalendarUtils.getInstanceTempCalendar()) ;
     DateFormat dateFormat = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     DateFormat dateTimeFormat = new SimpleDateFormat(CalendarUtils.DATETIMEFORMAT) ;
+    dateFormat.setCalendar(cal) ;
+    dateTimeFormat.setCalendar(cal) ;
     String value = getUIFormSelectBox(WORKINGTIME_END).getValue() ;
     String date = dateFormat.format(cal.getTime()) + " " + value ;
     cal.setTime(dateTimeFormat.parse(date)); 
@@ -239,6 +250,9 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     DateFormat dateFormat = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     DateFormat timeFormat = new SimpleDateFormat(CalendarUtils.TIMEFORMAT) ;
     DateFormat dateTimeFormat = new SimpleDateFormat(format) ;
+    dateFormat.setCalendar(cal) ;
+    timeFormat.setCalendar(cal) ;
+    dateTimeFormat.setCalendar(cal) ;
     String date = dateFormat.format(cal.getTime()) + " " + value ;
     cal.setTime(dateTimeFormat.parse(date)); 
     getUIFormSelectBox(WORKINGTIME_END).setValue(timeFormat.format(cal.getTime())) ;
@@ -250,15 +264,7 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     getUIStringInput(BASE_URL).setValue(value) ;
   }
   public List<SelectItemOption<String>> getTimeZones(String locale) {
-    if(locale == null || locale.trim().length() == 0) {
-      return CalendarUtils.getTimeZoneSelectBoxOptions(TimeZone.getAvailableIDs()) ;
-    }
-    System.out.println(locale);
-    int offSet = GregorianCalendar.getInstance(new Locale(locale)).get(Calendar.ZONE_OFFSET) ;
-    System.out.println(offSet);
-    System.out.println(GregorianCalendar.getInstance(new Locale(locale)).getTimeZone().getAvailableIDs().toString());
-    return CalendarUtils.getTimeZoneSelectBoxOptions(TimeZone.getAvailableIDs(offSet)) ;
-    
+    return CalendarUtils.getTimeZoneSelectBoxOptions(TimeZone.getAvailableIDs()) ;
   }
   private List<SelectItemOption<String>> getLocales() {
     return CalendarUtils.getLocaleSelectBoxOptions(java.util.Calendar.getAvailableLocales()) ;

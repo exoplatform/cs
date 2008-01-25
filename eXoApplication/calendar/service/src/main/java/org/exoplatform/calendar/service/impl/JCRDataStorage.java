@@ -1573,11 +1573,12 @@ public class JCRDataStorage{
     } else {
       calendarNode.addMixin(SHARED_MIXIN);     
     }
+    SessionProvider spd = SessionProvider.createSystemProvider() ;
     Session systemSession = sharedCalendarHome.getSession() ;
     Node userNode ;
     List<Value> valueList = new ArrayList<Value>() ;
     for(String user : receiverUsers) {
-      CalendarSetting calSetting = getCalendarSetting(sProvider, user) ;
+      CalendarSetting calSetting = getCalendarSetting(spd, user) ;
       if(calSetting == null) calSetting = new CalendarSetting() ;
       List<String> sharedCaeldnars = new ArrayList<String>() ;
       if(calSetting.getDefaultSharedCalendars() != null) {
@@ -1585,7 +1586,7 @@ public class JCRDataStorage{
       }
       if(! sharedCaeldnars.contains(calendarId)) sharedCaeldnars.add(calendarId) ;
       calSetting.setDefaultSharedCalendars(sharedCaeldnars.toArray(new String[sharedCaeldnars.size()])) ;
-      saveCalendarSetting(sProvider, user, calSetting) ;
+      saveCalendarSetting(spd, user, calSetting) ;
       if(sharedCalendarHome.hasNode(user)) {
         userNode = sharedCalendarHome.getNode(user) ;
       } else {
