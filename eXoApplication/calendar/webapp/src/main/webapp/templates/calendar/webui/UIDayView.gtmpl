@@ -27,12 +27,12 @@
 	dateTimeFormat = uicomponent.getDateTimeFormat() ;
 	timeInterval = uicomponent.getTimeInterval() ;
 	DateFormat df = new SimpleDateFormat(dateFormat) ;
-	df.setCalendar(uicomponent.getCurrentCalendar()) ;
+	df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
 	String currentDate = df.format(uicomponent.getCurrentCalendar().getTime()) ;
 	DateFormat tf = new SimpleDateFormat(timeFormat) ;
-	tf.setCalendar(uicomponent.getCurrentCalendar()) ;
+	tf.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
 	DateFormat dtf = new SimpleDateFormat(dateTimeFormat) ;
-	dtf.setCalendar(uicomponent.getCurrentCalendar()) ;
+	dtf.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
 	def rcontext = _ctx.getRequestContext() ;	
 	String startWorkingTime = uicomponent.getStartTime() ;
 	String endWorkingTime = uicomponent.getEndTime() ;

@@ -1501,8 +1501,7 @@ public class JCRDataStorage{
 
 
   private Map<Integer, String> updateMap(Map<Integer, String> data, NodeIterator it, java.util.Calendar fromDate, java.util.Calendar toDate) throws Exception {
-    Long start = new Long(1);
-    Long end ;
+    
     boolean isVictory = false ;
     long milisOfDay = 24 * 60 * 60 * 1000 ;
     long beginDay = fromDate.getTimeInMillis() / milisOfDay ;
@@ -1510,40 +1509,43 @@ public class JCRDataStorage{
     long endDay = toDate.getTimeInMillis() / milisOfDay ;
     //System.out.println("\n\n toDate " + toDate.getTime());
     while(it.hasNext()) {
+      Long start = new Long(1);
+      Long end ;
       Node eventNode = it.nextNode() ;
-      start = new Long(1) ;
+      //start = new Long(1) ;
       /*System.out.println("\n\n event form " + eventNode.getProperty("exo:fromDateTime").getDate().getTime());
       System.out.println("\n\n event to " + eventNode.getProperty("exo:toDateTime").getDate().getTime());*/
       long millis = eventNode.getProperty("exo:fromDateTime").getDate().getTimeInMillis() ;
-      long fromDay ;
-      long toDay ;
-      if(millis % milisOfDay == 0) fromDay = millis / milisOfDay;
-      else fromDay = millis / milisOfDay  + 1;
+      long eventFromDay ;
+      long eventToDay ;
+      if(millis % milisOfDay == 0) eventFromDay = millis / milisOfDay;
+      else eventFromDay = millis / milisOfDay  + 1;
 
       millis = eventNode.getProperty("exo:toDateTime").getDate().getTimeInMillis() ;
-      if(millis % milisOfDay == 0) toDay = millis / milisOfDay ;
-      else toDay = millis / milisOfDay + 1 ;
+      if(millis % milisOfDay == 0) eventToDay = millis / milisOfDay ;
+      else eventToDay = millis / milisOfDay + 1 ;
       //long toDay = eventNode.getProperty("exo:toDateTime").getDate().getTimeInMillis() / milisOfDay + 1;
-      if(fromDay < beginDay) {
-        if(toDay < endDay ) {
-          end = toDay - beginDay ;          
+      if(eventFromDay < beginDay) {
+        if(eventToDay < endDay ) {
+          end = eventToDay - beginDay ;          
         }else {
           end = endDay - beginDay ;
           isVictory = true ;
         }
-      }else if(fromDay == beginDay) {
-        if( toDay < endDay) {
-          end = toDay - beginDay ;            
+      }else if(eventFromDay == beginDay) {
+        if( eventToDay < endDay) {
+          end = eventToDay - beginDay ;            
         }else {
           end = endDay - beginDay ;
           isVictory = true ;
         }
       } else {
-        start = fromDay - beginDay ;
-        if(toDay < endDay) {
-          end = start + (toDay - fromDay) ;     
+        start = eventFromDay - beginDay ;
+        if(eventToDay < endDay) {
+          end = start + (eventToDay - eventFromDay) ;    
+          System.out.println("\n\n rmf fsu " + end);
         }else {
-          end = start + (endDay - fromDay) ;
+          end = start + (endDay - eventFromDay) ;
         }
         //System.out.println("\n\n end " + end);
 

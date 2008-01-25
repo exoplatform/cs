@@ -106,7 +106,6 @@ public class UICalendarViewContainer extends UIContainer  {
     for(UIComponent comp : getChildren()) {
       if(comp.isRendered() && comp instanceof CalendarView){
         ((CalendarView)comp).refresh() ;
-        ((CalendarView)comp).applySeting() ;
       }
     }
   }
