@@ -47,6 +47,14 @@
   display: block;
 }
 
+.UIContactPortlet .UISearchForm {
+	background: url('background/SearchForm1x34.gif') repeat-x ;
+  border: 1px solid #c7c7c7;
+	padding: 4px 13px 3px 0px;
+	margin-bottom: 8px;
+	line-height: 34px;
+}
+  
 .UIContactPortlet .UISearchForm .AdvancedSearch {
   background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/FindIcon.gif') no-repeat ;	
   height: 16px; width: 16px;
