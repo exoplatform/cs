@@ -425,6 +425,15 @@ UIMailPortlet.prototype.restoreFolderState = function() {
   }
 };
 
+UIMailPortlet.prototype.resizeIframe = function(str) {
+	var frame = document.getElementById("IframeMessagePreview") ;
+	var doc = frame.contentDocument ;
+	doc.open();
+	doc.write(str);
+	doc.close();
+	frame.style.height = doc.body.offsetHeight + 20 + "px" ;
+}
+
 // Check all
 function CheckBox() {
 }
