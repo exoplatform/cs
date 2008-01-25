@@ -134,7 +134,8 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       }
     } else {
       UIMiniCalendar miniCalendar = getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
-      java.util.Calendar cal = miniCalendar.getCurrentCalendar() ;
+      java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
+      cal.setTime(miniCalendar.getCurrentCalendar().getTime()) ;
       int beginMinute = (cal.get(java.util.Calendar.MINUTE)/CalendarUtils.DEFAULT_TIMEITERVAL)*CalendarUtils.DEFAULT_TIMEITERVAL ;
       cal.set(java.util.Calendar.MINUTE, beginMinute) ;
       setEventFromDate(cal.getTime(), calSetting.getTimeFormat()) ;

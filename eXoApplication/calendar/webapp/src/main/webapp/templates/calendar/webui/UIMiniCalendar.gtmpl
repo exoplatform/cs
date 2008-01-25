@@ -3,6 +3,7 @@
 	import java.text.SimpleDateFormat;
 	import java.util.Map ;
 	import org.exoplatform.calendar.CalendarUtils;
+	
 	int currentYear = uicomponent.getCurrentYear() ;
 	int currentMonth = uicomponent.getCurrentMonth() ;
 	int currentDay = uicomponent.getCurrentDay() ;
@@ -10,6 +11,7 @@
  	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS,String.valueOf(uicomponent.TYPE_MONTH)) ;
  	String linkYearNext = uicomponent.event(uicomponent.ACT_NEXT, String.valueOf(uicomponent.TYPE_YEAR)) ;
  	String linkYearPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS,String.valueOf(uicomponent.TYPE_YEAR)) ;
+	uiform.begin();
  	monthName = uicomponent.getMonthName(currentMonth) ;
  	cssClass = "CalendarContentNomal" ;
  	if(uicomponent.isCurrentMonth(currentMonth, currentYear)) {
@@ -20,7 +22,6 @@
 	DateFormat sdtf = new  SimpleDateFormat("MM/d") ;
  	sdtf.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
 	Map data = uicomponent.getData() ;
-	uiform.begin();
 %>
 <div class="UIMiniCalendar">
 	<div class="MiniCalendarContainer">
@@ -64,7 +65,7 @@
 				<div class="PreviousYearSelector" title="<%=_ctx.appRes('UIYearView.label.previousYear')%>"><span></span></div>
 			</a>
 			<div style="clear: right;"><span></span></div>
-		</div>
+		</div> 
 		<div class="MonthList">
 			<div class="WeekList">
 			  <%for(day in uicomponent.getDaysName()) {
@@ -79,7 +80,9 @@
   					<table class="UIGrid" id="" cellspacing="0" borderspacing="0">
   						<tbody>
   						<%
-  						 calendar = uicomponent.getBeginDateOfMonthView() ;
+  						 calendar = CalendarUtils.getInstanceTempCalendar()  ;
+  						 calendar.setTime(uicomponent.getBeginDateOfMonthView().getTime()) ;
+  						 
 					week = 0 ; 
 					dayOfMonth = 1 ;
 					validDay = 0 ;

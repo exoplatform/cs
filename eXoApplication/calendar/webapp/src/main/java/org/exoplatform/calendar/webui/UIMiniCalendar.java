@@ -61,8 +61,6 @@ public class UIMiniCalendar extends UICalendarView  {
     EventQuery eventQuery = new EventQuery() ;
     eventQuery.setFromDate(getBeginDateOfMonth()) ;
     eventQuery.setToDate(getEndDateOfMonth()) ;
-    System.out.println("\n\n eventQueryFrom " + eventQuery.getFromDate().getTime());
-    System.out.println("\n\n eventQueryTo " + eventQuery.getToDate().getTime());
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     dataMap = calendarService.searchHightLightEvent(SessionsUtils.getSystemProvider(), CalendarUtils.getCurrentUser(), eventQuery, getPublicCalendars());
   }
@@ -77,27 +75,27 @@ public class UIMiniCalendar extends UICalendarView  {
     java.util.Calendar temCal = getBeginDateOfMonth() ;
     int amount = temCal.getFirstDayOfWeek() - temCal.get(java.util.Calendar.DAY_OF_WEEK) ;
     temCal.add(java.util.Calendar.DATE, amount) ;
-    return getBeginDay(temCal) ;
+    return CalendarUtils.getBeginDay(temCal) ;
   }
   public java.util.Calendar getEndDateOfMonthView() throws Exception{
     java.util.Calendar temCal = getEndDateOfMonth() ;
     int amount = temCal.getMaximum(java.util.Calendar.DAY_OF_WEEK) - temCal.get(java.util.Calendar.DAY_OF_WEEK) ; 
     temCal.add(java.util.Calendar.DATE, amount) ;
-    return getEndDay(temCal) ;
+    return CalendarUtils.getEndDay(temCal) ;  
   }
   public java.util.Calendar getBeginDateOfMonth() throws Exception{
     java.util.Calendar temCal = CalendarUtils.getInstanceTempCalendar() ;
     temCal.setTime(calendar_.getTime()) ;
     temCal.setFirstDayOfWeek(Calendar.SUNDAY) ;
     temCal.set(java.util.Calendar.DATE, 1) ;
-    return getBeginDay(temCal) ;
+    return CalendarUtils.getBeginDay(temCal) ;  
   }
   public java.util.Calendar getEndDateOfMonth() throws Exception{
     java.util.Calendar temCal = CalendarUtils.getInstanceTempCalendar() ;
     temCal.setTime(calendar_.getTime()) ;
     temCal.setFirstDayOfWeek(java.util.Calendar.SUNDAY) ;
     temCal.set(java.util.Calendar.DATE, getDaysInMonth()) ;
-    return getEndDay(temCal) ;
+    return CalendarUtils.getEndDay(temCal) ;  
   }
  /* public Calendar getCurrentCalendar() {
     return calendar_ ;

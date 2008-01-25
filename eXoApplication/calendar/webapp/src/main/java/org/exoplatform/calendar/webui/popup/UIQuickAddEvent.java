@@ -110,7 +110,8 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     getUIFormCombobox(FIELD_FROM_TIME).setOptions(fromOptions) ;
     getUIFormCombobox(FIELD_TO_TIME).setOptions(toOptions) ;
     UIMiniCalendar miniCalendar = getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
-    java.util.Calendar cal = miniCalendar.getCurrentCalendar() ;
+    java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
+    cal.setTime(miniCalendar.getCurrentCalendar().getTime());
     if(startTime != null) cal.setTimeInMillis(Long.parseLong(startTime)) ;
     else {
       cal.set(java.util.Calendar.MINUTE, (cal.get(java.util.Calendar.MINUTE)/CalendarUtils.DEFAULT_TIMEITERVAL)*CalendarUtils.DEFAULT_TIMEITERVAL) ;

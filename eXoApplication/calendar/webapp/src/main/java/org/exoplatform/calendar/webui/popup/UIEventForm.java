@@ -19,7 +19,6 @@ package org.exoplatform.calendar.webui.popup;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -199,7 +198,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       attenderTab.calendar_.setTime(eventCalendar.getFromDateTime()) ;
     } else {
       UIMiniCalendar miniCalendar = getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
-      java.util.Calendar cal = miniCalendar.getCurrentCalendar() ;
+      java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
+      cal.setTime( miniCalendar.getCurrentCalendar().getTime()) ;
       int beginMinute = (cal.get(java.util.Calendar.MINUTE)/CalendarUtils.DEFAULT_TIMEITERVAL)*CalendarUtils.DEFAULT_TIMEITERVAL ;
       cal.set(java.util.Calendar.MINUTE, beginMinute) ;
       setEventFromDate(cal.getTime(), calSetting.getTimeFormat()) ;

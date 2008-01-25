@@ -1517,18 +1517,12 @@ public class JCRDataStorage{
       long millis = eventNode.getProperty("exo:fromDateTime").getDate().getTimeInMillis() ;
       long fromDay ;
       long toDay ;
-      if(millis % milisOfDay == 0) {
-        fromDay = millis / milisOfDay;
-      }else {
-        fromDay = millis / milisOfDay  + 1;
-      }
+      if(millis % milisOfDay == 0) fromDay = millis / milisOfDay;
+      else fromDay = millis / milisOfDay  + 1;
+
       millis = eventNode.getProperty("exo:toDateTime").getDate().getTimeInMillis() ;
-      if(millis % milisOfDay == 0) {
-        toDay = millis / milisOfDay ;
-      }
-      else {
-        toDay = millis / milisOfDay + 1 ;
-      }
+      if(millis % milisOfDay == 0) toDay = millis / milisOfDay ;
+      else toDay = millis / milisOfDay + 1 ;
       //long toDay = eventNode.getProperty("exo:toDateTime").getDate().getTimeInMillis() / milisOfDay + 1;
       if(fromDay < beginDay) {
         if(toDay < endDay ) {
@@ -1537,26 +1531,25 @@ public class JCRDataStorage{
           end = endDay - beginDay ;
           isVictory = true ;
         }
-      }else {
-        if(fromDay == beginDay) {
-          if( toDay < endDay) {
-            end = toDay - beginDay ;            
-          }else {
-            end = endDay - beginDay ;
-            isVictory = true ;
-          }
-        } else {
-          start = fromDay - beginDay ;
-          if(toDay < endDay) {
-            end = start + (toDay - fromDay) ;            
-          }else {
-            end = start + (endDay - fromDay) ;
-          }
-          //System.out.println("\n\n end " + end);
+      }else if(fromDay == beginDay) {
+        if( toDay < endDay) {
+          end = toDay - beginDay ;            
+        }else {
+          end = endDay - beginDay ;
+          isVictory = true ;
         }
+      } else {
+        start = fromDay - beginDay ;
+        if(toDay < endDay) {
+          end = start + (toDay - fromDay) ;     
+        }else {
+          end = start + (endDay - fromDay) ;
+        }
+        //System.out.println("\n\n end " + end);
+
       }
       for (int i = start.intValue(); i <= end.intValue(); i ++) {
-      // System.out.println("\n\n I " + i);
+        // System.out.println("\n\n I " + i);
         data.put(i, VALUE) ;            
       }
       if (isVictory) break ;

@@ -826,8 +826,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
       String startTime = event.getRequestContext().getRequestParameter("startTime") ;
       String finishTime = event.getRequestContext().getRequestParameter("finishTime") ;
-      System.out.println("\n\n start " + startTime);
-      System.out.println("\n\n finish " + finishTime);
       String selectedCategory = calendarview.getUIFormSelectBox(EVENT_CATEGORIES).getValue() ;
       UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
