@@ -26,10 +26,14 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.activation.DataHandler;
 import javax.mail.Multipart;
 import javax.mail.Part;
+import javax.mail.Session;
+import javax.mail.Store;
+import javax.mail.URLName;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
@@ -197,6 +201,30 @@ public class Utils {
   public static final String[] MIME_MAIL_TYPES = {"eml"};
   public static boolean isEmptyField(String value) {
     return value == null || value.trim().length() == 0 ;
+  }
+  
+  public static boolean checkConnection(Account acc) throws Exception {
+    try {
+      String protocol = acc.getProtocol();
+      Properties props = System.getProperties();
+      String socketFactoryClass = "javax.net.SocketFactory";
+      if (acc.isIncomingSsl()) socketFactoryClass = Utils.SSL_FACTORY;
+
+      if(protocol.equals(Utils.POP3)) {
+        props.setProperty("mail.pop3.socketFactory.fallback", "false");
+        props.setProperty( "mail.pop3.socketFactory.class", socketFactoryClass);
+      } else if (protocol.equals(Utils.IMAP)) {
+        props.setProperty("mail.imap.socketFactory.fallback", "false");
+        props.setProperty("mail.imap.socketFactory.class", socketFactoryClass);
+      }
+      Session session = Session.getDefaultInstance(props);
+      URLName url = new URLName(acc.getProtocol(), acc.getIncomingHost(), Integer.valueOf(acc.getIncomingPort()), null, acc.getIncomingUser(), acc.getIncomingPassword());
+      Store store = session.getStore(url) ;
+      store.connect();
+    } catch(Exception e) {
+      return false;
+    }
+    return true ;
   }
   
   public static boolean isNumber(String number) {
