@@ -833,6 +833,8 @@
 
 .UIMailPortlet .MailWorkingWorkspace .MessageDetails {
 	padding: 10px;
+	width: 98% ;
+	border: 0px;
 }
 
 /*=====================Page Iterator Container===================*/
