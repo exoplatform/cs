@@ -463,9 +463,9 @@ public class JCRDataStorage{
 				forumHomeNode.getSession().save() ;
 				if(isNew) {
 					// createPost first
-					String id = topic.getId().replaceFirst("topic", "post") ;
+					String id = topic.getId().replaceFirst("topic", "post").toUpperCase() ;
 					Post post = new Post() ;
-					post.setId(id.toUpperCase()) ;
+					post.setId(id) ;
 					post.setOwner(topic.getOwner()) ;
 					post.setCreatedDate(new Date()) ;
 					post.setModifiedBy(topic.getModifiedBy()) ;
@@ -479,7 +479,7 @@ public class JCRDataStorage{
 					
 					savePost(sProvider, categoryId, forumId, topic.getId(), post, true) ;
 				} else {
-					String id = topic.getId().replaceFirst("topic", "post") ;
+					String id = topic.getId().replaceFirst("topic", "post").toUpperCase() ;
 					if(topicNode.hasNode(id)) {
 						Node fistPostNode = topicNode.getNode(id) ;
 						Post post = getPost(fistPostNode) ;

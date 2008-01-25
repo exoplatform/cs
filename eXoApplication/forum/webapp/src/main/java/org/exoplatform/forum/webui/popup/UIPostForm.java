@@ -172,8 +172,8 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
 				if(index > 0) {
 					messenger = this.temp + this.style + messenger.substring(index, messenger.length());
 				}
-				this.attachments_ = post.getAttachments();
-				this.refreshUploadFileList();
+//				this.attachments_ = post.getAttachments();
+//				this.refreshUploadFileList();
 				getChild(UIFormWYSIWYGInput.class).setValue(messenger);
 				getChild(UIFormInputIconSelector.class).setSelectedIcon(post.getIcon());
 			}
