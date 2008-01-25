@@ -17,6 +17,7 @@
 package org.exoplatform.calendar.webui;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -72,7 +73,11 @@ public class UIMonthView extends UICalendarView {
   }
 
   protected int getWeeksOfTheMonth(int year, int month, int day) {
-    return new GregorianCalendar(year, month, day).getActualMaximum(java.util.Calendar.WEEK_OF_MONTH) ;
+    Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
+    cal.set(Calendar.YEAR, year);
+    cal.set(Calendar.MONTH, month);
+    cal.set(Calendar.DATE, day);
+    return cal.getActualMaximum(java.util.Calendar.WEEK_OF_MONTH) ;
   }
   protected void refreshEvents() throws Exception {
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
@@ -113,7 +118,7 @@ public class UIMonthView extends UICalendarView {
     System.out.println("\n\n>>>>>>>>>> MONTH VIEW") ;
     //refreshSelectedCalendarIds() ;
     refreshEvents() ;
-    
+
     //System.out.println("\n\n Begin month view " + getBeginDateOfMonthView().getTime());
     //System.out.println("\n\n End month view " + getEndDateOfMonthView().getTime());
 
@@ -124,14 +129,14 @@ public class UIMonthView extends UICalendarView {
     temCal.add(java.util.Calendar.DATE, amount) ;
     return getBeginDay(temCal) ;
   }
-  
+
   public java.util.Calendar getEndDateOfMonthView() throws Exception{
     java.util.Calendar temCal = getEndDateOfMonth() ;
     int amount = temCal.getMaximum(java.util.Calendar.DAY_OF_WEEK) - temCal.get(java.util.Calendar.DAY_OF_WEEK) ; 
     temCal.add(java.util.Calendar.DATE, amount) ;
     return getEndDay(temCal) ;
   }
-  
+
   public java.util.Calendar getBeginDateOfMonth() throws Exception{
     java.util.Calendar temCal = CalendarUtils.getInstanceTempCalendar() ;
     temCal.setTime(calendar_.getTime()) ;

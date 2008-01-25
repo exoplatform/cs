@@ -153,7 +153,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   }
   
   private void setEventToDate(Date value, String timeFormat) {
-    System.out.println("\n\n value " + value);
+    //System.out.println("\n\n value " + value);
     UIFormDateTimeInput toField =  getChildById(FIELD_TO) ;
     UIFormComboBox timeField =  getChildById(FIELD_TO_TIME) ;
     DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;

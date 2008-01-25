@@ -101,12 +101,12 @@ public class CalendarUtils {
   public static Calendar getInstanceTempCalendar() { 
     Calendar  calendar = GregorianCalendar.getInstance() ;
     calendar.setLenient(false) ;
-    try {
+   /* try {
       CalendarSetting setting = getCalendarService().getCalendarSetting(SessionsUtils.getSessionProvider(), getCurrentUser()) ;
       calendar.setTimeZone(TimeZone.getTimeZone(setting.getTimeZone())) ; 
     } catch (Exception e) {
       e.printStackTrace() ;
-    }
+    }*/
     int gmtoffset = calendar.get(Calendar.DST_OFFSET) + calendar.get(Calendar.ZONE_OFFSET);
     calendar.setTimeInMillis(System.currentTimeMillis() - gmtoffset) ; 
     return  calendar;

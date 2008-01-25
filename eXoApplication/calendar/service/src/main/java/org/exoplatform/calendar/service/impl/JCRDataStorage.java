@@ -1543,7 +1543,7 @@ public class JCRDataStorage{
         start = eventFromDay - beginDay ;
         if(eventToDay < endDay) {
           end = start + (eventToDay - eventFromDay) ;    
-          System.out.println("\n\n rmf fsu " + end);
+         // System.out.println("\n\n rmf fsu " + end);
         }else {
           end = start + (endDay - eventFromDay) ;
         }
