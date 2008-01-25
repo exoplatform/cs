@@ -1,4 +1,9 @@
-<%uiform.begin()%>
+<%
+	uiform.begin()
+	def rcontext = _ctx.getRequestContext() ;  
+	action = uicomponent.event("Search") ;
+	rcontext.getJavascriptManager().addJavascript('eXo.cs.Utils.captureInput("search","'+ action +'")') ;
+%>
 <div class="SearchForm">
 	<a href="<%=uicomponent.event("Advanced")%>"><div class="AdvancedSearch" title="Advance Search"><span></span></div></a>
 	<div class="SeparatorLine"><span></span></div>

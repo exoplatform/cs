@@ -94,10 +94,8 @@ Spliter.prototype.clear = function() {
   document.onmousemove = null ;
 } ;
 
-function Utils() {	
-}
+function Utils() {}
 
-eXo.cs.Utils = new Utils() ;
 
 Utils.prototype.showHidePane = function(clickobj, beforeobj, afterobj) {
 	if(typeof(beforeobj) == "string") beforeobj = document.getElementById(beforeobj) ;
@@ -110,5 +108,43 @@ Utils.prototype.showHidePane = function(clickobj, beforeobj, afterobj) {
 		clickobj.className = "MaximizeButton"
 	}
 } ;
+
+Utils.prototype.getKeynum = function(event) {
+  var keynum = false ;
+  if(window.event) { /* IE */
+    keynum = window.event.keyCode;
+    event = window.event ;
+  } else if(event.which) { /* Netscape/Firefox/Opera */
+    keynum = event.which ;
+  }
+  if(keynum == 0) {
+    keynum = event.keyCode ;
+  }
+  return keynum ;
+}
+
+Utils.prototype.captureInput = function(input, action) {
+  if(typeof(input) == "string") input = document.getElementById(input) ;
+  input.onkeydown = eXo.cs.Utils.onEnter ;
+  this.action = action ;
+} ;
+
+Utils.prototype.onEnter = function(evt) {
+  var _e = evt || window.event ;
+  _e.cancelBubble = true ;
+  var keynum = eXo.cs.Utils.getKeynum(_e) ;
+  if (keynum == 13) {
+    this.form.onsubmit = eXo.cs.Utils.cancelSubmit ;
+    var action = String(eXo.cs.Utils.action).replace("javascript:","") ;
+    eval(action) ;
+  }
+} ;
+
+Utils.prototype.cancelSubmit = function() {
+  return false ;
+}
+
+eXo.cs.Utils = new Utils() ;
+
 
 eXo.cs.Spliter = new Spliter() ;

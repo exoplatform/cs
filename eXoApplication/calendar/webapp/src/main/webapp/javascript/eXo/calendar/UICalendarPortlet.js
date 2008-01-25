@@ -1047,7 +1047,7 @@ UICalendarPortlet.prototype.swapMenu = function(oldmenu, clickobj) {
     var mnuBottom = eXo.core.Browser.findPosYInContainer(UICalendarPortlet.menuElement, uiDesktop) + uiRightClick.offsetHeight ;
     var widBottom = uiWindow.offsetTop + uiWindow.offsetHeight ;
     if(mnuBottom > widBottom) {
-      menuY -= (mnuBottom - widBottom - clickobj.offsetHeight - 30) ;
+      menuY -= (mnuBottom - widBottom - clickobj.offsetHeight - uiWindow.scrollTop) ;
       UICalendarPortlet.menuElement.style.top = menuY + "px" ;
     }
     window.status = mnuBottom + "-" + widBottom  + "-" + uiRightClick.offsetParent.className + "-" + uiWindow.offsetParent.className ;
