@@ -1,33 +1,33 @@
-eXo.require('eXo.cs.UIContextMenu','/csResources/javascript/') ;
+eXo.require('eXo.cs.UIContextMenuMail','/csResources/javascript/') ;
 eXo.require('eXo.cs.CSUtils','/csResources/javascript/') ;
 function UIMailPortlet(){
 };
 
 UIMailPortlet.prototype.showContextMenu = function(compid) {	
-	var UIContextMenu = eXo.webui.UIContextMenu ; //eXo.contact.ContextMenu ;
-	UIContextMenu.portletName = compid ;
+	var UIContextMenuMail = eXo.webui.UIContextMenuMail ; //eXo.contact.ContextMenu ;
+	UIContextMenuMail.portletName = compid ;
 	var config = {
 		'preventDefault':false, 
 		'preventForms':false
 	} ;	
-	UIContextMenu.init(config) ;
-	UIContextMenu.attach('MessageItem', 'UIMessagePopupMenu') ;
-	UIContextMenu.attach('FolderLink', 'UIFolderListPopupMenu') ;
-	UIContextMenu.attach('IconTagHolder', 'UITagListPopupMenu') ;
-	UIContextMenu.attach('InboxIcon', 'UIDefaultFolderPopupMenu') ;
-	UIContextMenu.attach('DraftsIcon', 'UIDefaultFolderPopupMenu') ;
-	UIContextMenu.attach('SentIcon', 'UIDefaultFolderPopupMenu') ;
-	UIContextMenu.attach('SpamIcon', 'UIDefaultFolderPopupMenu') ;
-	UIContextMenu.attach('TrashIcon', 'UITrashFolderPopupMenu') ;
+	UIContextMenuMail.init(config) ;
+	UIContextMenuMail.attach('MessageItem', 'UIMessagePopupMenu') ;
+	UIContextMenuMail.attach('FolderLink', 'UIFolderListPopupMenu') ;
+	UIContextMenuMail.attach('IconTagHolder', 'UITagListPopupMenu') ;
+	UIContextMenuMail.attach('InboxIcon', 'UIDefaultFolderPopupMenu') ;
+	UIContextMenuMail.attach('DraftsIcon', 'UIDefaultFolderPopupMenu') ;
+	UIContextMenuMail.attach('SentIcon', 'UIDefaultFolderPopupMenu') ;
+	UIContextMenuMail.attach('SpamIcon', 'UIDefaultFolderPopupMenu') ;
+	UIContextMenuMail.attach('TrashIcon', 'UITrashFolderPopupMenu') ;
 } ;
 
 UIMailPortlet.prototype.msgPopupMenuCallback = function(evt) {
-	var UIContextMenu = eXo.webui.UIContextMenu ;
+	var UIContextMenuMail = eXo.webui.UIContextMenuMail ;
 	var DOMUtil = eXo.core.DOMUtil ;
 	var _e = window.event || evt ;
 	//_e.cancelBubble = true ;
 	var src = null ;
-	if (UIContextMenu.IE) {
+	if (UIContextMenuMail.IE) {
 		src = _e.srcElement;
 	} else {
 		src = _e.target;
@@ -54,15 +54,15 @@ UIMailPortlet.prototype.msgPopupMenuCallback = function(evt) {
 		str.className += " SelectedItem";
 	}
 	id = src.getAttribute("msgId");
-	eXo.webui.UIContextMenu.changeAction(UIContextMenu.menuElement, id) ;
+	eXo.webui.UIContextMenuMail.changeAction(UIContextMenuMail.menuElement, id) ;
 } ;
 
 UIMailPortlet.prototype.defaultFolderPopupMenuCallback = function(evt) {
-	var UIContextMenu = eXo.webui.UIContextMenu ;
+	var UIContextMenuMail = eXo.webui.UIContextMenuMail ;
 	var _e = window.event || evt ;
 	//_e.cancelBubble = true ;
 	var src = null ;
-	if (UIContextMenu.IE) {
+	if (UIContextMenuMail.IE) {
 		src = _e.srcElement;
 	} else {
 		src = _e.target;
@@ -71,15 +71,15 @@ UIMailPortlet.prototype.defaultFolderPopupMenuCallback = function(evt) {
 		src = src.parentNode;
 		
 	folder = src.getAttribute("folder");
-	eXo.webui.UIContextMenu.changeAction(UIContextMenu.menuElement, folder) ;
+	eXo.webui.UIContextMenuMail.changeAction(UIContextMenuMail.menuElement, folder) ;
 } ;
 
 UIMailPortlet.prototype.tagListPopupMenuCallback = function(evt) {
-	var UIContextMenu = eXo.webui.UIContextMenu ;
+	var UIContextMenuMail = eXo.webui.UIContextMenuMail ;
 	var _e = window.event || evt ;
 	//_e.cancelBubble = true ;
 	var src = null ;
-	if (UIContextMenu.IE) {
+	if (UIContextMenuMail.IE) {
 		src = _e.srcElement;
 	} else {
 		src = _e.target;
@@ -88,7 +88,7 @@ UIMailPortlet.prototype.tagListPopupMenuCallback = function(evt) {
 		src = src.parentNode;
 		
 	tagName = src.getAttribute("tagId");
-	eXo.webui.UIContextMenu.changeAction(UIContextMenu.menuElement, tagName) ;
+	eXo.webui.UIContextMenuMail.changeAction(UIContextMenuMail.menuElement, tagName) ;
 } 
 
 UIMailPortlet.prototype.readMessage = function() {} ;

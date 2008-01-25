@@ -695,7 +695,9 @@ UICalendarPortlet.prototype.adjustTime = function(currentStart, currentEnd, obj)
 
 /* for showing context menu */
 
-UICalendarPortlet.prototype.showContextMenu = function(compid) {	
+
+
+UICalendarPortlet.prototype.showContextMenu = function(compid) {
 	var UIContextMenu = eXo.webui.UIContextMenu ;
 	this.portletName = compid ;
 	UIContextMenu.portletName = this.portletName ;
@@ -708,7 +710,7 @@ UICalendarPortlet.prototype.showContextMenu = function(compid) {
 	UIContextMenu.attach("EventOnDayContent","UIMonthViewEventRightMenu") ;
 	UIContextMenu.attach("TimeRule","UIDayViewRightMenu") ;
 	UIContextMenu.attach("EventBoxes","UIDayViewEventRightMenu") ;
-	UIContextMenu.attach(["EventWeekContent","EventAlldayContainer"],"UIWeekViewRightMenu") ;	
+	UIContextMenu.attach(["EventWeekContent","EventAlldayContainer"],"UIWeekViewRightMenu") ;
 	UIContextMenu.attach("UIListViewRow","UIListViewEventRightMenu") ;
 } ;
 

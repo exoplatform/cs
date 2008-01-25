@@ -1,4 +1,4 @@
-eXo.require('eXo.cs.UIContextMenu','/csResources/javascript/') ;
+eXo.require('eXo.cs.UIContextMenuCon','/csResources/javascript/') ;
 eXo.require('eXo.cs.CSUtils','/csResources/javascript/') ;
 function UIContactPortlet() {
 	
@@ -16,20 +16,20 @@ UIContactPortlet.prototype.toggleSelectAll = function(handler) {
 } ;
 
 UIContactPortlet.prototype.showContextMenu = function(compid) {
-	var UIContextMenu = eXo.webui.UIContextMenu ;//eXo.contact.ContextMenu ;
-	UIContextMenu.portletName = compid ;
+	var UIContextMenuCon = eXo.webui.UIContextMenuCon ;//eXo.contact.ContextMenu ;
+	UIContextMenuCon.portletName = compid ;
 	var config = {
 		'preventDefault':false, 
 		'preventForms':false
 	} ;	
-	UIContextMenu.init(config) ;
-	UIContextMenu.attach(['UIContactList','VCardContent'], 'UIContactListPopuMenu') ;
-	UIContextMenu.attach('ItemList', 'UIAddressBookPopupMenu') ;	
-	UIContextMenu.attach('TagList', 'UITagPopupMenu') ;
+	UIContextMenuCon.init(config) ;
+	UIContextMenuCon.attach(['UIContactList','VCardContent'], 'UIContactListPopuMenu') ;
+	UIContextMenuCon.attach('ItemList', 'UIAddressBookPopupMenu') ;	
+	UIContextMenuCon.attach('TagList', 'UITagPopupMenu') ;
 } ;
 
 UIContactPortlet.prototype.contactCallback = function(evt) {
-	var UIContextMenu = eXo.webui.UIContextMenu ;
+	var UIContextMenuCon = eXo.webui.UIContextMenuCon ;
 	var _e = window.event || evt ;
 	_e.cancelBubble = true ;
 	var src = _e.srcElement || _e.target ;
@@ -38,18 +38,18 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
 	if(tr != null) {
 		var checkbox = eXo.core.DOMUtil.findFirstDescendantByClass(tr, "input", "checkbox") ;		
 		id = checkbox.name ;
-		eXo.webui.UIContextMenu.changeAction(UIContextMenu.menuElement, id) ;
+		eXo.webui.UIContextMenuCon.changeAction(UIContextMenuCon.menuElement, id) ;
 //		if (tr.getAttribute("selectedTag") && (tr.getAttribute("selectedTag").toLowerCase()!="null")) {		
-//			var moveContactIcon =  eXo.core.DOMUtil.findFirstDescendantByClass(UIContextMenu.menuElement, "div", "MoveContactIcon") ;
+//			var moveContactIcon =  eXo.core.DOMUtil.findFirstDescendantByClass(UIContextMenuCon.menuElement, "div", "MoveContactIcon") ;
 //			moveContactIcon.parentNode.href = "javascript: void(0) ;" ;
 //			moveContactIcon.parentNode.style.color = "#cccccc" ;
 //		}
 	} else {
 		var VCardContent = eXo.core.DOMUtil.findAncestorByClass(src, "VCardContent") ;
 		id = VCardContent.getAttribute("id") ;
-		eXo.webui.UIContextMenu.changeAction(UIContextMenu.menuElement, id) ;
+		eXo.webui.UIContextMenuCon.changeAction(UIContextMenuCon.menuElement, id) ;
 //		if (VCardContent.getAttribute("selectedTag") && (VCardContent.getAttribute("selectedTag").toLowerCase()!="null")) {		
-//			var moveContactIcon =  eXo.core.DOMUtil.findFirstDescendantByClass(UIContextMenu.menuElement, "div", "MoveContactIcon") ;
+//			var moveContactIcon =  eXo.core.DOMUtil.findFirstDescendantByClass(UIContextMenuCon.menuElement, "div", "MoveContactIcon") ;
 //			moveContactIcon.parentNode.href = "javascript: void(0) ;" ;
 //			moveContactIcon.parentNode.style.color = "#cccccc" ;
 //		}
@@ -57,15 +57,15 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
 } ;
 
 UIContactPortlet.prototype.addressBookCallback = function(evt) {
-	var UIContextMenu = eXo.webui.UIContextMenu ;
+	var UIContextMenuCon = eXo.webui.UIContextMenuCon ;
 	var DOMUtil = eXo.core.DOMUtil ;
 	var _e = window.event || evt ;	
 	var src = _e.srcElement || _e.target ;
 	var a = (DOMUtil.hasClass(src, "ItemList")) ? src : DOMUtil.findAncestorByClass(src, "ItemList") ;	
-	eXo.webui.UIContextMenu.changeAction(UIContextMenu.menuElement, a.id) ;
+	eXo.webui.UIContextMenuCon.changeAction(UIContextMenuCon.menuElement, a.id) ;
 	var isPublic = a.getAttribute("addressType") ;	
 	
-	var menuItems = DOMUtil.findDescendantsByClass(UIContextMenu.menuElement, "div", "ItemIcon") ;
+	var menuItems = DOMUtil.findDescendantsByClass(UIContextMenuCon.menuElement, "div", "ItemIcon") ;
 	var itemLength = menuItems.length ;	
 
 	if (isPublic && (isPublic.toLowerCase() == "2")) {
@@ -147,13 +147,13 @@ UIContactPortlet.prototype.addressBookCallback = function(evt) {
 } ;
 
 UIContactPortlet.prototype.tagCallback = function(evt) {
-	var UIContextMenu = eXo.webui.UIContextMenu ;
+	var UIContextMenuCon = eXo.webui.UIContextMenuCon ;
 	var _e = window.event || evt ;
 	_e.cancelBubble = true ;
 	var src = _e.srcElement || _e.target ;
 	src = (src.nodeName.toLowerCase() == "div")? src : src.parentNode ;
 	var tagName = src.getAttribute("tagName") ;
-	eXo.webui.UIContextMenu.changeAction(UIContextMenu.menuElement, tagName) ;
+	eXo.webui.UIContextMenuCon.changeAction(UIContextMenuCon.menuElement, tagName) ;
 } ;
 
 UIContactPortlet.prototype.printpreview = function (obj){
