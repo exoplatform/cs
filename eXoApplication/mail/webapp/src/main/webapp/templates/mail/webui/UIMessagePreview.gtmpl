@@ -12,6 +12,7 @@
   def rcontext = _ctx.getRequestContext() ;
   rcontext.getJavascriptManager().importJavascript('eXo.cs.MaskLayerControl','/csResources/javascript/');
   rcontext.getJavascriptManager().addOnLoadJavascript('eXo.cs.MaskLayerControl.init(\'' + uicomponent.getId() + '\')');
+  rcontext.getJavascriptManager().importJavascript("eXo.mail.UIMailPortlet","/mail/javascript/");
 %>
 <div class="UIMessagePreview" id="<%=uicomponent.getId()%>">
 <%
@@ -31,7 +32,8 @@
 		<div><a href="javascript:eXo.mail.UIMailPortlet.showHidePreviewPane()"><span id="ActionReadingPane" class="MaximizeReadingPane" title="Maximize Reading Pane"></span></a></div>
 		<div style="clear:both;"><span></span></div>
 	</div>
-	<div class="ReadingPaneDetails">
+  
+	<div id="ReadingPaneDetails" class="ReadingPaneDetails"> 
   
 <!--  Start DecoratorBox ViewBoxStyle -->
     <% 
@@ -213,9 +215,16 @@
   								</div>
   								<div style="clear: both;"><span></span></div>
   							</div>
-  							<div class="MessageDetails">
+                
+                <iframe src="" style="border: 0px" class="MessageDetails" id="IframeMessagePreview"></iframe>
+                <%
+                  rcontext.getJavascriptManager().addJavascript("eXo.mail.UIMailPortlet.resizeIframe(document.getElementById(\'MessageDetails\').value) ;");
+                %>
+               
+  							<textarea id="MessageDetails" class="MessageDetails" style="display:none">
   								<%=msg.getMessageBody()%>
-  							</div>
+  							 </textarea>
+                
   							<%
                   if (msg.getAttachments().size() > 0) {
                 %>
@@ -290,7 +299,7 @@
 	  </div>
 	  <div class="LogoMail">
 	    <span></span>
-	  </div>
+	  </div>  
 	  <div class="OverviewMail">
 	    Overview
 	  </div>
