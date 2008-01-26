@@ -156,6 +156,7 @@ public class UIDayView extends UICalendarView {
       }
       calendarview.setLastUpdatedEventId(eventId) ;
       calendarview.refresh() ;
+      //calendarview.eventData_.put(ce.getId(), ce) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
   }

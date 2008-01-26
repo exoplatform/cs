@@ -52,7 +52,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
     }
 )
 public class UISearchForm extends UIForm {
-  final static  private String FIELD_SEARCHVALUE = "inputValue" ;
+  final static  private String FIELD_SEARCHVALUE = "value" ;
 
   public UISearchForm() {
     addChild(new UIFormStringInput(FIELD_SEARCHVALUE, FIELD_SEARCHVALUE, null)) ;

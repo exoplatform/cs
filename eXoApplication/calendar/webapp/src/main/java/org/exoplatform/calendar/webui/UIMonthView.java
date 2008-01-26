@@ -205,6 +205,7 @@ public class UIMonthView extends UICalendarView {
           uiMiniCalendar.updateMiniCal() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
           calendarview.refresh() ;
+          //calendarview.dataMap_.put(calEvent.getId(), calEvent) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
         }
       } catch (Exception e) {

@@ -2,7 +2,7 @@
 	uiform.begin();
 	def rcontext = _ctx.getRequestContext() ;  
 	action = uicomponent.event("Search") ;
-	rcontext.getJavascriptManager().addJavascript('eXo.cs.Utils.captureInput("inputValue","'+ action +'") ;') ;
+	rcontext.getJavascriptManager().addJavascript('eXo.cs.Utils.captureInput("value","'+ action +'") ;') ;
 %>
 <div class="UISearchForm">
 	<a href="<%=uicomponent.event("AdvancedSearch")%>">
@@ -11,9 +11,9 @@
 	<a href="<%=uicomponent.event("Search")%>">
 		<div class="Search" title="<%=uiform.getLabel('Search')%>"><span></span></div>
 	</a>
-	<%uiform.renderChild("inputValue")%>
+	<%uiform.renderChild("value")%>
 	<div class="UISearchLabel">
-		<%=uiform.getLabel("inputValue")%>
+		<%=uiform.getLabel("value")%>
 	</div>
 	<div style="clear:right;"><span></span></div>
 </div>
