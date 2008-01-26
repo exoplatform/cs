@@ -257,13 +257,18 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
       uiMessageList.setSelectedFolderId(null);
       uiMessageList.setSelectedTagId(null);
       uiMessageList.setMessageFilter(filter);
-
-      uiMessageList.setMessagePageList(mailService.getMessages(SessionsUtils.getSessionProvider(), username, filter));
-      UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
-      uiFolderContainer.setSelectedFolder(null);
-      uiPortlet.cancelAction();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
+      try {
+        uiMessageList.setMessagePageList(mailService.getMessages(SessionsUtils.getSessionProvider(), username, filter));
+        UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
+        uiFolderContainer.setSelectedFolder(null);
+        uiPortlet.cancelAction();
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
+      } catch(Exception e) {
+        uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.search-query-invalid", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      } 
     }
   }
   

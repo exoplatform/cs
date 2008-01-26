@@ -86,17 +86,21 @@ public class UISearchForm extends UIForm {
       
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);      
       String username = uiPortlet.getCurrentUser();
-      MailService mailService = uiPortlet.getApplicationComponent(MailService.class);
-      
-      uiMessageList.setMessagePageList(mailService.getMessages(SessionsUtils.getSessionProvider(), username, filter));
-      uiMessageList.setSelectedFolderId(null);
-      uiMessageList.setSelectedTagId(null);
-      uiMessageList.setMessageFilter(filter);
-      UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
-      uiFolderContainer.setSelectedFolder(null);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
-
+      try {
+        MailService mailService = uiPortlet.getApplicationComponent(MailService.class);
+        uiMessageList.setMessagePageList(mailService.getMessages(SessionsUtils.getSessionProvider(), username, filter));
+        uiMessageList.setSelectedFolderId(null);
+        uiMessageList.setSelectedTagId(null);
+        uiMessageList.setMessageFilter(filter);
+        UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
+        uiFolderContainer.setSelectedFolder(null);
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
+      } catch(Exception e) {
+        uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.contain-special-characters", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
     }
   }
  
