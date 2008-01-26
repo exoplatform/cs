@@ -86,7 +86,10 @@
 	width : 16px ;
 	height : 16px ;
 }
-
+.UIContactPortlet .SelectGroupIcon {
+	width : 16px ;
+	height : 16px ;
+}
 .UIMailPortlet .UIMessageCompose table {
 	background: none;
 }

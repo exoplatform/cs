@@ -29,6 +29,7 @@ public class ContactGroup {
   private String id ;
   private String name ;
   private String description ;
+  private String[] editPermission ;
   
   public ContactGroup() {
     id = "ContactGroup" + IdGenerator.generate() ;
@@ -42,4 +43,7 @@ public class ContactGroup {
   
   public String getDescription() { return description ; }
   public void setDescription(String s) { description = s ;}
+  
+  public String[] getEditPermission() { return editPermission ; }
+  public void setEditPermission(String[] editPermission) { this.editPermission = editPermission ; }
 }

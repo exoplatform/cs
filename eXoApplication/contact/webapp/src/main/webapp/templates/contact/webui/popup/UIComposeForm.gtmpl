@@ -46,15 +46,15 @@
 									</a>
 									
 									<div class="SeparatorLine"><span></span></div>
-									
+									<!--
 									<a href="<%=uicomponent.event("Attachment")%>" class="ControlButton">
 										<div class="IconHolder AttachFileIcon">
 											<div class="Label">Attach File</div>
 										</div>
 									</a>
-		
+									
 									<div class="SeparatorLine"><span></span></div>
-								
+								-->
 									<div style="clear:left;"><span></span></div>
 									
 								</div>

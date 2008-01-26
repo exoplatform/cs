@@ -36,6 +36,7 @@ import org.exoplatform.webui.form.UIForm;
     lifecycle = UIFormLifecycle.class,
     template = "app:/templates/contact/webui/popup/UIContactPreviewForm.gtmpl",
     events = {  
+      @EventConfig(listeners = UIContactPreviewForm.SendEmailActionListener.class) ,
       @EventConfig(listeners = UIContactPreviewForm.CancelActionListener.class)
     }
 )
@@ -63,4 +64,19 @@ public class UIContactPreviewForm extends UIForm implements UIPopupComponent {
       uiPopupAction.deActivate() ;
     }
   }
+  
+  static public class SendEmailActionListener extends EventListener<UIContactPreviewForm> {
+    public void execute(Event<UIContactPreviewForm> event) throws Exception {
+      UIContactPreviewForm uiForm = event.getSource() ;
+      String email = event.getRequestContext().getRequestParameter(OBJECTID);
+      if (!ContactUtils.isEmpty(email)) {
+        UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+        UIPopupAction popupAction = popupContainer.getChild(UIPopupAction.class) ;
+        UIComposeForm uiComposeForm = popupAction.activate(UIComposeForm.class, 850) ;
+        uiComposeForm.init(email) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;       
+      }
+    }
+  }
+  
 }

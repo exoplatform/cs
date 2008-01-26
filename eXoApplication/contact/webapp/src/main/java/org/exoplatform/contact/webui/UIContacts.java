@@ -515,7 +515,9 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
       UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
-      UIContactPreviewForm uiContactPreviewForm = popupAction.activate(UIContactPreviewForm.class, 700) ; 
+      UIPopupContainer uiPopupContainer = popupAction.activate(UIPopupContainer.class, 700) ;
+      uiPopupContainer.setId("ContactDetails") ;  
+      UIContactPreviewForm uiContactPreviewForm = uiPopupContainer.addChild(UIContactPreviewForm.class, null, null) ; 
       uiContactPreviewForm.setContact(uiContacts.contactMap.get(contactId)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;  
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
@@ -717,10 +719,13 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   static public class SendEmailActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource() ;
-      String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
+      String objectId = event.getRequestContext().getRequestParameter(OBJECTID);
       String emails = null ;
-      if (!ContactUtils.isEmpty(contactId)) {
-        emails = uiContacts.contactMap.get(contactId).getEmailAddress() ;
+      
+      if (!ContactUtils.isEmpty(objectId)) {
+        if (uiContacts.contactMap.containsKey(objectId))
+          emails = uiContacts.contactMap.get(objectId).getEmailAddress() ;
+        else emails = objectId ;
       } else {
         List<String> contactIds = uiContacts.getCheckedContacts() ;
         if (contactIds.size() < 1) {

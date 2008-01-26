@@ -65,7 +65,6 @@ import org.exoplatform.webui.organization.UIGroupMembershipSelector;
 })
 
 public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopupComponent, UISelectComponent {
-
   private UIComponent uiComponent ;
   private String type_ = null ;
   private List selectedGroup_ ;
@@ -137,21 +136,10 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
     }
   }
 
-  public void activate() throws Exception {
-    // TODO Auto-generated method stub
-
-  }
-
-  public void deActivate() throws Exception {
-    // TODO Auto-generated method stub
-  }
-  public void setType(String type) {
-    this.type_ = type;
-  }
-
-  public String getType() {
-    return type_;
-  }
+  public void activate() throws Exception { }
+  public void deActivate() throws Exception { }
+  public void setType(String type) { this.type_ = type; }
+  public String getType() { return type_; }
   
   static  public class SelectMembershipActionListener extends EventListener<UIGroupSelector> {   
     public void execute(Event<UIGroupSelector> event) throws Exception {
@@ -164,8 +152,6 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      
-      
       UIGroupSelector uiGroupSelector = event.getSource();
       UIPopupContainer uiPopupContainer = uiGroupSelector.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiPopup = uiPopupContainer.getChild(UIPopupAction.class) ;

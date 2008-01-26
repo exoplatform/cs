@@ -65,8 +65,7 @@ public class UIContactPreview extends UIComponent  {
         UIComposeForm uiComposeForm = popupAction.activate(UIComposeForm.class, 850) ;  
         uiComposeForm.init(email) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;  
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPreview.getParent()) ;
-        
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPreview.getParent()) ;        
       }
     }
   }

@@ -1,9 +1,10 @@
 <% 
+	uiform.begin()
 	def rcontext = _ctx.getRequestContext() ;
   rcontext.getJavascriptManager().importJavascript('eXo.contact.UIContactPortlet');
 	import org.exoplatform.contact.service.Contact;
 	import org.exoplatform.contact.ContactUtils;
-	uiform.begin()
+	
 %>
 <div class="UIContactPreview">
 <style type="text/css" media="print">
@@ -53,13 +54,13 @@
 										<div class="RightContent">
 											<div class="InfoItem">
 												<div class="InfoLabel1">Birthday:</div>
-												<% //println "aa:" + contact.getBirthday()%>
 												<div class="Info1"><%=(contact.getBirthday() == null ? "_" : contact.getBirthday())%></div>
 											</div>
 											<div class="InfoItem">
 												<div class="InfoLabel1">Email:</div>
 												<div class="Info1 Email">
-													<a href="<%=uicomponent.getParent().event("SendEmail", contact.getId())%>">
+													<a href="<%=uicomponent.event("SendEmail", contact.getEmailAddress())%>">
+						
 														<%=(ContactUtils.isEmpty(contact.getEmailAddress()) ? "_" : contact.getEmailAddress())%>
 													</a>
 												</div>

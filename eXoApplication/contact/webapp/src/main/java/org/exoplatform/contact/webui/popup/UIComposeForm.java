@@ -389,6 +389,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       serverConfig.setPassword("exoadmin") ;
       try {
         mailSvr.sendMessages(msgList, serverConfig);
+        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-succsessfuly", null)) ;
         uiChildPopup.deActivate() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
       }catch (Exception e) {
@@ -398,7 +399,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         e.printStackTrace() ;
         return ;
       }
-      uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-succsessfuly", null)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
     }
   }
@@ -406,9 +406,9 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   static public class DiscardChangeActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiForm = event.getSource() ;
-      UIContactPortlet uiPortlet = uiForm.getAncestorOfType(UIContactPortlet.class);
-      uiForm.resetFields() ;
-      uiPortlet.cancelAction();
+      UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
+      uiPopupAction.deActivate() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
   static public class AttachmentActionListener extends EventListener<UIComposeForm> {

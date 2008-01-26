@@ -70,7 +70,9 @@ UIContactPortlet.prototype.addressBookCallback = function(evt) {
 
 	if (isPublic && (isPublic.toLowerCase() == "2")) {
 		for(var i = 0 ; i < itemLength ; i ++) {
-			if (DOMUtil.hasClass(menuItems[i],"ShareIcon") || DOMUtil.hasClass(menuItems[i],"EditActionIcon") || DOMUtil.hasClass(menuItems[i],"DeleteIcon") || DOMUtil.hasClass(menuItems[i],"ImportContactIcon")) {
+			if (DOMUtil.hasClass(menuItems[i],"ShareIcon") || DOMUtil.hasClass(menuItems[i],"EditActionIcon")
+			|| DOMUtil.hasClass(menuItems[i],"DeleteIcon") || DOMUtil.hasClass(menuItems[i],"ImportContactIcon")
+			|| DOMUtil.hasClass(menuItems[i],"ContactIcon")) {
 				if (menuItems[i].parentNode.getAttribute("oldHref")) continue ;
 				menuItems[i].parentNode.setAttribute("oldHref", menuItems[i].parentNode.href) ;
 				menuItems[i].parentNode.href = "javascript: void(0) ;" ;
@@ -80,7 +82,8 @@ UIContactPortlet.prototype.addressBookCallback = function(evt) {
 		}
 	} else if(isPublic.toLowerCase() == "1") {
 			for(var i = 0 ; i < itemLength ; i ++) {
-				if (DOMUtil.hasClass(menuItems[i],"ShareIcon") || DOMUtil.hasClass(menuItems[i],"ImportAddressIcon") || DOMUtil.hasClass(menuItems[i],"ImportContactIcon")) {
+				if (DOMUtil.hasClass(menuItems[i],"ShareIcon") || DOMUtil.hasClass(menuItems[i],"ImportAddressIcon") 
+				|| DOMUtil.hasClass(menuItems[i],"ImportContactIcon")|| DOMUtil.hasClass(menuItems[i],"ContactIcon")) {
 					if (menuItems[i].parentNode.getAttribute("oldHref")) continue ;
 					menuItems[i].parentNode.setAttribute("oldHref", menuItems[i].parentNode.href) ;
 					menuItems[i].parentNode.href = "javascript: void(0) ;" ;

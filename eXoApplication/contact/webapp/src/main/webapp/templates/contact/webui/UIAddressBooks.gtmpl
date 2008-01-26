@@ -60,10 +60,7 @@
 			<div class="Label">Personal Address Book</div>
       <div style="clear: left"><span></span></div>
 		</div>
-		<%  
-			
-		
-		
+		<%
 			ContactGroup[] contactGroups = uicomponent.getGroups();
 			for(contactGroup in contactGroups) {
 				String groupId = contactGroup.getId() ;

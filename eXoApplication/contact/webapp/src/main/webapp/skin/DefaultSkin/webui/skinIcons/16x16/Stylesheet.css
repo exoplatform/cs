@@ -144,3 +144,6 @@
 .UIContactPortlet .SelectMemberIcon {
 	background:transparent url(icons/SmallMemberIcon.gif) no-repeat;
 }
+.UIContactPortlet .SelectGroupIcon {
+	background:transparent url(icons/SmallGroupIcon.gif) no-repeat;
+}

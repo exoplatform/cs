@@ -491,7 +491,7 @@
 		  		  						else subEmail = email ;			  		  				
 			  		  			%>
 			  		  		<span class="InfoContent MailIcon" title="<%=(email == null ? "" : email) %>">
-			  		  			<a href="#">  		  				
+			  		  			<a href="<%=uicomponent.event("SendEmail", email)%>">  		  				
 			  		  				<%=(email == null ? "_" : subEmail)%>
 			  		  			</a>
 			  		  		</span> 
