@@ -27,6 +27,7 @@ import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.PathNotFoundException;
 import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.query.Query;
@@ -64,17 +65,18 @@ public class JCRDataStorage{
 
   private Node getMailHomeNode(SessionProvider sProvider, String username) throws Exception {
     Node userApp = nodeHierarchyCreator_.getUserApplicationNode(sProvider, username) ;
-  	if(userApp.hasNode(MAIL_SERVICE)) return userApp.getNode(MAIL_SERVICE) ;
-    else {
-      userApp.addNode(MAIL_SERVICE, Utils.NT_UNSTRUCTURED) ;
+    Node mailNode = null;
+    try {
+      mailNode = userApp.getNode(MAIL_SERVICE) ;
+    } catch(PathNotFoundException e) {
+      mailNode = userApp.addNode(MAIL_SERVICE, Utils.NT_UNSTRUCTURED) ;
       userApp.save();
     }
-  	return userApp.getNode(MAIL_SERVICE) ;
+    return mailNode ;
   }
   
   public Account getAccountById(SessionProvider sProvider, String username, String id) throws Exception {
     Node mailHome = getMailHomeNode(sProvider, username) ;
-    //  if an account is found, creates the object
     if(mailHome.hasNode(id)) {
       return getAccount(mailHome.getNode(id)) ;
     }
@@ -82,16 +84,12 @@ public class JCRDataStorage{
   }
   
   public List<Account> getAccounts(SessionProvider sProvider, String username) throws Exception {
-    //  get all accounts of the specified user
     List<Account> accounts = new ArrayList<Account>();
     Node homeNode = getMailHomeNode(sProvider, username);
     NodeIterator it = homeNode.getNodes();
     while (it.hasNext()) {
-      // browse the accounts and add them to the return list
       Node node = it.nextNode();
-      if (node.isNodeType("exo:account")) {
-        accounts.add(getAccount(node));
-      }
+      if (node.isNodeType("exo:account")) accounts.add(getAccount(node));
     }
     return accounts ;
   }
@@ -338,8 +336,12 @@ public class JCRDataStorage{
   public void saveMailSetting(SessionProvider sProvider, String username, MailSetting newSetting) throws Exception {
     Node mailHome = getMailHomeNode(sProvider, username) ;
     Node settingNode = null;
-    if (mailHome.hasNode(Utils.KEY_MAIL_SETTING)) settingNode = mailHome.getNode(Utils.KEY_MAIL_SETTING);
-    else settingNode = mailHome.addNode(Utils.KEY_MAIL_SETTING, Utils.EXO_MAIL_SETTING);
+    try {
+      settingNode = mailHome.getNode(Utils.KEY_MAIL_SETTING) ;
+    } catch(PathNotFoundException e) {
+      settingNode = mailHome.addNode(Utils.KEY_MAIL_SETTING, Utils.EXO_MAIL_SETTING) ;
+      mailHome.save();
+    }
    
     if (settingNode != null) {
       settingNode.setProperty(Utils.EXO_NUMBER_OF_CONVERSATION, newSetting.getShowNumberMessage());
@@ -352,7 +354,7 @@ public class JCRDataStorage{
       settingNode.setProperty(Utils.EXO_PREFIX_MESSAGE_WITH, newSetting.getPrefixMessageWith());
       settingNode.setProperty(Utils.EXO_SAVE_SENT_MESSAGE, newSetting.saveMessageInSent());
       // saves change
-      mailHome.getSession().save();
+      settingNode.save();
     }
   }
   
@@ -653,30 +655,39 @@ public class JCRDataStorage{
   }
 
   public Node getMessageHome(SessionProvider sProvider, String username, String accountId) throws Exception {
-    Node accountHome = getMailHomeNode(sProvider, username).getNode(accountId);
-    if(!accountHome.hasNode(Utils.KEY_MESSAGE)) {
-    	accountHome.addNode(Utils.KEY_MESSAGE, Utils.NT_UNSTRUCTURED) ;
-    	accountHome.save() ;
+    Node accountHome = getMailHomeNode(sProvider, username).getNode(accountId) ;
+    Node msgHome = null ;
+    try {
+      msgHome = accountHome.getNode(Utils.KEY_MESSAGE) ;
+    } catch(PathNotFoundException e) {
+      msgHome = accountHome.addNode(Utils.KEY_MESSAGE, Utils.NT_UNSTRUCTURED) ;
+      accountHome.save() ;
     }
-    return accountHome.getNode(Utils.KEY_MESSAGE) ;
+    return msgHome ;
   }
 
   public Node getFolderHome(SessionProvider sProvider, String username, String accountId) throws Exception {
-    Node accountHome = getMailHomeNode(sProvider, username).getNode(accountId);
-    if (!accountHome.hasNode(Utils.KEY_FOLDERS)) {
-    	accountHome.addNode(Utils.KEY_FOLDERS, Utils.NT_UNSTRUCTURED);
-    	accountHome.save() ;
+    Node accountHome = getMailHomeNode(sProvider, username).getNode(accountId) ;
+    Node folderHome = null ;
+    try {
+      folderHome = accountHome.getNode(Utils.KEY_FOLDERS) ;
+    } catch(PathNotFoundException e) {
+      folderHome = accountHome.addNode(Utils.KEY_FOLDERS, Utils.NT_UNSTRUCTURED);
+      accountHome.save() ;
     }
-    return accountHome.getNode(Utils.KEY_FOLDERS);    
+    return folderHome ;    
   }
 
   public Node getTagHome(SessionProvider sProvider, String username, String accountId) throws Exception {
-    Node accountNode = getMailHomeNode(sProvider, username).getNode(accountId);
-    if(!accountNode.hasNode(Utils.KEY_TAGS)) {
-    	accountNode.addNode(Utils.KEY_TAGS, Utils.NT_UNSTRUCTURED) ;
-    	accountNode.save() ;
-    }
-    return accountNode.getNode(Utils.KEY_TAGS) ;     
+    Node accountHome = getMailHomeNode(sProvider, username).getNode(accountId) ;
+    Node tagHome = null ;
+    try {
+      tagHome = accountHome.getNode(Utils.KEY_TAGS) ;
+    } catch(PathNotFoundException e) {
+      tagHome = accountHome.addNode(Utils.KEY_TAGS, Utils.NT_UNSTRUCTURED) ;
+      accountHome.save() ;
+    }    
+    return tagHome ;   
   }
 
   public void addTag(SessionProvider sProvider, String username, String accountId, List<String> messageIds, List<Tag> tagList)
