@@ -38,6 +38,7 @@ import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
+import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UINavigationContainer;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -445,22 +446,23 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         return ;
       }
       try {
-        MailSetting mailSetting = mailSvr.getMailSetting(SessionsUtils.getSessionProvider(), usename);
-        if (mailSetting.saveMessageInSent()) {
-          message.setFolders(new String[]{Utils.createFolderId(accountId, Utils.FD_SENT, false)}) ;
-        }
+        MailSetting setting = mailSvr.getMailSetting(SessionsUtils.getSessionProvider(), usename);
+        if (setting.saveMessageInSent()) 
+          message.setFolders(new String[]{ Utils.createFolderId(accountId, Utils.FD_SENT, false) }) ;
         if (uiForm.fromDrafts()) {
           Folder drafts = mailSvr.getFolder(SessionsUtils.getSessionProvider(), usename, accountId, Utils.createFolderId(accountId, Utils.FD_DRAFTS, false));
           drafts.setTotalMessage(drafts.getTotalMessage() - 1);
           mailSvr.saveFolder(SessionsUtils.getSessionProvider(), usename, accountId, drafts);
-          mailSvr.saveMessage(SessionsUtils.getSessionProvider(), usename, accountId, message, false) ;      
+          mailSvr.removeMessage(SessionsUtils.getSessionProvider(), usename, accountId, message.getId());  
         } else {
           mailSvr.saveMessage(SessionsUtils.getSessionProvider(), usename, accountId, message, true) ;    
         }
+        UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
+        uiMessageList.updateList();
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList) ;
       } catch (Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.save-sent-error", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        e.printStackTrace() ;
         uiChildPopup.deActivate() ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer) ;
@@ -471,7 +473,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   static public class SaveDraftActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiForm = event.getSource() ;
-      //TODO review code and use only one SessionProvider, reduce call mailservice for performance problem 
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
       UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class) ;
