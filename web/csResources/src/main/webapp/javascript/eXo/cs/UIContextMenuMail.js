@@ -159,7 +159,6 @@ UIContextMenuMail.prototype.show = function(evt) {
       var uiWindow = eXo.core.DOMUtil.findAncestorByClass(document.getElementById(UIContextMenuMail.portletName), "UIWindow") ;
       top -= uiWindow.offsetTop ;
       left -= (uiWindow.offsetLeft)  ;
-      window.status = extraX ;
 		}
 		UIContextMenuMail.menuElement.style.left = left + "px" ;
 		UIContextMenuMail.menuElement.style.top = top + "px" ;
