@@ -213,11 +213,15 @@ public class UIFolderContainer extends UIContainer {
       filter.setAccountId(accountId);
       List<String> messageIds = mailSrv.getMessageIds(SessionsUtils.getSessionProvider(), username, filter);
       mailSrv.removeMessage(SessionsUtils.getSessionProvider(), username, accountId, messageIds);
-      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
+      UIMessageArea uiMsgArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class);
+      UIMessageList uiMessageList = uiMsgArea.getChild(UIMessageList.class) ;
+      UIMessagePreview uiMsgPreview = uiMsgArea.getChild(UIMessagePreview.class);
       UIFolderContainer uiFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
       uiMessageList.updateList();
+      if (messageIds.contains(uiMsgPreview.getMessage().getId()))
+         uiMsgPreview.setMessage(null);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgArea) ;
     }
   }
   
