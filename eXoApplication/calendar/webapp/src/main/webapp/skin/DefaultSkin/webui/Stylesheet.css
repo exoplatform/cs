@@ -578,8 +578,7 @@
 }
 
 .UIDayView .EventAllDay .EventContainerBorder .EventContainerBar{
-	width: 100%;
-	-moz-user-select : none ;
+	width: 100%;-moz-user-select : none ;
 }
 
 .UIDayView .EventAllDay .EventContainerBorder .EventContainer {
@@ -762,6 +761,7 @@
 	border-bottom: none;
 	-moz-user-select : none ;
 	cursor: move ;
+	overflow:hidden;
 }
 
 .UIWeekView .EventDayContent .EventContainer {

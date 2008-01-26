@@ -132,10 +132,7 @@
 									title = tf.format(event.getFromDateTime()) + "->" + tf.format(event.getToDateTime())+ ":&#013; " + event.summary ;
 									actionLink =  uicomponent.event("SaveEvent",event.getId()+"&calendarId="+event.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
                 %>
-                <div class="EventContainer EventAlldayContainer WeekViewEventBoxes $color" eventcat="$event.eventCategoryId"
-                  style="position: absolute; border: solid 1px grey;" caltype="$event.calType" eventid="$event.id"
-                  calid="$event.calendarId" starttime="$begindate" endtime="$enddate" style="height: 22px;"
-                  title="$title" actionlink="$actionLink">
+                <div class="EventContainer EventAlldayContainer WeekViewEventBoxes $color" eventcat="$event.eventCategoryId" style="position:absolute; border: solid 1px grey;" caltype="$event.calType" eventid="$event.id" calid="$event.calendarId" starttime="$begindate" endtime="$enddate"  title="$title" actionlink="$actionLink">
                   <div class="$leftClass">
                     <span></span>
                   </div>
@@ -192,7 +189,8 @@
           </div>
           <div class="EventContainerBar EventTitle" title="<%=uiform.getLabel('moveEvent')%>">
             <p unselectable="on">
-              $begin -> $end</p>
+              $begin 
+            </p>
           </div>
           <div style="clear: left;">
             <span></span>
