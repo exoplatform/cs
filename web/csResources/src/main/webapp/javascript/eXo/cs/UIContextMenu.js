@@ -123,7 +123,9 @@ UIContextMenu.prototype.hasChild = function(root, obj) {
 	if(typeof(obj) == "string") obj = document.getElementById(obj) ;
 	var children = eXo.core.DOMUtil.findChildrenByClass(root, "div", "UIRightClickPopupMenu") ;
 	var len = children.length ;
-	if (len > 0) return children ;
+  for(var i = 0 ; i < len ; i ++) {
+  	if (children[i].id == obj.id) return children[i] ;    
+  }
 	return false ;
 } ;
 
@@ -140,10 +142,10 @@ UIContextMenu.prototype.show = function(evt) {
 		}
 		var extraX = (document.getElementById("UIControlWorkspace")) ? document.getElementById("UIControlWorkspace").offsetWidth : 0 ;
 		var extraY = 0 ;
-		if (UIContextMenu.menuElement.offsetParent) {
-			extraX -= eXo.core.Browser.findPosX(UIContextMenu.menuElement.offsetParent) ;
-			extraY = eXo.core.Browser.findPosY(UIContextMenu.menuElement.offsetParent) ;
-		}
+//		if (UIContextMenu.menuElement.offsetParent) {
+//			extraX += eXo.core.Browser.findPosX(UIContextMenu.menuElement.offsetParent) ;
+//			extraY = eXo.core.Browser.findPosY(UIContextMenu.menuElement.offsetParent) ;
+//		}
 		var top = eXo.core.Browser.findMouseYInPage(_e) - extraY ;
 		var left = eXo.core.Browser.findMouseXInPage(_e) - extraX ;
 		eXo.core.DOMUtil.listHideElements(UIContextMenu.menuElement) ;
@@ -162,27 +164,14 @@ UIContextMenu.prototype.show = function(evt) {
 		UIContextMenu.menuElement.style.left = left + "px" ;
 		UIContextMenu.menuElement.style.top = top + "px" ;
 		UIContextMenu.menuElement.style.display = 'block' ;
-		eXo.core.DOMUtil.addClass(UIContextMenu.menuElement, UIContextMenu.portletName) ;
+		//eXo.core.DOMUtil.addClass(UIContextMenu.menuElement, UIContextMenu.portletName) ;
 		UIContextMenu.menuElement.onmouseover = UIContextMenu.autoHide ;
 		UIContextMenu.menuElement.onmouseout = UIContextMenu.autoHide ;		
-		//if (!UIContextMenu.IE) {
-			/* Clean up cache menu in body */
-//			try{				
-//				if(UIContextMenu.hasChild(document.body, menuElementId)) {
-//					var popup = UIContextMenu.hasChild(document.body, menuElementId) ;
-//					var len = popup.length ;
-//					for(var i = 0 ; i < len ; i++) {
-//						document.body.removeChild(popup[i]) ;
-//					}
-//				}
-//			} catch(e) {
-//				alert(e.message) ;		
-//			}
-      
-			/* ---------------------- */
-			//document.body.appendChild(UIContextMenu.menuElement) ;
-
-		///}
+		if (!UIContextMenu.IE) {			
+      var portlet = document.getElementById(UIContextMenu.portletName) ;
+      if(UIContextMenu.hasChild(portlet, menuElementId)) portlet.removeChild(UIContextMenu.hasChild(portlet, menuElementId)) ;
+      portlet.appendChild(UIContextMenu.menuElement) ;
+		}
 		return false ;
 	}
 	return UIContextMenu.getReturnValue(_e) ;

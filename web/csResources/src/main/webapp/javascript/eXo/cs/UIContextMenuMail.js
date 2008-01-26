@@ -123,7 +123,9 @@ UIContextMenuMail.prototype.hasChild = function(root, obj) {
 	if(typeof(obj) == "string") obj = document.getElementById(obj) ;
 	var children = eXo.core.DOMUtil.findChildrenByClass(root, "div", "UIRightClickPopupMenu") ;
 	var len = children.length ;
-	if (len > 0) return children ;
+  for(var i = 0 ; i < len ; i ++) {
+  	if (children[i].id == obj.id) return children[i] ;    
+  }
 	return false ;
 } ;
 
@@ -140,10 +142,10 @@ UIContextMenuMail.prototype.show = function(evt) {
 		}
 		var extraX = (document.getElementById("UIControlWorkspace")) ? document.getElementById("UIControlWorkspace").offsetWidth : 0 ;
 		var extraY = 0 ;
-		if (UIContextMenuMail.menuElement.offsetParent) {
-			extraX -= eXo.core.Browser.findPosX(UIContextMenuMail.menuElement.offsetParent) ;
-			extraY = eXo.core.Browser.findPosY(UIContextMenuMail.menuElement.offsetParent) ;
-		}
+//		if (UIContextMenuMail.menuElement.offsetParent) {
+//			extraX += eXo.core.Browser.findPosX(UIContextMenuMail.menuElement.offsetParent) ;
+//			extraY = eXo.core.Browser.findPosY(UIContextMenuMail.menuElement.offsetParent) ;
+//		}
 		var top = eXo.core.Browser.findMouseYInPage(_e) - extraY ;
 		var left = eXo.core.Browser.findMouseXInPage(_e) - extraX ;
 		eXo.core.DOMUtil.listHideElements(UIContextMenuMail.menuElement) ;
@@ -157,31 +159,19 @@ UIContextMenuMail.prototype.show = function(evt) {
       var uiWindow = eXo.core.DOMUtil.findAncestorByClass(document.getElementById(UIContextMenuMail.portletName), "UIWindow") ;
       top -= uiWindow.offsetTop ;
       left -= (uiWindow.offsetLeft)  ;
+      window.status = extraX ;
 		}
 		UIContextMenuMail.menuElement.style.left = left + "px" ;
 		UIContextMenuMail.menuElement.style.top = top + "px" ;
 		UIContextMenuMail.menuElement.style.display = 'block' ;
-		eXo.core.DOMUtil.addClass(UIContextMenuMail.menuElement, UIContextMenuMail.portletName) ;
 		UIContextMenuMail.menuElement.onmouseover = UIContextMenuMail.autoHide ;
 		UIContextMenuMail.menuElement.onmouseout = UIContextMenuMail.autoHide ;		
-//		if (!UIContextMenuMail.IE) {
-//			/* Clean up cache menu in body */
-//			try{				
-//				if(UIContextMenuMail.hasChild(document.body, menuElementId)) {
-//					var popup = UIContextMenuMail.hasChild(document.body, menuElementId) ;
-//					var len = popup.length ;
-//					for(var i = 0 ; i < len ; i++) {
-//						document.body.removeChild(popup[i]) ;
-//					}
-//				}
-//			} catch(e) {
-//				alert(e.message) ;		
-//			}
-//			/* ---------------------- */
-//
-//			//document.body.appendChild(tmp) ;
-//      //document.body.appendChild(UIContextMenuMail.menuElement) ;
-//		}
+		if (!UIContextMenuMail.IE) {			
+      var portlet = document.getElementById(UIContextMenuMail.portletName) ;
+      if(UIContextMenuMail.hasChild(portlet, menuElementId)) portlet.removeChild(UIContextMenuMail.hasChild(portlet, menuElementId)) ;
+      portlet.appendChild(UIContextMenuMail.menuElement) ;
+      //else UIContextMenuMail.menuElement = UIContextMenuMail.hasChild(portlet, menuElementId) ;
+		}
 		return false ;
 	}
 	return UIContextMenuMail.getReturnValue(_e) ;

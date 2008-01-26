@@ -1036,10 +1036,8 @@ UICalendarPortlet.prototype.swapMenu = function(oldmenu, clickobj) {
 	//if(document.getElementById("tmpMenuElement")) document.body.removeChild(document.getElementById("tmpMenuElement")) ; //document.getElementById(UICalendarPortlet.portletName).removeChild(document.getElementById("tmpMenuElement")) ;
   if(document.getElementById("tmpMenuElement")) document.getElementById(UICalendarPortlet.portletName).removeChild(document.getElementById("tmpMenuElement")) ;
 	var tmpMenuElement = oldmenu.cloneNode(true) ;
-	DOMUtil.addClass(tmpMenuElement, "UICalendarPortlet") ;
 	tmpMenuElement.setAttribute("id","tmpMenuElement") ;
 	UICalendarPortlet.menuElement = tmpMenuElement ;
-	//document.body.appendChild(tmpMenuElement) ;//document.getElementById(UICalendarPortlet.portletName).appendChild(tmpMenuElement) ;
   document.getElementById(UICalendarPortlet.portletName).appendChild(tmpMenuElement) ;	
 	UICalendarPortlet.menuElement.style.top = menuY + "px" ;
 	UICalendarPortlet.menuElement.style.left = menuX + "px" ;	
@@ -1052,7 +1050,6 @@ UICalendarPortlet.prototype.swapMenu = function(oldmenu, clickobj) {
       menuY -= (mnuBottom - widBottom - clickobj.offsetHeight - uiWindow.scrollTop) ;
       UICalendarPortlet.menuElement.style.top = menuY + "px" ;
     }
-    window.status = mnuBottom + "-" + widBottom  + "-" + uiRightClick.offsetParent.className + "-" + uiWindow.offsetParent.className ;
   }  
 
 	//UICalendarPortlet.menuElement = null ;
