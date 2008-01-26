@@ -490,8 +490,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         } else {
           mailSvr.saveMessage(SessionsUtils.getSessionProvider(), usename, accountId, message, false) ;
         }
-      }
-      catch (Exception e) {
+      } catch (Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.save-draft-error", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         e.printStackTrace() ;

@@ -268,6 +268,7 @@ public class UIMessageList extends UIForm {
       uiComposeForm.init(accountId, msg, uiComposeForm.MESSAGE_IN_DRAFT);
       uiPopupContainer.addChild(uiComposeForm) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;  
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
     }
   }
   
