@@ -84,19 +84,6 @@ public class UIMessagePreview extends UIComponent {
     selectedMessage_ = msg ;
   }
   
-  public List<Message> getConversations() throws Exception {
-    List<Message> msgList = new ArrayList<Message>();
-    String username = MailUtils.getCurrentUser();
-    String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-    MailService mailSrv = MailUtils.getMailService();
-    if (selectedMessage_.isRootConversation() && (selectedMessage_.getMessageIds() != null && selectedMessage_.getMessageIds().length > 0)) {
-      for (int i=0; i < selectedMessage_.getMessageIds().length; i++) {
-        msgList.add(mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, selectedMessage_.getMessageIds()[i]));
-      }
-    }
-    return msgList ;
-  }
-  
   public DownloadService getDownloadService() { 
     return getApplicationComponent(DownloadService.class) ; 
   }
@@ -220,10 +207,6 @@ public class UIMessagePreview extends UIComponent {
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       String username = MailUtils.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      List<String> msgList = new ArrayList<String>();
-      for (Message message : uiPreview.getConversations()) {
-        msgList.add(message.getId());
-      }
        
       Message msg = uiMessageList.messageList_.get(msgId);
       mailSrv.moveMessages(SessionsUtils.getSessionProvider(), username, accountId, msgId, msg.getFolders()[0],  Utils.createFolderId(accountId, Utils.FD_TRASH, false));

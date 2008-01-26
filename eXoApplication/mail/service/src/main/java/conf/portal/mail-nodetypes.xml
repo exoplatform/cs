@@ -169,22 +169,6 @@
         protected="false" multiple="false">
         <valueConstraints/>        
       </propertyDefinition>
-      <propertyDefinition name="exo:root" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
-        protected="false" multiple="false">
-        <valueConstraints/>        
-      </propertyDefinition>
-      <propertyDefinition name="exo:isRoot" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY"
-        protected="false" multiple="false">
-        <valueConstraints/>        
-      </propertyDefinition>
-      <propertyDefinition name="exo:addresses" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
-        protected="false" multiple="true">
-        <valueConstraints/>        
-      </propertyDefinition>
-      <propertyDefinition name="exo:messageIds" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
-        protected="false" multiple="true">
-        <valueConstraints/>        
-      </propertyDefinition>
     </propertyDefinitions>    
     <childNodeDefinitions>
       <childNodeDefinition name="*" defaultPrimaryType="nt:file" autoCreated="false" mandatory="false"

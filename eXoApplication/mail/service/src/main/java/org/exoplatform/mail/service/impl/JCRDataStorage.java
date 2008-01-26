@@ -220,26 +220,6 @@ public class JCRDataStorage{
       msg.setFolders(folders);
     }
     
-    // Use for conversation
-    if (messageNode.hasProperty(Utils.EXO_ROOT)) msg.setRoot(messageNode.getProperty(Utils.EXO_ROOT).getString()) ;
-    if (messageNode.hasProperty(Utils.EXO_ISROOT)) msg.setIsRootConversation(messageNode.getProperty(Utils.EXO_ISROOT).getBoolean());
-    if (messageNode.hasProperty(Utils.EXO_ADDRESSES)) {
-      Value[] propAddresses = messageNode.getProperty(Utils.EXO_ADDRESSES).getValues();
-      String[] addresses = new String[propAddresses.length];
-      for (int i = 0; i < propAddresses.length; i++) {
-        addresses[i] = propAddresses[i].getString();
-      }
-      msg.setAddresses(addresses);
-    }
-    if (messageNode.hasProperty(Utils.EXO_MESSAGEIDS)) {
-      Value[] propMessageIds = messageNode.getProperty(Utils.EXO_MESSAGEIDS).getValues();
-      String[] messageIds = new String[propMessageIds.length];
-      for (int i = 0; i < propMessageIds.length; i++) {
-        messageIds[i] = propMessageIds[i].getString();
-      }
-      msg.setMessageIds(messageIds);
-    }
-    
     NodeIterator msgAttachmentIt = messageNode.getNodes();
     List<Attachment> attachments = new ArrayList<Attachment>();
     while (msgAttachmentIt.hasNext()) {
@@ -280,47 +260,7 @@ public class JCRDataStorage{
 
   public void removeMessage(SessionProvider sProvider, String username, String accountId, String messageId) throws Exception {
     Node msgHomeNode = getMessageHome(sProvider, username, accountId);
-    Node msgNode = null;
-    if (msgHomeNode.hasNode(messageId)) msgNode = msgHomeNode.getNode(messageId) ;
-    
-    // For conversation
-    boolean isRoot = msgNode.getProperty(Utils.EXO_ISROOT).getBoolean();
-    if (isRoot) {
-      if (msgNode.hasProperty(Utils.EXO_MESSAGEIDS)) {
-        Value[] propMessageIds = msgNode.getProperty(Utils.EXO_MESSAGEIDS).getValues();
-        List<String> messageIds = new ArrayList<String>();
-        for (int i = 0; i < propMessageIds.length; i++) {
-          String msgId  = propMessageIds[i].getString();
-          messageIds.add(msgId);
-        }
-        messageIds.remove(messageId);
-        if (messageIds.size() > 0) {
-          Node newRoot = msgHomeNode.getNode(messageIds.get(messageIds.size() - 1));
-          newRoot.setProperty(Utils.EXO_ISROOT, true);
-          messageIds.remove(0);
-          newRoot.setProperty(Utils.EXO_ADDRESSES, msgNode.getProperty(Utils.EXO_ADDRESSES).getValues());
-          newRoot.setProperty(Utils.EXO_MESSAGEIDS, messageIds.toArray(new String[]{}));
-          for (String msgId : messageIds) {
-            Node conversation = msgHomeNode.getNode(msgId);
-            conversation.setProperty(Utils.EXO_ROOT, newRoot.getProperty(Utils.EXO_ID).getString());
-          }
-        }
-      }
-      msgNode.remove();
-    } else {
-      Node rootNode = null ;
-      rootNode = msgHomeNode.getNode(msgNode.getProperty(Utils.EXO_ROOT).getString()) ;
-      msgNode.remove() ;
-      if (rootNode.hasProperty(Utils.EXO_MESSAGEIDS)) {
-        Value[] propMessageIds = rootNode.getProperty(Utils.EXO_MESSAGEIDS).getValues();
-        List<String> messageIds = new ArrayList<String>();
-        for (int i = 0; i < propMessageIds.length; i++) {
-          String msgId  = propMessageIds[i].getString();
-          if (!msgId.equals(messageId))  messageIds.add(msgId);
-        }
-        rootNode.setProperty(Utils.EXO_MESSAGEIDS, messageIds.toArray(new String[]{}));
-      }
-    }
+    if (msgHomeNode.hasNode(messageId)) msgHomeNode.getNode(messageId).remove() ;
     msgHomeNode.getSession().save();
   }
 
@@ -449,13 +389,6 @@ public class JCRDataStorage{
       nodeMsg.setProperty(Utils.EXO_TAGS, tags);
       String[] folders = message.getFolders();
       nodeMsg.setProperty(Utils.EXO_FOLDERS, folders);
-      
-      nodeMsg.setProperty(Utils.EXO_ISROOT, message.isRootConversation());
-      nodeMsg.setProperty(Utils.EXO_ROOT, message.getRoot());
-      String[] addresses = message.getAddresses();
-      nodeMsg.setProperty(Utils.EXO_ADDRESSES, addresses);
-      String[] messageIds = message.getMessageIds();
-      nodeMsg.setProperty(Utils.EXO_MESSAGEIDS, messageIds);
       if (isNew) {
         List<Attachment> attachments = message.getAttachments();
         if(attachments != null) { 
@@ -1006,72 +939,5 @@ public class JCRDataStorage{
         }  
       }
     } 
-  }
-  
-  public Message groupConversation(SessionProvider sProvider, String username, String accountId, Message newMsg) throws Exception {
-    Node homeMsg = getMessageHome(sProvider, username, accountId);
-    Session sess = getMailHomeNode(sProvider, username).getSession();
-    QueryManager qm = sess.getWorkspace().getQueryManager();
-    MessageFilter filter = new MessageFilter("");
-    filter.setAccountPath(homeMsg.getPath()) ;
-    filter.setAccountId(accountId);
-    filter.setSubjectCondition(Utils.CONDITION_IS);
-    String subject = newMsg.getSubject() ;
-    if (subject.indexOf("Re:") == 0) subject = subject.substring(3, subject.length()).trim();
-    else if(subject.indexOf("Fwd:") == 0) subject = subject.substring(4, subject.length()).trim();
-    filter.setSubject(subject);
-    filter.setMemberOfConver(new String[]{ Utils.getAddresses(newMsg.getFrom())[0] });
-    boolean rootIsUnread = true; 
-    Message rootMsg = null;
-    String queryString = filter.getStatement();
-    Query query = qm.createQuery(queryString, Query.XPATH);
-    QueryResult result = query.execute();
-    NodeIterator it = result.getNodes();
-    String addressList = "";
-    if (newMsg.getFrom() != null) addressList += newMsg.getFrom();
-    if (newMsg.getMessageTo() != null) addressList += "," + newMsg.getMessageTo();
-    if (newMsg.getMessageCc() != null) addressList += "," + newMsg.getMessageCc();
-    if (newMsg.getMessageBcc() != null) addressList += "," + newMsg.getMessageBcc();
-    Map<String, String> newAddressMap = Utils.getAddressMap(addressList) ;
-    
-    if (it.hasNext()) {
-      Node node = it.nextNode();
-      rootMsg = getMessage(node);
-      if (!rootMsg.isUnread()) rootIsUnread = false ;
-      
-      Map<String, String> addressMap = new HashMap<String, String> () ;
-      if (rootMsg.getAddresses() != null && rootMsg.getAddresses().length > 0) 
-        for (String address : rootMsg.getAddresses()) addressMap.put(address, address);
-      
-      addressMap.putAll(newAddressMap);
-      
-      newMsg.setAddresses(addressMap.values().toArray(new String[]{}));
-      
-      if (rootMsg.getMessageIds() != null && rootMsg.getMessageIds().length > 0) {
-        int msgNumber = rootMsg.getMessageIds().length ;
-        String[] msgIds = new String[msgNumber + 1] ;
-        for (int i=0 ; i < msgNumber; i++) msgIds[i] = rootMsg.getMessageIds()[i] ;
-        msgIds[msgNumber] = newMsg.getId();
-        newMsg.setMessageIds(msgIds);
-      }
-      
-      node.setProperty(Utils.EXO_ISROOT, false) ;
-      node.setProperty(Utils.EXO_ISUNREAD, false) ; 
-      node.setProperty(Utils.EXO_ROOT, newMsg.getId()) ;
-      node.setProperty(Utils.EXO_ADDRESSES, new String[]{});
-      node.setProperty(Utils.EXO_MESSAGEIDS, new String[] {rootMsg.getId()}) ;
-      
-      for (String folderId : newMsg.getFolders()) {
-        Node folderNode = getFolderNodeById(sProvider, username, accountId, folderId) ;
-        if (rootMsg != null && (rootIsUnread)) 
-          folderNode.setProperty(Utils.EXO_UNREADMESSAGES, folderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() - 1) ;
-        if (rootMsg != null) 
-          folderNode.setProperty(Utils.EXO_TOTALMESSAGE , folderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() - 1) ;
-      }
-      
-      sess.save();
-    }
-    
-    return newMsg;
   }
 }

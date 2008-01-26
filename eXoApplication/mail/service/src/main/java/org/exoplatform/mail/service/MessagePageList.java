@@ -119,26 +119,6 @@ public class MessagePageList extends JCRPageList {
       msg.setFolders(folders);
     }
     
-   //  Use for conversation
-    if (messageNode.hasProperty(Utils.EXO_ROOT)) msg.setRoot(messageNode.getProperty(Utils.EXO_ROOT).getString()) ;
-    if (messageNode.hasProperty(Utils.EXO_ISROOT)) msg.setIsRootConversation(messageNode.getProperty(Utils.EXO_ISROOT).getBoolean());
-    if (messageNode.hasProperty(Utils.EXO_ADDRESSES)) {
-      Value[] propAddresses = messageNode.getProperty(Utils.EXO_ADDRESSES).getValues();
-      String[] addresses = new String[propAddresses.length];
-      for (int i = 0; i < propAddresses.length; i++) {
-        addresses[i] = propAddresses[i].getString();
-      }
-      msg.setAddresses(addresses);
-    }
-    if (messageNode.hasProperty(Utils.EXO_MESSAGEIDS)) {
-      Value[] propMessageIds = messageNode.getProperty(Utils.EXO_MESSAGEIDS).getValues();
-      String[] messageIds = new String[propMessageIds.length];
-      for (int i = 0; i < propMessageIds.length; i++) {
-        messageIds[i] = propMessageIds[i].getString();
-      }
-      msg.setMessageIds(messageIds);
-    }
-    
     NodeIterator msgAttachmentIt = messageNode.getNodes();
     List<Attachment> attachments = new ArrayList<Attachment>();
     while (msgAttachmentIt.hasNext()) {

@@ -459,7 +459,6 @@ public class MailServiceImpl implements MailService{
     node.setProperty(Utils.EXO_SIZE, msg.getSize());
     node.setProperty(Utils.EXO_ISUNREAD, true);
     node.setProperty(Utils.EXO_STAR, false);     
-    node.setProperty(Utils.EXO_ISROOT, true);
     
     node.setProperty(Utils.EXO_PRIORITY, getPriority(msg));
     
@@ -479,10 +478,6 @@ public class MailServiceImpl implements MailService{
       setPart(msg, node);
     }
     
-    node.setProperty(Utils.EXO_MESSAGEIDS, new String[] {newMsg.getId()});
-    node.setProperty(Utils.EXO_ADDRESSES, new String[] {});
-    node.setProperty(Utils.EXO_ROOT, newMsg.getId());
-  	
     Node folderHomeNode = storage_.getFolderHome(sProvider, username, accId) ;
     if (folderHomeNode.hasNode(folderId)) { 
       Node folderNode = folderHomeNode.getNode(folderId);

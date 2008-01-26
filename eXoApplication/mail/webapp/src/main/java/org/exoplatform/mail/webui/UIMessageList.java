@@ -210,51 +210,6 @@ public class UIMessageList extends UIForm {
     return messageList;
   }
   
-  public List<Message> getAppliedMessage() throws Exception {
-    List<Message> messageList = new ArrayList<Message>();
-    String username = MailUtils.getCurrentUser();
-    MailService mailSrv = MailUtils.getMailService();
-    for (Message msg : getCheckedMessage()) {
-      if (msg.getMessageIds() != null) {
-        for (int i = 0; i < msg.getMessageIds().length; i++) {
-          Message conversation ;
-          if (!msg.getMessageIds()[i].equals(msg.getId()))
-            conversation = mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId_, msg.getMessageIds()[i]);
-          else conversation = msg;
-          if (conversation != null) messageList.add(conversation);
-        }
-      }
-    }
-    return messageList;
-  }
-  
-  public List<Message> getConversations(Message msg) throws Exception {
-    List<Message> msgList = new ArrayList<Message>();
-    String username = MailUtils.getCurrentUser();
-    MailService mailSrv = MailUtils.getMailService();
-    if (msg.isRootConversation() && (msg.getMessageIds() != null && msg.getMessageIds().length > 0)) {
-      for (int i=0; i < msg.getMessageIds().length; i++) {
-        Message message = mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId_, msg.getMessageIds()[i]);
-        if (message != null) msgList.add(message) ;
-      }
-    } else if (msg.isRootConversation()) msgList.add(msg);
-    if (msgList.size() == 0) msgList.add(msg);
-    return msgList ;
-  }
-  
-  public List<String> getParticipators(Message msg) throws Exception {
-    String username = MailUtils.getCurrentUser();
-    MailService mailSrv = MailUtils.getMailService();
-    List<Message> msgList = getConversations(msg);
-    LinkedHashMap<String, String> participators = new LinkedHashMap<String, String>();
-    for (Message message : msgList) {
-      String personal = Utils.getPersonal(Utils.getInternetAddress(message.getFrom())[0]);
-      if (personal.equals(mailSrv.getAccountById(SessionsUtils.getSessionProvider(), username, accountId_).getUserDisplayName())) personal = "me";
-      participators.put(personal, personal);
-    }
-    return new ArrayList<String>(participators.values());
-  }
-  
   public List<Tag> getTags(Message msg) throws Exception {
     UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
     String username = uiPortlet.getCurrentUser() ;

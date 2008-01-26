@@ -337,7 +337,6 @@
       <%
           int i = 0;
     			for(Message msg : uicomponent.getMessageList()) {
-            if (msg.isRootConversation()) {
       			  String actionLink = uicomponent.event("SelectMessage", msg.getId());
       			  checkboxField = uicomponent.getChildById(msg.getId());
       			  String actionAddStar = uicomponent.event("AddStar", msg.getId());
@@ -428,7 +427,7 @@
     				%>
     				<td style="padding: 0px;" ><div class="text $priClass" title ><span></span></div></td>
        	 </tr>
-    		<% i++; }}%>
+    		<% i++; }%>
       	</tbody>
       <% } else {%>
         <tbody><tr><td colspan="10"><div class="MessageNotice SpliterResizableListArea" id="uiMessageListResizableArea">There are no messages !</div></td></tr></tbody>

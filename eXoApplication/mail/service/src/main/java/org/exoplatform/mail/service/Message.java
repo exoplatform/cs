@@ -43,11 +43,6 @@ public class Message extends MessageHeader {
   private boolean hasStar = false;
   private ServerConfiguration serverConfiguration;
   
-  private String root ;
-  private boolean isRootConversation = true ;
-  private String[] addresses ;
-  private String[] messageIds;
-  
   private String[] folders ;
   private String[] tags ;
   
@@ -113,16 +108,4 @@ public class Message extends MessageHeader {
     properties.put(key, value) ;
   }
   public Map<String, String> getProperties() { return properties ; }
-  
-  public boolean isRootConversation() { return isRootConversation ; }
-  public void setIsRootConversation(boolean b) { isRootConversation = b ; }
-  
-  public String getRoot() { return root ; }
-  public void setRoot(String r) { root = r ; }
-  
-  public String[] getAddresses() { return addresses; }
-  public void setAddresses(String[] arr) { addresses = arr ; }
-  
-  public String[] getMessageIds() { return messageIds; }
-  public void setMessageIds(String[] arr) { messageIds = arr; }
 }
