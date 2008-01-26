@@ -191,7 +191,7 @@
   <% /*Popup menu for the message*/ %>
   <div class="UIRightClickPopupMenu" id="UIMessagePopupMenu" eXoCallback="eXo.mail.UIMailPortlet.msgPopupMenuCallback">
     <div class="UIContextMenuContainer">
-      <div class="TopLeftRightClickPopupMenu" id="test">
+      <div class="TopLeftRightClickPopupMenu">
         <div class="TopRightRightClickPopupMenu">
           <div class="TopCenterRightClickPopupMenu"><span></span></div>
         </div>
