@@ -924,6 +924,7 @@ UICalendarPortlet.prototype.filterByCalendar = function() {
 			}
 		}
 	}
+  UICalendarPortlet.runFilterByCategory(UICalendarPortlet.filterSelect) ;
 	try {	//TODO: review order javascript file loading
 		if (document.getElementById("UIDayViewGrid")) UICalendarPortlet.showEvent() ;
 		if (document.getElementById("UIWeekViewGrid")) eXo.calendar.UIWeekView.init() ;
@@ -960,7 +961,34 @@ UICalendarPortlet.prototype.filterByCategory = function() {
 	if (document.getElementById("UIMonthView")) eXo.calendar.UICalendarMan.initMonth() ;
 	if (document.getElementById("UIDayViewGrid")) eXo.calendar.UICalendarPortlet.showEvent() ;
 	if (document.getElementById("UIWeekViewGrid")) {
-		eXo.calendar.UICalendarMan.GUIMan.init() ;
+		eXo.calendar.UICalendarMan.initWeek() ;
+		eXo.calendar.UIWeekView.init() ;
+	}
+} ;
+
+UICalendarPortlet.prototype.runFilterByCategory = function(selectobj) {
+	var uiCalendarViewContainer = document.getElementById("UICalendarViewContainer") ;
+	if (!uiCalendarViewContainer) return ;
+	var category = selectobj.options[selectobj.selectedIndex].value ;
+	var className = "EventBoxes" ;
+	if (document.getElementById("UIWeekViewGrid")) className = "WeekViewEventBoxes" ; // TODO : review event box gettting
+	var allEvents = eXo.core.DOMUtil.findDescendantsByClass(uiCalendarViewContainer, "div", className) ;
+	var events = eXo.calendar.UICalendarPortlet.getEventsForFilter(allEvents) ;
+	if (!events) return ;
+	var len = events.length ;
+	for(var i = 0 ; i < len ; i ++){
+		if (category == events[i].getAttribute("eventCat")) {
+			events[i].style.display = "block" ;
+		}
+		else if (category == "") {
+			events[i].style.display = "block" ;
+		}
+		else events[i].style.display = "none" ;
+	}
+	if (document.getElementById("UIMonthView")) eXo.calendar.UICalendarMan.initMonth() ;
+	if (document.getElementById("UIDayViewGrid")) eXo.calendar.UICalendarPortlet.showEvent() ;
+	if (document.getElementById("UIWeekViewGrid")) {
+		eXo.calendar.UICalendarMan.initWeek() ;
 		eXo.calendar.UIWeekView.init() ;
 	}
 } ;
@@ -1001,10 +1029,11 @@ UICalendarPortlet.prototype.checkCalendarFilter = function() {
 	for(var i = 0 ; i < len ; i ++) {		
 		this.runFilterByCalendar(checkbox[i].name, checkbox[i].checked) ;
 	}
+  this.runFilterByCategory(this.filterSelect) ;
 } ;
 
 UICalendarPortlet.prototype.checkCategoryFilter = function() {
-	if(this.filterSelect) eXo.calendar.UICalendarPortlet.filterByCategory(this.filterSelect) ;	
+	if(this.filterSelect) eXo.calendar.UICalendarPortlet.runFilterByCategory(this.filterSelect) ;	
 } ;
 
 /* EOF filter */
