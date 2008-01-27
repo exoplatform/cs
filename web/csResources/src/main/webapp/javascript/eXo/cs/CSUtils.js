@@ -126,7 +126,6 @@ Utils.prototype.getKeynum = function(event) {
 Utils.prototype.captureInput = function(input, action) {
   if(typeof(input) == "string") input = document.getElementById(input) ;
   input.onkeydown = eXo.cs.Utils.onEnter ;
-  this.action = action ;
 } ;
 
 Utils.prototype.onEnter = function(evt) {
@@ -135,7 +134,8 @@ Utils.prototype.onEnter = function(evt) {
   var keynum = eXo.cs.Utils.getKeynum(_e) ;
   if (keynum == 13) {
     this.form.onsubmit = eXo.cs.Utils.cancelSubmit ;
-    var action = String(eXo.cs.Utils.action).replace("javascript:","") ;
+    var action = eXo.core.DOMUtil.findPreviousElementByTagName(this, "a") ;
+    action = String(action.href).replace("javascript:","") ;
     eval(action) ;
   }
 } ;
