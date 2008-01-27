@@ -467,7 +467,7 @@ public class JCRDataStorage{
     Node privateContactHome = getUserContactHome(sysProvider, username);
     Node publicContactHome = getPublicContactHome(SessionProvider.createSystemProvider()) ;
     for(Contact contact : contacts) {
-    	try{
+      try{
     		if(addressType.equals(PRIVATE)) {
       		if(contact.getContactType().equals(SHARED)) {
       			saveContact(sysProvider, username, contact, true) ;
@@ -475,8 +475,10 @@ public class JCRDataStorage{
       		}else if(contact.getContactType().equals(PUBLIC)) {
       			publicContactHome.getSession().move(publicContactHome.getPath() +"/" + contact.getId(), 
       					                                 privateContactHome.getPath() +"/" + contact.getId()) ;	
-            if (privateContactHome.hasNode(contact.getId()))
+            publicContactHome.getSession().save() ;
+            if (privateContactHome.hasNode(contact.getId())) {
               privateContactHome.getNode(contact.getId()).setProperty("exo:categories", contact.getAddressBook()) ;
+            }
       		}else if(contact.getContactType().equals(PRIVATE)){
       			saveContact(sysProvider, username, contact, false) ;      			
       		}
@@ -498,8 +500,8 @@ public class JCRDataStorage{
 //                                                publicContactHome.getPath() +"/" + contact.getId()) ;
             publicContactHome.getSession().move(privateContactHome.getPath() +"/" + contact.getId(), 
                 publicContactHome.getPath() +"/" + contact.getId()) ;
+            publicContactHome.getSession().save() ;
       			publicContactHome.getNode(contact.getId()).setProperty("exo:categories", contact.getAddressBook()) ;      			
-      			
       		}else if(contact.getContactType().equals(SHARED)) {
       			savePublicContact(contact, true) ;
       			removeSharedContact(sysProvider, username, contact.getAddressBook()[0], contact.getId()) ;      			      			
