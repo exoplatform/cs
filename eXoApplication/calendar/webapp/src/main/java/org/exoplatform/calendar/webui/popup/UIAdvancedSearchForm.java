@@ -63,7 +63,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
     template = "system:/groovy/webui/form/UIForm.gtmpl",
     events = {
       @EventConfig(listeners = UIAdvancedSearchForm.SearchActionListener.class),
-      @EventConfig(listeners = UIAdvancedSearchForm.OnchageActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIAdvancedSearchForm.OnchangeActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIAdvancedSearchForm.CancelActionListener.class, phase = Phase.DECODE)
     }
 )
@@ -84,7 +84,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     types.add(new SelectItemOption<String>(CalendarEvent.TYPE_EVENT, CalendarEvent.TYPE_EVENT)) ;
     types.add(new SelectItemOption<String>(CalendarEvent.TYPE_TASK, CalendarEvent.TYPE_TASK)) ;
     UIFormSelectBox type =  new UIFormSelectBox(TYPE, TYPE, types) ;
-    type.setOnChange("Onchage") ;
+    type.setOnChange("Onchange") ;
     addChild(type) ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     String username = CalendarUtils.getCurrentUser() ;
@@ -187,6 +187,9 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
   public String getTaskState() {
    return getUIFormSelectBox(STATE).getValue() ;
   }
+  public String[] getActions() {
+    return new String[]{"Search","Cancel"} ;
+  }
   static  public class SearchActionListener extends EventListener<UIAdvancedSearchForm> {
     public void execute(Event<UIAdvancedSearchForm> event) throws Exception {
       UIAdvancedSearchForm uiForm = event.getSource() ;
@@ -261,7 +264,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
       }
     }
   }
-  static  public class OnchageActionListener extends EventListener<UIAdvancedSearchForm> {
+  static  public class OnchangeActionListener extends EventListener<UIAdvancedSearchForm> {
     public void execute(Event<UIAdvancedSearchForm> event) throws Exception {
       UIAdvancedSearchForm uiForm = event.getSource() ;
       uiForm.getUIFormSelectBox(STATE).setRendered(uiForm.isSearchTask()) ;
