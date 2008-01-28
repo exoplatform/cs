@@ -40,6 +40,8 @@
 	tf.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
 	DateFormat dtf = new SimpleDateFormat(dateTimeFormat) ;
 	DateFormat wf = new  SimpleDateFormat("EEE, dd/MMM") ;
+	DateFormat tempFormat = new  SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss") ;
+	tempFormat.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
 %>
 <div class="UIWeekView">
   <div class="TitleBar">
@@ -95,7 +97,7 @@
 							  }
 							 	wf.setCalendar(cl) ;
             %>
-            <th class="$cssClass UICellBlock" starttime="<%=cl.getTimeInMillis()%>">
+            <th class="$cssClass UICellBlock" starttime="<%=cl.getTimeInMillis()%>"  startTimeFull="<%=tempFormat.format(cl.getTime())%>">
               <a href="$actionLink" style="$styleCss">
                 <%=wf.format(cl.getTime())%>
               </a>
@@ -132,7 +134,9 @@
 									title = tf.format(event.getFromDateTime()) + "->" + tf.format(event.getToDateTime())+ ":&#013; " + event.summary ;
 									actionLink =  uicomponent.event("SaveEvent",event.getId()+"&calendarId="+event.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
                 %>
-                <div class="EventContainer EventAlldayContainer WeekViewEventBoxes $color" eventcat="$event.eventCategoryId" style="position:absolute; border: solid 1px grey;" caltype="$event.calType" eventid="$event.id" calid="$event.calendarId" starttime="$begindate" endtime="$enddate"  title="$title" actionlink="$actionLink">
+                <div class="EventContainer EventAlldayContainer WeekViewEventBoxes $color" eventcat="$event.eventCategoryId" style="position:absolute; border: solid 1px grey;" caltype="$event.calType" eventid="$event.id" calid="$event.calendarId" starttime="$begindate"  endtime="$enddate" 
+                startTimeFull="<%=tempFormat.format(event.getFromDateTime())%>" endTimeFull="<%=tempFormat.format(event.getToDateTime())%>"
+                 title="$title" actionlink="$actionLink">
                   <div class="$leftClass">
                     <span></span>
                   </div>
@@ -169,8 +173,7 @@
 					for(event in events.values()){ 
 						begin =  tf.format(event.fromDateTime) ;
 						begindate = dtf.format(event.fromDateTime) ;
-						end = tf.format(event.toDateTime) ;
-						enddate = dtf.format(event.toDateTime) ;
+						end = tf.format(event.toDateTime) ; 
 						cal = CalendarUtils.getInstanceTempCalendar() ;
 					 	cal.setTime(event.getFromDateTime()) ;
 					  beginTime = cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) ;

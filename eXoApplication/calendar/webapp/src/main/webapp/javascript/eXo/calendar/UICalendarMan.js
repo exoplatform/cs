@@ -489,8 +489,9 @@ EventMan.prototype.initWeek = function(rootNode) {
   this.dayNodes = DOMUtil.findDescendantsByClass(this.rootNode, 'th', 'UICellBlock');
   this.week = new WeekMan();
   this.week.weekIndex = 0;
-  this.week.startWeek = parseInt(this.dayNodes[0].getAttribute('starttime'));
-  this.week.endWeek = parseInt(this.dayNodes[this.dayNodes.length - 1].getAttribute('starttime')) + (1000 * 60 * 60 * 24) -1;
+//  this.week.startWeek = parseInt(this.dayNodes[0].getAttribute('starttime'));
+  this.week.startWeek = Date.parse(this.dayNodes[0].getAttribute('starttimefull'));
+  this.week.endWeek = this.week.startWeek + (1000 * 60 * 60 * 24 * 7) -1;
   this.week.events = this.events;
   this.week.resetEventWeekIndex();
   // Set unlimited event visible for all days
