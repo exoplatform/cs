@@ -24,6 +24,7 @@ import org.exoplatform.commons.exception.ExoMessageException;
  * @since Oct 21, 2004
  * @version $Id: PageList.java,v 1.2 2004/10/25 03:36:58 tuan08 Exp $
  */
+@SuppressWarnings({ "unchecked", "unchecked" })
 abstract public class JCRPageList {
 	
 	private long pageSize_ ;
@@ -31,6 +32,7 @@ abstract public class JCRPageList {
 	protected long availablePage_	= 1;
 	protected long currentPage_ = 1 ;
 	protected List currentListPage_ ;
+	protected List listPageAll_ ;
 	
 	public JCRPageList(long pageSize) {
 		pageSize_ = pageSize ;
@@ -62,7 +64,15 @@ abstract public class JCRPageList {
 		return currentListPage_ ;
 	}
 	
-	abstract public List getAll() throws Exception	;
+	abstract protected void getListAll() throws Exception	 ;
+	
+	@SuppressWarnings("unchecked")
+  public List getAll() throws Exception {
+		if(listPageAll_ == null) {
+			getListAll() ;
+		}
+		return listPageAll_ ;
+	};
 	
 	protected void checkAndSetPage(long page) throws Exception	{
 		if(page < 1 || page > availablePage_) {
