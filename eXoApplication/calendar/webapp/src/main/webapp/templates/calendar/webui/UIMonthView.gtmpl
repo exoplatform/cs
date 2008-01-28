@@ -185,7 +185,6 @@
 			</div>
 		</div>
 	</div>
-	<%=uicomponent.getCurrentCalendar().getTime()%>
 <%uiform.end();%>
 <% /*Begin Popup Menu*/ %>
   			
