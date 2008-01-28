@@ -208,6 +208,7 @@
             <a class="MenuItem" href="<%=uicomponent.event("Print", "id")%>">   
               <div class="ItemIcon PrintMailIcon"> Print </div>
             </a>
+            <% if (!uicomponent.selectedDraftFolder()) { %> 
             <a class="MenuItem" href="<%=uicomponent.event("Reply", "id")%>">   
               <div class="ItemIcon ReplyMailIcon"> Reply to Sender</div>
             </a>  
@@ -217,6 +218,7 @@
             <a class="MenuItem" href="<%=uicomponent.event("Forward", "id")%>">   
               <div class="ItemIcon ForwardMailIcon"> Forward </div>
             </a>
+            <% } %>
             <a class="MenuItem" href="<%=uicomponent.event("MoveMessages", "id")%>">   
               <div class="ItemIcon MoveMailIcon"> Move to Folder </div>
             </a>

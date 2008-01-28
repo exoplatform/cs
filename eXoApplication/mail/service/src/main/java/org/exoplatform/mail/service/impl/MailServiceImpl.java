@@ -415,6 +415,7 @@ public class MailServiceImpl implements MailService{
             try {
               saveMessage(sProvider, msg, messageHome, account.getId(), username, folderId, spamFilter) ;
             } catch(Exception e) {
+              i++ ;
               continue ;
             }  
             i ++ ;          
