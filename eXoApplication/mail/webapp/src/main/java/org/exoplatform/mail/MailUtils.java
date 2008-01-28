@@ -72,7 +72,7 @@ public class MailUtils {
     String str = "";
     if (size > 1024 * 1024) str += (int)(size/(1024 * 1024)) + " MB" ;
     else if (size > 1024) str += (int)(size/(1024)) + " KB" ;
-    else str += size + " K" ;
+    else str += size + " B" ;
     return str ;
   }
   
