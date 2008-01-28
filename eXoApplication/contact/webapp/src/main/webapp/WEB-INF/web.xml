@@ -7,11 +7,7 @@
 <web-app>
   <display-name>contact</display-name>
 
-  <listener>
-    <listener-class>org.exoplatform.services.portletcontainer.impl.servlet.PortletApplicationListener</listener-class>
-  </listener>
-
-  <filter>
+	<filter>
     <filter-name>ResourceRequestFilter</filter-name>
     <filter-class>org.exoplatform.portal.application.ResourceRequestFilter</filter-class>
   </filter>
@@ -19,6 +15,10 @@
     <filter-name>ResourceRequestFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
+  
+  <listener>
+    <listener-class>org.exoplatform.services.portletcontainer.impl.servlet.PortletApplicationListener</listener-class>
+  </listener>
 
   <servlet>
     <servlet-name>PortletWrapper</servlet-name>

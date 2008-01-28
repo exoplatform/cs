@@ -27,7 +27,7 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-public class CheckMailJob implements Job {
+public class CheckMailJob extends Thread implements Job {
   
 
 	private static Log log_ = ExoLogger.getLogger("job.RecordsJob");
@@ -53,4 +53,5 @@ public class CheckMailJob implements Job {
 		if (log_.isDebugEnabled())
 			log_.debug("File plan job done");
 	}
+	
 }
