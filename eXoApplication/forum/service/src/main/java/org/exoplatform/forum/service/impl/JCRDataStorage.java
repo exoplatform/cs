@@ -343,7 +343,7 @@ public class JCRDataStorage{
 		try {
 			//TODO: Need to review this way to get Topic node
 			return getTopicNode((Node)getForumHomeNode(sProvider).getSession().getItem(topicPath)) ;
-		}catch(PathNotFoundException e) {
+		}catch(Exception e) {
 			if(topicPath != null && topicPath.length() > 0) {
 				String forumPath = topicPath.substring(0, topicPath.lastIndexOf("/")) ;
 				return getTopicNode(queryLastTopic(sProvider, forumPath)) ;
