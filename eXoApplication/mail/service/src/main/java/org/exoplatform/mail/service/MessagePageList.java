@@ -129,6 +129,7 @@ public class MessagePageList extends JCRPageList {
         file.setMimeType(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_MIMETYPE).getString());
         file.setName(node.getName());
         file.setWorkspace(node.getSession().getWorkspace().getName()) ;
+        file.setSize(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_DATA).getStream().available());
         //file.setInputStream(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_DATA).getStream());
         attachments.add(file);
       }
