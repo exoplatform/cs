@@ -8,7 +8,7 @@
   boolean hasItem = (items != null && items.size() > 0) ;  
 %>
 
-<div id="<%=uicomponent.getId();%>" style="width: 99%;">  
+<div id="<%=uicomponent.getId();%>">  
 	<%/*Begin Content Detail*/ %>
 	<div class="ContentBreadcumbs">
 		<div class="CategoryControlBar">
