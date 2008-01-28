@@ -255,7 +255,7 @@
                         %>
                         <div class="AttachmentBox">
       										<div class="AttachmentIcon"><%=attach.getName()%></div>
-      										<div class="Size">Size: <%=attach.getSize()%> B &nbsp;&nbsp;&nbsp;<span class="Icon ViewDownloadIcon"><a href="#">View</a></span><span class="Icon DownloadIcon"> <a href="$downloadAction">Download</a></span></div>
+      										<div class="Size">Size: <%=MailUtils.convertSize(attach.getSize())%> &nbsp;&nbsp;&nbsp;<span class="Icon ViewDownloadIcon"><a href="#">View</a></span><span class="Icon DownloadIcon"> <a href="$downloadAction">Download</a></span></div>
       						  		</div>
       						  		<div style="clear: left;"><span></span></div>
       						  	</div>

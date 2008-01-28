@@ -68,6 +68,14 @@ public class MailUtils {
     return null ;
   }
   
+  public static String convertSize(long size) throws Exception {
+    String str = "";
+    if (size > 1024 * 1024) str += (int)(size/(1024 * 1024)) + " MB" ;
+    else if (size > 1024) str += (int)(size/(1024)) + " KB" ;
+    else str += size + " K" ;
+    return str ;
+  }
+  
   public static String getImageSource(Attachment attach, DownloadService dservice) throws Exception {      
     if (attach != null) {
       InputStream input = attach.getInputStream() ;

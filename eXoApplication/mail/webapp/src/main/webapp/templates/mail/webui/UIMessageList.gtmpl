@@ -411,15 +411,7 @@
     				  </a>
     				</td>
     				<td class="$readStatus"><a href="$actionLink">
-    				   <%
-    				     if (msg.getSize() > 1024) {
-    				   %> 
-    				       <%=(int)(msg.getSize()/1024)%> KB
-    				   <%
-    				     } else {   				   
-    				   %> 
-    				     <%=msg.getSize()%> B
-    				   <%}%>
+    				   <%=MailUtils.convertSize(msg.getSize())%>
     				</a></td>
     				<%
     				  String priClass = "";
