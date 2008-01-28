@@ -605,9 +605,9 @@ GUIMan.prototype.paintWeek = function() {
     var dayObj = weekObj.days[i];
     var dayNode = this.dayNodes[i];
     var dayInfo = {
-      width : dayNode.offsetWidth - 1,
+      width : dayNode.offsetWidth,
       top : 0,
-      startTime : parseInt(dayNode.getAttribute('starttime'))
+      startTime : Date.parse(dayNode.getAttribute('starttimefull'))
     }
     dayInfo.pixelPerUnit = dayInfo.width / 100;
     dayInfo.left = dayInfo.width * i;
@@ -647,7 +647,7 @@ GUIMan.prototype.drawEventByMiliseconds = function(eventObj, startTime, endTime,
   var eventNode = eventObj.rootNode;
   var topPos = dayInfo.eventTop ;
 //  var leftPos = dayInfo.left;
-  delta = (new Date(endTime)) - (new Date(startTime));
+  var delta = (new Date(endTime)) - (new Date(startTime));
   delta /= (1000 * 60 * 60 * 24);
   var eventLen = parseFloat(delta * (dayInfo.width)) - 2;
   var leftPos = dayInfo.left + ((dayInfo.eventShiftRightPercent * dayInfo.width) / 100) + 1;
