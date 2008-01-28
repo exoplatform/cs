@@ -29,6 +29,7 @@ import java.util.Vector;
 
 import javax.activation.DataHandler;
 import javax.jcr.Node;
+import javax.jcr.PathNotFoundException;
 import javax.mail.AuthenticationFailedException;
 import javax.mail.Flags;
 import javax.mail.MessagingException;
@@ -435,9 +436,10 @@ public class MailServiceImpl implements MailService{
     return messageList;
   }
   
-  private void saveMessage(SessionProvider sProvider, javax.mail.Message msg, Node messagesNode, String accId, String username, String folderId, SpamFilter spamFilter) throws Exception {
+  private void saveMessage(SessionProvider sProvider, javax.mail.Message msg, Node msgHomeNode, String accId, String username, String folderId, SpamFilter spamFilter) throws Exception {
     Message newMsg = new Message();
-  	Node node = messagesNode.addNode(newMsg.getId(), Utils.EXO_MESSAGE) ;
+  	Node node = msgHomeNode.addNode(newMsg.getId(), Utils.EXO_MESSAGE) ;
+    msgHomeNode.save();
     node.setProperty(Utils.EXO_ID, newMsg.getId());
   	node.setProperty(Utils.EXO_ACCOUNT, accId);
     node.setProperty(Utils.EXO_FROM, InternetAddress.toString(msg.getFrom()));
@@ -468,8 +470,6 @@ public class MailServiceImpl implements MailService{
       folderIds = new String[] { Utils.createFolderId(accId, Utils.FD_SPAM, false) } ;
     }
     
-    //storage_.groupConversation(sProvider, username, accId, newMsg) ;
-    
     node.setProperty(Utils.EXO_FOLDERS, folderIds);
     Object obj = msg.getContent() ;
     if (obj instanceof Multipart) {
@@ -477,14 +477,16 @@ public class MailServiceImpl implements MailService{
     } else {
       setPart(msg, node);
     }
+    node.save() ;
     
     Node folderHomeNode = storage_.getFolderHome(sProvider, username, accId) ;
-    if (folderHomeNode.hasNode(folderId)) { 
+    try { 
       Node folderNode = folderHomeNode.getNode(folderId);
       folderNode.setProperty(Utils.EXO_UNREADMESSAGES, folderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() + 1) ;
       folderNode.setProperty(Utils.EXO_TOTALMESSAGE , folderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() + 1) ;
-    }
-    messagesNode.getSession().save() ;
+      folderNode.save();
+    } catch(PathNotFoundException e) {}
+    
   }
 
   private long getPriority(javax.mail.Message msg) throws Exception {
