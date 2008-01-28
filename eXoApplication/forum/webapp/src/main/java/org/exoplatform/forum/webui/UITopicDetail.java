@@ -122,7 +122,6 @@ public class UITopicDetail extends UIForm	{
 		addUIFormInput( new UIFormStringInput("gopage2", null)) ;
 		addChild(UIForumPageIterator.class, null, "TopicPageIterator") ;
 		addChild(UIPostRules.class, null, null);
-		//addChild(UIForumLinks.class, null, null);
 	}
 	
 	public void setFormat(double timeZone, String shortDateformat, String longDateformat, String timeFormat) {
