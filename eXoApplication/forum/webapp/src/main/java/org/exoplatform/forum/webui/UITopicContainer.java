@@ -29,6 +29,7 @@ import org.exoplatform.forum.service.JCRPageList;
 import org.exoplatform.forum.service.Tag;
 import org.exoplatform.forum.service.Topic;
 import org.exoplatform.forum.webui.popup.UIForumForm;
+import org.exoplatform.forum.webui.popup.UIMergeTopicForm;
 import org.exoplatform.forum.webui.popup.UIMoveForumForm;
 import org.exoplatform.forum.webui.popup.UIMoveTopicForm;
 import org.exoplatform.forum.webui.popup.UIPopupAction;
@@ -71,7 +72,7 @@ import org.exoplatform.webui.form.validator.PositiveNumberFormatValidator;
 			@EventConfig(listeners = UITopicContainer.SetOpenForumActionListener.class),
 			@EventConfig(listeners = UITopicContainer.SetCloseForumActionListener.class),
 			@EventConfig(listeners = UITopicContainer.MoveForumActionListener.class),
-			@EventConfig(listeners = UITopicContainer.RemoveForumActionListener.class),
+			@EventConfig(listeners = UITopicContainer.RemoveForumActionListener.class),//Menu Topic
 			@EventConfig(listeners = UITopicContainer.EditTopicActionListener.class),
 			@EventConfig(listeners = UITopicContainer.SetOpenTopicActionListener.class),
 			@EventConfig(listeners = UITopicContainer.SetCloseTopicActionListener.class),
@@ -80,6 +81,7 @@ import org.exoplatform.webui.form.validator.PositiveNumberFormatValidator;
 			@EventConfig(listeners = UITopicContainer.SetStickTopicActionListener.class),
 			@EventConfig(listeners = UITopicContainer.SetUnStickTopicActionListener.class),
 			@EventConfig(listeners = UITopicContainer.SetMoveTopicActionListener.class),
+			@EventConfig(listeners = UITopicContainer.MergeTopicActionListener.class),
 			@EventConfig(listeners = UITopicContainer.SetDeleteTopicActionListener.class)
 		}
 )
@@ -185,7 +187,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 
 	@SuppressWarnings("unused")
 	private String[] getActionMenuTopic() throws Exception {
-		String []actions = {"EditTopic", "SetOpenTopic", "SetCloseTopic", "SetLockedTopic", "SetUnLockTopic", "SetStickTopic", "SetUnStickTopic", "SetMoveTopic", "SetDeleteTopic"}; 
+		String []actions = {"EditTopic", "SetOpenTopic", "SetCloseTopic", "SetLockedTopic", "SetUnLockTopic", "SetStickTopic", "SetUnStickTopic", "SetMoveTopic", "SetDeleteTopic", "MergeTopic"}; 
 		return actions;
 	}
 	
@@ -705,6 +707,35 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 		}
 	}	
 
+	static public class MergeTopicActionListener extends EventListener<UITopicContainer> {
+    @SuppressWarnings("unchecked")
+    public void execute(Event<UITopicContainer> event) throws Exception {
+			UITopicContainer uiTopicContainer = event.getSource();
+			List<UIComponent> children = uiTopicContainer.getChildren() ;
+			List <Topic> topics = new ArrayList<Topic>();
+			for(UIComponent child : children) {
+				if(child instanceof UIFormCheckBoxInput) {
+					if(((UIFormCheckBoxInput)child).isChecked()) {
+						topics.add(uiTopicContainer.getTopic(child.getName()));
+					}
+				}
+			}
+			UIForumPortlet forumPortlet = uiTopicContainer.getAncestorOfType(UIForumPortlet.class) ;
+			if(topics.size() > 0) {
+				UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
+				UIMergeTopicForm mergeTopicForm = popupAction.createUIComponent(UIMergeTopicForm.class, null, null) ;
+				mergeTopicForm.updateTopics(topics) ;
+				popupAction.activate(mergeTopicForm, 560, 260) ;
+				event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+			} 
+			if(topics.size() == 0){
+				Object[] args = { };
+				throw new MessageException(new ApplicationMessage("UITopicContainer.sms.notCheck", args, ApplicationMessage.WARNING)) ;
+			}
+			event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
+		}
+	}	
+	
 	static public class SetDeleteTopicActionListener extends EventListener<UITopicContainer> {
     @SuppressWarnings("unchecked")
     public void execute(Event<UITopicContainer> event) throws Exception {
