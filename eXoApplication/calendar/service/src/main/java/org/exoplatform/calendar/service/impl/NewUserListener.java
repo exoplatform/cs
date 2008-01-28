@@ -52,23 +52,24 @@ public class NewUserListener extends UserEventListener {
   }
   
   public void postSave(User user, boolean isNew) throws Exception {
+  	SessionProvider sysProvider = SessionProvider.createSystemProvider() ;
   	if(defaultEventCategories_ != null && defaultEventCategories_.length > 0) {
   		for(String evCategory : defaultEventCategories_) {
   			EventCategory eventCategory = new EventCategory() ;
   			eventCategory.setName(evCategory) ;
-  	  	cservice_.saveEventCategory(SessionProvider.createSystemProvider(), user.getUserName(), eventCategory, null, true) ;
+  	  	cservice_.saveEventCategory(sysProvider, user.getUserName(), eventCategory, null, true) ;
     	}
   	}
   	if(defaultCalendarCategory_ != null && defaultCalendarCategory_.length() > 0) {
 			CalendarCategory calCategory = new CalendarCategory() ;
 			calCategory.setName(defaultCalendarCategory_) ;  			
-	  	cservice_.saveCalendarCategory(SessionProvider.createSystemProvider(), user.getUserName(), calCategory, true) ;
+	  	cservice_.saveCalendarCategory(sysProvider, user.getUserName(), calCategory, true) ;
 	  	if(defaultCalendar_ != null && defaultCalendar_.length > 0) {
 	  		for(String calendar : defaultCalendar_) {
 	  			Calendar cal = new Calendar() ;
 	  			cal.setName(calendar) ;  
 	  			cal.setCategoryId(calCategory.getId()) ;
-	  	  	cservice_.saveUserCalendar(SessionProvider.createSystemProvider(), user.getUserName(), cal, true) ;
+	  	  	cservice_.saveUserCalendar(sysProvider, user.getUserName(), cal, true) ;
 	    	}
 	  	}
   	}
