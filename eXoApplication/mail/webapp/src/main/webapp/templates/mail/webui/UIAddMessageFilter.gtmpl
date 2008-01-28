@@ -2,7 +2,7 @@
   import org.exoplatform.mail.webui.UISelectFolder;
 %>
 <%uiform.begin()%>  
-<div class="UIAddMessageFilter" >
+<div class="UIAddMessageFilter">
 
 	<div class="UIForm">
 	  <div class="HorizontalLayout">
@@ -52,15 +52,15 @@
 			      <table class="UIFormGrid">
 			        <tr>
 			  	      <td class="FieldLabel"><%=uicomponent.getLabel(uicomponent.FILTER_APPLY_FOLDER)%>:</td>
-			  	      <td class="FieldComponent" style="width: 270px;"><%uicomponent.renderChild(UISelectFolder.class)%></td>
+			  	      <td class="FieldComponent SelectFolder" style="width: 270px; padding:0px;"><%uicomponent.renderChild(UISelectFolder.class)%></td>
 			        </tr>
               <tr>
                 <td class="FieldLabel"><%=uicomponent.getLabel(uicomponent.FILTER_APPLY_TAG)%>:</td>
-                <td class="FieldComponent" style="width: 270px;"><%uicomponent.renderField(uicomponent.FILTER_APPLY_TAG)%></td>
+                <td class="FieldComponent SelectTag" style="width: 270px;"><%uicomponent.renderField(uicomponent.FILTER_APPLY_TAG)%></td>
               </tr>
               <tr>
               <td class="FieldLabel"><%=uicomponent.getLabel(uicomponent.APPLY_ALL_MESSAGE)%></td>
-              <td class="FieldComponent" style="align-left: 1px"><%uicomponent.renderField(uicomponent.APPLY_ALL_MESSAGE)%></td>
+              <td class="FieldComponent SelectTag" style="align-left: 1px"><%uicomponent.renderField(uicomponent.APPLY_ALL_MESSAGE)%></td>
             </tr>
 			      </table>
 			    </div>

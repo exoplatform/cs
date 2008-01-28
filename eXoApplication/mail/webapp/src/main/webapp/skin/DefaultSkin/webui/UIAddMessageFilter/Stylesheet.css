@@ -38,12 +38,27 @@
 	width: 145px;
 }
 
+.UIMailPortlet .UIAddMessageFilter .UIForm .UIFormGrid td.FieldComponent td.FieldLabel {
+	display: none;
+}
+
+.UIMailPortlet .UIAddMessageFilter .UIForm .UIFormGrid td.FieldComponent td{
+	padding: 4px 0px;
+}
+
+.UIMailPortlet .UIAddMessageFilter td.FieldComponent .UIFormInputSet {
+	padding: 0px;
+}
+
+.UIMailPortlet .UIAddMessageFilter td.FieldComponent .UIFormInputSet .UIFormGrid {
+	margin: 0px;
+}
 .UIMailPortlet .UIAddMessageFilter .UIForm .HorizontalLayout .WorkingContent input {
 	width: 125px;
 }
 
 .UIMailPortlet .UIAddMessageFilter .UIForm .HorizontalLayout .WorkingContent select {
-	width: 125px;
+	width: 200px;
 }
 
 .UIMailPortlet .UIAddMessageFilter .UIForm .HorizontalLayout .WorkingContent input.checkbox {
