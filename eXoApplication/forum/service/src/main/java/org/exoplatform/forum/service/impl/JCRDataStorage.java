@@ -26,6 +26,7 @@ import java.util.TimeZone;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.PathNotFoundException;
 import javax.jcr.Value;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
@@ -67,8 +68,12 @@ public class JCRDataStorage{
 	
 	protected Node getForumHomeNode(SessionProvider sProvider) throws Exception {
 		Node appNode = nodeHierarchyCreator_.getPublicApplicationNode(sProvider) ;
-		if(appNode.hasNode(FORUM_SERVICE)) return appNode.getNode(FORUM_SERVICE) ;
-		return appNode.addNode(FORUM_SERVICE, NT_UNSTRUCTURED) ;
+		try {
+			return appNode.getNode(FORUM_SERVICE) ;
+    } catch (PathNotFoundException e) {
+    	return appNode.addNode(FORUM_SERVICE, NT_UNSTRUCTURED) ;
+    }
+//		if(appNode.hasNode(FORUM_SERVICE)) return appNode.getNode(FORUM_SERVICE) ;
 	}
 	
 	public List<Category> getCategories(SessionProvider sProvider) throws Exception {
@@ -88,11 +93,14 @@ public class JCRDataStorage{
 	
 	public Category getCategory(SessionProvider sProvider, String categoryId) throws Exception {
 		Node forumHomeNode = getForumHomeNode(sProvider) ;
-		if(!forumHomeNode.hasNode(categoryId)) return null;
-		Node cateNode = forumHomeNode.getNode(categoryId) ;
-		Category cat = new Category() ;
-		cat = getCategory(cateNode) ;
-		return cat ;
+		try {
+			Node cateNode = forumHomeNode.getNode(categoryId) ;
+			Category cat = new Category() ;
+			cat = getCategory(cateNode) ;
+			return cat ;
+    } catch (PathNotFoundException e) {
+	    return null ;
+    }
 	}
 
 	private Category getCategory(Node cateNode) throws Exception {
@@ -135,21 +143,21 @@ public class JCRDataStorage{
 	
 	public Category removeCategory(SessionProvider sProvider, String categoryId) throws Exception {
 		Node forumHomeNode = getForumHomeNode(sProvider) ;
-		Category category = new Category () ;
-		if(forumHomeNode.hasNode(categoryId)){
+		try {
+			Category category = new Category () ;
 			category = getCategory(sProvider, categoryId) ;
 			forumHomeNode.getNode(categoryId).remove() ;
-			//forumHomeNode.save() ;
 			forumHomeNode.getSession().save() ;
 			return category;
-		}
-		return null;
+    } catch (PathNotFoundException e) {
+    	return null ;
+    }
 	}
 	
 	
 	public List<Forum> getForums(SessionProvider sProvider, String categoryId) throws Exception {
 		Node forumHomeNode = getForumHomeNode(sProvider) ;
-		if(forumHomeNode.hasNode(categoryId)) {
+		try {
 			Node catNode = forumHomeNode.getNode(categoryId) ;
 			QueryManager qm = forumHomeNode.getSession().getWorkspace().getQueryManager() ;
 			String queryString = "/jcr:root" + catNode.getPath() + "//element(*,exo:forum) order by @exo:forumOrder ascending,@exo:createdDate ascending";
@@ -162,25 +170,27 @@ public class JCRDataStorage{
 				forums.add(getForum(forumNode)) ;
 			}
 			return forums;
+		} catch (PathNotFoundException e) {
+			return null ;
 		}
-		return null; 
 	}
 
 	public Forum getForum(SessionProvider sProvider, String categoryId, String forumId) throws Exception {
 		Node forumHomeNode = getForumHomeNode(sProvider) ;
-		if(forumHomeNode.hasNode(categoryId)) {
+		try {
 			Node catNode = forumHomeNode.getNode(categoryId) ;
 			Node forumNode = catNode.getNode(forumId) ;
 			Forum forum = new Forum() ;
 			forum = getForum(forumNode) ;
 			return forum;
+		} catch (PathNotFoundException e) {
+			return null ;
 		}
-		return null;
 	}
 
 	public void saveForum(SessionProvider sProvider, String categoryId, Forum forum, boolean isNew) throws Exception {
 		Node forumHomeNode = getForumHomeNode(sProvider) ;
-		if(forumHomeNode.hasNode(categoryId)) {
+		try {
 			Node catNode = forumHomeNode.getNode(categoryId) ;
 			Node forumNode;
 			if(isNew) {
@@ -215,6 +225,7 @@ public class JCRDataStorage{
 			
 			//forumHomeNode.save() ;
 			forumHomeNode.getSession().save() ;
+		} catch (PathNotFoundException e) {
 		}
 	}
 	
@@ -250,15 +261,15 @@ public class JCRDataStorage{
 	public Forum removeForum(SessionProvider sProvider, String categoryId, String forumId) throws Exception {
 		Node forumHomeNode = getForumHomeNode(sProvider) ;
 		Forum forum = new Forum() ;
-		if(forumHomeNode.hasNode(categoryId)) {
+		try {
 			Node catNode = forumHomeNode.getNode(categoryId) ;
 			forum = getForum(sProvider, categoryId, forumId) ;
 			catNode.getNode(forumId).remove() ;
-			//forumHomeNode.save() ;
 			forumHomeNode.getSession().save() ;
 			return forum;
-		}
-		return null ;
+    } catch (PathNotFoundException e) {
+    	return null ;
+    }
 	}
 
 	public void moveForum(SessionProvider sProvider, List<Forum> forums, String destCategoryPath)throws Exception {
@@ -269,14 +280,13 @@ public class JCRDataStorage{
 			Node forumNode = (Node)forumHomeNode.getSession().getItem(newForumPath) ;
 			forumNode.setProperty("exo:path", newForumPath) ;
 		}
-		//orumHomeNode.save() ;
 		forumHomeNode.getSession().save() ;
 	}
 	
 	
 	public JCRPageList getPageTopic(SessionProvider sProvider, String categoryId, String forumId) throws Exception {
 		Node forumHomeNode = getForumHomeNode(sProvider) ;
-		if(forumHomeNode.hasNode(categoryId)) {
+		try {
 			Node CategoryNode = forumHomeNode.getNode(categoryId) ;
 			Node forumNode = CategoryNode.getNode(forumId) ;
 			QueryManager qm = forumHomeNode.getSession().getWorkspace().getQueryManager() ;
@@ -286,13 +296,14 @@ public class JCRDataStorage{
 			NodeIterator iter = result.getNodes(); 
 			JCRPageList pagelist = new ForumPageList(iter, 10, forumNode.getPath(), false) ;
 			return pagelist ;
+		}catch (PathNotFoundException e) {
+			return null ;
 		}
-		return null ;
 	}
 	
 	public List<Topic> getTopics(SessionProvider sProvider, String categoryId, String forumId) throws Exception {
 		Node forumHomeNode = getForumHomeNode(sProvider) ;
-		if(forumHomeNode.hasNode(categoryId)) {
+		try{
 			Node CategoryNode = forumHomeNode.getNode(categoryId) ;
 			Node forumNode = CategoryNode.getNode(forumId) ;
 			NodeIterator iter = forumNode.getNodes() ;
@@ -302,13 +313,14 @@ public class JCRDataStorage{
 				topics.add(getTopicNode(topicNode)) ;
 			}
 			return topics ;
+		}catch (PathNotFoundException e) {
+			return null ;
 		}
-		return null ;
 	}
 	
 	public Topic getTopic(SessionProvider sProvider, String categoryId, String forumId, String topicId, boolean viewTopic) throws Exception {
 		Node forumHomeNode = getForumHomeNode(sProvider) ;
-		if(forumHomeNode.hasNode(categoryId)) {
+		try{
 			Node CategoryNode = forumHomeNode.getNode(categoryId) ;
 			Node forumNode = CategoryNode.getNode(forumId) ;
 			Node topicNode = forumNode.getNode(topicId) ;
@@ -322,15 +334,16 @@ public class JCRDataStorage{
 			//forumHomeNode.save() ;
 			forumHomeNode.getSession().save() ;
 			return topicNew ;
+		}catch (PathNotFoundException e) {
+			return null ;
 		}
-		return null ;
 	}
 	
 	public Topic getTopicByPath(SessionProvider sProvider, String topicPath)throws Exception {
 		try {
 			//TODO: Need to review this way to get Topic node
 			return getTopicNode((Node)getForumHomeNode(sProvider).getSession().getItem(topicPath)) ;
-		}catch(Exception e) {
+		}catch(PathNotFoundException e) {
 			if(topicPath != null && topicPath.length() > 0) {
 				String forumPath = topicPath.substring(0, topicPath.lastIndexOf("/")) ;
 				return getTopicNode(queryLastTopic(sProvider, forumPath)) ;
@@ -384,7 +397,7 @@ public class JCRDataStorage{
 		if(topicNode.hasProperty("exo:tagId")) topicNew.setTagId(ValuesToStrings(topicNode.getProperty("exo:tagId").getValues())) ;
 		if(topicNode.hasProperty("exo:voteRating")) topicNew.setVoteRating(topicNode.getProperty("exo:voteRating").getDouble()) ;
 		String idFirstPost = topicNode.getName().replaceFirst("topic", "post") ;
-		if(topicNode.hasNode(idFirstPost)) {
+		try {
 			Node FirstPostNode	= topicNode.getNode(idFirstPost) ;
 			if(FirstPostNode.hasProperty("exo:numberAttachments")) {
 				if(FirstPostNode.getProperty("exo:numberAttachments").getLong() > 0) {
@@ -407,8 +420,10 @@ public class JCRDataStorage{
 					topicNew.setAttachments(attachments);
 				}
 			}
+			return topicNew;
+		}catch (PathNotFoundException e) {
+			return topicNew;
 		}
-		return topicNew;
 	}
 
 	public TopicView getTopicView(SessionProvider sProvider, String categoryId, String forumId, String topicId) throws Exception {
@@ -420,9 +435,9 @@ public class JCRDataStorage{
 
 	public void saveTopic(SessionProvider sProvider, String categoryId, String forumId, Topic topic, boolean isNew) throws Exception {
 		Node forumHomeNode = getForumHomeNode(sProvider) ;
-		if(forumHomeNode.hasNode(categoryId)) {
+		try{
 			Node CategoryNode = forumHomeNode.getNode(categoryId) ;
-			if(CategoryNode.hasNode(forumId)) {
+			try{
 				Node forumNode = CategoryNode.getNode(forumId) ;
 				Node topicNode;
 				if(isNew) {
@@ -492,14 +507,16 @@ public class JCRDataStorage{
 						savePost(sProvider, categoryId, forumId, topic.getId(), post, false) ;
 					}
 				}
+			}catch (PathNotFoundException e) {
 			}
+		}catch (PathNotFoundException e) {
 		}
 	}
 	
 	public Topic removeTopic(SessionProvider sProvider, String categoryId, String forumId, String topicId) throws Exception {
 		Node forumHomeNode = getForumHomeNode(sProvider) ;
 		Topic topic = new Topic() ;
-		if(forumHomeNode.hasNode(categoryId)) {
+		try{
 			Node CategoryNode = forumHomeNode.getNode(categoryId) ;
 			Node forumNode = CategoryNode.getNode(forumId) ;
 			topic = getTopic(sProvider, categoryId, forumId, topicId, false) ;
@@ -514,8 +531,9 @@ public class JCRDataStorage{
 			//forumHomeNode.save() ;
 			forumHomeNode.getSession().save() ;
 			return topic ;
+		}catch (PathNotFoundException e) {
+			return null ;
 		}
-		return null ;
 	}
 	
 	public void moveTopic(SessionProvider sProvider, List<Topic> topics, String destForumPath) throws Exception {
@@ -552,36 +570,47 @@ public class JCRDataStorage{
 
 	public JCRPageList getPosts(SessionProvider sProvider, String categoryId, String forumId, String topicId) throws Exception {
 		Node forumHomeNode = getForumHomeNode(sProvider) ;
-		if(forumHomeNode.hasNode(categoryId)) {
+		try{
 			Node CategoryNode = forumHomeNode.getNode(categoryId) ;
-			if(CategoryNode.hasNode(forumId)) {
+			try {
 				Node forumNode = CategoryNode.getNode(forumId) ;
-				if(forumNode.hasNode(topicId)) {
+				try {
 					Node topicNode = forumNode.getNode(topicId) ;
 					NodeIterator iter = topicNode.getNodes() ; 
 					JCRPageList pagelist = new ForumPageList(iter, 10, topicNode.getPath(), false) ;
 					return pagelist ;
+				}catch (PathNotFoundException e) {
+					return null ;
 				}
+			}catch (PathNotFoundException e) {
+				return null ;
 			}
+		}catch (PathNotFoundException e) {
+			return null ;
 		}
-		return null ;
 	}
 	
 	public Post getPost(SessionProvider sProvider, String categoryId, String forumId, String topicId, String postId) throws Exception {
 		Node forumHomeNode = getForumHomeNode(sProvider) ;
-		if(forumHomeNode.hasNode(categoryId)) {
+		try {
 			Node CategoryNode = forumHomeNode.getNode(categoryId) ;
-			if(CategoryNode.hasNode(forumId)) {
+			try {
 				Node forumNode = CategoryNode.getNode(forumId) ;
 				Node topicNode = forumNode.getNode(topicId) ;
-				if(!topicNode.hasNode(postId)) return null;
-				Node postNode = topicNode.getNode(postId) ;
-				Post postNew = new Post() ;
-				postNew = getPost(postNode) ;
-				return postNew ;
+				try{ 
+					Node postNode = topicNode.getNode(postId) ;
+					Post postNew = new Post() ;
+					postNew = getPost(postNode) ;
+					return postNew ;
+				} catch (PathNotFoundException e) {
+					return null ;
+				}
+			}catch (PathNotFoundException e) {
+				return null ;
 			}
+		}catch (PathNotFoundException e) {
+			return null ;
 		}
-		return null ;
 	}
 
 	private Post getPost(Node postNode) throws Exception {
@@ -623,9 +652,9 @@ public class JCRDataStorage{
 	
 	public void savePost(SessionProvider sProvider, String categoryId, String forumId, String topicId, Post post, boolean isNew) throws Exception {
 		Node forumHomeNode = getForumHomeNode(sProvider) ;
-		if(forumHomeNode.hasNode(categoryId)) {
+		try {
 			Node CategoryNode = forumHomeNode.getNode(categoryId) ;
-			if(CategoryNode.hasNode(forumId)) {
+			try {
 				Node forumNode = CategoryNode.getNode(forumId) ;
 				Node topicNode = forumNode.getNode(topicId) ;
 				Node postNode;
@@ -681,16 +710,18 @@ public class JCRDataStorage{
 				postNode.setProperty("exo:numberAttach", numberAttach) ;
 				//forumHomeNode.save() ;
 				forumHomeNode.getSession().save() ;
+			}catch (PathNotFoundException e) {
 			}
+		}catch (PathNotFoundException e) {
 		}
 	}
 	
 	public Post removePost(SessionProvider sProvider, String categoryId, String forumId, String topicId, String postId) throws Exception {
 		Node forumHomeNode = getForumHomeNode(sProvider) ;
 		Post post = new Post() ;
-		if(forumHomeNode.hasNode(categoryId)) {
+		try {
 			Node CategoryNode = forumHomeNode.getNode(categoryId) ;
-			if(CategoryNode.hasNode(forumId)) {
+			try {
 				post = getPost(sProvider, categoryId, forumId, topicId, postId) ;
 				Node forumNode = CategoryNode.getNode(forumId) ;
 				Node topicNode = forumNode.getNode(topicId) ;
@@ -708,9 +739,12 @@ public class JCRDataStorage{
 				//forumHomeNode.save() ;
 				forumHomeNode.getSession().save() ;
 				return post;
+			}catch (PathNotFoundException e) {
+				return null;
 			}
+		}catch (PathNotFoundException e) {
+			return null;
 		}
-		return null;
 	}
 	
 	public void movePost(SessionProvider sProvider, List<Post> posts, String destTopicPath) throws Exception {
@@ -741,9 +775,9 @@ public class JCRDataStorage{
 	
 	public Poll getPoll(SessionProvider sProvider, String categoryId, String forumId, String topicId) throws Exception {
 		Node forumHomeNode = getForumHomeNode(sProvider) ;
-		if(forumHomeNode.hasNode(categoryId)) {
+		try{
 			Node CategoryNode = forumHomeNode.getNode(categoryId) ;
-			if(CategoryNode.hasNode(forumId)) {
+			try {
 				Node forumNode = CategoryNode.getNode(forumId) ;
 				Node topicNode = forumNode.getNode(topicId) ;
 				String pollId = topicId.replaceFirst("topic", "poll") ;
@@ -765,17 +799,20 @@ public class JCRDataStorage{
 				if(pollNode.hasProperty("exo:isMultiCheck")) pollNew.setIsMultiCheck(pollNode.getProperty("exo:isMultiCheck").getBoolean()) ;
 				if(pollNode.hasProperty("exo:isClosed")) pollNew.setIsClosed(pollNode.getProperty("exo:isClosed").getBoolean()) ;
 				return pollNew ;
+			}catch (PathNotFoundException e) {
+				return null ;
 			}
+		}catch (PathNotFoundException e) {
+			return null ;
 		}
-		return null ;
 	}
 	
 	public Poll removePoll(SessionProvider sProvider, String categoryId, String forumId, String topicId) throws Exception {
 		Node forumHomeNode = getForumHomeNode(sProvider) ;
 		Poll poll = new Poll() ;
-		if(forumHomeNode.hasNode(categoryId)) {
+		try {
 			Node CategoryNode = forumHomeNode.getNode(categoryId) ;
-			if(CategoryNode.hasNode(forumId)) {
+			try {
 				poll = getPoll(sProvider, categoryId, forumId, topicId) ;
 				Node forumNode = CategoryNode.getNode(forumId) ;
 				Node topicNode = forumNode.getNode(topicId) ;
@@ -784,16 +821,19 @@ public class JCRDataStorage{
 				topicNode.setProperty("exo:isPoll", false) ;
 				forumHomeNode.getSession().save() ;
 				return poll;
+			}catch (PathNotFoundException e) {
+				return null;
 			}
+		}catch (PathNotFoundException e) {
+			return null;
 		}
-		return null;
 	}
 	
 	public void savePoll(SessionProvider sProvider, String categoryId, String forumId, String topicId, Poll poll, boolean isNew, boolean isVote) throws Exception {
 		Node forumHomeNode = getForumHomeNode(sProvider) ;
-		if(forumHomeNode.hasNode(categoryId)) {
+		try {
 			Node CategoryNode = forumHomeNode.getNode(categoryId) ;
-			if(CategoryNode.hasNode(forumId)) {
+			try {
 				Node forumNode = CategoryNode.getNode(forumId) ;
 				Node topicNode = forumNode.getNode(topicId) ;
 				Node pollNode;
@@ -827,7 +867,9 @@ public class JCRDataStorage{
 				}
 				//forumHomeNode.save() ;
 				forumHomeNode.getSession().save() ;
+			}catch (PathNotFoundException e) {
 			}
+		}catch (PathNotFoundException e) {
 		}
 	}
 	
@@ -885,12 +927,13 @@ public class JCRDataStorage{
 	
 	public Tag getTag(SessionProvider sProvider, String tagId) throws Exception {
 		Node forumHomeNode = getForumHomeNode(sProvider) ;
-		if(forumHomeNode.hasNode(tagId)) {
+		try {
 			Node tagNode ;
 			tagNode = forumHomeNode.getNode(tagId) ;
 			return getTagNode(tagNode) ;
+		}catch (PathNotFoundException e) {
+			return null ;
 		}
-		return null ;
 	}
 	
 	public List<Tag> getTags(SessionProvider sProvider) throws Exception {
@@ -996,7 +1039,7 @@ public class JCRDataStorage{
 		Node forumHomeNode = getForumHomeNode(sProvider) ;
 		Node newOptionNode ;
 		ForumOption forumOption = new ForumOption();
-		userName = userName.trim().replaceAll(" ", "#") ;
+		userName = userName.trim().replaceAll(" ", "dc0") ;
 		if(forumHomeNode.hasNode(userName)) {
 			newOptionNode = forumHomeNode.getNode(userName) ;
 			if(newOptionNode.hasProperty("exo:userName"))forumOption.setUserName(userName);
@@ -1015,10 +1058,10 @@ public class JCRDataStorage{
 	public void saveOption(SessionProvider sProvider, ForumOption newOption) throws Exception {
 		Node forumHomeNode = getForumHomeNode(sProvider) ;
 		Node newOptionNode ;
-		String optionId = newOption.getUserName().trim().replaceAll(" ", "#") ;
-		if(forumHomeNode.hasNode(optionId)) {
+		String optionId = newOption.getUserName().trim().replaceAll(" ", "dc0") ;
+		try {
 			newOptionNode = forumHomeNode.getNode(optionId) ;
-		} else {
+		}catch (PathNotFoundException e) {
 			newOptionNode = forumHomeNode.addNode(optionId, "exo:forumOption") ;
 			newOptionNode.setProperty("exo:userName", optionId);
 		}
