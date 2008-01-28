@@ -36,6 +36,8 @@
 	dtf.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
 	DateFormat wf = new  SimpleDateFormat("EEE, dd/MMM") ;
 	wf.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
+	DateFormat tempFormat = new  SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss") ;
+	tempFormat.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
 	%>
 	<div class="UIMonthView">
 		<div class="TitleBar">
@@ -98,7 +100,9 @@
 					}
 					color = uicomponent.getColors().get(event.calendarId) ;
 					%>
-					<div class="DayContentContainer EventBoxes" style="position: absolute ;" startIndex="$startIndex" calType="$event.calType" eventId="$event.id" calId="$event.calendarId" eventCat="$event.eventCategoryId" startTime="$startTime" endTime="$endTime" >
+					<div class="DayContentContainer EventBoxes" style="position: absolute ;" startIndex="$startIndex" calType="$event.calType" eventId="$event.id" calId="$event.calendarId" eventCat="$event.eventCategoryId" 
+					startTimeFull="<%=tempFormat.format(event.getFromDateTime())%>" endTimeFull="<%=tempFormat.format(event.getToDateTime())%>"
+					startTime="$startTime" endTime="$endTime" >
 						<div class="EventOnDayBorder $color">
 							<div class="EventOnDayContent">
 								<div style="float:left;margin-left:2px;">
@@ -151,7 +155,7 @@
 					        }
 						      month = currentMonth + 1 ;
 					        %>
-					        <td actionLink="$actionUpdate" class='CalendarContentNomal UICellBlock' startTime='$dateTime' > 
+					        <td startTimeFull="<%=tempFormat.format(temcalendar.getTime())%>"  actionLink="$actionUpdate" class='CalendarContentNomal UICellBlock' startTime='$dateTime' > 
 					        	<div class='DayBox $clazz' >
 						        <a href="<%=uicomponent.event("GotoDate",dayActionLink)%>" onmousedown="event.cancelBubble = true ;">
 						         <%=sdf.format(temcalendar.getTime())%> 
@@ -162,7 +166,7 @@
 					        dayOfMonth++ ;
 					      } else {
 					      	%>
-					        <td actionLink="$actionUpdate" startTime='$dateTime' class='CalendarContentDisable  UICellBlock'> <div class='DisableDay'><span></span></div>
+					        <td  startTimeFull="<%=tempFormat.format(temcalendar.getTime())%>" actionLink="$actionUpdate" startTime='$dateTime' class='CalendarContentDisable  UICellBlock'> <div class='DisableDay'><span></span></div>
 					        	<div class='DayContent'> 
 								 		<%=sdtf.format(temcalendar.getTime())%>
 								 		</div>

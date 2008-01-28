@@ -128,8 +128,10 @@ EventObject.prototype.init = function(rootNode){
   this.eventIndex = this.rootNode.getAttribute('eventindex');
   this.calId = this.rootNode.getAttribute('calid');
   this.eventCat = this.rootNode.getAttribute('eventcat');
-  this.startTime = parseInt(this.rootNode.getAttribute('starttime'));
-  this.endTime = parseInt(this.rootNode.getAttribute('endtime'));
+//  this.startTime = parseInt(this.rootNode.getAttribute('starttime'));
+  this.startTime = Date.parse(this.rootNode.getAttribute('starttimefull'));
+//  this.endTime = parseInt(this.rootNode.getAttribute('endtime'));
+  this.endTime = Date.parse(this.rootNode.getAttribute('endtimefull'));
   if (this.rootNode.innerText) {
     this.name = (this.rootNode.innerText + '').trim();
   } else {
@@ -508,7 +510,8 @@ EventMan.prototype.groupByWeek = function(){
     for (var j = 0; j < this.events.length; j++) {
       var eventObj = this.events[j];
       startCell = DOMUtil.findFirstDescendantByClass(weekNodes[i], "td", "UICellBlock");
-      startWeek = parseInt(startCell.getAttribute("startTime"));
+//      startWeek = parseInt(startCell.getAttribute("startTime"));
+      startWeek = Date.parse(startCell.getAttribute('starttimefull'));
       endWeek = (startWeek + 7 * 24 * 60 * 60 * 1000) - 1;
       currentWeek.startWeek = startWeek;
       currentWeek.endWeek = endWeek;
