@@ -871,8 +871,7 @@ public class UIMessageList extends UIForm {
         uiMessageList.setMessageFilter(msgFilter);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList);
       } catch (Exception e) {
-        e.printStackTrace() ;
-        return ;
+        return;
       }
     }
   }
