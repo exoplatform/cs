@@ -15,7 +15,7 @@
 		<div class="LeftBar">
 			<div class="RightBar">
 				<div class="MiddleBar">
-					<div class="RSSReaderHeader">RSS Feed Reader</div>
+					<div class="RSSReaderHeader"><%=_ctx.appRes("UIContentNavigation.label.rssreader")%></div>
 				</div>
 			</div>
 		</div>
