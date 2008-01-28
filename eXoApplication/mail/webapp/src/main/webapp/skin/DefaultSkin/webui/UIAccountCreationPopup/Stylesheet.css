@@ -29,7 +29,7 @@
 
 .UIMailPortlet .UIAccountCreationWizard .UIWizardAction {
 	height: 36px;
-  padding: 0px 15px;
+  padding: 0px 0px 0px 15px;
 }
 
 .UIMailPortlet .UIAccountCreationWizard .UIWizardAction .StepNavigationTitle {
@@ -87,7 +87,7 @@
 
 .UIMailPortlet .UIAccountCreationWizard .UIAction {
 	float: right;
-	width: 200px;
+	width: 260px;
 }
 
 .UIMailPortlet .UIAccountCreationWizard .UITabPane .TabPaneContent {
