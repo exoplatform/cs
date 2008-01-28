@@ -29,6 +29,7 @@
 	background: white;
 	border: 1px solid #b7b7b7;
 	margin: 7px;
+	color: #292929;
 }
 
 /*==============================UISearchForm================================*/
@@ -90,6 +91,10 @@
 	line-height: 18px;
 }
 
+.UICalendarPortlet .CalendarWorkingWorkspace .SwitchButton {
+	display: block;
+}
+
 .UICalendarPortlet .CalendarWorkingWorkspace .SelectButton {
 	float: left;
 	line-height: 20px;
@@ -100,12 +105,12 @@
 	line-height: 18px;
 }
 
-.UICalendarPortlet .CalendarWorkingWorkspace  .UIActionBar a {
+.UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar a {
 	color: #000000;
 	margin: 3px 0px 0px 0px;
 }
 
-.UICalendarPortlet .CalendarWorkingWorkspace  .UIActionBar a:hover {
+.UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar a:hover {
 	background: url('background/ControlButtonBG1x26.gif') repeat-x ;
 	color: #058ee6; border: 1px solid #cbcbcb;
 	height: 24px;
@@ -153,11 +158,19 @@
 	margin-left: 4px;
 }
 
+.UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar .SelectButton a {
+	display: block;
+	padding: 1px 0px 0px 0px;
+}
+
+.UICalendarPortlet .CalendarWorkingWorkspace .SelectButton .IconHolder {
+	margin: 4px 7px 0px 7px;
+}
+
 .UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar .DownArrow1Icon {
-	line-height: 23px;
 	padding-right: 14px; 
 	cursor: pointer;
-	width: 60px;
+	width: 58px;
 	white-space: nowrap;
 }
 
@@ -516,7 +529,7 @@
 .UIDayView .EventAllDay {
 	border-left: 1px solid #c7c7c7;
 	background-color: #f6ffe5;
-	height: 25px;
+	height: 22px;
 }
 
 .UIDayView .EventDayContainer {
@@ -586,6 +599,10 @@
 	-moz-user-select : none ;
 }
 
+.UIDayView .EventAllDay .EventContainer{
+	padding: 2px 3px;
+}
+
 .UIDayView .EventDayContent .EventContainerBar{
 	border:1px solid #fff;
 	border-bottom: none;
@@ -618,15 +635,14 @@
 	border-top: none;
 }
 
-.UIDayView .TitleBar .Day { 
-}
-
 .UIDayView .TitleBar .Today{
 	 color:red ;
 }
+
 .UIDayView .TitleBar .Today a{
 	 color:red ;
 }
+
 .UIDayView .WorkOffTime {
 	background-color: #f3f3f3;
 }
@@ -678,7 +694,6 @@
 }
 
 .UIWeekView .EventWeekBar .Day {
-	 
 }
 
 .UIWeekView .EventWeekBar .Day a {
