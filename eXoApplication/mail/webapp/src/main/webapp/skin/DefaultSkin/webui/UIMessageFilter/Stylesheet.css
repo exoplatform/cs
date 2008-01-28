@@ -99,14 +99,14 @@
 }
 
 .UIMailPortlet .UIMessageFilter .FilterSettingContainer .FilterContent {
-	background: url('background/BGIntroduction89x1.png') repeat-y right top ;
-	margin: 0px 1px;
+	background: url('background/BGIntroduction89x1.gif') repeat-y right;
+	padding: 5px;
+	height: 319px;
 }
 
 .UIMailPortlet .UIMessageFilter .FilterSettingContainer .IntroductionContent {
-	background: url('background/BGMailFilter54x132.gif') no-repeat 265px 16px ;
-	height: 328px;
-	padding: 0px 85px 0px 12px;
+	background: url('background/BGMailFilter54x132.gif') no-repeat right;
+	margin-right: 5px; padding-right: 50px;
 }
 
 .UIMailPortlet .UIMessageFilter .FilterSettingContainer .IntroductionContent .TitleFilter {

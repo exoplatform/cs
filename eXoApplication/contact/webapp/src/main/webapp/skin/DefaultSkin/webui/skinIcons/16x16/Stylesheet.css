@@ -75,6 +75,11 @@
 	height: 16px; width: 17px;
 }
 
+.UIContactPortlet .OwnerIcon {
+	background: url('icons/OwnerIcon.gif') no-repeat;
+	height: 16px; width: 17px;
+}
+
 .UIContactPortlet .OfflineIcon {
 	background: url('icons/OffLineIcon.png') no-repeat;
 	height: 16px; width: 17px;
