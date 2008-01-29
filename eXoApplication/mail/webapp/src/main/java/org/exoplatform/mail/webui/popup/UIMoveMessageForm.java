@@ -26,6 +26,7 @@ import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
+import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.UISelectFolder;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -78,6 +79,7 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
       MailService mailSrv = uiMoveMessageForm.getApplicationComponent(MailService.class) ;
       UIMailPortlet uiPortlet = uiMoveMessageForm.getAncestorOfType(UIMailPortlet.class) ;
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType((UIMessageList.class));
+      UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class);
       String username = uiPortlet.getCurrentUser() ;
       String accountId =  uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       String destFolder = uiMoveMessageForm.getChild(UISelectFolder.class).getSelectedValue();
@@ -85,6 +87,8 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
          mailSrv.moveMessages(SessionsUtils.getSessionProvider(), username, accountId, message.getId(), message.getFolders()[0], destFolder);
       }       
       uiMessageList.updateList(); 
+      Message msgPreview = uiMsgPreview.getMessage();
+      if (msgPreview != null && uiMessageList.getCheckedMessage().contains(msgPreview)) uiMsgPreview.setMessage(null);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMoveMessageForm.getAncestorOfType(UIPopupAction.class)) ;     
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));  
