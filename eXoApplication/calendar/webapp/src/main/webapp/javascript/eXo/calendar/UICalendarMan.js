@@ -403,9 +403,9 @@ function EventMan(){}
  * @param {Object} rootNode
  */
 EventMan.prototype.initMonth = function(rootNode){
+  this.cleanUp();
   rootNode = typeof(rootNode) == 'string' ? document.getElementById(rootNode) : rootNode;
   this.rootNode = rootNode;
-  this.cleanUp();
   this.events = new Array();
   this.weeks = new Array();
   var DOMUtil = eXo.core.DOMUtil;
@@ -426,7 +426,9 @@ EventMan.prototype.initMonth = function(rootNode){
 };
 
 EventMan.prototype.cleanUp = function() {
-  if (!this.events) {
+  if (!this.events ||
+      !this.rootNode ||
+      !this.rootNode.parentNode) {
     return;
   }
   var DOMUtil = eXo.core.DOMUtil;
