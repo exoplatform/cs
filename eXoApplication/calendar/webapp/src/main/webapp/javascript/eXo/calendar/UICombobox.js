@@ -111,16 +111,16 @@ UICombobox.prototype.setValue = function(value) {
 
 UICombobox.prototype.getTimeFormat= function() {
 	var items = eXo.calendar.UICombobox.items ;
-	if (items.length <= 0) return {"am":"AM", "pm":"PM"} ;
+	if (items.length <= 0) return {am:"AM", pm:"PM"} ;
 	var first = eXo.core.DOMUtil.findFirstDescendantByClass(items[0], "div", "UIComboboxLabel").innerHTML ;
 	var last =  eXo.core.DOMUtil.findFirstDescendantByClass(items[items.length - 1], "div", "UIComboboxLabel").innerHTML ;
 	var am = first.match(/[A-Z]+/) ;
 	var pm = last.match(/[A-Z]+/) ;
-	return {"am":am, "pm":pm} ;
+	return {am:am, pm:pm} ;
 } ;
 
 UICombobox.prototype.digitToTime = function(stringNo) {
-	stringNo = eXo.calendar.UICombobox.getDigit(stringNo) ;
+	stringNo = new String(eXo.calendar.UICombobox.getDigit(stringNo)) ;
 	var len = stringNo.length ;
 	if (len <= 0) return false ;
 	switch(len) {
@@ -132,13 +132,13 @@ UICombobox.prototype.digitToTime = function(stringNo) {
 			return {"hour": stringNo,"minutes": "00" } ;
 			break ;
 		case 3 :
-			return {"hour": "0" + stringNo[0],"minutes": stringNo[1] + stringNo[2] } ;
+			return {"hour": "0" + stringNo.charAt(0),"minutes": stringNo.charAt(1) + stringNo.charAt(2) } ;
 			break ;
-		case 4 : 
-			return {"hour": stringNo[0] + stringNo[1],"minutes": stringNo[2] + stringNo[3] } ;
+		case 4 :
+			return {"hour": stringNo.charAt(0) + stringNo.charAt(1),"minutes": stringNo.charAt(2) + stringNo.charAt(3) } ;
 			break ;
 		default: 
-			var newString = stringNo.substring(0,4) ;
+			var newString = stringNo.substring(0,3) ;
 			return eXo.calendar.UICombobox.digitToTime(newString) ;
 	}
 } ;
@@ -150,7 +150,7 @@ UICombobox.prototype.getDigit = function(stringNo) {
 		if(i=="1"||i=="2"||i=="3"||i=="4"||i=="5"||i=="6"||i=="7"||i=="8"||i=="9"||i=="0")
 			parsedNo += i;
 	}
-	return parsedNo ;
+	return parsedNo.toString() ;
 } ;
 
 UICombobox.prototype.synchronize = function(obj) {
