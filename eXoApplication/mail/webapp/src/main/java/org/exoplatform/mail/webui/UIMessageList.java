@@ -715,11 +715,15 @@ public class UIMessageList extends UIForm {
       MailService mailSrv = MailUtils.getMailService();
       String username = MailUtils.getCurrentUser();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+      UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class);
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      for(Message message : uiMessageList.getCheckedMessage()) {
+      List<Message> appliedMsgList = uiMessageList.getCheckedMessage();
+      for(Message message : appliedMsgList) {
         mailSrv.moveMessages(SessionsUtils.getSessionProvider(), username, accountId, message.getId(), message.getFolders()[0], folderId);
       }       
       uiMessageList.updateList();     
+      Message msgPreview = uiMsgPreview.getMessage();
+      if (msgPreview != null && appliedMsgList.contains(msgPreview)) uiMsgPreview.setMessage(null);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));  
     }
