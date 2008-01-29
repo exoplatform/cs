@@ -174,8 +174,8 @@
         <a title="Previous Page" class="$cssPreviousPage PreviousPageArrow" href="<%=uicomponent.event("PreviousPage")%>"></a>
         <div class="Number">$currentPage</div>
         <a title="Next Page" class="$cssNextPage NextPageArrow" href="<%=uicomponent.event("NextPage")%>"/></a>
-        <a title="Last Page" class="$cssNextPage LastPageArrow" href="<%=uicomponent.event("LastPage")%>"><span/></a>
-        <div style="clear: left;"><span/></div>
+        <a title="Last Page" class="$cssNextPage LastPageArrow" href="<%=uicomponent.event("LastPage")%>"><span></span></a>
+        <div style="clear: left;"><span></span></div>
       </div>
       <div class="LeftPageIteratorBlock">
         <div class="TotalPages">Message(s) <span class="MailQuantity"> $mailRange </span></div>
@@ -183,7 +183,7 @@
       <div style="clear: right;"><span></span></div>
     </div>
   </div>
-  <div style="clear: left;"><span/></div>
+  <div style="clear: left;"><span></span></div>
   </div>
   
   <% /*End Message Action Bar*/ %>

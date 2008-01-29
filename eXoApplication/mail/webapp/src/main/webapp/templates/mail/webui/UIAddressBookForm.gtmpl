@@ -36,10 +36,10 @@
                 </a>
                 
                 <div class="SearchForm">
-                  <a href="#"><div title="Search" class="Search"><span/></div></a>
+                  <a href="#"><div title="Search" class="Search"><span></span></div></a>
                   <input type="text" name="search" id="search" class="Input"/>
                   <div class="LabelSearch">Search:</div>
-                  <div style="clear: right;"><span/></div>
+                  <div style="clear: right;"><span></span></div>
                 </div>
                 -->
               </div>
@@ -55,7 +55,7 @@
       <div class="LeftContacts">
         <div class="UISelectAccount">
           <%uicomponent.renderField(uicomponent.SELECT_GROUP)%>
-          <div style="clear: left;"><span/></div>
+          <div style="clear: left;"><span></span></div>
         </div>
         
         <div class="ContactContainer">
@@ -116,7 +116,7 @@
                         <div class="State"><%=selectedContact.getFullName()%></div>
                         <div class="Job"><%= (selectedContact.getJobTitle() != null) ? selectedContact.getJobTitle() : "_"%></div>
                       </div>
-                      <div style="clear: left;"><span/></div>
+                      <div style="clear: left;"><span></span></div>
                       <div class="InfoContainer">
                         <div class="TitleInfo">Profile</div>
                         <div class="Content">
@@ -124,17 +124,17 @@
                             <div class="InfoItem">
                               <div class="InfoLabel">Nick name:</div>
                               <div class="Info"><%= (selectedContact.getNickName() != null) ? selectedContact.getNickName() : "_"%></div>
-                              <div style="clear: left;"><span/></div>
+                              <div style="clear: left;"><span></span></div>
                             </div>
                             <div class="InfoItem">
                               <div class="InfoLabel">Gender:</div>
                               <div class="Info"><%= (selectedContact.getGender() != null) ? selectedContact.getGender() : "_"%></div>
-                              <div style="clear: left;"><span/></div>
+                              <div style="clear: left;"><span></span></div>
                             </div>
                             <div class="InfoItem">
                               <div class="InfoLabel">Job Title:</div>
                               <div class="Info"><%= (selectedContact.getJobTitle() != null) ? selectedContact.getJobTitle() : "_"%></div>
-                              <div style="clear: left;"><span/></div>
+                              <div style="clear: left;"><span></span></div>
                             </div>
                           </div>
                           <div class="RightContent">
@@ -149,13 +149,13 @@
                                 <%= (selectedContact.getEmailAddress() != null) ? selectedContact.getEmailAddress() : "_"%>
                                 </a>
                               </div>
-                              <div style="clear: left;"><span/></div>
+                              <div style="clear: left;"><span></span></div>
                             </div>                                                  
                           </div>
-                          <div style="clear: left;"><span/></div>
+                          <div style="clear: left;"><span></span></div>
                         </div>
                       </div>
-                      <div style="clear: left;"><span/></div>
+                      <div style="clear: left;"><span></span></div>
                       
                     </div>
                     <% } %>
@@ -172,7 +172,7 @@
         </div>    
       </div>
       
-      <div style="clear: left;"><span/></div>
+      <div style="clear: left;"><span></span></div>
     </div>
   </div>
   <div class="UIAction">

@@ -27,10 +27,10 @@
 									</div>
 								</a>
 								<div class="SearchForm">
-									<a href="#"><div title="Search" class="Search"><span/></div></a>
+									<a href="#"><div title="Search" class="Search"><span></span></div></a>
 								  <input type="text" name="search" id="search" class="Input"/>
 								  <div class="LabelSearch">Search:</div>
-									<div style="clear: right;"><span/></div>
+									<div style="clear: right;"><span></span></div>
 								</div>
 							</div>
 						</div>
@@ -47,7 +47,7 @@
 					<select onchange="" name="" class="selectbox">
 					</select>
 					
-				  <div style="clear: left;"><span/></div>
+				  <div style="clear: left;"><span></span></div>
 				</div>
 			  
 		  	<div class="ContactContainer">
@@ -93,7 +93,7 @@
 												<div class="State">asfd</div>
 												<div class="Job">sad</div>
 											</div>
-											<div style="clear: left;"><span/></div>
+											<div style="clear: left;"><span></span></div>
 											<div class="InfoContainer">
 												<div class="TitleInfo">Profile</div>
 												<div class="Content">
@@ -101,12 +101,12 @@
 														<div class="InfoItem">
 															<div class="InfoLabel">Nick name:</div>
 															<div class="Info">sdf</div>
-															<div style="clear: left;"><span/></div>
+															<div style="clear: left;"><span></span></div>
 														</div>
 														<div class="InfoItem">
 															<div class="InfoLabel">Gender:</div>
 															<div class="Info">Male</div>
-														  <div style="clear: left;"><span/></div>
+														  <div style="clear: left;"><span></span></div>
 														</div>
 													</div>
 													<div class="RightContent">
@@ -121,10 +121,10 @@
 																	dsg@dgh.fsg
 																</a>
 															</div>
-															<div style="clear: left;"><span/></div>
+															<div style="clear: left;"><span></span></div>
 														</div>																									
 													</div>
-													<div style="clear: left;"><span/></div>
+													<div style="clear: left;"><span></span></div>
 												</div>
 											</div>
 											
@@ -135,27 +135,27 @@
 														<div class="InfoItem">
 															<div class="InfoLabel">Address:</div>
 															<div class="Info">_</div>
-														  <div style="clear: left;"><span/></div>
+														  <div style="clear: left;"><span></span></div>
 														</div>
 														<div class="InfoItem">
 															<div class="InfoLabel">City:</div>
 															<div class="Info">_</div>
-														  <div style="clear: left;"><span/></div>
+														  <div style="clear: left;"><span></span></div>
 														</div>
 														<div class="InfoItem">
 															<div class="InfoLabel">State/Province:</div>
 															<div class="Info">_</div>
-														  <div style="clear: left;"><span/></div>
+														  <div style="clear: left;"><span></span></div>
 														</div>
 														<div class="InfoItem">
 															<div class="InfoLabel">Postal Code:</div>
 															<div class="Info">_</div>
-															<div style="clear: left;"><span/></div>
+															<div style="clear: left;"><span></span></div>
 														</div>
 														<div class="InfoItem">
 															<div class="InfoLabel">Country:</div>
 															<div class="Info">_</div>
-															<div style="clear: left;"><span/></div>
+															<div style="clear: left;"><span></span></div>
 														</div>
 													</div>
 													<div class="RightContent">
@@ -178,10 +178,10 @@
 														<div class="InfoItem">
 															<div class="InfoLabel">Web Page:</div>
 															<div class="Info">_</div>
-															<div style="clear: left;"><span/></div>
+															<div style="clear: left;"><span></span></div>
 														</div>													
 													</div>
-													<div style="clear: left;"><span/></div>
+													<div style="clear: left;"><span></span></div>
 												</div>
 											</div>
 											
@@ -192,22 +192,22 @@
 														<div class="InfoItem">
 															<div class="InfoLabel">eXo Chat:</div>
 															<div class="Info">_</div>
-															<div style="clear: left;"><span/></div>
+															<div style="clear: left;"><span></span></div>
 														</div>
 														<div class="InfoItem">
 															<div class="InfoLabel">Google:</div>
 															<div class="Info">_</div>
-															<div style="clear: left;"><span/></div>
+															<div style="clear: left;"><span></span></div>
 														</div>
 														<div class="InfoItem">
 															<div class="InfoLabel">MSN:</div>
 															<div class="Info">_</div>
-															<div style="clear: left;"><span/></div>
+															<div style="clear: left;"><span></span></div>
 														</div>
 														<div class="InfoItem">
 															<div class="InfoLabel">AOL/AIM:</div>
 															<div class="Info">_</div>
-															<div style="clear: left;"><span/></div>
+															<div style="clear: left;"><span></span></div>
 														</div>
 													</div>
 													<div class="RightContent">
@@ -226,10 +226,10 @@
 														<div class="InfoItem">
 															<div class="InfoLabel1">ICQ:</div>
 															<div class="Info1">_</div>
-															<div style="clear: left;"><span/></div>
+															<div style="clear: left;"><span></span></div>
 														</div>													
 													</div>
-													<div style="clear: left;"><span/></div>
+													<div style="clear: left;"><span></span></div>
 												</div>
 											</div>
 											<div class="InfoContainer">
@@ -239,27 +239,27 @@
 														<div class="InfoItem">
 															<div class="InfoLabel">Street:</div>
 															<div class="Info">_</div>
-															<div style="clear: left;"><span/></div>
+															<div style="clear: left;"><span></span></div>
 														</div>
 														<div class="InfoItem">
 															<div class="InfoLabel">City:</div>
 															<div class="Info">_</div>
-															<div style="clear: left;"><span/></div>
+															<div style="clear: left;"><span></span></div>
 														</div>
 														<div class="InfoItem">
 															<div class="InfoLabel">State/Province:</div>
 															<div class="Info">_</div>
-															<div style="clear: left;"><span/></div>
+															<div style="clear: left;"><span></span></div>
 														</div>
 														<div class="InfoItem">
 															<div class="InfoLabel">Postal Code:</div>
 															<div class="Info">_</div>
-															<div style="clear: left;"><span/></div>
+															<div style="clear: left;"><span></span></div>
 														</div>
 														<div class="InfoItem">
 															<div class="InfoLabel">Country/Region:</div>
 															<div class="Info">_</div>
-															<div style="clear: left;"><span/></div>
+															<div style="clear: left;"><span></span></div>
 														</div>
 													</div>
 													<div class="RightContent">
@@ -280,7 +280,7 @@
 															<div class="Info">_</div>
 														</div>													
 													</div>
-													<div style="clear: left;"><span/></div>
+													<div style="clear: left;"><span></span></div>
 												</div>
 											</div>
 											
@@ -294,7 +294,7 @@
 													</div>
 												</div>
 											</div>
-											<div style="clear: left;"><span/></div>
+											<div style="clear: left;"><span></span></div>
 											
 										</div>
 										
@@ -314,7 +314,7 @@
 			  </div>		
 			</div>
 			
-			<div style="clear: left;"><span/></div>
+			<div style="clear: left;"><span></span></div>
 		</div>
 	</div>
 	<div class="UIAction">
