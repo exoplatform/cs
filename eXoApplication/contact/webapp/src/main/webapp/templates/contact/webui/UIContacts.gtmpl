@@ -84,12 +84,12 @@
 	  						<a href="<%=uicomponent.event("PreviousPage")%>" title="Previous Page" class="$cssPreviousPage PreviousPageArrow"></a>
 								<div class="Number">$contactRange</div>
 	  				 		<a href="<%=uicomponent.event("NextPage")%>" title="Next Page" class="$cssNextPage NextPageArrow"/></a>
-	 				  		<a href="<%=uicomponent.event("LastPage")%>" title="Last Page" class="$cssNextPage LastPageArrow"><span/></a>
-						    <div style="clear: left;"><span/></div>
+	 				  		<a href="<%=uicomponent.event("LastPage")%>" title="Last Page" class="$cssNextPage LastPageArrow"><span></span></a>
+						    <div style="clear: left;"><span></span></div>
 						  </div>
 					  </div>
 					</div>
-					<div style="clear: both;"><span/></div>
+					<div style="clear: both;"><span></span></div>
 				</div>
 	
 				<div class="UIMessageList" >
@@ -392,12 +392,12 @@
 	  						<a href="<%=uicomponent.event("PreviousPage")%>" title="Previous Page" class="$cssPreviousPage PreviousPageArrow"></a>
 								<div class="Number">$contactRange</div>
 	  				 		<a href="<%=uicomponent.event("NextPage")%>" title="Next Page" class="$cssNextPage NextPageArrow"/></a>
-	 				  		<a href="<%=uicomponent.event("LastPage")%>" title="Last Page" class="$cssNextPage LastPageArrow"><span/></a>
-						    <div style="clear: left;"><span/></div>
+	 				  		<a href="<%=uicomponent.event("LastPage")%>" title="Last Page" class="$cssNextPage LastPageArrow"><span></span></a>
+						    <div style="clear: left;"><span></span></div>
 						  </div>
 					  </div>
 		</div>
-		<div style="clear: both;"><span/></div>	
+		<div style="clear: both;"><span></span></div>	
 		
 	</div>
 	
