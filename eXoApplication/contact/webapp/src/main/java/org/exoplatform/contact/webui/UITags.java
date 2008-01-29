@@ -73,6 +73,13 @@ public class UITags extends UIComponent {
   }
   public Map<String, Tag> getTagMap() { return tagMap_ ; }
   
+  public boolean canPrint(String tagId) {
+    if (ContactUtils.isEmpty(selectedTag_) || ContactUtils.isEmpty(tagId) || !tagId.equals(selectedTag_) 
+        || getAncestorOfType(UIWorkingContainer.class).findFirstComponentOfType(UIContacts.class).getViewContactsList()) {
+      return false ;
+    }
+    return true ;
+  }
   public void setSelectedTag(String id) { selectedTag_ = id ; }
   public String getSelectedTag() { return selectedTag_ ; }
   

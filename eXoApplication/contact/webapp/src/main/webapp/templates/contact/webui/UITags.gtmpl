@@ -15,13 +15,11 @@
 				if(tag.getId().equals(uicomponent.getSelectedTag())) cssClass = "Selected" ;
 				color = tag.getColor() + "Tag" ;
 		%>
-			<div  class="TagList ItemList $cssClass" tagName="<%=tag.getId()%>">
+			<div  class="TagList ItemList $cssClass" tagName="<%=tag.getId()%>" canPrint = "<%=uicomponent.canPrint(tag.getId())%>">
 				<a href="$actionLink" class="IconHolder $color" ><%=tag.getName()%></a>
 			</div>
 		<% } %>
 	</div>
-	
-
 	<% /*Begin Popup Menu*/ %>
 				
 	  	<div class="UIRightClickPopupMenu" id="UITagPopupMenu" eXoCallback="eXo.contact.UIContactPortlet.tagCallback">
@@ -39,16 +37,22 @@
 	              		Edit
 	            		</div>
 	        			</a>
-                <a class="MenuItem" href="<%=uicomponent.event("ExportAddress", "id")%>">   
-                  <div class="ItemIcon ExportContactIcon">
-                    Export Contacts
-                  </div>
-                </a>
 	        			<a class="MenuItem" href="<%=uicomponent.event("DeleteTag", "id")%>">   
 	            		<div class="ItemIcon DeleteIcon">
 	              		Delete
 	            		</div> 
 	        			</a>
+                <a class="MenuItem" href="<%=uicomponent.event("ExportAddress", "id")%>">   
+                  <div class="ItemIcon ExportContactIcon">
+                    Export Contacts
+                  </div>
+                </a>
+        			
+	        			<a class="MenuItem" href="javascript:eXo.contact.UIContactPortlet.adddressPrint() ;">   
+                  <div class="ItemIcon PrintIcon">
+                    Print Contacts
+                  </div>
+                </a>	        			
 							</div>
 	  				</div>
 					</div>

@@ -24,14 +24,28 @@
   String cssPreviousPage = "FloatBlockHidden";
   String cssNextPage = "FloatBlockHidden";
   String contactRange = "";	
+  
+  String firstPageAction = "#" ;
+  String previousPageAction = "#" ;
+  String nextPageAction = "#" ;
+  String lastPageAction = "#" ; 
+  
   Contact[] contacts = uicomponent.getContacts();
   if (pageList != null && (contacts.length != 0)) {
     currentPage = pageList.getCurrentPage();
     availablePage = pageList.getAvailablePage() ;
     availableContact =  pageList.getAvailable() ;
     pageSize = pageList.getPageSize() ;
-    if (currentPage > 1) cssPreviousPage = "FloatBlock";
-    if (currentPage < availablePage) cssNextPage = "FloatBlock";
+    if (currentPage > 1) {
+    	cssPreviousPage = "FloatBlock";
+    	firstPageAction = uicomponent.event("FirstPage") ;	
+    	previousPageAction = uicomponent.event("PreviousPage") ;
+    }
+    if (currentPage < availablePage) {
+    	cssNextPage = "FloatBlock";
+    	nextPageAction = uicomponent.event("NextPage") ;
+    	lastPageAction = uicomponent.event("LastPage") ;
+   	}
     long fromIndex = (currentPage - 1)* pageSize + 1;
     long endIndex = fromIndex-1 + pageSize;
     if (currentPage == availablePage) endIndex = availableContact;
@@ -73,6 +87,12 @@
 					<a href="<%=uicomponent.event("CopyContact")%>" class="ControlButton">
 							<div class="Icon CopyContactIcon" title="Copy Contacts"><span></span></div>
 					</a>
+					
+				<!--	
+					<a href="<%=uicomponent.event("SharedContacts")%>" class="ControlButton">
+							<div class="Icon CopyContactIcon" title="Copy Contacts"><span></span></div>
+					</a>
+					-->
 					<% 
 						}
 					 %>
@@ -80,11 +100,11 @@
 					<div class="UIAddressPageList">
 						<div class="ContactIteratorContainer">
 	  					<div class="RightPageIteratorBlock">
-	  						<a href="<%=uicomponent.event("FirstPage")%>" title="First Page" class="$cssPreviousPage FirstPageArrow"/></a>        
-	  						<a href="<%=uicomponent.event("PreviousPage")%>" title="Previous Page" class="$cssPreviousPage PreviousPageArrow"></a>
+	  						<a href="$firstPageAction" title="First Page" class="$cssPreviousPage FirstPageArrow"/></a>        
+	  						<a href="$previousPageAction" title="Previous Page" class="$cssPreviousPage PreviousPageArrow"></a>
 								<div class="Number">$contactRange</div>
-	  				 		<a href="<%=uicomponent.event("NextPage")%>" title="Next Page" class="$cssNextPage NextPageArrow"/></a>
-	 				  		<a href="<%=uicomponent.event("LastPage")%>" title="Last Page" class="$cssNextPage LastPageArrow"><span></span></a>
+	  				 		<a href="$nextPageAction" title="Next Page" class="$cssNextPage NextPageArrow"/></a>
+	 				  		<a href="$lastPageAction" title="Last Page" class="$cssNextPage LastPageArrow"><span/></a>
 						    <div style="clear: left;"><span></span></div>
 						  </div>
 					  </div>

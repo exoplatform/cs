@@ -21,15 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.contact.ContactUtils;
-import org.exoplatform.contact.SessionsUtils;
 import org.exoplatform.contact.service.Contact;
-import org.exoplatform.contact.service.ContactService;
-import org.exoplatform.contact.webui.UIContactPortlet;
-import org.exoplatform.container.PortalContainer;
-import org.exoplatform.download.DownloadResource;
-import org.exoplatform.download.DownloadService;
-import org.exoplatform.download.InputStreamDownloadResource;
-import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.ServerConfiguration;
@@ -39,14 +31,12 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
-import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormInputWithActions;
-import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.UIFormWYSIWYGInput;
@@ -67,11 +57,7 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
       @EventConfig(phase = Phase.DECODE, listeners = UIComposeForm.DiscardChangeActionListener.class),
       @EventConfig(listeners = UIComposeForm.AttachmentActionListener.class),
       @EventConfig(listeners = UIComposeForm.DownloadActionListener.class),
-      @EventConfig(listeners = UIComposeForm.RemoveAttachmentActionListener.class),
-      @EventConfig(listeners = UIComposeForm.ToActionListener.class),
-      @EventConfig(listeners = UIComposeForm.ToCCActionListener.class),
-      @EventConfig(listeners = UIComposeForm.ToBCCActionListener.class),
-      @EventConfig(listeners = UIComposeForm.UseVisualEdiorActionListener.class)
+      @EventConfig(listeners = UIComposeForm.RemoveAttachmentActionListener.class)
     }
 )
 public class UIComposeForm extends UIForm implements UIPopupComponent {
@@ -79,27 +65,16 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   final static public String FIELD_FROM = "from" ;
   final static public String FIELD_SUBJECT = "subject" ;
   final static public String FIELD_TO = "to" ;
-  final static public String FIELD_CC = "cc" ;
-  final static public String FIELD_BCC = "bcc" ;
   final static public String FIELD_ATTACHMENTS = "attachments" ;
   final static public String FIELD_MESSAGECONTENT = "messageContent" ;
   final static public String ACT_TO = "To" ;
-  final static public String ACT_CC = "ToCC" ;
-  final static public String ACT_BCC = "ToBCC" ;
   final static public String ACT_REMOVE = "remove" ;
   final static public int MESSAGE_NEW = 0;
-  final public int MESSAGE_IN_DRAFT = 1;
-  final public int MESSAGE_REPLY = 2;
-  final public int MESSAGE_REPLY_ALL = 3;
-  final public int MESSAGE_FOWARD = 4;
  /* private List<Attachment> attachments_ = new ArrayList<Attachment>() ;
   private Message message_ = null;*/
   private Boolean isVisualEditor = true;
-  private int composeType_;
-  
+  private int composeType_;  
   public List<Contact> toContacts = new ArrayList<Contact>();
-  public List<Contact> ccContacts = new ArrayList<Contact>();
-  public List<Contact> bccContacts = new ArrayList<Contact>();
   
   public boolean isVisualEditor() { return isVisualEditor; }
   public void setVisualEditor(boolean b) { isVisualEditor = b; }
@@ -107,12 +82,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   public UIComposeForm() throws Exception { }
   
   public List<Contact> getToContacts(){ return toContacts; }
-  public List<Contact> getCcContacts(){ return ccContacts; }
-  public List<Contact> getBccContacts(){ return bccContacts; }
   
   public void setToContacts(List<Contact> contactList) { toContacts = contactList; }
-  public void setCcContacts(List<Contact> contactList) { ccContacts = contactList; }
-  public void setBccContacts(List<Contact> contactList) { bccContacts = contactList; }
   
   public int getComposeType() { return composeType_ ; }
   public void setComposeType(int t) { composeType_ = t; }
@@ -148,14 +119,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   public void init(String emails) throws Exception {
     addUIFormInput(new UIFormStringInput(FIELD_FROM, null, "exomailtest@gmail.com")) ;
     addUIFormInput(new UIFormStringInput(FIELD_TO, null, emails)) ;
-    UIFormTextAreaInput textAreaCC= new UIFormTextAreaInput(FIELD_CC, null, null);
-    textAreaCC.setId(FIELD_CC);
-    textAreaCC.setColumns(2);
-    addUIFormInput(textAreaCC) ;
-    UIFormTextAreaInput textAreaBCC = new UIFormTextAreaInput(FIELD_BCC, null, null);
-    textAreaBCC.setColumns(2);
-    textAreaBCC.setId(FIELD_BCC);
-    addUIFormInput(textAreaBCC) ;
     addUIFormInput(new UIFormStringInput(FIELD_SUBJECT, null, null)) ;
     UIFormInputWithActions inputSet = new UIFormInputWithActions(FIELD_FROM_INPUT);   
     inputSet.addUIFormInput(new UIFormInputInfo(FIELD_ATTACHMENTS, FIELD_ATTACHMENTS, null)) ;
@@ -183,80 +146,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   public List<Attachment> getAttachFileList() {
     return attachments_ ;
   }
-  
-  public Message getMessage() { return message_; }
-  public void setMessage(Message message , int composeType) throws Exception { 
-    setComposeType(composeType) ;
-    this.message_ = message; 
-    fillFields(message_);
-  }*/
-  
-  /*public void fillFields(Message msg) throws Exception {
-    if (msg != null) {
-      MailService mailSrv = MailUtils.getMailService();
-      MailSetting mailSetting = mailSrv.getMailSetting(SessionsUtils.getSessionProvider(), MailUtils.getCurrentUser());
-      switch (getComposeType()) {
-        case MESSAGE_IN_DRAFT :
-          setFieldSubjectValue(msg.getSubject());
-          setFieldToValue(msg.getMessageTo());
-          setFieldContentValue(msg.getMessageBody());
-          for (Attachment att : msg.getAttachments()) {
-            attachments_.add(att);
-            refreshUploadFileList();
-          }
-          break;
-        case MESSAGE_REPLY :
-          String replyWithAtt = mailSetting.getReplyMessageWith();
-          setFieldToValue(msg.getReplyTo());
-          setFieldSubjectValue("Re: " + msg.getSubject());
-          String content = getReplyContent(msg);   
-          setFieldContentValue(content);
-          if (replyWithAtt.equals(MailSetting.REPLY_WITH_ATTACH)) {
-            for (Attachment att : msg.getAttachments()) {
-              attachments_.add(att);
-              refreshUploadFileList();
-            }
-          }
-          break ;
-        case MESSAGE_REPLY_ALL :
-          replyWithAtt = mailSetting.getReplyMessageWith();
-          setFieldSubjectValue("Re: " + msg.getSubject());
-          String replyAll = msg.getReplyTo();
-          if (msg.getMessageCc() != null) replyAll += "," + msg.getMessageCc();
-          if (msg.getMessageBcc() != null) replyAll += "," + msg.getMessageBcc();
-          setFieldToValue(replyAll);
-          String replyContent = getReplyContent(msg);
-          setFieldContentValue(replyContent);
-          if (replyWithAtt.equals(MailSetting.REPLY_WITH_ATTACH)) {
-            for (Attachment att : msg.getAttachments()) {
-              attachments_.add(att);
-              refreshUploadFileList();
-            }
-          }
-          break;
-        case MESSAGE_FOWARD : 
-          String forwardWithAtt = mailSetting.getReplyMessageWith();
-          setFieldSubjectValue("Fwd: " + msg.getSubject());
-          String forwardedText = "<br><br>-------- Original Message --------<br>" +
-              "Subject: " + msg.getSubject() + "<br>Date: " + msg.getSendDate() + 
-              "<br> From: " + msg.getFrom() + 
-              "<br> To: " + msg.getMessageTo() + 
-              "<br><br>" + msg.getMessageBody();         
-          setFieldContentValue(forwardedText);
-          setFieldToValue("");
-          if (forwardWithAtt.equals(MailSetting.FORWARD_WITH_ATTACH)) {
-            for (Attachment att : msg.getAttachments()) {
-              attachments_.add(att);
-              refreshUploadFileList();
-            }
-          }
-          break ;
-        default :
-          break;
-      }
-    }
-  }*/
-  
+*/
 
   
   public String getFieldFromValue() {
@@ -280,20 +170,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     getUIStringInput(FIELD_TO).setValue(value);
   }
 
-  public String getFieldCcValue() {
-    return getUIFormTextAreaInput(FIELD_CC).getValue() ;
-  }
-  
-  public void setFieldCcValue(String value) {
-    getUIFormTextAreaInput(FIELD_CC).setValue(value);
-  }
-
-  public String getFieldBccValue() {
-    return getUIFormTextAreaInput(FIELD_BCC).getValue() ;
-  }
-  public void setFieldBccValue(String value) {
-    getUIFormTextAreaInput(FIELD_BCC).setValue(value);
-  }
   public String getFieldAttachmentsValue() {
     UIFormInputWithActions inputSet = getChildById(FIELD_FROM_INPUT) ;
     return inputSet.getUIFormInputInfo(FIELD_ATTACHMENTS).getValue() ;
@@ -308,25 +184,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     }
     return content;
   }
-  
-/*  public void setFieldContentValue(String value) throws Exception {
-    String username = MailUtils.getCurrentUser();
-    MailService mailSrv = getApplicationComponent(MailService.class);
-    Account account = mailSrv.getAccountById(SessionsUtils.getSessionProvider(), username, accountId_);
-    if (isVisualEditor) {
-      if (!MailUtils.isFieldEmpty(account.getSignature())) {value += "</br> -- <br />" + account.getSignature() + "";}
-      getChild(UIFormWYSIWYGInput.class).setValue(value);
-    } else {
-      if (!MailUtils.isFieldEmpty(account.getSignature())) { value += account.getSignature() ; }
-      getUIFormTextAreaInput(FIELD_MESSAGECONTENT).setValue(value);
-    }
-  }*/
-  
- /* public List<Contact> getContacts() throws Exception {
-    ContactService contactSrv = getApplicationComponent(ContactService.class);
-    String username = MailUtils.getCurrentUser();
-    return contactSrv.getAllContact(SessionsUtils.getSessionProvider(), username);
-  }*/
   
   public void resetFields() { reset() ; }
   
@@ -361,19 +218,18 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       UIPopupAction uiChildPopup = uiForm.getAncestorOfType(UIPopupAction.class) ;
       Message message = new Message() ;
       message.setSendDate(new Date()) ;
-      //message.setAccountId(accountId_) ;
+
       message.setFrom(uiForm.getFieldFromValue()) ;
       String contentType = Utils.MIMETYPE_TEXTHTML;
       message.setContentType(contentType);
       message.setSubject(subject) ;
       message.setMessageTo(to) ;
-      //message.setMessageCc(cc) ;
+
       if (message.getReceivedDate() == null) {
         message.setReceivedDate(new Date());
       }
-      //message.setMessageBcc(bcc) ;
       message.setHasStar(false);
-      //message.setPriority(priority);
+
       //message.setAttachements(this.getAttachFileList()) ;
       String body = uiForm.getFieldContentValue() ;
       message.setMessageBody(body) ;
@@ -454,75 +310,5 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       uiComposeForm.refreshUploadFileList() ;*/
     }
   }
-
-  static public class ToActionListener extends EventListener<UIComposeForm> {
-    public void execute(Event<UIComposeForm> event) throws Exception {
-     /* UIComposeForm uiComposeForm = event.getSource() ;
-      UIPopupActionContainer uiActionContainer = uiComposeForm.getAncestorOfType(UIPopupActionContainer.class) ;    
-      UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
-
-      UIAddressForm uiAddressForm = uiChildPopup.activate(UIAddressForm.class, 700) ; 
-      uiAddressForm.setRecipientsType(FIELD_TO);
-      if (uiComposeForm.getToContacts() != null && uiComposeForm.getToContacts().size() > 0) {        
-        uiAddressForm.setAlreadyCheckedContact(uiComposeForm.getToContacts());      
-        uiAddressForm.setContactList();
-      }
-      
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;*/
-    }
-  }
-  static public class ToCCActionListener extends EventListener<UIComposeForm> {
-    public void execute(Event<UIComposeForm> event) throws Exception {
-      /*UIComposeForm uiComposeForm = event.getSource() ;
-      UIPopupActionContainer uiActionContainer = uiComposeForm.getAncestorOfType(UIPopupActionContainer.class) ;    
-      UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
-      UIAddressForm uiAddressForm = uiChildPopup.activate(UIAddressForm.class,700) ; 
-      uiAddressForm.setRecipientsType(FIELD_CC);
-      if (uiComposeForm.getCcContacts()!= null && uiComposeForm.getCcContacts().size()>0) {        
-       uiAddressForm.setAlreadyCheckedContact(uiComposeForm.getCcContacts());      
-        uiAddressForm.setContactList();
-      }
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;*/
-    }
-  }
   
-  static public class ToBCCActionListener extends EventListener<UIComposeForm> {
-    public void execute(Event<UIComposeForm> event) throws Exception {
-     /* UIComposeForm uiComposeForm = event.getSource() ;
-      
-      UIPopupActionContainer uiActionContainer = uiComposeForm.getAncestorOfType(UIPopupActionContainer.class) ;    
-      UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
-      UIAddressForm uiAddressForm = uiChildPopup.activate(UIAddressForm.class,700) ; 
-      
-      uiAddressForm.setRecipientsType(FIELD_BCC);
-      if (uiComposeForm.getCcContacts()!= null && uiComposeForm.getBccContacts().size()>0) {        
-       uiAddressForm.setAlreadyCheckedContact(uiComposeForm.getBccContacts());      
-        uiAddressForm.setContactList();
-      }
-      
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;*/
-    }   
-  }
-  
-  static public class UseVisualEdiorActionListener extends EventListener<UIComposeForm> {
-    public void execute(Event<UIComposeForm> event) throws Exception {
-      /*UIComposeForm uiForm = event.getSource() ;
-      boolean isVisualEditor = Boolean.valueOf(event.getRequestContext().getRequestParameter(OBJECTID)) ;  
-      String content = "";
-      if (isVisualEditor) {
-        content = uiForm.getUIFormTextAreaInput(FIELD_MESSAGECONTENT).getValue();
-        uiForm.removeChildById(FIELD_MESSAGECONTENT);
-        UIFormWYSIWYGInput wysiwyg = new UIFormWYSIWYGInput(FIELD_MESSAGECONTENT, null, null, true) ;
-        uiForm.addUIFormInput(wysiwyg);
-        wysiwyg.setValue(content);
-      } else {
-        content = uiForm.getChild(UIFormWYSIWYGInput.class).getValue();
-        uiForm.removeChild(UIFormWYSIWYGInput.class) ;
-        UIFormTextAreaInput textArea = new UIFormTextAreaInput(FIELD_MESSAGECONTENT, null, null);
-        textArea.setValue(content);
-        uiForm.addUIFormInput(textArea) ;
-      }
-      uiForm.setVisualEditor(isVisualEditor);*/
-    }
-  }
 }

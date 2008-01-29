@@ -145,8 +145,15 @@ public class UIImportForm extends UIForm {
       UIFormUploadInput uiformInput = uiForm.getUIInput(FIELD_UPLOAD) ;      
       UploadResource uploadResource = uiformInput.getUploadResource() ;
 
+      if (uploadResource == null) {
+        uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.uploadResource-empty", null, 
+            ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;        
+      }
       ByteArrayInputStream inputStream ;
       String uploadId = uiformInput.getUploadId() ;
+      /*
       if (uploadResource == null) {
         uploadResource = uiForm.uploadResource_ ;
         inputStream = new ByteArrayInputStream(uiForm.importBytes_) ;
@@ -155,12 +162,10 @@ public class UIImportForm extends UIForm {
         uiformInput.getUploadDataAsStream().read(input) ;
         inputStream = new ByteArrayInputStream(input) ;
       }
-      if (uploadResource == null) {
-        uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.uploadResource-empty", null, 
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;        
-      }
+      */
+      byte[] input = new byte[uiformInput.getUploadDataAsStream().available()] ;
+      uiformInput.getUploadDataAsStream().read(input) ;
+      inputStream = new ByteArrayInputStream(input) ;
       boolean canImport = false ;
       String[] array = uploadResource.getMimeType().split("/") ;
       String extend = array[array.length - 1] ;

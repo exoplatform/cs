@@ -74,7 +74,7 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
 
   public UIComponent getReturnComponent() { return uiComponent ; }
   public String getReturnField() { return returnFieldName ; }
-
+ 
   public void setComponent(UIComponent uicomponent, String[] initParams) {
     uiComponent = uicomponent ;
     if(initParams == null || initParams.length < 0) return ;

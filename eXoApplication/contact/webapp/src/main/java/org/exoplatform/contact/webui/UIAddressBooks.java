@@ -170,7 +170,7 @@ public class UIAddressBooks extends UIComponent {
         if (uiAddressBook.privateGroupMap_.containsKey(srcAddress)) srcType = "0" ;
         else if (uiAddressBook.sharedGroupMap_.containsKey(srcAddress)) srcType = "1" ;
         else srcType = "2" ;    
-        ContactUtils.getContactService().pasteAddressBook(SessionsUtils.getSessionProvider()
+        ContactUtils.getContactService().pasteAddressBook(SessionsUtils.getSystemProvider()
             , ContactUtils.getCurrentUser(), srcAddress, srcType, destAddress, destType) ;
       } else {        
         ContactUtils.getContactService().pasteContacts(SessionsUtils.getSessionProvider()
@@ -180,6 +180,8 @@ public class UIAddressBooks extends UIComponent {
       .getAncestorOfType(UIWorkingContainer.class).findFirstComponentOfType(UIContacts.class) ;
       uiContacts.updateList() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent())   ;
+      
     }
   }
   
@@ -273,6 +275,7 @@ public class UIAddressBooks extends UIComponent {
   static public class AddContactActionListener extends EventListener<UIAddressBooks> {
     public void execute(Event<UIAddressBooks> event) throws Exception {
       UIAddressBooks uiAddressBook = event.getSource() ;  
+      String groupId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIContactPortlet uiContactPortlet = uiAddressBook.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class) ; 
       UIPopupContainer popupContainer = uiPopupAction.activate(UIPopupContainer.class, 800) ;
@@ -280,7 +283,7 @@ public class UIAddressBooks extends UIComponent {
       UICategorySelect uiCategorySelect = popupContainer.addChild(UICategorySelect.class, null, null) ;
       UIContactForm uiContactForm = popupContainer.addChild(UIContactForm.class, null, null) ;
       uiContactForm.setNew(true) ;
-      String groupId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      
       if (uiAddressBook.publicGroupMap_.containsKey(groupId)) {
         uiContactForm.getUIFormCheckBoxInput(groupId).setChecked(true) ;   
       }
@@ -301,11 +304,11 @@ public class UIAddressBooks extends UIComponent {
 
   static public class EditGroupActionListener extends EventListener<UIAddressBooks> {
     public void execute(Event<UIAddressBooks> event) throws Exception {
+      String groupId = event.getRequestContext().getRequestParameter(OBJECTID);      
       UIAddressBooks uiAddressBook = event.getSource();
       UIContactPortlet uiContactPortlet = uiAddressBook.getAncestorOfType(UIContactPortlet.class);
       UIPopupAction popupAction = uiContactPortlet.getChild(UIPopupAction.class);
       UICategoryForm uiCategoryForm = popupAction.activate(UICategoryForm.class, 500) ;
-      String groupId = event.getRequestContext().getRequestParameter(OBJECTID);
       uiCategoryForm.setValues(groupId) ;
       uiCategoryForm.setNew(false) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction);
@@ -320,15 +323,12 @@ public class UIAddressBooks extends UIComponent {
       UIContactPortlet contactPortlet = uiAddressBook.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
       UIPopupContainer uiPopupContainer = popupAction.activate(UIPopupContainer.class, 600) ;
-      uiPopupContainer.setId("UIPermissionSelectPopup") ;
-      UISharedForm uiSharedForm = uiPopupContainer.addChild(UISharedForm.class, null, null) ;      
-      ContactGroup contactGroup = ContactUtils.getContactService()
-        .getGroup(SessionsUtils.getSessionProvider(), ContactUtils.getCurrentUser(), groupId) ;
-      if (contactGroup != null) {
-        uiSharedForm.init(contactGroup, true) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());
-      }
+      uiPopupContainer.setId("UISharedAddressBook") ;
+      UISharedForm uiSharedForm = uiPopupContainer.addChild(UISharedForm.class, null, null) ; 
+      uiSharedForm.init(true) ;
+      uiSharedForm.setAddress(groupId, uiAddressBook.getPrivateGroupMap().get(groupId)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());
     }
   }
 

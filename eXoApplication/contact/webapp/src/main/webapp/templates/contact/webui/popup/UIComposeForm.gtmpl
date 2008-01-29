@@ -1,5 +1,4 @@
 <%
- // import org.exoplatform.mail.service.Utils;
   import org.exoplatform.contact.service.Contact;
   
   def rcontext = _ctx.getRequestContext() ;
@@ -28,15 +27,6 @@
 											<div class="Label">Send mail</div>
 										</div>
 									</a>
-									
-									<!--<div class="SeparatorLine"><span></span></div>
-									
-									<a href="<%=uicomponent.event("SaveDraft")%>" class="ControlButton">
-										<div class="IconHolder SaveAsADraftIcon">
-											<div class="Label">Save as a Draft</div>
-										</div>
-									</a>-->
-									
 									<div class="SeparatorLine"><span></span></div>
 									
 									<a href="<%=uicomponent.event("DiscardChange")%>" class="ControlButton">
@@ -77,24 +67,12 @@
                 </td>  
               </tr>
               <tr>
-                <td class="FieldLabel"><a class="HoverButton" href="<%=uicomponent.event("To")%>">To :&nbsp;&nbsp;</a></td>
+                <td class="FieldLabel">To :&nbsp;&nbsp;</td>
                 <td class="FieldComponent"  colspan="2">
                   <%uicomponent.renderField(uicomponent.FIELD_TO)%> 
                 </td>
               </tr>
-
-              <!--<tr id="FIELD_CC" style="display: none">
-                <td class="FieldLabel"><a class="HoverButton " href="<%=uicomponent.event("ToCC")%>">Cc :&nbsp;&nbsp;</a></td>
-                <td class="FieldComponent" colspan="2">
-                  <%uicomponent.renderField(uicomponent.FIELD_CC)%> 
-                </td>
-              </tr>
-              <tr id="FIELD_BCC" style="display: none">
-                <td class="FieldLabel"><a class="HoverButton " href="<%=uicomponent.event("ToBCC")%>">Bcc :&nbsp;&nbsp;</a></td>
-                <td class="FieldComponent" colspan="2">
-                  <%uicomponent.renderField(uicomponent.FIELD_BCC)%> 
-                </td>
-              </tr>-->
+              
               <tr>
                 <td class="FieldLabel">Subject :&nbsp;&nbsp;</td>
                 <td class="FieldComponent" colspan="2" style="padding:4px;">
@@ -127,9 +105,4 @@
   </div>
 </div>
 
-<!-- Begin Autocomplete -->
-
-
-
-<!-- End Autocomplete -->
 <% uiform.end() %>

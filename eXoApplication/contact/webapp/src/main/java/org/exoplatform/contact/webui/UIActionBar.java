@@ -110,7 +110,7 @@ public class UIActionBar extends UIContainer  {
       
       // remove when print address book improved
       event.getRequestContext().addUIComponentToUpdateByAjax(
-          uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class)) ;
+          uiContactPortlet.findFirstComponentOfType(UINavigationContainer.class)) ;
     }  
   }
   

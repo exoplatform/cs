@@ -37,6 +37,7 @@ import org.exoplatform.contact.webui.popup.UIContactPreviewForm;
 import org.exoplatform.contact.webui.popup.UIExportForm;
 import org.exoplatform.contact.webui.popup.UIMoveContactsForm;
 import org.exoplatform.contact.webui.popup.UIPopupComponent;
+import org.exoplatform.contact.webui.popup.UISharedForm;
 import org.exoplatform.contact.webui.popup.UITagForm;
 import org.exoplatform.contact.webui.popup.UICategorySelect;
 import org.exoplatform.contact.webui.popup.UIContactForm;
@@ -76,7 +77,6 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
             , confirm = "UIContacts.msg.confirm-delete"),
         @EventConfig(listeners = UIContacts.SelectedContactActionListener.class), 
         @EventConfig(listeners = UIContacts.CopyContactActionListener.class),
-        //@EventConfig(listeners = UIContacts.PasteContactActionListener.class),
         @EventConfig(listeners = UIContacts.ViewDetailsActionListener.class),
         @EventConfig(listeners = UIContacts.SortActionListener.class),
         @EventConfig(listeners = UIContacts.FirstPageActionListener.class),
@@ -86,6 +86,8 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UIContacts.ExportContactActionListener.class),
         @EventConfig(listeners = UIContacts.CancelActionListener.class),
         @EventConfig(listeners = UIContacts.SelectTagActionListener.class),
+        // delete when drag and drop
+        @EventConfig(listeners = UIContacts.SharedContactsActionListener.class),
         @EventConfig(listeners = UIContacts.CloseSearchActionListener.class)
     }
 )
@@ -346,7 +348,9 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
       String isDND = event.getRequestContext().getRequestParameter("isDND");
       List<String> contactIds = new ArrayList<String>();
-      if (!ContactUtils.isEmpty(contactId)) contactIds.add(contactId) ;
+      if (!ContactUtils.isEmpty(contactId) && !contactId.equals("null")) {
+        contactIds.add(contactId) ;
+      }
       else {
         contactIds = uiContacts.getCheckedContacts() ;
         if (contactIds.size() == 0) { 
@@ -757,4 +761,24 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     }
   }
   
+  static public class SharedContactsActionListener extends EventListener<UIContacts> {
+    public void execute(Event<UIContacts> event) throws Exception {
+      UIContacts uiContacts = event.getSource() ;
+      List<String> contacts = uiContacts.getCheckedContacts() ;
+      UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
+      UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
+      UIPopupContainer uiPopupContainer = popupAction.activate(UIPopupContainer.class, 600) ;
+      uiPopupContainer.setId("UISharedContacts") ;
+      UISharedForm uiSharedForm = uiPopupContainer.addChild(UISharedForm.class, null, null) ;  
+      uiSharedForm.init(false) ;
+      Map<String, String> mapContacts = new LinkedHashMap<String, String>() ;
+      for (String contactId : contacts) {
+        mapContacts.put(contactId, uiContacts.contactMap.get(contactId).getFullName()) ;
+      }
+      uiSharedForm.setSharedContacts(mapContacts) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent());
+      
+    }
+  }
 }

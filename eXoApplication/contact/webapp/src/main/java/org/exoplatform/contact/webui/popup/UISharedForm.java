@@ -17,7 +17,7 @@
 package org.exoplatform.contact.webui.popup;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -58,43 +58,51 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
     }
 )
 public class UISharedForm extends UIForm implements UIPopupComponent, UISelector{
-  final static public String FIELD_NAME = "addressName".intern() ;
-  final static public String FIELD_USER = "username".intern() ;
+  final static public String FIELD_ADDRESS = "addressName".intern() ;
+  final static public String FIELD_CONTACT = "contactName".intern() ;  
+  final static public String FIELD_USER = "user".intern() ;
+  final static public String FIELD_GROUP = "group".intern() ;  
   final static public String FIELD_EDIT = "canEdit".intern() ;
-  private Map<String, String> permission_ = new HashMap<String, String>() ;
+  private Map<String, String> permissionUser_ = new LinkedHashMap<String, String>() ;
+  private Map<String, String> permissionGroup_ = new LinkedHashMap<String, String>() ;
+  private Map<String, String> sharedContacts = new LinkedHashMap<String, String>() ;
   private String addressId_ ;
-  public UISharedForm() throws Exception{
+  public UISharedForm() { }
+  
+  public void init(boolean isSharedAdd) throws Exception {
     UIFormInputWithActions inputset = new UIFormInputWithActions("UIInputUserSelect") ;
-    inputset.addChild(new UIFormInputInfo(FIELD_NAME, FIELD_NAME, null)) ;
+    if (isSharedAdd)
+      inputset.addChild(new UIFormInputInfo(FIELD_ADDRESS, FIELD_ADDRESS, null)) ;
+    else inputset.addChild(new UIFormInputInfo(FIELD_CONTACT, FIELD_CONTACT, null)) ;
+    
     inputset.addUIFormInput(new UIFormStringInput(FIELD_USER, FIELD_USER, null)) ;
-    List<ActionData> actions = new ArrayList<ActionData>() ;
-
-    actions = new ArrayList<ActionData>() ;
+    List<ActionData> actionUser = new ArrayList<ActionData>() ;
+    actionUser = new ArrayList<ActionData>() ;
     ActionData selectUserAction = new ActionData() ;
     selectUserAction.setActionListener("SelectPermission") ;
     selectUserAction.setActionName("SelectUser") ;    
     selectUserAction.setActionType(ActionData.TYPE_ICON) ;
     selectUserAction.setCssIconClass("SelectUserIcon") ;
     selectUserAction.setActionParameter(UISelectComponent.TYPE_USER) ;
-    actions.add(selectUserAction) ;
-
+    actionUser.add(selectUserAction) ;
+    inputset.setActionField(FIELD_USER, actionUser) ;
+/*
+    inputset.addUIFormInput(new UIFormStringInput(FIELD_GROUP, FIELD_GROUP, null)) ;
+    List<ActionData> actionGroup = new ArrayList<ActionData>() ;
     ActionData selectGroupAction = new ActionData() ;
     selectGroupAction.setActionListener("SelectPermission") ;
     selectGroupAction.setActionName("SelectGroup") ;    
     selectGroupAction.setActionType(ActionData.TYPE_ICON) ;  
     selectGroupAction.setCssIconClass("SelectGroupIcon") ;
     selectGroupAction.setActionParameter(UISelectComponent.TYPE_GROUP) ;
-    actions.add(selectGroupAction) ;
-    
-    inputset.setActionField(FIELD_USER, actions) ; 
+    actionGroup.add(selectGroupAction) ;
+    inputset.setActionField(FIELD_GROUP, actionGroup) ;
+*/
     inputset.addChild(new UIFormCheckBoxInput<Boolean>(FIELD_EDIT, FIELD_EDIT, null)) ;
-    addChild(inputset) ;
+    addChild(inputset) ;    
   }
-
-  public void init(ContactGroup contactGroup, boolean isAddNew) {
-    addressId_ = contactGroup.getId() ;
-    setAddressName(contactGroup.getName()) ;
-  }
+  
+  
   public String getLabel(String id) {
     try {
       return super.getLabel(id) ;
@@ -102,25 +110,41 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       return id ;
     }
   }
-  public void setSelectedAddressId(String id) { addressId_ = id ;}
-  public void setAddressName(String value) {
-    getUIFormInputInfo(FIELD_NAME).setValue(value) ;
+
+  public void setAddress(String addressId, String addressName) {
+    addressId_ = addressId ;
+    getUIFormInputInfo(FIELD_ADDRESS).setValue(addressName) ;
   }
-  protected void setSharedUser(String value) {
-    getUIStringInput(FIELD_NAME).setValue(value) ;
+  public void setSharedContacts(Map<String, String> contacts) { 
+    sharedContacts = contacts ; 
+    StringBuffer buffer = new StringBuffer() ;
+    for (String contactName : contacts.values()) {
+      if (buffer.length() > 0) buffer.append(", ") ;
+      buffer.append(contactName) ;
+    }
+    getUIFormInputInfo(FIELD_CONTACT).setValue(buffer.toString()) ;
   }
+
   public String[] getActions() { return new String[] {"Save","Cancel"} ; }
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
 
   public void updateSelect(String selectField, String value) throws Exception {
     UIFormStringInput fieldInput = getUIStringInput(selectField) ;
-    permission_.put(value, value) ;
+    Map<String, String> permission ;
+    if (selectField.equals(FIELD_USER)) {
+      permissionUser_.put(value, value) ;
+      permission = permissionUser_ ;
+    } else {
+      permissionGroup_.put(value, value) ;
+      permission = permissionGroup_ ;
+    }  
     StringBuilder sb = new StringBuilder() ;
-    for(String s : permission_.values()) {
+    for(String s : permission.values()) {      
       if(sb != null && sb.length() > 0) sb.append(", ") ;
       sb.append(s) ;
     }
+    
     fieldInput.setValue(sb.toString()) ;
   } 
   
@@ -177,7 +201,10 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       UIGroupSelector uiGroupSelector = childPopup.activate(UIGroupSelector.class, 500) ;
       uiGroupSelector.setType(permType) ;
       uiGroupSelector.setSelectedGroups(null) ;
-      uiGroupSelector.setComponent(uiForm, new String[]{UISharedForm.FIELD_USER}) ;
+      
+      if (permType.equals(UISelectComponent.TYPE_USER))      
+        uiGroupSelector.setComponent(uiForm, new String[]{UISharedForm.FIELD_USER}) ;
+      else uiGroupSelector.setComponent(uiForm, new String[]{UISharedForm.FIELD_GROUP}) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(childPopup) ;  
     }
   }
