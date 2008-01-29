@@ -24,7 +24,9 @@ UIContactPortlet.prototype.showContextMenu = function(compid) {
 	} ;	
 	UIContextMenuCon.init(config) ;
 	UIContextMenuCon.attach(['UIContactList','VCardContent'], 'UIContactListPopuMenu') ;
-	UIContextMenuCon.attach('ItemList', 'UIAddressBookPopupMenu') ;	
+	UIContextMenuCon.attach('PrivateAddressBook', 'UIAddressBookPopupMenu0') ;	
+  UIContextMenuCon.attach('ShareAddressBook', 'UIAddressBookPopupMenu1') ;
+  UIContextMenuCon.attach('PublicAddressBook', 'UIAddressBookPopupMenu2') ;
 	UIContextMenuCon.attach('TagList', 'UITagPopupMenu') ;
 } ;
 
@@ -39,20 +41,10 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
 		var checkbox = eXo.core.DOMUtil.findFirstDescendantByClass(tr, "input", "checkbox") ;		
 		id = checkbox.name ;
 		eXo.webui.UIContextMenuCon.changeAction(UIContextMenuCon.menuElement, id) ;
-//		if (tr.getAttribute("selectedTag") && (tr.getAttribute("selectedTag").toLowerCase()!="null")) {		
-//			var moveContactIcon =  eXo.core.DOMUtil.findFirstDescendantByClass(UIContextMenuCon.menuElement, "div", "MoveContactIcon") ;
-//			moveContactIcon.parentNode.href = "javascript: void(0) ;" ;
-//			moveContactIcon.parentNode.style.color = "#cccccc" ;
-//		}
 	} else {
 		var VCardContent = eXo.core.DOMUtil.findAncestorByClass(src, "VCardContent") ;
 		id = VCardContent.getAttribute("id") ;
 		eXo.webui.UIContextMenuCon.changeAction(UIContextMenuCon.menuElement, id) ;
-//		if (VCardContent.getAttribute("selectedTag") && (VCardContent.getAttribute("selectedTag").toLowerCase()!="null")) {		
-//			var moveContactIcon =  eXo.core.DOMUtil.findFirstDescendantByClass(UIContextMenuCon.menuElement, "div", "MoveContactIcon") ;
-//			moveContactIcon.parentNode.href = "javascript: void(0) ;" ;
-//			moveContactIcon.parentNode.style.color = "#cccccc" ;
-//		}
 	}
 } ;
 
@@ -61,55 +53,55 @@ UIContactPortlet.prototype.addressBookCallback = function(evt) {
 	var DOMUtil = eXo.core.DOMUtil ;
 	var _e = window.event || evt ;	
 	var src = _e.srcElement || _e.target ;
-	var a = (DOMUtil.hasClass(src, "ItemList")) ? src : DOMUtil.findAncestorByClass(src, "ItemList") ;	
-	eXo.webui.UIContextMenuCon.changeAction(UIContextMenuCon.menuElement, a.id) ;
-	var isPublic = a.getAttribute("addressType") ;	
+	var addressBook = (DOMUtil.hasClass(src, "ItemList")) ? src : DOMUtil.findAncestorByClass(src, "ItemList") ;	
+	
+	//var isPublic = addressBook.getAttribute("addressType") ;	
 	
 	var menuItems = DOMUtil.findDescendantsByClass(UIContextMenuCon.menuElement, "div", "ItemIcon") ;
 	var itemLength = menuItems.length ;	
 
-	if (isPublic && (isPublic.toLowerCase() == "2")) {
-		for(var i = 0 ; i < itemLength ; i ++) {
-			if (DOMUtil.hasClass(menuItems[i],"ShareIcon") || DOMUtil.hasClass(menuItems[i],"EditActionIcon")
-			|| DOMUtil.hasClass(menuItems[i],"DeleteIcon") || DOMUtil.hasClass(menuItems[i],"ImportContactIcon")
-			|| DOMUtil.hasClass(menuItems[i],"ContactIcon")) {
-				if (menuItems[i].parentNode.getAttribute("oldHref")) continue ;
-				menuItems[i].parentNode.setAttribute("oldHref", menuItems[i].parentNode.href) ;
-				menuItems[i].parentNode.href = "javascript: void(0) ;" ;
-				menuItems[i].parentNode.setAttribute("oldColor", DOMUtil.getStyle(menuItems[i].parentNode, "color")) ;
-				menuItems[i].parentNode.style.color = "#cccccc" ;
-			}
-		}
-	} else if(isPublic.toLowerCase() == "1") {
-			for(var i = 0 ; i < itemLength ; i ++) {
-				if (DOMUtil.hasClass(menuItems[i],"ShareIcon") || DOMUtil.hasClass(menuItems[i],"ImportAddressIcon") 
-				|| DOMUtil.hasClass(menuItems[i],"ImportContactIcon")|| DOMUtil.hasClass(menuItems[i],"ContactIcon")) {
-					if (menuItems[i].parentNode.getAttribute("oldHref")) continue ;
-					menuItems[i].parentNode.setAttribute("oldHref", menuItems[i].parentNode.href) ;
-					menuItems[i].parentNode.href = "javascript: void(0) ;" ;
-					menuItems[i].parentNode.setAttribute("oldColor", DOMUtil.getStyle(menuItems[i].parentNode, "color")) ;
-					menuItems[i].parentNode.style.color = "#cccccc" ;
-				} else {
-					if (!menuItems[i].parentNode.getAttribute("oldHref")) continue ;
-					menuItems[i].parentNode.href = menuItems[i].parentNode.getAttribute("oldHref") ;
-					menuItems[i].parentNode.style.color = menuItems[i].parentNode.getAttribute("oldColor") ;
-					menuItems[i].parentNode.removeAttribute("oldColor") ;
-					menuItems[i].parentNode.removeAttribute("oldHref") ;
-				}
-			}
-	}	else {
-		for(var i = 0 ; i < itemLength ; i ++) {
-			if (DOMUtil.hasClass(menuItems[i],"ShareIcon") || DOMUtil.hasClass(menuItems[i],"EditActionIcon") || DOMUtil.hasClass(menuItems[i],"DeleteIcon") || DOMUtil.hasClass(menuItems[i],"ImportContactIcon")) {
-				if (!menuItems[i].parentNode.getAttribute("oldHref")) continue ;
-				menuItems[i].parentNode.href = menuItems[i].parentNode.getAttribute("oldHref") ;
-				menuItems[i].parentNode.style.color = menuItems[i].parentNode.getAttribute("oldColor") ;
-				menuItems[i].parentNode.removeAttribute("oldColor") ;
-				menuItems[i].parentNode.removeAttribute("oldHref") ;
-			}
-		}
-	}
+//	if (isPublic && (isPublic.toLowerCase() == "2")) {
+//		for(var i = 0 ; i < itemLength ; i ++) {
+//			if (DOMUtil.hasClass(menuItems[i],"ShareIcon") || DOMUtil.hasClass(menuItems[i],"EditActionIcon")
+//			|| DOMUtil.hasClass(menuItems[i],"DeleteIcon") || DOMUtil.hasClass(menuItems[i],"ImportContactIcon")
+//			|| DOMUtil.hasClass(menuItems[i],"ContactIcon")) {
+//				if (menuItems[i].parentNode.getAttribute("oldHref")) continue ;
+//				menuItems[i].parentNode.setAttribute("oldHref", menuItems[i].parentNode.href) ;
+//				menuItems[i].parentNode.href = "javascript: void(0) ;" ;
+//				menuItems[i].parentNode.setAttribute("oldColor", DOMUtil.getStyle(menuItems[i].parentNode, "color")) ;
+//				menuItems[i].parentNode.style.color = "#cccccc" ;
+//			}
+//		}
+//	} else if(isPublic.toLowerCase() == "1") {
+//			for(var i = 0 ; i < itemLength ; i ++) {
+//				if (DOMUtil.hasClass(menuItems[i],"ShareIcon") || DOMUtil.hasClass(menuItems[i],"ImportAddressIcon") 
+//				|| DOMUtil.hasClass(menuItems[i],"ImportContactIcon")|| DOMUtil.hasClass(menuItems[i],"ContactIcon")) {
+//					if (menuItems[i].parentNode.getAttribute("oldHref")) continue ;
+//					menuItems[i].parentNode.setAttribute("oldHref", menuItems[i].parentNode.href) ;
+//					menuItems[i].parentNode.href = "javascript: void(0) ;" ;
+//					menuItems[i].parentNode.setAttribute("oldColor", DOMUtil.getStyle(menuItems[i].parentNode, "color")) ;
+//					menuItems[i].parentNode.style.color = "#cccccc" ;
+//				} else {
+//					if (!menuItems[i].parentNode.getAttribute("oldHref")) continue ;
+//					menuItems[i].parentNode.href = menuItems[i].parentNode.getAttribute("oldHref") ;
+//					menuItems[i].parentNode.style.color = menuItems[i].parentNode.getAttribute("oldColor") ;
+//					menuItems[i].parentNode.removeAttribute("oldColor") ;
+//					menuItems[i].parentNode.removeAttribute("oldHref") ;
+//				}
+//			}
+//	}	else {
+//		for(var i = 0 ; i < itemLength ; i ++) {
+//			if (DOMUtil.hasClass(menuItems[i],"ShareIcon") || DOMUtil.hasClass(menuItems[i],"EditActionIcon") || DOMUtil.hasClass(menuItems[i],"DeleteIcon") || DOMUtil.hasClass(menuItems[i],"ImportContactIcon")) {
+//				if (!menuItems[i].parentNode.getAttribute("oldHref")) continue ;
+//				menuItems[i].parentNode.href = menuItems[i].parentNode.getAttribute("oldHref") ;
+//				menuItems[i].parentNode.style.color = menuItems[i].parentNode.getAttribute("oldColor") ;
+//				menuItems[i].parentNode.removeAttribute("oldColor") ;
+//				menuItems[i].parentNode.removeAttribute("oldHref") ;
+//			}
+//		}
+//	}
 	
-	var isDefault = a.getAttribute("isDefault") ;
+	var isDefault = addressBook.getAttribute("isDefault") ;
 	if (isDefault == "true") {
 		for(var i = 0 ; i < itemLength ; i ++) {
 			if (DOMUtil.hasClass(menuItems[i],"EditActionIcon") || DOMUtil.hasClass(menuItems[i],"DeleteIcon")) {
@@ -120,9 +112,19 @@ UIContactPortlet.prototype.addressBookCallback = function(evt) {
 				menuItems[i].parentNode.style.color = "#cccccc" ;
 			}
 		}
-	}
+	} else {
+    for(var i = 0 ; i < itemLength ; i ++) {
+			if (DOMUtil.hasClass(menuItems[i],"EditActionIcon") || DOMUtil.hasClass(menuItems[i],"DeleteIcon")) {
+				if (!menuItems[i].parentNode.getAttribute("oldHref")) continue ;
+				menuItems[i].parentNode.href = menuItems[i].parentNode.getAttribute("oldHref") ;
+				menuItems[i].parentNode.style.color = menuItems[i].parentNode.getAttribute("oldColor") ;
+				menuItems[i].parentNode.removeAttribute("oldColor") ;
+				menuItems[i].parentNode.removeAttribute("oldHref") ;
+			}
+		}
+  }
 	
-	var isList = a.getAttribute("isList") ;
+	var isList = addressBook.getAttribute("isList") ;
 	if (isList == "true") {
 		for(var i = 0 ; i < itemLength ; i ++) {
 			if (DOMUtil.hasClass(menuItems[i],"PrintIcon")) {
@@ -145,7 +147,7 @@ UIContactPortlet.prototype.addressBookCallback = function(evt) {
 		}
 	}
 	
-	
+	eXo.webui.UIContextMenuCon.changeAction(UIContextMenuCon.menuElement, addressBook.id) ;
 
 } ;
 
