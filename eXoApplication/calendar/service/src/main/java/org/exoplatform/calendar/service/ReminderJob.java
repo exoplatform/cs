@@ -54,15 +54,7 @@ public class ReminderJob implements Job {
 		try {
 			ExoContainer container = ExoContainerContext.getCurrentContainer();
 			MailService mailService = 
-				(MailService) container.getComponentInstanceOfType(MailService.class);
-			/*JobSchedulerService schedulerService = 
-				(JobSchedulerService) container.getComponentInstanceOfType(JobSchedulerService.class);
-			
-			System.out.println("\n\n\n ==== Name ==="+ context.getJobDetail().getName());
-			System.out.println("\n\n\n ==== FullName ==="+ context.getJobDetail().getFullName());
-			System.out.println("\n\n\n ==== Group ==="+ context.getJobDetail().getGroup());
-			JobInfo info = new JobInfo(context.getJobDetail().getName(), "CollaborationSuite", context.getJobDetail().getJobClass()) ;
-			System.out.println("\n\n\n ==== removed === " + schedulerService.removeJob(info));*/
+				(MailService) container.getComponentInstanceOfType(MailService.class);			
 			if (log_.isDebugEnabled())
 				log_.debug("Calendar reminder service");
 			java.util.Calendar fromCalendar = new GregorianCalendar();
@@ -127,7 +119,7 @@ public class ReminderJob implements Job {
 			}
 			if(messageList.size() > 0) mailService.sendMessages(messageList, config);
 		} catch (Exception e) {
-			e.printStackTrace();			
+			//e.printStackTrace();			
 		}
 		if (log_.isDebugEnabled())
 			log_.debug("File plan job done");
