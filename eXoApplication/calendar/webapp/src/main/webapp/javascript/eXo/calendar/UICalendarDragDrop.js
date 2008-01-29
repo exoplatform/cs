@@ -75,7 +75,7 @@ UICalendarDragDrop.prototype.regDnDItem = function() {
 
 UICalendarDragDrop.prototype.dndTrigger = function(e){
   e = e ? e : window.event;
-  if (e.button == 0 || e.which == 1) {
+  if (e.button == 1 || e.which == 1) {
     return eXo.calendar.UICalendarDragDrop.initDnD(eXo.calendar.UICalendarDragDrop.dropableSets, this, this, e);
   }
   return true ;
@@ -171,15 +171,15 @@ UICalendarDragDrop.prototype.dragCallback = function(dndEvent) {
   if (dndEvent.foundTargetObject) {
     if (this.foundTargetObjectCatch != dndEvent.foundTargetObject) {
       if(this.foundTargetObjectCatch) {
-        this.foundTargetObjectCatch.style[eXo.calendar.UICalendarDragDrop.scKey] = this.foundTargetObjectCatchStyle ;
+        this.foundTargetObjectCatch.style.backgroundColor = this.foundTargetObjectCatchStyle ;
       }
       this.foundTargetObjectCatch = dndEvent.foundTargetObject ;
-      this.foundTargetObjectCatchStyle = this.foundTargetObjectCatch.style[eXo.calendar.UICalendarDragDrop.scKey] ;
-      this.foundTargetObjectCatch.style[eXo.calendar.UICalendarDragDrop.scKey] = eXo.calendar.UICalendarDragDrop.scValue ;
+      this.foundTargetObjectCatchStyle = this.foundTargetObjectCatch.style.backgroundColor ;
+      this.foundTargetObjectCatch.style.backgroundColor = eXo.calendar.UICalendarDragDrop.scValue ;
     }
   } else {
     if (this.foundTargetObjectCatch) {
-      this.foundTargetObjectCatch.style[eXo.calendar.UICalendarDragDrop.scKey] = this.foundTargetObjectCatchStyle ;
+      this.foundTargetObjectCatch.style.backgroundColor = this.foundTargetObjectCatchStyle ;
     }
     this.foundTargetObjectCatch = null ;
   }
@@ -194,7 +194,7 @@ UICalendarDragDrop.prototype.dropCallback = function(dndEvent) {
   
   eXo.core.DOMUtil.removeElement(dndEvent.dragObject);
   if (this.foundTargetObjectCatch) {
-    this.foundTargetObjectCatch.style[eXo.calendar.UICalendarDragDrop.scKey] = this.foundTargetObjectCatchStyle ;
+    this.foundTargetObjectCatch.style.backgroundColor = this.foundTargetObjectCatchStyle ;
   }
   this.foundTargetObjectCatch = dndEvent.foundTargetObject ;
   if (this.foundTargetObjectCatch) {
