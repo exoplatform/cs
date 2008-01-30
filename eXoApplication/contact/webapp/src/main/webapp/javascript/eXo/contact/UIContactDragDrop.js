@@ -54,7 +54,7 @@ UIContactDragDrop.prototype.regDnDItem = function() {
 
 UIContactDragDrop.prototype.dndTrigger = function(e){
   e = e ? e : window.event;
-  if (e.button == 0 || e.which == 1) {
+  if (e.button == 1 || e.button == 0 ||e.which == 1) {
     return eXo.contact.UIContactDragDrop.initDnD(eXo.contact.UIContactDragDrop.dropableSets, this, this, e);
   }
   return true ;    
@@ -164,7 +164,7 @@ UIContactDragDrop.prototype.dragCallback = function(dndEvent) {
   }
 } ;
 
-UIContactDragDrop.prototype.dropCallback = function(dndEvent) {
+UIContactDragDrop.prototype.dropCallback = function(dndEvent) { 
   document.body.removeChild(dndEvent.dragObject) ;
   if (this.foundTargetObjectCatch) {
     this.foundTargetObjectCatch.style[eXo.contact.UIContactDragDrop.scKey] = this.foundTargetObjectCatchStyle ;
@@ -182,24 +182,20 @@ UIContactDragDrop.prototype.dropCallback = function(dndEvent) {
       checkBoxElement.checked = true ;
       dndEvent.clickObject.appendChild(checkBoxElement) ;
     }
-    if (this.foundTargetObjectCatch.className.indexOf('UITags') != -1) {
+    if (eXo.core.DOMUtil.hasClass(this.foundTargetObjectCatch,'UITags')) {
       /* Commented by DungHM 
         eXo.webui.UIForm.submitForm('UIContacts','TagChecked', true) ;
       */
       eXo.webui.UIForm.submitForm('UIContacts','Tag', true) ;
       return ;
     }
-    if (this.foundTargetObjectCatch.className.indexOf('PublicAddress') != -1) {
+    if (eXo.core.DOMUtil.hasClass(this.foundTargetObjectCatch,'PublicAddress')) {
       uiContacts.action = uiContacts.action + '&isDND=true' ;
       eXo.webui.UIForm.submitForm('UIContacts','MoveContacts', true) ;
       return ;
     }
     var contactTypeId = this.foundTargetObjectCatch.getAttribute('tagname') ;
     if (!contactTypeId) {
-    	/* Commented by DungHM 
-  	    var contactTypeNode = eXo.core.DOMUtil.findDescendantsByClass(this.foundTargetObjectCatch, 'a', 'IconHolder')[0] ;
-	      contactTypeId = contactTypeNode.id ;
-      */
     	contactTypeId = this.foundTargetObjectCatch.id ;
     }
 

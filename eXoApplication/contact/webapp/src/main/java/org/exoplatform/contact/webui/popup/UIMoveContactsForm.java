@@ -162,8 +162,6 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       for(String id : uiMoveContactForm.getContactIds()) {
       	Contact contact = uiMoveContactForm.movedContacts.get(id) ;
         contact.setAddressBook(categories.toArray(new String[] {})) ;
-//      setContactType to represent in search result ;
-        //contact.setContactType(type) ;
       	contacts.add(contact) ;
       }
       ContactService contactService = ContactUtils.getContactService() ;

@@ -402,12 +402,10 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       for(String contactId : contactIds) {
       	Contact contact = uiContacts.contactMap.get(contactId) ;
       	if(contact != null) {
-//         setContactType to represent in search result ;
-          //contact.setContactType(type) ;
       		contact.setAddressBook(addressBooks) ;
       		contacts.add(contact) ;
       	}
-      }      
+      }     
       if(contacts.size() == 0) return ;
       ContactService contactService = ContactUtils.getContactService() ;
       SessionProvider sessionProvider = SessionsUtils.getSessionProvider() ;
