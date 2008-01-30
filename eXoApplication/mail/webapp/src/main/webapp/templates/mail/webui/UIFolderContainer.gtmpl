@@ -2,11 +2,13 @@
 	import org.exoplatform.mail.service.Folder;
   import org.exoplatform.mail.service.Utils;
   import org.exoplatform.mail.MailUtils;
-  def rcontext = _ctx.getRequestContext() ;
-  rcontext.getJavascriptManager().addOnLoadJavascript('eXo.mail.UIMailPortlet.restoreFolderState()');  
-	String compId = uicomponent.getId() ;
 %>
 <div class="UIFolderContainer" id="<%=uicomponent.getId()%>">
+<%  
+  def rcontext = _ctx.getRequestContext() ;
+	rcontext.getJavascriptManager().addOnLoadJavascript('eXo.mail.UIMailPortlet.restoreFolderState()');  
+	String compId = uicomponent.getId() ;
+%>
 <div class="TitleBar">
   <div class="DownArrow3Icon" title="Collapse this Panel"><span></span></div>
   <div class="Title FolderIcon">Folders</div>

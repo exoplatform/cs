@@ -400,8 +400,8 @@
                %>
                  <a href="$actionLink" title="$title" style="display: block; float: left; margin-right: 3px;"><div class="IconTag $colorCss"><span></span></div></a>
               <%}%>
-              <a href="$actionLink" style=""><%=msg.getSubject()%></a>
-              <div style="clear: left;"><spam></spam></div></td>             
+              <a href="$actionLink"><%=msg.getSubject()%></a>
+              <div style="clear: left;"><span></span></div></td>             
     				<td class="text">( 1 )</td>
     				<td class="$readStatus">
     				  <a href="$actionLink">
