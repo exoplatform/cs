@@ -15,7 +15,6 @@
   <div class="ApplicationMinWidth">
   	<div class="UIMailPortlet" id="UIMailPortlet">
 <!-- Start Mail Banner -->
-  	<%//uicomponent.renderChild(UIBannerContainer.class);%>
 <!-- End Mail Banner -->
 <!-- Start Mail Working Workspace -->
 	    <div class="MailWorkingWorkspace" id="MailWorkingWorkspace">
