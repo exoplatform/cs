@@ -693,6 +693,7 @@ public class UIMessageList extends UIForm {
         msgIdList.add(message.getId());
       }
       mailSrv.addTag(SessionsUtils.getSessionProvider(), username, accountId, msgIdList, tagList);
+      uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent()) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTagContainer) ;
     }
