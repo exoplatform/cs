@@ -56,7 +56,7 @@ UIMailDragDrop.prototype.regDnDItem = function() {
  */
 UIMailDragDrop.prototype.mailMDTrigger = function(e) {
   e = e ? e : window.event ;
-  if (e.button == 0 || e.which == 1) {
+  if (e.button == 1 || e.which == 1) {
     return eXo.mail.UIMailDragDrop.initDnD(eXo.mail.UIMailDragDrop.dropableSets, this, this, e) ;
   }
   return true ;
@@ -71,9 +71,11 @@ UIMailDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj, e) 
   
   var tmpNode = document.createElement('div') ;
   var uiGridNode = document.createElement('table') ;
+  var messageContainerNode = document.createElement('tbody') ;
+  messageContainerNode.className = 'MessageContainer';
   uiGridNode.className = 'UIGrid' ;
   with(tmpNode.style) {
-    background = '#ffe98f;' ;
+    background = '#ffe98f' ;
     border = 'solid 1px #A5A5A5' ;
     position = 'absolute' ;
     width = blockWidth + 'px' ;
@@ -82,19 +84,21 @@ UIMailDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj, e) 
   eXo.core.Browser.setOpacity(tmpNode, 80) ;
   var selectedItems = eXo.cs.FormHelper.getSelectedElementByClass(
                         document.getElementById('UIListUsers'), this.msgItemClass, dragBlock) ;
+  var cnt = 0;
   if (selectedItems.length > 0) {
     for (var i=0; i<selectedItems.length; i++) {
       if (selectedItems[i] && selectedItems[i].cloneNode) {
-        uiGridNode.appendChild(selectedItems[i].cloneNode(true)) ;
+        messageContainerNode.appendChild(selectedItems[i].cloneNode(true)) ;
+        cnt ++;
       }
     }
   } else {
-    uiGridNode.appendChild(dragBlock.cloneNode(true)) ;
+    messageContainerNode.appendChild(dragBlock.cloneNode(true)) ;
+    cnt ++;
   }
-  
+  uiGridNode.appendChild(messageContainerNode);
   tmpNode.appendChild(uiGridNode) ;
   document.body.appendChild(tmpNode) ;
-  
   this.DragDrop.initCallback = this.initCallback ;
   this.DragDrop.dragCallback = this.dragCallback ;
   this.DragDrop.dropCallback = this.dropCallback ;
@@ -152,7 +156,7 @@ UIMailDragDrop.prototype.dropCallback = function(dndEvent) {
   }
   this.foundTargetObjectCatch = dndEvent.foundTargetObject ;
   if (this.foundTargetObjectCatch) {
-    eXo.core.DOMUtil.findDescendantsByClass(dndEvent.clickObject, 'input', 'checkbox')[0].checked = true ;
+    eXo.core.DOMUtil.findFirstDescendantByClass(dndEvent.clickObject, 'input', 'checkbox').checked = true ;
     var place2MoveId = false ;
     var formOp = false ;
     if (this.foundTargetObjectCatch.className == 'UITagContainer') {
