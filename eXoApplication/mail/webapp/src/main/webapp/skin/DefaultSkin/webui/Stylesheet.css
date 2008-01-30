@@ -381,7 +381,7 @@
 .UIMailPortlet .MailWorkingWorkspace .MailContainer .UIMessageArea {
 	background: white;
 	border-top: none; 
-	*width: 99.5%;
+	_width: 99.3%;
 }
 
 .UIMailPortlet .UIMessageArea .UIMessageActionsBar {
@@ -616,10 +616,8 @@
 	overflow-x: hidden ;
 	background: white;
 	border: 1px solid #c0c0c0;
-	*width: 99.5%;
+	_width: 99.3%;
 }
-
-.UIMailPortlet .MailWorkingWorkspace .UIMessagePreview { }
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessagePreview .ReadingPaneDetails {
 	overflow: auto;

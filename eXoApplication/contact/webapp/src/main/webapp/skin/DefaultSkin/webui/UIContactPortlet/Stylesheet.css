@@ -540,6 +540,7 @@
 .UIContactPortlet .UIContactContainer .UIContactPreview {
 	border: 1px solid #c0c0c0;
 	background: #ffffff;
+	height: 100%;
 }
 
 .UIContactPortlet .UIContactContainer .UIContactPreview .ViewBoxStyle {
@@ -588,7 +589,7 @@
 }
 
 .UIContactPortlet .UIContactContainer .UIContactPreview .MinimizeButton {
-  float: right;
+ float: right;
 	width: 30px;
 	height: 25px;
 	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/MinimumReadingPane.gif') no-repeat center;

@@ -97,12 +97,7 @@
 	border-top: none;
 }
 
-.UIMailPortlet .UIAccountSetting .UITabPane .UIFormGrid {
-	width: 99%;
-}
-
 .UIMailPortlet .UIAccountSetting .UITabPane .UIForm {
-	height: 297px;
 }
 
 .UIMailPortlet .UIAccountSetting .UITabPane .UIForm .HorizontalLayout {
@@ -134,6 +129,7 @@
 .UIMailPortlet .UIAccountSetting .UIForm .HorizontalLayout .UIFormInputSet {
 	padding: 15px 10px;
 	height: 287px;
+	width: auto;
 }
 
 /************************************UIAction*************************************/

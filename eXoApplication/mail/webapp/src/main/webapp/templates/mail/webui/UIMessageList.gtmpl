@@ -178,7 +178,9 @@
         <div style="clear: left;"><span></span></div>
       </div>
       <div class="LeftPageIteratorBlock">
-        <div class="TotalPages">Message(s) <span class="MailQuantity"> $mailRange </span></div>
+        <div class="TotalPages">Message(s)
+        	<!--  <span class="MailQuantity"> $mailRange </span> -->
+        </div>
       </div>
       <div style="clear: right;"><span></span></div>
     </div>
