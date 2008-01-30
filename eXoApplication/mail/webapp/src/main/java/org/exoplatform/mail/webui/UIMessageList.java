@@ -215,11 +215,15 @@ public class UIMessageList extends UIForm {
     String username = uiPortlet.getCurrentUser() ;
     MailService mailSrv = getApplicationComponent(MailService.class);
     List<Tag> tagList = new ArrayList<Tag>();
-    if (msg.getTags() != null && msg.getTags().length > 0) {
-      for (int i = 0; i < msg.getTags().length; i++) {
-        Tag tag = mailSrv.getTag(SessionsUtils.getSessionProvider(), username, accountId_, msg.getTags()[i]);
-        tagList.add(tag);
+    try {
+      if (msg.getTags() != null && msg.getTags().length > 0) {
+        for (int i = 0; i < msg.getTags().length; i++) {
+          Tag tag = mailSrv.getTag(SessionsUtils.getSessionProvider(), username, accountId_, msg.getTags()[i]);
+          tagList.add(tag);
+        }
       }
+    } catch(Exception e) {
+      e.printStackTrace() ;
     }
     return tagList;
   } 
