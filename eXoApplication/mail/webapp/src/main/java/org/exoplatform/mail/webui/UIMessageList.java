@@ -235,17 +235,26 @@ public class UIMessageList extends UIForm {
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
 
       Message msg = uiMessageList.messageList_.get(msgId);
-      if (msg != null && msg.isUnread()) {
-        List<String> msgIds  = new ArrayList<String>();
-        msgIds.add(msgId);
-        MailUtils.getMailService().toggleMessageProperty(SessionsUtils.getSessionProvider(), username, accountId, msgIds, Utils.EXO_ISUNREAD);
-        msg.setUnread(false);
+      if (msg != null) {
+        if (msg.isUnread()) {
+          List<String> msgIds  = new ArrayList<String>();
+          msgIds.add(msgId);
+          MailUtils.getMailService().toggleMessageProperty(SessionsUtils.getSessionProvider(), username, accountId, msgIds, Utils.EXO_ISUNREAD);
+          msg.setUnread(false);
+        }
         uiMessageList.setSelectedMessageId(msgId);
         uiMessageList.messageList_.put(msg.getId(), msg);
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer); 
+        for (Message uncheckedMsg : uiMessageList.messageList_.values()) {
+          UIFormCheckBoxInput<Boolean> uiCheckbox = uiMessageList.getChildById(uncheckedMsg.getId());
+          if (uiCheckbox != null ) {
+            if (uncheckedMsg.getId().equals(msg.getId())) uiCheckbox.setChecked(true);
+            else uiCheckbox.setChecked(false); 
+          }
+        }
       }
       uiMessagePreview.setMessage(msg);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());       
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer); 
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());          
     }
   }
 
