@@ -427,11 +427,11 @@ UIMailPortlet.prototype.restoreFolderState = function() {
 
 UIMailPortlet.prototype.resizeIframe = function(str) {
 	var frame = document.getElementById("IframeMessagePreview") ;
-	var doc = frame.contentDocument ;
+	var doc = frame.contentWindow.document ;
 	doc.open();
 	doc.write(str);
 	doc.close();
-	frame.style.height = doc.body.offsetHeight + 20 + "px" ;
+	frame.style.height = doc.body.offsetHeight  + 20 + "px" ;
 }
 
 // Check all

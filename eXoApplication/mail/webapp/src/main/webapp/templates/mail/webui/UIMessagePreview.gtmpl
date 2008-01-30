@@ -216,7 +216,7 @@
   								<div style="clear: both;"><span></span></div>
   							</div>
                 
-                <iframe src="" style="border: 0px" class="MessageDetails" id="IframeMessagePreview"></iframe>
+                <iframe src="" style="border: 0px" frameborder="0" class="MessageDetails" id="IframeMessagePreview"></iframe>
                 <%
                   rcontext.getJavascriptManager().addJavascript("eXo.mail.UIMailPortlet.resizeIframe(document.getElementById(\'MessageDetails\').value) ;");
                 %>
