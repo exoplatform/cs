@@ -152,7 +152,7 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 		} else {
 			maximumPosts.setValue("id10");
 		}
-		boolean isJump = false ;
+		boolean isJump = true ;
 		if(isForumOption) {
 			isJump = forumOption.getIsShowForumJump() ;
 		}

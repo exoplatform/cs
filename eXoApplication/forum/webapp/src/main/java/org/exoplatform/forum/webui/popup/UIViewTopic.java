@@ -16,6 +16,7 @@
  ***************************************************************************/
 package org.exoplatform.forum.webui.popup;
 
+import org.exoplatform.forum.ForumFormatUtils;
 import org.exoplatform.forum.service.Post;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -48,7 +49,7 @@ public class UIViewTopic extends UIForm implements UIPopupComponent {
 	public void setPostView(Post post) throws Exception {
 		this.post = post ;
 	}
-
+	
 	@SuppressWarnings("unused")
 	private Post getPostView() throws Exception {
 		return post ;

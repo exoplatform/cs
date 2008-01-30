@@ -5,6 +5,7 @@
 	import org.exoplatform.forum.service.Post ;
 	import org.exoplatform.forum.service.Topic ;
   import org.exoplatform.forum.ForumSessionUtils; 
+  import org.exoplatform.forum.ForumFormatUtils;
 	import org.exoplatform.web.application.JavascriptManager;
   def rcontext = _ctx.getRequestContext() ;
   JavascriptManager jsmanager = rcontext.getJavascriptManager();
@@ -312,11 +313,12 @@
 				String subject = post.getSubject() ;
 				Date createdPostDate = post.getCreatedDate() ;
 				String createdDate = uicomponent.getLongDate(createdPostDate) + ", " + uicomponent.getTime(createdPostDate) ;
-				String messager = uicomponent.convertLinkHTML(post.getMessage()) ;
+				String messager = ForumFormatUtils.convertCodeHTML(post.getMessage()) ;
 				String editBy = post.getModifiedBy() ;
 				Date modifileDate = post.getModifiedDate() ;
 				String editDate = uicomponent.getLongDate(modifileDate) + ", " + uicomponent.getTime(modifileDate) ;
 				List attachments = post.getAttachments() ;
+				String idMessenger = "Id" + post.getId().substring(15);
 		%>
 
 		<div class="ContentContainer" id="<%=post.getId();%>" style="margin: 2px 0px 0px 0px;">
@@ -366,7 +368,7 @@
 							</div>
 						<div class="PostContentContainer">	
 							<div class="PostContent">
-								<div style="padding-top: 8px">$messager</div>
+								<div style="padding-top: 8px" id="$idMessenger">$messager</div>
 							</div>
 							<% if(attachments != null && attachments.size() > 0) {%>
 							<div class="AttachmentContainer">
@@ -464,6 +466,7 @@
 				</tbody>
 			</table>
 		</div>
+<% jsmanager.addJavascript("eXo.forum.UIForumPortlet.editerQuote('"+idMessenger+"');"); %>
 		<% } %>
 <!-- End ContentContainer -->
 <%

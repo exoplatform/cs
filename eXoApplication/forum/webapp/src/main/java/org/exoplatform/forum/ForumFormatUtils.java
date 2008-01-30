@@ -22,9 +22,8 @@ package org.exoplatform.forum;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+
 
 /**
  * Created by The eXo Platform SARL
@@ -34,33 +33,9 @@ import java.util.List;
  */
 
 public class ForumFormatUtils {
-
-	@SuppressWarnings("deprecation")
-  public static String getFormatTime(String format, Date myDate) {
-		 int time = myDate.getHours();
-		 int minut = myDate.getMinutes() ;
-		 String strMinut;
-		 if(minut < 10) strMinut = "0" + minut ;
-		 else strMinut = "" + minut ;
-		 StringBuffer stringBuffer = new StringBuffer() ;
-		 if(time < 10)stringBuffer.append("0");
-		 if(format.equals("24h")){
-			 stringBuffer.append(time).append(":").append(strMinut);
-		 } else {
-			 String str = "" ;
-			 if(time < 12) str = "AM";
-			 else {
-				 str = "PM";
-				 if(time > 12) time = time - 12 ;
-			 }
-			 stringBuffer.append(time).append(":").append(strMinut).append(" ").append(str);
-		 }
-		return stringBuffer.toString();
-	}
-	
 	@SuppressWarnings("deprecation")
   public static String getFormatDate(String format, Date myDate) {
-		/* D, DD, DDD, DDDD, M, MM, MMM, MMMM, yy, yyyy
+		/*h,hh,H, m, mm, D, DD, DDD, DDDD, M, MM, MMM, MMMM, yy, yyyy
 		 * */
 		String strCase = "" ;
 		int day = myDate.getDay() ;
@@ -133,7 +108,6 @@ public class ForumFormatUtils {
 			} else {
 				className[i] = "notStar" ;
 			}
-			
 			className[5] = ("" + voteRating) ;
 			if(className[5].length() >= 3) className[5] = className[5].substring(0, 3) ;
 			if(k == 0) className[5] = "" + star ; 
@@ -170,43 +144,97 @@ public class ForumFormatUtils {
 		return rtn.toString() ;
 	}
 	
-	public static String convertLinkHTML(String s) {
-		int i = 0, j , l;
-		StringBuffer buffer ;String str ;
-		boolean isWrite = true, Retu = false ;
-		List<String> Link = new ArrayList<String>() ; 
-		l = s.length() ;
+	public static String convertCodeHTML(String s) {
+		int i = 0, j = 0 ;
+		StringBuffer buffer = new StringBuffer();
+		String link = "";
 		while (true) {
-			j = i ; isWrite = true ;
-			i = i + s.substring(i , l).indexOf("ttp://") ;
-			if(i <= j || i >= l)break ;
-			if(i > 1 && s.charAt(i-1) == '"') continue ;
-			buffer = new StringBuffer() ;
-			buffer.append("h");
-			while (true) {
-	     char c = s.charAt(i);
-	     	if(c == '"') {isWrite = false ; break ;}
-	      if(c == ' ' || c == '<') break ;
-	      if(c == '?' || c == '#' || c == '&' || c == '\'') buffer.append("\\") ;
-	      buffer.append(c);
-	      i++ ;
-	      if(i >= (l)) {Retu = true; break ;}
-      }
-			
-			str = buffer.toString() ;
-			for (String string : Link) {
-	      if(string.equalsIgnoreCase(str)) { 
-	      	isWrite = false ;
-	      	break ;
-	      }
-      }
-			if(isWrite)	Link.add(str) ;
-			if(Retu) break ;
+			i = s.indexOf("http://");
+			if(i < 0)break ;
+			if(i > 6 && s.substring(i-6,i-2).equalsIgnoreCase("href")) {
+				i = s.indexOf("</a>");
+				buffer.append(s.substring(0, i+4));
+				s = s.substring(i+4);
+			}else {
+				j = 0;
+				String temp = s.substring(i) ;
+				while(true) {
+					char c = temp.charAt(j);
+					if(c == ' ' || c == ',' || c == ';' || c == '<' || c == '\'' || c == '\"') break ;
+					j++ ;
+					if(j == temp.length()) break;
+				}
+				j = j + i;
+				buffer.append(s.substring(0, i) + "<a target=\"_blank\" href=\"");
+				if(j <= i){
+					link = s.substring(i); 
+					buffer.append(link + "\">" + link + "</a>") ;
+					break;
+				} else {
+					link = s.substring(i, j);
+					buffer.append(link + "\">" + link + "</a>") ;
+				}
+				s = s.substring(j);
+			}
 		}
-		for (String link : Link) {
-			link = link.trim() ;
-			s = s.replaceAll(link, "<a target=\"_blank\" href=\"" + link + "\">" + link + "</a>") ;
-    }
-	  return s ;
+		buffer.append(s);
+		s = buffer.toString() ;
+		
+		buffer = new StringBuffer();
+		while (true) {
+			int t = s.indexOf('['+"QUOTE");
+			if(t < 0 ) break;
+			String first = s.substring(0, t) ;
+			int t1 = s.indexOf(']');
+			String usernam = s.substring((t+7), t1) ;
+			int t2 = s.indexOf('['+"/QUOTE");
+			String content = s.substring(t1+1, t2);
+			s = s.substring(t2+8) ;
+			buffer.append(first).append("<div>Quote:</div><div class=\"ClassQuote\"><div>Originally Posted by <strong>").append(usernam).
+				append("</strong></div><div>").append(content).append("</div></div>") ;
+		}
+		buffer.append(s);
+	  return buffer.toString() ;
   }
+	
+	public static String clearQuote(String s) {
+		StringBuffer buffer = new StringBuffer();
+		while(true) {
+			int t = s.indexOf('['+"QUOTE");
+			if(t < 0 ) break;
+			String first = s.substring(0, t) ;
+			int t2 = s.indexOf('['+"/QUOTE");
+			buffer.append(first+"</br>");
+			s = s.substring(t2+8);
+		}
+		buffer.append(s);
+		return buffer.toString() ;
+  }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

@@ -209,5 +209,33 @@ UIForumPortlet.prototype.goLastPost = function(idLastPost) {
 	}
 };
 
+UIForumPortlet.prototype.editerQuote = function(idMessenger) {
+	var quote = document.getElementById(idMessenger) ;
+	var messenger = quote.innerHTML ;
+	var t = messenger.indexOf('['+"quote"+']') ;
+	if( t >= 0) {
+		alert(t);
+	}
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 eXo.forum.UIForumPortlet = new UIForumPortlet() ;

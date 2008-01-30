@@ -16,6 +16,7 @@
  ***************************************************************************/
 package org.exoplatform.forum.service;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 /**
@@ -26,14 +27,24 @@ import java.io.InputStream;
  */
 public class BufferAttachment extends ForumAttachment {
 	
-	private InputStream inputStream;
+	private byte[] imageBytes ;
 	
-	public InputStream getInputStream()throws Exception{
-		/*DownloadService downloadService = (DownloadService)PortalContainer.getComponent(DownloadService.class) ;
-		DownloadResource downloadResource = downloadService.getDownloadResource(getId()) ;
-		downloadResource.getInputStream() ;*/
-		return inputStream ; 
-	}
-	public void setInputStream(InputStream is){ inputStream = is ; }
-	
+//	public InputStream getInputStream()throws Exception{
+//		/*DownloadService downloadService = (DownloadService)PortalContainer.getComponent(DownloadService.class) ;
+//		DownloadResource downloadResource = downloadService.getDownloadResource(getId()) ;
+//		downloadResource.getInputStream() ;*/
+//		return inputStream ; 
+//	}
+  public InputStream getInputStream() throws Exception { 
+    if(imageBytes != null) return new ByteArrayInputStream(imageBytes) ;
+    return null ;
+  }
+//	public void setInputStream(InputStream is){ inputStream = is ; }
+  public void setInputStream(InputStream input) throws Exception {
+    if (input != null) {
+      imageBytes = new byte[input.available()] ; 
+      input.read(imageBytes) ;
+    }
+    else imageBytes = null ;
+  }
 }

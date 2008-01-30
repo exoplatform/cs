@@ -45,7 +45,7 @@ public class UIForumPortlet extends UIPortletApplication {
 	private boolean isForumRendered = false;
 	private boolean isTagRendered = false;
 	private boolean isJumpRendered = false;
-	private double timeZone ;
+	private double timeZone = 0;
 	private String shortDateformat ;
 	private String longDateformat ;
 	private String timeFormat ;

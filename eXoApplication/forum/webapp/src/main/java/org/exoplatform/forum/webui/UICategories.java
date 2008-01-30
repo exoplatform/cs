@@ -65,18 +65,17 @@ public class UICategories extends UIContainer	{
   }
 	@SuppressWarnings({ "deprecation", "unused" })
   private String getTime(Date myDate) {
-		return ForumFormatUtils.getFormatTime(timeFormat, myDate) ;
+		myDate.setMinutes(myDate.getMinutes() - (int)(timeZone*60));
+		return ForumFormatUtils.getFormatDate(timeFormat, myDate) ;
 	}
 	@SuppressWarnings({ "deprecation", "unused" })
   private String getShortDate(Date myDate) {
-		int minute = (int)(timeZone*60);
-		myDate.setMinutes(myDate.getMinutes() - minute);
+		myDate.setMinutes(myDate.getMinutes() - (int)(timeZone*60));
 		return ForumFormatUtils.getFormatDate(shortDateformat, myDate) ;
 	}
 	@SuppressWarnings({ "deprecation", "unused" })
 	private String getLongDate(Date myDate) {
-		int minute = (int)(timeZone*60) ;
-		myDate.setMinutes(myDate.getMinutes() - minute);
+		myDate.setMinutes(myDate.getMinutes() - (int)(timeZone*60));
 		return ForumFormatUtils.getFormatDate(longDateformat, myDate) ;
 	}
 	private List<Category> getCategoryList() throws Exception {

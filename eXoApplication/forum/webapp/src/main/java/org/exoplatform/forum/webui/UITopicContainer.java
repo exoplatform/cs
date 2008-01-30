@@ -116,7 +116,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
   }
 	@SuppressWarnings({ "deprecation", "unused" })
 	private String getTime(Date myDate) {
-		return ForumFormatUtils.getFormatTime(timeFormat, myDate) ;
+		return ForumFormatUtils.getFormatDate(timeFormat, myDate) ;
 	}
 	@SuppressWarnings({ "deprecation", "unused" })
   private String getShortDate(Date myDate) {

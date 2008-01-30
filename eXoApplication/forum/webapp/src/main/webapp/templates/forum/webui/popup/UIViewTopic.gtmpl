@@ -1,11 +1,12 @@
 <%  
 	import org.exoplatform.forum.service.Post ;
+	import org.exoplatform.forum.ForumFormatUtils;
 %>
 <div class="UIViewTopic">
   <% uiform.begin() %>  
 	<% Post post = uicomponent.getPostView(); 
 		 String title = post.getSubject();	
-		 String messeger = post.getMessage();	
+		 String messager = ForumFormatUtils.convertCodeHTML(post.getMessage());
 		 String classIcon = post.getIcon() ;
 		 String postCreatedDate = post.getCreatedDate() ;
 		 List attachments = post.getAttachments() ;
@@ -17,7 +18,7 @@
 	  </div>
 	  		
 	  <div class="PostContent">
-	  	<br/><div>$messeger</div><br/>
+	  	<br/><div>$messager</div><br/>
 	  </div>
 	<% if(attachments != null && attachments.size() > 0) {%>  		
 	  <div class="AttachmentContainer">

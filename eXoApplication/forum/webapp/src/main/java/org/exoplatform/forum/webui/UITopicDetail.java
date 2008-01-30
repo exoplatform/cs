@@ -94,7 +94,7 @@ import org.exoplatform.webui.form.validator.PositiveNumberFormatValidator;
 			@EventConfig(listeners = UITopicDetail.DeletePostActionListener.class )	
 		}
 )
-public class UITopicDetail extends UIForm	{
+public class UITopicDetail extends UIForm {
 	private ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
 	private String categoryId ;
 	private String forumId ; 
@@ -132,7 +132,7 @@ public class UITopicDetail extends UIForm	{
   }
 	@SuppressWarnings({ "deprecation", "unused" })
 	private String getTime(Date myDate) {
-		return ForumFormatUtils.getFormatTime(timeFormat, myDate) ;
+		return ForumFormatUtils.getFormatDate(timeFormat, myDate) ;
 	}
 	@SuppressWarnings({ "deprecation", "unused" })
   private String getShortDate(Date myDate) {
@@ -167,11 +167,6 @@ public class UITopicDetail extends UIForm	{
 	
 	public void setIdPostView(String IdPostView) {
 	  this.IdPostView = IdPostView ;
-  }
-	
-	@SuppressWarnings("unused")
-  private String convertLinkHTML(String s) {
-	  return ForumFormatUtils.convertLinkHTML(s) ;
   }
 	
 	public void setUpdateContainer(String categoryId, String forumId, Topic topic, long numberPage) throws Exception {

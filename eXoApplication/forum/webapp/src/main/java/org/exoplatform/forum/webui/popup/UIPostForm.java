@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.forum.ForumFormatUtils;
 import org.exoplatform.forum.ForumSessionUtils;
 import org.exoplatform.forum.service.BufferAttachment;
 import org.exoplatform.forum.service.ForumAttachment;
@@ -82,8 +83,6 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
 	private String topicId ;
 	private String postId ;
 	private boolean isQuote = false ;
-	private String temp ;
-	private String style = "style=\"padding: 8px 5px;border: solid 1px #d8d8d8 ;background: #ededf7;\">" ;
 	public UIPostForm() throws Exception {
 		UIFormStringInput postTitle = new UIFormStringInput(FIELD_POSTTITLE_INPUT, FIELD_POSTTITLE_INPUT, null);
 		postTitle.addValidator(EmptyNameValidator.class) ;
@@ -148,30 +147,22 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
 	}
 	 
 	public void updatePost(String postId, boolean isQuote) throws Exception {
-		//TODO: Cann't write HTML code here!!!!
 		this.postId = postId ;
 		this.isQuote = isQuote ;
 		if(this.postId != null && this.postId.length() > 0) {
-			this.temp = "<div style=\"padding: 0px 10px 10px;\"><div style=\"height: 16px;\">" + getLabel("Quote") + ":</div><div class=\"ClassQuote\" " ;
 			Post post = this.forumService.getPost(ForumSessionUtils.getSystemProvider(), this.categoryId, this.forumId, this.topicId, postId) ;
 			String messenger = post.getMessage() ;
 			if(isQuote) {//quote
-				int begin = messenger.indexOf("TheEndQuote") ;
-				if(begin > 0) messenger = messenger.substring((begin + 15), messenger.length()) ;
 				String title = "" ;
 				if(post.getSubject().indexOf(": ") > 0) title = post.getSubject() ;
 				else title = getLabel(FIELD_LABEL_QUOTE) + ": " + post.getSubject() ;
 				getUIStringInput(FIELD_POSTTITLE_INPUT).setValue(title) ;
-				String value = this.temp + this.style + "<div>" + this.getLabel(FIELD_ORIGINALLY) + "<b>" + post.getOwner() + "</b></div><div>" + messenger + "</div></div></div><!---TheEndQuote---> <br/>";
+				String value = "[QUOTE=" + post.getOwner() + "]" + ForumFormatUtils.clearQuote(messenger) + "[/QUOTE]<br/>";
 				getChild(UIFormWYSIWYGInput.class).setValue(value);
 				//getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).setDefaultValue(value) ;
 				getChild(UIFormInputIconSelector.class).setSelectedIcon(post.getIcon());
 			} else {//edit
 				getUIStringInput(FIELD_POSTTITLE_INPUT).setValue(post.getSubject()) ;
-				int index = messenger.indexOf(("<div>" + getLabel(FIELD_ORIGINALLY))) ;
-				if(index > 0) {
-					messenger = this.temp + this.style + messenger.substring(index, messenger.length());
-				}
 //				this.attachments_ = post.getAttachments();
 //				this.refreshUploadFileList();
 				getChild(UIFormWYSIWYGInput.class).setValue(messenger);
@@ -205,10 +196,6 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
 			t = message.length() ;
 			if(postTitle.length() <= 3) {k = 0;}
 			if(t >= 20 && k != 0) {	
-				int index = message.indexOf(("<div>" + uiForm.getLabel(FIELD_ORIGINALLY))) ;
-				if(index > 0) {
-					message = uiForm.temp + ">" + message.substring(index, message.length());
-				}
 				Post post = new Post() ;
 				post.setSubject(postTitle.trim()) ;
 				post.setMessage(message) ;
@@ -253,10 +240,6 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
 			t = message.length() ;
 			if(postTitle.length() <= 3) {k = 0;}
 			if(t >= 20 && k != 0) {	
-				int index = message.indexOf(("<div>" + uiForm.getLabel(FIELD_ORIGINALLY))) ;
-				if(index > 0) {
-					message = uiForm.temp + ">" + message.substring(index, message.length());
-				}
 				Post post = new Post() ;
 				post.setSubject(postTitle.trim()) ;
 				post.setMessage(message) ;
