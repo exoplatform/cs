@@ -348,7 +348,7 @@
               if ((i%2) == 1) selectedClass = "EvenItem";
               String readStatus = "ReadItem" ;
               if (msg.isUnread()) readStatus = "UnreadItem" ;
-      			  if (msg.getId().equals(uicomponent.getSelectedMessageId()) || checkboxField.checked) selectedClass += " SelectedItem" ;
+      			  if (checkboxField.checked) selectedClass += " SelectedItem" ;
               String starClass = "UnStarredIcon" ;
               if (msg.hasStar()) starClass = "StarredIcon";
     		%>
