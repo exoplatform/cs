@@ -100,7 +100,7 @@ public class JCRDataStorage{
   }  
 
   private Node getPublicCalendarServiceHome(SessionProvider sProvider) throws Exception {
-    sProvider = SessionProvider.createSystemProvider() ;
+    //sProvider = SessionProvider.createSystemProvider() ;
     Node publicApp = nodeHierarchyCreator_.getPublicApplicationNode(sProvider)  ;
     try {
       return publicApp.getNode(CALENDAR_APP) ;
@@ -127,7 +127,7 @@ public class JCRDataStorage{
   }
 
   private Node getPublicRoot(SessionProvider sysProvider) throws Exception {
-    sysProvider = SessionProvider.createSystemProvider() ;
+    // sysProvider = SessionProvider.createSystemProvider() ;
     return nodeHierarchyCreator_.getPublicApplicationNode(sysProvider) ;
   }
 
@@ -810,7 +810,7 @@ public class JCRDataStorage{
     Node eventFolder = getEventFolder(SessionProvider.createSystemProvider(), event.getFromDateTime()) ;
     if(event.getReminders() != null && event.getReminders().size() > 0) {
       //Need to use system session
-      Node reminderFolder = getReminderFolder(sProvider, event.getFromDateTime()) ;
+      Node reminderFolder = getReminderFolder(SessionProvider.createSystemProvider(), event.getFromDateTime()) ;
       saveEvent(calendarNode, event, eventFolder, reminderFolder, isNew) ;
     }else {
       saveEvent(calendarNode, event, eventFolder, null, isNew) ;
@@ -835,7 +835,7 @@ public class JCRDataStorage{
 
   private void removeReminder(SessionProvider sProvider, Node eventNode)throws Exception {
     // Need to use system session
-    Node reminders = getReminderFolder(sProvider, eventNode.getProperty("exo:fromDateTime").getDate().getTime()) ;
+    Node reminders = getReminderFolder(SessionProvider.createSystemProvider(), eventNode.getProperty("exo:fromDateTime").getDate().getTime()) ;
     if(reminders.hasNode(eventNode.getName())) reminders.getNode(eventNode.getName()).remove() ;
     Node events = reminders.getParent().getNode(EVENTS) ;
     if(events != null && events.hasNode(eventNode.getName())) events.getNode(eventNode.getName()).remove() ;
@@ -916,7 +916,7 @@ public class JCRDataStorage{
     if(eventNode.hasProperty("exo:isPrivate")) event.setPrivate(eventNode.getProperty("exo:isPrivate").getBoolean()) ;
     if(eventNode.hasProperty("exo:eventState")) event.setEventState(eventNode.getProperty("exo:eventState").getString()) ;
 
-    event.setReminders(getReminders(sProvider, eventNode)) ;
+    event.setReminders(getReminders(SessionProvider.createSystemProvider(), eventNode)) ;
     event.setAttachment(getAttachments(eventNode)) ;
     if(eventNode.hasProperty("exo:invitation")){
       Value[] values = eventNode.getProperty("exo:invitation").getValues() ;
@@ -1488,8 +1488,8 @@ public class JCRDataStorage{
   public EventPageList searchEvent(SessionProvider sProvider, String username, EventQuery eventQuery, String[] publicCalendarIds)throws Exception {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>()  ; 
     events.addAll(getUserEvents(sProvider, username, eventQuery)) ;
-    events.addAll(getPublicEvents(sProvider, eventQuery)) ;
-    events.addAll(getSharedEvents(sProvider, username, eventQuery)) ;
+    events.addAll(getPublicEvents(SessionProvider.createSystemProvider(), eventQuery)) ;
+    events.addAll(getSharedEvents(SessionProvider.createSystemProvider(), username, eventQuery)) ; 
     return new EventPageList(events, 10) ;    
   }
 

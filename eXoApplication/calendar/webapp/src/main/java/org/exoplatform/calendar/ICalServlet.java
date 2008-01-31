@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.RepositoryService;
 /**
  * Created by The eXo Platform SARL        .
@@ -68,7 +69,7 @@ public class ICalServlet extends HttpServlet {
       CalendarService calService = 
         (CalendarService)pcontainer.getComponentInstanceOfType(CalendarService.class) ;
       
-      Node node = calService.getRssHome(SessionsUtils.getSystemProvider(), userName).getNode(fileName.toString()) ;
+      Node node = calService.getRssHome(SessionProviderFactory.createSystemProvider(), userName).getNode(fileName.toString()) ;
       if (node == null) throw new Exception("Node " + fileName + " not found. ");
       Node content;
       if(node.isNodeType("exo:rssData")) {

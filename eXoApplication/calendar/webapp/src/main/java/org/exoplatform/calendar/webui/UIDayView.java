@@ -18,7 +18,6 @@ package org.exoplatform.calendar.webui;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -26,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
-import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventQuery;
@@ -87,7 +85,7 @@ public class UIDayView extends UICalendarView {
   /*  System.out.println("\n\n " + begin.getTime());
     System.out.println("\n\n " + end.getTime());
     System.out.println("eventQuery " + eventQuery.getQueryStatement());*/
-    events = calendarService.getEvent(SessionsUtils.getSystemProvider(), username, eventQuery, getPublicCalendars()) ;
+    events = calendarService.getEvent(getSystemSession(), username, eventQuery, getPublicCalendars()) ;
     Iterator<CalendarEvent> iter = events.iterator() ;
     while (iter.hasNext()) {
       CalendarEvent ce = iter.next() ;
@@ -144,11 +142,11 @@ public class UIDayView extends UICalendarView {
             return ;
           }
           if(ce.getCalType().equals(CalendarUtils.PRIVATE_TYPE)) {
-            CalendarUtils.getCalendarService().saveUserEvent(SessionsUtils.getSessionProvider(), username, calendarId, ce, false) ;
+            CalendarUtils.getCalendarService().saveUserEvent(calendarview.getSession(), username, calendarId, ce, false) ;
           }else if(ce.getCalType().equals(CalendarUtils.SHARED_TYPE)){
-            CalendarUtils.getCalendarService().saveEventToSharedCalendar(SessionsUtils.getSystemProvider(), username, calendarId, ce, false) ;
+            CalendarUtils.getCalendarService().saveEventToSharedCalendar(calendarview.getSystemSession(), username, calendarId, ce, false) ;
           }else if(ce.getCalType().equals(CalendarUtils.PUBLIC_TYPE)){
-            CalendarUtils.getCalendarService().savePublicEvent(SessionsUtils.getSystemProvider(), calendarId, ce, false) ;          
+            CalendarUtils.getCalendarService().savePublicEvent(calendarview.getSystemSession(), calendarId, ce, false) ;          
           }
         } catch (Exception e) {
           e.printStackTrace() ;

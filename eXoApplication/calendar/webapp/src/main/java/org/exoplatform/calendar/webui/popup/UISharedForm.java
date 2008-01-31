@@ -19,18 +19,15 @@ package org.exoplatform.calendar.webui.popup;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.exoplatform.calendar.CalendarUtils;
-import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
-import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendars;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -164,11 +161,11 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         return ;
       }      
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
-      SessionProvider sProvider = SessionsUtils.getSystemProvider() ;
+      SessionProvider sProvider = SessionProviderFactory.createSystemProvider() ;
       String username = CalendarUtils.getCurrentUser() ;
       List<String> receiverUsers  = Arrays.asList(names.split(CalendarUtils.COMMA)) ;  
       if(uiForm.canEdit()) {
-        Calendar cal = calendarService.getUserCalendar(SessionsUtils.getSessionProvider(), CalendarUtils.getCurrentUser(), uiForm.calendarId_) ;
+        Calendar cal = calendarService.getUserCalendar(SessionProviderFactory.createSessionProvider(), CalendarUtils.getCurrentUser(), uiForm.calendarId_) ;
         cal.setEditPermission(receiverUsers.toArray(new String[receiverUsers.size()])) ;
         calendarService.saveUserCalendar(sProvider, username, cal, false) ;
       }

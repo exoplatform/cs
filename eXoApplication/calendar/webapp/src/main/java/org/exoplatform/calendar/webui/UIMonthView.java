@@ -18,7 +18,6 @@ package org.exoplatform.calendar.webui;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -26,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
-import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventQuery;
@@ -85,7 +83,7 @@ public class UIMonthView extends UICalendarView {
     EventQuery eventQuery = new EventQuery() ;
     eventQuery.setFromDate(getBeginDateOfMonthView()) ;
     eventQuery.setToDate(getEndDateOfMonthView()) ;
-    List<CalendarEvent> allEvents = calendarService.getEvent(SessionsUtils.getSystemProvider(), username, eventQuery, getPublicCalendars()) ;
+    List<CalendarEvent> allEvents = calendarService.getEvent(getSystemSession(), username, eventQuery, getPublicCalendars()) ;
     Iterator childIter = getChildren().iterator() ;
     while(childIter.hasNext()) {
       UIComponent comp = (UIComponent)childIter.next() ;
@@ -186,27 +184,29 @@ public class UIMonthView extends UICalendarView {
         CalendarEvent calEvent = calendarview.getDataMap().get(eventId); 
         if(calEvent != null) {
           java.util.Calendar tempCalFrom = CalendarUtils.getInstanceTempCalendar() ;
-          tempCalFrom.setTime(calEvent.getFromDateTime()) ;
-          int moveAmount =   Integer.valueOf((int)(Long.parseLong(value) - tempCalFrom.getTimeInMillis())) ; 
-          tempCalFrom.add(java.util.Calendar.MILLISECOND, moveAmount) ;
-          calEvent.setFromDateTime(tempCalFrom.getTime()) ;
-          java.util.Calendar tempCalTo = CalendarUtils.getInstanceTempCalendar() ;
-          tempCalTo.setTime(calEvent.getToDateTime()) ;
-          tempCalTo.add(java.util.Calendar.MILLISECOND, moveAmount) ;
-          calEvent.setToDateTime(tempCalTo.getTime()) ;
+          tempCalFrom.setTimeInMillis((Long.parseLong(value))) ;
+          java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
+          Long amount = calEvent.getToDateTime().getTime() - calEvent.getFromDateTime().getTime() ;
+          cal.setTime(calEvent.getFromDateTime()) ;
+          cal.set(Calendar.DATE, tempCalFrom.get(Calendar.DATE)) ;
+          cal.set(Calendar.MONTH, tempCalFrom.get(Calendar.MONTH)) ;
+          cal.set(Calendar.YEAR, tempCalFrom.get(Calendar.YEAR)) ;
+          calEvent.setFromDateTime(cal.getTime()) ;
+          cal.setTimeInMillis(calEvent.getFromDateTime().getTime() + amount) ;
+          calEvent.setToDateTime(cal.getTime()) ;
           if(calEvent.getCalType().equals(CalendarUtils.PRIVATE_TYPE)) {
-            CalendarUtils.getCalendarService().saveUserEvent(SessionsUtils.getSessionProvider(), username, calendarId, calEvent, false) ;
+            CalendarUtils.getCalendarService().saveUserEvent(calendarview.getSession(), username, calendarId, calEvent, false) ;
           }else if(calEvent.getCalType().equals(CalendarUtils.SHARED_TYPE)){
-            CalendarUtils.getCalendarService().saveEventToSharedCalendar(SessionsUtils.getSystemProvider(), username, calendarId, calEvent, false) ;
+            CalendarUtils.getCalendarService().saveEventToSharedCalendar(calendarview.getSystemSession(), username, calendarId, calEvent, false) ;
           }else if(calEvent.getCalType().equals(CalendarUtils.PUBLIC_TYPE)){
-            CalendarUtils.getCalendarService().savePublicEvent(SessionsUtils.getSystemProvider(), calendarId, calEvent, false) ;          
+            CalendarUtils.getCalendarService().savePublicEvent(calendarview.getSystemSession(), calendarId, calEvent, false) ;          
           }
           UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
           uiMiniCalendar.updateMiniCal() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
           calendarview.refresh() ;
           //calendarview.dataMap_.put(calEvent.getId(), calEvent) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ; 
         }
       } catch (Exception e) {
         e.printStackTrace() ;

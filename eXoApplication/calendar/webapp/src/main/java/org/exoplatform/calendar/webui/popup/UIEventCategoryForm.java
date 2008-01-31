@@ -16,17 +16,15 @@
  **/
 package org.exoplatform.calendar.webui.popup;
 
-import java.util.List;
-
 import javax.jcr.RepositoryException;
 
 import org.exoplatform.calendar.CalendarUtils;
-import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -37,7 +35,6 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.validator.EmptyFieldValidator;
@@ -111,13 +108,13 @@ public class UIEventCategoryForm extends UIForm {
       eventCat.setName(name) ;
       eventCat.setDescription(description) ;
       try {
-        if(uiForm.isAddNew_) calendarService.saveEventCategory(SessionsUtils.getSessionProvider(), username, eventCat, null, true) ;
+        if(uiForm.isAddNew_) calendarService.saveEventCategory(SessionProviderFactory.createSessionProvider(), username, eventCat, null, true) ;
         else { 
           eventCat = uiForm.getEventCategory() ;
          /* EventCategory newEventCategory = new EventCategory() ;
           newEventCategory.setName(name) ;
           newEventCategory.setDescription(uiForm.getCategoryDescription()) ;*/
-          calendarService.saveEventCategory(SessionsUtils.getSessionProvider(), username, eventCat, new String[]{name, uiForm.getCategoryDescription()}, false) ; 
+          calendarService.saveEventCategory(SessionProviderFactory.createSessionProvider(), username, eventCat, new String[]{name, uiForm.getCategoryDescription()}, false) ; 
         }
         uiManager.updateGrid() ;
         uiForm.reset() ;

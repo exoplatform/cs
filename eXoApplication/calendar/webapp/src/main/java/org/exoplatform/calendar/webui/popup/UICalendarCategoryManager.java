@@ -19,16 +19,15 @@ package org.exoplatform.calendar.webui.popup;
 import java.io.Writer;
 import java.util.List;
 
-import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarService;
-import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UICalendars;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.portal.webui.container.UIContainer;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -81,7 +80,7 @@ public class UICalendarCategoryManager extends UIContainer implements UIPopupCom
   public void updateGrid() throws Exception {
     CalendarService calService = getApplicationComponent(CalendarService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
-    List<CalendarCategory> categories = calService.getCategories(SessionsUtils.getSessionProvider(), username) ;
+    List<CalendarCategory> categories = calService.getCategories(SessionProviderFactory.createSessionProvider(), username) ;
     UIGrid uiGrid = getChild(UIGrid.class) ; 
     ObjectPageList objPageList = new ObjectPageList(categories, 20) ;
     uiGrid.getUIPageIterator().setPageList(objPageList) ;   
@@ -106,7 +105,7 @@ public class UICalendarCategoryManager extends UIContainer implements UIPopupCom
       String calendarCategoryId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       CalendarService calService = uiManager.getApplicationComponent(CalendarService.class) ;
       String username = event.getRequestContext().getRemoteUser() ;
-      calService.removeCalendarCategory(SessionsUtils.getSessionProvider(), username, calendarCategoryId) ;
+      calService.removeCalendarCategory(SessionProviderFactory.createSessionProvider(), username, calendarCategoryId) ;
       UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;
       UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
       uiViewContainer.refresh() ;

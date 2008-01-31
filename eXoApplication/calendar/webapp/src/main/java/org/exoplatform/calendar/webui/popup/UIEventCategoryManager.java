@@ -19,7 +19,6 @@ package org.exoplatform.calendar.webui.popup;
 import java.io.Writer;
 import java.util.List;
 
-import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
@@ -28,7 +27,9 @@ import org.exoplatform.calendar.webui.UICalendars;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.portal.webui.container.UIContainer;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -83,12 +84,14 @@ public class UIEventCategoryManager extends UIContainer implements UIPopupCompon
   public void updateGrid() throws Exception {
     CalendarService calService = getApplicationComponent(CalendarService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
-    List<EventCategory>  categories = calService.getEventCategories(SessionsUtils.getSessionProvider(), username) ;
+    List<EventCategory>  categories = calService.getEventCategories(getSession(), username) ;
     UIGrid uiGrid = getChild(UIGrid.class) ; 
     ObjectPageList objPageList = new ObjectPageList(categories, 10) ;
     uiGrid.getUIPageIterator().setPageList(objPageList) ;   
   }
-
+  private SessionProvider getSession() {
+    return SessionProviderFactory.createSessionProvider() ;
+  }
   static  public class EditActionListener extends EventListener<UIEventCategoryManager> {
     public void execute(Event<UIEventCategoryManager> event) throws Exception {
       UIEventCategoryManager uiManager = event.getSource() ;
@@ -97,7 +100,7 @@ public class UIEventCategoryManager extends UIContainer implements UIPopupCompon
       String categoryId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       CalendarService calService = uiManager.getApplicationComponent(CalendarService.class) ;
       String username = event.getRequestContext().getRemoteUser() ;
-      EventCategory category = calService.getEventCategory(SessionsUtils.getSessionProvider(), username, categoryId) ;
+      EventCategory category = calService.getEventCategory(uiManager.getSession(), username, categoryId) ;
       uiForm.setEventCategory(category) ;
       uiForm.setCategoryName(category.getName()) ;
       uiForm.setCategoryDescription(category.getDescription()) ;
@@ -111,7 +114,7 @@ public class UIEventCategoryManager extends UIContainer implements UIPopupCompon
       String eventCategoryName = event.getRequestContext().getRequestParameter(OBJECTID) ;
       CalendarService calService = uiManager.getApplicationComponent(CalendarService.class) ;
       String username = event.getRequestContext().getRemoteUser() ;
-      calService.removeEventCategory(SessionsUtils.getSessionProvider(), username, eventCategoryName) ;
+      calService.removeEventCategory(uiManager.getSession(), username, eventCategoryName) ;
       UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendars) ; 
       UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;

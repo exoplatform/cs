@@ -23,7 +23,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.calendar.CalendarUtils;
-import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
@@ -34,6 +33,7 @@ import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UIFormComboBox;
 import org.exoplatform.calendar.webui.UIListContainer;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -122,6 +122,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
       cal.add(java.util.Calendar.MINUTE, CalendarUtils.DEFAULT_TIMEITERVAL*2) ;
     }
     setEventToDate(cal.getTime(), calendarSetting.getTimeFormat()) ;
+    //setSelectedCategory("Meeting") ;
   }
   private void setEventFromDate(Date value, String timeFormat) {
     UIFormDateTimeInput fromField = getChildById(FIELD_FROM) ;
@@ -186,7 +187,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
-    List<Calendar> calendars = calendarService.getUserCalendars(SessionsUtils.getSessionProvider(), username, true) ;
+    List<Calendar> calendars = calendarService.getUserCalendars(SessionProviderFactory.createSessionProvider(), username, true) ;
     for(Calendar c : calendars) {
       options.add(new SelectItemOption<String>(c.getName(), c.getId())) ;
     }
@@ -282,11 +283,11 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         calEvent.setCalType(uiForm.calType_) ;
         String username = CalendarUtils.getCurrentUser() ;
         if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
-          CalendarUtils.getCalendarService().saveUserEvent(SessionsUtils.getSessionProvider(), username, calEvent.getCalendarId(), calEvent, true) ;
+          CalendarUtils.getCalendarService().saveUserEvent(SessionProviderFactory.createSessionProvider(), username, calEvent.getCalendarId(), calEvent, true) ;
         }else if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)){
-          CalendarUtils.getCalendarService().saveEventToSharedCalendar(SessionsUtils.getSystemProvider(), username, calEvent.getCalendarId(), calEvent, true) ;
+          CalendarUtils.getCalendarService().saveEventToSharedCalendar(SessionProviderFactory.createSystemProvider(), username, calEvent.getCalendarId(), calEvent, true) ;
         }else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)){
-          CalendarUtils.getCalendarService().savePublicEvent(SessionsUtils.getSystemProvider(), calEvent.getCalendarId(), calEvent, true) ;          
+          CalendarUtils.getCalendarService().savePublicEvent(SessionProviderFactory.createSystemProvider(), calEvent.getCalendarId(), calEvent, true) ;          
         }
         UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
         uiPopupAction.deActivate() ;
@@ -330,6 +331,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         uiEventForm.setEventFromDate(uiForm.getEventFromDate(calendarSetting.getTimeFormat()),calendarSetting.getTimeFormat()) ;
         uiEventForm.setEventToDate(uiForm.getEventToDate(calendarSetting.getTimeFormat()),calendarSetting.getTimeFormat()) ;
         uiEventForm.setEventAllDate(uiForm.getIsAllDay()) ;
+        uiEventForm.setSelectedCategory(uiForm.getEventCategory()) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       } else {
         uiPopupAction.deActivate() ;
@@ -343,6 +345,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         uiTaskForm.setEventFromDate(uiForm.getEventFromDate(calendarSetting.getTimeFormat()),calendarSetting.getTimeFormat()) ;
         uiTaskForm.setEventToDate(uiForm.getEventToDate(calendarSetting.getTimeFormat()),calendarSetting.getTimeFormat()) ;
         uiTaskForm.setEventAllDate(uiForm.getIsAllDay()) ;
+        uiTaskForm.setSelectedCategory(uiForm.getEventCategory()) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       }
     }

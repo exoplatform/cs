@@ -22,12 +22,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
-import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.DataPageList;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -86,7 +86,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     ContactService contactService = getApplicationComponent(ContactService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     options.add(new SelectItemOption<String>("all", "")) ;
-    for( ContactGroup cg : contactService.getGroups(SessionsUtils.getSessionProvider(), username)) {
+    for( ContactGroup cg : contactService.getGroups(SessionProviderFactory.createSessionProvider(), username)) {
       options.add(new SelectItemOption<String>(cg.getName(), cg.getId())) ;
     }
     return options;
@@ -112,9 +112,9 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     ContactService contactSrv = getApplicationComponent(ContactService.class);
     String username = Util.getPortalRequestContext().getRemoteUser();   
     if (groupId == null || groupId == "") {
-      contacts = contactSrv.getAllContact(SessionsUtils.getSessionProvider(), username);
+      contacts = contactSrv.getAllContact(SessionProviderFactory.createSessionProvider(), username);
     } else {
-      contacts = contactSrv.getContactPageListByGroup(SessionsUtils.getSessionProvider(), username, groupId).getAll();
+      contacts = contactSrv.getContactPageListByGroup(SessionProviderFactory.createSessionProvider(), username, groupId).getAll();
     }
     setContactList(contacts);
   }
@@ -205,7 +205,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       }
       filter.setText(text) ;
       DataPageList resultPageList = 
-        contactService.searchContact(SessionsUtils.getSystemProvider(), event.getRequestContext().getRemoteUser(), filter) ;
+        contactService.searchContact(SessionProviderFactory.createSystemProvider(), event.getRequestContext().getRemoteUser(), filter) ;
       uiForm.setContactList(resultPageList.getAll()) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
     }

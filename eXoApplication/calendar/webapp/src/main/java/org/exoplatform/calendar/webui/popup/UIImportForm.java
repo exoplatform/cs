@@ -20,13 +20,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.calendar.CalendarUtils;
-import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UICalendars;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.upload.UploadResource;
 import org.exoplatform.upload.UploadService;
@@ -97,7 +97,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
       try {
         String username = Util.getPortalRequestContext().getRemoteUser() ;
         CalendarService calendarService = CalendarUtils.getCalendarService() ;
-        calendarService.getCalendarImportExports(importFormat).importCalendar(SessionsUtils.getSystemProvider(), username, input.getUploadDataAsStream(), calendarName) ;
+        calendarService.getCalendarImportExports(importFormat).importCalendar(SessionProviderFactory.createSystemProvider(), username, input.getUploadDataAsStream(), calendarName) ;
         UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
         UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;
         UICalendarViewContainer uiCalendarViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;

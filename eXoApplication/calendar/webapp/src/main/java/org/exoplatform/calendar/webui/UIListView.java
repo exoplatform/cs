@@ -17,18 +17,15 @@
 package org.exoplatform.calendar.webui;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.exoplatform.calendar.CalendarUtils;
-import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventPageList;
 import org.exoplatform.calendar.service.EventQuery;
-import org.exoplatform.calendar.service.JCRPageList;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -105,7 +102,7 @@ public class UIListView extends UICalendarView {
     if(!getViewType().equals(TYPE_BOTH)) {
       eventQuery.setEventType(getViewType()) ;
     }
-    update(new EventPageList(calendarService.getEvent(SessionsUtils.getSystemProvider(), username, eventQuery, getPublicCalendars()), 10)) ;
+    update(new EventPageList(calendarService.getEvent(getSystemSession(), username, eventQuery, getPublicCalendars()), 10)) ;
     UIFormSelectBox uiCategory = getUIFormSelectBox(EVENT_CATEGORIES) ;
     uiCategory.setOnChange("Onchange") ;
   }
@@ -122,7 +119,7 @@ public class UIListView extends UICalendarView {
     if(!getViewType().equals(TYPE_BOTH)) {
       eventQuery.setEventType(getViewType()) ;
     }
-    update(new EventPageList(calendarService.getEvent(SessionsUtils.getSystemProvider(), username, eventQuery, getPublicCalendars()), 10)) ;
+    update(new EventPageList(calendarService.getEvent(getSystemSession(), username, eventQuery, getPublicCalendars()), 10)) ;
     UIFormSelectBox uiCategory = getUIFormSelectBox(EVENT_CATEGORIES) ;
     uiCategory.setValue(categoryId) ;
     uiCategory.setOnChange("Onchange") ;

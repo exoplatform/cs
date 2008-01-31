@@ -23,7 +23,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
-import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventQuery;
@@ -62,7 +61,7 @@ public class UIMiniCalendar extends UICalendarView  {
     eventQuery.setFromDate(getBeginDateOfMonth()) ;
     eventQuery.setToDate(getEndDateOfMonth()) ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    dataMap = calendarService.searchHightLightEvent(SessionsUtils.getSystemProvider(), CalendarUtils.getCurrentUser(), eventQuery, getPublicCalendars());
+    dataMap = calendarService.searchHightLightEvent(getSystemSession(), CalendarUtils.getCurrentUser(), eventQuery, getPublicCalendars());
   }
   protected int getWeeksOfTheMonth(int year, int month, int day) {
     return new GregorianCalendar(year, month, day).getActualMaximum(java.util.Calendar.WEEK_OF_MONTH) ;

@@ -24,12 +24,12 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import org.exoplatform.calendar.CalendarUtils;
-import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarWorkingContainer;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.Group;
@@ -146,10 +146,13 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   public String[] getActions(){
     return new String[]{"Save", "Reset", "Cancel"} ;
   }
+  private SessionProvider getSession()  {
+    return SessionProviderFactory.createSessionProvider() ;
+  }
   private  List<SelectItemOption<String>> getCategory() throws Exception {
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    List<CalendarCategory> categories = calendarService.getCategories(SessionsUtils.getSessionProvider(), username) ;
+    List<CalendarCategory> categories = calendarService.getCategories(getSession(), username) ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     for(CalendarCategory category : categories) {
       options.add(new SelectItemOption<String>(category.getName(), category.getId())) ;
@@ -195,8 +198,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       }
     } else {
       String username = Util.getPortalRequestContext().getRemoteUser() ;
-      SessionProvider sProvider = SessionsUtils.getSessionProvider() ;
-      Calendar calendar = CalendarUtils.getCalendarService().getUserCalendar(sProvider, username, calendarId_) ;
+      Calendar calendar = CalendarUtils.getCalendarService().getUserCalendar(getSession(), username, calendarId_) ;
       init(calendar) ;
     }
 
@@ -364,7 +366,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       }
       String username = Util.getPortalRequestContext().getRemoteUser() ;
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
-      SessionProvider sProvider = SessionsUtils.getSystemProvider() ;
+      SessionProvider sProvider = SessionProviderFactory.createSystemProvider() ;
       Calendar calendar = new Calendar() ;
       if(!uiForm.isAddNew_) calendar.setId(uiForm.calendarId_) ;
       calendar.setName(displayName) ;

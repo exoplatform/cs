@@ -21,10 +21,10 @@ import java.util.Collection;
 import java.util.List;
 
 import org.exoplatform.calendar.CalendarUtils;
-import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
@@ -95,7 +95,7 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
     ContactService contactService = getApplicationComponent(ContactService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     options.add(new SelectItemOption<String>("all", "")) ;
-    for( ContactGroup cg : contactService.getGroups(SessionsUtils.getSessionProvider(), username)) {
+    for( ContactGroup cg : contactService.getGroups(SessionProviderFactory.createSessionProvider(), username)) {
       options.add(new SelectItemOption<String>(cg.getName(), cg.getId())) ;
     }
     return options;

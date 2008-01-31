@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
-import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
@@ -38,6 +37,8 @@ import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UIListView;
 import org.exoplatform.calendar.webui.UIPreview;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -90,10 +91,10 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     String username = CalendarUtils.getCurrentUser() ;
     CalendarService cservice = CalendarUtils.getCalendarService() ;
     options.add(new SelectItemOption<String>("", "")) ;
-    for(Calendar cal : cservice.getUserCalendars(SessionsUtils.getSessionProvider(), username, true)) {
+    for(Calendar cal : cservice.getUserCalendars(getSession(), username, true)) {
       options.add(new SelectItemOption<String>(cal.getName(), cal.getId())) ;
     }
-    List<GroupCalendarData> groupCals  = cservice.getGroupCalendars(SessionsUtils.getSessionProvider(), CalendarUtils.getUserGroups(username), true, username) ;
+    List<GroupCalendarData> groupCals  = cservice.getGroupCalendars(getSystemSession(), CalendarUtils.getUserGroups(username), true, username) ;
     for(GroupCalendarData groupData : groupCals) {
       if(groupData != null) {
         for(Calendar cal : groupData.getCalendars()) {
@@ -101,7 +102,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
         }
       }
     }
-    GroupCalendarData sharedData  = cservice.getSharedCalendars(SessionsUtils.getSessionProvider(), CalendarUtils.getCurrentUser(), true) ;
+    GroupCalendarData sharedData  = cservice.getSharedCalendars(getSystemSession(), CalendarUtils.getCurrentUser(), true) ;
     if(sharedData != null) {
       for(Calendar cal : sharedData.getCalendars()) {
         options.add(new SelectItemOption<String>(cal.getName(), cal.getId())) ;
@@ -110,7 +111,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     addChild(new UIFormSelectBox(CALENDAR, CALENDAR, options)) ;
     options = new ArrayList<SelectItemOption<String>>() ;
     options.add(new SelectItemOption<String>("", "")) ;
-    for(EventCategory cat : cservice.getEventCategories(SessionsUtils.getSessionProvider(), CalendarUtils.getCurrentUser())) {
+    for(EventCategory cat : cservice.getEventCategories(getSession(), CalendarUtils.getCurrentUser())) {
       options.add(new SelectItemOption<String>(cat.getName(), cat.getName())) ;
     }
     addChild(new UIFormSelectBox(CATEGORY, CATEGORY, options)) ;
@@ -174,12 +175,18 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     String[] groups = CalendarUtils.getUserGroups(CalendarUtils.getCurrentUser()) ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     Map<String, String> map = new HashMap<String, String> () ;    
-    for(GroupCalendarData group : calendarService.getGroupCalendars(SessionsUtils.getSystemProvider(), groups, true, CalendarUtils.getCurrentUser())) {
+    for(GroupCalendarData group : calendarService.getGroupCalendars(getSystemSession(), groups, true, CalendarUtils.getCurrentUser())) {
       for(org.exoplatform.calendar.service.Calendar calendar : group.getCalendars()) {
         map.put(calendar.getId(), calendar.getId()) ;          
       }
     }
     return map.values().toArray(new String[map.values().size()] ) ;
+  }
+  private SessionProvider getSession() {
+    return SessionProviderFactory.createSessionProvider() ;
+  }
+  private SessionProvider getSystemSession() {
+    return SessionProviderFactory.createSystemProvider() ;
   }
   public boolean isSearchTask() {
     return getUIFormSelectBox(TYPE).getValue().equals(CalendarEvent.TYPE_TASK) ; 
@@ -193,7 +200,6 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
   static  public class SearchActionListener extends EventListener<UIAdvancedSearchForm> {
     public void execute(Event<UIAdvancedSearchForm> event) throws Exception {
       UIAdvancedSearchForm uiForm = event.getSource() ;
-
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;   
       if(!CalendarUtils.isEmpty(uiForm.getFromDateValue()) && uiForm.getFromDate() == null){
         uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.from-date-time-invalid", null)) ;
@@ -214,7 +220,8 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
       }
       try {
         EventQuery query = new EventQuery() ;
-        query.setText(uiForm.getUIStringInput(UIAdvancedSearchForm.TEXT).getValue()) ;
+        String text = uiForm.getUIStringInput(UIAdvancedSearchForm.TEXT).getValue() ;
+        if(! CalendarUtils.isEmpty(text)) query.setText(text) ;
         query.setEventType(uiForm.getUIFormSelectBox(UIAdvancedSearchForm.TYPE).getValue()) ;
         if(uiForm.isSearchTask()) query.setState(uiForm.getTaskState()) ; 
         String calendarId = uiForm.getUIFormSelectBox(UIAdvancedSearchForm.CALENDAR).getValue() ;
@@ -236,17 +243,16 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
           query.setFromDate(CalendarUtils.getBeginDay(cal)) ;
           query.setToDate(CalendarUtils.getEndDay(cal)) ;
         }
-
         String priority = uiForm.getUIFormSelectBox(UIAdvancedSearchForm.PRIORITY).getValue() ;
         if(priority != null && priority.trim().length() > 0) query.setPriority(priority) ;
         String username = CalendarUtils.getCurrentUser() ;
         UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
+        EventPageList resultPageList =  
+          CalendarUtils.getCalendarService().searchEvent(uiForm.getSession(), username, query, uiForm.getPublicCalendars()) ;
         UICalendarViewContainer calendarViewContainer = 
           calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
         calendarViewContainer.initView(UICalendarViewContainer.LIST_VIEW) ;
         UIListView uiListView = calendarViewContainer.findFirstComponentOfType(UIListView.class) ;
-        EventPageList resultPageList =  
-          CalendarUtils.getCalendarService().searchEvent(SessionsUtils.getSystemProvider(), username, query, uiForm.getPublicCalendars()) ;
         calendarPortlet.cancelAction() ;
         uiListView.update(resultPageList) ;
         calendarViewContainer.setRenderedChild(UICalendarViewContainer.LIST_VIEW) ;
@@ -261,6 +267,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
         event.getRequestContext().addUIComponentToUpdateByAjax(calendarViewContainer) ;
       } catch (Exception e) {
         e.printStackTrace() ;
+        return ;
       }
     }
   }
@@ -268,7 +275,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     public void execute(Event<UIAdvancedSearchForm> event) throws Exception {
       UIAdvancedSearchForm uiForm = event.getSource() ;
       uiForm.getUIFormSelectBox(STATE).setRendered(uiForm.isSearchTask()) ;
-       
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
     }
   }
   static  public class CancelActionListener extends EventListener<UIAdvancedSearchForm> {

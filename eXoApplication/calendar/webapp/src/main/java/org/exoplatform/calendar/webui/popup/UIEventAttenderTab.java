@@ -26,15 +26,15 @@ import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
-import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.EventQuery;
+import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UIFormComboBox;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
-import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 
 /**
@@ -100,7 +100,7 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
       eventQuery.setParticipants(newPars.toArray(new String[]{})) ;
       eventQuery.setNodeType("exo:calendarPublicEvent") ;
       Map<String, String> parsMap = 
-        CalendarUtils.getCalendarService().checkFreeBusy(SessionsUtils.getSystemProvider(), eventQuery) ;
+        CalendarUtils.getCalendarService().checkFreeBusy(SessionProviderFactory.createSystemProvider(), eventQuery) ;
       parMap_.putAll(parsMap) ;
       System.out.println("parsMap " + parsMap.values().toString());
     }
@@ -172,7 +172,9 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
     super.processRender(arg0);
   }
   public String getUserTimeZone(String username) throws Exception {
-   String timeZone = CalendarUtils.getCalendarService().getCalendarSetting(SessionsUtils.getSystemProvider(), username).getTimeZone() ;
-    return CalendarUtils.getTimeZone(timeZone) ;
+   return getAncestorOfType(UICalendarPortlet.class).getCalendarSetting().getTimeZone() ;
+   
+   // String timeZone = CalendarUtils.getCalendarService().getCalendarSetting(SessionProviderFactory.createSystemProvider(), username).getTimeZone() ;
+   // return CalendarUtils.getTimeZone(timeZone) ;
   }
 }

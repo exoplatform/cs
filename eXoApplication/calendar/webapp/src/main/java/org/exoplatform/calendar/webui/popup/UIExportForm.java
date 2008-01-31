@@ -26,7 +26,6 @@ import java.util.Map;
 import java.util.MissingResourceException;
 
 import org.exoplatform.calendar.CalendarUtils;
-import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarImportExport;
 import org.exoplatform.calendar.service.CalendarService;
@@ -36,6 +35,7 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -94,11 +94,11 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
     CalendarService calendarService = CalendarUtils.getCalendarService();
     List<Calendar> calendars = new ArrayList<Calendar>();
     if(calType.equals("0")) {
-      calendars = calendarService.getUserCalendars(SessionsUtils.getSessionProvider(), CalendarUtils.getCurrentUser(), true) ;
+      calendars = calendarService.getUserCalendars(SessionProviderFactory.createSessionProvider(), CalendarUtils.getCurrentUser(), true) ;
     }else if(calType.equals("1")) {
-      calendars = calendarService.getSharedCalendars(SessionsUtils.getSystemProvider(), CalendarUtils.getCurrentUser(), true).getCalendars() ;
+      calendars = calendarService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), CalendarUtils.getCurrentUser(), true).getCalendars() ;
     }else if(calType.equals("2")){
-      List<GroupCalendarData> groups = calendarService.getGroupCalendars(SessionsUtils.getSystemProvider(), CalendarUtils.getUserGroups(CalendarUtils.getCurrentUser()), true, CalendarUtils.getCurrentUser()) ;
+      List<GroupCalendarData> groups = calendarService.getGroupCalendars(SessionProviderFactory.createSystemProvider(), CalendarUtils.getUserGroups(CalendarUtils.getCurrentUser()), true, CalendarUtils.getCurrentUser()) ;
       for(GroupCalendarData group : groups) {
         calendars.addAll(group.getCalendars()) ;
       }
@@ -149,7 +149,7 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
       CalendarImportExport importExport = calendarService.getCalendarImportExports(type) ;
       OutputStream out = null ;
       try {
-        out = importExport.exportCalendar(SessionsUtils.getSystemProvider(), CalendarUtils.getCurrentUser(), calendarIds, uiForm.calType) ;        
+        out = importExport.exportCalendar(SessionProviderFactory.createSystemProvider(), CalendarUtils.getCurrentUser(), calendarIds, uiForm.calType) ;        
         ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
         DownloadResource dresource = new InputStreamDownloadResource(is, "text/iCalendar") ;
         DownloadService dservice = (DownloadService)PortalContainer.getInstance().getComponentInstanceOfType(DownloadService.class) ;

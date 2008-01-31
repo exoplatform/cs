@@ -19,7 +19,6 @@ package org.exoplatform.calendar.webui;
 import java.util.List;
 
 import org.exoplatform.calendar.CalendarUtils;
-import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
@@ -27,7 +26,9 @@ import org.exoplatform.calendar.webui.popup.UICalendarSettingForm;
 import org.exoplatform.calendar.webui.popup.UIFeed;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.calendar.webui.popup.UIQuickAddEvent;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -57,27 +58,23 @@ public class UIActionBar extends UIContainer  {
 
   private boolean isShowPane_ = true ;
   private String currentView_ = null ;
-  public UIActionBar() throws Exception {
-    CalendarService calService = getApplicationComponent(CalendarService.class) ;
-    String username = Util.getPortalRequestContext().getRemoteUser() ;
-    CalendarSetting calSetting = calService.getCalendarSetting(SessionsUtils.getSessionProvider(), username) ;
-    currentView_ = UICalendarViewContainer.TYPES[Integer.parseInt(calSetting.getViewType())] ;
-  }
+  public UIActionBar() throws Exception {}
   protected String[] getViewTypes() {return UICalendarViewContainer.TYPES ;} 
   protected String getCurrentView() {return currentView_ ;}
   public void setCurrentView(String viewName) {currentView_ = viewName ;}
-  
+
   protected boolean isShowPane() {return isShowPane_ ;}
   protected void setShowPane(boolean isShow) {isShowPane_ = isShow ;}
-  
-  
+  private SessionProvider getSession() {
+    return SessionProviderFactory.createSessionProvider() ;
+  }
   static public class QuickAddEventActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
-    	UIActionBar uiActionBar = event.getSource() ;
+      UIActionBar uiActionBar = event.getSource() ;
       CalendarService calendarService = uiActionBar.getApplicationComponent(CalendarService.class) ;
       UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
       List<org.exoplatform.calendar.service.Calendar> privateCalendars = 
-        calendarService.getUserCalendars(SessionsUtils.getSessionProvider(), CalendarUtils.getCurrentUser(), true) ;
+        calendarService.getUserCalendars(uiActionBar.getSession(), CalendarUtils.getCurrentUser(), true) ;
       if(privateCalendars.isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.calendar-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -95,6 +92,7 @@ public class UIActionBar extends UIContainer  {
       }
       uiQuickAddEvent.init(uiPortlet.getCalendarSetting(), null, null) ;
       uiQuickAddEvent.update("0", null) ;
+      uiQuickAddEvent.setSelectedCategory("Meeting") ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
@@ -112,7 +110,7 @@ public class UIActionBar extends UIContainer  {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
     }
   }  
-  
+
   static public class TodayActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ;     
@@ -135,8 +133,9 @@ public class UIActionBar extends UIContainer  {
       UIPopupAction popupAction = calendarPortlet.getChild(UIPopupAction.class) ;
       UICalendarSettingForm uiCalendarSettingForm = popupAction.activate(UICalendarSettingForm.class, 600) ;
       CalendarService cservice = CalendarUtils.getCalendarService() ;
-      String username = Util.getPortalRequestContext().getRemoteUser() ;
-      CalendarSetting calendarSetting = cservice.getCalendarSetting(SessionsUtils.getSessionProvider(), username) ;
+      //String username = Util.getPortalRequestContext().getRemoteUser() ;
+      CalendarSetting calendarSetting = calendarPortlet.getCalendarSetting() ;
+        //cservice.getCalendarSetting(uiActionBar.getSession(), username) ;
       uiCalendarSettingForm.init(calendarSetting, cservice) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }

@@ -83,7 +83,7 @@
 	  			%>			
   				<div style="clear: left;"><span></span></div>
   			</div>
-				<div class="RowContainerDay" style="position:relative ;" lastUpdatedId="<%=uicomponent.getLastUpdatedEventId()%>">
+				<div class="RowContainerDay" style="position:relative;" lastUpdatedId="<%=uicomponent.getLastUpdatedEventId()%>">
 				<%
 					startMonh =  uicomponent.getBeginDateOfMonth() ;
 					endMonth =  uicomponent.getEndDateOfMonth() ;					
@@ -110,7 +110,7 @@
 								</div>
 								<div>
 									<div class="<%=(uicomponent.getPriority(event.getPriority()) == null)? "" :  uicomponent.getPriority(event.getPriority())%>PriorityIcon" style="float:left;"><span></span></div>
-									<div class="EventLabel" style="line-height: 17px;">$event.summary</div>
+									<div class="EventLabel" style="line-height: 17px;height:17px;">$event.summary</div>
 								</div>
 							</div>
 						</div>

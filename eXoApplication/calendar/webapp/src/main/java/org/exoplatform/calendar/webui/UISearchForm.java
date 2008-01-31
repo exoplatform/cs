@@ -20,13 +20,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
-import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventPageList;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.webui.popup.UIAdvancedSearchForm;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -64,7 +64,7 @@ public class UISearchForm extends UIForm {
       String[] groups = CalendarUtils.getUserGroups(CalendarUtils.getCurrentUser()) ;
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
       Map<String, String> map = new HashMap<String, String> () ;    
-      for(GroupCalendarData group : calendarService.getGroupCalendars(SessionsUtils.getSystemProvider(), groups, true, CalendarUtils.getCurrentUser())) {
+      for(GroupCalendarData group : calendarService.getGroupCalendars(SessionProviderFactory.createSystemProvider(), groups, true, CalendarUtils.getCurrentUser())) {
         for(org.exoplatform.calendar.service.Calendar calendar : group.getCalendars()) {
           map.put(calendar.getId(), calendar.getId()) ;          
         }
@@ -76,7 +76,7 @@ public class UISearchForm extends UIForm {
       UISearchForm uiForm = event.getSource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       String text = uiForm.getSearchValue() ;
-      if(text == null || text.length() == 0) {
+     if(CalendarUtils.isEmpty(text))   {
         uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.no-text-to-search", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
@@ -86,12 +86,12 @@ public class UISearchForm extends UIForm {
         eventQuery.setText(text) ;
         String username = CalendarUtils.getCurrentUser() ;
         UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
+        EventPageList resultPageList = 
+          CalendarUtils.getCalendarService().searchEvent(SessionProviderFactory.createSessionProvider(), username, eventQuery,uiForm.getPublicCalendars()) ;
         UICalendarViewContainer calendarViewContainer = 
           calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
         calendarViewContainer.initView(UICalendarViewContainer.LIST_VIEW) ;
         UIListView uiListView = calendarViewContainer.findFirstComponentOfType(UIListView.class) ;
-        EventPageList resultPageList = 
-          CalendarUtils.getCalendarService().searchEvent(SessionsUtils.getSessionProvider(), username, eventQuery,uiForm.getPublicCalendars()) ;
         calendarViewContainer.setRenderedChild(UICalendarViewContainer.LIST_VIEW) ;
         uiListView.update(resultPageList) ;
         uiListView.setViewType(UIListView.TYPE_BOTH) ;
@@ -106,6 +106,7 @@ public class UISearchForm extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(calendarViewContainer) ;
       } catch (Exception e) {
         e.printStackTrace() ;
+        return;
       }
     }
   }
@@ -116,6 +117,8 @@ public class UISearchForm extends UIForm {
       UIPopupAction popupAction = calendarPortlet.getChild(UIPopupAction.class) ;
       UIAdvancedSearchForm uiAdvancedSearchForm = popupAction.activate(UIAdvancedSearchForm.class, 600) ;
       uiAdvancedSearchForm.setSearchValue(uiForm.getSearchValue()) ;
+      uiForm.reset() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }

@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
-import org.exoplatform.calendar.SessionsUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
@@ -95,7 +94,7 @@ public class UIWeekView extends UICalendarView {
     EventQuery eventQuery = new EventQuery() ;
     eventQuery.setFromDate(getBeginDateOfWeek()) ;
     eventQuery.setToDate(getEndDateOfWeek()) ;
-    List<CalendarEvent> allEvents = calendarService.getEvent(SessionsUtils.getSystemProvider(), username, eventQuery, getPublicCalendars())  ;
+    List<CalendarEvent> allEvents = calendarService.getEvent(getSystemSession(), username, eventQuery, getPublicCalendars())  ;
     Iterator iter = allEvents.iterator() ;
     while(iter.hasNext()) {
       CalendarEvent event = (CalendarEvent)iter.next() ;
@@ -122,13 +121,11 @@ public class UIWeekView extends UICalendarView {
   public java.util.Calendar getBeginDateOfWeek() throws Exception{
     java.util.Calendar temCal = CalendarUtils.getInstanceTempCalendar() ;
     temCal.setTime(calendar_.getTime()) ;
-    CalendarSetting calSetting  = null ;
-    try{
-      calSetting = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
-    } catch (Exception e) {
+    CalendarSetting calSetting = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
+   /* } catch (Exception e) {
       CalendarService calService = getApplicationComponent(CalendarService.class) ;
-      calSetting  = calService.getCalendarSetting(SessionsUtils.getSessionProvider(), Util.getPortalRequestContext().getRemoteUser()) ;
-    }
+      calSetting  = calService.getCalendarSetting(getSession(), Util.getPortalRequestContext().getRemoteUser()) ;
+    }*/
     temCal.setFirstDayOfWeek(Integer.parseInt(calSetting.getWeekStartOn())) ;
     temCal.set(java.util.Calendar.WEEK_OF_YEAR, getCurrentWeek()) ;
     int amout = temCal.getFirstDayOfWeek() - calendar_.get(Calendar.DAY_OF_WEEK) ;
@@ -138,13 +135,11 @@ public class UIWeekView extends UICalendarView {
 
   public java.util.Calendar getEndDateOfWeek() throws Exception{
     java.util.Calendar temCal = CalendarUtils.getInstanceTempCalendar() ;
-    CalendarSetting calSetting  = null ;
-    try{
-      calSetting = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
-    } catch (Exception e) {
+    CalendarSetting calSetting  = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
+   /* } catch (Exception e) {
       CalendarService calService = getApplicationComponent(CalendarService.class) ;
-      calSetting  = calService.getCalendarSetting(SessionsUtils.getSessionProvider(), Util.getPortalRequestContext().getRemoteUser()) ;
-    }
+      calSetting  = calService.getCalendarSetting(getSession(), Util.getPortalRequestContext().getRemoteUser()) ;
+    }*/
     temCal.setFirstDayOfWeek(Integer.parseInt(calSetting.getWeekStartOn())) ;
     temCal.setTime(getBeginDateOfWeek().getTime()) ;
     temCal.add(Calendar.DATE, 6) ;
@@ -244,11 +239,11 @@ public class UIWeekView extends UICalendarView {
             return ;
           }
           if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
-            calendarService.saveUserEvent(SessionsUtils.getSessionProvider(), username, calendarId, eventCalendar, false) ;
+            calendarService.saveUserEvent(calendarview.getSession(), username, calendarId, eventCalendar, false) ;
           }else if(calType.equals(CalendarUtils.SHARED_TYPE)){
-            calendarService.saveEventToSharedCalendar(SessionsUtils.getSystemProvider(), username, calendarId, eventCalendar, false) ;
+            calendarService.saveEventToSharedCalendar(calendarview.getSystemSession(), username, calendarId, eventCalendar, false) ;
           }else if(calType.equals(CalendarUtils.PUBLIC_TYPE)){
-            calendarService.savePublicEvent(SessionsUtils.getSystemProvider(), calendarId, eventCalendar, false) ;          
+            calendarService.savePublicEvent(calendarview.getSystemSession(), calendarId, eventCalendar, false) ;          
           }
           calendarview.setLastUpdatedEventId(eventId) ;
           /*key = calendarview.keyGen(cal.get(Calendar.DATE), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)) ;
@@ -299,11 +294,11 @@ public class UIWeekView extends UICalendarView {
             return ;
           }
           if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
-            calendarService.saveUserEvent(SessionsUtils.getSessionProvider(), username, calendarId, eventCalendar, false) ;
+            calendarService.saveUserEvent(calendarview.getSession(), username, calendarId, eventCalendar, false) ;
           }else if(calType.equals(CalendarUtils.SHARED_TYPE)){
-            calendarService.saveEventToSharedCalendar(SessionsUtils.getSystemProvider(), username, calendarId, eventCalendar, false) ;
+            calendarService.saveEventToSharedCalendar(calendarview.getSystemSession(), username, calendarId, eventCalendar, false) ;
           }else if(calType.equals(CalendarUtils.PUBLIC_TYPE)){
-            calendarService.savePublicEvent(SessionsUtils.getSystemProvider(), calendarId, eventCalendar, false) ;          
+            calendarService.savePublicEvent(calendarview.getSystemSession(), calendarId, eventCalendar, false) ;          
           }
           calendarview.setLastUpdatedEventId(eventId) ;
           calendarview.refresh() ;
