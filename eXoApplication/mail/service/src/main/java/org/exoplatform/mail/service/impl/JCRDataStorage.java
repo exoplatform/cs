@@ -881,6 +881,7 @@ public class JCRDataStorage{
         Node msgNode = messageHome.getNode(msgId) ;
         if (property.equals(Utils.EXO_STAR)) {
           msgNode.setProperty(Utils.EXO_STAR, !msgNode.getProperty(Utils.EXO_STAR).getBoolean());
+          msgNode.save();
         } else if (property.equals(Utils.EXO_ISUNREAD)) {
           Boolean isUnread = msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean();
           msgNode.setProperty(Utils.EXO_ISUNREAD, !isUnread);
