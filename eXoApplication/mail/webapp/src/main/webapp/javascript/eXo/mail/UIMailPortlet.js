@@ -475,9 +475,15 @@ CheckBox.prototype.checkAll = function() {
 	var rows = CheckBox.rows ;
 	var len = items.length - 1 ;
 	for(var i = len ; i >= 0 ; i--) {
-		rows[i].className = rows[i].className.replace("SelectedItem","") ;
-		rows[i].style.background = "#FFFEC4" ;
-		if(!isChecked) rows[i].removeAttribute("style") ;
+		if(!isChecked) { 		
+			if (rows[i].className.indexOf("SelectedItem") > -1) {
+				rows[i].className = rows[i].className.replace("SelectedItem", "") ;
+			}
+		} else {
+			if (rows[i].className.indexOf("SelectedItem") < 0) {
+				rows[i].className += " SelectedItem" ;
+			}
+		}
 		if(items[i].checked == isChecked) continue ;
 		items[i].checked = isChecked ;
 	}
@@ -490,9 +496,10 @@ CheckBox.prototype.check = function() {
 		tr.removeAttribute("style") ;
 		tr.className = tr.className.replace("SelectedItem","") ;
 		eXo.mail.CheckBox.checkall.checked = false ;
-	}
-	else {
-		tr.style.background = "#FFFEC4" ;
+	} else {
+	    if (tr.className.indexOf("SelectedItem") < 0) {
+			tr.className += " SelectedItem";
+		}
 		eXo.mail.CheckBox.checkall.checked = eXo.mail.CheckBox.isAll() ;
 	}
 }
