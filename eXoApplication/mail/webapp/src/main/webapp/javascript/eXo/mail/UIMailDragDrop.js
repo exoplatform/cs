@@ -15,6 +15,7 @@ UIMailDragDrop.prototype.onLoad = function() {
 } ;
 
 UIMailDragDrop.prototype.init = function() {
+  this.dropableSets = [] ;
   this.uiMailPortletNode = document.getElementById('UIMailPortlet') ;
   this.getAllDropableSets() ;
   this.regDnDItem() ;
