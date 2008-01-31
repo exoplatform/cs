@@ -444,7 +444,7 @@ UIMailPortlet.prototype.resizeIframe = function(str) {
 		}
 		frame.style.width = "96%";
 		frame.style.height = "auto"; 
-		frame.style.height = docHt; 
+		frame.style.height = docHt + 20 + "px"; 
 	}
 }
 
