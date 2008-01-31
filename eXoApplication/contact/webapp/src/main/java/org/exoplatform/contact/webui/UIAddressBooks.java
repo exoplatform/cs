@@ -170,7 +170,7 @@ public class UIAddressBooks extends UIComponent {
         if (uiAddressBook.privateGroupMap_.containsKey(srcAddress)) srcType = "0" ;
         else if (uiAddressBook.sharedGroupMap_.containsKey(srcAddress)) srcType = "1" ;
         else srcType = "2" ;    
-        ContactUtils.getContactService().pasteAddressBook(SessionsUtils.getSystemProvider()
+        ContactUtils.getContactService().pasteAddressBook(SessionsUtils.getSessionProvider()
             , ContactUtils.getCurrentUser(), srcAddress, srcType, destAddress, destType) ;
       } else {        
         ContactUtils.getContactService().pasteContacts(SessionsUtils.getSessionProvider()

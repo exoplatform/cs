@@ -709,6 +709,13 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           UIWorkingContainer.class).findFirstComponentOfType(UIAddressBooks.class) ;     
       uiAddressBooks.setCopyAddress(null) ;
       List<String> checkedContact = uiContacts.getCheckedContacts() ;
+      if (checkedContact.size() < 1) {
+        UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-required", null,
+            ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;        
+      }
       List<Contact> copyContacts = new ArrayList<Contact>();
       for (String contactId : checkedContact) {
         copyContacts.add(uiContacts.contactMap.get(contactId)) ;
