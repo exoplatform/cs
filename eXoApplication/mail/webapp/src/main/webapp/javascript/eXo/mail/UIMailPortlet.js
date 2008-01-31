@@ -431,7 +431,21 @@ UIMailPortlet.prototype.resizeIframe = function(str) {
 	doc.open();
 	doc.write(str);
 	doc.close();
-	frame.style.height = doc.body.offsetHeight  + 20 + "px" ;
+	if (eXo.core.Browser.isFF()) {
+		frame.style.height = doc.body.offsetHeight  + 20 + "px" ;
+	} else {
+		var docHt = 0, sh, oh;
+		if (doc.height) {
+			docHt = doc.height;
+		} else if (doc.body) {
+			if (doc.body.scrollHeight) docHt = sh = doc.body.scrollHeight;
+			if (doc.body.offsetHeight) docHt = oh = doc.body.offsetHeight;
+			if (sh && oh) docHt = Math.max(sh, oh);
+		}
+		frame.style.width = "96%";
+		frame.style.height = "auto"; 
+		frame.style.height = docHt; 
+	}
 }
 
 // Check all
