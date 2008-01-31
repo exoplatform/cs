@@ -23,13 +23,19 @@ UICalendarPortlet.prototype.timeToMin = function(milliseconds) {
 UICalendarPortlet.prototype.minToTime = function(min,timeFormat) {
 	var minutes = min%60 ;
 	var hour = (min - minutes)/ 60 ;
-	if(this.timeFormat != "hh:mm a") return hour + ":" + minutes ;
 	if (hour < 10) hour = "0" + hour ;
 	if (minutes < 10) minutes = "0" + minutes ;
+	if(eXo.calendar.UICalendarPortlet.timeFormat != "hh:mm a") return hour + ":" + minutes ;
 	var time = hour + ":" + minutes ;
 	if(!timeFormat) return time ;
 	if(hour < 12) time += " " + timeFormat.am ;
-	else time += " " + timeFormat.pm ;
+	else if (hour == 12)  time += " " + timeFormat.pm ;
+	else {
+		hour -= 12 ;
+		if (hour < 10) hour = "0" + hour ;
+		time = hour + ":" + minutes ;
+		time += " " + timeFormat.pm ;
+	}
  return time ;
 } ;
 
