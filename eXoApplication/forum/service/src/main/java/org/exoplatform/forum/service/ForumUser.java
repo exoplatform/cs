@@ -32,24 +32,22 @@ public class ForumUser {
 	private long totalPost ;
 	private long totalTopic ;
 	
-	private boolean isBanned = false ;
-	private Date banUntil ;
-	private String banReason ;
-	
-	private int banCounter = 0 ;
-	private String[] banReasonSummary ; // value: Ban reason + fromDate - toDate
-	
-	private Date createdDate ;
-	private Date lastLoginDate ;
-	private Date lastPostDate ;
-	
-	private boolean isDisplaySignature = true ;
-	private boolean isDisplayAvatar = true ;
-	
-	
 	private String[] moderateForums ; //store Ids of forum this user is moderator
 	private String[] moderateTopics ; //store Ids of topic this user is moderator
 	private String[] readTopic = new String[] {} ;
+	
+	private boolean isBanned = false ;
+	private Date banUntil ;
+	private String banReason ;
+	private int banCounter = 0 ;
+	private String[] banReasonSummary ; // value: Ban reason + fromDate - toDate
+	private Date createdDate ;
+	
+	private Date lastLoginDate ;
+	private Date lastPostDate ;
+	private boolean isDisplaySignature = true ;
+	private boolean isDisplayAvatar = true ;
+	
 	public ForumUser() {
 		// TODO Auto-generated constructor stub
 	}
@@ -83,5 +81,34 @@ public class ForumUser {
 
 	public void setModerateTopics(String[] moderateTopics) { this.moderateTopics = moderateTopics ; }
 	public String[] getModerateTopics() { return moderateTopics ;	}
-	
+
+	public void setBanned(boolean isBanned) {this.isBanned = isBanned; }
+	public boolean isBanned() {return isBanned; }
+
+	public void setBanUntil(Date banUntil) {this.banUntil = banUntil; }
+	public Date getBanUntil() {return banUntil; }
+
+	public void setBanReason(String banReason) {this.banReason = banReason; }
+	public String getBanReason() {return banReason; }
+
+	public void setBanCounter(int banCounter) {this.banCounter = banCounter; }
+	public int getBanCounter() {return banCounter; }
+
+	public void setBanReasonSummary(String[] banReasonSummary) {this.banReasonSummary = banReasonSummary; }
+	public String[] getBanReasonSummary() {return banReasonSummary; }
+
+	public void setCreatedDate(Date createdDate) {this.createdDate = createdDate; }
+	public Date getCreatedDate() {return createdDate; }
+
+	public void setLastLoginDate(Date lastLoginDate) {this.lastLoginDate = lastLoginDate; }
+	public Date getLastLoginDate() {return lastLoginDate; }
+
+	public void setLastPostDate(Date lastPostDate) {this.lastPostDate = lastPostDate; }
+	public Date getLastPostDate() {return lastPostDate; }
+
+	public void setDisplaySignature(boolean isDisplaySignature) {this.isDisplaySignature = isDisplaySignature; }
+	public boolean isDisplaySignature() {return isDisplaySignature; }
+
+	public void setDisplayAvatar(boolean isDisplayAvatar) {this.isDisplayAvatar = isDisplayAvatar; }
+	public boolean isDisplayAvatar() {return isDisplayAvatar; }
 }
