@@ -21,8 +21,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.forum.ForumFormatUtils;
 import org.exoplatform.forum.ForumSessionUtils;
+import org.exoplatform.forum.service.ForumOption;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.Poll;
 import org.exoplatform.forum.service.Topic;
@@ -66,34 +66,13 @@ public class UITopicPoll extends UIForm	{
 	private boolean isEditPoll = false ;
 	private Topic topic ;
 	
-	private double timeZone ;
-	private String shortDateformat ;
-	private String longDateformat ;
-	private String timeFormat ;
-	
 	public UITopicPoll() throws Exception {
 	}
+
+	private ForumOption getOption() {
+		return this.getAncestorOfType(UIForumPortlet.class).getUserProfile() ;
+	}
 	
-	public void setFormat(double timeZone, String shortDateformat, String longDateformat, String timeFormat) {
-	  this.timeZone = timeZone ;
-	  this.shortDateformat = shortDateformat;
-	  this.longDateformat = longDateformat ;
-	  this.timeFormat = timeFormat ;
-  }
-	@SuppressWarnings({ "deprecation", "unused" })
-	private String getTime(Date myDate) {
-		return ForumFormatUtils.getFormatDate(timeFormat, myDate) ;
-	}
-	@SuppressWarnings({ "deprecation", "unused" })
-  private String getShortDate(Date myDate) {
-		myDate.setMinutes(myDate.getMinutes() - (int)(timeZone*60));
-		return ForumFormatUtils.getFormatDate(shortDateformat, myDate) ;
-	}
-	@SuppressWarnings({ "deprecation", "unused" })
-	private String getLongDate(Date myDate) {
-		myDate.setMinutes(myDate.getMinutes() - (int)(timeZone*60));
-		return ForumFormatUtils.getFormatDate(longDateformat, myDate) ;
-	}
 	public void updatePoll(String categoryId, String forumId, Topic topic) throws Exception {
 		this.categoryId = categoryId; 
 		this.forumId = forumId; 
@@ -291,7 +270,7 @@ public class UITopicPoll extends UIForm	{
 	static public class VoteAgainPollActionListener extends EventListener<UITopicPoll> {
     public void execute(Event<UITopicPoll> event) throws Exception {
 			UITopicPoll topicPoll = event.getSource() ;
-			topicPoll.isMultiCheck = false ;
+			topicPoll.isMultiCheck = true ;
 			topicPoll.init() ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(topicPoll) ;
 		}

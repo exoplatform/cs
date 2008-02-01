@@ -100,8 +100,8 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 		}
 		timeZone.setValue(mark + timeZoneMyHost + "0");
 		list = new ArrayList<SelectItemOption<String>>() ;
-		String []format = new String[] {"M-D-yyyy", "M-D-yy", "MM-DD-yy", "MM-DD-yyyy","yyyy-MM-DD", "yy-MM-DD", "DD-MM-yyyy", "DD-MM-yy",
-				"M/D/yyyy", "M/D/yy", "MM/DD/yy", "MM/DD/yyyy","yyyy/MM/DD", "yy/MM/DD", "DD/MM/yyyy", "DD/MM/yy"} ;
+		String []format = new String[] {"M-d-yyyy", "M-d-yy", "MM-dd-yy", "MM-dd-yyyy","yyyy-MM-dd", "yy-MM-dd", "dd-MM-yyyy", "dd-MM-yy",
+				"M/d/yyyy", "M/d/yy", "MM/dd/yy", "MM/dd/yyyy","yyyy/MM/dd", "yy/MM/dd", "dd/MM/yyyy", "dd/MM/yy"} ;
 		for (String frm : format) {
 			list.add(new SelectItemOption<String>((frm.toLowerCase() +" ("  + ForumFormatUtils.getFormatDate(frm, date)+")"), frm)) ;
     }
@@ -112,25 +112,27 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 			shortdateFormat.setValue("M-D-yyyy");
 		}
 		list = new ArrayList<SelectItemOption<String>>() ;
-		format = new String[] {"DDD,MMMM DD,yyyy", "DDDD,MMMM DD,yyyy", "DDDD,DD MMMM,yyyy", "DDD,MMM DD,yyyy", "DDDD,MMM DD,yyyy", "DDDD,DD MMM,yyyy",
-				 								"MMMM DD,yyyy", "DD MMMM,yyyy","MMM DD,yyyy", "DD MMM,yyyy"} ;
+		format = new String[] {"DDD,MMMM dd,yyyy", "DDDD,MMMM dd,yyyy", "DDDD,dd MMMM,yyyy", "DDD,MMM dd,yyyy", "DDDD,MMM dd,yyyy", "DDDD,dd MMM,yyyy",
+				 								"MMMM dd,yyyy", "dd MMMM,yyyy","MMM dd,yyyy", "dd MMM,yyyy"} ;
 		for (String idFrm : format) {
-			list.add(new SelectItemOption<String>((idFrm.toLowerCase() +" (" + ForumFormatUtils.getFormatDate(idFrm, date)+")"), idFrm)) ;
+			list.add(new SelectItemOption<String>((idFrm.toLowerCase() +" (" + ForumFormatUtils.getFormatDate(idFrm, date)+")"), idFrm.replaceFirst(" ", "="))) ;
 		}
 		UIFormSelectBox longDateFormat = new UIFormSelectBox(FIELD_LONGDATEFORMAT_SELECTBOX, FIELD_LONGDATEFORMAT_SELECTBOX, list) ;
 		if(isForumOption) {
 			longDateFormat.setValue(forumOption.getLongDateFormat());
 		} else {
-			longDateFormat.setValue("DDD,MMMM DD,yyyy");
+			longDateFormat.setValue("DDD,MMMM dd,yyyy");
 		}
 		list = new ArrayList<SelectItemOption<String>>() ;
-		list.add(new SelectItemOption<String>("12-hour format", "id12h")) ;
-		list.add(new SelectItemOption<String>("24-hour format", "id24h")) ;
+		list.add(new SelectItemOption<String>("12-hour ("+ForumFormatUtils.getFormatDate("h:mm a", date)+")", "h:mm=a")) ;
+		list.add(new SelectItemOption<String>("12-hour ("+ForumFormatUtils.getFormatDate("hh:mm a", date)+")", "hh:mm=a")) ;
+		list.add(new SelectItemOption<String>("24-hour ("+ForumFormatUtils.getFormatDate("H:mm", date)+")", "H:mm")) ;
+		list.add(new SelectItemOption<String>("24-hour ("+ForumFormatUtils.getFormatDate("HH:mm", date)+")", "HH:mm")) ;
 		UIFormSelectBox timeFormat = new UIFormSelectBox(FIELD_TIMEFORMAT_SELECTBOX, FIELD_TIMEFORMAT_SELECTBOX, list) ;
 		if(isForumOption) {
-			timeFormat.setValue("id" + forumOption.getTimeFormat());
+			timeFormat.setValue(forumOption.getTimeFormat().replace(' ', '='));
 		} else {
-			timeFormat.setValue("id12h");
+			timeFormat.setValue("hh:mm=a");
 		}
 		list = new ArrayList<SelectItemOption<String>>() ;
 		for(int i=5; i <= 35; i = i + 5) {
@@ -194,14 +196,14 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 				ForumOption forumOption = new ForumOption() ;
 				forumOption.setUserName(userName);
 				forumOption.setTimeZone(-timeZone) ;
-				forumOption.setTimeFormat(timeFormat);
+				forumOption.setTimeFormat(timeFormat.replace('=', ' '));
 				forumOption.setShortDateFormat(shortDateFormat);
-				forumOption.setLongDateFormat(longDateFormat);
+				forumOption.setLongDateFormat(longDateFormat.replace('=', ' '));
 				forumOption.setMaxPostInPage(maxPost);
 				forumOption.setMaxTopicInPage(maxTopic);
 				forumOption.setIsShowForumJump(isJump);
 				uiForm.forumService.saveOption(ForumSessionUtils.getSystemProvider(), forumOption);
-				forumPortlet.initOption() ;
+				forumPortlet.setUserProfile() ;
 			}
 			forumPortlet.cancelAction() ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet);

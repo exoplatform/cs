@@ -6,6 +6,7 @@
 	import org.exoplatform.forum.service.JCRPageList ;
 	import org.exoplatform.forum.ForumFormatUtils ;
 	import org.exoplatform.forum.ForumSessionUtils; 
+	import org.exoplatform.forum.service.ForumOption ;
 	import java.util.GregorianCalendar;
 %>
 <%	
@@ -13,6 +14,7 @@
 	Forum forum = uicomponent.getForum() ;
 	String forumName = forum.getForumName();
 	boolean isShowMenu = ForumSessionUtils.isAnonim();
+	ForumOption option = uicomponent.getOption();
 %>
 <div class="UITopicContainer">
 	<% uiform.begin() %>
@@ -297,7 +299,7 @@
 									String topicBy = topic.getOwner();
 									String postNewBy = topic.getLastPostBy() ;
 									Date postDate = topic.getLastPostDate() ;
-									String lastPostDate = uicomponent.getShortDate(postDate) + ", " + uicomponent.getTime(postDate);									
+									String lastPostDate = ForumFormatUtils.getFormatDate((option.getShortDateFormat() + ", " + option.getTimeFormat()),postDate);								
 									String titlePost = uicomponent.getStringCleanHtmlCode(topic.getDescription());
 									if(titlePost.length() > 100) {
 										titlePost = titlePost.substring(0, 99) + "...";

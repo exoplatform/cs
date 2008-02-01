@@ -3,8 +3,11 @@
 	import org.exoplatform.forum.service.Forum; 
 	import org.exoplatform.forum.service.Topic; 
 	import org.exoplatform.forum.service.Post;
-	import org.exoplatform.forum.ForumSessionUtils; 
 	import java.util.GregorianCalendar;
+	import org.exoplatform.forum.ForumSessionUtils; 
+	import org.exoplatform.forum.ForumFormatUtils;
+	import org.exoplatform.forum.service.ForumOption ;
+	ForumOption option = uicomponent.getOption();
 %>
 <% Category category = uicomponent.getCategory(); %>
 <div class="UIForumCategory" style="padding: 2px 10px;">
@@ -147,7 +150,7 @@
 								topicNewPostTitle = topicNewPost.getTopicName();
 								lastPostBy = topicNewPost.getLastPostBy();
 								Date postDate = topicNewPost.getLastPostDate();
-								dateTime = uicomponent.getShortDate(postDate) + ", " + uicomponent.getTime(postDate);
+								dateTime = ForumFormatUtils.getFormatDate((option.getShortDateFormat() + ", " + option.getTimeFormat()),postDate);
 								long createdDate = topicNewPost.getLastPostDate().getTime();
 								if((toDay-createdDate)/86400000 < 4){
 									classIconForum = "ForumNewPostIcon";

@@ -17,13 +17,13 @@
 package org.exoplatform.forum.webui;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.forum.ForumFormatUtils;
 import org.exoplatform.forum.ForumSessionUtils;
 import org.exoplatform.forum.service.Forum;
+import org.exoplatform.forum.service.ForumOption;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.JCRPageList;
 import org.exoplatform.forum.service.Tag;
@@ -95,43 +95,17 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 	private long page = 1 ;
 	private boolean isGoPage = false;
 	private boolean isUpdate = false;
-	private double timeZone ;
-	private String shortDateformat ;
-	private String longDateformat ;
-	private String timeFormat ;
 	private long maxTopic = 10 ;
 	private long maxPost = 10 ;
+	private ForumOption forumOption = null;
 	public UITopicContainer() throws Exception {
 		addUIFormInput( new UIFormStringInput("gopage1", null)) ;
 		addUIFormInput( new UIFormStringInput("gopage2", null)) ;
 		addChild(UIForumPageIterator.class, null, "ForumPageIterator") ;
 	}
 	
-	
-	public void setFormat(double timeZone, String shortDateformat, String longDateformat, String timeFormat) {
-	  this.timeZone = timeZone ;
-	  this.shortDateformat = shortDateformat;
-	  this.longDateformat = longDateformat ;
-	  this.timeFormat = timeFormat ;
-  }
-	@SuppressWarnings({ "deprecation", "unused" })
-	private String getTime(Date myDate) {
-		return ForumFormatUtils.getFormatDate(timeFormat, myDate) ;
-	}
-	@SuppressWarnings({ "deprecation", "unused" })
-  private String getShortDate(Date myDate) {
-		myDate.setMinutes(myDate.getMinutes() - (int)(timeZone*60));
-		return ForumFormatUtils.getFormatDate(shortDateformat, myDate) ;
-	}
-	@SuppressWarnings({ "deprecation", "unused" })
-	private String getLongDate(Date myDate) {
-		myDate.setMinutes(myDate.getMinutes() - (int)(timeZone*60));
-		return ForumFormatUtils.getFormatDate(longDateformat, myDate) ;
-	}
-	
-	public void setMaxItemInPage(long maxTopic, long maxPost) {
-		this.maxTopic = maxTopic ;
-		this.maxPost = maxPost ;
+	private ForumOption getOption() {
+		return forumOption ;
 	}
 	
 	public void activate() throws Exception {}
@@ -169,7 +143,10 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 	
 	@SuppressWarnings("unused")
 	private void initPage() throws Exception {
+		this.forumOption = this.getAncestorOfType(UIForumPortlet.class).getUserProfile() ;
 		this.pageList = forumService.getPageTopic(ForumSessionUtils.getSystemProvider(), categoryId, forumId);
+		long maxTopic = forumOption.getMaxTopicInPage() ;
+		if(maxTopic > 0) this.maxTopic = maxTopic ;
 		this.pageList.setPageSize(this.maxTopic);
 		this.getChild(UIForumPageIterator.class).updatePageList(this.pageList) ;
 	}
@@ -218,6 +195,8 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 	
 	private JCRPageList getPageListPost(String topicId) throws Exception {
 		JCRPageList pageListPost = this.forumService.getPosts(ForumSessionUtils.getSystemProvider(), this.categoryId, this.forumId, topicId)	; 
+		long maxPost = getOption().getMaxTopicInPage() ;
+		if(maxPost > 0) this.maxPost = maxPost ;
 		pageListPost.setPageSize(this.maxPost) ;
 		return pageListPost;
 	}

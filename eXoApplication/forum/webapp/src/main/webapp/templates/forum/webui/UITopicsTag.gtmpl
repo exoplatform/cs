@@ -3,12 +3,15 @@
 	import org.exoplatform.forum.webui.UITopicsTag ;
 	import org.exoplatform.forum.service.Tag ;
 	import org.exoplatform.forum.webui.UIForumPageIterator ;
+	import org.exoplatform.forum.ForumFormatUtils ;
+	import org.exoplatform.forum.service.ForumOption ;
 %>
 <% uiform.begin() %>
 <%  
 	List topics = uicomponent.getTopicsTag() ; 
 	Tag tag_ = uicomponent.getTagById() ;
 	String tagName = tag_.getName() ;
+	ForumOption option = uicomponent.getOption();
 %>
 <div class="UIForumContainer">
 	<div class="UIForumDescription">
@@ -130,7 +133,7 @@
 									String topicBy = topic.getOwner();
 									String postNewBy = topic.getLastPostBy() ;
 									Date postDate = topic.getLastPostDate();
-									String lastPostDate = uicomponent.getShortDate(postDate) + ", " + uicomponent.getTime(postDate);
+									String lastPostDate = ForumFormatUtils.getFormatDate((option.getShortDateFormat() + ", " + option.getTimeFormat()),postDate);	
 									String titlePost = uicomponent.getStringCleanHtmlCode(topic.getDescription());
 									if(titlePost.length() > 100) {
 										titlePost = titlePost.substring(0, 99) + "...";

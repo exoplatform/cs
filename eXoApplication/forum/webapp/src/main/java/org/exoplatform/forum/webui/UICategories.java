@@ -16,14 +16,13 @@
  ***************************************************************************/
 package org.exoplatform.forum.webui;
 
-import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.forum.ForumFormatUtils;
 import org.exoplatform.forum.ForumSessionUtils;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
+import org.exoplatform.forum.service.ForumOption;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.Topic;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -48,36 +47,16 @@ import org.exoplatform.webui.event.EventListener;
 		}
 )
 public class UICategories extends UIContainer	{
-	private double timeZone ;
-	private String shortDateformat ;
-	private String longDateformat ;
-	private String timeFormat ;
 	protected ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
 	
 	public UICategories() throws Exception {
 	}
 
-	public void setFormat(double timeZone, String shortDateformat, String longDateformat, String timeFormat) {
-	  this.timeZone = timeZone ;
-	  this.shortDateformat = shortDateformat;
-	  this.longDateformat = longDateformat ;
-	  this.timeFormat = timeFormat ;
-  }
 	@SuppressWarnings({ "deprecation", "unused" })
-  private String getTime(Date myDate) {
-		myDate.setMinutes(myDate.getMinutes() - (int)(timeZone*60));
-		return ForumFormatUtils.getFormatDate(timeFormat, myDate) ;
+  private ForumOption getOption() {
+		return this.getAncestorOfType(UIForumPortlet.class).getUserProfile() ;
 	}
-	@SuppressWarnings({ "deprecation", "unused" })
-  private String getShortDate(Date myDate) {
-		myDate.setMinutes(myDate.getMinutes() - (int)(timeZone*60));
-		return ForumFormatUtils.getFormatDate(shortDateformat, myDate) ;
-	}
-	@SuppressWarnings({ "deprecation", "unused" })
-	private String getLongDate(Date myDate) {
-		myDate.setMinutes(myDate.getMinutes() - (int)(timeZone*60));
-		return ForumFormatUtils.getFormatDate(longDateformat, myDate) ;
-	}
+	
 	private List<Category> getCategoryList() throws Exception {
 		this.getAncestorOfType(UIForumPortlet.class).getChild(UIBreadcumbs.class).setUpdataPath("ForumService") ;
 		List<Category> categoryList = forumService.getCategories(ForumSessionUtils.getSystemProvider());

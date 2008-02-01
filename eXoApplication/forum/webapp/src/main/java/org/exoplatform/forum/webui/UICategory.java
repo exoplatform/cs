@@ -17,14 +17,13 @@
 package org.exoplatform.forum.webui;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.forum.ForumFormatUtils;
 import org.exoplatform.forum.ForumSessionUtils;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
+import org.exoplatform.forum.service.ForumOption;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.Topic;
 import org.exoplatform.forum.webui.popup.UICategoryForm;
@@ -42,7 +41,6 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
-
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen
@@ -70,10 +68,6 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 		}
 )
 public class UICategory extends UIForm	{
-	private double timeZone ;
-	private String shortDateformat ;
-	private String longDateformat ;
-	private String timeFormat ;
 	private String categoryId ;
 	private Category category ;
 	private boolean	isEditCategory = false ;
@@ -83,27 +77,9 @@ public class UICategory extends UIForm	{
 	public UICategory() throws Exception {
 	}
 	
-	public void setFormat(double timeZone, String shortDateformat, String longDateformat, String timeFormat) {
-	  this.timeZone = timeZone ;
-	  this.shortDateformat = shortDateformat;
-	  this.longDateformat = longDateformat ;
-	  this.timeFormat = timeFormat ;
-  }
-	@SuppressWarnings({ "deprecation", "unused" })
-	private String getTime(Date myDate) {
-		return ForumFormatUtils.getFormatDate(timeFormat, myDate) ;
+	private ForumOption getOption() {
+		return this.getAncestorOfType(UIForumPortlet.class).getUserProfile() ;
 	}
-	@SuppressWarnings({ "deprecation", "unused" })
-  private String getShortDate(Date myDate) {
-		myDate.setMinutes(myDate.getMinutes() - (int)(timeZone*60));
-		return ForumFormatUtils.getFormatDate(shortDateformat, myDate) ;
-	}
-	@SuppressWarnings({ "deprecation", "unused" })
-	private String getLongDate(Date myDate) {
-		myDate.setMinutes(myDate.getMinutes() - (int)(timeZone*60));
-		return ForumFormatUtils.getFormatDate(longDateformat, myDate) ;
-	}
-	
 	
 	public void update(Category category, List<Forum> forums) throws Exception {
 		this.category = category ;

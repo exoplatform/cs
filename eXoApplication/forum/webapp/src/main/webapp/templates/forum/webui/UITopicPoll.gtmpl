@@ -2,6 +2,8 @@
 	import org.exoplatform.forum.webui.UITopicPoll ;
 	import org.exoplatform.forum.service.Poll ;
 	import org.exoplatform.forum.ForumSessionUtils; 
+	import org.exoplatform.forum.ForumFormatUtils ;
+	import org.exoplatform.forum.service.ForumOption 
 	import java.util.GregorianCalendar;
 %>
 	<% 
@@ -93,7 +95,8 @@
 			Date dateOut = poll.getCreatedDate() ;
 			Date today = new Date() ;
 			dateOut.setDate(dateOut.getDate() + timeOut);
-			String timeOutDate =_ctx.appRes("UITopicPoll.label.timeOutPoll") + uicomponent.getLongDate(dateOut) + ", " + uicomponent.getTime(dateOut) ;
+			ForumOption option = uicomponent.getOption();
+			String timeOutDate =_ctx.appRes("UITopicPoll.label.timeOutPoll") + ForumFormatUtils.getFormatDate((option.getLongDateFormat() + ", " + option.getTimeFormat()),dateOut);
 			if(dateOut.getDate() < today.getDate()) {
 				timeOutDate = " Poll is Closed !" ;
 				isCheck = false ;

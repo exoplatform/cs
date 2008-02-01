@@ -17,14 +17,13 @@
 package org.exoplatform.forum.webui;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
-import org.exoplatform.forum.ForumFormatUtils;
 import org.exoplatform.forum.ForumSessionUtils;
 import org.exoplatform.forum.service.ForumAttachment;
+import org.exoplatform.forum.service.ForumOption;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.JCRPageList;
 import org.exoplatform.forum.service.Post;
@@ -111,11 +110,7 @@ public class UITopicDetail extends UIForm {
 	private List<Post> posts ;
 	
 	private long maxPost = 10 ;
-	private double timeZone ;
-	private String shortDateformat ;
-	private String longDateformat ;
-	private String timeFormat ;
-	
+	private ForumOption forumOption = null;
 	private String userName = " " ;
 	public UITopicDetail() throws Exception {
 		addUIFormInput( new UIFormStringInput("gopage1", null)) ;
@@ -124,25 +119,8 @@ public class UITopicDetail extends UIForm {
 		addChild(UIPostRules.class, null, null);
 	}
 	
-	public void setFormat(double timeZone, String shortDateformat, String longDateformat, String timeFormat) {
-	  this.timeZone = timeZone ;
-	  this.shortDateformat = shortDateformat;
-	  this.longDateformat = longDateformat ;
-	  this.timeFormat = timeFormat ;
-  }
-	@SuppressWarnings({ "deprecation", "unused" })
-	private String getTime(Date myDate) {
-		return ForumFormatUtils.getFormatDate(timeFormat, myDate) ;
-	}
-	@SuppressWarnings({ "deprecation", "unused" })
-  private String getShortDate(Date myDate) {
-		myDate.setMinutes(myDate.getMinutes() - (int)(timeZone*60));
-		return ForumFormatUtils.getFormatDate(shortDateformat, myDate) ;
-	}
-	@SuppressWarnings({ "deprecation", "unused" })
-	private String getLongDate(Date myDate) {
-		myDate.setMinutes(myDate.getMinutes() - (int)(timeZone*60));
-		return ForumFormatUtils.getFormatDate(longDateformat, myDate) ;
+	private ForumOption getOption() {
+		return forumOption ;
 	}
 	
 	public void setUpdateTopic(String categoryId, String forumId, String topicId, boolean viewTopic) throws Exception {
@@ -214,20 +192,18 @@ public class UITopicDetail extends UIForm {
 		DownloadService dservice = getApplicationComponent(DownloadService.class) ;
 		return ForumSessionUtils.getFileSource(attachment, dservice);
 	}
-	
-	public void setMaxPostInPage(long maxPost) {
-		this.maxPost = maxPost ;
-	}
-	
+
 	@SuppressWarnings("unused")
 	private void initPage() throws Exception {
+		this.forumOption = this.getAncestorOfType(UIForumPortlet.class).getUserProfile() ;
 		if(this.isUpdatePageList) {
 			this.isUpdatePageList = false ;
 		} else {
 			this.pageList = forumService.getPosts(ForumSessionUtils.getSystemProvider(), categoryId, forumId, topicId) ;
 		}
-		if(this.maxPost > 0)
-			pageList.setPageSize(this.maxPost) ;
+		long maxPost = getOption().getMaxPostInPage() ;
+		if(maxPost > 0) this.maxPost = maxPost ;
+		pageList.setPageSize(this.maxPost) ;
 		this.getChild(UIForumPageIterator.class).updatePageList(this.pageList) ;
 		if(IdPostView.equals("true")){
 			getChild(UIForumPageIterator.class).setSelectPage(pageList.getAvailablePage()) ;
@@ -274,7 +250,6 @@ public class UITopicDetail extends UIForm {
 			topicDetail.viewTopic = false ;
 			popupContainer.setId("UIAddPostContainer") ;
 			popupAction.activate(popupContainer, 670, 440) ;
-			//topicDetail.getChild(UIForumPageIterator.class).setSelectPage(topicDetail.pageList.getAvailablePage()) ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
 		}
 	}
