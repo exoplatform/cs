@@ -719,6 +719,12 @@ public class JCRDataStorage{
       for(CalendarEvent ce : getUserEventByCategory(sProvider, username, eventCategoryName)) {
         removeUserEvent(sProvider, username, ce.getCalendarId(), ce.getId()) ;
       }
+      for(CalendarEvent ce : getSharedEventByCategory(username, eventCategoryName)) {
+        removeSharedEvent(SessionProvider.createSystemProvider(), username, ce.getCalendarId(), ce.getId()) ;
+      }
+      for(CalendarEvent ce : getPublicEventByCategory(username, eventCategoryName)) {
+        removeGroupEvent(SessionProvider.createSystemProvider(),ce.getCalendarId(), ce.getId()) ;
+      }
       eventCategoryNode.remove() ;
       eventCategoryHome.save() ;
       eventCategoryHome.getSession().save() ;
@@ -767,13 +773,55 @@ public class JCRDataStorage{
     }
     return events ;
   }
+  private List<CalendarEvent> getPublicEventByCategory(String username, String eventCategoryId) throws Exception {
+    Node publicCalendarHome = getPublicCalendarHome(SessionProvider.createSystemProvider()) ;
+    QueryManager qm = publicCalendarHome.getSession().getWorkspace().getQueryManager();
+    List<CalendarEvent> events = new ArrayList<CalendarEvent> () ;
+    Query query ;
+    QueryResult result ;
+    NodeIterator calIter = publicCalendarHome.getNodes() ;
+    while (calIter.hasNext()) {
+      StringBuffer queryString = new StringBuffer("/jcr:root" + calIter.nextNode().getPath() 
+          + "//element(*,exo:calendarEvent)[@exo:eventCategoryId='").
+          append(eventCategoryId).
+          append("']");
+      query = qm.createQuery(queryString.toString(), Query.XPATH);
+      result = query.execute();
+      NodeIterator it = result.getNodes();
+      while(it.hasNext()){
+        events.add(getEvent(SessionProvider.createSystemProvider(), it.nextNode())) ;
+      }
+    }
+    return events ;
+  }
+ private List<CalendarEvent> getSharedEventByCategory(String username, String eventCategoryId) throws Exception {
+   Node sharedCalendarHome = getSharedCalendarHome(SessionProvider.createSystemProvider()) ;
+   QueryManager qm = sharedCalendarHome.getSession().getWorkspace().getQueryManager();
+   List<CalendarEvent> events = new ArrayList<CalendarEvent> () ;
+   Query query ;
+   QueryResult result ;
+   NodeIterator calIter = sharedCalendarHome.getNodes() ;
+   while (calIter.hasNext()) {
+     StringBuffer queryString = new StringBuffer("/jcr:root" + calIter.nextNode().getPath() 
+         + "//element(*,exo:calendarEvent)[@exo:eventCategoryId='").
+         append(eventCategoryId).
+         append("']");
+     query = qm.createQuery(queryString.toString(), Query.XPATH);
+     result = query.execute();
+     NodeIterator it = result.getNodes();
+     while(it.hasNext()){
+       events.add(getEvent(SessionProvider.createSystemProvider(), it.nextNode())) ;
+     }
+   }
+   return events ;
+  }
   public List<CalendarEvent> getUserEventByCategory(SessionProvider sProvider, String username, String eventCategoryId) throws Exception {
     Node calendarHome = getUserCalendarHome(sProvider, username) ;
     QueryManager qm = calendarHome.getSession().getWorkspace().getQueryManager();
     List<CalendarEvent> events = new ArrayList<CalendarEvent> () ;
-    NodeIterator calIter = calendarHome.getNodes() ;
     Query query ;
     QueryResult result ;
+    NodeIterator calIter = calendarHome.getNodes() ;
     while (calIter.hasNext()) {
       StringBuffer queryString = new StringBuffer("/jcr:root" + calIter.nextNode().getPath() 
           + "//element(*,exo:calendarEvent)[@exo:eventCategoryId='").
@@ -788,6 +836,7 @@ public class JCRDataStorage{
     }
     return events;
   }
+  
   public List<CalendarEvent> getUserEvents(SessionProvider sProvider, String username, EventQuery eventQuery) throws Exception {
     Node calendarHome = getUserCalendarHome(sProvider, username) ;
     eventQuery.setCalendarPath(calendarHome.getPath()) ;
@@ -1507,8 +1556,8 @@ public class JCRDataStorage{
       mapData = updateMap(mapData, it, eventQuery.getFromDate(), eventQuery.getToDate()) ;
     }
     // shared event
-    if(getSharedCalendarHome(sProvider).hasNode(username)) {
-      PropertyIterator iter = getSharedCalendarHome(sProvider).getNode(username).getReferences() ;
+    if(getSharedCalendarHome(SessionProvider.createSystemProvider()).hasNode(username)) {
+      PropertyIterator iter = getSharedCalendarHome(SessionProvider.createSystemProvider()).getNode(username).getReferences() ;
       while(iter.hasNext()) {
         try{
           Node calendar = iter.nextProperty().getParent() ;
@@ -1523,7 +1572,7 @@ public class JCRDataStorage{
       }
     }  
     // public events
-    Node publicCalHome = getPublicCalendarHome(sProvider) ;
+    Node publicCalHome = getPublicCalendarHome(SessionProvider.createSystemProvider()) ;
     eventQuery.setCalendarPath(publicCalHome.getPath()) ;
     qm = publicCalHome.getSession().getWorkspace().getQueryManager() ;
     eventQuery.setCalendarId(publicCalendarIds) ;
@@ -1547,8 +1596,8 @@ public class JCRDataStorage{
       Long end ;
       Node eventNode = it.nextNode() ;
       //start = new Long(1) ;
-      /*System.out.println("\n\n event form " + eventNode.getProperty("exo:fromDateTime").getDate().getTime());
-      System.out.println("\n\n event to " + eventNode.getProperty("exo:toDateTime").getDate().getTime());*/
+     /* System.out.println("\n\n event form " + eventNode.getProperty("exo:fromDateTime").getDate().getTime());
+      System.out.println("\n\n event to " + eventNode.getProperty("exo:toDateTime").getDate().getTime()); */
       long millis = eventNode.getProperty("exo:fromDateTime").getDate().getTimeInMillis() ;
       long eventFromDay ;
       long eventToDay ;
@@ -1559,6 +1608,8 @@ public class JCRDataStorage{
       if(millis % milisOfDay == 0) eventToDay = millis / milisOfDay ;
       else eventToDay = millis / milisOfDay + 1 ;
       //long toDay = eventNode.getProperty("exo:toDateTime").getDate().getTimeInMillis() / milisOfDay + 1;
+      /*System.out.println("\n\n evnet form day " + eventFromDay);
+      System.out.println("\n\n evnet to day " + eventToDay);*/
       if(eventFromDay < beginDay) {
         if(eventToDay < endDay ) {
           end = eventToDay - beginDay ;          
@@ -1577,11 +1628,14 @@ public class JCRDataStorage{
         start = eventFromDay - beginDay ;
         if(eventToDay < endDay) {
           end = start + (eventToDay - eventFromDay) ;    
-          // System.out.println("\n\n rmf fsu " + end);
+         //System.out.println("\n\n eventToDay - eventFromDay" + (eventToDay - eventFromDay));
         }else {
           end = start + (endDay - eventFromDay) ;
+         // System.out.println("\n\n endDay - eventFromDay" + (endDay - eventFromDay));
         }
-        //System.out.println("\n\n end " + end);
+       //System.out.println("\n\n start " + start);
+
+       // System.out.println("\n\n end " + end);
 
       }
       for (int i = start.intValue(); i <= end.intValue(); i ++) {

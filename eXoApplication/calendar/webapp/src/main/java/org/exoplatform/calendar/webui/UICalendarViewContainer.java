@@ -56,8 +56,8 @@ public class UICalendarViewContainer extends UIContainer  {
         calendarSetting = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
       }catch (Exception e) {
         CalendarService cservice = CalendarUtils.getCalendarService() ;
-       String username = Util.getPortalRequestContext().getRemoteUser() ;
-       calendarSetting =  cservice.getCalendarSetting(SessionProviderFactory.createSessionProvider(), username) ;
+        String username = Util.getPortalRequestContext().getRemoteUser() ;
+        calendarSetting =  cservice.getCalendarSetting(SessionProviderFactory.createSessionProvider(), username) ;
       }
       viewType = TYPES[Integer.parseInt(calendarSetting.getViewType())] ;
     }

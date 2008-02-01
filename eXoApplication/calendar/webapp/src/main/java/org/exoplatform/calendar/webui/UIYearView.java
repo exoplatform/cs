@@ -77,7 +77,7 @@ public class UIYearView extends UICalendarView {
     EventQuery eventQuery = new EventQuery() ;
     eventQuery.setFromDate(beginYear) ;
     eventQuery.setToDate(endYear) ;
-    yearData_ = calendarService.searchHightLightEvent(getSystemSession(), username, eventQuery, getPublicCalendars());
+    yearData_ = calendarService.searchHightLightEvent(getSession(), username, eventQuery, getPublicCalendars());
   }
   
  
