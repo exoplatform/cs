@@ -32,6 +32,15 @@
 	color: #292929;
 }
 
+.UICalendarPortlet .UIRightPopupMenuContainer a {
+  white-space: nowrap; 
+  display: block;
+}
+
+.UICalendarPortlet .UIRightPopupMenuContainer a:hover {
+  background: #dee4f2;
+}
+
 /*==============================UISearchForm================================*/
 .UICalendarPortlet .UICalendarContainer .UISearchForm {
   background: url('background/SearchForm1x34.gif') repeat-x;	
