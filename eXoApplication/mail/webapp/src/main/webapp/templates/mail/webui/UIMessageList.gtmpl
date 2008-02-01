@@ -354,9 +354,7 @@
     		%>
     		<tr class="MessageItem $selectedClass" msgId="<%=msg.getId()%>">
     	  		<td>
-              <%
-    	  		    if (checkboxField != null) uicomponent.renderField(checkboxField);
-    	  		  %>
+              
     	  		</td>
     				<td style="padding: 0px auto;"><a href="$actionAddStar" ><div class="$starClass"><span></span></div></a></td>
             <td class="$readStatus">
