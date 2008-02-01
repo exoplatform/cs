@@ -1002,7 +1002,7 @@ public class JCRDataStorage{
     }
     
     //query on public contacts
-    Node publicContactHome = getPublicContactHome(sysProvider);
+    Node publicContactHome = getPublicContactHome(SessionProvider.createSystemProvider());
     queryString = new StringBuffer("/jcr:root" + publicContactHome.getPath() 
                                                 + "//element(*,exo:contact)[@exo:tags='").
                                                 append(tagId).

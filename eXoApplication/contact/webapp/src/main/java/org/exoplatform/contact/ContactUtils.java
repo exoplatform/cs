@@ -20,6 +20,7 @@ import org.exoplatform.contact.service.Tag;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.impl.GroupImpl;
@@ -95,7 +96,7 @@ public class ContactUtils {
   }
   
   public static boolean isTagNameExisted(String tagName) throws Exception {
-    List<Tag> tags = getContactService().getTags(SessionsUtils.getSessionProvider(), getCurrentUser()) ;
+    List<Tag> tags = getContactService().getTags(SessionProviderFactory.createSessionProvider(), getCurrentUser()) ;
     for (Tag tag : tags)
       if (tag.getName().equalsIgnoreCase(tagName)) return true ;
     return false ;

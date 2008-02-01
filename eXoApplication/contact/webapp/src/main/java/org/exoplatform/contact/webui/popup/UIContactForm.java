@@ -19,12 +19,9 @@ package org.exoplatform.contact.webui.popup;
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.exoplatform.contact.ContactUtils;
-import org.exoplatform.contact.SessionsUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.contact.service.ContactService;
@@ -32,10 +29,8 @@ import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContactPreview;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UIWorkingContainer;
-import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.organization.Group;
-import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -44,13 +39,10 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
-import org.exoplatform.webui.form.UIFormCheckBoxInput;
-import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTabPane;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
-import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 
 /**
  * Created by The eXo Platform SARL
@@ -105,8 +97,8 @@ public class UIContactForm extends UIFormTabPane {
   
   private Contact contact_ = null ;
   private boolean isNew_ = true;
-  private Map<String, String> permission_ = new HashMap<String, String>() ;
-  private boolean isShared =false ;
+//  private Map<String, String> permission_ = new HashMap<String, String>() ;
+//  private boolean isShared =false ;
   
   public UIContactForm() throws Exception {
     super("UIContactForm");
@@ -176,7 +168,7 @@ public class UIContactForm extends UIFormTabPane {
     //addChild(sharing) ; 
     this.setSelectedTab(ProfileTab.getId());
   }
-  public void setShared(boolean shared) { isShared = shared ; }
+  //public void setShared(boolean shared) { isShared = shared ; }
   /*
   public List<String> getCheckedPublicGroup() {
     List<String> groups = new ArrayList<String>() ;
@@ -376,7 +368,7 @@ public class UIContactForm extends UIFormTabPane {
 
       ContactService contactService = ContactUtils.getContactService();  
       String username = ContactUtils.getCurrentUser() ;
-      SessionProvider sessionProvider = SessionsUtils.getSessionProvider() ;
+      SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
       
       //List<String> publicGroups = uiContactForm.getCheckedPublicGroup() ;
       UIPopupContainer popupContainer = uiContactForm.getParent() ;

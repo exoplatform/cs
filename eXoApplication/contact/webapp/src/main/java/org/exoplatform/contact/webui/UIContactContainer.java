@@ -17,8 +17,8 @@
 package org.exoplatform.contact.webui;
 
 import org.exoplatform.contact.ContactUtils;
-import org.exoplatform.contact.SessionsUtils;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
@@ -48,7 +48,7 @@ public class UIContactContainer extends UIContainer  {
   public void setSeletedGroup(String group) throws Exception{
     ContactService contactService = ContactUtils.getContactService() ;
     getChild(UIContacts.class)
-    .setContacts(contactService.getContactPageListByGroup(SessionsUtils.getSessionProvider(), ContactUtils.getCurrentUser(), group)) ;
+    .setContacts(contactService.getContactPageListByGroup(SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), group)) ;
   }
   public static class SendEmailActionListener extends EventListener<UIContactContainer> {
     public void execute(Event<UIContactContainer> event) throws Exception {

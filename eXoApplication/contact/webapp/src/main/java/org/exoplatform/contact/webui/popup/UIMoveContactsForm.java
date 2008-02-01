@@ -23,12 +23,12 @@ import java.util.Map;
 import java.util.MissingResourceException;
 
 import org.exoplatform.contact.ContactUtils;
-import org.exoplatform.contact.SessionsUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UIWorkingContainer;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -124,7 +124,7 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       	contact.setAddressBook(new String[]{addressBookId}) ;
       	contacts.add(contact) ;
       }
-      ContactUtils.getContactService().moveContacts(SessionsUtils.getSessionProvider()
+      ContactUtils.getContactService().moveContacts(SessionProviderFactory.createSessionProvider()
         , ContactUtils.getCurrentUser(), contacts, type) ;
 
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
@@ -166,7 +166,7 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       }
       ContactService contactService = ContactUtils.getContactService() ;
       String username = ContactUtils.getCurrentUser() ;
-      SessionProvider sessionProvider = SessionsUtils.getSessionProvider() ;
+      SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
       contactService.moveContacts(sessionProvider, username, contacts, type) ;
       
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;

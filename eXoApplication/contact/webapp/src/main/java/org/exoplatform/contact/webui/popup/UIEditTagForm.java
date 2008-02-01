@@ -20,11 +20,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.contact.ContactUtils;
-import org.exoplatform.contact.SessionsUtils;
 import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UITags;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -103,7 +103,7 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
       tag.setName(tagName) ;
       tag.setColor(uiEditTagForm.getUIFormSelectBox(FIELD_COLOR).getValue()) ;
       ContactUtils.getContactService().updateTag(
-          SessionsUtils.getSessionProvider(), ContactUtils.getCurrentUser(), tag) ;
+          SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), tag) ;
       UIContactPortlet uiContactPortlet = uiEditTagForm.getAncestorOfType(UIContactPortlet.class) ;
       WebuiRequestContext context = event.getRequestContext() ;
       context.addUIComponentToUpdateByAjax(uiContactPortlet.findFirstComponentOfType(UITags.class)) ;

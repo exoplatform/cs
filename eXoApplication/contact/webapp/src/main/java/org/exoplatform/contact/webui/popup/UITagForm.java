@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.MissingResourceException;
 
 import org.exoplatform.contact.ContactUtils;
-import org.exoplatform.contact.SessionsUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.Tag;
@@ -30,6 +29,7 @@ import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UITags;
 import org.exoplatform.contact.webui.UIWorkingContainer;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -157,7 +157,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       UITagForm uiTagForm = event.getSource() ;
       ContactService contactService = ContactUtils.getContactService();
       String username = ContactUtils.getCurrentUser() ;
-      SessionProvider sessionProvider = SessionsUtils.getSessionProvider();
+      SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider();
       UIApplication uiApp = uiTagForm.getAncestorOfType(UIApplication.class) ;
       List<Tag> tags = new ArrayList<Tag>();
       List<String> tagIds = new ArrayList<String>();
@@ -225,7 +225,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       ContactService contactService = ContactUtils.getContactService() ; 
       String username = ContactUtils.getCurrentUser() ;
       contactService.removeContactTag(
-          SessionsUtils.getSystemProvider(), username, contactIds, checkedTags) ;
+          SessionProviderFactory.createSystemProvider(), username, contactIds, checkedTags) ;
       UIContactPortlet contactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       UITags uiTags = contactPortlet.findFirstComponentOfType(UITags.class) ;
       String selectedTag = uiTags.getSelectedTag() ;
@@ -235,7 +235,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       //if(uiContacts.isDisplaySearchResult()) uiContacts.setContact(uiForm.contacts_, false) ;      
       if (!ContactUtils.isEmpty(selectedTag)) {
         uiContacts.setContacts(contactService.getContactPageListByTag(
-            SessionsUtils.getSystemProvider(), username, selectedTag)) ;
+            SessionProviderFactory.createSystemProvider(), username, selectedTag)) ;
       } else {
         uiContacts.updateList() ;
       }

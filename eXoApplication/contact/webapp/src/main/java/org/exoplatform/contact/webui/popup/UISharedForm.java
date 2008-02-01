@@ -22,11 +22,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.contact.ContactUtils;
-import org.exoplatform.contact.SessionsUtils;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -174,13 +174,13 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         String username = ContactUtils.getCurrentUser() ;
         if(uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT).isChecked()) {
           ContactGroup contactGroup = contactService.getGroup(
-              SessionsUtils.getSessionProvider(), ContactUtils.getCurrentUser(), uiForm.addressId_) ;
+              SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), uiForm.addressId_) ;
           String[] perms = receiverUser.toArray(new String[] {}) ;
           contactGroup.setEditPermission(perms) ;
-          contactService.saveGroup(SessionsUtils.getSessionProvider(), username, contactGroup, false) ;
+          contactService.saveGroup(SessionProviderFactory.createSessionProvider(), username, contactGroup, false) ;
         }      
         contactService.shareAddressBook(
-            SessionsUtils.getSystemProvider(), username, uiForm.addressId_, receiverUser) ;
+            SessionProviderFactory.createSystemProvider(), username, uiForm.addressId_, receiverUser) ;
         UIContactPortlet contactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
         UIAddressBooks addressBooks = contactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(addressBooks) ;

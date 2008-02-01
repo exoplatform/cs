@@ -25,12 +25,12 @@ import java.util.Map;
 import java.util.MissingResourceException;
 
 import org.exoplatform.contact.ContactUtils;
-import org.exoplatform.contact.SessionsUtils;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -147,7 +147,7 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
         return ;
       }
       OutputStream out = ContactUtils.getContactService().getContactImportExports(exportFormat).exportContact(
-          SessionsUtils.getSystemProvider(), ContactUtils.getCurrentUser(), groupIds.toArray(new String[]{})) ;
+          SessionProviderFactory.createSystemProvider(), ContactUtils.getCurrentUser(), groupIds.toArray(new String[]{})) ;
       if(out == null) {
       	 uiApp.addMessage(new ApplicationMessage("UIExportAddressBookForm.msg.there-is-not-contacts-exists", null,
            ApplicationMessage.WARNING)) ;

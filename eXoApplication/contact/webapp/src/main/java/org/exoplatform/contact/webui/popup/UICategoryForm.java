@@ -19,12 +19,12 @@ package org.exoplatform.contact.webui.popup;
 import java.util.List;
 
 import org.exoplatform.contact.ContactUtils;
-import org.exoplatform.contact.SessionsUtils;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -77,7 +77,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
   public void setValues(String groupId) throws Exception {
     ContactService contactService = ContactUtils.getContactService();
     String username = ContactUtils.getCurrentUser() ;
-    SessionProvider sessionProvider = SessionsUtils.getSessionProvider() ;
+    SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
     ContactGroup contactGroup = contactService.getGroup(sessionProvider, username, groupId) ;
     if (contactGroup == null) {
       contactGroup = contactService.getSharedGroup(username, groupId) ;      
@@ -108,7 +108,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
       group.setName(groupName) ;
       group.setDescription(uiCategoryForm.getUIFormTextAreaInput(FIELD_DESCRIPTION_INPUT).getValue()) ;
       ContactUtils.getContactService().saveGroup(
-          SessionsUtils.getSessionProvider(), ContactUtils.getCurrentUser(), group, uiCategoryForm.isNew_) ; 
+          SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), group, uiCategoryForm.isNew_) ; 
       
       UIPopupContainer popupContainer = uiCategoryForm.getAncestorOfType(UIPopupContainer.class) ;
       if (popupContainer != null) {

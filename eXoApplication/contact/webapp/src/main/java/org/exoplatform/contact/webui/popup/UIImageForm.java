@@ -97,7 +97,7 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
       uiProfileInputSet.setMimeType(mimeType) ;
       uiProfileInputSet.setFileName(fileName) ;
       UIPopupAction popupAction = uiPopupActionContainer.getChild(UIPopupAction.class) ;
-      popupAction.deActivate() ;
+      popupAction.deActivate() ; 
     }
   }
 

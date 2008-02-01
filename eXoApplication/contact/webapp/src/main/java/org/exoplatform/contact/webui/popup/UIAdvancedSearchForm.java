@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.contact.ContactUtils;
-import org.exoplatform.contact.SessionsUtils;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.DataPageList;
 import org.exoplatform.contact.webui.UIAddressBooks;
@@ -28,6 +27,7 @@ import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UITags;
 import org.exoplatform.contact.webui.UIWorkingContainer;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -120,7 +120,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent {
       if(!ContactUtils.isEmpty(gender)) filter.setGender(ContactUtils.filterString(gender)) ;
       
       DataPageList resultPageList = ContactUtils.getContactService()
-        .searchContact(SessionsUtils.getSystemProvider(), ContactUtils.getCurrentUser(), filter) ;
+        .searchContact(SessionProviderFactory.createSystemProvider(), ContactUtils.getCurrentUser(), filter) ;
       UIContactPortlet uiContactPortlet = uiAdvancedSearchForm.getAncestorOfType(UIContactPortlet.class) ;
       uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class).setSelectedGroup(null) ;
       uiContactPortlet.findFirstComponentOfType(UITags.class).setSelectedTag(null) ;      

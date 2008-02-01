@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.contact.ContactUtils;
-import org.exoplatform.contact.SessionsUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactService;
@@ -44,6 +43,7 @@ import org.exoplatform.contact.webui.popup.UIContactForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.webui.popup.UIPopupContainer;
 import org.exoplatform.download.DownloadService;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -226,7 +226,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   public boolean checkExistContacts(List<String> contactIds) throws Exception {
     ContactService contactService = ContactUtils.getContactService() ;
     String username = ContactUtils.getCurrentUser() ;
-    SessionProvider sessionProvider = SessionsUtils.getSessionProvider() ;
+    SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
     for (String contactId : contactIds) {
       if (contactService.getContact(sessionProvider, username, contactId) == null
           && contactService.getPublicContact(contactId) == null
@@ -327,7 +327,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         return ;
       }      
       ContactService contactService = ContactUtils.getContactService(); 
-      contactService.addTag(SessionsUtils.getSystemProvider(), ContactUtils.getCurrentUser(), contactIds, tagId);
+      contactService.addTag(SessionProviderFactory.createSystemProvider(), ContactUtils.getCurrentUser(), contactIds, tagId);
       if(uiContacts.isDisplaySearchResult()) {
         List<Contact> contacts = new ArrayList<Contact>() ;
         for (String contactId : contactIds) {
@@ -408,7 +408,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       }     
       if(contacts.size() == 0) return ;
       ContactService contactService = ContactUtils.getContactService() ;
-      SessionProvider sessionProvider = SessionsUtils.getSessionProvider() ;
+      SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
       String username = ContactUtils.getCurrentUser() ;
       contactService.moveContacts(
           sessionProvider, username, contacts, type); 
@@ -455,7 +455,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIWorkingContainer uiWorkingContainer = uiContacts.getAncestorOfType(UIWorkingContainer.class) ;
       ContactService contactService = ContactUtils.getContactService() ;
       String username = ContactUtils.getCurrentUser() ;
-      contactService.removeContacts(SessionsUtils.getSystemProvider(), username, contactIds) ;
+      contactService.removeContacts(SessionProviderFactory.createSystemProvider(), username, contactIds) ;
       if(uiContacts.isSearchResult) {
       	List<Contact> contacts = new ArrayList<Contact>();
         for(String id : contactIds) {
@@ -469,7 +469,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       if (uiContacts.getSelectedTag() != null) {
         String tagName = uiWorkingContainer.findFirstComponentOfType(UITags.class).getSelectedTag() ;
         uiContacts.setContacts(contactService
-            .getContactPageListByTag(SessionsUtils.getSystemProvider(), username, tagName)) ;
+            .getContactPageListByTag(SessionProviderFactory.createSystemProvider(), username, tagName)) ;
       } else {
         uiContacts.updateList() ;
       }
@@ -609,7 +609,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         
         if(type != null)
           pageList = ContactUtils.getContactService().getContactPageListByGroup(
-            SessionsUtils.getSystemProvider(),ContactUtils.getCurrentUser(), filter, type) ;
+            SessionProviderFactory.createSystemProvider(),ContactUtils.getCurrentUser(), filter, type) ;
         /*}else {
         	pageList = ContactUtils.getContactService().getContactPageListByGroup(
             SessionsUtils.getSessionProvider(),  ContactUtils.getCurrentUser(), filter, isPublic) ;
@@ -694,7 +694,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UITags tags = uiWorkingContainer.findFirstComponentOfType(UITags.class) ;
       tags.setSelectedTag(tagId) ;
       uiContacts.setContacts(ContactUtils.getContactService()
-        .getContactPageListByTag(SessionsUtils.getSystemProvider(), ContactUtils.getCurrentUser(), tagId)) ;
+        .getContactPageListByTag(SessionProviderFactory.createSystemProvider(), ContactUtils.getCurrentUser(), tagId)) ;
       uiContacts.setSelectedGroup(null) ;
       uiContacts.setSelectedTag(tagId) ;
       uiContacts.setDisplaySearchResult(false) ;

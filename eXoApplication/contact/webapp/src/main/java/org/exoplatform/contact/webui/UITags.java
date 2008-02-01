@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.contact.ContactUtils;
-import org.exoplatform.contact.SessionsUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.DataPageList;
@@ -32,6 +31,7 @@ import org.exoplatform.contact.webui.UIContacts.FullNameComparator;
 import org.exoplatform.contact.webui.popup.UIExportForm;
 import org.exoplatform.contact.webui.popup.UIEditTagForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -66,7 +66,7 @@ public class UITags extends UIComponent {
   public List<Tag> getTags() throws Exception {
     ContactService contactService = ContactUtils.getContactService();
     String username = ContactUtils.getCurrentUser() ;
-    List<Tag> tags = contactService.getTags(SessionsUtils.getSessionProvider(), username) ;
+    List<Tag> tags = contactService.getTags(SessionProviderFactory.createSessionProvider(), username) ;
     tagMap_.clear() ;
     for(Tag tag : tags) { tagMap_.put(tag.getId(), tag) ; }
     return tags;
@@ -94,7 +94,7 @@ public class UITags extends UIComponent {
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ;
       
       DataPageList pageList =ContactUtils.getContactService().getContactPageListByTag(
-          SessionsUtils.getSystemProvider(), ContactUtils.getCurrentUser(), tagId) ;
+          SessionProviderFactory.createSystemProvider(), ContactUtils.getCurrentUser(), tagId) ;
       if (pageList != null) {
         List<Contact> contacts = new ArrayList<Contact>() ;
         contacts = pageList.getAll() ;
@@ -134,8 +134,8 @@ public class UITags extends UIComponent {
       uiExportForm.setSelectedTag(uiForm.tagMap_.get(tagId).getName()) ;
 
       Contact[] contacts = null ;
-      contacts = ContactUtils.getContactService().getContactPageListByTag(SessionsUtils
-          .getSystemProvider(), ContactUtils.getCurrentUser(), tagId).getAll().toArray(new Contact[] {});
+      contacts = ContactUtils.getContactService().getContactPageListByTag(SessionProviderFactory
+          .createSystemProvider(), ContactUtils.getCurrentUser(), tagId).getAll().toArray(new Contact[] {});
       if (contacts == null || contacts.length == 0) {
         UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UITag.msg.noContactToExport", null,
@@ -154,7 +154,7 @@ public class UITags extends UIComponent {
       UITags uiTags = event.getSource() ;
       String tagId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       ContactUtils.getContactService()
-        .removeTag(SessionsUtils.getSystemProvider(), ContactUtils.getCurrentUser(), tagId) ;
+        .removeTag(SessionProviderFactory.createSystemProvider(), ContactUtils.getCurrentUser(), tagId) ;
       UIWorkingContainer uiWorkingContainer = uiTags.getAncestorOfType(UIWorkingContainer.class) ;
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ;
       if (tagId.equals(uiTags.getSelectedTag())) {
