@@ -1293,11 +1293,9 @@ public class JCRDataStorage{
              + oldNode.getProperty("exo:id").getString(), contactHomeNode.getPath() + "/" + newId) ;
         ExtendedNode extNode ;
         try{
-          System.out.println("\n\n 11111111 \n\n");
           extNode = (ExtendedNode)contactHomeNode.getNode(newId) ;
         }catch (Exception e) {
           
-          System.out.println("\n\n 222222222222222 \n\n");
           extNode = (ExtendedNode)getUserContactHome(SessionProvider.createSystemProvider(), username).getNode(newId) ;
         }
         // not need if private to private (very litte)
