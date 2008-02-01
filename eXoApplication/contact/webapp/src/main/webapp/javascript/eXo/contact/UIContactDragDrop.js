@@ -6,11 +6,11 @@ function UIContactDragDrop() {
   this.scValue = 'solid 1px #000' ;
   this.DOMUtil = eXo.core.DOMUtil ;
   this.DragDrop = eXo.core.DragDrop ;
-  this.dropableSets = [] ;
   this.listView = false ;
 } ;
 
 UIContactDragDrop.prototype.init = function() {
+  this.dropableSets = [] ;
   this.uiContactPortlet = document.getElementById('UIContactPortlet') ;
   this.getAllDropableSets() ;
   this.regDnDItem() ;
@@ -67,7 +67,7 @@ UIContactDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj, 
   var blockWidth = clickBlock.offsetWidth ;
   var blockHeight = clickBlock.offsetHeight ;
   
-  if (clickBlock.className.indexOf('VCardContent') != -1) {
+  if (eXo.core.DOMUtil.hasClass(clickBlock,'VCardContent')) {
     this.listView = false ;
   }
   
@@ -85,29 +85,40 @@ UIContactDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj, 
   uiContactPortletNode.appendChild(uiContactContainerNode) ;
 
   var contactListNode = document.createElement('div') ;
+  var cnt = 0;
   if (!this.listView) {
     contactListNode.className = 'UIVCards' ;
     contactListNode.appendChild(dragBlock.cloneNode(true)) ;
   } else {
     contactListNode = document.createElement('table') ;
-    contactListNode.className = 'UIGrid' ;
+    contactListNode.setAttribute("class", "UIGrid") ;
+    contactListNode.setAttribute("cellspacing", "0") ;
+    contactListNode.setAttribute("borderspacing", "0") ;
+    var tmpNode = document.createElement('tbody');
+    var tmpRow = null ;
     var selectedItems = eXo.cs.FormHelper.getSelectedElementByClass(
                           document.getElementById('UIListUsers') , 'UIContactList', dragBlock) ;
     if (selectedItems.length > 0) {
       for (var i=0; i<selectedItems.length; i++) {
         if (selectedItems[i] && selectedItems[i].cloneNode) {
-          contactListNode.appendChild(selectedItems[i].cloneNode(true)) ;
+          tmpRow = selectedItems[i].cloneNode(true) ;
+          tmpRow.style.height = blockHeight + "px" ;
+          tmpNode.appendChild(tmpRow) ;
+          cnt ++;
         }
       }
     } else {
-      contactListNode.appendChild(dragBlock.cloneNode(true)) ;
+      cnt ++;
+      tmpNode.appendChild(dragBlock.cloneNode(true)) ;
     }  
+    contactListNode.appendChild(tmpNode);
   }
   with(uiContactPortletNode.style) {
     border = 'solid 1px #A5A5A5' ;
     position = 'absolute' ;
     width = blockWidth + 'px' ;
     display = 'none' ;
+    height = (blockHeight * cnt) + 'px';
   }
   uiContactContainerNode.appendChild(contactListNode) ;
   uiContactPortletNode.appendChild(uiContactContainerNode) ;
@@ -165,7 +176,7 @@ UIContactDragDrop.prototype.dragCallback = function(dndEvent) {
 } ;
 
 UIContactDragDrop.prototype.dropCallback = function(dndEvent) { 
-  document.body.removeChild(dndEvent.dragObject) ;
+  eXo.core.DOMUtil.removeElement(dndEvent.dragObject) ;
   if (this.foundTargetObjectCatch) {
     this.foundTargetObjectCatch.style[eXo.contact.UIContactDragDrop.scKey] = this.foundTargetObjectCatchStyle ;
   }
@@ -194,8 +205,8 @@ UIContactDragDrop.prototype.dropCallback = function(dndEvent) {
       eXo.webui.UIForm.submitForm('UIContacts','MoveContacts', true) ;
       return ;
     }
-    var contactTypeId = this.foundTargetObjectCatch.getAttribute('tagname') ;
-    if (!contactTypeId) {
+    var contactTypeId = this.foundTargetObjectCatch.getAttribute('tagId') ;
+    if (!contactTypeId) {      
     	contactTypeId = this.foundTargetObjectCatch.id ;
     }
 
@@ -205,7 +216,6 @@ UIContactDragDrop.prototype.dropCallback = function(dndEvent) {
 	    return ;
     }
     var addressBookType = this.foundTargetObjectCatch.getAttribute('addresstype') ;
-    
     // request service
     uiContacts.action = uiContacts.action + '&objectId=' + contactTypeId + '&addressType=' + addressBookType ;
     eXo.webui.UIForm.submitForm('UIContacts','DNDContacts', true)

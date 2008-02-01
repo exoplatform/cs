@@ -157,7 +157,7 @@ UIContactPortlet.prototype.tagCallback = function(evt) {
 	_e.cancelBubble = true ;
 	var src = _e.srcElement || _e.target ;
 	src = (src.nodeName.toLowerCase() == "div")? src : src.parentNode ;
-	var tagName = src.getAttribute("tagName") ;
+	var tagName = src.getAttribute("tagId") ;
 	eXo.webui.UIContextMenuCon.changeAction(UIContextMenuCon.menuElement, tagName) ;
 } ;
 

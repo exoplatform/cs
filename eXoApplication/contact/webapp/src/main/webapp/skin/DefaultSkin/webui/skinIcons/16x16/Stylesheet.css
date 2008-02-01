@@ -72,7 +72,8 @@
 
 .UIContactPortlet .OnlineIcon {
 	background: url('icons/OnlineIcon.png') no-repeat;
-	height: 16px; width: 17px;
+  padding-left: 20px;
+  height: 16px;
 }
 
 .UIContactPortlet .OwnerIcon {
