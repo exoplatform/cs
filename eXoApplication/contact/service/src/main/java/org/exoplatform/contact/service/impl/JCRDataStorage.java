@@ -1258,6 +1258,33 @@ public class JCRDataStorage{
 
   private void copyNodes(SessionProvider sProvider, String username,Node srcHomeNode, NodeIterator iter, String destAddress, String destType ) throws Exception {
     if (destType.equals(PRIVATE)) {
+      
+//      Node contactHomeNode = getUserContactHome(sProvider, username);
+//      while (iter.hasNext()) {
+//        Node oldNode = iter.nextNode() ;
+//        String newId = "Contact" + IdGenerator.generate() ;
+//        srcHomeNode.getSession().getWorkspace().copy(srcHomeNode.getPath() + "/"
+//             + oldNode.getProperty("exo:id").getString(), contactHomeNode.getPath() + "/" + newId) ;
+//        ExtendedNode extNode ;
+//        try{
+//          System.out.println("\n\n 11111111 \n\n");
+//          extNode = (ExtendedNode)contactHomeNode.getNode(newId) ;
+//        }catch (Exception e) {
+//          
+//          System.out.println("\n\n 222222222222222 \n\n");
+//          extNode = (ExtendedNode)getUserContactHome(SessionProvider.createSystemProvider(), username).getNode(newId) ;
+//        }
+//        // not need if private to private (very litte)
+//        if (extNode.canAddMixin("exo:privilegeable")) extNode.addMixin("exo:privilegeable");
+//        String[] arrayPers = {PermissionType.READ, PermissionType.ADD_NODE, PermissionType.SET_PROPERTY, PermissionType.REMOVE} ;
+//        extNode.setPermission(username, arrayPers) ; 
+//        
+//        extNode.setProperty("exo:categories", new String [] {destAddress}) ;
+//        extNode.setProperty("exo:id", newId) ;          
+//        extNode.save() ;       
+//      }
+//      contactHomeNode.getSession().save() ;
+        
       Node contactHomeNode = getUserContactHome(sProvider, username);
       while (iter.hasNext()) {
         Node oldNode = iter.nextNode() ;
@@ -1266,20 +1293,27 @@ public class JCRDataStorage{
              + oldNode.getProperty("exo:id").getString(), contactHomeNode.getPath() + "/" + newId) ;
         ExtendedNode extNode ;
         try{
+          System.out.println("\n\n 11111111 \n\n");
           extNode = (ExtendedNode)contactHomeNode.getNode(newId) ;
         }catch (Exception e) {
+          
+          System.out.println("\n\n 222222222222222 \n\n");
           extNode = (ExtendedNode)getUserContactHome(SessionProvider.createSystemProvider(), username).getNode(newId) ;
         }
         // not need if private to private (very litte)
         if (extNode.canAddMixin("exo:privilegeable")) extNode.addMixin("exo:privilegeable");
         String[] arrayPers = {PermissionType.READ, PermissionType.ADD_NODE, PermissionType.SET_PROPERTY, PermissionType.REMOVE} ;
         extNode.setPermission(username, arrayPers) ; 
+        extNode.save() ;
         
-        extNode.setProperty("exo:categories", new String [] {destAddress}) ;
-        extNode.setProperty("exo:id", newId) ;          
-        extNode.save() ;       
+        Node newNode = contactHomeNode.getNode(newId) ;
+        newNode.setProperty("exo:categories", new String [] {destAddress}) ;
+        newNode.setProperty("exo:id", newId) ;          
+               
       }
       contactHomeNode.getSession().save() ;
+      
+      
     } else if (destType.equals(SHARED)) {
       Node sharedHome = getSharedAddressBookHome(SessionProvider.createSystemProvider()) ;
       while (iter.hasNext()) {
@@ -1361,6 +1395,8 @@ public class JCRDataStorage{
           copyNodes(sessionProvider, username, sharedContacts, iter, destAddress, destType) ;      
       }            
     } else {
+      
+      System.out.println("\n\n hiiiiiiiiiiiiii \n\n");
       Node publicContactHome = getPublicContactHome(SessionProvider.createSystemProvider());
       QueryManager qm = publicContactHome.getSession().getWorkspace().getQueryManager();
       StringBuffer queryString = new StringBuffer("/jcr:root" + publicContactHome.getPath() 
@@ -1369,6 +1405,8 @@ public class JCRDataStorage{
       Query query = qm.createQuery(queryString.toString(), Query.XPATH);
       QueryResult result = query.execute();
       iter = result.getNodes() ; 
+      
+      System.out.println("\n\n size:" + iter.getSize());
       copyNodes(sProvider, username, publicContactHome, iter, destAddress, destType) ;
     }
   }
