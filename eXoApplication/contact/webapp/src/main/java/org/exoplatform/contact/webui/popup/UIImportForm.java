@@ -24,12 +24,12 @@ import java.util.MissingResourceException;
 import java.io.ByteArrayInputStream;
 
 import org.exoplatform.contact.ContactUtils;
+import org.exoplatform.contact.SessionsUtils;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UIWorkingContainer;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.upload.UploadResource;
 import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -66,8 +66,10 @@ public class UIImportForm extends UIForm {
   public static final String FIELD_CATEGORY = "category";
   public static String[] Types = null ;
   private Map<String, String> groups_ = new HashMap<String, String>() ;
-  //private UploadResource uploadResource_ = null ;
-  //private byte[] importBytes_ = null;
+  
+  // remove later
+  private UploadResource uploadResource_ = null ;
+  private byte[] importBytes_ = null;
   
   public UIImportForm() { this.setMultiPart(true) ; }
   
@@ -121,9 +123,9 @@ public class UIImportForm extends UIForm {
     public void execute(Event<UIImportForm> event) throws Exception {
       UIImportForm uiForm = event.getSource() ;
       // added
-      //UIFormUploadInput uiformInput = uiForm.getUIInput(FIELD_UPLOAD) ;
-      //uiForm.uploadResource_ = uiformInput.getUploadResource() ;
-      //uiForm.importBytes_ = uiformInput.getUploadData() ;      
+      UIFormUploadInput uiformInput = uiForm.getUIInput(FIELD_UPLOAD) ;
+      uiForm.uploadResource_ = uiformInput.getUploadResource() ;
+      uiForm.importBytes_ = uiformInput.getUploadData() ;      
       UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = uiPopupContainer.getChild(UIPopupAction.class) ;
       uiChildPopup.activate(UICategoryForm.class, 500) ;
@@ -145,16 +147,15 @@ public class UIImportForm extends UIForm {
       UIFormUploadInput uiformInput = uiForm.getUIInput(FIELD_UPLOAD) ;      
       UploadResource uploadResource = uiformInput.getUploadResource() ;
 
-      if (uploadResource == null) {
-        uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.uploadResource-empty", null, 
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;        
-      }
       ByteArrayInputStream inputStream ;
       String uploadId = uiformInput.getUploadId() ;
-      /*
       if (uploadResource == null) {
+        if (uiForm.importBytes_ == null) {
+          uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.uploadResource-empty", null, 
+              ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ; 
+        }        
         uploadResource = uiForm.uploadResource_ ;
         inputStream = new ByteArrayInputStream(uiForm.importBytes_) ;
       } else {
@@ -162,10 +163,6 @@ public class UIImportForm extends UIForm {
         uiformInput.getUploadDataAsStream().read(input) ;
         inputStream = new ByteArrayInputStream(input) ;
       }
-      */
-      byte[] input = new byte[uiformInput.getUploadDataAsStream().available()] ;
-      uiformInput.getUploadDataAsStream().read(input) ;
-      inputStream = new ByteArrayInputStream(input) ;
       boolean canImport = false ;
       String[] array = uploadResource.getMimeType().split("/") ;
       String extend = array[array.length - 1] ;
@@ -181,8 +178,8 @@ public class UIImportForm extends UIForm {
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       String importFormat = uiForm.getUIFormSelectBox(UIImportForm.TYPE).getValue() ;
       try {
-        ContactUtils.getContactService().getContactImportExports(importFormat).importContact(SessionProviderFactory
-            .createSessionProvider(), ContactUtils.getCurrentUser(), inputStream, category) ;
+        ContactUtils.getContactService().getContactImportExports(importFormat).importContact(SessionsUtils
+            .getSessionProvider(), ContactUtils.getCurrentUser(), inputStream, category) ;
         UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
         UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;
         uploadService.removeUpload(uploadId) ;
