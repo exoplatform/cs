@@ -12,6 +12,7 @@ function UIContactDragDrop() {
 UIContactDragDrop.prototype.init = function() {
   this.dropableSets = [] ;
   this.uiContactPortlet = document.getElementById('UIContactPortlet') ;
+  this.uiGrid = eXo.core.DOMUtil.findFirstDescendantByClass(this.uiContactPortlet,"table", "UIGrid") ;
   this.getAllDropableSets() ;
   this.regDnDItem() ;
 } ;
@@ -97,7 +98,7 @@ UIContactDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj, 
     var tmpNode = document.createElement('tbody');
     var tmpRow = null ;
     var selectedItems = eXo.cs.FormHelper.getSelectedElementByClass(
-                          document.getElementById('UIListUsers') , 'UIContactList', dragBlock) ;
+                          this.uiGrid, 'UIContactList', dragBlock) ; //this.uiContactPortlet
     if (selectedItems.length > 0) {
       for (var i=0; i<selectedItems.length; i++) {
         if (selectedItems[i] && selectedItems[i].cloneNode) {
