@@ -325,14 +325,28 @@
 		                   </a>		
 		          		</div>
 		          			<div class="CalendarTableColor" >
-											<%
-												for(color in uicomponent.getColors()) {
-												actionLink = uicomponent.event("ChangeColor","id&calColor="+color);
-											%>
-												<a href="$actionLink" class="$color ColorCell"><div><span></span></div></a>
-											<%}%>
-										<div style="clear:left;"><span></span></div>
-									</div>
+									  <%
+											int i = 0 ;
+											int index = 0 ;
+											int items = 5 ;
+											int size = uicomponent.getColors().size() ;
+											int rows = size/items ;
+											int count = 0 ;
+											while(i <= rows)	{
+												print "<div>" ;	
+												j = 0 ;
+												while(j <= items && count < size){
+												 color = uicomponent.getColors()[count] ;
+												 actionLink = uicomponent.event('ChangeColor','id&calColor='+color);	
+												 print "<a href=\"$actionLink\" class=\"$color ColorCell\"><img src=\"/eXoResources/skin/sharedImages/Blank.gif\" /></a>" ;
+												 count++
+												 j++;
+												}
+												print "</div>" ;	
+												i++ ;
+											}
+					          %>
+									  </div>
 		      			</div>
 		    			</div>
 				        <div class="BottomLeftRightClickPopupMenu">
