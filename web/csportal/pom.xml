@@ -24,14 +24,15 @@
               	<exclude>index.jsp</exclude>
                 <exclude>WEB-INF/web.xml</exclude>                     
                 <exclude>WEB-INF/conf/</exclude>
-								<exclude>WEB-INF/classes/locale/navigation/</exclude>				
+				<exclude>WEB-INF/classes/locale/navigation/</exclude>				
               </excludes>
             </resource>
             <resource>
               <directory>${exo.projects.directory.src}/portal/trunk/web/portal/target/exo.portal.web.portal-${org.exoplatform.portal.version}</directory>
               <includes>
                 <include>WEB-INF/classes/locale/portal/</include>
-								<include>WEB-INF/conf/uiconf/</include>
+				<include>WEB-INF/conf/uiconf/</include>
+				<include>WEB-INF/conf/script/</include>
               </includes>
             </resource>            
           </webResources>

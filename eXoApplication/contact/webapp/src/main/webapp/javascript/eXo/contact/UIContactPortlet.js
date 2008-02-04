@@ -1,5 +1,3 @@
-eXo.require('eXo.cs.UIContextMenuCon','/csResources/javascript/') ;
-eXo.require('eXo.cs.CSUtils','/csResources/javascript/') ;
 function UIContactPortlet() {
 	
 }

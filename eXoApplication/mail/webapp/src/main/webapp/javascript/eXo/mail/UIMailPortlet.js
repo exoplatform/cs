@@ -1,5 +1,3 @@
-eXo.require('eXo.cs.UIContextMenuMail','/csResources/javascript/') ;
-eXo.require('eXo.cs.CSUtils','/csResources/javascript/') ;
 function UIMailPortlet(){
 };
 

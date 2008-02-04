@@ -1,4 +1,3 @@
-eXo.require('eXo.calendar.UICalendarPortlet', '/javascript/calendar/') ;
 function UIWeekView() {
 	
 }

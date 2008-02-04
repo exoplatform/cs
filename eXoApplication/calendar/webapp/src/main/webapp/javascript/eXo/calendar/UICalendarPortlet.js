@@ -1,5 +1,3 @@
-eXo.require('eXo.cs.UIContextMenu','/csResources/javascript/') ;
-eXo.require('eXo.cs.CSUtils','/csResources/javascript/') ;
 function UICalendarPortlet() {
 }
 
