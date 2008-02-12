@@ -1393,8 +1393,6 @@ public class JCRDataStorage{
           copyNodes(sessionProvider, username, sharedContacts, iter, destAddress, destType) ;      
       }            
     } else {
-      
-      //System.out.println("\n\n hiiiiiiiiiiiiii \n\n");
       Node publicContactHome = getPublicContactHome(SessionProvider.createSystemProvider());
       QueryManager qm = publicContactHome.getSession().getWorkspace().getQueryManager();
       StringBuffer queryString = new StringBuffer("/jcr:root" + publicContactHome.getPath() 
@@ -1402,9 +1400,7 @@ public class JCRDataStorage{
                                                   .append(srcAddress).append("']") ;
       Query query = qm.createQuery(queryString.toString(), Query.XPATH);
       QueryResult result = query.execute();
-      iter = result.getNodes() ; 
-      
-      //System.out.println("\n\n size:" + iter.getSize());
+      iter = result.getNodes() ;
       copyNodes(sProvider, username, publicContactHome, iter, destAddress, destType) ;
     }
   }
