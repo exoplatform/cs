@@ -245,6 +245,7 @@
 	height: 24px; line-height: 24px;
 	overflow: hidden;
 	white-space: nowrap;
+	width: 180px;
 }
 
 .UIContactPortlet .UINavigationContainer .ItemList a {
