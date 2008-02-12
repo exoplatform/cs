@@ -142,10 +142,6 @@ UIContextMenu.prototype.show = function(evt) {
 		}
 		var extraX = (document.getElementById("UIControlWorkspace")) ? document.getElementById("UIControlWorkspace").offsetWidth : 0 ;
 		var extraY = 0 ;
-//		if (UIContextMenu.menuElement.offsetParent) {
-//			extraX += eXo.core.Browser.findPosX(UIContextMenu.menuElement.offsetParent) ;
-//			extraY = eXo.core.Browser.findPosY(UIContextMenu.menuElement.offsetParent) ;
-//		}
 		var top = eXo.core.Browser.findMouseYInPage(_e) - extraY ;
 		var left = eXo.core.Browser.findMouseXInPage(_e) - extraX ;
 		eXo.core.DOMUtil.listHideElements(UIContextMenu.menuElement) ;
@@ -155,7 +151,7 @@ UIContextMenu.prototype.show = function(evt) {
 				eXo.core.DOMUtil.hideElementList[i].style.display = "none" ;
 			}
 		}
-    if (!UIContextMenu.IE && document.getElementById("UIPageDesktop")) {
+    if (document.getElementById("UIPageDesktop")) {
       var uiWindow = eXo.core.DOMUtil.findAncestorByClass(document.getElementById(UIContextMenu.portletName), "UIWindow") ;
       var extra = (document.getElementById("UIControlWorkspace")) ? document.getElementById("UIControlWorkspace").offsetWidth : 0 ;
       top -= uiWindow.offsetTop ;
@@ -164,7 +160,6 @@ UIContextMenu.prototype.show = function(evt) {
 		UIContextMenu.menuElement.style.left = left + "px" ;
 		UIContextMenu.menuElement.style.top = top + "px" ;
 		UIContextMenu.menuElement.style.display = 'block' ;
-		//eXo.core.DOMUtil.addClass(UIContextMenu.menuElement, UIContextMenu.portletName) ;
 		UIContextMenu.menuElement.onmouseover = UIContextMenu.autoHide ;
 		UIContextMenu.menuElement.onmouseout = UIContextMenu.autoHide ;		
 		if (!UIContextMenu.IE) {			

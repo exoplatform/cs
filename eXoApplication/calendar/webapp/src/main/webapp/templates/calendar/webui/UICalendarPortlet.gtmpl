@@ -4,7 +4,7 @@
 	import org.exoplatform.calendar.webui.popup.UIPopupAction ;
 	import org.exoplatform.calendar.service.CalendarSetting;
 	%>
-<div class="$uicomponent.id" oncontextmenu="return false;" id="$uicomponent.id">
+<div class="$uicomponent.id" oncontextmenu="return false" id="$uicomponent.id">
 	<%
 	timeStep = uicomponent.getCalendarSetting().getTimeInterval() ; 
   workingStart = uicomponent.getCalendarSetting().getWorkingTimeBegin() ;
@@ -12,6 +12,8 @@
   String timeFormat = calendarSetting.getTimeFormat() ;
   String settingTimeZone = uicomponent.getSettingTimeZone() ;
 	def rcontext = _ctx.getRequestContext() ;
+	rcontext.getJavascriptManager().importJavascript('eXo.cs.CSUtils','/csResources/javascript/') ;
+  rcontext.getJavascriptManager().importJavascript('eXo.cs.UIContextMenu','/csResources/javascript/') ;
   rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarPortlet','/calendar/javascript/') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.setting(' + timeStep + ', "' + workingStart + '", "' + timeFormat +'") ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showContextMenu("'+ uicomponent.id +'") ;') ;

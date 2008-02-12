@@ -142,10 +142,6 @@ UIContextMenuMail.prototype.show = function(evt) {
 		}
 		var extraX = (document.getElementById("UIControlWorkspace")) ? document.getElementById("UIControlWorkspace").offsetWidth : 0 ;
 		var extraY = 0 ;
-//		if (UIContextMenuMail.menuElement.offsetParent) {
-//			extraX += eXo.core.Browser.findPosX(UIContextMenuMail.menuElement.offsetParent) ;
-//			extraY = eXo.core.Browser.findPosY(UIContextMenuMail.menuElement.offsetParent) ;
-//		}
 		var top = eXo.core.Browser.findMouseYInPage(_e) - extraY ;
 		var left = eXo.core.Browser.findMouseXInPage(_e) - extraX ;
 		eXo.core.DOMUtil.listHideElements(UIContextMenuMail.menuElement) ;
@@ -155,7 +151,7 @@ UIContextMenuMail.prototype.show = function(evt) {
 				eXo.core.DOMUtil.hideElementList[i].style.display = "none" ;
 			}
 		}
-    if (!UIContextMenuMail.IE && document.getElementById("UIPageDesktop")) {
+    if (document.getElementById("UIPageDesktop")) {
       var uiWindow = eXo.core.DOMUtil.findAncestorByClass(document.getElementById(UIContextMenuMail.portletName), "UIWindow") ;
       top -= uiWindow.offsetTop ;
       left -= (uiWindow.offsetLeft)  ;
