@@ -641,7 +641,7 @@
 }
 
 .UIDayView .UIGrid {
-	*width: 97%;  /* fixed for IE */
+	*width: 96%;  /* fixed for IE */
 	border-top: none;
 }
 
