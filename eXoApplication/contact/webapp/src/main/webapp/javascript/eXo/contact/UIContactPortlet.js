@@ -144,9 +144,7 @@ UIContactPortlet.prototype.addressBookCallback = function(evt) {
 			}
 		}
 	}
-
 	eXo.webui.UIContextMenuCon.changeAction(UIContextMenuCon.menuElement, addressBook.id) ;
-
 } ;
 
 UIContactPortlet.prototype.tagCallback = function(evt) {
@@ -236,6 +234,125 @@ UIContactPortlet.prototype.cancelPrint = function (obj){
 	eXo.contact.UIContactPortlet.pageBackground = null ;
 } ;
 
+/**
+ * 
+ * @author Lam Nguyen
+ * 
+ */
+UIContactPortlet.prototype.checkLayout = function() {
+  try {
+    var Browser = eXo.core.Browser ;
+    var layout1State = parseInt(eXo.core.Browser.getCookie('contactLayout1'));
+    var layout2State = parseInt(eXo.core.Browser.getCookie('contactLayout2'));
+    var layout3State = parseInt(eXo.core.Browser.getCookie('contactLayout3'));    
+    if(layout1State == 0) {
+      eXo.contact.UIContactPortlet.switchLayout(1);
+    }
+    
+    if(layout2State == 0) {
+      eXo.contact.UIContactPortlet.switchLayout(2);
+    }
+    
+    if(layout3State == 0) {   
+      eXo.contact.UIContactPortlet.switchLayout(3);
+    }
+  }
+  catch(e) {
+    window.alert(e.message);
+  }
+}
+
+/**
+ * 
+ *  @author Lam Nguyen
+ *  
+ *  @param (Object) layout
+ */
+UIContactPortlet.prototype.switchLayout = function(layout) {
+  var Browser = eXo.core.Browser;
+  var DOMUtil = eXo.core.DOMUtil;
+  layout = parseInt(layout);
+  var contactLayout1 = DOMUtil.findFirstDescendantByClass(document.getElementById("contact"),"div","UINavigationContainer");                                                   
+  var contactLayout2 = document.getElementById("UIAddressBooks");
+  var contactLayout3 = document.getElementById("UITags");
+  var panelWorking = document.getElementById('UIContactContainer');
+  var showCheckedMenu = false;
+  switch(layout) {
+    case 0 : 
+      if(contactLayout1.style.display != "block") {
+        contactLayout1.style.display = "block";
+      } 
+      if(contactLayout2.style.display != "block") {
+        contactLayout2.style.display = "block";
+      }
+      if(contactLayout3.style.display != "block") {
+        contactLayout3.style.display = "block";             
+      }
+      panelWorking.style.marginLeft = "225px";   
+      Browser.setCookie("contactLayout1", "1", 30)
+      Browser.setCookie("contactLayout2", "1", 30)
+      Browser.setCookie("contactLayout3", "1", 30)     
+      this.addCheckedIcon(1,true);
+      this.addCheckedIcon(2,true);
+      this.addCheckedIcon(3,true);
+      return;
+    case 1 :
+      if(contactLayout1.style.display == "none") {
+        contactLayout1.style.display = "block";
+        panelWorking.style.marginLeft = "225px";
+        Browser.setCookie("contactLayout1", "1", 30);
+        showCheckedMenu = true;
+      } else {
+        contactLayout1.style.display = "none";  
+        panelWorking.style.marginLeft = "0px";
+        Browser.setCookie("contactLayout1", "0", 30);
+      }
+      break;
+    case 2 : 
+      if(contactLayout2.style.display == "none") {
+        contactLayout2.style.display = "block";
+        showCheckedMenu = true;        
+        if(contactLayout1.style.display == "none") {
+           panelWorking.style.marginLeft = "0px";
+        } else {
+           panelWorking.style.marginLeft ="225px";
+        }
+        Browser.setCookie("contactLayout2", "1", 30);
+      } else {
+        contactLayout2.style.display = "none";
+        Browser.setCookie("contactLayout2", "0", 30);
+        if(contactLayout1.style.display == "none") {
+           panelWorking.style.marginLeft = "0px";
+        }        
+      }
+      break;
+    case 3 : 
+      if(contactLayout3.style.display == "none") {
+        contactLayout3.style.display="block";
+        showCheckedMenu = true;
+        if(contactLayout1.style.display == "none") {
+           panelWorking.style.marginLeft = "0px";
+        } else {
+           panelWorking.style.marginLeft ="225px";
+        } 
+        Browser.setCookie("contactLayout3", "1", 30);
+      } else {
+        contactLayout3.style.display = "none";
+        Browser.setCookie("contactLayout3", "0", 30);
+        if(contactLayout1.style.display == "none") {
+           panelWorking.style.marginLeft = "0px";
+        }
+      }      
+      break;
+  }
+  this.addCheckedIcon(layout,showCheckedMenu);
+}
+
+/*
+ *  Date 26-JAN-2008
+ *  Lam Nguyen comment
+
+
 UIContactPortlet.prototype.checkLayout = function() {
 	try{
 		var Browser = eXo.core.Browser ;
@@ -256,6 +373,7 @@ UIContactPortlet.prototype.checkLayout = function() {
   var layoutno = Browser.getCookie('layoutno') ;
   eXo.contact.UIContactPortlet.addCheckedIcon(layoutno) ;
 } ;
+
 
 UIContactPortlet.prototype.switchLayout = function(layout) {
 	var Browser = eXo.core.Browser ;
@@ -329,13 +447,31 @@ UIContactPortlet.prototype.switchLayout = function(layout) {
 
 UIContactPortlet.prototype.addCheckedIcon = function(layout) {
   var itemIcons = eXo.core.DOMUtil.findDescendantsByClass(
-                    document.getElementById('customLayoutViewMenu'), 'div', 'ItemIcon') ;
+                    document.getElementById('customLayoutViewMenu'), 'div', 'ItemIcon');                    
   for (var i=0; i<itemIcons.length; i++) {
-    if (i == layout) {
-      itemIcons[i].className = 'ItemIcon CheckedMenu' ;
+    if(i == layout) {
+      itemIcons[i].className = "ItemIcon CheckedMenu";
     } else {
-      itemIcons[i].className = 'ItemIcon' ;
+      itemIcons[i].className = "ItemIcon";
     }
+  }
+  eXo.core.Browser.setCookie("layoutno", layout, 7) ;
+} ;
+*/
+
+/**
+ * @author Lam Nguyen
+ * 
+ * @param {Object} layout
+ */
+UIContactPortlet.prototype.addCheckedIcon = function(layout, visible) {
+  layout = parseInt(layout);
+  var itemIcon = eXo.core.DOMUtil.findDescendantsByClass(
+                document.getElementById("customLayoutViewMenu"), "div", "ItemIcon")[layout];
+  if(visible) {
+    itemIcon.className = 'ItemIcon CheckedMenu';
+  } else {
+    itemIcon.className = 'ItemIcon';
   }
   eXo.core.Browser.setCookie("layoutno", layout, 7) ;
 } ;

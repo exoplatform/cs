@@ -121,21 +121,26 @@
 									        <div class="MiddleLeftRightClickPopupMenu">
 									          <div class="MiddleRightRightClickPopupMenu">
 						              		<div class="UIRightPopupMenuContainer" id="customLayoutViewMenu">
-																<a class="MenuItem" href="javascript:eXo.contact.UIContactPortlet.switchLayout(0)" >   
-							                    <div class="ItemIcon MoveNavigationIcon">
-							                       Show/Hide Navigation
+																<div class="MenuItem" onclick="javascript:eXo.contact.UIContactPortlet.switchLayout(0)" >
+							                    <div class="ItemIcon">
+							                      Default
 							                    </div>
-						                    </a>
-						                    <a class="MenuItem" href="javascript:eXo.contact.UIContactPortlet.switchLayout(1)" >   
-							                    <div class="ItemIcon MoveAddressIcon">
-							                       Show/Hide Addressbooks
+						                    </div>
+                                <div class="MenuItem" onclick="javascript:eXo.contact.UIContactPortlet.switchLayout(1)" >   
+							                    <div class="ItemIcon CheckedMenu">
+							                      Navigation
 							                    </div>
-						                    </a>
-						                    <a class="MenuItem" href="javascript:eXo.contact.UIContactPortlet.switchLayout(2)" >
-							                    <div class="ItemIcon MoveTagIcon">
-							                      Show/Hide Tags
+						                    </div>
+						                    <div class="MenuItem" onclick="javascript:eXo.contact.UIContactPortlet.switchLayout(2)" >   
+							                    <div class="ItemIcon CheckedMenu">
+							                       Addressbooks
 							                    </div>
-						                    </a>
+						                    </div>
+						                    <div class="MenuItem" onclick="javascript:eXo.contact.UIContactPortlet.switchLayout(3)" >
+							                    <div class="ItemIcon CheckedMenu">
+							                      Tags
+							                    </div>
+						                    </div>
 															</div>
 							          		</div>
 							        		</div>
