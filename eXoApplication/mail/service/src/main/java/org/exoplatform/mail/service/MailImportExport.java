@@ -30,5 +30,5 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
  */
 public interface MailImportExport {  
 	public void importMessage(SessionProvider sProvider, String username, String accountId, String folderId, InputStream inputStream, String type) throws Exception;
-  public OutputStream exportMessage(SessionProvider sProvider, String username,String accountId, String messageId) throws Exception;
+  public OutputStream exportMessage(SessionProvider sProvider, String username,String accountId, Message message) throws Exception;
 }

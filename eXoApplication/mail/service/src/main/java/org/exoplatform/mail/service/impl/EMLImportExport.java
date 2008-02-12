@@ -42,10 +42,9 @@ public class EMLImportExport implements MailImportExport{
 	public EMLImportExport(JCRDataStorage jcrDataStorage) throws Exception {
 		jcrDataStorage_ = jcrDataStorage ;
 	}
-	public OutputStream exportMessage(SessionProvider sProvider, String username, String accountId, String messageId) throws Exception {
+	public OutputStream exportMessage(SessionProvider sProvider, String username, String accountId, Message message) throws Exception {
 		Properties props = System.getProperties();
     Session session = Session.getDefaultInstance(props, null);
-    Message message = jcrDataStorage_.getMessageById(sProvider, username, accountId, messageId);
     MimeMessage mimeMessage = new MimeMessage(session);
     mimeMessage = Utils.mergeToMimeMessage(message, mimeMessage);
     OutputStream outputStream = new ByteArrayOutputStream();

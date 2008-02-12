@@ -28,7 +28,8 @@ import java.util.Map;
  * Jun 23, 2007  
  */
 public class Message extends MessageHeader {
-  private String from;
+  private String path ;
+  private String from ;
   private String to ;
   private String cc ;
   private String bcc ;
@@ -50,6 +51,10 @@ public class Message extends MessageHeader {
   private List<Attachment> attachments ;
   
   public Message() {super() ;}
+  
+  public String getPath() {return path ; }
+  public void setPath(String s) { path = s ; } 
+  
   public String getMessageTo() { return to ; }
   public void setMessageTo(String s) { to = s ; }
   

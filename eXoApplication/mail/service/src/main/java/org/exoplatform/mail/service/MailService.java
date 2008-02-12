@@ -187,7 +187,7 @@ public interface MailService {
     * @param tag
     * @throws Exception
     */
-   public void addTag(SessionProvider sProvider, String username, String accountId, List<String> messagesId, List<Tag> tag) throws Exception ;
+   public void addTag(SessionProvider sProvider, String username, String accountId, List<Message> messages, List<Tag> tag) throws Exception ;
    /**
     * This method should: 
     * 1. Remove the tag from the message
@@ -198,7 +198,7 @@ public interface MailService {
     * @param tags
     * @throws Exception
     */
-   public void removeMessageTag(SessionProvider sProvider, String username, String accountId, List<String> messageId, List<String> tags) throws Exception ;
+   public void removeMessageTag(SessionProvider sProvider, String username, String accountId, List<Message> messages, List<String> tags) throws Exception ;
   /**
    * This method should:
    * 1. Find all the message that has the tag , remove the tag from the message and save
@@ -240,9 +240,9 @@ public interface MailService {
    * @return
    * @throws Exception
    */
-  public MessagePageList getMessages(SessionProvider sProvider, String username, MessageFilter filter) throws Exception ;
+  public MessagePageList getMessagePageList(SessionProvider sProvider, String username, MessageFilter filter) throws Exception ;
   
-  public List<String> getMessageIds(SessionProvider sProvider, String username, MessageFilter filter) throws Exception ;
+  public List<Message> getMessages(SessionProvider sProvider, String username, MessageFilter filter) throws Exception ;
   
   public void saveMessage(SessionProvider sProvider, String username, String accountId, Message message, boolean isNew) throws Exception;
   /**
@@ -261,10 +261,10 @@ public interface MailService {
    * 1. Remove the message from the database if it is existed
    * 2. Update or invalidate the cache if the message is cached
    * @param username
-   * @param messageId
+   * @param message
    * @throws Exception
    */
-  public void removeMessage(SessionProvider sProvider, String username, String accountId, String messageId) throws Exception ;
+  public void removeMessage(SessionProvider sProvider, String username, String accountId, Message message) throws Exception ;
   /**
    * This method should:
    * 1. Remove all the messages 
@@ -274,9 +274,9 @@ public interface MailService {
    * @param messageId
    * @throws Exception
    */
-  public void removeMessage(SessionProvider sProvider, String username, String accountId, List<String> messageIds) throws Exception ;
+  public void removeMessage(SessionProvider sProvider, String username, String accountId, List<Message> messages) throws Exception ;
   
-  public void moveMessages(SessionProvider sProvider, String username,String accountId, String msgId, String currentFolderId, String destFolderId) throws Exception ;
+  public void moveMessages(SessionProvider sProvider, String username,String accountId, Message msg, String currentFolderId, String destFolderId) throws Exception ;
 
   public void sendMessages(List<Message> msgList, ServerConfiguration serverConfig) throws Exception ;
   /**
@@ -319,7 +319,7 @@ public interface MailService {
   public void saveMailSetting(SessionProvider sProvider, String username, MailSetting newSetting) throws Exception;
   
   public void importMessage(SessionProvider sProvider, String username, String accountId, String folderId, InputStream inputStream, String type) throws Exception;
-  public OutputStream exportMessage(SessionProvider sProvider, String username,String accountId, String messageId) throws Exception;
+  public OutputStream exportMessage(SessionProvider sProvider, String username,String accountId, Message message) throws Exception;
   
   public void runFilter(SessionProvider sProvider, String username, String accountId, MessageFilter filter) throws Exception ;
   
@@ -327,7 +327,7 @@ public interface MailService {
   
   public void saveSpamFilter(SessionProvider sProvider, String username, String accountId, SpamFilter spamFilter) throws Exception ;
   
-  public void toggleMessageProperty(SessionProvider sProvider, String username, String accountId, List<String> msgList, String property) throws Exception ;
+  public void toggleMessageProperty(SessionProvider sProvider, String username, String accountId, List<Message> msgList, String property) throws Exception ;
   
   public String getFolderHomePath(SessionProvider sProvider, String username, String accountId) throws Exception ;
   

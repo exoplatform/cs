@@ -211,14 +211,14 @@ public class UIFolderContainer extends UIContainer {
       MessageFilter filter = new MessageFilter("");
       filter.setFolder(new String[] {folderId});
       filter.setAccountId(accountId);
-      List<String> messageIds = mailSrv.getMessageIds(SessionsUtils.getSessionProvider(), username, filter);
-      mailSrv.removeMessage(SessionsUtils.getSessionProvider(), username, accountId, messageIds);
+      List<Message> messages = mailSrv.getMessages(SessionsUtils.getSessionProvider(), username, filter);
+      mailSrv.removeMessage(SessionsUtils.getSessionProvider(), username, accountId, messages);
       UIMessageArea uiMsgArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class);
       UIMessageList uiMessageList = uiMsgArea.getChild(UIMessageList.class) ;
       UIMessagePreview uiMsgPreview = uiMsgArea.getChild(UIMessagePreview.class);
       UIFolderContainer uiFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
       uiMessageList.updateList();
-      if (messageIds.contains(uiMsgPreview.getMessage().getId()))
+      if (messages.contains(uiMsgPreview.getMessage().getId()))
          uiMsgPreview.setMessage(null);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgArea) ;
@@ -237,8 +237,8 @@ public class UIFolderContainer extends UIContainer {
       filter.setFolder(new String[] {folderId});
       filter.setAccountId(accountId);
       filter.setViewQuery("@" + Utils.EXO_ISUNREAD + "='true'");
-      List<String> messageIds = mailSrv.getMessageIds(SessionsUtils.getSessionProvider(), username, filter);
-      mailSrv.toggleMessageProperty(SessionsUtils.getSessionProvider(), username, accountId, messageIds, Utils.EXO_ISUNREAD);
+      List<Message> messages = mailSrv.getMessages(SessionsUtils.getSessionProvider(), username, filter);
+      mailSrv.toggleMessageProperty(SessionsUtils.getSessionProvider(), username, accountId, messages, Utils.EXO_ISUNREAD);
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
       List<Message> msgList = new  ArrayList<Message>(uiMessageList.messageList_.values());
       for (Message msg : msgList) {

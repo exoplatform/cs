@@ -89,7 +89,7 @@ public class UIExportForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UIExportForm> event) throws Exception {
       UIExportForm uiExportForm = event.getSource();
       UIMailPortlet uiPortlet = uiExportForm.getAncestorOfType(UIMailPortlet.class);
-      String msgExport = uiExportForm.getExportMessage().getId();
+      Message msgExport = uiExportForm.getExportMessage();
       String username = MailUtils.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailSrv = MailUtils.getMailService();      

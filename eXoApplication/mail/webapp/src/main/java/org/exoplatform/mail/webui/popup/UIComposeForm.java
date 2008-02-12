@@ -453,7 +453,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           Folder drafts = mailSvr.getFolder(SessionsUtils.getSessionProvider(), usename, accountId, Utils.createFolderId(accountId, Utils.FD_DRAFTS, false));
           drafts.setTotalMessage(drafts.getTotalMessage() - 1);
           mailSvr.saveFolder(SessionsUtils.getSessionProvider(), usename, accountId, drafts);
-          mailSvr.removeMessage(SessionsUtils.getSessionProvider(), usename, accountId, message.getId());  
+          mailSvr.removeMessage(SessionsUtils.getSessionProvider(), usename, accountId, message);  
         } else {
           mailSvr.saveMessage(SessionsUtils.getSessionProvider(), usename, accountId, message, true) ;    
         }

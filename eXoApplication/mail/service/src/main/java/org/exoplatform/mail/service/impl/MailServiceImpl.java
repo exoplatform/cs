@@ -151,24 +151,24 @@ public class MailServiceImpl implements MailService{
     return storage_.getMessageById(sProvider, username, accountId, msgId);
   }
 
-  public void removeMessage(SessionProvider sProvider, String username, String accountId, String messageId) throws Exception {
-    storage_.removeMessage(sProvider, username, accountId, messageId);
+  public void removeMessage(SessionProvider sProvider, String username, String accountId, Message message) throws Exception {
+    storage_.removeMessage(sProvider, username, accountId, message);
   }
 
-  public void removeMessage(SessionProvider sProvider, String username,String accountId, List<String> messageIds) throws Exception {
-    storage_.removeMessage(sProvider, username, accountId, messageIds);
+  public void removeMessage(SessionProvider sProvider, String username,String accountId, List<Message> messages) throws Exception {
+    storage_.removeMessage(sProvider, username, accountId, messages);
   } 
   
-  public void moveMessages(SessionProvider sProvider, String username,String accountId, String msgId, String currentFolderId, String destFolderId) throws Exception {
-    storage_.moveMessages(sProvider, username, accountId, msgId, currentFolderId, destFolderId);
+  public void moveMessages(SessionProvider sProvider, String username,String accountId, Message msg, String currentFolderId, String destFolderId) throws Exception {
+    storage_.moveMessages(sProvider, username, accountId, msg, currentFolderId, destFolderId);
   }
 
-  public MessagePageList getMessages(SessionProvider sProvider, String username, MessageFilter filter) throws Exception {
-    return storage_.getMessages(sProvider, username, filter);
+  public MessagePageList getMessagePageList(SessionProvider sProvider, String username, MessageFilter filter) throws Exception {
+    return storage_.getMessagePageList(sProvider, username, filter);
   }
   
-  public List<String> getMessageIds(SessionProvider sProvider, String username, MessageFilter filter) throws Exception {
-    return storage_.getMessageIds(sProvider, username, filter) ;
+  public List<Message> getMessages(SessionProvider sProvider, String username, MessageFilter filter) throws Exception {
+    return storage_.getMessages(sProvider, username, filter) ;
   }
 
   public void saveMessage(SessionProvider sProvider, String username, String accountId, Message message, boolean isNew) throws Exception {
@@ -382,7 +382,8 @@ public class MailServiceImpl implements MailService{
 
         javax.mail.Message[] messages = folder.getMessages() ;
         Vector<javax.mail.Message> vector = new Vector<javax.mail.Message>();
-        Node messageHome = storage_.getMessageHome(sProvider, username, accountId) ;
+        java.util.Calendar calendar = new GregorianCalendar() ;
+        Node messageHome = storage_.getDateStoreNode(sProvider, username, accountId, calendar.getTime()) ;
         boolean isPop3 = account.getProtocol().equals(Utils.POP3);
         for (int i=1 ; i< messages.length; i++) {
           if (!messages[i].isSet(Flags.Flag.SEEN)) vector.add(messages[i]); 
@@ -415,6 +416,7 @@ public class MailServiceImpl implements MailService{
             try {
               saveMessage(sProvider, msg, messageHome, account.getId(), username, folderId, spamFilter) ;
             } catch(Exception e) {
+              e.printStackTrace();
               i++ ;
               continue ;
             }  
@@ -609,9 +611,9 @@ public class MailServiceImpl implements MailService{
     return folders ;
   }
 
-  public void addTag(SessionProvider sProvider, String username, String accountId, List<String> messagesId, List<Tag> tag)
+  public void addTag(SessionProvider sProvider, String username, String accountId, List<Message> messages, List<Tag> tag)
       throws Exception {
-    storage_.addTag(sProvider, username, accountId, messagesId, tag);
+    storage_.addTag(sProvider, username, accountId, messages, tag);
   }
 
   public List<Tag> getTags(SessionProvider sProvider, String username, String accountId) throws Exception {
@@ -622,7 +624,7 @@ public class MailServiceImpl implements MailService{
     return storage_.getTag(sProvider, username, accountId, tagId);
   }
 
-  public void removeMessageTag(SessionProvider sProvider, String username, String accountId, List<String> messageIds, List<String> tags)
+  public void removeMessageTag(SessionProvider sProvider, String username, String accountId, List<Message> messageIds, List<String> tags)
       throws Exception {
     storage_.removeMessageTag(sProvider, username, accountId, messageIds, tags);   
   }
@@ -644,14 +646,14 @@ public class MailServiceImpl implements MailService{
     MessageFilter filter = new MessageFilter("Filter By Tag") ;
     filter.setAccountId(accountId) ;
     filter.setTag(new String[]{tagId} ) ;
-    return getMessages(sProvider, username, filter) ;   
+    return getMessagePageList(sProvider, username, filter) ;   
   }
   
   public MessagePageList getMessagePageListByFolder(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception {
     MessageFilter filter = new MessageFilter("Filter By Folder") ;
     filter.setAccountId(accountId) ;
     filter.setFolder(new String[]{folderId} ) ;
-    return getMessages(sProvider, username, filter) ;   
+    return getMessagePageList(sProvider, username, filter) ;   
   }
   
   public MailSetting getMailSetting(SessionProvider sProvider, String username) throws Exception {
@@ -666,13 +668,12 @@ public class MailServiceImpl implements MailService{
   	emlImportExport_.importMessage(sProvider, username, accountId, folderId, inputStream, type) ;
   }
   
-  public OutputStream exportMessage(SessionProvider sProvider, String username, String accountId, String messageId) throws Exception {
-    return emlImportExport_.exportMessage(sProvider, username, accountId, messageId) ; 
+  public OutputStream exportMessage(SessionProvider sProvider, String username, String accountId, Message message) throws Exception {
+    return emlImportExport_.exportMessage(sProvider, username, accountId, message) ; 
   }
   
   public void runFilter(SessionProvider sProvider, String username, String accountId, MessageFilter filter) throws Exception {
-    List<Message> msgList = getMessages(sProvider, username, filter).getAll(username);
-    List<String> msgIdList = new ArrayList<String>();
+    List<Message> msgList = getMessagePageList(sProvider, username, filter).getAll(username);
     String applyFolder = filter.getApplyFolder();
     String applyTag = filter.getApplyTag();
     List<Tag> tagList = new ArrayList<Tag>();
@@ -681,15 +682,14 @@ public class MailServiceImpl implements MailService{
       if (folder != null && (msg.getFolders()[0] != applyFolder)) {
         Folder appFolder = getFolder(sProvider, username, accountId, applyFolder);
         if (appFolder != null)
-          moveMessages(sProvider, username, accountId, msg.getId(), msg.getFolders()[0], applyFolder);
+          moveMessages(sProvider, username, accountId, msg, msg.getFolders()[0], applyFolder);
       }
-      msgIdList.add(msg.getId());
     }
     if (!Utils.isEmptyField(applyTag)) {
       Tag tag = getTag(sProvider, username, accountId, applyTag);
       if (tag != null) {
         tagList.add(tag);
-        addTag(sProvider, username, accountId, msgIdList, tagList);
+        addTag(sProvider, username, accountId, msgList, tagList);
       }
     }
   }
@@ -702,7 +702,7 @@ public class MailServiceImpl implements MailService{
     storage_.saveSpamFilter(sProvider, username, accountId, spamFilter);
   }
   
-  public void toggleMessageProperty(SessionProvider sProvider, String username, String accountId, List<String> msgList, String property) throws Exception {
+  public void toggleMessageProperty(SessionProvider sProvider, String username, String accountId, List<Message> msgList, String property) throws Exception {
     storage_.toggleMessageProperty(sProvider, username, accountId, msgList, property) ;
   }
 

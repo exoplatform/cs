@@ -88,7 +88,7 @@ public class UISearchForm extends UIForm {
       String username = uiPortlet.getCurrentUser();
       try {
         MailService mailService = uiPortlet.getApplicationComponent(MailService.class);
-        uiMessageList.setMessagePageList(mailService.getMessages(SessionsUtils.getSessionProvider(), username, filter));
+        uiMessageList.setMessagePageList(mailService.getMessagePageList(SessionsUtils.getSessionProvider(), username, filter));
         uiMessageList.setSelectedFolderId(null);
         uiMessageList.setSelectedTagId(null);
         uiMessageList.setMessageFilter(filter);

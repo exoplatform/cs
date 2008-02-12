@@ -94,10 +94,8 @@ public class UIMessagePreview extends UIComponent {
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
       String attId = event.getRequestContext().getRequestParameter("attachId");
       UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class);
-      String username = MailUtils.getCurrentUser();
-      String accountId = uiMessagePreview.getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      MailService mailSrv = MailUtils.getMailService();
-      Message message = mailSrv.getMessageById(SessionsUtils.getSessionProvider(), username, accountId, msgId);
+      UIMessageList uiMsgList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
+      Message message = uiMsgList.messageList_.get(msgId);
       List<Attachment> attList = message.getAttachments();
       JCRMessageAttachment att = new JCRMessageAttachment();
       for (Attachment attach : attList) {
@@ -105,7 +103,6 @@ public class UIMessagePreview extends UIComponent {
           att = (JCRMessageAttachment)attach;
         }
       }
-      //ByteArrayInputStream bis = (ByteArrayInputStream)att.getInputStream();
       DownloadResource dresource = new InputStreamDownloadResource(att.getInputStream(), att.getMimeType());
       DownloadService dservice = (DownloadService)PortalContainer.getInstance().getComponentInstanceOfType(DownloadService.class);
       dresource.setDownloadName(att.getName());
@@ -209,7 +206,7 @@ public class UIMessagePreview extends UIComponent {
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
        
       Message msg = uiMessageList.messageList_.get(msgId);
-      mailSrv.moveMessages(SessionsUtils.getSessionProvider(), username, accountId, msgId, msg.getFolders()[0],  Utils.createFolderId(accountId, Utils.FD_TRASH, false));
+      mailSrv.moveMessages(SessionsUtils.getSessionProvider(), username, accountId, msg, msg.getFolders()[0],  Utils.createFolderId(accountId, Utils.FD_TRASH, false));
       uiPreview.setMessage(null);
       uiPortlet.findFirstComponentOfType(UIMessageList.class).updateList();
       

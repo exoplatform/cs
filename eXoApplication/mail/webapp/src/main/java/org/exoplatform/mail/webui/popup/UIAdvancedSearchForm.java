@@ -258,7 +258,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
       uiMessageList.setSelectedTagId(null);
       uiMessageList.setMessageFilter(filter);
       try {
-        uiMessageList.setMessagePageList(mailService.getMessages(SessionsUtils.getSessionProvider(), username, filter));
+        uiMessageList.setMessagePageList(mailService.getMessagePageList(SessionsUtils.getSessionProvider(), username, filter));
         UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
         uiFolderContainer.setSelectedFolder(null);
         uiPortlet.cancelAction();

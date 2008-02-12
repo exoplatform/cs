@@ -125,12 +125,8 @@ public class UITagContainer extends UIComponent {
       
       List<Message> listMessage = mailSrv.getMessageByTag(SessionsUtils.getSessionProvider(), username, accountId, tagId);
       List<String> listTag = new ArrayList<String>();
-      List<String> listMessageId = new ArrayList<String>();
-      for (Message mess : listMessage) {
-        listMessageId.add(mess.getId());
-      }
       listTag.add(tagId);
-      mailSrv.removeMessageTag(SessionsUtils.getSessionProvider(), username, accountId, listMessageId, listTag);
+      mailSrv.removeMessageTag(SessionsUtils.getSessionProvider(), username, accountId, listMessage, listTag);
       uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTag);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));

@@ -68,7 +68,7 @@ public class UITagForm extends UIForm implements UIPopupComponent{
   public static final String TAG_COLOR = "Choose Color" ;
   public static final String TAG_MESSAGE = "TagMessage";
   
-  private Map<String, String> messageMap = new HashMap<String, String>() ;
+  private Map<String, Message> messageMap = new HashMap<String, Message>() ;
   private Map<String, Tag> tagMap = new HashMap<String, Tag>();
   
   public UITagForm() { }
@@ -117,12 +117,12 @@ public class UITagForm extends UIForm implements UIPopupComponent{
       uiTags.setName(mesSub);
       uiTags.setValue(tags);
       addUIFormInput(uiTags) ;
-      messageMap.put(msg.getId(), msg.getId());
+      messageMap.put(msg.getId(), msg);
     }
   }
   
-  public List<String> getMessageList() {
-    return new ArrayList<String>(messageMap.values());
+  public List<Message> getMessageList() {
+    return new ArrayList<Message>(messageMap.values());
   }
   
   public List<Tag> getCheckedTags() throws Exception {

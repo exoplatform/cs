@@ -97,6 +97,10 @@
         protected="false" multiple="false">
         <valueConstraints/>      
       </propertyDefinition>
+      <propertyDefinition name="exo:path" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
+        protected="false" multiple="false">
+        <valueConstraints/>      
+      </propertyDefinition>
       <propertyDefinition name="exo:account" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
         protected="false" multiple="false">
         <valueConstraints/>      

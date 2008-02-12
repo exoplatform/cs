@@ -19,6 +19,7 @@ package org.exoplatform.mail.service.impl;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -117,15 +118,19 @@ public class JCRDataStorage{
     return account ;
   }
   public Message getMessageById(SessionProvider sProvider, String username, String accountId, String msgId) throws Exception {
-    //  gets a message (email) from its id and username
-    Node messageHome = getMessageHome(sProvider, username, accountId);
-    //  if this message exists, creates the object and returns it
-    if (messageHome.hasNode(msgId)) {
-      Message msg = getMessage(messageHome.getNode(msgId));
-      msg.setAccountId(accountId);
-      return msg ;
-    }
-    return null ;
+    Session sess = getMailHomeNode(sProvider, username).getSession();
+    QueryManager qm = sess.getWorkspace().getQueryManager();
+    // gets the specified folder node
+    StringBuffer queryString = new StringBuffer("//element(*,exo:message)[@exo:id='").
+    append(msgId).
+    append("']");
+    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
+    QueryResult result = query.execute();
+    NodeIterator it = result.getNodes();
+    Node node = null ; 
+    if (it.hasNext()) node = it.nextNode();
+    Message msg = getMessage(node);
+    return msg ;
   }
   
   public MailSetting getMailSetting(SessionProvider sProvider, String username) throws Exception {
@@ -156,7 +161,7 @@ public class JCRDataStorage{
     return setting; 
   }
 
-  public MessagePageList getMessages(SessionProvider sProvider, String username, MessageFilter filter) throws Exception {
+  public MessagePageList getMessagePageList(SessionProvider sProvider, String username, MessageFilter filter) throws Exception {
     Node homeMsg = getMessageHome(sProvider, username, filter.getAccountId());
     filter.setAccountPath(homeMsg.getPath()) ;
     QueryManager qm = homeMsg.getSession().getWorkspace().getQueryManager();
@@ -168,7 +173,7 @@ public class JCRDataStorage{
     return pageList ;
   }
   
-  public List<String> getMessageIds(SessionProvider sProvider, String username, MessageFilter filter) throws Exception {
+  public List<Message> getMessages(SessionProvider sProvider, String username, MessageFilter filter) throws Exception {
     Node homeMsg = getMessageHome(sProvider, username, filter.getAccountId());
     filter.setAccountPath(homeMsg.getPath()) ;
     QueryManager qm = homeMsg.getSession().getWorkspace().getQueryManager();
@@ -176,10 +181,10 @@ public class JCRDataStorage{
     Query query = qm.createQuery(queryString, Query.XPATH);
     QueryResult result = query.execute();  
     NodeIterator iter = result.getNodes();
-    List<String> strList = new ArrayList<String>();
+    List<Message> strList = new ArrayList<Message>();
     while (iter.hasNext()) {
       Node node = iter.nextNode();
-      strList.add(node.getProperty(Utils.EXO_ID).getString());
+      strList.add(getMessage(node));
     }
     return strList ;
   }
@@ -187,6 +192,7 @@ public class JCRDataStorage{
   public Message getMessage(Node messageNode) throws Exception {
     Message msg = new Message();
     if (messageNode.hasProperty(Utils.EXO_ID)) msg.setId(messageNode.getProperty(Utils.EXO_ID).getString());
+    msg.setPath(messageNode.getPath());
     if (messageNode.hasProperty(Utils.EXO_ACCOUNT)) msg.setAccountId(messageNode.getProperty(Utils.EXO_ACCOUNT).getString()) ;
     if (messageNode.hasProperty(Utils.EXO_FROM)) msg.setFrom(messageNode.getProperty(Utils.EXO_FROM).getString());
     if (messageNode.hasProperty(Utils.EXO_TO)) msg.setMessageTo(messageNode.getProperty(Utils.EXO_TO).getString());
@@ -257,46 +263,47 @@ public class JCRDataStorage{
     }
   }
 
-  public void removeMessage(SessionProvider sProvider, String username, String accountId, String messageId) throws Exception {
-    Node msgHomeNode = getMessageHome(sProvider, username, accountId);
-    if (msgHomeNode.hasNode(messageId)) msgHomeNode.getNode(messageId).remove() ;
-    msgHomeNode.getSession().save();
+  public void removeMessage(SessionProvider sProvider, String username, String accountId, Message message) throws Exception {
+    Node msgStoreNode = getDateStoreNode(sProvider, username, accountId, message.getReceivedDate());
+    try {
+      msgStoreNode.getNode(message.getId()).remove() ;
+      msgStoreNode.getSession().save();
+    } catch(PathNotFoundException e) {}
   }
 
-  public void removeMessage(SessionProvider sProvider, String username, String accountId, List<String> messageIds) throws Exception {
+  public void removeMessage(SessionProvider sProvider, String username, String accountId, List<Message> messages) throws Exception {
     //  loops on the message names array, and removes each message
-    for (String messageId : messageIds) {
-      removeMessage(sProvider, username, accountId, messageId);
+    for (Message message : messages) {
+      removeMessage(sProvider, username, accountId, message);
     }
   }
   
-  public void moveMessages(SessionProvider sProvider, String username, String accountId, String msgId, String currentFolderId, String destFolderId) throws Exception {
+  public void moveMessages(SessionProvider sProvider, String username, String accountId, Message msg, String currentFolderId, String destFolderId) throws Exception {
     Node messageHome = getMessageHome(sProvider, username, accountId);
-    if (messageHome.hasNode(msgId)) {
-      Node msgNode = messageHome.getNode(msgId) ;
-      if (msgNode.hasProperty(Utils.EXO_FOLDERS)) {
-        Boolean isUnread = msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean();
-        Node currentFolderNode = getFolderNodeById(sProvider, username, accountId, currentFolderId);
-        Node destFolderNode = getFolderNodeById(sProvider, username, accountId, destFolderId);
-        Value[] propFolders = msgNode.getProperty(Utils.EXO_FOLDERS).getValues();
-        String[] folderIds = new String[propFolders.length];
-        for (int i = 0; i < propFolders.length; i++) {
-          String folderId = propFolders[i].getString() ;
-          if (currentFolderId.equals(folderId)) folderIds[i] = destFolderId ;
-          else folderIds[i] = folderId;
-        }
-        msgNode.setProperty(Utils.EXO_FOLDERS, folderIds);
-        
-        // Update number of unread messages
-        if (isUnread) {
-          currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() - 1));
-          destFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (destFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() + 1));
-        }
-        currentFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (currentFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() - 1));
-        destFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (destFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() + 1));
+    Node msgNode = (Node)messageHome.getSession().getItem(msg.getPath()) ;
+    if (msgNode.hasProperty(Utils.EXO_FOLDERS)) {
+      Boolean isUnread = msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean();
+      Node currentFolderNode = getFolderNodeById(sProvider, username, accountId, currentFolderId);
+      Node destFolderNode = getFolderNodeById(sProvider, username, accountId, destFolderId);
+      Value[] propFolders = msgNode.getProperty(Utils.EXO_FOLDERS).getValues();
+      String[] folderIds = new String[propFolders.length];
+      for (int i = 0; i < propFolders.length; i++) {
+        String folderId = propFolders[i].getString() ;
+        if (currentFolderId.equals(folderId)) folderIds[i] = destFolderId ;
+        else folderIds[i] = folderId;
       }
+      msgNode.setProperty(Utils.EXO_FOLDERS, folderIds);
+      msgNode.save();
+      // Update number of unread messages
+      if (isUnread) {
+        currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() - 1));
+        destFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (destFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() + 1));
+      }
+      currentFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (currentFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() - 1));
+      destFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (destFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() + 1));
+      currentFolderNode.save();
+      destFolderNode.save();
     }
-    messageHome.getSession().save();
   }
 
   public void saveAccount(SessionProvider sProvider, String username, Account account, boolean isNew) throws Exception {
@@ -360,12 +367,14 @@ public class JCRDataStorage{
   }
   
   public void saveMessage(SessionProvider sProvider, String username, String accountId, Message message, boolean isNew) throws Exception {
-    Node homeMsg = getMessageHome(sProvider, username, accountId);
+    Node mailHome = getMailHomeNode(sProvider, username) ;
+    Node homeMsg = getDateStoreNode(sProvider, username, accountId, message.getReceivedDate());
     Node nodeMsg = null;
     if (isNew) { // creates the node
       nodeMsg = homeMsg.addNode(message.getId(), Utils.EXO_MESSAGE);
+      homeMsg.save();
     } else { // gets the specified message
-      nodeMsg = homeMsg.getNode(message.getId());
+      nodeMsg = mailHome.getNode(message.getPath());
     }
     if (nodeMsg != null) {
       // add some properties
@@ -411,7 +420,7 @@ public class JCRDataStorage{
           }
         }
       }
-      homeMsg.getSession().save();
+      nodeMsg.save();
     }
   }
   
@@ -691,7 +700,7 @@ public class JCRDataStorage{
     return tagHome ;   
   }
 
-  public void addTag(SessionProvider sProvider, String username, String accountId, List<String> messageIds, List<Tag> tagList)
+  public void addTag(SessionProvider sProvider, String username, String accountId, List<Message> messages, List<Tag> tagList)
   throws Exception {    
     Map<String, String> tagMap = new HashMap<String, String> () ;
     Node tagHome = getTagHome(sProvider, username, accountId) ;
@@ -707,22 +716,21 @@ public class JCRDataStorage{
     }
     tagHome.getSession().save() ;
     
-    Node messageHome = getMessageHome(sProvider, username, accountId) ;
-    for(String messageId : messageIds) {
+    Node mailHome = getMailHomeNode(sProvider, username) ;
+    for(Message message : messages) {
       Map<String, String> messageTagMap = new HashMap<String, String> () ;
-      if(messageHome.hasNode(messageId)) {
-        Node messageNode = messageHome.getNode(messageId) ;
-        if(messageNode.hasProperty(Utils.EXO_TAGS)) {
-          Value[] values = messageNode.getProperty(Utils.EXO_TAGS).getValues() ;
-          for(Value value : values) {
-            messageTagMap.put(value.getString(), value.getString()) ;
-          }
+      Node messageNode = (Node) mailHome.getSession().getItem(message.getPath()) ;
+      if(messageNode.hasProperty(Utils.EXO_TAGS)) {
+        Value[] values = messageNode.getProperty(Utils.EXO_TAGS).getValues() ;
+        for(Value value : values) {
+          messageTagMap.put(value.getString(), value.getString()) ;
         }
-        messageTagMap.putAll(tagMap) ;
-        messageNode.setProperty(Utils.EXO_TAGS, messageTagMap.values().toArray(new String[]{})) ;
       }
+      messageTagMap.putAll(tagMap) ;
+      messageNode.setProperty(Utils.EXO_TAGS, messageTagMap.values().toArray(new String[]{})) ;
+      
+      messageNode.save() ;
     }
-    messageHome.getSession().save() ;
   }
 
 
@@ -758,12 +766,12 @@ public class JCRDataStorage{
     return tag ;
   }
 
-  public void removeMessageTag(SessionProvider sProvider, String username, String accountId, List<String> msgIds, List<String> tagIds) 
+  public void removeMessageTag(SessionProvider sProvider, String username, String accountId, List<Message> messages, List<String> tagIds) 
   throws Exception {
-    Node messageHome = getMessageHome(sProvider, username, accountId);
-    for (String msgId : msgIds) {
-      if (messageHome.hasNode(msgId)) {
-        Node msgNode = messageHome.getNode(msgId);
+    Node mailHome = getMailHomeNode(sProvider, username) ;
+    for (Message msg : messages) {
+      try {
+        Node msgNode = (Node) mailHome.getSession().getItem(msg.getPath());
         if (msgNode.hasProperty(Utils.EXO_TAGS)) {
           Value[] propTags = msgNode.getProperty(Utils.EXO_TAGS).getValues();
           String[] oldTagIds = new String[propTags.length];
@@ -774,10 +782,10 @@ public class JCRDataStorage{
           tagList.removeAll(tagIds);
           String[] newTagIds = tagList.toArray(new String[tagList.size()]);
           msgNode.setProperty(Utils.EXO_TAGS, newTagIds);
+          msgNode.save();
         }
-      }
+      } catch(PathNotFoundException e) {}
     }
-    messageHome.getSession().save();
   }
 
 
@@ -785,12 +793,8 @@ public class JCRDataStorage{
     // remove this tag in all messages
     List<Message> listMessage = getMessageByTag(sProvider, username, accountId, tagId);
     List<String> listTag = new ArrayList<String>();
-    List<String> listMessageId = new ArrayList<String>();
-    for (Message mess : listMessage) {
-      listMessageId.add(mess.getId());
-    }
     listTag.add(tagId);
-    removeMessageTag(sProvider, username, accountId, listMessageId, listTag);
+    removeMessageTag(sProvider, username, accountId, listMessage, listTag);
 
     // remove tag node
     Node tagHomeNode = getTagHome(sProvider, username, accountId) ;
@@ -874,27 +878,25 @@ public class JCRDataStorage{
     accountNode.getSession().save();
   }
   
-  public void toggleMessageProperty(SessionProvider sProvider, String username, String accountId, List<String> msgList, String property) throws Exception {
-    Node messageHome = getMessageHome(sProvider, username, accountId);
-    for (String msgId : msgList) {
-      if (messageHome.hasNode(msgId)) {
-        Node msgNode = messageHome.getNode(msgId) ;
-        if (property.equals(Utils.EXO_STAR)) {
-          msgNode.setProperty(Utils.EXO_STAR, !msgNode.getProperty(Utils.EXO_STAR).getBoolean());
-          msgNode.save();
-        } else if (property.equals(Utils.EXO_ISUNREAD)) {
-          Boolean isUnread = msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean();
-          msgNode.setProperty(Utils.EXO_ISUNREAD, !isUnread);
-          msgNode.save();
-          
-          Node currentFolderNode = getFolderNodeById(sProvider, username, accountId, msgNode.getProperty(Utils.EXO_FOLDERS).getValues()[0].getString());
-          if (isUnread) {
-            currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() - 1));
-          } else { 
-            currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() + 1));
-          }
-          currentFolderNode.save();
+  public void toggleMessageProperty(SessionProvider sProvider, String username, String accountId, List<Message> msgList, String property) throws Exception {
+    Node mailHome = getMailHomeNode(sProvider, username);
+    for (Message msg : msgList) {
+      Node msgNode = (Node) mailHome.getSession().getItem(msg.getPath()) ;
+      if (property.equals(Utils.EXO_STAR)) {
+        msgNode.setProperty(Utils.EXO_STAR, !msgNode.getProperty(Utils.EXO_STAR).getBoolean());
+        msgNode.save();
+      } else if (property.equals(Utils.EXO_ISUNREAD)) {
+        Boolean isUnread = msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean();
+        msgNode.setProperty(Utils.EXO_ISUNREAD, !isUnread);
+        msgNode.save();
+
+        Node currentFolderNode = getFolderNodeById(sProvider, username, accountId, msgNode.getProperty(Utils.EXO_FOLDERS).getValues()[0].getString());
+        if (isUnread) {
+          currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() - 1));
+        } else { 
+          currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() + 1));
         }
+        currentFolderNode.save();
       }
     }
   }
@@ -938,19 +940,49 @@ public class JCRDataStorage{
         if (!Utils.isEmptyField(applyFolder) && (getFolder(sProvider, username, accountId, applyFolder) != null)) {
           Folder folder = getFolder(sProvider, username, accountId, applyFolder);
           if (folder !=null)
-            moveMessages(sProvider, username, accountId, msg.getId(), msg.getFolders()[0], applyFolder);  
+            moveMessages(sProvider, username, accountId, msg, msg.getFolders()[0], applyFolder);  
         }
         if (!Utils.isEmptyField(applyTag)) {
           Tag tag = getTag(sProvider, username, accountId, applyTag);
           if (tag != null) {
-            List<String> msgIdList = new ArrayList<String>();
-            msgIdList.add(msg.getId());
+            List<Message> msgList = new ArrayList<Message>();
+            msgList.add(msg);
             List<Tag> tagList = new ArrayList<Tag>();
             tagList.add(tag);
-            addTag(sProvider, username, accountId, msgIdList , tagList);
+            addTag(sProvider, username, accountId, msgList, tagList);
           }
         }  
       }
     } 
+  }
+  
+  public Node getDateStoreNode(SessionProvider sProvider, String username, String accountId, Date date) throws Exception {
+    Node msgHome = getMessageHome(sProvider, username, accountId);
+    java.util.Calendar calendar = new GregorianCalendar() ;
+    calendar.setTime(date) ;
+    Node yearNode;
+    Node monthNode;
+    String year = "Y" + String.valueOf(calendar.get(java.util.Calendar.YEAR)) ;
+    String month = "M" + String.valueOf(calendar.get(java.util.Calendar.MONTH) + 1) ;
+    String day = "D" + String.valueOf(calendar.get(java.util.Calendar.DATE)) ;
+    try {
+      yearNode = msgHome.getNode(year) ;
+    } catch (Exception e) {
+      yearNode = msgHome.addNode(year, Utils.NT_UNSTRUCTURED) ;
+      msgHome.save();
+    }
+    try {
+      monthNode = yearNode.getNode(month) ;
+    } catch (Exception e) {
+      monthNode = yearNode.addNode(month, Utils.NT_UNSTRUCTURED) ;
+      yearNode.save();
+    }
+    try {
+      return monthNode.getNode(day) ;
+    } catch (Exception e) {
+      Node dayNode = monthNode.addNode(day, Utils.NT_UNSTRUCTURED) ;
+      monthNode.save();
+      return dayNode ;
+    }
   }
 }
