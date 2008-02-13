@@ -16,6 +16,7 @@
  */
 package org.exoplatform.contact.service.impl;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -25,7 +26,6 @@ import javax.jcr.Node;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
-import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.jcr.access.AccessControlEntry;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
@@ -43,40 +43,41 @@ import org.exoplatform.services.organization.UserEventListener;
 public class NewUserListener extends UserEventListener {
   private ContactService cservice_ ;
   private NodeHierarchyCreator nodeHierarchyCreator_ ;
-  private String[] groups_ ;
-  public NewUserListener(ContactService cservice, NodeHierarchyCreator nodeHierarchyCreator, 
-  		InitParams params) throws Exception {
+  public NewUserListener(ContactService cservice, NodeHierarchyCreator nodeHierarchyCreator) throws Exception {
   	cservice_ = cservice ;
-  	nodeHierarchyCreator_ = nodeHierarchyCreator ;
-  	String defaultGroup = params.getValueParam("defaultGroups").getValue() ;
-  	if(defaultGroup != null && defaultGroup.length() > 0) {
-  		groups_ = defaultGroup.split(",") ;
-  	}
+  	nodeHierarchyCreator_ = nodeHierarchyCreator ;  	
   }
   
-  public void postSave(User user, boolean isNew) throws Exception {
-  	ContactGroup group = new ContactGroup() ;
-  	group.setName("My contacts") ;
-  	group.setDescription("Default address book") ;
-  	cservice_.saveGroup(SessionProvider.createSystemProvider(), user.getUserName(), group, true) ;
-  	Contact contact = new Contact() ;
-  	contact.setFullName(user.getFirstName() + " " + user.getLastName()) ;
-  	contact.setFirstName(user.getFirstName()) ;
-  	contact.setLastName(user.getLastName()) ;
-  	contact.setEmailAddress(user.getEmail()) ;
-  	Calendar cal = new GregorianCalendar() ;
-  	contact.setLastUpdated(cal.getTime()) ;
-  	  	
-  	if(groups_ != null && groups_.length > 0) {
-  		contact.setAddressBook(groups_) ;
-      cservice_.savePublicContact(contact, true) ;
-  	}    
-    Node userApp = nodeHierarchyCreator_.getUserApplicationNode(SessionProvider.createSystemProvider(), user.getUserName()) ;
-    reparePermissions(userApp, user.getUserName()) ;
-    reparePermissions(userApp.getNode("ContactApplication"), user.getUserName()) ;
-    reparePermissions(userApp.getNode("ContactApplication/contactGroup"), user.getUserName()) ;
-    reparePermissions(userApp.getNode("ContactApplication/contactGroup/" + group.getId()), user.getUserName()) ;
-    userApp.getSession().save() ;    
+  public void postSave(User user, boolean isNew) throws Exception {  	
+  	if(isNew) {
+  		ContactGroup group = new ContactGroup() ;
+    	group.setName("My contacts") ;
+    	group.setDescription("Default address book") ;
+    	SessionProvider sysProvider = SessionProvider.createSystemProvider() ;
+    	cservice_.saveGroup(sysProvider, user.getUserName(), group, true) ;
+    	Contact contact = new Contact() ;
+    	contact.setId(user.getUserName()) ;
+    	contact.setFullName(user.getFirstName() + " " + user.getLastName()) ;
+    	contact.setFirstName(user.getFirstName()) ;
+    	contact.setLastName(user.getLastName()) ;
+    	contact.setEmailAddress(user.getEmail()) ;
+    	Calendar cal = new GregorianCalendar() ;
+    	contact.setLastUpdated(cal.getTime()) ;
+    	List<String> ls = new ArrayList<String>()  ;
+    	ls.add(group.getId()) ;
+    	
+    	contact.setAddressBook(ls.toArray(new String[]{})) ;
+    	contact.setOwner(true) ;
+    	contact.setOwnerId(user.getUserName()) ;
+    	cservice_.saveContact(sysProvider, user.getUserName(), contact, true) ;
+    	
+      Node userApp = nodeHierarchyCreator_.getUserApplicationNode(SessionProvider.createSystemProvider(), user.getUserName()) ;
+      reparePermissions(userApp, user.getUserName()) ;
+      reparePermissions(userApp.getNode("ContactApplication"), user.getUserName()) ;
+      reparePermissions(userApp.getNode("ContactApplication/contactGroup"), user.getUserName()) ;
+      reparePermissions(userApp.getNode("ContactApplication/contactGroup/" + group.getId()), user.getUserName()) ;
+      userApp.getSession().save() ;   
+  	}
   }
   
   private void reparePermissions(Node node, String owner) throws Exception {

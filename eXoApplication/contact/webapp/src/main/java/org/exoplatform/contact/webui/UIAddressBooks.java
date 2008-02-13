@@ -87,12 +87,12 @@ public class UIAddressBooks extends UIComponent {
     for (ContactGroup group : groupList) privateGroupMap_.put(group.getId(), group.getName()) ; 
     return groupList;
   }
-  public List<String> getPublicContactGroups() throws Exception {
-    List<String> publicGroup = ContactUtils.getContactService()
+  public String[] getPublicContactGroups() throws Exception {
+    /*List<String> publicGroup = ContactUtils.getContactService()
       .getPublicAddressBookContacts(SessionProviderFactory.createSystemProvider(), ContactUtils.getUserGroups());
     publicGroupMap_.clear() ;
-    for (String group : publicGroup) publicGroupMap_.put(group, group) ; 
-    return publicGroup ;
+    for (String group : publicGroup) publicGroupMap_.put(group, group) ; */
+  	return ContactUtils.getUserGroups() ;
   }
   public Map<String, String> getSharedGroups() throws Exception { 
     sharedGroupMap_.clear() ;

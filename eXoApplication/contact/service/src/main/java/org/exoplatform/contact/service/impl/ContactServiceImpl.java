@@ -86,7 +86,11 @@ public class ContactServiceImpl implements ContactService {
   public void moveContacts(SessionProvider sysProvider, String username, List<Contact> contacts, String addressType ) throws Exception {
     storage_.moveContacts(sysProvider, username, contacts, addressType) ;
   }
-   
+  
+  public void addGroupToPersonalContact(String userId, String groupId) throws Exception {
+  	storage_.addGroupToPersonalContact(userId, groupId) ;
+  }
+  
   public List<ContactGroup> getGroups(SessionProvider sProvider, String username) throws Exception {
     return storage_.getGroups(sProvider, username);
   }

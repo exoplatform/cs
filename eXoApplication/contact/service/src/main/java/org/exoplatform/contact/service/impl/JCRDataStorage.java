@@ -44,10 +44,12 @@ import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.DataPageList;
 import org.exoplatform.contact.service.GroupContactData;
 import org.exoplatform.contact.service.Tag;
+import org.exoplatform.services.jcr.access.AccessControlEntry;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.services.jcr.ext.hierarchy.impl.NodeHierarchyCreatorImpl;
 import org.exoplatform.services.jcr.util.IdGenerator;
 
 
@@ -780,11 +782,12 @@ public class JCRDataStorage{
   }
 
   public ContactPageList getPublicContactsByAddressBook(SessionProvider sysProvider, String groupId) throws Exception {
+  	String usersPath = nodeHierarchyCreator_.getJcrPath("usersPath") ;
     Node contactHome = getPublicContactHome(SessionProvider.createSystemProvider());
     QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
-    StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
+    StringBuffer queryString = new StringBuffer("/jcr:root" + usersPath 
                                                 + "//element(*,exo:contact)[@exo:categories='")
-                                                .append(groupId).append("']")
+                                                .append(groupId).append("' and @exo:isOwner='true'] ")
                                                 .append("order by @exo:fullName ascending");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
     QueryResult result = query.execute();
@@ -841,11 +844,43 @@ public class JCRDataStorage{
     contactHomeNode.getSession().save(); 
   }
   
+  public void addGroupToPersonalContact(String userId, String groupId) throws Exception {
+  	Node contactHome = getUserContactHome(SessionProvider.createSystemProvider(), userId) ;
+  	Node contactNode = contactHome.getNode(userId) ;
+  	Value[] values = contactNode.getProperty("exo:categories").getValues() ;
+  	List<String> ls = new ArrayList<String>() ;
+  	for(Value vl : values) {
+  		if(vl.getString().equals(groupId)) return ;
+  		ls.add(vl.getString()) ;  		
+  	}
+  	ls.add(groupId) ;
+  	contactNode.setProperty("exo:categories", ls.toArray(new String[]{})) ;
+  	contactNode.save() ;
+  }
+  
+  private void reparePermissions(Node node, String owner) throws Exception {
+  	ExtendedNode extNode = (ExtendedNode)node ;
+  	if (extNode.canAddMixin("exo:privilegeable")) extNode.addMixin("exo:privilegeable");
+    String[] arrayPers = {PermissionType.READ, PermissionType.ADD_NODE, PermissionType.SET_PROPERTY, PermissionType.REMOVE} ;
+    extNode.setPermission(owner, arrayPers) ;
+    List<AccessControlEntry> permsList = extNode.getACL().getPermissionEntries() ;    
+    for(AccessControlEntry accessControlEntry : permsList) {
+      extNode.setPermission(accessControlEntry.getIdentity(), arrayPers) ;      
+    } 
+    extNode.removePermission("any") ;
+    
+  }
+  
   private void saveContact(Node contactHomeNode, Contact contact, boolean isNew) throws Exception {
   	Node contactNode;
     if (isNew) {
       contactNode = contactHomeNode.addNode(contact.getId(), "exo:contact"); 
       contactNode.setProperty("exo:id", contact.getId());
+      if(contact.isOwner()) {
+      	contactNode.setProperty("exo:isOwner", true) ;
+      	reparePermissions(contactHomeNode, contact.getOwnerId()) ;
+      	reparePermissions(contactNode, contact.getOwnerId()) ;
+      }
     } else {
       contactNode = contactHomeNode.getNode(contact.getId());
     }

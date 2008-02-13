@@ -35,8 +35,7 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
  *          hung.nguyen@exoplatform.com
  * Jul 2, 2007  
  */
-public interface DataStorage {
-  
+public interface DataStorage {  
   public List<Contact> getAllContact(String username) throws Exception ;
   public ContactPageList getContactPageListByGroup(String username, String groupId) throws Exception ;
   public ContactPageList getContactPageListByTag(String username, ContactFilter filter) throws Exception ;

@@ -81,6 +81,10 @@ public class Contact {
   private String[] addressBook ;
   private String[] tags ;
   private String[] editPermission ;
+  private String[] sharedForUsers ;
+  private String[] sharedForGroups ;
+  private boolean isOwner = false ;
+  private String ownerId ;
   //private boolean isShared = false ;
   private ContactAttachment attachment ;
   private Date lastUpdated ;
@@ -214,8 +218,20 @@ public class Contact {
 
   public String[] getEditPermission() { return editPermission ; }
   public void setEditPermission(String[] s) { editPermission = s ; }
+  
+  public String[] getSharedForUsers() { return sharedForUsers ; }
+  public void setSharedForUsers(String[] s) { sharedForUsers = s ; }
+  
+  public String[] getSharedForGroups() { return sharedForGroups ; }
+  public void setSharedForGroups(String[] s) { sharedForGroups = s ; }
+  
+  public boolean isOwner(){ return isOwner ; }
+  public void setOwner(boolean owner) { isOwner = owner ; }
+  
+  public void setOwnerId(String ownerId) { this.ownerId = ownerId;}
+	public String getOwnerId() { return ownerId ; }
 
-  public void setAttachment(ContactAttachment attachment) { this.attachment = attachment; }
+	public void setAttachment(ContactAttachment attachment) { this.attachment = attachment; }
   public ContactAttachment getAttachment() { return attachment; }
 
 /*  public void setShared(boolean isShared) { this.isShared = isShared; }
