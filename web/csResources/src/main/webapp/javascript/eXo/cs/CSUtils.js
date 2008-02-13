@@ -41,7 +41,7 @@ CheckBox.prototype.check = function() {
 	}
 	else {
 		if(CheckBox.checkedItem < len) CheckBox.checkedItem++ ;
-		if(CheckBox.checkedItem == len)	CheckBox.allItems.checked = true ;		
+		if(CheckBox.checkedItem == len)	CheckBox.allItems.checked = true ;
 	}
 } ;
 
@@ -49,7 +49,7 @@ eXo.cs.CheckBox = new CheckBox() ;
 
 /***************************************************************************************/
 
-function Spliter() {  
+function Spliter() {
 } ;
 
 Spliter.prototype.doResize = function(e , markerobj, beforeAreaObj, afterAreaObj) {
@@ -69,13 +69,16 @@ Spliter.prototype.doResize = function(e , markerobj, beforeAreaObj, afterAreaObj
   }
   
   if (!this.afterArea) {
-    this.afterArea = eXo.core.DOMUtil.findNextElementByTagName(marker, "div") ; 
+    this.afterArea = eXo.core.DOMUtil.findNextElementByTagName(marker, "div") ;
   }
-  this.beforeArea.style.height = this.beforeArea.offsetHeight + "px" ;
-  this.afterArea.style.height = this.afterArea.offsetHeight + "px" ;  
+  //this.beforeArea.style.height = (this.beforeArea.offsetHeight - 1) + "px" ;
+  //this.afterArea.style.height = (this.afterArea.offsetHeight - 1) + "px" ;
+  this.beforeArea.style.overflowY = "auto" ;
+  this.afterArea.style.overflowY = "auto" ;
+  this.minHeight = 30 ;
   this.beforeY = this.beforeArea.offsetHeight ;
   this.afterY = this.afterArea.offsetHeight ;
-  document.onmousemove = eXo.cs.Spliter.adjustHeight ;  
+  document.onmousemove = eXo.cs.Spliter.adjustHeight ;
   document.onmouseup = eXo.cs.Spliter.clear ;
 } ;
 
@@ -83,19 +86,29 @@ Spliter.prototype.adjustHeight = function(evt) {
   evt = (window.event) ? window.event : evt ;
   var Spliter = eXo.cs.Spliter ;
   var delta = evt.clientY - Spliter.posY ;
-  var afterHeight = (Spliter.afterY - delta) ;
-  var beforeHeight = (Spliter.beforeY + delta) ;
+  var afterHeight = Spliter.afterY - delta ;
+  var beforeHeight = Spliter.beforeY + delta ;
   if (beforeHeight <= 0  || afterHeight <= 0) return ;
-  Spliter.beforeArea.style.height =  beforeHeight + "px" ;
-  Spliter.afterArea.style.height =  afterHeight + "px" ;  
+  
+  Spliter.beforeArea.style.height =  (beforeHeight < Spliter.minHeight) ? Spliter.minHeight : beforeHeight + "px" ;
+  Spliter.afterArea.style.height =  (afterHeight < Spliter.minHeight) ? Spliter.minHeight : afterHeight + "px" ;
+  
 } ;
 
 Spliter.prototype.clear = function() {
-  document.onmousemove = null ;
+  try {
+    var Spliter = eXo.cs.Spliter ;
+    document.onmousemove = null ;
+    Spliter.minHeight = null ;
+    Spliter.beforeY = null ;
+    Spliter.afterY = null ;
+    Spliter.beforeArea = null ;
+    Spliter.afterArea = null ;
+    Spliter.posY = null ;
+  } catch(e) {} ;
 } ;
 
 function Utils() {}
-
 
 Utils.prototype.showHidePane = function(clickobj, beforeobj, afterobj) {
 	if(typeof(beforeobj) == "string") beforeobj = document.getElementById(beforeobj) ;
