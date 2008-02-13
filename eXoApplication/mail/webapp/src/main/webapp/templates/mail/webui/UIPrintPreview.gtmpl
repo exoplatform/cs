@@ -45,7 +45,7 @@
         <%}%>
         </div>
       </div>
-      <div class="DateAndTime"><%=Utils.formatDate('EEEE, MMMM dd, yyyy HH:mm aaa', msg.getReceivedDate())%></div>
+      <div class="DateAndTime"><%=MailUtils.formatDate('EEEE, MMMM dd, yyyy HH:mm aaa', msg.getReceivedDate())%></div>
       <div style="clear: both;"><span></span></div>
     </div>
     <div class="PrintContent"  >

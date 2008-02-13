@@ -18,6 +18,11 @@ package org.exoplatform.mail;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.exoplatform.contact.service.Contact;
@@ -106,5 +111,32 @@ public class MailUtils {
 			if(((JobDetail)obj).getName().equals(username + ":" + accountId)) return true ; 
 		}
   	return false ;
+  }
+  
+  public static String formatDate(String format, Date date) {
+    Format formatter = new SimpleDateFormat(format);
+    return formatter.format(date);
+  }
+  
+  public static String formatDate(Date date) {
+    Calendar systemDate =  new GregorianCalendar() ;
+    Calendar cal =  new GregorianCalendar() ;
+    cal.setTime(date);
+    boolean isSameYear = (systemDate.get(Calendar.YEAR) == cal.get(Calendar.YEAR)) ;
+    boolean isSameMonth = (systemDate.get(Calendar.MONTH) == cal.get(Calendar.MONTH)) ;
+    boolean isSameWeek = (isSameMonth && (systemDate.get(Calendar.WEEK_OF_MONTH) == cal.get(Calendar.WEEK_OF_MONTH)));
+    boolean isSameDate = (isSameWeek && (systemDate.get(Calendar.DAY_OF_WEEK) == cal.get(Calendar.DAY_OF_WEEK)));
+    
+    if (isSameYear) 
+      if (isSameDate) 
+        return (new SimpleDateFormat("HH:mm aaa")).format(date);
+      else if (isSameWeek)
+        return (new SimpleDateFormat("EEEE")).format(date);
+      else if (isSameMonth)
+        return (new SimpleDateFormat("EEEE, dd")).format(date);
+      else 
+        return (new SimpleDateFormat("MMM dd")).format(date);
+    else 
+      return (new SimpleDateFormat("MMM dd, yyyy")).format(date);
   }
 }

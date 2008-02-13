@@ -32,7 +32,6 @@ import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.SessionsUtils;
-import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -120,7 +119,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
     }
     addUIFormInput(new UIFormSelectBox(MONTH, MONTH, monthOptions)) ;
 
-    String date = Utils.formatDate("dd/MM/yyyy", new Date()) ;
+    String date = MailUtils.formatDate("dd/MM/yyyy", new Date()) ;
     String strDate = date.substring(date.lastIndexOf("/") + 1, date.length()) ; 
     int thisYear = Integer.parseInt(strDate) ;
     List<SelectItemOption<String>> yearOptions = new ArrayList<SelectItemOption<String>>() ;

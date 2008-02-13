@@ -141,7 +141,7 @@
                   </div>
                   <div class="FieldContainer">
                     <div class="Title">Date & time:</div>
-                    <div class="Address"><%=Utils.formatDate('EEEE, dd MMMM, yyyy HH:mm:ss aaa', msg.getReceivedDate())%></div>
+                    <div class="Address"><%=MailUtils.formatDate('EEEE, dd MMMM, yyyy HH:mm:ss aaa', msg.getReceivedDate())%></div>
                     <div style="clear: left;"><span></span></div>
                   </div>
                   </div>

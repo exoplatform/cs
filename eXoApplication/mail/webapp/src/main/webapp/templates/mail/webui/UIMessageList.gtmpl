@@ -158,7 +158,7 @@
           String cssPreviousPage = "FloatBlockHidden";
           String cssNextPage = "FloatBlockHidden";
           long currentPage = 1;
-          String mailRange = "there is no message";
+          String mailRange = "";
           if (pageList != null && (uicomponent.getMessageList().size() != 0)) {
             currentPage = pageList.getCurrentPage();
             if (currentPage > 1) cssPreviousPage = "FloatBlock";
@@ -179,7 +179,7 @@
       </div>
       <div class="LeftPageIteratorBlock">
         <div class="TotalPages">Message(s)
-        	<!--  <span class="MailQuantity"> $mailRange </span> -->
+        	<span class="MailQuantity"> $mailRange </span>
         </div>
       </div>
       <div style="clear: right;"><span></span></div>
@@ -406,9 +406,9 @@
     				<td class="$readStatus">
     				  <a href="$actionLink">
     				    <%if (msg.getReceivedDate() != null) { %>
-    				      <%=Utils.formatDate('MMM dd, yyyy HH:mm aaa', msg.getReceivedDate())%>
+    				      <%=MailUtils.formatDate(msg.getReceivedDate())%>
     				    <%} else if (msg.getSendDate() != null){%>
-    				      <%=Utils.formatDate('MMM dd, yyyy HH:mm aaa', msg.getSendDate())%>
+    				      <%=MailUtils.formatDate(msg.getSendDate())%>
     				    <%}%>
     				  </a>
     				</td>
