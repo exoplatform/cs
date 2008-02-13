@@ -21,7 +21,6 @@ import java.util.List;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumLinkData;
-import org.exoplatform.forum.service.ForumOption;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.JCRPageList;
 import org.exoplatform.forum.service.Poll;
@@ -29,6 +28,7 @@ import org.exoplatform.forum.service.Post;
 import org.exoplatform.forum.service.Tag;
 import org.exoplatform.forum.service.Topic;
 import org.exoplatform.forum.service.TopicView;
+import org.exoplatform.forum.service.UserProfile;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 
@@ -197,11 +197,11 @@ public class ForumServiceImpl implements ForumService{
 		storage_.removeTag(sProvider, tagId) ;
 	}
 
-	public ForumOption getOption(SessionProvider sProvider, String userName) throws Exception {
-	  return storage_.getOption(sProvider, userName);
+	public UserProfile getUserProfile(SessionProvider sProvider, String userName) throws Exception {
+	  return storage_.getUserProfile(sProvider, userName);
   }
 
-	public void saveOption(SessionProvider sProvider, ForumOption newOption) throws Exception {
-		storage_.saveOption(sProvider, newOption) ;
+	public void saveUserProfile(SessionProvider sProvider, UserProfile userProfile, boolean isOption, boolean isBan) throws Exception {
+		storage_.saveUserProfile(sProvider, userProfile, isOption, isBan) ;
   }
 }

@@ -23,11 +23,11 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.forum.ForumSessionUtils;
 import org.exoplatform.forum.service.ForumAttachment;
-import org.exoplatform.forum.service.ForumOption;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.JCRPageList;
 import org.exoplatform.forum.service.Post;
 import org.exoplatform.forum.service.Topic;
+import org.exoplatform.forum.service.UserProfile;
 import org.exoplatform.forum.webui.popup.UIMovePostForm;
 import org.exoplatform.forum.webui.popup.UIMoveTopicForm;
 import org.exoplatform.forum.webui.popup.UIPollForm;
@@ -110,7 +110,7 @@ public class UITopicDetail extends UIForm {
 	private List<Post> posts ;
 	
 	private long maxPost = 10 ;
-	private ForumOption forumOption = null;
+	private UserProfile forumOption = null;
 	private String userName = " " ;
 	public UITopicDetail() throws Exception {
 		addUIFormInput( new UIFormStringInput("gopage1", null)) ;
@@ -119,7 +119,7 @@ public class UITopicDetail extends UIForm {
 		addChild(UIPostRules.class, null, null);
 	}
 	
-	private ForumOption getOption() {
+	private UserProfile getOption() {
 		return forumOption ;
 	}
 	

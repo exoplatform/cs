@@ -6,7 +6,7 @@
 	import org.exoplatform.forum.service.Topic ;
   import org.exoplatform.forum.ForumSessionUtils; 
   import org.exoplatform.forum.ForumFormatUtils;
-	import org.exoplatform.forum.service.ForumOption ;
+	import org.exoplatform.forum.service.UserProfile ;
 	import org.exoplatform.web.application.JavascriptManager;
   def rcontext = _ctx.getRequestContext() ;
   JavascriptManager jsmanager = rcontext.getJavascriptManager();
@@ -15,7 +15,7 @@
 	uicomponent.initPage() ;	
 	Topic topic = uicomponent.getTopic() ;
 	boolean isShowMenu = ForumSessionUtils.isAnonim();
-	ForumOption option = uicomponent.getOption();
+	UserProfile option = uicomponent.getOption();
 %>
 
 <div class="UITopicDetail">

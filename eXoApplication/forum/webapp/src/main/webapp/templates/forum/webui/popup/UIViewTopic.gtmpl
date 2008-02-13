@@ -1,7 +1,7 @@
 <%  
 	import org.exoplatform.forum.service.Post ;
 	import org.exoplatform.forum.ForumFormatUtils;
-	import org.exoplatform.forum.service.ForumOption ;
+	import org.exoplatform.forum.service.UserProfile ;
 %>
 <div class="UIViewTopic">
   <% uiform.begin() %>  
@@ -9,7 +9,7 @@
 		 String title = post.getSubject();	
 		 String messager = ForumFormatUtils.convertCodeHTML(post.getMessage());
 		 String classIcon = post.getIcon() ;
-		 ForumOption option = uicomponent.getOption();
+		 UserProfile option = uicomponent.getOption();
 		 String postCreatedDate = ForumFormatUtils.getFormatDate((option.getLongDateFormat() + ", " + option.getTimeFormat()),post.getCreatedDate());	
 		 List attachments = post.getAttachments() ;
 	%>

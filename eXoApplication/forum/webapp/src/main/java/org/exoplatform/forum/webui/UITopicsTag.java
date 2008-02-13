@@ -22,11 +22,11 @@ import java.util.TreeMap;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.forum.ForumFormatUtils;
 import org.exoplatform.forum.ForumSessionUtils;
-import org.exoplatform.forum.service.ForumOption;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.JCRPageList;
 import org.exoplatform.forum.service.Tag;
 import org.exoplatform.forum.service.Topic;
+import org.exoplatform.forum.service.UserProfile;
 import org.exoplatform.forum.webui.popup.UIAddTagForm;
 import org.exoplatform.forum.webui.popup.UIPopupAction;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -69,7 +69,7 @@ public class UITopicsTag extends UIForm {
 	private long maxTopic = 10 ;
 	private boolean isUpdateTag = true ;
 	private boolean isUpdateTopicTag = true ;
-	private ForumOption forumOption = null;
+	private UserProfile UserProfile = null;
 	public UITopicsTag() throws Exception {
 		addChild(UIForumPageIterator.class, null, "TagPageIterator") ;
 	}
@@ -78,17 +78,17 @@ public class UITopicsTag extends UIForm {
 		this.tagId = tagId ;
 		this.isUpdateTag = true ;
 		this.isUpdateTopicTag = true ;
-		this.forumOption = this.getAncestorOfType(UIForumPortlet.class).getUserProfile() ;
+		this.UserProfile  = this.getAncestorOfType(UIForumPortlet.class).getUserProfile() ;
   }
 	
-	private ForumOption getOption() {
-		return forumOption ;
+	private UserProfile getOption() {
+		return UserProfile ;
 	}
 	
 	@SuppressWarnings("unused")
   private void getListTopicTag() throws Exception {
 		this.listTopic = forumService.getTopicsByTag(ForumSessionUtils.getSystemProvider(), this.tagId) ;
-		long maxTopic = this.forumOption.getMaxTopicInPage() ;
+		long maxTopic = this.UserProfile.getMaxTopicInPage() ;
 		if(maxTopic > 0) this.maxTopic = maxTopic;
 		this.listTopic.setPageSize(this.maxTopic) ;
 		this.getChild(UIForumPageIterator.class).updatePageList(this.listTopic) ;

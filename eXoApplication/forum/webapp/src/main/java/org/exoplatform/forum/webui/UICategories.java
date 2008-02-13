@@ -22,9 +22,9 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.forum.ForumSessionUtils;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
-import org.exoplatform.forum.service.ForumOption;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.Topic;
+import org.exoplatform.forum.service.UserProfile;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
@@ -53,7 +53,7 @@ public class UICategories extends UIContainer	{
 	}
 
 	@SuppressWarnings({ "deprecation", "unused" })
-  private ForumOption getOption() {
+  private UserProfile getOption() {
 		return this.getAncestorOfType(UIForumPortlet.class).getUserProfile() ;
 	}
 	

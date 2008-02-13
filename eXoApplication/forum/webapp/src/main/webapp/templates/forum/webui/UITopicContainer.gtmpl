@@ -6,7 +6,7 @@
 	import org.exoplatform.forum.service.JCRPageList ;
 	import org.exoplatform.forum.ForumFormatUtils ;
 	import org.exoplatform.forum.ForumSessionUtils; 
-	import org.exoplatform.forum.service.ForumOption ;
+	import org.exoplatform.forum.service.UserProfile ;
 	import java.util.GregorianCalendar;
 %>
 <%	
@@ -14,7 +14,7 @@
 	Forum forum = uicomponent.getForum() ;
 	String forumName = forum.getForumName();
 	boolean isShowMenu = ForumSessionUtils.isAnonim();
-	ForumOption option = uicomponent.getOption();
+	UserProfile option = uicomponent.getOption();
 %>
 <div class="UITopicContainer">
 	<% uiform.begin() %>

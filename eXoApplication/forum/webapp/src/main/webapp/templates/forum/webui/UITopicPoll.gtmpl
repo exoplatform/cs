@@ -3,7 +3,7 @@
 	import org.exoplatform.forum.service.Poll ;
 	import org.exoplatform.forum.ForumSessionUtils; 
 	import org.exoplatform.forum.ForumFormatUtils ;
-	import org.exoplatform.forum.service.ForumOption 
+	import org.exoplatform.forum.service.UserProfile 
 	import java.util.GregorianCalendar;
 %>
 	<% 
@@ -95,7 +95,7 @@
 			Date dateOut = poll.getCreatedDate() ;
 			Date today = new Date() ;
 			dateOut.setDate(dateOut.getDate() + timeOut);
-			ForumOption option = uicomponent.getOption();
+			UserProfile option = uicomponent.getOption();
 			String timeOutDate =_ctx.appRes("UITopicPoll.label.timeOutPoll") + ForumFormatUtils.getFormatDate((option.getLongDateFormat() + ", " + option.getTimeFormat()),dateOut);
 			if(dateOut.getDate() < today.getDate()) {
 				timeOutDate = " Poll is Closed !" ;

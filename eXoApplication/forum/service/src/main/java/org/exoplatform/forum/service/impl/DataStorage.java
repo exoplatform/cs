@@ -21,13 +21,13 @@ import java.util.List;
 import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumLinkData;
-import org.exoplatform.forum.service.ForumOption;
 import org.exoplatform.forum.service.JCRPageList;
 import org.exoplatform.forum.service.Poll;
 import org.exoplatform.forum.service.Post;
 import org.exoplatform.forum.service.Tag;
 import org.exoplatform.forum.service.Topic;
 import org.exoplatform.forum.service.TopicView;
+import org.exoplatform.forum.service.UserProfile;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 /**
@@ -82,6 +82,6 @@ public interface DataStorage {
 	public void saveTag(SessionProvider sProvider, Tag newTag, boolean isNew) throws Exception ;
 	public void removeTag(SessionProvider sProvider, String tagId) throws Exception ;
 
-	public void saveOption(SessionProvider sProvider, ForumOption newOption) throws Exception ;
-	public ForumOption getOption(SessionProvider sProvider, String userName) throws Exception ;
+	public void saveUserProfile(SessionProvider sProvider, UserProfile userProfile, boolean isOption, boolean isBan) throws Exception ;
+	public UserProfile getUserProfile(SessionProvider sProvider, String userName) throws Exception ;
 }

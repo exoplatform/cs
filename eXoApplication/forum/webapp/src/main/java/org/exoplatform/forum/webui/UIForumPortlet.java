@@ -16,12 +16,10 @@
  ***************************************************************************/
 package org.exoplatform.forum.webui;
 
-import java.util.Date;
-
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.forum.ForumSessionUtils;
-import org.exoplatform.forum.service.ForumOption;
 import org.exoplatform.forum.service.ForumService;
+import org.exoplatform.forum.service.UserProfile;
 import org.exoplatform.forum.webui.popup.UIPopupAction;
 import org.exoplatform.web.application.RequestContext;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -45,7 +43,7 @@ public class UIForumPortlet extends UIPortletApplication {
 	private boolean isForumRendered = false;
 	private boolean isTagRendered = false;
 	private boolean isJumpRendered = false;
-	private ForumOption forumOption = null;
+	private UserProfile userProfile = null;
 	public UIForumPortlet() throws Exception {
 		setUserProfile();
 		addChild(UIBreadcumbs.class, null, null) ;
@@ -102,37 +100,12 @@ public class UIForumPortlet extends UIPortletApplication {
 		context.addUIComponentToUpdateByAjax(popupAction) ;
 	}
 	
-	public ForumOption getUserProfile() {
-	  return this.forumOption ;
+	public UserProfile getUserProfile() {
+	  return this.userProfile ;
   }
   @SuppressWarnings("deprecation")
 	public void setUserProfile() throws Exception {
-  	ForumOption forumOption;
-  	String userId = ForumSessionUtils.getCurrentUser() ;
-		Date dateHost = new Date() ;
-		double timeZone = dateHost.getTimezoneOffset()/ 60 ;
-		if(userId != null && userId.length() > 0) {
-			forumOption = forumService.getOption(ForumSessionUtils.getSystemProvider(), userId) ;
-			if(forumOption == null) {
-				forumOption = new ForumOption() ;
-				forumOption.setTimeZone(timeZone) ;
-				forumOption.setShortDateFormat("MM/dd/yyyy") ;
-				forumOption.setLongDateFormat("DDD,MMM dd,yyyy") ;
-				forumOption.setTimeFormat("hh:mm a") ;
-				forumOption.setMaxTopicInPage(10) ;
-				forumOption.setMaxPostInPage(10) ;
-				forumOption.setIsShowForumJump(true) ;
-			}
-		} else {
-			forumOption = new ForumOption() ;
-			forumOption.setTimeZone(timeZone) ;
-			forumOption.setShortDateFormat("MM/dd/yyyy") ;
-			forumOption.setLongDateFormat("DDD,MMM dd,yyyy") ;
-			forumOption.setTimeFormat("hh:mm a") ;
-			forumOption.setMaxTopicInPage(10) ;
-			forumOption.setMaxPostInPage(10) ;
-			forumOption.setIsShowForumJump(true) ;
-		}
-		this.forumOption = forumOption ;
+  	this.userProfile = forumService.getUserProfile(ForumSessionUtils.getSystemProvider(), ForumSessionUtils.getCurrentUser()) ;
+		System.out.println("\n\nfsif jpsodf jds: " + userProfile.getUserName());
   }
 }

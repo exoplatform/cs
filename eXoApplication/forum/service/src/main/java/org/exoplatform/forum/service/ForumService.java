@@ -281,7 +281,7 @@ public interface ForumService {
 	public void saveTag(SessionProvider sProvider, Tag newTag, boolean isNew) throws Exception ;
 	public void removeTag(SessionProvider sProvider, String tagId) throws Exception ;
 
-	public void saveOption(SessionProvider sProvider, ForumOption newOption) throws Exception ;
-	public ForumOption getOption(SessionProvider sProvider, String userName) throws Exception ;
+	public void saveUserProfile(SessionProvider sProvider, UserProfile userProfile, boolean isOption, boolean isBan) throws Exception ;
+	public UserProfile getUserProfile(SessionProvider sProvider, String userName) throws Exception ;
 	
 }

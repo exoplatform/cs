@@ -23,11 +23,11 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.forum.ForumFormatUtils;
 import org.exoplatform.forum.ForumSessionUtils;
 import org.exoplatform.forum.service.Forum;
-import org.exoplatform.forum.service.ForumOption;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.JCRPageList;
 import org.exoplatform.forum.service.Tag;
 import org.exoplatform.forum.service.Topic;
+import org.exoplatform.forum.service.UserProfile;
 import org.exoplatform.forum.webui.popup.UIForumForm;
 import org.exoplatform.forum.webui.popup.UIMergeTopicForm;
 import org.exoplatform.forum.webui.popup.UIMoveForumForm;
@@ -97,14 +97,14 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 	private boolean isUpdate = false;
 	private long maxTopic = 10 ;
 	private long maxPost = 10 ;
-	private ForumOption forumOption = null;
+	private UserProfile forumOption = null;
 	public UITopicContainer() throws Exception {
 		addUIFormInput( new UIFormStringInput("gopage1", null)) ;
 		addUIFormInput( new UIFormStringInput("gopage2", null)) ;
 		addChild(UIForumPageIterator.class, null, "ForumPageIterator") ;
 	}
 	
-	private ForumOption getOption() {
+	private UserProfile getOption() {
 		return forumOption ;
 	}
 	

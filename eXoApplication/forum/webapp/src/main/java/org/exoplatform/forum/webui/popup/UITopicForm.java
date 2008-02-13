@@ -239,9 +239,9 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
 			UITopicForm uiForm = event.getSource() ;
 			int t = 0, k = 1 ;
 			UIFormStringInput stringInputTitle = uiForm.getUIStringInput(FIELD_TOPICTITLE_INPUT) ; 
-			String topicTitle = "		 " + stringInputTitle.getValue();
+			String topicTitle = "  " + stringInputTitle.getValue();
 			topicTitle = topicTitle.trim() ;
-			String messenger = "		 " +	uiForm.getChild(UIFormWYSIWYGInput.class).getValue();
+			String messenger = "  " +	uiForm.getChild(UIFormWYSIWYGInput.class).getValue();
 			messenger = messenger.trim() ;
 			t = messenger.length() ;
 			if(topicTitle.length() <= 3) {k = 0;}
@@ -264,16 +264,15 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
 				viewTopic.setPostView(postNew) ;
 				event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
 			}else {
-				String[] sms = { ""} ;
+				String sms = "" ;
 				UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
 				if(k == 0) {
-					sms = new String[] { "Thread Title" } ;
-					if(t < 20) sms = new String[] { "Thread Title and Messenger" } ;
+					sms = "Thread Title" ;
+					if(t < 20) sms = "Thread Title and Messenger";
 					Object[] args = { sms };
 					uiApp.addMessage(new ApplicationMessage("NameValidator.msg.ShortText", args, ApplicationMessage.WARNING)) ;
 				} else if(t < 20) {
-					sms = new String[] { "Messenger" } ;
-					Object[] args = { sms };
+					Object[] args = { "Messenger" };
 					uiApp.addMessage(new ApplicationMessage("NameValidator.msg.ShortMessenger", args, ApplicationMessage.WARNING)) ;
 				}
 			}
@@ -286,9 +285,9 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
 			UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
 			int t = 0, k = 1 ;
 			UIFormStringInput stringInputTitle = uiForm.getUIStringInput(FIELD_TOPICTITLE_INPUT) ; 
-			String topicTitle = "		 " + stringInputTitle.getValue();
+			String topicTitle = "  " + stringInputTitle.getValue();
 			topicTitle = topicTitle.trim() ;
-			String messenger = "		 " +	uiForm.getChild(UIFormWYSIWYGInput.class).getValue();
+			String messenger = "  " +	uiForm.getChild(UIFormWYSIWYGInput.class).getValue();
 			messenger = messenger.trim() ;
 			t = messenger.length() ;
 			if(topicTitle.length() <= 3) {k = 0;}
@@ -348,14 +347,16 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
 				WebuiRequestContext context = RequestContext.getCurrentInstance() ;
 				context.addUIComponentToUpdateByAjax(forumPortlet) ;
 			} else {
-				String[] args = { ""} ;
+				String sms = "" ;
+				UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
 				if(k == 0) {
-					args = new String[] { "Thread Title" } ;
-					if(t < 20) args = new String[] { "Thread Title and Messenger" } ;
-					throw new MessageException(new ApplicationMessage("NameValidator.msg.ShortText", args)) ;
+					sms = "Thread Title" ;
+					if(t < 20) sms = "Thread Title and Messenger";
+					Object[] args = { sms };
+					uiApp.addMessage(new ApplicationMessage("NameValidator.msg.ShortText", args, ApplicationMessage.WARNING)) ;
 				} else if(t < 20) {
-					args = new String[] { "Messenger" } ;
-					throw new MessageException(new ApplicationMessage("NameValidator.msg.ShortMessenger", args)) ;
+					Object[] args = { "Messenger" };
+					uiApp.addMessage(new ApplicationMessage("NameValidator.msg.ShortMessenger", args, ApplicationMessage.WARNING)) ;
 				}
 			}
 		}

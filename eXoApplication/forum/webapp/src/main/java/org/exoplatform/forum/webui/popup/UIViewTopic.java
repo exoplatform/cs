@@ -16,8 +16,8 @@
  ***************************************************************************/
 package org.exoplatform.forum.webui.popup;
 
-import org.exoplatform.forum.service.ForumOption;
 import org.exoplatform.forum.service.Post;
+import org.exoplatform.forum.service.UserProfile;
 import org.exoplatform.forum.webui.UIForumPortlet;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -46,7 +46,7 @@ public class UIViewTopic extends UIForm implements UIPopupComponent {
 	public UIViewTopic() {
 	}
 	
-	private ForumOption getOption() {
+	private UserProfile getOption() {
 		return this.getAncestorOfType(UIForumPortlet.class).getUserProfile() ;
 	}
 	

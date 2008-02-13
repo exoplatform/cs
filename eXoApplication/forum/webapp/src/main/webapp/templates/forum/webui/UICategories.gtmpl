@@ -5,8 +5,8 @@
 	import org.exoplatform.forum.service.Post; 
 	import java.util.GregorianCalendar;
 	import org.exoplatform.forum.ForumFormatUtils;
-	import org.exoplatform.forum.service.ForumOption ;
-	ForumOption option = uicomponent.getOption();
+	import org.exoplatform.forum.service.UserProfile ;
+	UserProfile option = uicomponent.getOption();
 %>
 <div class="UICategories" id="$uicomponent.id">
 	<div class="UIForumWorkingWorkspace">

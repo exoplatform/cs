@@ -37,7 +37,6 @@ import org.exoplatform.forum.service.Category;
 import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumAttachment;
 import org.exoplatform.forum.service.ForumLinkData;
-import org.exoplatform.forum.service.ForumOption;
 import org.exoplatform.forum.service.ForumPageList;
 import org.exoplatform.forum.service.JCRForumAttachment;
 import org.exoplatform.forum.service.JCRPageList;
@@ -46,6 +45,7 @@ import org.exoplatform.forum.service.Post;
 import org.exoplatform.forum.service.Tag;
 import org.exoplatform.forum.service.Topic;
 import org.exoplatform.forum.service.TopicView;
+import org.exoplatform.forum.service.UserProfile;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 
@@ -60,6 +60,8 @@ import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
  */
 public class JCRDataStorage{
 	private final static String FORUM_SERVICE = "ForumService" ;
+	private final static String USER_ADMINISTRATION = "UserAdministration" ;
+	private final static String USER_PROFILE = "UserProfile" ;
 	private final static String NT_UNSTRUCTURED = "nt:unstructured".intern() ;
 	private NodeHierarchyCreator nodeHierarchyCreator_ ;
 	public JCRDataStorage(NodeHierarchyCreator nodeHierarchyCreator)throws Exception {
@@ -73,7 +75,21 @@ public class JCRDataStorage{
     } catch (PathNotFoundException e) {
     	return appNode.addNode(FORUM_SERVICE, NT_UNSTRUCTURED) ;
     }
-//		if(appNode.hasNode(FORUM_SERVICE)) return appNode.getNode(FORUM_SERVICE) ;
+	}
+	
+	private Node getUserProfileNode(SessionProvider sProvider) throws Exception {
+		Node forumHomeNode = getForumHomeNode(sProvider) ;
+		Node UserAdministration ;
+		try {
+			UserAdministration = forumHomeNode.getNode(USER_ADMINISTRATION) ;
+    } catch (PathNotFoundException e) {
+    	UserAdministration = forumHomeNode.addNode(USER_ADMINISTRATION, NT_UNSTRUCTURED) ;
+    }
+    try {
+    	return UserAdministration.getNode(USER_PROFILE) ;
+    } catch (PathNotFoundException e) {
+    	return UserAdministration.addNode(USER_PROFILE, NT_UNSTRUCTURED) ;
+    }
 	}
 	
 	public List<Category> getCategories(SessionProvider sProvider) throws Exception {
@@ -1033,47 +1049,84 @@ public class JCRDataStorage{
 	}
 	
 	
-	
-	public ForumOption getOption(SessionProvider sProvider, String userName) throws Exception {
-		if(userName == null || userName.length() <= 0) return null ;
-		Node forumHomeNode = getForumHomeNode(sProvider) ;
-		Node newOptionNode ;
-		ForumOption forumOption = new ForumOption();
-		userName = userName.trim().replaceAll(" ", "dc0") ;
-		if(forumHomeNode.hasNode(userName)) {
-			newOptionNode = forumHomeNode.getNode(userName) ;
-			if(newOptionNode.hasProperty("exo:userName"))forumOption.setUserName(userName);
-			if(newOptionNode.hasProperty("exo:timeZone"))forumOption.setTimeZone(newOptionNode.getProperty("exo:timeZone").getDouble());
-			if(newOptionNode.hasProperty("exo:shortDateformat"))forumOption.setShortDateFormat(newOptionNode.getProperty("exo:shortDateformat").getString());
-			if(newOptionNode.hasProperty("exo:longDateformat"))forumOption.setLongDateFormat(newOptionNode.getProperty("exo:longDateformat").getString());
-			if(newOptionNode.hasProperty("exo:timeFormat"))forumOption.setTimeFormat(newOptionNode.getProperty("exo:timeFormat").getString());
-			if(newOptionNode.hasProperty("exo:maxPost"))forumOption.setMaxPostInPage(newOptionNode.getProperty("exo:maxPost").getLong());
-			if(newOptionNode.hasProperty("exo:maxTopic"))forumOption.setMaxTopicInPage(newOptionNode.getProperty("exo:maxTopic").getLong());
-			if(newOptionNode.hasProperty("exo:isShowForumJump"))forumOption.setIsShowForumJump(newOptionNode.getProperty("exo:isShowForumJump").getBoolean());
-			return forumOption;
+	//TODO: coding !
+	public UserProfile getUserProfile(SessionProvider sProvider, String userName) throws Exception {
+		UserProfile userProfile = new UserProfile();
+		if(userName == null || userName.length() <= 0) return userProfile ;
+		Node userProfileNode = getForumHomeNode(sProvider) ;
+		Node newProfileNode ;
+		String userId = userName.trim().replaceAll(" ", "dc0") ;
+		System.out.println("\n da chay den day 1: " + userId);
+		try {	
+			System.out.println("\n da chay den day 2: " + userName + "\n\n");
+			newProfileNode = userProfileNode.getNode(userName) ;
+			if(newProfileNode.hasProperty("exo:userId"))userProfile.setUserId(userId);
+			if(newProfileNode.hasProperty("exo:userName"))userProfile.setUserName(userName);
+			if(newProfileNode.hasProperty("exo:timeZone"))userProfile.setTimeZone(newProfileNode.getProperty("exo:timeZone").getDouble());
+			if(newProfileNode.hasProperty("exo:shortDateformat"))userProfile.setShortDateFormat(newProfileNode.getProperty("exo:shortDateformat").getString());
+			if(newProfileNode.hasProperty("exo:longDateformat"))userProfile.setLongDateFormat(newProfileNode.getProperty("exo:longDateformat").getString());
+			if(newProfileNode.hasProperty("exo:timeFormat"))userProfile.setTimeFormat(newProfileNode.getProperty("exo:timeFormat").getString());
+			if(newProfileNode.hasProperty("exo:maxPost"))userProfile.setMaxPostInPage(newProfileNode.getProperty("exo:maxPost").getLong());
+			if(newProfileNode.hasProperty("exo:maxTopic"))userProfile.setMaxTopicInPage(newProfileNode.getProperty("exo:maxTopic").getLong());
+			if(newProfileNode.hasProperty("exo:isShowForumJump"))userProfile.setIsShowForumJump(newProfileNode.getProperty("exo:isShowForumJump").getBoolean());
+			return userProfile;
+		}catch(PathNotFoundException e) {
+			System.out.println("\nCo chay vao day ko: " + userName + "\n\n");
+			return userProfile ;
 		}
-		return null ;
   }
 
-	public void saveOption(SessionProvider sProvider, ForumOption newOption) throws Exception {
-		Node forumHomeNode = getForumHomeNode(sProvider) ;
-		Node newOptionNode ;
-		String optionId = newOption.getUserName().trim().replaceAll(" ", "dc0") ;
+	public void saveUserProfile(SessionProvider sProvider, UserProfile newUserProfile, boolean isOption, boolean isBan) throws Exception {
+		Node userProfileNode = getUserProfileNode(sProvider) ;
+		Node newProfileNode ;
+		String userName = newUserProfile.getUserName() ;
+		String userNameId = userName.trim().replaceAll(" ", "dc0") ;
 		try {
-			newOptionNode = forumHomeNode.getNode(optionId) ;
+			newProfileNode = userProfileNode.getNode(userNameId) ;
 		}catch (PathNotFoundException e) {
-			newOptionNode = forumHomeNode.addNode(optionId, "exo:forumOption") ;
-			newOptionNode.setProperty("exo:userName", optionId);
+			newProfileNode = userProfileNode.addNode(userNameId, "exo:userProfile") ;
+			newProfileNode.setProperty("exo:userId", userNameId);
 		}
-		newOptionNode.setProperty("exo:timeZone", newOption.getTimeZone());
-		newOptionNode.setProperty("exo:shortDateformat", newOption.getShortDateFormat());
-		newOptionNode.setProperty("exo:longDateformat", newOption.getLongDateFormat());
-		newOptionNode.setProperty("exo:timeFormat", newOption.getTimeFormat());
-		newOptionNode.setProperty("exo:maxPost", newOption.getMaxPostInPage());
-		newOptionNode.setProperty("exo:maxTopic", newOption.getMaxTopicInPage());
-		newOptionNode.setProperty("exo:isShowForumJump", newOption.getIsShowForumJump());
-		forumHomeNode.save() ;
-		forumHomeNode.getSession().save() ;
+		if(!isBan && !isOption) {
+			newProfileNode.setProperty("exo:userName", userName);
+			newProfileNode.setProperty("exo:userTitle", newUserProfile.getUserTitle());
+			
+			newProfileNode.setProperty("exo:signature", newUserProfile.getSignature());
+			newProfileNode.setProperty("exo:totalPost", newUserProfile.getTotalPost());
+			newProfileNode.setProperty("exo:totalTopic", newUserProfile.getTotalTopic());
+			
+			newProfileNode.setProperty("exo:moderateForums", newUserProfile.getModerateForums());
+			newProfileNode.setProperty("exo:moderateTopics", newUserProfile.getModerateTopics());
+			newProfileNode.setProperty("exo:readTopic", newUserProfile.getReadTopic());
+			
+			newProfileNode.setProperty("exo:lastLoginDate", getGreenwichMeanTime());
+			newProfileNode.setProperty("exo:lastPostDate", getGreenwichMeanTime());
+			newProfileNode.setProperty("exo:isDisplaySignature", newUserProfile.getIsDisplaySignature());
+			newProfileNode.setProperty("exo:isDisplayAvatar", newUserProfile.getIsDisplayAvatar());
+		}
+		//UserOption
+		if(isOption) {
+			newProfileNode.setProperty("exo:timeZone", newUserProfile.getTimeZone());
+			newProfileNode.setProperty("exo:shortDateformat", newUserProfile.getShortDateFormat());
+			newProfileNode.setProperty("exo:longDateformat", newUserProfile.getLongDateFormat());
+			newProfileNode.setProperty("exo:timeFormat", newUserProfile.getTimeFormat());
+			newProfileNode.setProperty("exo:maxPost", newUserProfile.getMaxPostInPage());
+			newProfileNode.setProperty("exo:maxTopic", newUserProfile.getMaxTopicInPage());
+			newProfileNode.setProperty("exo:isShowForumJump", newUserProfile.getIsShowForumJump());
+		}
+		//UserBan
+		if(isBan){
+			newProfileNode.setProperty("exo:isBanned", newUserProfile.getIsBanned());
+			newProfileNode.setProperty("exo:banUntil", newUserProfile.getBanUntil());
+			newProfileNode.setProperty("exo:banReason", newUserProfile.getBanReason());
+			newProfileNode.setProperty("exo:banCounter", newUserProfile.getBanCounter());
+			newProfileNode.setProperty("exo:banReasonSummary", newUserProfile.getBanReasonSummary());
+			newProfileNode.setProperty("exo:createdDate", newUserProfile.getIsShowForumJump());
+		}
+//		userProfileNode.save() ;
+		userProfileNode.getSession().save() ;
+		getForumHomeNode(sProvider).save() ;
+		getForumHomeNode(sProvider).getSession().save() ;
   }
 	
 	private String [] ValuesToStrings(Value[] Val) throws Exception {
