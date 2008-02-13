@@ -457,13 +457,14 @@
 
 .UIContactPortlet .UIContactContainer .UIMessageList {
 	padding-left: 1px;
-	*padding-left: 0px;
+	_padding-left: 0px;
 	overflow-y: auto;
+	overflow-x: hidden;
+	_width: 99.7%;
 }
 
 .UIContactPortlet .UIContactContainer .UIGrid {
 	border-top: none;
-	_width: 99.6%; 
 	background: #ffffff;
 }
 
