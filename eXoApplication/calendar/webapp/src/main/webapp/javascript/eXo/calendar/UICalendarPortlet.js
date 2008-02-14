@@ -1059,23 +1059,19 @@ UICalendarPortlet.prototype.showView = function(obj, evt) {
 
 UICalendarPortlet.prototype.swapMenu = function(oldmenu, clickobj) {
   var DOMUtil = eXo.core.DOMUtil ;
+	var Browser = eXo.core.Browser ;
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
 	var portlet = document.getElementById(UICalendarPortlet.portletName).parentNode ;
   var uiDesktop = document.getElementById("UIPageDesktop") ;
   var uiWindow = DOMUtil.findAncestorByClass(portlet, "UIWindow") ;
   var uiWorkSpaceWidth = (document.getElementById("UIControlWorkspace"))? document.getElementById("UIControlWorkspace").offsetWidth : 0 ;
-	var Browser = eXo.core.Browser ;
-	var menuX = Browser.findPosX(clickobj) - uiWorkSpaceWidth ;
+	uiWorkSpaceWidth = (document.all) ? 2*uiWorkSpaceWidth : uiWorkSpaceWidth ;
+  var menuX = Browser.findPosX(clickobj) - uiWorkSpaceWidth ;
 	var menuY = Browser.findPosY(clickobj) + clickobj.offsetHeight -  portlet.scrollTop ;
   if(uiDesktop) {
     menuX = menuX - uiWindow.offsetLeft ;
     menuY = menuY - uiWindow.offsetTop ;
   }  
-//	if (arguments.length > 2) { // Customize position of menu with an object that have 2 properties x, y 
-//		menuX = arguments[2].x ;
-//		menuY = arguments[2].y ;
-//	}
-	//if(document.getElementById("tmpMenuElement")) document.body.removeChild(document.getElementById("tmpMenuElement")) ; //document.getElementById(UICalendarPortlet.portletName).removeChild(document.getElementById("tmpMenuElement")) ;
   if(document.getElementById("tmpMenuElement")) document.getElementById(UICalendarPortlet.portletName).removeChild(document.getElementById("tmpMenuElement")) ;
 	var tmpMenuElement = oldmenu.cloneNode(true) ;
 	tmpMenuElement.setAttribute("id","tmpMenuElement") ;
