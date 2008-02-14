@@ -49,7 +49,6 @@ import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
-import org.exoplatform.services.jcr.ext.hierarchy.impl.NodeHierarchyCreatorImpl;
 import org.exoplatform.services.jcr.util.IdGenerator;
 
 
@@ -212,6 +211,7 @@ public class JCRDataStorage{
         contact.setAttachment(file) ;
       }
     }
+    if(contactNode.hasProperty("exo:isOwner")) contact.setOwner(contactNode.getProperty("exo:isOwner").getBoolean());
     return contact;
   }
 

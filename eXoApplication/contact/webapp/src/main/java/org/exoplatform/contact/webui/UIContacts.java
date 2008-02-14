@@ -162,7 +162,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     } else contactPreview.setContact(null) ;
   }
   
-  public Contact[] getContacts() throws Exception {  
+  public Contact[] getContacts() throws Exception {
     return contactMap.values().toArray(new Contact[]{}) ;
   }
   public LinkedHashMap<String, Contact> getContactMap() { return contactMap ;}

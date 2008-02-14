@@ -86,7 +86,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     selectUserAction.setActionParameter(UISelectComponent.TYPE_USER) ;
     actionUser.add(selectUserAction) ;
     inputset.setActionField(FIELD_USER, actionUser) ;
-/*
+    /*
     inputset.addUIFormInput(new UIFormStringInput(FIELD_GROUP, FIELD_GROUP, null)) ;
     List<ActionData> actionGroup = new ArrayList<ActionData>() ;
     ActionData selectGroupAction = new ActionData() ;
@@ -97,12 +97,11 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     selectGroupAction.setActionParameter(UISelectComponent.TYPE_GROUP) ;
     actionGroup.add(selectGroupAction) ;
     inputset.setActionField(FIELD_GROUP, actionGroup) ;
-*/
+    */
     inputset.addChild(new UIFormCheckBoxInput<Boolean>(FIELD_EDIT, FIELD_EDIT, null)) ;
     addChild(inputset) ;    
   }
-  
-  
+
   public String getLabel(String id) {
     try {
       return super.getLabel(id) ;

@@ -138,7 +138,6 @@ public class ContactPageList extends JCRPageList {
     if(contactNode.hasProperty("exo:tags")) contact.setTags(ValuesToStrings(contactNode.getProperty("exo:tags").getValues()));
     if(contactNode.hasProperty("exo:editPermission")) contact.setEditPermission(ValuesToStrings(contactNode.getProperty("exo:editPermission").getValues()));
     if(contactNode.hasProperty("exo:lastUpdated"))contact.setLastUpdated(contactNode.getProperty("exo:lastUpdated").getDate().getTime());
-    //if(contactNode.hasProperty("exo:isShared"))contact.setShared(contactNode.getProperty("exo:isShared").getBoolean());
     contact.setPath(contactNode.getPath()) ;
     if(contactNode.hasNode("image")){
       Node image = contactNode.getNode("image");
@@ -152,6 +151,7 @@ public class ContactPageList extends JCRPageList {
       }
     }
     contact.setContactType(type) ;
+    if(contactNode.hasProperty("exo:isOwner")) contact.setOwner(contactNode.getProperty("exo:isOwner").getBoolean());
     return contact ;
   }
   

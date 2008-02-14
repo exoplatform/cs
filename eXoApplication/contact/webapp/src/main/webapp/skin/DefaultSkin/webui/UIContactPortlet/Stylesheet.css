@@ -653,6 +653,7 @@
 	font-size: 14px;
 	border-bottom: 1px solid #cbcbcb;
 	padding: 0px 0px 5px;
+	*width: 98%;
 }
 
 .UIContactPortlet .InfoContainer .Content {

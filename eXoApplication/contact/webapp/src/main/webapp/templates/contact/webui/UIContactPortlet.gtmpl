@@ -11,8 +11,7 @@
  	rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactPortlet.showContextMenu('"+ compId +"') ;") ;
 %>
 
-<div class="UIContactPortlet" id="$compId">
-
+<div class="UIContactPortlet" id="$compId" oncontextmenu="return false">
 
 <div class="ContactContainer">	
 	<!-- Start Action Bar -->
@@ -27,6 +26,6 @@
 <!-- Start UIPopupAction -->
 	<% uicomponent.renderChild(UIPopupAction.class) ;%>	
 	<%uicomponent.renderPopupMessages();%>
-<!-- End UIPopupAction -->	
+<!-- End UIPopupAction -->
 
 </div>

@@ -31,9 +31,7 @@ public class ContactGroup {
   private String description ;
   private String[] editPermission ;
   
-  public ContactGroup() {
-    id = "ContactGroup" + IdGenerator.generate() ;
-  }
+  public ContactGroup() { id = "ContactGroup" + IdGenerator.generate() ; }
   
   public String getId()  { return id ; }
   public void   setId(String s) { id = s ; }

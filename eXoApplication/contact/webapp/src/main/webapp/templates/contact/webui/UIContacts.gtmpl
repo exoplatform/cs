@@ -55,7 +55,6 @@
     	contactRange = "Contacts " + fromIndex + " - " + endIndex + " of " + availableContact ;
   }
 
-	
 	if(uicomponent.getViewContactsList()) {
 		if(isDisplaySearchResult) {
 %>
@@ -264,7 +263,12 @@
 									<div class="$iconTag" title="<%=tagsName.toString() %>"><span></span></div>
 								</td>
 								<td class="text">
-									<div class="State OnlineIcon" title="Available">
+								
+									<% 
+										icon = "OnlineIcon"
+										if (contact.isOwner()) icon = "OwnerIcon" ; 	
+								  %>
+									<div class="State $icon" title="Available">
 										<a href="$actionLink">
 											<%=(ContactUtils.isEmpty(contact.getFullName()) ? "_" : contact.getFullName())%>
 										</a>
@@ -340,7 +344,12 @@
 									<div class="$iconTag" title="<%=tagsName.toString()%>"><span></span></div>
 								</td>
 								<td class="text">
-									<div class="State OnlineIcon" title="Available">
+									<% 
+										icon = "OnlineIcon"
+										if (contact.isOwner()) icon = "OwnerIcon" ; 	
+								  %>
+								
+									<div class="State $icon" title="Available">
 										<a href="$actionLink">
 											<%=(ContactUtils.isEmpty(contact.getFullName()) ? "" : contact.getFullName())%>
 										</a>
@@ -448,7 +457,11 @@
 		  <div class="LeftVCardsContent">
 		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>">
 			  	<div class="TitleVCards" >
-				  	<div class="StateIcon OnlineIcon"><%=(contact.getFullName()==null ? "_" : contact.getFullName())%></div>
+			  		<% 
+										icon = "OnlineIcon"
+										if (contact.isOwner()) icon = "OwnerIcon" ; 	
+						%>
+				  	<div class="StateIcon $icon"><%=(contact.getFullName()==null ? "_" : contact.getFullName())%></div>
 			  		<% if (tagIds != null && tagIds.length > 0) { %>
                 <div onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" style="cursor: pointer; display: inline" class="TagIcon $iconTag">
                   <% /*Begin Popup Menu*/ %>
@@ -563,7 +576,12 @@
 			<div class="RightVCardsContent">
 		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>" >
 			  	<div class="TitleVCards" >
-				  	<div class="StateIcon OfflineIcon"><%=(contact.getFullName()==null ? "_" : contact.getFullName())%></div>
+			  	<% 
+										icon = "OfflineIcon"
+										if (contact.isOwner()) icon = "OwnerIcon" ; 	
+					%>
+			  	
+				  	<div class="StateIcon $icon"><%=(contact.getFullName()==null ? "_" : contact.getFullName())%></div>
 			  		<% if (tagIds != null && tagIds.length > 0) { %>
 					     <div onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" style="cursor: pointer; display: inline" class="TagIcon $iconTag">
                 <% /*Begin Popup Menu*/ %>
