@@ -285,13 +285,15 @@ public class Utils {
   public static javax.mail.internet.MimeMessage mergeToMimeMessage(Message message, javax.mail.internet.MimeMessage mimeMessage) throws Exception {
     InternetAddress addressFrom = new InternetAddress(message.getFrom());
     mimeMessage.setFrom(addressFrom);
-    mimeMessage.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(message.getMessageTo()));
-    if(message.getMessageCc() != null) {
+    if (message.getMessageTo() != null) 
+      mimeMessage.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(message.getMessageTo()));
+    
+    if(message.getMessageCc() != null) 
       mimeMessage.setRecipients(javax.mail.Message.RecipientType.CC, InternetAddress.parse(message.getMessageCc(), true));
-    }
-    if(message.getMessageBcc() != null) {   
+    
+    if(message.getMessageBcc() != null)    
       mimeMessage.setRecipients(javax.mail.Message.RecipientType.BCC, InternetAddress.parse(message.getMessageBcc(), false));
-    }
+    
     mimeMessage.setSubject(message.getSubject());
     mimeMessage.setSentDate(message.getSendDate());
     

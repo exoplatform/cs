@@ -267,7 +267,7 @@ public class UIMessagePreview extends UIComponent {
       uiPopup.activate(uiExportForm, 600, 0, true);
       try {
         Message msg = uiPortlet.findFirstComponentOfType(UIMessageList.class).messageList_.get(msgId);
-      uiExportForm.setExportMessage(msg);
+        uiExportForm.setExportMessage(msg);
       } catch (Exception e) { }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);  
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessagePreview.class));
