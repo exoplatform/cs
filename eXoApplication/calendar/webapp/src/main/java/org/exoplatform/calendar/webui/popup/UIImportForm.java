@@ -103,6 +103,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
         UICalendarViewContainer uiCalendarViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
         calendarPortlet.findFirstComponentOfType(UIMiniCalendar.class).updateMiniCal() ;
         uiCalendarViewContainer.refresh() ;
+        calendarPortlet.setCalendarSetting(null) ;
         uploadService.removeUpload(input.getUploadId()) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(calendarPortlet.findFirstComponentOfType(UIMiniCalendar.class)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendars) ;

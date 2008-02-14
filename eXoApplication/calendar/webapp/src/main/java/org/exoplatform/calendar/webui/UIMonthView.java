@@ -71,7 +71,7 @@ public class UIMonthView extends UICalendarView {
   }
 
   protected int getWeeksOfTheMonth(int year, int month, int day) {
-    Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
+    Calendar cal = getInstanceTempCalendar() ;
     cal.set(Calendar.YEAR, year);
     cal.set(Calendar.MONTH, month);
     cal.set(Calendar.DATE, day);
@@ -136,7 +136,7 @@ public class UIMonthView extends UICalendarView {
   }
 
   public java.util.Calendar getBeginDateOfMonth() throws Exception{
-    java.util.Calendar temCal = CalendarUtils.getInstanceTempCalendar() ;
+    java.util.Calendar temCal = getInstanceTempCalendar() ;
     temCal.setTime(calendar_.getTime()) ;
     temCal.setFirstDayOfWeek(java.util.Calendar.SUNDAY) ;
     temCal.set(java.util.Calendar.DATE, 1) ;
@@ -144,7 +144,7 @@ public class UIMonthView extends UICalendarView {
   }
 
   public java.util.Calendar getEndDateOfMonth() throws Exception{
-    java.util.Calendar temCal = CalendarUtils.getInstanceTempCalendar() ;
+    java.util.Calendar temCal = getInstanceTempCalendar() ;
     temCal.setTime(calendar_.getTime()) ;
     temCal.setFirstDayOfWeek(java.util.Calendar.SUNDAY) ;
     temCal.set(java.util.Calendar.DATE, getDaysInMonth()) ;
@@ -183,7 +183,7 @@ public class UIMonthView extends UICalendarView {
       try {
         CalendarEvent calEvent = calendarview.getDataMap().get(eventId); 
         if(calEvent != null) {
-          java.util.Calendar tempCalFrom = CalendarUtils.getInstanceTempCalendar() ;
+          java.util.Calendar tempCalFrom = calendarview.getInstanceTempCalendar() ;
           tempCalFrom.setTimeInMillis((Long.parseLong(value))) ;
           java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
           Long amount = calEvent.getToDateTime().getTime() - calEvent.getFromDateTime().getTime() ;

@@ -74,7 +74,8 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
   private boolean isChildPopup_ = false ;
   private boolean isShowStepActions_ = true ;
 
-  private Map<Integer, String> chidrenMap_ = new HashMap<Integer, String>() ; 
+  private Map<Integer, String> chidrenMap_ = new HashMap<Integer, String>() ;
+  public String password_ = null ; 
 
   final static public String POPUPID = "UIAccountCreationWizardPopup" ;
   final static public String INPUT_STEP1 = "step1" ;
@@ -351,6 +352,7 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
           String serverName = uiAccWs3.getIncomingServer();
           String serverType = uiAccWs3.getServerType(); 
           String storeFolder = uiAccWs3.getStoreFolder() ;
+          uiAccCreation.password_  = uiAccWs4.getPassword() ;
           uiAccWs5.fillFields(accname, accOutgoingName, email, serverName, serverType, storeFolder) ;
         }
         uiAccCreation.nextStep() ;

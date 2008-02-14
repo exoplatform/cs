@@ -173,6 +173,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendars) ;
+      calendarPortlet.setCalendarSetting(null) ;
       calendarPortlet.cancelAction() ;       
     }
   }

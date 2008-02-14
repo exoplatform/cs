@@ -1,0 +1,37 @@
+.UICalendarPortlet .UISearchForm {
+  background: url('background/SearchForm1x34.gif') repeat-x;	
+  line-height: 34px;
+	padding:0px 13px 0px 0px;
+	border: 1px solid #c7c7c7;
+	margin-bottom: 4px;
+	width: 210px;
+}
+
+.UICalendarPortlet .UISearchForm .UISearchLabel {
+	float: right;
+	line-height: 20px;
+	margin: 5px 0px;
+	color: #555; 
+}
+
+.UICalendarPortlet .UISearchForm input {
+	width: 110px;
+	float: right;
+	margin: 6px 5px;
+}
+
+.UICalendarPortlet .UISearchForm .Search {
+  background: url('skinIcons/16x16/icons/SearchIcon.gif') no-repeat ;	
+  height: 16px;
+  width: 16px;
+  float: right;
+  margin: 8px 5px 0px 0px;  
+}
+
+.UICalendarPortlet .UISearchForm .AdvancedSearch {
+  background: url('skinIcons/16x16/icons/FindIcon.gif') no-repeat ;	
+  height: 16px; 
+  width: 16px;
+  float: right; 
+  margin: 8px 0px 0px 2px;
+}

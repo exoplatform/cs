@@ -335,6 +335,7 @@ public class UICalendars extends UIForm  {
       try{        
         uiMiniCalendar.updateMiniCal() ;
         uiViewContainer.refresh() ;
+        uiPortlet.setCalendarSetting(null) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(workingContainer) ;
       } catch (Exception e) {
         e.printStackTrace() ;

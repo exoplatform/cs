@@ -1,0 +1,131 @@
+.UICalendarPortlet .UIMiniCalendar {
+	border: 1px solid #c7c7c7;
+}
+
+.UICalendarPortlet .UIMiniCalendar .MiniCalendarContainer {
+	border: 1px solid #ffffff;
+	background: #e9edf9 url('background/MiniCalendarBG1x17.gif') repeat-x bottom;
+	padding: 4px;
+}
+
+.UICalendarPortlet .UIMiniCalendar .MonthSelector {
+	height: 19px; width: 167px;
+	background: #ffffff;
+	border-top: 1px solid #c7c7c7;
+	border-bottom: 1px solid  #c7c7c7;
+}
+
+.UICalendarPortlet .UIMiniCalendar .MonthSelector table {
+	width: auto;
+	margin: auto;
+}
+
+.UICalendarPortlet .UIMiniCalendar .YearSelector .NextYearSelector {
+	background: url('background/NextYear23x21.gif') no-repeat;
+	height: 21px; width: 23px;
+}
+
+.UICalendarPortlet .UIMiniCalendar .YearSelector .PreviousYearSelector {
+	background: url('background/PreviousYear23x21.gif') no-repeat;
+	height: 21px; width: 23px;
+}
+
+.UICalendarPortlet .UIMiniCalendar .MonthSelector .NextMonthSelector {
+	background: url('background/NextMonth10x16.gif') no-repeat;
+	height: 16px; width: 10px;
+	margin: 1px 0px 0px 4px;
+}
+
+.UICalendarPortlet .UIMiniCalendar .MonthSelector .PreviousMonthSelector {
+	background: url('background/PreviousMonth10x16.gif') no-repeat;
+	height: 16px; width: 10px;
+	margin: 1px 4px 0px 0px;
+}
+
+.UICalendarPortlet .UIMiniCalendar .MonthSelector .Title {
+	color:#0796D2;
+	font-weight:bolder;
+	text-align: center;
+}
+
+.UICalendarPortlet .UIMiniCalendar .TimeSelector {
+	padding: 7px 40px 2px 40px;
+}
+
+.UICalendarPortlet .UIMiniCalendar .TimeSelector .LeftTimeSelector {
+	background: url('background/LeftTimeSelector7x21.gif') no-repeat left;
+	padding-Left: 7px;
+}
+
+.UICalendarPortlet .UIMiniCalendar .TimeSelector .RightTimeSelector {
+	background: url('background/RightTimeSelector7x21.gif') no-repeat right;
+	padding-right: 7px;
+}
+
+.UICalendarPortlet .UIMiniCalendar .TimeSelector .CenterTimeSelector {
+	background: url('background/CenterTimeSelector1x21.gif') repeat-x ;
+	text-align: center; 
+	line-height: 20px;
+	font-weight: bolder;
+	height: 21px;
+}
+
+.UICalendarPortlet .UIMiniCalendar .DayList {
+	background: #ffffff;
+	border:solid 1px #c7c7c7;
+	padding: 3px;
+}
+
+.UICalendarPortlet .UIMiniCalendar .DayList .UIGrid {
+	border:none;
+}
+
+.UICalendarPortlet .UIMiniCalendar .DayList .UIGrid td{
+	background: #f3f3f3;
+	border:solid 1px #ffffff;
+	text-align:center;
+	vertical-align:middle;
+	padding:0px;
+	-moz-user-select : none ;
+}
+
+.UICalendarPortlet .UIMiniCalendar .DayList .UIGrid tr{
+	border:solid 1px #c7c7c7;
+	padding:0px;
+}
+
+.UICalendarPortlet .UIMiniCalendar .DayList .UIGrid .Highlight a{
+	font-weight:bold;
+}
+
+.UICalendarPortlet .UIMiniCalendar .DayList .UIGrid .Today {
+	background: #ABC7FE;
+}
+
+.UICalendarPortlet .UIMiniCalendar .DayList .UIGrid .SelectedDay {
+	background: #FFF6A3;
+}
+
+.UICalendarPortlet .UIMiniCalendar .DayList .UIGrid .Today .MiniCalendarActions {
+	color: red;
+}
+
+.UICalendarPortlet .UIMiniCalendar .WeekList .SundayTitle {
+	float: left;
+	font-weight: bold; color: red;
+	line-height: 20px;
+	width: 14%;
+	text-align: center;
+}
+
+.UICalendarPortlet .UIMiniCalendar .WeekList {
+	height: 20px;
+}
+
+.UICalendarPortlet .UIMiniCalendar .WeekList .DayTitle {
+	float: left;
+	font-weight: bold; color: #0796d2;
+	line-height: 20px;
+	width: 14%;
+	text-align: center;
+}

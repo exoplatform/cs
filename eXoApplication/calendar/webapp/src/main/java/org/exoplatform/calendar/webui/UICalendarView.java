@@ -98,6 +98,8 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   private String [] views = {TYPE_BOTH, TYPE_EVENT, TYPE_TASK} ;
 
   protected Calendar calendar_ = null ;
+  protected List<String> displayTimes_ = null ;
+  protected Map<String, String> timeSteps_ = null ;
   public boolean isShowEvent_ = true;
   private String editedEventId_ = null ;
   private int timeInterval_ = 30 ;
@@ -106,7 +108,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   private String dateTimeFormat_  ;
   protected List<String> privateCalendarIds = new ArrayList<String>() ;
   protected List<String> publicCalendarIds = new ArrayList<String>() ;
-
+  protected Calendar instanceTempCalendar_ = null ;
   final public static Map<Integer, String> monthsName_ = new HashMap<Integer, String>() ;
   private Map<Integer, String> daysMap_ = new LinkedHashMap<Integer, String>() ;
   private Map<Integer, String> monthsMap_ = new LinkedHashMap<Integer, String>() ;
@@ -116,7 +118,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   public UICalendarView() throws Exception{
     initCategories() ;
     applySeting() ;
-    calendar_ = CalendarUtils.getInstanceTempCalendar() ;
+    calendar_ = getInstanceTempCalendar() ; //CalendarUtils.getInstanceTempCalendar() ;
     /* calendar_.setLenient(false) ;
     int gmtoffset = calendar_.get(Calendar.DST_OFFSET) + calendar_.get(Calendar.ZONE_OFFSET);
     calendar_.setTimeInMillis(System.currentTimeMillis() - gmtoffset) ;*/
@@ -141,10 +143,22 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   protected SessionProvider getSystemSession() {
     return SessionProviderFactory.createSystemProvider() ;
   }
+  protected Calendar getInstanceTempCalendar() { 
+     if(instanceTempCalendar_ != null) return instanceTempCalendar_ ; 
+      System.out.println("created in " + this.getId() );
+      Calendar  calendar = GregorianCalendar.getInstance() ;
+      calendar.setLenient(false) ;
+      int gmtoffset = calendar.get(Calendar.DST_OFFSET) + calendar.get(Calendar.ZONE_OFFSET);
+      calendar.setTimeInMillis(System.currentTimeMillis() - gmtoffset) ; 
+      return  calendar;
+  } 
   public void applySeting() throws Exception {
-   try {
+    displayTimes_ = null ;
+    timeSteps_ = null ;
+    instanceTempCalendar_ = null ;
+    try {
       calendarSetting_ = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
-   } catch (Exception e) {
+    } catch (Exception e) {
       CalendarService calService = getApplicationComponent(CalendarService.class) ;
       String username = Util.getPortalRequestContext().getRemoteUser() ;
       calendarSetting_ = calService.getCalendarSetting(getSession(), username) ;
@@ -355,33 +369,39 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     return  QUICKEDIT_MENU ;
   }
   protected List<String> getDisplayTimes(String timeFormat, int timeInterval) {
-    List<String> times = new ArrayList<String>() ;
-    Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
-    cal.set(Calendar.HOUR_OF_DAY, 0) ;
-    cal.set(Calendar.MINUTE, 0) ;
-    cal.set(Calendar.MILLISECOND, 0) ;
-    DateFormat df = new SimpleDateFormat(timeFormat) ;
-    df.setCalendar(cal) ;
-    for(int i = 0; i < 24*(60/timeInterval); i++) {
-      times.add(df.format(cal.getTime())) ;
-      cal.add(java.util.Calendar.MINUTE, timeInterval) ;
+    // List<String> times = new ArrayList<String>() ;
+    if(displayTimes_ == null) {
+      displayTimes_ =   new ArrayList<String>() ;
+      Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
+      cal.set(Calendar.HOUR_OF_DAY, 0) ;
+      cal.set(Calendar.MINUTE, 0) ;
+      cal.set(Calendar.MILLISECOND, 0) ;
+      DateFormat df = new SimpleDateFormat(timeFormat) ;
+      df.setCalendar(cal) ;
+      for(int i = 0; i < 24*(60/timeInterval); i++) {
+        displayTimes_.add(df.format(cal.getTime())) ;
+        cal.add(java.util.Calendar.MINUTE, timeInterval) ;
+      }
     }
-    return times ;
+    return displayTimes_ ;
   }
   protected Map<String, String> getTimeSteps(String timeFormat, int timeInterval) {
-    Map<String, String> times = new LinkedHashMap<String, String>() ;
-    Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
-    cal.setTime(getCurrentDate()) ;
-    cal.set(Calendar.HOUR_OF_DAY, 0) ;
-    cal.set(Calendar.MINUTE, 0) ;
-    cal.set(Calendar.MILLISECOND, 0) ;
-    DateFormat df = new SimpleDateFormat(timeFormat) ;
-    df.setCalendar(cal) ;
-    for(int i = 0; i < 24*(60/timeInterval); i++) {
-      times.put(String.valueOf(cal.getTimeInMillis()), df.format(cal.getTime())) ;
-      cal.add(java.util.Calendar.MINUTE, timeInterval) ;
+    //Map<String, String> times = new LinkedHashMap<String, String>() ;
+    if(timeSteps_ == null) {
+      timeSteps_ = new LinkedHashMap<String, String>() ;
+      Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
+      cal.setTime(getCurrentDate()) ;
+      cal.set(Calendar.HOUR_OF_DAY, 0) ;
+      cal.set(Calendar.MINUTE, 0) ;
+      cal.set(Calendar.MILLISECOND, 0) ;
+      DateFormat df = new SimpleDateFormat(timeFormat) ;
+      df.setCalendar(cal) ;
+      for(int i = 0; i < 24*(60/timeInterval); i++) {
+        timeSteps_.put(String.valueOf(cal.getTimeInMillis()), df.format(cal.getTime())) ;
+        cal.add(java.util.Calendar.MINUTE, timeInterval) ;
+      }
     }
-    return times ;
+    return timeSteps_ ;
   }
   protected String getDateFormat() {
     return calendarSetting_.getDateFormat();

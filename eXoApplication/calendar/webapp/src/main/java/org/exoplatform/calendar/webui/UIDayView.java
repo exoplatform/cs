@@ -127,7 +127,7 @@ public class UIDayView extends UICalendarView {
           int hoursEnd = (Integer.parseInt(endTime)/60) ;
           int minutesEnd = (Integer.parseInt(endTime)%60) ;
           
-          Calendar cal = CalendarUtils.getInstanceTempCalendar()  ; //calendarview.getBeginDay(new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(), calendarview.getCurrentDay())) ;
+          Calendar cal = calendarview.getInstanceTempCalendar()  ; //calendarview.getBeginDay(new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(), calendarview.getCurrentDay())) ;
           cal.setTime(calendarview.getCurrentDate()) ;
           //cal.setTimeInMillis(Long.parseLong(startTime)) ;
           cal.set(Calendar.HOUR_OF_DAY, hoursBg) ;

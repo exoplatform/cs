@@ -35,7 +35,6 @@ import javax.jcr.PathNotFoundException;
 import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
-import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;

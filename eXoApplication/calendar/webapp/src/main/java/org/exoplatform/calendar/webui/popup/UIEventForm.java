@@ -194,7 +194,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       attenderTab.getUIFormComboBox(UIEventAttenderTab.FIELD_TO_TIME).setOptions(toOptions);*/
       eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CALENDAR).setEnable(false) ;
       if(CalendarUtils.SHARED_TYPE.equals(calType_)) {
-        eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).setRendered(false) ;
+        SelectItemOption<String> item = new SelectItemOption<String>(eventCalendar.getEventCategoryId(), eventCalendar.getEventCategoryId()) ;
+        if(!eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).getOptions().contains(item))
+        eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).getOptions().add(item) ;
+        //eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).getOptions().add(arg0)
       }
       attenderTab.calendar_.setTime(eventCalendar.getFromDateTime()) ;
     } else {

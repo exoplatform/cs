@@ -119,7 +119,7 @@ public class UIWeekView extends UICalendarView {
     } 
   }
   public java.util.Calendar getBeginDateOfWeek() throws Exception{
-    java.util.Calendar temCal = CalendarUtils.getInstanceTempCalendar() ;
+    java.util.Calendar temCal = getInstanceTempCalendar() ;
     temCal.setTime(calendar_.getTime()) ;
     CalendarSetting calSetting = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
    /* } catch (Exception e) {
@@ -134,7 +134,7 @@ public class UIWeekView extends UICalendarView {
   }
 
   public java.util.Calendar getEndDateOfWeek() throws Exception{
-    java.util.Calendar temCal = CalendarUtils.getInstanceTempCalendar() ;
+    java.util.Calendar temCal = getInstanceTempCalendar() ;
     CalendarSetting calSetting  = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
    /* } catch (Exception e) {
       CalendarService calService = getApplicationComponent(CalendarService.class) ;
@@ -215,7 +215,7 @@ public class UIWeekView extends UICalendarView {
       }*/
       if(eventCalendar != null) {
         try {
-          Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
+          Calendar cal = calendarview.getInstanceTempCalendar() ;
           //cal.setTime(eventCalendar.getFromDateTime()) ;
           //String key = calendarview.keyGen(cal.get(Calendar.DATE), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)) ;       
           //calendarview.eventData_.get(key).remove(eventId) ;
@@ -282,8 +282,8 @@ public class UIWeekView extends UICalendarView {
         } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
           eventCalendar = calendarService.getGroupEvent(calendarId, eventId) ;
         }*/
-          Calendar calBegin = CalendarUtils.getInstanceTempCalendar() ;
-          Calendar calEnd = CalendarUtils.getInstanceTempCalendar() ;
+          Calendar calBegin = calendarview.getInstanceTempCalendar() ;
+          Calendar calEnd = calendarview.getInstanceTempCalendar() ;
           long unit = 15*60*1000 ;
           calBegin.setTimeInMillis((Long.parseLong(startTime)/unit)*unit) ;
           eventCalendar.setFromDateTime(calBegin.getTime()) ;
