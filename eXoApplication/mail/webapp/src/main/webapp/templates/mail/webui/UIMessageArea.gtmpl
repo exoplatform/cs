@@ -23,3 +23,4 @@
 		<%uicomponent.renderChild(UIMessagePreview.class);%>
 	</div>
 </div>
+

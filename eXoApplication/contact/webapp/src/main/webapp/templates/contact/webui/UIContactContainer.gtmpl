@@ -6,12 +6,14 @@
 
 <div class="UIContactContainer" id="$compId">
 <!--  Start UIContacts-->
-	<% uicomponent.renderChild(UIContacts.class) ;%>			
+	<div class="UIMessageArea SpliterResizableListArea" id="uiMessageListResizableArea">
+	<% uicomponent.renderChild(UIContacts.class) ;%>		
+	</div>	
 <!--  End UIContacts -->
-			<div class="ResizeReadingPane" onmousedown = "eXo.cs.Spliter.doResize(event, this, document.getElementById('UIListUsers').parentNode, 'UIContactPreview') ;"><span></span></div>
+	<div class="ResizeReadingPane" onmousedown = "eXo.cs.Spliter.doResize(event, this, document.getElementById('UIListUsers').parentNode, 'UIContactPreview') ;"><span></span></div>
 		
 <!--  Start UIContactPreview-->
-	<% uicomponent.renderChild(UIContactPreview.class) ;%>		
+	<% uicomponent.renderChild(UIContactPreview.class) ;%>	
 <!--  End UIContactPreview -->		
 		
 </div>

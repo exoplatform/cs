@@ -466,6 +466,8 @@
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageList {
 	padding-left: 1px;
+	overflow-y: auto;
+	overflow-x: hidden;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIGrid {
@@ -602,25 +604,21 @@
 
 /*=================================Reading Pane=================*/
 
-.SpliterResizableListArea {
-	overflow-y: auto ;
-	overflow-x: hidden ;
+.UIMailPortlet .SpliterResizableListArea {
 	background: white;
 	border: 1px solid #c0c0c0;
 	_width: 99.3%;
-	height: 220px;
 }
 
-.SpliterResizableArea {
-	overflow-y: auto ;
-	overflow-x: hidden ;
+.UIMailPortlet .SpliterResizableArea {
 	background: white;
 	border: 1px solid #c0c0c0;
 	_width: 99.3%;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessagePreview .ReadingPaneDetails {
-	overflow: auto;
+	overflow-y: auto;
+	overflow-x: hidden;
 	padding: 5px;
 }
 
