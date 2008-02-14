@@ -291,7 +291,13 @@ public class UIMessageList extends UIForm {
       UIMessageList uiMessageList = event.getSource();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       String username = uiPortlet.getCurrentUser();
-      String accountId = uiMessageList.getAccountId() ;
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      if(Utils.isEmptyField(accountId)) {
+        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
       Message msg = uiMessageList.messageList_.get(msgId);
       if ( msg != null ) {
@@ -321,6 +327,13 @@ public class UIMessageList extends UIForm {
       UIMessageList uiMessageList = event.getSource();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       String username = uiPortlet.getCurrentUser();
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      if(Utils.isEmptyField(accountId)) {
+        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
       List<Message> msgList = new ArrayList<Message>() ;
       for (Message msg : uiMessageList.getCheckedMessage()) {
@@ -330,7 +343,7 @@ public class UIMessageList extends UIForm {
           uiMessageList.messageList_.put(msg.getId(), msg);
         }
       }
-      mailSrv.toggleMessageProperty(SessionsUtils.getSessionProvider(), username, uiMessageList.getAccountId(), msgList, Utils.EXO_STAR);
+      mailSrv.toggleMessageProperty(SessionsUtils.getSessionProvider(), username, accountId, msgList, Utils.EXO_STAR);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList);
     }
   }
@@ -338,6 +351,14 @@ public class UIMessageList extends UIForm {
   static public class ViewAllActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
+      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+      String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      if(Utils.isEmptyField(accId)) {
+        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       uiMessageList.filterMessage("");
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
@@ -346,6 +367,14 @@ public class UIMessageList extends UIForm {
   static public class ViewStarredActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();     
+      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+      String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      if(Utils.isEmptyField(accId)) {
+        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       uiMessageList.filterMessage("@" + Utils.EXO_STAR + "='true'");
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
@@ -354,6 +383,14 @@ public class UIMessageList extends UIForm {
   static public class ViewUnstarredActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
+      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+      String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      if(Utils.isEmptyField(accId)) {
+        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       uiMessageList.filterMessage("@" + Utils.EXO_STAR + "='false'");
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
@@ -362,6 +399,14 @@ public class UIMessageList extends UIForm {
   static public class ViewUnreadActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
+      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+      String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      if(Utils.isEmptyField(accId)) {
+        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       uiMessageList.filterMessage("@" + Utils.EXO_ISUNREAD + "='true'");
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
@@ -370,6 +415,14 @@ public class UIMessageList extends UIForm {
   static public class ViewReadActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
+      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+      String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      if(Utils.isEmptyField(accId)) {
+        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       uiMessageList.filterMessage("@" + Utils.EXO_ISUNREAD + "='false'");
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
@@ -378,6 +431,14 @@ public class UIMessageList extends UIForm {
   static public class ViewAttachmentActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
+      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+      String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      if(Utils.isEmptyField(accId)) {
+        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       uiMessageList.filterMessage("@" + Utils.EXO_HASATTACH + "='true'");
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
@@ -504,6 +565,14 @@ public class UIMessageList extends UIForm {
       UIMessageList uiMessageList = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+      String username = uiPortlet.getCurrentUser();
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      if(Utils.isEmptyField(accountId)) {
+        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
       UIMessageArea uiMessageArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class);
       UIMessagePreview uiMessagePreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class);
@@ -511,8 +580,6 @@ public class UIMessageList extends UIForm {
       if (uiMessagePreview.getMessage() != null) msgPreview = uiMessagePreview.getMessage();
       UITagContainer uiTags = uiPortlet.findFirstComponentOfType(UITagContainer.class); 
       MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
-      String username = uiPortlet.getCurrentUser();
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       List<Message> appliedMsgList = new ArrayList<Message>();
       if (msgId != null) { 
         appliedMsgList.add(uiMessageList.messageList_.get(msgId));
@@ -542,6 +609,12 @@ public class UIMessageList extends UIForm {
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class) ;
       String username = MailUtils.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      if(Utils.isEmptyField(accountId)) {
+        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       MailService mailSrv = MailUtils.getMailService();
       List<Message> checkedMessageList = new ArrayList<Message>();
       if (msgId != null) { 
@@ -571,6 +644,12 @@ public class UIMessageList extends UIForm {
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class) ;
       String username = MailUtils.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+      if(Utils.isEmptyField(accountId)) {
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       MailService mailSrv = MailUtils.getMailService();
       List<Message> checkedMessageList = new ArrayList<Message>();
       if (msgId != null) { 
@@ -620,10 +699,16 @@ public class UIMessageList extends UIForm {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ;  
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class) ;
-      List<Message> checkedMsgs = uiMessageList.getCheckedMessage();
-      MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      if(Utils.isEmptyField(accountId)) {
+        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
+      List<Message> checkedMsgs = uiMessageList.getCheckedMessage();
+      MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
       List<Message> msgList = new ArrayList<Message>();
       for (Message msg : checkedMsgs) {
         if (msg.isUnread()) {
@@ -642,10 +727,16 @@ public class UIMessageList extends UIForm {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ;  
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class) ;
-      List<Message> appliedList = uiMessageList.getCheckedMessage();
-      MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      if(Utils.isEmptyField(accountId)) {
+        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
+      List<Message> appliedList = uiMessageList.getCheckedMessage();
+      MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
       List<Message> msgList = new ArrayList<Message>();
       for (Message msg : appliedList) {
         if (!msg.isUnread()) {
@@ -664,13 +755,17 @@ public class UIMessageList extends UIForm {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ; 
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+      String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      if(Utils.isEmptyField(accId)) {
+        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);
       UITagForm uiTagForm = uiMessageList.createUIComponent(UITagForm.class, null, null) ;
       String username = uiPortlet.getCurrentUser();
       MailService mailService = uiMessageList.getApplicationComponent(MailService.class);
-      UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
-      UISelectAccount uiSelect = uiNavigation.getChild(UISelectAccount.class) ;
-      String accId = uiSelect.getSelectedValue() ;
       List<Tag> listTags = mailService.getTags(SessionsUtils.getSessionProvider(), username, accId);
       uiPopupAction.activate(uiTagForm, 600, 0, true);
       uiTagForm.setMessageList(uiMessageList.getCheckedMessage());
@@ -701,9 +796,15 @@ public class UIMessageList extends UIForm {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ;    
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+      String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+      if(Utils.isEmptyField(accId)) {
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);    
       if(uiMessageList.getCheckedMessage().isEmpty()) {
-        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
         return;
       }
@@ -768,14 +869,20 @@ public class UIMessageList extends UIForm {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ;   
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+      String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      if(Utils.isEmptyField(accId)) {
+        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
       UIImportForm uiImportForm = uiPopup.createUIComponent(UIImportForm.class, null, null);
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      uiImportForm.init(accountId);
+      uiImportForm.init(accId);
       if (uiMessageList.getSelectedFolderId() != null) {
         uiImportForm.setSelectedFolder(uiMessageList.getSelectedFolderId());
       } else {
-        uiImportForm.setSelectedFolder(Utils.createFolderId(accountId, Utils.FD_INBOX, false));
+        uiImportForm.setSelectedFolder(Utils.createFolderId(accId, Utils.FD_INBOX, false));
       }
       uiPopup.activate(uiImportForm, 600, 0, true);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);    
@@ -787,8 +894,14 @@ public class UIMessageList extends UIForm {
       UIMessageList uiMessageList = event.getSource() ;   
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
-      UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
+      String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+      if(Utils.isEmptyField(accId)) {
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
+      UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
       if(uiMessageList.getCheckedMessage().isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
         return;
