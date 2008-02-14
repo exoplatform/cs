@@ -427,6 +427,7 @@ UIMailPortlet.prototype.resizeIframe = function(str) {
 	var frame = document.getElementById("IframeMessagePreview") ;
 	var doc = frame.contentWindow.document ;
 	doc.open();
+	str = str.replace(/\n/g, "<br>");
 	doc.write(str);
 	doc.close();
 	if (eXo.core.Browser.isFF()) {
