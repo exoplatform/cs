@@ -190,7 +190,12 @@ UICalendarPortlet.prototype.show = function(obj, evt) {
 		"x" : eXo.core.Browser.findPosX(obj) ,
 		"y" : eXo.core.Browser.findPosY(obj) + obj.offsetHeight - contentContainer.scrollTop - portlet.scrollTop
 	}
-	if (DOMUtil.findAncestorByClass(obj, "CalendarItem")) uiPopupCategory = DOMUtil.findNextElementByTagName(uiPopupCategory,  "div") ;
+  var d = new Date() ;
+  var currentTime = d.getTime() ;
+  var timezoneOffset = d.getTimezoneOffset() ;
+	if (DOMUtil.findAncestorByClass(obj, "CalendarItem")) {
+    uiPopupCategory = DOMUtil.findNextElementByTagName(uiPopupCategory,  "div") ;
+  }
 	if (!uiPopupCategory) return ;
 	var value = "" ;
 	var calType = obj.getAttribute("calType") ;
@@ -220,7 +225,10 @@ UICalendarPortlet.prototype.show = function(obj, evt) {
 		}
 		items[i].href = String(items[i].href).replace(/objectId\s*=.*(?='|")/, value) ;
 	}	
-	
+  items[0].href = String(items[0].href).replace("')", "&ct=" + currentTime + "&tz=" + timezoneOffset + "')") ;
+	if (DOMUtil.findAncestorByClass(obj, "CalendarItem")) {
+    items[1].href = String(items[1].href).replace("')", "&ct=" + currentTime + "&tz=" + timezoneOffset + "')") ;
+  }
 	eXo.calendar.UICalendarPortlet.swapMenu(uiPopupCategory, obj, newPos) ;
 	//eXo.calendar.UICalendarPortlet.swapMenu(uiPopupCategory, obj) ;
 	if (calType && (calType != "0") ) {
