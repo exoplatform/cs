@@ -57,10 +57,6 @@ public class ContactPageList extends JCRPageList {
       if(isQuery_) {
         QueryManager qm = session.getWorkspace().getQueryManager() ;
         Query query = qm.createQuery(value_, Query.XPATH);
-        
-        
-        //System.out.println("\n\n statement1:" + query.getStatement() + "\n\n");
-        
         QueryResult result = query.execute();
         iter_ = result.getNodes();
       } else {
@@ -83,7 +79,10 @@ public class ContactPageList extends JCRPageList {
       if(iter_.hasNext()){
         currentNode = iter_.nextNode() ;
         if(currentNode.isNodeType("exo:contact")) {
-          currentListPage_.add(getContact(currentNode, contactType_)) ;        
+          // hoang quang hung edit
+          Contact contact = getContact(currentNode, contactType_) ;
+          if (contact.getId().equalsIgnoreCase(username_))  currentListPage_.add(0, contact) ;
+          else currentListPage_.add(contact);
         }
       }else {
         break ;
@@ -175,9 +174,6 @@ public class ContactPageList extends JCRPageList {
       if(isQuery_) {
         QueryManager qm = session.getWorkspace().getQueryManager() ;
         Query query = qm.createQuery(value_, Query.XPATH);
-        
-        //System.out.println("\n\n statement 2:" + query.getStatement() + "\n\n");
-        
         QueryResult result = query.execute();
         iter_ = result.getNodes();
       } else {
@@ -189,14 +185,9 @@ public class ContactPageList extends JCRPageList {
     
     
     List<Contact> contacts = new ArrayList<Contact>();
-    Contact contact;
     while (iter_.hasNext()) {
       Node contactNode = iter_.nextNode();
-      contact = getContact(contactNode, contactType_);
-      
-      //System.out.println("\n\n haha:" + contact.getFullName() + "\n");
-      
-      contacts.add(contact);
+      contacts.add(getContact(contactNode, contactType_));
     }
     return contacts; 
   }

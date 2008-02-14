@@ -235,7 +235,11 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     }
     return true ;
   }
-   
+  public String getDefaultGroup() {
+    return getAncestorOfType(UIWorkingContainer.class)
+      .findFirstComponentOfType(UIAddressBooks.class).getDefaultGroup() ;
+  }
+  
   
   static public class EditContactActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {

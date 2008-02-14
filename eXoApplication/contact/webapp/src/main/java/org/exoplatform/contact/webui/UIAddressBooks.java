@@ -123,6 +123,7 @@ public class UIAddressBooks extends UIComponent {
   }
   public void setCopyAddress(String add) { copyAddress = add ; }
   public boolean isDefault(String groupId) { return groupId.equals(defaultGroup) ; }
+  public String getDefaultGroup() { return defaultGroup ; } 
   
   public void setCopyContacts(List<Contact> contacts) { copyContacts = contacts ; }
   public List<Contact> getCopyContacts() { return copyContacts ; }
