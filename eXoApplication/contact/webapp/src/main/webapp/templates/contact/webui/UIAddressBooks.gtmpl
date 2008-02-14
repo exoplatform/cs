@@ -114,7 +114,7 @@
 				String actionLink  = uicomponent.event("SelectPublicGroup", group) ;				
 				if(group.equals(uicomponent.getSelectedGroup()))	cssClass = "Selected" ;	
 			%>
-				<div id="$group" title="$group" class="ItemList $cssClass" addressType="2" isList="<%=uicomponent.getListView(group)%>">
+				<div id="$group" title="$group" class="ItemList $cssClass PublicAddressBook" addressType="2" isList="<%=uicomponent.getListView(group)%>">
 					<a href="$actionLink" class="IconHolder AddressIcon" >$name</a>
 				</div>
 		<% } %>
