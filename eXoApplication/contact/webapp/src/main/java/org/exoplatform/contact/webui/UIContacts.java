@@ -350,7 +350,6 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource();
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
-      String isDND = event.getRequestContext().getRequestParameter("isDND");
       List<String> contactIds = new ArrayList<String>();
       if (!ContactUtils.isEmpty(contactId) && !contactId.equals("null")) {
         contactIds.add(contactId) ;
@@ -373,7 +372,6 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIContactPortlet uiContactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
       UIMoveContactsForm uiMoveForm = popupAction.activate(UIMoveContactsForm.class, 540) ;
-      if (isDND != null) uiMoveForm.setDND(true) ;
       Map<String, Contact> movedContacts = new HashMap<String, Contact>() ;
       for (String contact : contactIds) {
         movedContacts.put(contact, uiContacts.contactMap.get(contact)) ;

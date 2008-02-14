@@ -44,6 +44,12 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
 		id = VCardContent.getAttribute("id") ;
 		eXo.webui.UIContextMenuCon.changeAction(UIContextMenuCon.menuElement, id) ;
 	}
+	
+	
+	// move
+	
+	
+	
 } ;
 
 UIContactPortlet.prototype.addressBookCallback = function(evt) {

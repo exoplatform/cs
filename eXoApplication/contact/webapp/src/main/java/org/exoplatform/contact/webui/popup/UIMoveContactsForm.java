@@ -24,21 +24,16 @@ import java.util.MissingResourceException;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
-import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UIWorkingContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormCheckBoxInput;
 
 /**
  * Created by The eXo Platform SARL
@@ -51,28 +46,15 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
     template = "app:/templates/contact/webui/popup/UIMoveContactsForm.gtmpl",
     events = {     
       @EventConfig(listeners = UIMoveContactsForm.CancelActionListener.class),
-      @EventConfig(listeners = UIMoveContactsForm.SaveActionListener.class),
       @EventConfig(listeners = UIMoveContactsForm.SelectGroupActionListener.class)
     }
 )
 public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
   private Map<String, Contact> movedContacts = new HashMap<String, Contact>() ;
-  private List<String> publicGroups = new ArrayList<String>();
   private Map<String, String> privateGroupMap_ = new HashMap<String, String>() ;
   private Map<String, String> sharedGroupMap_ = new HashMap<String, String>() ;
-  private boolean isDND = false ;
   
-  public UIMoveContactsForm() throws Exception { 
-    String[] groups = ContactUtils.getUserGroups() ;
-    for(String group : groups) {
-      publicGroups.add(group) ; 
-      addUIFormInput(new UIFormCheckBoxInput<Boolean>(group, group, false));
-    }
-  }
-  public List<String> getPublicGroups() { return publicGroups ; }
-  public void setDND(boolean dnd) { isDND = dnd ; }
-  public boolean isDND() { return isDND ; }
-  
+  public UIMoveContactsForm() throws Exception { }
   public String getLabel(String id) throws Exception {
     try {
       return  super.getLabel(id) ;
@@ -104,7 +86,7 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
   }
   public void activate() throws Exception { }
   public void deActivate() throws Exception { }
-  public String[] getActions() { return new String[] {"Save", "Cancel"} ; }
+  public String[] getActions() { return new String[] {"Cancel"} ; }
 
   public Map<String, String> getPrivateGroupMap() { return privateGroupMap_ ; }
   public void setPrivateGroupMap(Map<String, String> map) { privateGroupMap_ = map ; }
@@ -140,46 +122,6 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
     }
   }
 
-  static  public class SaveActionListener extends EventListener<UIMoveContactsForm> {
-    public void execute(Event<UIMoveContactsForm> event) throws Exception {
-      UIMoveContactsForm uiMoveContactForm = event.getSource() ;
-      String type = event.getRequestContext().getRequestParameter("addressType");
-      UIContactPortlet uiContactPortlet = uiMoveContactForm.getAncestorOfType(UIContactPortlet.class) ;
-      
-      List<String> categories = new ArrayList<String>() ;   
-      for (String group : uiMoveContactForm.getPublicGroups()) {
-        if (uiMoveContactForm.getUIFormCheckBoxInput(group).isChecked())
-          categories.add(group);
-      }
-      if (categories.size() == 0) {
-        UIApplication uiApp = uiMoveContactForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIMoveContactsForm.msg.selectGroup-required", null, 
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ; 
-      }
-      List<Contact> contacts = new ArrayList<Contact>() ;
-      for(String id : uiMoveContactForm.getContactIds()) {
-      	Contact contact = uiMoveContactForm.movedContacts.get(id) ;
-        contact.setAddressBook(categories.toArray(new String[] {})) ;
-      	contacts.add(contact) ;
-      }
-      ContactService contactService = ContactUtils.getContactService() ;
-      String username = ContactUtils.getCurrentUser() ;
-      SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
-      contactService.moveContacts(sessionProvider, username, contacts, type) ;
-      
-      UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
-      if (uiContacts.isDisplaySearchResult()) {
-        for (String contactId : uiMoveContactForm.getContactIds()) {
-          uiMoveContactForm.movedContacts.get(contactId).setContactType(type) ;
-        }
-      }      
-      uiContacts.updateList() ;
-      uiContactPortlet.cancelAction() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet.getChild(UIWorkingContainer.class)) ;
-    }
-  }
   
   static  public class CancelActionListener extends EventListener<UIMoveContactsForm> {
     public void execute(Event<UIMoveContactsForm> event) throws Exception {

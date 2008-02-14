@@ -9,7 +9,6 @@
 		<%=uicomponent.getContactsName()%>
 	</div>
 	<div class="MoveContainer">
-	<% if (!uicomponent.isDND()) { %>	
 		<div class="PrivateAdress">
 			<div class="TitleMoveContactsForm">To Private Address Books:</div>
 			<div class="MoveContactsFormContainer">
@@ -40,42 +39,7 @@
 			<% } %>
 			</div>
 		</div>
-		<% } %>
-		
-		<% String fieldName; %>
-		<div class="UIForm PublicAdress">
-			<div class="TitleMoveContactsForm">To Public Address Books</div>
-		  <div class="HorizontalLayout">
-		    <div class="FormContainer">
-		      <table class="UIFormGrid">
-			      <% 
-			        for(String id in uicomponent.getPublicGroups()) { 
-			        	field = uiform.getChildById(id) ;
-			          if(field.isRendered()) {
-      			%>
-          <tr>
-              <%fieldName = uicomponent.getLabel(field.getName());%>
-              <%//TODO: Tung.Pham modified
-              	//if(!fieldName.equals(uicomponent.getId())) {
-              	if(fieldName != null && fieldName.length() > 0 && !fieldName.equals(uicomponent.getId())) {
-              %>                        
-  	              <td class="FieldLabel">
-                  <%=uicomponent.getLabel(field.getName()) %>
-              </td>
-  	              <td class="FieldComponent"><% uiform.renderField(field) %></td>
-              <%} else { %>
-                <td class="FieldComponent" colspan="2"><% uiform.renderField(field) %></td>
-              <%}%>
-            </tr>
-		      <%
-		          }
-		        }
-		      %>
-	      	</table>
-	    	</div>
-	  	</div>
-		</div>
-	
+
 	</div>
 	<div class="UIAction"> 
     <table class="ActionContainer" align="center">

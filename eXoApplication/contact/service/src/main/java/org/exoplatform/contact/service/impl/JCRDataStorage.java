@@ -463,14 +463,18 @@ public class JCRDataStorage{
   public void moveContacts(SessionProvider sysProvider, String username, List<Contact> contacts, String addressType ) throws Exception {
     Node privateContactHome = getUserContactHome(sysProvider, username);
     Node publicContactHome = getPublicContactHome(SessionProvider.createSystemProvider()) ;
-    //boolean isUpdatePermission = false ;
     for(Contact contact : contacts) {
       try{
     		if(addressType.equals(PRIVATE)) {
       		if(contact.getContactType().equals(SHARED)) {
       			saveContact(sysProvider, username, contact, true) ;
       			removeSharedContact(sysProvider, username, contact.getAddressBook()[0], contact.getId()) ;            
-      		}else if(contact.getContactType().equals(PUBLIC)) {
+      		} else if(contact.getContactType().equals(PRIVATE)){
+            saveContact(sysProvider, username, contact, false) ;            
+          }else if(contact.getContactType().equals(PRIVATE)){
+            saveContact(sysProvider, username, contact, false) ;            
+          }
+          /*else if(contact.getContactType().equals(PUBLIC)) {
             publicContactHome.getNode(contact.getId()).setProperty("exo:categories", contact.getAddressBook()) ;
             publicContactHome.getSession().move(publicContactHome.getPath() +"/" + contact.getId(), 
       					                                 privateContactHome.getPath() +"/" + contact.getId()) ;
@@ -487,21 +491,29 @@ public class JCRDataStorage{
             extNode.setPermission(username, arrayPers) ;
             extNode.save() ;
             //id = contact.getId() ;
-      		}else if(contact.getContactType().equals(PRIVATE)){
-      			saveContact(sysProvider, username, contact, false) ;      			
       		}
+          */
+          
+          
       	}else if(addressType.equals(SHARED)) {
       		if(contact.getContactType().equals(PRIVATE)) {
       			saveContactToSharedAddressBook(sysProvider, username, contact.getAddressBook()[0], contact, true) ;
             if (privateContactHome.hasNode(contact.getId()))
               privateContactHome.getNode(contact.getId()).remove() ;
-      		}else if(contact.getContactType().equals(PUBLIC)) {
+      		} else if(contact.getContactType().equals(SHARED)){
+            saveContactToSharedAddressBook(sysProvider, username, contact.getAddressBook()[0], contact, false) ;
+          }
+          
+          /*
+          else if(contact.getContactType().equals(PUBLIC)) {
       			saveContactToSharedAddressBook(sysProvider, username, contact.getAddressBook()[0], contact, true) ;
       			publicContactHome.getNode(contact.getId()).remove() ;
-      		}else if(contact.getContactType().equals(SHARED)){
-      			saveContactToSharedAddressBook(sysProvider, username, contact.getAddressBook()[0], contact, false) ;
       		}
-      	}else if(addressType.equals(PUBLIC)) {
+          */
+          
+      	}
+        /*
+        else if(addressType.equals(PUBLIC)) {
       		if(contact.getContactType().equals(PRIVATE)) {
             Node node = privateContactHome.getNode(contact.getId()) ;
             node.setProperty("exo:categories", contact.getAddressBook()) ;
@@ -515,6 +527,7 @@ public class JCRDataStorage{
       			savePublicContact(contact, false) ;
       		}
       	}
+        */
     	}catch(Exception e) {
     		e.printStackTrace() ;
     	}    	    	
@@ -784,6 +797,11 @@ public class JCRDataStorage{
   public ContactPageList getPublicContactsByAddressBook(SessionProvider sysProvider, String groupId) throws Exception {
   	String usersPath = nodeHierarchyCreator_.getJcrPath("usersPath") ;
     Node contactHome = getPublicContactHome(SessionProvider.createSystemProvider());
+    /*
+    System.out.println("\n\n userpath:" + usersPath + "\n\n");
+    System.out.println("\n\n publicHome:" + contactHome.getPath() + "\n\n");
+    System.out.println("\n\n ccc:" + contactHome.getNodes().getSize());
+    */
     QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + usersPath 
                                                 + "//element(*,exo:contact)[@exo:categories='")
