@@ -38,18 +38,29 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
 	if(tr != null) {
 		var checkbox = eXo.core.DOMUtil.findFirstDescendantByClass(tr, "input", "checkbox") ;		
 		id = checkbox.name ;
-		eXo.webui.UIContextMenuCon.changeAction(UIContextMenuCon.menuElement, id) ;
+		//eXo.webui.UIContextMenuCon.changeAction(UIContextMenuCon.menuElement, id) ;
 	} else {
-		var VCardContent = eXo.core.DOMUtil.findAncestorByClass(src, "VCardContent") ;
-		id = VCardContent.getAttribute("id") ;
-		eXo.webui.UIContextMenuCon.changeAction(UIContextMenuCon.menuElement, id) ;
+		tr = eXo.core.DOMUtil.findAncestorByClass(src, "VCardContent") ;
+		id = tr.getAttribute("id") ;
 	}
-	
-	
-	// move
-	
-	
-	
+  if(tr.getAttribute("ispublic")) {
+    var isPublic = tr.getAttribute("ispublic").toLowerCase() ;
+    var actions = eXo.core.DOMUtil.findDescendantsByClass(UIContextMenuCon.menuElement, "div", "ItemIcon") ;
+    if(isPublic == "true") {
+      if(!actions[4].parentNode.getAttribute("oldHref")) {
+        actions[4].parentNode.setAttribute("oldHref",actions[4].parentNode.href) ;
+        actions[4].parentNode.style.color = "#cccccc" ;
+        actions[4].parentNode.href = "javascript:void(0);" ;        
+      }
+    } else {
+      if(actions[4].parentNode.getAttribute("oldHref")) {
+        actions[4].parentNode.href = actions[4].parentNode.getAttribute("oldHref") ;
+        actions[4].parentNode.removeAttribute("oldHref") ;
+        actions[4].parentNode.removeAttribute("style") ;
+      }
+    }
+  }
+	eXo.webui.UIContextMenuCon.changeAction(UIContextMenuCon.menuElement, id) ;
 } ;
 
 UIContactPortlet.prototype.addressBookCallback = function(evt) {

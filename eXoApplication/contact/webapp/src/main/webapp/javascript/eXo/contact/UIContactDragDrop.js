@@ -21,10 +21,11 @@ UIContactDragDrop.prototype.getAllDropableSets = function() {
   var uiAddressBooksNode = document.getElementById('UIAddressBooks') ;
   var addressBooks = this.DOMUtil.findDescendantsByClass(uiAddressBooksNode, 'div', 'ItemList') ;
   for (var i=0; i<addressBooks.length; i++) {
+    if(eXo.core.DOMUtil.hasClass(addressBooks[i],"PublicAddressBook")) continue ;
     this.dropableSets[this.dropableSets.length] = addressBooks[i] ;
   }
-  var publicAddressBook = this.DOMUtil.findDescendantsByClass(uiAddressBooksNode, 'div', 'PublicAddress') ;
-  this.dropableSets[this.dropableSets.length] = publicAddressBook[0] ;
+//  var publicAddressBook = this.DOMUtil.findDescendantsByClass(uiAddressBooksNode, 'div', 'PublicAddress') ;
+//  this.dropableSets[this.dropableSets.length] = publicAddressBook[0] ;
   var uiTagsNode = document.getElementById('UITags') ;
   var tagLists = this.DOMUtil.findDescendantsByClass(uiTagsNode, 'div', 'ItemList') ;
   for (var i=0; i<tagLists.length; i++) {
@@ -127,7 +128,6 @@ UIContactDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj, 
   this.DragDrop.initCallback = this.initCallback ;
   this.DragDrop.dragCallback = this.dragCallback ;
   this.DragDrop.dropCallback = this.dropCallback ;
-  
   this.DragDrop.init(dropableObjs, clickBlock, uiContactPortletNode, e) ;
   return false ;
 } ;
@@ -201,11 +201,11 @@ UIContactDragDrop.prototype.dropCallback = function(dndEvent) {
       eXo.webui.UIForm.submitForm('UIContacts','Tag', true) ;
       return ;
     }
-    if (eXo.core.DOMUtil.hasClass(this.foundTargetObjectCatch,'PublicAddress')) {
-      uiContacts.action = uiContacts.action + '&isDND=true' ;
-      eXo.webui.UIForm.submitForm('UIContacts','MoveContacts', true) ;
-      return ;
-    }
+//    if (eXo.core.DOMUtil.hasClass(this.foundTargetObjectCatch,'PublicAddress')) {
+////      uiContacts.action = uiContacts.action + '&isDND=true' ;
+////      eXo.webui.UIForm.submitForm('UIContacts','MoveContacts', true) ;
+//      return ;
+//    }
     var contactTypeId = this.foundTargetObjectCatch.getAttribute('tagId') ;
     if (!contactTypeId) {      
     	contactTypeId = this.foundTargetObjectCatch.id ;
