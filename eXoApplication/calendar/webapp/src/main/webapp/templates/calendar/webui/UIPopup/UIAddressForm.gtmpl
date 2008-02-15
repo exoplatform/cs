@@ -11,19 +11,20 @@
           <div class="LeftBar">
             <div class="RightBar">
               <div class="MiddleBar">
-                <div class="UISearchForm">
-                  <div class="QuickSet">
+                <div class="UIAddressSearchForm">
+                  <div class="QuickSearch">
                     <div class="SearchTitle">Search:</div>
                     <%uiform.renderField(uiform.FIELD_KEYWORD)%>
                     <a class="SearchIcon" href="<%=uicomponent.event('Search')%>" title="Quick Search"><span></span></a>
+                    <div style="clear:left;"><span></span></div>
                   </div>  
                 </div>
                 <div class="AddressesGroup">
                   <div class="AddressLabel">Addresses from group:</div>
                    <%uiform.renderField(uiform.FIELD_GROUP)%>
-                  <div style="clear: left"><span></span></div>
+                  <div style="clear: left;"><span></span></div>
                 </div>
-                <div style="clear: left"><span></span></div>
+                <div style="clear: left;"><span></span></div>
               </div>
             </div>
           </div>

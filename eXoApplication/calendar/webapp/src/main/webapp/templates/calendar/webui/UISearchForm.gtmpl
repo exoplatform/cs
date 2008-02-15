@@ -9,7 +9,7 @@
 		<div class="AdvancedSearch" title="<%=uiform.getLabel('AdvancedSearch')%>"><span></span></div>
 	</a>
 	<a href="<%=uicomponent.event("Search")%>">
-		<div class="Search" title="<%=uiform.getLabel('Search')%>"><span></span></div>
+		<div class="SearchIcon" title="<%=uiform.getLabel('Search')%>"><span></span></div>
 	</a>
 	<%uiform.renderChild("value")%>
 	<div class="UISearchLabel">

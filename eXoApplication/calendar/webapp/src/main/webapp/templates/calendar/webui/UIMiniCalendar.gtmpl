@@ -18,9 +18,9 @@
 		cssClass = "CalendarMatchedEventContent" ;
 	}
 	DateFormat sdf = new  SimpleDateFormat("d") ;
-	sdf.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
+	sdf.setCalendar(uicomponent.getInstanceTempCalendar()) ;
 	DateFormat sdtf = new  SimpleDateFormat("MM/d") ;
- 	sdtf.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
+ 	sdtf.setCalendar(uicomponent.getInstanceTempCalendar()) ;
 	Map data = uicomponent.getData() ;
 %>
 <div class="UIMiniCalendar">
@@ -80,7 +80,7 @@
   					<table class="UIGrid" id="" cellspacing="0" borderspacing="0">
   						<tbody>
   						<%
-  						 calendar = CalendarUtils.getInstanceTempCalendar()  ;
+  						 calendar = uicomponent.getInstanceTempCalendar()  ;
   						 calendar.setTime(uicomponent.getBeginDateOfMonthView().getTime()) ;
   						 
 					week = 0 ; 

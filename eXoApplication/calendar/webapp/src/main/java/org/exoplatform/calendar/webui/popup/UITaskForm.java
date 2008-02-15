@@ -116,8 +116,10 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   public void initForm(CalendarSetting calSetting, CalendarEvent eventCalendar) throws Exception {
     reset() ;
     UITaskDetailTab taskDetailTab = getChildById(TAB_TASKDETAIL) ;
-    List<SelectItemOption<String>> fromTimes = CalendarUtils.getTimesSelectBoxOptions(calSetting.getTimeFormat(), calSetting.getTimeFormat()) ;
-    List<SelectItemOption<String>> toTimes = CalendarUtils.getTimesSelectBoxOptions(calSetting.getTimeFormat(), calSetting.getTimeFormat()) ;
+    List<SelectItemOption<String>> fromTimes 
+      = CalendarUtils.getTimesSelectBoxOptions(calSetting.getTimeFormat(), calSetting.getTimeFormat(), calSetting.getTimeInterval()) ;
+    List<SelectItemOption<String>> toTimes 
+      = CalendarUtils.getTimesSelectBoxOptions(calSetting.getTimeFormat(), calSetting.getTimeFormat(), calSetting.getTimeInterval()) ;
     taskDetailTab.getUIFormComboBox(UITaskDetailTab.FIELD_FROM_TIME).setOptions(fromTimes) ;
     taskDetailTab.getUIFormComboBox(UITaskDetailTab.FIELD_TO_TIME).setOptions(toTimes) ;
     if(eventCalendar != null) {

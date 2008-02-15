@@ -5,7 +5,7 @@
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.getFilterForm("' + uiform.id + '") ;') ;
   //rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkFilter() ;') ;
 %>
-<div class="$uicomponent.id" >
+<div class="UICalendars" >
 <%uiform.begin()%>
 	<div class="TitleBar">
 		<div class="Title">

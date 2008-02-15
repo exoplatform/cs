@@ -100,7 +100,7 @@ public class CalendarUtils {
   public static Calendar getInstanceTempCalendar() { 
     Calendar  calendar = GregorianCalendar.getInstance() ;
     calendar.setLenient(false) ;
-   /* try {
+    /* try {
       CalendarSetting setting = getCalendarService().getCalendarSetting(SessionsUtils.getSessionProvider(), getCurrentUser()) ;
       calendar.setTimeZone(TimeZone.getTimeZone(setting.getTimeZone())) ; 
     } catch (Exception e) {
@@ -116,7 +116,7 @@ public class CalendarUtils {
     cal.set(Calendar.HOUR_OF_DAY, 0) ;
     cal.set(Calendar.MINUTE, 0) ;
     cal.set(Calendar.MILLISECOND, 0) ;
-    
+
     DateFormat df = new SimpleDateFormat(timeFormat) ;
     df.setCalendar(cal) ;
     DateFormat df2 = new SimpleDateFormat(TIMEFORMAT) ;
@@ -135,7 +135,7 @@ public class CalendarUtils {
     cal.set(Calendar.HOUR_OF_DAY, 0) ;
     cal.set(Calendar.MINUTE, 0) ;
     cal.set(Calendar.MILLISECOND, 0) ;
-    
+
     DateFormat dfLabel = new SimpleDateFormat(labelFormat) ;
     dfLabel.setCalendar(cal) ;
     DateFormat dfValue = new SimpleDateFormat(valueFormat) ;
@@ -147,13 +147,34 @@ public class CalendarUtils {
     }
     return options ;
   }
+
+  public static List<SelectItemOption<String>> getTimesSelectBoxOptions(String labelFormat, String valueFormat, long timeInteval) {
+    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+    Calendar cal = getInstanceTempCalendar() ;
+    cal.set(Calendar.DST_OFFSET, 0) ;
+    cal.set(Calendar.HOUR_OF_DAY, 0) ;
+    cal.set(Calendar.MINUTE, 0) ;
+    cal.set(Calendar.MILLISECOND, 0) ;
+
+    DateFormat dfLabel = new SimpleDateFormat(labelFormat) ;
+    dfLabel.setCalendar(cal) ;
+    DateFormat dfValue = new SimpleDateFormat(valueFormat) ;
+    dfValue.setCalendar(cal) ;
+    int time = 0 ;
+    while (time ++ < 24*60/(timeInteval)) {
+      options.add(new SelectItemOption<String>(dfLabel.format(cal.getTime()), dfValue.format(cal.getTime()))) ;
+      cal.add(java.util.Calendar.MINUTE, (int)timeInteval) ;
+    }
+    return options ;
+  }
+
   public static List<SelectItemOption<String>> getTimesSelectBoxOptions(String timeFormat, int timeInteval) {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     Calendar cal = getInstanceTempCalendar() ;
     cal.set(Calendar.HOUR_OF_DAY, 0) ;
     cal.set(Calendar.MINUTE, 0) ;
     cal.set(Calendar.MILLISECOND, 0) ;
-    
+
     DateFormat df = new SimpleDateFormat(timeFormat) ;
     df.setCalendar(cal) ;
     DateFormat df2 = new SimpleDateFormat(TIMEFORMAT) ;
@@ -169,23 +190,27 @@ public class CalendarUtils {
   public static List<SelectItemOption<String>> getTimeZoneSelectBoxOptions(String[] timeZoneIds) {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     for (String tz : timeZoneIds){
-      TimeZone timeZone = TimeZone.getTimeZone(tz) ;
-      int rawOffset = timeZone.getRawOffset() / 60000;
-      int hours = rawOffset / 60;
-      int minutes = Math.abs(rawOffset) % 60;
-      String hrStr = "";
-      if (Math.abs(hours) < 10) {
-        if (hours < 0) {
-          hrStr = "-0" + Math.abs(hours);
+      if(tz.lastIndexOf("/") > 0 && tz.toLowerCase().lastIndexOf("etc".toLowerCase()) < 0 && tz.toLowerCase().lastIndexOf("system") < 0) {
+        TimeZone timeZone = TimeZone.getTimeZone(tz) ;
+        int rawOffset = timeZone.getRawOffset() / 60000;
+        int hours = rawOffset / 60;
+        int minutes = Math.abs(rawOffset) % 60;
+        String hrStr = "";
+        if (Math.abs(hours) < 10) {
+          if (hours < 0) {
+            hrStr = "-0" + Math.abs(hours);
+          } else {
+            hrStr = "0" + Math.abs(hours);
+          }
         } else {
-          hrStr = "0" + Math.abs(hours);
+          hrStr = Integer.toString(hours);
         }
-      } else {
-        hrStr = Integer.toString(hours);
-      }
-      String minStr = (minutes < 10) ? ("0" + Integer.toString(minutes)) : Integer.toString(minutes);
-      String str = "(GMT " + ((timeZone.getRawOffset() >= 0) ? "+" : "") + hrStr + ":" + minStr + ") " + timeZone.getID();
-      options.add(new SelectItemOption<String>( str , tz)); 
+        String minStr = (minutes < 10) ? ("0" + Integer.toString(minutes)) : Integer.toString(minutes);
+        String str = "(GMT " + ((timeZone.getRawOffset() >= 0) ? "+" : "") 
+          + hrStr + ":" + minStr + ") " + tz ;
+        //subZoneMap.put(tz,  str) ;
+        options.add(new SelectItemOption<String>(str, tz)) ;
+      } 
     }
     return options ;
   }
@@ -263,8 +288,8 @@ public class CalendarUtils {
     cal.setTime(date) ;
     return getEndDay(cal) ;
   }
-  
-  
+
+
   public static String getDataSource(Attachment attach, DownloadService dservice) throws Exception {      
     if (attach != null) {
       try {

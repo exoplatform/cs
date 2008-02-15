@@ -287,3 +287,11 @@
 .UICalendarPortlet .AddCategoryIcon {
 		background: url('icons/AddCategory.gif') no-repeat left center;
 }
+
+.UICalendarPortlet .ViewMoreIcon {
+	background: url('icons/ViewMoreEvent.gif') no-repeat right;
+}
+
+.UICalendarPortlet .AdvancedSearch {
+  background: url('icons/FindIcon.gif') no-repeat ;	
+}

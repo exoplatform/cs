@@ -145,7 +145,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   }
   protected Calendar getInstanceTempCalendar() { 
      if(instanceTempCalendar_ != null) return instanceTempCalendar_ ; 
-      System.out.println("created in " + this.getId() );
+      //System.out.println("created in " + this.getId() );
       Calendar  calendar = GregorianCalendar.getInstance() ;
       calendar.setLenient(false) ;
       int gmtoffset = calendar.get(Calendar.DST_OFFSET) + calendar.get(Calendar.ZONE_OFFSET);
@@ -166,7 +166,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     dateTimeFormat_ = getDateFormat() + " " + getTimeFormat() ;
     TimeZone settingTimeZone = TimeZone.getTimeZone(calendarSetting_.getTimeZone()) ;
     //dfs_ =  new DateFormatSymbols(new Locale(calendarSetting_.getLocation())) ;
-    calendar_ = CalendarUtils.getInstanceTempCalendar() ;
+    //calendar_ = getInstanceTempCalendar() ;
   }
   public void setViewType(String viewType) { this.viewType_ = viewType ; }
   public String getViewType() { return viewType_ ; }
@@ -862,7 +862,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
       UIQuickAddEvent uiQuickAddEvent = uiPopupAction.activate(UIQuickAddEvent.class, 600) ;
-      System.out.println(selectedCategory);
+      //System.out.println(selectedCategory);
       if(selectedCategory != null && selectedCategory.trim().length() > 0) 
         uiQuickAddEvent.setSelectedCategory(selectedCategory) ;
       else uiQuickAddEvent.setSelectedCategory("Meeting") ; 

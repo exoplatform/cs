@@ -40,18 +40,31 @@
 
 /*********************************************UISearch*****************************************/
 
-.UICalendarPortlet .UIInsertAddress .UISearchForm {
+.UICalendarPortlet .UIInsertAddress .UIAddressSearchForm {
 	float: left;
 	width: 300px;
 }
 
-.UICalendarPortlet .UIInsertAddress .UISearchForm .SearchIcon {
-  background: url('icons/SearchIcon.gif') no-repeat center;
-  float: left;
-  height: 20px; width: 24px;
+.UICalendarPortlet .UIInsertAddress .UIAddressSearchForm input{
+	float: left;
+	margin: 5px 0px;
 }
 
+.UICalendarPortlet .UIInsertAddress .UIAddressSearchForm .SearchIcon {
+  float: left;
+  height: 20px; width: 24px;
+  margin: 10px;
+}
+
+.UICalendarPortlet .UIInsertAddress .UIAddressSearchForm .SearchTitle {
+	float: left;
+	line-height: 20px;
+	margin: 5px 0px;
+	color: #555; 
+}
 .UICalendarPortlet .UIInsertAddress .AddressesGroup {
+	width: 300px;
+	height: 32px;
 	margin: 0px 8px 0px 305px;
 	text-align: right;
 }

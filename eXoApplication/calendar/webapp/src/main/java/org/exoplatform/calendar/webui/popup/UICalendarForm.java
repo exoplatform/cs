@@ -257,7 +257,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     return calendarDetail.getUIFormSelectBox(TIMEZONE).getValue() ;
   }
 
-  protected void setTimeZone(String value) {
+  public void setTimeZone(String value) {
     UIFormInputWithActions calendarDetail = getChildById(INPUT_CALENDAR) ;
     calendarDetail.getUIFormSelectBox(TIMEZONE).setValue(value) ;
   }
@@ -419,5 +419,4 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       calendarPortlet.cancelAction() ;
     }
   }
-
 }

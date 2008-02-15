@@ -17,11 +17,13 @@
 package org.exoplatform.calendar.webui;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
@@ -90,6 +92,9 @@ public class UICalendars extends UIForm  {
   public static String CALTYPE = "calType".intern() ;
   public static String CALNAME = "calName".intern() ;
   public static String CALCOLOR = "calColor".intern() ;
+  public static String CURRENTTIME = "ct".intern() ;
+  public static String TIMEZONE = "tz".intern() ;
+
   private String[] publicCalendarIds = {} ;
   private LinkedHashMap<String, String> colorMap_ = new LinkedHashMap<String, String>() ;
 
@@ -104,7 +109,7 @@ public class UICalendars extends UIForm  {
   private SessionProvider getSystemSession() {
     return SessionProviderFactory.createSystemProvider() ;
   }
-  
+
   protected List<GroupCalendarData> getPrivateCalendars() throws Exception{
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
@@ -172,11 +177,20 @@ public class UICalendars extends UIForm  {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiComponent = event.getSource() ;
       String categoryId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      String clientTime = event.getRequestContext().getRequestParameter(CURRENTTIME) ;
+      java.util.Calendar cal = new GregorianCalendar() ;
+      try {
+        cal.setTimeInMillis(Long.parseLong(clientTime)) ;
+      } catch (Exception e) {
+        System.out.println("invalid clientTime");
+      }
+      TimeZone timeZone = cal.getTimeZone() ;
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
       UIPopupContainer uiPopupContainer = uiCalendarPortlet.createUIComponent(UIPopupContainer.class, null, null) ;
       uiPopupContainer.setId(UIPopupContainer.UICALENDARPOPUP) ;
       UICalendarForm calendarForm = uiPopupContainer.addChild(UICalendarForm.class, null, null) ;
+      calendarForm.setTimeZone(timeZone.getID()) ;
       calendarForm.setSelectedGroup(categoryId) ;
       popupAction.activate(uiPopupContainer, 600, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
@@ -231,14 +245,16 @@ public class UICalendars extends UIForm  {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiComponent = event.getSource() ;
       String calendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      String calendarName = event.getRequestContext().getRequestParameter(CALNAME) ;
+      //String calendarName = event.getRequestContext().getRequestParameter(CALNAME) ;
       String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
+      String clientTime = event.getRequestContext().getRequestParameter(CURRENTTIME) ;
+      //String offsetTimeZone = event.getRequestContext().getRequestParameter(TIMEZONE) ;
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
       UIQuickAddEvent uiQuickAddEvent = popupAction.activate(UIQuickAddEvent.class, 600) ;
       uiQuickAddEvent.setEvent(true) ;  
       uiQuickAddEvent.setId("UIQuickAddEvent") ;
-      uiQuickAddEvent.init(uiCalendarPortlet.getCalendarSetting(), null, null) ;
+      uiQuickAddEvent.init(uiCalendarPortlet.getCalendarSetting(), clientTime, null) ;
       List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
       if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
         options = null ;
@@ -266,14 +282,16 @@ public class UICalendars extends UIForm  {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiComponent = event.getSource() ;
       String calendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      String calendarName = event.getRequestContext().getRequestParameter(CALNAME) ;
+      //String calendarName = event.getRequestContext().getRequestParameter(CALNAME) ;
+      String clientTime = event.getRequestContext().getRequestParameter(CURRENTTIME) ;
+      //String offsetTimeZone = event.getRequestContext().getRequestParameter(TIMEZONE) ;
       String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
       UIQuickAddEvent uiQuickAddEvent = popupAction.activate(UIQuickAddEvent.class, 600) ;
       uiQuickAddEvent.setEvent(false) ;  
       uiQuickAddEvent.setId("UIQuickAddTask") ;
-      uiQuickAddEvent.init(uiCalendarPortlet.getCalendarSetting(), null, null) ;
+      uiQuickAddEvent.init(uiCalendarPortlet.getCalendarSetting(), clientTime, null) ;
       List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
       if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
         options = null ;

@@ -102,7 +102,7 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
       Map<String, String> parsMap = 
         CalendarUtils.getCalendarService().checkFreeBusy(SessionProviderFactory.createSystemProvider(), eventQuery) ;
       parMap_.putAll(parsMap) ;
-      System.out.println("parsMap " + parsMap.values().toString());
+      //System.out.println("parsMap " + parsMap.values().toString());
     }
   }
 

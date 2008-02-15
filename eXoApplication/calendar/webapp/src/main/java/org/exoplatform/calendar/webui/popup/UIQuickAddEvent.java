@@ -105,8 +105,10 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   }
 
   public void init(CalendarSetting  calendarSetting, String startTime, String endTime) throws Exception {
-    List<SelectItemOption<String>> fromOptions = CalendarUtils.getTimesSelectBoxOptions(calendarSetting.getTimeFormat(),calendarSetting.getTimeFormat()) ;
-    List<SelectItemOption<String>> toOptions = CalendarUtils.getTimesSelectBoxOptions(calendarSetting.getTimeFormat(),calendarSetting.getTimeFormat()) ;
+    List<SelectItemOption<String>> fromOptions 
+      = CalendarUtils.getTimesSelectBoxOptions(calendarSetting.getTimeFormat(),calendarSetting.getTimeFormat(), calendarSetting.getTimeInterval()) ;
+    List<SelectItemOption<String>> toOptions 
+      = CalendarUtils.getTimesSelectBoxOptions(calendarSetting.getTimeFormat(),calendarSetting.getTimeFormat(),  calendarSetting.getTimeInterval()) ;
     getUIFormCombobox(FIELD_FROM_TIME).setOptions(fromOptions) ;
     getUIFormCombobox(FIELD_TO_TIME).setOptions(toOptions) ;
     UIMiniCalendar miniCalendar = getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;

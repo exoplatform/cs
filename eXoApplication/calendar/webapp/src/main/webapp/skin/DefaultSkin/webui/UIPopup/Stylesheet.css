@@ -1,3 +1,6 @@
+@import url("UIFeed/Stylesheet.css") ;
+@import url("UIAddressForm/Stylesheet.css");
+@import url("UIEventForm/Stylesheet.css");
 /************************ UIPopup Calendar *********************/
 
 .UICalendarPortlet .UIPopupWindow .PopupContent {
@@ -43,11 +46,43 @@
 	border: none;
 }
 
-/********************* UIImportForm ***************************/
-.UICalendarPortlet .UIImportForm {
-	padding: 10px;
+/*===================UIForm=======================*/
+
+.UICalendarPortlet .UIEventCategoryManager {
+	padding: 8px;
 }
 
-.UICalendarPortlet .UIImportForm .HorizontalLayout {
-	border: none;
+.UICalendarPortlet .UIEventCategoryManager .UIGrid .ActionContainer {
+	width: 60px;
+}
+
+.UICalendarPortlet .SelectFileFrame {
+	width: 300px;
+}
+
+.UICalendarPortlet .SelectMemberIcon {
+	width: 16px ; height: 16px;
+}
+
+.UICalendarPortlet .SelectUserIcon {
+	width: 16px ; height: 16px;
+}
+.UICalendarPortlet .SelectGroupIcon {
+	width: 16px ; height: 16px;
+}
+/********************************** UICalendarSettingForm ***************************************/
+.UICalendarPortlet .setting{
+}
+.UICalendarPortlet .setting .WorkingTime{
+ float: left;
+}
+.UICalendarPortlet .setting .WorkingTime .selectbox{
+ width: 70px;
+}
+.UICalendarPortlet .setting .WorkingTimeCheck {
+ float:left;
+}
+/********************************** UISelectUserForm ***************************************/
+.UISelectUserForm {
+	padding: 10px;
 }
