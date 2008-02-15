@@ -191,10 +191,6 @@ UICalendarPortlet.prototype.show = function(obj, evt) {
 	var portlet =	document.getElementById(this.portletName).parentNode ;
 	var contentContainer = DOMUtil.findFirstDescendantByClass(portlet, "div", "ContentContainer") ;
 	var	uiPopupCategory = DOMUtil.findNextElementByTagName(contentContainer,  "div") ;
-	var newPos = {
-		"x" : eXo.core.Browser.findPosX(obj) ,
-		"y" : eXo.core.Browser.findPosY(obj) + obj.offsetHeight - contentContainer.scrollTop - portlet.scrollTop
-	}
   var d = new Date() ;
   var currentTime = d.getTime() ;
   var timezoneOffset = d.getTimezoneOffset() ;
@@ -234,8 +230,7 @@ UICalendarPortlet.prototype.show = function(obj, evt) {
 	if (DOMUtil.findAncestorByClass(obj, "CalendarItem")) {
     items[1].href = String(items[1].href).replace("')", "&ct=" + currentTime + "&tz=" + timezoneOffset + "')") ;
   }
-	eXo.calendar.UICalendarPortlet.swapMenu(uiPopupCategory, obj, newPos) ;
-	//eXo.calendar.UICalendarPortlet.swapMenu(uiPopupCategory, obj) ;
+	eXo.calendar.UICalendarPortlet.swapMenu(uiPopupCategory, obj, contentContainer) ;
 	if (calType && (calType != "0") ) {
 		var actions = DOMUtil.findDescendantsByTagName(eXo.calendar.UICalendarPortlet.menuElement, "a") ;
 		for(var j = 0 ; j < actions.length ; j ++) {
@@ -1082,6 +1077,9 @@ UICalendarPortlet.prototype.swapMenu = function(oldmenu, clickobj) {
 	tmpMenuElement.setAttribute("id","tmpMenuElement") ;
 	UICalendarPortlet.menuElement = tmpMenuElement ;
   document.getElementById(UICalendarPortlet.portletName).appendChild(tmpMenuElement) ;	
+  if(arguments.length > 2) {
+    menuY -= arguments[2].scrollTop ;
+  }
 	UICalendarPortlet.menuElement.style.top = menuY + "px" ;
 	UICalendarPortlet.menuElement.style.left = menuX + "px" ;	
 	UICalendarPortlet.showHide(UICalendarPortlet.menuElement) ;
@@ -1094,7 +1092,6 @@ UICalendarPortlet.prototype.swapMenu = function(oldmenu, clickobj) {
       UICalendarPortlet.menuElement.style.top = menuY + "px" ;
     }
   }  
-
 	//UICalendarPortlet.menuElement = null ;
 } ;
 UICalendarPortlet.prototype.isAllday = function(form) {
