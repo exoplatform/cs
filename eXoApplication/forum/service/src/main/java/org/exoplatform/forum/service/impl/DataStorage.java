@@ -50,7 +50,7 @@ public interface DataStorage {
 	
 	public JCRPageList getPageTopic(SessionProvider sProvider, String categoryId, String forumId) throws Exception;
 	public List<Topic> getTopics(SessionProvider sProvider, String categoryId, String forumId) throws Exception;
-	public Topic getTopic(SessionProvider sProvider, String categoryId, String forumId, String topicId, boolean viewTopic) throws Exception;		
+	public Topic getTopic(SessionProvider sProvider, String categoryId, String forumId, String topicId, String userRead) throws Exception;		
 	public Topic getTopicByPath(SessionProvider sProvider, String topicPath) throws Exception;
 	public TopicView getTopicView(SessionProvider sProvider, String categoryId, String forumId, String topicId) throws Exception;
 	public void saveTopic(SessionProvider sProvider, String categoryId, String forumId, Topic topic, boolean isNew) throws Exception;
@@ -83,5 +83,5 @@ public interface DataStorage {
 	public void removeTag(SessionProvider sProvider, String tagId) throws Exception ;
 
 	public void saveUserProfile(SessionProvider sProvider, UserProfile userProfile, boolean isOption, boolean isBan) throws Exception ;
-	public UserProfile getUserProfile(SessionProvider sProvider, String userName) throws Exception ;
+	public UserProfile getUserProfile(SessionProvider sProvider, String userName, boolean isGetOption, boolean isGetBan) throws Exception ;
 }

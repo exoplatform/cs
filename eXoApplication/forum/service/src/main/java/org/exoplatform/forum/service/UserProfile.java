@@ -26,7 +26,6 @@ public class UserProfile {
 	public static final long GUEST = 3 ;
 	
 	private String userId ;
-	private String userName ;
 	private String userTitle ; //Rank of user
 	private long userRole ; // values: 0: Admin ; 1: Moderator ; 2: User ; 3 guest
 	private String signature ;
@@ -59,8 +58,8 @@ public class UserProfile {
 	
 	@SuppressWarnings("deprecation")
   public UserProfile() {
-		userId = "guestForum";
-		userName = "Guest";
+		userId = "Guest";
+		userTitle = "Guest";
 		userRole = GUEST ;
 		moderateForums = new String[] {} ;
 		moderateTopics = new String[] {} ;
@@ -76,14 +75,11 @@ public class UserProfile {
 	public void setUserId(String userId) {this.userId = userId;}
 	public String getUserId() {return this.userId ;}
 	
-	public void setUserName(String userName) {this.userName = userName;}
-	public String getUserName(){return this.userName ;}
-	
 	public void setUserTitle(String userTitle) {this.userTitle = userTitle;}
 	public String getUserTitle() {return this.userTitle ;}
 	
 	public void setUserRole(Long userGruops) {this.userRole = userGruops;}
-	public Long getUserGoups() {return this.userRole ;}
+	public Long getUserRole() {return this.userRole ;}
 	
 	public void setSignature(String signature) {this.signature = signature;}
 	public String getSignature() {return this.signature ;}

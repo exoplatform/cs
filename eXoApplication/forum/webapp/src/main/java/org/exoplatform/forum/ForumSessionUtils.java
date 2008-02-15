@@ -21,6 +21,7 @@ import java.io.InputStream;
 
 import javax.jcr.PathNotFoundException;
 
+import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
@@ -114,4 +115,13 @@ public class ForumSessionUtils {
     }
     return groupIds ;
   }
+  
+  @SuppressWarnings("unchecked")
+  public static PageList getPageListUser() throws Exception {
+  	OrganizationService organizationService = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+//  	OrganizationService organizationService = getApplicationComponent(OrganizationService.class) ;
+  	return organizationService.getUserHandler().getUserPageList(0);
+  }
+  
+  
 }

@@ -27,7 +27,6 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPopupMessages;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
-
 /**
  * Author : Nguyen Quang Hung
  *					hung.nguyen@exoplatform.com
@@ -52,10 +51,6 @@ public class UIForumPortlet extends UIPortletApplication {
 		addChild(UITopicsTag.class, null, null).setRendered(isTagRendered) ;
 		addChild(UIForumLinks.class, null, null).setRendered(false) ;
 		addChild(UIPopupAction.class, null, null) ;
-//		String []newStr = ForumSessionUtils.getUserGroups() ;
-//		for (String string : newStr) {
-//      System.out.println("\n" + string);
-//    }
 	}
 
 	public void updateIsRendered(int selected) throws Exception {
@@ -105,7 +100,7 @@ public class UIForumPortlet extends UIPortletApplication {
   }
   @SuppressWarnings("deprecation")
 	public void setUserProfile() throws Exception {
-  	this.userProfile = forumService.getUserProfile(ForumSessionUtils.getSystemProvider(), ForumSessionUtils.getCurrentUser()) ;
-		System.out.println("\n\nfsif jpsodf jds: " + userProfile.getUserName());
+  	this.userProfile = forumService.getUserProfile(ForumSessionUtils.getSystemProvider(), ForumSessionUtils.getCurrentUser(), true, false) ;
+		System.out.println("\n\nUIsetUserProfile: " + userProfile.getUserId());
   }
 }

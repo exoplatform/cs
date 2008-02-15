@@ -129,8 +129,14 @@ public class UITopicDetail extends UIForm {
 		this.topicId = topicId ;
 		this.viewTopic = viewTopic ;
 		this.isUpdatePageList = false ;
-		this.getAncestorOfType(UIForumPortlet.class).getChild(UIBreadcumbs.class).setUpdataPath((categoryId + "/" + forumId + "/" + topicId)) ;
-		this.topic = forumService.getTopic(ForumSessionUtils.getSystemProvider(), categoryId, forumId, topicId, viewTopic) ;
+		String userName = ForumSessionUtils.getCurrentUser() ;
+		if(userName ==null || userName.length() <= 0 || !this.viewTopic) {
+			userName = "guest" ;
+		}
+		UIForumPortlet forumPortlet = this.getAncestorOfType(UIForumPortlet.class) ;
+		forumPortlet.getChild(UIBreadcumbs.class).setUpdataPath((categoryId + "/" + forumId + "/" + topicId)) ;
+		this.topic = forumService.getTopic(ForumSessionUtils.getSystemProvider(), categoryId, forumId, topicId, userName) ;
+		if(!userName.equals("guest"))	forumPortlet.setUserProfile() ;
 	}
 	@SuppressWarnings("unused")
 	private String getIdPostView() {
@@ -156,15 +162,17 @@ public class UITopicDetail extends UIForm {
 		this.pageSelect = numberPage ;
 		this.isGopage = true ;
 		this.isEditTopic = false ;
+		UIForumPortlet forumPortlet = this.getAncestorOfType(UIForumPortlet.class) ;
 		String userName = ForumSessionUtils.getCurrentUser() ;
 		if(userName !=null && userName.length() > 0) {
 			if(!userName.equals(this.userName)) {
-				this.topic = forumService.getTopic(ForumSessionUtils.getSystemProvider(), categoryId, forumId, topic.getId(), true) ;
+				this.topic = forumService.getTopic(ForumSessionUtils.getSystemProvider(), categoryId, forumId, topic.getId(), userName) ;
 				this.userName = userName ;
+				forumPortlet.setUserProfile() ;
 			} else this.topic = topic ;
 		} else this.topic = topic ;
 		this.getChild(UIForumPageIterator.class).setSelectPage(numberPage) ;
-		this.getAncestorOfType(UIForumPortlet.class).getChild(UIBreadcumbs.class).setUpdataPath((categoryId + "/" + forumId + "/" + topicId)) ;
+		forumPortlet.getChild(UIBreadcumbs.class).setUpdataPath((categoryId + "/" + forumId + "/" + topicId)) ;
 	}
 	
 	public void setIsEditTopic( boolean isEditTopic) {
@@ -179,11 +187,12 @@ public class UITopicDetail extends UIForm {
 	private Topic getTopic() throws Exception {
 		try {
 			if(this.isEditTopic) {
-				this.topic = forumService.getTopic(ForumSessionUtils.getSystemProvider(), categoryId, forumId, topicId, viewTopic) ;
+				this.topic = forumService.getTopic(ForumSessionUtils.getSystemProvider(), categoryId, forumId, topicId, "guest") ;
 				this.isEditTopic = false ;
 			}
 			return this.topic ;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return null ;
 		}
 	}

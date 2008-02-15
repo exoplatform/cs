@@ -1,180 +1,70 @@
+<%  
+	import org.exoplatform.forum.service.UserProfile;
+%>
 <div class="UIModeratorsManagementForm">
+	<% uiform.begin() %>
   <div class="ModeratorsManagementContainer">
 		<div class="ManagementContent">	  	
-		  <div class="UIForm ModeratorsManagement">
-				<div class="HorizontalLayout">
-			  	<table class="UIFormGrid">
-			  		<tbody>
-			  			<tr>
-			  				<td class="FieldLabel">Add Forum to Category:</td>
-			  				<td class="FieldComponent">
-			  					<select name="" class="selectbox">
-										<option value="" selected="selected">eXo Platform SAS</option>
-									</select>
-			  				</td>
-			  			</tr>
-			  		</tbody>
-			  	</table>
-			  </div>
-		  </div>
+		 
 			<div class="ModeratorsGroup">
 			  <table cellspacing="0" borderspacing="0" id="PermissionInfo" class="UIGrid">
 				  <thead>
 				  	<tr>
-				      <th>Moderator (User or Group)</th>
-				      <th>Created Date</th>
+				      <th width="30%">User Name</th>
+				      <th width="20%">User Group</th>
+				      <th width="20%">User Role</th>
 				      <th>Action</th>
 				    </tr>
 				  </thead>
 				  <tbody>
-			      <tr class="EvenRow">
-						  <td class="text">hung.nguyen</td>
-							<td class="text">07-20-2007, 10:30 am</td>
+				  <% 
+				  	String classRowTable = "EvenRow";
+				  	List listUser = uiform.getListProFileUser() ;  
+				  	for(user in listUser) {
+				  %>
+			      <tr class="$classRowTable">
+						  <td class="text"><%=user.getUserId()%></td>
+							<td class="text"><%=user.getUserTitle()%></td>
+							<td class="text"><%=user.getUserRole()%></td>
 						  <td>         
 				        <div style="margin: 0px auto;" class="ActionContainer">
 				          <div style="margin: auto;" class="OverflowContainer">          
-					          <a title="Edit" href="#" class="EditIcon"><span/></a>		          
-					          <a title="Delete" href="#" class="DeleteIcon"><span/></a>		          
+					           <a title="Edit" href="#" class="EditIcon"><span/></a>		          
+					         <!-- <a title="Delete" href="#" class="DeleteIcon"><span/></a>-->		          
 				          </div>
 				        </div>
 				      </td>
 				    </tr>
-			      <tr class="OddRow">
-						  <td class="text">phuong.pham</td>
-							<td class="text"> </td>
-						  <td>         
-				        <div style="margin: 0px auto;" class="ActionContainer">
-				          <div style="margin: auto;" class="OverflowContainer">          
-				            <a title="Edit" href="#" class="EditIcon"><span/></a>		          
-				            <a title="Delete" href="#" class="DeleteIcon"><span/></a>		          
-				          </div>
-				        </div>
-				      </td>
-				    </tr>
-			      <tr class="EvenRow">
-						  <td class="text">thu.nguyen</td>
-							<td class="text"> </td>
-						  <td>         
-				        <div style="margin: 0px auto;" class="ActionContainer">
-				          <div style="margin: auto;" class="OverflowContainer">          
-				            <a title="Edit" href="#" class="EditIcon"><span/></a>		          
-				            <a title="Delete" href="#" class="DeleteIcon"><span/></a>		          
-				          </div>
-				        </div>
-				      </td>
-				    </tr>
+				   <% 
+				   if(classRowTable.equals("EvenRow")) classRowTable = "OddRow";
+				   else classRowTable = "EvenRow"; 
+				   	} 
+				   %>
 				  </tbody>
 				</table> <!--End UIGrid-->              
-			  <div class="UIPageIterator">
-					<div class="PageIteratorContainer">
-					  <div class="RightPageIteratorBlock">
-			    	  <a title="Back 10 pages" class="Icon DisableLastTopPageIcon"/>        
-			    	  <a title="Previous Page" class="Icon DisableLastPageIcon"><span/></a>
-					    <div class="Number">
-			        	<a class="PageSelected" href="javascript:ajaxGet('/portal/private/site/?portal:componentId=jcrexplorer&portal:type=action&portal:isSecure=false&uicomponent=PermissionInfoIterator&op=ShowPage&objectId=1&ajaxRequest=true')">1</a>
-					  	</div>
-			   			<a title="Next Page" class="Icon DisableNextPageIcon"><span/></a>
-				   		<a title="Next 10 pages" class="Icon DisableNextTopPageIcon"><span/></a>
-					    <div style="clear: left;"><span/></div>
-					  </div>
-					  <div class="LeftPageIteratorBlock">
-					  	<div class="TotalPages">Total pages:</div>
-					  	<div class="PagesTotalNumber">1</div>
-					  	<div style="clear: left;"><span/></div>
-					  </div>
-				  </div>
-				  <div style="clear: right;"><span/></div>
-				</div>
-		  	<div class="UIFormWithTitle UIPermissionForm">
-				  <div class="TitleBar">Add a Moderator to this Forum</div>
-				  <form method="post" onsubmit="SelectUser" action="" id="" name="" class="UIForm">
-				  	<input type="hidden" value="" name="formOp"/>
-					  <div class="HorizontalLayout">
-					    <div class="FormContainer">
-					      <table class="UIFormGrid">
-			          	<tbody>
-			          		<tr>
-			                <td colspan="2" class="FieldComponent">
-												<div class="Permission">
-													<div class="UIFormInputSet">
-														<div class="UIFormInputSetWithAction">
-												      <div class="FormContainer">
-												        <table class="UIFormGrid">
-												          <tbody>
-												            <tr>
-											                <td class="FieldLabel">User Or Group</td>
-												              <td class="FieldComponent">
-												              	<input type="text" name=""/>      
-													              <a title="SelectUser" href="#">
-													                <img src="/eXoResources/skin/sharedImages/Blank.gif" class="AddIcon16x16 SelectUserIcon"/>
-													              </a>
-													              <a title="SelectMember" href="#">
-													                <img src="/eXoResources/skin/sharedImages/Blank.gif" class="AddIcon16x16 SelectMemberIcon"/>
-													              </a>
-													              <a title="AddAny" href="#">
-													                <img src="/eXoResources/skin/sharedImages/Blank.gif" class="AddIcon16x16 AddAnyIcon"/>
-													              </a>
-												              </td>
-												            </tr>
-												          </tbody>
-												        </table>
-												      </div>
-														</div>
-													</div>
-												</div>    
-											</td>
-						        </tr>
-					      	</tbody>
-					      </table>
-					      <div class="UIAction"> 
-							    <table class="ActionContainer" align="center">
-									  <tr>
-										  <td align="center">
-	  										<a href="#" class="ActionButton LightBlueStyle">
-						          	  <div class="ButtonLeft">
-						            	  <div class="ButtonRight">
-						              	  <div class="ButtonMiddle"> Save </div>
-						                </div>
-						              </div>
-						            </a>
-						            <a href="#" class="ActionButton LightBlueStyle">
-						          	  <div class="ButtonLeft">
-						            	  <div class="ButtonRight">
-						              	  <div class="ButtonMiddle"> Cancel  </div>
-							              </div>
-							            </div>
-							          </a>
-	      							</td>
-										</tr>
-	 	              </table>
-								</div>
-					    </div>
-					  </div>
-				  </form>
-				</div>
-			</div> 
+			</div>
+			 
 		</div>
 	</div>
   <div class="UIAction"> 
-    <table class="ActionContainer" align="center">
-		  <tr>
-			  <td align="center">
-  				<a href="#" class="ActionButton LightBlueStyle">
-	      	  <div class="ButtonLeft">
-	        	  <div class="ButtonRight">
-	          	  <div class="ButtonMiddle"> Save </div>
-	            </div>
-	          </div>
-	        </a>
-	        <a href="#" class="ActionButton LightBlueStyle">
-	      	  <div class="ButtonLeft">
-	        	  <div class="ButtonRight">
-	          	  <div class="ButtonMiddle"> Cancel  </div>
-              </div>
-            </div>
-          </a>
-  			</td>
+		<table class="ActionContainer" align="center">
+			<tr>
+				<td align="center">
+			<% for(action in uicomponent.getActions()) { 
+				 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action); 
+				 String link = uicomponent.event(action) ;
+			%>
+					<a href="$link" class="ActionButton LightBlueStyle">
+						<div class="ButtonLeft">
+							<div class="ButtonRight">
+								<div class="ButtonMiddle"> $actionLabel </div>
+							</div>
+						</div>
+					</a>
+				<%}%>
+				</td>
 			</tr>
- 	  </table>
+ 		</table> 
 	</div>
+	<%uiform.end()%>
 </div>

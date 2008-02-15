@@ -211,7 +211,12 @@ public class ForumFormatUtils {
 		return buffer.toString() ;
   }
 	
-	
+	public static boolean isReadTopic(String []topicIds, String topicId) {
+	  for (String string : topicIds) {
+	    if(topicId.equals(string)) return true ;
+    }
+	  return false;
+  }
 	
 	
 	

@@ -107,7 +107,7 @@ public class UITopicPoll extends UIForm	{
 	private Poll getPoll() throws Exception {
 		if(categoryId != null && categoryId.length() > 0) {
 			if(this.isEditPoll) {
-				this.topic = forumService.getTopic(ForumSessionUtils.getSystemProvider(), categoryId, forumId, topicId, false) ;
+				this.topic = forumService.getTopic(ForumSessionUtils.getSystemProvider(), categoryId, forumId, topicId, "guest") ;
 				this.isEditPoll = false ;
 			}
 			if(this.topic.getIsPoll()) {

@@ -161,7 +161,7 @@ public interface ForumService {
 	 * @return
 	 * @throws Exception
 	 */
-	public Topic getTopic(SessionProvider sProvider, String categoryId, String forumId, String topicId, boolean viewTopic) throws Exception;		
+	public Topic getTopic(SessionProvider sProvider, String categoryId, String forumId, String topicId, String userRead) throws Exception;		
 	/**
 	 * This method should:
 	 * 1. Load the topic from the database
@@ -282,6 +282,6 @@ public interface ForumService {
 	public void removeTag(SessionProvider sProvider, String tagId) throws Exception ;
 
 	public void saveUserProfile(SessionProvider sProvider, UserProfile userProfile, boolean isOption, boolean isBan) throws Exception ;
-	public UserProfile getUserProfile(SessionProvider sProvider, String userName) throws Exception ;
+	public UserProfile getUserProfile(SessionProvider sProvider, String userName, boolean isGetOption, boolean isGetBan) throws Exception ;
 	
 }

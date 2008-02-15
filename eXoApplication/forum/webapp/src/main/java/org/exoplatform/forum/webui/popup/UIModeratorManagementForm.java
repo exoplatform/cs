@@ -16,7 +16,16 @@
  ***************************************************************************/
 package org.exoplatform.forum.webui.popup;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.exoplatform.commons.utils.PageList;
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.forum.ForumSessionUtils;
+import org.exoplatform.forum.service.ForumService;
+import org.exoplatform.forum.service.UserProfile;
 import org.exoplatform.forum.webui.UIForumPortlet;
+import org.exoplatform.services.organization.User;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -40,7 +49,45 @@ import org.exoplatform.webui.form.UIForm;
     }
 )
 public class UIModeratorManagementForm extends UIForm implements UIPopupComponent {
-  public UIModeratorManagementForm() throws Exception {
+	private ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
+	public UIModeratorManagementForm() throws Exception {
+  }
+  
+  @SuppressWarnings("unchecked")
+  private List<User> getListUser() throws Exception {
+  	PageList pageList = ForumSessionUtils.getPageListUser() ;
+  	pageList.setPageSize(10);
+  	List<User> list = pageList.getPage(1) ;
+  	return list ;
+  }
+  
+  @SuppressWarnings("unused")
+  private void addUserInForum() throws Exception {
+  	List<User> listUser = getListUser() ;
+  	UserProfile userProfile ;
+  	for (User user : listUser) {
+	    userProfile = new UserProfile() ;
+	    userProfile.setUserId(user.getUserName());
+	    userProfile.setUserTitle("Register User");
+  		forumService.saveUserProfile(ForumSessionUtils.getSystemProvider(), userProfile, false, false);
+    }
+  }
+  
+  @SuppressWarnings("unused")
+  private List<UserProfile> getListProFileUser() throws Exception {
+  	List<User> listUser = getListUser() ;
+  	List<UserProfile> userProfiles = new ArrayList<UserProfile>();
+  	for (User user : listUser) {
+  		UserProfile userProfile = new UserProfile() ;
+  		userProfile = forumService.getUserProfile(ForumSessionUtils.getSystemProvider(), user.getUserName(), false, false);
+  		userProfile.setUserId(user.getUserName()) ;
+  		if(userProfile.getUserRole() >= 2) {
+	  		userProfile.setUserRole((long)2);
+	  		userProfile.setUserTitle("Register User");
+  		}
+  		userProfiles.add(userProfile);
+    }
+  	return userProfiles ;
   }
   
   public void activate() throws Exception {}

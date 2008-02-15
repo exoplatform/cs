@@ -84,9 +84,9 @@ public class ForumServiceImpl implements ForumService{
 	public void saveTopic(SessionProvider sProvider, String categoryId, String forumId, Topic topic, boolean isNew) throws Exception {
 		storage_.saveTopic(sProvider, categoryId, forumId, topic, isNew);
 	}
-	
-	public Topic getTopic(SessionProvider sProvider, String categoryId, String forumId, String topicId, boolean viewTopic) throws Exception {
-		return storage_.getTopic(sProvider, categoryId, forumId, topicId, viewTopic);
+
+	public Topic getTopic(SessionProvider sProvider, String categoryId, String forumId, String topicId, String userRead) throws Exception {
+		return storage_.getTopic(sProvider, categoryId, forumId, topicId, userRead);
 	}
 	
 	public Topic getTopicByPath(SessionProvider sProvider, String topicPath) throws Exception{
@@ -197,8 +197,8 @@ public class ForumServiceImpl implements ForumService{
 		storage_.removeTag(sProvider, tagId) ;
 	}
 
-	public UserProfile getUserProfile(SessionProvider sProvider, String userName) throws Exception {
-	  return storage_.getUserProfile(sProvider, userName);
+	public UserProfile getUserProfile(SessionProvider sProvider, String userName, boolean isGetOption, boolean isGetBan) throws Exception {
+	  return storage_.getUserProfile(sProvider, userName, isGetOption, isGetBan);
   }
 
 	public void saveUserProfile(SessionProvider sProvider, UserProfile userProfile, boolean isOption, boolean isBan) throws Exception {

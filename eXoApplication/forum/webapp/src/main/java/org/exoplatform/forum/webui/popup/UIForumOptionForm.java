@@ -69,7 +69,7 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 	@SuppressWarnings({ "unchecked", "deprecation" })
   private void initForumOption() throws Exception {
 		String userName = ForumSessionUtils.getCurrentUser() ;
-		UserProfile userProfile = forumService.getUserProfile(ForumSessionUtils.getSystemProvider(), userName) ;
+		UserProfile userProfile = forumService.getUserProfile(ForumSessionUtils.getSystemProvider(), userName, true, false) ;
 		List<SelectItemOption<String>> list ;
 		String []timeZone1 = getLabel(FIELD_TIMEZONE).split("/") ;
 		list = new ArrayList<SelectItemOption<String>>() ;
@@ -155,13 +155,13 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 			double timeZone = Double.parseDouble(uiForm.getUIFormSelectBoxForum(FIELD_TIMEZONE_SELECTBOX).getValue());
 			String shortDateFormat = uiForm.getUIFormSelectBox(FIELD_SHORTDATEFORMAT_SELECTBOX).getValue();
 			String longDateFormat = uiForm.getUIFormSelectBox(FIELD_LONGDATEFORMAT_SELECTBOX).getValue();
-			String timeFormat = uiForm.getUIFormSelectBox(FIELD_TIMEFORMAT_SELECTBOX).getValue().substring(2);
+			String timeFormat = uiForm.getUIFormSelectBox(FIELD_TIMEFORMAT_SELECTBOX).getValue();
 			boolean isJump = (Boolean)uiForm.getUIFormCheckBoxInput(FIELD_FORUMJUMP_CHECKBOX).getValue() ;
 			String userName = ForumSessionUtils.getCurrentUser() ;
 			UIForumPortlet forumPortlet = uiForm.getAncestorOfType(UIForumPortlet.class) ;
 			if(userName != null && userName.length() > 0) {
 				UserProfile userProfile = new UserProfile() ;
-				userProfile.setUserName(userName);
+				userProfile.setUserId(userName);
 				userProfile.setTimeZone(-timeZone) ;
 				userProfile.setTimeFormat(timeFormat.replace('=', ' '));
 				userProfile.setShortDateFormat(shortDateFormat);

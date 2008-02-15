@@ -170,7 +170,7 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
 			}
 		} else {
 			if(!isQuote) {//reply
-				Topic topic = this.forumService.getTopic(ForumSessionUtils.getSystemProvider(), this.categoryId, this.forumId, this.topicId, false) ;
+				Topic topic = this.forumService.getTopic(ForumSessionUtils.getSystemProvider(), this.categoryId, this.forumId, this.topicId, "guest") ;
 				String title = topic.getTopicName() ;
 				getUIStringInput(FIELD_POSTTITLE_INPUT).setValue(getLabel(FIELD_LABEL_QUOTE) + ": " + title) ;
 				getChild(UIFormInputIconSelector.class).setSelectedIcon(topic.getIcon());
