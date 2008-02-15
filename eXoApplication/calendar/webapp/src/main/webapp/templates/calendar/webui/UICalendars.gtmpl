@@ -29,7 +29,7 @@
 			                      <%=uiform.getLabel("AddGroup")%>
 			                    </div>
 			                   </a>
-			                   <a class="MenuItem" href="<%=uicomponent.event("AddCalendar")%>">   
+			                   <a class="MenuItem" href="<%=uicomponent.event('AddCalendar','id')%>">   
 			                    <div class="ItemIcon AddCalendarIcon">
 			                      <%=uiform.getLabel("AddCalendar")%>
 			                    </div>

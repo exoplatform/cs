@@ -175,8 +175,13 @@ UICalendarPortlet.prototype.showHide = function(obj) {
 UICalendarPortlet.prototype.showMainMenu = function(obj, evt) {
 	var _e = window.event || evt ;
 	_e.cancelBubble = true ;
+  var d = new Date() ;
+  var currentTime = d.getTime() ;
+  var timezoneOffset = d.getTimezoneOffset() ;
 	var oldmenu = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div", "UIRightClickPopupMenu") ;
-	eXo.calendar.UICalendarPortlet.swapMenu(oldmenu, obj) ;
+	var actions = eXo.core.DOMUtil.findDescendantsByTagName(oldmenu, "a") ;
+  actions[1].href = String(actions[1].href).replace(/&.*/, "&ct=" + currentTime + "&tz=" + timezoneOffset + "')") ;
+  eXo.calendar.UICalendarPortlet.swapMenu(oldmenu, obj) ;  
 } ;
 
 UICalendarPortlet.prototype.show = function(obj, evt) {
