@@ -65,8 +65,8 @@ public interface ContactService {
   public List<Tag> getTags(SessionProvider sProvider, String username) throws Exception ;
   public Tag getTag(SessionProvider sProvider, String username, String tagId) throws Exception ;
   public DataPageList getContactPageListByTag(SessionProvider sProvider, String username, String tagId) throws Exception ;
-  public void addTag(SessionProvider sProvider, String username, List<String> contactIds, List<Tag> tags) throws Exception ;
-  public void addTag(SessionProvider sProvider, String username, List<String> contactIds, String tagId) throws Exception ;
+  public void addTag(SessionProvider sProvider, String username, List<Contact> contacts, List<Tag> tags) throws Exception ;
+  public void addTag(SessionProvider sProvider, String username, List<Contact> contacts, String tagId) throws Exception ;
   public Tag removeTag(SessionProvider sProvider, String username, String tagName) throws Exception ;
   public void removeContactTag(SessionProvider sProvider, String username, List<String>contactIds, List<String> tags) throws Exception ;
   public void updateTag(SessionProvider sProvider, String username,Tag tag) throws Exception ;

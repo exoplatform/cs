@@ -192,9 +192,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       	contact.setTags(tagIds.toArray(new String[]{})) ;
         contactIds.add(contact.getId()) ;
       }
-      
-
-      contactService.addTag(sessionProvider, username, contactIds, tags);
+      contactService.addTag(sessionProvider, username, uiTagForm.contacts_, tags);
       UIContactPortlet uiContactPortlet = uiTagForm.getAncestorOfType(UIContactPortlet.class);
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
       if(uiContacts.isDisplaySearchResult())uiContacts.setContact(uiTagForm.contacts_, true) ;     	

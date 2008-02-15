@@ -239,8 +239,12 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     return getAncestorOfType(UIWorkingContainer.class)
       .findFirstComponentOfType(UIAddressBooks.class).getDefaultGroup() ;
   }
-  
-  
+  /*
+  public boolean isPublic(String contactId) {
+    if ( contactMap.get(contactId).getContactType().equals(JCRDataStorage.PUBLIC)) return true ;
+    return false ;
+  }
+  */
   static public class EditContactActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource();
@@ -329,13 +333,13 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-deleted", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
-      }      
+      }    
+      List<Contact> contacts = new ArrayList<Contact>() ;
+      for (String contactId : contactIds) contacts.add(uiContacts.contactMap.get(contactId)) ;
       ContactService contactService = ContactUtils.getContactService(); 
-      contactService.addTag(SessionProviderFactory.createSystemProvider(), ContactUtils.getCurrentUser(), contactIds, tagId);
+      contactService.addTag(SessionProviderFactory.createSystemProvider(), ContactUtils.getCurrentUser(), contacts, tagId);
       if(uiContacts.isDisplaySearchResult()) {
-        List<Contact> contacts = new ArrayList<Contact>() ;
-        for (String contactId : contactIds) {
-         Contact contact = uiContacts.contactMap.get(contactId) ;
+        for (Contact contact : contacts) {
          contact.setTags(new String[] {tagId}) ;
          contacts.add(contact) ;
         }

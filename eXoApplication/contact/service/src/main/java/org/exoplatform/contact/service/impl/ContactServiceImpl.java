@@ -166,11 +166,11 @@ public class ContactServiceImpl implements ContactService {
     return storage_.getContactPageListByTag(sProvider, username, tagName);
   }
   
-  public void addTag(SessionProvider sProvider, String username, List<String> contactIds, List<Tag> tags) throws Exception {
-    storage_.addTag(sProvider, username, contactIds, tags);
+  public void addTag(SessionProvider sProvider, String username, List<Contact> contacts, List<Tag> tags) throws Exception {
+    storage_.addTag(sProvider, username, contacts, tags);
   }
   
-  public void addTag(SessionProvider sProvider, String username, List<String> contactIds, String tagId) throws Exception {
+  public void addTag(SessionProvider sProvider, String username, List<Contact> contactIds, String tagId) throws Exception {
 	  storage_.addTag(sProvider, username, contactIds, tagId);
   }
   
