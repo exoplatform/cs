@@ -25,6 +25,7 @@ import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContactPreview;
 import org.exoplatform.contact.webui.UIContacts;
@@ -374,7 +375,10 @@ public class UIContactForm extends UIFormTabPane {
       UIPopupContainer popupContainer = uiContactForm.getParent() ;
       UICategorySelect uiCategorySelect = popupContainer.getChild(UICategorySelect.class); 
       String category = uiCategorySelect.getSelectedCategory();
-      contact.setAddressBook(new String[] { category });
+      
+      // hoang quang hung edit
+      if (isNew || !contact.getContactType().equals(JCRDataStorage.PUBLIC)) contact.setAddressBook(new String[] { category });
+      
       if (isNew) {
         contactService.saveContact(sessionProvider, username, contact, true);
       } else {

@@ -212,6 +212,7 @@ public class JCRDataStorage{
       }
     }
     if(contactNode.hasProperty("exo:isOwner")) contact.setOwner(contactNode.getProperty("exo:isOwner").getBoolean());
+    if(contactNode.hasProperty("exo:ownerId")) contact.setOwnerId(contactNode.getProperty("exo:ownerId").getString());
     return contact;
   }
 
@@ -222,7 +223,7 @@ public class JCRDataStorage{
     Contact contact;
     while (iter.hasNext()) {
       Node contactNode = iter.nextNode();
-      contact = getContact(contactNode, "0");
+      contact = getContact(contactNode, PRIVATE);
       contacts.add(contact);
     }
     return contacts;
@@ -857,7 +858,7 @@ public class JCRDataStorage{
   }
 
   public void savePublicContact(Contact contact, boolean isNew) throws Exception {
-    Node contactHomeNode = getPublicContactHome(SessionProvider.createSystemProvider());
+    Node contactHomeNode = getUserContactHome(SessionProvider.createSystemProvider(), contact.getOwnerId()) ;
     saveContact(contactHomeNode, contact, isNew) ;
     contactHomeNode.getSession().save(); 
   }
@@ -896,12 +897,15 @@ public class JCRDataStorage{
       contactNode.setProperty("exo:id", contact.getId());
       if(contact.isOwner()) {
       	contactNode.setProperty("exo:isOwner", true) ;
+        contactNode.setProperty("exo:ownerId", contact.getOwnerId()) ;
       	reparePermissions(contactHomeNode, contact.getOwnerId()) ;
       	reparePermissions(contactNode, contact.getOwnerId()) ;
       }
     } else {
       contactNode = contactHomeNode.getNode(contact.getId());
     }
+    
+    
     contactNode.setProperty("exo:fullName", contact.getFullName());
     contactNode.setProperty("exo:firstName", contact.getFirstName());
     contactNode.setProperty("exo:lastName", contact.getLastName());
@@ -955,8 +959,6 @@ public class JCRDataStorage{
       dateTime.setTime(contact.getLastUpdated()) ;
       contactNode.setProperty("exo:lastUpdated", dateTime);
     }
-    //contactNode.setProperty("exo:isShared", contact.isShared());
-    
 //  save image to contact
     ContactAttachment attachment = contact.getAttachment() ;
     if (attachment != null) {

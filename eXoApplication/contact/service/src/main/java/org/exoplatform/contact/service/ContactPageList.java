@@ -151,6 +151,7 @@ public class ContactPageList extends JCRPageList {
     }
     contact.setContactType(type) ;
     if(contactNode.hasProperty("exo:isOwner")) contact.setOwner(contactNode.getProperty("exo:isOwner").getBoolean());
+    if(contactNode.hasProperty("exo:ownerId")) contact.setOwnerId(contactNode.getProperty("exo:ownerId").getString());
     return contact ;
   }
   

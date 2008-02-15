@@ -144,6 +144,10 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     contactMap.clear();
     UIContactPreview contactPreview = 
       getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class) ;
+    
+    
+    System.out.println("\n\n page list size:" + pageList_.getAvailable() + "\n\n");
+    
     if(pageList_ != null) {
       List<Contact> contactList = pageList_.getPage(pageList_.getCurrentPage(),ContactUtils.getCurrentUser()) ;
       if(contactList.size() == 0 && pageList_.getCurrentPage() > 1)
