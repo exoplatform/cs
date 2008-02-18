@@ -192,7 +192,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       	contact.setTags(tagIds.toArray(new String[]{})) ;
         contactIds.add(contact.getId()) ;
       }
-      contactService.addTag(sessionProvider, username, uiTagForm.contacts_, tags);
+      contactService.addTag(sessionProvider, username, contactIds, tags);
       UIContactPortlet uiContactPortlet = uiTagForm.getAncestorOfType(UIContactPortlet.class);
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
       if(uiContacts.isDisplaySearchResult())uiContacts.setContact(uiTagForm.contacts_, true) ;     	
@@ -218,8 +218,12 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       }
       ContactService contactService = ContactUtils.getContactService() ; 
       String username = ContactUtils.getCurrentUser() ;
+      List<String> contactIds = new ArrayList<String>() ;
+      for (Contact contact : uiForm.contacts_) {
+        contactIds.add(contact.getId()) ;
+      }
       contactService.removeContactTag(
-          SessionProviderFactory.createSystemProvider(), username, uiForm.contacts_, checkedTags) ;
+          SessionProviderFactory.createSystemProvider(), username, contactIds, checkedTags) ;
       UIContactPortlet contactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       UITags uiTags = contactPortlet.findFirstComponentOfType(UITags.class) ;
       String selectedTag = uiTags.getSelectedTag() ;

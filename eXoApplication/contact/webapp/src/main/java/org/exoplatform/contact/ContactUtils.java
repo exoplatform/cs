@@ -8,6 +8,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -64,12 +65,12 @@ public class ContactUtils {
     return false ;    
   }
   
-  public static String[] getUserGroups() throws Exception{
+  public static List<String> getUserGroups() throws Exception{
     OrganizationService organizationService = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
     Object[] objGroupIds = organizationService.getGroupHandler().findGroupsOfUser(getCurrentUser()).toArray() ;
-    String[] groupIds = new String[objGroupIds.length];
-    for (int i = 0; i < groupIds.length; i++) {
-      groupIds[i] = ((GroupImpl)objGroupIds[i]).getId() ;
+    List<String> groupIds = new ArrayList<String>() ;
+    for (Object object : objGroupIds) {
+      groupIds.add(((GroupImpl)object).getId()) ;
     }
     return groupIds ;
   }
@@ -103,7 +104,7 @@ public class ContactUtils {
   }
   
   public static boolean isPublicGroup(String groupId) throws Exception {
-    String[] sharedGroups = getUserGroups() ;
+    String[] sharedGroups = getUserGroups().toArray(new String[] {}) ;
     for (String group : sharedGroups)
       if (group.equals(groupId)) return true ;
     return false ;

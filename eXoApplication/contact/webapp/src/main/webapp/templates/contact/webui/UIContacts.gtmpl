@@ -204,11 +204,7 @@
 	  	 	    		for(contact in contacts) {
 	  	 	    			String groupName ;	  	 	    			
 	  	 	    			String[] addressBooks = contact.getAddressBook() ;
-	  	 	    			
-	  	 	    			
-	  	 	    			
-	  	 	    			contactType = contact.getContactType() ;
-	  	 	    			
+	  	 	    			contactType = contact.getContactType() ;	  	 	    			
 	  	 	    			if (contactType.equals("2")) {
 		  	 	    			StringBuffer buffer = new StringBuffer("")
 		  	 	    			int i = 1 ;

@@ -74,7 +74,7 @@ import org.exoplatform.webui.event.EventListener;
 public class UIAddressBooks extends UIComponent {
   private String selectedGroup = null;
   private Map<String, String> privateAddressBookMap_ = new HashMap<String, String>() ;
-  private Map<String, String> publicAddressBookMap_ = new HashMap<String, String>() ;
+  //private Map<String, String> publicAddressBookMap_ = new HashMap<String, String>() ;
   private Map<String, SharedAddressBook> sharedAddressBookMap_ = new HashMap<String, SharedAddressBook>() ;
   private List<Contact> copyContacts = new ArrayList<Contact>();
   private String defaultGroup ;
@@ -94,7 +94,7 @@ public class UIAddressBooks extends UIComponent {
       .getPublicAddressBookContacts(SessionProviderFactory.createSystemProvider(), ContactUtils.getUserGroups());
     publicGroupMap_.clear() ;
     for (String group : publicGroup) publicGroupMap_.put(group, group) ; */
-  	return ContactUtils.getUserGroups() ;
+  	return ContactUtils.getUserGroups().toArray(new String[] {}) ;
   }
   public Map<String, SharedAddressBook> getSharedGroups() throws Exception { 
     sharedAddressBookMap_.clear() ;
@@ -110,7 +110,7 @@ public class UIAddressBooks extends UIComponent {
   public String getSelectedGroup() { return selectedGroup ; }
 
   public Map<String, String> getPrivateGroupMap() { return privateAddressBookMap_ ;}
-  public Map<String, String> getPublicGroupMap() { return publicAddressBookMap_ ; }
+  //public Map<String, String> getPublicGroupMap() { return publicAddressBookMap_ ; }
 
   // to show print address book when contacts view is Thumbnail ;
   public boolean getListView(String groupId) {
@@ -208,7 +208,7 @@ public class UIAddressBooks extends UIComponent {
           uiExportForm.setSelectedGroup(privateGroup.get(addressBookId)) ;
           contacts = contactService.getContactPageListByGroup(
               sessionProvider, username, addressBookId).getAll().toArray(new Contact[] {});
-        } else if (uiAddressBook.publicAddressBookMap_.containsKey(addressBookId)){        
+        } else if (ContactUtils.getUserGroups().contains(addressBookId)){        
           uiExportForm.setSelectedGroup(addressBookId) ;
           contacts = contactService.getPublicContactsByAddressBook(
               sessionProvider, addressBookId).getAll().toArray(new Contact[] {});
@@ -234,7 +234,8 @@ public class UIAddressBooks extends UIComponent {
         uiExportForm.setId("UIExportAddressBookForm");
         Map<String, String> groups = uiAddressBook.privateAddressBookMap_ ;
         Map<String, SharedAddressBook> sharedGroups = uiAddressBook.sharedAddressBookMap_ ;
-        Map<String, String> publicGroups = uiAddressBook.publicAddressBookMap_ ;
+        Map<String, String> publicGroups = new HashMap<String, String>() ;
+        for (String group : ContactUtils.getUserGroups()) publicGroups.put(group, group) ;
         if ((groups == null || groups.size() == 0) && (sharedGroups == null || sharedGroups.size() == 0)
             && (publicGroups == null || publicGroups.size() == 0)) {
           UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
@@ -286,7 +287,7 @@ public class UIAddressBooks extends UIComponent {
       UIContactForm uiContactForm = popupContainer.addChild(UIContactForm.class, null, null) ;
       uiContactForm.setNew(true) ;
       
-      if (uiAddressBook.publicAddressBookMap_.containsKey(groupId)) {
+      if (ContactUtils.getUserGroups().contains(groupId)) {
         uiContactForm.getUIFormCheckBoxInput(groupId).setChecked(true) ;   
       }
       if (uiAddressBook.privateAddressBookMap_.containsKey(groupId)) {
@@ -345,7 +346,7 @@ public class UIAddressBooks extends UIComponent {
       if (uiAddressBook.privateAddressBookMap_.containsKey(groupId)) {
         addresses = contactService
         .getAllEmailAddressByGroup(SessionProviderFactory.createSessionProvider(), username, groupId);
-      } else if (uiAddressBook.publicAddressBookMap_.containsKey(groupId)) {
+      } else if (ContactUtils.getUserGroups().contains(groupId)) {
         addresses = contactService.getAllEmailByPublicGroup(username, groupId) ;
       } else {
         addresses = contactService.getAllEmailBySharedGroup(username, groupId) ;

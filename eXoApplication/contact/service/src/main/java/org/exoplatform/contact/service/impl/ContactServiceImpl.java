@@ -80,8 +80,8 @@ public class ContactServiceImpl implements ContactService {
     storage_.saveContact(sProvider, username, contact, isNew);    
   }
   
-  public List<Contact> removeContacts(SessionProvider sProvider, String username, List<Contact> contacts) throws Exception {
-    return storage_.removeContacts(sProvider, username, contacts);
+  public List<Contact> removeContacts(SessionProvider sProvider, String username, List<String> contactIds) throws Exception {
+    return storage_.removeContacts(sProvider, username, contactIds);
   }
   
   public void moveContacts(SessionProvider sysProvider, String username, List<Contact> contacts, String addressType ) throws Exception {
@@ -172,11 +172,11 @@ public class ContactServiceImpl implements ContactService {
     return storage_.getContactPageListByTag(sProvider, username, tagName);
   }
   
-  public void addTag(SessionProvider sProvider, String username, List<Contact> contacts, List<Tag> tags) throws Exception {
-    storage_.addTag(sProvider, username, contacts, tags);
+  public void addTag(SessionProvider sProvider, String username, List<String> contactIds, List<Tag> tags) throws Exception {
+    storage_.addTag(sProvider, username, contactIds, tags);
   }
   
-  public void addTag(SessionProvider sProvider, String username, List<Contact> contactIds, String tagId) throws Exception {
+  public void addTag(SessionProvider sProvider, String username, List<String> contactIds, String tagId) throws Exception {
 	  storage_.addTag(sProvider, username, contactIds, tagId);
   }
   
@@ -188,8 +188,8 @@ public class ContactServiceImpl implements ContactService {
     storage_.updateTag(sProvider, username, tag) ;
   }
   
-  public void removeContactTag(SessionProvider sProvider, String username, List<Contact> contacts, List<String> tags) throws Exception {
-    storage_.removeContactTag(sProvider, username, contacts, tags) ;
+  public void removeContactTag(SessionProvider sProvider, String username, List<String> contactIds, List<String> tags) throws Exception {
+    storage_.removeContactTag(sProvider, username, contactIds, tags) ;
   }
   
   public ContactPageList getPublicContactsByAddressBook(SessionProvider sProvider, String groupId) throws Exception {

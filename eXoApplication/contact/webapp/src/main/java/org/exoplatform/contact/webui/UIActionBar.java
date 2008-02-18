@@ -16,8 +16,10 @@
  */
 package org.exoplatform.contact.webui;
 
+import java.util.HashMap;
 import java.util.Map;
 
+import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.webui.popup.UICategoryForm;
 import org.exoplatform.contact.webui.popup.UICategorySelect;
@@ -142,7 +144,8 @@ public class UIActionBar extends UIContainer  {
       UIAddressBooks uiAddressBooks = uiActionBar.getAncestorOfType(UIContactPortlet.class)
         .findFirstComponentOfType(UIAddressBooks.class) ;
       Map<String, String> groups = uiAddressBooks.getPrivateGroupMap() ;
-      Map<String, String> publicGroups = uiAddressBooks.getPublicGroupMap() ;
+      Map<String, String> publicGroups = new HashMap<String, String>() ;
+      for (String group : ContactUtils.getUserGroups()) publicGroups.put(group, group) ;      
       Map<String, SharedAddressBook> sharedGroups = uiAddressBooks.getSharedGroups() ;
       
       if ((publicGroups == null || publicGroups.size() == 0) && (groups == null || groups.size() == 0)

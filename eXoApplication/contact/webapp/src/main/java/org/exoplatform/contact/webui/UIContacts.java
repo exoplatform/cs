@@ -332,14 +332,15 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }    
-      List<Contact> contacts = new ArrayList<Contact>() ;
-      for (String contactId : contactIds) contacts.add(uiContacts.contactMap.get(contactId)) ;
+      
       ContactService contactService = ContactUtils.getContactService(); 
-      contactService.addTag(SessionProviderFactory.createSystemProvider(), ContactUtils.getCurrentUser(), contacts, tagId);
+      contactService.addTag(SessionProviderFactory.createSystemProvider(), ContactUtils.getCurrentUser(), contactIds, tagId);
       if(uiContacts.isDisplaySearchResult()) {
-        for (Contact contact : contacts) {
-         contact.setTags(new String[] {tagId}) ;
-         contacts.add(contact) ;
+        List<Contact> contacts = new ArrayList<Contact>() ;
+        for (String contactId : contactIds) {
+          Contact contact = uiContacts.contactMap.get(contactId) ;
+          contact.setTags(new String[] {tagId}) ;
+          contacts.add(contact) ;
         }
         uiContacts.setContact(contacts, true) ;
       }
@@ -459,14 +460,12 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIWorkingContainer uiWorkingContainer = uiContacts.getAncestorOfType(UIWorkingContainer.class) ;
       ContactService contactService = ContactUtils.getContactService() ;
       String username = ContactUtils.getCurrentUser() ;
-      
-      List<Contact> contacts = new ArrayList<Contact>();
-      for(String id : contactIds) {
-        contacts.add(uiContacts.contactMap.get(id)) ;
-      }
-      
-      contactService.removeContacts(SessionProviderFactory.createSystemProvider(), username, contacts) ;
+      contactService.removeContacts(SessionProviderFactory.createSystemProvider(), username, contactIds) ;
       if(uiContacts.isSearchResult) {
+        List<Contact> contacts = new ArrayList<Contact>();
+        for(String id : contactIds) {
+          contacts.add(uiContacts.contactMap.get(id)) ;
+        }
         uiContacts.setContact(contacts, false) ;
       }
 //      if(contactIds.contains(uiContactPreview.getContact().getId())) 
@@ -611,7 +610,9 @@ public class UIContacts extends UIForm implements UIPopupComponent {
             UIWorkingContainer.class).findFirstComponentOfType(UIAddressBooks.class) ;
         if (addressBooks.getPrivateGroupMap().containsKey(group)) type = JCRDataStorage.PRIVATE ;
         else if (addressBooks.getSharedGroups().containsKey(group)) type = JCRDataStorage.SHARED ;
-        else if (addressBooks.getPublicGroupMap().containsKey(group)) type = JCRDataStorage.PUBLIC ;
+        else type = JCRDataStorage.PUBLIC ;
+        
+        //else if (addressBooks.getPublicGroupMap().containsKey(group)) type = JCRDataStorage.PUBLIC ;
         
         if(type != null)
           pageList = ContactUtils.getContactService().getContactPageListByGroup(
