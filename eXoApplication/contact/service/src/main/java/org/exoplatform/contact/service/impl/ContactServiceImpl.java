@@ -27,6 +27,7 @@ import org.exoplatform.contact.service.ContactImportExport;
 import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.GroupContactData;
+import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.service.DataPageList;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -115,15 +116,20 @@ public class ContactServiceImpl implements ContactService {
     return storage_.shareContacts(sProvider, username, contactIds, groupIds) ;
   }*/
   
-  
+  public void shareContact(SessionProvider sProvider, String username, String[] contactIds, List<String> receiveUsers) throws Exception {
+  	storage_.shareContact(sProvider, username, contactIds, receiveUsers) ;
+  }
+  public DataPageList getSharedContacts(String username) throws Exception {
+  	return storage_.getSharedContacts(username) ;
+  }
   public void shareAddressBook(SessionProvider sProvider, String username, String addressBookId, List<String> receiverUsers) throws Exception {
   	storage_.shareAddressBook(sProvider, username, addressBookId, receiverUsers) ;
   }
-  public List<String> getSharedAddressBooks(SessionProvider sProvider, String username) throws Exception {
+  public List<SharedAddressBook> getSharedAddressBooks(SessionProvider sProvider, String username) throws Exception {
   	return storage_.getSharedAddressBooks(sProvider, username) ;
   }
-  public ContactPageList getSharedContactsByAddressBook(SessionProvider sProvider, String username, String addressBookId) throws Exception {
-  	return storage_.getSharedContactsByAddressBook(sProvider, username, addressBookId) ;
+  public ContactPageList getSharedContactsByAddressBook(SessionProvider sProvider, String username, SharedAddressBook addressBook) throws Exception {
+  	return storage_.getSharedContactsByAddressBook(sProvider, username, addressBook) ;
   }
   public void removeSharedAddressBook(SessionProvider sProvider, String username, String addressBookId) throws Exception {
   	storage_.removeSharedAddressBook(sProvider, username, addressBookId) ;

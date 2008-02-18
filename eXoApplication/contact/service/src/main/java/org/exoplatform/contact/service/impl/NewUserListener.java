@@ -51,6 +51,7 @@ public class NewUserListener extends UserEventListener {
   public void postSave(User user, boolean isNew) throws Exception {  	
   	if(isNew) {
   		ContactGroup group = new ContactGroup() ;
+  		group.setId("default") ;
     	group.setName("My contacts") ;
     	group.setDescription("Default address book") ;
     	SessionProvider sysProvider = SessionProvider.createSystemProvider() ;

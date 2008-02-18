@@ -24,6 +24,7 @@ import java.util.MissingResourceException;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
+import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UIWorkingContainer;
@@ -52,7 +53,7 @@ import org.exoplatform.webui.form.UIForm;
 public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
   private Map<String, Contact> movedContacts = new HashMap<String, Contact>() ;
   private Map<String, String> privateGroupMap_ = new HashMap<String, String>() ;
-  private Map<String, String> sharedGroupMap_ = new HashMap<String, String>() ;
+  private Map<String, SharedAddressBook> sharedGroupMap_ = new HashMap<String, SharedAddressBook>() ;
   
   public UIMoveContactsForm() throws Exception { }
   public String getLabel(String id) throws Exception {
@@ -91,8 +92,8 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
   public Map<String, String> getPrivateGroupMap() { return privateGroupMap_ ; }
   public void setPrivateGroupMap(Map<String, String> map) { privateGroupMap_ = map ; }
 
-  public Map<String, String> getSharedGroupMap() { return sharedGroupMap_ ; }
-  public void setSharedGroupMap(Map<String, String> map) { sharedGroupMap_ = map ; }
+  public Map<String, SharedAddressBook> getSharedGroupMap() { return sharedGroupMap_ ; }
+  public void setSharedGroupMap(Map<String, SharedAddressBook> map) { sharedGroupMap_ = map ; }
   
   static  public class SelectGroupActionListener extends EventListener<UIMoveContactsForm> {
     public void execute(Event<UIMoveContactsForm> event) throws Exception {

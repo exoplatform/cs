@@ -62,19 +62,19 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
   final static public String FIELD_CONTACT = "contactName".intern() ;  
   final static public String FIELD_USER = "user".intern() ;
   final static public String FIELD_GROUP = "group".intern() ;  
-  final static public String FIELD_EDIT = "canEdit".intern() ;
+  final static public String FIELD_EDIT_PERMISSION = "canEdit".intern() ;
   private Map<String, String> permissionUser_ = new LinkedHashMap<String, String>() ;
   private Map<String, String> permissionGroup_ = new LinkedHashMap<String, String>() ;
   private Map<String, String> sharedContacts = new LinkedHashMap<String, String>() ;
   private String addressId_ ;
+  private boolean isSharedAdd_ = true ;
   public UISharedForm() { }
   
   public void init(boolean isSharedAdd) throws Exception {
     UIFormInputWithActions inputset = new UIFormInputWithActions("UIInputUserSelect") ;
-    if (isSharedAdd)
-      inputset.addChild(new UIFormInputInfo(FIELD_ADDRESS, FIELD_ADDRESS, null)) ;
+    if (isSharedAdd) inputset.addChild(new UIFormInputInfo(FIELD_ADDRESS, FIELD_ADDRESS, null)) ;
     else inputset.addChild(new UIFormInputInfo(FIELD_CONTACT, FIELD_CONTACT, null)) ;
-    
+    isSharedAdd_ = isSharedAdd ;
     inputset.addUIFormInput(new UIFormStringInput(FIELD_USER, FIELD_USER, null)) ;
     List<ActionData> actionUser = new ArrayList<ActionData>() ;
     actionUser = new ArrayList<ActionData>() ;
@@ -98,7 +98,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     actionGroup.add(selectGroupAction) ;
     inputset.setActionField(FIELD_GROUP, actionGroup) ;
     */
-    inputset.addChild(new UIFormCheckBoxInput<Boolean>(FIELD_EDIT, FIELD_EDIT, null)) ;
+    inputset.addChild(new UIFormCheckBoxInput<Boolean>(FIELD_EDIT_PERMISSION, FIELD_EDIT_PERMISSION, null)) ;
     addChild(inputset) ;    
   }
 
@@ -171,15 +171,21 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       if (receiverUser.size() > 0) {      
         ContactService contactService = ContactUtils.getContactService() ;
         String username = ContactUtils.getCurrentUser() ;
-        if(uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT).isChecked()) {
-          ContactGroup contactGroup = contactService.getGroup(
-              SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), uiForm.addressId_) ;
-          String[] perms = receiverUser.toArray(new String[] {}) ;
-          contactGroup.setEditPermission(perms) ;
-          contactService.saveGroup(SessionProviderFactory.createSessionProvider(), username, contactGroup, false) ;
-        }      
-        contactService.shareAddressBook(
-            SessionProviderFactory.createSystemProvider(), username, uiForm.addressId_, receiverUser) ;
+        if(uiForm.isSharedAdd_) {
+        	if(uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).isChecked()) {
+            ContactGroup contactGroup = contactService.getGroup(
+                SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), uiForm.addressId_) ;
+            String[] perms = receiverUser.toArray(new String[] {}) ;
+            contactGroup.setEditPermission(perms) ;
+            contactService.saveGroup(SessionProviderFactory.createSessionProvider(), username, contactGroup, false) ;
+          }      
+          contactService.shareAddressBook(
+              SessionProviderFactory.createSystemProvider(), username, uiForm.addressId_, receiverUser) ;
+        }else {
+        	String[] contactIds = uiForm.sharedContacts.keySet().toArray(new String[]{}) ;
+        	contactService.shareContact(SessionProviderFactory.createSessionProvider(), username, contactIds, receiverUser) ;
+        }
+        
         UIContactPortlet contactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
         UIAddressBooks addressBooks = contactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(addressBooks) ;

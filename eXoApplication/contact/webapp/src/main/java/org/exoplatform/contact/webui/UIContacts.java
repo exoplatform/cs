@@ -29,6 +29,7 @@ import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.JCRPageList;
+import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.webui.popup.UIComposeForm;
@@ -218,7 +219,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     return getAncestorOfType(UIWorkingContainer.class)
       .findFirstComponentOfType(UIAddressBooks.class).getPrivateGroupMap() ;
   }
-  public Map<String, String> getSharedGroupMap() throws Exception {
+  public Map<String, SharedAddressBook> getSharedGroupMap() throws Exception {
     return getAncestorOfType(UIWorkingContainer.class)
       .findFirstComponentOfType(UIAddressBooks.class).getSharedGroups() ;
   }
@@ -235,10 +236,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     }
     return true ;
   }
-  public String getDefaultGroup() {
-    return getAncestorOfType(UIWorkingContainer.class)
-      .findFirstComponentOfType(UIAddressBooks.class).getDefaultGroup() ;
-  }
+  public String getDefaultGroup() { return "default" ;}
   /*
   public boolean isPublic(String contactId) {
     if ( contactMap.get(contactId).getContactType().equals(JCRDataStorage.PUBLIC)) return true ;

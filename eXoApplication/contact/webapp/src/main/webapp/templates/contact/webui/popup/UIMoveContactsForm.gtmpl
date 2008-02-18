@@ -34,7 +34,7 @@
 						String actionLink  = uicomponent.event("SelectGroup", param) ;
       	%>
 				<div class="ItemList">
-					<div class="Icon AddressIcon"><a href="$actionLink"><%=sharedGroups.get(groupId)%></a></div>
+					<div class="Icon AddressIcon"><a href="$actionLink"><%=sharedGroups.get(groupId).getName() %></a></div>
 				</div>
 			<% } %>
 			</div>

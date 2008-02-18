@@ -80,19 +80,26 @@
 	<div class="PersonalAddress">
 		<div class="AddressTitle">
 			<div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
-			<div class="Label">Shared Address Book</div>
+			<div class="Label">
+				<%
+					String sharedContactLink  = uicomponent.event("SelectSharedContact") ;				
+				%>
+				<a href="$sharedContactLink">
+					Shared Contacts
+				</a>	
+			</div>
       <div style="clear: left"><span></span></div>
 		</div>
 		<% 
 		Map sharedGroups =	uicomponent.getSharedGroups() ;
 		for(group in sharedGroups.keySet()) {
-				cssClass = "Normal" ;
-				String actionLink  = uicomponent.event("SelectSharedGroup", group) ;				
-				if(group.equals(uicomponent.getSelectedGroup()))	cssClass = "Selected" ;
+			cssClass = "Normal" ;
+			String actionLink  = uicomponent.event("SelectSharedGroup", group) ;				
+			if(group.equals(uicomponent.getSelectedGroup()))	cssClass = "Selected" ;
 	 %>
 		<div id="$group" addressType="1" class="ItemList $cssClass ShareAddressBook" isList="<%=uicomponent.getListView(group)%>" >
 			<a href="$actionLink" class="IconHolder AddressIcon" >
-				<%= sharedGroups.get(group) %>
+				<%= sharedGroups.get(group).getName() %>
 			</a>
 		</div>
 		<% } %>

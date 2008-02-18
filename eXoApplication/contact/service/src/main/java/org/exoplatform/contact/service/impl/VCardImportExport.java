@@ -52,6 +52,7 @@ import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactImportExport;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
@@ -89,7 +90,10 @@ public class VCardImportExport implements ContactImportExport {
     		}else if (publicContactGroupHome.hasNode(address)){
     			publicAddress.add(address) ;
     		} else {
-    		  contactList.addAll(storage_.getSharedContactsByAddressBook(sProvider, username, address).getAll()) ;
+    			String[] array = address.split(":") ;
+    			if(array.length == 2) {
+    				contactList.addAll(storage_.getSharedContactsByAddressBook(sProvider, username, new SharedAddressBook(null, array[1], array[0])).getAll()) ;
+    			}    		  
         }
   		}catch(RepositoryException re) {
   			publicAddress.add(address) ;

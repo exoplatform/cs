@@ -27,9 +27,34 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-public class CheckMailJob extends Thread implements Job {
+public class CheckMailJob extends Thread implements Job, Runnable  {
+  private Thread thread ;
   
-
+	public CheckMailJob() throws Exception {
+		setDaemon(true) ;	
+		start() ;
+		
+	}
+	public void start() { 
+		//System.out.println("\n\n\n\n >>>>>>>> Started \n\n\n") ;
+		if ( thread == null ) { 
+    	thread = new Thread(this); 
+    	thread.start(); 
+    }
+	} 
+	
+	public void destroy() {
+		//System.out.println("\n\n\n\n >>>>>>>> detroy \n\n\n") ;
+		thread.stop() ;
+		thread = null ;
+	}
+	/*public void stop() { 
+	    if ( thread != null ) { 
+	    	thread.stop(); 
+	    	thread = null; 
+	    } 
+	}*/
+	
 	private static Log log_ = ExoLogger.getLogger("job.RecordsJob");
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		try {

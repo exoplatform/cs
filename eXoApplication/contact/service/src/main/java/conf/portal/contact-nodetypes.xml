@@ -195,7 +195,10 @@
       <propertyDefinition name="exo:sharedId" requiredType="Reference" autoCreated="false" mandatory="true"
         onParentVersion="COPY" protected="false" multiple="true">
         <valueConstraints/>
-      </propertyDefinition>        
+      </propertyDefinition>
+      <propertyDefinition name="exo:sharedUserId" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  			<valueConstraints/>
+  		</propertyDefinition>  		        
     </propertyDefinitions>
   </nodeType> 	 	 	
 </nodeTypes>  

@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.MissingResourceException;
 
 import org.exoplatform.contact.ContactUtils;
+import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadResource;
@@ -61,7 +62,7 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
   
   private Map<String, String> privateGroupMap_ = new HashMap<String, String>() ;
   private Map<String, String> publicGroupMap_ = new HashMap <String, String>() ;
-  private Map<String, String> sharedGroupMap_ = new HashMap <String, String>() ;
+  private Map<String, SharedAddressBook> sharedGroupMap_ = new HashMap <String, SharedAddressBook>() ;
   
   public UIExportAddressBookForm() throws Exception { }
   public String getLabel(String id) throws Exception {
@@ -78,8 +79,8 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
   public Map<String, String> getContactGroups() { return privateGroupMap_; }
   public void setContactGroups(Map<String, String> contactGroups) { privateGroupMap_ = contactGroups ; }
 
-  public Map<String, String> getSharedContactGroups() { return sharedGroupMap_; }
-  public void setSharedContactGroups(Map<String, String> contactGroups) { sharedGroupMap_ = contactGroups ; }
+  public Map<String, SharedAddressBook> getSharedContactGroups() { return sharedGroupMap_; }
+  public void setSharedContactGroups(Map<String, SharedAddressBook> contactGroups) { sharedGroupMap_ = contactGroups ; }
   
   public Map<String, String> getPublicContactGroup() { return publicGroupMap_ ; }//getSharedContactGroup
   public void setPublicContactGroup(Map<String, String> groups) { publicGroupMap_ = groups ; }
@@ -99,7 +100,7 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
       addUIFormInput(new UIFormCheckBoxInput<Boolean>(group, group, false));
     }
     for (String group : sharedGroupMap_.keySet()) {
-      addUIFormInput(new UIFormCheckBoxInput<Boolean>(group, sharedGroupMap_.get(group), false));
+      addUIFormInput(new UIFormCheckBoxInput<Boolean>(group, sharedGroupMap_.get(group).getName(), false));
     }
   }
 

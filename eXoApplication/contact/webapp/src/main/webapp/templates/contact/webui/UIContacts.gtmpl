@@ -87,11 +87,11 @@
 							<div class="Icon CopyContactIcon" title="Copy Contacts"><span></span></div>
 					</a>
 					
-				<!--	
+					
 					<a href="<%=uicomponent.event("SharedContacts")%>" class="ControlButton">
-							<div class="Icon CopyContactIcon" title="Copy Contacts"><span></span></div>
+							<div class="Icon CopyContactIcon" title="Share contacts"><span></span></div>
 					</a>
-					-->
+					
 					<% 
 						}
 					 %>
@@ -222,7 +222,7 @@
 		  	 	    			groupName = privateGroupMap.get(addressBooks[0]) ;								  
 								  	if (groupName == null) continue ;								  
 								  } else if (contactType.equals("1")){
-								  	groupName = sharedGroupMap.get(addressBooks[0]) ;
+								  	groupName = sharedGroupMap.get(addressBooks[0]).getName() ;
 								  	if (groupName == null) continue ;
 								  }
   	 	    				String actionLink  = uicomponent.event("SelectedContact", contact.getId()) ;

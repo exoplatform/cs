@@ -53,10 +53,12 @@ public interface ContactService {
   public void saveGroup(SessionProvider sProvider, String username, ContactGroup group, boolean isNew) throws Exception ;
   public ContactGroup removeGroup(SessionProvider sProvider, String username, String groupId) throws Exception ;
   
+  public void shareContact(SessionProvider sProvider, String username, String[] contactIds, List<String> receiveUsers) throws Exception ;
+  public DataPageList getSharedContacts(String username) throws Exception ;
   public void shareAddressBook(SessionProvider sProvider, String username, String addressBookId, List<String> receiverUsers) throws Exception ;
   public ContactGroup getSharedGroup(String username, String groupId) throws Exception ;
-  public List<String> getSharedAddressBooks(SessionProvider sProvider, String username) throws Exception ;
-  public ContactPageList getSharedContactsByAddressBook(SessionProvider sProvider, String username, String addressBookId) throws Exception ;
+  public List<SharedAddressBook> getSharedAddressBooks(SessionProvider sProvider, String username) throws Exception ;
+  public ContactPageList getSharedContactsByAddressBook(SessionProvider sProvider, String username, SharedAddressBook addressBook) throws Exception ;
   public void removeSharedAddressBook(SessionProvider sProvider, String username, String addressBookId) throws Exception ;
   public void saveContactToSharedAddressBook(SessionProvider sProvider, String username, String addressBookId, Contact contact, boolean isNew) throws Exception ;
   public Contact getSharedContacts(SessionProvider sProvider, String username, String contactId) throws Exception ;
