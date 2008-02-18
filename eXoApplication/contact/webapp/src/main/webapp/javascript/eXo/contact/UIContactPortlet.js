@@ -42,6 +42,7 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
 	} else {
 		tr = eXo.core.DOMUtil.findAncestorByClass(src, "VCardContent") ;
 		id = tr.getAttribute("id") ;
+    //eXo.webui.UIContextMenuCon.changeAction(UIContextMenuCon.menuElement, id) ;
 	}
   if(tr.getAttribute("ispublic")) {
     var isPublic = tr.getAttribute("ispublic").toLowerCase() ;

@@ -103,7 +103,7 @@
 	  						<a href="$previousPageAction" title="Previous Page" class="$cssPreviousPage PreviousPageArrow"></a>
 								<div class="Number">$contactRange</div>
 	  				 		<a href="$nextPageAction" title="Next Page" class="$cssNextPage NextPageArrow"/></a>
-	 				  		<a href="$lastPageAction" title="Last Page" class="$cssNextPage LastPageArrow"><span/></a>
+	 				  		<a href="$lastPageAction" title="Last Page" class="$cssNextPage LastPageArrow"><span></span></a>
 						    <div style="clear: left;"><span></span></div>
 						  </div>
 					  </div>
