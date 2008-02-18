@@ -117,7 +117,7 @@ public class NewUserListener extends UserEventListener {
         mservice_.saveFolder(sProvider, username, accId, folder) ;
       }
     }
-    
+    sProvider.close();
   }
   
   private void reparePermissions(Node node, String owner) throws Exception {

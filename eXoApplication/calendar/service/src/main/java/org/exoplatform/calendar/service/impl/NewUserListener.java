@@ -26,57 +26,66 @@ import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserEventListener;
 
 /**
- * Created by The eXo Platform SARL
- * Author : Hung Nguyen Quang
- *          hung.nguyen@exoplatform.com
- * Nov 23, 2007 3:09:21 PM
+ * Created by The eXo Platform SARL Author : Hung Nguyen Quang
+ * hung.nguyen@exoplatform.com Nov 23, 2007 3:09:21 PM
  */
 public class NewUserListener extends UserEventListener {
-  private CalendarService cservice_ ;
-  private String[] defaultEventCategories_ ;
-  private String defaultCalendarCategory_ ;
-  private String[] defaultCalendar_ ;
-  public NewUserListener(CalendarService cservice, InitParams params) throws Exception {
-  	cservice_ = cservice ;
-  	String defaultEventCategories = params.getValueParam("defaultEventCategories").getValue() ;
-  	if(defaultEventCategories != null && defaultEventCategories.length() > 0) {
-  		defaultEventCategories_ = defaultEventCategories.split(",") ;
-  	}
-  	
-  	defaultCalendarCategory_ = params.getValueParam("defaultCalendarCategory").getValue() ;
-  	
-  	String defaultCalendar = params.getValueParam("defaultCalendar").getValue() ;
-  	if(defaultCalendar != null && defaultCalendar.length() > 0) {
-  		defaultCalendar_ = defaultCalendar.split(",") ;
-  	}
-  }
-  
-  public void postSave(User user, boolean isNew) throws Exception {
-  	SessionProvider sysProvider = SessionProvider.createSystemProvider() ;
-  	if(defaultEventCategories_ != null && defaultEventCategories_.length > 0) {
-  		for(String evCategory : defaultEventCategories_) {
-  			EventCategory eventCategory = new EventCategory() ;
-  			eventCategory.setName(evCategory) ;
-  	  	cservice_.saveEventCategory(sysProvider, user.getUserName(), eventCategory, null, true) ;
-    	}
-  	}
-  	if(defaultCalendarCategory_ != null && defaultCalendarCategory_.length() > 0) {
-			CalendarCategory calCategory = new CalendarCategory() ;
-			calCategory.setName(defaultCalendarCategory_) ;  			
-	  	cservice_.saveCalendarCategory(sysProvider, user.getUserName(), calCategory, true) ;
-	  	if(defaultCalendar_ != null && defaultCalendar_.length > 0) {
-	  		for(String calendar : defaultCalendar_) {
-	  			Calendar cal = new Calendar() ;
-	  			cal.setName(calendar) ;  
-	  			cal.setCategoryId(calCategory.getId()) ;
-	  	  	cservice_.saveUserCalendar(sysProvider, user.getUserName(), cal, true) ;
-	    	}
-	  	}
-  	}
-  	
-  }
-  
-  public void preDelete(User user) throws Exception {
-    
-  }
+	private CalendarService cservice_;
+	private String[] defaultEventCategories_;
+	private String defaultCalendarCategory_;
+	private String[] defaultCalendar_;
+
+	public NewUserListener(CalendarService cservice, InitParams params)
+			throws Exception {
+		cservice_ = cservice;
+		String defaultEventCategories = params.getValueParam(
+				"defaultEventCategories").getValue();
+		if (defaultEventCategories != null
+				&& defaultEventCategories.length() > 0) {
+			defaultEventCategories_ = defaultEventCategories.split(",");
+		}
+
+		defaultCalendarCategory_ = params.getValueParam(
+				"defaultCalendarCategory").getValue();
+
+		String defaultCalendar = params.getValueParam("defaultCalendar")
+				.getValue();
+		if (defaultCalendar != null && defaultCalendar.length() > 0) {
+			defaultCalendar_ = defaultCalendar.split(",");
+		}
+	}
+
+	public void postSave(User user, boolean isNew) throws Exception {
+		SessionProvider sysProvider = SessionProvider.createSystemProvider();
+		if (defaultEventCategories_ != null
+				&& defaultEventCategories_.length > 0) {
+			for (String evCategory : defaultEventCategories_) {
+				EventCategory eventCategory = new EventCategory();
+				eventCategory.setName(evCategory);
+				cservice_.saveEventCategory(sysProvider, user.getUserName(),
+						eventCategory, null, true);
+			}
+		}
+		if (defaultCalendarCategory_ != null
+				&& defaultCalendarCategory_.length() > 0) {
+			CalendarCategory calCategory = new CalendarCategory();
+			calCategory.setName(defaultCalendarCategory_);
+			cservice_.saveCalendarCategory(sysProvider, user.getUserName(),
+					calCategory, true);
+			if (defaultCalendar_ != null && defaultCalendar_.length > 0) {
+				for (String calendar : defaultCalendar_) {
+				  Calendar cal = new Calendar();
+					cal.setName(calendar);
+					cal.setCategoryId(calCategory.getId());
+					cservice_.saveUserCalendar(sysProvider, user.getUserName(),
+							cal, true);
+				}
+			}
+		}
+		sysProvider.close();
+	}
+
+	public void preDelete(User user) throws Exception {
+
+	}
 }

@@ -34,94 +34,74 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.impl.GroupImpl;
 
 public class ForumSessionUtils {
-  public static String SYSTEM_SUFFIX = ":/" + SystemIdentity.SYSTEM ;
-  public static String ANONIM_SUFFIX = ":/" + SystemIdentity.ANONIM ;
-
+  
   static public String getCurrentUser() throws Exception {
-    return Util.getPortalRequestContext().getRemoteUser() ; 
+    return Util.getPortalRequestContext().getRemoteUser();
   }
   
   public static boolean isAnonim() throws Exception {
-    String userId = getCurrentUser() ;
-    if(userId == null) return true ;   
-    return false ;
+    String userId = getCurrentUser();
+    if (userId == null)
+      return true;
+    return false;
   }
   
-  public static SessionProvider getSystemProvider() {   
-    String key = Util.getPortalRequestContext().getSessionId() + SYSTEM_SUFFIX;
-    return getJcrSessionProvider(key) ;
-  }    
-
-  public static SessionProvider getSessionProvider() {    
-    String key = Util.getPortalRequestContext().getSessionId();
-    return getJcrSessionProvider(key) ;
+  public static SessionProvider getSystemProvider() {
+    return SessionProvider.createSystemProvider();
+  }
+  
+  public static SessionProvider getSessionProvider() {
+    SessionProviderService service = (SessionProviderService) PortalContainer
+        .getComponent(SessionProviderService.class);
+    return service.getSessionProvider(null);
   }
   
   public static SessionProvider getAnonimProvider() {
-    String key = Util.getPortalRequestContext().getSessionId() + ANONIM_SUFFIX ;
-    return getJcrSessionProvider(key) ;
-  } 
-
-  private static SessionProvider getJcrSessionProvider(String key) {    
-    SessionProviderService service = 
-      (SessionProviderService)PortalContainer.getComponent(SessionProviderService.class) ;    
-    SessionProvider sessionProvider = null ;    
-    try{
-      sessionProvider = service.getSessionProvider(key) ;
-      return sessionProvider ;
-    }catch (NullPointerException e) {
-      if(key.indexOf(SYSTEM_SUFFIX)>0) {
-        sessionProvider = SessionProvider.createSystemProvider() ;
-        service.setSessionProvider(key,sessionProvider) ;
-        return sessionProvider ;
-      }else if(key.indexOf(ANONIM_SUFFIX)>0) {
-        sessionProvider = SessionProvider.createAnonimProvider() ;
-        service.setSessionProvider(key,sessionProvider) ;
-        return sessionProvider ;
-      }else {
-        sessionProvider = new SessionProvider(null) ;
-        service.setSessionProvider(key,sessionProvider) ;
-        return sessionProvider ;
-      }
-    }   
+    return SessionProvider.createAnonimProvider();
   }
   
-  public static String getFileSource(ForumAttachment attachment, DownloadService dservice) throws Exception {    
+  public static String getFileSource(ForumAttachment attachment,
+      DownloadService dservice) throws Exception {
     if (attachment != null) {
       try {
-        InputStream input = attachment.getInputStream() ;
-        byte[] imageBytes = null ;
+        InputStream input = attachment.getInputStream();
+        byte[] imageBytes = null;
         if (input != null) {
-          imageBytes = new byte[input.available()] ;
-          input.read(imageBytes) ;
-          ByteArrayInputStream byteImage = new ByteArrayInputStream(imageBytes) ;
-          InputStreamDownloadResource dresource = new InputStreamDownloadResource(byteImage, "image") ;
-          dresource.setDownloadName(attachment.getName()) ;
-          return  dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;        
+          imageBytes = new byte[input.available()];
+          input.read(imageBytes);
+          ByteArrayInputStream byteImage = new ByteArrayInputStream(imageBytes);
+          InputStreamDownloadResource dresource = new InputStreamDownloadResource(
+              byteImage, "image");
+          dresource.setDownloadName(attachment.getName());
+          return dservice.getDownloadLink(dservice
+              .addDownloadResource(dresource));
         }
       } catch (PathNotFoundException ex) {
-        return null ;
+        return null;
       }
     }
-    return null ;
+    return null;
   }
   
-  public static String[] getUserGroups() throws Exception{
-    OrganizationService organizationService = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
-    Object[] objGroupIds = organizationService.getGroupHandler().findGroupsOfUser(getCurrentUser()).toArray() ;
+  public static String[] getUserGroups() throws Exception {
+    OrganizationService organizationService = (OrganizationService) PortalContainer
+        .getComponent(OrganizationService.class);
+    Object[] objGroupIds = organizationService.getGroupHandler()
+        .findGroupsOfUser(getCurrentUser()).toArray();
     String[] groupIds = new String[objGroupIds.length];
     for (int i = 0; i < groupIds.length; i++) {
-      groupIds[i] = ((GroupImpl)objGroupIds[i]).getId() ;
+      groupIds[i] = ((GroupImpl) objGroupIds[i]).getId();
     }
-    return groupIds ;
+    return groupIds;
   }
   
   @SuppressWarnings("unchecked")
   public static PageList getPageListUser() throws Exception {
-  	OrganizationService organizationService = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
-//  	OrganizationService organizationService = getApplicationComponent(OrganizationService.class) ;
-  	return organizationService.getUserHandler().getUserPageList(0);
+    OrganizationService organizationService = (OrganizationService) PortalContainer
+        .getComponent(OrganizationService.class);
+    // OrganizationService organizationService =
+    // getApplicationComponent(OrganizationService.class) ;
+    return organizationService.getUserHandler().getUserPageList(0);
   }
-  
   
 }

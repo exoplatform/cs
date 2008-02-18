@@ -78,6 +78,8 @@ public class NewUserListener extends UserEventListener {
       reparePermissions(userApp.getNode("ContactApplication/contactGroup"), user.getUserName()) ;
       reparePermissions(userApp.getNode("ContactApplication/contactGroup/" + group.getId()), user.getUserName()) ;
       userApp.getSession().save() ;   
+      
+      sysProvider.close();
   	}
   }
   

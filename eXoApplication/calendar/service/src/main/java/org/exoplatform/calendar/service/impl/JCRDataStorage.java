@@ -55,6 +55,9 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.xml.PortalContainerInfo;
+import org.exoplatform.services.jcr.access.AccessControlEntry;
+import org.exoplatform.services.jcr.access.AccessControlList;
+import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 
@@ -105,9 +108,9 @@ public class JCRDataStorage{
     try {
       return publicApp.getNode(CALENDAR_APP) ;
     } catch (Exception e) {
-      publicApp.addNode(CALENDAR_APP, NT_UNSTRUCTURED) ;
-      getPublicRoot(sProvider).getSession().save() ;
-      return publicApp.getNode(CALENDAR_APP) ;
+      Node calendarApp = publicApp.addNode(CALENDAR_APP, NT_UNSTRUCTURED) ;
+      publicApp.getSession().save() ;
+      return calendarApp ;
     }
   }
 
@@ -116,14 +119,10 @@ public class JCRDataStorage{
     try {
       return calendarServiceHome.getNode(SHARED_CALENDAR) ;
     } catch (Exception e) {
-      calendarServiceHome.addNode(SHARED_CALENDAR, NT_UNSTRUCTURED) ;
-      getPublicRoot(sProvider).getSession().save() ; 
-      return calendarServiceHome.getNode(SHARED_CALENDAR) ; 
+      Node sharedCal = calendarServiceHome.addNode(SHARED_CALENDAR, NT_UNSTRUCTURED) ;
+      calendarServiceHome.getSession().save() ; 
+      return sharedCal ; 
     }
-  }
-
-  private Node getUserRoot(SessionProvider sProvider, String username) throws Exception {
-    return nodeHierarchyCreator_.getUserApplicationNode(sProvider, username)  ;
   }
 
   private Node getPublicRoot(SessionProvider sysProvider) throws Exception {
@@ -135,17 +134,15 @@ public class JCRDataStorage{
     Node userApp = nodeHierarchyCreator_.getUserApplicationNode(sProvider, username)  ;
     Node calendarRoot ; 
     try {
-      calendarRoot = userApp.getNode(CALENDAR_APP) ;
+      return userApp.getNode(CALENDAR_APP) ;
     } catch (Exception e) {
-      userApp.addNode(CALENDAR_APP, NT_UNSTRUCTURED) ;
-      calendarRoot = userApp.getNode(CALENDAR_APP) ;
-      userApp.save() ;
+      calendarRoot = userApp.addNode(CALENDAR_APP, NT_UNSTRUCTURED) ;
+      if(!calendarRoot.hasNode(CALENDAR_SETTING)) {
+        addCalendarSetting(calendarRoot, new CalendarSetting()) ;
+      }
+      userApp.getSession().save();
+      return calendarRoot ;
     }
-    if(!calendarRoot.hasNode(CALENDAR_SETTING)) {
-      addCalendarSetting(calendarRoot, new CalendarSetting()) ;
-      userApp.save() ;
-    }  	
-    return calendarRoot ;
   }
 
   private Node getPublicCalendarHome(SessionProvider sProvider) throws Exception {
@@ -154,9 +151,9 @@ public class JCRDataStorage{
     try {
       return calendarServiceHome.getNode(CALENDARS) ;
     } catch (Exception e) {
-      calendarServiceHome.addNode(CALENDARS, NT_UNSTRUCTURED) ;
-      getPublicRoot(sProvider).getSession().save() ;
-      return calendarServiceHome.getNode(CALENDARS) ; 
+      Node cal = calendarServiceHome.addNode(CALENDARS, NT_UNSTRUCTURED) ;
+      calendarServiceHome.getSession().save() ;
+      return cal ; 
     }
   }
 
@@ -165,9 +162,9 @@ public class JCRDataStorage{
     try {
       return calendarServiceHome.getNode(CALENDARS) ;
     } catch (Exception e) {
-      calendarServiceHome.addNode(CALENDARS, NT_UNSTRUCTURED) ;
-      getUserRoot(sProvider, username).getSession().save() ;
-      return calendarServiceHome.getNode(CALENDARS) ; 
+      Node calendars = calendarServiceHome.addNode(CALENDARS, NT_UNSTRUCTURED) ;
+      calendarServiceHome.getSession().save() ;
+      return calendars ; 
     }
   }
 
@@ -176,9 +173,9 @@ public class JCRDataStorage{
     try {
       return calendarServiceHome.getNode(FEED) ;
     } catch (Exception e) {
-      calendarServiceHome.addNode(FEED, NT_UNSTRUCTURED) ;
-      getUserRoot(sProvider, username).getSession().save() ;
-      return calendarServiceHome.getNode(FEED) ;
+      Node feed = calendarServiceHome.addNode(FEED, NT_UNSTRUCTURED) ;
+      calendarServiceHome.getSession().save() ;
+      return feed ;
     }
   }
 
@@ -187,10 +184,10 @@ public class JCRDataStorage{
     try {
       return calendarServiceHome.getNode(CALENDAR_CATEGORIES) ;
     } catch (Exception e) {
-      calendarServiceHome.addNode(CALENDAR_CATEGORIES, NT_UNSTRUCTURED) ;
-      getUserRoot(sProvider, username).getSession().save() ;
+      Node calCat = calendarServiceHome.addNode(CALENDAR_CATEGORIES, NT_UNSTRUCTURED) ;
+      calendarServiceHome.getSession().save() ;
+      return calCat;
     }
-    return calendarServiceHome.getNode(CALENDAR_CATEGORIES) ;
   }
 
   protected Node getEventCategoryHome(SessionProvider sProvider, String username) throws Exception {
@@ -198,9 +195,9 @@ public class JCRDataStorage{
     try {
       return calendarServiceHome.getNode(EVENT_CATEGORIES) ;
     } catch (Exception e) {
-      calendarServiceHome.addNode(EVENT_CATEGORIES, NT_UNSTRUCTURED) ;
-      getUserRoot(sProvider, username).getSession().save() ;
-      return calendarServiceHome.getNode(EVENT_CATEGORIES) ; 
+      Node eventCat = calendarServiceHome.addNode(EVENT_CATEGORIES, NT_UNSTRUCTURED) ;
+      calendarServiceHome.getSession().save() ;
+      return eventCat ; 
     }
   }
 
@@ -288,11 +285,7 @@ public class JCRDataStorage{
       checkToSave(calendarCategory, calendar.getId()) ;
       calendarCategory.save() ;
     }*/
-    if(! calendarHome.isNew()) {
-      calendarHome.getSession().save() ;
-    }else {
-      getUserRoot(sProvider, username).getSession().save() ;
-    }
+    calendarHome.getSession().save() ;
   }
 
   public Calendar removeUserCalendar(SessionProvider sProvider, String username, String calendarId) throws Exception {
@@ -410,7 +403,7 @@ public class JCRDataStorage{
         removeReminder(sProvider, iter.nextNode()) ;
       }
       calNode.remove() ;
-      calendarHome.save() ;
+      //calendarHome.save() ;
       calendarHome.getSession().save() ;
       return calendar ;
     }
@@ -1288,7 +1281,7 @@ public class JCRDataStorage{
   public void saveCalendarSetting(SessionProvider sProvider, String username, CalendarSetting setting) throws Exception {
     Node calendarHome = getUserCalendarServiceHome(sProvider, username) ;
     addCalendarSetting(calendarHome, setting) ;
-    calendarHome.getSession().save() ;
+    calendarHome.save() ;
   }
 
   private void addCalendarSetting(Node calendarHome, CalendarSetting setting) throws Exception {

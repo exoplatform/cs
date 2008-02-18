@@ -83,7 +83,7 @@
 			</value-param>
 			<value-param>
 				<name>incomingServer</name>
-				<value>mail.finbel.intra</value>
+				<value>in</value>
 			</value-param>
 			<value-param>
 				<name>incomingPort</name>
@@ -95,7 +95,7 @@
 			</value-param>
 			<value-param>
 				<name>outgoingServer</name>
-				<value>mail.finbel.intra</value>
+				<value>out</value>
 			</value-param>
 			<value-param>
 				<name>outgoingPort</name>
