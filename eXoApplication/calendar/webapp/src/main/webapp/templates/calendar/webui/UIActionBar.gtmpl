@@ -7,7 +7,7 @@
 						<div class="Title ControlButton">
 							<%=_ctx.appRes(uicomponent.id + ".label.QuickAdd")%>
 						</div>
-						<a href="<%=uicomponent.event("QuickAddEvent","Event")%>" class="ControlButton">
+						<a href="<%=uicomponent.event("QuickAddEvent","Event")%>" onclick="" class="ControlButton">
 							<div class="IconHolder QuickAddEvent">
 								<%=_ctx.appRes(uicomponent.id + ".label.Event")%>
 							</div>

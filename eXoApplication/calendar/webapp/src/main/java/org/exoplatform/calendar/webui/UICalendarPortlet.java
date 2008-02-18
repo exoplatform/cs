@@ -25,6 +25,7 @@ import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPopupMessages;
+import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
@@ -44,7 +45,8 @@ public class UICalendarPortlet extends UIPortletApplication {
    UIActionBar uiActionBar = addChild(UIActionBar.class, null, null) ;
    uiActionBar.setCurrentView(UICalendarViewContainer.TYPES[Integer.parseInt(getCalendarSetting().getViewType())]) ;
     addChild(UICalendarWorkingContainer.class, null, null) ;
-    addChild(UIPopupAction.class, null, null) ;
+    UIPopupAction uiPopup =  addChild(UIPopupAction.class, null, null) ;
+    uiPopup.getChild(UIPopupWindow.class).setId("UICalendarPopupWindow") ;
   }
   
   public CalendarSetting getCalendarSetting() throws Exception{
