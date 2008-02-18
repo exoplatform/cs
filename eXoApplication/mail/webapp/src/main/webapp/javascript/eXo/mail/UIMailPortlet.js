@@ -426,24 +426,30 @@ UIMailPortlet.prototype.restoreFolderState = function() {
 UIMailPortlet.prototype.resizeIframe = function(str) {
 	var frame = document.getElementById("IframeMessagePreview") ;
 	var doc = frame.contentWindow.document ;
+	var isDesktop = (document.getElementById("UIPageDesktop") != null) ? true : false;
 	doc.open();
 	str = str.replace(/\n/g, "<br>");
 	doc.write(str);
 	doc.close();
-	if (eXo.core.Browser.isFF()) {
-		frame.style.height = doc.body.offsetHeight  + 20 + "px" ;
+	if (isDesktop) {
+		frame.style.height = "100%";
+		if(!eXo.core.Browser.isFF()) frame.style.width = "96%";
 	} else {
-		var docHt = 0, sh, oh;
-		if (doc.height) {
-			docHt = doc.height;
-		} else if (doc.body) {
-			if (doc.body.scrollHeight) docHt = sh = doc.body.scrollHeight;
-			if (doc.body.offsetHeight) docHt = oh = doc.body.offsetHeight;
-			if (sh && oh) docHt = Math.max(sh, oh);
+		if (eXo.core.Browser.isFF()) {
+			frame.style.height = doc.body.offsetHeight  + 20 + "px" ;
+		} else {
+			var docHt = 0, sh, oh;
+			if (doc.height) {
+				docHt = doc.height;
+			} else if (doc.body) {
+				if (doc.body.scrollHeight) docHt = sh = doc.body.scrollHeight;
+				if (doc.body.offsetHeight) docHt = oh = doc.body.offsetHeight;
+				if (sh && oh) docHt = Math.max(sh, oh);
+			}
+			frame.style.width = "96%";
+			frame.style.height = "auto"; 
+			frame.style.height = docHt + 20 + "px"; 
 		}
-		frame.style.width = "96%";
-		frame.style.height = "auto"; 
-		frame.style.height = docHt + 20 + "px"; 
 	}
 }
 
