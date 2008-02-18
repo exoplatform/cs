@@ -461,12 +461,14 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIWorkingContainer uiWorkingContainer = uiContacts.getAncestorOfType(UIWorkingContainer.class) ;
       ContactService contactService = ContactUtils.getContactService() ;
       String username = ContactUtils.getCurrentUser() ;
-      contactService.removeContacts(SessionProviderFactory.createSystemProvider(), username, contactIds) ;
+      
+      List<Contact> contacts = new ArrayList<Contact>();
+      for(String id : contactIds) {
+        contacts.add(uiContacts.contactMap.get(id)) ;
+      }
+      
+      contactService.removeContacts(SessionProviderFactory.createSystemProvider(), username, contacts) ;
       if(uiContacts.isSearchResult) {
-      	List<Contact> contacts = new ArrayList<Contact>();
-        for(String id : contactIds) {
-        	contacts.add(uiContacts.contactMap.get(id)) ;
-        }
         uiContacts.setContact(contacts, false) ;
       }
 //      if(contactIds.contains(uiContactPreview.getContact().getId())) 

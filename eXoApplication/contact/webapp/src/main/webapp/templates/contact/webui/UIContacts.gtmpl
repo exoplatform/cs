@@ -204,13 +204,18 @@
 	  	 	    		for(contact in contacts) {
 	  	 	    			String groupName ;	  	 	    			
 	  	 	    			String[] addressBooks = contact.getAddressBook() ;
+	  	 	    			
+	  	 	    			
+	  	 	    			
 	  	 	    			contactType = contact.getContactType() ;
 	  	 	    			
 	  	 	    			if (contactType.equals("2")) {
 		  	 	    			StringBuffer buffer = new StringBuffer("")
-		  	 	    			for(address in addressBooks) {
-		  	 	    				if(buffer.length() > 0) buffer.append(", ").append(address) ;
-		  	 	    				else buffer.append(address) ;
+		  	 	    			int i = 1 ;
+		  	 	    			while (i < addressBooks.length) {
+		  	 	    				if(buffer.length() > 0) buffer.append(", ").append(addressBooks[i]) ;
+		  	 	    				else buffer.append(addressBooks[i]) ;
+		  	 	    				i ++ ;
 		  	 	    			}
 								    groupName = buffer.toString() ;
 								  } else if (contactType.equals("0")) {

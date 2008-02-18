@@ -216,20 +216,16 @@ public class UITagForm extends UIForm implements UIPopupComponent {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;   
       }
-      List<String> contactIds = new ArrayList<String>() ;
-      for (Contact contact : uiForm.contacts_) {
-        contactIds.add(contact.getId()) ;
-      }
       ContactService contactService = ContactUtils.getContactService() ; 
       String username = ContactUtils.getCurrentUser() ;
       contactService.removeContactTag(
-          SessionProviderFactory.createSystemProvider(), username, contactIds, checkedTags) ;
+          SessionProviderFactory.createSystemProvider(), username, uiForm.contacts_, checkedTags) ;
       UIContactPortlet contactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       UITags uiTags = contactPortlet.findFirstComponentOfType(UITags.class) ;
       String selectedTag = uiTags.getSelectedTag() ;
       UIContacts uiContacts = contactPortlet.findFirstComponentOfType(UIContacts.class) ;
 
-      //hoang hung comment to fix bug 215
+      //comment to fix bug 215
       //if(uiContacts.isDisplaySearchResult()) uiContacts.setContact(uiForm.contacts_, false) ;      
       if (!ContactUtils.isEmpty(selectedTag)) {
         uiContacts.setContacts(contactService.getContactPageListByTag(

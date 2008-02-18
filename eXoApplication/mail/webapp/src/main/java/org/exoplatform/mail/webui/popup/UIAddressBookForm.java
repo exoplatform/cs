@@ -151,9 +151,9 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
       String username = MailUtils.getCurrentUser();
       ContactService contactServ = uiAddressBook.getApplicationComponent(ContactService.class);
       try {
-        List<String> contactIds = new ArrayList<String>();
-        contactIds.add(contact.getId());
-        contactServ.removeContacts(SessionsUtils.getSessionProvider(), username, contactIds);
+        List<Contact> contacts = new ArrayList<Contact>();
+        contacts.add(contact) ;
+        contactServ.removeContacts(SessionsUtils.getSessionProvider(), username, contacts);
         uiAddressBook.refrestContactList(uiAddressBook.getUIFormSelectBox(SELECT_GROUP).getValue());
         event.getRequestContext().addUIComponentToUpdateByAjax(mailPortlet.getChild(UIPopupAction.class)) ;
       } catch(Exception e) {

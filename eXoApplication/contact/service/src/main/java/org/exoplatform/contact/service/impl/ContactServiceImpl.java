@@ -79,8 +79,8 @@ public class ContactServiceImpl implements ContactService {
     storage_.saveContact(sProvider, username, contact, isNew);    
   }
   
-  public List<Contact> removeContacts(SessionProvider sProvider, String username, List<String> contactIds) throws Exception {
-    return storage_.removeContacts(sProvider, username, contactIds);
+  public List<Contact> removeContacts(SessionProvider sProvider, String username, List<Contact> contacts) throws Exception {
+    return storage_.removeContacts(sProvider, username, contacts);
   }
   
   public void moveContacts(SessionProvider sysProvider, String username, List<Contact> contacts, String addressType ) throws Exception {
@@ -182,8 +182,8 @@ public class ContactServiceImpl implements ContactService {
     storage_.updateTag(sProvider, username, tag) ;
   }
   
-  public void removeContactTag(SessionProvider sProvider, String username, List<String>contactIds, List<String> tags) throws Exception {
-    storage_.removeContactTag(sProvider, username, contactIds, tags) ;
+  public void removeContactTag(SessionProvider sProvider, String username, List<Contact> contacts, List<String> tags) throws Exception {
+    storage_.removeContactTag(sProvider, username, contacts, tags) ;
   }
   
   public ContactPageList getPublicContactsByAddressBook(SessionProvider sProvider, String groupId) throws Exception {
