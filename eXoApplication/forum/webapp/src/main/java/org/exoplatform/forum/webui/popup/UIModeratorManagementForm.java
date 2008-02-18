@@ -82,7 +82,7 @@ public class UIModeratorManagementForm extends UIForm implements UIPopupComponen
   	this.userProfiles = new ArrayList<UserProfile>();
   	for (User user : listUser) {
   		UserProfile userProfile = new UserProfile() ;
-  		userProfile = forumService.getUserProfile(ForumSessionUtils.getSystemProvider(), user.getUserName(), false, false);
+  		userProfile = forumService.getUserProfile(ForumSessionUtils.getSystemProvider(), user.getUserName(), true, true);
   		userProfile.setLastLoginDate(user.getLastLoginTime());
   		userProfile.setUserId(user.getUserName()) ;
   		userProfile.setUser(user);
