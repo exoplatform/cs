@@ -1,4 +1,4 @@
-<div class="UIHomePagePortlet" id="$uicomponent.id">
+<div class="UIHomePagePortlet" id="$uicomponent.id" style="border: 1px red solid">
 	<div class="PortletDecoration">
 		<div class="HomePortletAdBackround">
 			<div class="AdImage">

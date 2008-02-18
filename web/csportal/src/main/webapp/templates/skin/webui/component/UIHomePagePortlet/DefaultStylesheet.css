@@ -1,6 +1,7 @@
 .UIWindow .UIHomePagePortlet {	
 	margin: 0px;
 	padding: 10px;
+	border: 1px red solid;
 }
 
 .UIHomePagePortlet {	
@@ -107,7 +108,6 @@
 	background: url('DefaultSkin/background/UserAccountsBG.gif') no-repeat left -600px;
 }
 
-
 .UIHomePagePortlet .HomePortletContent .AccountInfos {
 	padding: 20px 0px 0px 0px ;
 }
@@ -124,5 +124,3 @@
 	color: #2c6fbd;
 	line-height: 25px;
 }
-
-
