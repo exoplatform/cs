@@ -29,8 +29,8 @@
 						  <td>         
 				        <div style="margin: 0px auto;" class="ActionContainer">
 				          <div style="margin: auto;" class="OverflowContainer">          
-					           <a title="Edit" href="#" class="EditIcon"><span/></a>		          
-					         <!-- <a title="Delete" href="#" class="DeleteIcon"><span/></a>-->		          
+					           <a title="Edit Profile" href="<%=uicomponent.event("EditProfile",user.getUserId());%>" class="EditIcon"><span/></a>		          
+					           <a title="View Profile" href="<%=uicomponent.event("ViewProfile",user.getUserId());%>" class="DeleteIcon"><span/></a>		          
 				          </div>
 				        </div>
 				      </td>
@@ -50,18 +50,13 @@
 		<table class="ActionContainer" align="center">
 			<tr>
 				<td align="center">
-			<% for(action in uicomponent.getActions()) { 
-				 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action); 
-				 String link = uicomponent.event(action) ;
-			%>
-					<a href="$link" class="ActionButton LightBlueStyle">
+					<a href="<%=uicomponent.event("Cancel");%>" class="ActionButton LightBlueStyle">
 						<div class="ButtonLeft">
 							<div class="ButtonRight">
-								<div class="ButtonMiddle"> $actionLabel </div>
+								<div class="ButtonMiddle"><%=_ctx.appRes(uicomponent.getName() + ".action.Cancel");%></div>
 							</div>
 						</div>
 					</a>
-				<%}%>
 				</td>
 			</tr>
  		</table> 

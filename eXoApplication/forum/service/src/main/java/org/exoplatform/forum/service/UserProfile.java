@@ -18,6 +18,8 @@ package org.exoplatform.forum.service;
 
 import java.util.Date;
 
+import org.exoplatform.services.organization.User;
+
 public class UserProfile {
 	
 	public static final long ADMIN = 0 ;
@@ -36,8 +38,8 @@ public class UserProfile {
 	private String[] moderateTopics ; //store Ids of topic this user is moderator
 	private String[] readTopic ;
 	
-	private Date lastLoginDate ;
-	private Date lastPostDate ;
+	private Date lastLoginDate = new Date();
+	private Date lastPostDate;
 	private boolean isDisplaySignature = true ;
 	private boolean isDisplayAvatar = true ;
 	//UserOption
@@ -54,7 +56,9 @@ public class UserProfile {
 	private String banReason ;
 	private int banCounter = 0 ;
 	private String[] banReasonSummary ; // value: Ban reason + fromDate - toDate
-	private Date createdDate ;
+	private Date createdDateBan ;
+	
+	private User user ;
 	
 	@SuppressWarnings("deprecation")
   public UserProfile() {
@@ -147,7 +151,10 @@ public class UserProfile {
 	public void setBanReasonSummary(String[] banReasonSummary) {this.banReasonSummary = banReasonSummary; }
 	public String[] getBanReasonSummary() {return banReasonSummary; }
 
-	public void setCreatedDate(Date createdDate) {this.createdDate = createdDate; }
-	public Date getCreatedDate() {return createdDate; }
+	public void setCreatedDateBan(Date createdDate) {this.createdDateBan = createdDate; }
+	public Date getCreatedDateBan() {return createdDateBan; }
+
+  public void setUser(User user) {this.user = user;}
+  public User getUser() {return user; }
 
 }

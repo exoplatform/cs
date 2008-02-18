@@ -1108,7 +1108,7 @@ public class JCRDataStorage{
 				if(newProfileNode.hasProperty("exo:banUntil"))userProfile.setBanUntil(newProfileNode.getProperty("exo:banUntil").getLong());
 				if(newProfileNode.hasProperty("exo:banReason"))userProfile.setBanReason(newProfileNode.getProperty("exo:banReason").getString());
 				if(newProfileNode.hasProperty("exo:banReasonSummary"))userProfile.setBanReasonSummary(ValuesToStrings(newProfileNode.getProperty("exo:banReasonSummary").getValues()));
-				if(newProfileNode.hasProperty("exo:createdDate"))userProfile.setCreatedDate(newProfileNode.getProperty("exo:createdDate").getDate().getTime());
+				if(newProfileNode.hasProperty("exo:createdDateBan"))userProfile.setCreatedDateBan(newProfileNode.getProperty("exo:createdDateBan").getDate().getTime());
 			}
 			return userProfile;
 		}catch(PathNotFoundException e) {
@@ -1138,9 +1138,11 @@ public class JCRDataStorage{
 			
 			newProfileNode.setProperty("exo:moderateForums", newUserProfile.getModerateForums());
 			newProfileNode.setProperty("exo:moderateTopics", newUserProfile.getModerateTopics());
-			
-//			newProfileNode.setProperty("exo:lastLoginDate", getGreenwichMeanTime());
-//			newProfileNode.setProperty("exo:lastPostDate", getGreenwichMeanTime());
+			Calendar calendar = GregorianCalendar.getInstance();
+			calendar.setTime(newUserProfile.getLastLoginDate()) ;
+			newProfileNode.setProperty("exo:lastLoginDate", calendar);
+			calendar.setTime(newUserProfile.getCreatedDateBan()) ;
+			newProfileNode.setProperty("exo:createdDate", calendar);
 			newProfileNode.setProperty("exo:isDisplaySignature", newUserProfile.getIsDisplaySignature());
 			newProfileNode.setProperty("exo:isDisplayAvatar", newUserProfile.getIsDisplayAvatar());
 		//UserOption
@@ -1157,12 +1159,18 @@ public class JCRDataStorage{
 		//UserBan
 		if(isBan){
 			System.out.println("==========> isBan");
+			if(newProfileNode.hasProperty("exo:isBanned")) {
+				if(!newProfileNode.getProperty("exo:isBanned").getBoolean() && newUserProfile.getIsBanned()) {
+					newProfileNode.setProperty("exo:createdDateBan", GregorianCalendar.getInstance() );
+				}
+			} else {
+				newProfileNode.setProperty("exo:createdDateBan", GregorianCalendar.getInstance() );
+			}
 			newProfileNode.setProperty("exo:isBanned", newUserProfile.getIsBanned());
 			newProfileNode.setProperty("exo:banUntil", newUserProfile.getBanUntil());
 			newProfileNode.setProperty("exo:banReason", newUserProfile.getBanReason());
 			newProfileNode.setProperty("exo:banCounter", newUserProfile.getBanCounter());
 			newProfileNode.setProperty("exo:banReasonSummary", newUserProfile.getBanReasonSummary());
-			newProfileNode.setProperty("exo:createdDate", newUserProfile.getIsShowForumJump());
 		}
 		userProfileNode.getSession().save() ;
   }

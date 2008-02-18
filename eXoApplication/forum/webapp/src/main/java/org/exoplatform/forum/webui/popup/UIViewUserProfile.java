@@ -16,13 +16,15 @@
  ***************************************************************************/
 package org.exoplatform.forum.webui.popup;
 
+import org.exoplatform.forum.service.UserProfile;
+import org.exoplatform.services.organization.User;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.form.UIForm;
 
 /**
  * Created by The eXo Platform SARL
@@ -32,21 +34,50 @@ import org.exoplatform.webui.event.Event.Phase;
  */
 @ComponentConfig(
 		lifecycle = UIFormLifecycle.class,
-		template = "app:/templates/forum/webui/UIViewUserProfile.gtmpl",
+		template = "app:/templates/forum/webui/popup/UIViewMemberProfile.gtmpl",
 		events = {
 			@EventConfig(listeners = UIViewUserProfile.CloseActionListener.class,phase = Phase.DECODE)
 		}
 )
-public class UIViewUserProfile extends UIComponent {
+public class UIViewUserProfile extends UIForm implements UIPopupComponent {
 	
 	
+	private UserProfile userProfile ;
 	public UIViewUserProfile() {
 		
 	}
 	
-	static	public class CloseActionListener extends EventListener<UIViewUserProfile> {
-    public void execute(Event<UIViewUserProfile> event) throws Exception {
-			UIViewUserProfile uiForm = event.getSource() ;
-		}
+	public void setUserProfile(UserProfile userProfile) {
+	  this.userProfile = userProfile ;
+  }
+	
+	public UserProfile getUserProfile() {
+		return this.userProfile ;
 	}
+	
+	@SuppressWarnings("unused")
+  private User getUser() {
+		User user = this.userProfile.getUser() ;
+		return user;
+	}
+	public void activate() throws Exception {
+	  // TODO Auto-generated method stub
+  }
+
+	public void deActivate() throws Exception {
+	  // TODO Auto-generated method stub
+  }
+	
+	static  public class CloseActionListener extends EventListener<UIViewUserProfile> {
+    public void execute(Event<UIViewUserProfile> event) throws Exception {
+    	UIViewUserProfile uiForm = event.getSource() ;
+    	UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+			popupContainer.getChild(UIPopupAction.class).deActivate() ;
+			event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
+    }
+  }
+	
+	
+	
+	
 }

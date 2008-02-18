@@ -21,6 +21,7 @@ import org.exoplatform.forum.webui.popup.UIForumForm;
 import org.exoplatform.forum.webui.popup.UIForumOptionForm;
 import org.exoplatform.forum.webui.popup.UIModeratorManagementForm;
 import org.exoplatform.forum.webui.popup.UIPopupAction;
+import org.exoplatform.forum.webui.popup.UIPopupContainer;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -88,8 +89,13 @@ public class UIForumActionBar extends UIContainer	{
     public void execute(Event<UIForumActionBar> event) throws Exception {
 			UIForumActionBar uiActionBar = event.getSource() ;
 				UIForumPortlet forumPortlet = uiActionBar.getAncestorOfType(UIForumPortlet.class) ;
+				
 				UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
-				popupAction.activate(UIModeratorManagementForm.class, 662) ;
+				UIPopupContainer popupContainer = popupAction.createUIComponent(UIPopupContainer.class, null, null) ;
+				popupContainer.addChild(UIModeratorManagementForm.class, null, null) ;
+//				moderatorManagementForm.setTopicIds(uiTopicContainer.categoryId, uiTopicContainer.forumId) ;
+				popupContainer.setId("UIModeratorManagement") ;
+				popupAction.activate(popupContainer, 660, 440) ;
 				event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
 		}
 	}	

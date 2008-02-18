@@ -1,6 +1,16 @@
+<%  
+	import org.exoplatform.forum.service.UserProfile ;
+	import org.exoplatform.services.organization.User ;
+%>
 <div class="UIViewMemberProfile">
+<% uiform.begin() %>
+<%  
+	UserProfile userProfile = uiform.getUserProfile() ;
+	String userName = userProfile.getUserId() ;
+	User user = uiform.getUser() ;
+%>
 	<div class="ViewMemberProfileContainer">
-		<div class="TitleBar">View Member Profile of : <span class="UserLabel"> phuong.pham</span></div>
+		<div class="TitleBar">View Member Profile of : <span class="UserLabel"><%=user.getFullName();%></span></div>
 		<div class="ViewContainer">
 			<table class="TablePost" cellspacing="0" borderspacing="0">
   			<tbody>
@@ -9,11 +19,11 @@
 						<td class="MemberContainer">
 				  		<div class="MemberContent">
 					  		<img src="/forum/skin/DefaultSkin/webui/background/Avatar1.gif" class="Img" />
-					  		<div class="Rank">Junior Member</div>
+					  		<div class="Rank"><%=userProfile.getUserTitle();%></div>
 					  		<div class="InfoMember">
-					  			<div>Join Date: Feb 2006</div>
-									<div>Posts: 150</div>
-									<div>Last Post: 07-22-2007, 10: 30 am</div>
+					  			<div>Join Date: <%=user.getCreatedDate();%></div>
+									<div>Posts: <%=userProfile.getTotalPost();%></div>
+									<div>Last Post:<%=userProfile.getLastPostDate();%></div>
 					  		</div>
 					  	</div>
 					  </td>
@@ -24,15 +34,15 @@
   							<tbody>
   								<tr>
 										<td class="Label">User name:</td>
-										<td class="LabelProfile"> phuong.pham</td>
+										<td class="LabelProfile"> $userName</td>
 									</tr>
 									<tr>
 										<td class="Label">First name: </td>
-										<td class="LabelProfile">Phuong</td>
+										<td class="LabelProfile"><%=user.getFirstName();%></td>
 									</tr>
 									<tr>
 										<td class="Label">Last name:</td>
-										<td class="LabelProfile"> Pham</td>
+										<td class="LabelProfile"><%=user.getLastName() ;%></td>
 									</tr>
 									<tr>
 										<td class="Label">Birthday: </td>
@@ -43,12 +53,8 @@
 										<td class="LabelProfile">male</td>
 									</tr>
 									<tr>
-										<td class="Label">Email 1: </td>
-										<td class="LabelLink">phuong.pham@exoplatform.com</td>
-									</tr>
-									<tr>
-										<td class="Label">Email 2: </td>
-										<td class="LabelLink">phuongexodesign@gmail.com</td>
+										<td class="Label">Email : </td>
+										<td class="LabelLink"><%=user.getEmail();%></td>
 									</tr>
 									<tr>
 										<td class="Label">Job title:</td>
@@ -80,18 +86,19 @@
 		</div>
 	</div>
 	<div class="UIAction"> 
-    <table class="ActionContainer" align="center">
-		  <tr>
-			  <td align="center">
-  				<a href="#" class="ActionButton LightBlueStyle">
-      	  	<div class="ButtonLeft">
-        	  	<div class="ButtonRight">
-          	  	<div class="ButtonMiddle"> Close </div>
-            	</div>
-          	</div>
-        	</a>
-  			</td>
+		<table class="ActionContainer" align="center">
+			<tr>
+				<td align="center">
+					<a href="<%=uicomponent.event("Close");%>" class="ActionButton LightBlueStyle">
+						<div class="ButtonLeft">
+							<div class="ButtonRight">
+								<div class="ButtonMiddle"><%=_ctx.appRes(uicomponent.getName() + ".action.Close");%></div>
+							</div>
+						</div>
+					</a>
+				</td>
 			</tr>
- 	  </table>
+ 		</table> 
 	</div>
+<%uiform.end()%>
 </div>
