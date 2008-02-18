@@ -187,14 +187,15 @@ public class UICalendars extends UIForm  {
       TimeZone timeZone = cal.getTimeZone() ;
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
-      UIPopupContainer uiPopupContainer = uiCalendarPortlet.createUIComponent(UIPopupContainer.class, null, null) ;
+      popupAction.deActivate() ;
+      UIPopupContainer uiPopupContainer = popupAction.activate(UIPopupContainer.class, 600) ;
       uiPopupContainer.setId(UIPopupContainer.UICALENDARPOPUP) ;
       UICalendarForm calendarForm = uiPopupContainer.addChild(UICalendarForm.class, null, null) ;
       calendarForm.setTimeZone(timeZone.getID()) ;
       calendarForm.setSelectedGroup(categoryId) ;
-      popupAction.activate(uiPopupContainer, 600, 0, true) ;
+      //popupAction.activate(uiPopupContainer, 600, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
     }
   }
   static  public class AddEventCategoryActionListener extends EventListener<UICalendars> {
@@ -202,6 +203,7 @@ public class UICalendars extends UIForm  {
       UICalendars uiCalendars = event.getSource() ;
       UICalendarPortlet calendarPortlet = uiCalendars.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = calendarPortlet.getChild(UIPopupAction.class) ;
+      popupAction.deActivate() ;
       popupAction.activate(UIEventCategoryManager.class, 470) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
@@ -211,12 +213,13 @@ public class UICalendars extends UIForm  {
       UICalendars uiComponent = event.getSource() ;
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
+      popupAction.deActivate() ;
       UICalendarCategoryManager uiManager = popupAction.activate(UICalendarCategoryManager.class, 470) ;
       UICalendarCategoryForm uiForm = uiManager.getChild(UICalendarCategoryForm.class) ;
       String categoryId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       uiForm.init(categoryId) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
     }
   }
   static  public class DeleteGroupActionListener extends EventListener<UICalendars> {
@@ -224,6 +227,7 @@ public class UICalendars extends UIForm  {
       UICalendars uiComponent = event.getSource() ;
       String calendarCategoryId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UICalendarPortlet uiPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
+      uiPortlet.cancelAction() ;
       CalendarService calService = uiComponent.getApplicationComponent(CalendarService.class) ;
       String username = event.getRequestContext().getRemoteUser() ;
       calService.removeCalendarCategory(uiComponent.getSession(), username, calendarCategoryId) ;
@@ -251,6 +255,7 @@ public class UICalendars extends UIForm  {
       //String offsetTimeZone = event.getRequestContext().getRequestParameter(TIMEZONE) ;
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
+      popupAction.deActivate() ;
       UIQuickAddEvent uiQuickAddEvent = popupAction.activate(UIQuickAddEvent.class, 600) ;
       uiQuickAddEvent.setEvent(true) ;  
       uiQuickAddEvent.setId("UIQuickAddEvent") ;
@@ -274,7 +279,7 @@ public class UICalendars extends UIForm  {
       uiQuickAddEvent.setSelectedCalendar(calendarId) ;
       uiQuickAddEvent.setSelectedCategory("Meeting") ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent) ;
     }
   }
 
@@ -288,6 +293,7 @@ public class UICalendars extends UIForm  {
       String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
+      popupAction.deActivate() ;
       UIQuickAddEvent uiQuickAddEvent = popupAction.activate(UIQuickAddEvent.class, 600) ;
       uiQuickAddEvent.setEvent(false) ;  
       uiQuickAddEvent.setId("UIQuickAddTask") ;
@@ -311,7 +317,7 @@ public class UICalendars extends UIForm  {
       uiQuickAddEvent.setSelectedCalendar(calendarId) ;
       uiQuickAddEvent.setSelectedCategory("Meeting") ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
     }
   }
 
@@ -322,6 +328,7 @@ public class UICalendars extends UIForm  {
       String username = event.getRequestContext().getRemoteUser() ;
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
+      popupAction.deActivate() ;
       UIPopupContainer uiPopupContainer = uiCalendarPortlet.createUIComponent(UIPopupContainer.class, null, null) ;
       uiPopupContainer.setId(UIPopupContainer.UICALENDARPOPUP) ;
       UICalendarForm uiCalendarForm = uiPopupContainer.addChild(UICalendarForm.class, null, null) ;
@@ -330,7 +337,7 @@ public class UICalendars extends UIForm  {
       uiCalendarForm.init(calendar) ;
       popupAction.activate(uiPopupContainer, 600, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
     }
   }
   static  public class RemoveCalendarActionListener extends EventListener<UICalendars> {
@@ -340,6 +347,7 @@ public class UICalendars extends UIForm  {
       String calendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
       UICalendarPortlet uiPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
+      uiPortlet.cancelAction() ;
       UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
       UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
       UICalendarWorkingContainer workingContainer = uiComponent.getAncestorOfType(UICalendarWorkingContainer.class) ;
@@ -366,9 +374,10 @@ public class UICalendars extends UIForm  {
       UICalendars uiComponent = event.getSource() ;
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
+      popupAction.deActivate() ;
       popupAction.activate(UICalendarCategoryManager.class, 470) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent) ;
     }
   }
 
@@ -379,10 +388,11 @@ public class UICalendars extends UIForm  {
       String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
+      popupAction.deActivate() ;
       UIExportForm exportForm = popupAction.activate(UIExportForm.class, 500) ;
       exportForm.update(calType, selectedCalendarId) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
     }
   }
   static  public class ExportCalendarsActionListener extends EventListener<UICalendars> {
@@ -391,13 +401,14 @@ public class UICalendars extends UIForm  {
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
+      popupAction.deActivate() ;
       UIExportForm exportForm = popupAction.activate(UIExportForm.class, 500) ;
       String username = event.getRequestContext().getRemoteUser() ;
       exportForm.initCheckBox(CalendarUtils.getCalendarService().getUserCalendarsByCategory(uiComponent.getSession(), username, groupId), null) ;
       //exportForm.addUIFormInput(arg0)
       //exportForm.update("0", groupId) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
+     // event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
     }
   }
   static  public class ImportCalendarActionListener extends EventListener<UICalendars> {
@@ -405,9 +416,10 @@ public class UICalendars extends UIForm  {
       UICalendars uiComponent = event.getSource() ;
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
+      popupAction.deActivate() ;
       popupAction.activate(UIImportForm.class, 600) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
+     //event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
     }
   }
 
@@ -416,10 +428,11 @@ public class UICalendars extends UIForm  {
       UICalendars uiComponent = event.getSource() ;
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
+      popupAction.deActivate() ;
       UIRssForm uiRssForm = popupAction.activate(UIRssForm.class, 600) ;
       uiRssForm.init() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
     }
   }
   static  public class GenerateCalDavActionListener extends EventListener<UICalendars> {
@@ -427,10 +440,11 @@ public class UICalendars extends UIForm  {
       UICalendars uiComponent = event.getSource() ;
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
+      popupAction.deActivate() ;
       UICalDavForm uiCalDavForm = popupAction.activate(UICalDavForm.class, 600) ;
       uiCalDavForm.init() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
     }
   }
   static  public class ShareCalendarActionListener extends EventListener<UICalendars> {
@@ -439,6 +453,7 @@ public class UICalendars extends UIForm  {
       String selectedCalendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
+      popupAction.deActivate() ;
       UIPopupContainer uiPopupContainer = popupAction.activate(UIPopupContainer.class, 400) ;
       uiPopupContainer.setId("UIPermissionSelectPopup") ;
       UISharedForm uiSharedForm = uiPopupContainer.addChild(UISharedForm.class, null, null) ;
@@ -446,15 +461,16 @@ public class UICalendars extends UIForm  {
       String username = event.getRequestContext().getRemoteUser() ;
       Calendar cal = calService.getUserCalendar(uiComponent.getSession(), username, selectedCalendarId) ;
       uiSharedForm.init(null, cal, true) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarPortlet) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarPortlet) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
     }
   }
   static  public class ChangeColorActionListener extends EventListener<UICalendars> {
     public void execute(Event<UICalendars> event) throws Exception {
       System.out.println("\n\n ChangeColorActionListener");
       UICalendars uiComponent = event.getSource() ;
+      uiComponent.getAncestorOfType(UICalendarPortlet.class).cancelAction() ;
       String calendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       String color = event.getRequestContext().getRequestParameter(CALCOLOR) ;
       String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
@@ -490,7 +506,7 @@ public class UICalendars extends UIForm  {
       }
       uiComponent.colorMap_.put(calendarId, color) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getAncestorOfType(UICalendarWorkingContainer.class)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent) ;
     }
   }
   static  public class CalendarSettingActionListener extends EventListener<UICalendars> {
@@ -498,6 +514,7 @@ public class UICalendars extends UIForm  {
       UICalendars uiComponent = event.getSource() ;
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
+      popupAction.deActivate() ;
       UICalendarSettingForm uiCalendarSettingForm = popupAction.activate(UICalendarSettingForm.class, 600) ;
       CalendarService cservice = CalendarUtils.getCalendarService() ;
       //String username = Util.getPortalRequestContext().getRemoteUser() ;
@@ -505,7 +522,7 @@ public class UICalendars extends UIForm  {
       // = cservice.getCalendarSetting(uiComponent.getSession(), username) ;
       uiCalendarSettingForm.init(calendarSetting, cservice) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
     }
   }
 }

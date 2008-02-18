@@ -46,6 +46,7 @@ public class UICalendarPortlet extends UIPortletApplication {
    uiActionBar.setCurrentView(UICalendarViewContainer.TYPES[Integer.parseInt(getCalendarSetting().getViewType())]) ;
     addChild(UICalendarWorkingContainer.class, null, null) ;
     UIPopupAction uiPopup =  addChild(UIPopupAction.class, null, null) ;
+    uiPopup.setId("UICalendarPopupAction") ;
     uiPopup.getChild(UIPopupWindow.class).setId("UICalendarPopupWindow") ;
   }
   
