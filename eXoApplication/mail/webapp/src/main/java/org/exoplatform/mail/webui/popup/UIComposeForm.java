@@ -256,7 +256,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           }
           break;
         case MESSAGE_FOWARD : 
-          String forwardWithAtt = mailSetting.getReplyMessageWith();
+          String forwardWithAtt = mailSetting.getForwardMessageWith();
           setFieldSubjectValue("Fwd: " + msg.getSubject());
           String forwardedText = "<br><br>-------- Original Message --------<br>" +
               "Subject: " + msg.getSubject() + "<br>Date: " + msg.getSendDate() + 

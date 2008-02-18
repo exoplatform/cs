@@ -33,16 +33,20 @@
           InternetAddress[] fromAddress = Utils.getInternetAddress(msg.getFrom());
           InternetAddress from = fromAddress[0];
         %>
-        <div class="PrintFrom">From: <span style="font-weight:bold;"><%=Utils.getPersonal(from)%></span> &lt; <%=from.getAddress()%> &gt;</div>
-        <div class="PrintTo">To:
+        <div class="PrintFrom"><%=_ctx.appRes(uicomponent.id+ ".label.from") %>: <span style="font-weight:bold;"><%=Utils.getPersonal(from)%></span> &lt; <%=from.getAddress()%> &gt;</div>
+        <div class="PrintTo"><%=_ctx.appRes(uicomponent.id+ ".label.to") %>:
         <%
-          InternetAddress[] toAddress = InternetAddress.parse(msg.getMessageTo());
-          for (i in 0..(toAddress.length-1)) {
-            InternetAddress address = toAddress[i];
-            if (i > 0) print ",";
+          if (!MailUtils.isFieldEmpty(msg.getMessageTo())) { 
+            InternetAddress[] toAddress = InternetAddress.parse(msg.getMessageTo());
+            for (i in 0..(toAddress.length-1)) {
+              InternetAddress address = toAddress[i];
+              if (i > 0) print(",");
         %>
-          <%=Utils.getPersonal(address)%> &lt; <%=address.getAddress()%> &gt;
-        <%}%>
+              <%=Utils.getPersonal(address)%> &lt; <%=address.getAddress()%> &gt;
+        <%  
+            } 
+          } 
+        %>
         </div>
       </div>
       <div class="DateAndTime"><%=MailUtils.formatDate('EEEE, MMMM dd, yyyy HH:mm aaa', msg.getReceivedDate())%></div>
@@ -55,7 +59,7 @@
       if (msg.getAttachments().size() > 0) {
     %>
       <div class="PrintAttachments"  >
-        <div class="AttachmentTitle">Attachments:</div>
+        <div class="AttachmentTitle"><%=_ctx.appRes(uicomponent.id+ ".label.attachments") %>:</div>
         <%
           DownloadService dservice = uicomponent.getDownloadService() ;
           String attLink ;
