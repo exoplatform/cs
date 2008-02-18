@@ -20,7 +20,7 @@
   if (msgRoot != null) {
 %> 
 	<div class="ReadingPaneBar">
-		<div class="Subject"><span>Subject: </span><span>
+		<div class="Subject"><span><%=_ctx.appRes(uicomponent.id+ ".label.subject") %>:</span><span>
 		<%
 		  String subject = "(No Subject)"
 		  if (msgRoot.getSubject() != null && msgRoot.getSubject() != "") {
@@ -97,7 +97,7 @@
                   <!-- Begin Expand Message Header -->
                   <div id="MessageAddressPreview" class="MessageAddress" style="display : none;">
                   <div class="FieldContainer">
-                    <div class="Title">From:</div>
+                    <div class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.from") %>:</div>
                     <div class="LinkAddress">
                       <%
                         InternetAddress[] fromAddress = Utils.getInternetAddress(msg.getFrom());
@@ -108,7 +108,7 @@
                     <div style="clear: left;"><span></span></div>
                   </div>
                   <div class="FieldContainer">
-                    <div class="Title">Reply-to:</div>
+                    <div class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.reply-to") %>:</div>
                     <div class="LinkAddress"> 
                       <%
                         InternetAddress[] replyAddress = Utils.getInternetAddress(msg.getReplyTo());
@@ -119,7 +119,7 @@
                     <div style="clear: left;"><span></span></div>
                   </div>
                   <div class="FieldContainer">
-                    <div class="Title">To:</div>
+                    <div class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.to") %>:</div>
                     <div class="LinkAddress"> 
                       <%
                         try { 
@@ -168,31 +168,31 @@
                                   <div class="MiddleRightRightClickPopupMenu">
                                     <div class="UIRightPopupMenuContainer">
                                       <a class="MenuItem" href="<%=uicomponent.event("Reply", msg.getId())%>">   
-                                        <div class="ItemIcon ReplyMailIcon"> Reply</div>
+                                        <div class="ItemIcon ReplyMailIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.reply-to-sender") %></div>
                                       </a>  
                                       <a class="MenuItem" href="<%=uicomponent.event("ReplyAll", msg.getId())%>">   
-                                        <div class="ItemIcon ReplyMailIcon"> Reply to All</div>
+                                        <div class="ItemIcon ReplyMailIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.reply-to-all") %></div>
                                       </a>  
                                       <a class="MenuItem" href="<%=uicomponent.event("Forward", msg.getId())%>">   
-                                        <div class="ItemIcon ForwardMailIcon"> Forward </div>
+                                        <div class="ItemIcon ForwardMailIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.forward") %> </div>
                                       </a>
                                       <a class="MenuItem" href="<%=uicomponent.event("Print", msg.getId())%>">   
-                                        <div class="ItemIcon PrintMailIcon"> Print </div>
+                                        <div class="ItemIcon PrintMailIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.print") %> </div>
                                       </a>
                                       <a class="MenuItem" href="<%=uicomponent.event("Delete", msg.getId())%>">   
-                                        <div class="ItemIcon DeleteMailIcon"> Delete </div>
+                                        <div class="ItemIcon DeleteMailIcon"> <%=_ctx.appRes(uicomponent.id+ ".delete") %> </div>
                                       </a>
                                       <a class="MenuItem" href="<%=uicomponent.event("AddTag", msg.getId())%>">   
-                                        <div class="ItemIcon TagMailIcon"> Tag </div>
+                                        <div class="ItemIcon TagMailIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.tag") %> </div>
                                       </a>
                                       <a class="MenuItem" href="<%=uicomponent.event("MoveMessages", msg.getId())%>">   
-                                        <div class="ItemIcon MoveMailIcon">Move to Folder </div>
+                                        <div class="ItemIcon MoveMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.move-to-folder") %> </div>
                                       </a>
                                       <a class="MenuItem" href="<%=uicomponent.event("AddContact", msg.getId())%>">   
-                                        <div class="ItemIcon AddContactIcon"> Add to Contacts </div>
+                                        <div class="ItemIcon AddContactIcon"><%=_ctx.appRes(uicomponent.id+ ".label.add-sender-to-contacts") %></div>
                                       </a>
                                       <a class="MenuItem" href="<%=uicomponent.event("Export", msg.getId())%>">   
-                                      <div class="ItemIcon ExportIcon"> Export (*.eml) </div>
+                                      <div class="ItemIcon ExportIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.export-eml") %> </div>
                                       </a>
                                       <div class="RightClickCustomItem"></div>
                                     </div>

@@ -58,28 +58,28 @@
 	              <div class="MiddleRightRightClickPopupMenu">
 	                <div class="UIRightPopupMenuContainer">
 	                  <a class="MenuItem" href="<%=uicomponent.event("MarkAsRead")%>">   
-	                    <div class="ItemIcon MarkReadIcon">Mark as read</div>
+	                    <div class="ItemIcon MarkReadIcon"><%=_ctx.appRes(uicomponent.id+ ".label.mark-as-read") %></div>
 	                  </a>
 	                  <a class="MenuItem ItemHidden" href="<%=uicomponent.event("MarkAsUnRead")%>">   
-	                    <div class="ItemIcon MarkUnreadIcon">Mark as unread</div>
+	                    <div class="ItemIcon MarkUnreadIcon"><%=_ctx.appRes(uicomponent.id+ ".label.mark-as-unread") %></div>
 	                  </a>
 	                  <a class="MenuItem" href="<%=uicomponent.event("AddStar")%>">   
-	                    <div class="ItemIcon StarredIcon">Add star</div>
+	                    <div class="ItemIcon StarredIcon"><%=_ctx.appRes(uicomponent.id+ ".label.add-star") %></div>
 	                  </a>
 	                  <a class="MenuItem ItemHidden" href="<%=uicomponent.event("RemoveStar")%>">   
-	                    <div class="ItemIcon RemoveStarIcon">Remove star</div>
+	                    <div class="ItemIcon RemoveStarIcon"><%=_ctx.appRes(uicomponent.id+ ".label.remove-star") %></div>
 	                  </a>
 	                  <a class="MenuItem" href="<%=uicomponent.event("AddTag")%>">   
-	                    <div class="ItemIcon BlueTag">Tag message</div>
+	                    <div class="ItemIcon BlueTag"><%=_ctx.appRes(uicomponent.id+ ".label.tag-message") %></div>
 	                  </a>
 	                  <a class="MenuItem" href="<%=uicomponent.event("MoveMessages")%>">   
-	                    <div class="ItemIcon MoveMessageIcon">Move message</div>
+	                    <div class="ItemIcon MoveMessageIcon"><%=_ctx.appRes(uicomponent.id+ ".label.move-message") %></div>
 	                  </a>
 	                  <a class="MenuItem" href="<%=uicomponent.event("Import")%>">   
-	                    <div class="ItemIcon ImportMessageIcon">Import message</div>
+	                    <div class="ItemIcon ImportMessageIcon"><%=_ctx.appRes(uicomponent.id+ ".label.import-message") %></div>
 	                  </a>
 	                  <a class="MenuItem" href="<%=uicomponent.event("Export")%>">   
-	                    <div class="ItemIcon EmportMessageIcon">Export message</div>
+	                    <div class="ItemIcon EmportMessageIcon"><%=_ctx.appRes(uicomponent.id+ ".label.export-message") %></div>
 	                  </a>
 	                </div>
 	              </div>
@@ -116,22 +116,22 @@
 	              <div class="MiddleRightRightClickPopupMenu">
 	                <div class="UIRightPopupMenuContainer">
 	                  <a class="MenuItem" href="<%=uicomponent.event("ViewAll")%>">   
-	                    <div class="ItemIcon AllMessagesIcon">All messages</div>
+	                    <div class="ItemIcon AllMessagesIcon"><%=_ctx.appRes(uicomponent.id+ ".label.view-all-messages") %></div>
 	                  </a>
 	                  <a class="MenuItem" href="<%=uicomponent.event("ViewStarred")%>">   
-	                    <div class="ItemIcon StarredIcon">Starred messages</div>
+	                    <div class="ItemIcon StarredIcon"><%=_ctx.appRes(uicomponent.id+ ".label.view-starred-messages") %></div>
 	                  </a>
 	                  <a class="MenuItem" href="<%=uicomponent.event("ViewUnstarred")%>">   
-	                    <div class="ItemIcon UnStarredIcon">Unstarred messages</div>
+	                    <div class="ItemIcon UnStarredIcon"><%=_ctx.appRes(uicomponent.id+ ".label.view-unstarred-messages") %></div>
 	                  </a>
 	                  <a class="MenuItem" href="<%=uicomponent.event("ViewUnread")%>">   
-	                    <div class="ItemIcon UnreadMessagesIcon">Unread messages</div>
+	                    <div class="ItemIcon UnreadMessagesIcon"><%=_ctx.appRes(uicomponent.id+ ".label.view-unread-messages") %></div>
 	                  </a>
 	                  <a class="MenuItem" href="<%=uicomponent.event("ViewRead")%>">   
-	                    <div class="ItemIcon ReadMessagesIcon">Read messages</div>
+	                    <div class="ItemIcon ReadMessagesIcon"><%=_ctx.appRes(uicomponent.id+ ".label.view-read-messages") %></div>
 	                  </a>
 	                  <a class="MenuItem" href="<%=uicomponent.event("ViewAttachment")%>">   
-	                    <div class="ItemIcon MessagesAttachmentIcon">Messages with attachment</div>
+	                    <div class="ItemIcon MessagesAttachmentIcon"><%=_ctx.appRes(uicomponent.id+ ".label.view-with-attachment") %></div>
 	                  </a>
 	                </div>
 	              </div>
@@ -166,8 +166,8 @@
             long fromIndex = (pageList.getCurrentPage()-1)* pageList.getPageSize() + 1;
             long endIndex = fromIndex + pageList.getPageSize() - 1;
             if (pageList.getCurrentPage() == pageList.getAvailablePage()) endIndex = pageList.getAvailable();
-            if (fromIndex < endIndex) mailRange = fromIndex + " to " + endIndex + " of " + pageList.getAvailable();
-            else if (fromIndex == endIndex) mailRange = fromIndex + " of " + pageList.getAvailable()
+            if (fromIndex < endIndex) mailRange = fromIndex + " " + _ctx.appRes(uicomponent.id+ ".label.to-index") + " " + endIndex + " " + _ctx.appRes(uicomponent.id+ ".label.of") + " " + pageList.getAvailable();
+            else if (fromIndex == endIndex) mailRange = fromIndex + " " + _ctx.appRes(uicomponent.id+ ".label.of") + " " + pageList.getAvailable()
           }         
         %>
         <a title="First Page" class="$cssPreviousPage FirstPageArrow" href="<%=uicomponent.event("FirstPage")%>"/></a>        
@@ -178,7 +178,7 @@
         <div style="clear: left;"><span></span></div>
       </div>
       <div class="LeftPageIteratorBlock">
-        <div class="TotalPages">Message(s)
+        <div class="TotalPages"><%=_ctx.appRes(uicomponent.id+ ".label.messages") %>
         	<span class="MailQuantity"> $mailRange </span>
         </div>
       </div>
@@ -204,37 +204,37 @@
           <div class="UIRightPopupMenuContainer">
             <% if (uicomponent.selectedDraftFolder()) { %> 
             <a class="MenuItem" href="<%=uicomponent.event("EditDraft", "id")%>">   
-              <div class="ItemIcon EditDraftIcon"> Edit Draft </div>
+              <div class="ItemIcon EditDraftIcon"><%=_ctx.appRes(uicomponent.id+ ".label.edit-draft") %></div>
             </a>
             <% } %>
             <a class="MenuItem" href="<%=uicomponent.event("Print", "id")%>">   
-              <div class="ItemIcon PrintMailIcon"> Print </div>
+              <div class="ItemIcon PrintMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.print") %></div>
             </a>
             <% if (!uicomponent.selectedDraftFolder()) { %> 
             <a class="MenuItem" href="<%=uicomponent.event("Reply", "id")%>">   
-              <div class="ItemIcon ReplyMailIcon"> Reply to Sender</div>
+              <div class="ItemIcon ReplyMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.reply-to-sender") %></div>
             </a>  
             <a class="MenuItem" href="<%=uicomponent.event("ReplyAll", "id")%>">   
-              <div class="ItemIcon ReplyAllMailIcon"> Reply to All </div>
+              <div class="ItemIcon ReplyAllMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.reply-to-all") %></div>
             </a>
             <a class="MenuItem" href="<%=uicomponent.event("Forward", "id")%>">   
-              <div class="ItemIcon ForwardMailIcon"> Forward </div>
+              <div class="ItemIcon ForwardMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.forward") %></div>
             </a>
             <% } %>
             <a class="MenuItem" href="<%=uicomponent.event("MoveMessages", "id")%>">   
-              <div class="ItemIcon MoveMailIcon"> Move to Folder </div>
+              <div class="ItemIcon MoveMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.move-to-folder") %></div>
             </a>
             <a class="MenuItem" href="<%=uicomponent.event("AddTag", "id")%>">   
-              <div class="ItemIcon TagMailIcon"> Tag </div>
+              <div class="ItemIcon TagMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.tag") %> </div>
             </a>          
             <a class="MenuItem" href="<%=uicomponent.event("Delete", "id")%>">   
-              <div class="ItemIcon DeleteMailIcon"> Delete </div>
+              <div class="ItemIcon DeleteMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.delete") %></div>
             </a>
             <a class="MenuItem" href="<%=uicomponent.event("AddContact", "id")%>">   
-              <div class="ItemIcon AddContactIcon"> Add Sender to Contacts </div>
+              <div class="ItemIcon AddContactIcon"><%=_ctx.appRes(uicomponent.id+ ".label.add-sender-to-contacts") %></div>
             </a>
             <a class="MenuItem" href="<%=uicomponent.event("Export", "id")%>">   
-            <div class="ItemIcon ExportIcon"> Export (*.eml) </div>
+            <div class="ItemIcon ExportIcon"><%=_ctx.appRes(uicomponent.id+ ".label.export-eml") %></div>
             </a>
           </div>
         </div>
@@ -253,7 +253,9 @@
 			%>
 				<div style="background: #ffe98f; padding: 2px 0px 5px 10px; height: 18px;">
 					<div class="LoadingIcon"><span></span></div>
-					<div style=" float: left; margin-top: 2px">Receiving messages .... </div>
+					<div style=" float: left; margin-top: 2px"> 
+            <%=_ctx.appRes(uicomponent.id+ ".label.receiving-messages") %>
+          </div>
 					<div style="float: right; padding-right: 10px; margin-top: 2px" class="Here">Click <a href="<%=uicomponent.event("Refresh")%> "> here</a> to display received messages</div>
 					<div style="clear: both;"><span></span></div>
 				</div>
@@ -276,10 +278,10 @@
     		    <%
     		      String sortedBySender = uicomponent.event("Sort",Utils.EXO_FROM);
               String classArrowFrom = "";
-              String head = "Sender" ;
+              String head = _ctx.appRes(uicomponent.id+ ".label.sender") ;
               if (uicomponent.selectedSentFolder() || uicomponent.selectedDraftFolder()) {
                 sortedBySender = uicomponent.event("Sort",Utils.EXO_TO);
-                head = "To" ;
+                head = _ctx.appRes(uicomponent.id+ ".label.to") ;
               }
               if (uicomponent.getSortedBy().equals(Utils.EXO_FROM)) {
                 if (uicomponent.isAscending()) classArrowFrom = "UpArrow1Icon";
@@ -426,7 +428,11 @@
     		<% i++; }%>
       	</tbody>
       <% } else {%>
-        <tbody><tr><td colspan="10"><div class="MessageNotice SpliterResizableListArea" id="uiMessageListResizableArea">There are no messages !</div></td></tr></tbody>
+        <tbody><tr><td colspan="10">
+          <div class="MessageNotice SpliterResizableListArea" id="uiMessageListResizableArea">
+            <%=_ctx.appRes(uicomponent.id+ ".label.there-are-no-messages") %>
+          </div>
+        </td></tr></tbody>
     <%}%>
   	</table>
   </div>

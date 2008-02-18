@@ -4,7 +4,7 @@
 <div class="UITagContainer" id="<%=uicomponent.getId()%>">
 	<div class="TitleBar">
 		<div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
-		<div class="TagTitle BlueTag">Tags</div>
+		<div class="TagTitle BlueTag"><%=_ctx.appRes(uicomponent.id+ ".label.tags") %></div>
 		<div class="ActionIcon"><span></span></div>
   <div style="clear: both"><span></span></div>
 	</div>	
@@ -22,13 +22,13 @@
 	  	  <div class="MiddleRightRightClickPopupMenu">
 	  	    <div class="UIRightPopupMenuContainer">
 	  	      <a class="MenuItem" href="<%=uicomponent.event("EditTag", "id")%>">   
-	  	        <div class="ItemIcon RenameFolderIcon"> Edit </div>
+	  	        <div class="ItemIcon RenameFolderIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.edit") %> </div>
 	  	      </a>
 	  	      <a class="MenuItem" href="<%=uicomponent.event("RemoveTag", "id")%>">   
-	  	        <div class="ItemIcon RemoveFolderIcon"> Remove </div>
+	  	        <div class="ItemIcon RemoveFolderIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.remove") %> </div>
 	  	      </a>
 	  	      <a class="MenuItem" href="<%=uicomponent.event("EmptyTag", "id")%>">   
-	  	        <div class="ItemIcon EmptyIcon"> Empty </div>
+	  	        <div class="ItemIcon EmptyIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.empty") %> </div>
 	  	      </a>
 	  	    </div>
 	  	  </div>
