@@ -17,6 +17,7 @@
 package org.exoplatform.calendar.webui;
 import java.util.Calendar;
 
+import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
@@ -82,5 +83,10 @@ public class UIListContainer extends UIContainer implements CalendarView {
 
   public Calendar getCurrentCalendar() {
     return  getChild(UIListView.class).getCurrentCalendar() ;
+  }
+
+  public void setCalendarSetting(CalendarSetting calendarSetting) {
+    getChild(UIListView.class).setCalendarSetting(calendarSetting) ;
+    getChild(UIPreview.class).setCalendarSetting(calendarSetting) ;
   }
 }

@@ -114,7 +114,7 @@ public class UICalendars extends UIForm  {
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     //List<CalendarCategory> categories = calendarService.getCategories(SessionsUtils.getSessionProvider(), username) ;
-    List<GroupCalendarData> groupCalendars = calendarService.getCalendarCategories(getSession(), username, false) ;
+    List<GroupCalendarData> groupCalendars = calendarService.getCalendarCategories(getSystemSession(), username, false) ;
     for(GroupCalendarData group : groupCalendars) {
       List<Calendar> calendars = group.getCalendars() ;
       if(calendars != null) {
