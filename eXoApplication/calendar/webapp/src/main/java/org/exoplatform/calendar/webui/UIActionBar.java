@@ -101,10 +101,22 @@ public class UIActionBar extends UIContainer  {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ;     
       String viewType = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      String categoryId = event.getRequestContext().getRequestParameter("categoryId") ;
+      System.out.println("category id " + categoryId);
       UICalendarPortlet uiPortlet = uiActionBar.getAncestorOfType(UICalendarPortlet.class) ;
       UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
       uiViewContainer.initView(viewType);      
       uiViewContainer.refresh() ;
+      UIMiniCalendar miniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
+      miniCalendar.setCategoryId(categoryId) ; 
+      if(uiViewContainer.getRenderedChild() instanceof UIListContainer) {
+        UIListContainer listContainer = (UIListContainer)uiViewContainer.getRenderedChild() ;
+        listContainer.setSelectedCategory(categoryId) ;
+      } else  if(uiViewContainer.getRenderedChild() instanceof UIYearView) {
+        UIYearView uiYearView = (UIYearView)uiViewContainer.getRenderedChild() ;
+        uiYearView.setCategoryId(categoryId) ;
+        uiYearView.refresh() ;
+      }
       uiActionBar.setCurrentView(viewType) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;

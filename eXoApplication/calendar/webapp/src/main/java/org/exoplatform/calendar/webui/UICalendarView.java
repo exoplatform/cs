@@ -144,13 +144,13 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     return SessionProviderFactory.createSystemProvider() ;
   }
   protected Calendar getInstanceTempCalendar() { 
-     if(instanceTempCalendar_ != null) return instanceTempCalendar_ ; 
-      //System.out.println("created in " + this.getId() );
-      Calendar  calendar = GregorianCalendar.getInstance() ;
-      calendar.setLenient(false) ;
-      int gmtoffset = calendar.get(Calendar.DST_OFFSET) + calendar.get(Calendar.ZONE_OFFSET);
-      calendar.setTimeInMillis(System.currentTimeMillis() - gmtoffset) ; 
-      return  calendar;
+    if(instanceTempCalendar_ != null) return instanceTempCalendar_ ; 
+    //System.out.println("created in " + this.getId() );
+    Calendar  calendar = GregorianCalendar.getInstance() ;
+    calendar.setLenient(false) ;
+    int gmtoffset = calendar.get(Calendar.DST_OFFSET) + calendar.get(Calendar.ZONE_OFFSET);
+    calendar.setTimeInMillis(System.currentTimeMillis() - gmtoffset) ; 
+    return  calendar;
   } 
   public void applySeting() throws Exception {
     displayTimes_ = null ;
@@ -268,7 +268,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     for(EventCategory category : eventCategories) {
       options.add(new SelectItemOption<String>(category.getName(), category.getName())) ;
     }
-    getUIFormSelectBox(EVENT_CATEGORIES).setOptions(options) ; 
+    getUIFormSelectBox(EVENT_CATEGORIES).setOptions(options) ;
+    getUIFormSelectBox(EVENT_CATEGORIES).setValue(null) ;
+    if (this instanceof UIYearView) ((UIYearView) this).setCategoryId(null) ;
   }
 
   public List<CalendarEvent> getList() throws Exception {
@@ -780,6 +782,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
             UIListView uiListView = uiView.getChild(UIListView.class) ;
             if(!uiListView.isDisplaySearchResult()){
               uiView.setCurrentCalendar(cal) ;
+              uiView.setSelectedCategory(calendarview.getSelectedCategory()) ;
               uiView.refresh() ;
             }
             uiContainer.setRenderedChild(UIListContainer.class) ;
@@ -811,6 +814,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         case TYPE_YEAR :{
           UIYearView uiView = uiContainer.getChild(UIYearView.class) ;
           uiView.setCurrentCalendar(cal) ;
+          uiView.setCategoryId(calendarview.getSelectedCategory()) ;
           uiView.refresh() ;
           uiContainer.setRenderedChild(UIYearView.class) ;
         }break;

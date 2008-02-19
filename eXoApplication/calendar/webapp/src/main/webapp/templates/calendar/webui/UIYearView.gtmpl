@@ -2,6 +2,8 @@
 	import java.util.Map;
 	import java.util.Calendar;
 	uiform.begin() ;
+	def rcontext = _ctx.getRequestContext() ;
+	rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.setSelected("'+uiform.id+'") ;') ;
  	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
 	int currentYear = uicomponent.getCurrentYear() ;
 	String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT, String.valueOf(Calendar.YEAR)) ;

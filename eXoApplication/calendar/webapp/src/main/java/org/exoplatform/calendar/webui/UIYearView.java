@@ -30,6 +30,9 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.form.UIFormSelectBox;
 
 /**
  * Created by The eXo Platform SARL
@@ -46,13 +49,15 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
       @EventConfig(listeners = UICalendarView.AddCategoryActionListener.class),
       @EventConfig(listeners = UICalendarView.MoveNextActionListener.class), 
       @EventConfig(listeners = UICalendarView.GotoDateActionListener.class),
-      @EventConfig(listeners = UICalendarView.MovePreviousActionListener.class)
+      @EventConfig(listeners = UICalendarView.MovePreviousActionListener.class),
+      @EventConfig(listeners = UIYearView.OnchangeActionListener.class )   
     }
 
 )
 public class UIYearView extends UICalendarView {
   private Map<Integer, String > yearData_ = new HashMap<Integer, String>() ;
   private final static String VALUE = "value".intern() ; 
+  private String categoryId_ = null ;
   public UIYearView() throws Exception {
     super() ;
   }
@@ -75,16 +80,35 @@ public class UIYearView extends UICalendarView {
     CalendarService calendarService = getApplicationComponent(CalendarService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     EventQuery eventQuery = new EventQuery() ;
+    if(categoryId_ != null && categoryId_.toLowerCase().equals("null")) {
+      eventQuery.setCategoryId(new String[]{categoryId_}) ;
+    }
     eventQuery.setFromDate(beginYear) ;
     eventQuery.setToDate(endYear) ;
     yearData_ = calendarService.searchHightLightEvent(getSession(), username, eventQuery, getPublicCalendars());
+    UIFormSelectBox uiCategory = getUIFormSelectBox(EVENT_CATEGORIES) ;
+    uiCategory.setOnChange("Onchange") ;
   }
-  
- 
+
   @Override
   public LinkedHashMap<String, CalendarEvent> getDataMap() {
     // TODO Auto-generated method stub
     return null;
   }
+  public void setCategoryId(String categoryId) {
+    categoryId_ = categoryId ;
+    UIFormSelectBox uiCategory = getUIFormSelectBox(EVENT_CATEGORIES) ;
+    uiCategory.setValue(categoryId) ;
+  }
 
+  static  public class OnchangeActionListener extends EventListener<UIYearView> {
+    public void execute(Event<UIYearView> event) throws Exception {
+      UIYearView uiYearView = event.getSource() ;
+      String categoryId = uiYearView.getSelectedCategory() ;
+      uiYearView.setCategoryId(categoryId) ;
+      UIMiniCalendar uiMiniCalendar = uiYearView.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
+      uiMiniCalendar.setCategoryId(categoryId) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiYearView);           
+    }
+  }
 }

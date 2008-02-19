@@ -1573,6 +1573,8 @@ public class JCRDataStorage{
     eventQuery.setCalendarId(publicCalendarIds) ;
     query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH) ;
     NodeIterator it = query.execute().getNodes();
+    //System.out.println("event form " + eventQuery.getFromDate());
+    //System.out.println("event to " + eventQuery.getToDate());
     mapData = updateMap(mapData, it, eventQuery.getFromDate(), eventQuery.getToDate()) ;  
     return mapData ;    
   }

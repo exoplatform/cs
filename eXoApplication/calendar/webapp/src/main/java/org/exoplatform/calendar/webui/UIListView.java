@@ -232,6 +232,8 @@ public class UIListView extends UICalendarView {
       UIListView uiListView = event.getSource() ;
       String categoryId = uiListView.getUIFormSelectBox(EVENT_CATEGORIES).getValue() ;
       uiListView.refresh(categoryId) ;
+      UIMiniCalendar uiMiniCalendar = uiListView.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
+      uiMiniCalendar.setCategoryId(categoryId) ;
       uiListView.getUIFormSelectBox(EVENT_CATEGORIES).setValue(categoryId) ;
       UIPreview uiPreview = uiListView.getAncestorOfType(UIListContainer.class).getChild(UIPreview.class) ;
       if(uiListView.getEvents().length >0) {

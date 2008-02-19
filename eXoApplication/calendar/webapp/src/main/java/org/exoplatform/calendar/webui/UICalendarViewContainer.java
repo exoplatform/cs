@@ -123,7 +123,9 @@ public class UICalendarViewContainer extends UIContainer  {
   }
   public void updateCategory() throws Exception{
     for(UIComponent comp : getChildren()) {
-      if(comp instanceof CalendarView) ((CalendarView)comp).update() ;
+      if(comp instanceof CalendarView) {
+        ((CalendarView)comp).update() ;
+      }
     }
   }
 }

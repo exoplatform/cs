@@ -89,4 +89,7 @@ public class UIListContainer extends UIContainer implements CalendarView {
     getChild(UIListView.class).setCalendarSetting(calendarSetting) ;
     getChild(UIPreview.class).setCalendarSetting(calendarSetting) ;
   }
+  public void setSelectedCategory(String categoryId) throws Exception {
+    getChild(UIListView.class).refresh(categoryId) ;
+  }
 }

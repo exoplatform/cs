@@ -41,7 +41,7 @@
 				              			<%for(viewType in uicomponent.getViewTypes()){
 				              				if(!viewType.equals(uicomponent.getCurrentView())) {
 				              				icon = viewType + "Icon" ;
-				              				actionLink = uicomponent.event("ChangeView", viewType) ;
+				              				actionLink = uicomponent.event("ChangeView",viewType + "&categoryId=calId") ;
 				              				String label = _ctx.appRes(uicomponent.id + ".label." + viewType) ;
 				              				if(!viewType.equals("UIScheduleView")) {
 				              			%>

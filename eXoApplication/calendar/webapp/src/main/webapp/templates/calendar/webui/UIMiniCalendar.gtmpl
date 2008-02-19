@@ -47,7 +47,7 @@
 								<a href="<%=uicomponent.event("GotoDate", monthViewAction)%>" style="color:blue;">
 									$monthName 
 								</a>,  
-								<a href="<%=uicomponent.event("GotoDate", yearViewAction)%>" style="color:orange">
+								<a style="color:orange">
 									$currentYear
 								</a>
 								</div>

@@ -51,6 +51,7 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UIMiniCalendar extends UICalendarView  {
   private Map<Integer, String> dataMap = new HashMap<Integer, String>() ;
+  private String categoryId_ = null ;
   public UIMiniCalendar() throws Exception {
     updateMiniCal() ;
   }  
@@ -58,6 +59,9 @@ public class UIMiniCalendar extends UICalendarView  {
   public void updateMiniCal() throws Exception {
     dataMap.clear() ;
     EventQuery eventQuery = new EventQuery() ;
+    /*if(categoryId_ != null && categoryId_.toLowerCase().equals("null")) {
+      eventQuery.setCategoryId(new String[]{categoryId_}) ;
+    }*/
     eventQuery.setFromDate(getBeginDateOfMonth()) ;
     eventQuery.setToDate(getEndDateOfMonth()) ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
@@ -69,7 +73,7 @@ public class UIMiniCalendar extends UICalendarView  {
   @SuppressWarnings("unused")
   private Map<Integer, String> getData(){ return dataMap ; }
   public LinkedHashMap<String, CalendarEvent> getDataMap(){ return null ; }
-  
+
   public java.util.Calendar getBeginDateOfMonthView() throws Exception{
     java.util.Calendar temCal = getBeginDateOfMonth() ;
     int amount = temCal.getFirstDayOfWeek() - temCal.get(java.util.Calendar.DAY_OF_WEEK) ;
@@ -96,9 +100,15 @@ public class UIMiniCalendar extends UICalendarView  {
     temCal.set(java.util.Calendar.DATE, getDaysInMonth()) ;
     return CalendarUtils.getEndDay(temCal) ;  
   }
- /* public Calendar getCurrentCalendar() {
+  /* public Calendar getCurrentCalendar() {
     return calendar_ ;
   }*/
+  public void setCategoryId(String categoryId) {
+    categoryId_ = categoryId ;
+  }
+  public String getSelectedCategory() {
+    return categoryId_  ;
+  }
   static  public class MoveNextActionListener extends EventListener<UIMiniCalendar> {
     public void execute(Event<UIMiniCalendar> event) throws Exception {
       UIMiniCalendar miniCal = event.getSource() ;
