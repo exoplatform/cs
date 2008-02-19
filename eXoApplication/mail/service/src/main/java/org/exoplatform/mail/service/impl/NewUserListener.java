@@ -16,34 +16,33 @@
  */
 package org.exoplatform.mail.service.impl;
 
-import javax.jcr.Node;
-
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserEventListener;
 
 /**
  * @author : Huu-Dung Kieu
  *           huu-dung.kieu@bull.be
+ *           
+ * This is a plugin running every time a new user is created.
+ * The goal is to create a default mail account for each user.
+ * The plugin configuration is defined in the portal/conf/cs/cs-plugin-configuration.xml file. 
+ *
  */
 public class NewUserListener extends UserEventListener {
   private MailService mservice_ ;
-  private NodeHierarchyCreator nodeHierarchyCreator_ ;
 
-  
   final static public String FD_INBOX = "Inbox".intern();
   final static public String FD_DRAFTS = "Drafts".intern() ;
   final static public String FD_SENT = "Sent".intern() ;
   final static public String FD_SPAM = "Spam".intern() ;
   final static public String FD_TRASH = "Trash".intern() ;
   final static public String[] defaultFolders_ =  {FD_INBOX ,FD_DRAFTS, FD_SENT, FD_SPAM, FD_TRASH} ;
-  
   
   String protocol;
   boolean isSSL;
@@ -53,10 +52,8 @@ public class NewUserListener extends UserEventListener {
   String outgoingHost;
   String outgoingPort;
   
-  public NewUserListener(MailService mservice, NodeHierarchyCreator nodeHierarchyCreator, 
-  		InitParams params) throws Exception {
+  public NewUserListener(MailService mservice, InitParams params) throws Exception {
   	mservice_ = mservice ;
-  	nodeHierarchyCreator_ = nodeHierarchyCreator ;
     
     // parameters defined in the plugin configuration
   	protocol       = params.getValueParam("protocol").getValue() ;
@@ -77,7 +74,10 @@ public class NewUserListener extends UserEventListener {
     
     Account acc = new Account();
     
-    String incomingUserName = email;
+    // it is the case at spff
+    //String incomingUserName = email;
+    // but normally
+    String incomingUserName = user.getUserName();
     
     acc.setLabel(fullName + " (Default)") ;
     acc.setDescription("") ;
@@ -119,12 +119,5 @@ public class NewUserListener extends UserEventListener {
     }
     sProvider.close();
   }
-  
-  private void reparePermissions(Node node, String owner) throws Exception {
-    
-  }
-  
-  public void preDelete(User user) throws Exception {
-    
-  }
+
 }
