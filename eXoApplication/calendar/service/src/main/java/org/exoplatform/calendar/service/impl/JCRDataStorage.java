@@ -1287,7 +1287,7 @@ public class JCRDataStorage{
   private void addCalendarSetting(Node calendarHome, CalendarSetting setting) throws Exception {
     Node settingNode ;
     try {
-      settingNode = calendarHome.getNode(CALENDAR_SETTING) ;
+      settingNode = calendarHome.getNode(CALENDAR_SETTING) ; // TODO if node exists why we set properties anyway
     } catch (Exception e) {
       settingNode = calendarHome.addNode(CALENDAR_SETTING, "exo:calendarSetting") ;
     }
