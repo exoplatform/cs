@@ -64,7 +64,5 @@ public class NewGroupListener extends GroupEventListener {
     calendar.setCalendarColor(Calendar.SEASHELL);
 
     calendarService_.savePublicCalendar(sProvider, calendar, isNew, null) ;
-    
-    System.out.println("the calendar has been created !!\n\n");
   }
 }
