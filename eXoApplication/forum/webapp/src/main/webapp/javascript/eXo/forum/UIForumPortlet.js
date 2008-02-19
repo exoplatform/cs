@@ -209,17 +209,33 @@ UIForumPortlet.prototype.goLastPost = function(idLastPost) {
 	}
 };
 
-UIForumPortlet.prototype.editerQuote = function(idMessenger) {
-	var quote = document.getElementById(idMessenger) ;
-	var messenger = quote.innerHTML ;
-	var t = messenger.indexOf('['+"quote"+']') ;
-	if( t >= 0) {
-		alert(t);
+UIForumPortlet.prototype.setEnableInput = function() {
+	var parend = document.getElementById("ForumUserBan") ;
+	if(parend) {
+		var obj = eXo.core.DOMUtil.findFirstDescendantByClass(parend, "input", "checkbox") ;
+		if(obj) {
+			document.getElementById("ForumUserName").disabled = "disabled" ;
+			document.getElementById("BanCounter").disabled = "disabled" ;
+			document.getElementById("BanReasonSummary").disabled = "disabled" ;
+			document.getElementById("CreatedDateBan").disabled = "disabled" ;
+			if(!obj.checked) {
+				var selectbox = eXo.core.DOMUtil.findFirstDescendantByClass(parend, "select", "selectbox") ;
+				selectbox.disabled = "disabled" ;
+				var banReason = document.getElementById("BanReason");
+				banReason.disabled = "disabled" ;
+			}
+			obj.onclick = function() {
+				if(!obj.checked) {
+					selectbox.disabled = "disabled" ;
+					banReason.disabled = "disabled" ;
+				} else {
+					selectbox.disabled = "" ;
+					banReason.disabled = "" ;
+				}
+ 			} ;
+		}
 	}
-};
-
-
-
+} ;
 
 
 

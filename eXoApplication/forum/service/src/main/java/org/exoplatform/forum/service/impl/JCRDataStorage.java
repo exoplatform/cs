@@ -1139,10 +1139,9 @@ public class JCRDataStorage{
 			newProfileNode.setProperty("exo:moderateForums", newUserProfile.getModerateForums());
 			newProfileNode.setProperty("exo:moderateTopics", newUserProfile.getModerateTopics());
 			Calendar calendar = GregorianCalendar.getInstance();
-			calendar.setTime(newUserProfile.getLastLoginDate()) ;
+			if(newUserProfile.getLastLoginDate() != null)
+				calendar.setTime(newUserProfile.getLastLoginDate()) ;
 			newProfileNode.setProperty("exo:lastLoginDate", calendar);
-			calendar.setTime(newUserProfile.getCreatedDateBan()) ;
-			newProfileNode.setProperty("exo:createdDate", calendar);
 			newProfileNode.setProperty("exo:isDisplaySignature", newUserProfile.getIsDisplaySignature());
 			newProfileNode.setProperty("exo:isDisplayAvatar", newUserProfile.getIsDisplayAvatar());
 		//UserOption

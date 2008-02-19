@@ -1,6 +1,7 @@
 <%  
 	import org.exoplatform.forum.service.UserProfile ;
 	import org.exoplatform.services.organization.User ;
+	 import org.exoplatform.forum.ForumFormatUtils;
 %>
 <div class="UIViewMemberProfile">
 <% uiform.begin() %>
@@ -8,6 +9,8 @@
 	UserProfile userProfile = uiform.getUserProfile() ;
 	String userName = userProfile.getUserId() ;
 	User user = uiform.getUser() ;
+	String createdDate = ForumFormatUtils.getFormatDate(userProfile.getShortDateFormat(),user.getCreatedDate()) ;
+	long totalPost = userProfile.getTotalPost();
 %>
 	<div class="ViewMemberProfileContainer">
 		<div class="TitleBar">View Member Profile of : <span class="UserLabel"><%=user.getFullName();%></span></div>
@@ -21,9 +24,15 @@
 					  		<img src="/forum/skin/DefaultSkin/webui/background/Avatar1.gif" class="Img" />
 					  		<div class="Rank"><%=userProfile.getUserTitle();%></div>
 					  		<div class="InfoMember">
-					  			<div>Join Date: <%=user.getCreatedDate();%></div>
-									<div>Posts: <%=userProfile.getTotalPost();%></div>
-									<div>Last Post:<%=userProfile.getLastPostDate();%></div>
+					  			<div>Join Date: $createdDate</div>
+									<% if(totalPost > 0) { 
+											 String lastPostDateOfUser = ForumFormatUtils.getFormatDate((userProfile.getShortDateFormat() + ", " + userProfile.getTimeFormat()),userProfile.getLastPostDate()) ;
+									%>
+									<div>Posts: $totalPost</div>
+									<div>Last Post: $lastPostDateOfUser</div>
+									<% } else {%>
+									<div><strong>$userName</strong> has no post!</div>
+									<% } %>
 					  		</div>
 					  	</div>
 					  </td>

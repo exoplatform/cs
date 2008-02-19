@@ -113,13 +113,13 @@ public class UIForumOptionForm extends UIForm implements UIPopupComponent {
 		UIFormSelectBox timeFormat = new UIFormSelectBox(FIELD_TIMEFORMAT_SELECTBOX, FIELD_TIMEFORMAT_SELECTBOX, list) ;
 		timeFormat.setValue(userProfile.getTimeFormat().replace(' ', '='));
 		list = new ArrayList<SelectItemOption<String>>() ;
-		for(int i=5; i <= 35; i = i + 5) {
+		for(int i=5; i <= 45; i = i + 5) {
 			list.add(new SelectItemOption<String>(String.valueOf(i),("id" + i))) ;
 		}
 		UIFormSelectBox maximumThreads = new UIFormSelectBox(FIELD_MAXTOPICS_SELECTBOX, FIELD_MAXTOPICS_SELECTBOX, list) ;
 		maximumThreads.setValue("id" + userProfile.getMaxTopicInPage());
 		list = new ArrayList<SelectItemOption<String>>() ;
-		for(int i=5; i <= 45; i = i + 5) {
+		for(int i=5; i <= 35; i = i + 5) {
 			list.add(new SelectItemOption<String>(String.valueOf(i), ("id" + i))) ;
 		}
 		UIFormSelectBox maximumPosts = new UIFormSelectBox(FIELD_MAXPOSTS_SELECTBOX, FIELD_MAXPOSTS_SELECTBOX, list) ;

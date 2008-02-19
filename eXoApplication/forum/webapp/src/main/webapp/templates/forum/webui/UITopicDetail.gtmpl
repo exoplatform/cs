@@ -468,7 +468,6 @@
 				</tbody>
 			</table>
 		</div>
-<% jsmanager.addJavascript("eXo.forum.UIForumPortlet.editerQuote('"+idMessenger+"');"); %>
 		<% } %>
 <!-- End ContentContainer -->
 <%

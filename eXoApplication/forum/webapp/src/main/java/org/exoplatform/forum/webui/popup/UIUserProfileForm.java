@@ -17,7 +17,9 @@
 package org.exoplatform.forum.webui.popup;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.exoplatform.forum.ForumFormatUtils;
@@ -25,6 +27,7 @@ import org.exoplatform.forum.service.UserProfile;
 import org.exoplatform.forum.webui.UIFormSelectBoxForum;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -53,11 +56,12 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
 )
 public class UIUserProfileForm extends UIForm implements UIPopupComponent {
 	
-	public static final String FIELD_USERPROFILE_FORM = "UserProfile" ;
-	public static final String FIELD_USEROPTION_FORM = "UserOption" ;
-	public static final String FIELD_USERBAN_FORM = "UserBan" ;
+	public static final String FIELD_USERPROFILE_FORM = "ForumUserProfile" ;
+	public static final String FIELD_USEROPTION_FORM = "ForumUserOption" ;
+	public static final String FIELD_USERBAN_FORM = "ForumUserBan" ;
 	
-	public static final String FIELD_USERID_INPUT = "UserName" ;
+	public static final String FIELD_USERID_INPUT = "ForumUserName" ;
+	public static final String FIELD_USERTITLE_INPUT = "ForumUserTitle" ;
 	public static final String FIELD_USERROLE_SELECTBOX = "UserRole" ;
 	public static final String FIELD_SIGNATURE_TEXTAREA = "Signature" ;
 	public static final String FIELD_ISDISPLAYSIGNATURE_CHECKBOX = "IsDisplaySignature" ;
@@ -91,12 +95,12 @@ public class UIUserProfileForm extends UIForm implements UIPopupComponent {
 	  this.initUserProfileForm() ;
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "deprecation" })
   private void initUserProfileForm() throws Exception {
 		List<SelectItemOption<String>> list ;
 		UIFormStringInput userId = new UIFormStringInput(FIELD_USERID_INPUT, FIELD_USERID_INPUT, null);
 		userId.setValue(this.userProfile.getUserId());
-		UIFormStringInput userTitle = new UIFormStringInput(FIELD_USERID_INPUT, FIELD_USERID_INPUT, null);
+		UIFormStringInput userTitle = new UIFormStringInput(FIELD_USERTITLE_INPUT, FIELD_USERTITLE_INPUT, null);
 		userTitle.setValue(this.userProfile.getUserTitle());
 		list = new ArrayList<SelectItemOption<String>>() ;
 		list.add(new SelectItemOption<String>("Admin", "id0")) ;
@@ -114,9 +118,9 @@ public class UIUserProfileForm extends UIForm implements UIPopupComponent {
 		String []timeZone1 = getLabel(FIELD_TIMEZONE).split("/") ;
 		list = new ArrayList<SelectItemOption<String>>() ;
 		for(String string : timeZone1) {
-			list.add(new SelectItemOption<String>(string + "/timeZone", ForumFormatUtils.getTimeZoneNumberInString(string))) ;
+			list.add(new SelectItemOption<String>(string, ForumFormatUtils.getTimeZoneNumberInString(string))) ;
 		}
-		UIFormSelectBoxForum timeZone = new UIFormSelectBoxForum(FIELD_TIMEZONE_SELECTBOX, FIELD_TIMEZONE_SELECTBOX, list) ;
+		UIFormSelectBox timeZone = new UIFormSelectBox(FIELD_TIMEZONE_SELECTBOX, FIELD_TIMEZONE_SELECTBOX, list) ;
 		Date date = new Date() ;
 		double timeZoneMyHost = userProfile.getTimeZone() ;
 		String mark = "+";
@@ -153,13 +157,13 @@ public class UIUserProfileForm extends UIForm implements UIPopupComponent {
 		UIFormSelectBox timeFormat = new UIFormSelectBox(FIELD_TIMEFORMAT_SELECTBOX, FIELD_TIMEFORMAT_SELECTBOX, list) ;
 		timeFormat.setValue(userProfile.getTimeFormat().replace(' ', '='));
 		list = new ArrayList<SelectItemOption<String>>() ;
-		for(int i=5; i <= 35; i = i + 5) {
+		for(int i=5; i <= 45; i = i + 5) {
 			list.add(new SelectItemOption<String>(String.valueOf(i),("id" + i))) ;
 		}
 		UIFormSelectBox maximumThreads = new UIFormSelectBox(FIELD_MAXTOPICS_SELECTBOX, FIELD_MAXTOPICS_SELECTBOX, list) ;
 		maximumThreads.setValue("id" + userProfile.getMaxTopicInPage());
 		list = new ArrayList<SelectItemOption<String>>() ;
-		for(int i=5; i <= 45; i = i + 5) {
+		for(int i=5; i <= 35; i = i + 5) {
 			list.add(new SelectItemOption<String>(String.valueOf(i), ("id" + i))) ;
 		}
 		UIFormSelectBox maximumPosts = new UIFormSelectBox(FIELD_MAXPOSTS_SELECTBOX, FIELD_MAXPOSTS_SELECTBOX, list) ;
@@ -171,7 +175,31 @@ public class UIUserProfileForm extends UIForm implements UIPopupComponent {
 		UIFormCheckBoxInput isBanned = new UIFormCheckBoxInput<Boolean>(FIELD_ISBANNED_CHECKBOX, FIELD_ISBANNED_CHECKBOX, this.userProfile.getIsBanned());
 		boolean isBan = userProfile.getIsBanned() ;
 		isBanned.setValue(isBan) ;
-		UIFormStringInput banUntil = new UIFormStringInput(FIELD_BANUNTIL_INPUT,FIELD_BANUNTIL_INPUT, null) ;
+		list = new ArrayList<SelectItemOption<String>>() ;
+		String dv = "Days";
+		int i = 2;
+		date.setDate(date.getDate() + 1) ;
+		list.add(new SelectItemOption<String>("1 Day ("+ForumFormatUtils.getFormatDate("MM-dd-yyyy hh:mm a", date)+")", "Day_1")) ;
+		while(true) {
+			if(i == 8 && dv.equals("Days")) i = 10;
+			if(i == 11) {i = 2; dv = "Weeks";}
+			if(i == 4 && dv.equals("Weeks")) {i = 1; dv = "Month" ;}
+			if(i == 2 && dv.equals("Month")){dv = "Months" ;}
+			if(i == 7 && dv.equals("Months")){i = 1; dv = "Year" ;}
+			if(i == 2 && dv.equals("Year")){dv = "Years" ;}
+			if(i == 3 && dv.equals("Years")){break;}
+			if(dv.equals("Weeks")){ date = new Date(); date.setDate(date.getDate() + i*7) ;}
+			if(dv.equals("Days")){ date = new Date(); date.setDate(date.getDate() + i) ;}
+			if(dv.equals("Month")||dv.equals("Months")){ date = new Date(); date.setMonth(date.getMonth() + i) ;}
+			if(dv.equals("Years")||dv.equals("Year")){ date = new Date(); date.setYear(date.getYear() + i) ;}
+			list.add(new SelectItemOption<String>(i+" "+dv+" ("+ForumFormatUtils.getFormatDate("MM-dd-yyyy hh:mm a", date)+")", (dv + "_"+i) )) ;
+			++i;
+		}
+		
+		UIFormSelectBox banUntil = new UIFormSelectBox(FIELD_BANUNTIL_INPUT,FIELD_BANUNTIL_INPUT, list) ;
+		
+		
+		
 		UIFormTextAreaInput banReason = new UIFormTextAreaInput(FIELD_BANREASON_TEXTAREA, FIELD_BANREASON_TEXTAREA, null);
 		UIFormStringInput banCounter = new UIFormStringInput(FIELD_BANCOUNTER_INPUT, FIELD_BANCOUNTER_INPUT, null) ;
 		banCounter.setValue(userProfile.getBanCounter() + "");
@@ -179,9 +207,12 @@ public class UIUserProfileForm extends UIForm implements UIPopupComponent {
 		banReasonSummary.setValue(userProfile.getBanReasonSummary().toString());
 		UIFormStringInput createdDateBan = new UIFormStringInput(FIELD_CREATEDDATEBAN_INPUT, FIELD_CREATEDDATEBAN_INPUT, null) ;
 		if(isBan) {
-			banUntil.setValue("" + userProfile.getBanUntil());
+//			banUntil.setValue("" + userProfile.getBanUntil());
 			banReason.setValue(userProfile.getBanReason());
 			createdDateBan.setValue(ForumFormatUtils.getFormatDate("MM/dd/yyyy, hh:mm a",userProfile.getCreatedDateBan()));
+		} else {
+//			banUntil.setEnable(true);
+			banReason.setEnable(true);
 		}
 		
 		UIFormInputWithActions inputSetProfile = new UIFormInputWithActions(FIELD_USERPROFILE_FORM); 
@@ -216,6 +247,7 @@ public class UIUserProfileForm extends UIForm implements UIPopupComponent {
 		
 	}
 	
+	
 	public void activate() throws Exception {
 	}
 
@@ -226,6 +258,30 @@ public class UIUserProfileForm extends UIForm implements UIPopupComponent {
 	static  public class SaveActionListener extends EventListener<UIUserProfileForm> {
     public void execute(Event<UIUserProfileForm> event) throws Exception {
     	UIUserProfileForm uiForm = event.getSource() ;
+    	UIFormInputWithActions inputSetProfile = uiForm.getChildById(FIELD_USERPROFILE_FORM) ;
+    	String userTitle = inputSetProfile.getUIStringInput(FIELD_USERTITLE_INPUT).getValue() ;
+    	long userRole = Long.parseLong(inputSetProfile.getUIFormSelectBox(FIELD_USERROLE_SELECTBOX).getValue().substring(2));
+    	if(userTitle.equals("Admin") || userTitle.equals("Moderator") || userTitle.equals("Register User")) {
+    		if(userRole == 0) userTitle = "Administrator" ;
+    		if(userRole == 1) userTitle = "Moderator" ;
+    		if(userRole == 2) userTitle = "Register User" ;
+    	}
+    	String signature = inputSetProfile.getUIFormTextAreaInput(FIELD_SIGNATURE_TEXTAREA).getValue() ;
+    	Boolean isDisplaySignature = (Boolean)inputSetProfile.getUIFormCheckBoxInput(FIELD_ISDISPLAYSIGNATURE_CHECKBOX).getValue() ;
+    	Boolean isDisplayAvatar = (Boolean)inputSetProfile.getUIFormCheckBoxInput(FIELD_ISDISPLAYAVATAR_CHECKBOX).getValue() ;
+    	
+    	UIFormInputWithActions inputSetOption = uiForm.getChildById(FIELD_USEROPTION_FORM) ;
+    	long maxTopic = Long.parseLong(inputSetOption.getUIFormSelectBox(FIELD_MAXTOPICS_SELECTBOX).getValue().substring(2)) ;
+			long maxPost = Long.parseLong(inputSetOption.getUIFormSelectBox(FIELD_MAXPOSTS_SELECTBOX).getValue().substring(2)) ;
+			double timeZone = Double.parseDouble(inputSetOption.getUIFormSelectBox(FIELD_TIMEZONE_SELECTBOX).getValue());
+			String shortDateFormat = inputSetOption.getUIFormSelectBox(FIELD_SHORTDATEFORMAT_SELECTBOX).getValue();
+			String longDateFormat = inputSetOption.getUIFormSelectBox(FIELD_LONGDATEFORMAT_SELECTBOX).getValue();
+			String timeFormat = inputSetOption.getUIFormSelectBox(FIELD_TIMEFORMAT_SELECTBOX).getValue();
+			boolean isJump = (Boolean)inputSetOption.getUIFormCheckBoxInput(FIELD_FORUMJUMP_CHECKBOX).getValue() ;
+			
+    	UIFormInputWithActions inputSetBan = uiForm.getChildById(FIELD_USERBAN_FORM) ;
+    	boolean isBanned = (Boolean)inputSetProfile.getUIFormCheckBoxInput(FIELD_ISBANNED_CHECKBOX).getValue() ;
+    	
     	UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
 			popupContainer.getChild(UIPopupAction.class).deActivate() ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
