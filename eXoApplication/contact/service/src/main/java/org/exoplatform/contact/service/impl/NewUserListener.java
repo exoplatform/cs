@@ -43,6 +43,7 @@ import org.exoplatform.services.organization.UserEventListener;
 public class NewUserListener extends UserEventListener {
   private ContactService cservice_ ;
   private NodeHierarchyCreator nodeHierarchyCreator_ ;
+  public static String DEFAULTGROUP = "default".intern() ;
   public NewUserListener(ContactService cservice, NodeHierarchyCreator nodeHierarchyCreator) throws Exception {
   	cservice_ = cservice ;
   	nodeHierarchyCreator_ = nodeHierarchyCreator ;  	
@@ -51,7 +52,7 @@ public class NewUserListener extends UserEventListener {
   public void postSave(User user, boolean isNew) throws Exception {  	
   	if(isNew) {
   		ContactGroup group = new ContactGroup() ;
-  		group.setId("default") ;
+  		group.setId(DEFAULTGROUP) ;
     	group.setName("My contacts") ;
     	group.setDescription("Default address book") ;
     	SessionProvider sysProvider = SessionProvider.createSystemProvider() ;

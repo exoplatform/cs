@@ -27,6 +27,7 @@ import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.SharedAddressBook;
+import org.exoplatform.contact.service.impl.NewUserListener;
 import org.exoplatform.contact.webui.popup.UICategoryForm;
 import org.exoplatform.contact.webui.popup.UICategorySelect;
 import org.exoplatform.contact.webui.popup.UIComposeForm;
@@ -77,14 +78,12 @@ public class UIAddressBooks extends UIComponent {
   //private Map<String, String> publicAddressBookMap_ = new HashMap<String, String>() ;
   private Map<String, SharedAddressBook> sharedAddressBookMap_ = new HashMap<String, SharedAddressBook>() ;
   private List<Contact> copyContacts = new ArrayList<Contact>();
-  private String defaultGroup ;
   private String copyAddress = null ;
   public UIAddressBooks() throws Exception { }
 
   public List<ContactGroup> getGroups() throws Exception {
     List<ContactGroup> groupList = ContactUtils.getContactService()
       .getGroups(SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser());
-    if (groupList != null && groupList.size() > 0) defaultGroup = groupList.get(0).getId() ;
     privateAddressBookMap_.clear() ;
     for (ContactGroup group : groupList) privateAddressBookMap_.put(group.getId(), group.getName()) ; 
     return groupList;
@@ -123,7 +122,7 @@ public class UIAddressBooks extends UIComponent {
     return false ;
   }
   public void setCopyAddress(String add) { copyAddress = add ; }
-  public boolean isDefault(String groupId) { return groupId.equals(defaultGroup) ; }
+  public boolean isDefault(String groupId) { return groupId.equals(NewUserListener.DEFAULTGROUP) ; }
   
   public void setCopyContacts(List<Contact> contacts) { copyContacts = contacts ; }
   public List<Contact> getCopyContacts() { return copyContacts ; }

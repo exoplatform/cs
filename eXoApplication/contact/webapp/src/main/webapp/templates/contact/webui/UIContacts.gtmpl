@@ -86,11 +86,11 @@
 					<a href="<%=uicomponent.event("CopyContact")%>" class="ControlButton">
 							<div class="Icon CopyContactIcon" title="Copy Contacts"><span></span></div>
 					</a>
-					
+				<!--	
 					
 					<a href="<%=uicomponent.event("SharedContacts")%>" class="ControlButton">
 							<div class="Icon CopyContactIcon" title="Share contacts"><span></span></div>
-					</a>
+					</a>-->
 					
 					<% 
 						}
@@ -297,7 +297,7 @@
    			     	<% } %>  
   	   			</tbody>
 
-						
+					<!--	no search-->
 						<% } else {	%>
 						<tbody>
 						<%   	
@@ -347,7 +347,7 @@
 								<td class="text">
 									<% 
 										icon = "OnlineIcon"
-										if (contact.isOwner()&& uicomponent.getDefaultGroup().equals(contact.getAddressBook()[0])) icon = "OwnerIcon" ; 	
+										if (contact.isOwner()&& contact.getOwnerId().equals(ContactUtils.getCurrentUser())) icon = "OwnerIcon" ; 	
 								  %>
 								
 									<div class="State $icon" title="Available">

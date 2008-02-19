@@ -117,23 +117,6 @@ public class UIActionBar extends UIContainer  {
     }  
   }
   
-  /*
-  static public class VCardViewActionListener extends EventListener<UIActionBar> {
-    public void execute(Event<UIActionBar> event) throws Exception {      
-      UIActionBar uiActionBar = event.getSource() ;
-      UIContactPortlet uiContactPortlet = uiActionBar.getParent() ; 
-      UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
-      uiContacts.setRendered(true) ;
-      uiContacts.setViewContactsList(false) ;  
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
-      
-//    remove when print address book improved
-      event.getRequestContext().addUIComponentToUpdateByAjax(
-          uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class)) ;
-    }  
-  }
-  */
-  
   static public class ExportContactActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {        
       UIActionBar uiActionBar = event.getSource();
