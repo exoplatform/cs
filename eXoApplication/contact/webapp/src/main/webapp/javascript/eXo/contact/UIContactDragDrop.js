@@ -24,8 +24,8 @@ UIContactDragDrop.prototype.getAllDropableSets = function() {
     if(eXo.core.DOMUtil.hasClass(addressBooks[i],"PublicAddressBook")) continue ;
     this.dropableSets[this.dropableSets.length] = addressBooks[i] ;
   }
-//  var publicAddressBook = this.DOMUtil.findDescendantsByClass(uiAddressBooksNode, 'div', 'PublicAddress') ;
-//  this.dropableSets[this.dropableSets.length] = publicAddressBook[0] ;
+  var personalAddress = this.DOMUtil.findDescendantsByClass(uiAddressBooksNode, 'div', 'PersonalAddress') ;
+  this.dropableSets[this.dropableSets.length] = personalAddress[1] ;
   var uiTagsNode = document.getElementById('UITags') ;
   var tagLists = this.DOMUtil.findDescendantsByClass(uiTagsNode, 'div', 'ItemList') ;
   for (var i=0; i<tagLists.length; i++) {
@@ -201,11 +201,10 @@ UIContactDragDrop.prototype.dropCallback = function(dndEvent) {
       eXo.webui.UIForm.submitForm('UIContacts','Tag', true) ;
       return ;
     }
-//    if (eXo.core.DOMUtil.hasClass(this.foundTargetObjectCatch,'PublicAddress')) {
-////      uiContacts.action = uiContacts.action + '&isDND=true' ;
-////      eXo.webui.UIForm.submitForm('UIContacts','MoveContacts', true) ;
-//      return ;
-//    }
+    if (eXo.core.DOMUtil.hasClass(this.foundTargetObjectCatch,'PersonalAddress')) {
+      eXo.webui.UIForm.submitForm('contact#UIContacts','SharedContacts', true)
+      return ;
+    }
     var contactTypeId = this.foundTargetObjectCatch.getAttribute('tagId') ;
     if (!contactTypeId) {      
     	contactTypeId = this.foundTargetObjectCatch.id ;
