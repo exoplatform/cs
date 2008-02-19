@@ -1,4 +1,3 @@
-
 function UICalendarPortlet() {
 }
 
@@ -909,8 +908,12 @@ UICalendarPortlet.prototype.runFilterByCalendar = function(calid, checked) {
 		}
 	}
 	try {	//TODO: review order javascript file loading
-		if (document.getElementById("UIDayViewGrid")) UICalendarPortlet.showEvent() ;
-		if (document.getElementById("UIWeekViewGrid")) eXo.calendar.UIWeekView.init() ;
+		if (document.getElementById("UIMonthView")) eXo.calendar.UICalendarMan.initMonth() ;
+  	if (document.getElementById("UIDayViewGrid")) eXo.calendar.UICalendarPortlet.showEvent() ;
+  	if (document.getElementById("UIWeekViewGrid")) {
+  		eXo.calendar.UICalendarMan.initWeek() ;
+  		eXo.calendar.UIWeekView.init() ;
+  	}
 	}
 	catch(e) {} ;
 
@@ -938,24 +941,23 @@ UICalendarPortlet.prototype.filterByCalendar = function() {
 		}
 	}
   UICalendarPortlet.runFilterByCategory(UICalendarPortlet.filterSelect) ;
-	try {	//TODO: review order javascript file loading
-		if (document.getElementById("UIDayViewGrid")) UICalendarPortlet.showEvent() ;
-		if (document.getElementById("UIWeekViewGrid")) eXo.calendar.UIWeekView.init() ;
+	try {	//TODO: review order javascript file 
+		if (document.getElementById("UIMonthView")) eXo.calendar.UICalendarMan.initMonth() ;
+  	if (document.getElementById("UIDayViewGrid")) eXo.calendar.UICalendarPortlet.showEvent() ;
+  	if (document.getElementById("UIWeekViewGrid")) {
+  		eXo.calendar.UICalendarMan.initWeek() ;
+  		eXo.calendar.UIWeekView.init() ;
+  	}
 	}
 	catch(e) {} ;
 
 } ;
 
-//UICalendarPortlet.prototype.initFilterByCategory = function(obj) {
-//	var selectbox = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "select", "selectbox") ;
-//	var onchange = selectbox.getAttribute("onchange") ;
-//	if (!onchange) selectbox.onchange = new Function("eXo.calendar.UICalendarPortlet.filterByCategory(this)") ;
-//} ;
-
 UICalendarPortlet.prototype.filterByCategory = function() {
 	var uiCalendarViewContainer = document.getElementById("UICalendarViewContainer") ;
 	if (!uiCalendarViewContainer) return ;
 	var category = this.options[this.selectedIndex].value ;
+  eXo.calendar.UICalendarPortlet.selectedCategory = category ;
 	var className = "EventBoxes" ;
 	if (document.getElementById("UIWeekViewGrid")) className = "WeekViewEventBoxes" ; // TODO : review event box gettting
 	var allEvents = eXo.core.DOMUtil.findDescendantsByClass(uiCalendarViewContainer, "div", className) ;
@@ -1031,7 +1033,20 @@ UICalendarPortlet.prototype.getFilterSelect = function(form) {
 	this.filterSelect = select ;
 } ;
 
+UICalendarPortlet.prototype.setSelected = function(form) {
+  try{
+    eXo.calendar.UICalendarPortlet.getFilterSelect(form) ;
+  	eXo.calendar.UICalendarPortlet.selectedCategory = eXo.calendar.UICalendarPortlet.filterSelect.options[eXo.calendar.UICalendarPortlet.filterSelect.selectedIndex].value ;
+  } catch(e) {}
+} ;
+
 UICalendarPortlet.prototype.checkFilter = function() {
+  var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
+  for(var i = 0 ; i < UICalendarPortlet.filterSelect.options.length ; i ++) {
+    if(UICalendarPortlet.filterSelect.options[i].value == UICalendarPortlet.selectedCategory) {
+      UICalendarPortlet.filterSelect.options[i].selected = true ;
+    }
+  }  
 	this.checkCalendarFilter() ;
 } ;
 
@@ -1053,7 +1068,13 @@ UICalendarPortlet.prototype.checkCategoryFilter = function() {
 UICalendarPortlet.prototype.showView = function(obj, evt) {
 	var _e = window.event || evt ;
 	_e.cancelBubble = true ;	
-	var oldmenu = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div", "UIRightClickPopupMenu") ;	
+	var oldmenu = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div", "UIRightClickPopupMenu") ;
+  var actions = eXo.core.DOMUtil.findDescendantsByClass(oldmenu, "a","MenuItem") ;
+  if(!this.selectedCategory) this.selectedCategory = null ;
+  for(var i=0 ; i < actions.length ; i++) {
+    if(actions[i].href.indexOf("categoryId") < 0) continue ; 
+    actions[i].href = String(actions[i].href).replace(/categoryId.*&/,"categoryId="+ this.selectedCategory + "&") ;
+  }
 	eXo.calendar.UICalendarPortlet.swapMenu(oldmenu, obj) ;
 } ;
 

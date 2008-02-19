@@ -3,6 +3,8 @@
 	import java.text.SimpleDateFormat;
 	import java.util.Calendar;
 	uiform.begin() ;
+	def rcontext = _ctx.getRequestContext() ;
+	rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.setSelected("'+uiform.id+'") ;') ;
 	int currentDay = uicomponent.getCurrentDay() ;
 	int currentMonth = uicomponent.getCurrentMonth() ;
 	String currentMonthName = uicomponent.getMonthName(currentMonth) ;

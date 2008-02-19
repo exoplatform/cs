@@ -19,6 +19,7 @@
 	selectedEvent = uicomponent.getSelectedEvent() ;
 	def rcontext = _ctx.getRequestContext() ;
 	rcontext.getJavascriptManager().addJavascript('eXo.cs.CheckBox.init("'+uiform.id+'") ;') ;
+	rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.setSelected("'+uiform.id+'") ;') ;
 %>
 	<div class="TitleBar Result">
 	    <table>
