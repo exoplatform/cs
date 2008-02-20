@@ -271,11 +271,12 @@ UICalendarPortlet.prototype.show = function(obj, evt) {
  */
 UICalendarPortlet.prototype.runAction = function(obj){
   var actions = obj.getAttribute("actionLink") ;
+  var selectedCategroy = (this.selectedCategory)?this.selectedCategory:null ;
   var d = new Date() ;
   var currentTime = d.getTime() ;
   var timeZoneOffset = d.getTimezoneOffset() ;
   actions = actions.replace(/javascript:/,"") ;
-  actions = actions.replace(/\'\)/,"&ct="+currentTime + "&tz=" + timeZoneOffset + "')") ;
+  actions = actions.replace(/\'\)/,"&ct="+currentTime + "&tz=" + timeZoneOffset + "&categoryId=" + selectedCategroy + "')") ;
   eval(actions) ;
 } ;
 
