@@ -1136,7 +1136,7 @@ UICalendarPortlet.prototype.swapMenu = function(oldmenu, clickobj) {
   if(uiDesktop) {
     menuX = menuX - uiWindow.offsetLeft ;
     menuY = menuY - uiWindow.offsetTop ;
-  }  
+  }
   if(document.getElementById("tmpMenuElement")) document.getElementById(UICalendarPortlet.portletName).removeChild(document.getElementById("tmpMenuElement")) ;
 	var tmpMenuElement = oldmenu.cloneNode(true) ;
 	tmpMenuElement.setAttribute("id","tmpMenuElement") ;
@@ -1156,8 +1156,14 @@ UICalendarPortlet.prototype.swapMenu = function(oldmenu, clickobj) {
       menuY -= (mnuBottom - widBottom - clickobj.offsetHeight - uiWindow.scrollTop) ;
       UICalendarPortlet.menuElement.style.top = menuY + "px" ;
     }
-  }  
-	//UICalendarPortlet.menuElement = null ;
+  } else {
+    var uiRightClick = (DOMUtil.findFirstDescendantByClass(UICalendarPortlet.menuElement, "div", "UIRightClickPopupMenu")) ? DOMUtil.findFirstDescendantByClass(UICalendarPortlet.menuElement, "div", "UIRightClickPopupMenu") : UICalendarPortlet.menuElement ;
+    var mnuBottom = UICalendarPortlet.menuElement.offsetTop +  uiRightClick.offsetHeight - window.document.documentElement.scrollTop ;
+    if(window.document.documentElement.clientHeight < mnuBottom) {
+      menuY += (window.document.documentElement.clientHeight - mnuBottom) ;
+      UICalendarPortlet.menuElement.style.top = menuY + "px" ;      
+    }
+  }
 } ;
 UICalendarPortlet.prototype.isAllday = function(form) {
 	try{
