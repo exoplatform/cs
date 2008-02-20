@@ -87,7 +87,6 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UIContacts.ExportContactActionListener.class),
         @EventConfig(listeners = UIContacts.CancelActionListener.class),
         @EventConfig(listeners = UIContacts.SelectTagActionListener.class),
-        // delete when drag and drop
         @EventConfig(listeners = UIContacts.SharedContactsActionListener.class),
         @EventConfig(listeners = UIContacts.CloseSearchActionListener.class)
     }
@@ -354,31 +353,36 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIContacts uiContacts = event.getSource();
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
       List<String> contactIds = new ArrayList<String>();
+      UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
       if (!ContactUtils.isEmpty(contactId) && !contactId.equals("null")) {
         contactIds.add(contactId) ;
-      }
-      else {
+      } else {
         contactIds = uiContacts.getCheckedContacts() ;
-        if (contactIds.size() == 0) { 
-          UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
+        if (contactIds.size() == 0) {          
           uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-required", null)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
         }
       } 
       if (uiContacts.isSearchResult && !uiContacts.checkExistContacts(contactIds)){
-        UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-deleted", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       } 
+      Map<String, Contact> movedContacts = new HashMap<String, Contact>() ;
+      for (String id : contactIds) {
+        Contact contact = uiContacts.contactMap.get(id) ;
+        if (contact.getContactType().equals(JCRDataStorage.PUBLIC)) {
+          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-move", null
+              , ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
+        movedContacts.put(id, contact) ;
+      }
       UIContactPortlet uiContactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
       UIMoveContactsForm uiMoveForm = popupAction.activate(UIMoveContactsForm.class, 540) ;
-      Map<String, Contact> movedContacts = new HashMap<String, Contact>() ;
-      for (String contact : contactIds) {
-        movedContacts.put(contact, uiContacts.contactMap.get(contact)) ;
-      }
       uiMoveForm.setContacts(movedContacts) ;
       UIAddressBooks addressBooks = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
       uiMoveForm.setPrivateGroupMap(addressBooks.getPrivateGroupMap()) ;
@@ -394,11 +398,10 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       String addressBookId = event.getRequestContext().getRequestParameter(OBJECTID);
       String type = event.getRequestContext().getRequestParameter("addressType");
       String[] addressBooks = {addressBookId} ;
-      List<String> contactIds = new ArrayList<String>();
+      List<String> contactIds = uiContacts.getCheckedContacts() ;
       List<Contact> contacts = new ArrayList<Contact>();
       @SuppressWarnings("unused")
       UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
-      contactIds = uiContacts.getCheckedContacts() ;
       if (uiContacts.isSearchResult && !uiContacts.checkExistContacts(contactIds)){
         uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-deleted", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -406,6 +409,12 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       }
       for(String contactId : contactIds) {
       	Contact contact = uiContacts.contactMap.get(contactId) ;
+        if (contact.getContactType().equals(JCRDataStorage.PUBLIC)) {
+          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-move", null
+              , ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }        
       	if(contact != null) {
       		contact.setAddressBook(addressBooks) ;
       		contacts.add(contact) ;
@@ -415,8 +424,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       ContactService contactService = ContactUtils.getContactService() ;
       SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
       String username = ContactUtils.getCurrentUser() ;
-      contactService.moveContacts(
-          sessionProvider, username, contacts, type); 
+      contactService.moveContacts(sessionProvider, username, contacts, type); 
       
       // update addressbook when search
       if (uiContacts.isSearchResult) {
@@ -457,6 +465,10 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
+      
+      
+      //
+      
       UIWorkingContainer uiWorkingContainer = uiContacts.getAncestorOfType(UIWorkingContainer.class) ;
       ContactService contactService = ContactUtils.getContactService() ;
       String username = ContactUtils.getCurrentUser() ;
@@ -777,16 +789,23 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource() ;
       List<String> contacts = uiContacts.getCheckedContacts() ;
+      Map<String, String> mapContacts = new LinkedHashMap<String, String>() ;
+      for (String contactId : contacts) {
+        if (uiContacts.contactMap.get(contactId).getContactType().equals(JCRDataStorage.PUBLIC)) {
+          UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-share", null
+              , ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
+        mapContacts.put(contactId, uiContacts.contactMap.get(contactId).getFullName()) ;
+      }      
       UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
       UIPopupContainer uiPopupContainer = popupAction.activate(UIPopupContainer.class, 600) ;
       uiPopupContainer.setId("UISharedContacts") ;
       UISharedForm uiSharedForm = uiPopupContainer.addChild(UISharedForm.class, null, null) ;  
-      uiSharedForm.init(false) ;
-      Map<String, String> mapContacts = new LinkedHashMap<String, String>() ;
-      for (String contactId : contacts) {
-        mapContacts.put(contactId, uiContacts.contactMap.get(contactId).getFullName()) ;
-      }
+      uiSharedForm.init(false) ;      
       uiSharedForm.setSharedContacts(mapContacts) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent());      
