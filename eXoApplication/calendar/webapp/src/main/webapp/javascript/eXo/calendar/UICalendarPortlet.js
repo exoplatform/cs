@@ -1,14 +1,21 @@
 function UICalendarPortlet() {
 }
-
-/* utility method */
-
+/*
+ * 
+ * @param {Object} object : DOM Element
+ * @param {Object} styles : Object contains style name and style value
+ * This function to set stylesheet for a DOM element
+ */
 UICalendarPortlet.prototype.setStyle = function(object,styles) {	
 	for(var value in styles) {
 		object.style[value] = styles[value] ;
 	}
 } ;
-
+/*
+ * 
+ * @param {Int} milliseconds : Milliseconds
+ * This function to convert time from milliseconds to minutes
+ */
 UICalendarPortlet.prototype.timeToMin = function(milliseconds) {
 	if (typeof(milliseconds) == "string") milliseconds = parseInt(milliseconds) ;
 	var d = new Date(milliseconds) ;
@@ -17,7 +24,12 @@ UICalendarPortlet.prototype.timeToMin = function(milliseconds) {
   var min = hour*60 + min ;
 	return min ;
 }	;
-
+/*
+ * 
+ * @param {Int} min : Minutes
+ * @param {String} timeFormat : format string of time
+ * This function to convert time from minutes to time string
+ */
 UICalendarPortlet.prototype.minToTime = function(min,timeFormat) {
 	var minutes = min%60 ;
 	var hour = (min - minutes)/ 60 ;
@@ -170,7 +182,12 @@ UICalendarPortlet.prototype.showHide = function(obj) {
 		obj.style.display = "none" ;
 	}
 } ;
-
+/*
+ * 
+ * @param {Object} obj : DOM Element to click
+ * @param {Object} evt : EventObject
+ * This function to show/hide Calendar menu
+ */
 UICalendarPortlet.prototype.showMainMenu = function(obj, evt) {
 	var _e = window.event || evt ;
 	_e.cancelBubble = true ;
@@ -182,7 +199,12 @@ UICalendarPortlet.prototype.showMainMenu = function(obj, evt) {
   actions[1].href = String(actions[1].href).replace(/&.*/, "&ct=" + currentTime + "&tz=" + timezoneOffset + "')") ;
   eXo.calendar.UICalendarPortlet.swapMenu(oldmenu, obj) ;  
 } ;
-
+/*
+ * 
+ * @param {Object} obj : DOM Element to click
+ * @param {Object} evt : EventObject
+ * This function to show/hide Calendar and Group Calendar item
+ */
 UICalendarPortlet.prototype.show = function(obj, evt) {
 	var _e = window.event || evt ;
 	_e.cancelBubble = true ;
@@ -242,6 +264,24 @@ UICalendarPortlet.prototype.show = function(obj, evt) {
 		}
 	}
 } ;
+/*
+ * 
+ * @param {String} actions: action link string
+ * This function to add current time and timezone offset to action link, then run it
+ */
+UICalendarPortlet.prototype.runAction = function(obj){
+  var actions = obj.getAttribute("actionLink") ;
+  var d = new Date() ;
+  var currentTime = d.getTime() ;
+  var timeZoneOffset = d.getTimezoneOffset() ;
+  actions = actions.replace(/javascript:/,"") ;
+  actions = actions.replace(/\'\)/,"&ct="+currentTime + "&tz=" + timeZoneOffset + "')") ;
+  eval(actions) ;
+} ;
+
+/*
+ * This function to check layout of portlet when page load
+ */
 
 UICalendarPortlet.prototype.checkLayout = function() {
 	try{
@@ -261,7 +301,11 @@ UICalendarPortlet.prototype.checkLayout = function() {
 	layout0.style.display = display0 ;
 	layout1.style.display = display1 ;
 } ;
-
+/*
+ * 
+ * @param {Int} layout : layout value
+ * This function to switch among types of layout
+ */
 UICalendarPortlet.prototype.switchLayout = function(layout) {	
 	var Browser = eXo.core.Browser ;
 	layout = parseInt(layout) ;

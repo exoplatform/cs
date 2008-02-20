@@ -5,13 +5,13 @@ def rcontext = _ctx.getRequestContext() ;
 rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.getFilterSelect("'+uiform.id+'") ;') ;
 %>
 <div class="UIHeaderBar ListBar">
-		<a href="<%=uicomponent.event("AddEvent",uicomponent.TYPE_EVENT)%>" class="ControlButton">
+		<a href="javascript: void(0) ;" onclick="eXo.calendar.UICalendarPortlet.runAction(this) ;" actionLink="<%=uicomponent.event("AddEvent",uicomponent.TYPE_EVENT)%>" class="ControlButton">
 			<div class="IconHolder AddNewEvent">
 				<%=_ctx.appRes("UIHeaderBar.label.AddEvent")%>
 			</div>
 		</a>
 		<div class="SeparatorLine"><span></span></div>
-		<a href="<%=uicomponent.event("AddEvent", uicomponent.TYPE_TASK)%>" class="ControlButton">
+		<a href="javascript: void(0) ;" onclick="eXo.calendar.UICalendarPortlet.runAction(this) ;" actionLink="<%=uicomponent.event("AddEvent", uicomponent.TYPE_TASK)%>" class="ControlButton">
 			<div class="IconHolder AddNewTask">
 				<%=_ctx.appRes("UIHeaderBar.label.AddTask")%>
 			</div>
