@@ -56,7 +56,7 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.xml.PortalContainerInfo;
 import org.exoplatform.services.jcr.access.AccessControlEntry;
-import org.exoplatform.services.jcr.access.AccessControlList;
+import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
@@ -266,6 +266,7 @@ public class JCRDataStorage{
         if(!privateCalendars.contains((calendar.getId()))) privateCalendars.add(calendar.getId()) ;
         setting.setDefaultPrivateCalendars(privateCalendars.toArray(new String[privateCalendars.size()])) ;
         saveCalendarSetting(sProvider, username, setting) ;
+        if(calendar.isDataInit()) reparePermissions(calendarNode, username) ;
       }
     }else {
       calendarNode = calendarHome.getNode(calendar.getId()) ;
@@ -307,7 +308,6 @@ public class JCRDataStorage{
   }
 
   public Calendar getGroupCalendar(SessionProvider sProvider, String calendarId) throws Exception {
-    //sProvider = SessionProvider.createSystemProvider() ;
     Node calendarNode = getPublicCalendarHome(sProvider).getNode(calendarId) ;
     return getCalendar(new String[]{calendarId}, null, calendarNode, true) ;
   }
@@ -588,15 +588,29 @@ public class JCRDataStorage{
       if(calCategoryHome.hasNode(calendarCategory.getId())) throw new Exception("This calendar category is already exists! ") ;
       calCategoryNode = calCategoryHome.addNode(calendarCategory.getId(),"exo:calendarCategory") ;
       calCategoryNode.setProperty("exo:id", calendarCategory.getId()) ;
+      if(calendarCategory.isDataInit()) reparePermissions(calCategoryNode, username) ;
     }else {
       calCategoryNode = calCategoryHome.getNode(calendarCategory.getId()) ;
     }
     calCategoryNode.setProperty("exo:name", calendarCategory.getName()) ;
     calCategoryNode.setProperty("exo:description", calendarCategory.getDescription()) ;
-    //calCategoryNode.setProperty("exo:calendarIds", calendarCategory.getCalendars()) ;
+    reparePermissions(calCategoryHome, username) ;
     calCategoryHome.getSession().save() ;
   }
-
+  
+  private void reparePermissions(Node node, String owner) throws Exception {
+  	ExtendedNode extNode = (ExtendedNode)node ;
+  	if (extNode.canAddMixin("exo:privilegeable")) extNode.addMixin("exo:privilegeable");
+    String[] arrayPers = {PermissionType.READ, PermissionType.ADD_NODE, PermissionType.SET_PROPERTY, PermissionType.REMOVE} ;
+    extNode.setPermission(owner, arrayPers) ;
+    List<AccessControlEntry> permsList = extNode.getACL().getPermissionEntries() ;    
+    for(AccessControlEntry accessControlEntry : permsList) {
+      extNode.setPermission(accessControlEntry.getIdentity(), arrayPers) ;      
+    } 
+    extNode.removePermission("any") ;
+    
+  }
+  
   public CalendarCategory removeCalendarCategory(SessionProvider sProvider, String username, String calendarCategoryId) throws Exception {
     Node calCategoryHome = getCalendarCategoryHome(sProvider, username) ;
     Node calCategoryNode = calCategoryHome.getNode(calendarCategoryId) ; 
@@ -664,6 +678,7 @@ public class JCRDataStorage{
       eventCategoryNode = eventCategoryHome.addNode(eventCategory.getName(), "exo:eventCategory") ;
       name = eventCategory.getName() ;
       description = eventCategory.getDescription() ;
+      if(eventCategory.isDataInit()) reparePermissions(eventCategoryNode, username) ;
     }else {
       eventCategoryNode = eventCategoryHome.getNode(eventCategory.getName()) ;
       if(eventCategory.getName().equals(values[0])) {
@@ -738,18 +753,6 @@ public class JCRDataStorage{
     return getEventCategory(eventCategoryHome.getNode(eventCategoryName)) ;
   }
 
-  /*private List<EventCategory> getEventCategories(SessionProvider sProvider, String username, String calendarId) throws Exception {
-    Node calendarNode ; 
-    if(username != null) calendarNode = getCalendarHome(sProvider, username).getNode(calendarId) ;
-    else calendarNode = getCalendarHome(sProvider).getNode(calendarId) ;
-    NodeIterator iter = calendarNode.getNodes() ;
-    List<EventCategory> categories = new ArrayList<EventCategory> ();
-    while(iter.hasNext()) {
-      Node eventCat = iter.nextNode() ;
-      if(eventCat.isNodeType("exo:eventCategory")) categories.add(getEventCategory(eventCat)) ;
-    }
-    return categories ;
-  }*/
 //Event APIs
 
   public CalendarEvent getUserEvent(SessionProvider sProvider, String username, String calendarId, String eventId) throws Exception {

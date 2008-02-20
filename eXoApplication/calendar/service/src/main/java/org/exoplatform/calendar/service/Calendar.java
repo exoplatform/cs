@@ -80,6 +80,7 @@ public class Calendar {
   private String locale ;
   private String[] viewPermission ;
   private String[] editPermission ;
+  private boolean isDataInit = false ;
   
   private boolean isPublic = false ;
   private String categoryId ;
@@ -117,24 +118,18 @@ public class Calendar {
 
   public boolean isPublic() { return isPublic ; }
   public void setPublic(boolean isPublic) { this.isPublic = isPublic ; }
-  public void setTimeZone(String timeZone) {
-    this.timeZone = timeZone;
-  }
-  public String getTimeZone() {
-    return timeZone;
-  }
-  public void setLocale(String locale) {
-    this.locale = locale;
-  }
-  public String getLocale() {
-    return locale;
-  }
-  public void setCalendarColor(String calendarColor) {
-    this.calendarColor = calendarColor;
-  }
-  public String getCalendarColor() {
-    return calendarColor;
-  }
+  
+  public void setTimeZone(String timeZone) { this.timeZone = timeZone ; }
+  public String getTimeZone() { return timeZone ; }
+  
+  public void setLocale(String locale) { this.locale = locale ; }
+  public String getLocale() { return locale ; }
+  
+  public void setCalendarColor(String calendarColor) { this.calendarColor = calendarColor ; }
+  public String getCalendarColor() { return calendarColor ; }
+  
+	public void setDataInit(boolean isDataInit) {	this.isDataInit = isDataInit ; }
+	public boolean isDataInit() { return isDataInit ; }
   
   //public List<EventCategory> getEventCategories() { return eventCategories ; }
   //public void setEventCategories(List<EventCategory> evCate) { eventCategories = evCate ; }
