@@ -151,6 +151,10 @@ UICalendarDragDrop.prototype.synDragObjectPos = function(dndEvent) {
 
 UICalendarDragDrop.prototype.initCallback = function(dndEvent) {
   dndEvent.dragObject.style.top = '-1000px';
+  eXo.calendar.UICalendarDragDrop.pos = {
+    "x": dndEvent.dragObject.offsetLeft,
+    "y": dndEvent.dragObject.offsetTop
+  } ;
 } ;
 
 UICalendarDragDrop.prototype.dragCallback = function(dndEvent) {
@@ -186,6 +190,10 @@ UICalendarDragDrop.prototype.dragCallback = function(dndEvent) {
 } ;
 
 UICalendarDragDrop.prototype.dropCallback = function(dndEvent) {
+  if ((eXo.calendar.UICalendarDragDrop.pos.x == dndEvent.dragObject.offsetLeft) && (eXo.calendar.UICalendarDragDrop.pos.y == dndEvent.dragObject.offsetTop)) {
+    eXo.calendar.UICalendarDragDrop.pos = null ;
+    return ;
+  }
   // Re-find target
   var foundTarget = 
       eXo.core.DragDrop.findDropableTarget4Cal(dndEvent, eXo.core.DragDrop.dropableTargets, dndEvent.backupMouseEvent) ;

@@ -451,7 +451,7 @@ EventMan.prototype.cleanUp = function() {
       // Restore checkbox
       var checkBoxTmp = eventNode.getElementsByTagName('input')[0];
       if (checkBoxTmp) {
-        checkBoxTmp.style.display = null;
+        checkBoxTmp.style.display = '';
       }
       var bodyNode = eXo.core.DOMUtil.findAncestorByTagName(eventObj.rootNode, 'body');
       if (bodyNode) {
@@ -805,9 +805,9 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
       top = '0px';
       left = '0px';
     }
-    moreContainerNode.className = 'MoreContainer';
-    moreContainerNode.onmousemove = this.showMore;
-    moreContainerNode.onmouseout = this.hideMore;
+    moreContainerNode.className = 'MoreContainer' ;
+    moreContainerNode.onmousemove = this.showMore ;
+    moreContainerNode.onmouseout = this.hideMore ;
     // Create invisible event
     var cnt = 0
     for (var i=0; i<dayObj.invisibleGroup.length; i++) {
@@ -898,6 +898,7 @@ GUIMan.prototype.showMore = function() {
 
 
 GUIMan.prototype.hideMore = function() {
+  eXo.core.DOMUtil.listHideElements(this) ; return ;
   var GUIMan = eXo.calendar.UICalendarMan.GUIMan;
   /*
   if (!GUIMan.backupNode) {
