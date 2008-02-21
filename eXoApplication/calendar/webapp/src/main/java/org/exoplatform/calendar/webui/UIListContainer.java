@@ -30,8 +30,8 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
  */
 
 @ComponentConfig(
-    lifecycle = UIContainerLifecycle.class
-    // template =  "app:/templates/calendar/webui/UIListContainer.gtmpl"
+    //lifecycle = UIContainerLifecycle.class,
+    template =  "app:/templates/calendar/webui/UIListContainer.gtmpl"
 )
 public class UIListContainer extends UIContainer implements CalendarView {
   public UIListContainer() throws Exception {

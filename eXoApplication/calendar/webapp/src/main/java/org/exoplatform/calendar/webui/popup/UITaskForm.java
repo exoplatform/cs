@@ -113,7 +113,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   private SessionProvider getSystemSession() {
     return SessionProviderFactory.createSystemProvider() ;
   }
-  public void initForm(CalendarSetting calSetting, CalendarEvent eventCalendar) throws Exception {
+  public void initForm(CalendarSetting calSetting, CalendarEvent eventCalendar, String formTime) throws Exception {
     reset() ;
     UITaskDetailTab taskDetailTab = getChildById(TAB_TASKDETAIL) ;
     List<SelectItemOption<String>> fromTimes 
@@ -143,11 +143,15 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     } else {
       UIMiniCalendar miniCalendar = getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
       java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
-      cal.setTime(miniCalendar.getCurrentCalendar().getTime()) ;
-      int beginMinute = (cal.get(java.util.Calendar.MINUTE)/CalendarUtils.DEFAULT_TIMEITERVAL)*CalendarUtils.DEFAULT_TIMEITERVAL ;
-      cal.set(java.util.Calendar.MINUTE, beginMinute) ;
+      try {
+        cal.setTimeInMillis(Long.parseLong(formTime)) ;
+      } catch (Exception e)      {
+        cal.setTime(miniCalendar.getCurrentCalendar().getTime()) ;
+      }
+      Long beginMinute = (cal.get(java.util.Calendar.MINUTE)/calSetting.getTimeInterval())*calSetting.getTimeInterval() ;
+      cal.set(java.util.Calendar.MINUTE, beginMinute.intValue()) ;
       setEventFromDate(cal.getTime(), calSetting.getTimeFormat()) ;
-      cal.add(java.util.Calendar.MINUTE, CalendarUtils.DEFAULT_TIMEITERVAL*2) ;
+      cal.add(java.util.Calendar.MINUTE, (int)calSetting.getTimeInterval()*2) ;
       setEventToDate(cal.getTime(), calSetting.getTimeFormat()) ;
     }
   }

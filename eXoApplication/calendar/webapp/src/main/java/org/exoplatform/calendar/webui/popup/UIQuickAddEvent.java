@@ -116,12 +116,13 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     cal.setTime(miniCalendar.getCurrentCalendar().getTime());
     if(startTime != null) cal.setTimeInMillis(Long.parseLong(startTime)) ;
     else {
-      cal.set(java.util.Calendar.MINUTE, (cal.get(java.util.Calendar.MINUTE)/CalendarUtils.DEFAULT_TIMEITERVAL)*CalendarUtils.DEFAULT_TIMEITERVAL) ;
+      Long begingMinute = (cal.get(java.util.Calendar.MINUTE)/calendarSetting.getTimeInterval())*calendarSetting.getTimeInterval() ;
+      cal.set(java.util.Calendar.MINUTE, begingMinute.intValue()) ;
     }
     setEventFromDate(cal.getTime(), calendarSetting.getTimeFormat()) ;
     if(endTime != null ) cal.setTimeInMillis(Long.parseLong(endTime)) ; 
     else {
-      cal.add(java.util.Calendar.MINUTE, CalendarUtils.DEFAULT_TIMEITERVAL*2) ;
+      cal.add(java.util.Calendar.MINUTE, (int)calendarSetting.getTimeInterval()*2) ;
     }
     setEventToDate(cal.getTime(), calendarSetting.getTimeFormat()) ;
     //setSelectedCategory("Meeting") ;
@@ -327,7 +328,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         uiPouContainer.setId(UIPopupContainer.UIEVENTPOPUP) ;
         UIEventForm uiEventForm = uiPouContainer.addChild(UIEventForm.class, null, null) ;
         uiEventForm.update(uiForm.calType_, uiForm.getUIFormSelectBox(FIELD_CALENDAR).getOptions()) ;
-        uiEventForm.initForm(calendarSetting, null) ;
+        uiEventForm.initForm(calendarSetting, null, null) ;
         uiEventForm.setEventSumary(uiForm.getEventSummary()) ;
         uiEventForm.setEventDescription(uiForm.getEventDescription()) ;
         uiEventForm.setEventFromDate(uiForm.getEventFromDate(calendarSetting.getTimeFormat()),calendarSetting.getTimeFormat()) ;
@@ -341,7 +342,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         uiPouContainer.setId(UIPopupContainer.UITASKPOPUP) ;
         UITaskForm uiTaskForm = uiPouContainer.addChild(UITaskForm.class, null, null) ;
         uiTaskForm.update(uiForm.calType_, uiForm.getUIFormSelectBox(FIELD_CALENDAR).getOptions()) ;
-        uiTaskForm.initForm(calendarSetting, null) ;
+        uiTaskForm.initForm(calendarSetting, null, null) ;
         uiTaskForm.setEventSumary(uiForm.getEventSummary()) ;
         uiTaskForm.setEventDescription(uiForm.getEventDescription()) ;
         uiTaskForm.setEventFromDate(uiForm.getEventFromDate(calendarSetting.getTimeFormat()),calendarSetting.getTimeFormat()) ;

@@ -1,3 +1,13 @@
-<div class="UICalendarContainer" id="$uicomponent.id">
-	<%uicomponent.renderChildren()%>
+<%
+	import org.exoplatform.calendar.webui.UIListView ;
+	import org.exoplatform.calendar.webui.UIPreview ;
+%>
+<div class="UIListContainer" id="$uicomponent.id">
+	<div class="SpliterResizableListArea">
+		<%uicomponent.renderChild(UIListView.class)%>
+	</div>
+	<div class="ResizeReadingPane" onmousedown="eXo.cs.Spliter.doResize(event, this, document.getElementById('UIListUsers').parentNode,document.getElementById('UIPreview')) ;"><span></span></div>
+	<div class="SpliterResizableListArea">
+		<%uicomponent.renderChild(UIPreview.class)%>
+	</div>
 </div>

@@ -377,7 +377,7 @@ public class UICalendars extends UIForm  {
       popupAction.deActivate() ;
       popupAction.activate(UICalendarCategoryManager.class, 470) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
-      //event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarPortlet) ;
     }
   }
 

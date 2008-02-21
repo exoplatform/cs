@@ -7,12 +7,12 @@
 						<div class="Title ControlButton">
 							<%=_ctx.appRes(uicomponent.id + ".label.QuickAdd")%>
 						</div>
-						<a href="javascript:void(0) ;" onclick="eXo.calendar.UICalendarPortlet.runAction(this)" actionLink="<%=uicomponent.event("QuickAddEvent","Event")%>" onclick="" class="ControlButton">
+						<a href="javascript:void(0) ;" onclick="eXo.calendar.UICalendarPortlet.runAction(this)" actionLink="<%=uicomponent.event('QuickAddEvent','Event')%>" class="ControlButton">
 							<div class="IconHolder QuickAddEvent">
 								<%=_ctx.appRes(uicomponent.id + ".label.Event")%>
 							</div>
 						</a>
-						<a href="javascript:void(0) ;" onclick="eXo.calendar.UICalendarPortlet.runAction(this)" actionLink="<%=uicomponent.event("QuickAddEvent","Task")%>" class="ControlButton">
+						<a href="javascript:void(0) ;" onclick="eXo.calendar.UICalendarPortlet.runAction(this)" actionLink="<%=uicomponent.event('QuickAddEvent','Task')%>" class="ControlButton">
 							<div class="IconHolder AddNewTask">
 								<%=_ctx.appRes(uicomponent.id + ".label.Task")%>
 							</div>

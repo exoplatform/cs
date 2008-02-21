@@ -1,11 +1,11 @@
 @import url("UIFeed/Stylesheet.css") ;
 @import url("UIAddressForm/Stylesheet.css");
 @import url("UIEventForm/Stylesheet.css");
+
 /************************ UIPopup Calendar *********************/
 
 .UICalendarPortlet .UIPopupWindow .PopupContent {
 	background: #f3f3f3;
-/*	padding: 10px;*/
 }
 
 /********************* UIAttachFileForm ***************************/

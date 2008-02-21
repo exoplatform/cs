@@ -1,3 +1,4 @@
+
 @import url("skinIcons/16x16/Stylesheet.css") ;
 @import url("UICombobox/Stylesheet.css");
 @import url("UIPopup/Stylesheet.css");
@@ -7,6 +8,7 @@
 @import url("UISearchForm/Stylesheet.css");
 @import url("UIMiniCalendar/Stylesheet.css");
 @import url("UICalendars/Stylesheet.css");
+
 /*=========================== MailBanner ==================================*/
 
 .UIWindow .UICalendarPortlet {
@@ -61,7 +63,7 @@
   background: url('background/SeparatorLine2x1.gif') repeat-y ;	
   height: 18px; width: 2px;
 }
-.UICalendarContainer {
+.UICalendarPortlet .UICalendarContainer {
 	float: left;
 	width: 225px;
 	padding: 8px;
@@ -173,7 +175,7 @@
 .SandyBrown {background-color: #F4A460;}    
 .SeaGreen {background-color: #2E8B57;}    
 .SeaShell {background-color: #FFF5EE;}    
-.Sienna {background-color: #A0522D; color:#fff;}    
+.Sienna {background-color: #A0522D;}    
 .Silver {background-color: #C0C0C0;}    
 .SkyBlue {background-color: #87CEEB;}
 .Thistle {background-color: #D8BFD8;}    
