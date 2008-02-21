@@ -1140,16 +1140,16 @@ UICalendarPortlet.prototype.swapMenu = function(oldmenu, clickobj) {
   var DOMUtil = eXo.core.DOMUtil ;
 	var Browser = eXo.core.Browser ;
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
-	var portlet = DOMUtil.findAncestorByClass(document.getElementById(UICalendarPortlet.portletName), "UIResizableBlock") ; //.parentNode.parentNode ;
   var uiDesktop = document.getElementById("UIPageDesktop") ;
-  var uiWindow = DOMUtil.findAncestorByClass(portlet, "UIWindow") ;
   var uiWorkSpaceWidth = (document.getElementById("UIControlWorkspace"))? document.getElementById("UIControlWorkspace").offsetWidth : 0 ;
 	uiWorkSpaceWidth = (document.all) ? 2*uiWorkSpaceWidth : uiWorkSpaceWidth ;
   var menuX = Browser.findPosX(clickobj) - uiWorkSpaceWidth ;
-	var menuY = Browser.findPosY(clickobj) + clickobj.offsetHeight -  portlet.scrollTop ;
+	var menuY = Browser.findPosY(clickobj) + clickobj.offsetHeight ;
   if(uiDesktop) {
+  	var portlet = DOMUtil.findAncestorByClass(document.getElementById(UICalendarPortlet.portletName), "UIResizableBlock") ;
+    var uiWindow = DOMUtil.findAncestorByClass(portlet, "UIWindow") ;
     menuX = menuX - uiWindow.offsetLeft ;
-    menuY = menuY - uiWindow.offsetTop ;
+    menuY = menuY - uiWindow.offsetTop  -  portlet.scrollTop ;
   }
   if(document.getElementById("tmpMenuElement")) DOMUtil.removeElement(document.getElementById("tmpMenuElement")) ;
 	var tmpMenuElement = oldmenu.cloneNode(true) ;
