@@ -28,7 +28,6 @@ import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UITags;
-import org.exoplatform.contact.webui.UIWorkingContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -198,8 +197,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       if(uiContacts.isDisplaySearchResult())uiContacts.setContact(uiTagForm.contacts_, true) ;     	
       
       uiContacts.updateList() ;
-      UITags uiTags = uiContactPortlet.findFirstComponentOfType(UITags.class) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiTags) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet.findFirstComponentOfType(UITags.class)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
       uiContactPortlet.cancelAction() ;  
     }
@@ -234,10 +232,26 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       if (!ContactUtils.isEmpty(selectedTag)) {
         uiContacts.setContacts(contactService.getContactPageListByTag(
             SessionProviderFactory.createSystemProvider(), username, selectedTag)) ;
-      } else {
-        uiContacts.updateList() ;
       }
-      event.getRequestContext().addUIComponentToUpdateByAjax(contactPortlet.getChild(UIWorkingContainer.class)) ;
+      if(uiContacts.isDisplaySearchResult() || 
+          (ContactUtils.isEmpty(uiContacts.getSelectedGroup()) && ContactUtils.isEmpty(uiContacts.getSelectedTag()))) {
+        List<Contact> contacts = new ArrayList<Contact>() ;
+        for (String contactId : contactIds) {
+          Contact contact = uiContacts.getContactMap().get(contactId) ;
+          String[] oldTag = contact.getTags() ;
+          List<String> newTags = new ArrayList<String>() ;
+          for (String tag : oldTag) {
+            if (!checkedTags.contains(tag)) newTags.add(tag) ;
+          }
+             
+          contact.setTags(newTags.toArray(new String[] {})) ;
+          contacts.add(contact) ;
+        }
+        uiContacts.setContact(contacts, true) ;
+      }
+      uiContacts.updateList() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiTags) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
       contactPortlet.cancelAction() ; 
     }
   }

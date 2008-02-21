@@ -17,7 +17,7 @@
 package org.exoplatform.contact.webui.popup;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -51,7 +51,7 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 public class UICategorySelect extends UIForm {
   public static final String INPUT_CATEGORY = "categoryInput";
   public static final String FIELD_CATEGORY = "category";
-  private Map<String, String> privateGroupMap_ = new HashMap<String, String>() ;
+  private Map<String, String> privateGroupMap_ = new LinkedHashMap<String, String>() ;
   
   public UICategorySelect() { }
   

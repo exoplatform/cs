@@ -107,8 +107,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   public static String jobTitle = "jobTitle".intern() ;
   private boolean isSearchResult = false ;
   private boolean defaultNameSorted = true ;
-  
-  
+ 
   public UIContacts() throws Exception { } 
   public String[] getActions() { return new String[] {"Cancel"} ; }
   public void activate() throws Exception { }
@@ -331,14 +330,25 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }    
+      ContactUtils.getContactService().addTag(
+          SessionProviderFactory.createSystemProvider(), ContactUtils.getCurrentUser(), contactIds, tagId);
       
-      ContactService contactService = ContactUtils.getContactService(); 
-      contactService.addTag(SessionProviderFactory.createSystemProvider(), ContactUtils.getCurrentUser(), contactIds, tagId);
-      if(uiContacts.isDisplaySearchResult()) {
+      // when select shared contacts 
+      if(uiContacts.isDisplaySearchResult() || (ContactUtils.isEmpty(
+          uiContacts.getSelectedGroup()) && ContactUtils.isEmpty(uiContacts.getSelectedTag()))) {
         List<Contact> contacts = new ArrayList<Contact>() ;
         for (String contactId : contactIds) {
           Contact contact = uiContacts.contactMap.get(contactId) ;
-          contact.setTags(new String[] {tagId}) ;
+          String[] tags = contact.getTags() ;
+          if (tags != null && tags.length > 1) {
+            List<String> newTags = new ArrayList<String>() ;
+            for (String tag : tags) newTags.add(tag) ;
+            newTags.add(tagId) ;
+            contact.setTags(newTags.toArray(new String[] {})) ;
+          }
+          else {
+            contact.setTags(new String[] {tagId}) ;
+          }
           contacts.add(contact) ;
         }
         uiContacts.setContact(contacts, true) ;
@@ -372,7 +382,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       Map<String, Contact> movedContacts = new HashMap<String, Contact>() ;
       for (String id : contactIds) {
         Contact contact = uiContacts.contactMap.get(id) ;
-        if (contact.getContactType().equals(JCRDataStorage.PUBLIC)) {
+        if (contact.getContactType().equals(JCRDataStorage.PUBLIC)
+            || contact.getContactType().equals(JCRDataStorage.SHARED)) {
           uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-move", null
               , ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -409,12 +420,12 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       }
       for(String contactId : contactIds) {
       	Contact contact = uiContacts.contactMap.get(contactId) ;
-        if (contact.getContactType().equals(JCRDataStorage.PUBLIC)) {
+        if (contact.getContactType().equals(JCRDataStorage.PUBLIC) || contact.getContactType().equals(JCRDataStorage.SHARED)){
           uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-move", null
               , ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
-        }        
+        }
       	if(contact != null) {
       		contact.setAddressBook(addressBooks) ;
       		contacts.add(contact) ;
@@ -628,21 +639,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         
         if(type != null)
           pageList = ContactUtils.getContactService().getContactPageListByGroup(
-            SessionProviderFactory.createSystemProvider(),ContactUtils.getCurrentUser(), filter, type) ;
-        /*}else {
-        	pageList = ContactUtils.getContactService().getContactPageListByGroup(
-            SessionsUtils.getSessionProvider(),  ContactUtils.getCurrentUser(), filter, isPublic) ;
-        }*/
-//        
-//        if (pageList == null || pageList.getAll().size() == 0)
-//          pageList = 
-        
-        /*List<Contact> contacts = pageList.getAll() ;
-        for (Contact contact : contacts) {
-          System.out.println("\n\n c :" + contact.getFullName() + "\n\n");
-        }*/
-        
-      } else {      //if (!ContactUtils.isEmpty(uiContacts.getSelectedTag())) {
+            SessionProviderFactory.createSystemProvider(),ContactUtils.getCurrentUser(), filter, type) ; 
+      } else {      //selected group = null ;
           pageList = uiContacts.pageList_ ;
           if (pageList != null) {
             List<Contact> contacts = new ArrayList<Contact>() ;

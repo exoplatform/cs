@@ -134,8 +134,12 @@ public class ContactServiceImpl implements ContactService {
   public void removeSharedAddressBook(SessionProvider sProvider, String username, String addressBookId) throws Exception {
   	storage_.removeSharedAddressBook(sProvider, username, addressBookId) ;
   }
-  public void saveContactToSharedAddressBook(SessionProvider sProvider, String username, String addressBookId, Contact contact, boolean isNew) throws Exception {
-  	storage_.saveContactToSharedAddressBook(sProvider, username, addressBookId, contact, isNew) ;
+  public void saveContactToSharedAddressBook(String username, String addressBookId, Contact contact, boolean isNew) throws Exception {
+  	storage_.saveContactToSharedAddressBook(username, addressBookId, contact, isNew) ;
+  }
+  
+  public void saveSharedContact(String username, Contact contact) throws Exception  {
+    storage_.saveSharedContact(username, contact) ;
   }
   
   public Contact getSharedContacts(SessionProvider sProvider, String username, String contactId) throws Exception {

@@ -26,6 +26,7 @@ import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.impl.JCRDataStorage;
+import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContactPreview;
 import org.exoplatform.contact.webui.UIContacts;
@@ -377,17 +378,23 @@ public class UIContactForm extends UIFormTabPane {
       String category = uiCategorySelect.getSelectedCategory();
       
       // hoang quang hung edit
-      if (isNew || !contact.getContactType().equals(JCRDataStorage.PUBLIC)) contact.setAddressBook(new String[] { category });
-      
       if (isNew) {
+        contact.setAddressBook(new String[] { category });
         contactService.saveContact(sessionProvider, username, contact, true);
       } else {
         String contactType = contact.getContactType() ;
-        if (contactType.equals("0")) {
+        if (contactType.equals(JCRDataStorage.PRIVATE)) {
           contactService.saveContact(sessionProvider, username, contact, false) ;
-        } else if (contactType.equals("1")) {
-          contactService.saveContactToSharedAddressBook(
-              sessionProvider, username, contact.getAddressBook()[0], contact, false) ;
+        } else if (contactType.equals(JCRDataStorage.SHARED)) {
+          // contact of private has only 1 addressbook ;
+          UIAddressBooks uiAddressBooks = uiContactForm
+            .getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class) ;
+          if (uiAddressBooks.getSharedGroups().containsKey(contact.getAddressBook()[0])) {
+            contactService.saveContactToSharedAddressBook(
+                username, contact.getAddressBook()[0], contact, false) ;
+          } else {
+            contactService.saveSharedContact(username, contact) ;
+          }  
         } else {          
           contactService.savePublicContact(contact, false) ;
         }
