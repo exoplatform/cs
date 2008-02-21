@@ -1,6 +1,7 @@
 if(!eXo.cs){
 	eXo.cs = {} ;
 }
+/********************* Checkbox Manager ******************/
 function CheckBox() {
 } ;
 
@@ -27,8 +28,7 @@ CheckBox.prototype.checkAll = function() {
 	CheckBox.checkedItem = (checked) ? len : 0 ;
 	for(var i = 0 ; i < len ; i ++) {
 		items[i].checked = checked ;
-	}
-	
+	}	
 } ;
 
 CheckBox.prototype.check = function() {
@@ -47,32 +47,39 @@ CheckBox.prototype.check = function() {
 
 eXo.cs.CheckBox = new CheckBox() ;
 
-/***************************************************************************************/
+/********************* Pane Spliter ******************/
 
 function Spliter() {
 } ;
 
-Spliter.prototype.doResize = function(e , markerobj, beforeAreaObj, afterAreaObj) {
+//Spliter.prototype.doResize = function(e , markerobj, beforeAreaObj, afterAreaObj) {
+Spliter.prototype.doResize = function(e , markerobj) {  
   _e = (window.event) ? window.event : e ;
+  var DOMUtil = eXo.core.DOMUtil ;
   this.posY = _e.clientY; 
   var marker = (typeof(markerobj) == "string")? document.getElementById(markerobj):markerobj ;
-  if (beforeAreaObj) {
-    this.beforeArea = (typeof(beforeAreaObj) == "string")? document.getElementById(beforeAreaObj):beforeAreaObj ;
-  }
-  
-  if (!this.beforeArea) {
-    this.beforeArea = eXo.core.DOMUtil.findPreviousElementByTagName(marker, "div") ;
-  }
-  
-  if (afterAreaObj) {
-    this.afterArea = (typeof(afterAreaObj) == "string")? document.getElementById(afterAreaObj):afterAreaObj ;
-  }
-  
-  if (!this.afterArea) {
-    this.afterArea = eXo.core.DOMUtil.findNextElementByTagName(marker, "div") ;
-  }
-  //this.beforeArea.style.height = (this.beforeArea.offsetHeight - 1) + "px" ;
-  //this.afterArea.style.height = (this.afterArea.offsetHeight - 1) + "px" ;
+  var container = marker.parentNode ;
+  var areas = DOMUtil.findDescendantsByClass(container, "div", "SpliterResizableListArea") ;
+  if(areas.length < 2) return ;
+  this.beforeArea = areas[0] ;
+  this.afterArea = areas[1] ;
+//  if (beforeAreaObj) {
+//    this.beforeArea = (typeof(beforeAreaObj) == "string")? document.getElementById(beforeAreaObj):beforeAreaObj ;
+//  }
+//  
+//  if (!this.beforeArea) {
+//    this.beforeArea = eXo.core.DOMUtil.findPreviousElementByTagName(marker, "div") ;
+//  }
+//  
+//  if (afterAreaObj) {
+//    this.afterArea = (typeof(afterAreaObj) == "string")? document.getElementById(afterAreaObj):afterAreaObj ;
+//  }
+//  
+//  if (!this.afterArea) {
+//    this.afterArea = eXo.core.DOMUtil.findNextElementByTagName(marker, "div") ;
+//  }
+  this.beforeArea.style.height = (this.beforeArea.offsetHeight - 1) + "px" ;
+  this.afterArea.style.height = (this.afterArea.offsetHeight - 1) + "px" ;
   this.beforeArea.style.overflowY = "auto" ;
   this.afterArea.style.overflowY = "auto" ;
   this.minHeight = 30 ;
@@ -90,9 +97,8 @@ Spliter.prototype.adjustHeight = function(evt) {
   var beforeHeight = Spliter.beforeY + delta ;
   if (beforeHeight <= 0  || afterHeight <= 0) return ;
   
-  Spliter.beforeArea.style.height =  (beforeHeight < Spliter.minHeight) ? Spliter.minHeight : beforeHeight + "px" ;
-  Spliter.afterArea.style.height =  (afterHeight < Spliter.minHeight) ? Spliter.minHeight : afterHeight + "px" ;
-  
+  Spliter.beforeArea.style.height =  beforeHeight + "px" ;
+  Spliter.afterArea.style.height =  afterHeight + "px" ;
 } ;
 
 Spliter.prototype.clear = function() {
@@ -107,6 +113,10 @@ Spliter.prototype.clear = function() {
     Spliter.posY = null ;
   } catch(e) {} ;
 } ;
+
+eXo.cs.Spliter = new Spliter() ;
+
+/********************* Utility function for CS ******************/
 
 function Utils() {}
 
@@ -134,7 +144,7 @@ Utils.prototype.getKeynum = function(event) {
     keynum = event.keyCode ;
   }
   return keynum ;
-}
+} ;
 
 Utils.prototype.captureInput = function(input, action) {
   if(typeof(input) == "string") input = document.getElementById(input) ;
@@ -155,9 +165,22 @@ Utils.prototype.onEnter = function(evt) {
 
 Utils.prototype.cancelSubmit = function() {
   return false ;
-}
+} ;
 
 eXo.cs.Utils = new Utils() ;
 
+/********************* Scroll Manager ******************/
 
-eXo.cs.Spliter = new Spliter() ;
+function UINavigation() {
+  
+} ;
+
+UINavigation.prototype.loadScroll = function() {
+  
+} ;
+
+UINavigation.prototype.initScroll = function() {
+  
+} ;
+
+eXo.cs.UINavigation = new UINavigation() ;

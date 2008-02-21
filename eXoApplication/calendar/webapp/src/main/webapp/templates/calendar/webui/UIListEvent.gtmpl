@@ -48,7 +48,7 @@
 				</body>
 			</table>
 		</div>
-	<div class="UIListView">
+	<div class="UIListView SpliterResizableListArea">
 		<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
   		<thead>
   			<tr>

@@ -111,7 +111,7 @@
 					<div style="clear: both;"><span></span></div>
 				</div>
 	
-				<div class="UIMessageList" >
+				<div class="UIMessageList  SpliterResizableListArea">
 					<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
 	  				<thead>
 	  					<tr>

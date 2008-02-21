@@ -7,7 +7,7 @@
 
 %>
 
-<div class="UIContactPreview" id="<%=uicomponent.getId()%>">
+<div class="UIContactPreview SpliterResizableListArea" id="<%=uicomponent.getId()%>">
 <% if(contact != null) { %>	
 	<div class="ContactPreviewBar" >
 		<div class="Subject">Contact Details</div>

@@ -666,7 +666,11 @@ UIResizeEvent.prototype.resizeCallback = function(evt) {
 } ;
 
 /* for drag and drop */
-
+/*
+ * 
+ * @param {Object} obj : DOM element
+ * This function to reset z-Index of DOM element
+ */
 UICalendarPortlet.prototype.resetZIndex = function(obj) {
 	try{		
 	var maxZIndex = parseInt(obj.style.zIndex) ;
@@ -683,7 +687,11 @@ UICalendarPortlet.prototype.resetZIndex = function(obj) {
 		//alert(e.message) ;
 	}
 } ;
-
+/*
+ * 
+ * @param {Object} evt : Event Object
+ * This function to initialize drag and drop actions
+ */
 UICalendarPortlet.prototype.initDND = function(evt) {
 	var _e = window.event || evt ;
 	_e.cancelBubble = true ;
@@ -697,6 +705,11 @@ UICalendarPortlet.prototype.initDND = function(evt) {
 	UICalendarPortlet.dragContainer.onmousemove = UICalendarPortlet.dragStart ;
 	UICalendarPortlet.dragContainer.onmouseup = UICalendarPortlet.dragEnd ;
 } ;
+/*
+ * 
+ * @param {Object} evt : Event Object
+ * This function to process when dragging object 
+ */
 UICalendarPortlet.prototype.dragStart = function(evt) {
 	var _e = window.event || evt ;
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
@@ -1127,7 +1140,7 @@ UICalendarPortlet.prototype.swapMenu = function(oldmenu, clickobj) {
   var DOMUtil = eXo.core.DOMUtil ;
 	var Browser = eXo.core.Browser ;
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
-	var portlet = document.getElementById(UICalendarPortlet.portletName).parentNode ;
+	var portlet = DOMUtil.findAncestorByClass(document.getElementById(UICalendarPortlet.portletName), "UIResizableBlock") ; //.parentNode.parentNode ;
   var uiDesktop = document.getElementById("UIPageDesktop") ;
   var uiWindow = DOMUtil.findAncestorByClass(portlet, "UIWindow") ;
   var uiWorkSpaceWidth = (document.getElementById("UIControlWorkspace"))? document.getElementById("UIControlWorkspace").offsetWidth : 0 ;
@@ -1138,7 +1151,7 @@ UICalendarPortlet.prototype.swapMenu = function(oldmenu, clickobj) {
     menuX = menuX - uiWindow.offsetLeft ;
     menuY = menuY - uiWindow.offsetTop ;
   }
-  if(document.getElementById("tmpMenuElement")) document.getElementById(UICalendarPortlet.portletName).removeChild(document.getElementById("tmpMenuElement")) ;
+  if(document.getElementById("tmpMenuElement")) DOMUtil.removeElement(document.getElementById("tmpMenuElement")) ;
 	var tmpMenuElement = oldmenu.cloneNode(true) ;
 	tmpMenuElement.setAttribute("id","tmpMenuElement") ;
 	UICalendarPortlet.menuElement = tmpMenuElement ;
