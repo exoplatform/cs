@@ -78,6 +78,7 @@ public class UIModeratorManagementForm extends UIForm implements UIPopupComponen
   
   @SuppressWarnings("unused")
   private List<UserProfile> getListProFileUser() throws Exception {
+  	System.out.println("\n\n==> GetListPro");
   	List<User> listUser = getListUser() ;
   	this.userProfiles = new ArrayList<UserProfile>();
   	for (User user : listUser) {

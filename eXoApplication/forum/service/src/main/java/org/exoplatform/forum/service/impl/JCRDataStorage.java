@@ -1083,6 +1083,7 @@ public class JCRDataStorage{
 			newProfileNode = userProfileNode.getNode(userName) ;
 				if(newProfileNode.hasProperty("exo:userId"))userProfile.setUserId(userName);
 				if(newProfileNode.hasProperty("exo:userTitle"))userProfile.setUserTitle(newProfileNode.getProperty("exo:userTitle").getString());
+				if(newProfileNode.hasProperty("exo:userRole"))userProfile.setUserRole(newProfileNode.getProperty("exo:userRole").getLong());
 				if(newProfileNode.hasProperty("exo:signature"))userProfile.setSignature(newProfileNode.getProperty("exo:signature").getString());
 				if(newProfileNode.hasProperty("exo:totalPost"))userProfile.setTotalPost(newProfileNode.getProperty("exo:totalPost").getLong());
 				if(newProfileNode.hasProperty("exo:totalTopic"))userProfile.setTotalTopic(newProfileNode.getProperty("exo:totalTopic").getLong());
@@ -1107,6 +1108,7 @@ public class JCRDataStorage{
 				if(newProfileNode.hasProperty("exo:isBanned"))userProfile.setIsBanned(newProfileNode.getProperty("exo:isBanned").getBoolean());
 				if(newProfileNode.hasProperty("exo:banUntil"))userProfile.setBanUntil(newProfileNode.getProperty("exo:banUntil").getLong());
 				if(newProfileNode.hasProperty("exo:banReason"))userProfile.setBanReason(newProfileNode.getProperty("exo:banReason").getString());
+				if(newProfileNode.hasProperty("exo:banCounter"))userProfile.setBanCounter(Integer.parseInt(newProfileNode.getProperty("exo:banCounter").getString()));
 				if(newProfileNode.hasProperty("exo:banReasonSummary"))userProfile.setBanReasonSummary(ValuesToStrings(newProfileNode.getProperty("exo:banReasonSummary").getValues()));
 				if(newProfileNode.hasProperty("exo:createdDateBan"))userProfile.setCreatedDateBan(newProfileNode.getProperty("exo:createdDateBan").getDate().getTime());
 			}
@@ -1128,11 +1130,12 @@ public class JCRDataStorage{
 			newProfileNode.setProperty("exo:totalPost", 0);
 			newProfileNode.setProperty("exo:totalTopic", 0);
 			newProfileNode.setProperty("exo:readTopic", new String[]{});
-			if(newUserProfile.getUserRole() >= 2) {
-				newProfileNode.setProperty("exo:userRole", 2);
-				newUserProfile.setUserTitle("Register User");
-			}
+			newUserProfile.setUserTitle("Register User");
 		}
+		if(newUserProfile.getUserRole() >= 2) {
+			newUserProfile.setUserRole((long)2);
+		}
+			newProfileNode.setProperty("exo:userRole", newUserProfile.getUserRole());
 			newProfileNode.setProperty("exo:userTitle", newUserProfile.getUserTitle());
 			newProfileNode.setProperty("exo:signature", newUserProfile.getSignature());
 			
@@ -1146,7 +1149,6 @@ public class JCRDataStorage{
 			newProfileNode.setProperty("exo:isDisplayAvatar", newUserProfile.getIsDisplayAvatar());
 		//UserOption
 		if(isOption) {
-			System.out.println("==========> isOption");
 			newProfileNode.setProperty("exo:timeZone", newUserProfile.getTimeZone());
 			newProfileNode.setProperty("exo:shortDateformat", newUserProfile.getShortDateFormat());
 			newProfileNode.setProperty("exo:longDateformat", newUserProfile.getLongDateFormat());
@@ -1157,7 +1159,6 @@ public class JCRDataStorage{
 		}
 		//UserBan
 		if(isBan){
-			System.out.println("==========> isBan");
 			if(newProfileNode.hasProperty("exo:isBanned")) {
 				if(!newProfileNode.getProperty("exo:isBanned").getBoolean() && newUserProfile.getIsBanned()) {
 					newProfileNode.setProperty("exo:createdDateBan", GregorianCalendar.getInstance() );
@@ -1168,7 +1169,7 @@ public class JCRDataStorage{
 			newProfileNode.setProperty("exo:isBanned", newUserProfile.getIsBanned());
 			newProfileNode.setProperty("exo:banUntil", newUserProfile.getBanUntil());
 			newProfileNode.setProperty("exo:banReason", newUserProfile.getBanReason());
-			newProfileNode.setProperty("exo:banCounter", newUserProfile.getBanCounter());
+			newProfileNode.setProperty("exo:banCounter", "" + newUserProfile.getBanCounter());
 			newProfileNode.setProperty("exo:banReasonSummary", newUserProfile.getBanReasonSummary());
 		}
 		userProfileNode.getSession().save() ;
@@ -1279,7 +1280,7 @@ public class JCRDataStorage{
 			linkData = new ForumLinkData() ;
 			Node cateNode = iter.nextNode() ;
 			linkData.setId(cateNode.getName());
-			linkData.setName("&nbsp; &nbsp; " + cateNode.getProperty("exo:name").getString() + "/categoryLink");
+			linkData.setName(cateNode.getProperty("exo:name").getString());
 			linkData.setType("category");
 			linkData.setPath(cateNode.getName());
 			forumLinks.add(linkData) ;
@@ -1292,14 +1293,31 @@ public class JCRDataStorage{
 					linkData = new ForumLinkData() ;
 					Node forumNode = (Node) iterForum.nextNode();
 					linkData.setId(forumNode.getName());
-					linkData.setName("&nbsp; &nbsp; &nbsp; &nbsp; " + forumNode.getProperty("exo:name").getString() + "/forumLink");
+					linkData.setName(forumNode.getProperty("exo:name").getString());
 					linkData.setType("forum");
 					linkData.setPath(cateNode.getName() + "/" + forumNode.getName());
 					forumLinks.add(linkData) ;
+					{
+						NodeIterator iterTopic = forumNode.getNodes() ;
+						while (iterTopic.hasNext()) {
+							linkData = new ForumLinkData() ;
+							Node topicNode = (Node) iterTopic.nextNode();
+							linkData.setId(topicNode.getName());
+							linkData.setName(topicNode.getProperty("exo:name").getString());
+							linkData.setType("topic");
+							linkData.setPath(cateNode.getName() + "/" + forumNode.getName() + "/" + topicNode.getName());
+							forumLinks.add(linkData) ;
+						}
+					}
 				}
 			}
 		}
 		return forumLinks ;
 	}
-
 }
+
+
+
+
+
+

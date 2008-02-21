@@ -204,7 +204,7 @@ public class UIForumForm extends UIForm implements UIPopupComponent {
 			String[] setPostable = uiForm.splitForForum(uiForm.getUIStringInput(FIELD_POSTABLE_INPUT).getValue()) ; 
 			Boolean	ModerateTopic = (Boolean) uiForm.getUIFormCheckBoxInput(FIELD_MODERATETHREAD_CHECKBOX).getValue();
 			Boolean	ModeratePost = (Boolean) uiForm.getUIFormCheckBoxInput(FIELD_MODERATEPOST_CHECKBOX).getValue();
-			
+			if(forumOrder == null || forumOrder.length() <= 0) forumOrder = "0";
 			String userName = ForumSessionUtils.getCurrentUser() ;
 			Forum newForum = new Forum();
 			newForum.setForumName(forumTitle);

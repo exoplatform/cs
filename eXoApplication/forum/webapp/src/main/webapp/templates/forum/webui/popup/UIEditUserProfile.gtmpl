@@ -1,8 +1,10 @@
 <%  
+	import org.exoplatform.forum.service.ForumLinkData ;
 	import org.exoplatform.web.application.JavascriptManager;
   def rcontext = _ctx.getRequestContext() ;
   JavascriptManager jsmanager = rcontext.getJavascriptManager();
   jsmanager.addJavascript("eXo.forum.UIForumPortlet.setEnableInput();");
+  jsmanager.addJavascript("eXo.forum.UIForumPortlet.setMenuTextAreaMutil('UIUserProfileForm');");
 %>
 <div class="UIEditUserProfile UIForumForm">	
   <% uiform.begin() %>  
@@ -74,5 +76,70 @@
 				</tr>
 	 	  </table> 
     </div>
+		<div id="PopupMenuTextAreaMulil">
+		<% /*Begin Popup Menu*/
+		String []temp = ["ModForums", "MosTopics"]; 
+		List forumLink = uiform.getForumLinks() ;
+		for(tp in temp) {
+		%>
+			<div class="ChildPopupMenu" id="Add${tp}">
+				<div class="UIPopupCategory" style="display: none;">
+					<div class="PopupCategoryDecorator">
+				
+						<div class="UIRightClickPopupMenu" style="display: block;">
+							<div class="UIContextMenuContainer">
+								<div class="TopLeftRightClickPopupMenu">
+									<div class="TopRightRightClickPopupMenu">
+										<div class="TopCenterRightClickPopupMenu"><span></span></div>
+									</div>
+								</div>
+								<div class="MiddleLeftRightClickPopupMenu">
+									<div class="MiddleRightRightClickPopupMenu">
+										<div class="UIRightPopupMenuContainer">
+											<div class="ContentItems">
+											<% 
+											for(link in forumLink) {
+												if(link.getType().equals("forum") && tp.equals("ModForums") || link.getType().equals("topic") && tp.equals("MosTopics")) {
+												String item = link.getName().trim();
+												String id = link.getId() ;
+											%>
+												 <div class="MenuItem" style="overflow:auto;">
+												 	<div style="float:left; padding: 3px 4px 3px 10px;">
+												 		<input type="checkbox" class="checkbox" value="false" name="$id"/>
+												 	</div>	 
+													<div class="ItemIcon classIconItem">$item dadsa</div>
+												 </div>
+											<% } 
+											 }
+											%>
+											<div class="UIActionForum" style="width: 50px; margin:auto;">
+												<div class="NormalButtom" onclick="eXo.forum.UIForumPortlet.onclickAddMenuTextAreaMutil(this, '$tp');">
+													<div class="ButtonLeft">
+														<div class="ButtonRight">
+															<div class="ButtonMiddle">
+															 <div style="text-align: center;"><a>Add</a></div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="BottomLeftRightClickPopupMenu">
+								<div class="BottomRightRightClickPopupMenu">
+									<div class="BottomCenterRightClickPopupMenu"><span></span></div>
+								</div>
+							</div>
+							</div>
+						</div>
+					</div>
+				
+				</div>
+			</div>
+			<% } %>
+			<% /*End Popup Menu*/ %>
+		</div>			
   <%uiform.end()%>
 </div>

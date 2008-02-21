@@ -48,12 +48,16 @@ public class UIForumLinks extends UIForm {
 	private ForumService forumService =	(ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
 	public static final String FIELD_FORUMLINK_SELECTBOX = "forumLink" ;
 	private String path	= "";
+	List<ForumLinkData> forumLinks = null;
 	public UIForumLinks() throws Exception {
-		List<ForumLinkData> forumLinks = forumService.getAllLink(ForumSessionUtils.getSystemProvider());
+		this.forumLinks = forumService.getAllLink(ForumSessionUtils.getSystemProvider());
 		List<SelectItemOption<String>> list = new ArrayList<SelectItemOption<String>>() ;
 		list.add(new SelectItemOption<String>("Forum Home Page/hompage", "ForumService")) ;
+		String space = "&nbsp; &nbsp; ", type = "/categoryLink"; 
 		for(ForumLinkData linkData : forumLinks) {
-			list.add(new SelectItemOption<String>(linkData.getName(), linkData.getPath())) ;
+			if(linkData.getType().equals("forum")) {type = "/forumLink"; space = space + space ;}
+			if(linkData.getType().equals("topic")) break ;
+			list.add(new SelectItemOption<String>(space + linkData.getName() + type, linkData.getPath())) ;
 		}
 		UIFormSelectBoxForum forumLink = new UIFormSelectBoxForum(FIELD_FORUMLINK_SELECTBOX, FIELD_FORUMLINK_SELECTBOX, list) ;
 		forumLink.setDefaultValue("ForumService");
@@ -64,8 +68,12 @@ public class UIForumLinks extends UIForm {
 		return	findComponentById(name) ;
 	}
 	
+	public List<ForumLinkData> getForumLinks() throws Exception {
+	  return this.forumLinks ;
+  }
+	
 	public void setUpdateForumLinks() throws Exception {
-		List<ForumLinkData> forumLinks = forumService.getAllLink(ForumSessionUtils.getSystemProvider());
+		this.forumLinks = forumService.getAllLink(ForumSessionUtils.getSystemProvider());
 		List<SelectItemOption<String>> list = new ArrayList<SelectItemOption<String>>() ;
 		list.add(new SelectItemOption<String>("Forum Home Page;hompage", "ForumService")) ;
 		for(ForumLinkData linkData : forumLinks) {

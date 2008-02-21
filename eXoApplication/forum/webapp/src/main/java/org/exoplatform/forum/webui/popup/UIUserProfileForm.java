@@ -17,17 +17,21 @@
 package org.exoplatform.forum.webui.popup;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.apache.log4j.varia.FallbackErrorHandler;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.forum.ForumFormatUtils;
+import org.exoplatform.forum.ForumSessionUtils;
+import org.exoplatform.forum.service.ForumLinkData;
+import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.UserProfile;
-import org.exoplatform.forum.webui.UIFormSelectBoxForum;
+import org.exoplatform.forum.webui.UIFormTextAreaMultilInput;
+import org.exoplatform.forum.webui.UIForumLinks;
+import org.exoplatform.forum.webui.UIForumPortlet;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -79,14 +83,15 @@ public class UIUserProfileForm extends UIForm implements UIPopupComponent {
 	public static final String FIELD_TIMEZONE = "timeZone" ;
 	
 	public static final String FIELD_ISBANNED_CHECKBOX = "IsBanned" ;
-	public static final String FIELD_BANUNTIL_INPUT = "BanUntil" ;
+	public static final String FIELD_BANUNTIL_SELECTBOX = "BanUntil" ;
 	public static final String FIELD_BANREASON_TEXTAREA = "BanReason" ;
 	public static final String FIELD_BANCOUNTER_INPUT = "BanCounter" ;
 	public static final String FIELD_BANREASONSUMMARY_MULTIVALUE = "BanReasonSummary" ;
 	public static final String FIELD_CREATEDDATEBAN_INPUT = "CreatedDateBan" ;
 
-	
+	private ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
 	private UserProfile userProfile = new UserProfile();
+	List<ForumLinkData> forumLinks = null;
 	public UIUserProfileForm() {	  
   }
 	
@@ -97,6 +102,7 @@ public class UIUserProfileForm extends UIForm implements UIPopupComponent {
 	
 	@SuppressWarnings({ "unchecked", "deprecation" })
   private void initUserProfileForm() throws Exception {
+		this.setForumLinks();
 		List<SelectItemOption<String>> list ;
 		UIFormStringInput userId = new UIFormStringInput(FIELD_USERID_INPUT, FIELD_USERID_INPUT, null);
 		userId.setValue(this.userProfile.getUserId());
@@ -108,12 +114,17 @@ public class UIUserProfileForm extends UIForm implements UIPopupComponent {
 		list.add(new SelectItemOption<String>("Register User", "id2")) ;
 		UIFormSelectBox userRole = new UIFormSelectBox(FIELD_USERROLE_SELECTBOX, FIELD_USERROLE_SELECTBOX, list) ;
 		userRole.setValue("id" + this.userProfile.getUserRole());
+		System.out.println("\n===================> id" + this.userProfile.getUserRole());
 		UIFormTextAreaInput signature = new UIFormTextAreaInput(FIELD_SIGNATURE_TEXTAREA, FIELD_SIGNATURE_TEXTAREA, null);
 		signature.setValue(this.userProfile.getSignature());
-		UIFormCheckBoxInput isDisplaySignature = new UIFormCheckBoxInput<Boolean>(FIELD_ISDISPLAYSIGNATURE_CHECKBOX, FIELD_ISDISPLAYSIGNATURE_CHECKBOX, this.userProfile.getIsDisplaySignature());
-		UIFormTextAreaInput moderateForums = new UIFormTextAreaInput(FIELD_MODERATEFORUMS_MULTIVALUE, FIELD_MODERATEFORUMS_MULTIVALUE, null);
-		UIFormTextAreaInput moderateTopics = new UIFormTextAreaInput(FIELD_MODERATETOPICS_MULTIVALUE, FIELD_MODERATETOPICS_MULTIVALUE, null);
-		UIFormCheckBoxInput isDisplayAvatar = new UIFormCheckBoxInput<Boolean>(FIELD_ISDISPLAYAVATAR_CHECKBOX, FIELD_ISDISPLAYAVATAR_CHECKBOX, this.userProfile.getIsDisplayAvatar());
+		UIFormCheckBoxInput isDisplaySignature = new UIFormCheckBoxInput<Boolean>(FIELD_ISDISPLAYSIGNATURE_CHECKBOX, FIELD_ISDISPLAYSIGNATURE_CHECKBOX, false);
+		isDisplaySignature.setChecked(this.userProfile.getIsDisplaySignature()) ;
+		UIFormTextAreaMultilInput moderateForums = new UIFormTextAreaMultilInput(FIELD_MODERATEFORUMS_MULTIVALUE, FIELD_MODERATEFORUMS_MULTIVALUE, null);
+		moderateForums.setValue(ForumFormatUtils.unSplitForForum(userProfile.getModerateForums()));
+		UIFormTextAreaMultilInput moderateTopics = new UIFormTextAreaMultilInput(FIELD_MODERATETOPICS_MULTIVALUE, FIELD_MODERATETOPICS_MULTIVALUE, null);
+		moderateTopics.setValue(ForumFormatUtils.unSplitForForum(userProfile.getModerateTopics()));
+		UIFormCheckBoxInput isDisplayAvatar = new UIFormCheckBoxInput<Boolean>(FIELD_ISDISPLAYAVATAR_CHECKBOX, FIELD_ISDISPLAYAVATAR_CHECKBOX, false);
+		isDisplayAvatar.setChecked(this.userProfile.getIsDisplayAvatar()) ;
 		//Option
 		String []timeZone1 = getLabel(FIELD_TIMEZONE).split("/") ;
 		list = new ArrayList<SelectItemOption<String>>() ;
@@ -169,17 +180,25 @@ public class UIUserProfileForm extends UIForm implements UIPopupComponent {
 		UIFormSelectBox maximumPosts = new UIFormSelectBox(FIELD_MAXPOSTS_SELECTBOX, FIELD_MAXPOSTS_SELECTBOX, list) ;
 		maximumPosts.setValue("id" + userProfile.getMaxPostInPage());
 		boolean isJump = userProfile.getIsShowForumJump() ;
-		UIFormCheckBoxInput isShowForumJump = new UIFormCheckBoxInput<Boolean>(FIELD_FORUMJUMP_CHECKBOX, FIELD_FORUMJUMP_CHECKBOX, isJump);
-		isShowForumJump.setChecked(isJump) ;
+		UIFormCheckBoxInput isShowForumJump = new UIFormCheckBoxInput<Boolean>(FIELD_FORUMJUMP_CHECKBOX, FIELD_FORUMJUMP_CHECKBOX, false);
+		isShowForumJump.setChecked(isJump);
 		//Ban
-		UIFormCheckBoxInput isBanned = new UIFormCheckBoxInput<Boolean>(FIELD_ISBANNED_CHECKBOX, FIELD_ISBANNED_CHECKBOX, this.userProfile.getIsBanned());
+		UIFormCheckBoxInput isBanned = new UIFormCheckBoxInput<Boolean>(FIELD_ISBANNED_CHECKBOX, FIELD_ISBANNED_CHECKBOX, false);
 		boolean isBan = userProfile.getIsBanned() ;
-		isBanned.setValue(isBan) ;
+		isBanned.setChecked(isBan) ;
 		list = new ArrayList<SelectItemOption<String>>() ;
 		String dv = "Days";
 		int i = 2;
-		date.setDate(date.getDate() + 1) ;
-		list.add(new SelectItemOption<String>("1 Day ("+ForumFormatUtils.getFormatDate("MM-dd-yyyy hh:mm a", date)+")", "Day_1")) ;
+		long oneDate = 86400000, until ;
+		if(isBan){
+			until = userProfile.getBanUntil() ;
+			date.setTime(until) ;
+			list.add(new SelectItemOption<String>("Banned until: " + ForumFormatUtils.getFormatDate(userProfile.getShortDateFormat()+ " hh:mm a", date), ("Until_" + until))) ;
+		}
+		date = new Date();
+		until = date.getTime() + oneDate;
+		date.setTime(until);
+		list.add(new SelectItemOption<String>("1 Day ("+ForumFormatUtils.getFormatDate(userProfile.getShortDateFormat()+ " hh:mm a", date)+")", "Until_" + until)) ;
 		while(true) {
 			if(i == 8 && dv.equals("Days")) i = 10;
 			if(i == 11) {i = 2; dv = "Weeks";}
@@ -188,30 +207,28 @@ public class UIUserProfileForm extends UIForm implements UIPopupComponent {
 			if(i == 7 && dv.equals("Months")){i = 1; dv = "Year" ;}
 			if(i == 2 && dv.equals("Year")){dv = "Years" ;}
 			if(i == 3 && dv.equals("Years")){break;}
-			if(dv.equals("Weeks")){ date = new Date(); date.setDate(date.getDate() + i*7) ;}
-			if(dv.equals("Days")){ date = new Date(); date.setDate(date.getDate() + i) ;}
-			if(dv.equals("Month")||dv.equals("Months")){ date = new Date(); date.setMonth(date.getMonth() + i) ;}
-			if(dv.equals("Years")||dv.equals("Year")){ date = new Date(); date.setYear(date.getYear() + i) ;}
-			list.add(new SelectItemOption<String>(i+" "+dv+" ("+ForumFormatUtils.getFormatDate("MM-dd-yyyy hh:mm a", date)+")", (dv + "_"+i) )) ;
+			if(dv.equals("Days")){ date = new Date(); until = date.getTime() + i*oneDate ; date.setTime(until);}
+			if(dv.equals("Weeks")){ date = new Date();until = date.getTime() + i*oneDate*7; date.setTime(until);}
+			if(dv.equals("Month")||dv.equals("Months")){ date = new Date(); date.setMonth(date.getMonth() + i) ; until = date.getTime();}
+			if(dv.equals("Years")||dv.equals("Year")){ date = new Date(); date.setYear(date.getYear() + i) ; until = date.getTime();}
+			list.add(new SelectItemOption<String>(i+" "+dv+" ("+ForumFormatUtils.getFormatDate(userProfile.getShortDateFormat()+ " hh:mm a", date)+")", ("Until_" + until))) ;
 			++i;
 		}
-		
-		UIFormSelectBox banUntil = new UIFormSelectBox(FIELD_BANUNTIL_INPUT,FIELD_BANUNTIL_INPUT, list) ;
-		
-		
+		UIFormSelectBox banUntil = new UIFormSelectBox(FIELD_BANUNTIL_SELECTBOX,FIELD_BANUNTIL_SELECTBOX, list) ;
+		if(isBan) {
+			banUntil.setValue("Until_" + userProfile.getBanUntil()) ;
+		}
 		
 		UIFormTextAreaInput banReason = new UIFormTextAreaInput(FIELD_BANREASON_TEXTAREA, FIELD_BANREASON_TEXTAREA, null);
 		UIFormStringInput banCounter = new UIFormStringInput(FIELD_BANCOUNTER_INPUT, FIELD_BANCOUNTER_INPUT, null) ;
 		banCounter.setValue(userProfile.getBanCounter() + "");
 		UIFormTextAreaInput banReasonSummary = new UIFormTextAreaInput(FIELD_BANREASONSUMMARY_MULTIVALUE, FIELD_BANREASONSUMMARY_MULTIVALUE, null);
-		banReasonSummary.setValue(userProfile.getBanReasonSummary().toString());
+		banReasonSummary.setValue(ForumFormatUtils.unSplitForForum(userProfile.getBanReasonSummary()));
 		UIFormStringInput createdDateBan = new UIFormStringInput(FIELD_CREATEDDATEBAN_INPUT, FIELD_CREATEDDATEBAN_INPUT, null) ;
 		if(isBan) {
-//			banUntil.setValue("" + userProfile.getBanUntil());
 			banReason.setValue(userProfile.getBanReason());
 			createdDateBan.setValue(ForumFormatUtils.getFormatDate("MM/dd/yyyy, hh:mm a",userProfile.getCreatedDateBan()));
 		} else {
-//			banUntil.setEnable(true);
 			banReason.setEnable(true);
 		}
 		
@@ -244,20 +261,28 @@ public class UIUserProfileForm extends UIForm implements UIPopupComponent {
 		inputSetBan.addUIFormInput(banReasonSummary);
 		inputSetBan.addUIFormInput(createdDateBan);
 		addUIFormInput(inputSetBan);
-		
 	}
 	
-	
-	public void activate() throws Exception {
+	private void setForumLinks() throws Exception {
+		this.forumLinks = this.getAncestorOfType(UIForumPortlet.class).getChild(UIForumLinks.class).getForumLinks() ;
+		if(forumLinks.size() <= 0) {
+			this.forumService.getAllLink(ForumSessionUtils.getSystemProvider());
+		}
 	}
-
-	public void deActivate() throws Exception {
-	  // TODO Auto-generated method stub
+	
+	@SuppressWarnings("unused")
+  private List<ForumLinkData> getForumLinks() throws Exception {
+	  return this.forumLinks ;
   }
+	
+	public void activate() throws Exception {}
+	public void deActivate() throws Exception {}
 	
 	static  public class SaveActionListener extends EventListener<UIUserProfileForm> {
     public void execute(Event<UIUserProfileForm> event) throws Exception {
     	UIUserProfileForm uiForm = event.getSource() ;
+    	UserProfile userProfile = uiForm.userProfile ;
+    	
     	UIFormInputWithActions inputSetProfile = uiForm.getChildById(FIELD_USERPROFILE_FORM) ;
     	String userTitle = inputSetProfile.getUIStringInput(FIELD_USERTITLE_INPUT).getValue() ;
     	long userRole = Long.parseLong(inputSetProfile.getUIFormSelectBox(FIELD_USERROLE_SELECTBOX).getValue().substring(2));
@@ -267,21 +292,88 @@ public class UIUserProfileForm extends UIForm implements UIPopupComponent {
     		if(userRole == 2) userTitle = "Register User" ;
     	}
     	String signature = inputSetProfile.getUIFormTextAreaInput(FIELD_SIGNATURE_TEXTAREA).getValue() ;
-    	Boolean isDisplaySignature = (Boolean)inputSetProfile.getUIFormCheckBoxInput(FIELD_ISDISPLAYSIGNATURE_CHECKBOX).getValue() ;
+      boolean isDisplaySignature = (Boolean)inputSetProfile.getUIFormCheckBoxInput(FIELD_ISDISPLAYSIGNATURE_CHECKBOX).getValue() ;
+    	String moderateForum = inputSetProfile.getUIFormTextAreaInput(FIELD_MODERATEFORUMS_MULTIVALUE).getValue() ;
+    	String []moderateForums ;
+    	if(moderateForum != null && moderateForum.length() > 0) {
+    		moderateForums = ForumFormatUtils.splitForForum(moderateForum) ;
+    	} else {
+    		moderateForums = userProfile.getModerateForums() ;
+    	}
+    	String moderateTopic = inputSetProfile.getUIFormTextAreaInput(FIELD_MODERATETOPICS_MULTIVALUE).getValue() ;
+    	String []moderateTopics ;
+    	System.out.println("\n===========>moderateForum: " +moderateTopic);
+    	if(moderateTopic != null && moderateTopic.length() > 0) {
+    		moderateTopics = ForumFormatUtils.splitForForum(moderateTopic) ;
+    	} else {
+    		moderateTopics = userProfile.getModerateForums() ;
+    	}
     	Boolean isDisplayAvatar = (Boolean)inputSetProfile.getUIFormCheckBoxInput(FIELD_ISDISPLAYAVATAR_CHECKBOX).getValue() ;
     	
     	UIFormInputWithActions inputSetOption = uiForm.getChildById(FIELD_USEROPTION_FORM) ;
+    	double timeZone = Double.parseDouble(inputSetOption.getUIFormSelectBox(FIELD_TIMEZONE_SELECTBOX).getValue());
+    	String shortDateFormat = inputSetOption.getUIFormSelectBox(FIELD_SHORTDATEFORMAT_SELECTBOX).getValue();
+    	String longDateFormat = inputSetOption.getUIFormSelectBox(FIELD_LONGDATEFORMAT_SELECTBOX).getValue();
+    	String timeFormat = inputSetOption.getUIFormSelectBox(FIELD_TIMEFORMAT_SELECTBOX).getValue();
     	long maxTopic = Long.parseLong(inputSetOption.getUIFormSelectBox(FIELD_MAXTOPICS_SELECTBOX).getValue().substring(2)) ;
 			long maxPost = Long.parseLong(inputSetOption.getUIFormSelectBox(FIELD_MAXPOSTS_SELECTBOX).getValue().substring(2)) ;
-			double timeZone = Double.parseDouble(inputSetOption.getUIFormSelectBox(FIELD_TIMEZONE_SELECTBOX).getValue());
-			String shortDateFormat = inputSetOption.getUIFormSelectBox(FIELD_SHORTDATEFORMAT_SELECTBOX).getValue();
-			String longDateFormat = inputSetOption.getUIFormSelectBox(FIELD_LONGDATEFORMAT_SELECTBOX).getValue();
-			String timeFormat = inputSetOption.getUIFormSelectBox(FIELD_TIMEFORMAT_SELECTBOX).getValue();
-			boolean isJump = (Boolean)inputSetOption.getUIFormCheckBoxInput(FIELD_FORUMJUMP_CHECKBOX).getValue() ;
+			boolean isShowForumJump = (Boolean)inputSetOption.getUIFormCheckBoxInput(FIELD_FORUMJUMP_CHECKBOX).getValue() ;
 			
     	UIFormInputWithActions inputSetBan = uiForm.getChildById(FIELD_USERBAN_FORM) ;
-    	boolean isBanned = (Boolean)inputSetProfile.getUIFormCheckBoxInput(FIELD_ISBANNED_CHECKBOX).getValue() ;
+    	boolean isBanned = (Boolean)inputSetBan.getUIFormCheckBoxInput(FIELD_ISBANNED_CHECKBOX).getValue() ;
+    	String until = inputSetBan.getUIFormSelectBox(FIELD_BANUNTIL_SELECTBOX).getValue() ;
+    	long banUntil = 0;
+    	if(until != null && until.length() > 0) {
+    		banUntil = Long.parseLong(until.substring(6));
+    	}
+    	String banReason = inputSetBan.getUIFormTextAreaInput(FIELD_BANREASON_TEXTAREA).getValue() ;
+    	String banReasonSummarys =  ForumFormatUtils.unSplitForForum(userProfile.getBanReasonSummary());
+    	Date date = new Date();
+    	int banCounter = 0;
+    	date.setTime(banUntil) ;
+    	if(banReasonSummarys != null && banReasonSummarys.length() > 0){
+    		if(isBanned) {
+    			banReasonSummarys = banReasonSummarys + 
+    			"Ban Reason: " + banReason + " From Date: " + (ForumFormatUtils.getFormatDate("MM-dd-yyyy hh:mm a", new Date())) + 
+    			" To Date: " + ForumFormatUtils.getFormatDate("MM-dd-yyyy hh:mm a", date) + ";";
+    			banCounter = userProfile.getBanCounter() + 1;
+    		}
+    	} else {
+    		if(isBanned) {
+    			banReasonSummarys = "Ban Reason: " + banReason + " From Date: " + (ForumFormatUtils.getFormatDate("MM-dd-yyyy hh:mm a", new Date())) + 
+    			" To Date: " + ForumFormatUtils.getFormatDate("MM-dd-yyyy hh:mm a", date) + ";";
+    			banCounter = 1;
+    		}
+    	}
+    	System.out.println(userRole + " \n\nfsf dfopsd f\n => " + userTitle + "\nfsdd  : " + isDisplaySignature);
+    	String []banReasonSummary = ForumFormatUtils.splitForForum(banReasonSummarys);
     	
+    	userProfile.setUserTitle(userTitle);
+    	userProfile.setUserRole(userRole) ;
+    	userProfile.setSignature(signature);
+    	userProfile.setIsDisplaySignature(isDisplaySignature);
+    	userProfile.setModerateForums(moderateForums);
+    	userProfile.setModerateTopics(moderateTopics);
+    	userProfile.setIsDisplayAvatar(isDisplayAvatar);
+    	
+    	userProfile.setTimeZone(timeZone);
+    	userProfile.setShortDateFormat(shortDateFormat);
+    	userProfile.setLongDateFormat(longDateFormat) ;
+    	userProfile.setTimeFormat(timeFormat);
+    	userProfile.setMaxPostInPage(maxPost);
+    	userProfile.setMaxTopicInPage(maxTopic);
+    	userProfile.setIsShowForumJump(isShowForumJump) ;
+    	
+    	userProfile.setIsBanned(isBanned) ;
+    	userProfile.setBanUntil(banUntil) ;
+    	userProfile.setBanReason(banReason);
+    	userProfile.setBanCounter(banCounter);
+    	userProfile.setBanReasonSummary(banReasonSummary);
+    	try {
+    		uiForm.forumService.saveUserProfile(ForumSessionUtils.getSystemProvider(), userProfile, true, true) ;
+      } catch (Exception e) {
+      	e.printStackTrace() ;
+      }
     	UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
 			popupContainer.getChild(UIPopupAction.class).deActivate() ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
@@ -296,8 +388,4 @@ public class UIUserProfileForm extends UIForm implements UIPopupComponent {
 			event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
     }
   }
-	
-	
-	
-	
 }

@@ -211,6 +211,7 @@ UIForumPortlet.prototype.goLastPost = function(idLastPost) {
 
 UIForumPortlet.prototype.setEnableInput = function() {
 	var parend = document.getElementById("ForumUserBan") ;
+	var DOMUtil = eXo.core.DOMUtil ;
 	if(parend) {
 		var obj = eXo.core.DOMUtil.findFirstDescendantByClass(parend, "input", "checkbox") ;
 		if(obj) {
@@ -219,7 +220,7 @@ UIForumPortlet.prototype.setEnableInput = function() {
 			document.getElementById("BanReasonSummary").disabled = "disabled" ;
 			document.getElementById("CreatedDateBan").disabled = "disabled" ;
 			if(!obj.checked) {
-				var selectbox = eXo.core.DOMUtil.findFirstDescendantByClass(parend, "select", "selectbox") ;
+				var selectbox = DOMUtil.findFirstDescendantByClass(parend, "select", "selectbox") ;
 				selectbox.disabled = "disabled" ;
 				var banReason = document.getElementById("BanReason");
 				banReason.disabled = "disabled" ;
@@ -237,11 +238,54 @@ UIForumPortlet.prototype.setEnableInput = function() {
 	}
 } ;
 
+UIForumPortlet.prototype.setMenuTextAreaMutil = function(ParendId) {
+	var ancestor = document.getElementById(ParendId) ;
+	if(ancestor) {
+		var DOMUtil = eXo.core.DOMUtil ;
+		var childrens = DOMUtil.findDescendantsByClass(ancestor, "div", "TextAreaMultil") ;
+		var parendOldMenu = document.getElementById("PopupMenuTextAreaMulil") ;
+		var oldPopupMenu = DOMUtil.findDescendantsByClass(parendOldMenu, "div", "ChildPopupMenu") ;
+		var textAreas = DOMUtil.findDescendantsByClass(ancestor, "textarea", "textareaMultil") ;
+		for(var i=0; i < childrens.length; ++i) {
+			if(oldPopupMenu.length > i) {
+				if(childrens[i].getAttribute('id') === oldPopupMenu[i].getAttribute('id')) {
+					childrens[i].innerHTML = oldPopupMenu[i].innerHTML ;
+					oldPopupMenu[i].innerHTML = "";
+					childrens[i].onclick = eXo.forum.UIForumPortlet.cancel ;
+					for(var j=0; j<textAreas.length; ++j){
+						if(childrens[i].getAttribute('id').indexOf(textAreas[j].getAttribute('id')) > 0) {
+							var inputs = childrens[i].getElementsByTagName("input");
+							for(var t=0;t<inputs.length;++t) {
+								if(textAreas[j].value.indexOf(inputs[t].name) > 0) {
+									inputs[t].checked = true ;
+								}
+							}
+							break ;
+						}
+					}
+				}
+			}
+		}
+	}
+};
 
-
-
-
-
+UIForumPortlet.prototype.onclickAddMenuTextAreaMutil = function(obj, textAreaId) {
+	var ancestor = eXo.core.DOMUtil.findAncestorByClass(obj, "ContentItems") ;
+	var inputs = ancestor.getElementsByTagName("input");
+	var itemIcons = eXo.core.DOMUtil.findDescendantsByClass(ancestor, "div", "ItemIcon") ;
+	var textArea = document.getElementById(textAreaId);
+	var textAreaValues = textArea.value ;
+	var values = textAreaValues.split(';');
+	var value = "";
+	textAreaValues = ""; 
+	for(var i=0; i < inputs.length; ++i) {
+		if(inputs[i].checked) {
+			value = itemIcons[i].innerHTML + "(" + inputs[i].name + ");" + '\n';
+			textAreaValues = textAreaValues + value ;
+		} 
+	}
+	textArea.value = textAreaValues ;
+};
 
 
 

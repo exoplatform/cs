@@ -317,3 +317,11 @@
 .UIForumPortlet .SetUnStickIcon {
 	background: url('icons/StickThreadsIcon.gif') no-repeat left center;
 }
+
+.UIForumPortlet .AddIcon16x16 {
+	float: left ;
+	width: 16px;	height: 16px;
+	margin: 0px 0px 0px 6px;
+	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/BlueCirclePlus.gif') no-repeat center;
+	cursor: pointer;
+}

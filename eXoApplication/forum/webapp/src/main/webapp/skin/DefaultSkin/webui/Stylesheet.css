@@ -248,3 +248,39 @@
 	padding: 8px 5px;
 	background: #ededf7 ;
 }
+
+.UIForumPortlet .TextAreaMultil {
+	position: relative ;
+}
+
+.UIForumPortlet .TextAreaMultil .UIPopupCategory{
+	top : 18px;
+	left: 15px;
+}
+
+.UIForumPortlet .TextAreaMultil .UIRightClickPopupMenu .ItemIcon {
+  padding: 3px 0px 3px 10px;
+}
+
+.UIForumPortlet .TextAreaMultil .UIRightClickPopupMenu .MenuItem {
+  width: 194px;
+  max-height: 120px;
+  overflow-y: auto ;
+}
+
+
+.UIForm .HorizontalLayout .textareaMultil {
+	font-size:11px;
+	height:75px;
+	width:232px;
+}
+
+
+
+
+
+
+
+
+
+

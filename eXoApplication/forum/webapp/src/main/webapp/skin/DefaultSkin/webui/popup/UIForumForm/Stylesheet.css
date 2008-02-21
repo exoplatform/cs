@@ -31,13 +31,6 @@
 	padding: 5px;
 }
 
-.UIForumForm .ForumPermission .AddIcon16x16 {
-	width: 16px; height: 16px;
-	margin: 0px 0px 0px 250px;
-	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/BlueCirclePlus.gif') ;
-	cursor: pointer;
-}
-
 .UIForumForm .ForumPermission input {
 	float: left ;
 }

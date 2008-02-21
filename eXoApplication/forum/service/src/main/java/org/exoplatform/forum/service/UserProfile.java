@@ -82,7 +82,7 @@ public class UserProfile {
 	public void setUserTitle(String userTitle) {this.userTitle = userTitle;}
 	public String getUserTitle() {return this.userTitle ;}
 	
-	public void setUserRole(Long userGruops) {this.userRole = userGruops;}
+	public void setUserRole(Long userRole) {this.userRole = userRole;}
 	public Long getUserRole() {return this.userRole ;}
 	
 	public void setSignature(String signature) {this.signature = signature;}

@@ -27,7 +27,6 @@ import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.forum.service.ForumAttachment;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.services.jcr.access.SystemIdentity;
 import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.OrganizationService;
@@ -97,10 +96,7 @@ public class ForumSessionUtils {
   
   @SuppressWarnings("unchecked")
   public static PageList getPageListUser() throws Exception {
-    OrganizationService organizationService = (OrganizationService) PortalContainer
-        .getComponent(OrganizationService.class);
-    // OrganizationService organizationService =
-    // getApplicationComponent(OrganizationService.class) ;
+    OrganizationService organizationService = (OrganizationService) PortalContainer.getComponent(OrganizationService.class);
     return organizationService.getUserHandler().getUserPageList(0);
   }
   

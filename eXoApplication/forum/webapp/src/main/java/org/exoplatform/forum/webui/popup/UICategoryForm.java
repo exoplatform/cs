@@ -99,6 +99,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
 			String description = uiForm.getUIFormTextAreaInput(FIELD_DESCRIPTION_TEXTAREA).getValue();
 			String userPrivate = uiForm.getUIStringInput(FIELD_USERPRIVATE_INPUT).getValue();
 			String userName = ForumSessionUtils.getCurrentUser();
+			if(categoryOrder == null || categoryOrder.length() <= 0) categoryOrder = "0";
 			Category cat = new Category();
 			cat.setOwner(userName) ;
 			cat.setCategoryName(categoryTitle.trim()) ;
