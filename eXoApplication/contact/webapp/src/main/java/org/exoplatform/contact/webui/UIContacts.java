@@ -452,6 +452,36 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     }
   }
   
+  static public class CopyContactActionListener extends EventListener<UIContacts> {
+    public void execute(Event<UIContacts> event) throws Exception {
+      UIContacts uiContacts = event.getSource() ;
+      String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
+      List<String> checkedContact = new ArrayList<String>() ; 
+      if (!ContactUtils.isEmpty(contactId)) {
+        checkedContact.add(contactId) ;
+      } else {
+        checkedContact =  uiContacts.getCheckedContacts() ;
+        if (checkedContact.size() < 1) {
+          UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-required", null,
+              ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;        
+        }
+      }
+      UIAddressBooks uiAddressBooks = uiContacts.getAncestorOfType(
+          UIWorkingContainer.class).findFirstComponentOfType(UIAddressBooks.class) ;     
+      uiAddressBooks.setCopyAddress(null) ;
+      List<Contact> copyContacts = new ArrayList<Contact>();
+      for (String contact : checkedContact) {
+        copyContacts.add(uiContacts.contactMap.get(contact)) ;
+      }  
+      uiAddressBooks.setCopyContacts(copyContacts) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBooks) ;
+    }
+  }
+  
+  
   static public class DeleteContactsActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource();
@@ -719,28 +749,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     }
   }
   
-  static public class CopyContactActionListener extends EventListener<UIContacts> {
-    public void execute(Event<UIContacts> event) throws Exception {
-      UIContacts uiContacts = event.getSource() ;
-      UIAddressBooks uiAddressBooks = uiContacts.getAncestorOfType(
-          UIWorkingContainer.class).findFirstComponentOfType(UIAddressBooks.class) ;     
-      uiAddressBooks.setCopyAddress(null) ;
-      List<String> checkedContact = uiContacts.getCheckedContacts() ;
-      if (checkedContact.size() < 1) {
-        UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-required", null,
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;        
-      }
-      List<Contact> copyContacts = new ArrayList<Contact>();
-      for (String contactId : checkedContact) {
-        copyContacts.add(uiContacts.contactMap.get(contactId)) ;
-      }  
-      uiAddressBooks.setCopyContacts(copyContacts) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBooks) ;
-    }
-  }
+
  
   static public class SendEmailActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {

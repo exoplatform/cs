@@ -1178,6 +1178,7 @@ public class JCRDataStorage{
         }
       }
     } catch (PathNotFoundException e) { }
+
     Node sharedAddressBookMock = getSharedAddressBook(username) ;
     PropertyIterator iter = sharedAddressBookMock.getReferences() ;
     Node addressBook ;      
@@ -1498,6 +1499,48 @@ public class JCRDataStorage{
       contacts.add(getContact(itpublic.nextNode(), PUBLIC)) ;
     }
     //share contacts
+    try {
+      Node sharedContact = getSharedContact(username) ;      
+      PropertyIterator iter = sharedContact.getReferences() ;
+      while(iter.hasNext()) {
+        try{
+          Node sharedContactHomeNode = iter.nextProperty().getParent().getParent() ;
+          
+          //System.out.println("\n\n share :" + sharedContactHomeNode.getPath() + "\n\n");
+          filter.setAccountPath(sharedContactHomeNode.getPath()) ;
+          qm = sharedContactHomeNode.getSession().getWorkspace().getQueryManager() ;      
+          query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
+          NodeIterator it = query.execute().getNodes() ;
+          while(it.hasNext()) {
+            contacts.add(getContact(it.nextNode(), SHARED)) ;        
+          }
+        }catch(Exception e){
+          e.printStackTrace() ;
+        }
+      }
+    } catch (PathNotFoundException e) { }
+    /*
+    
+    Node sharedAddressBookMock = getSharedAddressBook(username) ;
+    PropertyIterator iter = sharedAddressBookMock.getReferences() ;
+    Node addressBook ;      
+    while(iter.hasNext()) {
+      addressBook = iter.nextProperty().getParent() ;
+
+      Node contactHomeNode = addressBook.getParent().getParent().getNode(CONTACTS) ;
+      queryString = new StringBuffer("/jcr:root" + contactHomeNode.getPath() 
+          + "//element(*,exo:contact)[@exo:tags='").
+          append(tagId).
+          append("']");
+      query = qm.createQuery(queryString.toString(), Query.XPATH);
+      result = query.execute();
+      it = result.getNodes();    
+      while (it.hasNext()) {
+        contacts.add(getContact(it.nextNode(), SHARED));        
+      }
+    }
+    */
+    /*
     Node sharedAddressBookHome = getSharedAddressBookHome(SessionProvider.createSystemProvider()) ;
     if(sharedAddressBookHome.hasNode(username)) {
       Node userNode = sharedAddressBookHome.getNode(username) ;
@@ -1515,6 +1558,7 @@ public class JCRDataStorage{
         }
       }      
     }
+    */
     return new DataPageList(contacts, 10, null, false) ;    
   }
 
@@ -1637,12 +1681,14 @@ public class JCRDataStorage{
     if (destType.equals(PRIVATE)) {
       for (Contact contact : contacts) {
         contact.setId("Contact" + IdGenerator.generate()) ;
+        contact.setOwnerId(null) ;
         contact.setAddressBook(new String[] {destAddress}) ;
         saveContact(sProvider, username, contact, true) ;         
       }      
     } else if (destType.equals(SHARED)) {
       for (Contact contact : contacts) {
         contact.setId("Contact" + IdGenerator.generate()) ;
+        contact.setOwnerId(null) ;
         contact.setAddressBook(new String[] {destAddress}) ;
         saveContactToSharedAddressBook(username, destAddress, contact, true) ;
       }
