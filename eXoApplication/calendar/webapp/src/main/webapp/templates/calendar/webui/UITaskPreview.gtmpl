@@ -9,7 +9,7 @@ df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
 CalendarEvent task = uicomponent.getEvent() ;		
 uiform.begin() ;
 %>
-	<div class="UIPreview SpliterResizableListArea" id="<%=uicomponent.getId()%>">
+	<div class="UIPreview SpliterResizableListArea">
 	<%if(!uicomponent.isShowPopup()){%>
 		<div class="ViewBar">
 			<div class="Label">
