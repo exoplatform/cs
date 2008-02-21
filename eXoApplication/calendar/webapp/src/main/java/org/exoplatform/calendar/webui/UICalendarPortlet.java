@@ -52,7 +52,7 @@ public class UICalendarPortlet extends UIPortletApplication {
   
   public CalendarSetting getCalendarSetting() throws Exception{
     if(calendarSetting_ != null ) return calendarSetting_ ;
-    calendarSetting_ = CalendarUtils.getCalendarService().getCalendarSetting(SessionProviderFactory.createSystemProvider(), CalendarUtils.getCurrentUser()) ; 
+    calendarSetting_ = CalendarUtils.getCalendarService().getCalendarSetting(SessionProviderFactory.createSessionProvider(), CalendarUtils.getCurrentUser()) ; 
     return calendarSetting_ ; 
   }
   public void setCalendarSetting(CalendarSetting setting) throws Exception{

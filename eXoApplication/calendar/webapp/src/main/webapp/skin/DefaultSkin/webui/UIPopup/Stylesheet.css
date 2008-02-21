@@ -1,7 +1,3 @@
-@import url("UIFeed/Stylesheet.css") ;
-@import url("UIAddressForm/Stylesheet.css");
-@import url("UIEventForm/Stylesheet.css");
-
 /************************ UIPopup Calendar *********************/
 
 .UICalendarPortlet .UIPopupWindow .PopupContent {

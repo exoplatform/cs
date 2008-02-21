@@ -9,6 +9,10 @@
 @import url("UIMiniCalendar/Stylesheet.css");
 @import url("UICalendars/Stylesheet.css");
 
+@import url("UIPopup/UIFeed/Stylesheet.css") ;
+@import url("UIPopup/UIAddressForm/Stylesheet.css");
+@import url("UIPopup/UIEventForm/Stylesheet.css");
+
 /*=========================== MailBanner ==================================*/
 
 .UIWindow .UICalendarPortlet {
