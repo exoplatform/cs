@@ -172,7 +172,7 @@ public class UIAddressBooks extends UIComponent {
         else srcType = "2" ;    
         ContactUtils.getContactService().pasteAddressBook(SessionProviderFactory.createSessionProvider()
             , ContactUtils.getCurrentUser(), srcAddress, srcType, destAddress, destType) ;
-      } else {        
+      } else {
         ContactUtils.getContactService().pasteContacts(SessionProviderFactory.createSessionProvider()
             , ContactUtils.getCurrentUser(), destAddress, destType, uiAddressBook.getCopyContacts()) ;
       }      
@@ -309,7 +309,9 @@ public class UIAddressBooks extends UIComponent {
       UIContactPortlet uiContactPortlet = uiAddressBook.getAncestorOfType(UIContactPortlet.class);
       UIPopupAction popupAction = uiContactPortlet.getChild(UIPopupAction.class);
       UICategoryForm uiCategoryForm = popupAction.activate(UICategoryForm.class, 500) ;
-      uiCategoryForm.setValues(groupId) ;
+      if (uiAddressBook.privateAddressBookMap_.containsKey(groupId))
+        uiCategoryForm.setValues(groupId, false) ;
+      else uiCategoryForm.setValues(groupId, true) ;
       uiCategoryForm.setNew(false) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());

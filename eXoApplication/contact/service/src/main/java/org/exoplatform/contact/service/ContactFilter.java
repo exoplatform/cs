@@ -40,6 +40,7 @@ public class ContactFilter {
   private String gender ;
   private String jobTitle ;
   private String emailAddress ;
+  private String isOwner = null ;
   
   
   public ContactFilter() { isAscending = true ; }
@@ -49,6 +50,9 @@ public class ContactFilter {
   
   public String getFullName()  { return fullName ; }
   public void   setFullName(String s) { fullName = s ; }
+  
+  public String isOwner()  { return isOwner ; }
+  public void  setOwner(String s) { isOwner = s ; }
   
   public String getFirstName()  { return firstName ; }
   public void   setFirstName(String s) { firstName = s ; }
@@ -178,6 +182,14 @@ public class ContactFilter {
       if(hasConjuntion) stringBuffer.append(" and (") ;
       else stringBuffer.append("(") ;
       stringBuffer.append("@exo:emailAddress='" + emailAddress + "'") ;
+      stringBuffer.append(")") ;
+      hasConjuntion = true ;
+    }
+    if (isOwner != null && isOwner.trim().length() > 0) {
+      if(hasConjuntion) stringBuffer.append(" and (") ;
+      else stringBuffer.append("(") ;
+      //if (isOwner.equals("true"))
+        stringBuffer.append("@exo:isOwner='" + isOwner + "'") ;
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }

@@ -386,13 +386,15 @@ public class UIContactForm extends UIFormTabPane {
         if (contactType.equals(JCRDataStorage.PRIVATE)) {
           contactService.saveContact(sessionProvider, username, contact, false) ;
         } else if (contactType.equals(JCRDataStorage.SHARED)) {
-          // contact of private has only 1 addressbook ;
           UIAddressBooks uiAddressBooks = uiContactForm
             .getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class) ;
-          if (uiAddressBooks.getSharedGroups().containsKey(contact.getAddressBook()[0])) {
-            contactService.saveContactToSharedAddressBook(
-                username, contact.getAddressBook()[0], contact, false) ;
+          if ( !ContactUtils.isEmpty(uiAddressBooks.getSelectedGroup())) {
+            
+            System.out.println("\n\n 11111111 \n\n");
+            contactService.saveContactToSharedAddressBook(username, contact.getAddressBook()[0], contact, false) ;
           } else {
+            
+            System.out.println("\n\n 222222222 \n\n");
             contactService.saveSharedContact(username, contact) ;
           }  
         } else {          

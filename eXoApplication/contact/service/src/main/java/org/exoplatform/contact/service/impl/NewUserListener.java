@@ -74,10 +74,10 @@ public class NewUserListener extends UserEventListener {
     	cservice_.saveContact(sysProvider, user.getUserName(), contact, true) ;
     	
       Node userApp = nodeHierarchyCreator_.getUserApplicationNode(SessionProvider.createSystemProvider(), user.getUserName()) ;
-      reparePermissions(userApp, user.getUserName()) ;
-      reparePermissions(userApp.getNode("ContactApplication"), user.getUserName()) ;
-      reparePermissions(userApp.getNode("ContactApplication/contactGroup"), user.getUserName()) ;
-      reparePermissions(userApp.getNode("ContactApplication/contactGroup/" + group.getId()), user.getUserName()) ;
+      //reparePermissions(userApp, user.getUserName()) ;
+      //reparePermissions(userApp.getNode("ContactApplication"), user.getUserName()) ;
+      //reparePermissions(userApp.getNode("ContactApplication/contactGroup"), user.getUserName()) ;
+      //reparePermissions(userApp.getNode("ContactApplication/contactGroup/" + group.getId()), user.getUserName()) ;
       userApp.getSession().save() ;   
       
       sysProvider.close();

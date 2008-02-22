@@ -74,14 +74,16 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
   public boolean isNew() { return isNew_ ; } 
   public void setNew(boolean isNew) { isNew_ = isNew ;}
   
-  public void setValues(String groupId) throws Exception {
+  public void setValues(String groupId, boolean isShared) throws Exception {
     ContactService contactService = ContactUtils.getContactService();
     String username = ContactUtils.getCurrentUser() ;
     SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
-    ContactGroup contactGroup = contactService.getGroup(sessionProvider, username, groupId) ;
-    if (contactGroup == null) {
-      contactGroup = contactService.getSharedGroup(username, groupId) ;      
-    }   
+    ContactGroup contactGroup ;
+    if (isShared) {
+      contactGroup = contactService.getSharedGroup(username, groupId) ;
+    } else {
+      contactGroup = contactService.getGroup(sessionProvider, username, groupId) ;       
+    }  
     if (contactGroup != null) {
       groupId_ = groupId ;
       getUIStringInput(FIELD_CATEGORYNAME_INPUT).setValue(contactGroup.getName()) ;

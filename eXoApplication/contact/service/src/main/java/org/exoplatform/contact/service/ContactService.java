@@ -62,7 +62,7 @@ public interface ContactService {
   public void removeSharedAddressBook(SessionProvider sProvider, String username, String addressBookId) throws Exception ;
   public void saveContactToSharedAddressBook(String username, String addressBookId, Contact contact, boolean isNew) throws Exception ;
   public ContactPageList getSharedContactsByAddressBook(SessionProvider sProvider, String username, SharedAddressBook addressBook) throws Exception ;
-  public Contact getSharedContacts(SessionProvider sProvider, String username, String contactId) throws Exception ;
+  public Contact getSharedContact(SessionProvider sProvider, String username, String contactId) throws Exception ;
   public void saveSharedContact(String username, Contact contact) throws Exception ;  
   public List<String> getAllEmailBySharedGroup(String username, String addressBookId) throws Exception ;
   

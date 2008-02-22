@@ -32,6 +32,7 @@ import org.exoplatform.contact.service.JCRPageList;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.service.impl.JCRDataStorage;
+import org.exoplatform.contact.service.impl.NewUserListener;
 import org.exoplatform.contact.webui.popup.UIComposeForm;
 import org.exoplatform.contact.webui.popup.UIContactPreviewForm;
 import org.exoplatform.contact.webui.popup.UIExportForm;
@@ -229,12 +230,12 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     for (String contactId : contactIds) {
       if (contactService.getContact(sessionProvider, username, contactId) == null
           && contactService.getPublicContact(contactId) == null
-          && contactService.getSharedContacts(sessionProvider, username, contactId) == null) 
+          && contactService.getSharedContact(sessionProvider, username, contactId) == null)
         return false ;
     }
     return true ;
   }
-  public String getDefaultGroup() { return "default" ;}
+  public String getDefaultGroup() { return NewUserListener.DEFAULTGROUP ;}
   /*
   public boolean isPublic(String contactId) {
     if ( contactMap.get(contactId).getContactType().equals(JCRDataStorage.PUBLIC)) return true ;
@@ -247,12 +248,16 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
       List<String> contactIds = new ArrayList<String>() ;
       contactIds.add(contactId) ;
+      
+      /*
       if (uiContacts.isSearchResult && !uiContacts.checkExistContacts(contactIds)){
         UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-deleted", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
+      */
+      
       UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
       UIPopupContainer popupContainer =  popupAction.activate(UIPopupContainer.class, 800) ;

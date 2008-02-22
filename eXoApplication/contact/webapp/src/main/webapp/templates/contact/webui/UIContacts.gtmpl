@@ -7,6 +7,7 @@
 	import org.exoplatform.download.DownloadService;
 	import org.exoplatform.contact.ContactUtils;
 	import org.exoplatform.contact.service.JCRPageList;
+	import org.exoplatform.contact.service.SharedAddressBook;
 	import java.util.HashMap;
 	import java.util.Map;
 	
@@ -218,7 +219,9 @@
 		  	 	    			groupName = privateGroupMap.get(addressBooks[0]) ;								  
 								  	if (groupName == null) continue ;								  
 								  } else if (contactType.equals("1")){
-								  	groupName = sharedGroupMap.get(addressBooks[0]).getName() ;
+									  	SharedAddressBook add =  sharedGroupMap.get(addressBooks[0]) ;
+								  		if (add != null)	groupName = add.getName() ;
+								  		else groupName = "" ;
 								  	if (groupName == null) continue ;
 								  }
   	 	    				String actionLink  = uicomponent.event("SelectedContact", contact.getId()) ;
