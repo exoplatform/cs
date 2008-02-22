@@ -55,6 +55,7 @@ public class UIModeratorManagementForm extends UIForm implements UIPopupComponen
 	public UIModeratorManagementForm() throws Exception {
   }
   
+	
   @SuppressWarnings("unchecked")
   private List<User> getListUser() throws Exception {
   	PageList pageList = ForumSessionUtils.getPageListUser() ;
@@ -78,14 +79,15 @@ public class UIModeratorManagementForm extends UIForm implements UIPopupComponen
   
   @SuppressWarnings("unused")
   private List<UserProfile> getListProFileUser() throws Exception {
-  	System.out.println("\n\n==> GetListPro");
   	List<User> listUser = getListUser() ;
   	this.userProfiles = new ArrayList<UserProfile>();
   	for (User user : listUser) {
   		UserProfile userProfile = new UserProfile() ;
   		userProfile = forumService.getUserProfile(ForumSessionUtils.getSystemProvider(), user.getUserName(), true, true);
   		userProfile.setLastLoginDate(user.getLastLoginTime());
-  		userProfile.setUserId(user.getUserName()) ;
+  		String userName = user.getUserName() ;
+  		userProfile.setUserId(userName) ;
+  		if(userName.equals("root")) userProfile.setUserRole((long)0);
   		userProfile.setUser(user);
   		if(userProfile.getUserRole() >= 2) {
 	  		userProfile.setUserRole((long)2);

@@ -97,32 +97,39 @@
 									<div class="MiddleRightRightClickPopupMenu">
 										<div class="UIRightPopupMenuContainer">
 											<div class="ContentItems">
-											<% 
+												<div class="MenuItems">
+											<% int count = 0;
 											for(link in forumLink) {
 												if(link.getType().equals("forum") && tp.equals("ModForums") || link.getType().equals("topic") && tp.equals("MosTopics")) {
-												String item = link.getName().trim();
-												String id = link.getId() ;
+													String item = link.getName().trim();
+													String id = link.getId() ;
+													count = 1;
 											%>
 												 <div class="MenuItem" style="overflow:auto;">
 												 	<div style="float:left; padding: 3px 4px 3px 10px;">
 												 		<input type="checkbox" class="checkbox" value="false" name="$id"/>
 												 	</div>	 
-													<div class="ItemIcon classIconItem">$item dadsa</div>
+													<div class="ItemIcon classIconItem">$item</div>
 												 </div>
 											<% } 
 											 }
+											 if(count == 1) {
 											%>
-											<div class="UIActionForum" style="width: 50px; margin:auto;">
-												<div class="NormalButtom" onclick="eXo.forum.UIForumPortlet.onclickAddMenuTextAreaMutil(this, '$tp');">
-													<div class="ButtonLeft">
-														<div class="ButtonRight">
-															<div class="ButtonMiddle">
-															 <div style="text-align: center;"><a>Add</a></div>
+												</div>
+												<div class="UIActionForum" style="width: 50px; margin:auto;">
+													<div class="NormalButtom" onclick="eXo.forum.UIForumPortlet.onclickAddMenuTextAreaMutil(this, '$tp');">
+														<div class="ButtonLeft">
+															<div class="ButtonRight">
+																<div class="ButtonMiddle">
+																 <div style="text-align: center;"><a>Add</a></div>
+																</div>
 															</div>
 														</div>
 													</div>
 												</div>
-											</div>
+										<% } else { %>
+											<div class="MenuItem">Not Item</div>
+										<% } %>
 											</div>
 										</div>
 									</div>

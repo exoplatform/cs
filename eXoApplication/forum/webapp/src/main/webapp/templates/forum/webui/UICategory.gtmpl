@@ -7,9 +7,14 @@
 	import org.exoplatform.forum.ForumSessionUtils; 
 	import org.exoplatform.forum.ForumFormatUtils;
 	import org.exoplatform.forum.service.UserProfile ;
-	UserProfile option = uicomponent.getOption();
 %>
-<% Category category = uicomponent.getCategory(); %>
+<% 
+	Category category = uicomponent.getCategory(); 
+	UserProfile userProfile = uicomponent.getUserProfile();
+	boolean isShowMenu = !ForumSessionUtils.isAnonim();
+	if(userProfile.getUserRole() == 0) isShowMenu = true ;
+	else isShowMenu = false ;
+%>
 <div class="UIForumCategory" style="padding: 2px 10px;">
 <%uiform.begin()%>
 	<div class="ForumToolbar">
@@ -18,10 +23,7 @@
 				<div class="CenterBar CategoryDetectPosition">
 					<div class="Title"><%=category.getCategoryName()%></div>
 					<div class="CollapseButton" title="Collapse" onclick="eXo.forum.UIForumPortlet.expandCollapse(this) ;"><span></span></div>
-					<%
-						boolean isShowMenu = !ForumSessionUtils.isAnonim();
-						if(isShowMenu){ 
-					%>
+				<% if(isShowMenu){ %>
 					<div class="SeparatorLine"><span></span></div>
 					<div class="ToolbarActionsContainer" onclick="eXo.forum.UIForumPortlet.checkAction(this, event, 3);">
 						<div style="position: relative;">
@@ -105,7 +107,9 @@
 						<th style="width: 50px;"><%=_ctx.appRes("UICategory.label.thread");%></th>
 						<th style="width: 50px;"><%=_ctx.appRes("UICategory.label.post");%></th>
 						<th style="width: 170px;"><%=_ctx.appRes("UICategory.label.moderator");%></th>
+						<% if(isShowMenu){ %>
 						<th style="width: 30px;"><input type="checkbox" class="checkbox" title="Check all" value="4" onClick="eXo.forum.UIForumPortlet.checkAll(this);"/></th>
+						<% } %>
 					</tr>
 				</thead>
 				<tbody>
@@ -120,7 +124,9 @@
 						<td><%=_ctx.appRes("UICategory.label.0");%></td>
 						<td><%=_ctx.appRes("UICategory.label.0");%></td>
 						<td></td>
+						<% if(isShowMenu){ %>
 						<td></td>
+						<% } %>
 					</tr>
 				<% }else {%>
 					<%
@@ -150,7 +156,7 @@
 								topicNewPostTitle = topicNewPost.getTopicName();
 								lastPostBy = topicNewPost.getLastPostBy();
 								Date postDate = topicNewPost.getLastPostDate();
-								dateTime = ForumFormatUtils.getFormatDate((option.getShortDateFormat() + ", " + option.getTimeFormat()),postDate);
+								dateTime = ForumFormatUtils.getFormatDate((userProfile.getShortDateFormat() + ", " + userProfile.getTimeFormat()),postDate);
 								long createdDate = topicNewPost.getLastPostDate().getTime();
 								if((toDay-createdDate)/86400000 < 4){
 									classIconForum = "ForumNewPostIcon";
@@ -202,7 +208,9 @@
 								<% } %>
 										<div style="clear: left;"><span></span></div>
 									</td>
+								<% if(isShowMenu){ %>
 									<td isLock="$isLock" isClose="$isClose" class="Tdbox" onclick="eXo.forum.UIForumPortlet.selectItem(this.firstChild)"><% uicomponent.renderChild(forum.getId())%></td>
+								<% } %>
 								 </tr>
 					 <%	} 
 						}

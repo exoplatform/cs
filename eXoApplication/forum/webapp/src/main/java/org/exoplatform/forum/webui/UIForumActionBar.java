@@ -16,6 +16,7 @@
  ***************************************************************************/
 package org.exoplatform.forum.webui;
 
+import org.exoplatform.forum.service.UserProfile;
 import org.exoplatform.forum.webui.popup.UICategoryForm;
 import org.exoplatform.forum.webui.popup.UIForumForm;
 import org.exoplatform.forum.webui.popup.UIForumOptionForm;
@@ -43,7 +44,8 @@ import org.exoplatform.webui.event.EventListener;
 				@EventConfig(listeners = UIForumActionBar.AddCategoryActionListener.class),
 				@EventConfig(listeners = UIForumActionBar.AddForumActionListener.class),
 				@EventConfig(listeners = UIForumActionBar.ManageModeratorActionListener.class),
-				@EventConfig(listeners = UIForumActionBar.ForumOptionActionListener.class)
+				@EventConfig(listeners = UIForumActionBar.ForumOptionActionListener.class),
+				@EventConfig(listeners = UIForumActionBar.EditProfileActionListener.class)
 		}
 )
 public class UIForumActionBar extends UIContainer	{
@@ -51,6 +53,10 @@ public class UIForumActionBar extends UIContainer	{
 	public UIForumActionBar() throws Exception {		
 	} 
 	
+	@SuppressWarnings("unused")
+  private UserProfile getUserProfile() {
+		return this.getAncestorOfType(UIForumPortlet.class).getUserProfile() ;
+	}
 	public void setHasCategory(boolean hasCategory) {
 	  this.hasCategory = hasCategory ;
   }
@@ -102,6 +108,17 @@ public class UIForumActionBar extends UIContainer	{
 	
 	static public class ForumOptionActionListener extends EventListener<UIForumActionBar> {
     public void execute(Event<UIForumActionBar> event) throws Exception {
+			UIForumActionBar uiActionBar = event.getSource() ;
+			UIForumPortlet forumPortlet = uiActionBar.getAncestorOfType(UIForumPortlet.class) ;
+			UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
+			UIForumOptionForm forumOptionForm = popupAction.createUIComponent(UIForumOptionForm.class, null, null) ;
+			popupAction.activate(forumOptionForm, 580, 290) ;
+			event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+		}
+	}	
+	
+	static public class EditProfileActionListener extends EventListener<UIForumActionBar> {
+		public void execute(Event<UIForumActionBar> event) throws Exception {
 			UIForumActionBar uiActionBar = event.getSource() ;
 			UIForumPortlet forumPortlet = uiActionBar.getAncestorOfType(UIForumPortlet.class) ;
 			UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;

@@ -53,7 +53,7 @@ public class UICategories extends UIContainer	{
 	}
 
 	@SuppressWarnings({ "deprecation", "unused" })
-  private UserProfile getOption() {
+  private UserProfile getUserProfile() {
 		return this.getAncestorOfType(UIForumPortlet.class).getUserProfile() ;
 	}
 	
@@ -70,6 +70,21 @@ public class UICategories extends UIContainer	{
 	private List<Forum> getForumList(String categoryId) throws Exception {
 		List<Forum> forumList = forumService.getForums(ForumSessionUtils.getSystemProvider(), categoryId);
 		return forumList;
+	}
+	
+	@SuppressWarnings("unused")
+  private boolean getIsPrivate(UserProfile userProfile, Category category) {
+		String user = userProfile.getUserId() ;
+		if(userProfile.getUserRole() == 0) return true ;
+		if(category.getOwner().equals(user)) return true ;
+		String userList = category.getUserPrivate() ;
+		if(userList != null && userList.length() > 0) {
+			String []uesrs = userList.split(";");
+			for (String string : uesrs) {
+		    if(string.indexOf(user) >= 0) return true ;
+	    }
+			return false ;
+		} else return true ;
 	}
 	
 	@SuppressWarnings("unused")

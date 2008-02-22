@@ -47,12 +47,12 @@ public class UIPrunManagementForm extends UIForm {
 	
 	static	public class SaveActionListener extends EventListener<UIPrunManagementForm> {
     public void execute(Event<UIPrunManagementForm> event) throws Exception {
-			UIPrunManagementForm uiForm = event.getSource() ;
+//			UIPrunManagementForm uiForm = event.getSource() ;
 		}
 	}
 	static	public class CancelActionListener extends EventListener<UIPrunManagementForm> {
     public void execute(Event<UIPrunManagementForm> event) throws Exception {
-			UIPrunManagementForm uiForm = event.getSource() ;
+//			UIPrunManagementForm uiForm = event.getSource() ;
 		}
 	}
 }

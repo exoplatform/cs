@@ -199,13 +199,13 @@
 	float: left;
 	height: 23px;
 	line-height: 22px;
-	margin: 3px 6px 0px 6px; 
+	margin: 3px 3px 0px 3px; 
 }
 
 .UIForumPortlet .ForumBarAction {
 	float: left;
 	line-height: 22px;
-	margin: 3px 6px 0px 6px; 
+	margin: 3px 3px 0px 3px; 
 }
 
 .UIForumPortlet .ForumBarAction .LeftOverButton {
@@ -263,9 +263,15 @@
 }
 
 .UIForumPortlet .TextAreaMultil .UIRightClickPopupMenu .MenuItem {
-  width: 194px;
+  width: 175px;
+  max-height: 120px;
+  overflow-x: hidden ;
+}
+
+.UIForumPortlet .TextAreaMultil .UIRightClickPopupMenu .MenuItems {
   max-height: 120px;
   overflow-y: auto ;
+  width: 194px;
 }
 
 

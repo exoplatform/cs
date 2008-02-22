@@ -100,7 +100,17 @@ public class UIForumPortlet extends UIPortletApplication {
   }
   @SuppressWarnings("deprecation")
 	public void setUserProfile() throws Exception {
-  	this.userProfile = forumService.getUserProfile(ForumSessionUtils.getSystemProvider(), ForumSessionUtils.getCurrentUser(), true, false) ;
-		System.out.println("\n\nUIsetUserProfile: " + userProfile.getUserId());
+  	String userId = ForumSessionUtils.getCurrentUser() ;
+  	try {
+  		this.userProfile = forumService.getUserProfile(ForumSessionUtils.getSystemProvider(), userId, true, false) ;
+  	} catch (Exception e) {
+    	this.userProfile = new UserProfile() ;
+    }
+  	if(userId != null && userId.length() > 0)  {
+  		this.userProfile.setUserId(userId) ;
+  	// default Administration
+  		if(userId.equals("root")) userProfile.setUserRole((long)0) ;
+  	}
+    this.isJumpRendered = this.userProfile.getIsShowForumJump() ;
   }
 }

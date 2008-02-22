@@ -18,6 +18,7 @@ package org.exoplatform.forum;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.List;
 
 import javax.jcr.PathNotFoundException;
 
@@ -31,6 +32,7 @@ import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.impl.GroupImpl;
+import org.exoplatform.services.organization.User;
 
 public class ForumSessionUtils {
   
@@ -98,6 +100,14 @@ public class ForumSessionUtils {
   public static PageList getPageListUser() throws Exception {
     OrganizationService organizationService = (OrganizationService) PortalContainer.getComponent(OrganizationService.class);
     return organizationService.getUserHandler().getUserPageList(0);
+  }
+
+  @SuppressWarnings("unchecked")
+  public static List<User> getAllUser() throws Exception {
+  	OrganizationService organizationService = (OrganizationService) PortalContainer.getComponent(OrganizationService.class);
+  	PageList pageList = organizationService.getUserHandler().getUserPageList(0) ;
+  	List<User>list = pageList.getAll() ;
+  	return list;
   }
   
 }

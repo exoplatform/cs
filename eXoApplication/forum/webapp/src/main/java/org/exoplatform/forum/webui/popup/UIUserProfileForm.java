@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.log4j.varia.FallbackErrorHandler;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.forum.ForumFormatUtils;
 import org.exoplatform.forum.ForumSessionUtils;
@@ -114,7 +113,6 @@ public class UIUserProfileForm extends UIForm implements UIPopupComponent {
 		list.add(new SelectItemOption<String>("Register User", "id2")) ;
 		UIFormSelectBox userRole = new UIFormSelectBox(FIELD_USERROLE_SELECTBOX, FIELD_USERROLE_SELECTBOX, list) ;
 		userRole.setValue("id" + this.userProfile.getUserRole());
-		System.out.println("\n===================> id" + this.userProfile.getUserRole());
 		UIFormTextAreaInput signature = new UIFormTextAreaInput(FIELD_SIGNATURE_TEXTAREA, FIELD_SIGNATURE_TEXTAREA, null);
 		signature.setValue(this.userProfile.getSignature());
 		UIFormCheckBoxInput isDisplaySignature = new UIFormCheckBoxInput<Boolean>(FIELD_ISDISPLAYSIGNATURE_CHECKBOX, FIELD_ISDISPLAYSIGNATURE_CHECKBOX, false);
@@ -286,13 +284,6 @@ public class UIUserProfileForm extends UIForm implements UIPopupComponent {
     	UIFormInputWithActions inputSetProfile = uiForm.getChildById(FIELD_USERPROFILE_FORM) ;
     	String userTitle = inputSetProfile.getUIStringInput(FIELD_USERTITLE_INPUT).getValue() ;
     	long userRole = Long.parseLong(inputSetProfile.getUIFormSelectBox(FIELD_USERROLE_SELECTBOX).getValue().substring(2));
-    	if(userTitle.equals("Admin") || userTitle.equals("Moderator") || userTitle.equals("Register User")) {
-    		if(userRole == 0) userTitle = "Administrator" ;
-    		if(userRole == 1) userTitle = "Moderator" ;
-    		if(userRole == 2) userTitle = "Register User" ;
-    	}
-    	String signature = inputSetProfile.getUIFormTextAreaInput(FIELD_SIGNATURE_TEXTAREA).getValue() ;
-      boolean isDisplaySignature = (Boolean)inputSetProfile.getUIFormCheckBoxInput(FIELD_ISDISPLAYSIGNATURE_CHECKBOX).getValue() ;
     	String moderateForum = inputSetProfile.getUIFormTextAreaInput(FIELD_MODERATEFORUMS_MULTIVALUE).getValue() ;
     	String []moderateForums ;
     	if(moderateForum != null && moderateForum.length() > 0) {
@@ -302,12 +293,21 @@ public class UIUserProfileForm extends UIForm implements UIPopupComponent {
     	}
     	String moderateTopic = inputSetProfile.getUIFormTextAreaInput(FIELD_MODERATETOPICS_MULTIVALUE).getValue() ;
     	String []moderateTopics ;
-    	System.out.println("\n===========>moderateForum: " +moderateTopic);
     	if(moderateTopic != null && moderateTopic.length() > 0) {
     		moderateTopics = ForumFormatUtils.splitForForum(moderateTopic) ;
     	} else {
     		moderateTopics = userProfile.getModerateForums() ;
     	}
+    	if(moderateForums.length > 0 || moderateTopics.length > 0) {
+    		if(userRole >= 2) userRole = 1;
+    	}
+    	if(userTitle.equals("Admin") || userTitle.equals("Moderator") || userTitle.equals("Register User")) {
+    		if(userRole == 0) userTitle = "Administrator" ;
+    		if(userRole == 1) userTitle = "Moderator" ;
+    		if(userRole == 2) userTitle = "Register User" ;
+    	}
+    	String signature = inputSetProfile.getUIFormTextAreaInput(FIELD_SIGNATURE_TEXTAREA).getValue() ;
+      boolean isDisplaySignature = (Boolean)inputSetProfile.getUIFormCheckBoxInput(FIELD_ISDISPLAYSIGNATURE_CHECKBOX).getValue() ;
     	Boolean isDisplayAvatar = (Boolean)inputSetProfile.getUIFormCheckBoxInput(FIELD_ISDISPLAYAVATAR_CHECKBOX).getValue() ;
     	
     	UIFormInputWithActions inputSetOption = uiForm.getChildById(FIELD_USEROPTION_FORM) ;
@@ -345,7 +345,6 @@ public class UIUserProfileForm extends UIForm implements UIPopupComponent {
     			banCounter = 1;
     		}
     	}
-    	System.out.println(userRole + " \n\nfsf dfopsd f\n => " + userTitle + "\nfsdd  : " + isDisplaySignature);
     	String []banReasonSummary = ForumFormatUtils.splitForForum(banReasonSummarys);
     	
     	userProfile.setUserTitle(userTitle);
@@ -373,6 +372,9 @@ public class UIUserProfileForm extends UIForm implements UIPopupComponent {
     		uiForm.forumService.saveUserProfile(ForumSessionUtils.getSystemProvider(), userProfile, true, true) ;
       } catch (Exception e) {
       	e.printStackTrace() ;
+      }
+      if(userProfile.getUserId().equals(ForumSessionUtils.getCurrentUser())) {
+      	uiForm.getAncestorOfType(UIForumPortlet.class).setUserProfile() ;
       }
     	UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
 			popupContainer.getChild(UIPopupAction.class).deActivate() ;

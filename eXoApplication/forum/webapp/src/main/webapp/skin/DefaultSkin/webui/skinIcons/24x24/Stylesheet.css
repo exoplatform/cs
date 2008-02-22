@@ -49,6 +49,10 @@
 	background: url('icons/AddNewForum.gif') no-repeat ;
 }
 
+.UIForumPortlet .AddForum {
+	background: url('icons/AddNewForum.gif') no-repeat ;
+}
+
 .UIForumPortlet .ForumOption {
 	background: url('icons/ForumOption.gif') no-repeat ;
 }

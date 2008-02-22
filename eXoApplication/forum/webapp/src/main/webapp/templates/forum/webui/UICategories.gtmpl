@@ -6,7 +6,7 @@
 	import java.util.GregorianCalendar;
 	import org.exoplatform.forum.ForumFormatUtils;
 	import org.exoplatform.forum.service.UserProfile ;
-	UserProfile option = uicomponent.getOption();
+	UserProfile userProfile = uicomponent.getUserProfile();
 %>
 <div class="UICategories" id="$uicomponent.id">
 	<div class="UIForumWorkingWorkspace">
@@ -15,8 +15,9 @@
 		<%
 			List categories = uicomponent.getCategoryList();
 			 for(category in categories) {
-			 String title = category.getCategoryName();
-			 String description = category.getDescription()
+			   if(uicomponent.getIsPrivate(userProfile,category)) {
+					 String title = category.getCategoryName();
+					 String description = category.getDescription()
 			 
 		 %>
 			<div class="UIForumCategory">
@@ -85,7 +86,7 @@
 											topicNewPostTitle = topicNewPost.getTopicName();
 											lastPostBy = topicNewPost.getLastPostBy();
 											Date postDate = topicNewPost.getLastPostDate();
-											dateTime = ForumFormatUtils.getFormatDate((option.getShortDateFormat() + ", " + option.getTimeFormat()),postDate);
+											dateTime = ForumFormatUtils.getFormatDate((userProfile.getShortDateFormat() + ", " + userProfile.getTimeFormat()),postDate);
 											long createdDate = topicNewPost.getLastPostDate().getTime();
 											if((toDay-createdDate)/86400000 < 4){
 												classIconForum = "ForumNewPostIcon";
@@ -149,8 +150,8 @@
 					</div>
 				</div>
 			</div>	
-		<% } %>
-		<% // End ForumCategory%>
+		<%   } // End if private%>
+		<% }// End for and End ForumCategory%>
 		</div>
 	</div>
 </div>

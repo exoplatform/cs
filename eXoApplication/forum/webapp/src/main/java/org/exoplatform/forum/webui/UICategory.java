@@ -77,7 +77,7 @@ public class UICategory extends UIForm	{
 	public UICategory() throws Exception {
 	}
 	
-	private UserProfile getOption() {
+	private UserProfile getUserProfile() {
 		return this.getAncestorOfType(UIForumPortlet.class).getUserProfile() ;
 	}
 	

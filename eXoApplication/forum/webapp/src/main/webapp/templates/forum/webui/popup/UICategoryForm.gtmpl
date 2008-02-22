@@ -1,0 +1,131 @@
+<%  
+	import org.exoplatform.forum.ForumSessionUtils ;
+	import org.exoplatform.services.organization.User;
+	import org.exoplatform.web.application.JavascriptManager;
+  def rcontext = _ctx.getRequestContext() ;
+  JavascriptManager jsmanager = rcontext.getJavascriptManager();
+  jsmanager.addJavascript("eXo.forum.UIForumPortlet.setMenuTextAreaMutil('UICategoryForm');");
+%>
+<div class="UIFormForum $uicomponent.id">
+	<% uiform.begin() %>
+		<div class="HorizontalLayout">
+			<div class="UIFormInput">
+				<table class="UIFormGrid">
+					<tbody>						
+				<% 
+					for(field in uiform.getChildren()) { 
+						if(field.isRendered()) {
+				%>
+							<tr>
+								<%fieldName = uicomponent.getLabel(field.getName());%>
+								<%if(!fieldName.equals(uicomponent.getId())) { %>												
+									<td class="FieldLabel">
+										<%if(fieldName != null && fieldName.length() > 0) {%> 
+											<%=uicomponent.getLabel(field.getName()) %>
+										<%}%>
+									</td>
+									<td class="FieldComponent">
+											<% uiform.renderField(field) %>
+									</td>
+								<%} else {%>
+									<td class="FieldComponent" colspan="2"><% uiform.renderField(field) %></td>
+								<%}%>
+							</tr>
+				<%
+						}
+					}
+				%>						
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="UIAction"> 
+			<table class="ActionContainer" align="center">
+				<tr>
+					<td align="center">
+				<% for(action in uicomponent.getActions()) { 
+					 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action); 
+					 String link = uicomponent.event(action) ;
+				%>
+						<a href="$link" class="ActionButton LightBlueStyle">
+							<div class="ButtonLeft">
+								<div class="ButtonRight">
+									<div class="ButtonMiddle"> $actionLabel </div>
+								</div>
+							</div>
+						</a>
+					<%}%>
+					</td>
+				</tr>
+	 		</table> 
+		</div>
+		<%uiform.end()%>
+		<div id="PopupMenuTextAreaMulil">
+		<% /*Begin Popup Menu*/
+			List listUser = ForumSessionUtils.getAllUser() ;
+		%>
+			<div class="ChildPopupMenu" id="AddUserPrivate">
+				<div class="UIPopupCategory" style="display: none; top: -18px; left: -225px;">
+					<div class="PopupCategoryDecorator">
+				
+						<div class="UIRightClickPopupMenu" style="display: block;">
+							<div class="UIContextMenuContainer">
+								<div class="TopLeftRightClickPopupMenu">
+									<div class="TopRightRightClickPopupMenu">
+										<div class="TopCenterRightClickPopupMenu"><span></span></div>
+									</div>
+								</div>
+								<div class="MiddleLeftRightClickPopupMenu">
+									<div class="MiddleRightRightClickPopupMenu">
+										<div class="UIRightPopupMenuContainer">
+											<div class="ContentItems">
+												<div class="MenuItems">
+												<% int count = 0;
+												for(user in listUser) {
+														count = 1;
+												%>
+													 <div class="MenuItem" style="overflow:auto;">
+													 	<div style="float:left; padding: 3px 4px 3px 10px;">
+													 		<input type="checkbox" class="checkbox" value="false" name="<%=user.getUserName();%>"/>
+													 	</div>	 
+														<div class="ItemIcon classIconItem"><%=user.getUserName();%></div>
+													 </div>
+												<%  
+												 }
+												 if(count >= 1) {
+												%>
+												</div>
+												<div class="UIActionForum" style="width: 50px; margin:auto;">
+													<div class="NormalButtom" onclick="eXo.forum.UIForumPortlet.onclickAddMenuTextAreaMutil(this, 'UserPrivate');">
+														<div class="ButtonLeft">
+															<div class="ButtonRight">
+																<div class="ButtonMiddle">
+																 <div style="text-align: center;"><a>Add</a></div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<% } else { %>
+													<div class="MenuItem">Not Item</div>
+												<% } %>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="BottomLeftRightClickPopupMenu">
+								<div class="BottomRightRightClickPopupMenu">
+									<div class="BottomCenterRightClickPopupMenu"><span></span></div>
+								</div>
+							</div>
+							</div>
+						</div>
+					</div>
+				
+				</div>
+			</div>
+			<% /*End Popup Menu*/ %>
+		</div>	
+		
+	
+</div>

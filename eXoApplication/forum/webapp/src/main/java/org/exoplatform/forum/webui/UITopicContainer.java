@@ -232,16 +232,26 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 				numberPage = numberPage1 ;
 			} else numberPage = numberPage2 ;
 			if(numberPage != null && numberPage.length() > 0) {
-				Long page = Long.parseLong(numberPage);
-				if(page == 0) {
-					page = (long)1;
-				} else if(page > topicContainer.pageList.getAvailablePage()){
-					page = topicContainer.pageList.getAvailablePage() ;
+				boolean isNumber = true ;
+				for (int i = 0; i < numberPage.length(); i++) {
+	        char c = numberPage.charAt(i) ;
+	        if(!Character.isDigit(c)) {
+	        	isNumber = false ;
+	        	break ;
+	        }
+        }
+				if(isNumber) {
+					Long page = Long.parseLong(numberPage);
+					if(page == 0) {
+						page = (long)1;
+					} else if(page > topicContainer.pageList.getAvailablePage()){
+						page = topicContainer.pageList.getAvailablePage() ;
+					}
+					topicContainer.page = page ;
+					topicContainer.isGoPage = true ;
+					topicContainer.getChild(UIForumPageIterator.class).setSelectPage(page) ;
+					event.getRequestContext().addUIComponentToUpdateByAjax(topicContainer) ;
 				}
-				topicContainer.page = page ;
-				topicContainer.isGoPage = true ;
-				topicContainer.getChild(UIForumPageIterator.class).setSelectPage(page) ;
-				event.getRequestContext().addUIComponentToUpdateByAjax(topicContainer) ;
 			}
 			stringInput1.setValue("") ;
 			stringInput2.setValue("") ;
