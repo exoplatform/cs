@@ -91,7 +91,8 @@ public class UICalendarViewContainer extends UIContainer  {
               UIListView uiListView = uiView.getChild(UIListView.class) ;
               uiListView.setShowEventAndTask(false) ;
               uiListView.setDisplaySearchResult(false) ;
-              uiListView.refresh(null) ;
+              uiListView.setCategoryId(null) ;
+              uiListView.refresh() ;
               uiListView.isShowEvent_ = true ;
               if(getRenderedChild() != null) uiView.setCurrentCalendar(((CalendarView)getRenderedChild()).getCurrentCalendar()) ;
               setRenderedChild(viewType) ;

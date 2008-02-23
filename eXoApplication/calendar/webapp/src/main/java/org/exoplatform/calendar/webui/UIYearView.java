@@ -80,7 +80,7 @@ public class UIYearView extends UICalendarView {
     CalendarService calendarService = getApplicationComponent(CalendarService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     EventQuery eventQuery = new EventQuery() ;
-    if(categoryId_ != null && categoryId_.toLowerCase().equals("null")) {
+    if(categoryId_ != null && categoryId_.trim().length() > 0 && !categoryId_.toLowerCase().equals("null")) {
       eventQuery.setCategoryId(new String[]{categoryId_}) ;
     }
     eventQuery.setFromDate(beginYear) ;
@@ -108,6 +108,7 @@ public class UIYearView extends UICalendarView {
       uiYearView.setCategoryId(categoryId) ;
       UIMiniCalendar uiMiniCalendar = uiYearView.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
       uiMiniCalendar.setCategoryId(categoryId) ;
+      uiYearView.refresh() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiYearView);           
     }
   }

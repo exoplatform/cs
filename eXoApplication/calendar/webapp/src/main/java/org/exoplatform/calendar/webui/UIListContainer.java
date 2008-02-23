@@ -41,7 +41,7 @@ public class UIListContainer extends UIContainer implements CalendarView {
 
   public void refresh() throws Exception {
     UIListView list = getChild(UIListView.class) ;
-    list.refresh(null) ;
+    list.refresh() ;
     UIPreview view = getChild(UIPreview.class) ;
     if(list.getEvents().length > 0) { 
       list.setSelectedEvent(list.getEvents()[0].getId()) ;  
@@ -90,6 +90,7 @@ public class UIListContainer extends UIContainer implements CalendarView {
     getChild(UIPreview.class).setCalendarSetting(calendarSetting) ;
   }
   public void setSelectedCategory(String categoryId) throws Exception {
-    getChild(UIListView.class).refresh(categoryId) ;
+    getChild(UIListView.class).setCategoryId(categoryId);
+    getChild(UIListView.class).refresh() ;
   }
 }

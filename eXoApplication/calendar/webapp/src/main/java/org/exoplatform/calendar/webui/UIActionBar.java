@@ -107,7 +107,6 @@ public class UIActionBar extends UIContainer  {
       UIActionBar uiActionBar = event.getSource() ;     
       String viewType = event.getRequestContext().getRequestParameter(OBJECTID) ;
       String categoryId = event.getRequestContext().getRequestParameter("categoryId") ;
-      System.out.println("category id " + categoryId);
       UICalendarPortlet uiPortlet = uiActionBar.getAncestorOfType(UICalendarPortlet.class) ;
       UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
       uiViewContainer.initView(viewType);      

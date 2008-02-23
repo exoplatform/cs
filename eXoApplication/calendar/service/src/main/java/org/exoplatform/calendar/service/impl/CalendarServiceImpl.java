@@ -229,4 +229,11 @@ public class CalendarServiceImpl implements CalendarService{
     storage_.removeSharedEvent(sessionProvider, username, calendarId, eventId) ;
     
   }
+
+  public boolean hasEditPermission(SessionProvider sProvider, String sharedCalendarId, String username) throws Exception {
+    return storage_.hasEditPermission(sProvider, sharedCalendarId, username);
+  }
+  public void moveEvent(SessionProvider sProvider, String formCalendar, String toCalendar,List<CalendarEvent> calEvents, String username) throws Exception {
+    storage_.moveEvent(sProvider, formCalendar, toCalendar, calEvents, username)  ;
+  }
 }

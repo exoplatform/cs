@@ -22,6 +22,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -39,6 +40,7 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.impl.GroupImpl;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -207,7 +209,7 @@ public class CalendarUtils {
         }
         String minStr = (minutes < 10) ? ("0" + Integer.toString(minutes)) : Integer.toString(minutes);
         String str = "(GMT " + ((timeZone.getRawOffset() >= 0) ? "+" : "") 
-          + hrStr + ":" + minStr + ") " + tz ;
+        + hrStr + ":" + minStr + ") " + tz ;
         //subZoneMap.put(tz,  str) ;
         options.add(new SelectItemOption<String>(str, tz)) ;
       } 
@@ -334,6 +336,26 @@ public class CalendarUtils {
     return String.valueOf(rawOffset) ;
   }
 
+  public static boolean hasEditPermission(String[] savePerms, String[] checkPerms) {
+    for(String sp : savePerms) {
+      for (String cp : checkPerms) {
+        if( sp.equals(cp)) {return true ;}      
+      }
+    }
+    return false ;
+  } 
+  
+  public static boolean canEdit(OrganizationService oService, String[] savePerms, String username) throws Exception {
+    StringBuffer sb = new StringBuffer(username) ;
+    if(oService != null) {
+      Collection<Membership> memberShipsType = oService.getMembershipHandler().findMembershipsByUser(username) ;
+      for(Membership mp : memberShipsType) {
+        sb.append(CalendarUtils.COMMA).append(mp.getMembershipType()+CalendarUtils.COLON+ mp.getGroupId()) ;
+      }
+    }
+    return CalendarUtils.hasEditPermission(savePerms, sb.toString().split(CalendarUtils.COMMA)) ;
+  }
+
   static public class SelectComparator implements Comparator{
     public int compare(Object o1, Object o2) throws ClassCastException {
       String name1 = ((SelectItemOption) o1).getLabel() ;
@@ -341,4 +363,5 @@ public class CalendarUtils {
       return name1.compareToIgnoreCase(name2) ;
     }
   }
+
 }

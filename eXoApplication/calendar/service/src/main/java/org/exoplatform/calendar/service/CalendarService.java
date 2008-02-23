@@ -373,4 +373,8 @@ public interface CalendarService {
   
   public void generateCalDav(SessionProvider sProvider, String username, List<String> calendarIds, RssData rssData) throws Exception ;
   public void removeSharedEvent(SessionProvider sessionProvider, String username, String calendarId, String eventId) throws Exception ;
+  
+  public boolean hasEditPermission(SessionProvider sProvider, String sharedCalendarId, String username) throws Exception ;
+  
+  public void moveEvent(SessionProvider sProvider, String formCalendar, String toCalendar, List<CalendarEvent> calEvents, String username) throws Exception ;
 }

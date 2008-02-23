@@ -46,8 +46,11 @@ import org.exoplatform.calendar.webui.popup.UISharedForm;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -114,7 +117,7 @@ public class UICalendars extends UIForm  {
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     //List<CalendarCategory> categories = calendarService.getCategories(SessionsUtils.getSessionProvider(), username) ;
-    List<GroupCalendarData> groupCalendars = calendarService.getCalendarCategories(getSystemSession(), username, false) ;
+    List<GroupCalendarData> groupCalendars = calendarService.getCalendarCategories(getSession(), username, false) ;
     for(GroupCalendarData group : groupCalendars) {
       List<Calendar> calendars = group.getCalendars() ;
       if(calendars != null) {
@@ -346,26 +349,47 @@ public class UICalendars extends UIForm  {
       String username = event.getRequestContext().getRemoteUser() ;
       String calendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
-      UICalendarPortlet uiPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
-      uiPortlet.cancelAction() ;
-      UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
-      UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
-      UICalendarWorkingContainer workingContainer = uiComponent.getAncestorOfType(UICalendarWorkingContainer.class) ;
+      CalendarService calService = CalendarUtils.getCalendarService() ;
       if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
-        CalendarUtils.getCalendarService().removeUserCalendar(uiComponent.getSession(), username, calendarId) ;
+        calService.removeUserCalendar(uiComponent.getSession(), username, calendarId) ;
       }else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
-        CalendarUtils.getCalendarService().removeSharedCalendar(uiComponent.getSystemSession(), username, calendarId) ;
+        //if(CalendarUtils.canEdit(null, uiComponent.getSharedCalendars().getCalendarById(calendarId).getEditPermission(), username)) {
+        calService.removeSharedCalendar(uiComponent.getSystemSession(), username, calendarId) ;
+        /*} else {
+          UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.have-no-delete-permission", null)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }*/
       }else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
-        CalendarUtils.getCalendarService().removeGroupCalendar(uiComponent.getSystemSession(), calendarId) ;
+        boolean canEdit = false ;
+        OrganizationService oService = uiComponent.getApplicationComponent(OrganizationService.class) ;
+        for(GroupCalendarData groupCal : uiComponent.getPublicCalendars()) {
+          for(Calendar cal : groupCal.getCalendars()) {
+            if(cal.getId().equals(calendarId)) {
+              canEdit = CalendarUtils.canEdit(oService, groupCal.getCalendarById(calendarId).getEditPermission(), username) ;
+              break ;
+            }
+          }
+        }
+        if(canEdit) {
+          calService.removeGroupCalendar(uiComponent.getSystemSession(), calendarId) ;
+        } else {
+          UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.have-no-delete-permission", null)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
       }
-      try{        
+        UICalendarPortlet uiPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
+        uiPortlet.cancelAction() ;
+        UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
+        UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+        UICalendarWorkingContainer workingContainer = uiComponent.getAncestorOfType(UICalendarWorkingContainer.class) ;
         uiMiniCalendar.updateMiniCal() ;
         uiViewContainer.refresh() ;
         uiPortlet.setCalendarSetting(null) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(workingContainer) ;
-      } catch (Exception e) {
-        e.printStackTrace() ;
-      }
     }
   }
 
@@ -408,7 +432,7 @@ public class UICalendars extends UIForm  {
       //exportForm.addUIFormInput(arg0)
       //exportForm.update("0", groupId) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
-     // event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
+      // event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
     }
   }
   static  public class ImportCalendarActionListener extends EventListener<UICalendars> {
@@ -419,7 +443,7 @@ public class UICalendars extends UIForm  {
       popupAction.deActivate() ;
       popupAction.activate(UIImportForm.class, 600) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
-     //event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
     }
   }
 

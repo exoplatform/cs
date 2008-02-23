@@ -42,5 +42,14 @@ public class GroupCalendarData {
 
   public List<Calendar> getCalendars() { return calendars ; }
   public void setCalendars(List<Calendar> calendars) { this.calendars = calendars ; }
-
+  public Calendar getCalendarById(String calendarId) {
+    if(calendarId != null && calendars != null && !calendars.isEmpty()) {
+      for (Calendar cal : calendars) {
+        if(calendarId.equals(cal.getId())) {
+          return cal ;
+        }
+      }
+    }
+    return null ;
+  }
 }
