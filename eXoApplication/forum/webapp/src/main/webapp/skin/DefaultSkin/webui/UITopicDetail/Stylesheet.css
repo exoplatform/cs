@@ -44,12 +44,16 @@
 }
 
 /*************************************** ContentContainer ************************************/
-.UITopicDetail .PostContentContainer {
+.UITopicDetail .PostContentContainer .PostContent {
 	min-height: 130px ;
 }
 
-*html .UITopicDetail .PostContentContainer {
+*html .UITopicDetail .PostContentContainer .PostContent {
 	height: 130px ;
+}
+
+.UITopicDetail .PostContentContainer .Signature {
+	padding-bottom: 5px;
 }
 
 .UITopicDetail .TablePost {

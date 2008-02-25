@@ -30,6 +30,10 @@
 	background: url('icons/ModerationIcon.gif') no-repeat ;
 }
 
+.UIForumPortlet .ViewProfileIcon {
+	background: url('icons/ViewProfileIcon.gif') no-repeat ;
+}
+
 .UIForumPortlet .SmallGrayPlus {
 	background: url('icons/SmallGrayPlus.gif') no-repeat left top;
 }

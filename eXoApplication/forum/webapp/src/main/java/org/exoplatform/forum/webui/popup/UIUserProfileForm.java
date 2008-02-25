@@ -301,7 +301,7 @@ public class UIUserProfileForm extends UIForm implements UIPopupComponent {
     	if(moderateForums.length > 0 || moderateTopics.length > 0) {
     		if(userRole >= 2) userRole = 1;
     	}
-    	if(userTitle.equals("Admin") || userTitle.equals("Moderator") || userTitle.equals("Register User")) {
+    	if(userTitle.indexOf("Admin") >= 0 || userTitle.equals("Moderator") || userTitle.indexOf("Register") >= 0 || userTitle.equals("Guest")) {
     		if(userRole == 0) userTitle = "Administrator" ;
     		if(userRole == 1) userTitle = "Moderator" ;
     		if(userRole == 2) userTitle = "Register User" ;
@@ -357,8 +357,8 @@ public class UIUserProfileForm extends UIForm implements UIPopupComponent {
     	
     	userProfile.setTimeZone(timeZone);
     	userProfile.setShortDateFormat(shortDateFormat);
-    	userProfile.setLongDateFormat(longDateFormat) ;
-    	userProfile.setTimeFormat(timeFormat);
+    	userProfile.setLongDateFormat(longDateFormat.replace('=', ' ')) ;
+    	userProfile.setTimeFormat(timeFormat.replace('=', ' '));
     	userProfile.setMaxPostInPage(maxPost);
     	userProfile.setMaxTopicInPage(maxTopic);
     	userProfile.setIsShowForumJump(isShowForumJump) ;

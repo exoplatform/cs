@@ -107,7 +107,6 @@ public class UIForumPortlet extends UIPortletApplication {
     	this.userProfile = new UserProfile() ;
     }
   	if(userId != null && userId.length() > 0)  {
-  		this.userProfile.setUserId(userId) ;
   	// default Administration
   		if(userId.equals("root")) userProfile.setUserRole((long)0) ;
   	}

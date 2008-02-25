@@ -30,7 +30,7 @@
 				        <div style="margin: 0px auto;" class="ActionContainer">
 				          <div style="margin: auto;" class="OverflowContainer">          
 					           <a title="Edit Profile" href="<%=uicomponent.event("EditProfile",user.getUserId());%>" class="EditIcon"><span/></a>		          
-					           <a title="View Profile" href="<%=uicomponent.event("ViewProfile",user.getUserId());%>" class="DeleteIcon"><span/></a>		          
+					           <a title="View Profile" href="<%=uicomponent.event("ViewProfile",user.getUserId());%>" class="ViewProfileIcon"><span/></a>		          
 				          </div>
 				        </div>
 				      </td>

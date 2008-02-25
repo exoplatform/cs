@@ -110,7 +110,7 @@ public class UITopicDetail extends UIForm {
 	private List<Post> posts ;
 	
 	private long maxPost = 10 ;
-	private UserProfile forumOption = null;
+	private UserProfile userProfile = null;
 	private String userName = " " ;
 	public UITopicDetail() throws Exception {
 		addUIFormInput( new UIFormStringInput("gopage1", null)) ;
@@ -119,8 +119,9 @@ public class UITopicDetail extends UIForm {
 		addChild(UIPostRules.class, null, null);
 	}
 	
-	private UserProfile getOption() {
-		return forumOption ;
+	@SuppressWarnings("unused")
+  private UserProfile getUserProfile() {
+		return userProfile ;
 	}
 	
 	public void setUpdateTopic(String categoryId, String forumId, String topicId, boolean viewTopic) throws Exception {
@@ -204,13 +205,13 @@ public class UITopicDetail extends UIForm {
 
 	@SuppressWarnings("unused")
 	private void initPage() throws Exception {
-		this.forumOption = this.getAncestorOfType(UIForumPortlet.class).getUserProfile() ;
+		this.userProfile = this.getAncestorOfType(UIForumPortlet.class).getUserProfile() ;
 		if(this.isUpdatePageList) {
 			this.isUpdatePageList = false ;
 		} else {
 			this.pageList = forumService.getPosts(ForumSessionUtils.getSystemProvider(), categoryId, forumId, topicId) ;
 		}
-		long maxPost = getOption().getMaxPostInPage() ;
+		long maxPost = getUserProfile().getMaxPostInPage() ;
 		if(maxPost > 0) this.maxPost = maxPost ;
 		pageList.setPageSize(this.maxPost) ;
 		this.getChild(UIForumPageIterator.class).updatePageList(this.pageList) ;
@@ -245,6 +246,12 @@ public class UITopicDetail extends UIForm {
 			if(post.getId().equals(postId)) return post;
 		}
 		return null ;
+	}
+	
+	
+	@SuppressWarnings("unused")
+  private UserProfile getUserInfo(String userName) throws Exception {
+		return this.forumService.getUserInfo(ForumSessionUtils.getSystemProvider(), userName);
 	}
 	
 	static public class AddPostActionListener extends EventListener<UITopicDetail> {

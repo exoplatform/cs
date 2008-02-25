@@ -204,4 +204,7 @@ public class ForumServiceImpl implements ForumService{
 	public void saveUserProfile(SessionProvider sProvider, UserProfile userProfile, boolean isOption, boolean isBan) throws Exception {
 		storage_.saveUserProfile(sProvider, userProfile, isOption, isBan) ;
   }
+	public UserProfile getUserInfo(SessionProvider sProvider, String userName) throws Exception {
+		return storage_.getUserInfo(sProvider, userName);
+	}
 }

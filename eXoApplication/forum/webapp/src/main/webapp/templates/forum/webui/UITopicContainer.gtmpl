@@ -14,7 +14,30 @@
 	Forum forum = uicomponent.getForum() ;
 	String forumName = forum.getForumName();
 	boolean isShowMenu = ForumSessionUtils.isAnonim();
-	UserProfile option = uicomponent.getOption();
+	UserProfile userProfile = uicomponent.getUserProfile();
+	boolean canEdit = false ;
+	if(!isShowMenu) {
+		if(userProfile.getUserRole() == 0) canEdit = true;
+		if(userProfile.getUserRole() == 1) {
+			String []moderatorsByUser = userProfile.getModerateForums() ;
+			if(moderatorsByUser == null || moderatorsByUser.length <= 0) canEdit = true;
+			else {
+				for(forumId in moderatorsByUser) {
+					if(forumId.indexOf(forum.getId()) >= 0) {
+						canEdit = true;
+						break ;
+					}
+				}
+			}
+		}
+		String []moderatorsByForum = forum.getModerators() ;
+		for(user in moderatorsByForum) {
+			if(user.indexOf(userProfile.getUserId()) >= 0) {
+				canEdit = true;
+				break ;
+			}
+		}
+	}
 %>
 <div class="UITopicContainer">
 	<% uiform.begin() %>
@@ -100,7 +123,7 @@
 					<div class="RightBar">
 						<div class="CenterBar" style="padding-right: 10px;">
 							<div class="Title"><span style="font-weight: normal;">Thread in forum: </span>$forumName</div>
-						<% if(!isShowMenu) { %>	
+						<% if(!isShowMenu && canEdit) { %>	
 							<div class="ContentAction" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 								<div class="DefaultStyle Forum" onmouseover="eXo.forum.UIForumPortlet.OverButton(this)" onmouseout="eXo.forum.UIForumPortlet.OverButton(this)">
 									<div class="LeftOverButton">
@@ -184,7 +207,7 @@
 									</a>
 								</div>
 							</div>
-						<% if(!isShowMenu) { %>	
+						<% if(!isShowMenu && canEdit) { %>	
 							<div class="SeparatorLine"><span></span></div>
 							<div class="ContentAction" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 								<div style="position: relative;">
@@ -279,7 +302,9 @@
 								<th style="width: 130px;"><div class="DownArrow1Icon">Last posts</div></th>
 								<th style="width: 50px;">Replies</th>
 								<th style="width: 50px;">Views</th>
+								<% if(canEdit) { %>
 								<th style="width: 30px;"><input type="checkbox" class="checkbox" title="Check all" value="4" onClick="eXo.forum.UIForumPortlet.checkAll(this);"/></th>
+								<% } %>
 							</tr>
 						</thead>
 						<tbody>
@@ -299,7 +324,7 @@
 									String topicBy = topic.getOwner();
 									String postNewBy = topic.getLastPostBy() ;
 									Date postDate = topic.getLastPostDate() ;
-									String lastPostDate = ForumFormatUtils.getFormatDate((option.getShortDateFormat() + ", " + option.getTimeFormat()),postDate);								
+									String lastPostDate = ForumFormatUtils.getFormatDate((userProfile.getShortDateFormat() + ", " + userProfile.getTimeFormat()),postDate);								
 									String titlePost = uicomponent.getStringCleanHtmlCode(topic.getDescription());
 									if(titlePost.length() > 100) {
 										titlePost = titlePost.substring(0, 99) + "...";
@@ -314,7 +339,7 @@
 										titleTopicStatus = "Hot thread with new post lock" ;
 									}
 									String number = "1";
-									boolean isReadTopic = ForumFormatUtils.isReadTopic(option.getReadTopic(), topicId);
+									boolean isReadTopic = ForumFormatUtils.isReadTopic(userProfile.getReadTopic(), topicId);
 									String title = "";
 									if(isReadTopic) {
 										title = "TitleNorman";
@@ -391,7 +416,9 @@
 									</td>
 								 	<td class="Tdbox" align="center"><div>$postCount</div></td>
 									<td class="Tdbox" align="center">$postView</td>
+									<% if(canEdit) { %>
 									<td class="Tdbox" align="center" onClick="eXo.forum.UIForumPortlet.selectItem(this.firstChild);"><%uicomponent.renderChild(topic.getId())%></td>
+					 				<% } %>
 					 			</tr>
 						 	<% i = i + 1;} %>
 						</tbody>

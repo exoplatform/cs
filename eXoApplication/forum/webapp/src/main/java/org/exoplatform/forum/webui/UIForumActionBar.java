@@ -44,7 +44,6 @@ import org.exoplatform.webui.event.EventListener;
 				@EventConfig(listeners = UIForumActionBar.AddCategoryActionListener.class),
 				@EventConfig(listeners = UIForumActionBar.AddForumActionListener.class),
 				@EventConfig(listeners = UIForumActionBar.ManageModeratorActionListener.class),
-				@EventConfig(listeners = UIForumActionBar.ForumOptionActionListener.class),
 				@EventConfig(listeners = UIForumActionBar.EditProfileActionListener.class)
 		}
 )
@@ -95,25 +94,12 @@ public class UIForumActionBar extends UIContainer	{
     public void execute(Event<UIForumActionBar> event) throws Exception {
 			UIForumActionBar uiActionBar = event.getSource() ;
 				UIForumPortlet forumPortlet = uiActionBar.getAncestorOfType(UIForumPortlet.class) ;
-				
 				UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
 				UIPopupContainer popupContainer = popupAction.createUIComponent(UIPopupContainer.class, null, null) ;
 				popupContainer.addChild(UIModeratorManagementForm.class, null, null) ;
-//				moderatorManagementForm.setTopicIds(uiTopicContainer.categoryId, uiTopicContainer.forumId) ;
 				popupContainer.setId("UIModeratorManagement") ;
 				popupAction.activate(popupContainer, 660, 440) ;
 				event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
-		}
-	}	
-	
-	static public class ForumOptionActionListener extends EventListener<UIForumActionBar> {
-    public void execute(Event<UIForumActionBar> event) throws Exception {
-			UIForumActionBar uiActionBar = event.getSource() ;
-			UIForumPortlet forumPortlet = uiActionBar.getAncestorOfType(UIForumPortlet.class) ;
-			UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
-			UIForumOptionForm forumOptionForm = popupAction.createUIComponent(UIForumOptionForm.class, null, null) ;
-			popupAction.activate(forumOptionForm, 580, 290) ;
-			event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
 		}
 	}	
 	
@@ -123,7 +109,7 @@ public class UIForumActionBar extends UIContainer	{
 			UIForumPortlet forumPortlet = uiActionBar.getAncestorOfType(UIForumPortlet.class) ;
 			UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
 			UIForumOptionForm forumOptionForm = popupAction.createUIComponent(UIForumOptionForm.class, null, null) ;
-			popupAction.activate(forumOptionForm, 580, 290) ;
+			popupAction.activate(forumOptionForm, 580, 360) ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
 		}
 	}	

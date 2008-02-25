@@ -1,6 +1,14 @@
+<%  
+	import org.exoplatform.forum.ForumSessionUtils ;
+	import org.exoplatform.services.organization.User;
+	import org.exoplatform.web.application.JavascriptManager;
+  def rcontext = _ctx.getRequestContext() ;
+  JavascriptManager jsmanager = rcontext.getJavascriptManager();
+  jsmanager.addJavascript("eXo.forum.UIForumPortlet.setMenuTextAreaMutil('UIForumForm');");
+%>
 <div class="UIForumForm">	
   <% uiform.begin() %>  
-  <div class="UIForm AddForum">
+  <div class="UIForm AddForumInCategpry">
     <div class="HorizontalLayout">
       <table class="UIFormGrid">
         <tbody>
@@ -25,109 +33,39 @@
                <div class="RightHorizontalTabs">
                  <div class="CenterHorizontalTabs">
                   <div class="TabsContainer">
-                    
+                    <%String classCss = "SelectedTab" ; 
+                  	for(tabconten in uiform.getChildren()){ 
+                  		if(tabconten.id.equals("Category")) continue ;
+                  	%>  
                     <div class="UITab NormalTabStyle">
-                      <div class="SelectedTab">
+                      <div class="$classCss">
                         <div class="LeftTab">
                           <div class="RightTab">
-                            <div onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this)" class="MiddleTab"><%= _ctx.appRes("UIForumForm.title.newForum"); %></div>
+                            <div onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this)" class="MiddleTab"><%= _ctx.appRes(uiform.id + ".label." + tabconten.id); %></div>
                           </div>
                         </div>
                       </div>
                     </div>
-                
-                    <div class="UITab NormalTabStyle">
-                      <div class="NormalTab">
-                        <div class="LeftTab">
-                          <div class="RightTab">
-                            <div onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this)" class="MiddleTab"><%= _ctx.appRes("UIForumForm.title.moderationOptions"); %></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div class="UITab NormalTabStyle">
-                      <div class="NormalTab">
-                        <div class="LeftTab">
-                          <div class="RightTab">
-                            <div onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this)" class="MiddleTab"><%= _ctx.appRes("UIForumForm.title.forumPermission"); %></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    
+                	<% classCss = "NormalTab" ;  
+                		} %>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="UIForm">
+					<div class="UIForm">
             <div class="HorizontalLayout">
               <div class="UITabContentContainer">
-                
-                <div style="display: block;" id="UITabContent" class="UITabContent">
-                
-                  <div class="UIFormInputSet NewForum">
-                    <table class="UIFormGrid">
-                      <tbody>
-                      <% 
-                      	String[] actions = ["ForumTitle", "ForumOrder", "ForumStatus", "ForumState", "Description"] ;
-                        for(action in actions) {%>
-                        <tr>
-                          <td class="FieldLabel"><%=uicomponent.getLabel(action)%>:</td>
-                          <td class="FieldComponent">
-                            <% uiform.renderChild(action) %>
-                          </td>
-                        </tr>
-                      <% } %>
-                      </tbody>
-                    </table>
-                  </div>
-               
+                <% 
+                	String display =  "block";
+                	for(tabconten in uiform.getChildren()){
+                		if(tabconten.id.equals("Category")) continue ;
+                %>
+                <div style="display: $display;" id="UITabContent" class="UITabContent">
+                  <% uiform.renderChild(tabconten.id) ; %>
                 </div>
-            
-                <div style="display: none;" id="UITabContent" class="UITabContent">
-                  
-                  <div class="UIFormInputSet ModerationOptions">
-                    <table class="UIFormGrid">
-                      <tbody>
-                      <% 
-                      	actions = ["NotifyWhenAddTopic", "NotifyWhenAddPost", "ModerateThread", "ModeratePost"] ;
-                        for(action in actions) {%>
-                        <tr>
-                          <td class="FieldLabel"><%=uicomponent.getLabel(action)%>:</td>
-                          <td class="FieldComponent">
-                            <% uiform.renderChild(action) %>
-                          </td>
-                        </tr>
-                      <% } %>
-                      </tbody>
-                    </table>
-                  </div>
-    
-                </div>
-                
-                <div style="display: none;" id="UITabContent" class="UITabContent">
-                 <div class="UIFormInputSet ForumPermission">
-                    <table class="UIFormGrid">
-                      <tbody>
-                      <% 
-                      	actions = ["Moderator", "Viewer", "Topicable", "Postable"] ;
-                        for(action in actions) {%>
-                        <tr>
-                          <td class="FieldLabel"><%=uicomponent.getLabel(action)%>:</td>
-                          <td class="FieldComponent">
-                            <% uiform.renderChild(action) %>
-                            <div class="Icon24x24 AddIcon16x16" title="Add $action"><span></span></div>
-                            <div style="clear: left" ><span></span></div>
-                          </td>
-                        </tr>
-                      <% } %>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-                
+                <% display = "none"; %>
+            	<% } %>
               </div>
             </div>
           </div>
@@ -157,4 +95,73 @@
 	 	  </table> 
     </div>
   <%uiform.end()%>
+  <div id="PopupMenuTextAreaMulil">
+		<% /*Begin Popup Menu*/
+			List listUser = ForumSessionUtils.getAllUser() ;
+			String []childIds = ["Moderator","Viewer","Topicable","Postable"] ; 
+			for(childId in childIds){
+		%>
+			<div class="ChildPopupMenu" id="Add${childId}">
+				<div class="UIPopupCategory" style="display: none; top: -18px; left: -225px;">
+					<div class="PopupCategoryDecorator">
+				
+						<div class="UIRightClickPopupMenu" style="display: block;">
+							<div class="UIContextMenuContainer">
+								<div class="TopLeftRightClickPopupMenu">
+									<div class="TopRightRightClickPopupMenu">
+										<div class="TopCenterRightClickPopupMenu"><span></span></div>
+									</div>
+								</div>
+								<div class="MiddleLeftRightClickPopupMenu">
+									<div class="MiddleRightRightClickPopupMenu">
+										<div class="UIRightPopupMenuContainer">
+											<div class="ContentItems">
+												<div class="MenuItems">
+												<% int count = 0;
+												for(user in listUser) {
+														count = 1;
+												%>
+													 <div class="MenuItem" style="overflow:auto;">
+													 	<div style="float:left; padding: 3px 4px 3px 10px;">
+													 		<input type="checkbox" class="checkbox" value="false" name="<%=user.getUserName();%>"/>
+													 	</div>	 
+														<div class="ItemIcon classIconItem"><%=user.getUserName();%></div>
+													 </div>
+												<%  
+												 }
+												 if(count >= 1) {
+												%>
+												</div>
+												<div class="UIActionForum" style="width: 50px; margin:auto;">
+													<div class="NormalButtom" onclick="eXo.forum.UIForumPortlet.onclickAddMenuTextAreaMutil(this, '$childId');">
+														<div class="ButtonLeft">
+															<div class="ButtonRight">
+																<div class="ButtonMiddle">
+																 <div style="text-align: center;"><a>Add</a></div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<% } else { %>
+													<div class="MenuItem">Not Item</div>
+												<% } %>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="BottomLeftRightClickPopupMenu">
+								<div class="BottomRightRightClickPopupMenu">
+									<div class="BottomCenterRightClickPopupMenu"><span></span></div>
+								</div>
+							</div>
+							</div>
+						</div>
+					</div>
+				
+				</div>
+			</div>
+			<% } /*End Popup Menu*/ %>
+		</div>	
+		
 </div>

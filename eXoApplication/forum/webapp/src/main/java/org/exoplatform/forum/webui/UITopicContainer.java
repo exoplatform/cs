@@ -97,15 +97,16 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 	private boolean isUpdate = false;
 	private long maxTopic = 10 ;
 	private long maxPost = 10 ;
-	private UserProfile forumOption = null;
+	private UserProfile userProfile = null;
 	public UITopicContainer() throws Exception {
 		addUIFormInput( new UIFormStringInput("gopage1", null)) ;
 		addUIFormInput( new UIFormStringInput("gopage2", null)) ;
 		addChild(UIForumPageIterator.class, null, "ForumPageIterator") ;
 	}
 	
-	private UserProfile getOption() {
-		return forumOption ;
+	@SuppressWarnings("unused")
+  private UserProfile getUserProfile() {
+		return userProfile ;
 	}
 	
 	public void activate() throws Exception {}
@@ -143,9 +144,9 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 	
 	@SuppressWarnings("unused")
 	private void initPage() throws Exception {
-		this.forumOption = this.getAncestorOfType(UIForumPortlet.class).getUserProfile() ;
+		this.userProfile = this.getAncestorOfType(UIForumPortlet.class).getUserProfile() ;
 		this.pageList = forumService.getPageTopic(ForumSessionUtils.getSystemProvider(), categoryId, forumId);
-		long maxTopic = forumOption.getMaxTopicInPage() ;
+		long maxTopic = userProfile.getMaxTopicInPage() ;
 		if(maxTopic > 0) this.maxTopic = maxTopic ;
 		this.pageList.setPageSize(this.maxTopic);
 		this.getChild(UIForumPageIterator.class).updatePageList(this.pageList) ;
@@ -195,7 +196,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 	
 	private JCRPageList getPageListPost(String topicId) throws Exception {
 		JCRPageList pageListPost = this.forumService.getPosts(ForumSessionUtils.getSystemProvider(), this.categoryId, this.forumId, topicId)	; 
-		long maxPost = getOption().getMaxTopicInPage() ;
+		long maxPost = getUserProfile().getMaxTopicInPage() ;
 		if(maxPost > 0) this.maxPost = maxPost ;
 		pageListPost.setPageSize(this.maxPost) ;
 		return pageListPost;

@@ -131,10 +131,12 @@
 										 	<td class="Tdbox">$topicCount</td>
 											<td class="Tdbox">$postCount</td>
 											<td >
-											<% for(forumModerator in forumModerators) { %>
+											<% for(forumModerator in forumModerators) { 
+													 String userModerator = forumModerator.substring(forumModerator.indexOf("(")+1, forumModerator.indexOf(")")) ;
+											%>
 												<div class="ModeratorContent">
 													<div class="EmoticonsIcon BigGrinIcon"><span></span></div>
-													<a href="#" class="Moderator">$forumModerator</a>
+													<a href="#" class="Moderator">$userModerator</a>
 													<div style="clear: left;"><span></span></div>
 												</div>
 											<% } %>

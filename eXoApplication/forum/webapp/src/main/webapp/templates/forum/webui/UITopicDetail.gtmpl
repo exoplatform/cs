@@ -7,6 +7,7 @@
   import org.exoplatform.forum.ForumSessionUtils; 
   import org.exoplatform.forum.ForumFormatUtils;
 	import org.exoplatform.forum.service.UserProfile ;
+	import org.exoplatform.services.organization.User ;
 	import org.exoplatform.web.application.JavascriptManager;
   def rcontext = _ctx.getRequestContext() ;
   JavascriptManager jsmanager = rcontext.getJavascriptManager();
@@ -15,7 +16,7 @@
 	uicomponent.initPage() ;	
 	Topic topic = uicomponent.getTopic() ;
 	boolean isShowMenu = ForumSessionUtils.isAnonim();
-	UserProfile option = uicomponent.getOption();
+	UserProfile userProfile = uicomponent.getUserProfile();
 %>
 
 <div class="UITopicDetail">
@@ -309,18 +310,21 @@
 			int checked = 0 ;
 			for(post in posts) {
 				String owner = post.getOwner() ;
+				UserProfile userInfo = uicomponent.getUserInfo(owner) ;
 				String classIconPost = post.getIcon() ;
 				if(classIconPost.length() <= 0) 
 					classIconPost = "NormalTopicIcon" ;
 				String subject = post.getSubject() ;
 				Date createdPostDate = post.getCreatedDate() ;
-				String createdDate = ForumFormatUtils.getFormatDate((option.getLongDateFormat() + ", " + option.getTimeFormat()),createdPostDate);
+				String createdDate = ForumFormatUtils.getFormatDate((userProfile.getLongDateFormat() + ", " + userProfile.getTimeFormat()),createdPostDate);
 				String messager = ForumFormatUtils.convertCodeHTML(post.getMessage()) ;
 				String editBy = post.getModifiedBy() ;
 				Date modifileDate = post.getModifiedDate() ;
-				String editDate = ForumFormatUtils.getFormatDate((option.getLongDateFormat() + ", " + option.getTimeFormat()),modifileDate);
+				String editDate = ForumFormatUtils.getFormatDate((userProfile.getLongDateFormat() + ", " + userProfile.getTimeFormat()),modifileDate);
 				List attachments = post.getAttachments() ;
 				String idMessenger = "Id" + post.getId().substring(15);
+				User user = ForumSessionUtils.getUserByUserId(owner) ; 
+				String joinDate = ForumFormatUtils.getFormatDate("DDD yyyy",user.getCreatedDate()) ;
 		%>
 
 		<div class="ContentContainer" id="<%=post.getId();%>" style="margin: 2px 0px 0px 0px;">
@@ -336,11 +340,19 @@
 									<div class="Action"><span></span></div>
 									<div style="clear: left;"><span></span></div>
 								</div>
-								<div class="Rank">Junior Member</div>
+								<div class="Rank"><%=userInfo.getUserTitle();%></div>
 								<img src="/forum/skin/DefaultSkin/webui/background/Avatar1.gif" class="Img" />
 								<div class="InfoMember">
-									<div>Join Date: Feb 2006</div>
-									<div>Posts: 150</div>
+									<div>Join Date: $joinDate</div>
+									<% long totalPost = userInfo.getTotalPost();
+										if(totalPost > 0) { 
+											 String lastPostDateOfUser = ForumFormatUtils.getFormatDate((userProfile.getShortDateFormat() + ", " + userProfile.getTimeFormat()),userInfo.getLastPostDate()) ;
+									%>
+									<div>Posts: $totalPost</div>
+									<div>Last Post: $lastPostDateOfUser</div>
+									<% } else {%>
+									<div><strong>$owner</strong> has no post!</div>
+									<% } %>
 									<div>Location: Hanoi, Vietnam</div>
 								</div>
 							</div>
@@ -372,6 +384,11 @@
 							<div class="PostContent">
 								<div style="padding-top: 8px" id="$idMessenger">$messager</div>
 							</div>
+								<%  
+									if(userInfo.getIsDisplaySignature() && userInfo.getSignature() != null && userInfo.getSignature().length() > 0) {
+								%>
+								<div class="Signature">__________________<br><%= userInfo.getSignature(); %></div>
+								<% } %>
 							<% if(attachments != null && attachments.size() > 0) {%>
 							<div class="AttachmentContainer">
 								<div class="AttachmentTitle">Attachments:</div>

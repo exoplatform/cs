@@ -11,7 +11,7 @@
 				<div class="ControlbarCotainer">
 				<%
 				if(isAdmin) { 
-					String[] actions = ["AddCategory","AddForum","ManageModerator","ForumOption"];
+					String[] actions = ["AddCategory","AddForum","ManageModerator"];
 					for(action in actions){  
 				%>
 					<div class="DefaultStyle ForumBar" onmouseover="eXo.forum.UIForumPortlet.OverButton(this)" onmouseout="eXo.forum.UIForumPortlet.OverButton(this)">
@@ -36,7 +36,7 @@
 							<div class="LeftOverButton">
 								<div class="RightOverButton">
 									<div class="CenterOverButton">
-										<div class="Icon EditProfile">
+										<div class="Icon ForumOption">
 											<%= _ctx.appRes("UIForumActionBar.label.EditProfile"); %>
 										</div>
 									</div>

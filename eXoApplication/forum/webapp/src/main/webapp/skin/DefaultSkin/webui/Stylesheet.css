@@ -275,10 +275,14 @@
 }
 
 
-.UIForm .HorizontalLayout .textareaMultil {
+.UIForumPortlet .UIForm .HorizontalLayout .textareaMultil {
 	font-size:11px;
-	height:75px;
+	height:70px;
 	width:232px;
+}
+
+.UIForumPortlet .UIForumForm .HorizontalLayout .textareaMultil {
+	height:60px;
 }
 
 

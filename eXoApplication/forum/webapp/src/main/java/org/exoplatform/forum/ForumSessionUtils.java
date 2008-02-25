@@ -110,4 +110,9 @@ public class ForumSessionUtils {
   	return list;
   }
   
+  public static User getUserByUserId(String userId) throws Exception {
+  	OrganizationService organizationService = (OrganizationService) PortalContainer.getComponent(OrganizationService.class);
+  	return organizationService.getUserHandler().findUserByName(userId) ;
+  }
+  
 }
