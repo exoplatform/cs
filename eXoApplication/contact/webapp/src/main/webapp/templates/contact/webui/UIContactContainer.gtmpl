@@ -4,7 +4,7 @@
 	String compId = uicomponent.getId() ;
 %>
 
-<div class="UIContactContainer" id="$compId">
+<div class="UIContactContainer SpliterContainer" id="$compId">
 <!--  Start UIContacts-->
 	<div class="UIMessageArea" id="uiMessageListResizableArea">
 	<% uicomponent.renderChild(UIContacts.class) ;%>		
