@@ -30,35 +30,46 @@ UIContactPortlet.prototype.showContextMenu = function(compid) {
 
 UIContactPortlet.prototype.contactCallback = function(evt) {
 	var UIContextMenuCon = eXo.webui.UIContextMenuCon ;
+  var DOMUtil = eXo.core.DOMUtil ;
 	var _e = window.event || evt ;
 	_e.cancelBubble = true ;
 	var src = _e.srcElement || _e.target ;
-	var tr = eXo.core.DOMUtil.findAncestorByTagName(src, "tr") ;
+	var tr = DOMUtil.findAncestorByTagName(src, "tr") ;
 	var id = null ;
 	if(tr != null) {
-		var checkbox = eXo.core.DOMUtil.findFirstDescendantByClass(tr, "input", "checkbox") ;		
+		var checkbox = DOMUtil.findFirstDescendantByClass(tr, "input", "checkbox") ;		
 		id = checkbox.name ;
 		//eXo.webui.UIContextMenuCon.changeAction(UIContextMenuCon.menuElement, id) ;
 	} else {
-		tr = eXo.core.DOMUtil.findAncestorByClass(src, "VCardContent") ;
+		tr = DOMUtil.findAncestorByClass(src, "VCardContent") ;
 		id = tr.getAttribute("id") ;
     //eXo.webui.UIContextMenuCon.changeAction(UIContextMenuCon.menuElement, id) ;
 	}
   if(tr.getAttribute("ispublic")) {
     var isPublic = tr.getAttribute("ispublic").toLowerCase() ;
-    var actions = eXo.core.DOMUtil.findDescendantsByClass(UIContextMenuCon.menuElement, "div", "ItemIcon") ;
+    var actions = DOMUtil.findDescendantsByClass(UIContextMenuCon.menuElement, "div", "ItemIcon") ;
+    var isDisable = null ;
+    var len = actions.length ;
     if(isPublic == "true") {
-      if(!actions[4].parentNode.getAttribute("oldHref")) {
-        actions[4].parentNode.setAttribute("oldHref",actions[4].parentNode.href) ;
-        actions[4].parentNode.style.color = "#cccccc" ;
-        actions[4].parentNode.href = "javascript:void(0);" ;        
-      }
+      for (var i = 0; i < len; i++) {
+        isDisable = DOMUtil.hasClass(actions[i], "EditActionIcon") || DOMUtil.hasClass(actions[i], "MoveIcon") || DOMUtil.hasClass(actions[i], "DeleteContactIcon")
+        if (isDisable == false) continue;
+        if (!actions[i].parentNode.getAttribute("oldHref")) {
+          actions[i].parentNode.setAttribute("oldHref", actions[i].parentNode.href);
+          actions[i].parentNode.style.color = "#cccccc";
+          actions[i].parentNode.href = "javascript:void(0);";
+        }
+      } 
     } else {
-      if(actions[4].parentNode.getAttribute("oldHref")) {
-        actions[4].parentNode.href = actions[4].parentNode.getAttribute("oldHref") ;
-        actions[4].parentNode.removeAttribute("oldHref") ;
-        actions[4].parentNode.removeAttribute("style") ;
-      }
+      for (var i = 0; i < len; i++) {
+        isDisable = DOMUtil.hasClass(actions[i], "EditActionIcon") || DOMUtil.hasClass(actions[i], "MoveIcon") || DOMUtil.hasClass(actions[i], "DeleteContactIcon")
+        if (isDisable == false) continue;
+        if (actions[i].parentNode.getAttribute("oldHref")) {
+          actions[i].parentNode.href = actions[i].parentNode.getAttribute("oldHref");
+          actions[i].parentNode.removeAttribute("oldHref");
+          actions[i].parentNode.removeAttribute("style");
+        }
+      } 
     }
   }
 	eXo.webui.UIContextMenuCon.changeAction(UIContextMenuCon.menuElement, id) ;
