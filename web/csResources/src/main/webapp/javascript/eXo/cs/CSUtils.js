@@ -56,33 +56,17 @@ function Spliter() {
 Spliter.prototype.doResize = function(e , markerobj) {  
   _e = (window.event) ? window.event : e ;
   var DOMUtil = eXo.core.DOMUtil ;
-  this.posY = _e.clientY; 
+  this.posY = eXo.core.Browser.findMouseYInPage(_e) ;
   var marker = (typeof(markerobj) == "string")? document.getElementById(markerobj):markerobj ;
   var container = marker.parentNode ;
   var areas = DOMUtil.findDescendantsByClass(container, "div", "SpliterResizableListArea") ;
-  if(areas.length < 2) return ;
+  if((areas.length < 2) || (areas[0].style.display=="none")) return ;
   this.beforeArea = areas[0] ;
   this.afterArea = areas[1] ;
-//  if (beforeAreaObj) {
-//    this.beforeArea = (typeof(beforeAreaObj) == "string")? document.getElementById(beforeAreaObj):beforeAreaObj ;
-//  }
-//  
-//  if (!this.beforeArea) {
-//    this.beforeArea = eXo.core.DOMUtil.findPreviousElementByTagName(marker, "div") ;
-//  }
-//  
-//  if (afterAreaObj) {
-//    this.afterArea = (typeof(afterAreaObj) == "string")? document.getElementById(afterAreaObj):afterAreaObj ;
-//  }
-//  
-//  if (!this.afterArea) {
-//    this.afterArea = eXo.core.DOMUtil.findNextElementByTagName(marker, "div") ;
-//  }
-  this.beforeArea.style.height = (this.beforeArea.offsetHeight - 1) + "px" ;
-  this.afterArea.style.height = (this.afterArea.offsetHeight - 1) + "px" ;
+//  this.beforeArea.style.height = this.beforeArea.offsetHeight + "px" ;
+//  this.afterArea.style.height = this.afterArea.offsetHeight + "px" ;
   this.beforeArea.style.overflowY = "auto" ;
   this.afterArea.style.overflowY = "auto" ;
-  this.minHeight = 30 ;
   this.beforeY = this.beforeArea.offsetHeight ;
   this.afterY = this.afterArea.offsetHeight ;
   document.onmousemove = eXo.cs.Spliter.adjustHeight ;
@@ -92,11 +76,10 @@ Spliter.prototype.doResize = function(e , markerobj) {
 Spliter.prototype.adjustHeight = function(evt) {
   evt = (window.event) ? window.event : evt ;
   var Spliter = eXo.cs.Spliter ;
-  var delta = evt.clientY - Spliter.posY ;
+  var delta = eXo.core.Browser.findMouseYInPage(evt) - Spliter.posY ;
   var afterHeight = Spliter.afterY - delta ;
   var beforeHeight = Spliter.beforeY + delta ;
   if (beforeHeight <= 0  || afterHeight <= 0) return ;
-  
   Spliter.beforeArea.style.height =  beforeHeight + "px" ;
   Spliter.afterArea.style.height =  afterHeight + "px" ;
 } ;
@@ -105,13 +88,12 @@ Spliter.prototype.clear = function() {
   try {
     var Spliter = eXo.cs.Spliter ;
     document.onmousemove = null ;
-    Spliter.minHeight = null ;
-    Spliter.beforeY = null ;
-    Spliter.afterY = null ;
-    Spliter.beforeArea = null ;
-    Spliter.afterArea = null ;
-    Spliter.posY = null ;
-  } catch(e) {} ;
+    delete Spliter.beforeY ;
+    delete Spliter.afterY ;
+    delete Spliter.beforeArea ;
+    delete Spliter.afterArea ;
+    delete Spliter.posY ;
+  } catch(e) {window.statuts = "Message : " + e.message ;} ;
 } ;
 
 eXo.cs.Spliter = new Spliter() ;
@@ -121,14 +103,21 @@ eXo.cs.Spliter = new Spliter() ;
 function Utils() {}
 
 Utils.prototype.showHidePane = function(clickobj, beforeobj, afterobj) {
-	if(typeof(beforeobj) == "string") beforeobj = document.getElementById(beforeobj) ;
-	if(typeof(afterobj) == "string") afterobj = document.getElementById(afterobj) ;
-	if(beforeobj.style.display != "none") {
-		beforeobj.style.display = "none" ;
+  var container = eXo.core.DOMUtil.findAncestorByClass(clickobj, "SpliterContainer") ;
+  var areas = eXo.core.DOMUtil.findDescendantsByClass(container, "div", "SpliterResizableListArea") ;
+  var uiGrid = eXo.core.DOMUtil.findFirstDescendantByClass(areas[1], "table", "UIGrid") ;
+  var uiPreview = eXo.core.DOMUtil.findAncestorByClass(areas[1], "UIPreview") ;
+  if(areas.length < 2) return ;
+	if(areas[0].style.display != "none") {
 		clickobj.className = "MinimizeButton"
+    //uiGrid.style.height = (uiGrid.offsetHeight + areas[0].offsetHeight - 4) + "px" ;
+    areas[1].style.height = (areas[1].offsetHeight  + areas[0].offsetHeight - 4) + "px" ;
+		areas[0].style.display = "none" ;
 	} else {
-		beforeobj.style.display = "block" ;
+		areas[0].style.display = "block" ;
 		clickobj.className = "MaximizeButton"
+    //uiGrid.style.height = (uiGrid.offsetHeight - areas[0].offsetHeight + 4) + "px" ;
+    areas[1].style.height = (areas[1].offsetHeight - areas[0].offsetHeight + 4 ) + "px" ;
 	}
 } ;
 
