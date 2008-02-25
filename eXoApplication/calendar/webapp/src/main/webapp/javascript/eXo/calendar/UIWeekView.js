@@ -139,6 +139,7 @@ UIWeekView.prototype.dragStart = function(evt) {
 		"x" : eXo.core.Browser.findPosX(UIWeekView.container.parentNode),
 		"y" : eXo.core.Browser.findPosY(UIWeekView.container.parentNode)
 	}
+  UIWeekView.title = eXo.core.DOMUtil.findDescendantsByTagName(UIWeekView.dragElement,"p")[0].innerHTML ;
 	document.onmousemove = UIWeekView.drag ;
 	document.onmouseup = UIWeekView.drop ;
 } ;
@@ -152,7 +153,10 @@ UIWeekView.prototype.drag = function(evt) {
 	var height =  UIWeekView.dragElement.offsetHeight ;
 	var deltaY = null ;	
 	deltaY = _e.clientY - UIWeekView.mouseY ;
-	if(deltaY%eXo.calendar.UICalendarPortlet.interval == 0) UIWeekView.dragElement.style.top = UIWeekView.mousePos(_e).y - UIWeekView.offset.y - UIWeekView.containerOffset.y + "px" ;
+	if (deltaY % eXo.calendar.UICalendarPortlet.interval == 0) {
+    UIWeekView.dragElement.style.top = UIWeekView.mousePos(_e).y - UIWeekView.offset.y - UIWeekView.containerOffset.y + "px" ;
+    eXo.calendar.UICalendarPortlet.updateTitle(UIWeekView.dragElement, posY) ;
+  }
 	if (UIWeekView.isCol(_e)) {
 		var posX = eXo.core.Browser.findPosXInContainer(UIWeekView.currentCol, UIWeekView.dragElement.offsetParent) ;
 		UIWeekView.dragElement.style.left = posX + "px" ;
@@ -176,17 +180,25 @@ UIWeekView.prototype.dropCallback = function() {
 } ;
 
 UIWeekView.prototype.drop = function(evt) {
+	document.onmousemove = null ;
 	var _e = window.event || evt ;
 	var UIWeekView = eXo.calendar.UIWeekView ;
 	if (!UIWeekView.isCol(_e)) return ;
 	var currentCol = UIWeekView.currentCol ;
 	var sourceCol = UIWeekView.dragElement.parentNode ;
+  var eventY = UIWeekView.eventY ;
 	currentCol.appendChild(UIWeekView.dragElement) ;
 	UIWeekView.showInCol(sourceCol) ;	
 	UIWeekView.showInCol(currentCol) ;
-	if ((currentCol.cellIndex != sourceCol.cellIndex) || (UIWeekView.dragElement.offsetTop != UIWeekView.eventY)) UIWeekView.dropCallback() ;
+  UIWeekView.title = null ;
+  UIWeekView.offset = null ;
+  UIWeekView.mouseY = null ;
+  UIWeekView.eventY = null ;
+  UIWeekView.objectOffsetLeft = null ;
+  UIWeekView.containerOffset = null ;
+  UIWeekView.title = null ;
+	if ((currentCol.cellIndex != sourceCol.cellIndex) || (UIWeekView.dragElement.offsetTop != eventY)) UIWeekView.dropCallback() ;
 	UIWeekView.dragElement = null ;
-	document.onmousemove = null ;
 	return null ;
 } ;
 

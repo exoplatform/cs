@@ -121,7 +121,9 @@ UICalendarPortlet.prototype.getWeekNumber = function(now) {
 } ;
 
 /* common method */
-
+/*
+ * This function to apply common setting for portlet
+ */
 UICalendarPortlet.prototype.setting = function() {
 	// paras 1: time interval, paras 2: working time, paras 3: time format type, paras 4: portletid
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
@@ -132,7 +134,13 @@ UICalendarPortlet.prototype.setting = function() {
 	this.timeFormat = (arguments.length > 2) ? (new String(arguments[2])).trim() : null ;
 	this.portletName = arguments[3] ;
 } ;
-
+/*
+ * 
+ * @param {Object} obj : DOM element
+ * @param {Object} events : DOM element contains calendar events
+ * @param {Object} container : DOM element contains all calendar events
+ * This function to scroll scrollbar to certain postion
+ */
 UICalendarPortlet.prototype.setFocus = function(obj, events, container) {
 	events = this.getBlockElements(events) ;
 	var len = events.length ;
@@ -379,7 +387,9 @@ UICalendarPortlet.prototype.switchLayout = function(layout) {
 	}
 }	;
 /* for event */
-
+/*
+ * Initialize some properties in Day view
+ */
 UICalendarPortlet.prototype.init = function() {
 	try{
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
@@ -393,7 +403,11 @@ UICalendarPortlet.prototype.init = function() {
 	}
 	return true ;
 } ;
-
+/*
+ * 
+ * @param {Object} viewer : DOM element contains all calendar events
+ * This function to get all event element
+ */
 UICalendarPortlet.prototype.getElements = function(viewer) {
 	var className = (arguments.length > 1)? arguments[1] : "EventContainerBorder" ;
 	var elements = eXo.core.DOMUtil.findDescendantsByClass(viewer, "div", className) ;
@@ -408,10 +422,20 @@ UICalendarPortlet.prototype.getElements = function(viewer) {
 	}
 	return elems ;
 } ;
+/*
+ * 
+ * @param {Object} obj : DOM element
+ * This function to check a DOM element is visible or hidden
+ */
 UICalendarPortlet.prototype.isShow = function(obj) {
 	if(obj.style.display != "none") return true ;
 	return false ;
-}
+} ;
+/*
+ * 
+ * @param {Object} elements : All calendar event calendar 
+ * This function to get all visible event element
+ */
 UICalendarPortlet.prototype.getBlockElements = function(elements) {
 	var el = new Array() ;
 	var len = elements.length ;
@@ -419,8 +443,12 @@ UICalendarPortlet.prototype.getBlockElements = function(elements) {
 		if(this.isShow(elements[i])) el.push(elements[i]);
 	}
 	return el ;
-}
-
+} ;
+/**
+ * 
+ * @param {Object} obj : DOM element
+ * This function to set size for a DOM element
+ */
 UICalendarPortlet.prototype.setSize = function(obj) {
 	var start = parseInt(obj.getAttribute("startTime")) ;
 	var end = parseInt(obj.getAttribute("endTime")) ;
@@ -708,6 +736,7 @@ UICalendarPortlet.prototype.initDND = function(evt) {
 	UICalendarPortlet.eventTop = UICalendarPortlet.dragObject.offsetTop ;
 	UICalendarPortlet.dragContainer.onmousemove = UICalendarPortlet.dragStart ;
 	UICalendarPortlet.dragContainer.onmouseup = UICalendarPortlet.dragEnd ;
+  UICalendarPortlet.title = eXo.core.DOMUtil.findDescendantsByTagName(UICalendarPortlet.dragObject,"p")[0].innerHTML ;
 } ;
 /*
  * 
@@ -731,8 +760,21 @@ UICalendarPortlet.prototype.dragStart = function(evt) {
 			var top = UICalendarPortlet.eventTop + delta ;		
 			UICalendarPortlet.dragObject.style.top = top + "px" ;
 		}
-	}	
+	}
+  UICalendarPortlet.updateTitle(UICalendarPortlet.dragObject, posY) ;
 } ;
+/**
+ * 
+ * @param {Object} events : DOM elemnt contains a calendar event
+ * @param {Object} min : Minutes
+ * This function to update title of event when dragging calendar event
+ */
+UICalendarPortlet.prototype.updateTitle = function(events,min) {
+  var timeFormat = events.getAttribute("timeFormat") ;
+  var title = eXo.core.DOMUtil.findDescendantsByTagName(events,"p")[0] ;
+  timeFormat = (timeFormat)?eval(timeFormat) : {am: "AM", pm: "PM"} ;
+  title.innerHTML = eXo.calendar.UICalendarPortlet.minToTime(min, timeFormat) ;
+}
 
 UICalendarPortlet.prototype.dragEnd = function() {
 	this.onmousemove = null ;
@@ -741,20 +783,27 @@ UICalendarPortlet.prototype.dragEnd = function() {
 	var calType = dragObject.getAttribute("calType") ;
 	var start = parseInt(dragObject.getAttribute("startTime")) ;
 	var end = parseInt(dragObject.getAttribute("endTime")) ;
+  var title = eXo.core.DOMUtil.findDescendantsByTagName(dragObject,"p")[0] ;
+  var titleName = UICalendarPortlet.title ;
 	if (end == 0) end = 1440 ;
 	var delta = end - start  ;
-//	var currentStart = (UICalendarPortlet.workingStart) ? dragObject.offsetTop + UICalendarPortlet.workingStart : dragObject.offsetTop ;
 	var currentStart = dragObject.offsetTop ;
 	var currentEnd = currentStart + delta ;
 	var eventDayContainer = eXo.core.DOMUtil.findAncestorByClass(dragObject, "EventDayContainer") ;
-	eventDayContainer.onmousemove = null ;
+	var eventTop = UICalendarPortlet.eventTop ;
+  eventDayContainer.onmousemove = null ;
 	eventDayContainer.onmouseup = null ;
-	if(dragObject.offsetTop != UICalendarPortlet.eventTop) {		
+  UICalendarPortlet.dragObject = null ;
+  UICalendarPortlet.eventTop = null ;
+  UICalendarPortlet.eventY = null ;
+  UICalendarPortlet.dragContainer = null ;  
+  UICalendarPortlet.title = null ;
+	if(dragObject.offsetTop != eventTop) {
 		var actionLink =	UICalendarPortlet.adjustTime(currentStart, currentEnd, dragObject) ;
 		if (calType) actionLink = actionLink.replace(/'\s*\)/, "&calType=" + calType + "')") ;
 		eval(actionLink) ;
 	}
-	dragObject = null ;
+  title.innerHTML = titleName ;
 } ;
 
 /* for adjusting time */
