@@ -7,7 +7,7 @@
 
 %>
 
-<div class="UIContactPreview SpliterResizableListArea" id="<%=uicomponent.getId()%>">
+<div class="UIContactPreview" id="<%=uicomponent.getId()%>">
 <% if(contact != null) { %>	
 	<div class="ContactPreviewBar" >
 		<div class="Subject">Contact Details</div>
@@ -18,7 +18,7 @@
 		</span>
 		<div style="clear:both;"><span></span></div>
 	</div>
-	<div class="ContactPreviewDetails">
+	<div class="ContactPreviewDetails SpliterResizableListArea">
 <!--  Start DecoratorBox ViewBoxStyle -->
 		<div class="DecoratorBox">
 			<div class="ViewBoxStyle">

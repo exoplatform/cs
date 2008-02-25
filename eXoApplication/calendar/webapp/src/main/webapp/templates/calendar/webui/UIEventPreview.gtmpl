@@ -10,7 +10,7 @@ CalendarEvent event = uicomponent.getEvent() ;
 color = uicomponent.getColors().get(event.getCalendarId()) ;
 uiform.begin() ;
 %>
-<div class="UIPreview SpliterResizableListArea">
+<div class="UIPreview">
 	<%if(!uicomponent.isShowPopup()){%>
 		<div class="ViewBar">
 		  <div class="Label">
@@ -21,7 +21,7 @@ uiform.begin() ;
 		</div>
 	<%}%>
 	<div class="ViewContainer">
-	 <div class="DecoratorBox">
+	 <div class="DecoratorBox SpliterResizableListArea">
 	  <div class="ViewBoxStyle">
 	   <div class="TopLeftViewBoxStyle">
 	    <div class="TopRightViewBoxStyle">
