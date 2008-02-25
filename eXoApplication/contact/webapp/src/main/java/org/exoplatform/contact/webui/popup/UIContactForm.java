@@ -389,12 +389,8 @@ public class UIContactForm extends UIFormTabPane {
           UIAddressBooks uiAddressBooks = uiContactForm
             .getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class) ;
           if ( !ContactUtils.isEmpty(uiAddressBooks.getSelectedGroup())) {
-            
-            System.out.println("\n\n 11111111 \n\n");
             contactService.saveContactToSharedAddressBook(username, contact.getAddressBook()[0], contact, false) ;
           } else {
-            
-            System.out.println("\n\n 222222222 \n\n");
             contactService.saveSharedContact(username, contact) ;
           }  
         } else {          

@@ -851,15 +851,10 @@ public class JCRDataStorage{
     while(iter.hasNext()) {
       addressBook = iter.nextProperty().getParent() ;
       if(addressBook.getName().equals(addressBookId)) {
-        if(isNew) { 
-          
-          
-        }else {
-          Node contactHomeNode = addressBook.getParent().getParent().getNode(CONTACTS) ;
-          saveContact(contactHomeNode, contact, false) ;
-          contactHomeNode.getSession().save() ;
-        }
-        return ;
+      Node contactHomeNode = addressBook.getParent().getParent().getNode(CONTACTS) ;
+      saveContact(contactHomeNode, contact, isNew) ;
+      contactHomeNode.getSession().save() ;   
+      return ;
       }
     }      
   }

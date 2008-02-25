@@ -388,7 +388,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       for (String id : contactIds) {
         Contact contact = uiContacts.contactMap.get(id) ;
         if (contact.getContactType().equals(JCRDataStorage.PUBLIC)
-            || contact.getContactType().equals(JCRDataStorage.SHARED)) {
+            || contact.getContactType().equals(JCRDataStorage.SHARED)
+            || contact.getId().equals(ContactUtils.getCurrentUser())) {
           uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-move", null
               , ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -423,12 +424,18 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
+      String username = ContactUtils.getCurrentUser() ;
       for(String contactId : contactIds) {
       	Contact contact = uiContacts.contactMap.get(contactId) ;
-        if (contact.getContactType().equals(JCRDataStorage.PUBLIC) || contact.getContactType().equals(JCRDataStorage.SHARED)){
+        if (contact.getContactType().equals(JCRDataStorage.PUBLIC) 
+            || contact.getContactType().equals(JCRDataStorage.SHARED)
+            || contact.getId().equals(username)){
           uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-move", null
               , ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+
+          // add
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
           return ;
         }
       	if(contact != null) {
@@ -439,7 +446,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       if(contacts.size() == 0) return ;
       ContactService contactService = ContactUtils.getContactService() ;
       SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
-      String username = ContactUtils.getCurrentUser() ;
+      
       contactService.moveContacts(sessionProvider, username, contacts, type); 
       
       // update addressbook when search
