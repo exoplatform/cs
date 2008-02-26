@@ -16,7 +16,8 @@ UIWeekView.prototype.init = function() {
 	var uiCalendarViewContainer = document.getElementById("UICalendarViewContainer") ;
 	var allEvents = DOMUtil.findDescendantsByClass(uiCalendarViewContainer, "div", "EventContainerBorder") ;
 	this.container = document.getElementById("UIWeekViewGrid") ;
-	this.items = new Array() ; 
+	this.items = new Array() ;
+  eXo.calendar.UICalendarPortlet.viewType = "UIWeekView" ;
 	for(var i = 0 ; i < allEvents.length ; i ++) {
 		if(allEvents[i].style.display != "none") this.items.push(allEvents[i]) ;
 	}
@@ -25,6 +26,7 @@ UIWeekView.prototype.init = function() {
 	for(var i = 0 ; i < len ; i ++){		
 		var height = parseInt(this.items[i].getAttribute("endtime")) - parseInt(this.items[i].getAttribute("starttime")) ;
 		this.items[i].onmousedown = UIWeekView.dragStart ;
+    this.items[i].ondblclick = eXo.calendar.UICalendarPortlet.ondblclickCallback ;
 		eXo.calendar.UICalendarPortlet.setSize(this.items[i]) ;
 		marker = DOMUtil.findFirstDescendantByClass(this.items[i], "div", "ResizeEventContainer") ;
 		marker.onmousedown = UIWeekView.initResize ;

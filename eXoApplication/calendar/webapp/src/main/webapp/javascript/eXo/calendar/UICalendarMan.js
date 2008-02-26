@@ -701,6 +701,7 @@ GUIMan.prototype.scrollTo = function() {
 } ;
 
 GUIMan.prototype.initDND = function() {
+  eXo.calendar.UICalendarPortlet.viewType = "UIMonthView" ;
   var events = eXo.calendar.UICalendarMan.EventMan.events;
   for(var i=0 ; i<events.length ; i++) {
     var eventNode = events[i].rootNode;
@@ -708,6 +709,7 @@ GUIMan.prototype.initDND = function() {
     if (checkbox) {
       checkbox.onmousedown = this.cancelEvent;
     }
+    eventNode.ondblclick = eXo.calendar.UICalendarPortlet.ondblclickCallback ;
   }
   eXo.calendar.UICalendarDragDrop.init(this.tableData, eXo.calendar.UICalendarMan.EventMan.events);
 };

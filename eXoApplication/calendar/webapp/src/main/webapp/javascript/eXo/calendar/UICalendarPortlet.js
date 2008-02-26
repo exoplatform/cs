@@ -572,6 +572,7 @@ UICalendarPortlet.prototype.showEvent = function() {
 	var EventDayContainer = eXo.core.DOMUtil.findAncestorByClass(this.viewer,"EventDayContainer") ;
 	EventDayContainer.scrollTop = (this.workingStart) ? this.workingStart : 0 ;
 	if (!this.init()) return ;
+  this.viewType = "UIDayView" ;
 	var el = this.getElements(this.viewer) ;
 	el = this.sortByAttribute(el, "startTime") ;
 	if (el.length <= 0) return ;
@@ -579,6 +580,7 @@ UICalendarPortlet.prototype.showEvent = function() {
 	for(var i = 0 ; i < el.length ; i ++ ) {		
 		this.setSize(el[i]) ;
 		el[i].onmousedown = eXo.calendar.UICalendarPortlet.initDND ;
+    el[i].ondblclick = eXo.calendar.UICalendarPortlet.ondblclickCallback ;
 		marker = eXo.core.DOMUtil.findFirstChildByClass(el[i], "div", "ResizeEventContainer") ;
 		marker.onmousedown = eXo.calendar.UIResizeEvent.init ;
 	}
@@ -590,6 +592,13 @@ UICalendarPortlet.prototype.showEvent = function() {
 UICalendarPortlet.prototype.browserResizeCallback = function() {
 	if (!eXo.calendar.UICalendarPortlet.items) return ;
 	eXo.calendar.UICalendarPortlet.adjustWidth(eXo.calendar.UICalendarPortlet.items) ;
+}
+
+UICalendarPortlet.prototype.ondblclickCallback = function() {
+  var eventId = this.getAttribute("eventId") ;
+  var calendarId = this.getAttribute("calid") ;
+  var calendarType = this.getAttribute("caltype") ;
+  eXo.webui.UIForm.submitEvent('calendar#'+eXo.calendar.UICalendarPortlet.viewType,'Edit','&subComponentId='+eXo.calendar.UICalendarPortlet.viewType+'&objectId=' + eventId + '&calendarId=' + calendarId + '&calType='+ calendarType)
 }
 
 UICalendarPortlet.prototype.sortByAttribute = function(obj, attribute) {
