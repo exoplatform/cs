@@ -156,20 +156,12 @@ public class JCRDataStorage{
   }
   
   public Contact getPersonalContact(String userId) throws Exception {
-    String usersPath = nodeHierarchyCreator_.getJcrPath("usersPath") ;
-    Node contactHome = getPublicContactHome(SessionProvider.createSystemProvider());
-    QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
-    StringBuffer queryString = new StringBuffer("/jcr:root" + usersPath 
-                                                + "//element(*,exo:contact)[@exo:id='")
-                                                .append(userId).append("' and @exo:isOwner='true'] ") ;
-                                        
-    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
-    QueryResult result = query.execute();
-    NodeIterator i = result.getNodes() ;
-    if (i.hasNext()) {
-      return getContact(i.nextNode(), JCRDataStorage.PUBLIC) ;
-    }
-    return null ;
+    Node contactHome = getUserContactHome(SessionProvider.createSystemProvider(), userId) ;
+    try {
+      return getContact(contactHome.getNode(userId), JCRDataStorage.PUBLIC) ;
+    } catch (PathNotFoundException e) {
+      return null ;
+    } 
   }
   
   private Contact getContact(Node contactNode, String contactType) throws Exception {
