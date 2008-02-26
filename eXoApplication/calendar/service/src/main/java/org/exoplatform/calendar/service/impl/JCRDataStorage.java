@@ -55,12 +55,8 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.xml.PortalContainerInfo;
-import org.exoplatform.services.jcr.access.AccessControlEntry;
-import org.exoplatform.services.jcr.access.PermissionType;
-import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
-import org.hibernate.hql.ast.tree.FromClause;
 
 import com.sun.syndication.feed.synd.SyndContent;
 import com.sun.syndication.feed.synd.SyndContentImpl;
@@ -600,7 +596,7 @@ public class JCRDataStorage{
   }
 
   private void reparePermissions(Node node, String owner) throws Exception {
-   /* ExtendedNode extNode = (ExtendedNode)node ;
+    /* ExtendedNode extNode = (ExtendedNode)node ;
     if (extNode.canAddMixin("exo:privilegeable")) extNode.addMixin("exo:privilegeable");
     String[] arrayPers = {PermissionType.READ, PermissionType.ADD_NODE, PermissionType.SET_PROPERTY, PermissionType.REMOVE} ;
     extNode.setPermission(owner, arrayPers) ;
@@ -1545,6 +1541,7 @@ public class JCRDataStorage{
     Map<Integer, String > mapData = new HashMap<Integer, String>() ;
     Query query ;
     QueryManager qm ;
+    SessionProvider systemSession = SessionProvider.createSystemProvider() ; 
     // private events
     if(username != null && username.length() > 0) {
       Node calendarHome = getUserCalendarHome(sProvider, username) ;
@@ -1555,8 +1552,8 @@ public class JCRDataStorage{
       mapData = updateMap(mapData, it, eventQuery.getFromDate(), eventQuery.getToDate()) ;
     }
     // shared event
-    if(getSharedCalendarHome(SessionProvider.createSystemProvider()).hasNode(username)) {
-      PropertyIterator iter = getSharedCalendarHome(SessionProvider.createSystemProvider()).getNode(username).getReferences() ;
+    if(getSharedCalendarHome(systemSession).hasNode(username)) {
+      PropertyIterator iter = getSharedCalendarHome(systemSession).getNode(username).getReferences() ;
       while(iter.hasNext()) {
         try{
           Node calendar = iter.nextProperty().getParent() ;
@@ -1571,140 +1568,46 @@ public class JCRDataStorage{
       }
     }  
     // public events
-    Node publicCalHome = getPublicCalendarHome(SessionProvider.createSystemProvider()) ;
+    Node publicCalHome = getPublicCalendarHome(systemSession) ;
     eventQuery.setCalendarPath(publicCalHome.getPath()) ;
     qm = publicCalHome.getSession().getWorkspace().getQueryManager() ;
     eventQuery.setCalendarId(publicCalendarIds) ;
     query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH) ;
     NodeIterator it = query.execute().getNodes();
-    //System.out.println("event form " + eventQuery.getFromDate());
-    //System.out.println("event to " + eventQuery.getToDate());
     mapData = updateMap(mapData, it, eventQuery.getFromDate(), eventQuery.getToDate()) ;  
     return mapData ;    
   }
 
-
-  /*private Map<Integer, String> updateMap(Map<Integer, String> data, NodeIterator it, java.util.Calendar fromDate, java.util.Calendar toDate) throws Exception {
-    boolean isVictory = false ;
-
-    long milisOfDay = 24 * 60 * 60 * 1000 ;
-    long beginDay = fromDate.getTimeInMillis() / milisOfDay ;
-    //System.out.println("\n\n fromDate " + fromDate.getTime());
-    long endDay = toDate.getTimeInMillis() / milisOfDay ;
-    //System.out.println("\n\n toDate " + toDate.getTime());
-    while(it.hasNext()) {
-      Node eventNode = it.nextNode() ;
-
-      java.util.Calendar eventFrom = eventNode.getProperty("exo:fromDateTime").getDate() ;
-      java.util.Calendar eventTo = eventNode.getProperty("exo:toDateTime").getDate() ;
-
-      if(eventFrom.before(fromDate) && eventTo.after(toDate)) {
-        for(int i = 0; i <= 31; i++) {
-          data.put(i, VALUE) ;
-        }
-        return data ;
-      } 
-
-      Long start = new Long(1);
-      Long end ;
-
-      //start = new Long(1) ;
-       System.out.println("\n\n event form " + eventNode.getProperty("exo:fromDateTime").getDate().getTime());
-      System.out.println("\n\n event to " + eventNode.getProperty("exo:toDateTime").getDate().getTime()); 
-      long millis = eventNode.getProperty("exo:fromDateTime").getDate().getTimeInMillis() ;
-      long eventFromDay ;
-      long eventToDay ;
-      if(millis % milisOfDay == 0) eventFromDay = millis / milisOfDay;
-      else eventFromDay = millis / milisOfDay  + 1;
-
-      millis = eventNode.getProperty("exo:toDateTime").getDate().getTimeInMillis() ;
-      if(millis % milisOfDay == 0) eventToDay = millis / milisOfDay ;
-      else eventToDay = millis / milisOfDay + 1 ;
-      //long toDay = eventNode.getProperty("exo:toDateTime").getDate().getTimeInMillis() / milisOfDay + 1;
-      System.out.println("\n\n evnet form day " + eventFromDay);
-      System.out.println("\n\n evnet to day " + eventToDay);
-      if(eventFromDay < beginDay) {
-        if(eventToDay < endDay ) {
-          end = eventToDay - beginDay ;          
-        }else {
-          end = endDay - beginDay ;
-          isVictory = true ;
-        }
-      }else if(eventFromDay == beginDay) {
-        if( eventToDay < endDay) {
-          end = eventToDay - beginDay ;            
-        }else {
-          end = endDay - beginDay ;
-          isVictory = true ;
-        }
-      } else {
-        start = eventFromDay - beginDay ;
-        if(eventToDay < endDay) {
-          end = start + (eventToDay - eventFromDay) ;    
-          //System.out.println("\n\n eventToDay - eventFromDay" + (eventToDay - eventFromDay));
-        }else {
-          end = start + (endDay - eventFromDay) ;
-          // System.out.println("\n\n endDay - eventFromDay" + (endDay - eventFromDay));
-        }
-        //System.out.println("\n\n start " + start);
-
-        // System.out.println("\n\n end " + end);
-
-      }
-      for (int i = start.intValue(); i <= end.intValue(); i ++) {
-        // System.out.println("\n\n I " + i);
-        data.put(i, VALUE) ;            
-      }
-      if (isVictory) break ;
-    }
-    return data ;
-  }*/
+ 
   private Map<Integer, String> updateMap(Map<Integer, String> data, NodeIterator it, java.util.Calendar fromDate, java.util.Calendar toDate) throws Exception {
     boolean isVictory = false ;
-    long milisOfDay = 24 * 60 * 60 * 1000 ;
-    long beginDay = fromDate.getTimeInMillis() / milisOfDay ;
-    long endDay = toDate.getTimeInMillis() / milisOfDay ;
-    while(it.hasNext()) {
-      Long start = new Long(1);
-      Long end ;
+    while(it.hasNext() && !isVictory) {
       Node eventNode = it.nextNode() ;
-      //start = new Long(1) ;
-      long millis = eventNode.getProperty("exo:fromDateTime").getDate().getTimeInMillis() ;
-      long eventFromDay ;
-      long eventToDay ;
-      if(millis % milisOfDay == 0) eventFromDay = millis / milisOfDay;
-      else eventFromDay = millis / milisOfDay  + 1;
+      java.util.Calendar eventFormDate = eventNode.getProperty("exo:fromDateTime").getDate() ;
+      java.util.Calendar eventToDate = eventNode.getProperty("exo:toDateTime").getDate() ;
 
-      millis = eventNode.getProperty("exo:toDateTime").getDate().getTimeInMillis() ;
-      if(millis % milisOfDay == 0) eventToDay = millis / milisOfDay ;
-      else eventToDay = millis / milisOfDay + 1 ;
-      //long toDay = eventNode.getProperty("exo:toDateTime").getDate().getTimeInMillis() / milisOfDay + 1;
-      if(eventFromDay < beginDay) {
-        if(eventToDay < endDay ) {
-          end = eventToDay - beginDay ;          
-        }else {
-          end = endDay - beginDay ;
-          isVictory = true ;
+      if(eventFormDate.before(fromDate) && eventToDate.after(toDate)) {
+        isVictory = true ;
+        while(toDate.after(fromDate)) {
+          data.put(fromDate.get(java.util.Calendar.DAY_OF_YEAR), VALUE) ;
+          fromDate.add(java.util.Calendar.DATE, 1) ;
         }
-      }else if(eventFromDay == beginDay) {
-        if( eventToDay < endDay) {
-          end = eventToDay - beginDay ;            
-        }else {
-          end = endDay - beginDay ;
-          isVictory = true ;
+      } else if(eventFormDate.after(fromDate) && eventToDate.after(toDate)) {
+        while(toDate.after(eventFormDate)) {
+          data.put(eventFormDate.get(java.util.Calendar.DAY_OF_YEAR), VALUE) ;
+          eventFormDate.add(java.util.Calendar.DATE, 1) ;
         }
-      } else {
-        start = eventFromDay - beginDay ;
-        if(eventToDay < endDay) {
-          end = start + (eventToDay - eventFromDay) ;    
-        }else {
-          end = start + (endDay - eventFromDay) ;
+      } else if(eventFormDate.after(fromDate) && eventToDate.before(toDate)) {
+        while (eventToDate.after(eventFormDate)) {
+          data.put(eventFormDate.get(java.util.Calendar.DAY_OF_YEAR), VALUE) ;
+          eventFormDate.add(java.util.Calendar.DATE, 1) ;
+        }
+      } else if(eventFormDate.before(fromDate) && eventToDate.before(toDate)){
+        while(eventToDate.after(fromDate)) {
+          data.put(fromDate.get(java.util.Calendar.DAY_OF_YEAR), VALUE) ;
+          fromDate.add(java.util.Calendar.DATE, 1) ;
         }
       }
-      for (int i = start.intValue(); i <= end.intValue(); i ++) {
-        data.put(i, VALUE) ;            
-      }
-      if (isVictory) break ;
     }
     return data ;
   }

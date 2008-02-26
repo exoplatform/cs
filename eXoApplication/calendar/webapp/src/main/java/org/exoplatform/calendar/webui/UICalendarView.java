@@ -122,9 +122,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     initCategories() ;
     applySeting() ;
     calendar_ = getInstanceTempCalendar() ; //CalendarUtils.getInstanceTempCalendar() ;
-    /* calendar_.setLenient(false) ;
-    int gmtoffset = calendar_.get(Calendar.DST_OFFSET) + calendar_.get(Calendar.ZONE_OFFSET);
-    calendar_.setTimeInMillis(System.currentTimeMillis() - gmtoffset) ;*/
+    calendar_.setLenient(false) ;
+    /*int gmtoffset = calendar_.get(Calendar.DST_OFFSET) + calendar_.get(Calendar.ZONE_OFFSET);
+    calendar_.setTimeInMillis(System.currentTimeMillis() - gmtoffset) ; */
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy k:m:s z");
     simpleDateFormat.setCalendar(calendar_) ;
     dfs_ = new DateFormatSymbols() ;
@@ -773,16 +773,18 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         System.out.println("GotoDateActionListener  mini calendar ");
         UICalendarView calendarview = event.getSource() ;
         String viewType = event.getRequestContext().getRequestParameter(OBJECTID) ;
+        String currentTime = event.getRequestContext().getRequestParameter("currentTime") ;
         String year = event.getRequestContext().getRequestParameter(YEAR) ;
         String month = event.getRequestContext().getRequestParameter(MONTH) ;
         String day = event.getRequestContext().getRequestParameter(DAY) ;
         UICalendarPortlet portlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
         UICalendarViewContainer uiContainer = portlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
         UIMiniCalendar uiMiniCalendar = portlet.findFirstComponentOfType(UIMiniCalendar.class) ;
-        Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
-        cal.set(Calendar.DATE, Integer.parseInt(day)) ;
+        Calendar cal = calendarview.getInstanceTempCalendar() ;
+        cal.setTimeInMillis(Long.parseLong(currentTime)) ;
+       /* cal.set(Calendar.DATE, Integer.parseInt(day)) ;
         cal.set(Calendar.MONTH, Integer.parseInt(month)) ;
-        cal.set(Calendar.YEAR, Integer.parseInt(year)) ;
+        cal.set(Calendar.YEAR, Integer.parseInt(year)) ;*/
         int type = Integer.parseInt(viewType) ; 
         uiContainer.initView(UICalendarViewContainer.TYPES[type]) ;
         switch (type){

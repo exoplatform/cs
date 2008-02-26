@@ -56,6 +56,8 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 )
 public class UIYearView extends UICalendarView {
   private Map<Integer, String > yearData_ = new HashMap<Integer, String>() ;
+  private Map<String, Map<Integer, String >> fullYearData_ = new HashMap<String, Map<Integer,String>>() ; 
+  
   private final static String VALUE = "value".intern() ; 
   private String categoryId_ = null ;
   public UIYearView() throws Exception {
@@ -69,6 +71,7 @@ public class UIYearView extends UICalendarView {
     calendar_.add(Calendar.YEAR, years) ;
   }
   private Map<Integer, String> getValueMap() { return yearData_ ; }
+  
   public void refresh() throws Exception { 
     System.out.println("\n\n>>>>>>>>>> YEAR VIEW") ;
     yearData_.clear() ;

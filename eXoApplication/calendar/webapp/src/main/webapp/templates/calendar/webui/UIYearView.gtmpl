@@ -6,6 +6,7 @@
 	rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.setSelected("'+uiform.id+'") ;') ;
  	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
 	int currentYear = uicomponent.getCurrentYear() ;
+	Calendar cal = uicomponent.getCurrentCalendar() ;
 	String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT, String.valueOf(Calendar.YEAR)) ;
  	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS, String.valueOf(Calendar.YEAR)) ;
  	Map value = uicomponent.getValueMap() ;
@@ -49,7 +50,11 @@
 	        				cssClass = "CalendarMatchedEventContent" ;
 	        			}
 	        		monthName = uicomponent.getMonthName(month) ;
-	        		monthViewAction = uicomponent.TYPE_MONTH +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ month +"&"+ uicomponent.DAY + "=1" ;
+	        		cal.set(Calendar.YEAR, currentYear) ;
+	        		cal.set(Calendar.MONTH, month) ;
+	        		cal.set(Calendar.DATE, 1) ;
+	        		monthViewAction = uicomponent.TYPE_MONTH +"&currentTime="+cal.getTimeInMillis() ;  
+	        		//monthViewAction = uicomponent.TYPE_MONTH +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ month +"&"+ uicomponent.DAY + "=1" ;
         	 %>
         	 <td class="$cssClass">
 							<div class="WeekSuburdbar">
@@ -87,7 +92,10 @@
 											      }
 											      if (validDay) {
 											      	highlight = "" ;
-											      	dayActionLink = uicomponent.TYPE_DAY +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ month +"&"+ uicomponent.DAY + "=" + dayOfMonth ;
+											      	cal.set(Calendar.MONTH, month) ;
+											      	cal.set(Calendar.DAY_OF_MONTH, dayOfMonth) ;
+											      	dayActionLink = uicomponent.TYPE_DAY +"&currentTime="+ cal.getTimeInMillis();
+											      	//dayActionLink = uicomponent.TYPE_DAY +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ month +"&"+ uicomponent.DAY + "=" + dayOfMonth ;
 											      	if(value.get(dayOfYear) != null) {
 											      		highlight = "Highlight" ;
 											      	}

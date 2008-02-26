@@ -21,14 +21,13 @@
 	rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarMan','/calendar/javascript/') ;
   rcontext.getJavascriptManager().importJavascript('eXo.calendar.UIWeekView','/calendar/javascript/') ;
   int defaultTimeInterval = uicomponent.getDefaultTimeInterval() ;
-  //rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.setting(' + defaultTimeInterval + ', "' + workingStart + '") ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarMan.initWeek() ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UIWeekView.init() ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkFilter() ;') ;
-	//rcontext.getJavascriptManager().addJavascript('eXo.calendar.UIWeekView.initSelection() ;') ;
-	//rcontext.getJavascriptManager().addJavascript('eXo.calendar.UIWeekView.initSelectionX() ;') ;
 	rcontext.getJavascriptManager().addOnResizeJavascript('eXo.calendar.UIWeekView.setSize') ;
- 	yearViewAction = uicomponent.TYPE_YEAR +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=1" ;
+ 	monthViewAction = uicomponent.TYPE_MONTH +"&currentTime="+ uicomponent.getCurrentCalendar().getTimeInMillis();
+	yearViewAction = uicomponent.TYPE_YEAR +"&currentTime="+ uicomponent.getCurrentCalendar().getTimeInMillis();
+ 	
  	dateFormat = uicomponent.getDateFormat() ;
 	timeFormat = uicomponent.getTimeFormat() ;
 	dateTimeFormat = uicomponent.getDateTimeFormat() ;
@@ -89,7 +88,7 @@
 						  	if(uicomponent.isCurrentDay(cl.get(Calendar.DATE), cl.get(Calendar.MONTH), cl.get(Calendar.YEAR))) {
 						  		cssClass = "Today" ;
 						  	}
-							  dayActionLink = uicomponent.TYPE_DAY +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ cl.get(Calendar.MONTH)+"&"+ uicomponent.DAY + "=" +  cl.get(Calendar.DATE) ;
+							  dayActionLink = uicomponent.TYPE_DAY +"&currentTime="+ cl.getTimeInMillis() ;
 							  actionLink =  uicomponent.event("GotoDate",dayActionLink) ;
 							  styleCss = "" ;
 							  if(cl.get(Calendar.DAY_OF_WEEK) == 1){

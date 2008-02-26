@@ -6,7 +6,7 @@
 	
 	int currentYear = uicomponent.getCurrentYear() ;
 	int currentMonth = uicomponent.getCurrentMonth() ;
-	int currentDay = uicomponent.getCurrentDay() ;
+	int currentDay = uicomponent.getCurrentCalendar().get(Calendar.DAY_OF_YEAR) ;
 	String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT,String.valueOf(uicomponent.TYPE_MONTH)) ;
  	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS,String.valueOf(uicomponent.TYPE_MONTH)) ;
  	String linkYearNext = uicomponent.event(uicomponent.ACT_NEXT, String.valueOf(uicomponent.TYPE_YEAR)) ;
@@ -41,8 +41,8 @@
 							<td>
 								<div class="Title">
 								<%
-										monthViewAction = uicomponent.TYPE_MONTH +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=1" ;
-										yearViewAction = uicomponent.TYPE_YEAR +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"=0&"+ uicomponent.DAY + "=1" ;
+										monthViewAction = uicomponent.TYPE_MONTH +"&currentTime="+ uicomponent.getCurrentCalendar().getTimeInMillis();
+										yearViewAction = uicomponent.TYPE_YEAR +"&currentTime="+ uicomponent.getCurrentCalendar().getTimeInMillis();
 								%>
 								<a href="<%=uicomponent.event("GotoDate", monthViewAction)%>" style="color:blue;">
 									$monthName 
@@ -97,20 +97,20 @@
 				      } else if (validDay == 1 && dayOfMonth > daysInMonth) {
 				        validDay = 0;
 				      }
-				      if (validDay) {
+				      if (true) {
 				       	clazz = "" ;
 				       	highlight = "" ;
-						    if(data.get(dayOfMonth) != null) {
+						    if(data.get(calendar.get(Calendar.DAY_OF_YEAR)) != null) {
 						    	highlight = "Highlight" ;
 						    } 
 					      if (uicomponent.isCurrentDay(dayOfMonth, currentMonth, currentYear )) {
 						       clazz = "Today";
 						     } else  {
-						       if(dayOfMonth == currentDay) {
+						       if(calendar.get(Calendar.DAY_OF_YEAR) == currentDay) {
 						       	clazz = "SelectedDay";
 						       }  
 						     }
-						   dayActionLink = uicomponent.TYPE_DAY +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=" + dayOfMonth ;
+						   dayActionLink = uicomponent.TYPE_DAY +"&currentTime="+ calendar.getTime().getTime() ;
 				       actionLink = uicomponent.event("GotoDate", dayActionLink) ;
 				       //sdf.setCalendar(calendar) ;
 				       %>

@@ -10,8 +10,6 @@
 	def rcontext = _ctx.getRequestContext() ;  
   rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarDragDrop','/calendar/javascript/') ;
   rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarMan','/calendar/javascript/') ;
-  //rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarMan.initMonth() ;') ;
-  //rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarMan.GUIMan.initHighlighter("' + uiform.id + '") ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkFilter() ;') ;
  	int currentDay = uicomponent.getCurrentDay() ;
 	int currentMonth = uicomponent.getCurrentMonth() ;
@@ -19,8 +17,8 @@
 	int currentYear = uicomponent.getCurrentYear() ;
  	String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT, String.valueOf(Calendar.MONTH)) ;
  	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS, String.valueOf(Calendar.MONTH)) ;
- 	yearViewAction = uicomponent.TYPE_YEAR +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=1" ;
 	Calendar calendar = uicomponent.getCurrentCalendar() ;
+ 	yearViewAction = uicomponent.TYPE_YEAR +"&currentTime="+ uicomponent.getCurrentCalendar().getTimeInMillis();
 	dateFormat = uicomponent.getDateFormat() ;
 	timeFormat = uicomponent.getTimeFormat() ;
 	dateTimeFormat = uicomponent.getDateTimeFormat() ;
@@ -122,7 +120,7 @@
 				<tbody>
 				
 					<%
-					  temcalendar = CalendarUtils.getInstanceTempCalendar() ;//uicomponent.getBeginDateOfMonthView() ;
+					  temcalendar = uicomponent.getInstanceTempCalendar() ;//uicomponent.getBeginDateOfMonthView() ;
 					  temcalendar.setTime(uicomponent.getBeginDateOfMonthView().getTime()) ;
 						week = 0 ; 
 						table = "" ;
@@ -144,7 +142,7 @@
 					      display = "" ;
 					     	dateTime = temcalendar.getTimeInMillis() ;  
 						    actionUpdate = uicomponent.event('UpdateEvent', dateTime + '&' + uicomponent.EVENTID + '=event&' + uicomponent.CALENDARID + '=cal&' + uicomponent.CALTYPE + '=caltype') ;
-					      dayActionLink = uicomponent.TYPE_DAY +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=" + dayOfMonth ;
+					      dayActionLink = uicomponent.TYPE_DAY +"&currentTime="+  dateTime ;
 					      if (validDay) { 
 					        if (uicomponent.isCurrentDay(dayOfMonth, currentMonth, currentYear )) {
 					          clazz = 'Today';
@@ -168,7 +166,9 @@
 					      	%>
 					        <td  startTimeFull="<%=tempFormat.format(temcalendar.getTime())%>" actionLink="$actionUpdate" startTime='$dateTime' class='CalendarContentDisable  UICellBlock'> <div class='DisableDay'><span></span></div>
 					        	<div class='DayContent'> 
-								 		<%=sdtf.format(temcalendar.getTime())%>
+					        	 <a href="<%=uicomponent.event("GotoDate",dayActionLink)%>" onmousedown="event.cancelBubble = true ;">
+						        	<%=sdtf.format(temcalendar.getTime())%>
+										</a>
 								 		</div>
 								 	</td>
 					     <%

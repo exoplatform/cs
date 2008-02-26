@@ -256,13 +256,13 @@ public class UICalendars extends UIForm  {
       String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
       String clientTime = event.getRequestContext().getRequestParameter(CURRENTTIME) ;
       //String offsetTimeZone = event.getRequestContext().getRequestParameter(TIMEZONE) ;
+      String categoryId = event.getRequestContext().getRequestParameter("categoryId") ;
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
       popupAction.deActivate() ;
       UIQuickAddEvent uiQuickAddEvent = popupAction.activate(UIQuickAddEvent.class, 600) ;
       uiQuickAddEvent.setEvent(true) ;  
       uiQuickAddEvent.setId("UIQuickAddEvent") ;
-      uiQuickAddEvent.init(uiCalendarPortlet.getCalendarSetting(), clientTime, null) ;
       List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
       if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
         options = null ;
@@ -280,7 +280,12 @@ public class UICalendars extends UIForm  {
       }    
       uiQuickAddEvent.update(calType, options) ;
       uiQuickAddEvent.setSelectedCalendar(calendarId) ;
-      uiQuickAddEvent.setSelectedCategory("Meeting") ;
+      uiQuickAddEvent.init(uiCalendarPortlet.getCalendarSetting(), clientTime, null) ;
+      if(categoryId != null && categoryId.trim().length() >0 && !categoryId.toLowerCase().equals("null")) {
+        uiQuickAddEvent.setSelectedCategory(categoryId) ;
+      } else {
+        uiQuickAddEvent.setSelectedCategory("Meeting") ;
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       //event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent) ;
     }
@@ -294,6 +299,7 @@ public class UICalendars extends UIForm  {
       String clientTime = event.getRequestContext().getRequestParameter(CURRENTTIME) ;
       //String offsetTimeZone = event.getRequestContext().getRequestParameter(TIMEZONE) ;
       String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
+      String categoryId = event.getRequestContext().getRequestParameter("categoryId") ;
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
       popupAction.deActivate() ;
@@ -318,7 +324,11 @@ public class UICalendars extends UIForm  {
       }    
       uiQuickAddEvent.update(calType, options) ;
       uiQuickAddEvent.setSelectedCalendar(calendarId) ;
-      uiQuickAddEvent.setSelectedCategory("Meeting") ;
+      if(categoryId != null && categoryId.trim().length() >0 && !categoryId.toLowerCase().equals("null")) {
+        uiQuickAddEvent.setSelectedCategory(categoryId) ;
+      } else {
+        uiQuickAddEvent.setSelectedCategory("Meeting") ;
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       //event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
     }
@@ -381,15 +391,15 @@ public class UICalendars extends UIForm  {
           return ;
         }
       }
-        UICalendarPortlet uiPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
-        uiPortlet.cancelAction() ;
-        UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
-        UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
-        UICalendarWorkingContainer workingContainer = uiComponent.getAncestorOfType(UICalendarWorkingContainer.class) ;
-        uiMiniCalendar.updateMiniCal() ;
-        uiViewContainer.refresh() ;
-        uiPortlet.setCalendarSetting(null) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(workingContainer) ;
+      UICalendarPortlet uiPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
+      uiPortlet.cancelAction() ;
+      UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
+      UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+      UICalendarWorkingContainer workingContainer = uiComponent.getAncestorOfType(UICalendarWorkingContainer.class) ;
+      uiMiniCalendar.updateMiniCal() ;
+      uiViewContainer.refresh() ;
+      uiPortlet.setCalendarSetting(null) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(workingContainer) ;
     }
   }
 
