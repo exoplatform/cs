@@ -67,7 +67,7 @@ public class UIActionBar extends UIContainer  {
       UICategorySelect categorySelect = uiPopupContainer.addChild(UICategorySelect.class, null, null) ;
       categorySelect.setPrivateGroupMap(
           uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class).getPrivateGroupMap()) ;
-      categorySelect.addCategories() ;
+      //categorySelect.addCategories() ;
       UIContactForm contactForm = uiPopupContainer.addChild(UIContactForm.class, null, null) ;
       contactForm.setNew(true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;

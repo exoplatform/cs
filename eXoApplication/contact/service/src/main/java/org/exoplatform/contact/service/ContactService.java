@@ -47,6 +47,9 @@ public interface ContactService {
   public Contact removePublicContact(SessionProvider sProvider, String contactId) throws Exception ;
   public List<String> getAllEmailByPublicGroup(String username, String groupId) throws Exception ;
   public void addGroupToPersonalContact(String userId, String groupId) throws Exception ;
+  // added 25-2-08
+  public Contact getPersonalContact(String userId) throws Exception ;
+  
   
   public List<ContactGroup> getGroups(SessionProvider sProvider, String username) throws Exception ;
   public ContactGroup getGroup(SessionProvider sProvider, String username, String groupId) throws Exception ;

@@ -18,6 +18,7 @@ package org.exoplatform.contact.webui;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +28,7 @@ import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.SharedAddressBook;
+import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.service.impl.NewUserListener;
 import org.exoplatform.contact.webui.popup.UICategoryForm;
 import org.exoplatform.contact.webui.popup.UICategorySelect;
@@ -74,9 +76,9 @@ import org.exoplatform.webui.event.EventListener;
     
 public class UIAddressBooks extends UIComponent {
   private String selectedGroup = null;
-  private Map<String, String> privateAddressBookMap_ = new HashMap<String, String>() ;
+  private Map<String, String> privateAddressBookMap_ = new LinkedHashMap<String, String>() ;
   //private Map<String, String> publicAddressBookMap_ = new HashMap<String, String>() ;
-  private Map<String, SharedAddressBook> sharedAddressBookMap_ = new HashMap<String, SharedAddressBook>() ;
+  private Map<String, SharedAddressBook> sharedAddressBookMap_ = new LinkedHashMap<String, SharedAddressBook>() ;
   private List<Contact> copyContacts = new ArrayList<Contact>();
   private String copyAddress = null ;
   public UIAddressBooks() throws Exception { }
@@ -153,9 +155,10 @@ public class UIAddressBooks extends UIComponent {
       UIAddressBooks uiAddressBook = event.getSource();
       String destAddress = event.getRequestContext().getRequestParameter(OBJECTID);
       String destType ;
-      if (uiAddressBook.privateAddressBookMap_.containsKey(destAddress)) destType = "0" ;
-      else if (uiAddressBook.sharedAddressBookMap_.containsKey(destAddress)) destType = "1" ;
-      else destType = "2" ;
+      if (uiAddressBook.privateAddressBookMap_.containsKey(destAddress)) destType = JCRDataStorage.PRIVATE ;
+      else destType = JCRDataStorage.SHARED ;
+//      else if (uiAddressBook.sharedAddressBookMap_.containsKey(destAddress)) destType = "1" ;
+//      else destType = "2" ;
             
       String srcAddress = uiAddressBook.copyAddress ; 
       if (!ContactUtils.isEmpty(srcAddress)) {
@@ -167,9 +170,9 @@ public class UIAddressBooks extends UIComponent {
           return ;
         }
         String srcType ;
-        if (uiAddressBook.privateAddressBookMap_.containsKey(srcAddress)) srcType = "0" ;
-        else if (uiAddressBook.sharedAddressBookMap_.containsKey(srcAddress)) srcType = "1" ;
-        else srcType = "2" ;    
+        if (uiAddressBook.privateAddressBookMap_.containsKey(srcAddress)) srcType = JCRDataStorage.PRIVATE ;
+        else if (uiAddressBook.sharedAddressBookMap_.containsKey(srcAddress)) srcType = JCRDataStorage.SHARED ;
+        else srcType = JCRDataStorage.PUBLIC ;    
         ContactUtils.getContactService().pasteAddressBook(SessionProviderFactory.createSessionProvider()
             , ContactUtils.getCurrentUser(), srcAddress, srcType, destAddress, destType) ;
       } else {
@@ -286,15 +289,18 @@ public class UIAddressBooks extends UIComponent {
       UIContactForm uiContactForm = popupContainer.addChild(UIContactForm.class, null, null) ;
       uiContactForm.setNew(true) ;
       
-      if (ContactUtils.getUserGroups().contains(groupId)) {
-        uiContactForm.getUIFormCheckBoxInput(groupId).setChecked(true) ;   
-      }
+      
       if (uiAddressBook.privateAddressBookMap_.containsKey(groupId)) {
         uiCategorySelect.setPrivateGroupMap(uiAddressBook.privateAddressBookMap_) ;
-      } /*else {
-        uiCategorySelect.setPrivateGroupMap(uiAddressBook.sharedAddressBookMap_) ;
-      } */       
-      uiCategorySelect.addCategories() ;
+        uiContactForm.setShared(false) ;
+      } else {
+        uiContactForm.setShared(true) ;
+        Map<String, String> sharedAddress = new LinkedHashMap<String, String>() ;
+        for (SharedAddressBook address : uiAddressBook.sharedAddressBookMap_.values())
+          sharedAddress.put(address.getId(), address.getName()) ;
+        uiCategorySelect.setPrivateGroupMap(sharedAddress) ;
+      }        
+      //uiCategorySelect.addCategories() ;
       uiCategorySelect.setValue(groupId) ; 
       
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;

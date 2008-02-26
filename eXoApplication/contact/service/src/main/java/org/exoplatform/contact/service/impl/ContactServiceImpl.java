@@ -56,6 +56,10 @@ public class ContactServiceImpl implements ContactService {
     return storage_.getAllContact(sProvider, username);
   }
   
+  public Contact getPersonalContact(String userId) throws Exception {
+    return storage_.getPersonalContact(userId) ;
+  }
+  
   /*
   public ContactPageList getContactPageListByTag(String username, ContactFilter filter) throws Exception {
     return storage_.getContactPageListByTag(username, filter);

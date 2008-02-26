@@ -51,11 +51,11 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 public class UICategorySelect extends UIForm {
   public static final String INPUT_CATEGORY = "categoryInput";
   public static final String FIELD_CATEGORY = "category";
-  private Map<String, String> privateGroupMap_ = new LinkedHashMap<String, String>() ;
-  
+  private Map<String, String> privateGroupMap_ = new LinkedHashMap<String, String>() ;  
   public UICategorySelect() { }
   
-  public void addCategories() throws Exception {
+  public void setPrivateGroupMap(Map<String, String> map) throws Exception { 
+    privateGroupMap_ = map ; 
     UIFormInputWithActions input = new UIFormInputWithActions(INPUT_CATEGORY) ;
     input.addUIFormInput(new UIFormSelectBox(FIELD_CATEGORY, FIELD_CATEGORY, getCategoryList())) ;
     UIFormSelectBox uiSelectBox = input.getUIFormSelectBox(FIELD_CATEGORY) ;
@@ -67,11 +67,9 @@ public class UICategorySelect extends UIForm {
     addAction.setActionName("AddCategory") ;
     actions.add(addAction) ;
     input.setActionField(FIELD_CATEGORY, actions) ;
-    addUIFormInput(input) ;
+    addUIFormInput(input) ;  
   }
-
   public Map<String, String> getPrivateGroupMap() { return privateGroupMap_ ; }
-  public void setPrivateGroupMap(Map<String, String> map) { privateGroupMap_ = map ; }
   
   public String getSelectedCategory() {
     UIFormInputWithActions input = getChildById(INPUT_CATEGORY) ;

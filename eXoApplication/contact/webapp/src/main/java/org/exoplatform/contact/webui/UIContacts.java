@@ -249,14 +249,14 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       List<String> contactIds = new ArrayList<String>() ;
       contactIds.add(contactId) ;
       
-      /*
+      
       if (uiContacts.isSearchResult && !uiContacts.checkExistContacts(contactIds)){
         UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-deleted", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      */
+      
       
       UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
@@ -267,7 +267,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       Contact contact = uiContacts.contactMap.get(contactId) ;
       uiCategorySelect.setPrivateGroupMap(contactPortlet
           .findFirstComponentOfType(UIAddressBooks.class).getPrivateGroupMap()) ;
-      uiCategorySelect.addCategories() ;
+      //uiCategorySelect.addCategories() ;
       uiCategorySelect.setValue(contact.getAddressBook()[0]) ;
       if (contact.getContactType().equals("1"))  uiCategorySelect.disableSelect() ;
       uiContactForm.setValues(contact);
@@ -388,7 +388,6 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       for (String id : contactIds) {
         Contact contact = uiContacts.contactMap.get(id) ;
         if (contact.getContactType().equals(JCRDataStorage.PUBLIC)
-            || contact.getContactType().equals(JCRDataStorage.SHARED)
             || contact.getId().equals(ContactUtils.getCurrentUser())) {
           uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-move", null
               , ApplicationMessage.WARNING)) ;
@@ -427,8 +426,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       String username = ContactUtils.getCurrentUser() ;
       for(String contactId : contactIds) {
       	Contact contact = uiContacts.contactMap.get(contactId) ;
-        if (contact.getContactType().equals(JCRDataStorage.PUBLIC) 
-            || contact.getContactType().equals(JCRDataStorage.SHARED)
+        if (contact.getContactType().equals(JCRDataStorage.PUBLIC)
             || contact.getId().equals(username)){
           uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-move", null
               , ApplicationMessage.WARNING)) ;
@@ -810,7 +808,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       List<String> contacts = uiContacts.getCheckedContacts() ;
       Map<String, String> mapContacts = new LinkedHashMap<String, String>() ;
       for (String contactId : contacts) {
-        if (uiContacts.contactMap.get(contactId).getContactType().equals(JCRDataStorage.PUBLIC)) {
+        String contactType = uiContacts.contactMap.get(contactId).getContactType() ; 
+        if (contactType.equals(JCRDataStorage.PUBLIC) || contactType.equals(JCRDataStorage.SHARED)) {
           UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-share", null
               , ApplicationMessage.WARNING)) ;
