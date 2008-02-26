@@ -446,19 +446,20 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
       
       contactService.moveContacts(sessionProvider, username, contacts, type); 
-      
+
       // update addressbook when search
       if (uiContacts.isSearchResult) {
         for (String contactId : contactIds) {
           uiContacts.contactMap.get(contactId).setContactType(type) ;
         }
-      } 
+      } else if (ContactUtils.isEmpty(uiContacts.selectedGroup) && ContactUtils.isEmpty(uiContacts.selectedTag_)
+          && !ContactUtils.isEmpty(addressBookId)) {
+
+        //select shared contacts        
+        uiContacts.setContact(contacts, false) ;
+      }
       uiContacts.updateList() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
-      
-      // to hide public AddressBook if contactPageList=null ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts
-          .getAncestorOfType(UIWorkingContainer.class).findFirstComponentOfType(UIAddressBooks.class)) ;
     }
   }
   
@@ -516,14 +517,13 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      
-      
       //
       
       UIWorkingContainer uiWorkingContainer = uiContacts.getAncestorOfType(UIWorkingContainer.class) ;
       ContactService contactService = ContactUtils.getContactService() ;
       String username = ContactUtils.getCurrentUser() ;
       contactService.removeContacts(SessionProviderFactory.createSystemProvider(), username, contactIds) ;
+      
       if(uiContacts.isSearchResult) {
         List<Contact> contacts = new ArrayList<Contact>();
         for(String id : contactIds) {

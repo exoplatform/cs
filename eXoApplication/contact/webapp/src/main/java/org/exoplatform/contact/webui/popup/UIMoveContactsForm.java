@@ -115,6 +115,11 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
         for (String contactId : uiMoveContactForm.getContactIds()) {
           uiMoveContactForm.movedContacts.get(contactId).setContactType(type) ;
         }
+      } else if (ContactUtils.isEmpty(uiContacts.getSelectedGroup()) && 
+          ContactUtils.isEmpty(uiContacts.getSelectedTag())) {
+
+        //select shared contacts        
+        uiContacts.setContact(contacts, false) ;
       }
       uiContacts.updateList() ;
       uiContactPortlet.cancelAction() ;

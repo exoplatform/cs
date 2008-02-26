@@ -603,8 +603,7 @@ public class JCRDataStorage{
     } catch (PathNotFoundException ex) {
       sharedHome = contactHome.addNode(SHARED_HOME, NT_UNSTRUCTURED) ;
       contactHome.save() ;
-    }
-    
+    }    
     try{
     	return sharedHome.getNode(SHARED_CONTACT) ;
     }catch(PathNotFoundException ex) {
@@ -1464,7 +1463,8 @@ public class JCRDataStorage{
     }
     
     //public contacts
-    Node publicContactHome = getPublicContactHome(sysProvider) ;  
+    Node publicContactHome = getPublicContactHome(SessionProvider.createSystemProvider()) ;
+    //Node publicContactHome = getPublicContactHome(sysProvider) ;  
     String usersPath = nodeHierarchyCreator_.getJcrPath("usersPath") ;
     filter.setAccountPath(usersPath) ;
     
