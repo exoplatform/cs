@@ -308,13 +308,6 @@
 	margin-left: 225px;
 }
 
-.UIContactPortlet .SpliterResizableListArea {
-	background: white;
-	border: 1px solid #c0c0c0;
-	border-top: none;
-	_margin-left: 3px;
-}
-
 .UIContactPortlet .UIContactContainer .DecoratorBox {
 }
 
@@ -350,6 +343,8 @@
 .UIContactPortlet .UIContactActionsBar {
 	background: url('background/BgTitleBar1x24.gif') repeat-x;
 	height: 24px;
+	border-left: 1px solid #c0c0c0;
+	border-right: 1px solid #c0c0c0;
 }
 
 .UIContactPortlet .UIContactActionsBar .SeparatorLine {
@@ -468,11 +463,8 @@
 	_width: 99.7%;
 }
 
-.UIContactPortlet .UIContactContainer .UIMessageList .UIGrid {
+.UIContactPortlet .UIContactContainer .UIGrid {
 	border-top: none;
-	border-left: none;
-	border-right: none;
-	border-bottom: 1px solid #c7c7c7;
 	background: #ffffff;
 }
 
@@ -481,7 +473,6 @@
 	text-align: left;
 	border-bottom: 1px solid #d8d8d8;
 	border-top: none;
-	border-left: none;
 }
 
 .UIContactPortlet .UIContactContainer .UIGrid .Icon {
@@ -509,7 +500,6 @@
 
 .UIContactPortlet .UIContactContainer td {
 	border-top: none;
-	border-left: none;
 	padding-left: 10px;
 }
 
@@ -653,7 +643,6 @@
 	font-size: 14px;
 	border-bottom: 1px solid #cbcbcb;
 	padding: 0px 0px 5px;
-	*width: 98%;
 }
 
 .UIContactPortlet .InfoContainer .Content {
