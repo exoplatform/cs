@@ -142,6 +142,10 @@ public class ContactServiceImpl implements ContactService {
   	storage_.saveContactToSharedAddressBook(username, addressBookId, contact, isNew) ;
   }
   
+  public Contact getSharedContactAddressBook(String username, String contactId) throws Exception {
+    return storage_.getSharedContactAddressBook(username, contactId) ;
+  }
+  
   public void saveSharedContact(String username, Contact contact) throws Exception  {
     storage_.saveSharedContact(username, contact) ;
   }

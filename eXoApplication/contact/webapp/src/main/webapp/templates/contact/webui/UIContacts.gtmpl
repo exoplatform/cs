@@ -270,7 +270,7 @@
 								
 									<% 
 										icon = "OnlineIcon"
-										if (contact.isOwner()&& uicomponent.getDefaultGroup().equals(contact.getAddressBook()[0])) icon = "OwnerIcon" ; 	
+										if (contact.isOwner()&& contact.getOwnerId().equals(ContactUtils.getCurrentUser())) icon = "OwnerIcon" ; 	
 								  %>
 									<div class="State $icon" title="Available">
 										<a href="$actionLink">

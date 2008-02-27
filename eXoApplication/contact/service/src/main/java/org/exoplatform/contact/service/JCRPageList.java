@@ -63,7 +63,10 @@ abstract public class JCRPageList {
     			if(isUpdate) {
     				currentListPage_.set(i, ct) ;
     			}else {
-    				currentListPage_.remove(i) ;
+    				System.out.println("\n\n 1111111:"  + currentListPage_.size() );
+            currentListPage_.remove(i) ;
+            
+            System.out.println("\n\n 22222:" + currentListPage_.size() + "\n\n");
     			}
     			break ;
     		}
