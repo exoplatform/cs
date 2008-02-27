@@ -1144,7 +1144,11 @@ public class JCRDataStorage{
 			return userProfile;
 		}catch(PathNotFoundException e) {
 			userProfile.setUserId(userName) ;
-			userProfile.setUserTitle("Register User") ;
+		// default Administration
+  		if(userName.equals("root")) {
+  			userProfile.setUserRole((long)0) ;
+  			userProfile.setUserTitle("Administrator") ;
+  		} else userProfile.setUserTitle("User") ;
 			return userProfile ;
 		}
   }

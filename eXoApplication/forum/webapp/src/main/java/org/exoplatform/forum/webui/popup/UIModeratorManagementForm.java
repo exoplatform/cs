@@ -71,7 +71,7 @@ public class UIModeratorManagementForm extends UIForm implements UIPopupComponen
   	for (User user : listUser) {
 	    userProfile = new UserProfile() ;
 	    userProfile.setUserId(user.getUserName());
-	    userProfile.setUserTitle("Register User");
+	    userProfile.setUserTitle("User");
   		forumService.saveUserProfile(ForumSessionUtils.getSystemProvider(), userProfile, true, true);
   		userProfile.setUser(user);
     }
@@ -91,7 +91,7 @@ public class UIModeratorManagementForm extends UIForm implements UIPopupComponen
   		userProfile.setUser(user);
   		if(userProfile.getUserRole() >= 2) {
 	  		userProfile.setUserRole((long)2);
-	  		userProfile.setUserTitle("Register User");
+	  		userProfile.setUserTitle("User");
   		}
   		this.userProfiles.add(userProfile);
     }

@@ -34,6 +34,9 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.impl.GroupImpl;
 import org.exoplatform.services.organization.User;
 
+import org.exoplatform.contact.service.Contact;
+import org.exoplatform.contact.service.ContactService;
+
 public class ForumSessionUtils {
   
   static public String getCurrentUser() throws Exception {
@@ -115,4 +118,25 @@ public class ForumSessionUtils {
   	return organizationService.getUserHandler().findUserByName(userId) ;
   }
   
+
+  public static Contact getPersonalContact(String userId) throws Exception {
+  	ContactService contactService = (ContactService) PortalContainer.getComponent(ContactService.class) ;
+	  return contactService.getPersonalContact(userId);
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

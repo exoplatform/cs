@@ -110,7 +110,7 @@ public class UIUserProfileForm extends UIForm implements UIPopupComponent {
 		list = new ArrayList<SelectItemOption<String>>() ;
 		list.add(new SelectItemOption<String>("Admin", "id0")) ;
 		list.add(new SelectItemOption<String>("Moderator", "id1")) ;
-		list.add(new SelectItemOption<String>("Register User", "id2")) ;
+		list.add(new SelectItemOption<String>("User", "id2")) ;
 		UIFormSelectBox userRole = new UIFormSelectBox(FIELD_USERROLE_SELECTBOX, FIELD_USERROLE_SELECTBOX, list) ;
 		userRole.setValue("id" + this.userProfile.getUserRole());
 		UIFormTextAreaInput signature = new UIFormTextAreaInput(FIELD_SIGNATURE_TEXTAREA, FIELD_SIGNATURE_TEXTAREA, null);
@@ -301,10 +301,10 @@ public class UIUserProfileForm extends UIForm implements UIPopupComponent {
     	if(moderateForums.length > 0 || moderateTopics.length > 0) {
     		if(userRole >= 2) userRole = 1;
     	}
-    	if(userTitle.indexOf("Admin") >= 0 || userTitle.equals("Moderator") || userTitle.indexOf("Register") >= 0 || userTitle.equals("Guest")) {
+    	if(userTitle.indexOf("Admin") >= 0 || userTitle.equals("Moderator") || userTitle.equals("User") || userTitle.equals("Guest")) {
     		if(userRole == 0) userTitle = "Administrator" ;
     		if(userRole == 1) userTitle = "Moderator" ;
-    		if(userRole == 2) userTitle = "Register User" ;
+    		if(userRole == 2) userTitle = "User" ;
     	}
     	String signature = inputSetProfile.getUIFormTextAreaInput(FIELD_SIGNATURE_TEXTAREA).getValue() ;
       boolean isDisplaySignature = (Boolean)inputSetProfile.getUIFormCheckBoxInput(FIELD_ISDISPLAYSIGNATURE_CHECKBOX).getValue() ;

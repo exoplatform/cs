@@ -1,7 +1,8 @@
 <%  
 	import org.exoplatform.forum.service.UserProfile ;
 	import org.exoplatform.services.organization.User ;
-	 import org.exoplatform.forum.ForumFormatUtils;
+	import org.exoplatform.forum.ForumFormatUtils;
+	import org.exoplatform.contact.service.Contact;
 %>
 <div class="UIViewMemberProfile">
 <% uiform.begin() %>
@@ -9,6 +10,12 @@
 	UserProfile userProfile = uiform.getUserProfile() ;
 	String userName = userProfile.getUserId() ;
 	User user = uiform.getUser() ;
+	Contact contact = uiform.getPersonalContact(userName) ;
+	String birthDay = "" ;
+	Date birthDayDate = contact.getBirthday() ;
+	if(birthDayDate != null) birthDay = ForumFormatUtils.getFormatDate(userProfile.getShortDateFormat(),birthDayDate) ;
+	String location = "" ;
+	if(contact.getHomeCountry() != null )location = contact.getHomeCity() + ", " + contact.getHomeCountry() ;
 	String createdDate = ForumFormatUtils.getFormatDate(userProfile.getShortDateFormat(),user.getCreatedDate()) ;
 	long totalPost = userProfile.getTotalPost();
 %>
@@ -18,7 +25,6 @@
 			<table class="TablePost" cellspacing="0" borderspacing="0">
   			<tbody>
   				<tr>
-<!-- Start MemberContainer -->	  
 						<td class="MemberContainer">
 				  		<div class="MemberContent">
 					  		<img src="/forum/skin/DefaultSkin/webui/background/Avatar1.gif" class="Img" />
@@ -36,59 +42,28 @@
 					  		</div>
 					  	</div>
 					  </td>
-<!-- End MemberContainer -->
-<!-- Start PostViewContainer -->
 						<td class="ProfileContainer">
 							<table class="TablePost" cellspacing="0" borderspacing="0">
   							<tbody>
+  							<% 
+  								String []labels = uiform.getLabelProfile();  
+  								String []contents = [userName,user.getFirstName(),user.getLastName(),birthDay,contact.getGender(),user.getEmail(),
+  								  contact.getJobTitle(),location,contact.getWorkPhone1(),contact.getMobilePhone(),contact.getPersonalSite()]; 
+  								int i = 0 ;
+  								for(label in labels) {
+  									String content = contents[i];
+  									if(content == null) content = "";
+  									label = _ctx.appRes(uicomponent.getName() + ".label." + label) ;
+  									++i ;
+  							%>
   								<tr>
-										<td class="Label">User name:</td>
-										<td class="LabelProfile"> $userName</td>
+										<td class="Label">$label:</td>
+										<td class="LabelProfile">$content</td>
 									</tr>
-									<tr>
-										<td class="Label">First name: </td>
-										<td class="LabelProfile"><%=user.getFirstName();%></td>
-									</tr>
-									<tr>
-										<td class="Label">Last name:</td>
-										<td class="LabelProfile"><%=user.getLastName() ;%></td>
-									</tr>
-									<tr>
-										<td class="Label">Birthday: </td>
-										<td class="LabelProfile">05 - 01 - 1979</td>
-									</tr>
-									<tr>
-										<td class="Label">Gender: </td>
-										<td class="LabelProfile">male</td>
-									</tr>
-									<tr>
-										<td class="Label">Email : </td>
-										<td class="LabelLink"><%=user.getEmail();%></td>
-									</tr>
-									<tr>
-										<td class="Label">Job title:</td>
-										<td class="LabelProfile"> Webdesigner</td>
-									</tr>
-									<tr>
-										<td class="Label">Location: </td>
-										<td class="LabelProfile">Hanoi, Vietnam</td>
-									</tr>
-									<tr>
-										<td class="Label">Work phone: </td>
-										<td class="LabelProfile">04.266 3367</td>
-									</tr>
-									<tr>
-										<td class="Label">Mobile phone: </td>
-										<td class="LabelProfile">0972 975 767</td>
-									</tr>
-									<tr>
-										<td class="Label">Website: </td>
-										<td class="LabelLink">http://www.phuongdesign.com</td>
-									</tr>
+								<%} %>
 								</tbody>
 							</table>
 					  </td>
-<!-- End PostViewContainer -->
 					</tr>
 				</tbody>
 			</table>

@@ -101,15 +101,7 @@ public class UIForumPortlet extends UIPortletApplication {
   @SuppressWarnings("deprecation")
 	public void setUserProfile() throws Exception {
   	String userId = ForumSessionUtils.getCurrentUser() ;
-  	try {
-  		this.userProfile = forumService.getUserProfile(ForumSessionUtils.getSystemProvider(), userId, true, false) ;
-  	} catch (Exception e) {
-    	this.userProfile = new UserProfile() ;
-    }
-  	if(userId != null && userId.length() > 0)  {
-  	// default Administration
-  		if(userId.equals("root")) userProfile.setUserRole((long)0) ;
-  	}
+  	this.userProfile = forumService.getUserProfile(ForumSessionUtils.getSystemProvider(), userId, true, false) ;
     this.isJumpRendered = this.userProfile.getIsShowForumJump() ;
   }
 }

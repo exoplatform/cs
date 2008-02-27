@@ -53,6 +53,7 @@
 .UIForumPortlet .UIViewMemberProfile .ProfileContainer .LabelProfile {
 	line-height: 20px;
 	text-align: left;
+	width: 65% ;
 }
 
 .UIForumPortlet .UIViewMemberProfile .ProfileContainer .LabelLink {
