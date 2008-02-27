@@ -71,7 +71,7 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 )
 public class UITopicForm extends UIForm implements UIPopupComponent {
 	public static final String FIELD_TOPICTITLE_INPUT = "ThreadTitle" ;
-	public static final String FIELD_MESSENGER_TEXTAREA = "Messenger" ;
+	public static final String FIELD_MESSAGE_TEXTAREA = "Message" ;
 	final static public String FIELD_MESSAGECONTENT = "messageContent" ;
 	public static final String FIELD_TOPICSTATUS_SELECTBOX = "TopicStatus" ;
 	public static final String FIELD_TOPICSTATE_SELECTBOX = "TopicState" ;
@@ -95,7 +95,7 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
 	public UITopicForm() throws Exception {
 		UIFormStringInput topicTitle = new UIFormStringInput(FIELD_TOPICTITLE_INPUT, FIELD_TOPICTITLE_INPUT, null);
 		topicTitle.addValidator(EmptyNameValidator.class) ;
-//		UIFormTextAreaInput messenger = new UIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA, FIELD_MESSENGER_TEXTAREA, null);
+//		UIFormTextAreaInput message = new UIFormTextAreaInput(FIELD_MESSAGE_TEXTAREA, FIELD_MESSAGE_TEXTAREA, null);
 		
 		List<SelectItemOption<String>> ls = new ArrayList<SelectItemOption<String>>() ;
 		ls.add(new SelectItemOption<String>("Open", "open")) ;
@@ -117,7 +117,7 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
 		UIFormStringInput canPost = new UIFormStringInput(FIELD_CANPOST_INPUT, FIELD_CANPOST_INPUT, null);
 		
 		addUIFormInput(topicTitle);
-	 // addUIFormInput(messenger);
+	 // addUIFormInput(message);
 		
 		addUIFormInput(topicState);
 		addUIFormInput(topicStatus);
@@ -240,9 +240,9 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
 			UIFormStringInput stringInputTitle = uiForm.getUIStringInput(FIELD_TOPICTITLE_INPUT) ; 
 			String topicTitle = "  " + stringInputTitle.getValue();
 			topicTitle = topicTitle.trim() ;
-			String messenger = "  " +	uiForm.getChild(UIFormWYSIWYGInput.class).getValue();
-			messenger = messenger.trim() ;
-			t = messenger.length() ;
+			String message = "  " +	uiForm.getChild(UIFormWYSIWYGInput.class).getValue();
+			message = message.trim() ;
+			t = message.length() ;
 			if(topicTitle.length() <= 3) {k = 0;}
 			if(t >= 20 && k != 0) {
 				String userName = ForumSessionUtils.getCurrentUser() ;
@@ -252,7 +252,7 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
 				postNew.setCreatedDate(new Date());
 				postNew.setModifiedBy(userName);
 				postNew.setModifiedDate(new Date());
-				postNew.setMessage(messenger);
+				postNew.setMessage(message);
 				postNew.setAttachments(uiForm.attachments_) ;
 				UIFormInputIconSelector uiIconSelector = uiForm.getChild(UIFormInputIconSelector.class);
 				postNew.setIcon(uiIconSelector.getSelectedIcon());
@@ -267,12 +267,12 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
 				UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
 				if(k == 0) {
 					sms = "Thread Title" ;
-					if(t < 20) sms = "Thread Title and Messenger";
+					if(t < 20) sms = "Thread Title and Message";
 					Object[] args = { sms };
 					uiApp.addMessage(new ApplicationMessage("NameValidator.msg.ShortText", args, ApplicationMessage.WARNING)) ;
 				} else if(t < 20) {
-					Object[] args = { "Messenger" };
-					uiApp.addMessage(new ApplicationMessage("NameValidator.msg.ShortMessenger", args, ApplicationMessage.WARNING)) ;
+					Object[] args = { "Message" };
+					uiApp.addMessage(new ApplicationMessage("NameValidator.msg.ShortMessage", args, ApplicationMessage.WARNING)) ;
 				}
 			}
 		}
@@ -286,12 +286,12 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
 			UIFormStringInput stringInputTitle = uiForm.getUIStringInput(FIELD_TOPICTITLE_INPUT) ; 
 			String topicTitle = "  " + stringInputTitle.getValue();
 			topicTitle = topicTitle.trim() ;
-			String messenger = "  " +	uiForm.getChild(UIFormWYSIWYGInput.class).getValue();
-			messenger = messenger.trim() ;
-			t = messenger.length() ;
+			String message = "  " +	uiForm.getChild(UIFormWYSIWYGInput.class).getValue();
+			message = message.trim() ;
+			t = message.length() ;
 			if(topicTitle.length() <= 3) {k = 0;}
 			if(t >= 20 && k != 0) {	
-				// uiForm.getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).getValue() ;
+				// uiForm.getUIFormTextAreaInput(FIELD_MESSAGE_TEXTAREA).getValue() ;
 				String topicState = uiForm.getUIFormSelectBox(FIELD_TOPICSTATE_SELECTBOX).getValue();
 				String topicStatus = uiForm.getUIFormSelectBox(FIELD_TOPICSTATUS_SELECTBOX).getValue();
 				
@@ -312,7 +312,7 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
 				topicNew.setModifiedDate(new Date());
 				topicNew.setLastPostBy(userName);
 				topicNew.setLastPostDate(new Date());
-				topicNew.setDescription(messenger);
+				topicNew.setDescription(message);
 				
 				topicNew.setIsNotifyWhenAddPost(whenNewPost);
 				topicNew.setIsModeratePost(moderatePost);
@@ -350,12 +350,12 @@ public class UITopicForm extends UIForm implements UIPopupComponent {
 				UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
 				if(k == 0) {
 					sms = "Thread Title" ;
-					if(t < 20) sms = "Thread Title and Messenger";
+					if(t < 20) sms = "Thread Title and Message";
 					Object[] args = { sms };
 					uiApp.addMessage(new ApplicationMessage("NameValidator.msg.ShortText", args, ApplicationMessage.WARNING)) ;
 				} else if(t < 20) {
-					Object[] args = { "Messenger" };
-					uiApp.addMessage(new ApplicationMessage("NameValidator.msg.ShortMessenger", args, ApplicationMessage.WARNING)) ;
+					Object[] args = { "Message" };
+					uiApp.addMessage(new ApplicationMessage("NameValidator.msg.ShortMessage", args, ApplicationMessage.WARNING)) ;
 				}
 			}
 		}

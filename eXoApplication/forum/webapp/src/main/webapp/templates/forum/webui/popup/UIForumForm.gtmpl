@@ -127,22 +127,20 @@
 													 	</div>	 
 														<div class="ItemIcon classIconItem"><%=user.getUserName();%></div>
 													 </div>
-												<%  
-												 }
-												 if(count >= 1) {
-												%>
+												<% } %>
 												</div>
-												<div class="UIActionForum" style="width: 50px; margin:auto;">
-													<div class="NormalButtom" onclick="eXo.forum.UIForumPortlet.onclickAddMenuTextAreaMutil(this, '$childId');">
-														<div class="ButtonLeft">
-															<div class="ButtonRight">
-																<div class="ButtonMiddle">
-																 <div style="text-align: center;"><a>Add</a></div>
+												<% if(count >= 1) { %>
+													<div class="UIActionForum" style="width: 50px; margin:auto;">
+														<div class="NormalButtom" onclick="eXo.forum.UIForumPortlet.onclickAddMenuTextAreaMutil(this, '$childId');">
+															<div class="ButtonLeft">
+																<div class="ButtonRight">
+																	<div class="ButtonMiddle">
+																	 <div style="text-align: center;"><a>Add</a></div>
+																	</div>
 																</div>
 															</div>
 														</div>
 													</div>
-												</div>
 												<% } else { %>
 													<div class="MenuItem">Not Item</div>
 												<% } %>

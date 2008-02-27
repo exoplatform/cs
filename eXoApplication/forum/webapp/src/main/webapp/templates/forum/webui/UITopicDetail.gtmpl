@@ -4,6 +4,7 @@
 	import org.exoplatform.forum.webui.UIForumPageIterator ;
 	import org.exoplatform.forum.service.Post ;
 	import org.exoplatform.forum.service.Topic ;
+	import org.exoplatform.forum.service.Forum ;
   import org.exoplatform.forum.ForumSessionUtils; 
   import org.exoplatform.forum.ForumFormatUtils;
 	import org.exoplatform.forum.service.UserProfile ;
@@ -15,15 +16,47 @@
 <%
 	uicomponent.initPage() ;	
 	Topic topic = uicomponent.getTopic() ;
-	boolean isShowMenu = ForumSessionUtils.isAnonim();
+	Forum forum = uicomponent.getForum() ;
+	boolean isShowMenu = !ForumSessionUtils.isAnonim();
 	UserProfile userProfile = uicomponent.getUserProfile();
+	
+	if(userProfile.getIsBanned()) {
+		isShowMenu = false ;
+	}
+	boolean canEdit = false ;
+	if(isShowMenu) {
+		if(userProfile.getUserRole() == 0) canEdit = true;
+		if(userProfile.getUserRole() == 1) {
+			String []moderatorsByUser = userProfile.getModerateForums() ;
+			if(moderatorsByUser == null || moderatorsByUser.length <= 0) canEdit = true;
+			else {
+				for(forumId in moderatorsByUser) {
+					if(forumId.indexOf(forum.getId()) >= 0) {
+						canEdit = true;
+						break ;
+					}
+				}
+			}
+		}
+		if(!canEdit && forum != null) {
+			String []moderatorsByForum = forum.getModerators() ;
+			if(moderatorsByForum != null || moderatorsByForum.length > 0) {
+				for(user in moderatorsByForum) {
+					if(user.indexOf(userProfile.getUserId()) >= 0) {
+						canEdit = true;
+						break ;
+					}
+				}
+			}
+		}
+	}
 %>
 
 <div class="UITopicDetail">
 <% uiform.begin() %>
 	<% if(topic != null) {%>
 	<div class="ButtomAndPageListContainer">
-	<% if(topic.getIsLock() || isShowMenu) { %>
+	<% if(topic.getIsLock() || !isShowMenu) { %>
 		<div class="LockActionForum UIActionForum" style="float: left;">
 	<% } else { %>
 		<div class="UIActionForum" style="float: left;">
@@ -33,7 +66,7 @@
 					<div class="ButtonLeft">
 						<div class="ButtonRight">
 							<div class="ButtonMiddle">
-							<% if(topic.getIsLock() || isShowMenu) { %>
+							<% if(topic.getIsLock() || !isShowMenu) { %>
 									<div class="IconButton LockIcon" title="You can not reply this thread."><span class="LockLabel"></span>Post Reply</div>
 							<% } else { %>
 								<a href="<%=uicomponent.event("AddPost")%>">
@@ -103,7 +136,7 @@
 				<div class="RightBar">
 					<div class="CenterBar">
 						<div class="ToolbarActionsContainer">
-						<% if(!isShowMenu) { %>	
+						<% if(isShowMenu && canEdit) { %>	
 							<div class="ContentAction" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 								<div class="DefaultStyle Forum" onmouseover="eXo.forum.UIForumPortlet.OverButton(this)" onmouseout="eXo.forum.UIForumPortlet.OverButton(this)">
 									<div class="LeftOverButton">
@@ -219,7 +252,7 @@
 									</a>
 								</div>
 							</div>
-						<% if(!isShowMenu) { %>	
+						<% if(canEdit && isShowMenu) { %>	
 							<div class="SeparatorLine"><span></span></div>
 							<div class="ContentAction" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 								<div style="position: relative;">
@@ -317,12 +350,12 @@
 				String subject = post.getSubject() ;
 				Date createdPostDate = post.getCreatedDate() ;
 				String createdDate = ForumFormatUtils.getFormatDate((userProfile.getLongDateFormat() + ", " + userProfile.getTimeFormat()),createdPostDate);
-				String messager = ForumFormatUtils.convertCodeHTML(post.getMessage()) ;
+				String message = ForumFormatUtils.convertCodeHTML(post.getMessage()) ;
 				String editBy = post.getModifiedBy() ;
 				Date modifileDate = post.getModifiedDate() ;
 				String editDate = ForumFormatUtils.getFormatDate((userProfile.getLongDateFormat() + ", " + userProfile.getTimeFormat()),modifileDate);
 				List attachments = post.getAttachments() ;
-				String idMessenger = "Id" + post.getId().substring(15);
+				String idMessage = "Id" + post.getId().substring(15);
 				User user = ForumSessionUtils.getUserByUserId(owner) ; 
 				String joinDate = ForumFormatUtils.getFormatDate("DDD yyyy",user.getCreatedDate()) ;
 		%>
@@ -382,7 +415,7 @@
 							</div>
 						<div class="PostContentContainer">	
 							<div class="PostContent">
-								<div style="padding-top: 8px" id="$idMessenger">$messager</div>
+								<div style="padding-top: 8px" id="$idMessage">$message</div>
 							</div>
 								<%  
 									if(userInfo.getIsDisplaySignature() && userInfo.getSignature() != null && userInfo.getSignature().length() > 0) {
@@ -450,11 +483,16 @@
 								<div class="ButtonContainer">
 									<div class="UIActionForum">
 									<%
-									if(!isShowMenu) {
+									if(isShowMenu) {
 										String[] actions = ["Edit", "Delete", "Quote"] ; 
 										for(action in actions) {
 											String title = _ctx.appRes(uicomponent.getName() + ".title." + action);
 											String label = _ctx.appRes(uicomponent.getName() + ".action." + action);
+											if(!(userProfile.getUserId().equals(owner))) {
+												if(!canEdit){
+													if(action.equals("Edit")||action.equals("Delete"))continue ;
+												}
+											}
 											if(topic.getIsLock()&&(action.equals("Edit")||action.equals("Quote"))) continue ;
 											String actionLink = uicomponent.event(action, post.getId());
 											if(action.equals("Delete")) actionLink = "javascript:if(confirm('Are you sure you want to Delete this Post?')){"+uicomponent.event(action, post.getId())+"}"
@@ -494,7 +532,7 @@
 	</div>	
 <!-- End PostsInThreadContainer -->
 	<div class="ButtomAndPageListContainer">
-		<% if(topic.getIsLock() || isShowMenu) { %>
+		<% if(topic.getIsLock() || !isShowMenu) { %>
 		<div class="LockActionForum UIActionForum" style="float: left;">
 	<% } else { %>
 		<div class="UIActionForum" style="float: left;">
@@ -504,7 +542,7 @@
 					<div class="ButtonLeft">
 						<div class="ButtonRight">
 							<div class="ButtonMiddle">
-							<% if(topic.getIsLock() || isShowMenu) { %>
+							<% if(topic.getIsLock() || !isShowMenu) { %>
 									<div class="IconButton LockIcon" title="You can not reply this thread."><span class="LockLabel"></span>Post Reply</div>
 							<% } else { %>
 								<a href="<%=uicomponent.event("AddPost")%>">

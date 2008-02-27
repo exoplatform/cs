@@ -13,10 +13,13 @@
 	uicomponent.initPage() ;
 	Forum forum = uicomponent.getForum() ;
 	String forumName = forum.getForumName();
-	boolean isShowMenu = ForumSessionUtils.isAnonim();
+	boolean isShowMenu = !ForumSessionUtils.isAnonim();
 	UserProfile userProfile = uicomponent.getUserProfile();
+	if(userProfile.getIsBanned()) {
+		isShowMenu = false ;
+	}
 	boolean canEdit = false ;
-	if(!isShowMenu) {
+	if(isShowMenu) {
 		if(userProfile.getUserRole() == 0) canEdit = true;
 		if(userProfile.getUserRole() == 1) {
 			String []moderatorsByUser = userProfile.getModerateForums() ;
@@ -30,11 +33,15 @@
 				}
 			}
 		}
-		String []moderatorsByForum = forum.getModerators() ;
-		for(user in moderatorsByForum) {
-			if(user.indexOf(userProfile.getUserId()) >= 0) {
-				canEdit = true;
-				break ;
+		if(!canEdit) {
+			String []moderatorsByForum = forum.getModerators() ;
+			if(moderatorsByForum != null || moderatorsByForum.length > 0) {
+				for(user in moderatorsByForum) {
+					if(user.indexOf(userProfile.getUserId()) >= 0) {
+						canEdit = true;
+						break ;
+					}
+				}
 			}
 		}
 	}
@@ -42,7 +49,7 @@
 <div class="UITopicContainer">
 	<% uiform.begin() %>
 	<div class="ButtomAndPageListContainer">
-	<% if(forum.getIsLock() || isShowMenu) { %>
+	<% if(forum.getIsLock() || !isShowMenu) { %>
 		<div class="LockActionForum UIActionForum" style="float: left;">
 	<% } else { %>
 		<div class="UIActionForum" style="float: left;">
@@ -52,7 +59,7 @@
 					<div class="ButtonLeft">
 						<div class="ButtonRight">
 							<div class="ButtonMiddle">
-							<% if(forum.getIsLock() || isShowMenu) { %>
+							<% if(forum.getIsLock() || !isShowMenu) { %>
 									<div class="IconButton LockIcon" title="<%= _ctx.appRes("UITopicContainer.tooltip.forumClosePosting"); %>"><span class="LockLabel"></span>New Thread</div>
 							<% } else { %>
 								<a href="<%=uicomponent.event("AddTopic")%>">
@@ -123,7 +130,7 @@
 					<div class="RightBar">
 						<div class="CenterBar" style="padding-right: 10px;">
 							<div class="Title"><span style="font-weight: normal;">Thread in forum: </span>$forumName</div>
-						<% if(!isShowMenu && canEdit) { %>	
+						<% if(isShowMenu && canEdit) { %>	
 							<div class="ContentAction" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 								<div class="DefaultStyle Forum" onmouseover="eXo.forum.UIForumPortlet.OverButton(this)" onmouseout="eXo.forum.UIForumPortlet.OverButton(this)">
 									<div class="LeftOverButton">
@@ -207,7 +214,7 @@
 									</a>
 								</div>
 							</div>
-						<% if(!isShowMenu && canEdit) { %>	
+						<% if(isShowMenu && canEdit) { %>	
 							<div class="SeparatorLine"><span></span></div>
 							<div class="ContentAction" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 								<div style="position: relative;">
@@ -429,7 +436,7 @@
 		</div>
 	</div>
 	<div class="ButtomAndPageListContainer">
-		<% if(forum.getIsLock() || isShowMenu) { %>
+		<% if(forum.getIsLock() || !isShowMenu) { %>
 			<div class="LockActionForum UIActionForum" style="float: left;">
 		<% } else { %>
 			<div class="UIActionForum" style="float: left;">
@@ -439,7 +446,7 @@
 					<div class="ButtonLeft">
 						<div class="ButtonRight">
 							<div class="ButtonMiddle">
-							<% if(forum.getIsLock() || isShowMenu) { %>
+							<% if(forum.getIsLock() || !isShowMenu) { %>
 								<div class="IconButton LockIcon" title="Forum is Closed for Posting"><span class="LockLabel"></span>New Thread</div>
 							<% } else { %>
 								<a href="<%=uicomponent.event("AddTopic")%>">

@@ -270,9 +270,10 @@ UIForumPortlet.prototype.setMenuTextAreaMutil = function(ParendId) {
 };
 
 UIForumPortlet.prototype.onclickAddMenuTextAreaMutil = function(obj, textAreaId) {
-	var ancestor = eXo.core.DOMUtil.findAncestorByClass(obj, "ContentItems") ;
+	var DOMUtil = eXo.core.DOMUtil ;
+	var ancestor = DOMUtil.findAncestorByClass(obj, "ContentItems") ;
 	var inputs = ancestor.getElementsByTagName("input");
-	var itemIcons = eXo.core.DOMUtil.findDescendantsByClass(ancestor, "div", "ItemIcon") ;
+	var itemIcons = DOMUtil.findDescendantsByClass(ancestor, "div", "ItemIcon") ;
 	var textArea = document.getElementById(textAreaId);
 	var textAreaValues = textArea.value ;
 	var values = textAreaValues.split(';');
@@ -285,10 +286,8 @@ UIForumPortlet.prototype.onclickAddMenuTextAreaMutil = function(obj, textAreaId)
 		} 
 	}
 	textArea.value = textAreaValues ;
+	DOMUtil.findAncestorByClass(ancestor, "UIPopupCategory").style.display = "none" ;
 };
-
-
-
 
 
 

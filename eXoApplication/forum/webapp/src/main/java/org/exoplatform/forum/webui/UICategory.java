@@ -59,8 +59,8 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 				@EventConfig(listeners = UICategory.EditForumActionListener.class),
 				@EventConfig(listeners = UICategory.SetLockedActionListener.class),
 				@EventConfig(listeners = UICategory.SetUnLockActionListener.class),
-				//@EventConfig(listeners = UICategory.SetOpenActionListener.class),
-				//@EventConfig(listeners = UICategory.SetCloseActionListener.class),
+				@EventConfig(listeners = UICategory.SetOpenActionListener.class),
+				@EventConfig(listeners = UICategory.SetCloseActionListener.class),
 				@EventConfig(listeners = UICategory.MoveForumActionListener.class),
 				@EventConfig(listeners = UICategory.RemoveForumActionListener.class),
 				@EventConfig(listeners = UICategory.OpenForumLinkActionListener.class),
@@ -74,6 +74,7 @@ public class UICategory extends UIForm	{
 	private boolean	isEditForum = false ;
 	private	ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
 	private List<Forum> forums = new ArrayList<Forum>() ;
+	private List<Topic> topicLastList = new ArrayList<Topic>() ;
 	public UICategory() throws Exception {
 	}
 	
@@ -132,7 +133,19 @@ public class UICategory extends UIForm	{
 	
 	@SuppressWarnings("unused")
 	private Topic getLastTopic(String topicPath) throws Exception {
-		return forumService.getTopicByPath(ForumSessionUtils.getSystemProvider(), topicPath) ;
+		Topic topic = forumService.getTopicByPath(ForumSessionUtils.getSystemProvider(), topicPath) ;
+		this.topicLastList.add(topic) ;
+		return topic ;
+	}
+	
+	private Topic getTopic(String topicId) throws Exception {
+	if(this.topicLastList.size() > 0) {
+		for(Topic topic : this.topicLastList) {
+			System.out.println("\n\n=========> " + topic.getIcon() + "  :  " + topicId);
+			if(topic.getId().equals(topicId)) return topic ;
+		}
+	}
+	return null ;
 	}
 	
 	static public class EditCategoryActionListener extends EventListener<UICategory> {
@@ -429,10 +442,16 @@ public class UICategory extends UIForm	{
 			uiForumContainer.setIsRenderChild(false) ;
 			UITopicDetail uiTopicDetail = uiTopicDetailContainer.getChild(UITopicDetail.class) ;
 			uiForumContainer.getChild(UIForumDescription.class).setForumIds(uiCategory.categoryId, id[0]);
-			uiTopicDetail.setUpdateTopic(uiCategory.categoryId, id[0], id[1], true) ;
+			Topic topic = uiCategory.getTopic(id[1]) ;
+			if(topic == null) {
+				topic = uiCategory.forumService.getTopic(ForumSessionUtils.getSystemProvider(), uiCategory.categoryId, id[0], id[1], "Guest");
+			}
+			uiTopicDetail.setTopicFromCate(uiCategory.categoryId ,id[0], topic, true) ;
+			uiTopicDetail.setUpdateForum(uiCategory.getForum(id[0])) ;
 			uiTopicDetail.setIdPostView("true") ;
 			uiTopicDetailContainer.getChild(UITopicPoll.class).updateFormPoll(uiCategory.categoryId, id[0], id[1]) ;
 			forumPortlet.getChild(UIForumLinks.class).setValueOption((uiCategory.categoryId+"/"+id[0] + " "));
+			uiCategory.topicLastList.clear() ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
 		}
 	}

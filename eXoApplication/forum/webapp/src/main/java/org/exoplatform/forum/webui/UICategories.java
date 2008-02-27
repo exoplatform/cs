@@ -16,6 +16,7 @@
  ***************************************************************************/
 package org.exoplatform.forum.webui;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
@@ -48,6 +49,8 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UICategories extends UIContainer	{
 	protected ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
+	private List<Forum> forumList = null ;
+	private List<Topic> topicLastList = new ArrayList<Topic>() ;
 	
 	public UICategories() throws Exception {
 	}
@@ -68,8 +71,36 @@ public class UICategories extends UIContainer	{
 	}	
 	
 	private List<Forum> getForumList(String categoryId) throws Exception {
-		List<Forum> forumList = forumService.getForums(ForumSessionUtils.getSystemProvider(), categoryId);
-		return forumList;
+		this.forumList = forumService.getForums(ForumSessionUtils.getSystemProvider(), categoryId);
+		return this.forumList;
+	}
+	
+	private Forum getForumById(String forumId) throws Exception {
+		for(Forum forum : this.forumList) {
+			if(forum.getId().equals(forumId)) return forum ;
+		}
+		return null ;
+	}
+	
+	@SuppressWarnings("unused")
+	private Topic getLastTopic(String topicPath) throws Exception {
+		Topic topicLast = forumService.getTopicByPath(ForumSessionUtils.getSystemProvider(), topicPath) ;
+		this.topicLastList.add(topicLast) ;
+		return topicLast ;
+	}
+	
+	private Topic getTopic(String topicId) throws Exception {
+		for(Topic topic : this.topicLastList) {
+			if(topic.getId().equals(topicId)) return topic ;
+		}	
+	return null ;
+	}
+	
+	private Category getCategory(String categoryId) throws Exception {
+		for(Category category : this.getCategoryList()) {
+			if(category.getId().equals(categoryId)) return category ;
+		}
+		return null ;
 	}
 	
 	@SuppressWarnings("unused")
@@ -86,19 +117,7 @@ public class UICategories extends UIContainer	{
 			return false ;
 		} else return true ;
 	}
-	
-	@SuppressWarnings("unused")
-	private Topic getLastTopic(String topicPath) throws Exception {
-		return forumService.getTopicByPath(ForumSessionUtils.getSystemProvider(), topicPath) ;
-	}
-	
-	private Category getCategory(String categoryId) throws Exception {
-		for(Category category : this.getCategoryList()) {
-			if(category.getId().equals(categoryId)) return category ;
-		}
-		return null ;
-	}
-	
+
 	static public class OpenCategoryActionListener extends EventListener<UICategories> {
     public void execute(Event<UICategories> event) throws Exception {
 			UICategories uiContainer = event.getSource();
@@ -140,10 +159,12 @@ public class UICategories extends UIContainer	{
 			uiForumContainer.setIsRenderChild(false) ;
 			UITopicDetail uiTopicDetail = uiTopicDetailContainer.getChild(UITopicDetail.class) ;
 			uiForumContainer.getChild(UIForumDescription.class).setForumIds(id[0], id[1]);
-			uiTopicDetail.setUpdateTopic(id[0], id[1], id[2], true) ;
+			uiTopicDetail.setTopicFromCate(id[0], id[1],uiContainer.getTopic(id[2]), true) ;
+			uiTopicDetail.setUpdateForum(uiContainer.getForumById(id[1])) ;
 			uiTopicDetail.setIdPostView("true") ;
 			uiTopicDetailContainer.getChild(UITopicPoll.class).updateFormPoll(id[0], id[1], id[2]) ;
 			forumPortlet.getChild(UIForumLinks.class).setValueOption((id[0]+"/"+id[1] + " "));
+			uiContainer.topicLastList.clear() ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
 		}
 	}

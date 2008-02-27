@@ -16,6 +16,7 @@
  ***************************************************************************/
 package org.exoplatform.forum.webui;
 
+import org.exoplatform.forum.service.UserProfile;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
 
@@ -32,4 +33,10 @@ import org.exoplatform.webui.core.UIContainer;
 public class UIPostRules extends UIContainer	{
 	public UIPostRules() throws Exception {		
 	}	
+	
+	@SuppressWarnings("unused")
+  private UserProfile getUserProfile() {
+		return this.getAncestorOfType(UIForumPortlet.class).getUserProfile() ;
+	}
+	
 }

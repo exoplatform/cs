@@ -55,7 +55,7 @@
 	                      </td>
                       </tr>
 	              			<tr>
-	                      <td class="FieldLabel"><%=_ctx.appRes("UITopicForm.label.Messenger")%>:</td>
+	                      <td class="FieldLabel"><%=_ctx.appRes("UITopicForm.label.Message")%>:</td>
 	                      <td class="FieldComponent">
 	                        <% uicomponent.getChildById(uiform.FIELD_MESSAGECONTENT).setRendered(true);
 	                           uiform.renderChild(uiform.FIELD_MESSAGECONTENT); %>

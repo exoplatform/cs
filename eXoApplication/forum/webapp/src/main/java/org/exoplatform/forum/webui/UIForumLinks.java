@@ -53,10 +53,11 @@ public class UIForumLinks extends UIForm {
 		this.forumLinks = forumService.getAllLink(ForumSessionUtils.getSystemProvider());
 		List<SelectItemOption<String>> list = new ArrayList<SelectItemOption<String>>() ;
 		list.add(new SelectItemOption<String>("Forum Home Page/hompage", "ForumService")) ;
-		String space = "&nbsp; &nbsp; ", type = "/categoryLink"; 
+		String space = "&nbsp; &nbsp; ",  type = "/categoryLink"; 
 		for(ForumLinkData linkData : forumLinks) {
-			if(linkData.getType().equals("forum")) {type = "/forumLink"; space = space + space ;}
-			if(linkData.getType().equals("topic")) break ;
+			if(linkData.getType().equals("forum")) {type = "/forumLink"; space = "&nbsp; &nbsp; &nbsp; &nbsp; " ;}
+			if(linkData.getType().equals("category")) {type = "/categoryLink"; space = "&nbsp; &nbsp; " ;}
+			if(linkData.getType().equals("topic")) continue ;
 			list.add(new SelectItemOption<String>(space + linkData.getName() + type, linkData.getPath())) ;
 		}
 		UIFormSelectBoxForum forumLink = new UIFormSelectBoxForum(FIELD_FORUMLINK_SELECTBOX, FIELD_FORUMLINK_SELECTBOX, list) ;

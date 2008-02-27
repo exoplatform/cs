@@ -222,9 +222,9 @@ public class TestForumService extends BaseForumTestCase{
 //    assertEquals(page3.size(), 6);
 //		// update Post First
 //		Post newPost = (Post)pagePosts.getPage(1, session_).get(0);
-//		newPost.setMessage("New messenger");
+//		newPost.setMessage("New message");
 //		forumService_.savePost(cat.getId(), forum.getId(), topic.getId(), newPost, false);
-//		assertEquals("New messenger", forumService_.getPost(cat.getId(), forum.getId(), topic.getId(), newPost.getId()).getMessage());
+//		assertEquals("New message", forumService_.getPost(cat.getId(), forum.getId(), topic.getId(), newPost.getId()).getMessage());
 ////		List<Post> posts1 = topicView.getAllPost(session_);
 ////		for (int i = 0; i < posts1.size(); i++) {
 ////			System.out.print("\n" + posts1.get(i).getId() + "\n");

@@ -68,7 +68,7 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 public class UIPostForm extends UIForm implements UIPopupComponent {
 	private ForumService forumService =	(ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
 	public static final String FIELD_POSTTITLE_INPUT = "PostTitle" ;
-	//public static final String FIELD_MESSENGER_TEXTAREA = "Messenger" ;
+	//public static final String FIELD_MESSAGE_TEXTAREA = "Message" ;
 	public static final String FIELD_LABEL_QUOTE = "ReUser" ;
 	
 	final static public String ACT_REMOVE = "remove" ;
@@ -87,9 +87,9 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
 		UIFormStringInput postTitle = new UIFormStringInput(FIELD_POSTTITLE_INPUT, FIELD_POSTTITLE_INPUT, null);
 		postTitle.addValidator(EmptyNameValidator.class) ;
 		addUIFormInput(postTitle);
-		//UIFormTextAreaInput messenger = new UIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA, FIELD_MESSENGER_TEXTAREA, null);
-		//messenger.addValidator(EmptyNameValidator.class) ;
-		//addUIFormInput(messenger);
+		//UIFormTextAreaInput message = new UIFormTextAreaInput(FIELD_MESSAGE_TEXTAREA, FIELD_MESSAGE_TEXTAREA, null);
+		//message.addValidator(EmptyNameValidator.class) ;
+		//addUIFormInput(message);
 		
 		UIFormInputIconSelector uiIconSelector = new UIFormInputIconSelector("Icon", "Icon") ;
 		uiIconSelector.setSelectedIcon("IconsView");
@@ -151,21 +151,21 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
 		this.isQuote = isQuote ;
 		if(this.postId != null && this.postId.length() > 0) {
 			Post post = this.forumService.getPost(ForumSessionUtils.getSystemProvider(), this.categoryId, this.forumId, this.topicId, postId) ;
-			String messenger = post.getMessage() ;
+			String message = post.getMessage() ;
 			if(isQuote) {//quote
 				String title = "" ;
 				if(post.getSubject().indexOf(": ") > 0) title = post.getSubject() ;
 				else title = getLabel(FIELD_LABEL_QUOTE) + ": " + post.getSubject() ;
 				getUIStringInput(FIELD_POSTTITLE_INPUT).setValue(title) ;
-				String value = "[QUOTE=" + post.getOwner() + "]" + ForumFormatUtils.clearQuote(messenger) + "[/QUOTE]<br/>";
+				String value = "[QUOTE=" + post.getOwner() + "]" + ForumFormatUtils.clearQuote(message) + "[/QUOTE]<br/>";
 				getChild(UIFormWYSIWYGInput.class).setValue(value);
-				//getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).setDefaultValue(value) ;
+				//getUIFormTextAreaInput(FIELD_MESSAGE_TEXTAREA).setDefaultValue(value) ;
 				getChild(UIFormInputIconSelector.class).setSelectedIcon(post.getIcon());
 			} else {//edit
 				getUIStringInput(FIELD_POSTTITLE_INPUT).setValue(post.getSubject()) ;
 //				this.attachments_ = post.getAttachments();
 //				this.refreshUploadFileList();
-				getChild(UIFormWYSIWYGInput.class).setValue(messenger);
+				getChild(UIFormWYSIWYGInput.class).setValue(message);
 				getChild(UIFormInputIconSelector.class).setSelectedIcon(post.getIcon());
 			}
 		} else {
@@ -218,11 +218,11 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
 				String[] args = { ""} ;
 				if(k == 0) {
 					args = new String[] { "Thread Title" } ;
-					if(t < 20) args = new String[] { "Thread Title and Messenger" } ;
+					if(t < 20) args = new String[] { "Thread Title and Message" } ;
 					throw new MessageException(new ApplicationMessage("NameValidator.msg.ShortText", args)) ;
 				} else if(t < 20) {
-					args = new String[] { "Messenger" } ;
-					throw new MessageException(new ApplicationMessage("NameValidator.msg.ShortMessenger", args)) ;
+					args = new String[] { "Message" } ;
+					throw new MessageException(new ApplicationMessage("NameValidator.msg.ShortMessage", args)) ;
 				}
 			}
 		}
@@ -234,7 +234,7 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
 			int t = 0, k = 1 ;
 			String postTitle = uiForm.getUIStringInput(FIELD_POSTTITLE_INPUT).getValue().trim();
 			String message = uiForm.getChild(UIFormWYSIWYGInput.class).getValue();
-				//uiForm.getUIFormTextAreaInput(FIELD_MESSENGER_TEXTAREA).getValue() ;
+				//uiForm.getUIFormTextAreaInput(FIELD_MESSAGE_TEXTAREA).getValue() ;
 			String userName = ForumSessionUtils.getCurrentUser() ;
 			if(message != null && message.length() > 0) message = message.trim() ;
 			t = message.length() ;
@@ -273,11 +273,11 @@ public class UIPostForm extends UIForm implements UIPopupComponent {
 				String[] args = { ""} ;
 				if(k == 0) {
 					args = new String[] { "Thread Title" } ;
-					if(t < 20) args = new String[] { "Thread Title and Messenger" } ;
+					if(t < 20) args = new String[] { "Thread Title and Message" } ;
 					throw new MessageException(new ApplicationMessage("NameValidator.msg.ShortText", args)) ;
 				} else if(t < 20) {
-					args = new String[] { "Messenger" } ;
-					throw new MessageException(new ApplicationMessage("NameValidator.msg.ShortMessenger", args)) ;
+					args = new String[] { "Message" } ;
+					throw new MessageException(new ApplicationMessage("NameValidator.msg.ShortMessage", args)) ;
 				}
 			}
 		}

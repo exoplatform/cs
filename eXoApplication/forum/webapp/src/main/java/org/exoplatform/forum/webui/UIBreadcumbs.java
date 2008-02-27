@@ -56,7 +56,7 @@ public class UIBreadcumbs extends UIContainer {
 		breadcumbs_.add("eXo Forum") ;
 		path_.add("ForumService") ;
 	}
-	
+
 	public void setUpdataPath(String path) throws Exception {
 		if(path != null && path.length() > 0 && !path.equals("ForumService")) {
 			String temp[] = path.split("/") ;

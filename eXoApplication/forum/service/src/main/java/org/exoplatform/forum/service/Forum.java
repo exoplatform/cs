@@ -33,8 +33,8 @@ public class Forum {
 	private String lastTopicPath;
 	private String name;
 	private String description;
-	private long postCount;
-	private long topicCount;
+	private long postCount = 0;
+	private long topicCount = 0;
 	
 	private String[] notifyWhenAddTopic ;
 	private String[] notifyWhenAddPost ;
@@ -51,6 +51,12 @@ public class Forum {
 	
 	
 	public Forum() {
+		notifyWhenAddTopic = new String[] {};
+		notifyWhenAddPost = new String[] {};
+		viewForumRole = new String[] {};
+		createTopicRole = new String[] {};
+		moderators = new String[] {};
+		replyTopicRole = new String[] {};
 		id = "forum" + IdGenerator.generate() ;
 	}
 	

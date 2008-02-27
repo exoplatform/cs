@@ -16,6 +16,7 @@
  ***************************************************************************/
 package org.exoplatform.forum.webui;
 
+import org.exoplatform.forum.service.UserProfile;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
 
@@ -30,7 +31,16 @@ import org.exoplatform.webui.core.UIContainer;
 		template =	"app:/templates/forum/webui/UIForumInfos.gtmpl"
 )
 public class UIForumInfos extends UIContainer	{
+	private String [] moderators ;
 	public UIForumInfos() throws Exception { 
 		addChild(UIPostRules.class, null, null);
-	}	
+	}
+
+	public String[] getModeratorsForum() {
+	  return this.moderators ;
+  }
+
+	public void setModeratorsForum(String[] moderators) {
+		this.moderators = moderators ;
+	}
 }

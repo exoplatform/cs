@@ -21,7 +21,9 @@ import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
+import org.exoplatform.forum.ForumFormatUtils;
 import org.exoplatform.forum.ForumSessionUtils;
+import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumAttachment;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.JCRPageList;
@@ -99,6 +101,7 @@ public class UITopicDetail extends UIForm {
 	private String forumId ; 
 	private String topicId = "";
 	private boolean viewTopic = true ;
+	private Forum forum;
 	private Topic topic;
 	private JCRPageList pageList ;
 	private long pageSelect	= 1 ;
@@ -139,6 +142,86 @@ public class UITopicDetail extends UIForm {
 		this.topic = forumService.getTopic(ForumSessionUtils.getSystemProvider(), categoryId, forumId, topicId, userName) ;
 		if(!userName.equals("guest"))	forumPortlet.setUserProfile() ;
 	}
+	
+	public void setTopicFromCate(String categoryId, String forumId, Topic topic, boolean viewTopic) throws Exception {
+		this.categoryId = categoryId ;
+		this.forumId = forumId ;
+		this.topicId = topic.getId() ;
+		this.viewTopic = viewTopic ;
+		this.isUpdatePageList = false ;
+		String userName = ForumSessionUtils.getCurrentUser() ;
+		if(userName ==null || userName.length() <= 0 || !this.viewTopic) {
+			userName = "guest" ;
+		}
+		UIForumPortlet forumPortlet = this.getAncestorOfType(UIForumPortlet.class) ;
+		forumPortlet.getChild(UIBreadcumbs.class).setUpdataPath((categoryId + "/" + forumId + "/" + topicId)) ;
+		boolean isGetService = false ;
+		if(userName !=null && userName.length() > 0) {
+			if(!userName.equals(this.userName)) {
+				if(this.userProfile != null) {
+					String []topicsRead = this.userProfile.getReadTopic() ;
+					if(topicsRead != null && topicsRead.length > 0) {
+						if(!ForumFormatUtils.isReadTopic(topicsRead, this.topicId)) {
+							isGetService = true ;
+						} 
+					} else isGetService = true ;
+				} else isGetService = true ;
+			} 
+			this.userName = userName ;
+		}
+		if(isGetService) {
+			this.topic = forumService.getTopic(ForumSessionUtils.getSystemProvider(), categoryId, forumId, topic.getId(), userName) ;
+			forumPortlet.setUserProfile() ;
+		} else {
+			this.topic = topic ;
+		}
+		forumPortlet.getChild(UIBreadcumbs.class).setUpdataPath((categoryId + "/" + forumId + "/" + topicId)) ;
+	}
+	
+	public void setUpdateContainer(String categoryId, String forumId, Topic topic, long numberPage) throws Exception {
+		if(this.topicId == null || !this.topicId.equals(topic.getId())) this.userName = "" ;
+		this.categoryId = categoryId ;
+		this.forumId = forumId ;
+		this.topicId = topic.getId() ;
+		this.viewTopic = false ;
+		this.pageSelect = numberPage ;
+		this.isGopage = true ;
+		this.isEditTopic = false ;
+		UIForumPortlet forumPortlet = this.getAncestorOfType(UIForumPortlet.class) ;
+		String userName = ForumSessionUtils.getCurrentUser() ;
+		boolean isGetService = false ;
+		if(userName !=null && userName.length() > 0) {
+			if(!userName.equals(this.userName)) {
+				if(this.userProfile != null) {
+					String []topicsRead = this.userProfile.getReadTopic() ;
+					if(topicsRead != null && topicsRead.length > 0) {
+						if(!ForumFormatUtils.isReadTopic(topicsRead, this.topicId)) {
+							isGetService = true ;
+						} 
+					} else isGetService = true ;
+				} else isGetService = true ;
+			} 
+			this.userName = userName ;
+		}
+		if(isGetService) {
+			this.topic = forumService.getTopic(ForumSessionUtils.getSystemProvider(), categoryId, forumId, topic.getId(), userName) ;
+			forumPortlet.setUserProfile() ;
+		} else {
+			this.topic = topic ;
+		}
+		this.getChild(UIForumPageIterator.class).setSelectPage(numberPage) ;
+		forumPortlet.getChild(UIBreadcumbs.class).setUpdataPath((categoryId + "/" + forumId + "/" + topicId)) ;
+	}
+	
+	public void setUpdateForum(Forum forum) throws Exception {
+		this.forum = forum ;
+	}
+	
+	@SuppressWarnings("unused")
+  private Forum getForum() throws Exception {
+		return this.forum ;
+	}
+	
 	@SuppressWarnings("unused")
 	private String getIdPostView() {
 		if(this.IdPostView.equals("true")){
@@ -153,28 +236,6 @@ public class UITopicDetail extends UIForm {
 	public void setIdPostView(String IdPostView) {
 	  this.IdPostView = IdPostView ;
   }
-	
-	public void setUpdateContainer(String categoryId, String forumId, Topic topic, long numberPage) throws Exception {
-		if(this.topicId == null || !this.topicId.equals(topic.getId())) this.userName = "" ;
-		this.categoryId = categoryId ;
-		this.forumId = forumId ;
-		this.topicId = topic.getId() ;
-		this.viewTopic = false ;
-		this.pageSelect = numberPage ;
-		this.isGopage = true ;
-		this.isEditTopic = false ;
-		UIForumPortlet forumPortlet = this.getAncestorOfType(UIForumPortlet.class) ;
-		String userName = ForumSessionUtils.getCurrentUser() ;
-		if(userName !=null && userName.length() > 0) {
-			if(!userName.equals(this.userName)) {
-				this.topic = forumService.getTopic(ForumSessionUtils.getSystemProvider(), categoryId, forumId, topic.getId(), userName) ;
-				this.userName = userName ;
-				forumPortlet.setUserProfile() ;
-			} else this.topic = topic ;
-		} else this.topic = topic ;
-		this.getChild(UIForumPageIterator.class).setSelectPage(numberPage) ;
-		forumPortlet.getChild(UIBreadcumbs.class).setUpdataPath((categoryId + "/" + forumId + "/" + topicId)) ;
-	}
 	
 	public void setIsEditTopic( boolean isEditTopic) {
 		this.isEditTopic = isEditTopic ;

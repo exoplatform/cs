@@ -1,9 +1,11 @@
 <%  
 	import org.exoplatform.forum.webui.UIPostRules ;
+	String []moderators =  uicomponent.getModeratorsForum() ;
+	int total = moderators.length;
 %>
 <div class="UIForumInfos">
 	<div class="ThreadsStartsList RightStartsList">
-		<% uicomponent.renderChild(UIPostRules.class) %>
+		<% uicomponent.renderChild(UIPostRules.class); %>
 	</div>
 	<div class="ThreadsStartsList LeftStartsList">
 		<div class="ForumCategory">
@@ -11,7 +13,7 @@
 			  <div class="LeftBar">
 			  	<div class="RightBar">
 			  		<div class="CenterBar">
-			  			<div class="Title">Moderators(10)</div>
+			  			<div class="Title">Moderators<% if(total > 0) { %>($total)<% } %></div>
 				  		<div class="CollapseButton" title="Collapse" onclick="eXo.forum.UIForumPortlet.expandCollapse(this) ;"><span></span></div>
 							<div style="clear: both;"><span></span></div>
 			  		</div>
@@ -20,7 +22,18 @@
 		  </div>
 		  <div class="ContentContainer">
 			  <div class="ForumList">
-			  	<div class="text"> <a href="#"> benjamin.mestrallet </a>,<a href="#"> brice.revenant </a> ,<a href="#"> dung.nguyen </a> ,<a href="#"> jeremi </a> ,<a href="#"> hieu.luong </a> ,<a href="#"> tuan.nguyen </a>,<a href="#"> tuan.pham </a></div>
+			  	<div class="text"> 
+			  	<% boolean isMod = false ; 
+			  	for(moderator in moderators) {
+				  	isMod = true ; 
+				  	String userModerator = moderator.substring(moderator.indexOf("(")+1, moderator.indexOf(")")) ;
+			  	%>
+			  		<a href="#">$userModerator</a>,
+			  	<% } 
+			  	if(!isMod){%>
+			  	<div>Not moderator</div>
+			  	<% } %>
+			  	</div>
 		  	</div>
 		  </div>
 	  </div>

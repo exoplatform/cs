@@ -22,6 +22,7 @@ import java.util.TreeMap;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.forum.ForumFormatUtils;
 import org.exoplatform.forum.ForumSessionUtils;
+import org.exoplatform.forum.service.Forum;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.JCRPageList;
 import org.exoplatform.forum.service.Tag;
@@ -171,6 +172,10 @@ public class UITopicsTag extends UIForm {
 		return null ;
 	}
 	
+	private Forum getForum(String categoryId, String forumId) throws Exception {
+		return this.forumService.getForum(ForumSessionUtils.getSystemProvider(), categoryId, forumId);
+	}
+	
 	static public class OpenTopicActionListener extends EventListener<UITopicsTag> {
     public void execute(Event<UITopicsTag> event) throws Exception {
 			UITopicsTag uiTopicsTag = event.getSource();
@@ -186,6 +191,7 @@ public class UITopicsTag extends UIForm {
 			UITopicDetail uiTopicDetail = uiTopicDetailContainer.getChild(UITopicDetail.class) ;
 			uiTopicDetail.setUpdateContainer(temp[temp.length-3], temp[temp.length-2], topic, Long.parseLong(id[1])) ;
 			uiTopicDetail.setUpdatePageList(uiTopicsTag.getPagePost(id[0]));
+			uiTopicDetail.setUpdateForum(uiTopicsTag.getForum(temp[temp.length-3], temp[temp.length-2]));
 			uiTopicDetailContainer.getChild(UITopicPoll.class).updatePoll(temp[temp.length-3], temp[temp.length-2], topic) ;
 			if(id[2].equals("true")) {
 				uiTopicDetail.setIdPostView("true") ;

@@ -13,10 +13,10 @@
       <div class="TabPaneContent">
         
         <div class="WorkingArea">
-           <div class="UIHorizontalTabs">
-             <div class="LeftHorizontalTabs">
-               <div class="RightHorizontalTabs">
-                 <div class="CenterHorizontalTabs">
+          <div class="UIHorizontalTabs">
+            <div class="LeftHorizontalTabs">
+              <div class="RightHorizontalTabs">
+                <div class="CenterHorizontalTabs">
                   <div class="TabsContainer">
                   <%String classCss = "SelectedTab" ; 
                   	for(tabconten in uiform.getChildren()){ %>  
@@ -67,16 +67,16 @@
         		<a href="$link" class="ActionButton LightBlueStyle">
 	      	  	<div class="ButtonLeft">
 	        	  	<div class="ButtonRight">
-	          	  	<div class="ButtonMiddle"> $actionLabel </div>
+	          	  	<div class="ButtonMiddle">$actionLabel</div>
 	            	</div>
 	          	</div>
 	        	</a>
           <%}%>
-          </td>
-				</tr>
-	 	  </table> 
-    </div>
-		<div id="PopupMenuTextAreaMulil">
+         </td>
+			 </tr>
+	   </table> 
+   </div>
+	<div id="PopupMenuTextAreaMulil">
 		<% /*Begin Popup Menu*/
 		String []temp = ["ModForums", "MosTopics"]; 
 		List forumLink = uiform.getForumLinks() ;
@@ -106,22 +106,21 @@
 													count = 1;
 											%>
 												 <div class="MenuItem" style="overflow:auto;">
-												 	<div style="float:left; padding: 3px 4px 3px 10px;">
-												 		<input type="checkbox" class="checkbox" value="false" name="$id"/>
-												 	</div>	 
-													<div class="ItemIcon classIconItem">$item</div>
+												 	 <div style="float:left; padding: 3px 4px 3px 10px;">
+												 		 <input type="checkbox" class="checkbox" value="false" name="$id"/>
+												 	 </div>	 
+													 <div class="ItemIcon classIconItem">$item</div>
 												 </div>
-											<% } 
-											 }
-											 if(count == 1) {
-											%>
+											<%} 
+											} %>
 												</div>
+											<% if(count == 1) {%>
 												<div class="UIActionForum" style="width: 50px; margin:auto;">
 													<div class="NormalButtom" onclick="eXo.forum.UIForumPortlet.onclickAddMenuTextAreaMutil(this, '$tp');">
 														<div class="ButtonLeft">
 															<div class="ButtonRight">
 																<div class="ButtonMiddle">
-																 <div style="text-align: center;"><a>Add</a></div>
+																  <div style="text-align: center;"><a>Add</a></div>
 																</div>
 															</div>
 														</div>
@@ -135,10 +134,10 @@
 									</div>
 								</div>
 								<div class="BottomLeftRightClickPopupMenu">
-								<div class="BottomRightRightClickPopupMenu">
-									<div class="BottomCenterRightClickPopupMenu"><span></span></div>
+									<div class="BottomRightRightClickPopupMenu">
+										<div class="BottomCenterRightClickPopupMenu"><span></span></div>
+									</div>
 								</div>
-							</div>
 							</div>
 						</div>
 					</div>
@@ -147,6 +146,6 @@
 			</div>
 			<% } %>
 			<% /*End Popup Menu*/ %>
-		</div>			
+		</div>		
   <%uiform.end()%>
 </div>

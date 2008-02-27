@@ -139,6 +139,8 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 			this.forum = forumService.getForum(ForumSessionUtils.getSystemProvider(), categoryId, forumId);
 			this.isUpdate = false ;
 		}
+		UIForumPortlet forumPortlet = this.getAncestorOfType(UIForumPortlet.class) ;
+		forumPortlet.findFirstComponentOfType(UIForumInfos.class).setModeratorsForum(this.forum.getModerators());
 		return this.forum ;
 	}
 	
@@ -298,6 +300,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 			UITopicDetail uiTopicDetail = uiTopicDetailContainer.getChild(UITopicDetail.class) ;
 			uiTopicDetail.setUpdateContainer(uiTopicContainer.categoryId, uiTopicContainer.forumId, topic, Long.parseLong(temp[1])) ;
 			uiTopicDetail.setUpdatePageList(uiTopicContainer.getPageListPost(temp[0])) ;
+			uiTopicDetail.setUpdateForum(uiTopicContainer.forum) ;
 			uiTopicDetailContainer.getChild(UITopicPoll.class).updatePoll(uiTopicContainer.categoryId, uiTopicContainer.forumId, topic ) ;
 			forumPortlet.getChild(UIForumLinks.class).setValueOption((uiTopicContainer.categoryId+"/"+ uiTopicContainer.forumId + " "));
 			if(temp[2].equals("true")) {
