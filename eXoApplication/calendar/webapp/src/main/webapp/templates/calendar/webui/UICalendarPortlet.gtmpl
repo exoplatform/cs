@@ -16,7 +16,7 @@
 		rcontext.getJavascriptManager().importJavascript('eXo.cs.CSUtils','/csResources/javascript/') ;
 	  rcontext.getJavascriptManager().importJavascript('eXo.cs.UIContextMenu','/csResources/javascript/') ;
 	  rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarPortlet','/calendar/javascript/') ;
-	  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.setting(' + timeStep + ', "' + workingStart + '", "' + timeFormat +'") ;') ;
+	  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.setting(' + timeStep + ', "' + workingStart + '", "' + timeFormat +'", "'+uicomponent.id+'") ;') ;
 	  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.showContextMenu("'+ uicomponent.id +'") ;') ;
 	  rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICombobox','/calendar/javascript/') ;
 	  rcontext.getJavascriptManager().importJavascript('eXo.calendar.Highlighter','/calendar/javascript/') ;
