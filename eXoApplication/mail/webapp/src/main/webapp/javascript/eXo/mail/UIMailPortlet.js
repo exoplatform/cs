@@ -423,8 +423,11 @@ UIMailPortlet.prototype.restoreFolderState = function() {
   }
 };
 
-UIMailPortlet.prototype.resizeIframe = function(str) {
-	var frame = document.getElementById("IframeMessagePreview") ;
+UIMailPortlet.prototype.resizeIframe = function(textAreaId, frameId, styleExpand) {
+	var frame = document.getElementById(frameId) ;
+	var textAreas = document.getElementById(textAreaId) ;
+	var expandMessage = eXo.core.DOMUtil.findAncestorByClass(frame, "ExpandMessage");
+	var str = textAreas.value ;
 	var doc = frame.contentWindow.document ;
 	var isDesktop = (document.getElementById("UIPageDesktop") != null) ? true : false;
 	doc.open();
@@ -436,6 +439,7 @@ UIMailPortlet.prototype.resizeIframe = function(str) {
 		if(!eXo.core.Browser.isFF()) frame.style.width = "96%";
 	} else {
 		if (eXo.core.Browser.isFF()) {
+			doc.body.style.visibility = true;
 			frame.style.height = doc.body.offsetHeight  + 20 + "px" ;
 		} else {
 			var docHt = 0, sh, oh;
@@ -451,7 +455,38 @@ UIMailPortlet.prototype.resizeIframe = function(str) {
 			frame.style.height = docHt + 20 + "px"; 
 		}
 	}
+	expandMessage.style.display = styleExpand ;
 }
+
+UIMailPortlet.prototype.showView = function(obj, evt) {
+   if(!evt) evt = window.event ;
+   evt.cancelBubble = true ;
+   var DOMUtil = eXo.core.DOMUtil ;
+   var uiPopupCategory = DOMUtil.findFirstDescendantByClass(obj, 'div', 'UIPopupCategory') ;
+   if (!uiPopupCategory) return ; 
+   var uiRightPopupMenuContainer = DOMUtil.findFirstDescendantByClass(uiPopupCategory, 'div', 'UIRightPopupMenuContainer') ;
+   var actions = DOMUtil.findChildrenByClass(uiRightPopupMenuContainer,"a", "MenuItem") ;
+   if(uiPopupCategory.style.display == "none") {
+       eXo.webui.UIPopupSelectCategory.hide() ;
+       uiPopupCategory.style.display = "block" ;
+       eXo.core.DOMUtil.listHideElements(uiPopupCategory) ; 
+   } else uiPopupCategory.style.display = "none" ;
+   actions[0].onmouseover = eXo.mail.UIMailPortlet.showSubmenu ;
+   actions[0].onmouseout = eXo.mail.UIMailPortlet.hideSubmenu ;
+   eXo.mail.UIMailPortlet.subMenu = DOMUtil.findNextElementByTagName(actions[0], "div") ;
+   eXo.mail.UIMailPortlet.subMenu.style.left = actions[0].offsetWidth + "px" ;
+   eXo.core.DOMUtil.listHideElements(eXo.mail.UIMailPortlet.subMenu) ;
+} ;
+
+UIMailPortlet.prototype.showSubmenu = function() {
+  eXo.mail.UIMailPortlet.subMenu.style.display = "block" ;
+} ;
+
+UIMailPortlet.prototype.hideSubmenu = function() {
+  eXo.mail.UIMailPortlet.subMenu.style.display = "none" ;
+  eXo.mail.UIMailPortlet.subMenu.onmouseover = eXo.mail.UIMailPortlet.showSubmenu ;
+  eXo.mail.UIMailPortlet.subMenu.onmouseout = eXo.mail.UIMailPortlet.hideSubmenu ;
+} ;
 
 // Check all
 function CheckBox() {

@@ -404,6 +404,11 @@
 	background-position: left center;
 }
 
+.UIMailPortlet .UIMessageActionsBar .UIRightClickPopupMenu .ItemIcon .NextArrow1Icon {
+	padding-right: 15px;
+	background-position: center right;
+}
+
 .UIMailPortlet .MailWorkingWorkspace .UIMessageActionsBar .SeparatorLine {
 	background: url('background/SeparatorDottedLine2x23.gif') no-repeat;
 	height: 23px;
@@ -470,6 +475,12 @@
 	overflow-x: hidden;
 }
 
+.UIMailPortlet .MailWorkingWorkspace .UIMessageList .LevelThreadIcon2 {
+	float: left;
+	background: url(background/Tree2.gif) no-repeat;
+	width: 22px; height: 22px;
+}
+
 .UIMailPortlet .MailWorkingWorkspace .UIGrid {
 	background: #ffffff;
 	border-bottom: 1px solid #e8e8e8;
@@ -534,6 +545,8 @@
 .UIMailPortlet .MailWorkingWorkspace .MessageHeader .MessageAttachment .MonthDate {
 	margin: 1px 3px 1px 3px;
 	float: right;
+	color:#2276AB;
+    font-weight:bold;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .MessageHeader .MessageAddress .SenderAddress {
@@ -647,7 +660,7 @@
 	margin: 4px 4px 0px 0px;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .UIMessagePreview .ReplyAllMailIcon {
+.UIMailPortlet .MailWorkingWorkspace .UIMessagePreview .MessageActionIcon {
 	float: left;
 	height: 20px; line-height: 20px;
 	height: 20px; line-height: 20px;
@@ -658,22 +671,7 @@
 	text-decoration: underline;
 }	
 
-.UIMailPortlet .MailWorkingWorkspace .UIMessagePreview .ForwardMailIcon {
-	float: left;
-	height: 20px; line-height: 20px;
-	padding: 0px 5px 0px 20px;
-	color: #2276AB;
-	display: block;
-	background-position: left center;
-	text-decoration: underline;
-}	
-
-.UIMailPortlet .MailWorkingWorkspace .UIMessagePreview a:hover.ReplyAllMailIcon {
-	text-decoration: none;
-	color: #fda946;
-}
-
-.UIMailPortlet .MailWorkingWorkspace .UIMessagePreview a:hover.ForwardMailIcon {
+.UIMailPortlet .MailWorkingWorkspace .UIMessagePreview a:hover.MessageActionIcon {
 	color: #fda946;
 	text-decoration: none;
 }
@@ -735,6 +733,7 @@
 
 .UIMailPortlet .DecoratorBox .MiddleCenterViewBoxStyle {
 	padding: 5px 10px 2px 10px;
+	height: 100%;
 }
 
 .UIMailPortlet .DecoratorBox .CollapseMessage .MiddleCenterViewBoxStyle {

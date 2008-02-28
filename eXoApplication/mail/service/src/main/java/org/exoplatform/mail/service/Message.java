@@ -16,6 +16,7 @@
  */
 package org.exoplatform.mail.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -49,6 +50,9 @@ public class Message extends MessageHeader {
   
   private Map<String, String> properties = new HashMap<String, String>() ;
   private List<Attachment> attachments ;
+  private List<String> referedMessageIds = new ArrayList<String>() ;
+  private List<String> groupedMessageIds = new ArrayList<String>() ;
+  private boolean isRootConversation = true ;
   
   public Message() {super() ;}
   
@@ -90,6 +94,15 @@ public class Message extends MessageHeader {
   
   public List<Attachment> getAttachments() { return attachments ; }
   public void setAttachements(List<Attachment> attachments) { this.attachments = attachments ; }
+  
+  public List<String> getReferedMessageIds() { return referedMessageIds ; }
+  public void setReferedMessageIds(List<String> referedMessageIds) { this.referedMessageIds = referedMessageIds ; }
+  
+  public List<String> getGroupedMessageIds() { return groupedMessageIds ; }
+  public void setGroupedMessageIds(List<String> groupedMessageIds) { this.groupedMessageIds = groupedMessageIds ; }
+  
+  public boolean isRootConversation() { return isRootConversation ; }
+  public void setIsRootConversation(boolean b) { this.isRootConversation = b ; }
   
   public Message cloneMessage() { return null ; }
   

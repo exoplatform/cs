@@ -244,6 +244,8 @@ public interface MailService {
   
   public List<Message> getMessages(SessionProvider sProvider, String username, MessageFilter filter) throws Exception ;
   
+  public void saveMessage(SessionProvider sProvider, String username, String accountId, String targetMsgPath, Message message) throws Exception ;
+  
   public void saveMessage(SessionProvider sProvider, String username, String accountId, Message message, boolean isNew) throws Exception;
   /**
    * This method should:
@@ -334,4 +336,6 @@ public interface MailService {
   public void saveFolder(SessionProvider sProvider, String username, String accountId, String parentId, Folder folder) throws Exception ;
   
   public List<Folder> getSubFolders(SessionProvider sProvider, String username, String accountId, String parentPath) throws Exception ;
+  
+  public List<Message> getReferencedMessages(SessionProvider sProvider, String username, String accountId, String msgPath) throws Exception ;
 }

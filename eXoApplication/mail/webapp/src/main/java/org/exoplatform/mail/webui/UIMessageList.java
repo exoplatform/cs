@@ -77,6 +77,9 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
       @EventConfig(listeners = UIMessageList.MarkAsUnReadActionListener.class),
       @EventConfig(listeners = UIMessageList.RemoveStarActionListener.class),
       @EventConfig(listeners = UIMessageList.ViewAllActionListener.class),
+      @EventConfig(listeners = UIMessageList.ViewAsListActionListener.class),
+      @EventConfig(listeners = UIMessageList.ViewAsThreadActionListener.class),
+      @EventConfig(listeners = UIMessageList.ViewAsConversationActionListener.class),
       @EventConfig(listeners = UIMessageList.ViewStarredActionListener.class),
       @EventConfig(listeners = UIMessageList.ViewUnstarredActionListener.class),
       @EventConfig(listeners = UIMessageList.ViewUnreadActionListener.class),
@@ -99,6 +102,10 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 )
 
 public class UIMessageList extends UIForm {
+  public final int MODE_LIST = 1 ;
+  public final int MODE_THREAD = 2 ;
+  public final int MODE_CONVERSATION = 3 ;
+  
   private String selectedMessageId_ = null ;
   private String selectedFolderId_ = null ;
   private String selectedTagId_ = null ;
@@ -107,7 +114,8 @@ public class UIMessageList extends UIForm {
   private boolean isAscending_ = true;
   private MessagePageList pageList_ = null ;
   private MessageFilter msgFilter_;
-  private String accountId_;
+  private String accountId_ ;
+  public int viewMode = MODE_THREAD ;
   public LinkedHashMap<String, Message> messageList_ = new LinkedHashMap<String, Message>();
 
   public UIMessageList() throws Exception {}
@@ -257,6 +265,16 @@ public class UIMessageList extends UIForm {
           }
         }
         uiMessagePreview.setMessage(msg);
+        List<Message> showedMessages = new ArrayList<Message>() ;
+        showedMessages.add(msg) ;
+        if (uiMessageList.viewMode == uiMessageList.MODE_CONVERSATION) {
+          if (msg != null && msg.getGroupedMessageIds().size() > 0) {
+            for (String id : msg.getGroupedMessageIds()) {
+              showedMessages.add(uiMessageList.messageList_.get(id)) ;
+            }
+          }
+        }
+        uiMessagePreview.setShowedMessages(showedMessages) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class));
       }          
     }
@@ -360,6 +378,57 @@ public class UIMessageList extends UIForm {
         return ;
       }
       uiMessageList.filterMessage("");
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
+    }
+  }
+  
+  static public class ViewAsListActionListener extends EventListener<UIMessageList> {
+    public void execute(Event<UIMessageList> event) throws Exception {
+      UIMessageList uiMessageList = event.getSource();
+      if (uiMessageList.viewMode == uiMessageList.MODE_CONVERSATION) {
+        UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+        UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class) ;
+        List<Message> showedMsgs = new ArrayList<Message>();
+        showedMsgs.add(uiMsgPreview.getMessage()) ;
+        uiMsgPreview.setShowedMessages(showedMsgs);
+      }
+      uiMessageList.viewMode = uiMessageList.MODE_LIST ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
+    }
+  }
+  
+  static public class ViewAsThreadActionListener extends EventListener<UIMessageList> {
+    public void execute(Event<UIMessageList> event) throws Exception {
+      UIMessageList uiMessageList = event.getSource();
+      if (uiMessageList.viewMode == uiMessageList.MODE_CONVERSATION) {
+        UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+        UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class) ;
+        List<Message> showedMsgs = new ArrayList<Message>();
+        showedMsgs.add(uiMsgPreview.getMessage()) ;
+        uiMsgPreview.setShowedMessages(showedMsgs);
+      }
+      uiMessageList.viewMode = uiMessageList.MODE_THREAD ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
+    }
+  }
+  
+  static public class ViewAsConversationActionListener extends EventListener<UIMessageList> {
+    public void execute(Event<UIMessageList> event) throws Exception {
+      UIMessageList uiMessageList = event.getSource();
+      if (uiMessageList.viewMode != uiMessageList.MODE_CONVERSATION) {
+        UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+        UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class) ;
+        List<Message> showedMsgs = new ArrayList<Message>();
+        Message msg = uiMsgPreview.getMessage();
+        showedMsgs.add(msg) ;
+        if (msg != null && msg.getGroupedMessageIds().size() > 0) {
+          for (String id : msg.getGroupedMessageIds()) {
+            showedMsgs.add(uiMessageList.messageList_.get(id)) ;
+          }
+        }
+        uiMsgPreview.setShowedMessages(showedMsgs);
+      }
+      uiMessageList.viewMode = uiMessageList.MODE_CONVERSATION ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }

@@ -107,6 +107,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   private Boolean isVisualEditor = true;
   private int composeType_;
   private String accountId_;
+  public String parentPath_ ;
   
   public List<Contact> toContacts = new ArrayList<Contact>();
   public List<Contact> ccContacts = new ArrayList<Contact>();
@@ -366,7 +367,10 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   
   private Message getNewMessage() throws Exception {
     Message message = getMessage();
-    if (!fromDrafts()) { message = new Message(); }
+    if (!fromDrafts()) {
+      if (message != null) parentPath_ = message.getPath() ;
+      message = new Message(); 
+    }
     UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
     String usename = uiPortlet.getCurrentUser() ;
     MailService mailSvr = this.getApplicationComponent(MailService.class) ;
@@ -455,7 +459,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           mailSvr.saveFolder(SessionsUtils.getSessionProvider(), usename, accountId, drafts);
           mailSvr.removeMessage(SessionsUtils.getSessionProvider(), usename, accountId, message);  
         } else {
-          mailSvr.saveMessage(SessionsUtils.getSessionProvider(), usename, accountId, message, true) ;    
+          mailSvr.saveMessage(SessionsUtils.getSessionProvider(), usename, accountId, uiForm.parentPath_, message) ;    
         }
         UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
         uiMessageList.updateList();
@@ -484,7 +488,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       try {
         message.setFolders(new String[]{Utils.createFolderId(accountId, Utils.FD_DRAFTS, false)}) ;
         if (! uiForm.fromDrafts()) {
-          mailSvr.saveMessage(SessionsUtils.getSessionProvider(), usename, accountId, message, true) ;
+          mailSvr.saveMessage(SessionsUtils.getSessionProvider(), usename, accountId, uiForm.parentPath_, message) ;
           Folder drafts = mailSvr.getFolder(SessionsUtils.getSessionProvider(), usename, accountId, Utils.createFolderId(accountId, Utils.FD_DRAFTS, false));
           drafts.setTotalMessage(drafts.getTotalMessage() + 1);
           mailSvr.saveFolder(SessionsUtils.getSessionProvider(), usename, accountId, drafts);

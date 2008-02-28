@@ -58,7 +58,7 @@ public class MailSetting {
   private boolean saveMessageInSent_ = true;
   
   public MailSetting() {
-    showNumberOfConversation = 30;
+    showNumberOfConversation = 20;
     formatWhenReplyForward = FORMAT_AS_ORIGINAL;
     replyMessageWith = REPLY_AS_ORIGINAL;
     forwardMessageWith = FORWARD_AS_ORIGINAL;

@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.PropertyIterator;
 import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.query.Query;
@@ -76,14 +77,60 @@ public class MessagePageList extends JCRPageList {
     for(int i = 0; i < pageSize; i ++) {
       if(iter_.hasNext()){
         currentNode = iter_.nextNode() ;
-        if(currentNode.isNodeType("exo:message")) {
-          currentListPage_.add(getMessage(currentNode)) ;        
+        String nodeType = "exo:message" ;        
+        if (Utils.SHOWCONVERSATION) nodeType = "exo:conversationMixin" ;
+        Message msg = getMessage(currentNode) ;
+        
+        Value[] values = {};
+        boolean isExist = false ; 
+        if (currentNode.hasProperty("exo:conversationId")) {
+          values = currentNode.getProperty("exo:conversationId").getValues();
+          for (int j = 0; j < values.length; j++) {
+            Value value = values[j];
+            String uuid = value.getString();
+            Node refNode = currentNode.getSession().getNodeByUUID(uuid);
+            String refMsgFolder = refNode.getProperty("exo:folders").getValues()[0].getString() ;
+            if (refMsgFolder.equals(currentNode.getProperty("exo:folders").getValues()[0].getString()))
+              isExist = true ; 
+            String sentFolderId = Utils.createFolderId(currentNode.getProperty(Utils.EXO_ACCOUNT).getString(), Utils.FD_SENT, false) ;
+            if (refMsgFolder.equals(sentFolderId)) {
+              currentListPage_.add(getMessage(refNode)) ;
+              msg.setIsRootConversation(false) ;
+            }
+          }
+        }
+        if (Utils.SHOWCONVERSATION && (!currentNode.isNodeType("exo:messageMixin") || !isExist)) {
+          currentListPage_.add(msg) ;
+          currentListPage_ = getMessageList(currentListPage_, currentNode, msg.getFolders()[0]) ;
+        } else if(!Utils.SHOWCONVERSATION && currentNode.isNodeType(nodeType)) {
+          currentListPage_.add(getMessage(currentNode)) ;
         }
       }else {
         break ;
       }
     }
     iter_ = null ;    
+  }
+  
+  private List<Message> getMessageList(List<Message> listPage, Node currentNode, String folderId) throws Exception {
+    PropertyIterator prosIter = currentNode.getReferences() ;
+    Node msgNode ;
+    while (prosIter.hasNext()) {
+      msgNode = prosIter.nextProperty().getParent() ;
+      if (msgNode.isNodeType("exo:message")) {
+        Message msg = getMessage(msgNode) ;
+        msg.setIsRootConversation(false) ;
+        String sentFolderId = Utils.createFolderId(msg.getAccountId(), Utils.FD_SENT, false) ;
+        String draftFolderId = Utils.createFolderId(msg.getAccountId(), Utils.FD_DRAFTS, false) ;
+        if (folderId.equals(msg.getFolders()[0]) || sentFolderId.equals(msg.getFolders()[0]) || draftFolderId.equals(msg.getFolders()[0])) {
+          listPage.add(msg) ;
+          if (msgNode.isNodeType("mix:referenceable")) {
+            listPage = getMessageList(listPage, msgNode, folderId) ;
+          }
+        }
+      }
+    }
+    return listPage ;
   }
   
   private Message getMessage(Node messageNode) throws Exception {
@@ -130,7 +177,7 @@ public class MessagePageList extends JCRPageList {
         file.setMimeType(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_MIMETYPE).getString());
         file.setName(node.getName());
         file.setWorkspace(node.getSession().getWorkspace().getName()) ;
-        file.setSize(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_DATA).getStream().available());
+        file.setSize(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_DATA).getLength());
         //file.setInputStream(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_DATA).getStream());
         attachments.add(file);
       }
@@ -147,9 +194,45 @@ public class MessagePageList extends JCRPageList {
       cal.setTimeInMillis(messageNode.getProperty(Utils.EXO_SENDDATE).getLong());
       msg.setSendDate(cal.getTime());
     }
+    
+    if (Utils.SHOWCONVERSATION) {
+      List<String> referedMessageIds = new ArrayList<String>() ;
+      PropertyIterator prosIter = messageNode.getReferences() ;
+      Node msgNode ;
+      while (prosIter.hasNext()) {
+        msgNode = prosIter.nextProperty().getParent() ;
+        if (msgNode.isNodeType("exo:message")) referedMessageIds.add(msgNode.getProperty(Utils.EXO_ID).getString()) ;
+      }
+      msg.setReferedMessageIds(referedMessageIds);
+
+      List<String> groupedMessageIds = new ArrayList<String>() ;
+      groupedMessageIds = getGroupedMessageIds(groupedMessageIds, messageNode, msg.getFolders()[0]) ;
+      msg.setGroupedMessageIds(groupedMessageIds);
+    }
+    
     return msg ;
   }
   
+  private List<String> getGroupedMessageIds(List<String> list, Node currentNode, String folderId) throws Exception {
+    PropertyIterator prosIter = currentNode.getReferences() ;
+    Node msgNode ;
+    String accId = currentNode.getProperty(Utils.EXO_ACCOUNT).getString() ;
+    while (prosIter.hasNext()) {
+      msgNode = prosIter.nextProperty().getParent() ;
+      if (msgNode.isNodeType("exo:message")) {
+        String sentFolderId = Utils.createFolderId(accId, Utils.FD_SENT, false) ;
+        String draftFolderId = Utils.createFolderId(accId, Utils.FD_DRAFTS, false) ;
+        String msgFolderId = msgNode.getProperty(Utils.EXO_FOLDERS).getValues()[0].getString() ;
+        if (folderId.equals(msgFolderId) || sentFolderId.equals(msgFolderId) || draftFolderId.equals(msgFolderId)) {
+          list.add(msgNode.getProperty(Utils.EXO_ID).getString()) ;
+          if (msgNode.isNodeType("mix:referenceable")) {
+            list = getGroupedMessageIds(list, msgNode, folderId) ;
+          }
+        }
+      }
+    }
+    return list ;
+  }
   
   
 /*  private String [] ValuesToStrings(Value[] Val) throws Exception {

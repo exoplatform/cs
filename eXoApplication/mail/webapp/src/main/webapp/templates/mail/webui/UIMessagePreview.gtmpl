@@ -38,12 +38,71 @@
 <!--  Start DecoratorBox ViewBoxStyle -->
     <% 
     int msgIndex = 0;
-    if (msgRoot != null) { Message msg = msgRoot; %>
+    if (msgRoot != null) { for(Message msg : uicomponent.getShowedMessages()) {  if (msg != null) {%>
 		<div class="DecoratorBox" previewId="<%=msg.getId()%>">
+    <%
+        String starClass = "UnStarredIcon" ;
+        if (msg.hasStar()) starClass = "StarredIcon";
+        String styleCollapse = "block";
+        if (msgIndex == uicomponent.getShowedMessages().size() -1) styleCollapse = "none";
+    %>
+      <div id="CollapseMessage" class="CollapseMessage" style="display: $styleCollapse ;" onclick="javascript:eXo.mail.UIMailPortlet.showHideMessageDetails(this)">
+        <div class="ViewBoxStyle">
+          <div class="TopLeftViewBoxStyle">
+            <div class="TopRightViewBoxStyle">
+              <div class="TopCenterViewBoxStyle"><span></span></div>
+            </div>
+          </div>
+          <div class="MiddleLeftViewBoxStyle">
+            <div class="MiddleRightViewBoxStyle">
+              <div class="MiddleCenterViewBoxStyle">
+                <div class="MessageHeader">
+                  <div class="MessageCheck">
+                    <div><a href="<%=uicomponent.event("AddStar", msg.getId())%>"><div  class="$starClass" title="Add star for this message"><span></span></div></a></div>
+                    <div style="clear: left;"><span></span></div>
+                  </div>
+                  <div class="MessageAddress">
+                    <div class="FieldContainer">
+                      <div class="SenderAddress">
+                        <%
+                          InternetAddress[] fromAddress2 = Utils.getInternetAddress(msg.getFrom());
+                          InternetAddress from2 = fromAddress2[0];
+                        %>
+                        <span><%=Utils.getPersonal(from2)%> &lt; <%=from2.getAddress()%> &gt; </span>
+                      </div>
+                      <div class="HeadlineText">Click here to expand contents of message ...</div>
+                      <div style="clear: left;"><span></span></div>
+                    </div>
+                  </div>
+                  <div class="MessageAttachment" >
+                    <% if (msg.getAttachments().size() > 0) { %>
+                      <div class="AttachmentIcon"><span></span></div>
+                    <% } %>
+
+                    <div class="MonthDate">
+                      <%=Utils.formatDate('MMM dd', msg.getReceivedDate())%>
+                    </div>
+
+                    <div style="clear: right;"><span></span></div>
+                  </div>
+                  <div style="clear: both;"><span></span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="BottomLeftViewBoxStyle">
+            <div class="BottomRightViewBoxStyle">
+              <div class="BottomCenterViewBoxStyle"><span></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <%
-        String styleExpand = "block";
+        String styleExpand = "none";
+        if (msgIndex == uicomponent.getShowedMessages().size() -1) styleExpand = "block";
       %>
-      <div class="ExpandMessage" style="display: $styleExpand ;">
+      <div class="ExpandMessage">
   			<div class="ViewBoxStyle">
   				<div class="TopLeftViewBoxStyle">
   					<div class="TopRightViewBoxStyle">
@@ -55,10 +114,6 @@
   						<div class="MiddleCenterViewBoxStyle">
   							<div class="MessageHeader">
   								<div class="MessageCheck">
-                    <%
-                      String starClass = "UnStarredIcon" ;
-                      if (msg.hasStar()) starClass = "StarredIcon";
-                    %>
   									<div><a href="<%=uicomponent.event("AddStar", msg.getId())%>"><div  class="$starClass" title="Add star for this message"><span></span></div></a></div>
   									<div style="clear: left;"><span></span></div>
   								</div>
@@ -180,7 +235,7 @@
                                         <div class="ItemIcon PrintMailIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.print") %> </div>
                                       </a>
                                       <a class="MenuItem" href="<%=uicomponent.event("Delete", msg.getId())%>">   
-                                        <div class="ItemIcon DeleteMailIcon"> <%=_ctx.appRes(uicomponent.id+ ".delete") %> </div>
+                                        <div class="ItemIcon DeleteMailIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.delete") %> </div>
                                       </a>
                                       <a class="MenuItem" href="<%=uicomponent.event("AddTag", msg.getId())%>">   
                                         <div class="ItemIcon TagMailIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.tag") %> </div>
@@ -215,13 +270,16 @@
   								</div>
   								<div style="clear: both;"><span></span></div>
   							</div>
-                
-                <iframe src="" style="border: 0px" frameborder="0" class="MessageDetails" id="IframeMessagePreview"></iframe>
                 <%
-                  rcontext.getJavascriptManager().addJavascript("eXo.mail.UIMailPortlet.resizeIframe(document.getElementById(\'MessageDetails\').value) ;");
+                  String frameId = "IframeMessagePreview" + msgIndex ;
+                  String textAreaId = "MessageDetails" + msgIndex ;
+                %>
+                <iframe src="" style="border: 0px" frameborder="0" class="MessageDetails" id="$frameId"></iframe>
+                <%
+                  rcontext.getJavascriptManager().addJavascript("eXo.mail.UIMailPortlet.resizeIframe('" + textAreaId + "', '" + frameId + "', '" + styleExpand + "') ;");
                 %>
                
-  							<textarea id="MessageDetails" class="MessageDetails" style="display:none">
+  							<textarea id="$textAreaId" class="MessageDetails" style="display:none">
   								<%=msg.getMessageBody()%>
   							 </textarea>
                 
@@ -267,8 +325,8 @@
                   } 
                 %>
                 			<div style="border-top: 1px dotted #b7b7b7; padding-top: 3px">
-                				<a href="#" class="ReplyAllMailIcon">Reply</a>
-			                	<a href="#" class="ForwardMailIcon">Forward</a>
+                				<a href="#" class="MessageActionIcon ReplyAllMailIcon">Reply</a>
+			                	<a href="#" class="MessageActionIcon ForwardMailIcon">Forward</a>
 			                	<div style="clear: left"><span></span></div>
 			                </div>
   						</div>										
@@ -284,6 +342,8 @@
 		</div>
     <%
      msgIndex++;
+    }
+    } 
     }%>
 <!--  End DecoratorBox ViewBoxStyle -->
 	</div>

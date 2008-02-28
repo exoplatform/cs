@@ -99,7 +99,7 @@
   </div>
   
   <div class="SelectButton">
-    <div class="View" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+    <div class="View" onclick="eXo.mail.UIMailPortlet.showView(this, event);">
       <div class="DownArrow1Icon">View</div>
       
       <% /*Begin Popup Menu*/ %>
@@ -115,9 +115,47 @@
 	            <div class="MiddleLeftRightClickPopupMenu">
 	              <div class="MiddleRightRightClickPopupMenu">
 	                <div class="UIRightPopupMenuContainer">
-	                  <a class="MenuItem" href="<%=uicomponent.event("ViewAll")%>">   
-	                    <div class="ItemIcon AllMessagesIcon"><%=_ctx.appRes(uicomponent.id+ ".label.view-all-messages") %></div>
+	                  <a class="MenuItem">   
+	                    <div class="ItemIcon ViewAsIcon">
+                        <div class="NextArrow1Icon">View As</div>
+                      </div>
 	                  </a>
+                    <!--Submenu-->
+                    <div class="UIPopupCategory" style="display: none ;">
+                       <div class="UIRightClickPopupMenu" style="display: block;">
+                        <div class="UIContextMenuContainer">
+                          <div class="TopLeftRightClickPopupMenu">
+                            <div class="TopRightRightClickPopupMenu">
+                              <div class="TopCenterRightClickPopupMenu"><span></span></div>
+                            </div>
+                          </div>
+                          <div class="MiddleLeftRightClickPopupMenu">
+                            <div class="MiddleRightRightClickPopupMenu">
+                              <div class="UIRightPopupMenuContainer">
+                              <a class="MenuItem" href="<%=uicomponent.event("ViewAsList")%>">   
+                              <div class="ItemIcon ListIcon"> List</div>
+                            </a>
+                            <a class="MenuItem" href="<%=uicomponent.event("ViewAsThread")%>">   
+                              <div class="ItemIcon ThreadIcon">Thread</div>
+                            </a>
+                            <a class="MenuItem" href="<%=uicomponent.event("ViewAsConversation")%>">   
+                              <div class="ItemIcon ConversationIcon">Conversation</div>
+                            </a>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="BottomLeftRightClickPopupMenu">
+                           <div class="BottomRightRightClickPopupMenu">
+                             <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+                           </div>
+                         </div>
+                         </div>
+                       </div>
+                     </div>
+                    <!--end-->
+                    <a class="MenuItem" href="<%=uicomponent.event("ViewAll")%>">   
+                      <div class="ItemIcon AllMessagesIcon"><%=_ctx.appRes(uicomponent.id+ ".label.view-all-messages") %></div>
+                    </a>
 	                  <a class="MenuItem" href="<%=uicomponent.event("ViewStarred")%>">   
 	                    <div class="ItemIcon StarredIcon"><%=_ctx.appRes(uicomponent.id+ ".label.view-starred-messages") %></div>
 	                  </a>
@@ -338,102 +376,165 @@
    	      </th>
     	 	</tr>
     	</thead>
-      <%if (uicomponent.getMessageList().size() > 0) {%>
-      <tbody class="MessageContainer">
-      <%
-          int i = 0;
+      
+      
+      <% 
+        public int show(Message msg, int i, int l) {
+          if (msg != null && (uicomponent.viewMode != uicomponent.MODE_CONVERSATION || msg.isRootConversation())) {
+            l ++ ;
+            String actionLink = uicomponent.event("SelectMessage", msg.getId());
+            checkboxField = uicomponent.getChildById(msg.getId());
+            String actionAddStar = uicomponent.event("AddStar", msg.getId());
+            String selectedClass = "OddItem" ;
+            if ((i%2) == 1) selectedClass = "EvenItem";
+            String readStatus = "ReadItem" ;
+            if (msg.isUnread()) readStatus = "UnreadItem" ;
+            if (checkboxField.checked) selectedClass += " SelectedItem" ;
+            String starClass = "UnStarredIcon" ;
+            if (msg.hasStar()) starClass = "StarredIcon";
+      %>
+            <tr class="MessageItem $selectedClass" msgId="<%=msg.getId()%>">
+              <td>
+                <%
+                  if (checkboxField != null) uicomponent.renderField(checkboxField);
+                %>
+              </td>
+              <td style="padding: 0px auto;"><a href="$actionAddStar" ><div class="$starClass"><span></span></div></a></td>
+              <td class="$readStatus">
+                <%
+                  String sender = "";
+                  if (uicomponent.selectedSentFolder() || uicomponent.selectedDraftFolder()) {
+                    try {
+                      InternetAddress[] toAddress = InternetAddress.parse(msg.getMessageTo());
+                      for (j in 0..(toAddress.length-1)) {
+                        InternetAddress address = toAddress[j];
+                        if (j > 0) sender += ",";
+                        sender += Utils.getPersonal(address);
+                      }
+                    } catch(Exception) {}
+                  } else {
+                    sender = Utils.getPersonal(Utils.getInternetAddress(msg.getFrom())[0]) ;
+                  }
+                %>
+                <a href="$actionLink"> $sender </a>
+              </td>
+              <td style="padding: 0px auto;">
+                <% 
+                  if (msg.getAttachments().size() > 0) {
+                %>
+                <a href="$actionLink"><div class="AttachmentIcon"><span></span></div></a>
+                <%}%>
+              </td>
+              <td class="$readStatus">
+              <% 
+                if (msg.getTags() != null && msg.getTags().length > 0) {
+                  String colorCss = "";
+                  String title = "";
+                  if (msg.getTags().length > 1) {
+                    colorCss = "MultipTag";
+                  } else if (uicomponent.getTags(msg).size() > 0) {
+                    colorCss = uicomponent.getTags(msg).get(0).getColor() + "Tag";
+                  }
+                  for (Tag tag : uicomponent.getTags(msg)) {
+                    title += "[" + tag.getName() + "] ";
+                  }
+                %>
+                  <a href="$actionLink" title="$title" style="display: block; float: left; margin-right: 3px;"><div class="IconTag $colorCss"><span></span></div></a>
+                <%
+                  }
+                %>
+                <a href="$actionLink">
+                <% 
+                  if (!msg.isRootConversation() && uicomponent.viewMode == uicomponent.MODE_THREAD) {
+                    String marginLevel = (l-2)*10 + "px" ;
+                %>
+                  <div class="LevelThreadIcon2" style="margin-left: $marginLevel; padding-left: 25px; width: auto;">
+                <% 
+                  } else {
+                %>
+                  <div>
+                <%
+                  }
+                %>
+                  <%=msg.getSubject()%></div>
+                </a>
+                <div style="clear: left;"><span></span></div>
+              </td>                     
+              <td class="text">
+                <% 
+                  if (uicomponent.viewMode == uicomponent.MODE_LIST) {
+                %>
+                  ( 1 )
+                <% 
+                  } else if (msg.isRootConversation()){
+                %>
+                  ( <%=msg.getGroupedMessageIds().size() + 1%> )
+                <%
+                  }
+                %>
+              </td>
+              <td class="$readStatus">
+                <a href="$actionLink">
+                  <%if (msg.getReceivedDate() != null) { %>
+                    <%=MailUtils.formatDate(msg.getReceivedDate())%>
+                  <%} else if (msg.getSendDate() != null){%>
+                    <%=MailUtils.formatDate(msg.getSendDate())%>
+                  <%}%>
+                </a>
+              </td>
+              <td class="$readStatus">
+                <a href="$actionLink">
+                  <%=MailUtils.convertSize(msg.getSize())%>
+                </a>
+              </td>
+              <%
+                String priClass = "";
+                if (msg.getPriority().equals(Utils.PRIORITY_LOW)) priClass = "LowPriority";
+                else if (msg.getPriority().equals(Utils.PRIORITY_NORMAL)) priClass = "NormalPriority";
+                else if (msg.getPriority().equals(Utils.PRIORITY_HIGH)) priClass = "HighPriority";
+              %>
+              <td style="padding: 0px;" >
+                <div class="text $priClass" title ><span></span></div>
+              </td>
+            </tr>
+          <%
+              i++ ;
+            }
+            if (msg != null && msg.getReferedMessageIds().size() > 0) {
+              for (String referedMsg: msg.getReferedMessageIds()) {
+                Message childMsg = uicomponent.messageList_.get(referedMsg) ;
+                i = show(childMsg, i, l);
+              }
+              l-- ;
+            }
+          return i ;
+        }
+      %>
+      
+      <%/* End of function show*/%>
+      
+      <% if (uicomponent.getMessageList().size() > 0) { %>
+        <tbody class="MessageContainer">
+        <%
+          int i = 0 ;
+          int l = 0 ;
     			for(Message msg : uicomponent.getMessageList()) {
-      			  String actionLink = uicomponent.event("SelectMessage", msg.getId());
-      			  checkboxField = uicomponent.getChildById(msg.getId());
-      			  String actionAddStar = uicomponent.event("AddStar", msg.getId());
-      			  String selectedClass = "OddItem" ;
-              if ((i%2) == 1) selectedClass = "EvenItem";
-              String readStatus = "ReadItem" ;
-              if (msg.isUnread()) readStatus = "UnreadItem" ;
-      			  if (checkboxField.checked) selectedClass += " SelectedItem" ;
-              String starClass = "UnStarredIcon" ;
-              if (msg.hasStar()) starClass = "StarredIcon";
-    		%>
-    		<tr class="MessageItem $selectedClass" msgId="<%=msg.getId()%>">
-    	  		<td>
-              <%
-                if (checkboxField != null) uicomponent.renderField(checkboxField);
-              %>
-    	  		</td>
-    				<td style="padding: 0px auto;"><a href="$actionAddStar" ><div class="$starClass"><span></span></div></a></td>
-            <td class="$readStatus">
-              <%
-                String sender = "";
-                if (uicomponent.selectedSentFolder() || uicomponent.selectedDraftFolder()) {
-                  try {
-                    InternetAddress[] toAddress = InternetAddress.parse(msg.getMessageTo());
-                    for (j in 0..(toAddress.length-1)) {
-                      InternetAddress address = toAddress[j];
-                      if (j > 0) sender += ",";
-                      sender += Utils.getPersonal(address);
-                    }
-                  } catch(Exception) {}
-                } else {
-                  sender = Utils.getPersonal(Utils.getInternetAddress(msg.getFrom())[0]) ;
-                }
-              %>
-              <a href="$actionLink"> $sender </a>
-            </td>
-    				<td style="padding: 0px auto;">
-    				  <% 
-    				    if (msg.getAttachments().size() > 0) {
-    				  %>
-    				  <a href="$actionLink"><div class="AttachmentIcon"><span></span></div></a>
-    				  <%}%>
-    				</td>
-    				<td class="$readStatus">
-            <% 
-              if (msg.getTags() != null && msg.getTags().length > 0) {
-                String colorCss = "";
-                String title = "";
-                if (msg.getTags().length > 1) {
-                  colorCss = "MultipTag";
-                } else if (uicomponent.getTags(msg).size() > 0) {
-                  colorCss = uicomponent.getTags(msg).get(0).getColor() + "Tag";
-                }
-                for (Tag tag : uicomponent.getTags(msg)) {
-                  title += "[" + tag.getName() + "] ";
-                }
-              %>
-                <a href="$actionLink" title="$title" style="display: block; float: left; margin-right: 3px;"><div class="IconTag $colorCss"><span></span></div></a>
-             <%}%>
-             <a href="$actionLink"><%=msg.getSubject()%></a>
-             <div style="clear: left;"><span></span></div></td>                     
-    				<td class="text">( 1 )</td>
-    				<td class="$readStatus">
-    				  <a href="$actionLink">
-    				    <%if (msg.getReceivedDate() != null) { %>
-    				      <%=MailUtils.formatDate(msg.getReceivedDate())%>
-    				    <%} else if (msg.getSendDate() != null){%>
-    				      <%=MailUtils.formatDate(msg.getSendDate())%>
-    				    <%}%>
-    				  </a>
-    				</td>
-    				<td class="$readStatus"><a href="$actionLink">
-    				   <%=MailUtils.convertSize(msg.getSize())%>
-    				</a></td>
-    				<%
-    				  String priClass = "";
-    				  if (msg.getPriority().equals(Utils.PRIORITY_LOW)) priClass = "LowPriority";
-    				  else if (msg.getPriority().equals(Utils.PRIORITY_NORMAL)) priClass = "NormalPriority";
-    				  else if (msg.getPriority().equals(Utils.PRIORITY_HIGH)) priClass = "HighPriority";
-    				%>
-    				<td style="padding: 0px;" ><div class="text $priClass" title ><span></span></div></td>
-       	 </tr>
-    		<% i++; }%>
+            if (msg.isRootConversation()) 
+            i = show(msg, i, l);
+          } // end of for loop
+        %>
       	</tbody>
-      <% } else {%>
-        <tbody><tr><td colspan="10">
-          <div class="MessageNotice SpliterResizableListArea" id="uiMessageListResizableArea">
+      <% 
+        } else {
+      %>
+          <tbody><tr><td colspan="10">
+            <div class="MessageNotice SpliterResizableListArea" id="uiMessageListResizableArea">
             <%=_ctx.appRes(uicomponent.id+ ".label.there-are-no-messages") %>
           </div>
         </td></tr></tbody>
-    <%}%>
+      <%
+        }
+      %>
   	</table>
   </div>
 <%uiform.end()%>    

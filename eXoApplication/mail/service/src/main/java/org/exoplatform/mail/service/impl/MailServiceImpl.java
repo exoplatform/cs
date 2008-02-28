@@ -167,6 +167,10 @@ public class MailServiceImpl implements MailService{
     return storage_.getMessagePageList(sProvider, username, filter);
   }
   
+  public void saveMessage(SessionProvider sProvider, String username, String accountId, String targetMsgPath, Message message) throws Exception {
+    storage_.saveMessage(sProvider, username, accountId, targetMsgPath, message) ;
+  }
+  
   public List<Message> getMessages(SessionProvider sProvider, String username, MessageFilter filter) throws Exception {
     return storage_.getMessages(sProvider, username, filter) ;
   }
@@ -480,6 +484,8 @@ public class MailServiceImpl implements MailService{
     }
     node.save() ;
     
+    storage_.saveConversation(sProvider, username, accId, Utils.getAllRecipients(msg), node) ;
+    
     Node folderHomeNode = storage_.getFolderHome(sProvider, username, accId) ;
     try { 
       Node folderNode = folderHomeNode.getNode(folderId);
@@ -719,5 +725,9 @@ public class MailServiceImpl implements MailService{
   
   public List<Folder> getSubFolders(SessionProvider sProvider, String username, String accountId, String parentPath) throws Exception {
     return storage_.getSubFolders(sProvider, username, accountId, parentPath) ;
+  }
+  
+  public List<Message> getReferencedMessages(SessionProvider sProvider, String username, String accountId, String msgPath) throws Exception {
+    return storage_.getReferencedMessages(sProvider, username, accountId, msgPath);
   }
 }

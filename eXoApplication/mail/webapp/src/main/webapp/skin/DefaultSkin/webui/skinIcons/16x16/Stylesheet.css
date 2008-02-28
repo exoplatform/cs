@@ -196,6 +196,22 @@
 	background: url('icons/AllMessagesIcon.gif') no-repeat;
 }
 
+.UIMailPortlet .ViewAsIcon {
+	background: url('icons/ViewAsIcon.gif') no-repeat left 6px;
+}
+
+.UIMailPortlet .ListIcon {
+	background: url('icons/ListIcon.gif') no-repeat;
+}
+
+.UIMailPortlet .ThreadIcon {
+	background: url('icons/ThreadIcon.gif') no-repeat;
+}
+
+.UIMailPortlet .ConversationIcon {
+	background: url('icons/ConversationIcon.gif') no-repeat;
+}
+
 .UIMailPortlet .StaredMessagesIcon {
 	background: url('icons/AllMessagesIcon.gif') no-repeat;
 }

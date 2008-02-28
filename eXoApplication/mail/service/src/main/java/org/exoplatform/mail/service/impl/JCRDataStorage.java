@@ -29,6 +29,7 @@ import java.util.Map;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
+import javax.jcr.PropertyIterator;
 import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.query.Query;
@@ -59,7 +60,7 @@ import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
  */
 public class JCRDataStorage{
 	private NodeHierarchyCreator nodeHierarchyCreator_ ;
-	private static final String MAIL_SERVICE = "MailService" ; 
+	private static final String MAIL_SERVICE = "MailApplication" ; 
   public JCRDataStorage(NodeHierarchyCreator nodeHierarchyCreator) {
   	nodeHierarchyCreator_ = nodeHierarchyCreator ;
   }
@@ -266,7 +267,9 @@ public class JCRDataStorage{
   public void removeMessage(SessionProvider sProvider, String username, String accountId, Message message) throws Exception {
     Node msgStoreNode = getDateStoreNode(sProvider, username, accountId, message.getReceivedDate());
     try {
-      msgStoreNode.getNode(message.getId()).remove() ;
+      Node node = msgStoreNode.getNode(message.getId()) ;
+      moveReference(node) ;
+      node.remove() ;
       msgStoreNode.getSession().save();
     } catch(PathNotFoundException e) {}
   }
@@ -281,6 +284,7 @@ public class JCRDataStorage{
   public void moveMessages(SessionProvider sProvider, String username, String accountId, Message msg, String currentFolderId, String destFolderId) throws Exception {
     Node messageHome = getMessageHome(sProvider, username, accountId);
     Node msgNode = (Node)messageHome.getSession().getItem(msg.getPath()) ;
+    moveReference(msgNode) ;
     if (msgNode.hasProperty(Utils.EXO_FOLDERS)) {
       Boolean isUnread = msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean();
       Node currentFolderNode = getFolderNodeById(sProvider, username, accountId, currentFolderId);
@@ -366,7 +370,16 @@ public class JCRDataStorage{
     }
   }
   
-  public void saveMessage(SessionProvider sProvider, String username, String accountId, Message message, boolean isNew) throws Exception {
+  public void saveMessage(SessionProvider sProvider, String username, String accountId, String targetMsgPath, Message message) throws Exception {
+    Node msgNode = saveMessage(sProvider, username, accountId, message, true) ;
+    if (targetMsgPath != null && !targetMsgPath.equals("")) {
+      Node mailHome = getMailHomeNode(sProvider, username) ;
+      Node targetNode = (Node) mailHome.getSession().getItem(targetMsgPath) ;
+      createReference(msgNode, targetNode) ;
+    }
+  }
+  
+  public Node saveMessage(SessionProvider sProvider, String username, String accountId, Message message, boolean isNew) throws Exception {
     Node mailHome = getMailHomeNode(sProvider, username) ;
     Node homeMsg = getDateStoreNode(sProvider, username, accountId, new Date());
     Node nodeMsg = null;
@@ -421,8 +434,14 @@ public class JCRDataStorage{
           }
         }
       }
+      
+      if(nodeMsg.canAddMixin("mix:referenceable")) nodeMsg.addMixin("mix:referenceable") ;
+      if(nodeMsg.canAddMixin("exo:conversationMixin")) nodeMsg.addMixin("exo:conversationMixin") ;
+      nodeMsg.setProperty(Utils.EXO_SUBJECT, message.getSubject()) ;
+      nodeMsg.setProperty(Utils.EXO_RECIPIENT, Utils.getAddresses(message.getMessageTo() + "," + message.getMessageCc() + "," + message.getMessageBcc())) ;
       nodeMsg.save();
     }
+    return nodeMsg ;
   }
   
   public String setAddress(String strAddress) throws Exception {
@@ -985,5 +1004,152 @@ public class JCRDataStorage{
       monthNode.save();
       return dayNode ;
     }
+  }
+  
+  private Node getConversation(SessionProvider sProvider, String username, String accountId, Node msg) throws Exception {
+    Node converNode = null ;
+    Session sess = getMailHomeNode(sProvider, username).getSession();
+    QueryManager qm = sess.getWorkspace().getQueryManager();
+    String subject = msg.getProperty(Utils.EXO_SUBJECT).getString();
+    subject = subject.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("'", "&apos;").replace("\"", "&quot;") ;
+    String froms = msg.getProperty(Utils.EXO_FROM).getString();
+    StringBuffer queryString = new StringBuffer("//element(*,exo:conversationMixin)[((@exo:subject='").
+    append(subject).append("')");
+    while(subject.indexOf("Re:") == 0) {
+      subject = subject.substring(subject.indexOf("Re:") + 4) ;
+      queryString.append(" or (@exo:subject='").append(subject).append("')");
+    }
+    while(subject.indexOf("Pwd:") == 0) {
+      subject = subject.substring(subject.indexOf("Pwd:") + 5) ;
+      queryString.append(" or (@exo:subject='").append(subject).append("')");
+    }
+    String[] from = Utils.getAddresses(froms);
+    if(from != null && from.length > 0)  
+      queryString.append(") and (@exo:recipient='" + from[0] + "')") ;
+    queryString.append("]");
+    queryString.append(" order by @exo:receivedDate descending") ;
+    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
+    QueryResult result = query.execute();
+    NodeIterator it = result.getNodes();
+    if (it.hasNext()) converNode = it.nextNode();
+    return converNode;
+  }
+  
+  public void saveConversation(SessionProvider sProvider, String username, String accountId, String[] recipients, Node msgNode) throws Exception {
+    String subject = msgNode.getProperty(Utils.EXO_SUBJECT).getString();
+    Node converNode = getConversation(sProvider, username, accountId, msgNode) ;  
+    try {
+      if (converNode != null && converNode.isNodeType("exo:conversationMixin")) {
+        Value[] propRecipients = converNode.getProperty(Utils.EXO_RECIPIENT).getValues();
+        Map<String, String> existRecipients = new HashMap<String, String>();
+        for (int i = 0; i < propRecipients.length; i++) {
+          String address = propRecipients[i].getString() ;
+          existRecipients.put(address, address);
+        }
+        for (int j =0; j < recipients.length; j++) {
+          String address = recipients[j] ;
+          existRecipients.put(address, address) ;
+        }
+        converNode.setProperty(Utils.EXO_RECIPIENT, existRecipients.values().toArray(new String[]{})) ;
+        //TODO: add when save message
+        if(msgNode.canAddMixin("mix:referenceable")) msgNode.addMixin("mix:referenceable") ;
+        if(msgNode.canAddMixin("exo:conversationMixin")) msgNode.addMixin("exo:conversationMixin") ;
+        msgNode.setProperty(Utils.EXO_RECIPIENT, existRecipients.values().toArray(new String[]{})) ;
+        createReference(msgNode, converNode) ;
+        msgNode.save() ;
+        converNode.save() ;
+      } else {
+        converNode = msgNode ;
+        if(converNode.canAddMixin("mix:referenceable")) converNode.addMixin("mix:referenceable") ;
+        if(converNode.canAddMixin("exo:conversationMixin")) converNode.addMixin("exo:conversationMixin") ;
+        converNode.setProperty(Utils.EXO_SUBJECT, subject) ;
+        converNode.setProperty(Utils.EXO_RECIPIENT, recipients) ;
+        converNode.save() ;
+      }
+    } catch(Exception e) {
+      e.printStackTrace() ;
+    }
+  }
+  
+  private void createReference(Node msgNode, Node converNode) throws Exception {
+    List<Value> valueList = new ArrayList<Value>() ;
+    Value[] values = {};
+    if (msgNode.isNodeType("exo:messageMixin")) {     
+      values = msgNode.getProperty("exo:conversationId").getValues();
+    } else {
+      msgNode.addMixin("exo:messageMixin");
+    }
+    boolean isExist = false ; 
+    for (int i = 0; i < values.length; i++) {
+      Value value = values[i];
+      String uuid = value.getString();
+      Node refNode = converNode.getSession().getNodeByUUID(uuid);
+      if(refNode.getPath().equals(converNode.getPath())) {
+        isExist = true ; 
+        break ;
+      }
+      valueList.add(value) ;
+    }
+    if(!isExist) {
+      Value value2add = msgNode.getSession().getValueFactory().createValue(converNode);
+      valueList.add(value2add) ;
+    } 
+    
+    if(valueList.size() > 0) {
+      msgNode.setProperty("exo:conversationId", valueList.toArray( new Value[valueList.size()]));
+      msgNode.save() ;
+    }
+  }
+  
+  /*
+   * Move reference : to first parent if it is exist, if not move reference to first child message. 
+   */
+  private void moveReference(Node node) throws Exception {
+    List<Value> valueList = new ArrayList<Value>() ;
+    Value[] values = {};
+    PropertyIterator iter = node.getReferences() ;
+    Node msgNode ;
+    Node firstNode = null;
+    while (iter.hasNext()) {
+      msgNode = iter.nextProperty().getParent() ;
+      if (msgNode.isNodeType("exo:messageMixin")) {     
+        values = msgNode.getProperty("exo:conversationId").getValues();
+        
+        for (int i = 0; i < values.length; i++) valueList.add(values[i]) ;
+        
+        Node parentNode = null ;
+        if (node.hasProperty("exo:conversationId")) {
+          Value[] currentValues = node.getProperty("exo:conversationId").getValues();
+          //TODO: get parent have the same folder with child message
+          if (currentValues.length > 0) {
+            parentNode = node.getSession().getNodeByUUID(currentValues[0].getString()) ;
+          }
+        }
+
+        if (parentNode != null) {
+          valueList.add(msgNode.getSession().getValueFactory().createValue(parentNode)) ;
+        } else if (firstNode != null) {
+          valueList.add(msgNode.getSession().getValueFactory().createValue(firstNode)) ;
+        }
+        
+        if (firstNode == null) firstNode = msgNode ;
+        
+        msgNode.setProperty("exo:conversationId", valueList.toArray( new Value[valueList.size()]));
+        msgNode.save() ;
+      }
+    }
+  }
+  
+  public List<Message> getReferencedMessages(SessionProvider sProvider, String username, String accountId, String msgPath) throws Exception {
+    Node mailHome = getMailHomeNode(sProvider, username);
+    List<Message> msgList = new ArrayList<Message>() ;
+    Node converNode = (Node) mailHome.getSession().getItem(msgPath) ;
+    PropertyIterator iter = converNode.getReferences() ;
+    Node msgNode ;
+    while (iter.hasNext()) {
+      msgNode = iter.nextProperty().getParent() ;
+      msgList.add(getMessage(msgNode)) ;
+    }
+    return msgList ;
   }
 }

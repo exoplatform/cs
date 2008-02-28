@@ -73,6 +73,7 @@ import org.exoplatform.webui.event.EventListener;
 
 public class UIMessagePreview extends UIComponent {
   private Message selectedMessage_ ;
+  private List<Message> showedMsgs = new ArrayList<Message>() ;
   
   public UIMessagePreview() throws Exception {}
   
@@ -82,6 +83,14 @@ public class UIMessagePreview extends UIComponent {
   
   public void setMessage(Message msg) throws Exception {
     selectedMessage_ = msg ;
+  }
+  
+  public List<Message> getShowedMessages() throws Exception {
+    return showedMsgs ;
+  } 
+  
+  public void setShowedMessages(List<Message> msgList) throws Exception {
+    showedMsgs = msgList ;
   }
   
   public DownloadService getDownloadService() { 
@@ -122,9 +131,11 @@ public class UIMessagePreview extends UIComponent {
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailServ = uiPortlet.getApplicationComponent(MailService.class);
       try {
+        List<Message> msgList = new ArrayList<Message>() ;
         Message msg = uiMessageList.messageList_.get(msgId);
         msg.setHasStar(!msg.hasStar());
-        mailServ.saveMessage(SessionsUtils.getSessionProvider(), username, accountId, msg, false);
+        msgList.add(msg) ;
+        mailServ.toggleMessageProperty(SessionsUtils.getSessionProvider(), username, accountId, msgList, Utils.EXO_STAR);
         uiMessageList.messageList_.put(msgId, msg);
         uiMessagePreview.setMessage(msg);
       } catch (Exception e) { }

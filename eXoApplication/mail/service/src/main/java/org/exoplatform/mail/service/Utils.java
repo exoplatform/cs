@@ -84,6 +84,7 @@ public class Utils {
   public static final String KEY_SPAM_FILTER = "SpamFilter".intern() ;
   public static final String KEY_ACCOUNT = "account".intern() ;
   public static final String KEY_HEADER = "mailHeader".intern() ;
+  public static final String KEY_CONVERSATION = "Conversation".intern() ;
   
   public static final String EXO_ACCOUNT = "exo:account".intern() ;
   public static final String EXO_ID = "exo:id".intern() ;
@@ -124,6 +125,9 @@ public class Utils {
   public static final String EXO_EMPTYTRASH = "exo:emptyTrash".intern();
   public static final String EXO_PLACESIGNATURE = "exo:placeSignature".intern();
   public static final String EXO_SPAM_FILTER = "exo:spamFilter".intern();
+  public static final String EXO_CONVERSATION = "exo:conversation".intern();
+  public static final String EXO_CONVERSATIONID = "exo:conversationId".intern();
+  public static final String EXO_RECIPIENT = "exo:recipient".intern();
   
 
   public static final String EXO_MAIL_SETTING = "exo:mailSetting".intern();
@@ -195,6 +199,9 @@ public class Utils {
   public static final String TAG_YELLOW = "Yellow".intern() ;
   public static final String[] TAG_COLOR = {TAG_RED, TAG_BLUE, TAG_GREEN, TAG_BROWN, TAG_ORANGE, TAG_PING, TAG_YELLOW, TAG_VIOLET};
   public static final String[] MIME_MAIL_TYPES = {"eml"};
+  
+  public static final boolean SHOWCONVERSATION = true ;
+  
   public static boolean isEmptyField(String value) {
     return value == null || value.trim().length() == 0 ;
   }
@@ -254,6 +261,10 @@ public class Utils {
       strs[i] = internetAddresses[i].getAddress();
     }
     return strs;
+  }
+  
+  public static String[] getAllRecipients(javax.mail.Message msg) throws Exception {
+    return getAddresses(InternetAddress.toString(msg.getFrom()) + "," + InternetAddress.toString(msg.getAllRecipients()));
   }
   
   public static Map<String, String> getAddressMap(String addressList) throws Exception { 

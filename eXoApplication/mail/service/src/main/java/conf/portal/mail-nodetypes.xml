@@ -320,4 +320,25 @@
   	</propertyDefinitions>
   </nodeType>
   
+  <nodeType name="exo:conversationMixin" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
+	<propertyDefinitions>
+	  <propertyDefinition name="exo:subject" requiredType="String" autoCreated="false" mandatory="false" 
+	    onParentVersion="COPY" protected="false" multiple="false">
+	    <valueConstraints/>
+	  </propertyDefinition>        	    
+	  <propertyDefinition name="exo:recipient" requiredType="String" autoCreated="false" mandatory="false" 
+	    onParentVersion="COPY" protected="false" multiple="true">
+	    <valueConstraints/>
+	  </propertyDefinition>        
+	</propertyDefinitions>
+  </nodeType>  	 	
+  
+  <nodeType name="exo:messageMixin" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
+    <propertyDefinitions>
+      <propertyDefinition name="exo:conversationId" requiredType="Reference" autoCreated="false" mandatory="true"
+        onParentVersion="COPY" protected="false" multiple="true">
+        <valueConstraints/>
+      </propertyDefinition>
+    </propertyDefinitions>
+  </nodeType>
 </nodeTypes>
