@@ -22,6 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.faces.component.UIInput;
+
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
@@ -132,7 +134,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     return getUIFormCheckBoxInput(FIELD_EDIT).isChecked() ;
   }
   protected void setSharedUser(String value) {
-    getUIStringInput(FIELD_NAME).setValue(value) ;
+    getUIStringInput(FIELD_USER).setValue(value) ;
   }
   public String[] getActions() {
     return new String[] {"Save","Cancel"} ;
@@ -161,20 +163,31 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         return ;
       }      
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
-      SessionProvider sProvider = SessionProviderFactory.createSystemProvider() ;
+      SessionProvider sProvider = SessionProviderFactory.createSessionProvider() ;
       String username = CalendarUtils.getCurrentUser() ;
-      List<String> receiverUsers  = Arrays.asList(names.split(CalendarUtils.COMMA)) ;  
-      if(uiForm.canEdit()) {
-        Calendar cal = calendarService.getUserCalendar(SessionProviderFactory.createSessionProvider(), CalendarUtils.getCurrentUser(), uiForm.calendarId_) ;
-        cal.setEditPermission(receiverUsers.toArray(new String[receiverUsers.size()])) ;
-        calendarService.saveUserCalendar(sProvider, username, cal, false) ;
+      List<String> receiverUsers  = Arrays.asList(names.split(CalendarUtils.COMMA)) ;
+      Calendar cal = calendarService.getUserCalendar(sProvider, username, uiForm.calendarId_) ;
+      Map<String, String> perms = new HashMap<String, String>() ;
+      for(String v : cal.getViewPermission()) {
+        perms.put(v,String.valueOf(Arrays.asList(cal.getEditPermission()).contains(v))) ;
       }
-      calendarService.shareCalendar(sProvider, username, uiForm.calendarId_, receiverUsers) ;
-      UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
-      UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendars) ;
-      calendarPortlet.setCalendarSetting(null) ;
-      calendarPortlet.cancelAction() ;       
+      for(String u : receiverUsers) {
+        perms.put(u, String.valueOf(uiForm.canEdit())) ;
+      }
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
+      cal.setViewPermission(perms.keySet().toArray(new String[perms.keySet().size()])) ;
+      List<String> tempList = new ArrayList<String>() ;
+      for(String v : perms.keySet()) {
+        if(Boolean.parseBoolean(perms.get(v))) tempList.add(v) ;
+      }
+      cal.setEditPermission(tempList.toArray(new String[tempList.size()])) ;
+      calendarService.saveUserCalendar(sProvider, username, cal, false) ;
+      calendarService.shareCalendar(SessionProviderFactory.createSystemProvider(), username, uiForm.calendarId_, receiverUsers) ;
+      UIAddEditPermission uiAddEdit = uiForm.getParent() ;
+      uiAddEdit.updateGrid(cal);
+      uiForm.setCanEdit(false) ;
+      uiForm.setSharedUser(null) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddEdit) ;
     }
   }
   static  public class SelectPermissionActionListener extends EventListener<UISharedForm> {
