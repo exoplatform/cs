@@ -16,7 +16,13 @@
  **/
 package org.exoplatform.calendar.webui;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.TimeZone;
+
+import javax.mail.search.FromTerm;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
@@ -85,6 +91,7 @@ public class UIActionBar extends UIContainer  {
       }
       String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
       String formTime = event.getRequestContext().getRequestParameter(CURRENTTIME) ;
+      String timeZone = event.getRequestContext().getRequestParameter(TIMEZONE) ;
       String categoryId = event.getRequestContext().getRequestParameter(CATEGORYID) ;
       UICalendarPortlet uiPortlet = uiActionBar.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
@@ -95,7 +102,7 @@ public class UIActionBar extends UIContainer  {
         uiQuickAddEvent.setEvent(false) ;
         uiQuickAddEvent.setId(UIQuickAddEvent.UIQUICKADDTASK) ;
       }
-      uiQuickAddEvent.init(uiPortlet.getCalendarSetting(), formTime, null) ;
+      uiQuickAddEvent.init(uiPortlet.getCalendarSetting(), formTime , null) ;
       uiQuickAddEvent.update("0", null) ;
       uiQuickAddEvent.setSelectedCategory(categoryId) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;

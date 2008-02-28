@@ -1418,6 +1418,7 @@ UICalendarPortlet.prototype.setBusyTime = function(from, to, tr) {
 	var cell = eXo.core.DOMUtil.findDescendantsByTagName(tr, "td").slice(1) ;
 	var start = this.round(from,15)/15 ;
 	var end = this.round(to,15)/15 ;
+	//alert(start + ' - ' + end) ;
 	for(var i = start ; i < end ; i ++) {
 		cell[i].className = "BusyDotTime" ;
 		this.busyCell[i].className = "BusyTime" ;		

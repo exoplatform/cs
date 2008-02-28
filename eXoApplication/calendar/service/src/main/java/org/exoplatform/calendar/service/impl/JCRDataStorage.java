@@ -406,8 +406,7 @@ public class JCRDataStorage{
     }
     return null ;
   }
-
-  private void checkToSave(Node groupNode, String calendarId) throws Exception{
+  /*private void checkToSave(Node groupNode, String calendarId) throws Exception{
     if(groupNode.hasProperty("exo:calendarIds")) {
       Value[] vls = groupNode.getProperty("exo:calendarIds").getValues() ;
       boolean hasValue = false ;
@@ -426,7 +425,7 @@ public class JCRDataStorage{
       groupNode.setProperty("exo:calendarIds", new String[] {calendarId}) ;
     }
 
-  }
+  }*/
   private Calendar getCalendar(String[] defaultCalendars, String username, Node calNode, boolean isShowAll) throws Exception {
     Calendar calendar = null ;
     if(isShowAll) {
@@ -441,40 +440,28 @@ public class JCRDataStorage{
       if(!calendar.isPublic()) {
         if(calNode.hasProperty("exo:groups")){
           Value[] values = calNode.getProperty("exo:groups").getValues() ;
-          if(values.length == 1 ){      
-            calendar.setGroups(new String[]{values[0].getString()}) ;
-          }else {
-            String[] groups = new String[values.length] ;
-            for(int i = 0; i < values.length - 1; i ++) {
-              groups[i] = values[i].getString() ;
-            }
-            calendar.setGroups(groups) ;
+          List<String> groups = new ArrayList<String>() ;
+          for(Value v : values) {
+            groups.add(v.getString()) ;
           }
+          calendar.setGroups(groups.toArray(new String[groups.size()])) ;
         }
 
         if(calNode.hasProperty("exo:viewPermissions")) {
           Value[] viewValues = calNode.getProperty("exo:viewPermissions").getValues() ;
-          if(viewValues.length == 1 ){      
-            calendar.setViewPermission(new String[]{viewValues[0].getString()}) ;
-          }else {
-            String[] views = new String[viewValues.length] ;
-            for(int i = 0; i < viewValues.length - 1; i ++) {
-              views[i] = viewValues[i].getString() ;
-            }
-            calendar.setViewPermission(views) ;
+          List<String> viewPerms = new ArrayList<String>() ;
+          for(Value v : viewValues) {
+            viewPerms.add(v.getString()) ;
           }
+          calendar.setViewPermission(viewPerms.toArray(new String[viewPerms.size()])) ;
         }
         if(calNode.hasProperty("exo:editPermissions")) {
           Value[] editValues = calNode.getProperty("exo:editPermissions").getValues() ;
-          if(editValues.length == 1 ){      
-            calendar.setEditPermission(new String[]{editValues[0].getString()}) ;
-          }else {
-            String[] edits = new String[editValues.length] ;
-            for(int i = 0; i < editValues.length - 1; i ++) {
-              edits[i] = editValues[i].getString() ;
-            }
-            calendar.setEditPermission(edits) ;
+          List<String> editPerms = new ArrayList<String>() ;
+          for(Value v : editValues) {
+            editPerms.add(v.getString()) ;
           }
+          calendar.setEditPermission(editPerms.toArray(new String[editPerms.size()])) ;
         }      
       }  
     } else {
@@ -490,39 +477,27 @@ public class JCRDataStorage{
         if(!calendar.isPublic()) {
           if(calNode.hasProperty("exo:groups")){
             Value[] values = calNode.getProperty("exo:groups").getValues() ;
-            if(values.length == 1 ){      
-              calendar.setGroups(new String[]{values[0].getString()}) ;
-            }else {
-              String[] groups = new String[values.length] ;
-              for(int i = 0; i < values.length - 1; i ++) {
-                groups[i] = values[i].getString() ;
-              }
-              calendar.setGroups(groups) ;
+            List<String> groups = new ArrayList<String>() ;
+            for(Value v : values) {
+              groups.add(v.getString()) ;
             }
+            calendar.setGroups(groups.toArray(new String[groups.size()])) ;
           }
           if(calNode.hasProperty("exo:viewPermissions")) {
             Value[] viewValues = calNode.getProperty("exo:viewPermissions").getValues() ;
-            if(viewValues.length == 1 ){      
-              calendar.setViewPermission(new String[]{viewValues[0].getString()}) ;
-            }else {
-              String[] views = new String[viewValues.length] ;
-              for(int i = 0; i < viewValues.length - 1; i ++) {
-                views[i] = viewValues[i].getString() ;
-              }
-              calendar.setViewPermission(views) ;
+            List<String> viewPerms = new ArrayList<String>() ;
+            for(Value v : viewValues) {
+              viewPerms.add(v.getString()) ;
             }
+            calendar.setViewPermission(viewPerms.toArray(new String[viewPerms.size()])) ;
           }
           if(calNode.hasProperty("exo:editPermissions")) {
             Value[] editValues = calNode.getProperty("exo:editPermissions").getValues() ;
-            if(editValues.length == 1 ){      
-              calendar.setEditPermission(new String[]{editValues[0].getString()}) ;
-            }else {
-              String[] edits = new String[editValues.length] ;
-              for(int i = 0; i < editValues.length - 1; i ++) {
-                edits[i] = editValues[i].getString() ;
-              }
-              calendar.setEditPermission(edits) ;
+            List<String> editPerms = new ArrayList<String>() ;
+            for(Value v : editValues) {
+              editPerms.add(v.getString()) ;
             }
+            calendar.setEditPermission(editPerms.toArray(new String[editPerms.size()])) ;
           }      
         }  
       }
@@ -1578,7 +1553,7 @@ public class JCRDataStorage{
     return mapData ;    
   }
 
- 
+
   private Map<Integer, String> updateMap(Map<Integer, String> data, NodeIterator it, java.util.Calendar fromDate, java.util.Calendar toDate) throws Exception {
     boolean isVictory = false ;
     while(it.hasNext() && !isVictory) {

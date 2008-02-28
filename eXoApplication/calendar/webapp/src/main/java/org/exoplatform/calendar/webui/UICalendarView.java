@@ -473,6 +473,10 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       } else {
         String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
         String formTime = event.getRequestContext().getRequestParameter(CURRENTTIME) ;
+        String timeZone = event.getRequestContext().getRequestParameter(TIMEZONE) ;
+        /*if(TimeZone.getDefault().getRawOffset() != (Long.parseLong(timeZone) * 60 * 1000)) {
+          formTime =  String.valueOf(Long.parseLong(formTime) +(TimeZone.getDefault().getRawOffset() - (Long.parseLong(timeZone) * 60 * 1000))) ;
+        }*/
         String value = uiForm.getUIFormSelectBox(EVENT_CATEGORIES).getValue() ;
         UICalendarPortlet uiPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
         UIPopupAction uiParenPopup = uiPortlet.getChild(UIPopupAction.class) ;
@@ -782,7 +786,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         UIMiniCalendar uiMiniCalendar = portlet.findFirstComponentOfType(UIMiniCalendar.class) ;
         Calendar cal = calendarview.getInstanceTempCalendar() ;
         cal.setTimeInMillis(Long.parseLong(currentTime)) ;
-       /* cal.set(Calendar.DATE, Integer.parseInt(day)) ;
+        /* cal.set(Calendar.DATE, Integer.parseInt(day)) ;
         cal.set(Calendar.MONTH, Integer.parseInt(month)) ;
         cal.set(Calendar.YEAR, Integer.parseInt(year)) ;*/
         int type = Integer.parseInt(viewType) ; 
@@ -878,6 +882,18 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
       String startTime = event.getRequestContext().getRequestParameter("startTime") ;
       String finishTime = event.getRequestContext().getRequestParameter("finishTime") ;
+      String currentTime = event.getRequestContext().getRequestParameter(CURRENTTIME) ;
+      String timeZone = event.getRequestContext().getRequestParameter(TIMEZONE) ;
+      try {
+        Long.parseLong(currentTime) ;
+        //System.out.println("client time " + new Date(Long.parseLong(currentTime)));
+        long amount =  Long.parseLong(finishTime) - Long.parseLong(startTime) ;
+        startTime = currentTime ;
+        finishTime = String.valueOf(Long.parseLong(currentTime) + amount) ;
+        //finishTime = String.valueOf(Long.parseLong(finishTime) +(TimeZone.getDefault().getRawOffset() - (Long.parseLong(timeZone) * 60 * 1000))) ;
+      } catch (Exception e) {
+        System.out.println("clientTime" + currentTime);
+      }
       String selectedCategory = calendarview.getUIFormSelectBox(EVENT_CATEGORIES).getValue() ;
       UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;

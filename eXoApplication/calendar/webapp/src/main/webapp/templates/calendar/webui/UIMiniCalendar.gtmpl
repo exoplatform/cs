@@ -97,9 +97,11 @@
 				      } else if (validDay == 1 && dayOfMonth > daysInMonth) {
 				        validDay = 0;
 				      }
-				      if (true) {
 				       	clazz = "" ;
 				       	highlight = "" ;
+						   dayActionLink = uicomponent.TYPE_DAY +"&currentTime="+ calendar.getTime().getTime() ;
+				       actionLink = uicomponent.event("GotoDate", dayActionLink) ;
+				      if (validDay) {
 						    if(data.get(calendar.get(Calendar.DAY_OF_YEAR)) != null) {
 						    	highlight = "Highlight" ;
 						    } 
@@ -110,8 +112,6 @@
 						       	clazz = "SelectedDay";
 						       }  
 						     }
-						   dayActionLink = uicomponent.TYPE_DAY +"&currentTime="+ calendar.getTime().getTime() ;
-				       actionLink = uicomponent.event("GotoDate", dayActionLink) ;
 				       //sdf.setCalendar(calendar) ;
 				       %>
 				      
@@ -126,9 +126,13 @@
 				       dayOfMonth++ ;
 				      } else {
 				        %>
-				        <td >
-				         <%=sdf.format(calendar.getTime())%> 
-				        </td> 
+				        <td class="$highlight $clazz">
+				        	<a href="$actionLink">
+				        		<div class="MiniCalendarActions">
+				       				<%=sdf.format(calendar.getTime())%> 
+				       			</div>
+				       		</a>
+				       	</td>
 				      <%
 				      }
 				     calendar.add(Calendar.DATE, 1) ;

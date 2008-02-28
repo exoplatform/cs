@@ -333,7 +333,7 @@ public class CalendarUtils {
   static public String getTimeZone(String timezone) {
     TimeZone timeZone = TimeZone.getTimeZone(timezone) ;
     int rawOffset = timeZone.getRawOffset() / 60000;
-    return String.valueOf(rawOffset) ;
+    return String.valueOf(timeZone.getDSTSavings() - rawOffset) ;
   }
 
   public static boolean hasEditPermission(String[] savePerms, String[] checkPerms) {

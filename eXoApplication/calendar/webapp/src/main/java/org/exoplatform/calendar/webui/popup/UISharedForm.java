@@ -168,8 +168,9 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       List<String> receiverUsers  = Arrays.asList(names.split(CalendarUtils.COMMA)) ;
       Calendar cal = calendarService.getUserCalendar(sProvider, username, uiForm.calendarId_) ;
       Map<String, String> perms = new HashMap<String, String>() ;
+      if(cal.getViewPermission() != null)
       for(String v : cal.getViewPermission()) {
-        perms.put(v,String.valueOf(Arrays.asList(cal.getEditPermission()).contains(v))) ;
+        perms.put(v,String.valueOf(cal.getEditPermission()!= null && Arrays.asList(cal.getEditPermission()).contains(v))) ;
       }
       for(String u : receiverUsers) {
         perms.put(u, String.valueOf(uiForm.canEdit())) ;

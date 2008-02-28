@@ -256,7 +256,7 @@ public class UICalendars extends UIForm  {
       //String calendarName = event.getRequestContext().getRequestParameter(CALNAME) ;
       String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
       String clientTime = event.getRequestContext().getRequestParameter(CURRENTTIME) ;
-      //String offsetTimeZone = event.getRequestContext().getRequestParameter(TIMEZONE) ;
+      String timeZone = event.getRequestContext().getRequestParameter(TIMEZONE) ;
       String categoryId = event.getRequestContext().getRequestParameter("categoryId") ;
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
@@ -298,7 +298,7 @@ public class UICalendars extends UIForm  {
       String calendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       //String calendarName = event.getRequestContext().getRequestParameter(CALNAME) ;
       String clientTime = event.getRequestContext().getRequestParameter(CURRENTTIME) ;
-      //String offsetTimeZone = event.getRequestContext().getRequestParameter(TIMEZONE) ;
+      String timeZone = event.getRequestContext().getRequestParameter(TIMEZONE) ;
       String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
       String categoryId = event.getRequestContext().getRequestParameter("categoryId") ;
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;

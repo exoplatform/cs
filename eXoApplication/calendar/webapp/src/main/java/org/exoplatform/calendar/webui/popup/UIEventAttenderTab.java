@@ -163,7 +163,7 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
     df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
     timeField.setValue(df.format(date)) ;
   }  
-  
+
   private boolean isAllDateFieldChecked() {
     return getUIFormCheckBoxInput(FIELD_DATEALL).isChecked() ;
   }
@@ -172,9 +172,10 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
     super.processRender(arg0);
   }
   public String getUserTimeZone(String username) throws Exception {
-   return getAncestorOfType(UICalendarPortlet.class).getCalendarSetting().getTimeZone() ;
-   
-   // String timeZone = CalendarUtils.getCalendarService().getCalendarSetting(SessionProviderFactory.createSystemProvider(), username).getTimeZone() ;
-   // return CalendarUtils.getTimeZone(timeZone) ;
+
+    //return String.valueOf(TimeZone.getTimeZone(getAncestorOfType(UICalendarPortlet.class).getCalendarSetting().getTimeZone()).getRawOffset()) ;
+    return CalendarUtils.getTimeZone(getAncestorOfType(UICalendarPortlet.class).getCalendarSetting().getTimeZone()) ;
+    // String timeZone = CalendarUtils.getCalendarService().getCalendarSetting(SessionProviderFactory.createSystemProvider(), username).getTimeZone() ;
+    // return CalendarUtils.getTimeZone(timeZone) ;
   }
 }

@@ -1024,7 +1024,10 @@ GUIMan.prototype.callbackHighlighter = function() {
   var Highlighter = eXo.calendar.Highlighter ;
   var startTime = parseInt(Date.parse(Highlighter.firstCell.getAttribute('startTimeFull')));
   var endTime = parseInt(Date.parse(Highlighter.lastCell.getAttribute('startTimeFull')))  + 24*60*60*1000 - 1;
-  eXo.webui.UIForm.submitEvent('UIMonthView' ,'QuickAdd','&objectId=Event&startTime=' + startTime + '&finishTime=' + endTime); 
+  var d = new Date() ;
+  var timezoneOffset = d.getTimezoneOffset() ;
+  var currentTime = Highlighter.firstCell.getAttribute('startTime') ;
+  eXo.webui.UIForm.submitEvent('UIMonthView' ,'QuickAdd','&objectId=Event&startTime=' + startTime + '&finishTime=' + endTime +'&ct='+currentTime+ '&tz=' + timezoneOffset); 
 } ;
 
 GUIMan.prototype.callbackHighlighterDays = function() {

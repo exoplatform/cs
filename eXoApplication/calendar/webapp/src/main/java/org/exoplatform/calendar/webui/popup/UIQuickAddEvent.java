@@ -20,6 +20,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.exoplatform.calendar.CalendarUtils;
@@ -114,11 +115,11 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     UIMiniCalendar miniCalendar = getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
     java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
     cal.setTime(miniCalendar.getCurrentCalendar().getTime());
-    if(startTime != null) cal.setTimeInMillis(Long.parseLong(startTime)) ;
-    else {
-      Long begingMinute = (cal.get(java.util.Calendar.MINUTE)/calendarSetting.getTimeInterval())*calendarSetting.getTimeInterval() ;
-      cal.set(java.util.Calendar.MINUTE, begingMinute.intValue()) ;
-    }
+    if(startTime != null) {
+      cal.setTimeInMillis(Long.parseLong(startTime)) ;
+    } 
+    Long begingMinute = (cal.get(java.util.Calendar.MINUTE)/calendarSetting.getTimeInterval())*calendarSetting.getTimeInterval() ;
+    cal.set(java.util.Calendar.MINUTE, begingMinute.intValue()) ;
     setEventFromDate(cal.getTime(), calendarSetting.getTimeFormat()) ;
     if(endTime != null ) cal.setTimeInMillis(Long.parseLong(endTime)) ; 
     else {

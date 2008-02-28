@@ -35,7 +35,7 @@
 	DateFormat wf = new  SimpleDateFormat("EEE, dd/MMM") ;
 	wf.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
 	DateFormat tempFormat = new  SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss") ;
-	tempFormat.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
+	tempFormat.setCalendar(uicomponent.getInstanceTempCalendar()) ;
 	%>
 	<div class="UIMonthView">
 		<div class="TitleBar">
@@ -153,7 +153,7 @@
 					        }
 						      month = currentMonth + 1 ;
 					        %>
-					        <td startTimeFull="<%=tempFormat.format(temcalendar.getTime())%>"  actionLink="$actionUpdate" class='CalendarContentNomal UICellBlock' startTime='$dateTime' > 
+					        <td startTimeFull="<%=tempFormat.format(temcalendar.getTime())%>"  actionLink="$actionUpdate" class='CalendarContentNomal UICellBlock' startTime='<%=temcalendar.getTimeInMillis()%>' > 
 					        	<div class='DayBox $clazz' >
 						        <a href="<%=uicomponent.event("GotoDate",dayActionLink)%>" onmousedown="event.cancelBubble = true ;">
 						         <%=sdf.format(temcalendar.getTime())%> 
