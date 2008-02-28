@@ -137,9 +137,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   public boolean isNameSorted() { return defaultNameSorted ; }
   
   public void setContact(List<Contact> contacts, boolean isUpdate) throws Exception{
-    pageList_.setContact(contacts, isUpdate) ; 
-    
-    System.out.println("\n\n pageList size:" + pageList_.getAll().size() + "\n\n");
+    pageList_.setContact(contacts, isUpdate) ;
   }
   public void updateList() throws Exception {
     getChildren().clear() ;
