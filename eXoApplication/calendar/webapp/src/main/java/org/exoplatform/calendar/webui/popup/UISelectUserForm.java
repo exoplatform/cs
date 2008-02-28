@@ -78,7 +78,7 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
     OrganizationService service = getApplicationComponent(OrganizationService.class) ;
     PageList pl = service.getUserHandler().getUserPageList(0) ;
     for(Object o : pl.getAll()){
-      User user =  (User)o ;
+      User user =  (User)o ; 
       data_.add(user) ;
       addUIFormInput(new UIFormCheckBoxInput<Boolean>(user.getUserName(),user.getUserName(), false)) ;
     }
@@ -89,6 +89,7 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
   public void  initSearchForm() throws Exception{
     addUIFormInput(new UIFormStringInput(FIELD_KEYWORD, FIELD_KEYWORD, null)) ;
     addUIFormInput(new UIFormSelectBox(FIELD_GROUP, FIELD_GROUP, getGroups())) ;
+    isShowSearch_ = true ;
   }
   private List<SelectItemOption<String>> getGroups() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
@@ -104,6 +105,14 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
   public String[] getActions() { return new String[]{"Save", "Cancel"}; }
   public void activate() throws Exception {}
   public void deActivate() throws Exception {} 
+  public String getLabel(String id) {
+    String label = id ;
+    try {
+      label = super.getLabel(id) ;
+    } catch (Exception e) {
+    }
+    return label ;
+  }
   public void setShowSearch(boolean isShowSearch) {
     this.isShowSearch_ = isShowSearch;
   }

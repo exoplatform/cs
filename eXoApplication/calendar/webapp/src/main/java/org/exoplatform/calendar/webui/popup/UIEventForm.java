@@ -759,9 +759,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       String tabId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopupAction = uiContainer.getChild(UIPopupAction.class) ;
-      UISelectUserForm uiSelectUserForm = uiChildPopupAction.activate(UISelectUserForm.class, 500) ;
+      UISelectUserForm uiSelectUserForm = uiChildPopupAction.activate(UISelectUserForm.class, 680) ;
       uiSelectUserForm.init(((UIEventAttenderTab)uiForm.getChildById(TAB_EVENTATTENDER)).parMap_.keySet()) ;
       uiSelectUserForm.tabId_ = tabId ;
+      uiSelectUserForm.initSearchForm() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopupAction) ;      
     }
   }

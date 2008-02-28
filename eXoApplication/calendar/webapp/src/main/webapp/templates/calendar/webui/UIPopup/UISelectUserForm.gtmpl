@@ -13,10 +13,10 @@
           <div class="LeftBar">
             <div class="RightBar">
               <div class="MiddleBar">
-                <div class="UISearchForm">
+                <div class="UIAddressSearchForm">
                   <div class="QuickSet">
                     <div class="SearchTitle">
-                    	<%=uiform.getLabel('Search')%>
+                    	<%=uiform.getLabel('search')%>
                     </div>
                     <%uiform.renderField(uiform.FIELD_KEYWORD)%>
                     <a class="SearchIcon" href="<%=uicomponent.event('Search')%>" title="Quick Search"><span></span></a>
@@ -24,7 +24,7 @@
                 </div>
                 <div class="AddressesGroup">
                   <div class="AddressLabel">
-                  		<%=uiform.getLabel('Addresses')%>
+                  		<%=uiform.getLabel('addresses')%>
                   	</div>
                    <%uiform.renderField(uiform.FIELD_GROUP)%>
                   <div style="clear: left"><span></span></div>
@@ -47,7 +47,14 @@
                 <th class="BorderAddress">
                   <div class="BlueDownArrowIcon">
                     <div class="Label">
-                   	<%=uiform.getLabel('Name')%>
+                   	<%=uiform.getLabel('name')%>
+                    </div>
+                  </div>
+                </th>
+                <th class="BorderAddress">
+                  <div class="BlueDownArrowIcon">
+                    <div class="Label">
+                   	<%=uiform.getLabel('email')%>
                     </div>
                   </div>
                 </th>
@@ -65,6 +72,7 @@
                     %>
                   </td>
                   <td class="text BorderAddress"><%=data.getUserName()%></td>
+                   <td class="text BorderAddress"><%=data.getEmail()%></td>
                 </tr>
               <%}%>
         </tbody>

@@ -1,0 +1,118 @@
+.UICalendarPortlet .UISelectUserForm {
+	background: #f3f3f3;
+	width:630px;
+}
+
+.UICalendarPortlet .UISelectUserForm .InsertAddressContainer {
+	padding: 10px;
+	border: 1px solid #c0c0c0;
+}
+
+.UICalendarPortlet .UISelectUserForm .AddressContainer {
+	padding-top: 10px;
+}
+
+.UICalendarPortlet .UISelectUserForm .UIGrid th {
+	background: url('background/ThGridTitle1x20.gif') repeat-x;
+	line-height: 17px; height: 18px;
+	text-align: left;
+	padding: 0px 5px;
+}
+
+.UICalendarPortlet .UISelectUserForm .UIGrid th input {
+	text-align: center;
+	margin: 2px 0px 0px 0px;
+}
+
+.UICalendarPortlet .UISelectUserForm .UIGrid tbody {
+	background: white;	
+	padding-bottom: 10px;
+}
+
+.UICalendarPortlet .UISelectUserForm .UIGrid td {
+	height: 23px;
+	padding: 4px 0px 0px 5px;
+}
+
+.UICalendarPortlet .UISelectUserForm .UIGrid .BorderAddress {
+	border-right: 1px solid #e8e8e8;
+}
+
+/*********************************************UISearch*****************************************/
+
+.UICalendarPortlet .UISelectUserForm .UIAddressSearchForm {
+	float: left;
+	width: 250px;
+}
+
+.UICalendarPortlet .UISelectUserForm .UIAddressSearchForm input{
+	float: left;
+	margin: 5px 0px;
+}
+
+.UICalendarPortlet .UISelectUserForm .UIAddressSearchForm .SearchIcon {
+  float: left;
+  height: 20px; width: 24px;
+  margin: 10px;
+}
+
+.UICalendarPortlet .UISelectUserForm .UIAddressSearchForm .SearchTitle {
+	float: left;
+	line-height: 20px;
+	margin: 5px 0px;
+	color: #555; 
+}
+.UICalendarPortlet .UISelectUserForm .AddressesGroup {
+	width: 300px;
+	height: 32px;
+	margin: 0px 8px 0px 305px;
+	text-align: right;
+}
+
+.UICalendarPortlet .UISelectUserForm .AddressesGroup .AddressLabel {
+	float: left;
+	width: 120px;
+	padding: 0px 4px;
+}
+
+.UICalendarPortlet .UISelectUserForm .AddressesGroup select {
+	width: 160px;
+	margin: 10px 0px 0px 0px;
+	font-size: 11px;
+}
+
+/*********************************************ListAddress*****************************************/
+
+.UICalendarPortlet .UISelectUserForm .ListAddress {
+	background: white;
+	overflow-y: auto;
+	overflow-x: hidden;
+	border: 1px solid #b7b7b7;
+}
+
+
+.UICalendarPortlet .UISelectUserForm .ListAddress .UIGrid {
+	border-top: none;
+	border-left: none;
+	border-right: none;
+}
+
+.UICalendarPortlet .UISelectUserForm .ListAddress .UIGrid .BlueDownArrowIcon{
+  padding: 0px 10px 0px 4px; 
+  width: 34px;
+  float: left;
+  cursor: pointer;
+}
+
+.UICalendarPortlet .UISelectUserForm .ListAddress .UIGrid thead {
+	border: none;
+}
+
+.UICalendarPortlet .UISelectUserForm .ListAddress .UIGrid th {
+	border-left: none;
+	border-top: none;
+}
+
+.UICalendarPortlet .UISelectUserForm .ListAddress .UIGrid td {
+	border-left: none;
+}
