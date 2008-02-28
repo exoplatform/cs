@@ -178,13 +178,14 @@ public class UIAddressBooks extends UIComponent {
       } else {
         ContactUtils.getContactService().pasteContacts(SessionProviderFactory.createSessionProvider()
             , ContactUtils.getCurrentUser(), destAddress, destType, uiAddressBook.getCopyContacts()) ;
-      }      
+      }
       UIContacts uiContacts = uiAddressBook
       .getAncestorOfType(UIWorkingContainer.class).findFirstComponentOfType(UIContacts.class) ;
-      uiContacts.updateList() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent())   ;
-      
+      if (!uiContacts.isDisplaySearchResult()) {
+        uiContacts.updateList() ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
+      }      
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent()) ;      
     }
   }
   

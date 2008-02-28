@@ -644,9 +644,9 @@
 			  		  					email = contact.getEmailAddress() ;
 			  		  					if (email != null && email.length() > 20) subEmail = email.substring(0, 20) + "..." ;
 		  		  						else subEmail = email ;			  		  				
-			  		  			%>
+			  		  			%>	
 			  		  		<span class="InfoContent MailIcon" title="<%=(email == null ? "" : email) %>">
-			  		  			<a href="#">  		  				
+			  		  			<a href="<%=uicomponent.event("SendEmail", email)%>">  		  				
 			  		  				<%=(email == null ? "_" : subEmail)%>
 			  		  			</a>
 			  		  		</span> 
