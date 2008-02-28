@@ -265,10 +265,15 @@
     						  </div>
                 <% 
                   } 
-                %>  
+                %>
+                			<div style="border-top: 1px dotted #b7b7b7; padding-top: 3px">
+                				<a href="#" class="ReplyAllMailIcon">Reply</a>
+			                	<a href="#" class="ForwardMailIcon">Forward</a>
+			                	<div style="clear: left"><span></span></div>
+			                </div>
   						</div>										
   					</div>
-  				</div>
+  				</div>	
   				<div class="BottomLeftViewBoxStyle">
   					<div class="BottomRightViewBoxStyle">
   						<div class="BottomCenterViewBoxStyle"><span></span></div>										

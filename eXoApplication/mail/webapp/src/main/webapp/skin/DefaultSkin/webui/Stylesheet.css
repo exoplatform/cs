@@ -647,6 +647,37 @@
 	margin: 4px 4px 0px 0px;
 }
 
+.UIMailPortlet .MailWorkingWorkspace .UIMessagePreview .ReplyAllMailIcon {
+	float: left;
+	height: 20px; line-height: 20px;
+	height: 20px; line-height: 20px;
+	padding: 0px 10px 0px 20px;
+	color: #2276AB;
+	display: block;
+	background-position: left center;
+	text-decoration: underline;
+}	
+
+.UIMailPortlet .MailWorkingWorkspace .UIMessagePreview .ForwardMailIcon {
+	float: left;
+	height: 20px; line-height: 20px;
+	padding: 0px 5px 0px 20px;
+	color: #2276AB;
+	display: block;
+	background-position: left center;
+	text-decoration: underline;
+}	
+
+.UIMailPortlet .MailWorkingWorkspace .UIMessagePreview a:hover.ReplyAllMailIcon {
+	text-decoration: none;
+	color: #fda946;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .UIMessagePreview a:hover.ForwardMailIcon {
+	color: #fda946;
+	text-decoration: none;
+}
+
 .UIMessagePreview .AttachmentContainer {
 	padding: 10px 0px;
 }
@@ -703,8 +734,7 @@
 /*=======================Message Header====================*/
 
 .UIMailPortlet .DecoratorBox .MiddleCenterViewBoxStyle {
-	padding: 10px;
-	padding-top: 5px;
+	padding: 5px 10px 2px 10px;
 }
 
 .UIMailPortlet .DecoratorBox .CollapseMessage .MiddleCenterViewBoxStyle {
