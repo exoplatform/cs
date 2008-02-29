@@ -134,7 +134,7 @@ public class UIMessagePreview extends UIComponent {
       UIMessagePreview uiMsgPreview = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
-      UIMessageArea uiMsgArea = uiPortlet.getAncestorOfType(UIMessageArea.class) ;
+      UIMessageArea uiMsgArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class) ;
       UIMessageList uiMessageList = uiMsgArea.getChild(UIMessageList.class) ;
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
