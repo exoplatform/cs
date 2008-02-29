@@ -23,16 +23,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.faces.component.UIInput;
-
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
-import org.exoplatform.calendar.webui.UICalendars;
 import org.exoplatform.calendar.webui.UIFormDateTimePicker;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -163,17 +161,38 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.invalid-username", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
-      }      
+      }
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
+      OrganizationService oService = uiForm.getApplicationComponent(OrganizationService.class) ;
       SessionProvider sProvider = SessionProviderFactory.createSessionProvider() ;
       String username = CalendarUtils.getCurrentUser() ;
-      List<String> receiverUsers  = Arrays.asList(names.split(CalendarUtils.COMMA)) ;
+
+      List<String> receiverUsers  = new ArrayList<String>() ;
+      StringBuffer sb = new StringBuffer() ;
+      for(String name : Arrays.asList(names.split(CalendarUtils.COMMA))) {
+        name = name.trim();
+        if( oService.getUserHandler().findUserByName(name) != null) { 
+          receiverUsers.add(name) ;
+        }
+        else{
+          if(sb.length() > 0) sb.append(CalendarUtils.COMMA) ;
+          sb.append(name) ;
+         
+        }
+      }
+      if(sb.length() > 0) {
+        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.not-found-user", new Object[]{sb.toString()}, 1)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        //if(sb.length() == names.length())
+          return ;
+      }
       Calendar cal = calendarService.getUserCalendar(sProvider, username, uiForm.calendarId_) ;
       Map<String, String> perms = new HashMap<String, String>() ;
       if(cal.getViewPermission() != null)
-      for(String v : cal.getViewPermission()) {
-        perms.put(v,String.valueOf(cal.getEditPermission()!= null && Arrays.asList(cal.getEditPermission()).contains(v))) ;
-      }
+        for(String v : cal.getViewPermission()) {
+          perms.put(v,String.valueOf(cal.getEditPermission()!= null && Arrays.asList(cal.getEditPermission()).contains(v))) ;
+        }
       for(String u : receiverUsers) {
         perms.put(u, String.valueOf(uiForm.canEdit())) ;
       }
