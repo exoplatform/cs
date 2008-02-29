@@ -53,7 +53,8 @@ import org.exoplatform.webui.event.EventListener;
         @EventConfig(listeners = UIFolderContainer.RenameFolderActionListener.class),
         @EventConfig(listeners = UIFolderContainer.RemoveFolderActionListener.class, confirm="UIFolderContainer.msg.confirm-remove-folder"),
         @EventConfig(listeners = UIFolderContainer.MarkReadActionListener.class),
-        @EventConfig(listeners = UIFolderContainer.EmptyFolderActionListener.class)
+        @EventConfig(listeners = UIFolderContainer.EmptyFolderActionListener.class),
+        @EventConfig(listeners = UIFolderContainer.MoveToTrashActionListener.class)
     }
 )
 public class UIFolderContainer extends UIContainer {
@@ -248,5 +249,32 @@ public class UIFolderContainer extends UIContainer {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent()) ;
     }
+  }
+  
+  static public class MoveToTrashActionListener extends EventListener<UIFolderContainer> {
+	public void execute(Event<UIFolderContainer> event) throws Exception {
+	  UIFolderContainer uiFolderContainer = event.getSource() ;
+	  String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ;		  
+      UIMailPortlet uiPortlet = uiFolderContainer.getAncestorOfType(UIMailPortlet.class) ;
+      UIFolderContainer uiFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class) ;
+	  UIMessageArea uiMsgArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class) ;	
+      UIMessageList uiMsgList = uiMsgArea.getChild(UIMessageList.class) ;
+	  UIMessagePreview uiMsgPreview = uiMsgArea.getChild(UIMessagePreview.class) ;
+	  String username = uiPortlet.getCurrentUser() ;
+	  String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
+	  MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class) ;
+	  List<Message> msgList = mailSrv.getMessagesByFolder(SessionsUtils.getSessionProvider(), username, accountId, folderId) ;
+	  boolean containPreview = false ;
+	  Message msgPre = uiMsgPreview.getMessage() ;
+	  for (Message msg : msgList) {
+		if (msgPre != null && msg.getId().equals(msgPre.getId())) containPreview = true ;
+		String trashFolderId = Utils.createFolderId(accountId, Utils.FD_TRASH, false) ;
+		 mailSrv.moveMessages(SessionsUtils.getSessionProvider(), username, accountId, msg, folderId, trashFolderId) ;
+		}	      		 
+	  uiMsgList.updateList() ;
+	  if (containPreview) uiMsgPreview.setMessage(null);
+	  event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;
+	  event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgArea) ;
+	  }
   }
 }

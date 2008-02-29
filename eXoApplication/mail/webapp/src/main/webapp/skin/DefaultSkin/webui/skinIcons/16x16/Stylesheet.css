@@ -356,6 +356,10 @@
 	background: url('icons/MarkAll.gif') no-repeat left center;
 }
 
+.UIMailPortlet .MoveToTrash {
+	background: url('icons/MoveToTrashIcon.gif') no-repeat left center;
+}
+
 .UIMailPortlet .RemoveFolderIcon {
 	background: url('icons/RemoveFolderIcon.gif') no-repeat left center;
 }
