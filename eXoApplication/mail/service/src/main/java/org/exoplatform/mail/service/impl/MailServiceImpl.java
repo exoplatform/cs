@@ -171,6 +171,20 @@ public class MailServiceImpl implements MailService{
     storage_.saveMessage(sProvider, username, accountId, targetMsgPath, message) ;
   }
   
+  public List<Message> getMessagesByTag(SessionProvider sProvider, String username, String accountId, String tagId) throws Exception {
+    MessageFilter filter = new MessageFilter("Tag") ;
+    filter.setAccountId(accountId) ;
+    filter.setFolder(new String[]{ tagId }) ;
+    return getMessages(sProvider, username, filter) ;   
+  }
+  
+  public List<Message> getMessagesByFolder(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception {
+    MessageFilter filter = new MessageFilter("Folder") ;
+    filter.setAccountId(accountId) ;
+    filter.setFolder(new String[]{ folderId }) ;
+    return getMessages(sProvider, username, filter) ;   
+  }
+  
   public List<Message> getMessages(SessionProvider sProvider, String username, MessageFilter filter) throws Exception {
     return storage_.getMessages(sProvider, username, filter) ;
   }

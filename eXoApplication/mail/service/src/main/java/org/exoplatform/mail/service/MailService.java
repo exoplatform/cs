@@ -242,6 +242,10 @@ public interface MailService {
    */
   public MessagePageList getMessagePageList(SessionProvider sProvider, String username, MessageFilter filter) throws Exception ;
   
+  public List<Message> getMessagesByTag(SessionProvider sProvider, String username, String accountId, String tagId) throws Exception ;
+  
+  public List<Message> getMessagesByFolder(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception ;
+  
   public List<Message> getMessages(SessionProvider sProvider, String username, MessageFilter filter) throws Exception ;
   
   public void saveMessage(SessionProvider sProvider, String username, String accountId, String targetMsgPath, Message message) throws Exception ;
