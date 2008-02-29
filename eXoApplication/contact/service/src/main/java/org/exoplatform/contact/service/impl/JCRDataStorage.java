@@ -633,7 +633,7 @@ public class JCRDataStorage{
     List<Value> valueList = new ArrayList<Value>() ;
   	for(String userId : receiveUsers) {
     	Node sharedAddress = getSharedAddressBook(userId) ;
-    	boolean isExist = false ; 
+      boolean isExist = false ; 
       for (int i = 0; i < values.length; i++) {
         Value value = values[i];
         String uuid = value.getString();

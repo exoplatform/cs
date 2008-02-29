@@ -78,9 +78,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   
   public boolean isVisualEditor() { return isVisualEditor; }
   public void setVisualEditor(boolean b) { isVisualEditor = b; }
-  
   public UIComposeForm() throws Exception { }
-  
   public List<Contact> getToContacts(){ return toContacts; }
   
   public void setToContacts(List<Contact> contactList) { toContacts = contactList; }
@@ -117,7 +115,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   }
   
   public void init(String emails) throws Exception {
-    addUIFormInput(new UIFormStringInput(FIELD_FROM, null, "exomailtest@gmail.com")) ;
+    addUIFormInput(new UIFormStringInput(FIELD_FROM, null, ContactUtils.getCurrentEmail())) ;
     addUIFormInput(new UIFormStringInput(FIELD_TO, null, emails)) ;
     addUIFormInput(new UIFormStringInput(FIELD_SUBJECT, null, null)) ;
     UIFormInputWithActions inputSet = new UIFormInputWithActions(FIELD_FROM_INPUT);   

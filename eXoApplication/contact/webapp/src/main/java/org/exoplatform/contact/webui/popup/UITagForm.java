@@ -17,6 +17,7 @@
 package org.exoplatform.contact.webui.popup;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
@@ -62,9 +63,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
   public static final String FIELD_TAGNAME_INPUT = "tagName";
   public static final String NO_TAG_INFO = "no Tag";
   public static final String FIELD_COLOR= "color";
-  public static final String RED = "Red".intern() ;
-  public static final String BLUE = "Blue".intern() ;
-  public static final String GREEN = "Green".intern() ;
+  
   public static String[] FIELD_TAG_BOX_KEY = null;
   public static String[] FIELD_TAG_BOX_LABLE = null;
   private List<Contact> contacts_ ;
@@ -109,11 +108,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       }
     }
     addUIFormInput(new UIFormStringInput(FIELD_TAGNAME_INPUT, FIELD_TAGNAME_INPUT, null));
-    List<SelectItemOption<String>> colors = new ArrayList<SelectItemOption<String>>() ;
-    colors.add(new SelectItemOption<String>(RED,RED)) ;
-    colors.add(new SelectItemOption<String>(BLUE,BLUE)) ;
-    colors.add(new SelectItemOption<String>(GREEN,GREEN)) ;
-    addUIFormInput(new UIFormSelectBox(FIELD_COLOR, FIELD_COLOR, colors)) ;
+    addUIFormInput(new UIFormSelectBox(FIELD_COLOR, FIELD_COLOR, getColors())) ;
     FIELD_TAG_BOX_KEY = new String[tags.size()];
     FIELD_TAG_BOX_LABLE = new String[tags.size()] ;
     int k = 0 ;
@@ -124,6 +119,16 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_TAG_BOX_LABLE[k], FIELD_TAG_BOX_KEY[k], false));
       k ++ ;
     }
+  }
+  
+  @SuppressWarnings("unchecked")
+  private List<SelectItemOption<String>> getColors() {    
+    List<SelectItemOption<String>> colors = new ArrayList<SelectItemOption<String>>() ;
+    for (String color : Tag.COLORS) {
+      colors.add(new SelectItemOption<String>(color,color)) ;
+    }
+    Collections.sort(colors, new ContactUtils.SelectComparator()) ;
+    return colors ;
   }
   
   public void setValues(String tagName) throws Exception {

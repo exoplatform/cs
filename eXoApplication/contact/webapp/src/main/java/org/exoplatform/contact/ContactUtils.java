@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +26,7 @@ import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.impl.GroupImpl;
+import org.exoplatform.webui.core.model.SelectItemOption;
 
 /**
  * Created by The eXo Platform SARL
@@ -65,8 +67,9 @@ public class ContactUtils {
     return false ;    
   }
   
-  public static List<String> getUserGroups() throws Exception{
-    OrganizationService organizationService = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+  public static List<String> getUserGroups() throws Exception {
+    OrganizationService organizationService = 
+      (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
     Object[] objGroupIds = organizationService.getGroupHandler().findGroupsOfUser(getCurrentUser()).toArray() ;
     List<String> groupIds = new ArrayList<String>() ;
     for (Object object : objGroupIds) {
@@ -97,22 +100,35 @@ public class ContactUtils {
   }
   
   public static boolean isTagNameExisted(String tagName) throws Exception {
-    List<Tag> tags = getContactService().getTags(SessionProviderFactory.createSessionProvider(), getCurrentUser()) ;
+    List<Tag> tags = getContactService().getTags(
+        SessionProviderFactory.createSessionProvider(), getCurrentUser()) ;
     for (Tag tag : tags)
       if (tag.getName().equalsIgnoreCase(tagName)) return true ;
     return false ;
   }
   
   public static boolean isPublicGroup(String groupId) throws Exception {
-    String[] sharedGroups = getUserGroups().toArray(new String[] {}) ;
-    for (String group : sharedGroups)
-      if (group.equals(groupId)) return true ;
+    if (getUserGroups().contains(groupId)) return true ;
     return false ;
   }
   
   public static String formatDate(String format, Date date) {
     Format formatter = new SimpleDateFormat(format);
     return formatter.format(date);
+  }
+  
+  static public class SelectComparator implements Comparator{
+    public int compare(Object o1, Object o2) throws ClassCastException {
+      String name1 = ((SelectItemOption) o1).getLabel() ;
+      String name2 = ((SelectItemOption) o2).getLabel() ;
+      return name1.compareToIgnoreCase(name2) ;
+    }
+  }
+  
+  public static String getCurrentEmail() throws Exception {
+    OrganizationService organizationService =
+      (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+    return organizationService.getUserHandler().findUserByName(getCurrentUser()).getEmail() ;
   }
   
 }

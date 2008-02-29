@@ -282,7 +282,7 @@ public class UIContactForm extends UIFormTabPane {
         } else if (contactType.equals(JCRDataStorage.SHARED)) {
           UIAddressBooks uiAddressBooks = uiContactForm
             .getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class) ;
-          if ( !ContactUtils.isEmpty(uiAddressBooks.getSelectedGroup())) {
+          if ( uiAddressBooks.getSharedGroups().containsKey(contact.getAddressBook()[0])) {
             contactService.saveContactToSharedAddressBook(username, contact.getAddressBook()[0], contact, false) ;
           } else {
             contactService.saveSharedContact(username, contact) ;

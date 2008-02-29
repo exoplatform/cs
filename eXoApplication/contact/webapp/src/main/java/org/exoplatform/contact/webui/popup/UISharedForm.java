@@ -27,7 +27,9 @@ import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -88,7 +90,9 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     actionUser.add(selectUserAction) ;
     inputset.setActionField(FIELD_USER, actionUser) ;
     
-    inputset.addUIFormInput(new UIFormStringInput(FIELD_GROUP, FIELD_GROUP, null)) ;
+    UIFormStringInput group = new UIFormStringInput(FIELD_GROUP, FIELD_GROUP, null) ;
+    group.setEditable(false) ;
+    inputset.addUIFormInput(group) ;
     List<ActionData> actionGroup = new ArrayList<ActionData>() ;
     ActionData selectGroupAction = new ActionData() ;
     selectGroupAction.setActionListener("SelectPermission") ;
@@ -163,14 +167,25 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         return ;
       } 
       if(!ContactUtils.isEmpty(names)) {
-        if (names.indexOf(",") > 0) {
-          String[] array = names.split(",") ;
-          for(String name : array) {
-            receiverUser.add(name.trim()) ;
+        OrganizationService organizationService = 
+          (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+        try {
+          if (names.indexOf(",") > 0) {
+            String[] array = names.split(",") ;
+            for(String name : array) {
+              organizationService.getUserHandler().findUserByName(name).getFullName();
+              receiverUser.add(name.trim()) ;
+            }
+          } else {
+            organizationService.getUserHandler().findUserByName(names.trim()).getFullName();
+            receiverUser.add(names.trim()) ;
           }
-        } else {
-          receiverUser.add(names.trim()) ;
-        }  
+        } catch (NullPointerException e) {
+          uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.invalid-username", null,
+              ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
       }
       if (!ContactUtils.isEmpty(groups)) {
         String[] arrayGroups = groups.split(",") ; 

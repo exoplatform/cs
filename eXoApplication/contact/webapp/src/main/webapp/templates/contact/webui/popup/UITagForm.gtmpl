@@ -8,7 +8,7 @@
    				int i = 0 ;
    				String[] contacts = uicomponent.contactNames ;
    				String[] tags = uicomponent.tagNames ;
-   				while (i < contacts.length) {   	
+   				while (i < contacts.length) {  	
       	%>
       	<tr>
       		<td class="FieldLabel">Contact <%=contacts[i]%> :</td>

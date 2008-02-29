@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.contact.ContactUtils;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
@@ -36,6 +37,8 @@ import org.exoplatform.webui.core.UITree;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.organization.UIGroupMembershipSelector;
+
+import sun.security.action.GetLongAction;
 
 /**
  * Created by The eXo Platform SARL
@@ -166,9 +169,9 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
   static  public class ChangeNodeActionListener extends EventListener<UITree> {   
     public void execute(Event<UITree> event) throws Exception {
       UIGroupSelector uiGroupSelector = event.getSource().getAncestorOfType(UIGroupSelector.class) ;
-      String groupId = event.getRequestContext().getRequestParameter(OBJECTID)  ;
+      String groupId = event.getRequestContext().getRequestParameter(OBJECTID) ;        
       uiGroupSelector.changeGroup(groupId) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiGroupSelector) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiGroupSelector) ;   
     }
   }
 
