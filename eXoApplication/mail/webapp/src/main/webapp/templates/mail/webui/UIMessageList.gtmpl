@@ -13,29 +13,29 @@
 <% /*Start Message Action Bar*/ %>
 <%uiform.begin()%>  
   <div class="UIMessageActionsBar">
-  <a href="<%=uicomponent.event("Reply")%>" class="ControlButton">
+  <a href="<%=uicomponent.event("Reply")%>" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.reply-to-sender") %>">
     <div class="IconHolder ReplyIcon"><span></span></div>
   </a>
-  <a href="<%=uicomponent.event("ReplyAll")%>" class="ControlButton">
+  <a href="<%=uicomponent.event("ReplyAll")%>" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.reply-to-all") %>">
     <div class="IconHolder ReplyAllIcon"><span></span></div>
   </a>
-  <a href="<%=uicomponent.event("Forward")%>" class="ControlButton">
+  <a href="<%=uicomponent.event("Forward")%>" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.forward") %>">
     <div class="IconHolder ForwardIcon"><span></span></div>
   </a>
   <div class="SeparatorLine"><span></span></div>
-  <a href="<%=uicomponent.event("Delete")%>" class="ControlButton">
+  <a href="<%=uicomponent.event("Delete")%>" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.delete") %>">
     <div class="IconHolder DeleteIcon"><span></span></div>
   </a>
   <% if (!uicomponent.selectedSpamFolder()) { %>
-    <a href="<%=uicomponent.event("ReportSpam")%>" class="ControlButton">
+    <a href="<%=uicomponent.event("ReportSpam")%>" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.report-spam") %>">
       <div class="IconHolder SpamMail"><span></span></div>
     </a>
   <% } else { %>
-    <a href="<%=uicomponent.event("NotSpam")%>" class="ControlButton">
+    <a href="<%=uicomponent.event("NotSpam")%>" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.not-spam") %>">
       <div class="IconHolder NotSpamMail"><span></span></div>
     </a>
   <% } %>
-  <a href="<%=uicomponent.event("Print")%>" class="ControlButton">
+  <a href="<%=uicomponent.event("Print")%>" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.print") %>">
     <div class="IconHolder PrintIcon"><span></span></div>
   </a>
   <div class="SeparatorLine"><span></span></div>
@@ -117,7 +117,7 @@
 	                <div class="UIRightPopupMenuContainer">
 	                  <a class="MenuItem">   
 	                    <div class="ItemIcon ViewAsIcon">
-                        <div class="NextArrow1Icon">View As</div>
+                        <div class="NextArrow1Icon"><%=_ctx.appRes(uicomponent.id+ ".label.view-as") %></div>
                       </div>
 	                  </a>
                     <!--Submenu-->
@@ -133,13 +133,13 @@
                             <div class="MiddleRightRightClickPopupMenu">
                               <div class="UIRightPopupMenuContainer">
                               <a class="MenuItem" href="<%=uicomponent.event("ViewAsList")%>">   
-                              <div class="ItemIcon ListIcon"> List</div>
+                              <div class="ItemIcon ListIcon"><%=_ctx.appRes(uicomponent.id+ ".label.list") %></div>
                             </a>
                             <a class="MenuItem" href="<%=uicomponent.event("ViewAsThread")%>">   
-                              <div class="ItemIcon ThreadIcon">Thread</div>
+                              <div class="ItemIcon ThreadIcon"><%=_ctx.appRes(uicomponent.id+ ".label.thread") %></div>
                             </a>
                             <a class="MenuItem" href="<%=uicomponent.event("ViewAsConversation")%>">   
-                              <div class="ItemIcon ConversationIcon">Conversation</div>
+                              <div class="ItemIcon ConversationIcon"><%=_ctx.appRes(uicomponent.id+ ".label.conversation") %></div>
                             </a>
                               </div>
                             </div>

@@ -93,233 +93,260 @@ public class UIMessagePreview extends UIComponent {
     showedMsgs = msgList ;
   }
   
+  public Message getShowedMessageById(String id) throws Exception {
+    for (Message msg : getShowedMessages()) {
+      if (msg.getId().equals(id)) return msg ;
+    }
+    return null ;
+  }
+  
   public DownloadService getDownloadService() { 
     return getApplicationComponent(DownloadService.class) ; 
   }
   
   public static class DownloadAttachmentActionListener extends EventListener<UIMessagePreview> {
     public void execute(Event<UIMessagePreview> event) throws Exception {
-      UIMessagePreview uiMessagePreview = event.getSource();
+      UIMessagePreview uiMsgPreview = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
       String attId = event.getRequestContext().getRequestParameter("attachId");
-      UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class);
-      UIMessageList uiMsgList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
-      Message message = uiMsgList.messageList_.get(msgId);
-      List<Attachment> attList = message.getAttachments();
-      JCRMessageAttachment att = new JCRMessageAttachment();
-      for (Attachment attach : attList) {
-        if (attach.getId().equals(attId)) {
-          att = (JCRMessageAttachment)attach;
+      UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
+      Message msg = uiMsgPreview.getShowedMessageById(msgId) ;
+      if (msg != null) {
+        List<Attachment> attList = msg.getAttachments();
+        JCRMessageAttachment att = new JCRMessageAttachment();
+        for (Attachment attach : attList) {
+          if (attach.getId().equals(attId)) {
+            att = (JCRMessageAttachment)attach;
+          }
         }
+        DownloadResource dresource = new InputStreamDownloadResource(att.getInputStream(), att.getMimeType());
+        DownloadService dservice = (DownloadService)PortalContainer.getInstance().getComponentInstanceOfType(DownloadService.class);
+        dresource.setDownloadName(att.getName());
+        String downloadLink = dservice.getDownloadLink(dservice.addDownloadResource(dresource));
+        event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + downloadLink + "');");
+        uiPortlet.cancelAction() ;
       }
-      DownloadResource dresource = new InputStreamDownloadResource(att.getInputStream(), att.getMimeType());
-      DownloadService dservice = (DownloadService)PortalContainer.getInstance().getComponentInstanceOfType(DownloadService.class);
-      dresource.setDownloadName(att.getName());
-      String downloadLink = dservice.getDownloadLink(dservice.addDownloadResource(dresource));
-      event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + downloadLink + "');");
-      uiPortlet.cancelAction() ;
     }
   }
   
   static public class AddStarActionListener extends EventListener<UIMessagePreview> {
     public void execute(Event<UIMessagePreview> event) throws Exception { 
-      UIMessagePreview uiMessagePreview = event.getSource();
+      UIMessagePreview uiMsgPreview = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID);
-      UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class);
-      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
+      UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
+      UIMessageArea uiMsgArea = uiPortlet.getAncestorOfType(UIMessageArea.class) ;
+      UIMessageList uiMessageList = uiMsgArea.getChild(UIMessageList.class) ;
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailServ = uiPortlet.getApplicationComponent(MailService.class);
-      try {
+      Message msg = uiMsgPreview.getShowedMessageById(msgId) ;
+      if (msg != null) {
         List<Message> msgList = new ArrayList<Message>() ;
-        Message msg = uiMessageList.messageList_.get(msgId);
         msg.setHasStar(!msg.hasStar());
         msgList.add(msg) ;
         mailServ.toggleMessageProperty(SessionsUtils.getSessionProvider(), username, accountId, msgList, Utils.EXO_STAR);
         uiMessageList.messageList_.put(msgId, msg);
-        uiMessagePreview.setMessage(msg);
-      } catch (Exception e) { }
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
+        uiMsgPreview.setMessage(msg);
+      }
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgArea);
     }
   }
   
   static public class ReplyActionListener extends EventListener<UIMessagePreview> {
     public void execute(Event<UIMessagePreview> event) throws Exception {
-      UIMessagePreview uiMessagePreview = event.getSource() ; 
+      UIMessagePreview uiMsgPreview = event.getSource() ; 
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class) ;
-      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
+      UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class) ;
       String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
-      UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 850) ;
       
-      UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
       if (msgId != null) {
-        Message message = uiMessageList.messageList_.get(msgId);
-        uiComposeForm.init(accId, message, uiComposeForm.MESSAGE_REPLY);
+        Message msg = uiMsgPreview.getShowedMessageById(msgId);
+        if (msg != null) {
+          UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
+          UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 850) ;
+          UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
+          uiComposeForm.init(accId, msg, uiComposeForm.MESSAGE_REPLY);
+          uiPopupContainer.addChild(uiComposeForm) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+        }
       }
-      uiPopupContainer.addChild(uiComposeForm) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessagePreview.class));
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview) ;
     }
   }
   
   static  public class ReplyAllActionListener extends EventListener<UIMessagePreview> {    
     public void execute(Event<UIMessagePreview> event) throws Exception {
-      UIMessagePreview uiMessagePreview = event.getSource() ; 
+      UIMessagePreview uiMsgPreview = event.getSource() ; 
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class) ;
+      UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class) ;
       String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
-      UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 850) ;
-      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
-      UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
+      
       if (msgId != null) {
-        Message message = uiMessageList.messageList_.get(msgId);
-        uiComposeForm.init(accId, message, uiComposeForm.MESSAGE_REPLY_ALL);
+        Message msg = uiMsgPreview.getShowedMessageById(msgId);
+        if (msg != null) {
+          UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
+          UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 850) ;
+          UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
+          uiComposeForm.init(accId, msg, uiComposeForm.MESSAGE_REPLY_ALL);
+          uiPopupContainer.addChild(uiComposeForm) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+        }
       }
-      uiPopupContainer.addChild(uiComposeForm) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class));
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview) ;
     }
   }
   
   static public class ForwardActionListener extends EventListener<UIMessagePreview> {
     public void execute(Event<UIMessagePreview> event) throws Exception {
-      UIMessagePreview uiMessagePreview = event.getSource() ; 
+      UIMessagePreview uiMsgPreview = event.getSource() ; 
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class) ;
+      UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class) ;
       String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
-      UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 850) ;
-      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
-      UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
-
+      
       if (msgId != null) {
-        Message message = uiMessageList.messageList_.get(msgId);
-        uiComposeForm.init(accId, message, uiComposeForm.MESSAGE_FOWARD);
+        Message msg = uiMsgPreview.getShowedMessageById(msgId);
+        if (msg != null) {
+          UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
+          UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 850) ;
+          UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
+          uiComposeForm.init(accId, msg, uiComposeForm.MESSAGE_FOWARD);
+          uiPopupContainer.addChild(uiComposeForm) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+        }
       }
-      uiPopupContainer.addChild(uiComposeForm) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessagePreview.class));
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview) ;
     }
   }
   
   static public class DeleteActionListener extends EventListener<UIMessagePreview> {
     public void execute(Event<UIMessagePreview> event) throws Exception {
-      UIMessagePreview uiPreview = event.getSource();
+      UIMessagePreview uiMsgPreview = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      UIMailPortlet uiPortlet = uiPreview.getAncestorOfType(UIMailPortlet.class);
-      UIMessageArea uiMessageArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class);
-      MailService mailSrv = uiPreview.getApplicationComponent(MailService.class);
-      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
-      String username = MailUtils.getCurrentUser();
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-       
-      Message msg = uiMessageList.messageList_.get(msgId);
-      mailSrv.moveMessages(SessionsUtils.getSessionProvider(), username, accountId, msg, msg.getFolders()[0],  Utils.createFolderId(accountId, Utils.FD_TRASH, false));
-      uiPreview.setMessage(null);
-      uiPortlet.findFirstComponentOfType(UIMessageList.class).updateList();
-      
+      UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
+      UIMessageArea uiMsgArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class);
+      UIMessageList uiMsgList = uiMsgArea.getChild(UIMessageList.class) ;
+      Message msg = uiMsgPreview.getShowedMessageById(msgId) ;
+      if (msg != null) {
+        MailService mailSrv = uiMsgPreview.getApplicationComponent(MailService.class);
+        String username = MailUtils.getCurrentUser();
+        String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+        mailSrv.moveMessages(SessionsUtils.getSessionProvider(), username, accountId, msg, msg.getFolders()[0],  Utils.createFolderId(accountId, Utils.FD_TRASH, false));
+        uiMsgList.updateList();
+        uiMsgPreview.setMessage(null);
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UINavigationContainer.class));
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgArea);
     }
   }
   
   static public class PrintActionListener extends EventListener<UIMessagePreview> {
     public void execute(Event<UIMessagePreview> event) throws Exception {
-      UIMessagePreview uiMessagePreview = event.getSource();
+      UIMessagePreview uiMsgPreview = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class);
-      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
-      UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
-      UIPrintPreview uiPrintPreview = uiPopup.activate(UIPrintPreview.class, 700) ;
-      uiPrintPreview.setPrintMessage(uiMessageList.messageList_.get(msgId)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessagePreview.class));
+      UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
+      Message msg = uiMsgPreview.getShowedMessageById(msgId) ;
+      if (msg != null) {
+        UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
+        UIPrintPreview uiPrintPreview = uiPopup.activate(UIPrintPreview.class, 700) ;
+        uiPrintPreview.setPrintMessage(msg) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
+      }
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview);
     }
   }
   
   static public class AddContactActionListener extends EventListener<UIMessagePreview> {
     public void execute(Event<UIMessagePreview> event) throws Exception {
-      UIMessagePreview uiMessagePreview = event.getSource() ;   
+      UIMessagePreview uiMsgPreview = event.getSource() ;   
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class);
+      UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
       
-      Message msg = uiPortlet.findFirstComponentOfType(UIMessageList.class).messageList_.get(msgId);
-      UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
-      UIPopupActionContainer uiPopupContainer = uiPopup.createUIComponent(UIPopupActionContainer.class, null, null) ;
-      uiPopup.activate(uiPopupContainer, 730, 0, true);
-      
-      UIAddContactForm uiAddContactForm = uiPopupContainer.createUIComponent(UIAddContactForm.class, null, null);
-      uiPopupContainer.addChild(uiAddContactForm);
-      InternetAddress[] addresses  = Utils.getInternetAddress(msg.getFrom());
-      String personal = Utils.getPersonal(addresses[0]);
-      String firstName = personal;
-      String lastName = "";
-      if (personal.indexOf(" ") > 0) {
-        firstName = personal.substring(0, personal.indexOf(" "));
-        lastName = personal.substring(personal.indexOf(" ") + 1, personal.length());
+      Message msg = uiMsgPreview.getShowedMessageById(msgId) ;
+      if (msg != null) {
+        UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
+        UIPopupActionContainer uiPopupContainer = uiPopup.createUIComponent(UIPopupActionContainer.class, null, null) ;
+        uiPopup.activate(uiPopupContainer, 730, 0, true);
+
+        UIAddContactForm uiAddContactForm = uiPopupContainer.createUIComponent(UIAddContactForm.class, null, null);
+        uiPopupContainer.addChild(uiAddContactForm);
+        InternetAddress[] addresses  = Utils.getInternetAddress(msg.getFrom());
+        String personal = Utils.getPersonal(addresses[0]);
+        String firstName = personal;
+        String lastName = "";
+        if (personal.indexOf(" ") > 0) {
+          firstName = personal.substring(0, personal.indexOf(" "));
+          lastName = personal.substring(personal.indexOf(" ") + 1, personal.length());
+        }
+        uiAddContactForm.setFirstNameField(firstName);
+        uiAddContactForm.setLastNameField(lastName);
+        uiAddContactForm.setEmailField(addresses[0].getAddress());
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);
       }
-      uiAddContactForm.setFirstNameField(firstName);
-      uiAddContactForm.setLastNameField(lastName);
-      uiAddContactForm.setEmailField(addresses[0].getAddress());
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview);
     }
   }
   
   static public class ExportActionListener extends EventListener<UIMessagePreview> {
     public void execute(Event<UIMessagePreview> event) throws Exception {
-      UIMessagePreview uiMessagePreview = event.getSource() ;   
+      UIMessagePreview uiMsgPreview = event.getSource() ;   
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class);
-      UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
-      UIExportForm uiExportForm = uiPopup.createUIComponent(UIExportForm.class, null, null);
-      uiPopup.activate(uiExportForm, 600, 0, true);
+      UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
       try {
-        Message msg = uiPortlet.findFirstComponentOfType(UIMessageList.class).messageList_.get(msgId);
-        uiExportForm.setExportMessage(msg);
-      } catch (Exception e) { }
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);  
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessagePreview.class));
+        Message msg = uiMsgPreview.getShowedMessageById(msgId) ;
+        if (msg != null) {
+          UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
+          UIExportForm uiExportForm = uiPopup.createUIComponent(UIExportForm.class, null, null);
+          uiPopup.activate(uiExportForm, 600, 0, true);
+          uiExportForm.setExportMessage(msg);
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);
+        }
+      } catch (Exception e) { }  
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview);
     }
   }
   
   static public class AddTagActionListener extends EventListener<UIMessagePreview> {
     public void execute(Event<UIMessagePreview> event) throws Exception {
-      UIMessagePreview uiMessagePreview = event.getSource() ; 
+      UIMessagePreview uiMsgPreview = event.getSource() ; 
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class);
-      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);
-      UITagForm uiTagForm = uiMessagePreview.createUIComponent(UITagForm.class, null, null) ;
-      String username = uiPortlet.getCurrentUser();
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      MailService mailSrv = MailUtils.getMailService();
-      List<Tag> listTags = mailSrv.getTags(SessionsUtils.getSessionProvider(), username, accountId);
-      uiPopupAction.activate(uiTagForm, 600, 0, true);
-      List<Message> msgList = new ArrayList<Message>();
-      msgList.add(uiPortlet.findFirstComponentOfType(UIMessageList.class).messageList_.get(msgId));
-      uiTagForm.setMessageList(msgList);
-      uiTagForm.setTagList(listTags) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessagePreview.class));
+      UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
+      Message msg = uiMsgPreview.getShowedMessageById(msgId) ;
+      if (msg != null) {
+        UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);
+        UITagForm uiTagForm = uiMsgPreview.createUIComponent(UITagForm.class, null, null) ;
+        String username = uiPortlet.getCurrentUser();
+        String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+        MailService mailSrv = MailUtils.getMailService();
+        List<Tag> listTags = mailSrv.getTags(SessionsUtils.getSessionProvider(), username, accountId);
+        uiPopupAction.activate(uiTagForm, 600, 0, true);
+        List<Message> msgList = new ArrayList<Message>();
+        msgList.add(msg);
+        uiTagForm.setMessageList(msgList);
+        uiTagForm.setTagList(listTags) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
+      }
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview);
     }
   }
 
   static public class MoveMessagesActionListener extends EventListener<UIMessagePreview> {
     public void execute(Event<UIMessagePreview> event) throws Exception {
-      UIMessagePreview uiMessagePreview = event.getSource() ;    
+      UIMessagePreview uiMsgPreview = event.getSource() ;    
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      UIMailPortlet uiPortlet = uiMessagePreview.getAncestorOfType(UIMailPortlet.class);
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);     
-      UIMoveMessageForm uiMoveMessageForm = uiMessagePreview.createUIComponent(UIMoveMessageForm.class,null, null);
-      uiMoveMessageForm.init(accountId);
-      List<Message> msgList = new ArrayList<Message>();
-      msgList.add(uiPortlet.findFirstComponentOfType(UIMessageList.class).messageList_.get(msgId));
-      uiMoveMessageForm.setMessageList(msgList);
-      uiPopupAction.activate(uiMoveMessageForm, 600, 0, true);             
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);        
+      UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
+      Message msg = uiMsgPreview.getShowedMessageById(msgId) ;
+      if (msg != null) {
+        String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+        UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);     
+        UIMoveMessageForm uiMoveMessageForm = uiMsgPreview.createUIComponent(UIMoveMessageForm.class,null, null);
+        uiMoveMessageForm.init(accountId);
+        List<Message> msgList = new ArrayList<Message>();
+        msgList.add(msg);
+        uiMoveMessageForm.setMessageList(msgList);
+        uiPopupAction.activate(uiMoveMessageForm, 600, 0, true);
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
+      }
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview);
     }
   }
 }

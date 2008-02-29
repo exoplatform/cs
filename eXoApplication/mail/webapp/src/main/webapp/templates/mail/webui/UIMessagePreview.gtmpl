@@ -80,7 +80,7 @@
                     <% } %>
 
                     <div class="MonthDate">
-                      <%=Utils.formatDate('MMM dd', msg.getReceivedDate())%>
+                      <%=MailUtils.formatDate(msg.getReceivedDate())%>
                     </div>
 
                     <div style="clear: right;"><span></span></div>
@@ -287,8 +287,7 @@
                   if (msg.getAttachments().size() > 0) {
                 %>
                   <div class="AttachmentContainer">
-    						  	<div class="AttachmentTitle">Attachments:</div>
-                    
+    						  	<div class="AttachmentTitle"><%=_ctx.appRes(uicomponent.id+ ".label.attachments") %>:</div>            
                     <%
                       DownloadService dservice = uicomponent.getDownloadService() ;
                       String attLink ;
@@ -313,7 +312,7 @@
                         %>
                         <div class="AttachmentBox">
       										<div class="AttachmentIcon"><%=attach.getName()%></div>
-      										<div class="Size">Size: <%=MailUtils.convertSize(attach.getSize())%> &nbsp;&nbsp;&nbsp;<span class="Icon ViewDownloadIcon"><a href="#">View</a></span><span class="Icon DownloadIcon"> <a href="$downloadAction">Download</a></span></div>
+      										<div class="Size"><%=_ctx.appRes(uicomponent.id+ ".label.size") %>: <%=MailUtils.convertSize(attach.getSize())%> &nbsp;&nbsp;&nbsp;<span class="Icon ViewDownloadIcon"><a href="#">View</a></span><span class="Icon DownloadIcon"> <a href="$downloadAction">Download</a></span></div>
       						  		</div>
       						  		<div style="clear: left;"><span></span></div>
       						  	</div>
@@ -325,8 +324,8 @@
                   } 
                 %>
                 			<div style="border-top: 1px dotted #b7b7b7; padding-top: 3px">
-                				<a href="#" class="MessageActionIcon ReplyAllMailIcon">Reply</a>
-			                	<a href="#" class="MessageActionIcon ForwardMailIcon">Forward</a>
+                				<a href="<%=uicomponent.event("Reply", msg.getId())%>" class="MessageActionIcon ReplyAllMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.reply") %></a>
+			                	<a href="<%=uicomponent.event("Forward", msg.getId())%>" class="MessageActionIcon ForwardMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.forward") %></a>
 			                	<div style="clear: left"><span></span></div>
 			                </div>
   						</div>										

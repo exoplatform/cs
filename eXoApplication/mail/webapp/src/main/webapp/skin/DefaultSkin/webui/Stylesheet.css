@@ -667,12 +667,14 @@
 	padding: 0px 10px 0px 20px;
 	color: #2276AB;
 	display: block;
+	font-size: 12px;
 	background-position: left center;
 	text-decoration: underline;
 }	
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessagePreview a:hover.MessageActionIcon {
 	color: #fda946;
+    font-size: 12px;
 	text-decoration: none;
 }
 
