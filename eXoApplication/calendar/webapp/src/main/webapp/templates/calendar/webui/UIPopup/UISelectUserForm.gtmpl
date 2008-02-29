@@ -16,7 +16,7 @@
                 <div class="UIAddressSearchForm">
                   <div class="QuickSet">
                     <div class="SearchTitle">
-                    	<%=uiform.getLabel('search')%>
+                    	<%=uiform.getLabel(uiform.FIELD_KEYWORD)%>
                     </div>
                     <%uiform.renderField(uiform.FIELD_KEYWORD)%>
                     <a class="SearchIcon" href="<%=uicomponent.event('Search')%>" title="Quick Search"><span></span></a>
@@ -24,7 +24,7 @@
                 </div>
                 <div class="AddressesGroup">
                   <div class="AddressLabel">
-                  		<%=uiform.getLabel('addresses')%>
+                  		<%=uiform.getLabel(uiform.FIELD_GROUP)%>
                   	</div>
                    <%uiform.renderField(uiform.FIELD_GROUP)%>
                   <div style="clear: left"><span></span></div>

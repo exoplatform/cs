@@ -18,18 +18,20 @@ package org.exoplatform.calendar.webui.popup;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.commons.utils.PageList;
-import org.exoplatform.contact.service.ContactGroup;
-import org.exoplatform.contact.service.ContactService;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -50,8 +52,9 @@ import org.exoplatform.webui.form.UIFormStringInput;
     lifecycle = UIFormLifecycle.class,
     template =  "app:/templates/calendar/webui/UIPopup/UISelectUserForm.gtmpl",
     events = {
-      @EventConfig(listeners = UISelectUserForm.SaveActionListener.class), 
-      @EventConfig(listeners = UISelectUserForm.SearchActionListener.class), 
+      @EventConfig(listeners = UISelectUserForm.ReplaceActionListener.class), 
+      @EventConfig(listeners = UISelectUserForm.AddActionListener.class, phase = Phase.DECODE), 
+      @EventConfig(listeners = UISelectUserForm.SearchActionListener.class, phase = Phase.DECODE), 
       @EventConfig(listeners = UISelectUserForm.CancelActionListener.class, phase = Phase.DECODE)
     }
 )
@@ -61,14 +64,13 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
   final public static String FIELD_GROUP = "group".intern() ;
 
 
-  private List<User> data_  = new ArrayList<User>() ;
+  //private List<User> data_  = new ArrayList<User>() ;
+  private Map<String, User> userData_ = new HashMap<String, User>() ;
   private boolean isShowSearch_ = false ;
   protected String tabId_ = null ;
+  protected Collection<String> pars_ ;
   public List<User> getData() {
-    return data_ ;
-  }
-  public void update(List<User> list) {
-    data_ = list ;
+    return new ArrayList<User>(userData_.values()) ;
   }
   public UISelectUserForm() throws Exception {  
     //initSearchForm() ;
@@ -79,12 +81,14 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
     PageList pl = service.getUserHandler().getUserPageList(0) ;
     for(Object o : pl.getAll()){
       User user =  (User)o ; 
-      data_.add(user) ;
+      userData_.put(user.getUserName(), user) ;
+      //data_.add(user) ;
       addUIFormInput(new UIFormCheckBoxInput<Boolean>(user.getUserName(),user.getUserName(), false)) ;
     }
     for(String s : pars) {
       if(getUIFormCheckBoxInput(s) != null) getUIFormCheckBoxInput(s).setChecked(true) ;
     }
+    pars_ = pars ;
   }
   public void  initSearchForm() throws Exception{
     addUIFormInput(new UIFormStringInput(FIELD_KEYWORD, FIELD_KEYWORD, null)) ;
@@ -93,16 +97,17 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
   }
   private List<SelectItemOption<String>> getGroups() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    ContactService contactService = getApplicationComponent(ContactService.class) ;
-    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    //ContactService contactService = getApplicationComponent(ContactService.class) ;
+    OrganizationService orgService = getApplicationComponent(OrganizationService.class) ;
     options.add(new SelectItemOption<String>("all", "")) ;
-    for( ContactGroup cg : contactService.getGroups(SessionProviderFactory.createSessionProvider(), username)) {
-      options.add(new SelectItemOption<String>(cg.getName(), cg.getId())) ;
+    for( Object g : orgService.getGroupHandler().getAllGroups()) { 
+      Group  cg = (Group)g ;
+      options.add(new SelectItemOption<String>(cg.getGroupName(), cg.getLabel())) ;
     }
     return options;
   }
 
-  public String[] getActions() { return new String[]{"Save", "Cancel"}; }
+  public String[] getActions() { return new String[]{"Add", "Replace", "Cancel"}; }
   public void activate() throws Exception {}
   public void deActivate() throws Exception {} 
   public String getLabel(String id) {
@@ -119,8 +124,44 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
   public boolean isShowSearch() {
     return isShowSearch_;
   }
-
-  static  public class SaveActionListener extends EventListener<UISelectUserForm> {
+  static  public class AddActionListener extends EventListener<UISelectUserForm> {
+    public void execute(Event<UISelectUserForm> event) throws Exception { 
+      System.out.println("======== >>>UISelectUserForm.SaveActionListener");
+      UISelectUserForm uiForm = event.getSource();
+      UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+      UIEventForm uiEventForm = uiContainer.findFirstComponentOfType(UIEventForm.class) ;
+      if(uiEventForm != null) {
+        StringBuilder sb = new StringBuilder() ;
+        for(String s : uiForm.pars_) {
+          if(sb != null && sb.length() > 0) sb.append(CalendarUtils.COMMA) ;
+          sb.append(s) ;
+        }
+        for(User u : uiForm.getData()) {
+          UIFormCheckBoxInput input = uiForm.getUIFormCheckBoxInput(u.getUserName()) ;
+          if(input != null && input.isChecked()) {
+            if(!uiForm.pars_.contains(u.getUserName())) {
+              if(sb != null && sb.length() > 0) sb.append(CalendarUtils.COMMA) ;
+              sb.append(u.getUserName()) ;
+            }
+          }
+        }
+        uiEventForm.setSelectedTab(uiForm.tabId_) ;
+        uiEventForm.setParticipant(sb.toString()) ;
+        ((UIEventAttenderTab)uiEventForm.getChildById(uiEventForm.TAB_EVENTATTENDER)).updateParticipants(sb.toString()) ;
+      } 
+      //chilPopup.deActivate() ;
+      /*UIPopupAction chilPopup =  uiContainer.getChild(UIPopupAction.class) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(chilPopup) ;*/
+      
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getChildById(uiEventForm.TAB_EVENTATTENDER)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getChildById(uiEventForm.TAB_EVENTSHARE)) ;
+      
+     /* UIApplication uiApplication = uiForm.getAncestorOfType(UIApplication.class) ;
+      uiApplication.addMessage(new ApplicationMessage("UISelectUserForm.msg.add-successful", null)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages()) ;*/
+    }  
+  } 
+  static  public class ReplaceActionListener extends EventListener<UISelectUserForm> {
     public void execute(Event<UISelectUserForm> event) throws Exception { 
       System.out.println("======== >>>UISelectUserForm.SaveActionListener");
       UISelectUserForm uiForm = event.getSource();
@@ -148,8 +189,42 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
   } 
   static  public class SearchActionListener extends EventListener<UISelectUserForm> {
     public void execute(Event<UISelectUserForm> event) throws Exception {
+      UISelectUserForm uiForm = event.getSource() ;
+      //if(uiForm.getChildren()!= null) uiForm.getChildren().clear() ;
+      OrganizationService service = uiForm.getApplicationComponent(OrganizationService.class) ;
+      String keyword = uiForm.getUIStringInput(UISelectUserForm.FIELD_KEYWORD).getValue();
+      if(keyword == null && keyword.trim().length() <= 0) keyword = "*" ;
+      keyword = "*" + keyword + "*" ;
+      Query q = new Query() ;
+      q.setUserName(keyword) ;
+      List results = new ArrayList() ;
+      results.addAll(service.getUserHandler().findUsers(q).getAll()) ;
+      q = new Query() ;
+      q.setEmail(keyword) ;
+      results.addAll(service.getUserHandler().findUsers(q).getAll()) ;
+      q = new Query() ;
+      q.setFirstName(keyword) ;
+      results.addAll(service.getUserHandler().findUsers(q).getAll()) ;
+      q = new Query() ;
+      q.setLastName(keyword) ;
+      results.addAll(service.getUserHandler().findUsers(q).getAll()) ;
+      uiForm.userData_.clear() ;
+      for(Object o : results) {
+        User u = (User)o ;
+        uiForm.userData_.put(u.getUserName(), u) ;
+      }
+      for(String username  : uiForm.userData_.keySet()) {
+        if(uiForm.getUIFormCheckBoxInput(username) != null) 
+          uiForm.addUIFormInput(new UIFormCheckBoxInput<Boolean>(username, username, false)) ;
+      }
+      for(String currentUsers : uiForm.pars_) {
+        if(uiForm.getUIFormCheckBoxInput(currentUsers) != null) 
+          uiForm.getUIFormCheckBoxInput(currentUsers).setChecked(true) ;
+      }
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
     }
   }
+
   static  public class CancelActionListener extends EventListener<UISelectUserForm> {
     public void execute(Event<UISelectUserForm> event) throws Exception {
       UISelectUserForm uiAddressForm = event.getSource();  
