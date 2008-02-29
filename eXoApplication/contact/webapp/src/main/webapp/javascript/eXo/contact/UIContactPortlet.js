@@ -50,7 +50,7 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
     var actions = DOMUtil.findDescendantsByClass(UIContextMenuCon.menuElement, "div", "ItemIcon") ;
     var isDisable = null ;
     var len = actions.length ;
-    if(isPublic == "true") {
+    if(isPublic == "2") {
       for (var i = 0; i < len; i++) {
         isDisable = DOMUtil.hasClass(actions[i], "EditActionIcon") || DOMUtil.hasClass(actions[i], "MoveIcon") || DOMUtil.hasClass(actions[i], "DeleteContactIcon")
         if (isDisable == false) continue;

@@ -22,6 +22,8 @@ import org.exoplatform.contact.service.Tag;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
+import org.exoplatform.mail.service.Account;
+import org.exoplatform.mail.service.MailService;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
@@ -126,9 +128,13 @@ public class ContactUtils {
   }
   
   public static String getCurrentEmail() throws Exception {
-    OrganizationService organizationService =
-      (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
-    return organizationService.getUserHandler().findUserByName(getCurrentUser()).getEmail() ;
-  }
+    MailService mailSvr = (MailService)PortalContainer.getComponent(MailService.class) ;
+    try {
+      return mailSvr.getAccounts(SessionsUtils.getSessionProvider(), getCurrentUser()).get(0).getEmailAddress() ;
+    } catch (Exception e) {
+      e.printStackTrace() ;
+      return null ;
+    }
+   }
   
 }

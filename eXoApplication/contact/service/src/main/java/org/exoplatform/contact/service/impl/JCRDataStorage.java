@@ -141,6 +141,7 @@ public class JCRDataStorage{
     } catch (PathNotFoundException ex) {
       Node tagHome = contactServiceHome.addNode(TAGS, NT_UNSTRUCTURED) ;
       contactServiceHome.save() ;
+      //contactServiceHome.getSession().save() ;
       return tagHome ;
     } 
   }

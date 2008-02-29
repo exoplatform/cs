@@ -254,7 +254,7 @@
 									if (selectedContact != null && contact.getId().equals(selectedContact)) cssClass = "Selected" ;
 	  	 	    %>
 								
-  						<tr class="UIContactList $cssClass" isPublic="<%=contact.isOwner()%>"> 
+  						<tr class="UIContactList $cssClass" isPublic="<%=contact.getContactType()%>"> 
   						  <td class="text" style="padding-left: 7px;">
   						  	<%
   						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
@@ -335,7 +335,7 @@
 										if (contact.getId().equals(uicomponent.getSelectedContact())) cssClass = "Selected" ;								
 						%>
 							
-  						<tr class="UIContactList $cssClass" isSearch="<%=uicomponent.isDisplaySearchResult()%>" isPublic="<%=contact.isOwner()%>">
+  						<tr class="UIContactList $cssClass" isSearch="<%=uicomponent.isDisplaySearchResult()%>" isPublic="<%=contact.getContactType()%>">
   						  <td class="text" style="padding-left: 7px;">
   						  	<%
   						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
@@ -456,7 +456,7 @@
 		
 				%>	
 		  <div class="LeftVCardsContent">
-		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>" isPublic="<%=contact.isOwner()%>">
+		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>" isPublic="<%=contact.getContactType()%>">
 			  	<div class="TitleVCards" >
 			  		<% 
 										icon = "OnlineIcon"
@@ -575,7 +575,7 @@
 				}
 			%>
 			<div class="RightVCardsContent">
-		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>" isPublic="<%=contact.isOwner()%>">
+		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>" isPublic="<%=contact.getContactType()%>">
 			  	<div class="TitleVCards" >
 			  	<% 
 										icon = "OfflineIcon"
