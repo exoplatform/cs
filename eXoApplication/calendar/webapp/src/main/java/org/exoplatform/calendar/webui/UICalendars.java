@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -48,6 +49,7 @@ import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -180,6 +182,7 @@ public class UICalendars extends UIForm  {
   static  public class AddCalendarActionListener extends EventListener<UICalendars> {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiComponent = event.getSource() ;
+      Locale locale = event.getRequestContext().getLocale() ;
       String categoryId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       String clientTime = event.getRequestContext().getRequestParameter(CURRENTTIME) ;
       java.util.Calendar cal = new GregorianCalendar() ;
@@ -196,6 +199,7 @@ public class UICalendars extends UIForm  {
       uiPopupContainer.setId(UIPopupContainer.UICALENDARPOPUP) ;
       UICalendarForm calendarForm = uiPopupContainer.addChild(UICalendarForm.class, null, null) ;
       calendarForm.setTimeZone(timeZone.getID()) ;
+      calendarForm.setLocale(locale.getISO3Country()) ;
       calendarForm.setSelectedGroup(categoryId) ;
       //popupAction.activate(uiPopupContainer, 600, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
