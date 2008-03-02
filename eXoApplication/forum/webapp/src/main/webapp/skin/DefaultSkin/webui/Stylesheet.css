@@ -249,8 +249,10 @@
 	background: #ededf7 ;
 }
 
-.UIForumPortlet .TextAreaMultil {
-	position: relative ;
+.UIForumPortlet .textAreaMultil {
+	font-size:11px;
+	height:70px;
+	width:232px;
 }
 
 .UIForumPortlet .TextAreaMultil .UIPopupCategory{
@@ -274,16 +276,6 @@
   width: 194px;
 }
 
-
-.UIForumPortlet .UIForm .HorizontalLayout .textareaMultil {
-	font-size:11px;
-	height:70px;
-	width:232px;
-}
-
-.UIForumPortlet .UIForumForm .HorizontalLayout .textareaMultil {
-	height:60px;
-}
 
 
 

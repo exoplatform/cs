@@ -11,7 +11,8 @@
 	List topics = uicomponent.getTopicsTag() ; 
 	Tag tag_ = uicomponent.getTagById() ;
 	String tagName = tag_.getName() ;
-	UserProfile option = uicomponent.getOption();
+	UserProfile userProfile = uicomponent.getUserProfile();
+	long setTime = (long)(userProfile.getTimeZone()*3600000) ;
 %>
 <div class="UIForumContainer">
 	<div class="UIForumDescription">
@@ -133,7 +134,8 @@
 									String topicBy = topic.getOwner();
 									String postNewBy = topic.getLastPostBy() ;
 									Date postDate = topic.getLastPostDate();
-									String lastPostDate = ForumFormatUtils.getFormatDate((option.getShortDateFormat() + ", " + option.getTimeFormat()),postDate);	
+									postDate.setTime(postDate.getTime() - setTime);
+									String lastPostDate = ForumFormatUtils.getFormatDate((userProfile.getShortDateFormat() + ", " + userProfile.getTimeFormat()),postDate);	
 									String titlePost = uicomponent.getStringCleanHtmlCode(topic.getDescription());
 									if(titlePost.length() > 100) {
 										titlePost = titlePost.substring(0, 99) + "...";

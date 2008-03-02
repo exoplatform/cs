@@ -48,15 +48,15 @@ public class UIFormTextAreaMultilInput extends UIFormTextAreaInput {
     w.append("<div style=\"float:left;\"><textarea class='textareaMultil' name='").append(getName()).
       append("' id='").append(getId()).append("'");
     if(readonly_) w.write(" readonly ");
-    w.write(" disabled ");
+   // w.write(" disabled ");
     if(rows > -1) w.append(" rows=\"").append(String.valueOf(rows)).append("\"");
     if(columns > -1) w.append(" cols=\"").append(String.valueOf(columns)).append("\"");
     w.write(">");
     if(value != null) w.write(value) ;  
     w.write("</textarea></div>");
-    w.write("<div <div style=\"float:left;\" class=\"Icon24x24 AddIcon16x16\" title=\"Add ");
-    w.write(getName()+"\" onclick=\"eXo.webui.UIPopupSelectCategory.show(this, event);\">");
-    w.write("<div class=\"TextAreaMultil\" id=\"Add"+ getName() +"\"><span></span></div></div>") ;
+    w.write("<a style=\"float:left;\" class=\"TextAreaMultil\" id=\"Add"+ getName() +"\">");
+    w.write("	<div class=\"Icon24x24 AddIcon16x16\"><span></span></div>" +
+    			  "</a>") ;
     w.write("<div style=\"clear: left;\"><span></span></div>") ;
   }
 

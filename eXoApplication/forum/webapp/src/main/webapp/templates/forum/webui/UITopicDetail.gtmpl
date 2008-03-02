@@ -19,7 +19,7 @@
 	Forum forum = uicomponent.getForum() ;
 	boolean isShowMenu = !ForumSessionUtils.isAnonim();
 	UserProfile userProfile = uicomponent.getUserProfile();
-	
+	long setTime = (long)(userProfile.getTimeZone()*3600000) ;
 	if(userProfile.getIsBanned()) {
 		isShowMenu = false ;
 	}
@@ -86,7 +86,7 @@
 			<div onclick="eXo.forum.UIForumPortlet.showPopup(this, event);" style="width: 20px; height: 16px;"><span></span></div>
 			<% /*Begin Popup Menu*/ %>
 			<div style="position: relative; ">
-				<div class="UIPopupCategory" style="display: none; ">
+				<div id="goPage1" class="UIPopupCategory" style="display: none; ">
 					<div class="UIRightClickPopupMenu" style="display: block; left: -70px;">
 						<div class="UIContextMenuContainer">
 							<div class="TopLeftRightClickPopupMenu">
@@ -349,15 +349,19 @@
 					classIconPost = "NormalTopicIcon" ;
 				String subject = post.getSubject() ;
 				Date createdPostDate = post.getCreatedDate() ;
+				createdPostDate.setTime(createdPostDate.getTime() - setTime);
 				String createdDate = ForumFormatUtils.getFormatDate((userProfile.getLongDateFormat() + ", " + userProfile.getTimeFormat()),createdPostDate);
 				String message = ForumFormatUtils.convertCodeHTML(post.getMessage()) ;
 				String editBy = post.getModifiedBy() ;
 				Date modifileDate = post.getModifiedDate() ;
+				modifileDate.setTime(modifileDate.getTime() - setTime);
 				String editDate = ForumFormatUtils.getFormatDate((userProfile.getLongDateFormat() + ", " + userProfile.getTimeFormat()),modifileDate);
 				List attachments = post.getAttachments() ;
 				String idMessage = "Id" + post.getId().substring(15);
 				User user = ForumSessionUtils.getUserByUserId(owner) ; 
-				String joinDate = ForumFormatUtils.getFormatDate("DDD yyyy",user.getCreatedDate()) ;
+				Date userCreated = user.getCreatedDate() ;
+				userCreated.setTime(userCreated.getTime() - setTime);
+				String joinDate = ForumFormatUtils.getFormatDate("DDD yyyy",userCreated) ;
 		%>
 
 		<div class="ContentContainer" id="<%=post.getId();%>" style="margin: 2px 0px 0px 0px;">
@@ -378,8 +382,10 @@
 								<div class="InfoMember">
 									<div>Join Date: $joinDate</div>
 									<% long totalPost = userInfo.getTotalPost();
-										if(totalPost > 0) { 
-											 String lastPostDateOfUser = ForumFormatUtils.getFormatDate((userProfile.getShortDateFormat() + ", " + userProfile.getTimeFormat()),userInfo.getLastPostDate()) ;
+										if(totalPost > 0) {
+											 Date lastPostOfUser = userInfo.getLastPostDate() ;
+											 lastPostOfUser.setTime(lastPostOfUser.getTime() - setTime);
+											 String lastPostDateOfUser = ForumFormatUtils.getFormatDate((userProfile.getShortDateFormat() + ", " + userProfile.getTimeFormat()),lastPostOfUser) ;
 									%>
 									<div>Posts: $totalPost</div>
 									<div>Last Post: $lastPostDateOfUser</div>
@@ -562,7 +568,7 @@
 			<div onclick="eXo.forum.UIForumPortlet.showPopup(this, event);" style="width: 20px; height: 16px;"><span></span></div>
 			<% /*Begin Popup Menu*/ %>
 			<div style="position: relative;">
-				<div class="UIPopupCategory" style="display: none; ">
+				<div id="goPage2" class="UIPopupCategory" style="display: none; ">
 					<div class="UIRightClickPopupMenu" style="display: block; left: -70px;">
 						<div class="UIContextMenuContainer">
 							<div class="TopLeftRightClickPopupMenu">

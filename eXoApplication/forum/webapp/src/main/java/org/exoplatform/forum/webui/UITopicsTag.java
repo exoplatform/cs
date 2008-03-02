@@ -82,7 +82,7 @@ public class UITopicsTag extends UIForm {
 		this.UserProfile  = this.getAncestorOfType(UIForumPortlet.class).getUserProfile() ;
   }
 	
-	private UserProfile getOption() {
+	private UserProfile getUserProfile() {
 		return UserProfile ;
 	}
 	
@@ -104,7 +104,7 @@ public class UITopicsTag extends UIForm {
   private long getMaxPagePost(String Id) throws Exception {
 		String Ids[] = Id.split("/") ;
 		JCRPageList pageListPost = this.forumService.getPosts(ForumSessionUtils.getSystemProvider(), Ids[(Ids.length - 3)], Ids[(Ids.length - 2)], Ids[(Ids.length - 1)])	; 
-		long maxPost = getOption().getMaxTopicInPage() ;
+		long maxPost = getUserProfile().getMaxTopicInPage() ;
 		if(maxPost > 0) this.maxPost = maxPost;
 		pageListPost.setPageSize(this.maxPost) ;
 		this.mapPostPage.put(Ids[(Ids.length - 1)], pageListPost) ; 

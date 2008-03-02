@@ -1149,6 +1149,7 @@ public class JCRDataStorage{
   			userProfile.setUserRole((long)0) ;
   			userProfile.setUserTitle("Administrator") ;
   		} else userProfile.setUserTitle("User") ;
+  		saveUserProfile(sProvider, userProfile, false, false);
 			return userProfile ;
 		}
   }

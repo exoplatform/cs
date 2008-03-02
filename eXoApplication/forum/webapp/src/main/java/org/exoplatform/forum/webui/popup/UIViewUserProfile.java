@@ -16,6 +16,7 @@
  ***************************************************************************/
 package org.exoplatform.forum.webui.popup;
 
+import org.exoplatform.contact.service.Contact;
 import org.exoplatform.forum.ForumSessionUtils;
 import org.exoplatform.forum.service.UserProfile;
 import org.exoplatform.services.organization.User;
@@ -26,8 +27,6 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
-
-import org.exoplatform.contact.service.Contact;
 
 /**
  * Created by The eXo Platform SARL

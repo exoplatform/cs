@@ -178,8 +178,8 @@ UIForumPortlet.prototype.overVote = function(event) {
 
 
 UIForumPortlet.prototype.showPopup = function(elevent,e) {
-	document.getElementById("gopage1").onclick = eXo.forum.UIForumPortlet.cancel ;
-	document.getElementById("gopage2").onclick = eXo.forum.UIForumPortlet.cancel ;
+	document.getElementById("goPage1").onclick = eXo.forum.UIForumPortlet.cancel ;
+	document.getElementById("goPage2").onclick = eXo.forum.UIForumPortlet.cancel ;
 	if(!e) e = window.event ;
 		e.cancelBubble = true ;
 	var parend = eXo.core.DOMUtil.findAncestorByClass(elevent, "GotoPageIcon") ;
@@ -215,7 +215,6 @@ UIForumPortlet.prototype.setEnableInput = function() {
 	if(parend) {
 		var obj = eXo.core.DOMUtil.findFirstDescendantByClass(parend, "input", "checkbox") ;
 		if(obj) {
-			document.getElementById("ForumUserName").disabled = "disabled" ;
 			document.getElementById("BanCounter").disabled = "disabled" ;
 			document.getElementById("BanReasonSummary").disabled = "disabled" ;
 			document.getElementById("CreatedDateBan").disabled = "disabled" ;
@@ -242,52 +241,22 @@ UIForumPortlet.prototype.setMenuTextAreaMutil = function(ParendId) {
 	var ancestor = document.getElementById(ParendId) ;
 	if(ancestor) {
 		var DOMUtil = eXo.core.DOMUtil ;
-		var childrens = DOMUtil.findDescendantsByClass(ancestor, "div", "TextAreaMultil") ;
-		var parendOldMenu = document.getElementById("PopupMenuTextAreaMulil") ;
-		var oldPopupMenu = DOMUtil.findDescendantsByClass(parendOldMenu, "div", "ChildPopupMenu") ;
-		var textAreas = DOMUtil.findDescendantsByClass(ancestor, "textarea", "textareaMultil") ;
+		var childrens = DOMUtil.findDescendantsByClass(ancestor, "a", "TextAreaMultil") ;
+		var parendOldAction = document.getElementById("ActionsTextAreaMulil") ;
+		var oldActions = DOMUtil.findDescendantsByClass(parendOldAction, "a", "ChildAction") ;
 		for(var i=0; i < childrens.length; ++i) {
-			if(oldPopupMenu.length > i) {
-				if(childrens[i].getAttribute('id') === oldPopupMenu[i].getAttribute('id')) {
-					childrens[i].innerHTML = oldPopupMenu[i].innerHTML ;
-					oldPopupMenu[i].innerHTML = "";
-					childrens[i].onclick = eXo.forum.UIForumPortlet.cancel ;
-					for(var j=0; j<textAreas.length; ++j){
-						if(childrens[i].getAttribute('id').indexOf(textAreas[j].getAttribute('id')) > 0) {
-							var inputs = childrens[i].getElementsByTagName("input");
-							for(var t=0;t<inputs.length;++t) {
-								if(textAreas[j].value.indexOf(inputs[t].name) > 0) {
-									inputs[t].checked = true ;
-								}
-							}
-							break ;
-						}
-					}
+			if(oldActions.length > i) {
+				if(childrens[i].getAttribute('id') === oldActions[i].getAttribute('id')) {
+					var href = oldActions[i].href ;
+					childrens[i].href =  href;
+					oldActions[i].innerHTML = "<span></span>";
 				}
 			}
 		}
 	}
 };
 
-UIForumPortlet.prototype.onclickAddMenuTextAreaMutil = function(obj, textAreaId) {
-	var DOMUtil = eXo.core.DOMUtil ;
-	var ancestor = DOMUtil.findAncestorByClass(obj, "ContentItems") ;
-	var inputs = ancestor.getElementsByTagName("input");
-	var itemIcons = DOMUtil.findDescendantsByClass(ancestor, "div", "ItemIcon") ;
-	var textArea = document.getElementById(textAreaId);
-	var textAreaValues = textArea.value ;
-	var values = textAreaValues.split(';');
-	var value = "";
-	textAreaValues = ""; 
-	for(var i=0; i < inputs.length; ++i) {
-		if(inputs[i].checked) {
-			value = itemIcons[i].innerHTML + "(" + inputs[i].name + ");" + '\n';
-			textAreaValues = textAreaValues + value ;
-		} 
-	}
-	textArea.value = textAreaValues ;
-	DOMUtil.findAncestorByClass(ancestor, "UIPopupCategory").style.display = "none" ;
-};
+
 
 
 

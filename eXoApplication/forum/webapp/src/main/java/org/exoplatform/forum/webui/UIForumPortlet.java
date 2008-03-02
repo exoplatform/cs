@@ -100,7 +100,12 @@ public class UIForumPortlet extends UIPortletApplication {
   }
   @SuppressWarnings("deprecation")
 	public void setUserProfile() throws Exception {
-  	String userId = ForumSessionUtils.getCurrentUser() ;
+  	String userId = "" ;
+  	try {
+  		userId = ForumSessionUtils.getCurrentUser() ;
+    } catch (Exception e) {
+    	e.printStackTrace() ;
+    }
   	this.userProfile = forumService.getUserProfile(ForumSessionUtils.getSystemProvider(), userId, true, false) ;
     this.isJumpRendered = this.userProfile.getIsShowForumJump() ;
   }

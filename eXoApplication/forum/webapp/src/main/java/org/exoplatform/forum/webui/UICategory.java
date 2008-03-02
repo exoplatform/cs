@@ -30,6 +30,7 @@ import org.exoplatform.forum.webui.popup.UICategoryForm;
 import org.exoplatform.forum.webui.popup.UIForumForm;
 import org.exoplatform.forum.webui.popup.UIMoveForumForm;
 import org.exoplatform.forum.webui.popup.UIPopupAction;
+import org.exoplatform.forum.webui.popup.UIPopupContainer;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -153,9 +154,11 @@ public class UICategory extends UIForm	{
 			UICategory uiCategory = event.getSource() ;			
 			UIForumPortlet forumPortlet = uiCategory.getAncestorOfType(UIForumPortlet.class) ;
 			UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
-			UICategoryForm categoryForm = popupAction.createUIComponent(UICategoryForm.class, null, null) ;
+			UIPopupContainer popupContainer = popupAction.createUIComponent(UIPopupContainer.class, null, null) ;
+			UICategoryForm categoryForm = popupContainer.addChild(UICategoryForm.class, null, null) ;
 			categoryForm.setCategoryValue(uiCategory.getCategory(), true) ;
-			popupAction.activate(categoryForm, 600, 300) ;
+			popupContainer.setId("EditCategoryForm") ;
+			popupAction.activate(popupContainer, 500, 340) ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
 			uiCategory.isEditCategory = true ;
 		}
@@ -178,12 +181,15 @@ public class UICategory extends UIForm	{
 	
 	static public class AddForumActionListener extends EventListener<UICategory> {
     public void execute(Event<UICategory> event) throws Exception {
-			UICategory uiCategory = event.getSource() ;			
+			UICategory uiCategory = event.getSource() ;
 			UIForumPortlet forumPortlet = uiCategory.getAncestorOfType(UIForumPortlet.class) ;
 			UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
-			UIForumForm forumForm = popupAction.createUIComponent(UIForumForm.class, null, null) ;
+			UIPopupContainer popupContainer = popupAction.createUIComponent(UIPopupContainer.class, null, null) ;
+			UIForumForm forumForm = popupContainer.addChild(UIForumForm.class, null, null) ;
 			forumForm.setCategoryValue(uiCategory.categoryId, false) ;
-			popupAction.activate(forumForm, 650, 450) ;
+			forumForm.setForumUpdate(false) ;
+			popupContainer.setId("AddNewForumForm") ;
+			popupAction.activate(popupContainer, 650, 450) ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
 			uiCategory.isEditForum = true ; 
 		}
@@ -205,11 +211,13 @@ public class UICategory extends UIForm	{
 			if(forum != null) {
 				UIForumPortlet forumPortlet = uiCategory.getAncestorOfType(UIForumPortlet.class) ;
 				UIPopupAction popupAction = forumPortlet.getChild(UIPopupAction.class) ;
-				UIForumForm forumForm = popupAction.createUIComponent(UIForumForm.class, null, null) ;
+				UIPopupContainer popupContainer = popupAction.createUIComponent(UIPopupContainer.class, null, null) ;
+				UIForumForm forumForm = popupContainer.addChild(UIForumForm.class, null, null) ;
 				forumForm.setCategoryValue(uiCategory.categoryId, false) ;
 				forumForm.setForumValue(forum, true);
-				forumForm.setForumUpdate(false);
-				popupAction.activate(forumForm, 662, 466) ;
+				forumForm.setForumUpdate(false) ;
+				popupContainer.setId("EditForumForm") ;
+				popupAction.activate(popupContainer, 650, 450) ;
 				event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
 				uiCategory.isEditForum = true ;
 			} else {

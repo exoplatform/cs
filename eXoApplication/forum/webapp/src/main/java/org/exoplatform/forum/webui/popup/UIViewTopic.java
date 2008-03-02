@@ -47,7 +47,7 @@ public class UIViewTopic extends UIForm implements UIPopupComponent {
 	}
 	
 	@SuppressWarnings("unused")
-  private UserProfile getOption() {
+  private UserProfile getUserProfile() {
 		return this.getAncestorOfType(UIForumPortlet.class).getUserProfile() ;
 	}
 	

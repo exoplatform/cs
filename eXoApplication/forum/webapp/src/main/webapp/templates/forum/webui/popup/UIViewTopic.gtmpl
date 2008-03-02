@@ -9,8 +9,8 @@
 		 String title = post.getSubject();	
 		 String messager = ForumFormatUtils.convertCodeHTML(post.getMessage());
 		 String classIcon = post.getIcon() ;
-		 UserProfile option = uicomponent.getOption();
-		 String postCreatedDate = ForumFormatUtils.getFormatDate((option.getLongDateFormat() + ", " + option.getTimeFormat()),post.getCreatedDate());	
+		 UserProfile userProfile = uicomponent.getUserProfile();
+		 String postCreatedDate = ForumFormatUtils.getFormatDate((userProfile.getLongDateFormat() + ", " + userProfile.getTimeFormat()),post.getCreatedDate());	
 		 List attachments = post.getAttachments() ;
 	%>
 	<div class="ViewContainer">

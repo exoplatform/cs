@@ -16,7 +16,6 @@
  ***************************************************************************/
 package org.exoplatform.forum.webui;
 
-import org.exoplatform.forum.service.UserProfile;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
 

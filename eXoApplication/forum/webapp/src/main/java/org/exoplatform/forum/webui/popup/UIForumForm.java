@@ -60,10 +60,11 @@ import org.exoplatform.webui.form.validator.PositiveNumberFormatValidator;
 		template = "app:/templates/forum/webui/popup/UIForumForm.gtmpl",
 		events = {
 			@EventConfig(listeners = UIForumForm.SaveActionListener.class), 
+			@EventConfig(listeners = UIForumForm.AddValuesUserActionListener.class, phase=Phase.DECODE),
 			@EventConfig(listeners = UIForumForm.CancelActionListener.class, phase=Phase.DECODE)
 		}
 )
-public class UIForumForm extends UIForm implements UIPopupComponent {
+public class UIForumForm extends UIForm implements UIPopupComponent, UISelector {
 	private ForumService forumService =	(ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
 	private boolean isCategoriesUpdate = true;
 	private boolean isForumUpdate = false;
@@ -186,9 +187,9 @@ public class UIForumForm extends UIForm implements UIPopupComponent {
 			
 			UIFormInputWithActions forumPermission = this.getChildById(FIELD_FORUMPERMISSION_FORM);
 			forumPermission.getUIFormTextAreaInput(FIELD_MODERATOR_MULTIVALUE).setValue(unSplitForForum(forum.getModerators()));
+			forumPermission.getUIFormTextAreaInput(FIELD_VIEWER_MULTIVALUE).setValue(unSplitForForum(forum.getViewForumRole()));
 			forumPermission.getUIFormTextAreaInput(FIELD_TOPICABLE_MULTIVALUE).setValue(unSplitForForum(forum.getCreateTopicRole()));
 			forumPermission.getUIFormTextAreaInput(FIELD_POSTABLE_MULTIVALUE).setValue(unSplitForForum(forum.getReplyTopicRole()));
-			forumPermission.getUIFormTextAreaInput(FIELD_VIEWER_MULTIVALUE).setValue(unSplitForForum(forum.getViewForumRole()));
 		}
 	}
 	
@@ -201,6 +202,20 @@ public class UIForumForm extends UIForm implements UIPopupComponent {
 	public void setForumUpdate(boolean isForumUpdate) {
 		this.isForumUpdate = isForumUpdate ;
 	}
+	
+	@SuppressWarnings("unused")
+  private String [] getChildIds() {return new String[] {FIELD_MODERATOR_MULTIVALUE,FIELD_VIEWER_MULTIVALUE,FIELD_TOPICABLE_MULTIVALUE,FIELD_POSTABLE_MULTIVALUE} ;}
+	
+	public void updateSelect(String selectField, String value) throws Exception {
+    UIFormStringInput fieldInput = getUIStringInput(selectField) ;
+    String values = fieldInput.getValue() ;
+    if(values != null && values.length() > 0) {
+    	values = "," + value ;
+    } else {
+    	values = value ;
+    }
+    fieldInput.setValue(values) ;
+  }
 	
 	static	public class SaveActionListener extends EventListener<UIForumForm> {
     public void execute(Event<UIForumForm> event) throws Exception {
@@ -282,6 +297,22 @@ public class UIForumForm extends UIForm implements UIPopupComponent {
 				breadcumbs.setUpdataPath(categoryId + "/" + uiForm.forumId);
 				context.addUIComponentToUpdateByAjax(forumPortlet) ;
 			}
+		}
+	}
+	
+	static	public class AddValuesUserActionListener extends EventListener<UIForumForm> {
+    public void execute(Event<UIForumForm> event) throws Exception {
+    	UIForumForm forumForm = event.getSource() ;
+    	String childId = event.getRequestContext().getRequestParameter(OBJECTID)	;
+    	if(childId != null && childId.length() > 0) {
+				UIPopupContainer popupContainer = forumForm.getAncestorOfType(UIPopupContainer.class) ;
+				UIPopupAction popupAction = popupContainer.getChild(UIPopupAction.class).setRendered(true) ;
+				UIGroupSelector uiGroupSelector = popupAction.activate(UIGroupSelector.class, 500) ;
+	      uiGroupSelector.setType("0") ;
+	      uiGroupSelector.setSelectedGroups(null) ;
+	      uiGroupSelector.setComponent(forumForm, new String[]{childId}) ;
+	      event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
+    	}
 		}
 	}
 	

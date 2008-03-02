@@ -23,6 +23,8 @@ import java.util.List;
 import javax.jcr.PathNotFoundException;
 
 import org.exoplatform.commons.utils.PageList;
+import org.exoplatform.contact.service.Contact;
+import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
@@ -31,11 +33,8 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.OrganizationService;
-import org.exoplatform.services.organization.impl.GroupImpl;
 import org.exoplatform.services.organization.User;
-
-import org.exoplatform.contact.service.Contact;
-import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.services.organization.impl.GroupImpl;
 
 public class ForumSessionUtils {
   

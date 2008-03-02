@@ -77,6 +77,7 @@
 										String lastPostBy = "";
 										String dateTime = "";
 										String openLinkLastPost = "#";
+										long setTime = (long)(userProfile.getTimeZone()*3600000) ;
 										
 				 						Topic topicNewPost = uicomponent.getLastTopic(forum.getLastTopicPath());
 				 						if(topicNewPost != null) {
@@ -86,8 +87,9 @@
 											topicNewPostTitle = topicNewPost.getTopicName();
 											lastPostBy = topicNewPost.getLastPostBy();
 											Date postDate = topicNewPost.getLastPostDate();
+											postDate.setTime(postDate.getTime() - setTime);
 											dateTime = ForumFormatUtils.getFormatDate((userProfile.getShortDateFormat() + ", " + userProfile.getTimeFormat()),postDate);
-											long createdDate = topicNewPost.getLastPostDate().getTime();
+											long createdDate = topicNewPost.getLastPostDate().getTime() - setTime;
 											if((toDay-createdDate)/86400000 < 4){
 												classIconForum = "ForumNewPostIcon";
 												titleIconForum = "Forum Contains New Posts";
@@ -131,12 +133,10 @@
 										 	<td class="Tdbox">$topicCount</td>
 											<td class="Tdbox">$postCount</td>
 											<td >
-											<% for(forumModerator in forumModerators) { 
-													 String userModerator = forumModerator.substring(forumModerator.indexOf("(")+1, forumModerator.indexOf(")")) ;
-											%>
+											<% for(forumModerator in forumModerators) {%>
 												<div class="ModeratorContent">
 													<div class="EmoticonsIcon BigGrinIcon"><span></span></div>
-													<a href="#" class="Moderator">$userModerator</a>
+													<a href="#" class="Moderator">$forumModerator</a>
 													<div style="clear: left;"><span></span></div>
 												</div>
 											<% } %>

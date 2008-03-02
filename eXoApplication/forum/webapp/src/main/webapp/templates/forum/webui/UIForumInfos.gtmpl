@@ -26,9 +26,8 @@
 			  	<% boolean isMod = false ; 
 			  	for(moderator in moderators) {
 				  	isMod = true ; 
-				  	String userModerator = moderator.substring(moderator.indexOf("(")+1, moderator.indexOf(")")) ;
 			  	%>
-			  		<a href="#">$userModerator</a>,
+			  		<a href="#">$moderator</a>,
 			  	<% } 
 			  	if(!isMod){%>
 			  	<div>Not moderator</div>

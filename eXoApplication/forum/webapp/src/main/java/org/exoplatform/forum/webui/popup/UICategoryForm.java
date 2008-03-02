@@ -17,6 +17,8 @@
 package org.exoplatform.forum.webui.popup;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.forum.ForumSessionUtils;
@@ -53,17 +55,18 @@ import org.exoplatform.webui.form.validator.PositiveNumberFormatValidator;
 		template = "app:/templates/forum/webui/popup/UICategoryForm.gtmpl",
 		events = {
 			@EventConfig(listeners = UICategoryForm.SaveActionListener.class), 
+			@EventConfig(listeners = UICategoryForm.AddValuesPrivateCategoryActionListener.class, phase=Phase.DECODE),
 			@EventConfig(listeners = UICategoryForm.CancelActionListener.class, phase=Phase.DECODE)
 		}
 )
-public class UICategoryForm extends UIForm implements UIPopupComponent{
+public class UICategoryForm extends UIForm implements UIPopupComponent, UISelector{
 	private String categoryId = "";
 	public static final String FIELD_CATEGORYTITLE_INPUT = "CategoryTitle" ;
 	public static final String FIELD_CATEGORYORDER_INPUT = "CategoryOrder" ;
 	public static final String FIELD_DESCRIPTION_INPUT = "Description" ;
 	
 	public static final String FIELD_USERPRIVATE_MULTIVALUE = "UserPrivate" ;
-	
+	private Map<String, String> permission_ = new HashMap<String, String>() ;
 	public UICategoryForm() throws Exception {
 		UIFormStringInput categoryTitle = new UIFormStringInput(FIELD_CATEGORYTITLE_INPUT, FIELD_CATEGORYTITLE_INPUT, null);
 		categoryTitle.addValidator(EmptyNameValidator.class);
@@ -91,6 +94,17 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
 			getUIFormTextAreaInput(FIELD_USERPRIVATE_MULTIVALUE).setValue(category.getUserPrivate()) ;
 		}
 	}
+
+	public void updateSelect(String selectField, String value) throws Exception {
+    UIFormStringInput fieldInput = getUIStringInput(selectField) ;
+    permission_.put(value, value) ;
+    StringBuilder sb = new StringBuilder() ;
+    for(String s : permission_.values()) {
+      if(sb != null && sb.length() > 0) sb.append(',') ;
+      sb.append(s) ;
+    }
+    fieldInput.setValue(sb.toString()) ;
+  }
 	
 	static	public class SaveActionListener extends EventListener<UICategoryForm> {
     public void execute(Event<UICategoryForm> event) throws Exception {
@@ -132,8 +146,21 @@ public class UICategoryForm extends UIForm implements UIPopupComponent{
 		}
 	}
 	
-	static	public class CancelActionListener extends EventListener<UICategoryForm> {
+	static	public class AddValuesPrivateCategoryActionListener extends EventListener<UICategoryForm> {
     public void execute(Event<UICategoryForm> event) throws Exception {
+    	UICategoryForm categoryForm = event.getSource() ;
+			UIPopupContainer popupContainer = categoryForm.getAncestorOfType(UIPopupContainer.class) ;
+			UIPopupAction popupAction = popupContainer.getChild(UIPopupAction.class).setRendered(true) ;
+			UIGroupSelector uiGroupSelector = popupAction.activate(UIGroupSelector.class, 500) ;
+      uiGroupSelector.setType("0") ;
+      uiGroupSelector.setSelectedGroups(null) ;
+      uiGroupSelector.setComponent(categoryForm, new String[]{UICategoryForm.FIELD_USERPRIVATE_MULTIVALUE}) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
+		}
+	}
+
+	static	public class CancelActionListener extends EventListener<UICategoryForm> {
+		public void execute(Event<UICategoryForm> event) throws Exception {
 			UIForumPortlet forumPortlet = event.getSource().getAncestorOfType(UIForumPortlet.class) ;
 			forumPortlet.cancelAction() ;
 		}

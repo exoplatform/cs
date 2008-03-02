@@ -8,21 +8,25 @@
 	padding: 5px;
 }
 
-.UIForumForm .HorizontalLayout .NewForum {
+.UIForumForm .HorizontalLayout .newForum {
 	width: 400px;
 	padding: 15px 0px;
 }
 
-.UIForumForm .HorizontalLayout .NewForum textarea {
+.UIForumForm .HorizontalLayout .newForum textarea {
 	height: 100px;
 }
 
-.UIForumForm .HorizontalLayout .ModerationOptions  {
+.UIForumPortlet .UIForm .forumPermission .textareaMultil {
+	height: 46px;
+}
+
+.UIForumForm .HorizontalLayout .moderationOptions  {
 	width: 510px;
 	padding: 20px 0px 60px 0px;
 }
 
-.UIForumForm .HorizontalLayout .ModerationOptions textarea {
+.UIForumForm .HorizontalLayout .moderationOptions textarea {
 	width: 340px;
 	height: 40px;
 }

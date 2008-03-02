@@ -65,7 +65,7 @@ import org.exoplatform.webui.form.validator.PositiveNumberFormatValidator;
 			@EventConfig(listeners = UITopicContainer.AddTopicActionListener.class ),	
 			@EventConfig(listeners = UITopicContainer.OpenTopicActionListener.class ),
 			@EventConfig(listeners = UITopicContainer.OpenTopicsTagActionListener.class ),
-			@EventConfig(listeners = UITopicContainer.DisplayOptionActionListener.class ),//Menu Forum
+//			@EventConfig(listeners = UITopicContainer.DisplayOptionActionListener.class ),//Menu Forum
 			@EventConfig(listeners = UITopicContainer.EditForumActionListener.class ),	
 			@EventConfig(listeners = UITopicContainer.SetLockedForumActionListener.class),
 			@EventConfig(listeners = UITopicContainer.SetUnLockForumActionListener.class),
@@ -161,7 +161,7 @@ public class UITopicContainer extends UIForm implements UIPopupComponent {
 	
 	@SuppressWarnings("unused")
 	private String[] getActionMenuForum() throws Exception {
-		String []actions = {"DisplayOptions", "EditForum", "SetLockedForum", "SetUnLockForum", "SetOpenForum", "SetCloseForum", "MoveForum", "RemoveForum"};
+		String []actions = {"EditForum", "SetLockedForum", "SetUnLockForum", "SetOpenForum", "SetCloseForum", "MoveForum", "RemoveForum"};
 		return actions;
 	}
 
