@@ -140,24 +140,33 @@ public class JCRDataStorage{
     if (homeNode.hasNode(Utils.KEY_MAIL_SETTING)) settingNode = homeNode.getNode(Utils.KEY_MAIL_SETTING) ;
     MailSetting setting = new MailSetting();
     if (settingNode != null ){
-      if (settingNode.hasProperty(Utils.EXO_NUMBER_OF_CONVERSATION)) 
-        setting.setShowNumberMessage((settingNode.getProperty(Utils.EXO_NUMBER_OF_CONVERSATION).getLong()));
-      if (settingNode.hasProperty(Utils.EXO_PERIOD_CHECKMAIL_AUTO)) 
-        setting.setPeriodCheckMailAuto((settingNode.getProperty(Utils.EXO_PERIOD_CHECKMAIL_AUTO).getLong()));
-      if (settingNode.hasProperty(Utils.EXO_DEFAULT_ACCOUNT)) 
+      try {
+        setting.setNumberMsgPerPage((settingNode.getProperty(Utils.EXO_NUMBER_MSG_PER_PAGE).getLong()));
+      } catch(Exception e) { }
+      try {
+        setting.setPeriodCheckAuto((settingNode.getProperty(Utils.EXO_PERIOD_CHECKMAIL_AUTO).getLong()));
+      } catch(Exception e) { }
+      try {
         setting.setDefaultAccount((settingNode.getProperty(Utils.EXO_DEFAULT_ACCOUNT).getString()));
-      if (settingNode.hasProperty(Utils.EXO_EDITOR)) 
-        setting.setTypeOfEditor((settingNode.getProperty(Utils.EXO_EDITOR).getString()));
-      if (settingNode.hasProperty(Utils.EXO_FORMAT_WHEN_REPLYFORWARD)) 
-        setting.setFormatWhenReplyForward((settingNode.getProperty(Utils.EXO_FORMAT_WHEN_REPLYFORWARD).getString()));
-      if (settingNode.hasProperty(Utils.EXO_REPLY_MESSAGE_WITH)) 
-        setting.setReplyMessageWith((settingNode.getProperty(Utils.EXO_REPLY_MESSAGE_WITH).getString()));
-      if (settingNode.hasProperty(Utils.EXO_FORWARD_MESSAGE_WITH)) 
-        setting.setForwardMessageWith((settingNode.getProperty(Utils.EXO_FORWARD_MESSAGE_WITH).getString()));
-      if (settingNode.hasProperty(Utils.EXO_PREFIX_MESSAGE_WITH)) 
+      } catch(Exception e) {}
+      try {
+        setting.setUseWysiwyg(settingNode.getProperty(Utils.EXO_USE_WYSIWYG).getBoolean());
+      } catch(Exception e) { }
+      try {
+        setting.setFormatAsOriginal((settingNode.getProperty(Utils.EXO_FORMAT_AS_ORIGINAL).getBoolean()));
+      } catch(Exception e) { }
+      try {
+        setting.setReplyWithAttach(settingNode.getProperty(Utils.EXO_REPLY_WITH_ATTACH).getBoolean());
+      } catch(Exception e) { }
+      try {
+        setting.setForwardWithAtt(settingNode.getProperty(Utils.EXO_FORWARD_WITH_ATTACH).getBoolean());
+      } catch(Exception e) { }
+      try { 
         setting.setPrefixMessageWith((settingNode.getProperty(Utils.EXO_PREFIX_MESSAGE_WITH).getString()));
-      if (settingNode.hasProperty(Utils.EXO_SAVE_SENT_MESSAGE)) 
+      } catch(Exception e) { }
+      try { 
         setting.setSaveMessageInSent((settingNode.getProperty(Utils.EXO_SAVE_SENT_MESSAGE).getBoolean()));
+      } catch (Exception e) { }
     }
     return setting; 
   }
@@ -167,7 +176,7 @@ public class JCRDataStorage{
     filter.setAccountPath(homeMsg.getPath()) ;
     QueryManager qm = homeMsg.getSession().getWorkspace().getQueryManager();
     String queryString = filter.getStatement();
-    long pageSize = getMailSetting(sProvider, username).getShowNumberMessage();
+    long pageSize = getMailSetting(sProvider, username).getNumberMsgPerPage();
     Query query = qm.createQuery(queryString, Query.XPATH);
     QueryResult result = query.execute();    
     MessagePageList pageList = new MessagePageList(result.getNodes(), pageSize, queryString, true) ;
@@ -356,13 +365,13 @@ public class JCRDataStorage{
     }
    
     if (settingNode != null) {
-      settingNode.setProperty(Utils.EXO_NUMBER_OF_CONVERSATION, newSetting.getShowNumberMessage());
-      settingNode.setProperty(Utils.EXO_PERIOD_CHECKMAIL_AUTO, newSetting.getPeriodCheckMailAuto());
+      settingNode.setProperty(Utils.EXO_NUMBER_MSG_PER_PAGE, newSetting.getNumberMsgPerPage());
+      settingNode.setProperty(Utils.EXO_PERIOD_CHECKMAIL_AUTO, newSetting.getPeriodCheckAuto());
       settingNode.setProperty(Utils.EXO_DEFAULT_ACCOUNT, newSetting.getDefaultAccount());
-      settingNode.setProperty(Utils.EXO_FORMAT_WHEN_REPLYFORWARD, newSetting.getFormatWhenReplyForward());
-      settingNode.setProperty(Utils.EXO_EDITOR, newSetting.getTypeOfEditor());
-      settingNode.setProperty(Utils.EXO_REPLY_MESSAGE_WITH, newSetting.getReplyMessageWith());
-      settingNode.setProperty(Utils.EXO_FORWARD_MESSAGE_WITH, newSetting.getForwardMessageWith());
+      settingNode.setProperty(Utils.EXO_FORMAT_AS_ORIGINAL, newSetting.formatAsOriginal());
+      settingNode.setProperty(Utils.EXO_USE_WYSIWYG, newSetting.useWysiwyg());
+      settingNode.setProperty(Utils.EXO_REPLY_WITH_ATTACH, newSetting.replyWithAttach());
+      settingNode.setProperty(Utils.EXO_FORWARD_WITH_ATTACH, newSetting.forwardWithAtt());
       settingNode.setProperty(Utils.EXO_PREFIX_MESSAGE_WITH, newSetting.getPrefixMessageWith());
       settingNode.setProperty(Utils.EXO_SAVE_SENT_MESSAGE, newSetting.saveMessageInSent());
       // saves change

@@ -146,7 +146,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     inputSet.setActionField(FIELD_ATTACHMENTS, getUploadFileList()) ;
     addUIFormInput(inputSet) ;
     MailSetting mailSetting = mailSrv.getMailSetting(SessionsUtils.getSessionProvider(), username);
-    isVisualEditor = ((mailSetting.getTypeOfEditor().equals(MailSetting.WYSIWYG)) ? true : false );
+    isVisualEditor = mailSetting.useWysiwyg() ;
     if (isVisualEditor) {
       addUIFormInput(new UIFormWYSIWYGInput(FIELD_MESSAGECONTENT, null, null, true));    
     } else {
@@ -228,12 +228,11 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           }
           break;
         case MESSAGE_REPLY :
-          String replyWithAtt = mailSetting.getReplyMessageWith();
           setFieldToValue(msg.getReplyTo());
           setFieldSubjectValue("Re: " + msg.getSubject());
           String content = getReplyContent(msg);   
           setFieldContentValue(content);
-          if (replyWithAtt.equals(MailSetting.REPLY_WITH_ATTACH)) {
+          if (mailSetting.replyWithAttach()) {
             for (Attachment att : msg.getAttachments()) {
               attachments_.add(att);
               refreshUploadFileList();
@@ -241,7 +240,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           }
           break ;
         case MESSAGE_REPLY_ALL :
-          replyWithAtt = mailSetting.getReplyMessageWith();
           setFieldSubjectValue("Re: " + msg.getSubject());
           String replyAll = msg.getReplyTo();
           if (msg.getMessageCc() != null) replyAll += "," + msg.getMessageCc();
@@ -249,7 +247,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           setFieldToValue(replyAll);
           String replyContent = getReplyContent(msg);
           setFieldContentValue(replyContent);
-          if (replyWithAtt.equals(MailSetting.REPLY_WITH_ATTACH)) {
+          if (mailSetting.replyWithAttach()) {
             for (Attachment att : msg.getAttachments()) {
               attachments_.add(att);
               refreshUploadFileList();
@@ -257,7 +255,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           }
           break;
         case MESSAGE_FOWARD : 
-          String forwardWithAtt = mailSetting.getForwardMessageWith();
           setFieldSubjectValue("Fwd: " + msg.getSubject());
           String forwardedText = "<br><br>-------- Original Message --------<br>" +
               "Subject: " + msg.getSubject() + "<br>Date: " + msg.getSendDate() + 
@@ -266,7 +263,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
               "<br><br>" + msg.getMessageBody();         
           setFieldContentValue(forwardedText);
           setFieldToValue("");
-          if (forwardWithAtt.equals(MailSetting.FORWARD_WITH_ATTACH)) {
+          if (mailSetting.forwardWithAtt()) {
             for (Attachment att : msg.getAttachments()) {
               attachments_.add(att);
               refreshUploadFileList();

@@ -79,6 +79,7 @@ public class UITagContainer extends UIComponent {
       uiMessageList.setMessageFilter(filter);
       uiMessageList.setSelectedTagId(tagId);
       uiMessageList.setSelectedFolderId(null);
+      uiPortlet.findFirstComponentOfType(UIFolderContainer.class).setSelectedFolder(null);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTags);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }

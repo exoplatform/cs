@@ -216,8 +216,8 @@ public class UIActionBar extends UIContainer {
             "&gt;", acc.getId());
         options.add(itemOption) ;
       }
-      uiMailSetting.fillFormAccount(options);
-      uiMailSetting.fillAllField(mailSetting);
+      //uiMailSetting.fillFormAccount(options);
+      //uiMailSetting.fillAllField(mailSetting);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }

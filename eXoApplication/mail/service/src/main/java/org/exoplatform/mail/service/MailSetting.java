@@ -30,67 +30,60 @@ public class MailSetting {
   public static long THIRTY_MINS = 30;
   public static long ONE_HOUR = 60;
   
-  public static String WYSIWYG = "wysiwyg";
-  public static String PLAIN_TEXT = "plaintext";
+  public static boolean USE_WYSIWYG = true;
   
-  public static String FORMAT_AS_ORIGINAL = "original";
-  public static String FORMAT_AS_TEXTONLY = "textonly";
+  public static boolean FORMAT_AS_ORIGINAL = true ;
   
-  public static String REPLY_AS_ORIGINAL = "original";
-  public static String REPLY_WITH_ATTACH = "attach";
+  public static boolean REPLY_WITH_ATTACH = true ;
   
-  public static String FORWARD_AS_ORIGINAL = "original";
-  public static String FORWARD_WITH_ATTACH = "attach";
+  public static boolean FORWARD_WITH_ATTACH = true ;
   
   public static String PREFIX_WITH_MINUS = "minus";
   public static String PREFIX_WITH_STAR = "star";
   public static String PREFIX_WITH_EQUAL = "equal";
   public static String PREFIX_WITH_QUOTE = "quote";
   
-  private long showNumberOfConversation;  
-  private String formatWhenReplyForward;
-  private String replyMessageWith;
-  private String forwardMessageWith;
-  private String prefixMessageWith;
-  private long periodCheckMailAuto;
+  private long numberMsgPerPage;  
+  private boolean formatAsOriginal;
+  private boolean replyWithAtt;
+  private boolean forwardWithAtt;
+  private String prefixMsgWith;
+  private long periodCheckAuto;
   private String defaultAccount;
-  private String editor; 
-  private boolean saveMessageInSent_ = true;
+  private boolean useWysiwyg ; 
+  private boolean saveMsgInSent = true;
   
   public MailSetting() {
-    showNumberOfConversation = 20;
-    formatWhenReplyForward = FORMAT_AS_ORIGINAL;
-    replyMessageWith = REPLY_AS_ORIGINAL;
-    forwardMessageWith = FORWARD_AS_ORIGINAL;
-    periodCheckMailAuto = NEVER_CHECK_AUTO;
-    editor = WYSIWYG;
-    prefixMessageWith = PREFIX_WITH_MINUS;
+    numberMsgPerPage = 20;
+    periodCheckAuto = NEVER_CHECK_AUTO;
+    useWysiwyg = true;
+    prefixMsgWith = PREFIX_WITH_MINUS;
   }
   
-  public long getShowNumberMessage() { return showNumberOfConversation; }
-  public void setShowNumberMessage(long number) { showNumberOfConversation = number; }
+  public long getNumberMsgPerPage() { return numberMsgPerPage; }
+  public void setNumberMsgPerPage(long number) { numberMsgPerPage = number; }
   
-  public long getPeriodCheckMailAuto() { return periodCheckMailAuto; }
-  public void setPeriodCheckMailAuto(long period) { periodCheckMailAuto = period; }
+  public long getPeriodCheckAuto() { return periodCheckAuto; }
+  public void setPeriodCheckAuto(long period) { periodCheckAuto = period; }
   
-  public String getTypeOfEditor() { return editor; }
-  public void setTypeOfEditor(String edit) { editor = edit; }
+  public boolean useWysiwyg() { return useWysiwyg; }
+  public void setUseWysiwyg(boolean b) { useWysiwyg = b; }
   
   public String getDefaultAccount(){ return defaultAccount; }
   public void setDefaultAccount(String account) { defaultAccount = account; }
   
-  public boolean saveMessageInSent() { return saveMessageInSent_; }
-  public void setSaveMessageInSent(boolean save) { saveMessageInSent_ = save; }
+  public boolean saveMessageInSent() { return saveMsgInSent; }
+  public void setSaveMessageInSent(boolean save) { saveMsgInSent = save; }
   
-  public String getFormatWhenReplyForward(){ return formatWhenReplyForward; }
-  public void setFormatWhenReplyForward(String format) { formatWhenReplyForward = format; }
+  public boolean formatAsOriginal(){ return formatAsOriginal ; }
+  public void setFormatAsOriginal(boolean b) { formatAsOriginal = b; }
   
-  public String getReplyMessageWith() { return replyMessageWith; }
-  public void setReplyMessageWith(String reply) { replyMessageWith = reply; }
+  public boolean replyWithAttach() { return replyWithAtt; }
+  public void setReplyWithAttach(boolean b) { replyWithAtt = b; }
   
-  public String getForwardMessageWith() { return forwardMessageWith; }
-  public void setForwardMessageWith(String forward) { forwardMessageWith = forward; }
+  public boolean forwardWithAtt() { return forwardWithAtt ; }
+  public void setForwardWithAtt(boolean b) { forwardWithAtt = b; }
   
-  public String getPrefixMessageWith() { return prefixMessageWith; }
-  public void setPrefixMessageWith(String prefix) { prefixMessageWith = prefix; }
+  public String getPrefixMessageWith() { return prefixMsgWith; }
+  public void setPrefixMessageWith(String prefix) { prefixMsgWith = prefix; }
 }

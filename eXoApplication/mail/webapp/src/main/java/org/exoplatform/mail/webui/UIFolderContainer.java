@@ -149,19 +149,23 @@ public class UIFolderContainer extends UIContainer {
       String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ;  
       UIFolderContainer uiFolder = event.getSource() ;
       UIMailPortlet uiPortlet = uiFolder.getAncestorOfType(UIMailPortlet.class);
-      uiFolder.setSelectedFolder(folderId) ;
       UIMessageArea uiMsgArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class) ;
       UIMessageList uiMessageList = uiMsgArea.getChild(UIMessageList.class) ;
       UIMessagePreview uiMsgPreview = uiMsgArea.getChild(UIMessagePreview.class) ;
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      MessageFilter filter = new MessageFilter("Folder"); 
-      filter.setAccountId(accountId);
-      filter.setFolder(new String[] {folderId});
-      uiMessageList.setMessageFilter(filter);
-      uiMessageList.setSelectedFolderId(folderId);
-      uiMessageList.setSelectedTagId(null);
-      uiMessageList.init(accountId);
-      uiMsgPreview.setMessage(null);
+      if (uiFolder.getSelectedFolder() !=null  && uiFolder.getSelectedFolder().equals(folderId)) {
+        uiMessageList.updateList();
+      } else {
+        uiFolder.setSelectedFolder(folderId) ;
+        MessageFilter filter = new MessageFilter("Folder"); 
+        filter.setAccountId(accountId);
+        filter.setFolder(new String[] {folderId});
+        uiMessageList.setMessageFilter(filter);
+        uiMessageList.setSelectedFolderId(folderId);
+        uiMessageList.setSelectedTagId(null);
+        uiMessageList.init(accountId);
+        uiMsgPreview.setMessage(null);
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgArea) ;
     }

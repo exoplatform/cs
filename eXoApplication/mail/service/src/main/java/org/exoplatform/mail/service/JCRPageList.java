@@ -16,7 +16,9 @@
  */
 package org.exoplatform.mail.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.exoplatform.commons.exception.ExoMessageException;
 /**
@@ -31,7 +33,7 @@ abstract public class JCRPageList {
   protected long available_ = 0;
   protected long availablePage_  = 1;
   protected long currentPage_ = 1 ;
-  protected List<Message> currentListPage_ ;
+  protected Map<String, Message> currentListPage_ ;
   
   public JCRPageList(long pageSize) {
     pageSize_ = pageSize ;
@@ -52,7 +54,7 @@ abstract public class JCRPageList {
     if(currentListPage_ == null) {
       populateCurrentPage(currentPage_, username) ;
     }
-    return currentListPage_  ;
+    return new ArrayList<Message>(currentListPage_.values()) ;
   }
   
   abstract protected void populateCurrentPage(long page, String username) throws Exception   ;
@@ -60,7 +62,7 @@ abstract public class JCRPageList {
   public List<Message> getPage(long page, String username) throws Exception   {
     checkAndSetPage(page) ;
     populateCurrentPage(page, username) ;
-    return currentListPage_ ;
+    return new ArrayList<Message>(currentListPage_.values()) ;
   }
   
   abstract public List getAll() throws Exception  ;

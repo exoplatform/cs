@@ -131,15 +131,15 @@ public class Utils {
   
 
   public static final String EXO_MAIL_SETTING = "exo:mailSetting".intern();
-  public static final String EXO_NUMBER_OF_CONVERSATION = "exo:showNumberOfConversation".intern();
-  public static final String EXO_FORMAT_WHEN_REPLYFORWARD = "exo:formatWhenReplyForward".intern();
-  public static final String EXO_REPLY_MESSAGE_WITH = "exo:replyMessageWith".intern();
-  public static final String EXO_FORWARD_MESSAGE_WITH = "exo:forwardMessageWith".intern();
-  public static final String EXO_PREFIX_MESSAGE_WITH = "exo:prefixMessageWith".intern();
-  public static final String EXO_PERIOD_CHECKMAIL_AUTO = "exo:periodCheckMailAuto".intern();
+  public static final String EXO_NUMBER_MSG_PER_PAGE = "exo:numberMsgPerPage".intern();
+  public static final String EXO_FORMAT_AS_ORIGINAL = "exo:formatAsOriginal".intern();
+  public static final String EXO_REPLY_WITH_ATTACH = "exo:replyWithAttach".intern();
+  public static final String EXO_FORWARD_WITH_ATTACH = "exo:forwardWithAttach".intern();
+  public static final String EXO_PREFIX_MESSAGE_WITH = "exo:prefixMsgWith".intern();
+  public static final String EXO_PERIOD_CHECKMAIL_AUTO = "exo:periodCheckAuto".intern();
   public static final String EXO_DEFAULT_ACCOUNT = "exo:defaultAccount".intern();
-  public static final String EXO_EDITOR = "exo:editor".intern();
-  public static final String EXO_SAVE_SENT_MESSAGE = "exo:saveMessageInSent".intern();
+  public static final String EXO_USE_WYSIWYG = "exo:useWysiwyg".intern();
+  public static final String EXO_SAVE_SENT_MESSAGE = "exo:saveMsgInSent".intern();
   public static final String EXO_FILTER = "exo:filter".intern() ;
   public static final String EXO_PATH = "exo:path".intern();
   
