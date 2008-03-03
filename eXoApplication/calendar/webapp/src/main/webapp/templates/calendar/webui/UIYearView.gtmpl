@@ -1,12 +1,14 @@
 <%
 	import java.util.Map;
 	import java.util.Calendar;
+	import java.util.GregorianCalendar;
 	uiform.begin() ;
 	def rcontext = _ctx.getRequestContext() ;
 	rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.setSelected("'+uiform.id+'") ;') ;
  	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
 	int currentYear = uicomponent.getCurrentYear() ;
-	Calendar cal = uicomponent.getCurrentCalendar() ;
+	Calendar cal =  new GregorianCalendar() ;
+	cal.setTimeInMillis(uicomponent.getCurrentCalendar().getTimeInMillis()) ;
 	String linkDayNext = uicomponent.event(uicomponent.ACT_NEXT, String.valueOf(Calendar.YEAR)) ;
  	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS, String.valueOf(Calendar.YEAR)) ;
  	Map value = uicomponent.getValueMap() ;

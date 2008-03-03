@@ -123,7 +123,6 @@ public class UIListView extends UICalendarView {
     uiCategory.setOnChange("Onchange") ;
     UIListContainer uiContainer = getParent() ;
     UIPreview view = uiContainer.getChild(UIPreview.class) ;
-    System.out.println(getEvents().length);
     if(getEvents().length > 0) { 
       setSelectedEvent(getEvents()[0].getId()) ;  
       view.setEvent(getEvents()[0]) ;
