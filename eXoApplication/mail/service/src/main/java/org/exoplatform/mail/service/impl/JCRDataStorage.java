@@ -99,23 +99,41 @@ public class JCRDataStorage{
   public Account getAccount(Node accountNode) throws Exception{
     Account account = new Account();
     account.setId(accountNode.getProperty(Utils.EXO_ID).getString());
-    if (accountNode.hasProperty(Utils.EXO_LABEL)) account.setLabel(accountNode.getProperty(Utils.EXO_LABEL).getString());
-    if (accountNode.hasProperty(Utils.EXO_USERDISPLAYNAME)) account.setUserDisplayName(accountNode.getProperty(Utils.EXO_USERDISPLAYNAME).getString());
-    if (accountNode.hasProperty(Utils.EXO_EMAILADDRESS)) account.setEmailAddress(accountNode.getProperty(Utils.EXO_EMAILADDRESS).getString());
-    if (accountNode.hasProperty(Utils.EXO_REPLYEMAIL)) account.setEmailReplyAddress(accountNode.getProperty(Utils.EXO_REPLYEMAIL).getString());
-    if (accountNode.hasProperty(Utils.EXO_SIGNATURE)) account.setSignature(accountNode.getProperty(Utils.EXO_SIGNATURE).getString());
-    if (accountNode.hasProperty(Utils.EXO_DESCRIPTION)) account.setDescription(accountNode.getProperty(Utils.EXO_DESCRIPTION).getString());
-    if (accountNode.hasProperty(Utils.EXO_CHECKMAILAUTO)) account.setCheckedAuto(accountNode.getProperty(Utils.EXO_CHECKMAILAUTO).getBoolean());
-    if (accountNode.hasProperty(Utils.EXO_EMPTYTRASH)) account.setEmptyTrashWhenExit(accountNode.getProperty(Utils.EXO_EMPTYTRASH).getBoolean());
-    if (accountNode.hasProperty(Utils.EXO_PLACESIGNATURE)) account.setPlaceSignature(accountNode.getProperty(Utils.EXO_PLACESIGNATURE).getString());
-    if (accountNode.hasProperty(Utils.EXO_SERVERPROPERTIES)) {
+    try {
+      account.setLabel(accountNode.getProperty(Utils.EXO_LABEL).getString());
+    } catch(Exception e) { }
+    try {
+      account.setUserDisplayName(accountNode.getProperty(Utils.EXO_USERDISPLAYNAME).getString());
+    } catch(Exception e) { }
+    try {
+      account.setEmailAddress(accountNode.getProperty(Utils.EXO_EMAILADDRESS).getString());
+    } catch(Exception e) { }
+    try {
+      account.setEmailReplyAddress(accountNode.getProperty(Utils.EXO_REPLYEMAIL).getString());
+    } catch(Exception e) { }
+    try {
+      account.setSignature(accountNode.getProperty(Utils.EXO_SIGNATURE).getString());
+    } catch(Exception e) { }
+    try {
+      account.setDescription(accountNode.getProperty(Utils.EXO_DESCRIPTION).getString());
+    } catch(Exception e) { }
+    try {
+      account.setCheckedAuto(accountNode.getProperty(Utils.EXO_CHECKMAILAUTO).getBoolean());
+    } catch(Exception e) { }
+    try {
+      account.setEmptyTrashWhenExit(accountNode.getProperty(Utils.EXO_EMPTYTRASH).getBoolean());
+    } catch(Exception e) { }
+    try {
+      account.setPlaceSignature(accountNode.getProperty(Utils.EXO_PLACESIGNATURE).getString());
+    } catch(Exception e) { }
+    try {
       Value[] properties = accountNode.getProperty(Utils.EXO_SERVERPROPERTIES).getValues();
       for (int i=0; i<properties.length; i++) {
         String property = properties[i].getString();
         int index = property.indexOf('=');
         if (index != -1) account.setServerProperty(property.substring(0, index), property.substring(index+1));
       }
-    }
+    } catch(Exception e) { }
     return account ;
   }
   public Message getMessageById(SessionProvider sProvider, String username, String accountId, String msgId) throws Exception {
@@ -201,38 +219,66 @@ public class JCRDataStorage{
 
   public Message getMessage(Node messageNode) throws Exception {
     Message msg = new Message();
-    if (messageNode.hasProperty(Utils.EXO_ID)) msg.setId(messageNode.getProperty(Utils.EXO_ID).getString());
+    try {
+      msg.setId(messageNode.getProperty(Utils.EXO_ID).getString());
+    } catch(Exception e) { }
     msg.setPath(messageNode.getPath());
-    if (messageNode.hasProperty(Utils.EXO_ACCOUNT)) msg.setAccountId(messageNode.getProperty(Utils.EXO_ACCOUNT).getString()) ;
-    if (messageNode.hasProperty(Utils.EXO_FROM)) msg.setFrom(messageNode.getProperty(Utils.EXO_FROM).getString());
-    if (messageNode.hasProperty(Utils.EXO_TO)) msg.setMessageTo(messageNode.getProperty(Utils.EXO_TO).getString());
-    if (messageNode.hasProperty(Utils.EXO_SUBJECT)) msg.setSubject(messageNode.getProperty(Utils.EXO_SUBJECT).getString());
-    if (messageNode.hasProperty(Utils.EXO_CC)) msg.setMessageCc(messageNode.getProperty(Utils.EXO_CC).getString());
-    if (messageNode.hasProperty(Utils.EXO_BCC)) msg.setMessageBcc(messageNode.getProperty(Utils.EXO_BCC).getString());
-    if (messageNode.hasProperty(Utils.EXO_REPLYTO)) msg.setReplyTo(messageNode.getProperty(Utils.EXO_REPLYTO).getString());
-    if (messageNode.hasProperty(Utils.EXO_CONTENT_TYPE)) msg.setContentType(messageNode.getProperty(Utils.EXO_CONTENT_TYPE).getString());
-    if (messageNode.hasProperty(Utils.EXO_BODY)) msg.setMessageBody(messageNode.getProperty(Utils.EXO_BODY).getString());
-    if (messageNode.hasProperty(Utils.EXO_SIZE)) msg.setSize(messageNode.getProperty(Utils.EXO_SIZE).getLong());
-    if (messageNode.hasProperty(Utils.EXO_STAR)) msg.setHasStar(messageNode.getProperty(Utils.EXO_STAR).getBoolean());
-    if (messageNode.hasProperty(Utils.EXO_PRIORITY)) msg.setPriority(messageNode.getProperty(Utils.EXO_PRIORITY).getLong());
-    if (messageNode.hasProperty(Utils.EXO_ISUNREAD)) msg.setUnread(messageNode.getProperty(Utils.EXO_ISUNREAD).getBoolean());
+    try {
+      msg.setAccountId(messageNode.getProperty(Utils.EXO_ACCOUNT).getString()) ;
+    } catch(Exception e) { }
+    try {
+      msg.setFrom(messageNode.getProperty(Utils.EXO_FROM).getString());
+    } catch(Exception e) { }
+    try {
+      msg.setMessageTo(messageNode.getProperty(Utils.EXO_TO).getString());
+    } catch(Exception e) { }
+    try {
+      msg.setSubject(messageNode.getProperty(Utils.EXO_SUBJECT).getString());
+    } catch(Exception e) { }
+    try {
+      msg.setMessageCc(messageNode.getProperty(Utils.EXO_CC).getString());
+    } catch(Exception e) { }
+    try {
+      msg.setMessageBcc(messageNode.getProperty(Utils.EXO_BCC).getString());
+    } catch(Exception e) { }
+    try {
+      msg.setReplyTo(messageNode.getProperty(Utils.EXO_REPLYTO).getString());
+    } catch(Exception e) { }
+    try {
+      msg.setContentType(messageNode.getProperty(Utils.EXO_CONTENT_TYPE).getString());
+    } catch(Exception e) { }
+    try {
+      msg.setMessageBody(messageNode.getProperty(Utils.EXO_BODY).getString());
+    } catch(Exception e) { }
+    try {
+      msg.setSize(messageNode.getProperty(Utils.EXO_SIZE).getLong());
+    } catch(Exception e) { }
+    try {
+      msg.setHasStar(messageNode.getProperty(Utils.EXO_STAR).getBoolean());
+    } catch(Exception e) { }
+    try {
+      msg.setPriority(messageNode.getProperty(Utils.EXO_PRIORITY).getLong());
+    } catch(Exception e) { }
+    try {
+      msg.setUnread(messageNode.getProperty(Utils.EXO_ISUNREAD).getBoolean());
+    } catch(Exception e) { }
     
-    if (messageNode.hasProperty(Utils.EXO_TAGS)) {
+    try {
       Value[] propTags = messageNode.getProperty(Utils.EXO_TAGS).getValues();
       String[] tags = new String[propTags.length];
       for (int i = 0; i < propTags.length; i++) {
         tags[i] = propTags[i].getString();
       }
       msg.setTags(tags);
-    }
-    if (messageNode.hasProperty(Utils.EXO_FOLDERS)) {
+    } catch(Exception e) { }
+    try {
       Value[] propFolders = messageNode.getProperty(Utils.EXO_FOLDERS).getValues();
       String[] folders = new String[propFolders.length];
       for (int i = 0; i < propFolders.length; i++) {
         folders[i] = propFolders[i].getString();
       }
       msg.setFolders(folders);
-    }
+    } catch(Exception e) { }
     
     NodeIterator msgAttachmentIt = messageNode.getNodes();
     List<Attachment> attachments = new ArrayList<Attachment>();
@@ -244,7 +290,7 @@ public class JCRDataStorage{
         file.setMimeType(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_MIMETYPE).getString());
         file.setName(node.getName());
         file.setWorkspace(node.getSession().getWorkspace().getName()) ;
-        file.setSize(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_DATA).getStream().available());
+        file.setSize(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_DATA).getLength());
         //file.setInputStream(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_DATA).getStream());
         attachments.add(file);
       }
@@ -252,15 +298,15 @@ public class JCRDataStorage{
     msg.setAttachements(attachments);
     
     GregorianCalendar cal = new GregorianCalendar();
-    if (messageNode.hasProperty(Utils.EXO_RECEIVEDDATE)) {
+    try {
       cal.setTimeInMillis(messageNode.getProperty(Utils.EXO_RECEIVEDDATE).getLong());
       msg.setReceivedDate(cal.getTime());
-    }
+    } catch(Exception e) { }
 
-    if (messageNode.hasProperty(Utils.EXO_SENDDATE)) {
+    try {
       cal.setTimeInMillis(messageNode.getProperty(Utils.EXO_SENDDATE).getLong());
       msg.setSendDate(cal.getTime());
-    }
+    } catch(Exception e) { }
     return msg ;
   }
 
@@ -620,18 +666,42 @@ public class JCRDataStorage{
     while (iter.hasNext()){
       Node filterNode = (Node)iter.next() ;
       MessageFilter filter = new MessageFilter("");
-      if (filterNode.hasProperty(Utils.EXO_ID)) filter.setId((filterNode.getProperty(Utils.EXO_ID).getString())) ;
-      if (filterNode.hasProperty(Utils.EXO_NAME)) filter.setName(filterNode.getProperty(Utils.EXO_NAME).getString()) ;
-      if (filterNode.hasProperty(Utils.EXO_FROM)) filter.setFrom(filterNode.getProperty(Utils.EXO_FROM).getString());
-      if (filterNode.hasProperty(Utils.EXO_FROM_CONDITION)) filter.setFromCondition((int)(filterNode.getProperty(Utils.EXO_FROM_CONDITION).getLong()));
-      if (filterNode.hasProperty(Utils.EXO_TO)) filter.setTo(filterNode.getProperty(Utils.EXO_TO).getString());
-      if (filterNode.hasProperty(Utils.EXO_TO_CONDITION)) filter.setToCondition((int)(filterNode.getProperty(Utils.EXO_TO_CONDITION).getLong()));
-      if (filterNode.hasProperty(Utils.EXO_SUBJECT)) filter.setSubject(filterNode.getProperty(Utils.EXO_SUBJECT).getString());
-      if (filterNode.hasProperty(Utils.EXO_SUBJECT_CONDITION)) filter.setSubjectCondition((int)(filterNode.getProperty(Utils.EXO_SUBJECT_CONDITION).getLong()));
-      if (filterNode.hasProperty(Utils.EXO_BODY)) filter.setBody(filterNode.getProperty(Utils.EXO_BODY).getString());
-      if (filterNode.hasProperty(Utils.EXO_BODY_CONDITION)) filter.setBodyCondition((int)(filterNode.getProperty(Utils.EXO_BODY_CONDITION).getLong()));
-      if (filterNode.hasProperty(Utils.EXO_APPLY_FOLDER)) filter.setApplyFolder(filterNode.getProperty(Utils.EXO_APPLY_FOLDER).getString());
-      if (filterNode.hasProperty(Utils.EXO_APPLY_TAG)) filter.setApplyTag(filterNode.getProperty(Utils.EXO_APPLY_TAG).getString());
+      try {
+        filter.setId((filterNode.getProperty(Utils.EXO_ID).getString())) ;
+      } catch(Exception e) { }
+      try {
+        filter.setName(filterNode.getProperty(Utils.EXO_NAME).getString()) ;
+      } catch(Exception e) { }
+      try {
+        filter.setFrom(filterNode.getProperty(Utils.EXO_FROM).getString());
+      } catch(Exception e) { }
+      try {
+        filter.setFromCondition((int)(filterNode.getProperty(Utils.EXO_FROM_CONDITION).getLong()));
+      } catch(Exception e) { }
+      try {
+        filter.setTo(filterNode.getProperty(Utils.EXO_TO).getString());
+      } catch(Exception e) { }
+      try {
+        filter.setToCondition((int)(filterNode.getProperty(Utils.EXO_TO_CONDITION).getLong()));
+      } catch(Exception e) { }
+      try {
+        filter.setSubject(filterNode.getProperty(Utils.EXO_SUBJECT).getString());
+      } catch(Exception e) { }
+      try {
+        filter.setSubjectCondition((int)(filterNode.getProperty(Utils.EXO_SUBJECT_CONDITION).getLong()));
+      } catch(Exception e) { }
+      try {
+        filter.setBody(filterNode.getProperty(Utils.EXO_BODY).getString());
+      } catch(Exception e) { }
+      try {
+        filter.setBodyCondition((int)(filterNode.getProperty(Utils.EXO_BODY_CONDITION).getLong()));
+      } catch(Exception e) { }
+      try {
+        filter.setApplyFolder(filterNode.getProperty(Utils.EXO_APPLY_FOLDER).getString());
+      } catch(Exception e) { }
+      try {
+        filter.setApplyTag(filterNode.getProperty(Utils.EXO_APPLY_TAG).getString());
+      } catch(Exception e) { }
       //if (filterNode.hasProperty(Utils.EXO_KEEP_IN_INBOX)) filter.setKeepInInbox(filterNode.getProperty(Utils.EXO_KEEP_IN_INBOX).getBoolean());
       filterList.add(filter);
     }
@@ -643,18 +713,42 @@ public class JCRDataStorage{
     MessageFilter filter = new MessageFilter("");
     if (filterHomeNode.hasNode(filterId)) {
       Node filterNode = filterHomeNode.getNode(filterId);
-      if (filterNode.hasProperty(Utils.EXO_ID)) filter.setId((filterNode.getProperty(Utils.EXO_ID).getString())) ;
-      if (filterNode.hasProperty(Utils.EXO_NAME)) filter.setName(filterNode.getProperty(Utils.EXO_NAME).getString()) ;
-      if (filterNode.hasProperty(Utils.EXO_FROM)) filter.setFrom(filterNode.getProperty(Utils.EXO_FROM).getString());
-      if (filterNode.hasProperty(Utils.EXO_FROM_CONDITION)) filter.setFromCondition((int)(filterNode.getProperty(Utils.EXO_FROM_CONDITION).getLong()));
-      if (filterNode.hasProperty(Utils.EXO_TO)) filter.setTo(filterNode.getProperty(Utils.EXO_TO).getString());
-      if (filterNode.hasProperty(Utils.EXO_TO_CONDITION)) filter.setToCondition((int)(filterNode.getProperty(Utils.EXO_TO_CONDITION).getLong()));
-      if (filterNode.hasProperty(Utils.EXO_SUBJECT)) filter.setSubject(filterNode.getProperty(Utils.EXO_SUBJECT).getString());
-      if (filterNode.hasProperty(Utils.EXO_SUBJECT_CONDITION)) filter.setSubjectCondition((int)(filterNode.getProperty(Utils.EXO_SUBJECT_CONDITION).getLong()));
-      if (filterNode.hasProperty(Utils.EXO_BODY)) filter.setBody(filterNode.getProperty(Utils.EXO_BODY).getString());
-      if (filterNode.hasProperty(Utils.EXO_BODY_CONDITION)) filter.setBodyCondition((int)(filterNode.getProperty(Utils.EXO_BODY_CONDITION).getLong()));
-      if (filterNode.hasProperty(Utils.EXO_APPLY_FOLDER)) filter.setApplyFolder(filterNode.getProperty(Utils.EXO_APPLY_FOLDER).getString());
-      if (filterNode.hasProperty(Utils.EXO_APPLY_TAG)) filter.setApplyTag(filterNode.getProperty(Utils.EXO_APPLY_TAG).getString());
+      try {
+        filter.setId((filterNode.getProperty(Utils.EXO_ID).getString())) ;
+      } catch(Exception e) { }
+      try {
+        filter.setName(filterNode.getProperty(Utils.EXO_NAME).getString()) ;
+      } catch(Exception e) { }
+      try {
+        filter.setFrom(filterNode.getProperty(Utils.EXO_FROM).getString());
+      } catch(Exception e) { }
+      try {
+        filter.setFromCondition((int)(filterNode.getProperty(Utils.EXO_FROM_CONDITION).getLong()));
+      } catch(Exception e) { }
+      try {
+        filter.setTo(filterNode.getProperty(Utils.EXO_TO).getString());
+      } catch(Exception e) { }
+      try {
+        filter.setToCondition((int)(filterNode.getProperty(Utils.EXO_TO_CONDITION).getLong()));
+      } catch(Exception e) { }
+      try { 
+        filter.setSubject(filterNode.getProperty(Utils.EXO_SUBJECT).getString());
+      } catch(Exception e) { }
+      try {
+        filter.setSubjectCondition((int)(filterNode.getProperty(Utils.EXO_SUBJECT_CONDITION).getLong()));
+      } catch(Exception e) { }
+      try {
+        filter.setBody(filterNode.getProperty(Utils.EXO_BODY).getString());
+      } catch(Exception e) { }
+      try {
+        filter.setBodyCondition((int)(filterNode.getProperty(Utils.EXO_BODY_CONDITION).getLong()));
+      } catch(Exception e) { }
+      try {
+        filter.setApplyFolder(filterNode.getProperty(Utils.EXO_APPLY_FOLDER).getString());
+      } catch(Exception e) { }
+      try {
+        filter.setApplyTag(filterNode.getProperty(Utils.EXO_APPLY_TAG).getString());
+      } catch(Exception e) { }
       //if (filterNode.hasProperty(Utils.EXO_KEEP_IN_INBOX)) filter.setKeepInInbox(filterNode.getProperty(Utils.EXO_KEEP_IN_INBOX).getBoolean());
     }
     return filter ;
@@ -749,12 +843,12 @@ public class JCRDataStorage{
     for(Message message : messages) {
       Map<String, String> messageTagMap = new HashMap<String, String> () ;
       Node messageNode = (Node) mailHome.getSession().getItem(message.getPath()) ;
-      if(messageNode.hasProperty(Utils.EXO_TAGS)) {
+      try {
         Value[] values = messageNode.getProperty(Utils.EXO_TAGS).getValues() ;
         for(Value value : values) {
           messageTagMap.put(value.getString(), value.getString()) ;
         }
-      }
+      } catch(Exception e) { }
       messageTagMap.putAll(tagMap) ;
       messageNode.setProperty(Utils.EXO_TAGS, messageTagMap.values().toArray(new String[]{})) ;
       
@@ -801,7 +895,7 @@ public class JCRDataStorage{
     for (Message msg : messages) {
       try {
         Node msgNode = (Node) mailHome.getSession().getItem(msg.getPath());
-        if (msgNode.hasProperty(Utils.EXO_TAGS)) {
+        try {
           Value[] propTags = msgNode.getProperty(Utils.EXO_TAGS).getValues();
           String[] oldTagIds = new String[propTags.length];
           for (int i = 0; i < propTags.length; i++) {
@@ -812,7 +906,7 @@ public class JCRDataStorage{
           String[] newTagIds = tagList.toArray(new String[tagList.size()]);
           msgNode.setProperty(Utils.EXO_TAGS, newTagIds);
           msgNode.save();
-        }
+        } catch(Exception e) { }
       } catch(PathNotFoundException e) {}
     }
   }
@@ -882,14 +976,14 @@ public class JCRDataStorage{
     }
     SpamFilter spamFilter = new SpamFilter();
     if (spamFilterNode != null) {
-      if (spamFilterNode.hasProperty(Utils.EXO_FROMS)) {
+      try {
         Value[] propFroms = spamFilterNode.getProperty(Utils.EXO_FROMS).getValues();
         String[] froms = new String[propFroms.length];
         for (int i = 0; i < propFroms.length; i++) {
           froms[i] = propFroms[i].getString();
         }
         spamFilter.setSenders(froms);
-      }
+      } catch(Exception e) { }
     }
     return spamFilter ;
   }
