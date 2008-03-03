@@ -16,9 +16,6 @@
  */
 package org.exoplatform.mail.webui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.mail.AuthenticationFailedException;
 
 import org.exoplatform.calendar.service.CalendarService;
@@ -26,7 +23,6 @@ import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
-import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIAddressBookForm;
 import org.exoplatform.mail.webui.popup.UIComposeForm;
@@ -36,13 +32,11 @@ import org.exoplatform.mail.webui.popup.UIMailSettings;
 import org.exoplatform.mail.webui.popup.UIMessageFilter;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIContainer;
-import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
@@ -207,17 +201,7 @@ public class UIActionBar extends UIContainer {
       }
       UIPopupAction uiPopupAction = mailPortlet.getChild(UIPopupAction.class) ;
       UIMailSettings uiMailSetting = uiPopupAction.activate(UIMailSettings.class, 750) ;
-      MailService mailSrv = uiActionBar.getApplicationComponent(MailService.class);
-      String username = Util.getPortalRequestContext().getRemoteUser();
-      MailSetting mailSetting = mailSrv.getMailSetting(SessionsUtils.getSessionProvider(), username);
-      List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
-      for(Account acc : mailSrv.getAccounts(SessionsUtils.getSessionProvider(), username)) {
-        SelectItemOption<String> itemOption = new SelectItemOption<String>(acc.getUserDisplayName() + " &lt;" + acc.getEmailAddress() + 
-            "&gt;", acc.getId());
-        options.add(itemOption) ;
-      }
-      //uiMailSetting.fillFormAccount(options);
-      //uiMailSetting.fillAllField(mailSetting);
+      uiMailSetting.init() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
