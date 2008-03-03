@@ -79,7 +79,6 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
       for(String uName : userData_.keySet()) {
         for(Object gObj : orgService.getGroupHandler().findGroupsOfUser(uName)) {
           Group g = (Group)gObj ;
-          System.out.println("\n\n "+ groupId_+ " " + g.getId());
           if(groupId_.equals(g.getId())) users.add(userData_.get(uName)) ;
         }
       }
@@ -233,6 +232,7 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
       q.setLastName(keyword) ;
       results.addAll(service.getUserHandler().findUsers(q).getAll()) ;
       uiForm.userData_.clear() ;
+      uiForm.groupId_ = null ;
       for(Object o : results) {
         User u = (User)o ;
         uiForm.userData_.put(u.getUserName(), u) ;
@@ -245,13 +245,16 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
         if(uiForm.getUIFormCheckBoxInput(currentUsers) != null) 
           uiForm.getUIFormCheckBoxInput(currentUsers).setChecked(true) ;
       }
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
     }
   }
   static  public class ChangeActionListener extends EventListener<UISelectUserForm> {
     public void execute(Event<UISelectUserForm> event) throws Exception {
       UISelectUserForm uiForm = event.getSource() ;
       uiForm.setSelectedGroup(uiForm.getSelectedGroup()) ;
+      for(String s : uiForm.pars_) {
+        if(uiForm.getUIFormCheckBoxInput(s) != null) uiForm.getUIFormCheckBoxInput(s).setChecked(true) ;
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
     }
   }
