@@ -3,6 +3,10 @@
 	background:#ffffff;
 }
 
+.UIModeratorsManagementForm .UIForumPageIterator {
+	padding: 0px;
+}
+
 .UIModeratorsManagementForm .ModeratorsManagementContainer {
 	border: 1px solid #b7b7b7;
 }

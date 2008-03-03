@@ -81,6 +81,8 @@ public class ForumPageList extends JCRPageList {
 					currentListPage_.add(getPost(currentNode)) ;
 				}else if(currentNode.isNodeType("exo:topic")) {
 					currentListPage_.add(getTopic(currentNode)) ;
+				}else if(currentNode.isNodeType("exo:userProfile")) {
+					currentListPage_.add(getUserProfile(currentNode)) ;
 				}
 			}else {
 				break ;
@@ -101,6 +103,8 @@ public class ForumPageList extends JCRPageList {
 					listPageAll_.add(getPost(currentNode)) ;
 				}else if(currentNode.isNodeType("exo:topic")) {
 					listPageAll_.add(getTopic(currentNode)) ;
+				}else if(currentNode.isNodeType("exo:userProfile")) {
+					listPageAll_.add(getUserProfile(currentNode)) ;
 				}
 			}
 		}
@@ -200,6 +204,37 @@ public class ForumPageList extends JCRPageList {
 			}
 		}
 		return topicNew;
+	}
+	
+	private UserProfile getUserProfile(Node userProfileNode) throws Exception {
+		UserProfile userProfile = new UserProfile() ;
+		if(userProfileNode.hasProperty("exo:userId"))userProfile.setUserId(userProfileNode.getProperty("exo:userId").getString());
+		if(userProfileNode.hasProperty("exo:userTitle"))userProfile.setUserTitle(userProfileNode.getProperty("exo:userTitle").getString());
+		if(userProfileNode.hasProperty("exo:userRole"))userProfile.setUserRole(userProfileNode.getProperty("exo:userRole").getLong());
+		if(userProfileNode.hasProperty("exo:signature"))userProfile.setSignature(userProfileNode.getProperty("exo:signature").getString());
+		if(userProfileNode.hasProperty("exo:totalPost"))userProfile.setTotalPost(userProfileNode.getProperty("exo:totalPost").getLong());
+		if(userProfileNode.hasProperty("exo:totalTopic"))userProfile.setTotalTopic(userProfileNode.getProperty("exo:totalTopic").getLong());
+		if(userProfileNode.hasProperty("exo:moderateForums"))userProfile.setModerateForums(ValuesToStrings(userProfileNode.getProperty("exo:moderateForums").getValues()));
+		if(userProfileNode.hasProperty("exo:moderateTopics"))userProfile.setModerateTopics(ValuesToStrings(userProfileNode.getProperty("exo:moderateTopics").getValues()));
+		if(userProfileNode.hasProperty("exo:readTopic"))userProfile.setReadTopic(ValuesToStrings(userProfileNode.getProperty("exo:readTopic").getValues()));
+		if(userProfileNode.hasProperty("exo:lastLoginDate"))userProfile.setLastLoginDate(userProfileNode.getProperty("exo:lastLoginDate").getDate().getTime());
+		if(userProfileNode.hasProperty("exo:lastPostDate"))userProfile.setLastPostDate(userProfileNode.getProperty("exo:lastPostDate").getDate().getTime());
+		if(userProfileNode.hasProperty("exo:isDisplaySignature"))userProfile.setIsDisplaySignature(userProfileNode.getProperty("exo:isDisplaySignature").getBoolean());
+		if(userProfileNode.hasProperty("exo:isDisplayAvatar"))userProfile.setIsDisplaySignature(userProfileNode.getProperty("exo:isDisplayAvatar").getBoolean());
+		if(userProfileNode.hasProperty("exo:timeZone"))userProfile.setTimeZone(userProfileNode.getProperty("exo:timeZone").getDouble());
+		if(userProfileNode.hasProperty("exo:shortDateformat"))userProfile.setShortDateFormat(userProfileNode.getProperty("exo:shortDateformat").getString());
+		if(userProfileNode.hasProperty("exo:longDateformat"))userProfile.setLongDateFormat(userProfileNode.getProperty("exo:longDateformat").getString());
+		if(userProfileNode.hasProperty("exo:timeFormat"))userProfile.setTimeFormat(userProfileNode.getProperty("exo:timeFormat").getString());
+		if(userProfileNode.hasProperty("exo:maxPost"))userProfile.setMaxPostInPage(userProfileNode.getProperty("exo:maxPost").getLong());
+		if(userProfileNode.hasProperty("exo:maxTopic"))userProfile.setMaxTopicInPage(userProfileNode.getProperty("exo:maxTopic").getLong());
+		if(userProfileNode.hasProperty("exo:isShowForumJump"))userProfile.setIsShowForumJump(userProfileNode.getProperty("exo:isShowForumJump").getBoolean());
+		if(userProfileNode.hasProperty("exo:isBanned"))userProfile.setIsBanned(userProfileNode.getProperty("exo:isBanned").getBoolean());
+		if(userProfileNode.hasProperty("exo:banUntil"))userProfile.setBanUntil(userProfileNode.getProperty("exo:banUntil").getLong());
+		if(userProfileNode.hasProperty("exo:banReason"))userProfile.setBanReason(userProfileNode.getProperty("exo:banReason").getString());
+		if(userProfileNode.hasProperty("exo:banCounter"))userProfile.setBanCounter(Integer.parseInt(userProfileNode.getProperty("exo:banCounter").getString()));
+		if(userProfileNode.hasProperty("exo:banReasonSummary"))userProfile.setBanReasonSummary(ValuesToStrings(userProfileNode.getProperty("exo:banReasonSummary").getValues()));
+		if(userProfileNode.hasProperty("exo:createdDateBan"))userProfile.setCreatedDateBan(userProfileNode.getProperty("exo:createdDateBan").getDate().getTime());
+		return userProfile;
 	}
 	
 	private String [] ValuesToStrings(Value[] Val) throws Exception {

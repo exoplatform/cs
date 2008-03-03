@@ -1103,6 +1103,13 @@ public class JCRDataStorage{
 	
 	
 	//TODO: coding !
+	public JCRPageList getPageListUserProfile(SessionProvider sProvider) throws Exception {
+		Node userProfileNode = getUserProfileNode(sProvider) ;
+		NodeIterator iterator = userProfileNode.getNodes() ;
+		JCRPageList pageList = new ForumPageList(iterator, 10, "", false) ;
+		return pageList ;
+	}
+	
 	public UserProfile getUserProfile(SessionProvider sProvider, String userName, boolean isGetOption, boolean isGetBan) throws Exception {
 		UserProfile userProfile = new UserProfile();
 		if(userName == null || userName.length() <= 0) return userProfile ;

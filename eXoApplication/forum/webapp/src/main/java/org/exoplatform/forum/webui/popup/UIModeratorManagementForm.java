@@ -23,7 +23,9 @@ import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.forum.ForumSessionUtils;
 import org.exoplatform.forum.service.ForumService;
+import org.exoplatform.forum.service.JCRPageList;
 import org.exoplatform.forum.service.UserProfile;
+import org.exoplatform.forum.webui.UIForumPageIterator;
 import org.exoplatform.forum.webui.UIForumPortlet;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -52,50 +54,41 @@ import org.exoplatform.webui.form.UIForm;
 public class UIModeratorManagementForm extends UIForm implements UIPopupComponent {
 	private ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
 	private List<UserProfile> userProfiles = new ArrayList<UserProfile>();
+	private JCRPageList pageList ;
 	public UIModeratorManagementForm() throws Exception {
+		addChild(UIForumPageIterator.class, null, "ForumUserPageIterator") ;
   }
-  
 	
-  @SuppressWarnings("unchecked")
-  private List<User> getListUser() throws Exception {
-  	PageList pageList = ForumSessionUtils.getPageListUser() ;
-  	pageList.setPageSize(10);
-  	List<User> list = pageList.getPage(1) ;
-  	return list ;
-  }
-  
-  @SuppressWarnings("unused")
-  private void addUserInForum() throws Exception {
-  	List<User> listUser = getListUser() ;
-  	UserProfile userProfile ;
-  	for (User user : listUser) {
-	    userProfile = new UserProfile() ;
-	    userProfile.setUserId(user.getUserName());
-	    userProfile.setUserTitle("User");
-  		forumService.saveUserProfile(ForumSessionUtils.getSystemProvider(), userProfile, true, true);
-  		userProfile.setUser(user);
-    }
+  public JCRPageList setPageListUserProfile() throws Exception {
+  	this.pageList = this.forumService.getPageListUserProfile(ForumSessionUtils.getSystemProvider()) ;
+  	this.pageList.setPageSize(10);
+  	this.getChild(UIForumPageIterator.class).updatePageList(this.pageList) ;
+  	this.setListProFileUser() ;
+  	return this.pageList;
   }
   
   @SuppressWarnings("unused")
   private List<UserProfile> getListProFileUser() throws Exception {
-  	List<User> listUser = getListUser() ;
-  	this.userProfiles = new ArrayList<UserProfile>();
-  	for (User user : listUser) {
-  		UserProfile userProfile = new UserProfile() ;
-  		userProfile = forumService.getUserProfile(ForumSessionUtils.getSystemProvider(), user.getUserName(), true, true);
-  		userProfile.setLastLoginDate(user.getLastLoginTime());
-  		String userName = user.getUserName() ;
-  		userProfile.setUserId(userName) ;
-  		if(userName.equals("root")) userProfile.setUserRole((long)0);
-  		userProfile.setUser(user);
-  		if(userProfile.getUserRole() >= 2) {
-	  		userProfile.setUserRole((long)2);
-	  		userProfile.setUserTitle("User");
-  		}
-  		this.userProfiles.add(userProfile);
-    }
   	return this.userProfiles ;
+  }
+  
+  @SuppressWarnings("unchecked")
+  private void setListProFileUser() throws Exception {
+  	List<User> listUser = ForumSessionUtils.getAllUser() ;
+  	List<UserProfile> listUserProfile = new ArrayList<UserProfile>() ;
+  	this.userProfiles = new ArrayList<UserProfile>();
+  	long page = this.getChild(UIForumPageIterator.class).getPageSelected() ;
+  	listUserProfile = this.pageList.getPage(page) ;
+  	for (User user : listUser) {
+  		for (UserProfile userProfile : listUserProfile) {
+	      if(user.getUserName().equals(userProfile.getUserId())) {
+		  		userProfile.setUser(user);
+		  		userProfile.setLastLoginDate(user.getLastLoginTime());
+		  		this.userProfiles.add(userProfile);
+		  		break ;
+	      }
+      }
+    }
   }
   
   private UserProfile getUserProfile(String userId) throws Exception {

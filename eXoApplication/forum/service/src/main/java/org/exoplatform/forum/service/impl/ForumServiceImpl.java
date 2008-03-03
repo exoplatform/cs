@@ -207,4 +207,8 @@ public class ForumServiceImpl implements ForumService{
 	public UserProfile getUserInfo(SessionProvider sProvider, String userName) throws Exception {
 		return storage_.getUserInfo(sProvider, userName);
 	}
+
+	public JCRPageList getPageListUserProfile(SessionProvider sProvider)throws Exception {
+	  return storage_.getPageListUserProfile(sProvider);
+  }
 }

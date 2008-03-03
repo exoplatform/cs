@@ -4,7 +4,6 @@
   def rcontext = _ctx.getRequestContext() ;
   JavascriptManager jsmanager = rcontext.getJavascriptManager();
   jsmanager.addJavascript("eXo.forum.UIForumPortlet.setEnableInput();");
-  jsmanager.addJavascript("eXo.forum.UIForumPortlet.setMenuTextAreaMutil('UIUserProfileForm');");
 %>
 <div class="UIEditUserProfile UIForumForm">	
   <% uiform.begin() %>  

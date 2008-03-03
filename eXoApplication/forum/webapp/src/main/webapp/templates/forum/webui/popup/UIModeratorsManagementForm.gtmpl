@@ -1,8 +1,12 @@
-<%  
+<%
+	import org.exoplatform.forum.webui.UIForumPageIterator ;  
 	import org.exoplatform.forum.service.UserProfile;
 %>
 <div class="UIModeratorsManagementForm">
 	<% uiform.begin() %>
+	<div style="overflow:auto;">
+		<% uicomponent.renderChild(UIForumPageIterator.class) ; %>
+	</div>
   <div class="ModeratorsManagementContainer">
 		<div class="ManagementContent">	  	
 		 
@@ -45,6 +49,9 @@
 			</div>
 			 
 		</div>
+	</div>
+	<div style="overflow:auto;">
+		<% uicomponent.renderChild(UIForumPageIterator.class) ; %>
 	</div>
   <div class="UIAction"> 
 		<table class="ActionContainer" align="center">
