@@ -121,6 +121,19 @@ public class UIListView extends UICalendarView {
     UIFormSelectBox uiCategory = getUIFormSelectBox(EVENT_CATEGORIES) ;
     uiCategory.setValue(categoryId_) ;
     uiCategory.setOnChange("Onchange") ;
+    UIListContainer uiContainer = getParent() ;
+    UIPreview view = uiContainer.getChild(UIPreview.class) ;
+    System.out.println(getEvents().length);
+    if(getEvents().length > 0) { 
+      setSelectedEvent(getEvents()[0].getId()) ;  
+      view.setEvent(getEvents()[0]) ;
+      setLastUpdatedEventId(getEvents()[0].getId()) ;
+    } else {
+      setSelectedEvent(null) ;
+      view.setEvent(null) ;
+      setLastUpdatedEventId(null) ;
+    }
+    view.refresh() ;
   }
 
   public void update(EventPageList pageList) throws Exception {

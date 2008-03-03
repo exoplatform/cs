@@ -938,7 +938,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         uiMiniCalendar.setCurrentCalendar(calendarview.getCurrentCalendar()) ;
         uiMiniCalendar.updateMiniCal() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(calendarview) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
       } catch (Exception e) {
         e.printStackTrace() ;
         return ;
@@ -958,7 +958,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         uiMiniCalendar.setCurrentCalendar(calendarview.getCurrentCalendar()) ;
         uiMiniCalendar.updateMiniCal() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(calendarview) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
       } catch (Exception e) {
         e.printStackTrace() ;
         return ;
