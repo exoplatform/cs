@@ -201,21 +201,26 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
       options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE  + c.getName(), CalendarUtils.PRIVATE_TYPE + ":" + c.getId())) ;
     }
 
-    options.add(new SelectItemOption<String>("Shared Calendars", "")) ;
     GroupCalendarData gcd = calendarService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true);
+    if(gcd != null) {
+      options.add(new SelectItemOption<String>("Shared Calendars", "")) ;
       for(Calendar c : gcd.getCalendars()) {
         if(Arrays.asList(c.getEditPermission()).contains(username)){
           options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE  + c.getName(), CalendarUtils.SHARED_TYPE + CalendarUtils.COLON + c.getId())) ;
         }
+      }
     }
 
-    options.add(new SelectItemOption<String>("Public Calendars", "")) ;
     List<GroupCalendarData> lgcd = calendarService.getGroupCalendars(SessionProviderFactory.createSystemProvider(), CalendarUtils.getUserGroups(username), false, username) ;
-    for(GroupCalendarData g : lgcd) {
-      for(Calendar c : g.getCalendars()){
-        if(c != null && c.getEditPermission() != null && Arrays.asList(c.getEditPermission()).contains(username)){
-          options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE + c.getName(), CalendarUtils.PUBLIC_TYPE + CalendarUtils.COLON + c.getId())) ;
+    if(lgcd != null) {
+      options.add(new SelectItemOption<String>("Public Calendars", "")) ;
+      for(GroupCalendarData g : lgcd) {
+        for(Calendar c : g.getCalendars()){
+          if(c != null && c.getEditPermission() != null && Arrays.asList(c.getEditPermission()).contains(username)){
+            options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE + c.getName(), CalendarUtils.PUBLIC_TYPE + CalendarUtils.COLON + c.getId())) ;
+          }
         }
+
       }
     }
     return options ;
@@ -258,7 +263,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   public boolean isEvent() { return isEvent_ ; }
 
   public void update(String calType, List<SelectItemOption<String>> options) throws Exception{
-   if(options != null) {
+    if(options != null) {
       getUIFormSelectBox(FIELD_CALENDAR).setOptions(options) ;
     }else {
       getUIFormSelectBox(FIELD_CALENDAR).setOptions(getCalendars()) ;
