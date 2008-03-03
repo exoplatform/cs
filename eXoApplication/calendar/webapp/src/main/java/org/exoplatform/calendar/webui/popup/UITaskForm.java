@@ -19,6 +19,7 @@ package org.exoplatform.calendar.webui.popup;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -28,6 +29,7 @@ import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
+import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.webui.CalendarView;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
@@ -136,10 +138,10 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       setSelectedEventPriority(eventCalendar.getPriority()) ;
       setEventReminders(eventCalendar.getReminders()) ;
       setAttachments(eventCalendar.getAttachment()) ;
-      taskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_CALENDAR).setEnable(false) ;
+      /*taskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_CALENDAR).setEnable(false) ;
       if(CalendarUtils.SHARED_TYPE.equals(calType_)) {
         taskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_CATEGORY).setRendered(false) ;
-      }
+      }*/
     } else {
       UIMiniCalendar miniCalendar = getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
       java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
@@ -250,10 +252,16 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   }
   protected String getCalendarId() {
     UIFormInputWithActions taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
-    return taskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_CALENDAR).getValue() ;
+    String value = taskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_CALENDAR).getValue() ;
+    if(value != null && value.trim().length() > 0 && value.split(CalendarUtils.COLON).length > 0) {
+      calType_ = value.split(CalendarUtils.COLON)[0] ;
+      return value.split(CalendarUtils.COLON)[1] ;
+    }
+    return null ;
   }
   public void setSelectedCalendarId(String value) {
     UIFormInputWithActions taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
+    value = calType_ + CalendarUtils.COLON + value ;
     taskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_CALENDAR).setValue(value) ;
   }
 
@@ -476,21 +484,46 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     if(options != null) {
       uiTaskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_CALENDAR).setOptions(options) ;
     }else {
-      uiTaskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_CALENDAR).setOptions(getCalendar()) ;
+      uiTaskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_CALENDAR).setOptions(getCalendars()) ;
     }
     calType_ = calType ;
   }
 
-  private List<SelectItemOption<String>> getCalendar() throws Exception {
+  private List<SelectItemOption<String>> getCalendars() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
-    List<org.exoplatform.calendar.service.Calendar> calendars = calendarService.getUserCalendars(getSession(), username, true) ;
+    options.add(new SelectItemOption<String>("User Calendars", "")) ;
+    List<org.exoplatform.calendar.service.Calendar> calendars = calendarService.getUserCalendars(SessionProviderFactory.createSessionProvider(), username, true) ;
     for(org.exoplatform.calendar.service.Calendar c : calendars) {
-      options.add(new SelectItemOption<String>(c.getName(), c.getId())) ;
+      options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE  + c.getName(), CalendarUtils.PRIVATE_TYPE + ":" + c.getId())) ;
+    }
+
+    GroupCalendarData gcd = calendarService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true);
+    if(gcd != null) {
+      options.add(new SelectItemOption<String>("Shared Calendars", "")) ;
+      for(org.exoplatform.calendar.service.Calendar c : gcd.getCalendars()) {
+        if(Arrays.asList(c.getEditPermission()).contains(username)){
+          options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE  + c.getName(), CalendarUtils.SHARED_TYPE + CalendarUtils.COLON + c.getId())) ;
+        }
+      }
+    }
+
+    List<GroupCalendarData> lgcd = calendarService.getGroupCalendars(SessionProviderFactory.createSystemProvider(), CalendarUtils.getUserGroups(username), false, username) ;
+    if(lgcd != null) {
+      options.add(new SelectItemOption<String>("Public Calendars", "")) ;
+      for(GroupCalendarData g : lgcd) {
+        for(org.exoplatform.calendar.service.Calendar c : g.getCalendars()){
+          if(c != null && c.getEditPermission() != null && Arrays.asList(c.getEditPermission()).contains(username)){
+            options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE + c.getName(), CalendarUtils.PUBLIC_TYPE + CalendarUtils.COLON + c.getId())) ;
+          }
+        }
+
+      }
     }
     return options ;
   }
+
 
   static  public class AddCategoryActionListener extends EventListener<UITaskForm> {
     public void execute(Event<UITaskForm> event) throws Exception {

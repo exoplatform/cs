@@ -19,6 +19,7 @@ package org.exoplatform.calendar.webui.popup;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -28,6 +29,7 @@ import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
+import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.webui.CalendarView;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
@@ -186,15 +188,13 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       //pars.append(Util.getPortalRequestContext().getRemoteUser()) ;
       if(eventCalendar.getParticipant() != null) {
         for(String par : eventCalendar.getParticipant()) {
-          if(pars != null && pars.length() > 0) pars.append(",") ;
+          if(!CalendarUtils.isEmpty(pars.toString())) pars.append(",") ;
           pars.append(par) ;
         }
       }
       setParticipant(pars.toString()) ;
       attenderTab.updateParticipants(pars.toString());
-      /*attenderTab.getUIFormComboBox(UIEventAttenderTab.FIELD_FROM_TIME).setOptions(fromOptions);
-      attenderTab.getUIFormComboBox(UIEventAttenderTab.FIELD_TO_TIME).setOptions(toOptions);*/
-      //eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CALENDAR).setEnable(false) ;
+      //eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CALENDAR).setEnable(true) ;
       if(CalendarUtils.SHARED_TYPE.equals(calType_)) {
         SelectItemOption<String> item = new SelectItemOption<String>(eventCalendar.getEventCategoryId(), eventCalendar.getEventCategoryId()) ;
         if(!eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).getOptions().contains(item))
@@ -215,7 +215,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       setEventFromDate(cal.getTime(), calSetting.getTimeFormat()) ;
       cal.add(java.util.Calendar.MINUTE, (int)calSetting.getTimeInterval()*2) ;
       setEventToDate(cal.getTime(), calSetting.getTimeFormat()) ;
-      StringBuffer pars = new StringBuffer(Util.getPortalRequestContext().getRemoteUser()) ;
+      StringBuffer pars = new StringBuffer(CalendarUtils.getCurrentUser()) ;
       setParticipant(pars.toString()) ;
       attenderTab.updateParticipants(pars.toString());
     }
@@ -226,18 +226,42 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     if(options != null) {
       uiEventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CALENDAR).setOptions(options) ;
     }else {
-      uiEventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CALENDAR).setOptions(getCalendar()) ;
+      uiEventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CALENDAR).setOptions(getCalendars()) ;
     }
     calType_ = calType ;
   }
 
-  private List<SelectItemOption<String>> getCalendar() throws Exception {
+  private List<SelectItemOption<String>> getCalendars() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    List<org.exoplatform.calendar.service.Calendar> calendars = 
-      calendarService.getUserCalendars(getSession(), CalendarUtils.getCurrentUser(), true) ;
+    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    options.add(new SelectItemOption<String>("User Calendars", "")) ;
+    List<org.exoplatform.calendar.service.Calendar> calendars = calendarService.getUserCalendars(SessionProviderFactory.createSessionProvider(), username, true) ;
     for(org.exoplatform.calendar.service.Calendar c : calendars) {
-      options.add(new SelectItemOption<String>(c.getName(), c.getId())) ;
+      options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE  + c.getName(), CalendarUtils.PRIVATE_TYPE + ":" + c.getId())) ;
+    }
+
+    GroupCalendarData gcd = calendarService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true);
+    if(gcd != null) {
+      options.add(new SelectItemOption<String>("Shared Calendars", "")) ;
+      for(org.exoplatform.calendar.service.Calendar c : gcd.getCalendars()) {
+        if(Arrays.asList(c.getEditPermission()).contains(username)){
+          options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE  + c.getName(), CalendarUtils.SHARED_TYPE + CalendarUtils.COLON + c.getId())) ;
+        }
+      }
+    }
+
+    List<GroupCalendarData> lgcd = calendarService.getGroupCalendars(SessionProviderFactory.createSystemProvider(), CalendarUtils.getUserGroups(username), false, username) ;
+    if(lgcd != null) {
+      options.add(new SelectItemOption<String>("Public Calendars", "")) ;
+      for(GroupCalendarData g : lgcd) {
+        for(org.exoplatform.calendar.service.Calendar c : g.getCalendars()){
+          if(c != null && c.getEditPermission() != null && Arrays.asList(c.getEditPermission()).contains(username)){
+            options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE + c.getName(), CalendarUtils.PUBLIC_TYPE + CalendarUtils.COLON + c.getId())) ;
+          }
+        }
+
+      }
     }
     return options ;
   }
@@ -359,10 +383,16 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   }
   protected String getCalendarId() {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
-    return eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CALENDAR).getValue() ;
+    String value = eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CALENDAR).getValue() ;
+    if (!CalendarUtils.isEmpty(value) && value.split(CalendarUtils.COLON).length>0) {
+      calType_ = value.split(CalendarUtils.COLON)[0] ; 
+      return value.split(CalendarUtils.COLON)[1] ;      
+    }
+    return null ;
   }
   public void setSelectedCalendarId(String value) {
     UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
+    value = calType_ + CalendarUtils.COLON + value ;
     eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CALENDAR).setValue(value) ;
   }
 
