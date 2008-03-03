@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.jcr.PathNotFoundException;
+import javax.jcr.RepositoryException;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
@@ -127,12 +128,11 @@ public class ContactUtils {
     }
   }
   
-  public static String getCurrentEmail() throws Exception {
+  public static Account getAccount() throws Exception {
     MailService mailSvr = (MailService)PortalContainer.getComponent(MailService.class) ;
     try {
-      return mailSvr.getAccounts(SessionsUtils.getSessionProvider(), getCurrentUser()).get(0).getEmailAddress() ;
-    } catch (Exception e) {
-      e.printStackTrace() ;
+      return mailSvr.getAccounts(SessionsUtils.getSessionProvider(), getCurrentUser()).get(0) ;
+    } catch (RepositoryException e) {
       return null ;
     }
    }

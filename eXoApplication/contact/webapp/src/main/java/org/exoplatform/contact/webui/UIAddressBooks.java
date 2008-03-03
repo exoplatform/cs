@@ -30,6 +30,7 @@ import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.service.impl.NewUserListener;
+import org.exoplatform.contact.webui.popup.UIAddEditPermission;
 import org.exoplatform.contact.webui.popup.UICategoryForm;
 import org.exoplatform.contact.webui.popup.UICategorySelect;
 import org.exoplatform.contact.webui.popup.UIComposeForm;
@@ -333,9 +334,15 @@ public class UIAddressBooks extends UIComponent {
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
       UIPopupContainer uiPopupContainer = popupAction.activate(UIPopupContainer.class, 600) ;
       uiPopupContainer.setId("UISharedAddressBook") ;
-      UISharedForm uiSharedForm = uiPopupContainer.addChild(UISharedForm.class, null, null) ; 
+      UIAddEditPermission uiAddNewEditPermission = uiPopupContainer.addChild(UIAddEditPermission.class, null, null);
+      ContactService contactService = ContactUtils.getContactService();
+      String username = ContactUtils.getCurrentUser();
+      SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
+      
+      uiAddNewEditPermission.init(null, contactService.getGroup(sessionProvider, username, groupId), true) ;
+     /* UISharedForm uiSharedForm = uiPopupContainer.addChild(UISharedForm.class, null, null) ; 
       uiSharedForm.init(true) ;
-      uiSharedForm.setAddress(groupId, uiAddressBook.getPrivateGroupMap().get(groupId)) ;
+      uiSharedForm.setAddress(groupId, uiAddressBook.getPrivateGroupMap().get(groupId)) ;*/
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());
     }

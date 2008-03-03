@@ -828,7 +828,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIPopupContainer uiPopupContainer = popupAction.activate(UIPopupContainer.class, 600) ;
       uiPopupContainer.setId("UISharedContacts") ;
       UISharedForm uiSharedForm = uiPopupContainer.addChild(UISharedForm.class, null, null) ;  
-      uiSharedForm.init(false) ;      
+      //uiSharedForm.init(false) ;      
       uiSharedForm.setSharedContacts(mapContacts) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent());      

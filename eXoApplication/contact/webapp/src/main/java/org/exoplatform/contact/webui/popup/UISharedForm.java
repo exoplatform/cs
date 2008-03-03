@@ -73,7 +73,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
   private boolean isSharedAdd_ = true ;
   public UISharedForm() { }
   
-  public void init(boolean isSharedAdd) throws Exception {
+  public void init(boolean isSharedAdd, String username, ContactGroup cal, boolean isAddNew) throws Exception {
     UIFormInputWithActions inputset = new UIFormInputWithActions("UIInputUserSelect") ;
     if (isSharedAdd) inputset.addChild(new UIFormInputInfo(FIELD_ADDRESS, FIELD_ADDRESS, null)) ;
     else inputset.addChild(new UIFormInputInfo(FIELD_CONTACT, FIELD_CONTACT, null)) ;
@@ -206,14 +206,25 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
             String[] perms = receiverUser.toArray(new String[] {}) ;
             contactGroup.setEditPermission(perms) ;
             contactService.saveGroup(SessionProviderFactory.createSessionProvider(), username, contactGroup, false) ;
+            
+           // System.out.println("\n\n 2222 \n\n :");
+            UIAddEditPermission uiAddEdit = uiForm.getParent() ;
+            uiAddEdit.updateGrid(contactGroup);
+ /*           uiForm.setCanEdit(false) ;
+            uiForm.setSharedUser(null) ;*/
+            
           }      
           contactService.shareAddressBook(
               SessionProviderFactory.createSystemProvider(), username, uiForm.addressId_, receiverUser) ;
-          uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.address-shared", null)) ;
+          
+          
+          //uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.address-shared", null)) ;
         }else {
         	String[] contactIds = uiForm.sharedContacts.keySet().toArray(new String[]{}) ;
         	contactService.shareContact(SessionProviderFactory.createSessionProvider(), username, contactIds, receiverUser) ;
-          uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.contacts-shared", null)) ;
+          
+          
+          //uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.contacts-shared", null)) ;
         }
         UIContactPortlet contactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
         UIAddressBooks addressBooks = contactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;

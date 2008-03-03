@@ -78,7 +78,9 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   
   public boolean isVisualEditor() { return isVisualEditor; }
   public void setVisualEditor(boolean b) { isVisualEditor = b; }
+  
   public UIComposeForm() throws Exception { }
+  
   public List<Contact> getToContacts(){ return toContacts; }
   
   public void setToContacts(List<Contact> contactList) { toContacts = contactList; }
@@ -115,7 +117,14 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   }
   
   public void init(String emails) throws Exception {
-    addUIFormInput(new UIFormStringInput(FIELD_FROM, null, ContactUtils.getCurrentEmail())) ;
+    String email = ContactUtils.getAccount().getEmailAddress() ;
+    if (ContactUtils.isEmpty(email)) {
+      UIApplication uiApp = getAncestorOfType(UIApplication.class) ;
+      uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.invalidAcc", null,
+          ApplicationMessage.WARNING)) ;
+      return ;
+    }
+    addUIFormInput(new UIFormStringInput(FIELD_FROM, null, email)) ;
     addUIFormInput(new UIFormStringInput(FIELD_TO, null, emails)) ;
     addUIFormInput(new UIFormStringInput(FIELD_SUBJECT, null, null)) ;
     UIFormInputWithActions inputSet = new UIFormInputWithActions(FIELD_FROM_INPUT);   
@@ -239,8 +248,10 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       serverConfig.setOutgoingHost("smtp.gmail.com");
       serverConfig.setOutgoingPort("465");
       serverConfig.setSsl(true);
+      
       serverConfig.setUserName("exomailtest@gmail.com");
       serverConfig.setPassword("exoadmin") ;
+      
       try {
         mailSvr.sendMessages(msgList, serverConfig);
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-succsessfuly", null)) ;
