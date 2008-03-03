@@ -17,7 +17,9 @@
 package org.exoplatform.forum.webui;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.forum.ForumSessionUtils;
@@ -51,6 +53,8 @@ public class UICategories extends UIContainer	{
 	protected ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
 	private List<Forum> forumList = null ;
 	private List<Topic> topicLastList = new ArrayList<Topic>() ;
+	private Map<String, List<Forum>> mapListForum = new HashMap<String, List<Forum>>() ;
+	private List<Category> categoryList = new ArrayList<Category>() ;
 	
 	public UICategories() throws Exception {
 	}
@@ -59,6 +63,15 @@ public class UICategories extends UIContainer	{
   private UserProfile getUserProfile() {
 		return this.getAncestorOfType(UIForumPortlet.class).getUserProfile() ;
 	}
+	
+	//Function Public getObject 
+	public List<Category> getCategorys() {
+	  return this.categoryList ;
+  }
+	
+	public List<Forum> getForums(String categoryId) {
+	  return mapListForum.get(categoryId) ;
+  }
 	
 	private List<Category> getCategoryList() throws Exception {
 		this.getAncestorOfType(UIForumPortlet.class).getChild(UIBreadcumbs.class).setUpdataPath("ForumService") ;
@@ -71,7 +84,16 @@ public class UICategories extends UIContainer	{
 	}	
 	
 	private List<Forum> getForumList(String categoryId) throws Exception {
-		this.forumList = forumService.getForums(ForumSessionUtils.getSystemProvider(), categoryId);
+		if(!mapListForum.isEmpty()) {
+			this.forumList = mapListForum.get(categoryId) ;
+			if(this.forumList == null || this.forumList.size() <= 0) {
+				this.forumList = forumService.getForums(ForumSessionUtils.getSystemProvider(), categoryId);
+				mapListForum.put(categoryId, this.forumList) ;
+			}
+		} else {
+			this.forumList = forumService.getForums(ForumSessionUtils.getSystemProvider(), categoryId);
+			mapListForum.put(categoryId, this.forumList) ;
+		}
 		return this.forumList;
 	}
 	

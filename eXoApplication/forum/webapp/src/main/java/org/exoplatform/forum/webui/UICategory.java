@@ -142,7 +142,6 @@ public class UICategory extends UIForm	{
 	private Topic getTopic(String topicId) throws Exception {
 	if(this.topicLastList.size() > 0) {
 		for(Topic topic : this.topicLastList) {
-			System.out.println("\n\n=========> " + topic.getIcon() + "  :  " + topicId);
 			if(topic.getId().equals(topicId)) return topic ;
 		}
 	}
