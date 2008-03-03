@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
@@ -102,10 +103,15 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
   public List<String> getList() throws Exception {
     List<String> children = new ArrayList<String>() ; 
     OrganizationService service = getApplicationComponent(OrganizationService.class) ;
+    
+    String currenUser = CalendarUtils.getCurrentUser();
+    
     if(TYPE_USER.equals(type_)){
       PageList userPageList = service.getUserHandler().findUsersByGroup(this.getCurrentGroup().getId()) ;    
       for(Object child : userPageList.getAll()){
-        children.add(((User)child).getUserName()) ;
+        if(!((User)child).getUserName().equals(currenUser)) {
+          children.add(((User)child).getUserName()) ;
+        }
       }
     } else if(TYPE_MEMBERSHIP.equals(type_)) {
       for(String child :  getListMemberhip()){
