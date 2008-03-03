@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UIFormComboBox;
@@ -172,10 +173,10 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
     super.processRender(arg0);
   }
   public String getUserTimeZone(String username) throws Exception {
-
+    /*CalendarUtils.getCalendarService().getCalendarSetting(SessionProviderFactory.createSessionProvider(), username) ;
     //return String.valueOf(TimeZone.getTimeZone(getAncestorOfType(UICalendarPortlet.class).getCalendarSetting().getTimeZone()).getRawOffset()) ;
-    return CalendarUtils.getTimeZone(getAncestorOfType(UICalendarPortlet.class).getCalendarSetting().getTimeZone()) ;
-    // String timeZone = CalendarUtils.getCalendarService().getCalendarSetting(SessionProviderFactory.createSystemProvider(), username).getTimeZone() ;
-    // return CalendarUtils.getTimeZone(timeZone) ;
+    return CalendarUtils.getTimeZone(getAncestorOfType(UICalendarPortlet.class).getCalendarSetting().getTimeZone()) ;*/
+     String timeZone = CalendarUtils.getCalendarService().getCalendarSetting(SessionProviderFactory.createSystemProvider(), username).getTimeZone() ;
+      return CalendarUtils.getTimeZone(timeZone) ;
   }
 }

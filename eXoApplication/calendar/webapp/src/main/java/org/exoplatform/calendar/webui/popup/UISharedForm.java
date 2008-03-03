@@ -18,16 +18,16 @@ package org.exoplatform.calendar.webui.popup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.Color;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
-import org.exoplatform.calendar.webui.UIFormDateTimePicker;
+import org.exoplatform.calendar.webui.UIFormColorPicker;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.OrganizationService;
@@ -73,6 +73,12 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     UIFormInputWithActions inputset = new UIFormInputWithActions("UIInputUserSelect") ;
     inputset.addChild(new UIFormInputInfo(FIELD_NAME, FIELD_NAME, null)) ;
     inputset.addUIFormInput(new UIFormStringInput(FIELD_USER, FIELD_USER, null)) ;
+    List<Color> colors = new ArrayList<Color>() ;
+    for(String coString : Calendar.COLORS) {
+      //colors.add(new Color()) ;
+      
+    }
+    inputset.addUIFormInput(new UIFormColorPicker(FIELD_USER, FIELD_USER, colors)) ;
     List<ActionData> actions = new ArrayList<ActionData>() ;
     /* ActionData selectGroupAction = new ActionData() ;
     selectGroupAction.setActionListener("SelectPermission") ;
