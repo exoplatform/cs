@@ -63,6 +63,7 @@ public class CalendarUtils {
   final public static String COMMA = ",".intern() ;
   final public static String SLASH = "/".intern() ;
   final public static String BACKSLASH = "\\".intern() ;
+  final public static String DOUBLESCORE = "--".intern() ;
 
   final public static String UNDERSCORE = "_".intern() ;
   final public static String TIMEFORMAT  = "HH:mm".intern() ;

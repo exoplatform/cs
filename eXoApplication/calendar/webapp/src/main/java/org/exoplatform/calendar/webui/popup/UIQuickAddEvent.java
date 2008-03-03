@@ -16,9 +16,11 @@
  **/
 package org.exoplatform.calendar.webui.popup;
 
+import java.security.acl.Group;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -28,6 +30,7 @@ import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
+import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.webui.CalendarView;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
@@ -52,6 +55,7 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.validator.EmptyFieldValidator;
+import org.hsqldb.lib.ArrayCounter;
 
 /**
  * Created by The eXo Platform SARL
@@ -107,9 +111,9 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
 
   public void init(CalendarSetting  calendarSetting, String startTime, String endTime) throws Exception {
     List<SelectItemOption<String>> fromOptions 
-      = CalendarUtils.getTimesSelectBoxOptions(calendarSetting.getTimeFormat(),calendarSetting.getTimeFormat(), calendarSetting.getTimeInterval()) ;
+    = CalendarUtils.getTimesSelectBoxOptions(calendarSetting.getTimeFormat(),calendarSetting.getTimeFormat(), calendarSetting.getTimeInterval()) ;
     List<SelectItemOption<String>> toOptions 
-      = CalendarUtils.getTimesSelectBoxOptions(calendarSetting.getTimeFormat(),calendarSetting.getTimeFormat(),  calendarSetting.getTimeInterval()) ;
+    = CalendarUtils.getTimesSelectBoxOptions(calendarSetting.getTimeFormat(),calendarSetting.getTimeFormat(),  calendarSetting.getTimeInterval()) ;
     getUIFormCombobox(FIELD_FROM_TIME).setOptions(fromOptions) ;
     getUIFormCombobox(FIELD_TO_TIME).setOptions(toOptions) ;
     UIMiniCalendar miniCalendar = getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
@@ -156,7 +160,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
       return null ;
     }
   }
-  
+
   private void setEventToDate(Date value, String timeFormat) {
     //System.out.println("\n\n value " + value);
     UIFormDateTimeInput toField =  getChildById(FIELD_TO) ;
@@ -187,13 +191,32 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     }
   }
 
-  private List<SelectItemOption<String>> getCalendar() throws Exception {
+  public List<SelectItemOption<String>> getCalendars() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
+    options.add(new SelectItemOption<String>("User Calendars", "")) ;
     List<Calendar> calendars = calendarService.getUserCalendars(SessionProviderFactory.createSessionProvider(), username, true) ;
     for(Calendar c : calendars) {
-      options.add(new SelectItemOption<String>(c.getName(), c.getId())) ;
+      options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE  + c.getName(), CalendarUtils.PRIVATE_TYPE + ":" + c.getId())) ;
+    }
+
+    options.add(new SelectItemOption<String>("Shared Calendars", "")) ;
+    GroupCalendarData gcd = calendarService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true);
+      for(Calendar c : gcd.getCalendars()) {
+        if(Arrays.asList(c.getEditPermission()).contains(username)){
+          options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE  + c.getName(), CalendarUtils.SHARED_TYPE + CalendarUtils.COLON + c.getId())) ;
+        }
+    }
+
+    options.add(new SelectItemOption<String>("Public Calendars", "")) ;
+    List<GroupCalendarData> lgcd = calendarService.getGroupCalendars(SessionProviderFactory.createSystemProvider(), CalendarUtils.getUserGroups(username), false, username) ;
+    for(GroupCalendarData g : lgcd) {
+      for(Calendar c : g.getCalendars()){
+        if(c != null && c.getEditPermission() != null && Arrays.asList(c.getEditPermission()).contains(username)){
+          options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE + c.getName(), CalendarUtils.PUBLIC_TYPE + CalendarUtils.COLON + c.getId())) ;
+        }
+      }
     }
     return options ;
   }
@@ -214,8 +237,19 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   private boolean getIsAllDay() {
     return getUIFormCheckBoxInput(FIELD_ALLDAY).isChecked() ;
   }
-  private String getEventCalendar() {return getUIFormSelectBox(FIELD_CALENDAR).getValue() ;}
-  public void setSelectedCalendar(String value) {getUIFormSelectBox(FIELD_CALENDAR).setValue(value) ;}
+  private String getEventCalendar() {
+    String values = getUIFormSelectBox(FIELD_CALENDAR).getValue() ;
+    if(values != null && values.trim().length() > 0 && values.split(CalendarUtils.COLON).length > 0) {
+      calType_ = values.split(CalendarUtils.COLON)[0] ;
+      return values.split(CalendarUtils.COLON)[1] ;
+    }
+    return null ;
+
+  }
+  public void setSelectedCalendar(String value) {
+    value = calType_ + CalendarUtils.COLON + value ;
+    getUIFormSelectBox(FIELD_CALENDAR).setValue(value) ;
+  }
   public void setSelectedCategory(String value) {getUIFormSelectBox(FIELD_CATEGORY).setValue(value) ;}
   private String getEventCategory() {return getUIFormSelectBox(FIELD_CATEGORY).getValue() ;}
   public void activate() throws Exception {}
@@ -224,11 +258,11 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   public boolean isEvent() { return isEvent_ ; }
 
   public void update(String calType, List<SelectItemOption<String>> options) throws Exception{
-    if(options != null) {
+   if(options != null) {
       getUIFormSelectBox(FIELD_CALENDAR).setOptions(options) ;
     }else {
-      getUIFormSelectBox(FIELD_CALENDAR).setOptions(getCalendar()) ;
-    }
+      getUIFormSelectBox(FIELD_CALENDAR).setOptions(getCalendars()) ;
+    } 
     calType_ = calType ;
   }
   static  public class SaveActionListener extends EventListener<UIQuickAddEvent> {
@@ -306,7 +340,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         }
         calendarView.setLastUpdatedEventId(calEvent.getId()) ;
         uiContainer.refresh() ;
-       ///event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
+        ///event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
         /* uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.add-successfully", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;*/

@@ -248,7 +248,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     UIFormInputWithActions calendarDetail = getChildById(INPUT_CALENDAR) ;
     return calendarDetail.getUIFormSelectBox(LOCALE).getValue() ;
   }
-  public void setLocale(String value) {
+  protected void setLocale(String value) {
     UIFormInputWithActions calendarDetail = getChildById(INPUT_CALENDAR) ;
     calendarDetail.getUIFormSelectBox(LOCALE).setValue(value) ;
   }

@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -49,7 +48,6 @@ import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.OrganizationService;
-import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -69,10 +67,6 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
  * Aus 01, 2007 2:48:18 PM 
  */
 
-/**
- * @author exo
- *
- */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
     template =  "app:/templates/calendar/webui/UICalendars.gtmpl",
@@ -186,7 +180,6 @@ public class UICalendars extends UIForm  {
   static  public class AddCalendarActionListener extends EventListener<UICalendars> {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiComponent = event.getSource() ;
-      Locale locale = event.getRequestContext().getLocale() ;
       String categoryId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       String clientTime = event.getRequestContext().getRequestParameter(CURRENTTIME) ;
       java.util.Calendar cal = new GregorianCalendar() ;
@@ -203,7 +196,6 @@ public class UICalendars extends UIForm  {
       uiPopupContainer.setId(UIPopupContainer.UICALENDARPOPUP) ;
       UICalendarForm calendarForm = uiPopupContainer.addChild(UICalendarForm.class, null, null) ;
       calendarForm.setTimeZone(timeZone.getID()) ;
-      calendarForm.setLocale(locale.getISO3Country()) ;
       calendarForm.setSelectedGroup(categoryId) ;
       //popupAction.activate(uiPopupContainer, 600, 0, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
@@ -273,49 +265,21 @@ public class UICalendars extends UIForm  {
       uiQuickAddEvent.setEvent(true) ;  
       uiQuickAddEvent.setId("UIQuickAddEvent") ;
       List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-      
-      String username = CalendarUtils.getCurrentUser() ;
-      
-      if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
+      options = uiQuickAddEvent.getCalendars() ;
+      /*if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
         options = null ;
       } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
-
-        boolean canEdit = false ;
-        CalendarService calService = CalendarUtils.getCalendarService() ;
-        GroupCalendarData calendarData = calService.getSharedCalendars(uiComponent.getSystemSession(), username, true) ;
-        if(calendarData.getCalendarById(calendarId) != null)
-          canEdit = CalendarUtils.canEdit(null, calendarData.getCalendarById(calendarId).getEditPermission(), username) ;
-        if(!canEdit) {
-          UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null, ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;
-        }
-        
-        /*GroupCalendarData calendarData = uiComponent.getSharedCalendars() ;*/
+        GroupCalendarData calendarData = uiComponent.getSharedCalendars() ;
         for(Calendar cal : calendarData.getCalendars()) {
           options.add(new SelectItemOption<String>(cal.getName(), cal.getId())) ;
         }
       } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
-        
-        OrganizationService oService = uiComponent.getApplicationComponent(OrganizationService.class);        
-        boolean canEdit = false ;
-        CalendarService calService = CalendarUtils.getCalendarService() ;
-        canEdit = CalendarUtils.canEdit(oService, calService.getGroupCalendar(uiComponent.getSystemSession(), calendarId).getEditPermission(), username) ;
-        if(!canEdit) {
-          UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null, ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;
-        }
-        
         for (GroupCalendarData calendarData : uiComponent.getPublicCalendars()) {
           for(Calendar cal : calendarData.getCalendars()) {
             options.add(new SelectItemOption<String>(cal.getName(), cal.getId())) ;
           }
         }
-      }
-      
+      }    */
       uiQuickAddEvent.update(calType, options) ;
       uiQuickAddEvent.setSelectedCalendar(calendarId) ;
       uiQuickAddEvent.init(uiCalendarPortlet.getCalendarSetting(), clientTime, null) ;
@@ -325,6 +289,7 @@ public class UICalendars extends UIForm  {
         uiQuickAddEvent.setSelectedCategory("Meeting") ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent) ;
     }
   }
 
@@ -344,49 +309,21 @@ public class UICalendars extends UIForm  {
       uiQuickAddEvent.setEvent(false) ;  
       uiQuickAddEvent.setId("UIQuickAddTask") ;
       uiQuickAddEvent.init(uiCalendarPortlet.getCalendarSetting(), clientTime, null) ;
-      List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-      
-      String username = CalendarUtils.getCurrentUser() ;
-      
-      if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
+      List<SelectItemOption<String>> options = uiQuickAddEvent.getCalendars() ;
+      /*if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
         options = null ;
       } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
-        
-        boolean canEdit = false ;
-        CalendarService calService = CalendarUtils.getCalendarService() ;
-        GroupCalendarData calendarData = calService.getSharedCalendars(SessionProviderFactory.createSessionProvider(), username, true) ;
-        if(calendarData.getCalendarById(calendarId)!=null)
-          canEdit = CalendarUtils.canEdit(null, calendarData.getCalendarById(calendarId).getEditPermission(), username) ;
-        if(!canEdit){
-          UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null, 1)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;
-        }
-        
+        GroupCalendarData calendarData = uiComponent.getSharedCalendars() ;
         for(Calendar cal : calendarData.getCalendars()) {
           options.add(new SelectItemOption<String>(cal.getName(), cal.getId())) ;
         }
       } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
-
-        OrganizationService oService = uiComponent.getApplicationComponent(OrganizationService.class);        
-        boolean canEdit = false ;
-        CalendarService calService = CalendarUtils.getCalendarService() ;
-        canEdit = CalendarUtils.canEdit(oService, calService.getGroupCalendar(uiComponent.getSystemSession(), calendarId).getEditPermission(), username) ;
-        if(!canEdit) {
-          UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null, 1)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;
-        }
-        
         for (GroupCalendarData calendarData : uiComponent.getPublicCalendars()) {
           for(Calendar cal : calendarData.getCalendars()) {
             options.add(new SelectItemOption<String>(cal.getName(), cal.getId())) ;
           }
         }
-      }
-      
+      }    */
       uiQuickAddEvent.update(calType, options) ;
       uiQuickAddEvent.setSelectedCalendar(calendarId) ;
       if(categoryId != null && categoryId.trim().length() >0 && !categoryId.toLowerCase().equals("null")) {
