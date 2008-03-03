@@ -80,7 +80,7 @@
 						</a>
 						<div class="SeparatorLine"><span></span></div>
 						<a href="<%=uicomponent.event("RSS")%>" class="ControlButton">
-							<div class="IconHolder RssIcon">
+							<div class="IconHolder CalendarRssIcon">
 								<%=_ctx.appRes(uicomponent.id + ".label.RSS")%>
 							</div>
 						</a>

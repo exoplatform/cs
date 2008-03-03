@@ -73,7 +73,7 @@ rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.ge
 	
 		</div>
 		<%}%>
-		<a href="<%=uicomponent.event("AddCategory")%>">
+		<a href="<%=uicomponent.event("AddCategory")%>" title="Add new event category">
 			<div class="AddCategoryIcon"><span></span></div>
 		</a>
 		<div class="EventCategory">

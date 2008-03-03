@@ -37,12 +37,11 @@
 }
 
 .UICalendarPortlet .UICalendars .CollapserFlatStyle {
-	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/BlackNextArrow.gif') no-repeat ;
+	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/BlackNextArrow.gif') no-repeat left;
 	width: 13px; height: 16px;
 	float: left;
 	margin: 1px 0px 0px 3px;
 	cursor: pointer;
-	background-position: left;
 }
 
 .UICalendarPortlet .UICalendars .MyCalendarContainer .IconHolder {
@@ -65,7 +64,7 @@
 }
 
 .UICalendarPortlet .UICalendars .CalendarGroupIcon {
-  padding-left: 19px; height: 16px;
+  padding-left: 19px;
   margin: 1px 3px 0px 0px;
   float: left;
   line-height: 16px;
@@ -79,12 +78,15 @@
 }
 
 .UICalendarPortlet .UICalendars .CalendarIcon {
-  padding-left: 19px; height: 16px;
-  margin: 1px 3px 0px 0px;
+  padding-left: 19px;
   float: left;
-  width: 87px;
+  width: 90px;
   overflow: hidden;
-  line-height: 16px;
+  line-height: 17px;
+}
+
+.UICalendarPortlet .UICalendars .UIForm input.checkbox {
+  margin: 2px 0px 0px 2px;
 }
 
 .UICalendarPortlet .UICalendars .DownArrow1Icon {
@@ -98,6 +100,7 @@
 .UICalendarPortlet .UICalendars .CheckBox {
   margin: 0px 3px 0px 0px;
   float: left;
+  width: 16px;
 }
 
 .UICalendarPortlet .UICalendars a {

@@ -54,11 +54,11 @@ uiform.begin() ;
 		         		String rndString = String.valueOf(new Date().getTime());
 		         		String src = uicomponent.getDownloadLink(attachFile) ; // "/${uicomponent.getPortalName()}/jcr?workspace=${attachFile.workspace}&hash=${rndString}&path=${attachFile.getDataPath()}" ;
 		         %>
-		         	 <a imgSource="$src"  onclick="javaScript:document.getElementById('$attachFile.id').src=this.getAttribute('imgSource'); document.getElementById('$attachFile.id').style.display='block'" class="IconHolder ViewAttachmentIcon" style="cursor:pointer;padding-left:15px;">
+		         	 <a imgSource="$src"  onclick="javaScript:document.getElementById('$attachFile.id').src=this.getAttribute('imgSource'); document.getElementById('$attachFile.id').style.display='block'" class="IconHolder ViewAttachmentIcon">
 			         	<%=uiform.getLabel('View')%>
 			         </a> 
 		         <%}%>
-			         <a href="<%=uicomponent.event("Download",attachFile.getId())%>" class="IconHolder DownLoadAttachmentIcon" style="padding-left:15px;">
+			         <a href="<%=uicomponent.event("Download",attachFile.getId())%>" class="IconHolder DownLoadAttachmentIcon">
 			         	<%=uiform.getLabel('Download')%>
 			         </a>
 		         </div> 
