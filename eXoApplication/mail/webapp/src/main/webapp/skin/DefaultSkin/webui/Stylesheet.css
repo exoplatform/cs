@@ -299,6 +299,39 @@
 	display: block;
 }
 
+
+/*=====================Table Color===========================*/
+
+.UIMailPortlet .UIContextMenuContainer {
+	white-space: nowrap;
+}
+
+
+.UIMailPortlet .MailTableColor {
+	background: #e4eaf5;
+	padding: 5px;
+	margin: 1px;
+}
+
+.UIMailPortlet .MailTableColor .ColorCell {
+ width: 12px; height: 12px;
+ margin: 2px;
+ border: 1px solid #ffffff;
+}
+
+.UIMailPortlet .MailTableColor .ColorCell img {
+ width: 12px; height: 12px;
+}
+.UIMailPortlet .MailTableColor .SelectedColorCell {
+	background: url('skinIcons/16x16/icons/CheckedColorIcon.gif') no-repeat ;
+	width: 12px; height: 12px;
+}
+
+.UIMailPortlet .MailTableColor a:hover {
+	border: 1px solid red; 
+}
+
+
 /*********************************MailContentWorkingArea*************************************/
 
 
@@ -1531,3 +1564,38 @@
 .UIFolderForm .UIForm .UIFormGrid td.FieldLabel {
 	line-height: 20px;
 }
+
+/* Colors Picker*/
+.Olive {background-color: #808000; }
+.OliveDrab {background-color: #6B8E23;}   
+.Orange {background-color: #FFA500;}    
+.OrangeRed {background-color: #FF4500;}    
+.Orchid {background-color: #DA70D6;}    
+.PaleGoldenRod {background-color: #EEE8AA;}    
+.PaleGreen {background-color: #98FB98;}    
+.PaleTurquoise {background-color: #AFEEEE;}    
+.PaleVioletRed {background-color: #D87093;}    
+.PapayaWhip  {background-color: #FFEFD5;}    
+.PeachPuff {background-color: #FFDAB9;}    
+.Peru {background-color: #CD853F;}    
+.Pink {background-color: #FFC0CB ;}   
+.Plum {background-color: #DDA0DD ;}   
+.PowderBlue {background-color: #B0E0E6;}    
+.Purple {background-color: #800080;}    
+.Red {background-color: #FF0000;}    
+.RosyBrown {background-color: #BC8F8F;}    
+.RoyalBlue {background-color: #4169E1;}    
+.SaddleBrown {background-color: #8B4513;}    
+.Salmon {background-color: #FA8072;}    
+.SandyBrown {background-color: #F4A460;}    
+.SeaGreen {background-color: #2E8B57;}    
+.SeaShell {background-color: #FFF5EE;}    
+.Sienna {background-color: #A0522D;}    
+.Silver {background-color: #C0C0C0;}    
+.SkyBlue {background-color: #87CEEB;}
+.Thistle {background-color: #D8BFD8;}    
+.Tomato {background-color: #FF6347;}    
+.Turquoise {background-color: #40E0D0;}    
+.Violet {background-color: #EE82EE;}    
+.Wheat {background-color: #F5DEB3;}    
+.Yellow {background-color: #FFFF00;} 

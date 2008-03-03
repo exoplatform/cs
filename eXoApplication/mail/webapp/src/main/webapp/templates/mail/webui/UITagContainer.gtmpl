@@ -1,7 +1,8 @@
 <%
   import org.exoplatform.mail.service.Tag;
 %>
-<div class="UITagContainer" id="<%=uicomponent.getId()%>">
+<% uiform.begin()%>
+<div class="UITagContainer">
 	<div class="TitleBar">
 		<div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
 		<div class="TagTitle BlueTag"><%=_ctx.appRes(uicomponent.id+ ".label.tags") %></div>
@@ -30,6 +31,29 @@
 	  	      <a class="MenuItem" href="<%=uicomponent.event("EmptyTag", "id")%>">   
 	  	        <div class="ItemIcon EmptyIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.empty") %> </div>
 	  	      </a>
+            <div class="MailTableColor" >
+            <%
+              int i = 0 ;
+              int index = 0 ;
+              int items = 5 ;
+              int size = uicomponent.getColors().size() ;
+              int rows = size/items ;
+              int count = 0 ;
+              while(i <= rows)  {
+                print "<div>" ; 
+                j = 0 ;
+                while(j <= items && count < size){
+                 color = uicomponent.getColors()[count] ;
+                 actionLink = uicomponent.event('ChangeColor','id&color=' + color);  
+                 print("<a href=\"" + actionLink + "\" class=\"$color ColorCell\"><img src=\"/eXoResources/skin/sharedImages/Blank.gif\" /></a>") ;
+                 count++
+                 j++;
+                }
+                print "</div>" ;  
+                i++ ;
+              }
+            %>
+            </div>
 	  	    </div>
 	  	  </div>
 	  	</div>
@@ -59,3 +83,4 @@
 	  %>
 	</div>
 </div>
+<% uiform.end() %>

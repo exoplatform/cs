@@ -19,6 +19,7 @@ package org.exoplatform.mail.webui ;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.MailService;
@@ -29,9 +30,10 @@ import org.exoplatform.mail.webui.popup.UIEditTagForm;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.form.UIForm;
 
 /**
  * Created by The eXo Platform SARL
@@ -41,16 +43,58 @@ import org.exoplatform.webui.event.EventListener;
  */
 
 @ComponentConfig(
+    lifecycle = UIFormLifecycle.class,
     template =  "app:/templates/mail/webui/UITagContainer.gtmpl",
     events = {
         @EventConfig(listeners = UITagContainer.ChangeTagActionListener.class),
         @EventConfig(listeners = UITagContainer.EditTagActionListener.class),
         @EventConfig(listeners = UITagContainer.RemoveTagActionListener.class,confirm="UITagContainer.msg.confirm-remove-tag"),
-        @EventConfig(listeners = UITagContainer.EmptyTagActionListener.class)
+        @EventConfig(listeners = UITagContainer.EmptyTagActionListener.class),
+        @EventConfig(listeners = UITagContainer.ChangeColorActionListener.class)
     }
 )
 
-public class UITagContainer extends UIComponent {
+public class UITagContainer extends UIForm {
+  public static final String OLIVE = "Olive".intern() ;
+  public static final String OLIVEDRAB = "OliveDrab".intern() ;
+  public static final String ORANGERED = "OrangeRed".intern() ;
+  public static final String ORCHID = "Orchid".intern() ;
+  public static final String PALEGOLDENROD = "PaleGoldenRod".intern() ;
+  public static final String PALEGREEN = "PaleGreen".intern() ;
+  public static final String PALETURQUOISE = "PaleTurquoise".intern() ;
+  public static final String PALEVIOLETRED = "PaleVioletRed".intern() ;
+  public static final String PAPAYAWHIP = "PapayaWhip".intern() ;
+  public static final String PEACHPUFF = "PeachPuff".intern() ;
+  public static final String PERU = "Peru".intern() ;
+  public static final String PINK = "Pink".intern() ;
+  public static final String PLUM = "Plum".intern() ;
+  public static final String POWDERBLUE = "PowderBlue".intern() ;
+  public static final String PURPLE = "Purple".intern() ;
+  public static final String RED = "Red".intern() ;
+  public static final String ROSYBROWN = "RosyBrown".intern() ;
+  public static final String ROYALBLUE = "RoyalBlue".intern() ;
+  public static final String SADDLEBROWN = "SaddleBrown".intern() ;
+  public static final String SALMON = "Salmon".intern() ;
+  public static final String SANDYBROWN = "SandyBrown".intern() ;
+  public static final String SEAGREEN = "SeaGreen".intern() ;
+  public static final String SEASHELL = "SeaShell".intern() ;
+  public static final String SIANNA = "Sienna".intern() ;
+  public static final String SILVER = "Silver".intern() ;
+  public static final String SKYBLUE = "SkyBlue".intern() ;
+  public static final String THISTLE = "Thistle".intern() ;
+  public static final String TOMATO = "Tomato".intern() ;
+  public static final String TURQUOISE = "Turquoise".intern() ;
+  public static final String VIOLET = "Violet".intern() ;
+  public static final String WHEAT = "Wheat".intern() ;
+  public static final String YELLOW = "Yellow".intern() ;
+  
+  public static final String[] COLORS = {
+    POWDERBLUE,ORCHID,PALEGOLDENROD,PALEGREEN,
+    OLIVE,OLIVEDRAB,ORANGERED,PALETURQUOISE,PALEVIOLETRED,PAPAYAWHIP,PEACHPUFF,
+    PERU,PINK,PLUM,PURPLE,RED,ROSYBROWN,ROYALBLUE,SADDLEBROWN,SALMON,
+    SANDYBROWN,SEAGREEN,SEASHELL,SIANNA,SILVER,SKYBLUE,THISTLE,TOMATO,TURQUOISE,
+    VIOLET,WHEAT,YELLOW } ;
+  
   public UITagContainer() throws Exception {}
   
   public List<Tag> getTags() throws Exception {
@@ -61,6 +105,10 @@ public class UITagContainer extends UIComponent {
     String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
     if (accountId != null && accountId != "") tagList = mailService.getTags(SessionsUtils.getSessionProvider(), username, accountId);
     return tagList;
+  }
+  
+  public String[] getColors() {
+    return Calendar.COLORS ;
   }
   
   static public class ChangeTagActionListener extends EventListener<UITagContainer> {
@@ -84,7 +132,7 @@ public class UITagContainer extends UIComponent {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
-  
+
   static public class EditTagActionListener extends EventListener<UITagContainer> {
     public void execute(Event<UITagContainer> event) throws Exception {
       String tagId = event.getRequestContext().getRequestParameter(OBJECTID) ;      
@@ -130,6 +178,25 @@ public class UITagContainer extends UIComponent {
       mailSrv.removeMessageTag(SessionsUtils.getSessionProvider(), username, accountId, listMessage, listTag);
       uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTag);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
+    }
+  }
+  
+  static  public class ChangeColorActionListener extends EventListener<UITagContainer> {
+    public void execute(Event<UITagContainer> event) throws Exception {
+      UITagContainer uiTag = event.getSource(); 
+      String tagId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      String color = event.getRequestContext().getRequestParameter("color") ;
+      UIMailPortlet uiPortlet = uiTag.getAncestorOfType(UIMailPortlet.class);
+      MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
+      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
+      String username = uiPortlet.getCurrentUser();
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      Tag tag = mailSrv.getTag(SessionsUtils.getSessionProvider(), username, accountId, tagId) ;
+      tag.setColor(color) ;
+      mailSrv.updateTag(SessionsUtils.getSessionProvider(), username, accountId, tag);
+      uiMessageList.updateList();
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiTag) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
