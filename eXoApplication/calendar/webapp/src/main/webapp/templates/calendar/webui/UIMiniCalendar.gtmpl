@@ -115,7 +115,7 @@
 				       //sdf.setCalendar(calendar) ;
 				       %>
 				      
-				        <td class="$highlight $clazz">
+				        <td class="$highlight $clazz"  style="background:#FFFFFF;">
 				        	<a href="$actionLink">
 				        		<div class="MiniCalendarActions">
 				       				<%=sdf.format(calendar.getTime())%> 

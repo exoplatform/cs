@@ -1,0 +1,35 @@
+.UICalendarPortlet .UIFormColorPicker {
+	background: white ;
+	position: absolute ;
+	border: solid 1px gray ;
+	overflow-y: auto ;
+	display: none ;
+	max-height: 150px;
+	*height: 150px ;
+}
+.UICalendarPortlet .UIFormColorPicker .UIColorPickerItem {
+	display: block ;
+	padding: 3px 5px ;
+	text-decoration: none ;
+	color: black ;
+}
+
+.UICalendarPortlet .UIFormColorPicker a:hover{
+	background: blue ;
+	color: white ;
+}
+
+.UICalendarPortlet .UIFormColorPicker a:visit{
+	background: white ;
+	color: black ;
+}
+
+.UICalendarPortlet .UIFormColorPicker .UIColorPickerSelectedIcon a{
+	background: blue ;
+}
+
+.UICalendarPortlet .UIFormColorPicker .UIColorPickerLabel {
+	font-family: tahoma ;
+	font-size: 11px ;
+	margin-left: 16px ;
+}

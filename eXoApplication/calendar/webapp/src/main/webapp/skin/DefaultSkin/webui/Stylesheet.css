@@ -1,6 +1,8 @@
 
 @import url("skinIcons/Stylesheet.css") ;
 @import url("UICombobox/Stylesheet.css");
+@import url("UIColorPicker/Stylesheet.css");
+
 @import url("UIPopup/Stylesheet.css");
 @import url("UIActionBar/Stylesheet.css");
 @import url("UIHeaderBar/Stylesheet.css");
