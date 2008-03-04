@@ -1149,25 +1149,25 @@ public class JCRDataStorage{
           String address = propRecipients[i].getString() ;
           existRecipients.put(address, address);
         }
-        for (int j =0; j < recipients.length; j++) {
+        for (int j = 0; j < recipients.length; j++) {
           String address = recipients[j] ;
           existRecipients.put(address, address) ;
         }
-        converNode.setProperty(Utils.EXO_RECIPIENT, existRecipients.values().toArray(new String[]{})) ;
+        String[] newRecipients = existRecipients.values().toArray(new String[]{}) ;
+        converNode.setProperty(Utils.EXO_RECIPIENT, newRecipients) ;
         //TODO: add when save message
-        if(msgNode.canAddMixin("mix:referenceable")) msgNode.addMixin("mix:referenceable") ;
-        if(msgNode.canAddMixin("exo:conversationMixin")) msgNode.addMixin("exo:conversationMixin") ;
-        msgNode.setProperty(Utils.EXO_RECIPIENT, existRecipients.values().toArray(new String[]{})) ;
+        msgNode.addMixin("mix:referenceable") ;
+        msgNode.addMixin("exo:conversationMixin") ;
+        msgNode.setProperty(Utils.EXO_RECIPIENT, newRecipients) ;
         createReference(msgNode, converNode) ;
         msgNode.save() ;
         converNode.save() ;
       } else {
-        converNode = msgNode ;
-        if(converNode.canAddMixin("mix:referenceable")) converNode.addMixin("mix:referenceable") ;
-        if(converNode.canAddMixin("exo:conversationMixin")) converNode.addMixin("exo:conversationMixin") ;
-        converNode.setProperty(Utils.EXO_SUBJECT, subject) ;
-        converNode.setProperty(Utils.EXO_RECIPIENT, recipients) ;
-        converNode.save() ;
+        msgNode.addMixin("mix:referenceable") ;
+        msgNode.addMixin("exo:conversationMixin") ;
+        msgNode.setProperty(Utils.EXO_SUBJECT, subject) ;
+        msgNode.setProperty(Utils.EXO_RECIPIENT, recipients) ;
+        msgNode.save() ;
       }
     } catch(Exception e) {
       e.printStackTrace() ;

@@ -468,7 +468,11 @@
                 <% 
                   } else if (msg.isRootConversation()){
                 %>
-                  ( <%=msg.getGroupedMessageIds().size() + 1%> )
+                  ( <% 
+                      int nom = 1 ;
+                      for (String id : msg.getGroupedMessageIds()) if (uicomponent.messageList_.containsKey(id)) nom++ ;
+                      print(nom);
+                    %> )
                 <%
                   }
                 %>
