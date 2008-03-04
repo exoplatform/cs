@@ -17,8 +17,8 @@
 package org.exoplatform.mail.service;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.exoplatform.commons.exception.ExoMessageException;
 /**
@@ -33,7 +33,7 @@ abstract public class JCRPageList {
   protected long available_ = 0;
   protected long availablePage_  = 1;
   protected long currentPage_ = 1 ;
-  protected Map<String, Message> currentListPage_ ;
+  protected LinkedHashMap<String, Message> currentListPage_ ;
   
   public JCRPageList(long pageSize) {
     pageSize_ = pageSize ;

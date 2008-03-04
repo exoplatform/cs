@@ -153,9 +153,7 @@ public class MessageFilter {
   public void setKeepInInbox(boolean keepInbox) { this.keepInbox = keepInbox ; }
   
   public String getStatement() throws Exception{
-    StringBuffer queryString = new StringBuffer();
-    if (Utils.SHOWCONVERSATION) queryString.append("/jcr:root" + accountPath + "//element(*,exo:conversationMixin)") ;
-    else queryString.append("/jcr:root" + accountPath + "//element(*,exo:message)") ;
+    StringBuffer queryString = new StringBuffer("/jcr:root" + accountPath + "//element(*,exo:message)");
     boolean hasConjuntion = false ;
     StringBuffer stringBuffer = new StringBuffer("[") ;
     if(folder != null && folder.length > 0) {
@@ -350,7 +348,7 @@ public class MessageFilter {
       else stringBuffer.append("descending");
     }
     
-    //System.out.println(" ## Query Statement : " + stringBuffer.toString());
+    // System.out.println(" ## Query Statement : " + stringBuffer.toString());
     if(hasConjuntion) queryString.append(stringBuffer.toString()) ;
     return queryString.toString() ;
   }

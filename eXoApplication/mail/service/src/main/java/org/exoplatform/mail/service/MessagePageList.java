@@ -19,6 +19,7 @@ package org.exoplatform.mail.service;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -78,7 +79,7 @@ public class MessagePageList extends JCRPageList {
     }
     previousListPage = new HashMap<String, Message>() ;
     if (currentListPage_ != null) previousListPage = currentListPage_;
-    currentListPage_ = new HashMap<String, Message>() ;
+    currentListPage_ = new LinkedHashMap<String, Message>() ;
     
     for(int i = 0; i < pageSize; i ++) {
       if(iter_.hasNext()){
@@ -123,10 +124,10 @@ public class MessagePageList extends JCRPageList {
         break ;
       }
     }
-    iter_ = null ;    
+    iter_ = null ; 
   }
   
-  private Map<String, Message> getMessageList(Map<String, Message> listPage, Node currentNode, String folderId, String[] refFolders) throws Exception {
+  private LinkedHashMap<String, Message> getMessageList(LinkedHashMap<String, Message> listPage, Node currentNode, String folderId, String[] refFolders) throws Exception {
     PropertyIterator prosIter = currentNode.getReferences() ;
     String accId = currentNode.getProperty(Utils.EXO_ACCOUNT).getString() ;
     String sentFolderId = Utils.createFolderId(accId, Utils.FD_SENT, false) ;
