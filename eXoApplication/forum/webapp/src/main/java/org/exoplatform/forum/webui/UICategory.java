@@ -109,6 +109,7 @@ public class UICategory extends UIForm	{
 		if(this.isEditForum) {
 			this.forums = forumService.getForums(ForumSessionUtils.getSystemProvider(), this.categoryId);
 			this.isEditForum = false ;
+      this.getAncestorOfType(UICategoryContainer.class).getChild(UICategories.class).setIsgetForumList(true) ;
 		}
 		for(Forum forum : this.forums) {
 			if(getUIFormCheckBoxInput(forum.getId()) != null) {

@@ -44,46 +44,46 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
  *  Mar 3, 2008 2:12:29 PM
  */
 @ComponentConfig(
-		lifecycle = UIFormLifecycle.class,
-		template = "app:/templates/forum/webui/popup/UISelectItemForumForm.gtmpl",
-		events = {
-			@EventConfig(listeners = UISelectItemForum.SaveActionListener.class), 
-			@EventConfig(listeners = UISelectItemForum.CancelActionListener.class,phase = Phase.DECODE)
-		}
+	lifecycle = UIFormLifecycle.class,
+	template = "app:/templates/forum/webui/popup/UISelectItemForumForm.gtmpl",
+	events = {
+		@EventConfig(listeners = UISelectItemForum.SaveActionListener.class), 
+		@EventConfig(listeners = UISelectItemForum.CancelActionListener.class,phase = Phase.DECODE)
+	}
 )
 public class UISelectItemForum extends UIForm implements UIPopupComponent {
 	List<ForumLinkData> forumLinks = null;
 	private boolean isTopic = false ;
-	private String IdChild = "" ;
+	@SuppressWarnings("unused")
+  private String IdChild = "" ;
 	private Map<String, List<ForumLinkData>> mapListForum = new HashMap<String, List<ForumLinkData>>() ;
 	private Map<String, List<ForumLinkData>> mapListTopic = new HashMap<String, List<ForumLinkData>>() ;
 	public UISelectItemForum() {
-	 
-  }
+	}
 	
 	public void activate() throws Exception {}
 	public void deActivate() throws Exception {}
 	
-  public void setForumLinks() throws Exception {
+	public void setForumLinks() throws Exception {
 		this.forumLinks = getAncestorOfType(UIForumPortlet.class).getChild(UIForumLinks.class).getForumLinks() ; 
 		if(this.forumLinks.size() <= 0) {
 			ForumService forumService =	(ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
 			this.forumLinks = forumService.getAllLink(ForumSessionUtils.getSystemProvider());
 		}
 	}
-  
-  public void setIsTopic(boolean isTopic, String IdChild) {
-  	this.isTopic = isTopic ;
-  	this.IdChild = IdChild ;
-  }
 	
-  @SuppressWarnings("unused")
-  private boolean getIsTopic() {
-  	return this.isTopic ;
-  }
-  
+	public void setIsTopic(boolean isTopic, String IdChild) {
+		this.isTopic = isTopic ;
+		this.IdChild = IdChild ;
+	}
+	
+	@SuppressWarnings("unused")
+	private boolean getIsTopic() {
+		return this.isTopic ;
+	}
+	
 	@SuppressWarnings({ "unchecked", "unused" })
-  private List<ForumLinkData> getForumLinks() throws Exception {
+	private List<ForumLinkData> getForumLinks() throws Exception {
 		String categoryId = "" , forumId = "";
 		boolean isPut = true ;
 		List<ForumLinkData> linkForum = new ArrayList<ForumLinkData>() ;
@@ -115,7 +115,7 @@ public class UISelectItemForum extends UIForm implements UIPopupComponent {
 				mapListTopic.put(forumId, linkTopic) ;
 				linkTopic = new ArrayList<ForumLinkData>() ;
 			}
-    }
+		}
 		if(linkTopic.size() > 0) {
 			mapListTopic.put(forumId, linkTopic) ;
 		}
@@ -123,39 +123,40 @@ public class UISelectItemForum extends UIForm implements UIPopupComponent {
 	}
 	
 	@SuppressWarnings("unused")
-  private List<ForumLinkData> getForums(String categoryId) {
+	private List<ForumLinkData> getForums(String categoryId) {
 		return mapListForum.get(categoryId) ;
 	}
 
 	@SuppressWarnings("unused")
-  private List<ForumLinkData> getTopics(String forumId) {
+	private List<ForumLinkData> getTopics(String forumId) {
 		return mapListForum.get(forumId) ;
 	}
 	
 	private String getNameForumLinkData(String id) throws Exception {
 		for (ForumLinkData linkData : this.forumLinks ) {
-	    if(linkData.getId().equals(id)) return linkData.getName() ;
-    }
+			if(linkData.getId().equals(id)) return linkData.getName() ;
+		}
 		return null ;
 	}
 
 	static	public class SaveActionListener extends EventListener<UISelectItemForum> {
-    public void execute(Event<UISelectItemForum> event) throws Exception {
-    	UISelectItemForum uiForm = event.getSource() ;
-    	String idSelected = "" ;
-    	List<UIComponent> children = uiForm.getChildren() ;
-    	for(UIComponent child : children) {
+		@SuppressWarnings("unchecked")
+		public void execute(Event<UISelectItemForum> event) throws Exception {
+			UISelectItemForum uiForm = event.getSource() ;
+			String idSelected = "" ;
+			List<UIComponent> children = uiForm.getChildren() ;
+			for(UIComponent child : children) {
 				if(child instanceof UIFormCheckBoxInput) {
 					if(((UIFormCheckBoxInput)child).isChecked()) {
 						idSelected = idSelected + uiForm.getNameForumLinkData(child.getName()) +" ("+ child.getName() + ");<br/>";
 					}
 				}
 			}
-    	UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-    	UIModeratorManagementForm managementForm = popupContainer.getChild(UIModeratorManagementForm.class) ;
-    	managementForm.setValuesTextArea(idSelected) ;
-    	popupContainer.getChild(UIPopupAction.class).deActivate() ;
-    	event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
+			UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+			UIModeratorManagementForm managementForm = popupContainer.getChild(UIModeratorManagementForm.class) ;
+			managementForm.setValuesTextArea(idSelected) ;
+			popupContainer.getChild(UIPopupAction.class).deActivate() ;
+			event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
 		}
 	}
 	
@@ -167,12 +168,4 @@ public class UISelectItemForum extends UIForm implements UIPopupComponent {
 			event.getRequestContext().addUIComponentToUpdateByAjax(popupContainer) ;
 		}
 	}
-
-
-
-
-
-
-
-
 }

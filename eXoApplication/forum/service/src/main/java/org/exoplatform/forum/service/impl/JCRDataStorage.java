@@ -1182,6 +1182,12 @@ public class JCRDataStorage{
 			return userProfile;
 		}catch(PathNotFoundException e) {
 			userProfile.setUserId(userName) ;
+		// default Administration
+      if(userName.equals("root")) {
+        userProfile.setUserRole((long)0) ;
+        userProfile.setUserTitle("Administrator") ;
+      } else userProfile.setUserTitle("User") ;
+      saveUserProfile(sProvider, userProfile, false, false);
 			return userProfile ;
 		}
 	}
@@ -1198,7 +1204,6 @@ public class JCRDataStorage{
 			newProfileNode.setProperty("exo:totalPost", 0);
 			newProfileNode.setProperty("exo:totalTopic", 0);
 			newProfileNode.setProperty("exo:readTopic", new String[]{});
-			newUserProfile.setUserTitle("Register User");
 		}
 		if(newUserProfile.getUserRole() >= 2) {
 			newUserProfile.setUserRole((long)2);

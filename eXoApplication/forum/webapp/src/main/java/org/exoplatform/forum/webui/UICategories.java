@@ -55,7 +55,9 @@ public class UICategories extends UIContainer	{
 	private List<Topic> topicLastList = new ArrayList<Topic>() ;
 	private Map<String, List<Forum>> mapListForum = new HashMap<String, List<Forum>>() ;
 	private List<Category> categoryList = new ArrayList<Category>() ;
-	
+	private boolean isGetForumList = false ;
+  
+  
 	public UICategories() throws Exception {
 	}
 
@@ -83,12 +85,16 @@ public class UICategories extends UIContainer	{
 		return categoryList;
 	}	
 	
+  public void setIsgetForumList(boolean isGetForumList) {
+    this.isGetForumList = isGetForumList ;
+  }
 	private List<Forum> getForumList(String categoryId) throws Exception {
 		if(!mapListForum.isEmpty()) {
 			this.forumList = mapListForum.get(categoryId) ;
-			if(this.forumList == null || this.forumList.size() <= 0) {
+			if(this.forumList == null || this.forumList.size() <= 0 || isGetForumList) {
 				this.forumList = forumService.getForums(ForumSessionUtils.getSystemProvider(), categoryId);
 				mapListForum.put(categoryId, this.forumList) ;
+        isGetForumList = false ;
 			}
 		} else {
 			this.forumList = forumService.getForums(ForumSessionUtils.getSystemProvider(), categoryId);

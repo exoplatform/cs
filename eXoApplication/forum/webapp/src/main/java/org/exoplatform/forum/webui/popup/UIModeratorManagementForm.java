@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.forum.ForumFormatUtils;
 import org.exoplatform.forum.ForumSessionUtils;
@@ -35,7 +34,6 @@ import org.exoplatform.forum.webui.UIForumPortlet;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -107,6 +105,10 @@ public class UIModeratorManagementForm extends UIForm implements UIPopupComponen
 	
   @SuppressWarnings("unused")
   public JCRPageList setPageListUserProfile() throws Exception {
+    List<User> listUser = ForumSessionUtils.getAllUser() ;
+    for (User user : listUser) {
+      UserProfile userProfile = this.forumService.getUserProfile(ForumSessionUtils.getSystemProvider(), user.getUserName(), true, true) ;
+    }
   	this.pageList = this.forumService.getPageListUserProfile(ForumSessionUtils.getSystemProvider()) ;
   	this.pageList.setPageSize(10);
   	this.getChild(UIForumPageIterator.class).updatePageList(this.pageList) ;
@@ -472,6 +474,7 @@ public class UIModeratorManagementForm extends UIForm implements UIPopupComponen
       if(userProfile.getUserId().equals(ForumSessionUtils.getCurrentUser())) {
       	uiForm.getAncestorOfType(UIForumPortlet.class).setUserProfile() ;
       }
+      uiForm.isEdit = false ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
     }
   }
