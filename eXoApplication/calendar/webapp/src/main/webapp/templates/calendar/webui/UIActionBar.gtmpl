@@ -7,11 +7,21 @@
 						<div class="Title ControlButton">
 							<%=_ctx.appRes(uicomponent.id + ".label.QuickAdd")%>
 						</div>
-						<a href="javascript:void(0) ;" onclick="eXo.calendar.UICalendarPortlet.runAction(this)" actionLink="<%=uicomponent.event('QuickAddEvent','Event')%>" class="ControlButton">
-							<div class="IconHolder QuickAddEvent">
-								<%=_ctx.appRes(uicomponent.id + ".label.Event")%>
-							</div>
-						</a>
+						<div class="DefaultStyle CalendarBar" onmouseover="eXo.forum.UIForumPortlet.OverButton(this)" onmouseout="eXo.forum.UIForumPortlet.OverButton(this)">
+							<a href="javascript:void(0) ;" onclick="eXo.calendar.UICalendarPortlet.runAction(this)" actionLink="<%=uicomponent.event('QuickAddEvent','Event')%>">
+								<div class="LeftOverButton">
+									<div class="RightOverButton">
+										<div class="CenterOverButton">
+											<div class="IconHolder QuickAddEvent">
+												<%=_ctx.appRes(uicomponent.id + ".label.Event")%>
+											</div>
+										</div>
+									</div>
+								</div>
+							</a>
+						</div>
+					
+						
 						<a href="javascript:void(0) ;" onclick="eXo.calendar.UICalendarPortlet.runAction(this)" actionLink="<%=uicomponent.event('QuickAddEvent','Task')%>" class="ControlButton">
 							<div class="IconHolder AddNewTask">
 								<%=_ctx.appRes(uicomponent.id + ".label.Task")%>

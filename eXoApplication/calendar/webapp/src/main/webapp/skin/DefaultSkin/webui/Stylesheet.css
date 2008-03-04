@@ -227,3 +227,43 @@
 .UICalendarPortlet .SelectGroupIcon {
 	width: 16px ; height: 16px;
 }
+
+/******************************	OverButton	***************************************/
+.UICalendarPortlet .DefaultStyle .LeftOverButton {
+	padding-left: 5px;
+}
+
+.UICalendarPortlet .DefaultStyle .RightOverButton {
+	padding-right: 5px;
+}
+
+.UICalendarPortlet .DefaultStyle .CenterOverButton {
+	padding-left: 3px;
+}
+/*ForumAction*/
+.UICalendarPortlet .CalendarBar {
+	background: none;
+	height: 22px;
+	float: left;
+	margin: 5px 3px 0px 3px; 
+}
+
+.UICalendarPortlet .CalendarBarAction {
+	background: none;
+	height: 22px;
+	float: left;
+	margin: 5px 3px 0px 3px; 
+}
+
+.UICalendarPortlet .CalendarBarAction .LeftOverButton {
+	background: url('background/LeftOverButton5x22.gif') no-repeat left top;
+}
+
+.UICalendarPortlet .CalendarBarAction .RightOverButton {
+	background: url('background/RightOverButton5x22.gif') no-repeat right top;
+}
+
+.UICalendarPortlet .CalendarBarAction .CenterOverButton {
+	background: url('background/CenterOverButton1x22.gif') repeat-x top;
+	height: 22px;
+}
