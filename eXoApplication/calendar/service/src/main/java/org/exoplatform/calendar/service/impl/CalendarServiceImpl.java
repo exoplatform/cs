@@ -234,6 +234,6 @@ public class CalendarServiceImpl implements CalendarService{
     return storage_.hasEditPermission(sProvider, sharedCalendarId, username);
   }
   public void moveEvent(SessionProvider sProvider, String formCalendar, String toCalendar,String fromType, String toType, List<CalendarEvent> calEvents, String username) throws Exception {
-    storage_.moveEvent(sProvider, formCalendar, fromType, toType, toCalendar, calEvents, username)  ;
+    storage_.moveEvent(sProvider, formCalendar,toCalendar, fromType, toType, calEvents, username)  ;
   }
 }

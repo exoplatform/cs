@@ -1884,7 +1884,7 @@ public class JCRDataStorage{
     return false;
   }
 
-  public void moveEvent(SessionProvider sProvider, String formCalendar, String toCalendar,String fromType, String toType, List<CalendarEvent> calEvents, String username) throws Exception {
+  public void moveEvent(SessionProvider sProvider, String formCalendar, String toCalendar, String fromType, String toType, List<CalendarEvent> calEvents, String username) throws Exception {
     SessionProvider systemSession = SessionProvider.createSystemProvider() ;
     switch (Integer.parseInt(fromType)) {
     case  Calendar.TYPE_PRIVATE :  
