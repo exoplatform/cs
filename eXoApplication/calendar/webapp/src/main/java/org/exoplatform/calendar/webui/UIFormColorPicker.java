@@ -153,10 +153,9 @@ public class UIFormColorPicker extends UIFormInputBase<String>  {
   private int items() {return items_ ;}
   private int size() {return colors_.length ;}
   public void processRender(WebuiRequestContext context) throws Exception {
-    context.getJavascriptManager().addJavascript("eXo.calendar.UIColorPicker.init('" + getId()+ "');") ;  
     Writer w =  context.getWriter() ; 
     w.write("<div class='UIFormColorPicker'>") ;
-      w.write("<div class=\"UIColorPickerInput\">") ;
+      w.write("<div class=\"UIColorPickerInput\" onclick=\"eXo.calendar.UIColorPicker.show(this)\">") ;
       w.write("<span class=\""+encodeValue(value_).toString()+"\"></span>") ;
       w.write("</div>") ;
       w.write("<div class=\"CalendarTableColor\">") ;
