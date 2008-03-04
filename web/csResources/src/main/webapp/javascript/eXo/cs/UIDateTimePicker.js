@@ -5,6 +5,7 @@ UIDateTimePicker = function(calendarId) {
   														// if selectedDate is invalid, currentDate deals with system time;
   this.selectedDate = null ; //Datetime value of input date&time field
   this.months = ['January','February','March','April','May','June','July','August','September','October','November','December'] ;
+  this.weekdays = ['S','M','T','W','T','F','S'] ;
 }
 
 UIDateTimePicker.prototype.init = function(field, isDisplayTime) {
@@ -14,7 +15,6 @@ UIDateTimePicker.prototype.init = function(field, isDisplayTime) {
 	}
 	this.dateField = field ;
 	if (!document.getElementById(this.calendarId)) this.create() ;
-//	field.parentNode.style.position = 'relative' ;
   field.parentNode.insertBefore(document.getElementById(this.calendarId), field) ;
   this.show() ;
 }
@@ -29,20 +29,51 @@ UIDateTimePicker.prototype.create = function() {
 		clndr.innerHTML = "<div class='UICalendarComponent'><div style='position: absolute; width: 100%;'></div></div>" ;
 	}
 	document.body.appendChild(clndr) ;
-}
+} ;
 
 UIDateTimePicker.prototype.show = function() {
 	document.onmousedown = new Function('eXo.cs.UIDateTimePicker.hide()') ;
-	var re = /^(\d{1,2}\/\d{1,2}\/\d{1,4})\s*(\s+\d{1,2}:\d{1,2}:\d{1,2})?$/i ;
+  var str = this.dateField.getAttribute("format") ;
+  str = str.replace(/d{2}/,"(\\d{1,2}\\") ;
+  str = str.replace(/M{2}/,"\\d{1,2}\\") ;
+  str = str.replace(/y{2,4}/,"\\d{1,4})") ;
+  if(this.isDisplayTime) {
+    str = str.replace(/\s+/,"\\s*") ;
+    str = str.replace(/H{2}/,"(\\d{1,2}\\") ;
+    str = str.replace(/m{2}/,"\\d{1,2}\\") ;
+    str = str.replace(/s{2}/,"\\d{1,2})") ;    
+  }
+  str = "^" + str + "?$" ;
+	re = new RegExp(str,'i') ;
   this.selectedDate = new Date() ;
 	if (re.test(this.dateField.value)) {
 	  var dateParts = this.dateField.value.split(" ") ;
-	  var arr = dateParts[0].split("/") ;
-	  this.selectedDate.setDate(parseInt(arr[1],10)) ;
-	  this.selectedDate.setMonth(parseInt(arr[0],10) - 1) ;
+    var spLine = dateParts[0].match(/\W{1}/) ;
+	  var arr = dateParts[0].split(spLine) ;
+    var type = this.getTypeFormat() ;
+    var month = 0 ;
+    var date = 0 ;
+    switch(type) {
+      case 0 :
+      case 1 : 
+        date = arr[0] ;
+        month = arr[1] ;
+      break ;
+      case 2 :
+      case 3 : 
+        date = arr[1] ;
+        month = arr[0] ;
+      break ;
+      default : 
+        date = arr[0] ;
+        month = arr[1] ;
+    }
+	  this.selectedDate.setDate(parseInt(date,10)) ;
+	  this.selectedDate.setMonth(parseInt(month,10) - 1) ;
 	  this.selectedDate.setFullYear(parseInt(arr[2],10)) ;
 	  if (dateParts.length > 1 && dateParts[dateParts.length - 1] != "") {
-	  	arr = dateParts[dateParts.length - 1].split(":") ;
+	  	spLine = dateParts[dateParts.length - 1].match(/\W{1}/) ;
+      arr = dateParts[dateParts.length - 1].split(spLine) ;
 	  	this.selectedDate.setHours(arr[0], 10) ;
 	  	this.selectedDate.setMinutes(arr[1], 10) ;
 	  	this.selectedDate.setSeconds(arr[2], 10) ;
@@ -68,8 +99,6 @@ UIDateTimePicker.prototype.show = function() {
 			drag.style.width = innerWidth + "px";
 			eXo.core.DragDrop.init(null, drag, drag, event);
 	 	}
-	
-	//
 	var primary = eXo.core.DOMUtil.findAncestorById(this.dateField, "UIECMSearch");
 	if (primary && eXo.core.Browser.isFF()) {
 			calendar = clndr.firstChild;
@@ -77,15 +106,25 @@ UIDateTimePicker.prototype.show = function() {
 			calendar.style.left = this.dateField.offsetLeft - this.dateField.offsetWidth - 32 + "px";
 	}
 	
-}
+} ;
 
 UIDateTimePicker.prototype.hide = function() {
   if (this.dateField) {
     document.getElementById(this.calendarId).firstChild.style.display = 'none' ;
-//		this.dateField.parentNode.style.position = '' ;
     this.dateField = null ;
   }
  	document.onmousedown = null ;
+} ;
+
+UIDateTimePicker.prototype.getTypeFormat = function() {
+  var dateMask = ["dd/MM/yyyy","dd-MM-yyyy","MM/dd/yyyy","MM-dd-yyyy"] ;
+  var dateTimeFormat = this.dateField.getAttribute("format") ;
+  var dateFormat = (this.isDisplayTime)?dateTimeFormat.split(' ')[0].trim() : dateTimeFormat ;
+  var len = dateMask.length ;
+  for(var i = 0 ; i < len ; i ++) {
+    if (dateMask[i] == dateFormat) return i ;
+  }
+  return false ;
 }
 
 /* TODO: Move HTML code to a javascript template file (.jstmpl) */
@@ -101,7 +140,7 @@ UIDateTimePicker.prototype.renderCalendar = function() {
 	table += 		'	  <tr>' ;
 	table += 		'			<td class="MonthButton"><a class="PreviousMonth" href="javascript:eXo.cs.UIDateTimePicker.changeMonth(-1);"></a></td>' ;
 	table += 		'			<td class="YearButton"><a class="PreviousYear" href="javascript:eXo.cs.UIDateTimePicker.changeYear(-1);"></a></td>' ;
-	table += 		'			<td><font color="#f89302">' + this.months[this.currentDate.getMonth()] + '</font> - ' + this.currentDate.getFullYear() + '</td>' ;
+	table += 		'			<td><span style="color:#f89302;">' + this.months[this.currentDate.getMonth()] + '</span> - <span>' + this.currentDate.getFullYear() + '</span></td>' ;
 	table += 		'			<td class="YearButton"><a class="NextYear" href="javascript:eXo.cs.UIDateTimePicker.changeYear(1);"></a></td>' ;
 	table += 		'			<td class="MonthButton"><a class="NextMonth" href="javascript:eXo.cs.UIDateTimePicker.changeMonth(1);"></a></td>' ;
 	table += 		'		</tr>' ;
@@ -109,7 +148,7 @@ UIDateTimePicker.prototype.renderCalendar = function() {
 	table += 		'	<div style="margin-top: 6px;padding: 0px 5px;">' ;
 	table += 		'		<table>' ;
 	table += 		'			<tr>' ;
-	table += 		'				<td><font color="red">S</font></td><td>M</td><td>T</td><td>W</td><td>T</td><td>F</td><td>S</td>' ;
+	table += 		'				<td><font color="red">' + this.weekdays[0] + '</font></td><td>' + this.weekdays[1] + '</td><td>' + this.weekdays[2] + '</td><td>' + this.weekdays[3] + '</td><td>' + this.weekdays[4] + '</td><td>' + this.weekdays[5] + '</td><td>' + this.weekdays[6] + '</td>' ;
 	table += 		'			</tr>' ;
 	table += 		'		</table>' ;
 	table += 		'	</div>' ;
@@ -152,35 +191,54 @@ UIDateTimePicker.prototype.renderCalendar = function() {
 	table += 		'</div>' ;
 	table += 		'</div>' ;
 	return table ;
-}
+} ;
 
 UIDateTimePicker.prototype.changeMonth = function(change) {
 	this.currentDate.setMonth(this.currentDate.getMonth() + change) ;
   var clndr = document.getElementById(this.calendarId) ;
   clndr.firstChild.lastChild.innerHTML = this.renderCalendar() ;
-}
+} ;
 
 UIDateTimePicker.prototype.changeYear = function(change) {
   this.currentDate.setFullYear(this.currentDate.getFullYear() + change) ;
   this.currentDay = 0 ;
   var clndr = document.getElementById(this.calendarId) ;
   clndr.firstChild.lastChild.innerHTML = this.renderCalendar() ;
-}
+} ;
 
 UIDateTimePicker.prototype.setDate = function(year, month, day) {	
   if (this.dateField) {
     if (month < 10) month = "0" + month ;
     if (day < 10) day = "0" + day ;
-    var dateString = month + "/" + day + "/" + year ;
-    if (!this.currentHours) this.currentHours = new Date().getHours() ;
-    if (!this.currentMinutes) this.currentMinutes = new Date().getMinutes() ;
-    if (!this.currentSeconds) this.currentSeconds = new Date().getSeconds() ;
-    if(this.isDisplayTime) dateString += " " + this.currentHours + ":" + this.currentMinutes + ":" + this.currentSeconds ;
+    var dateString = this.dateField.getAttribute("format") ;
+    yearString = new String(dateString.match(/y{2,4}/)) ;
+    year = year.toString() ;
+    if(yearString.length < 4) year = year.charAt(year.length - 2) + year.charAt(year.length - 1) ;
+    dateString = dateString.replace(/d{2}/, day) ;
+    dateString = dateString.replace(/M{2}/, month) ;
+    dateString = dateString.replace(/y{2,4}/, year) ;
+    this.currentHours = new Date().getHours() ;
+    this.currentMinutes = new Date().getMinutes() ;
+    this.currentSeconds = new Date().getSeconds() ;
+    if (this.isDisplayTime) {
+      var currentHours = (this.currentHours < 10) ? "0" + this.currentHours : this.currentHours;
+      var currentMinutes = (this.currentMinutes < 10) ? "0" + this.currentMinutes : this.currentMinutes;
+      var currentSeconds = (this.currentSeconds < 10) ? "0" + this.currentSeconds : this.currentSeconds;
+      dateString = dateString.replace(/H{2}/, currentHours) ;
+      dateString = dateString.replace(/m{2}/, currentMinutes) ;
+      dateString = dateString.replace(/s{2}/, currentSeconds) ;
+    } else {
+      dateString = dateString.split(' ') ;
+      this.dateField.value = dateString[0] ;
+      this.hide() ;
+      return ;
+    }
+    
     this.dateField.value = dateString ;
     this.hide() ;
   }
   return ;
-}
+} ;
 
 UIDateTimePicker.prototype.setSeconds = function(object) {
 		if(this.dateField) {
@@ -189,8 +247,6 @@ UIDateTimePicker.prototype.setSeconds = function(object) {
 				object.value = seconds.substring(0,1);
 				return;
 			}
-//			this.currentHours = this.currentDate.getHours() ;
-//    	this.currentMinutes = this.currentDate.getMinutes() ;
 			if(seconds.length < 2) seconds = "0" + seconds;
 			var timeString = this.currentDate.getHours() + ":" + this.currentDate.getMinutes() + ":" + seconds;
 			this.currentDate.setSeconds(seconds);
@@ -201,7 +257,7 @@ UIDateTimePicker.prototype.setSeconds = function(object) {
 			this.dateField.value = timeString;
 	}
 	return;
-}
+} ;
 
 UIDateTimePicker.prototype.setMinus = function(object) {
 		if(this.dateField) {
@@ -210,8 +266,6 @@ UIDateTimePicker.prototype.setMinus = function(object) {
 				object.value = minus.substring(0,1);
 				return;
 			}
-//			this.currentHours = this.currentDate.getHours() ;
-// 			this.currentSeconds = this.currentDate.getSeconds() ;
 			if(minus.length < 2) minus = "0" + minus;
 			this.currentDate.setMinutes(minus);
 			var timeString = this.currentDate.getHours() + ":" + minus + ":" + this.currentDate.getSeconds();
@@ -222,7 +276,7 @@ UIDateTimePicker.prototype.setMinus = function(object) {
 			this.dateField.value = timeString;
 	}
 	return;
-}
+} ;
 
 UIDateTimePicker.prototype.setHour = function(object) {
 		if(this.dateField) {
@@ -231,8 +285,6 @@ UIDateTimePicker.prototype.setHour = function(object) {
 				object.value = hour.substring(0,1);	
 				return;
 			}
-//			this.currentMinutes = this.currentDate.getMinutes() ;
-//    	this.currentSeconds = this.currentDate.getSeconds() ;
 			if(hour.length < 2) hour = "0" + hour;
 			this.currentDate.setHours(hour);
 			var timeString = hour + ":" + this.currentDate.getMinutes() + ":" + this.currentDate.getSeconds();
@@ -243,30 +295,20 @@ UIDateTimePicker.prototype.setHour = function(object) {
 			this.dateField.value = timeString;
 	}
 	return;
-}
+} ;
 
 UIDateTimePicker.prototype.clearDate = function() {
   this.dateField.value = '' ;
   this.hide() ;
-}
+} ;
 
 UIDateTimePicker.prototype.getDayOfWeek = function(year, month, day) {
   var date = new Date(year, month - 1, day) ;
   return date.getDay() ;
-}
+} ;
 
 UIDateTimePicker.prototype.getDaysInMonth = function(year, month) {
 	return [31, ((!(year % 4 ) && ( (year % 100 ) || !( year % 400 ) ))? 29:28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
-}
-
-//UIDateTimePicker.prototype.getChangedTime = function(input, type) {
-//	var time = input.value ;
-//	if (isNaN(time)) {
-//		return ; 
-//	}
-//	if (type == 'h') this.currentHours = time ;
-//	else if (type == 'm') this.currentMinutes = time ;
-//	else if (type == 's') this.currentSeconds = time ;
-//}
+} ;
 
 eXo.cs.UIDateTimePicker = new UIDateTimePicker('UICalendarControl') ;
