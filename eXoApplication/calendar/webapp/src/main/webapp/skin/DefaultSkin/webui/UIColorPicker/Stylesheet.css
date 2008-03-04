@@ -15,8 +15,13 @@
 	line-height: 20px;
 }
 .UICalendarPortlet .UIFormColorPicker .UIColorPickerInput .DisplayValue {
-	height: 16px;
-	margin: 2px;
+	display:block;
+}
+
+.UICalendarPortlet .UIFormColorPicker .UIColorPickerInput span {
+ 	*height:16px;
+ 	height: 16px;
+ 	margin: 2px;
 }
 
 .UICalendarPortlet .UIFormColorPicker a:hover{
