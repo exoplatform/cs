@@ -16,6 +16,7 @@
  **/
 package org.exoplatform.calendar.webui.popup;
 
+import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -109,6 +110,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   private CalendarEvent calendarEvent_ = null ;
   protected String calType_ = "0" ;
   private String errorMsg_ = null ;
+  
+  private static String oldCalendarId = null ;
+  private static String newCalendarId = null ;
   //protected LinkedHashMap<String, String> participants_ = new LinkedHashMap<String, String>() ;
 
   public UIEventForm() throws Exception {
@@ -163,6 +167,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     attenderTab.getUIFormComboBox(UIEventAttenderTab.FIELD_FROM_TIME).setOptions(fromOptions) ;
     attenderTab.getUIFormComboBox(UIEventAttenderTab.FIELD_TO_TIME).setOptions(toOptions) ;
     if(eventCalendar != null) {
+      oldCalendarId = eventCalendar.getCalType() + CalendarUtils.COLON + eventCalendar.getCalendarId();
+      
       isAddNew_ = false ;
       calendarEvent_ = eventCalendar ;
       setEventSumary(eventCalendar.getSummary()) ;
@@ -384,6 +390,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   protected String getCalendarId() {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     String value = eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CALENDAR).getValue() ;
+    if(oldCalendarId != null) newCalendarId = value ;
     if (!CalendarUtils.isEmpty(value) && value.split(CalendarUtils.COLON).length>0) {
       calType_ = value.split(CalendarUtils.COLON)[0] ; 
       return value.split(CalendarUtils.COLON)[1] ;      
@@ -922,23 +929,24 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
           calendarEvent.setAttachment(uiForm.getAttachments(calendarEvent.getId(), uiForm.isAddNew_)) ;
           calendarEvent.setReminders(uiForm.getEventReminders(from, calendarEvent.getReminders())) ;
           eventId = calendarEvent.getId() ;
-          
-          if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
-            List<CalendarEvent> events =  new ArrayList<CalendarEvent>(); 
-            events.add(calendarEvent) ;
-            if(!uiForm.isAddNew_) {
-              if (!formCalendar.equals(toCalendar)) {
-                //calService.moveEvent(uiForm.getSession(), formCalendar, toCalendar,, events, username) ;
-              } else {
-                calService.saveUserEvent(uiForm.getSession(), username, calendarId, calendarEvent, uiForm.isAddNew_) ;
-              }
+          if(uiForm.isAddNew_){
+            if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
+              calService.saveUserEvent(uiForm.getSession(), username, calendarId, calendarEvent, uiForm.isAddNew_) ;
+            }else if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)){
+              calService.saveEventToSharedCalendar(uiForm.getSystemSession() , username, calendarId, calendarEvent, uiForm.isAddNew_) ;
+            }else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)){
+              calService.savePublicEvent(uiForm.getSystemSession() , calendarId, calendarEvent, uiForm.isAddNew_) ;          
             }
-            else calService.saveUserEvent(uiForm.getSession(), username, calendarId, calendarEvent, uiForm.isAddNew_) ;
-          }else if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)){
-            calService.saveEventToSharedCalendar(uiForm.getSystemSession() , username, calendarId, calendarEvent, uiForm.isAddNew_) ;
-          }else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)){
-            calService.savePublicEvent(uiForm.getSystemSession() , calendarId, calendarEvent, uiForm.isAddNew_) ;          
+          } else {
+            String fromCal = oldCalendarId.split(CalendarUtils.COLON)[1].trim() ;
+            String toCal = newCalendarId.split(CalendarUtils.COLON)[1].trim() ;
+            String fromType = oldCalendarId.split(CalendarUtils.COLON)[0].trim() ;
+            String toType = newCalendarId.split(CalendarUtils.COLON)[0].trim() ;
+            List<CalendarEvent> listEvent = new ArrayList<CalendarEvent>();
+            listEvent.add(calendarEvent) ;
+            calService.moveEvent(uiForm.getSession(), fromCal, toCal, fromType, toType, listEvent, username) ;
           }
+          
           /*System.out.println("\n\n added .  " + calendarEvent.getSummary() +" " +(new Date().getTime() - start_milisec) + " ss");
             t++ ;
           } 

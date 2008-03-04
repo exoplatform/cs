@@ -243,8 +243,8 @@ public class CalendarUtils {
     cal2.setTime(eventCalendar.getToDateTime()) ;
     return (cal1.get(Calendar.HOUR_OF_DAY) == 0  && 
         cal1.get(Calendar.MINUTE) == 0 &&
-        cal2.get(Calendar.HOUR_OF_DAY) == 0 && 
-        cal2.get(Calendar.MINUTE) == 0 );
+        cal2.get(Calendar.HOUR_OF_DAY) == cal2.getActualMaximum(Calendar.HOUR_OF_DAY)&& 
+        cal2.get(Calendar.MINUTE) == cal2.getActualMaximum(Calendar.MINUTE) );
   }
 
   public static boolean isSameDate(java.util.Calendar date1, java.util.Calendar date2) {
