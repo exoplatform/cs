@@ -57,7 +57,7 @@
 }
 
 .UICalendarPortlet .MinimizeButton {
-	background: url('icons/CalendarIcons.gif') no-repeat left -998px;
+	background: url('icons/CalendarIcons.gif') no-repeat left -988px;
 	width: 17px; height: 16px;
 }
 
@@ -98,7 +98,7 @@
 }
 
 .UICalendarPortlet .SelectUserIcon {
-	background: url('icons/CalendarIcons.gif') no-repeat left -1324px;
+	background: url('icons/CalendarIcons.gif') no-repeat left -1326px;
 }
 
 .UICalendarPortlet .AddCategory {

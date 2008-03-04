@@ -154,7 +154,7 @@
 }
 
 .UIWeekView .UIGrid th {
-	background: url('background/TitleBarBG1x23.gif') repeat-x ;	
+	background: url('../background/CalendarBackground.gif') repeat-x center -106px;	
   height: 23px;
 	border-right: 1px solid #c7c7c7;
 	width: 13.2%;
@@ -300,7 +300,7 @@
 }
 
 .UIWeekView .EventAlldayContainer .LeftResizeEvent {
-	background: url('background/LeftResizeEvent2x11.gif') no-repeat ;	
+	background: url('../background/CalendarBackground.gif') no-repeat left -130px;
 	width: 2px;
 	height: 11px;
 	float: left;
@@ -309,7 +309,7 @@
 }
 
 .UIWeekView .EventAlldayContainer .RightResizeEvent {
-	background: url('background/RightResizeEvent2x11.gif') no-repeat ;	
+	background: url('../background/CalendarBackground.gif') no-repeat right -130px;	
 	width: 2px;
 	height: 11px;
 	float: right;
@@ -318,7 +318,7 @@
 }
 
 .UIWeekView .EventAlldayContainer .RightContinueEvent {
-	background: url('background/RightContinueEvent8x9.gif') no-repeat ;	
+	background: url('../background/CalendarBackground.gif') no-repeat left -142px;	
 	width: 8px;
 	height: 9px;
 	float: right;
@@ -326,7 +326,7 @@
 }
 
 .UIWeekView .EventAlldayContainer .LeftContinueEvent {
-	background: url('background/LeftContinueEvent8x9.gif') no-repeat ;	
+	background: url('../background/CalendarBackground.gif') no-repeat left -152px;	
 	width: 8px;
 	height: 9px;
 	float: left;
@@ -365,7 +365,7 @@
 
 
 .UIScheduleView .UIGrid th {
-	background: url('background/TitleBarBG1x23.gif') repeat-x ;	
+	background: url('../background/CalendarBackground.gif') repeat-x center -106px;	
   height: 23px;
 	border-right: 1px solid #c7c7c7;
 	width: 22%;
@@ -474,14 +474,14 @@
 }
 
 .UIYearView .WeekSuburdbar {
-	background: url('background/TitleBarBG1x23.gif') repeat-x ;
+	background: url('../background/CalendarBackground.gif') repeat-x center -106px;	
 	height: 23px;
 	text-align: center;
 	line-height: 23px;
 }
 
 .UIYearView .CurrentWeekSuburdbar {
-	background: url('background/CurrentTitleBarBG1x23.gif') repeat-x ;
+	background: url('../background/CalendarBackground.gif') repeat-x center -27px;	
 	height: 23px;
 	text-align: center;
 	line-height: 23px;
@@ -559,7 +559,7 @@
 }
 
 .ListBar {
-	background: url('background/TitleBarBG1x26.gif') repeat-x ;	
+	background: url('../background/CalendarBackground.gif') repeat-x center -79px;		
 	height: 26px;
 	border-left: 1px solid #c7c7c7;
 }
@@ -608,7 +608,7 @@
 }
 
 .UIListView .UIGrid th {
-	background: url('background/TitleBarBG1x20.gif') repeat-x ;	
+	background: url('../background/CalendarBackground.gif') repeat-x center -162px;		
   height: 20px;
 	border-right: 1px solid #c7c7c7;
 }
@@ -656,7 +656,7 @@
 	line-height: 23px;
 	text-align: center;
 	font-weight: bold;
-	background: url('background/TitleBarBG1x23.gif') repeat-x ;
+	background: url('../background/CalendarBackground.gif') repeat-x center -106px;
 	border-left: 1px solid #cccccc;
 	border-right: 1px solid #cccccc;
 	margin-right: 5px;
@@ -746,13 +746,13 @@
 
 .UIPreview .ViewContainer .SeparatorDotLine {
 	float: left;
-	background: url('background/SeparatorDotLine1x25.gif') no-repeat ;
+	background: url('../background/CalendarBackground.gif') no-repeat -4px top;
 	width: 1px; height: 25px;
 	margin: 3px 5px;
 }
 
 .UIPreview .ViewContainer .ActionsContainer {
-	background: url('background/DotLine2x1.gif') repeat-x top ;
+	border-top: 1px dotted #b7b7b7;
 	margin: 0px 10px 0px 33px;
 	padding-top: 2px;
 }
@@ -841,7 +841,7 @@
 }
 
 .UIMonthView .EventMonthContent  .WeekList {
-	background: url('background/TitleBarBG1x23.gif') repeat-x ;	
+	background: url('../background/CalendarBackground.gif') repeat-x center -51px;	
   height: 23px;
 	border-left: 1px solid #c7c7c7;
 }
@@ -906,7 +906,7 @@
 }
 
 .UITaskView .TaskListContainer .ListBar {
-	background: url('background/TitleBarBG1x26.gif') repeat-x ;	
+	background: url('../background/CalendarBackground.gif') repeat-x center -79px;	
 	height: 26px;
 	padding: 0px 8px;
 	border-left: 1px solid #c7c7c7;
@@ -931,7 +931,7 @@
 }
 
 .UITaskView .TaskListContainer .AddCategoryIcon {
-	background: url('skinIcons/16x16/icons/AddCategory.gif') no-repeat ;
+	background: url('../skinIcons/icons/CalendarIcons.gif') no-repeat left -27px;
 	float: right;
 	width: 16px; height: 16px;
 	margin: 5px 6px 0px 3px;
@@ -1007,13 +1007,13 @@
 
 .UITaskView .TaskListContainer .ViewContainer .SeparatorDotLine {
 	float: left;
-	background: url('background/SeparatorDotLine1x25.gif') no-repeat ;
+	background: url('../background/CalendarBackground.gif') no-repeat 4px top;
 	width: 1px; height: 25px;
 	margin: 3px 5px;
 }
 
 .UITaskView .TaskListContainer .ViewContainer .ActionsContainer {
-	background: url('background/DotLine2x1.gif') repeat-x top ;
+	background: url('../background/CalendarBackground.gif') repeat-x center -183px;
 	margin-right: 10px;
 }
 
@@ -1046,7 +1046,7 @@
 }
 
 .UITaskView .TaskListContainer  .UIGrid th {
-	background: url('background/TitleBarBG1x20.gif') repeat-x ;	
+	background: url('../background/CalendarBackground.gif') repeat-x center -162px;	
   height: 20px;
 	border-right: 1px solid #c7c7c7;
 	border-bottom: none;

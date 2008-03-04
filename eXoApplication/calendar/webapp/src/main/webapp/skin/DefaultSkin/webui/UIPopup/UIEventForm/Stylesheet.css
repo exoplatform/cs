@@ -1,18 +1,21 @@
 .UICalendarPortlet .UIAddNewEvent {
-	padding: 8px; 
 }
 
 .UICalendarPortlet .UIAddNewEvent .ReminderByEmail {
-	background: url('background/ReminderTabHeader1x24.gif') repeat-x top ;
-	padding: 4px;
+	padding: 6px;
+	background: #f4f4f4;
+	border: 1px solid #c9c9c9;
+	margin-bottom: 4px;
 }
 
 .UICalendarPortlet .UIAddNewEvent .ReminderByEmail input.checkbox{
 	float: left;
+	margin-right: 3px;
 }
 
 .UICalendarPortlet .UIAddNewEvent .ReminderByPopup input.checkbox{
 	float: left;
+	margin-right: 3px;
 }
 
 .UICalendarPortlet .UIAddNewEvent .ReminderByEmail .selectbox{
@@ -24,8 +27,9 @@
 }
 
 .UICalendarPortlet .UIAddNewEvent .ReminderByPopup {
-	background: url('background/ReminderTabHeader1x24.gif') repeat-x top ;
-	padding: 4px;
+	background: #f4f4f4;
+	padding: 6px;
+	border: 1px solid #c9c9c9;
 }
 
 .UICalendarPortlet .UIAddNewEvent .UIFormGrid{
@@ -46,7 +50,7 @@
 
 .UICalendarPortlet .UIAddNewEvent .AddEmailAddress {
 	float: left;
-	background: url('icons/16x16/AddEmailAddress.gif') no-repeat ;
+	background: url('../../skinIcons/icons/CalendarIcons.gif') no-repeat left -1841px;
 	width: 18px; height: 16px;
 	margin: 1px 0px 0px 6px;
 	cursor: pointer;
@@ -54,7 +58,7 @@
 
 .UICalendarPortlet .UIAddNewEvent .AddUserIcon {
 	float: right;
-	background: url('icons/16x16/AddUser.gif') no-repeat ;
+	background: url('../../skinIcons/icons/CalendarIcons.gif') no-repeat left -1793px;
 	width: 16px; height: 16px;
 	margin: 4px 0px 0px 6px;
 	cursor: pointer;
@@ -63,7 +67,7 @@
 
 .UICalendarPortlet .UIAddNewEvent .DeleteUserIcon {
 	float: right;
-	background: url('icons/16x16/DeleteUser.gif') no-repeat ;
+	background: url('../../skinIcons/icons/CalendarIcons.gif') no-repeat left -1769px;
 	width: 16px; height: 16px;
 	margin: 4px 4px 0px 6px;
 	cursor: pointer;
@@ -71,7 +75,7 @@
 
 .UICalendarPortlet .UIAddNewEvent .SaveUserIcon {
 	float: right;
-	background: url('icons/16x16/SaveUser.gif') no-repeat ;
+	background: url('../../skinIcons/icons/CalendarIcons.gif') no-repeat left -1817px;
 	width: 16px; height: 16px;
 	margin: 4px 0px 0px 6px;
 	cursor: pointer;
@@ -158,7 +162,7 @@
 }
 
 .UICalendarPortlet .UIAddNewEvent .NewEventAttendee .BusyDotTime {
-	background-image: url(background/BusyDot2x2.gif) ;
+	background-image: url(../background/RedDot2x2.gif) ;
 	width: 11px;
 }
 
@@ -178,7 +182,7 @@
 }
 
 .UICalendarPortlet .UIAddNewEvent .NewEventAttendee .TitleBar {
-  background: url('background/TitleBarBG1x23.gif') repeat-x ;	
+  background: url('../../background/CalendarBackgrond.gif') repeat-x center -51px;	
   height: 23px;
   border: 1px solid #c7c7c7;
   border-bottom: none;
@@ -296,15 +300,15 @@
 }
 
 .UICalendarPortlet .UIAddTask .HorizontalLayout .SelectUserIcon {
-	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/SmallUserIcon.gif') no-repeat;
+	background: url('../../skinIcons/icons/CalendarIcons.gif') no-repeat left -1324px;
 }
 
 .UICalendarPortlet .UIAddTask .HorizontalLayout .SelectMemberIcon {
-	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/SmallGroupIcon.gif') no-repeat;
+	background: url('../../skinIcons/icons/CalendarIcons.gif') no-repeat left -1272px;
 }
 
 .UICalendarPortlet .UIAddTask .HorizontalLayout .AddAnyIcon {
-	background: url('/forum/skin/DefaultSkin/webui/skinIcons/16x16/icons/SmallMemberIcon.gif') no-repeat;
+	background: url('../../skinIcons/icons/CalendarIcons.gif') no-repeat left -1297px;
 }
 
 .UICalendarPortlet .UIAddTask .HorizontalLayout .UIAction {

@@ -11,7 +11,7 @@
 
 .UICalendarPortlet .UICalendars .ActionsButton {
 	float: right;
-  background: url('background/ActionsButton.gif') no-repeat ;	
+  background: url('../skinIcons/icons/CalendarIcons.gif') no-repeat left -1686px;	
   width: 17px; height: 15px;
   margin: 3px 4px 0px 0px;
   cursor: pointer;
@@ -31,7 +31,7 @@
 }
 
 .UICalendarPortlet .UICalendars .CalendarTitle {
-	background: url('background/TitleBarBG136x1.gif') no-repeat bottom left ;	
+	background: url('../background/HorizontalLine.gif') no-repeat bottom left ;	
 	height: 18px;
 	padding-top: 5px;
 }

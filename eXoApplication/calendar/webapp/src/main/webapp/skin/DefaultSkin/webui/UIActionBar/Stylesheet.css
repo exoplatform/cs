@@ -30,7 +30,7 @@
 }
 
 .UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar a:hover {
-	background: url('background/ControlButtonBG1x26.gif') repeat-x ;
+	background: url('../background/CalendarBackground.gif') repeat-x center -79px;
 	color: #058ee6; border: 1px solid #cbcbcb;
 	height: 24px;
 }

@@ -4,7 +4,7 @@
 
 .UICalendarPortlet .UIMiniCalendar .MiniCalendarContainer {
 	border: 1px solid #ffffff;
-	background: #e9edf9 url('background/MiniCalendarBG1x17.gif') repeat-x bottom;
+	background: #e9edf9;
 	padding: 4px;
 }
 
@@ -21,23 +21,23 @@
 }
 
 .UICalendarPortlet .UIMiniCalendar .YearSelector .NextYearSelector {
-	background: url('background/NextYear23x21.gif') no-repeat;
+	background: url('../skinIcons/icons/CalendarIcons.gif') no-repeat left -1724px;
 	height: 21px; width: 23px;
 }
 
 .UICalendarPortlet .UIMiniCalendar .YearSelector .PreviousYearSelector {
-	background: url('background/PreviousYear23x21.gif') no-repeat;
+	background: url('../skinIcons/icons/CalendarIcons.gif') no-repeat left -1702px;
 	height: 21px; width: 23px;
 }
 
 .UICalendarPortlet .UIMiniCalendar .MonthSelector .NextMonthSelector {
-	background: url('background/NextMonth10x16.gif') no-repeat;
+	background: url('../skinIcons/icons/CalendarIcons.gif') no-repeat right -1748px;
 	height: 16px; width: 10px;
 	margin: 1px 0px 0px 4px;
 }
 
 .UICalendarPortlet .UIMiniCalendar .MonthSelector .PreviousMonthSelector {
-	background: url('background/PreviousMonth10x16.gif') no-repeat;
+	background: url('../skinIcons/icons/CalendarIcons.gif') no-repeat left -1748px;
 	height: 16px; width: 10px;
 	margin: 1px 4px 0px 0px;
 }
@@ -53,17 +53,17 @@
 }
 
 .UICalendarPortlet .UIMiniCalendar .TimeSelector .LeftTimeSelector {
-	background: url('background/LeftTimeSelector7x21.gif') no-repeat left;
+	background: url('../background/CalendarBackground.gif') no-repeat left -185px;
 	padding-Left: 7px;
 }
 
 .UICalendarPortlet .UIMiniCalendar .TimeSelector .RightTimeSelector {
-	background: url('background/RightTimeSelector7x21.gif') no-repeat right;
+	background: url('../background/CalendarBackground.gif') no-repeat left -207px;
 	padding-right: 7px;
 }
 
 .UICalendarPortlet .UIMiniCalendar .TimeSelector .CenterTimeSelector {
-	background: url('background/CenterTimeSelector1x21.gif') repeat-x ;
+	background: url('../background/CalendarBackground.gif') repeat-x center -229px;
 	text-align: center; 
 	line-height: 20px;
 	font-weight: bolder;
