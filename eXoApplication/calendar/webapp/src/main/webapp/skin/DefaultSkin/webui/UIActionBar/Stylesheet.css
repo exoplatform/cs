@@ -24,9 +24,19 @@
 	line-height: 18px;
 }
 
+.UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar a:hover {
+	color: #058ee6;
+}
+
 .UICalendarPortlet .CalendarWorkingWorkspace  .UIPopupCategory a {
 	color: #000000;
 	margin: 0px;
+}
+
+.UICalendarPortlet .CalendarWorkingWorkspace  .UIPopupCategory a:hover {
+	background: none ;
+	color: #058ee6; border: none;
+	height: auto;
 }
 
 .UICalendarPortlet .CalendarWorkingWorkspace .SeparatorLine {
