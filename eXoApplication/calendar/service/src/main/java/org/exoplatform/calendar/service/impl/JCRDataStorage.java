@@ -1894,8 +1894,12 @@ public class JCRDataStorage{
           //move events in side private calendars
           if(getUserCalendarHome(sProvider, username).hasNode(toCalendar)){
             for(CalendarEvent calEvent : calEvents) {
-              saveUserEvent(sProvider, username, toCalendar, calEvent, getUserCalendarHome(sProvider, username).getNode(toCalendar).hasNode(calEvent.getId())) ;
-              removeUserEvent(sProvider, username, formCalendar, calEvent.getId()) ;
+              if(!formCalendar.equals(toCalendar)) {
+                saveUserEvent(sProvider, username, toCalendar, calEvent, getUserCalendarHome(sProvider, username).getNode(toCalendar).hasNode(calEvent.getId())) ;
+                removeUserEvent(sProvider, username, formCalendar, calEvent.getId()) ;
+              } else {
+                saveUserEvent(sProvider, username, toCalendar, calEvent,  false) ;
+              }
             }
           }
           break;
@@ -1938,8 +1942,12 @@ public class JCRDataStorage{
           //   move events in side shared calendars
           if(getSharedCalendarHome(systemSession).hasNode(toCalendar)){
             for(CalendarEvent calEvent : calEvents) {
-              saveEventToSharedCalendar(systemSession, username, toCalendar, calEvent, getSharedCalendarHome(systemSession).getNode(toCalendar).hasNode(calEvent.getId()));
-              removeSharedEvent(systemSession, username, formCalendar, calEvent.getId()) ;
+              if(!formCalendar.equals(toCalendar)) {
+                saveEventToSharedCalendar(systemSession, username, toCalendar, calEvent, getSharedCalendarHome(systemSession).getNode(toCalendar).hasNode(calEvent.getId()));
+                removeSharedEvent(systemSession, username, formCalendar, calEvent.getId()) ;
+              } else {
+                saveEventToSharedCalendar(systemSession, username, toCalendar, calEvent, false);
+              }
             }
           }
           break;
@@ -1983,8 +1991,12 @@ public class JCRDataStorage{
           //move events in side public calendars
           if(getPublicCalendarHome(systemSession).hasNode(toCalendar)){
             for(CalendarEvent calEvent : calEvents) {
-              savePublicEvent(sProvider, toCalendar, calEvent, getPublicCalendarHome(systemSession).getNode(toCalendar).hasNode(calEvent.getId())) ;
-              removePublicEvent(systemSession, formCalendar, calEvent.getId()) ;
+              if(!formCalendar.equals(toCalendar)) {
+                savePublicEvent(sProvider, toCalendar, calEvent, getPublicCalendarHome(systemSession).getNode(toCalendar).hasNode(calEvent.getId())) ;
+                removePublicEvent(systemSession, formCalendar, calEvent.getId()) ;
+              } else {
+                savePublicEvent(sProvider, toCalendar, calEvent,  false) ;
+              }
             }
           }
           break;
