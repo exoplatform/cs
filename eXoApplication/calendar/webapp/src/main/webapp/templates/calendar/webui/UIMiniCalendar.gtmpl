@@ -115,7 +115,7 @@
 				       //sdf.setCalendar(calendar) ;
 				       %>
 				      
-				        <td class="$highlight $clazz"  style="background:#FFFFFF;">
+				        <td class="$highlight $clazz">
 				        	<a href="$actionLink">
 				        		<div class="MiniCalendarActions">
 				       				<%=sdf.format(calendar.getTime())%> 
@@ -126,7 +126,7 @@
 				       dayOfMonth++ ;
 				      } else {
 				        %>
-				        <td class="$highlight $clazz">
+				        <td class="OtherMonth">
 				        	<a href="$actionLink">
 				        		<div class="MiniCalendarActions">
 				       				<%=sdf.format(calendar.getTime())%> 

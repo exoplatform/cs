@@ -81,8 +81,8 @@
 }
 
 .UICalendarPortlet .UIMiniCalendar .DayList .UIGrid td{
-	background: #f3f3f3;
-	border:solid 1px #ffffff;
+	background:#f3f3f3;
+	border:solid 1px #ffffff ;
 	text-align:center;
 	vertical-align:middle;
 	padding:0px;
@@ -101,7 +101,9 @@
 .UICalendarPortlet .UIMiniCalendar .DayList .UIGrid .Today {
 	background: #ABC7FE;
 }
-
+.UICalendarPortlet .UIMiniCalendar .DayList .UIGrid .OtherMonth {
+	background: #c8c8c8;
+}
 .UICalendarPortlet .UIMiniCalendar .DayList .UIGrid .SelectedDay {
 	background: #FFF6A3;
 }
