@@ -156,7 +156,7 @@ public class UIFormColorPicker extends UIFormInputBase<String>  {
     Writer w =  context.getWriter() ; 
     w.write("<div class='UIFormColorPicker'>") ;
       w.write("<div class=\"UIColorPickerInput\" onclick=\"eXo.calendar.UIColorPicker.show(this)\">") ;
-      w.write("<span class=\""+encodeValue(value_).toString()+"\"></span>") ;
+      w.write("<span class=\" DisplayValue "+encodeValue(value_).toString()+"\"></span>") ;
       w.write("</div>") ;
       w.write("<div class=\"CalendarTableColor\">") ;
       int i = 0 ;
@@ -168,7 +168,7 @@ public class UIFormColorPicker extends UIFormInputBase<String>  {
         while(j <= items() && count < size()){
           Color color = getColors()[count] ; 
           String actionLink = "javascript:eXo.calendar.UIColorPicker.setColor("+color.getName()+")" ;// event('ChangeColor','id&calColor='+color);  
-          w.write("<a href=\"$actionLink\" class=\""+color.getName()+" ColorCell \"><img src=\"/eXoResources/skin/sharedImages/Blank.gif\" /></a>") ;
+          w.write("<a href=\""+actionLink+"\" class=\""+color.getName()+" ColorCell \"><img src=\"/eXoResources/skin/sharedImages/Blank.gif\" /></a>") ;
           count++ ;
           j++;
         }
