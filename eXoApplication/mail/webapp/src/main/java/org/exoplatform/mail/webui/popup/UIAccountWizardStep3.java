@@ -45,16 +45,6 @@ public class UIAccountWizardStep3 extends UIFormInputSet  implements WizardStep{
   public static final String FIELD_USESSL = "isSsl".intern() ;
   public static final String FIELD_STOREFOLDER = "storeFolder" ;
   
-  public static final String DEFAULT_POP_SERVER = "pop.gmail.com".intern() ;
-  public static final String DEFAULT_IMAP_SERVER = "imap.gmail.com".intern() ;
-  public static final String DEFAULT_SMTP_SERVER = "smtp.gmail.com".intern() ;
-  public static final String DEFAULT_POP_PORT = "110".intern() ;
-  public static final String DEFAULT_SMTP_PORT = "25".intern() ;
-  public static final String DEFAULT_POPSSL_PORT = "995".intern() ;
-  public static final String DEFAULT_SMTPSSL_PORT = "465".intern() ;
-  public static final String DEFAULT_SERVER_FOLDER = "Inbox".intern() ;
-  public static final String DEFAULT_IMAP_PORT = "143".intern() ;
-  public static final String DEFAULT_IMAPSSL_PORT = "993".intern() ;
   public boolean isValid_ = false ;
   
   private List<String> infoMessage_ = new ArrayList<String>() ;
@@ -86,22 +76,22 @@ public class UIAccountWizardStep3 extends UIFormInputSet  implements WizardStep{
   
   protected void setDefaultValue(String serverType, boolean isSSL) {
     if(serverType.equals(Utils.POP3)) {
-      getUIStringInput(FIELD_INCOMING_SERVER).setValue(DEFAULT_POP_SERVER) ;
+      getUIStringInput(FIELD_INCOMING_SERVER).setValue(UIAccountCreation.DEFAULT_POP_SERVER) ;
       if(isSSL) {
-        getUIStringInput(FIELD_INCOMINGPORT).setValue(DEFAULT_POPSSL_PORT) ;
-        getUIStringInput(FIELD_OUTGOINGPORT).setValue(DEFAULT_SMTPSSL_PORT) ;
+        getUIStringInput(FIELD_INCOMINGPORT).setValue(UIAccountCreation.DEFAULT_POPSSL_PORT) ;
+        getUIStringInput(FIELD_OUTGOINGPORT).setValue(UIAccountCreation.DEFAULT_SMTPSSL_PORT) ;
       } else {
-        getUIStringInput(FIELD_INCOMINGPORT).setValue(DEFAULT_POP_PORT) ;
-        getUIStringInput(FIELD_OUTGOINGPORT).setValue(DEFAULT_SMTP_PORT) ;
+        getUIStringInput(FIELD_INCOMINGPORT).setValue(UIAccountCreation.DEFAULT_POP_PORT) ;
+        getUIStringInput(FIELD_OUTGOINGPORT).setValue(UIAccountCreation.DEFAULT_SMTP_PORT) ;
       }
     } else {
-      getUIStringInput(FIELD_INCOMING_SERVER).setValue(DEFAULT_IMAP_SERVER) ;
+      getUIStringInput(FIELD_INCOMING_SERVER).setValue(UIAccountCreation.DEFAULT_IMAP_SERVER) ;
       if(isSSL) {
-        getUIStringInput(FIELD_INCOMINGPORT).setValue(DEFAULT_IMAPSSL_PORT) ;
-        getUIStringInput(FIELD_OUTGOINGPORT).setValue(DEFAULT_SMTP_PORT) ;
+        getUIStringInput(FIELD_INCOMINGPORT).setValue(UIAccountCreation.DEFAULT_IMAPSSL_PORT) ;
+        getUIStringInput(FIELD_OUTGOINGPORT).setValue(UIAccountCreation.DEFAULT_SMTP_PORT) ;
       } else {
-        getUIStringInput(FIELD_INCOMINGPORT).setValue(DEFAULT_IMAP_PORT) ;
-        getUIStringInput(FIELD_OUTGOINGPORT).setValue(DEFAULT_SMTP_PORT) ;
+        getUIStringInput(FIELD_INCOMINGPORT).setValue(UIAccountCreation.DEFAULT_IMAP_PORT) ;
+        getUIStringInput(FIELD_OUTGOINGPORT).setValue(UIAccountCreation.DEFAULT_SMTP_PORT) ;
       }
     }
   }
@@ -129,11 +119,11 @@ public class UIAccountWizardStep3 extends UIFormInputSet  implements WizardStep{
   
   protected void resetFields(){
     reset() ;
-    setIncomingServer(DEFAULT_POP_SERVER) ;
-    setIncomingPort(DEFAULT_POP_PORT) ;
-    setOutgoingServer(DEFAULT_SMTP_SERVER) ;
-    setOutgoingPort(DEFAULT_SMTP_PORT) ;
-    setStoreFolder(DEFAULT_SERVER_FOLDER) ;
+    setIncomingServer(UIAccountCreation.DEFAULT_POP_SERVER) ;
+    setIncomingPort(UIAccountCreation.DEFAULT_POP_PORT) ;
+    setOutgoingServer(UIAccountCreation.DEFAULT_SMTP_SERVER) ;
+    setOutgoingPort(UIAccountCreation.DEFAULT_SMTP_PORT) ;
+    setStoreFolder(UIAccountCreation.DEFAULT_SERVER_FOLDER) ;
   }
   protected void fillFields(String serverType, boolean isSsl, String incomingServer, String popPort,String outgoingServer, String smtpPort, String storeFolder){
     setServerType(serverType) ;

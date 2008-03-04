@@ -95,6 +95,17 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
   final static public String FD_SPAM = "Spam".intern() ;
   final static public String FD_TRASH = "Trash".intern() ;
   final static public String[] defaultFolders_ =  {FD_INBOX ,FD_DRAFTS, FD_SENT, FD_SPAM, FD_TRASH} ;
+  
+  public static final String DEFAULT_POP_SERVER = "pop.gmail.com".intern() ;
+  public static final String DEFAULT_IMAP_SERVER = "imap.gmail.com".intern() ;
+  public static final String DEFAULT_SMTP_SERVER = "smtp.gmail.com".intern() ;
+  public static final String DEFAULT_POP_PORT = "110".intern() ;
+  public static final String DEFAULT_SMTP_PORT = "25".intern() ;
+  public static final String DEFAULT_POPSSL_PORT = "995".intern() ;
+  public static final String DEFAULT_SMTPSSL_PORT = "465".intern() ;
+  public static final String DEFAULT_SERVER_FOLDER = "Inbox".intern() ;
+  public static final String DEFAULT_IMAP_PORT = "143".intern() ;
+  public static final String DEFAULT_IMAPSSL_PORT = "993".intern() ;
 
   public UIAccountCreation() throws Exception {
     super("UIAccountCreation") ;

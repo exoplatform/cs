@@ -56,7 +56,9 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
         @EventConfig(listeners = UIAccountSetting.AddNewAccountActionListener.class),
         @EventConfig(listeners = UIAccountSetting.DeleteAccountActionListener.class),
         @EventConfig(listeners = UIAccountSetting.SaveActionListener.class),
-        @EventConfig(listeners = UIAccountSetting.CancelActionListener.class)
+        @EventConfig(listeners = UIAccountSetting.CancelActionListener.class),
+        @EventConfig(listeners = UIAccountSetting.ChangeServerTypeActionListener.class),
+        @EventConfig(listeners = UIAccountSetting.ChangeSSLActionListener.class)
     }
 )
 
@@ -100,13 +102,17 @@ public class UIAccountSetting extends UIFormTabPane {
     addUIFormInput(identityInputSet); 
     
     UIFormInputWithActions serverInputSet = new UIFormInputWithActions(TAB_SERVER_SETTINGS);
-    serverInputSet.addUIFormInput(new UIFormSelectBox(FIELD_SERVER_TYPE, null, getServerTypeValues())) ;
+    UIFormSelectBox serverType = new UIFormSelectBox(FIELD_SERVER_TYPE, null, getServerTypeValues()) ;
+    serverType.setOnChange("ChangeServerType");
+    serverInputSet.addUIFormInput(serverType) ;
     
     serverInputSet.addUIFormInput(new UIFormStringInput(FIELD_INCOMING_SERVER, null, null));
     serverInputSet.addUIFormInput(new UIFormStringInput(FIELD_INCOMING_PORT, null, null));
     serverInputSet.addUIFormInput(new UIFormStringInput(FIELD_INCOMING_ACCOUNT, null, null));
     serverInputSet.addUIFormInput(new UIFormStringInput(FIELD_INCOMING_PASSWORD, null, null).setType(UIFormStringInput.PASSWORD_TYPE));
-    serverInputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_IS_INCOMING_SSL, null, null));
+    UIFormCheckBoxInput<Boolean> ssl = new UIFormCheckBoxInput<Boolean>(FIELD_IS_INCOMING_SSL, null, null);//getFieldIsSSL()
+    ssl.setOnChange("ChangeSSL"); 
+    serverInputSet.addUIFormInput(ssl);
     
     serverInputSet.addUIFormInput(new UIFormStringInput(FIELD_OUTGOING_SERVER, null, null));
     serverInputSet.addUIFormInput(new UIFormStringInput(FIELD_OUTGOING_PORT, null, null));
@@ -235,6 +241,28 @@ public class UIAccountSetting extends UIFormTabPane {
     uiServerInput.getUIFormCheckBoxInput(FIELD_CHECKMAIL_AUTO).setChecked(account.checkedAuto());
   } 
   
+  public void setDefaultValue(String serverType, boolean isSSL) {
+    if(serverType.equals(Utils.POP3)) {
+      getUIStringInput(FIELD_INCOMING_SERVER).setValue(UIAccountCreation.DEFAULT_POP_SERVER) ;
+      if(isSSL) {
+        getUIStringInput(FIELD_INCOMING_PORT).setValue(UIAccountCreation.DEFAULT_POPSSL_PORT) ;
+        getUIStringInput(FIELD_OUTGOING_PORT).setValue(UIAccountCreation.DEFAULT_SMTPSSL_PORT) ;
+      } else {
+        getUIStringInput(FIELD_INCOMING_PORT).setValue(UIAccountCreation.DEFAULT_POP_PORT) ;
+        getUIStringInput(FIELD_OUTGOING_PORT).setValue(UIAccountCreation.DEFAULT_SMTP_PORT) ;
+      }
+    } else {
+      getUIStringInput(FIELD_INCOMING_SERVER).setValue(UIAccountCreation.DEFAULT_IMAP_SERVER) ;
+      if(isSSL) {
+        getUIStringInput(FIELD_INCOMING_PORT).setValue(UIAccountCreation.DEFAULT_IMAPSSL_PORT) ;
+        getUIStringInput(FIELD_OUTGOING_PORT).setValue(UIAccountCreation.DEFAULT_SMTP_PORT) ;
+      } else {
+        getUIStringInput(FIELD_INCOMING_PORT).setValue(UIAccountCreation.DEFAULT_IMAP_PORT) ;
+        getUIStringInput(FIELD_OUTGOING_PORT).setValue(UIAccountCreation.DEFAULT_SMTP_PORT) ;
+      }
+    }
+  }
+  
   public String[] getActions() {return new String[]{"Save", "Cancel"};}
   
   public List<Account> getAccounts() throws Exception {
@@ -326,6 +354,20 @@ public class UIAccountSetting extends UIFormTabPane {
     }
   }
   
+  static	public class ChangeServerTypeActionListener extends EventListener<UIAccountSetting> {
+  	public void execute(Event<UIAccountSetting> event) throws Exception {
+  		UIAccountSetting uiSetting = event.getSource() ; 
+  		uiSetting.setDefaultValue(uiSetting.getFieldProtocol(),uiSetting.getFieldIsSSL());
+  	}
+  }
+  
+  static	public class ChangeSSLActionListener extends EventListener<UIAccountSetting> {
+  	public void execute(Event<UIAccountSetting> event) throws Exception {
+  		UIAccountSetting uiSetting = event.getSource() ; 
+  		uiSetting.setDefaultValue(uiSetting.getFieldProtocol(),uiSetting.getFieldIsSSL());
+  	}
+  }
+   
   static  public class CancelActionListener extends EventListener<UIAccountSetting> {
     public void execute(Event<UIAccountSetting> event) throws Exception {
       event.getSource().getAncestorOfType(UIMailPortlet.class).cancelAction();
