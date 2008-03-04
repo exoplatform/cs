@@ -385,7 +385,7 @@ public class UICalendars extends UIForm  {
           }
         }
         if(canEdit) {
-          calService.removeGroupCalendar(uiComponent.getSystemSession(), calendarId) ;
+          calService.removePublicCalendar(uiComponent.getSystemSession(), calendarId) ;
         } else {
           UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.have-no-delete-permission", null)) ;

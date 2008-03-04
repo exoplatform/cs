@@ -187,7 +187,7 @@ public interface CalendarService {
    * @return Calendar
    * @throws Exception
    */
-  public Calendar removeGroupCalendar(SessionProvider sProvider, String calendarId) throws Exception ;
+  public Calendar removePublicCalendar(SessionProvider sProvider, String calendarId) throws Exception ;
   
   
   public List<EventCategory> getEventCategories(SessionProvider sProvider, String username) throws Exception ;
@@ -350,7 +350,7 @@ public interface CalendarService {
    * @return Event
    * @throws Exception
    */
-  public CalendarEvent removeGroupEvent(SessionProvider sProvider, String calendarId, String eventId) throws Exception ;
+  public CalendarEvent removePublicEvent(SessionProvider sProvider, String calendarId, String eventId) throws Exception ;
   
   public void saveCalendarSetting(SessionProvider sProvider, String username, CalendarSetting setting) throws Exception ;
   public CalendarSetting getCalendarSetting(SessionProvider sProvider, String username) throws Exception ;
@@ -376,5 +376,5 @@ public interface CalendarService {
   
   public boolean hasEditPermission(SessionProvider sProvider, String sharedCalendarId, String username) throws Exception ;
   
-  public void moveEvent(SessionProvider sProvider, String formCalendar, String toCalendar, List<CalendarEvent> calEvents, String username) throws Exception ;
+  public void moveEvent(SessionProvider sProvider, String formCalendar, String toCalendar, String formType, String toType, List<CalendarEvent> calEvents, String username) throws Exception ;
 }

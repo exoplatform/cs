@@ -29,7 +29,10 @@ import org.exoplatform.services.jcr.util.IdGenerator;
  */
 public class Calendar {
   
-  
+  public static final int TYPE_PRIVATE = 0 ;
+  public static final int TYPE_SHARED = 1 ;
+  public static final int TYPE_PUBLIC = 2 ;
+
   public static final String OLIVE = "Olive".intern() ;
   public static final String OLIVEDRAB = "OliveDrab".intern() ;
   public static final String ORANGERED = "OrangeRed".intern() ;

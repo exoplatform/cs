@@ -354,7 +354,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     for (CalendarEvent ce : events) {
       if(CalendarUtils.PUBLIC_TYPE.equals(ce.getCalType())){
-        calService.removeGroupEvent(getSystemSession(), ce.getCalendarId(), ce.getId()) ;
+        calService.removePublicEvent(getSystemSession(), ce.getCalendarId(), ce.getId()) ;
       } else if(CalendarUtils.PRIVATE_TYPE.equals(ce.getCalType())) {
         calService.removeUserEvent(getSession(), username, ce.getCalendarId(), ce.getId()) ;
       } else if(CalendarUtils.SHARED_TYPE.equals(ce.getCalType())){
@@ -757,7 +757,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       }
       if(canEdit) {
         if(CalendarUtils.PUBLIC_TYPE.equals(calType)){
-          calendarService.removeGroupEvent(uiCalendarView.getSystemSession(), calendarId, eventId) ;
+          calendarService.removePublicEvent(uiCalendarView.getSystemSession(), calendarId, eventId) ;
         } else if(CalendarUtils.PRIVATE_TYPE.equals(calType)){
           calendarService.removeUserEvent(uiCalendarView.getSession(), username, calendarId, eventId) ;
         } else if(CalendarUtils.SHARED_TYPE.equals(calType)) {

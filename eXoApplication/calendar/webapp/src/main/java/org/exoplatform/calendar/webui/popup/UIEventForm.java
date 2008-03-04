@@ -922,12 +922,13 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
           calendarEvent.setAttachment(uiForm.getAttachments(calendarEvent.getId(), uiForm.isAddNew_)) ;
           calendarEvent.setReminders(uiForm.getEventReminders(from, calendarEvent.getReminders())) ;
           eventId = calendarEvent.getId() ;
+          
           if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
             List<CalendarEvent> events =  new ArrayList<CalendarEvent>(); 
             events.add(calendarEvent) ;
             if(!uiForm.isAddNew_) {
               if (!formCalendar.equals(toCalendar)) {
-                calService.moveEvent(uiForm.getSession(), formCalendar, toCalendar, events, username) ;
+                //calService.moveEvent(uiForm.getSession(), formCalendar, toCalendar,, events, username) ;
               } else {
                 calService.saveUserEvent(uiForm.getSession(), username, calendarId, calendarEvent, uiForm.isAddNew_) ;
               }

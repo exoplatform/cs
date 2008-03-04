@@ -99,7 +99,7 @@ public class CalendarServiceImpl implements CalendarService{
   public void savePublicCalendar(SessionProvider sProvider, Calendar calendar, boolean isNew, String username) throws Exception {
     storage_.savePublicCalendar(sProvider, calendar, isNew, username) ;
   }
-  public Calendar removeGroupCalendar(SessionProvider sProvider, String calendarId) throws Exception {
+  public Calendar removePublicCalendar(SessionProvider sProvider, String calendarId) throws Exception {
     return storage_.removeGroupCalendar(sProvider, calendarId);
   }
 
@@ -149,8 +149,8 @@ public class CalendarServiceImpl implements CalendarService{
   public void savePublicEvent(SessionProvider sProvider, String calendarId, CalendarEvent event, boolean isNew) throws Exception {
     storage_.savePublicEvent(sProvider, calendarId, event, isNew) ;
   }  
-  public CalendarEvent removeGroupEvent(SessionProvider sProvider, String calendarId, String eventId) throws Exception {
-    return storage_.removeGroupEvent(sProvider, calendarId, eventId);
+  public CalendarEvent removePublicEvent(SessionProvider sProvider, String calendarId, String eventId) throws Exception {
+    return storage_.removePublicEvent(sProvider, calendarId, eventId);
   }
 
   public CalendarImportExport  getCalendarImportExports(String type) {
@@ -233,7 +233,7 @@ public class CalendarServiceImpl implements CalendarService{
   public boolean hasEditPermission(SessionProvider sProvider, String sharedCalendarId, String username) throws Exception {
     return storage_.hasEditPermission(sProvider, sharedCalendarId, username);
   }
-  public void moveEvent(SessionProvider sProvider, String formCalendar, String toCalendar,List<CalendarEvent> calEvents, String username) throws Exception {
-    storage_.moveEvent(sProvider, formCalendar, toCalendar, calEvents, username)  ;
+  public void moveEvent(SessionProvider sProvider, String formCalendar, String toCalendar,String fromType, String toType, List<CalendarEvent> calEvents, String username) throws Exception {
+    storage_.moveEvent(sProvider, formCalendar, fromType, toType, toCalendar, calEvents, username)  ;
   }
 }
