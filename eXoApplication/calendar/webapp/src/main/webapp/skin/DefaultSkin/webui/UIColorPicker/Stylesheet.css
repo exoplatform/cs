@@ -1,5 +1,5 @@
 .UICalendarPortlet .UIFormColorPicker {
- position:relative;
+ 
 }
 .UICalendarPortlet .UIFormColorPicker .UIColorPickerItem {
 	display: block ;
@@ -9,34 +9,29 @@
 }
 .UICalendarPortlet .UIFormColorPicker .UIColorPickerInput {
 	border: solid 1px gray ;
-	width:202px;
+	width:102px;
 	height: 20px;
 	*height: 20px;
 	line-height: 20px;
 }
-.UICalendarPortlet .UIFormColorPicker .UIColorPickerInput .DisplayValue {
-	display:block;
-}
-
-.UICalendarPortlet .UIFormColorPicker .UIColorPickerInput span {
+.UICalendarPortlet .UIFormColorPicker  .DisplayValue {
+	display:block ;
  	*height:16px;
  	height: 16px;
- 	margin: 2px;
+ 	margin: 1px;
+  border: solid 1px #cccccc ;
+}
+
+.UICalendarPortlet .UIFormColorPicker  .UIColorLine {
+	margin: 5px 0px ;
 }
 
 .UICalendarPortlet .UIFormColorPicker a:hover{
-	background: blue ;
 	color: white ;
 }
 
 .UICalendarPortlet .UIFormColorPicker a:visit{
-	background: white ;
 	color: black ;
-}
-
-.UICalendarPortlet .UIFormColorPicker .UIColorPickerSelectedIcon a{
-	background: blue ;
-	display:block;
 }
 
 .UICalendarPortlet .UIFormColorPicker .UIColorPickerLabel {
@@ -48,8 +43,8 @@
 	display: none;
  	position: absolute;
  	background: #e4eaf5;
-	padding: 5px;
-	margin: 1px;
+	padding: 2px;
+  border: solid 1px #cccccc ;
 }
  
 
@@ -63,12 +58,12 @@
  width: 12px; height: 12px;
 }
 .UICalendarPortlet .CalendarTableColor .SelectedColorCell {
-	background: url('skinIcons/16x16/icons/CheckedColorIcon.gif') no-repeat ;
-	width: 12px; height: 12px;
+	border: solid 1px red ;
 }
 
 .UICalendarPortlet .CalendarTableColor a:hover {
-	border: 1px solid red; 
+	border: 2px solid red;
+  margin: 1px ;
 }
 
 /* Colors*/

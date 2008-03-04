@@ -163,12 +163,12 @@ public class UIFormColorPicker extends UIFormInputBase<String>  {
       int index = 0 ;
       int count = 0 ;
       while(i <= size()/items())  {
-        w.write("<div>") ; 
+        w.write("<div class='UIColorLine'>") ; 
         int j = 0 ;
         while(j <= items() && count < size()){
           Color color = getColors()[count] ; 
           String actionLink = "javascript:eXo.calendar.UIColorPicker.setColor('"+color.getName()+"')" ;   
-          w.write("<a href=\""+actionLink+"\" class=\""+color.getName()+" ColorCell \"><img src=\"/eXoResources/skin/sharedImages/Blank.gif\" /></a>") ;
+          w.write("<a href=\""+actionLink+"\" class=\""+color.getName()+" ColorCell \" onmousedown=\"event.cancelBubble=true\"><img src=\"/eXoResources/skin/sharedImages/Blank.gif\" /></a>") ;
           count++ ;
           j++;
         }
