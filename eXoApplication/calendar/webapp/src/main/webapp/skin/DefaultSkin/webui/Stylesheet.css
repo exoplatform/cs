@@ -245,14 +245,14 @@
 	background: none;
 	height: 22px;
 	float: left;
-	margin: 5px 3px 0px 3px; 
+	margin: 5px 0px 0px 0px; 
 }
 
 .UICalendarPortlet .CalendarBarAction {
 	background: none;
 	height: 22px;
 	float: left;
-	margin: 5px 3px 0px 3px; 
+	margin: 5px 0px 0px 0px; 
 }
 
 .UICalendarPortlet .CalendarBarAction .LeftOverButton {
