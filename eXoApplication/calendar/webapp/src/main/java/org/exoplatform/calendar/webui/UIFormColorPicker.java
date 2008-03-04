@@ -38,12 +38,11 @@ public class UIFormColorPicker extends UIFormInputBase<String>  {
   /**
    * The size of the list (number of select options)
    */
-  private int size_ = 1 ;
-
+  private int items_ = 10 ;
   /**
    * The list of options
    */
-  private List<SelectItemOption<String>> options_ ;
+  //private List<SelectItemOption<String>> options_ ;
 
   /**
    * The javascript expression executed when an onChange event fires
@@ -81,7 +80,8 @@ public class UIFormColorPicker extends UIFormInputBase<String>  {
   public static final String ON_CLICK = "onclick".intern();
 
   private Map<String, String> jsActions_ = new HashMap<String, String>() ;
-  private Map<String, Color> colors_ = new HashMap<String, Color>() ;
+  private Color[] colors_ = null ;
+  //private Map<String, Color> colors_ = new HashMap<String, Color>() ;
 
   public UIFormColorPicker(String name, String bindingExpression, String value) {
     super(name, bindingExpression, String.class);
@@ -103,21 +103,21 @@ public class UIFormColorPicker extends UIFormInputBase<String>  {
   public void addJsActions(String action, String javaScript) {
     jsActions_.put(action, javaScript) ;
   }
-  public UIFormColorPicker(String name, String bindingExpression, List<SelectItemOption<String>> options, Map<String, String> jsActions) {
+  public UIFormColorPicker(String name, String bindingExpression, Color[] colors, Map<String, String> jsActions) {
     super(name, bindingExpression, null);
-    setOptions(options);
+    setColors(colors) ;
     setJsActions(jsActions) ;
   }
 
   public UIFormColorPicker(String name, String value) {
     this(name, null, value);
   }
-  final public UIFormColorPicker setOptions(List<SelectItemOption<String>> options) { 
+  /*final public UIFormColorPicker setColors(List<SelectItemOption<String>> options) { 
     options_ = options ; 
     if(options_ == null || options_.size() < 1) return this;
     value_ = options_.get(0).getValue();
     return this ;
-  } 
+  } */
   @SuppressWarnings("unused")
   public void decode(Object input, WebuiRequestContext context) throws Exception {
     value_ = (String) input;
@@ -143,46 +143,46 @@ public class UIFormColorPicker extends UIFormInputBase<String>  {
     return sb.toString() ;
   }
 
-  private String[] getColors(){
-    return colors_.keySet().toArray(new String[colors_.keySet().size()]) ;
+  private Color[] getColors(){
+    return colors_ ;
   }
   private void setColors(Color[] colors){
-    for(Color c : colors) {
-      colors_.put(c.getCode(), c) ;
-    }
-    //return colors_.keySet().toArray(new String[colors_.keySet().size()]) ;
+    colors_ = colors ;
+    value_ = colors_[0].getName() ;
   }
+  private int items() {return items_ ;}
+  private int size() {return colors_.length ;}
   public void processRender(WebuiRequestContext context) throws Exception {
     context.getJavascriptManager().addJavascript("eXo.calendar.UIColorPicker.init('" + getId()+ "');") ;  
     Writer w =  context.getWriter() ; 
     w.write("<div class='UIFormColorPicker'>") ;
-    w.write("<div class=\"CalendarTableColor\">") ;
-    int i = 0 ;
-    int index = 0 ;
-    int items = 5 ;
-    int size = getColors().length ; 
-    int rows = size/items ;
-    int count = 0 ;
-    while(i <= rows)  {
-      w.write("<div>") ; 
-      int j = 0 ;
-      while(j <= items && count < size){
-        String color = getColors()[count] ;
-        String actionLink = "#" ;// event('ChangeColor','id&calColor='+color);  
-        w.write("<a href=\"$actionLink\" class=\"ColorCell\" style=\"background:$color\"><img src=\"/eXoResources/skin/sharedImages/Blank.gif\" /></a>") ;
-        count++ ;
-        j++;
+      w.write("<div class=\"UIColorPickerInput\">") ;
+      w.write("<span class=\""+encodeValue(value_).toString()+"\"></span>") ;
+      w.write("</div>") ;
+      w.write("<div class=\"CalendarTableColor\">") ;
+      int i = 0 ;
+      int index = 0 ;
+      int count = 0 ;
+      while(i <= size()/items())  {
+        w.write("<div>") ; 
+        int j = 0 ;
+        while(j <= items() && count < size()){
+          Color color = getColors()[count] ; 
+          String actionLink = "javascript:eXo.calendar.UIColorPicker.setColor("+color.getName()+")" ;// event('ChangeColor','id&calColor='+color);  
+          w.write("<a href=\"$actionLink\" class=\""+color.getName()+" ColorCell \"><img src=\"/eXoResources/skin/sharedImages/Blank.gif\" /></a>") ;
+          count++ ;
+          j++;
+        }
+        w.write("</div>") ;  
+        i++ ;
       }
-      w.write("</div>") ;  
-      i++ ;
-    }
+      w.write("</div>") ;
+      w.write("<input class='UIColorPickerValue' name='"+getName()+"' type='hidden'" + " id='"+getId()+"' " + renderJsActions());
+      if(value_ != null && value_.trim().length() > 0) {      
+        w.write(" value='"+encodeValue(value_).toString()+"'");
+      }
+      w.write(" \\>") ;
     w.write("</div>") ;
-    w.write("</div>") ;
-    w.write("<input class='UIColorPickerInput' name='"+getName()+"' type='hidden'" + " id='"+getId()+"' " + renderJsActions());
-    if(value_ != null && value_.trim().length() > 0) {      
-      w.write(" value='"+encodeValue(value_).toString()+"'");
-    }
-    w.write(" \\>") ;
   }
 
   private StringBuilder encodeValue(String value){

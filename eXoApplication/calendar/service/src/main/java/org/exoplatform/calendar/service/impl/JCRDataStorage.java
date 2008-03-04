@@ -1996,44 +1996,6 @@ public class JCRDataStorage{
     default:
       break;
     }
-
-    /*  //move events in side private calendars
-    if(Calendar.TYPE_PRIVATE.equals(fromType) && Calendar.TYPE_PRIVATE.equals(toType)) {
-      if(getUserCalendarHome(sProvider, username).hasNode(formCalendar)) {
-        if(getUserCalendarHome(sProvider, username).hasNode(toCalendar)){
-          for(CalendarEvent calEvent : calEvents) {
-            saveUserEvent(sProvider, username, toCalendar, calEvent, getUserCalendarHome(sProvider, username).getNode(toCalendar).hasNode(calEvent.getId())) ;
-            removeUserEvent(sProvider, username, formCalendar, calEvent.getId()) ;
-          }
-        }
-      }
-    }
-      //   move events in side shared calendars
-      if(Calendar.TYPE_SHARED.equals(fromType) && Calendar.TYPE_SHARED.equals(toType)) {
-        SessionProvider systemSession = SessionProvider.createSystemProvider() ;
-        if(getSharedCalendarHome(systemSession).hasNode(formCalendar)) {
-          if(getSharedCalendarHome(systemSession).hasNode(toCalendar)){
-            for(CalendarEvent calEvent : calEvents) {
-              saveEventToSharedCalendar(systemSession, username, toCalendar, calEvent, getSharedCalendarHome(systemSession).getNode(toCalendar).hasNode(calEvent.getId()));
-              removeSharedEvent(systemSession, username, formCalendar, calEvent.getId()) ;
-            }
-          }
-
-        }
-      }
-      //   move events in side public calendars
-      if(Calendar.TYPE_SHARED.equals(fromType) && Calendar.TYPE_SHARED.equals(toType)) {
-        SessionProvider systemSession = SessionProvider.createSystemProvider() ;
-        if(getPublicCalendarHome(systemSession).hasNode(formCalendar)) {
-          if(getPublicCalendarHome(systemSession).hasNode(toCalendar)){
-            for(CalendarEvent calEvent : calEvents) {
-              savePublicEvent(sProvider, toCalendar, calEvent, getPublicCalendarHome(systemSession).getNode(toCalendar).hasNode(calEvent.getId())) ;
-              removePublicEvent(systemSession, formCalendar, calEvent.getId()) ;
-            }
-          }
-        }
-      }
-    }  */
   }
 
 }
