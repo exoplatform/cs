@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarService;
@@ -178,5 +179,9 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
     return CalendarUtils.getTimeZone(getAncestorOfType(UICalendarPortlet.class).getCalendarSetting().getTimeZone()) ;*/
      String timeZone = CalendarUtils.getCalendarService().getCalendarSetting(SessionProviderFactory.createSystemProvider(), username).getTimeZone() ;
       return CalendarUtils.getTimeZone(timeZone) ;
+  }
+  
+  public String getServerTimeZone() {
+    return CalendarUtils.getTimeZone(TimeZone.getDefault().getID()) ;
   }
 }

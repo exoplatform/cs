@@ -11,7 +11,7 @@
 	def rcontext = _ctx.getRequestContext() ;
 	rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.initCheck("' + uicomponent.id + '") ;') ;
 %>
-<div class="UIAddNewEvent $uicomponent.id" id="$uicomponent.id">
+<div class="UIAddNewEvent $uicomponent.id" id="$uicomponent.id" serverTimeZone="<%=uicomponent.getServerTimeZone()%>" >
   <div class="NewEventAttendee">
     <div class="UIFormInputSet">
       <div class="UIFormInputSetWithAction">
