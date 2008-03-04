@@ -89,6 +89,10 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   private CalendarEvent calendarEvent_ = null ;
   private String errorMsg_ = null ;
   private String calType_ = "0" ;
+  
+  private static String oldCalendarId = null ;
+  private static String newCalendarId = null ;
+  
   public UITaskForm() throws Exception {
     super("UIEventForm");
     UITaskDetailTab uiTaskDetailTab =  new UITaskDetailTab(TAB_TASKDETAIL) ;
@@ -125,6 +129,8 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     taskDetailTab.getUIFormComboBox(UITaskDetailTab.FIELD_FROM_TIME).setOptions(fromTimes) ;
     taskDetailTab.getUIFormComboBox(UITaskDetailTab.FIELD_TO_TIME).setOptions(toTimes) ;
     if(eventCalendar != null) {
+      oldCalendarId = eventCalendar.getCalType() + CalendarUtils.COLON + eventCalendar.getCalendarId();
+      
       isAddNew_ = false ;
       calendarEvent_ = eventCalendar ;
       setEventSumary(eventCalendar.getSummary()) ;
@@ -253,6 +259,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   protected String getCalendarId() {
     UIFormInputWithActions taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
     String value = taskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_CALENDAR).getValue() ;
+    if(oldCalendarId != null) newCalendarId = value ;
     if(value != null && value.trim().length() > 0 && value.split(CalendarUtils.COLON).length > 0) {
       calType_ = value.split(CalendarUtils.COLON)[0] ;
       return value.split(CalendarUtils.COLON)[1] ;
@@ -607,6 +614,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+      CalendarService calService = CalendarUtils.getCalendarService();
       if(uiForm.isEventDetailValid(calendarPortlet.getCalendarSetting())) {
         String username = event.getRequestContext().getRemoteUser() ;
         String calendarId = uiForm.getCalendarId() ;
@@ -644,13 +652,24 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
         calendarEvent.setAttachment(uiForm.getAttachments(calendarEvent.getId(), uiForm.isAddNew_)) ;
         calendarEvent.setReminders(uiForm.getEventReminders(from)) ;
         try {
-          if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
-            CalendarUtils.getCalendarService().saveUserEvent(uiForm.getSession(), username, calendarId, calendarEvent, uiForm.isAddNew_) ;
-          }else if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)){
-            CalendarUtils.getCalendarService().saveEventToSharedCalendar(uiForm.getSystemSession(), username, calendarId, calendarEvent, uiForm.isAddNew_) ;
-          }else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)){
-            CalendarUtils.getCalendarService().savePublicEvent(uiForm.getSystemSession(), calendarId, calendarEvent, uiForm.isAddNew_) ;          
+          if(uiForm.isAddNew_){
+            if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
+              CalendarUtils.getCalendarService().saveUserEvent(uiForm.getSession(), username, calendarId, calendarEvent, uiForm.isAddNew_) ;
+            }else if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)){
+              CalendarUtils.getCalendarService().saveEventToSharedCalendar(uiForm.getSystemSession(), username, calendarId, calendarEvent, uiForm.isAddNew_) ;
+            }else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)){
+              CalendarUtils.getCalendarService().savePublicEvent(uiForm.getSystemSession(), calendarId, calendarEvent, uiForm.isAddNew_) ;          
+            }
+          } else {
+            String fromCal = oldCalendarId.split(CalendarUtils.COLON)[1].trim() ;
+            String toCal = newCalendarId.split(CalendarUtils.COLON)[1].trim() ;
+            String fromType = oldCalendarId.split(CalendarUtils.COLON)[0].trim() ;
+            String toType = newCalendarId.split(CalendarUtils.COLON)[0].trim() ;
+            List<CalendarEvent> listEvent = new ArrayList<CalendarEvent>();
+            listEvent.add(calendarEvent) ;
+            calService.moveEvent(uiForm.getSession(), fromCal, toCal, fromType, toType, listEvent, username) ;
           }
+          
           CalendarView calendarView = (CalendarView)uiViewContainer.getRenderedChild() ;
           if (calendarView instanceof UIListContainer)((UIListContainer)calendarView).setDisplaySearchResult(false) ;
           uiViewContainer.refresh() ;

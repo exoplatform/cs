@@ -903,8 +903,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
           if(!uiForm.isAddNew_){
             calendarEvent = uiForm.calendarEvent_ ; 
           }
-          String formCalendar = calendarEvent.getCalendarId() ;
-          String toCalendar = uiForm.getCalendarId() ;
 
           /*cal.add(Calendar.MINUTE, interval) ;
             from = cal.getTime() ;*/
