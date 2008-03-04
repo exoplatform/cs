@@ -79,7 +79,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       
     }*/
     
-    inputset.addUIFormInput(new UIFormColorPicker(FIELD_NAME, FIELD_NAME, Colors.COLORS)) ; 
+    //inputset.addUIFormInput(new UIFormColorPicker(FIELD_NAME, FIELD_NAME, Colors.COLORS)) ; 
     List<ActionData> actions = new ArrayList<ActionData>() ;
     /* ActionData selectGroupAction = new ActionData() ;
     selectGroupAction.setActionListener("SelectPermission") ;
