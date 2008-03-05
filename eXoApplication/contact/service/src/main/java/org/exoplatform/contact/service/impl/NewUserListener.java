@@ -23,6 +23,7 @@ import java.util.List;
 
 import javax.jcr.Node;
 
+import org.apache.poi.util.SystemOutLogger;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
