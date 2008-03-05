@@ -72,10 +72,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
   final private static String DEFAULT_CALENDAR_TAB = "defaultCalendarTab".intern() ;
   final private static String DEFAULT_CALENDARS = "defaultCalendars".intern() ;
   final private static String DEFAULT_CALENDARS_NOTE = "note".intern() ;
-  final private static String PRIVATE_CALENDARS = "privateCalendar".intern() ;
-  final private static String SHARED_CALENDARS = "sharedCalendar".intern() ;
-  final private static String PUBLIC_CALENDARS = "publicCalendar".intern() ;
-
+ 
   final private static String PREFIX_PRIVATE = "private".intern() ;
   final private static String PREFIX_SHARED  = "shared".intern() ;
   final private static String  PREFIX_PUBLIC = "public".intern() ;
@@ -133,7 +130,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     List<Calendar> privateCals = getPrivateCalendars(cservice, username) ;
     defaultCalendarsTab.addChild(new UIFormInputInfo(DEFAULT_CALENDARS, DEFAULT_CALENDARS, getLabel(DEFAULT_CALENDARS_NOTE))) ;
     if(privateCals != null && !privateCals.isEmpty()) {
-      defaultCalendarsTab.addChild(new UIFormInputInfo(PRIVATE_CALENDARS, PRIVATE_CALENDARS, null)) ;    
+      defaultCalendarsTab.addChild(new UIFormInputInfo(CalendarUtils.PRIVATE_CALENDARS, CalendarUtils.PRIVATE_CALENDARS, null)) ;    
       for(Calendar calendar : privateCals) {
         names_.put(calendar.getId(), calendar.getName()) ;
         UIFormCheckBoxInput checkBox = defaultCalendarsTab.getChildById(calendar.getId()) ;
@@ -146,7 +143,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     }
     List<Calendar> sharedCals =  getSharedCalendars(cservice, username) ;
     if(sharedCals != null && !sharedCals.isEmpty()) {
-      defaultCalendarsTab.addChild(new UIFormInputInfo(SHARED_CALENDARS, SHARED_CALENDARS, null)) ; 
+      defaultCalendarsTab.addChild(new UIFormInputInfo(CalendarUtils.SHARED_CALENDARS, CalendarUtils.SHARED_CALENDARS, null)) ; 
       for(Calendar calendar : sharedCals) {
         names_.put(calendar.getId(), calendar.getName()) ;
         defaultCalendarsTab.addUIFormInput(new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false)) ;
@@ -154,7 +151,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     }
     List<Calendar> publicCals = getPublicCalendars(cservice, username) ;
     if(publicCals != null && !publicCals.isEmpty()) {
-      defaultCalendarsTab.addChild(new UIFormInputInfo(PUBLIC_CALENDARS, PUBLIC_CALENDARS, null)) ; 
+      defaultCalendarsTab.addChild(new UIFormInputInfo(CalendarUtils.PUBLIC_CALENDARS, CalendarUtils.PUBLIC_CALENDARS, null)) ; 
       for(Calendar calendar : publicCals) {
         names_.put(calendar.getId(), calendar.getName()) ;
         UIFormCheckBoxInput checkBox = defaultCalendarsTab.getChildById(calendar.getId()) ;

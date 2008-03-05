@@ -30,7 +30,7 @@ import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.service.impl.NewUserListener;
-import org.exoplatform.contact.webui.popup.UIAddEditPermission;
+import org.exoplatform.contact.webui.popup.UIAddEditGroupPermission;
 import org.exoplatform.contact.webui.popup.UICategoryForm;
 import org.exoplatform.contact.webui.popup.UICategorySelect;
 import org.exoplatform.contact.webui.popup.UIComposeForm;
@@ -40,7 +40,7 @@ import org.exoplatform.contact.webui.popup.UIExportForm;
 import org.exoplatform.contact.webui.popup.UIImportForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.webui.popup.UIPopupContainer;
-import org.exoplatform.contact.webui.popup.UISharedForm;
+import org.exoplatform.contact.webui.popup.UISharedGroupForm;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -334,15 +334,11 @@ public class UIAddressBooks extends UIComponent {
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
       UIPopupContainer uiPopupContainer = popupAction.activate(UIPopupContainer.class, 600) ;
       uiPopupContainer.setId("UISharedAddressBook") ;
-      UIAddEditPermission uiAddNewEditPermission = uiPopupContainer.addChild(UIAddEditPermission.class, null, null);
+      UIAddEditGroupPermission uiAddNewEditPermission = uiPopupContainer.addChild(UIAddEditGroupPermission.class, null, null);
       ContactService contactService = ContactUtils.getContactService();
       String username = ContactUtils.getCurrentUser();
-      SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
-      
-      uiAddNewEditPermission.init(null, contactService.getGroup(sessionProvider, username, groupId), true) ;
-     /* UISharedForm uiSharedForm = uiPopupContainer.addChild(UISharedForm.class, null, null) ; 
-      uiSharedForm.init(true) ;
-      uiSharedForm.setAddress(groupId, uiAddressBook.getPrivateGroupMap().get(groupId)) ;*/
+      SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;  
+      uiAddNewEditPermission.init(contactService.getGroup(sessionProvider, username, groupId)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());
     }

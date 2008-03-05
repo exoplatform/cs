@@ -178,7 +178,7 @@ public class UITagContainer extends UIForm {
       mailSrv.removeMessageTag(SessionsUtils.getSessionProvider(), username, accountId, listMessage, listTag);
       uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTag);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
     }
   }
   
@@ -197,7 +197,7 @@ public class UITagContainer extends UIForm {
       mailSrv.updateTag(SessionsUtils.getSessionProvider(), username, accountId, tag);
       uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTag) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
     }
   }
 }

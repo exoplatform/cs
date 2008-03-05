@@ -37,34 +37,38 @@ public class UIFormDateTimePicker extends UIFormInputBase<String>  {
   /**
    * The DateFormat
    */
-  private DateFormat dateFormat_ ;
+ // private DateFormat dateFormat_ ;
   /**
    * Whether to display the full time (with hours, minutes and seconds), not only the date
    */
   
   private String dateStyle_ = "MM/dd/yyyy" ;
   private String timeStyle_ = "HH:mm:ss" ;
-  
+  private Date date_ ;
   private boolean isDisplayTime_ ;
   
   public UIFormDateTimePicker(String name, String bindField, Date date, boolean isDisplayTime) {
     super(name, bindField, String.class) ;
-    setDisplayTime(isDisplayTime) ;
-    if(date != null) value_ = dateFormat_.format(date) ;
+    date_ = date ;
+    isDisplayTime_ = isDisplayTime ; 
+    if(date != null) value_ = getFormater().format(date) ;
+    if(date != null) value_ = getFormater().format(date) ;
   }
   
   public UIFormDateTimePicker(String name, String bindField, Date date, boolean isDisplayTime, String dateStyle) {
     super(name, bindField, String.class) ;
     dateStyle_ = dateStyle ;
-    setDisplayTime(isDisplayTime) ;
-    if(date != null) value_ = dateFormat_.format(date) ;
+    isDisplayTime_ = isDisplayTime ;
+    date_ = date ;
+    if(date != null) value_ = getFormater().format(date) ;
   }
   public UIFormDateTimePicker(String name, String bindField, Date date, boolean isDisplayTime, String dateStyle, String timeStyle) {
     super(name, bindField, String.class) ;
     dateStyle_ = dateStyle ;
     timeStyle_ = timeStyle ;
-    setDisplayTime(isDisplayTime) ;
-    if(date != null) value_ = dateFormat_.format(date) ;
+    date_ = date ;
+    isDisplayTime_ = isDisplayTime ;
+    if(date != null) value_ = getFormater().format(date) ;
   }
   public UIFormDateTimePicker(String name, String bindField, Date date) {
     this(name, bindField, date, true) ;
@@ -77,54 +81,56 @@ public class UIFormDateTimePicker extends UIFormInputBase<String>  {
    */
   
   public UIFormDateTimePicker(String name, String bindField, Date date, String dateStyle) {
-    this(name, bindField, date, true, dateStyle) ;
+    this(name, bindField, date, false, dateStyle) ;
   }
   public UIFormDateTimePicker(String name, String bindField, Date date, String dateStyle, String timeStyle) {
     this(name, bindField, date, true, dateStyle, timeStyle) ;
   }
   public void setDisplayTime(boolean isDisplayTime) {
     isDisplayTime_ = isDisplayTime;
-    if(isDisplayTime_) dateFormat_ = new SimpleDateFormat(dateStyle_ + " " + timeStyle_);
-    else dateFormat_ = new SimpleDateFormat(dateStyle_);
   }
   
   public void setCalendar(Calendar date) { 
-    dateFormat_ = new SimpleDateFormat(getFullDateTimeFormat());
-    value_ = dateFormat_.format(date.getTime()) ; 
+    date_ = date.getTime() ;
+    value_ = getFormater().format(date.getTime()) ; 
    }
   public Calendar getCalendar() {
     try {
       Calendar calendar = new GregorianCalendar() ;
-      dateFormat_ = new SimpleDateFormat(getFullDateTimeFormat());
-      calendar.setTime(dateFormat_.parse(value_ + " 0:0:0")) ;
+      calendar.setTime(getFormater().parse(value_ + " 0:0:0")) ;
       return calendar ;
     } catch (ParseException e) {
       return null;
     }
   }
-  public void setDateFormat(String dateStyle) {
+  public void setDateFormatStyle(String dateStyle) {
     dateStyle_ = dateStyle ;
+    value_ = getFormater().format(date_) ;
+    
   }
-  public void setTimeFormat(String timeStyle) {
+  public void setTimeFormatStyle(String timeStyle) {
     timeStyle_ = timeStyle ;
+    value_ = getFormater().format(date_) ;
   }
   @SuppressWarnings("unused")
   public void decode(Object input, WebuiRequestContext context) throws Exception {
     if(input != null) value_ = ((String)input).trim();
   }
-  public String getFullDateTimeFormat() {
-    return dateStyle_ + " " + timeStyle_ ;
+  public String getFormatStyle() {
+    if(isDisplayTime_) return dateStyle_ + " " + timeStyle_ ;
+    return dateStyle_ ;
   }
-  
+  private DateFormat getFormater() {return new SimpleDateFormat(getFormatStyle()) ;}
   public void processRender(WebuiRequestContext context) throws Exception {
+    
     context.getJavascriptManager().importJavascript("eXo.cs.UIDateTimePicker","/csResources/javascript/") ;
     Writer w = context.getWriter();
-    w.write("<input format='" + getFullDateTimeFormat() + "' type='text' onfocus='eXo.cs.UIDateTimePicker.init(this,") ;
+    w.write("<input format='" + getFormatStyle() + "' type='text' onfocus='eXo.cs.UIDateTimePicker.init(this,") ;
     w.write(String.valueOf(isDisplayTime_));
     w.write(");' onkeyup='eXo.cs.UIDateTimePicker.show();' name='") ;
     w.write(getName()) ; w.write('\'') ;
     if(value_ != null && value_.length() > 0) {      
-      w.write(" value='"); w.write(value_.toString()); w.write('\'');
+      w.write(" value='"); w.write(getFormater().format(date_)); w.write('\'');
     }
     w.write(" onmousedown='event.cancelBubble = true' />") ;
   }

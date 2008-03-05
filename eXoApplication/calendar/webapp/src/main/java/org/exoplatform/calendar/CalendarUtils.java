@@ -54,6 +54,11 @@ import org.exoplatform.webui.core.model.SelectItemOption;
  * Jul 11, 2007  
  */
 public class CalendarUtils {
+  
+  final public static String PRIVATE_CALENDARS = "privateCalendar".intern() ;
+  final public static String SHARED_CALENDARS = "sharedCalendar".intern() ;
+  final public static String PUBLIC_CALENDARS = "publicCalendar".intern() ;
+  
   public static final String PRIVATE_TYPE = "0".intern() ;
   public static final String SHARED_TYPE = "1".intern() ;
   public static final String PUBLIC_TYPE = "2".intern() ;

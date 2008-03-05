@@ -24,11 +24,13 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.Colors;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarWorkingContainer;
+import org.exoplatform.calendar.webui.UIFormColorPicker;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -95,7 +97,8 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     calendarDetail.addUIFormInput(new UIFormSelectBox(CATEGORY, CATEGORY, getCategory())) ;
     calendarDetail.addUIFormInput(new UIFormSelectBox(LOCALE, LOCALE, getLocales())) ;
     calendarDetail.addUIFormInput(new UIFormSelectBox(TIMEZONE, TIMEZONE, getTimeZones())) ;
-    calendarDetail.addUIFormInput(new UIFormSelectBox(SELECT_COLOR, SELECT_COLOR, getColors())) ;
+    calendarDetail.addUIFormInput(new UIFormColorPicker(SELECT_COLOR, SELECT_COLOR, Colors.COLORS)) ;
+    //calendarDetail.addUIFormInput(new UIFormSelectBox(SELECT_COLOR, SELECT_COLOR, getColors())) ;
     List<ActionData> actions = new ArrayList<ActionData>() ;
     ActionData addCategory = new ActionData() ;
     addCategory.setActionListener("AddCategory") ;
@@ -220,29 +223,37 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   }
 
   protected String getDisplayName() {
-    return getUIStringInput(DISPLAY_NAME).getValue() ;
+    UIFormInputWithActions calendarDetail = getChildById(INPUT_CALENDAR) ;
+    return calendarDetail.getUIStringInput(DISPLAY_NAME).getValue() ;
   }
   protected void setDisplayName(String value) {
-    getUIStringInput(DISPLAY_NAME).setValue(value) ;
+    UIFormInputWithActions calendarDetail = getChildById(INPUT_CALENDAR) ;
+    calendarDetail.getUIStringInput(DISPLAY_NAME).setValue(value) ;
   }
 
   protected String getDescription() {
-    return getUIFormTextAreaInput(DESCRIPTION).getValue() ;
+    UIFormInputWithActions calendarDetail = getChildById(INPUT_CALENDAR) ;
+    return calendarDetail.getUIFormTextAreaInput(DESCRIPTION).getValue() ;
   }
   protected void setDescription(String value) {
-    getUIFormTextAreaInput(DESCRIPTION).setValue(value) ;
+    UIFormInputWithActions calendarDetail = getChildById(INPUT_CALENDAR) ;
+    calendarDetail.getUIFormTextAreaInput(DESCRIPTION).setValue(value) ;
   }
   protected String getSelectedGroup() {
-    return getUIFormSelectBox(CATEGORY).getValue() ;
+    UIFormInputWithActions calendarDetail = getChildById(INPUT_CALENDAR) ;
+    return calendarDetail.getUIFormSelectBox(CATEGORY).getValue() ;
   }
   public void setSelectedGroup(String value) {
-    getUIFormSelectBox(CATEGORY).setValue(value) ;
+    UIFormInputWithActions calendarDetail = getChildById(INPUT_CALENDAR) ;
+    calendarDetail.getUIFormSelectBox(CATEGORY).setValue(value) ;
   }
   protected String getSelectedColor() {
-    return getUIFormSelectBox(SELECT_COLOR).getValue() ;
+    UIFormInputWithActions calendarDetail = getChildById(INPUT_CALENDAR) ;
+    return calendarDetail.getChild(UIFormColorPicker.class).getValue() ;
   }
   protected void setSelectedColor(String value) {
-    getUIFormSelectBox(SELECT_COLOR).setValue(value) ;
+    UIFormInputWithActions calendarDetail = getChildById(INPUT_CALENDAR) ;
+    calendarDetail.getChild(UIFormColorPicker.class).setValue(value) ;
   }
   protected String getLocale() {
     UIFormInputWithActions calendarDetail = getChildById(INPUT_CALENDAR) ;

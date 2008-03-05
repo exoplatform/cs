@@ -413,7 +413,51 @@ public class JCRDataStorage{
           contacts.add(contact) ;
         }
       } else {
-        Node publicContactHomeNode = getUserContactHome(SessionProvider.createSystemProvider(), contactId) ;
+        boolean had = false ;
+        try {
+          Node sharedContact = getSharedContact(username) ;      
+          PropertyIterator iter = sharedContact.getReferences() ;      
+          while(iter.hasNext()) {
+            try{
+              Node contactNode = iter.nextProperty().getParent() ;
+              if (contactNode.getName().equals(contactId)) { 
+                Contact contact = getContact(contactNode, JCRDataStorage.SHARED) ;
+                if (canRemove(username, contact)) {
+                  contactNode.remove() ;
+                  sharedContact.getSession().save() ;
+                  contacts.add(contact) ;
+                }                  
+                had = true ;
+                break ;
+              }
+            }catch(Exception e){
+              e.printStackTrace() ;
+            }
+          }
+        } catch (PathNotFoundException e) { }
+        
+        /////////////
+        if (!had) {
+          Node sharedAddressBookMock = getSharedAddressBook(username) ;
+          PropertyIterator iter = sharedAddressBookMock.getReferences() ;
+          Node addressBook ;      
+          while(iter.hasNext()) {
+            addressBook = iter.nextProperty().getParent() ;
+            Node contactHome = addressBook.getParent().getParent().getNode(CONTACTS) ;
+            try {
+              Node contactNode = contactHome.getNode(contactId) ;
+              Contact contact = getContact(contactNode, JCRDataStorage.SHARED) ;
+              if (canRemove(username, contact)) {
+                contactHome.getNode(contactId).remove() ;
+                contactHome.getSession().save() ;
+                contacts.add(contact) ;
+              }                
+              break ;
+            } catch(PathNotFoundException e) { }
+          }
+        }          
+      } 
+        /*Node publicContactHomeNode = getUserContactHome(SessionProvider.createSystemProvider(), contactId) ;
         if (publicContactHomeNode.hasNode(contactId)) {
           Contact contact = getPublicContact(contactId) ;
           if(canRemove(username, contact)) {
@@ -421,52 +465,7 @@ public class JCRDataStorage{
             publicContactHomeNode.getSession().save();
             contacts.add(contact) ;
           }
-        } else {
-          boolean had = false ;
-          try {
-            Node sharedContact = getSharedContact(username) ;      
-            PropertyIterator iter = sharedContact.getReferences() ;      
-            while(iter.hasNext()) {
-              try{
-                Node contactNode = iter.nextProperty().getParent() ;
-                if (contactNode.getName().equals(contactId)) { 
-                  Contact contact = getContact(contactNode, JCRDataStorage.SHARED) ;
-                  if (canRemove(username, contact)) {
-                    contactNode.remove() ;
-                    sharedContact.getSession().save() ;
-                    contacts.add(contact) ;
-                  }                  
-                  had = true ;
-                  break ;
-                }
-              }catch(Exception e){
-                e.printStackTrace() ;
-              }
-            }
-          } catch (PathNotFoundException e) { }
-          
-          /////////////
-          if (!had) {
-            Node sharedAddressBookMock = getSharedAddressBook(username) ;
-            PropertyIterator iter = sharedAddressBookMock.getReferences() ;
-            Node addressBook ;      
-            while(iter.hasNext()) {
-              addressBook = iter.nextProperty().getParent() ;
-              Node contactHome = addressBook.getParent().getParent().getNode(CONTACTS) ;
-              try {
-                Node contactNode = contactHome.getNode(contactId) ;
-                Contact contact = getContact(contactNode, JCRDataStorage.SHARED) ;
-                if (canRemove(username, contact)) {
-                  contactHome.getNode(contactId).remove() ;
-                  contactHome.getSession().save() ;
-                  contacts.add(contact) ;
-                }                
-                break ;
-              } catch(PathNotFoundException e) { }
-            }
-          }          
-        }  
-      }  
+        }*/       
     }   
     return contacts ;
   }
@@ -564,6 +563,7 @@ public class JCRDataStorage{
       groupNode.setProperty("exo:name", group.getName());
       groupNode.setProperty("exo:description", group.getDescription());
       groupNode.setProperty("exo:editPermissions", group.getEditPermission()) ;
+      groupNode.setProperty("exo:viewPermissions", group.getViewPermission()) ;
       if(groupNode.isNew()) groupNode.getSession().save() ;
       else groupNode.save() ;
     }
@@ -623,7 +623,7 @@ public class JCRDataStorage{
   }
   
   public void shareAddressBook(SessionProvider sProvider, String username, String addressBookId, List<String> receiveUsers) throws Exception {
-  	Node addressBookNode = getUserContactGroupHome(sProvider, username).getNode(addressBookId);
+    Node addressBookNode = getUserContactGroupHome(sProvider, username).getNode(addressBookId);
     Value[] values = {};
     if (addressBookNode.isNodeType(SHARED_MIXIN)) {     
       values = addressBookNode.getProperty(SHARED_PROP).getValues();

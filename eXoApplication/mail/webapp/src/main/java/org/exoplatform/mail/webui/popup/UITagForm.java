@@ -177,8 +177,19 @@ public class UITagForm extends UIForm implements UIPopupComponent{
       
       tagList.addAll(uiTagForm.getCheckedTags());
       mailSrv.addTag(SessionsUtils.getSessionProvider(), username, accountId, uiTagForm.getMessageList(), tagList);
+      
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
-      uiMessageList.updateList();
+      List<String> tagIdList = new ArrayList<String>() ;
+      for (Tag tag : tagList) tagIdList.add(tag.getId()) ;
+      for (Message msg : uiTagForm.getMessageList()) {
+        if (msg.getTags() != null && msg.getTags().length > 0) {
+          for (int i=0 ; i < msg.getTags().length; i++) {
+            tagIdList.add(msg.getTags()[i]) ;
+          }
+        }
+        msg.setTags(tagIdList.toArray(new String[]{})) ;
+        uiMessageList.messageList_.put(msg.getId(), msg) ;
+      }
       uiPortlet.cancelAction() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTagContainer) ;
@@ -193,12 +204,19 @@ public class UITagForm extends UIForm implements UIPopupComponent{
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailSrv = uiTagForm.getApplicationComponent(MailService.class);
       List<String> tagList = new ArrayList<String>();
-      for (Tag tag : uiTagForm.getCheckedTags()) {
-        tagList.add(tag.getId());
-      }
+      for (Tag tag : uiTagForm.getCheckedTags()) tagList.add(tag.getId());
+      
       mailSrv.removeMessageTag(SessionsUtils.getSessionProvider(), username, accountId, uiTagForm.getMessageList(), tagList);
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
-      uiMessageList.updateList();
+      for (Message msg : uiTagForm.getMessageList()) {
+        if (msg.getTags() != null && msg.getTags().length > 0) {
+          for (int i=0 ; i < msg.getTags().length; i++) {
+            tagList.remove(msg.getTags()[i]) ;
+          }
+        }
+        msg.setTags(tagList.toArray(new String[]{})) ;
+        uiMessageList.messageList_.put(msg.getId(), msg) ;
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class)) ;
       uiPortlet.cancelAction() ;
     }
