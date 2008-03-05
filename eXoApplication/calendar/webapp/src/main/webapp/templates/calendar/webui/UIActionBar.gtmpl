@@ -135,12 +135,12 @@
 							    </div>
 		      		<% /*End Popup Menu*/ %>
 		      		</div>
-						<a href="<%=uicomponent.event("Today")%>" class="RightControlButton">
-							<div class="IconHolder TodayIcon">
-								<%=_ctx.appRes(uicomponent.id + '.label.Today')%>
-							</div>
-						</a>
-						<div class="SeparatorLine RightLine"><span></span></div>
+		      		<div class="SeparatorLine"><span></span></div>
+		      		<a href="<%=uicomponent.event("Today")%>" class="ControlButton">
+								<div class="IconHolder TodayIcon">
+									<%=_ctx.appRes(uicomponent.id + '.label.Today')%>
+								</div>
+							</a>
 						<div style="clear: both;"><span></span></div>
 					</div>
 				</div>

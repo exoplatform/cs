@@ -456,11 +456,14 @@
 /*================================== UIGrid========================================*/
 
 .UIContactPortlet .UIContactContainer .UIMessageList {
+	background: #ffffff;
 	padding-left: 1px;
 	_padding-left: 0px;
 	overflow-y: auto;
 	overflow-x: hidden;
-	_width: 99.7%;
+	_width: 99.5%;
+	border: 1px solid #c7c7c7;
+	border-top: none;
 }
 
 .UIContactPortlet .UIContactContainer .UIGrid {
@@ -576,13 +579,7 @@
 	height: 25px;
 	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/MaximizeReadingPane.gif') no-repeat center;
 }
-
-.UIContactPortlet .UIContactContainer .UIContactPreview .MaximizeContactPane {
-  float: right;
-	width: 30px;
-	height: 25px;
-	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/MaximizeReadingPane.gif') no-repeat center;
-}*/
+*/
 
 .UIContactPortlet .UIContactContainer .UIContactPreview .MaximizeButton {
   float: right;
