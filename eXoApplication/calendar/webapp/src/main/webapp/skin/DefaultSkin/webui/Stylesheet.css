@@ -1,6 +1,7 @@
-
-@import url("skinIcons/16x16/Stylesheet.css") ;
+@import url("skinIcons/Stylesheet.css") ;
 @import url("UICombobox/Stylesheet.css");
+@import url("UIColorPicker/Stylesheet.css");
+
 @import url("UIPopup/Stylesheet.css");
 @import url("UIActionBar/Stylesheet.css");
 @import url("UIHeaderBar/Stylesheet.css");
@@ -12,6 +13,8 @@
 @import url("UIPopup/UIFeed/Stylesheet.css") ;
 @import url("UIPopup/UIAddressForm/Stylesheet.css");
 @import url("UIPopup/UIEventForm/Stylesheet.css");
+@import url("UIPopup/UISelectUserForm/Stylesheet.css");
+
 
 /*=========================== MailBanner ==================================*/
 
@@ -64,7 +67,7 @@
 .UICalendarPortlet .UICalendarWorkingContainer .SeparatorLine {
   float: left;
   margin: 4px 3px 0px 3px;
-  background: url('background/SeparatorLine2x1.gif') repeat-y ;	
+  background: url('background/CalendarBackground.gif') no-repeat left top;	
   height: 18px; width: 2px;
 }
 .UICalendarPortlet .UICalendarContainer {
@@ -75,12 +78,12 @@
  
 /*==========================================*/
 .UICalendarPortlet .SeparatorLine {
-  background: url('background/SeparatorLine2x26.gif') no-repeat ;	
+  background: url('background/CalendarBackground.gif') no-repeat right top;	
   height: 26px; width: 2px;
 }
 
 .UICalendarPortlet .TitleBar {
-  background: url('background/TitleBarBG1x23.gif') repeat-x ;	
+  background: url('background/CalendarBackground.gif') repeat-x  center -51px;	
   height: 23px;
   line-height: 23px ;
   font-weight: bold ;
@@ -88,7 +91,7 @@
 }
 
 .UICalendarPortlet .CurrentTitleBar {
-  background: url('background/CurrentTitleBarBG1x23.gif') repeat-x ;	
+  background: url('background/CalendarBackground.gif') repeat-x center -27px;	
   height: 23px;
   line-height: 23px ;
   text-align: center ;
@@ -97,10 +100,10 @@
 }
 
 .UICalendarPortlet .ResizeReadingPane {
-	background: url('background/ResizeReadingPane38x3.gif') no-repeat;
-	width: 38px; height: 3px;
+	background: url('background/CalendarBackground.gif') repeat-x center -75px;
+	width: 40px; height: 4px;
 	cursor: n-resize;
-	margin: 1px auto 1px auto;
+	margin: 3px auto;
 }
 
 /*=====================Table Color===========================*/
@@ -108,7 +111,6 @@
 .UIPopupCategory .UIContextMenuContainer {
 	white-space: nowrap;
 }
-
 
 .UIPopupCategory .CalendarTableColor {
 	background: #e4eaf5;
@@ -127,7 +129,7 @@
 }
 
 .UIPopupCategory .CalendarTableColor .SelectedColorCell {
-	background: url('skinIcons/16x16/icons/CheckedColorIcon.gif') no-repeat ;
+	background: url('skinIcons/icons/CalendarIcons.gif') no-repeat left -342px;
 	width: 12px; height: 12px;
 }
 
@@ -135,19 +137,12 @@
 	border: 1px solid red; 
 }
 
-
 /* Popup Menu Positioning*/
 .UIActionBar .SelectButton .UIPopupCategory {
 	top: 25px;
 	left: 7px ;
 }
 
-.UICalendarPortlet .UIActionBar .RssIcon {
-	background:transparent url(skinIcons/16x16/icons/RssIcon.gif) no-repeat scroll 0%;
-}
-
-
-/* Selection */
 .selection {
 	background-color: rgb(204, 204, 204);
 	position: absolute ;
