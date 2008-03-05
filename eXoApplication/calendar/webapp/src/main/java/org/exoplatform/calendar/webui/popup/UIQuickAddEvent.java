@@ -353,6 +353,9 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
       UIQuickAddEvent uiForm = event.getSource() ;
       CalendarSetting calendarSetting = 
         uiForm.getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
+      String dateFormat = calendarSetting.getDateFormat() ;
+      String timeFormat = calendarSetting.getTimeFormat() ;
+      
       UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
       if(uiForm.isEvent()) {
         uiPopupAction.deActivate() ;
@@ -363,8 +366,8 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         uiEventForm.initForm(calendarSetting, null, null) ;
         uiEventForm.setEventSumary(uiForm.getEventSummary()) ;
         uiEventForm.setEventDescription(uiForm.getEventDescription()) ;
-        uiEventForm.setEventFromDate(uiForm.getEventFromDate(calendarSetting.getDateFormat(), calendarSetting.getTimeFormat()),calendarSetting.getTimeFormat()) ;
-        uiEventForm.setEventToDate(uiForm.getEventToDate(calendarSetting.getDateFormat(), calendarSetting.getTimeFormat()),calendarSetting.getTimeFormat()) ;
+        uiEventForm.setEventFromDate(uiForm.getEventFromDate(dateFormat, timeFormat),dateFormat, timeFormat) ;
+        uiEventForm.setEventToDate(uiForm.getEventToDate(dateFormat, timeFormat),dateFormat, timeFormat) ;
         uiEventForm.setEventAllDate(uiForm.getIsAllDay()) ;
         uiEventForm.setSelectedCategory(uiForm.getEventCategory()) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
@@ -377,8 +380,8 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         uiTaskForm.initForm(calendarSetting, null, null) ;
         uiTaskForm.setEventSumary(uiForm.getEventSummary()) ;
         uiTaskForm.setEventDescription(uiForm.getEventDescription()) ;
-        uiTaskForm.setEventFromDate(uiForm.getEventFromDate(calendarSetting.getDateFormat(), calendarSetting.getTimeFormat()),calendarSetting.getTimeFormat()) ;
-        uiTaskForm.setEventToDate(uiForm.getEventToDate(calendarSetting.getDateFormat(), calendarSetting.getTimeFormat()),calendarSetting.getTimeFormat()) ;
+        uiTaskForm.setEventFromDate(uiForm.getEventFromDate(dateFormat, timeFormat),dateFormat, timeFormat) ;
+        uiTaskForm.setEventToDate(uiForm.getEventToDate(dateFormat, timeFormat), dateFormat, timeFormat) ;
         uiTaskForm.setEventAllDate(uiForm.getIsAllDay()) ;
         uiTaskForm.setSelectedCategory(uiForm.getEventCategory()) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
