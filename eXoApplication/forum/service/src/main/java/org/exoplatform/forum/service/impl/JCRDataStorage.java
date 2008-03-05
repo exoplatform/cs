@@ -450,6 +450,22 @@ public class JCRDataStorage{
 		return topicview;
 	}
 
+	public JCRPageList getPageTopicByUser(SessionProvider sProvider, String userName) throws Exception {
+		try {
+		Node forumHomeNode = getForumHomeNode(sProvider) ;
+		QueryManager qm = forumHomeNode.getSession().getWorkspace().getQueryManager() ;
+		String pathQuery = "/jcr:root" + forumHomeNode.getPath() + "//element(*,exo:topic)[@exo:owner='"+userName+"']";
+		Query query = qm.createQuery(pathQuery , Query.XPATH) ;
+		QueryResult result = query.execute() ;
+		NodeIterator iter = result.getNodes(); 
+		JCRPageList pagelist = new ForumPageList(iter, 10, forumHomeNode.getPath(), false) ;
+		return pagelist ;
+		}catch (Exception e) {
+			e.printStackTrace() ;
+			return null ;
+		}
+  }
+	
 	public void saveTopic(SessionProvider sProvider, String categoryId, String forumId, Topic topic, boolean isNew) throws Exception {
 		Node forumHomeNode = getForumHomeNode(sProvider) ;
 		try{
@@ -477,12 +493,10 @@ public class JCRDataStorage{
 						long totalTopicByUser = 0;
 						if(newProfileNode.hasProperty("exo:totalTopic"))totalTopicByUser = newProfileNode.getProperty("exo:totalTopic").getLong() ;
 						newProfileNode.setProperty("exo:totalTopic", totalTopicByUser + 1);
-						System.out.println("\n\n========> Save Topic Total Old");
 					}catch (PathNotFoundException e) {
 						newProfileNode = userProfileNode.addNode(topic.getOwner(), "exo:userProfile") ;
 						newProfileNode.setProperty("exo:userId", topic.getOwner());
 						newProfileNode.setProperty("exo:totalTopic", 1);
-						System.out.println("\n\n========> Save Topic Total new");
 					}
 					userProfileNode.getSession().save() ;
 				} else {
@@ -631,6 +645,23 @@ public class JCRDataStorage{
 		}
 	}
 	
+	
+	public JCRPageList getPagePostByUser(SessionProvider sProvider, String userName) throws Exception {
+		try {
+		Node forumHomeNode = getForumHomeNode(sProvider) ;
+		QueryManager qm = forumHomeNode.getSession().getWorkspace().getQueryManager() ;
+		String pathQuery = "/jcr:root" + forumHomeNode.getPath() + "//element(*,exo:post)[@exo:owner='"+userName+"']";
+		Query query = qm.createQuery(pathQuery , Query.XPATH) ;
+		QueryResult result = query.execute() ;
+		NodeIterator iter = result.getNodes(); 
+		JCRPageList pagelist = new ForumPageList(iter, 10, forumHomeNode.getPath(), false) ;
+		return pagelist ;
+		}catch (Exception e) {
+			e.printStackTrace() ;
+			return null ;
+		}
+  }
+	
 	public Post getPost(SessionProvider sProvider, String categoryId, String forumId, String topicId, String postId) throws Exception {
 		Node forumHomeNode = getForumHomeNode(sProvider) ;
 		try {
@@ -712,14 +743,12 @@ public class JCRDataStorage{
 						long totalPostByUser = 0;
 						if(newProfileNode.hasProperty("exo:totalPost")){
 							totalPostByUser = newProfileNode.getProperty("exo:totalPost").getLong() ;
-							System.out.println("\n\n========> Save Post Total Old: " + (totalPostByUser));
 						}
 						newProfileNode.setProperty("exo:totalPost", totalPostByUser + 1);
 					}catch (PathNotFoundException e) {
 						newProfileNode = userProfileNode.addNode(post.getOwner(), "exo:userProfile") ;
 						newProfileNode.setProperty("exo:userId", post.getOwner());
 						newProfileNode.setProperty("exo:totalPost", 1);
-						System.out.println("\n\n========> Save Post Total New");
 					}
 					newProfileNode.setProperty("exo:lastPostDate", getGreenwichMeanTime()) ;
 					userProfileNode.getSession().save() ;

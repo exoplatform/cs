@@ -148,7 +148,7 @@ public class UISelectItemForum extends UIForm implements UIPopupComponent {
 			for(UIComponent child : children) {
 				if(child instanceof UIFormCheckBoxInput) {
 					if(((UIFormCheckBoxInput)child).isChecked()) {
-						idSelected = idSelected + uiForm.getNameForumLinkData(child.getName()) +" ("+ child.getName() + ");<br/>";
+						idSelected = idSelected + uiForm.getNameForumLinkData(child.getName()) +" ("+ child.getName() + ");\n";
 					}
 				}
 			}

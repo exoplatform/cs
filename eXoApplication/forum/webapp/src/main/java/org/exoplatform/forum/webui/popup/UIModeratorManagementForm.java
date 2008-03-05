@@ -26,6 +26,8 @@ import org.exoplatform.forum.ForumSessionUtils;
 import org.exoplatform.forum.service.ForumLinkData;
 import org.exoplatform.forum.service.ForumService;
 import org.exoplatform.forum.service.JCRPageList;
+import org.exoplatform.forum.service.Tag;
+import org.exoplatform.forum.service.Topic;
 import org.exoplatform.forum.service.UserProfile;
 import org.exoplatform.forum.webui.UIFormTextAreaMultilInput;
 import org.exoplatform.forum.webui.UIForumLinks;
@@ -69,7 +71,9 @@ public class UIModeratorManagementForm extends UIForm implements UIPopupComponen
 	private List<UserProfile> userProfiles = new ArrayList<UserProfile>();
   private JCRPageList pageList ;
 	private boolean isEdit = false ;
-
+	private UserProfile userProfile = new UserProfile();
+	private List<ForumLinkData> forumLinks = null;
+	
 	public static final String FIELD_USERPROFILE_FORM = "ForumUserProfile" ;
 	public static final String FIELD_USEROPTION_FORM = "ForumUserOption" ;
 	public static final String FIELD_USERBAN_FORM = "ForumUserBan" ;
@@ -157,8 +161,7 @@ public class UIModeratorManagementForm extends UIForm implements UIPopupComponen
 		return this.isEdit ;
 	}
 	
-	private UserProfile userProfile = new UserProfile();
-	List<ForumLinkData> forumLinks = null;
+	
 	
 	@SuppressWarnings({ "unchecked", "deprecation" })
   private void initUserProfileForm() throws Exception {
@@ -339,6 +342,46 @@ public class UIModeratorManagementForm extends UIForm implements UIPopupComponen
 		UIFormInputWithActions inputSetProfile = this.getChildById(FIELD_USERPROFILE_FORM) ;
 		inputSetProfile.getUIFormTextAreaInput(FIELD_MODERATEFORUMS_MULTIVALUE).setValue(values) ;
   }
+	
+	private JCRPageList getPageTopicByUser(String userName) throws Exception {
+	  return this.forumService.getPageTopicByUser(ForumSessionUtils.getSystemProvider(), userName) ;
+  }
+	
+	@SuppressWarnings({ "unchecked", "unused" })
+  private List<Topic> getTopicsByUser() throws Exception {
+		String userName = this.userProfile.getUserId() ;
+		JCRPageList pageListTopic = getPageTopicByUser(userName) ; 
+		pageListTopic.setPageSize(10) ;
+		List<Topic> topics = pageListTopic.getPage(1) ;
+		return topics ;
+	}
+	
+	@SuppressWarnings("unused")
+	private String[] getStarNumber(Topic topic) throws Exception {
+		double voteRating = topic.getVoteRating() ;
+		return ForumFormatUtils.getStarNumber(voteRating) ;
+	}
+	
+	@SuppressWarnings("unused")
+	private String getStringCleanHtmlCode(String sms) {
+		return ForumFormatUtils.getStringCleanHtmlCode(sms);
+	}
+
+	@SuppressWarnings("unused")
+	private List<Tag> getTagsByTopic(String[] tagIds) throws Exception {
+		return this.forumService.getTagsByTopic(ForumSessionUtils.getSystemProvider(), tagIds);	
+	}
+	
+	@SuppressWarnings("unused")
+  private JCRPageList getPageListPost(String topicPath) throws Exception {
+		String []id = topicPath.split("/") ;
+		int i = id.length ;
+		JCRPageList pageListPost = this.forumService.getPosts(ForumSessionUtils.getSystemProvider(), id[i-3], id[i-2], id[i-1])	; 
+//		long maxPost = getUserProfile().getMaxTopicInPage() ;
+//		if(maxPost > 0) this.maxPost = maxPost ;
+//		pageListPost.setPageSize(this.maxPost) ;
+		return pageListPost;
+	}
 	
   static  public class ViewProfileActionListener extends EventListener<UIModeratorManagementForm> {
     public void execute(Event<UIModeratorManagementForm> event) throws Exception {

@@ -211,4 +211,12 @@ public class ForumServiceImpl implements ForumService{
 	public JCRPageList getPageListUserProfile(SessionProvider sProvider)throws Exception {
 	  return storage_.getPageListUserProfile(sProvider);
   }
+
+	public JCRPageList getPageTopicByUser(SessionProvider sProvider, String userName) throws Exception {
+	  return storage_.getPageTopicByUser(sProvider, userName);
+  }
+
+	public JCRPageList getPagePostByUser(SessionProvider sProvider, String userName) throws Exception {
+	  return storage_.getPagePostByUser(sProvider, userName);
+  }
 }

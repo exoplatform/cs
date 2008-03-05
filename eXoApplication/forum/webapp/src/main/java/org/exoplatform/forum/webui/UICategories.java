@@ -52,8 +52,8 @@ import org.exoplatform.webui.event.EventListener;
 public class UICategories extends UIContainer	{
 	protected ForumService forumService = (ForumService)PortalContainer.getInstance().getComponentInstanceOfType(ForumService.class) ;
 	private List<Forum> forumList = null ;
-	private List<Topic> topicLastList = new ArrayList<Topic>() ;
 	private Map<String, List<Forum>> mapListForum = new HashMap<String, List<Forum>>() ;
+	private Map<String, Topic> maptopicLast = new HashMap<String, Topic>() ;
 	private List<Category> categoryList = new ArrayList<Category>() ;
 	private boolean isGetForumList = false ;
   
@@ -112,16 +112,23 @@ public class UICategories extends UIContainer	{
 	
 	@SuppressWarnings("unused")
 	private Topic getLastTopic(String topicPath) throws Exception {
-		Topic topicLast = forumService.getTopicByPath(ForumSessionUtils.getSystemProvider(), topicPath) ;
-		this.topicLastList.add(topicLast) ;
+		Topic topicLast = new Topic() ;
+		topicLast = maptopicLast.get(topicLast.getId()) ;
+    if(topicLast == null) {
+    	topicLast = forumService.getTopicByPath(ForumSessionUtils.getSystemProvider(), topicPath) ;
+    	if(topicLast != null)maptopicLast.put(topicLast.getId(), topicLast) ;
+    }
 		return topicLast ;
 	}
 	
-	private Topic getTopic(String topicId) throws Exception {
-		for(Topic topic : this.topicLastList) {
-			if(topic.getId().equals(topicId)) return topic ;
-		}	
-	return null ;
+	private Topic getTopic(String topicId, String path) throws Exception {
+		Topic topic = new Topic() ;
+		topic = this.maptopicLast.get(topicId) ;
+		if(topic == null) {
+    	String forumHomePath = forumService.getForumHomePath(ForumSessionUtils.getSystemProvider()) ;
+    	topic = forumService.getTopicByPath(ForumSessionUtils.getSystemProvider(), forumHomePath + "/" + path) ;
+    }
+	return topic ;
 	}
 	
 	private Category getCategory(String categoryId) throws Exception {
@@ -186,13 +193,14 @@ public class UICategories extends UIContainer	{
 			UITopicDetailContainer uiTopicDetailContainer = uiForumContainer.getChild(UITopicDetailContainer.class) ;
 			uiForumContainer.setIsRenderChild(false) ;
 			UITopicDetail uiTopicDetail = uiTopicDetailContainer.getChild(UITopicDetail.class) ;
+			String path = id[0]+"/"+id[1] + "/" + id[2];
 			uiForumContainer.getChild(UIForumDescription.class).setForumIds(id[0], id[1]);
-			uiTopicDetail.setTopicFromCate(id[0], id[1],uiContainer.getTopic(id[2]), true) ;
+			uiTopicDetail.setTopicFromCate(id[0], id[1],uiContainer.getTopic(id[2], path), true) ;
 			uiTopicDetail.setUpdateForum(uiContainer.getForumById(id[1])) ;
 			uiTopicDetail.setIdPostView("true") ;
 			uiTopicDetailContainer.getChild(UITopicPoll.class).updateFormPoll(id[0], id[1], id[2]) ;
 			forumPortlet.getChild(UIForumLinks.class).setValueOption((id[0]+"/"+id[1] + " "));
-			uiContainer.topicLastList.clear() ;
+			uiContainer.maptopicLast.clear() ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(forumPortlet) ;
 		}
 	}

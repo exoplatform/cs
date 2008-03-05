@@ -154,7 +154,6 @@ public class UITopicDetail extends UIForm {
 			userName = "guest" ;
 		}
 		UIForumPortlet forumPortlet = this.getAncestorOfType(UIForumPortlet.class) ;
-		forumPortlet.getChild(UIBreadcumbs.class).setUpdataPath((categoryId + "/" + forumId + "/" + topicId)) ;
 		boolean isGetService = false ;
 		if(userName !=null && userName.length() > 0) {
 			if(!userName.equals(this.userName)) {

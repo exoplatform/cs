@@ -149,7 +149,8 @@ public interface ForumService {
 	 * @return
 	 * @throws Exception
 	 */
-
+	public JCRPageList getPageTopicByUser(SessionProvider sProvider, String userName) throws Exception ;
+	
 	public List<Topic> getTopics(SessionProvider sProvider, String categoryId, String forumId) throws Exception;
 	/**
 	 * This method should:
@@ -235,6 +236,7 @@ public interface ForumService {
 	 * @throws Exception
 	 */
 	public JCRPageList getPosts(SessionProvider sProvider, String categoryId, String forumId, String topicId)throws Exception;
+	public JCRPageList getPagePostByUser(SessionProvider sProvider, String userName) throws Exception ;
 	/**
 	 * This method should:
 	 * 1. Check the user permission
