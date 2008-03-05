@@ -12,19 +12,19 @@
 	    <label>#{platform.users.collaboration}</label>
 	    <page-reference>group::platform/users::collaboration</page-reference>
 	    	    
-	    <node>
+	    <!--node>
 		    <uri>collaboration/rss</uri>
 		    <name>contact</name>
 		    <label>#{platform.users.collaboration.rss}</label>
 		    <page-reference>group::platform/users::rss</page-reference>
-	  	</node>
+	  	</node-->
 	  	
-	    <node>
+	    <!--node>
 		    <uri>collaboration/forum</uri>
 		    <name>contact</name>
 		    <label>#{platform.users.collaboration.forum}</label>
 		    <page-reference>group::platform/users::forum</page-reference>
-	  	</node>
+	  	</node-->
 	  	
 	    <node>
 		    <uri>collaboration/contact</uri>
