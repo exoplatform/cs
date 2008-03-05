@@ -42,6 +42,7 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 public class UICalendarPortlet extends UIPortletApplication {
   private CalendarSetting calendarSetting_ ;
   public UICalendarPortlet() throws Exception {
+   calendarSetting_ = CalendarUtils.getCalendarService().getCalendarSetting(SessionProviderFactory.createSessionProvider(), CalendarUtils.getCurrentUser()) ;
    UIActionBar uiActionBar = addChild(UIActionBar.class, null, null) ;
    uiActionBar.setCurrentView(UICalendarViewContainer.TYPES[Integer.parseInt(getCalendarSetting().getViewType())]) ;
     addChild(UICalendarWorkingContainer.class, null, null) ;
@@ -51,8 +52,8 @@ public class UICalendarPortlet extends UIPortletApplication {
   }
   
   public CalendarSetting getCalendarSetting() throws Exception{
-    if(calendarSetting_ != null ) return calendarSetting_ ;
-    calendarSetting_ = CalendarUtils.getCalendarService().getCalendarSetting(SessionProviderFactory.createSessionProvider(), CalendarUtils.getCurrentUser()) ; 
+   /* if(calendarSetting_ != null ) return calendarSetting_ ;
+    calendarSetting_ = CalendarUtils.getCalendarService().getCalendarSetting(SessionProviderFactory.createSessionProvider(), CalendarUtils.getCurrentUser()) ; */
     return calendarSetting_ ; 
   }
   public void setCalendarSetting(CalendarSetting setting) throws Exception{

@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.exoplatform.calendar.Colors;
 import org.exoplatform.calendar.Colors.Color;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.model.SelectItemOption;
@@ -86,6 +87,7 @@ public class UIFormColorPicker extends UIFormInputBase<String>  {
   public UIFormColorPicker(String name, String bindingExpression, String value) {
     super(name, bindingExpression, String.class);
     this.value_ = value ;
+    setColors(Colors.COLORS) ;
   }
 
   public UIFormColorPicker(String name, String bindingExpression, Color[] colors) {
@@ -118,10 +120,11 @@ public class UIFormColorPicker extends UIFormInputBase<String>  {
     value_ = options_.get(0).getValue();
     return this ;
   } */
+  
   @SuppressWarnings("unused")
   public void decode(Object input, WebuiRequestContext context) throws Exception {
     value_ = (String) input;
-    if(value_ != null && value_.length() == 0) value_ = null ;
+    if(value_ != null && value_.trim().length() == 0) value_ = null ;
   }
   public void setOnChange(String onchange){ onchange_ = onchange; } 
 
@@ -133,7 +136,7 @@ public class UIFormColorPicker extends UIFormInputBase<String>  {
   }
 
   private String renderJsActions() {
-    StringBuffer sb = new StringBuffer() ;
+    StringBuffer sb = new StringBuffer("") ;
     for(String k : jsActions_.keySet()){
       if(sb != null && sb.length() > 0 ) sb.append(" ") ;
       if(jsActions_.get(k) != null) {
@@ -158,7 +161,7 @@ public class UIFormColorPicker extends UIFormInputBase<String>  {
       w.write("<div class=\"UIColorPickerInput\" onclick=\"eXo.calendar.UIColorPicker.show(this)\">") ;
       w.write("<span class=\" DisplayValue "+encodeValue(value_).toString()+"\"></span>") ;
       w.write("</div>") ;
-      w.write("<div class=\"CalendarTableColor\">") ;
+      w.write("<div class=\"CalendarTableColor\" selectedColor=\""+encodeValue(value_).toString()+" \">") ;
       int i = 0 ;
       int index = 0 ;
       int count = 0 ;
@@ -176,9 +179,9 @@ public class UIFormColorPicker extends UIFormInputBase<String>  {
         i++ ;
       }
       w.write("</div>") ;
-      w.write("<input class='UIColorPickerValue' name='"+getName()+"' type='hidden'" + " id='"+getId()+"' " + renderJsActions());
+      w.write("<input class='UIColorPickerValue' name='"+getId()+"' type='hidden'" + " id='"+getId()+"' " + renderJsActions());
       if(value_ != null && value_.trim().length() > 0) {      
-        w.write(" value='"+encodeValue(value_).toString()+"'");
+        w.write(" value='"+value_+"'");
       }
       w.write(" \\>") ;
     w.write("</div>") ;

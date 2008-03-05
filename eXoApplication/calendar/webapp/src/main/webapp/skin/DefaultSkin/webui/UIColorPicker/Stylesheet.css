@@ -9,16 +9,17 @@
 }
 .UICalendarPortlet .UIFormColorPicker .UIColorPickerInput {
 	border: solid 1px gray ;
-	width:102px;
-	height: 20px;
-	*height: 20px;
-	line-height: 20px;
+	width: 235px;
+	height: 18px;
+	*height: 18px;
+	line-height: 18px;
 }
 .UICalendarPortlet .UIFormColorPicker  .DisplayValue {
 	display:block ;
- 	*height:16px;
- 	height: 16px;
  	margin: 1px;
+ 	height: 15px;
+	*height: 15px;
+	line-height: 15px;
   border: solid 1px #cccccc ;
 }
 
