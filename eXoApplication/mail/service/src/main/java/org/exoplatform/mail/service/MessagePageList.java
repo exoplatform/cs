@@ -257,7 +257,7 @@ public class MessagePageList extends JCRPageList {
       msg.setReferedMessageIds(referedMessageIds);
       
       List<String> groupedMessageIds = new ArrayList<String>() ;
-      groupedMessageIds = getGroupedMessageIds(groupedMessageIds, messageNode, refFolders) ;
+      groupedMessageIds = getGroupedMessageIds(groupedMessageIds, messageNode, refFolders) ; 
       msg.setGroupedMessageIds(groupedMessageIds);
     }
     
