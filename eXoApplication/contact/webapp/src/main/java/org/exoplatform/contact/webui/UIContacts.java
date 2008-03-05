@@ -38,7 +38,7 @@ import org.exoplatform.contact.webui.popup.UIContactPreviewForm;
 import org.exoplatform.contact.webui.popup.UIExportForm;
 import org.exoplatform.contact.webui.popup.UIMoveContactsForm;
 import org.exoplatform.contact.webui.popup.UIPopupComponent;
-import org.exoplatform.contact.webui.popup.UISharedForm;
+import org.exoplatform.contact.webui.popup.UISharedGroupForm;
 import org.exoplatform.contact.webui.popup.UITagForm;
 import org.exoplatform.contact.webui.popup.UICategorySelect;
 import org.exoplatform.contact.webui.popup.UIContactForm;
@@ -524,6 +524,17 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           return ;
         }
       }
+      for (String id : contactIds) {
+        Contact contact = uiContacts.contactMap.get(id) ;
+        if (contact.getContactType().equals(JCRDataStorage.PUBLIC)
+            || contact.getId().equals(ContactUtils.getCurrentUser())) {
+          UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-delete", null
+              , ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
+      }
       if (uiContacts.isSearchResult && !uiContacts.checkExistContacts(contactId)){
         UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-deleted", null,
@@ -808,7 +819,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   
   static public class SharedContactsActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
-      UIContacts uiContacts = event.getSource() ;
+      /*UIContacts uiContacts = event.getSource() ;
       List<String> contacts = uiContacts.getCheckedContacts() ;
       Map<String, String> mapContacts = new LinkedHashMap<String, String>() ;
       for (String contactId : contacts) {
@@ -831,7 +842,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       //uiSharedForm.init(false) ;      
       uiSharedForm.setSharedContacts(mapContacts) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent());      
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()); */     
     }
   }
 }
