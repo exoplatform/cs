@@ -310,7 +310,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   protected Date getEventFromDate(String dateFormat, String timeFormat) throws Exception {
     UITaskDetailTab taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
     UIFormComboBox timeField = taskDetailTab.getUIFormComboBox(UITaskDetailTab.FIELD_FROM_TIME) ;
-    UIFormDateTimeInput fromField = taskDetailTab.getChildById(UITaskDetailTab.FIELD_FROM) ;
+    UIFormDateTimePicker fromField = taskDetailTab.getChildById(UITaskDetailTab.FIELD_FROM) ;
     if(getEventAllDate()) {
       DateFormat df = new SimpleDateFormat(dateFormat) ;
       df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
