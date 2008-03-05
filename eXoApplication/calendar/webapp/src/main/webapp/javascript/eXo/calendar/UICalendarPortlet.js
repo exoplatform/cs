@@ -662,8 +662,7 @@ UIResizeEvent.prototype.execute = function(evt) {
 	if (height <= UIResizeEvent.minHeight) {
 		if (mouseY >= (posY + height)) {
 			UIResizeEvent.outerElement.style.height = UIResizeEvent.minHeight + "px" ;
-			UIResizeEvent.innerElement.style.height = (UIResizeEvent.minHeight - 15) + "px" ;		
-			window.status = UIResizeEvent.minHeight ;
+			UIResizeEvent.innerElement.style.height = (UIResizeEvent.minHeight - 15) + "px" ;
 		}
 	} else {		
 		if (delta >= UIResizeEvent.interval) {
@@ -1376,13 +1375,14 @@ UISelection.prototype.clear = function() {
 UICalendarPortlet.prototype.initCheck = function(container) {
 	var DOMUtil = eXo.core.DOMUtil ;
 	if(typeof(container) == "string") container = document.getElementById(container) ;
+  var serverTimezone = parseInt(container.getAttribute("serverTimezone")) ;
 	var table = DOMUtil.findFirstDescendantByClass(container, "table", "UIGrid") ;
 	var tr = DOMUtil.findDescendantsByTagName(table, "tr") ;	
 	var firstTr = tr[1] ;
 	this.busyCell = DOMUtil.findDescendantsByTagName(firstTr, "td").slice(1) ;
 	var len = tr.length ;
 	for(var i = 2 ; i < len ; i ++) {
-		this.showBusyTime(tr[i]) ;
+		this.showBusyTime(tr[i],serverTimezone) ;
 	}
 	eXo.calendar.UICalendarPortlet.initSelectionX(firstTr) ;
 } ;
@@ -1399,17 +1399,18 @@ UICalendarPortlet.prototype.parseTime = function(string) {
 	return time ;
 } ;
 
-UICalendarPortlet.prototype.showBusyTime = function(tr) {
+UICalendarPortlet.prototype.showBusyTime = function(tr,serverTimezone) {
 	var stringTime = tr.getAttribute("busytime") ;
 	var localize = (tr.getAttribute("usertimezone")) ? parseInt(tr.getAttribute("usertimezone")) : 0 ;
+  var extraTime = localize - serverTimezone ;
 	if (!stringTime) return ;
 	var time = this.parseTime(stringTime) ;
 	var len = time.length ;
 	var from = null ;
 	var to = null ;
 	for(var i = 0 ; i < len ; i ++) {
-		from = parseInt(time[i].from) - localize ;
-		to = parseInt(time[i].to) - localize ;
+		from = parseInt(time[i].from) + extraTime;
+		to = parseInt(time[i].to) + extraTime ;
 		this.setBusyTime(from, to, tr)
 	}
 } ;
@@ -1418,7 +1419,6 @@ UICalendarPortlet.prototype.setBusyTime = function(from, to, tr) {
 	var cell = eXo.core.DOMUtil.findDescendantsByTagName(tr, "td").slice(1) ;
 	var start = this.round(from,15)/15 ;
 	var end = this.round(to,15)/15 ;
-	//alert(start + ' - ' + end) ;
 	for(var i = start ; i < end ; i ++) {
 		cell[i].className = "BusyDotTime" ;
 		this.busyCell[i].className = "BusyTime" ;		
