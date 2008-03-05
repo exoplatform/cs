@@ -1,8 +1,6 @@
 
-@import url("skinIcons/Stylesheet.css") ;
+@import url("skinIcons/16x16/Stylesheet.css") ;
 @import url("UICombobox/Stylesheet.css");
-@import url("UIColorPicker/Stylesheet.css");
-
 @import url("UIPopup/Stylesheet.css");
 @import url("UIActionBar/Stylesheet.css");
 @import url("UIHeaderBar/Stylesheet.css");
@@ -14,8 +12,6 @@
 @import url("UIPopup/UIFeed/Stylesheet.css") ;
 @import url("UIPopup/UIAddressForm/Stylesheet.css");
 @import url("UIPopup/UIEventForm/Stylesheet.css");
-@import url("UIPopup/UISelectUserForm/Stylesheet.css");
-
 
 /*=========================== MailBanner ==================================*/
 
@@ -68,7 +64,7 @@
 .UICalendarPortlet .UICalendarWorkingContainer .SeparatorLine {
   float: left;
   margin: 4px 3px 0px 3px;
-  background: url('background/CalendarBackground.gif') no-repeat left top;	
+  background: url('background/SeparatorLine2x1.gif') repeat-y ;	
   height: 18px; width: 2px;
 }
 .UICalendarPortlet .UICalendarContainer {
@@ -79,12 +75,12 @@
  
 /*==========================================*/
 .UICalendarPortlet .SeparatorLine {
-  background: url('background/CalendarBackground.gif') no-repeat right top;	
+  background: url('background/SeparatorLine2x26.gif') no-repeat ;	
   height: 26px; width: 2px;
 }
 
 .UICalendarPortlet .TitleBar {
-  background: url('background/CalendarBackground.gif') repeat-x  center -51px;	
+  background: url('background/TitleBarBG1x23.gif') repeat-x ;	
   height: 23px;
   line-height: 23px ;
   font-weight: bold ;
@@ -92,7 +88,7 @@
 }
 
 .UICalendarPortlet .CurrentTitleBar {
-  background: url('background/CalendarBackground.gif') repeat-x center -27px;	
+  background: url('background/CurrentTitleBarBG1x23.gif') repeat-x ;	
   height: 23px;
   line-height: 23px ;
   text-align: center ;
@@ -101,10 +97,10 @@
 }
 
 .UICalendarPortlet .ResizeReadingPane {
-	background: url('background/CalendarBackground.gif') repeat-x center -75px;
-	width: 40px; height: 4px;
+	background: url('background/ResizeReadingPane38x3.gif') no-repeat;
+	width: 38px; height: 3px;
 	cursor: n-resize;
-	margin: 3px auto;
+	margin: 1px auto 1px auto;
 }
 
 /*=====================Table Color===========================*/
@@ -112,6 +108,7 @@
 .UIPopupCategory .UIContextMenuContainer {
 	white-space: nowrap;
 }
+
 
 .UIPopupCategory .CalendarTableColor {
 	background: #e4eaf5;
@@ -130,7 +127,7 @@
 }
 
 .UIPopupCategory .CalendarTableColor .SelectedColorCell {
-	background: url('skinIcons/icons/CalendarIcons.gif') no-repeat left -342px;
+	background: url('skinIcons/16x16/icons/CheckedColorIcon.gif') no-repeat ;
 	width: 12px; height: 12px;
 }
 
@@ -138,12 +135,19 @@
 	border: 1px solid red; 
 }
 
+
 /* Popup Menu Positioning*/
 .UIActionBar .SelectButton .UIPopupCategory {
 	top: 25px;
 	left: 7px ;
 }
 
+.UICalendarPortlet .UIActionBar .RssIcon {
+	background:transparent url(skinIcons/16x16/icons/RssIcon.gif) no-repeat scroll 0%;
+}
+
+
+/* Selection */
 .selection {
 	background-color: rgb(204, 204, 204);
 	position: absolute ;
@@ -226,44 +230,4 @@
 }
 .UICalendarPortlet .SelectGroupIcon {
 	width: 16px ; height: 16px;
-}
-
-/******************************	OverButton	***************************************/
-.UICalendarPortlet .DefaultStyle .LeftOverButton {
-	padding-left: 5px;
-}
-
-.UICalendarPortlet .DefaultStyle .RightOverButton {
-	padding-right: 5px;
-}
-
-.UICalendarPortlet .DefaultStyle .CenterOverButton {
-	padding-left: 3px;
-}
-/*ForumAction*/
-.UICalendarPortlet .CalendarBar {
-	background: none;
-	height: 22px;
-	float: left;
-	margin: 5px 0px 0px 0px; 
-}
-
-.UICalendarPortlet .CalendarBarAction {
-	background: none;
-	height: 22px;
-	float: left;
-	margin: 5px 0px 0px 0px; 
-}
-
-.UICalendarPortlet .CalendarBarAction .LeftOverButton {
-	background: url('background/LeftOverButton5x22.gif') no-repeat left top;
-}
-
-.UICalendarPortlet .CalendarBarAction .RightOverButton {
-	background: url('background/RightOverButton5x22.gif') no-repeat right top;
-}
-
-.UICalendarPortlet .CalendarBarAction .CenterOverButton {
-	background: url('background/CenterOverButton1x22.gif') repeat-x top;
-	height: 22px;
 }
