@@ -479,11 +479,12 @@ UIMailPortlet.prototype.showView = function(obj, evt) {
 } ;
 
 UIMailPortlet.prototype.showSubmenu = function() {
+  window.clearTimeout(eXo.mail.UIMailPortlet.timeOutSubmenu) ;
   eXo.mail.UIMailPortlet.subMenu.style.display = "block" ;
 } ;
 
 UIMailPortlet.prototype.hideSubmenu = function() {
-  eXo.mail.UIMailPortlet.subMenu.style.display = "none" ;
+  eXo.mail.UIMailPortlet.timeOutSubmenu = window.setTimeout('eXo.mail.UIMailPortlet.subMenu.style.display = "none"', 100) ;
   eXo.mail.UIMailPortlet.subMenu.onmouseover = eXo.mail.UIMailPortlet.showSubmenu ;
   eXo.mail.UIMailPortlet.subMenu.onmouseout = eXo.mail.UIMailPortlet.hideSubmenu ;
 } ;

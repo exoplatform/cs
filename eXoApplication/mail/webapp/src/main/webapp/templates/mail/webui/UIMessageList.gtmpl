@@ -300,7 +300,7 @@
 			<%
 		}
 	%>
-  <div class="UIMessageList" >
+  <div class="UIMessageList SpliterResizableListArea" >
     <% /* <div class="AdvancedTooltipTmpl" id="mailAdvancedTooltipTmpl">
       <div class="Item">
         <div class="Key">Email: </div>
@@ -532,7 +532,7 @@
         } else {
       %>
           <tbody><tr><td colspan="10">
-            <div class="MessageNotice SpliterResizableListArea" id="uiMessageListResizableArea">
+            <div class="MessageNotice">
             <%=_ctx.appRes(uicomponent.id+ ".label.there-are-no-messages") %>
           </div>
         </td></tr></tbody>

@@ -39,7 +39,7 @@
     <% 
     int msgIndex = 0;
     if (msgRoot != null) { for(Message msg : uicomponent.getShowedMessages()) {  if (msg != null) {%>
-		<div class="DecoratorBox" previewId="<%=msg.getId()%>">
+		<div class="DecoratorBox SpliterResizableListArea" previewId="<%=msg.getId()%>">
     <%
         String starClass = "UnStarredIcon" ;
         if (msg.hasStar()) starClass = "StarredIcon";
@@ -354,7 +354,7 @@
   <div><a href="javascript:eXo.mail.UIMailPortlet.showHidePreviewPane()"><span id="ActionReadingPane" class="MaximizeReadingPane" title="Maximize Reading Pane"></span></a></div>
   <div style="clear:both;"><span></span></div>
 </div>
-<div class="ReadingPaneDetails">
+<div class="ReadingPaneDetails SpliterResizableListArea">
   <div class="SubjectMail">
 	  <div class="WelcomeMail">
 	    <div class="LabelWelcomeMail">Welcome to</div>

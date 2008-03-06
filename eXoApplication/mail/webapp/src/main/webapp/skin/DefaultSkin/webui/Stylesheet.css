@@ -651,7 +651,8 @@
 
 /*=================================Reading Pane=================*/
 
-.UIMailPortlet .SpliterResizableArea {
+
+.UIMailPortlet .MailWorkingWorkspace .UIMessagePreview {
 	background: white;
 	border: 1px solid #c0c0c0;
 	_width: 99.3%;
