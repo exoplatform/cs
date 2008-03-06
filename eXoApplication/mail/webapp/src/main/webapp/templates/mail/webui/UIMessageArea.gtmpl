@@ -15,11 +15,11 @@
 %>
 
 <div class="MailWorkingDetails SpliterContainer" id="<%=uicomponent.getId()%>">
-	<div class="UIMessageArea SpliterResizableListArea" id="uiMessageListResizableArea">		
+	<div class="UIMessageArea" id="uiMessageListResizableArea" style="border-top:0px">		
 		<%uicomponent.renderChild(UIMessageList.class);%>
 	</div>
-	<div class="ResizeReadingPane" id="ResizeReadingPane" onmousedown="eXo.mail.Spliter.doResize(event, this, 'uiMessageListResizableAreaMain', 'SpliterResizableArea');"><span></span></div>
-	<div  class="SpliterResizableArea" id="SpliterResizableArea">
+	<div class="ResizeReadingPane" id="ResizeReadingPane" onmousedown="eXo.cs.Spliter.doResize(event, this);"><span></span></div>
+	<div id="SpliterResizableArea">
 		<%uicomponent.renderChild(UIMessagePreview.class);%>
 	</div>
 </div>

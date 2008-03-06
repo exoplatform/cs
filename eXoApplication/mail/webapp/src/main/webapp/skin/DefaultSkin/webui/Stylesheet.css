@@ -413,8 +413,9 @@
 
 .UIMailPortlet .MailWorkingWorkspace .MailContainer .UIMessageArea {
 	background: white;
-	border-top: none; 
+	border: 1px solid #c0c0c0;
 	_width: 99.3%;
+	overflow: hidden;
 }
 
 .UIMailPortlet .UIMessageArea .UIMessageActionsBar {
@@ -650,14 +651,8 @@
 
 /*=================================Reading Pane=================*/
 
-.UIMailPortlet .SpliterResizableListArea {
-	background: white;
-	border: 1px solid #c0c0c0;
-	_width: 99.3%;
-	overflow: hidden;
-}
 
-.UIMailPortlet .SpliterResizableArea {
+.UIMailPortlet .MailWorkingWorkspace .UIMessagePreview {
 	background: white;
 	border: 1px solid #c0c0c0;
 	_width: 99.3%;
