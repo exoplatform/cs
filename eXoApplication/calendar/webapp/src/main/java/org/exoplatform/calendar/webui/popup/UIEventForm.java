@@ -175,7 +175,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     attenderTab.getUIFormComboBox(UIEventAttenderTab.FIELD_FROM_TIME).setOptions(fromOptions) ;
     attenderTab.getUIFormComboBox(UIEventAttenderTab.FIELD_TO_TIME).setOptions(toOptions) ;
     if(eventCalendar != null) {
-      oldCalendarId_ = eventCalendar.getCalType() + CalendarUtils.COLON + eventCalendar.getCalendarId();
+     // oldCalendarId_ = calType_ + CalendarUtils.COLON + eventCalendar.getCalendarId();
       isAddNew_ = false ;
       calendarEvent_ = eventCalendar ;
       setEventSumary(eventCalendar.getSummary()) ;
@@ -405,17 +405,18 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   protected String getCalendarId() {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     String value = eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CALENDAR).getValue() ;
-    if(oldCalendarId_ != null) newCalendarId_ = value ;
+    newCalendarId_ = value ;
     if (!CalendarUtils.isEmpty(value) && value.split(CalendarUtils.COLON).length>0) {
       calType_ = value.split(CalendarUtils.COLON)[0] ; 
       return value.split(CalendarUtils.COLON)[1] ;      
-    }
-    return null ;
+    } 
+    return value ;
   }
   public void setSelectedCalendarId(String value) {
     UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     value = calType_ + CalendarUtils.COLON + value ;
     eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CALENDAR).setValue(value) ;
+    oldCalendarId_ = value ;
   }
 
   protected String getEventCategory() {
@@ -891,6 +892,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         long start_milisec = new Date().getTime() ;
         System.out.println("\n\n Starting add  event ...." ); */
         Date from = uiForm.getEventFromDate(calSetting.getDateFormat(), calSetting.getTimeFormat()) ;
+        System.out.println(from);
         Date to = uiForm.getEventToDate(calSetting.getDateFormat(),calSetting.getTimeFormat()) ;
         if(from.after(to)) {
           uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.event-date-time-logic", null, ApplicationMessage.WARNING)) ;
@@ -950,12 +952,11 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
             }else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)){
               calService.savePublicEvent(uiForm.getSystemSession() , calendarId, calendarEvent, uiForm.isAddNew_) ;          
             }
-          } else {
+          } else  {
             String fromCal = uiForm.oldCalendarId_.split(CalendarUtils.COLON)[1].trim() ;
             String toCal = uiForm.newCalendarId_.split(CalendarUtils.COLON)[1].trim() ;
             String fromType = uiForm.oldCalendarId_.split(CalendarUtils.COLON)[0].trim() ;
             String toType = uiForm.newCalendarId_.split(CalendarUtils.COLON)[0].trim() ;
-                        
             if((uiForm.calType_.equals(CalendarUtils.SHARED_TYPE) || uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)) && uiForm.newCategoryId_ != null){
               EventCategory evc = new EventCategory() ;
               evc.setName(uiForm.newCategoryId_ ) ;
