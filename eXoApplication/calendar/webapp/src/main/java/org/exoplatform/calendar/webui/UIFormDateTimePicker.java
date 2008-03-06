@@ -124,6 +124,7 @@ public class UIFormDateTimePicker extends UIFormInputBase<String>  {
   @SuppressWarnings("unused")
   public void decode(Object input, WebuiRequestContext context) throws Exception {
     if(input != null) value_ = ((String)input).trim();
+    System.out.println(value_);
   }
   public String getFormatStyle() {
     if(isDisplayTime_) return dateStyle_ + " " + timeStyle_ ;

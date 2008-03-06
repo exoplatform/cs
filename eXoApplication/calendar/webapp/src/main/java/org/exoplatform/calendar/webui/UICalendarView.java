@@ -947,7 +947,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         finishTime = String.valueOf(Long.parseLong(currentTime) + amount) ;
         //finishTime = String.valueOf(Long.parseLong(finishTime) +(TimeZone.getDefault().getRawOffset() - (Long.parseLong(timeZone) * 60 * 1000))) ;
       } catch (Exception e) {
-        //System.out.println("clientTime" + currentTime);
+        System.out.println("clientTime" + currentTime);
       }
       String selectedCategory = calendarview.getUIFormSelectBox(EVENT_CATEGORIES).getValue() ;
       UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
