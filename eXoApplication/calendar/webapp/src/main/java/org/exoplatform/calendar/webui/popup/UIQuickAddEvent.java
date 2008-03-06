@@ -224,6 +224,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     String label = id ;
     try {
       label = super.getLabel(id) ;
+      System.out.println(label);
     } catch (Exception e) {
     }
     return label ;
