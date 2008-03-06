@@ -103,6 +103,15 @@ public class UIFormDateTimePicker extends UIFormInputBase<String>  {
       return null;
     }
   }
+  public Date getDateValue() {
+    try {
+      Calendar calendar = new GregorianCalendar() ;
+      calendar.setTime(getFormater().parse(value_ + " 0:0:0")) ;
+      return calendar.getTime() ;
+    } catch (ParseException e) {
+      return null;
+    }
+  }
   public void setDateFormatStyle(String dateStyle) {
     dateStyle_ = dateStyle ;
     value_ = getFormater().format(date_) ;
@@ -115,6 +124,7 @@ public class UIFormDateTimePicker extends UIFormInputBase<String>  {
   @SuppressWarnings("unused")
   public void decode(Object input, WebuiRequestContext context) throws Exception {
     if(input != null) value_ = ((String)input).trim();
+    System.out.println(value_);
   }
   public String getFormatStyle() {
     if(isDisplayTime_) return dateStyle_ + " " + timeStyle_ ;
@@ -122,7 +132,6 @@ public class UIFormDateTimePicker extends UIFormInputBase<String>  {
   }
   private DateFormat getFormater() {return new SimpleDateFormat(getFormatStyle()) ;}
   public void processRender(WebuiRequestContext context) throws Exception {
-    
     context.getJavascriptManager().importJavascript("eXo.cs.UIDateTimePicker","/csResources/javascript/") ;
     Writer w = context.getWriter();
     w.write("<input format='" + getFormatStyle() + "' type='text' onfocus='eXo.cs.UIDateTimePicker.init(this,") ;
@@ -130,7 +139,7 @@ public class UIFormDateTimePicker extends UIFormInputBase<String>  {
     w.write(");' onkeyup='eXo.cs.UIDateTimePicker.show();' name='") ;
     w.write(getName()) ; w.write('\'') ;
     if(value_ != null && value_.length() > 0) {      
-      w.write(" value='"); w.write(getFormater().format(date_)); w.write('\'');
+      w.write(" value='"+value_+"\'");
     }
     w.write(" onmousedown='event.cancelBubble = true' />") ;
   }
