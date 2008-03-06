@@ -950,7 +950,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
             }else if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)){
               calService.saveEventToSharedCalendar(uiForm.getSystemSession() , username, calendarId, calendarEvent, uiForm.isAddNew_) ;
             }else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)){
-              calService.savePublicEvent(uiForm.getSystemSession() , calendarId, calendarEvent, uiForm.isAddNew_) ;          
+              calService.savePublicEvent(uiForm.getSystemSession(), calendarId, calendarEvent, uiForm.isAddNew_) ;          
             }
           } else  {
             String fromCal = uiForm.oldCalendarId_.split(CalendarUtils.COLON)[1].trim() ;

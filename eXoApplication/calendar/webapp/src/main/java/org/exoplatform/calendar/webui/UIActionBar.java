@@ -139,6 +139,7 @@ public class UIActionBar extends UIContainer  {
       UIActionBar uiActionBar = event.getSource() ;     
       UICalendarPortlet uiPortlet = uiActionBar.getAncestorOfType(UICalendarPortlet.class) ;
       UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
+      UICalendarContainer uiCalendarContainer = uiPortlet.findFirstComponentOfType(UICalendarContainer.class) ;
       UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
       CalendarView renderedChild = (CalendarView)uiViewContainer.getRenderedChild() ;
       renderedChild.setCurrentCalendar(CalendarUtils.getInstanceTempCalendar()) ;
@@ -146,6 +147,7 @@ public class UIActionBar extends UIContainer  {
       uiMiniCalendar.setCurrentCalendar(CalendarUtils.getInstanceTempCalendar()) ;
       uiMiniCalendar.updateMiniCal() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarContainer) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
     }
   }  
