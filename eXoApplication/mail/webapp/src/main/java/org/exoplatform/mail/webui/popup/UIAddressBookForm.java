@@ -47,7 +47,9 @@ import org.exoplatform.webui.form.UIFormSelectBox;
     lifecycle = UIFormLifecycle.class,
     template =  "app:/templates/mail/webui/UIAddressBookForm.gtmpl",
     events = {  
+    	@EventConfig(listeners = UIAddressBookForm.AddNewGroupActionListener.class),
       @EventConfig(listeners = UIAddressBookForm.AddContactActionListener.class),
+      @EventConfig(listeners = UIAddressBookForm.EditContactActionListener.class),
       @EventConfig(listeners = UIAddressBookForm.ChangeGroupActionListener.class),
       @EventConfig(listeners = UIAddressBookForm.SelectContactActionListener.class),
       @EventConfig(listeners = UIAddressBookForm.DeleteContactActionListener.class),
@@ -121,6 +123,16 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
 
   public void deActivate() throws Exception { }
   
+  static  public class AddNewGroupActionListener extends EventListener<UIAddressBookForm> {
+    public void execute(Event<UIAddressBookForm> event) throws Exception {
+      UIAddressBookForm uiAddressBookForm = event.getSource() ;
+      UIPopupActionContainer popupContainer = uiAddressBookForm.getParent() ;
+      UIPopupAction popupAction = popupContainer.getChild(UIPopupAction.class) ;
+      popupAction.activate(UIAddGroupForm.class, 600) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+    }
+  }
+  
   static public class AddContactActionListener extends EventListener<UIAddressBookForm> {
     public void execute(Event<UIAddressBookForm> event) throws Exception {
       UIAddressBookForm uiAddressBookForm = event.getSource() ;
@@ -130,6 +142,21 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
       uiPopupContainer.setId("UIAddContactContainer");
       uiPopupContainer.addChild(UIAddContactForm.class, null, null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
+    }
+  }
+  
+  static public class EditContactActionListener extends EventListener<UIAddressBookForm> {
+    public void execute(Event<UIAddressBookForm> event) throws Exception {
+      UIAddressBookForm uiAddBook = event.getSource() ;
+      UIPopupActionContainer uiActionContainer = uiAddBook.getParent() ;
+      UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
+      UIPopupActionContainer uiPopupContainer = uiChildPopup.activate(UIPopupActionContainer.class, 730) ;
+      uiPopupContainer.setId("UIAddContactContainer");
+      UIAddContactForm uiAddContact = uiPopupContainer.createUIComponent(UIAddContactForm.class, null, null) ;
+      uiAddContact.fillDatas(uiAddBook.getSelectedContact()) ;
+      uiPopupContainer.addChild(uiAddContact) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
+      
     }
   }
   

@@ -48,15 +48,15 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
     }  
 )
 public class UIAddGroupForm extends UIForm implements UIPopupComponent{
-  public final static String GROUP_NAME = "group-name".intern();
-  public final static String GROUP_DESCRIPTION = "group-description".intern();
+  public final static String GROUP_NAME = "group-name".intern() ;
+  public final static String GROUP_DESCRIPTION = "group-description".intern() ;
   
   public UIAddGroupForm() {
-    addUIFormInput(new UIFormStringInput(GROUP_NAME, GROUP_NAME, null));
-    addUIFormInput(new UIFormTextAreaInput(GROUP_DESCRIPTION, GROUP_DESCRIPTION, null));
+    addUIFormInput(new UIFormStringInput(GROUP_NAME, GROUP_NAME, null)) ;
+    addUIFormInput(new UIFormTextAreaInput(GROUP_DESCRIPTION, GROUP_DESCRIPTION, null)) ;
   }
   
-  public String[] getActions() {return (new String[]{"Add", "Cancel"}); }
+  public String[] getActions() {return (new String[]{"Add", "Cancel"}) ; }
   
   public void activate() throws Exception { }
 
@@ -64,13 +64,13 @@ public class UIAddGroupForm extends UIForm implements UIPopupComponent{
   
   static  public class AddActionListener extends EventListener<UIAddGroupForm> {
     public void execute(Event<UIAddGroupForm> event) throws Exception {
-      UIAddGroupForm uiAddGroupForm = event.getSource();
-      UIMailPortlet uiPortlet = uiAddGroupForm.getAncestorOfType(UIMailPortlet.class);
-      String groupName = uiAddGroupForm.getUIStringInput(GROUP_NAME).getValue();
-      String groupDescription = uiAddGroupForm.getUIFormTextAreaInput(GROUP_DESCRIPTION).getValue();
-      String username = MailUtils.getCurrentUser();
-      ContactService contactSrv = uiAddGroupForm.getApplicationComponent(ContactService.class);
+      UIAddGroupForm uiAddGroupForm = event.getSource() ;
+      UIMailPortlet uiPortlet = uiAddGroupForm.getAncestorOfType(UIMailPortlet.class) ;
+      ContactService contactSrv = uiAddGroupForm.getApplicationComponent(ContactService.class) ;
       UIApplication uiApp = uiAddGroupForm.getAncestorOfType(UIApplication.class) ;
+      String groupName = uiAddGroupForm.getUIStringInput(GROUP_NAME).getValue() ;
+      String groupDescription = uiAddGroupForm.getUIFormTextAreaInput(GROUP_DESCRIPTION).getValue() ;
+      String username = MailUtils.getCurrentUser() ;
       if (groupName == null || groupName.equals("")) {
         uiApp.addMessage(new ApplicationMessage("UIAddGroupForm.msg.group-name-required", null,
           ApplicationMessage.WARNING)) ;
@@ -81,10 +81,17 @@ public class UIAddGroupForm extends UIForm implements UIPopupComponent{
         group.setName(groupName);
         group.setDescription(groupDescription);
         contactSrv.saveGroup(SessionsUtils.getSessionProvider(), username, group, true);
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.getChild(UIPopupAction.class)) ;
+        UIAddContactForm uiAddContact = uiPortlet.findFirstComponentOfType(UIAddContactForm.class);
+        UIAddressBookForm uiAddressBook = uiPortlet.findFirstComponentOfType(UIAddressBookForm.class);
+        if (uiAddContact != null) {
+          uiAddContact.refreshGroupList() ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiAddContact) ;
+        }
+        else if (uiAddressBook !=null) {
+          uiAddressBook.updateGroup(group.getId()) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook) ;
+        }
       }
-      UIAddContactForm uiAddContact = uiPortlet.findFirstComponentOfType(UIAddContactForm.class);
-      uiAddContact.refreshGroupList();
       UIPopupAction uiPopupAction = uiAddGroupForm.getAncestorOfType(UIPopupAction.class) ; 
       uiPopupAction.deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;

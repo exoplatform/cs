@@ -83,9 +83,11 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
   private static final String EMAIL = "email" ;
   private static final String MALE = "male" ;
   private static final String FEMALE = "female" ;
-  private byte[] imageBytes = null;
-  private String fileName = null ;
-  private String imageMimeType = null ;
+  private byte[] imageBytes_ = null;
+  private String fileName_ = null ;
+  private String imageMimeType_ = null ;
+  public boolean isEdited_ = false ;
+  public Contact selectedContact_ = null ;
   
   public UIAddContactForm() throws Exception { 
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
@@ -133,6 +135,32 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
     addUIFormInput(new UIFormStringInput(JOBTITLE, JOBTITLE, null));
     addUIFormInput(new UIFormStringInput(EMAIL, EMAIL, null)
     .addValidator(EmailAddressValidator.class));
+  }
+  
+  public void fillDatas(Contact ct) throws Exception {
+  	isEdited_ = true ;
+  	selectedContact_ = ct ;
+  	getUIFormSelectBox(SELECT_GROUP).setSelectedValues(ct.getAddressBook());
+  	getUIStringInput(FIRST_NAME).setValue(ct.getFirstName());
+  	getUIStringInput(LAST_NAME).setValue(ct.getLastName());
+  	getUIStringInput(NICKNAME).setValue(ct.getNickName());
+  	getChild(UIFormRadioBoxInput.class).setValue(ct.getGender()) ;
+  	setFieldBirthday(ct.getBirthday());
+    getUIStringInput(JOBTITLE).setValue(ct.getJobTitle());
+    getUIStringInput(EMAIL).setValue(ct.getEmailAddress());
+    if (ct != null && ct.getAttachment() != null){
+    	setImage(ct.getAttachment().getInputStream()) ;
+    }
+  }
+  
+  public void setFieldBirthday(Date date) throws Exception {
+    if (date != null) {
+      Calendar cal = GregorianCalendar.getInstance() ;
+      cal.setTime(date) ;
+      getUIFormSelectBox(MONTH).setValue(String.valueOf(cal.get(Calendar.MONTH) + 1)) ;
+      getUIFormSelectBox(DAY).setValue(String.valueOf(cal.get(Calendar.DATE))) ;
+      getUIFormSelectBox(YEAR).setValue(String.valueOf(cal.get(Calendar.YEAR))) ;
+    }
   }
   
   public void refreshGroupList() throws Exception{
@@ -214,7 +242,6 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
       String firstName = uiContact.getUIStringInput(FIRST_NAME).getValue();
       String lastName = uiContact.getUIStringInput(LAST_NAME).getValue();
       String email = uiContact.getUIStringInput(EMAIL).getValue();
-      
       if (MailUtils.isFieldEmpty(groupId)) {  
         uiApp.addMessage(new ApplicationMessage("UIAddContactForm.msg.group-required", null, ApplicationMessage.INFO)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -224,8 +251,9 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       }
-        
-      Contact contact = new Contact();
+      Contact contact ;
+      if(uiContact.isEdited_) contact = uiContact.selectedContact_ ;
+      else contact = new Contact();
       contact.setAddressBook(new String[] {groupId});
       contact.setFullName(firstName + " " + lastName);
       contact.setFirstName(firstName);
@@ -303,25 +331,24 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
   
   protected void setImage(InputStream input) throws Exception{
     if (input != null) {
-      imageBytes = new byte[input.available()] ; 
-      input.read(imageBytes) ;
-    }
-    else imageBytes = null ;
+      imageBytes_ = new byte[input.available()] ; 
+      input.read(imageBytes_) ;
+    } else imageBytes_ = null ;
   }
-  protected byte[] getImage() {return imageBytes ;}
+  protected byte[] getImage() {return imageBytes_ ;}
 
-  protected String getMimeType() { return imageMimeType ;} ;
-  protected void setMimeType(String mimeType) {imageMimeType = mimeType ;} 
+  protected String getMimeType() { return imageMimeType_ ;} ;
+  protected void setMimeType(String mimeType) {imageMimeType_ = mimeType ;} 
 
-  protected void setFileName(String name) { fileName = name ; }
-  protected String getFileName() {return fileName ;}
+  protected void setFileName(String name) { fileName_ = name ; }
+  protected String getFileName() {return fileName_ ;}
 
-  protected String getImageSource() throws Exception {    
-    if(imageBytes == null || imageBytes.length == 0) return null;
-    ByteArrayInputStream byteImage = new ByteArrayInputStream(imageBytes) ;    
+  protected String getImageSource() throws Exception {
+    if(imageBytes_ == null || imageBytes_.length == 0) return null;
+    ByteArrayInputStream byteImage = new ByteArrayInputStream(imageBytes_) ;    
     DownloadService dservice = getApplicationComponent(DownloadService.class) ;
     InputStreamDownloadResource dresource = new InputStreamDownloadResource(byteImage, "image") ;
-    dresource.setDownloadName(fileName) ;
+    dresource.setDownloadName(fileName_) ;
     return  dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;
   }
 }
