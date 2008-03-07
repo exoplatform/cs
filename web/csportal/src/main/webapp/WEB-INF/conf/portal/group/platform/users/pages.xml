@@ -12,6 +12,13 @@
     <show-max-window>true</show-max-window>
     
     <application>
+      <instance-id>group#platform/users:/content/RSSReaderPortlet/content</instance-id>    
+      <title>RSS Reader Portlet</title>
+      <show-info-bar>true</show-info-bar>
+      <show-application-state>true</show-application-state>
+    </application>
+    
+    <application>
       <instance-id>group#platform/users:/mail/MailPortlet/mail</instance-id>    
       <title>Mail Portlet</title>
       <show-info-bar>true</show-info-bar>
@@ -75,6 +82,21 @@
     <application>
       <instance-id>group#platform/users:/contact/ContactPortlet/contact</instance-id>    
       <title>Contact Portlet</title>
+      <show-info-bar>true</show-info-bar>      
+    </application>  
+  </page>
+  
+  <page>
+  	<page-id>group::platform/users::content</page-id>
+  	<owner-type>group</owner-type>
+    <owner-id>platform/users</owner-id>
+    <name>content</name>
+    <access-permissions>*:/platform/users</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
+    
+    <application>
+      <instance-id>group#platform/users:/content/RSSReaderPortlet/content</instance-id>    
+      <title>RSS Reader Portlet</title>
       <show-info-bar>true</show-info-bar>      
     </application>  
   </page>
