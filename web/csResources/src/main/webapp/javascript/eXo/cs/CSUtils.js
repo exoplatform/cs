@@ -53,7 +53,7 @@ function Spliter() {
 } ;
 
 //Spliter.prototype.doResize = function(e , markerobj, beforeAreaObj, afterAreaObj) {
-Spliter.prototype.doResize = function(e , markerobj) {  
+Spliter.prototype.doResize = function(e , markerobj) {
   _e = (window.event) ? window.event : e ;
   var DOMUtil = eXo.core.DOMUtil ;
   this.posY = eXo.core.Browser.findMouseYInPage(_e) ;
@@ -67,6 +67,10 @@ Spliter.prototype.doResize = function(e , markerobj) {
 //  this.afterArea.style.height = this.afterArea.offsetHeight + "px" ;
   this.beforeArea.style.overflowY = "auto" ;
   this.afterArea.style.overflowY = "auto" ;
+  try{
+	  this.beforeArea.style.maxHeight = "none" ;
+	  this.afterArea.style.maxHeight = "none" ;
+  } catch(e) {} ;
   this.beforeY = this.beforeArea.offsetHeight ;
   this.afterY = this.afterArea.offsetHeight ;
   document.onmousemove = eXo.cs.Spliter.adjustHeight ;
