@@ -507,6 +507,8 @@
 	padding-left: 1px;
 	overflow-y: auto;
 	overflow-x: hidden;
+	max-height: 200px;
+	*height: 200px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageList .LevelThreadIcon2 {
