@@ -16,7 +16,6 @@
  **/
 package org.exoplatform.calendar.webui.popup;
 
-import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,11 +23,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import net.fortuna.ical4j.model.property.Categories;
-
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Attachment;
-import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
@@ -37,7 +33,6 @@ import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.webui.CalendarView;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
-import org.exoplatform.calendar.webui.UICalendarView;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UIFormComboBox;
 import org.exoplatform.calendar.webui.UIFormDateTimePicker;
@@ -56,7 +51,6 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
-import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormTabPane;
@@ -115,7 +109,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   private CalendarEvent calendarEvent_ = null ;
   protected String calType_ = "0" ;
   private String errorMsg_ = null ;
-  
+
   private String oldCalendarId_ = null ;
   private String newCalendarId_ = null ;
   private String newCategoryId_ = null ;
@@ -175,7 +169,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     attenderTab.getUIFormComboBox(UIEventAttenderTab.FIELD_FROM_TIME).setOptions(fromOptions) ;
     attenderTab.getUIFormComboBox(UIEventAttenderTab.FIELD_TO_TIME).setOptions(toOptions) ;
     if(eventCalendar != null) {
-     // oldCalendarId_ = calType_ + CalendarUtils.COLON + eventCalendar.getCalendarId();
+      // oldCalendarId_ = calType_ + CalendarUtils.COLON + eventCalendar.getCalendarId();
       isAddNew_ = false ;
       calendarEvent_ = eventCalendar ;
       setEventSumary(eventCalendar.getSummary()) ;
@@ -209,7 +203,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       attenderTab.updateParticipants(pars.toString());
       //eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CALENDAR).setEnable(true) ;
       if(CalendarUtils.SHARED_TYPE.equals(calType_) || CalendarUtils.PUBLIC_TYPE.equals(calType_)) {
-        
+
         boolean isContains = false ;
         CalendarService calService = CalendarUtils.getCalendarService();
         List<EventCategory> listCategory = 
@@ -760,15 +754,16 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     public void execute(Event<UIEventForm> event) throws Exception {
       System.out.println("\n\n AddEmailAddressActionListener");
       UIEventForm uiForm = event.getSource() ;
-      if(!uiForm.getEmailReminder()) uiForm.setEmailReminder(true) ;
-      /*UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-      uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.email-reminder-required", null));
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;*/      
-      UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-      UIPopupAction uiPopupAction  = uiPopupContainer.getChild(UIPopupAction.class) ;
-      uiPopupAction.activate(UIAddressForm.class, 640) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-
+      if(!uiForm.getEmailReminder()) {
+        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.email-reminder-required", null));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ; 
+      } else {
+        UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+        UIPopupAction uiPopupAction  = uiPopupContainer.getChild(UIPopupAction.class) ;
+        uiPopupAction.activate(UIAddressForm.class, 640) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      }
     }
   }
   static  public class AddAttachmentActionListener extends EventListener<UIEventForm> {
@@ -963,12 +958,12 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
               calService.saveEventCategory(uiForm.getSession(), username, evc, null, true) ;
               uiViewContainer.updateCategory() ;
             }
-            
+
             List<CalendarEvent> listEvent = new ArrayList<CalendarEvent>();
             listEvent.add(calendarEvent) ;
             calService.moveEvent(uiForm.getSession(), fromCal, toCal, fromType, toType, listEvent, username) ;
           }
-          
+
           /*System.out.println("\n\n added .  " + calendarEvent.getSummary() +" " +(new Date().getTime() - start_milisec) + " ss");
             t++ ;
           } 

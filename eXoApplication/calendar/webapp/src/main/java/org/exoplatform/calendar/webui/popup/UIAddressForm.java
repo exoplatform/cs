@@ -171,12 +171,12 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         sb.append(c.getEmailAddress()) ;
       }
       if(uiTaskForm != null) {
-        uiTaskForm.setRenderedChild(UITaskForm.TAB_TASKREMINDER) ;
+        uiTaskForm.setSelectedTab(UITaskForm.TAB_TASKREMINDER) ;
         uiTaskForm.setEmailAddress(sb.toString()) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiTaskForm) ;
       } 
       if(uiEventForm != null) {
-        uiEventForm.setRenderedChild(UIEventForm.TAB_EVENTREMINDER) ;
+        uiEventForm.setSelectedTab(UIEventForm.TAB_EVENTREMINDER) ;
         uiEventForm.setEmailAddress(sb.toString()) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm) ;
       } 
