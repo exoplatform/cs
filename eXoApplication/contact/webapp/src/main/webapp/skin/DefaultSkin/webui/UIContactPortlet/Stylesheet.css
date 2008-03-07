@@ -458,10 +458,10 @@
 .UIContactPortlet .UIContactContainer .UIMessageList {
 	background: #ffffff;
 	padding-left: 1px;
-	_padding-left: 0px;
+	padding-left: 0px;
 	overflow-y: auto;
 	overflow-x: hidden;
-	_width: 99.5%;
+	width: 99.5%;
 	border: 1px solid #c7c7c7;
 	border-top: none;
 }
@@ -615,7 +615,7 @@
 
 .UIContactPortlet .ContactPreviewContainer .Member {
 	margin-left: 80px;
-	_width: 60%;
+	width: 60%;
 }
 
 .UIContactPortlet .ContactPreviewContainer .State {

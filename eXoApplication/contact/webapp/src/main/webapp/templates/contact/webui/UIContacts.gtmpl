@@ -20,6 +20,7 @@
 	rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactDragDrop.init() ;") ;
   //rcontext.getJavascriptManager().addOnLoadJavascript('eXo.cs.TableDnD.init(\'UIListUsers\')');
   rcontext.getJavascriptManager().addOnLoadJavascript('eXo.cs.CheckBox.init("' + uiform.id + '")') ;
+  rcontext.getJavascriptManager().addOnLoadJavascript('eXo.contact.UIContactPortlet.checkLayoutView()') ;
 	boolean isDisplaySearchResult = uicomponent.isDisplaySearchResult() ;
 	JCRPageList pageList = uicomponent.getContactPageList();
   String cssPreviousPage = "FloatBlockHidden";

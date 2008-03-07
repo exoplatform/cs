@@ -585,4 +585,39 @@ UIContactPortlet.prototype.showMap = function(/*String*/ address, /*String*/ mes
 	eXo.core.Topic.publish("UIContactPortlet", "/eXo/portlet/map/displayAddress", {address:address, text:message});
 }
 
+/**
+ * 
+ *  @author Lam Nguyen
+ * 
+ */
+UIContactPortlet.prototype.checkLayoutView = function() {
+  var objRoot = document.getElementById("UIContactPortlet");
+  var objPopup = eXo.core.DOMUtil.findFirstDescendantByClass(objRoot, "div", "TypeViewContactPortlet");    
+  var objListView = null;
+  var objVCards = null;
+  if(eXo.core.DOMUtil.findFirstDescendantByClass(objPopup, "div", "ContactListIcon")) {
+    objListView =  eXo.core.DOMUtil.findFirstDescendantByClass(objPopup, "div", "ContactListIcon");    
+  } else {
+    objListView = eXo.core.DOMUtil.findFirstDescendantByClass(objPopup, "div", "ContactListIconSelected");
+  }
+  
+  if(eXo.core.DOMUtil.findFirstDescendantByClass(objPopup, "div", "ContactIcon")) {
+    objVCards =  eXo.core.DOMUtil.findFirstDescendantByClass(objPopup, "div", "ContactIcon");    
+  } else {
+    objVCards = eXo.core.DOMUtil.findFirstDescendantByClass(objPopup, "div", "ContactIconSelected");
+  }
+  
+  var objListMenuItem = eXo.core.DOMUtil.findAncestorByClass(objListView, "MenuItem");
+  var objVCardsMenuItem = eXo.core.DOMUtil.findAncestorByClass(objVCards, "MenuItem");  
+
+  if (eXo.core.DOMUtil.findDescendantById(objRoot, "UIListUsers")) {
+    objListMenuItem.style.backgroundColor = "#dee4f2";
+    objVCardsMenuItem.style.backgroundColor = "#f6f6f6";
+  } else {
+    objListMenuItem.style.backgroundColor = "#f6f6f6";
+    objVCardsMenuItem.style.backgroundColor = "#dee4f2";
+  }
+}
+
+
 eXo.contact.UIContactPortlet = new UIContactPortlet() ;
