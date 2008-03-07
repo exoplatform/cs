@@ -17,6 +17,7 @@
 package org.exoplatform.calendar.webui;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -28,9 +29,12 @@ import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventQuery;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
@@ -183,6 +187,31 @@ public class UIMonthView extends UICalendarView {
       try {
         CalendarEvent calEvent = calendarview.getDataMap().get(eventId); 
         if(calEvent != null) {
+          
+          if(!calEvent.getCalType().equals(CalendarUtils.PRIVATE_TYPE)) {
+            CalendarService calService = CalendarUtils.getCalendarService() ;
+            org.exoplatform.calendar.service.Calendar calendar = null ;
+            List<String> listEditPermission = new ArrayList<String>() ;
+            if(calEvent.getCalType().equals(CalendarUtils.SHARED_TYPE)){
+              calendar = 
+              calService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true).getCalendarById(calendarId) ;
+            } else if(calEvent.getCalType().equals(CalendarUtils.PUBLIC_TYPE)) {
+              calendar = calService.getGroupCalendar(SessionProviderFactory.createSystemProvider(), calendarId) ;
+            }
+            listEditPermission = Arrays.asList(calendar.getEditPermission()) ;
+            if(!listEditPermission.contains(CalendarUtils.getCurrentUser())) {
+              UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;
+              uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null, 1)) ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              
+              calendarview.refresh() ;
+              //calendarview.eventData_.put(ce.getId(), ce) ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+              
+              return ;
+            }
+          }
+          
           java.util.Calendar tempCalFrom = calendarview.getInstanceTempCalendar() ;
           tempCalFrom.setTimeInMillis((Long.parseLong(value))) ;
           java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;

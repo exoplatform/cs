@@ -17,6 +17,7 @@
 package org.exoplatform.calendar.webui;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -28,9 +29,12 @@ import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventQuery;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -113,6 +117,7 @@ public class UIDayView extends UICalendarView {
   static  public class SaveEventActionListener extends EventListener<UIDayView> {
     public void execute(Event<UIDayView> event) throws Exception {
       UIDayView calendarview = event.getSource() ;
+      calendarview.refresh() ;
       String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       String calendarId = event.getRequestContext().getRequestParameter("calendarId") ;
       String startTime = event.getRequestContext().getRequestParameter("startTime") ;
@@ -120,6 +125,31 @@ public class UIDayView extends UICalendarView {
       String username = event.getRequestContext().getRemoteUser() ;
       CalendarEvent ce = calendarview.eventData_.get(eventId) ;
       if(ce != null) {
+        
+        if(!ce.getCalType().equals(CalendarUtils.PRIVATE_TYPE)) {
+          CalendarService calService = CalendarUtils.getCalendarService() ;
+          org.exoplatform.calendar.service.Calendar calendar = null ;
+          List<String> listEditPermission = new ArrayList<String>() ;
+          if(ce.getCalType().equals(CalendarUtils.SHARED_TYPE)){
+            calendar = 
+            calService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true).getCalendarById(calendarId) ;
+          } else if(ce.getCalType().equals(CalendarUtils.PUBLIC_TYPE)) {
+            calendar = calService.getGroupCalendar(SessionProviderFactory.createSystemProvider(), calendarId) ;
+          }
+          listEditPermission = Arrays.asList(calendar.getEditPermission()) ;
+          if(!listEditPermission.contains(CalendarUtils.getCurrentUser())) {
+            UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;
+            uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null, 1)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            
+            calendarview.refresh() ;
+            //calendarview.eventData_.put(ce.getId(), ce) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+            
+            return ;
+          }
+        }
+        
         try {
           int hoursBg = (Integer.parseInt(startTime)/60) ;
           int minutesBg = (Integer.parseInt(startTime)%60) ;
@@ -151,6 +181,14 @@ public class UIDayView extends UICalendarView {
         } catch (Exception e) {
           e.printStackTrace() ;
         }
+      } else  {
+        UICalendarWorkingContainer uiWorkingContainer = calendarview.getAncestorOfType(UICalendarWorkingContainer.class) ;
+        UIMiniCalendar uiMiniCalendar = uiWorkingContainer.findFirstComponentOfType(UIMiniCalendar.class) ;
+        uiMiniCalendar.updateMiniCal() ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
+        UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.event-not-found", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
       }
       calendarview.setLastUpdatedEventId(eventId) ;
       calendarview.refresh() ;
