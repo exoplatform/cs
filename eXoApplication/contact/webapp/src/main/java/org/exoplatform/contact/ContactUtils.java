@@ -134,6 +134,8 @@ public class ContactUtils {
       return mailSvr.getAccounts(SessionsUtils.getSessionProvider(), getCurrentUser()).get(0) ;
     } catch (RepositoryException e) {
       return null ;
+    } catch (IndexOutOfBoundsException ex) {
+      return null ;
     }
    }
   

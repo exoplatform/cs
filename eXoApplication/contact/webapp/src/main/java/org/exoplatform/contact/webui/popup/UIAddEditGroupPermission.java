@@ -20,8 +20,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.exoplatform.commons.utils.ObjectPageList;
+import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.ContactGroup;
+import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.portal.webui.container.UIContainer;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIGrid;
@@ -46,7 +49,8 @@ import org.exoplatform.webui.event.EventListener;
 public class UIAddEditGroupPermission extends UIContainer implements UIPopupComponent {
   public static String[]  BEAN_FIELD = {"viewPermission","editPermission"} ;
   private static String[] ACTION = {"Edit", "Delete"} ;
-
+  private String groupId_ ;
+  
   public UIAddEditGroupPermission() throws Exception {
     this.setName("UIAddEditGroupPermission");
     UIGrid permissionList = addChild(UIGrid.class, null, "PermissionList") ;
@@ -62,16 +66,11 @@ public class UIAddEditGroupPermission extends UIContainer implements UIPopupComp
     UISharedGroupForm shareForm = getChild(UISharedGroupForm.class) ;
     shareForm.init(group) ; 
     updateGrid(group) ;
+    groupId_ = group.getId() ;
   }
 
   public void updateGrid(ContactGroup group) throws Exception {
     List<data> dataRow = new ArrayList<data>() ;
-    
-    if (group.getViewPermission() != null)
-      System.out.println("\n\n 111:" + group.getViewPermission().length );
-    if (group.getEditPermission() != null) 
-      System.out.println("\n\n 222:" + group.getEditPermission().length + "\n\n");
-    
     if(group.getViewPermission() != null) {
       for(String username : group.getViewPermission() ) {
         dataRow.add(new data(username, (group.getEditPermission()!= null && Arrays.asList(group.getEditPermission()).contains(username)))) ;
@@ -82,20 +81,7 @@ public class UIAddEditGroupPermission extends UIContainer implements UIPopupComp
     permissionList.getUIPageIterator().setPageList(objPageList) ;   
     //cal.getEditPermission()
   }
-  /*
-  public void updateGrid(ContactGroup group) throws Exception {
-    List<data> dataRow = new ArrayList<data>() ;
-    if(group.getEditPermission() != null) {
-      for(String username : group.getEditPermission()) {
-        dataRow.add(new data(username, (Arrays.asList(group.getEditPermission()).contains(username)))) ;
-      }
-    }
-    UIGrid permissionList = getChild(UIGrid.class) ;
-    ObjectPageList objPageList = new ObjectPageList(dataRow, 10) ;
-    permissionList.getUIPageIterator().setPageList(objPageList) ;   
-    //cal.getEditPermission()
-  }
-  */
+
   static public class EditActionListener extends EventListener<UIAddEditGroupPermission> {
     public void execute(Event<UIAddEditGroupPermission> event) throws Exception {
       /*UIAddEditPermission addEdit = event.getSource();
@@ -112,33 +98,37 @@ public class UIAddEditGroupPermission extends UIContainer implements UIPopupComp
   }
   static public class DeleteActionListener extends EventListener<UIAddEditGroupPermission> {
     public void execute(Event<UIAddEditGroupPermission> event) throws Exception {
-      /*UIAddEditPermission addEdit = event.getSource();
-      String resiceUser = event.getRequestContext().getRequestParameter(OBJECTID);
-      CalendarService calService = CalendarUtils.getCalendarService() ;
-      String username = CalendarUtils.getCurrentUser() ;
-      Calendar cal = calService.getUserCalendar(SessionProviderFactory.createSessionProvider(), username, addEdit.calendarId_) ;
-      if(cal.getViewPermission() != null) {
+      UIAddEditGroupPermission addEdit = event.getSource();
+      String receiverUser = event.getRequestContext().getRequestParameter(OBJECTID);
+      ContactService contactService = ContactUtils.getContactService();
+      String username = ContactUtils.getCurrentUser() ;
+      ContactGroup group = contactService.getGroup(SessionProviderFactory.createSessionProvider(), username, addEdit.groupId_) ;
+      if(group.getViewPermission() != null) {
         List<String> newPerms = new ArrayList<String>() ;
-        for(String s : cal.getViewPermission()) {
-          if(!s.equals(resiceUser)) {
+        for(String s : group.getViewPermission()) {
+          if(!s.equals(receiverUser)) {
             newPerms.add(s) ;
           }
         }
-        cal.setViewPermission(newPerms.toArray(new String[newPerms.size()])) ;
+        group.setViewPermission(newPerms.toArray(new String[newPerms.size()])) ;
       }
-      if(cal.getEditPermission() != null) {
+      if(group.getEditPermission() != null) {
         List<String> newPerms = new ArrayList<String>() ;
-        for(String s : cal.getEditPermission()) {
-          if(!s.equals(resiceUser)) {
+        for(String s : group.getEditPermission()) {
+          if(!s.equals(receiverUser)) {
             newPerms.add(s) ;
           }
         }
-        cal.setEditPermission(newPerms.toArray(new String[newPerms.size()])) ;
+        group.setEditPermission(newPerms.toArray(new String[newPerms.size()])) ;
       }
-      calService.saveUserCalendar(SessionProviderFactory.createSessionProvider(), username, cal, false) ;
-      //scalService.saveCalendarCategory(SessionProviderFactory.createSessionProvider(), username, calendarCategory, isNew)
-      addEdit.updateGrid(cal);
-      event.getRequestContext().addUIComponentToUpdateByAjax(addEdit) ;*/
+      List<String> removedUsers = new ArrayList<String>() ;
+      removedUsers.add(receiverUser) ;
+      contactService.removeUserShareAddressBook(SessionProviderFactory.createSessionProvider()
+          , username, addEdit.groupId_, removedUsers) ;
+      contactService.saveGroup(SessionProviderFactory.createSessionProvider(), username, group, false) ;
+      
+      addEdit.updateGrid(group);
+      event.getRequestContext().addUIComponentToUpdateByAjax(addEdit) ;
     }
   }
   public class data {

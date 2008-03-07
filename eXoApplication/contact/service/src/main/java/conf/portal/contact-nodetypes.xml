@@ -123,7 +123,10 @@
   		</propertyDefinition>  		
   		<propertyDefinition name="exo:editPermission" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
   			<valueConstraints/>
-  		</propertyDefinition>  		
+  		</propertyDefinition>  	
+  		<propertyDefinition name="exo:viewPermission" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+  			<valueConstraints/>
+  		</propertyDefinition>	
   		<propertyDefinition name="exo:tags" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
   			<valueConstraints/>
   		</propertyDefinition>  

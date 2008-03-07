@@ -201,7 +201,8 @@ UIContactDragDrop.prototype.dropCallback = function(dndEvent) {
       eXo.webui.UIForm.submitForm('UIContacts','Tag', true) ;
       return ;
     }
-    if (eXo.core.DOMUtil.hasClass(this.foundTargetObjectCatch,'PersonalAddress')) {
+
+    if (eXo.core.DOMUtil.hasClass(this.foundTargetObjectCatch,"PersonalAddress")) {
       eXo.webui.UIForm.submitForm('contact#UIContacts','SharedContacts', true)
       return ;
     }
