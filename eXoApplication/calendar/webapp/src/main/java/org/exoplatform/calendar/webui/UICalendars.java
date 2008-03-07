@@ -259,7 +259,7 @@ public class UICalendars extends UIForm  {
     String currentUser = CalendarUtils.getCurrentUser() ;
     List<Calendar> listCal = new ArrayList<Calendar>() ;
     if(calType.equals(CalendarUtils.SHARED_TYPE)) {
-      listCal = calService.getSharedCalendars(SessionProviderFactory.createSessionProvider(), currentUser, true).getCalendars() ;
+      listCal = calService.getSharedCalendars(getSystemSession(), currentUser, true).getCalendars() ;
       for(Calendar cal : listCal) {
         if(cal.getId().equals(calendarId)) {
           calendar = cal ;
@@ -267,7 +267,7 @@ public class UICalendars extends UIForm  {
         }
       }
     } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
-      calendar = calService.getGroupCalendar(SessionProviderFactory.createSessionProvider(), calendarId) ;
+      calendar = calService.getGroupCalendar(getSystemSession(), calendarId) ;
     }
     if(CalendarUtils.canEdit(null, calendar.getEditPermission(), currentUser)) return true ;
     return false ;
