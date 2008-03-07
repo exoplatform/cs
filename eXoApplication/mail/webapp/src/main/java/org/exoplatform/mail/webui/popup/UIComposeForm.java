@@ -253,8 +253,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
               refreshUploadFileList();
             }
           }
-          break;
-        case MESSAGE_FOWARD : 
+          break ;
+        case MESSAGE_FOWARD :
           setFieldSubjectValue("Fwd: " + msg.getSubject());
           String forwardedText = "<br><br>-------- Original Message --------<br>" +
               "Subject: " + msg.getSubject() + "<br>Date: " + msg.getSendDate() + 
