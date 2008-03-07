@@ -93,13 +93,13 @@ public class UIMailSettings extends UIForm implements UIPopupComponent {
     
 
     List<SelectItemOption<String>> replyWithAtt = new ArrayList<SelectItemOption<String>>();
-    replyWithAtt.add(new SelectItemOption<String>("Original message", "true"));
-    replyWithAtt.add(new SelectItemOption<String>("Original message included attachment", "false"));
+    replyWithAtt.add(new SelectItemOption<String>("Original message", "false"));
+    replyWithAtt.add(new SelectItemOption<String>("Original message included attachment", "true"));
     addUIFormInput(new UIFormSelectBox(REPLY_WITH_ATTACH, REPLY_WITH_ATTACH, replyWithAtt));
     
     List<SelectItemOption<String>> forwardWithAtt = new ArrayList<SelectItemOption<String>>();
-    forwardWithAtt.add(new SelectItemOption<String>("Original message", "true"));
-    forwardWithAtt.add(new SelectItemOption<String>("Original message included attachment", "false"));
+    forwardWithAtt.add(new SelectItemOption<String>("Original message", "false"));
+    forwardWithAtt.add(new SelectItemOption<String>("Original message included attachment", "true"));
     addUIFormInput(new UIFormSelectBox(FORWARD_WITH_ATTACH, FORWARD_WITH_ATTACH, forwardWithAtt));
     
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(SAVE_SENT_MESSAGE, SAVE_SENT_MESSAGE, false));
