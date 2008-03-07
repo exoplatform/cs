@@ -202,7 +202,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       ContactFilter filter = new ContactFilter() ;
       if(!CalendarUtils.isEmpty(category)) {
         filter.setCategories(new String[]{category}) ;
-      }
+      } 
       filter.setText(text) ;
       DataPageList resultPageList = 
         contactService.searchContact(SessionProviderFactory.createSystemProvider(), event.getRequestContext().getRemoteUser(), filter) ;
