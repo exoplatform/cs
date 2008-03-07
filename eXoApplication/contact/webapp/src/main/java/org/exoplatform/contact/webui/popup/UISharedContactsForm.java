@@ -23,9 +23,7 @@ import java.util.Map;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
-import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
-import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -55,29 +53,32 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
     lifecycle = UIFormLifecycle.class,
     template = "system:/groovy/webui/form/UIForm.gtmpl",
     events = {
-      @EventConfig(listeners = UISharedForm.SaveActionListener.class),    
-      @EventConfig(listeners = UISharedForm.SelectPermissionActionListener.class, phase = Phase.DECODE),  
-      @EventConfig(listeners = UISharedForm.CancelActionListener.class, phase = Phase.DECODE)
+      @EventConfig(listeners = UISharedContactsForm.SaveActionListener.class),    
+      @EventConfig(listeners = UISharedContactsForm.SelectPermissionActionListener.class, phase = Phase.DECODE),  
+      @EventConfig(listeners = UISharedContactsForm.CancelActionListener.class, phase = Phase.DECODE)
     }
 )
-public class UISharedForm extends UIForm implements UIPopupComponent, UISelector{
-  final static public String FIELD_ADDRESS = "addressName".intern() ;
+public class UISharedContactsForm extends UIForm implements UIPopupComponent, UISelector {
   final static public String FIELD_CONTACT = "contactName".intern() ;  
   final static public String FIELD_USER = "user".intern() ;
   final static public String FIELD_GROUP = "group".intern() ;  
   final static public String FIELD_EDIT_PERMISSION = "canEdit".intern() ;
   private Map<String, String> permissionUser_ = new LinkedHashMap<String, String>() ;
   private Map<String, String> permissionGroup_ = new LinkedHashMap<String, String>() ;
-  private Map<String, String> sharedContacts = new LinkedHashMap<String, String>() ;
-  private String addressId_ ;
-  private boolean isSharedAdd_ = true ;
-  public UISharedForm() { }
+  private Map<String, Contact> sharedContacts = new LinkedHashMap<String, Contact>() ;
+  public UISharedContactsForm() { }
   
-  public void init(boolean isSharedAdd, String username, ContactGroup cal, boolean isAddNew) throws Exception {
+  public void init(Map<String, Contact> contacts) throws Exception {
     UIFormInputWithActions inputset = new UIFormInputWithActions("UIInputUserSelect") ;
-    if (isSharedAdd) inputset.addChild(new UIFormInputInfo(FIELD_ADDRESS, FIELD_ADDRESS, null)) ;
-    else inputset.addChild(new UIFormInputInfo(FIELD_CONTACT, FIELD_CONTACT, null)) ;
-    isSharedAdd_ = isSharedAdd ;
+    sharedContacts = contacts ; 
+    StringBuffer buffer = new StringBuffer() ;
+    for (Contact contact : contacts.values()) {
+      if (buffer.length() > 0) buffer.append(", ") ;
+      buffer.append(contact.getFullName()) ;
+    }
+    UIFormInputInfo inputInfo = new UIFormInputInfo(FIELD_CONTACT, FIELD_CONTACT, null) ;
+    inputInfo.setValue(buffer.toString()) ;
+    inputset.addChild(inputInfo) ;
     inputset.addUIFormInput(new UIFormStringInput(FIELD_USER, FIELD_USER, null)) ;
     List<ActionData> actionUser = new ArrayList<ActionData>() ;
     actionUser = new ArrayList<ActionData>() ;
@@ -115,21 +116,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     }
   }
 
-  public void setAddress(String addressId, String addressName) {
-    addressId_ = addressId ;
-    getUIFormInputInfo(FIELD_ADDRESS).setValue(addressName) ;
-  }
-  public void setSharedContacts(Map<String, String> contacts) { 
-    sharedContacts = contacts ; 
-    StringBuffer buffer = new StringBuffer() ;
-    for (String contactName : contacts.values()) {
-      if (buffer.length() > 0) buffer.append(", ") ;
-      buffer.append(contactName) ;
-    }
-    getUIFormInputInfo(FIELD_CONTACT).setValue(buffer.toString()) ;
-  }
-
-  public String[] getActions() { return new String[] {"Save","Cancel"} ; }
+  public String[] getActions() { return new String[] { "Save", "Cancel" } ; }
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
 
@@ -151,17 +138,15 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     fieldInput.setValue(sb.toString()) ;
   } 
   
-  static  public class SaveActionListener extends EventListener<UISharedForm> {
-    public void execute(Event<UISharedForm> event) throws Exception {
-      UISharedForm uiForm = event.getSource() ;
+  static  public class SaveActionListener extends EventListener<UISharedContactsForm> {
+    public void execute(Event<UISharedContactsForm> event) throws Exception {
+      UISharedContactsForm uiForm = event.getSource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       String names = uiForm.getUIStringInput(FIELD_USER).getValue() ;
       String groups = uiForm.getUIStringInput(FIELD_GROUP).getValue() ;
       List<String> receiverUser = new ArrayList<String>() ;
-      ContactService contactService = ContactUtils.getContactService() ;
-      String username = ContactUtils.getCurrentUser() ;
       if(ContactUtils.isEmpty(names) && ContactUtils.isEmpty(groups)) {        
-        uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.empty-username", null,
+        uiApp.addMessage(new ApplicationMessage("UISharedContactsForm.msg.empty-username", null,
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
@@ -181,12 +166,14 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
             receiverUser.add(names.trim()) ;
           }
         } catch (NullPointerException e) {
-          uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.invalid-username", null,
+          uiApp.addMessage(new ApplicationMessage("UISharedContactsForm.msg.not-exist-username", null,
               ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
         }
       }
+      ContactService contactService = ContactUtils.getContactService() ;
+      String username = ContactUtils.getCurrentUser() ;      
       if (!ContactUtils.isEmpty(groups)) {
         String[] arrayGroups = groups.split(",") ; 
         for (String group : arrayGroups) {
@@ -199,47 +186,37 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       } 
       receiverUser.remove(ContactUtils.getCurrentUser()) ;
       if (receiverUser.size() > 0) {
-        if(uiForm.isSharedAdd_) {
-        	if(uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).isChecked()) {
-            ContactGroup contactGroup = contactService.getGroup(
-                SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), uiForm.addressId_) ;
-            String[] perms = receiverUser.toArray(new String[] {}) ;
-            contactGroup.setEditPermission(perms) ;
-            contactService.saveGroup(SessionProviderFactory.createSessionProvider(), username, contactGroup, false) ;
-            
-           // System.out.println("\n\n 2222 \n\n :");
-            UIAddEditPermission uiAddEdit = uiForm.getParent() ;
-            uiAddEdit.updateGrid(contactGroup);
- /*           uiForm.setCanEdit(false) ;
-            uiForm.setSharedUser(null) ;*/
-            
-          }      
-          contactService.shareAddressBook(
-              SessionProviderFactory.createSystemProvider(), username, uiForm.addressId_, receiverUser) ;
-          
-          
-          //uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.address-shared", null)) ;
-        }else {
-        	String[] contactIds = uiForm.sharedContacts.keySet().toArray(new String[]{}) ;
-        	contactService.shareContact(SessionProviderFactory.createSessionProvider(), username, contactIds, receiverUser) ;
-          
-          
-          //uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.contacts-shared", null)) ;
+        Map<String, String> viewMap = new LinkedHashMap<String, String>() ;
+        for (String user : receiverUser) viewMap.put(user, user) ;
+        Map<String, String> editMap = new LinkedHashMap<String, String>() ; 
+        if (uiForm.getUIFormCheckBoxInput(UISharedGroupForm.FIELD_EDIT_PERMISSION).isChecked()) 
+          for (String user : receiverUser) editMap.put(user, user) ;
+        for (Contact contact : uiForm.sharedContacts.values()) {
+          String[] viewPer = contact.getViewPermission() ;
+          if (viewPer != null)
+            for (String view : viewPer) viewMap.put(view, view) ;
+          String[] editPer = contact.getEditPermission() ;
+          if (editPer != null)
+            for (String edit : editPer) editMap.put(edit, edit) ; 
+          contact.setViewPermission(viewMap.keySet().toArray(new String[] {})) ;
+          contact.setEditPermission(editMap.keySet().toArray(new String[] {})) ;
+          contactService.saveContact(SessionProviderFactory.createSessionProvider(), username, contact, false) ;
         }
+      	String[] contactIds = uiForm.sharedContacts.keySet().toArray(new String[]{}) ;
+      	contactService.shareContact(SessionProviderFactory.createSessionProvider(), username, contactIds, receiverUser) ;  
+        uiApp.addMessage(new ApplicationMessage("UISharedContactsForm.msg.contacts-shared", null)) ;
         UIContactPortlet contactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
-        UIAddressBooks addressBooks = contactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(addressBooks) ;
         contactPortlet.cancelAction() ;
       } else {
-        uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.address-not-shared", null)) ;
+        uiApp.addMessage(new ApplicationMessage("UISharedContactsForm.msg.invalid-username", null)) ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
       return ;      
     }
   }
-  static  public class SelectPermissionActionListener extends EventListener<UISharedForm> {
-    public void execute(Event<UISharedForm> event) throws Exception {
-      UISharedForm uiForm = event.getSource() ;
+  static  public class SelectPermissionActionListener extends EventListener<UISharedContactsForm> {
+    public void execute(Event<UISharedContactsForm> event) throws Exception {
+      UISharedContactsForm uiForm = event.getSource() ;
       String permType = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIPopupAction childPopup = uiForm.getAncestorOfType(UIPopupContainer.class).getChild(UIPopupAction.class) ;
       UIGroupSelector uiGroupSelector = childPopup.activate(UIGroupSelector.class, 500) ;
@@ -247,15 +224,15 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       uiGroupSelector.setSelectedGroups(null) ;
       
       if (permType.equals(UISelectComponent.TYPE_USER))      
-        uiGroupSelector.setComponent(uiForm, new String[]{UISharedForm.FIELD_USER}) ;
-      else uiGroupSelector.setComponent(uiForm, new String[]{UISharedForm.FIELD_GROUP}) ;
+        uiGroupSelector.setComponent(uiForm, new String[]{UISharedContactsForm.FIELD_USER}) ;
+      else uiGroupSelector.setComponent(uiForm, new String[]{UISharedContactsForm.FIELD_GROUP}) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(childPopup) ;  
     }
   }
   
-  static  public class CancelActionListener extends EventListener<UISharedForm> {
-    public void execute(Event<UISharedForm> event) throws Exception {
-      UISharedForm uiForm = event.getSource() ;
+  static  public class CancelActionListener extends EventListener<UISharedContactsForm> {
+    public void execute(Event<UISharedContactsForm> event) throws Exception {
+      UISharedContactsForm uiForm = event.getSource() ;
       UIContactPortlet contactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       contactPortlet.cancelAction() ;
     }

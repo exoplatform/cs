@@ -23,7 +23,6 @@ import java.util.List;
 
 import javax.jcr.Node;
 
-import org.apache.poi.util.SystemOutLogger;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
@@ -53,7 +52,7 @@ public class NewUserListener extends UserEventListener {
   public void postSave(User user, boolean isNew) throws Exception {  	
   	if(isNew) {
   		ContactGroup group = new ContactGroup() ;
-  		group.setId(DEFAULTGROUP) ;
+  		group.setId(DEFAULTGROUP+user.getUserName()) ;
     	group.setName("My contacts") ;
     	group.setDescription("Default address book") ;
     	SessionProvider sysProvider = SessionProvider.createSystemProvider() ;

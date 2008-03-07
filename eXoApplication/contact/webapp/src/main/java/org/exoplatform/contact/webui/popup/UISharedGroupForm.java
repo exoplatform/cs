@@ -16,21 +16,15 @@
  */
 package org.exoplatform.contact.webui.popup;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
-import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -77,15 +71,9 @@ public class UISharedGroupForm extends UIForm implements UIPopupComponent, UISel
   
   public void init(ContactGroup group) throws Exception {
     UIFormInputWithActions inputset = new UIFormInputWithActions("UIInputUserSelect") ;
-    //getUIFormInputInfo(FIELD_ADDRESS).setValue(addressName) ;
-    
-    // edit
-    
     UIFormInputInfo formInputInfo = new UIFormInputInfo(FIELD_ADDRESS, FIELD_ADDRESS, null) ;
     formInputInfo.setValue(group.getName()) ;
-    inputset.addChild(formInputInfo) ;
-    
-    
+    inputset.addChild(formInputInfo) ; 
     group_ = group ;
     inputset.addUIFormInput(new UIFormStringInput(FIELD_USER, FIELD_USER, null)) ;
     List<ActionData> actionUser = new ArrayList<ActionData>() ;
@@ -122,17 +110,7 @@ public class UISharedGroupForm extends UIForm implements UIPopupComponent, UISel
       return id ;
     }
   }
-/*  
-  public void setSharedContacts(Map<String, String> contacts) { 
-    sharedContacts = contacts ; 
-    StringBuffer buffer = new StringBuffer() ;
-    for (String contactName : contacts.values()) {
-      if (buffer.length() > 0) buffer.append(", ") ;
-      buffer.append(contactName) ;
-    }
-    getUIFormInputInfo(FIELD_CONTACT).setValue(buffer.toString()) ;
-  }
-*/
+
   public String[] getActions() { return new String[] {"Save","Cancel"} ; }
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
@@ -163,7 +141,7 @@ public class UISharedGroupForm extends UIForm implements UIPopupComponent, UISel
       String groups = uiForm.getUIStringInput(FIELD_GROUP).getValue() ;
       List<String> receiverUser = new ArrayList<String>() ;
       if(ContactUtils.isEmpty(names) && ContactUtils.isEmpty(groups)) {        
-        uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.empty-username", null,
+        uiApp.addMessage(new ApplicationMessage("UISharedGroupForm.msg.empty-username", null,
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
@@ -183,7 +161,7 @@ public class UISharedGroupForm extends UIForm implements UIPopupComponent, UISel
             receiverUser.add(names.trim()) ;
           }
         } catch (NullPointerException e) {
-          uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.invalid-username", null,
+          uiApp.addMessage(new ApplicationMessage("UISharedGroupForm.msg.not-exist-username", null,
               ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
@@ -219,14 +197,17 @@ public class UISharedGroupForm extends UIForm implements UIPopupComponent, UISel
             for (String edit : editPer) editMap.put(edit, edit) ; 
           for (String user : receiverUser) editMap.put(user, user) ;
           contactGroup.setEditPermission(editMap.keySet().toArray(new String[] {})) ;
-          contactService.saveGroup(SessionProviderFactory.createSessionProvider(), username, contactGroup, false) ;
-          uiAddEdit.updateGrid(contactGroup);
         }
+        contactService.saveGroup(SessionProviderFactory.createSessionProvider(), username, contactGroup, false) ;
+        uiAddEdit.updateGrid(contactGroup);
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiAddEdit) ; 
         contactService.shareAddressBook(
             SessionProviderFactory.createSystemProvider(), username, contactGroup.getId(), receiverUser) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiAddEdit) ;        
       } else {
-      System.out.println("\n\n elseeeeeeeeee \n\n");      
+        uiApp.addMessage(new ApplicationMessage("UISharedGroupForm.msg.invalid-username", null,
+            ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
       }
     }
   }

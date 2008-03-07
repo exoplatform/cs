@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
+import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.ServerConfiguration;
@@ -117,13 +118,14 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   }
   
   public void init(String emails) throws Exception {
-    String email = ContactUtils.getAccount().getEmailAddress() ;
-    if (ContactUtils.isEmpty(email)) {
+    Account acc = ContactUtils.getAccount() ;
+    if (acc == null) {
       UIApplication uiApp = getAncestorOfType(UIApplication.class) ;
       uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.invalidAcc", null,
           ApplicationMessage.WARNING)) ;
       return ;
     }
+    String email = acc.getEmailAddress() ;
     addUIFormInput(new UIFormStringInput(FIELD_FROM, null, email)) ;
     addUIFormInput(new UIFormStringInput(FIELD_TO, null, emails)) ;
     addUIFormInput(new UIFormStringInput(FIELD_SUBJECT, null, null)) ;

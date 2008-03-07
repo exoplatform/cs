@@ -81,6 +81,7 @@ public class Contact {
   private String[] addressBook ;
   private String[] tags ;
   private String[] editPermission ;
+  private String[] viewPermission ;
   private String[] sharedForUsers ;
   private String[] sharedForGroups ;
   private boolean isOwner = false ;
@@ -218,6 +219,9 @@ public class Contact {
 
   public String[] getEditPermission() { return editPermission ; }
   public void setEditPermission(String[] s) { editPermission = s ; }
+  
+  public String[] getViewPermission() { return viewPermission ; }
+  public void setViewPermission(String[] s) { viewPermission = s ; }
   
   public String[] getSharedForUsers() { return sharedForUsers ; }
   public void setSharedForUsers(String[] s) { sharedForUsers = s ; }
