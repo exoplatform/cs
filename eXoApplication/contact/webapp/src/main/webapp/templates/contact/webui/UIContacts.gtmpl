@@ -769,7 +769,7 @@
 	                    </div>
                     </a>
                      
-                    <a class="MenuItem" href="javascript:eXo.require('eXo.communication.chat.webui.eXoChatLoader', '/exomessenger/javascript/')">
+                    <a class="MenuItem" href="javascript:eXo.require('eXo.communication.chat.webui.eXoChatLoader', '/exomessenger/javascript/'); eXo.communication.chat.webui.eXoChatLoader.init('<%=org.exoplatform.contact.ContactUtils.getCurrentUser();%>');">
 	                    <div class="ItemIcon InstantMessage">
 	                      <%=_ctx.appRes(uicomponent.getName() + ".label.instantMessage")%>
 	                    </div>
