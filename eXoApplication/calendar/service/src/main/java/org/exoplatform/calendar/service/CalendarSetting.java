@@ -57,9 +57,9 @@ public class CalendarSetting {
   private String[] defaultPrivateCalendars ;
   private String[] defaultPublicCalendars ;
   private String[] defaultSharedCalendars ;
-  private boolean isShowWorkingTime = false ; 
-  private String workingTimeBegin ;
-  private String workingTimeEnd ;
+  private boolean isShowWorkingTime = true ; 
+  private String workingTimeBegin = "08:00".intern() ;
+  private String workingTimeEnd = "18:00".intern() ;;
   private String[] sharedCalendarsColors ;
 
   public CalendarSetting() {
