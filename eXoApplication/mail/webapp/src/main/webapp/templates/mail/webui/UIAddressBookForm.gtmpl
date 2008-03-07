@@ -12,14 +12,19 @@
           <div class="LeftBar">
             <div class="RightBar">
               <div class="CenterBar">
-                <!-- <a class="ControlButton" href="<%=uicomponent.event("AddGroup")%>">
+                <a class="ControlButton" href="<%=uicomponent.event("AddNewGroup")%>">
                   <div class="IconHolder AddGroup">
                     <div class="Label">Add New Group</div>
                   </div>
-                </a> -->
+                </a>
                 <a class="ControlButton" href="<%=uicomponent.event("AddContact")%>">
                   <div class="IconHolder AddContact">
                     <div class="Label"> Add New Contact </div>
+                  </div>
+                </a>
+                <a class="ControlButton" href="<%=uicomponent.event("EditContact")%>">
+                  <div class="IconHolder EditContact">
+                    <div class="Label"> Edit Contact </div>
                   </div>
                 </a>
                 <a class="ControlButton" href="<%=uicomponent.event("DeleteContact")%>">
@@ -27,14 +32,8 @@
                     <div class="Label">Delete</div>
                   </div>
                 </a>
-                
+               
                 <!--  
-                <a class="ControlButton" href="#">
-                  <div class="IconHolder EditContact">
-                    <div class="Label"> Edit Contact </div>
-                  </div>
-                </a>
-                
                 <div class="SearchForm">
                   <a href="#"><div title="Search" class="Search"><span></span></div></a>
                   <input type="text" name="search" id="search" class="Input"/>

@@ -223,8 +223,10 @@ public class UIFolderContainer extends UIContainer {
       UIMessagePreview uiMsgPreview = uiMsgArea.getChild(UIMessagePreview.class);
       UIFolderContainer uiFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
       uiMessageList.updateList();
-      if (messages.contains(uiMsgPreview.getMessage().getId()))
-         uiMsgPreview.setMessage(null);
+      if	(uiMsgPreview.getMessage()!=null){
+      	if (messages.contains(uiMsgPreview.getMessage().getId()))
+      		uiMsgPreview.setMessage(null);
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgArea) ;
     }
@@ -259,10 +261,10 @@ public class UIFolderContainer extends UIContainer {
 	public void execute(Event<UIFolderContainer> event) throws Exception {
 	  UIFolderContainer uiFolderContainer = event.getSource() ;
 	  String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ;		  
-      UIMailPortlet uiPortlet = uiFolderContainer.getAncestorOfType(UIMailPortlet.class) ;
-      UIFolderContainer uiFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class) ;
+    UIMailPortlet uiPortlet = uiFolderContainer.getAncestorOfType(UIMailPortlet.class) ;
+    UIFolderContainer uiFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class) ;
 	  UIMessageArea uiMsgArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class) ;	
-      UIMessageList uiMsgList = uiMsgArea.getChild(UIMessageList.class) ;
+    UIMessageList uiMsgList = uiMsgArea.getChild(UIMessageList.class) ;
 	  UIMessagePreview uiMsgPreview = uiMsgArea.getChild(UIMessagePreview.class) ;
 	  String username = uiPortlet.getCurrentUser() ;
 	  String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
