@@ -470,7 +470,8 @@ public class MailServiceImpl implements MailService{
     Calendar gc = GregorianCalendar.getInstance();
     if (msg.getReceivedDate() != null)
       gc.setTime(msg.getReceivedDate());
-    else gc.setTime(msg.getSentDate());
+    else if (msg.getSentDate() != null)
+      gc.setTime(msg.getSentDate());
     node.setProperty(Utils.EXO_RECEIVEDDATE, gc);
     Calendar sc = GregorianCalendar.getInstance();
     sc.setTime(msg.getSentDate());
