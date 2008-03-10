@@ -303,7 +303,7 @@
 }
 
 .UIMailPortlet .UpArrow1Icon {
-	background: url('icons/MailIcons.gif') no-repeat left -1793px;
+	background: url('icons/MailIcons.gif') no-repeat right -1793px;
 }
 
 .UIMailPortlet .ViewDownloadIcon {
