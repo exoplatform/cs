@@ -105,7 +105,7 @@
 			      		<% /*End Popup Menu*/ %>
 						</div>
 						
-						<div class="SelectButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+						<div class="SelectButton" onclick="eXo.contact.UIContactPortlet.showPopupCustomLayoutView(this, event);">
 							<div class="IconHolder CustomLayoutIcon">
 								<div class="DownArrow1Icon">Custom Layout View</div>
 								<% /*Begin Popup Menu*/ %>
@@ -139,6 +139,11 @@
 						                    <div class="MenuItem" onclick="javascript:eXo.contact.UIContactPortlet.switchLayout(3)" >
 							                    <div class="ItemIcon CheckedMenu">
 							                      Tags
+							                    </div>
+						                    </div>
+                                <div class="MenuItem ContactDetailsMenuItem" onclick="javascript:eXo.contact.UIContactPortlet.switchLayout(4)" >
+							                    <div class="ItemIcon CheckedMenu">
+							                      Details
 							                    </div>
 						                    </div>
 															</div>
