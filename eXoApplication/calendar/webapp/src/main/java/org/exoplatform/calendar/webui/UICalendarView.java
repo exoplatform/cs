@@ -460,40 +460,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     }
   }  
 
-  public List<SelectItemOption<String>> getCalendars() throws Exception {
-    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    String username = Util.getPortalRequestContext().getRemoteUser() ;
-    options.add(new SelectItemOption<String>("User Calendars", "")) ;
-    List<org.exoplatform.calendar.service.Calendar> calendars = calendarService.getUserCalendars(SessionProviderFactory.createSessionProvider(), username, true) ;
-    for(org.exoplatform.calendar.service.Calendar c : calendars) {
-      options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE  + c.getName(), CalendarUtils.PRIVATE_TYPE + ":" + c.getId())) ;
-    }
-
-    GroupCalendarData gcd = calendarService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true);
-    if(gcd != null) {
-      options.add(new SelectItemOption<String>("Shared Calendars", "")) ;
-      for(org.exoplatform.calendar.service.Calendar c : gcd.getCalendars()) {
-        if(Arrays.asList(c.getEditPermission()).contains(username)){
-          options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE  + c.getName(), CalendarUtils.SHARED_TYPE + CalendarUtils.COLON + c.getId())) ;
-        }
-      }
-    }
-
-    List<GroupCalendarData> lgcd = calendarService.getGroupCalendars(SessionProviderFactory.createSystemProvider(), CalendarUtils.getUserGroups(username), false, username) ;
-    if(lgcd != null) {
-      options.add(new SelectItemOption<String>("Public Calendars", "")) ;
-      for(GroupCalendarData g : lgcd) {
-        for(org.exoplatform.calendar.service.Calendar c : g.getCalendars()){
-          if(c != null && c.getEditPermission() != null && Arrays.asList(c.getEditPermission()).contains(username)){
-            options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE + c.getName(), CalendarUtils.PUBLIC_TYPE + CalendarUtils.COLON + c.getId())) ;
-          }
-        }
-
-      }
-    }
-    return options ;
-  }
+  
   static  public class AddEventActionListener extends EventListener<UICalendarView> {
     public void execute(Event<UICalendarView> event) throws Exception {
       UICalendarView uiForm = event.getSource() ;
@@ -521,7 +488,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           uiPopupContainer.setId(UIPopupContainer.UITASKPOPUP) ;
           UITaskForm uiTaskForm = uiPopupContainer.addChild(UITaskForm.class, null, null) ;
           uiTaskForm.initForm(uiPortlet.getCalendarSetting(), null, formTime) ;
-          uiTaskForm.update(CalendarUtils.PRIVATE_TYPE,  uiForm.getCalendars()) ;
+          uiTaskForm.update(CalendarUtils.PRIVATE_TYPE,  CalendarUtils.getCalendars()) ;
           if(value != null && value.trim().length() > 0) 
             uiTaskForm.setSelectedCategory(value) ;
           else  uiTaskForm.setSelectedCategory("Meeting") ;  
@@ -530,7 +497,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           UIEventForm uiEventForm =  uiPopupContainer.addChild(UIEventForm.class, null, null) ;
           uiEventForm.initForm(uiPortlet.getCalendarSetting(), null, formTime) ;
           
-          uiEventForm.update(CalendarUtils.PRIVATE_TYPE, uiForm.getCalendars()) ;
+          uiEventForm.update(CalendarUtils.PRIVATE_TYPE, CalendarUtils.getCalendars()) ;
           if(value != null && value.trim().length() > 0) 
             uiEventForm.setSelectedCategory(value) ;
           else  uiEventForm.setSelectedCategory("Meeting") ;  
@@ -682,7 +649,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         eventCalendar = uiCalendarView.getDataMap().get(eventId) ;
         CalendarService calendarService = CalendarUtils.getCalendarService() ;
         boolean canEdit = false ;
-        List<SelectItemOption<String>> options = uiCalendarView.getCalendars() ; 
         if(CalendarUtils.PRIVATE_TYPE.equals(calType)) {
           canEdit = true ;
           //options = null ;
@@ -716,7 +682,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           if(CalendarEvent.TYPE_EVENT.equals(eventCalendar.getEventType())) {
             uiPopupContainer.setId(UIPopupContainer.UIEVENTPOPUP) ;
             UIEventForm uiEventForm = uiPopupContainer.createUIComponent(UIEventForm.class, null, null) ;
-            uiEventForm.update(calType, options) ;
+            uiEventForm.update(calType, CalendarUtils.getCalendars()) ;
             uiEventForm.initForm(uiPortlet.getCalendarSetting(), eventCalendar, null) ;
             uiEventForm.setSelectedCalendarId(calendarId) ;
             uiPopupContainer.addChild(uiEventForm) ;
@@ -724,7 +690,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           } else if(CalendarEvent.TYPE_TASK.equals(eventCalendar.getEventType())) {
             uiPopupContainer.setId(UIPopupContainer.UITASKPOPUP) ;
             UITaskForm uiTaskForm = uiPopupContainer.createUIComponent(UITaskForm.class, null, null) ;
-            uiTaskForm.update(calType, options) ;
+            uiTaskForm.update(calType, CalendarUtils.getCalendars()) ;
             uiTaskForm.initForm(uiPortlet.getCalendarSetting(), eventCalendar, null) ;
             uiTaskForm.setSelectedCalendarId(calendarId) ;
             uiPopupContainer.addChild(uiTaskForm) ;

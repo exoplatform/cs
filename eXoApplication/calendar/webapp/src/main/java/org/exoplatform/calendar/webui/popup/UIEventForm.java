@@ -256,35 +256,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     calType_ = calType ;
   }
   private List<SelectItemOption<String>> getCalendars() throws Exception {
-    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    String username = Util.getPortalRequestContext().getRemoteUser() ;
-    options.add(new SelectItemOption<String>(CalendarUtils.PRIVATE_CALENDARS, "")) ;
-    List<org.exoplatform.calendar.service.Calendar> calendars = calendarService.getUserCalendars(SessionProviderFactory.createSessionProvider(), username, true) ;
-    for(org.exoplatform.calendar.service.Calendar c : calendars) {
-      options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE  + c.getName(), CalendarUtils.PRIVATE_TYPE + ":" + c.getId())) ;
-    }
-    GroupCalendarData gcd = calendarService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true);
-    if(gcd != null) {
-      options.add(new SelectItemOption<String>(CalendarUtils.SHARED_CALENDARS, "")) ;
-      for(org.exoplatform.calendar.service.Calendar c : gcd.getCalendars()) {
-        if(Arrays.asList(c.getEditPermission()).contains(username)){
-          options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE  + c.getName(), CalendarUtils.SHARED_TYPE + CalendarUtils.COLON + c.getId())) ;
-        }
-      }
-    }
-    List<GroupCalendarData> lgcd = calendarService.getGroupCalendars(SessionProviderFactory.createSystemProvider(), CalendarUtils.getUserGroups(username), false, username) ;
-    if(lgcd != null && lgcd.size() > 0) {
-      options.add(new SelectItemOption<String>(CalendarUtils.PUBLIC_CALENDARS, "")) ;
-      for(GroupCalendarData g : lgcd) {
-        for(org.exoplatform.calendar.service.Calendar c : g.getCalendars()){
-          if(c != null && c.getEditPermission() != null && Arrays.asList(c.getEditPermission()).contains(username)){
-            options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE + c.getName(), CalendarUtils.PUBLIC_TYPE + CalendarUtils.COLON + c.getId())) ;
-          }
-        }
-      }
-    }
-    return options ;
+    return CalendarUtils.getCalendars() ;
   }
 
   public static List<SelectItemOption<String>> getCategory() throws Exception {

@@ -40,6 +40,7 @@ import org.exoplatform.calendar.webui.UIListContainer;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -187,39 +188,9 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   }
 
   public List<SelectItemOption<String>> getCalendars() throws Exception {
-    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    String username = Util.getPortalRequestContext().getRemoteUser() ;
-    options.add(new SelectItemOption<String>(CalendarUtils.PRIVATE_CALENDARS, "")) ;
-    List<Calendar> calendars = calendarService.getUserCalendars(SessionProviderFactory.createSessionProvider(), username, true) ;
-    for(Calendar c : calendars) {
-      options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE  + c.getName(), CalendarUtils.PRIVATE_TYPE + ":" + c.getId())) ;
-    }
-
-    GroupCalendarData gcd = calendarService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true);
-    if(gcd != null) {
-      options.add(new SelectItemOption<String>(CalendarUtils.SHARED_CALENDARS, "")) ;
-      for(Calendar c : gcd.getCalendars()) {
-        if(Arrays.asList(c.getEditPermission()).contains(username)){
-          options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE  + c.getName(), CalendarUtils.SHARED_TYPE + CalendarUtils.COLON + c.getId())) ;
-        }
-      }
-    }
-
-    List<GroupCalendarData> lgcd = calendarService.getGroupCalendars(SessionProviderFactory.createSystemProvider(), CalendarUtils.getUserGroups(username), false, username) ;
-    if(lgcd != null) {
-      options.add(new SelectItemOption<String>(CalendarUtils.PUBLIC_CALENDARS, "")) ;
-      for(GroupCalendarData g : lgcd) {
-        for(Calendar c : g.getCalendars()){
-          if(c != null && c.getEditPermission() != null && Arrays.asList(c.getEditPermission()).contains(username)){
-            options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE + c.getName(), CalendarUtils.PUBLIC_TYPE + CalendarUtils.COLON + c.getId())) ;
-          }
-        }
-
-      }
-    }
-    return options ;
+    return CalendarUtils.getCalendars() ;
   }
+  
   public String getLabel(String id) {
     String label = id ;
     try {

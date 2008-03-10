@@ -36,9 +36,11 @@ import javax.jcr.PathNotFoundException;
 import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
@@ -370,4 +372,38 @@ public class CalendarUtils {
     }
   }
 
+  public static List<SelectItemOption<String>> getCalendars() throws Exception {
+    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+    CalendarService calendarService = CalendarUtils.getCalendarService() ;
+    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    options.add(new SelectItemOption<String>(CalendarUtils.PRIVATE_CALENDARS, "")) ;
+    List<org.exoplatform.calendar.service.Calendar> calendars = calendarService.getUserCalendars(SessionProviderFactory.createSessionProvider(), username, true) ;
+    for(org.exoplatform.calendar.service.Calendar c : calendars) {
+      options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE  + c.getName(), CalendarUtils.PRIVATE_TYPE + CalendarUtils.COLON + c.getId())) ;
+    }
+    GroupCalendarData gcd = calendarService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true);
+    if(gcd != null) {
+      options.add(new SelectItemOption<String>(CalendarUtils.SHARED_CALENDARS, "")) ;
+      for(org.exoplatform.calendar.service.Calendar c : gcd.getCalendars()) {
+        if(CalendarUtils.canEdit(null, c.getEditPermission(), username)){
+          options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE  + c.getName(), CalendarUtils.SHARED_TYPE + CalendarUtils.COLON + c.getId())) ;
+        }
+      }
+    }
+    List<GroupCalendarData> lgcd = calendarService.getGroupCalendars(SessionProviderFactory.createSystemProvider(), CalendarUtils.getUserGroups(username), false, username) ;
+    if(lgcd != null) {
+      OrganizationService oService = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+      options.add(new SelectItemOption<String>(CalendarUtils.PUBLIC_CALENDARS, "")) ;
+      for(GroupCalendarData g : lgcd) {
+        for(org.exoplatform.calendar.service.Calendar c : g.getCalendars()){
+          if(CalendarUtils.canEdit(oService, c.getEditPermission(), username)){
+            options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE + c.getName(), CalendarUtils.PUBLIC_TYPE + CalendarUtils.COLON + c.getId())) ;
+            System.out.println(CalendarUtils.PUBLIC_TYPE + CalendarUtils.COLON + c.getId()) ;
+          }
+        }
+
+      }
+    }
+    return options ;
+  }
 }

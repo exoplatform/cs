@@ -523,38 +523,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   }
 
   private List<SelectItemOption<String>> getCalendars() throws Exception {
-    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    String username = Util.getPortalRequestContext().getRemoteUser() ;
-    options.add(new SelectItemOption<String>("User Calendars", "")) ;
-    List<org.exoplatform.calendar.service.Calendar> calendars = calendarService.getUserCalendars(SessionProviderFactory.createSessionProvider(), username, true) ;
-    for(org.exoplatform.calendar.service.Calendar c : calendars) {
-      options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE  + c.getName(), CalendarUtils.PRIVATE_TYPE + ":" + c.getId())) ;
-    }
-
-    GroupCalendarData gcd = calendarService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true);
-    if(gcd != null) {
-      options.add(new SelectItemOption<String>("Shared Calendars", "")) ;
-      for(org.exoplatform.calendar.service.Calendar c : gcd.getCalendars()) {
-        if(Arrays.asList(c.getEditPermission()).contains(username)){
-          options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE  + c.getName(), CalendarUtils.SHARED_TYPE + CalendarUtils.COLON + c.getId())) ;
-        }
-      }
-    }
-
-    List<GroupCalendarData> lgcd = calendarService.getGroupCalendars(SessionProviderFactory.createSystemProvider(), CalendarUtils.getUserGroups(username), false, username) ;
-    if(lgcd != null) {
-      options.add(new SelectItemOption<String>("Public Calendars", "")) ;
-      for(GroupCalendarData g : lgcd) {
-        for(org.exoplatform.calendar.service.Calendar c : g.getCalendars()){
-          if(c != null && c.getEditPermission() != null && Arrays.asList(c.getEditPermission()).contains(username)){
-            options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE + c.getName(), CalendarUtils.PUBLIC_TYPE + CalendarUtils.COLON + c.getId())) ;
-          }
-        }
-
-      }
-    }
-    return options ;
+    return CalendarUtils.getCalendars() ;
   }
 
 
