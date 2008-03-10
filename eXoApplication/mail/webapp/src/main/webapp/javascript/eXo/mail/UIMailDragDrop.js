@@ -133,28 +133,33 @@ UIMailDragDrop.prototype.dragCallback = function(dndEvent) {
     dragObject.style.display = 'block' ;
   }
   eXo.mail.UIMailDragDrop.synDragObjectPos(dndEvent) ;
-  
+  try{
+		
   if (dndEvent.foundTargetObject) {
     if (this.foundTargetObjectCatch != dndEvent.foundTargetObject) {
       if(this.foundTargetObjectCatch) {
-        this.foundTargetObjectCatch.style[eXo.mail.UIMailDragDrop.scKey] = this.foundTargetObjectCatchStyle ;
+				if(this.foundTargetObjectCatch.getAttribute("style")) this.foundTargetObjectCatch.removeAttribute("style") ;
+        //this.foundTargetObjectCatch.style[eXo.mail.UIMailDragDrop.scKey] = this.foundTargetObjectCatchStyle ;
       }
       this.foundTargetObjectCatch = dndEvent.foundTargetObject ;
-      this.foundTargetObjectCatchStyle = this.foundTargetObjectCatch.style[eXo.mail.UIMailDragDrop.scKey] ;
+      //this.foundTargetObjectCatchStyle = this.foundTargetObjectCatch.style[eXo.mail.UIMailDragDrop.scKey] ;
       this.foundTargetObjectCatch.style[eXo.mail.UIMailDragDrop.scKey] = eXo.mail.UIMailDragDrop.scValue ;
     }
   } else {
     if (this.foundTargetObjectCatch) {
-      this.foundTargetObjectCatch.style[eXo.mail.UIMailDragDrop.scKey] = this.foundTargetObjectCatchStyle ;
+			if(this.foundTargetObjectCatch.getAttribute("style")) this.foundTargetObjectCatch.removeAttribute("style") ;
+      //this.foundTargetObjectCatch.style[eXo.mail.UIMailDragDrop.scKey] = this.foundTargetObjectCatchStyle ;
     }
     this.foundTargetObjectCatch = null ;
   }
+	}catch(e) {window.document.title = e.message} ;
 } ;
 
 UIMailDragDrop.prototype.dropCallback = function(dndEvent) {
   document.body.removeChild(dndEvent.dragObject) ;
   if (this.foundTargetObjectCatch) {
-    this.foundTargetObjectCatch.style[eXo.mail.UIMailDragDrop.scKey] = this.foundTargetObjectCatchStyle ;
+		if(this.foundTargetObjectCatch.getAttribute("style")) this.foundTargetObjectCatch.removeAttribute("style") ;
+    //this.foundTargetObjectCatch.style[eXo.mail.UIMailDragDrop.scKey] = this.foundTargetObjectCatchStyle ;
   }
   this.foundTargetObjectCatch = dndEvent.foundTargetObject ;
   if (this.foundTargetObjectCatch) {
