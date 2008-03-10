@@ -405,7 +405,14 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
         calendar.setGroups(selected.toArray(new String[]{})) ;
         String editPermission = uiForm.getUIStringInput(EDIT_PERMISSION).getValue() ;
         if(!CalendarUtils.isEmpty(editPermission)) {
-          calendar.setEditPermission(editPermission.split(CalendarUtils.COMMA)) ;
+          List<String> listPermission = new ArrayList<String>() ;
+          listPermission.add(CalendarUtils.getCurrentUser()) ;
+          for(String permission : editPermission.split(CalendarUtils.COMMA)) {
+            if(permission != null && permission.trim().length()>0 && !permission.trim().equals(CalendarUtils.getCurrentUser())) {
+              listPermission.add(permission.trim()) ;
+            }
+          }
+          calendar.setEditPermission(listPermission.toArray(new String[]{})) ;
         }
         calendarService.savePublicCalendar(sProvider, calendar, uiForm.isAddNew_, username) ;
       }else {

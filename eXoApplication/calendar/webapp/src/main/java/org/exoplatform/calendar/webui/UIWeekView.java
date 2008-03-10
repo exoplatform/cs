@@ -33,7 +33,9 @@ import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.web.command.handler.GetApplicationHandler;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -222,15 +224,14 @@ public class UIWeekView extends UICalendarView {
         if(!eventCalendar.getCalType().equals(CalendarUtils.PRIVATE_TYPE)) {
           CalendarService calService = CalendarUtils.getCalendarService() ;
           org.exoplatform.calendar.service.Calendar calendar = null ;
-          List<String> listEditPermission = new ArrayList<String>() ;
           if(eventCalendar.getCalType().equals(CalendarUtils.SHARED_TYPE)){
             calendar = 
             calService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true).getCalendarById(calendarId) ;
           } else if(eventCalendar.getCalType().equals(CalendarUtils.PUBLIC_TYPE)) {
             calendar = calService.getGroupCalendar(SessionProviderFactory.createSystemProvider(), calendarId) ;
           }
-          listEditPermission = Arrays.asList(calendar.getEditPermission()) ;
-          if(!listEditPermission.contains(CalendarUtils.getCurrentUser())) {
+          if(!CalendarUtils.canEdit(calendarview.getApplicationComponent(OrganizationService.class), calendar.getEditPermission(), username)) {
+          //if(!listEditPermission.contains(CalendarUtils.getCurrentUser())) {
             UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;
             uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null, 1)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

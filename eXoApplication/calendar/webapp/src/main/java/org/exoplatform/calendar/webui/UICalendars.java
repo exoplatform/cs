@@ -44,10 +44,8 @@ import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.calendar.webui.popup.UIPopupContainer;
 import org.exoplatform.calendar.webui.popup.UIQuickAddEvent;
 import org.exoplatform.calendar.webui.popup.UIRssForm;
-import org.exoplatform.calendar.webui.popup.UISharedForm;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
-//import org.exoplatform.services.common.util.Arrays;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -61,8 +59,6 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
-
-import com.sun.corba.se.impl.protocol.giopmsgheaders.Message;
 
 /**
  * Created by The eXo Platform SARL
@@ -258,7 +254,9 @@ public class UICalendars extends UIForm  {
     Calendar calendar = null;
     String currentUser = CalendarUtils.getCurrentUser() ;
     List<Calendar> listCal = new ArrayList<Calendar>() ;
-    if(calType.equals(CalendarUtils.SHARED_TYPE)) {
+    if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
+      return true ;
+    } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
       listCal = calService.getSharedCalendars(getSystemSession(), currentUser, true).getCalendars() ;
       for(Calendar cal : listCal) {
         if(cal.getId().equals(calendarId)) {
@@ -266,10 +264,11 @@ public class UICalendars extends UIForm  {
           break ;
         }
       }
+      return CalendarUtils.canEdit(null, calendar.getEditPermission(), currentUser) ;
     } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
       calendar = calService.getGroupCalendar(getSystemSession(), calendarId) ;
-    }
-    if(CalendarUtils.canEdit(null, calendar.getEditPermission(), currentUser)) return true ;
+      return CalendarUtils.canEdit(uiComponent.getApplicationComponent(OrganizationService.class), calendar.getEditPermission(), currentUser) ;
+    }  
     return false ;
   }
 
