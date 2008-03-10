@@ -39,7 +39,8 @@ UIMailDragDrop.prototype.getAllDropableSets = function() {
   var tagContainer = document.getElementById('UITagContainer') ;
 //  if (tagContainer &&  tagLists.length <= 0) {
   if (tagContainer) {
-    this.dropableSets[this.dropableSets.length] = tagContainer ;
+  	var uiTagContainer = this.DOMUtil.findFirstDescendantByClass(tagContainer, "div","UITagContainer") ;
+    this.dropableSets[this.dropableSets.length] = uiTagContainer ;
   }
 } ;
 
@@ -160,7 +161,7 @@ UIMailDragDrop.prototype.dropCallback = function(dndEvent) {
     eXo.core.DOMUtil.findFirstDescendantByClass(dndEvent.clickObject, 'input', 'checkbox').checked = true ;
     var place2MoveId = false ;
     var formOp = false ;
-    if (this.foundTargetObjectCatch.className == 'UITagContainer') {
+    if (eXo.core.DOMUtil.hasClass(this.foundTargetObjectCatch,'UITagContainer')) {
       eXo.webui.UIForm.submitForm('UIMessageList','AddTag', true) ;
       return ;
     } else if (eXo.core.DOMUtil.findAncestorByClass(this.foundTargetObjectCatch, 'UITagContainer')) {
