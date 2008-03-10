@@ -503,10 +503,13 @@ CheckBox.prototype.init = function(cont) {
 	this.checkboxes = checkboxes.slice(1) ;
 	this.rows = new Array() ;
 	checkboxes[0].onclick = eXo.mail.CheckBox.checkAll ;
+	var isAll = 0 ;
 	for(var i = len - 1 ; i >= 1 ; i--) {
 		checkboxes[i].onclick = eXo.mail.CheckBox.check ;
 		this.rows.push(checkboxes[i].parentNode.parentNode) ;
+		if(checkboxes[i].checked == true) isAll++ ;
 	}
+	if(isAll == (len - 1)) checkboxes[0].checked = true ;
 } ;
 
 CheckBox.prototype.checkAll = function() {
