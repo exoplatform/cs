@@ -37,7 +37,7 @@ import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
-import org.exoplatform.webui.form.validator.EmptyFieldValidator;
+import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 /**
  * Created by The eXo Platform SARL
@@ -61,7 +61,7 @@ public class UIEventCategoryForm extends UIForm {
   private EventCategory eventCategory_ = null ;
   public UIEventCategoryForm() throws Exception{
     addUIFormInput(new UIFormStringInput(EVENT_CATEGORY_NAME, EVENT_CATEGORY_NAME, null)
-    .addValidator(EmptyFieldValidator.class)) ;
+    .addValidator(MandatoryValidator.class)) ;
     addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, null)) ;
   }
   protected String getCategoryName() {return getUIStringInput(EVENT_CATEGORY_NAME).getValue() ;}

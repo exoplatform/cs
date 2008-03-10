@@ -28,7 +28,7 @@ import org.exoplatform.webui.form.UIFormInputSet;
  * Created by The eXo Platform SARL
  * Author : Dang Van Minh
  *          minh.dang@exoplatform.com
- * Sep 20, 2006
+ * Sep 20, 2006R
  */
 @ComponentConfig(
    template = "app:/templates/mail/webui/UIFormInputSetWithAction.gtmpl"
