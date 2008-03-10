@@ -17,10 +17,6 @@
 	margin: 1px 4px 0px 4px;
 }
 
-.UIMailPortlet .UIMailSetting .UITabSelector .FlatTabStyle .SettingsIcon {
-	height: 25px; width: 24px;
-}
-
 .UIMailPortlet .UIMailSetting .UITabSelector .FlatTabStyle .ShortcutKeyIcon {
 	background: url('icons/ShortcutkeyIcon.gif') no-repeat center;
 	height: 27px; width: 24px;
@@ -42,7 +38,4 @@
 
 .UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .UIFormGrid td.FieldLabel {
 	width: 250px;
-}
-
-.UIMailPortlet .UIMailSetting .UIAction {
 }

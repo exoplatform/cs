@@ -226,7 +226,7 @@
                                         <div class="ItemIcon ReplyMailIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.reply-to-sender") %></div>
                                       </a>  
                                       <a class="MenuItem" href="<%=uicomponent.event("ReplyAll", msg.getId())%>">   
-                                        <div class="ItemIcon ReplyMailIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.reply-to-all") %></div>
+                                        <div class="ItemIcon ReplyToAllIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.reply-to-all") %></div>
                                       </a>  
                                       <a class="MenuItem" href="<%=uicomponent.event("Forward", msg.getId())%>">   
                                         <div class="ItemIcon ForwardMailIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.forward") %> </div>
@@ -238,16 +238,16 @@
                                         <div class="ItemIcon DeleteMailIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.delete") %> </div>
                                       </a>
                                       <a class="MenuItem" href="<%=uicomponent.event("AddTag", msg.getId())%>">   
-                                        <div class="ItemIcon TagMailIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.tag") %> </div>
+                                        <div class="ItemIcon BlueTag"> <%=_ctx.appRes(uicomponent.id+ ".label.tag") %> </div>
                                       </a>
                                       <a class="MenuItem" href="<%=uicomponent.event("MoveMessages", msg.getId())%>">   
-                                        <div class="ItemIcon MoveMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.move-to-folder") %> </div>
+                                        <div class="ItemIcon MoveMessageIcon"><%=_ctx.appRes(uicomponent.id+ ".label.move-to-folder") %> </div>
                                       </a>
                                       <a class="MenuItem" href="<%=uicomponent.event("AddContact", msg.getId())%>">   
                                         <div class="ItemIcon AddContactIcon"><%=_ctx.appRes(uicomponent.id+ ".label.add-sender-to-contacts") %></div>
                                       </a>
                                       <a class="MenuItem" href="<%=uicomponent.event("Export", msg.getId())%>">   
-                                      <div class="ItemIcon ExportIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.export-eml") %> </div>
+                                      <div class="ItemIcon ExportMailIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.export-eml") %> </div>
                                       </a>
                                       <div class="RightClickCustomItem"></div>
                                     </div>
@@ -303,7 +303,7 @@
                             } else if (attach.getMimeType().indexOf("msword") > -1) {
                               attLink = "/mail/skin/DefaultSkin/webui/skinIcons/24x24/icons/WordIcon.gif";
                             } else if (attach.getMimeType().indexOf("pdf") > -1) {
-                              attLink = "/mail/skin/DefaultSkin/webui/skinIcons/24x24/icons/PDFIcon.gif";
+                              attLink = "/mail/skin/DefaultSkin/webui/skinIcons/icons/PDFIcon.gif";
                             }
                         %> 
       						  		      <img class="AttachmentFile" src="$attLink">
@@ -324,7 +324,7 @@
                   } 
                 %>
                 			<div style="border-top: 1px dotted #b7b7b7; padding-top: 3px">
-                				<a href="<%=uicomponent.event("Reply", msg.getId())%>" class="MessageActionIcon ReplyAllMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.reply") %></a>
+                				<a href="<%=uicomponent.event("Reply", msg.getId())%>" class="MessageActionIcon ReplyMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.reply") %></a>
 			                	<a href="<%=uicomponent.event("Forward", msg.getId())%>" class="MessageActionIcon ForwardMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.forward") %></a>
 			                	<div style="clear: left"><span></span></div>
 			                </div>

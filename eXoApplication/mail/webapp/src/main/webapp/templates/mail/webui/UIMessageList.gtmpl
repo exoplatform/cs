@@ -28,11 +28,11 @@
   </a>
   <% if (!uicomponent.selectedSpamFolder()) { %>
     <a href="<%=uicomponent.event("ReportSpam")%>" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.report-spam") %>">
-      <div class="IconHolder SpamMail"><span></span></div>
+      <div class="IconHolder SpamMailIcon"><span></span></div>
     </a>
   <% } else { %>
     <a href="<%=uicomponent.event("NotSpam")%>" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.not-spam") %>">
-      <div class="IconHolder NotSpamMail"><span></span></div>
+      <div class="IconHolder NonSpamMailIcon"><span></span></div>
     </a>
   <% } %>
   <a href="<%=uicomponent.event("Print")%>" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.print") %>">
@@ -42,7 +42,7 @@
   
   <div class="SelectButton">
     <div class="MoreActionsIcon"  onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
-      <div class="DownArrow1Icon">More Actions</div>
+      <a class="DownArrow1Icon">More Actions</a>
       
       <% /*Begin Popup Menu*/ %>
       <div style="position: relative;">
@@ -100,7 +100,7 @@
   
   <div class="SelectButton">
     <div class="View" onclick="eXo.mail.UIMailPortlet.showView(this, event);">
-      <div class="DownArrow1Icon">View</div>
+      <a class="DownArrow1Icon">View</a>
       
       <% /*Begin Popup Menu*/ %>
       <div style="position: relative;">

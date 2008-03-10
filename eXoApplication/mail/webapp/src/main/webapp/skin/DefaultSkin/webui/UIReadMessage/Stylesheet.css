@@ -59,11 +59,6 @@
 	margin: 4px 4px 0px 0px;
 }
 
-.UIMailPortlet .UIReadMessage .MailControlBar .ReadingPane .MaximizeAllViewBoxStyle {
-  float: right;
-	margin: 2px 4px 0px 0px;
-}
-
 /*=======================Message Header====================*/
 
 .UIMailPortlet .UIReadMessage .MailControlBar .MessageHeader {
@@ -73,7 +68,7 @@
 
 .UIMailPortlet .UIReadMessage .MailControlBar .MessageCheck {
 	float: left;
-	width: 50px; 
+	width: 40px; 
 }
 
 .UIMailPortlet .UIReadMessage .MailControlBar .MessageCheck .CheckBox {
@@ -161,6 +156,3 @@
 	padding: 10px;
 }
 
-.UIMailPortlet .UIReadMessage .MailControlBar .UnStarredIcon {
-	margin: 1px 0px 0px 4px; 
-}

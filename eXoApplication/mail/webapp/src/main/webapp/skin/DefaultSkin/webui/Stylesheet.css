@@ -4,8 +4,7 @@
 @import url("UIAccountSetting/Stylesheet.css");
 @import url("UIMailSetting/Stylesheet.css");
 @import url("UIInsertAddress/Stylesheet.css");
-@import url("skinIcons/16x16/Stylesheet.css");
-@import url("skinIcons/24x24/Stylesheet.css");
+@import url("skinIcons/Stylesheet.css");
 @import url("UIQuickAddEvent/Stylesheet.css");
 @import url("UIAddMessageFilter/Stylesheet.css");
 @import url("UIMessageFilter/Stylesheet.css");
@@ -55,7 +54,7 @@
 
 .UIMailPortlet .SearchForm .Input {
 	float: right;
-	background: #ffffff url('skinIcons/16x16/icons/SearchActions.gif') no-repeat left center ;	
+	background: #ffffff url('skinIcons/icons/MailIcons.gif') no-repeat left -1646px;	
 	width: 110px;
 	font-size: 11px;
 	padding: 4px 0px 0px 20px;
@@ -63,7 +62,7 @@
 }
 
 .UIMailPortlet .SearchForm .Search {
-  background: url('skinIcons/16x16/icons/SearchIcon.gif') no-repeat ;	
+  background: url('skinIcons/icons/MailIcons.gif') no-repeat left -1622px;	
   height: 16px;
   width: 16px;
   float: right;
@@ -72,7 +71,7 @@
 }
 
 .UIMailPortlet .SearchForm .AdvancedSearch {
-  background: url('skinIcons/16x16/icons/FindIcon.gif') no-repeat ;	
+  background: url('skinIcons/icons/MailIcons.gif') no-repeat left -799px;	
   height: 16px; width: 16px;
   float: right; cursor: pointer;
   margin: 8px 0px 0px 2px;
@@ -162,7 +161,7 @@
 }
 
 .UIMailPortlet .UISelectAccount .AddAccountIcon {
-	background: url('/mail/skin/DefaultSkin/webui/skinIcons/24x24/icons/EditSelectAccount.gif') no-repeat left top;
+	background: url('skinIcons/icons/MailIcons.gif') no-repeat left -1767px;
 	cursor: pointer;
 	float: right; margin: 8px 0px 0px 0px;
 	height: 22px; width: 21px;
@@ -196,7 +195,7 @@
 }
 
 .UIMailPortlet .UINavigationContainer .ActionIcon {
-	background: url('/mail/skin/DefaultSkin/webui/skinIcons/16x16/icons/ActionIcon.gif') no-repeat center;
+	background: url('skinIcons/icons/MailIcons.gif') no-repeat left -1276px;
 	float: right;
 	width: 20px;
 	height: 20px;	
@@ -344,6 +343,7 @@
 .UIMailPortlet .MailWorkingWorkspace .ControlButton {
 	float: left;
 	line-height: 26px;
+	height: 25px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .SelectButton {
@@ -351,6 +351,16 @@
 	line-height:18px;
 	margin-top:3px;
 	cursor: pointer;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .SelectButton a{
+	color: #333;
+	display: block;
+	margin-left: 2px;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .SelectButton a:hover{
+	color: #058ee6;
 }
 
 .UIMailPortlet .MailWorkingWorkspace  .UIActionBar a.ControlButton {
@@ -371,15 +381,15 @@
 }
 
 .UIMailPortlet .MailWorkingWorkspace .IconHolder {
-	line-height: 24px;
+	line-height: 26px;
 	margin: 0px 7px;
-	padding-left: 30px;
+	padding-left: 29px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .IconTagHolder {
 	line-height: 24px;
 	margin: 0px 7px;
-	padding-left: 30px;
+	padding-left: 21px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIActionBar .DownArrow1Icon {
@@ -433,11 +443,6 @@
 	width: 130px;
 }
 
-.UIMailPortlet .UIMessageActionsBar .UIRightClickPopupMenu .ItemIcon {
-	width: auto;
-	background-position: left center;
-}
-
 .UIMailPortlet .UIMessageActionsBar .UIRightClickPopupMenu .ItemIcon .NextArrow1Icon {
 	padding-right: 15px;
 	background-position: center right;
@@ -464,9 +469,8 @@
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageActionsBar .IconHolder {
 	height: 26px;
-	width: 24px;
+	width: 22px;
 	padding: 0px;
-	background-position: center;
 }
 
 .UIMailPortlet .MailWorkingWorkspace a:hover {
@@ -488,7 +492,6 @@
 .UIMailPortlet .MailWorkingWorkspace .UIActionBar .AddEventIcon {
 	margin: 1px 7px 0px 7px;
 	line-height: 23px;
-	background-position: left center;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageActionsBar .DownArrow1Icon {
@@ -559,14 +562,6 @@
 	width: 16px;
 	height: 20px;
 	margin-left: 4px;
-}
-
-.UIMailPortlet .MailWorkingWorkspace .UnStarredIcon {
-	margin: 1px 0px 0px 4px; 
-}
-
-.UIMailPortlet .MailWorkingWorkspace .StarredIcon {
-	margin: 1px 0px 0px 4px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .AttachmentIcon {
@@ -686,25 +681,22 @@
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessagePreview .MinimumReadingPane {
-    float: right;
+  float: right;
 	margin: 4px 4px 0px 0px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessagePreview .MessageActionIcon {
 	float: left;
-	height: 20px; line-height: 20px;
-	height: 20px; line-height: 20px;
-	padding: 0px 10px 0px 20px;
+	height: 22px; line-height: 22px;
+	padding: 0px 15px 0px 22px;
 	color: #2276AB;
 	display: block;
 	font-size: 12px;
-	background-position: left center;
 	text-decoration: underline;
 }	
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessagePreview a:hover.MessageActionIcon {
 	color: #fda946;
-    font-size: 12px;
 	text-decoration: none;
 }
 
@@ -734,14 +726,6 @@
 	padding-top: 0px;
 }
 
-.UIMessagePreview .AttachmentContainer .AttachmentBox .DownloadIcon {
-	padding-left: 24px;
-}
-
-.UIMessagePreview .AttachmentContainer .AttachmentBox .ViewDownloadIcon {
-	padding-left: 24px;
-}
-
 .UIMessagePreview .AttachmentContainer .AttachmentIcon {
 	width: auto;
 	padding-left: 24px;
@@ -754,12 +738,12 @@
 }
 
 .UIMessagePreview .AttachmentContainer .AttachmentBox .Icon {
-	padding-left: 24px;
+	padding-left: 20px;
 	width: auto;
 	height: 24px;
 	line-height: 24px;
-	margin-right: 5px;
-	background-position: left center;
+	margin-right: 10px;
+	color: orange;
 }
 /*=======================Message Header====================*/
 

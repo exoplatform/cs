@@ -1,0 +1,467 @@
+.UIMailPortlet .TagIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -1394px;
+	width: 16px; height: 16px;
+	cursor: pointer;
+	float: left;
+}
+
+.UIMailPortlet .MaximizeReadingPane {
+	background: url('icons/MailIcons.gif') no-repeat left -1234px;
+	width: 17px; height: 16px;
+	cursor: pointer;
+}
+
+.UIMailPortlet .MinimumReadingPane {
+	background: url('icons/MailIcons.gif') no-repeat left -1257px;
+	width: 17px; height: 16px;
+	cursor: pointer;
+}
+
+.UIMailPortlet .PriorityIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -1029px;
+	width: 16px; height: 16px;
+}
+
+.UIMailPortlet .ReplyIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -518px;
+}
+
+.UIMailPortlet .PriorityHighlightIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -1053px;
+	width: 16px; height: 16px;
+}
+
+.UIMailPortlet .TotalMessageIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -89px;
+	width: 16px; height: 16px;
+}
+
+.UIMailPortlet .DownArrow3Icon {
+	background: url('icons/MailIcons.gif') no-repeat left -1808px;
+	height: 16px; width: 16px;
+	cursor: pointer;
+}
+
+.UIMailPortlet .AddressIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -1687px;
+}
+
+.UIMailPortlet .BlueTag {
+	background: url('icons/MailIcons.gif') no-repeat left -1436px;
+}
+
+.UIMailPortlet .RedTag {
+	background: url('icons/MailIcons.gif') no-repeat left -1392px;
+}
+
+.UIMailPortlet .GreenTag {
+	background: url('icons/MailIcons.gif') no-repeat left -1486px;
+}
+
+.UIMailPortlet .VioletTag {
+	background: url('icons/MailIcons.gif') no-repeat left -1463px;
+}
+
+.UIMailPortlet .brownTag {
+	background: url('icons/MailIcons.gif') no-repeat left -1417px;
+}
+
+.UIMailPortlet .OrangeTag {
+	background: url('icons/MailIcons.gif') no-repeat left -1417px;
+}
+
+.UIMailPortlet .PingTag {
+	background: url('icons/MailIcons.gif') no-repeat left -1463px;
+}
+
+.UIMailPortlet .PingVioletTag {
+	background: url('icons/MailIcons.gif') no-repeat left -1463px;
+}
+
+.UIMailPortlet .YellowTag {
+	background: url('icons/MailIcons.gif') no-repeat left -1509px;
+}
+
+.UIMailPortlet .MultipTag {
+	background: url('icons/MailIcons.gif') no-repeat left -1371px;
+}
+
+.UIMailPortlet .MoreActionsIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -429px;
+}
+
+.UIMailPortlet .View {
+	background: url('icons/MailIcons.gif') no-repeat left -245px;
+}
+
+.UIMailPortlet .ReplyMailIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -336px;
+}
+
+.UIMailPortlet .DeleteMailIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -39px;
+}
+
+.UIMailPortlet .AddContactIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -704px;
+}
+
+.UIMailPortlet .ExportMailIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -314px;
+}
+
+.UIMailPortlet .PrintMailIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -474px;
+}
+
+.UIMailPortlet .ReplyAllMailIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -542px;
+}
+
+.UIMailPortlet .ReplyToAllIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -360px;
+}
+
+.UIMailPortlet .ForwardMailIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -224px;
+}
+
+.UIMailPortlet .OpenMailIcon {
+	background: url('icons/ReadMessagesIcon.gif') no-repeat left 6px;
+}
+
+.UIMailPortlet .ReplyAllIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -541px;
+}
+
+.UIMailPortlet .ForwardIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -495px;
+}
+
+.UIMailPortlet .DefaultLayoutIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -840px;
+}
+
+.UIMailPortlet .HideFolderListIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -863px;
+}
+
+.UIMailPortlet .HideMessagesPaneIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -886px;
+}
+
+.UIMailPortlet .HideReadingPaneIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -909px;
+}
+
+.UIMailPortlet .EditDraftIcon {
+	background: url('icons/EditDraftsIcon.gif') no-repeat left;
+}
+
+.UIMailPortlet .PrintIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -1526px;
+}
+
+.UIMailPortlet .MarkReadIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -2337px;
+}
+
+.UIMailPortlet .MarkUnreadIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -108px;
+}
+
+.UIMailPortlet .RemoveStarIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -956px;
+}
+
+.UIMailPortlet .MoveMessageIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -268px;
+}
+
+.UIMailPortlet .ImportMessageIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -131px;
+}
+
+.UIMailPortlet .EmportMessageIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -177px;
+}
+
+.UIMailPortlet .AllMessagesIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -154px;
+}
+
+.UIMailPortlet .ViewAsIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -1572px;
+}
+
+.UIMailPortlet .ListIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -1184px;
+}
+
+.UIMailPortlet .ThreadIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -1596px;
+}
+
+.UIMailPortlet .ConversationIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -636px;
+}
+
+.UIMailPortlet .StaredMessagesIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -155px;
+}
+
+.UIMailPortlet .UnreadMessagesIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -62px;
+}
+
+.UIMailPortlet .ReadMessagesIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -453px;
+}
+
+.UIMailPortlet .MessagesAttachmentIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -406px;
+}
+
+.UIMailPortlet .DeleteIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -1297px;
+	width: 16px; height: 16px;
+}
+
+.UIMailPortlet .UnStarredIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -979px;
+	width: 16px; height: 18px;
+	cursor: pointer;
+}
+
+.UIMailPortlet .UIMessagePreview .UnStarredIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -982px;
+}
+
+.UIMailPortlet .StarredIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -934px;
+	width: 16px; height: 18px;
+	cursor: pointer;
+}
+
+.UIMailPortlet .UIMessagePreview .StarredIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -936px;
+}
+
+.UIMailPortlet .AttachmentIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -593px;
+	width: 16px; height: 16px;
+	cursor: pointer;
+}
+
+.UIMailPortlet .NextPageArrow {
+	background: url('icons/MailIcons.gif') no-repeat left -1097px;
+	width: 16px; height: 16px;
+	cursor: pointer;
+}
+
+.UIMailPortlet .LastPageArrow {
+	background: url('icons/MailIcons.gif') no-repeat left -1143px;
+	width: 16px; height: 16px;
+	cursor: pointer;
+}
+
+.UIMailPortlet .FirstPageArrow{
+	background: url('icons/MailIcons.gif') no-repeat left -1166px;
+	width: 16px; height: 16px;
+	cursor: pointer;
+}
+
+.UIMailPortlet .PreviousPageArrow {
+	background: url('icons/MailIcons.gif') no-repeat left -1120px;
+	width: 16px; height: 16px;
+	cursor: pointer;
+}
+
+.UIMailPortlet .FolderIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -819px;
+}
+
+.UIMailPortlet .AccountIcon {
+	background: url('icons/MailIcons.gif') no-repeat left top;
+	height: 16px; width: 17px;
+}
+
+.UIMailPortlet .LowPriority {
+	background: url('icons/MailIcons.gif') no-repeat left -1028px;
+	text-align: center;
+	cursor: pointer;
+	width: 16px; height: 16px;
+	margin: auto;
+}
+
+.UIMailPortlet .HighPriority {
+	background: url('icons/MailIcons.gif') no-repeat left -1051px;
+	text-align: center;
+	cursor: pointer;
+	width: 16px; height: 16px;
+	margin: auto;
+}
+
+.UIMailPortlet .UpArrow1Icon {
+	background: url('icons/MailIcons.gif') no-repeat left -1793px;
+}
+
+.UIMailPortlet .ViewDownloadIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -1670px;
+}
+
+.UIMailPortlet .DownloadIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -2388px;
+}
+
+.UIMailPortlet .AddAccount {
+	background: url('icons/MailIcons.gif') no-repeat left -17px;
+}
+
+.UIMailPortlet .AddFolderIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -680px;
+}
+
+.UIMailPortlet .CheckItem {
+	background: url('icons/MailIcons.gif') no-repeat left -615px;
+}
+
+.UIMailPortlet .CloseFolder {
+	background: url('icons/MailIcons.gif') no-repeat left -659px;
+}
+
+.UIMailPortlet .Folder {
+	background: url('icons/MailIcons.gif') no-repeat left -659px;
+}
+
+.UIMailPortlet .DeleteAccount {
+	background: url('icons/MailIcons.gif') no-repeat left -292px;
+}
+
+.UIMailPortlet .EditAccount {
+	background: url('icons/MailIcons.gif') no-repeat left -200px;
+}
+
+.UIMailPortlet .EmptyIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -1322px;
+}
+
+.UIMailPortlet .MarkAll {
+	background: url('icons/MailIcons.gif') no-repeat left -2337px;
+}
+
+.UIMailPortlet .MoveToTrash {
+	background: url('icons/MailIcons.gif') no-repeat left -2361px;
+}
+
+.UIMailPortlet .RemoveFolderIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -727px;
+}
+
+.UIMailPortlet .RenameFolderIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -750px;
+}
+
+.UIMailPortlet .LoadingIcon {
+	background: url('icons/loading.gif') no-repeat center;
+	float: left;
+	width: 16px;
+	height: 16px;
+	margin: 0px 2px 0px 0px;
+}
+/*================Icons 24x24==============================*/
+.UIMailPortlet .SpamMailIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -1712px;
+}
+
+.UIMailPortlet .NonSpamMailIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -1742px;
+}
+
+.UIMailPortlet .Actions {
+	background: url(icons/MailIcons.gif) no-repeat left -1848px;
+	cursor: pointer;
+	float: right;
+	width: 24px; height: 22px;
+}
+
+.UIMailPortlet .CheckMailIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -2235px ;
+}
+
+.UIMailPortlet .InboxIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -2004px ;
+}
+
+.UIMailPortlet .inboxIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -2004px ;
+}
+
+.UIMailPortlet .DraftsIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -2084px ;
+}
+
+.UIMailPortlet .SentIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -1924px;
+}
+
+.UIMailPortlet .SpamIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -1872px ;
+}
+
+.UIMailPortlet .TrashIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -1823px;
+}
+
+.UIMailPortlet .OpenFolder {
+	background: url('icons/MailIcons.gif') no-repeat left -1977px;
+}
+
+.UIMailPortlet .CloseFolder {
+	background: url('icons/MailIcons.gif') no-repeat left -658px;
+}
+
+.UIMailPortlet .ComposeIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -2209px;
+}
+
+.UIMailPortlet .ContactsIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -2158px;
+}
+
+.UIMailPortlet .RssIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -1949px;
+}
+
+.UIMailPortlet .CustomViewIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -2132px;
+	float: left;
+}
+
+.UIMailPortlet .SettingsIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -1897px;
+}
+
+.UIMailPortlet .AddEventIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -2287px;
+}
+
+.UIMailPortlet .AddGroup {
+	background: url('icons/MailIcons.gif') no-repeat left -2262px;
+}
+
+.UIMailPortlet .AddContact {
+	background: url('icons/MailIcons.gif') no-repeat left -2312px;
+}
+
+.UIMailPortlet .DeleteContact {
+	background: url('icons/MailIcons.gif') no-repeat left -2110px;
+}
+
+.UIMailPortlet .EditContact {
+	background: url('icons/MailIcons.gif') no-repeat left -2059px;
+}
+
+.UIMailPortlet .FilterIcon {
+	background: url('icons/MailIcons.gif') no-repeat left -2031px;
+}
