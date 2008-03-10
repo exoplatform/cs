@@ -763,6 +763,12 @@
 	                    </div>
                     </a>
                     
+                    <a class="MenuItem" href="<%=uicomponent.event("SharedContacts", "id")%>">   
+	                    <div class="ItemIcon ShareIcon">
+	                      <%=_ctx.appRes(uicomponent.getName() + ".label.shared")%>
+	                    </div>
+                    </a>
+                    
                     <a class="MenuItem" href="<%=uicomponent.event("SendEmail", "id")%>">  
 	                    <div class="ItemIcon EmailIcon">
 	                      <%=_ctx.appRes(uicomponent.getName() + ".label.sendEmail")%>

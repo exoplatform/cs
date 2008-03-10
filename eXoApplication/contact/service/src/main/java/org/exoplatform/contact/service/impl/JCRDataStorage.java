@@ -626,29 +626,27 @@ public class JCRDataStorage{
     }
   }
 
-  public void removeUserShareContact(SessionProvider sProvider, String username, String[] contactIds, List<String> removedUsers) throws Exception {
-    for(String contactId : contactIds) {
-      try {
-        Node contactNode = getUserContactHome(sProvider, username).getNode(contactId);
-        List<String> values = new ArrayList<String>(
-            Arrays.asList(ValuesToStrings(contactNode.getProperty(SHARED_PROP).getValues())));
-        List<String> newValues = new ArrayList<String>(values) ;
-        for(String userId : removedUsers) {
-          Node sharedContact = getSharedContact(userId) ;
-          for (String value : values) {
-            Node refNode = sharedContact.getSession().getNodeByUUID(value);
-            if(refNode.getPath().equals(sharedContact.getPath())) {
-              newValues.remove(value) ;
-            }
-          }   
-        }
-        contactNode.setProperty(SHARED_PROP, newValues.toArray(new String[] {}));
-        contactNode.save() ;
-        contactNode.getSession().save();
-      }catch (Exception e) {
-        e.printStackTrace() ;
-      }     
-    }   
+  public void removeUserShareContact(SessionProvider sProvider, String username, String contactId, List<String> removedUsers) throws Exception {
+    try {
+      Node contactNode = getUserContactHome(sProvider, username).getNode(contactId);
+      List<String> values = new ArrayList<String>(
+          Arrays.asList(ValuesToStrings(contactNode.getProperty(SHARED_PROP).getValues())));
+      List<String> newValues = new ArrayList<String>(values) ;
+      for(String userId : removedUsers) {
+        Node sharedContact = getSharedContact(userId) ;
+        for (String value : values) {
+          Node refNode = sharedContact.getSession().getNodeByUUID(value);
+          if(refNode.getPath().equals(sharedContact.getPath())) {
+            newValues.remove(value) ;
+          }
+        }   
+      }
+      contactNode.setProperty(SHARED_PROP, newValues.toArray(new String[] {}));
+      contactNode.save() ;
+      contactNode.getSession().save();
+    }catch (Exception e) {
+      e.printStackTrace() ;
+    }
   }
   
   public void removeUserShareAddressBook(SessionProvider sProvider, String username, String addressBookId, List<String> removedUsers) throws Exception {
@@ -1081,7 +1079,14 @@ public class JCRDataStorage{
     contactNode.setProperty("exo:categories", contact.getAddressBook());
     contactNode.setProperty("exo:tags", contact.getTags());
     contactNode.setProperty("exo:editPermission", contact.getEditPermission());
+    
+    
+    
     contactNode.setProperty("exo:viewPermission", contact.getViewPermission());
+    
+    
+    
+    
     
     if (contact.getLastUpdated() != null) {
       dateTime.setTime(contact.getLastUpdated()) ;

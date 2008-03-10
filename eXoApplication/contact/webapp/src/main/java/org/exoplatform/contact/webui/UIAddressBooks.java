@@ -31,7 +31,7 @@ import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.service.impl.NewUserListener;
-import org.exoplatform.contact.webui.popup.UIAddEditGroupPermission;
+import org.exoplatform.contact.webui.popup.UIAddEditPermission;
 import org.exoplatform.contact.webui.popup.UICategoryForm;
 import org.exoplatform.contact.webui.popup.UICategorySelect;
 import org.exoplatform.contact.webui.popup.UIComposeForm;
@@ -41,6 +41,7 @@ import org.exoplatform.contact.webui.popup.UIExportForm;
 import org.exoplatform.contact.webui.popup.UIImportForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.webui.popup.UIPopupContainer;
+import org.exoplatform.mail.service.Account;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -157,7 +158,7 @@ public class UIAddressBooks extends UIComponent {
       String destAddress = event.getRequestContext().getRequestParameter(OBJECTID);
       String username = ContactUtils.getCurrentUser() ;
       ContactGroup group = ContactUtils.getContactService().getSharedGroup(username, destAddress) ;
-      if (group.getEditPermission() != null && !Arrays.asList(group.getEditPermission()).contains(username)) {
+      if (group.getEditPermission() == null || !Arrays.asList(group.getEditPermission()).contains(username)) {
         UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.non-permission", null,
           ApplicationMessage.WARNING)) ;
@@ -305,7 +306,7 @@ public class UIAddressBooks extends UIComponent {
       } else {
         String username = ContactUtils.getCurrentUser() ;
         ContactGroup group = ContactUtils.getContactService().getSharedGroup(username, groupId) ;
-        if (group.getEditPermission() != null &&  !Arrays.asList(group.getEditPermission()).contains(username)) {
+        if (group.getEditPermission() == null ||  !Arrays.asList(group.getEditPermission()).contains(username)) {
           UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.non-permission", null,
             ApplicationMessage.WARNING)) ;
@@ -338,7 +339,7 @@ public class UIAddressBooks extends UIComponent {
       } else {
         String username = ContactUtils.getCurrentUser() ;
         ContactGroup group = ContactUtils.getContactService().getSharedGroup(username, groupId) ;
-        if (group.getEditPermission() != null && !Arrays.asList(group.getEditPermission()).contains(username)) {
+        if (group.getEditPermission() == null || !Arrays.asList(group.getEditPermission()).contains(username)) {
           UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.non-permission", null,
             ApplicationMessage.WARNING)) ;
@@ -361,11 +362,11 @@ public class UIAddressBooks extends UIComponent {
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
       UIPopupContainer uiPopupContainer = popupAction.activate(UIPopupContainer.class, 600) ;
       uiPopupContainer.setId("UIPermissionGroupForm") ;
-      UIAddEditGroupPermission uiAddNewEditPermission = uiPopupContainer.addChild(UIAddEditGroupPermission.class, null, null);
+      UIAddEditPermission uiAddNewEditPermission = uiPopupContainer.addChild(UIAddEditPermission.class, null, null);
       ContactService contactService = ContactUtils.getContactService();
       String username = ContactUtils.getCurrentUser();
       SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;  
-      uiAddNewEditPermission.init(contactService.getGroup(sessionProvider, username, groupId)) ;
+      uiAddNewEditPermission.initGroup(contactService.getGroup(sessionProvider, username, groupId)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());
     }
@@ -400,8 +401,15 @@ public class UIAddressBooks extends UIComponent {
         for (int i = 1; i < addresses.size(); i ++) {
           buffer.append(", " + addresses.get(i)) ;
         }
+        Account acc = ContactUtils.getAccount() ;
+        if (acc == null) {
+          UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.invalidAcc", null,
+              ApplicationMessage.WARNING)) ;
+          return ;
+        }
         UIComposeForm uiComposeForm = uiPopupAction.activate(UIComposeForm.class, 850) ;
-        uiComposeForm.init(buffer.toString()) ;
+        uiComposeForm.init(acc.getEmailAddress(), buffer.toString()) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());
       } 
@@ -417,7 +425,7 @@ public class UIAddressBooks extends UIComponent {
       SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
       if (uiAddressBook.sharedAddressBookMap_.containsKey(groupId)) {
         ContactGroup group = ContactUtils.getContactService().getSharedGroup(username, groupId) ;
-        if (group.getEditPermission() != null && !Arrays.asList(group.getEditPermission()).contains(username)) {
+        if (group.getEditPermission() == null || !Arrays.asList(group.getEditPermission()).contains(username)) {
           UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.non-permission", null,
             ApplicationMessage.WARNING)) ;

@@ -189,7 +189,7 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
         Map<String, String> viewMap = new LinkedHashMap<String, String>() ;
         for (String user : receiverUser) viewMap.put(user, user) ;
         Map<String, String> editMap = new LinkedHashMap<String, String>() ; 
-        if (uiForm.getUIFormCheckBoxInput(UISharedGroupForm.FIELD_EDIT_PERMISSION).isChecked()) 
+        if (uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).isChecked()) 
           for (String user : receiverUser) editMap.put(user, user) ;
         for (Contact contact : uiForm.sharedContacts.values()) {
           String[] viewPer = contact.getViewPermission() ;

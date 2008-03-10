@@ -21,8 +21,11 @@ import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.webui.popup.UIComposeForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.download.DownloadService;
+import org.exoplatform.mail.service.Account;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -62,8 +65,16 @@ public class UIContactPreview extends UIComponent  {
       if (!ContactUtils.isEmpty(email)) {
         UIContactPortlet contactPortlet = uiContactPreview.getAncestorOfType(UIContactPortlet.class) ;
         UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
-        UIComposeForm uiComposeForm = popupAction.activate(UIComposeForm.class, 850) ;  
-        uiComposeForm.init(email) ;
+         
+        Account acc = ContactUtils.getAccount() ;
+        if (acc == null) {
+          UIApplication uiApp = uiContactPreview.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.invalidAcc", null,
+              ApplicationMessage.WARNING)) ;
+          return ;
+        }
+        UIComposeForm uiComposeForm = popupAction.activate(UIComposeForm.class, 850) ; 
+        uiComposeForm.init(acc.getEmailAddress(),email) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;  
         event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPreview.getParent()) ;        
       }

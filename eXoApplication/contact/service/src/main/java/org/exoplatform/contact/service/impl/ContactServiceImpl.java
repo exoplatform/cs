@@ -120,8 +120,8 @@ public class ContactServiceImpl implements ContactService {
     return storage_.shareContacts(sProvider, username, contactIds, groupIds) ;
   }*/
   
-  public void removeUserShareContact(SessionProvider sProvider, String username, String[] contactIds, List<String> removedUsers) throws Exception {
-    storage_.removeUserShareContact(sProvider, username, contactIds, removedUsers) ;
+  public void removeUserShareContact(SessionProvider sProvider, String username, String contactId, List<String> removedUsers) throws Exception {
+    storage_.removeUserShareContact(sProvider, username, contactId, removedUsers) ;
   }
   
   public void shareContact(SessionProvider sProvider, String username, String[] contactIds, List<String> receiveUsers) throws Exception {
