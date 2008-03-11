@@ -51,9 +51,9 @@
     long endIndex = fromIndex-1 + pageSize;
     if (currentPage == availablePage) endIndex = availableContact;
     if (fromIndex == endIndex)
-    	contactRange = "Contacts " + fromIndex + " of " + availableContact ;
+    	contactRange = _ctx.appRes(uicomponent.getName() + ".label.contacts")+ "&nbsp;" + fromIndex + _ctx.appRes(uicomponent.getName() + ".label.of") + availableContact ;
     else 
-    	contactRange = "Contacts " + fromIndex + " - " + endIndex + " of " + availableContact ;
+    	contactRange = _ctx.appRes(uicomponent.getName() + ".label.contacts") + "&nbsp;" + fromIndex + " - " + endIndex + _ctx.appRes(uicomponent.getName() + ".label.of") + availableContact ;
   }
 
 	if(uicomponent.getViewContactsList()) {
@@ -61,11 +61,11 @@
 %>
 			
 			<div class="Result">
-				<div class="TitleSearch">Search result</div>
+				<div class="TitleSearch"><%=_ctx.appRes(uicomponent.getName() + ".label.searchResult")%></div>
 	<% } else { %>
 				<div class="UIContactActionsBar">
 					<a href="<%=uicomponent.event("MoveContacts")%>" class="ControlButton">
-						<div class="IconHolder MoveIcon">Move</div>
+						<div class="IconHolder MoveIcon"><%=_ctx.appRes(uicomponent.getName() + ".label.move")%></div>
 					</a>
 					<div class="SeparatorLine"><span></span></div>
 					<a href="#" class="ControlButton">
@@ -137,7 +137,7 @@
 			              }
     		    			%>
 	  		        	<a href="$sortedByName">
-	  		        	<div class="$classArrowName" title="Sort by Name"> Name </div>
+	  		        	<div class="$classArrowName" title="Sort by Name"> <%=_ctx.appRes(uicomponent.getName() + ".label.name")%> </div>
 	  		        	</a>
 	  		        </th>
 	 	      	    <th class="text" style="padding-left: 7px;">
@@ -159,7 +159,7 @@
     		    			%>
 	 	      	    
 	 	      	    	<a href="$sortedByEmail">
-	  		        	<div class="$classArrowEmail" title="Sort by Email">Email</div>
+	  		        	<div class="$classArrowEmail" title="Sort by Email"><%=_ctx.appRes(uicomponent.getName() + ".label.email")%></div>
 	  		        	</a>
 	  		        </th>
 	 	      	    <th style="width: 120px; padding-left: 7px;" class="text">
@@ -181,14 +181,14 @@
     		    			%>
 	 	      	    
 	  		        	<a href="$sortedByOrganition">
-	  		        	<div class="$classArrowOrganition" style="padding-right:26px;" title="Sort by Job Title">Job Title</div>
+	  		        	<div class="$classArrowOrganition" style="padding-right:26px;" title="Sort by Job Title"><%=_ctx.appRes(uicomponent.getName() + ".label.jobTitle")%></div>
 	 	      	    	</a>
 	 	      	    </th>
-	 	      	    <th style="width: 120px; padding-left: 7px;"> Work Phone </th>
+	 	      	    <th style="width: 120px; padding-left: 7px;"> <%=_ctx.appRes(uicomponent.getName() + ".label.workPhone")%> </th>
 	 	      	    <% 
 	 	      	    	if(isDisplaySearchResult) {	
 	 	      	    %>
-	 	      	    	<th style="padding-left: 7px;"> Address Book </th>
+	 	      	    	<th style="padding-left: 7px;"> <%=_ctx.appRes(uicomponent.getName() + ".label.addressBook")%> </th>
 	 	      	    <% } %>
 	 	      	    	
 	  	 	      </tr>
@@ -414,7 +414,7 @@
 %>
 	<div class="UIVCards" id="UIVCards">
 	<div class="VCardsBar">
-		<div class="Subject">Vcards in eXo Platform</div>
+		<div class="Subject"><%=_ctx.appRes(uicomponent.getName() + ".label.vcard")%></div>
 		<div class="UIAddressPageList">
 						<div class="ContactIteratorContainer">
 	  					<div class="RightPageIteratorBlock">

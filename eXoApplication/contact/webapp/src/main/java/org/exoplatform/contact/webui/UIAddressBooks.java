@@ -157,18 +157,20 @@ public class UIAddressBooks extends UIComponent {
       UIAddressBooks uiAddressBook = event.getSource();
       String destAddress = event.getRequestContext().getRequestParameter(OBJECTID);
       String username = ContactUtils.getCurrentUser() ;
-      ContactGroup group = ContactUtils.getContactService().getSharedGroup(username, destAddress) ;
-      if (group.getEditPermission() == null || !Arrays.asList(group.getEditPermission()).contains(username)) {
-        UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.non-permission", null,
-          ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;          
-      } 
       String destType ;
       if (uiAddressBook.privateAddressBookMap_.containsKey(destAddress))
         destType = JCRDataStorage.PRIVATE ;
-      else destType = JCRDataStorage.SHARED ;     
+      else {
+        ContactGroup group = ContactUtils.getContactService().getSharedGroup(username, destAddress) ;
+        if (group.getEditPermission() == null || !Arrays.asList(group.getEditPermission()).contains(username)) {
+          UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.non-permission", null,
+            ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;          
+        }        
+        destType = JCRDataStorage.SHARED ;     
+      }
       String srcAddress = uiAddressBook.copyAddress ; 
       if (!ContactUtils.isEmpty(srcAddress)) {
         

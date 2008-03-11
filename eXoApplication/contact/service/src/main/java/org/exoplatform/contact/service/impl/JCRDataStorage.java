@@ -269,8 +269,8 @@ public class JCRDataStorage{
     }      
     if (qm != null) {
       Query query = qm.createQuery(filter.getStatement(), Query.XPATH);  
-      QueryResult result = query.execute(); 
-      return new ContactPageList(username, result.getNodes(), 10, filter.getStatement(), true, PRIVATE) ; 
+      QueryResult result = query.execute();
+      return new ContactPageList(username, result.getNodes(), 10, filter.getStatement(), true, type) ; 
     }
     return null ;
   }
@@ -626,20 +626,18 @@ public class JCRDataStorage{
     }
   }
 
-  public void removeUserShareContact(SessionProvider sProvider, String username, String contactId, List<String> removedUsers) throws Exception {
+  public void removeUserShareContact(SessionProvider sProvider, String username, String contactId, String removedUser) throws Exception {
     try {
       Node contactNode = getUserContactHome(sProvider, username).getNode(contactId);
       List<String> values = new ArrayList<String>(
           Arrays.asList(ValuesToStrings(contactNode.getProperty(SHARED_PROP).getValues())));
       List<String> newValues = new ArrayList<String>(values) ;
-      for(String userId : removedUsers) {
-        Node sharedContact = getSharedContact(userId) ;
-        for (String value : values) {
-          Node refNode = sharedContact.getSession().getNodeByUUID(value);
-          if(refNode.getPath().equals(sharedContact.getPath())) {
-            newValues.remove(value) ;
-          }
-        }   
+      Node sharedContact = getSharedContact(removedUser) ;
+      for (String value : values) {
+        Node refNode = sharedContact.getSession().getNodeByUUID(value);
+        if(refNode.getPath().equals(sharedContact.getPath())) {
+          newValues.remove(value) ;
+        }
       }
       contactNode.setProperty(SHARED_PROP, newValues.toArray(new String[] {}));
       contactNode.save() ;
@@ -649,18 +647,16 @@ public class JCRDataStorage{
     }
   }
   
-  public void removeUserShareAddressBook(SessionProvider sProvider, String username, String addressBookId, List<String> removedUsers) throws Exception {
+  public void removeUserShareAddressBook(SessionProvider sProvider, String username, String addressBookId, String removedUser) throws Exception {
     Node addressBookNode = getUserContactGroupHome(sProvider, username).getNode(addressBookId);
     List<String> values = new ArrayList<String>(
         Arrays.asList(ValuesToStrings(addressBookNode.getProperty(SHARED_PROP).getValues())));
     List<String> newValues = new ArrayList<String>(values) ;
-    for(String userId : removedUsers) {
-      Node sharedAddress = getSharedAddressBook(userId) ;
-      for (String value : values) {
-        Node refNode = sharedAddress.getSession().getNodeByUUID(value);
-        if(refNode.getPath().equals(sharedAddress.getPath())) {
-          newValues.remove(value) ;
-        }
+    Node sharedAddress = getSharedAddressBook(removedUser) ;
+    for (String value : values) {
+      Node refNode = sharedAddress.getSession().getNodeByUUID(value);
+      if(refNode.getPath().equals(sharedAddress.getPath())) {
+        newValues.remove(value) ;
       }
     }
     addressBookNode.setProperty(SHARED_PROP, newValues.toArray(new String[] {}));

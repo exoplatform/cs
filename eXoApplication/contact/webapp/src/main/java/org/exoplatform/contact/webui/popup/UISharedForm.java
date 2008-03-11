@@ -26,7 +26,6 @@ import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.UIContactPortlet;
-import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.organization.OrganizationService;
@@ -221,24 +220,27 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
           event.getRequestContext().addUIComponentToUpdateByAjax(uiAddEdit) ; 
           contactService.shareAddressBook(
               SessionProviderFactory.createSystemProvider(), username, contactGroup.getId(), receiverUser) ;
-        } else {
-          Contact contact = uiForm.contact_ ;  
-          String[] viewPer = contact.getViewPermission() ;
-          Map<String, String> viewMap = new LinkedHashMap<String, String>() ; 
-          if (viewPer != null)
-            for (String view : viewPer) viewMap.put(view, view) ; 
-          for (String user : receiverUser) viewMap.put(user, user) ;
-          contact.setViewPermission(viewMap.keySet().toArray(new String[] {})) ;
-          
-          UIAddEditPermission uiAddEdit = uiForm.getParent() ;
-          if(uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).isChecked()) {
-            String[] editPer = contact.getEditPermission() ;
-            Map<String, String> editMap = new LinkedHashMap<String, String>() ; 
-            if (editPer != null)
-              for (String edit : editPer) editMap.put(edit, edit) ; 
-            for (String user : receiverUser) editMap.put(user, user) ;
-            contact.setEditPermission(editMap.keySet().toArray(new String[] {})) ;
+        
+          // added
+          List<Contact> contacts = contactService.getContactPageListByGroup(
+              SessionProviderFactory.createSessionProvider(), username, uiForm.group_.getId()).getAll() ;
+          Map<String, String> viewMapContact = new LinkedHashMap<String, String>() ; 
+          for (String user : receiverUser) viewMapContact.put(user, user) ;
+          Map<String, String> editMapContact = new LinkedHashMap<String, String>() ; 
+          if(uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).isChecked())
+            for (String user : receiverUser) editMapContact.put(user, user) ;
+          for (Contact contact : contacts) {
+            contactService.saveContact(SessionProviderFactory.createSessionProvider()
+                , username, addPer(contact, viewMapContact, editMapContact), false);
           }
+        } else {
+          Map<String, String> viewMap = new LinkedHashMap<String, String>() ; 
+          for (String user : receiverUser) viewMap.put(user, user) ;
+          Map<String, String> editMap = new LinkedHashMap<String, String>() ; 
+          if(uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).isChecked())
+            for (String user : receiverUser) editMap.put(user, user) ;
+          Contact contact = addPer(uiForm.contact_, viewMap, editMap)  ;
+          UIAddEditPermission uiAddEdit = uiForm.getParent() ;
           contactService.saveContact(SessionProviderFactory.createSessionProvider(), username, contact, false) ;
           uiAddEdit.updateContactGrid(contact);
           event.getRequestContext().addUIComponentToUpdateByAjax(uiAddEdit) ; 
@@ -251,6 +253,19 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
+    }
+    private Contact addPer(Contact contact, Map<String, String> viewMap, Map<String, String> editMap) {
+      String[] viewPer = contact.getViewPermission() ;
+      if (viewPer != null)
+        for (String view : viewPer) viewMap.put(view, view) ;
+      contact.setViewPermission(viewMap.keySet().toArray(new String[] {})) ;
+      
+      String[] editPer = contact.getEditPermission() ;
+      if (editPer != null)
+        for (String edit : editPer) editMap.put(edit, edit) ; 
+      contact.setEditPermission(editMap.keySet().toArray(new String[] {})) ;
+      
+      return contact ;
     }
   }
   static  public class SelectPermissionActionListener extends EventListener<UISharedForm> {

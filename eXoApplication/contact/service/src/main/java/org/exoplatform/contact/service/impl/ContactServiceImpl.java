@@ -120,8 +120,8 @@ public class ContactServiceImpl implements ContactService {
     return storage_.shareContacts(sProvider, username, contactIds, groupIds) ;
   }*/
   
-  public void removeUserShareContact(SessionProvider sProvider, String username, String contactId, List<String> removedUsers) throws Exception {
-    storage_.removeUserShareContact(sProvider, username, contactId, removedUsers) ;
+  public void removeUserShareContact(SessionProvider sProvider, String username, String contactId, String removedUser) throws Exception {
+    storage_.removeUserShareContact(sProvider, username, contactId, removedUser) ;
   }
   
   public void shareContact(SessionProvider sProvider, String username, String[] contactIds, List<String> receiveUsers) throws Exception {
@@ -133,8 +133,8 @@ public class ContactServiceImpl implements ContactService {
   public void shareAddressBook(SessionProvider sProvider, String username, String addressBookId, List<String> receiverUsers) throws Exception {
   	storage_.shareAddressBook(sProvider, username, addressBookId, receiverUsers) ;
   }
-  public void removeUserShareAddressBook(SessionProvider sProvider, String username, String addressBookId, List<String> removedUsers) throws Exception {
-    storage_.removeUserShareAddressBook(sProvider, username, addressBookId, removedUsers) ;
+  public void removeUserShareAddressBook(SessionProvider sProvider, String username, String addressBookId, String removedUser) throws Exception {
+    storage_.removeUserShareAddressBook(sProvider, username, addressBookId, removedUser) ;
   }
   public List<SharedAddressBook> getSharedAddressBooks(SessionProvider sProvider, String username) throws Exception {
   	return storage_.getSharedAddressBooks(sProvider, username) ;
