@@ -257,7 +257,7 @@ public class UICalendars extends UIForm  {
     if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
       return true ;
     } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
-      listCal = calService.getSharedCalendars(SessionProviderFactory.createSessionProvider(), currentUser, true).getCalendars() ;
+      listCal = calService.getSharedCalendars(getSystemSession(), currentUser, true).getCalendars() ;
       for(Calendar cal : listCal) {
         if(cal.getId().equals(calendarId)) {
           calendar = cal ;
@@ -266,7 +266,7 @@ public class UICalendars extends UIForm  {
       }
       return CalendarUtils.canEdit(null, calendar.getEditPermission(), currentUser) ;
     } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
-      calendar = calService.getGroupCalendar(SessionProviderFactory.createSessionProvider(), calendarId) ;
+      calendar = calService.getGroupCalendar(getSystemSession(), calendarId) ;
       return CalendarUtils.canEdit(uiComponent.getApplicationComponent(OrganizationService.class), calendar.getEditPermission(), currentUser) ;
     }  
     return false ;

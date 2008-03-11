@@ -163,7 +163,6 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
     public void execute(Event<UIMessageFilter> event) throws Exception {
       UIMessageFilter uiMessageFilter = event.getSource() ;
       MessageFilter filter = uiMessageFilter.getSelectedFilter();
-      //    Verify
       UIApplication uiApp = uiMessageFilter.getAncestorOfType(UIApplication.class) ;
       if(filter == null) {
         uiApp.addMessage(new ApplicationMessage("UIMessageFilter.msg.select-no-filter", null, ApplicationMessage.INFO)) ;

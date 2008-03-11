@@ -119,6 +119,11 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   private Map<String, String> priorityMap_ = new HashMap<String, String>() ;
   abstract LinkedHashMap<String, CalendarEvent> getDataMap() ;
   protected DateFormatSymbols dfs_  ;
+  
+  private List<CalendarEvent> canEditPermission_ = new ArrayList<CalendarEvent>() ;
+  private StringBuffer calendarDeleted_ = new StringBuffer() ;
+  private boolean allDelete_ = true ;
+  
   public UICalendarView() throws Exception{
     initCategories() ;
     applySeting() ;
@@ -351,14 +356,26 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   }
   protected void removeEvents(List<CalendarEvent> events) throws Exception {
     CalendarService calService = getApplicationComponent(CalendarService.class) ;
-    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    String username = CalendarUtils.getCurrentUser() ;
+    OrganizationService orService = getApplicationComponent(OrganizationService.class) ;
     for (CalendarEvent ce : events) {
+      org.exoplatform.calendar.service.Calendar cal = null ;
       if(CalendarUtils.PUBLIC_TYPE.equals(ce.getCalType())){
+        cal = calService.getGroupCalendar(getSystemSession(), ce.getCalendarId());
+        if(cal.getEditPermission() != null && CalendarUtils.canEdit(orService, cal.getEditPermission(), username)) {
         calService.removePublicEvent(getSystemSession(), ce.getCalendarId(), ce.getId()) ;
+        } else {
+          allDelete_ = false ;
+        }
       } else if(CalendarUtils.PRIVATE_TYPE.equals(ce.getCalType())) {
         calService.removeUserEvent(getSession(), username, ce.getCalendarId(), ce.getId()) ;
       } else if(CalendarUtils.SHARED_TYPE.equals(ce.getCalType())){
-        calService.removeSharedEvent(getSystemSession(), username, ce.getCalendarId(), ce.getId()) ;
+        cal = calService.getSharedCalendars(getSystemSession(), username, true).getCalendarById(ce.getCalendarId());
+        if(cal.getEditPermission() != null && CalendarUtils.canEdit(null, cal.getEditPermission(), username)) {
+          calService.removeSharedEvent(getSystemSession(), username, ce.getCalendarId(), ce.getId()) ;
+        } else {
+          allDelete_ = false ;
+        }
       }
     }
   }
@@ -507,11 +524,14 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       }
     }
   }
+    
   static  public class DeleteEventActionListener extends EventListener<UICalendarView> {
     public void execute(Event<UICalendarView> event) throws Exception {
       UICalendarView uiCalendarView = event.getSource() ;
       System.out.println(" ===========> DeleteEventActionListener") ;
       UIApplication uiApp = uiCalendarView.getAncestorOfType(UIApplication.class) ;
+      //uiCalendarView.refresh() ;
+      uiCalendarView.allDelete_ = true ;
       if(uiCalendarView instanceof UIMonthView ) {
         List<CalendarEvent> list = ((UIMonthView)uiCalendarView).getSelectedEvents() ;
         if(list.isEmpty()) {
@@ -519,9 +539,13 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         } else {
           try {
-            uiCalendarView.removeEvents(((UIMonthView)uiCalendarView).getSelectedEvents()) ;
+            uiCalendarView.removeEvents(list) ;
             ((UIMonthView)uiCalendarView).refreshEvents() ;
-            uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.delete-event-successfully", null)) ;
+            if(uiCalendarView.allDelete_) {
+              uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.delete-event-successfully", null)) ;
+            } else {
+              uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.can-not-delete-all-event",null)) ;
+            }
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           } catch (Exception e) {
             e.printStackTrace() ;
@@ -532,19 +556,25 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         }
       } else if(uiCalendarView instanceof UIListView) {
         UIListView uiListView = (UIListView)uiCalendarView ;
-        if(uiListView.getSelectedEvents() .isEmpty()) {
+       List<CalendarEvent> list = ((UIListView)uiCalendarView).getSelectedEvents();
+        if(uiListView.getSelectedEvents().isEmpty()) {
           uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.check-box-required", null)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
-        }  
+        }
         try {
-
-          uiCalendarView.removeEvents(((UIListView)uiCalendarView).getSelectedEvents()) ;
+         uiCalendarView.removeEvents(list) ;
+          //uiCalendarView.removeEvents(uiCalendarView.canEditPermission_) ;
           //uiListView.getSelectedCategory()
           uiListView.refresh() ;
           UIListContainer  uiListContainer = uiCalendarView.getParent() ;
           uiListContainer.refresh() ;
-          uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.delete-event-successfully", null)) ;
+          if(uiCalendarView.allDelete_) {
+            //System.out.println("allDelete: " + uiCalendarView.allDelete_)  ;
+            uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.delete-event-successfully", null)) ;
+          } else {
+            uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.can-not-delete-all-event",null)) ;
+          }
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
 
         } catch (Exception e) {
