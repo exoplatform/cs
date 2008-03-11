@@ -139,4 +139,9 @@ public class MailUtils {
     else 
       return (new SimpleDateFormat("MMM dd, yyyy")).format(date);
   }
+  
+  public static String encodeHTML(String htmlContent) throws Exception {
+    return htmlContent.replaceAll("&", "&amp;").replaceAll("\"", "&quot;")
+    .replaceAll("<", "&lt;").replaceAll(">", "&gt;") ;
+  }
 }

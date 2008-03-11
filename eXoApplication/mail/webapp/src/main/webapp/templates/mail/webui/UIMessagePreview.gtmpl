@@ -280,9 +280,8 @@
                 %>
                
   							<textarea id="$textAreaId" class="MessageDetails" style="display:none">
-  								<%=msg.getMessageBody()%>
+  								<%=MailUtils.encodeHTML(msg.getMessageBody())%>
   							 </textarea>
-                
   							<%
                   if (msg.getAttachments().size() > 0) {
                 %>
