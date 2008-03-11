@@ -556,6 +556,7 @@
 .UIListView {
 	overflow: auto;
 	padding-left: 1px;
+	_padding-left: 0px;
 }
 
 .ListBar {
@@ -598,12 +599,13 @@
 	margin: 3px 6px 0px 3px;
 }
 
-.UIListView  table {
+.UIListView table {
 	width: 99.4%;
+	_width: 96.4%;
 	background-color: #ffffff;
 }
 
-.UIListView  td {
+.UIListView td {
 	border-top: none;
 }
 
@@ -613,24 +615,24 @@
 	border-right: 1px solid #c7c7c7;
 }
 
-.UIListView  .EventIcon {
+.UIListView .EventIcon {
 	width: 16px;
 	height: 16px;
 	margin: 4px;
 }
 
-.UIListView  .TaskIcon {
+.UIListView .TaskIcon {
 	width: 16px;
 	height: 16px;
 	margin: 4px;
 }
-.UIListView  .BothIcon {
+.UIListView .BothIcon {
 	width: 16px;
 	height: 16px;
 	margin: 4px;
 }
 
-.UIListView  .Null {
+.UIListView .Null {
 	color: red; 
 	border: 1px solid #c7c7c7; 
 	border-top: none; 

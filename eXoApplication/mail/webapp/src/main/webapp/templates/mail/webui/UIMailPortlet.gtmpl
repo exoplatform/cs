@@ -13,7 +13,8 @@
   rcontext.getJavascriptManager().addJavascript('eXo.mail.UIMailPortlet.checkLayout() ;') ;
   rcontext.getJavascriptManager().addJavascript("eXo.mail.UIMailPortlet.showContextMenu('" + uicomponent.id + "') ;") ;
 %>
-<div class="$uicomponent.id" id="$uicomponent.id">
+<div><div style="width: 920px;" ><span style="display: none;"></span></div></div>
+<div class="$uicomponent.id" id="$uicomponent.id" style="_width: expression(this.previousSibling.offsetWidth - 22 + 'px'); !border: 1px solid white;">
   <div class="ApplicationMinWidth">
   	<div class="UIMailPortlet" id="UIMailPortlet">
 <!-- Start Mail Banner -->
