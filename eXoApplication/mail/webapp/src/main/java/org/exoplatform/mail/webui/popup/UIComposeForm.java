@@ -449,6 +449,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           message.setFolders(new String[]{ Utils.createFolderId(accountId, Utils.FD_SENT, false) }) ;
         }
         if (!uiForm.fromDrafts()) {
+          message.setReplyTo(message.getMessageTo()) ;
           mailSvr.saveMessage(SessionsUtils.getSessionProvider(), usename, accountId, uiForm.parentPath_, message) ;  
         } else {
           Folder drafts = mailSvr.getFolder(SessionsUtils.getSessionProvider(), usename, accountId, Utils.createFolderId(accountId, Utils.FD_DRAFTS, false));
@@ -481,6 +482,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       MailService mailSvr = uiForm.getApplicationComponent(MailService.class) ;
       UIPopupAction uiChildPopup = uiForm.getAncestorOfType(UIPopupAction.class) ;
       Message message = uiForm.getNewMessage() ;   
+      message.setReplyTo(message.getMessageTo()) ;
       try {
         String draftFolderId = Utils.createFolderId(accountId, Utils.FD_DRAFTS, false) ;
         message.setFolders(new String[]{ draftFolderId }) ;
