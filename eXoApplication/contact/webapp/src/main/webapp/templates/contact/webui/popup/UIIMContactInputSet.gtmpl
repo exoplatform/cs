@@ -23,7 +23,7 @@
 		                <td class="FieldLabel"> $label </td>
 			              <td class="FieldComponent">
 			                <%uicomponent.renderUIComponent(field)%>
-			                <div id="<%=uicomponent.id%>_PopupMenu" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" style="cursor: pointer; display: inline">
+			                <div id="<%=uicomponent.id%>_PopupMenu" onclick="eXo.contact.UIContactPortlet.showImMenu(this, event);" style="cursor: pointer; display: inline">
                         <img class="ActionsAddIcon" src="/eXoResources/skin/DefaultSkin/background/Blank.gif"/>
                         <% /*Begin Popup Menu*/ %>
                         <span style="position: absolute;">
