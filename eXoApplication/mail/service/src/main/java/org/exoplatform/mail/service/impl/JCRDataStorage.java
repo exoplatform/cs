@@ -702,7 +702,12 @@ public class JCRDataStorage{
       try {
         filter.setApplyTag(filterNode.getProperty(Utils.EXO_APPLY_TAG).getString());
       } catch(Exception e) { }
-      //if (filterNode.hasProperty(Utils.EXO_KEEP_IN_INBOX)) filter.setKeepInInbox(filterNode.getProperty(Utils.EXO_KEEP_IN_INBOX).getBoolean());
+      try {
+        filter.setKeepInInbox(filterNode.getProperty(Utils.EXO_KEEP_IN_INBOX).getBoolean());
+      } catch(Exception e) { }
+      try {
+        filter.setApplyForAll(filterNode.getProperty(Utils.EXO_APPLY_FOR_ALL).getBoolean());
+      } catch(Exception e) { }
       filterList.add(filter);
     }
     return filterList ;
@@ -749,7 +754,12 @@ public class JCRDataStorage{
       try {
         filter.setApplyTag(filterNode.getProperty(Utils.EXO_APPLY_TAG).getString());
       } catch(Exception e) { }
-      //if (filterNode.hasProperty(Utils.EXO_KEEP_IN_INBOX)) filter.setKeepInInbox(filterNode.getProperty(Utils.EXO_KEEP_IN_INBOX).getBoolean());
+      try {
+        filter.setKeepInInbox(filterNode.getProperty(Utils.EXO_KEEP_IN_INBOX).getBoolean());
+      } catch(Exception e) { }
+      try {
+        filter.setApplyForAll(filterNode.getProperty(Utils.EXO_APPLY_FOR_ALL).getBoolean());
+      } catch(Exception e) { }
     }
     return filter ;
   }
@@ -775,7 +785,8 @@ public class JCRDataStorage{
     filterNode.setProperty(Utils.EXO_BODY_CONDITION, (long)filter.getBodyCondition());
     filterNode.setProperty(Utils.EXO_APPLY_FOLDER, filter.getApplyFolder());
     filterNode.setProperty(Utils.EXO_APPLY_TAG, filter.getApplyTag());
-    //filterNode.setProperty(Utils.EXO_KEEP_IN_INBOX, filter.keepInInbox());
+    filterNode.setProperty(Utils.EXO_KEEP_IN_INBOX, filter.keepInInbox());
+    filterNode.setProperty(Utils.EXO_APPLY_FOR_ALL, filter.applyForAll());
     home.getSession().save();
   }
   

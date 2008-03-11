@@ -143,6 +143,7 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
     setApplyFolder(filter.getApplyFolder());
     setApplyTag(filter.getApplyTag());
     //setKeepInInbox(filter.keepInInbox());
+    setApplyAll(filter.applyForAll()) ;
   }
   
   public String getFilterName() throws Exception {
@@ -272,6 +273,7 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
       String applyFolder = uiAddFilter.getApplyFolder();
       String applyTag = uiAddFilter.getApplyTag();
       //boolean keepInbox = uiAddFilter.getKeepInInbox();
+      boolean applyForAll = uiAddFilter.getApplyAll() ;
       // Verify
       UIApplication uiApp = uiAddFilter.getAncestorOfType(UIApplication.class) ;
       if (Utils.isEmptyField(filterName)) {
@@ -298,6 +300,7 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
       filter.setApplyFolder(applyFolder);
       filter.setApplyTag(applyTag);
       //filter.setKeepInInbox(keepInbox);
+      filter.setApplyForAll(applyForAll) ;
       try {
         mailSrv.saveFilter(SessionsUtils.getSessionProvider(), username, accountId, filter);
         if (uiAddFilter.getApplyAll()) 
