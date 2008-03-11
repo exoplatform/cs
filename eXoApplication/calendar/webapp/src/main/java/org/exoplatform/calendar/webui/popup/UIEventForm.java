@@ -200,26 +200,20 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         }
       }
       setParticipant(pars.toString()) ;
-      attenderTab.updateParticipants(pars.toString());
-      //eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CALENDAR).setEnable(true) ;
-      if(CalendarUtils.SHARED_TYPE.equals(calType_) || CalendarUtils.PUBLIC_TYPE.equals(calType_)) {
-
-        boolean isContains = false ;
-        CalendarService calService = CalendarUtils.getCalendarService();
-        List<EventCategory> listCategory = 
-          calService.getEventCategories(SessionProviderFactory.createSessionProvider(), CalendarUtils.getCurrentUser());
-        for(EventCategory eventCat : listCategory) {
-          isContains = eventCat.getName().toLowerCase().equals(eventCalendar.getEventCategoryId().toLowerCase()) ;
-          if(isContains) break ;
-        }
-        if(!isContains) {
-          SelectItemOption<String> item = new SelectItemOption<String>(eventCalendar.getEventCategoryId(), eventCalendar.getEventCategoryId()) ;
-          eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).getOptions().add(item) ;
-          newCategoryId_ = eventCalendar.getEventCategoryId() ;
-          eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).setValue(eventCalendar.getEventCategoryId());
-        }
-        //eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).getOptions().add(arg0)
+      boolean isContains = false ;
+      CalendarService calService = CalendarUtils.getCalendarService();
+      List<EventCategory> listCategory = 
+        calService.getEventCategories(SessionProviderFactory.createSessionProvider(), CalendarUtils.getCurrentUser());
+      for(EventCategory eventCat : listCategory) {
+        isContains = eventCat.getName().toLowerCase().equals(eventCalendar.getEventCategoryId().toLowerCase()) ;
+        if(isContains) break ;
       }
+      if(!isContains) {
+        SelectItemOption<String> item = new SelectItemOption<String>(eventCalendar.getEventCategoryId(), eventCalendar.getEventCategoryId()) ;
+        eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).getOptions().add(item) ;
+        newCategoryId_ = eventCalendar.getEventCategoryId() ;
+        eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).setValue(eventCalendar.getEventCategoryId());
+      }      
       attenderTab.calendar_.setTime(eventCalendar.getFromDateTime()) ;
     } else {
       UIMiniCalendar miniCalendar = getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
@@ -924,7 +918,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
             String toCal = uiForm.newCalendarId_.split(CalendarUtils.COLON)[1].trim() ;
             String fromType = uiForm.oldCalendarId_.split(CalendarUtils.COLON)[0].trim() ;
             String toType = uiForm.newCalendarId_.split(CalendarUtils.COLON)[0].trim() ;
-            if((uiForm.calType_.equals(CalendarUtils.SHARED_TYPE) || uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)) && uiForm.newCategoryId_ != null){
+            if(uiForm.newCategoryId_ != null) {
               EventCategory evc = new EventCategory() ;
               evc.setName(uiForm.newCategoryId_ ) ;
               calService.saveEventCategory(uiForm.getSession(), username, evc, null, true) ;
