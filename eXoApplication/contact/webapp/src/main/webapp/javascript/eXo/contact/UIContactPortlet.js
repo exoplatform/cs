@@ -412,6 +412,15 @@ UIContactPortlet.prototype.switchLayout = function(layout) {
   }
   this.addCheckedIcon(layout, showCheckedMenu);
 }
+UIContactPortlet.prototype.showImMenu = function(obj, event) {
+	var menuItems = eXo.core.DOMUtil.findDescendantsByClass(obj, "span", "MenuItem") ;
+	var len = menuItems.length ;
+	for(var i = 0 ; i < len ; i++) {
+		if (menuItems[i].style.display != "none") break ;
+	}
+	if (i == len) return ;
+	eXo.webui.UIPopupSelectCategory.show(obj, event) ;
+}
 
 /**
  * @author Lam Nguyen
