@@ -21,6 +21,7 @@
 .UIWindow .UIContactPortlet {
 	margin: 0px;
 	border: none;
+	min-width: 750px;
 }
 
 .UIContactPortlet {
@@ -93,3 +94,4 @@
 .UIMailPortlet .UIMessageCompose table {
 	background: none;
 }
+

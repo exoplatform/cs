@@ -16,6 +16,7 @@
 .UIWindow .UIMailPortlet {
 	margin: 0px;
 	border: none;
+	min-width: 880px;
 }
 
 .UIMailPortlet {
