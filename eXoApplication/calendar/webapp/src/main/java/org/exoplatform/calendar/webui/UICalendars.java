@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.Colors;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
@@ -49,6 +50,7 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.web.command.handler.GetApplicationHandler;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -123,7 +125,7 @@ public class UICalendars extends UIForm  {
       List<Calendar> calendars = group.getCalendars() ;
       if(calendars != null) {
         for(Calendar calendar : calendars) {
-          colorMap_.put(calendar.getId(), calendar.getCalendarColor()) ;
+          colorMap_.put(Calendar.TYPE_PRIVATE + CalendarUtils.COLON + calendar.getId(), calendar.getCalendarColor()) ;
           if(getUIFormCheckBoxInput(calendar.getId()) == null){
             addUIFormInput(new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false).setChecked(true)) ;
           } else {
@@ -146,7 +148,7 @@ public class UICalendars extends UIForm  {
       List<Calendar> calendars = group.getCalendars() ;
       for(Calendar calendar : calendars) {
         map.put(calendar.getId(), calendar.getId()) ;
-        colorMap_.put(calendar.getId(), calendar.getCalendarColor()) ;
+        colorMap_.put(Calendar.TYPE_PUBLIC + CalendarUtils.COLON + calendar.getId(), calendar.getCalendarColor()) ;
         if(getUIFormCheckBoxInput(calendar.getId()) == null){
           addUIFormInput(new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false).setChecked(true)) ;
         }
@@ -159,10 +161,17 @@ public class UICalendars extends UIForm  {
   protected GroupCalendarData getSharedCalendars() throws Exception{
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     GroupCalendarData groupCalendars = calendarService.getSharedCalendars(getSystemSession(), CalendarUtils.getCurrentUser(), false) ;
+    CalendarSetting setting = calendarService.getCalendarSetting(getSession(), CalendarUtils.getCurrentUser()) ;
+    Map<String, String> map = new HashMap<String, String>() ;
+    for(String key : setting.getSharedCalendarsColors()) {
+      map.put(key.split(":")[0], key.split(":")[1]) ;
+    }
     if(groupCalendars != null) {
       List<Calendar> calendars = groupCalendars.getCalendars() ;
       for(Calendar calendar : calendars) {
-        colorMap_.put(calendar.getId(), calendar.getCalendarColor()) ;
+        String color = map.get(calendar.getId()) ;
+        if(color == null) color = calendar.getCalendarColor() ;
+        colorMap_.put(Calendar.TYPE_SHARED + CalendarUtils.COLON + calendar.getId(), color) ;
         if(getUIFormCheckBoxInput(calendar.getId()) == null){
           addUIFormInput(new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false).setChecked(true)) ;
         }
@@ -175,7 +184,7 @@ public class UICalendars extends UIForm  {
     return colorMap_;
   }
   public String[] getColors() {
-    return Calendar.COLORS ;
+    return Colors.COLORNAME ;
   }
   static  public class AddCalendarActionListener extends EventListener<UICalendars> {
     public void execute(Event<UICalendars> event) throws Exception {
@@ -248,7 +257,7 @@ public class UICalendars extends UIForm  {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
     }
   }
-  
+
   private boolean canAddTaskAndEvent(UICalendars uiComponent, String calendarId, String calType) throws Exception {
     CalendarService calService = CalendarUtils.getCalendarService() ;
     Calendar calendar = null;
@@ -278,7 +287,7 @@ public class UICalendars extends UIForm  {
       String calendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       //String calendarName = event.getRequestContext().getRequestParameter(CALNAME) ;
       String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
-      
+
       if(!calType.equals(CalendarUtils.PRIVATE_TYPE)) {
         if(!uiComponent.canAddTaskAndEvent(uiComponent, calendarId, calType)) {
           UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
@@ -287,7 +296,7 @@ public class UICalendars extends UIForm  {
           return;
         }
       }
-      
+
       String clientTime = event.getRequestContext().getRequestParameter(CURRENTTIME) ;
       String timeZone = event.getRequestContext().getRequestParameter(TIMEZONE) ;
       String categoryId = event.getRequestContext().getRequestParameter("categoryId") ;
@@ -297,8 +306,6 @@ public class UICalendars extends UIForm  {
       UIQuickAddEvent uiQuickAddEvent = popupAction.activate(UIQuickAddEvent.class, 600) ;
       uiQuickAddEvent.setEvent(true) ;  
       uiQuickAddEvent.setId("UIQuickAddEvent") ;
-      List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-      options = uiQuickAddEvent.getCalendars() ;
       /*if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
         options = null ;
       } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
@@ -313,7 +320,7 @@ public class UICalendars extends UIForm  {
           }
         }
       }    */
-      uiQuickAddEvent.update(calType, options) ;
+      uiQuickAddEvent.update(calType, null) ;
       uiQuickAddEvent.setSelectedCalendar(calendarId) ;
       uiQuickAddEvent.init(uiCalendarPortlet.getCalendarSetting(), clientTime, null) ;
       if(categoryId != null && categoryId.trim().length() >0 && !categoryId.toLowerCase().equals("null")) {
@@ -335,7 +342,7 @@ public class UICalendars extends UIForm  {
       String timeZone = event.getRequestContext().getRequestParameter(TIMEZONE) ;
       String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
       String categoryId = event.getRequestContext().getRequestParameter("categoryId") ;
-      
+
       if(!calType.equals(CalendarUtils.PRIVATE_TYPE)) {
         if(!uiComponent.canAddTaskAndEvent(uiComponent, calendarId, calType)) {
           UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
@@ -344,7 +351,7 @@ public class UICalendars extends UIForm  {
           return;
         }
       }
-      
+
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
       popupAction.deActivate() ;
@@ -352,7 +359,6 @@ public class UICalendars extends UIForm  {
       uiQuickAddEvent.setEvent(false) ;  
       uiQuickAddEvent.setId("UIQuickAddTask") ;
       uiQuickAddEvent.init(uiCalendarPortlet.getCalendarSetting(), clientTime, null) ;
-      List<SelectItemOption<String>> options = uiQuickAddEvent.getCalendars() ;
       /*if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
         options = null ;
       } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
@@ -367,7 +373,7 @@ public class UICalendars extends UIForm  {
           }
         }
       }    */
-      uiQuickAddEvent.update(calType, options) ;
+      uiQuickAddEvent.update(calType, null) ;
       uiQuickAddEvent.setSelectedCalendar(calendarId) ;
       if(categoryId != null && categoryId.trim().length() >0 && !categoryId.toLowerCase().equals("null")) {
         uiQuickAddEvent.setSelectedCategory(categoryId) ;
@@ -408,14 +414,7 @@ public class UICalendars extends UIForm  {
       if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
         calService.removeUserCalendar(uiComponent.getSession(), username, calendarId) ;
       }else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
-        //if(CalendarUtils.canEdit(null, uiComponent.getSharedCalendars().getCalendarById(calendarId).getEditPermission(), username)) {
         calService.removeSharedCalendar(uiComponent.getSystemSession(), username, calendarId) ;
-        /*} else {
-          UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.have-no-delete-permission", null)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;
-        }*/
       }else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
         boolean canEdit = false ;
         OrganizationService oService = uiComponent.getApplicationComponent(OrganizationService.class) ;
@@ -441,10 +440,11 @@ public class UICalendars extends UIForm  {
       UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
       UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
       UICalendarWorkingContainer workingContainer = uiComponent.getAncestorOfType(UICalendarWorkingContainer.class) ;
+      CalendarSetting setting = calService.getCalendarSetting(uiComponent.getSession(), username) ;
       uiMiniCalendar.updateMiniCal() ;
       uiViewContainer.refresh() ;
-      uiPortlet.setCalendarSetting(null) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(workingContainer) ;
+      uiPortlet.setCalendarSetting(setting) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
     }
   }
 
@@ -565,7 +565,7 @@ public class UICalendars extends UIForm  {
           calendar.setCalendarColor(color) ;
           calService.saveUserCalendar(session, username, calendar, false) ;
         } else if(CalendarUtils.SHARED_TYPE.equals(calType)){
-          Iterator iter = calService.getSharedCalendars(session, username, true).getCalendars().iterator() ;
+          Iterator iter = calService.getSharedCalendars(systemSession, username, true).getCalendars().iterator() ;
           while (iter.hasNext()) {
             Calendar cal = ((Calendar)iter.next()) ;
             if(cal.getId().equals(calendarId)) {
@@ -575,26 +575,25 @@ public class UICalendars extends UIForm  {
           }
           calendar.setCalendarColor(color) ;
           calService.saveSharedCalendar(systemSession, username, calendar) ;
+          CalendarSetting setting = calService.getCalendarSetting(session, username) ;
+          uiComponent.getAncestorOfType(UICalendarPortlet.class).setCalendarSetting(setting) ;
           //calService.save UserCalendar(SessionsUtils.getSessionProvider(), username, calendar, false) ;
         } else if(CalendarUtils.PUBLIC_TYPE.equals(calType)){
           calendar = calService.getGroupCalendar(systemSession, calendarId) ;
-          
-          List<String> listEditPermission = Arrays.asList(calendar.getEditPermission()) ;
-          if(!listEditPermission.contains(CalendarUtils.getCurrentUser())) {
+          if(!CalendarUtils.canEdit(uiComponent.getApplicationComponent(OrganizationService.class), calendar.getEditPermission(), username)){
             UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
-            uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null, 1)) ;
+            uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null, ApplicationMessage.WARNING)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return ;
           }
-          
           calendar.setCalendarColor(color) ;
           calService.savePublicCalendar(systemSession, calendar, false, username) ;
         }
       } catch (Exception e) {
         e.printStackTrace() ;
       }
-      uiComponent.colorMap_.put(calendarId, color) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getAncestorOfType(UICalendarWorkingContainer.class)) ;
+      //uiComponent.colorMap_.put(calendarId, color) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getAncestorOfType(UICalendarPortlet.class)) ;
       //event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent) ;
     }
   }

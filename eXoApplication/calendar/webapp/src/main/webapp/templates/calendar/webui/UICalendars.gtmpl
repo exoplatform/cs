@@ -146,12 +146,13 @@
 						for(calendar in calendarList) {
 						calId = calendar.getId() ;
 						if(uicomponent.getChildById(calId) != null) {
+						color = uicomponent.getColorMap().get("1"+":"+calId) ;
 				%>
   					<div class="CalendarItem">
-  						<div class="$calendar.calendarColor">
+  						<div class="$color">
   							<div class="CheckBox"><%uiform.renderField(calendar.getId())%></div>
   							<div class="CalendarIcon"><a><%=calendar.getName()%></a></div>
-  							<div class="DownArrow1Icon" calColor="$calendar.calendarColor" id="$calId" calType="1" title="<%=uiform.getLabel("calendarActions")%>" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
+  							<div class="DownArrow1Icon" calColor="$color" id="$calId" calType="1" title="<%=uiform.getLabel("calendarActions")%>" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
   							<div style="clear:both;"><span></span></div>
   						</div>
   					</div>

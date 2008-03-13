@@ -26,6 +26,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -57,8 +58,6 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.xml.PortalContainerInfo;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
-
-import sun.security.provider.SystemSigner;
 
 import com.sun.syndication.feed.synd.SyndContent;
 import com.sun.syndication.feed.synd.SyndContentImpl;
@@ -475,6 +474,7 @@ public class JCRDataStorage{
         if(calNode.hasProperty("exo:categoryId")) calendar.setCategoryId(calNode.getProperty("exo:categoryId").getString()) ;
         if(calNode.hasProperty("exo:locale")) calendar.setLocale(calNode.getProperty("exo:locale").getString()) ;
         if(calNode.hasProperty("exo:timeZone")) calendar.setTimeZone(calNode.getProperty("exo:timeZone").getString()) ;
+        if(calNode.hasProperty("exo:sharedColor")) calendar.setCalendarColor(calNode.getProperty("exo:sharedColor").getString()) ;
         if(calNode.hasProperty("exo:calendarColor")) calendar.setCalendarColor(calNode.getProperty("exo:calendarColor").getString()) ;
         if(!calendar.isPublic()) {
           if(calNode.hasProperty("exo:groups")){
@@ -1589,19 +1589,36 @@ public class JCRDataStorage{
   public void shareCalendar(SessionProvider sProvider, String username, String calendarId, List<String> receiverUsers) throws Exception {
     Node sharedCalendarHome = getSharedCalendarHome(sProvider) ;
     Node calendarNode = getUserCalendarHome(sProvider, username).getNode(calendarId) ;
+    // CalendarSetting usCalSetting = getCalendarSetting(sProvider, username) ;
+    //List<String> calColors = Arrays.asList(usCalSetting.getSharedCalendarsColors()) ;
+
     Value[] values = {};
     if (calendarNode.isNodeType(SHARED_MIXIN)) {     
       values = calendarNode.getProperty(SHARED_PROP).getValues();
     } else {
       calendarNode.addMixin(SHARED_MIXIN);     
     }
+
     SessionProvider spd = SessionProvider.createSystemProvider() ;
     Session systemSession = sharedCalendarHome.getSession() ;
     Node userNode ;
     List<Value> valueList = new ArrayList<Value>() ;
     for(String user : receiverUsers) {
       CalendarSetting calSetting = getCalendarSetting(spd, user) ;
+
       if(calSetting == null) calSetting = new CalendarSetting() ;
+      Map<String, String> map = new HashMap<String, String> () ;
+      for(String key : calSetting.getSharedCalendarsColors()) {
+        map.put(key.split(":")[0], key.split(":")[1]) ;
+      }
+      if(map.get(calendarNode.getProperty("exo:id").getString()) == null)
+      map.put(calendarNode.getProperty("exo:id").getString(), calendarNode.getProperty("exo:calendarColor").getString()) ;
+      List<String> calColors = new ArrayList<String>() ;
+      for(String key : map.keySet()) {
+        calColors.add(key + ":" +map.get(key)) ;
+      }
+      //saveCalendarSetting(sProvider, username, calSetting) ;
+      calSetting.setSharedCalendarsColors(calColors.toArray(new String[calColors.size()])) ;
       List<String> sharedCaeldnars = new ArrayList<String>() ;
       if(calSetting.getDefaultSharedCalendars() != null) {
         sharedCaeldnars.addAll(Arrays.asList(calSetting.getDefaultSharedCalendars())) ;
@@ -1690,7 +1707,21 @@ public class JCRDataStorage{
           calendarNode.setProperty("exo:groups", calendar.getGroups()) ;
           calendarNode.setProperty("exo:locale", calendar.getLocale()) ;
           calendarNode.setProperty("exo:timeZone", calendar.getTimeZone()) ;
-          calendarNode.setProperty("exo:calendarColor", calendar.getCalendarColor()) ;
+          //calendarNode.setProperty("exo:calendarColor", calendar.getCalendarColor()) ;
+          //calendarNode.setProperty("exo:sharedColor", calendar.getCalendarColor()) ;
+          CalendarSetting usCalSetting = getCalendarSetting(sProvider, username) ;
+          Map<String, String> map = new HashMap<String, String> () ;
+          for(String key : usCalSetting.getSharedCalendarsColors()) {
+            map.put(key.split(":")[0], key.split(":")[1]) ;
+          }
+          map.put(calendar.getId(), calendar.getCalendarColor()) ;
+          List<String> calColors = new ArrayList<String>() ;
+          for(String key : map.keySet()) {
+            calColors.add(key + ":" +map.get(key)) ;
+          }
+          calColors.add(calendar.getId()+":"+calendar.getCalendarColor());
+          usCalSetting.setSharedCalendarsColors(calColors.toArray(new String[calColors.size()])) ;
+          saveCalendarSetting(sProvider, username, usCalSetting) ;
           calendarNode.save() ;
           break ;
         }
@@ -1754,21 +1785,33 @@ public class JCRDataStorage{
       String uuid = userNode.getProperty("jcr:uuid").getString() ;
       PropertyIterator iter = userNode.getReferences() ;
       Node calendar ;
+      CalendarSetting calSetting = getCalendarSetting(sProvider, username) ;
+      Map<String, String> map = new HashMap<String, String>() ;
+      for(String key : calSetting.getSharedCalendarsColors()) {
+        map.put(key.split(":")[0], key.split(":")[1]) ;
+      }
       List<Value> newValues = new ArrayList<Value>() ;
       while(iter.hasNext()) {
         calendar = iter.nextProperty().getParent() ;
         if(calendar.getProperty("exo:id").getString().equals(calendarId)) {
+          map.remove(calendarId) ;
           Value[] values = calendar.getProperty(SHARED_PROP).getValues() ;
           for(Value value : values){
             if(!value.getString().equals(uuid)) {
               newValues.add(value) ;
             }
           }
+          List<String> calColors = new ArrayList<String>() ;
+          for(String key : map.keySet()) {
+            calColors.add(key + ":" +map.get(key)) ;
+          }
+          calSetting.setSharedCalendarsColors(calColors.toArray(new String[calColors.size()])) ;
+          saveCalendarSetting(sProvider, username, calSetting) ;
           calendar.setProperty(SHARED_PROP, newValues.toArray(new Value[newValues.size()])) ;
           calendar.save() ;
           break ;
         }
-      }      
+      }
     }
   }
 

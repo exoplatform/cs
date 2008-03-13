@@ -188,7 +188,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   }
 
   public List<SelectItemOption<String>> getCalendars() throws Exception {
-    return CalendarUtils.getCalendars() ;
+    return CalendarUtils.getCalendarOption() ;
   }
   
   public String getLabel(String id) {

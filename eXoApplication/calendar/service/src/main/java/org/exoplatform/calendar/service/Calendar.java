@@ -78,6 +78,7 @@ public class Calendar {
   private String name ;
   private String calendarPath ;
   private String calendarColor = POWDERBLUE ;
+  private String calendarSharedColor = null ;
   private String description ;
   private String timeZone ;
   private String locale ;

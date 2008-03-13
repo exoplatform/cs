@@ -129,7 +129,7 @@
 									}  		
 								  long 	startTime = event.getFromDateTime().getTime() ;  
 								  long	finishTime = event.getToDateTime().getTime() ;  
-									color = uicomponent.getColors().get(event.getCalendarId()) ;
+									color = uicomponent.getColors().get(event.calType +CalendarUtils.COLON+ event.getCalendarId()) ;
 									title = tf.format(event.getFromDateTime()) + "->" + tf.format(event.getToDateTime())+ ":&#013; " + event.summary ;
 									actionLink =  uicomponent.event("SaveEvent",event.getId()+"&calendarId="+event.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
                 %>
@@ -178,7 +178,7 @@
 					  beginTime = cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) ;
 					  cal.setTime(event.getToDateTime()) ;
 					  endTime = cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) ;
-						color = uicomponent.getColors().get(event.getCalendarId()) ;
+						color = uicomponent.getColors().get(event.calType +CalendarUtils.COLON+ event.getCalendarId()) ;
 						actionLink =  uicomponent.event("UpdateEvent",event.getId()+"&calendarId="+event.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
         %>
         <div class="EventContainerBorder WeekViewEventBoxes $color" eventindex="$dayOfWeek"

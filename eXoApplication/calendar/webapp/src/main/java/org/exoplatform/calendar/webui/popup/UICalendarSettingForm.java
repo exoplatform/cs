@@ -79,6 +79,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
 
 
   private Map<String, String> names_ = new HashMap<String, String>() ;
+  public String[] sharedCalendarColors_  = null ;
   public UICalendarSettingForm() throws Exception{
     super("UICalendarSettingForm") ;
     UICalendarSettingTab setting = new UICalendarSettingTab(SETTING_CALENDAR_TAB) ;//.setRendered(true) ;
@@ -95,6 +96,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     names_.clear() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     if(calendarSetting != null) {
+      sharedCalendarColors_ = calendarSetting.getSharedCalendarsColors() ;
       UICalendarSettingTab settingTab = getChildById(SETTING_CALENDAR_TAB) ;
       settingTab.setViewType(calendarSetting.getViewType()) ;
       settingTab.setTimeInterval(String.valueOf(calendarSetting.getTimeInterval())) ;
@@ -227,6 +229,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       UICalendarSettingForm uiForm = event.getSource() ;      
       CalendarSetting calendarSetting = new CalendarSetting() ;
       UICalendarSettingTab settingTab = uiForm.getChildById(UICalendarSettingForm.SETTING_CALENDAR_TAB) ;
+      calendarSetting.setSharedCalendarsColors(uiForm.sharedCalendarColors_) ;
       calendarSetting.setViewType(settingTab.getViewType()) ;
       calendarSetting.setTimeInterval(Long.parseLong(settingTab.getTimeInterval())) ;
       calendarSetting.setWeekStartOn(settingTab.getWeekStartOn()) ;
