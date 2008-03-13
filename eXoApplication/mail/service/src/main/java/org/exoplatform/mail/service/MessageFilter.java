@@ -44,7 +44,6 @@ public class MessageFilter {
   private String[] folders_ ;
   private String[] tags_ ;
   private String viewQuery_ ;
-  private String searchQuery_ ;
   private String accountPath_ ;
   private String orderBy_ ;
   private boolean isAscending_ ;
@@ -53,6 +52,7 @@ public class MessageFilter {
   private boolean hasAttach_ ;
   private boolean hasStar_ ;
   private long priority_ ;
+  private String text_ ;
   
   private String applyFolder_ ;
   private String applyTag_ ;
@@ -114,9 +114,6 @@ public class MessageFilter {
   public int getBodyCondition() { return bodyCondition_ ; }
   public void setBodyCondition(int i) { bodyCondition_ = i; } 
   
-  public String getSearchQuery() { return searchQuery_ ; }
-  public void setSearchQuery(String query) { this.searchQuery_ = query ; }
-  
   public String getViewQuery() { return viewQuery_ ; }
   public void setViewQuery(String query) { this.viewQuery_ = query ; }
   
@@ -156,10 +153,19 @@ public class MessageFilter {
   public Boolean applyForAll() { return applyForAll_ ; }
   public void setApplyForAll(boolean b) { this.applyForAll_ = b ; }
   
+  public String getText() { return text_ ; }
+  public void setText(String text) { this.text_ = text ; }
+  
   public String getStatement() throws Exception{
     StringBuffer queryString = new StringBuffer("/jcr:root" + accountPath_ + "//element(*,exo:message)");
     boolean hasConjuntion = false ;
     StringBuffer stringBuffer = new StringBuffer("[") ;
+    if(text_ != null && text_.trim().length() > 0) {
+      text_ = Utils.encodeJCRTextSearch(text_) ;
+      stringBuffer.append("jcr:contains(., '").append(text_).append("')") ;
+      hasConjuntion = true ;
+    }
+    
     if(folders_ != null && folders_.length > 0) {
       stringBuffer.append("(") ;    
       for(int i = 0; i < folders_.length; i ++) {
@@ -237,11 +243,7 @@ public class MessageFilter {
     
     //jcr:contains(., 'JSR 170')
     if(subject_ != null && subject_.trim().length() > 0) {
-      subject_ = subject_.replace("&", "&amp;");
-      subject_ = subject_.replace("<", "&lt;");
-      subject_ = subject_.replace(">", "&gt;");
-      subject_ = subject_.replace("'", "&apos;");
-      subject_ = subject_.replace("\"", "&quot;");
+      subject_ = Utils.encodeJCRTextSearch(subject_) ;
       if(hasConjuntion) stringBuffer.append(" and (") ;
       else stringBuffer.append("(") ;
       switch (getSubjectCondition()) {
@@ -269,11 +271,7 @@ public class MessageFilter {
     }
       
     if (body_ != null && body_.trim().length() > 0) {
-      body_ = body_.replace("&", "&amp;");
-      body_ = body_.replace("<", "&lt;");
-      body_ = body_.replace(">", "&gt;");
-      body_ = body_.replace("'", "&apos;");
-      body_ = body_.replace("\"", "&quot;");
+      body_ = Utils.encodeJCRTextSearch(body_) ;
       if(hasConjuntion) stringBuffer.append(" and (") ;
       else stringBuffer.append("(") ;
       switch (getBodyCondition()) {
@@ -324,14 +322,6 @@ public class MessageFilter {
       if(hasConjuntion) stringBuffer.append(" and (") ;
       else stringBuffer.append("(") ;
       stringBuffer.append(" @exo:star = 'true'") ;
-      stringBuffer.append(")") ;
-      hasConjuntion = true ;
-    }
-    
-    if(searchQuery_ != null && searchQuery_.trim().length() > 0) {
-      if(hasConjuntion) stringBuffer.append(" and (") ;
-      else stringBuffer.append("(") ;
-      stringBuffer.append(searchQuery_) ;
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }

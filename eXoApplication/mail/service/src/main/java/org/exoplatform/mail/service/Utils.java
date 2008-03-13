@@ -451,4 +451,9 @@ public class Utils {
       e.printStackTrace() ;
     }
   }
+  
+  public static String encodeJCRTextSearch(String str) {
+    return str.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").
+        replace("'", "&apos;").replace("\"", "&quot;") ;
+  }
 }
