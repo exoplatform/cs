@@ -345,6 +345,7 @@ public class CalendarUtils {
   }
 
   public static boolean hasEditPermission(String[] savePerms, String[] checkPerms) {
+    if(savePerms != null)
     for(String sp : savePerms) {
       for (String cp : checkPerms) {
         if( sp.equals(cp)) {return true ;}      

@@ -404,16 +404,18 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
         }
         calendar.setGroups(selected.toArray(new String[]{})) ;
         String editPermission = uiForm.getUIStringInput(EDIT_PERMISSION).getValue() ;
+        //if(!CalendarUtils.isEmpty(editPermission)) {
+        List<String> listPermission = new ArrayList<String>() ;
+        listPermission.add(CalendarUtils.getCurrentUser()) ;
         if(!CalendarUtils.isEmpty(editPermission)) {
-          List<String> listPermission = new ArrayList<String>() ;
-          listPermission.add(CalendarUtils.getCurrentUser()) ;
           for(String permission : editPermission.split(CalendarUtils.COMMA)) {
             if(permission != null && permission.trim().length()>0 && !permission.trim().equals(CalendarUtils.getCurrentUser())) {
               listPermission.add(permission.trim()) ;
             }
           }
-          calendar.setEditPermission(listPermission.toArray(new String[]{})) ;
         }
+        calendar.setEditPermission(listPermission.toArray(new String[]{})) ;
+        //}
         calendarService.savePublicCalendar(sProvider, calendar, uiForm.isAddNew_, username) ;
       }else {
         if(CalendarUtils.isEmpty(uiForm.getUIFormSelectBox(CATEGORY).getValue())) {
@@ -421,11 +423,11 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
         } 
-       /* calendar.setViewPermission(new String[]{username}) ;
+        /* calendar.setViewPermission(new String[]{username}) ;
         calendar.setEditPermission(new String[]{username}) ;*/
         calendarService.saveUserCalendar(sProvider, username, calendar, uiForm.isAddNew_) ;    
       }
-      
+
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       calendarPortlet.setCalendarSetting(null) ;
       calendarPortlet.cancelAction() ;
