@@ -327,11 +327,15 @@ UIContactPortlet.prototype.switchLayout = function(layout) {
       if(contactLayout3.style.display != "block") {
         contactLayout3.style.display = "block";             
       }
-      if(contactLayout4.style.display != "block") {
-        contactLayout4.style.display = "block";
+      if(contactLayout4) {
+        if(contactLayout4.style.display != "block") {
+          contactLayout4.style.display = "block";
+        }
       }
-      if(contactLayout5.style.display != "block") {
-        contactLayout5.style.display = "block";
+      if(contactLayout5)  {
+        if(contactLayout5.style.display != "block") {
+          contactLayout5.style.display = "block";
+        }
       }
       panelWorking.style.marginLeft = "225px";   
       Browser.setCookie("contactLayout1", "1", 30);
@@ -394,7 +398,7 @@ UIContactPortlet.prototype.switchLayout = function(layout) {
       break;
     case 4 : 
       if( objRoot != null) {
-        if(contactLayout4){
+        if(contactLayout4 && contactLayout5){
           if(contactLayout4.style.display == "none" && contactLayout5.style.display == "none") {
             contactLayout4.style.display = "block";
             contactLayout5.style.display = "block";
