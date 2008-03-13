@@ -77,6 +77,12 @@
   		<propertyDefinition name="exo:serverProperties" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
   			<valueConstraints/>
   		</propertyDefinition> 		
+  		<propertyDefinition name="exo:popServerProperties" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+  			<valueConstraints/>
+  		</propertyDefinition> 
+  		<propertyDefinition name="exo:imapServerProperties" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+  			<valueConstraints/>
+  		</propertyDefinition> 
   	</propertyDefinitions>
   	<childNodeDefinitions>
       <childNodeDefinition name="*" defaultPrimaryType="nt:unstructured" autoCreated="false" mandatory="false"

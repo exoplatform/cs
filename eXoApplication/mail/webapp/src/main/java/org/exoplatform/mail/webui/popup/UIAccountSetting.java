@@ -84,7 +84,14 @@ public class UIAccountSetting extends UIFormTabPane {
   public static final String FIELD_INCOMING_FOLDER = "messageComeInFolder";
   public static final String FIELD_IS_INCOMING_SSL = "isSSL";
   public static final String FIELD_CHECKMAIL_AUTO = "checkMailAutomatically";
+  public static final String FIELD_LEAVE_ON_SERVER = "leaveMailOnServer";
+  public static final String FIELD_SKIP_OVER_SIZE = "skipMessageOverMaxSize";
+  public static final String FIELD_MARK_AS_DELETED = "markItAsDeleted";
   private String accountId_ = null;
+  UIFormCheckBoxInput<Boolean> leaveOnServer_ ;
+  UIFormStringInput skipOverSize_;
+  UIFormCheckBoxInput<Boolean> markAsDelete_;
+  
   
   public UIAccountSetting() throws Exception {
     super("UIAccountSetting");
@@ -119,7 +126,12 @@ public class UIAccountSetting extends UIFormTabPane {
     
     serverInputSet.addUIFormInput(new UIFormStringInput(FIELD_INCOMING_FOLDER, null, null));
     serverInputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_CHECKMAIL_AUTO, null, null));
-    addUIFormInput(serverInputSet); 
+    
+    leaveOnServer_ = new UIFormCheckBoxInput<Boolean>(FIELD_LEAVE_ON_SERVER, null, null) ;
+    skipOverSize_ = new UIFormStringInput(FIELD_SKIP_OVER_SIZE, null, null);
+    markAsDelete_ = new UIFormCheckBoxInput<Boolean>(FIELD_MARK_AS_DELETED, null, null);
+    
+    addUIFormInput(serverInputSet);
   }
   
   private List<SelectItemOption<String>> getServerTypeValues(){
@@ -212,33 +224,64 @@ public class UIAccountSetting extends UIFormTabPane {
     return uiInput.getUIFormCheckBoxInput(FIELD_CHECKMAIL_AUTO).isChecked();
   }
   
+  public boolean getFieldLeaveOnServer() {
+    UIFormInputWithActions uiInput = getChildById(TAB_SERVER_SETTINGS);
+    return uiInput.getUIFormCheckBoxInput(FIELD_LEAVE_ON_SERVER).isChecked();
+  }
+  
+  public String getFieldSkipOverSize() {
+    UIFormInputWithActions uiInput = getChildById(TAB_SERVER_SETTINGS);
+    return uiInput.getUIStringInput(FIELD_SKIP_OVER_SIZE).getValue();
+  }
+  
+  public boolean getFieldMaxAsDeleted() {
+    UIFormInputWithActions uiInput = getChildById(TAB_SERVER_SETTINGS);
+    return uiInput.getUIFormCheckBoxInput(FIELD_MARK_AS_DELETED).isChecked();
+  }
+  
   public void fillField() throws Exception {
-    MailService mailSrv = getApplicationComponent(MailService.class);
-    String username = Util.getPortalRequestContext().getRemoteUser();
+    MailService mailSrv = getApplicationComponent(MailService.class) ;
+    String username = Util.getPortalRequestContext().getRemoteUser() ;
     Account account = mailSrv.getAccountById(SessionsUtils.getSessionProvider(), username, getSelectedAccountId());
-    UIFormInputWithActions uiAccountInput = getChildById(TAB_ACCOUNT);
-    uiAccountInput.getUIStringInput(FIELD_ACCOUNT_NAME).setValue(account.getLabel());
-    uiAccountInput.getUIStringInput(FIELD_ACCOUNT_DESCRIPTION).setValue(account.getDescription());
+    UIFormInputWithActions uiAccountInput = getChildById(TAB_ACCOUNT) ;
+    uiAccountInput.getUIStringInput(FIELD_ACCOUNT_NAME).setValue(account.getLabel()) ;
+    uiAccountInput.getUIStringInput(FIELD_ACCOUNT_DESCRIPTION).setValue(account.getDescription()) ;
     
-    UIFormInputWithActions uiIdentityInput = getChildById(TAB_IDENTITY_SETTINGS);
-    uiIdentityInput.getUIStringInput(FIELD_DISPLAY_NAME).setValue(account.getUserDisplayName());
-    uiIdentityInput.getUIStringInput(FIELD_EMAIL_ADDRESS).setValue(account.getEmailAddress());
-    uiIdentityInput.getUIStringInput(FIELD_REPLYTO_ADDRESS).setValue(account.getEmailReplyAddress());
-    uiIdentityInput.getUIStringInput(FIELD_MAIL_SIGNATURE).setValue(account.getSignature());
+    UIFormInputWithActions uiIdentityInput = getChildById(TAB_IDENTITY_SETTINGS) ;
+    uiIdentityInput.getUIStringInput(FIELD_DISPLAY_NAME).setValue(account.getUserDisplayName()) ;
+    uiIdentityInput.getUIStringInput(FIELD_EMAIL_ADDRESS).setValue(account.getEmailAddress()) ;
+    uiIdentityInput.getUIStringInput(FIELD_REPLYTO_ADDRESS).setValue(account.getEmailReplyAddress()) ;
+    uiIdentityInput.getUIStringInput(FIELD_MAIL_SIGNATURE).setValue(account.getSignature()) ;
     
-    UIFormInputWithActions uiServerInput = getChildById(TAB_SERVER_SETTINGS);
-    uiServerInput.getUIStringInput(FIELD_INCOMING_SERVER).setValue(account.getIncomingHost());
-    uiServerInput.getUIStringInput(FIELD_INCOMING_PORT).setValue(account.getIncomingPort());
-    uiServerInput.getUIStringInput(FIELD_INCOMING_ACCOUNT).setValue(account.getIncomingUser());
-    uiServerInput.getUIStringInput(FIELD_INCOMING_PASSWORD).setValue(account.getIncomingPassword());
+    UIFormInputWithActions uiServerInput = getChildById(TAB_SERVER_SETTINGS) ;
+    uiServerInput.getUIStringInput(FIELD_INCOMING_SERVER).setValue(account.getIncomingHost()) ;
+    uiServerInput.getUIStringInput(FIELD_INCOMING_PORT).setValue(account.getIncomingPort()) ;
+    uiServerInput.getUIStringInput(FIELD_INCOMING_ACCOUNT).setValue(account.getIncomingUser()) ;
+    uiServerInput.getUIStringInput(FIELD_INCOMING_PASSWORD).setValue(account.getIncomingPassword()) ;
     
-    uiServerInput.getUIStringInput(FIELD_OUTGOING_SERVER).setValue(account.getOutgoingHost());
-    uiServerInput.getUIStringInput(FIELD_OUTGOING_PORT).setValue(account.getOutgoingPort());
+    uiServerInput.getUIStringInput(FIELD_OUTGOING_SERVER).setValue(account.getOutgoingHost()) ;
+    uiServerInput.getUIStringInput(FIELD_OUTGOING_PORT).setValue(account.getOutgoingPort()) ;
     
-    uiServerInput.getUIStringInput(FIELD_INCOMING_FOLDER).setValue(account.getIncomingFolder());
-    uiServerInput.getUIFormSelectBox(FIELD_SERVER_TYPE).setValue(account.getProtocol());
-    uiServerInput.getUIFormCheckBoxInput(FIELD_IS_INCOMING_SSL).setChecked(account.isIncomingSsl());
-    uiServerInput.getUIFormCheckBoxInput(FIELD_CHECKMAIL_AUTO).setChecked(account.checkedAuto());
+    uiServerInput.getUIStringInput(FIELD_INCOMING_FOLDER).setValue(account.getIncomingFolder()) ;
+    uiServerInput.getUIFormSelectBox(FIELD_SERVER_TYPE).setValue(account.getProtocol()) ;
+    uiServerInput.getUIFormCheckBoxInput(FIELD_IS_INCOMING_SSL).setChecked(account.isIncomingSsl()) ;
+    uiServerInput.getUIFormCheckBoxInput(FIELD_CHECKMAIL_AUTO).setChecked(account.checkedAuto()) ;
+    if(getFieldProtocol().equals(Utils.POP3)) {
+      uiServerInput.addUIFormInput(leaveOnServer_) ;
+      uiServerInput.addUIFormInput(skipOverSize_) ;
+    } else {
+      uiServerInput.addUIFormInput(markAsDelete_) ;
+    }
+    
+    if(account.getPopServerProperties() != null) {
+      if (uiServerInput.getChildById(FIELD_LEAVE_ON_SERVER) != null)
+        uiServerInput.getUIFormCheckBoxInput(FIELD_LEAVE_ON_SERVER).setChecked(Boolean.valueOf(account.getPopServerProperties().get(Utils.SVR_POP_LEAVE_ON_SERVER))) ;
+      if (uiServerInput.getChildById(FIELD_SKIP_OVER_SIZE) != null)
+        uiServerInput.getUIStringInput(FIELD_SKIP_OVER_SIZE).setValue(account.getPopServerProperties().get(Utils.SVR_POP_SKIP_OVER_SIZE)) ;
+    }
+    if(account.getImapServerProperties() != null && uiServerInput.getChildById(FIELD_MARK_AS_DELETED) != null) {
+      uiServerInput.getUIFormCheckBoxInput(FIELD_MARK_AS_DELETED).setChecked(Boolean.valueOf(account.getImapServerProperties().get(Utils.SVR_IMAP_MARK_AS_DELETE))) ;
+    }
   } 
   
   public void setDefaultValue(String serverType, boolean isSSL) {
@@ -274,10 +317,10 @@ public class UIAccountSetting extends UIFormTabPane {
   static  public class SelectAccountActionListener extends EventListener<UIAccountSetting> {
     public void execute(Event<UIAccountSetting> event) throws Exception {
       UIAccountSetting uiAccountSetting = event.getSource() ;
-      String accountId = event.getRequestContext().getRequestParameter(OBJECTID);
-      uiAccountSetting.setSelectedAccountId(accountId);
+      String accountId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      uiAccountSetting.setSelectedAccountId(accountId) ;
       uiAccountSetting.fillField();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiAccountSetting.getParent());
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAccountSetting.getParent()) ;
     }
   }
   
@@ -295,17 +338,17 @@ public class UIAccountSetting extends UIFormTabPane {
   static  public class DeleteAccountActionListener extends EventListener<UIAccountSetting> {
     public void execute(Event<UIAccountSetting> event) throws Exception {
       UIAccountSetting uiAccountSetting = event.getSource() ;
-      UIMailPortlet uiPortlet = uiAccountSetting.getAncestorOfType(UIMailPortlet.class);
+      UIMailPortlet uiPortlet = uiAccountSetting.getAncestorOfType(UIMailPortlet.class) ;
       String username = uiPortlet.getCurrentUser();
-      MailService mailServ = uiPortlet.getApplicationComponent(MailService.class);
+      MailService mailServ = uiPortlet.getApplicationComponent(MailService.class) ;
       try {
-        mailServ.removeAccount(SessionsUtils.getSessionProvider(), username, uiAccountSetting.getSelectedAccountId());
+        mailServ.removeAccount(SessionsUtils.getSessionProvider(), username, uiAccountSetting.getSelectedAccountId()) ;
         if (uiAccountSetting.getAccounts().size() > 0)
-          uiAccountSetting.setSelectedAccountId(uiAccountSetting.getAccounts().get(0).getId());
-        uiAccountSetting.fillField();
+          uiAccountSetting.setSelectedAccountId(uiAccountSetting.getAccounts().get(0).getId()) ;
+        uiAccountSetting.fillField() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiAccountSetting.getAncestorOfType(UIPopupActionContainer.class)) ;
       } catch(Exception e) {
-        e.printStackTrace();
+        e.printStackTrace() ;
       } 
     }
   }
@@ -313,40 +356,50 @@ public class UIAccountSetting extends UIFormTabPane {
   static  public class SaveActionListener extends EventListener<UIAccountSetting> {
     public void execute(Event<UIAccountSetting> event) throws Exception {
       UIAccountSetting uiSetting = event.getSource() ;
-      MailService mailSrv = uiSetting.getApplicationComponent(MailService.class);
-      UIMailPortlet uiPortlet = uiSetting.getAncestorOfType(UIMailPortlet.class);
-      String username = Util.getPortalRequestContext().getRemoteUser();
-      Account acc = mailSrv.getAccountById(SessionsUtils.getSessionProvider(), username, uiSetting.getSelectedAccountId());
-      String userName = uiSetting.getFieldIncomingAccount();
+      MailService mailSrv = uiSetting.getApplicationComponent(MailService.class) ;
+      UIMailPortlet uiPortlet = uiSetting.getAncestorOfType(UIMailPortlet.class) ;
+      String username = Util.getPortalRequestContext().getRemoteUser() ;
+      Account acc = mailSrv.getAccountById(SessionsUtils.getSessionProvider(), username, uiSetting.getSelectedAccountId()) ;
+      String userName = uiSetting.getFieldIncomingAccount() ;
       
-      acc.setProtocol(uiSetting.getFieldProtocol());
+      acc.setProtocol(uiSetting.getFieldProtocol()) ;
       acc.setLabel(uiSetting.getFieldAccountNameValue()) ;
-      acc.setUserDisplayName(uiSetting.getDisplayName());
+      acc.setUserDisplayName(uiSetting.getDisplayName()) ;
       acc.setDescription(uiSetting.getFieldAccountDescription()) ;
       acc.setEmailAddress(uiSetting.getFieldMailAddress()) ;
       acc.setEmailReplyAddress(uiSetting.getFieldReplyAddress()) ;
       acc.setSignature(uiSetting.getFieldMailSignature()) ;
-      acc.setCheckedAuto(uiSetting.getFieldCheckMailAuto());
-      acc.setIncomingUser(userName); 
-      acc.setIncomingPassword(uiSetting.getFieldIncomingPassword());
-      acc.setIncomingHost(uiSetting.getFieldIncomingServer());
-      acc.setIncomingPort(uiSetting.getFieldIncomingPort());  
-      acc.setIncomingSsl(uiSetting.getFieldIsSSL());
+      acc.setCheckedAuto(uiSetting.getFieldCheckMailAuto()) ;
+      acc.setIncomingUser(userName) ; 
+      acc.setIncomingPassword(uiSetting.getFieldIncomingPassword()) ; 
+      acc.setIncomingHost(uiSetting.getFieldIncomingServer()) ;
+      acc.setIncomingPort(uiSetting.getFieldIncomingPort()) ;  
+      acc.setIncomingSsl(uiSetting.getFieldIsSSL()) ;
       acc.setIncomingFolder(uiSetting.getFieldIncomingFolder()) ;
-      acc.setOutgoingHost(uiSetting.getFieldOutgoingServer());
-      acc.setOutgoingPort(uiSetting.getFieldOutgoingPort());
-      acc.setServerProperty(Utils.SVR_SMTP_USER, userName);
+      acc.setOutgoingHost(uiSetting.getFieldOutgoingServer()) ;
+      acc.setOutgoingPort(uiSetting.getFieldOutgoingPort()) ;
+      acc.setServerProperty(Utils.SVR_SMTP_USER, userName) ;
+      if(uiSetting.getFieldProtocol().equals(Utils.POP3)){
+        boolean leaveOnServer = uiSetting.getFieldLeaveOnServer() ;
+        String skipOverSize = uiSetting.getFieldSkipOverSize() ;
+        System.out.println("=======>>>>>>>>"+ String.valueOf(leaveOnServer)) ;
+        acc.setPopServerProperty(Utils.SVR_POP_LEAVE_ON_SERVER, String.valueOf(leaveOnServer)) ;
+        acc.setPopServerProperty(Utils.SVR_POP_SKIP_OVER_SIZE, skipOverSize) ;
+      } else {
+        boolean markAsDelete = uiSetting.getFieldMaxAsDeleted() ;
+        acc.setImapServerProperty(Utils.SVR_IMAP_MARK_AS_DELETE, String.valueOf(markAsDelete)) ;
+      }
       
       UIApplication uiApp = uiSetting.getAncestorOfType(UIApplication.class) ;
       try {
-        mailSrv.updateAccount(SessionsUtils.getSessionProvider(), username, acc);
-        uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.edit-acc-successfully", null));
-        uiPortlet.findFirstComponentOfType(UISelectAccount.class).updateAccount();
+        mailSrv.updateAccount(SessionsUtils.getSessionProvider(), username, acc) ;
+        uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.edit-acc-successfully", null)) ;
+        uiPortlet.findFirstComponentOfType(UISelectAccount.class).updateAccount() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UINavigationContainer.class)) ;
         event.getSource().getAncestorOfType(UIMailPortlet.class).cancelAction();
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
       } catch(Exception e) {
-        uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.edit-acc-unsuccessfully", null));
+        uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.edit-acc-unsuccessfully", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         e.printStackTrace() ;
         return ;
@@ -358,6 +411,34 @@ public class UIAccountSetting extends UIFormTabPane {
   	public void execute(Event<UIAccountSetting> event) throws Exception {
   		UIAccountSetting uiSetting = event.getSource() ; 
   		uiSetting.setDefaultValue(uiSetting.getFieldProtocol(),uiSetting.getFieldIsSSL());
+  		UIFormInputWithActions uiInput = uiSetting.getChildById(TAB_SERVER_SETTINGS);
+  		String serverTypeValue = uiSetting.getFieldProtocol() ;
+  		if(serverTypeValue.equals(Utils.IMAP)) {
+  		  if (uiInput.getChildById(FIELD_LEAVE_ON_SERVER) != null ) {
+          uiSetting.leaveOnServer_ = uiInput.getChildById(FIELD_LEAVE_ON_SERVER) ; 
+          uiInput.removeChildById(FIELD_LEAVE_ON_SERVER) ;
+  		  }
+  		  
+  		  if (uiInput.getChildById(FIELD_SKIP_OVER_SIZE) != null ) {
+          uiSetting.skipOverSize_ = uiInput.getChildById(FIELD_SKIP_OVER_SIZE) ; 
+          uiInput.removeChildById(FIELD_SKIP_OVER_SIZE) ;
+        }
+  		  
+  		  if (uiInput.getChildById(FIELD_MARK_AS_DELETED) == null )
+  		    uiInput.addUIFormInput(uiSetting.markAsDelete_) ;
+  		} else {
+  		  if (uiInput.getChildById(FIELD_MARK_AS_DELETED) != null ) {
+          uiSetting.markAsDelete_ = uiInput.getChildById(FIELD_MARK_AS_DELETED) ; 
+          uiInput.removeChildById(FIELD_MARK_AS_DELETED) ;
+        } 
+  		  
+  		  if (uiInput.getChildById(FIELD_LEAVE_ON_SERVER) == null ) 
+          uiInput.addUIFormInput(uiSetting.leaveOnServer_) ;
+        
+        if (uiInput.getChildById(FIELD_SKIP_OVER_SIZE) == null ) 
+          uiInput.addUIFormInput(uiSetting.skipOverSize_) ;
+  		}
+  		
   	}
   }
   

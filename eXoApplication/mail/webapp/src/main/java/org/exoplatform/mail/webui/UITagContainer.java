@@ -117,6 +117,7 @@ public class UITagContainer extends UIForm {
       UITagContainer uiTags = event.getSource();
       UIMailPortlet uiPortlet = uiTags.getAncestorOfType(UIMailPortlet.class);
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
+      UIMessagePreview uiMessagePreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class) ;
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
@@ -127,9 +128,11 @@ public class UITagContainer extends UIForm {
       uiMessageList.setMessageFilter(filter);
       uiMessageList.setSelectedTagId(tagId);
       uiMessageList.setSelectedFolderId(null);
+      uiMessagePreview.setMessage(null);
       uiPortlet.findFirstComponentOfType(UIFolderContainer.class).setSelectedFolder(null);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTags);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessagePreview.getAncestorOfType(UIMessageArea.class));
     }
   }
 

@@ -42,6 +42,8 @@ public class Account {
   private String placeSignature;
   
   private Map<String, String> serverProperties ;  
+  private Map<String, String> popServerProperties ;
+  private Map<String, String> imapServerProperties ;
   private List<Folder> defaultFolders ;
   private List<Folder> userFolders ;  
 
@@ -187,4 +189,18 @@ public class Account {
   public void setIncomingSsl(boolean b) { 
     setServerProperty(Utils.SVR_INCOMING_SSL, String.valueOf(b)); 
   }
+  
+  public void setPopServerProperty(String key, String value) {
+    if (popServerProperties == null) popServerProperties = new HashMap<String, String>();
+    popServerProperties.put(key, value) ;
+  }
+  
+  public Map<String, String> getPopServerProperties() { return popServerProperties ; }
+  
+  public void setImapServerProperty(String key, String value) {
+    if (imapServerProperties == null) imapServerProperties = new HashMap<String, String>();
+    imapServerProperties.put(key, value) ;
+  }
+  
+  public Map<String, String> getImapServerProperties() { return imapServerProperties ; }
 }

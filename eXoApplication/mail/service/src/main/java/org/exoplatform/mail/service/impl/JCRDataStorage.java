@@ -133,6 +133,25 @@ public class JCRDataStorage{
         if (index != -1) account.setServerProperty(property.substring(0, index), property.substring(index+1));
       }
     } catch(Exception e) { }
+    
+    try {
+      Value[] properties = accountNode.getProperty(Utils.EXO_POPSERVERPROPERTIES).getValues();
+      for (int i=0; i<properties.length; i++) {
+        String property = properties[i].getString();
+        int index = property.indexOf('=');
+        if (index != -1) account.setPopServerProperty(property.substring(0, index), property.substring(index+1));
+      }
+    } catch(Exception e) { }
+    
+    try {
+      Value[] properties = accountNode.getProperty(Utils.EXO_IMAPSERVERPROPERTIES).getValues();
+      for (int i=0; i<properties.length; i++) {
+        String property = properties[i].getString();
+        int index = property.indexOf('=');
+        if (index != -1) account.setImapServerProperty(property.substring(0, index), property.substring(index+1));
+      }
+    } catch(Exception e) { }
+    
     return account ;
   }
   public Message getMessageById(SessionProvider sProvider, String username, String accountId, String msgId) throws Exception {
@@ -387,13 +406,33 @@ public class JCRDataStorage{
       newAccount.setProperty(Utils.EXO_CHECKMAILAUTO, account.checkedAuto());
       newAccount.setProperty(Utils.EXO_EMPTYTRASH, account.isEmptyTrashWhenExit());
       newAccount.setProperty(Utils.EXO_PLACESIGNATURE, account.getPlaceSignature());
-      Iterator it = account.getServerProperties().keySet().iterator();
+      Iterator<String> it = account.getServerProperties().keySet().iterator();
       ArrayList<String> values = new ArrayList<String>(account.getServerProperties().size());
       while (it.hasNext()) {
         String key = it.next().toString();
         values.add(key+"="+account.getServerProperties().get(key));
       }
       newAccount.setProperty(Utils.EXO_SERVERPROPERTIES, values.toArray(new String[account.getServerProperties().size()]));
+      
+      if (account.getPopServerProperties() != null) {
+        it = account.getPopServerProperties().keySet().iterator();
+        values = new ArrayList<String>(account.getPopServerProperties().size());
+        while (it.hasNext()) {
+          String key = it.next().toString();
+          values.add(key+"="+account.getPopServerProperties().get(key));
+        }
+        newAccount.setProperty(Utils.EXO_POPSERVERPROPERTIES, values.toArray(new String[account.getPopServerProperties().size()]));
+      }
+      
+      if (account.getImapServerProperties() != null) {
+        it = account.getImapServerProperties().keySet().iterator();
+        values = new ArrayList<String>(account.getImapServerProperties().size());
+        while (it.hasNext()) {
+          String key = it.next().toString();
+          values.add(key+"="+account.getImapServerProperties().get(key));
+        }
+        newAccount.setProperty(Utils.EXO_IMAPSERVERPROPERTIES, values.toArray(new String[account.getImapServerProperties().size()]));
+      }
       // saves changes
       mailHome.getSession().save();
     }
