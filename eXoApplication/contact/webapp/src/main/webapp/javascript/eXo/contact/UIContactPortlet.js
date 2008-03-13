@@ -394,20 +394,22 @@ UIContactPortlet.prototype.switchLayout = function(layout) {
       break;
     case 4 : 
       if( objRoot != null) {
-        if(contactLayout4.style.display == "none" && contactLayout5.style.display == "none") {
-          contactLayout4.style.display = "block";
-          contactLayout5.style.display = "block";
-          Browser.setCookie("contactLayout4", "1", 30);
-          Browser.setCookie("contactLayout5", "1", 30);
-          showCheckedMenu = true;
-        } else {
-          if(!isWelcome) {
-            contactLayout4.style.display = "none";
-            contactLayout5.style.display = "none";
-            Browser.setCookie("contactLayout4", "0", 30);
-            Browser.setCookie("contactLayout5", "0", 30);
-          }
-        } 
+        if(contactLayout4){
+          if(contactLayout4.style.display == "none" && contactLayout5.style.display == "none") {
+            contactLayout4.style.display = "block";
+            contactLayout5.style.display = "block";
+            Browser.setCookie("contactLayout4", "1", 30);
+            Browser.setCookie("contactLayout5", "1", 30);
+            showCheckedMenu = true;
+          } else {
+            if(!isWelcome) {
+              contactLayout4.style.display = "none";
+              contactLayout5.style.display = "none";
+              Browser.setCookie("contactLayout4", "0", 30);
+              Browser.setCookie("contactLayout5", "0", 30);
+            }
+          } 
+        }
       }
   }
   this.addCheckedIcon(layout, showCheckedMenu);
@@ -557,7 +559,8 @@ UIContactPortlet.prototype.showPopupCustomLayoutView = function(obj, evt) {
   var root = document.getElementById("UIContactPortlet");
   var objWelcome = eXo.core.DOMUtil.findFirstDescendantByClass(root, "div", "UIWelcomeContact");
   var objDetails = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div", "ContactDetailsMenuItem");
-  if(objWelcome) {
+  var objVCard = eXo.core.DOMUtil.findFirstDescendantByClass(root, "div", "UIVCards");
+  if(objWelcome || objVCard) {
     objDetails.style.display = "none";
   } else {
     objDetails.style.display = "block";
