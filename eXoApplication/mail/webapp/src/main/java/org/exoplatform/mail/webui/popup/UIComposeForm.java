@@ -103,8 +103,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   private Message message_ = null;
   private long priority_ = Utils.PRIORITY_NORMAL;
   private Boolean isVisualEditor = true;
-  private int composeType_;
-  private String accountId_;
+  private int composeType_ = MESSAGE_NEW;
+  private String accountId_ ;
   public String parentPath_ ;
   
   public List<Contact> toContacts = new ArrayList<Contact>();
@@ -271,6 +271,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         default :
           break;
       }
+    } else {
+      setFieldContentValue("") ;
     }
   }
   
@@ -341,10 +343,10 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     MailService mailSrv = getApplicationComponent(MailService.class);
     Account account = mailSrv.getAccountById(SessionsUtils.getSessionProvider(), username, accountId_);
     if (isVisualEditor) {
-      if (!MailUtils.isFieldEmpty(account.getSignature())) {value += "</br> -- <br />" + account.getSignature() + "";}
+      if (!MailUtils.isFieldEmpty(account.getSignature())) {value += "<br><br> -- <br >" + account.getSignature().replace("\n", "<br>") + "";}
       getChild(UIFormWYSIWYGInput.class).setValue(value);
     } else {
-      if (!MailUtils.isFieldEmpty(account.getSignature())) { value += account.getSignature() ; }
+      if (!MailUtils.isFieldEmpty(account.getSignature())) { value += "\n\n -- \n" + account.getSignature() ; }
       getUIFormTextAreaInput(FIELD_MESSAGECONTENT).setValue(value);
     }
   }
