@@ -41,7 +41,7 @@
   <div class="SeparatorLine"><span></span></div>
   
   <div class="SelectButton">
-    <div class="MoreActionsIcon"  onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+    <div class="MoreActionsIcon"  onclick="eXo.mail.UIMailPortlet.showMenu(this, event);">
       <a class="DownArrow1Icon">More Actions</a>
       
       <% /*Begin Popup Menu*/ %>
