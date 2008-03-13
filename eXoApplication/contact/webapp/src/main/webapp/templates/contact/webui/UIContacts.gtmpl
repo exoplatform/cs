@@ -31,7 +31,7 @@
   String previousPageAction = "#" ;
   String nextPageAction = "#" ;
   String lastPageAction = "#" ; 
-  
+
   Contact[] contacts = uicomponent.getContacts();
   if (pageList != null && (contacts.length != 0)) {
     currentPage = pageList.getCurrentPage();

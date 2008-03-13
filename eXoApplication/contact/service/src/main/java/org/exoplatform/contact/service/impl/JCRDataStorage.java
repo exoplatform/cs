@@ -279,8 +279,7 @@ public class JCRDataStorage{
   public Contact getContact(SessionProvider sProvider, String username, String contactId) throws Exception {
     Node contactHomeNode = getUserContactHome(sProvider, username);
     try {
-      Node contactNode = contactHomeNode.getNode(contactId);
-      return getContact(contactNode, PRIVATE);
+      return getContact(contactHomeNode.getNode(contactId), PRIVATE);
     } catch (PathNotFoundException ex) {
       return null;
     }
@@ -572,7 +571,7 @@ public class JCRDataStorage{
       else groupNode.save() ;
     }
   }
-  
+  /*
   private Node getSharedAddressBookHome(SessionProvider sProvider) throws Exception {
     Node contactServiceHome = getPublicContactServiceHome(SessionProvider.createSystemProvider()) ;
     try {
@@ -581,9 +580,9 @@ public class JCRDataStorage{
       Node sharedHome = contactServiceHome.addNode(SHARED_CONTACT, NT_UNSTRUCTURED) ;
       contactServiceHome.save() ;
       return sharedHome ;
-    }
+    }S
   }
-  
+  */
   private Node getSharedAddressBook(String userId) throws Exception {
     Node contactHome = getUserContactServiceHome(SessionProvider.createSystemProvider(), userId);
     Node sharedHome ;
@@ -923,8 +922,8 @@ public class JCRDataStorage{
     return null;
   }
 
-  public ContactPageList getPublicContactsByAddressBook(SessionProvider sysProvider, String groupId) throws Exception {
-  	String usersPath = nodeHierarchyCreator_.getJcrPath("usersPath") ;
+  public ContactPageList getPublicContactsByAddressBook(SessionProvider sysProvider, String groupId) throws Exception {   
+    String usersPath = nodeHierarchyCreator_.getJcrPath("usersPath") ;
     Node contactHome = getPublicContactHome(SessionProvider.createSystemProvider());
     QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + usersPath 

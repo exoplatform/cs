@@ -74,25 +74,26 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
   
   public void setContact(Contact contact) { 
     isSharedGroup = false ;
-    contact_ = contact ;
-    UIFormInputWithActions inputset = new UIFormInputWithActions("UIInputUserSelect") ;
-    UIFormInputInfo formInputInfo = new UIFormInputInfo(FIELD_CONTACT, FIELD_CONTACT, null) ;
-    formInputInfo.setValue(contact.getFullName()) ;
-    inputset.addChild(formInputInfo) ; 
-    addChild(inputset) ;
+    contact_ = contact ; 
   }
   public void setGroup(ContactGroup group) {
     isSharedGroup = true ;
-    group_ = group ;
-    UIFormInputWithActions inputset = new UIFormInputWithActions("UIInputUserSelect") ;
-    UIFormInputInfo formInputInfo = new UIFormInputInfo(FIELD_ADDRESS, FIELD_ADDRESS, null) ;
-    formInputInfo.setValue(group.getName()) ;
-    inputset.addChild(formInputInfo) ; 
-    addChild(inputset) ;
+    group_ = group ;    
   }
   
   public void init() throws Exception {
-    UIFormInputWithActions inputset = getChild(UIFormInputWithActions.class) ;
+    UIFormInputWithActions inputset = new UIFormInputWithActions("UIInputUserSelect") ;
+    if (isSharedGroup) {
+      UIFormInputInfo formInputInfo = new UIFormInputInfo(FIELD_ADDRESS, FIELD_ADDRESS, null) ;
+      formInputInfo.setValue(group_.getName()) ;
+      inputset.addChild(formInputInfo) ; 
+    } else {
+      UIFormInputInfo formInputInfo = new UIFormInputInfo(FIELD_CONTACT, FIELD_CONTACT, null) ;
+      formInputInfo.setValue(contact_.getFullName()) ;
+      inputset.addChild(formInputInfo) ;
+    }
+    
+    addChild(inputset) ;
     inputset.addUIFormInput(new UIFormStringInput(FIELD_USER, FIELD_USER, null)) ;
     List<ActionData> actionUser = new ArrayList<ActionData>() ;
     actionUser = new ArrayList<ActionData>() ;
@@ -246,7 +247,10 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
           event.getRequestContext().addUIComponentToUpdateByAjax(uiAddEdit) ; 
           contactService.shareContact(SessionProviderFactory
               .createSystemProvider(), username, new String[] {contact.getId()}, receiverUser) ; 
-        } 
+        }
+        uiForm.getUIStringInput(UISharedForm.FIELD_USER).setValue(null) ;
+        uiForm.getUIStringInput(UISharedForm.FIELD_GROUP).setValue(null) ;
+        uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).setChecked(false) ;
       } else {
         uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.invalid-username", null,
             ApplicationMessage.WARNING)) ;

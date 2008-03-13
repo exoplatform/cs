@@ -17,7 +17,6 @@
 package org.exoplatform.contact.webui.popup;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.exoplatform.commons.utils.ObjectPageList;
@@ -95,6 +94,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
     UIGrid permissionList = getChild(UIGrid.class) ;
     ObjectPageList objPageList = new ObjectPageList(dataRow, 10) ;
     permissionList.getUIPageIterator().setPageList(objPageList) ;
+    getChild(UISharedForm.class).setContact(contact) ;
   }
   
   public void updateGroupGrid(ContactGroup group) throws Exception {
@@ -107,20 +107,20 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
     UIGrid permissionList = getChild(UIGrid.class) ;
     ObjectPageList objPageList = new ObjectPageList(dataRow, 10) ;
     permissionList.getUIPageIterator().setPageList(objPageList) ;
+    getChild(UISharedForm.class).setGroup(group) ;
   }
 
   static public class EditActionListener extends EventListener<UIAddEditPermission> {
     public void execute(Event<UIAddEditPermission> event) throws Exception {
-      /*UIAddEditPermission addEdit = event.getSource();
+      UIAddEditPermission addEdit = event.getSource();
+      String recievedUser = event.getRequestContext().getRequestParameter(OBJECTID);
+      ContactGroup group = ContactUtils.getContactService().getGroup(
+          SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), addEdit.groupId_) ;
       UISharedForm shareForm = addEdit.getChild(UISharedForm.class);
-      String resiceUser = event.getRequestContext().getRequestParameter(OBJECTID);
-      UIFormCheckBoxInput checkBox = shareForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT) ;
-      CalendarService calService = CalendarUtils.getCalendarService() ;
-      String username = CalendarUtils.getCurrentUser() ;
-      shareForm.setSharedUser(resiceUser) ;
-      Calendar cal = calService.getUserCalendar(SessionProviderFactory.createSessionProvider(), username, addEdit.calendarId_) ;
-      checkBox.setChecked((cal.getEditPermission() != null) && Arrays.asList(cal.getEditPermission()).contains(resiceUser)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(shareForm) ;*/
+      shareForm.getUIStringInput(UISharedForm.FIELD_USER).setValue(recievedUser) ;
+      shareForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).setChecked(
+          (group.getEditPermission() != null) && Arrays.asList(group.getEditPermission()).contains(recievedUser)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(shareForm) ;
     }
   }
   static public class DeleteActionListener extends EventListener<UIAddEditPermission> {

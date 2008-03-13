@@ -362,7 +362,7 @@ public class UIAddressBooks extends UIComponent {
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIContactPortlet contactPortlet = uiAddressBook.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
-      UIPopupContainer uiPopupContainer = popupAction.activate(UIPopupContainer.class, 600) ;
+      UIPopupContainer uiPopupContainer = popupAction.activate(UIPopupContainer.class, 400) ;
       uiPopupContainer.setId("UIPermissionGroupForm") ;
       UIAddEditPermission uiAddNewEditPermission = uiPopupContainer.addChild(UIAddEditPermission.class, null, null);
       ContactService contactService = ContactUtils.getContactService();
