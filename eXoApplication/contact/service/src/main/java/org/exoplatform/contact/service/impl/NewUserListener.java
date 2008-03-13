@@ -26,13 +26,16 @@ import javax.jcr.Node;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.access.AccessControlEntry;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserEventListener;
+import org.exoplatform.services.organization.impl.GroupImpl;
 
 /**
  * Created by The eXo Platform SARL
@@ -62,13 +65,20 @@ public class NewUserListener extends UserEventListener {
     	contact.setFullName(user.getFirstName() + " " + user.getLastName()) ;
     	contact.setFirstName(user.getFirstName()) ;
     	contact.setLastName(user.getLastName()) ;
+      
+      
     	contact.setEmailAddress(user.getEmail()) ;
     	Calendar cal = new GregorianCalendar() ;
     	contact.setLastUpdated(cal.getTime()) ;
-    	List<String> ls = new ArrayList<String>()  ;
-    	ls.add(group.getId()) ;
-    	
-    	contact.setAddressBook(ls.toArray(new String[]{})) ;
+    	List<String> groupIds = new ArrayList<String>()  ;
+    	groupIds.add(group.getId()) ;
+      OrganizationService organizationService = 
+        (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+      Object[] objGroupIds = organizationService.getGroupHandler().findGroupsOfUser(user.getUserName()).toArray() ;
+      for (Object object : objGroupIds) {
+        groupIds.add(((GroupImpl)object).getId()) ;
+      }
+    	contact.setAddressBook(groupIds.toArray(new String[]{})) ;
     	contact.setOwner(true) ;
     	contact.setOwnerId(user.getUserName()) ;
     	cservice_.saveContact(sysProvider, user.getUserName(), contact, true) ;

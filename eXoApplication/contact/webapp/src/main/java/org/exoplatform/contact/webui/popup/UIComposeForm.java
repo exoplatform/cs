@@ -117,16 +117,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     inputSet.setActionField(FIELD_ATTACHMENTS, getUploadFileList()) ;
   }
   
-  public void init(String emails) throws Exception {
-    Account acc = ContactUtils.getAccount() ;
-    if (acc == null) {
-      UIApplication uiApp = getAncestorOfType(UIApplication.class) ;
-      uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.invalidAcc", null,
-          ApplicationMessage.WARNING)) ;
-      return ;
-    }
-    String email = acc.getEmailAddress() ;
-    addUIFormInput(new UIFormStringInput(FIELD_FROM, null, email)) ;
+  public void init(String from, String emails) throws Exception {
+    addUIFormInput(new UIFormStringInput(FIELD_FROM, null, from)) ;
     addUIFormInput(new UIFormStringInput(FIELD_TO, null, emails)) ;
     addUIFormInput(new UIFormStringInput(FIELD_SUBJECT, null, null)) ;
     UIFormInputWithActions inputSet = new UIFormInputWithActions(FIELD_FROM_INPUT);   
