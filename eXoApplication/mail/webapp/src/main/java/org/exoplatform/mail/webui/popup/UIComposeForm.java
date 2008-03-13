@@ -30,7 +30,6 @@ import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
-import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
@@ -174,7 +173,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       fileUpload.setActionParameter(attachdata.getId());
       fileUpload.setActionType(ActionData.TYPE_ICON) ;
       fileUpload.setCssIconClass("AttachmentIcon") ; // "AttachmentIcon ZipFileIcon"
-      fileUpload.setActionName(attachdata.getName() + " ("+attachdata.getSize()+" Kb)" ) ;
+      fileUpload.setActionName(attachdata.getName() + " ("+attachdata.getSize()+" B)" ) ;
       fileUpload.setShowLabel(true) ;
       uploadedFiles.add(fileUpload) ;
       ActionData removeAction = new ActionData() ;
@@ -527,17 +526,15 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiComposeForm = event.getSource();
       String attId = event.getRequestContext().getRequestParameter(OBJECTID);
-      BufferAttachment att = new BufferAttachment();
       for (Attachment attach : uiComposeForm.getAttachFileList()) {
         if (attach.getId().equals(attId)) {
-          att = (BufferAttachment) attach ;
+          DownloadResource dresource = new InputStreamDownloadResource(attach.getInputStream(), attach.getMimeType());
+          DownloadService dservice = (DownloadService)PortalContainer.getInstance().getComponentInstanceOfType(DownloadService.class);
+          dresource.setDownloadName(attach.getName());
+          String downloadLink = dservice.getDownloadLink(dservice.addDownloadResource(dresource));
+          event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + downloadLink + "');");
         }
       }
-      DownloadResource dresource = new InputStreamDownloadResource(att.getInputStream(), att.getMimeType());
-      DownloadService dservice = (DownloadService)PortalContainer.getInstance().getComponentInstanceOfType(DownloadService.class);
-      dresource.setDownloadName(att.getName());
-      String downloadLink = dservice.getDownloadLink(dservice.addDownloadResource(dresource));
-      event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + downloadLink + "');");
     }
   }
   
@@ -545,14 +542,12 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiComposeForm = event.getSource() ;
       String attFileId = event.getRequestContext().getRequestParameter(OBJECTID);
-      BufferAttachment attachfile = new BufferAttachment();
       for (Attachment att : uiComposeForm.attachments_) {
         if (att.getId().equals(attFileId)) {
-          attachfile = (BufferAttachment) att;
+          uiComposeForm.removeFromUploadFileList(att);
+          uiComposeForm.refreshUploadFileList() ;
         }
       }
-      uiComposeForm.removeFromUploadFileList(attachfile);
-      uiComposeForm.refreshUploadFileList() ;
     }
   }
 

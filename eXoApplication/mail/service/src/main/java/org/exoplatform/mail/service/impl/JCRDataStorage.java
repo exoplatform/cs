@@ -39,7 +39,6 @@ import javax.mail.internet.InternetAddress;
 
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
-import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.JCRMessageAttachment;
 import org.exoplatform.mail.service.MailSetting;
@@ -475,7 +474,7 @@ public class JCRDataStorage{
         if(attachments != null) { 
           Iterator<Attachment> it = attachments.iterator();
           while (it.hasNext()) {
-            BufferAttachment file = (BufferAttachment)it.next();
+            Attachment file = it.next();
             Node nodeFile = null;
             if (!nodeMsg.hasNode(file.getName())) nodeFile = nodeMsg.addNode(file.getName(), Utils.NT_FILE);
             else nodeFile = nodeMsg.getNode(file.getName());
