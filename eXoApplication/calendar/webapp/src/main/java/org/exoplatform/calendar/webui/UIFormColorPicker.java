@@ -26,6 +26,7 @@ import org.exoplatform.calendar.Colors.Color;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormInput;
 import org.exoplatform.webui.form.UIFormInputBase;
 
 /**
@@ -185,6 +186,12 @@ public class UIFormColorPicker extends UIFormInputBase<String>  {
       }
       w.write(" \\>") ;
     w.write("</div>") ;
+  }
+
+  @Override
+  public UIFormInput setValue(String arg0) {
+    if(arg0 == null) arg0 = colors_[0].getName() ;
+    return super.setValue(arg0);
   }
 
   private StringBuilder encodeValue(String value){

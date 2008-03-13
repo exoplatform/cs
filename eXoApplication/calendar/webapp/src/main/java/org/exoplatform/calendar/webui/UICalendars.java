@@ -262,21 +262,12 @@ public class UICalendars extends UIForm  {
     CalendarService calService = CalendarUtils.getCalendarService() ;
     Calendar calendar = null;
     String currentUser = CalendarUtils.getCurrentUser() ;
-    List<Calendar> listCal = new ArrayList<Calendar>() ;
-    if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
-      return true ;
-    } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
-      listCal = calService.getSharedCalendars(getSystemSession(), currentUser, true).getCalendars() ;
-      for(Calendar cal : listCal) {
-        if(cal.getId().equals(calendarId)) {
-          calendar = cal ;
-          break ;
-        }
-      }
-      return CalendarUtils.canEdit(null, calendar.getEditPermission(), currentUser) ;
+    if(calType.equals(CalendarUtils.SHARED_TYPE)) {
+      calendar = calService.getSharedCalendars(getSystemSession(), currentUser, true).getCalendarById(calendarId) ;
+      return calendar.getEditPermission()!=null && CalendarUtils.canEdit(null, calendar.getEditPermission(), currentUser) ;
     } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
       calendar = calService.getGroupCalendar(getSystemSession(), calendarId) ;
-      return CalendarUtils.canEdit(uiComponent.getApplicationComponent(OrganizationService.class), calendar.getEditPermission(), currentUser) ;
+      return calendar.getEditPermission()!=null && CalendarUtils.canEdit(uiComponent.getApplicationComponent(OrganizationService.class), calendar.getEditPermission(), currentUser) ;
     }  
     return false ;
   }
