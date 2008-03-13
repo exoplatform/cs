@@ -91,8 +91,16 @@
 	height: 16px; width: 17px;
 }
 
-.UIContactPortlet .ContactListIcon {
+.UIContactPortlet .TypeViewContactPortlet .ContactListIcon {
 	background: url('icons/ContactListIcon.gif') no-repeat center;
+}
+
+.UIContactPortlet .TypeViewContactPortlet .MenuItem {
+
+}
+
+.UIContactPortlet .TypeViewContactPortlet .MenuItemSelected {
+	background: #dee4f2;
 }
 
 .UIContactPortlet .EmailIcon {

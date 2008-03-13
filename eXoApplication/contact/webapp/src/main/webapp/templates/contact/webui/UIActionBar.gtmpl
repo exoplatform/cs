@@ -78,18 +78,18 @@
 								        <div class="MiddleLeftRightClickPopupMenu">
 								          <div class="MiddleRightRightClickPopupMenu">
 					              		<div class="UIRightPopupMenuContainer">
-					            
-					                    <a class="MenuItem" href="<%=uicomponent.event("ListView", "true")%>">   
-						                    <div class="ItemIcon ContactListIcon">
-						                      <%=_ctx.appRes(uicomponent.getName() + ".label.contactsList")%>
-						                    </div>
-					                    </a>
-					                    <a class="MenuItem" href="<%=uicomponent.event("ListView", "false")%>">   
-						                    <div class="ItemIcon ContactIcon">
-						                      <%=_ctx.appRes(uicomponent.getName() + ".label.vcard")%>
-						                    </div>
-					                    </a>
-					                
+					                    <div class="TypeViewContactPortlet">
+  					                    <a class="MenuItem" href="<%=uicomponent.event("ListView", "true")%>">   
+  						                    <div class="ItemIcon ContactListIcon">
+  						                      <%=_ctx.appRes(uicomponent.getName() + ".label.contactsList")%>
+  						                    </div>
+  					                    </a>
+  					                    <a class="MenuItem" href="<%=uicomponent.event("ListView", "false")%>">   
+  						                    <div class="ItemIcon ContactIcon">
+  						                      <%=_ctx.appRes(uicomponent.getName() + ".label.vcard")%>
+  						                    </div>
+  					                    </a>
+					                    </div>
 														</div>
 						          		</div>
 						        		</div>
@@ -105,7 +105,7 @@
 			      		<% /*End Popup Menu*/ %>
 						</div>
 						
-						<div class="SelectButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+						<div class="SelectButton" onclick="eXo.contact.UIContactPortlet.showPopupCustomLayoutView(this, event);">
 							<div class="IconHolder CustomLayoutIcon">
 								<div class="DownArrow1Icon">Custom Layout View</div>
 								<% /*Begin Popup Menu*/ %>
@@ -139,6 +139,11 @@
 						                    <div class="MenuItem" onclick="javascript:eXo.contact.UIContactPortlet.switchLayout(3)" >
 							                    <div class="ItemIcon CheckedMenu">
 							                      Tags
+							                    </div>
+						                    </div>
+                                <div class="MenuItem ContactDetailsMenuItem" onclick="javascript:eXo.contact.UIContactPortlet.switchLayout(4)" >
+							                    <div class="ItemIcon CheckedMenu">
+							                      Details
 							                    </div>
 						                    </div>
 															</div>

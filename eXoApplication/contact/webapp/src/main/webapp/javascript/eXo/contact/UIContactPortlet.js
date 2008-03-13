@@ -274,6 +274,8 @@ UIContactPortlet.prototype.checkLayout = function() {
     var layout1State = parseInt(eXo.core.Browser.getCookie('contactLayout1'));
     var layout2State = parseInt(eXo.core.Browser.getCookie('contactLayout2'));
     var layout3State = parseInt(eXo.core.Browser.getCookie('contactLayout3'));    
+    var layout4state = parseInt(eXo.core.Browser.getCookie('contactLayout4'));
+    var layout5state = parseInt(eXo.core.Browser.getCookie('contactLayout5'));
     if(layout1State == 0) {
       eXo.contact.UIContactPortlet.switchLayout(1);
     }
@@ -284,6 +286,10 @@ UIContactPortlet.prototype.checkLayout = function() {
     
     if(layout3State == 0) {   
       eXo.contact.UIContactPortlet.switchLayout(3);
+    }
+    
+    if(layout4state == 0 && layout5state == 0) {
+      eXo.contact.UIContactPortlet.switchLayout(4);  
     }
   }
   catch(e) {
@@ -301,11 +307,15 @@ UIContactPortlet.prototype.switchLayout = function(layout) {
   var Browser = eXo.core.Browser;
   var DOMUtil = eXo.core.DOMUtil;
   layout = parseInt(layout);
-  var contactLayout1 = DOMUtil.findFirstDescendantByClass(document.getElementById("contact"),"div","UINavigationContainer");                                                   
+  var contactLayout1 = DOMUtil.findFirstDescendantByClass(document.getElementById("UIContactPortlet"), "div", "UINavigationContainer");                                                   
   var contactLayout2 = document.getElementById("UIAddressBooks");
   var contactLayout3 = document.getElementById("UITags");
+  var contactLayout4 = DOMUtil.findFirstDescendantByClass(document.getElementById("UIContactPortlet"), "div", "UIContactPreview");
+  var contactLayout5 = DOMUtil.findFirstDescendantByClass(document.getElementById("UIContactPortlet"), "div", "ResizeReadingPane");
   var panelWorking = document.getElementById('UIContactContainer');
+  var objRoot = document.getElementById("defaultroot");
   var showCheckedMenu = false;
+  var isWelcome = eXo.core.DOMUtil.findFirstDescendantByClass(contactLayout4, "div", "UIWelcomeContact");
   switch(layout) {
     case 0 : 
       if(contactLayout1.style.display != "block") {
@@ -317,13 +327,22 @@ UIContactPortlet.prototype.switchLayout = function(layout) {
       if(contactLayout3.style.display != "block") {
         contactLayout3.style.display = "block";             
       }
+      if(contactLayout4.style.display != "block") {
+        contactLayout4.style.display = "block";
+      }
+      if(contactLayout5.style.display != "block") {
+        contactLayout5.style.display = "block";
+      }
       panelWorking.style.marginLeft = "225px";   
-      Browser.setCookie("contactLayout1", "1", 30)
-      Browser.setCookie("contactLayout2", "1", 30)
-      Browser.setCookie("contactLayout3", "1", 30)     
+      Browser.setCookie("contactLayout1", "1", 30);
+      Browser.setCookie("contactLayout2", "1", 30);
+      Browser.setCookie("contactLayout3", "1", 30);
+      Browser.setCookie("contactLayout4", "1", 30); 
+      Browser.setCookie("contactLayout5", "1", 30);     
       this.addCheckedIcon(1,true);
       this.addCheckedIcon(2,true);
       this.addCheckedIcon(3,true);
+      this.addCheckedIcon(4, true);
       return;
     case 1 :
       if(contactLayout1.style.display == "none") {
@@ -373,120 +392,26 @@ UIContactPortlet.prototype.switchLayout = function(layout) {
         }
       }      
       break;
+    case 4 : 
+      if( objRoot != null) {
+        if(contactLayout4.style.display == "none" && contactLayout5.style.display == "none") {
+          contactLayout4.style.display = "block";
+          contactLayout5.style.display = "block";
+          Browser.setCookie("contactLayout4", "1", 30);
+          Browser.setCookie("contactLayout5", "1", 30);
+          showCheckedMenu = true;
+        } else {
+          if(!isWelcome) {
+            contactLayout4.style.display = "none";
+            contactLayout5.style.display = "none";
+            Browser.setCookie("contactLayout4", "0", 30);
+            Browser.setCookie("contactLayout5", "0", 30);
+          }
+        } 
+      }
   }
-  this.addCheckedIcon(layout,showCheckedMenu);
+  this.addCheckedIcon(layout, showCheckedMenu);
 }
-
-/*
- *  Date 26-JAN-2008
- *  Lam Nguyen comment
-
-
-UIContactPortlet.prototype.checkLayout = function() {
-	try{
-		var Browser = eXo.core.Browser ;
-		var	display = Browser.getCookie("contdisplaymode") ;
-		var	display0 = Browser.getCookie("contdisplaymode0") ;
-		var	display1 = Browser.getCookie("contdisplaymode1") ;
-		var	layout0 = document.getElementById("UIAddressBooks") ;
-		var	layout1 = document.getElementById("UITags") ;
-		var	layout2 = document.getElementById("UINavigationContainer") ;
-		var workingarea = eXo.core.DOMUtil.findNextElementByTagName(layout2, "div") ;
-	}catch(e) {
-		alert(e.message) ;
-	}
-	layout2.style.display = display ;
-	if (display == "none") workingarea.style.marginLeft = "0px"	;
-	layout0.style.display = display0 ;
-	layout1.style.display = display1 ;
-  var layoutno = Browser.getCookie('layoutno') ;
-  eXo.contact.UIContactPortlet.addCheckedIcon(layoutno) ;
-} ;
-
-
-UIContactPortlet.prototype.switchLayout = function(layout) {
-	var Browser = eXo.core.Browser ;
-	layout = parseInt(layout) ;
-	var	layout0 = document.getElementById("UIAddressBooks") ;
-	var	layout1 = document.getElementById("UITags") ;
-	var	layout3 = document.getElementById("UINavigationContainer") ;
-	var workingarea = eXo.core.DOMUtil.findNextElementByTagName(layout3, "div") ;
-	
-  this.addCheckedIcon(layout) ;
-  
-	switch(layout) {
-		case 0 :
-			if (layout3.style.display == "none") {
-				layout0.style.display = "block" ;				
-				layout1.style.display = "block" ;				
-				layout3.style.display = "block" ;												
-				workingarea.style.marginLeft = "243px"	;
-				Browser.setCookie("contdisplaymode","block",7) ;
-				Browser.setCookie("contdisplaymode0","block",7) ;
-				Browser.setCookie("contdisplaymode1","block",7) ;
-			} else {
-				layout0.style.display = "none" ;
-				layout1.style.display = "none" ;
-				layout3.style.display = "none" ;
-				workingarea.style.marginLeft = "0px"	;
-				Browser.setCookie("contdisplaymode","none",7) ;
-				Browser.setCookie("contdisplaymode0","none",7) ;
-				Browser.setCookie("contdisplaymode1","none",7) ;
-			}
-			break ;
-		case 1 :
-			if (layout0.style.display == "none") {
-				layout0.style.display = "block" ;
-				layout3.style.display = "block" ;
-				workingarea.style.marginLeft = "243px"	;			
-				Browser.setCookie("contdisplaymode","block",7) ;
-				Browser.setCookie("contdisplaymode0","block",7) ;
-			}
-			else {
-				layout0.style.display = "none" ;
-				if(layout1.style.display == "none") {
-					Browser.setCookie("contdisplaymode","none",7) ;
-					workingarea.style.marginLeft = "0px"	;
-					layout3.style.display = "none" ;
-				}
-				Browser.setCookie("contdisplaymode0","none",7) ;	
-			}
-			break ;
-		case 2 :
-			if (layout1.style.display == "none") {
-				layout1.style.display = "block" ;
-				layout3.style.display = "block" ;
-				workingarea.style.marginLeft = "243px"	;
-				Browser.setCookie("contdisplaymode","block",7) ;
-				Browser.setCookie("contdisplaymode1","block",7) ;
-
-			}
-			else {				
-				layout1.style.display = "none" ;
-				if(layout0.style.display == "none") {
-					Browser.setCookie("contdisplaymode","none",7) ;
-					workingarea.style.marginLeft = "0px"	;
-					layout3.style.display = "none" ;
-				}
-				Browser.setCookie("contdisplaymode1","none",7) ;	
-			}
-			break ;
-	}
-}	;
-
-UIContactPortlet.prototype.addCheckedIcon = function(layout) {
-  var itemIcons = eXo.core.DOMUtil.findDescendantsByClass(
-                    document.getElementById('customLayoutViewMenu'), 'div', 'ItemIcon');                    
-  for (var i=0; i<itemIcons.length; i++) {
-    if(i == layout) {
-      itemIcons[i].className = "ItemIcon CheckedMenu";
-    } else {
-      itemIcons[i].className = "ItemIcon";
-    }
-  }
-  eXo.core.Browser.setCookie("layoutno", layout, 7) ;
-} ;
-*/
 
 UIContactPortlet.prototype.showImMenu = function(obj, event) {
 	var menuItems = eXo.core.DOMUtil.findDescendantsByClass(obj, "span", "MenuItem") ;
@@ -593,6 +518,52 @@ UIContactPortlet.prototype.showTrTimer = function(e) {
 
 UIContactPortlet.prototype.showMap = function(/*String*/ address, /*String*/ message) {
 	eXo.core.Topic.publish("UIContactPortlet", "/eXo/portlet/map/displayAddress", {address:address, text:message});
-}
+};
+
+/**
+ * 
+ *  @author Lam Nguyen
+ * 
+ */
+UIContactPortlet.prototype.checkLayoutView = function() {
+  var objRoot = document.getElementById("UIContactPortlet");
+  var objPopup = eXo.core.DOMUtil.findFirstDescendantByClass(objRoot, "div", "TypeViewContactPortlet");    
+  var objListView = null;
+  var objVCards = null;
+  if(eXo.core.DOMUtil.findFirstDescendantByClass(objPopup, "div", "ContactListIcon")) {
+    objListView =  eXo.core.DOMUtil.findFirstDescendantByClass(objPopup, "div", "ContactListIcon");    
+  } else {
+    objListView = eXo.core.DOMUtil.findFirstDescendantByClass(objPopup, "div", "ContactListIconSelected");
+  }
+  
+  if(eXo.core.DOMUtil.findFirstDescendantByClass(objPopup, "div", "ContactIcon")) {
+    objVCards =  eXo.core.DOMUtil.findFirstDescendantByClass(objPopup, "div", "ContactIcon");    
+  } else {
+    objVCards = eXo.core.DOMUtil.findFirstDescendantByClass(objPopup, "div", "ContactIconSelected");
+  }
+  
+  var objListMenuItem = eXo.core.DOMUtil.findAncestorByClass(objListView, "MenuItem");
+  var objVCardsMenuItem = eXo.core.DOMUtil.findAncestorByClass(objVCards, "MenuItem");  
+
+  if (eXo.core.DOMUtil.findDescendantById(objRoot, "UIListUsers")) {
+    objListMenuItem.style.backgroundColor = "#dee4f2";
+    objVCardsMenuItem.style.backgroundColor = "#f6f6f6";
+  } else {
+    objListMenuItem.style.backgroundColor = "#f6f6f6";
+    objVCardsMenuItem.style.backgroundColor = "#dee4f2";
+  }
+};
+
+UIContactPortlet.prototype.showPopupCustomLayoutView = function(obj, evt) {
+  var root = document.getElementById("UIContactPortlet");
+  var objWelcome = eXo.core.DOMUtil.findFirstDescendantByClass(root, "div", "UIWelcomeContact");
+  var objDetails = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div", "ContactDetailsMenuItem");
+  if(objWelcome) {
+    objDetails.style.display = "none";
+  } else {
+    objDetails.style.display = "block";
+  }
+  eXo.webui.UIPopupSelectCategory.show(obj, evt);
+};
 
 eXo.contact.UIContactPortlet = new UIContactPortlet() ;
