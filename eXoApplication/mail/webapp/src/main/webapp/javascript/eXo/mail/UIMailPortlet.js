@@ -455,26 +455,47 @@ UIMailPortlet.prototype.resizeIframe = function(textAreaId, frameId, styleExpand
 		}
 	}
 	expandMessage.style.display = styleExpand ;
-}
+} ;
+
+UIMailPortlet.prototype.showMenu = function(obj, evt){
+	if(!evt) evt = window.event ;
+   evt.cancelBubble = true ;
+   var DOMUtil = eXo.core.DOMUtil ;
+	 var UIMailPortlet = eXo.mail.UIMailPortlet ;
+   var uiPopupCategory = DOMUtil.findFirstDescendantByClass(obj, 'div', 'UIPopupCategory') ;
+   if (!uiPopupCategory) return ;
+	 if(UIMailPortlet.menuElement) {
+	   if(UIMailPortlet.menuElement.style.display == "none") {
+	       eXo.webui.UIPopupSelectCategory.hide() ;
+	       UIMailPortlet.menuElement.style.display = "block" ;
+	       eXo.core.DOMUtil.listHideElements(UIMailPortlet.menuElement) ; 
+	   } else UIMailPortlet.menuElement.style.display = "none" ;
+	 }
+	 UIMailPortlet.swapMenu(uiPopupCategory,obj) ;
+} ;
 
 UIMailPortlet.prototype.showView = function(obj, evt) {
    if(!evt) evt = window.event ;
    evt.cancelBubble = true ;
    var DOMUtil = eXo.core.DOMUtil ;
+	 var UIMailPortlet = eXo.mail.UIMailPortlet ;
    var uiPopupCategory = DOMUtil.findFirstDescendantByClass(obj, 'div', 'UIPopupCategory') ;
-   if (!uiPopupCategory) return ; 
-   var uiRightPopupMenuContainer = DOMUtil.findFirstDescendantByClass(uiPopupCategory, 'div', 'UIRightPopupMenuContainer') ;
+   if (!uiPopupCategory) return ;
+	 if(UIMailPortlet.menuElement) {
+	   if(UIMailPortlet.menuElement.style.display == "none") {
+	       eXo.webui.UIPopupSelectCategory.hide() ;
+	       UIMailPortlet.menuElement.style.display = "block" ;
+	       eXo.core.DOMUtil.listHideElements(UIMailPortlet.menuElement) ; 
+	   } else UIMailPortlet.menuElement.style.display = "none" ;
+	 }
+	 UIMailPortlet.swapMenu(uiPopupCategory,obj) ;
+   var uiRightPopupMenuContainer = DOMUtil.findFirstDescendantByClass(UIMailPortlet.menuElement, 'div', 'UIRightPopupMenuContainer') ;
    var actions = DOMUtil.findChildrenByClass(uiRightPopupMenuContainer,"a", "MenuItem") ;
-   if(uiPopupCategory.style.display == "none") {
-       eXo.webui.UIPopupSelectCategory.hide() ;
-       uiPopupCategory.style.display = "block" ;
-       eXo.core.DOMUtil.listHideElements(uiPopupCategory) ; 
-   } else uiPopupCategory.style.display = "none" ;
-   actions[0].onmouseover = eXo.mail.UIMailPortlet.showSubmenu ;
-   actions[0].onmouseout = eXo.mail.UIMailPortlet.hideSubmenu ;
+   actions[0].onmouseover = UIMailPortlet.showSubmenu ;
+   actions[0].onmouseout = UIMailPortlet.hideSubmenu ;
    eXo.mail.UIMailPortlet.subMenu = DOMUtil.findNextElementByTagName(actions[0], "div") ;
    eXo.mail.UIMailPortlet.subMenu.style.left = actions[0].offsetWidth + "px" ;
-   eXo.core.DOMUtil.listHideElements(eXo.mail.UIMailPortlet.subMenu) ;
+   eXo.core.DOMUtil.listHideElements(UIMailPortlet.subMenu) ;
 } ;
 
 UIMailPortlet.prototype.showSubmenu = function() {
@@ -486,6 +507,59 @@ UIMailPortlet.prototype.hideSubmenu = function() {
   eXo.mail.UIMailPortlet.timeOutSubmenu = window.setTimeout('eXo.mail.UIMailPortlet.subMenu.style.display = "none"', 100) ;
   eXo.mail.UIMailPortlet.subMenu.onmouseover = eXo.mail.UIMailPortlet.showSubmenu ;
   eXo.mail.UIMailPortlet.subMenu.onmouseout = eXo.mail.UIMailPortlet.hideSubmenu ;
+} ;
+
+UIMailPortlet.prototype.swapMenu = function(oldmenu, clickobj) {
+  var DOMUtil = eXo.core.DOMUtil ;
+	var Browser = eXo.core.Browser ;
+	var UIMailPortlet = eXo.mail.UIMailPortlet ;
+  var uiDesktop = document.getElementById("UIPageDesktop") ;
+  var uiWorkSpaceWidth = (document.getElementById("UIControlWorkspace"))? document.getElementById("UIControlWorkspace").offsetWidth : 0 ;
+	uiWorkSpaceWidth = (document.all) ? 2*uiWorkSpaceWidth : uiWorkSpaceWidth ;
+  var menuX = Browser.findPosX(clickobj) - uiWorkSpaceWidth ;
+	var menuY = Browser.findPosY(clickobj) + clickobj.offsetHeight ;
+  if(uiDesktop) {
+  	var portlet = DOMUtil.findAncestorByClass(document.getElementById(eXo.webui.UIContextMenuMail.portletName), "UIResizableBlock") ;
+    var uiWindow = DOMUtil.findAncestorByClass(portlet, "UIWindow") ;
+    menuX = menuX - uiWindow.offsetLeft  -  portlet.scrollLeft ;
+    menuY = menuY - uiWindow.offsetTop  -  portlet.scrollTop ;
+  }
+  if(document.getElementById("tmpMenuElement")) DOMUtil.removeElement(document.getElementById("tmpMenuElement")) ;
+	var tmpMenuElement = oldmenu.cloneNode(true) ;
+	tmpMenuElement.setAttribute("id","tmpMenuElement") ;
+	UIMailPortlet.menuElement = tmpMenuElement ;
+  document.getElementById(eXo.webui.UIContextMenuMail.portletName).appendChild(tmpMenuElement) ;	
+  if(arguments.length > 2) {
+    menuY -= arguments[2].scrollTop ;
+  }
+	UIMailPortlet.menuElement.style.top = menuY + "px" ;
+	UIMailPortlet.menuElement.style.left = menuX + "px" ;	
+	UIMailPortlet.showHide(UIMailPortlet.menuElement) ;
+  if(uiDesktop) {    
+    var uiRightClick = (DOMUtil.findFirstDescendantByClass(UIMailPortlet.menuElement, "div", "UIRightClickPopupMenu")) ? DOMUtil.findFirstDescendantByClass(UIMailPortlet.menuElement, "div", "UIRightClickPopupMenu") : UIMailPortlet.menuElement ;
+    var mnuBottom = eXo.core.Browser.findPosYInContainer(UIMailPortlet.menuElement, uiDesktop) + uiRightClick.offsetHeight ;
+    var widBottom = uiWindow.offsetTop + uiWindow.offsetHeight ;
+    if(mnuBottom > widBottom) {
+      menuY -= (mnuBottom - widBottom - clickobj.offsetHeight - uiWindow.scrollTop) ;
+      UIMailPortlet.menuElement.style.top = menuY + "px" ;
+    }
+  } else {
+    var uiRightClick = (DOMUtil.findFirstDescendantByClass(UIMailPortlet.menuElement, "div", "UIRightClickPopupMenu")) ? DOMUtil.findFirstDescendantByClass(UIMailPortlet.menuElement, "div", "UIRightClickPopupMenu") : UIMailPortlet.menuElement ;
+    var mnuBottom = UIMailPortlet.menuElement.offsetTop +  uiRightClick.offsetHeight - window.document.documentElement.scrollTop ;
+    if(window.document.documentElement.clientHeight < mnuBottom) {
+      menuY += (window.document.documentElement.clientHeight - mnuBottom) ;
+      UIMailPortlet.menuElement.style.top = menuY + "px" ;      
+    }
+  }
+} ;
+
+UIMailPortlet.prototype.showHide = function(obj) {
+	if (obj.style.display != "block") {
+		obj.style.display = "block" ;
+		eXo.core.DOMUtil.listHideElements(obj) ;
+	} else {
+		obj.style.display = "none" ;
+	}
 } ;
 
 // Check all
@@ -545,7 +619,7 @@ CheckBox.prototype.check = function() {
 		}
 		eXo.mail.CheckBox.checkall.checked = eXo.mail.CheckBox.isAll() ;
 	}
-}
+} ;
 
 CheckBox.prototype.isAll = function() {
 	var items = eXo.mail.CheckBox.checkboxes ;
@@ -555,5 +629,6 @@ CheckBox.prototype.isAll = function() {
 	}
 	return true ;
 } ;
+
 eXo.mail.CheckBox = new CheckBox() ;
 eXo.mail.UIMailPortlet = new UIMailPortlet();
