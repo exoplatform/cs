@@ -76,6 +76,11 @@ public class Utils {
    
   public static final String SVR_INCOMING_SSL = "ssl".intern() ;
   
+  public static final String SVR_POP_LEAVE_ON_SERVER = "leave.on.server".intern() ;
+  public static final String SVR_POP_SKIP_OVER_SIZE = "skip.over.size".intern() ;
+  
+  public static final String SVR_IMAP_MARK_AS_DELETE = "mark.as.delete".intern() ;
+  
   public static final String KEY_FOLDERS = "Folders".intern() ;
   public static final String KEY_MESSAGE = "Messages".intern() ;
   public static final String KEY_TAGS = "Tags".intern() ;
@@ -113,6 +118,8 @@ public class Utils {
   public static final String EXO_RECEIVEDDATE = "exo:receivedDate".intern() ; 
   public static final String EXO_SENDDATE = "exo:sendDate".intern() ;
   public static final String EXO_SERVERPROPERTIES = "exo:serverProperties".intern() ;
+  public static final String EXO_POPSERVERPROPERTIES = "exo:popServerProperties".intern() ;
+  public static final String EXO_IMAPSERVERPROPERTIES = "exo:imapServerProperties".intern() ;
   public static final String EXO_MESSAGE = "exo:message".intern() ;
   public static final String EXO_ISUNREAD = "exo:isUnread".intern() ;
   public static final String EXO_TOTALMESSAGE = "exo:totalMessages".intern();

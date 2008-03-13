@@ -234,6 +234,7 @@ public class UIMessagePreview extends UIComponent {
         uiMsgList.updateList();
         uiMsgPreview.setMessage(null);
       }
+      uiMsgPreview.setShowedMessages(null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UINavigationContainer.class));
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgArea);
     }
@@ -333,20 +334,21 @@ public class UIMessagePreview extends UIComponent {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource() ;    
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
+      UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class) ;
       Message msg = uiMsgPreview.getShowedMessageById(msgId) ;
       if (msg != null) {
-        String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-        UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);     
-        UIMoveMessageForm uiMoveMessageForm = uiMsgPreview.createUIComponent(UIMoveMessageForm.class,null, null);
+        String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
+        UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;     
+        UIMoveMessageForm uiMoveMessageForm = uiMsgPreview.createUIComponent(UIMoveMessageForm.class,null, null) ;
         uiMoveMessageForm.init(accountId);
-        List<Message> msgList = new ArrayList<Message>();
-        msgList.add(msg);
+        List<Message> msgList = new ArrayList<Message>() ;
+        msgList.add(msg) ;
         uiMoveMessageForm.setMessageList(msgList);
-        uiPopupAction.activate(uiMoveMessageForm, 600, 0, true);
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
+        uiPopupAction.activate(uiMoveMessageForm, 600, 0, true) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       }
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview);
+      uiMsgPreview.setMessage(null) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview) ;
     }
   }
 }
