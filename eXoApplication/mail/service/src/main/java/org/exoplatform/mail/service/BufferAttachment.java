@@ -16,6 +16,7 @@
  */
 package org.exoplatform.mail.service;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 //import org.exoplatform.download.DownloadResource;
 //import org.exoplatform.download.DownloadService;
@@ -28,15 +29,18 @@ import java.io.InputStream;
  * Jul 9, 2007
  */
 public class BufferAttachment extends Attachment{
-  
-  private InputStream inputStream;
-  
+  //private InputStream inputStream;
+  byte[] bytes = null ;
   public InputStream getInputStream()throws Exception{
     /*DownloadService downloadService = (DownloadService)PortalContainer.getComponent(DownloadService.class) ;
     DownloadResource downloadResource = downloadService.getDownloadResource(getId()) ;
     downloadResource.getInputStream() ;*/
-    return inputStream ; 
+    return new ByteArrayInputStream(bytes) ; 
   }
-  public void setInputStream(InputStream is){ inputStream = is ; }
+  public void setInputStream(InputStream is) throws Exception { 
+    //inputStream = is ; 
+    bytes = new byte[is.available()] ; 
+    is.read(bytes) ;
+  }
   
 }
