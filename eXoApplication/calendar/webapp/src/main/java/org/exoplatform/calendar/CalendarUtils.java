@@ -372,7 +372,7 @@ public class CalendarUtils {
     }
   }
 
-  public static List<SelectItemOption<String>> getCalendars() throws Exception {
+  public static List<SelectItemOption<String>> getCalendarOption() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
@@ -398,12 +398,42 @@ public class CalendarUtils {
         for(org.exoplatform.calendar.service.Calendar c : g.getCalendars()){
           if(CalendarUtils.canEdit(oService, c.getEditPermission(), username)){
             options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE + c.getName(), CalendarUtils.PUBLIC_TYPE + CalendarUtils.COLON + c.getId())) ;
-            System.out.println(CalendarUtils.PUBLIC_TYPE + CalendarUtils.COLON + c.getId()) ;
           }
         }
 
       }
     }
     return options ;
+  }
+  
+  public static List<org.exoplatform.calendar.service.Calendar> getCalendars() throws Exception {
+    List<org.exoplatform.calendar.service.Calendar> list = new ArrayList<org.exoplatform.calendar.service.Calendar>() ;
+    CalendarService calendarService = CalendarUtils.getCalendarService() ;
+    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    List<org.exoplatform.calendar.service.Calendar> calendars = calendarService.getUserCalendars(SessionProviderFactory.createSessionProvider(), username, true) ;
+    for(org.exoplatform.calendar.service.Calendar c : calendars) {
+      list.add(c) ;
+    }
+    GroupCalendarData gcd = calendarService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true);
+    if(gcd != null) {
+      for(org.exoplatform.calendar.service.Calendar c : gcd.getCalendars()) {
+        if(CalendarUtils.canEdit(null, c.getEditPermission(), username)){
+          list.add(c) ;
+        }
+      }
+    }
+    List<GroupCalendarData> lgcd = calendarService.getGroupCalendars(SessionProviderFactory.createSystemProvider(), CalendarUtils.getUserGroups(username), false, username) ;
+    if(lgcd != null) {
+      OrganizationService oService = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+      for(GroupCalendarData g : lgcd) {
+        for(org.exoplatform.calendar.service.Calendar c : g.getCalendars()){
+          if(CalendarUtils.canEdit(oService, c.getEditPermission(), username)){
+            list.add(c) ; 
+          }
+        }
+
+      }
+    }
+    return list ;
   }
 }

@@ -244,7 +244,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     calType_ = calType ;
   }
   private List<SelectItemOption<String>> getCalendars() throws Exception {
-    return CalendarUtils.getCalendars() ;
+    return CalendarUtils.getCalendarOption() ;
   }
 
   public static List<SelectItemOption<String>> getCategory() throws Exception {

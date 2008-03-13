@@ -136,15 +136,15 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     addChild(sharing) ;
   }
 
-  @SuppressWarnings("unchecked")
+  /*@SuppressWarnings("unchecked")
   private List<SelectItemOption<String>> getColors() {
     List<SelectItemOption<String>> colors = new ArrayList<SelectItemOption<String>>() ;
-    for(String color : Calendar.COLORS) {
+    for(String color : Colors.COLORNAME) {
       colors.add(new SelectItemOption<String>(color, color)) ;
     }
     Collections.sort(colors, new CalendarUtils.SelectComparator()) ;
     return colors;
-  }
+  }*/
 
   public String[] getActions(){
     return new String[]{"Save", "Reset", "Cancel"} ;

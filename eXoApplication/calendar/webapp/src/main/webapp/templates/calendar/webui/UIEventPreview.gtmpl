@@ -7,7 +7,7 @@ dateTimeFormat = uicomponent.getDateTimeFormat() ;
 DateFormat df = new SimpleDateFormat(dateTimeFormat) ;
 df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
 CalendarEvent event = uicomponent.getEvent() ;		
-color = uicomponent.getColors().get(event.getCalendarId()) ;
+color = uicomponent.getColors().get(event.getCalType() + CalendarUtils.COLON + event.getCalendarId()) ;
 uiform.begin() ;
 %>
 <div class="UIPreview">

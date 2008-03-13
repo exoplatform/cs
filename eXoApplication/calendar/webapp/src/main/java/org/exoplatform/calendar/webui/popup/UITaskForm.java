@@ -519,7 +519,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   }
 
   private List<SelectItemOption<String>> getCalendars() throws Exception {
-    return CalendarUtils.getCalendars() ;
+    return CalendarUtils.getCalendarOption() ;
   }
 
 
