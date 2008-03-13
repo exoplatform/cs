@@ -526,7 +526,7 @@ public class UIMessageList extends UIForm {
     msgFilter.setAscending(isAscending_);
     msgFilter.setViewQuery(getViewQuery());
     if (!msgFilter.getName().equals("Search")) {
-      msgFilter.setSearchQuery("");
+      msgFilter.setText("");
       msgFilter.setFolder((getSelectedFolderId() == null) ? null : new String[] {getSelectedFolderId()});
       msgFilter.setTag((getSelectedTagId() == null) ? null : new String[] {getSelectedTagId()});
     }
@@ -1066,7 +1066,7 @@ public class UIMessageList extends UIForm {
       msgFilter.setAscending(uiMessageList.isAscending_);
       msgFilter.setViewQuery(uiMessageList.getViewQuery());
       if (!msgFilter.getName().equals("Search")) {
-        msgFilter.setSearchQuery("");
+        msgFilter.setText("");
         msgFilter.setFolder((uiMessageList.getSelectedFolderId() == null) ? null : new String[] {uiMessageList.getSelectedFolderId()});
         msgFilter.setTag((uiMessageList.getSelectedTagId() == null) ? null : new String[] {uiMessageList.getSelectedTagId()});
       }
