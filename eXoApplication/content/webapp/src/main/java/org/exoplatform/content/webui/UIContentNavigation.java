@@ -48,7 +48,7 @@ public class UIContentNavigation extends UIContainer {
   private ContentNode parentNode_ ; 
   private ContentNavigation nav_ ;
   private ContentNode grandNode_;
-  
+  static final private String anonymous_ = "anonymous" ;
   void refresh() throws Exception {
     ContentDAO contentService = getApplicationComponent(ContentDAO.class) ;
 //    nav_ = contentService.get(Util.getUIPortal().getOwner());
@@ -57,6 +57,7 @@ public class UIContentNavigation extends UIContainer {
     if(nav_ == null) {
       nav_ = new ContentNavigation();
       //nav_.setOwner(Util.getUIPortal().getOwner());
+      if(userName==null) userName = anonymous_ ;
       nav_.setOwner(userName) ;
     }
     if(nav_.getNodes() != null && nav_.getNodes().size() > 0){

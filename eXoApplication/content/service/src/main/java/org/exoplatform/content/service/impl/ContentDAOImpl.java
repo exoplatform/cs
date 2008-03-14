@@ -4,8 +4,10 @@
  **************************************************************************/
 package org.exoplatform.content.service.impl;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import javax.jcr.Node;
 
@@ -70,7 +72,10 @@ public class ContentDAOImpl extends BaseContentService implements ContentDAO {
   
   public void create(final ContentNavigation navigation) throws Exception {
     SessionProvider sessionProvider = SessionProvider.createSystemProvider() ;
-    Node appNode = createApplicationNode(sessionProvider, navigation.getOwner()) ;
+    Node appNode = nodeCreator_.getPublicApplicationNode(sessionProvider) ;
+    if(navigation.getOwner() != "anonymous") {
+      appNode = createApplicationNode(sessionProvider, navigation.getOwner()) ;
+    }
     ContentData data = new ContentData();
     data.setDataType(ContentNavigation.class.getName());    
     data.setId(navigation.getOwner()+"::"+ContentNavigation.class.getName());
@@ -82,7 +87,10 @@ public class ContentDAOImpl extends BaseContentService implements ContentDAO {
   
   public void save(ContentNavigation navigation) throws Exception {
     SessionProvider sessionProvider = SessionProvider.createSystemProvider() ;
-    Node appNode = getApplicationNode(sessionProvider, navigation.getOwner()) ;
+    Node appNode = nodeCreator_.getPublicApplicationNode(sessionProvider) ;
+    if(navigation.getOwner() != "anonymous") {
+      appNode = getApplicationNode(sessionProvider, navigation.getOwner()) ;
+    }
     if(appNode == null) {
       sessionProvider.close() ;
       create(navigation);
@@ -112,7 +120,8 @@ public class ContentDAOImpl extends BaseContentService implements ContentDAO {
   
   private ContentData getDataByOwner(String owner) throws Exception {
     SessionProvider sessionProvider = SessionProvider.createSystemProvider() ;
-    Node appNode = getApplicationNode(sessionProvider, owner) ;
+    Node appNode = nodeCreator_.getPublicApplicationNode(sessionProvider) ;
+    if(owner != null) appNode = getApplicationNode(sessionProvider, owner) ;
     if(appNode == null || appNode.hasNode(NODE_NAME) == false){
       sessionProvider.close() ;
       return null;    
@@ -188,4 +197,10 @@ public class ContentDAOImpl extends BaseContentService implements ContentDAO {
     node.setProperty(MODIFIED_DATE, calendar);    
   }
   
+  public List<String> getTypes() {
+    List<String> types = new ArrayList<String>();
+    types.add("rss") ;
+    types.add("desc") ;
+    return types ;
+  }
 }

@@ -37,12 +37,11 @@
        String removeLink = uicomponent.event("RemoveNode") ;
        String editLink = uicomponent.event("EditNode") ;
         %>
-        <%if(uicomponent.isLogon()) { %>
-    	
+        <%//if(uicomponent.isLogon()) { %>
 	        <a href="<%=uicomponent.event("AddNode")%>" class="NavigationControlIcon AddCategory24x24Icon" title="Add a Category"><span></span></a>
 	        <a href="<%=editLink%>" class="NavigationControlIcon EditCategory24x24Icon" title="Edit Selected Category"><span></span></a>
 	        <a href="<%=removeLink%>" class="NavigationControlIcon DeleteCategory24x24Icon" title="Remove Selected Category"><span></span></a>
-	    	<% }%>
+	    	<% //}%>
 	    	<div style="clear: left"><span></span></div>
 	    </div>
 	    <div style="clear: both"><span></span></div>
