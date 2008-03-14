@@ -23,6 +23,7 @@ import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageList;
@@ -122,17 +123,21 @@ public class UIAccountList extends UIGrid  implements UIPopupComponent{
         mailSvr.removeAccount(SessionsUtils.getSessionProvider(), username, accId) ;
         uiSelectAccount.refreshItems() ;
         uiAccountList.updateGrid() ;
+        MailSetting mailSetting = mailSvr.getMailSetting(SessionsUtils.getSessionProvider(), username) ;
         if (currAccountId.equals(accId)) {
           List<Account> accounts = mailSvr.getAccounts(SessionsUtils.getSessionProvider(), username);
           if (accounts.size() == 0) {
             uiSelectAccount.setSelectedValue(null);
+            mailSetting.setDefaultAccount(null) ;
             uiMessageList.init("");
           } else {
             String selectedAcc = accounts.get(0).getId();
             uiSelectAccount.setSelectedValue(selectedAcc);
+            mailSetting.setDefaultAccount(selectedAcc) ;
             uiMessageList.setMessageFilter(null);
             uiMessageList.init(selectedAcc);
           }
+          mailSvr.saveMailSetting(SessionsUtils.getSessionProvider(), username, mailSetting) ;
           uiMessagePreview.setMessage(null);
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ; 
         } else {
