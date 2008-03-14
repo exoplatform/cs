@@ -192,12 +192,11 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   }
   
   public String getLabel(String id) {
-    String label = id ;
     try {
-      label = super.getLabel(id) ;
+      return super.getLabel(id) ;
     } catch (Exception e) {
+      return id ;
     }
-    return label ;
   }
   private String getEventSummary() {
     return getUIStringInput(FIELD_EVENT).getValue() ;
