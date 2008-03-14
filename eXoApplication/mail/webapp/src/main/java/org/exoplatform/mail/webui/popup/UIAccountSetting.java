@@ -24,6 +24,8 @@ import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIMailPortlet;
+import org.exoplatform.mail.webui.UIMessageArea;
+import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UINavigationContainer;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.portal.webui.util.Util;
@@ -337,16 +339,30 @@ public class UIAccountSetting extends UIFormTabPane {
   
   static  public class DeleteAccountActionListener extends EventListener<UIAccountSetting> {
     public void execute(Event<UIAccountSetting> event) throws Exception {
-      UIAccountSetting uiAccountSetting = event.getSource() ;
-      UIMailPortlet uiPortlet = uiAccountSetting.getAncestorOfType(UIMailPortlet.class) ;
+      UIAccountSetting uiAccSetting = event.getSource() ;
+      UIMailPortlet uiPortlet = uiAccSetting.getAncestorOfType(UIMailPortlet.class) ;
+      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
+      UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;
       String username = uiPortlet.getCurrentUser();
       MailService mailServ = uiPortlet.getApplicationComponent(MailService.class) ;
       try {
-        mailServ.removeAccount(SessionsUtils.getSessionProvider(), username, uiAccountSetting.getSelectedAccountId()) ;
-        if (uiAccountSetting.getAccounts().size() > 0)
-          uiAccountSetting.setSelectedAccountId(uiAccountSetting.getAccounts().get(0).getId()) ;
-        uiAccountSetting.fillField() ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiAccountSetting.getAncestorOfType(UIPopupActionContainer.class)) ;
+        String removedAccId = uiAccSetting.getSelectedAccountId() ; 
+        mailServ.removeAccount(SessionsUtils.getSessionProvider(), username, removedAccId) ;
+        if (uiAccSetting.getAccounts().size() > 0) {
+          String newSelectedAcc = uiAccSetting.getAccounts().get(0).getId() ;
+          uiAccSetting.setSelectedAccountId(newSelectedAcc) ;
+          if (removedAccId.equals(uiSelectAccount.getSelectedValue()))
+            uiSelectAccount.setSelectedValue(newSelectedAcc) ;
+          uiAccSetting.fillField() ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiAccSetting.getAncestorOfType(UIPopupActionContainer.class)) ;
+        } else {
+          uiSelectAccount.updateAccount() ;
+          uiSelectAccount.setSelectedValue(null) ;
+          event.getSource().getAncestorOfType(UIMailPortlet.class).cancelAction() ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectAccount) ;
+        }
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectAccount.getAncestorOfType(UINavigationContainer.class)) ;
       } catch(Exception e) {
         e.printStackTrace() ;
       } 
