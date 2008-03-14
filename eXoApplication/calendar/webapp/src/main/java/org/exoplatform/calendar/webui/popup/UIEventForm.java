@@ -144,12 +144,11 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     setSelectedTab(eventDetailTab.getId()) ;
   }
   public String getLabel(String id) {
-    String label = id ;
     try {
-      label = super.getLabel(id) ;
+      return super.getLabel(id) ;
     } catch (Exception e) {
+      return id ;
     }
-    return label ;
   }
 
   public void initForm(CalendarSetting calSetting, CalendarEvent eventCalendar, String formTime) throws Exception {

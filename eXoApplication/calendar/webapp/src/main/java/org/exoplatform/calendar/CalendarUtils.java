@@ -68,6 +68,7 @@ public class CalendarUtils {
   final public static String SEMICOLON = ";".intern() ;
   final public static String COLON = ":".intern() ;
   final public static String COMMA = ",".intern() ;
+  final public static String STAR = "*".intern() ;
   final public static String SLASH = "/".intern() ;
   final public static String BACKSLASH = "\\".intern() ;
   final public static String DOUBLESCORE = "--".intern() ;
@@ -359,7 +360,8 @@ public class CalendarUtils {
     if(oService != null) {
       Collection<Membership> memberShipsType = oService.getMembershipHandler().findMembershipsByUser(username) ;
       for(Membership mp : memberShipsType) {
-        sb.append(CalendarUtils.COMMA).append(mp.getMembershipType()+CalendarUtils.COLON+ mp.getGroupId()) ;
+        sb.append(CalendarUtils.COMMA).append(mp.getMembershipType() +
+            CalendarUtils.COLON+ mp.getGroupId()).append(CalendarUtils.COMMA).append(CalendarUtils.STAR + CalendarUtils.COLON+ mp.getGroupId()) ;
       }
     }
     return CalendarUtils.hasEditPermission(savePerms, sb.toString().split(CalendarUtils.COMMA)) ;
