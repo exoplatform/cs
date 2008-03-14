@@ -27,6 +27,7 @@ import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.DataPageList;
+import org.exoplatform.contact.service.impl.NewUserListener;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -55,6 +56,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
     events = {
       @EventConfig(listeners = UIAddressForm.SaveActionListener.class), 
       @EventConfig(listeners = UIAddressForm.SearchActionListener.class), 
+      @EventConfig(listeners = UIAddressForm.ChangeGroupActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIAddressForm.CancelActionListener.class, phase = Phase.DECODE)
     }
 )
@@ -66,7 +68,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   private List<Contact> alreadyCheckedContact = new ArrayList<Contact>();
 
   private String recipientsType = "";
-
+  protected String selectedAddressId_ = "" ;
   public void setRecipientsType(String type)  {
     recipientsType=type;
   }
@@ -79,7 +81,10 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   }
   public void  initSearchForm() throws Exception{
     addUIFormInput(new UIFormStringInput(FIELD_KEYWORD, FIELD_KEYWORD, null)) ;
-    addUIFormInput(new UIFormSelectBox(FIELD_GROUP, FIELD_GROUP, getGroups())) ;
+    UIFormSelectBox fieldGroup = new UIFormSelectBox(FIELD_GROUP, FIELD_GROUP, getGroups()) ;
+    fieldGroup.setOnChange("ChangeGroup") ;
+    addUIFormInput(fieldGroup) ;
+
   }
   private List<SelectItemOption<String>> getGroups() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
@@ -162,6 +167,13 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UIAddressForm> event) throws Exception { 
       System.out.println("======== >>>UIAddressForm.SaveActionListener");
       UIAddressForm uiForm = event.getSource();
+      if(uiForm.getCheckedContact().size() <= 0) {
+        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIAddressForm.msg.contact-email-required",null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
+      
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UITaskForm uiTaskForm = uiContainer.findFirstComponentOfType(UITaskForm.class) ;
       UIEventForm uiEventForm = uiContainer.findFirstComponentOfType(UIEventForm.class) ;
@@ -193,6 +205,8 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       ContactService contactService = uiForm.getApplicationComponent(ContactService.class) ;
       String text = uiForm.getUIStringInput(UIAddressForm.FIELD_KEYWORD).getValue() ;
       String category = uiForm.getUIFormSelectBox(UIAddressForm.FIELD_GROUP).getValue() ;
+      if(category.equals(NewUserListener.DEFAULTGROUP)) category = category + CalendarUtils.getCurrentUser() ;
+      uiForm.selectedAddressId_ = category ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       if(CalendarUtils.isEmpty(text)) {
         uiApp.addMessage(new ApplicationMessage("UIAddressForm.msg.keyword-required", null)) ;
@@ -200,13 +214,31 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         return ;
       }
       ContactFilter filter = new ContactFilter() ;
-      if(!CalendarUtils.isEmpty(category)) {
-        filter.setCategories(new String[]{category}) ;
+      if(!CalendarUtils.isEmpty(uiForm.selectedAddressId_)) {
+        filter.setCategories(new String[]{uiForm.selectedAddressId_}) ;
       } 
       filter.setText(text) ;
       DataPageList resultPageList = 
         contactService.searchContact(SessionProviderFactory.createSystemProvider(), event.getRequestContext().getRemoteUser(), filter) ;
       uiForm.setContactList(resultPageList.getAll()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
+    }
+  }
+  static  public class ChangeGroupActionListener extends EventListener<UIAddressForm> {
+    public void execute(Event<UIAddressForm> event) throws Exception {
+      UIAddressForm uiForm = event.getSource();  
+      ContactService contactService = uiForm.getApplicationComponent(ContactService.class) ;
+      String category = uiForm.getUIFormSelectBox(UIAddressForm.FIELD_GROUP).getValue() ;
+      if(category.equals(NewUserListener.DEFAULTGROUP)) category = category + CalendarUtils.getCurrentUser() ;
+      uiForm.selectedAddressId_ = category ;
+      ContactFilter filter = new ContactFilter() ;
+      if(!CalendarUtils.isEmpty(uiForm.selectedAddressId_)) {
+        filter.setCategories(new String[]{uiForm.selectedAddressId_}) ;
+      } 
+      DataPageList resultPageList = 
+        contactService.searchContact(SessionProviderFactory.createSystemProvider(), event.getRequestContext().getRemoteUser(), filter) ;
+      uiForm.setContactList(resultPageList.getAll()) ;
+      uiForm.getUIFormSelectBox(UIAddressForm.FIELD_GROUP).setValue(uiForm.selectedAddressId_) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
     }
   }
