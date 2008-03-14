@@ -398,7 +398,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     message.setMessageBody(body) ;
     message.setUnread(false);
     message.setSize(body.getBytes().length);
-    message.setReplyTo(account.getUserDisplayName()+ "<" + account.getEmailReplyAddress() + ">");
+    message.setReplyTo(account.getEmailReplyAddress());
     return message;
   }
   

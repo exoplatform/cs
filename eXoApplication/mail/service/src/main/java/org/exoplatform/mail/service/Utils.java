@@ -313,6 +313,9 @@ public class Utils {
     if(message.getMessageBcc() != null)    
       mimeMessage.setRecipients(javax.mail.Message.RecipientType.BCC, InternetAddress.parse(message.getMessageBcc(), false));
     
+    if(message.getReplyTo() != null)    
+      mimeMessage.setReplyTo(Utils.getInternetAddress(message.getReplyTo()));
+    
     mimeMessage.setSubject(message.getSubject());
     mimeMessage.setSentDate(message.getSendDate());
     

@@ -275,21 +275,24 @@ public class MailServiceImpl implements MailService{
     javax.mail.Message mimeMessage = new MimeMessage(session);
     String status = "";
     InternetAddress addressFrom ;
-    if (message.getFrom() != null) {
+    if (message.getFrom() != null) 
       addressFrom = new InternetAddress(message.getFrom());
-    } else {
+    else 
       addressFrom = new InternetAddress(session.getProperties().getProperty(Utils.SVR_SMTP_USER));
-    }
+    
     mimeMessage.setFrom(addressFrom);
-    if(message.getMessageTo() != null) {
+    if(message.getMessageTo() != null) 
       mimeMessage.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(message.getMessageTo()));
-    }
-    if(message.getMessageCc() != null) {
+    
+    if(message.getMessageCc() != null) 
       mimeMessage.setRecipients(javax.mail.Message.RecipientType.CC, InternetAddress.parse(message.getMessageCc(), true));
-    }
-    if(message.getMessageBcc() != null) {   
+    
+    if(message.getMessageBcc() != null)    
       mimeMessage.setRecipients(javax.mail.Message.RecipientType.BCC, InternetAddress.parse(message.getMessageBcc(), false));
-    }
+    
+    if(message.getReplyTo() != null)    
+      mimeMessage.setReplyTo(Utils.getInternetAddress(message.getReplyTo()));
+    
     mimeMessage.setSubject(message.getSubject());
     mimeMessage.setSentDate(message.getSendDate());
     
