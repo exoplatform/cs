@@ -129,4 +129,9 @@ public class UICalendarViewContainer extends UIContainer  {
       }
     }
   }
+  public void applySeting() throws Exception {
+    for(UIComponent comp : getChildren()) {
+      if((comp instanceof CalendarView) &&  comp.isRendered()) ((CalendarView)comp).applySeting() ;  
+    }
+  }
 }
