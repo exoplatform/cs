@@ -91,6 +91,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
   private CalendarEvent calendarEvent_ = null ;
   protected String calType_ = "0" ;
   private String errorMsg_ = null ;
+  private String newCalendarId_ = null ;
+  private String oldCalendarId_ = null ;
 
   public UIEventForm() throws Exception {
     super("UIEventForm");
@@ -99,7 +101,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
     setSelectedTab(eventDetailTab.getId()) ;
     UIEventReminderTab eventReminderTab =  new UIEventReminderTab(TAB_EVENTREMINDER) ;
     addChild(eventReminderTab) ;
-    setRenderedChild(TAB_EVENTDETAIL) ;
+    //setRenderedChild(TAB_EVENTDETAIL) ;
   }
   public String getLabel(String id) {
     String label = id ;
@@ -150,20 +152,13 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
     if(options != null) {
       uiEventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CALENDAR).setOptions(options) ;
     }else {
-      uiEventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CALENDAR).setOptions(getCalendar()) ;
+      uiEventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CALENDAR).setOptions(getCalendars()) ;
     }
     calType_ = calType ;
   }
 
-  private List<SelectItemOption<String>> getCalendar() throws Exception {
-    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    List<org.exoplatform.calendar.service.Calendar> calendars = 
-      calendarService.getUserCalendars(SessionsUtils.getSessionProvider(), CalendarUtils.getCurrentUser(), true) ;
-    for(org.exoplatform.calendar.service.Calendar c : calendars) {
-      options.add(new SelectItemOption<String>(c.getName(), c.getId())) ;
-    }
-    return options ;
+  private List<SelectItemOption<String>> getCalendars() throws Exception {
+    return CalendarUtils.getCalendarOption() ;
   }
 
   public static List<SelectItemOption<String>> getCategory() throws Exception {
@@ -260,11 +255,22 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
   }
   protected String getCalendarId() {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
-    return eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CALENDAR).getValue() ;
+    //return eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CALENDAR).getValue() ;
+    
+    String value = eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CALENDAR).getValue() ;
+    newCalendarId_ = value ;
+    if (!CalendarUtils.isEmpty(value) && value.split(CalendarUtils.COLON).length>0) {
+      calType_ = value.split(CalendarUtils.COLON)[0] ; 
+      return value.split(CalendarUtils.COLON)[1] ;      
+    } 
+    return value ;
   }
   public void setSelectedCalendarId(String value) {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
+    value = calType_ + CalendarUtils.COLON + value ;
     eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CALENDAR).setValue(value) ;
+    oldCalendarId_  = value ;
+    
   }
 
   protected String getEventCategory() {
@@ -478,9 +484,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
         String username = event.getRequestContext().getRemoteUser() ;
         String calendarId = uiForm.getCalendarId() ;
         CalendarEvent calendarEvent = new CalendarEvent() ;
-        if(!uiForm.isAddNew_){
+       /* if(!uiForm.isAddNew_){
           calendarEvent = uiForm.calendarEvent_ ; 
-        }
+        }*/
         calendarEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
         calendarEvent.setSummary(uiForm.getEventSumary()) ;
         calendarEvent.setDescription(uiForm.getEventDescription()) ;

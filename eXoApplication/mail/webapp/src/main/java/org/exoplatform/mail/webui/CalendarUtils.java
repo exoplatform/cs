@@ -22,6 +22,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -29,10 +30,13 @@ import java.util.List;
 import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.impl.GroupImpl;
 import org.exoplatform.webui.core.model.SelectItemOption;
@@ -45,13 +49,21 @@ import org.exoplatform.webui.core.model.SelectItemOption;
  * Jul 11, 2007  
  */
 public class CalendarUtils {
+  final public static String PRIVATE_CALENDARS = "privateCalendar".intern() ;
+  final public static String SHARED_CALENDARS = "sharedCalendar".intern() ;
+  final public static String PUBLIC_CALENDARS = "publicCalendar".intern() ;
+  
   public static final String PRIVATE_TYPE = "0".intern() ;
   public static final String SHARED_TYPE = "1".intern() ;
   public static final String PUBLIC_TYPE = "2".intern() ;
 
   final public static String SEMICOLON = ";".intern() ;
   final public static String COLON = ",".intern() ;
+  final public static String COMMA = ",".intern() ;
+  final public static String STAR = "*".intern() ;
   final public static String UNDERSCORE = "_".intern() ;
+  final public static String DOUBLESCORE = "--".intern() ;
+  
   final public static String TIMEFORMAT  = "HH:mm".intern() ;
   final public static String DATEFORMAT = "MM/dd/yyyy".intern() ;
   final public static String DATETIMEFORMAT = DATEFORMAT + " " +TIMEFORMAT ;   
@@ -182,4 +194,60 @@ public class CalendarUtils {
     }
     return null ;
   }
+  
+  public static List<SelectItemOption<String>> getCalendarOption() throws Exception {
+    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+    CalendarService calendarService = CalendarUtils.getCalendarService() ;
+    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    options.add(new SelectItemOption<String>(CalendarUtils.PRIVATE_CALENDARS, "")) ;
+    List<org.exoplatform.calendar.service.Calendar> calendars = calendarService.getUserCalendars(SessionProviderFactory.createSessionProvider(), username, true) ;
+    for(org.exoplatform.calendar.service.Calendar c : calendars) {
+      options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE  + c.getName(), CalendarUtils.PRIVATE_TYPE + CalendarUtils.COLON + c.getId())) ;
+    }
+    GroupCalendarData gcd = calendarService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true);
+    if(gcd != null) {
+      options.add(new SelectItemOption<String>(CalendarUtils.SHARED_CALENDARS, "")) ;
+      for(org.exoplatform.calendar.service.Calendar c : gcd.getCalendars()) {
+        if(CalendarUtils.canEdit(null, c.getEditPermission(), username)){
+          options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE  + c.getName(), CalendarUtils.SHARED_TYPE + CalendarUtils.COLON + c.getId())) ;
+        }
+      }
+    }
+    List<GroupCalendarData> lgcd = calendarService.getGroupCalendars(SessionProviderFactory.createSystemProvider(), CalendarUtils.getUserGroups(username), false, username) ;
+    if(lgcd != null) {
+      OrganizationService oService = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+      options.add(new SelectItemOption<String>(CalendarUtils.PUBLIC_CALENDARS, "")) ;
+      for(GroupCalendarData g : lgcd) {
+        for(org.exoplatform.calendar.service.Calendar c : g.getCalendars()){
+          if(CalendarUtils.canEdit(oService, c.getEditPermission(), username)){
+            options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE + c.getName(), CalendarUtils.PUBLIC_TYPE + CalendarUtils.COLON + c.getId())) ;
+          }
+        }
+
+      }
+    }
+    return options ;
+  }
+  
+  public static boolean canEdit(OrganizationService oService, String[] savePerms, String username) throws Exception {
+    StringBuffer sb = new StringBuffer(username) ;
+    if(oService != null) {
+      Collection<Membership> memberShipsType = oService.getMembershipHandler().findMembershipsByUser(username) ;
+      for(Membership mp : memberShipsType) {
+        sb.append(CalendarUtils.COMMA).append(mp.getMembershipType() +
+            CalendarUtils.COLON+ mp.getGroupId()).append(CalendarUtils.COMMA).append(CalendarUtils.STAR + CalendarUtils.COLON+ mp.getGroupId()) ;
+      }
+    }
+    return CalendarUtils.hasEditPermission(savePerms, sb.toString().split(CalendarUtils.COMMA)) ;
+  }
+  
+  public static boolean hasEditPermission(String[] savePerms, String[] checkPerms) {
+    if(savePerms != null)
+    for(String sp : savePerms) {
+      for (String cp : checkPerms) {
+        if( sp.equals(cp)) {return true ;}      
+      }
+    }
+    return false ;
+  } 
 }
