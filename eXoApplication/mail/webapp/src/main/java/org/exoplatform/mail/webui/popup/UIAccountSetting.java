@@ -22,6 +22,7 @@ import java.util.List;
 import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
@@ -344,20 +345,28 @@ public class UIAccountSetting extends UIFormTabPane {
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
       UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;
       String username = uiPortlet.getCurrentUser();
-      MailService mailServ = uiPortlet.getApplicationComponent(MailService.class) ;
+      MailService mailSvr = uiPortlet.getApplicationComponent(MailService.class) ;
       try {
         String removedAccId = uiAccSetting.getSelectedAccountId() ; 
-        mailServ.removeAccount(SessionsUtils.getSessionProvider(), username, removedAccId) ;
+        mailSvr.removeAccount(SessionsUtils.getSessionProvider(), username, removedAccId) ;
+        MailSetting mailSetting = mailSvr.getMailSetting(SessionsUtils.getSessionProvider(), username) ;
         if (uiAccSetting.getAccounts().size() > 0) {
           String newSelectedAcc = uiAccSetting.getAccounts().get(0).getId() ;
           uiAccSetting.setSelectedAccountId(newSelectedAcc) ;
           if (removedAccId.equals(uiSelectAccount.getSelectedValue()))
             uiSelectAccount.setSelectedValue(newSelectedAcc) ;
+          String defaultAcc = mailSetting.getDefaultAccount();
+          if (removedAccId.equals(defaultAcc)) {
+            mailSetting.setDefaultAccount(newSelectedAcc) ;
+            mailSvr.saveMailSetting(SessionsUtils.getSessionProvider(), username, mailSetting) ;
+          }
           uiAccSetting.fillField() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiAccSetting.getAncestorOfType(UIPopupActionContainer.class)) ;
         } else {
           uiSelectAccount.updateAccount() ;
           uiSelectAccount.setSelectedValue(null) ;
+          mailSetting.setDefaultAccount(null) ;
+          mailSvr.saveMailSetting(SessionsUtils.getSessionProvider(), username, mailSetting) ;
           event.getSource().getAncestorOfType(UIMailPortlet.class).cancelAction() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectAccount) ;
         }
@@ -398,7 +407,6 @@ public class UIAccountSetting extends UIFormTabPane {
       if(uiSetting.getFieldProtocol().equals(Utils.POP3)){
         boolean leaveOnServer = uiSetting.getFieldLeaveOnServer() ;
         String skipOverSize = uiSetting.getFieldSkipOverSize() ;
-        System.out.println("=======>>>>>>>>"+ String.valueOf(leaveOnServer)) ;
         acc.setPopServerProperty(Utils.SVR_POP_LEAVE_ON_SERVER, String.valueOf(leaveOnServer)) ;
         acc.setPopServerProperty(Utils.SVR_POP_SKIP_OVER_SIZE, skipOverSize) ;
       } else {

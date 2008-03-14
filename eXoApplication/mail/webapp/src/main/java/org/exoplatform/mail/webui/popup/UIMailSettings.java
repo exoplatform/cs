@@ -27,6 +27,8 @@ import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
+import org.exoplatform.mail.webui.UINavigationContainer;
+import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -143,10 +145,13 @@ public class UIMailSettings extends UIForm implements UIPopupComponent {
     public void execute(Event<UIMailSettings> event) throws Exception {
       UIMailSettings uiSetting = event.getSource();
 		  UIMailPortlet uiPortlet = uiSetting.getAncestorOfType(UIMailPortlet.class);
-		  String username = MailUtils.getCurrentUser() ;
+      String username = uiPortlet.getCurrentUser();
+      UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;
+      String accountId = uiSelectAccount.getSelectedValue();
 		  MailService mailSrv = MailUtils.getMailService();
 		  MailSetting setting = new MailSetting();
-		  setting.setDefaultAccount(uiSetting.getUIFormSelectBox(DEFAULT_ACCOUNT).getValue()) ;
+      String defaultAcc = uiSetting.getUIFormSelectBox(DEFAULT_ACCOUNT).getValue() ;
+		  setting.setDefaultAccount(defaultAcc) ;
       setting.setNumberMsgPerPage(Long.valueOf(uiSetting.getUIFormSelectBox(NUMBER_MSG_PER_PAGE).getValue())) ;
 		  setting.setPeriodCheckAuto(Long.valueOf(uiSetting.getUIFormSelectBox(PERIOD_CHECK_AUTO).getValue())) ;
       setting.setUseWysiwyg(Boolean.valueOf(uiSetting.getUIFormSelectBox(COMPOSE_MESSAGE_IN).getValue())) ;
@@ -157,6 +162,11 @@ public class UIMailSettings extends UIForm implements UIPopupComponent {
       mailSrv.saveMailSetting(SessionsUtils.getSessionProvider(), username, setting);
 		  UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
 		  uiMessageList.setMessagePageList(mailSrv.getMessagePageList(SessionsUtils.getSessionProvider(), username, uiMessageList.getMessageFilter()));
+      if (defaultAcc != null && !defaultAcc.equals(accountId)) {
+        uiSelectAccount.updateAccount() ;
+        uiSelectAccount.setSelectedValue(defaultAcc) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectAccount.getAncestorOfType(UINavigationContainer.class)) ;
+      }
 		  event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
 		  uiPortlet.cancelAction();
 	  }
