@@ -474,7 +474,7 @@ public class JCRDataStorage{
   
   public Node saveMessage(SessionProvider sProvider, String username, String accountId, Message message, boolean isNew) throws Exception {
     Node mailHome = getMailHomeNode(sProvider, username) ;
-    Node homeMsg = getDateStoreNode(sProvider, username, accountId, new Date());
+    Node homeMsg = getDateStoreNode(sProvider, username, accountId, message.getReceivedDate());
     Node nodeMsg = null;
     if (isNew) { // creates the node
       nodeMsg = homeMsg.addNode(message.getId(), Utils.EXO_MESSAGE);

@@ -60,6 +60,7 @@ import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.MessagePageList;
+import org.exoplatform.mail.service.MimeMessageParser;
 import org.exoplatform.mail.service.ServerConfiguration;
 import org.exoplatform.mail.service.SpamFilter;
 import org.exoplatform.mail.service.Tag;
@@ -401,8 +402,6 @@ public class MailServiceImpl implements MailService{
 
         javax.mail.Message[] messages = folder.getMessages() ;
         Vector<javax.mail.Message> vector = new Vector<javax.mail.Message>();
-        java.util.Calendar calendar = new GregorianCalendar() ;
-        Node messageHome = storage_.getDateStoreNode(sProvider, username, accountId, calendar.getTime()) ;
         boolean isPop3 = account.getProtocol().equals(Utils.POP3);
         for (int i=1 ; i< messages.length; i++) {
           if (!messages[i].isSet(Flags.Flag.SEEN)) vector.add(messages[i]); 
@@ -433,7 +432,7 @@ public class MailServiceImpl implements MailService{
           while (i < totalNew) {
             javax.mail.Message msg = vector.get(i) ;      
             try {
-              saveMessage(sProvider, msg, messageHome, account.getId(), username, folderId, spamFilter) ;
+              saveMessage(sProvider, msg, account.getId(), username, folderId, spamFilter) ;
             } catch(Exception e) {
               e.printStackTrace();
               i++ ;
@@ -458,8 +457,10 @@ public class MailServiceImpl implements MailService{
     return messageList;
   }
   
-  private void saveMessage(SessionProvider sProvider, javax.mail.Message msg, Node msgHomeNode, String accId, String username, String folderId, SpamFilter spamFilter) throws Exception {
+  private void saveMessage(SessionProvider sProvider, javax.mail.Message msg, String accId, String username, String folderId, SpamFilter spamFilter) throws Exception {
     Message newMsg = new Message();
+    Calendar gc = MimeMessageParser.getReceivedDate(msg) ;
+    Node msgHomeNode = storage_.getDateStoreNode(sProvider, username, accId, gc.getTime()) ;
   	Node node = msgHomeNode.addNode(newMsg.getId(), Utils.EXO_MESSAGE) ;
     msgHomeNode.save();
     node.setProperty(Utils.EXO_ID, newMsg.getId());
@@ -470,14 +471,10 @@ public class MailServiceImpl implements MailService{
     node.setProperty(Utils.EXO_BCC, InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.BCC)));
     node.setProperty(Utils.EXO_REPLYTO, InternetAddress.toString(msg.getReplyTo()));
     node.setProperty(Utils.EXO_SUBJECT, msg.getSubject());
-    Calendar gc = GregorianCalendar.getInstance();
-    if (msg.getReceivedDate() != null)
-      gc.setTime(msg.getReceivedDate());
-    else if (msg.getSentDate() != null)
-      gc.setTime(msg.getSentDate());
     node.setProperty(Utils.EXO_RECEIVEDDATE, gc);
     Calendar sc = GregorianCalendar.getInstance();
-    sc.setTime(msg.getSentDate());
+    if (msg.getSentDate() != null) sc.setTime(msg.getSentDate());
+    else sc = gc ;
     node.setProperty(Utils.EXO_SENDDATE, sc); //TODO send date
     
     node.setProperty(Utils.EXO_CONTENT_TYPE, msg.getContentType());
@@ -485,7 +482,7 @@ public class MailServiceImpl implements MailService{
     node.setProperty(Utils.EXO_ISUNREAD, true);
     node.setProperty(Utils.EXO_STAR, false);     
     
-    node.setProperty(Utils.EXO_PRIORITY, getPriority(msg));
+    node.setProperty(Utils.EXO_PRIORITY, MimeMessageParser.getPriority(msg));
     
     String[] folderIds = { folderId };
     
@@ -512,28 +509,6 @@ public class MailServiceImpl implements MailService{
       folderNode.save();
     } catch(PathNotFoundException e) {}
     
-  }
-
-  private long getPriority(javax.mail.Message msg) throws Exception {
-    String[] xPriority = msg.getHeader("X-Priority");
-    String[] importance = msg.getHeader("Importance");
-    
-    // Get priority of message on header if it's available.
-    if (xPriority != null && xPriority.length > 0) {
-      for (int j = 0 ; j < xPriority.length; j++) {
-        return Long.valueOf(msg.getHeader("X-Priority")[j].substring(0,1));
-      }          
-    }          
-    if (importance != null && importance.length > 0) {
-      for (int j = 0 ; j < importance.length; j++) {
-        if (importance[j].equalsIgnoreCase("Low")) {
-          return Utils.PRIORITY_LOW;
-        } else if (importance[j].equalsIgnoreCase("high")) {
-          return Utils.PRIORITY_HIGH;
-        } 
-      }
-    } 
-    return Utils.PRIORITY_NORMAL ;
   }
   
   private void setMultiPart(Multipart multipart, Node node) {
