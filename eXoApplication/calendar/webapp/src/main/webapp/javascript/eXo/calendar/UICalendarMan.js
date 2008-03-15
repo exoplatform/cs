@@ -806,9 +806,10 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
       display = 'none';
       top = '0px';
       left = '0px';
+			height = ((dayObj.MAX_EVENT_VISIBLE - 2) * this.EVENT_BAR_HEIGH) + 'px';
     }
     moreContainerNode.className = 'MoreContainer' ;
-    moreContainerNode.onmousemove = this.showMore ;
+    moreContainerNode.onmouseover = this.delayMore ;
     moreContainerNode.onmouseout = this.hideMore ;
     // Create invisible event
     var cnt = 0
@@ -871,56 +872,39 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
   }
 };
 
-GUIMan.prototype.showMore = function() {
-  if (this.className.indexOf('MoreContainer') != -1) {
-    if (this.style.display == 'none') {
-      this.style.display = 'block';
-    }
-    return;
-  }
-  var moreNode = this;
+GUIMan.prototype.hideElement = function(){
+	var GUIMan = eXo.calendar.UICalendarMan.GUIMan;
+	GUIMan.moreNode.style.display = "none" ;
+	if (GUIMan.hideMoreTimeoutId) {
+    window.clearTimeout(GUIMan.hideMoreTimeoutId);
+    GUIMan.hideMoreTimeoutId = null;
+		GUIMan.moreNode = null;
+  }	
+}
+
+GUIMan.prototype.delayMore = function(){
   var GUIMan = eXo.calendar.UICalendarMan.GUIMan;
   if (GUIMan.hideMoreTimeoutId) {
     window.clearTimeout(GUIMan.hideMoreTimeoutId);
-    GUIMan.hideMoreTimeoutId = false;
-  }
-  /*
-  if (GUIMan.preMoreNode && GUIMan.preMoreNode != moreNode) {
-    var moreContainerNode = eXo.core.DOMUtil.findFirstDescendantByClass(GUIMan.preMoreNode, 'div', 'MoreContainer');
-    moreContainerNode.style.display = 'none';
-  }
-  GUIMan.preMoreNode = moreNode;
-  */
+    GUIMan.hideMoreTimeoutId = null;
+  }	
+} ;
+
+GUIMan.prototype.showMore = function() {
+  var moreNode = this;
+	var GUIMan = eXo.calendar.UICalendarMan.GUIMan;
   var moreContainerNode = eXo.core.DOMUtil.findFirstDescendantByClass(moreNode, 'div', 'MoreContainer');
   if (!moreContainerNode.style.display || 
       moreContainerNode.style.display == 'none') {
     moreContainerNode.style.display = 'block';
   }
+	GUIMan.moreNode = moreContainerNode ;
 };
 
 
 GUIMan.prototype.hideMore = function() {
-  eXo.core.DOMUtil.listHideElements(this) ; return ;
   var GUIMan = eXo.calendar.UICalendarMan.GUIMan;
-  /*
-  if (!GUIMan.backupNode) {
-    GUIMan.backupNode = this;
-    if (GUIMan.hideMoreTimeoutId) {
-      window.clearTimeout(GUIMan.hideMoreTimeoutId);
-      GUIMan.hideMoreTimeoutId = false;
-    }
-    GUIMan.hideMoreTimeoutId = window.setTimeout(GUIMan.hideMore, 2500);
-    return;
-  }
-  if (GUIMan.backupNode &&
-      GUIMan.backupNode.style.display != 'none') {
-    GUIMan.backupNode.style.display = 'none';
-  }
-  GUIMan.backupNode = false;
-  */
-  if (this.style.display != 'none') {
-    this.style.display = 'none';
-  }
+	GUIMan.hideMoreTimeoutId = window.setTimeout(GUIMan.hideElement, 1500);
 };
 
 /**
