@@ -6,7 +6,7 @@ function UICalendarPortlet() {
  * @param {Object} styles : Object contains style name and style value
  * This function to set stylesheet for a DOM element
  */
-UICalendarPortlet.prototype.setStyle = function(object,styles) {	
+UICalendarPortlet.prototype.setStyle = function(object,styles) {
 	for(var value in styles) {
 		object.style[value] = styles[value] ;
 	}
@@ -469,13 +469,21 @@ UICalendarPortlet.prototype.setWidth = function(element, width) {
 	element.style.width = width + "%" ;
 } ;
 
+UICalendarPortlet.prototype.getSize = function(el){
+	var start = parseInt(el.getAttribute("starttime")) ;
+	var end =  parseInt(el.getAttribute("endtime")) ;
+	return [start, end] ;
+} ;
+
 UICalendarPortlet.prototype.getInterval = function(el) {
 	var bottom = new Array() ;
 	var interval = new Array() ;
+	var size = null ;
 	if (!el || (el.length <= 0)) return ;
 	for(var i = 0 ; i < el.length ; i ++ ) {
-		bottom.push(el[i].offsetTop + el[i].offsetHeight) ;
-		if (bottom[i-1] && (el[i].offsetTop > bottom[i-1])) {
+		size = this.getSize(el[i]) ;
+		bottom.push(size[1]) ;
+		if (bottom[i-1] && (size[0] > bottom[i-1])) {
 			interval.push(i) ;
 		}
 	}
@@ -486,45 +494,6 @@ UICalendarPortlet.prototype.getInterval = function(el) {
 } ;
 
 UICalendarPortlet.prototype.adjustWidth = function(el,totalWidth) {
-//	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
-//	var inter = UICalendarPortlet.getInterval(el) ;
-//	if (el.length <= 0) return ;
-//	var width = "" ;
-//	for(var i = 0 ; i < inter.length ; i ++) {
-//		var offsetLeft = parseFloat(0) ;
-//		if(arguments.length > 2) {
-//			offsetLeft = parseFloat(arguments[2]) ;
-//		} 
-//		var len = (inter[i+1] - inter[i]) ;
-//		if(isNaN(len)) continue ;
-//		var mark = null ;
-//		if (i > 0){
-//			for(var l = 0 ; l < inter[i] ; l ++) {
-//				if((el[inter[i]].offsetTop > el[l].offsetTop) && (el[inter[i]].offsetTop < (el[l].offsetTop + el[l].offsetHeight))) {
-//					mark = l ;					
-//				}
-//			}			
-//			if (mark != null) {
-//				offsetLeft = parseFloat(el[mark].style.left) + parseFloat(el[mark].style.width) ;
-//			}
-//		}
-//		var n = 0 ;
-//		for(var j = inter[i]; j < inter[i+1] ; j++) {
-//			if(mark != null) {				
-//				width = parseFloat((totalWidth + offsetLeft - parseFloat(el[mark].style.left) - parseFloat(el[mark].style.width))/len) ;
-//			} else {
-//				width = parseFloat(totalWidth/len) ;
-//			}
-//			el[j].style.width = width + "px" ;
-//			if (el[j-1]&&(len > 1)) el[j].style.left = offsetLeft + parseFloat(el[j-1].style.width)*n +  "px" ;
-//			else {
-//				el[j].style.left = offsetLeft +  "px" ;
-//			}
-//			n++ ;
-//		}
-//	}
-/* --- o0o --- */	
-
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
 	var inter = UICalendarPortlet.getInterval(el) ;
 	if (el.length <= 0) return ;
@@ -570,11 +539,11 @@ UICalendarPortlet.prototype.adjustWidth = function(el,totalWidth) {
 UICalendarPortlet.prototype.showEvent = function() {
 	this.init() ;
 	var EventDayContainer = eXo.core.DOMUtil.findAncestorByClass(this.viewer,"EventDayContainer") ;
-	EventDayContainer.scrollTop = (this.workingStart) ? this.workingStart : 0 ;
+	//EventDayContainer.scrollTop = (this.workingStart) ? this.workingStart : 0 ;
 	if (!this.init()) return ;
   this.viewType = "UIDayView" ;
 	var el = this.getElements(this.viewer) ;
-	el = this.sortByAttribute(el, "startTime") ;
+	el = this.sortByAttribute(el,"starttime") ;
 	if (el.length <= 0) return ;
 	var marker = null ;
 	for(var i = 0 ; i < el.length ; i ++ ) {		
@@ -587,7 +556,13 @@ UICalendarPortlet.prototype.showEvent = function() {
 	this.items = el ;
 	this.adjustWidth(this.items) ;
 	this.setFocus(this.viewer, el, EventDayContainer) ;
+	this.items = null ;
+	this.viewer = null ;
 } ;
+
+UICalendarPortlet.prototype.onLoad = function(){
+	window.setTimeout("eXo.calendar.UICalendarPortlet.checkFilter() ;", 500)  ;
+};
 
 UICalendarPortlet.prototype.browserResizeCallback = function() {
 	if (!eXo.calendar.UICalendarPortlet.items) return ;
@@ -631,7 +606,7 @@ UIResizeEvent.prototype.init = function(evt) {
 	var outerElement = eXo.core.DOMUtil.findAncestorByClass(this,'EventBoxes') ;
 	var innerElement = eXo.core.DOMUtil.findPreviousElementByTagName(this, "div") ;
 	var container = eXo.core.DOMUtil.findAncestorByClass(outerElement, 'EventDayContainer') ;
-	var minHeight = 30 ;
+	var minHeight = 15 ;
 	var interval = eXo.calendar.UICalendarPortlet.interval ;
 	UIResizeEvent.start(_e, innerElement, outerElement, container, minHeight, interval) ;
 	UIResizeEvent.callback = UIResizeEvent.resizeCallback ;
@@ -649,30 +624,44 @@ UIResizeEvent.prototype.start = function(evt, innerElement, outerElement, contai
 	this.container.onmousemove = UIResizeEvent.execute ;
 	this.container.onmouseup = UIResizeEvent.end ;	
 	this.beforeHeight =  this.outerElement.offsetHeight ;	
-	//this.posY = _e.clientY ;
+	this.innerElementHeight =  this.innerElement.offsetHeight ;	
+	this.posY = _e.clientY ;
+	this.uppermost = outerElement.offsetTop + minHeight - container.scrollTop ;
+	if(document.getElementById("UIPageDesktop")) {
+		var uiWindow = eXo.core.DOMUtil.findAncestorByClass(container, "UIResizableBlock") ;
+		this.uppermost -= uiWindow.scrollTop ;
+	}
 } ;
 
 UIResizeEvent.prototype.execute = function(evt) {
 	var _e = window.event || evt ;
 	var UIResizeEvent = eXo.calendar.UIResizeEvent ;	
-	var height = UIResizeEvent.outerElement.offsetHeight ;
-	var mouseY = eXo.core.Browser.findMouseRelativeY(UIResizeEvent.container,_e) + UIResizeEvent.container.scrollTop ;
-	var posY = UIResizeEvent.outerElement.offsetTop ;
-	var delta = posY + height - mouseY ;
-	if (height <= UIResizeEvent.minHeight) {
-		if (mouseY >= (posY + height)) {
-			UIResizeEvent.outerElement.style.height = UIResizeEvent.minHeight + "px" ;
-			UIResizeEvent.innerElement.style.height = (UIResizeEvent.minHeight - 15) + "px" ;
+	//var height = UIResizeEvent.outerElement.offsetHeight ;
+	var mouseY = eXo.core.Browser.findMouseRelativeY(UIResizeEvent.container,_e) ;
+	var mDelta = _e.clientY - UIResizeEvent.posY ;
+//	var delta = posY + height - mouseY ;
+	if (mouseY <= UIResizeEvent.uppermost) { return ;
+		//if (mouseY >= (posY + height)) {
+			UIResizeEvent.outerElement.style.height = (UIResizeEvent.minHeight - 2) + "px" ;
+			UIResizeEvent.innerElement.style.height = (UIResizeEvent.minHeight - 22) + "px" ;
+			window.document.title = mouseY + " --- " + UIResizeEvent.uppermost;
+		//}
+	} else {
+		if (mDelta%UIResizeEvent.interval == 0) {
+			UIResizeEvent.outerElement.style.height = UIResizeEvent.beforeHeight - 2 + mDelta + "px" ;
+			UIResizeEvent.innerElement.style.height = UIResizeEvent.innerElementHeight - 2 + mDelta + "px" ;
+			
 		}
-	} else {		
-		if (delta >= UIResizeEvent.interval) {
-			UIResizeEvent.outerElement.style.height = parseInt(UIResizeEvent.outerElement.style.height) - UIResizeEvent.interval + "px" ;
-			UIResizeEvent.innerElement.style.height = parseInt(UIResizeEvent.innerElement.style.height) - UIResizeEvent.interval + "px" ;
-		}
-		if (mouseY >= (posY + height)) {
-			UIResizeEvent.outerElement.style.height = parseInt(UIResizeEvent.outerElement.style.height) + UIResizeEvent.interval + "px" ;
-			UIResizeEvent.innerElement.style.height = parseInt(UIResizeEvent.innerElement.style.height) + UIResizeEvent.interval + "px" ;		
-		}
+//		if (delta >= UIResizeEvent.interval) {
+//			UIResizeEvent.outerElement.style.height = parseInt(UIResizeEvent.outerElement.style.height) - UIResizeEvent.interval + "px" ;
+//			UIResizeEvent.innerElement.style.height = parseInt(UIResizeEvent.innerElement.style.height) - UIResizeEvent.interval + "px" ;
+//			window.document.title = "2 :" + height + "-" + UIResizeEvent.minHeight ;
+//		}
+//		if (mouseY >= (posY + height)) {
+//			UIResizeEvent.outerElement.style.height = parseInt(UIResizeEvent.outerElement.style.height) + UIResizeEvent.interval + "px" ;
+//			UIResizeEvent.innerElement.style.height = parseInt(UIResizeEvent.innerElement.style.height) + UIResizeEvent.interval + "px" ;
+//			window.document.title = "3 :" + height + "-" + UIResizeEvent.minHeight ;
+//		}
 	}
 } ;
 
@@ -690,6 +679,10 @@ UIResizeEvent.prototype.end = function(evt) {
 	UIResizeEvent.container.onmousemove = null ;
 	UIResizeEvent.container.onmouseup = null ;
 	UIResizeEvent.container = null ;
+	UIResizeEvent.innerElementHeight = null ;
+	UIResizeEvent.beforeHeight = null ;
+	UIResizeEvent.posY = null ;
+	UIResizeEvent.uppermost = null ;
 } ;
 
 UIResizeEvent.prototype.resizeCallback = function(evt) {
@@ -1132,7 +1125,6 @@ UICalendarPortlet.prototype.getFilterForm = function(form) {
 	this.filterForm = form ;
 	var CalendarGroup = eXo.core.DOMUtil.findDescendantsByClass(form, "input","CalendarGroup") ;	
 	var CalendarItem = eXo.core.DOMUtil.findDescendantsByClass(form, "input","checkbox") ;
-	var uvTab = null ;
 	var len = CalendarGroup.length ;
 	var clen = CalendarItem.length ;
 	for(var i = 0 ; i < len ; i ++) {
@@ -1209,7 +1201,7 @@ UICalendarPortlet.prototype.swapMenu = function(oldmenu, clickobj) {
   if(uiDesktop) {
   	var portlet = DOMUtil.findAncestorByClass(document.getElementById(UICalendarPortlet.portletName), "UIResizableBlock") ;
     var uiWindow = DOMUtil.findAncestorByClass(portlet, "UIWindow") ;
-    menuX = menuX - uiWindow.offsetLeft ;
+    menuX = menuX - uiWindow.offsetLeft  -  portlet.scrollLeft ;
     menuY = menuY - uiWindow.offsetTop  -  portlet.scrollTop ;
   }
   if(document.getElementById("tmpMenuElement")) DOMUtil.removeElement(document.getElementById("tmpMenuElement")) ;

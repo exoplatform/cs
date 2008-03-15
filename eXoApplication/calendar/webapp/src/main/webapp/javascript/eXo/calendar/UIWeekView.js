@@ -238,7 +238,7 @@ UIWeekView.prototype.initResize = function(evt) {
 	var outerElement = eXo.core.DOMUtil.findAncestorByClass(this,'EventContainerBorder') ;
 	var innerElement = eXo.core.DOMUtil.findPreviousElementByTagName(this, "div") ;
 	var container = eXo.core.DOMUtil.findAncestorByClass(document.getElementById("UIWeekViewGrid"), "EventWeekContent") ;
-	var minHeight = 30 ;
+	var minHeight = 15 ;
 	var interval = eXo.calendar.UICalendarPortlet.interval ;
 	UIResizeEvent.start(_e, innerElement, outerElement, container, minHeight, interval) ;
 	UIResizeEvent.callback = eXo.calendar.UIWeekView.resizeCallback ;
