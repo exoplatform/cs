@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 
 /**
  * Created by The eXo Platform SAS
@@ -102,25 +103,31 @@ public class MimeMessageParser {
     }
   }
 
-  public static long getPriority(javax.mail.Message msg) throws Exception {
-    String[] xPriority = msg.getHeader("X-Priority");
-    String[] importance = msg.getHeader("Importance");
-    
-    // Get priority of message on header if it's available.
-    if (xPriority != null && xPriority.length > 0) {
-      for (int j = 0 ; j < xPriority.length; j++) {
-        return Long.valueOf(msg.getHeader("X-Priority")[j].substring(0,1));
-      }          
-    }          
-    if (importance != null && importance.length > 0) {
-      for (int j = 0 ; j < importance.length; j++) {
-        if (importance[j].equalsIgnoreCase("Low")) {
-          return Utils.PRIORITY_LOW;
-        } else if (importance[j].equalsIgnoreCase("high")) {
-          return Utils.PRIORITY_HIGH;
-        } 
+  public static long getPriority(javax.mail.Message message ) throws MessagingException {
+      MimeMessage msg = (MimeMessage)message;
+      String xpriority = msg.getHeader("Importance", null);
+      if (xpriority != null) {
+        xpriority = xpriority.toLowerCase();
+        if (xpriority.indexOf("high") == 0) {
+          return Utils.PRIORITY_HIGH ;
+        } else if (xpriority.indexOf( "low" ) == 0) {
+          return Utils.PRIORITY_LOW ;
+        } else {
+          return Utils.PRIORITY_NORMAL ;
+        }
       }
-    } 
-    return Utils.PRIORITY_NORMAL ;
+      // X Standard: X-Priority: (highest) 1 | 2 | 3 | 4 | 5 (lowest)
+      xpriority = msg.getHeader("X-Priority", null) ;
+      if ( xpriority != null ) {
+        xpriority = xpriority.toLowerCase();
+        if (xpriority.indexOf("1") == 0 || xpriority.indexOf( "2" ) == 0) {
+          return Utils.PRIORITY_HIGH;
+        } else if (xpriority.indexOf("4") == 0 || xpriority.indexOf( "5" ) == 0) {
+          return Utils.PRIORITY_LOW;
+        } else {
+          return Utils.PRIORITY_NORMAL ;
+        }
+      }
+      return Utils.PRIORITY_NORMAL ;
   }
 }

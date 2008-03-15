@@ -478,7 +478,7 @@ public class MailServiceImpl implements MailService{
     node.setProperty(Utils.EXO_SENDDATE, sc); //TODO send date
     
     node.setProperty(Utils.EXO_CONTENT_TYPE, msg.getContentType());
-    node.setProperty(Utils.EXO_SIZE, msg.getSize());
+    node.setProperty(Utils.EXO_SIZE, Math.abs(msg.getSize()));
     node.setProperty(Utils.EXO_ISUNREAD, true);
     node.setProperty(Utils.EXO_STAR, false);     
     
