@@ -180,8 +180,8 @@
 	                <td class="FieldLabel">From :&nbsp;&nbsp;</td>
 	                <td class="FieldComponent"><%uicomponent.renderField(uicomponent.FIELD_FROM)%></td>
 	                <td class="FieldCCAndBCC">
-	                  <a  href="javascript:eXo.mail.UIMailPortlet.showHide('FIELD_CC')">|Add CC|</a> 
-	                  <a  href="javascript:eXo.mail.UIMailPortlet.showHide('FIELD_BCC')">Add BCC|</a>
+	                  <a  href="javascript:eXo.mail.UIMailPortlet.showHideAddMoreAddress('FIELD_CC')">|Add CC|</a> 
+	                  <a  href="javascript:eXo.mail.UIMailPortlet.showHideAddMoreAddress('FIELD_BCC')">Add BCC|</a>
 	                </td>
 	              </tr>
 	              <tr>
@@ -191,13 +191,13 @@
 	                </td>
 	              </tr>
 	
-	              <tr id="FIELD_CC" style="display: none">
+	              <tr id="FIELD_CC" style="display:none">
 	                <td class="FieldLabel"><a class="HoverButton " href="<%=uicomponent.event("ToCC")%>">Cc :&nbsp;&nbsp;</a></td>
 	                <td class="FieldComponent" colspan="2">
 	                  <%uicomponent.renderField(uicomponent.FIELD_CC)%> 
 	                </td>
 	              </tr>
-	              <tr id="FIELD_BCC" style="display: none">
+	              <tr id="FIELD_BCC" style="display:none">
 	                <td class="FieldLabel"><a class="HoverButton " href="<%=uicomponent.event("ToBCC")%>">Bcc :&nbsp;&nbsp;</a></td>
 	                <td class="FieldComponent" colspan="2">
 	                  <%uicomponent.renderField(uicomponent.FIELD_BCC)%> 

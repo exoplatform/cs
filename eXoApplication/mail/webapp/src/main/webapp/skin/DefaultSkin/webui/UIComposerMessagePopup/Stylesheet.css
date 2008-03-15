@@ -17,15 +17,12 @@
 }
 
 .UIMailPortlet .UIMessageCompose .MailListActionsbar .UIRightClickPopupMenu a {
-	color: #000000;
-	margin: 3px 0px 0px 0px;
-	line-height: 26px;
+	margin: 0px;
 }
 
 .UIMailPortlet .UIMessageCompose .MailListActionsbar .UIRightClickPopupMenu a:hover {
-	background: none;
+	background: none; height: auto;
 	color: #058ee6; border: none;
-	height: 24px;
 }
 
 .UIMailPortlet .UIMessageCompose .MailListActionsbar .ControlButton .Label {
@@ -61,18 +58,19 @@
 }
 
 .UIMessageCompose .MailListActionsbar .ControlButton .PriorityIcon {
-	background: url('icons/24x24/MessagePriority.gif') no-repeat left;
+	background: url('icons/24x24/MessagePriority.gif') no-repeat left top;
 	height: auto;
 }
 
 .UIMessageCompose .MailListActionsbar .ControlButton .EditorOptionsIcon {
-	background: url('icons/24x24/EditorOptions.gif') no-repeat left;
+	background: url('icons/24x24/EditorOptions.gif') no-repeat left top;
 }
 
 .UIMessageCompose .MailListActionsbar .ControlButton .DownArrow1Icon {
 	line-height: 24px;
 	padding-right: 16px;
 	background-position: right;
+	margin-top: 4px;
 }
 
 /*===========================Compose Message Address==================================*/
@@ -94,6 +92,10 @@
 
 .UIMessageCompose .MessageAddress .UIComposeForm .UIFormGrid {
 	width: 95%;
+}
+
+.UIComposeForm .UIMessageCompose .UIPopupCategory {
+	top: 5px;
 }
 
 .UIMessageCompose table {

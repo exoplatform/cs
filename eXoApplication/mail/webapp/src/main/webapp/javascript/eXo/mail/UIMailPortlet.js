@@ -237,7 +237,7 @@ UIMailPortlet.prototype.checkLayout = function() {
   }
 } ;
 
-UIMailPortlet.prototype.showHide = function(add) {	
+UIMailPortlet.prototype.showHideAddMoreAddress = function(add) {	
 	var elm = document.getElementById(add);
 	if (elm.style.display == "none") {
 		elm.style.display = "" ;
