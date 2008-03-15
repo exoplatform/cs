@@ -948,6 +948,9 @@
 
 .UIMailPortlet .UIRightClickPopupMenu .ItemIcon {
 	white-space: nowrap;
+	width: auto;
+	height: auto;
+	background-position: left center;
 }
 
 .UIMailPortlet .SeparatorLine {
