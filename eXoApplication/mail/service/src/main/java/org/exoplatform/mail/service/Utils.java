@@ -22,7 +22,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -362,8 +361,7 @@ public class Utils {
   }
   
   public static Message mergeFromMimeMessage(Message message, javax.mail.Message mimeMessage) throws Exception {
-    Calendar gc = GregorianCalendar.getInstance();
-    Date receivedDate = gc.getTime();
+    Calendar gc = MimeMessageParser.getReceivedDate(mimeMessage) ;
     message.setMessageTo(InternetAddress.toString(mimeMessage.getRecipients(javax.mail.Message.RecipientType.TO)));
     message.setMessageCc(InternetAddress.toString(mimeMessage.getRecipients(javax.mail.Message.RecipientType.CC)));
     message.setMessageBcc(InternetAddress.toString(mimeMessage.getRecipients(javax.mail.Message.RecipientType.BCC)));
@@ -371,30 +369,13 @@ public class Utils {
     message.setContentType(mimeMessage.getContentType());
     message.setFrom(InternetAddress.toString(mimeMessage.getFrom()));
     message.setReplyTo(InternetAddress.toString(mimeMessage.getReplyTo()));
-    message.setReceivedDate(receivedDate);
-    message.setSendDate(mimeMessage.getSentDate());
+    message.setReceivedDate(gc.getTime());
+    if (mimeMessage.getSentDate() != null) message.setSendDate(mimeMessage.getSentDate());
+    else message.setSendDate(gc.getTime()) ;
     message.setSize(mimeMessage.getSize());
     message.setUnread(true);
     message.setHasStar(false);       
-    message.setPriority(Utils.PRIORITY_NORMAL);
-    String[] xPriority = mimeMessage.getHeader("X-Priority");
-    String[] importance = mimeMessage.getHeader("Importance");
-    
-    if (xPriority != null && xPriority.length > 0) {
-      for (int j = 0 ; j < xPriority.length; j++) {
-        message.setPriority(Long.valueOf(mimeMessage.getHeader("X-Priority")[j].substring(0,1)));
-      }          
-    }
-    
-    if (importance != null && importance.length > 0) {
-      for (int j = 0 ; j < importance.length; j++) {
-        if (importance[j].equalsIgnoreCase("Low")) {
-          message.setPriority(Utils.PRIORITY_LOW);
-        } else if (importance[j].equalsIgnoreCase("high")) {
-          message.setPriority(Utils.PRIORITY_HIGH);
-        } 
-      }
-    }
+    message.setPriority(MimeMessageParser.getPriority(mimeMessage));
     
     message.setAttachements(new ArrayList<Attachment>());
     
