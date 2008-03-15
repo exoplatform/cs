@@ -36,6 +36,7 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
@@ -52,7 +53,7 @@ import org.exoplatform.webui.form.validator.EmailAddressValidator;
     template = "system:/groovy/webui/form/UIForm.gtmpl", 
     events = {
       @EventConfig(listeners = UIAdvancedSearchForm.SearchActionListener.class),      
-      @EventConfig(listeners = UIAdvancedSearchForm.CancelActionListener.class)
+      @EventConfig(phase = Phase.DECODE, listeners = UIAdvancedSearchForm.CancelActionListener.class)
     }
 )
 
