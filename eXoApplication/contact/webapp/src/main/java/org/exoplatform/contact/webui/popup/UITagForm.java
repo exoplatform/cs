@@ -22,10 +22,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
 
+import javax.jcr.PathNotFoundException;
+
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.Tag;
+import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UITags;
@@ -194,9 +197,17 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       List<String> contactIds = new ArrayList<String>() ;
       for (Contact contact : uiTagForm.contacts_) {
       	contact.setTags(tagIds.toArray(new String[]{})) ;
-        contactIds.add(contact.getId()) ;
+        contactIds.add(contact.getId() + JCRDataStorage.SPLIT + contact.getContactType()) ;
       }
-      contactService.addTag(sessionProvider, username, contactIds, tags);
+      try {
+        contactService.addTag(sessionProvider, username, contactIds, tags);
+      } catch (PathNotFoundException e) {
+        uiApp.addMessage(new ApplicationMessage("UITagForm.msg.contact-not-existed", null, 
+            ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
+      
       UIContactPortlet uiContactPortlet = uiTagForm.getAncestorOfType(UIContactPortlet.class);
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
       if(uiContacts.isDisplaySearchResult())uiContacts.setContact(uiTagForm.contacts_, true) ;     	
@@ -222,8 +233,10 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       ContactService contactService = ContactUtils.getContactService() ; 
       String username = ContactUtils.getCurrentUser() ;
       List<String> contactIds = new ArrayList<String>() ;
+      List<String> newContactIds = new ArrayList<String>() ;
       for (Contact contact : uiForm.contacts_) {
         contactIds.add(contact.getId()) ;
+        newContactIds.add(contact.getId() + JCRDataStorage.SPLIT + contact.getContactType()) ;
       }
       contactService.removeContactTag(
           SessionProviderFactory.createSystemProvider(), username, contactIds, checkedTags) ;

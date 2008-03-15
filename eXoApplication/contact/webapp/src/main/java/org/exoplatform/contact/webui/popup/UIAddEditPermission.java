@@ -114,12 +114,23 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
     public void execute(Event<UIAddEditPermission> event) throws Exception {
       UIAddEditPermission addEdit = event.getSource();
       String recievedUser = event.getRequestContext().getRequestParameter(OBJECTID);
-      ContactGroup group = ContactUtils.getContactService().getGroup(
-          SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), addEdit.groupId_) ;
       UISharedForm shareForm = addEdit.getChild(UISharedForm.class);
+      shareForm.setNew(false) ;
       shareForm.getUIStringInput(UISharedForm.FIELD_USER).setValue(recievedUser) ;
-      shareForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).setChecked(
-          (group.getEditPermission() != null) && Arrays.asList(group.getEditPermission()).contains(recievedUser)) ;
+      if (addEdit.isSharedGroup) {
+        ContactGroup group = ContactUtils.getContactService().getGroup(
+            SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), addEdit.groupId_) ;        
+        shareForm.setGroup(group) ;
+        shareForm.getUIStringInput(UISharedForm.FIELD_USER).setValue(recievedUser) ;
+        shareForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).setChecked(
+            (group.getEditPermission() != null) && Arrays.asList(group.getEditPermission()).contains(recievedUser)) ;
+      } else {
+        Contact contact = ContactUtils.getContactService().getContact(
+            SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), addEdit.contactId_) ;        
+        shareForm.setContact(contact) ;
+        shareForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).setChecked(
+            (contact.getEditPermission() != null) && Arrays.asList(contact.getEditPermission()).contains(recievedUser)) ;
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(shareForm) ;
     }
   }
@@ -168,7 +179,6 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
             .createSessionProvider(), username, uiForm.contactId_), removedUser) ;        
         contactService.removeUserShareContact(SessionProviderFactory.createSessionProvider()
             , username, uiForm.contactId_, removedUser) ;
-        //if (contact.getViewPermission() != null)
         contactService.saveContact(
             SessionProviderFactory.createSessionProvider(), username, contact, false) ;
         uiForm.updateContactGrid(contact);

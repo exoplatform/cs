@@ -280,17 +280,20 @@ public class VCardImportExport implements ContactImportExport {
 
     net.wimpi.pim.contact.model.Contact[] pimContacts = unmarshaller.unmarshallContacts(input);
     for (int index = 0; index < pimContacts.length; index++) {
-
       Contact contact = new Contact();
-
       PersonalIdentity identity = pimContacts[index].getPersonalIdentity();
-
+      String additionName = null ;
+      try {
+        additionName = identity.getAdditionalName(0);
+      } catch (IndexOutOfBoundsException e) {
+        additionName = "" ;
+      }
       String fullName = identity.getFormattedName();
       contact.setFullName(fullName);
       String lastName = identity.getLastname();
       contact.setLastName(lastName);
       String firstName = identity.getFirstname();
-      contact.setFirstName(identity.getFirstname());
+      contact.setFirstName(identity.getFirstname() + " " + additionName);
       
       int size = identity.getAdditionalNameCount();
       
@@ -388,9 +391,6 @@ public class VCardImportExport implements ContactImportExport {
         contact.setEmailAddress(emailAddress);
       }
 
-      
-
-      
       if (mobilePhone != null)
         contact.setMobilePhone(mobilePhone);
 

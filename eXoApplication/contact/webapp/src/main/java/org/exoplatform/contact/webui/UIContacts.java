@@ -25,6 +25,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.jcr.PathNotFoundException;
+
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
@@ -225,7 +227,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     return getAncestorOfType(UIWorkingContainer.class)
       .findFirstComponentOfType(UIAddressBooks.class).getSharedGroups() ;
   }
-  
+  /*
   public boolean checkExistContacts(String contactId) throws Exception {
     ContactService contactService = ContactUtils.getContactService() ;
     String username = ContactUtils.getCurrentUser() ;
@@ -237,6 +239,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       return true ;    
     return false ;
   }  
+  */
+  
   public String getDefaultGroup() { return NewUserListener.DEFAULTGROUP ;}
   /*
   public boolean isPublic(String contactId) {
@@ -257,14 +261,14 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      
+      /*
       if (uiContacts.isSearchResult && !uiContacts.checkExistContacts(contactId)){
         UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-deleted", null
           , ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
-      }
+      }*/
       UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
       UIPopupContainer popupContainer =  popupAction.activate(UIPopupContainer.class, 800) ;
@@ -301,7 +305,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           return ;
         }
       }
-      if (uiContacts.isSearchResult )
+      /*if (uiContacts.isSearchResult )
         for (String contact : contactIds) {
           if (!uiContacts.checkExistContacts(contact)) {
             UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
@@ -310,7 +314,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return ;
           }
-        }      
+        }*/      
       UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
       UITagForm uiTagForm = popupAction.activate(UITagForm.class, 600) ;
@@ -334,7 +338,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
       contactIds = uiContacts.getCheckedContacts() ;
       SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
-      if (uiContacts.isSearchResult){
+      /*if (uiContacts.isSearchResult){
         for (String contactId : contactIds) {
           if (!uiContacts.checkExistContacts(contactId)) {
             uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-deleted", null,
@@ -343,8 +347,21 @@ public class UIContacts extends UIForm implements UIPopupComponent {
             return ;
           }
         }        
-      }    
-      ContactUtils.getContactService().addTag(sessionProvider, ContactUtils.getCurrentUser(), contactIds, tagId);
+      } */
+      List<String> newContactIds = new ArrayList<String>();
+      for (String contactId : contactIds) {
+        Contact contact = uiContacts.contactMap.get(contactId) ;
+        newContactIds.add(contactId + JCRDataStorage.SPLIT + contact.getContactType()) ;
+      }
+      try {
+        ContactUtils.getContactService().addTag(
+            sessionProvider, ContactUtils.getCurrentUser(), newContactIds, tagId);
+      } catch (PathNotFoundException e) {
+        uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-deleted", null,
+            ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       
       // when select shared contacts 
       if(ContactUtils.isEmpty(uiContacts.selectedGroup) && ContactUtils.isEmpty(uiContacts.selectedTag_)) {
@@ -386,7 +403,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           return ;
         }
       } 
-      if (uiContacts.isSearchResult){
+      /*if (uiContacts.isSearchResult){
         for (String contact : contactIds) {
           if (!uiContacts.checkExistContacts(contact)) {
             uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-deleted", null,
@@ -395,7 +412,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
             return ;
           }
         }        
-      } 
+      }*/ 
       Map<String, Contact> movedContacts = new HashMap<String, Contact>() ;
       for (String id : contactIds) {
         Contact contact = uiContacts.contactMap.get(id) ;
@@ -439,7 +456,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       ContactService contactService = ContactUtils.getContactService() ;
       String username = ContactUtils.getCurrentUser() ;
       SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
-      if (uiContacts.isSearchResult){
+      /*if (uiContacts.isSearchResult){
         for (String contact : contactIds) {
           if (!uiContacts.checkExistContacts(contact)) {
             uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-deleted", null,
@@ -448,7 +465,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
             return ;
           }
         }        
-      }
+      }*/
       for(String contactId : contactIds) {
       	Contact contact = uiContacts.contactMap.get(contactId) ;
         if (contact.getContactType().equals(JCRDataStorage.SHARED) 
@@ -536,6 +553,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           return ;
         }
       }
+      List<String> newContactIds = new ArrayList<String>() ;
       for (String id : contactIds) {
         Contact contact = uiContacts.contactMap.get(id) ;
         if (contact.getContactType().equals(JCRDataStorage.SHARED) 
@@ -553,8 +571,9 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
         }
+        newContactIds.add(id + JCRDataStorage.SPLIT + contact.getContactType()) ;
       }
-      if (uiContacts.isSearchResult){
+      /*if (uiContacts.isSearchResult){
         for (String contact : contactIds) {
           if (!uiContacts.checkExistContacts(contact)) {
             UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
@@ -564,18 +583,15 @@ public class UIContacts extends UIForm implements UIPopupComponent {
             return ;
           }
         }        
-      }
+      }*/
       UIWorkingContainer uiWorkingContainer = uiContacts.getAncestorOfType(UIWorkingContainer.class) ;
       ContactService contactService = ContactUtils.getContactService() ;
       String username = ContactUtils.getCurrentUser() ;
       List <Contact> removedContacts = contactService
-        .removeContacts(SessionProviderFactory.createSystemProvider(), username, contactIds) ;
-      
-      
+        .removeContacts(SessionProviderFactory.createSystemProvider(), username, newContactIds) ;
       if (ContactUtils.isEmpty(uiContacts.selectedGroup) && ContactUtils.isEmpty(uiContacts.selectedTag_)) {
         uiContacts.setContact(removedContacts, false) ;
       }
-      
       if (uiContacts.getSelectedTag() != null) {
         String tagName = uiWorkingContainer.findFirstComponentOfType(UITags.class).getSelectedTag() ;
         uiContacts.setContacts(contactService

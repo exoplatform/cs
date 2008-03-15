@@ -94,3 +94,8 @@
 .UIMailPortlet .UIMessageCompose table {
 	background: none;
 }
+
+.UIContactPortlet .ContactIcon {
+	width : 16px ;
+	height : 16px ;
+}
