@@ -63,16 +63,23 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
     } else if (type == "1") {
     	for (var i = 0; i < len; i++) {
         isDisable = DOMUtil.hasClass(actions[i], "ShareIcon") ;
-        if (isDisable == false) continue;
-        if (!actions[i].parentNode.getAttribute("oldHref")) {
-          actions[i].parentNode.setAttribute("oldHref", actions[i].parentNode.href);
-          actions[i].parentNode.style.color = "#cccccc";
-          actions[i].parentNode.href = "javascript:void(0);";
-        }
+        if (isDisable == true) {
+	        if (!actions[i].parentNode.getAttribute("oldHref")) {
+	          actions[i].parentNode.setAttribute("oldHref", actions[i].parentNode.href);
+	          actions[i].parentNode.style.color = "#cccccc";
+	          actions[i].parentNode.href = "javascript:void(0);";
+	        }		
+				}else {
+					if (actions[i].parentNode.getAttribute("oldHref")) {
+	          actions[i].parentNode.href = actions[i].parentNode.getAttribute("oldHref");
+	          actions[i].parentNode.removeAttribute("oldHref");
+	          actions[i].parentNode.removeAttribute("style");
+	        }
+				}
       }    	
     } else {
       for (var i = 0; i < len; i++) {
-        isDisable = DOMUtil.hasClass(actions[i], "EditActionIcon") || DOMUtil.hasClass(actions[i], "MoveIcon") || DOMUtil.hasClass(actions[i], "DeleteContactIcon")
+        isDisable = DOMUtil.hasClass(actions[i], "EditActionIcon") || DOMUtil.hasClass(actions[i], "ShareIcon") || DOMUtil.hasClass(actions[i], "MoveIcon") || DOMUtil.hasClass(actions[i], "DeleteContactIcon")
         if (isDisable == false) continue;
         if (actions[i].parentNode.getAttribute("oldHref")) {
           actions[i].parentNode.href = actions[i].parentNode.getAttribute("oldHref");
