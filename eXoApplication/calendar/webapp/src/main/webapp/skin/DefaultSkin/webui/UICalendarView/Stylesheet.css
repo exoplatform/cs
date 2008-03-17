@@ -114,6 +114,7 @@
 	border-bottom: none;
 	overflow: hidden ;
 	padding: 1px 2px;
+	height: 10px;
 }
 
 .UIDayView .EventDayContent .ResizeEventContainer{
@@ -1188,14 +1189,6 @@
 	-moz-user-select : none ;
 	padding: 0px 2px;
 	font-size: 10px;
-}
-
-.UIDayView .EventDayContent .EventContainer{
-	border:1px solid #ffffff;
-	border-top: none;
-	border-bottom: none;
-	overflow: hidden ;
-	padding: 1px 2px;
 }
 
 .UIDayView .EventDayContent .ResizeEventContainer{
