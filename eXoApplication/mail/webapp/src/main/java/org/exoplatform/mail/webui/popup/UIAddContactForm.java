@@ -81,13 +81,13 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
   private static final String YEAR = "year" ; 
   private static final String JOBTITLE = "jobTitle";
   private static final String EMAIL = "email" ;
-  private static final String MALE = "male" ;
-  private static final String FEMALE = "female" ;
+  private static final String MALE = "Male" ;
+  private static final String FEMALE = "Female" ;
   private byte[] imageBytes_ = null;
   private String fileName_ = null ;
   private String imageMimeType_ = null ;
   public boolean isEdited_ = false ;
-  public Contact selectedContact_ = null ;
+  public Contact selectedContact_  ;
   
   public UIAddContactForm() throws Exception { 
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
@@ -260,7 +260,14 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
       contact.setLastName(lastName);
       contact.setNickName(uiContact.getNickName());
       contact.setGender(uiContact.getFieldGender());
-      contact.setBirthday(uiContact.getFieldBirthday());
+      try {
+        contact.setBirthday(uiContact.getFieldBirthday());
+      } catch(IllegalArgumentException e) {
+        uiApp.addMessage(new ApplicationMessage("UIAddContactForm.msg.birthday-incorrect", null, 
+            ApplicationMessage.INFO)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }      
       contact.setEmailAddress(email);
       if(uiContact.getImage() != null) {
         ContactAttachment attachment = new ContactAttachment() ;

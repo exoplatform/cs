@@ -305,13 +305,14 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
 
   public String getFieldSubjectValue() {
     String subject = getUIStringInput(FIELD_SUBJECT).getValue() ;
-    if (subject !=null )
-      return subject ;
-    else return "" ;
+    if (subject == null ) subject = "(no subject)";
+    return subject ;   
   }
+  
   public void setFieldSubjectValue(String value) {
     getUIStringInput(FIELD_SUBJECT).setValue(value) ;
   }
+  
   public String getFieldToValue() {
     return getUIStringInput(FIELD_TO).getValue() ;
   }
@@ -346,6 +347,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     } else {
       content = getUIFormTextAreaInput(FIELD_MESSAGECONTENT).getValue();
     }
+    if (content == null) content = "" ;
     return content;
   }
   
@@ -408,7 +410,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     message.setAttachements(this.getAttachFileList()) ;
     message.setMessageBody(body) ;
     message.setUnread(false);
-    message.setSize(body.getBytes().length);
+    message.setSize(body.getBytes().length) ;
     message.setReplyTo(account.getEmailReplyAddress());
     return message;
   }
@@ -436,15 +438,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.to-field-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
-      } else if (Utils.isEmptyField(uiForm.getFieldSubjectValue())) {
-        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.subject-field-empty", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      } else if (Utils.isEmptyField(uiForm.getFieldContentValue())) {
-        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.content-field-empty", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
+      } 
       
       try {
         mailSvr.sendMessage(SessionsUtils.getSessionProvider(), usename, message) ;
