@@ -274,14 +274,19 @@
                   String frameId = "IframeMessagePreview" + msgIndex ;
                   String textAreaId = "MessageDetails" + msgIndex ;
                 %>
-                <iframe src="" style="border: 0px" frameborder="0" class="MessageDetails" id="$frameId"></iframe>
-                <%
-                  rcontext.getJavascriptManager().addJavascript("eXo.mail.UIMailPortlet.resizeIframe('" + textAreaId + "', '" + frameId + "', '" + styleExpand + "') ;");
+                <% 
+                  if (msg.getContentType().indexOf("text/plain") > -1) { 
                 %>
-               
-  							<textarea id="$textAreaId" class="MessageDetails" style="display:none">
-  								<%=MailUtils.encodeHTML(msg.getMessageBody())%>
-  							 </textarea>
+                  <%=MailUtils.encodeHTML(msg.getMessageBody().replace("\n", "<br>"))%>
+                <%} else { %>
+                  <iframe src="" style="border: 0px" frameborder="0" class="MessageDetails" id="$frameId"></iframe>
+                  <%
+                    rcontext.getJavascriptManager().addJavascript("eXo.mail.UIMailPortlet.resizeIframe('" + textAreaId + "', '" + frameId + "', '" + styleExpand + "') ;");
+                  %>
+  							  <textarea id="$textAreaId" class="MessageDetails" style="display:none">
+                    <%=MailUtils.encodeHTML(msg.getMessageBody())%>
+  							  </textarea>
+                <%}%>
   							<%
                   if (msg.getAttachments().size() > 0) {
                 %>
