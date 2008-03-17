@@ -423,11 +423,12 @@ UIMailPortlet.prototype.restoreFolderState = function() {
   }
 };
 
-UIMailPortlet.prototype.resizeIframe = function(textAreaId, frameId, styleExpand) {
+UIMailPortlet.prototype.resizeIframe = function(textAreaId, frameId, styleExpand, contentType) {
 	var frame = document.getElementById(frameId) ;
 	var textAreas = document.getElementById(textAreaId) ;
 	var expandMessage = eXo.core.DOMUtil.findAncestorByClass(frame, "ExpandMessage");
 	var str = textAreas.value ;
+	if (contentType.indexOf("text/plain") > -1) str = str.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br>") ;
 	var doc = frame.contentWindow.document ;
 	var isDesktop = (document.getElementById("UIPageDesktop") != null) ? true : false;
 	doc.open();
