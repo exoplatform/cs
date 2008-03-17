@@ -400,19 +400,17 @@ UIMailPortlet.prototype.updateFolderState = function(folderId, folderState) {
   // Save state to cookie
   var dateExpire = new Date();
   dateExpire.setYear(dateExpire.getYear() + 49);
-  eXo.core.Browser.setCookie('lastfoldershow', folderId, dateExpire);
-  eXo.core.Browser.setCookie('folderstate', folderState, dateExpire);
+  eXo.core.Browser.setCookie('cs.mail.lastfoldershow', folderId, dateExpire);
+  eXo.core.Browser.setCookie('cs.mail.folderstate', folderState, dateExpire);
 };
 
 UIMailPortlet.prototype.restoreFolderState = function() {
-  var folderId = eXo.core.Browser.getCookie('lastfoldershow');
+  var folderId = eXo.core.Browser.getCookie('cs.mail.lastfoldershow');
   if (!folderId) {
     return;
   }
-  var folderState = eXo.core.Browser.getCookie('folderstate');
-  if (!this.uiFolderContainerNode) {
-    this.uiFolderContainerNode = document.getElementById('UIFolderContainer');
-  }
+  var folderState = eXo.core.Browser.getCookie('cs.mail.folderstate');
+	this.uiFolderContainerNode = document.getElementById('UIFolderContainer');
   var folderNodes = eXo.core.DOMUtil.findDescendantsByClass(this.uiFolderContainerNode, 'div', 'Folder');
   for (var i=0; i<folderNodes.length; i++) {
     var folderIdTmp = folderNodes[i].getAttribute('folder');
