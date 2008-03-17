@@ -185,20 +185,20 @@
 	                </td>
 	              </tr>
 	              <tr>
-	                <td class="FieldLabel"><a class="HoverButton" href="<%=uicomponent.event("To")%>">To :&nbsp;&nbsp;</a></td>
+	                <td class="FieldLabel"><a href="<%=uicomponent.event("To")%>">To</a> :&nbsp;&nbsp;</td>
 	                <td class="FieldComponent"  colspan="2">
 	                  <%uicomponent.renderField(uicomponent.FIELD_TO)%> 
 	                </td>
 	              </tr>
 	
 	              <tr id="FIELD_CC" style="display:none">
-	                <td class="FieldLabel"><a class="HoverButton " href="<%=uicomponent.event("ToCC")%>">Cc :&nbsp;&nbsp;</a></td>
+	                <td class="FieldLabel"><a href="<%=uicomponent.event("ToCC")%>">Cc</a> :&nbsp;&nbsp;</td>
 	                <td class="FieldComponent" colspan="2">
 	                  <%uicomponent.renderField(uicomponent.FIELD_CC)%> 
 	                </td>
 	              </tr>
 	              <tr id="FIELD_BCC" style="display:none">
-	                <td class="FieldLabel"><a class="HoverButton " href="<%=uicomponent.event("ToBCC")%>">Bcc :&nbsp;&nbsp;</a></td>
+	                <td class="FieldLabel"><a href="<%=uicomponent.event("ToBCC")%>">Bcc</a> :&nbsp;&nbsp;</td>
 	                <td class="FieldComponent" colspan="2">
 	                  <%uicomponent.renderField(uicomponent.FIELD_BCC)%> 
 	                </td>

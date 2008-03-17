@@ -219,7 +219,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         case MESSAGE_IN_DRAFT :
           setFieldSubjectValue(msg.getSubject());
           setFieldToValue(msg.getMessageTo());
-          setFieldContentValue(msg.getMessageBody());
+          setFieldContentValue(formatContent(msg));
           for (Attachment att : msg.getAttachments()) {
             attachments_.add(att);
             refreshUploadFileList();
@@ -258,7 +258,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
               "Subject: " + msg.getSubject() + "<br>Date: " + msg.getSendDate() + 
               "<br> From: " + msg.getFrom() + 
               "<br> To: " + msg.getMessageTo() + 
-              "<br><br>" + msg.getMessageBody();         
+              "<br><br>" + formatContent(msg) ;         
           setFieldContentValue(forwardedText);
           setFieldToValue("");
           if (mailSetting.forwardWithAtt()) {
@@ -276,13 +276,24 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     }
   }
   
-  public String getReplyContent(Message msg) {
-    String content = msg.getMessageBody();
+  private String getReplyContent(Message msg) throws Exception {
+    String msgContent = formatContent(msg) ;
+    String content = msgContent ;
     if (isVisualEditor) {
       content = "<br><br><div> On " + MailUtils.formatDate("MMM dd, yyyy HH:mm aaa", msg.getSendDate()) + ", " + msg.getFrom() + " wrote: <br>" ;
-      content += "<blockquote style=\"border-left:1px #cccccc solid ; margin-left: 10px; padding-left: 5px;\">" + msg.getMessageBody() + "</blockquote></div>" ;
+      content += "<blockquote style=\"border-left:1px #cccccc solid ; margin-left: 10px; padding-left: 5px;\">" + msgContent + "</blockquote></div>" ;
     }
     return content ;
+  }
+  
+  private String formatContent(Message msg) throws Exception {
+    String msgContent = msg.getMessageBody();
+    if (msg.getContentType().indexOf("text/plain") > -1) {
+      msgContent = MailUtils.encodeHTML(msg.getMessageBody()).replace("\n", "<br>") ;
+    } else {
+      msgContent = MailUtils.encodeHTML(msgContent) ;
+    }
+    return msgContent ;
   }
   
   public long getPriority() { return priority_; }  
