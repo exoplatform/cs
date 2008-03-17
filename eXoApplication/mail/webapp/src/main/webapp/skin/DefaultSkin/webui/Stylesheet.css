@@ -1045,6 +1045,7 @@
     position: absolute; 
     height: 100%;
     background: #ffffff;
+    overflow: auto;
 }
 
 .UIMailPortlet .PrintPreview {
