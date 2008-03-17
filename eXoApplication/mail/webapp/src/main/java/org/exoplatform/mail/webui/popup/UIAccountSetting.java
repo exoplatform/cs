@@ -382,7 +382,6 @@ public class UIAccountSetting extends UIFormTabPane {
     public void execute(Event<UIAccountSetting> event) throws Exception {
       UIAccountSetting uiSetting = event.getSource() ;
       MailService mailSrv = uiSetting.getApplicationComponent(MailService.class) ;
-      UIMailPortlet uiPortlet = uiSetting.getAncestorOfType(UIMailPortlet.class) ;
       String username = Util.getPortalRequestContext().getRemoteUser() ;
       Account acc = mailSrv.getAccountById(SessionsUtils.getSessionProvider(), username, uiSetting.getSelectedAccountId()) ;
       String userName = uiSetting.getFieldIncomingAccount() ;
@@ -418,8 +417,6 @@ public class UIAccountSetting extends UIFormTabPane {
       try {
         mailSrv.updateAccount(SessionsUtils.getSessionProvider(), username, acc) ;
         uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.edit-acc-successfully", null)) ;
-        uiPortlet.findFirstComponentOfType(UISelectAccount.class).updateAccount() ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UINavigationContainer.class)) ;
         event.getSource().getAncestorOfType(UIMailPortlet.class).cancelAction();
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
       } catch(Exception e) {

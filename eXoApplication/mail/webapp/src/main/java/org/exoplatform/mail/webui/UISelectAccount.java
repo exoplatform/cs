@@ -125,7 +125,6 @@ public class UISelectAccount extends UIForm {
       UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
       UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 730) ;
-      
       uiPopupContainer.setId("UIAccountPopupSetting");
       UIAccountSetting uiAccountSetting = uiPopupContainer.createUIComponent(UIAccountSetting.class, null, null);
       uiPopupContainer.addChild(uiAccountSetting) ; 
