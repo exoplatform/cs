@@ -189,7 +189,7 @@
 .EventTitle{
 	background-color:black ;
 	opacity: 0.3 ;
-	
+	filter:alpha(opacity=30) ;
 }
 .EventTitle p{
 	font-weight:bold;
