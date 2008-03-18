@@ -83,14 +83,13 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
     }
     List<String> newPars = new ArrayList<String>() ;
     parMap_.clear() ;
-    if(values != null && values.length() > 0) {
-      for(String par : values.split(",")) {
+    if(!CalendarUtils.isEmpty(values)) {
+      for(String par : values.split(CalendarUtils.COMMA)) {
         String vl = tmpMap.get(par) ;
-        parMap_.put(par, vl) ;
-        if(vl == null) newPars.add(par) ;  			
+        parMap_.put(par.trim(), vl) ;
+        if(vl == null) newPars.add(par.trim()) ;  			
       }
     }
-
     for(String id : parMap_.keySet()) {
       addUIFormInput(new UIFormCheckBoxInput<Boolean>(id, id, false)) ;
     }
@@ -104,7 +103,6 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
       Map<String, String> parsMap = 
         CalendarUtils.getCalendarService().checkFreeBusy(SessionProviderFactory.createSystemProvider(), eventQuery) ;
       parMap_.putAll(parsMap) ;
-      //System.out.println("parsMap " + parsMap.values().toString());
     }
   }
 

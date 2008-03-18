@@ -546,7 +546,8 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       } else {
         UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
         UIPopupAction uiPopupAction  = uiPopupContainer.getChild(UIPopupAction.class) ;
-        uiPopupAction.activate(UIAddressForm.class, 640) ;
+        UIAddressForm uiAddressForm = uiPopupAction.activate(UIAddressForm.class, 640) ;
+        uiAddressForm.setContactList("") ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       }
     }

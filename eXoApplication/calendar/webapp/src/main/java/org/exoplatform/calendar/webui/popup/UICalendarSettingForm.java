@@ -282,7 +282,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
       uiViewContainer.initView(viewType) ;
       uiViewContainer.applySeting() ;
-      calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class).refresh() ;
+      uiViewContainer.refresh() ;
       calendarPortlet.findFirstComponentOfType(UIActionBar.class).setCurrentView(viewType) ;
       calendarPortlet.cancelAction() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarPortlet) ;

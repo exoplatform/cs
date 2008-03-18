@@ -184,8 +184,10 @@ public class UIEventDetailTab extends UIFormInputWithActions {
   public void processRender(WebuiRequestContext arg0) throws Exception {
     super.processRender(arg0);
   }
-  public UIFormComboBox getUIFormComboBox(String id) {
+  public UIFormComboBox getUIFormComboBox (String id) {
     return findComponentById(id);
   }
-
+  public UIFormDateTimePicker getUIFormDateTimePicker (String id) {
+    return findComponentById(id) ;
+  }
 }

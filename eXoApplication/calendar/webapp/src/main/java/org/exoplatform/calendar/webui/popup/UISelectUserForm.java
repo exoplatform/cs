@@ -216,7 +216,7 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
       //if(uiForm.getChildren()!= null) uiForm.getChildren().clear() ;
       OrganizationService service = uiForm.getApplicationComponent(OrganizationService.class) ;
       String keyword = uiForm.getUIStringInput(UISelectUserForm.FIELD_KEYWORD).getValue();
-      if(keyword == null && keyword.trim().length() <= 0) keyword = "*" ;
+      if(keyword == null || keyword.trim().length() <= 0) keyword = "*" ;
       keyword = "*" + keyword + "*" ;
       Query q = new Query() ;
       q.setUserName(keyword) ;
