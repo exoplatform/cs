@@ -26,6 +26,6 @@
   
   <import>war:/conf/cs/jcr-component-plugins-configuration.xml</import>
   <import>war:/conf/cs/cs-plugins-configuration.xml</import>
-  <!--import>war:/conf/cs/rssreader-configuration.xml</import-->
+  <import>war:/conf/cs/rssreader-configuration.xml</import>
 	
 </configuration>

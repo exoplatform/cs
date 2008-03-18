@@ -197,10 +197,10 @@ public class ContentDAOImpl extends BaseContentService implements ContentDAO {
     node.setProperty(MODIFIED_DATE, calendar);    
   }
   
-  public List<String> getTypes() {
-    List<String> types = new ArrayList<String>();
-    types.add("rss") ;
-    types.add("desc") ;
-    return types ;
-  }
+//  public List<String> getTypes() {
+////    List<String> types = new ArrayList<String>();
+////    types.add("rss") ;
+////    types.add("desc") ;
+////    return types ;
+//  }
 }

@@ -45,9 +45,11 @@ public class RSSContentPlugin extends ContentPlugin {
     public RSSItem(){
     }
 
-    @SuppressWarnings("unused")
-    public void setCreator(String creator){ }
-    public String getCreator(){ return null; }
+    //@SuppressWarnings("unused")
+    //TODO: dang.tung -> set creator of content
+    public void setCreator(String creator){ super.setCreator(creator) ;}
+    public String getCreator(){return super.getCreator() ;
+    }
 
   }
   
