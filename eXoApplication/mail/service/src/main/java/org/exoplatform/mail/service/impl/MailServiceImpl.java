@@ -723,4 +723,14 @@ public class MailServiceImpl implements MailService{
   public List<Message> getReferencedMessages(SessionProvider sProvider, String username, String accountId, String msgPath) throws Exception {
     return storage_.getReferencedMessages(sProvider, username, accountId, msgPath);
   }
+  
+  public Account getDefaultAccount(SessionProvider sProvider, String username) throws Exception {
+    MailSetting mailSetting = storage_.getMailSetting(sProvider, username) ;
+    String defaultAccount = mailSetting.getDefaultAccount() ;
+    Account account = null ;
+    if (defaultAccount != null) { 
+      account = getAccountById(sProvider, username, defaultAccount) ;
+    }
+    return account ;
+  }
 }

@@ -342,4 +342,6 @@ public interface MailService {
   public List<Folder> getSubFolders(SessionProvider sProvider, String username, String accountId, String parentPath) throws Exception ;
   
   public List<Message> getReferencedMessages(SessionProvider sProvider, String username, String accountId, String msgPath) throws Exception ;
+  
+  public Account getDefaultAccount(SessionProvider sProvider, String username) throws Exception ;
 }
