@@ -52,7 +52,12 @@ eXo.cs.CheckBox = new CheckBox() ;
 function Spliter() {
 } ;
 
-//Spliter.prototype.doResize = function(e , markerobj, beforeAreaObj, afterAreaObj) {
+/**
+ * 
+ * @param {Object} e : Event Object
+ * @param {Object} markerobj : Click object
+ * This function to resize pane
+ */
 Spliter.prototype.doResize = function(e , markerobj) {
   _e = (window.event) ? window.event : e ;
   var DOMUtil = eXo.core.DOMUtil ;
@@ -67,10 +72,6 @@ Spliter.prototype.doResize = function(e , markerobj) {
 //  this.afterArea.style.height = this.afterArea.offsetHeight + "px" ;
   this.beforeArea.style.overflowY = "auto" ;
   this.afterArea.style.overflowY = "auto" ;
-  try{
-	  this.beforeArea.style.maxHeight = "none" ;
-	  this.afterArea.style.maxHeight = "none" ;
-  } catch(e) {} ;
   this.beforeY = this.beforeArea.offsetHeight ;
   this.afterY = this.afterArea.offsetHeight ;
   document.onmousemove = eXo.cs.Spliter.adjustHeight ;
@@ -151,6 +152,7 @@ Utils.prototype.onEnter = function(evt) {
   if (keynum == 13) {
     this.form.onsubmit = eXo.cs.Utils.cancelSubmit ;
     var action = eXo.core.DOMUtil.findPreviousElementByTagName(this, "a") ;
+		if(!action) action = eXo.core.DOMUtil.findNextElementByTagName(this, "a") ;
     action = String(action.href).replace("javascript:","") ;
     eval(action) ;
   }
@@ -165,15 +167,43 @@ eXo.cs.Utils = new Utils() ;
 /********************* Scroll Manager ******************/
 
 function UINavigation() {
-  
+  this.scrollManagerLoaded = false ;
 } ;
 
 UINavigation.prototype.loadScroll = function() {
-  
+  var uiNav = eXo.cs.UINavigation ;
+  var container = document.getElementById("UIActionBar") ;
+  if(container) {    
+    this.scrollMgr = eXo.portal.UIPortalControl.newScrollManager("UIActionBar") ;
+    this.scrollMgr.initFunction = uiNav.iniScroll ;
+    
+    this.scrollMgr.mainContainer = eXo.core.DOMUtil.findFirstDescendantByClass(container, "div", "CenterBar") ;
+    this.scrollMgr.arrowsContainer = eXo.core.DOMUtil.findFirstDescendantByClass(container, "div", "ScrollButtons") ;
+    this.scrollMgr.loadElements("ControlButton", true) ;
+    
+    var button = eXo.core.DOMUtil.findDescendantsByTagName(this.scrollMgr.arrowsContainer, "div");
+    if(button.length >= 2) {    
+      this.scrollMgr.initArrowButton(button[0],"left", "ScrollLeftButton", "HighlightScrollLeftButton", "DisableScrollLeftButton") ;
+      this.scrollMgr.initArrowButton(button[1],"right", "ScrollRightButton", "HighlightScrollRightButton", "DisableScrollRightButton") ;
+    }
+    
+    this.scrollMgr.callback = uiNav.scrollCallback ;
+    uiNav.scrollManagerLoaded = true;
+    uiNav.initScroll() ;
+  }
 } ;
 
 UINavigation.prototype.initScroll = function() {
-  
+  var uiNav = eXo.cs.UINavigation ;
+  if(!uiNav.scrollManagerLoaded) uiNav.loadScroll() ;
+  var elements = uiNav.scrollMgr.elements ;
+  uiNav.scrollMgr.init() ;
+  uiNav.scrollMgr.checkAvailableSpace() ;
+  uiNav.scrollMgr.renderElements() ;
+} ;
+
+UINavigation.prototype.scrollCallback = function() {
+
 } ;
 
 eXo.cs.UINavigation = new UINavigation() ;
