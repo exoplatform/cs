@@ -137,7 +137,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     addUser.setActionType(ActionData.TYPE_ICON) ;
     addUser.setCssIconClass("SelectUserIcon") ;
     actions.add(addUser) ;
-
     eventShareTab.setActionField(FIELD_PARTICIPANT, actions) ;
     addChild(eventShareTab) ;
     UIEventAttenderTab eventAttenderTab = new UIEventAttenderTab(TAB_EVENTATTENDER) ;
@@ -775,6 +774,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     public void execute(Event<UIEventForm> event) throws Exception {
       System.out.println( "\n\n ==========> AddParticipantActionListener");
       UIEventForm uiForm = event.getSource() ;
+      UIEventAttenderTab tabAttender = uiForm.getChildById(TAB_EVENTATTENDER) ;
+      String values = uiForm.getParticipantValues() ;
+      tabAttender.updateParticipants(values) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(tabAttender) ;
       String tabId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopupAction = uiContainer.getChild(UIPopupAction.class) ;
@@ -834,6 +837,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     public void execute(Event<UIEventForm> event) throws Exception {
       UIEventForm uiForm = event.getSource() ;
       UIEventAttenderTab tabAttender = uiForm.getChildById(TAB_EVENTATTENDER) ;
+      String values = uiForm.getParticipantValues() ;
+      tabAttender.updateParticipants(values) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(tabAttender) ;
       String[] pars = tabAttender.getParticipants() ;
       StringBuffer newPars = new StringBuffer() ;
       for(String id : pars){
