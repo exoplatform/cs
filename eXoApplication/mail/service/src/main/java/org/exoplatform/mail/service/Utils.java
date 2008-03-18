@@ -444,7 +444,7 @@ public class Utils {
   }
   
   public static String encodeJCRTextSearch(String str) {
-    return str.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").
-        replace("'", "&apos;").replace("\"", "&quot;") ;
+    return str.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").
+    replaceAll("'", "&apos;").replaceAll("\"", "&quot;") ;
   }
 }
