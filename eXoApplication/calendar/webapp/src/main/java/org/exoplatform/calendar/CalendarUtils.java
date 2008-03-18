@@ -93,20 +93,23 @@ public class CalendarUtils {
     return groups ;
   }
   static public String[] getAllGroups() throws Exception {
-    OrganizationService organization = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
-    Object[] objs = organization.getGroupHandler().getAllGroups().toArray() ;
+    Object[] objs = getOrganizationService().getGroupHandler().getAllGroups().toArray() ;
     String[] groups = new String[objs.length] ;
     for(int i = 0; i < objs.length ; i ++) {
       groups[i] = ((GroupImpl)objs[i]).getId() ;
     }
     return groups ;
   }
+  
   public static boolean isEmpty(String value) {
     return (value == null || value.trim().length() == 0) ;
   }
 
   static public CalendarService getCalendarService() throws Exception {
     return (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
+  }
+  static public OrganizationService getOrganizationService() throws Exception {
+    return (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
   }
   public static Calendar getInstanceTempCalendar() { 
     Calendar  calendar = GregorianCalendar.getInstance() ;
@@ -438,5 +441,15 @@ public class CalendarUtils {
       }
     }
     return list ;
+  }
+  
+  public static String encodeJCRText(String str) {
+    return str.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").
+    replaceAll("'", "&apos;").replaceAll("\"", "&quot;") ;
+  }
+  
+  public static String encodeHTML(String htmlContent) throws Exception {
+    return htmlContent.replaceAll("&", "&amp;").replaceAll("\"", "&quot;")
+    .replaceAll("<", "&lt;").replaceAll(">", "&gt;") ;
   }
 }
