@@ -97,7 +97,7 @@ public class ContactFilter {
   public void setAscending(boolean b) { this.isAscending = b; } 
   
   public String getStatement() throws Exception {
-    StringBuffer queryString = new StringBuffer("/jcr:root" + accountPath + "//element(*,exo:contact)") ;
+    StringBuffer queryString = new StringBuffer("/jcr:root" + (accountPath == null ? "" : accountPath) + "//element(*,exo:contact)") ;
     boolean hasConjuntion = false ;
     StringBuffer stringBuffer = new StringBuffer("[") ;
     
@@ -108,7 +108,8 @@ public class ContactFilter {
     }
     
     if(categories != null && categories.length > 0) {      
-      stringBuffer.append("(") ;    
+      if(hasConjuntion) stringBuffer.append(" and (") ;
+      else stringBuffer.append("(") ;  
       for(int i = 0; i < categories.length; i ++) {
         if(i == 0) stringBuffer.append("@exo:categories='" + categories[i] +"'") ;
         else stringBuffer.append(" or @exo:categories='" + categories[i] +"'") ;

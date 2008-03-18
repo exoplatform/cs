@@ -82,11 +82,12 @@ public class Contact {
   private String[] tags ;
   private String[] editPermission ;
   private String[] viewPermission ;
+  
+  // remove 2 these properties
   private String[] sharedForUsers ;
   private String[] sharedForGroups ;
   private boolean isOwner = false ;
   private String ownerId ;
-  //private boolean isShared = false ;
   private ContactAttachment attachment ;
   private Date lastUpdated ;
   

@@ -23,6 +23,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -1195,12 +1196,9 @@ public class JCRDataStorage {
       while(iter.hasNext()) {
         try{
           Node contactNode = iter.nextProperty().getParent() ;
-          String[] tags = ValuesToStrings(contactNode.getProperty("exo:tags").getValues()) ;
-          for (String tag : tags) 
-            if (tag.equals(tagId)) {
-              contacts.add(getContact(contactNode, SHARED)) ;
-              break ;
-            }
+          if (contactNode.hasProperty("exo:tags") && 
+              Arrays.asList(ValuesToStrings(contactNode.getProperty("exo:tags").getValues())).contains(tagId))
+            contacts.add(getContact(contactNode, SHARED)) ;
         }catch(Exception e){
           e.printStackTrace() ;
         }
@@ -1352,55 +1350,81 @@ public class JCRDataStorage {
     } 
   }
 
+  private void removeTagInContacts (NodeIterator it, String tagId) throws Exception {
+    while (it.hasNext()) {
+      Node contactNode = it.nextNode() ;
+      if (contactNode.hasProperty("exo:tags")) {
+        String[] tagIds = ValuesToStrings(contactNode.getProperty("exo:tags").getValues()) ;
+        List<String> newTagIds = new ArrayList<String>() ;
+        for (String id : tagIds) 
+          if (!id.equals(tagId)) newTagIds.add(id) ;
+        contactNode.setProperty("exo:tags", newTagIds.toArray(new String[]{})) ;
+        contactNode.save() ;
+      }
+    }
+  }
+  
   public Tag removeTag(SessionProvider sysProvider, String username, String tagId) throws Exception {
     Node tagHomeNode = getTagHome(sysProvider, username);
     Node tagNode = tagHomeNode.getNode(tagId) ;
     Tag tag = getTag(tagNode) ;
     tagNode.remove();
     tagHomeNode.save() ;
-    List<Contact> contacts = getContactPageListByTag(sysProvider, username, tagId).getAll();
-    for (Contact contact : contacts) {
-      List<String> tags = new ArrayList<String>(Arrays.asList(contact.getTags()));
-      tags.remove(tagId) ;
-      Node contactNode = null ;
-      if (contact.getContactType().equals(PRIVATE)) {
-        contactNode = getUserContactHome(sysProvider, username).getNode(contact.getId()) ;
-      } else if (contact.getContactType().equals(PUBLIC)) {
-        contactNode = getUserContactHome(
-            SessionProvider.createSystemProvider(), contact.getId()).getNode(contact.getId());
-      } else {
-        Node sharedContactMock = getSharedContact(username) ;      
-        PropertyIterator iter = sharedContactMock.getReferences() ;
+    
+    // remove tagId in contact property       
+    // query on private contacts
+      Node contactHome = getUserContactHome(sysProvider, username);
+      QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
+      StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
+                                                  + "//element(*,exo:contact)[@exo:tags='").
+                                                  append(tagId).append("']");
+      Query query = qm.createQuery(queryString.toString(), Query.XPATH);
+      removeTagInContacts(query.execute().getNodes(), tagId) ;
+      
+      //query on public contacts
+      String usersPath = nodeHierarchyCreator_.getJcrPath("usersPath") ;
+      Node publicContactHome = getPublicContactHome(SessionProvider.createSystemProvider());
+      qm = publicContactHome.getSession().getWorkspace().getQueryManager();
+      queryString = new StringBuffer("/jcr:root" + usersPath 
+                                                  + "//element(*,exo:contact)[@exo:tags='")
+                                                  .append(tagId).append("' and @exo:isOwner='true'] ") ;
+      query = qm.createQuery(queryString.toString(), Query.XPATH);
+      removeTagInContacts(query.execute().getNodes(), tagId) ;
+      
+      // query on shared contacts
+      try {
+        Node sharedContact = getSharedContact(username) ;      
+        PropertyIterator iter = sharedContact.getReferences() ;
         while(iter.hasNext()) {
           try{
-            Node node = iter.nextProperty().getParent() ;
-            if(node.getName().equals(contact.getId())) {
-              contactNode = node ;
-              break ;
+            Node contactNode = iter.nextProperty().getParent() ;
+            if (contactNode.hasProperty("exo:tags")) {
+              String[] tagIds = ValuesToStrings(contactNode.getProperty("exo:tags").getValues()) ;
+              List<String> newTagIds = new ArrayList<String>() ;
+              for (String id : tagIds) 
+                if (!id.equals(tagId)) newTagIds.add(id) ;
+              contactNode.setProperty("exo:tags", newTagIds.toArray(new String[]{})) ;
+              contactNode.save() ;
             }
-          }catch(Exception exx){
-            exx.printStackTrace() ;
+          }catch(Exception e){
+            e.printStackTrace() ;
           }
         }
-        if (contactNode == null) {
-          Node sharedAddressBookMock = getSharedAddressBook(username) ;
-          PropertyIterator iter1 = sharedAddressBookMock.getReferences() ;
-          Node addressBook ;      
-          while(iter1.hasNext()) {
-            addressBook = iter1.nextProperty().getParent() ;
-            if (Arrays.asList(contact.getAddressBook()).contains(addressBook.getProperty("exo:id"))) {
-              Node contactNodes = addressBook.getParent().getParent().getNode(CONTACTS) ;
-              if(contactNodes.hasNode(contact.getId())) {
-              contactNode = contactNodes.getNode(contact.getId()) ;
-              break ;
-              }
-            }
-          }
-        }
-      }      
-     contactNode.setProperty("exo:tags", tags.toArray(new String[]{})) ;
-     contactNode.save() ;
-    }
+      } catch (PathNotFoundException e) { }
+
+      Node sharedAddressBookMock = getSharedAddressBook(username) ;
+      PropertyIterator iter = sharedAddressBookMock.getReferences() ;
+      Node addressBook ;      
+      while(iter.hasNext()) {
+        addressBook = iter.nextProperty().getParent() ;
+        Node contactHomeNode = addressBook.getParent().getParent().getNode(CONTACTS) ;
+        queryString = new StringBuffer("/jcr:root" + contactHomeNode.getPath() 
+            + "//element(*,exo:contact)[@exo:tags='").
+            append(tagId).
+            append("']");
+        query = qm.createQuery(queryString.toString(), Query.XPATH);
+        removeTagInContacts(query.execute().getNodes(), tagId) ;
+      }
     return tag ;    
   }
   
@@ -1443,7 +1467,7 @@ public class JCRDataStorage {
         }
       }
       
-      if (contactNode != null) {
+      if (contactNode == null) {
         throw new PathNotFoundException() ;
       } else {
         if(contactNode.hasProperty("exo:tags")){
@@ -1564,6 +1588,9 @@ public class JCRDataStorage {
         newNode.setProperty("exo:categories", new String [] {destAddress}) ;
         newNode.setProperty("exo:id", newId) ;          
         newNode.setProperty("exo:isOwner", false) ;
+        newNode.setProperty("exo:editPermission", new String [] {}) ;
+        newNode.setProperty("exo:viewPermission", new String [] {}) ;
+        newNode.setProperty("exo:tags", new String [] {}) ; 
       }
       contactHomeNode.getSession().save() ;
     } else if (destType.equals(SHARED)) {
@@ -1583,6 +1610,9 @@ public class JCRDataStorage {
             newNode.setProperty("exo:categories", new String [] {destAddress}) ;  
             newNode.setProperty("exo:id", newId) ;
             newNode.setProperty("exo:isOwner", false) ;
+            newNode.setProperty("exo:editPermission", new String [] {}) ;
+            newNode.setProperty("exo:viewPermission", new String [] {}) ;
+            newNode.setProperty("exo:tags", new String [] {}) ; 
           }  
           contactHomeNode.getSession().save() ;
           break ;         
@@ -1637,23 +1667,19 @@ public class JCRDataStorage {
   }
   
   public void pasteContacts(SessionProvider sProvider, String username, String destAddress, String destType, List<Contact> contacts) throws Exception {
-    if (destType.equals(PRIVATE)) {
-      for (Contact contact : contacts) {
-        contact.setId("Contact" + IdGenerator.generate()) ;
-        contact.setOwnerId(null) ;
-        contact.setOwner(false) ;
-        contact.setAddressBook(new String[] {destAddress}) ;
-        saveContact(sProvider, username, contact, true) ;         
-      }      
-    } else if (destType.equals(SHARED)) {
-      for (Contact contact : contacts) {
-        contact.setId("Contact" + IdGenerator.generate()) ;
-        contact.setOwnerId(null) ;
-        contact.setOwner(false) ;
-        contact.setAddressBook(new String[] {destAddress}) ;
+    for (Contact contact : contacts) {
+      contact.setId("Contact" + IdGenerator.generate()) ;
+      contact.setOwnerId(null) ;
+      contact.setOwner(false) ;
+      contact.setAddressBook(new String[] {destAddress}) ;
+      contact.setEditPermission(null) ;
+      contact.setViewPermission(null) ;
+      contact.setTags(null) ;
+      if (destType.equals(PRIVATE)) {
+        saveContact(sProvider, username, contact, true) ;   
+      } else if (destType.equals(SHARED)) {
         saveContactToSharedAddressBook(username, destAddress, contact, true) ;
-      }
+      }       
     }
   }
-  
 }
