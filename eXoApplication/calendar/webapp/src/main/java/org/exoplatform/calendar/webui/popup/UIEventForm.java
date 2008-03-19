@@ -177,6 +177,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       setEventDescription(eventCalendar.getDescription()) ;
       setEventAllDate(CalendarUtils.isAllDayEvent(eventCalendar)) ;
       setEventFromDate(eventCalendar.getFromDateTime(),calSetting.getDateFormat(), calSetting.getTimeFormat()) ;
+      setEventCheckTime(eventCalendar.getFromDateTime()) ;
       setEventToDate(eventCalendar.getToDateTime(),calSetting.getDateFormat(), calSetting.getTimeFormat()) ;
       setSelectedCalendarId(eventCalendar.getCalendarId()) ;
       setSelectedCategory(eventCalendar.getEventCategoryId()) ;
@@ -228,6 +229,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       Long beginMinute = (cal.get(java.util.Calendar.MINUTE)/calSetting.getTimeInterval())*calSetting.getTimeInterval() ;
       cal.set(java.util.Calendar.MINUTE, beginMinute.intValue()) ;
       setEventFromDate(cal.getTime(),calSetting.getDateFormat(), calSetting.getTimeFormat()) ;
+      setEventCheckTime(cal.getTime()) ;
       cal.add(java.util.Calendar.MINUTE, (int)calSetting.getTimeInterval()*2) ;
       setEventToDate(cal.getTime(),calSetting.getDateFormat(), calSetting.getTimeFormat()) ;
       StringBuffer pars = new StringBuffer(CalendarUtils.getCurrentUser()) ;
@@ -236,6 +238,11 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     }
   }
 
+  private void setEventCheckTime(Date time) {
+    UIEventAttenderTab uiAttenderTab = getChildById(TAB_EVENTATTENDER) ;
+    uiAttenderTab.calendar_.setTime(time) ;
+  }
+  
   public void update(String calType, List<SelectItemOption<String>> options) throws Exception{
     UIEventDetailTab uiEventDetailTab = getChildById(TAB_EVENTDETAIL) ;
     if(options != null) {

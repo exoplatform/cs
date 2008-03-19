@@ -78,7 +78,7 @@
               <%}%>
         </tbody>
         </table>      
-            
+        <%_ctx.include("app:/templates/calendar/webui/UIPageIterator.gtmpl");%>    
       </div>
       
     </div>
