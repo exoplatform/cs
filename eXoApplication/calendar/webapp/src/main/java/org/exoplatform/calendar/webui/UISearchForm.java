@@ -83,7 +83,7 @@ public class UISearchForm extends UIForm {
       }
       try {
         EventQuery eventQuery = new EventQuery() ;
-        eventQuery.setText(text) ;
+        eventQuery.setText(CalendarUtils.encodeJCRText(text)) ;
         String username = CalendarUtils.getCurrentUser() ;
         UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
         EventPageList resultPageList = 

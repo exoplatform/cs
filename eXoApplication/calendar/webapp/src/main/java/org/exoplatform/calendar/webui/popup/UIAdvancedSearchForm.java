@@ -221,7 +221,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
       try {
         EventQuery query = new EventQuery() ;
         String text = uiForm.getUIStringInput(UIAdvancedSearchForm.TEXT).getValue() ;
-        if(! CalendarUtils.isEmpty(text)) query.setText(text) ;
+        if(! CalendarUtils.isEmpty(text)) query.setText(CalendarUtils.encodeJCRText(text)) ;
         query.setEventType(uiForm.getUIFormSelectBox(UIAdvancedSearchForm.TYPE).getValue()) ;
         if(uiForm.isSearchTask()) query.setState(uiForm.getTaskState()) ; 
         String calendarId = uiForm.getUIFormSelectBox(UIAdvancedSearchForm.CALENDAR).getValue() ;

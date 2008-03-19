@@ -37,10 +37,12 @@ import org.exoplatform.calendar.webui.UIFormComboBox;
 import org.exoplatform.calendar.webui.UIFormDateTimePicker;
 import org.exoplatform.calendar.webui.UIListContainer;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
+import org.exoplatform.mail.service.Account;
+import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.service.Message;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -709,6 +711,13 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   private SessionProvider getSystemSession() {
     return SessionProviderFactory.createSystemProvider() ;
   }
+  
+  private void sendMail(MailService svr,String fromId,  String toId) throws Exception {
+   Account acc = svr.getDefaultAccount(getSession(), fromId) ;
+   Message message = new Message() ;
+   svr.sendMessage(getSession(), fromId, message);
+  }
+  
   static  public class AddCategoryActionListener extends EventListener<UIEventForm> {
     public void execute(Event<UIEventForm> event) throws Exception {
       UIEventForm uiForm = event.getSource() ;
@@ -1037,26 +1046,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         event.getRequestContext().addUIComponentToUpdateByAjax(eventShareTab) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(attendTab) ;
       }
-      /*f(CalendarUtils.isEmpty(sb1.toString())) {
-        uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.participant-required", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        if(isCheckFreeTime) attendTab.getUIFormCheckBoxInput(UIEventAttenderTab.FIELD_CHECK_TIME).setChecked(false) ;
-        uiForm.setSelectedTab(TAB_EVENTATTENDER) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getChildById(TAB_EVENTATTENDER)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getChildById(TAB_EVENTSHARE)) ;
-        return ;
-      }
-      if(fromDate.get(Calendar.DATE) != toDate.get(Calendar.DATE)) {
-        uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.can-not-check", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        if(isCheckFreeTime) attendTab.getUIFormCheckBoxInput(UIEventAttenderTab.FIELD_CHECK_TIME).setChecked(false) ;
-      }  
-      uiForm.setSelectedTab(TAB_EVENTATTENDER) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getChildById(TAB_EVENTSHARE)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getChildById(TAB_EVENTATTENDER)) ;*/
     }
   }
-  static  public class CancelActionListener extends EventListener<UIEventForm> {
+  
+  static public class CancelActionListener extends EventListener<UIEventForm> {
     public void execute(Event<UIEventForm> event) throws Exception {
       System.out.println("CancelActionListener ========>") ;
       UIEventForm uiForm = event.getSource() ;
