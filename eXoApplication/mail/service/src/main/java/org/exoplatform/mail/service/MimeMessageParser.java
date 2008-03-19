@@ -103,7 +103,7 @@ public class MimeMessageParser {
     }
   }
 
-  public static long getPriority(javax.mail.Message message ) throws MessagingException {
+  public static long getPriority(javax.mail.Message message) throws MessagingException {
       MimeMessage msg = (MimeMessage)message;
       String xpriority = msg.getHeader("Importance", null);
       if (xpriority != null) {
@@ -129,5 +129,19 @@ public class MimeMessageParser {
         }
       }
       return Utils.PRIORITY_NORMAL ;
+  }
+  
+  public static String getMessageId(javax.mail.Message message) throws Exception {
+    String[] msgIdHeaders = message.getHeader("Message-ID");
+    if (msgIdHeaders != null && msgIdHeaders[0]!= null)
+      return msgIdHeaders[0] ;
+    return "" ;
+  }
+  
+  public static String getInReplyToHeader(javax.mail.Message message) throws Exception {
+    String[] inReplyToHeaders = message.getHeader("In-Reply-To") ;
+    if (inReplyToHeaders != null && inReplyToHeaders[0] != null)
+      return inReplyToHeaders[0];
+    return "" ;
   }
 }

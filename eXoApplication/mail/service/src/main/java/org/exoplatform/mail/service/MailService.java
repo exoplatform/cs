@@ -295,9 +295,10 @@ public interface MailService {
    * This method should send out the message
    * @param username
    * @param message
+   * @return TODO
    * @throws Exception
    */
-  public void sendMessage(SessionProvider sProvider, String username, Message message) throws Exception ;
+  public Message sendMessage(SessionProvider sProvider, String username, Message message) throws Exception ;
   /**
    * This method should check  for the new message in the mail server, download and save them in the 
    * Inbox folder

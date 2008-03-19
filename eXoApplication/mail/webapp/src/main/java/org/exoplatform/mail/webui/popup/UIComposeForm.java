@@ -441,7 +441,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       } 
       
       try {
-        mailSvr.sendMessage(SessionsUtils.getSessionProvider(), usename, message) ;
+        message = mailSvr.sendMessage(SessionsUtils.getSessionProvider(), usename, message) ;
       } catch(Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-error", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

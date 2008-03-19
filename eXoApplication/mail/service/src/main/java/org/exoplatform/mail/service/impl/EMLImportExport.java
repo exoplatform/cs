@@ -56,11 +56,7 @@ public class EMLImportExport implements MailImportExport{
 		Properties props = System.getProperties();
     Session session = Session.getDefaultInstance(props, null);
     MimeMessage mimeMessage = new MimeMessage(session, inputStream);
-    Message message = new Message();
-    message.setAccountId(accountId);
-    message = Utils.mergeFromMimeMessage(message, mimeMessage);
-    message.setFolders(new String[] {folderId});
-    jcrDataStorage_.saveMessage(sProvider, username, accountId, message, true);
+    jcrDataStorage_.saveMessage(sProvider, username, accountId, mimeMessage, folderId, null);
 	}  
 	
 }
