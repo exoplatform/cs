@@ -16,6 +16,9 @@
  */
 package org.exoplatform.mail.service.impl;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -35,21 +38,29 @@ import javax.jcr.Value;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
+import javax.mail.Multipart;
+import javax.mail.Part;
+import javax.mail.internet.ContentType;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.MimeUtility;
 
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
+import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.JCRMessageAttachment;
 import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.MessagePageList;
+import org.exoplatform.mail.service.MimeMessageParser;
 import org.exoplatform.mail.service.SpamFilter;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.services.jcr.util.IdGenerator;
 
 /**
  * Created by The eXo Platform SARL
@@ -535,6 +546,152 @@ public class JCRDataStorage{
       nodeMsg.save();
     }
     return nodeMsg ;
+  }
+  
+  public void saveMessage(SessionProvider sProvider, String username, String accId, javax.mail.Message msg, String folderId, SpamFilter spamFilter) throws Exception {
+    long t1, t2 ;
+    String msgId = MimeMessageParser.getMessageId(msg) ;
+    Calendar gc = MimeMessageParser.getReceivedDate(msg) ;
+    System.out.println(" [DEBUG] Saving message to JCR ...") ;
+    t1 = System.currentTimeMillis();
+    Node msgHomeNode = getDateStoreNode(sProvider, username, accId, gc.getTime()) ;
+    Node node = msgHomeNode.addNode(msgId, Utils.EXO_MESSAGE) ;
+    msgHomeNode.save();
+    node.setProperty(Utils.EXO_ID, msgId);
+    node.setProperty(Utils.EXO_ACCOUNT, accId);
+    node.setProperty(Utils.EXO_FROM, InternetAddress.toString(msg.getFrom()));
+    node.setProperty(Utils.EXO_TO, InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.TO)));
+    node.setProperty(Utils.EXO_CC, InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.CC)));
+    node.setProperty(Utils.EXO_BCC, InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.BCC)));
+    node.setProperty(Utils.EXO_REPLYTO, InternetAddress.toString(msg.getReplyTo()));
+    node.setProperty(Utils.EXO_SUBJECT, msg.getSubject());
+    node.setProperty(Utils.EXO_RECEIVEDDATE, gc);
+    Calendar sc = GregorianCalendar.getInstance();
+    if (msg.getSentDate() != null) sc.setTime(msg.getSentDate());
+    else sc = gc ;
+    node.setProperty(Utils.EXO_SENDDATE, sc); //TODO send date
+    
+    node.setProperty(Utils.EXO_CONTENT_TYPE, msg.getContentType());
+    node.setProperty(Utils.EXO_SIZE, Math.abs(msg.getSize()));
+    node.setProperty(Utils.EXO_ISUNREAD, true);
+    node.setProperty(Utils.EXO_STAR, false);     
+    
+    node.setProperty(Utils.EXO_PRIORITY, MimeMessageParser.getPriority(msg));
+    
+    String[] folderIds = { folderId };
+    
+    if (spamFilter != null && spamFilter.checkSpam(msg)) {
+      folderIds = new String[] { Utils.createFolderId(accId, Utils.FD_SPAM, false) } ;
+    }
+    node.setProperty(Utils.EXO_FOLDERS, folderIds);
+    
+    Object obj = msg.getContent() ;
+    if (obj instanceof Multipart) {
+      setMultiPart((Multipart)obj, node);
+    } else {
+      setPart(msg, node);
+    }
+    node.save() ;
+    t2 = System.currentTimeMillis();
+    System.out.println(" [DEBUG] Saved message to JCR finished : " + (t2 - t1) + " ms") ;
+    
+    System.out.println(" [DEBUG] Adding message to thread ...") ;
+    t1 = System.currentTimeMillis();
+    addMessageToThread(sProvider, username, accId, Utils.getAllRecipients(msg),MimeMessageParser.getInReplyToHeader(msg), node) ;
+    t2 = System.currentTimeMillis();
+    System.out.println(" [DEBUG] Added message to thread finished : " + (t2 - t1) + " ms") ;
+    
+    System.out.println(" [DEBUG] Updating number message to folder ...") ;
+    t1 = System.currentTimeMillis();
+    
+    Node folderHomeNode = getFolderHome(sProvider, username, accId) ;
+    try { 
+      Node folderNode = folderHomeNode.getNode(folderId);
+      folderNode.setProperty(Utils.EXO_UNREADMESSAGES, folderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() + 1) ;
+      folderNode.setProperty(Utils.EXO_TOTALMESSAGE , folderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() + 1) ;
+      folderNode.save();
+    } catch(PathNotFoundException e) { }
+    
+    t2 = System.currentTimeMillis();
+    System.out.println(" [DEBUG] Updated number message to folder finished : " + (t2 - t1) + " ms") ;
+  }
+  
+  private void setMultiPart(Multipart multipart, Node node) {
+    try {
+      int i = 0 ;
+      int n = multipart.getCount() ;
+      while( i < n) {
+        setPart(multipart.getBodyPart(i), node);
+        i++ ;
+      }     
+    }catch(Exception e) {
+      e.printStackTrace() ;
+    }   
+  }
+
+  private void setPart(Part part, Node node){
+    try {
+      String disposition = part.getDisposition();
+      String contentType = part.getContentType();
+      if (disposition == null) {
+        if (part.getContent() instanceof MimeMultipart) {
+          MimeMultipart mimeMultiPart = (MimeMultipart) part.getContent() ;
+          for (int i = 0; i< mimeMultiPart.getCount(); i++) {
+            // for each part, set the body content
+            setPart(mimeMultiPart.getBodyPart(i), node);
+          }
+        } else {
+          setMessageBody(part, node);
+        }
+      } else {
+        if (disposition.equalsIgnoreCase(Part.INLINE)) {
+          /* this must be presented INLINE, hence inside the body of the message */
+          if (part.isMimeType("text/plain") || part.isMimeType("text/html")) {
+            setMessageBody(part, node);
+          }
+        } else if (disposition.equalsIgnoreCase(Part.ATTACHMENT)) {
+          /* this part must be presented as an attachment, hence we add it to the attached files */
+          BufferAttachment file = new BufferAttachment();
+          file.setId("Attachment" + IdGenerator.generate());
+          file.setName(MimeUtility.decodeText(part.getFileName()));
+          InputStream is = part.getInputStream();
+          file.setInputStream(is);
+          file.setSize(is.available());
+          if (contentType.indexOf(";") > 0) {
+            String[] type = contentType.split(";") ;
+            file.setMimeType(type[0]);
+          } else {
+            file.setMimeType(contentType) ;
+          }
+          Node nodeFile = node.addNode(file.getName(), Utils.NT_FILE);
+          Node nodeContent = nodeFile.addNode(Utils.JCR_CONTENT, Utils.NT_RESOURCE);
+          nodeContent.setProperty(Utils.JCR_MIMETYPE, file.getMimeType());
+          nodeContent.setProperty(Utils.JCR_DATA, file.getInputStream());
+          nodeContent.setProperty(Utils.JCR_LASTMODIFIED, Calendar.getInstance().getTimeInMillis());
+          node.setProperty(Utils.EXO_HASATTACH, true);
+        }
+      }
+    } catch(Exception e) {
+      e.printStackTrace() ;
+    }
+  }
+
+  private void setMessageBody(Part part, Node node) throws Exception {
+    StringBuffer messageBody =new StringBuffer();
+    InputStream is = part.getInputStream();
+    String contentType = part.getContentType() ;
+    String charset = "UTF-8" ;
+    if(contentType != null){
+      String cs = new ContentType(contentType).getParameter("charset");
+      if (cs != null) { charset = cs ; }
+    }
+    BufferedReader reader = new BufferedReader(new InputStreamReader(is , charset));
+    String inputLine;
+    
+    while ((inputLine = reader.readLine()) != null) {
+      messageBody.append(inputLine + "\n");
+    }
+    node.setProperty(Utils.EXO_BODY, messageBody.toString());
   }
   
   public String setAddress(String strAddress) throws Exception {
@@ -1158,28 +1315,14 @@ public class JCRDataStorage{
     }
   }
   
-  private Node getConversation(SessionProvider sProvider, String username, String accountId, Node msg) throws Exception {
+  private Node getMatchingThread(SessionProvider sProvider, String username, String accountId, String inReplyToHeader, Node msg) throws Exception {
     Node converNode = null ;
+    if (inReplyToHeader.equals(msg.getName())) return null ;
     Session sess = getMailHomeNode(sProvider, username).getSession();
-    QueryManager qm = sess.getWorkspace().getQueryManager();
-    String subject = msg.getProperty(Utils.EXO_SUBJECT).getString();
-    subject = subject.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("'", "&apos;").replace("\"", "&quot;") ;
-    String froms = msg.getProperty(Utils.EXO_FROM).getString();
-    StringBuffer queryString = new StringBuffer("//element(*,exo:conversationMixin)[((@exo:subject='").
-    append(subject).append("')");
-    while(subject.indexOf("Re:") == 0) {
-      subject = subject.substring(subject.indexOf("Re:") + 4) ;
-      queryString.append(" or (@exo:subject='").append(subject).append("')");
-    }
-    while(subject.indexOf("Pwd:") == 0) {
-      subject = subject.substring(subject.indexOf("Pwd:") + 5) ;
-      queryString.append(" or (@exo:subject='").append(subject).append("')");
-    }
-    String[] from = Utils.getAddresses(froms);
-    if(from != null && from.length > 0)  
-      queryString.append(") and (@exo:recipient='" + from[0] + "')") ;
-    queryString.append("]");
-    queryString.append(" order by @exo:receivedDate descending") ;
+    QueryManager qm = sess.getWorkspace().getQueryManager() ;
+    StringBuffer queryString = new StringBuffer("//element(*,exo:message)[@exo:id='").
+    append(inReplyToHeader).
+    append("']");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
     QueryResult result = query.execute();
     NodeIterator it = result.getNodes();
@@ -1187,9 +1330,8 @@ public class JCRDataStorage{
     return converNode;
   }
   
-  public void saveConversation(SessionProvider sProvider, String username, String accountId, String[] recipients, Node msgNode) throws Exception {
-    String subject = msgNode.getProperty(Utils.EXO_SUBJECT).getString();
-    Node converNode = getConversation(sProvider, username, accountId, msgNode) ;  
+  public void addMessageToThread(SessionProvider sProvider, String username, String accountId, String[] recipients, String inReplyToHeader, Node msgNode) throws Exception {
+    Node converNode = getMatchingThread(sProvider, username, accountId, inReplyToHeader, msgNode) ;  
     try {
       if (converNode != null && converNode.isNodeType("exo:conversationMixin")) {
         Value[] propRecipients = converNode.getProperty(Utils.EXO_RECIPIENT).getValues();
@@ -1214,7 +1356,6 @@ public class JCRDataStorage{
       } else {
         msgNode.addMixin("mix:referenceable") ;
         msgNode.addMixin("exo:conversationMixin") ;
-        msgNode.setProperty(Utils.EXO_SUBJECT, subject) ;
         msgNode.setProperty(Utils.EXO_RECIPIENT, recipients) ;
         msgNode.save() ;
       }

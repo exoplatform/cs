@@ -16,9 +16,7 @@
  */
 package org.exoplatform.mail.service.impl;
 
-import java.io.BufferedReader;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -28,24 +26,19 @@ import java.util.Properties;
 import java.util.Vector;
 
 import javax.activation.DataHandler;
-import javax.jcr.Node;
-import javax.jcr.PathNotFoundException;
 import javax.mail.AuthenticationFailedException;
 import javax.mail.Flags;
 import javax.mail.MessagingException;
-import javax.mail.Multipart;
 import javax.mail.Part;
 import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.Transport;
 import javax.mail.URLName;
 import javax.mail.internet.AddressException;
-import javax.mail.internet.ContentType;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-import javax.mail.internet.MimeUtility;
 import javax.mail.util.ByteArrayDataSource;
 
 import org.exoplatform.container.ExoContainer;
@@ -53,7 +46,6 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.AccountData;
 import org.exoplatform.mail.service.Attachment;
-import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
@@ -67,7 +59,6 @@ import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
-import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.scheduler.JobInfo;
 import org.exoplatform.services.scheduler.JobSchedulerService;
 import org.exoplatform.services.scheduler.PeriodInfo;
@@ -194,7 +185,7 @@ public class MailServiceImpl implements MailService{
     storage_.saveMessage(sProvider, username, accountId, message, isNew);
   }
 
-  public void sendMessage(SessionProvider sProvider, String username, Message message) throws Exception {
+  public Message sendMessage(SessionProvider sProvider, String username, Message message) throws Exception {
     String accountId = message.getAccountId() ;
     Account acc = getAccountById(sProvider, username, accountId) ;
     String smtpUser = acc.getIncomingUser() ;
@@ -227,9 +218,10 @@ public class MailServiceImpl implements MailService{
     System.out.println(" #### Sending email ... ");
     Transport transport = session.getTransport(Utils.SVR_SMTP);
     transport.connect(outgoingHost, smtpUser, acc.getIncomingPassword()) ;
-    String status = send(session, transport, message);
-    System.out.println(" ### Infor : " + status);
+    Message msg = send(session, transport, message);
     transport.close();
+    
+    return msg ;
   }
   
   public void sendMessage(Message message) throws Exception {
@@ -260,22 +252,22 @@ public class MailServiceImpl implements MailService{
     int i = 0;
     for (Message msg : msgList) {
       msg.setServerConfiguration(serverConfig);
-      String status = "";
       try {
-        status = send(session , transport, msg);
+        send(session , transport, msg);
         i++;
       } catch(Exception e) {
-        System.out.println(" #### Info : send fail at message " + i + " \n" + status);
+        System.out.println(" #### Info : send fail at message " + i + " \n");
       }
     }
     System.out.println(" #### Info : Sent " + i + " email(s)");
     transport.close();
   }
   
-  private String send(Session session,Transport transport, Message message) throws Exception {
+  private Message send(Session session,Transport transport, Message message) throws Exception {
     javax.mail.Message mimeMessage = new MimeMessage(session);
     String status = "";
     InternetAddress addressFrom ;
+    mimeMessage.setHeader("Message-ID", message.getId()) ;
     if (message.getFrom() != null) 
       addressFrom = new InternetAddress(message.getFrom());
     else 
@@ -336,6 +328,7 @@ public class MailServiceImpl implements MailService{
     mimeMessage.saveChanges();
     try {
       transport.sendMessage(mimeMessage, mimeMessage.getAllRecipients());
+      message.setId(MimeMessageParser.getMessageId(mimeMessage)) ;
       status = "Mail Delivered !";
     } catch (AddressException e) {
       status = "There was an error parsing the addresses. Sending Falied !" + e.getMessage(); 
@@ -350,7 +343,9 @@ public class MailServiceImpl implements MailService{
     } finally {
       //System.out.println(" #### Info : " + status);      
     } 
-    return status ;
+    System.out.println(" #### Info : " + status) ;
+    
+    return message ;
   }
   
   public void checkMail(String username, String accountId) throws Exception {
@@ -367,6 +362,7 @@ public class MailServiceImpl implements MailService{
   
   public List<Message> checkNewMessage(SessionProvider sProvider, String username, String accountId) throws Exception {
     Account account = getAccountById(sProvider, username, accountId) ;
+    long t1, t2 , tt1, tt2;
     System.out.println(" #### Getting mail from " + account.getIncomingHost() + " ... !");
     List<Message> messageList = new ArrayList<Message>();
     int totalNew = -1;
@@ -412,6 +408,7 @@ public class MailServiceImpl implements MailService{
         totalNew = vector.size() ;
 
         System.out.println(" #### Folder contains " + totalNew + " messages !");
+        tt1 = System.currentTimeMillis();
 
         if (totalNew > 0) {
           int i = 0 ;
@@ -430,23 +427,32 @@ public class MailServiceImpl implements MailService{
             storage_.saveFolder(sProvider, username, account.getId(), storeFolder) ;
           }
           while (i < totalNew) {
+            System.out.println(" [DEBUG] Fetching message " + (i+1) + " ...") ;
+            t1 = System.currentTimeMillis();
             javax.mail.Message msg = vector.get(i) ;      
             try {
-              saveMessage(sProvider, msg, account.getId(), username, folderId, spamFilter) ;
+              storage_.saveMessage(sProvider, username, account.getId(), msg, folderId, spamFilter) ;
             } catch(Exception e) {
               e.printStackTrace();
               i++ ;
               continue ;
             }  
             i ++ ;          
-            System.out.println(" ####  " + i + " messages saved");
+            t2 = System.currentTimeMillis();
+            System.out.println(" [DEBUG] " + i + " messages saved : " + (t2-t1) + " ms");
           }
           Calendar cc = GregorianCalendar.getInstance();
           javax.mail.Message firstMsg = vector.get(0) ;
           if (firstMsg.getReceivedDate() != null)
             cc.setTime(firstMsg.getReceivedDate());
           else cc.setTime(firstMsg.getSentDate());
+          System.out.println(" [DEBUG] Executing the filter ...") ;
+          t1 = System.currentTimeMillis();
           storage_.execActionFilter(sProvider, username, accountId, cc);
+          t2 = System.currentTimeMillis();
+          System.out.println(" [DEBUG] Executed the filter finished : " + (t2 - t1) + " ms") ;
+          tt2 = System.currentTimeMillis();
+          System.out.println(" ### Check mail finished total took: " + (tt2 - tt1) + " ms") ;
           folder.close(true);      
           store.close();
         }
@@ -455,138 +461,6 @@ public class MailServiceImpl implements MailService{
       e.printStackTrace();
     }
     return messageList;
-  }
-  
-  private void saveMessage(SessionProvider sProvider, javax.mail.Message msg, String accId, String username, String folderId, SpamFilter spamFilter) throws Exception {
-    Message newMsg = new Message();
-    Calendar gc = MimeMessageParser.getReceivedDate(msg) ;
-    Node msgHomeNode = storage_.getDateStoreNode(sProvider, username, accId, gc.getTime()) ;
-  	Node node = msgHomeNode.addNode(newMsg.getId(), Utils.EXO_MESSAGE) ;
-    msgHomeNode.save();
-    node.setProperty(Utils.EXO_ID, newMsg.getId());
-  	node.setProperty(Utils.EXO_ACCOUNT, accId);
-    node.setProperty(Utils.EXO_FROM, InternetAddress.toString(msg.getFrom()));
-    node.setProperty(Utils.EXO_TO, InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.TO)));
-    node.setProperty(Utils.EXO_CC, InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.CC)));
-    node.setProperty(Utils.EXO_BCC, InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.BCC)));
-    node.setProperty(Utils.EXO_REPLYTO, InternetAddress.toString(msg.getReplyTo()));
-    node.setProperty(Utils.EXO_SUBJECT, msg.getSubject());
-    node.setProperty(Utils.EXO_RECEIVEDDATE, gc);
-    Calendar sc = GregorianCalendar.getInstance();
-    if (msg.getSentDate() != null) sc.setTime(msg.getSentDate());
-    else sc = gc ;
-    node.setProperty(Utils.EXO_SENDDATE, sc); //TODO send date
-    
-    node.setProperty(Utils.EXO_CONTENT_TYPE, msg.getContentType());
-    node.setProperty(Utils.EXO_SIZE, Math.abs(msg.getSize()));
-    node.setProperty(Utils.EXO_ISUNREAD, true);
-    node.setProperty(Utils.EXO_STAR, false);     
-    
-    node.setProperty(Utils.EXO_PRIORITY, MimeMessageParser.getPriority(msg));
-    
-    String[] folderIds = { folderId };
-    
-    if ( spamFilter.checkSpam(msg) ) {
-      folderIds = new String[] { Utils.createFolderId(accId, Utils.FD_SPAM, false) } ;
-    }
-    
-    node.setProperty(Utils.EXO_FOLDERS, folderIds);
-    Object obj = msg.getContent() ;
-    if (obj instanceof Multipart) {
-      setMultiPart((Multipart)obj, node);
-    } else {
-      setPart(msg, node);
-    }
-    node.save() ;
-    
-    storage_.saveConversation(sProvider, username, accId, Utils.getAllRecipients(msg), node) ;
-    
-    Node folderHomeNode = storage_.getFolderHome(sProvider, username, accId) ;
-    try { 
-      Node folderNode = folderHomeNode.getNode(folderId);
-      folderNode.setProperty(Utils.EXO_UNREADMESSAGES, folderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() + 1) ;
-      folderNode.setProperty(Utils.EXO_TOTALMESSAGE , folderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() + 1) ;
-      folderNode.save();
-    } catch(PathNotFoundException e) {}
-    
-  }
-  
-  private void setMultiPart(Multipart multipart, Node node) {
-    try {
-      int i = 0 ;
-      int n = multipart.getCount() ;
-      while( i < n) {
-        setPart(multipart.getBodyPart(i), node);
-        i++ ;
-      }     
-    }catch(Exception e) {
-      e.printStackTrace() ;
-    }   
-  }
-
-  private void setPart(Part part, Node node){
-    try {
-      String disposition = part.getDisposition();
-      String contentType = part.getContentType();
-      if (disposition == null) {
-        if (part.getContent() instanceof MimeMultipart) {
-          MimeMultipart mimeMultiPart = (MimeMultipart) part.getContent() ;
-          for (int i = 0; i< mimeMultiPart.getCount(); i++) {
-            // for each part, set the body content
-            setPart(mimeMultiPart.getBodyPart(i), node);
-          }
-        } else {
-          setMessageBody(part, node);
-        }
-      } else {
-        if (disposition.equalsIgnoreCase(Part.INLINE)) {
-          /* this must be presented INLINE, hence inside the body of the message */
-          if (part.isMimeType("text/plain") || part.isMimeType("text/html")) {
-            setMessageBody(part, node);
-          }
-        } else if (disposition.equalsIgnoreCase(Part.ATTACHMENT)) {
-          /* this part must be presented as an attachment, hence we add it to the attached files */
-          BufferAttachment file = new BufferAttachment();
-          file.setId("Attachment" + IdGenerator.generate());
-          file.setName(MimeUtility.decodeText(part.getFileName()));
-          InputStream is = part.getInputStream();
-          file.setInputStream(is);
-          file.setSize(is.available());
-          if (contentType.indexOf(";") > 0) {
-            String[] type = contentType.split(";") ;
-            file.setMimeType(type[0]);
-          } else {
-            file.setMimeType(contentType) ;
-          }
-          Node nodeFile = node.addNode(file.getName(), Utils.NT_FILE);
-          Node nodeContent = nodeFile.addNode(Utils.JCR_CONTENT, Utils.NT_RESOURCE);
-          nodeContent.setProperty(Utils.JCR_MIMETYPE, file.getMimeType());
-          nodeContent.setProperty(Utils.JCR_DATA, file.getInputStream());
-          nodeContent.setProperty(Utils.JCR_LASTMODIFIED, Calendar.getInstance().getTimeInMillis());
-          node.setProperty(Utils.EXO_HASATTACH, true);
-        }
-      }
-    } catch(Exception e) {
-      e.printStackTrace() ;
-    }
-  }
-
-  private void setMessageBody(Part part, Node node) throws Exception {
-    StringBuffer messageBody =new StringBuffer();
-    InputStream is = part.getInputStream();
-    String contentType = part.getContentType() ;
-    String charset = "UTF-8" ;
-    if(contentType != null){
-      String cs = new ContentType(contentType).getParameter("charset");
-      if (cs != null) { charset = cs ; }
-    }
-    BufferedReader reader = new BufferedReader(new InputStreamReader(is , charset));
-    String inputLine;
-    
-    while ((inputLine = reader.readLine()) != null) {
-      messageBody.append(inputLine + "\n");
-    }
-    node.setProperty(Utils.EXO_BODY, messageBody.toString());
   }
   
   public void createAccount(SessionProvider sProvider, String username, Account account) throws Exception {
