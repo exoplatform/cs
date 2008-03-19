@@ -88,11 +88,11 @@ public class UIAccountSetting extends UIFormTabPane {
   public static final String FIELD_IS_INCOMING_SSL = "isSSL";
   public static final String FIELD_CHECKMAIL_AUTO = "checkMailAutomatically";
   public static final String FIELD_LEAVE_ON_SERVER = "leaveMailOnServer";
-  public static final String FIELD_SKIP_OVER_SIZE = "skipMessageOverMaxSize";
+//  public static final String FIELD_SKIP_OVER_SIZE = "skipMessageOverMaxSize";
   public static final String FIELD_MARK_AS_DELETED = "markItAsDeleted";
   private String accountId_ = null;
   UIFormCheckBoxInput<Boolean> leaveOnServer_ ;
-  UIFormStringInput skipOverSize_;
+//  UIFormStringInput skipOverSize_;
   UIFormCheckBoxInput<Boolean> markAsDelete_;
   
   
@@ -131,7 +131,7 @@ public class UIAccountSetting extends UIFormTabPane {
     serverInputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_CHECKMAIL_AUTO, null, null));
     
     leaveOnServer_ = new UIFormCheckBoxInput<Boolean>(FIELD_LEAVE_ON_SERVER, null, null) ;
-    skipOverSize_ = new UIFormStringInput(FIELD_SKIP_OVER_SIZE, null, null);
+//    skipOverSize_ = new UIFormStringInput(FIELD_SKIP_OVER_SIZE, null, null);
     markAsDelete_ = new UIFormCheckBoxInput<Boolean>(FIELD_MARK_AS_DELETED, null, null);
     
     addUIFormInput(serverInputSet);
@@ -232,10 +232,10 @@ public class UIAccountSetting extends UIFormTabPane {
     return uiInput.getUIFormCheckBoxInput(FIELD_LEAVE_ON_SERVER).isChecked();
   }
   
-  public String getFieldSkipOverSize() {
-    UIFormInputWithActions uiInput = getChildById(TAB_SERVER_SETTINGS);
-    return uiInput.getUIStringInput(FIELD_SKIP_OVER_SIZE).getValue();
-  }
+//  public String getFieldSkipOverSize() {
+//    UIFormInputWithActions uiInput = getChildById(TAB_SERVER_SETTINGS);
+//    return uiInput.getUIStringInput(FIELD_SKIP_OVER_SIZE).getValue();
+//  }
   
   public boolean getFieldMaxAsDeleted() {
     UIFormInputWithActions uiInput = getChildById(TAB_SERVER_SETTINGS);
@@ -271,7 +271,7 @@ public class UIAccountSetting extends UIFormTabPane {
     uiServerInput.getUIFormCheckBoxInput(FIELD_CHECKMAIL_AUTO).setChecked(account.checkedAuto()) ;
     if(getFieldProtocol().equals(Utils.POP3)) {
       uiServerInput.addUIFormInput(leaveOnServer_) ;
-      uiServerInput.addUIFormInput(skipOverSize_) ;
+//      uiServerInput.addUIFormInput(skipOverSize_) ;
     } else {
       uiServerInput.addUIFormInput(markAsDelete_) ;
     }
@@ -279,8 +279,8 @@ public class UIAccountSetting extends UIFormTabPane {
     if(account.getPopServerProperties() != null) {
       if (uiServerInput.getChildById(FIELD_LEAVE_ON_SERVER) != null)
         uiServerInput.getUIFormCheckBoxInput(FIELD_LEAVE_ON_SERVER).setChecked(Boolean.valueOf(account.getPopServerProperties().get(Utils.SVR_POP_LEAVE_ON_SERVER))) ;
-      if (uiServerInput.getChildById(FIELD_SKIP_OVER_SIZE) != null)
-        uiServerInput.getUIStringInput(FIELD_SKIP_OVER_SIZE).setValue(account.getPopServerProperties().get(Utils.SVR_POP_SKIP_OVER_SIZE)) ;
+//      if (uiServerInput.getChildById(FIELD_SKIP_OVER_SIZE) != null)
+//        uiServerInput.getUIStringInput(FIELD_SKIP_OVER_SIZE).setValue(account.getPopServerProperties().get(Utils.SVR_POP_SKIP_OVER_SIZE)) ;
     }
     if(account.getImapServerProperties() != null && uiServerInput.getChildById(FIELD_MARK_AS_DELETED) != null) {
       uiServerInput.getUIFormCheckBoxInput(FIELD_MARK_AS_DELETED).setChecked(Boolean.valueOf(account.getImapServerProperties().get(Utils.SVR_IMAP_MARK_AS_DELETE))) ;
@@ -289,7 +289,6 @@ public class UIAccountSetting extends UIFormTabPane {
   
   public void setDefaultValue(String serverType, boolean isSSL) {
     if(serverType.equals(Utils.POP3)) {
-      getUIStringInput(FIELD_INCOMING_SERVER).setValue(UIAccountCreation.DEFAULT_POP_SERVER) ;
       if(isSSL) {
         getUIStringInput(FIELD_INCOMING_PORT).setValue(UIAccountCreation.DEFAULT_POPSSL_PORT) ;
         getUIStringInput(FIELD_OUTGOING_PORT).setValue(UIAccountCreation.DEFAULT_SMTPSSL_PORT) ;
@@ -298,7 +297,6 @@ public class UIAccountSetting extends UIFormTabPane {
         getUIStringInput(FIELD_OUTGOING_PORT).setValue(UIAccountCreation.DEFAULT_SMTP_PORT) ;
       }
     } else {
-      getUIStringInput(FIELD_INCOMING_SERVER).setValue(UIAccountCreation.DEFAULT_IMAP_SERVER) ;
       if(isSSL) {
         getUIStringInput(FIELD_INCOMING_PORT).setValue(UIAccountCreation.DEFAULT_IMAPSSL_PORT) ;
         getUIStringInput(FIELD_OUTGOING_PORT).setValue(UIAccountCreation.DEFAULT_SMTP_PORT) ;
@@ -405,9 +403,9 @@ public class UIAccountSetting extends UIFormTabPane {
       acc.setServerProperty(Utils.SVR_SMTP_USER, userName) ;
       if(uiSetting.getFieldProtocol().equals(Utils.POP3)){
         boolean leaveOnServer = uiSetting.getFieldLeaveOnServer() ;
-        String skipOverSize = uiSetting.getFieldSkipOverSize() ;
+        //String skipOverSize = uiSetting.getFieldSkipOverSize() ;
         acc.setPopServerProperty(Utils.SVR_POP_LEAVE_ON_SERVER, String.valueOf(leaveOnServer)) ;
-        acc.setPopServerProperty(Utils.SVR_POP_SKIP_OVER_SIZE, skipOverSize) ;
+        //acc.setPopServerProperty(Utils.SVR_POP_SKIP_OVER_SIZE, skipOverSize) ;
       } else {
         boolean markAsDelete = uiSetting.getFieldMaxAsDeleted() ;
         acc.setImapServerProperty(Utils.SVR_IMAP_MARK_AS_DELETE, String.valueOf(markAsDelete)) ;
@@ -440,10 +438,10 @@ public class UIAccountSetting extends UIFormTabPane {
           uiInput.removeChildById(FIELD_LEAVE_ON_SERVER) ;
   		  }
   		  
-  		  if (uiInput.getChildById(FIELD_SKIP_OVER_SIZE) != null ) {
-          uiSetting.skipOverSize_ = uiInput.getChildById(FIELD_SKIP_OVER_SIZE) ; 
-          uiInput.removeChildById(FIELD_SKIP_OVER_SIZE) ;
-        }
+//  		  if (uiInput.getChildById(FIELD_SKIP_OVER_SIZE) != null ) {
+//          uiSetting.skipOverSize_ = uiInput.getChildById(FIELD_SKIP_OVER_SIZE) ; 
+//          uiInput.removeChildById(FIELD_SKIP_OVER_SIZE) ;
+//        }
   		  
   		  if (uiInput.getChildById(FIELD_MARK_AS_DELETED) == null )
   		    uiInput.addUIFormInput(uiSetting.markAsDelete_) ;
@@ -456,8 +454,8 @@ public class UIAccountSetting extends UIFormTabPane {
   		  if (uiInput.getChildById(FIELD_LEAVE_ON_SERVER) == null ) 
           uiInput.addUIFormInput(uiSetting.leaveOnServer_) ;
         
-        if (uiInput.getChildById(FIELD_SKIP_OVER_SIZE) == null ) 
-          uiInput.addUIFormInput(uiSetting.skipOverSize_) ;
+//        if (uiInput.getChildById(FIELD_SKIP_OVER_SIZE) == null ) 
+//          uiInput.addUIFormInput(uiSetting.skipOverSize_) ;
   		}
   		
   	}
