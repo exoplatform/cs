@@ -399,10 +399,11 @@ public class MailServiceImpl implements MailService{
         javax.mail.Message[] messages = folder.getMessages() ;
         Vector<javax.mail.Message> vector = new Vector<javax.mail.Message>();
         boolean isPop3 = account.getProtocol().equals(Utils.POP3);
+        boolean leaveOnServer = (isPop3 && Boolean.valueOf(account.getPopServerProperties().get(Utils.SVR_POP_LEAVE_ON_SERVER))) ;
         for (int i=1 ; i< messages.length; i++) {
           if (!messages[i].isSet(Flags.Flag.SEEN)) vector.add(messages[i]); 
           messages[i].setFlag(Flags.Flag.SEEN, true); 
-          if (isPop3) messages[i].setFlag(Flags.Flag.DELETED, true); 
+          if (leaveOnServer) messages[i].setFlag(Flags.Flag.DELETED, true); 
         }  
 
         totalNew = vector.size() ;
