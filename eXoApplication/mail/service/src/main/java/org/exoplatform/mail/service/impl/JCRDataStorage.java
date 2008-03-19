@@ -549,10 +549,10 @@ public class JCRDataStorage{
   }
   
   public void saveMessage(SessionProvider sProvider, String username, String accId, javax.mail.Message msg, String folderId, SpamFilter spamFilter) throws Exception {
-    long t1, t2 ;
+    long t1, t2, t3, t4 ;
     String msgId = MimeMessageParser.getMessageId(msg) ;
     Calendar gc = MimeMessageParser.getReceivedDate(msg) ;
-    System.out.println(" [DEBUG] Saving message to JCR ...") ;
+    System.out.println("   [DEBUG] Saving message to JCR ...") ;
     t1 = System.currentTimeMillis();
     Node msgHomeNode = getDateStoreNode(sProvider, username, accId, gc.getTime()) ;
     Node node = msgHomeNode.addNode(msgId, Utils.EXO_MESSAGE) ;
@@ -585,23 +585,27 @@ public class JCRDataStorage{
     }
     node.setProperty(Utils.EXO_FOLDERS, folderIds);
     
+    System.out.println("     [DEBUG] Saved body and attachment of message .... size : " + Math.abs(msg.getSize()) + " B") ;
+    t2 = System.currentTimeMillis();
     Object obj = msg.getContent() ;
     if (obj instanceof Multipart) {
       setMultiPart((Multipart)obj, node);
     } else {
       setPart(msg, node);
     }
+    t3 = System.currentTimeMillis();
+    System.out.println("     [DEBUG] Saved body (and attachments) of message finished : " + (t3 - t2) + " ms") ;
     node.save() ;
-    t2 = System.currentTimeMillis();
-    System.out.println(" [DEBUG] Saved message to JCR finished : " + (t2 - t1) + " ms") ;
+    t4 = System.currentTimeMillis();
+    System.out.println("   [DEBUG] Saved total message to JCR finished : " + (t4 - t1) + " ms") ;
     
-    System.out.println(" [DEBUG] Adding message to thread ...") ;
+    System.out.println("   [DEBUG] Adding message to thread ...") ;
     t1 = System.currentTimeMillis();
     addMessageToThread(sProvider, username, accId, Utils.getAllRecipients(msg),MimeMessageParser.getInReplyToHeader(msg), node) ;
     t2 = System.currentTimeMillis();
-    System.out.println(" [DEBUG] Added message to thread finished : " + (t2 - t1) + " ms") ;
+    System.out.println("   [DEBUG] Added message to thread finished : " + (t2 - t1) + " ms") ;
     
-    System.out.println(" [DEBUG] Updating number message to folder ...") ;
+    System.out.println("   [DEBUG] Updating number message to folder ...") ;
     t1 = System.currentTimeMillis();
     
     Node folderHomeNode = getFolderHome(sProvider, username, accId) ;
@@ -613,7 +617,7 @@ public class JCRDataStorage{
     } catch(PathNotFoundException e) { }
     
     t2 = System.currentTimeMillis();
-    System.out.println(" [DEBUG] Updated number message to folder finished : " + (t2 - t1) + " ms") ;
+    System.out.println("   [DEBUG] Updated number message to folder finished : " + (t2 - t1) + " ms") ;
   }
   
   private void setMultiPart(Multipart multipart, Node node) {

@@ -51,6 +51,8 @@ public class Account {
   
   public Account() {
     id = Utils.KEY_ACCOUNT + IdGenerator.generate() ;
+    setPopServerProperty(Utils.SVR_POP_LEAVE_ON_SERVER, "true") ;
+    setPopServerProperty(Utils.SVR_IMAP_MARK_AS_DELETE, "true") ;
   }
   
   /**
