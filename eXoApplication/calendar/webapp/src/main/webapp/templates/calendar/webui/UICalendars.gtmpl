@@ -334,7 +334,7 @@
 											int rows = size/items ;
 											int count = 0 ;
 											while(i <= rows)	{
-												print "<div>" ;	
+												print "<div >" ;	
 												j = 0 ;
 												while(j <= items && count < size){
 												 color = uicomponent.getColors()[count] ;
