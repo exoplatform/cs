@@ -40,6 +40,7 @@ import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
+import org.exoplatform.mail.service.MailService;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.Membership;
@@ -451,5 +452,9 @@ public class CalendarUtils {
   public static String encodeHTML(String htmlContent) throws Exception {
     return htmlContent.replaceAll("&", "&amp;").replaceAll("\"", "&quot;")
     .replaceAll("<", "&lt;").replaceAll(">", "&gt;") ;
+  }
+  
+  static public MailService getMailService() throws Exception {
+    return (MailService)PortalContainer.getComponent(MailService.class) ;
   }
 }
