@@ -94,3 +94,134 @@
 .UIMailPortlet .NotSpamMail {
 	background: url('icons/NotSpam.gif') no-repeat;
 }
+
+.UIMailPortlet .PowderBlueTag {
+	background: url('icons/MailIcons.gif') no-repeat left top;
+}
+
+.UIMailPortlet .OrchidTag {
+	background: url('icons/MailIcons.gif') no-repeat left -21px;
+}
+
+.UIMailPortlet .PaleGoldenRodTag {
+	background: url('icons/MailIcons.gif') no-repeat left -42px;
+}
+
+.UIMailPortlet .PaleGreenTag {
+	background: url('icons/MailIcons.gif') no-repeat left -63px;
+}
+
+.UIMailPortlet .OliveTag {
+	background: url('icons/MailIcons.gif') no-repeat left -84px;
+}
+
+.UIMailPortlet .OliveDrabTag {
+	background: url('icons/MailIcons.gif') no-repeat left -105px;
+}
+
+.UIMailPortlet .OrangeRedTag {
+	background: url('icons/MailIcons.gif') no-repeat left -126px;
+}
+
+.UIMailPortlet .PaleTurquoiseTag {
+	background: url('icons/MailIcons.gif') no-repeat left -147px;
+}
+
+.UIMailPortlet .PaleVioletRedTag {
+	background: url('icons/MailIcons.gif') no-repeat left -168px;
+}
+
+.UIMailPortlet .PapayaWhipTag {
+	background: url('icons/MailIcons.gif') no-repeat left -189px;
+}
+
+.UIMailPortlet .PeachPuffTag {
+	background: url('icons/MailIcons.gif') no-repeat left -210px;
+}
+
+.UIMailPortlet .PeruTag {
+	background: url('icons/MailIcons.gif') no-repeat left -231px;
+}
+
+.UIMailPortlet .PinkTag  {
+	background: url('icons/MailIcons.gif') no-repeat left -252px;
+}
+
+.UIMailPortlet .PlumTag {
+	background: url('icons/MailIcons.gif') no-repeat left -273px;
+}
+
+.UIMailPortlet .PurpleTag {
+	background: url('icons/MailIcons.gif') no-repeat left -294px;
+}
+
+.UIMailPortlet .RedTag {
+	background: url('icons/MailIcons.gif') no-repeat left -315px;
+}
+
+.UIMailPortlet .RosyBrownTag {
+	background: url('icons/MailIcons.gif') no-repeat left -336px;
+}
+
+.UIMailPortlet .RoyalBlueTag {
+	background: url('icons/MailIcons.gif') no-repeat left -357px;
+}
+
+.UIMailPortlet .SaddleBrownTag {
+	background: url('icons/MailIcons.gif') no-repeat left -378px;
+}
+
+.UIMailPortlet .SalmonTag {
+	background: url('icons/MailIcons.gif') no-repeat left -399px;
+}
+
+.UIMailPortlet .SandyBrownTag {
+	background: url('icons/MailIcons.gif') no-repeat left -420px;
+}
+
+.UIMailPortlet .SeaGreenTag {
+	background: url('icons/MailIcons.gif') no-repeat left -441px;
+}
+
+.UIMailPortlet .SeaShellTag {
+	background: url('icons/MailIcons.gif') no-repeat left -462px;
+}
+
+.UIMailPortlet .SiennaTag {
+	background: url('icons/MailIcons.gif') no-repeat left -483px;
+}
+
+.UIMailPortlet .SilverTag {
+	background: url('icons/MailIcons.gif') no-repeat left -504px;
+}
+
+.UIMailPortlet .SkyBlueTag {
+	background: url('icons/MailIcons.gif') no-repeat left -525px;
+}
+
+.UIMailPortlet .ThistleTag {
+	background: url('icons/MailIcons.gif') no-repeat left -546px;
+}
+
+.UIMailPortlet .TomatoTag {
+	background: url('icons/MailIcons.gif') no-repeat left -567px;
+}
+.UIMailPortlet .TurquoiseTag {
+	background: url('icons/MailIcons.gif') no-repeat left -588px;
+}
+
+.UIMailPortlet .VioletTag {
+	background: url('icons/MailIcons.gif') no-repeat left -609px;
+}
+
+.UIMailPortlet .WheatTag {
+	background: url('icons/MailIcons.gif') no-repeat left -630px;
+}
+
+.UIMailPortlet .YellowTag {
+	background: url('icons/MailIcons.gif') no-repeat left -651px;
+}
+
+.UIMailPortlet .MultipTag {
+	background: url('icons/MailIcons.gif') no-repeat left -672px;
+}
