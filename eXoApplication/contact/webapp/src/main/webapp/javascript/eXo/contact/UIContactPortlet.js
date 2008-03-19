@@ -280,6 +280,17 @@ UIContactPortlet.prototype.cancelPrint = function (obj){
 	eXo.contact.UIContactPortlet.pageBackground = null ;
 } ;
 
+UIContactPortlet.prototype.printList = function (obj){
+	if(typeof(obj) == "string") obj = document.getElementById(obj) ;
+	var printContainer = obj.cloneNode(true) ;
+	var div = document.createElement("div") ;
+	div.className = "UIContactPortlet" ;
+	div.appendChild(printContainer) ;
+	var UIPortalApplication = document.getElementById("UIPortalApplication") ;
+	UIPortalApplication.style.display = "none" ;
+	document.body.appendChild(div) ;
+} ;
+
 /**
  * 
  * @author Lam Nguyen
