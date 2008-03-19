@@ -552,9 +552,10 @@ public class JCRDataStorage{
     long t1, t2, t3, t4 ;
     String msgId = MimeMessageParser.getMessageId(msg) ;
     Calendar gc = MimeMessageParser.getReceivedDate(msg) ;
+    Node msgHomeNode = getDateStoreNode(sProvider, username, accId, gc.getTime()) ;
+    if (msgHomeNode.hasNode(msgId)) return ;
     System.out.println("   [DEBUG] Saving message to JCR ...") ;
     t1 = System.currentTimeMillis();
-    Node msgHomeNode = getDateStoreNode(sProvider, username, accId, gc.getTime()) ;
     Node node = msgHomeNode.addNode(msgId, Utils.EXO_MESSAGE) ;
     msgHomeNode.save();
     node.setProperty(Utils.EXO_ID, msgId);
