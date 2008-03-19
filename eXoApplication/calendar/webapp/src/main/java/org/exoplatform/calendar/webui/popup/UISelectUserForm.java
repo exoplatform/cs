@@ -23,13 +23,16 @@ import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
-import org.exoplatform.commons.utils.PageList;
+import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.core.UIPageIterator;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -54,6 +57,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
       @EventConfig(listeners = UISelectUserForm.AddActionListener.class, phase = Phase.DECODE), 
       @EventConfig(listeners = UISelectUserForm.SearchActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UISelectUserForm.ChangeActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UISelectUserForm.ShowPageActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UISelectUserForm.CloseActionListener.class, phase = Phase.DECODE)
     }
 )
@@ -63,39 +67,48 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
   final public static String FIELD_GROUP = "group".intern() ;
 
 
-  //private List<User> data_  = new ArrayList<User>() ;
   private Map<String, User> userData_ = new HashMap<String, User>() ;
   private boolean isShowSearch_ = false ;
   protected String tabId_ = null ;
   protected String groupId_ = null ;
   protected Collection<String> pars_ ;
+  public UIPageIterator uiIterator_ ;
+
   public List<User> getData() throws Exception {
-    List<User> users = new ArrayList<User>(userData_.values()) ;
-    if(!CalendarUtils.isEmpty(groupId_)) {
-      OrganizationService orgService  = getApplicationComponent(OrganizationService.class) ;
-      users.clear() ;
-      for(String uName : userData_.keySet()) {
-        for(Object gObj : orgService.getGroupHandler().findGroupsOfUser(uName)) {
+    List<User> users = new ArrayList<User>() ;
+    OrganizationService orService = CalendarUtils.getOrganizationService() ;
+    for(Object obj : uiIterator_.getCurrentPageData()){
+      User user = (User)obj ;
+      if(CalendarUtils.isEmpty(groupId_)) {
+        users.add(user) ;
+      } else {
+        for(Object gObj : orService.getGroupHandler().findGroupsOfUser(user.getUserName())){
           Group g = (Group)gObj ;
-          if(groupId_.equals(g.getId())) users.add(userData_.get(uName)) ;
+          if(groupId_.equals(g.getId())) users.add(user) ;
         }
       }
+      if(getUIFormCheckBoxInput(user.getUserName()) == null)
+        addUIFormInput(new UIFormCheckBoxInput<Boolean>(user.getUserName(),user.getUserName(), false)) ;
+    } 
+    for(String currentUsers : pars_) {
+      if(getUIFormCheckBoxInput(currentUsers) != null) 
+        getUIFormCheckBoxInput(currentUsers).setChecked(true) ;
     }
     return  users;
   }
   public UISelectUserForm() throws Exception {  
-    //initSearchForm() ;
+    uiIterator_ = new UIPageIterator() ;
+    uiIterator_.setId("UISelectUserPage") ;
   }
+  public UIPageIterator  getUIPageIterator() {  return uiIterator_ ; }
+  public long getAvailablePage(){ return uiIterator_.getAvailablePage() ;}
+  public long getCurrentPage() { return uiIterator_.getCurrentPage();}
+
   public void init(Collection<String> pars) throws Exception{
     if(getChildren()!= null) getChildren().clear() ;
     OrganizationService service = getApplicationComponent(OrganizationService.class) ;
-    PageList pl = service.getUserHandler().getUserPageList(0) ;
-    for(Object o : pl.getAll()){
-      User user =  (User)o ; 
-      userData_.put(user.getUserName(), user) ;
-      //data_.add(user) ;
-      addUIFormInput(new UIFormCheckBoxInput<Boolean>(user.getUserName(),user.getUserName(), false)) ;
-    }
+    ObjectPageList objPageList = new ObjectPageList(service.getUserHandler().getUserPageList(0).getAll(), 10) ;
+    uiIterator_.setPageList(objPageList) ;
     for(String s : pars) {
       if(getUIFormCheckBoxInput(s) != null) getUIFormCheckBoxInput(s).setChecked(true) ;
     }
@@ -110,8 +123,7 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
   }
   private List<SelectItemOption<String>> getGroups() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    //ContactService contactService = getApplicationComponent(ContactService.class) ;
-    OrganizationService orgService = getApplicationComponent(OrganizationService.class) ;
+    OrganizationService orgService = CalendarUtils.getOrganizationService() ;
     options.add(new SelectItemOption<String>("all", "")) ;
     for( Object g : orgService.getGroupHandler().getAllGroups()) { 
       Group  cg = (Group)g ;
@@ -124,12 +136,11 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
   public void activate() throws Exception {}
   public void deActivate() throws Exception {} 
   public String getLabel(String id) {
-    String label = id ;
     try {
-      label = super.getLabel(id) ;
+      return super.getLabel(id) ;
     } catch (Exception e) {
+      return id ;
     }
-    return label ;
   }
   public void setShowSearch(boolean isShowSearch) {
     this.isShowSearch_ = isShowSearch;
@@ -152,12 +163,10 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIEventForm uiEventForm = uiContainer.findFirstComponentOfType(UIEventForm.class) ;
       if(uiEventForm != null) {
+
         StringBuilder sb = new StringBuilder() ;
-        for(String s : uiForm.pars_) {
-          if(!CalendarUtils.isEmpty(sb.toString())) sb.append(CalendarUtils.COMMA) ;
-          sb.append(s) ;
-        }
-        for(User u : uiForm.getData()) {
+        for(Object o : uiForm.uiIterator_.getCurrentPageData()) {
+          User u = (User)o ;
           UIFormCheckBoxInput input = uiForm.getUIFormCheckBoxInput(u.getUserName()) ;
           if(input != null && input.isChecked()) {
             if(!uiForm.pars_.contains(u.getUserName())) {
@@ -166,22 +175,29 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
             }
           }
         }
+        if(CalendarUtils.isEmpty(sb.toString())) {
+          UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UISelectUserForm.msg.user-required",null)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
+        for(String s : uiForm.pars_) {
+          if(!CalendarUtils.isEmpty(sb.toString())) sb.append(CalendarUtils.COMMA) ;
+          sb.append(s) ;
+        }
         uiEventForm.setSelectedTab(uiForm.tabId_) ;
         uiEventForm.setParticipant(sb.toString()) ;
         ((UIEventAttenderTab)uiEventForm.getChildById(uiEventForm.TAB_EVENTATTENDER)).updateParticipants(sb.toString()) ;
       } 
-      //chilPopup.deActivate() ;
-      /*UIPopupAction chilPopup =  uiContainer.getChild(UIPopupAction.class) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(chilPopup) ;*/
-
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getChildById(uiEventForm.TAB_EVENTATTENDER)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getChildById(uiEventForm.TAB_EVENTSHARE)) ;
-
-      /* UIApplication uiApplication = uiForm.getAncestorOfType(UIApplication.class) ;
-      uiApplication.addMessage(new ApplicationMessage("UISelectUserForm.msg.add-successful", null)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiApplication.getUIPopupMessages()) ;*/
     }  
   } 
+
+  protected void updateCurrentPage(int page) throws Exception{
+    uiIterator_.setCurrentPage(page) ;
+  }
+  public void setKeyword(String value) {
+    getUIStringInput(FIELD_KEYWORD).setValue(value) ;
+  }
   static  public class ReplaceActionListener extends EventListener<UISelectUserForm> {
     public void execute(Event<UISelectUserForm> event) throws Exception { 
       System.out.println("======== >>>UISelectUserForm.SaveActionListener");
@@ -190,12 +206,19 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
       UIEventForm uiEventForm = uiContainer.findFirstComponentOfType(UIEventForm.class) ;
       if(uiEventForm != null) {
         StringBuilder sb = new StringBuilder() ;
-        for(User u : uiForm.getData()) {
+        for(Object o : uiForm.uiIterator_.getCurrentPageData()) {
+          User u = (User)o ;
           UIFormCheckBoxInput input = uiForm.getUIFormCheckBoxInput(u.getUserName()) ;
           if(input != null && input.isChecked()) {
             if(sb != null && sb.length() > 0) sb.append(CalendarUtils.COMMA) ;
             sb.append(u.getUserName()) ;
           }
+        }
+        if(CalendarUtils.isEmpty(sb.toString())) {
+          UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UISelectUserForm.msg.user-required",null)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
         }
         uiEventForm.setSelectedTab(uiForm.tabId_) ;
         uiEventForm.setParticipant(sb.toString()) ;
@@ -211,11 +234,12 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
   static  public class SearchActionListener extends EventListener<UISelectUserForm> {
     public void execute(Event<UISelectUserForm> event) throws Exception {
       UISelectUserForm uiForm = event.getSource() ;
-      //if(uiForm.getChildren()!= null) uiForm.getChildren().clear() ;
       OrganizationService service = uiForm.getApplicationComponent(OrganizationService.class) ;
       String keyword = uiForm.getUIStringInput(UISelectUserForm.FIELD_KEYWORD).getValue();
+      uiForm.groupId_ = uiForm.getSelectedGroup() ;
+      uiForm.setSelectedGroup(uiForm.getSelectedGroup()) ;
       if(keyword == null || keyword.trim().length() <= 0) keyword = "*" ;
-      keyword = "*" + keyword + "*" ;
+      keyword = "*" + keyword.toLowerCase() + "*" ;
       Query q = new Query() ;
       q.setUserName(keyword) ;
       List results = new ArrayList() ;
@@ -229,20 +253,9 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
       q = new Query() ;
       q.setLastName(keyword) ;
       results.addAll(service.getUserHandler().findUsers(q).getAll()) ;
-      uiForm.userData_.clear() ;
       uiForm.groupId_ = null ;
-      for(Object o : results) {
-        User u = (User)o ;
-        uiForm.userData_.put(u.getUserName(), u) ;
-      }
-      for(String username  : uiForm.userData_.keySet()) {
-        if(uiForm.getUIFormCheckBoxInput(username) != null) 
-          uiForm.addUIFormInput(new UIFormCheckBoxInput<Boolean>(username, username, false)) ;
-      }
-      for(String currentUsers : uiForm.pars_) {
-        if(uiForm.getUIFormCheckBoxInput(currentUsers) != null) 
-          uiForm.getUIFormCheckBoxInput(currentUsers).setChecked(true) ;
-      }
+      ObjectPageList objPageList = new ObjectPageList(results, 10) ;
+      uiForm.uiIterator_.setPageList(objPageList);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
     }
   }
@@ -250,6 +263,13 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UISelectUserForm> event) throws Exception {
       UISelectUserForm uiForm = event.getSource() ;
       uiForm.setSelectedGroup(uiForm.getSelectedGroup()) ;
+      uiForm.setKeyword(null) ;
+      OrganizationService service = CalendarUtils.getOrganizationService() ;
+      if(!CalendarUtils.isEmpty(uiForm.getSelectedGroup())) {
+        uiForm.uiIterator_.setPageList(service.getUserHandler().findUsersByGroup(uiForm.getSelectedGroup()));
+      } else {
+        uiForm.uiIterator_.setPageList(service.getUserHandler().getUserPageList(0));
+      }
       for(String s : uiForm.pars_) {
         if(uiForm.getUIFormCheckBoxInput(s) != null) uiForm.getUIFormCheckBoxInput(s).setChecked(true) ;
       }
@@ -263,6 +283,14 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
       UIPopupAction chilPopup =  uiContainer.getChild(UIPopupAction.class) ;
       chilPopup.deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(chilPopup) ;
+    }
+  }
+  static  public class ShowPageActionListener extends EventListener<UISelectUserForm> {
+    public void execute(Event<UISelectUserForm> event) throws Exception {
+      UISelectUserForm uiSelectUserForm = event.getSource() ;
+      int page = Integer.parseInt(event.getRequestContext().getRequestParameter(OBJECTID)) ;
+      uiSelectUserForm.updateCurrentPage(page) ; 
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectUserForm);           
     }
   }
 }

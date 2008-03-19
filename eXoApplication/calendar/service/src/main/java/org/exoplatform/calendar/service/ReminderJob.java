@@ -91,6 +91,7 @@ public class ReminderJob implements Job {
 				String to = reminder.getProperty("exo:email").getString();				
 				if (to != null && to.length() > 0) {
 					message = new Message();
+          
 					message.setMessageTo(to);
 					message.setSubject("eXo calendar reminder!");
 					message.setMessageBody(reminder.getProperty("exo:eventSummary").getString());

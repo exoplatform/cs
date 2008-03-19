@@ -162,7 +162,7 @@
 }
 
 .UICalendarPortlet .UIAddNewEvent .NewEventAttendee .BusyDotTime {
-	background-image: url(../../background/RedDot2x2.gif) ;
+	background-image: url('background/RedDot2x2.gif') ;
 	width: 11px;
 }
 
@@ -182,7 +182,7 @@
 }
 
 .UICalendarPortlet .UIAddNewEvent .NewEventAttendee .TitleBar {
-  background: url('../../background/CalendarBackground.gif') repeat-x center -51px;	
+  background: url('../../background/CalendarBackgrond.gif') repeat-x center -51px;	
   height: 23px;
   border: 1px solid #c7c7c7;
   border-bottom: none;
