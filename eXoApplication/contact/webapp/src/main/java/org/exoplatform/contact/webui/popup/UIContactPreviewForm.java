@@ -18,6 +18,8 @@ package org.exoplatform.contact.webui.popup;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
+import org.exoplatform.contact.webui.UIContactPortlet;
+import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -45,11 +47,14 @@ import org.exoplatform.webui.form.UIForm;
 )
 public class UIContactPreviewForm extends UIForm implements UIPopupComponent {
   private Contact contact_ ; 
+  private boolean isPrintForm = false ;
   
-  public UIContactPreviewForm() { }
-  
+  public UIContactPreviewForm() { }  
   public void setContact(Contact c) { contact_ = c; }
   public Contact getContact() { return contact_; }
+  
+  public void setPrintForm(boolean isPrint) { isPrintForm = isPrint ; }
+  public boolean isPrintForm() { return isPrintForm ; }
   
   public String getImageSource() throws Exception {
     DownloadService dservice = getApplicationComponent(DownloadService.class) ;
@@ -63,6 +68,9 @@ public class UIContactPreviewForm extends UIForm implements UIPopupComponent {
   static  public class CancelActionListener extends EventListener<UIContactPreviewForm> {
     public void execute(Event<UIContactPreviewForm> event) throws Exception {
       UIContactPreviewForm uiContactPreviewForm = event.getSource() ;
+      uiContactPreviewForm.setPrintForm(false) ;
+      uiContactPreviewForm.getAncestorOfType(UIContactPortlet.class)
+        .findFirstComponentOfType(UIContacts.class).setPrintDetail(false) ;
       UIPopupAction uiPopupAction = uiContactPreviewForm.getAncestorOfType(UIPopupAction.class) ;
       uiPopupAction.deActivate() ;
     }

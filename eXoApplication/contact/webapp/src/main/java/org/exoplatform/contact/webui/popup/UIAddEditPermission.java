@@ -34,6 +34,7 @@ import org.exoplatform.webui.core.UIGrid;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.form.UIFormStringInput;
 
 /**
  * Created by The eXo Platform SAS
@@ -116,7 +117,9 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
       String recievedUser = event.getRequestContext().getRequestParameter(OBJECTID);
       UISharedForm shareForm = addEdit.getChild(UISharedForm.class);
       shareForm.setNew(false) ;
-      shareForm.getUIStringInput(UISharedForm.FIELD_USER).setValue(recievedUser) ;
+      UIFormStringInput uiStringInput = shareForm.getUIStringInput(UISharedForm.FIELD_USER) ;
+      uiStringInput.setValue(recievedUser) ;
+      uiStringInput.setEditable(false) ;
       if (addEdit.isSharedGroup) {
         ContactGroup group = ContactUtils.getContactService().getGroup(
             SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), addEdit.groupId_) ;        
@@ -175,17 +178,24 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
         }
         
       } else {
+        
+        // ko luu ca object contact vi co the ko dung den delete va edit
         Contact contact = removePer(contactService.getContact(SessionProviderFactory
-            .createSessionProvider(), username, uiForm.contactId_), removedUser) ;        
+            .createSessionProvider(), username, uiForm.contactId_), removedUser) ;
         contactService.removeUserShareContact(SessionProviderFactory.createSessionProvider()
             , username, uiForm.contactId_, removedUser) ;
         contactService.saveContact(
             SessionProviderFactory.createSessionProvider(), username, contact, false) ;
         uiForm.updateContactGrid(contact);
         
-        UIContacts uiContacts = uiForm.getAncestorOfType(
-            UIContactPortlet.class).findFirstComponentOfType(UIContacts.class) ;
-        uiContacts.updateList() ;
+        UIContacts uiContacts = uiForm
+          .getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIContacts.class) ;
+        if (uiContacts.isDisplaySearchResult()) {
+          uiContacts.getContactMap().put(contact.getId(), contact) ;
+        } else {
+          uiContacts.updateList() ;
+        }
+        
         event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
         
       }

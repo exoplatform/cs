@@ -79,7 +79,6 @@ import org.exoplatform.webui.event.EventListener;
 public class UIAddressBooks extends UIComponent {
   private String selectedGroup = null;
   private Map<String, String> privateAddressBookMap_ = new LinkedHashMap<String, String>() ;
-  //private Map<String, String> publicAddressBookMap_ = new HashMap<String, String>() ;
   private Map<String, SharedAddressBook> sharedAddressBookMap_ = new LinkedHashMap<String, SharedAddressBook>() ;
   private List<Contact> copyContacts = new ArrayList<Contact>();
   private String copyAddress = null ;
@@ -93,10 +92,6 @@ public class UIAddressBooks extends UIComponent {
     return groupList;
   }
   public String[] getPublicContactGroups() throws Exception {
-    /*List<String> publicGroup = ContactUtils.getContactService()
-      .getPublicAddressBookContacts(SessionProviderFactory.createSystemProvider(), ContactUtils.getUserGroups());
-    publicGroupMap_.clear() ;
-    for (String group : publicGroup) publicGroupMap_.put(group, group) ; */
   	return ContactUtils.getUserGroups().toArray(new String[] {}) ;
   }
   public Map<String, SharedAddressBook> getSharedGroups() throws Exception { 
@@ -116,11 +111,13 @@ public class UIAddressBooks extends UIComponent {
   //public Map<String, String> getPublicGroupMap() { return publicAddressBookMap_ ; }
 
   // to show print address book when contacts view is Thumbnail ;
-  public boolean getListView(String groupId) {
+  /*public boolean getListView(String groupId) {
     if (!groupId.equals(selectedGroup)) return true ;    
     return getAncestorOfType(UIWorkingContainer.class)
       .findFirstComponentOfType(UIContacts.class).getViewContactsList() ;
-  }
+  }*/
+  
+  
   public boolean canPaste() {
     if (!ContactUtils.isEmpty(copyAddress) || copyContacts.size() > 0 ) return true ;
     return false ;
@@ -544,12 +541,36 @@ public class UIAddressBooks extends UIComponent {
   static public class PrintActionListener extends EventListener<UIAddressBooks> {
     public void execute(Event<UIAddressBooks> event) throws Exception {
       UIAddressBooks uiAddressBook = event.getSource();
+      String groupId = event.getRequestContext().getRequestParameter(OBJECTID);
+      
       UIWorkingContainer workingContainer = uiAddressBook.getAncestorOfType(UIWorkingContainer.class) ;
       UIContacts uiContacts = workingContainer.findFirstComponentOfType(UIContacts.class) ;      
       UIContactPreview uiContactPreview = workingContainer.findFirstComponentOfType(UIContactPreview.class) ;
       uiContactPreview.setRendered(false) ;
-      uiContacts.setViewContactsList(false) ;  
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+      uiContacts.setViewListBeforePrint(uiContacts.getViewContactsList()) ;
+      uiContacts.setViewContactsList(false) ;
+      uiContacts.setPrintForm(true) ;
+      uiContacts.setSelectedTag(null) ;
+
+      if (ContactUtils.isEmpty(uiAddressBook.selectedGroup) || 
+          (!ContactUtils.isEmpty(uiAddressBook.selectedGroup) && !uiAddressBook.selectedGroup.equals(groupId))) {
+        ContactService service = ContactUtils.getContactService() ;
+        String username = ContactUtils.getCurrentUser() ;
+        SessionProvider provide = SessionProviderFactory.createSessionProvider() ;
+        List<Contact> contacts ;
+        if (uiAddressBook.privateAddressBookMap_.containsKey(groupId)) {
+          contacts = service.getContactPageListByGroup(provide, username, groupId).getAll() ;
+        } else if (uiAddressBook.sharedAddressBookMap_.containsKey(groupId)){
+          contacts = service.getSharedContactsByAddressBook(
+              provide, username, uiAddressBook.sharedAddressBookMap_.get(groupId)).getAll() ;
+        } else {
+          contacts = service.getPublicContactsByAddressBook(provide, groupId).getAll() ;
+        }  
+        LinkedHashMap<String, Contact> contactMap = new LinkedHashMap<String, Contact> () ;
+        for (Contact contact : contacts) contactMap.put(contact.getId(), contact) ;
+        uiContacts.setContactMap(contactMap) ;
+      }
+      event.getRequestContext().addUIComponentToUpdateByAjax(workingContainer) ;
     }
   }
     

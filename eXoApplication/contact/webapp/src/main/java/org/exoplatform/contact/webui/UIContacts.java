@@ -94,12 +94,15 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UIContacts.CancelActionListener.class),
         @EventConfig(listeners = UIContacts.SelectTagActionListener.class),
         @EventConfig(listeners = UIContacts.SharedContactsActionListener.class),
-        @EventConfig(listeners = UIContacts.CloseSearchActionListener.class)
+        @EventConfig(listeners = UIContacts.CloseSearchActionListener.class),
+        @EventConfig(listeners = UIContacts.PrintActionListener.class), 
+        @EventConfig(listeners = UIContacts.PrintDetailsActionListener.class)
     }
 )
 
 public class UIContacts extends UIForm implements UIPopupComponent {
   public boolean viewContactsList = true ;
+  public boolean viewListBeforePrint = false ;
   private String selectedTag_ = null ;
   private LinkedHashMap<String, Contact> contactMap = new LinkedHashMap<String, Contact> () ;
   private String selectedGroup = null ;
@@ -113,14 +116,22 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   public static String jobTitle = "jobTitle".intern() ;
   private boolean isSearchResult = false ;
   private boolean defaultNameSorted = true ;
- 
+  private boolean isPrintForm = false ;
+  @SuppressWarnings("unused")
+  private boolean isPrintDetail = false ;
+  
   public UIContacts() throws Exception { } 
   public String[] getActions() { return new String[] {"Cancel"} ; }
   public void activate() throws Exception { }
   public void deActivate() throws Exception { } 
   
+  public void setPrintForm(boolean isPrint) { isPrintForm = isPrint ; }
+  public boolean isPrintForm() { return isPrintForm ; }
+  public void setPrintDetail(boolean isDetail) { isPrintDetail = isDetail ; }
+  
   public boolean isDisplaySearchResult() {return isSearchResult ;}
   public void setDisplaySearchResult(boolean search) { isSearchResult = search ; }
+  public void setViewListBeforePrint(boolean isList) { viewListBeforePrint = isList ; }
   
   public void setAscending(boolean isAsc) { isAscending_ = isAsc ; }
   public boolean isAscending() {return isAscending_ ; }
@@ -191,10 +202,10 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   
   public List<String> getCheckedContacts() throws Exception {
     List<String> checkedContacts = new ArrayList<String>() ;
-    for (Contact contact : getContacts()) {
-      UIFormCheckBoxInput uiCheckBox = getChildById(contact.getId()) ;
+    for (String contactId : contactMap.keySet()) {
+      UIFormCheckBoxInput uiCheckBox = getChildById(contactId) ;
       if(uiCheckBox != null && uiCheckBox.isChecked()) {
-        checkedContacts.add(contact.getId()) ;
+        checkedContacts.add(contactId) ;
       } 
     }
     return checkedContacts ;
@@ -607,12 +618,29 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIPopupContainer uiPopupContainer = popupAction.activate(UIPopupContainer.class, 700) ;
       uiPopupContainer.setId("ContactDetails") ;  
       UIContactPreviewForm uiContactPreviewForm = uiPopupContainer.addChild(UIContactPreviewForm.class, null, null) ; 
+      uiContactPreviewForm.setPrintForm(false) ;
       uiContactPreviewForm.setContact(uiContacts.contactMap.get(contactId)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;  
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;  
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
     }
-  } 
+  }
   
+  static public class PrintDetailsActionListener extends EventListener<UIContacts> {
+    public void execute(Event<UIContacts> event) throws Exception {
+      UIContacts uiContacts = event.getSource();
+      uiContacts.isPrintDetail = true ;
+      String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
+      UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
+      UIContactPreviewForm uiPreviewForm = contactPortlet.createUIComponent(UIContactPreviewForm.class, null, null) ;
+      uiPreviewForm.setId("ContactDetails") ;
+      uiPreviewForm.setPrintForm(true) ;
+      uiPreviewForm.setContact(uiContacts.contactMap.get(contactId)) ;
+      UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
+      popupAction.activate(uiPreviewForm, 700, 0) ;
+//      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;  
+//      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+    }
+  }
   static public class FirstPageActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource() ; 
@@ -658,14 +686,6 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         uiContacts.updateList() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent());
       }      
-    }
-  }
-  
-  static  public class CancelActionListener extends EventListener<UIContacts> {
-    public void execute(Event<UIContacts> event) throws Exception {
-      UIContacts uiContacts = event.getSource() ;
-      UIPopupAction uiPopupAction = uiContacts.getAncestorOfType(UIPopupAction.class) ;
-      uiPopupAction.deActivate() ;
     }
   }
   
@@ -839,16 +859,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         uiAddNewEditPermission.initContact(uiContacts.contactMap.get(objectId)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;  
       } else {
-        List<String> contacts = uiContacts.getCheckedContacts() ;
-        if (contacts.size() < 1) {
-          UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-required", null,
-              ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;
-        }
         Map<String, Contact> mapContacts = new LinkedHashMap<String, Contact>() ;
-        for (String contactId : contacts) {
+        for (String contactId : uiContacts.getCheckedContacts()) {
           Contact contact = uiContacts.contactMap.get(contactId) ;        
           String contactType = contact.getContactType() ; 
           if (contactType.equals(JCRDataStorage.PUBLIC) || contactType.equals(JCRDataStorage.SHARED)) {
@@ -871,4 +883,38 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent());    
     }
   }
+  
+  static public class PrintActionListener extends EventListener<UIContacts> {
+    public void execute(Event<UIContacts> event) throws Exception {
+      UIContacts uiContacts = event.getSource() ;
+      List<String> contactIds = uiContacts.getCheckedContacts() ;
+      if (contactIds.size() < 1) {
+        UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-required", null,
+            ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
+      LinkedHashMap<String, Contact> contactMap = new LinkedHashMap<String, Contact> () ;
+      for (String contactId : contactIds) contactMap.put(contactId, uiContacts.contactMap.get(contactId)) ;
+      uiContacts.contactMap = contactMap ;
+      uiContacts.viewListBeforePrint = uiContacts.viewContactsList ;
+      uiContacts.viewContactsList = false ;
+      uiContacts.isPrintForm = true ;
+      uiContacts.isPrintDetail = false ;
+      uiContacts.getAncestorOfType(UIContactContainer.class).findFirstComponentOfType(UIContactPreview.class).setRendered(false) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+    }
+  }
+  
+  static  public class CancelActionListener extends EventListener<UIContacts> {
+    public void execute(Event<UIContacts> event) throws Exception {
+      UIContacts uiContacts = event.getSource() ;
+      uiContacts.isPrintForm = false ;
+      uiContacts.viewContactsList = uiContacts.viewListBeforePrint ;
+      uiContacts.updateList() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+    }
+  }
+  
 }

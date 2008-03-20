@@ -4,14 +4,16 @@
   rcontext.getJavascriptManager().importJavascript('eXo.contact.UIContactPortlet');
 	import org.exoplatform.contact.service.Contact;
 	import org.exoplatform.contact.ContactUtils;
-	
 %>
+
+
+
 <div class="UIContactPreview">
-<style type="text/css" media="print">
+<!--<style type="text/css" media="print">
 .UIAction {
 	display: none ;
 }
-</style>
+</style>-->
 	<div class="ContactPreviewDetails">
 <!--  Start DecoratorBox ViewBoxStyle -->
 		<div class="DecoratorBox">
@@ -263,8 +265,16 @@
 		</div>
 <!--  End DecoratorBox ViewBoxStyle -->
 	</div>
+	<style type="text/css" media="print">	
+				.Printable {
+					display: none ;
+					visibility : hidden ;
+				}
+			</style>
 	
-	<div class="UIAction"> 
+	
+	
+	<div class="UIAction Printable"> 
         <table class="ActionContainer" align="center">
         	<tr>
         		<td align="center">
@@ -281,19 +291,22 @@
                   </div>
                 </div>
            		</a>
-          		<%}%>
-          		
+          		<%}
+								
+          		if (uicomponent.isPrintForm) {
+          			rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactPortlet.printList('"+uiform.id+"') ;") ;
+          		%>	
           		<a href="#" onclick="javascript:window.print() ;" class="ActionButton LightBlueStyle">
                 <div class="ButtonLeft">
                   <div class="ButtonRight">
-                    <div class="ButtonMiddle" style="display:none ;">
+                    <div class="ButtonMiddle">
                     <%=_ctx.appRes(uicomponent.getName() + ".action.print")%>
                     </div>
                   </div>
                 </div>
-           		</a>           		 
-           		
-           		<a href="#" onclick="javascript:eXo.contact.UIContactPortlet.printpreview(this) ;" class="ActionButton LightBlueStyle">
+           		</a>
+           		<% } else { %>
+           		<a href="#" onclick="javascript:eXo.contact.UIContactPortlet.printpreview(this) ;" printLabel="<%=_ctx.appRes(uicomponent.getName() + ".action.print")%>" class="ActionButton LightBlueStyle">
                 <div class="ButtonLeft">
                   <div class="ButtonRight">
                     <div class="ButtonMiddle">
@@ -301,7 +314,10 @@
                     </div>
                   </div>
                 </div>
-           		</a>           		    
+           		</a> 
+           		
+           		
+           		<% } %>  		    
           	</td>
           </tr>  
         </table>

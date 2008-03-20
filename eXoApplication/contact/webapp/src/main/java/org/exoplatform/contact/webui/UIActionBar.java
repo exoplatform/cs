@@ -48,8 +48,7 @@ import org.exoplatform.webui.event.EventListener;
     events = {
         @EventConfig(listeners = UIActionBar.AddContactActionListener.class),
         @EventConfig(listeners = UIActionBar.AddAddressBookActionListener.class),
-        @EventConfig(listeners = UIActionBar.ListViewActionListener.class),
-        //@EventConfig(listeners = UIActionBar.VCardViewActionListener.class),
+        @EventConfig(listeners = UIActionBar.ChangeViewActionListener.class),
         @EventConfig(listeners = UIActionBar.ImportContactActionListener.class),
         @EventConfig(listeners = UIActionBar.ExportContactActionListener.class)
     }
@@ -100,7 +99,7 @@ public class UIActionBar extends UIContainer  {
     }  
   }
   
-  static public class ListViewActionListener extends EventListener<UIActionBar> {
+  static public class ChangeViewActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {      
       UIActionBar uiActionBar = event.getSource() ;
       String isList = event.getRequestContext().getRequestParameter(OBJECTID);
@@ -112,8 +111,8 @@ public class UIActionBar extends UIContainer  {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
       
       // remove when print address book improved
-      event.getRequestContext().addUIComponentToUpdateByAjax(
-          uiContactPortlet.findFirstComponentOfType(UINavigationContainer.class)) ;
+     /* event.getRequestContext().addUIComponentToUpdateByAjax(
+          uiContactPortlet.findFirstComponentOfType(UINavigationContainer.class)) ;*/
     }  
   }
   

@@ -82,11 +82,11 @@
 					<a href="<%=uicomponent.event("DeleteContacts", uicomponent.id, "null")%>" class="ControlButton">
 						<div class="Icon DustBin16x16Icon " title="delete"><span></span></div>
 					</a>
-					<!--
-					<a href="#" class="ControlButton">
+					
+					<a href="<%= uicomponent.event("Print") %>" class="ControlButton">
 							<div class="Icon PrintIcon" title="Print"><span></span></div>
 					</a>
-					-->
+				
 					<a href="<%=uicomponent.event("CopyContact")%>" class="ControlButton">
 							<div class="Icon CopyContactIcon" title="Copy Contacts"><span></span></div>
 					</a>
@@ -411,7 +411,7 @@
 					
 	</div>
 <% 
-	} else {
+	} else {      // begin Vcard
 %>
 	<div class="UIVCards" id="UIVCards">
 	<div class="VCardsBar">
@@ -687,6 +687,52 @@
 		</div>
 		
 	</div>
+	
+	<% if (uicomponent.isPrintForm && !uicomponent.isPrintDetail) {
+		   rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactPortlet.printList('"+ uiform.id +"') ;") ;
+	%>
+			<style type="text/css" media="print">	
+				.Printable {
+					display: none ;
+					visibility : hidden ;
+				}
+			</style>
+			<div class="UIAction Printable"> 
+        <table class="ActionContainer" align="center">
+        	<tr>
+        		<td align="center">
+          		<a href="<%= uicomponent.event("Cancel") %>" class="ActionButton LightBlueStyle">
+                <div class="ButtonLeft">
+                  <div class="ButtonRight">
+                    <div class="ButtonMiddle">
+                      <%= _ctx.appRes(uicomponent.getName() + ".action.Cancel") %>
+                    </div>
+                  </div>
+                </div>
+           		</a>
+          		<a href="#" onclick = "javascript:window.print()" class="ActionButton LightBlueStyle">
+                <div class="ButtonLeft">
+                  <div class="ButtonRight">
+                    <div class="ButtonMiddle">
+                      <%= _ctx.appRes(uicomponent.getName() + ".action.print") %>
+                    </div>
+                  </div>
+                </div>
+           		</a>
+           		
+          		        
+          	</td>
+          </tr>  
+        </table>
+      </div>
+   <% } 
+   		
+   			
+   		
+   %>   
+      
+	
+	<!--
 	<style type="text/css">
 		.UIAction1 {
 			display: none ;
@@ -733,13 +779,17 @@
         </table>
       </div>
 	
-	
+	-->
 	
 	
 </div>
-<% } %>			
+<% } // end of vcard %> 			
 			
-			
+	<%  
+		if (!uicomponent.isPrintForm && !uicomponent.isPrintDetail) {
+			rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactPortlet.cancelPrintList() ;") ;
+		}
+	 %>		
 			<% /*Begin Popup Menu*/ %>						
 
   				<div class="UIRightClickPopupMenu" id="UIContactListPopuMenu" eXoCallback="eXo.contact.UIContactPortlet.contactCallback">
@@ -797,7 +847,7 @@
 	                      <%=_ctx.appRes(uicomponent.getName() + ".label.delete")%>
 	                    </div> 
                     </a>
-                    <a class="MenuItem" href="<%=uicomponent.event("ViewDetails", "id")%>">   
+                    <a class="MenuItem" href="<%=uicomponent.event("PrintDetails", "id")%>">   
 	                    <div class="ItemIcon PrintIcon">
 	                      <%=_ctx.appRes(uicomponent.getName() + ".label.print") %>
 	                    </div>

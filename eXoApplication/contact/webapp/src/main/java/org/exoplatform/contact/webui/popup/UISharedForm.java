@@ -26,6 +26,7 @@ import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.UIContactPortlet;
+import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.organization.OrganizationService;
@@ -264,6 +265,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
                 }
               }
             }
+            uiForm.getUIStringInput(UISharedForm.FIELD_USER).setEditable(true) ;
           }
           contactService.saveGroup(SessionProviderFactory.createSessionProvider(), username, contactGroup, false) ;
           UIAddEditPermission uiAddEdit = uiForm.getParent() ;
@@ -307,6 +309,14 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
             UIAddEditPermission uiAddEdit = uiForm.getParent() ;
             uiAddEdit.updateContactGrid(contact);
             event.getRequestContext().addUIComponentToUpdateByAjax(uiAddEdit) ;
+            uiForm.getUIStringInput(UISharedForm.FIELD_USER).setEditable(true) ;
+            
+            UIContacts uiContacts = uiForm.getAncestorOfType(
+                UIContactPortlet.class).findFirstComponentOfType(UIContacts.class) ;
+            if (uiContacts.isDisplaySearchResult()) {
+              uiContacts.getContactMap().put(contact.getId(), contact) ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
+            }
           } 
         }
         uiForm.getUIStringInput(UISharedForm.FIELD_USER).setValue(null) ;
@@ -338,6 +348,13 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
   static  public class SelectPermissionActionListener extends EventListener<UISharedForm> {
     public void execute(Event<UISharedForm> event) throws Exception {
       UISharedForm uiForm = event.getSource() ;
+      if (!uiForm.isNew_) {
+        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.cannot-change-username", null,
+            ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      } 
       String permType = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIPopupAction childPopup = uiForm.getAncestorOfType(UIPopupContainer.class).getChild(UIPopupAction.class) ;
       UIGroupSelector uiGroupSelector = childPopup.activate(UIGroupSelector.class, 500) ;
