@@ -4,7 +4,6 @@ function UIContextMenuCon(){
 	this.menuElement = null ;
 	this.preventDefault = true ;
 	this.preventForms = true ;
-  this.tmpMenu = null ;
 }
 
 UIContextMenuCon.prototype.getCallback = function(menuId) {
@@ -18,18 +17,9 @@ UIContextMenuCon.prototype.getPortlet = function(portletid) {
 } ;
 UIContextMenuCon.prototype.init = function(conf) {
 	var UIContextMenuCon = eXo.webui.UIContextMenuCon ;
-	if ( document.all && document.getElementById && !window.opera ) {
-		UIContextMenuCon.IE = true;
-	}
-
-	if ( !document.all && document.getElementById && !window.opera ) {
-		UIContextMenuCon.FF = true;
-	}
-
-	if ( document.all && document.getElementById && window.opera ) {
-		UIContextMenuCon.OP = true;
-	}
-
+	UIContextMenuCon.FF = eXo.core.Browser.isFF() ;
+	UIContextMenuCon.IE = eXo.core.Browser.isIE6() || eXo.core.Browser.isIE7() ;
+	
 	if ( UIContextMenuCon.IE || UIContextMenuCon.FF ) {
 
 		if (conf && typeof(conf.preventDefault) != "undefined") {
@@ -39,7 +29,18 @@ UIContextMenuCon.prototype.init = function(conf) {
 		if (conf && typeof(conf.preventForms) != "undefined") {
 			UIContextMenuCon.preventForms = conf.preventForms;
 		}
-		document.getElementById(UIContextMenuCon.portletName).oncontextmenu = UIContextMenuCon.show;
+		document.getElementById(UIContextMenuCon.portletName).onmouseover = UIContextMenuCon.set;
+		document.getElementById(UIContextMenuCon.portletName).onmouseout = UIContextMenuCon.release;
+	}
+} ;
+
+UIContextMenuCon.prototype.set = function() {
+	document.body.oncontextmenu = eXo.webui.UIContextMenuCon.show;
+} ;
+
+UIContextMenuCon.prototype.release = function() {
+	document.body.oncontextmenu = function() {
+		return true ;
 	}
 } ;
 
@@ -179,9 +180,12 @@ UIContextMenuCon.prototype.autoHide = function(evt) {
 	var eventType = _e.type ;	
 	var UIContextMenuCon = eXo.webui.UIContextMenuCon ;
 	if (eventType == 'mouseout') {
-		UIContextMenuCon.timeout = setTimeout("eXo.webui.UIContextMenuCon.menuElement.style.display='none'", 5000) ;		
+		UIContextMenuCon.timeout = window.setTimeout("eXo.webui.UIContextMenuCon.menuElement.style.display='none'", 5000) ;		
 	} else {
-		if (UIContextMenuCon.timeout) clearTimeout(UIContextMenuCon.timeout) ;		
+		if (UIContextMenuCon.timeout) {
+			window.clearTimeout(UIContextMenuCon.timeout) ;
+			UIContextMenuCon.timeout = null ;
+		}
 	}
 } ;
 
@@ -246,8 +250,9 @@ UIContextMenuCon.prototype.swapMenu = function(oldmenu, clickobj) {
 	if (arguments.length > 2) { // Customize position of menu with an object that have 2 properties x, y 
 		menuX = arguments[2].x ;
 		menuY = arguments[2].y ;
-	}	
-	if(document.getElementById("tmpMenuElement")) document.getElementById("UIPortalApplication").removeChild(document.getElementById("tmpMenuElement")) ;
+	}
+	var tmpNode = document.getElementById("tmpMenuElement") ;
+	if(tmpNode) eXo.core.DOMUtil.removeElement(tmpNode) ;
 	var tmpMenuElement = oldmenu.cloneNode(true) ;
 	tmpMenuElement.setAttribute("id","tmpMenuElement") ;
 	UIContextMenuCon.menuElement = tmpMenuElement ;
