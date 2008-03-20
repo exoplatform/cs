@@ -540,9 +540,7 @@ public class JCRDataStorage{
       }
       
       if(nodeMsg.canAddMixin("mix:referenceable")) nodeMsg.addMixin("mix:referenceable") ;
-      if(nodeMsg.canAddMixin("exo:conversationMixin")) nodeMsg.addMixin("exo:conversationMixin") ;
       nodeMsg.setProperty(Utils.EXO_SUBJECT, message.getSubject()) ;
-      nodeMsg.setProperty(Utils.EXO_RECIPIENT, Utils.getAddresses(message.getMessageTo() + "," + message.getMessageCc() + "," + message.getMessageBcc())) ;
       nodeMsg.save();
     }
     return nodeMsg ;
@@ -602,7 +600,7 @@ public class JCRDataStorage{
     
     System.out.println("   [DEBUG] Adding message to thread ...") ;
     t1 = System.currentTimeMillis();
-    addMessageToThread(sProvider, username, accId, Utils.getAllRecipients(msg),MimeMessageParser.getInReplyToHeader(msg), node) ;
+    addMessageToThread(sProvider, username, accId, MimeMessageParser.getInReplyToHeader(msg), node) ;
     t2 = System.currentTimeMillis();
     System.out.println("   [DEBUG] Added message to thread finished : " + (t2 - t1) + " ms") ;
     
@@ -1335,33 +1333,17 @@ public class JCRDataStorage{
     return converNode;
   }
   
-  public void addMessageToThread(SessionProvider sProvider, String username, String accountId, String[] recipients, String inReplyToHeader, Node msgNode) throws Exception {
+  public void addMessageToThread(SessionProvider sProvider, String username, String accountId, String inReplyToHeader, Node msgNode) throws Exception {
     Node converNode = getMatchingThread(sProvider, username, accountId, inReplyToHeader, msgNode) ;  
     try {
-      if (converNode != null && converNode.isNodeType("exo:conversationMixin")) {
-        Value[] propRecipients = converNode.getProperty(Utils.EXO_RECIPIENT).getValues();
-        Map<String, String> existRecipients = new HashMap<String, String>();
-        for (int i = 0; i < propRecipients.length; i++) {
-          String address = propRecipients[i].getString() ;
-          existRecipients.put(address, address);
-        }
-        for (int j = 0; j < recipients.length; j++) {
-          String address = recipients[j] ;
-          existRecipients.put(address, address) ;
-        }
-        String[] newRecipients = existRecipients.values().toArray(new String[]{}) ;
-        converNode.setProperty(Utils.EXO_RECIPIENT, newRecipients) ;
+      if (converNode != null && converNode.isNodeType("exo:message")) {
         //TODO: add when save message
         msgNode.addMixin("mix:referenceable") ;
-        msgNode.addMixin("exo:conversationMixin") ;
-        msgNode.setProperty(Utils.EXO_RECIPIENT, newRecipients) ;
         createReference(msgNode, converNode) ;
         msgNode.save() ;
         converNode.save() ;
       } else {
         msgNode.addMixin("mix:referenceable") ;
-        msgNode.addMixin("exo:conversationMixin") ;
-        msgNode.setProperty(Utils.EXO_RECIPIENT, recipients) ;
         msgNode.save() ;
       }
     } catch(Exception e) {
