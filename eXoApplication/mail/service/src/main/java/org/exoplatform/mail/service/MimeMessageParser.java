@@ -144,4 +144,9 @@ public class MimeMessageParser {
       return inReplyToHeaders[0];
     return "" ;
   }
+  
+  public static String[] getReferencesHeader(javax.mail.Message message) throws Exception {
+    String[] references = message.getHeader("References") ;
+    return references ;
+  }
 }
