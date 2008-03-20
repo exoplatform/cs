@@ -285,6 +285,8 @@ public interface MailService {
   public void moveMessages(SessionProvider sProvider, String username,String accountId, Message msg, String currentFolderId, String destFolderId) throws Exception ;
 
   public void sendMessages(List<Message> msgList, ServerConfiguration serverConfig) throws Exception ;
+  
+  public Message sendMessage(SessionProvider sProvider, String username, String accId, Message message) throws Exception ;
   /**
    * This method should send out the message
    * @param message

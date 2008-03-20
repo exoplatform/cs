@@ -1307,7 +1307,7 @@ public class JCRDataStorage{
       monthNode = yearNode.getNode(month) ;
     } catch (Exception e) {
       monthNode = yearNode.addNode(month, Utils.NT_UNSTRUCTURED) ;
-      yearNode.save();
+      yearNode.save() ;
     }
     try {
       return monthNode.getNode(day) ;

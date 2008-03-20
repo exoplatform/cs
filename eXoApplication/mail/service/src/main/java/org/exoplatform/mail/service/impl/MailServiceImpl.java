@@ -185,9 +185,8 @@ public class MailServiceImpl implements MailService{
     storage_.saveMessage(sProvider, username, accountId, message, isNew);
   }
 
-  public Message sendMessage(SessionProvider sProvider, String username, Message message) throws Exception {
-    String accountId = message.getAccountId() ;
-    Account acc = getAccountById(sProvider, username, accountId) ;
+  public Message sendMessage(SessionProvider sProvider, String username, String accId, Message message) throws Exception {
+    Account acc = getAccountById(sProvider, username, accId) ;
     String smtpUser = acc.getIncomingUser() ;
     String outgoingHost = acc.getOutgoingHost() ;
     String outgoingPort  = acc.getOutgoingPort() ;
@@ -222,6 +221,10 @@ public class MailServiceImpl implements MailService{
     transport.close();
     
     return msg ;
+  }
+  
+  public Message sendMessage(SessionProvider sProvider, String username, Message message) throws Exception {
+    return sendMessage(sProvider, username, message.getAccountId(), message) ;
   }
   
   public void sendMessage(Message message) throws Exception {
