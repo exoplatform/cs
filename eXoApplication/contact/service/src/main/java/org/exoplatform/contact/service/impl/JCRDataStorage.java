@@ -479,6 +479,8 @@ public class JCRDataStorage {
       try{
     		if(addressType.equals(PRIVATE)) {
       		if(contact.getContactType().equals(SHARED)) {
+            contact.setViewPermission(null) ;
+            contact.setEditPermission(null) ;
       			saveContact(sysProvider, username, contact, true) ;
       			removeSharedContact(sysProvider, username, contact.getAddressBook()[0], contact.getId()) ;            
       		} else if(contact.getContactType().equals(PRIVATE)){
@@ -1498,6 +1500,8 @@ public class JCRDataStorage {
         contacts.add(getContact(it.nextNode(), PRIVATE)) ;        
       }
     }
+    
+    //System.out.println("\n\n 11 :" + contacts.size() + "\n\n");
     //public contacts
     Node publicContactHome = getPublicContactHome(SessionProvider.createSystemProvider()) ;
     //Node publicContactHome = getPublicContactHome(sysProvider) ;  

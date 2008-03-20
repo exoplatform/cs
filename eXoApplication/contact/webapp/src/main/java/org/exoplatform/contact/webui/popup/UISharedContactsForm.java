@@ -158,7 +158,7 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
           if (names.indexOf(",") > 0) {
             String[] array = names.split(",") ;
             for(String name : array) {
-              organizationService.getUserHandler().findUserByName(name).getFullName();
+              organizationService.getUserHandler().findUserByName(name.trim()).getFullName();
               receiverUser.add(name.trim()) ;
             }
           } else {
