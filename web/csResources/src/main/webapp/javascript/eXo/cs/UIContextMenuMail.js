@@ -133,7 +133,7 @@ UIContextMenuMail.prototype.hasChild = function(root, obj) {
 } ;
 
 UIContextMenuMail.prototype.show = function(evt) {
-	var _e = window.event || evt
+	var _e = window.event || evt ;
 	var UIContextMenuMail = eXo.webui.UIContextMenuMail ;
 	var menuElementId = UIContextMenuMail.getMenuElementId(_e) ;
 	if (menuElementId) {
@@ -159,11 +159,13 @@ UIContextMenuMail.prototype.show = function(evt) {
       top -= uiWindow.offsetTop ;
       left -= (uiWindow.offsetLeft)  ;
 		}
-		UIContextMenuMail.menuElement.style.left = left + "px" ;
-		UIContextMenuMail.menuElement.style.top = top + "px" ;
-		UIContextMenuMail.menuElement.style.display = 'block' ;
-		UIContextMenuMail.menuElement.onmouseover = UIContextMenuMail.autoHide ;
-		UIContextMenuMail.menuElement.onmouseout = UIContextMenuMail.autoHide ;		
+		UIContextMenuMail.menuElement.style.left = left - 2 + "px" ;
+		UIContextMenuMail.menuElement.style.top = top - 1 + "px" ;
+		//UIContextMenuMail.menuElement.style.display = 'block' ;
+		eXo.webui.UIPopup.show(UIContextMenuMail.menuElement) ;
+		//UIContextMenuMail.menuElement.onmouseover = UIContextMenuMail.autoHide ;
+		//UIContextMenuMail.menuElement.onmouseout = UIContextMenuMail.autoHide ;	
+//		alert("asdfas fasd ") ;	
 		if (!UIContextMenuMail.IE) {			
       var portlet = document.getElementById(UIContextMenuMail.portletName) ;
       if(UIContextMenuMail.hasChild(portlet, menuElementId)) portlet.removeChild(UIContextMenuMail.hasChild(portlet, menuElementId)) ;

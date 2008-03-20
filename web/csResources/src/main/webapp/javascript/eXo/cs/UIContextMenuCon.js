@@ -160,8 +160,8 @@ UIContextMenuCon.prototype.show = function(evt) {
       top -= uiWindow.offsetTop ;
       left -= (uiWindow.offsetLeft)  ;
 		}
-		UIContextMenuCon.menuElement.style.left = left + "px" ;
-		UIContextMenuCon.menuElement.style.top = top + "px" ;
+		UIContextMenuCon.menuElement.style.left = left - 2 + "px" ;
+		UIContextMenuCon.menuElement.style.top = top - 1 + "px" ;
 		UIContextMenuCon.menuElement.style.display = 'block' ;
 		UIContextMenuCon.menuElement.onmouseover = UIContextMenuCon.autoHide ;
 		UIContextMenuCon.menuElement.onmouseout = UIContextMenuCon.autoHide ;		
