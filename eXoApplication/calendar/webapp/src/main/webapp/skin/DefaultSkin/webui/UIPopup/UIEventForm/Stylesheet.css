@@ -320,6 +320,7 @@
 
 .UICalendarPortlet .UIQuickAddEvent .UIFormGrid .FieldComponent .Date {
 	float: left;
+	background: none;
 }
 
 .UICalendarPortlet .UIQuickAddEvent .UIFormGrid .FieldComponent .Date input{
