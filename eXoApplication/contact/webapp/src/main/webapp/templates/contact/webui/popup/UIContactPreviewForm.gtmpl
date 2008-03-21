@@ -6,8 +6,6 @@
 	import org.exoplatform.contact.ContactUtils;
 %>
 
-
-
 <div class="UIContactPreview">
 <!--<style type="text/css" media="print">
 .UIAction {
@@ -61,10 +59,13 @@
 											<div class="InfoItem">
 												<div class="InfoLabel1">Email:</div>
 												<div class="Info1 Email">
+												<% if (!uicomponent.isPrintForm) { %>	
 													<a href="<%=uicomponent.event("SendEmail", contact.getEmailAddress())%>">
-						
 														<%=(ContactUtils.isEmpty(contact.getEmailAddress()) ? "_" : contact.getEmailAddress())%>
 													</a>
+												<% } else { %>
+														<%=(ContactUtils.isEmpty(contact.getEmailAddress()) ? "_" : contact.getEmailAddress())%>
+												<% } %>	
 												</div>
 												<div style="clear: left;"><span></span></div>
 											</div>																									

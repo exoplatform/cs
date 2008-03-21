@@ -15,7 +15,7 @@
 				if(tag.getId().equals(uicomponent.getSelectedTag())) cssClass = "Selected" ;
 				color = tag.getColor() + "Tag" ;
 		%>
-			<div  class="TagList ItemList $cssClass" tagId="<%=tag.getId()%>" canPrint = "<%=uicomponent.canPrint(tag.getId())%>">
+			<div  class="TagList ItemList $cssClass" tagId="<%=tag.getId()%>" >
 				<a href="$actionLink" class="IconHolder $color" ><%=tag.getName()%></a>
 			</div>
 		<% } %>
@@ -48,7 +48,7 @@
                   </div>
                 </a>
         			
-	        			<a class="MenuItem" href="javascript:eXo.contact.UIContactPortlet.adddressPrint() ;">   
+	        			<a class="MenuItem" href="<%=uicomponent.event("Print", "id")%>">   
                   <div class="ItemIcon PrintIcon">
                     Print Contacts
                   </div>

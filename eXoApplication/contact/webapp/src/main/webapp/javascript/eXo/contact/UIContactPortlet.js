@@ -199,36 +199,36 @@ UIContactPortlet.prototype.tagCallback = function(evt) {
 	_e.cancelBubble = true ;
 	var src = _e.srcElement || _e.target ;
 	src = (src.nodeName.toLowerCase() == "div")? src : src.parentNode ;
-	var tagName = src.getAttribute("tagId") ;
+	var tagId = src.getAttribute("tagId") ;
 	
 	// hoang quang hung add
-	var DOMUtil = eXo.core.DOMUtil ;
-	var addressBook = (DOMUtil.hasClass(src, "ItemList")) ? src : DOMUtil.findAncestorByClass(src, "ItemList") ;
-	var canPrint = addressBook.getAttribute("canPrint") ;
-	var menuItems = DOMUtil.findDescendantsByClass(UIContextMenuCon.menuElement, "div", "ItemIcon") ;
-	var itemLength = menuItems.length ;	
-	if (canPrint == "true") {
-		for(var i = 0 ; i < itemLength ; i ++) {
-			if (DOMUtil.hasClass(menuItems[i],"PrintIcon")) {
-				if (!menuItems[i].parentNode.getAttribute("oldHref")) continue ;
-				menuItems[i].parentNode.href = menuItems[i].parentNode.getAttribute("oldHref") ;
-				menuItems[i].parentNode.style.color = menuItems[i].parentNode.getAttribute("oldColor") ;
-				menuItems[i].parentNode.removeAttribute("oldColor") ;
-				menuItems[i].parentNode.removeAttribute("oldHref") ;
-			}
-		}
-	} else {
-		for(var i = 0 ; i < itemLength ; i ++) {
-			if (DOMUtil.hasClass(menuItems[i],"PrintIcon")) {
-				if (menuItems[i].parentNode.getAttribute("oldHref")) continue ;
-				menuItems[i].parentNode.setAttribute("oldHref", menuItems[i].parentNode.href) ;
-				menuItems[i].parentNode.href = "javascript: void(0) ;" ;
-				menuItems[i].parentNode.setAttribute("oldColor", DOMUtil.getStyle(menuItems[i].parentNode, "color")) ;
-				menuItems[i].parentNode.style.color = "#cccccc" ;
-			}
-		}
-	}
-	eXo.webui.UIContextMenuCon.changeAction(UIContextMenuCon.menuElement, tagName) ;
+//	var DOMUtil = eXo.core.DOMUtil ;
+//	var addressBook = (DOMUtil.hasClass(src, "ItemList")) ? src : DOMUtil.findAncestorByClass(src, "ItemList") ;
+//	var canPrint = addressBook.getAttribute("canPrint") ;
+//	var menuItems = DOMUtil.findDescendantsByClass(UIContextMenuCon.menuElement, "div", "ItemIcon") ;
+//	var itemLength = menuItems.length ;	
+//	if (canPrint == "true") {
+//		for(var i = 0 ; i < itemLength ; i ++) {
+//			if (DOMUtil.hasClass(menuItems[i],"PrintIcon")) {
+//				if (!menuItems[i].parentNode.getAttribute("oldHref")) continue ;
+//				menuItems[i].parentNode.href = menuItems[i].parentNode.getAttribute("oldHref") ;
+//				menuItems[i].parentNode.style.color = menuItems[i].parentNode.getAttribute("oldColor") ;
+//				menuItems[i].parentNode.removeAttribute("oldColor") ;
+//				menuItems[i].parentNode.removeAttribute("oldHref") ;
+//			}
+//		}
+//	} else {
+//		for(var i = 0 ; i < itemLength ; i ++) {
+//			if (DOMUtil.hasClass(menuItems[i],"PrintIcon")) {
+//				if (menuItems[i].parentNode.getAttribute("oldHref")) continue ;
+//				menuItems[i].parentNode.setAttribute("oldHref", menuItems[i].parentNode.href) ;
+//				menuItems[i].parentNode.href = "javascript: void(0) ;" ;
+//				menuItems[i].parentNode.setAttribute("oldColor", DOMUtil.getStyle(menuItems[i].parentNode, "color")) ;
+//				menuItems[i].parentNode.style.color = "#cccccc" ;
+//			}
+//		}
+//	}
+	eXo.webui.UIContextMenuCon.changeAction(UIContextMenuCon.menuElement, tagId) ;
 } ;
 
 UIContactPortlet.prototype.printpreview = function (obj){
@@ -237,9 +237,9 @@ UIContactPortlet.prototype.printpreview = function (obj){
 	var UIContactPreview = DOMUtil.findAncestorByClass(obj, "UIContactPreview") ;
 	var div = document.createElement("div") ;
 	var form = eXo.core.DOMUtil.findAncestorByTagName(obj, "form") ;
-	var pirntLabel = DOMUtil.findFirstDescendantByClass(obj, 'div','ButtonMiddle') ;
+	var printLabel = DOMUtil.findFirstDescendantByClass(obj, 'div','ButtonMiddle') ;
 	obj.href = "javascript:window.print() ;" ;
-	if(obj.getAttribute("printLabel")) pirntLabel.innerHTML = obj.getAttribute("printLabel") ;
+	if(obj.getAttribute("printLabel")) printLabel.innerHTML = obj.getAttribute("printLabel") ;
 	if(obj.getAttribute("onclick")) obj.removeAttribute("onclick") ;
 	eXo.contact.UIContactPortlet.printList(form.id) ;
 //	div.className = "UIContactPortlet" ;
@@ -258,6 +258,21 @@ UIContactPortlet.prototype.printpreview = function (obj){
 //	DOMUtil.findFirstDescendantByClass(button[1], 'div','ButtonMiddle').style.display = "block" ;
 //	button[2].style.display = "none" ;
 //	
+} ;
+
+UIContactPortlet.prototype.disableAction = function(cont){
+	if(typeof(cont) == "string") cont = document.getElementById(cont) ;
+	var a = eXo.core.DOMUtil.findDescendantsByTagName(cont, "a") ;
+	var len = a.length ;
+	for(var i = 0 ; i < len ; i ++) {
+		if(eXo.core.DOMUtil.hasClass(a[i],"ActionButton")) continue ;
+		var text = document.createTextNode(a[i].innerHTML) ;
+		a[i].parentNode.appendChild(text) ;
+		eXo.core.DOMUtil.removeElement(a[i]) ;
+//		a[i].removeAttribute("href") ;
+		
+	}
+	return cont ;
 } ;
 
 UIContactPortlet.prototype.adddressPrint = function (){
@@ -298,6 +313,7 @@ UIContactPortlet.prototype.cancelPrintList = function (){
 
 UIContactPortlet.prototype.printList = function (obj){
 	if(typeof(obj) == "string") obj = document.getElementById(obj) ;
+	obj = eXo.contact.UIContactPortlet.disableAction(obj) ;
 	var printContainer = obj.cloneNode(true) ;
 	var UIAction = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div", "UIAction") ;
 	var div = document.createElement("div") ;

@@ -526,9 +526,14 @@
 		  		  						else subEmail = email ;			  		  				
 			  		  			%>
 			  		  		<span class="InfoContent MailIcon" title="<%=(email == null ? "" : email) %>">
-			  		  			<a href="<%=uicomponent.event("SendEmail", email)%>">  		  				
-			  		  				<%=(email == null ? "_" : subEmail)%>
-			  		  			</a>
+			  		  			<% if (!uicomponent.isPrintForm) { %>
+			  		  					<a href="<%=uicomponent.event("SendEmail", email)%>"> 
+			  		  					<%=(email == null ? "_" : subEmail)%>
+			  		  					</a> 		  				
+			  		  			<% } else { %>
+			  		  					<%=(email == null ? "_" : subEmail)%>
+			  		  			<% } %>
+			  		  			
 			  		  		</span> 
 			  		  	</div>
 			  		  	<div class="InfoMember">
@@ -551,7 +556,9 @@
 			  		  	</div>
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">
+			  		  		<% if (!uicomponent.isPrintForm) { %>
 			  		  			<a href="<%=uicomponent.event("ViewDetails", contact.getId())%>">View Details</a>
+			  		  		<% } %>
 			  		  		</span>			  		  	
 			  		  	</div>
 			  		  </div>
@@ -644,9 +651,14 @@
 		  		  						else subEmail = email ;			  		  				
 			  		  			%>	
 			  		  		<span class="InfoContent MailIcon" title="<%=(email == null ? "" : email) %>">
-			  		  			<a href="<%=uicomponent.event("SendEmail", email)%>">  		  				
-			  		  				<%=(email == null ? "_" : subEmail)%>
-			  		  			</a>
+			  		  			<% if (!uicomponent.isPrintForm) { %>
+			  		  					<a href="<%=uicomponent.event("SendEmail", email)%>">
+			  		  						<%=(email == null ? "_" : subEmail)%>  		  				
+			  		  					</a>
+			  		  			<% } else { %>
+			  		  					 <%=(email == null ? "_" : subEmail)%>
+			  		  			<% } %>
+			  		  			
 			  		  		</span> 
 			  		  	</div>
 			  		  	<div class="InfoMember">
@@ -669,7 +681,9 @@
 			  		  	</div>
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">
+			  		  		<% if (!uicomponent.isPrintForm) { %>
 			  		  			<a href="<%=uicomponent.event("ViewDetails", contact.getId())%>">View Details</a>
+			  		  		<% } %>
 			  		  		</span>			  		  	
 			  		  	</div>
 			  		  </div>
