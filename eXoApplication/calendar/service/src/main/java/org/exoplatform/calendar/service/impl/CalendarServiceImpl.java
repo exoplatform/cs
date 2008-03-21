@@ -236,4 +236,8 @@ public class CalendarServiceImpl implements CalendarService{
   public void moveEvent(SessionProvider sProvider, String formCalendar, String toCalendar,String fromType, String toType, List<CalendarEvent> calEvents, String username) throws Exception {
     storage_.moveEvent(sProvider, formCalendar,toCalendar, fromType, toType, calEvents, username)  ;
   }
+
+  public void confirmInvitation(String fromUserId, String toUserId, String eventId, boolean isAccept) throws Exception {
+    storage_.confirmInvitation(fromUserId, toUserId, eventId, isAccept) ;
+  }
 }

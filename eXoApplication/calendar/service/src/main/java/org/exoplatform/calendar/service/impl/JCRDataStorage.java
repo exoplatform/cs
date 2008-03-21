@@ -26,7 +26,6 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -2059,7 +2058,9 @@ public class JCRDataStorage{
       break;
     }
   }
-
+  public void confirmInvitation(String fromUserId, String toUserId, String eventId, boolean isAccept){
+    
+  }
 }
 
 

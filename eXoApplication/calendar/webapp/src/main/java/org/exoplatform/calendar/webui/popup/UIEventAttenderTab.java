@@ -77,12 +77,7 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
 
   protected void updateParticipants(String values) throws Exception{
     Map<String, String> tmpMap = new HashMap<String, String>() ;
-    tmpMap.putAll(parMap_) ;
-    for(String id : parMap_.keySet()) {
-      removeChildById(id) ;
-    }
     List<String> newPars = new ArrayList<String>() ;
-    parMap_.clear() ;
     if(!CalendarUtils.isEmpty(values)) {
       for(String par : values.split(CalendarUtils.COMMA)) {
         String vl = tmpMap.get(par) ;
@@ -90,9 +85,11 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
         if(vl == null) newPars.add(par.trim()) ;  			
       }
     }
-    for(String id : parMap_.keySet()) {
+   /* for(String id : parMap_.keySet()) {
+      UIFormCheckBoxInput input = getUIFormCheckBoxInput(id) ;
+      if(input == null)
       addUIFormInput(new UIFormCheckBoxInput<Boolean>(id, id, false)) ;
-    }
+    }*/
     boolean isCheckFreeTime = getUIFormCheckBoxInput(FIELD_CHECK_TIME).isChecked() ;
     if(newPars.size() > 0 && isCheckFreeTime) {
       EventQuery eventQuery = new EventQuery() ;
@@ -107,7 +104,13 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
   }
 
 
-  private Map<String, String> getMap(){ return parMap_ ; }
+  private Map<String, String> getMap(){ 
+    for(String id : parMap_.keySet()) {
+      if(getUIFormCheckBoxInput(id) == null) addUIFormInput(new UIFormCheckBoxInput<Boolean>(id, id, false)) ;
+    }
+    return parMap_ ; 
+    
+  }
 
   protected String[] getParticipants() { return parMap_.keySet().toArray(new String[]{}) ; } 
 

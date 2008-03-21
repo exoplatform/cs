@@ -119,7 +119,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       if(sharing.getUIFormCheckBoxInput(group) != null)sharing.getUIFormCheckBoxInput(group).setChecked(false) ;
       else sharing.addUIFormInput(new UIFormCheckBoxInput<Boolean>(group, group, false)) ;
       if(sharing.getUIFormInputInfo(group+PERMISSION_SUB) == null) {
-        sharing.addUIFormInput(new UIFormInputInfo(group+PERMISSION_SUB ,group+PERMISSION_SUB, null)) ;
+        sharing.addUIFormInput(new UIFormStringInput(group+PERMISSION_SUB ,group+PERMISSION_SUB, null)) ;
 
         actions = new ArrayList<ActionData> () ;
         ActionData editPermission = new ActionData() ;
@@ -286,14 +286,17 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   @SuppressWarnings("unchecked")
   public void updateSelect(String selectField, String value) throws Exception {
     UIGroupCalendarTab shareTab = getChildById(INPUT_SHARE) ;
-    UIFormInputInfo fieldInput = shareTab.getUIFormInputInfo(selectField) ;
+    UIFormStringInput fieldInput = shareTab.getUIStringInput(selectField) ;
     StringBuilder sb = new StringBuilder() ;
     Map<String, String> temp = new HashMap<String, String>() ;
+    String tempS = value ;
     if(perms_.get(selectField) == null) {
-      temp.put(value, value.split(CalendarUtils.COLON)[0]) ;
+      if(value.split(CalendarUtils.COLON).length > 1) tempS = CalendarUtils.STAR + CalendarUtils.COLON + value.split(CalendarUtils.COLON)[0] ;
+      temp.put(value, tempS) ;
     } else {
       temp = perms_.get(selectField) ;
-      temp.put(value, value.split(CalendarUtils.COLON)[0]) ;
+      if(value.split(CalendarUtils.COLON).length > 1) tempS = CalendarUtils.STAR + CalendarUtils.COLON + value.split(CalendarUtils.COLON)[0] ;
+      temp.put(value, tempS) ;
     }
     perms_.put(selectField, temp) ;
     Map<String, String> tempMap = perms_.get(selectField) ;

@@ -377,4 +377,15 @@ public interface CalendarService {
   public boolean hasEditPermission(SessionProvider sProvider, String sharedCalendarId, String username) throws Exception ;
   
   public void moveEvent(SessionProvider sProvider, String formCalendar, String toCalendar, String formType, String toType, List<CalendarEvent> calEvents, String username) throws Exception ;
+  /**
+   * This method should:
+   * 1. update event attenders information
+   * 2. update free / busy time of user
+   * @param fromUserId : the inviter id
+   * @param toUserId : the recive id
+   * @param eventId
+   * @param isAccept
+   * @throws Exception
+   */
+  public void confirmInvitation(String fromUserId, String toUserId, String eventId, boolean isAccept) throws Exception ;
 }

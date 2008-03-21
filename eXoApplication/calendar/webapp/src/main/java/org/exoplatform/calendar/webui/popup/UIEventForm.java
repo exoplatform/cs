@@ -43,6 +43,7 @@ import org.exoplatform.mail.service.Message;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -202,7 +203,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         }
       }
       setParticipant(pars.toString()) ;
-      attenderTab.updateParticipants(pars.toString());
+      //attenderTab.updateParticipants(pars.toString());
       boolean isContains = false ;
       CalendarService calService = CalendarUtils.getCalendarService();
       List<EventCategory> listCategory = 
@@ -242,7 +243,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     UIEventAttenderTab uiAttenderTab = getChildById(TAB_EVENTATTENDER) ;
     uiAttenderTab.calendar_.setTime(time) ;
   }
-  
+
   public void update(String calType, List<SelectItemOption<String>> options) throws Exception{
     UIEventDetailTab uiEventDetailTab = getChildById(TAB_EVENTDETAIL) ;
     if(options != null) {
@@ -704,27 +705,31 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   } 
   protected void setParticipant(String values) throws Exception{
     ((UIFormInputWithActions)getChildById(TAB_EVENTSHARE)).getUIFormTextAreaInput(FIELD_PARTICIPANT).setValue(values) ;
-    //((UIEventAttenderTab)getChildById(TAB_EVENTATTENDER)).updateParticipants(values) ;
+    ((UIEventAttenderTab)getChildById(TAB_EVENTATTENDER)).updateParticipants(values) ;
   }
 
-  private void initParticipantCheckBox(String id) {
+  /*private void initParticipantCheckBox(String id) {
     UIEventAttenderTab eventAttenderTab = getChildById(TAB_EVENTATTENDER) ;
     UIFormCheckBoxInput<Boolean> input = eventAttenderTab.getChildById(id) ;
     if(input == null) eventAttenderTab.addUIFormInput(new UIFormCheckBoxInput<Boolean>(id,id, false)) ;
-  }
+  }*/
   private SessionProvider getSession() {
     return SessionProviderFactory.createSessionProvider() ;
   }
   private SessionProvider getSystemSession() {
     return SessionProviderFactory.createSystemProvider() ;
   }
-  
-  private void sendMail(MailService svr,String fromId,  String toId) throws Exception {
-   Account acc = svr.getDefaultAccount(getSession(), fromId) ;
-   Message message = new Message() ;
-   svr.sendMessage(getSession(), fromId, message);
+
+  private void sendMail(MailService svr, OrganizationService orSvr, String fromId,  String toId) throws Exception {
+    Account acc = svr.getDefaultAccount(getSession(), fromId) ;
+    Message message = new Message() ;
+    message.setMessageTo(toId) ;
+    User user = orSvr.getUserHandler().findUserByName(fromId) ;
+    message.setFrom(user.getEmail()) ;
+    //message.setContentType()
+    svr.sendMessage(getSession(), user.getUserName(), acc.getId(), message) ;
   }
-  
+
   static  public class AddCategoryActionListener extends EventListener<UIEventForm> {
     public void execute(Event<UIEventForm> event) throws Exception {
       UIEventForm uiForm = event.getSource() ;
@@ -800,7 +805,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       UISelectUserForm uiSelectUserForm = uiChildPopupAction.activate(UISelectUserForm.class, 680) ;
       uiSelectUserForm.init(((UIEventAttenderTab)uiForm.getChildById(TAB_EVENTATTENDER)).parMap_.keySet()) ;
       uiSelectUserForm.tabId_ = tabId ;
-      uiSelectUserForm.initSearchForm() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopupAction) ;      
     }
   }
@@ -811,19 +815,19 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       UIEventDetailTab uiEventDetailTab = uiForm.getChildById(TAB_EVENTDETAIL) ;
       UIEventAttenderTab uiEventAttenderTab =  uiForm.getChildById(TAB_EVENTATTENDER) ;
       boolean isCheckFreeTime = uiEventAttenderTab.getUIFormCheckBoxInput(UIEventAttenderTab.FIELD_CHECK_TIME).isChecked() ;
-      if(isCheckFreeTime) {
-        uiEventAttenderTab.moveNextDay() ;
-        uiEventDetailTab.getUIFormDateTimePicker(UIEventDetailTab.FIELD_FROM).setCalendar(uiEventAttenderTab.calendar_) ;
-        uiEventDetailTab.getUIFormDateTimePicker(UIEventDetailTab.FIELD_TO).setCalendar(uiEventAttenderTab.calendar_) ;
-        //uiForm.setEventFromDate(date, calSetting.getDateFormat(), calSetting.getTimeFormat()) ;
-        uiForm.setSelectedTab(TAB_EVENTATTENDER) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
-      } else {
+      // if(isCheckFreeTime) {
+      CalendarSetting calSetting = uiForm.getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
+      uiEventAttenderTab.moveNextDay() ;
+      uiEventDetailTab.getUIFormDateTimePicker(UIEventDetailTab.FIELD_FROM).setCalendar(uiEventAttenderTab.calendar_) ;
+      uiEventDetailTab.getUIFormDateTimePicker(UIEventDetailTab.FIELD_TO).setCalendar(uiEventAttenderTab.calendar_) ;
+      uiForm.setSelectedTab(TAB_EVENTATTENDER) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
+      /*} else {
         UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.check-free-busy-required", null));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
-      }
+      }*/
     }
   }
 
@@ -834,19 +838,19 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       UIEventDetailTab uiEventDetailTab = uiForm.getChildById(TAB_EVENTDETAIL) ;
       UIEventAttenderTab uiEventAttenderTab =  uiForm.getChildById(TAB_EVENTATTENDER) ;
       boolean isCheckFreeTime = uiEventAttenderTab.getUIFormCheckBoxInput(UIEventAttenderTab.FIELD_CHECK_TIME).isChecked() ;
-      if(isCheckFreeTime) {
-        uiEventAttenderTab.movePreviousDay() ;
-        uiEventDetailTab.getUIFormDateTimePicker(UIEventDetailTab.FIELD_FROM).setCalendar(uiEventAttenderTab.calendar_) ;
-        uiEventDetailTab.getUIFormDateTimePicker(UIEventDetailTab.FIELD_TO).setCalendar(uiEventAttenderTab.calendar_) ;
-        //uiForm.setEventFromDate(date, calSetting.getDateFormat(), calSetting.getTimeFormat()) ;
-        uiForm.setSelectedTab(TAB_EVENTATTENDER) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
-      } else {
+      /*if(isCheckFreeTime) {*/
+      uiEventAttenderTab.movePreviousDay() ;
+      uiEventDetailTab.getUIFormDateTimePicker(UIEventDetailTab.FIELD_FROM).setCalendar(uiEventAttenderTab.calendar_) ;
+      uiEventDetailTab.getUIFormDateTimePicker(UIEventDetailTab.FIELD_TO).setCalendar(uiEventAttenderTab.calendar_) ;
+      //uiForm.setEventFromDate(date, calSetting.getDateFormat(), calSetting.getTimeFormat()) ;
+      uiForm.setSelectedTab(TAB_EVENTATTENDER) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
+      /*} else {
         UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.check-free-busy-required", null));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
-      }
+      }*/
     }
   }
   static  public class DeleteUserActionListener extends EventListener<UIEventForm> {
@@ -856,16 +860,17 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       String values = uiForm.getParticipantValues() ;
       tabAttender.updateParticipants(values) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(tabAttender) ;
-      String[] pars = tabAttender.getParticipants() ;
       StringBuffer newPars = new StringBuffer() ;
-      for(String id : pars){
-        UIFormCheckBoxInput input = uiForm.getUIFormCheckBoxInput(id) ;
-        if(input != null && input.isChecked()) {
-          tabAttender.parMap_.remove(id) ;
-          uiForm.removeChildById(id) ;
-        }else {
-          if(newPars != null && newPars.length() > 0) newPars.append(",") ;
-          newPars.append(id) ;
+      for(String id : tabAttender.getParticipants()){
+        UIFormCheckBoxInput input = tabAttender.getUIFormCheckBoxInput(id) ;
+        if(input != null) {
+          if( input.isChecked()) {
+            tabAttender.parMap_.remove(id) ;
+            uiForm.removeChildById(id) ; 
+          }else {
+            if(!CalendarUtils.isEmpty(newPars.toString())) newPars.append(CalendarUtils.COMMA) ;
+            newPars.append(id) ;
+          }
         }
       }
       uiForm.setParticipant(newPars.toString()) ;
@@ -1055,7 +1060,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       }
     }
   }
-  
+
   static public class CancelActionListener extends EventListener<UIEventForm> {
     public void execute(Event<UIEventForm> event) throws Exception {
       System.out.println("CancelActionListener ========>") ;
