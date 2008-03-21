@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactGroup;
@@ -39,6 +40,7 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.core.UIPageIterator;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -62,6 +64,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
       @EventConfig(listeners = UIAddressForm.AddActionListener.class), 
       @EventConfig(listeners = UIAddressForm.ReplaceActionListener.class),
       @EventConfig(listeners = UIAddressForm.SearchActionListener.class), 
+      @EventConfig(listeners = UIAddressForm.ShowPageActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIAddressForm.ChangeGroupActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIAddressForm.CancelActionListener.class, phase = Phase.DECODE)
     }
@@ -75,6 +78,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
 
   private String recipientsType = "";
   protected String selectedAddressId_ = "" ;
+  private UIPageIterator uiPageIterator_ ;
   public void setRecipientsType(String type)  {
     recipientsType=type;
   }
@@ -87,6 +91,8 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     UIFormSelectBox fieldGroup = new UIFormSelectBox(FIELD_GROUP, FIELD_GROUP, getGroups()) ;
     fieldGroup.setOnChange("ChangeGroup") ;
     addUIFormInput(fieldGroup) ;
+    uiPageIterator_ = new UIPageIterator() ;
+    uiPageIterator_.setId("UICalendarAddressPage") ;
   }
   private List<SelectItemOption<String>> getGroups() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
@@ -114,15 +120,14 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
 
   public String[] getActions() { return new String[]{"Add", "Replace", "Cancel"}; }
 
-  private Map<String, Contact> contactMap_ = new HashMap<String, Contact>(); 
+  //private Map<String, Contact> contactMap_ = new HashMap<String, Contact>(); 
 
   public void activate() throws Exception {}
   public void deActivate() throws Exception {} 
   public List<Contact> getContacts() throws Exception { 
-    return new ArrayList<Contact>(contactMap_.values());
+    return new ArrayList<Contact>(uiPageIterator_.getCurrentPageData());
   }
   public void setContactList(String groupId) throws Exception {
-    List<Contact> contacts = new ArrayList<Contact>();
     ContactService contactSrv = getApplicationComponent(ContactService.class);
     ContactFilter filter = new ContactFilter() ;
     if(!CalendarUtils.isEmpty(groupId)) {
@@ -130,20 +135,21 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     }  
     DataPageList resultPageList = 
       contactSrv.searchContact(SessionProviderFactory.createSystemProvider(), CalendarUtils.getCurrentUser(), filter) ;
-    contacts = resultPageList.getAll() ;
-    setContactList(contacts);
+    setContactList(resultPageList.getAll());
   }
 
   public void setContactList(List<Contact> contactList) throws Exception {
     getUIFormSelectBox(FIELD_GROUP).setOptions(getGroups()) ;
-    contactMap_.clear();
+    ObjectPageList objPageList = new ObjectPageList(contactList, 10) ;
+    uiPageIterator_.setPageList(objPageList) ;
+    //contactMap_.clear();
     for (Contact contact : contactList) {
       UIFormCheckBoxInput uiCheckbox = getUIFormCheckBoxInput(contact.getId()) ;
       if(uiCheckbox == null) {
         uiCheckbox = new UIFormCheckBoxInput<Boolean>(contact.getId(), contact.getId(), false) ;
         addUIFormInput(uiCheckbox);
       } 
-      contactMap_.put(contact.getId(), contact);
+      //contactMap_.put(contact.getId(), contact);
     }
   }
   public List<Contact> getCheckedContact() throws Exception {
@@ -156,7 +162,13 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     }
     return contactList;
   }
-
+  public UIPageIterator  getUIPageIterator() {  return uiPageIterator_ ; }
+  public long getAvailablePage(){ return uiPageIterator_.getAvailablePage() ;}
+  public long getCurrentPage() { return uiPageIterator_.getCurrentPage();}
+  protected void updateCurrentPage(int page) throws Exception{
+    uiPageIterator_.setCurrentPage(page) ;
+  }
+  
   static public class AddActionListener extends EventListener<UIAddressForm> {
     public void execute(Event<UIAddressForm> event) throws Exception {
       System.out.println("======== >>>>>>UIAddressForm.AddActionListener") ;
@@ -298,6 +310,15 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       chilPopup.deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(chilPopup) ;
       //event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
+    }
+  }
+  
+  static  public class ShowPageActionListener extends EventListener<UIAddressForm> {
+    public void execute(Event<UIAddressForm> event) throws Exception {
+      UIAddressForm uiAddressForm = event.getSource() ;
+      int page = Integer.parseInt(event.getRequestContext().getRequestParameter(OBJECTID)) ;
+      uiAddressForm.updateCurrentPage(page) ; 
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressForm);           
     }
   }
 }

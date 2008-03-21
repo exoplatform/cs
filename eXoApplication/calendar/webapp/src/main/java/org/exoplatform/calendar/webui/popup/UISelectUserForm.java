@@ -75,28 +75,22 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
   public UIPageIterator uiIterator_ ;
 
   public List<User> getData() throws Exception {
-    List<User> users = new ArrayList<User>() ;
-    OrganizationService orService = CalendarUtils.getOrganizationService() ;
     for(Object obj : uiIterator_.getCurrentPageData()){
       User user = (User)obj ;
-      if(CalendarUtils.isEmpty(groupId_)) {
-        users.add(user) ;
-      } else {
-        for(Object gObj : orService.getGroupHandler().findGroupsOfUser(user.getUserName())){
-          Group g = (Group)gObj ;
-          if(groupId_.equals(g.getId())) users.add(user) ;
-        }
-      }
       if(getUIFormCheckBoxInput(user.getUserName()) == null)
         addUIFormInput(new UIFormCheckBoxInput<Boolean>(user.getUserName(),user.getUserName(), false)) ;
-    } 
-    for(String currentUsers : pars_) {
-      if(getUIFormCheckBoxInput(currentUsers) != null) 
-        getUIFormCheckBoxInput(currentUsers).setChecked(true) ;
     }
-    return  users;
+    for(String s : pars_) {
+      if(getUIFormCheckBoxInput(s) != null) getUIFormCheckBoxInput(s).setChecked(true) ;
+    }
+    return  new ArrayList<User>(uiIterator_.getCurrentPageData());
   }
   public UISelectUserForm() throws Exception {  
+    addUIFormInput(new UIFormStringInput(FIELD_KEYWORD, FIELD_KEYWORD, null)) ;
+    UIFormSelectBox uiSelectBox = new UIFormSelectBox(FIELD_GROUP, FIELD_GROUP, getGroups()) ;
+    addUIFormInput(uiSelectBox) ;
+    uiSelectBox.setOnChange("Change") ;
+    isShowSearch_ = true ;
     uiIterator_ = new UIPageIterator() ;
     uiIterator_.setId("UISelectUserPage") ;
   }
@@ -105,22 +99,17 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
   public long getCurrentPage() { return uiIterator_.getCurrentPage();}
 
   public void init(Collection<String> pars) throws Exception{
-    if(getChildren()!= null) getChildren().clear() ;
     OrganizationService service = getApplicationComponent(OrganizationService.class) ;
     ObjectPageList objPageList = new ObjectPageList(service.getUserHandler().getUserPageList(0).getAll(), 10) ;
     uiIterator_.setPageList(objPageList) ;
-    for(String s : pars) {
+    /*for(String s : pars) {
       if(getUIFormCheckBoxInput(s) != null) getUIFormCheckBoxInput(s).setChecked(true) ;
-    }
+    }*/
     pars_ = pars ;
   }
-  public void  initSearchForm() throws Exception{
-    addUIFormInput(new UIFormStringInput(FIELD_KEYWORD, FIELD_KEYWORD, null)) ;
-    UIFormSelectBox uiSelectBox = new UIFormSelectBox(FIELD_GROUP, FIELD_GROUP, getGroups()) ;
-    addUIFormInput(uiSelectBox) ;
-    uiSelectBox.setOnChange("Change") ;
-    isShowSearch_ = true ;
-  }
+  /*public void  initSearchForm() throws Exception{
+   
+  }*/
   private List<SelectItemOption<String>> getGroups() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     OrganizationService orgService = CalendarUtils.getOrganizationService() ;
@@ -236,26 +225,28 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
       UISelectUserForm uiForm = event.getSource() ;
       OrganizationService service = uiForm.getApplicationComponent(OrganizationService.class) ;
       String keyword = uiForm.getUIStringInput(UISelectUserForm.FIELD_KEYWORD).getValue();
-      uiForm.groupId_ = uiForm.getSelectedGroup() ;
-      uiForm.setSelectedGroup(uiForm.getSelectedGroup()) ;
-      if(keyword == null || keyword.trim().length() <= 0) keyword = "*" ;
-      keyword = "*" + keyword.toLowerCase() + "*" ;
-      Query q = new Query() ;
-      q.setUserName(keyword) ;
-      List results = new ArrayList() ;
-      results.addAll(service.getUserHandler().findUsers(q).getAll()) ;
-      q = new Query() ;
-      q.setEmail(keyword) ;
-      results.addAll(service.getUserHandler().findUsers(q).getAll()) ;
-      q = new Query() ;
-      q.setFirstName(keyword) ;
-      results.addAll(service.getUserHandler().findUsers(q).getAll()) ;
-      q = new Query() ;
-      q.setLastName(keyword) ;
-      results.addAll(service.getUserHandler().findUsers(q).getAll()) ;
-      uiForm.groupId_ = null ;
-      ObjectPageList objPageList = new ObjectPageList(results, 10) ;
-      uiForm.uiIterator_.setPageList(objPageList);
+      uiForm.groupId_ = null ; //uiForm.getSelectedGroup() ;
+      uiForm.setSelectedGroup(null) ;
+      if(CalendarUtils.isEmpty(keyword)) {
+        uiForm.init(uiForm.pars_) ;
+      }  else {
+        keyword = "*" + keyword.toLowerCase() + "*" ;
+        Query q = new Query() ;
+        q.setUserName(keyword) ;
+        List results = new ArrayList() ;
+        results.addAll(service.getUserHandler().findUsers(q).getAll()) ;
+        q = new Query() ;
+        q.setEmail(keyword) ;
+        results.addAll(service.getUserHandler().findUsers(q).getAll()) ;
+        q = new Query() ;
+        q.setFirstName(keyword) ;
+        results.addAll(service.getUserHandler().findUsers(q).getAll()) ;
+        q = new Query() ;
+        q.setLastName(keyword) ;
+        results.addAll(service.getUserHandler().findUsers(q).getAll()) ;
+        ObjectPageList objPageList = new ObjectPageList(results, 10) ;
+        uiForm.uiIterator_.setPageList(objPageList);
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
     }
   }

@@ -72,7 +72,7 @@
                       if (checkboxField != null) { uicomponent.renderField(checkboxField); }
                     %>
                   </td>
-                  <td class="text BorderAddress"><%=data.getUserName()%></td>
+                  <td class="text BorderAddress"><%=data.getFullName()%></td>
                    <td class="text BorderAddress"><%=data.getEmail()%></td>
                 </tr>
               <%}%>
