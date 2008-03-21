@@ -159,11 +159,12 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     getChildren().clear() ;
     contactMap.clear();
     UIContactPreview contactPreview = 
-      getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class) ;
+      getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class) ;    
     if(pageList_ != null) {
       List<Contact> contactList = pageList_.getPage(pageList_.getCurrentPage(),ContactUtils.getCurrentUser()) ;
-      if(contactList.size() == 0 && pageList_.getCurrentPage() > 1)
+      if(contactList.size() == 0 && pageList_.getCurrentPage() > 1) {
         contactList = pageList_.getPage(pageList_.getCurrentPage() - 1,ContactUtils.getCurrentUser()) ;
+      }        
       for(Contact contact : contactList) {
         UIFormCheckBoxInput<Boolean> checkbox = new UIFormCheckBoxInput<Boolean>(contact.getId(),contact.getId(), false) ;
         addUIFormInput(checkbox);
@@ -514,9 +515,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           UIWorkingContainer.class).findFirstComponentOfType(UIAddressBooks.class) ;     
       uiAddressBooks.setCopyAddress(null) ;
       List<Contact> copyContacts = new ArrayList<Contact>();
-      for (String id : contactIds) {
+      for (String id : contactIds)
         copyContacts.add(uiContacts.contactMap.get(id)) ;
-      }  
       uiAddressBooks.setCopyContacts(copyContacts) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBooks) ;
     }

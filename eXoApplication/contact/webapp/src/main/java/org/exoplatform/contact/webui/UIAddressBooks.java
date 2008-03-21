@@ -186,21 +186,9 @@ public class UIAddressBooks extends UIComponent {
         ContactUtils.getContactService().pasteAddressBook(SessionProviderFactory.createSessionProvider()
             , username, srcAddress, srcType, destAddress, destType) ;
       } else {
-       /*
-        for (String id : uiContacts.getContactMap().keySet())  
-          System.out.println("\n\n id 1 :" + id + "\n\n");
-        for (Contact c : uiContacts.getContactMap().values()) 
-          System.out.println("\n\n cc 2: " + c.getId() + "\n\n");
-        contactMap van refferent nen bi thay doi id
-        */
-        LinkedHashMap<String, Contact> contactMap = uiContacts.getContactMap() ;
         ContactUtils.getContactService().pasteContacts(SessionProviderFactory.createSessionProvider()
-            , username, destAddress, destType, uiAddressBook.getCopyContacts()) ;      
-        for (String id : contactMap.keySet()) {
-          contactMap.get(id).setId(id) ;
-        } 
+            , username, destAddress, destType, uiAddressBook.getCopyContacts()) ;
       }
-      
       // bi update neu la shared contacts 
       if (!uiContacts.isDisplaySearchResult() && uiAddressBook.selectedGroup != null) {
         uiContacts.updateList() ;
@@ -550,7 +538,7 @@ public class UIAddressBooks extends UIComponent {
       uiContacts.setViewListBeforePrint(uiContacts.getViewContactsList()) ;
       uiContacts.setViewContactsList(false) ;
       uiContacts.setPrintForm(true) ;
-      uiContacts.setSelectedTag(null) ;
+      //uiContacts.setSelectedTag(null) ;
 
       if (ContactUtils.isEmpty(uiAddressBook.selectedGroup) || 
           (!ContactUtils.isEmpty(uiAddressBook.selectedGroup) && !uiAddressBook.selectedGroup.equals(groupId))) {

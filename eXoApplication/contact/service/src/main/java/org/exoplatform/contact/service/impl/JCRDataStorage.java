@@ -20,8 +20,6 @@ package org.exoplatform.contact.service.impl;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -1678,20 +1676,121 @@ public class JCRDataStorage {
     }
   }
   
+  
   public void pasteContacts(SessionProvider sProvider, String username, String destAddress, String destType, List<Contact> contacts) throws Exception {
     for (Contact contact : contacts) {
-      contact.setId("Contact" + IdGenerator.generate()) ;
-      contact.setOwnerId(null) ;
-      contact.setOwner(false) ;
-      contact.setAddressBook(new String[] {destAddress}) ;
-      contact.setEditPermission(null) ;
-      contact.setViewPermission(null) ;
-      contact.setTags(null) ;
+//      contact.setId("Contact" + IdGenerator.generate()) ;
+//      contact.setOwnerId(null) ;
+//      contact.setOwner(false) ;
+//      contact.setAddressBook(new String[] {destAddress}) ;
+//      contact.setEditPermission(null) ;
+//      contact.setViewPermission(null) ;
+//      contact.setTags(null) ;
+      
       if (destType.equals(PRIVATE)) {
-        saveContact(sProvider, username, contact, true) ;   
+        Node contactHomeNode = getUserContactHome(sProvider, username);
+        saveCopyContact(contactHomeNode, contact, destAddress) ;
+        contactHomeNode.getSession().save(); 
       } else if (destType.equals(SHARED)) {
-        saveContactToSharedAddressBook(username, destAddress, contact, true) ;
+        Node sharedAddressBookMock = getSharedAddressBook(username) ;
+        PropertyIterator iter = sharedAddressBookMock.getReferences() ;
+        Node addressBook ;      
+        while(iter.hasNext()) {
+          addressBook = iter.nextProperty().getParent() ;
+          if(addressBook.getName().equals(destAddress)) {
+            Node contactHomeNode = addressBook.getParent().getParent().getNode(CONTACTS) ;
+            saveCopyContact(contactHomeNode, contact, destAddress) ;
+            contactHomeNode.getSession().save() ;   
+            return ;
+          }
+        }        
+      //  saveContactToSharedAddressBook(username, destAddress, contact, true) ;
       }       
     }
   }
+  
+  private void saveCopyContact(Node contactHomeNode, Contact contact, String destAddress) throws Exception {
+    Node contactNode;
+    String newId = "Contact" + IdGenerator.generate() ;
+    contactNode = contactHomeNode.addNode(newId, "exo:contact"); 
+    contactNode.setProperty("exo:id", newId);
+ 
+    contactNode.setProperty("exo:fullName", contact.getFullName());
+    contactNode.setProperty("exo:firstName", contact.getFirstName());
+    contactNode.setProperty("exo:lastName", contact.getLastName());
+    contactNode.setProperty("exo:nickName", contact.getNickName());
+    contactNode.setProperty("exo:gender", contact.getGender()) ;
+    GregorianCalendar dateTime = new GregorianCalendar() ;
+    Date birthday = contact.getBirthday() ;
+    if (birthday != null) {
+      dateTime.setTime(birthday) ;    
+      contactNode.setProperty("exo:birthday", dateTime) ;
+    }
+    contactNode.setProperty("exo:jobTitle", contact.getJobTitle());
+    contactNode.setProperty("exo:emailAddress", contact.getEmailAddress());
+    
+    contactNode.setProperty("exo:exoId", contact.getExoId());
+    contactNode.setProperty("exo:googleId", contact.getGoogleId());
+    contactNode.setProperty("exo:msnId", contact.getMsnId());
+    contactNode.setProperty("exo:aolId", contact.getAolId());
+    contactNode.setProperty("exo:yahooId", contact.getYahooId());
+    contactNode.setProperty("exo:icrId", contact.getIcrId());
+    contactNode.setProperty("exo:skypeId", contact.getSkypeId());
+    contactNode.setProperty("exo:icqId", contact.getIcqId());
+    
+    contactNode.setProperty("exo:homeAddress", contact.getHomeAddress());
+    contactNode.setProperty("exo:homeCity", contact.getHomeCity());
+    contactNode.setProperty("exo:homeState_province", contact.getHomeState_province());
+    contactNode.setProperty("exo:homePostalCode", contact.getHomePostalCode());
+    contactNode.setProperty("exo:homeCountry", contact.getHomeCountry());
+    contactNode.setProperty("exo:homePhone1", contact.getHomePhone1());
+    contactNode.setProperty("exo:homePhone2", contact.getHomePhone2());
+    contactNode.setProperty("exo:homeFax", contact.getHomeFax());
+    contactNode.setProperty("exo:personalSite", contact.getPersonalSite());
+    
+    contactNode.setProperty("exo:workAddress", contact.getWorkAddress());
+    contactNode.setProperty("exo:workCity", contact.getWorkCity());
+    contactNode.setProperty("exo:workState_province", contact.getWorkStateProvince());
+    contactNode.setProperty("exo:workPostalCode", contact.getWorkPostalCode());
+    contactNode.setProperty("exo:workCountry", contact.getWorkCountry());
+    contactNode.setProperty("exo:workPhone1", contact.getWorkPhone1());
+    contactNode.setProperty("exo:workPhone2", contact.getWorkPhone2());
+    contactNode.setProperty("exo:workFax", contact.getWorkFax());
+    contactNode.setProperty("exo:mobilePhone", contact.getMobilePhone());
+    contactNode.setProperty("exo:webPage", contact.getWebPage());
+    
+    contactNode.setProperty("exo:note", contact.getNote());
+    contactNode.setProperty("exo:categories", new String[] {destAddress});
+//    contactNode.setProperty("exo:tags", contact.getTags());
+//    contactNode.setProperty("exo:editPermission", contact.getEditPermission());
+//    contactNode.setProperty("exo:viewPermission", contact.getViewPermission());    
+    if (contact.getLastUpdated() != null) {
+      dateTime.setTime(contact.getLastUpdated()) ;
+      contactNode.setProperty("exo:lastUpdated", dateTime);
+    }
+//  save image to contact
+    ContactAttachment attachment = contact.getAttachment() ;
+    if (attachment != null) {
+      if (attachment.getFileName() != null) {
+        Node nodeFile = null ;
+        try {
+          nodeFile = contactNode.getNode("image") ;
+        } catch (PathNotFoundException ex) {
+          nodeFile = contactNode.addNode("image", "nt:file");
+        }
+        Node nodeContent = null ;
+        try {
+          nodeContent = nodeFile.getNode("jcr:content") ;
+        } catch (PathNotFoundException ex) {
+          nodeContent = nodeFile.addNode("jcr:content", "nt:resource") ;
+        }
+        nodeContent.setProperty("jcr:mimeType", attachment.getMimeType()) ;
+        nodeContent.setProperty("jcr:data", attachment.getInputStream());
+        nodeContent.setProperty("jcr:lastModified", Calendar.getInstance().getTimeInMillis());
+      }
+    }else {
+      if(contactNode.hasNode("image")) contactNode.getNode("image").remove() ;
+    }    
+  }
+  
 }

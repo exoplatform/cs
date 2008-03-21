@@ -19,6 +19,7 @@ package org.exoplatform.contact.webui;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +33,7 @@ import org.exoplatform.contact.webui.popup.UIExportForm;
 import org.exoplatform.contact.webui.popup.UIEditTagForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -53,8 +55,8 @@ import org.exoplatform.webui.event.EventListener;
         @EventConfig(listeners = UITags.SelectTagActionListener.class),
         @EventConfig(listeners = UITags.EditTagActionListener.class),
         @EventConfig(listeners = UITags.ExportAddressActionListener.class),
-        @EventConfig(listeners = UITags.DeleteTagActionListener.class,
-            confirm = "UITags.msg.confirm-delete")        
+        @EventConfig(listeners = UITags.PrintActionListener.class),
+        @EventConfig(listeners = UITags.DeleteTagActionListener.class, confirm = "UITags.msg.confirm-delete")        
     }
 )
 public class UITags extends UIComponent {
@@ -72,14 +74,14 @@ public class UITags extends UIComponent {
     return tags;
   }
   public Map<String, Tag> getTagMap() { return tagMap_ ; }
-  
+/*  
   public boolean canPrint(String tagId) {        
     if (ContactUtils.isEmpty(selectedTag_) || ContactUtils.isEmpty(tagId) || !tagId.equals(selectedTag_) 
         || getAncestorOfType(UIWorkingContainer.class).findFirstComponentOfType(UIContacts.class).getViewContactsList()) {
       return false ;
     }
     return true ;
-  }
+  }*/
   public void setSelectedTag(String id) { selectedTag_ = id ; }
   public String getSelectedTag() { return selectedTag_ ; }
   
@@ -163,6 +165,31 @@ public class UITags extends UIComponent {
         uiWorkingContainer.findFirstComponentOfType(UIContactPreview.class).setContact(null) ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
+    }
+  }
+  
+  static  public class PrintActionListener extends EventListener<UITags> {
+    public void execute(Event<UITags> event) throws Exception {
+      UITags uiTags = event.getSource() ;
+      String tagId = event.getRequestContext().getRequestParameter(OBJECTID); 
+      UIWorkingContainer workingContainer = uiTags.getAncestorOfType(UIWorkingContainer.class) ;
+      UIContacts uiContacts = workingContainer.findFirstComponentOfType(UIContacts.class) ;      
+      UIContactPreview uiContactPreview = workingContainer.findFirstComponentOfType(UIContactPreview.class) ;
+      uiContactPreview.setRendered(false) ;
+      uiContacts.setViewListBeforePrint(uiContacts.getViewContactsList()) ;
+      uiContacts.setViewContactsList(false) ;
+      uiContacts.setPrintForm(true) ;
+      //uiContacts.setSelectedGroup(null) ;
+
+      if (ContactUtils.isEmpty(uiTags.selectedTag_) || 
+          (!ContactUtils.isEmpty(uiTags.selectedTag_) && !uiTags.selectedTag_.equals(tagId))) {
+        List<Contact> contacts = ContactUtils.getContactService().getContactPageListByTag(
+            SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), tagId).getAll() ;
+        LinkedHashMap<String, Contact> contactMap = new LinkedHashMap<String, Contact> () ;
+        for (Contact contact : contacts) contactMap.put(contact.getId(), contact) ;
+        uiContacts.setContactMap(contactMap) ;
+      }
+      event.getRequestContext().addUIComponentToUpdateByAjax(workingContainer) ;  
     }
   }
   
