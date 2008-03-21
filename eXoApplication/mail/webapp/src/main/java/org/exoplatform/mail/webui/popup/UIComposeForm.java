@@ -441,7 +441,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       } 
       
       try {
-        message = mailSvr.sendMessage(SessionsUtils.getSessionProvider(), usename, accountId, message) ;
+
+        mailSvr.sendMessage(SessionsUtils.getSessionProvider(), usename, message) ;
       } catch(Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-error", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -563,14 +564,12 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       UIComposeForm uiComposeForm = event.getSource() ;
       UIPopupActionContainer uiActionContainer = uiComposeForm.getAncestorOfType(UIPopupActionContainer.class) ;    
       UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
-
-      UIAddressForm uiAddressForm = uiChildPopup.activate(UIAddressForm.class, 700) ; 
+      UIAddressForm uiAddressForm = uiChildPopup.activate(UIAddressForm.class, 650) ; 
       uiAddressForm.setRecipientsType(FIELD_TO);
-      if (uiComposeForm.getToContacts() != null && uiComposeForm.getToContacts().size() > 0) {        
-        uiAddressForm.setAlreadyCheckedContact(uiComposeForm.getToContacts());      
-        uiAddressForm.setContactList();
-      }
-      
+      if (uiComposeForm.getToContacts() != null && uiComposeForm.getToContacts().size() > 0) {
+        uiAddressForm.setAlreadyCheckedContact(uiComposeForm.getToContacts());
+      } 
+      uiAddressForm.setContactList("") ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
     }
   }
@@ -579,12 +578,12 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       UIComposeForm uiComposeForm = event.getSource() ;
       UIPopupActionContainer uiActionContainer = uiComposeForm.getAncestorOfType(UIPopupActionContainer.class) ;    
       UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
-      UIAddressForm uiAddressForm = uiChildPopup.activate(UIAddressForm.class,700) ; 
+      UIAddressForm uiAddressForm = uiChildPopup.activate(UIAddressForm.class,650) ; 
       uiAddressForm.setRecipientsType(FIELD_CC);
       if (uiComposeForm.getCcContacts()!= null && uiComposeForm.getCcContacts().size()>0) {        
        uiAddressForm.setAlreadyCheckedContact(uiComposeForm.getCcContacts());      
-        uiAddressForm.setContactList();
       }
+      uiAddressForm.setContactList("") ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
     }
   }
@@ -592,17 +591,14 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   static public class ToBCCActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiComposeForm = event.getSource() ;
-      
       UIPopupActionContainer uiActionContainer = uiComposeForm.getAncestorOfType(UIPopupActionContainer.class) ;    
       UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
-      UIAddressForm uiAddressForm = uiChildPopup.activate(UIAddressForm.class,700) ; 
-      
+      UIAddressForm uiAddressForm = uiChildPopup.activate(UIAddressForm.class,650) ; 
       uiAddressForm.setRecipientsType(FIELD_BCC);
       if (uiComposeForm.getCcContacts()!= null && uiComposeForm.getBccContacts().size()>0) {        
-       uiAddressForm.setAlreadyCheckedContact(uiComposeForm.getBccContacts());      
-        uiAddressForm.setContactList();
+       uiAddressForm.setAlreadyCheckedContact(uiComposeForm.getBccContacts());
       }
-      
+      uiAddressForm.setContactList("") ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
     }   
   }
@@ -610,8 +606,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   static public class ChangePriorityActionListener extends EventListener<UIComposeForm> {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiForm = event.getSource() ;
-      String priority = event.getRequestContext().getRequestParameter(OBJECTID) ;  
-      uiForm.setPriority(Long.valueOf(priority));
+      String priority = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      uiForm.setPriority(Long.valueOf(priority)) ;
     }
   }
   
@@ -621,19 +617,19 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       boolean isVisualEditor = Boolean.valueOf(event.getRequestContext().getRequestParameter(OBJECTID)) ;  
       String content = "";
       if (isVisualEditor) {
-        content = uiForm.getUIFormTextAreaInput(FIELD_MESSAGECONTENT).getValue();
+        content = uiForm.getUIFormTextAreaInput(FIELD_MESSAGECONTENT).getValue() ;
         uiForm.removeChildById(FIELD_MESSAGECONTENT);
         UIFormWYSIWYGInput wysiwyg = new UIFormWYSIWYGInput(FIELD_MESSAGECONTENT, null, null, true) ;
-        uiForm.addUIFormInput(wysiwyg);
+        uiForm.addUIFormInput(wysiwyg) ;
         wysiwyg.setValue(content);
       } else {
-        content = uiForm.getChild(UIFormWYSIWYGInput.class).getValue();
+        content = uiForm.getChild(UIFormWYSIWYGInput.class).getValue() ;
         uiForm.removeChild(UIFormWYSIWYGInput.class) ;
         UIFormTextAreaInput textArea = new UIFormTextAreaInput(FIELD_MESSAGECONTENT, null, null);
         textArea.setValue(content);
         uiForm.addUIFormInput(textArea) ;
       }
-      uiForm.setVisualEditor(isVisualEditor);
+      uiForm.setVisualEditor(isVisualEditor) ;
     }
   }
 }

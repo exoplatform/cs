@@ -1,8 +1,11 @@
 <%
  import org.exoplatform.contact.service.Contact;
-%>
-  
-<% uiform.begin() %>
+ uiform.begin() 
+ def rcontext = _ctx.getRequestContext() ;
+ String actionLink = uicomponent.event('SearchContact') ;
+ rcontext.getJavascriptManager().addJavascript('eXo.cs.Utils.captureInput("'+uiform.CONTACT_SEARCH+'","'+actionLink+'") ;') ;
+ rcontext.getJavascriptManager().addJavascript('eXo.cs.CheckBox.init("' + uiform.id + '"); ') ;
+ %>
 <div class="UIInsertAddress">
   <div class="InsertAddressContainer">
     <div class="UISearch">
@@ -37,7 +40,7 @@
         <table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
             <thead>
               <tr>
-                <th style="width: 20px;" class="BorderAddress"><input type="checkbox" class="checkbox" value="4" onclick="eXo.mail.UIMailPortlet.checkAll(this);"/></th>
+                <th style="width: 20px;" class="BorderAddress"><input type="checkbox" class="checkbox" value="4" /></th>
                 <th class="BorderAddress">
                   <div class="BlueDownArrowIcon">
                     <div class="Label">Name</div>
@@ -67,7 +70,7 @@
               <%}%>
         </tbody>
         </table>      
-            
+        <%_ctx.include("app:/templates/mail/webui/UIPageIterator.gtmpl");%>  
       </div>
       
     </div>
@@ -79,10 +82,17 @@
       <tr>
         <td align="center"> 
       
-         <a href="<%=uicomponent.event("Save")%>" class="ActionButton LightBlueStyle">
+         <a href="<%=uicomponent.event("Add")%>" class="ActionButton LightBlueStyle">
             <div class="ButtonLeft">
               <div class="ButtonRight">
-                <div class="ButtonMiddle"> Ok </div>
+                <div class="ButtonMiddle"> Add Address </div>
+              </div>
+            </div>
+          </a>
+          <a href="<%=uicomponent.event("Replace")%>" class="ActionButton LightBlueStyle">
+            <div class="ButtonLeft">
+              <div class="ButtonRight">
+                <div class="ButtonMiddle"> Replace </div>
               </div>
             </div>
           </a>
