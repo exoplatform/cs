@@ -124,6 +124,7 @@ UICalendarPortlet.prototype.getWeekNumber = function(now) {
 /*
  * This function to apply common setting for portlet
  */
+
 UICalendarPortlet.prototype.setting = function() {
 	// paras 1: time interval, paras 2: working time, paras 3: time format type, paras 4: portletid
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
@@ -836,6 +837,15 @@ UICalendarPortlet.prototype.showContextMenu = function(compid) {
 	UIContextMenu.attach("EventBoxes","UIDayViewEventRightMenu") ;
 	UIContextMenu.attach(["EventWeekContent","EventAlldayContainer"],"UIWeekViewRightMenu") ;
 	UIContextMenu.attach("UIListViewRow","UIListViewEventRightMenu") ;
+	//this.fixIE() ;
+} ;
+
+UICalendarPortlet.prototype.fixIE = function(){
+	if (eXo.core.Browser.isFF()) return ;
+	var portlet = document.getElementById(this.portletName) ;
+	var uiResizeBlock = eXo.core.DOMUtil.findAncestorByClass(portlet,"UIResizableBlock") ;
+	if(!uiResizeBlock && document.getElementById("UIPageDesktop")) return ;
+	uiResizeBlock.style.position = "relative" ;
 } ;
 
 UICalendarPortlet.prototype.listViewCallack = function(evt){
@@ -1176,6 +1186,23 @@ UICalendarPortlet.prototype.checkCategoryFilter = function() {
 } ;
 
 /* EOF filter */
+UICalendarPortlet.prototype.switchListView = function(obj, evt){
+	var menu = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div", "UIPopupCategory") ;
+	if(eXo.core.Browser.isIE6()) {
+		var size = {
+			top: obj.offsetHeight ,
+			left: "-" + obj.offsetWidth
+		} ;
+		this.setStyle(menu, size) ;
+	} else{
+		var size = {
+			marginLeft: "-18px"
+		} ;
+		this.setStyle(menu, size) ;
+	}
+	eXo.webui.UIPopupSelectCategory.show(obj, evt);
+} ;
+
 UICalendarPortlet.prototype.showView = function(obj, evt) {
 	var _e = window.event || evt ;
 	_e.cancelBubble = true ;	

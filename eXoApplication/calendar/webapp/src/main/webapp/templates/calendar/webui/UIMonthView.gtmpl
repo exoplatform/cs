@@ -7,10 +7,11 @@
 	import org.exoplatform.calendar.CalendarUtils;
 	uiform.begin() ;
  	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
-	def rcontext = _ctx.getRequestContext() ;  
+	def rcontext = _ctx.getRequestContext() ;
   rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarDragDrop','/calendar/javascript/') ;
   rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarMan','/calendar/javascript/') ;
-  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkFilter() ;') ;
+  rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.UICalendarPortlet.checkFilter() ;') ;
+//  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkFilter() ;') ;
  	int currentDay = uicomponent.getCurrentDay() ;
 	int currentMonth = uicomponent.getCurrentMonth() ;
 	String currentMonthName = uicomponent.getMonthName(currentMonth) ;
@@ -81,7 +82,7 @@
 	  			%>			
   				<div style="clear: left;"><span></span></div>
   			</div>
-				<div class="RowContainerDay" style="position:relative;" lastUpdatedId="<%=uicomponent.getLastUpdatedEventId()%>">
+				<div class="RowContainerDay" style="position:relative;" onresize="eXo.calendar.UICalendarMan.initMonth() ;" lastUpdatedId="<%=uicomponent.getLastUpdatedEventId()%>">
 				<%
 					startMonh =  uicomponent.getBeginDateOfMonth() ;
 					endMonth =  uicomponent.getEndDateOfMonth() ;					

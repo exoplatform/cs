@@ -26,14 +26,8 @@ rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.ge
 		<%}%>
 		<%if(uicomponent instanceof UIListView){%>
 		<div class="SeparatorLine"><span></span></div>
-		<div class="ViewTypeSelect" style="cursor:pointer;" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
-			<div class="ControlButton">
-				<div class="IconHolder <%=uicomponent.getViewType()%>Icon">
-					<%=uicomponent.getViewType()%>
-				</div>
-			</div>
+		<div class="ViewTypeSelect" style="cursor:pointer; position:relative ;" onclick="eXo.calendar.UICalendarPortlet.switchListView(this, event);">
 			<% /*Begin  ViewTypeSelect Popup Menu*/ %>
-				 <div style="position: relative;"> 
 	  			<div class="UIPopupCategory" style="display: none;">
 	  				<div class="UIRightClickPopupMenu" style="display: block;">
 	  					<div class="UIContextMenuContainer">
@@ -68,8 +62,12 @@ rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.ge
 		      		</div>		
 					  </div>
 	  			</div>
-	  	 </div> 
   	<% /*End Popup Menu*/ %>
+			<div class="ControlButton">
+				<div class="IconHolder <%=uicomponent.getViewType()%>Icon">
+					<%=uicomponent.getViewType()%>
+				</div>
+			</div>
 	
 		</div>
 		<%}%>

@@ -577,7 +577,7 @@ GUIMan.prototype.initMonth = function(){
     this.tableData[i] = rowData;
   }
   this.paintMonth();
-  this.setDynamicSize4Month();
+  if(eXo.core.Browser.isFF()) this.setDynamicSize4Month();
   this.scrollTo();
   this.initDND();
 };
@@ -600,7 +600,7 @@ GUIMan.prototype.initWeek = function() {
   this.eventAlldayNode = DOMUtil.findFirstDescendantByClass(EventMan.rootNode, 'td', 'EventAllday');
   this.dayNodes = EventMan.dayNodes;
   this.paintWeek();
-  this.setDynamicSize4Week();
+  if(eXo.core.Browser.isFF()) this.setDynamicSize4Week();
   this.initSelectionDayEvent();
   this.initSelectionDaysEvent();
 };
@@ -954,8 +954,9 @@ GUIMan.prototype.setDynamicSize4Month = function() {
   var totalWidth = cellWidth ;
   for (var i=0; i<events.length; i++) {
     var eventNode = events[i].rootNode;
-    eventNode.style.width = parseFloat((parseInt(eventNode.style.width)- i)/totalWidth)*100 + '%';
-    eventNode.style.left = parseFloat((parseInt(eventNode.style.left)- i)/totalWidth)*100 + '%';
+		var d = new Date(events[i].starttime) ;
+    eventNode.style.width = parseFloat((parseInt(eventNode.style.width))/totalWidth)*100 + '%';
+    eventNode.style.left = parseFloat((parseInt(eventNode.style.left))/totalWidth)*100 + '%';
     for (var j=0; j<events[i].cloneNodes.length; j++) {
       var tmpNode = events[i].cloneNodes[j];
       tmpNode.style.width = parseFloat(parseInt(tmpNode.style.width)/totalWidth)*100 + '%';

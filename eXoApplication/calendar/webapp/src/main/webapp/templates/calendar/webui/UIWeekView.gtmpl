@@ -24,7 +24,7 @@
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarMan.initWeek() ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UIWeekView.init() ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkFilter() ;') ;
-	rcontext.getJavascriptManager().addOnResizeJavascript('eXo.calendar.UIWeekView.setSize') ;
+	rcontext.getJavascriptManager().addOnResizeJavascript('eXo.calendar.UIWeekView.onResize') ;
  	monthViewAction = uicomponent.TYPE_MONTH +"&currentTime="+ uicomponent.getCurrentCalendar().getTimeInMillis();
 	yearViewAction = uicomponent.TYPE_YEAR +"&currentTime="+ uicomponent.getCurrentCalendar().getTimeInMillis();
  	
@@ -114,7 +114,7 @@
                 <span></span>
               </div>
             </td>
-            <td colspan="7" class="EventAllday">
+            <td colspan="7" class="EventAllday" onresize="eXo.calendar.UICalendarMan.initWeek() ;">
               <div style="position: relative;">
                 <% for (event in uicomponent.getEventList().values()) {
 									begindate =  event.getFromDateTime().getTime() ;  
@@ -156,7 +156,7 @@
         </tbody>
       </table>
     </div>
-    <div class="EventWeekContent" style="position: relative;">
+    <div class="EventWeekContent" style="position: relative;" onresize="eXo.calendar.UIWeekView.setSize() ;">
       <div class="EventBoard">
         <%
 				cl = uicomponent.getBeginDateOfWeek() ;				
@@ -197,7 +197,7 @@
           <div style="clear: left;">
             <span></span>
           </div>
-          <div class="EventContainer">
+          <div unselectable="on" class="EventContainer">
             $event.summary</div>
           <div class="ResizeEventContainer" unselectable="on">
             <span></span>

@@ -62,6 +62,11 @@ UIWeekView.prototype.distributeEvent = function() {
 	}
 } ;
 
+UIWeekView.prototype.onResize = function() {
+	if(!eXo.core.Browser.isFF()) return ;
+	eXo.calendar.UIWeekView.setSize() ;
+} ;
+
 UIWeekView.prototype.setSize = function() {
 	var UIWeekView = eXo.calendar.UIWeekView ;
 	var len = UIWeekView.cols.length ;
@@ -70,48 +75,48 @@ UIWeekView.prototype.setSize = function() {
 	}
 } ;
 
-//UIWeekView.prototype.adjustWidth = function(el) {
-//	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
-//	var inter = UICalendarPortlet.getInterval(el) ;
-//	if (el.length <= 0) return ;
-//	var width = "" ;
-//	for(var i = 0 ; i < inter.length ; i ++) {
-//		var totalWidth = (arguments.length > 1) ? arguments[1] : parseFloat(100) ;
-//		var offsetLeft = parseFloat(0) ;
-//		var left = parseFloat(0) ;
-//		if(arguments.length > 2) {
-//			offsetLeft = parseFloat(arguments[2]) ;
-//			left = arguments[2] ;
-//		} 
-//		var len = (inter[i+1] - inter[i]) ;
-//		if(isNaN(len)) continue ;
-//		var mark = null ;
-//		if (i > 0){
-//			for(var l = 0 ; l < inter[i] ; l ++) {
-//				if((el[inter[i]].offsetTop > el[l].offsetTop) && (el[inter[i]].offsetTop < (el[l].offsetTop + el[l].offsetHeight))) {
-//					mark = l ;					
-//				}
-//			}			
-//			if (mark != null) {
-//				offsetLeft = parseFloat(el[mark].style.left) + parseFloat(el[mark].style.width) ;
-//			}
-//		}
-//		var n = 0 ;
-//		for(var j = inter[i]; j < inter[i+1] ; j++) {
-//			if(mark != null) {				
-//				width = parseFloat((totalWidth + left - parseFloat(el[mark].style.left) - parseFloat(el[mark].style.width))/len) ;
-//			} else {
-//				width = parseFloat(totalWidth/len) ;
-//			}
-//			el[j].style.width = width + "px" ;
-//			if (el[j-1]&&(len > 1)) el[j].style.left = offsetLeft + parseFloat(el[j-1].style.width)*n +  "px" ;
-//			else {
-//				el[j].style.left = offsetLeft +  "px" ;
-//			}
-//			n++ ;
-//		}
-//	}
-//} ;
+UIWeekView.prototype.adjustWidth = function(el) {
+	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
+	var inter = UICalendarPortlet.getInterval(el) ;
+	if (el.length <= 0) return ;
+	var width = "" ;
+	for(var i = 0 ; i < inter.length ; i ++) {
+		var totalWidth = (arguments.length > 1) ? arguments[1] : parseFloat(100) ;
+		var offsetLeft = parseFloat(0) ;
+		var left = parseFloat(0) ;
+		if(arguments.length > 2) {
+			offsetLeft = parseFloat(arguments[2]) ;
+			left = arguments[2] ;
+		} 
+		var len = (inter[i+1] - inter[i]) ;
+		if(isNaN(len)) continue ;
+		var mark = null ;
+		if (i > 0){
+			for(var l = 0 ; l < inter[i] ; l ++) {
+				if((el[inter[i]].offsetTop > el[l].offsetTop) && (el[inter[i]].offsetTop < (el[l].offsetTop + el[l].offsetHeight))) {
+					mark = l ;					
+				}
+			}			
+			if (mark != null) {
+				offsetLeft = parseFloat(el[mark].style.left) + parseFloat(el[mark].style.width) ;
+			}
+		}
+		var n = 0 ;
+		for(var j = inter[i]; j < inter[i+1] ; j++) {
+			if(mark != null) {				
+				width = parseFloat((totalWidth + left - parseFloat(el[mark].style.left) - parseFloat(el[mark].style.width))/len) ;
+			} else {
+				width = parseFloat(totalWidth/len) ;
+			}
+			el[j].style.width = width + "px" ;
+			if (el[j-1]&&(len > 1)) el[j].style.left = offsetLeft + parseFloat(el[j-1].style.width)*n +  "px" ;
+			else {
+				el[j].style.left = offsetLeft +  "px" ;
+			}
+			n++ ;
+		}
+	}
+} ;
 
 UIWeekView.prototype.showInCol = function(obj) {
 	var items = eXo.calendar.UICalendarPortlet.getElements(obj) ;
@@ -122,8 +127,8 @@ UIWeekView.prototype.showInCol = function(obj) {
 	var left = parseFloat((eXo.core.Browser.findPosXInContainer(obj, container) - 1)/container.offsetWidth)*100 ;
 	var width = parseFloat((obj.offsetWidth - 2)/container.offsetWidth)*100 ;
 	items = eXo.calendar.UICalendarPortlet.sortByAttribute(items, "starttime") ;
-	//UIWeekView.adjustWidth(items, width, left) ;
-	eXo.calendar.UICalendarPortlet.adjustWidth(items, width, left) ;
+	if(!eXo.core.Browser.isFF()) UIWeekView.adjustWidth(items, obj.offsetWidth, eXo.core.Browser.findPosXInContainer(obj, container)) ;
+	else eXo.calendar.UICalendarPortlet.adjustWidth(items, width, left) ;
 } ;
 
 UIWeekView.prototype.dragStart = function(evt) {
