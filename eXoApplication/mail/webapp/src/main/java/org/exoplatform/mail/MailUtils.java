@@ -35,6 +35,7 @@ import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.scheduler.JobSchedulerService;
 import org.quartz.JobDetail;
 
@@ -71,6 +72,15 @@ public class MailUtils {
       }
     }
     return null ;
+  }
+  
+  static public OrganizationService getOrganizationService() throws Exception {
+    return (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+  }
+  
+  public static String encodeJCRText(String str) {
+    return str.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").
+    replaceAll("'", "&apos;").replaceAll("\"", "&quot;") ;
   }
   
   public static String convertSize(long size) throws Exception {
