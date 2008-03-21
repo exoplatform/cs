@@ -103,6 +103,8 @@ public class ContactFilter {
     
     //  desclared full text query
     if(text != null && text.length() > 0) {
+      
+      //System.out.println("\n\n 11111111111111 \n\n");
       stringBuffer.append("jcr:contains(., '").append(text).append("')") ;
       hasConjuntion = true ;
     }

@@ -72,6 +72,7 @@ public class NewUserListener extends UserEventListener {
     	contact.setLastUpdated(cal.getTime()) ;
     	List<String> groupIds = new ArrayList<String>()  ;
     	groupIds.add(group.getId()) ;
+      
       OrganizationService organizationService = 
         (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
       Object[] objGroupIds = organizationService.getGroupHandler().findGroupsOfUser(user.getUserName()).toArray() ;

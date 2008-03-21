@@ -20,6 +20,8 @@ package org.exoplatform.contact.service.impl;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -1486,7 +1488,8 @@ public class JCRDataStorage {
     }
   }
   public DataPageList searchContact(SessionProvider sysProvider, String username, ContactFilter filter)throws Exception {
-    List<Contact> contacts = new ArrayList<Contact>() ;
+    Map<String, Contact> contacts = new LinkedHashMap<String, Contact>() ;
+    //List<Contact> contacts = new ArrayList<Contact>() ;
     Query query ;
     QueryManager qm ;
     // private contacts
@@ -1495,9 +1498,12 @@ public class JCRDataStorage {
       filter.setAccountPath(contactHome.getPath()) ;
       qm = contactHome.getSession().getWorkspace().getQueryManager() ;      
       query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
+      
+      //System.out.println("\n\n query:" + query.getStatement() + "\n\n");
       NodeIterator it = query.execute().getNodes() ;
       while(it.hasNext()) {
-        contacts.add(getContact(it.nextNode(), PRIVATE)) ;        
+        Contact contact = getContact(it.nextNode(), PRIVATE) ;
+        contacts.put(contact.getId(), contact) ;        
       }
     }
     
@@ -1507,16 +1513,17 @@ public class JCRDataStorage {
     //Node publicContactHome = getPublicContactHome(sysProvider) ;  
     String usersPath = nodeHierarchyCreator_.getJcrPath("usersPath") ;
     filter.setAccountPath(usersPath) ;
-    
     // minus shared contacts
     filter.setOwner("true") ; 
     qm = publicContactHome.getSession().getWorkspace().getQueryManager() ;
     query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
     NodeIterator itpublic = query.execute().getNodes();
     while(itpublic.hasNext()) {
-      contacts.add(getContact(itpublic.nextNode(), PUBLIC)) ;
+      Contact contact = getContact(itpublic.nextNode(), PUBLIC) ;
+      contacts.put(contact.getId(), contact) ;
     }
     filter.setOwner(null) ;
+
     //share contacts
     try {
       Node sharedContact = getSharedContact(username) ;      
@@ -1534,7 +1541,8 @@ public class JCRDataStorage {
           while(it.hasNext()) {
             Node contactNode = it.nextNode() ;
             if (sharedContactIds.contains(contactNode.getProperty("exo:id").getString())) {
-              contacts.add(getContact(contactNode, SHARED)) ;
+              Contact contact = getContact(contactNode, SHARED) ;
+              contacts.put(contact.getId(), contact) ;
               sharedContactIds.remove(contactNode.getProperty("exo:id").getString()) ;
             } 
           }
@@ -1550,17 +1558,17 @@ public class JCRDataStorage {
       addressBook = iter.nextProperty().getParent() ;
       Node contactHomeNode = addressBook.getParent().getParent().getNode(CONTACTS) ;
       filter.setAccountPath(contactHomeNode.getPath()) ;
+      // add
+      filter.setCategories(new String[] {addressBook.getName()}) ;
       qm = contactHomeNode.getSession().getWorkspace().getQueryManager() ;      
       query = qm.createQuery(filter.getStatement(), Query.XPATH) ;  
       NodeIterator it = query.execute().getNodes() ;
       while(it.hasNext()) {
-        // except duplicate if shared 2 address book
         Contact contact = getContact(it.nextNode(), SHARED) ;
-        if (contact.getAddressBook()[0].equals(addressBook.getProperty("exo:id").getString()))
-          contacts.add(contact) ;
+        contacts.put(contact.getId(), contact) ;
       }
     }
-    return new DataPageList(contacts, 10, null, false) ;    
+    return new DataPageList(Arrays.asList(contacts.values().toArray(new Contact[] {})), 10, null, false) ;    
   }
 
   // no public ;
