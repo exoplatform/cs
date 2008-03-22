@@ -137,6 +137,11 @@ public class JCRDataStorage{
       account.setPlaceSignature(accountNode.getProperty(Utils.EXO_PLACESIGNATURE).getString());
     } catch(Exception e) { }
     try {
+      GregorianCalendar cal = new GregorianCalendar();
+      cal.setTimeInMillis(accountNode.getProperty(Utils.EXO_LAST_CHECKED_TIME).getLong());
+      account.setLastCheckedDate(cal.getTime());
+    } catch(Exception e) { }
+    try {
       Value[] properties = accountNode.getProperty(Utils.EXO_SERVERPROPERTIES).getValues();
       for (int i=0; i<properties.length; i++) {
         String property = properties[i].getString();
@@ -417,6 +422,8 @@ public class JCRDataStorage{
       newAccount.setProperty(Utils.EXO_CHECKMAILAUTO, account.checkedAuto());
       newAccount.setProperty(Utils.EXO_EMPTYTRASH, account.isEmptyTrashWhenExit());
       newAccount.setProperty(Utils.EXO_PLACESIGNATURE, account.getPlaceSignature());
+      if (account.getLastCheckedDate() != null)
+        newAccount.setProperty(Utils.EXO_LAST_CHECKED_TIME, account.getLastCheckedDate().getTime());
       Iterator<String> it = account.getServerProperties().keySet().iterator();
       ArrayList<String> values = new ArrayList<String>(account.getServerProperties().size());
       while (it.hasNext()) {

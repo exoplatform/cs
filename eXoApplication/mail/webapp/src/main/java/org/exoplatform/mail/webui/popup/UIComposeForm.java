@@ -412,6 +412,9 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     message.setUnread(false);
     message.setSize(body.getBytes().length) ;
     message.setReplyTo(account.getEmailReplyAddress());
+    if (getComposeType() == MESSAGE_REPLY || getComposeType() == MESSAGE_REPLY_ALL || getComposeType() == MESSAGE_FOWARD) {
+      message.setHeader(Utils.HEADER_IN_REPLY_TO, getMessage().getId()) ;
+    }
     return message;
   }
   

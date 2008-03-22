@@ -16,6 +16,7 @@
  */
 package org.exoplatform.mail.service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,7 @@ public class Account {
   private boolean checkedAuto_ ;
   private boolean emptyTrashWhenExit ;
   private String placeSignature;
+  private Date lastCheckedDate_ ;
   
   private Map<String, String> serverProperties ;  
   private Map<String, String> popServerProperties ;
@@ -52,7 +54,7 @@ public class Account {
   public Account() {
     id = Utils.KEY_ACCOUNT + IdGenerator.generate() ;
     setPopServerProperty(Utils.SVR_POP_LEAVE_ON_SERVER, "true") ;
-    setPopServerProperty(Utils.SVR_IMAP_MARK_AS_DELETE, "true") ;
+    setImapServerProperty(Utils.SVR_IMAP_MARK_AS_DELETE, "false") ;
   }
   
   /**
@@ -128,6 +130,10 @@ public class Account {
    */
   public String getPlaceSignature() { return placeSignature; }
   public void setPlaceSignature(String placeSig) { placeSignature = placeSig; }
+  
+  
+  public Date getLastCheckedDate() { return lastCheckedDate_; }
+  public void setLastCheckedDate(Date date) { lastCheckedDate_ = date ; }
   
   /**
    * @return Return a mail server configuration of account

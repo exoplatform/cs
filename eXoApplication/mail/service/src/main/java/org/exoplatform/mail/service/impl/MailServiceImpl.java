@@ -21,6 +21,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
@@ -39,6 +40,11 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.search.ComparisonTerm;
+import javax.mail.search.FlagTerm;
+import javax.mail.search.OrTerm;
+import javax.mail.search.SearchTerm;
+import javax.mail.search.SentDateTerm;
 import javax.mail.util.ByteArrayDataSource;
 
 import org.exoplatform.container.ExoContainer;
@@ -327,6 +333,12 @@ public class MailServiceImpl implements MailService{
     }     
     if (message.getPriority() != 0 ) mimeMessage.setHeader("Importance", priority);
     
+    Iterator iter = message.getHeaders().keySet().iterator() ;
+    while (iter.hasNext()) {
+      String key = iter.next().toString() ;
+      mimeMessage.setHeader(key, message.getHeaders().get(key)) ;
+    }
+    
     mimeMessage.setContent(multipPartRoot);
     mimeMessage.saveChanges();
     try {
@@ -370,6 +382,8 @@ public class MailServiceImpl implements MailService{
     List<Message> messageList = new ArrayList<Message>();
     int totalNew = -1;
     String protocol = account.getProtocol();
+    boolean isPop3 = account.getProtocol().equals(Utils.POP3) ;
+    boolean isImap = account.getProtocol().equals(Utils.IMAP) ;
     try {
       Properties props = System.getProperties();
       String socketFactoryClass = "javax.net.SocketFactory";
@@ -398,17 +412,25 @@ public class MailServiceImpl implements MailService{
           System.out.println(" #### Getting mails from folder " + incomingFolder + " !");
         }
         folder.open(javax.mail.Folder.READ_WRITE);
-
-        javax.mail.Message[] messages = folder.getMessages() ;
+        
+        javax.mail.Message[] messages ;
+        if (account.getLastCheckedDate() == null) {
+          messages = folder.getMessages() ;
+        } else {
+          SearchTerm unseenFlag = new FlagTerm(new Flags(Flags.Flag.SEEN), false) ;
+          SentDateTerm dateTerm = new SentDateTerm(ComparisonTerm.GT, account.getLastCheckedDate());
+          unseenFlag = new OrTerm(unseenFlag, dateTerm) ;
+          messages = folder.search(unseenFlag) ;
+        }
         Vector<javax.mail.Message> vector = new Vector<javax.mail.Message>();
-        boolean isPop3 = account.getProtocol().equals(Utils.POP3);
         boolean leaveOnServer = (isPop3 && Boolean.valueOf(account.getPopServerProperties().get(Utils.SVR_POP_LEAVE_ON_SERVER))) ;
-        for (int i=1 ; i< messages.length; i++) {
-          if (!messages[i].isSet(Flags.Flag.SEEN)) vector.add(messages[i]); 
-          messages[i].setFlag(Flags.Flag.SEEN, true); 
-          if (leaveOnServer) messages[i].setFlag(Flags.Flag.DELETED, true); 
+        boolean markAsDelete = (isImap && Boolean.valueOf(account.getImapServerProperties().get(Utils.SVR_IMAP_MARK_AS_DELETE))) ;
+        for (int i=0 ; i< messages.length; i++) {  
+          vector.add(messages[i]); 
+          messages[i].setFlag(Flags.Flag.SEEN, true);
+          if (!leaveOnServer || markAsDelete) messages[i].setFlag(Flags.Flag.DELETED, true);
         }  
-
+        
         totalNew = vector.size() ;
 
         System.out.println(" #### Folder contains " + totalNew + " messages !");
@@ -436,8 +458,10 @@ public class MailServiceImpl implements MailService{
             javax.mail.Message msg = vector.get(i) ;      
             try {
               storage_.saveMessage(sProvider, username, account.getId(), msg, folderId, spamFilter) ;
+              System.out.println(i + "=====>>> " + MimeMessageParser.getReceivedDate(msg).getTime()) ;
+              account.setLastCheckedDate(MimeMessageParser.getReceivedDate(msg).getTime()) ;
             } catch(Exception e) {
-              e.printStackTrace();
+              e.printStackTrace() ;
               i++ ;
               continue ;
             }  
@@ -445,6 +469,7 @@ public class MailServiceImpl implements MailService{
             t2 = System.currentTimeMillis();
             System.out.println(" [DEBUG] " + i + " messages saved : " + (t2-t1) + " ms");
           }
+          saveAccount(sProvider, username, account, false) ;
           Calendar cc = GregorianCalendar.getInstance();
           javax.mail.Message firstMsg = vector.get(0) ;
           if (firstMsg.getReceivedDate() != null)
@@ -457,6 +482,7 @@ public class MailServiceImpl implements MailService{
           System.out.println(" [DEBUG] Executed the filter finished : " + (t2 - t1) + " ms") ;
           tt2 = System.currentTimeMillis();
           System.out.println(" ### Check mail finished total took: " + (tt2 - tt1) + " ms") ;
+          
           folder.close(true);      
           store.close();
         }

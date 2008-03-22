@@ -17,7 +17,7 @@
 			      String cssClass = "NormalItem";
 			      if (account.getId() == uicomponent.getSelectedAccountId()) { cssClass = "SelectedItem"; }
 			  %>
-				<div class="$cssClass"><a href="$linkAction"><%=account.getUserDisplayName()%></a></div>
+				<div class="$cssClass"><a href="$linkAction"><%=account.getLabel()%></a></div>
 				<%}%>
 			</div>
 		</div>
