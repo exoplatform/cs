@@ -86,11 +86,11 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
     addUIFormInput(new UIFormStringInput(FILTER_BODY, FILTER_BODY , null));
     List<SelectItemOption<String>>  options1 = new ArrayList<SelectItemOption<String>>() ;
     options1.add(new SelectItemOption<String>("contains", String.valueOf(Utils.CONDITION_CONTAIN)));
-    options1.add(new SelectItemOption<String>("doesn't contains", String.valueOf(Utils.CONDITION_NOT_CONTAIN)));
+    options1.add(new SelectItemOption<String>("doesn't contain", String.valueOf(Utils.CONDITION_NOT_CONTAIN)));
     addUIFormInput(new UIFormSelectBox(FILTER_BODY_CONDITION, FILTER_BODY_CONDITION, options1));
     List<SelectItemOption<String>>  options2 = new ArrayList<SelectItemOption<String>>() ;
     options2.add(new SelectItemOption<String>("contains", String.valueOf(Utils.CONDITION_CONTAIN)));
-    options2.add(new SelectItemOption<String>("doesn't contains", String.valueOf(Utils.CONDITION_NOT_CONTAIN)));
+    options2.add(new SelectItemOption<String>("doesn't contain", String.valueOf(Utils.CONDITION_NOT_CONTAIN)));
     options2.add(new SelectItemOption<String>("is", String.valueOf(Utils.CONDITION_IS)));
     options2.add(new SelectItemOption<String>("is not", String.valueOf(Utils.CONDITION_NOT_IS)));
     options2.add(new SelectItemOption<String>("starts with", String.valueOf(Utils.CONDITION_STARTS_WITH)));
@@ -98,7 +98,7 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
     addUIFormInput(new UIFormSelectBox(FILTER_TO_CONDITION, FILTER_TO_CONDITION, options2));
     List<SelectItemOption<String>>  options3 = new ArrayList<SelectItemOption<String>>() ;
     options3.add(new SelectItemOption<String>("contains", String.valueOf(Utils.CONDITION_CONTAIN)));
-    options3.add(new SelectItemOption<String>("doesn't contains", String.valueOf(Utils.CONDITION_NOT_CONTAIN)));
+    options3.add(new SelectItemOption<String>("doesn't contain", String.valueOf(Utils.CONDITION_NOT_CONTAIN)));
     options3.add(new SelectItemOption<String>("is", String.valueOf(Utils.CONDITION_IS)));
     options3.add(new SelectItemOption<String>("is not", String.valueOf(Utils.CONDITION_NOT_IS)));
     options3.add(new SelectItemOption<String>("starts with", String.valueOf(Utils.CONDITION_STARTS_WITH)));
@@ -106,7 +106,7 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
     addUIFormInput(new UIFormSelectBox(FILTER_FROM_CONDITION, FILTER_FROM_CONDITION, options3));
     List<SelectItemOption<String>>  options4 = new ArrayList<SelectItemOption<String>>() ;
     options4.add(new SelectItemOption<String>("contains", String.valueOf(Utils.CONDITION_CONTAIN)));
-    options4.add(new SelectItemOption<String>("doesn't contains", String.valueOf(Utils.CONDITION_NOT_CONTAIN)));
+    options4.add(new SelectItemOption<String>("doesn't contain", String.valueOf(Utils.CONDITION_NOT_CONTAIN)));
     options4.add(new SelectItemOption<String>("is", String.valueOf(Utils.CONDITION_IS)));
     options4.add(new SelectItemOption<String>("is not", String.valueOf(Utils.CONDITION_NOT_IS)));
     options4.add(new SelectItemOption<String>("starts with", String.valueOf(Utils.CONDITION_STARTS_WITH)));
