@@ -113,7 +113,7 @@ public class UIMailSettings extends UIForm implements UIPopupComponent {
     MailService mailSrv = getApplicationComponent(MailService.class);
     String username = Util.getPortalRequestContext().getRemoteUser();
     for(Account acc : mailSrv.getAccounts(SessionsUtils.getSessionProvider(), username)) {
-      SelectItemOption<String> itemOption = new SelectItemOption<String>(acc.getUserDisplayName() + " &lt;" + acc.getEmailAddress() + "&gt;", acc.getId());
+      SelectItemOption<String> itemOption = new SelectItemOption<String>(acc.getLabel() + " &lt;" + acc.getEmailAddress() + "&gt;", acc.getId());
       options.add(itemOption) ;
     }
     return options ;

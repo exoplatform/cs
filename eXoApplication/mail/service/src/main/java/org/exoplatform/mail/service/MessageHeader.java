@@ -16,28 +16,38 @@
  */
 package org.exoplatform.mail.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.exoplatform.services.jcr.util.IdGenerator;
 
 /**
  * Created by The eXo Platform SARL
- * Author : Tuan Nguyen
- *          tuan.nguyen@exoplatform.com
+ * Author : Phung Nam
+ *          phunghainam@gmail.com
  * Jun 23, 2007  
  */
 public class MessageHeader {
-  private String id ;
-  private String accountId;
-  private long priority;
+  private String id_ ;
+  private String accountId_;
+  private long priority_; 
+  private Map<String, String> headers_ = new HashMap<String, String>();
   
   public MessageHeader() {
     setId("MessageHeader" + IdGenerator.generate()) ;
   }
-  public String getId() { return id ; }
-  public void setId(String id) { this.id = id; }
+  public String getId() { return id_ ; }
+  public void setId(String id) { this.id_ = id; }
   
-  public String getAccountId() { return accountId ; }
-  public void setAccountId(String accountId) { this.accountId = accountId ; }
-
-  public long getPriority() { return priority; }
-  public void setPriority(long priority) { this.priority = priority; }
+  public String getAccountId() { return accountId_ ; }
+  public void setAccountId(String accountId) { this.accountId_ = accountId ; }
+  
+  public long getPriority() { return priority_; }
+  public void setPriority(long priority) { this.priority_ = priority; }
+  
+  public Map<String, String> getHeaders() { return headers_ ; }
+  public void setHeaders(Map<String, String> header) { headers_ = header ; }
+  
+  public String getHeader(String key) { return headers_.get(key) ; }
+  public void setHeader(String key, String value) { headers_.put(key, value) ; }
 }

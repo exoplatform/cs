@@ -65,7 +65,7 @@ public class UIAccountList extends UIGrid  implements UIPopupComponent{
     String userId = Util.getPortalRequestContext().getRemoteUser() ;
     MailService mailSvr = getApplicationComponent(MailService.class) ;
     for(Account acc : mailSvr.getAccounts(SessionsUtils.getSessionProvider(), userId)) {
-      accounts.add(new AccountData(acc.getId(), acc.getUserDisplayName(), acc.getEmailAddress(), 
+      accounts.add(new AccountData(acc.getId(), acc.getLabel(), acc.getEmailAddress(), 
           acc.getServerProperties().get(Utils.SVR_INCOMING_HOST), acc.getProtocol())) ;
     }
 

@@ -133,6 +133,7 @@ public class Utils {
   public static final String EXO_SPAM_FILTER = "exo:spamFilter".intern();
   public static final String EXO_CONVERSATION = "exo:conversation".intern();
   public static final String EXO_CONVERSATIONID = "exo:conversationId".intern();
+  public static final String EXO_LAST_CHECKED_TIME = "exo:lastCheckedTime".intern() ;
 
   public static final String EXO_MAIL_SETTING = "exo:mailSetting".intern();
   public static final String EXO_NUMBER_MSG_PER_PAGE = "exo:numberMsgPerPage".intern();
@@ -189,6 +190,8 @@ public class Utils {
   public static final String P_HEAD = "Head".intern() ;
   public static final String P_FOOT = "Foot".intern() ;
   
+  public static final String HEADER_IN_REPLY_TO = "In-Reply-To".intern() ;
+  public static final String HEADER_REFERENCES = "References".intern() ;
   public static final long PRIORITY_HIGH = 1 ;
   public static final long PRIORITY_NORMAL = 3 ;
   public static final long PRIORITY_LOW = 5 ;
