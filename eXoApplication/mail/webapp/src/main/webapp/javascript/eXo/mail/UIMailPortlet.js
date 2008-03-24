@@ -383,7 +383,9 @@ UIMailPortlet.prototype.collapseExpandFolder = function(obj, folderState) {
     collapseContainerNode = DOMUtil.findAncestorByClass(collapseContainerNode, 'Collapse');
   }
     
-  if (colExpContainerNode != null) {
+  if (colExpContainerNode != null && 
+  	  colExpContainerNode.className &&
+  	  (colExpContainerNode.className.indexOf('Collapse') != -1 || colExpContainerNode.className.indexOf('Expand') != -1)) {
   	if (folderState == '0') {
   		colExpContainerNode.className = "Collapse" ;
   	} else if (folderState == '1'){
