@@ -634,6 +634,10 @@ public class MailServiceImpl implements MailService{
     Account account = null ;
     if (defaultAccount != null) { 
       account = getAccountById(sProvider, username, defaultAccount) ;
+    } else {
+      List<Account> accList = getAccounts(sProvider, username) ;
+      if (accList.size() > 0) 
+        account = getAccounts(sProvider, username).get(0) ;
     }
     return account ;
   }
