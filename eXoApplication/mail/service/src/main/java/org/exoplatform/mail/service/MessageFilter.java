@@ -289,15 +289,18 @@ public class MessageFilter {
     if (fromDate_ != null) {
       if(hasConjuntion) stringBuffer.append(" and (") ;
       else stringBuffer.append("(") ;
-      stringBuffer.append(" @exo:receivedDate >= xs:dateTime('" + ISO8601.format(fromDate_)+"')") ;
+      stringBuffer.append(" @exo:receivedDate >= xs:dateTime('" + ISO8601.format(fromDate_) + "')") ;
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }
     
     if (toDate_ != null) {
+      toDate_.set(Calendar.HOUR_OF_DAY,  23) ;
+      toDate_.set(Calendar.MINUTE,  59) ;
+      toDate_.set(Calendar.MILLISECOND, 999) ;
       if(hasConjuntion) stringBuffer.append(" and (") ;
       else stringBuffer.append("(") ;
-      stringBuffer.append(" @exo:receivedDate <= xs:dateTime('" + ISO8601.format(toDate_)+"')") ;
+      stringBuffer.append(" @exo:receivedDate <= xs:dateTime('" + ISO8601.format(toDate_) + "')") ;
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }
