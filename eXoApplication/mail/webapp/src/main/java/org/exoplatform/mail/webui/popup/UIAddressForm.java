@@ -156,7 +156,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   }
 
   public void setContactList(List<Contact> contactList) throws Exception {
-    ObjectPageList objPageList = new ObjectPageList(contactList, 2) ;
+    ObjectPageList objPageList = new ObjectPageList(contactList, 10) ;
     uiPageList_.setPageList(objPageList) ;
   }
   

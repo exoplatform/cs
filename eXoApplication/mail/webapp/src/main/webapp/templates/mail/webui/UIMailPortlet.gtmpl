@@ -10,6 +10,7 @@
  	rcontext.getJavascriptManager().importJavascript('eXo.cs.CSUtils','/csResources/javascript/') ;
 	rcontext.getJavascriptManager().importJavascript('eXo.cs.UIContextMenuMail','/csResources/javascript/') ;
   rcontext.getJavascriptManager().importJavascript('eXo.mail.UIMailPortlet','/mail/javascript/');
+  rcontext.getJavascriptManager().importJavascript('eXo.mail.UIColorPicker','/mail/javascript/') ;
   rcontext.getJavascriptManager().addJavascript('eXo.mail.UIMailPortlet.checkLayout() ;') ;
   rcontext.getJavascriptManager().addJavascript("eXo.mail.UIMailPortlet.showContextMenu('" + uicomponent.id + "') ;") ;
 %>

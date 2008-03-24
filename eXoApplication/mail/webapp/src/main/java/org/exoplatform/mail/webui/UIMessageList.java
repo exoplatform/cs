@@ -656,7 +656,8 @@ public class UIMessageList extends UIForm {
         appliedMsgList = uiMessageList.getCheckedMessage();
       }
       String trashFolderId = Utils.createFolderId(accountId, Utils.FD_TRASH, false) ;
-      if (uiMessageList.getSelectedFolderId().equals(trashFolderId)) { 
+      String selectedFolderId = uiMessageList.getSelectedFolderId() ;
+      if (selectedFolderId != null && selectedFolderId.equals(trashFolderId)) { 
         mailSrv.removeMessage(SessionsUtils.getSessionProvider(), username, accountId, appliedMsgList);
       } else {
         for (Message message : appliedMsgList)
