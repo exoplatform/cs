@@ -65,10 +65,12 @@
                     <div class="FieldContainer">
                       <div class="SenderAddress">
                         <%
-                          InternetAddress[] fromAddress2 = Utils.getInternetAddress(msg.getFrom());
-                          InternetAddress from2 = fromAddress2[0];
+                          if (!MailUtils.isFieldEmpty(msg.getFrom())) {
+                            InternetAddress[] fromAddress2 = Utils.getInternetAddress(msg.getFrom());
+                            InternetAddress from2 = fromAddress2[0];
                         %>
-                        <span><%=Utils.getPersonal(from2)%> &lt; <%=from2.getAddress()%> &gt; </span>
+                            <span><%=Utils.getPersonal(from2)%> &lt; <%=from2.getAddress()%> &gt; </span>
+                        <%} %>    
                       </div>
                       <div class="HeadlineText">Click here to expand contents of message ...</div>
                       <div style="clear: left;"><span></span></div>
@@ -122,22 +124,26 @@
   										<div class="Title"></div>
   										<div class="LinkAddress">
   										  <%
-  										    InternetAddress[] fromAddress1 = Utils.getInternetAddress(msg.getFrom());
-  										    InternetAddress from1 = fromAddress1[0];
+  										    if (!MailUtils.isFieldEmpty(msg.getFrom())) {
+  										      InternetAddress[] fromAddress1 = Utils.getInternetAddress(msg.getFrom());
+  										      InternetAddress from1 = fromAddress1[0];
   										  %>
-  										  <span><%=Utils.getPersonal(from1)%> &lt; <%=from1.getAddress()%> &gt; </span>
-  										</div>  
+  										      <span><%=Utils.getPersonal(from1)%> &lt; <%=from1.getAddress()%> &gt; </span>
+                        <%} %>    
+  										</div>
                       <div class="Title">To:</div>
                       <div class="LinkAddress"> 
                         <%
                           try {
-                            InternetAddress[] toAddress1 = InternetAddress.parse(msg.getMessageTo());
-                            for (i in 0..(toAddress1.length-1)) {
-                              InternetAddress address1 = toAddress1[i];
-                              if (i > 0) print ",";
+                            if (!MailUtils.isFieldEmpty(msg.getMessageTo())) {
+                              InternetAddress[] toAddress1 = InternetAddress.parse(msg.getMessageTo());
+                              for (i in 0..(toAddress1.length-1)) {
+                                InternetAddress address1 = toAddress1[i];
+                                if (i > 0) print ",";
                         %>
-                              <span><%=Utils.getPersonal(address1)%> </span> &lt; <%=address1.getAddress()%> &gt; 
+                                <span><%=Utils.getPersonal(address1)%> </span> &lt; <%=address1.getAddress()%> &gt; 
                         <%
+                              }
                             } 
                           } catch (Exception e) {
                             if (msg.getMessageTo() != null) {
@@ -166,10 +172,12 @@
                     <div class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.reply-to") %>:</div>
                     <div class="LinkAddress"> 
                       <%
+                        if (!MailUtils.isFieldEmpty(msg.getReplyTo())) {
                         InternetAddress[] replyAddress = Utils.getInternetAddress(msg.getReplyTo());
                         InternetAddress reply = replyAddress[0];
                       %>
                       <span><%=Utils.getPersonal(reply)%> </span> &lt; <%=reply.getAddress()%> &gt;
+                      <%} %>
                     </div>
                     <div style="clear: left;"><span></span></div>
                   </div>
@@ -178,6 +186,7 @@
                     <div class="LinkAddress"> 
                       <%
                         try { 
+                          if (!MailUtils.isFieldEmpty(msg.getMessageTo())) {  
                         InternetAddress[] toAddress = InternetAddress.parse(msg.getMessageTo());
                           for (i in 0..(toAddress.length-1)) {
                             InternetAddress address = toAddress[i];
@@ -186,6 +195,7 @@
                               <span><%=Utils.getPersonal(address)%> </span> &lt; <%=address.getAddress()%> &gt; 
                       <%
                           } 
+                          }
                         } catch (Exception e) { 
                           if (msg.getMessageTo() != null) {
                       %>   
