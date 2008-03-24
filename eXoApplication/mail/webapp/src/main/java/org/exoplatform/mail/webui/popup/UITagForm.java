@@ -21,12 +21,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.exoplatform.mail.Colors;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Tag;
-import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
@@ -37,14 +37,12 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
-import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputInfo;
-import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 
 
@@ -76,13 +74,7 @@ public class UITagForm extends UIForm implements UIPopupComponent{
   public void setTagList(List<Tag> tagList) throws Exception {
     tagMap.clear();   
     addUIFormInput(new UIFormStringInput(SELECT_AVAIABLE_TAG, SELECT_AVAIABLE_TAG, null));
-    
-    List<SelectItemOption<String>> selectColor = new ArrayList<SelectItemOption<String>>();
-    for (String color : Utils.TAG_COLOR) {
-      selectColor.add(new SelectItemOption<String>(color, color));
-    }
-    addUIFormInput(new UIFormSelectBox(TAG_COLOR, TAG_COLOR, selectColor));
-    
+    addUIFormInput(new UIFormColorPicker(TAG_COLOR, TAG_COLOR, Colors.COLORS)) ;
     for(Tag tag : tagList) {
       UIFormCheckBoxInput<Boolean> uiCheckBox = new UIFormCheckBoxInput<Boolean>(tag.getName(), tag.getName(), null);
       addUIFormInput(uiCheckBox) ;
@@ -137,7 +129,12 @@ public class UITagForm extends UIForm implements UIPopupComponent{
   }
   
   public String getLabel(String id) { return id ;}
-  
+  public String getSelectedColor() {
+    return getChild(UIFormColorPicker.class).getValue() ;
+  }
+  public void setSelectedColor(String value) {
+    getChild(UIFormColorPicker.class).setValue(value) ;
+  }
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
   
@@ -145,7 +142,7 @@ public class UITagForm extends UIForm implements UIPopupComponent{
     public void execute(Event<UITagForm> event) throws Exception {
       UITagForm uiTagForm = event.getSource(); 
       String newTagName = uiTagForm.getUIStringInput(SELECT_AVAIABLE_TAG).getValue();
-      String tagColor = uiTagForm.getUIStringInput(TAG_COLOR).getValue();
+      String tagColor = uiTagForm.getSelectedColor();
       UIMailPortlet uiPortlet = uiTagForm.getAncestorOfType(UIMailPortlet.class);
       UITagContainer uiTagContainer = uiPortlet.findFirstComponentOfType(UITagContainer.class);
       String username = uiPortlet.getCurrentUser() ;

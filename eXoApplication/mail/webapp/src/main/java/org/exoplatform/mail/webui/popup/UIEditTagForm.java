@@ -16,9 +16,9 @@
  */
 package org.exoplatform.mail.webui.popup;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.mail.Colors;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.MailService;
@@ -34,11 +34,9 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
-import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 
@@ -65,16 +63,16 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
   private String tagId;
   public UIEditTagForm() {       
     addUIFormInput(new UIFormStringInput(NEW_TAG_NAME, NEW_TAG_NAME, null)) ;
-    List<SelectItemOption<String>> tagColors = new ArrayList<SelectItemOption<String>>();
-    for (String color : Utils.TAG_COLOR) {
-      tagColors.add(new SelectItemOption<String>(color, color));
-    }
-    UIFormSelectBox selectColor = new UIFormSelectBox(COLOR, COLOR, tagColors);
-    
-    addUIFormInput(selectColor);
+    addUIFormInput(new UIFormColorPicker(COLOR, COLOR, Colors.COLORS)) ;
     addUIFormInput(new UIFormTextAreaInput(DESCRIPTION,DESCRIPTION,null)) ;    
   }
   
+  public String getSelectedColor() {
+    return getChild(UIFormColorPicker.class).getValue() ;
+  }
+  public void setSelectedColor(String value) {
+    getChild(UIFormColorPicker.class).setValue(value) ;
+  }
   public String getTagId() throws Exception { return tagId; }
   
   public void setTag(String tagId) throws Exception {
@@ -91,7 +89,7 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
       if (tag.getId().equals(tagId)){
         getUIStringInput(NEW_TAG_NAME).setValue(tag.getName()); 
         getUIFormTextAreaInput(DESCRIPTION).setValue(tag.getDescription());
-        getUIFormSelectBox(COLOR).setValue(tag.getColor());       
+        getChild(UIFormColorPicker.class).setValue(tag.getColor()) ;       
       }
     }
   }
@@ -101,7 +99,6 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
  
   static  public class SaveActionListener extends EventListener<UIEditTagForm> {
     public void execute(Event<UIEditTagForm> event) throws Exception {
-      System.out.println("SaveActionListener() ");
       UIEditTagForm uiEditTagForm  = event.getSource() ;
       UIMailPortlet uiPortlet = uiEditTagForm.getAncestorOfType(UIMailPortlet.class);
       UIMailPortlet uiMailPortlet = uiEditTagForm.getAncestorOfType(UIMailPortlet.class);
@@ -112,9 +109,7 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
       String tagId = uiEditTagForm.getTagId();
       String newTagName = uiEditTagForm.getUIStringInput(NEW_TAG_NAME).getValue() ;
       String description = uiEditTagForm.getUIFormTextAreaInput(DESCRIPTION).getValue() ;
-      System.out.println("description :"+description);
-      String color = uiEditTagForm.getUIFormSelectBox(COLOR).getValue(); 
-
+      String color = uiEditTagForm.getSelectedColor(); 
       UIApplication uiApp = uiEditTagForm.getAncestorOfType(UIApplication.class) ;
 
       if(Utils.isEmptyField(newTagName)) {
