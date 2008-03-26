@@ -194,10 +194,14 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
           uiContacts.getContactMap().put(contact.getId(), contact) ;
         } else {
           uiContacts.updateList() ;
-        }
-        
+        } 
         event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
-        
+      }
+      UISharedForm uiSharedForm = uiForm.getChild(UISharedForm.class) ;
+      if (!uiSharedForm.isNew()) {
+        uiSharedForm.getUIStringInput(UISharedForm.FIELD_USER).setValue(null) ;
+        uiSharedForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).setChecked(false) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiSharedForm) ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
     }

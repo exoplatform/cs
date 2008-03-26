@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -38,12 +39,16 @@ import org.exoplatform.webui.core.model.SelectItemOption;
  * Jul 11, 2007  
  */
 public class ContactUtils {
-  public static String[] specialString = {"!", "@", "#", "$", "%", "^", "&"
+  private static String AKONG = "@" ;
+  
+  public static String[] specialString = {"!", "#", "$", "%", "^", "&"
                                             , ":", ">", "<", "~", "`", "]", "'", "/"} ;
-  public static String filterString(String text) {
+  public static String filterString(String text, boolean isEmail) {
+
     for (String str : specialString) {
       text = text.replaceAll(str, "") ;
     }
+    if (!isEmail) text = text.replaceAll(AKONG, "") ;
     int i = 0 ;
     while (i < text.length()) {
       if (text.charAt(i) == '?' || text.charAt(i) == '[' || text.charAt(i) == '(' || text.charAt(i) == '|'

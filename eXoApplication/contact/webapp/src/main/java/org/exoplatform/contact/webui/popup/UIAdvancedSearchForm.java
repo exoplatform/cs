@@ -111,14 +111,16 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent {
         return ;        
       }
       ContactFilter filter = new ContactFilter() ;
-      if(!ContactUtils.isEmpty(text)) filter.setText(ContactUtils.filterString(text)) ;
-      if(!ContactUtils.isEmpty(fullName)) filter.setFullName(ContactUtils.filterString(fullName)) ;   
-      if(!ContactUtils.isEmpty(firstName)) filter.setFirstName(ContactUtils.filterString(firstName)) ;       
-      if(!ContactUtils.isEmpty(lastName)) filter.setLastName(ContactUtils.filterString(lastName)) ;
-      if(!ContactUtils.isEmpty(nickName)) filter.setNickName(ContactUtils.filterString(nickName)) ;      
-      if(!ContactUtils.isEmpty(jobTitle)) filter.setJobTitle(ContactUtils.filterString(jobTitle)) ;      
-      if(!ContactUtils.isEmpty(email)) filter.setEmailAddress(ContactUtils.filterString(email)) ;      
-      if(!ContactUtils.isEmpty(gender)) filter.setGender(ContactUtils.filterString(gender)) ;
+      if(!ContactUtils.isEmpty(text)) filter.setText(ContactUtils.filterString(text, false)) ;
+      if(!ContactUtils.isEmpty(fullName)) filter.setFullName(ContactUtils.filterString(fullName, false)) ;   
+      if(!ContactUtils.isEmpty(firstName)) filter.setFirstName(ContactUtils.filterString(firstName, false)) ;       
+      if(!ContactUtils.isEmpty(lastName)) filter.setLastName(ContactUtils.filterString(lastName, false)) ;
+      if(!ContactUtils.isEmpty(nickName)) filter.setNickName(ContactUtils.filterString(nickName, false)) ;      
+      if(!ContactUtils.isEmpty(jobTitle)) filter.setJobTitle(ContactUtils.filterString(jobTitle, false)) ;      
+      
+      if(!ContactUtils.isEmpty(email)) filter.setEmailAddress(ContactUtils.filterString(email, true)) ;      
+      
+      if(!ContactUtils.isEmpty(gender)) filter.setGender(ContactUtils.filterString(gender, false)) ;
       
       DataPageList resultPageList = ContactUtils.getContactService()
         .searchContact(SessionProviderFactory.createSystemProvider(), ContactUtils.getCurrentUser(), filter) ;

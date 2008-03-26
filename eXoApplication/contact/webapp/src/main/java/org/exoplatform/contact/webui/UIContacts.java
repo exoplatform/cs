@@ -817,11 +817,14 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
         }
-        StringBuffer buffer = new StringBuffer(uiContacts.contactMap.get(contactIds.get(0)).getEmailAddress()) ; 
+        StringBuffer buffer = new StringBuffer() ;
+        String email = uiContacts.contactMap.get(contactIds.get(0)).getEmailAddress() ;
+        if (!ContactUtils.isEmpty(email)) buffer.append(email) ; 
         for (int i = 1; i < contactIds.size(); i ++) {
-          buffer.append(", " + uiContacts.contactMap.get(contactIds.get(i)).getEmailAddress()) ;
+          email = uiContacts.contactMap.get(contactIds.get(i)).getEmailAddress() ;
+          if (!ContactUtils.isEmpty(email)) buffer.append(", " + email) ;
         }
-        emails = buffer.toString() ;
+        emails = buffer.toString() ; 
       }
       if (ContactUtils.isEmpty(emails)) {
         UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
@@ -832,6 +835,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       }
       UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
+      
       Account acc = ContactUtils.getAccount() ;
       if (acc == null) {
         UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
@@ -839,8 +843,9 @@ public class UIContacts extends UIForm implements UIPopupComponent {
             ApplicationMessage.WARNING)) ;
         return ;
       }
+      
       UIComposeForm uiComposeForm = popupAction.activate(UIComposeForm.class, 850) ;
-      uiComposeForm.init(acc.getEmailAddress(), emails) ;      
+      uiComposeForm.init(acc.getId(), acc.getEmailAddress(), emails) ;  
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;  
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
     }

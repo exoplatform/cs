@@ -27,6 +27,7 @@ import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.ServerConfiguration;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -76,6 +77,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   private Boolean isVisualEditor = true;
   private int composeType_;  
   public List<Contact> toContacts = new ArrayList<Contact>();
+  private String accId_ ;
   
   public boolean isVisualEditor() { return isVisualEditor; }
   public void setVisualEditor(boolean b) { isVisualEditor = b; }
@@ -117,7 +119,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     inputSet.setActionField(FIELD_ATTACHMENTS, getUploadFileList()) ;
   }
   
-  public void init(String from, String emails) throws Exception {
+  public void init(String accId, String from, String emails) throws Exception {
+    accId_ = accId ;
     addUIFormInput(new UIFormStringInput(FIELD_FROM, null, from)) ;
     addUIFormInput(new UIFormStringInput(FIELD_TO, null, emails)) ;
     addUIFormInput(new UIFormStringInput(FIELD_SUBJECT, null, null)) ;
@@ -236,18 +239,21 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       message.setMessageBody(body) ;
       message.setUnread(false);
       message.setSize(body.getBytes().length);
-      List<Message> msgList = new ArrayList<Message>() ;
-      msgList.add(message) ;
+   /*
       ServerConfiguration serverConfig = new ServerConfiguration() ;
       serverConfig.setOutgoingHost("smtp.gmail.com");
       serverConfig.setOutgoingPort("465");
       serverConfig.setSsl(true);
       
       serverConfig.setUserName("exomailtest@gmail.com");
-      serverConfig.setPassword("exoadmin") ;
+      serverConfig.setPassword("exoadmin") ;*/
       
       try {
-        mailSvr.sendMessages(msgList, serverConfig);
+        mailSvr.sendMessage(SessionProviderFactory
+            .createSessionProvider(), ContactUtils.getCurrentUser(), uiForm.accId_, message) ;
+        
+        
+        //mailSvr.sendMessages(msgList, serverConfig);
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-succsessfuly", null)) ;
         uiChildPopup.deActivate() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
@@ -255,7 +261,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-error", null,
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        e.printStackTrace() ;
+        //e.printStackTrace() ;
         return ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

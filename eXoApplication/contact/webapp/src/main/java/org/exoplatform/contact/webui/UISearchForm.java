@@ -65,7 +65,8 @@ public class UISearchForm extends UIForm {
       }
   
       ContactFilter filter = new ContactFilter() ;
-      filter.setText(ContactUtils.filterString(text)) ;
+      filter.setText(ContactUtils.filterString(text, true)) ;
+      
       DataPageList resultPageList = ContactUtils.getContactService()
         .searchContact(SessionProviderFactory.createSystemProvider(), ContactUtils.getCurrentUser(), filter) ;
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;

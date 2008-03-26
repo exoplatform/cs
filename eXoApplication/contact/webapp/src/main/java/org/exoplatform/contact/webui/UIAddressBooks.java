@@ -407,7 +407,7 @@ public class UIAddressBooks extends UIComponent {
           return ;
         }
         UIComposeForm uiComposeForm = uiPopupAction.activate(UIComposeForm.class, 850) ;
-        uiComposeForm.init(acc.getEmailAddress(), buffer.toString()) ;
+        uiComposeForm.init(acc.getId(), acc.getEmailAddress(), buffer.toString()) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());
       } 
