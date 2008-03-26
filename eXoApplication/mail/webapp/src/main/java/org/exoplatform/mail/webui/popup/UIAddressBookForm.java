@@ -31,6 +31,7 @@ import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -140,7 +141,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
       UIPopupActionContainer uiActionContainer = uiAddressBookForm.getParent() ;
       UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
       UIPopupActionContainer uiPopupContainer = uiChildPopup.activate(UIPopupActionContainer.class, 730) ;
-      uiPopupContainer.setId("UIAddContactContainer");
+      uiPopupContainer.setId("UIPopupAddContactForm") ;
       uiPopupContainer.addChild(UIAddContactForm.class, null, null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
     }
@@ -152,7 +153,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
       UIPopupActionContainer uiActionContainer = uiAddBook.getParent() ;
       UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
       UIPopupActionContainer uiPopupContainer = uiChildPopup.activate(UIPopupActionContainer.class, 730) ;
-      uiPopupContainer.setId("UIEditContactContainer");
+      uiPopupContainer.setId("UIPopupAddContactForm") ;
       UIAddContactForm uiAddContact = uiPopupContainer.createUIComponent(UIAddContactForm.class, null, null) ;
       uiPopupContainer.addChild(uiAddContact) ;
       uiAddContact.fillDatas(uiAddBook.getSelectedContact()) ;
