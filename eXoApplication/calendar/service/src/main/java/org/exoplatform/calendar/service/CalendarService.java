@@ -382,10 +382,12 @@ public interface CalendarService {
    * 1. update event attenders information
    * 2. update free / busy time of user
    * @param fromUserId : the inviter id
-   * @param toUserId : the recive id
-   * @param eventId
-   * @param isAccept
+   * @param toUserId : the recive id list
+   * @param calendarType : 0 = private, 1 = shared, 2 = public
+   * @param calendarId : calendar id
+   * @param eventId : evnet id
+   * @param answer : 0 = no, 1 = yes , 2 = maybe 
    * @throws Exception
    */
-  public void confirmInvitation(String fromUserId, String toUserId, String eventId, boolean isAccept) throws Exception ;
+  public void confirmInvitation(String fromUserId, String toUserId,int calType,String calendarId, String eventId, int answer) throws Exception ;
 }

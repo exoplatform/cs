@@ -53,6 +53,10 @@ public class Utils {
   public static final String MIMETYPE_TEXTPLAIN = "text/plain".intern() ;
   public static final String ATTACHMENT = "ATTACHMENT".intern();
   public static final String INLINE = "INLINE".intern();
+
+  public static final int DENY = 0 ;
+  public static final int ACCEPT = 1 ;
+  public static final int NOTSURE = 2 ;
   
   public static GregorianCalendar getInstanceTempCalendar() { 
 	  GregorianCalendar  calendar = new GregorianCalendar() ;

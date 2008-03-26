@@ -740,9 +740,14 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     return uiShareTab.getUIFormCheckBoxInput(FIELD_ISSENDMAIL).isChecked() ;
   }
 
-  protected void sendMail(MailService svr, OrganizationService orSvr, Account acc, String fromId,  String toId, CalendarEvent event) throws Exception {
+  protected void sendMail(MailService svr, OrganizationService orSvr,CalendarSetting setting, Account acc, String fromId,  String toId, CalendarEvent event) throws Exception {
     Message message = new Message() ;
-    message.setSubject("invitation about : " + event.getSummary()) ;
+    DateFormat df = new SimpleDateFormat(setting.getDateFormat() + " " + setting.getTimeFormat()) ;
+    StringBuffer sbSubject = new StringBuffer("[invitation] ") ;
+    sbSubject.append(event.getSummary()) ;
+    sbSubject.append(" ") ;
+    sbSubject.append(df.format(event.getFromDateTime())) ;
+    message.setSubject(sbSubject.toString()) ;
     StringBuffer sbAddress = new StringBuffer() ;
     for(String s : toId.split(CalendarUtils.COMMA)) {
       User reciver = orSvr.getUserHandler().findUserByName(s) ;
@@ -750,20 +755,31 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         if(!CalendarUtils.isEmpty(sbAddress.toString())) sbAddress.append(CalendarUtils.COMMA) ;
       sbAddress.append(reciver.getEmail()) ;
     }
-    message.setMessageBcc(sbAddress.toString()) ;
+    message.setMessageTo(sbAddress.toString()) ;
+    //message.setMessageBcc(sbAddress.toString()) ;
     message.setContentType(Utils.MIMETYPE_TEXTHTML) ;
+    StringBuffer values = new StringBuffer(fromId) ; 
+    User user = orSvr.getUserHandler().findUserByName(fromId) ;
+    message.setFrom(user.getEmail()) ;
+    values.append(CalendarUtils.SEMICOLON + " ") ; 
+    values.append(toId) ;
+    values.append(CalendarUtils.SEMICOLON + " ") ;
+    values.append(event.getCalType()) ;
+    values.append(CalendarUtils.SEMICOLON + " ") ;
+    values.append(event.getCalendarId()) ;
+    values.append(CalendarUtils.SEMICOLON + " ") ;
+    values.append(event.getId()) ;
+    message.setHeader(CalendarUtils.EXO_INVITATION , values.toString()) ;
     message.setSendDate(new Date()) ;
     StringBuffer sb = new StringBuffer() ;
     sb.append("<div style='border:solid 1px blue; width:100%; height:100%;' >") ;
-    sb.append("you have invitation to a meeting!") ;
+     sb.append("you have invitation to a meeting!" + "<br/>") ;
     sb.append("it about : " + event.getDescription() + "<br/>") ;
     sb.append("it form : " + event.getFromDateTime().toString() + "<br/>") ;
     sb.append("to : " + event.getToDateTime().toString() + "<br/>") ;
-    sb.append("in " + event.getLocation()) ;
+    sb.append("in " + event.getLocation() != null ? event.getLocation() : "") ; 
     sb.append("</div>") ;
     message.setMessageBody(sb.toString()) ;
-    User user = orSvr.getUserHandler().findUserByName(fromId) ;
-    message.setFrom(user.getEmail()) ;
     svr.sendMessage(getSession(), user.getUserName(), acc.getId(), message) ;
   }
 
@@ -1033,7 +1049,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
           if(uiForm.isSendMail()) {
             Account acc = CalendarUtils.getMailService().getDefaultAccount(uiForm.getSession(), username);
             if(acc != null) {
-              uiForm.sendMail(CalendarUtils.getMailService(), CalendarUtils.getOrganizationService(), acc, username, uiForm.getParticipantValues(), calendarEvent) ;
+              uiForm.sendMail(CalendarUtils.getMailService(), CalendarUtils.getOrganizationService(), calSetting, acc, username, uiForm.getParticipantValues(), calendarEvent) ;
             } else {
               uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.cant-send-email", null));
               event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -1076,14 +1092,14 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         event.getRequestContext().addUIComponentToUpdateByAjax(eventShareTab) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(attendTab) ;
       } else {
-        if(fromDate.get(Calendar.DATE) != toDate.get(Calendar.DATE)) {
+        /*if(fromDate.get(Calendar.DATE) != toDate.get(Calendar.DATE)) {
           if(isCheckFreeTime) attendTab.getUIFormCheckBoxInput(UIEventAttenderTab.FIELD_CHECK_TIME).setChecked(false) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(eventShareTab) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(attendTab) ;
           uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.can-not-check", null));
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
-        }  
+        }  */
         StringBuilder sb1 = new StringBuilder() ;
         StringBuilder sb2 = new StringBuilder() ;
         for(String uName : values.split(CalendarUtils.COMMA)) {
