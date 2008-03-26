@@ -706,7 +706,7 @@ public class JCRDataStorage {
         if (contactNode.isNodeType(SHARED_MIXIN)) {     
           values = contactNode.getProperty(SHARED_PROP).getValues();
         } else {
-        	contactNode.addMixin(SHARED_MIXIN);
+        	contactNode.addMixin(SHARED_MIXIN);          
         	contactNode.setProperty("exo:sharedUserId", username) ;
         }
         List<Value> valueList = new ArrayList<Value>() ;
@@ -1487,25 +1487,18 @@ public class JCRDataStorage {
   }
   public DataPageList searchContact(SessionProvider sysProvider, String username, ContactFilter filter)throws Exception {
     Map<String, Contact> contacts = new LinkedHashMap<String, Contact>() ;
-    //List<Contact> contacts = new ArrayList<Contact>() ;
-    Query query ;
-    QueryManager qm ;
     // private contacts
     if(username != null && username.length() > 0) {
       Node contactHome = getUserContactHome(sysProvider, username) ;
       filter.setAccountPath(contactHome.getPath()) ;
-      qm = contactHome.getSession().getWorkspace().getQueryManager() ;      
-      query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
-      
-      //System.out.println("\n\n query:" + query.getStatement() + "\n\n");
+      QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager() ;      
+      Query query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
       NodeIterator it = query.execute().getNodes() ;
       while(it.hasNext()) {
         Contact contact = getContact(it.nextNode(), PRIVATE) ;
         contacts.put(contact.getId(), contact) ;        
       }
     }
-    
-    //System.out.println("\n\n 11 :" + contacts.size() + "\n\n");
     //public contacts
     Node publicContactHome = getPublicContactHome(SessionProvider.createSystemProvider()) ;
     //Node publicContactHome = getPublicContactHome(sysProvider) ;  
@@ -1513,15 +1506,14 @@ public class JCRDataStorage {
     filter.setAccountPath(usersPath) ;
     // minus shared contacts
     filter.setOwner("true") ; 
-    qm = publicContactHome.getSession().getWorkspace().getQueryManager() ;
-    query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
+    QueryManager qm = publicContactHome.getSession().getWorkspace().getQueryManager() ;
+    Query query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
     NodeIterator itpublic = query.execute().getNodes();
     while(itpublic.hasNext()) {
       Contact contact = getContact(itpublic.nextNode(), PUBLIC) ;
       contacts.put(contact.getId(), contact) ;
     }
     filter.setOwner(null) ;
-
     //share contacts
     try {
       Node sharedContact = getSharedContact(username) ;      
