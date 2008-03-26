@@ -76,7 +76,8 @@ public class ContactPageList extends JCRPageList {
     }
     currentListPage_ = new ArrayList<Contact>() ;
     for(int i = 0; i < pageSize; i ++) {
-      if(iter_.hasNext()){
+      // add != null to fix bug 514
+      if(iter_ != null && iter_.hasNext()){
         currentNode = iter_.nextNode() ;
         if(currentNode.isNodeType("exo:contact")) {
           // hoang quang hung edit

@@ -419,10 +419,10 @@
 		<div class="UIAddressPageList">
 						<div class="ContactIteratorContainer">
 	  					<div class="RightPageIteratorBlock">
-	  						<a href="<%=uicomponent.event("FirstPage")%>" title="First Page" class="$cssPreviousPage FirstPageArrow"/></a>        
-	  						<a href="<%=uicomponent.event("PreviousPage")%>" title="Previous Page" class="$cssPreviousPage PreviousPageArrow"></a>
+	  						<a href="<%=uicomponent.event("FirstPage")%>" title="First Page" class="$cssPreviousPage FirstPageArrow"/><span></span></a>        
+	  						<a href="<%=uicomponent.event("PreviousPage")%>" title="Previous Page" class="$cssPreviousPage PreviousPageArrow"><span></span></a>
 								<div class="Number">$contactRange</div>
-	  				 		<a href="<%=uicomponent.event("NextPage")%>" title="Next Page" class="$cssNextPage NextPageArrow"/></a>
+	  				 		<a href="<%=uicomponent.event("NextPage")%>" title="Next Page" class="$cssNextPage NextPageArrow"/><span></span></a>
 	 				  		<a href="<%=uicomponent.event("LastPage")%>" title="Last Page" class="$cssNextPage LastPageArrow"><span></span></a>
 						    <div style="clear: left;"><span></span></div>
 						  </div>
