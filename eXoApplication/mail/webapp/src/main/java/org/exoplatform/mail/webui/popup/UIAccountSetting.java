@@ -270,10 +270,16 @@ public class UIAccountSetting extends UIFormTabPane {
     uiServerInput.getUIFormCheckBoxInput(FIELD_IS_INCOMING_SSL).setChecked(account.isIncomingSsl()) ;
     uiServerInput.getUIFormCheckBoxInput(FIELD_CHECKMAIL_AUTO).setChecked(account.checkedAuto()) ;
     if(getFieldProtocol().equals(Utils.POP3)) {
-      uiServerInput.addUIFormInput(leaveOnServer_) ;
+      if(uiServerInput.getChildById(FIELD_LEAVE_ON_SERVER) == null)
+        uiServerInput.addUIFormInput(leaveOnServer_) ;
+      if(uiServerInput.getChildById(FIELD_MARK_AS_DELETED) != null)
+        uiServerInput.removeChildById(FIELD_MARK_AS_DELETED) ;
 //      uiServerInput.addUIFormInput(skipOverSize_) ;
     } else {
-      uiServerInput.addUIFormInput(markAsDelete_) ;
+      if(uiServerInput.getChildById(FIELD_MARK_AS_DELETED) == null)
+        uiServerInput.addUIFormInput(markAsDelete_) ;
+      if(uiServerInput.getChildById(FIELD_LEAVE_ON_SERVER) != null)
+        uiServerInput.removeChildById(FIELD_LEAVE_ON_SERVER) ;
     }
     
     if(account.getPopServerProperties() != null) {
