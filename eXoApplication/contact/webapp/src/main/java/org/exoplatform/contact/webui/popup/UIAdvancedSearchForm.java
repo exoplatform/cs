@@ -111,7 +111,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent {
         return ;        
       }
       ContactFilter filter = new ContactFilter() ;
-      if(!ContactUtils.isEmpty(text)) filter.setText(ContactUtils.filterString(text, false)) ;
+      if(!ContactUtils.isEmpty(text)) filter.setText(ContactUtils.filterString(text, true)) ;
       if(!ContactUtils.isEmpty(fullName)) filter.setFullName(ContactUtils.filterString(fullName, false)) ;   
       if(!ContactUtils.isEmpty(firstName)) filter.setFirstName(ContactUtils.filterString(firstName, false)) ;       
       if(!ContactUtils.isEmpty(lastName)) filter.setLastName(ContactUtils.filterString(lastName, false)) ;
