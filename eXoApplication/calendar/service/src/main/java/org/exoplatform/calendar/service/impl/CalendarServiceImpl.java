@@ -38,6 +38,8 @@ import org.exoplatform.calendar.service.RssData;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 
+import sun.util.calendar.CalendarUtils;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen Quang
@@ -237,7 +239,7 @@ public class CalendarServiceImpl implements CalendarService{
     storage_.moveEvent(sProvider, formCalendar,toCalendar, fromType, toType, calEvents, username)  ;
   }
 
-  public void confirmInvitation(String fromUserId, String toUserId, String eventId, boolean isAccept) throws Exception {
-    storage_.confirmInvitation(fromUserId, toUserId, eventId, isAccept) ;
+  public void confirmInvitation(String fromUserId, String toUserId,int calType,String calendarId, String eventId, int answer) throws Exception {
+    storage_.confirmInvitation(fromUserId, toUserId, calType, calendarId, eventId, answer) ;
   }
 }

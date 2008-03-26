@@ -80,7 +80,7 @@ public class CalendarUtils {
   final public static String DATETIMEFORMAT = DATEFORMAT + " " +TIMEFORMAT ;   
   final public static int DEFAULT_TIMEITERVAL = 15 ;
   final public static long MILISECONS_OF_DAY = 24*60*59*1000 ;
-
+  final public static String EXO_INVITATION = "X-Exo-Invitation".intern() ;
 
   final public static String SPECIALCHARACTER[] = {SEMICOLON,COMMA,SLASH,BACKSLASH,"'","|",">","<","\"", "?", "!", "@", "#", "$", "%","^","&","*"} ;
 
