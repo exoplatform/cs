@@ -16,14 +16,14 @@
               <div class="MiddleBar">
                 <div class="UIAddressSearchForm">
                   <div class="QuickSearch">
-                    <div class="SearchTitle">Search:</div>
+                    <div class="SearchTitle"><%=uiform.getLabel(uiform.FIELD_KEYWORD)%></div>
                     <%uiform.renderField(uiform.FIELD_KEYWORD)%>
-                    <a class="SearchIcon" href="<%=uicomponent.event('Search')%>" title="Quick Search"><span></span></a>
+                    <a class="SearchIcon" href="<%=uicomponent.event('Search')%>" title="<%=uiform.getLabel(uiform.FIELD_KEYWORD)%>"><span></span></a>
                     <div style="clear:left;"><span></span></div>
                   </div>  
                 </div>
                 <div class="AddressesGroup">
-                  <div class="AddressLabel">Addresses from group:</div>
+                  <div class="AddressLabel"><%=uiform.getLabel(uiform.FIELD_GROUP)%></div>
                    <%uiform.renderField(uiform.FIELD_GROUP)%>
                   <div style="clear: left;"><span></span></div>
                 </div>
@@ -44,12 +44,12 @@
                 <th style="width: 20px;" class="BorderAddress"><input type="checkbox" class="checkbox" value="4" /></th>
                 <th class="BorderAddress">
                   <div class="BlueDownArrowIcon">
-                    <div class="Label">Name</div>
+                    <div class="Label"><%=uiform.getLabel("name")%></div>
                   </div>
                 </th>
                 <th style="width: 48%;" >
                   <div class="BlueDownArrowIcon">
-                    <div class="Label">Email</div>
+                    <div class="Label"><%=uiform.getLabel("email")%></div>
                   </div>
                 </th>
               </tr>
@@ -66,7 +66,7 @@
                     %>
                   </td>
                   <td class="text BorderAddress"><%=contact.getFullName()%></td>
-                  <td class="text"><%=contact.getEmailAddress()%></td>
+                  <td class="text"><%=contact.getEmailAddress() != null ? contact.getEmailAddress() : "" %></td>
                 </tr>
               <%}%>
         </tbody>
@@ -82,11 +82,13 @@
     <table class="ActionContainer" align="center">
       <tr>
         <td align="center"> 
-      	<%for(String action : uicomponent.getActions()){%>
+      	<%for(String action : uicomponent.getActions()){
+      		String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
+      	%>
          <a href="<%=uicomponent.event(action)%>" class="ActionButton LightBlueStyle">
             <div class="ButtonLeft">
               <div class="ButtonRight">
-                <div class="ButtonMiddle">$action</div>
+                <div class="ButtonMiddle">$actionLabel</div>
               </div>
             </div>
           </a>

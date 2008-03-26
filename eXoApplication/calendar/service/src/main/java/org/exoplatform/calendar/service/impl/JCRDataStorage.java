@@ -57,6 +57,7 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.xml.PortalContainerInfo;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.hibernate.hql.ast.tree.FromClause;
 
 import com.sun.syndication.feed.synd.SyndContent;
 import com.sun.syndication.feed.synd.SyndContentImpl;
@@ -1611,7 +1612,7 @@ public class JCRDataStorage{
         map.put(key.split(":")[0], key.split(":")[1]) ;
       }
       if(map.get(calendarNode.getProperty("exo:id").getString()) == null)
-      map.put(calendarNode.getProperty("exo:id").getString(), calendarNode.getProperty("exo:calendarColor").getString()) ;
+        map.put(calendarNode.getProperty("exo:id").getString(), calendarNode.getProperty("exo:calendarColor").getString()) ;
       List<String> calColors = new ArrayList<String>() ;
       for(String key : map.keySet()) {
         calColors.add(key + ":" +map.get(key)) ;
@@ -1876,8 +1877,14 @@ public class JCRDataStorage{
       StringBuilder timeValues = new StringBuilder() ;
       while(it.hasNext()) {
         event = it.nextNode() ;
-        from = String.valueOf(event.getProperty("exo:fromDateTime").getDate().getTimeInMillis()) ;
-        to = String.valueOf(event.getProperty("exo:toDateTime").getDate().getTimeInMillis()) ;
+        java.util.Calendar fromCal = event.getProperty("exo:fromDateTime").getDate() ;
+        System.out.println(fromCal.getTime());
+        System.out.println("query ++" + eventQuery.getFromDate().getTime());
+        if(fromCal.before(eventQuery.getFromDate())) fromCal.setTimeInMillis(eventQuery.getFromDate().getTimeInMillis()) ;
+        java.util.Calendar toCal = event.getProperty("exo:toDateTime").getDate() ;
+        if(toCal.after(eventQuery.getToDate())) toCal.setTimeInMillis(eventQuery.getToDate().getTimeInMillis()) ;
+        from = String.valueOf(fromCal.getTimeInMillis()) ;
+        to = String.valueOf(toCal.getTimeInMillis()) ;
         if(timeValues != null && timeValues.length() > 0) timeValues.append(",") ;
         timeValues.append(from).append(",").append(to) ;
       }
@@ -1916,7 +1923,6 @@ public class JCRDataStorage{
         calendar = iter.nextProperty().getParent() ;
         if(calendar.getProperty("exo:id").getString().equals(sharedCalendarId)) {
           Value[] editValues = calendar.getProperty("exo:editPermissions").getValues() ;
-          System.out.println(Arrays.asList(editValues).contains(username));
           return Arrays.asList(editValues).contains(username) ;
         }
       }
@@ -2059,7 +2065,7 @@ public class JCRDataStorage{
     }
   }
   public void confirmInvitation(String fromUserId, String toUserId, String eventId, boolean isAccept){
-    
+
   }
 }
 

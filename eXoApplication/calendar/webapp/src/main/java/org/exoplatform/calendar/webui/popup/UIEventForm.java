@@ -21,7 +21,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Attachment;
@@ -40,6 +42,7 @@ import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
+import org.exoplatform.mail.service.Utils;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -97,6 +100,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   final public static String FIELD_STATUS = "status".intern() ;
   final public static String FIELD_MEETING = "meeting".intern() ;
   final public static String FIELD_PARTICIPANT = "participant".intern() ;
+  final public static String FIELD_ISSENDMAIL = "isSendMail".intern() ;
 
   final public static String ITEM_PUBLIC = "public".intern() ;
   final public static String ITEM_PRIVATE = "private".intern() ;
@@ -113,7 +117,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   private CalendarEvent calendarEvent_ = null ;
   protected String calType_ = "0" ;
   private String errorMsg_ = null ;
-
+  private Map<String, User> participants_ = new LinkedHashMap<String, User>() ;
   private String oldCalendarId_ = null ;
   private String newCalendarId_ = null ;
   private String newCategoryId_ = null ;
@@ -129,6 +133,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     List<ActionData> actions = new ArrayList<ActionData>() ;
     eventShareTab.addUIFormInput(new UIFormSelectBox(FIELD_SHARE, FIELD_SHARE, getShareValue()) ) ;
     eventShareTab.addUIFormInput(new UIFormSelectBox(FIELD_STATUS, FIELD_STATUS, getStatusValue()) ) ;
+    eventShareTab.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_ISSENDMAIL, FIELD_ISSENDMAIL, true)) ;
     eventShareTab.addUIFormInput(new UIFormTextAreaInput(FIELD_PARTICIPANT, FIELD_PARTICIPANT, null)) ;
     eventShareTab.addUIFormInput(new UIFormTextAreaInput(FIELD_MEETING, FIELD_MEETING, null)) ;
     actions = new ArrayList<ActionData>() ;
@@ -687,16 +692,16 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     eventDetailTab.getUIFormTextAreaInput(FIELD_MEETING).setValue(sb.toString()) ;
   }
 
-  protected String[] getParticipant() {
-    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTSHARE) ;
-    String participant = eventDetailTab.getUIFormTextAreaInput(FIELD_PARTICIPANT).getValue() ;
-    if(CalendarUtils.isEmpty(participant)) return null ;
+  protected String[] getParticipants() {
+    String participants = getParticipantValues() ;
+    if(CalendarUtils.isEmpty(participants)) return null ;
     else {
-      String[] pars = participant.split(CalendarUtils.COMMA) ;
+      /*String[] pars = participant.split(CalendarUtils.COMMA) ;
       for(int i = 0; i < pars.length; i++) {
         pars[i] = pars[i].trim() ;
       }
-      return pars ;
+      return pars ;*/
+      return participants.split(CalendarUtils.COMMA) ;
     }
   } 
   protected String  getParticipantValues() {
@@ -704,7 +709,17 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     return eventDetailTab.getUIFormTextAreaInput(FIELD_PARTICIPANT).getValue() ; 
   } 
   protected void setParticipant(String values) throws Exception{
-    ((UIFormInputWithActions)getChildById(TAB_EVENTSHARE)).getUIFormTextAreaInput(FIELD_PARTICIPANT).setValue(values) ;
+    OrganizationService orgService = CalendarUtils.getOrganizationService() ;
+    StringBuffer sb = new StringBuffer() ;
+    for(String s : values.split(CalendarUtils.COMMA)) {
+      User user = orgService.getUserHandler().findUserByName(s) ; 
+      if(user != null) {
+        participants_.put(s, user) ;
+        if(!CalendarUtils.isEmpty(sb.toString())) sb.append(CalendarUtils.COMMA) ;
+        sb.append(s) ;
+      }
+    }
+    ((UIFormInputWithActions)getChildById(TAB_EVENTSHARE)).getUIFormTextAreaInput(FIELD_PARTICIPANT).setValue(sb.toString()) ;
     ((UIEventAttenderTab)getChildById(TAB_EVENTATTENDER)).updateParticipants(values) ;
   }
 
@@ -713,20 +728,42 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     UIFormCheckBoxInput<Boolean> input = eventAttenderTab.getChildById(id) ;
     if(input == null) eventAttenderTab.addUIFormInput(new UIFormCheckBoxInput<Boolean>(id,id, false)) ;
   }*/
-  private SessionProvider getSession() {
+  protected SessionProvider getSession() {
     return SessionProviderFactory.createSessionProvider() ;
   }
-  private SessionProvider getSystemSession() {
+  protected SessionProvider getSystemSession() {
     return SessionProviderFactory.createSystemProvider() ;
   }
 
-  private void sendMail(MailService svr, OrganizationService orSvr, String fromId,  String toId) throws Exception {
-    Account acc = svr.getDefaultAccount(getSession(), fromId) ;
+  protected boolean isSendMail() {
+    UIFormInputWithActions uiShareTab = getChildById(TAB_EVENTSHARE) ;
+    return uiShareTab.getUIFormCheckBoxInput(FIELD_ISSENDMAIL).isChecked() ;
+  }
+
+  protected void sendMail(MailService svr, OrganizationService orSvr, Account acc, String fromId,  String toId, CalendarEvent event) throws Exception {
     Message message = new Message() ;
-    message.setMessageTo(toId) ;
+    message.setSubject("invitation about : " + event.getSummary()) ;
+    StringBuffer sbAddress = new StringBuffer() ;
+    for(String s : toId.split(CalendarUtils.COMMA)) {
+      User reciver = orSvr.getUserHandler().findUserByName(s) ;
+      if(reciver.getEmail() != null)
+        if(!CalendarUtils.isEmpty(sbAddress.toString())) sbAddress.append(CalendarUtils.COMMA) ;
+      sbAddress.append(reciver.getEmail()) ;
+    }
+    message.setMessageBcc(sbAddress.toString()) ;
+    message.setContentType(Utils.MIMETYPE_TEXTHTML) ;
+    message.setSendDate(new Date()) ;
+    StringBuffer sb = new StringBuffer() ;
+    sb.append("<div style='border:solid 1px blue; width:100%; height:100%;' >") ;
+    sb.append("you have invitation to a meeting!") ;
+    sb.append("it about : " + event.getDescription() + "<br/>") ;
+    sb.append("it form : " + event.getFromDateTime().toString() + "<br/>") ;
+    sb.append("to : " + event.getToDateTime().toString() + "<br/>") ;
+    sb.append("in " + event.getLocation()) ;
+    sb.append("</div>") ;
+    message.setMessageBody(sb.toString()) ;
     User user = orSvr.getUserHandler().findUserByName(fromId) ;
     message.setFrom(user.getEmail()) ;
-    //message.setContentType()
     svr.sendMessage(getSession(), user.getUserName(), acc.getId(), message) ;
   }
 
@@ -897,7 +934,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         long start_milisec = new Date().getTime() ;
         System.out.println("\n\n Starting add  event ...." ); */
         Date from = uiForm.getEventFromDate(calSetting.getDateFormat(), calSetting.getTimeFormat()) ;
-        System.out.println(from);
         Date to = uiForm.getEventToDate(calSetting.getDateFormat(),calSetting.getTimeFormat()) ;
         if(from.after(to)) {
           uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.event-date-time-logic", null, ApplicationMessage.WARNING)) ;
@@ -913,7 +949,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
           to = tempCal.getTime() ;
         }
         try {
-          String[] pars = uiForm.getParticipant() ;
+          String[] pars = uiForm.getParticipants() ;
           String eventId = null ;
           /*Calendar temp =  CalendarUtils.getInstanceTempCalendar() ;
           temp.setTime(from) ;
@@ -982,6 +1018,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
           long amount = end_milisec - start_milisec ;
           System.out.println("\n\n Finished.  " + amount + " ss");
            */ 
+
           CalendarView calendarView = (CalendarView)uiViewContainer.getRenderedChild() ;
           if(calendarView instanceof UIListContainer)((UIListContainer)calendarView).setDisplaySearchResult(false) ;
           uiViewContainer.refresh() ;
@@ -992,6 +1029,17 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
           event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
           uiForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
+
+          if(uiForm.isSendMail()) {
+            Account acc = CalendarUtils.getMailService().getDefaultAccount(uiForm.getSession(), username);
+            if(acc != null) {
+              uiForm.sendMail(CalendarUtils.getMailService(), CalendarUtils.getOrganizationService(), acc, username, uiForm.getParticipantValues(), calendarEvent) ;
+            } else {
+              uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.cant-send-email", null));
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            }
+          }
+
         }catch (Exception e) {
           uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.add-event-error", null));
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

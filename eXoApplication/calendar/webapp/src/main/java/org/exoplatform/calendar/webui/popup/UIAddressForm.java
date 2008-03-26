@@ -202,7 +202,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         email = c.getEmailAddress() ;
         if(!listMail.contains(email)) {
           if(sb != null && sb.length() > 0) sb.append(CalendarUtils.COMMA) ;
-          sb.append(email) ;
+          if(email != null) sb.append(email) ;
         }
       }
 
