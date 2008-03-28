@@ -63,6 +63,9 @@ public class CalendarUtils {
   final public static String STAR = "*".intern() ;
   final public static String UNDERSCORE = "_".intern() ;
   final public static String DOUBLESCORE = "--".intern() ;
+  public static final int DENY = 0 ;
+  public static final int ACCEPT = 1 ;
+  public static final int NOTSURE = 2 ;
   
   final public static String TIMEFORMAT  = "HH:mm".intern() ;
   final public static String DATEFORMAT = "MM/dd/yyyy".intern() ;

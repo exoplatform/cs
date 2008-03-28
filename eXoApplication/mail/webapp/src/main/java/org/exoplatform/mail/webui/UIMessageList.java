@@ -44,7 +44,6 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -755,12 +754,13 @@ public class UIMessageList extends UIForm {
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-many-messages", null, ApplicationMessage.INFO)) ;
         return;
       }
-      if (msgId == null) msgId = uiMessageList.getCheckedMessage().get(0).getId();
-
+      Message message = null ;
+      if (msgId != null) message = uiMessageList.messageList_.get(msgId) ;
+      else  message = uiMessageList.getCheckedMessage().get(0);
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
       UIPrintPreview uiPrintPreview = uiPopup.activate(UIPrintPreview.class, 700) ;
-      uiPrintPreview.setPrintMessage(uiMessageList.messageList_.get(msgId)) ;
+      uiPrintPreview.setPrintMessage(message) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class));
     }
@@ -1080,6 +1080,7 @@ public class UIMessageList extends UIForm {
       } catch (Exception e) {
         return;
       }
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
     }
   }
 }

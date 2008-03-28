@@ -24,7 +24,6 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
-import java.util.Vector;
 
 import javax.activation.DataHandler;
 import javax.mail.AuthenticationFailedException;
@@ -422,16 +421,10 @@ public class MailServiceImpl implements MailService{
           unseenFlag = new OrTerm(unseenFlag, dateTerm) ;
           messages = folder.search(unseenFlag) ;
         }
-        Vector<javax.mail.Message> vector = new Vector<javax.mail.Message>();
         boolean leaveOnServer = (isPop3 && Boolean.valueOf(account.getPopServerProperties().get(Utils.SVR_POP_LEAVE_ON_SERVER))) ;
         boolean markAsDelete = (isImap && Boolean.valueOf(account.getImapServerProperties().get(Utils.SVR_IMAP_MARK_AS_DELETE))) ;
-        for (int i=0 ; i< messages.length; i++) {  
-          vector.add(messages[i]); 
-          messages[i].setFlag(Flags.Flag.SEEN, true);
-          if (!leaveOnServer || markAsDelete) messages[i].setFlag(Flags.Flag.DELETED, true);
-        }  
         
-        totalNew = vector.size() ;
+        totalNew = messages.length ;
 
         System.out.println(" #### Folder contains " + totalNew + " messages !");
         tt1 = System.currentTimeMillis();
@@ -452,13 +445,15 @@ public class MailServiceImpl implements MailService{
             storeFolder.setPersonalFolder(true) ;
             storage_.saveFolder(sProvider, username, account.getId(), storeFolder) ;
           }
+          javax.mail.Message msg ;
           while (i < totalNew) {
             System.out.println(" [DEBUG] Fetching message " + (i+1) + " ...") ;
             t1 = System.currentTimeMillis();
-            javax.mail.Message msg = vector.get(i) ;      
+            msg = messages[i] ;   
+            msg.setFlag(Flags.Flag.SEEN, true);
+            if (!leaveOnServer || markAsDelete) msg.setFlag(Flags.Flag.DELETED, true);
             try {
               storage_.saveMessage(sProvider, username, account.getId(), msg, folderId, spamFilter) ;
-              System.out.println(i + "=====>>> " + MimeMessageParser.getReceivedDate(msg).getTime()) ;
               account.setLastCheckedDate(MimeMessageParser.getReceivedDate(msg).getTime()) ;
             } catch(Exception e) {
               e.printStackTrace() ;
@@ -471,10 +466,8 @@ public class MailServiceImpl implements MailService{
           }
           saveAccount(sProvider, username, account, false) ;
           Calendar cc = GregorianCalendar.getInstance();
-          javax.mail.Message firstMsg = vector.get(0) ;
-          if (firstMsg.getReceivedDate() != null)
-            cc.setTime(firstMsg.getReceivedDate());
-          else cc.setTime(firstMsg.getSentDate());
+          javax.mail.Message firstMsg = messages[0] ;
+          cc = MimeMessageParser.getReceivedDate(firstMsg);
           System.out.println(" [DEBUG] Executing the filter ...") ;
           t1 = System.currentTimeMillis();
           storage_.execActionFilter(sProvider, username, accountId, cc);

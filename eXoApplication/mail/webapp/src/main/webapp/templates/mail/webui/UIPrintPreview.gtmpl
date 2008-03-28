@@ -19,6 +19,7 @@
   <%
     Message msg = uicomponent.getPrintMessage();
     Account acc = uicomponent.getAccount();
+    if (msg != null) {
   %>
   <div class="PrintPreview">
     <div class="PrintHeader" >
@@ -87,6 +88,7 @@
       </div>
     <%}%>
   </div>
+  <%}%>
   <% uiform.end() %>
   <!--  End PrintPriview -->
   <style type="text/css" media="print">

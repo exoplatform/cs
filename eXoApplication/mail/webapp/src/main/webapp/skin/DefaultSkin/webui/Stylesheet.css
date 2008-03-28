@@ -1572,6 +1572,51 @@
 	line-height: 20px;
 }
 
+/******************************* invitation mail ******************************/
+
+.InvitationBG {
+	background: url('background/Envelope.gif') no-repeat;
+	height: 250px;
+	width: 560px;
+	padding-top: 40px;
+	margin: auto;
+}
+
+.InvitationBox {
+	background: #E0ECFF;
+	border: 1px solid #c7c7c7;
+	padding: 8px;
+    width:400px;
+    margin:auto;
+}
+
+.InvitationBG .MoreDetail {
+	color: blue;
+	padding: 4px;
+}
+
+.InvitationBG .ActionBox {
+	border: 1px solid #c7c7c7;
+	background: #ffffff;
+	padding: 4px;
+	width: 210px;
+	margin: auto;
+}
+
+.InvitationBG .ActionBox a {
+	color:#058EE6;
+	text-decoration:underline;
+}
+
+.InvitationBG .ActionBox a.hover {
+	color:#FDA946;
+	text-decoration:none;
+}
+
+.InvitationBox .UIForm .UIFormGrid td.FieldLabel {
+	width: 60px;
+}
+
 /* Colors Picker*/
 .Olive {background-color: #808000; }
 .OliveDrab {background-color: #6B8E23;}   
@@ -1606,3 +1651,4 @@
 .Violet {background-color: #EE82EE;}    
 .Wheat {background-color: #F5DEB3;}    
 .Yellow {background-color: #FFFF00;} 
+

@@ -90,11 +90,20 @@
 .UIMailPortlet .UIAccountSetting .UITabPane .UITabContentContainer {
 	border: 1px solid #939393;
 	border-top: none;
+	height: 100%;
 }
 
 .UIMailPortlet .UIAccountSetting .UITabPane .UITabContentContainer .UITabContent {
 	border: 1px solid white;	
 	border-top: none;
+	padding: 0px;
+	height: 100%;
+}
+
+.UIMailPortlet .UIAccountSetting .UIForm .HorizontalLayout .serverSettings {
+	overflow-y: auto;
+	overflow-x: hidden;
+	*width: 432px;
 }
 
 .UIMailPortlet .UIAccountSetting .UITabPane .UIForm {
@@ -126,7 +135,7 @@
 	padding-left: 24px; 
 }
 
-.UIMailPortlet .UIAccountSetting .UIForm .HorizontalLayout .UIFormInputSet {
+.UIMailPortlet .UIAccountSetting .UIForm .UIFormInputSet {
 	padding: 15px 10px;
 	height: 287px;
 	width: auto;

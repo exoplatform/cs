@@ -221,6 +221,15 @@ public class MessagePageList extends JCRPageList {
       msg.setFolders(folders);
     } catch(Exception e) { }
     
+    try {
+      Value[] properties = messageNode.getProperty(Utils.EXO_HEADERS).getValues();
+      for (int i=0; i<properties.length; i++) {
+        String property = properties[i].getString();
+        int index = property.indexOf('=');
+        if (index != -1) msg.setHeader(property.substring(0, index), property.substring(index+1));
+      }
+    } catch(Exception e) { }
+    
     NodeIterator msgAttachmentIt = messageNode.getNodes();
     List<Attachment> attachments = new ArrayList<Attachment>();
     while (msgAttachmentIt.hasNext()) {

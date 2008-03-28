@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -38,6 +39,7 @@ import javax.jcr.Value;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
+import javax.mail.Header;
 import javax.mail.Multipart;
 import javax.mail.Part;
 import javax.mail.internet.ContentType;
@@ -314,6 +316,15 @@ public class JCRDataStorage{
       msg.setFolders(folders);
     } catch(Exception e) { }
     
+    try {
+      Value[] properties = messageNode.getProperty(Utils.EXO_HEADERS).getValues();
+      for (int i=0; i<properties.length; i++) {
+        String property = properties[i].getString();
+        int index = property.indexOf('=');
+        if (index != -1) msg.setHeader(property.substring(0, index), property.substring(index+1));
+      }
+    } catch(Exception e) { }
+    
     NodeIterator msgAttachmentIt = messageNode.getNodes();
     List<Attachment> attachments = new ArrayList<Attachment>();
     while (msgAttachmentIt.hasNext()) {
@@ -526,6 +537,14 @@ public class JCRDataStorage{
       nodeMsg.setProperty(Utils.EXO_TAGS, tags);
       String[] folders = message.getFolders();
       nodeMsg.setProperty(Utils.EXO_FOLDERS, folders);
+      Iterator<String> ith = message.getHeaders().keySet().iterator();
+      ArrayList<String> values = new ArrayList<String>(message.getHeaders().size());
+      while (ith.hasNext()) {
+        String key = ith.next().toString();
+        values.add(key+"="+message.getHeaders().get(key));
+      }
+      nodeMsg.setProperty(Utils.EXO_HEADERS, values.toArray(new String[message.getHeaders().size()]));
+      
       if (isNew) {
         List<Attachment> attachments = message.getAttachments();
         if(attachments != null) { 
@@ -590,6 +609,14 @@ public class JCRDataStorage{
       folderIds = new String[] { Utils.createFolderId(accId, Utils.FD_SPAM, false) } ;
     }
     node.setProperty(Utils.EXO_FOLDERS, folderIds);
+    
+    ArrayList<String> values = new ArrayList<String>() ;
+    Enumeration enu = msg.getAllHeaders() ;
+    while (enu.hasMoreElements()) {
+      Header header = (Header)enu.nextElement() ;
+      values.add(header.getName()+"="+header.getValue()) ;
+    }
+    node.setProperty(Utils.EXO_HEADERS, values.toArray(new String[]{}));
     
     System.out.println("     [DEBUG] Saved body and attachment of message .... size : " + Math.abs(msg.getSize()) + " B") ;
     t2 = System.currentTimeMillis();

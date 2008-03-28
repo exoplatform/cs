@@ -288,6 +288,7 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
       MessageFilter filter = new MessageFilter(filterName);       
       if (uiAddFilter.getCurrentFilter() != null) filter = uiAddFilter.getCurrentFilter();
       
+      filter.setName(filterName) ;
       filter.setAccountId(accountId);
       filter.setFrom(from);
       filter.setFromCondition(Integer.valueOf(fromCondition));

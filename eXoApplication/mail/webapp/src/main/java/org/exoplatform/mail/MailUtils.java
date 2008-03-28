@@ -34,6 +34,7 @@ import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.service.Message;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.scheduler.JobSchedulerService;
@@ -153,5 +154,51 @@ public class MailUtils {
   public static String encodeHTML(String htmlContent) throws Exception {
     return htmlContent.replaceAll("&", "&amp;").replaceAll("\"", "&quot;")
     .replaceAll("<", "&lt;").replaceAll(">", "&gt;") ;
+  }
+  
+  public static boolean isInvitation(Message msg) throws Exception {
+    String inviteHeader = msg.getHeader("X-Exo-Invitation") ;
+    if (inviteHeader != null) return true ;
+    else return false ;
+  }
+  
+  public static String getEventFrom(Message msg) throws Exception {
+    String from = null;
+    if (isInvitation(msg)) {
+      from = msg.getHeader("X-Exo-Invitation").split(";")[0].trim() ;
+    }
+    return from ;
+  }
+  
+  public static String getEventTo(Message msg) throws Exception {
+    String to = null;
+    if (isInvitation(msg)) {
+      to = msg.getHeader("X-Exo-Invitation").split(";")[1].trim() ;
+    }
+    return to ;
+  }
+  
+  public static String getEventType(Message msg) throws Exception {
+    String eventType = null;
+    if (isInvitation(msg)) {
+      eventType = msg.getHeader("X-Exo-Invitation").split(";")[2].trim() ;
+    }
+    return eventType ;
+  }
+  
+  public static String getCalendarId(Message msg) throws Exception {
+    String calId = null;
+    if (isInvitation(msg)) {
+      calId = msg.getHeader("X-Exo-Invitation").split(";")[3].trim() ;
+    }
+    return calId ;
+  }
+  
+  public static String getCalendarEventId(Message msg) throws Exception {
+    String calEvenId = null;
+    if (isInvitation(msg)) {
+      calEvenId = msg.getHeader("X-Exo-Invitation").split(";")[4].trim() ;
+    }
+    return calEvenId ;
   }
 }
