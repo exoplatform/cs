@@ -748,6 +748,33 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     sbSubject.append(" ") ;
     sbSubject.append(df.format(event.getFromDateTime())) ;
     message.setSubject(sbSubject.toString()) ;
+    StringBuffer sbBody = new StringBuffer() ;
+    sbBody.append("<table style=\"margin: 0px; padding: 0px; border-collapse: collapse; border-spacing: 0px; width: 100%; line-height: 16px;\">") ;
+    sbBody.append("<tbody>") ;
+    sbBody.append("<tr>") ;
+    sbBody.append("<td colspan=\"2\" style=\"font-size: 12px; text-align: center;\">You are invited to</td>") ;
+    sbBody.append("</tr>") ;
+    sbBody.append("<tr>") ;
+    sbBody.append("<td colspan=\"2\" style=\"font-weight: bold; text-align: center; font-size: 17px;\">"+event.getSummary()+"</td>") ;
+    sbBody.append("</tr>") ;
+    sbBody.append("<tr>") ;
+    sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">When:</td>") ;
+    sbBody.append("<td style=\"padding: 4px;\"> <div>From: " +df.format(event.getFromDateTime())+"</div><div>To: "+df.format(event.getToDateTime())+"</div></td>") ;
+    sbBody.append("</tr>") ;
+    sbBody.append("<tr>") ;
+    sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">Where:</td><td>" + event.getLocation() != null ? event.getLocation(): " " + "</td>") ;
+    sbBody.append("</tr>") ;
+    sbBody.append("<tr>") ;
+    sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">Who:</td>") ;
+    sbBody.append("<td style=\"padding: 4px;\">" +toId+ "</td>") ;
+    sbBody.append("</tr>");
+    sbBody.append("<tr>");
+    sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">Link:</td>");  
+    sbBody.append("<td style=\"padding: 4px;\"> </td>");
+    sbBody.append("</tr>");
+    sbBody.append("</tbody>");
+    sbBody.append("</table>");
+    message.setMessageBody(sbBody.toString()) ;
     StringBuffer sbAddress = new StringBuffer() ;
     for(String s : toId.split(CalendarUtils.COMMA)) {
       User reciver = orSvr.getUserHandler().findUserByName(s) ;
@@ -756,7 +783,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       sbAddress.append(reciver.getEmail()) ;
     }
     message.setMessageTo(sbAddress.toString()) ;
-    //message.setMessageBcc(sbAddress.toString()) ;
     message.setContentType(Utils.MIMETYPE_TEXTHTML) ;
     StringBuffer values = new StringBuffer(fromId) ; 
     User user = orSvr.getUserHandler().findUserByName(fromId) ;
@@ -771,15 +797,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     values.append(event.getId()) ;
     message.setHeader(CalendarUtils.EXO_INVITATION , values.toString()) ;
     message.setSendDate(new Date()) ;
-    StringBuffer sb = new StringBuffer() ;
-    sb.append("<div style='border:solid 1px blue; width:100%; height:100%;' >") ;
-     sb.append("you have invitation to a meeting!" + "<br/>") ;
-    sb.append("it about : " + event.getDescription() + "<br/>") ;
-    sb.append("it form : " + event.getFromDateTime().toString() + "<br/>") ;
-    sb.append("to : " + event.getToDateTime().toString() + "<br/>") ;
-    sb.append("in " + event.getLocation() != null ? event.getLocation() : "") ; 
-    sb.append("</div>") ;
-    message.setMessageBody(sb.toString()) ;
     svr.sendMessage(getSession(), user.getUserName(), acc.getId(), message) ;
   }
 
