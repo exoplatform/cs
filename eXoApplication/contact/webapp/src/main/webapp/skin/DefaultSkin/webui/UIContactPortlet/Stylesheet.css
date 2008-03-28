@@ -331,13 +331,13 @@
 	font-weight: bold;
 	line-height: 23px;
 	height: 23px;
-	margin-right: 5px;
 	text-align: center;
+	_margin-right: 2px;
 }
 
 .UIContactPortlet .Result .TitleSearch {
 	float: left;
-	width: 68%;
+	margin-left: 12px;
 }
 
 .UIContactPortlet .UIContactActionsBar {

@@ -508,9 +508,8 @@
 .UIMailPortlet .MailWorkingWorkspace .UIMessageList {
 	padding-left: 1px;
 	overflow-y: auto;
-	overflow-x: hidden;
-	max-height: 200px;
-	*height: 200px;
+	overflow-x: auto;
+	_width: 99.5%;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageList .LevelThreadIcon2 {
@@ -553,7 +552,6 @@
 
 .UIMailPortlet .MailWorkingWorkspace .UIGrid td a {
 	display: block;
-	overflow: hidden;
 	white-space: nowrap;
 }
 
@@ -626,6 +624,7 @@
 	cursor: pointer;
 	background-position: right;
 	padding-right: 16px;
+	width: 60px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageList .UpArrow1Icon {
@@ -635,6 +634,7 @@
 	cursor: pointer;
 	background-position: right;
 	padding-right: 16px;
+	width: 60px;
 }
 
 .AdvancedTooltipTmpl {
@@ -1471,6 +1471,10 @@
 
 .UIMailPortlet .UIContactsPopup .SelectFileFrame {
 	width: 300px;
+}
+
+.UIMailPortlet .UIContactsPopup .ViewBoxStyle {
+	height: 8px;
 }
 
 /******************************* UIAddNewContact ******************************/
