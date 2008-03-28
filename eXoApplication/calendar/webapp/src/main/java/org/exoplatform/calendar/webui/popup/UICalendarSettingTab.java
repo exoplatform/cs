@@ -70,6 +70,7 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     List<SelectItemOption<String>> viewTypes = new ArrayList<SelectItemOption<String>>() ;
     viewTypes.add(new SelectItemOption<String>("Day view", CalendarSetting.DAY_VIEW)) ;
     viewTypes.add(new SelectItemOption<String>("Week view", CalendarSetting.WEEK_VIEW)) ;
+    viewTypes.add(new SelectItemOption<String>("Working view", CalendarSetting.WORKING_VIEW)) ;
     viewTypes.add(new SelectItemOption<String>("Month view", CalendarSetting.MONTH_VIEW)) ;
     viewTypes.add(new SelectItemOption<String>("Year view", CalendarSetting.YEAR_VIEW)) ;
     viewTypes.add(new SelectItemOption<String>("List view", CalendarSetting.LIST_VIEW)) ;

@@ -120,6 +120,10 @@ UICalendarPortlet.prototype.getWeekNumber = function(now) {
 	return NumberOfWeek ;
 } ;
 
+UICalendarPortlet.prototype.getWorkingdays = function(weekdays) {
+	this.weekdays = weekdays ;
+}
+
 /* common method */
 /*
  * This function to apply common setting for portlet

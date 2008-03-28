@@ -313,7 +313,9 @@ WeekMan.prototype.resetEventWeekIndex = function() {
 
 WeekMan.prototype.createDays = function() {
   // Create 7 days
-  for (var i=0; i<7; i++) {
+  var len = (eXo.calendar.UICalendarPortlet.weekdays && document.getElementById("UIWeekView"))?eXo.calendar.UICalendarPortlet.weekdays: 7 ;
+
+  for (var i=0; i<len; i++) {
     this.days[i] = new DayMan();
     // link days
     if (i > 0) {
@@ -352,7 +354,11 @@ WeekMan.prototype.putEvents2Days = function(){
       endDay = startDay;
     }
     for (var j=startDay; j<=endDay; j++) {
-      this.days[j].events.push(eventObj);
+      try{
+      	this.days[j].events.push(eventObj);
+      }catch(e){
+      	//TODO check this when in UIWorkingView
+      }
     }
   }
   for (var i=0; i<this.days.length; i++) {
@@ -480,6 +486,7 @@ EventMan.prototype.cleanUp = function() {
 EventMan.prototype.initWeek = function(rootNode) {
   this.events = new Array();
   this.weeks = new Array();
+
   rootNode = typeof(rootNode) == 'string' ? document.getElementById(rootNode) : rootNode;
   this.rootNode = rootNode;
   var DOMUtil = eXo.core.DOMUtil;
@@ -499,7 +506,8 @@ EventMan.prototype.initWeek = function(rootNode) {
   this.week.weekIndex = 0;
 //  this.week.startWeek = parseInt(this.dayNodes[0].getAttribute('starttime'));
   this.week.startWeek = Date.parse(this.dayNodes[0].getAttribute('starttimefull'));
-  this.week.endWeek = this.week.startWeek + (1000 * 60 * 60 * 24 * 7) -1;
+  var len = (eXo.calendar.UICalendarPortlet.weekdays && document.getElementById("UIWeekView"))?eXo.calendar.UICalendarPortlet.weekdays: 7 ;
+  this.week.endWeek = this.week.startWeek + (1000 * 60 * 60 * 24 * len) -1;
   this.week.events = this.events;
   this.week.resetEventWeekIndex();
   // Set unlimited event visible for all days
@@ -513,6 +521,7 @@ EventMan.prototype.groupByWeek = function(){
   var startWeek = 0;
   var endWeek = 0;
   var startCell = null;
+  var len = (eXo.calendar.UICalendarPortlet.weekdays && document.getElementById("UIWeekView"))?eXo.calendar.UICalendarPortlet.weekdays: 7 ;
   for (var i = 0; i < weekNodes.length; i++) {
     var currentWeek = new WeekMan();
     currentWeek.weekIndex = i;
@@ -521,7 +530,7 @@ EventMan.prototype.groupByWeek = function(){
       startCell = DOMUtil.findFirstDescendantByClass(weekNodes[i], "td", "UICellBlock");
 //      startWeek = parseInt(startCell.getAttribute("startTime"));
       startWeek = Date.parse(startCell.getAttribute('starttimefull'));
-      endWeek = (startWeek + 7 * 24 * 60 * 60 * 1000) - 1;
+      endWeek = (startWeek + len * 24 * 60 * 60 * 1000) - 1;
       currentWeek.startWeek = startWeek;
       currentWeek.endWeek = endWeek;
       if ((eventObj.startTime >= startWeek && eventObj.startTime < endWeek) ||

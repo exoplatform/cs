@@ -138,6 +138,7 @@ public class UIWeekView extends UICalendarView {
     temCal.setFirstDayOfWeek(Integer.parseInt(calSetting.getWeekStartOn())) ;
     temCal.set(java.util.Calendar.WEEK_OF_YEAR, getCurrentWeek()) ;
     int amout = temCal.getFirstDayOfWeek() - calendar_.get(Calendar.DAY_OF_WEEK) ;
+    if(isShowCustomView_) amout = amout + 1 ;
     temCal.add(Calendar.DATE, amout) ;
     return getBeginDay(temCal) ;
   }
@@ -154,7 +155,9 @@ public class UIWeekView extends UICalendarView {
     } 
     temCal.setFirstDayOfWeek(Integer.parseInt(calSetting.getWeekStartOn())) ;
     temCal.setTime(getBeginDateOfWeek().getTime()) ;
-    temCal.add(Calendar.DATE, 6) ;
+    int amout = 6 ;
+    if(isShowCustomView_) amout = amout - 1 ;
+    temCal.add(Calendar.DATE, amout) ;
     return getEndDay(temCal) ;
   }
 
@@ -171,41 +174,7 @@ public class UIWeekView extends UICalendarView {
     }
     return dataMap ;
   }
-
-  /* static  public class QuickAddActionListener extends EventListener<UIWeekView> {
-    public void execute(Event<UIWeekView> event) throws Exception {
-      System.out.println("QuickAddActionListener");
-      UIWeekView calendarview = event.getSource() ;
-      String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      String startTime = event.getRequestContext().getRequestParameter("startTime") ;
-      String finishTime = event.getRequestContext().getRequestParameter("finishTime") ;
-      UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
-      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
-      UIQuickAddEvent uiQuickAddEvent = uiPopupAction.activate(UIQuickAddEvent.class, 600) ;
-      if(CalendarEvent.TYPE_EVENT.equals(type)) {
-        uiQuickAddEvent.setEvent(true) ;
-        uiQuickAddEvent.setId("UIQuickAddEvent") ;
-      } else {
-        uiQuickAddEvent.setEvent(false) ;
-        uiQuickAddEvent.setId("UIQuickAddTask") ;
-      }
-      try {
-        Long.parseLong(startTime) ;
-      }catch (Exception e) {
-        startTime = null ;
-      }
-      try {
-        Long.parseLong(finishTime) ;
-      }catch (Exception e) {
-        finishTime = null ;
-      }
-      uiQuickAddEvent.init(uiPortlet.getCalendarSetting(), startTime, finishTime) ;
-      uiQuickAddEvent.update(CalendarUtils.PRIVATE_TYPE, null) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
-    }
-  }*/
-
+  protected boolean isShowCustomView() {return isShowCustomView_ ;}
   static  public class UpdateEventActionListener extends EventListener<UIWeekView> {
     public void execute(Event<UIWeekView> event) throws Exception {
       UIWeekView calendarview = event.getSource() ;

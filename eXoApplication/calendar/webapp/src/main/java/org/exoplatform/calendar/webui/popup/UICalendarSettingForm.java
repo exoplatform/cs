@@ -72,7 +72,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
   final private static String DEFAULT_CALENDAR_TAB = "defaultCalendarTab".intern() ;
   final private static String DEFAULT_CALENDARS = "defaultCalendars".intern() ;
   final private static String DEFAULT_CALENDARS_NOTE = "note".intern() ;
- 
+
   final private static String PREFIX_PRIVATE = "private".intern() ;
   final private static String PREFIX_SHARED  = "shared".intern() ;
   final private static String  PREFIX_PUBLIC = "public".intern() ;
@@ -232,7 +232,10 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       calendarSetting.setSharedCalendarsColors(uiForm.sharedCalendarColors_) ;
       calendarSetting.setViewType(settingTab.getViewType()) ;
       calendarSetting.setTimeInterval(Long.parseLong(settingTab.getTimeInterval())) ;
-      calendarSetting.setWeekStartOn(settingTab.getWeekStartOn()) ;
+      if(settingTab.getViewType().equals(CalendarSetting.WORKING_VIEW))
+        calendarSetting.setWeekStartOn(String.valueOf(1)) ;
+      else   
+        calendarSetting.setWeekStartOn(settingTab.getWeekStartOn()) ;
       calendarSetting.setDateFormat(settingTab.getDateFormat()) ;
       calendarSetting.setTimeFormat(settingTab.getTimeFormat()) ;
       calendarSetting.setLocation(settingTab.getLocale()) ;

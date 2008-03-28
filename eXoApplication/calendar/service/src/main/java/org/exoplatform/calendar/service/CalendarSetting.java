@@ -36,6 +36,7 @@ public class CalendarSetting {
   public static String YEAR_VIEW = "3" ;
   public static String LIST_VIEW = "4" ;
   public static String SCHEDULE_VIEW = "5" ;
+  public static String WORKING_VIEW = "6" ;
 
   // time weekStartOn types
   public static String MONDAY = "1" ;

@@ -17,10 +17,17 @@
  	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS, String.valueOf(Calendar.WEEK_OF_YEAR)) ;
  	int weekNumber = uicomponent.getCurrentWeek() ;
  	def rcontext = _ctx.getRequestContext() ;
+	numberOfDays = 7 ;
+	styleWidth = "width:13.8%;*width:14%;" ;
+	if(uicomponent.isShowCustomView()) {
+		numberOfDays = 5 ;
+		styleWidth = "width:19.8%;*width:20%;" ;
+	} 
 	workingStart = uicomponent.getCalendarSetting().getWorkingTimeBegin() ;
 	rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarMan','/calendar/javascript/') ;
   rcontext.getJavascriptManager().importJavascript('eXo.calendar.UIWeekView','/calendar/javascript/') ;
   int defaultTimeInterval = uicomponent.getDefaultTimeInterval() ;
+  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.getWorkingdays('+numberOfDays+') ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarMan.initWeek() ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UIWeekView.init() ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkFilter() ;') ;
@@ -41,6 +48,7 @@
 	DateFormat wf = new  SimpleDateFormat("EEE, dd/MMM") ;
 	DateFormat tempFormat = new  SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss") ;
 	tempFormat.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
+	
 %>
 <div class="UIWeekView">
   <div class="TitleBar">
@@ -83,7 +91,7 @@
             <%			
 							cl = uicomponent.getBeginDateOfWeek() ;				
 						  t = 0 ; 
-							while(t++ <7) {
+							while(t++ <numberOfDays) {
 						  	cssClass = "Day" ;
 						  	if(uicomponent.isCurrentDay(cl.get(Calendar.DATE), cl.get(Calendar.MONTH), cl.get(Calendar.YEAR))) {
 						  		cssClass = "Today" ;
@@ -91,12 +99,12 @@
 							  dayActionLink = uicomponent.TYPE_DAY +"&currentTime="+ cl.getTimeInMillis() ;
 							  actionLink =  uicomponent.event("GotoDate",dayActionLink) ;
 							  styleCss = "" ;
-							  if(cl.get(Calendar.DAY_OF_WEEK) == 1){
-							   styleCss = "color:red;" ;
-							  }
+							  if(cl.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
+								   styleCss = "color:red;" ;
+								}
 							 	wf.setCalendar(cl) ;
             %>
-            <th class="$cssClass UICellBlock" starttime="<%=cl.getTimeInMillis()%>"  startTimeFull="<%=tempFormat.format(cl.getTime())%>">
+            <th class="$cssClass UICellBlock" style="$styleWidth" starttime="<%=cl.getTimeInMillis()%>"  startTimeFull="<%=tempFormat.format(cl.getTime())%>">
               <a href="$actionLink" style="$styleCss">
                 <%=wf.format(cl.getTime())%>
               </a>
@@ -114,7 +122,7 @@
                 <span></span>
               </div>
             </td>
-            <td colspan="7" class="EventAllday" onresize="eXo.calendar.UICalendarMan.initWeek() ;">
+            <td colspan="$numberOfDays" class="EventAllday" numberOfDays="$numberOfDays" onresize="eXo.calendar.UICalendarMan.initWeek() ;">
               <div style="position: relative;">
                 <% for (event in uicomponent.getEventList().values()) {
 									begindate =  event.getFromDateTime().getTime() ;  
@@ -161,7 +169,7 @@
         <%
 				cl = uicomponent.getBeginDateOfWeek() ;				
 			  t = 0 ; 
-				while(t++ <7) {
+				while(t++ < numberOfDays) {
 					day = cl.get(Calendar.DATE) ;
 		 			month = cl.get(Calendar.MONTH) ;
 		 			year = cl.get(Calendar.YEAR) ;
@@ -224,7 +232,7 @@
 						if(flag) {styleClass = "TdDotLine" ;}
 						else {styleClass = "TdLine"}
           %>
-          <tr class="$style">
+          <tr class="$style" style="$styleWidth">
             <td class="TdTime">
               <div class="TdTime">
                 <%if(!flag) {println time;}%>
@@ -233,7 +241,7 @@
             <%
 					 		cl = uicomponent.getBeginDateOfWeek() ;				
 						  t = 0 ; 
-							while(t++ <7) {
+							while(t++ < numberOfDays) {
 								df.setCalendar(cl) ;
 					 			startTime = df.format(cl.getTime()) + " " + time;
 					 			dtf.setCalendar(cl) ;
@@ -247,7 +255,7 @@
 					 		  	cssClass = "Weekday" ;
 					 		  }
             %>
-            <td startTime="<%=cl.getTimeInMillis()%>" eventindex="$dayOfWeek" class="$styleClass $cssClass $style">
+            <td startTime="<%=cl.getTimeInMillis()%>" eventindex="$dayOfWeek" class="$styleClass $cssClass $style" style="$styleWidth">
               <span></span>
             </td>
             <%		
