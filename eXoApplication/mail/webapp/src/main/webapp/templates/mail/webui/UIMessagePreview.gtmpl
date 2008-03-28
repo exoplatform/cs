@@ -5,6 +5,7 @@
   import javax.mail.internet.InternetAddress;
   import org.exoplatform.mail.MailUtils;  
   import org.exoplatform.download.DownloadService;
+  import org.exoplatform.calendar.service.CalendarEvent;
   
   import org.exoplatform.mail.webui.UIMessageList ;
   import org.exoplatform.mail.webui.UIMessagePreview ;
@@ -236,7 +237,7 @@
                                         <div class="ItemIcon ReplyMailIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.reply-to-sender") %></div>
                                       </a>  
                                       <a class="MenuItem" href="<%=uicomponent.event("ReplyAll", msg.getId())%>">   
-                                        <div class="ItemIcon ReplyToAllIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.reply-to-all") %></div>
+                                        <div class="ItemIcon ReplyMailIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.reply-to-all") %></div>
                                       </a>  
                                       <a class="MenuItem" href="<%=uicomponent.event("Forward", msg.getId())%>">   
                                         <div class="ItemIcon ForwardMailIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.forward") %> </div>
@@ -248,16 +249,16 @@
                                         <div class="ItemIcon DeleteMailIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.delete") %> </div>
                                       </a>
                                       <a class="MenuItem" href="<%=uicomponent.event("AddTag", msg.getId())%>">   
-                                        <div class="ItemIcon BlueTag"> <%=_ctx.appRes(uicomponent.id+ ".label.tag") %> </div>
+                                        <div class="ItemIcon TagMailIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.tag") %> </div>
                                       </a>
                                       <a class="MenuItem" href="<%=uicomponent.event("MoveMessages", msg.getId())%>">   
-                                        <div class="ItemIcon MoveMessageIcon"><%=_ctx.appRes(uicomponent.id+ ".label.move-to-folder") %> </div>
+                                        <div class="ItemIcon MoveMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.move-to-folder") %> </div>
                                       </a>
                                       <a class="MenuItem" href="<%=uicomponent.event("AddContact", msg.getId())%>">   
                                         <div class="ItemIcon AddContactIcon"><%=_ctx.appRes(uicomponent.id+ ".label.add-sender-to-contacts") %></div>
                                       </a>
                                       <a class="MenuItem" href="<%=uicomponent.event("Export", msg.getId())%>">   
-                                      <div class="ItemIcon ExportMailIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.export-eml") %> </div>
+                                      <div class="ItemIcon ExportIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.export-eml") %> </div>
                                       </a>
                                       <div class="RightClickCustomItem"></div>
                                     </div>
@@ -280,7 +281,8 @@
   								</div>
   								<div style="clear: both;"><span></span></div>
   							</div>
-                <%
+                
+                <% if (!MailUtils.isInvitation(msg)) {
                   String frameId = "IframeMessagePreview" + msgIndex ;
                   String textAreaId = "MessageDetails" + msgIndex ;
                   String contentType = msg.getContentType() ;
@@ -295,7 +297,15 @@
   							<textarea id="$textAreaId" class="MessageDetails" style="display:none">
                     <%=MailUtils.encodeHTML(msg.getMessageBody())%>
   							</textarea>
-  							<%
+                <%} else {%>
+                  <div class="InvitationBG">
+                  <%=msg.getMessageBody()%>
+                  <div class="ActionBox">
+                    <span style="font-weight: bold ;">Will you attend ?</span> <a href="<%=uicomponent.event('AnswerInvitation', '1')%>">Yes</a> - <a href="<%=uicomponent.event('AnswerInvitation', '0')%>">No</a> - <a href="<%=uicomponent.event('AnswerInvitation', '2')%>">Maybe</a> </span>
+                  </div>
+                  </div> 
+                <%}%>
+                <%
                   if (msg.getAttachments().size() > 0) {
                 %>
                   <div class="AttachmentContainer">
@@ -315,7 +325,7 @@
                             } else if (attach.getMimeType().indexOf("msword") > -1) {
                               attLink = "/mail/skin/DefaultSkin/webui/skinIcons/24x24/icons/WordIcon.gif";
                             } else if (attach.getMimeType().indexOf("pdf") > -1) {
-                              attLink = "/mail/skin/DefaultSkin/webui/skinIcons/icons/PDFIcon.gif";
+                              attLink = "/mail/skin/DefaultSkin/webui/skinIcons/24x24/icons/PDFIcon.gif";
                             }
                         %> 
       						  		      <img class="AttachmentFile" src="$attLink">
@@ -336,7 +346,7 @@
                   } 
                 %>
                 			<div style="border-top: 1px dotted #b7b7b7; padding-top: 3px">
-                				<a href="<%=uicomponent.event("Reply", msg.getId())%>" class="MessageActionIcon ReplyMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.reply") %></a>
+                				<a href="<%=uicomponent.event("Reply", msg.getId())%>" class="MessageActionIcon ReplyAllMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.reply") %></a>
 			                	<a href="<%=uicomponent.event("Forward", msg.getId())%>" class="MessageActionIcon ForwardMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.forward") %></a>
 			                	<div style="clear: left"><span></span></div>
 			                </div>
@@ -358,43 +368,8 @@
     }%>
 <!--  End DecoratorBox ViewBoxStyle -->
 	</div>
-<%} else {%>
-<div class="ReadingPaneBar">
-  <div class="Subject"><span>Subject: </span>
-    <span>Welcome to eXo Mail - eXo Collaboration Suite. </span>
-  </div>
-  <div><a href="javascript:eXo.mail.UIMailPortlet.showHidePreviewPane()"><span id="ActionReadingPane" class="MaximizeReadingPane" title="Maximize Reading Pane"></span></a></div>
-  <div style="clear:both;"><span></span></div>
-</div>
-<div class="ReadingPaneDetails SpliterResizableListArea">
-  <div class="SubjectMail">
-	  <div class="WelcomeMail">
-	    <div class="LabelWelcomeMail">Welcome to</div>
-	    <div class="LabelComment">please do not reply to this message !</div>
-	    <div style="clear: both;"><span></span></div>
-	  </div>
-	  <div class="LogoMail">
-	    <span></span>
-	  </div>  
-	  <div class="OverviewMail">
-	    Overview
-	  </div>
-	  <div class="ContentMail" style="margin-left: 25px;">
-	    <b>eXo Mail</b> is an open-source mail that is built on foudation of eXo WebOS with variety of new features designed to make your e-mail experience more productive and convenience, as a new way to view your mails inbox and conversation and help to reduce risks and annoyances such as phishing and junk e-mail. Easy to approach the basics as writing, reading, finding and  much more...
-	  </div>
-	  <div class="FeaturesMail">
-	    Features
-	  </div>
-	  <div class="ContentMail">
-      <ul>
-        <li>Advanced Folder Views : eXo Mail offers a variety of ways for you to organize and display your folders</li>
-        <li>Message Tagging : eXo Mail  allows you to “tag” messages with descriptions that are specific to your needs.</li>
-        <li>Message Filter : eXo Mail  allows you to filter message with special conditions to apply to special folder or tag.</li>
-        <li>Advance Search : eXo Mail  allows you to search message with a lots of options.</li>
-        <li>etc...</li>
-      </ul>
-	  </div>
-  </div>
-</div>  
-<%}%>
+<%} else {
+    _ctx.include("app:/templates/mail/webui/UIIntroduction.gtmpl");
+  } 
+%>
 </div>

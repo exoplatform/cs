@@ -113,6 +113,7 @@ public class Utils {
   public static final String EXO_HASATTACH = "exo:hasAttach".intern();
   public static final String EXO_TAGS = "exo:tags".intern() ;
   public static final String EXO_FOLDERS = "exo:folders".intern() ;
+  public static final String EXO_HEADERS = "exo:headers".intern() ;
   public static final String EXO_PERSONAL = "exo:personal".intern() ;
   public static final String EXO_RECEIVEDDATE = "exo:receivedDate".intern() ; 
   public static final String EXO_SENDDATE = "exo:sendDate".intern() ;

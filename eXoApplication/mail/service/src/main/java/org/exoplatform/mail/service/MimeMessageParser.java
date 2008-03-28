@@ -149,4 +149,10 @@ public class MimeMessageParser {
     String[] references = message.getHeader("References") ;
     return references ;
   }
+  
+  public static String[] getInvitationHeader(javax.mail.Message message) throws Exception {
+    String[] exoInvitationHeaders = message.getHeader("X-Exo-Invitation");
+    if (exoInvitationHeaders != null) return exoInvitationHeaders ;
+    return null ;
+  }
 }

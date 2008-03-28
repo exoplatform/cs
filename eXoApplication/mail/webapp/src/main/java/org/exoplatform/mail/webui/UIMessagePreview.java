@@ -17,10 +17,14 @@
 package org.exoplatform.mail.webui ;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.mail.internet.InternetAddress;
 
+import org.exoplatform.calendar.service.Calendar;
+import org.exoplatform.calendar.service.CalendarEvent;
+import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
@@ -41,8 +45,11 @@ import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
 import org.exoplatform.mail.webui.popup.UIPrintPreview;
 import org.exoplatform.mail.webui.popup.UITagForm;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -67,43 +74,66 @@ import org.exoplatform.webui.event.EventListener;
         @EventConfig(listeners = UIMessagePreview.ExportActionListener.class),
         @EventConfig(listeners = UIMessagePreview.AddTagActionListener.class),
         @EventConfig(listeners = UIMessagePreview.AddContactActionListener.class),
-        @EventConfig(listeners = UIMessagePreview.MoveMessagesActionListener.class)
+        @EventConfig(listeners = UIMessagePreview.MoveMessagesActionListener.class),
+        @EventConfig(listeners = UIMessagePreview.AnswerInvitationActionListener.class)
     }
 )
 
 public class UIMessagePreview extends UIComponent {
   private Message selectedMessage_ ;
   private List<Message> showedMsgs = new ArrayList<Message>() ;
-  
+
   public UIMessagePreview() throws Exception {}
-  
+
   public Message getMessage() throws Exception { 
-      return selectedMessage_ ;
+    return selectedMessage_ ;
   }
-  
+
   public void setMessage(Message msg) throws Exception {
     selectedMessage_ = msg ;
   }
-  
+
   public List<Message> getShowedMessages() throws Exception {
     return showedMsgs ;
   } 
-  
+
   public void setShowedMessages(List<Message> msgList) throws Exception {
     showedMsgs = msgList ;
   }
-  
+
+  public CalendarEvent getEvent(Message msg) throws Exception {
+    CalendarService calendarSrv = getApplicationComponent(CalendarService.class) ;
+    CalendarEvent calEvent = null ;
+    if(Calendar.TYPE_PRIVATE == Integer.parseInt(MailUtils.getEventType(msg)) ) {
+      List<String> calIds = new ArrayList<String>() ;
+      calIds.add(MailUtils.getCalendarId(msg)) ;
+      Iterator<CalendarEvent> iter =
+        calendarSrv.getUserEventByCalendar(SessionProviderFactory.createSessionProvider(), MailUtils.getEventFrom(msg), calIds).iterator() ;
+      while (iter.hasNext()) {
+        calEvent = iter.next() ;
+        if(MailUtils.getCalendarEventId(msg).equals(calEvent.getId())) ;
+        break ;
+      }
+    } else if(Calendar.TYPE_SHARED == Integer.parseInt(MailUtils.getEventType(msg))) {
+      //calendarSrv.get
+    }
+    else if(Calendar.TYPE_PUBLIC == Integer.parseInt(MailUtils.getEventType(msg))) {
+      calEvent = calendarSrv.getGroupEvent(SessionProviderFactory.createSystemProvider(), MailUtils.getCalendarId(msg), MailUtils.getCalendarEventId(msg)) ; 
+    }
+    return calEvent ;
+  }
+
   public Message getShowedMessageById(String id) throws Exception {
     for (Message msg : getShowedMessages()) {
       if (msg.getId().equals(id)) return msg ;
     }
     return null ;
   }
-  
+
   public DownloadService getDownloadService() { 
     return getApplicationComponent(DownloadService.class) ; 
   }
-  
+
   public static class DownloadAttachmentActionListener extends EventListener<UIMessagePreview> {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
@@ -128,7 +158,7 @@ public class UIMessagePreview extends UIComponent {
       }
     }
   }
-  
+
   static public class AddStarActionListener extends EventListener<UIMessagePreview> {
     public void execute(Event<UIMessagePreview> event) throws Exception { 
       UIMessagePreview uiMsgPreview = event.getSource();
@@ -151,14 +181,14 @@ public class UIMessagePreview extends UIComponent {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgArea);
     }
   }
-  
+
   static public class ReplyActionListener extends EventListener<UIMessagePreview> {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource() ; 
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class) ;
       String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      
+
       if (msgId != null) {
         Message msg = uiMsgPreview.getShowedMessageById(msgId);
         if (msg != null) {
@@ -173,14 +203,14 @@ public class UIMessagePreview extends UIComponent {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview) ;
     }
   }
-  
+
   static  public class ReplyAllActionListener extends EventListener<UIMessagePreview> {    
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource() ; 
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class) ;
       String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      
+
       if (msgId != null) {
         Message msg = uiMsgPreview.getShowedMessageById(msgId);
         if (msg != null) {
@@ -195,14 +225,14 @@ public class UIMessagePreview extends UIComponent {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview) ;
     }
   }
-  
+
   static public class ForwardActionListener extends EventListener<UIMessagePreview> {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource() ; 
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class) ;
       String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      
+
       if (msgId != null) {
         Message msg = uiMsgPreview.getShowedMessageById(msgId);
         if (msg != null) {
@@ -217,7 +247,7 @@ public class UIMessagePreview extends UIComponent {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview) ;
     }
   }
-  
+
   static public class DeleteActionListener extends EventListener<UIMessagePreview> {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
@@ -239,7 +269,7 @@ public class UIMessagePreview extends UIComponent {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgArea);
     }
   }
-  
+
   static public class PrintActionListener extends EventListener<UIMessagePreview> {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource();
@@ -255,13 +285,13 @@ public class UIMessagePreview extends UIComponent {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview);
     }
   }
-  
+
   static public class AddContactActionListener extends EventListener<UIMessagePreview> {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource() ;   
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
-      
+
       Message msg = uiMsgPreview.getShowedMessageById(msgId) ;
       if (msg != null) {
         UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
@@ -286,7 +316,7 @@ public class UIMessagePreview extends UIComponent {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview);
     }
   }
-  
+
   static public class ExportActionListener extends EventListener<UIMessagePreview> {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource() ;   
@@ -305,7 +335,7 @@ public class UIMessagePreview extends UIComponent {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview);
     }
   }
-  
+
   static public class AddTagActionListener extends EventListener<UIMessagePreview> {
     public void execute(Event<UIMessagePreview> event) throws Exception {
       UIMessagePreview uiMsgPreview = event.getSource() ; 
@@ -349,6 +379,27 @@ public class UIMessagePreview extends UIComponent {
       }
       uiMsgPreview.setMessage(null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview) ;
+    }
+  }
+  
+  static public class AnswerInvitationActionListener extends EventListener<UIMessagePreview> {
+    public void execute(Event<UIMessagePreview> event) throws Exception {
+      UIMessagePreview uiMsgPreview = event.getSource() ;    
+      String answer = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      CalendarService calService = uiMsgPreview.getApplicationComponent(CalendarService.class) ;
+      String fromUserId = MailUtils.getEventFrom(uiMsgPreview.selectedMessage_) ;
+      String toUserId = MailUtils.getEventTo(uiMsgPreview.selectedMessage_) ;
+      int calType = Integer.parseInt(MailUtils.getEventType(uiMsgPreview.selectedMessage_)) ;
+      String calendarId = MailUtils.getCalendarId(uiMsgPreview.selectedMessage_) ;
+      String eventId = MailUtils.getCalendarEventId(uiMsgPreview.selectedMessage_) ;
+      try {
+        calService.confirmInvitation(fromUserId, toUserId, calType, calendarId, eventId, Integer.parseInt(answer)) ;
+      } catch (Exception e) {
+        UIApplication uiApp = uiMsgPreview.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIMessagePreview.msg.trouble-loading-event", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
     }
   }
 }
