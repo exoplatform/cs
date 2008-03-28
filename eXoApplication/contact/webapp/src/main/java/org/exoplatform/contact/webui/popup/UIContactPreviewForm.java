@@ -16,6 +16,8 @@
  */
 package org.exoplatform.contact.webui.popup;
 
+import java.util.List;
+
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.webui.UIContactPortlet;
@@ -83,15 +85,15 @@ public class UIContactPreviewForm extends UIForm implements UIPopupComponent {
       if (!ContactUtils.isEmpty(email)) {
         UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
         UIPopupAction popupAction = popupContainer.getChild(UIPopupAction.class) ;
-        Account acc = ContactUtils.getAccount() ;
-        if (acc == null) {
+        List<Account> acc = ContactUtils.getAccounts() ;
+        if (acc == null || acc.size() < 1) {
           UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.invalidAcc", null,
               ApplicationMessage.WARNING)) ;
           return ;
         }
         UIComposeForm uiComposeForm = popupAction.activate(UIComposeForm.class, 850) ;
-        uiComposeForm.init(acc.getId(), acc.getEmailAddress(), email) ;
+        uiComposeForm.init(acc, email) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;       
       }
     }

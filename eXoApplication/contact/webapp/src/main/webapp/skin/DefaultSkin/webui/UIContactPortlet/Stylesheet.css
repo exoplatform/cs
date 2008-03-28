@@ -618,7 +618,7 @@
 
 .UIContactPortlet .ContactPreviewContainer .Member {
 	margin-left: 80px;
-	_width: 60%;
+	width: 60%;
 }
 
 .UIContactPortlet .ContactPreviewContainer .State {

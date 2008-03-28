@@ -27,6 +27,9 @@ public class SharedAddressBook {
   private String id ;
   private String sharedUserId ;
   
+  // add to show/hide actions in rightClick popup
+  private String[] editPermission ;
+  
   public SharedAddressBook(String name, String id, String sharedUserId) throws Exception {
     this.name = name ;
     this.id = id ;
@@ -40,4 +43,7 @@ public class SharedAddressBook {
 	
 	public void setSharedUserId(String sharedUserId) { this.sharedUserId = sharedUserId ;}
 	public String getSharedUserId() { return sharedUserId ;}
+  
+  public String[] getEditPermission() { return editPermission ; }
+  public void setEditPermission(String[] editPermission) { this.editPermission = editPermission ; }
 }

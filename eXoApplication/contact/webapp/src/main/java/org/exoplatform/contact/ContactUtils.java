@@ -133,10 +133,10 @@ public class ContactUtils {
     }
   }
   
-  public static Account getAccount() throws Exception {
+  public static List<Account> getAccounts() throws Exception {
     MailService mailSvr = (MailService)PortalContainer.getComponent(MailService.class) ;
     try {
-      return mailSvr.getAccounts(SessionsUtils.getSessionProvider(), getCurrentUser()).get(0) ;
+      return mailSvr.getAccounts(SessionsUtils.getSessionProvider(), getCurrentUser()) ;
     } catch (RepositoryException e) {
       return null ;
     } catch (IndexOutOfBoundsException ex) {
