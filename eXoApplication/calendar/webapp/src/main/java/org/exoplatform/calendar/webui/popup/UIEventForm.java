@@ -749,6 +749,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     sbSubject.append(df.format(event.getFromDateTime())) ;
     message.setSubject(sbSubject.toString()) ;
     StringBuffer sbBody = new StringBuffer() ;
+    sbBody.append("<div style=\"margin: 20px auto; padding: 8px; background: rgb(224, 236, 255) none repeat scroll 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; width: 400px;\">") ;
     sbBody.append("<table style=\"margin: 0px; padding: 0px; border-collapse: collapse; border-spacing: 0px; width: 100%; line-height: 16px;\">") ;
     sbBody.append("<tbody>") ;
     sbBody.append("<tr>") ;
@@ -759,10 +760,12 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     sbBody.append("</tr>") ;
     sbBody.append("<tr>") ;
     sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">When:</td>") ;
-    sbBody.append("<td style=\"padding: 4px;\"> <div>From: " +df.format(event.getFromDateTime())+"</div><div>To: "+df.format(event.getToDateTime())+"</div></td>") ;
+    sbBody.append("<td style=\"padding: 4px;\"> <div>From: " +df.format(event.getFromDateTime())+"</div>");
+    sbBody.append("<div>To: "+df.format(event.getToDateTime())+"</div></td>") ;
     sbBody.append("</tr>") ;
     sbBody.append("<tr>") ;
-    sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">Where:</td><td>" + event.getLocation() != null ? event.getLocation(): " " + "</td>") ;
+    sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">Where:</td>") ;
+    sbBody.append("<td>" + (event.getLocation() != null && event.getLocation().trim().length() > 0 ? event.getLocation(): " ") + "</td>") ;
     sbBody.append("</tr>") ;
     sbBody.append("<tr>") ;
     sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">Who:</td>") ;
@@ -774,6 +777,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     sbBody.append("</tr>");
     sbBody.append("</tbody>");
     sbBody.append("</table>");
+    sbBody.append("</div>") ;
     message.setMessageBody(sbBody.toString()) ;
     StringBuffer sbAddress = new StringBuffer() ;
     for(String s : toId.split(CalendarUtils.COMMA)) {
