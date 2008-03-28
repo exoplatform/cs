@@ -195,6 +195,9 @@
 .UICalendarPortlet .UIWeekViewIcon {
 	background: url('icons/CalendarIcons.gif') no-repeat left -1503px;
 }
+.UICalendarPortlet .UIWorkingViewIcon {
+	background: url('icons/CalendarIcons.gif') no-repeat left -1503px;
+}
 
 .UICalendarPortlet .UIDayViewIcon {
 	background: url('icons/CalendarIcons.gif') no-repeat left -1659px;

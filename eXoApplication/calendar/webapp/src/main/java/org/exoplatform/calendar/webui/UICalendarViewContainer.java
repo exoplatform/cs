@@ -43,8 +43,9 @@ public class UICalendarViewContainer extends UIContainer  {
   final public static String YEAR_VIEW = "UIYearView".intern() ;
   final public static String LIST_VIEW = "UIListContainer".intern() ;
   final public static String SCHEDULE_VIEW = "UIScheduleView".intern() ;
+  final public static String WORKING_VIEW = "UIWorkingView".intern() ;
 
-  final public static String[] TYPES = {DAY_VIEW, WEEK_VIEW, MONTH_VIEW, YEAR_VIEW, LIST_VIEW, SCHEDULE_VIEW} ;
+  final public static String[] TYPES = {DAY_VIEW, WEEK_VIEW, MONTH_VIEW, YEAR_VIEW, LIST_VIEW, SCHEDULE_VIEW, WORKING_VIEW} ;
 
   public UICalendarViewContainer() throws Exception {
     initView(null) ;
@@ -70,6 +71,7 @@ public class UICalendarViewContainer extends UIContainer  {
       if(WEEK_VIEW.equals(viewType)) {
         UIWeekView uiView = getChild(UIWeekView.class) ;
         if(uiView == null) uiView =  addChild(UIWeekView.class, null, null) ;
+        uiView.isShowCustomView_ = false ;
         if(getRenderedChild() != null) uiView.setCurrentCalendar(((CalendarView)getRenderedChild()).getCurrentCalendar()) ;
         setRenderedChild(viewType) ;
       } else
@@ -102,6 +104,12 @@ public class UICalendarViewContainer extends UIContainer  {
                 if(uiView == null) uiView =  addChild(UIScheduleView.class, null, null) ;
                 if(getRenderedChild() != null) uiView.setCurrentCalendar(((CalendarView)getRenderedChild()).getCurrentCalendar()) ;
                 setRenderedChild(viewType) ;
+              } else if(WORKING_VIEW.equals(viewType)) {
+                UIWeekView uiView = getChild(UIWeekView.class) ;
+                if(uiView == null) uiView =  addChild(UIWeekView.class, null, null) ;
+                uiView.isShowCustomView_ = true ;
+                if(getRenderedChild() != null) uiView.setCurrentCalendar(((CalendarView)getRenderedChild()).getCurrentCalendar()) ;
+                setRenderedChild(WEEK_VIEW) ;
               }
     refresh() ;
     //((CalendarView)getRenderedChild()).setLastUpdatedEventId(null) ;

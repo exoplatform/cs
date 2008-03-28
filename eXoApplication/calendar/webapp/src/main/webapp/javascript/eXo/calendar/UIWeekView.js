@@ -435,7 +435,7 @@ UIWeekView.prototype.initAllday = function() {
 //	EventAlldayContainer.style.height = eventAllday.length * eventAllday[0].offsetHeight + "px" ;
 	this.weekdays = eXo.core.DOMUtil.findDescendantsByTagName(uiWeekViewGridAllDay, "th") ;
 	this.startWeek = 	UIWeekView.weekdays[1] ;
-	this.endWeek = 	UIWeekView.weekdays[7] ;
+	this.endWeek = 	UIWeekView.weekdays[UIWeekView.weekdays.length-1] ;
 //	this.setPosition(eventAllday) ;
 } ;
 
