@@ -119,11 +119,15 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   private boolean isPrintForm = false ;
   @SuppressWarnings("unused")
   private boolean isPrintDetail = false ;
+  private boolean isSelectSharedContacts = false ;
   
   public UIContacts() throws Exception { } 
   public String[] getActions() { return new String[] {"Cancel"} ; }
   public void activate() throws Exception { }
   public void deActivate() throws Exception { } 
+  
+  public void setSelectSharedContacts(boolean selected) { isSelectSharedContacts = selected ; }
+  public boolean isSelectSharedContacts() { return isSelectSharedContacts ; }
   
   public void setPrintForm(boolean isPrint) { isPrintForm = isPrint ; }
   public boolean isPrintForm() { return isPrintForm ; }
@@ -312,7 +316,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         contactIds = uiContacts.getCheckedContacts() ;
         if (contactIds.size() == 0) {
           UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-required", null)) ;
+          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-toTag", null,
+              ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
         }
@@ -392,7 +397,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       } else {
         contactIds = uiContacts.getCheckedContacts() ;
         if (contactIds.size() == 0) {          
-          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-required", null)) ;
+          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-toMove", null,
+              ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
         }
@@ -483,8 +489,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         for (String contactId : contactIds) {
           uiContacts.contactMap.get(contactId).setContactType(type) ;
         }
-      } else if (ContactUtils.isEmpty(uiContacts.selectedGroup) && ContactUtils.isEmpty(uiContacts.selectedTag_)
-          && !ContactUtils.isEmpty(addressBookId)) {
+      } else if (uiContacts.isSelectSharedContacts  && !ContactUtils.isEmpty(addressBookId)) {
 
         //select shared contacts        
         uiContacts.setContact(contacts, false) ;
@@ -505,7 +510,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         contactIds =  uiContacts.getCheckedContacts() ;
         if (contactIds.size() < 1) {
           UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-required", null,
+          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-toCopy", null,
               ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;        
@@ -534,7 +539,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         contactIds = uiContacts.getCheckedContacts() ;
         if (contactIds.size() == 0) {
           UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-required", null,
+          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-toDelete", null,
               ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
@@ -812,7 +817,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         List<String> contactIds = uiContacts.getCheckedContacts() ;
         if (contactIds.size() < 1) {
           UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-required", null,
+          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-toSendMail", null,
               ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
@@ -836,8 +841,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
       
-      Account acc = ContactUtils.getAccount() ;
-      if (acc == null) {
+      List<Account> acc = ContactUtils.getAccounts() ;
+      if (acc == null || acc.size() < 1) {
         UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.invalidAcc", null,
             ApplicationMessage.WARNING)) ;
@@ -845,7 +850,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       }
       
       UIComposeForm uiComposeForm = popupAction.activate(UIComposeForm.class, 850) ;
-      uiComposeForm.init(acc.getId(), acc.getEmailAddress(), emails) ;  
+      uiComposeForm.init(acc, emails) ;  
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;  
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
     }
@@ -895,7 +900,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       List<String> contactIds = uiContacts.getCheckedContacts() ;
       if (contactIds.size() < 1) {
         UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-required", null,
+        uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-toPrint", null,
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;

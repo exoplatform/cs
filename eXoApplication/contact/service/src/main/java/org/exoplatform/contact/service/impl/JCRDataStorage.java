@@ -746,9 +746,13 @@ public class JCRDataStorage {
       while(iter.hasNext()) {
         try{
           Node addressNode = iter.nextProperty().getParent() ;
-          addressBooks.add(new SharedAddressBook(addressNode.getProperty("exo:name").getString(), 
-          		                                   addressNode.getName(), 
-          		                                   addressNode.getProperty("exo:sharedUserId").getString())) ;
+          SharedAddressBook sharedAddressBook = new SharedAddressBook(addressNode.getProperty("exo:name").getString(), 
+                                                                      addressNode.getName(),
+                                                                      addressNode.getProperty("exo:sharedUserId").getString()) ;
+          try {
+            sharedAddressBook.setEditPermission(ValuesToStrings(addressNode.getProperty("exo:editPermissions").getValues())) ;
+          } catch (PathNotFoundException e) { }
+          addressBooks.add(sharedAddressBook) ;          
         }catch(Exception e){
           e.printStackTrace() ;
         }
@@ -1491,7 +1495,7 @@ public class JCRDataStorage {
     if(username != null && username.length() > 0) {
       Node contactHome = getUserContactHome(sysProvider, username) ;
       filter.setAccountPath(contactHome.getPath()) ;
-      QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager() ;      
+      QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager() ;    
       Query query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
       NodeIterator it = query.execute().getNodes() ;
       while(it.hasNext()) {

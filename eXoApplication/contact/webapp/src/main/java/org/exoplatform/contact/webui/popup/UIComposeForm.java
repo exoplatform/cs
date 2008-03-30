@@ -18,14 +18,15 @@ package org.exoplatform.contact.webui.popup;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
-import org.exoplatform.mail.service.ServerConfiguration;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -33,12 +34,14 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormInputWithActions;
+import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.UIFormWYSIWYGInput;
@@ -65,6 +68,8 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 public class UIComposeForm extends UIForm implements UIPopupComponent {
   final static public String FIELD_FROM_INPUT = "fromInput" ;
   final static public String FIELD_FROM = "from" ;
+  
+  
   final static public String FIELD_SUBJECT = "subject" ;
   final static public String FIELD_TO = "to" ;
   final static public String FIELD_ATTACHMENTS = "attachments" ;
@@ -74,10 +79,10 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   final static public int MESSAGE_NEW = 0;
  /* private List<Attachment> attachments_ = new ArrayList<Attachment>() ;
   private Message message_ = null;*/
+  private Map<String, String> fromOptions = new LinkedHashMap<String, String>() ;
   private Boolean isVisualEditor = true;
   private int composeType_;  
   public List<Contact> toContacts = new ArrayList<Contact>();
-  private String accId_ ;
   
   public boolean isVisualEditor() { return isVisualEditor; }
   public void setVisualEditor(boolean b) { isVisualEditor = b; }
@@ -119,9 +124,17 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     inputSet.setActionField(FIELD_ATTACHMENTS, getUploadFileList()) ;
   }
   
-  public void init(String accId, String from, String emails) throws Exception {
-    accId_ = accId ;
-    addUIFormInput(new UIFormStringInput(FIELD_FROM, null, from)) ;
+  public void init(List<Account> accs, String emails) throws Exception {
+    fromOptions.clear() ;
+    List<SelectItemOption<String>>  options = new ArrayList<SelectItemOption<String>>() ;
+    
+    // improve later ;
+    for(Account acc : accs) {
+      String fromEmail = acc.getUserDisplayName() + " &lt;" + acc.getEmailAddress() + "&gt;" ;      
+      options.add(new SelectItemOption<String>(fromEmail, fromEmail)) ;
+      fromOptions.put(acc.getId(), acc.getUserDisplayName() + " <" + acc.getEmailAddress() + ">") ;
+    }
+    addUIFormInput(new UIFormSelectBox(FIELD_FROM, FIELD_FROM, options)) ;
     addUIFormInput(new UIFormStringInput(FIELD_TO, null, emails)) ;
     addUIFormInput(new UIFormStringInput(FIELD_SUBJECT, null, null)) ;
     UIFormInputWithActions inputSet = new UIFormInputWithActions(FIELD_FROM_INPUT);   
@@ -154,7 +167,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
 
   
   public String getFieldFromValue() {
-    return getUIStringInput(FIELD_FROM).getValue() ;
+    return getUIFormSelectBox(FIELD_FROM).getValue() ;
   }
 
   public String getFieldSubjectValue() {
@@ -186,6 +199,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     } else {
       content = getUIFormTextAreaInput(FIELD_MESSAGECONTENT).getValue();
     }
+    if (content == null) content = "" ;
     return content;
   }
   
@@ -199,15 +213,13 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       UIComposeForm uiForm = event.getSource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       String to = uiForm.getFieldToValue() ;
-      String subject = uiForm.getFieldSubjectValue() ;
-      String content = uiForm.getFieldContentValue() ;
       
       if (ContactUtils.isEmpty(to)) {
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.to-field-empty", null,
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
-      } else if (ContactUtils.isEmpty(subject)){
+      } /*else if (ContactUtils.isEmpty(subject)){
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.subject-field-empty", null,
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -217,16 +229,13 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
-      }
-      MailService mailSvr = uiForm.getApplicationComponent(MailService.class) ;
+      }*/
       UIPopupAction uiChildPopup = uiForm.getAncestorOfType(UIPopupAction.class) ;
       Message message = new Message() ;
       message.setSendDate(new Date()) ;
-
-      message.setFrom(uiForm.getFieldFromValue()) ;
       String contentType = Utils.MIMETYPE_TEXTHTML;
       message.setContentType(contentType);
-      message.setSubject(subject) ;
+      message.setSubject(uiForm.getFieldSubjectValue()) ;
       message.setMessageTo(to) ;
 
       if (message.getReceivedDate() == null) {
@@ -239,21 +248,19 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       message.setMessageBody(body) ;
       message.setUnread(false);
       message.setSize(body.getBytes().length);
-   /*
-      ServerConfiguration serverConfig = new ServerConfiguration() ;
-      serverConfig.setOutgoingHost("smtp.gmail.com");
-      serverConfig.setOutgoingPort("465");
-      serverConfig.setSsl(true);
+      String fieldFrom = uiForm.getFieldFromValue() ;
+      message.setFrom(fieldFrom) ;
       
-      serverConfig.setUserName("exomailtest@gmail.com");
-      serverConfig.setPassword("exoadmin") ;*/
+      //String accId = uiForm.fromOptions.keySet().toArray(new String[] {})[0] ;
       
+      String accId = null ;
+      for (String key : uiForm.fromOptions.keySet()) {
+        if (uiForm.fromOptions.get(key).equals(fieldFrom))
+            accId = key ;
+      }
       try {
-        mailSvr.sendMessage(SessionProviderFactory
-            .createSessionProvider(), ContactUtils.getCurrentUser(), uiForm.accId_, message) ;
-        
-        
-        //mailSvr.sendMessages(msgList, serverConfig);
+        uiForm.getApplicationComponent(MailService.class).sendMessage(SessionProviderFactory
+            .createSessionProvider(), ContactUtils.getCurrentUser(), accId, message) ;
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-succsessfuly", null)) ;
         uiChildPopup.deActivate() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
@@ -261,7 +268,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-error", null,
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        //e.printStackTrace() ;
         return ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

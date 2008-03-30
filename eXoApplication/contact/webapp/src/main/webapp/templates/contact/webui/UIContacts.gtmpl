@@ -67,7 +67,7 @@
 				<div class="UIContactActionsBar">
 					<a href="<%=uicomponent.event("MoveContacts")%>" class="ControlButton">
 						<div class="IconHolder MoveIcon"><%=_ctx.appRes(uicomponent.getName() + ".label.move")%></div>
-					</a>
+					</a>					
 					<div class="SeparatorLine"><span></span></div>
 					<a href="#" class="ControlButton">
 						<div class="Icon ChatIcon" title="chat"><span></span></div>
@@ -379,12 +379,11 @@
   	   			<% } %>
 					</table>				
 
-				<%if(isDisplaySearchResult) {
-						if (contacts.length == 0) {	
-				%>
-				<div style="text-align : center" class="MessageNotice">Not result found</div>
-				<% } %>
-				
+				<% if (contacts.length == 0 && (uicomponent.selectedGroup != null || uicomponent.selectedTag_ != null || uicomponent.isSelectSharedContacts || isDisplaySearchResult)) { %>
+						 <div style="text-align : center" class="MessageNotice">Not contact found</div>
+			  <% } %>
+				 
+				<%  if(isDisplaySearchResult) {	%>
 				<div class="UIAction"> 
 					<table class="ActionContainer" align="center">
 						<tr>
@@ -419,11 +418,13 @@
 		<div class="UIAddressPageList">
 						<div class="ContactIteratorContainer">
 	  					<div class="RightPageIteratorBlock">
-	  						<a href="<%=uicomponent.event("FirstPage")%>" title="First Page" class="$cssPreviousPage FirstPageArrow"/><span></span></a>        
-	  						<a href="<%=uicomponent.event("PreviousPage")%>" title="Previous Page" class="$cssPreviousPage PreviousPageArrow"><span></span></a>
+	  					
+	  						<% /* delete <span> to fix bug print icon - 531 */ %>
+	  						<a href="<%=uicomponent.event("FirstPage")%>" title="First Page" class="$cssPreviousPage FirstPageArrow"/></a>        
+	  						<a href="<%=uicomponent.event("PreviousPage")%>" title="Previous Page" class="$cssPreviousPage PreviousPageArrow"></a>
 								<div class="Number">$contactRange</div>
-	  				 		<a href="<%=uicomponent.event("NextPage")%>" title="Next Page" class="$cssNextPage NextPageArrow"/><span></span></a>
-	 				  		<a href="<%=uicomponent.event("LastPage")%>" title="Last Page" class="$cssNextPage LastPageArrow"><span></span></a>
+	  				 		<a href="<%=uicomponent.event("NextPage")%>" title="Next Page" class="$cssNextPage NextPageArrow"/></a>
+	 				  		<a href="<%=uicomponent.event("LastPage")%>" title="Last Page" class="$cssNextPage LastPageArrow"></a>
 						    <div style="clear: left;"><span></span></div>
 						  </div>
 					  </div>

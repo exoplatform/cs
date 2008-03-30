@@ -33,9 +33,12 @@
 						
 							<div class="ContactPreviewContainer"	>		
 								<% 
-			  					imageLink = uicomponent.getImageSource() ;
+								String img = uicomponent.getImageSource();
+			  					if (ContactUtils.isEmpty(img)) {
+			  						img = "/contact/skin/DefaultSkin/webui/background/Img2.gif" ;
+			  					}
 			  				%>
-								<img src="<%=(ContactUtils.isEmpty(imageLink) ? "/contact/skin/DefaultSkin/webui/background/Img2.gif": imageLink)%>" width=63 height=81 class="Avatar"/>						
+								<img src="$img" width=63 height=81 class="Avatar"/>
 								<div class="Member">
 									<div class="State"><%=(ContactUtils.isEmpty(contact.getFullName()) ? "" : contact.getFullName())%></div>
 									<div class="Job"><%=(ContactUtils.isEmpty(contact.getJobTitle()) ? "" : contact.getJobTitle())%></div>
@@ -292,13 +295,13 @@
 						    Overview
 						  </div>
 						  <div class="ContentContact">
-								    The eXo Address Book managed your private contacts and also public contacts in your organization. The contact contained informations about your self, your work and your home,...We supported VCard format and you can import/export contacts to Vcard format. You also can tags and do many actions on your contacts and refer your contacts from other application as eXo Calendar or eXo Web Mail....
+								    eXo Contact is an open-source Contact that is built on foundation of eXo WebOS with variety of new features designed to make your e-Contact experience more productive and convenience. Users can easily and flexibly mange contacts by interacting with friendly interface. 
 								  </div>
 						  <div class="FeaturesContact">
 						    Features
 						  </div>
 						  <div class="ContentContact">
-						    eXo Contact is an open-source Contact that is built on foudation of eXo WebOS with variety of new features designed to make your e-Contact experience more productive and convenience, User can easy do all helpfully actions on action menu or do some action with drag and drop feature, The searching for contacts also very convenience with fulltext search and excactly search on contact's properties.
+						    eXo Address Book manages your private, public and shared contacts. Each contact contains detail information about yourself, work and home. Vcard format feature makes it easy for you to import/export your contacts . Drag and drop feature allows you to perform many actions flexibly. Searching for contacts is convenient with Quick and Advance Search...You can share, create tag and also refer your contacts to other application such as eXo Calendar, eXo Web Mail...
 						  </div>
 					  </div>
 						
