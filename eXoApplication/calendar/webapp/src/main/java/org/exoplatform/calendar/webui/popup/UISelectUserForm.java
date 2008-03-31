@@ -176,7 +176,8 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
         }
         uiEventForm.setSelectedTab(uiForm.tabId_) ;
         uiEventForm.setParticipant(sb.toString()) ;
-        ((UIEventAttenderTab)uiEventForm.getChildById(uiEventForm.TAB_EVENTATTENDER)).updateParticipants(sb.toString()) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getParent()) ;
+        //((UIEventAttenderTab)uiEventForm.getChildById(uiEventForm.TAB_EVENTATTENDER)).updateParticipants(sb.toString()) ;
       } 
     }  
   } 
@@ -211,13 +212,13 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
         }
         uiEventForm.setSelectedTab(uiForm.tabId_) ;
         uiEventForm.setParticipant(sb.toString()) ;
-        ((UIEventAttenderTab)uiEventForm.getChildById(uiEventForm.TAB_EVENTATTENDER)).updateParticipants(sb.toString()) ;
+        //((UIEventAttenderTab)uiEventForm.getChildById(uiEventForm.TAB_EVENTATTENDER)).updateParticipants(sb.toString()) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getParent()) ;
       } 
       UIPopupAction chilPopup =  uiContainer.getChild(UIPopupAction.class) ;
       chilPopup.deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(chilPopup) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getChildById(uiEventForm.TAB_EVENTATTENDER)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getChildById(uiEventForm.TAB_EVENTSHARE)) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getChildById(uiEventForm.TAB_EVENTSHARE)) ;
     }  
   } 
   static  public class SearchActionListener extends EventListener<UISelectUserForm> {

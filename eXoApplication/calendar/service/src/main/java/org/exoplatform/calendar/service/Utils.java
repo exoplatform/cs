@@ -57,7 +57,6 @@ public class Utils {
   public static final int DENY = 0 ;
   public static final int ACCEPT = 1 ;
   public static final int NOTSURE = 2 ;
-  
   public static GregorianCalendar getInstanceTempCalendar() { 
 	  GregorianCalendar  calendar = new GregorianCalendar() ;
 		int gmtoffset = calendar.get(Calendar.DST_OFFSET) + calendar.get(Calendar.ZONE_OFFSET);

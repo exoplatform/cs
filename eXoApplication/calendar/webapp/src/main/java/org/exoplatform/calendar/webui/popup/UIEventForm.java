@@ -16,6 +16,10 @@
  **/
 package org.exoplatform.calendar.webui.popup;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,6 +36,7 @@ import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.Reminder;
+import org.exoplatform.calendar.service.impl.CalendarServiceImpl;
 import org.exoplatform.calendar.webui.CalendarView;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
@@ -40,6 +45,7 @@ import org.exoplatform.calendar.webui.UIFormDateTimePicker;
 import org.exoplatform.calendar.webui.UIListContainer;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.mail.service.Account;
+import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
@@ -63,6 +69,8 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormTabPane;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
+
+import com.sun.xml.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 /**
  * Created by The eXo Platform SARL
@@ -709,6 +717,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     return eventDetailTab.getUIFormTextAreaInput(FIELD_PARTICIPANT).getValue() ; 
   } 
   protected void setParticipant(String values) throws Exception{
+    participants_.clear() ;
     OrganizationService orgService = CalendarUtils.getOrganizationService() ;
     StringBuffer sb = new StringBuffer() ;
     for(String s : values.split(CalendarUtils.COMMA)) {
@@ -801,6 +810,17 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     values.append(event.getId()) ;
     message.setHeader(CalendarUtils.EXO_INVITATION , values.toString()) ;
     message.setSendDate(new Date()) ;
+    CalendarService calService = CalendarUtils.getCalendarService() ;
+    List<String> calendarIds = new ArrayList<String>() ;
+    calendarIds.add(event.getCalendarId()) ;
+    OutputStream out = calService.getCalendarImportExports(CalendarServiceImpl.ICALENDAR).exportCalendar(getSystemSession(), fromId, calendarIds, event.getCalType()) ;
+    ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
+    BufferAttachment bf = new BufferAttachment() ;
+    bf.setInputStream(is) ;
+    bf.setName("icalendar.ics");
+    List<org.exoplatform.mail.service.Attachment> attachments = new ArrayList<org.exoplatform.mail.service.Attachment>() ;
+    attachments.add(bf) ;
+    message.setAttachements(attachments) ;
     svr.sendMessage(getSession(), user.getUserName(), acc.getId(), message) ;
   }
 
