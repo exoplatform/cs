@@ -860,7 +860,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource() ;
       String objectId = event.getRequestContext().getRequestParameter(OBJECTID);
-      if (!ContactUtils.isEmpty(objectId)) {
+      if (!ContactUtils.isEmpty(objectId) || uiContacts.getCheckedContacts().size() == 1) {
+        if (ContactUtils.isEmpty(objectId)) objectId = uiContacts.getCheckedContacts().get(0) ;        
         UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
         UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
         UIPopupContainer uiPopupContainer = popupAction.activate(UIPopupContainer.class, 400) ;
