@@ -46,6 +46,7 @@ import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormTabPane;
 
+
 /**
  * Created by The eXo Platform SARL
  * @author  Tuan Pham
@@ -146,7 +147,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
       setEventToDate(cal.getTime()) ;
     }
   }
-
+  
   public void update(String calType, List<SelectItemOption<String>> options) throws Exception{
     UIEventDetailTab uiEventDetailTab = getChildById(TAB_EVENTDETAIL) ;
     if(options != null) {
@@ -174,6 +175,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
   protected void refreshCategory()throws Exception {
     UIFormInputWithActions eventDetailTab = getChildById(TAB_EVENTDETAIL) ;
     eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).setOptions(getCategory()) ;
+//    eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).setValue(selectedCategory) ;
+
   }
 
   public String[] getActions() { return new String[]{"Save", "Cancel"} ; }
@@ -451,28 +454,29 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
 
   static  public class AddCategoryActionListener extends EventListener<UIEventForm> {
     public void execute(Event<UIEventForm> event) throws Exception {
-//      UIEventForm uiForm = event.getSource() ;
-//      System.out.println("\n\n AddCategoryActionListener");
-//      UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-//      UIPopupAction uiChildPopup = uiContainer.getChild(UIPopupAction.class) ;
-//      uiChildPopup.activate(UIEventCategoryManager.class, 470) ;
-//      event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
+      UIEventForm uiForm = event.getSource() ;
+      UIPopupActionContainer uiActionContainer = uiForm.getParent() ;
+      UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
+      UIPopupActionContainer uiPopupContainer = uiChildPopup.activate(UIPopupActionContainer.class, 470) ;
+      UIEventCategoryForm uiEventCategoryForm = uiPopupContainer.createUIComponent(UIEventCategoryForm.class, null, null) ;
+      uiPopupContainer.addChild(uiEventCategoryForm) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
     }
   }
   static  public class AddEmailAddressActionListener extends EventListener<UIEventForm> {
     public void execute(Event<UIEventForm> event) throws Exception {
-//      System.out.println("\n\n AddEmailAddressActionListener");
-//      UIEventForm uiForm = event.getSource() ;
-//      if(!uiForm.getEmailReminder()) {
-//        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-//        uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.email-reminder-required", null));
-//        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-//      } else {
-//        UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-//        UIPopupAction uiPopupAction  = uiPopupContainer.getChild(UIPopupAction.class) ;
-//        uiPopupAction.activate(UIAddressForm.class, 640) ;
-//        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-//      }
+      UIEventForm uiForm = event.getSource() ;
+      if(!uiForm.getEmailReminder()) {
+        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.email-reminder-required", null));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      } else {
+        UIPopupActionContainer uiActionContainer = uiForm.getAncestorOfType(UIPopupActionContainer.class) ;    
+        UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
+        UIAddressForm uiAddressForm = uiChildPopup.activate(UIAddressForm.class, 650) ; 
+        uiAddressForm.setContactList("") ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
+      }
     }
   }
 

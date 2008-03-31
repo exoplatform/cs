@@ -126,7 +126,6 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
     //addUIFormInput(new UIFormCheckBoxInput<Boolean>(FILTER_KEEP_INBOX, FILTER_KEEP_INBOX, true));
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(APPLY_ALL_MESSAGE, APPLY_ALL_MESSAGE, false));
   }
-  
   public MessageFilter getCurrentFilter() { return currentFilter; }
   
   public void setCurrentFilter(MessageFilter filter) throws Exception { 
@@ -287,9 +286,9 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
       }
       MessageFilter filter = new MessageFilter(filterName);       
       if (uiAddFilter.getCurrentFilter() != null) filter = uiAddFilter.getCurrentFilter();
-      
       filter.setName(filterName) ;
       filter.setAccountId(accountId);
+      filter.setName(filterName) ;
       filter.setFrom(from);
       filter.setFromCondition(Integer.valueOf(fromCondition));
       filter.setTo(to);
