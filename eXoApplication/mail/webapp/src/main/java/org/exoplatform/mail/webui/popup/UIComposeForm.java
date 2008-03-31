@@ -165,7 +165,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   public int getComposeType() { return composeType_ ; }
   public void setComposeType(int t) { composeType_ = t; }
 
-  public List<ActionData> getUploadFileList() { 
+  public List<ActionData> getUploadFileList() throws Exception { 
     List<ActionData> uploadedFiles = new ArrayList<ActionData>() ;
     for(Attachment attachdata : attachments_) {
       ActionData fileUpload = new ActionData() ;
@@ -173,7 +173,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       fileUpload.setActionParameter(attachdata.getId());
       fileUpload.setActionType(ActionData.TYPE_ICON) ;
       fileUpload.setCssIconClass("AttachmentIcon") ; // "AttachmentIcon ZipFileIcon"
-      fileUpload.setActionName(attachdata.getName() + " ("+attachdata.getSize()+" B)" ) ;
+      fileUpload.setActionName(attachdata.getName() + " (" + MailUtils.convertSize(attachdata.getSize()) + ")" ) ;
       fileUpload.setShowLabel(true) ;
       uploadedFiles.add(fileUpload) ;
       ActionData removeAction = new ActionData() ;
