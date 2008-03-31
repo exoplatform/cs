@@ -17,6 +17,7 @@
 package org.exoplatform.mail.webui.popup;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,7 +83,6 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   public String getRecipientType() {
     return recipientsType_;
   }
-
   public UIAddressForm() throws Exception {
     addUIFormInput(new UIFormStringInput(CONTACT_SEARCH, CONTACT_SEARCH, null)) ;
     UIFormSelectBox uiSelect = new UIFormSelectBox(CONTACT_GROUP, CONTACT_GROUP, getGroups()) ;
@@ -232,10 +232,23 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       String toAddress = "";
       uiAddressForm.checkedList_.clear() ;
       for (Contact ct : uiAddressForm.getCheckedContact()) {
-        toAddress += ct.getFullName() + "<" + ct.getEmailAddress() + "> ," ;
-        uiAddressForm.checkedList_.put(ct.getId(), ct) ;
+        if(ct.getEmailAddress() != null) {
+          toAddress += ct.getFullName() + "<" + ct.getEmailAddress() + "> ," ;
+          uiAddressForm.checkedList_.put(ct.getId(), ct) ;
+        }
+      }
+      StringBuilder sb = new StringBuilder() ;
+      for(Contact c : uiAddressForm.getCheckedContact()) {
+        if(sb != null && sb.length() > 0) sb.append(MailUtils.COMMA) ;
+        sb.append(c.getEmailAddress()) ;
       }
       UIComposeForm uiComposeForm = uiPortlet.findFirstComponentOfType(UIComposeForm.class) ;
+      UIEventForm uiEventForm = uiPortlet.findFirstComponentOfType(UIEventForm.class) ;
+      if(uiEventForm != null) {
+        uiEventForm.setSelectedTab(UIEventForm.TAB_EVENTREMINDER) ;
+        uiEventForm.setEmailAddress(sb.toString()) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm) ;
+      }
       if (uiAddressForm.getRecipientType().equals("to")) {
         uiComposeForm.setFieldToValue(toAddress) ;
         uiComposeForm.setToContacts(new ArrayList<Contact>(uiAddressForm.checkedList_.values())) ;
@@ -250,6 +263,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         uiComposeForm.setFieldBccValue(toAddress) ;
         uiComposeForm.setBccContacts(new ArrayList<Contact>(uiAddressForm.checkedList_.values())) ;
       }
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressForm.getParent()) ;
     }
   }
 
@@ -258,13 +272,30 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       UIAddressForm uiAddressForm = event.getSource() ;
       UIMailPortlet uiPortlet = uiAddressForm.getAncestorOfType(UIMailPortlet.class) ;
       String toAddress = "";
+      StringBuffer sb = new StringBuffer() ;
       for (Contact ct : uiAddressForm.getCheckedContact()) {
         uiAddressForm.newCheckedList_.put(ct.getId(), ct) ;
       }
       for (Contact contact : uiAddressForm.newCheckedList_.values()) {
+        if(contact.getEmailAddress() != null)
         toAddress += contact.getFullName() + "<" + contact.getEmailAddress() + "> ," ;
       }
+      List<String> listMail = Arrays.asList( sb.toString().split(MailUtils.COMMA)) ; 
+      String email = null ;
+      for(Contact c : uiAddressForm.getCheckedContact()) {
+        email = c.getEmailAddress() ;
+        if(!listMail.contains(email)) {
+          if(sb != null && sb.length() > 0) sb.append(MailUtils.COMMA) ;
+          if(email != null) sb.append(email) ;
+        }
+      }
       UIComposeForm uiComposeForm = uiPortlet.findFirstComponentOfType(UIComposeForm.class) ;
+      UIEventForm uiEventForm = uiPortlet.findFirstComponentOfType(UIEventForm.class) ;
+      if(uiEventForm != null) {
+        uiEventForm.setSelectedTab(UIEventForm.TAB_EVENTREMINDER) ;
+        uiEventForm.setEmailAddress(sb.toString()) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm) ;
+      }
       if (uiAddressForm.getRecipientType().equals("to")) {
         uiComposeForm.setFieldToValue(toAddress) ;
         uiComposeForm.setToContacts(new ArrayList<Contact>(uiAddressForm.newCheckedList_.values())) ;
@@ -280,6 +311,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         uiComposeForm.setBccContacts(new ArrayList<Contact>(uiAddressForm.newCheckedList_.values())) ;
       }
       uiAddressForm.checkedList_ = uiAddressForm.newCheckedList_ ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressForm.getParent()) ;
     }
   }
 

@@ -50,14 +50,23 @@ import org.quartz.JobDetail;
  * Jul 11, 2007  
  */
 public class MailUtils { 
-  
-  
+  final public static String SEMICOLON = ";".intern() ;
+  final public static String COMMA = ",".intern() ;
+  final public static String SLASH = "/".intern() ;
+  final public static String BACKSLASH = "\\".intern() ;
+  final public static String SPECIALCHARACTER[] = {SEMICOLON,COMMA,SLASH,BACKSLASH,"'","|",">","<","\"", "?", "!", "@", "#", "$", "%","^","&","*"} ;
+
   static public MailService getMailService() throws Exception {
     return (MailService)PortalContainer.getComponent(MailService.class) ;
   }
   
   static public String getCurrentUser() throws Exception { 
     return Util.getPortalRequestContext().getRemoteUser() ; 
+  }
+  
+  public static boolean isNameValid(String name, String[] regexpression) {
+    for(String c : regexpression){ if(name.contains(c)) return false ;}
+    return true ;
   }
   
   public static String getImageSource(Contact contact, DownloadService dservice) throws Exception {    
@@ -117,14 +126,14 @@ public class MailUtils {
   }
   
   public static boolean isChecking(String username, String accountId) throws Exception {
-  	ExoContainer container = ExoContainerContext.getCurrentContainer();
-		JobSchedulerService schedulerService = 
-			(JobSchedulerService) container.getComponentInstanceOfType(JobSchedulerService.class);
-		List allJobs = schedulerService.getAllJobs() ;
-		for(Object obj : allJobs) {
-			if(((JobDetail)obj).getName().equals(username + ":" + accountId)) return true ; 
-		}
-  	return false ;
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    JobSchedulerService schedulerService = 
+      (JobSchedulerService) container.getComponentInstanceOfType(JobSchedulerService.class);
+    List allJobs = schedulerService.getAllJobs() ;
+    for(Object obj : allJobs) {
+      if(((JobDetail)obj).getName().equals(username + ":" + accountId)) return true ; 
+    }
+    return false ;
   }
   
   public static String formatDate(String format, Date date) {
