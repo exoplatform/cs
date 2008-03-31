@@ -76,6 +76,7 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
   }
 
   protected void updateParticipants(String values) throws Exception{
+    parMap_.clear() ;
     Map<String, String> tmpMap = new HashMap<String, String>() ;
     List<String> newPars = new ArrayList<String>() ;
     if(!CalendarUtils.isEmpty(values)) {

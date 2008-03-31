@@ -48,8 +48,9 @@ import sun.util.calendar.CalendarUtils;
  */
 public class CalendarServiceImpl implements CalendarService{
 
-  final private static String ICALENDAR = "ICalendar(.ics)".intern() ;
-
+  final public static String ICALENDAR = "ICalendar(.ics)".intern() ;
+  final public static String EXPORTEDCSV = "ExportedCsv(.csv)".intern() ;
+  
   private JCRDataStorage storage_ ;
   private Map<String, CalendarImportExport> calendarImportExport_ = new HashMap<String, CalendarImportExport>() ;
 

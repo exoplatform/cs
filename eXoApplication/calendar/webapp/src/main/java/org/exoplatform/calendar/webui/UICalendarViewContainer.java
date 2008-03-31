@@ -16,6 +16,8 @@
  **/
 package org.exoplatform.calendar.webui;
 
+import java.util.Calendar;
+
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
@@ -51,17 +53,15 @@ public class UICalendarViewContainer extends UIContainer  {
     initView(null) ;
   }  
   public void initView(String viewType) throws Exception {
-    if(viewType == null) {
-      CalendarSetting calendarSetting = new CalendarSetting() ;
-      try {
-        calendarSetting = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
-      }catch (Exception e) {
-        CalendarService cservice = CalendarUtils.getCalendarService() ;
-        String username = Util.getPortalRequestContext().getRemoteUser() ;
-        calendarSetting =  cservice.getCalendarSetting(SessionProviderFactory.createSessionProvider(), username) ;
-      }
-      viewType = TYPES[Integer.parseInt(calendarSetting.getViewType())] ;
+    CalendarSetting calendarSetting = new CalendarSetting() ;
+    try {
+      calendarSetting = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
+    }catch (Exception e) {
+      CalendarService cservice = CalendarUtils.getCalendarService() ;
+      String username = Util.getPortalRequestContext().getRemoteUser() ;
+      calendarSetting =  cservice.getCalendarSetting(SessionProviderFactory.createSessionProvider(), username) ;
     }
+    if(viewType == null) viewType = TYPES[Integer.parseInt(calendarSetting.getViewType())] ;
     if(DAY_VIEW.equals(viewType)) {
       UIDayView uiView = getChild(UIDayView.class) ;
       if(uiView == null) uiView =  addChild(UIDayView.class, null, null) ;
@@ -73,6 +73,7 @@ public class UICalendarViewContainer extends UIContainer  {
         if(uiView == null) uiView =  addChild(UIWeekView.class, null, null) ;
         uiView.isShowCustomView_ = false ;
         if(getRenderedChild() != null) uiView.setCurrentCalendar(((CalendarView)getRenderedChild()).getCurrentCalendar()) ;
+        uiView.calendar_.setFirstDayOfWeek(Integer.parseInt(calendarSetting.getWeekStartOn())) ;
         setRenderedChild(viewType) ;
       } else
         if(MONTH_VIEW.equals(viewType)) {
@@ -109,6 +110,7 @@ public class UICalendarViewContainer extends UIContainer  {
                 if(uiView == null) uiView =  addChild(UIWeekView.class, null, null) ;
                 uiView.isShowCustomView_ = true ;
                 if(getRenderedChild() != null) uiView.setCurrentCalendar(((CalendarView)getRenderedChild()).getCurrentCalendar()) ;
+                uiView.calendar_.setFirstDayOfWeek(Calendar.SUNDAY) ;
                 setRenderedChild(WEEK_VIEW) ;
               }
     refresh() ;
