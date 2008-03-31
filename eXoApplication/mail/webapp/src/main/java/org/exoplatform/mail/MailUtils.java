@@ -18,7 +18,9 @@ package org.exoplatform.mail;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.text.DecimalFormat;
 import java.text.Format;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -86,8 +88,9 @@ public class MailUtils {
   
   public static String convertSize(long size) throws Exception {
     String str = "";
-    if (size > 1024 * 1024) str += (int)(size/(1024 * 1024)) + " MB" ;
-    else if (size > 1024) str += (int)(size/(1024)) + " KB" ;
+    DecimalFormat df = new DecimalFormat("0.00");
+    if (size > 1024 * 1024) str += df.format(((double) size)/(1024 * 1024)) + " MB" ;
+    else if (size > 1024) str += df.format(((double) size)/(1024)) + " KB" ;
     else str += size + " B" ;
     return str ;
   }

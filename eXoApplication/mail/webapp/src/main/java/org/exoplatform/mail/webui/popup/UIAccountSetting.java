@@ -463,7 +463,7 @@ public class UIAccountSetting extends UIFormTabPane {
 //        if (uiInput.getChildById(FIELD_SKIP_OVER_SIZE) == null ) 
 //          uiInput.addUIFormInput(uiSetting.skipOverSize_) ;
   		}
-  		
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiSetting.getParent()) ;
   	}
   }
   
@@ -471,6 +471,7 @@ public class UIAccountSetting extends UIFormTabPane {
   	public void execute(Event<UIAccountSetting> event) throws Exception {
   		UIAccountSetting uiSetting = event.getSource() ; 
   		uiSetting.setDefaultValue(uiSetting.getFieldProtocol(),uiSetting.getFieldIsSSL());
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiSetting.getParent()) ;
   	}
   }
    
