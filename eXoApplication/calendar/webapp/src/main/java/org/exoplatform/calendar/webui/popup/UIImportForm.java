@@ -95,6 +95,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
         calendarName = resource.getFileName() ;
       }
       try {
+        
         String username = Util.getPortalRequestContext().getRemoteUser() ;
         CalendarService calendarService = CalendarUtils.getCalendarService() ;
         calendarService.getCalendarImportExports(importFormat).importCalendar(SessionProviderFactory.createSystemProvider(), username, input.getUploadDataAsStream(), calendarName) ;
