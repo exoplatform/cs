@@ -263,7 +263,6 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         uiComposeForm.setFieldBccValue(toAddress) ;
         uiComposeForm.setBccContacts(new ArrayList<Contact>(uiAddressForm.checkedList_.values())) ;
       }
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressForm.getParent()) ;
     }
   }
 
@@ -311,7 +310,6 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         uiComposeForm.setBccContacts(new ArrayList<Contact>(uiAddressForm.newCheckedList_.values())) ;
       }
       uiAddressForm.checkedList_ = uiAddressForm.newCheckedList_ ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressForm.getParent()) ;
     }
   }
 
