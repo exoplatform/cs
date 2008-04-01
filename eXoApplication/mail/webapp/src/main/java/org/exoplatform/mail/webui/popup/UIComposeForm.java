@@ -18,6 +18,7 @@ package org.exoplatform.mail.webui.popup;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.exoplatform.contact.service.Contact;
@@ -553,12 +554,15 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiComposeForm = event.getSource() ;
       String attFileId = event.getRequestContext().getRequestParameter(OBJECTID);
-      for (Attachment att : uiComposeForm.attachments_) {
+      Iterator<Attachment> iter =  uiComposeForm.attachments_.iterator() ;
+      Attachment att ;
+      while (iter.hasNext()) {
+        att = (Attachment) iter.next() ;
         if (att.getId().equals(attFileId)) {
-          uiComposeForm.removeFromUploadFileList(att);
-          uiComposeForm.refreshUploadFileList() ;
+          iter.remove() ;
         }
       }
+      uiComposeForm.refreshUploadFileList() ;
     }
   }
 

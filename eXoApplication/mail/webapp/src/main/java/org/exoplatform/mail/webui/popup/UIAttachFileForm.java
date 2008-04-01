@@ -19,6 +19,7 @@ package org.exoplatform.mail.webui.popup;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.services.jcr.util.IdGenerator;
@@ -106,7 +107,7 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
       } else {
         UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
         UIComposeForm uiComposeForm = uiPortlet.findFirstComponentOfType(UIComposeForm.class);
-        for (BufferAttachment att : fileAttachList) {
+        for (Attachment att : fileAttachList) {
           uiComposeForm.addToUploadFileList(att) ;
         }
         uiComposeForm.refreshUploadFileList() ;

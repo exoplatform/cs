@@ -424,6 +424,8 @@ public class MailServiceImpl implements MailService{
         boolean leaveOnServer = (isPop3 && Boolean.valueOf(account.getPopServerProperties().get(Utils.SVR_POP_LEAVE_ON_SERVER))) ;
         boolean markAsDelete = (isImap && Boolean.valueOf(account.getImapServerProperties().get(Utils.SVR_IMAP_MARK_AS_DELETE))) ;
         
+        boolean deleteOnServer = (isPop3 && !leaveOnServer) || (isImap && markAsDelete);
+        
         totalNew = messages.length ;
 
         System.out.println(" #### Folder contains " + totalNew + " messages !");
@@ -451,7 +453,7 @@ public class MailServiceImpl implements MailService{
             t1 = System.currentTimeMillis();
             msg = messages[i] ;   
             msg.setFlag(Flags.Flag.SEEN, true);
-            if (!leaveOnServer || markAsDelete) msg.setFlag(Flags.Flag.DELETED, true);
+            if (deleteOnServer) msg.setFlag(Flags.Flag.DELETED, true);
             try {
               storage_.saveMessage(sProvider, username, account.getId(), msg, folderId, spamFilter) ;
               account.setLastCheckedDate(MimeMessageParser.getReceivedDate(msg).getTime()) ;
