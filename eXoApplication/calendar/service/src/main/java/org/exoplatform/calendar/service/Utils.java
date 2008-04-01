@@ -63,4 +63,8 @@ public class Utils {
 		calendar.setTimeInMillis(System.currentTimeMillis() - gmtoffset) ;
 		return  calendar;
 	}
+  
+  public static boolean isEmpty(String s) {
+    return s == null || s.trim().length() == 0 ;
+  }
 }

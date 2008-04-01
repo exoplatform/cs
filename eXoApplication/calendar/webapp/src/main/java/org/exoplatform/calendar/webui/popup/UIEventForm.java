@@ -813,14 +813,15 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     CalendarService calService = CalendarUtils.getCalendarService() ;
     List<String> calendarIds = new ArrayList<String>() ;
     calendarIds.add(event.getCalendarId()) ;
-    OutputStream out = calService.getCalendarImportExports(CalendarServiceImpl.ICALENDAR).exportCalendar(getSystemSession(), fromId, calendarIds, event.getCalType()) ;
+     OutputStream out = calService.getCalendarImportExports(CalendarServiceImpl.ICALENDAR).exportCalendar(getSystemSession(), fromId, calendarIds, event.getCalType()) ;
     ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
     BufferAttachment bf = new BufferAttachment() ;
     bf.setInputStream(is) ;
     bf.setName("icalendar.ics");
+    bf.setMimeType("text/calendar") ;
     List<org.exoplatform.mail.service.Attachment> attachments = new ArrayList<org.exoplatform.mail.service.Attachment>() ;
     attachments.add(bf) ;
-    message.setAttachements(attachments) ;
+    message.setAttachements(attachments) ; 
     svr.sendMessage(getSession(), user.getUserName(), acc.getId(), message) ;
   }
 
@@ -1005,7 +1006,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
           tempCal.add(java.util.Calendar.MILLISECOND, -1) ;
           to = tempCal.getTime() ;
         }
+        CalendarEvent calendarEvent  = null ;
         try {
+          calendarEvent = new CalendarEvent() ;
           String[] pars = uiForm.getParticipants() ;
           String eventId = null ;
           /*Calendar temp =  CalendarUtils.getInstanceTempCalendar() ;
@@ -1014,7 +1017,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
           Calendar calEnd = CalendarUtils.getEndDay(temp) ;
           int t = 1 ;
           while (cal.before(calEnd)) { */
-          CalendarEvent calendarEvent = new CalendarEvent() ;
           if(!uiForm.isAddNew_){
             calendarEvent = uiForm.calendarEvent_ ; 
           }

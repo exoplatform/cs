@@ -50,7 +50,7 @@ public class CalendarSetting {
   private String viewType ;
   private long timeInterval ;
   private String weekStartOn ;
-  private String dateFormat ;
+  public static String dateFormat ;
   private String timeFormat ;
   private String location ;
   private String timeZone ;

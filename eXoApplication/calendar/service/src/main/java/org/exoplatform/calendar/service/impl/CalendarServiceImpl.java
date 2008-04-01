@@ -57,6 +57,7 @@ public class CalendarServiceImpl implements CalendarService{
   public CalendarServiceImpl(NodeHierarchyCreator nodeHierarchyCreator) throws Exception {
     storage_ = new JCRDataStorage(nodeHierarchyCreator) ;
     calendarImportExport_.put(ICALENDAR, new ICalendarImportExport(storage_)) ;
+    calendarImportExport_.put(EXPORTEDCSV, new CsvImportExport(storage_)) ;
   }
 
   public List<CalendarCategory> getCategories(SessionProvider sProvider, String username) throws Exception {
