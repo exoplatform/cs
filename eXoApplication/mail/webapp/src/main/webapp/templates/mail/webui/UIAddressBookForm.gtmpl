@@ -139,7 +139,15 @@
                           <div class="RightContent">
                             <div class="InfoItem">
                               <div class="InfoLabel1">Birthday:</div>
-                              <div class="Info1"><%= (selectedContact.getBirthday() != null) ? selectedContact.getBirthday() : "_"%></div>
+                              <%
+                                String birthday = null ; 
+                                if (selectedContact.getBirthday() != null) {
+                              	String birth = selectedContact.getBirthday().toString() ;
+                              	String a = birth.substring(0, 10); String b = birth.substring(23,28) ;
+                              	birthday = a+ b;
+                              	}
+                               %>
+                              <div class="Info1"><%= (birthday != null) ? birthday : "_"%></div>
                             </div>
                             <div class="InfoItem">
                               <div class="InfoLabel1">Email:</div>

@@ -37,7 +37,6 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -139,18 +138,18 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
   }
   
   public void fillDatas(Contact ct) throws Exception {
-  	isEdited_ = true ;
-  	selectedContact_ = ct ;
-  	getUIFormSelectBox(SELECT_GROUP).setSelectedValues(ct.getAddressBook());
-  	getUIStringInput(FIRST_NAME).setValue(ct.getFirstName());
-  	getUIStringInput(LAST_NAME).setValue(ct.getLastName());
-  	getUIStringInput(NICKNAME).setValue(ct.getNickName());
-  	getChild(UIFormRadioBoxInput.class).setValue(ct.getGender()) ;
-  	setFieldBirthday(ct.getBirthday());
+    isEdited_ = true ;
+    selectedContact_ = ct ;
+    getUIFormSelectBox(SELECT_GROUP).setSelectedValues(ct.getAddressBook());
+    getUIStringInput(FIRST_NAME).setValue(ct.getFirstName());
+    getUIStringInput(LAST_NAME).setValue(ct.getLastName());
+    getUIStringInput(NICKNAME).setValue(ct.getNickName());
+    getChild(UIFormRadioBoxInput.class).setValue(ct.getGender()) ;
+    setFieldBirthday(ct.getBirthday());
     getUIStringInput(JOBTITLE).setValue(ct.getJobTitle());
     getUIStringInput(EMAIL).setValue(ct.getEmailAddress());
     if (ct != null && ct.getAttachment() != null){
-    	setImage(ct.getAttachment().getInputStream()) ;
+      setImage(ct.getAttachment().getInputStream()) ;
     }
   }
   
@@ -262,7 +261,14 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
       contact.setNickName(uiContact.getNickName());
       contact.setGender(uiContact.getFieldGender());
       try {
-        contact.setBirthday(uiContact.getFieldBirthday());
+        Date birthday = uiContact.getFieldBirthday() ;
+        Date today = new Date() ;
+        if (birthday.after(today)) {
+          uiApp.addMessage(new ApplicationMessage("UIAddContactForm.msg.date-time-invalid", null)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
+        contact.setBirthday(birthday);
       } catch(IllegalArgumentException e) {
         uiApp.addMessage(new ApplicationMessage("UIAddContactForm.msg.birthday-incorrect", null, 
             ApplicationMessage.INFO)) ;
