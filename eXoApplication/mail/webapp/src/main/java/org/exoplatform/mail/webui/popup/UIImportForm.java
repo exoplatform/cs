@@ -22,6 +22,7 @@ import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageList;
@@ -83,6 +84,19 @@ public class UIImportForm extends UIForm implements UIPopupComponent {
       UIApplication  uiApp = uiImport.getAncestorOfType(UIApplication.class);
       if(uploadResource == null) {
         uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.upload-error", null, 
+            ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
+      String name = uploadResource.getFileName() ;
+      boolean validType = true ;
+      for (int i = 0; i < Utils.MIME_MAIL_TYPES.length; i++) {
+        String type = Utils.MIME_MAIL_TYPES[i].trim() ;
+        if(!name.substring(name.lastIndexOf(".") + 1, name.length()).equals(type))  
+          validType = false ;
+      }
+      if(!validType)  {
+        uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.file-upload-error", null, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;

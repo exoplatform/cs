@@ -263,7 +263,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
       try {
         Date birthday = uiContact.getFieldBirthday() ;
         Date today = new Date() ;
-        if (birthday.after(today)) {
+        if (birthday != null && birthday.after(today)) {
           uiApp.addMessage(new ApplicationMessage("UIAddContactForm.msg.date-time-invalid", null)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
