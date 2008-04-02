@@ -56,7 +56,10 @@ public class MailSetting {
   public MailSetting() {
     numberMsgPerPage = 20;
     periodCheckAuto = NEVER_CHECK_AUTO;
-    useWysiwyg = true;
+    useWysiwyg = true; 
+    formatAsOriginal = true;
+    replyWithAtt = true; 
+    forwardWithAtt = true;
     prefixMsgWith = PREFIX_WITH_MINUS;
   }
   

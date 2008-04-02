@@ -326,15 +326,28 @@
                               attLink = "/mail/skin/DefaultSkin/webui/skinIcons/24x24/icons/WordIcon.gif";
                             } else if (attach.getMimeType().indexOf("pdf") > -1) {
                               attLink = "/mail/skin/DefaultSkin/webui/skinIcons/24x24/icons/PDFIcon.gif";
-                            }
+                            } 
                         %> 
       						  		      <img class="AttachmentFile" src="$attLink">
       						  		<%
                           }
-                        %>
+                        %> 
                         <div class="AttachmentBox">
       										<div class="AttachmentIcon"><%=attach.getName()%></div>
-      										<div class="Size"><%=_ctx.appRes(uicomponent.id+ ".label.size") %>: <%=MailUtils.convertSize(attach.getSize())%> &nbsp;&nbsp;&nbsp;<span class="Icon ViewDownloadIcon"><a href="#">View</a></span><span class="Icon DownloadIcon"> <a href="$downloadAction">Download</a></span></div>
+													<div class="Size"><%=_ctx.appRes(uicomponent.id+ ".label.size") %>: <%=MailUtils.convertSize(attach.getSize())%> &nbsp;&nbsp;&nbsp;
+													<% 
+                            	boolean validType = true ;
+      												String name = attach.getName() ;
+     												 	for (int i = 0; i < Utils.SUPPORTED_VIEW_TYPE_ATTACH.length; i++) {
+        												String type = Utils.SUPPORTED_VIEW_TYPE_ATTACH[i].trim() ;
+        												if(name.substring(name.lastIndexOf(".") + 1, name.length()).equals(type)) {	
+      										%>
+															<span class="Icon ViewDownloadIcon"><a href="#">View</a></span>
+													<% 
+      													}
+      												}	
+      										%>
+														<span class="Icon DownloadIcon"> <a href="$downloadAction">Download</a></span></div>
       						  		</div>
       						  		<div style="clear: left;"><span></span></div>
       						  	</div>
