@@ -8,6 +8,7 @@
 	import org.exoplatform.contact.ContactUtils;
 	import org.exoplatform.contact.service.JCRPageList;
 	import org.exoplatform.contact.service.SharedAddressBook;
+	import org.exoplatform.contact.service.impl.NewUserListener;
 	import java.util.HashMap;
 	import java.util.Map;
 	
@@ -206,12 +207,13 @@
 	  	 	    			contactType = contact.getContactType() ;	  	 	    			
 	  	 	    			if (contactType.equals("2")) {
 		  	 	    			StringBuffer buffer = new StringBuffer("")
-		  	 	    			int i = 1 ;
-		  	 	    			while (i < addressBooks.length) {
-		  	 	    				if(buffer.length() > 0) buffer.append(", ").append(addressBooks[i]) ;
-		  	 	    				else buffer.append(addressBooks[i]) ;
-		  	 	    				i ++ ;
-		  	 	    			}
+		  	 	    			for (String address : addressBooks) {
+		  	 	    				if (address.equals(NewUserListener.DEFAULTGROUP + ContactUtils.getCurrentUser())) {
+		  	 	    					address = NewUserListener.DEFAULTGROUPNAME ;
+		  	 	    				}
+		  	 	    				if(buffer.length() > 0) buffer.append(", ").append(address) ;
+		  	 	    				else buffer.append(address) ;
+		  	 	    			}	
 								    groupName = buffer.toString() ;
 								  } else if (contactType.equals("0")) {
 		  	 	    			groupName = privateGroupMap.get(addressBooks[0]) ;								  
