@@ -94,19 +94,23 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
         return ; 
       }
       Tag tag = uiEditTagForm.tag_ ;
-      if (!tag.getName().equalsIgnoreCase(tagName) && ContactUtils.isTagNameExisted(tagName)) {
-        uiApp.addMessage(new ApplicationMessage("UIEditTagForm.msg.tagName-existed", null, 
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
+      UIContactPortlet uiContactPortlet = uiEditTagForm.getAncestorOfType(UIContactPortlet.class) ;
+      UITags uiTags = uiContactPortlet.findFirstComponentOfType(UITags.class) ;
+      if (!tag.getName().equals(tagName))
+        for (Tag oldTag : uiTags.getTagMap().values()) 
+          if (oldTag.getName().equals(tagName)) {
+            uiApp.addMessage(new ApplicationMessage("UIEditTagForm.msg.tagName-existed", null, 
+                ApplicationMessage.WARNING)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return ;
+          }
       tag.setName(tagName) ;
       tag.setColor(uiEditTagForm.getUIFormSelectBox(FIELD_COLOR).getValue()) ;
       ContactUtils.getContactService().updateTag(
           SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), tag) ;
-      UIContactPortlet uiContactPortlet = uiEditTagForm.getAncestorOfType(UIContactPortlet.class) ;
+      
       WebuiRequestContext context = event.getRequestContext() ;
-      context.addUIComponentToUpdateByAjax(uiContactPortlet.findFirstComponentOfType(UITags.class)) ;
+      context.addUIComponentToUpdateByAjax(uiTags) ;
       context.addUIComponentToUpdateByAjax(uiContactPortlet.findFirstComponentOfType(UIContacts.class)) ;
       uiContactPortlet.cancelAction() ;
     }
