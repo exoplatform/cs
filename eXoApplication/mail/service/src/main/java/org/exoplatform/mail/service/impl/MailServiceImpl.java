@@ -464,7 +464,7 @@ public class MailServiceImpl implements MailService{
             }  
             i ++ ;          
             t2 = System.currentTimeMillis();
-            System.out.println(" [DEBUG] " + i + " messages saved : " + (t2-t1) + " ms");
+            System.out.println(" [DEBUG] Message " + i + " saved : " + (t2-t1) + " ms");
           }
           saveAccount(sProvider, username, account, false) ;
           Calendar cc = GregorianCalendar.getInstance();
@@ -560,8 +560,8 @@ public class MailServiceImpl implements MailService{
     storage_.saveMailSetting(sProvider, username, newSetting);
   }
   
-  public void importMessage(SessionProvider sProvider, String username, String accountId, String folderId, InputStream inputStream, String type) throws Exception {
-  	emlImportExport_.importMessage(sProvider, username, accountId, folderId, inputStream, type) ;
+  public boolean importMessage(SessionProvider sProvider, String username, String accountId, String folderId, InputStream inputStream, String type) throws Exception {
+  	return emlImportExport_.importMessage(sProvider, username, accountId, folderId, inputStream, type) ;
   }
   
   public OutputStream exportMessage(SessionProvider sProvider, String username, String accountId, Message message) throws Exception {

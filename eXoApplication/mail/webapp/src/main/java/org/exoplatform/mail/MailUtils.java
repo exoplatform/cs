@@ -163,8 +163,8 @@ public class MailUtils {
   }
   
   public static String encodeHTML(String htmlContent) throws Exception {
-    return htmlContent.replaceAll("&", "&amp;").replaceAll("\"", "&quot;")
-    .replaceAll("<", "&lt;").replaceAll(">", "&gt;") ;
+    return (!isFieldEmpty(htmlContent)) ? htmlContent.replaceAll("&", "&amp;").replaceAll("\"", "&quot;")
+        .replaceAll("<", "&lt;").replaceAll(">", "&gt;") : "" ;
   }
   
   public static boolean isInvitation(Message msg) throws Exception {
