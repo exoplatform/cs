@@ -84,7 +84,8 @@ public class UIWeekView extends UICalendarView {
   }
 
   public void refresh() throws Exception {
-    System.out.println("\n\n>>>>>>>>>> WEEK VIEW") ;
+    if(isShowCustomView_) System.out.println("\n\n>>>>>>>>>> WORKING VIEW") ;
+    else System.out.println("\n\n>>>>>>>>>> WEEK VIEW") ;
     eventData_.clear() ;
     allWeekData_.clear() ;
     int i = 0 ;
@@ -127,15 +128,15 @@ public class UIWeekView extends UICalendarView {
   public java.util.Calendar getBeginDateOfWeek() throws Exception{
     java.util.Calendar temCal = getInstanceTempCalendar() ;
     temCal.setTime(calendar_.getTime()) ;
-    CalendarSetting calSetting = new CalendarSetting() ;
+    /*CalendarSetting calSetting = new CalendarSetting() ;
     try {
       calSetting = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
     }
     catch (Exception e) {
       CalendarService calService = getApplicationComponent(CalendarService.class) ;
       calSetting  = calService.getCalendarSetting(getSession(),CalendarUtils.getCurrentUser()) ;
-    } 
-    temCal.setFirstDayOfWeek(Integer.parseInt(calSetting.getWeekStartOn())) ;
+    } */
+    temCal.setFirstDayOfWeek(Integer.parseInt(calendarSetting_.getWeekStartOn())) ;
     temCal.set(java.util.Calendar.WEEK_OF_YEAR, getCurrentWeek()) ;
     int amout = temCal.getFirstDayOfWeek() - calendar_.get(Calendar.DAY_OF_WEEK) ;
     if(isShowCustomView_) amout = amout + 1 ;
@@ -145,15 +146,7 @@ public class UIWeekView extends UICalendarView {
 
   public java.util.Calendar getEndDateOfWeek() throws Exception{
     java.util.Calendar temCal = getInstanceTempCalendar() ;
-    CalendarSetting calSetting = new CalendarSetting() ;
-    try {
-      calSetting  = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
-    }
-    catch (Exception e) {
-      CalendarService calService = getApplicationComponent(CalendarService.class) ;
-      calSetting  = calService.getCalendarSetting(getSession(), Util.getPortalRequestContext().getRemoteUser()) ;
-    } 
-    temCal.setFirstDayOfWeek(Integer.parseInt(calSetting.getWeekStartOn())) ;
+    temCal.setFirstDayOfWeek(Integer.parseInt(calendarSetting_.getWeekStartOn())) ;
     temCal.setTime(getBeginDateOfWeek().getTime()) ;
     int amout = 6 ;
     if(isShowCustomView_) amout = amout - 1 ;

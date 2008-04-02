@@ -116,7 +116,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
         settingTab.setWorkingEnd(calendarSetting.getWorkingTimeEnd(), CalendarUtils.DATEFORMAT + " " + calendarSetting.getTimeFormat()) ;
       }
       if(calendarSetting.getBaseURL() == null) calendarSetting.setBaseURL(CalendarUtils.getServerBaseUrl() + "calendar/iCalRss") ;
-      settingTab.setBaseUrl(calendarSetting.getBaseURL()) ;
+      //settingTab.setBaseUrl(calendarSetting.getBaseURL()) ;
     }
     UIFormInputWithActions defaultCalendarsTab = getChildById(DEFAULT_CALENDAR_TAB) ;    
     List<String> settedCalendars = new ArrayList<String>() ;
@@ -232,15 +232,15 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       calendarSetting.setSharedCalendarsColors(uiForm.sharedCalendarColors_) ;
       calendarSetting.setViewType(settingTab.getViewType()) ;
       calendarSetting.setTimeInterval(Long.parseLong(settingTab.getTimeInterval())) ;
-      if(settingTab.getViewType().equals(CalendarSetting.WORKING_VIEW))
+      /*if(settingTab.getViewType().equals(CalendarSetting.WORKING_VIEW))
         calendarSetting.setWeekStartOn(String.valueOf(1)) ;
-      else   
+      else */  
         calendarSetting.setWeekStartOn(settingTab.getWeekStartOn()) ;
       calendarSetting.setDateFormat(settingTab.getDateFormat()) ;
       calendarSetting.setTimeFormat(settingTab.getTimeFormat()) ;
       calendarSetting.setLocation(settingTab.getLocale()) ;
       calendarSetting.setTimeZone(settingTab.getTimeZone()) ;
-      calendarSetting.setBaseURL(settingTab.getBaseUrl()) ;
+      calendarSetting.setBaseURL(CalendarUtils.getServerBaseUrl() + "calendar/iCalRss") ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       if(settingTab.getShowWorkingTimes()) {
         if(settingTab.getWorkingBegin().equals(settingTab.getWorkingEnd()) || settingTab.getWorkingBeginTime().after(settingTab.getWorkingEndTime())) {

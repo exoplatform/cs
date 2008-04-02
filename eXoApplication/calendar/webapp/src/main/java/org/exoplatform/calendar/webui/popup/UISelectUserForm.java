@@ -64,8 +64,12 @@ import org.exoplatform.webui.form.UIFormStringInput;
 
 public class UISelectUserForm extends UIForm implements UIPopupComponent { 
   final public static String FIELD_KEYWORD = "keyWord".intern() ;
+  final public static String FIELD_FILTER = "filter".intern() ;
   final public static String FIELD_GROUP = "group".intern() ;
-
+  public static String USER_NAME = "userName";
+  public static String LAST_NAME = "lastName";
+  public static String FIRST_NAME = "firstName";
+  public static String EMAIL = "email";
 
   private Map<String, User> userData_ = new HashMap<String, User>() ;
   private boolean isShowSearch_ = false ;
@@ -87,6 +91,7 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
   }
   public UISelectUserForm() throws Exception {  
     addUIFormInput(new UIFormStringInput(FIELD_KEYWORD, FIELD_KEYWORD, null)) ;
+    addUIFormInput(new UIFormSelectBox(FIELD_FILTER, FIELD_FILTER, getFilters())) ;
     UIFormSelectBox uiSelectBox = new UIFormSelectBox(FIELD_GROUP, FIELD_GROUP, getGroups()) ;
     addUIFormInput(uiSelectBox) ;
     uiSelectBox.setOnChange("Change") ;
@@ -108,7 +113,7 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
     pars_ = pars ;
   }
   /*public void  initSearchForm() throws Exception{
-   
+
   }*/
   private List<SelectItemOption<String>> getGroups() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
@@ -118,6 +123,14 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
       Group  cg = (Group)g ;
       options.add(new SelectItemOption<String>(cg.getGroupName(), cg.getId())) ;
     }
+    return options;
+  }
+  private List<SelectItemOption<String>> getFilters() throws Exception {
+    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+    options.add(new SelectItemOption<String>(USER_NAME, USER_NAME)) ;
+    options.add(new SelectItemOption<String>(LAST_NAME, LAST_NAME)) ;
+    options.add(new SelectItemOption<String>(FIRST_NAME, FIRST_NAME)) ;
+    options.add(new SelectItemOption<String>(EMAIL, EMAIL)) ;
     return options;
   }
 
@@ -225,7 +238,8 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UISelectUserForm> event) throws Exception {
       UISelectUserForm uiForm = event.getSource() ;
       OrganizationService service = uiForm.getApplicationComponent(OrganizationService.class) ;
-      String keyword = uiForm.getUIStringInput(UISelectUserForm.FIELD_KEYWORD).getValue();
+      String keyword = uiForm.getUIStringInput(FIELD_KEYWORD).getValue();
+      String filter = uiForm.getUIFormSelectBox(FIELD_FILTER).getValue() ;
       uiForm.groupId_ = null ; //uiForm.getSelectedGroup() ;
       uiForm.setSelectedGroup(null) ;
       if(CalendarUtils.isEmpty(keyword)) {
@@ -233,17 +247,19 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
       }  else {
         keyword = "*" + keyword.toLowerCase() + "*" ;
         Query q = new Query() ;
-        q.setUserName(keyword) ;
+        if(USER_NAME.equals(filter)) {
+          q.setUserName(keyword) ;
+        } 
+        if(LAST_NAME.equals(filter)) {
+          q.setLastName(keyword) ;
+        }
+        if(FIRST_NAME.equals(filter)) {
+          q.setFirstName(keyword) ;
+        }
+        if(EMAIL.equals(filter)) {
+          q.setEmail(keyword) ;
+        }
         List results = new ArrayList() ;
-        results.addAll(service.getUserHandler().findUsers(q).getAll()) ;
-        q = new Query() ;
-        q.setEmail(keyword) ;
-        results.addAll(service.getUserHandler().findUsers(q).getAll()) ;
-        q = new Query() ;
-        q.setFirstName(keyword) ;
-        results.addAll(service.getUserHandler().findUsers(q).getAll()) ;
-        q = new Query() ;
-        q.setLastName(keyword) ;
         results.addAll(service.getUserHandler().findUsers(q).getAll()) ;
         ObjectPageList objPageList = new ObjectPageList(results, 10) ;
         uiForm.uiIterator_.setPageList(objPageList);
