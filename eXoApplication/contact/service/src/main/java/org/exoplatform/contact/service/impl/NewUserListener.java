@@ -47,6 +47,7 @@ public class NewUserListener extends UserEventListener {
   private ContactService cservice_ ;
   private NodeHierarchyCreator nodeHierarchyCreator_ ;
   public static String DEFAULTGROUP = "default".intern() ;
+  public static String DEFAULTGROUPNAME = "My contacts".intern() ;
   public NewUserListener(ContactService cservice, NodeHierarchyCreator nodeHierarchyCreator) throws Exception {
   	cservice_ = cservice ;
   	nodeHierarchyCreator_ = nodeHierarchyCreator ;  	
@@ -56,7 +57,7 @@ public class NewUserListener extends UserEventListener {
   	if(isNew) {
   		ContactGroup group = new ContactGroup() ;
   		group.setId(DEFAULTGROUP+user.getUserName()) ;
-    	group.setName("My contacts") ;
+    	group.setName(DEFAULTGROUPNAME) ;
     	group.setDescription("Default address book") ;
     	SessionProvider sysProvider = SessionProvider.createSystemProvider() ;
     	cservice_.saveGroup(sysProvider, user.getUserName(), group, true) ;
