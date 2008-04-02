@@ -75,7 +75,6 @@ public class UIImportForm extends UIForm implements UIPopupComponent {
   static public class ImportActionListener extends EventListener<UIImportForm> {
     public void execute(Event<UIImportForm> event) throws Exception {
       System.out.println(" === >>> Import Listener");
-      // TODO Call service alot, need to review
       UIImportForm uiImport = event.getSource();
       MailService mailSrv = MailUtils.getMailService();
       UIMailPortlet uiPortlet = uiImport.getAncestorOfType(UIMailPortlet.class);
@@ -106,9 +105,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent {
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
       String username = uiPortlet.getCurrentUser() ;
       String folderId = uiImport.getChild(UISelectFolder.class).getSelectedValue();
-      try {
-        mailSrv.importMessage(SessionsUtils.getSessionProvider(), username, accountId, folderId, inputStream, type);
-      } catch(Exception e) {
+      if (!mailSrv.importMessage(SessionsUtils.getSessionProvider(), username, accountId, folderId, inputStream, type)) {
         uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.import-messages-error", null, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

@@ -327,7 +327,7 @@ public interface MailService {
    */
   public void saveMailSetting(SessionProvider sProvider, String username, MailSetting newSetting) throws Exception;
   
-  public void importMessage(SessionProvider sProvider, String username, String accountId, String folderId, InputStream inputStream, String type) throws Exception;
+  public boolean importMessage(SessionProvider sProvider, String username, String accountId, String folderId, InputStream inputStream, String type) throws Exception;
   public OutputStream exportMessage(SessionProvider sProvider, String username,String accountId, Message message) throws Exception;
   
   public void runFilter(SessionProvider sProvider, String username, String accountId, MessageFilter filter) throws Exception ;

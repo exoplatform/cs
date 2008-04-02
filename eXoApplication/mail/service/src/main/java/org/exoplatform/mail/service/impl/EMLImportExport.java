@@ -52,11 +52,13 @@ public class EMLImportExport implements MailImportExport{
 		return outputStream;
 	}
 
-	public void importMessage(SessionProvider sProvider, String username, String accountId, String folderId, InputStream inputStream, String type) throws Exception {
+	public boolean importMessage(SessionProvider sProvider, String username, String accountId, String folderId, InputStream inputStream, String type) throws Exception {
 		Properties props = System.getProperties();
     Session session = Session.getDefaultInstance(props, null);
     MimeMessage mimeMessage = new MimeMessage(session, inputStream);
-    jcrDataStorage_.saveMessage(sProvider, username, accountId, mimeMessage, folderId, null);
+    try {
+       return jcrDataStorage_.saveMessage(sProvider, username, accountId, mimeMessage, folderId, null);
+    } catch(Exception e) { return false ; }
 	}  
 	
 }

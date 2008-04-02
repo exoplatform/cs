@@ -572,72 +572,75 @@ public class JCRDataStorage{
     return nodeMsg ;
   }
   
-  public void saveMessage(SessionProvider sProvider, String username, String accId, javax.mail.Message msg, String folderId, SpamFilter spamFilter) throws Exception {
+  public boolean saveMessage(SessionProvider sProvider, String username, String accId, javax.mail.Message msg, String folderId, SpamFilter spamFilter) throws Exception {
     long t1, t2, t3, t4 ;
     String msgId = MimeMessageParser.getMessageId(msg) ;
     Calendar gc = MimeMessageParser.getReceivedDate(msg) ;
     Node msgHomeNode = getDateStoreNode(sProvider, username, accId, gc.getTime()) ;
-    if (msgHomeNode.hasNode(msgId)) return ;
+    if (msgHomeNode.hasNode(msgId)) return true;
     System.out.println("   [DEBUG] Saving message to JCR ...") ;
     t1 = System.currentTimeMillis();
     Node node = msgHomeNode.addNode(msgId, Utils.EXO_MESSAGE) ;
-    msgHomeNode.save();
-    node.setProperty(Utils.EXO_ID, msgId);
-    node.setProperty(Utils.EXO_ACCOUNT, accId);
-    node.setProperty(Utils.EXO_FROM, InternetAddress.toString(msg.getFrom()));
-    node.setProperty(Utils.EXO_TO, InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.TO)));
-    node.setProperty(Utils.EXO_CC, InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.CC)));
-    node.setProperty(Utils.EXO_BCC, InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.BCC)));
-    node.setProperty(Utils.EXO_REPLYTO, InternetAddress.toString(msg.getReplyTo()));
-    node.setProperty(Utils.EXO_SUBJECT, msg.getSubject());
-    node.setProperty(Utils.EXO_RECEIVEDDATE, gc);
-    Calendar sc = GregorianCalendar.getInstance();
-    if (msg.getSentDate() != null) sc.setTime(msg.getSentDate());
-    else sc = gc ;
-    node.setProperty(Utils.EXO_SENDDATE, sc); //TODO send date
-    
-    node.setProperty(Utils.EXO_CONTENT_TYPE, msg.getContentType());
-    node.setProperty(Utils.EXO_SIZE, Math.abs(msg.getSize()));
-    node.setProperty(Utils.EXO_ISUNREAD, true);
-    node.setProperty(Utils.EXO_STAR, false);     
-    
-    node.setProperty(Utils.EXO_PRIORITY, MimeMessageParser.getPriority(msg));
-    
-    String[] folderIds = { folderId };
-    
-    if (spamFilter != null && spamFilter.checkSpam(msg)) {
-      folderIds = new String[] { Utils.createFolderId(accId, Utils.FD_SPAM, false) } ;
+    try {
+      node.setProperty(Utils.EXO_ID, msgId);
+      node.setProperty(Utils.EXO_ACCOUNT, accId);
+      node.setProperty(Utils.EXO_FROM, InternetAddress.toString(msg.getFrom()));
+      node.setProperty(Utils.EXO_TO, InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.TO)));
+      node.setProperty(Utils.EXO_CC, InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.CC)));
+      node.setProperty(Utils.EXO_BCC, InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.BCC)));
+      node.setProperty(Utils.EXO_REPLYTO, InternetAddress.toString(msg.getReplyTo()));
+      node.setProperty(Utils.EXO_SUBJECT, msg.getSubject());
+      node.setProperty(Utils.EXO_RECEIVEDDATE, gc);
+      Calendar sc = GregorianCalendar.getInstance() ;
+      if (msg.getSentDate() != null) sc.setTime(msg.getSentDate()) ;
+      else sc = gc ;
+      node.setProperty(Utils.EXO_SENDDATE, sc) ;
+
+      node.setProperty(Utils.EXO_CONTENT_TYPE, msg.getContentType()) ;
+      node.setProperty(Utils.EXO_SIZE, Math.abs(msg.getSize())) ;
+      node.setProperty(Utils.EXO_ISUNREAD, true) ;
+      node.setProperty(Utils.EXO_STAR, false) ;     
+
+      node.setProperty(Utils.EXO_PRIORITY, MimeMessageParser.getPriority(msg));
+
+      String[] folderIds = { folderId };
+
+      if (spamFilter != null && spamFilter.checkSpam(msg)) {
+        folderIds = new String[] { Utils.createFolderId(accId, Utils.FD_SPAM, false) } ;
+      }
+      node.setProperty(Utils.EXO_FOLDERS, folderIds);
+
+      ArrayList<String> values = new ArrayList<String>() ;
+      Enumeration enu = msg.getAllHeaders() ;
+      while (enu.hasMoreElements()) {
+        Header header = (Header)enu.nextElement() ;
+        values.add(header.getName()+"="+header.getValue()) ;
+      }
+      node.setProperty(Utils.EXO_HEADERS, values.toArray(new String[]{}));
+
+      System.out.println("     [DEBUG] Saved body and attachment of message .... size : " + Math.abs(msg.getSize()) + " B") ;
+      t2 = System.currentTimeMillis();
+      Object obj = msg.getContent() ;
+      if (obj instanceof Multipart) {
+        setMultiPart((Multipart)obj, node);
+      } else {
+        setPart(msg, node);
+      }
+      t3 = System.currentTimeMillis();
+      System.out.println("     [DEBUG] Saved body (and attachments) of message finished : " + (t3 - t2) + " ms") ;
+    } catch (Exception e) { 
+      System.out.println("   [DEBUG] Cancel saving message to JCR.") ;
+      return false ; 
     }
-    node.setProperty(Utils.EXO_FOLDERS, folderIds);
-    
-    ArrayList<String> values = new ArrayList<String>() ;
-    Enumeration enu = msg.getAllHeaders() ;
-    while (enu.hasMoreElements()) {
-      Header header = (Header)enu.nextElement() ;
-      values.add(header.getName()+"="+header.getValue()) ;
-    }
-    node.setProperty(Utils.EXO_HEADERS, values.toArray(new String[]{}));
-    
-    System.out.println("     [DEBUG] Saved body and attachment of message .... size : " + Math.abs(msg.getSize()) + " B") ;
-    t2 = System.currentTimeMillis();
-    Object obj = msg.getContent() ;
-    if (obj instanceof Multipart) {
-      setMultiPart((Multipart)obj, node);
-    } else {
-      setPart(msg, node);
-    }
-    t3 = System.currentTimeMillis();
-    System.out.println("     [DEBUG] Saved body (and attachments) of message finished : " + (t3 - t2) + " ms") ;
-    node.save() ;
+    msgHomeNode.save() ;
     t4 = System.currentTimeMillis();
     System.out.println("   [DEBUG] Saved total message to JCR finished : " + (t4 - t1) + " ms") ;
-    
     System.out.println("   [DEBUG] Adding message to thread ...") ;
     t1 = System.currentTimeMillis();
     addMessageToThread(sProvider, username, accId, MimeMessageParser.getInReplyToHeader(msg), node) ;
     t2 = System.currentTimeMillis();
     System.out.println("   [DEBUG] Added message to thread finished : " + (t2 - t1) + " ms") ;
-    
+
     System.out.println("   [DEBUG] Updating number message to folder ...") ;
     t1 = System.currentTimeMillis();
     
@@ -651,6 +654,7 @@ public class JCRDataStorage{
     
     t2 = System.currentTimeMillis();
     System.out.println("   [DEBUG] Updated number message to folder finished : " + (t2 - t1) + " ms") ;
+    return true ;
   }
   
   private void setMultiPart(Multipart multipart, Node node) {
