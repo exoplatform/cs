@@ -49,7 +49,6 @@ import javax.mail.internet.MimeUtility;
 
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
-import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.JCRMessageAttachment;
 import org.exoplatform.mail.service.MailSetting;
@@ -62,7 +61,6 @@ import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
-import org.exoplatform.services.jcr.util.IdGenerator;
 
 /**
  * Created by The eXo Platform SARL
@@ -691,24 +689,18 @@ public class JCRDataStorage{
           }
         } else if (disposition.equalsIgnoreCase(Part.ATTACHMENT)) {
           /* this part must be presented as an attachment, hence we add it to the attached files */
-          BufferAttachment file = new BufferAttachment();
-          file.setId("Attachment" + IdGenerator.generate());
-          file.setName(MimeUtility.decodeText(part.getFileName()));
           InputStream is = part.getInputStream();
-          file.setInputStream(is);
-          file.setSize(is.available());
+          Node nodeFile = node.addNode(MimeUtility.decodeText(part.getFileName()), Utils.NT_FILE);
+          Node nodeContent = nodeFile.addNode(Utils.JCR_CONTENT, Utils.NT_RESOURCE);
           if (contentType.indexOf(";") > 0) {
             String[] type = contentType.split(";") ;
-            file.setMimeType(type[0]);
+            nodeContent.setProperty(Utils.JCR_MIMETYPE, type[0]) ;
           } else {
-            file.setMimeType(contentType) ;
+            nodeContent.setProperty(Utils.JCR_MIMETYPE, contentType);
           }
-          Node nodeFile = node.addNode(file.getName(), Utils.NT_FILE);
-          Node nodeContent = nodeFile.addNode(Utils.JCR_CONTENT, Utils.NT_RESOURCE);
-          nodeContent.setProperty(Utils.JCR_MIMETYPE, file.getMimeType());
-          nodeContent.setProperty(Utils.JCR_DATA, file.getInputStream());
-          nodeContent.setProperty(Utils.JCR_LASTMODIFIED, Calendar.getInstance().getTimeInMillis());
-          node.setProperty(Utils.EXO_HASATTACH, true);
+          nodeContent.setProperty(Utils.JCR_DATA, is) ;
+          nodeContent.setProperty(Utils.JCR_LASTMODIFIED, Calendar.getInstance().getTimeInMillis()) ;
+          node.setProperty(Utils.EXO_HASATTACH, true) ;
         }
       }
     } catch(Exception e) {
