@@ -813,7 +813,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     CalendarService calService = CalendarUtils.getCalendarService() ;
     List<String> calendarIds = new ArrayList<String>() ;
     calendarIds.add(event.getCalendarId()) ;
-     OutputStream out = calService.getCalendarImportExports(CalendarServiceImpl.ICALENDAR).exportCalendar(getSystemSession(), fromId, calendarIds, event.getCalType()) ;
+    OutputStream out = calService.getCalendarImportExports(CalendarServiceImpl.ICALENDAR).exportCalendar(getSystemSession(), fromId, calendarIds, event.getCalType()) ;
     ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
     BufferAttachment bf = new BufferAttachment() ;
     bf.setInputStream(is) ;
@@ -1089,20 +1089,25 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
           uiForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
 
-          if(uiForm.isSendMail()) {
-            Account acc = CalendarUtils.getMailService().getDefaultAccount(uiForm.getSession(), username);
-            if(acc != null) {
-              uiForm.sendMail(CalendarUtils.getMailService(), CalendarUtils.getOrganizationService(), calSetting, acc, username, uiForm.getParticipantValues(), calendarEvent) ;
-            } else {
-              uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.cant-send-email", null));
-              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-            }
-          }
-
         }catch (Exception e) {
           uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.add-event-error", null));
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           e.printStackTrace() ;
+        }
+        if(calendarEvent != null && uiForm.isSendMail()) {
+          Account acc = CalendarUtils.getMailService().getDefaultAccount(uiForm.getSession(), username);
+          if(acc != null) {
+            try {
+            uiForm.sendMail(CalendarUtils.getMailService(), CalendarUtils.getOrganizationService(), calSetting, acc, username, uiForm.getParticipantValues(), calendarEvent) ;
+            } catch (Exception e) {
+              e.printStackTrace() ;
+              uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.error-send-email", null));
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            }
+          } else {
+            uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.cant-send-email", null));
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          }
         }
       } else {
         uiApp.addMessage(new ApplicationMessage(uiForm.errorMsg_, null));
