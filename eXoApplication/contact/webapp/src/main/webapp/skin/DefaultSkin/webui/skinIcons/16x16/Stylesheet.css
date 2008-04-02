@@ -6,6 +6,10 @@
 	background: url('icons/AddressBookIcon.gif') no-repeat left center;
 }
 
+.UIContactPortlet .SharedAddressIcon {
+	background: url('icons/SharedAddressIcon.gif') no-repeat left center;
+}
+
 .UIContactPortlet .EmailListIcon {
 	background: url('icons/EmailListIcon.gif') no-repeat left center;
 }

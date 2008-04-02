@@ -68,10 +68,16 @@
 				String actionLink  = uicomponent.event("SelectGroup", groupId) ;	
 				cssClass = "Normal" ;				
 				if(groupId.equals(uicomponent.getSelectedGroup()))	cssClass = "Selected" ;		
+				
+				icon = "AddressIcon" ;
+				if ((contactGroup.getViewPermissionUsers() != null && contactGroup.getViewPermissionUsers().length > 0)
+						|| (contactGroup.getViewPermissionGroups() != null && contactGroup.getViewPermissionGroups().length > 0)) {
+					icon = "SharedAddressIcon" ;		
+				}
 		%>
 	
 		<div id="$groupId" addressType="0" class="ItemList $cssClass PrivateAddressBook" isDefault="<%=uicomponent.isDefault(groupId)%>">
-			<a href="$actionLink"  class="IconHolder AddressIcon">
+			<a href="$actionLink"  class="IconHolder $icon">
 				<%=contactGroup.getName()%>
 			</a>
 		</div>

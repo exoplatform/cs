@@ -25,6 +25,7 @@ import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.container.PortalContainer;
@@ -311,7 +312,9 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
           contactService.saveGroup(SessionProviderFactory.createSessionProvider(), username, contactGroup, false) ;
           UIAddEditPermission uiAddEdit = uiForm.getParent() ;
           uiAddEdit.updateGroupGrid(contactGroup);
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiAddEdit) ;  
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiAddEdit) ;          
+          event.getRequestContext().addUIComponentToUpdateByAjax(
+              uiForm.getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class)) ;
         } else { // shared contact
           if (uiForm.isNew_) {
             Map<String, String> viewMapUsers = new LinkedHashMap<String, String>() ; 
