@@ -87,11 +87,18 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
     
   public void updateContactGrid(Contact contact) throws Exception {
     List<data> dataRow = new ArrayList<data>() ;
-    if(contact.getViewPermission() != null) {
-      for(String username : contact.getViewPermission() ) {
-        dataRow.add(new data(username, (contact.getEditPermission()!= null && Arrays.asList(contact.getEditPermission()).contains(username)))) ;
+    if(contact.getViewPermissionUsers() != null) {
+      for(String username : contact.getViewPermissionUsers() ) {
+        dataRow.add(new data(username, (contact.getEditPermissionUsers()!= null && Arrays.asList(contact.getEditPermissionUsers()).contains(username)))) ;
       }
     }
+    
+    if(contact.getViewPermissionGroups() != null) {
+      for(String username : contact.getViewPermissionGroups() ) {
+        dataRow.add(new data(username, (contact.getEditPermissionGroups()!= null && Arrays.asList(contact.getEditPermissionGroups()).contains(username)))) ;
+      }
+    }
+    
     UIGrid permissionList = getChild(UIGrid.class) ;
     ObjectPageList objPageList = new ObjectPageList(dataRow, 10) ;
     permissionList.getUIPageIterator().setPageList(objPageList) ;
@@ -100,9 +107,14 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
   
   public void updateGroupGrid(ContactGroup group) throws Exception {
     List<data> dataRow = new ArrayList<data>() ;
-    if(group.getViewPermission() != null) {
-      for(String username : group.getViewPermission() ) {
-        dataRow.add(new data(username, (group.getEditPermission()!= null && Arrays.asList(group.getEditPermission()).contains(username)))) ;
+    if(group.getViewPermissionUsers() != null) {
+      for(String username : group.getViewPermissionUsers() ) {
+        dataRow.add(new data(username, (group.getEditPermissionUsers()!= null && Arrays.asList(group.getEditPermissionUsers()).contains(username)))) ;
+      }
+    }
+    if(group.getViewPermissionGroups() != null) {
+      for(String groupId : group.getViewPermissionGroups() ) {
+        dataRow.add(new data(groupId, (group.getEditPermissionGroups()!= null && Arrays.asList(group.getEditPermissionGroups()).contains(groupId)))) ;
       }
     }
     UIGrid permissionList = getChild(UIGrid.class) ;
@@ -114,25 +126,42 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
   static public class EditActionListener extends EventListener<UIAddEditPermission> {
     public void execute(Event<UIAddEditPermission> event) throws Exception {
       UIAddEditPermission addEdit = event.getSource();
-      String recievedUser = event.getRequestContext().getRequestParameter(OBJECTID);
+      String reciever = event.getRequestContext().getRequestParameter(OBJECTID);
       UISharedForm shareForm = addEdit.getChild(UISharedForm.class);
       shareForm.setNew(false) ;
       UIFormStringInput uiStringInput = shareForm.getUIStringInput(UISharedForm.FIELD_USER) ;
-      uiStringInput.setValue(recievedUser) ;
+      uiStringInput.setValue(reciever) ;
       uiStringInput.setEditable(false) ;
       if (addEdit.isSharedGroup) {
         ContactGroup group = ContactUtils.getContactService().getGroup(
             SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), addEdit.groupId_) ;        
         shareForm.setGroup(group) ;
-        shareForm.getUIStringInput(UISharedForm.FIELD_USER).setValue(recievedUser) ;
-        shareForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).setChecked(
-            (group.getEditPermission() != null) && Arrays.asList(group.getEditPermission()).contains(recievedUser)) ;
+        if (Arrays.asList(group.getViewPermissionGroups()).contains(reciever)) {
+          shareForm.getUIStringInput(UISharedForm.FIELD_GROUP).setValue(reciever) ;
+          shareForm.getUIStringInput(UISharedForm.FIELD_USER).setValue(null) ;
+          shareForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).setChecked(
+              (group.getEditPermissionGroups() != null) && Arrays.asList(group.getEditPermissionGroups()).contains(reciever)) ;
+        } else {
+          shareForm.getUIStringInput(UISharedForm.FIELD_USER).setValue(reciever) ;
+          shareForm.getUIStringInput(UISharedForm.FIELD_GROUP).setValue(null) ;
+          shareForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).setChecked(
+              (group.getEditPermissionUsers() != null) && Arrays.asList(group.getEditPermissionUsers()).contains(reciever)) ;
+        }
       } else {
         Contact contact = ContactUtils.getContactService().getContact(
             SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), addEdit.contactId_) ;        
         shareForm.setContact(contact) ;
-        shareForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).setChecked(
-            (contact.getEditPermission() != null) && Arrays.asList(contact.getEditPermission()).contains(recievedUser)) ;
+        if (Arrays.asList(contact.getViewPermissionGroups()).contains(reciever)) {
+          shareForm.getUIStringInput(UISharedForm.FIELD_GROUP).setValue(reciever) ;
+          shareForm.getUIStringInput(UISharedForm.FIELD_USER).setValue(null) ;
+          shareForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).setChecked(
+              (contact.getEditPermissionGroups() != null) && Arrays.asList(contact.getEditPermissionGroups()).contains(reciever)) ;
+        } else {
+          shareForm.getUIStringInput(UISharedForm.FIELD_USER).setValue(reciever) ;
+          shareForm.getUIStringInput(UISharedForm.FIELD_GROUP).setValue(null) ;
+          shareForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).setChecked(
+              (contact.getEditPermissionUsers() != null) && Arrays.asList(contact.getEditPermissionUsers()).contains(reciever)) ;
+        }
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(shareForm) ;
     }
@@ -140,52 +169,96 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
   static public class DeleteActionListener extends EventListener<UIAddEditPermission> {
     public void execute(Event<UIAddEditPermission> event) throws Exception {
       UIAddEditPermission uiForm = event.getSource();
-      String removedUser = event.getRequestContext().getRequestParameter(OBJECTID);
+      String remover = event.getRequestContext().getRequestParameter(OBJECTID);
       ContactService contactService = ContactUtils.getContactService();
       String username = ContactUtils.getCurrentUser() ;
       
       if (uiForm.isSharedGroup) {
         ContactGroup group = contactService.getGroup(
             SessionProviderFactory.createSessionProvider(), username, uiForm.groupId_) ;
-        if(group.getViewPermission() != null) {
-          List<String> newPerms = new ArrayList<String>() ;
-          for(String s : group.getViewPermission()) {
-            if(!s.equals(removedUser)) {
-              newPerms.add(s) ;
+        
+        // delete group permission
+        if (Arrays.asList(group.getViewPermissionGroups()).contains(remover)) {
+          if(group.getViewPermissionGroups() != null) {
+            List<String> newPerms = new ArrayList<String>() ;
+            for(String s : group.getViewPermissionGroups()) {
+              if(!s.equals(remover)) {
+                newPerms.add(s) ;
+              }
             }
+            group.setViewPermissionGroups(newPerms.toArray(new String[newPerms.size()])) ;
           }
-          group.setViewPermission(newPerms.toArray(new String[newPerms.size()])) ;
+          if(group.getEditPermissionGroups() != null) {
+            List<String> newPerms = new ArrayList<String>() ;
+            for(String s : group.getEditPermissionGroups()) {
+              if(!s.equals(remover)) {
+                newPerms.add(s) ;
+              }
+            }
+            group.setEditPermissionGroups(newPerms.toArray(new String[newPerms.size()])) ;
+          }        
+          List<Contact> users = contactService
+            .getPublicContactsByAddressBook(SessionProviderFactory.createSystemProvider(), remover).getAll() ;
+          for (Contact user : users)
+            contactService.removeUserShareAddressBook(
+                SessionProviderFactory.createSessionProvider(), username, uiForm.groupId_, user.getId()) ;
+          
+          List<Contact> contacts = contactService.getContactPageListByGroup(
+              SessionProviderFactory.createSessionProvider(), username, uiForm.groupId_).getAll() ;
+          for (Contact contact : contacts) {
+            removePerGroup(contact, remover) ;
+            contactService.saveContact(SessionProviderFactory.createSessionProvider()
+                , username,contact , false) ;
+          }
+        } else {
+          if(group.getViewPermissionUsers() != null) {
+            List<String> newPerms = new ArrayList<String>() ;
+            for(String s : group.getViewPermissionUsers()) {
+              if(!s.equals(remover)) {
+                newPerms.add(s) ;
+              }
+            }
+            group.setViewPermissionUsers(newPerms.toArray(new String[newPerms.size()])) ;
+          }
+          if(group.getEditPermissionUsers() != null) {
+            List<String> newPerms = new ArrayList<String>() ;
+            for(String s : group.getEditPermissionUsers()) {
+              if(!s.equals(remover)) {
+                newPerms.add(s) ;
+              }
+            }
+            group.setEditPermissionUsers(newPerms.toArray(new String[newPerms.size()])) ;
+          }        
+          contactService.removeUserShareAddressBook(SessionProviderFactory.createSessionProvider()
+              , username, uiForm.groupId_, remover) ;
+          List<Contact> contacts = contactService.getContactPageListByGroup(
+              SessionProviderFactory.createSessionProvider(), username, uiForm.groupId_).getAll() ;
+          for (Contact contact : contacts) {
+            removePerUser(contact, remover) ;
+            contactService.saveContact(SessionProviderFactory.createSessionProvider()
+                , username,contact , false) ;
+          }
         }
-        if(group.getEditPermission() != null) {
-          List<String> newPerms = new ArrayList<String>() ;
-          for(String s : group.getEditPermission()) {
-            if(!s.equals(removedUser)) {
-              newPerms.add(s) ;
-            }
-          }
-          group.setEditPermission(newPerms.toArray(new String[newPerms.size()])) ;
-        }        
-        contactService.removeUserShareAddressBook(SessionProviderFactory.createSessionProvider()
-            , username, uiForm.groupId_, removedUser) ;
         contactService.saveGroup(SessionProviderFactory.createSessionProvider(), username, group, false) ;
-        uiForm.updateGroupGrid(group);
-        
-        List<Contact> contacts = contactService.getContactPageListByGroup(
-            SessionProviderFactory.createSessionProvider(), username, uiForm.groupId_).getAll() ;
-        for (Contact contact : contacts) {
-          contactService.saveContact(SessionProviderFactory.createSessionProvider()
-              , username, removePer(contact, removedUser), false) ;
-        }
-        
+        uiForm.updateGroupGrid(group);  
       } else {
         
         // ko luu ca object contact vi co the ko dung den delete va edit
-        Contact contact = removePer(contactService.getContact(SessionProviderFactory
-            .createSessionProvider(), username, uiForm.contactId_), removedUser) ;
-        contactService.removeUserShareContact(SessionProviderFactory.createSessionProvider()
-            , username, uiForm.contactId_, removedUser) ;
-        contactService.saveContact(
-            SessionProviderFactory.createSessionProvider(), username, contact, false) ;
+        Contact contact = contactService.getContact(
+            SessionProviderFactory.createSessionProvider(), username, uiForm.contactId_) ;
+        if (Arrays.asList(contact.getViewPermissionGroups()).contains(remover)) {
+          removePerGroup(contact, remover) ;
+          List<Contact> users = contactService
+            .getPublicContactsByAddressBook(SessionProviderFactory.createSystemProvider(), remover).getAll() ;
+          for (Contact user : users)
+            contactService.removeUserShareContact(
+                SessionProviderFactory.createSessionProvider(), username, uiForm.contactId_, user.getId()) ;
+        } else {
+          removePerUser(contact, remover) ;
+          contactService.removeUserShareContact(SessionProviderFactory.createSessionProvider()
+              , username, uiForm.contactId_, remover) ;
+        }        
+        contactService.saveContact(SessionProviderFactory.createSessionProvider(), username, contact, false) ;
         uiForm.updateContactGrid(contact);
         
         UIContacts uiContacts = uiForm
@@ -198,37 +271,61 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
         event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
       }
       UISharedForm uiSharedForm = uiForm.getChild(UISharedForm.class) ;
-      if (!uiSharedForm.isNew() && uiSharedForm.getUIStringInput(UISharedForm.FIELD_USER).getValue().equals(removedUser)) {
-        
-        UIFormStringInput uiStringInput = uiSharedForm.getUIStringInput(UISharedForm.FIELD_USER) ;
-        uiStringInput.setValue(null) ;
-        uiStringInput.setEditable(true) ;
-        uiSharedForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).setChecked(false) ;
-        uiSharedForm.setNew(true) ;
-        //event.getRequestContext().addUIComponentToUpdateByAjax(uiSharedForm) ;
+      if (!uiSharedForm.isNew()) {
+        UIFormStringInput uiStringInput = null ;
+        if (uiSharedForm.getUIStringInput(UISharedForm.FIELD_USER).getValue().equals(remover)) {
+          uiStringInput = uiSharedForm.getUIStringInput(UISharedForm.FIELD_USER) ;
+        } else if (uiSharedForm.getUIStringInput(UISharedForm.FIELD_GROUP).getValue().equals(remover)) {
+          uiStringInput = uiSharedForm.getUIStringInput(UISharedForm.FIELD_GROUP) ;                 
+        }
+        if (uiStringInput != null) {
+          uiStringInput.setValue(null) ;
+          uiStringInput.setEditable(true) ;
+          uiSharedForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).setChecked(false) ;
+          uiSharedForm.setNew(true) ;
+        }
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
     }
-    private Contact removePer(Contact contact, String removedUser) {
-      if(contact.getViewPermission() != null) {
+    private void removePerUser(Contact contact, String removedUser) {
+      if(contact.getViewPermissionUsers() != null) {
         List<String> newPerms = new ArrayList<String>() ;
-        for(String s : contact.getViewPermission()) {
+        for(String s : contact.getViewPermissionUsers()) {
           if(!s.equals(removedUser)) {
             newPerms.add(s) ;
           }
         }
-        contact.setViewPermission(newPerms.toArray(new String[newPerms.size()])) ;
+        contact.setViewPermissionUsers(newPerms.toArray(new String[newPerms.size()])) ;
       }
-      if(contact.getEditPermission() != null) {
+      if(contact.getEditPermissionUsers() != null) {
         List<String> newPerms = new ArrayList<String>() ;
-        for(String s : contact.getEditPermission()) {
+        for(String s : contact.getEditPermissionUsers()) {
           if(!s.equals(removedUser)) {
             newPerms.add(s) ;
           }
         }
-        contact.setEditPermission(newPerms.toArray(new String[newPerms.size()])) ;
+        contact.setEditPermissionUsers(newPerms.toArray(new String[newPerms.size()])) ;
       }
-      return contact ;
+    }
+    private void removePerGroup(Contact contact, String removedGroup) {
+      if(contact.getViewPermissionGroups() != null) {
+        List<String> newPerms = new ArrayList<String>() ;
+        for(String s : contact.getViewPermissionGroups()) {
+          if(!s.equals(removedGroup)) {
+            newPerms.add(s) ;
+          }
+        }
+        contact.setViewPermissionGroups(newPerms.toArray(new String[newPerms.size()])) ;
+      }
+      if(contact.getEditPermissionGroups() != null) {
+        List<String> newPerms = new ArrayList<String>() ;
+        for(String s : contact.getEditPermissionGroups()) {
+          if(!s.equals(removedGroup)) {
+            newPerms.add(s) ;
+          }
+        }
+        contact.setEditPermissionGroups(newPerms.toArray(new String[newPerms.size()])) ;
+      }
     }
   }
   public class data {

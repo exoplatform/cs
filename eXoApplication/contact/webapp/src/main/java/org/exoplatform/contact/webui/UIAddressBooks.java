@@ -106,8 +106,15 @@ public class UIAddressBooks extends UIComponent {
 
   public boolean havePermission(String groupId) throws Exception { 
     String currentUser = ContactUtils.getCurrentUser() ;
-    String[] editPers = sharedAddressBookMap_.get(groupId).getEditPermission() ;
-    if (editPers == null || !Arrays.asList(editPers).contains(currentUser)) return false ;
+    SharedAddressBook sharedAddressBook = sharedAddressBookMap_.get(groupId) ;
+    if (sharedAddressBook.getEditPermissionUsers() == null ||
+        !Arrays.asList(sharedAddressBook.getEditPermissionUsers()).contains(currentUser)) {
+      boolean canEdit = false ;
+      String[] editPerGroups = sharedAddressBook.getEditPermissionGroups() ;
+      for (String editPer : editPerGroups)
+        if (ContactUtils.getUserGroups().contains(editPer)) canEdit = true ;          
+      if (canEdit == false) return false ;
+    }
     return true ;
   }
   

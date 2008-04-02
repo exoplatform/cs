@@ -106,7 +106,7 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       if (uiMoveContactForm. sharedGroupMap_.containsKey(addressBookId)) {
         String username = ContactUtils.getCurrentUser() ;
         ContactGroup group = ContactUtils.getContactService().getSharedGroup(username, addressBookId) ;
-        if (group.getEditPermission() == null ||  !Arrays.asList(group.getEditPermission()).contains(username)) {
+        if (group.getEditPermissionUsers() == null ||  !Arrays.asList(group.getEditPermissionUsers()).contains(username)) {
           UIApplication uiApp = uiMoveContactForm.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UIMoveContactsForm.msg.non-permission", null,
             ApplicationMessage.WARNING)) ;
