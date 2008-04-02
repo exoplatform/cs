@@ -53,11 +53,11 @@
 				                    <%}
 				                    else {
 				                    %>
-				                    <a class="MenuItem" style="color:gray;">   
+				                    <span class="MenuItem" style="color:gray;">   
 						                    <div class="ItemIcon $icon ">
 						                      $label
 						                    </div>
-					                    </a>
+					                    </span>
 				                    <%}
 				                    }}%>
 													</div>
@@ -85,11 +85,11 @@
 							</div>
 						</a>
 						<div class="SeparatorLine"><span></span></div>
-						<a class="ControlButton" style="color:gray;">
+						<span class="ControlButton" style="color:gray;">
 							<div class="IconHolder PrintCalendarIcon">
 								<%=_ctx.appRes(uicomponent.id + ".label.Print")%>
 							</div>
-						</a>
+						</span>
 						<div class="SeparatorLine"><span></span></div>
 						<div class="ControlButton" onclick="eXo.calendar.UICalendarPortlet.showView(this, event);">
 							<a class="SwitchButton">

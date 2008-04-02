@@ -125,7 +125,7 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     addUIFormInput(new UIFormSelectBox(WORKINGTIME_BEGIN, WORKINGTIME_BEGIN, startTimes)) ;
     addUIFormInput(new UIFormSelectBox(WORKINGTIME_END, WORKINGTIME_END, endTimes)) ;
 
-    addUIFormInput(new UIFormStringInput(BASE_URL, BASE_URL, null)) ;
+    //addUIFormInput(new UIFormStringInput(BASE_URL, BASE_URL, null)) ;
   }
   protected UIForm getParentFrom() {
     return (UIForm)getParent() ;
@@ -258,12 +258,12 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     cal.setTime(dateTimeFormat.parse(date)); 
     getUIFormSelectBox(WORKINGTIME_END).setValue(timeFormat.format(cal.getTime())) ;
   }
-  protected String getBaseUrl() {
+ /* protected String getBaseUrl() {
     return getUIStringInput(BASE_URL).getValue() ;
-  }
-  protected void setBaseUrl(String value) {
+  }*/
+  /*protected void setBaseUrl(String value) {
     getUIStringInput(BASE_URL).setValue(value) ;
-  }
+  }*/
   public List<SelectItemOption<String>> getTimeZones(String locale) {
     return CalendarUtils.getTimeZoneSelectBoxOptions(TimeZone.getAvailableIDs()) ;
   }

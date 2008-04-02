@@ -72,8 +72,10 @@ public class UICalendarViewContainer extends UIContainer  {
         UIWeekView uiView = getChild(UIWeekView.class) ;
         if(uiView == null) uiView =  addChild(UIWeekView.class, null, null) ;
         uiView.isShowCustomView_ = false ;
+        System.out.println(calendarSetting.getWeekStartOn());
+        uiView.calendarSetting_.setWeekStartOn(calendarSetting.getWeekStartOn()) ;
+        //uiView.calendar_.setFirstDayOfWeek(Integer.parseInt(calendarSetting.getWeekStartOn())) ;
         if(getRenderedChild() != null) uiView.setCurrentCalendar(((CalendarView)getRenderedChild()).getCurrentCalendar()) ;
-        uiView.calendar_.setFirstDayOfWeek(Integer.parseInt(calendarSetting.getWeekStartOn())) ;
         setRenderedChild(viewType) ;
       } else
         if(MONTH_VIEW.equals(viewType)) {
@@ -110,7 +112,8 @@ public class UICalendarViewContainer extends UIContainer  {
                 if(uiView == null) uiView =  addChild(UIWeekView.class, null, null) ;
                 uiView.isShowCustomView_ = true ;
                 if(getRenderedChild() != null) uiView.setCurrentCalendar(((CalendarView)getRenderedChild()).getCurrentCalendar()) ;
-                uiView.calendar_.setFirstDayOfWeek(Calendar.SUNDAY) ;
+                uiView.calendarSetting_.setWeekStartOn(String.valueOf(Calendar.SUNDAY)) ;
+                //uiView.calendar_.setFirstDayOfWeek(Calendar.SUNDAY) ;
                 setRenderedChild(WEEK_VIEW) ;
               }
     refresh() ;

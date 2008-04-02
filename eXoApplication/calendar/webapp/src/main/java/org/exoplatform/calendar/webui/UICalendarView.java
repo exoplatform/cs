@@ -106,7 +106,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   public boolean isShowEvent_ = true;
   private String editedEventId_ = null ;
   private int timeInterval_ = 30 ;
-  private CalendarSetting calendarSetting_ ;
+  protected CalendarSetting calendarSetting_ ;
 
   private String dateTimeFormat_  ;
   protected List<String> privateCalendarIds = new ArrayList<String>() ;
