@@ -192,14 +192,14 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
         if (uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).isChecked()) 
           for (String user : receiverUser) editMap.put(user, user) ;
         for (Contact contact : uiForm.sharedContacts.values()) {
-          String[] viewPer = contact.getViewPermission() ;
+          String[] viewPer = contact.getViewPermissionUsers() ;
           if (viewPer != null)
             for (String view : viewPer) viewMap.put(view, view) ;
-          String[] editPer = contact.getEditPermission() ;
+          String[] editPer = contact.getEditPermissionUsers() ;
           if (editPer != null)
             for (String edit : editPer) editMap.put(edit, edit) ; 
-          contact.setViewPermission(viewMap.keySet().toArray(new String[] {})) ;
-          contact.setEditPermission(editMap.keySet().toArray(new String[] {})) ;
+          contact.setViewPermissionUsers(viewMap.keySet().toArray(new String[] {})) ;
+          contact.setEditPermissionUsers(editMap.keySet().toArray(new String[] {})) ;
           contactService.saveContact(SessionProviderFactory.createSessionProvider(), username, contact, false) ;
         }
       	String[] contactIds = uiForm.sharedContacts.keySet().toArray(new String[]{}) ;

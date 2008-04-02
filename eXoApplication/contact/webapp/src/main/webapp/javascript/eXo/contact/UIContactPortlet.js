@@ -52,6 +52,8 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
     var len = actions.length ;
     if(type == "2") {
       for (var i = 0; i < len; i++) {
+      	
+      	// change variable name to "isEnable" ?
         isDisable = DOMUtil.hasClass(actions[i], "EditActionIcon") || DOMUtil.hasClass(actions[i], "ShareIcon") || DOMUtil.hasClass(actions[i], "MoveIcon") || DOMUtil.hasClass(actions[i], "DeleteContactIcon") ;
         if (isDisable == false) continue;
         if (!actions[i].parentNode.getAttribute("oldHref")) {
@@ -76,7 +78,35 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
 	          actions[i].parentNode.removeAttribute("style");
 	        }
 				}
-      }    	
+      }  
+      
+      // hoang quang hung add :
+      if(tr.getAttribute("havePermission")) {
+    		var havePermission = tr.getAttribute("havePermission").toLowerCase() ;
+    		
+    		if (havePermission == "false") {
+    			for (var i = 0; i < len; i++) {    			
+	    			isDisable = DOMUtil.hasClass(actions[i], "EditActionIcon") || DOMUtil.hasClass(actions[i], "ShareIcon") || DOMUtil.hasClass(actions[i], "MoveIcon") || DOMUtil.hasClass(actions[i], "DeleteContactIcon") ;
+	        	if (isDisable == false) continue ;
+		        if (!actions[i].parentNode.getAttribute("oldHref")) {
+		          actions[i].parentNode.setAttribute("oldHref", actions[i].parentNode.href);
+		          actions[i].parentNode.style.color = "#cccccc";
+		          actions[i].parentNode.href = "javascript:void(0);";
+		        }    			
+    			}
+      	} else { // havePermission
+      		for (var i = 0; i < len; i++) {
+		        isDisable = DOMUtil.hasClass(actions[i], "EditActionIcon") || DOMUtil.hasClass(actions[i], "MoveIcon") || DOMUtil.hasClass(actions[i], "DeleteContactIcon")
+		        if (isDisable == false) continue;
+		        if (actions[i].parentNode.getAttribute("oldHref")) {
+		          actions[i].parentNode.href = actions[i].parentNode.getAttribute("oldHref");
+		          actions[i].parentNode.removeAttribute("oldHref");
+		          actions[i].parentNode.removeAttribute("style");
+		        }
+     	 		}      		
+      	}
+      }      
+      // end add  	
     } else {
       for (var i = 0; i < len; i++) {
         isDisable = DOMUtil.hasClass(actions[i], "EditActionIcon") || DOMUtil.hasClass(actions[i], "ShareIcon") || DOMUtil.hasClass(actions[i], "MoveIcon") || DOMUtil.hasClass(actions[i], "DeleteContactIcon")

@@ -80,8 +80,10 @@ public class Contact {
   
   private String[] addressBook ;
   private String[] tags ;
-  private String[] editPermission ;
-  private String[] viewPermission ;
+  private String[] editPermissionUsers ;
+  private String[] viewPermissionUsers ;
+  private String[] editPermissionGroups ;
+  private String[] viewPermissionGroups ;
   
   // remove 2 these properties
   private String[] sharedForUsers ;
@@ -218,11 +220,17 @@ public class Contact {
   public String[] getTags() { return tags ; }
   public void   setTags(String[] s) { tags = s ; }
 
-  public String[] getEditPermission() { return editPermission ; }
-  public void setEditPermission(String[] s) { editPermission = s ; }
+  public String[] getEditPermissionUsers() { return editPermissionUsers ; }
+  public void setEditPermissionUsers(String[] s) { editPermissionUsers = s ; }
   
-  public String[] getViewPermission() { return viewPermission ; }
-  public void setViewPermission(String[] s) { viewPermission = s ; }
+  public String[] getViewPermissionUsers() { return viewPermissionUsers ; }
+  public void setViewPermissionUsers(String[] s) { viewPermissionUsers = s ; }
+  
+  public String[] getEditPermissionGroups() { return editPermissionGroups ; }
+  public void setEditPermissionGroups(String[] s) { editPermissionGroups = s ; }
+  
+  public String[] getViewPermissionGroups() { return viewPermissionGroups ; }
+  public void setViewPermissionGroups(String[] s) { viewPermissionGroups = s ; }
   
   public String[] getSharedForUsers() { return sharedForUsers ; }
   public void setSharedForUsers(String[] s) { sharedForUsers = s ; }

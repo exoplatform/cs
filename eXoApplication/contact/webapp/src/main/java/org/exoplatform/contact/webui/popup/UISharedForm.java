@@ -161,7 +161,9 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       String names = uiForm.getUIStringInput(FIELD_USER).getValue() ;
       String groups = uiForm.getUIStringInput(FIELD_GROUP).getValue() ;
-      List<String> receiverUser = new ArrayList<String>() ;
+      List<String> receiveUsers = new ArrayList<String>() ;
+      List<String> receiveGroups = new ArrayList<String>() ;
+      
       if(ContactUtils.isEmpty(names) && ContactUtils.isEmpty(groups)) {        
         uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.empty-username", null,
             ApplicationMessage.WARNING)) ;
@@ -176,11 +178,11 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
             String[] array = names.split(",") ;
             for(String name : array) {
               organizationService.getUserHandler().findUserByName(name.trim()).getFullName();
-              receiverUser.add(name.trim()) ;
+              receiveUsers.add(name.trim()) ;
             }
           } else {
             organizationService.getUserHandler().findUserByName(names.trim()).getFullName();
-            receiverUser.add(names.trim()) ;
+            receiveUsers.add(names.trim()) ;
           }
         } catch (NullPointerException e) {
           uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.not-exist-username", null,
@@ -191,78 +193,117 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       }
       ContactService contactService = ContactUtils.getContactService() ;
       String username = ContactUtils.getCurrentUser() ;
+      
+      List<String> receiveUsersByGroups = new ArrayList<String>() ;
       if (!ContactUtils.isEmpty(groups)) {
         String[] arrayGroups = groups.split(",") ; 
         for (String group : arrayGroups) {
+          receiveGroups.add(group) ;
           List<Contact> contacts = contactService
             .getPublicContactsByAddressBook(SessionProviderFactory.createSystemProvider(), group.trim()).getAll() ; 
           for (Contact contact : contacts) {
-            receiverUser.add(contact.getId()) ;
+            receiveUsersByGroups.add(contact.getId()) ;
           }
         }        
       } 
-      receiverUser.remove(ContactUtils.getCurrentUser()) ;
+      receiveUsers.remove(ContactUtils.getCurrentUser()) ;
+      receiveUsersByGroups.remove(ContactUtils.getCurrentUser()) ;
       // xong phan xu ly recieve users
       
-      if (receiverUser.size() > 0) {
+      if (receiveUsers.size() > 0 || receiveUsersByGroups.size() > 0) {
         if (uiForm.isSharedGroup) {
           ContactGroup contactGroup = uiForm.group_ ;
           if(uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).isChecked()) {
-            String[] editPer = contactGroup.getEditPermission() ;
-            Map<String, String> editMap = new LinkedHashMap<String, String>() ; 
-            if (editPer != null)
-              for (String edit : editPer) editMap.put(edit, edit) ;
-            for (String user : receiverUser) editMap.put(user, user) ;
-            contactGroup.setEditPermission(editMap.keySet().toArray(new String[] {})) ;
+            String[] editPerUsers = contactGroup.getEditPermissionUsers() ;
+            Map<String, String> editMapUsers = new LinkedHashMap<String, String>() ; 
+            if (editPerUsers != null)
+              for (String edit : editPerUsers) editMapUsers.put(edit, edit) ;
+            for (String user : receiveUsers) editMapUsers.put(user, user) ;
+            contactGroup.setEditPermissionUsers(editMapUsers.keySet().toArray(new String[] {})) ;
+            
+            String[] editPerGroups = contactGroup.getEditPermissionGroups() ;
+            Map<String, String> editMapGroups = new LinkedHashMap<String, String>() ; 
+            if (editPerGroups != null)
+              for (String edit : editPerGroups) editMapGroups.put(edit, edit) ;
+            for (String group : receiveGroups) editMapGroups.put(group, group) ;
+            contactGroup.setEditPermissionGroups(editMapGroups.keySet().toArray(new String[] {})) ; 
             
 //          set permisson for contacts in this address book
             List<Contact> contacts = contactService.getContactPageListByGroup(
                 SessionProviderFactory.createSessionProvider(), username, uiForm.group_.getId()).getAll() ;
             Map<String, String> viewMapContact = new LinkedHashMap<String, String>() ; 
-            for (String user : receiverUser) viewMapContact.put(user, user) ;
+            for (String user : receiveUsers) viewMapContact.put(user, user) ;
+            for (String user : receiveUsersByGroups) viewMapContact.put(user, user) ;
             Map<String, String> editMapContact = new LinkedHashMap<String, String>() ; 
-            if(uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).isChecked())
-              for (String user : receiverUser) editMapContact.put(user, user) ;
+            if(uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).isChecked()) {
+              for (String user : receiveUsers) editMapContact.put(user, user) ;
+              for (String user : receiveUsersByGroups) editMapContact.put(user, user) ;
+            }
             for (Contact contact : contacts) {
               contactService.saveContact(SessionProviderFactory.createSessionProvider()
-                  , username, addPer(contact, viewMapContact, editMapContact), false);
+                  , username, addPerUsers(contact, viewMapContact, editMapContact), false);
             }
           }
           if (uiForm.isNew_) {
-            String[] viewPer = contactGroup.getViewPermission() ;
-            Map<String, String> viewMap = new LinkedHashMap<String, String>() ; 
-            if (viewPer != null)
-              for (String view : viewPer) viewMap.put(view, view) ; 
-            for (String user : receiverUser) viewMap.put(user, user) ;
-            contactGroup.setViewPermission(viewMap.keySet().toArray(new String[] {})) ;
+            String[] viewPerUsers = contactGroup.getViewPermissionUsers() ;
+            Map<String, String> viewMapUsers = new LinkedHashMap<String, String>() ; 
+            if (viewPerUsers != null)
+              for (String view : viewPerUsers) viewMapUsers.put(view, view) ; 
+            for (String user : receiveUsers) viewMapUsers.put(user, user) ;
+            contactGroup.setViewPermissionUsers(viewMapUsers.keySet().toArray(new String[] {})) ;
+            
+            String[] viewPerGroups = contactGroup.getViewPermissionGroups() ;
+            Map<String, String> viewMapGroups = new LinkedHashMap<String, String>() ; 
+            if (viewPerGroups != null)
+              for (String view : viewPerGroups) viewMapGroups.put(view, view) ; 
+            for (String user : receiveGroups) viewMapGroups.put(user, user) ;
+            contactGroup.setViewPermissionGroups(viewMapGroups.keySet().toArray(new String[] {})) ;
             //---------------- 
             contactService.shareAddressBook(
-                SessionProviderFactory.createSystemProvider(), username, contactGroup.getId(), receiverUser) ;
+                SessionProviderFactory.createSystemProvider(), username, contactGroup.getId(), receiveUsers) ;
+            contactService.shareAddressBook(
+                SessionProviderFactory.createSystemProvider(), username, contactGroup.getId(), receiveUsersByGroups) ;
           } else { // change permission 
             if (!uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).isChecked()) {
-              List<String> newPerms = new ArrayList<String>() ; 
-              if (contactGroup.getEditPermission() != null)
-                for (String edit : contactGroup.getEditPermission())
-                  if(!receiverUser.contains(edit)) {
-                    newPerms.add(edit) ;
+              List<String> newPerUsers = new ArrayList<String>() ; 
+              if (contactGroup.getEditPermissionUsers() != null)
+                for (String edit : contactGroup.getEditPermissionUsers())
+                  if(!receiveUsers.contains(edit)) {
+                    newPerUsers.add(edit) ;
                 }
-              contactGroup.setEditPermission(newPerms.toArray(new String[newPerms.size()])) ;
+              contactGroup.setEditPermissionUsers(newPerUsers.toArray(new String[newPerUsers.size()])) ;
+              
+              List<String> newPerGroups = new ArrayList<String>() ; 
+              if (contactGroup.getEditPermissionGroups() != null)
+                for (String edit : contactGroup.getEditPermissionGroups())
+                  if(!receiveGroups.contains(edit)) {
+                    newPerGroups.add(edit) ;
+                }
+              contactGroup.setEditPermissionGroups(newPerGroups.toArray(new String[newPerGroups.size()])) ;
               
               // 
               List<Contact> contacts = contactService.getContactPageListByGroup(
                   SessionProviderFactory.createSessionProvider(), username, uiForm.group_.getId()).getAll() ;
               for (Contact contact : contacts) {
-                if(contact.getEditPermission() != null) {
-                  List<String> newPerContact = new ArrayList<String>() ;
-                  for(String s : contact.getEditPermission()) {
-                    if(!receiverUser.contains(s)) {
-                      newPerContact.add(s) ;
+                if(contact.getEditPermissionUsers() != null) {
+                  List<String> newEditPerUsers = new ArrayList<String>() ;
+                  for(String s : contact.getEditPermissionUsers()) {
+                    if(!receiveUsers.contains(s)) {
+                      newEditPerUsers.add(s) ;
                     }
                   }
-                  contact.setEditPermission(newPerContact.toArray(new String[newPerContact.size()])) ;
-                  contactService.saveContact(SessionProviderFactory.createSessionProvider()
-                      , username, contact, false) ;
+                  contact.setEditPermissionUsers(newEditPerUsers.toArray(new String[newEditPerUsers.size()])) ;                  
                 }
+                if(contact.getEditPermissionGroups() != null) {
+                  List<String> newEditPerGroups = new ArrayList<String>() ;
+                  for(String s : contact.getEditPermissionGroups()) {
+                    if(!receiveGroups.contains(s)) {
+                      newEditPerGroups.add(s) ;
+                    }
+                  }
+                  contact.setEditPermissionGroups(newEditPerGroups.toArray(new String[newEditPerGroups.size()])) ;                 
+                }
+                contactService.saveContact(SessionProviderFactory.createSessionProvider(), username, contact, false) ;
               }
             }
             uiForm.getUIStringInput(UISharedForm.FIELD_USER).setEditable(true) ;
@@ -273,37 +314,56 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
           event.getRequestContext().addUIComponentToUpdateByAjax(uiAddEdit) ;  
         } else { // shared contact
           if (uiForm.isNew_) {
-            Map<String, String> viewMap = new LinkedHashMap<String, String>() ; 
-            for (String user : receiverUser) viewMap.put(user, user) ; 
-            Map<String, String> editMap = new LinkedHashMap<String, String>() ;
+            Map<String, String> viewMapUsers = new LinkedHashMap<String, String>() ; 
+            for (String user : receiveUsers) viewMapUsers.put(user, user) ; 
+            for (String user : receiveUsersByGroups) viewMapUsers.put(user, user) ;
+            Map<String, String> editMapUsers = new LinkedHashMap<String, String>() ;
             if(uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).isChecked()) {
-              for (String user : receiverUser) editMap.put(user, user) ;
+              for (String user : receiveUsers) editMapUsers.put(user, user) ;
+              for (String user : receiveUsersByGroups) editMapUsers.put(user, user) ;
             }
-            Contact contact = addPer(uiForm.contact_, viewMap, editMap) ;
-            contactService.saveContact(SessionProviderFactory.createSessionProvider(),
-                username, contact, false) ;
+            Map<String, String> viewMapGroups = new LinkedHashMap<String, String>() ; 
+            for (String user : receiveGroups) viewMapGroups.put(user, user) ; 
+            Map<String, String> editMapGroups = new LinkedHashMap<String, String>() ;
+            if(uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).isChecked()) {
+              for (String user : receiveGroups) editMapGroups.put(user, user) ;
+            }
+            // incorrect ?
+            Contact contact = uiForm.contact_ ;
+            addPerUsers(contact, viewMapUsers, editMapUsers) ;
+            addPerGroups(contact, viewMapGroups, editMapGroups) ;
+            contactService.saveContact(SessionProviderFactory.createSessionProvider(), username, contact, false) ;
             UIAddEditPermission uiAddEdit = uiForm.getParent() ;
             uiAddEdit.updateContactGrid(contact);
             event.getRequestContext().addUIComponentToUpdateByAjax(uiAddEdit) ; 
             contactService.shareContact(SessionProviderFactory
-                .createSystemProvider(), username, new String[] {contact.getId()}, receiverUser) ; 
+                .createSystemProvider(), username, new String[] {contact.getId()}, receiveUsers) ; 
           } else {
             Contact contact = uiForm.contact_ ;
             if (uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).isChecked()) {
-              String[] editPer = contact.getEditPermission() ;
-              Map<String, String> editMap = new LinkedHashMap<String, String>() ;
-              if (editPer != null)
-                for (String edit : editPer) editMap.put(edit, edit) ; 
-              for (String user : receiverUser) editMap.put(user, user) ;
-              contact.setEditPermission(editMap.keySet().toArray(new String[] {})) ;              
+              String[] editPerUsers = contact.getEditPermissionUsers() ;
+              Map<String, String> editMapUsers = new LinkedHashMap<String, String>() ;
+              if (editPerUsers != null)
+                for (String edit : editPerUsers) editMapUsers.put(edit, edit) ; 
+              for (String user : receiveUsers) editMapUsers.put(user, user) ;
+              contact.setEditPermissionUsers(editMapUsers.keySet().toArray(new String[] {})) ;     
+              
+              String[] editPerGroups = contact.getEditPermissionGroups() ;
+              Map<String, String> editMapGroups = new LinkedHashMap<String, String>() ;
+              if (editPerUsers != null)
+                for (String edit : editPerGroups) editMapGroups.put(edit, edit) ; 
+              for (String user : receiveGroups) editMapGroups.put(user, user) ;
+              contact.setEditPermissionGroups(editMapGroups.keySet().toArray(new String[] {})) ;
             } else {
-              List<String> newEditPer = new ArrayList<String>() ;
-              for (String edit : contact.getEditPermission()) 
-                if (!receiverUser.contains(edit)) newEditPer.add(edit) ; 
-              contact.setEditPermission(newEditPer.toArray(new String[] {})) ;
-               
-//              contactService.shareContact(SessionProviderFactory
-//                  .createSystemProvider(), username, new String[] {contact.getId()}, receiverUser) ;  
+              List<String> newEditPerUsers = new ArrayList<String>() ;
+              for (String edit : contact.getEditPermissionUsers()) 
+                if (!receiveUsers.contains(edit)) newEditPerUsers.add(edit) ; 
+              contact.setEditPermissionUsers(newEditPerUsers.toArray(new String[] {})) ;
+              
+              List<String> newEditPerGroups = new ArrayList<String>() ;
+              for (String edit : contact.getEditPermissionGroups()) 
+                if (!receiveGroups.contains(edit)) newEditPerGroups.add(edit) ; 
+              contact.setEditPermissionGroups(newEditPerGroups.toArray(new String[] {})) ;
             }
             contactService.saveContact(SessionProviderFactory.createSessionProvider(), username, contact, false) ;
             UIAddEditPermission uiAddEdit = uiForm.getParent() ;
@@ -332,19 +392,32 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       }
       uiForm.isNew_ = true ;
     }
-    private static Contact addPer(Contact contact, Map<String, String> viewMap, Map<String, String> editMap) {
-      String[] viewPer = contact.getViewPermission() ;
+    private static Contact addPerUsers(Contact contact, Map<String, String> viewMap, Map<String, String> editMap) {
+      String[] viewPer = contact.getViewPermissionUsers() ;
       if (viewPer != null)
         for (String view : viewPer) viewMap.put(view, view) ;
-      contact.setViewPermission(viewMap.keySet().toArray(new String[] {})) ;
+      contact.setViewPermissionUsers(viewMap.keySet().toArray(new String[] {})) ;
       
-      String[] editPer = contact.getEditPermission() ;
+      String[] editPer = contact.getEditPermissionUsers() ;
       if (editPer != null)
         for (String edit : editPer) editMap.put(edit, edit) ; 
-      contact.setEditPermission(editMap.keySet().toArray(new String[] {})) ;
+      contact.setEditPermissionUsers(editMap.keySet().toArray(new String[] {})) ;
+      return contact ;
+    }
+    private static Contact addPerGroups(Contact contact, Map<String, String> viewMap, Map<String, String> editMap) {
+      String[] viewPer = contact.getViewPermissionGroups() ;
+      if (viewPer != null)
+        for (String view : viewPer) viewMap.put(view, view) ;
+      contact.setViewPermissionGroups(viewMap.keySet().toArray(new String[] {})) ;
+      
+      String[] editPer = contact.getEditPermissionGroups() ;
+      if (editPer != null)
+        for (String edit : editPer) editMap.put(edit, edit) ; 
+      contact.setEditPermissionGroups(editMap.keySet().toArray(new String[] {})) ;
       return contact ;
     }
   }
+  
   static  public class SelectPermissionActionListener extends EventListener<UISharedForm> {
     public void execute(Event<UISharedForm> event) throws Exception {
       UISharedForm uiForm = event.getSource() ;

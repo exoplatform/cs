@@ -111,7 +111,7 @@
   		</propertyDefinition>
   		<propertyDefinition name="exo:mobilePhone" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   			<valueConstraints/>
-  		</propertyDefinition>
+  		</propertyDefinition>s
   		<propertyDefinition name="exo:webPage" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   			<valueConstraints/>
   		</propertyDefinition>
@@ -121,12 +121,20 @@
   		<propertyDefinition name="exo:categories" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
   			<valueConstraints/>
   		</propertyDefinition>  		
-  		<propertyDefinition name="exo:editPermission" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+  		<propertyDefinition name="exo:editPermissionUsers" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
   			<valueConstraints/>
   		</propertyDefinition>  	
-  		<propertyDefinition name="exo:viewPermission" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+  		<propertyDefinition name="exo:viewPermissionUsers" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
   			<valueConstraints/>
   		</propertyDefinition>	
+  		
+  		<propertyDefinition name="exo:editPermissionGroups" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+  			<valueConstraints/>
+  		</propertyDefinition>  	
+  		<propertyDefinition name="exo:viewPermissionGroups" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+  			<valueConstraints/>
+  		</propertyDefinition>
+  		
   		<propertyDefinition name="exo:tags" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
   			<valueConstraints/>
   		</propertyDefinition>  
@@ -169,12 +177,20 @@
   		<propertyDefinition name="exo:description" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   			<valueConstraints/>
   		</propertyDefinition> 	
-  		<propertyDefinition name="exo:editPermissions" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+  		<propertyDefinition name="exo:editPermissionUsers" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
   			<valueConstraints/>
   		</propertyDefinition>	
-  		<propertyDefinition name="exo:viewPermissions" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+  		<propertyDefinition name="exo:viewPermissionUsers" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
   			<valueConstraints/>
-	  	</propertyDefinition>		
+	  	</propertyDefinition>	
+	  	
+	  	<propertyDefinition name="exo:editPermissionGroups" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+  			<valueConstraints/>
+  		</propertyDefinition>	
+  		<propertyDefinition name="exo:viewPermissionGroups" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
+  			<valueConstraints/>
+	  	</propertyDefinition>
+	  		
   	</propertyDefinitions>
   </nodeType>
   <nodeType name="exo:contactTag" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">

@@ -136,8 +136,12 @@ public class ContactPageList extends JCRPageList {
     if(contactNode.hasProperty("exo:note"))contact.setNote(contactNode.getProperty("exo:note").getString());
     if(contactNode.hasProperty("exo:categories"))contact.setAddressBook(ValuesToStrings(contactNode.getProperty("exo:categories").getValues()));
     if(contactNode.hasProperty("exo:tags")) contact.setTags(ValuesToStrings(contactNode.getProperty("exo:tags").getValues()));
-    if(contactNode.hasProperty("exo:viewPermission")) contact.setViewPermission(ValuesToStrings(contactNode.getProperty("exo:viewPermission").getValues()));
-    if(contactNode.hasProperty("exo:editPermission")) contact.setEditPermission(ValuesToStrings(contactNode.getProperty("exo:editPermission").getValues()));
+    if(contactNode.hasProperty("exo:viewPermissionUsers")) contact.setViewPermissionUsers(ValuesToStrings(contactNode.getProperty("exo:viewPermissionUsers").getValues()));
+    if(contactNode.hasProperty("exo:editPermissionUsers")) contact.setEditPermissionUsers(ValuesToStrings(contactNode.getProperty("exo:editPermissionUsers").getValues()));
+    
+    if(contactNode.hasProperty("exo:viewPermissionGroups")) contact.setViewPermissionGroups(ValuesToStrings(contactNode.getProperty("exo:viewPermissionGroups").getValues()));
+    if(contactNode.hasProperty("exo:editPermissionGroups")) contact.setEditPermissionGroups(ValuesToStrings(contactNode.getProperty("exo:editPermissionGroups").getValues()));
+    
     if(contactNode.hasProperty("exo:lastUpdated"))contact.setLastUpdated(contactNode.getProperty("exo:lastUpdated").getDate().getTime());
     contact.setPath(contactNode.getPath()) ;
     if(contactNode.hasNode("image")){
