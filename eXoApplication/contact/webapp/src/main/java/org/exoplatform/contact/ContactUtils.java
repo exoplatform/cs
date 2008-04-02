@@ -105,15 +105,7 @@ public class ContactUtils {
     }
     return null ;
   }
-  
-  public static boolean isTagNameExisted(String tagName) throws Exception {
-    List<Tag> tags = getContactService().getTags(
-        SessionProviderFactory.createSessionProvider(), getCurrentUser()) ;
-    for (Tag tag : tags)
-      if (tag.getName().equalsIgnoreCase(tagName)) return true ;
-    return false ;
-  }
-  
+
   public static boolean isPublicGroup(String groupId) throws Exception {
     if (getUserGroups().contains(groupId)) return true ;
     return false ;

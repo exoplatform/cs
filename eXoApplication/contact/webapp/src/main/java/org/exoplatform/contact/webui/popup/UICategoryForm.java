@@ -94,9 +94,6 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
   static  public class SaveActionListener extends EventListener<UICategoryForm> {
     public void execute(Event<UICategoryForm> event) throws Exception {
       UICategoryForm uiCategoryForm = event.getSource() ;
-      UIContactPortlet uiContactPortlet = uiCategoryForm.getAncestorOfType(UIContactPortlet.class) ;
-      UIAddressBooks uiAddressBook = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
-      
       String  groupName = uiCategoryForm.getUIStringInput(FIELD_CATEGORYNAME_INPUT).getValue(); 
       UIApplication uiApp = uiCategoryForm.getAncestorOfType(UIApplication.class) ;
       if (ContactUtils.isEmpty(groupName)) {
@@ -105,6 +102,14 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       }
+      UIContactPortlet uiContactPortlet = uiCategoryForm.getAncestorOfType(UIContactPortlet.class) ;
+      UIAddressBooks uiAddressBook = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
+      if (uiAddressBook.getPrivateGroupMap().values().contains(groupName)) {
+        uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.existed-categoryName", null,
+            ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ; 
+      }      
       ContactGroup group = new ContactGroup() ;
       if (!uiCategoryForm.isNew_) group.setId(uiCategoryForm.groupId_) ;
       group.setName(groupName) ;

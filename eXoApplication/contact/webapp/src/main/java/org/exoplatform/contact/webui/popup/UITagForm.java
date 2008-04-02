@@ -186,21 +186,22 @@ public class UITagForm extends UIForm implements UIPopupComponent {
 
       Map<String, String> tagIds = new LinkedHashMap<String, String>() ;
       String inputTag = uiTagForm.getUIStringInput(FIELD_TAGNAME_INPUT).getValue();
+      UIContactPortlet uiContactPortlet = uiTagForm.getAncestorOfType(UIContactPortlet.class);
+      UITags uiTags = uiContactPortlet.findFirstComponentOfType(UITags.class) ;
       if (!ContactUtils.isEmpty(inputTag)) {
-        if (ContactUtils.isTagNameExisted(inputTag)) {
-          uiApp.addMessage(new ApplicationMessage("UITagForm.msg.tagName-existed", null, 
-              ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;
-        }
+        for (Tag tag : uiTags.getTagMap().values())
+          if (tag.getName().equals(inputTag)) {
+            uiApp.addMessage(new ApplicationMessage("UITagForm.msg.tagName-existed", null, 
+                ApplicationMessage.WARNING)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return ;
+          }
         Tag tag = new Tag();
         tag.setName(inputTag);
         tag.setColor(uiTagForm.getUIFormSelectBox(FIELD_COLOR).getValue()) ;
         tags.add(tag);
         tagIds.put(tag.getId(), tag.getId()) ;
-      }
-      UIContactPortlet uiContactPortlet = uiTagForm.getAncestorOfType(UIContactPortlet.class);
-      UITags uiTags = uiContactPortlet.findFirstComponentOfType(UITags.class) ;
+      } 
       for (String tagId : uiTagForm.getCheckedTags()) {
         Tag tag = uiTags.getTagMap().get(tagId) ;
         tags.add(tag);
