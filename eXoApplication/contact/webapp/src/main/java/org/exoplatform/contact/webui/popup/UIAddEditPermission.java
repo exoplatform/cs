@@ -24,6 +24,7 @@ import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.portal.webui.container.UIContainer;
@@ -171,8 +172,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
       UIAddEditPermission uiForm = event.getSource();
       String remover = event.getRequestContext().getRequestParameter(OBJECTID);
       ContactService contactService = ContactUtils.getContactService();
-      String username = ContactUtils.getCurrentUser() ;
-      
+      String username = ContactUtils.getCurrentUser() ;      
       if (uiForm.isSharedGroup) {
         ContactGroup group = contactService.getGroup(
             SessionProviderFactory.createSessionProvider(), username, uiForm.groupId_) ;
@@ -286,6 +286,8 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
         }
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(
+          uiForm.getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class)) ;
     }
     private void removePerUser(Contact contact, String removedUser) {
       if(contact.getViewPermissionUsers() != null) {
