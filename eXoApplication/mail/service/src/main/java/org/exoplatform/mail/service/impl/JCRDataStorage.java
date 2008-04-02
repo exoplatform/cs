@@ -528,7 +528,6 @@ public class JCRDataStorage{
       nodeMsg.setProperty(Utils.EXO_PRIORITY, message.getPriority());
       nodeMsg.setProperty(Utils.EXO_ISUNREAD, message.isUnread());
       nodeMsg.setProperty(Utils.EXO_CONTENT_TYPE, message.getContentType());
-      nodeMsg.setProperty(Utils.EXO_HASATTACH, false);
       if (message.getSendDate() != null)
         nodeMsg.setProperty(Utils.EXO_SENDDATE, message.getSendDate().getTime());
       if (message.getReceivedDate() != null)
