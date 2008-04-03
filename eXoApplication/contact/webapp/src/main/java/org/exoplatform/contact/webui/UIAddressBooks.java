@@ -111,8 +111,9 @@ public class UIAddressBooks extends UIComponent {
         !Arrays.asList(sharedAddressBook.getEditPermissionUsers()).contains(currentUser)) {
       boolean canEdit = false ;
       String[] editPerGroups = sharedAddressBook.getEditPermissionGroups() ;
-      for (String editPer : editPerGroups)
-        if (ContactUtils.getUserGroups().contains(editPer)) canEdit = true ;          
+      if (editPerGroups != null)
+        for (String editPer : editPerGroups)
+          if (ContactUtils.getUserGroups().contains(editPer)) canEdit = true ;          
       if (canEdit == false) return false ;
     }
     return true ;

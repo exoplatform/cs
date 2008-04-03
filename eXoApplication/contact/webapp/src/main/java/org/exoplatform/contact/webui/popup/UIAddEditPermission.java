@@ -272,17 +272,21 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
       }
       UISharedForm uiSharedForm = uiForm.getChild(UISharedForm.class) ;
       if (!uiSharedForm.isNew()) {
-        UIFormStringInput uiStringInput = null ;
-        if (uiSharedForm.getUIStringInput(UISharedForm.FIELD_USER).getValue().equals(remover)) {
+        UIFormStringInput uiStringInput = uiSharedForm.getUIStringInput(UISharedForm.FIELD_USER) ;
+        if (uiStringInput.getValue() != null && uiStringInput.getValue().equals(remover)) {
           uiStringInput = uiSharedForm.getUIStringInput(UISharedForm.FIELD_USER) ;
-        } else if (uiSharedForm.getUIStringInput(UISharedForm.FIELD_GROUP).getValue().equals(remover)) {
-          uiStringInput = uiSharedForm.getUIStringInput(UISharedForm.FIELD_GROUP) ;                 
-        }
-        if (uiStringInput != null) {
           uiStringInput.setValue(null) ;
           uiStringInput.setEditable(true) ;
           uiSharedForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).setChecked(false) ;
-          uiSharedForm.setNew(true) ;
+          uiSharedForm.setNew(true) ;          
+        } else {
+          uiStringInput = uiSharedForm.getUIStringInput(UISharedForm.FIELD_GROUP) ;  
+          if (uiStringInput.getValue() != null && uiStringInput.getValue().equals(remover)) {
+            uiStringInput = uiSharedForm.getUIStringInput(UISharedForm.FIELD_GROUP) ;
+            uiStringInput.setValue(null) ;
+            uiSharedForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).setChecked(false) ;
+            uiSharedForm.setNew(true) ;          
+          }
         }
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
