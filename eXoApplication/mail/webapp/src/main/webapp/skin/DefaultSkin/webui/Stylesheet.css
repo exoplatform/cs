@@ -508,7 +508,7 @@
 .UIMailPortlet .MailWorkingWorkspace .UIMessageList {
 	padding-left: 1px;
 	overflow-y: auto;
-	overflow-x: hidden;
+	overflow-x: auto;
 	height: 200px ;
 	_width: 99.5%;
 }

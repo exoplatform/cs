@@ -12,7 +12,7 @@
 
 <% /*Start Message Action Bar*/ %>
 <%uiform.begin()%>  
-  <div class="UIMessageActionsBar">
+  <div class="UIMessageActionsBar" >
   <a href="<%=uicomponent.event("Reply")%>" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.reply-to-sender") %>">
     <div class="IconHolder ReplyIcon"><span></span></div>
   </a>
