@@ -17,7 +17,6 @@
 package org.exoplatform.contact.webui.popup;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +24,7 @@ import java.util.MissingResourceException;
 
 import javax.jcr.PathNotFoundException;
 
+import org.exoplatform.contact.Colors;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
@@ -32,6 +32,7 @@ import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
+import org.exoplatform.contact.webui.UIFormColorPicker;
 import org.exoplatform.contact.webui.UITags;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -40,12 +41,10 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
-import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
-import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 
 /**
@@ -100,24 +99,6 @@ public class UITagForm extends UIForm implements UIPopupComponent {
               buffer.append(", " + tag.getName()) ;
             }
           }
-          
-          /*
-          boolean hascomma = false ;
-          Tag tag = tags.get(tagIds[0]) ;
-          if (tag != null) {
-            buffer.append(tag.getName()) ;
-            hascomma = true ;
-          }          
-          for (int j = 1; j < tagIds.length; j ++) {
-            tag = tags.get(tagIds[j]) ;  
-            if (tag != null && hascomma) buffer.append(", " + tag.getName()) ;
-            else if (tag != null){
-              hascomma = true ;
-              buffer.append(tag.getName()) ;  
-            }
-          } 
-          */
-          
         }
         if (ContactUtils.isEmpty(buffer.toString())) buffer.append(NO_TAG_INFO) ;
         contactNames[i] = contact.getFullName() ;
@@ -126,7 +107,8 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       }
     }
     addUIFormInput(new UIFormStringInput(FIELD_TAGNAME_INPUT, FIELD_TAGNAME_INPUT, null));
-    addUIFormInput(new UIFormSelectBox(FIELD_COLOR, FIELD_COLOR, getColors())) ;
+    addUIFormInput(new UIFormColorPicker(FIELD_COLOR, FIELD_COLOR, Colors.COLORS)) ;
+    
     FIELD_TAG_BOX_KEY = new String[tags.size()];
     FIELD_TAG_BOX_LABLE = new String[tags.size()] ;
     int k = 0 ;
@@ -139,7 +121,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
     }
   }
   public List<Contact> getContacts() { return contacts_ ;}
-  
+  /*
   @SuppressWarnings("unchecked")
   private List<SelectItemOption<String>> getColors() {    
     List<SelectItemOption<String>> colors = new ArrayList<SelectItemOption<String>>() ;
@@ -149,7 +131,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
     Collections.sort(colors, new ContactUtils.SelectComparator()) ;
     return colors ;
   }
-  
+  */
   public void setValues(String tagName) throws Exception {
     getUIStringInput(FIELD_TAGNAME_INPUT).setValue(tagName) ;   
   }
@@ -175,6 +157,13 @@ public class UITagForm extends UIForm implements UIPopupComponent {
     return checkedTags;
   }
   
+  protected String getSelectedColor() {
+    return getChild(UIFormColorPicker.class).getValue() ;
+  }
+  protected void setSelectedColor(String value) {
+    getChild(UIFormColorPicker.class).setValue(value) ;
+  }
+  
   static  public class AddActionListener extends EventListener<UITagForm> {
     public void execute(Event<UITagForm> event) throws Exception { 
       UITagForm uiTagForm = event.getSource() ;
@@ -198,7 +187,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
           }
         Tag tag = new Tag();
         tag.setName(inputTag);
-        tag.setColor(uiTagForm.getUIFormSelectBox(FIELD_COLOR).getValue()) ;
+        tag.setColor(uiTagForm.getSelectedColor()) ;
         tags.add(tag);
         tagIds.put(tag.getId(), tag.getId()) ;
       } 

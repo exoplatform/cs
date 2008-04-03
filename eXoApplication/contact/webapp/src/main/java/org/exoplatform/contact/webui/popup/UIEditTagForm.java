@@ -16,13 +16,12 @@
  */
 package org.exoplatform.contact.webui.popup;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import org.exoplatform.contact.Colors;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
+import org.exoplatform.contact.webui.UIFormColorPicker;
 import org.exoplatform.contact.webui.UITags;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -31,11 +30,9 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
-import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 
 
@@ -57,17 +54,19 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
   private Tag tag_ = null ;
   public static final String FIELD_TAGNAME_INPUT = "tagName";
   public static final String FIELD_COLOR = "color";
-  public static final String RED = "Red".intern() ;
+ /* public static final String RED = "Red".intern() ;
   public static final String BLUE = "Blue".intern() ;
-  public static final String GREEN = "Green".intern() ;
+  public static final String GREEN = "Green".intern() ;*/
   
   public UIEditTagForm() {
     addUIFormInput(new UIFormStringInput(FIELD_TAGNAME_INPUT, FIELD_TAGNAME_INPUT, null));
+    /*
     List<SelectItemOption<String>> colors = new ArrayList<SelectItemOption<String>>() ;
     colors.add(new SelectItemOption<String>(RED,RED)) ;
     colors.add(new SelectItemOption<String>(BLUE,BLUE)) ;
     colors.add(new SelectItemOption<String>(GREEN,GREEN)) ;
-    addUIFormInput(new UIFormSelectBox(FIELD_COLOR, FIELD_COLOR, colors)) ;    
+    */
+    addUIFormInput(new UIFormColorPicker(FIELD_COLOR, FIELD_COLOR, Colors.COLORS)) ;   
   }
   
   public String[] getActions() { return new String[] {"Save", "Cancel"} ; }
@@ -78,7 +77,7 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
     tag_ = tag ;
     if (tag != null) {
       getUIStringInput(FIELD_TAGNAME_INPUT).setValue(tag.getName()) ;
-      getUIFormSelectBox(FIELD_COLOR).setValue(tag.getColor()) ;
+      getChild(UIFormColorPicker.class).setValue(tag.getColor()) ;
     }
   }
   
@@ -105,7 +104,7 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
             return ;
           }
       tag.setName(tagName) ;
-      tag.setColor(uiEditTagForm.getUIFormSelectBox(FIELD_COLOR).getValue()) ;
+      tag.setColor(uiEditTagForm.getChild(UIFormColorPicker.class).getValue()) ;
       ContactUtils.getContactService().updateTag(
           SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), tag) ;
       
