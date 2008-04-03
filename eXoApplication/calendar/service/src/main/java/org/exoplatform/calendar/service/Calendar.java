@@ -82,6 +82,7 @@ public class Calendar {
   private String description ;
   private String timeZone ;
   private String locale ;
+  private String calendarOwner ;
   private String[] viewPermission ;
   private String[] editPermission ;
   private boolean isDataInit = false ;
@@ -134,6 +135,12 @@ public class Calendar {
   
 	public void setDataInit(boolean isDataInit) {	this.isDataInit = isDataInit ; }
 	public boolean isDataInit() { return isDataInit ; }
+  public void setCalendarOwner(String calendarOwner) {
+    this.calendarOwner = calendarOwner;
+  }
+  public String getCalendarOwner() {
+    return calendarOwner;
+  }
   
   //public List<EventCategory> getEventCategories() { return eventCategories ; }
   //public void setEventCategories(List<EventCategory> evCate) { eventCategories = evCate ; }

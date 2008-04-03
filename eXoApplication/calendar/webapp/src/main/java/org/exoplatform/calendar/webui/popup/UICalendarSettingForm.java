@@ -28,10 +28,8 @@ import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.GroupCalendarData;
-import org.exoplatform.calendar.webui.CalendarView;
 import org.exoplatform.calendar.webui.UIActionBar;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
-import org.exoplatform.calendar.webui.UICalendarView;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UICalendars;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -41,7 +39,6 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -119,15 +116,15 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       //settingTab.setBaseUrl(calendarSetting.getBaseURL()) ;
     }
     UIFormInputWithActions defaultCalendarsTab = getChildById(DEFAULT_CALENDAR_TAB) ;    
-    List<String> settedCalendars = new ArrayList<String>() ;
+    List<String> filteredCalendars = new ArrayList<String>() ;
     if(calendarSetting != null && calendarSetting.getDefaultPrivateCalendars() != null) {
-      settedCalendars.addAll(Arrays.asList(calendarSetting.getDefaultPrivateCalendars())) ;
+      filteredCalendars.addAll(Arrays.asList(calendarSetting.getDefaultPrivateCalendars())) ;
     }
     if(calendarSetting != null && calendarSetting.getDefaultPublicCalendars() != null) {
-      settedCalendars.addAll(Arrays.asList(calendarSetting.getDefaultPublicCalendars())) ;
+      filteredCalendars.addAll(Arrays.asList(calendarSetting.getDefaultPublicCalendars())) ;
     }
     if(calendarSetting != null && calendarSetting.getDefaultSharedCalendars() != null) {
-      settedCalendars.addAll(Arrays.asList(calendarSetting.getDefaultSharedCalendars())) ;
+      filteredCalendars.addAll(Arrays.asList(calendarSetting.getDefaultSharedCalendars())) ;
     }
     List<Calendar> privateCals = getPrivateCalendars(cservice, username) ;
     defaultCalendarsTab.addChild(new UIFormInputInfo(DEFAULT_CALENDARS, DEFAULT_CALENDARS, getLabel(DEFAULT_CALENDARS_NOTE))) ;
@@ -137,10 +134,10 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
         names_.put(calendar.getId(), calendar.getName()) ;
         UIFormCheckBoxInput checkBox = defaultCalendarsTab.getChildById(calendar.getId()) ;
         if(checkBox == null) {
-          checkBox = new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false) ;
+          checkBox = new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), true) ;
           defaultCalendarsTab.addUIFormInput(checkBox) ;
         }
-        checkBox.setChecked(false) ;
+        checkBox.setChecked(true) ;
       }
     }
     List<Calendar> sharedCals =  getSharedCalendars(cservice, username) ;
@@ -148,7 +145,12 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       defaultCalendarsTab.addChild(new UIFormInputInfo(CalendarUtils.SHARED_CALENDARS, CalendarUtils.SHARED_CALENDARS, null)) ; 
       for(Calendar calendar : sharedCals) {
         names_.put(calendar.getId(), calendar.getName()) ;
-        defaultCalendarsTab.addUIFormInput(new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false)) ;
+        UIFormCheckBoxInput checkBox = defaultCalendarsTab.getChildById(calendar.getId()) ;
+        if(checkBox == null) {
+          checkBox = new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), true) ;
+          defaultCalendarsTab.addUIFormInput(checkBox) ;
+        }
+        checkBox.setChecked(true) ;
       }
     }
     List<Calendar> publicCals = getPublicCalendars(cservice, username) ;
@@ -158,15 +160,15 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
         names_.put(calendar.getId(), calendar.getName()) ;
         UIFormCheckBoxInput checkBox = defaultCalendarsTab.getChildById(calendar.getId()) ;
         if(checkBox == null) {
-          checkBox = new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false) ;
+          checkBox = new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), true) ;
           defaultCalendarsTab.addUIFormInput(checkBox) ;
         }
-        checkBox.setChecked(false) ;
+        checkBox.setChecked(true) ;
       }
     }
-    for(String calId : settedCalendars) {
+    for(String calId : filteredCalendars) {
       UIFormCheckBoxInput<Boolean> input = defaultCalendarsTab.getChildById(calId) ;
-      if(input != null) input.setChecked(true) ;
+      if(input != null) input.setChecked(false) ;
     }
   }
   private SessionProvider getSession() {
@@ -213,11 +215,11 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     }
     return label ;
   }
-  protected List<String> getCheckedList(List<Calendar> calendars) {
+  protected List<String> getUnCheckedList(List<Calendar> calendars) {
     List<String> list = new ArrayList<String>() ;
     for(Calendar cal : calendars) {
       UIFormCheckBoxInput<Boolean> input = ((UIFormInputWithActions)getChildById(DEFAULT_CALENDAR_TAB)).getChildById(cal.getId()) ;
-      if(input != null && input.isChecked()) list.add(input.getId()) ;
+      if(input != null && !input.isChecked()) list.add(input.getId()) ;
     }
     return list ;
   }
@@ -235,7 +237,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       /*if(settingTab.getViewType().equals(CalendarSetting.WORKING_VIEW))
         calendarSetting.setWeekStartOn(String.valueOf(1)) ;
       else */  
-        calendarSetting.setWeekStartOn(settingTab.getWeekStartOn()) ;
+      calendarSetting.setWeekStartOn(settingTab.getWeekStartOn()) ;
       calendarSetting.setDateFormat(settingTab.getDateFormat()) ;
       calendarSetting.setTimeFormat(settingTab.getTimeFormat()) ;
       calendarSetting.setLocation(settingTab.getLocale()) ;
@@ -256,29 +258,29 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;
       String username = event.getRequestContext().getRemoteUser() ;
-      List<String> defaultCalendars = new ArrayList<String>() ;
-      List<String> checkList = new ArrayList<String>() ;
-      defaultCalendars = uiForm.getCheckedList(uiForm.getPrivateCalendars(calendarService, username)) ;
-      if(!defaultCalendars.isEmpty()){
-        calendarSetting.setDefaultPrivateCalendars(defaultCalendars.toArray(new String[] {})) ;
-        checkList.addAll(defaultCalendars) ;
-        defaultCalendars.clear() ;
+      List<String> defaultFilterCalendars = new ArrayList<String>() ;
+      List<String> unCheckList = new ArrayList<String>() ;
+      defaultFilterCalendars = uiForm.getUnCheckedList(uiForm.getPrivateCalendars(calendarService, username)) ;
+      if(!defaultFilterCalendars.isEmpty()){
+        calendarSetting.setDefaultPrivateCalendars(defaultFilterCalendars.toArray(new String[] {})) ;
+        unCheckList.addAll(defaultFilterCalendars) ;
+        defaultFilterCalendars.clear() ;
       }
-      defaultCalendars = uiForm.getCheckedList(uiForm.getPublicCalendars(calendarService, username)) ;
-      if(!defaultCalendars.isEmpty()){
-        calendarSetting.setDefaultPublicCalendars(defaultCalendars.toArray(new String[] {})) ;
-        checkList.addAll(defaultCalendars) ;
-        defaultCalendars.clear() ;
+      defaultFilterCalendars = uiForm.getUnCheckedList(uiForm.getPublicCalendars(calendarService, username)) ;
+      if(!defaultFilterCalendars.isEmpty()){
+        calendarSetting.setDefaultPublicCalendars(defaultFilterCalendars.toArray(new String[] {})) ;
+        unCheckList.addAll(defaultFilterCalendars) ;
+        defaultFilterCalendars.clear() ;
       }
-      defaultCalendars = uiForm.getCheckedList(uiForm.getSharedCalendars(calendarService, username)) ;
-      if(!defaultCalendars.isEmpty()){
-        calendarSetting.setDefaultSharedCalendars(defaultCalendars.toArray(new String[] {})) ;
-        checkList.addAll(defaultCalendars) ;
-        defaultCalendars.clear() ;
+      defaultFilterCalendars = uiForm.getUnCheckedList(uiForm.getSharedCalendars(calendarService, username)) ;
+      if(!defaultFilterCalendars.isEmpty()){
+        calendarSetting.setDefaultSharedCalendars(defaultFilterCalendars.toArray(new String[] {})) ;
+        unCheckList.addAll(defaultFilterCalendars) ;
+        defaultFilterCalendars.clear() ;
       }
-      for(String id : checkList) {
+      /*for(String id : unCheckList) {
         if(uiCalendars.getUIFormCheckBoxInput(id) != null)  uiCalendars.getUIFormCheckBoxInput(id).setChecked(true) ;
-      }
+      }*/
       calendarService.saveCalendarSetting(uiForm.getSession(), event.getRequestContext().getRemoteUser(), calendarSetting) ;
       calendarPortlet.setCalendarSetting(calendarSetting) ;
       String viewType = UICalendarViewContainer.TYPES[Integer.parseInt(calendarSetting.getViewType())] ;

@@ -39,13 +39,13 @@ public class CalendarSetting {
   public static String WORKING_VIEW = "6" ;
 
   // time weekStartOn types
-  public static String MONDAY = "1" ;
-  public static String TUESDAY = "2" ;
-  public static String WENDNESDAY = "3" ;
-  public static String THURSDAY = "4" ;
-  public static String FRIDAY = "5" ;
-  public static String SATURDAY = "6" ;
-  public static String SUNDAY = "7" ;
+  public static String SUNDAY = "1" ;
+  public static String MONDAY = "2" ;
+  public static String TUESDAY = "3" ;
+  public static String WENDNESDAY = "4" ;
+  public static String THURSDAY = "5" ;
+  public static String FRIDAY = "6" ;
+  public static String SATURDAY = "7" ;
 
   private String viewType ;
   private long timeInterval ;
@@ -55,13 +55,14 @@ public class CalendarSetting {
   private String location ;
   private String timeZone ;
   private String baseURL ;
-  private String[] defaultPrivateCalendars ;
-  private String[] defaultPublicCalendars ;
-  private String[] defaultSharedCalendars ;
   private boolean isShowWorkingTime = true ; 
   private String workingTimeBegin ;
   private String workingTimeEnd  ;
+  
   private String[] sharedCalendarsColors ;
+  private String[] defaultPrivateCalendars ;
+  private String[] defaultPublicCalendars ;
+  private String[] defaultSharedCalendars ;
 
   public CalendarSetting() {
     viewType = DAY_VIEW ;
