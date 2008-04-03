@@ -65,7 +65,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent {
   public static final String FIELD_NICKNAME_INPUT = "nickName";
   public static final String FIELD_BIRTHDAY_DATETIME = "birthday" ;
   public static final String FIELD_JOBTITLE_INPUT = "jobTitle";
-  public static final String FIELD_EMAIL_INPUT = "preferredEmail" ;
+  public static final String FIELD_EMAIL_INPUT = "email" ;
   
   public final static String FIELD_GENDER_BOX = "gender" ;
   public static final String MALE = "Male".intern() ;
