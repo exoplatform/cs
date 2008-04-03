@@ -254,7 +254,7 @@ public class JCRDataStorage{
       } catch (Exception e) {
         calendarNode = calendarHome.addNode(calendar.getId(), "exo:calendar") ;
         calendarNode.setProperty("exo:id", calendar.getId()) ;
-        CalendarSetting setting = getCalendarSetting(sProvider, username) ;
+        /*CalendarSetting setting = getCalendarSetting(sProvider, username) ;
         if(setting == null) setting = new CalendarSetting() ;
         List<String> privateCalendars = new ArrayList<String>() ;
         if(setting.getDefaultPrivateCalendars() != null) {
@@ -262,7 +262,7 @@ public class JCRDataStorage{
         }
         if(!privateCalendars.contains((calendar.getId()))) privateCalendars.add(calendar.getId()) ;
         setting.setDefaultPrivateCalendars(privateCalendars.toArray(new String[privateCalendars.size()])) ;
-        saveCalendarSetting(sProvider, username, setting) ;
+        saveCalendarSetting(sProvider, username, setting) ;*/
         if(calendar.isDataInit()) reparePermissions(calendarNode, username) ;
       }
     }else {
@@ -277,6 +277,7 @@ public class JCRDataStorage{
     calendarNode.setProperty("exo:locale", calendar.getLocale()) ;
     calendarNode.setProperty("exo:timeZone", calendar.getTimeZone()) ;
     calendarNode.setProperty("exo:calendarColor", calendar.getCalendarColor()) ;
+    calendarNode.setProperty("exo:calendarOwner", calendar.getCalendarOwner()) ;
     //Check to save category
     /*if(calendar.getCategoryId() != null && calendar.getCategoryId().length() > 0) {
       Node calendarCategory = getCalendarCategoryHome(sProvider, username).getNode(calendar.getCategoryId()) ;
@@ -348,7 +349,7 @@ public class JCRDataStorage{
       calendarNode.setProperty("exo:id", calendar.getId()) ;   
       if(username != null) {
         //TODO update all user form group that this user belong to.
-        CalendarSetting calSetting = getCalendarSetting(sProvider, username) ;
+        /*CalendarSetting calSetting = getCalendarSetting(sProvider, username) ;
         if(calSetting == null) calSetting = new CalendarSetting() ;
         List<String> publicCalendars = new ArrayList<String>() ;
         if(calSetting.getDefaultPublicCalendars() != null) {
@@ -356,7 +357,7 @@ public class JCRDataStorage{
         }
         if(!publicCalendars.contains(calendar.getId())) publicCalendars.add(calendar.getId()) ;
         calSetting.setDefaultPublicCalendars(publicCalendars.toArray(new String[publicCalendars.size()])) ;
-        saveCalendarSetting(sProvider, username, calSetting) ;
+        saveCalendarSetting(sProvider, username, calSetting) ;*/
       }
     }else {
       calendarNode = calendarHome.getNode(calendar.getId()) ;
@@ -426,7 +427,7 @@ public class JCRDataStorage{
     }
 
   }*/
-  private Calendar getCalendar(String[] defaultCalendars, String username, Node calNode, boolean isShowAll) throws Exception {
+  private Calendar getCalendar(String[] defaultFilterCalendars, String username, Node calNode, boolean isShowAll) throws Exception {
     Calendar calendar = null ;
     if(isShowAll) {
       calendar = new Calendar() ;
@@ -437,6 +438,7 @@ public class JCRDataStorage{
       if(calNode.hasProperty("exo:locale")) calendar.setLocale(calNode.getProperty("exo:locale").getString()) ;
       if(calNode.hasProperty("exo:timeZone")) calendar.setTimeZone(calNode.getProperty("exo:timeZone").getString()) ;
       if(calNode.hasProperty("exo:calendarColor")) calendar.setCalendarColor(calNode.getProperty("exo:calendarColor").getString()) ;
+      if(calNode.hasProperty("exo:calendarOwner")) calendar.setCalendarOwner(calNode.getProperty("exo:calendarOwner").getString()) ;
       if(!calendar.isPublic()) {
         if(calNode.hasProperty("exo:groups")){
           Value[] values = calNode.getProperty("exo:groups").getValues() ;
@@ -465,7 +467,7 @@ public class JCRDataStorage{
         }      
       }  
     } else {
-      if(defaultCalendars != null && Arrays.asList(defaultCalendars).contains(calNode.getName())) {
+      if(defaultFilterCalendars == null || !Arrays.asList(defaultFilterCalendars).contains(calNode.getName())) {
         calendar = new Calendar() ;
         if(calNode.hasProperty("exo:id")) calendar.setId(calNode.getProperty("exo:id").getString()) ;
         if(calNode.hasProperty("exo:name")) calendar.setName(calNode.getProperty("exo:name").getString()) ;
@@ -475,6 +477,7 @@ public class JCRDataStorage{
         if(calNode.hasProperty("exo:timeZone")) calendar.setTimeZone(calNode.getProperty("exo:timeZone").getString()) ;
         if(calNode.hasProperty("exo:sharedColor")) calendar.setCalendarColor(calNode.getProperty("exo:sharedColor").getString()) ;
         if(calNode.hasProperty("exo:calendarColor")) calendar.setCalendarColor(calNode.getProperty("exo:calendarColor").getString()) ;
+        if(calNode.hasProperty("exo:calendarOwner")) calendar.setCalendarOwner(calNode.getProperty("exo:calendarOwner").getString()) ;
         if(!calendar.isPublic()) {
           if(calNode.hasProperty("exo:groups")){
             Value[] values = calNode.getProperty("exo:groups").getValues() ;
@@ -1634,12 +1637,12 @@ public class JCRDataStorage{
       }
       //saveCalendarSetting(sProvider, username, calSetting) ;
       calSetting.setSharedCalendarsColors(calColors.toArray(new String[calColors.size()])) ;
-      List<String> sharedCaeldnars = new ArrayList<String>() ;
+      /*List<String> sharedCaeldnars = new ArrayList<String>() ;
       if(calSetting.getDefaultSharedCalendars() != null) {
         sharedCaeldnars.addAll(Arrays.asList(calSetting.getDefaultSharedCalendars())) ;
       }
       if(! sharedCaeldnars.contains(calendarId)) sharedCaeldnars.add(calendarId) ;
-      calSetting.setDefaultSharedCalendars(sharedCaeldnars.toArray(new String[sharedCaeldnars.size()])) ;
+      calSetting.setDefaultSharedCalendars(sharedCaeldnars.toArray(new String[sharedCaeldnars.size()])) ;*/
       saveCalendarSetting(spd, user, calSetting) ;
       try {
         userNode = sharedCalendarHome.getNode(user) ;
@@ -1679,14 +1682,16 @@ public class JCRDataStorage{
       Node sharedNode = getSharedCalendarHome(sProvider).getNode(username) ;
       List<Calendar> calendars = new ArrayList<Calendar>() ;
       PropertyIterator iter = sharedNode.getReferences() ;
-      String[] defaultCalendars =  null  ;
+      String[] defaultFilterCalendars =  null  ;
       if(getCalendarSetting(sProvider, username) != null) {
-        defaultCalendars = getCalendarSetting(sProvider, username).getDefaultSharedCalendars() ;
+        defaultFilterCalendars = getCalendarSetting(sProvider, username).getDefaultSharedCalendars() ;
       }
       while(iter.hasNext()) {
         try{
-          Calendar cal = getCalendar(defaultCalendars, null, iter.nextProperty().getParent(), isShowAll) ;
-          if(cal != null) calendars.add(cal) ;
+          Calendar cal = getCalendar(defaultFilterCalendars, null, iter.nextProperty().getParent(), isShowAll) ;
+          if(cal != null) {
+            calendars.add(cal) ;
+          }
         }catch(Exception e){
           e.printStackTrace() ;
         }

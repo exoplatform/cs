@@ -9,6 +9,7 @@ import java.util.TimeZone;
 
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.Group;
@@ -38,7 +39,7 @@ public class NewGroupListener extends GroupEventListener {
     
     calendarService_ = calendarService;
     
-    defaultCalendarName = params.getValueParam("defaultCalendarName").getValue() ;
+    //defaultCalendarName = params.getValueParam("defaultCalendarName").getValue() ;
     defaultCalendarDescription = params.getValueParam("defaultCalendarDescription").getValue() ;
   }
   
@@ -55,7 +56,7 @@ public class NewGroupListener extends GroupEventListener {
     TimeZone timezone = TimeZone.getDefault();
     
     Calendar calendar = new Calendar() ;
-    calendar.setName(defaultCalendarName) ;
+    calendar.setName(group.getGroupName()+" calendar") ;
     calendar.setDescription(defaultCalendarDescription) ;
     calendar.setGroups(new String[]{groupId}) ;
     calendar.setPublic(isPublic) ;
@@ -64,5 +65,7 @@ public class NewGroupListener extends GroupEventListener {
     calendar.setCalendarColor(Calendar.SEASHELL);
 
     calendarService_.savePublicCalendar(sProvider, calendar, isNew, null) ;
+    
+//    calendarService_.saveCalendarSetting(sProvider, username, new CalendarSetting());
   }
 }

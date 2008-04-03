@@ -147,11 +147,15 @@
 						calId = calendar.getId() ;
 						if(uicomponent.getChildById(calId) != null) {
 						color = uicomponent.getColorMap().get("1"+":"+calId) ;
+						owner = "" ;
+						if(calendar.getCalendarOwner() != null) {
+							owner = calendar.getCalendarOwner() + "- " ;
+						}
 				%>
   					<div class="CalendarItem">
   						<div class="$color">
   							<div class="CheckBox"><%uiform.renderField(calendar.getId())%></div>
-  							<div class="CalendarIcon"><a><%=calendar.getName()%></a></div>
+  							<div class="CalendarIcon"><a><%=owner + calendar.getName()%></a></div>
   							<div class="DownArrow1Icon" calColor="$color" id="$calId" calType="1" title="<%=uiform.getLabel("calendarActions")%>" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
   							<div style="clear:both;"><span></span></div>
   						</div>
@@ -334,7 +338,7 @@
 											int rows = size/items ;
 											int count = 0 ;
 											while(i <= rows)	{
-												print "<div >" ;	
+												print "<div style='margin:4px 0px;'>" ;	
 												j = 0 ;
 												while(j <= items && count < size){
 												 color = uicomponent.getColors()[count] ;
@@ -350,7 +354,7 @@
 									  </div>
 		      			</div>
 		    			</div>
-				        <div class="BottomLeftRightClickPopupMenu">
+				      <div class="BottomLeftRightClickPopupMenu">
 			          <div class="BottomRightRightClickPopupMenu">
 			            <div class="BottomCenterRightClickPopupMenu"><span></span></div>
 			          </div>
