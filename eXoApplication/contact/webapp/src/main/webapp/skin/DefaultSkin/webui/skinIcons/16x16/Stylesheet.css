@@ -14,7 +14,7 @@
 	background: url('icons/EmailListIcon.gif') no-repeat left center;
 }
 
-.UIContactPortlet .BlueTag {
+.UIContactPortlet .RoyalBlueTag {
 	background: url('icons/BlueTag.gif') no-repeat left center;
 }
 
@@ -22,7 +22,7 @@
 	background: url('icons/RedTag.gif') no-repeat left center;
 }
 
-.UIContactPortlet .GreenTag {
+.UIContactPortlet .TurquoiseTag {
 	background: url('icons/GreenTag.gif') no-repeat left center;
 }
 
