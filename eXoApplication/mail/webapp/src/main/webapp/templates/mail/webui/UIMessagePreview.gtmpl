@@ -121,9 +121,7 @@
   									<div style="clear: left;"><span></span></div>
   								</div>
   								<div id="CollapseMessageAddressPreview" class="CollapseMessageAddress" onclick="javascript:eXo.mail.UIMailPortlet.showHideMessageDetails(this);">
-  									<div class="FieldContainer">
-  										<div class="Title"></div>
-  										<div class="LinkAddress">
+  										<span class="LinkAddress">
   										  <%
   										    if (!MailUtils.isFieldEmpty(msg.getFrom())) {
   										      InternetAddress[] fromAddress1 = Utils.getInternetAddress(msg.getFrom());
@@ -131,19 +129,21 @@
   										  %>
   										      <span><%=Utils.getPersonal(from1)%> &lt; <%=from1.getAddress()%> &gt; </span>
                         <%} %>    
-  										</div>
-                      <div class="Title">To:</div>
-                      <div class="LinkAddress"> 
+  										</span>
+                      <span class="Title">To:</span>
+                      <span class="LinkAddress"> 
                         <%
                           try {
                             if (!MailUtils.isFieldEmpty(msg.getMessageTo())) {
                               InternetAddress[] toAddress1 = InternetAddress.parse(msg.getMessageTo());
-                              for (i in 0..(toAddress1.length-1)) {
+                              int lenToAddress = (toAddress1.length < 3) ? toAddress1.length : 3;
+                              for (i in 0..(lenToAddress - 1)) {
                                 InternetAddress address1 = toAddress1[i];
                                 if (i > 0) print ",";
                         %>
-                                <span><%=Utils.getPersonal(address1)%> </span> &lt; <%=address1.getAddress()%> &gt; 
+                                <span><%=Utils.getPersonal(address1)%> </span>
                         <%
+                                if ((toAddress1.length > 3) && (i == lenToAddress-1)) print " ..." ;
                               }
                             } 
                           } catch (Exception e) {
@@ -151,9 +151,7 @@
                         %>   
                           <%=msg.getMessageTo()%>
                         <% } }%>
-                      </div>
-  										<div style="clear: left;"><span></span></div>
-  									</div>
+                      </span>
   								</div>
                   
                   <!-- Begin Expand Message Header -->
@@ -188,10 +186,10 @@
                       <%
                         try { 
                           if (!MailUtils.isFieldEmpty(msg.getMessageTo())) {  
-                        InternetAddress[] toAddress = InternetAddress.parse(msg.getMessageTo());
+                          InternetAddress[] toAddress = InternetAddress.parse(msg.getMessageTo());
                           for (i in 0..(toAddress.length-1)) {
                             InternetAddress address = toAddress[i];
-                              if (i > 0) print ",";
+                              if (i > 0 && i < (toAddress.length)) print ", <br>";
                       %>
                               <span><%=Utils.getPersonal(address)%> </span> &lt; <%=address.getAddress()%> &gt; 
                       <%
@@ -205,6 +203,31 @@
                     </div>
                     <div style="clear: left;"><span></span></div>
                   </div>
+                  <%
+                    if (!MailUtils.isFieldEmpty(msg.getMessageCc())) {  
+                  %>
+                      <div class="FieldContainer">
+                        <div class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.cc") %>:</div>
+                        <div class="LinkAddress"> 
+                        <%
+                          try { 
+                          InternetAddress[] toAddress = InternetAddress.parse(msg.getMessageCc());
+                            for (i in 0..(toAddress.length-1)) {
+                              InternetAddress address = toAddress[i];
+                                if (i > 0 && i < (toAddress.length)) print ", <br>";
+                        %>
+                                <span><%=Utils.getPersonal(address)%> </span> &lt; <%=address.getAddress()%> &gt; 
+                        <%
+                            } 
+                          } catch (Exception e) { 
+                            if (msg.getMessageCc() != null) {
+                        %>   
+                          <%=msg.getMessageCc()%>
+                        <% } }%>
+                        </div>  
+                        <div style="clear: left;"><span></span></div>
+                      </div>
+                  <%} %>
                   <div class="FieldContainer">
                     <div class="Title">Date & time:</div>
                     <div class="Address"><%=MailUtils.formatDate('EEEE, dd MMMM, yyyy HH:mm:ss aaa', msg.getReceivedDate())%></div>

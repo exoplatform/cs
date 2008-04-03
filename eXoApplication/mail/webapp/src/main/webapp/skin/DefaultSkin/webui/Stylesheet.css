@@ -825,26 +825,23 @@
 
 .UIMailPortlet .MailWorkingWorkspace .CollapseMessageAddress {
 	float: left; 
-}
-
-.UIMailPortlet .MailWorkingWorkspace .CollapseMessageAddress .FieldContainer{
 	line-height: 18px;
+	width: 70%;
+	overflow: hidden;
+	white-space: nowrap;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .CollapseMessageAddress .Title {
-	float: left;
 	text-align: center;
 	color: #6a6a6a;
 	width: 35px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .CollapseMessageAddress .Address {
-	float: left;
 	padding-left: 2px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .CollapseMessageAddress .LinkAddress {
-	float: left;
 	color: #2276ab;
 	cursor: pointer;
 }
