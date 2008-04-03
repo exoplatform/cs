@@ -1353,6 +1353,7 @@
 
 .UIMailPortlet .UIContactsPopup .RightContacts .ContactContainer {
 	border: 1px solid #ccc;
+	_width: 98%;
 }
 
 .UIMailPortlet .UIContactsPopup .BoxSearch {
