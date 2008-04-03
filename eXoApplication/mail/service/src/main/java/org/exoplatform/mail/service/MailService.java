@@ -309,7 +309,7 @@ public interface MailService {
    * @return the number of the new message
    * @throws Exception
    */
-  public List<Message>  checkNewMessage(SessionProvider sProvider, String username, String accountId) throws Exception ;
+  public List<Message>  checkNewMessage(SessionProvider sProvider, String username, String accountId, CheckingInfo checkingInfo) throws Exception ;
   
   public void checkMail(String username, String accountId) throws Exception ;
   /**
