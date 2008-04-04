@@ -285,23 +285,6 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIContacts uiContacts = event.getSource();
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
       Contact contact = uiContacts.contactMap.get(contactId) ;
-     /*
-      if (contact.getContactType().equals(JCRDataStorage.SHARED) 
-          && (contact.getEditPermissionUsers() == null || !Arrays.asList(contact.getEditPermissionUsers()).contains(ContactUtils.getCurrentUser()))) {
-        UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIContacts.msg.non-permission", null
-          , ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }*/
-      /*
-      if (uiContacts.isSearchResult && !uiContacts.checkExistContacts(contactId)){
-        UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-deleted", null
-          , ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }*/
       UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
       UIPopupContainer popupContainer =  popupAction.activate(UIPopupContainer.class, 800) ;
@@ -588,6 +571,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-delete", null
               , ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
         }
