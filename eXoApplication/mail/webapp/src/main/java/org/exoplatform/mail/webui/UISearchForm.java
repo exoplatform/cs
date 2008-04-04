@@ -57,6 +57,7 @@ public class UISearchForm extends UIForm {
     public void execute(Event<UISearchForm> event) throws Exception {
       UISearchForm uiSearchForm = event.getSource();
       UIMailPortlet uiPortlet = uiSearchForm.getAncestorOfType(UIMailPortlet.class) ;
+      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);  
       String text = uiSearchForm.getUIStringInput(FIELD_SEARCHVALUE).getValue();
       MessageFilter filter = new MessageFilter("Search"); 
       UIApplication uiApp = uiSearchForm.getAncestorOfType(UIApplication.class) ;
@@ -74,8 +75,17 @@ public class UISearchForm extends UIForm {
         filter.setText(text);
       }
       filter.setAccountId(accId);      
-      
-      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);      
+      String spamFolderId = Utils.createFolderId(accId, Utils.FD_SPAM, false) ;
+      String trashFolderId = Utils.createFolderId(accId, Utils.FD_TRASH, false) ;
+      String currentFolder = uiMessageList.getSelectedFolderId() ;
+      if (currentFolder != null) {
+        if (currentFolder.equals(spamFolderId)) filter.setFolder(new String[] {spamFolderId}) ;
+        else if (currentFolder.equals(trashFolderId)) filter.setFolder(new String[] {trashFolderId}) ;
+        else filter.setExcludeFolders(new String[] {spamFolderId, trashFolderId}) ;
+      } else {
+        filter.setExcludeFolders(new String[] {spamFolderId, trashFolderId}) ;
+      }
+          
       String username = uiPortlet.getCurrentUser();
       try {
         MailService mailService = uiPortlet.getApplicationComponent(MailService.class);

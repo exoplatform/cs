@@ -334,6 +334,9 @@
     		  <th style="width: 24px;">
     		    <a hreft = ""><div class="AttachmentIcon" title="Attchments"><span></span></div></a>
     		  </th>
+          <% 
+            if (uicomponent.getMessageFilter().getName().equals("Search")) print(" <th style=\"width:20px; border-right:0px;\"> </th> ") ;
+          %>
    	      <th style="padding-left: 24px;">
        	   <%
              String sortedBySubject = uicomponent.event("Sort",Utils.EXO_SUBJECT);
@@ -425,6 +428,10 @@
                 <a href="$actionLink"><div class="AttachmentIcon"><span></span></div></a>
                 <%}%>
               </td>
+              <% 
+                if (uicomponent.getMessageFilter().getName().equals("Search")) 
+                  print(" <td style=\"border-right:0px;\"> [" + msg.getFolders()[0].substring(msg.getFolders()[0].indexOf("Folder") + 6, msg.getFolders()[0].length()) + "] </td> ") ;
+              %>
               <td class="$readStatus">
               <% 
                 if (msg.getTags() != null && msg.getTags().length > 0) {
