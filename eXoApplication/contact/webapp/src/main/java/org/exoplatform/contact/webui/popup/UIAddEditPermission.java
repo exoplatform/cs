@@ -92,8 +92,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
       for(String username : contact.getViewPermissionUsers() ) {
         dataRow.add(new data(username, (contact.getEditPermissionUsers()!= null && Arrays.asList(contact.getEditPermissionUsers()).contains(username)))) ;
       }
-    }
-    
+    }    
     if(contact.getViewPermissionGroups() != null) {
       for(String username : contact.getViewPermissionGroups() ) {
         dataRow.add(new data(username, (contact.getEditPermissionGroups()!= null && Arrays.asList(contact.getEditPermissionGroups()).contains(username)))) ;
