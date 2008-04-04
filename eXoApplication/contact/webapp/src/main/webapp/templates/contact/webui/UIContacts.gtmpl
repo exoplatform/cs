@@ -466,7 +466,7 @@
 										icon = "OnlineIcon"
 										if (contact.isOwner()&& uicomponent.getDefaultGroup().equals(contact.getAddressBook()[0])) icon = "OwnerIcon" ; 	
 						%>
-				  	<div class="StateIcon $icon"><%=(contact.getFullName()==null ? "_" : contact.getFullName())%></div>
+				  	<div class="StateIcon $icon"><%= contact.getFullName() %></div>
 			  		<% if (tagIds != null && tagIds.length > 0) { %>
                 <div onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" style="cursor: pointer; display: inline" class="TagIcon $iconTag">
                   <% /*Begin Popup Menu*/ %>
@@ -518,45 +518,61 @@
 			  		%>
 						<img src="<%=(imageLink == null ? "/contact/skin/DefaultSkin/webui/background/Img2.gif": imageLink)%>" width=63 height=81 class="AvatasIcon"/>	
 			  		<div class="WorkContainerVCards">
-			  		  <div class="JobMember"><%=(contact.getJobTitle()==null ? "_" : contact.getJobTitle())%></div>
+			  		<% if (!ContactUtils.isEmpty(contact.getJobTitle())) { %>
+			  		  <div class="JobMember"><%= contact.getJobTitle()%></div>
+			  		<% } %>  
 			  		  <div class="InformationsMember">
+								<% if (!ContactUtils.isEmpty(contact.getEmailAddress())) { %>
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">Email:</span>
 			  		  			<% 
 			  		  					String email = contact.getEmailAddress() ;
 			  		  					String subEmail ;
-			  		  					if (email != null && email.length() > 20) subEmail = email.substring(0, 20) + "..." ;
+			  		  					if (email.length() > 20) subEmail = email.substring(0, 20) + "..." ;
 		  		  						else subEmail = email ;			  		  				
 			  		  			%>
-			  		  		<span class="InfoContent MailIcon" title="<%=(email == null ? "" : email) %>">
+			  		  		<span class="InfoContent MailIcon" title="<%= email %>">
 			  		  			<% if (!uicomponent.isPrintForm) { %>
 			  		  					<a href="<%=uicomponent.event("SendEmail", email)%>"> 
-			  		  					<%=(email == null ? "_" : subEmail)%>
+			  		  					<%= subEmail %>
 			  		  					</a> 		  				
 			  		  			<% } else { %>
-			  		  					<%=(email == null ? "_" : subEmail)%>
-			  		  			<% } %>
-			  		  			
+			  		  					<%= subEmail %>
+			  		  			<% } %>			  		  			
 			  		  		</span> 
 			  		  	</div>
+			  		  	<% } %>
+			  		  	<%
+			  		  		workPhone = contact.getWorkPhone1() ;
+			  		  		if (ContactUtils.isEmpty(contact.getWorkPhone1())) { 
+			  		  			workPhone = contact.getWorkPhone2() ;
+			  		  		}
+			  		  		if (!ContactUtils.isEmpty(workPhone)) {
+			  		  	%>
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">Work phone:</span>
 			  		  		<span class="LabelContent">
-			  		  			<%=(contact.getWorkPhone1()==null ? "_" : contact.getWorkPhone1())%>
+			  		  			<%= workPhone %>
 			  		  		</span>
 			  		  	</div>
+			  		  	<% } %>
+			  		  	<% if (!ContactUtils.isEmpty(contact.getMobilePhone())) { %>
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">Mobile:</span>
 			  		  		<span class="LabelContent">
-			  		  			<%=(contact.getMobilePhone()==null ? "_" : contact.getMobilePhone())%>
+			  		  			<%= contact.getMobilePhone() %>
 			  		  		</span>
 			  		  	</div>
+			  		  	<% } %>
+			  		  	<% if (!ContactUtils.isEmpty(contact.getWebPage())) { %>
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">Website:</span>
 			  		  		<span class="LabelContent">
-			  		  			<a href="#"><%=(contact.getWebPage()==null ? "_" : contact.getWebPage())%></a>
+			  		  			<a href="#"><%= contact.getWebPage()%></a>
 			  		  		</span>
 			  		  	</div>
+			  		  	<% } %>
+			  		  	
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">
 			  		  		<% if (!uicomponent.isPrintForm) { %>
@@ -564,6 +580,7 @@
 			  		  		<% } %>
 			  		  		</span>			  		  	
 			  		  	</div>
+			  		  
 			  		  </div>
 			  		</div>
 			  		<div style="clear: left;"><span></span></div>
@@ -643,45 +660,61 @@
 			  		%>
 						<img src="<%=(ContactUtils.isEmpty(imageLink) ? "/contact/skin/DefaultSkin/webui/background/Img2.gif": imageLink)%>" width=63 height=81 class="AvatasIcon"/>
 			  		<div class="WorkContainerVCards">
-			  		  <div class="JobMember"><%=(contact.getJobTitle()==null ? "_" : contact.getJobTitle())%></div>
-			  		  
+			  		<% if (!ContactUtils.isEmpty(contact.getJobTitle())) { %>
+			  		  <div class="JobMember"><%= contact.getJobTitle()%></div>
+			  		<% } %>  
 			  		  <div class="InformationsMember">
+			  		  	<% if (!ContactUtils.isEmpty(contact.getEmailAddress())) { %>
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">Email:</span>
 			  		  			<% 
-			  		  					email = contact.getEmailAddress() ;
-			  		  					if (email != null && email.length() > 20) subEmail = email.substring(0, 20) + "..." ;
+			  		  					String email = contact.getEmailAddress() ;
+			  		  					String subEmail ;
+			  		  					if (email.length() > 20) subEmail = email.substring(0, 20) + "..." ;
 		  		  						else subEmail = email ;			  		  				
-			  		  			%>	
-			  		  		<span class="InfoContent MailIcon" title="<%=(email == null ? "" : email) %>">
+			  		  			%>
+			  		  		<span class="InfoContent MailIcon" title="<%= email %>">
 			  		  			<% if (!uicomponent.isPrintForm) { %>
-			  		  					<a href="<%=uicomponent.event("SendEmail", email)%>">
-			  		  						<%=(email == null ? "_" : subEmail)%>  		  				
-			  		  					</a>
+			  		  					<a href="<%=uicomponent.event("SendEmail", email)%>"> 
+			  		  					<%= subEmail %>
+			  		  					</a> 		  				
 			  		  			<% } else { %>
-			  		  					 <%=(email == null ? "_" : subEmail)%>
-			  		  			<% } %>
-			  		  			
+			  		  					<%= subEmail %>
+			  		  			<% } %>			  		  			
 			  		  		</span> 
 			  		  	</div>
+			  		  	<% } %>
+			  		  	<%
+			  		  		workPhone = contact.getWorkPhone1() ;
+			  		  		if (ContactUtils.isEmpty(contact.getWorkPhone1())) { 
+			  		  			workPhone = contact.getWorkPhone2() ;
+			  		  		}
+			  		  		if (!ContactUtils.isEmpty(workPhone)) {
+			  		  	%>
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">Work phone:</span>
 			  		  		<span class="LabelContent">
-			  		  			<%=(contact.getWorkPhone1()==null ? "_" : contact.getWorkPhone1())%>
+			  		  			<%= workPhone %>
 			  		  		</span>
 			  		  	</div>
+			  		  	<% } %>
+			  		  	<% if (!ContactUtils.isEmpty(contact.getMobilePhone())) { %>
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">Mobile:</span>
 			  		  		<span class="LabelContent">
-			  		  			<%=(contact.getMobilePhone()==null ? "_" : contact.getMobilePhone())%>
+			  		  			<%= contact.getMobilePhone() %>
 			  		  		</span>
 			  		  	</div>
+			  		  	<% } %>
+			  		  	<% if (!ContactUtils.isEmpty(contact.getWebPage())) { %>
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">Website:</span>
 			  		  		<span class="LabelContent">
-			  		  			<a href="#"><%=(contact.getWebPage()==null ? "_" : contact.getWebPage())%></a>
+			  		  			<a href="#"><%= contact.getWebPage()%></a>
 			  		  		</span>
 			  		  	</div>
+			  		  	<% } %>
+			  		  	
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">
 			  		  		<% if (!uicomponent.isPrintForm) { %>
@@ -850,7 +883,7 @@
                     </a> 
                   
                     <a class="MenuItem" href="<%=uicomponent.event("Tag", "id")%>">   
-	                    <div class="ItemIcon BlueTag">
+	                    <div class="ItemIcon VioletTag">
 	                      <%=_ctx.appRes(uicomponent.getName() + ".label.tag")%>
 	                    </div>
                     </a>
