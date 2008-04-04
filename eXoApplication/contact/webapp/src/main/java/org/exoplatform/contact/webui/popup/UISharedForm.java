@@ -319,11 +319,15 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
           if (uiForm.isNew_) {
             Map<String, String> viewMapUsers = new LinkedHashMap<String, String>() ; 
             for (String user : receiveUsers) viewMapUsers.put(user, user) ; 
-            for (String user : receiveUsersByGroups) viewMapUsers.put(user, user) ;
+//            Map<String, String> viewMapUsersByGroup = new LinkedHashMap<String, String>() ;
+//            
+//            for (String user : receiveUsersByGroups) viewMapUsersByGroup.put(user, user) ;
             Map<String, String> editMapUsers = new LinkedHashMap<String, String>() ;
             if(uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).isChecked()) {
               for (String user : receiveUsers) editMapUsers.put(user, user) ;
-              for (String user : receiveUsersByGroups) editMapUsers.put(user, user) ;
+              
+//              Map<String, String> editMapUsersByGroup = new LinkedHashMap<String, String>() ;
+//              for (String user : receiveUsersByGroups) editMapUsersByGroup.put(user, user) ;
             }
             Map<String, String> viewMapGroups = new LinkedHashMap<String, String>() ; 
             for (String user : receiveGroups) viewMapGroups.put(user, user) ; 
@@ -333,8 +337,10 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
             }
             // incorrect ?
             Contact contact = uiForm.contact_ ;
+            
             addPerUsers(contact, viewMapUsers, editMapUsers) ;
             addPerGroups(contact, viewMapGroups, editMapGroups) ;
+            
             contactService.saveContact(SessionProviderFactory.createSessionProvider(), username, contact, false) ;
             UIAddEditPermission uiAddEdit = uiForm.getParent() ;
             uiAddEdit.updateContactGrid(contact);

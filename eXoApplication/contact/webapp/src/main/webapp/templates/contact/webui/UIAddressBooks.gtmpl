@@ -91,7 +91,7 @@
 					String sharedContactLink  = uicomponent.event("SelectSharedContact") ;				
 				%>
 				<a href="$sharedContactLink">
-					Shared Contacts
+					<%=_ctx.appRes(uicomponent.getName() + ".label.sharedContacts")%>
 				</a>	
 			</div>
       <div style="clear: left"><span></span></div>

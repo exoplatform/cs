@@ -210,7 +210,7 @@
 		  	 	    			for (String address : addressBooks) {
 		  	 	    				if (address.equals(NewUserListener.DEFAULTGROUP + ContactUtils.getCurrentUser())) {
 		  	 	    					address = NewUserListener.DEFAULTGROUPNAME ;
-		  	 	    				}
+		  	 	    				} else if (address.equals(NewUserListener.DEFAULTGROUP + contact.getId())) continue ;		  	 	    				
 		  	 	    				if(buffer.length() > 0) buffer.append(", ").append(address) ;
 		  	 	    				else buffer.append(address) ;
 		  	 	    			}	
@@ -221,8 +221,15 @@
 								  } else if (contactType.equals("1")){
 									  	SharedAddressBook add =  sharedGroupMap.get(addressBooks[0]) ;
 								  		if (add != null)	groupName = add.getName() ;
-								  		else groupName = "" ;
-								  	if (groupName == null) continue ;
+								  		else {
+								  			StringBuffer buffer = new StringBuffer(_ctx.appRes(uicomponent.getName() + ".label.sharedContacts")) ;
+								  			for (String address : addressBooks) { 
+								  				if (!address.equals(NewUserListener.DEFAULTGROUP + contact.getId())) {
+								  					buffer.append(", ").append(address) ;
+								  				}
+								  			}
+								  			groupName = buffer.toString() ;
+								  		}
 								  }
   	 	    				String actionLink  = uicomponent.event("SelectedContact", contact.getId()) ;
 									checkboxField = uicomponent.getChildById(contact.getId()) ;
