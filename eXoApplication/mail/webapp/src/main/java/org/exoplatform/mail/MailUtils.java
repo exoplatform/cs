@@ -54,7 +54,8 @@ public class MailUtils {
   final public static String SLASH = "/".intern() ;
   final public static String BACKSLASH = "\\".intern() ;
   final public static String SPECIALCHARACTER[] = {SEMICOLON,COMMA,SLASH,BACKSLASH,"'","|",">","<","\"", "?", "!", "@", "#", "$", "%","^","&","*"} ;
-
+  final public static String SUPPORTED_VIEW_TYPE_ATTACH[] = {"gif", "png", "jpg", "jpec"} ;
+  
   static public MailService getMailService() throws Exception {
     return (MailService)PortalContainer.getComponent(MailService.class) ;
   }

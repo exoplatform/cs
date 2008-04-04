@@ -359,15 +359,17 @@
       										<div class="AttachmentIcon"><%=attach.getName()%></div>
 													<div class="Size"><%=_ctx.appRes(uicomponent.id+ ".label.size") %>: <%=MailUtils.convertSize(attach.getSize())%> &nbsp;&nbsp;&nbsp;
 													<% 
-                            	boolean validType = true ;
+                            	boolean validType = false ;
       												String name = attach.getName() ;
-     												 	for (int i = 0; i < Utils.SUPPORTED_VIEW_TYPE_ATTACH.length; i++) {
-        												String type = Utils.SUPPORTED_VIEW_TYPE_ATTACH[i].trim() ;
-        												if(name.substring(name.lastIndexOf(".") + 1, name.length()).equals(type)) {	
+     												 	for (int i = 0; i < MailUtils.SUPPORTED_VIEW_TYPE_ATTACH.length; i++) {
+        												String type = MailUtils.SUPPORTED_VIEW_TYPE_ATTACH[i].trim() ;
+        												if(name.substring(name.lastIndexOf(".") + 1, name.length()).equals(type))
+        													validType = true ;
+        												}
+        											if (validType) {
       										%>
 															<span class="Icon ViewDownloadIcon"><a href="#">View</a></span>
 													<% 
-      													}
       												}	
       										%>
 														<span class="Icon DownloadIcon"> <a href="$downloadAction">Download</a></span></div>
