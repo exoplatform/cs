@@ -1,16 +1,15 @@
 @import url("UIComposerMessagePopup/Stylesheet.css") ;
 @import url("UIReadMessage/Stylesheet.css") ;
-@import url(UIAccountCreationPopup/Stylesheet.css) ;
+@import url("UIAccountCreationPopup/Stylesheet.css");
 @import url("UIAccountSetting/Stylesheet.css");
 @import url("UIMailSetting/Stylesheet.css");
 @import url("UIInsertAddress/Stylesheet.css");
-@import url("skinIcons/16x16/Stylesheet.css");
-@import url("skinIcons/24x24/Stylesheet.css");
 @import url("UIQuickAddEvent/Stylesheet.css");
 @import url("UIAddMessageFilter/Stylesheet.css");
 @import url("UIMessageFilter/Stylesheet.css");
 @import url("UIAddNewEvent/Stylesheet.css");
 @import url("UIColorPicker/Stylesheet.css");
+@import url("skinIcons/Stylesheet.css");
 /**
  * UIMailPortlet
 */

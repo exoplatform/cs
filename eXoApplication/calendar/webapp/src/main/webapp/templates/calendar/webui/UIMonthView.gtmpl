@@ -99,7 +99,7 @@
 					}
 					color = uicomponent.getColors().get(event.calType +CalendarUtils.COLON+ event.calendarId) ;
 					%>
-					<div class="DayContentContainer EventBoxes" style="position: absolute ;" startIndex="$startIndex" calType="$event.calType" eventId="$event.id" calId="$event.calendarId" eventCat="$event.eventCategoryId" 
+					<div class="DayContentContainer EventBoxes" style="position: absolute;" startIndex="$startIndex" calType="$event.calType" eventId="$event.id" calId="$event.calendarId" eventCat="$event.eventCategoryId" 
 					startTimeFull="<%=tempFormat.format(event.getFromDateTime())%>" endTimeFull="<%=tempFormat.format(event.getToDateTime())%>"
 					startTime="$startTime" endTime="$endTime" >
 						<div class="EventOnDayBorder $color">
