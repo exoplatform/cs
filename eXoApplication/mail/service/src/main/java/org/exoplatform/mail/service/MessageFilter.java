@@ -41,6 +41,7 @@ public class MessageFilter {
   private int subjectCondition_ ; // contain, doesn't contain, is , is not, starts with, ends with
   private String body_ ;
   private int bodyCondition_ ; // contain , doesn't contain
+  private String[] excludeFolders_ ;
   private String[] folders_ ;
   private String[] tags_ ;
   private String viewQuery_ ;
@@ -83,6 +84,9 @@ public class MessageFilter {
   
   public String getAccountId() { return accountId_ ; }
   public void setAccountId(String id) { accountId_ =  id ; }
+  
+  public String[] getExcludeFolders() { return excludeFolders_ ; }
+  public void setExcludeFolders(String[] folders) { this.excludeFolders_ = folders ; }
   
   public String[] getFolder() { return folders_ ; }
   public void setFolder(String[] folder) { this.folders_ = folder ; }
@@ -166,8 +170,20 @@ public class MessageFilter {
       hasConjuntion = true ;
     }
     
+    if(excludeFolders_ != null && excludeFolders_.length > 0) {
+      if(hasConjuntion) stringBuffer.append(" and (") ;
+      else stringBuffer.append("(") ;    
+      for(int i = 0; i < excludeFolders_.length; i ++) {
+        if(i == 0) stringBuffer.append("@exo:folders!='" + excludeFolders_[i] +"'") ;
+        else stringBuffer.append(" and @exo:folders!='" + excludeFolders_[i] +"'") ;
+      }
+      stringBuffer.append(")") ;
+      hasConjuntion = true ;
+    }
+    
     if(folders_ != null && folders_.length > 0) {
-      stringBuffer.append("(") ;    
+      if(hasConjuntion) stringBuffer.append(" and (") ;
+      else stringBuffer.append("(") ;    
       for(int i = 0; i < folders_.length; i ++) {
         if(i == 0) stringBuffer.append("@exo:folders='" + folders_[i] +"'") ;
         else stringBuffer.append(" or @exo:folders='" + folders_[i] +"'") ;
