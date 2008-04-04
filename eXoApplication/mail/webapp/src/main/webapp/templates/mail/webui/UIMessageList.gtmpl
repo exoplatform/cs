@@ -272,7 +272,7 @@
               <div class="ItemIcon AddContactIcon"><%=_ctx.appRes(uicomponent.id+ ".label.add-sender-to-contacts") %></div>
             </a>
             <a class="MenuItem" href="<%=uicomponent.event("Export", "id")%>">   
-            <div class="ItemIcon ExportIcon"><%=_ctx.appRes(uicomponent.id+ ".label.export-eml") %></div>
+              <div class="ItemIcon ExportIcon"><%=_ctx.appRes(uicomponent.id+ ".label.export-eml") %></div>
             </a>
           </div>
         </div>

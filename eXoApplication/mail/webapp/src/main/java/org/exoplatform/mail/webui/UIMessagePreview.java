@@ -37,6 +37,7 @@ import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.webui.popup.UIAccountList;
 import org.exoplatform.mail.webui.popup.UIAddContactForm;
 import org.exoplatform.mail.webui.popup.UIComposeForm;
 import org.exoplatform.mail.webui.popup.UIExportForm;
@@ -45,6 +46,7 @@ import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
 import org.exoplatform.mail.webui.popup.UIPrintPreview;
 import org.exoplatform.mail.webui.popup.UITagForm;
+import org.exoplatform.mail.webui.popup.UIViewAllHeaders;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -75,7 +77,8 @@ import org.exoplatform.webui.event.EventListener;
         @EventConfig(listeners = UIMessagePreview.AddTagActionListener.class),
         @EventConfig(listeners = UIMessagePreview.AddContactActionListener.class),
         @EventConfig(listeners = UIMessagePreview.MoveMessagesActionListener.class),
-        @EventConfig(listeners = UIMessagePreview.AnswerInvitationActionListener.class)
+        @EventConfig(listeners = UIMessagePreview.AnswerInvitationActionListener.class),
+        @EventConfig(listeners = UIMessagePreview.ViewAllHeadersActionListener.class)
     }
 )
 
@@ -400,6 +403,20 @@ public class UIMessagePreview extends UIComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
+    }
+  }
+  
+  static public class ViewAllHeadersActionListener extends EventListener<UIMessagePreview> {
+    public void execute(Event<UIMessagePreview> event) throws Exception {
+      UIMessagePreview uiMsgPreview = event.getSource() ;    
+      String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class) ;
+      UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class) ;
+      Message msg = uiMsgPreview.getShowedMessageById(msgId) ;
+      UIViewAllHeaders uiAllHeader = uiPopup.createUIComponent(UIViewAllHeaders.class,null, null) ;
+      uiAllHeader.init(msg);
+      uiPopup.activate(uiAllHeader, 700, 0, true) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
     }
   }
 }

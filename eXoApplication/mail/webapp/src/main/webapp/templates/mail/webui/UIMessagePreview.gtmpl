@@ -281,8 +281,11 @@
                                         <div class="ItemIcon AddContactIcon"><%=_ctx.appRes(uicomponent.id+ ".label.add-sender-to-contacts") %></div>
                                       </a>
                                       <a class="MenuItem" href="<%=uicomponent.event("Export", msg.getId())%>">   
-                                      <div class="ItemIcon ExportIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.export-eml") %> </div>
+                                        <div class="ItemIcon ExportIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.export-eml") %> </div>
                                       </a>
+                                      <a class="MenuItem" href="<%=uicomponent.event("ViewAllHeaders", msg.getId())%>">   
+                                        <div class="ItemIcon ViewFullHeadersIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.view-all-headers") %> </div>
+                                      </a>  
                                       <div class="RightClickCustomItem"></div>
                                     </div>
                                   </div>

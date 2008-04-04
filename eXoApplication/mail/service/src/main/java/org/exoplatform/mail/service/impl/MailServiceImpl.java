@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
@@ -28,6 +29,7 @@ import java.util.Properties;
 import javax.activation.DataHandler;
 import javax.mail.AuthenticationFailedException;
 import javax.mail.Flags;
+import javax.mail.Header;
 import javax.mail.MessagingException;
 import javax.mail.Part;
 import javax.mail.Session;
@@ -343,6 +345,11 @@ public class MailServiceImpl implements MailService{
     try {
       transport.sendMessage(mimeMessage, mimeMessage.getAllRecipients());
       message.setId(MimeMessageParser.getMessageId(mimeMessage)) ;
+      Enumeration enu = mimeMessage.getAllHeaders() ;
+      while (enu.hasMoreElements()) {
+        Header header = (Header)enu.nextElement() ;
+        message.setHeader(header.getName(), header.getValue()) ;
+      }
       status = "Mail Delivered !";
     } catch (AddressException e) {
       status = "There was an error parsing the addresses. Sending Falied !" + e.getMessage(); 
@@ -427,7 +434,7 @@ public class MailServiceImpl implements MailService{
         boolean deleteOnServer = (isPop3 && !leaveOnServer) || (isImap && markAsDelete);
         
         totalNew = messages.length ;
-
+        
         System.out.println(" #### Folder contains " + totalNew + " messages !");
         tt1 = System.currentTimeMillis();
 

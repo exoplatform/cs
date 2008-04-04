@@ -106,6 +106,10 @@
 	background: url('icons/ExportMail.gif') no-repeat left 6px;
 }
 
+.UIMailPortlet .ViewFullHeadersIcon {
+	background: url('icons/ViewFullHeaders.gif') no-repeat left 6px;
+}
+
 .UIMailPortlet .AddContactIcon {
 	background: url('icons/AddContact16x13.gif') no-repeat left 6px;
 }
