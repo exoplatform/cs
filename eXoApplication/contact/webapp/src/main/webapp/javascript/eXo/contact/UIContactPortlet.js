@@ -494,13 +494,28 @@ UIContactPortlet.prototype.switchLayout = function(layout) {
 }
 
 UIContactPortlet.prototype.showImMenu = function(obj, event) {
-	var menuItems = eXo.core.DOMUtil.findDescendantsByClass(obj, "span", "MenuItem") ;
+	var event = window.event || event ;
+	event.cancelBubble = true ;
+	var uiPopupCategory = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div", "UIPopupCategory") ;
+	var menuItems = eXo.core.DOMUtil.findDescendantsByClass(uiPopupCategory, "span", "MenuItem") ;
 	var len = menuItems.length ;
 	for(var i = 0 ; i < len ; i++) {
 		if (menuItems[i].style.display != "none") break ;
 	}
-	if (i == len) return ;
-	eXo.webui.UIPopupSelectCategory.show(obj, event) ;
+	if (i == len) {
+		uiPopupCategory.style.display = "none" ;
+		return ;
+  }
+	if(uiPopupCategory.style.display != "none") {
+		uiPopupCategory.style.display = "none" ;
+	} else {
+		uiPopupCategory.style.display = "block" ;
+		eXo.core.DOMUtil.listHideElements(uiPopupCategory) ;
+	}
+	var menuX = eXo.core.Browser.findPosXInContainer(obj, uiPopupCategory.offsetParent) ;
+	var menuY = eXo.core.Browser.findPosYInContainer(obj, uiPopupCategory.offsetParent) +  obj.offsetHeight ;
+	uiPopupCategory.style.top = menuY + "px" ;
+	uiPopupCategory.style.left = menuX + "px" ;	
 }
 
 /**
@@ -570,14 +585,18 @@ UIContactPortlet.prototype.showImField = function() {
   var imFields = domUtil.findDescendantsByTagName(uiIMContact, 'input') ;
   for (var i=0; i<imFields.length; i++) {
     if (imFields[i].name == fieldName) {
-      var trTag = domUtil.findAncestorByTagName(imFields[i], 'tr') ;
-      trTag.style.display = 'table-row' ;
-      var aTag = domUtil.findAncestorByTagName(menuItem, 'span') ;
+			try{
+	      var trTag = domUtil.findAncestorByTagName(imFields[i], 'tr') ;
+	      if(eXo.core.Browser.browserType == "ie") trTag.style.display = 'block' ;
+				else trTag.removeAttribute("style") ;
+			}catch(e){}
+      var aTag = domUtil.findAncestorByTagName(menuItem, 'span') ;				
       aTag.style.display = 'none' ;
       break ;
     }
   }
   // fix display
+	return ;
   var root = eXo.contact.UIContactPortlet.imFormRoot ;
   if (!root.getAttribute('sync') || root.getAttribute('sync') != '1') {
     var trTags = root.getElementsByTagName('tr') ;

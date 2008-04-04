@@ -5,12 +5,12 @@
 				<div class="RightBar">
 					<div class="CenterBar">
 					
-						<div class="SelectButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+						<div class="SelectButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" style="position: relative;">
 							<div class="IconHolder BlueCirclePlusIcon" >
 								<div class="DownArrow1Icon">Add New</div>
 							</div>
 							<% /*Begin Popup Menu*/ %>
-								<div style="position: relative;">
+<!--								<div style="position: relative;">-->
 			      			<div class="UIPopupCategory" style="display: none;">
 			      				<div class="UIRightClickPopupMenu" style="display: block;">
 			      					<div class="UIContextMenuContainer">
@@ -46,7 +46,7 @@
 			      			</div>
 			      		</div>
 			      		<% /*End Popup Menu*/ %>
-						</div>
+<!--						</div>-->
 						
           <a href="<%=uicomponent.event("ImportContact")%>" class="ControlButton">
 						<div class="ImportAddressIcon" title="Import Address">
@@ -59,14 +59,13 @@
 							<span></span>
 						</div>
           </a>
-          
 						<div class="SeparatorLine"><span></span></div>
-						<div class="SelectButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+						<div class="SelectButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" style="position: relative;">
 							<div class="IconHolder ViewIcon">
 								<div class="DownArrow1Icon">Contacts View</div>
 							</div>
 								<% /*Begin Popup Menu*/ %>
-								<div style="position: relative;">
+<!--								<div style="position: relative;">-->
 			      			<div class="UIPopupCategory" style="display: none;">
 			      				<div class="UIRightClickPopupMenu" style="display: block;">
 			      					<div class="UIContextMenuContainer">
@@ -103,13 +102,13 @@
 			      			</div>
 			      		</div>
 			      		<% /*End Popup Menu*/ %>
-						</div>
+<!--						</div>-->
 						
-						<div class="SelectButton" onclick="eXo.contact.UIContactPortlet.showPopupCustomLayoutView(this, event);">
+						<div class="SelectButton" onclick="eXo.contact.UIContactPortlet.showPopupCustomLayoutView(this, event);" style="position: relative;">
 							<div class="IconHolder CustomLayoutIcon">
 								<div class="DownArrow1Icon">Custom Layout View</div>
 								<% /*Begin Popup Menu*/ %>
-									<div style="position: relative;">
+<!--									<div style="position: relative;">-->
 			      			<div class="UIPopupCategory" style="display: none;">
 			      				<div class="UIRightClickPopupMenu" style="display: block;">
 				      					<div class="UIContextMenuContainer">
@@ -159,7 +158,7 @@
 				      			</div>
 				      		</div>
 				      		<% /*End Popup Menu*/ %>
-							</div>
+<!--							</div>-->
 						</div>
 						
 						<!--a href="#">
