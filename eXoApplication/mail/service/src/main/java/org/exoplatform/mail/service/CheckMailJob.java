@@ -29,7 +29,6 @@ import org.quartz.JobExecutionException;
 
 public class CheckMailJob extends Thread implements Job, Runnable  {
   private Thread thread ;
-  private CheckingInfo checkingInfo_ ;
   
 	public CheckMailJob() throws Exception {
 		setDaemon(true) ;	
@@ -42,7 +41,6 @@ public class CheckMailJob extends Thread implements Job, Runnable  {
     	thread = new Thread(this); 
     	thread.start(); 
     }
-    checkingInfo_ = new CheckingInfo() ;
 	} 
 	
 	public void destroy() {
@@ -69,10 +67,7 @@ public class CheckMailJob extends Thread implements Job, Runnable  {
 			JobInfo info = new JobInfo(context.getJobDetail().getName(), "CollaborationSuite-webmail", context.getJobDetail().getJobClass()) ;
 			if(name != null && name.indexOf(":") > 0) {
 				String[] array = name.split(":") ;
-        String username = array[0].trim() ;
-        String accId = array[1].trim() ;
-        checkingInfo_.setAccountId(accId) ;
-			  mailService.checkNewMessage(SessionProvider.createSystemProvider(), username, accId, checkingInfo_) ;
+			  mailService.checkNewMessage(SessionProvider.createSystemProvider(), array[0].trim(), array[1].trim()) ;
 			}
 			schedulerService.removeJob(info) ;
 			System.out.println("\n\n####  Checking mail of " + context.getJobDetail().getName()+ " finished ");

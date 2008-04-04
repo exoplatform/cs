@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
@@ -28,6 +29,7 @@ import java.util.Properties;
 import javax.activation.DataHandler;
 import javax.mail.AuthenticationFailedException;
 import javax.mail.Flags;
+import javax.mail.Header;
 import javax.mail.MessagingException;
 import javax.mail.Part;
 import javax.mail.Session;
@@ -51,7 +53,6 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.AccountData;
 import org.exoplatform.mail.service.Attachment;
-import org.exoplatform.mail.service.CheckingInfo;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
@@ -344,6 +345,11 @@ public class MailServiceImpl implements MailService{
     try {
       transport.sendMessage(mimeMessage, mimeMessage.getAllRecipients());
       message.setId(MimeMessageParser.getMessageId(mimeMessage)) ;
+      Enumeration enu = mimeMessage.getAllHeaders() ;
+      while (enu.hasMoreElements()) {
+        Header header = (Header)enu.nextElement() ;
+        message.setHeader(header.getName(), header.getValue()) ;
+      }
       status = "Mail Delivered !";
     } catch (AddressException e) {
       status = "There was an error parsing the addresses. Sending Falied !" + e.getMessage(); 
@@ -375,7 +381,7 @@ public class MailServiceImpl implements MailService{
 		
   }
   
-  public List<Message> checkNewMessage(SessionProvider sProvider, String username, String accountId, CheckingInfo checkingInfo) throws Exception {
+  public List<Message> checkNewMessage(SessionProvider sProvider, String username, String accountId) throws Exception {
     Account account = getAccountById(sProvider, username, accountId) ;
     long t1, t2 , tt1, tt2;
     System.out.println(" #### Getting mail from " + account.getIncomingHost() + " ... !");
@@ -428,7 +434,7 @@ public class MailServiceImpl implements MailService{
         boolean deleteOnServer = (isPop3 && !leaveOnServer) || (isImap && markAsDelete);
         
         totalNew = messages.length ;
-        checkingInfo.setTotalMsg(totalNew) ;
+        
         System.out.println(" #### Folder contains " + totalNew + " messages !");
         tt1 = System.currentTimeMillis();
 
@@ -456,7 +462,6 @@ public class MailServiceImpl implements MailService{
             msg.setFlag(Flags.Flag.SEEN, true);
             if (deleteOnServer) msg.setFlag(Flags.Flag.DELETED, true);
             try {
-              checkingInfo.setFetching(i) ;
               storage_.saveMessage(sProvider, username, account.getId(), msg, folderId, spamFilter) ;
               account.setLastCheckedDate(MimeMessageParser.getReceivedDate(msg).getTime()) ;
             } catch(Exception e) {
