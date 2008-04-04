@@ -110,7 +110,7 @@
 	            %>
 	          </td>
 	          <td class="FieldLabel" style="text-align: left;">Has Star</td>
-	          <td class="FieldLabel" style="width: 25px">Priority :</td>
+	          <td class="FieldLabel" style="width: 25px">Priority </td>
 	          <td class="FieldComponent FieldShort">
 	            <%
 	              uicomponent.renderField(uicomponent.SEARCH_PRIORITY);
@@ -128,7 +128,6 @@
 	          <td colspan="2">&nbsp;</td>
 				  </tr>
 				</table>
-	    </div>
   		</div>
   	</div>
   </div>

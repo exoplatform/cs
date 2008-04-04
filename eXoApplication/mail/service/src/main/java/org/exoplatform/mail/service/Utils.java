@@ -208,7 +208,6 @@ public class Utils {
   public static final String TAG_YELLOW = "Yellow".intern() ;
   public static final String[] TAG_COLOR = {TAG_RED, TAG_BLUE, TAG_GREEN, TAG_BROWN, TAG_ORANGE, TAG_PING, TAG_YELLOW, TAG_VIOLET};
   public static final String[] MIME_MAIL_TYPES = {"eml"};
-  public static final String[] SUPPORTED_VIEW_TYPE_ATTACH = {"gif", "png", "jpg", "jpec"} ;
   
   public static final boolean SHOWCONVERSATION = true ;
   
