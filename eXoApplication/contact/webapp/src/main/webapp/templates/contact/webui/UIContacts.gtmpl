@@ -70,7 +70,7 @@
 						<div class="IconHolder MoveIcon"><%=_ctx.appRes(uicomponent.getName() + ".label.move")%></div>
 					</a>					
 					<div class="SeparatorLine"><span></span></div>
-					<a href="#" class="ControlButton">
+					<a href="<%=uicomponent.event("Chat")%>" class="ControlButton">
 						<div class="Icon ChatIcon" title="chat"><span></span></div>
 					</a>
 					<a href="<%=uicomponent.event("Tag")%>" class="ControlButton">
@@ -883,11 +883,22 @@
 	                    </div>
                     </a>
                      
+                    <% if (uicomponent.canChat()) { %>
                     <a class="MenuItem" href="javascript:eXo.require('eXo.communication.chat.webui.eXoChatLoader', '/exomessenger/javascript/'); eXo.communication.chat.webui.eXoChatLoader.init('<%=org.exoplatform.contact.ContactUtils.getCurrentUser();%>');">
 	                    <div class="ItemIcon InstantMessage">
 	                      <%=_ctx.appRes(uicomponent.getName() + ".label.instantMessage")%>
 	                    </div>
                     </a> 
+                    <% 
+                    	} else {                     
+                    %>
+		                  <a class="MenuItem" href="javascript:void(0) ;" style="color:#cccccc">   
+						            <div class="ItemIcon InstantMessage">
+						              <%=_ctx.appRes(uicomponent.getName() + ".label.instantMessage")%>
+						            </div>
+						        	</a>
+				        	<% } %>
+                  
                   
                     <a class="MenuItem" href="<%=uicomponent.event("Tag", "id")%>">   
 	                    <div class="ItemIcon VioletTag">

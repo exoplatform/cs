@@ -96,6 +96,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UIContacts.SharedContactsActionListener.class),
         @EventConfig(listeners = UIContacts.CloseSearchActionListener.class),
         @EventConfig(listeners = UIContacts.PrintActionListener.class), 
+        @EventConfig(listeners = UIContacts.ChatActionListener.class),
         @EventConfig(listeners = UIContacts.PrintDetailsActionListener.class)
     }
 )
@@ -126,6 +127,14 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   public void activate() throws Exception { }
   public void deActivate() throws Exception { } 
   
+  public boolean canChat() {
+    try {
+      java.lang.Class.forName("org.exoplatform.services.xmpp.rest.RESTXMPPService") ;
+      return true ;
+    } catch (ClassNotFoundException e) {
+      return false ;
+    }
+  }
   public void setSelectSharedContacts(boolean selected) { isSelectSharedContacts = selected ; }
   public boolean isSelectSharedContacts() { return isSelectSharedContacts ; }
   public boolean havePermission(Contact contact) throws Exception {
@@ -927,6 +936,38 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       uiContacts.isPrintDetail = false ;
       uiContacts.getAncestorOfType(UIContactContainer.class).findFirstComponentOfType(UIContactPreview.class).setRendered(false) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+    }
+  }
+  
+  static  public class ChatActionListener extends EventListener<UIContacts> {
+    public void execute(Event<UIContacts> event) throws Exception {
+      UIContacts uiContacts = event.getSource() ;
+      String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
+      
+      if (!ContactUtils.isEmpty(contactId)) { 
+      } else {
+        List<String> contactIds = uiContacts.getCheckedContacts() ;
+        if (contactIds.size() < 1) {
+          UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-toChat", null,
+              ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
+      }
+      
+      try {
+        Class im = java.lang.Class.forName("org.exoplatform.services.xmpp.rest.RESTXMPPService") ;
+        im.newInstance() ;
+      } catch (ClassNotFoundException e) {
+        UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIContacts.msg.chatApp-notAvaiable", null,
+            ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;        
+      }
+      
+      
     }
   }
   

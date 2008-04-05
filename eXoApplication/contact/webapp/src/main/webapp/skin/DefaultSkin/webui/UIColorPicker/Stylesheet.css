@@ -56,7 +56,7 @@
 }
 
 .UIContactPortlet .ContactTableColor .ColorCell img {
- width: 12px; height: 12px;
+ width: 23px; height: 12px;
 }
 .UIContactPortlet .ContactTableColor .SelectedColorCell {
 	border: solid 1px red ;

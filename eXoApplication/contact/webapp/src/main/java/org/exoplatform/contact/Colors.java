@@ -138,7 +138,8 @@ public class Colors {
     O_SANDYBROWN,O_SEAGREEN,O_SEASHELL,O_SIANNA,O_SILVER,O_SKYBLUE,O_THISTLE,O_TOMATO,O_TURQUOISE,
     O_VIOLET,O_WHEAT,O_YELLOW } ;
    */
-  public static final Color[] COLORS = { O_RED, O_ROYALBLUE, O_TURQUOISE, O_VIOLET } ;
+  public static final Color[] COLORS = { O_RED, O_ROYALBLUE, O_TURQUOISE, O_VIOLET 
+                                        , O_YELLOW, O_PINK, O_PLUM, O_ORANGERED } ;
   
   public static final String[] COLORNAME = {
     N_POWDERBLUE,N_ORCHID,N_PALEGOLDENROD,N_PALEGREEN,

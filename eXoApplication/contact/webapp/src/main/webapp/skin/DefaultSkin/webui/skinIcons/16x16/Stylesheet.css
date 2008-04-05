@@ -30,6 +30,23 @@
 	background: url('icons/VioletTag.gif') no-repeat left center;
 }
 
+.UIContactPortlet .MultipTag {
+	background: url('icons/MultipTag.gif') no-repeat left center;
+}
+.UIContactPortlet .OrangeRedTag {
+	background: url('icons/OrangeTag.gif') no-repeat left center;
+}
+.UIContactPortlet .PinkTag {
+	background: url('icons/PingTag.gif') no-repeat left center;
+}
+.UIContactPortlet .PlumTag {
+	background: url('icons/PingVioletTag.gif') no-repeat left center;
+}
+.UIContactPortlet .YellowTag {
+	background: url('icons/YellowTag.gif') no-repeat left center;
+}
+
+
 .UIContactPortlet .MoveIcon {
 	background: url('icons/MoveActionIcon.gif') no-repeat left center;
 }
