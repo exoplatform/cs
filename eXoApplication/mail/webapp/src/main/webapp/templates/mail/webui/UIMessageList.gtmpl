@@ -446,12 +446,9 @@
                     title += "[" + tag.getName() + "] ";
                   }
                 %>
-                  <a href="$actionLink" title="$title" style="display: block; float: left; margin-right: 3px;"><div class="IconTag $colorCss"><span></span></div></a>
+                  <a href="$actionLink" class="IconTag $colorCss" title="$title" style="display: block; float: left; width: 79%; overflow: hidden; white-space: nowrap; margin-right: 3px;">
                 <%
                   }
-                %>
-                <a href="$actionLink">
-                <% 
                   if (!msg.isRootConversation() && uicomponent.viewMode == uicomponent.MODE_THREAD) {
                     String marginLevel = (l-2)*10 + "px" ;
                 %>
