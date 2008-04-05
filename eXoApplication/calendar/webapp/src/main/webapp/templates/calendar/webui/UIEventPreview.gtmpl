@@ -47,7 +47,7 @@ uiform.begin() ;
 		         </div>
 		          <%if(attachFile.getMimeType().startsWith("image"))  {
 		        	%> 	
-		        	 	<img id="$attachFile.id" src="" class="Img" style="display:none;"  />
+		        	 	<img id="$attachFile.id" class="Img" style="display:none;"  />
 		          <%}%>
 		         <div class="Actions" style="white-space: nowrap;">
 		         <%if(attachFile.getMimeType().startsWith("image"))  {
