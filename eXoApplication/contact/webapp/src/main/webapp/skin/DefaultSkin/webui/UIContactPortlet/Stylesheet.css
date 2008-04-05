@@ -636,6 +636,7 @@
 
 .UIContactPortlet .ContactPreviewContainer .InfoContainer {
 	padding: 5px 0px;
+	width: 99%;
 }
 
 .UIContactPortlet .InfoContainer .TitleInfo {
