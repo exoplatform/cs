@@ -37,19 +37,21 @@
                 <%=_ctx.appRes(uiForm.id + ".label." + uicomponent.FIELD_DATEALL)%>
                 :
               </div>
-              <div class="Field">
-               <%uiForm.renderField(uicomponent.FIELD_TO_TIME)%>
-              </div>
-              <div class="Label">
-                <%=_ctx.appRes(uiForm.id + ".label." + uicomponent.FIELD_FROM_TIME)%>
-                :
-              </div>
-              <div class="Field">
-               <%uiForm.renderField(uicomponent.FIELD_FROM_TIME)%>
-              </div>
-              <div class="Label">
-                <%=_ctx.appRes(uiForm.id + ".label." + uicomponent.FIELD_TO_TIME)%>
-                :
+              <div class="TimeField">
+	              <div class="Field">
+	               <%uiForm.renderField(uicomponent.FIELD_TO_TIME)%>
+	              </div>
+	              <div class="Label">
+	                <%=_ctx.appRes(uiForm.id + ".label." + uicomponent.FIELD_FROM_TIME)%>
+	                :
+	              </div>
+	              <div class="Field">
+	               <%uiForm.renderField(uicomponent.FIELD_FROM_TIME)%>
+	              </div>
+	              <div class="Label">
+	                <%=_ctx.appRes(uiForm.id + ".label." + uicomponent.FIELD_TO_TIME)%>
+	                :
+	              </div>
               </div>
               <div style="clear: right;">
                 <span></span>
