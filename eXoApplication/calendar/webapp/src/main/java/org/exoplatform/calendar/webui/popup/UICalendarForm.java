@@ -450,6 +450,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
          if(uiForm.perms_.get(groupIdSelected + PERMISSION_SUB) != null)
           for(String s : uiForm.perms_.get(groupIdSelected + PERMISSION_SUB).keySet()){
             if(!CalendarUtils.isEmpty(s)) listPermission.add(s) ;
+            System.out.println(s);
           }
           listPermission.add(CalendarUtils.getCurrentUser()) ;
         }        

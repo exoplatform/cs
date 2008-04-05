@@ -132,8 +132,12 @@
 	    <description>description</description>
 	    <init-params>
         <value-param>
-        	<name>defaultCalendarDescription</name>
-        	<value>defaul group calendar</value>
+        	<name>defaultEditPermission</name>
+        	<value>*:*</value><!-- Multi value membership, use coma (,) to split values-->
+        </value-param>
+        <value-param>
+        	<name>defaultViewPermission</name>
+        	<value>*:*</value><!-- Multi value membership, use coma (,) to split values-->
         </value-param>
 	    </init-params>    
 	  </component-plugin>

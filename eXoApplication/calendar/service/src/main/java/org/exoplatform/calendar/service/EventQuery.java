@@ -30,6 +30,7 @@ public class EventQuery {
   private String text = null ;
   private String[] categoryIds = null ;
   private String[] calendarIds = null ;
+  private String[] filterCalendarIds = null ;
   private java.util.Calendar fromDate  = null ;
   private java.util.Calendar toDate = null ;
   private String calendarPath ;
@@ -54,6 +55,12 @@ public class EventQuery {
   public String[] getCalendarId() { return calendarIds ; }
   public void setCalendarId(String[] calendarIds) { this.calendarIds = calendarIds ; }
   
+  public void setFilterCalendarIds(String[] filterCalendarIds) {
+    this.filterCalendarIds = filterCalendarIds;
+  }
+  public String[] getFilterCalendarIds() {
+    return filterCalendarIds;
+  }
   public java.util.Calendar getFromDate() { return fromDate ; }
   public void setFromDate(java.util.Calendar fromDate) { this.fromDate = fromDate ; }
   
@@ -135,6 +142,16 @@ public class EventQuery {
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }
+    /*if(filterCalendarIds != null && filterCalendarIds.length > 0) {
+      if(hasConjuntion) stringBuffer.append(" and (") ;
+      else stringBuffer.append("(") ;
+      for(int i = 0; i < filterCalendarIds.length; i ++) {
+        if(i == 0) stringBuffer.append("@exo:calendarId !='" + filterCalendarIds[i] +"'") ;
+        else stringBuffer.append(" and @exo:calendarId !='" + filterCalendarIds[i] +"'") ;
+      }
+      stringBuffer.append(")") ;
+      hasConjuntion = true ;
+    }*/
     // desclared participants query
     if(participants != null && participants.length > 0) {
       if(hasConjuntion) stringBuffer.append(" and (") ;

@@ -32,6 +32,7 @@ import org.exoplatform.calendar.webui.UIActionBar;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UICalendars;
+import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -117,14 +118,14 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     }
     UIFormInputWithActions defaultCalendarsTab = getChildById(DEFAULT_CALENDAR_TAB) ;    
     List<String> filteredCalendars = new ArrayList<String>() ;
-    if(calendarSetting != null && calendarSetting.getDefaultPrivateCalendars() != null) {
-      filteredCalendars.addAll(Arrays.asList(calendarSetting.getDefaultPrivateCalendars())) ;
+    if(calendarSetting != null && calendarSetting.getFilterPrivateCalendars() != null) {
+      filteredCalendars.addAll(Arrays.asList(calendarSetting.getFilterPrivateCalendars())) ;
     }
-    if(calendarSetting != null && calendarSetting.getDefaultPublicCalendars() != null) {
-      filteredCalendars.addAll(Arrays.asList(calendarSetting.getDefaultPublicCalendars())) ;
+    if(calendarSetting != null && calendarSetting.getFilterPublicCalendars() != null) {
+      filteredCalendars.addAll(Arrays.asList(calendarSetting.getFilterPublicCalendars())) ;
     }
-    if(calendarSetting != null && calendarSetting.getDefaultSharedCalendars() != null) {
-      filteredCalendars.addAll(Arrays.asList(calendarSetting.getDefaultSharedCalendars())) ;
+    if(calendarSetting != null && calendarSetting.getFilterSharedCalendars() != null) {
+      filteredCalendars.addAll(Arrays.asList(calendarSetting.getFilterSharedCalendars())) ;
     }
     List<Calendar> privateCals = getPrivateCalendars(cservice, username) ;
     defaultCalendarsTab.addChild(new UIFormInputInfo(DEFAULT_CALENDARS, DEFAULT_CALENDARS, getLabel(DEFAULT_CALENDARS_NOTE))) ;
@@ -262,19 +263,19 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       List<String> unCheckList = new ArrayList<String>() ;
       defaultFilterCalendars = uiForm.getUnCheckedList(uiForm.getPrivateCalendars(calendarService, username)) ;
       if(!defaultFilterCalendars.isEmpty()){
-        calendarSetting.setDefaultPrivateCalendars(defaultFilterCalendars.toArray(new String[] {})) ;
+        calendarSetting.setFilterPrivateCalendars(defaultFilterCalendars.toArray(new String[] {})) ;
         unCheckList.addAll(defaultFilterCalendars) ;
         defaultFilterCalendars.clear() ;
       }
       defaultFilterCalendars = uiForm.getUnCheckedList(uiForm.getPublicCalendars(calendarService, username)) ;
       if(!defaultFilterCalendars.isEmpty()){
-        calendarSetting.setDefaultPublicCalendars(defaultFilterCalendars.toArray(new String[] {})) ;
+        calendarSetting.setFilterPublicCalendars(defaultFilterCalendars.toArray(new String[] {})) ;
         unCheckList.addAll(defaultFilterCalendars) ;
         defaultFilterCalendars.clear() ;
       }
       defaultFilterCalendars = uiForm.getUnCheckedList(uiForm.getSharedCalendars(calendarService, username)) ;
       if(!defaultFilterCalendars.isEmpty()){
-        calendarSetting.setDefaultSharedCalendars(defaultFilterCalendars.toArray(new String[] {})) ;
+        calendarSetting.setFilterSharedCalendars(defaultFilterCalendars.toArray(new String[] {})) ;
         unCheckList.addAll(defaultFilterCalendars) ;
         defaultFilterCalendars.clear() ;
       }
@@ -290,6 +291,8 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       uiViewContainer.refresh() ;
       calendarPortlet.findFirstComponentOfType(UIActionBar.class).setCurrentView(viewType) ;
       calendarPortlet.cancelAction() ;
+      UIMiniCalendar miniCal = calendarPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
+      miniCal.updateMiniCal() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarPortlet) ;
     }
   }

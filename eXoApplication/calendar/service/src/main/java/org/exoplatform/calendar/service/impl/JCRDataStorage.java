@@ -218,7 +218,7 @@ public class JCRDataStorage{
     List<Calendar> calList = new ArrayList<Calendar>() ;
     String[] defaultCalendars = null ;     
     if(getCalendarSetting(sProvider, username) != null){
-      defaultCalendars = getCalendarSetting(sProvider, username).getDefaultPrivateCalendars() ;
+      defaultCalendars = getCalendarSetting(sProvider, username).getFilterPrivateCalendars() ;
     }
     while(iter.hasNext()) {
       calList.add(getCalendar(defaultCalendars, username, iter.nextNode(), isShowAll)) ;
@@ -238,7 +238,7 @@ public class JCRDataStorage{
     List<Calendar> calendares = new ArrayList<Calendar> () ;
     String[] defaultCalendars = null ;     
     if(getCalendarSetting(sProvider, username) != null){
-      defaultCalendars = getCalendarSetting(sProvider, username).getDefaultPrivateCalendars() ;
+      defaultCalendars = getCalendarSetting(sProvider, username).getFilterPrivateCalendars() ;
     }
     while(it.hasNext()){
       calendares.add(getCalendar(defaultCalendars, username, it.nextNode(), true)) ;
@@ -316,7 +316,7 @@ public class JCRDataStorage{
     QueryManager qm ;
     List<GroupCalendarData> groupCalendars = new ArrayList<GroupCalendarData>();
     String[] defaultCalendars = null ;
-    if(getCalendarSetting(sProvider, username) != null) defaultCalendars = getCalendarSetting(sProvider, username).getDefaultPublicCalendars() ;
+    if(getCalendarSetting(sProvider, username) != null) defaultCalendars = getCalendarSetting(sProvider, username).getFilterPublicCalendars() ;
     for(String groupId : groupIds) {
       qm = calendarHome.getSession().getWorkspace().getQueryManager();
       StringBuffer queryString = new StringBuffer("/jcr:root" + calendarHome.getPath() 
@@ -519,7 +519,7 @@ public class JCRDataStorage{
     String[] defaultCalendars = null ;
     CalendarSetting calSetting = getCalendarSetting(sProvider, username) ;
     if(calSetting != null) {
-      defaultCalendars = calSetting.getDefaultPrivateCalendars() ;
+      defaultCalendars = calSetting.getFilterPrivateCalendars() ;
     }
     while(iter.hasNext()){      
       Node categoryNode =  iter.nextNode() ;
@@ -813,17 +813,19 @@ public class JCRDataStorage{
 
   public List<CalendarEvent> getUserEvents(SessionProvider sProvider, String username, EventQuery eventQuery) throws Exception {
     Node calendarHome = getUserCalendarHome(sProvider, username) ;
+    List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
     eventQuery.setCalendarPath(calendarHome.getPath()) ;
     QueryManager qm = calendarHome.getSession().getWorkspace().getQueryManager() ;
-    List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
     Query query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH) ;
     QueryResult result = query.execute();
     NodeIterator it = result.getNodes();
     CalendarEvent calEvent ;
     while(it.hasNext()) {
       calEvent = getEvent(sProvider, it.nextNode()) ;
-      calEvent.setCalType("0") ;
-      events.add(calEvent) ;
+      if(eventQuery.getFilterCalendarIds()== null || !Arrays.asList(eventQuery.getFilterCalendarIds()).contains(calEvent.getCalendarId())) {
+        calEvent.setCalType("0") ;
+        events.add(calEvent) ;
+      }
     }
     return events ;
   }
@@ -888,17 +890,19 @@ public class JCRDataStorage{
 
   public List<CalendarEvent> getPublicEvents(SessionProvider sProvider, EventQuery eventQuery) throws Exception {
     Node calendarHome = getPublicCalendarHome(sProvider) ;
+    List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
     eventQuery.setCalendarPath(calendarHome.getPath()) ;
     QueryManager qm = calendarHome.getSession().getWorkspace().getQueryManager() ;
-    List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
     Query query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH) ;
     QueryResult result = query.execute();
     NodeIterator it = result.getNodes();
     CalendarEvent calEvent ;
     while(it.hasNext()) {
       calEvent = getEvent(sProvider, it.nextNode()) ;
-      calEvent.setCalType("2") ;
-      events.add(calEvent) ;
+      if(eventQuery.getFilterCalendarIds()== null || !Arrays.asList(eventQuery.getFilterCalendarIds()).contains(calEvent.getCalendarId())) {
+        calEvent.setCalType("2") ;
+        events.add(calEvent) ;
+      }
     }
     return events ;
   }
@@ -1297,9 +1301,9 @@ public class JCRDataStorage{
       settingNode.setProperty("exo:workingTimeEnd", setting.getWorkingTimeEnd()) ;
     }
     settingNode.setProperty("exo:baseURL", setting.getBaseURL()) ;
-    settingNode.setProperty("exo:defaultPrivateCalendars", setting.getDefaultPrivateCalendars()) ;
-    settingNode.setProperty("exo:defaultPublicCalendars", setting.getDefaultPublicCalendars()) ;
-    settingNode.setProperty("exo:defaultSharedCalendars", setting.getDefaultSharedCalendars()) ;
+    settingNode.setProperty("exo:defaultPrivateCalendars", setting.getFilterPrivateCalendars()) ;
+    settingNode.setProperty("exo:defaultPublicCalendars", setting.getFilterPublicCalendars()) ;
+    settingNode.setProperty("exo:defaultSharedCalendars", setting.getFilterSharedCalendars()) ;
     settingNode.setProperty("exo:sharedCalendarsColors", setting.getSharedCalendarsColors()) ;
   }
   public CalendarSetting getCalendarSetting(SessionProvider sProvider ,String username) throws Exception{
@@ -1331,7 +1335,7 @@ public class JCRDataStorage{
         for(int i = 0; i < values.length; i++) {
           calendars[i] = values[i].getString() ;
         }
-        calendarSetting.setDefaultPrivateCalendars(calendars) ;
+        calendarSetting.setFilterPrivateCalendars(calendars) ;
       }
       if(settingNode.hasProperty("exo:defaultPublicCalendars")){
         Value[] values = settingNode.getProperty("exo:defaultPublicCalendars").getValues() ;
@@ -1339,7 +1343,7 @@ public class JCRDataStorage{
         for(int i = 0; i < values.length; i++) {
           calendars[i] = values[i].getString() ;
         }
-        calendarSetting.setDefaultPublicCalendars(calendars) ;
+        calendarSetting.setFilterPublicCalendars(calendars) ;
       }
 
       if(settingNode.hasProperty("exo:defaultSharedCalendars")){
@@ -1348,7 +1352,7 @@ public class JCRDataStorage{
         for(int i = 0; i < values.length; i++) {
           calendars[i] = values[i].getString() ;
         }
-        calendarSetting.setDefaultSharedCalendars(calendars) ;
+        calendarSetting.setFilterSharedCalendars(calendars) ;
       }
       if(settingNode.hasProperty("exo:sharedCalendarsColors")){
         Value[] values = settingNode.getProperty("exo:sharedCalendarsColors").getValues() ;
@@ -1535,6 +1539,7 @@ public class JCRDataStorage{
     Query query ;
     QueryManager qm ;
     SessionProvider systemSession = SessionProvider.createSystemProvider() ; 
+    CalendarSetting calSetting = getCalendarSetting(sProvider, username)  ;
     // private events
     if(username != null && username.length() > 0) {
       Node calendarHome = getUserCalendarHome(sProvider, username) ;
@@ -1542,7 +1547,7 @@ public class JCRDataStorage{
       qm = calendarHome.getSession().getWorkspace().getQueryManager() ;
       query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH) ;
       NodeIterator it = query.execute().getNodes();   
-      mapData = updateMap(mapData, it, eventQuery.getFromDate(), eventQuery.getToDate()) ;
+      mapData = updateMap(mapData, it, eventQuery.getFromDate(), eventQuery.getToDate(), calSetting.getFilterPrivateCalendars()) ;
     }
     // shared event
     if(getSharedCalendarHome(systemSession).hasNode(username)) {
@@ -1554,7 +1559,7 @@ public class JCRDataStorage{
           qm = calendar.getSession().getWorkspace().getQueryManager() ;
           query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH) ;
           NodeIterator it = query.execute().getNodes();
-          mapData = updateMap(mapData, it, eventQuery.getFromDate(), eventQuery.getToDate()) ;
+          mapData = updateMap(mapData, it, eventQuery.getFromDate(), eventQuery.getToDate(), calSetting.getFilterSharedCalendars()) ;
         }catch(Exception e){
           e.printStackTrace() ;
         }
@@ -1567,38 +1572,40 @@ public class JCRDataStorage{
     eventQuery.setCalendarId(publicCalendarIds) ;
     query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH) ;
     NodeIterator it = query.execute().getNodes();
-    mapData = updateMap(mapData, it, eventQuery.getFromDate(), eventQuery.getToDate()) ;  
+    mapData = updateMap(mapData, it, eventQuery.getFromDate(), eventQuery.getToDate(), calSetting.getFilterPublicCalendars()) ;  
     return mapData ;    
   }
 
 
-  private Map<Integer, String> updateMap(Map<Integer, String> data, NodeIterator it, java.util.Calendar fromDate, java.util.Calendar toDate) throws Exception {
+  private Map<Integer, String> updateMap(Map<Integer, String> data, NodeIterator it, java.util.Calendar fromDate, java.util.Calendar toDate, String[] filterCalIds) throws Exception {
     boolean isVictory = false ;
     while(it.hasNext() && !isVictory) {
       Node eventNode = it.nextNode() ;
-      java.util.Calendar eventFormDate = eventNode.getProperty("exo:fromDateTime").getDate() ;
-      java.util.Calendar eventToDate = eventNode.getProperty("exo:toDateTime").getDate() ;
+      if(filterCalIds == null || !Arrays.asList(filterCalIds).contains(eventNode.getProperty("exo:calendarId").getString())) {
+        java.util.Calendar eventFormDate = eventNode.getProperty("exo:fromDateTime").getDate() ;
+        java.util.Calendar eventToDate = eventNode.getProperty("exo:toDateTime").getDate() ;
 
-      if(eventFormDate.before(fromDate) && eventToDate.after(toDate)) {
-        isVictory = true ;
-        while(toDate.after(fromDate)) {
-          data.put(fromDate.get(java.util.Calendar.DAY_OF_YEAR), VALUE) ;
-          fromDate.add(java.util.Calendar.DATE, 1) ;
-        }
-      } else if(eventFormDate.after(fromDate) && eventToDate.after(toDate)) {
-        while(toDate.after(eventFormDate)) {
-          data.put(eventFormDate.get(java.util.Calendar.DAY_OF_YEAR), VALUE) ;
-          eventFormDate.add(java.util.Calendar.DATE, 1) ;
-        }
-      } else if(eventFormDate.after(fromDate) && eventToDate.before(toDate)) {
-        while (eventToDate.after(eventFormDate)) {
-          data.put(eventFormDate.get(java.util.Calendar.DAY_OF_YEAR), VALUE) ;
-          eventFormDate.add(java.util.Calendar.DATE, 1) ;
-        }
-      } else if(eventFormDate.before(fromDate) && eventToDate.before(toDate)){
-        while(eventToDate.after(fromDate)) {
-          data.put(fromDate.get(java.util.Calendar.DAY_OF_YEAR), VALUE) ;
-          fromDate.add(java.util.Calendar.DATE, 1) ;
+        if(eventFormDate.before(fromDate) && eventToDate.after(toDate)) {
+          isVictory = true ;
+          while(toDate.after(fromDate)) {
+            data.put(fromDate.get(java.util.Calendar.DAY_OF_YEAR), VALUE) ;
+            fromDate.add(java.util.Calendar.DATE, 1) ;
+          }
+        } else if(eventFormDate.after(fromDate) && eventToDate.after(toDate)) {
+          while(toDate.after(eventFormDate)) {
+            data.put(eventFormDate.get(java.util.Calendar.DAY_OF_YEAR), VALUE) ;
+            eventFormDate.add(java.util.Calendar.DATE, 1) ;
+          }
+        } else if(eventFormDate.after(fromDate) && eventToDate.before(toDate)) {
+          while (eventToDate.after(eventFormDate)) {
+            data.put(eventFormDate.get(java.util.Calendar.DAY_OF_YEAR), VALUE) ;
+            eventFormDate.add(java.util.Calendar.DATE, 1) ;
+          }
+        } else if(eventFormDate.before(fromDate) && eventToDate.before(toDate)){
+          while(eventToDate.after(fromDate)) {
+            data.put(fromDate.get(java.util.Calendar.DAY_OF_YEAR), VALUE) ;
+            fromDate.add(java.util.Calendar.DATE, 1) ;
+          }
         }
       }
     }
@@ -1684,7 +1691,7 @@ public class JCRDataStorage{
       PropertyIterator iter = sharedNode.getReferences() ;
       String[] defaultFilterCalendars =  null  ;
       if(getCalendarSetting(sProvider, username) != null) {
-        defaultFilterCalendars = getCalendarSetting(sProvider, username).getDefaultSharedCalendars() ;
+        defaultFilterCalendars = getCalendarSetting(sProvider, username).getFilterSharedCalendars() ;
       }
       while(iter.hasNext()) {
         try{
@@ -1764,8 +1771,10 @@ public class JCRDataStorage{
 
           while(it.hasNext()){
             calEvent = getEvent(sProvider, it.nextNode()) ;
-            calEvent.setCalType("1") ;
-            events.add(calEvent) ;
+            if(eventQuery.getFilterCalendarIds()== null || !Arrays.asList(eventQuery.getFilterCalendarIds()).contains(calEvent.getCalendarId())) {
+              calEvent.setCalType("1") ;
+              events.add(calEvent) ;
+            }
           }
         }catch (Exception e) {
           e.printStackTrace() ;
@@ -1854,24 +1863,17 @@ public class JCRDataStorage{
     }
   } 
 
-  public List<CalendarEvent> getEvent(SessionProvider sProvider, String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception {
+  public List<CalendarEvent> getEvents(SessionProvider sProvider, String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
+    List<String> filterList = new ArrayList<String>() ;
     CalendarSetting calSetting = getCalendarSetting(sProvider, username) ;
-    //user session
-    if(calSetting != null && calSetting.getDefaultPrivateCalendars().length > 0) {
-      eventQuery.setCalendarId(calSetting.getDefaultPrivateCalendars()) ;
-      events.addAll(getUserEvents(sProvider, username, eventQuery)) ;
-    }
-    //system session
-    if(calSetting != null && calSetting.getDefaultSharedCalendars().length > 0) {
-      eventQuery.setCalendarId(calSetting.getDefaultSharedCalendars()) ;
-      events.addAll(getSharedEvents(SessionProvider.createSystemProvider(), username, eventQuery)) ;
-    }
-    if(calSetting != null && calSetting.getDefaultPublicCalendars().length > 0) {
-      eventQuery.setCalendarId(calSetting.getDefaultPublicCalendars()) ;
-      //eventQuery.setCalendarId(publicCalendarIds) ;
-      events.addAll(getPublicEvents(SessionProvider.createSystemProvider(), eventQuery)) ;
-    }
+    filterList.addAll(Arrays.asList(calSetting.getFilterPrivateCalendars())) ;
+    filterList.addAll(Arrays.asList(calSetting.getFilterPublicCalendars())) ;
+    filterList.addAll(Arrays.asList(calSetting.getFilterSharedCalendars())) ;
+    eventQuery.setFilterCalendarIds(filterList.toArray(new String[]{})) ;
+    events.addAll(getUserEvents(sProvider, username, eventQuery)) ;
+    events.addAll(getSharedEvents(SessionProvider.createSystemProvider(), username, eventQuery)) ;
+    events.addAll(getPublicEvents(SessionProvider.createSystemProvider(), eventQuery)) ;
     return events ;
   }
 
