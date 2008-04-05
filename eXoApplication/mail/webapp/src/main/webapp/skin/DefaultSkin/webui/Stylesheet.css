@@ -10,6 +10,8 @@
 @import url("UIAddNewEvent/Stylesheet.css");
 @import url("UIColorPicker/Stylesheet.css");
 @import url("skinIcons/Stylesheet.css");
+@import url("skinIcons/16x16/Stylesheet.css");
+@import url("skinIcons/24x24/Stylesheet.css");
 /**
  * UIMailPortlet
 */
@@ -476,13 +478,13 @@
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageActionsBar .MoreActionsIcon {
 	margin: 1px 0px 0px 10px;
-	line-height: 29px;
+	line-height: 28px;
 	padding-left: 24px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageActionsBar .View {
 	margin: 1px 0px 0px 10px;
-	line-height: 29px;
+	line-height: 28px;
 	padding-left: 24px;
 }
 
@@ -1645,4 +1647,3 @@
 .Violet {background-color: #EE82EE;}    
 .Wheat {background-color: #F5DEB3;}    
 .Yellow {background-color: #FFFF00;} 
-
