@@ -208,8 +208,8 @@ public class CalendarServiceImpl implements CalendarService{
     return storage_.getSharedCalendars(sProvider, username, isShowAll) ;
   }
   
-  public List<CalendarEvent> getEvent(SessionProvider sProvider, String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception{
-    return storage_.getEvent(sProvider, username, eventQuery, publicCalendarIds) ;
+  public List<CalendarEvent> getEvents(SessionProvider sProvider, String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception{
+    return storage_.getEvents(sProvider, username, eventQuery, publicCalendarIds) ;
   }
   
   public void removeSharedCalendar(SessionProvider sProvider, String username, String calendarId) throws Exception {

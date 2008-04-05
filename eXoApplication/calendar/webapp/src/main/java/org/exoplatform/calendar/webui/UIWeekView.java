@@ -101,7 +101,7 @@ public class UIWeekView extends UICalendarView {
     EventQuery eventQuery = new EventQuery() ;
     eventQuery.setFromDate(getBeginDateOfWeek()) ;
     eventQuery.setToDate(getEndDateOfWeek()) ;
-    List<CalendarEvent> allEvents = calendarService.getEvent(getSystemSession(), username, eventQuery, getPublicCalendars())  ;
+    List<CalendarEvent> allEvents = calendarService.getEvents(getSystemSession(), username, eventQuery, getPublicCalendars())  ;
     Iterator iter = allEvents.iterator() ;
     while(iter.hasNext()) {
       CalendarEvent event = (CalendarEvent)iter.next() ;

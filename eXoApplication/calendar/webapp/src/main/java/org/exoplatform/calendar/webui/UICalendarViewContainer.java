@@ -72,7 +72,6 @@ public class UICalendarViewContainer extends UIContainer  {
         UIWeekView uiView = getChild(UIWeekView.class) ;
         if(uiView == null) uiView =  addChild(UIWeekView.class, null, null) ;
         uiView.isShowCustomView_ = false ;
-        System.out.println(calendarSetting.getWeekStartOn());
         uiView.calendarSetting_.setWeekStartOn(calendarSetting.getWeekStartOn()) ;
         //uiView.calendar_.setFirstDayOfWeek(Integer.parseInt(calendarSetting.getWeekStartOn())) ;
         if(getRenderedChild() != null) uiView.setCurrentCalendar(((CalendarView)getRenderedChild()).getCurrentCalendar()) ;

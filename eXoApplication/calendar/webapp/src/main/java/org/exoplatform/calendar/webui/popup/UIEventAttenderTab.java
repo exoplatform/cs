@@ -180,7 +180,7 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
     //return String.valueOf(TimeZone.getTimeZone(getAncestorOfType(UICalendarPortlet.class).getCalendarSetting().getTimeZone()).getRawOffset()) ;
     return CalendarUtils.getTimeZone(getAncestorOfType(UICalendarPortlet.class).getCalendarSetting().getTimeZone()) ;*/
      String timeZone = CalendarUtils.getCalendarService().getCalendarSetting(SessionProviderFactory.createSystemProvider(), username).getTimeZone() ;
-      return CalendarUtils.getTimeZone(timeZone) ;
+     return CalendarUtils.getTimeZone(timeZone) ;
   }
   
   public String getServerTimeZone() {

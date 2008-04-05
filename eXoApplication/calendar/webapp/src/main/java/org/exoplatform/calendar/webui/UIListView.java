@@ -117,7 +117,7 @@ public class UIListView extends UICalendarView {
     if(!getViewType().equals(TYPE_BOTH)) {
       eventQuery.setEventType(getViewType()) ;
     }
-    update(new EventPageList(calendarService.getEvent(getSession(), username, eventQuery, getPublicCalendars()), 10)) ;
+    update(new EventPageList(calendarService.getEvents(getSession(), username, eventQuery, getPublicCalendars()), 10)) ;
     UIFormSelectBox uiCategory = getUIFormSelectBox(EVENT_CATEGORIES) ;
     uiCategory.setValue(categoryId_) ;
     uiCategory.setOnChange("Onchange") ;

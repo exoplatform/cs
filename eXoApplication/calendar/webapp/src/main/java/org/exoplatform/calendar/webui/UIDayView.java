@@ -87,10 +87,11 @@ public class UIDayView extends UICalendarView {
     EventQuery eventQuery = new EventQuery() ;
     eventQuery.setFromDate(begin) ;
     eventQuery.setToDate(end) ;
+    //eventQuery.setFilterCalendarIds(getFilterCalendarIds()) ;
   /*  System.out.println("\n\n " + begin.getTime());
     System.out.println("\n\n " + end.getTime());
     System.out.println("eventQuery " + eventQuery.getQueryStatement());*/
-    events = calendarService.getEvent(getSystemSession(), username, eventQuery, getPublicCalendars()) ;
+    events = calendarService.getEvents(getSystemSession(), username, eventQuery, getPublicCalendars()) ;
     Iterator<CalendarEvent> iter = events.iterator() ;
     while (iter.hasNext()) {
       CalendarEvent ce = iter.next() ;

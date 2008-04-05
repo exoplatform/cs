@@ -20,10 +20,12 @@ import java.text.DateFormat;
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -197,6 +199,40 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       }
       return map.values().toArray(new String[]{}) ;
     }    
+  }
+  public  List<String> getPrivateCalendars() throws Exception{
+    CalendarService calendarService = CalendarUtils.getCalendarService() ;
+    List<String> list = new ArrayList<String>() ;
+    for(org.exoplatform.calendar.service.Calendar c : calendarService.getUserCalendars(SessionProviderFactory.createSessionProvider() , CalendarUtils.getCurrentUser(), true)) {
+      list.add(c.getId()) ;
+    }
+    return list ;
+  }
+
+  public List<String> getSharedCalendars() throws Exception{
+    List<String> list = new ArrayList<String>() ;
+    CalendarService calendarService = CalendarUtils.getCalendarService() ; 
+    GroupCalendarData gcd =  calendarService.getSharedCalendars(SessionProviderFactory.createSystemProvider() , CalendarUtils.getCurrentUser(), true) ;
+   if(gcd != null)
+    for(org.exoplatform.calendar.service.Calendar cal : gcd.getCalendars()) {
+      list.add(cal.getId()) ;
+    }
+    return list ;
+  }
+  public String[] getFilterCalendarIds() throws Exception {
+    List<String> filterList = new ArrayList<String>() ;
+    filterList.addAll(Arrays.asList(getCalendarSetting().getFilterPrivateCalendars())) ;
+    filterList.addAll(Arrays.asList(getCalendarSetting().getFilterPublicCalendars())) ;
+    filterList.addAll(Arrays.asList(getCalendarSetting().getFilterSharedCalendars())) ;
+    List<String> ids = new ArrayList<String>() ;
+    ids.addAll(getPrivateCalendars()) ;
+    ids.addAll(getSharedCalendars()) ;
+    ids.addAll(Arrays.asList(getPublicCalendars())) ;
+    List<String> results = new ArrayList<String>() ;
+    for(String id : ids) {
+      if(!filterList.contains(id))  results.add(id) ;
+    }
+    return filterList.toArray(new String[]{}) ;
   }
   protected List<GroupCalendarData> getPublicCalendars(String username) throws Exception{
     String[] groups = CalendarUtils.getUserGroups(username) ;
@@ -812,7 +848,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       eventQuery.setFromDate(fromcalendar) ;
       java.util.Calendar tocalendar = uiListView.getEndDay(new GregorianCalendar(uiListView.getCurrentYear(), uiListView.getCurrentMonth(), uiListView.getCurrentDay())) ;
       eventQuery.setToDate(tocalendar) ;
-      uiListView.update(new EventPageList(calendarService.getEvent(uiCalendarView.getSystemSession(), username, eventQuery, uiCalendarView.getPublicCalendars()), 10)) ; 
+      uiListView.update(new EventPageList(calendarService.getEvents(uiCalendarView.getSystemSession(), username, eventQuery, uiCalendarView.getPublicCalendars()), 10)) ; 
       uiListView.setShowEventAndTask(false) ;
       uiListView.setDisplaySearchResult(false) ;
       uiListView.isShowEvent_ = false ;

@@ -60,9 +60,9 @@ public class CalendarSetting {
   private String workingTimeEnd  ;
   
   private String[] sharedCalendarsColors ;
-  private String[] defaultPrivateCalendars ;
-  private String[] defaultPublicCalendars ;
-  private String[] defaultSharedCalendars ;
+  private String[] filterPrivateCalendars ;
+  private String[] filterPublicCalendars ;
+  private String[] filterSharedCalendars ;
 
   public CalendarSetting() {
     viewType = DAY_VIEW ;
@@ -73,9 +73,9 @@ public class CalendarSetting {
     isShowWorkingTime = false ;
     timeZone = TimeZone.getDefault().getID() ;
     location = Locale.getDefault().getISO3Country() ;
-    defaultPrivateCalendars = new String[]{} ;
-    defaultPublicCalendars = new String[]{} ;
-    defaultSharedCalendars = new String[]{} ;
+    filterPrivateCalendars = new String[]{} ;
+    filterPublicCalendars = new String[]{} ;
+    filterSharedCalendars = new String[]{} ;
     sharedCalendarsColors = new String[]{} ;
   }
 
@@ -100,11 +100,11 @@ public class CalendarSetting {
   public void setBaseURL(String url) { this.baseURL = url ; }
   public String getBaseURL() { return baseURL ; }
 
-  public void setDefaultPrivateCalendars(String[] defaultCalendars) { this.defaultPrivateCalendars = defaultCalendars ; }
-  public String[] getDefaultPrivateCalendars() { return defaultPrivateCalendars ; }
+  public void setFilterPrivateCalendars(String[] defaultCalendars) { this.filterPrivateCalendars = defaultCalendars ; }
+  public String[] getFilterPrivateCalendars() { return filterPrivateCalendars ; }
 
-  public void setDefaultPublicCalendars(String[] defaultCalendars) { this.defaultPublicCalendars = defaultCalendars ; }
-  public String[] getDefaultPublicCalendars() { return defaultPublicCalendars ; }
+  public void setFilterPublicCalendars(String[] defaultCalendars) { this.filterPublicCalendars = defaultCalendars ; }
+  public String[] getFilterPublicCalendars() { return filterPublicCalendars ; }
 
   public void setShowWorkingTime(boolean isShowWorkingTime) {
     this.isShowWorkingTime = isShowWorkingTime;
@@ -145,11 +145,11 @@ public class CalendarSetting {
   public String[] getSharedCalendarsColors() {
     return sharedCalendarsColors;
   }
-  public void setDefaultSharedCalendars(String[] sharedCalendars) {
-    defaultSharedCalendars = sharedCalendars ;
+  public void setFilterSharedCalendars(String[] sharedCalendars) {
+    filterSharedCalendars = sharedCalendars ;
   }
-  public String[] getDefaultSharedCalendars() {
-    return defaultSharedCalendars ;
+  public String[] getFilterSharedCalendars() {
+    return filterSharedCalendars ;
   }
 }
 
