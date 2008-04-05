@@ -1,17 +1,16 @@
 @import url("UIComposerMessagePopup/Stylesheet.css") ;
 @import url("UIReadMessage/Stylesheet.css") ;
-@import url("UIAccountCreationPopup/Stylesheet.css");
+@import url(UIAccountCreationPopup/Stylesheet.css) ;
 @import url("UIAccountSetting/Stylesheet.css");
 @import url("UIMailSetting/Stylesheet.css");
 @import url("UIInsertAddress/Stylesheet.css");
+@import url("skinIcons/16x16/Stylesheet.css");
+@import url("skinIcons/24x24/Stylesheet.css");
 @import url("UIQuickAddEvent/Stylesheet.css");
 @import url("UIAddMessageFilter/Stylesheet.css");
 @import url("UIMessageFilter/Stylesheet.css");
 @import url("UIAddNewEvent/Stylesheet.css");
 @import url("UIColorPicker/Stylesheet.css");
-@import url("skinIcons/Stylesheet.css");
-@import url("skinIcons/16x16/Stylesheet.css");
-@import url("skinIcons/24x24/Stylesheet.css");
 /**
  * UIMailPortlet
 */
@@ -478,13 +477,13 @@
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageActionsBar .MoreActionsIcon {
 	margin: 1px 0px 0px 10px;
-	line-height: 28px;
+	line-height: 29px;
 	padding-left: 24px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageActionsBar .View {
 	margin: 1px 0px 0px 10px;
-	line-height: 28px;
+	line-height: 29px;
 	padding-left: 24px;
 }
 
@@ -525,6 +524,7 @@
 	border-bottom: 1px solid #e8e8e8;
 	border-right: none;
 	border-left: none;	
+	*width: auto;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIGrid thead {
@@ -555,12 +555,22 @@
 .UIMailPortlet .MailWorkingWorkspace .UIGrid td a {
 	display: block;
 	white-space: nowrap;
+	overflow: hidden ;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIGrid .IconTag {
 	width: 16px;
 	height: 20px;
 	margin-left: 4px;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .UIGrid .ReadItem {
+	white-space: nowrap;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .UIGrid .ReadItem .IconTag {
+	padding-left: 20px;
+	width: auto;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UnStarredIcon {
@@ -1354,7 +1364,7 @@
 
 .UIMailPortlet .UIContactsPopup .RightContacts .ContactContainer {
 	border: 1px solid #ccc;
-		_width: 98%;
+	_width: 98%;
 }
 
 .UIMailPortlet .UIContactsPopup .BoxSearch {
@@ -1647,3 +1657,4 @@
 .Violet {background-color: #EE82EE;}    
 .Wheat {background-color: #F5DEB3;}    
 .Yellow {background-color: #FFFF00;} 
+

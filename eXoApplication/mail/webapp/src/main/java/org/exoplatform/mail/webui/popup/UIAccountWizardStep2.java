@@ -25,6 +25,7 @@ import org.exoplatform.mail.webui.WizardStep;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
+import org.exoplatform.webui.form.validator.EmailAddressValidator;
 
 /**
  * Created by The eXo Platform SARL
@@ -42,12 +43,12 @@ public class UIAccountWizardStep2 extends UIFormInputSet implements WizardStep{
   public boolean isValid_ = false ;
   private List<String> infoMessage_ = new ArrayList<String>() ;
   
-  public UIAccountWizardStep2(String id) {
+  public UIAccountWizardStep2(String id) throws Exception {
     setId(id) ;
     setComponentConfig(getClass(), null) ; 
     addChild(new UIFormStringInput(FIELD_OUTGOINGNAME, null, null)) ;
-    addChild(new UIFormStringInput(FIELD_EMAILADDRESS, null, null)) ;
-    addChild(new UIFormStringInput(FIELD_EMAILREPLY, null, null)) ;
+    addChild(new UIFormStringInput(FIELD_EMAILADDRESS, null, null).addValidator(EmailAddressValidator.class)) ;
+    addChild(new UIFormStringInput(FIELD_EMAILREPLY, null, null).addValidator(EmailAddressValidator.class)) ;
     addChild(new UIFormTextAreaInput(FIELD_SIGNATURE, null, null)) ;
     infoMessage_.clear() ;
     infoMessage_.add("UIAccountWizardStep2.info.label1") ;
