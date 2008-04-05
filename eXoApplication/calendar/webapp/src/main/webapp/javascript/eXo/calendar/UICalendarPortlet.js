@@ -1271,6 +1271,7 @@ UICalendarPortlet.prototype.isAllday = function(form) {
 		}
 		for(var i = 0 ; i < form.elements.length ; i ++) {
 			if(form.elements[i].getAttribute("name") == "allDay") {
+				eXo.calendar.UICalendarPortlet.allDayStatus = form.elements[i] ;
 				eXo.calendar.UICalendarPortlet.showHideTime(form.elements[i]) ;
 				break ;
 			}
@@ -1395,9 +1396,26 @@ UISelection.prototype.clear = function() {
 } ;
 
 // check free/busy time
+
+UICalendarPortlet.prototype.checkAllInBusy = function(chk){
+	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
+	var isChecked = chk.checked ;
+	var timeField = eXo.core.DOMUtil.findFirstDescendantByClass(chk.form, "div", "TimeField") ;
+	if(isChecked) {
+		timeField.style.display = "none" ;
+	}else {
+		timeField.style.display = "block" ;
+	}
+	if (UICalendarPortlet.allDayStatus) {
+		UICalendarPortlet.allDayStatus.checked = isChecked ;
+		UICalendarPortlet.showHideTime(UICalendarPortlet.allDayStatus) ;
+  }
+} ;
+
 UICalendarPortlet.prototype.initCheck = function(container) {
 	var DOMUtil = eXo.core.DOMUtil ;
 	if(typeof(container) == "string") container = document.getElementById(container) ;
+	var dateAll = DOMUtil.findDescendantsByClass(container, "input", "checkbox")[1] ;
   var serverTimezone = parseInt(container.getAttribute("serverTimezone")) ;
 	var table = DOMUtil.findFirstDescendantByClass(container, "table", "UIGrid") ;
 	var tr = DOMUtil.findDescendantsByTagName(table, "tr") ;	
@@ -1407,6 +1425,12 @@ UICalendarPortlet.prototype.initCheck = function(container) {
 	for(var i = 2 ; i < len ; i ++) {
 		this.showBusyTime(tr[i],serverTimezone) ;
 	}
+	if(eXo.calendar.UICalendarPortlet.allDayStatus) dateAll.checked = eXo.calendar.UICalendarPortlet.allDayStatus.checked ;
+	eXo.calendar.UICalendarPortlet.checkAllInBusy(dateAll) ;
+	dateAll.onclick = function() {		
+		eXo.calendar.UICalendarPortlet.checkAllInBusy(this) ;
+	}
+	//eXo.calendar.UICalendarPortlet.dateAll = dateAll ;
 	eXo.calendar.UICalendarPortlet.initSelectionX(firstTr) ;
 } ;
 
