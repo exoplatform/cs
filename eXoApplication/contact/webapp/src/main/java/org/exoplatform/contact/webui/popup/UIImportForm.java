@@ -64,13 +64,15 @@ public class UIImportForm extends UIForm {
   final static public String TYPE = "type".intern() ;
   public static final String INPUT_CATEGORY = "categoryInput";
   public static final String FIELD_CATEGORY = "category";
-  public static String[] Types = null ;
+  
+  //public static String[] Types = null ;
+  private String[] Types = null ;
   private Map<String, String> groups_ = new HashMap<String, String>() ;
   
   // remove later
-  private UploadResource uploadResource_ = null ;
-  private byte[] importBytes_ = null;
-  
+//  private UploadResource uploadResource_ = null ;
+//  private byte[] importBytes_ = null;
+//  
   public UIImportForm() { this.setMultiPart(true) ; }
   
   public void addConponent() throws Exception {
@@ -123,9 +125,9 @@ public class UIImportForm extends UIForm {
     public void execute(Event<UIImportForm> event) throws Exception {
       UIImportForm uiForm = event.getSource() ;
       // added
-      UIFormUploadInput uiformInput = uiForm.getUIInput(FIELD_UPLOAD) ;
+      /*UIFormUploadInput uiformInput = uiForm.getUIInput(FIELD_UPLOAD) ;
       uiForm.uploadResource_ = uiformInput.getUploadResource() ;
-      uiForm.importBytes_ = uiformInput.getUploadData() ;      
+      uiForm.importBytes_ = uiformInput.getUploadData() ;*/      
       UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = uiPopupContainer.getChild(UIPopupAction.class) ;
       uiChildPopup.activate(UICategoryForm.class, 500) ;
@@ -150,14 +152,14 @@ public class UIImportForm extends UIForm {
       ByteArrayInputStream inputStream ;
       String uploadId = uiformInput.getUploadId() ;
       if (uploadResource == null) {
-        if (uiForm.importBytes_ == null) {
-          uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.uploadResource-empty", null, 
-              ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ; 
-        }        
-        uploadResource = uiForm.uploadResource_ ;
-        inputStream = new ByteArrayInputStream(uiForm.importBytes_) ;
+       // if (uiForm.importBytes_ == null) {
+        uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.uploadResource-empty", null, 
+            ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ; 
+       // }        
+//        uploadResource = uiForm.uploadResource_ ;
+//        inputStream = new ByteArrayInputStream(uiForm.importBytes_) ;
       } else {
         byte[] input = new byte[uiformInput.getUploadDataAsStream().available()] ;
         uiformInput.getUploadDataAsStream().read(input) ;
@@ -166,7 +168,7 @@ public class UIImportForm extends UIForm {
       boolean canImport = false ;
       String[] array = uploadResource.getMimeType().split("/") ;
       String extend = array[array.length - 1] ;
-      for(String type : Types) {        
+      for(String type : uiForm.Types) {        
         if (extend.equalsIgnoreCase(type)) canImport = true ;
       }
       if(!canImport) {

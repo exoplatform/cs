@@ -1525,8 +1525,7 @@ public class JCRDataStorage {
       }
     }
     //public contacts
-    Node publicContactHome = getPublicContactHome(SessionProvider.createSystemProvider()) ;
-    //Node publicContactHome = getPublicContactHome(sysProvider) ;  
+    Node publicContactHome = getPublicContactHome(SessionProvider.createSystemProvider()) ; 
     String usersPath = nodeHierarchyCreator_.getJcrPath("usersPath") ;
     filter.setAccountPath(usersPath) ;
     // minus shared contacts
