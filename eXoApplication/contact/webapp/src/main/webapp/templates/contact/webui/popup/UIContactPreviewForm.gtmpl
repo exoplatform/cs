@@ -155,7 +155,7 @@
 											<% if (!ContactUtils.isEmpty(contact.getWebPage())) { %>
 											<div class="InfoItem">
 												<div class="InfoLabel">Web Page:</div>
-												<a href="#"><div class="Info"><%= contact.getWebPage()%></div></a>
+												 <div class="Info"><a target="_blank" href="<%= contact.getWebPage() %>"><%= contact.getWebPage()%></a></div>
 												<div style="clear: left;"><span></span></div>
 											</div>
 											<% } %>													
@@ -289,7 +289,7 @@
 											<% if (!ContactUtils.isEmpty(contact.getPersonalSite())) { %>												
 											<div class="InfoItem">
 												<div class="InfoLabel">Web Page:</div>
-												<a href="#"><div class="Info"><%= contact.getPersonalSite()%></div></a>
+												<div class="Info"><a target="_blank" href="<%= contact.getPersonalSite() %>"><%= contact.getPersonalSite()%></a></div>
 											</div>	
 											<% } %>												
 										</div>

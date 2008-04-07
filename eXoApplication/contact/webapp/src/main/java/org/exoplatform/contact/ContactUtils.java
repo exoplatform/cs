@@ -19,13 +19,11 @@ import javax.jcr.RepositoryException;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.contact.service.ContactService;
-import org.exoplatform.contact.service.Tag;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.impl.GroupImpl;
@@ -39,7 +37,7 @@ import org.exoplatform.webui.core.model.SelectItemOption;
  */
 public class ContactUtils {
   private static String AKONG = "@" ;
-  
+  public static final String HTTP = "http://" ; 
   public static String[] specialString = {"!", "#", "$", "%", "^", "&"
                                             , ":", ">", "<", "~", "`", "]", "'", "/"} ;
   public static String filterString(String text, boolean isEmail) {

@@ -140,28 +140,28 @@ public class ContactFilter {
     if (fullName != null && fullName.trim().length() > 0) {
       if(hasConjuntion) stringBuffer.append(" and (") ;
       else stringBuffer.append("(") ;
-      stringBuffer.append("@exo:fullName='" + fullName + "'") ;
+      stringBuffer.append("jcr:like(@exo:fullName,'%" + fullName + "%')") ;
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }
     if (firstName != null && firstName.trim().length() > 0) {
       if(hasConjuntion) stringBuffer.append(" and (") ;
       else stringBuffer.append("(") ;
-      stringBuffer.append("@exo:firstName='" + firstName + "'") ;
+      stringBuffer.append("jcr:like(@exo:firstName,'%" + firstName + "%')") ;
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }
     if (lastName != null && lastName.trim().length() > 0) {
       if(hasConjuntion) stringBuffer.append(" and (") ;
       else stringBuffer.append("(") ;
-      stringBuffer.append("@exo:lastName='" + lastName + "'") ;
+      stringBuffer.append("jcr:like(@exo:lastName, '%" + lastName + "%')") ;
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }
     if (nickName != null && nickName.trim().length() > 0) {
       if(hasConjuntion) stringBuffer.append(" and (") ;
       else stringBuffer.append("(") ;
-      stringBuffer.append("@exo:nickName='" + nickName + "'") ;
+      stringBuffer.append("jcr:like(@exo:nickName,'%" + nickName + "%')") ;
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }
@@ -175,14 +175,14 @@ public class ContactFilter {
     if (jobTitle != null && jobTitle.trim().length() > 0) {
       if(hasConjuntion) stringBuffer.append(" and (") ;
       else stringBuffer.append("(") ;
-      stringBuffer.append("@exo:jobTitle='" + jobTitle + "'") ;
+      stringBuffer.append("jcr:like(@exo:jobTitle, '%" + jobTitle + "%')") ;
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }
     if (emailAddress != null && emailAddress.trim().length() > 0) {
       if(hasConjuntion) stringBuffer.append(" and (") ;
       else stringBuffer.append("(") ;
-      stringBuffer.append("@exo:emailAddress='" + emailAddress + "'") ;
+      stringBuffer.append("jcr:like(@exo:emailAddress, '%" + emailAddress + "%')") ;
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }

@@ -239,7 +239,9 @@ public class UIContactForm extends UIFormTabPane {
       contact.setWorkPhone2(uiContactForm.getUIStringInput(FIELD_WORKPHONE2_INPUT).getValue());
       contact.setWorkFax(uiContactForm.getUIStringInput(FIELD_WORKFAX_INPUT).getValue());
       contact.setMobilePhone(uiContactForm.getUIStringInput(FIELD_WORKMOBILEPHONE_INPUT).getValue());
-      contact.setWebPage(uiContactForm.getUIStringInput(FIELD_WORKWEBPAGE_INPUT).getValue());
+      String webPage = uiContactForm.getUIStringInput(FIELD_WORKWEBPAGE_INPUT).getValue() ;
+      if (!ContactUtils.isEmpty(webPage) && !webPage.startsWith(ContactUtils.HTTP)) webPage = ContactUtils.HTTP + webPage ;
+      contact.setWebPage(webPage);
     
       contact.setExoId(uiContactForm.getUIStringInput(UIIMContactInputSet.FIELD_EXOCHAT_INPUT).getValue());
       contact.setGoogleId(uiContactForm.getUIStringInput(UIIMContactInputSet.FIELD_GOOGLE_INPUT).getValue());
@@ -258,7 +260,9 @@ public class UIContactForm extends UIFormTabPane {
       contact.setHomePhone1(uiContactForm.getUIStringInput(FIELD_HOMEPHONE1_INPUT).getValue() );
       contact.setHomePhone2(uiContactForm.getUIStringInput(FIELD_HOMEPHONE2_INPUT).getValue());
       contact.setHomeFax(uiContactForm.getUIStringInput(FIELD_HOMEFAX_INPUT).getValue());
-      contact.setPersonalSite(uiContactForm.getUIStringInput(FIELD_PERSONALSITE_INPUT).getValue());
+      String perSite = uiContactForm.getUIStringInput(FIELD_PERSONALSITE_INPUT).getValue() ;
+      if (!ContactUtils.isEmpty(perSite) && !perSite.startsWith(ContactUtils.HTTP)) perSite = ContactUtils.HTTP + perSite ;
+      contact.setPersonalSite(perSite);
       contact.setNote(uiContactForm.getUIFormTextAreaInput(FIELD_NOTE_INPUT).getValue());
       contact.setLastUpdated(new Date()) ;
 
