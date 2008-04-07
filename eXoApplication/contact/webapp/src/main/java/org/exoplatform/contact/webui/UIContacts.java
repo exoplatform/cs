@@ -16,6 +16,7 @@
  */
 package org.exoplatform.contact.webui;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -96,7 +97,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UIContacts.SharedContactsActionListener.class),
         @EventConfig(listeners = UIContacts.CloseSearchActionListener.class),
         @EventConfig(listeners = UIContacts.PrintActionListener.class), 
-        @EventConfig(listeners = UIContacts.ChatActionListener.class),
+//        @EventConfig(listeners = UIContacts.ChatActionListener.class),
         @EventConfig(listeners = UIContacts.PrintDetailsActionListener.class)
     }
 )
@@ -135,6 +136,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       return false ;
     }
   }
+  
   public void setSelectSharedContacts(boolean selected) { isSelectSharedContacts = selected ; }
   public boolean isSelectSharedContacts() { return isSelectSharedContacts ; }
   public boolean havePermission(Contact contact) throws Exception {
@@ -938,7 +940,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
     }
   }
-  
+ /* 
   static  public class ChatActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource() ;
@@ -958,7 +960,14 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       
       try {
         Class im = java.lang.Class.forName("org.exoplatform.services.xmpp.rest.RESTXMPPService") ;
-        im.newInstance() ;
+        
+        System.out.println("\n\n 11:" + im.toString() );
+        
+        for (Constructor c : im.getConstructors()) {
+          System.out.println("\n\n 22:" + c.toString());
+        }
+        
+     
       } catch (ClassNotFoundException e) {
         UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIContacts.msg.chatApp-notAvaiable", null,
@@ -970,7 +979,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       
     }
   }
-  
+  */
   static  public class CancelActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource() ;

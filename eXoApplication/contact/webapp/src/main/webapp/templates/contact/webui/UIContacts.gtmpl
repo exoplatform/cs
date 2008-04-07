@@ -70,7 +70,9 @@
 						<div class="IconHolder MoveIcon"><%=_ctx.appRes(uicomponent.getName() + ".label.move")%></div>
 					</a>					
 					<div class="SeparatorLine"><span></span></div>
-					<a href="<%=uicomponent.event("Chat")%>" class="ControlButton">
+					
+					<!--call javascript here when already-->
+					<a href="#" class="ControlButton">
 						<div class="Icon ChatIcon" title="chat"><span></span></div>
 					</a>
 					<a href="<%=uicomponent.event("Tag")%>" class="ControlButton">
