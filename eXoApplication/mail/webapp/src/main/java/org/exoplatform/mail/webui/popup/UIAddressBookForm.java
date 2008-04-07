@@ -53,7 +53,7 @@ import org.exoplatform.webui.form.UIFormSelectBox;
       @EventConfig(listeners = UIAddressBookForm.EditContactActionListener.class),
       @EventConfig(listeners = UIAddressBookForm.ChangeGroupActionListener.class),
       @EventConfig(listeners = UIAddressBookForm.SelectContactActionListener.class),
-      @EventConfig(listeners = UIAddressBookForm.DeleteContactActionListener.class),
+      @EventConfig(listeners = UIAddressBookForm.DeleteContactActionListener.class, confirm="UIAddressBookForm.msg.confirm-remove-contact"),
       @EventConfig(listeners = UIAddressBookForm.CloseActionListener.class)
     }
 )
