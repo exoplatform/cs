@@ -27,7 +27,7 @@
                     <div class="Label"> Edit Contact </div>
                   </div>
                 </a>
-                <a class="ControlButton" href="<%=uicomponent.event("DeleteContact")%>">
+                <a class="ControlButton" href="<%=uicomponent.event("DeleteContact",uicomponent.id,"id")%>">
                   <div class="IconHolder DeleteContact">
                     <div class="Label">Delete</div>
                   </div>
