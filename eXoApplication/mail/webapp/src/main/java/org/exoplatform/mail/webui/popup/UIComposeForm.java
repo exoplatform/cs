@@ -79,7 +79,9 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
       @EventConfig(listeners = UIComposeForm.ToCCActionListener.class),
       @EventConfig(listeners = UIComposeForm.ToBCCActionListener.class),
       @EventConfig(listeners = UIComposeForm.ChangePriorityActionListener.class),
-      @EventConfig(listeners = UIComposeForm.UseVisualEdiorActionListener.class)
+      @EventConfig(listeners = UIComposeForm.UseVisualEdiorActionListener.class),
+      @EventConfig(listeners = UIComposeForm.ShowCcActionListener.class),
+      @EventConfig(listeners = UIComposeForm.ShowBccActionListener.class)
     }
 )
 public class UIComposeForm extends UIForm implements UIPopupComponent {
@@ -107,6 +109,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   private int composeType_ = MESSAGE_NEW;
   private String accountId_ ;
   public String parentPath_ ;
+  private boolean showCc_ = false ;
+  private boolean showBcc_ = false ;
   
   public List<Contact> toContacts = new ArrayList<Contact>();
   public List<Contact> ccContacts = new ArrayList<Contact>();
@@ -123,8 +127,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     accountId_ = accountId ;
     MailService mailSrv = getApplicationComponent(MailService.class);
     for(Account acc : mailSrv.getAccounts(SessionsUtils.getSessionProvider(), username)) {
-      SelectItemOption<String> itemOption = new SelectItemOption<String>(acc.getUserDisplayName() + " &lt;" + acc.getEmailAddress() + 
-          "&gt;", acc.getUserDisplayName() + "<" + acc.getEmailAddress() + ">");
+      SelectItemOption<String> itemOption = new SelectItemOption<String>(acc.getUserDisplayName() + " &lt;" + acc.getIncomingUser() + "&gt;", acc.getId());
       if (acc.getId().equals(accountId)) { itemOption.setSelected(true); }
       options.add(itemOption) ;
     }
@@ -385,12 +388,15 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
     String usename = uiPortlet.getCurrentUser() ;
     MailService mailSvr = this.getApplicationComponent(MailService.class) ;
-    Account account = mailSvr.getAccountById(SessionsUtils.getSessionProvider(), usename, accountId_);
-    String from = this.getFieldFromValue() ;
+    Account account = mailSvr.getAccountById(SessionsUtils.getSessionProvider(), usename, this.getFieldFromValue());
+    String from = account.getUserDisplayName() + "<" + account.getIncomingUser() + ">" ;
     String subject = this.getFieldSubjectValue() ;
     String to = this.getFieldToValue() ;
+    if (to.indexOf(";") > -1) to = to.replace(';', ',') ;
     String cc = this.getFieldCcValue() ;
+    if (cc != null && cc.indexOf(";") > -1) cc = cc.replace(';', ',') ;
     String bcc = this.getFieldBccValue() ;
+    if (bcc != null && bcc.indexOf(";") > -1) bcc = bcc.replace(';', ',') ;
     String body = this.getFieldContentValue() ;
     Long priority = this.getPriority();
     message.setSendDate(new Date()) ;
@@ -438,11 +444,23 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       UIPopupAction uiChildPopup = uiForm.getAncestorOfType(UIPopupAction.class) ;
       Message message = uiForm.getNewMessage() ; 
       
-      if (Utils.isEmptyField(uiForm.getFieldToValue())) {
+      if (Utils.isEmptyField(message.getMessageTo())) {
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.to-field-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
-      } 
+      } else if (!MailUtils.isValidEmailAddresses(message.getMessageTo())) {
+        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.invalid-to-field", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      } else if (!MailUtils.isValidEmailAddresses(message.getMessageCc())) {
+        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.invalid-cc-field", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      } else if (!MailUtils.isValidEmailAddresses(message.getMessageBcc())) {
+        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.invalid-bcc-field", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       
       try {
 
@@ -563,6 +581,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         }
       }
       uiComposeForm.refreshUploadFileList() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiComposeForm.getParent()) ;
     }
   }
 
@@ -615,6 +634,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       UIComposeForm uiForm = event.getSource() ;
       String priority = event.getRequestContext().getRequestParameter(OBJECTID) ;
       uiForm.setPriority(Long.valueOf(priority)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
     }
   }
   
@@ -637,6 +657,23 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         uiForm.addUIFormInput(textArea) ;
       }
       uiForm.setVisualEditor(isVisualEditor) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
+    }
+  }
+  
+  static public class ShowCcActionListener extends EventListener<UIComposeForm> {
+    public void execute(Event<UIComposeForm> event) throws Exception {
+      UIComposeForm uiForm = event.getSource() ;
+      uiForm.showCc_ = !uiForm.showCc_ ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
+    }
+  }
+  
+  static public class ShowBccActionListener extends EventListener<UIComposeForm> {
+    public void execute(Event<UIComposeForm> event) throws Exception {
+      UIComposeForm uiForm = event.getSource() ;
+      uiForm.showBcc_ = !uiForm.showBcc_ ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
     }
   }
 }

@@ -180,8 +180,9 @@
 	                <td class="FieldLabel">From :&nbsp;&nbsp;</td>
 	                <td class="FieldComponent"><%uicomponent.renderField(uicomponent.FIELD_FROM)%></td>
 	                <td class="FieldCCAndBCC">
-	                  <a  href="javascript:eXo.mail.UIMailPortlet.showHideAddMoreAddress('FIELD_CC')">|Add CC|</a> 
-	                  <a  href="javascript:eXo.mail.UIMailPortlet.showHideAddMoreAddress('FIELD_BCC')">Add BCC|</a>
+	                  <a  href="<%=uicomponent.event("ShowCc")%>">|Add CC|</a> 
+	                  <a  href="<%=uicomponent.event("ShowBcc")%>">Add BCC|</a>
+                    <%// javascript:eXo.mail.UIMailPortlet.showHideAddMoreAddress('FIELD_BCC') %>
 	                </td>
 	              </tr>
 	              <tr>
@@ -190,19 +191,28 @@
 	                  <%uicomponent.renderField(uicomponent.FIELD_TO)%> 
 	                </td>
 	              </tr>
-	
-	              <tr id="FIELD_CC" style="display:none">
-	                <td class="FieldLabel"><a href="<%=uicomponent.event("ToCC")%>">Cc</a> :&nbsp;&nbsp;</td>
-	                <td class="FieldComponent" colspan="2">
-	                  <%uicomponent.renderField(uicomponent.FIELD_CC)%> 
-	                </td>
-	              </tr>
-	              <tr id="FIELD_BCC" style="display:none">
-	                <td class="FieldLabel"><a href="<%=uicomponent.event("ToBCC")%>">Bcc</a> :&nbsp;&nbsp;</td>
-	                <td class="FieldComponent" colspan="2">
-	                  <%uicomponent.renderField(uicomponent.FIELD_BCC)%> 
-	                </td>
-	              </tr>
+	              <%
+                  if (uicomponent.showCc_) {
+                %>
+  	              <tr id="FIELD_CC">
+  	                <td class="FieldLabel"><a href="<%=uicomponent.event("ToCC")%>">Cc</a> :&nbsp;&nbsp;</td>
+  	                <td class="FieldComponent" colspan="2">
+  	                  <%uicomponent.renderField(uicomponent.FIELD_CC)%> 
+  	                </td>
+  	              </tr>
+	              <%
+                  }
+                  if (uicomponent.showBcc_) {
+                %>
+                  <tr id="FIELD_BCC">
+  	                <td class="FieldLabel"><a href="<%=uicomponent.event("ToBCC")%>">Bcc</a> :&nbsp;&nbsp;</td>
+  	                <td class="FieldComponent" colspan="2">
+  	                  <%uicomponent.renderField(uicomponent.FIELD_BCC)%> 
+  	                </td>
+  	              </tr>
+                <%
+                  }
+                %>
 	              <tr>
 	                <td class="FieldLabel">Subject :&nbsp;&nbsp;</td>
 	                <td class="FieldComponent" colspan="2" style="padding:4px;">
