@@ -20,8 +20,8 @@ import javax.jcr.RepositoryException;
 
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventCategory;
-import org.exoplatform.mail.webui.popup.UIEventForm;
 import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.CalendarUtils;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -37,7 +37,6 @@ import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
-import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 /**
  * Created by The eXo Platform SARL
@@ -60,8 +59,7 @@ public class UIEventCategoryForm extends UIForm {
   private boolean isAddNew_ = true ;
   private EventCategory eventCategory_ = null ;
   public UIEventCategoryForm() throws Exception{
-    addUIFormInput(new UIFormStringInput(EVENT_CATEGORY_NAME, EVENT_CATEGORY_NAME, null)
-    .addValidator(MandatoryValidator.class)) ;
+    addUIFormInput(new UIFormStringInput(EVENT_CATEGORY_NAME, EVENT_CATEGORY_NAME, null)) ;
     addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, null)) ;
   }
   protected String getCategoryName() {return getUIStringInput(EVENT_CATEGORY_NAME).getValue() ;}
@@ -97,6 +95,11 @@ public class UIEventCategoryForm extends UIForm {
       UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
       UIEventForm uiEventForm = uiPortlet.findFirstComponentOfType(UIEventForm.class) ;
       String name = uiForm.getUIStringInput(UIEventCategoryForm.EVENT_CATEGORY_NAME).getValue() ;
+      if(Utils.isEmptyField(name)) {
+        uiApp.addMessage(new ApplicationMessage("UIEventCategoryForm.msg.name-required", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       if(!MailUtils.isNameValid(name, MailUtils.SPECIALCHARACTER)) {
         uiApp.addMessage(new ApplicationMessage("UIEventCategoryForm.msg.name-invalid", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ; 
