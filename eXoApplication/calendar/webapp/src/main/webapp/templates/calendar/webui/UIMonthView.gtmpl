@@ -10,7 +10,7 @@
 	def rcontext = _ctx.getRequestContext() ;
   rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarDragDrop','/calendar/javascript/') ;
   rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarMan','/calendar/javascript/') ;
-  rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.UICalendarPortlet.checkFilter() ;') ;
+  rcontext.getJavascriptManager().addOnLoadJavascript('eXo.calendar.UICalendarPortlet.onLoad') ;
 //  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkFilter() ;') ;
  	int currentDay = uicomponent.getCurrentDay() ;
 	int currentMonth = uicomponent.getCurrentMonth() ;
@@ -82,40 +82,8 @@
 	  			%>			
   				<div style="clear: left;"><span></span></div>
   			</div>
-				<div class="RowContainerDay" style="position:relative;" onresize="eXo.calendar.UICalendarMan.initMonth() ;" lastUpdatedId="<%=uicomponent.getLastUpdatedEventId()%>">
-				<%
-					startMonh =  uicomponent.getBeginDateOfMonth() ;
-					endMonth =  uicomponent.getEndDateOfMonth() ;					
-					eventList = uicomponent.getDataMap().values() ;
-					for(event in eventList){
-					startTime = event.fromDateTime.getTime() ;
-					endTime = event.toDateTime.getTime() ;
-					startIndex = 0;
-					endIndex = uicomponent.getCurrentCalendar().getMaximum(Calendar.WEEK_OF_MONTH) ;
-					if(event.fromDateTime.after(startMonh.getTime()) || event.fromDateTime.equals(startMonh.getTime())) {
-						Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
-						cal.setTime(event.fromDateTime) ;
-						startIndex = cal.get(Calendar.WEEK_OF_MONTH) ;
-					}
-					color = uicomponent.getColors().get(event.calType +CalendarUtils.COLON+ event.calendarId) ;
-					%>
-					<div class="DayContentContainer EventBoxes" style="position: absolute ;" startIndex="$startIndex" calType="$event.calType" eventId="$event.id" calId="$event.calendarId" eventCat="$event.eventCategoryId" 
-					startTimeFull="<%=tempFormat.format(event.getFromDateTime())%>" endTimeFull="<%=tempFormat.format(event.getToDateTime())%>"
-					startTime="$startTime" endTime="$endTime" >
-						<div class="EventOnDayBorder $color">
-							<div class="EventOnDayContent">
-								<div style="float:left;margin-left:2px;">
-									<%uicomponent.renderField(uicomponent.getChildById(event.id))%>
-								</div>
-								<div>
-									<div class="<%=(uicomponent.getPriority(event.getPriority()) == null)? "" :  uicomponent.getPriority(event.getPriority())%>PriorityIcon" style="float:left;"><span></span></div>
-									<div class="EventLabel" style="line-height: 17px;height:17px;">$event.summary</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<%
-					}%>
+				<div class="RowContainerDay" style="position:relative ;"  onresize="eXo.calendar.UICalendarMan.initMonth() ;" lastUpdatedId="<%=uicomponent.getLastUpdatedEventId()%>">
+					
 			<table class="UIGrid" id="UIMonthViewGrid" cellspacing="0" borderspacing="0" eXoCallback="eXo.calendar.UICalendarMan.GUIMan.callbackHighlighter() ;">
 				<col width="14%"><col width="14%"><col width="14%"><col width="14%"><col width="14%"><col width="14%"><col width="14%">
 				<tbody>
@@ -182,6 +150,39 @@
 					%>
 				</tbody>
 			</table>
+			<%
+					startMonh =  uicomponent.getBeginDateOfMonth() ;
+					endMonth =  uicomponent.getEndDateOfMonth() ;					
+					eventList = uicomponent.getDataMap().values() ;
+					for(event in eventList){
+					startTime = event.fromDateTime.getTime() ;
+					endTime = event.toDateTime.getTime() ;
+					startIndex = 0;
+					endIndex = uicomponent.getCurrentCalendar().getMaximum(Calendar.WEEK_OF_MONTH) ;
+					if(event.fromDateTime.after(startMonh.getTime()) || event.fromDateTime.equals(startMonh.getTime())) {
+						Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
+						cal.setTime(event.fromDateTime) ;
+						startIndex = cal.get(Calendar.WEEK_OF_MONTH) ;
+					}
+					color = uicomponent.getColors().get(event.calType +CalendarUtils.COLON+ event.calendarId) ;
+					%>
+					<div class="DayContentContainer EventBoxes" style="position: absolute ;" startIndex="$startIndex" calType="$event.calType" eventId="$event.id" calId="$event.calendarId" eventCat="$event.eventCategoryId" 
+					startTimeFull="<%=tempFormat.format(event.getFromDateTime())%>" endTimeFull="<%=tempFormat.format(event.getToDateTime())%>"
+					startTime="$startTime" endTime="$endTime" >
+						<div class="EventOnDayBorder $color">
+							<div class="EventOnDayContent">
+								<div style="float:left;margin-left:2px;">
+									<%uicomponent.renderField(uicomponent.getChildById(event.id))%>
+								</div>
+								<div>
+									<div class="<%=(uicomponent.getPriority(event.getPriority()) == null)? "" :  uicomponent.getPriority(event.getPriority())%>PriorityIcon" style="float:left;"><span></span></div>
+									<div class="EventLabel" style="line-height: 17px;height:17px;">$event.summary</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<%
+					}%>	
 		</div>
 			</div>
 		</div>

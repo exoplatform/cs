@@ -125,7 +125,8 @@ UICalendarDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj,
   
   EventMonthContentNode.appendChild(tmpNode);
   UIMonthViewNode.appendChild(EventMonthContentNode);
-  document.body.appendChild(UIMonthViewNode);
+  if (document.getElementById("UIPageDesktop")) document.body.appendChild(UIMonthViewNode);
+	else document.getElementById("UIMonthView").appendChild(UIMonthViewNode);
   
   this.DragDrop.initCallback = this.initCallback ;
   this.DragDrop.dragCallback = this.dragCallback ;

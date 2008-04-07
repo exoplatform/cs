@@ -566,7 +566,11 @@ UICalendarPortlet.prototype.showEvent = function() {
 } ;
 
 UICalendarPortlet.prototype.onLoad = function(){
-	window.setTimeout("eXo.calendar.UICalendarPortlet.checkFilter() ;", 500)  ;
+	if(eXo.core.Browser.isFF()) {
+		window.setTimeout("eXo.calendar.UICalendarPortlet.checkFilter() ;", 1000) ;
+		return ;
+	}
+	eXo.calendar.UICalendarPortlet.checkFilter() ;	
 };
 
 UICalendarPortlet.prototype.browserResizeCallback = function() {
