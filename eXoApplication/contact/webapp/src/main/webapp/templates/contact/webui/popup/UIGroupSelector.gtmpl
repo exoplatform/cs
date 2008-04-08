@@ -24,7 +24,7 @@
       <div class="OverflowContainer">
 	      <%                
 	      boolean even = true ;
-	      if(uicomponent.getCurrentGroup() != null) {
+	      if(uicomponent.selectedChildGroup == null && uicomponent.getCurrentGroup() != null) {
 		      for(user in uicomponent.getList()){
 		        String rowCssClass = "OddRow" ;
 		        if(even) rowCssClass = "EvenRow" ;  
@@ -43,8 +43,18 @@
 			        	<a href="<%=uicomponent.event('SelectMembership',key)%>">$user</a>	
 			        	<div style="clear: left"><span></span></div>								           
 			      </div>
-	      <%}
-	      }%>
+	      <%
+	      	}
+	      } else if (uicomponent.selectedChildGroup != null ) { 
+	      	String group = uicomponent.selectedChildGroup ;	      
+	      %>
+      		<div class="OddRow">
+			        <div class="ItemIcon"><span></span></div>
+			        	<a href="<%=uicomponent.event('SelectMembership',group)%>">$group</a>	
+			        	<div style="clear: left"><span></span></div>								           
+			      </div>
+      	
+      	<% } %>
       </div>
 	  </div>
 		<div style="clear: left"><span></span></div>
