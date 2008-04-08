@@ -209,7 +209,7 @@
   						<div class="$calendar.calendarColor">
   							<div class="CheckBox"><%uiform.renderField(calendar.getId())%></div>
   							<div class="CalendarIcon"><a><%=calendar.getName()%></a></div>
-  							<div class="DownArrow1Icon" calColor="$calendar.calendarColor" id="$calId" calType="2" title="<%=uiform.getLabel("calendarActions")%>" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
+  							<div class="DownArrow1Icon" calColor="$calendar.calendarColor" canEdit="<%=uicomponent.canEdit(calendar.getEditPermission())%>" id="$calId" calType="2" title="<%=uiform.getLabel("calendarActions")%>" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
   							<div style="clear: both"><span></span></div>
   						</div>
   					</div>

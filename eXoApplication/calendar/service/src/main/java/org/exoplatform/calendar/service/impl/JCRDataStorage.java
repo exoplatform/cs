@@ -367,6 +367,9 @@ public class JCRDataStorage{
     calendarNode.setProperty("exo:categoryId", calendar.getCategoryId()) ;
     calendarNode.setProperty("exo:viewPermissions", calendar.getViewPermission()) ;
     calendarNode.setProperty("exo:editPermissions", calendar.getEditPermission()) ;
+    calendarNode.setProperty("exo:locale", calendar.getLocale()) ;
+    calendarNode.setProperty("exo:timeZone", calendar.getTimeZone()) ;
+    calendarNode.setProperty("exo:calendarOwner", calendar.getCalendarOwner()) ;
     calendarNode.setProperty("exo:groups", calendar.getGroups()) ;
     calendarNode.setProperty("exo:calendarColor", calendar.getCalendarColor()) ;
     //  Check to save group
@@ -822,10 +825,10 @@ public class JCRDataStorage{
     CalendarEvent calEvent ;
     while(it.hasNext()) {
       calEvent = getEvent(sProvider, it.nextNode()) ;
-      if(eventQuery.getFilterCalendarIds()== null || !Arrays.asList(eventQuery.getFilterCalendarIds()).contains(calEvent.getCalendarId())) {
+     // if(eventQuery.getFilterCalendarIds()== null || !Arrays.asList(eventQuery.getFilterCalendarIds()).contains(calEvent.getCalendarId())) {
         calEvent.setCalType("0") ;
         events.add(calEvent) ;
-      }
+     // }
     }
     return events ;
   }
@@ -899,10 +902,10 @@ public class JCRDataStorage{
     CalendarEvent calEvent ;
     while(it.hasNext()) {
       calEvent = getEvent(sProvider, it.nextNode()) ;
-      if(eventQuery.getFilterCalendarIds()== null || !Arrays.asList(eventQuery.getFilterCalendarIds()).contains(calEvent.getCalendarId())) {
+      //if(eventQuery.getFilterCalendarIds()== null || !Arrays.asList(eventQuery.getFilterCalendarIds()).contains(calEvent.getCalendarId())) {
         calEvent.setCalType("2") ;
         events.add(calEvent) ;
-      }
+      //}
     }
     return events ;
   }
@@ -1771,10 +1774,10 @@ public class JCRDataStorage{
 
           while(it.hasNext()){
             calEvent = getEvent(sProvider, it.nextNode()) ;
-            if(eventQuery.getFilterCalendarIds()== null || !Arrays.asList(eventQuery.getFilterCalendarIds()).contains(calEvent.getCalendarId())) {
+            //if(eventQuery.getFilterCalendarIds()== null || !Arrays.asList(eventQuery.getFilterCalendarIds()).contains(calEvent.getCalendarId())) {
               calEvent.setCalType("1") ;
               events.add(calEvent) ;
-            }
+            //}
           }
         }catch (Exception e) {
           e.printStackTrace() ;

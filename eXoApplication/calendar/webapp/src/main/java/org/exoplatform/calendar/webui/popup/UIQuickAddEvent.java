@@ -32,6 +32,7 @@ import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.webui.CalendarView;
+import org.exoplatform.calendar.webui.SelectItem;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UIFormComboBox;
@@ -99,7 +100,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     addUIFormInput(new UIFormComboBox(FIELD_FROM_TIME, FIELD_FROM_TIME, options));
     addUIFormInput(new UIFormComboBox(FIELD_TO_TIME, FIELD_TO_TIME, options));
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_ALLDAY, FIELD_ALLDAY, false));
-    addUIFormInput(new UIFormSelectBox(FIELD_CALENDAR, FIELD_CALENDAR, null)) ;
+    addUIFormInput(new org.exoplatform.calendar.webui.UIFormSelectBox(FIELD_CALENDAR, FIELD_CALENDAR, null)) ;
     addUIFormInput(new UIFormSelectBox(FIELD_CATEGORY, FIELD_CATEGORY, UIEventForm.getCategory())) ;
   }
 
@@ -187,7 +188,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     }
   }
 
-  public List<SelectItemOption<String>> getCalendars() throws Exception {
+  public List<SelectItem> getCalendars() throws Exception {
     return CalendarUtils.getCalendarOption() ;
   }
   
@@ -208,7 +209,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     return getUIFormCheckBoxInput(FIELD_ALLDAY).isChecked() ;
   }
   private String getEventCalendar() {
-    String values = getUIFormSelectBox(FIELD_CALENDAR).getValue() ;
+    String values = getUIFormSelectBoxGroup(FIELD_CALENDAR).getValue() ;
     if(values != null && values.trim().length() > 0 && values.split(CalendarUtils.COLON).length > 0) {
       calType_ = values.split(CalendarUtils.COLON)[0] ;
       return values.split(CalendarUtils.COLON)[1] ;
@@ -218,7 +219,10 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   }
   public void setSelectedCalendar(String value) {
     value = calType_ + CalendarUtils.COLON + value ;
-    getUIFormSelectBox(FIELD_CALENDAR).setValue(value) ;
+    getUIFormSelectBoxGroup(FIELD_CALENDAR).setValue(value) ;
+  }
+  public org.exoplatform.calendar.webui.UIFormSelectBox getUIFormSelectBoxGroup(String id) {
+  	return findComponentById(id) ;
   }
   public void setSelectedCategory(String value) {getUIFormSelectBox(FIELD_CATEGORY).setValue(value) ;}
   private String getEventCategory() {return getUIFormSelectBox(FIELD_CATEGORY).getValue() ;}
@@ -227,11 +231,11 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   public void setEvent(boolean isEvent) { isEvent_ = isEvent ; }
   public boolean isEvent() { return isEvent_ ; }
 
-  public void update(String calType, List<SelectItemOption<String>> options) throws Exception{
+  public void update(String calType, List<SelectItem> options) throws Exception{
     if(options != null) {
-      getUIFormSelectBox(FIELD_CALENDAR).setOptions(options) ;
+      getUIFormSelectBoxGroup(FIELD_CALENDAR).setOptions(options) ;
     }else {
-      getUIFormSelectBox(FIELD_CALENDAR).setOptions(getCalendars()) ;
+      getUIFormSelectBoxGroup(FIELD_CALENDAR).setOptions(getCalendars()) ;
     } 
     calType_ = calType ;
   }
@@ -332,7 +336,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         UIPopupContainer uiPouContainer = uiPopupAction.activate(UIPopupContainer.class, 700) ;
         uiPouContainer.setId(UIPopupContainer.UIEVENTPOPUP) ;
         UIEventForm uiEventForm = uiPouContainer.addChild(UIEventForm.class, null, null) ;
-        uiEventForm.update(uiForm.calType_, uiForm.getUIFormSelectBox(FIELD_CALENDAR).getOptions()) ;
+        uiEventForm.update(uiForm.calType_, uiForm.getUIFormSelectBoxGroup(FIELD_CALENDAR).getOptions()) ;
         uiEventForm.initForm(calendarSetting, null, null) ;
         uiEventForm.setEventSumary(uiForm.getEventSummary()) ;
         uiEventForm.setEventDescription(uiForm.getEventDescription()) ;
@@ -346,7 +350,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         UIPopupContainer uiPouContainer  = uiPopupAction.activate(UIPopupContainer.class, 700) ;
         uiPouContainer.setId(UIPopupContainer.UITASKPOPUP) ;
         UITaskForm uiTaskForm = uiPouContainer.addChild(UITaskForm.class, null, null) ;
-        uiTaskForm.update(uiForm.calType_, uiForm.getUIFormSelectBox(FIELD_CALENDAR).getOptions()) ;
+        uiTaskForm.update(uiForm.calType_, uiForm.getUIFormSelectBoxGroup(FIELD_CALENDAR).getOptions()) ;
         uiTaskForm.initForm(calendarSetting, null, null) ;
         uiTaskForm.setEventSumary(uiForm.getEventSummary()) ;
         uiTaskForm.setEventDescription(uiForm.getEventDescription()) ;
