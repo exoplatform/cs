@@ -33,6 +33,7 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIBreadcumbs;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UITree;
+import org.exoplatform.webui.core.UIBreadcumbs.LocalPath;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.organization.UIGroupMembershipSelector;
@@ -68,6 +69,7 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
   private UIComponent uiComponent ;
   private String type_ = null ;
   private List selectedGroup_ ;
+  public String selectedChildGroup = null ;
   private String returnFieldName = null ;
 
   public UIGroupSelector() throws Exception {}
@@ -163,12 +165,36 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
     }
   }
 
+  private List<LocalPath> getPath(List<LocalPath> list, String id) throws Exception {
+    if(list == null) list = new ArrayList<LocalPath>(5);
+    if(id == null) return list;
+    OrganizationService service = getApplicationComponent(OrganizationService.class) ;
+    Group group = service.getGroupHandler().findGroupById(id);
+    if(group == null) return list;
+    list.add(0, new LocalPath(group.getId(), group.getGroupName())); 
+    getPath(list, group.getParentId());
+    return list ;
+  }
+  
   static  public class ChangeNodeActionListener extends EventListener<UITree> {   
     public void execute(Event<UITree> event) throws Exception {
       UIGroupSelector uiGroupSelector = event.getSource().getAncestorOfType(UIGroupSelector.class) ;
-      String groupId = event.getRequestContext().getRequestParameter(OBJECTID) ;        
-      uiGroupSelector.changeGroup(groupId) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiGroupSelector) ;   
+      String groupId = event.getRequestContext().getRequestParameter(OBJECTID) ;      
+      OrganizationService service = uiGroupSelector.getApplicationComponent(OrganizationService.class) ;
+      Group group = service.getGroupHandler().findGroupById(groupId) ;
+      if (service.getGroupHandler().findGroups(group).size() > 0 || !uiGroupSelector.isSelectGroup()) {
+        uiGroupSelector.changeGroup(groupId) ;
+        uiGroupSelector.selectedChildGroup = null ;  
+      } else {
+        uiGroupSelector.selectedChildGroup = groupId ;
+        UIBreadcumbs uiBreadcumb = uiGroupSelector.getChild(UIBreadcumbs.class);
+        uiBreadcumb.setPath(uiGroupSelector.getPath(null, groupId)) ;        
+        UITree tree = uiGroupSelector.getChild(UITree.class);
+        tree.setSelected(group) ;
+        tree.setSibbling((List)service.getGroupHandler().findGroups(service.getGroupHandler().findGroupById(group.getParentId())));
+        tree.setChildren(null) ;
+      }
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiGroupSelector) ;
     }
   }
 
