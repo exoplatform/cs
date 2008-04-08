@@ -81,7 +81,7 @@ public class UITaskDetailTab extends UIFormInputWithActions {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     addUIFormInput(new UIFormStringInput(FIELD_EVENT, FIELD_EVENT, null)) ;
     addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION, FIELD_DESCRIPTION, null)) ;
-    addUIFormInput(new UIFormSelectBox(FIELD_CALENDAR, FIELD_CALENDAR, null)) ;
+    addUIFormInput(new org.exoplatform.calendar.webui.UIFormSelectBox(FIELD_CALENDAR, FIELD_CALENDAR, null)) ;
     addUIFormInput(new UIFormSelectBox(FIELD_CATEGORY, FIELD_CATEGORY, UIEventForm.getCategory())) ;
     addUIFormInput(new UIFormSelectBox(FIELD_STATUS, FIELD_STATUS, getStatus())) ;
 
@@ -218,5 +218,9 @@ public class UITaskDetailTab extends UIFormInputWithActions {
     // TODO Auto-generated method stub
     return findComponentById(id);
   }  
+  
+  public org.exoplatform.calendar.webui.UIFormSelectBox getUIFormSelectBoxGroup(String id) {
+    return findComponentById(id);
+  }
   
 }

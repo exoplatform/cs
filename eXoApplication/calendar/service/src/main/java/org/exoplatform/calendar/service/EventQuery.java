@@ -142,7 +142,7 @@ public class EventQuery {
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }
-    /*if(filterCalendarIds != null && filterCalendarIds.length > 0) {
+    if(filterCalendarIds != null && filterCalendarIds.length > 0) {
       if(hasConjuntion) stringBuffer.append(" and (") ;
       else stringBuffer.append("(") ;
       for(int i = 0; i < filterCalendarIds.length; i ++) {
@@ -151,7 +151,7 @@ public class EventQuery {
       }
       stringBuffer.append(")") ;
       hasConjuntion = true ;
-    }*/
+    }
     // desclared participants query
     if(participants != null && participants.length > 0) {
       if(hasConjuntion) stringBuffer.append(" and (") ;

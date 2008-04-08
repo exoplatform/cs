@@ -282,6 +282,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       /*for(String id : unCheckList) {
         if(uiCalendars.getUIFormCheckBoxInput(id) != null)  uiCalendars.getUIFormCheckBoxInput(id).setChecked(true) ;
       }*/
+      uiCalendars.checkAll() ;
       calendarService.saveCalendarSetting(uiForm.getSession(), event.getRequestContext().getRemoteUser(), calendarSetting) ;
       calendarPortlet.setCalendarSetting(calendarSetting) ;
       String viewType = UICalendarViewContainer.TYPES[Integer.parseInt(calendarSetting.getViewType())] ;

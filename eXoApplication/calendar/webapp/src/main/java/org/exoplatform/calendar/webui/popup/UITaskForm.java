@@ -33,6 +33,7 @@ import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.webui.CalendarView;
+import org.exoplatform.calendar.webui.SelectItem;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UIFormComboBox;
@@ -263,24 +264,24 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     return true ;
   }
   protected String getEventSumary() {
-    UIFormInputWithActions taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
+    UITaskDetailTab taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
     return taskDetailTab.getUIStringInput(UITaskDetailTab.FIELD_EVENT).getValue() ;
   }
   protected void setEventSumary(String value) {
-    UIFormInputWithActions taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
+  	UITaskDetailTab taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
     taskDetailTab.getUIStringInput(UITaskDetailTab.FIELD_EVENT).setValue(value) ;
   }
   protected String getEventDescription() {
-    UIFormInputWithActions taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
+  	UITaskDetailTab taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
     return taskDetailTab.getUIFormTextAreaInput(UITaskDetailTab.FIELD_DESCRIPTION).getValue() ;
   }
   protected void setEventDescription(String value) {
-    UIFormInputWithActions taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
+  	UITaskDetailTab taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
     taskDetailTab.getUIFormTextAreaInput(UITaskDetailTab.FIELD_DESCRIPTION).setValue(value) ;
   }
   protected String getCalendarId() {
-    UIFormInputWithActions taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
-    String value = taskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_CALENDAR).getValue() ;
+  	UITaskDetailTab taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
+    String value = taskDetailTab.getUIFormSelectBoxGroup(UITaskDetailTab.FIELD_CALENDAR).getValue() ;
     if(oldCalendarId_ != null) newCalendarId_ = value ;
     if(value != null && value.trim().length() > 0 && value.split(CalendarUtils.COLON).length > 0) {
       calType_ = value.split(CalendarUtils.COLON)[0] ;
@@ -289,9 +290,9 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     return null ;
   }
   public void setSelectedCalendarId(String value) {
-    UIFormInputWithActions taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
+  	UITaskDetailTab taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
     value = calType_ + CalendarUtils.COLON + value ;
-    taskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_CALENDAR).setValue(value) ;
+    taskDetailTab.getUIFormSelectBoxGroup(UITaskDetailTab.FIELD_CALENDAR).setValue(value) ;
   }
 
   protected String getEventCategory() {
@@ -508,17 +509,17 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_PRIORITY).setValue(value) ;
   }
 
-  public void update(String calType, List<SelectItemOption<String>> options) throws Exception{
+  public void update(String calType, List<SelectItem> options) throws Exception{
     UITaskDetailTab uiTaskDetailTab = getChildById(TAB_TASKDETAIL) ;
     if(options != null) {
-      uiTaskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_CALENDAR).setOptions(options) ;
+      uiTaskDetailTab.getUIFormSelectBoxGroup(UITaskDetailTab.FIELD_CALENDAR).setOptions(options) ;
     }else {
-      uiTaskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_CALENDAR).setOptions(getCalendars()) ;
+      uiTaskDetailTab.getUIFormSelectBoxGroup(UITaskDetailTab.FIELD_CALENDAR).setOptions(getCalendars()) ;
     }
     calType_ = calType ;
   }
 
-  private List<SelectItemOption<String>> getCalendars() throws Exception {
+  private List<SelectItem> getCalendars() throws Exception {
     return CalendarUtils.getCalendarOption() ;
   }
 

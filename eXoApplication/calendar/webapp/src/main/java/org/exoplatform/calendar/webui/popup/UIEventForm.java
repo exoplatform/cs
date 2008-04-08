@@ -16,9 +16,7 @@
  **/
 package org.exoplatform.calendar.webui.popup;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -38,6 +36,7 @@ import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.service.impl.CalendarServiceImpl;
 import org.exoplatform.calendar.webui.CalendarView;
+import org.exoplatform.calendar.webui.SelectItem;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UIFormComboBox;
@@ -69,8 +68,6 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormTabPane;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
-
-import com.sun.xml.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 /**
  * Created by The eXo Platform SARL
@@ -257,16 +254,16 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     uiAttenderTab.calendar_.setTime(time) ;
   }
 
-  public void update(String calType, List<SelectItemOption<String>> options) throws Exception{
+  public void update(String calType, List<SelectItem> options) throws Exception{
     UIEventDetailTab uiEventDetailTab = getChildById(TAB_EVENTDETAIL) ;
     if(options != null) {
-      uiEventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CALENDAR).setOptions(options) ;
+      uiEventDetailTab.getUIFormSelectBoxGroup(UIEventDetailTab.FIELD_CALENDAR).setOptions(options) ;
     }else {
-      uiEventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CALENDAR).setOptions(getCalendars()) ;
+      uiEventDetailTab.getUIFormSelectBoxGroup(UIEventDetailTab.FIELD_CALENDAR).setOptions(getCalendars()) ;
     }
     calType_ = calType ;
   }
-  private List<SelectItemOption<String>> getCalendars() throws Exception {
+  private List<SelectItem> getCalendars() throws Exception {
     return CalendarUtils.getCalendarOption() ;
   }
 
@@ -370,24 +367,24 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     return true ;
   }
   protected String getEventSumary() {
-    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
+    UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     return eventDetailTab.getUIStringInput(UIEventDetailTab.FIELD_EVENT).getValue() ;
   }
   protected void setEventSumary(String value) {
-    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
+  	UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     eventDetailTab.getUIStringInput(UIEventDetailTab.FIELD_EVENT).setValue(value) ;
   }
   protected String getEventDescription() {
-    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
+  	UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     return eventDetailTab.getUIFormTextAreaInput(UIEventDetailTab.FIELD_DESCRIPTION).getValue() ;
   }
   protected void setEventDescription(String value) {
-    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
+  	UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     eventDetailTab.getUIFormTextAreaInput(UIEventDetailTab.FIELD_DESCRIPTION).setValue(value) ;
   }
   protected String getCalendarId() {
-    UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
-    String value = eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CALENDAR).getValue() ;
+  	UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
+    String value = eventDetailTab.getUIFormSelectBoxGroup(UIEventDetailTab.FIELD_CALENDAR).getValue() ;
     newCalendarId_ = value ;
     if (!CalendarUtils.isEmpty(value) && value.split(CalendarUtils.COLON).length>0) {
       calType_ = value.split(CalendarUtils.COLON)[0] ; 
@@ -398,7 +395,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   public void setSelectedCalendarId(String value) {
     UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     value = calType_ + CalendarUtils.COLON + value ;
-    eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CALENDAR).setValue(value) ;
+    eventDetailTab.getUIFormSelectBoxGroup(UIEventDetailTab.FIELD_CALENDAR).setValue(value) ;
     oldCalendarId_ = value ;
   }
 

@@ -37,6 +37,8 @@ import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.GroupCalendarData;
+import org.exoplatform.calendar.webui.SelectItem;
+import org.exoplatform.calendar.webui.SelectItemOptionGroup;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
@@ -379,36 +381,47 @@ public class CalendarUtils {
     }
   }
 
-  public static List<SelectItemOption<String>> getCalendarOption() throws Exception {
-    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+  public static List<SelectItem> getCalendarOption() throws Exception {
+    List<SelectItem> options = new ArrayList<SelectItem>() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
-    options.add(new SelectItemOption<String>(CalendarUtils.PRIVATE_CALENDARS, "")) ;
+    /*
+     * Modified by Philippe (philippe.aristote@gmail.com)
+     * Uses SelectItemOptionGroup to differienciate private, shared and public groups
+     */
+    
+    // private calendars group
+    SelectItemOptionGroup privGrp = new SelectItemOptionGroup(CalendarUtils.PRIVATE_CALENDARS);
     List<org.exoplatform.calendar.service.Calendar> calendars = calendarService.getUserCalendars(SessionProviderFactory.createSessionProvider(), username, true) ;
     for(org.exoplatform.calendar.service.Calendar c : calendars) {
-      options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE  + c.getName(), CalendarUtils.PRIVATE_TYPE + CalendarUtils.COLON + c.getId())) ;
+    	privGrp.addOption(new org.exoplatform.calendar.webui.SelectItemOption<String>(c.getName(), CalendarUtils.PRIVATE_TYPE + CalendarUtils.COLON + c.getId())) ;
     }
+    options.add(privGrp);
+    // shared calendars group
     GroupCalendarData gcd = calendarService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true);
     if(gcd != null) {
-      options.add(new SelectItemOption<String>(CalendarUtils.SHARED_CALENDARS, "")) ;
+    	SelectItemOptionGroup sharedGrp = new SelectItemOptionGroup(CalendarUtils.SHARED_CALENDARS);
       for(org.exoplatform.calendar.service.Calendar c : gcd.getCalendars()) {
         if(CalendarUtils.canEdit(null, c.getEditPermission(), username)){
-          options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE  + c.getName(), CalendarUtils.SHARED_TYPE + CalendarUtils.COLON + c.getId())) ;
+        	sharedGrp.addOption(new org.exoplatform.calendar.webui.SelectItemOption<String>(c.getName(), CalendarUtils.SHARED_TYPE + CalendarUtils.COLON + c.getId())) ;
         }
       }
+      options.add(sharedGrp);
     }
+    // public calendars group
     List<GroupCalendarData> lgcd = calendarService.getGroupCalendars(SessionProviderFactory.createSystemProvider(), CalendarUtils.getUserGroups(username), false, username) ;
     if(lgcd != null) {
       OrganizationService oService = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
-      options.add(new SelectItemOption<String>(CalendarUtils.PUBLIC_CALENDARS, "")) ;
+      SelectItemOptionGroup pubGrp = new SelectItemOptionGroup(CalendarUtils.PUBLIC_CALENDARS);
       for(GroupCalendarData g : lgcd) {
         for(org.exoplatform.calendar.service.Calendar c : g.getCalendars()){
           if(CalendarUtils.canEdit(oService, c.getEditPermission(), username)){
-            options.add(new SelectItemOption<String>(CalendarUtils.DOUBLESCORE + c.getName(), CalendarUtils.PUBLIC_TYPE + CalendarUtils.COLON + c.getId())) ;
+        	  pubGrp.addOption(new org.exoplatform.calendar.webui.SelectItemOption<String>(c.getName(), CalendarUtils.PUBLIC_TYPE + CalendarUtils.COLON + c.getId())) ;
           }
         }
 
       }
+      options.add(pubGrp);
     }
     return options ;
   }

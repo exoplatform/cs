@@ -221,6 +221,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       uiAddEdit.updateGrid(cal);
       uiForm.setCanEdit(false) ;
       uiForm.setSharedUser(null) ;
+      uiForm.permission_.clear() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddEdit) ;
     }
   }

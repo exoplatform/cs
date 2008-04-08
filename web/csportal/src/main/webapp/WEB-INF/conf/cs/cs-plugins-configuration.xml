@@ -139,6 +139,18 @@
         	<name>defaultViewPermission</name>
         	<value>*:*</value><!-- Multi value membership, use coma (,) to split values-->
         </value-param>
+        
+        <value-param>
+	      	<name>defaultLocale</name>
+	        <value>BEL</value><!-- see more locale ids http://userpage.chemie.fu-berlin.de/diverse/doc/ISO_3166.html -->
+      	</value-param>
+      
+      	<value-param>
+	      	<name>defaultTimeZone</name>
+	      	<value>Europe/Brussels</value><!-- see more for timeZone ids http://www.unicode.org/cldr/data/docs/design/formatting/zone_log.html#windows_ids -->
+      	</value-param>	
+      
+        
 	    </init-params>    
 	  </component-plugin>
 	  

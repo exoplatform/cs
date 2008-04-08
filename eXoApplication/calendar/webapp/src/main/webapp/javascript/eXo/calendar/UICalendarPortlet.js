@@ -269,11 +269,13 @@ UICalendarPortlet.prototype.show = function(obj, evt) {
     
   }
 	eXo.calendar.UICalendarPortlet.swapMenu(uiPopupCategory, obj, contentContainer) ;
+	
 	if (calType && (calType != "0") ) {
+
 		var actions = DOMUtil.findDescendantsByTagName(eXo.calendar.UICalendarPortlet.menuElement, "a") ;
 		for(var j = 0 ; j < actions.length ; j ++) {
 			if (
-				(actions[j].href.indexOf("EditCalendar") >= 0) ||
+				//(actions[j].href.indexOf("EditCalendar") >= 0) ||
 				(actions[j].href.indexOf("ShareCalendar") >= 0) ||
 				(actions[j].href.indexOf("ChangeColorCalendar") >= 0)) {
 				actions[j].style.display = "none" ;
