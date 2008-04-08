@@ -711,7 +711,7 @@
 
 .UIPreview .ViewContainer table{
 	border: none;
-	width: 99.4%;
+	width: auto;
 }
 
 .UIPreview .ViewContainer .AttachmentIcon {
@@ -733,6 +733,7 @@
 
 .UIPreview .ViewContainer .Text {
 	line-height: 20px;
+	padding: 0px 5px;
 }
 
 .UIPreview .ViewContainer .Img {

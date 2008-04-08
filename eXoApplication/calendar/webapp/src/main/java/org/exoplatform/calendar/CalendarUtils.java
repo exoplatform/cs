@@ -19,6 +19,7 @@ package org.exoplatform.calendar;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -469,5 +470,14 @@ public class CalendarUtils {
   
   static public MailService getMailService() throws Exception {
     return (MailService)PortalContainer.getComponent(MailService.class) ;
+  }
+  
+  public static String convertSize(long size) throws Exception {
+    String str = "";
+    DecimalFormat df = new DecimalFormat("0.00");
+    if (size > 1024 * 1024) str += df.format(((double) size)/(1024 * 1024)) + " MB" ;
+    else if (size > 1024) str += df.format(((double) size)/(1024)) + " KB" ;
+    else str += size + " B" ;
+    return str ;
   }
 }
