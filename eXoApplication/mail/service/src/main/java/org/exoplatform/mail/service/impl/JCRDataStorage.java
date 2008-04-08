@@ -36,6 +36,7 @@ import javax.jcr.PathNotFoundException;
 import javax.jcr.PropertyIterator;
 import javax.jcr.Session;
 import javax.jcr.Value;
+import javax.jcr.nodetype.NodeType;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
@@ -231,7 +232,7 @@ public class JCRDataStorage{
     long pageSize = getMailSetting(sProvider, username).getNumberMsgPerPage();
     Query query = qm.createQuery(queryString, Query.XPATH);
     QueryResult result = query.execute();    
-    MessagePageList pageList = new MessagePageList(result.getNodes(), pageSize, queryString, true) ;
+    MessagePageList pageList = new MessagePageList(result.getNodes(), pageSize, queryString, true, filter.hasStructure()) ;
     return pageList ;
   }
   
@@ -367,6 +368,10 @@ public class JCRDataStorage{
     try {
       Node node = msgStoreNode.getNode(message.getId()) ;
       moveReference(node) ;
+      NodeType[] nts = node.getMixinNodeTypes() ;
+      for (int i = 0 ;i < nts.length; i++) {
+        node.removeMixin(nts[i].getName()) ;
+      }
       node.remove() ;
       msgStoreNode.getSession().save();
     } catch(PathNotFoundException e) {}

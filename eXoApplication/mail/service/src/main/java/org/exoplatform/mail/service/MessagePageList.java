@@ -46,12 +46,14 @@ public class MessagePageList extends JCRPageList {
   private boolean isQuery_ = false ;
   private String value_ ;
   Map<String, Message> previousListPage ;
+  private boolean hasStructure_ ;
   
-  public MessagePageList(NodeIterator iter, long pageSize, String value, boolean isQuery ) throws Exception{
+  public MessagePageList(NodeIterator iter, long pageSize, String value, boolean isQuery , boolean hasStructure) throws Exception{
     super(pageSize) ;
     iter_ = iter ;
     value_ = value ;
     isQuery_ = isQuery ;
+    hasStructure_ = hasStructure ;
     setAvailablePage(iter.getSize()) ;    
   }
   
@@ -85,36 +87,41 @@ public class MessagePageList extends JCRPageList {
     for(int i = 0; i < pageSize; i ++) {
       if(iter_.hasNext()){
         currentNode = iter_.nextNode() ;
-        Value[] values = {};
-        boolean existRefNode = false ; 
-        String curMsgFolder = currentNode.getProperty(Utils.EXO_FOLDERS).getValues()[0].getString() ;
-        String accId = currentNode.getProperty(Utils.EXO_ACCOUNT).getString() ;
-        String sentFolderId = Utils.createFolderId(accId, Utils.FD_SENT, false) ;
-        String[] refFolders = new String[] {sentFolderId, curMsgFolder} ;
-        try {
-          values = currentNode.getProperty("exo:conversationId").getValues();
-          for (int j = 0; j < values.length; j++) {
-            Value value = values[j];
-            String uuid = value.getString();
-            Node refNode = currentNode.getSession().getNodeByUUID(uuid);
-            String refMsgFolder = refNode.getProperty(Utils.EXO_FOLDERS).getValues()[0].getString() ;
-            if (refMsgFolder.equals(curMsgFolder)) existRefNode = true ;
-            if (refMsgFolder.equals(sentFolderId)) {
-              existRefNode = true ; 
-              Message refMsg = getMessage(refNode, refFolders) ;
-              currentListPage_.put(refMsg.getId(), refMsg) ;
-              currentListPage_ = getMessageList(currentListPage_, refNode, curMsgFolder, refFolders) ;
+          Value[] values = {};
+          boolean existRefNode = false ; 
+          String curMsgFolder = currentNode.getProperty(Utils.EXO_FOLDERS).getValues()[0].getString() ;
+          String accId = currentNode.getProperty(Utils.EXO_ACCOUNT).getString() ;
+          String sentFolderId = Utils.createFolderId(accId, Utils.FD_SENT, false) ;
+          String[] refFolders = new String[] {sentFolderId, curMsgFolder} ;
+          if (hasStructure_) {
+            try {
+              values = currentNode.getProperty("exo:conversationId").getValues();
+              for (int j = 0; j < values.length; j++) {
+                Value value = values[j];
+                String uuid = value.getString();
+                Node refNode = currentNode.getSession().getNodeByUUID(uuid);
+                String refMsgFolder = refNode.getProperty(Utils.EXO_FOLDERS).getValues()[0].getString() ;
+                if (refMsgFolder.equals(curMsgFolder)) existRefNode = true ;
+                if (refMsgFolder.equals(sentFolderId)) {
+                  existRefNode = true ; 
+                  Message refMsg = getMessage(refNode, refFolders) ;
+                  currentListPage_.put(refMsg.getId(), refMsg) ;
+                  currentListPage_ = getMessageList(currentListPage_, refNode, curMsgFolder, refFolders) ;
+                }
+              }
+            } catch(Exception e) { }
+            if (Utils.SHOWCONVERSATION && (!currentNode.isNodeType("exo:messageMixin") || !existRefNode)) {
+              Message msg = getMessage(currentNode, refFolders) ;
+              currentListPage_.put(msg.getId(), msg) ;
+              currentListPage_ = getMessageList(currentListPage_, currentNode, curMsgFolder, refFolders) ;
             }
+          } else {
+            Message msg = getMessage(currentNode, null) ;
+            currentListPage_.put(msg.getId(), msg) ;
           }
-        } catch(Exception e) { }
-        if (Utils.SHOWCONVERSATION && (!currentNode.isNodeType("exo:messageMixin") || !existRefNode)) {
-          Message msg = getMessage(currentNode, refFolders) ;
-          currentListPage_.put(msg.getId(), msg) ;
-          currentListPage_ = getMessageList(currentListPage_, currentNode, curMsgFolder, refFolders) ;
+        } else {
+          break ;
         }
-      }else {
-        break ;
-      }
     }
     iter_ = null ; 
   }
@@ -149,7 +156,7 @@ public class MessagePageList extends JCRPageList {
   private boolean isAvaiableMessage(Node node, String[] refFolders) throws Exception {
     return previousListPage.size() > 0 && 
       previousListPage.containsKey(node.getName()) && 
-      previousListPage.get(node.getName()).getReferedMessageIds().size() != getReferedMessageIds(node, refFolders).size() ;
+      (refFolders == null || previousListPage.get(node.getName()).getReferedMessageIds().size() != getReferedMessageIds(node, refFolders).size()) ;
   }
   
   /**
@@ -257,7 +264,7 @@ public class MessagePageList extends JCRPageList {
       msg.setSendDate(cal.getTime());
     } catch(Exception e) { }
     
-    if (Utils.SHOWCONVERSATION) {
+    if (hasStructure_) {
       if (refFolders == null) refFolders = new String[]{ msg.getFolders()[0] } ;
       List<String> referedMessageIds = getReferedMessageIds(messageNode, refFolders) ;
       msg.setReferedMessageIds(referedMessageIds);

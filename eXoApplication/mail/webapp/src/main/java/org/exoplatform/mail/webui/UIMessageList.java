@@ -127,6 +127,7 @@ public class UIMessageList extends UIForm {
     MailService mailSrv = MailUtils.getMailService();
     MessageFilter filter = getMessageFilter();
     if (filter == null) filter = new MessageFilter("Folder");
+    if (viewMode == MODE_THREAD || viewMode == MODE_CONVERSATION) filter.setHasStructure(true) ;
     if (accountId != null && accountId != ""){
       filter.setAccountId(accountId);
       //if(filter.getFolder() == null || (filter.getFolder() != null && (!filter.getFolder()[0].equals(selectedFolderId_)) ||  pageList_ == null)) {
@@ -134,7 +135,7 @@ public class UIMessageList extends UIForm {
         selectedFolderId_ = Utils.createFolderId(accountId, Utils.FD_INBOX, false);
         filter.setFolder(new String[] { selectedFolderId_ });
       } else selectedFolderId_ = filter.getFolder()[0];
-      setMessagePageList(mailSrv.getMessagePageListByFolder(SessionsUtils.getSessionProvider(), username, accountId, selectedFolderId_));
+      setMessagePageList(mailSrv.getMessagePageList(SessionsUtils.getSessionProvider(), username, filter));
       //}
     } else messageList_.clear();
     setMessageFilter(filter);
@@ -385,13 +386,18 @@ public class UIMessageList extends UIForm {
   static public class ViewAsListActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
+      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       if (uiMessageList.viewMode == uiMessageList.MODE_CONVERSATION) {
-        UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
         UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class) ;
         List<Message> showedMsgs = new ArrayList<Message>();
         showedMsgs.add(uiMsgPreview.getMessage()) ;
         uiMsgPreview.setShowedMessages(showedMsgs);
       }
+      MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
+      String username = uiPortlet.getCurrentUser();
+      MessageFilter filter = uiMessageList.getMessageFilter() ;
+      filter.setHasStructure(false) ;
+      uiMessageList.setMessagePageList(mailSrv.getMessagePageList(SessionsUtils.getSessionProvider(), username, filter)) ;
       uiMessageList.viewMode = uiMessageList.MODE_LIST ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
@@ -400,12 +406,18 @@ public class UIMessageList extends UIForm {
   static public class ViewAsThreadActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
+      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       if (uiMessageList.viewMode == uiMessageList.MODE_CONVERSATION) {
-        UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
         UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class) ;
         List<Message> showedMsgs = new ArrayList<Message>();
         showedMsgs.add(uiMsgPreview.getMessage()) ;
         uiMsgPreview.setShowedMessages(showedMsgs);
+      } else {
+        MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
+        String username = uiPortlet.getCurrentUser();
+        MessageFilter filter = uiMessageList.getMessageFilter() ;
+        filter.setHasStructure(true) ;
+        uiMessageList.setMessagePageList(mailSrv.getMessagePageList(SessionsUtils.getSessionProvider(), username, filter)) ;
       }
       uiMessageList.viewMode = uiMessageList.MODE_THREAD ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
@@ -415,8 +427,8 @@ public class UIMessageList extends UIForm {
   static public class ViewAsConversationActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
+      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       if (uiMessageList.viewMode != uiMessageList.MODE_CONVERSATION) {
-        UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
         UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class) ;
         List<Message> showedMsgs = new ArrayList<Message>();
         Message msg = uiMsgPreview.getMessage();
@@ -427,6 +439,12 @@ public class UIMessageList extends UIForm {
           }
         }
         uiMsgPreview.setShowedMessages(showedMsgs);
+      } else if (uiMessageList.viewMode != uiMessageList.MODE_THREAD) {
+        MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
+        String username = uiPortlet.getCurrentUser();
+        MessageFilter filter = uiMessageList.getMessageFilter() ;
+        filter.setHasStructure(true) ;
+        uiMessageList.setMessagePageList(mailSrv.getMessagePageList(SessionsUtils.getSessionProvider(), username, filter)) ;
       }
       uiMessageList.viewMode = uiMessageList.MODE_CONVERSATION ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
@@ -1072,6 +1090,7 @@ public class UIMessageList extends UIForm {
         msgFilter.setText("");
         msgFilter.setFolder((uiMessageList.getSelectedFolderId() == null) ? null : new String[] {uiMessageList.getSelectedFolderId()});
         msgFilter.setTag((uiMessageList.getSelectedTagId() == null) ? null : new String[] {uiMessageList.getSelectedTagId()});
+        msgFilter.setHasStructure(false) ;
       }
       try {
         uiMessageList.setMessagePageList(mailSrv.getMessagePageList(SessionsUtils.getSessionProvider(), username, msgFilter));

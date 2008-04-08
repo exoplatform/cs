@@ -392,7 +392,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     String from = account.getUserDisplayName() + "<" + account.getIncomingUser() + ">" ;
     String subject = this.getFieldSubjectValue() ;
     String to = this.getFieldToValue() ;
-    if (to.indexOf(";") > -1) to = to.replace(';', ',') ;
+    if (to != null && to.indexOf(";") > -1) to = to.replace(';', ',') ;
     String cc = this.getFieldCcValue() ;
     if (cc != null && cc.indexOf(";") > -1) cc = cc.replace(';', ',') ;
     String bcc = this.getFieldBccValue() ;
