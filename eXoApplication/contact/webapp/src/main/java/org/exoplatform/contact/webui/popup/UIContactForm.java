@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.jcr.PathNotFoundException;
+
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
@@ -280,20 +282,27 @@ public class UIContactForm extends UIFormTabPane {
           contactService.saveContact(sessionProvider, username, contact, true);
         }        
       } else {
-        String contactType = contact.getContactType() ;
-        if (contactType.equals(JCRDataStorage.PRIVATE)) {
-          contactService.saveContact(sessionProvider, username, contact, false) ;
-        } else if (contactType.equals(JCRDataStorage.SHARED)) {
-          UIAddressBooks uiAddressBooks = uiContactForm
-            .getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class) ;
-          if ( uiAddressBooks.getSharedGroups().containsKey(contact.getAddressBook()[0])) {
-            contactService.saveContactToSharedAddressBook(username, contact.getAddressBook()[0], contact, false) ;
-          } else {
-            contactService.saveSharedContact(username, contact) ;
-          }  
-        } else {          
-          contactService.savePublicContact(contact, false) ;
-        }        
+        try {
+          String contactType = contact.getContactType() ;
+          if (contactType.equals(JCRDataStorage.PRIVATE)) {
+            contactService.saveContact(sessionProvider, username, contact, false) ;
+          } else if (contactType.equals(JCRDataStorage.SHARED)) {
+            UIAddressBooks uiAddressBooks = uiContactForm
+              .getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class) ;
+            if ( uiAddressBooks.getSharedGroups().containsKey(contact.getAddressBook()[0])) {
+              contactService.saveContactToSharedAddressBook(username, contact.getAddressBook()[0], contact, false) ;
+            } else {
+              contactService.saveSharedContact(username, contact) ;
+            }  
+          } else {          
+            contactService.savePublicContact(contact, false) ;
+          }
+        } catch(PathNotFoundException e) {
+          uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.contact-deleted", null,
+              ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }         
       }      
       UIContactPortlet uiContactPortlet = uiContactForm.getAncestorOfType(UIContactPortlet.class) ;
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
