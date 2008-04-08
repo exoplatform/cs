@@ -59,6 +59,8 @@ public class MessageFilter {
   private String applyTag_ ;
   private boolean keepInbox_ ;
   private boolean applyForAll_ ; 
+  
+  private boolean hasStructure_ ;
 
   public MessageFilter(String name) {
     this.id_ = Utils.KEY_FILTER + IdGenerator.generate();
@@ -72,6 +74,7 @@ public class MessageFilter {
     this.priority_ = 0;
     isAscending_ = false;
     orderBy_ = Utils.EXO_RECEIVEDDATE;
+    hasStructure_ = false ;
   }
   
   public String getId() { return id_ ; }
@@ -159,6 +162,9 @@ public class MessageFilter {
   
   public String getText() { return text_ ; }
   public void setText(String text) { this.text_ = text ; }
+  
+  public boolean hasStructure() { return hasStructure_ ; }
+  public void setHasStructure(boolean hasStructure) { this.hasStructure_ = hasStructure ; }
   
   public String getStatement() throws Exception{
     StringBuffer queryString = new StringBuffer("/jcr:root" + accountPath_ + "//element(*,exo:message)");
@@ -357,7 +363,7 @@ public class MessageFilter {
     
     if (orderBy_ != null && orderBy_.trim().length() >0) {
       stringBuffer.append(" order by @" + orderBy_ + " ") ;
-      if (isAscending_) stringBuffer.append("ascending") ;
+      if (isAscending_ && !hasStructure_) stringBuffer.append("ascending") ;
       else stringBuffer.append("descending");
     }
     
