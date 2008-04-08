@@ -36,7 +36,7 @@ uiform.begin() ;
 				        		<%for(attachFile in task.getAttachment()){%>
 						         <div class="AttachmentIcon"  style="">
 						          $attachFile.name  
-						         	 $attachFile.size Kb
+						         	<%=CalendarUtils.convertSize(attachFile.size)%> 
 						         </div>
 						          <%if(attachFile.getMimeType().startsWith("image")) {
 						         %>
@@ -58,7 +58,7 @@ uiform.begin() ;
 						         <div style="clear:left;"><span></span></div>
 						         <%}%> 
         						<td >
-        							<div class="TaskDescription"><%=task.getSummary()%></div>
+        							<div class="TaskDescription" style="font-weight: bold;"><%=task.getSummary()%></div>
         							<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
 			        					<tr>
 			        						<td class="Text">

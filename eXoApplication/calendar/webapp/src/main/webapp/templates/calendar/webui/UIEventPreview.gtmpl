@@ -43,7 +43,7 @@ uiform.begin() ;
 	         <%for(attachFile in  event.getAttachment()){%>
 		         <div class="AttachmentIcon"  style="white-space: nowrap;">
 		          $attachFile.name  
-		         	 $attachFile.size Kb
+		          <%=CalendarUtils.convertSize(attachFile.size)%> 
 		         </div>
 		          <%if(attachFile.getMimeType().startsWith("image"))  {
 		        	%> 	
@@ -67,7 +67,7 @@ uiform.begin() ;
 	        </td>
 	            <td >
 	             <div class="EventDescription $color"><span></span></div>
-	             <div>$event.summary</div>
+	             <div style="font-weight: bold;">$event.summary</div>
 	             <div style="clear:left;"><span></span></div>
 	             
 	             <table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
