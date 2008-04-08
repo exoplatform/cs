@@ -16,6 +16,8 @@
  */
 package org.exoplatform.contact.webui.popup;
 
+import javax.jcr.PathNotFoundException;
+
 import org.exoplatform.contact.Colors;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Tag;
@@ -105,8 +107,17 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
           }
       tag.setName(tagName) ;
       tag.setColor(uiEditTagForm.getChild(UIFormColorPicker.class).getValue()) ;
-      ContactUtils.getContactService().updateTag(
-          SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), tag) ;
+      try {
+        ContactUtils.getContactService().updateTag(
+            SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), tag) ;
+      } catch (PathNotFoundException e) {
+        uiApp.addMessage(new ApplicationMessage("UIEditTagForm.msg.tag-deleted", null, 
+            ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
+      
+      
       
       WebuiRequestContext context = event.getRequestContext() ;
       context.addUIComponentToUpdateByAjax(uiTags) ;

@@ -18,6 +18,8 @@ package org.exoplatform.contact.webui.popup;
 
 import java.util.List;
 
+import javax.jcr.PathNotFoundException;
+
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
@@ -114,9 +116,15 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
       if (!uiCategoryForm.isNew_) group.setId(uiCategoryForm.groupId_) ;
       group.setName(groupName) ;
       group.setDescription(uiCategoryForm.getUIFormTextAreaInput(FIELD_DESCRIPTION_INPUT).getValue()) ;
-      ContactUtils.getContactService().saveGroup(
-          SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), group, uiCategoryForm.isNew_) ; 
-      
+      try {
+        ContactUtils.getContactService().saveGroup(
+            SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), group, uiCategoryForm.isNew_) ;
+      } catch (PathNotFoundException e) {
+        uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.category-deleted", null,
+            ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ; 
+      } 
       UIPopupContainer popupContainer = uiCategoryForm.getAncestorOfType(UIPopupContainer.class) ;
       if (popupContainer != null) {
         UICategorySelect uiCategorySelect = popupContainer.findFirstComponentOfType(UICategorySelect.class);

@@ -576,6 +576,8 @@ public class JCRDataStorage {
         }
       } 
     }
+    
+    if (groupNode == null && !isNew) throw new PathNotFoundException() ;
     if (groupNode != null) {
       groupNode.setProperty("exo:name", group.getName());
       groupNode.setProperty("exo:description", group.getDescription());      
@@ -1158,12 +1160,10 @@ public class JCRDataStorage {
   
   public void updateTag(SessionProvider sProvider, String username,Tag tag) throws Exception {
     Node tagHome = getTagHome(sProvider, username) ;
-    if (tagHome.hasNode(tag.getId())) {
-      Node tagNode = tagHome.getNode(tag.getId());
-      tagNode.setProperty("exo:name", tag.getName());
-      tagNode.setProperty("exo:description", tag.getDescription());
-      tagNode.setProperty("exo:color", tag.getColor());
-    }
+    Node tagNode = tagHome.getNode(tag.getId());
+    tagNode.setProperty("exo:name", tag.getName());
+    tagNode.setProperty("exo:description", tag.getDescription());
+    tagNode.setProperty("exo:color", tag.getColor());
     tagHome.save();
   }
   
