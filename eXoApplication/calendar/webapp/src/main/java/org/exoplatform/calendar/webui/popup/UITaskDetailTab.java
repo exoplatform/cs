@@ -138,14 +138,14 @@ public class UITaskDetailTab extends UIFormInputWithActions {
     return (UIForm)getParent() ;
   }
 
-  public List<ActionData> getUploadFileList() { 
+  public List<ActionData> getUploadFileList() throws Exception { 
     List<ActionData> uploadedFiles = new ArrayList<ActionData>() ;
     for(Attachment attachdata : attachments_) {
       ActionData fileUpload = new ActionData() ;
       fileUpload.setActionListener("") ;
       fileUpload.setActionType(ActionData.TYPE_ICON) ;
       fileUpload.setCssIconClass("AttachmentIcon ZipFileIcon") ;
-      fileUpload.setActionName(attachdata.getName() + " ("+attachdata.getSize()+" Kb)" ) ;
+      fileUpload.setActionName(attachdata.getName() + " ("+ CalendarUtils.convertSize(attachdata.getSize()) +")" ) ;
       fileUpload.setShowLabel(true) ;
       uploadedFiles.add(fileUpload) ;
       ActionData removeAction = new ActionData() ;
