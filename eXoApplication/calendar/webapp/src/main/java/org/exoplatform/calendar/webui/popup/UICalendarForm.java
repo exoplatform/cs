@@ -16,9 +16,9 @@
  **/
 package org.exoplatform.calendar.webui.popup;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
@@ -31,7 +31,6 @@ import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarWorkingContainer;
 import org.exoplatform.calendar.webui.UIFormColorPicker;
-import org.exoplatform.calendar.webui.UIPreview;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -55,7 +54,6 @@ import org.exoplatform.webui.form.UIFormTabPane;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
-import org.pdfbox.util.operator.SetGraphicsStateParameters;
 
 /**
  * Created by The eXo Platform SARL
@@ -88,11 +86,10 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
 	final public static String LOCALE = "locale" ;
 	final public static String PERMISSION_SUB = "_permission".intern() ;
 	public Map<String, String> permission_ = new HashMap<String, String>() ;
-
 	public Map<String, Map<String, String>> perms_ = new HashMap<String, Map<String, String>>() ;
-	private boolean isAddNew_ = true ;
 	public String calendarId_ = null ;
-	public String calType_ =  null ;
+	public String calType_ =  CalendarUtils.PRIVATE_TYPE ;
+	private boolean isAddNew_ = true ;
 	public UICalendarForm() throws Exception{
 		super("UICalendarForm");
 
@@ -162,6 +159,10 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
 	private SessionProvider getSession()  {
 		return SessionProviderFactory.createSessionProvider() ;
 	}
+	
+	private SessionProvider getSystemSession()  {
+		return SessionProviderFactory.createSystemProvider() ;
+	}
 	private  List<SelectItemOption<String>> getCategory() throws Exception {
 		String username = Util.getPortalRequestContext().getRemoteUser() ;
 		CalendarService calendarService = CalendarUtils.getCalendarService() ;
@@ -194,10 +195,20 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
 	public void deActivate() throws Exception {
 		// TODO Auto-generated method stub
 	}
-	public void resetField(UICalendarForm uiForm) throws Exception {
+	public void resetField() throws Exception {
+		permission_.clear() ;
+		perms_.clear() ;
+		UIGroupCalendarTab sharing = getChildById(INPUT_SHARE) ;
+		for(Object obj : getPublicGroups()) {
+			String groupId = ((Group)obj).getId() ;
+			UIFormCheckBoxInput checkbox = sharing.getUIFormCheckBoxInput(((Group)obj).getId()) ;
+			if(checkbox != null) checkbox.setChecked(false) ;
+			UIFormStringInput uiInputIfo = sharing.getUIStringInput(groupId + PERMISSION_SUB);
+			if(uiInputIfo != null) uiInputIfo.setValue(null) ;
+		}
 		if(isAddNew_) {
-			isAddNew_ = true ;
 			calendarId_ = null ;
+			calType_ = CalendarUtils.PRIVATE_TYPE ;
 			setDisplayName(null) ;
 			setDescription(null) ;
 			setSelectedGroup(null) ;
@@ -205,22 +216,25 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
 			setTimeZone(null) ;
 			setSelectedColor(null) ;
 			lockCheckBoxFields(false) ;
-			UIGroupCalendarTab sharing = getChildById(INPUT_SHARE) ;
-			String groupId = null ;
-			for(Object obj : getPublicGroups()) {
-				groupId = ((Group)obj).getId() ;
-				UIFormCheckBoxInput input = getUIFormCheckBoxInput(((Group)obj).getId()) ;
-				if(input != null && input.isChecked()) input.setChecked(false) ;
-				UIFormInputInfo uiInputIfo = sharing.getUIFormInputInfo(groupId + PERMISSION_SUB);
-				if(uiInputIfo != null && uiInputIfo.getValue() != null ) {
-					System.out.println(uiInputIfo.getValue()) ;
-					uiInputIfo.setValue(null) ;
-				}
-			}
 		} else {
+			Calendar calendar = null ;
+			CalendarService calService = CalendarUtils.getCalendarService() ;
 			String username = Util.getPortalRequestContext().getRemoteUser() ;
-			Calendar calendar = CalendarUtils.getCalendarService().getUserCalendar(getSession(), username, calendarId_) ;
-			init(calendar) ;
+			if(CalendarUtils.PRIVATE_TYPE.equals(calType_)) {
+				calendar = calService.getUserCalendar(getSession(), username, calendarId_) ;
+			} else if(CalendarUtils.SHARED_TYPE.equals(calType_)) {
+				Iterator iter = calService.getSharedCalendars(getSystemSession(), username, true).getCalendars().iterator() ;
+				while (iter.hasNext()) {
+					Calendar cal = ((Calendar)iter.next()) ;
+					if(cal.getId().equals(calendarId_)) {
+						calendar = cal ;
+						break ;
+					}
+				}
+			} else if(CalendarUtils.PUBLIC_TYPE.equals(calType_)) {
+				calendar = calService.getGroupCalendar(getSystemSession(), calendarId_) ;
+			}
+			if(calendar != null) init(calendar) ;
 		}
 
 	}
@@ -238,16 +252,16 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
 			UIFormInputWithActions sharing = getChildById(INPUT_SHARE) ;
 			for(String groupId : calendar.getGroups()) {
 				UIFormCheckBoxInput checkbox = sharing.getUIFormCheckBoxInput(groupId) ;
+				StringBuffer sb = new StringBuffer() ;
 				if(checkbox != null) { 
 					checkbox.setChecked(true) ;
 					if(calendar.getEditPermission() != null) {
-						StringBuffer sb = new StringBuffer() ;
 						for(String s : calendar.getEditPermission()) {
 							if(!CalendarUtils.isEmpty(sb.toString())) sb.append(CalendarUtils.COMMA) ;
 							sb.append(s) ;
 						}
-						updateSelect(groupId + PERMISSION_SUB, sb.toString())  ;
 					}
+					updateSelect(groupId + PERMISSION_SUB, sb.toString())  ;
 				}
 			}
 		}
@@ -427,7 +441,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
 		public void execute(Event<UICalendarForm> event) throws Exception {
 			System.out.println("\n\n ResetActionListener");
 			UICalendarForm uiForm = event.getSource() ;
-			uiForm.resetField(uiForm) ;
+			uiForm.resetField() ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
 		}
 	}
@@ -446,6 +460,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
 				CalendarService calendarService = CalendarUtils.getCalendarService() ;
 				SessionProvider sProvider = SessionProviderFactory.createSystemProvider() ;
 				boolean isPublic = uiForm.isPublic() ;
+				if(isPublic) uiForm.calType_ = CalendarUtils.PUBLIC_TYPE ;
 				Calendar calendar = new Calendar() ;
 				if(!uiForm.isAddNew_) calendar.setId(uiForm.calendarId_) ;
 				calendar.setName(displayName) ;
@@ -465,37 +480,35 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
 				} else if(CalendarUtils.SHARED_TYPE.equals(uiForm.calType_)) {
 					calendarService.saveSharedCalendar(sProvider, username, calendar) ;
 				}else if (CalendarUtils.PUBLIC_TYPE.equals(uiForm.calType_)) {
-					if(isPublic) {
-						Object[] groupList = uiForm.getPublicGroups() ;
-						List<String> selected = new ArrayList<String>() ;
-						for(Object groupObj : groupList) {
-							String groupId = ((Group)groupObj).getId() ;
-							if(uiForm.getUIFormCheckBoxInput(groupId)!= null && uiForm.getUIFormCheckBoxInput(groupId).isChecked()) { 
-								selected.add(groupId) ;
-							}
+					Object[] groupList = uiForm.getPublicGroups() ;
+					List<String> selected = new ArrayList<String>() ;
+					for(Object groupObj : groupList) {
+						String groupId = ((Group)groupObj).getId() ;
+						if(uiForm.getUIFormCheckBoxInput(groupId)!= null && uiForm.getUIFormCheckBoxInput(groupId).isChecked()) { 
+							selected.add(groupId) ;
 						}
-						if(selected.size() < 1){
-							uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.group-empty", null, ApplicationMessage.WARNING) ) ;
-							event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-							return ;
-						}
-						calendar.setPublic(isPublic) ;
-						calendar.setGroups(selected.toArray((new String[]{})));
-						List<String> listPermission = new ArrayList<String>() ;
-						for(String groupIdSelected : selected) {
-							String values	= uiForm.getUIStringInput(groupIdSelected + PERMISSION_SUB).getValue() ;
-							uiForm.updateSelect(groupIdSelected + PERMISSION_SUB, values) ;
-						}
-						for(String groupIdSelected : selected) {
-							if(uiForm.perms_.get(groupIdSelected + PERMISSION_SUB) != null)
-								for(String s : uiForm.perms_.get(groupIdSelected + PERMISSION_SUB).keySet()){
-									if(!CalendarUtils.isEmpty(s)) listPermission.add(s) ;
-								}
-							listPermission.add(CalendarUtils.getCurrentUser()) ;
-						}        
-						calendar.setEditPermission(listPermission.toArray(new String[]{})) ;
-						calendarService.savePublicCalendar(sProvider, calendar, uiForm.isAddNew_, username) ;
 					}
+					if(selected.size() < 1){
+						uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.group-empty", null, ApplicationMessage.WARNING) ) ;
+						event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+						return ;
+					}
+					calendar.setPublic(isPublic) ;
+					calendar.setGroups(selected.toArray((new String[]{})));
+					List<String> listPermission = new ArrayList<String>() ;
+					for(String groupIdSelected : selected) {
+						String values	= uiForm.getUIStringInput(groupIdSelected + PERMISSION_SUB).getValue() ;
+						uiForm.updateSelect(groupIdSelected + PERMISSION_SUB, values) ;
+					}
+					for(String groupIdSelected : selected) {
+						if(uiForm.perms_.get(groupIdSelected + PERMISSION_SUB) != null)
+							for(String s : uiForm.perms_.get(groupIdSelected + PERMISSION_SUB).keySet()){
+								if(!CalendarUtils.isEmpty(s)) listPermission.add(s) ;
+							}
+						listPermission.add(CalendarUtils.getCurrentUser()) ;
+					}        
+					calendar.setEditPermission(listPermission.toArray(new String[]{})) ;
+					calendarService.savePublicCalendar(sProvider, calendar, uiForm.isAddNew_, username) ;
 				} 
 				UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
 				calendarPortlet.setCalendarSetting(null) ;
