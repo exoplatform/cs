@@ -6,7 +6,7 @@
 
 <div class="UIAddressBooks" id="<%=uicomponent.getId()%>">
 	<div class="TitleBar">
-		<div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
+		<div class="DownArrow3Icon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.collapse-expand")%>"><span></span></div>
 		<div class="TitleIcon AddressIcon">Address Books</div>
 		<div class="ActionIcon" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 			<% /*Begin Popup Menu*/ %>
@@ -56,7 +56,7 @@
 	</div>
 	<div class="PersonalAddress">
 		<div class="AddressTitle">
-			<div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
+			<div class="DownArrow3Icon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.collapse-expand")%>"><span></span></div>
 			<div class="Label">Personal Address Book</div>
       <div style="clear: left"><span></span></div>
 		</div>
@@ -86,7 +86,7 @@
 	
 	<div class="PersonalAddress">
 		<div class="AddressTitle">
-			<div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
+			<div class="DownArrow3Icon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.collapse-expand")%>"><span></span></div>
 			<div class="Label">
 				<%
 					String sharedContactLink  = uicomponent.event("SelectSharedContact") ;				
@@ -114,7 +114,7 @@
 	
 	<div class="PublicAddress">
 		<div class="AddressTitle">
-			<div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
+			<div class="DownArrow3Icon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.collapse-expand")%>"><span></span></div>
 			<div class="Label">Public Address Book</div>
       <div style="clear: left"><span></span></div>
 		</div>
