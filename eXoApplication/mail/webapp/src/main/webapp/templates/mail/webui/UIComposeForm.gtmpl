@@ -178,7 +178,7 @@
 	            <table class="UIFormGrid">
 	              <tr>
 	                <td class="FieldLabel">From :&nbsp;&nbsp;</td>
-	                <td class="FieldComponent"><%uicomponent.renderField(uicomponent.FIELD_FROM)%></td>
+	                <td class="FieldComponent" style="width: 62%;"><%uicomponent.renderField(uicomponent.FIELD_FROM)%></td>
 	                <td class="FieldCCAndBCC">
 	                  <a  href="<%=uicomponent.event("ShowCc")%>">|Add CC|</a> 
 	                  <a  href="<%=uicomponent.event("ShowBcc")%>">Add BCC|</a>
