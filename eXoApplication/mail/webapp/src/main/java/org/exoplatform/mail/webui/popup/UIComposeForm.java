@@ -127,7 +127,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     accountId_ = accountId ;
     MailService mailSrv = getApplicationComponent(MailService.class);
     for(Account acc : mailSrv.getAccounts(SessionsUtils.getSessionProvider(), username)) {
-      SelectItemOption<String> itemOption = new SelectItemOption<String>(acc.getUserDisplayName() + " &lt;" + acc.getIncomingUser() + "&gt;", acc.getId());
+      SelectItemOption<String> itemOption = new SelectItemOption<String>(acc.getUserDisplayName() + " &lt;" + acc.getEmailAddress() + "&gt;", acc.getId());
       if (acc.getId().equals(accountId)) { itemOption.setSelected(true); }
       options.add(itemOption) ;
     }
@@ -260,8 +260,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           setFieldSubjectValue("Fwd: " + msg.getSubject());
           String forwardedText = "<br><br>-------- Original Message --------<br>" +
               "Subject: " + msg.getSubject() + "<br>Date: " + msg.getSendDate() + 
-              "<br> From: " + msg.getFrom() + 
-              "<br> To: " + msg.getMessageTo() + 
+              "<br> From: " + msg.getFrom().replaceAll("\"", "").replaceAll("<", "&quot;").replaceAll(">", "&quot;") + 
+              "<br> To: " + msg.getMessageTo().replaceAll("\"", "").replaceAll("<", "&quot;").replaceAll(">", "&quot;") + 
               "<br><br>" + formatContent(msg) ;         
           setFieldContentValue(forwardedText);
           setFieldToValue("");
@@ -389,7 +389,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     String usename = uiPortlet.getCurrentUser() ;
     MailService mailSvr = this.getApplicationComponent(MailService.class) ;
     Account account = mailSvr.getAccountById(SessionsUtils.getSessionProvider(), usename, this.getFieldFromValue());
-    String from = account.getUserDisplayName() + "<" + account.getIncomingUser() + ">" ;
+    String from = account.getUserDisplayName() + "<" + account.getEmailAddress() + ">" ;
     String subject = this.getFieldSubjectValue() ;
     String to = this.getFieldToValue() ;
     if (to != null && to.indexOf(";") > -1) to = to.replace(';', ',') ;
