@@ -14,11 +14,11 @@
 		    if (!ContactUtils.isEmpty(uicomponent.getSelectedGroup())) {
 		      text = uicomponent.getSelectedGroup();
 		  %>
-		      Address Book : <%=text%>
+		      <%=_ctx.appRes(uicomponent.getName() + ".label.addressBook")%> <%=text%>
 		  <%} else if (!ContactUtils.isEmpty(uicomponent.getSelectedTag())) {
 		      text = uicomponent.getSelectedTag();
 		  %>
-		      Tag : <%=text%>
+		      <%=_ctx.appRes(uicomponent.getName() + ".label.tag")%> <%=text%>
 		  <%} %>
 
 		  </div>
@@ -29,10 +29,10 @@
 		  			<tr>
 		  		    <th style="width: 23px; padding-left: 3px;" class="text"><input type="checkbox" class="checkbox" title="Check all" value="4" onclick="eXo.contact.UIContactPortlet.toggleSelectAll(this) ;"/></th>
 		  		    <th style="width: 40%; padding-left: 2px;" class="text">
-		  		      	<div> Name </div>
+		  		      	<div> <%=_ctx.appRes(uicomponent.getName() + ".label.name")%></div>
 		  		    </th>
 		 	      	<th class="text" style="padding-left: 7px;">
-		  		    	 	<div>Email</div>
+		  		    	 	<div><%=_ctx.appRes(uicomponent.getName() + ".label.email")%></div>
 		  		    </th>
 		  	 	  </tr>
 		  	 	</thead>
@@ -64,7 +64,7 @@
 			<div class="ExportForm">
 			  <table class="UIFormGrid">
 			    <tr>
-			      <td class="FieldLabel"><%= _ctx.appRes("UIExportForm.label.name") %></td>
+			      <td class="FieldLabel"><%= _ctx.appRes("UIExportForm.label.fileName") %></td>
 			      <td class="FieldComponent"><%uicomponent.renderField(uicomponent.getChildById(uicomponent.NAME))%></td>
 			    </tr>
 			    <tr>
@@ -84,14 +84,14 @@
 		      <a href="<%=uicomponent.event("Save")%>" class="ActionButton LightBlueStyle">
 		        <div class="ButtonLeft">
 		          <div class="ButtonRight">
-		            <div class="ButtonMiddle"> Ok </div>
+		            <div class="ButtonMiddle"> <%=_ctx.appRes(uicomponent.getName() + ".label.ok")%> </div>
 		          </div>
 		        </div>
 		      </a>
 		      <a href="<%=uicomponent.event("Cancel")%>" class="ActionButton LightBlueStyle">
 		        <div class="ButtonLeft">
 		          <div class="ButtonRight">
-		            <div class="ButtonMiddle"> Cancel </div>
+		            <div class="ButtonMiddle"> <%=_ctx.appRes(uicomponent.getName() + ".label.cancel")%> </div>
 		          </div>
 		        </div>
 		      </a>

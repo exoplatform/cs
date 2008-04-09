@@ -1,5 +1,4 @@
 <%
-	import org.exoplatform.contact.webui.UIBannerContainer;
 	import org.exoplatform.contact.webui.UIActionBar;
 	import org.exoplatform.contact.webui.UIWorkingContainer;
 	import org.exoplatform.contact.webui.popup.UIPopupAction ;

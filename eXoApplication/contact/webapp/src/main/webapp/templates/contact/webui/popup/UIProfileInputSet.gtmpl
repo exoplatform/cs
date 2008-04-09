@@ -130,14 +130,14 @@ uiForm = uicomponent.getParentFrom() ;
 	  </table>
 	</div>
 	<div class="AvatarContent">
-		<div class="Label">Picture:</div>
+		<div class="Label"><%=_ctx.appRes(uicomponent.getParent().id + ".label.picture")%></div>
 		<% String imageLink = uicomponent.getImageSource() ; %>
 		<div class="Avatar">
 			<img src="<%=(imageLink == null ? "/contact/skin/DefaultSkin/webui/background/Img2.gif": imageLink)%>" width=63 height=81 class="ImgAvatar"/>
 		</div>
 		<div class="Action">	
-			<a href="<%=uicomponent.getParent().event("ChangeImage")%>">Change | </a>
-			<a href="<%=uicomponent.getParent().event("DeleteImage")%>">Delete</a>			
+			<a href="<%=uicomponent.getParent().event("ChangeImage")%>"><%=_ctx.appRes(uicomponent.getParent().id + ".label.change")%> | </a>
+			<a href="<%=uicomponent.getParent().event("DeleteImage")%>"><%=_ctx.appRes(uicomponent.getParent().id + ".label.delete")%></a>			
 		</div>
 	</div>
 	

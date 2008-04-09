@@ -5,12 +5,12 @@
 %>
 
 <div class="UIMoveContactsForm">
-	<div class="MoveContactsName"><span style="font-weight: normal">Contacts :</span>
+	<div class="MoveContactsName"><span style="font-weight: normal"><%=_ctx.appRes(uicomponent.getName() + ".label.contacts")%></span>
 		<%=uicomponent.getContactsName()%>
 	</div>
 	<div class="MoveContainer">
 		<div class="PrivateAdress">
-			<div class="TitleMoveContactsForm">To Private Address Books:</div>
+			<div class="TitleMoveContactsForm"><%=_ctx.appRes(uicomponent.getName() + ".label.toPrivate")%></div>
 			<div class="MoveContactsFormContainer">
 				<%  Map map = uicomponent.getPrivateGroupMap() ;
 						for(groupId in map.keySet()) {
@@ -25,7 +25,7 @@
 		</div>	
 		
 		<div class="PrivateAdress">
-			<div class="TitleMoveContactsForm">To Shared Address Books</div>
+			<div class="TitleMoveContactsForm"><%=_ctx.appRes(uicomponent.getName() + ".label.toShared")%></div>
 			<div class="MoveContactsFormContainer">
 				<% 
 	      	Map sharedGroups = uicomponent.getSharedGroupMap() ;

@@ -37,20 +37,20 @@
 								</div>
 								<div style="clear: left;"><span></span></div>
 								<div class="InfoContainer">
-									<div class="TitleInfo">Profile</div>
+									<div class="TitleInfo"><%=_ctx.appRes(uicomponent.getName() + ".label.profile")%></div>
 									<div class="Content">
 										<div class="LeftContent">
 											
 											<% if (!ContactUtils.isEmpty(contact.getNickName())) { %>
 											<div class="InfoItem">
-												<div class="InfoLabel">Nick name:</div>
+												<div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.nickname")%></div>
 												<div class="Info"><%= contact.getNickName()%></div>
 												<div style="clear: left;"><span></span></div>
 											</div>
 											<% } %>
 											<% if (!ContactUtils.isEmpty(contact.getGender())) { %>
 											<div class="InfoItem">
-												<div class="InfoLabel">Gender:</div>
+												<div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.gender")%></div>
 												<div class="Info"><%= contact.getGender()%></div>
 											  <div style="clear: left;"><span></span></div>
 											</div>
@@ -59,14 +59,14 @@
 										<div class="RightContent">
 										<% if (contact.getBirthday() != null){ %>
 											<div class="InfoItem">
-												<div class="InfoLabel1">Birthday:</div>
+												<div class="InfoLabel1"><%=_ctx.appRes(uicomponent.getName() + ".label.birthday")%></div>
 												<div class="Info1"><%=  ContactUtils.formatDate("MM/dd/yyyy", contact.getBirthday())%></div>
 											</div>
 											<% } %>
 											
 											<% if (!ContactUtils.isEmpty(contact.getEmailAddress())) { %>
 											<div class="InfoItem">
-												<div class="InfoLabel1">Email:</div>
+												<div class="InfoLabel1"><%=_ctx.appRes(uicomponent.getName() + ".label.email")%></div>
 												<div class="Info1 Email">
 												<% if (!uicomponent.isPrintForm) { %>	
 													<a href="<%=uicomponent.event("SendEmail", contact.getEmailAddress())%>">
@@ -86,75 +86,75 @@
 								</div>
 								
 								<div class="InfoContainer">
-									<div class="TitleInfo">Work</div>
+									<div class="TitleInfo"><%=_ctx.appRes(uicomponent.getName() + ".label.work")%></div>
 									<div class="Content">
 										<div class="LeftContent">
 											<% if (!ContactUtils.isEmpty(contact.getWorkAddress())) { %>
 											   <div class="InfoItem">
-													 <div class="InfoLabel">Address:</div>
+													 <div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.address")%></div>
 													 <div class="Info"><%= contact.getWorkAddress() %></div>
 													 <div style="clear: left;"><span></span></div>
 												 </div>
 											<% } %>
 											<% if (!ContactUtils.isEmpty(contact.getWorkCity())) { %>
 												<div class="InfoItem">
-													<div class="InfoLabel">City:</div>
+													<div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.city")%></div>
 													<div class="Info"><%= contact.getWorkCity()%></div>
 												  <div style="clear: left;"><span></span></div>
 												</div>
 											<% } %>
 											<% if (!ContactUtils.isEmpty(contact.getWorkStateProvince())) { %>
 											<div class="InfoItem">
-												<div class="InfoLabel">State/Province:</div>
+												<div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.state-province")%></div>
 												<div class="Info"><%= contact.getWorkStateProvince()%></div>
 											  <div style="clear: left;"><span></span></div>
 											</div>
 											<% } %>
 											<% if (!ContactUtils.isEmpty(contact.getWorkPostalCode())) { %>
 											<div class="InfoItem">
-												<div class="InfoLabel">Postal Code:</div>
+												<div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.postalCode")%></div>
 												<div class="Info"><%= contact.getWorkPostalCode() %></div>
 												<div style="clear: left;"><span></span></div>
 											</div>
 											<% } %>
 											<% if (!ContactUtils.isEmpty(contact.getWorkCountry())) { %>
 											<div class="InfoItem">
-												<div class="InfoLabel">Country:</div>
+												<div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.country")%></div>
 												<div class="Info"><%= contact.getWorkCountry()%></div>
 												<div style="clear: left;"><span></span></div>
 											</div>
 											<% } %>
 											
-											<div class="showOnMap"><a href="#" onclick="eXo.contact.UIContactPortlet.showMap('64 rue d archereau 75019 paris, france', '<%=contact.getFullName()%>');return false;">Map</a></div>
+											<div class="showOnMap"><a href="#" onclick="eXo.contact.UIContactPortlet.showMap('64 rue d archereau 75019 paris, france', '<%=contact.getFullName()%>');return false;"><%=_ctx.appRes(uicomponent.getName() + ".label.map")%></a></div>
 										</div>
 										<div class="RightContent">
 										<% if (!ContactUtils.isEmpty(contact.getWorkPhone1())) { %>
 											<div class="InfoItem">
-												<div class="InfoLabel">Work Phone 1:</div>
+												<div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.workPhone1")%></div>
 												<div class="Info"><%= contact.getWorkPhone1()%></div>
 											</div>
 											<% } %>
 											<% if (!ContactUtils.isEmpty(contact.getWorkPhone2())) { %>													
 											<div class="InfoItem">
-												<div class="InfoLabel">Work Phone 2:</div>
+												<div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.workPhone2")%></div>
 												<div class="Info"><%= contact.getWorkPhone2() %></div>
 											</div>		
 											<% } %>
 											<% if (!ContactUtils.isEmpty(contact.getWorkFax())) { %>											
 											<div class="InfoItem">
-												<div class="InfoLabel">Work Fax:</div>
+												<div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.workFax")%></div>
 												<div class="Info"><%= contact.getWorkFax() %></div>
 											</div>	
 											<% } %>
 											<% if (!ContactUtils.isEmpty(contact.getMobilePhone())) { %>												
 											<div class="InfoItem">
-												<div class="InfoLabel">Mobile Phone:</div>
+												<div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.mobilePhone")%></div>
 												<div class="Info"><%= contact.getMobilePhone()%></div>
 											</div>													
 											<% } %>
 											<% if (!ContactUtils.isEmpty(contact.getWebPage())) { %>
 											<div class="InfoItem">
-												<div class="InfoLabel">Web Page:</div>
+												<div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.webPage")%></div>
 												 <div class="Info"><a target="_blank" href="<%= contact.getWebPage() %>"><%= contact.getWebPage()%></a></div>
 												<div style="clear: left;"><span></span></div>
 											</div>
@@ -165,33 +165,33 @@
 								</div>
 								
 								<div class="InfoContainer">
-									<div class="TitleInfo">Instant Messaging Contacts</div>
+									<div class="TitleInfo"><%=_ctx.appRes(uicomponent.getName() + ".label.instantMessaginContacts")%></div>
 									<div class="Content">
 										<div class="LeftContent">
 										<% if (!ContactUtils.isEmpty(contact.getExoId())) { %>
 											<div class="InfoItem">
-												<div class="InfoLabel">eXo Chat:</div>
+												<div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.exoChat")%></div>
 												<div class="Info"><%= contact.getExoId() %></div>
 												<div style="clear: left;"><span></span></div>
 											</div>
 											<% } %>
 											<% if (!ContactUtils.isEmpty(contact.getGoogleId())) { %>
 											<div class="InfoItem">
-												<div class="InfoLabel">Google:</div>
+												<div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.google")%></div>
 												<div class="Info"><%= contact.getGoogleId()%></div>
 												<div style="clear: left;"><span></span></div>
 											</div>
 											<% } %>
 											<% if (!ContactUtils.isEmpty(contact.getMsnId())) { %>
 											<div class="InfoItem">
-												<div class="InfoLabel">MSN:</div>
+												<div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.msn")%></div>
 												<div class="Info"><%= contact.getMsnId()%></div>
 												<div style="clear: left;"><span></span></div>
 											</div>
 											<% } %>
 											<% if (!ContactUtils.isEmpty(contact.getAolId())) { %>
 											<div class="InfoItem">
-												<div class="InfoLabel">AOL/AIM:</div>
+												<div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.aol-aim")%></div>
 												<div class="Info"><%= contact.getAolId()%></div>
 												<div style="clear: left;"><span></span></div>
 											</div>
@@ -200,25 +200,25 @@
 										<div class="RightContent">
 										<% if (!ContactUtils.isEmpty(contact.getYahooId())) { %>
 											<div class="InfoItem">
-												<div class="InfoLabel1">Yahoo!:</div>
+												<div class="InfoLabel1"><%=_ctx.appRes(uicomponent.getName() + ".label.yahoo")%></div>
 												<div class="Info1"><%= contact.getYahooId()%></div>
 											</div>
 											<% } %>
 											<% if (!ContactUtils.isEmpty(contact.getIcrId())) { %>													
 											<div class="InfoItem">
-												<div class="InfoLabel1">ICR:</div>
+												<div class="InfoLabel1"><%=_ctx.appRes(uicomponent.getName() + ".label.icr")%></div>
 												<div class="Info1"><%= contact.getIcrId()%></div>
 											</div>	
 											<% } %>	
 											<% if (!ContactUtils.isEmpty(contact.getSkypeId())) { %>											
 											<div class="InfoItem">
-												<div class="InfoLabel1">Skype:</div>
+												<div class="InfoLabel1"><%=_ctx.appRes(uicomponent.getName() + ".label.skype")%></div>
 												<div class="Info1"><%= contact.getSkypeId()%></div>
 											</div>	
 											<% } %>	
 											<% if (!ContactUtils.isEmpty(contact.getIcqId())) { %>											
 											<div class="InfoItem">
-												<div class="InfoLabel1">ICQ:</div>
+												<div class="InfoLabel1"><%=_ctx.appRes(uicomponent.getName() + ".label.icq")%></div>
 												<div class="Info1"><%= contact.getIcqId()%></div>
 												<div style="clear: left;"><span></span></div>
 											</div>	
@@ -228,40 +228,40 @@
 									</div>
 								</div>
 								<div class="InfoContainer">
-									<div class="TitleInfo">Home</div>
+									<div class="TitleInfo"><%=_ctx.appRes(uicomponent.getName() + ".label.home")%></div>
 									<div class="Content">
 										<div class="LeftContent">
 										<% if (!ContactUtils.isEmpty(contact.getHomeAddress())) { %>
 											<div class="InfoItem">
-												<div class="InfoLabel">Street:</div>
+												<div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.street")%></div>
 												<div class="Info"><%= contact.getHomeAddress()%></div>
 												<div style="clear: left;"><span></span></div>
 											</div>
 											<% } %>
 											<% if (!ContactUtils.isEmpty(contact.getHomeCity())) { %>
 											<div class="InfoItem">
-												<div class="InfoLabel">City:</div>
+												<div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.city")%></div>
 												<div class="Info"><%= contact.getHomeCity()%></div>
 												<div style="clear: left;"><span></span></div>
 											</div>
 											<% } %>
 											<% if (!ContactUtils.isEmpty(contact.getHomeState_province())) { %>
 											<div class="InfoItem">
-												<div class="InfoLabel">State/Province:</div>
+												<div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.state-province")%></div>
 												<div class="Info"><%= contact.getHomeState_province()%></div>
 												<div style="clear: left;"><span></span></div>
 											</div>
 											<% } %>
 											<% if (!ContactUtils.isEmpty(contact.getHomePostalCode())) { %>
 											<div class="InfoItem">
-												<div class="InfoLabel">Postal Code:</div>
+												<div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.postalCode")%></div>
 												<div class="Info"><%= contact.getHomePostalCode()%></div>
 												<div style="clear: left;"><span></span></div>
 											</div>
 											<% } %>
 											<% if (!ContactUtils.isEmpty(contact.getHomeCountry())) { %>
 											<div class="InfoItem">
-												<div class="InfoLabel">Country/Region:</div>
+												<div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.country-region")%></div>
 												<div class="Info"><%= contact.getHomeCountry()%></div>
 												<div style="clear: left;"><span></span></div>
 											</div>
@@ -270,25 +270,25 @@
 										<div class="RightContent">
 										<% if (!ContactUtils.isEmpty(contact.getHomePhone1())) { %>
 											<div class="InfoItem">
-												<div class="InfoLabel">Home Phone 1:</div>
+												<div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.homePhone1")%></div>
 												<div class="Info"><%= contact.getHomePhone1()%></div>
 											</div>
 											<% } %>
 											<% if (!ContactUtils.isEmpty(contact.getHomePhone2())) { %>													
 											<div class="InfoItem">
-												<div class="InfoLabel">Home Phone 2:</div>
+												<div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.homePhone2")%></div>
 												<div class="Info"><%= contact.getHomePhone2()%></div>
 											</div>	
 											<% } %>
 											<% if (!ContactUtils.isEmpty(contact.getHomeFax()))  { %>												
 											<div class="InfoItem">
-												<div class="InfoLabel">Home Fax:</div>
+												<div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.homeFax")%></div>
 												<div class="Info"><%= contact.getHomeFax()%></div>
 											</div>	
 											<% } %>
 											<% if (!ContactUtils.isEmpty(contact.getPersonalSite())) { %>												
 											<div class="InfoItem">
-												<div class="InfoLabel">Web Page:</div>
+												<div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.webPage")%></div>
 												<div class="Info"><a target="_blank" href="<%= contact.getPersonalSite() %>"><%= contact.getPersonalSite()%></a></div>
 											</div>	
 											<% } %>												
@@ -303,7 +303,7 @@
 									else note = contact.getNote().replaceAll("\n", "<br>") ;								
 								 %>
 								<div class="InfoContainer">
-									<div class="TitleInfo">Note</div>
+									<div class="TitleInfo"><%=_ctx.appRes(uicomponent.getName() + ".label.note")%></div>
 									<div class="Content">
 										<!--<div class="LeftContent">					
 											<div class="Member">-->

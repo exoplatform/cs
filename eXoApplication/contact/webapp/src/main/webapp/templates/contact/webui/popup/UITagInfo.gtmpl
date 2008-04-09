@@ -7,8 +7,8 @@
 	<div class="">
 		<table class="UIFormGrid">
 			<thead>
-				<th class="Border">Tag</th>
-				<th>Tag name</th>
+				<th class="Border"><%=_ctx.appRes("UITagInfo.label.tag")%></th>
+				<th><%=_ctx.appRes("UITagInfo.label.tagName")%></th>
 			</thead>
 			<tbody>
 			<% 
