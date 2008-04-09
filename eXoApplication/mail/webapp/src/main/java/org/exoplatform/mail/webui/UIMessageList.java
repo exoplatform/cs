@@ -128,16 +128,18 @@ public class UIMessageList extends UIForm {
     MessageFilter filter = getMessageFilter();
     if (filter == null) filter = new MessageFilter("Folder");
     if (viewMode == MODE_THREAD || viewMode == MODE_CONVERSATION) filter.setHasStructure(true) ;
-    if (accountId != null && accountId != ""){
-      filter.setAccountId(accountId);
-      //if(filter.getFolder() == null || (filter.getFolder() != null && (!filter.getFolder()[0].equals(selectedFolderId_)) ||  pageList_ == null)) {
+    if (accountId != null && accountId != "") {
+      filter.setAccountId(accountId) ;
       if (filter.getFolder() == null) {        
         selectedFolderId_ = Utils.createFolderId(accountId, Utils.FD_INBOX, false);
         filter.setFolder(new String[] { selectedFolderId_ });
-      } else selectedFolderId_ = filter.getFolder()[0];
+      } else {
+        selectedFolderId_ = filter.getFolder()[0];
+      }
       setMessagePageList(mailSrv.getMessagePageList(SessionsUtils.getSessionProvider(), username, filter));
-      //}
-    } else messageList_.clear();
+    } else {
+      messageList_.clear();
+    }
     setMessageFilter(filter);
   }
 
@@ -654,14 +656,18 @@ public class UIMessageList extends UIForm {
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+
+      // Verify
+      UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
       if(Utils.isEmptyField(accountId)) {
-        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
+      } else if(uiMessageList.getCheckedMessage().isEmpty()) {
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
+        return;
       }
       UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
-      UIMessageArea uiMessageArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class);
       UIMessagePreview uiMessagePreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class);
       Message msgPreview = null;
       if (uiMessagePreview.getMessage() != null) msgPreview = uiMessagePreview.getMessage();
@@ -685,7 +691,7 @@ public class UIMessageList extends UIForm {
       if (msgPreview != null && appliedMsgList.contains(msgPreview)) uiMessagePreview.setMessage(null);
       uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageArea);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTags);
     }
   }
