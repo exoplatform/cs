@@ -11,11 +11,15 @@
 <% if(contact != null) { %>	
 	<div class="ContactPreviewBar" >
 		<div class="Subject"><%=_ctx.appRes(uicomponent.getName() + ".label.contactDetails")%></div>
-		<div class="MaximizeButton" title="View full - size task" onclick = "eXo.cs.Utils.showHidePane(this,document.getElementById('UIListUsers').parentNode,'<%=uicomponent.getId()%>')"><span></span></div>
-		<span class="LastUpdated">
-				<%java.util.Date lastUpdated = contact.getLastUpdated() %>
-				<%=_ctx.appRes(uicomponent.getName() + ".label.lastUpdated")%><%=(lastUpdated == null) ? "_" : lastUpdated%>
-		</span>
+		<div class="MaximizeButton" title="<%=_ctx.appRes(uicomponent.getName() + ".label.viewFull")%>" onclick = "eXo.cs.Utils.showHidePane(this,document.getElementById('UIListUsers').parentNode,'<%=uicomponent.getId()%>')"><span></span></div>
+		<%
+		java.util.Date lastUpdated = contact.getLastUpdated()
+		if (lastUpdated != null) { 
+		%>
+			<span class="LastUpdated">				
+					<%=_ctx.appRes(uicomponent.getName() + ".label.lastUpdated")%> : <%=lastUpdated%>
+			</span>
+		<% } %>		
 		<div style="clear:both;"><span></span></div>
 	</div>
 	<div class="ContactPreviewDetails SpliterResizableListArea">

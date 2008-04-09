@@ -5,7 +5,7 @@
 	rcontext.getJavascriptManager().addJavascript('eXo.cs.Utils.captureInput("inputValue","'+ action +'") ;') ;
 %>
 <div class="UISearchForm">
-	<a href="<%=uicomponent.event("AdvancedSearch")%>" class="AdvancedSearch" title="Advance Search"><span></span></a>
+	<a href="<%=uicomponent.event("AdvancedSearch")%>" class="AdvancedSearch" title="<%=_ctx.appRes(uicomponent.getName() + ".label.advanceSearch")%>"><span></span></a>
 	<a href="<%=uicomponent.event("Search")%>" class="Search" title="Search"><span></span></a>
 	<%uiform.renderChild("inputValue")%>
 	<%
