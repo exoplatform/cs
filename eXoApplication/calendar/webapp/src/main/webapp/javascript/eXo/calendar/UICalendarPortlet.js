@@ -237,6 +237,7 @@ UICalendarPortlet.prototype.show = function(obj, evt) {
 	var calType = obj.getAttribute("calType") ;
 	var calName = obj.getAttribute("calName") ;
 	var calColor = obj.getAttribute("calColor") ;
+	var canEdit =  String(obj.getAttribute("canedit")).toLowerCase() ;
 	value = "objectId=" + obj.id ;
 	if (calType) {		
 		value += "&calType=" + calType ;
@@ -275,13 +276,20 @@ UICalendarPortlet.prototype.show = function(obj, evt) {
 		var actions = DOMUtil.findDescendantsByTagName(eXo.calendar.UICalendarPortlet.menuElement, "a") ;
 		for(var j = 0 ; j < actions.length ; j ++) {
 			if (
-				//(actions[j].href.indexOf("EditCalendar") >= 0) ||
+				(actions[j].href.indexOf("EditCalendar") >= 0) ||
 				(actions[j].href.indexOf("ShareCalendar") >= 0) ||
 				(actions[j].href.indexOf("ChangeColorCalendar") >= 0)) {
 				actions[j].style.display = "none" ;
 			}
 		}
 	}
+	if (canEdit && (canEdit == "true") ) {
+		for(var j = 0 ; j < actions.length ; j ++) {
+			if (actions[j].href.indexOf("EditCalendar") >= 0) {
+				actions[j].style.display = "block" ;
+			}
+		}
+	}	
 } ;
 /*
  * 
