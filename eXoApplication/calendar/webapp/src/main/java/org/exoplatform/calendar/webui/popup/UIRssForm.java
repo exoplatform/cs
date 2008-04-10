@@ -42,6 +42,7 @@ import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTabPane;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
+import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 /**
  * Created by The eXo Platform SARL
@@ -79,15 +80,15 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     UIFormInputWithActions rssInfo = new UIFormInputWithActions("rssInfo") ;
     //rssInfo.addUIFormInput(new UIFormStringInput(NAME, NAME, "eXoCalendar.rss")) ;
-    rssInfo.addUIFormInput(new UIFormStringInput(TITLE, TITLE, "eXoCalendar")) ;
+    rssInfo.addUIFormInput(new UIFormStringInput(TITLE, TITLE, "eXoCalendar").addValidator(MandatoryValidator.class)) ;
     //List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     /*for(String vs : version) {
       options.add(new SelectItemOption<String>(vs, vs)) ;
     }*/
     //rssInfo.addUIFormInput(new UIFormSelectBox(VERSION, VERSION, options)) ;
     String url = calendarService.getCalendarSetting(SessionProviderFactory.createSessionProvider(), username).getBaseURL() ;
-    if(url == null) url = CalendarUtils.getServerBaseUrl() + "calendar/iCalRss" ;
-    rssInfo.addUIFormInput(new UIFormStringInput(URL, URL, url)) ;
+    if(CalendarUtils.isEmpty(url)) url = CalendarUtils.getServerBaseUrl() + "calendar/iCalRss" ;
+    rssInfo.addUIFormInput(new UIFormStringInput(URL, URL, url).addValidator(MandatoryValidator.class)) ;
     rssInfo.addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, null)) ;
     rssInfo.addUIFormInput(new UIFormStringInput(COPYRIGHT, COPYRIGHT, null)) ;
     rssInfo.addUIFormInput(new UIFormStringInput(LINK, LINK, "www.exoplatform.org")) ;    
