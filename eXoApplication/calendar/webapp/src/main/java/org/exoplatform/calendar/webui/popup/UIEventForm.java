@@ -160,6 +160,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     try {
       return super.getLabel(id) ;
     } catch (Exception e) {
+    	e.printStackTrace() ;
       return id ;
     }
   }
