@@ -73,25 +73,25 @@
 					
 					<!--call javascript here when already-->
 					<a href="#" class="ControlButton">
-						<div class="Icon ChatIcon" title="chat"><span></span></div>
+						<div class="Icon ChatIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.instantMessage")%>"><span></span></div>
 					</a>
 					<a href="<%=uicomponent.event("Tag")%>" class="ControlButton">
-						<div class="Icon SelectTagIcon"title="tag"><span></span></div>
+						<div class="Icon SelectTagIcon"title="<%=_ctx.appRes(uicomponent.getName() + ".label.tag")%>"><span></span></div>
 					</a>
 					<a href="<%=uicomponent.event("SendEmail")%>" class="ControlButton">
-						<div class="Icon MessageIcon" title="send mail"><span></span></div>
+						<div class="Icon MessageIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.email")%>"><span></span></div>
 					</a>
 					<div class="SeparatorLine"><span></span></div>
 					<a href="<%=uicomponent.event("DeleteContacts", uicomponent.id, "null")%>" class="ControlButton">
-						<div class="Icon DustBin16x16Icon " title="delete"><span></span></div>
+						<div class="Icon DustBin16x16Icon " title="<%=_ctx.appRes(uicomponent.getName() + ".label.delete")%>"><span></span></div>
 					</a>
 					
 					<a href="<%= uicomponent.event("Print") %>" class="ControlButton">
-							<div class="Icon PrintIcon" title="Print"><span></span></div>
+							<div class="Icon PrintIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.print")%>"><span></span></div>
 					</a>
 				
 					<a href="<%=uicomponent.event("CopyContact")%>" class="ControlButton">
-							<div class="Icon CopyContactIcon" title="Copy Contacts"><span></span></div>
+							<div class="Icon CopyContactIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.copyContacts")%>"><span></span></div>
 					</a>
 					
 					<% 
@@ -533,7 +533,7 @@
 			  		  <div class="InformationsMember">
 								<% if (!ContactUtils.isEmpty(contact.getEmailAddress())) { %>
 			  		  	<div class="InfoMember">
-			  		  		<span class="LabelContent">Email:</span>
+			  		  		<span class="LabelContent"><%=_ctx.appRes(uicomponent.getName() + ".label.email")%> :</span>
 			  		  			<% 
 			  		  					String email = contact.getEmailAddress() ;
 			  		  					String subEmail ;
@@ -559,7 +559,7 @@
 			  		  		if (!ContactUtils.isEmpty(workPhone)) {
 			  		  	%>
 			  		  	<div class="InfoMember">
-			  		  		<span class="LabelContent">Work phone:</span>
+			  		  		<span class="LabelContent"><%=_ctx.appRes(uicomponent.getName() + ".label.workPhone")%> :</span>
 			  		  		<span class="LabelContent">
 			  		  			<%= workPhone %>
 			  		  		</span>
@@ -567,7 +567,7 @@
 			  		  	<% } %>
 			  		  	<% if (!ContactUtils.isEmpty(contact.getMobilePhone())) { %>
 			  		  	<div class="InfoMember">
-			  		  		<span class="LabelContent">Mobile:</span>
+			  		  		<span class="LabelContent"><%=_ctx.appRes(uicomponent.getName() + ".label.mobile")%> : </span>
 			  		  		<span class="LabelContent">
 			  		  			<%= contact.getMobilePhone() %>
 			  		  		</span>
@@ -575,7 +575,7 @@
 			  		  	<% } %>
 			  		  	<% if (!ContactUtils.isEmpty(contact.getWebPage())) { %>
 			  		  	<div class="InfoMember">
-			  		  		<span class="LabelContent">Website:</span>
+			  		  		<span class="LabelContent"><%=_ctx.appRes(uicomponent.getName() + ".label.webSite")%> :</span>
 			  		  		<span class="LabelContent">
 			  		  			<a target="_blank" href="<%= contact.getWebPage() %>"><%= contact.getWebPage()%></a>
 			  		  		</span>
@@ -585,7 +585,7 @@
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">
 			  		  		<% if (!uicomponent.isPrintForm) { %>
-			  		  			<a href="<%=uicomponent.event("ViewDetails", contact.getId())%>">View Details</a>
+			  		  			<a href="<%=uicomponent.event("ViewDetails", contact.getId())%>"><%=_ctx.appRes(uicomponent.getName() + ".label.viewDetails")%></a>
 			  		  		<% } %>
 			  		  		</span>			  		  	
 			  		  	</div>
@@ -675,7 +675,7 @@
 			  		  <div class="InformationsMember">
 			  		  	<% if (!ContactUtils.isEmpty(contact.getEmailAddress())) { %>
 			  		  	<div class="InfoMember">
-			  		  		<span class="LabelContent">Email:</span>
+			  		  		<span class="LabelContent"><%=_ctx.appRes(uicomponent.getName() + ".label.email")%> :</span>
 			  		  			<% 
 			  		  					String email = contact.getEmailAddress() ;
 			  		  					String subEmail ;
@@ -701,7 +701,7 @@
 			  		  		if (!ContactUtils.isEmpty(workPhone)) {
 			  		  	%>
 			  		  	<div class="InfoMember">
-			  		  		<span class="LabelContent">Work phone:</span>
+			  		  		<span class="LabelContent"><%=_ctx.appRes(uicomponent.getName() + ".label.workPhone")%> :</span>
 			  		  		<span class="LabelContent">
 			  		  			<%= workPhone %>
 			  		  		</span>
@@ -709,7 +709,7 @@
 			  		  	<% } %>
 			  		  	<% if (!ContactUtils.isEmpty(contact.getMobilePhone())) { %>
 			  		  	<div class="InfoMember">
-			  		  		<span class="LabelContent">Mobile:</span>
+			  		  		<span class="LabelContent"><%=_ctx.appRes(uicomponent.getName() + ".label.mobile")%> :</span>
 			  		  		<span class="LabelContent">
 			  		  			<%= contact.getMobilePhone() %>
 			  		  		</span>
@@ -717,7 +717,7 @@
 			  		  	<% } %>
 			  		  	<% if (!ContactUtils.isEmpty(contact.getWebPage())) { %>
 			  		  	<div class="InfoMember">
-			  		  		<span class="LabelContent">Website:</span>
+			  		  		<span class="LabelContent"><%=_ctx.appRes(uicomponent.getName() + ".label.webSite")%> :</span>
 			  		  		<span class="LabelContent">
 			  		  			<a target="_blank" href="<%= contact.getWebPage() %>"><%= contact.getWebPage()%></a>
 			  		  		</span>
@@ -727,7 +727,7 @@
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent">
 			  		  		<% if (!uicomponent.isPrintForm) { %>
-			  		  			<a href="<%=uicomponent.event("ViewDetails", contact.getId())%>">View Details</a>
+			  		  			<a href="<%=uicomponent.event("ViewDetails", contact.getId())%>"><%=_ctx.appRes(uicomponent.getName() + ".label.viewDetails")%></a>
 			  		  		<% } %>
 			  		  		</span>			  		  	
 			  		  	</div>
