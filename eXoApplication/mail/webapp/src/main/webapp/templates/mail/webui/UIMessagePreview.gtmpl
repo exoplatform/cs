@@ -327,7 +327,12 @@
                   <div class="InvitationBG">
                   <%=msg.getMessageBody()%>
                   <div class="ActionBox">
-                    <span style="font-weight: bold ;">Will you attend ?</span> <a href="<%=uicomponent.event('AnswerInvitation', '1')%>">Yes</a> - <a href="<%=uicomponent.event('AnswerInvitation', '0')%>">No</a> - <a href="<%=uicomponent.event('AnswerInvitation', '2')%>">Maybe</a> </span>
+                    <span style="font-weight: bold ;">Will you attend ?</span> 
+	                    <a href="<%=uicomponent.event('AnswerInvitation', '3&messageId=' + msg.getId())%>">Yes and Import</a> -
+	                    <a href="<%=uicomponent.event('AnswerInvitation', '1&messageId=' + msg.getId())%>">Yes</a> - 
+	                    <a href="<%=uicomponent.event('AnswerInvitation', '0&messageId=' + msg.getId())%>">No</a> - 
+	                    <a href="<%=uicomponent.event('AnswerInvitation', '2&messageId=' + msg.getId())%>">Maybe</a> 
+                    </span>
                   </div>
                   </div> 
                 <%}%>
