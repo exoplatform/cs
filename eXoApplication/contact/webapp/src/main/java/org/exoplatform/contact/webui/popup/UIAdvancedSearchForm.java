@@ -78,9 +78,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent {
     addUIFormInput(new UIFormStringInput(FIELD_LASTNAME_INPUT, FIELD_LASTNAME_INPUT, null));
     addUIFormInput(new UIFormStringInput(FIELD_NICKNAME_INPUT, FIELD_NICKNAME_INPUT, null));
     addUIFormInput(new UIFormStringInput(FIELD_JOBTITLE_INPUT, FIELD_JOBTITLE_INPUT, null));
-    addUIFormInput(new UIFormStringInput(FIELD_EMAIL_INPUT, FIELD_EMAIL_INPUT, null)
-      .addValidator(EmailAddressValidator.class));
-    
+    addUIFormInput(new UIFormStringInput(FIELD_EMAIL_INPUT, FIELD_EMAIL_INPUT, null)) ; 
     List<SelectItemOption<String>> genders = new ArrayList<SelectItemOption<String>>() ;
     genders.add(new SelectItemOption<String>("", "")) ;
     genders.add(new SelectItemOption<String>(MALE, MALE)) ;

@@ -103,11 +103,14 @@
 			      			</div>
 			      		</div>
 			      		<% /*End Popup Menu*/ %>
+							<!--div class="IconHolder ViewIcon">
+								<div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.getName() + ".label.contactsView")%></div>
+							</div-->
 						</div>
 						
 						<div class="SelectButton" onclick="eXo.contact.UIContactPortlet.showPopupCustomLayoutView(this, event);">
 							<div class="IconHolder CustomLayoutIcon">
-								<div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.getName() + ".label.customLayoutView")%></div>
+								<div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.getName() + ".label.layoutView")%></div>
 							</div>
 							<% /*Begin Popup Menu*/ %>
 									<div style="position: relative;">
@@ -160,6 +163,9 @@
 				      			</div>
 				      		</div>
 				      		<% /*End Popup Menu*/ %>
+							<!--div class="IconHolder CustomLayoutIcon">
+								<div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.getName() + ".label.customLayoutView")%></div>
+							</div-->
 						</div>
 						
 						<!--a href="#">
