@@ -184,7 +184,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
 			UIFormStringInput uiPermInput = shareTab.getUIStringInput(group + PERMISSION_SUB) ;
 			if(uiInput != null) uiInput.setEnable(!isLock) ;
 			if(uiPermInput != null) uiPermInput.setEditable(!isLock) ;
-			shareTab.setActionField(group + PERMISSION_SUB, null) ;
+			if(isLock) shareTab.setActionField(group + PERMISSION_SUB, null) ;
 		}
 		/*shareTab.getUIStringInput(EDIT_PERMISSION).setEditable(!isLock) ;*/
 	}
