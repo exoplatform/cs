@@ -90,6 +90,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent {
   public void activate() throws Exception { }
   public void deActivate() throws Exception { }
   
+  
   static  public class SearchActionListener extends EventListener<UIAdvancedSearchForm> {
     public void execute(Event<UIAdvancedSearchForm> event) throws Exception {
       UIAdvancedSearchForm uiAdvancedSearchForm = event.getSource() ;
