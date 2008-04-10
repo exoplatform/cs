@@ -292,4 +292,9 @@ public class CsvImportExport implements CalendarImportExport {
       }
     }
   }
+	public List<CalendarEvent> getEventObjects(InputStream icalInputStream)
+			throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
