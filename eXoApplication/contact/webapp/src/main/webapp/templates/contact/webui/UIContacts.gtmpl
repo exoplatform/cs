@@ -533,7 +533,7 @@
 			  		  <div class="InformationsMember">
 								<% if (!ContactUtils.isEmpty(contact.getEmailAddress())) { %>
 			  		  	<div class="InfoMember">
-			  		  		<span class="LabelContent"><%=_ctx.appRes(uicomponent.getName() + ".label.email")%>:</span>
+			  		  		<span class="LabelContent"><%=_ctx.appRes(uicomponent.getName() + ".label.email")%> :</span>
 			  		  			<% 
 			  		  					String email = contact.getEmailAddress() ;
 			  		  					String subEmail ;
@@ -567,7 +567,7 @@
 			  		  	<% } %>
 			  		  	<% if (!ContactUtils.isEmpty(contact.getMobilePhone())) { %>
 			  		  	<div class="InfoMember">
-			  		  		<span class="LabelContent">Mobile:</span>
+			  		  		<span class="LabelContent"><%=_ctx.appRes(uicomponent.getName() + ".label.mobile")%> : </span>
 			  		  		<span class="LabelContent">
 			  		  			<%= contact.getMobilePhone() %>
 			  		  		</span>
@@ -675,7 +675,7 @@
 			  		  <div class="InformationsMember">
 			  		  	<% if (!ContactUtils.isEmpty(contact.getEmailAddress())) { %>
 			  		  	<div class="InfoMember">
-			  		  		<span class="LabelContent"><%=_ctx.appRes(uicomponent.getName() + ".label.email")%>:</span>
+			  		  		<span class="LabelContent"><%=_ctx.appRes(uicomponent.getName() + ".label.email")%> :</span>
 			  		  			<% 
 			  		  					String email = contact.getEmailAddress() ;
 			  		  					String subEmail ;
@@ -701,7 +701,7 @@
 			  		  		if (!ContactUtils.isEmpty(workPhone)) {
 			  		  	%>
 			  		  	<div class="InfoMember">
-			  		  		<span class="LabelContent"><%=_ctx.appRes(uicomponent.getName() + ".label.workPhone")%>:</span>
+			  		  		<span class="LabelContent"><%=_ctx.appRes(uicomponent.getName() + ".label.workPhone")%> :</span>
 			  		  		<span class="LabelContent">
 			  		  			<%= workPhone %>
 			  		  		</span>
@@ -717,7 +717,7 @@
 			  		  	<% } %>
 			  		  	<% if (!ContactUtils.isEmpty(contact.getWebPage())) { %>
 			  		  	<div class="InfoMember">
-			  		  		<span class="LabelContent"><%=_ctx.appRes(uicomponent.getName() + ".label.webSite")%></span>
+			  		  		<span class="LabelContent"><%=_ctx.appRes(uicomponent.getName() + ".label.webSite")%> :</span>
 			  		  		<span class="LabelContent">
 			  		  			<a target="_blank" href="<%= contact.getWebPage() %>"><%= contact.getWebPage()%></a>
 			  		  		</span>

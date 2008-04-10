@@ -356,24 +356,24 @@
 						<div class="UIWelcomeContact" >
 						
 						  <div class="WelcomeContact">
-						    <div class="LabelWelcomeContact">Welcome to</div>
-						    <div class="LabelComment">Your powerful Contact Manager</div>
+						    <div class="LabelWelcomeContact"><%=_ctx.appRes("UIWelcomeContact.label.label0")%></div>
+						    <div class="LabelComment"><%=_ctx.appRes("UIWelcomeContact.label.label1")%></div>
 						    <div style="clear: both;"><span></span></div>
 						  </div>
 						  <div class="LogoContact">
 						    <span></span>
 						  </div>
 						  <div class="OverviewContact">
-						    Overview
+						    <%=_ctx.appRes("UIWelcomeContact.label.label2")%>
 						  </div>
 						  <div class="ContentContact">
-								    eXo Contact is an open-source Contact that is built on foundation of eXo WebOS with variety of new features designed to make your e-Contact experience more productive and convenience. Users can easily and flexibly mange contacts by interacting with friendly interface. 
-								  </div>
+								<%=_ctx.appRes("UIWelcomeContact.label.label3")%>
+							</div>
 						  <div class="FeaturesContact">
-						    Features
+						    <%=_ctx.appRes("UIWelcomeContact.label.label4")%>
 						  </div>
 						  <div class="ContentContact">
-						    eXo Address Book manages your private, public and shared contacts. Each contact contains detail information about yourself, work and home. Vcard format feature makes it easy for you to import/export your contacts . Drag and drop feature allows you to perform many actions flexibly. Searching for contacts is convenient with Quick and Advance Search...You can share, create tag and also refer your contacts to other application such as eXo Calendar, eXo Web Mail...
+						    <%=_ctx.appRes("UIWelcomeContact.label.label5")%>
 						  </div>
 					  </div>
 						
