@@ -357,14 +357,14 @@
 
 .UIMailPortlet .MailWorkingWorkspace  .UIActionBar a.ControlButton {
 	color: #000000;
-	margin: 3px 0px 0px 0px;
+	margin: 4px 1px 0px 1px;
 	line-height: 26px;
-	border-width: 1px ;
 }
 
 .UIMailPortlet .MailWorkingWorkspace  .UIActionBar a:hover.ControlButton {
 	background: url('background/ControlButtonBG1x26.gif') repeat-x ;
 	color: #058ee6; border: 1px solid #cbcbcb;
+	margin: 3px 0px 0px 0px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .SeparatorLine {
@@ -477,13 +477,13 @@
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageActionsBar .MoreActionsIcon {
 	margin: 1px 0px 0px 10px;
-	line-height: 29px;
+	line-height: 27px;
 	padding-left: 24px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageActionsBar .View {
 	margin: 1px 0px 0px 10px;
-	line-height: 29px;
+	line-height: 27px;
 	padding-left: 24px;
 }
 
