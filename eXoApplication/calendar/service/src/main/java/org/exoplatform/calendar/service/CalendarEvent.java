@@ -35,7 +35,7 @@ public class CalendarEvent {
   
   final public static String TENTATIVE = "tentative".intern() ;
   final public static String CONFIRMED = "confirmed".intern() ;
-  final public static String CANCELLED = "cancelled".intern() ;
+  final public static String CANCELLED = "canceled".intern() ;
   
   final public static String NEEDS_ACTION = "needs-action".intern() ;
   final public static String COMPLETED = "completed".intern() ;
@@ -57,12 +57,12 @@ public class CalendarEvent {
   final public static String RP_NOREPEAT = "norepeat".intern() ;
   final public static String RP_DAILY = "daily".intern() ;
   final public static String RP_WEEKLY = "weekly".intern() ;
-  final public static String RP_MONTHY = "monthy".intern() ;
+  final public static String RP_MONTHLY = "monthly".intern() ;
   final public static String RP_YEARLY = "yearly".intern() ;
   final public static String RP_WEEKEND = "weekend".intern() ;
   final public static String RP_WORKINGDAYS = "workingdays".intern() ;
   
-  final public static String[] REPEATTYPES = {RP_NOREPEAT, RP_DAILY, RP_WORKINGDAYS, RP_WEEKEND, RP_WEEKLY, RP_MONTHY, RP_YEARLY} ;
+  final public static String[] REPEATTYPES = {RP_NOREPEAT, RP_DAILY, RP_WORKINGDAYS, RP_WEEKEND, RP_WEEKLY, RP_MONTHLY, RP_YEARLY} ;
   
   private String id ;
   private String summary ;

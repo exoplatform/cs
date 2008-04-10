@@ -118,7 +118,7 @@ public class UITaskDetailTab extends UIFormInputWithActions {
 
     ActionData selectUser = new ActionData() ;
     selectUser.setActionType(ActionData.TYPE_ICON) ;
-    addEmailAddress.setActionName(UITaskForm.ACT_SELECTUSER) ;
+    selectUser.setActionName(UITaskForm.ACT_SELECTUSER) ;
     selectUser.setActionListener(UITaskForm.ACT_SELECTUSER) ;
 
     List<ActionData> selectUsers = new ArrayList<ActionData>() ;

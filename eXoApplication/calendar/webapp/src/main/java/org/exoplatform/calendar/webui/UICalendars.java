@@ -210,7 +210,8 @@ public class UICalendars extends UIForm  {
 			UIPopupContainer uiPopupContainer = popupAction.activate(UIPopupContainer.class, 600) ;
 			uiPopupContainer.setId(UIPopupContainer.UICALENDARPOPUP) ;
 			UICalendarForm calendarForm = uiPopupContainer.addChild(UICalendarForm.class, null, null) ;
-			calendarForm.setTimeZone(timeZone.getID()) ;
+			calendarForm.setTimeZone(uiCalendarPortlet.getCalendarSetting().getTimeZone()) ;
+			calendarForm.setLocale(uiCalendarPortlet.getCalendarSetting().getLocation()) ;
 			calendarForm.setSelectedGroup(categoryId) ;
 			//popupAction.activate(uiPopupContainer, 600, 0, true) ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;

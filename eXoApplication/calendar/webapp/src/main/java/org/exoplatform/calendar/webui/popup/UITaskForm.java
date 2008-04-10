@@ -110,6 +110,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     try {
       label = super.getLabel(id) ;
     } catch (Exception e) {
+    	e.printStackTrace() ;
     }
     return label ;
   }
