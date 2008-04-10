@@ -3,6 +3,7 @@
 		<div class="HeaderToolbar">
 			<div class="LeftBar">
 				<div class="RightBar">
+				
 					<div class="CenterBar">
 					
 						<div class="SelectButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
