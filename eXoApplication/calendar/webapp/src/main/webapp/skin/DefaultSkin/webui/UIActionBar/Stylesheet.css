@@ -27,13 +27,14 @@
 
 .UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar a {
 	color: #000000;
-	margin: 3px 0px 0px 0px;
+	margin: 4px 1px 0px 1px;
 }
 
 .UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar a:hover {
 	background: url('../background/CalendarBackground.gif') repeat-x center -79px;
 	color: #058ee6; border: 1px solid #cbcbcb;
 	height: 24px;
+	margin: 3px 0px 0px 0px;
 }
 
 .UICalendarPortlet .CalendarWorkingWorkspace  .UIPopupCategory a {
