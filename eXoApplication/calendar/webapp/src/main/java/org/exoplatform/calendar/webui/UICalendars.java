@@ -428,6 +428,7 @@ public class UICalendars extends UIForm  {
 			String calendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;
 			String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
 			CalendarService calService = CalendarUtils.getCalendarService() ;
+			
 			if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
 				calService.removeUserCalendar(uiComponent.getSession(), username, calendarId) ;
 			}else if(calType.equals(CalendarUtils.SHARED_TYPE)) {

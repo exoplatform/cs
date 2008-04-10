@@ -567,6 +567,8 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       UIApplication uiApp = uiCalendarView.getAncestorOfType(UIApplication.class) ;
       //uiCalendarView.refresh() ;
       uiCalendarView.allDelete_ = true ;
+      UICalendarPortlet calPortlet = uiCalendarView.getAncestorOfType(UICalendarPortlet.class) ;
+      calPortlet.cancelAction() ;
       if(uiCalendarView instanceof UIMonthView ) {
         List<CalendarEvent> list = ((UIMonthView)uiCalendarView).getSelectedEvents() ;
         if(list.isEmpty()) {
@@ -791,6 +793,8 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       String username = event.getRequestContext().getRemoteUser() ;
       CalendarService calendarService = uiCalendarView.getApplicationComponent(CalendarService.class) ;
       boolean canEdit = false ;
+      UICalendarPortlet uiPortlet = uiCalendarView.getAncestorOfType(UICalendarPortlet.class) ;
+      uiPortlet.cancelAction() ;
       if(CalendarUtils.PRIVATE_TYPE.equals(calType)) {
         canEdit = true ;
       } else if (CalendarUtils.SHARED_TYPE.equals(calType)) {
@@ -808,6 +812,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         }
       }
       if(canEdit) {
+      	
         if(CalendarUtils.PUBLIC_TYPE.equals(calType)){
           calendarService.removePublicEvent(uiCalendarView.getSystemSession(), calendarId, eventId) ;
         } else if(CalendarUtils.PRIVATE_TYPE.equals(calType)){
@@ -816,7 +821,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           calendarService.removeSharedEvent(uiCalendarView.getSystemSession(), username, calendarId, eventId) ;
         }
         UICalendarViewContainer uiContainer = uiCalendarView.getAncestorOfType(UICalendarViewContainer.class) ;
-        UICalendarPortlet uiPortlet = uiCalendarView.getAncestorOfType(UICalendarPortlet.class) ;
         UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
         uiMiniCalendar.updateMiniCal() ;
         uiCalendarView.setLastUpdatedEventId(null) ;

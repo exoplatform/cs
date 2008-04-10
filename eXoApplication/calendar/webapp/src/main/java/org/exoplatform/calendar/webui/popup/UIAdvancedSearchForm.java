@@ -166,6 +166,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
   
   private List<SelectItemOption<String>> getStatus() {
     List<SelectItemOption<String>> status = new ArrayList<SelectItemOption<String>>() ;
+    status.add(new SelectItemOption<String>("", "")) ;
     for(String taskStatus : CalendarEvent.TASK_STATUS) {
       status.add(new SelectItemOption<String>(taskStatus, taskStatus)) ;
     }
