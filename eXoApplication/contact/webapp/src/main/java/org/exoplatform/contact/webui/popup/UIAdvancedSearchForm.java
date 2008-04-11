@@ -108,6 +108,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;        
       }
+      
       ContactFilter filter = new ContactFilter() ;
       if(!ContactUtils.isEmpty(text)) filter.setText(ContactUtils.filterString(text, true)) ;
       if(!ContactUtils.isEmpty(fullName)) filter.setFullName(ContactUtils.filterString(fullName, false)) ;   
