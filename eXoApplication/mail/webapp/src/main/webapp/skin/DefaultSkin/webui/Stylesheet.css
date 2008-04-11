@@ -508,7 +508,7 @@
 .UIMailPortlet .MailWorkingWorkspace .UIMessageList {
 	padding-left: 1px;
 	overflow-y: auto;
-	overflow-x: auto;
+	overflow-x: hidden;
 	height: 200px ;
 	_width: 99.5%;
 }
@@ -524,7 +524,6 @@
 	border-bottom: 1px solid #e8e8e8;
 	border-right: none;
 	border-left: none;	
-	*width: auto;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIGrid thead {

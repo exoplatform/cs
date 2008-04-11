@@ -20,7 +20,6 @@ import java.io.InputStream;
 
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.SessionsUtils;
-import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIFolderContainer;
@@ -111,10 +110,6 @@ public class UIImportForm extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       } 
-      Folder folder = mailSrv.getFolder(SessionsUtils.getSessionProvider(), username, accountId, folderId);
-      folder.setNumberOfUnreadMessage(folder.getNumberOfUnreadMessage() + 1);
-      folder.setTotalMessage(folder.getTotalMessage() + 1);
-      mailSrv.saveFolder(SessionsUtils.getSessionProvider(), username, accountId, folder);
       uiPortlet.cancelAction() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class)) ;
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
