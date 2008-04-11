@@ -19,6 +19,7 @@ package org.exoplatform.mail.webui.popup;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.WizardStep;
@@ -47,8 +48,8 @@ public class UIAccountWizardStep2 extends UIFormInputSet implements WizardStep{
     setId(id) ;
     setComponentConfig(getClass(), null) ; 
     addChild(new UIFormStringInput(FIELD_OUTGOINGNAME, null, null)) ;
-    addChild(new UIFormStringInput(FIELD_EMAILADDRESS, null, null).addValidator(EmailAddressValidator.class)) ;
-    addChild(new UIFormStringInput(FIELD_EMAILREPLY, null, null).addValidator(EmailAddressValidator.class)) ;
+    addChild(new UIFormStringInput(FIELD_EMAILADDRESS, null, null)) ;
+    addChild(new UIFormStringInput(FIELD_EMAILREPLY, null, null)) ;
     addChild(new UIFormTextAreaInput(FIELD_SIGNATURE, null, null)) ;
     infoMessage_.clear() ;
     infoMessage_.add("UIAccountWizardStep2.info.label1") ;
@@ -73,8 +74,12 @@ public class UIAccountWizardStep2 extends UIFormInputSet implements WizardStep{
   }
   
   public boolean isFieldsValid() {
-   return !(Utils.isEmptyField(getOutgoingName()) || Utils.isEmptyField(getEmailAddress())) ;
-    // return isValid_ ;
+    try {
+      return (!Utils.isEmptyField(getOutgoingName()) && !Utils.isEmptyField(getEmailAddress()) && 
+          MailUtils.isValidEmailAddresses(getEmailAddress()) &&  MailUtils.isValidEmailAddresses(getEmailReply())) ;
+    } catch(Exception e) {
+      return false ;
+    }
   }
   protected void fieldsValid(boolean isValid) {
     isValid_ = isValid ;
