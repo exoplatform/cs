@@ -681,6 +681,8 @@ public class JCRDataStorage {
     addressBookNode.save() ;
     addressBookNode.getSession().save(); 
   }
+  
+  
   public void shareAddressBook(SessionProvider sProvider, String username, String addressBookId, List<String> receiveUsers) throws Exception {
     Node addressBookNode = getUserContactGroupHome(sProvider, username).getNode(addressBookId);
     Value[] values = {};
@@ -690,9 +692,49 @@ public class JCRDataStorage {
     	addressBookNode.addMixin(SHARED_MIXIN);
     	addressBookNode.setProperty("exo:sharedUserId", username) ;
     }
+    
     List<Value> valueList = new ArrayList<Value>() ;
   	for(String userId : receiveUsers) {
     	Node sharedAddress = getSharedAddressBook(userId) ;
+      boolean isExist = false ; 
+      for (int i = 0; i < values.length; i++) {
+        Value value = values[i];
+        String uuid = value.getString();
+        Node refNode = sharedAddress.getSession().getNodeByUUID(uuid);
+        if(refNode.getPath().equals(sharedAddress.getPath())) {
+          isExist = true ; 
+          
+//        add to fix bug 623
+          valueList.clear() ;
+          break ;
+        }
+        valueList.add(value) ;
+      }
+      if(!isExist) {
+        Value value2add = addressBookNode.getSession().getValueFactory().createValue(sharedAddress);
+        valueList.add(value2add) ;
+      }    
+    }
+  	if(valueList.size() > 0) {
+  		addressBookNode.setProperty(SHARED_PROP, valueList.toArray( new Value[valueList.size()]));
+  		addressBookNode.save() ;
+      addressBookNode.getSession().save();
+    }    
+  }
+/*  public void shareAddressBook(SessionProvider sProvider, String username, String addressBookId, List<String> receiveUsers) throws Exception {
+    
+    for(String userId : receiveUsers) {
+      Node addressBookNode = getUserContactGroupHome(sProvider, username).getNode(addressBookId);
+      Value[] values = {};
+      if (addressBookNode.isNodeType(SHARED_MIXIN)) {     
+        values = addressBookNode.getProperty(SHARED_PROP).getValues();
+      } else {
+        addressBookNode.addMixin(SHARED_MIXIN);
+        addressBookNode.setProperty("exo:sharedUserId", username) ;
+      }
+      List<Value> valueList = new ArrayList<Value>() ;
+
+      Node sharedAddress = getSharedAddressBook(userId) ;
       boolean isExist = false ; 
       for (int i = 0; i < values.length; i++) {
         Value value = values[i];
@@ -707,14 +749,14 @@ public class JCRDataStorage {
       if(!isExist) {
         Value value2add = addressBookNode.getSession().getValueFactory().createValue(sharedAddress);
         valueList.add(value2add) ;
-      }    
+      }  
+      if(valueList.size() > 0 && addressBookNode != null) {
+        addressBookNode.setProperty(SHARED_PROP, valueList.toArray( new Value[valueList.size()]));
+        addressBookNode.save() ;
+        addressBookNode.getSession().save();
+      } 
     }
-  	if(valueList.size() > 0) {
-  		addressBookNode.setProperty(SHARED_PROP, valueList.toArray( new Value[valueList.size()]));
-  		addressBookNode.save() ;
-      addressBookNode.getSession().save();
-    }
-  }
+  }*/
   
   public void shareContact(SessionProvider sProvider, String username, String[] contactIds, List<String> receiveUsers) throws Exception {
   	for(String contactId : contactIds) {
@@ -737,6 +779,9 @@ public class JCRDataStorage {
             Node refNode = sharedContact.getSession().getNodeByUUID(uuid);
             if(refNode.getPath().equals(sharedContact.getPath())) {
               isExist = true ; 
+              
+              // add to fix bug 623
+              valueList.clear() ;
               break ;
             }
             valueList.add(value) ;
@@ -751,6 +796,8 @@ public class JCRDataStorage {
       		contactNode.save() ;
           contactNode.getSession().save();
         }
+
+        
   		}catch (Exception e) {
   			e.printStackTrace() ;
   		}  		

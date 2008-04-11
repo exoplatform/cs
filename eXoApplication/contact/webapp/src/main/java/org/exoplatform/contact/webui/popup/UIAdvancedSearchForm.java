@@ -40,7 +40,6 @@ import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
-import org.exoplatform.webui.form.validator.EmailAddressValidator;
 
 /**
  * Created by The eXo Platform SARL
@@ -78,9 +77,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent {
     addUIFormInput(new UIFormStringInput(FIELD_LASTNAME_INPUT, FIELD_LASTNAME_INPUT, null));
     addUIFormInput(new UIFormStringInput(FIELD_NICKNAME_INPUT, FIELD_NICKNAME_INPUT, null));
     addUIFormInput(new UIFormStringInput(FIELD_JOBTITLE_INPUT, FIELD_JOBTITLE_INPUT, null));
-    addUIFormInput(new UIFormStringInput(FIELD_EMAIL_INPUT, FIELD_EMAIL_INPUT, null)
-      .addValidator(EmailAddressValidator.class));
-    
+    addUIFormInput(new UIFormStringInput(FIELD_EMAIL_INPUT, FIELD_EMAIL_INPUT, null)) ; 
     List<SelectItemOption<String>> genders = new ArrayList<SelectItemOption<String>>() ;
     genders.add(new SelectItemOption<String>("", "")) ;
     genders.add(new SelectItemOption<String>(MALE, MALE)) ;
@@ -111,6 +108,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;        
       }
+      
       ContactFilter filter = new ContactFilter() ;
       if(!ContactUtils.isEmpty(text)) filter.setText(ContactUtils.filterString(text, true)) ;
       if(!ContactUtils.isEmpty(fullName)) filter.setFullName(ContactUtils.filterString(fullName, false)) ;   
