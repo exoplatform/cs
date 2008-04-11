@@ -260,10 +260,15 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
             for (String user : receiveGroups) viewMapGroups.put(user, user) ;
             contactGroup.setViewPermissionGroups(viewMapGroups.keySet().toArray(new String[] {})) ;
             //---------------- 
-            contactService.shareAddressBook(
-                SessionProviderFactory.createSystemProvider(), username, contactGroup.getId(), receiveUsers) ;
-            contactService.shareAddressBook(
-                SessionProviderFactory.createSystemProvider(), username, contactGroup.getId(), receiveUsersByGroups) ;
+            // error here :
+            if (receiveUsers.size() > 0 ) {
+              contactService.shareAddressBook(
+                  SessionProviderFactory.createSystemProvider(), username, contactGroup.getId(), receiveUsers) ;
+            }              
+            if (receiveUsersByGroups.size() > 0) {
+              contactService.shareAddressBook(
+                  SessionProviderFactory.createSystemProvider(), username, contactGroup.getId(), receiveUsersByGroups) ;
+            }
           } else { // change permission 
             if (!uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).isChecked()) {
               List<String> newPerUsers = new ArrayList<String>() ; 
@@ -347,6 +352,12 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
             event.getRequestContext().addUIComponentToUpdateByAjax(uiAddEdit) ; 
             contactService.shareContact(SessionProviderFactory
                 .createSystemProvider(), username, new String[] {contact.getId()}, receiveUsers) ; 
+            
+            // added 
+            if (receiveUsersByGroups.size() > 0)
+              contactService.shareContact(SessionProviderFactory
+                .createSystemProvider(), username, new String[] {contact.getId()}, receiveUsersByGroups) ; 
+            
           } else {
             Contact contact = uiForm.contact_ ;
             if (uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).isChecked()) {
