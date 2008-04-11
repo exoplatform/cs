@@ -303,17 +303,16 @@ public class MailServiceImpl implements MailService{
     
     MimeMultipart  multipPartContent = new MimeMultipart("alternative");
     
-    MimeBodyPart contentPartRoot = new MimeBodyPart();
-    contentPartRoot.setContent(multipPartContent);
-
-    MimeBodyPart  mimeBodyPart1 = new MimeBodyPart();
-    mimeBodyPart1.setContent(message.getMessageBody(), "text/html");
-    multipPartContent.addBodyPart(mimeBodyPart1);
-    
-    multipPartRoot.addBodyPart(contentPartRoot);
-    
     List<Attachment> attachList = message.getAttachments();
-    if (attachList != null) {
+    if (attachList != null && attachList.size() != 0) {
+      MimeBodyPart contentPartRoot = new MimeBodyPart();
+      contentPartRoot.setContent(multipPartContent);
+      
+      MimeBodyPart  mimeBodyPart1 = new MimeBodyPart();
+      mimeBodyPart1.setContent(message.getMessageBody(), message.getContentType());
+      multipPartContent.addBodyPart(mimeBodyPart1);
+      multipPartRoot.addBodyPart(contentPartRoot);
+      
       for (Attachment att : attachList) {
         InputStream is = att.getInputStream();
         MimeBodyPart mimeBodyPart = new MimeBodyPart();
@@ -323,7 +322,13 @@ public class MailServiceImpl implements MailService{
         mimeBodyPart.setDisposition(Part.ATTACHMENT);
         mimeBodyPart.setFileName(att.getName());
         multipPartRoot.addBodyPart(mimeBodyPart);
-      }        
+      }
+      mimeMessage.setContent(multipPartRoot);
+    } else {
+      if (message.getContentType().indexOf("text/plain") > -1)
+        mimeMessage.setText(message.getMessageBody());
+      else
+        mimeMessage.setContent(message.getMessageBody(), "text/html");
     }
     mimeMessage.setHeader("X-Priority", String.valueOf(message.getPriority()));
     String priority = "Normal";
@@ -339,8 +344,6 @@ public class MailServiceImpl implements MailService{
       String key = iter.next().toString() ;
       mimeMessage.setHeader(key, message.getHeaders().get(key)) ;
     }
-    
-    mimeMessage.setContent(multipPartRoot);
     mimeMessage.saveChanges();
     try {
       transport.sendMessage(mimeMessage, mimeMessage.getAllRecipients());
