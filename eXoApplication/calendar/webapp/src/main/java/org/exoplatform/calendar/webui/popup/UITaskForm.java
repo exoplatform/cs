@@ -221,10 +221,10 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   }
 
   protected boolean isEventDetailValid(CalendarSetting calendarSetting){
-    if(CalendarUtils.isEmpty(getEventSumary())) {
+    /*if(CalendarUtils.isEmpty(getEventSumary())) {
       errorMsg_ = getId() + ".msg.event-summary-required" ;
       return false ;
-    }
+    }*/
     if(CalendarUtils.isEmpty(getCalendarId())) {
       errorMsg_ = getId() + ".msg.event-calendar-required" ;
       return false ;

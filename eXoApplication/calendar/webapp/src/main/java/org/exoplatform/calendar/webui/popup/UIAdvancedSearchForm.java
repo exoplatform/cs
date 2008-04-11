@@ -35,6 +35,7 @@ import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.webui.UIActionBar;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
+import org.exoplatform.calendar.webui.UIFormDateTimePicker;
 import org.exoplatform.calendar.webui.UIListView;
 import org.exoplatform.calendar.webui.UIPreview;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -43,6 +44,7 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -117,8 +119,8 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     addChild(new UIFormSelectBox(CATEGORY, CATEGORY, options)) ;
     addChild(new UIFormSelectBox(STATE, STATE, getStatus()).setRendered(false)) ;
     addChild(new UIFormSelectBox(PRIORITY, PRIORITY, getPriority())) ;
-    addChild( new UIFormDateTimeInput(FROMDATE, FROMDATE, null, false)) ;
-    addChild(new UIFormDateTimeInput(TODATE, TODATE, null, false)) ;
+    addChild(new UIFormDateTimePicker(FROMDATE, FROMDATE, null, false)) ;
+    addChild(new UIFormDateTimePicker(TODATE, TODATE, null, false)) ;
   }
   public void activate() throws Exception {}
   public void deActivate() throws Exception {
@@ -127,11 +129,14 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
   public void setSearchValue(String searchValue) {
     getUIStringInput(TEXT).setValue(searchValue) ;
   }  
+  public UIFormDateTimePicker getUIFormDateTimePicker(String id){
+  	return findComponentById(id) ;
+  }
   public String getFromDateValue() {
-    return getUIFormDateTimeInput(FROMDATE).getValue() ;
+    return getUIFormDateTimePicker(FROMDATE).getValue() ;
   }
   public String getToDateValue() {
-    return getUIFormDateTimeInput(TODATE).getValue() ;
+    return getUIFormDateTimePicker(TODATE).getValue() ;
   }
   public Date getFromDate() {
     DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
@@ -248,6 +253,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
         if(priority != null && priority.trim().length() > 0) query.setPriority(priority) ;
         String username = CalendarUtils.getCurrentUser() ;
         UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
+        System.out.println(query.getQueryStatement());
         EventPageList resultPageList =  
           CalendarUtils.getCalendarService().searchEvent(uiForm.getSession(), username, query, uiForm.getPublicCalendars()) ;
         UICalendarViewContainer calendarViewContainer = 

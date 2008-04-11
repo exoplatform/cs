@@ -30,9 +30,11 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
+import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 /**
  * Created by The eXo Platform SARL
@@ -45,8 +47,8 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
     template = "system:/groovy/webui/form/UIForm.gtmpl", 
     events = {
       @EventConfig(listeners = UICalendarCategoryForm.SaveActionListener.class),
-      @EventConfig(listeners = UICalendarCategoryForm.ResetActionListener.class),
-      @EventConfig(listeners = UICalendarCategoryForm.CancelActionListener.class)
+      @EventConfig(listeners = UICalendarCategoryForm.ResetActionListener.class, phase=Phase.DECODE),
+      @EventConfig(listeners = UICalendarCategoryForm.CancelActionListener.class, phase=Phase.DECODE)
     }
 )
 public class UICalendarCategoryForm extends UIForm {
@@ -54,8 +56,8 @@ public class UICalendarCategoryForm extends UIForm {
   final static String DESCRIPTION = "description" ;
   private boolean isAddNew = true ;
   private String categoryId = null ;
-  public UICalendarCategoryForm() {
-    addUIFormInput(new UIFormStringInput(CATEGORY_NAME, null)) ;
+  public UICalendarCategoryForm() throws Exception {
+    addUIFormInput(new UIFormStringInput(CATEGORY_NAME, null).addValidator(MandatoryValidator.class)) ;
     addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, null)) ;
   }
 
@@ -102,11 +104,11 @@ public class UICalendarCategoryForm extends UIForm {
       String categoryName = uiForm.getCategoryName() ;
       String description = uiForm.getCategoryDescription() ;
       UIApplication app = uiForm.getAncestorOfType(UIApplication.class) ;
-      if(CalendarUtils.isEmpty(categoryName)) {
+      /*if(CalendarUtils.isEmpty(categoryName)) {
         app.addMessage(new ApplicationMessage("UICalendarCategoryForm.msg.category-name-required", null, ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(app.getUIPopupMessages()) ;
         return ;
-      }
+      }*/
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       try {
         CalendarService calendarService = CalendarUtils.getCalendarService() ;
