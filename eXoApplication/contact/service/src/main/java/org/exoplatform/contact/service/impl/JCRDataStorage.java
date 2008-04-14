@@ -682,7 +682,7 @@ public class JCRDataStorage {
     addressBookNode.getSession().save(); 
   }
   
-  
+  /*
   public void shareAddressBook(SessionProvider sProvider, String username, String addressBookId, List<String> receiveUsers) throws Exception {
     Node addressBookNode = getUserContactGroupHome(sProvider, username).getNode(addressBookId);
     Value[] values = {};
@@ -695,6 +695,7 @@ public class JCRDataStorage {
     
     List<Value> valueList = new ArrayList<Value>() ;
   	for(String userId : receiveUsers) {
+      
     	Node sharedAddress = getSharedAddressBook(userId) ;
       boolean isExist = false ; 
       for (int i = 0; i < values.length; i++) {
@@ -705,7 +706,7 @@ public class JCRDataStorage {
           isExist = true ; 
           
 //        add to fix bug 623
-          valueList.clear() ;
+          //valueList.clear() ;
           break ;
         }
         valueList.add(value) ;
@@ -716,24 +717,26 @@ public class JCRDataStorage {
       }    
     }
   	if(valueList.size() > 0) {
+      // getpropertis luu laj truoc khj set 
+      
   		addressBookNode.setProperty(SHARED_PROP, valueList.toArray( new Value[valueList.size()]));
   		addressBookNode.save() ;
       addressBookNode.getSession().save();
     }    
-  }
-/*  public void shareAddressBook(SessionProvider sProvider, String username, String addressBookId, List<String> receiveUsers) throws Exception {
-    
-    for(String userId : receiveUsers) {
-      Node addressBookNode = getUserContactGroupHome(sProvider, username).getNode(addressBookId);
-      Value[] values = {};
-      if (addressBookNode.isNodeType(SHARED_MIXIN)) {     
-        values = addressBookNode.getProperty(SHARED_PROP).getValues();
-      } else {
-        addressBookNode.addMixin(SHARED_MIXIN);
-        addressBookNode.setProperty("exo:sharedUserId", username) ;
-      }
-      List<Value> valueList = new ArrayList<Value>() ;
+  }*/
 
+  public void shareAddressBook(SessionProvider sProvider, String username, String addressBookId, List<String> receiveUsers) throws Exception {
+    Node addressBookNode = getUserContactGroupHome(sProvider, username).getNode(addressBookId);
+    Value[] values = {};
+    if (addressBookNode.isNodeType(SHARED_MIXIN)) {     
+      values = addressBookNode.getProperty(SHARED_PROP).getValues();
+    } else {
+      addressBookNode.addMixin(SHARED_MIXIN);
+      addressBookNode.setProperty("exo:sharedUserId", username) ;
+    }
+    
+    List<Value> valueList = new ArrayList<Value>() ;
+    for(String userId : receiveUsers) {
       Node sharedAddress = getSharedAddressBook(userId) ;
       boolean isExist = false ; 
       for (int i = 0; i < values.length; i++) {
@@ -749,14 +752,20 @@ public class JCRDataStorage {
       if(!isExist) {
         Value value2add = addressBookNode.getSession().getValueFactory().createValue(sharedAddress);
         valueList.add(value2add) ;
-      }  
-      if(valueList.size() > 0 && addressBookNode != null) {
-        addressBookNode.setProperty(SHARED_PROP, valueList.toArray( new Value[valueList.size()]));
-        addressBookNode.save() ;
-        addressBookNode.getSession().save();
-      } 
+      }    
     }
-  }*/
+    if(valueList.size() > 0) {
+      
+      Map<String, Value> newValue = new LinkedHashMap<String, Value>() ;
+      for (Value value : values )
+        newValue.put(value.getString(), value) ;
+      for (Value value : valueList)
+        newValue.put(value.getString(), value) ;
+      addressBookNode.setProperty(SHARED_PROP, newValue.values().toArray(new Value[newValue.size()]));
+      addressBookNode.save() ;
+      addressBookNode.getSession().save();
+    }    
+  }
   
   public void shareContact(SessionProvider sProvider, String username, String[] contactIds, List<String> receiveUsers) throws Exception {
   	for(String contactId : contactIds) {
@@ -779,9 +788,6 @@ public class JCRDataStorage {
             Node refNode = sharedContact.getSession().getNodeByUUID(uuid);
             if(refNode.getPath().equals(sharedContact.getPath())) {
               isExist = true ; 
-              
-              // add to fix bug 623
-              valueList.clear() ;
               break ;
             }
             valueList.add(value) ;
@@ -792,7 +798,12 @@ public class JCRDataStorage {
           }    
         }
       	if(valueList.size() > 0) {
-      		contactNode.setProperty(SHARED_PROP, valueList.toArray( new Value[valueList.size()]));
+          Map<String, Value> newValue = new LinkedHashMap<String, Value>() ;
+          for (Value value : values )
+            newValue.put(value.getString(), value) ;
+          for (Value value : valueList)
+            newValue.put(value.getString(), value) ;
+          contactNode.setProperty(SHARED_PROP, newValue.values().toArray(new Value[newValue.size()]));
       		contactNode.save() ;
           contactNode.getSession().save();
         }

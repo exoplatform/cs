@@ -263,8 +263,8 @@ public class VCardImportExport implements ContactImportExport {
   
   public void importContact(SessionProvider sProvider, String username, InputStream input, String groupId) throws Exception {
     ContactIOFactory ciof = Pim.getContactIOFactory();
-    
     ContactUnmarshaller unmarshaller = ciof.createContactUnmarshaller();
+
     // unmarshall contact
     addExtensionHandler(eXoGender);
     addExtensionHandler(eXoExoId);
@@ -278,6 +278,7 @@ public class VCardImportExport implements ContactImportExport {
     unmarshaller.setStrict(false);
     unmarshaller.setEncoding(ENCODING);
 
+    // die here when image size about 1mb
     net.wimpi.pim.contact.model.Contact[] pimContacts = unmarshaller.unmarshallContacts(input);
     for (int index = 0; index < pimContacts.length; index++) {
       Contact contact = new Contact();
