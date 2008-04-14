@@ -19,11 +19,11 @@ package org.exoplatform.mail.webui.popup;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.WizardStep;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.form.UIFormInputSet;
@@ -66,7 +66,7 @@ public class UIAccountWizardStepIntro extends UIFormInputSet implements WizardSt
     if(!isCreateNew()) {
       MailService mailSvr = getApplicationComponent(MailService.class) ;
       String username = Util.getPortalRequestContext().getRemoteUser() ;
-      for(Account acc : mailSvr.getAccounts(SessionsUtils.getSessionProvider(), username)) {
+      for(Account acc : mailSvr.getAccounts(SessionProviderFactory.createSystemProvider(), username)) {
         options.add(new SelectItemOption<String>(acc.getUserDisplayName(), acc.getId())) ;
       }  
     }

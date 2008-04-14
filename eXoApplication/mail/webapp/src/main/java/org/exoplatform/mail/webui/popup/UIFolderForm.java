@@ -16,14 +16,14 @@
  */
 package org.exoplatform.mail.webui.popup;
 
-import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UISelectAccount;
-import org.exoplatform.mail.service.Utils;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -78,16 +78,16 @@ public class UIFolderForm extends UIForm implements UIPopupComponent {
       }
       try {
         String folderId = Utils.createFolderId(accountId, folderName, true);
-        Folder folder = mailSvr.getFolder(SessionsUtils.getSessionProvider(), username, accountId, folderId) ;
+        Folder folder = mailSvr.getFolder(SessionProviderFactory.createSystemProvider(), username, accountId, folderId) ;
         if(folder == null) {
           folder = new Folder() ;
           folder.setId(folderId);
           folder.setName(folderName) ;
           folder.setLabel(folderName) ;
           if (uiForm.getParentPath() != null && !"".equals(uiForm.getParentPath().trim())) {
-            mailSvr.saveFolder(SessionsUtils.getSessionProvider(), username, accountId, uiForm.getParentPath(), folder) ;
+            mailSvr.saveFolder(SessionProviderFactory.createSystemProvider(), username, accountId, uiForm.getParentPath(), folder) ;
           } else {
-            mailSvr.saveFolder(SessionsUtils.getSessionProvider(), username, accountId, folder) ;
+            mailSvr.saveFolder(SessionProviderFactory.createSystemProvider(), username, accountId, folder) ;
           }
         } else {
           uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.folder-exist", new Object[]{folderName})) ;

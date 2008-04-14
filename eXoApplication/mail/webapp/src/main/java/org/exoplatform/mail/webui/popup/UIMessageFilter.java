@@ -19,7 +19,6 @@ package org.exoplatform.mail.webui.popup;
 import java.util.List;
 
 import org.exoplatform.mail.MailUtils;
-import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MessageFilter;
@@ -28,6 +27,7 @@ import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UINavigationContainer;
 import org.exoplatform.mail.webui.UISelectAccount;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -84,7 +84,7 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
     String accountId = getAncestorOfType(UIMailPortlet.class).getChild(UINavigationContainer.class).getChild(UISelectAccount.class).getSelectedValue() ;
     MailService mailSrv = MailUtils.getMailService();
     if (getSelectedFilterId() != null) {
-      return mailSrv.getFilterById(SessionsUtils.getSessionProvider(), username, accountId, getSelectedFilterId());
+      return mailSrv.getFilterById(SessionProviderFactory.createSystemProvider(), username, accountId, getSelectedFilterId());
     } else {
       return null;
     }
@@ -93,21 +93,21 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
   public List<MessageFilter> getFilters() throws Exception {
     String username = MailUtils.getCurrentUser();
     MailService mailSrv = MailUtils.getMailService();
-    return mailSrv.getFilters(SessionsUtils.getSessionProvider(), username, accountId_);
+    return mailSrv.getFilters(SessionProviderFactory.createSystemProvider(), username, accountId_);
   }
   
   public Folder getFolder() throws Exception {
     String username = MailUtils.getCurrentUser();
     String accountId = getAncestorOfType(UIMailPortlet.class).getChild(UINavigationContainer.class).getChild(UISelectAccount.class).getSelectedValue() ;
     MailService mailSrv = MailUtils.getMailService();
-    return mailSrv.getFolder(SessionsUtils.getSessionProvider(), username, accountId, getSelectedFilter().getApplyFolder());
+    return mailSrv.getFolder(SessionProviderFactory.createSystemProvider(), username, accountId, getSelectedFilter().getApplyFolder());
   }
   
   public Tag getTag() throws Exception {
     String username = MailUtils.getCurrentUser();
     String accountId = getAncestorOfType(UIMailPortlet.class).getChild(UINavigationContainer.class).getChild(UISelectAccount.class).getSelectedValue() ;
     MailService mailSrv = MailUtils.getMailService();
-    return mailSrv.getTag(SessionsUtils.getSessionProvider(), username, accountId, getSelectedFilter().getApplyTag());
+    return mailSrv.getTag(SessionProviderFactory.createSystemProvider(), username, accountId, getSelectedFilter().getApplyTag());
   }
   
   public String getCondition(int i) throws Exception {
@@ -190,7 +190,7 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
       String accountId = mailPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailServ = MailUtils.getMailService();
       try {
-        mailServ.removeFilter(SessionsUtils.getSessionProvider(), username, accountId, filterId);
+        mailServ.removeFilter(SessionProviderFactory.createSystemProvider(), username, accountId, filterId);
         uiMessageFilter.setSelectedFilterId(null);
         event.getRequestContext().addUIComponentToUpdateByAjax(mailPortlet.getChild(UIPopupAction.class)) ;
       } catch(Exception e) {

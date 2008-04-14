@@ -20,7 +20,6 @@ import java.util.List;
 
 import org.exoplatform.mail.Colors;
 import org.exoplatform.mail.MailUtils;
-import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
@@ -29,6 +28,7 @@ import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.UITagContainer;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -81,7 +81,7 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
     MailService mailSrv = getApplicationComponent(MailService.class);
     String username = MailUtils.getCurrentUser();
     String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-    List<Tag> tagList= mailSrv.getTags(SessionsUtils.getSessionProvider(), username, accountId);
+    List<Tag> tagList= mailSrv.getTags(SessionProviderFactory.createSystemProvider(), username, accountId);
     
     if (tagList.isEmpty()) return;   
     
@@ -120,7 +120,7 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
 
       try {      
         uiEditTagForm.setTag(tagId);        
-        List<Tag> tagList = mailService.getTags(SessionsUtils.getSessionProvider(), username, accountId);
+        List<Tag> tagList = mailService.getTags(SessionProviderFactory.createSystemProvider(), username, accountId);
         for (Tag tag : tagList) {
           if(tag.getName().equals(newTagName)&&!tag.getId().equals(tagId)) {
             uiApp.addMessage(new ApplicationMessage("UIEditTagForm.msg.tag-already-exists", new Object[]{newTagName})) ;
@@ -131,7 +131,7 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
             tag.setName(newTagName);
             tag.setColor(color);
             tag.setDescription(description);
-            mailService.updateTag(SessionsUtils.getSessionProvider(), username, accountId, tag);
+            mailService.updateTag(SessionProviderFactory.createSystemProvider(), username, accountId, tag);
           }
         }
       } catch (Exception e){

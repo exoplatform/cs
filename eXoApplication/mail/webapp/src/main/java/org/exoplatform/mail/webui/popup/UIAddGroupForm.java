@@ -19,8 +19,8 @@ package org.exoplatform.mail.webui.popup;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.mail.MailUtils;
-import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.webui.UIMailPortlet;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -80,7 +80,7 @@ public class UIAddGroupForm extends UIForm implements UIPopupComponent{
         ContactGroup group = new ContactGroup();
         group.setName(groupName);
         group.setDescription(groupDescription);
-        contactSrv.saveGroup(SessionsUtils.getSessionProvider(), username, group, true);
+        contactSrv.saveGroup(SessionProviderFactory.createSystemProvider(), username, group, true);
         UIAddContactForm uiAddContact = uiPortlet.findFirstComponentOfType(UIAddContactForm.class);
         UIAddressBookForm uiAddressBook = uiPortlet.findFirstComponentOfType(UIAddressBookForm.class);
         if (uiAddContact != null) {

@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.commons.utils.ObjectPageList;
-import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
@@ -29,6 +28,7 @@ import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UISelectAccount;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -64,7 +64,7 @@ public class UIAccountList extends UIGrid  implements UIPopupComponent{
     List<AccountData> accounts = new ArrayList<AccountData>() ;
     String userId = Util.getPortalRequestContext().getRemoteUser() ;
     MailService mailSvr = getApplicationComponent(MailService.class) ;
-    for(Account acc : mailSvr.getAccounts(SessionsUtils.getSessionProvider(), userId)) {
+    for(Account acc : mailSvr.getAccounts(SessionProviderFactory.createSystemProvider(), userId)) {
       accounts.add(new AccountData(acc.getId(), acc.getLabel(), acc.getEmailAddress(), 
           acc.getServerProperties().get(Utils.SVR_INCOMING_HOST), acc.getProtocol())) ;
     }
@@ -120,12 +120,12 @@ public class UIAccountList extends UIGrid  implements UIPopupComponent{
       String username = event.getRequestContext().getRemoteUser() ;
 
       try {
-        mailSvr.removeAccount(SessionsUtils.getSessionProvider(), username, accId) ;
+        mailSvr.removeAccount(SessionProviderFactory.createSystemProvider(), username, accId) ;
         uiSelectAccount.refreshItems() ;
         uiAccountList.updateGrid() ;
-        MailSetting mailSetting = mailSvr.getMailSetting(SessionsUtils.getSessionProvider(), username) ;
+        MailSetting mailSetting = mailSvr.getMailSetting(SessionProviderFactory.createSystemProvider(), username) ;
         if (currAccountId.equals(accId)) {
-          List<Account> accounts = mailSvr.getAccounts(SessionsUtils.getSessionProvider(), username);
+          List<Account> accounts = mailSvr.getAccounts(SessionProviderFactory.createSystemProvider(), username);
           if (accounts.size() == 0) {
             uiSelectAccount.setSelectedValue(null);
             mailSetting.setDefaultAccount(null) ;
@@ -137,7 +137,7 @@ public class UIAccountList extends UIGrid  implements UIPopupComponent{
             uiMessageList.setMessageFilter(null);
             uiMessageList.init(selectedAcc);
           }
-          mailSvr.saveMailSetting(SessionsUtils.getSessionProvider(), username, mailSetting) ;
+          mailSvr.saveMailSetting(SessionProviderFactory.createSystemProvider(), username, mailSetting) ;
           uiMessagePreview.setMessage(null);
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ; 
         } else {

@@ -23,7 +23,6 @@ import java.util.Map;
 
 import org.exoplatform.mail.Colors;
 import org.exoplatform.mail.MailUtils;
-import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Tag;
@@ -32,6 +31,7 @@ import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.UITagContainer;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -101,7 +101,7 @@ public class UITagForm extends UIForm implements UIPopupComponent{
       if (msg.getTags() != null && msg.getTags().length > 0) {
         for (int i = 0; i < msg.getTags().length; i++) {
           if (i > 0) tags += ", ";
-          Tag tag = mailSrv.getTag(SessionsUtils.getSessionProvider(), username, accountId, msg.getTags()[i]);
+          Tag tag = mailSrv.getTag(SessionProviderFactory.createSystemProvider(), username, accountId, msg.getTags()[i]);
           tags += "[" + tag.getName() + "]";
         }
       } else tags = "No tag";
@@ -152,7 +152,7 @@ public class UITagForm extends UIForm implements UIPopupComponent{
 
       if (newTagName != null && newTagName != "") {
         boolean isExist = false;
-        for (Tag tag: mailSrv.getTags(SessionsUtils.getSessionProvider(), username, accountId)) {
+        for (Tag tag: mailSrv.getTags(SessionProviderFactory.createSystemProvider(), username, accountId)) {
           if (tag.getName().equals(newTagName)) { 
             isExist = true;
             tagList.add(tag);
@@ -178,7 +178,7 @@ public class UITagForm extends UIForm implements UIPopupComponent{
       }
       
       tagList.addAll(uiTagForm.getCheckedTags());
-      mailSrv.addTag(SessionsUtils.getSessionProvider(), username, accountId, uiTagForm.getMessageList(), tagList);
+      mailSrv.addTag(SessionProviderFactory.createSystemProvider(), username, accountId, uiTagForm.getMessageList(), tagList);
       
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       List<String> tagIdList = new ArrayList<String>() ;
@@ -208,7 +208,7 @@ public class UITagForm extends UIForm implements UIPopupComponent{
       List<String> tagList = new ArrayList<String>();
       for (Tag tag : uiTagForm.getCheckedTags()) tagList.add(tag.getId());
       
-      mailSrv.removeMessageTag(SessionsUtils.getSessionProvider(), username, accountId, uiTagForm.getMessageList(), tagList);
+      mailSrv.removeMessageTag(SessionProviderFactory.createSystemProvider(), username, accountId, uiTagForm.getMessageList(), tagList);
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       for (Message msg : uiTagForm.getMessageList()) {
         if (msg.getTags() != null && msg.getTags().length > 0) {

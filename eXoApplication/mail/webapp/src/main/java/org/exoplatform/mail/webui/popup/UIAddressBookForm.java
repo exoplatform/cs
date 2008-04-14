@@ -27,8 +27,8 @@ import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.mail.MailUtils;
-import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.webui.UIMailPortlet;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -69,14 +69,14 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
     ContactService contactSrv = getApplicationComponent(ContactService.class);
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
     options.add(new SelectItemOption<String>(ALL_GROUP, ""));
-    for (ContactGroup group : contactSrv.getGroups(SessionsUtils.getSessionProvider(), username)) {
+    for (ContactGroup group : contactSrv.getGroups(SessionProviderFactory.createSystemProvider(), username)) {
       options.add(new SelectItemOption<String>(group.getName(), group.getId()));
     }
     UIFormSelectBox uiSelectGroup = new UIFormSelectBox(SELECT_GROUP, SELECT_GROUP, options);
     uiSelectGroup.setOnChange("ChangeGroup");
     addUIFormInput(uiSelectGroup);
     
-    List<Contact> contactList = contactSrv.getAllContact(SessionsUtils.getSessionProvider(), username);
+    List<Contact> contactList = contactSrv.getAllContact(SessionProviderFactory.createSystemProvider(), username);
     for (Contact ct : contactList) contactMap_.put(ct.getId(), ct);
     contactList_ = new ArrayList<Contact>(contactMap_.values());
     
@@ -96,8 +96,8 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
     String username = MailUtils.getCurrentUser();
     ContactService contactSrv = getApplicationComponent(ContactService.class);
     List<Contact> contactList = new ArrayList<Contact>();
-    if (groupId != null && groupId != "") contactList = contactSrv.getContactPageListByGroup(SessionsUtils.getSessionProvider(), username, groupId).getAll();
-    else contactList = contactSrv.getAllContact(SessionsUtils.getSessionProvider(), username);
+    if (groupId != null && groupId != "") contactList = contactSrv.getContactPageListByGroup(SessionProviderFactory.createSystemProvider(), username, groupId).getAll();
+    else contactList = contactSrv.getAllContact(SessionProviderFactory.createSystemProvider(), username);
     contactMap_.clear();
     for (Contact ct : contactList) contactMap_.put(ct.getId(), ct);
 
@@ -111,7 +111,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
     ContactService contactSrv = getApplicationComponent(ContactService.class);
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
     options.add(new SelectItemOption<String>(ALL_GROUP, ""));
-    for (ContactGroup group : contactSrv.getGroups(SessionsUtils.getSessionProvider(), username)) {
+    for (ContactGroup group : contactSrv.getGroups(SessionProviderFactory.createSystemProvider(), username)) {
       options.add(new SelectItemOption<String>(group.getName(), group.getId()));
     }
     getUIFormSelectBox(SELECT_GROUP).setOptions(options);
@@ -183,7 +183,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
         
         // hung edit
         contactIds.add(contact.getId() + JCRDataStorage.SPLIT + contact.getContactType()) ;
-        contactServ.removeContacts(SessionsUtils.getSessionProvider(), username, contactIds);
+        contactServ.removeContacts(SessionProviderFactory.createSystemProvider(), username, contactIds);
         uiAddressBook.refrestContactList(uiAddressBook.getUIFormSelectBox(SELECT_GROUP).getValue());
         event.getRequestContext().addUIComponentToUpdateByAjax(mailPortlet.getChild(UIPopupAction.class)) ;
       } catch(Exception e) {

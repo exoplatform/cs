@@ -20,7 +20,6 @@ import javax.mail.AuthenticationFailedException;
 
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.mail.MailUtils;
-import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;
@@ -32,6 +31,7 @@ import org.exoplatform.mail.webui.popup.UIMailSettings;
 import org.exoplatform.mail.webui.popup.UIMessageFilter;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -77,7 +77,7 @@ public class UIActionBar extends UIContainer {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       } else {
-        Account acc = mailSvr.getAccountById(SessionsUtils.getSessionProvider(), username, accId);
+        Account acc = mailSvr.getAccountById(SessionProviderFactory.createSystemProvider(), username, accId);
         if (!Utils.checkConnection(acc)) {
           uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.conection-false", null)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -152,7 +152,7 @@ public class UIActionBar extends UIContainer {
       uiPopupAction.activate(uiPopupContainer, 600, 0, true) ;
       UIEventForm uiEventForm = uiPopupContainer.createUIComponent(UIEventForm.class, null, null);
       uiPopupContainer.addChild(uiEventForm) ;
-      uiEventForm.initForm(calendarService.getCalendarSetting(SessionsUtils.getSessionProvider() ,MailUtils.getCurrentUser()), null) ;
+      uiEventForm.initForm(calendarService.getCalendarSetting(SessionProviderFactory.createSystemProvider() ,MailUtils.getCurrentUser()), null) ;
       uiEventForm.update(CalendarUtils.PRIVATE_TYPE, null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
