@@ -23,6 +23,8 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.io.ByteArrayInputStream;
 
+import net.wimpi.pim.util.versitio.versitException;
+
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.SessionsUtils;
 import org.exoplatform.contact.service.ContactService;
@@ -61,7 +63,7 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 )
 public class UIImportForm extends UIForm {
   final static public String FIELD_UPLOAD = "upload".intern() ;
-  final static public String TYPE = "type".intern() ;
+  final static public String FIELD_TYPE = "type".intern() ;
   public static final String INPUT_CATEGORY = "categoryInput";
   public static final String FIELD_CATEGORY = "category";
   
@@ -69,12 +71,7 @@ public class UIImportForm extends UIForm {
   private String[] Types = null ;
   private Map<String, String> groups_ = new HashMap<String, String>() ;
   
-  // remove later
-//  private UploadResource uploadResource_ = null ;
-//  private byte[] importBytes_ = null;
-//  
   public UIImportForm() { this.setMultiPart(true) ; }
-  
   public void addConponent() throws Exception {
     UIFormInputWithActions input = new UIFormInputWithActions(INPUT_CATEGORY) ;
     input.addUIFormInput(new UIFormSelectBox(FIELD_CATEGORY, FIELD_CATEGORY, getCategoryList())) ; 
@@ -85,15 +82,16 @@ public class UIImportForm extends UIForm {
     addAction.setActionName("AddCategory") ;
     actions.add(addAction) ;
     input.setActionField(FIELD_CATEGORY, actions) ;
+
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     ContactService contactService = ContactUtils.getContactService();
     Types = contactService.getImportExportType() ;
     for(String type : Types) {
       options.add(new SelectItemOption<String>(type, type)) ;
     }
-    input.addUIFormInput(new UIFormSelectBox(TYPE, TYPE, options)) ;
+    input.addUIFormInput(new UIFormSelectBox(FIELD_TYPE, FIELD_TYPE, options)) ;
     input.addUIFormInput(new UIFormUploadInput(FIELD_UPLOAD, FIELD_UPLOAD)) ;
-    addUIFormInput(input) ;    
+    addUIFormInput(input) ;
   }
   
   public String getLabel(String id) throws Exception {
@@ -124,10 +122,14 @@ public class UIImportForm extends UIForm {
   static  public class AddCategoryActionListener extends EventListener<UIImportForm> {
     public void execute(Event<UIImportForm> event) throws Exception {
       UIImportForm uiForm = event.getSource() ;
-      // added
-      /*UIFormUploadInput uiformInput = uiForm.getUIInput(FIELD_UPLOAD) ;
-      uiForm.uploadResource_ = uiformInput.getUploadResource() ;
-      uiForm.importBytes_ = uiformInput.getUploadData() ;*/      
+    /*  UIFormUploadInput uiUploadInput = uiForm.getUIInput(FIELD_UPLOAD) ;
+      if (uiUploadInput.getUploadResource() == null) {
+        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.addGroup-required", null, 
+            ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }*/
       UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = uiPopupContainer.getChild(UIPopupAction.class) ;
       uiChildPopup.activate(UICategoryForm.class, 500) ;
@@ -178,7 +180,7 @@ public class UIImportForm extends UIForm {
         return ;
       }
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
-      String importFormat = uiForm.getUIFormSelectBox(UIImportForm.TYPE).getValue() ;
+      String importFormat = uiForm.getUIFormSelectBox(UIImportForm.FIELD_TYPE).getValue() ;
       try {
         ContactUtils.getContactService().getContactImportExports(importFormat).importContact(SessionsUtils
             .getSessionProvider(), ContactUtils.getCurrentUser(), inputStream, category) ;
@@ -186,8 +188,8 @@ public class UIImportForm extends UIForm {
         UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;
         uploadService.removeUpload(uploadId) ;
         uiContacts.updateList() ;        
-      } catch (Exception ex) {
-        ex.printStackTrace() ;
+      } catch (versitException ex) {
+//        ex.printStackTrace() ;
         uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.invalid-format", null, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

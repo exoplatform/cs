@@ -37,6 +37,7 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 
@@ -143,7 +144,8 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
           ls.add(new SelectItemOption<String>(groupName, group.getId())) ;
           importForm.setCategoryList(ls);
           importForm.setValues(category) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(importForm) ;
+          //event.getRequestContext().addUIComponentToUpdateByAjax(importForm) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(importForm.getChild(UIFormInputWithActions.class)) ;
         }        
 
         UIPopupAction action = uiCategoryForm.getAncestorOfType(UIPopupAction.class) ;
