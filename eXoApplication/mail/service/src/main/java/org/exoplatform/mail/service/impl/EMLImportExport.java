@@ -28,6 +28,7 @@ import org.exoplatform.mail.service.MailImportExport;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.jcr.util.IdGenerator;
 
 
 /**
@@ -56,6 +57,7 @@ public class EMLImportExport implements MailImportExport{
 		Properties props = System.getProperties();
     Session session = Session.getDefaultInstance(props, null);
     MimeMessage mimeMessage = new MimeMessage(session, inputStream);
+    mimeMessage.setHeader("Message-ID", "Message" + IdGenerator.generate());
     try {
        return jcrDataStorage_.saveMessage(sProvider, username, accountId, mimeMessage, folderId, null);
     } catch(Exception e) { return false ; }
