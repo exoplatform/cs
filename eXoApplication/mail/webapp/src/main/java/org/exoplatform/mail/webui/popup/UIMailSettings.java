@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.mail.MailUtils;
-import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
@@ -29,6 +28,7 @@ import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UINavigationContainer;
 import org.exoplatform.mail.webui.UISelectAccount;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -112,7 +112,7 @@ public class UIMailSettings extends UIForm implements UIPopupComponent {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
     MailService mailSrv = getApplicationComponent(MailService.class);
     String username = Util.getPortalRequestContext().getRemoteUser();
-    for(Account acc : mailSrv.getAccounts(SessionsUtils.getSessionProvider(), username)) {
+    for(Account acc : mailSrv.getAccounts(SessionProviderFactory.createSystemProvider(), username)) {
       SelectItemOption<String> itemOption = new SelectItemOption<String>(acc.getLabel() + " &lt;" + acc.getEmailAddress() + "&gt;", acc.getId());
       options.add(itemOption) ;
     }
@@ -122,7 +122,7 @@ public class UIMailSettings extends UIForm implements UIPopupComponent {
   public void fillData() throws Exception {    
     MailService mailSrv = getApplicationComponent(MailService.class);
     String username = Util.getPortalRequestContext().getRemoteUser();
-    MailSetting setting = mailSrv.getMailSetting(SessionsUtils.getSessionProvider(), username);
+    MailSetting setting = mailSrv.getMailSetting(SessionProviderFactory.createSystemProvider(), username);
     if (setting != null) {
       getUIFormSelectBox(DEFAULT_ACCOUNT).setValue(setting.getDefaultAccount()) ;
       getUIFormSelectBox(NUMBER_MSG_PER_PAGE).setValue(String.valueOf(setting.getNumberMsgPerPage()));
@@ -159,9 +159,9 @@ public class UIMailSettings extends UIForm implements UIPopupComponent {
       setting.setReplyWithAttach(Boolean.valueOf(uiSetting.getUIFormSelectBox(REPLY_WITH_ATTACH).getValue()));
       setting.setForwardWithAtt(Boolean.valueOf(uiSetting.getUIFormSelectBox(FORWARD_WITH_ATTACH).getValue()));
       setting.setSaveMessageInSent(uiSetting.getUIFormCheckBoxInput(SAVE_SENT_MESSAGE).isChecked());
-      mailSrv.saveMailSetting(SessionsUtils.getSessionProvider(), username, setting);
+      mailSrv.saveMailSetting(SessionProviderFactory.createSystemProvider(), username, setting);
 		  UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
-		  uiMessageList.setMessagePageList(mailSrv.getMessagePageList(SessionsUtils.getSessionProvider(), username, uiMessageList.getMessageFilter()));
+		  uiMessageList.setMessagePageList(mailSrv.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, uiMessageList.getMessageFilter()));
       if (defaultAcc != null && !defaultAcc.equals(accountId)) {
         uiSelectAccount.updateAccount() ;
         uiSelectAccount.setSelectedValue(defaultAcc) ;

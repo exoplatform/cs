@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.mail.MailUtils;
-import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.Tag;
@@ -31,6 +30,7 @@ import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UINavigationContainer;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.UISelectFolder;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -119,7 +119,7 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
     
     List<SelectItemOption<String>> tagList = new ArrayList<SelectItemOption<String>>();   
     tagList.add(new SelectItemOption<String>("-- Choose tag --", ""));       
-    for (Tag tag : mailSrv.getTags(SessionsUtils.getSessionProvider(), username, accountId)) {   
+    for (Tag tag : mailSrv.getTags(SessionProviderFactory.createSystemProvider(), username, accountId)) {   
       tagList.add(new SelectItemOption<String>(tag.getName(), tag.getId()));       
     }    
     addUIFormInput(new UIFormSelectBox(FILTER_APPLY_TAG, FILTER_APPLY_TAG, tagList));
@@ -302,9 +302,9 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
       //filter.setKeepInInbox(keepInbox);
       filter.setApplyForAll(applyForAll) ;
       try {
-        mailSrv.saveFilter(SessionsUtils.getSessionProvider(), username, accountId, filter);
+        mailSrv.saveFilter(SessionProviderFactory.createSystemProvider(), username, accountId, filter);
         if (uiAddFilter.getApplyAll()) 
-          mailSrv.runFilter(SessionsUtils.getSessionProvider(), username, accountId, filter);
+          mailSrv.runFilter(SessionProviderFactory.createSystemProvider(), username, accountId, filter);
         uiPortlet.findFirstComponentOfType(UIMessageFilter.class).setSelectedFilterId(filter.getId());
       } catch (Exception e) {
         e.printStackTrace();

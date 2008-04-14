@@ -31,7 +31,6 @@ import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.MailUtils;
-import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.JCRMessageAttachment;
 import org.exoplatform.mail.service.MailService;
@@ -178,7 +177,7 @@ public class UIMessagePreview extends UIComponent {
 				List<Message> msgList = new ArrayList<Message>() ;
 				msg.setHasStar(!msg.hasStar());
 				msgList.add(msg) ;
-				mailServ.toggleMessageProperty(SessionsUtils.getSessionProvider(), username, accountId, msgList, Utils.EXO_STAR);
+				mailServ.toggleMessageProperty(SessionProviderFactory.createSystemProvider(), username, accountId, msgList, Utils.EXO_STAR);
 				uiMessageList.messageList_.put(msgId, msg);
 				uiMsgPreview.setMessage(msg);
 			}
@@ -264,7 +263,7 @@ public class UIMessagePreview extends UIComponent {
 				MailService mailSrv = uiMsgPreview.getApplicationComponent(MailService.class);
 				String username = MailUtils.getCurrentUser();
 				String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-				mailSrv.moveMessages(SessionsUtils.getSessionProvider(), username, accountId, msg, msg.getFolders()[0],  Utils.createFolderId(accountId, Utils.FD_TRASH, false));
+				mailSrv.moveMessages(SessionProviderFactory.createSystemProvider(), username, accountId, msg, msg.getFolders()[0],  Utils.createFolderId(accountId, Utils.FD_TRASH, false));
 				uiMsgList.updateList();
 				uiMsgPreview.setMessage(null);
 			}
@@ -352,7 +351,7 @@ public class UIMessagePreview extends UIComponent {
 				String username = uiPortlet.getCurrentUser();
 				String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
 				MailService mailSrv = MailUtils.getMailService();
-				List<Tag> listTags = mailSrv.getTags(SessionsUtils.getSessionProvider(), username, accountId);
+				List<Tag> listTags = mailSrv.getTags(SessionProviderFactory.createSystemProvider(), username, accountId);
 				uiPopupAction.activate(uiTagForm, 600, 0, true);
 				List<Message> msgList = new ArrayList<Message>();
 				msgList.add(msg);
@@ -419,7 +418,7 @@ public class UIMessagePreview extends UIComponent {
 						uiPopupAction.activate(uiPopupContainer, 600, 0, true) ;
 						UIEventForm uiEventForm = uiPopupContainer.createUIComponent(UIEventForm.class, null, null);
 						uiPopupContainer.addChild(uiEventForm) ;
-						uiEventForm.initForm(calService.getCalendarSetting(SessionsUtils.getSessionProvider() ,MailUtils.getCurrentUser()), calEvent) ;
+						uiEventForm.initForm(calService.getCalendarSetting(SessionProviderFactory.createSystemProvider() ,MailUtils.getCurrentUser()), calEvent) ;
 						uiEventForm.isAddNew_ = true ;
 						uiEventForm.update(CalendarUtils.PRIVATE_TYPE, null) ;
 						calService.confirmInvitation(fromUserId, toUserId, calType, calendarId, eventId, 1) ;

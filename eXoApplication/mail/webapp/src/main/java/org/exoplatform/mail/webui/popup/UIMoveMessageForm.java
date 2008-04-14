@@ -19,7 +19,6 @@ package org.exoplatform.mail.webui.popup;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.webui.UIFolderContainer;
@@ -29,6 +28,7 @@ import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.UISelectFolder;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -85,7 +85,7 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
       String destFolder = uiMoveMessageForm.getChild(UISelectFolder.class).getSelectedValue();
       List<Message> appliedMsgList = uiMessageList.getCheckedMessage() ;
       for(Message message: uiMoveMessageForm.getMessageList()) {
-         mailSrv.moveMessages(SessionsUtils.getSessionProvider(), username, accountId, message, message.getFolders()[0], destFolder);
+         mailSrv.moveMessages(SessionProviderFactory.createSystemProvider(), username, accountId, message, message.getFolders()[0], destFolder);
       }       
       uiMessageList.updateList(); 
       Message msgPreview = uiMsgPreview.getMessage();

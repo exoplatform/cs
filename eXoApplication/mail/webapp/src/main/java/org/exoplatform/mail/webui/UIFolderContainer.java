@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.mail.MailUtils;
-import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
@@ -30,6 +29,7 @@ import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIFolderForm;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UIRenameFolderForm;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -83,7 +83,7 @@ public class UIFolderContainer extends UIContainer {
     String username = MailUtils.getCurrentUser() ;
     String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
     List<Folder> subFolders = new ArrayList<Folder>();
-    for (Folder f : mailSvr.getSubFolders(SessionsUtils.getSessionProvider(), username, accountId, parentPath)) {
+    for (Folder f : mailSvr.getSubFolders(SessionProviderFactory.createSystemProvider(), username, accountId, parentPath)) {
       subFolders.add(f);
     }
     return subFolders ;
@@ -94,7 +94,7 @@ public class UIFolderContainer extends UIContainer {
     String username = getAncestorOfType(UIMailPortlet.class).getCurrentUser() ;
     String accountId = getAncestorOfType(UINavigationContainer.class).
     getChild(UISelectAccount.class).getSelectedValue() ;
-    return mailSvr.getFolder(SessionsUtils.getSessionProvider(), username, accountId, getSelectedFolder()) ;
+    return mailSvr.getFolder(SessionProviderFactory.createSystemProvider(), username, accountId, getSelectedFolder()) ;
   }
   
   public List<Folder> getFolders(boolean isPersonal) throws Exception{
@@ -104,7 +104,7 @@ public class UIFolderContainer extends UIContainer {
     String accountId = getAncestorOfType(UINavigationContainer.class).
     getChild(UISelectAccount.class).getSelectedValue() ;
     try {
-      folders.addAll(mailSvr.getFolders(SessionsUtils.getSessionProvider(), username, accountId, isPersonal)) ;
+      folders.addAll(mailSvr.getFolders(SessionProviderFactory.createSystemProvider(), username, accountId, isPersonal)) ;
     } catch (Exception e){
       //e.printStackTrace() ;
     }
@@ -192,9 +192,9 @@ public class UIFolderContainer extends UIContainer {
       UINavigationContainer uiNavigationContainer = uiFolderContainer.getAncestorOfType(UINavigationContainer.class);
       String accountId = uiNavigationContainer.getChild(UISelectAccount.class).getSelectedValue();
       
-      Account account = mailService.getAccountById(SessionsUtils.getSessionProvider(), username, accountId);
-      Folder folder = mailService.getFolder(SessionsUtils.getSessionProvider(), username, accountId, folderId);  
-      mailService.removeUserFolder(SessionsUtils.getSessionProvider(), username, account, folder);     
+      Account account = mailService.getAccountById(SessionProviderFactory.createSystemProvider(), username, accountId);
+      Folder folder = mailService.getFolder(SessionProviderFactory.createSystemProvider(), username, accountId, folderId);  
+      mailService.removeUserFolder(SessionProviderFactory.createSystemProvider(), username, account, folder);     
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
       UIFolderContainer uiFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
       uiMessageList.setMessageFilter(null);
@@ -216,8 +216,8 @@ public class UIFolderContainer extends UIContainer {
       MessageFilter filter = new MessageFilter("");
       filter.setFolder(new String[] {folderId});
       filter.setAccountId(accountId);
-      List<Message> messages = mailSrv.getMessages(SessionsUtils.getSessionProvider(), username, filter);
-      mailSrv.removeMessage(SessionsUtils.getSessionProvider(), username, accountId, messages);
+      List<Message> messages = mailSrv.getMessages(SessionProviderFactory.createSystemProvider(), username, filter);
+      mailSrv.removeMessage(SessionProviderFactory.createSystemProvider(), username, accountId, messages);
       UIMessageArea uiMsgArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class);
       UIMessageList uiMessageList = uiMsgArea.getChild(UIMessageList.class) ;
       UIMessagePreview uiMsgPreview = uiMsgArea.getChild(UIMessagePreview.class);
@@ -244,8 +244,8 @@ public class UIFolderContainer extends UIContainer {
       filter.setFolder(new String[] {folderId});
       filter.setAccountId(accountId);
       filter.setViewQuery("@" + Utils.EXO_ISUNREAD + "='true'");
-      List<Message> messages = mailSrv.getMessages(SessionsUtils.getSessionProvider(), username, filter);
-      mailSrv.toggleMessageProperty(SessionsUtils.getSessionProvider(), username, accountId, messages, Utils.EXO_ISUNREAD);
+      List<Message> messages = mailSrv.getMessages(SessionProviderFactory.createSystemProvider(), username, filter);
+      mailSrv.toggleMessageProperty(SessionProviderFactory.createSystemProvider(), username, accountId, messages, Utils.EXO_ISUNREAD);
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
       List<Message> msgList = new  ArrayList<Message>(uiMessageList.messageList_.values());
       for (Message msg : msgList) {
@@ -269,13 +269,13 @@ public class UIFolderContainer extends UIContainer {
 	  String username = uiPortlet.getCurrentUser() ;
 	  String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
 	  MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class) ;
-	  List<Message> msgList = mailSrv.getMessagesByFolder(SessionsUtils.getSessionProvider(), username, accountId, folderId) ;
+	  List<Message> msgList = mailSrv.getMessagesByFolder(SessionProviderFactory.createSystemProvider(), username, accountId, folderId) ;
 	  boolean containPreview = false ;
 	  Message msgPre = uiMsgPreview.getMessage() ;
 	  for (Message msg : msgList) {
 		if (msgPre != null && msg.getId().equals(msgPre.getId())) containPreview = true ;
 		String trashFolderId = Utils.createFolderId(accountId, Utils.FD_TRASH, false) ;
-		 mailSrv.moveMessages(SessionsUtils.getSessionProvider(), username, accountId, msg, folderId, trashFolderId) ;
+		 mailSrv.moveMessages(SessionProviderFactory.createSystemProvider(), username, accountId, msg, folderId, trashFolderId) ;
 		}	      		 
 	  uiMsgList.updateList() ;
 	  if (containPreview) uiMsgPreview.setMessage(null);

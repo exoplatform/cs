@@ -28,7 +28,6 @@ import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.MailUtils;
-import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.Folder;
@@ -40,6 +39,7 @@ import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UISelectAccount;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -126,7 +126,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     String username = MailUtils.getCurrentUser();
     accountId_ = accountId ;
     MailService mailSrv = getApplicationComponent(MailService.class);
-    for(Account acc : mailSrv.getAccounts(SessionsUtils.getSessionProvider(), username)) {
+    for(Account acc : mailSrv.getAccounts(SessionProviderFactory.createSystemProvider(), username)) {
       SelectItemOption<String> itemOption = new SelectItemOption<String>(acc.getUserDisplayName() + " &lt;" + acc.getEmailAddress() + "&gt;", acc.getId());
       if (acc.getId().equals(accountId)) { itemOption.setSelected(true); }
       options.add(itemOption) ;
@@ -147,7 +147,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     inputSet.addUIFormInput(new UIFormInputInfo(FIELD_ATTACHMENTS, FIELD_ATTACHMENTS, null)) ;
     inputSet.setActionField(FIELD_ATTACHMENTS, getUploadFileList()) ;
     addUIFormInput(inputSet) ;
-    MailSetting mailSetting = mailSrv.getMailSetting(SessionsUtils.getSessionProvider(), username);
+    MailSetting mailSetting = mailSrv.getMailSetting(SessionProviderFactory.createSystemProvider(), username);
     isVisualEditor = mailSetting.useWysiwyg() ;
     if (isVisualEditor) {
       addUIFormInput(new UIFormWYSIWYGInput(FIELD_MESSAGECONTENT, null, null, true));    
@@ -218,7 +218,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   public void fillFields(Message msg) throws Exception {
     if (msg != null) {
       MailService mailSrv = MailUtils.getMailService();
-      MailSetting mailSetting = mailSrv.getMailSetting(SessionsUtils.getSessionProvider(), MailUtils.getCurrentUser());
+      MailSetting mailSetting = mailSrv.getMailSetting(SessionProviderFactory.createSystemProvider(), MailUtils.getCurrentUser());
       switch (getComposeType()) {
         case MESSAGE_IN_DRAFT :
           setFieldSubjectValue(msg.getSubject());
@@ -358,7 +358,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   public void setFieldContentValue(String value) throws Exception {
     String username = MailUtils.getCurrentUser();
     MailService mailSrv = getApplicationComponent(MailService.class);
-    Account account = mailSrv.getAccountById(SessionsUtils.getSessionProvider(), username, accountId_);
+    Account account = mailSrv.getAccountById(SessionProviderFactory.createSystemProvider(), username, accountId_);
     if (isVisualEditor) {
       if (!MailUtils.isFieldEmpty(account.getSignature()) && !fromDrafts()) {value += "<br><br> -- <br >" + account.getSignature().replace("\n", "<br>") + "";}
       getChild(UIFormWYSIWYGInput.class).setValue(value);
@@ -371,7 +371,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   public List<Contact> getContacts() throws Exception {
     ContactService contactSrv = getApplicationComponent(ContactService.class);
     String username = MailUtils.getCurrentUser();
-    return contactSrv.getAllContact(SessionsUtils.getSessionProvider(), username);
+    return contactSrv.getAllContact(SessionProviderFactory.createSystemProvider(), username);
   }
   
   public void resetFields() { reset() ; }
@@ -388,7 +388,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
     String usename = uiPortlet.getCurrentUser() ;
     MailService mailSvr = this.getApplicationComponent(MailService.class) ;
-    Account account = mailSvr.getAccountById(SessionsUtils.getSessionProvider(), usename, this.getFieldFromValue());
+    Account account = mailSvr.getAccountById(SessionProviderFactory.createSystemProvider(), usename, this.getFieldFromValue());
     String from = account.getUserDisplayName() + "<" + account.getEmailAddress() + ">" ;
     String subject = this.getFieldSubjectValue() ;
     String to = this.getFieldToValue() ;
@@ -464,7 +464,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       
       try {
 
-        mailSvr.sendMessage(SessionsUtils.getSessionProvider(), usename, message) ;
+        mailSvr.sendMessage(SessionProviderFactory.createSystemProvider(), usename, message) ;
       } catch(Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-error", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -473,18 +473,18 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       }
       
       try {
-        MailSetting setting = mailSvr.getMailSetting(SessionsUtils.getSessionProvider(), usename);
+        MailSetting setting = mailSvr.getMailSetting(SessionProviderFactory.createSystemProvider(), usename);
         if (setting.saveMessageInSent()) {
           message.setFolders(new String[]{ Utils.createFolderId(accountId, Utils.FD_SENT, false) }) ;
         }
         if (!uiForm.fromDrafts()) {
           message.setReplyTo(message.getMessageTo()) ;
-          mailSvr.saveMessage(SessionsUtils.getSessionProvider(), usename, accountId, uiForm.parentPath_, message) ;  
+          mailSvr.saveMessage(SessionProviderFactory.createSystemProvider(), usename, accountId, uiForm.parentPath_, message) ;  
         } else {
-          Folder drafts = mailSvr.getFolder(SessionsUtils.getSessionProvider(), usename, accountId, Utils.createFolderId(accountId, Utils.FD_DRAFTS, false));
+          Folder drafts = mailSvr.getFolder(SessionProviderFactory.createSystemProvider(), usename, accountId, Utils.createFolderId(accountId, Utils.FD_DRAFTS, false));
           drafts.setTotalMessage(drafts.getTotalMessage() - 1);
-          mailSvr.saveFolder(SessionsUtils.getSessionProvider(), usename, accountId, drafts);
-          mailSvr.removeMessage(SessionsUtils.getSessionProvider(), usename, accountId, message);
+          mailSvr.saveFolder(SessionProviderFactory.createSystemProvider(), usename, accountId, drafts);
+          mailSvr.removeMessage(SessionProviderFactory.createSystemProvider(), usename, accountId, message);
         }
         UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
         uiMessageList.updateList();
@@ -516,12 +516,12 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         String draftFolderId = Utils.createFolderId(accountId, Utils.FD_DRAFTS, false) ;
         message.setFolders(new String[]{ draftFolderId }) ;
         if (!uiForm.fromDrafts()) {
-          mailSvr.saveMessage(SessionsUtils.getSessionProvider(), usename, accountId, uiForm.parentPath_, message) ;
-          Folder drafts = mailSvr.getFolder(SessionsUtils.getSessionProvider(), usename, accountId, draftFolderId);
+          mailSvr.saveMessage(SessionProviderFactory.createSystemProvider(), usename, accountId, uiForm.parentPath_, message) ;
+          Folder drafts = mailSvr.getFolder(SessionProviderFactory.createSystemProvider(), usename, accountId, draftFolderId);
           drafts.setTotalMessage(drafts.getTotalMessage() + 1);
-          mailSvr.saveFolder(SessionsUtils.getSessionProvider(), usename, accountId, drafts);
+          mailSvr.saveFolder(SessionProviderFactory.createSystemProvider(), usename, accountId, drafts);
         } else {
-          mailSvr.saveMessage(SessionsUtils.getSessionProvider(), usename, accountId, message, false) ;
+          mailSvr.saveMessage(SessionProviderFactory.createSystemProvider(), usename, accountId, message, false) ;
         }
       } catch (Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.save-draft-error", null)) ;

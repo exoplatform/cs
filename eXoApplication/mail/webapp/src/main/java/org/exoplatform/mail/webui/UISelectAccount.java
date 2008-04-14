@@ -19,7 +19,6 @@ package org.exoplatform.mail.webui;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MessageFilter;
@@ -29,6 +28,7 @@ import org.exoplatform.mail.webui.popup.UIAccountList;
 import org.exoplatform.mail.webui.popup.UIAccountSetting;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -71,8 +71,8 @@ public class UISelectAccount extends UIForm {
     MailService mailSvr = getApplicationComponent(MailService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     List<Account> accountList = new ArrayList<Account>(); 
-    accountList =  mailSvr.getAccounts(SessionsUtils.getSessionProvider(), username) ;
-    String defaultAcc = mailSvr.getMailSetting(SessionsUtils.getSessionProvider(), username).getDefaultAccount();
+    accountList =  mailSvr.getAccounts(SessionProviderFactory.createSystemProvider(), username) ;
+    String defaultAcc = mailSvr.getMailSetting(SessionProviderFactory.createSystemProvider(), username).getDefaultAccount();
     List<SelectItemOption<String>>  options = new ArrayList<SelectItemOption<String>>() ;
     for(Account acc : accountList) {
       SelectItemOption<String> option = new SelectItemOption<String>(acc.getLabel(), acc.getId());

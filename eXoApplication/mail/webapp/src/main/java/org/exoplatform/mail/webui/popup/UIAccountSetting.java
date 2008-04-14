@@ -19,7 +19,6 @@ package org.exoplatform.mail.webui.popup;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.exoplatform.mail.SessionsUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
@@ -29,6 +28,7 @@ import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UINavigationContainer;
 import org.exoplatform.mail.webui.UISelectAccount;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -245,7 +245,7 @@ public class UIAccountSetting extends UIFormTabPane {
   public void fillField() throws Exception {
     MailService mailSrv = getApplicationComponent(MailService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
-    Account account = mailSrv.getAccountById(SessionsUtils.getSessionProvider(), username, getSelectedAccountId());
+    Account account = mailSrv.getAccountById(SessionProviderFactory.createSystemProvider(), username, getSelectedAccountId());
     UIFormInputWithActions uiAccountInput = getChildById(TAB_ACCOUNT) ;
     uiAccountInput.getUIStringInput(FIELD_ACCOUNT_NAME).setValue(account.getLabel()) ;
     uiAccountInput.getUIStringInput(FIELD_ACCOUNT_DESCRIPTION).setValue(account.getDescription()) ;
@@ -318,7 +318,7 @@ public class UIAccountSetting extends UIFormTabPane {
   public List<Account> getAccounts() throws Exception {
     MailService mailSrv = getApplicationComponent(MailService.class);
     String username = Util.getPortalRequestContext().getRemoteUser();
-    return mailSrv.getAccounts(SessionsUtils.getSessionProvider(), username);
+    return mailSrv.getAccounts(SessionProviderFactory.createSystemProvider(), username);
   }
   
   static  public class SelectAccountActionListener extends EventListener<UIAccountSetting> {
@@ -352,8 +352,8 @@ public class UIAccountSetting extends UIFormTabPane {
       MailService mailSvr = uiPortlet.getApplicationComponent(MailService.class) ;
       try {
         String removedAccId = uiAccSetting.getSelectedAccountId() ; 
-        mailSvr.removeAccount(SessionsUtils.getSessionProvider(), username, removedAccId) ;
-        MailSetting mailSetting = mailSvr.getMailSetting(SessionsUtils.getSessionProvider(), username) ;
+        mailSvr.removeAccount(SessionProviderFactory.createSystemProvider(), username, removedAccId) ;
+        MailSetting mailSetting = mailSvr.getMailSetting(SessionProviderFactory.createSystemProvider(), username) ;
         if (uiAccSetting.getAccounts().size() > 0) {
           String newSelectedAcc = uiAccSetting.getAccounts().get(0).getId() ;
           uiAccSetting.setSelectedAccountId(newSelectedAcc) ;
@@ -362,7 +362,7 @@ public class UIAccountSetting extends UIFormTabPane {
           String defaultAcc = mailSetting.getDefaultAccount();
           if (removedAccId.equals(defaultAcc)) {
             mailSetting.setDefaultAccount(newSelectedAcc) ;
-            mailSvr.saveMailSetting(SessionsUtils.getSessionProvider(), username, mailSetting) ;
+            mailSvr.saveMailSetting(SessionProviderFactory.createSystemProvider(), username, mailSetting) ;
           }
           uiAccSetting.fillField() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiAccSetting.getAncestorOfType(UIPopupActionContainer.class)) ;
@@ -370,7 +370,7 @@ public class UIAccountSetting extends UIFormTabPane {
           uiSelectAccount.updateAccount() ;
           uiSelectAccount.setSelectedValue(null) ;
           mailSetting.setDefaultAccount(null) ;
-          mailSvr.saveMailSetting(SessionsUtils.getSessionProvider(), username, mailSetting) ;
+          mailSvr.saveMailSetting(SessionProviderFactory.createSystemProvider(), username, mailSetting) ;
           event.getSource().getAncestorOfType(UIMailPortlet.class).cancelAction() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectAccount) ;
         }
@@ -387,7 +387,7 @@ public class UIAccountSetting extends UIFormTabPane {
       UIAccountSetting uiSetting = event.getSource() ;
       MailService mailSrv = uiSetting.getApplicationComponent(MailService.class) ;
       String username = Util.getPortalRequestContext().getRemoteUser() ;
-      Account acc = mailSrv.getAccountById(SessionsUtils.getSessionProvider(), username, uiSetting.getSelectedAccountId()) ;
+      Account acc = mailSrv.getAccountById(SessionProviderFactory.createSystemProvider(), username, uiSetting.getSelectedAccountId()) ;
       String userName = uiSetting.getFieldIncomingAccount() ;
       
       acc.setProtocol(uiSetting.getFieldProtocol()) ;
@@ -419,7 +419,7 @@ public class UIAccountSetting extends UIFormTabPane {
       
       UIApplication uiApp = uiSetting.getAncestorOfType(UIApplication.class) ;
       try {
-        mailSrv.updateAccount(SessionsUtils.getSessionProvider(), username, acc) ;
+        mailSrv.updateAccount(SessionProviderFactory.createSystemProvider(), username, acc) ;
         uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.edit-acc-successfully", null)) ;
         event.getSource().getAncestorOfType(UIMailPortlet.class).cancelAction();
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
