@@ -568,6 +568,16 @@
 	white-space: nowrap;
 }
 
+.UIMailPortlet .MailWorkingWorkspace .UIGrid .ReadItem .SubjectItem{
+	display: block; 
+	float: left; 
+	width: 90%;
+	overflow: hidden; 
+	white-space: nowrap; 
+	margin-right: 3px;
+	padding-left: 20px;
+}
+
 .UIMailPortlet .MailWorkingWorkspace .UIGrid .ReadItem .IconTag {
 	padding-left: 20px;
 	width: auto;

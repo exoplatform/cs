@@ -190,13 +190,17 @@
 	opacity: 0.3 ;
 	filter:alpha(opacity=30) ;
 }
+
 .EventTitle p{
 	font-weight:bold;
 	color:white;
 	padding: 0px ;
 	margin: 0px ;
 	white-space:nowrap ;
+	font-size: 10px;
+	line-height: 10px;
 }
+
 .UserSelectionBlock {
 	background: #cccccc ;
 	position: absolute ;

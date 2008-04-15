@@ -12,7 +12,7 @@
 
 <% /*Start Message Action Bar*/ %>
 <%uiform.begin()%>  
-  <div class="UIMessageActionsBar" >
+  <div class="UIMessageActionsBar">
   <a href="<%=uicomponent.event("Reply")%>" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.reply-to-sender") %>">
     <div class="IconHolder ReplyIcon"><span></span></div>
   </a>
@@ -28,11 +28,11 @@
   </a>
   <% if (!uicomponent.selectedSpamFolder()) { %>
     <a href="<%=uicomponent.event("ReportSpam")%>" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.report-spam") %>">
-      <div class="IconHolder SpamMailIcon"><span></span></div>
+      <div class="IconHolder SpamMail"><span></span></div>
     </a>
   <% } else { %>
     <a href="<%=uicomponent.event("NotSpam")%>" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.not-spam") %>">
-      <div class="IconHolder NonSpamMailIcon"><span></span></div>
+      <div class="IconHolder NotSpamMail"><span></span></div>
     </a>
   <% } %>
   <a href="<%=uicomponent.event("Print")%>" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.print") %>">
@@ -42,7 +42,7 @@
   
   <div class="SelectButton">
     <div class="MoreActionsIcon"  onclick="eXo.mail.UIMailPortlet.showMenu(this, event);">
-      <a class="DownArrow1Icon">More Actions</a>
+      <div class="DownArrow1Icon">More Actions</div>
       
       <% /*Begin Popup Menu*/ %>
       <div style="position: relative;">
@@ -100,7 +100,7 @@
   
   <div class="SelectButton">
     <div class="View" onclick="eXo.mail.UIMailPortlet.showView(this, event);">
-      <a class="DownArrow1Icon">View</a>
+      <div class="DownArrow1Icon">View</div>
       
       <% /*Begin Popup Menu*/ %>
       <div style="position: relative;">
@@ -337,7 +337,7 @@
           <% 
             if (uicomponent.getMessageFilter().getName().equals("Search")) print(" <th style=\"width:20px; border-right:0px;\"> </th> ") ;
           %>
-   	      <th style="padding-left: 24px;">
+   	      <th style="padding-left: 24px;width:40%;">
        	   <%
              String sortedBySubject = uicomponent.event("Sort",Utils.EXO_SUBJECT);
            	   String classArrowSubject = "";
@@ -446,7 +446,7 @@
                     title += "[" + tag.getName() + "] ";
                   }
                 %>
-                  <a href="$actionLink" class="IconTag $colorCss" title="$title" style="display: block; float: left; width: 79%; overflow: hidden; white-space: nowrap; margin-right: 3px;">
+                  <a href="$actionLink" class="$colorCss SubjectItem" title="$title" >
                 <%
                   } else {
                 %>
