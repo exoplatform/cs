@@ -89,10 +89,10 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
     String url = calendarService.getCalendarSetting(SessionProviderFactory.createSessionProvider(), username).getBaseURL() ;
     if(CalendarUtils.isEmpty(url)) url = CalendarUtils.getServerBaseUrl() + "calendar/iCalRss" ;
     rssInfo.addUIFormInput(new UIFormStringInput(URL, URL, url).addValidator(MandatoryValidator.class)) ;
-    rssInfo.addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, null)) ;
-    rssInfo.addUIFormInput(new UIFormStringInput(COPYRIGHT, COPYRIGHT, null)) ;
-    rssInfo.addUIFormInput(new UIFormStringInput(LINK, LINK, "www.exoplatform.org")) ;    
-    rssInfo.addUIFormInput(new UIFormDateTimeInput(PUBLIC_DATE, PUBLIC_DATE, new Date())) ;
+    rssInfo.addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, null).addValidator(MandatoryValidator.class)) ;
+    rssInfo.addUIFormInput(new UIFormStringInput(COPYRIGHT, COPYRIGHT, null).addValidator(MandatoryValidator.class)) ;
+    rssInfo.addUIFormInput(new UIFormStringInput(LINK, LINK, "www.exoplatform.org").addValidator(MandatoryValidator.class)) ;    
+    rssInfo.addUIFormInput(new UIFormDateTimeInput(PUBLIC_DATE, PUBLIC_DATE, new Date(), false)) ;
     setSelectedTab(rssInfo.getId()) ;
     addUIFormInput(rssInfo) ;
     UIFormInputWithActions rssCalendars = new UIFormInputWithActions("rssCalendars") ;
@@ -148,6 +148,7 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
       String title = uiForm.getUIStringInput(uiForm.TITLE).getValue() ;
       rssData.setTitle(title) ;
       rssData.setVersion("rss_2.0") ;
+      if(uiForm.getUIFormDateTimeInput(uiForm.PUBLIC_DATE).getCalendar() != null)
       rssData.setPubDate(uiForm.getUIFormDateTimeInput(uiForm.PUBLIC_DATE).getCalendar().getTime()) ;
       calendarService.generateRss(SessionProviderFactory.createSystemProvider(), Util.getPortalRequestContext().getRemoteUser(), calendarIds, rssData) ;
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;

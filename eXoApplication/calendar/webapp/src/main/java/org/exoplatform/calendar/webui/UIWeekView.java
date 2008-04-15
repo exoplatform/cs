@@ -137,7 +137,12 @@ public class UIWeekView extends UICalendarView {
       calSetting  = calService.getCalendarSetting(getSession(),CalendarUtils.getCurrentUser()) ;
     } */
     temCal.setFirstDayOfWeek(Integer.parseInt(calendarSetting_.getWeekStartOn())) ;
-    temCal.set(java.util.Calendar.WEEK_OF_YEAR, getCurrentWeek()) ;
+    if(temCal.getFirstDayOfWeek() > calendar_.get(Calendar.DAY_OF_WEEK)) {
+    	temCal.set(java.util.Calendar.WEEK_OF_YEAR, getCurrentWeek()-1) ;
+    } else {
+    	temCal.set(java.util.Calendar.WEEK_OF_YEAR, getCurrentWeek()) ;
+    	
+    }
     int amout = temCal.getFirstDayOfWeek() - calendar_.get(Calendar.DAY_OF_WEEK) ;
     if(isShowCustomView_) amout = amout + 1 ;
     temCal.add(Calendar.DATE, amout) ;
