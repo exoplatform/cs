@@ -47,6 +47,10 @@ public class UIMailPortlet extends UIPortletApplication {
     //addChild(UIMailContainer.class, null, null) ;
   }
   
+  public String getAccountId() {
+    return getChild(UINavigationContainer.class).getChild(UISelectAccount.class).getSelectedValue();
+  }
+  
   public String getCurrentUser() {
     return Util.getPortalRequestContext().getRemoteUser() ;
   }

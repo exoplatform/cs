@@ -8,4 +8,4 @@ JavascriptService.addJavascript("eXo.cs.TableMan", "/javascript/eXo/cs/TableMan.
 JavascriptService.addJavascript("eXo.cs.UIContextMenu", "/javascript/eXo/cs/UIContextMenu.js", ServletContext);
 JavascriptService.addJavascript("eXo.cs.UIContextMenuCon", "/javascript/eXo/cs/UIContextMenuCon.js", ServletContext);
 JavascriptService.addJavascript("eXo.cs.UIContextMenuMail", "/javascript/eXo/cs/UIContextMenuMail.js", ServletContext);
-
+JavascriptService.addJavascript("eXo.cs.UIContextMenuMail", "/javascript/eXo/cs/webservice/core/WebserviceManager.js", ServletContext);

@@ -23,10 +23,17 @@ package org.exoplatform.mail.service;
  * Apr 1, 2008  
  */
 public class CheckingInfo {
+  public static final int START_CHECKMAIL_STATUS = 101;
+  public static final int NO_UPDATE_STATUS = 201;
+  public static final int DOWNLOADING_MAIL_STATUS = 150;
+  public static final int FINISHED_CHECKMAIL_STATUS = 200;
+  public static final int REQUEST_STOP_STATUS = 202;
+  
   private int totalMsg_ ;
   private int fetching_ ;
   private int statusCode_ ;
   private boolean hasChanged_ ;
+  private boolean isRequestStop_ = false;
   
   public int getTotalMsg() {  return totalMsg_ ; } ;
   public void setTotalMsg(int totalMsg) { 
@@ -48,4 +55,7 @@ public class CheckingInfo {
   
   public boolean hasChanged() { return hasChanged_ ; }
   public void setHasChanged(boolean b) { hasChanged_ = b ; }
+  
+  public boolean isRequestStop() { return isRequestStop_ ; }
+  public void setRequestStop(boolean b) { isRequestStop_ = b ; }
 }

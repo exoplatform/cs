@@ -287,18 +287,19 @@
   </div>  
   <% /* End popup menu for the message*/ %>
   <%
-		if(MailUtils.isChecking(MailUtils.getCurrentUser(), uicomponent.getAccountId())) {
+		//if(MailUtils.isChecking(MailUtils.getCurrentUser(), uicomponent.getAccountId())) {
 			%>
-				<div style="background: #ffe98f; padding: 2px 0px 5px 10px; height: 18px;">
+				<div style="background: #ffe98f; padding: 2px 0px 5px 10px; height: 18px; display: none" id="checkMailInfobar">
 					<div class="LoadingIcon"><span></span></div>
-					<div style=" float: left; margin-top: 2px"> 
+					<div style=" float: left; margin-top: 2px" class="StatusText"> 
             <%=_ctx.appRes(uicomponent.id+ ".label.receiving-messages") %>
           </div>
+					<div style=" float: left; margin: 2px 0px 0px 5px; color: #00f; cursor: pointer" class="StopCheckMail" onclick="eXo.mail.MailServiceHandler.stopCheckMail()">stop</div>
 					<div style="float: right; padding-right: 10px; margin-top: 2px" class="Here">Click <a href="<%=uicomponent.event("Refresh")%> "> here</a> to display received messages</div>
 					<div style="clear: both;"><span></span></div>
 				</div>
 			<%
-		}
+		//}
 	%>
   <div class="UIMessageList SpliterResizableListArea" >
     <% /* <div class="AdvancedTooltipTmpl" id="mailAdvancedTooltipTmpl">
