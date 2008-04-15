@@ -146,13 +146,7 @@
   		</propertyDefinition>
   		<propertyDefinition name="exo:ownerId" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:sharedForUsers" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
-  			<valueConstraints/>
-  		</propertyDefinition>
-  		<propertyDefinition name="exo:sharedForGroups" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
-  			<valueConstraints/>
-  		</propertyDefinition>   			
+  		</propertyDefinition>  			
   	</propertyDefinitions>
   	<childNodeDefinitions>
       <childNodeDefinition name="*" defaultPrimaryType="nt:file" autoCreated="false" mandatory="false"

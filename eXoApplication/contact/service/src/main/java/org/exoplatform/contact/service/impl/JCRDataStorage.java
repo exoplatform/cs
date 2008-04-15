@@ -75,6 +75,7 @@ public class JCRDataStorage {
   final public static String SHARED = "1".intern();
   final public static String PUBLIC = "2".intern();
   final public static String SPLIT = "::".intern();
+  final public static String HYPHEN = "shared_".intern();
   private NodeHierarchyCreator nodeHierarchyCreator_ ;
   
   public JCRDataStorage(NodeHierarchyCreator nodeHierarchyCreator)throws Exception {
@@ -737,7 +738,7 @@ public class JCRDataStorage {
     
     List<Value> valueList = new ArrayList<Value>() ;
     for(String userId : receiveUsers) {
-      Node sharedAddress = getSharedAddressBook(userId) ;
+      Node sharedAddress = getSharedAddressBook(userId.replaceFirst(JCRDataStorage.HYPHEN, "")) ;
       boolean isExist = false ; 
       for (int i = 0; i < values.length; i++) {
         Value value = values[i];
@@ -769,49 +770,44 @@ public class JCRDataStorage {
   
   public void shareContact(SessionProvider sProvider, String username, String[] contactIds, List<String> receiveUsers) throws Exception {
   	for(String contactId : contactIds) {
-  		try{
-  			Node contactNode = getUserContactHome(sProvider, username).getNode(contactId);
-        Value[] values = {};
-        if (contactNode.isNodeType(SHARED_MIXIN)) {     
-          values = contactNode.getProperty(SHARED_PROP).getValues();
-        } else {
-        	contactNode.addMixin(SHARED_MIXIN);          
-        	contactNode.setProperty("exo:sharedUserId", username) ;
-        }
-        List<Value> valueList = new ArrayList<Value>() ;
-      	for(String userId : receiveUsers) {
-        	Node sharedContact = getSharedContact(userId) ;
-        	boolean isExist = false ; 
-          for (int i = 0; i < values.length; i++) {
-            Value value = values[i];
-            String uuid = value.getString();
-            Node refNode = sharedContact.getSession().getNodeByUUID(uuid);
-            if(refNode.getPath().equals(sharedContact.getPath())) {
-              isExist = true ; 
-              break ;
-            }
-            valueList.add(value) ;
+			Node contactNode = getUserContactHome(sProvider, username).getNode(contactId);
+      Value[] values = {};
+      if (contactNode.isNodeType(SHARED_MIXIN)) {     
+        values = contactNode.getProperty(SHARED_PROP).getValues();
+      } else {
+      	contactNode.addMixin(SHARED_MIXIN);          
+      	contactNode.setProperty("exo:sharedUserId", username) ;
+      }
+      List<Value> valueList = new ArrayList<Value>() ;
+    	for(String user : receiveUsers) {
+      	Node sharedContact = getSharedContact(user.replaceFirst(JCRDataStorage.HYPHEN, "")) ;
+      	boolean isExist = false ; 
+        for (int i = 0; i < values.length; i++) {
+          Value value = values[i];
+          String uuid = value.getString();
+          Node refNode = sharedContact.getSession().getNodeByUUID(uuid);
+          if(refNode.getPath().equals(sharedContact.getPath())) {
+            isExist = true ; 
+            break ;
           }
-          if(!isExist) {
-            Value value2add = contactNode.getSession().getValueFactory().createValue(sharedContact);
-            valueList.add(value2add) ;
-          }    
+          valueList.add(value) ;
         }
-      	if(valueList.size() > 0) {
-          Map<String, Value> newValue = new LinkedHashMap<String, Value>() ;
-          for (Value value : values )
-            newValue.put(value.getString(), value) ;
-          for (Value value : valueList)
-            newValue.put(value.getString(), value) ;
-          contactNode.setProperty(SHARED_PROP, newValue.values().toArray(new Value[newValue.size()]));
-      		contactNode.save() ;
-          contactNode.getSession().save();
+        if(!isExist) {
+          Value value2add = contactNode.getSession().getValueFactory().createValue(sharedContact);
+          valueList.add(value2add) ;
         }
-
+      }
+    	if(valueList.size() > 0) {
+        Map<String, Value> newValue = new LinkedHashMap<String, Value>() ;
+        for (Value value : values )
+          newValue.put(value.getString(), value) ;
+        for (Value value : valueList)
+          newValue.put(value.getString(), value) ;
         
-  		}catch (Exception e) {
-  			e.printStackTrace() ;
-  		}  		
+        contactNode.setProperty(SHARED_PROP, newValue.values().toArray(new Value[newValue.size()]));
+    		contactNode.save() ;
+        contactNode.getSession().save();
+      }		
   	}  	
   }
   

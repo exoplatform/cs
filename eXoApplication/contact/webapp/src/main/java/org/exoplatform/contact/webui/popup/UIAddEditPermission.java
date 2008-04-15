@@ -24,6 +24,7 @@ import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
@@ -144,8 +145,8 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
         } else {
           shareForm.getUIStringInput(UISharedForm.FIELD_USER).setValue(reciever) ;
           shareForm.getUIStringInput(UISharedForm.FIELD_GROUP).setValue(null) ;
-          shareForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).setChecked(
-              (group.getEditPermissionUsers() != null) && Arrays.asList(group.getEditPermissionUsers()).contains(reciever)) ;
+          shareForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).setChecked((group.getEditPermissionUsers()
+              != null) && Arrays.asList(group.getEditPermissionUsers()).contains(reciever + JCRDataStorage.HYPHEN)) ;
         }
       } else {
         Contact contact = ContactUtils.getContactService().getContact(
@@ -159,8 +160,8 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
         } else {
           shareForm.getUIStringInput(UISharedForm.FIELD_USER).setValue(reciever) ;
           shareForm.getUIStringInput(UISharedForm.FIELD_GROUP).setValue(null) ;
-          shareForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).setChecked(
-              (contact.getEditPermissionUsers() != null) && Arrays.asList(contact.getEditPermissionUsers()).contains(reciever)) ;
+          shareForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).setChecked((contact.getEditPermissionUsers()
+              != null) && Arrays.asList(contact.getEditPermissionUsers()).contains(reciever + JCRDataStorage.HYPHEN)) ;
         }
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(shareForm) ;
@@ -213,7 +214,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
           if(group.getViewPermissionUsers() != null) {
             List<String> newPerms = new ArrayList<String>() ;
             for(String s : group.getViewPermissionUsers()) {
-              if(!s.equals(remover)) {
+              if(!s.equals(remover + JCRDataStorage.HYPHEN)) {
                 newPerms.add(s) ;
               }
             }
@@ -222,7 +223,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
           if(group.getEditPermissionUsers() != null) {
             List<String> newPerms = new ArrayList<String>() ;
             for(String s : group.getEditPermissionUsers()) {
-              if(!s.equals(remover)) {
+              if(!s.equals(remover + JCRDataStorage.HYPHEN)) {
                 newPerms.add(s) ;
               }
             }
@@ -233,13 +234,20 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
           List<Contact> contacts = contactService.getContactPageListByGroup(
               SessionProviderFactory.createSessionProvider(), username, uiForm.groupId_).getAll() ;
           for (Contact contact : contacts) {
-            removePerUser(contact, remover) ;
+            
+            removePerUser(contact, remover + JCRDataStorage.HYPHEN) ;
             contactService.saveContact(SessionProviderFactory.createSessionProvider()
                 , username,contact , false) ;
           }
         }
         contactService.saveGroup(SessionProviderFactory.createSessionProvider(), username, group, false) ;
-        uiForm.updateGroupGrid(group);  
+        uiForm.updateGroupGrid(group); 
+        event.getRequestContext().addUIComponentToUpdateByAjax(
+            uiForm.getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class)) ;
+        
+        UIContacts uiContacts = uiForm.getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIContacts.class) ;
+        uiContacts.updateList() ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
       } else {
         
         // ko luu ca object contact vi co the ko dung den delete va edit
@@ -253,7 +261,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
             contactService.removeUserShareContact(
                 SessionProviderFactory.createSessionProvider(), username, uiForm.contactId_, user.getId()) ;
         } else {
-          removePerUser(contact, remover) ;
+          removePerUser(contact, remover + JCRDataStorage.HYPHEN) ;
           contactService.removeUserShareContact(SessionProviderFactory.createSessionProvider()
               , username, uiForm.contactId_, remover) ;
         }        
@@ -289,8 +297,6 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
         }
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(
-          uiForm.getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class)) ;
     }
     private void removePerUser(Contact contact, String removedUser) {
       if(contact.getViewPermissionUsers() != null) {
@@ -337,12 +343,16 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
     String viewPermission = null ;
     String editPermission = null ;
 
-  public  String getViewPermission() {return viewPermission ;}
-  public  String getEditPermission() {return editPermission ;}
-    
+    public  String getViewPermission() {return viewPermission ;}
+    public  String getEditPermission() {return editPermission ;}
+      
     public data(String username, boolean canEdit) {
-      viewPermission = username ;
-      editPermission = String.valueOf(canEdit) ;
+      if (username.endsWith(JCRDataStorage.HYPHEN))
+        viewPermission = username.replaceFirst(JCRDataStorage.HYPHEN, "") ;
+      else viewPermission = username ;
+      String edit = String.valueOf(canEdit) ;
+      if (edit.endsWith(JCRDataStorage.HYPHEN)) editPermission = edit.replaceFirst(JCRDataStorage.HYPHEN, "") ;
+      else editPermission = edit ;
     }
   }
 }

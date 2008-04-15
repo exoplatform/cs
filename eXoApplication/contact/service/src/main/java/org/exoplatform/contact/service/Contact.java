@@ -18,6 +18,7 @@ package org.exoplatform.contact.service;
 
 import java.util.Date;
 
+import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.services.jcr.util.IdGenerator;
 
 /**
@@ -76,7 +77,7 @@ public class Contact {
    * 	0: Private
    * 	1: Shared
    * 	2: Public */
-  private String contactType = "0" ;
+  private String contactType = JCRDataStorage.PRIVATE ;
   
   private String[] addressBook ;
   private String[] tags ;
@@ -86,8 +87,8 @@ public class Contact {
   private String[] viewPermissionGroups ;
   
   // remove 2 these properties
-  private String[] sharedForUsers ;
-  private String[] sharedForGroups ;
+  /*private String[] sharedForUsers ;
+  private String[] sharedForGroups ;*/
   private boolean isOwner = false ;
   private String ownerId ;
   private ContactAttachment attachment ;
@@ -231,12 +232,12 @@ public class Contact {
   
   public String[] getViewPermissionGroups() { return viewPermissionGroups ; }
   public void setViewPermissionGroups(String[] s) { viewPermissionGroups = s ; }
-  
+/*  
   public String[] getSharedForUsers() { return sharedForUsers ; }
   public void setSharedForUsers(String[] s) { sharedForUsers = s ; }
-  
-  public String[] getSharedForGroups() { return sharedForGroups ; }
-  public void setSharedForGroups(String[] s) { sharedForGroups = s ; }
+  */
+  /*public String[] getSharedForGroups() { return sharedForGroups ; }
+  public void setSharedForGroups(String[] s) { sharedForGroups = s ; }*/
   
   public boolean isOwner(){ return isOwner ; }
   public void setOwner(boolean owner) { isOwner = owner ; }
