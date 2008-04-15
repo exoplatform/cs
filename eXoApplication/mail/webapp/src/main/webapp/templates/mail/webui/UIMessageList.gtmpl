@@ -337,7 +337,7 @@
           <% 
             if (uicomponent.getMessageFilter().getName().equals("Search")) print(" <th style=\"width:20px; border-right:0px;\"> </th> ") ;
           %>
-   	      <th style="padding-left: 24px;">
+   	      <th style="padding-left: 24px;width:40%;">
        	   <%
              String sortedBySubject = uicomponent.event("Sort",Utils.EXO_SUBJECT);
            	   String classArrowSubject = "";
@@ -446,7 +446,7 @@
                     title += "[" + tag.getName() + "] ";
                   }
                 %>
-                  <a href="$actionLink" class="IconTag $colorCss" title="$title" style="display: block; float: left; width: 79%; overflow: hidden; white-space: nowrap; margin-right: 3px;">
+                  <a href="$actionLink" class="$colorCss SubjectItem" title="$title" >
                 <%
                   } else {
                 %>

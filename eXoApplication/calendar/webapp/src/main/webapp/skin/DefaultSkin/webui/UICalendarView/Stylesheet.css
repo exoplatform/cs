@@ -1067,7 +1067,10 @@
 	padding: 0px ;
 	margin: 0px ;
 	white-space:nowrap ;
+	font-size: 10px;
+	line-height: 10px;
 }
+
 .UserSelectionBlock {
 	background: #cccccc ;
 	position: absolute ;

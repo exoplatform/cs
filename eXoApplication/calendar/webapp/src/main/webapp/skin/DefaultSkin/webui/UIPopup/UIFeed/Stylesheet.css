@@ -21,6 +21,5 @@
 
 .UICalendarPortlet .UIFeed .FeedContent a.Icon {
 	padding-left: 32px;
-	line-height: 25px;
-	background-position: left center;
+	line-height: 20px;
 }
