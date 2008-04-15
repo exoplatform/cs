@@ -108,7 +108,7 @@ public class UIAddressBooks extends UIComponent {
     String currentUser = ContactUtils.getCurrentUser() ;
     SharedAddressBook sharedAddressBook = sharedAddressBookMap_.get(groupId) ;
     if (sharedAddressBook.getEditPermissionUsers() == null ||
-        !Arrays.asList(sharedAddressBook.getEditPermissionUsers()).contains(currentUser)) {
+        !Arrays.asList(sharedAddressBook.getEditPermissionUsers()).contains(currentUser + JCRDataStorage.HYPHEN)) {
       boolean canEdit = false ;
       String[] editPerGroups = sharedAddressBook.getEditPermissionGroups() ;
       if (editPerGroups != null)

@@ -16,7 +16,6 @@
  */
 package org.exoplatform.contact.webui;
 
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -144,7 +143,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     // contact shared
     String currentUser = ContactUtils.getCurrentUser() ;
     if (contact.getEditPermissionUsers() == null ||
-        !Arrays.asList(contact.getEditPermissionUsers()).contains(currentUser)) {
+        !Arrays.asList(contact.getEditPermissionUsers()).contains(currentUser + JCRDataStorage.HYPHEN)) {
       boolean canEdit = false ;
       String[] editPerGroups = contact.getEditPermissionGroups() ;
       if (editPerGroups != null)
@@ -454,7 +453,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         ContactGroup group = ContactUtils
           .getContactService().getSharedGroup(ContactUtils.getCurrentUser(), addressBookId) ;
         if (group.getEditPermissionUsers() == null || 
-            !Arrays.asList(group.getEditPermissionUsers()).contains(ContactUtils.getCurrentUser())) {
+            !Arrays.asList(group.getEditPermissionUsers()).contains(ContactUtils.getCurrentUser() + JCRDataStorage.HYPHEN)) {
           boolean canEdit = false ;
           String[] editPerGroups = group.getEditPermissionGroups() ;
           for (String editPer : editPerGroups)
@@ -477,8 +476,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
       for(String contactId : contactIds) {
       	Contact contact = uiContacts.contactMap.get(contactId) ;
-        if (contact.getContactType().equals(JCRDataStorage.SHARED) 
-            && (contact.getEditPermissionUsers() == null || !Arrays.asList(contact.getEditPermissionUsers()).contains(ContactUtils.getCurrentUser()))) {      
+        if (contact.getContactType().equals(JCRDataStorage.SHARED) && (contact.getEditPermissionUsers() == null 
+            || !Arrays.asList(contact.getEditPermissionUsers()).contains(ContactUtils.getCurrentUser() + JCRDataStorage.HYPHEN))) {      
           boolean canEdit = false ;
           String[] editPerGroups = contact.getEditPermissionGroups() ;
           if (editPerGroups != null)
