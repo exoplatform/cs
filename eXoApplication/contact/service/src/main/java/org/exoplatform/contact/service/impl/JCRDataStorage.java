@@ -1668,8 +1668,10 @@ public class JCRDataStorage {
         newNode.setProperty("exo:categories", new String [] {destAddress}) ;
         newNode.setProperty("exo:id", newId) ;          
         newNode.setProperty("exo:isOwner", false) ;
-        newNode.setProperty("exo:editPermission", new String [] {}) ;
-        newNode.setProperty("exo:viewPermission", new String [] {}) ;
+        newNode.setProperty("exo:editPermissionUsers", new String [] {}) ;
+        newNode.setProperty("exo:viewPermissionUsers", new String [] {}) ;
+        newNode.setProperty("exo:editPermissionGroups", new String [] {}) ;
+        newNode.setProperty("exo:viewPermissionGroups", new String [] {}) ;
         newNode.setProperty("exo:tags", new String [] {}) ; 
       }
       contactHomeNode.getSession().save() ;
@@ -1690,8 +1692,12 @@ public class JCRDataStorage {
             newNode.setProperty("exo:categories", new String [] {destAddress}) ;  
             newNode.setProperty("exo:id", newId) ;
             newNode.setProperty("exo:isOwner", false) ;
-            newNode.setProperty("exo:editPermission", new String [] {}) ;
-            newNode.setProperty("exo:viewPermission", new String [] {}) ;
+            /*newNode.setProperty("exo:editPermission", new String [] {}) ;
+            newNode.setProperty("exo:viewPermission", new String [] {}) ;*/
+            newNode.setProperty("exo:editPermissionUsers", new String [] {}) ;
+            newNode.setProperty("exo:viewPermissionUsers", new String [] {}) ;
+            newNode.setProperty("exo:editPermissionGroups", new String [] {}) ;
+            newNode.setProperty("exo:viewPermissionGroups", new String [] {}) ;
             newNode.setProperty("exo:tags", new String [] {}) ; 
           }  
           contactHomeNode.getSession().save() ;
@@ -1830,10 +1836,7 @@ public class JCRDataStorage {
     contactNode.setProperty("exo:webPage", contact.getWebPage());
     
     contactNode.setProperty("exo:note", contact.getNote());
-    contactNode.setProperty("exo:categories", new String[] {destAddress});
-//    contactNode.setProperty("exo:tags", contact.getTags());
-//    contactNode.setProperty("exo:editPermission", contact.getEditPermission());
-//    contactNode.setProperty("exo:viewPermission", contact.getViewPermission());    
+    contactNode.setProperty("exo:categories", new String[] {destAddress}); 
     if (contact.getLastUpdated() != null) {
       dateTime.setTime(contact.getLastUpdated()) ;
       contactNode.setProperty("exo:lastUpdated", dateTime);
