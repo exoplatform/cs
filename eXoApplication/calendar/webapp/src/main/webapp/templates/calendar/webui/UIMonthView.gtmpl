@@ -5,6 +5,7 @@
 	import java.util.Calendar;
 	import java.util.Date;
 	import java.util.GregorianCalendar;
+	import java.util.Locale;
 	import org.exoplatform.calendar.CalendarUtils;
 	uiform.begin() ;
  	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
@@ -36,7 +37,7 @@
 	dtf.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
 	DateFormat wf = new  SimpleDateFormat("EEE, dd/MMM") ;
 	wf.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
-	DateFormat tempFormat = new  SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss") ;
+	DateFormat tempFormat = new  SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss", Locale.ENGLISH) ;
 	tempFormat.setCalendar(uicomponent.getInstanceTempCalendar()) ;
 	%>
 	<div class="UIMonthView">

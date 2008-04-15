@@ -25,7 +25,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -121,8 +120,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   abstract LinkedHashMap<String, CalendarEvent> getDataMap() ;
   protected DateFormatSymbols dfs_  ;
 
-  private List<CalendarEvent> canEditPermission_ = new ArrayList<CalendarEvent>() ;
-  private StringBuffer calendarDeleted_ = new StringBuffer() ;
   private boolean allDelete_ = true ;
 
   public UICalendarView() throws Exception{

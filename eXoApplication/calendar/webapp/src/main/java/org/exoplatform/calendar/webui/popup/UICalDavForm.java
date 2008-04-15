@@ -45,6 +45,7 @@ import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTabPane;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
+import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 /**
  * Created by The eXo Platform SARL
@@ -76,13 +77,13 @@ public class UICalDavForm extends UIFormTabPane implements UIPopupComponent{
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     UIFormInputWithActions rssInfo = new UIFormInputWithActions("rssInfo") ;
-    rssInfo.addUIFormInput(new UIFormStringInput(TITLE, TITLE, "eXoCalendarCalDav")) ;
+    rssInfo.addUIFormInput(new UIFormStringInput(TITLE, TITLE, "eXoCalendarCalDav").addValidator(MandatoryValidator.class)) ;
     String url = calendarService.getCalendarSetting(SessionProviderFactory.createSessionProvider(), username).getBaseURL();
     if(CalendarUtils.isEmpty(url)) url = CalendarUtils.getServerBaseUrl() + "calendar/iCalRss" ;
-    rssInfo.addUIFormInput(new UIFormStringInput(URL, URL, url)) ;
-    rssInfo.addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, DESCRIPTIONS)) ;
-    rssInfo.addUIFormInput(new UIFormStringInput(COPYRIGHT, COPYRIGHT, "Copyright by 2000-2005 eXo Platform SARL")) ;
-    rssInfo.addUIFormInput(new UIFormDateTimeInput(PUBLIC_DATE, PUBLIC_DATE, new Date())) ;
+    rssInfo.addUIFormInput(new UIFormStringInput(URL, URL, url).addValidator(MandatoryValidator.class)) ;
+    rssInfo.addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, DESCRIPTIONS).addValidator(MandatoryValidator.class)) ;
+    rssInfo.addUIFormInput(new UIFormStringInput(COPYRIGHT, COPYRIGHT, "Copyright by 2000-2005 eXo Platform SARL").addValidator(MandatoryValidator.class)) ;
+    rssInfo.addUIFormInput(new UIFormDateTimeInput(PUBLIC_DATE, PUBLIC_DATE, new Date(), false)) ;
     setSelectedTab(rssInfo.getId()) ;
     addUIFormInput(rssInfo) ;
     UIFormInputWithActions rssCalendars = new UIFormInputWithActions("rssCalendars") ;
@@ -154,6 +155,7 @@ public class UICalDavForm extends UIFormTabPane implements UIPopupComponent{
       String title = uiForm.getUIStringInput(UICalDavForm.TITLE).getValue() ;
       rssData.setTitle(title) ;
       rssData.setVersion("rss_2.0") ;
+      if(uiForm.getUIFormDateTimeInput(UICalDavForm.PUBLIC_DATE).getCalendar() != null)
       rssData.setPubDate(uiForm.getUIFormDateTimeInput(UICalDavForm.PUBLIC_DATE).getCalendar().getTime()) ;
       calendarService.generateCalDav(SessionProviderFactory.createSystemProvider(), Util.getPortalRequestContext().getRemoteUser(), calendarIds, rssData) ;
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
