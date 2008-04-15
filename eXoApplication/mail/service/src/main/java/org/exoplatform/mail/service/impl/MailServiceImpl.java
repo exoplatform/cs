@@ -24,6 +24,7 @@ import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
@@ -53,6 +54,7 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.AccountData;
 import org.exoplatform.mail.service.Attachment;
+import org.exoplatform.mail.service.CheckingInfo;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
@@ -83,9 +85,16 @@ public class MailServiceImpl implements MailService{
   private JCRDataStorage storage_ ;
   //will be use map for multi import/export email type 
   private EMLImportExport emlImportExport_ ;
+  private Map<String, CheckingInfo> checkingLog_ ; 
+  
   public MailServiceImpl(NodeHierarchyCreator nodeHierarchyCreator) throws Exception {
     storage_ = new JCRDataStorage(nodeHierarchyCreator) ;
     emlImportExport_ = new EMLImportExport(storage_) ;
+  }
+  
+  public CheckingInfo getCheckingInfo(String username, String accountId) {
+    String key = username + ":" + accountId ;
+    return checkingLog_.get(key) ;
   }
 
   /**
@@ -386,6 +395,9 @@ public class MailServiceImpl implements MailService{
   
   public List<Message> checkNewMessage(SessionProvider sProvider, String username, String accountId) throws Exception {
     Account account = getAccountById(sProvider, username, accountId) ;
+    CheckingInfo info = new CheckingInfo() ;
+    String key = username + ":" + accountId ;
+    checkingLog_.put(key, info) ;
     long t1, t2 , tt1, tt2;
     System.out.println(" #### Getting mail from " + account.getIncomingHost() + " ... !");
     List<Message> messageList = new ArrayList<Message>();
@@ -437,6 +449,7 @@ public class MailServiceImpl implements MailService{
         boolean deleteOnServer = (isPop3 && !leaveOnServer) || (isImap && markAsDelete);
         
         totalNew = messages.length ;
+        checkingLog_.get(key).setTotalMsg(totalNew) ;
         
         System.out.println(" #### Folder contains " + totalNew + " messages !");
         tt1 = System.currentTimeMillis();
@@ -465,6 +478,7 @@ public class MailServiceImpl implements MailService{
             msg.setFlag(Flags.Flag.SEEN, true);
             if (deleteOnServer) msg.setFlag(Flags.Flag.DELETED, true);
             try {
+              checkingLog_.get(key).setFetching(i) ;
               storage_.saveMessage(sProvider, username, account.getId(), msg, folderId, spamFilter) ;
               account.setLastCheckedDate(MimeMessageParser.getReceivedDate(msg).getTime()) ;
             } catch(Exception e) {
@@ -487,6 +501,7 @@ public class MailServiceImpl implements MailService{
           System.out.println(" [DEBUG] Executed the filter finished : " + (t2 - t1) + " ms") ;
           tt2 = System.currentTimeMillis();
           System.out.println(" ### Check mail finished total took: " + (tt2 - tt1) + " ms") ;
+          checkingLog_.remove(key) ;
           
           folder.close(true);      
           store.close();
