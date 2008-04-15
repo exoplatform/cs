@@ -121,7 +121,7 @@ public class UIEventCategoryManager extends UIContainer implements UIPopupCompon
       uiViewContainer.updateCategory() ;
       uiViewContainer.refresh() ;
       UIMiniCalendar uiMiniCalendar = calendarPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
-      uiMiniCalendar.updateMiniCal() ;
+      //uiMiniCalendar.updateMiniCal() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
       uiManager.updateGrid() ;

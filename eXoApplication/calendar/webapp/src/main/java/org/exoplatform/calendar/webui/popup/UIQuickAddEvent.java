@@ -306,7 +306,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
         UICalendarViewContainer uiContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class);
         UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
-        uiMiniCalendar.updateMiniCal() ;
+        //uiMiniCalendar.updateMiniCal() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
         CalendarView calendarView = (CalendarView)uiContainer.getRenderedChild() ;
         if (calendarView instanceof UIListContainer) {

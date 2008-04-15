@@ -293,7 +293,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       calendarPortlet.findFirstComponentOfType(UIActionBar.class).setCurrentView(viewType) ;
       calendarPortlet.cancelAction() ;
       UIMiniCalendar miniCal = calendarPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
-      miniCal.updateMiniCal() ;
+      //miniCal.updateMiniCal() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarPortlet) ;
     }
   }

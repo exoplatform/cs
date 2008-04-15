@@ -257,7 +257,7 @@ public class UICalendars extends UIForm  {
 			uiViewContainer.refresh() ;
 			try{       
 				UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
-				uiMiniCalendar.updateMiniCal() ;
+				//uiMiniCalendar.updateMiniCal() ;
 			} catch (Exception e) {
 				e.printStackTrace() ;
 			}
@@ -460,7 +460,7 @@ public class UICalendars extends UIForm  {
 			UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
 			UICalendarWorkingContainer workingContainer = uiComponent.getAncestorOfType(UICalendarWorkingContainer.class) ;
 			CalendarSetting setting = calService.getCalendarSetting(uiComponent.getSession(), username) ;
-			uiMiniCalendar.updateMiniCal() ;
+			//uiMiniCalendar.updateMiniCal() ;
 			uiViewContainer.refresh() ;
 			uiPortlet.setCalendarSetting(setting) ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;

@@ -120,7 +120,7 @@ public class UIEventCategoryForm extends UIForm {
         uiForm.reset() ;
         UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
         UIMiniCalendar uiMiniCalendar = calendarPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
-        uiMiniCalendar.updateMiniCal() ;
+        //uiMiniCalendar.updateMiniCal() ;
         uiMiniCalendar.setCategoryId(null) ;
         UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
         UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
