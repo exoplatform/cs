@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -85,11 +86,12 @@ public class MailServiceImpl implements MailService{
   private JCRDataStorage storage_ ;
   //will be use map for multi import/export email type 
   private EMLImportExport emlImportExport_ ;
-  private Map<String, CheckingInfo> checkingLog_ ; 
+  private Map<String, CheckingInfo> checkingLog_ ;
   
   public MailServiceImpl(NodeHierarchyCreator nodeHierarchyCreator) throws Exception {
     storage_ = new JCRDataStorage(nodeHierarchyCreator) ;
     emlImportExport_ = new EMLImportExport(storage_) ;
+    checkingLog_ = new HashMap<String, CheckingInfo>(); 
   }
   
   public CheckingInfo getCheckingInfo(String username, String accountId) {
