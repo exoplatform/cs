@@ -184,7 +184,7 @@ public class UIDayView extends UICalendarView {
       } else  {
         UICalendarWorkingContainer uiWorkingContainer = calendarview.getAncestorOfType(UICalendarWorkingContainer.class) ;
         UIMiniCalendar uiMiniCalendar = uiWorkingContainer.findFirstComponentOfType(UIMiniCalendar.class) ;
-        uiMiniCalendar.updateMiniCal() ;
+        //uiMiniCalendar.updateMiniCal() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
         UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.event-not-found", null)) ;

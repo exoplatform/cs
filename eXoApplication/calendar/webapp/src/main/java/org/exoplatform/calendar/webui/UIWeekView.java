@@ -254,7 +254,7 @@ public class UIWeekView extends UICalendarView {
           calendarview.eventData_.get(key).put(eventId, eventCalendar) ;*/
           calendarview.refresh() ;
           UIMiniCalendar uiMiniCalendar = calendarview.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
-          uiMiniCalendar.updateMiniCal() ;
+          //uiMiniCalendar.updateMiniCal() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
         } catch (Exception e) {
@@ -307,7 +307,7 @@ public class UIWeekView extends UICalendarView {
           calendarview.refresh() ;
           ///calendarview.allWeekData_.put(eventCalendar.getId(), eventCalendar) ;
           UIMiniCalendar uiMiniCalendar = calendarview.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
-          uiMiniCalendar.updateMiniCal() ;
+          //uiMiniCalendar.updateMiniCal() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
         }

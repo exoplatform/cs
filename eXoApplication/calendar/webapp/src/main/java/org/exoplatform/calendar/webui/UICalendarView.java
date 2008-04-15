@@ -623,7 +623,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         return ;
       }
       UIMiniCalendar uiMiniCalendar = uiCalendarView.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
-      uiMiniCalendar.updateMiniCal() ;
+      //uiMiniCalendar.updateMiniCal() ;
       uiCalendarView.setLastUpdatedEventId(null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView.getParent()) ;
@@ -690,7 +690,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       } else {
         UICalendarWorkingContainer uiWorkingContainer = uiCalendarView.getAncestorOfType(UICalendarWorkingContainer.class) ;
         UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
-        uiMiniCalendar.updateMiniCal() ;
+        //uiMiniCalendar.updateMiniCal() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
         UIApplication uiApp = uiCalendarView.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.event-not-found", null)) ;
@@ -772,7 +772,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       } else {
         UICalendarWorkingContainer uiWorkingContainer = uiCalendarView.getAncestorOfType(UICalendarWorkingContainer.class) ;
         UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
-        uiMiniCalendar.updateMiniCal() ;
+        //uiMiniCalendar.updateMiniCal() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
         UIApplication uiApp = uiCalendarView.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.event-not-found", null)) ;
@@ -819,7 +819,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         }
         UICalendarViewContainer uiContainer = uiCalendarView.getAncestorOfType(UICalendarViewContainer.class) ;
         UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
-        uiMiniCalendar.updateMiniCal() ;
+        //uiMiniCalendar.updateMiniCal() ;
         uiCalendarView.setLastUpdatedEventId(null) ;
         if(uiContainer.getRenderedChild() instanceof UIListContainer) {
           ((UIListContainer)uiContainer.getRenderedChild()).getChild(UIListView.class).setDisplaySearchResult(false) ;
@@ -931,7 +931,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         default: System.out.println("Invalid type.");break;
         }
         uiMiniCalendar.setCurrentCalendar(cal) ;
-        uiMiniCalendar.updateMiniCal() ;
+        //uiMiniCalendar.updateMiniCal() ;
         UIActionBar uiActionBar = portlet.findFirstComponentOfType(UIActionBar.class) ;
         uiActionBar.setCurrentView(uiContainer.getRenderedChild().getId()) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
@@ -1026,7 +1026,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         UICalendarPortlet uiClendarPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
         UIMiniCalendar uiMiniCalendar = uiClendarPortlet.findFirstComponentOfType(UIMiniCalendar.class);
         uiMiniCalendar.setCurrentCalendar(calendarview.getCurrentCalendar()) ;
-        uiMiniCalendar.updateMiniCal() ;
+        //uiMiniCalendar.updateMiniCal() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
       } catch (Exception e) {
@@ -1046,7 +1046,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         UICalendarPortlet uiClendarPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
         UIMiniCalendar uiMiniCalendar = uiClendarPortlet.findFirstComponentOfType(UIMiniCalendar.class);
         uiMiniCalendar.setCurrentCalendar(calendarview.getCurrentCalendar()) ;
-        uiMiniCalendar.updateMiniCal() ;
+        //uiMiniCalendar.updateMiniCal() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
       } catch (Exception e) {

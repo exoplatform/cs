@@ -119,7 +119,7 @@ public class UIMiniCalendar extends UICalendarView  {
         miniCal.calendar_.add(Calendar.YEAR, 1) ;
       }
       miniCal.setCurrentDay(1);
-      miniCal.updateMiniCal() ;
+      //miniCal.updateMiniCal() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(miniCal.getParent()) ;
     }
   }
