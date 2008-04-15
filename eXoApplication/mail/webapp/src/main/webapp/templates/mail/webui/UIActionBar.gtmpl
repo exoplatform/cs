@@ -4,7 +4,7 @@
 			<div class="LeftBar">
 				<div class="RightBar">
 					<div class="CenterBar">
-						<a href="<%=uicomponent.event("CheckMail")%>" class="ControlButton">
+						<a href="javascript:eXo.mail.MailServiceHandler.checkMail()" class="ControlButton">
 							<div class="IconHolder CheckMailIcon">
 								<div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.check-mail") %></div>
 							</div>
@@ -33,7 +33,7 @@
             </a>
 						<div class="SeparatorLine"><span></span></div>
 						
-						<div class="SelectButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+						<a class="ControlButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 							
 							<div class="IconHolder CustomViewIcon" title="Custome panels view">
 								<div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.id+ ".label.custom-layout-view") %></div>
@@ -86,7 +86,7 @@
 		      		</div>
 		      		<% /*End Popup Menu*/ %>
 		      		
-						</div>
+						</a>
 						
 						<a href="<%=uicomponent.event("MailSettings")%>" class="ControlButton">
 							<div class="IconHolder SettingsIcon" title="Mail settings"><%=_ctx.appRes(uicomponent.id+ ".label.settings") %></div>

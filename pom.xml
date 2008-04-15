@@ -21,6 +21,8 @@
     
     <module>eXoApplication/content/webapp</module>
     <module>eXoApplication/content/service</module>
+
+    <module>eXoApplication/webservice/service</module>
   </modules>
 
   <build>
