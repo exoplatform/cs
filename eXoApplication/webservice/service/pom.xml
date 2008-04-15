@@ -18,7 +18,7 @@
       <groupId>org.exoplatform.ws.rest</groupId>
       <artifactId>exo.rest.core</artifactId>
       <!--version>${org.exoplatform.core.version}</version-->
-      <version>trunk</version>
+      <version>1.0</version>
     </dependency>
     <dependency>
       <groupId>org.exoplatform.core</groupId>
