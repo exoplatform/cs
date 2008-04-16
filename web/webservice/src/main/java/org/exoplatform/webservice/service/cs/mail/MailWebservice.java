@@ -40,13 +40,8 @@ public class MailWebservice implements ResourceContainer {
   String accountId) throws Exception {
     MailService mailService = (MailService) ExoContainerContext
         .getCurrentContainer().getComponentInstanceOfType(MailService.class);
-
     String userName = this.getUserName();
-    System.out.println("========= accountId: " + accountId);
-    System.out.println("========= User name: " + userName);
-
     boolean isExists = false;
-    
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     JobSchedulerService schedulerService = 
       (JobSchedulerService) container.getComponentInstanceOfType(JobSchedulerService.class);
@@ -85,9 +80,11 @@ public class MailWebservice implements ResourceContainer {
       buffer.append("<info>");
       buffer.append("  <checkingmail>");
       buffer.append("    <status>" + CheckingInfo.REQUEST_STOP_STATUS + "</status>");
+      buffer.append("    <statusmsg>" + checkingInfo.getStatusMsg() + "</statusmsg>");
       buffer.append("  </checkingmail>");
       buffer.append("</info>");
     }
+    mailService.removeCheckingInfo(this.getUserName(), accountId);
     return Response.Builder.ok(buffer.toString(), "text/xml").build();
   }
 
@@ -121,6 +118,7 @@ public class MailWebservice implements ResourceContainer {
         buffer.append("<info>");
         buffer.append("  <checkingmail>");
         buffer.append("    <status>" + CheckingInfo.DOWNLOADING_MAIL_STATUS + "</status>");
+        buffer.append("    <statusmsg>" + checkingInfo.getStatusMsg() + "</statusmsg>");
         buffer.append("    <total>" + checkingInfo.getTotalMsg() + "</total>");
         buffer.append("    <completed>" + (checkingInfo.getFetching() - 1) + "</completed>");
         buffer.append("  </checkingmail>");
@@ -130,15 +128,21 @@ public class MailWebservice implements ResourceContainer {
         buffer.append("<info>");
         buffer.append("  <checkingmail>");
         buffer.append("    <status>" + CheckingInfo.NO_UPDATE_STATUS + "</status>");
+        buffer.append("    <statusmsg>" + checkingInfo.getStatusMsg() + "</statusmsg>");
         buffer.append("  </checkingmail>");
         buffer.append("</info>");
       }
+      if (checkingInfo.getStatusCode() == CheckingInfo.FINISHED_CHECKMAIL_STATUS) {
+        buffer.append("<info>");
+        buffer.append("  <checkingmail>");
+        buffer.append("    <status>" + CheckingInfo.FINISHED_CHECKMAIL_STATUS + "</status>");
+        buffer.append("    <statusmsg>" + checkingInfo.getStatusMsg() + "</statusmsg>");
+        buffer.append("  </checkingmail>");
+        buffer.append("</info>");
+        mailService.removeCheckingInfo(this.getUserName(), accountId);
+      }
     } else {
-      buffer.append("<info>");
-      buffer.append("  <checkingmail>");
-      buffer.append("    <status>" + CheckingInfo.FINISHED_CHECKMAIL_STATUS + "</status>");
-      buffer.append("  </checkingmail>");
-      buffer.append("</info>");
+      
     }
     return Response.Builder.ok(buffer.toString(), "text/xml").build();
   }

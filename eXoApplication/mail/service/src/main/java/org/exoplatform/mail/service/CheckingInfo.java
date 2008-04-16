@@ -33,6 +33,7 @@ public class CheckingInfo {
   private int totalMsg_ ;
   private int fetching_ ;
   private int statusCode_ ;
+  private String statusMsg_;
   private boolean hasChanged_ ;
   private boolean isRequestStop_ = false;
   
@@ -45,6 +46,12 @@ public class CheckingInfo {
   public int getFetching() { return fetching_ ; }
   public void setFetching(int in) { 
     fetching_ = in ; 
+    hasChanged_ = true ;
+  }
+  
+  public String getStatusMsg() { return statusMsg_ ; }
+  public void setStatusMsg(String statusMsg) { 
+    statusMsg_ = statusMsg ; 
     hasChanged_ = true ;
   }
   
