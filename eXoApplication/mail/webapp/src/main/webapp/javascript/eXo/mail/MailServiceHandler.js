@@ -85,7 +85,8 @@ MailServiceHandler.prototype.stopCheckMail = function() {
  * @param {Object} status
  */
 MailServiceHandler.prototype.updateUI = function(status) {
-  var statusTxt = '';
+  var statusTxt = this.serverData.info.checkingmail.statusMsg;
+  /*
   switch (status) {
     case this.START_CHECKMAIL_STATUS:
       statusTxt += 'Connecting...';
@@ -99,6 +100,7 @@ MailServiceHandler.prototype.updateUI = function(status) {
     case this.ERROR_STATE:
       statusTxt += 'Server error while checking mail';
   }
+  */
   var statusTextNode = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'StatusText');
   if (this.checkMailInfobarNode.style.display == 'none') {
     this.checkMailInfobarNode.style.display = 'block';
