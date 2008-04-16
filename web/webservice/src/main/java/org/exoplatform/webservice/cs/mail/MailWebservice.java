@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.exoplatform.webservice.service.cs.mail;
+package org.exoplatform.webservice.cs.mail;
 
 import java.util.List;
 
@@ -28,84 +28,101 @@ import org.quartz.JobDetail;
 public class MailWebservice implements ResourceContainer {
 
   public static final int MIN_SLEEP_TIMEOUT = 500;
-  public static final int TOTAL_SLEEP_TIME = 16;
-  
+  public static final int TOTAL_SLEEP_TIME  = 16;
+
   public MailWebservice() {
   }
 
   @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/cs/mail/checkmail/{accountId}/")
+  @URITemplate("/cs/mail/checkmail/{username}/{accountId}/")
   @OutputTransformer(StringOutputTransformer.class)
-  public Response checkMail(@URIParam("accountId")
+  public Response checkMail(@URIParam("username")
+  String userName, @URIParam("accountId")
   String accountId) throws Exception {
     MailService mailService = (MailService) ExoContainerContext
         .getCurrentContainer().getComponentInstanceOfType(MailService.class);
-    String userName = this.getUserName();
     boolean isExists = false;
     ExoContainer container = ExoContainerContext.getCurrentContainer();
-    JobSchedulerService schedulerService = 
-      (JobSchedulerService) container.getComponentInstanceOfType(JobSchedulerService.class);
-    List allJobs = schedulerService.getAllJobs() ;
-    for(Object obj : allJobs) {
-      if(((JobDetail)obj).getName().equals(userName + ":" + accountId)) {
-         isExists = true;
+    JobSchedulerService schedulerService = (JobSchedulerService) container
+        .getComponentInstanceOfType(JobSchedulerService.class);
+    List allJobs = schedulerService.getAllJobs();
+    for (Object obj : allJobs) {
+      if (((JobDetail) obj).getName().equals(userName + ":" + accountId)) {
+        isExists = true;
       }
     }
-    
+
     if (!isExists) {
       mailService.checkMail(userName, accountId);
     }
-    
+    CheckingInfo checkingInfo = mailService
+        .getCheckingInfo(userName, accountId);
     StringBuffer buffer = new StringBuffer();
     buffer.append("<info>");
     buffer.append("  <checkingmail>");
     buffer.append("    <status>" + CheckingInfo.START_CHECKMAIL_STATUS + "</status>");
+    if (checkingInfo != null) {
+      buffer.append("    <statusmsg>" + checkingInfo.getStatusMsg() + "</statusmsg>");
+    }
     buffer.append("  </checkingmail>");
     buffer.append("</info>");
-    
-    return Response.Builder.ok(buffer.toString(), "text/xml").build();
-  }
-  
-  @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/cs/mail/stopcheckmail/{accountId}/")
-  @OutputTransformer(StringOutputTransformer.class)
-  public Response stopCheckMail(@URIParam("accountId")
-      String accountId) throws Exception {
-    MailService mailService = (MailService) ExoContainerContext
-    .getCurrentContainer().getComponentInstanceOfType(MailService.class);
-    StringBuffer buffer = new StringBuffer();
-    CheckingInfo checkingInfo = mailService.getCheckingInfo(this.getUserName(), accountId);
-    if (checkingInfo != null) {
-      checkingInfo.setRequestStop(true);
-      buffer.append("<info>");
-      buffer.append("  <checkingmail>");
-      buffer.append("    <status>" + CheckingInfo.REQUEST_STOP_STATUS + "</status>");
-      buffer.append("    <statusmsg>" + checkingInfo.getStatusMsg() + "</statusmsg>");
-      buffer.append("  </checkingmail>");
-      buffer.append("</info>");
-    }
-    mailService.removeCheckingInfo(this.getUserName(), accountId);
+
     return Response.Builder.ok(buffer.toString(), "text/xml").build();
   }
 
   @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/cs/mail/checkmailjobinfo/{accountId}/")
+  @URITemplate("/cs/mail/stopcheckmail/{username}/{accountId}/")
   @OutputTransformer(StringOutputTransformer.class)
-  public Response getCheckMailJobInfo(@URIParam("accountId")
-      String accountId) throws Exception {
+  public Response stopCheckMail(@URIParam("username")
+  String userName, @URIParam("accountId")
+  String accountId) throws Exception {
     MailService mailService = (MailService) ExoContainerContext
-                                .getCurrentContainer().getComponentInstanceOfType(MailService.class);
-    CheckingInfo checkingInfo = mailService.getCheckingInfo(this.getUserName(), accountId);
+        .getCurrentContainer().getComponentInstanceOfType(MailService.class);
+    StringBuffer buffer = new StringBuffer();
+    CheckingInfo checkingInfo = mailService
+        .getCheckingInfo(userName, accountId);
+    if (checkingInfo != null) {
+
+      checkingInfo.setRequestStop(true);
+      while (checkingInfo.getStatusCode() != CheckingInfo.FINISHED_CHECKMAIL_STATUS) {
+        Thread.sleep(MailWebservice.MIN_SLEEP_TIMEOUT);
+        continue;
+      }
+
+      buffer.append("<info>");
+      buffer.append("  <checkingmail>");
+      buffer.append("    <status>" + checkingInfo.getStatusCode() + "</status>");
+      buffer.append("    <statusmsg>" + checkingInfo.getStatusMsg() + "</statusmsg>");
+      buffer.append("  </checkingmail>");
+      buffer.append("</info>");
+      mailService.removeCheckingInfo(userName, accountId);
+    } else {
+      return Response.Builder.serverError().build();
+    }
+    return Response.Builder.ok(buffer.toString(), "text/xml").build();
+  }
+
+  @HTTPMethod(HTTPMethods.GET)
+  @URITemplate("/cs/mail/checkmailjobinfo/{username}/{accountId}/")
+  @OutputTransformer(StringOutputTransformer.class)
+  public Response getCheckMailJobInfo(@URIParam("username")
+  String userName, @URIParam("accountId")
+  String accountId) throws Exception {
+    MailService mailService = (MailService) ExoContainerContext
+        .getCurrentContainer().getComponentInstanceOfType(MailService.class);
+    CheckingInfo checkingInfo = mailService
+        .getCheckingInfo(userName, accountId);
     if (checkingInfo == null) {
       Thread.sleep(MailWebservice.MIN_SLEEP_TIMEOUT);
-      checkingInfo = mailService.getCheckingInfo(this.getUserName(), accountId);
+      checkingInfo = mailService.getCheckingInfo(userName, accountId);
     }
     if (checkingInfo == null) {
       return Response.Builder.serverError().build();
     }
     if (!checkingInfo.hasChanged()) {
       Thread.sleep(MailWebservice.MIN_SLEEP_TIMEOUT);
-      for (int i=1; i<MailWebservice.MIN_SLEEP_TIMEOUT * MailWebservice.TOTAL_SLEEP_TIME; i++) {
+      for (int i = 1; i < MailWebservice.MIN_SLEEP_TIMEOUT
+          * MailWebservice.TOTAL_SLEEP_TIME; i++) {
         if (checkingInfo.hasChanged()) {
           break;
         }
@@ -139,10 +156,10 @@ public class MailWebservice implements ResourceContainer {
         buffer.append("    <statusmsg>" + checkingInfo.getStatusMsg() + "</statusmsg>");
         buffer.append("  </checkingmail>");
         buffer.append("</info>");
-        mailService.removeCheckingInfo(this.getUserName(), accountId);
+        mailService.removeCheckingInfo(userName, accountId);
       }
     } else {
-      
+
     }
     return Response.Builder.ok(buffer.toString(), "text/xml").build();
   }
