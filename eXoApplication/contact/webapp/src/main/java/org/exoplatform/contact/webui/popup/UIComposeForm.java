@@ -26,6 +26,7 @@ import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -258,9 +259,10 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         if (uiForm.fromOptions.get(key).equals(fieldFrom))
             accId = key ;
       }
+      MailService mailSvr = uiForm.getApplicationComponent(MailService.class) ; 
+      String username = ContactUtils.getCurrentUser() ;
       try {
-        uiForm.getApplicationComponent(MailService.class).sendMessage(SessionProviderFactory
-            .createSessionProvider(), ContactUtils.getCurrentUser(), accId, message) ;
+        mailSvr.sendMessage(SessionProviderFactory.createSessionProvider(), username, accId, message) ;
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-succsessfuly", null)) ;
         uiChildPopup.deActivate() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
@@ -271,6 +273,25 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         return ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      
+      // add
+      try {
+        MailSetting setting = mailSvr.getMailSetting(SessionProviderFactory.createSystemProvider(), username);
+        if (setting.saveMessageInSent()) {
+          message.setFolders(new String[]{ Utils.createFolderId(accId, Utils.FD_SENT, false) }) ;
+        }
+        message.setReplyTo(message.getMessageTo()) ;
+        mailSvr.saveMessage(SessionProviderFactory.createSystemProvider(), username, accId, message.getPath(), message) ;  
+        
+
+        uiChildPopup.deActivate() ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
+      } catch (Exception e) {
+        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.save-sent-error", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        uiChildPopup.deActivate() ;
+      }
+      
     }
   }
   
