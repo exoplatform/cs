@@ -45,7 +45,6 @@ import org.exoplatform.contact.webui.popup.UIMoveContactsForm;
 import org.exoplatform.contact.webui.popup.UIPopupComponent;
 import org.exoplatform.contact.webui.popup.UISharedContactsForm;
 import org.exoplatform.contact.webui.popup.UITagForm;
-import org.exoplatform.contact.webui.popup.UICategorySelect;
 import org.exoplatform.contact.webui.popup.UIContactForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.webui.popup.UIPopupContainer;
@@ -299,14 +298,14 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
       UIPopupContainer popupContainer =  popupAction.activate(UIPopupContainer.class, 800) ;
       popupContainer.setId("AddNewContact");
-      UICategorySelect uiCategorySelect = popupContainer.addChild(UICategorySelect.class, null, null) ;
+      //UICategorySelect uiCategorySelect = popupContainer.addChild(UICategorySelect.class, null, null) ;
       UIContactForm uiContactForm = popupContainer.addChild(UIContactForm.class, null, null) ;      
       
-      uiCategorySelect.setPrivateGroupMap(contactPortlet
-          .findFirstComponentOfType(UIAddressBooks.class).getPrivateGroupMap()) ;
+      /*uiCategorySelect.setPrivateGroupMap(contactPortlet
+          .findFirstComponentOfType(UIAddressBooks.class).getPrivateGroupMap()) ;*/
       //uiCategorySelect.addCategories() ;
-      uiCategorySelect.setValue(contact.getAddressBook()[0]) ;
-      if (contact.getContactType().equals(JCRDataStorage.SHARED))  uiCategorySelect.disableSelect() ;
+      //uiCategorySelect.setValue(contact.getAddressBook()[0]) ;
+      //if (contact.getContactType().equals(JCRDataStorage.SHARED))  uiCategorySelect.disableSelect() ;
       uiContactForm.setValues(contact);
       uiContactForm.setNew(false) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
@@ -467,11 +466,9 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         }
       }
       String type = event.getRequestContext().getRequestParameter("addressType");
-      String[] addressBooks = {addressBookId} ;
       List<String> contactIds = uiContacts.getCheckedContacts() ;
       List<Contact> contacts = new ArrayList<Contact>();
       @SuppressWarnings("unused")
-      ContactService contactService = ContactUtils.getContactService() ;
       String username = ContactUtils.getCurrentUser() ;
       SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
       for(String contactId : contactIds) {
@@ -499,12 +496,12 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           return ;
         }
       	if(contact != null) {
-      		contact.setAddressBook(addressBooks) ;
+      		contact.setAddressBook(new String[] { addressBookId }) ;
       		contacts.add(contact) ;
       	}
-      }     
+      }
       if(contacts.size() == 0) return ;
-      contactService.moveContacts(sessionProvider, username, contacts, type); 
+      ContactUtils.getContactService().moveContacts(sessionProvider, username, contacts, type); 
 
       // update addressbook when search
       if (uiContacts.isSearchResult) {

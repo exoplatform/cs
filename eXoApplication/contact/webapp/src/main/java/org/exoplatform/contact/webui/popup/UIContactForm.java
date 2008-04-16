@@ -26,6 +26,7 @@ import javax.jcr.PathNotFoundException;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
+import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.webui.UIAddressBooks;
@@ -276,10 +277,23 @@ public class UIContactForm extends UIFormTabPane {
         UICategorySelect uiCategorySelect = popupContainer.getChild(UICategorySelect.class); 
         String category = uiCategorySelect.getSelectedCategory();        
         contact.setAddressBook(new String[] { category });
+        ContactGroup group ;
         if (uiContactForm.isShared) {
-          contactService.saveContactToSharedAddressBook(username, category, contact, true) ; 
+          group = contactService.getSharedGroup(username, category) ;
+          contact.setViewPermissionUsers(group.getViewPermissionUsers()) ;
+          contact.setViewPermissionGroups(group.getViewPermissionGroups()) ;
+          contact.setEditPermissionUsers(group.getEditPermissionUsers()) ;
+          contact.setEditPermissionGroups(group.getEditPermissionGroups()) ;          
+          contactService.saveContactToSharedAddressBook(username, category, contact, true) ;          
+          contact.setContactType(JCRDataStorage.SHARED) ;
         } else {
-          contactService.saveContact(sessionProvider, username, contact, true);
+          group = contactService.getGroup(sessionProvider, username, category) ;
+          contact.setViewPermissionUsers(group.getViewPermissionUsers()) ;
+          contact.setViewPermissionGroups(group.getViewPermissionGroups()) ;
+          contact.setEditPermissionUsers(group.getEditPermissionUsers()) ;
+          contact.setEditPermissionGroups(group.getEditPermissionGroups()) ;                    
+          contactService.saveContact(sessionProvider, username, contact, true);          
+          contact.setContactType(JCRDataStorage.PRIVATE) ;
         }        
       } else {
         try {
@@ -294,9 +308,10 @@ public class UIContactForm extends UIFormTabPane {
             } else {
               contactService.saveSharedContact(username, contact) ;
             }  
-          } else {          
+          } /*else {      
+            
             contactService.savePublicContact(contact, false) ;
-          }
+          }*/
         } catch(PathNotFoundException e) {
           uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.contact-deleted", null,
               ApplicationMessage.WARNING)) ;

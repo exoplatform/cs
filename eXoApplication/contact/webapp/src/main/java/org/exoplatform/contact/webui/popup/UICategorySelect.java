@@ -79,7 +79,7 @@ public class UICategorySelect extends UIForm {
     UIFormInputWithActions input = getChildById(INPUT_CATEGORY) ;
     input.getUIFormSelectBox(FIELD_CATEGORY).setValue(groupId) ;
   }
-  public void disableSelect() { getUIFormSelectBox(FIELD_CATEGORY).setEnable(false) ; }
+  //public void disableSelect() { getUIFormSelectBox(FIELD_CATEGORY).setEnable(false) ; }
 
   public List<SelectItemOption<String>> getCategoryList() throws Exception {
     List<SelectItemOption<String>> categories = new ArrayList<SelectItemOption<String>>() ;

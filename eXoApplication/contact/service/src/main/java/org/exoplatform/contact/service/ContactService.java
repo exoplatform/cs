@@ -42,13 +42,12 @@ public interface ContactService {
   public ContactPageList getPublicContactsByAddressBook(SessionProvider sProvider, String addressBookId) throws Exception ;
   public List<GroupContactData> getPublicContacts(SessionProvider sProvider, String[] groupIds) throws Exception ;
   public List<String> getPublicAddressBookContacts(SessionProvider sProvider, String[] groupIds) throws Exception ;
-  public Contact getPublicContact(String contactId) throws Exception ;
-  public void savePublicContact(Contact contact, boolean isNew) throws Exception ;
-  public Contact removePublicContact(SessionProvider sProvider, String contactId) throws Exception ;
+  public Contact getPublicContact(String contactId) throws Exception ;  
+  //public void savePublicContact(Contact contact, boolean isNew) throws Exception ;
+  //public Contact removePublicContact(SessionProvider sProvider, String contactId) throws Exception ;
   public List<String> getAllEmailByPublicGroup(String username, String groupId) throws Exception ;
   public void addGroupToPersonalContact(String userId, String groupId) throws Exception ;
   public Contact getPersonalContact(String userId) throws Exception ;
-  
   
   public List<ContactGroup> getGroups(SessionProvider sProvider, String username) throws Exception ;
   public ContactGroup getGroup(SessionProvider sProvider, String username, String groupId) throws Exception ;

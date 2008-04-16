@@ -27,6 +27,7 @@ import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.SharedAddressBook;
+import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UIWorkingContainer;
@@ -106,7 +107,8 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       if (uiMoveContactForm. sharedGroupMap_.containsKey(addressBookId)) {
         String username = ContactUtils.getCurrentUser() ;
         ContactGroup group = ContactUtils.getContactService().getSharedGroup(username, addressBookId) ;
-        if (group.getEditPermissionUsers() == null ||  !Arrays.asList(group.getEditPermissionUsers()).contains(username)) {
+        if (group.getEditPermissionUsers() == null || 
+            !Arrays.asList(group.getEditPermissionUsers()).contains(username + JCRDataStorage.HYPHEN)) {
           UIApplication uiApp = uiMoveContactForm.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UIMoveContactsForm.msg.non-permission", null,
             ApplicationMessage.WARNING)) ;
@@ -119,7 +121,7 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       List<Contact> contacts = new ArrayList<Contact>() ;
       for(String id : uiMoveContactForm.getContactIds()) {
       	Contact contact = uiMoveContactForm.movedContacts.get(id) ;
-      	contact.setAddressBook(new String[]{addressBookId}) ;
+      	contact.setAddressBook(new String[] {addressBookId}) ;
       	contacts.add(contact) ;
       }
       ContactUtils.getContactService().moveContacts(SessionProviderFactory.createSessionProvider()
