@@ -516,6 +516,7 @@ public class MailServiceImpl implements MailService{
           System.out.println(" [DEBUG] Executed the filter finished : " + (t2 - t1) + " ms") ;
           tt2 = System.currentTimeMillis();
           System.out.println(" ### Check mail finished total took: " + (tt2 - tt1) + " ms") ;
+          checkingLog_.get(key).setStatusMsg("Check mail finished !") ;
           
           folder.close(true);      
           store.close();
