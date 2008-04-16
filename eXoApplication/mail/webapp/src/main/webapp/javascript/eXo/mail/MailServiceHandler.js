@@ -12,14 +12,18 @@ function MailServiceHandler() {
 
 MailServiceHandler.prototype = new eXo.cs.webservice.core.WebserviceHandler();
 
-MailServiceHandler.prototype.initService = function(uiId, accountId, checkMailInterval) {
+MailServiceHandler.prototype.initService = function(uiId, userName, accountId, checkMailInterval) {
   this.checkMailInterval = checkMailInterval;
-  this.checkMailInfobarNode = document.getElementById(uiId);
+  this.uiId = uiId;
   this.accountId = accountId;
+  this.userName = userName;
   if (this.checkMailInterval &&
       !isNaN(this.checkMailInterval)) {
     this.checkMailInterval = parseInt(this.checkMailInterval);
     window.setInterval(eXo.mail.MailServiceHandler.checkMailWrapper, this.checkMailInterval);
+  }
+  if (eXo.core.Browser.getCookie('cs.mail.checkingmail') == 'true') {
+    this.checkMail();
   }
 };
 
@@ -44,9 +48,8 @@ MailServiceHandler.prototype.update = function(state, requestObj, action) {
     var url = false;
     if (status == this.START_CHECKMAIL_STATUS ||
         status == this.DOWNLOADING_MAIL_STATUS ||
-        status == this.NO_UPDATE_STATUS ||
-        status == this.REQUEST_STOP_STATUS) {
-      url = this.SERVICE_BASED_URL + '/checkmailjobinfo/' + this.accountId + '/';
+        status == this.NO_UPDATE_STATUS) {
+      url = this.SERVICE_BASED_URL + '/checkmailjobinfo/' + this.userName + '/' + this.accountId + '/';
     }
     if (url && url != '') {
       this.makeRequest(url, this.HTTP_GET, 'get check mail information');
@@ -54,8 +57,13 @@ MailServiceHandler.prototype.update = function(state, requestObj, action) {
     if (status != this.NO_UPDATE_STATUS) {
       this.updateUI(status);
     }
+    if (status == this.FINISHED_CHECKMAIL_STATUS ||
+        status == this.REQUEST_STOP_STATUS) {
+      this.destroy();    
+    }
   } else if(state == this.ERROR_STATE) {
     this.updateUI(state);
+    this.destroy();    
   }
 };
 
@@ -65,17 +73,17 @@ MailServiceHandler.prototype.checkMailWrapper = function() {
 
 MailServiceHandler.prototype.checkMail = function() {
   if (!this.accountId ||
-      !this.checkMailInfobarNode ||
-      !this.checkMailInfobarNode.parentNode) {
+      !this.userName) {
     return;
   }
-  var url = this.SERVICE_BASED_URL + '/checkmail/' + this.accountId + '/';
+  eXo.core.Browser.setCookie('cs.mail.checkingmail', 'true');
+  var url = this.SERVICE_BASED_URL + '/checkmail/' + this.userName + '/' + this.accountId + '/';
   this.makeRequest(url, this.HTTP_GET, 'check mail');
 };
 
 MailServiceHandler.prototype.stopCheckMail = function() {
   if (this.accountId) {
-    var url = this.SERVICE_BASED_URL + '/stopcheckmail/' + this.accountId + '/';
+    var url = this.SERVICE_BASED_URL + '/stopcheckmail/' + this.userName + '/' + this.accountId + '/';
     this.makeRequest(url, this.HTTP_GET, 'Stop check mail');
   }
 };
@@ -85,27 +93,24 @@ MailServiceHandler.prototype.stopCheckMail = function() {
  * @param {Object} status
  */
 MailServiceHandler.prototype.updateUI = function(status) {
-  var statusTxt = this.serverData.info.checkingmail.statusMsg;
-  /*
-  switch (status) {
-    case this.START_CHECKMAIL_STATUS:
-      statusTxt += 'Connecting...';
-      break;
-    case this.DOWNLOADING_MAIL_STATUS:
-      statusTxt += 'Fetching message ' + this.serverData.info.checkingmail.completed + '/' + this.serverData.info.checkingmail.total;
-      break;
-    case this.FINISHED_CHECKMAIL_STATUS:
-      statusTxt += 'Check mail completed';
-      break;
-    case this.ERROR_STATE:
-      statusTxt += 'Server error while checking mail';
+  this.checkMailInfobarNode = document.getElementById(this.uiId);
+  var statusTxt = '';
+  if (this.serverData.info.checkingmail.statusmsg) {
+    statusTxt = this.serverData.info.checkingmail.statusmsg;
   }
-  */
   var statusTextNode = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'StatusText');
   if (this.checkMailInfobarNode.style.display == 'none') {
     this.checkMailInfobarNode.style.display = 'block';
   }
-  statusTextNode.innerHTML = statusTxt;
+  if (statusTxt != '') {
+    statusTextNode.innerHTML = statusTxt;
+  }
+};
+
+MailServiceHandler.prototype.destroy = function() {
+  if (this.serverData.info.checkingmail.status == this.FINISHED_CHECKMAIL_STATUS) {
+    eXo.core.Browser.setCookie('cs.mail.checkingmail', 'false');
+  }
 };
 
 eXo.mail.MailServiceHandler = new MailServiceHandler() ;
