@@ -484,8 +484,8 @@ public class MailServiceImpl implements MailService{
           }
           javax.mail.Message msg ;
           while (i < totalNew && !checkingLog_.get(key).isRequestStop()) {
-            System.out.println(" [DEBUG] Fetching message " + (i+1) + " ...") ;
-            checkingLog_.get(key).setStatusMsg("Fetching message ") ;
+            System.out.println(" [DEBUG] Fetching message " + (i + 1) + " ...") ;
+            checkingLog_.get(key).setStatusMsg("Fetching message " + (i + 1) + "/" + totalNew) ;
             t1 = System.currentTimeMillis();
             msg = messages[i] ;   
             msg.setFlag(Flags.Flag.SEEN, true);
