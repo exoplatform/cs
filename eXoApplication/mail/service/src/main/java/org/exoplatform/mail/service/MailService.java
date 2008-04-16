@@ -311,6 +311,8 @@ public interface MailService {
    */
   public List<Message>  checkNewMessage(SessionProvider sProvider, String username, String accountId) throws Exception ;
   
+  public void removeCheckingInfo(String username, String accountId)throws Exception ;
+  
   public CheckingInfo getCheckingInfo(String username, String accountId) throws Exception ;
   
   public void checkMail(String username, String accountId) throws Exception ;

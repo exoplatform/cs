@@ -94,7 +94,12 @@ public class MailServiceImpl implements MailService{
     checkingLog_ = new HashMap<String, CheckingInfo>(); 
   }
   
-  public CheckingInfo getCheckingInfo(String username, String accountId) {
+  public void removeCheckingInfo(String username, String accountId)throws Exception {
+    String key = username + ":" + accountId ;
+    checkingLog_.remove(key) ;
+  }
+  
+  public CheckingInfo getCheckingInfo(String username, String accountId) throws Exception {
     String key = username + ":" + accountId ;
     return checkingLog_.get(key) ;
   }
@@ -503,7 +508,6 @@ public class MailServiceImpl implements MailService{
           System.out.println(" [DEBUG] Executed the filter finished : " + (t2 - t1) + " ms") ;
           tt2 = System.currentTimeMillis();
           System.out.println(" ### Check mail finished total took: " + (tt2 - tt1) + " ms") ;
-          checkingLog_.remove(key) ;
           
           folder.close(true);      
           store.close();
