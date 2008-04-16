@@ -408,6 +408,7 @@ public class MailServiceImpl implements MailService{
     checkingLog_.put(key, info) ;
     long t1, t2 , tt1, tt2;
     System.out.println(" #### Getting mail from " + account.getIncomingHost() + " ... !");
+    checkingLog_.get(key).setStatusMsg("Getting mail from " + account.getIncomingHost() + " ... !") ;
     List<Message> messageList = new ArrayList<Message>();
     int totalNew = -1;
     String protocol = account.getProtocol();
@@ -436,9 +437,11 @@ public class MailServiceImpl implements MailService{
         javax.mail.Folder folder = store.getFolder(storeURL.getFile());
         if (!folder.exists()) {
           System.out.println(" #### Folder " + incomingFolder + " is not exists !");
+          checkingLog_.get(key).setStatusMsg("Folder " + incomingFolder + " is not exists") ;
           continue ;
         } else {
           System.out.println(" #### Getting mails from folder " + incomingFolder + " !");
+          checkingLog_.get(key).setStatusMsg("Getting mails from folder " + incomingFolder + " !") ;
         }
         folder.open(javax.mail.Folder.READ_WRITE);
         
@@ -482,6 +485,7 @@ public class MailServiceImpl implements MailService{
           javax.mail.Message msg ;
           while (i < totalNew && !checkingLog_.get(key).isRequestStop()) {
             System.out.println(" [DEBUG] Fetching message " + (i+1) + " ...") ;
+            checkingLog_.get(key).setStatusMsg("Fetching message ") ;
             t1 = System.currentTimeMillis();
             msg = messages[i] ;   
             msg.setFlag(Flags.Flag.SEEN, true);
@@ -505,6 +509,7 @@ public class MailServiceImpl implements MailService{
           javax.mail.Message firstMsg = messages[0] ;
           cc = MimeMessageParser.getReceivedDate(firstMsg);
           System.out.println(" [DEBUG] Executing the filter ...") ;
+          checkingLog_.get(key).setStatusMsg("Executing the filter ") ;
           t1 = System.currentTimeMillis();
           storage_.execActionFilter(sProvider, username, accountId, cc);
           t2 = System.currentTimeMillis();
