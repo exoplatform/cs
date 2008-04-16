@@ -35,6 +35,7 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormInputInfo;
@@ -55,7 +56,7 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
     template = "system:/groovy/webui/form/UIFormTabPane.gtmpl",
     events = {
       @EventConfig(listeners = UIRssForm.GenerateRssActionListener.class),      
-      @EventConfig(listeners = UIRssForm.CancelActionListener.class)
+      @EventConfig(listeners = UIRssForm.CancelActionListener.class, phase=Phase.DECODE)
     }
 )
 public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
