@@ -28,6 +28,7 @@ public class CheckingInfo {
   public static final int DOWNLOADING_MAIL_STATUS = 150;
   public static final int FINISHED_CHECKMAIL_STATUS = 200;
   public static final int REQUEST_STOP_STATUS = 202;
+  public static final int EXECUTING_FILTER = 203;
   
   private int totalMsg_ ;
   private int fetching_ ;
