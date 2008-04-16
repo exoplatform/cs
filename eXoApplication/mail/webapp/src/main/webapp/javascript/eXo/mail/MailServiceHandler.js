@@ -22,7 +22,7 @@ MailServiceHandler.prototype.initService = function(uiId, userName, accountId, c
     this.checkMailInterval = parseInt(this.checkMailInterval);
     window.setInterval(eXo.mail.MailServiceHandler.checkMailWrapper, this.checkMailInterval);
   }
-  if (eXo.core.Browser.getCookie('cs.mail.checkingmail') == 'true') {
+  if (eXo.core.Browser.getCookie('cs.mail.checkingmail' + this.accountId) == 'true') {
     this.checkMail();
   }
 };
@@ -76,7 +76,7 @@ MailServiceHandler.prototype.checkMail = function() {
       !this.userName) {
     return;
   }
-  eXo.core.Browser.setCookie('cs.mail.checkingmail', 'true');
+  eXo.core.Browser.setCookie('cs.mail.checkingmail' + this.accountId, 'true');
   var url = this.SERVICE_BASED_URL + '/checkmail/' + this.userName + '/' + this.accountId + '/';
   this.makeRequest(url, this.HTTP_GET, 'check mail');
 };
@@ -109,7 +109,7 @@ MailServiceHandler.prototype.updateUI = function(status) {
 
 MailServiceHandler.prototype.destroy = function() {
   if (this.serverData.info.checkingmail.status == this.FINISHED_CHECKMAIL_STATUS) {
-    eXo.core.Browser.setCookie('cs.mail.checkingmail', 'false');
+    eXo.core.Browser.setCookie('cs.mail.checkingmail' + this.accountId, 'false');
   }
 };
 
