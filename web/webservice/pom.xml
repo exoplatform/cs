@@ -6,12 +6,12 @@
   </parent> 
 
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>exo.cs.eXoApplication.webservice.service</artifactId>
+  <artifactId>exo.cs.web.webservice</artifactId>
   <version>${org.exoplatform.cs.version}</version>
   <packaging>jar</packaging>
-  <name>eXo webservice service</name>
+  <name>eXo webservice</name>
   <url>http://www.exoplatform.org</url>
-  <description>eXo webservice service</description>
+  <description>eXo webservice</description>
   
   <dependencies> 
     <dependency>
