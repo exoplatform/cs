@@ -46,6 +46,7 @@ import javax.mail.internet.MimeMultipart;
 import javax.mail.search.ComparisonTerm;
 import javax.mail.search.FlagTerm;
 import javax.mail.search.OrTerm;
+import javax.mail.search.ReceivedDateTerm;
 import javax.mail.search.SearchTerm;
 import javax.mail.search.SentDateTerm;
 import javax.mail.util.ByteArrayDataSource;
@@ -448,6 +449,7 @@ public class MailServiceImpl implements MailService{
           SearchTerm unseenFlag = new FlagTerm(new Flags(Flags.Flag.SEEN), false) ;
           SentDateTerm dateTerm = new SentDateTerm(ComparisonTerm.GT, account.getLastCheckedDate());
           unseenFlag = new OrTerm(unseenFlag, dateTerm) ;
+          if (isImap) unseenFlag = new ReceivedDateTerm(ComparisonTerm.GT, account.getLastCheckedDate());
           messages = folder.search(unseenFlag) ;
         }
         boolean leaveOnServer = (isPop3 && Boolean.valueOf(account.getPopServerProperties().get(Utils.SVR_POP_LEAVE_ON_SERVER))) ;
@@ -478,7 +480,7 @@ public class MailServiceImpl implements MailService{
             storage_.saveFolder(sProvider, username, account.getId(), storeFolder) ;
           }
           javax.mail.Message msg ;
-          while (i < totalNew) {
+          while (i < totalNew && !checkingLog_.get(key).isRequestStop()) {
             System.out.println(" [DEBUG] Fetching message " + (i+1) + " ...") ;
             t1 = System.currentTimeMillis();
             msg = messages[i] ;   
@@ -498,6 +500,7 @@ public class MailServiceImpl implements MailService{
             System.out.println(" [DEBUG] Message " + i + " saved : " + (t2-t1) + " ms");
           }
           saveAccount(sProvider, username, account, false) ;
+          checkingLog_.get(key).setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS) ;
           Calendar cc = GregorianCalendar.getInstance();
           javax.mail.Message firstMsg = messages[0] ;
           cc = MimeMessageParser.getReceivedDate(firstMsg);
