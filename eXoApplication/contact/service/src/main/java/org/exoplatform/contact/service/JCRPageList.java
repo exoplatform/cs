@@ -63,6 +63,8 @@ abstract public class JCRPageList {
     			if(isUpdate) {
     				currentListPage_.set(i, ct) ;
     			}else {
+            
+            // in unltimate : UnsupportedOperationException
             currentListPage_.remove(i) ;
     			}
     			break ;

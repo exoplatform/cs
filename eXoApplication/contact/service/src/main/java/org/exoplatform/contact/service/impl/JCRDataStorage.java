@@ -1593,6 +1593,7 @@ public class JCRDataStorage {
       contacts.put(contact.getId(), contact) ;
     }
     filter.setOwner(null) ;
+    
     //share contacts
     try {
       Node sharedContact = getSharedContact(username) ;      
