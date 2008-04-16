@@ -172,14 +172,14 @@ public class ContactServiceImpl implements ContactService {
   public List<String> getPublicAddressBookContacts(SessionProvider sProvider, String[] groupIds) throws Exception{
     return storage_.getPublicAddressBookContacts(sProvider, groupIds);
   }
-  public Contact removePublicContact(SessionProvider sProvider, String contactId) throws Exception {
+/*  public Contact removePublicContact(SessionProvider sProvider, String contactId) throws Exception {
     return storage_.removePublicContact(sProvider, contactId);
-  }
-
+  }*/
+/*
   public void savePublicContact(Contact contact, boolean isNew) throws Exception {
     storage_.savePublicContact(contact, isNew);
   } 
-  
+  */
   public Tag getTag(SessionProvider sProvider, String username, String tagName) throws Exception {
     return storage_.getTag(sProvider, username, tagName) ;
   }

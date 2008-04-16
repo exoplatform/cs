@@ -173,21 +173,9 @@ public class UIAddressBooks extends UIComponent {
       if (uiAddressBook.privateAddressBookMap_.containsKey(destAddress))
         destType = JCRDataStorage.PRIVATE ;
       else {
-        /*
-        ContactGroup group = ContactUtils.getContactService().getSharedGroup(username, destAddress) ;
-        if (group.getEditPermission() == null || !Arrays.asList(group.getEditPermission()).contains(username)) {
-          UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.non-permission", null,
-            ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;          
-        }
-        */
         destType = JCRDataStorage.SHARED ;     
       }
       String srcAddress = uiAddressBook.copyAddress ;
-      UIContacts uiContacts = uiAddressBook
-      .getAncestorOfType(UIWorkingContainer.class).findFirstComponentOfType(UIContacts.class) ;
       if (!ContactUtils.isEmpty(srcAddress)) {
         if (destAddress.equals(srcAddress)){
           UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
@@ -207,6 +195,8 @@ public class UIAddressBooks extends UIComponent {
             , username, destAddress, destType, uiAddressBook.getCopyContacts()) ;
       }
       // bi update neu la shared contacts 
+      UIContacts uiContacts = uiAddressBook
+      .getAncestorOfType(UIWorkingContainer.class).findFirstComponentOfType(UIContacts.class) ;
       if (!uiContacts.isDisplaySearchResult() && uiAddressBook.selectedGroup != null) {
         uiContacts.updateList() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;

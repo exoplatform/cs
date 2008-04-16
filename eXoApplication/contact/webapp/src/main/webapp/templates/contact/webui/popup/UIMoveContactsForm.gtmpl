@@ -23,12 +23,15 @@
 			<% } %>
 			</div>
 		</div>	
-		
+
+		<% 
+			Map sharedGroups = uicomponent.getSharedGroupMap() ;
+			if (sharedGroups.size() > 0) {
+		 %>
 		<div class="PrivateAdress">
 			<div class="TitleMoveContactsForm"><%=_ctx.appRes(uicomponent.getName() + ".label.toShared")%></div>
 			<div class="MoveContactsFormContainer">
 				<% 
-	      	Map sharedGroups = uicomponent.getSharedGroupMap() ;
 	        for(groupId in sharedGroups.keySet()) { 
 	        	String param = groupId + "&addressType=1" ;
 						String actionLink  = uicomponent.event("SelectGroup", param) ;
@@ -39,6 +42,8 @@
 			<% } %>
 			</div>
 		</div>
+
+		<% } %>
 
 	</div>
 	<div class="UIAction"> 
