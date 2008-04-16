@@ -132,6 +132,7 @@
 .UIPopupCategory .CalendarTableColor .SelectedColorCell {
 	background: url('skinIcons/icons/CalendarIcons.gif') no-repeat left -342px;
 	width: 12px; height: 12px;
+	border: 1px solid red;
 }
 
 .UIPopupCategory .CalendarTableColor a:hover {
