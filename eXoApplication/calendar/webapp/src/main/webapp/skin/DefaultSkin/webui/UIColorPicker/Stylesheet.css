@@ -55,6 +55,16 @@
  border: 1px solid #ffffff;
 }
 
+.UICalendarPortlet .CalendarTableColor .ColorCell img {
+ width: 12px; height: 12px;
+}
+
+.UICalendarPortlet .UIFormColorPicker .SelectedColorCell {
+	background: url('../skinIcons/icons/CalendarIcons.gif') no-repeat left -342px;
+	width: 12px; height: 12px;
+	border: 1px solid red;
+}
+
 .UICalendarPortlet .CalendarTableColor a:hover {
 	border: 2px solid red;
   margin: 1px ;
