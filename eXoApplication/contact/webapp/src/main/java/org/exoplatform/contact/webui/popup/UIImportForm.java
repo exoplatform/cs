@@ -70,7 +70,7 @@ public class UIImportForm extends UIForm {
   //public static String[] Types = null ;
   private String[] Types = null ;
   private Map<String, String> groups_ = new HashMap<String, String>() ;
-  
+
   public UIImportForm() { this.setMultiPart(true) ; }
   public void addConponent() throws Exception {
     UIFormInputWithActions input = new UIFormInputWithActions(INPUT_CATEGORY) ;
@@ -82,6 +82,7 @@ public class UIImportForm extends UIForm {
     addAction.setActionName("AddCategory") ;
     actions.add(addAction) ;
     input.setActionField(FIELD_CATEGORY, actions) ;
+    addUIFormInput(input) ;
 
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     ContactService contactService = ContactUtils.getContactService();
@@ -89,9 +90,8 @@ public class UIImportForm extends UIForm {
     for(String type : Types) {
       options.add(new SelectItemOption<String>(type, type)) ;
     }
-    input.addUIFormInput(new UIFormSelectBox(FIELD_TYPE, FIELD_TYPE, options)) ;
-    input.addUIFormInput(new UIFormUploadInput(FIELD_UPLOAD, FIELD_UPLOAD)) ;
-    addUIFormInput(input) ;
+    addUIFormInput(new UIFormSelectBox(FIELD_TYPE, FIELD_TYPE, options)) ;
+    addUIFormInput(new UIFormUploadInput(FIELD_UPLOAD, FIELD_UPLOAD)) ;    
   }
   
   public String getLabel(String id) throws Exception {
@@ -151,6 +151,9 @@ public class UIImportForm extends UIForm {
       UIFormUploadInput uiformInput = uiForm.getUIInput(FIELD_UPLOAD) ;      
       UploadResource uploadResource = uiformInput.getUploadResource() ;
 
+      
+      // uploadResource.getUploadedSize() ;
+      
       ByteArrayInputStream inputStream ;
       String uploadId = uiformInput.getUploadId() ;
       if (uploadResource == null) {
