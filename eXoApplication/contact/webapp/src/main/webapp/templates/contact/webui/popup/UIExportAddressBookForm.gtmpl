@@ -55,7 +55,7 @@
   						  	%>
   						  </td>
 							<td class="text">
-									<%=sharedGroups.get(group)%>
+									<%=sharedGroups.get(group).getName()%>
 							</td>
 
    			     	</tr>

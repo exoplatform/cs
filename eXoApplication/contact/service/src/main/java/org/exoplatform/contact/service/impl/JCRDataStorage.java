@@ -52,7 +52,6 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.jcr.util.IdGenerator;
 
-
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen Quang
@@ -1638,7 +1637,11 @@ public class JCRDataStorage {
         contacts.put(contact.getId(), contact) ;
       }
     }
-    return new DataPageList(Arrays.asList(contacts.values().toArray(new Contact[] {})), 10, null, false) ;    
+    List<Contact> contactList = new ArrayList<Contact>() ;
+    contactList.addAll(contacts.values()) ;
+    
+    //return new DataPageList(Arrays.asList(contacts.values().toArray(new Contact[] {})), 10, null, false) ;    
+    return new DataPageList(contactList, 10, null, false) ;
   }
 
   // no public ;
