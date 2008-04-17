@@ -46,7 +46,6 @@ import javax.mail.internet.MimeMultipart;
 import javax.mail.search.ComparisonTerm;
 import javax.mail.search.FlagTerm;
 import javax.mail.search.OrTerm;
-import javax.mail.search.ReceivedDateTerm;
 import javax.mail.search.SearchTerm;
 import javax.mail.search.SentDateTerm;
 import javax.mail.util.ByteArrayDataSource;
@@ -408,7 +407,7 @@ public class MailServiceImpl implements MailService{
     checkingLog_.put(key, info) ;
     long t1, t2 , tt1, tt2;
     System.out.println(" #### Getting mail from " + account.getIncomingHost() + " ... !");
-    checkingLog_.get(key).setStatusMsg("Getting mail from " + account.getIncomingHost() + " ... !") ;
+    info.setStatusMsg("Getting mail from " + account.getIncomingHost() + " ... !") ;
     List<Message> messageList = new ArrayList<Message>();
     int totalNew = -1;
     String protocol = account.getProtocol();
@@ -437,11 +436,11 @@ public class MailServiceImpl implements MailService{
         javax.mail.Folder folder = store.getFolder(storeURL.getFile());
         if (!folder.exists()) {
           System.out.println(" #### Folder " + incomingFolder + " is not exists !");
-          checkingLog_.get(key).setStatusMsg("Folder " + incomingFolder + " is not exists") ;
+          info.setStatusMsg("Folder " + incomingFolder + " is not exists") ;
           continue ;
         } else {
           System.out.println(" #### Getting mails from folder " + incomingFolder + " !");
-          checkingLog_.get(key).setStatusMsg("Getting mails from folder " + incomingFolder + " !") ;
+          info.setStatusMsg("Getting mails from folder " + incomingFolder + " !") ;
         }
         folder.open(javax.mail.Folder.READ_WRITE);
         
@@ -452,7 +451,7 @@ public class MailServiceImpl implements MailService{
           SearchTerm unseenFlag = new FlagTerm(new Flags(Flags.Flag.SEEN), false) ;
           SentDateTerm dateTerm = new SentDateTerm(ComparisonTerm.GT, account.getLastCheckedDate());
           unseenFlag = new OrTerm(unseenFlag, dateTerm) ;
-          if (isImap) unseenFlag = new ReceivedDateTerm(ComparisonTerm.GT, account.getLastCheckedDate());
+          if (isImap) unseenFlag = new FlagTerm(new Flags(Flags.Flag.FLAGGED), false) ;
           messages = folder.search(unseenFlag) ;
         }
         boolean leaveOnServer = (isPop3 && Boolean.valueOf(account.getPopServerProperties().get(Utils.SVR_POP_LEAVE_ON_SERVER))) ;
@@ -461,12 +460,12 @@ public class MailServiceImpl implements MailService{
         boolean deleteOnServer = (isPop3 && !leaveOnServer) || (isImap && markAsDelete);
         
         totalNew = messages.length ;
-        checkingLog_.get(key).setTotalMsg(totalNew) ;
-        
+       
         System.out.println(" #### Folder contains " + totalNew + " messages !");
         tt1 = System.currentTimeMillis();
 
         if (totalNew > 0) {
+          info.setTotalMsg(totalNew) ;
           int i = 0 ;
           SpamFilter spamFilter = getSpamFilter(sProvider, username, account.getId());
           String folderId = Utils.createFolderId(accountId, incomingFolder, false) ;
@@ -483,18 +482,20 @@ public class MailServiceImpl implements MailService{
             storage_.saveFolder(sProvider, username, account.getId(), storeFolder) ;
           }
           javax.mail.Message msg ;
-          while (i < totalNew && !checkingLog_.get(key).isRequestStop()) {
+          while (i < totalNew && !info.isRequestStop()) {
             System.out.println(" [DEBUG] Fetching message " + (i + 1) + " ...") ;
+            checkingLog_.get(key).setFetching(i + 1) ;
             checkingLog_.get(key).setStatusMsg("Fetching message " + (i + 1) + "/" + totalNew) ;
             t1 = System.currentTimeMillis();
             msg = messages[i] ;   
             msg.setFlag(Flags.Flag.SEEN, true);
+            if (isImap) msg.setFlag(Flags.Flag.FLAGGED, true);
             if (deleteOnServer) msg.setFlag(Flags.Flag.DELETED, true);
             try {
-              checkingLog_.get(key).setFetching(i) ;
               storage_.saveMessage(sProvider, username, account.getId(), msg, folderId, spamFilter) ;
               account.setLastCheckedDate(MimeMessageParser.getReceivedDate(msg).getTime()) ;
             } catch(Exception e) {
+              checkingLog_.get(key).setStatusMsg("An error occurs while fetching messsge " + i) ;
               e.printStackTrace() ;
               i++ ;
               continue ;
@@ -504,23 +505,24 @@ public class MailServiceImpl implements MailService{
             System.out.println(" [DEBUG] Message " + i + " saved : " + (t2-t1) + " ms");
           }
           saveAccount(sProvider, username, account, false) ;
-          checkingLog_.get(key).setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS) ;
+          
           Calendar cc = GregorianCalendar.getInstance();
           javax.mail.Message firstMsg = messages[0] ;
           cc = MimeMessageParser.getReceivedDate(firstMsg);
           System.out.println(" [DEBUG] Executing the filter ...") ;
-          checkingLog_.get(key).setStatusMsg("Executing the filter ") ;
           t1 = System.currentTimeMillis();
           storage_.execActionFilter(sProvider, username, accountId, cc);
           t2 = System.currentTimeMillis();
           System.out.println(" [DEBUG] Executed the filter finished : " + (t2 - t1) + " ms") ;
           tt2 = System.currentTimeMillis();
           System.out.println(" ### Check mail finished total took: " + (tt2 - tt1) + " ms") ;
-          checkingLog_.get(key).setStatusMsg("Check mail finished !") ;
-          
-          folder.close(true);      
-          store.close();
         }
+        
+        folder.close(true);      
+        store.close();
+        if (totalNew == 0) info.setStatusMsg("There is no new messages !") ;
+        else info.setStatusMsg("Check mail finished !") ;
+        info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS) ;
       }
     }  catch (Exception e) { 
       e.printStackTrace();

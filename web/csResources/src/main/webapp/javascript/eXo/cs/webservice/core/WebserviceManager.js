@@ -59,10 +59,11 @@ WebserviceHandler.prototype = {
    * 
    * @param {String} url
    */
-  makeRequest : function(url, method, data) {
+  makeRequest : function(url, method, data, action) {
     if (!this.manager) {
       throw (new Message("Can not make request without manager object."));
     }
+    this.action = action;
     var request = new eXo.portal.AjaxRequest(method, url, data);
     this.manager.initRequest(request, this);
     request.process() ;
