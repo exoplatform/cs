@@ -477,7 +477,7 @@ UICalendarPortlet.prototype.setSize = function(obj) {
 		"height" : (height - 2) + "px"
 	} ;
 	eXo.calendar.UICalendarPortlet.setStyle(obj, styles) ;
-	eventContainer.style.height = (height - 22) + "px" ;
+	eventContainer.style.height = (height - 19) + "px" ;
 } ;
 
 UICalendarPortlet.prototype.setWidth = function(element, width) {
@@ -668,7 +668,7 @@ UIResizeEvent.prototype.execute = function(evt) {
 	} else {
 		if (mDelta%UIResizeEvent.interval == 0) {
 			UIResizeEvent.outerElement.style.height = UIResizeEvent.beforeHeight - 2 + mDelta + "px" ;
-			UIResizeEvent.innerElement.style.height = UIResizeEvent.innerElementHeight - 2 + mDelta + "px" ;
+			UIResizeEvent.innerElement.style.height = UIResizeEvent.innerElementHeight + mDelta + "px" ;
 			
 		}
 //		if (delta >= UIResizeEvent.interval) {
