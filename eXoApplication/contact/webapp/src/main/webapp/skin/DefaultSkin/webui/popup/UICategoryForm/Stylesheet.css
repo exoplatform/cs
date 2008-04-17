@@ -1,9 +1,9 @@
-.UICategoryForm {
+.UIContactPortlet .UICategoryForm {
 	background: #f3f3f3;
 	padding: 10px;
 }
 
-.UICategoryForm .UIForm .HorizontalLayout {
+.UIContactPortlet .UICategoryForm .UIForm .HorizontalLayout {
 	border: none;
 	width: 400px;
 	margin: auto;
