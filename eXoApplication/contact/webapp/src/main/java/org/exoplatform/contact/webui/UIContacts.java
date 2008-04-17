@@ -644,7 +644,9 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIContactPreviewForm uiContactPreviewForm = uiPopupContainer.addChild(UIContactPreviewForm.class, null, null) ; 
       uiContactPreviewForm.setPrintForm(false) ;
       uiContactPreviewForm.setContact(uiContacts.contactMap.get(contactId)) ;
-      //event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;  
+      
+      // edited 17-4 
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;  
       //event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
     }
   }
@@ -661,7 +663,9 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       uiPreviewForm.setContact(uiContacts.contactMap.get(contactId)) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
       popupAction.activate(uiPreviewForm, 700, 0) ;
-//      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;  
+      
+//    edited 17-4
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;  
 //      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
     }
   }
