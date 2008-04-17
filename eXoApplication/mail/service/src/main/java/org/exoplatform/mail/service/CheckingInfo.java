@@ -30,8 +30,8 @@ public class CheckingInfo {
   public static final int REQUEST_STOP_STATUS = 202;
   public static final int EXECUTING_FILTER = 203;
   
-  private int totalMsg_ ;
-  private int fetching_ ;
+  private int totalMsg_ = 0 ;
+  private int fetching_ = 0  ;
   private int statusCode_ ;
   private String statusMsg_;
   private boolean hasChanged_ ;
