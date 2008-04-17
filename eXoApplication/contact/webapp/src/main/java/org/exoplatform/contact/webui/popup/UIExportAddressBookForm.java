@@ -57,7 +57,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
     }
 )
 public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
-  final static private String NAME = "name".intern() ;
+  final static private String NAME = "fileName".intern() ;
   final static private String TYPE = "type".intern() ;
   
   private Map<String, String> privateGroupMap_ = new HashMap<String, String>() ;
