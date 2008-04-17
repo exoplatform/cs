@@ -693,5 +693,11 @@
 }
 
 .UIContactPortlet .SelectFileFrame {
+	width: 340px;
+}
+
+.UIContactPortlet .FileNameLabel {
+	overflow: hidden;
 	width: 300px;
+	white-space: nowrap;
 }

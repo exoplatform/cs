@@ -1493,6 +1493,15 @@
 	width: 300px;
 }
 
+.UIMailPortlet .SelectFileFrame {
+	width: 340px;
+}
+
+.UIMailPortlet .FileNameLabel {
+	overflow: hidden;
+	width: 300px;
+	white-space: nowrap;
+}
 /******************************* UIAddNewContact ******************************/
 
 .UIMailPortlet .UIAddNewContact {

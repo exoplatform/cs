@@ -218,7 +218,14 @@
 }
 
 .UICalendarPortlet .SelectFileFrame {
+	width: 340px;
+}
+
+
+.UICalendarPortlet .FileNameLabel {
 	width: 300px;
+	overflow: hidden;
+	white-space: nowrap;
 }
 
 .UICalendarPortlet .SelectMemberIcon {
