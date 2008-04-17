@@ -31,6 +31,7 @@ import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.GroupCalendarData;
+import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.webui.CalendarView;
 import org.exoplatform.calendar.webui.SelectItem;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
@@ -191,7 +192,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   public List<SelectItem> getCalendars() throws Exception {
     return CalendarUtils.getCalendarOption() ;
   }
-  
+
   public String getLabel(String id) {
     try {
       return super.getLabel(id) ;
@@ -222,7 +223,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     getUIFormSelectBoxGroup(FIELD_CALENDAR).setValue(value) ;
   }
   public org.exoplatform.calendar.webui.UIFormSelectBox getUIFormSelectBoxGroup(String id) {
-  	return findComponentById(id) ;
+    return findComponentById(id) ;
   }
   public void setSelectedCategory(String value) {getUIFormSelectBox(FIELD_CATEGORY).setValue(value) ;}
   private String getEventCategory() {return getUIFormSelectBox(FIELD_CATEGORY).getValue() ;}
@@ -294,6 +295,18 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         calEvent.setToDateTime(to) ;
         calEvent.setCalType(uiForm.calType_) ;
         String username = CalendarUtils.getCurrentUser() ;
+        calEvent.setEventState(UIEventForm.ITEM_BUSY) ;
+        calEvent.setParticipant(new String[]{username}) ;
+        List<Reminder> reminders = new ArrayList<Reminder>() ;
+        Reminder email = new Reminder(Reminder.TYPE_EMAIL) ;
+        email.setReminderType(Reminder.TYPE_EMAIL) ;
+        email.setAlarmBefore(5) ;
+        email.setEmailAddress(CalendarUtils.getOrganizationService().getUserHandler().findUserByName(username).getEmail()) ;
+        email.setRepeate(Boolean.FALSE) ;
+        email.setRepeatInterval(0) ;
+        email.setFromDateTime(from) ;      
+        reminders.add(email) ;
+        calEvent.setReminders(reminders) ;
         if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
           CalendarUtils.getCalendarService().saveUserEvent(SessionProviderFactory.createSessionProvider(), username, calEvent.getCalendarId(), calEvent, true) ;
         }else if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)){
@@ -329,7 +342,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         uiForm.getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
       String dateFormat = calendarSetting.getDateFormat() ;
       String timeFormat = calendarSetting.getTimeFormat() ;
-      
+
       UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
       if(uiForm.isEvent()) {
         uiPopupAction.deActivate() ;

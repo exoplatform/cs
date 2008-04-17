@@ -48,7 +48,10 @@ public class Reminder {
   public Reminder() {
     id = "Reminder" + IdGenerator.generate() ;
   }
-  
+  public Reminder(String type) {
+    id = "Reminder" + IdGenerator.generate() ;
+    reminderType = type ;
+  }
   public String getId() { return this.id ; }
   public void   setId(String id) { this.id = id ; }
   
