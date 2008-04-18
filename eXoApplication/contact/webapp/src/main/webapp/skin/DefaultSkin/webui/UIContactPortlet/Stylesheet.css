@@ -338,8 +338,8 @@
 }
 
 .UIContactPortlet .Result .TitleSearch {
-	float: left;
-	margin-left: 12px;
+	text-align: center;
+	height: 23px;
 }
 
 .UIContactPortlet .UIContactActionsBar {

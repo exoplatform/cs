@@ -94,6 +94,10 @@ public class UIAddressBooks extends UIComponent {
   public String[] getPublicContactGroups() throws Exception {
   	return ContactUtils.getUserGroups().toArray(new String[] {}) ;
   }
+  public boolean isSelectSharedContacts() {
+    return getAncestorOfType(UIWorkingContainer.class).findFirstComponentOfType(UIContacts.class).isSelectSharedContacts() ;    
+  }
+  
   public Map<String, SharedAddressBook> getSharedGroups() throws Exception { 
     sharedAddressBookMap_.clear() ;
     List<SharedAddressBook> addressList = ContactUtils.getContactService()
@@ -199,7 +203,7 @@ public class UIAddressBooks extends UIComponent {
       .getAncestorOfType(UIWorkingContainer.class).findFirstComponentOfType(UIContacts.class) ;
       if (!uiContacts.isDisplaySearchResult() && uiAddressBook.selectedGroup != null) {
         uiContacts.updateList() ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent()) ;
     }

@@ -62,8 +62,22 @@
 		if(isDisplaySearchResult) {
 %>
 			
-			<div class="Result">
-				<div class="TitleSearch"><%=_ctx.appRes(uicomponent.getName() + ".label.searchResult")%></div>
+				<div class="Result">
+					<div class="UIAddressPageList" style="float: right; width: 250px">
+						<div class="ContactIteratorContainer">
+	  					<div class="RightPageIteratorBlock">
+	  						<a href="$firstPageAction" title="<%=_ctx.appRes(uicomponent.getName() + ".label.firstPage")%>" class="$cssPreviousPage FirstPageArrow"/></a>        
+	  						<a href="$previousPageAction" title="<%=_ctx.appRes(uicomponent.getName() + ".label.previousPage")%>" class="$cssPreviousPage PreviousPageArrow"></a>
+								<div class="Number">$contactRange</div>
+	  				 		<a href="$nextPageAction" title="<%=_ctx.appRes(uicomponent.getName() + ".label.nextPage")%>" class="$cssNextPage NextPageArrow"/></a>
+	 				  		<a href="$lastPageAction" title="<%=_ctx.appRes(uicomponent.getName() + ".label.lastPage")%>" class="$cssNextPage LastPageArrow"><span></span></a>
+						    <div style="clear: left;"><span></span></div>
+						  </div>
+					  </div>
+					</div>
+					<div class="TitleSearch"><%=_ctx.appRes(uicomponent.getName() + ".label.searchResult")%></div>
+					<div style="clear: both;"><span></span></div>
+				</div>
 	<% } else { %>
 				<div class="UIContactActionsBar">
 					<a href="<%=uicomponent.event("MoveContacts")%>" class="ControlButton">
@@ -94,10 +108,6 @@
 							<div class="Icon CopyContactIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.copyContacts")%>"><span></span></div>
 					</a>
 					
-					<% 
-						}
-					 %>
-					
 					<div class="UIAddressPageList">
 						<div class="ContactIteratorContainer">
 	  					<div class="RightPageIteratorBlock">
@@ -112,6 +122,9 @@
 					</div>
 					<div style="clear: both;"><span></span></div>
 				</div>
+				<% 
+						}
+					 %>
 	
 				<div class="UIMessageList  SpliterResizableListArea">
 					<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
@@ -416,10 +429,11 @@
 					  </tr>  
 					</table>
 				</div>	
+
 				<% } %>	
-					
-					
-	</div>
+				
+									
+	  </div>
 <% 
 	} else {      // begin Vcard
 %>
