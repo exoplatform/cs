@@ -295,7 +295,8 @@
             Starting ...
           </div>
 					<div style=" float: left; margin: 2px 0px 0px 5px; color: #00f; cursor: pointer" class="StopCheckMail" onclick="eXo.mail.MailServiceHandler.stopCheckMail()">stop</div>
-					<div style="float: right; padding-right: 10px; margin-top: 2px" class="Here">Click <a href="<%=uicomponent.event("Refresh")%> "> here</a> to display received messages</div>
+          <div style=" float: right; padding-right: 10px; margin-top: 2px; color: #00f; cursor: pointer; display:none" class="Hide" onclick="document.getElementById('checkMailInfobar').style.display = 'none'">| Hide</div>
+					<div style="float: right; padding-right: 5px; margin-top: 2px;" class="Here"><a style=" color: #00f;" href="<%=uicomponent.event("Refresh")%> "> Refresh</a></div>
 					<div style="clear: both;"><span></span></div>
 				</div>
 			<%

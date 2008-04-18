@@ -3,6 +3,7 @@
  */
 function MailServiceHandler() {
   this.START_CHECKMAIL_STATUS = 101;
+  this.CONNECTION_FAILURE = 102 ;
   this.DOWNLOADING_MAIL_STATUS = 150;
   this.NO_UPDATE_STATUS = 201;
   this.FINISHED_CHECKMAIL_STATUS = 200;
@@ -65,7 +66,7 @@ MailServiceHandler.prototype.update = function(state, requestObj, action) {
     if (status != this.NO_UPDATE_STATUS) {
       this.updateUI(status);
     }
-    if (status == this.FINISHED_CHECKMAIL_STATUS ||
+    if (status == this.FINISHED_CHECKMAIL_STATUS || status == this.CONNECTION_FAILURE ||
         status == this.REQUEST_STOP_STATUS) {
       this.destroy();    
     }
@@ -126,10 +127,18 @@ MailServiceHandler.prototype.updateUI = function(status) {
 };
 
 MailServiceHandler.prototype.destroy = function() {
-  if (this.serverData.info.checkingmail.status == this.FINISHED_CHECKMAIL_STATUS) {
+	var st = this.serverData.info.checkingmail.status ;
+  if (st == this.FINISHED_CHECKMAIL_STATUS || st == this.CONNECTION_FAILURE) {
     eXo.core.Browser.setCookie('cs.mail.checkingmail' + this.accountId, 'false');
-    var refesh = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'Here');
-    eval(eXo.core.DOMUtil.findDescendantsByTagName(refesh, 'a')[0].href)
+    var stopLabel = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'StopCheckMail') ;
+    stopLabel.style.display = 'none' ;
+    if (st != this.CONNECTION_FAILURE) {
+    	var refeshLabel = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'Here');
+    	eval(eXo.core.DOMUtil.findDescendantsByTagName(refeshLabel, 'a')[0].href)
+    } else {
+    	var hideLabel = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'Hide') ;
+      hideLabel.style.display = 'block' ;
+    }
   }
 };
 

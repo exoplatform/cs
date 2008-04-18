@@ -144,6 +144,16 @@ public class MailWebservice implements ResourceContainer {
         mailService.removeCheckingInfo(userName, accountId);
         return Response.Builder.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
       }
+      if (checkingInfo.getStatusCode() == CheckingInfo.CONNECTION_FAILURE) {
+        buffer.append("<info>");
+        buffer.append("  <checkingmail>");
+        buffer.append("    <status>" + CheckingInfo.CONNECTION_FAILURE + "</status>");
+        buffer.append("    <statusmsg>" + checkingInfo.getStatusMsg() + "</statusmsg>");
+        buffer.append("  </checkingmail>");
+        buffer.append("</info>");
+        mailService.removeCheckingInfo(userName, accountId);
+        return Response.Builder.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
+      }
       if (checkingInfo.hasChanged()) {
         buffer.append("<info>");
         buffer.append("  <checkingmail>");
