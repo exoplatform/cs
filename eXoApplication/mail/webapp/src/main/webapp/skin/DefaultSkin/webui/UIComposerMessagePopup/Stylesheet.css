@@ -132,6 +132,7 @@
 .UIMessageCompose .UIForm .HorizontalLayout {
 	padding: 10px 0px;
 	border: 1px solid #cccccc;
+	border-bottom: 0px ;
 }
 
 .UIMessageCompose .UIForm .HorizontalLayout input {
@@ -191,7 +192,7 @@
 /*=========================Text Actions Bar=============================*/
 
 .UIMessageCompose .MessageContent {
-	background: white;
+	background: #f3f3f3;
 }
 
 .UIMessageCompose .MessageContent .PlainTextMessage {
@@ -199,6 +200,7 @@
 	height : 100%;
 	border: 1px solid  #cbcbcb;
 	border-top: none;
+	padding-bottom: 10px ;
 }
 .UIMessageCompose .MessageContent .PlainTextMessage .textarea {
 	width:99.5%; height: 252px; text-align: left ;
