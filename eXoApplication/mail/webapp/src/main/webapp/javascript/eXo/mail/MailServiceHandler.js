@@ -128,6 +128,8 @@ MailServiceHandler.prototype.updateUI = function(status) {
 MailServiceHandler.prototype.destroy = function() {
   if (this.serverData.info.checkingmail.status == this.FINISHED_CHECKMAIL_STATUS) {
     eXo.core.Browser.setCookie('cs.mail.checkingmail' + this.accountId, 'false');
+    var refesh = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'Here');
+    eval(eXo.core.DOMUtil.findDescendantsByTagName(refesh, 'a')[0].href)
   }
 };
 
