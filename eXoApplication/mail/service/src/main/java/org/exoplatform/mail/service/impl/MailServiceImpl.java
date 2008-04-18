@@ -432,7 +432,22 @@ public class MailServiceImpl implements MailService{
         incomingFolder = incomingFolder.trim() ;
         URLName storeURL = new URLName(account.getProtocol(), account.getIncomingHost(), Integer.valueOf(account.getIncomingPort()), incomingFolder, account.getIncomingUser(), account.getIncomingPassword()) ;
         Store store = session.getStore(storeURL) ;
-        store.connect();
+        try {
+          store.connect();
+        } catch(AuthenticationFailedException e) {
+          info.setStatusMsg("The username or password may be wrong. Connecting falied !");
+          info.setStatusCode(CheckingInfo.CONNECTION_FAILURE) ;
+          return messageList ;
+        } catch (MessagingException  e) {
+          info.setStatusMsg("Connecting falied. Please check server configuration !");
+          info.setStatusCode(CheckingInfo.CONNECTION_FAILURE) ;
+          return messageList ;
+        } catch (Exception e) {
+          info.setStatusMsg("There was an unexpected error. Connecting falied !");
+          info.setStatusCode(CheckingInfo.CONNECTION_FAILURE) ;
+          return messageList ;
+        }
+        
         javax.mail.Folder folder = store.getFolder(storeURL.getFile());
         if (!folder.exists()) {
           System.out.println(" #### Folder " + incomingFolder + " is not exists !");
