@@ -19,7 +19,6 @@ package org.exoplatform.contact.webui.popup;
 import java.io.ByteArrayInputStream;
 
 import org.exoplatform.contact.ContactUtils;
-import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.upload.UploadResource;
@@ -79,6 +78,10 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
+      
+      System.out.println("\n\n size : " + uploadResource.getUploadedSize() + "\n\n");
+      
+      
       String mimeType = uploadResource.getMimeType() ;
       String fileName = uploadResource.getFileName() ;
       boolean isImage = false ;
