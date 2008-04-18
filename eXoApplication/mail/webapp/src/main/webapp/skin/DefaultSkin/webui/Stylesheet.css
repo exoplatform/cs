@@ -1554,6 +1554,10 @@
 	color: #050E80;
 }
 
+.UIMessageCompose {
+	padding: 10px;
+}
+
 /******************************* UIImportForm ******************************/
 .UIImportForm {
 	background: #F3F3F3;
