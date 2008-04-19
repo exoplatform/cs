@@ -64,7 +64,7 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
       } 
     } else if (type == "1") {
     	for (var i = 0; i < len; i++) {
-        isDisable = DOMUtil.hasClass(actions[i], "ShareIcon") ;
+        isDisable = DOMUtil.hasClass(actions[i], "ShareIcon");
         if (isDisable == true) {
 	        if (!actions[i].parentNode.getAttribute("oldHref")) {
 	          actions[i].parentNode.setAttribute("oldHref", actions[i].parentNode.href);
@@ -82,11 +82,10 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
       
       // hoang quang hung add :
       if(tr.getAttribute("havePermission")) {
-    		var havePermission = tr.getAttribute("havePermission").toLowerCase() ;
-    		
+    		var havePermission = tr.getAttribute("havePermission").toLowerCase() ;    		
     		if (havePermission == "false") {
     			for (var i = 0; i < len; i++) {    			
-	    			isDisable = DOMUtil.hasClass(actions[i], "EditActionIcon") || DOMUtil.hasClass(actions[i], "ShareIcon") || DOMUtil.hasClass(actions[i], "MoveIcon") || DOMUtil.hasClass(actions[i], "DeleteContactIcon") ;
+	    			isDisable = DOMUtil.hasClass(actions[i], "EditActionIcon") ;
 	        	if (isDisable == false) continue ;
 		        if (!actions[i].parentNode.getAttribute("oldHref")) {
 		          actions[i].parentNode.setAttribute("oldHref", actions[i].parentNode.href);
@@ -96,7 +95,7 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
     			}
       	} else { // havePermission
       		for (var i = 0; i < len; i++) {
-		        isDisable = DOMUtil.hasClass(actions[i], "EditActionIcon") || DOMUtil.hasClass(actions[i], "MoveIcon") || DOMUtil.hasClass(actions[i], "DeleteContactIcon")
+		        isDisable = DOMUtil.hasClass(actions[i], "EditActionIcon")
 		        if (isDisable == false) continue;
 		        if (actions[i].parentNode.getAttribute("oldHref")) {
 		          actions[i].parentNode.href = actions[i].parentNode.getAttribute("oldHref");
@@ -106,10 +105,36 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
      	 		}      		
       	}
       }      
+
+      if(tr.getAttribute("canDeleteShared")) {
+    		var canDeleteShared = tr.getAttribute("canDeleteShared").toLowerCase() ;    		
+    		if (canDeleteShared == "false") {
+    			for (var i = 0; i < len; i++) {    			
+	    			isDisable = DOMUtil.hasClass(actions[i], "DeleteContactIcon") || DOMUtil.hasClass(actions[i], "MoveIcon");
+	        	if (isDisable == false) continue ;
+		        if (!actions[i].parentNode.getAttribute("oldHref")) {
+		          actions[i].parentNode.setAttribute("oldHref", actions[i].parentNode.href);
+		          actions[i].parentNode.style.color = "#cccccc";
+		          actions[i].parentNode.href = "javascript:void(0);";
+		        }    			
+    			}
+      	} else { // havePermission
+      		for (var i = 0; i < len; i++) {
+		        isDisable = DOMUtil.hasClass(actions[i], "DeleteContactIcon")
+		        if (isDisable == false) continue;
+		        if (actions[i].parentNode.getAttribute("oldHref")) {
+		          actions[i].parentNode.href = actions[i].parentNode.getAttribute("oldHref");
+		          actions[i].parentNode.removeAttribute("oldHref");
+		          actions[i].parentNode.removeAttribute("style");
+		        }
+     	 		}      		
+      	}
+      }
+
       // end add  	
     } else {
       for (var i = 0; i < len; i++) {
-        isDisable = DOMUtil.hasClass(actions[i], "EditActionIcon") || DOMUtil.hasClass(actions[i], "ShareIcon") || DOMUtil.hasClass(actions[i], "MoveIcon") || DOMUtil.hasClass(actions[i], "DeleteContactIcon")
+        isDisable = DOMUtil.hasClass(actions[i], "EditActionIcon") || DOMUtil.hasClass(actions[i], "ShareIcon") || DOMUtil.hasClass(actions[i], "MoveIcon")
         if (isDisable == false) continue;
         if (actions[i].parentNode.getAttribute("oldHref")) {
           actions[i].parentNode.href = actions[i].parentNode.getAttribute("oldHref");
@@ -135,7 +160,7 @@ UIContactPortlet.prototype.addressBookCallback = function(evt) {
 	if (havePermission == "false") {
 		for(var i = 0 ; i < itemLength ; i ++) {
 			if (DOMUtil.hasClass(menuItems[i],"ContactIcon") || DOMUtil.hasClass(menuItems[i],"PasteIcon")
-				|| DOMUtil.hasClass(menuItems[i],"EditActionIcon") || DOMUtil.hasClass(menuItems[i],"DeleteIcon")) {
+				|| DOMUtil.hasClass(menuItems[i],"EditActionIcon")) {
 				if (menuItems[i].parentNode.getAttribute("oldHref")) continue ;
 				menuItems[i].parentNode.setAttribute("oldHref", menuItems[i].parentNode.href) ;
 				menuItems[i].parentNode.href = "javascript: void(0) ;" ;
@@ -146,7 +171,7 @@ UIContactPortlet.prototype.addressBookCallback = function(evt) {
 	} else if (havePermission == "true") {
 		for(var i = 0 ; i < itemLength ; i ++) {
 			if (DOMUtil.hasClass(menuItems[i],"ContactIcon") || DOMUtil.hasClass(menuItems[i],"PasteIcon")
-				|| DOMUtil.hasClass(menuItems[i],"EditActionIcon") || DOMUtil.hasClass(menuItems[i],"DeleteIcon")) {
+				|| DOMUtil.hasClass(menuItems[i],"EditActionIcon")) {
 				if (!menuItems[i].parentNode.getAttribute("oldHref")) continue ;
 				menuItems[i].parentNode.href = menuItems[i].parentNode.getAttribute("oldHref") ;
 				menuItems[i].parentNode.style.color = menuItems[i].parentNode.getAttribute("oldColor") ;

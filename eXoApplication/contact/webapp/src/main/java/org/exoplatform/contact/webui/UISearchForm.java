@@ -78,6 +78,7 @@ public class UISearchForm extends UIForm {
       uiContacts.setViewContactsList(true) ; 
       uiContacts.setSelectedGroup(null) ;
       uiContacts.setSelectedTag(null) ;
+      uiContacts.setSelectSharedContacts(false) ;
       event.getRequestContext()
         .addUIComponentToUpdateByAjax(uiContactPortlet.getChild(UIWorkingContainer.class)) ;
     }

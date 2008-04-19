@@ -212,14 +212,14 @@
 	  	 	    </thead>
 	  	 	    <% if(isDisplaySearchResult) { %>
 	  	 	    <tbody>
-	  	 	    <%
+	  	 	    <% 
 	  	 	    		Map tagMap = uicomponent.getTagMap() ;
 	  	 	    		Map privateGroupMap = uicomponent.getPrivateGroupMap() ;
 	  	 	    		Map sharedGroupMap = uicomponent.getSharedGroupMap() ;
 	  	 	    		for(contact in contacts) {
 	  	 	    			String groupName ;	  	 	    			
 	  	 	    			String[] addressBooks = contact.getAddressBook() ;
-	  	 	    			contactType = contact.getContactType() ;	  	 	    			
+	  	 	    			contactType = contact.getContactType() ;   			
 	  	 	    			if (contactType.equals("2")) {
 		  	 	    			StringBuffer buffer = new StringBuffer("")
 		  	 	    			for (String address : addressBooks) {
@@ -235,17 +235,19 @@
 								  	if (groupName == null) continue ;								  
 								  } else if (contactType.equals("1")){
 									  	SharedAddressBook add =  sharedGroupMap.get(addressBooks[0]) ;
-								  		if (add != null)	groupName = add.getName() ;
+											StringBuffer buffer ;
+								  		if (add != null)  buffer = new StringBuffer(add.getName()) ;
 								  		else {
-								  			StringBuffer buffer = new StringBuffer(_ctx.appRes(uicomponent.getName() + ".label.sharedContacts")) ;
-								  			for (String address : addressBooks) { 
-								  				if (!address.equals(NewUserListener.DEFAULTGROUP + contact.getId())) {
-								  					buffer.append(", ").append(address) ;
-								  				}
-								  			}
-								  			groupName = buffer.toString() ;
+								  			buffer = new StringBuffer(_ctx.appRes(uicomponent.getName() + ".label.sharedContacts")) ;
 								  		}
+							  			for (String address : addressBooks) { 
+							  				if (!address.contains(NewUserListener.DEFAULTGROUP)) {
+							  					buffer.append(", ").append(address) ;
+							  				}
+							  			}
+								  		groupName = buffer.toString() ;
 								  }
+								  
   	 	    				String actionLink  = uicomponent.event("SelectedContact", contact.getId()) ;
 									checkboxField = uicomponent.getChildById(contact.getId()) ;
 									iconTag = null ;
@@ -279,7 +281,7 @@
 									if (selectedContact != null && contact.getId().equals(selectedContact)) cssClass = "Selected" ;
 	  	 	    %>
 								
-  						<tr class="UIContactList $cssClass" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>"> 
+  						<tr class="UIContactList $cssClass" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" canDeleteShared="<%=uicomponent.canDeleteShared(contact.getAddressBook()[0])%>"> 
   						  <td class="text" style="padding-left: 7px;">
   						  	<%
   						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
@@ -360,7 +362,7 @@
 										if (contact.getId().equals(uicomponent.getSelectedContact())) cssClass = "Selected" ;								
 						%>
 							
-  						<tr class="UIContactList $cssClass" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>">
+  						<tr class="UIContactList $cssClass" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" canDeleteShared="<%=uicomponent.canDeleteShared(contact.getAddressBook()[0])%>">
   						  <td class="text" style="padding-left: 7px;">
   						  	<%
   						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
@@ -483,7 +485,7 @@
 		
 				%>	
 		  <div class="LeftVCardsContent">
-		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>">
+		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" canDeleteShared="<%=uicomponent.canDeleteShared(contact.getAddressBook()[0])%>">
 			  	<div class="TitleVCards" >
 			  		<% 
 										icon = "OnlineIcon"
@@ -626,7 +628,7 @@
 				}
 			%>
 			<div class="RightVCardsContent">
-		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>">
+		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" canDeleteShared="<%=uicomponent.canDeleteShared(contact.getAddressBook()[0])%>">
 			  	<div class="TitleVCards" >
 			  	<% 
 										icon = "OfflineIcon"
