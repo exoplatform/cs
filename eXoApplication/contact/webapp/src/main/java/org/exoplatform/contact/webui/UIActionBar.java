@@ -94,7 +94,7 @@ public class UIActionBar extends UIContainer  {
       UIActionBar uiActionBar = event.getSource() ;
       UIContactPortlet uiContactPortlet = uiActionBar.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
-      uiPopupAction.activate(UICategoryForm.class, 400) ;
+      uiPopupAction.activate(UICategoryForm.class, 500) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }  
   }

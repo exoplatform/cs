@@ -60,6 +60,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
   private String groupId_ ;
   public static final String FIELD_CATEGORYNAME_INPUT = "categoryName";
   public static final String FIELD_DESCRIPTION_INPUT = "description";
+  public String editedAddName = null ;
   
   public UICategoryForm() {
     addUIFormInput(new UIFormStringInput(FIELD_CATEGORYNAME_INPUT, FIELD_CATEGORYNAME_INPUT, null));    
@@ -91,6 +92,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
       groupId_ = groupId ;
       getUIStringInput(FIELD_CATEGORYNAME_INPUT).setValue(contactGroup.getName()) ;
       getUIFormTextAreaInput(FIELD_DESCRIPTION_INPUT).setValue(contactGroup.getDescription()) ;
+      editedAddName = contactGroup.getName() ;
     }
   }
   
@@ -108,13 +110,24 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
       UIContactPortlet uiContactPortlet = uiCategoryForm.getAncestorOfType(UIContactPortlet.class) ;
       UIAddressBooks uiAddressBook = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
       if (uiAddressBook.getPrivateGroupMap().values().contains(groupName)) {
-        uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.existed-categoryName", null,
-            ApplicationMessage.WARNING)) ;
+        if (uiCategoryForm.isNew_ || (!uiCategoryForm.isNew_  && uiCategoryForm.editedAddName != null 
+            && !groupName.equals(uiCategoryForm.editedAddName))) {
+          uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.existed-categoryName", null,
+              ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ; 
-      }      
+        }
+      }    
       ContactGroup group = new ContactGroup() ;
-      if (!uiCategoryForm.isNew_) group.setId(uiCategoryForm.groupId_) ;
+      if (!uiCategoryForm.isNew_) {
+        ContactGroup oldGroup = ContactUtils.getContactService().getGroup(
+            SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(),uiCategoryForm.groupId_) ;
+        group.setEditPermissionGroups(oldGroup.getEditPermissionGroups()) ;
+        group.setEditPermissionUsers(oldGroup.getEditPermissionUsers()) ;
+        group.setViewPermissionGroups(oldGroup.getViewPermissionGroups()) ;
+        group.setViewPermissionUsers(oldGroup.getViewPermissionUsers()) ;
+        group.setId(uiCategoryForm.groupId_) ;
+      }
       group.setName(groupName) ;
       group.setDescription(uiCategoryForm.getUIFormTextAreaInput(FIELD_DESCRIPTION_INPUT).getValue()) ;
       try {
