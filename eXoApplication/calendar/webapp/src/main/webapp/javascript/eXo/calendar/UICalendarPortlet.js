@@ -1448,13 +1448,23 @@ UICalendarPortlet.prototype.initCheck = function(container) {
 	eXo.calendar.UICalendarPortlet.initSelectionX(firstTr) ;
 } ;
 
-UICalendarPortlet.prototype.parseTime = function(string) {
+UICalendarPortlet.prototype.localTimeToMin = function(millis, timezoneOffset) {
+	if (typeof(millis) == "string") millis = parseInt(millis) ;
+	millis -= timezoneOffset*60*1000 ;
+	var d = new Date(millis) ;
+	var hour = d.getHours() ;
+	var min = d.getMinutes() ;
+  var min = hour*60 + min ;
+	return min ;
+} ;
+
+UICalendarPortlet.prototype.parseTime = function(string,timezoneOffset) {
 	var stringTime = string.split(",") ;
 	var len = stringTime.length ;
 	var time = new Array() ;
 	var tmp = null ;
 	for(var i = 0 ; i < len ; i += 2) {
-		tmp = {"from": this.timeToMin(stringTime[i]),"to":this.timeToMin(stringTime[i+1])} ;
+		tmp = {"from": this.localTimeToMin(stringTime[i],timezoneOffset),"to":this.localTimeToMin(stringTime[i+1],timezoneOffset)} ;
 		time.push(tmp) ;
 	}
 	return time ;
@@ -1465,13 +1475,13 @@ UICalendarPortlet.prototype.showBusyTime = function(tr,serverTimezone) {
 	var localize = (tr.getAttribute("usertimezone")) ? parseInt(tr.getAttribute("usertimezone")) : 0 ;
   var extraTime = localize - serverTimezone ;
 	if (!stringTime) return ;
-	var time = this.parseTime(stringTime) ;
+	var time = this.parseTime(stringTime,extraTime) ;
 	var len = time.length ;
 	var from = null ;
 	var to = null ;
 	for(var i = 0 ; i < len ; i ++) {
-		from = parseInt(time[i].from) + extraTime;
-		to = parseInt(time[i].to) + extraTime ;
+		from = parseInt(time[i].from);
+		to = parseInt(time[i].to) ;
 		this.setBusyTime(from, to, tr)
 	}
 } ;

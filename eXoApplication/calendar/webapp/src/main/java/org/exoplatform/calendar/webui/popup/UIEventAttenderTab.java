@@ -157,6 +157,7 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
     DateFormat df = new SimpleDateFormat(timeFormat) ;
     df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
     timeField.setValue(df.format(date)) ;
+    calendar_.setTime(date) ;
   }
   private boolean getEventAllDate() {
     return false;
@@ -179,7 +180,7 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
     /*CalendarUtils.getCalendarService().getCalendarSetting(SessionProviderFactory.createSessionProvider(), username) ;
     //return String.valueOf(TimeZone.getTimeZone(getAncestorOfType(UICalendarPortlet.class).getCalendarSetting().getTimeZone()).getRawOffset()) ;
     return CalendarUtils.getTimeZone(getAncestorOfType(UICalendarPortlet.class).getCalendarSetting().getTimeZone()) ;*/
-     String timeZone = CalendarUtils.getCalendarService().getCalendarSetting(SessionProviderFactory.createSystemProvider(), username).getTimeZone() ;
+     String timeZone = CalendarUtils.getCalendarService().getCalendarSetting(SessionProviderFactory.createSystemProvider(), CalendarUtils.getCurrentUser()).getTimeZone() ;
      return CalendarUtils.getTimeZone(timeZone) ;
   }
   

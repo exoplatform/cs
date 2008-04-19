@@ -16,21 +16,15 @@
  **/
 package org.exoplatform.calendar.webui.popup;
 
-import java.security.acl.Group;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.exoplatform.calendar.CalendarUtils;
-import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
-import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
-import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.webui.CalendarView;
 import org.exoplatform.calendar.webui.SelectItem;
@@ -41,8 +35,6 @@ import org.exoplatform.calendar.webui.UIFormDateTimePicker;
 import org.exoplatform.calendar.webui.UIListContainer;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -54,12 +46,10 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
-import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
-import org.hsqldb.lib.ArrayCounter;
 
 /**
  * Created by The eXo Platform SARL
@@ -209,6 +199,9 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   private boolean getIsAllDay() {
     return getUIFormCheckBoxInput(FIELD_ALLDAY).isChecked() ;
   }
+  public void setIsAllday(boolean isChecked) {
+    getUIFormCheckBoxInput(FIELD_ALLDAY).setChecked(isChecked) ;
+  }
   private String getEventCalendar() {
     String values = getUIFormSelectBoxGroup(FIELD_CALENDAR).getValue() ;
     if(values != null && values.trim().length() > 0 && values.split(CalendarUtils.COLON).length > 0) {
@@ -285,8 +278,21 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         calEvent.setSummary(uiForm.getEventSummary()) ;
         calEvent.setDescription(uiForm.getEventDescription()) ;
         calEvent.setCalendarId(uiForm.getEventCalendar());
+        String username = CalendarUtils.getCurrentUser() ;
         if(uiForm.isEvent_){ 
           calEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
+          calEvent.setEventState(UIEventForm.ITEM_BUSY) ;
+          calEvent.setParticipant(new String[]{username}) ;
+          List<Reminder> reminders = new ArrayList<Reminder>() ;
+          Reminder email = new Reminder(Reminder.TYPE_EMAIL) ;
+          email.setReminderType(Reminder.TYPE_EMAIL) ;
+          email.setAlarmBefore(5) ;
+          email.setEmailAddress(CalendarUtils.getOrganizationService().getUserHandler().findUserByName(username).getEmail()) ;
+          email.setRepeate(Boolean.FALSE) ;
+          email.setRepeatInterval(0) ;
+          email.setFromDateTime(from) ;      
+          reminders.add(email) ;
+          calEvent.setReminders(reminders) ;
         } else {
           calEvent.setEventType(CalendarEvent.TYPE_TASK) ;
         }
@@ -294,19 +300,6 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         calEvent.setFromDateTime(from);
         calEvent.setToDateTime(to) ;
         calEvent.setCalType(uiForm.calType_) ;
-        String username = CalendarUtils.getCurrentUser() ;
-        calEvent.setEventState(UIEventForm.ITEM_BUSY) ;
-        calEvent.setParticipant(new String[]{username}) ;
-        List<Reminder> reminders = new ArrayList<Reminder>() ;
-        Reminder email = new Reminder(Reminder.TYPE_EMAIL) ;
-        email.setReminderType(Reminder.TYPE_EMAIL) ;
-        email.setAlarmBefore(5) ;
-        email.setEmailAddress(CalendarUtils.getOrganizationService().getUserHandler().findUserByName(username).getEmail()) ;
-        email.setRepeate(Boolean.FALSE) ;
-        email.setRepeatInterval(0) ;
-        email.setFromDateTime(from) ;      
-        reminders.add(email) ;
-        calEvent.setReminders(reminders) ;
         if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
           CalendarUtils.getCalendarService().saveUserEvent(SessionProviderFactory.createSessionProvider(), username, calEvent.getCalendarId(), calEvent, true) ;
         }else if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)){
@@ -342,7 +335,6 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         uiForm.getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
       String dateFormat = calendarSetting.getDateFormat() ;
       String timeFormat = calendarSetting.getTimeFormat() ;
-
       UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
       if(uiForm.isEvent()) {
         uiPopupAction.deActivate() ;
@@ -357,6 +349,13 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         uiEventForm.setEventToDate(uiForm.getEventToDate(dateFormat, timeFormat),dateFormat, timeFormat) ;
         uiEventForm.setEventAllDate(uiForm.getIsAllDay()) ;
         uiEventForm.setSelectedCategory(uiForm.getEventCategory()) ;
+        String username = CalendarUtils.getCurrentUser() ;
+        uiEventForm.setSelectedEventState(UIEventForm.ITEM_BUSY) ;
+        uiEventForm.setParticipant(username) ;
+        uiEventForm.setEmailAddress(CalendarUtils.getOrganizationService().getUserHandler().findUserByName(username).getEmail()) ;
+        uiEventForm.setEmailRemindBefore(String.valueOf(5));
+        uiEventForm.setEmailReminder(true) ;
+        uiEventForm.setEmailRepeat(String.valueOf(false)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       } else {
         uiPopupAction.deActivate() ;

@@ -104,7 +104,8 @@ public class UIActionBar extends UIContainer  {
       }
       uiQuickAddEvent.init(uiPortlet.getCalendarSetting(), formTime , null) ;
       uiQuickAddEvent.update("0", null) ;
-      uiQuickAddEvent.setSelectedCategory(categoryId) ;
+      if(CalendarUtils.isEmpty(categoryId) || categoryId.toLowerCase().trim().equals("null")) uiQuickAddEvent.setSelectedCategory("Meeting") ;
+      else uiQuickAddEvent.setSelectedCategory(categoryId) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
