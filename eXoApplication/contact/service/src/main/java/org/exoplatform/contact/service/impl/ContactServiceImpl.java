@@ -142,9 +142,9 @@ public class ContactServiceImpl implements ContactService {
   public ContactPageList getSharedContactsByAddressBook(SessionProvider sProvider, String username, SharedAddressBook addressBook) throws Exception {
   	return storage_.getSharedContactsByAddressBook(sProvider, username, addressBook) ;
   }
-  public void removeSharedAddressBook(SessionProvider sProvider, String username, String addressBookId) throws Exception {
+  /*public void removeSharedAddressBook(SessionProvider sProvider, String username, String addressBookId) throws Exception {
   	storage_.removeSharedAddressBook(sProvider, username, addressBookId) ;
-  }
+  }*/
   public void saveContactToSharedAddressBook(String username, String addressBookId, Contact contact, boolean isNew) throws Exception {
   	storage_.saveContactToSharedAddressBook(username, addressBookId, contact, isNew) ;
   }

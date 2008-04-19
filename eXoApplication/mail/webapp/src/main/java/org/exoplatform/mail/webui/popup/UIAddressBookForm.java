@@ -24,7 +24,6 @@ import java.util.Map;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
-import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.webui.UIMailPortlet;
@@ -182,7 +181,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
         List<String> contactIds = new ArrayList<String>();
         
         // hung edit
-        contactIds.add(contact.getId() + JCRDataStorage.SPLIT + contact.getContactType()) ;
+        contactIds.add(contact.getId()) ;
         contactServ.removeContacts(SessionProviderFactory.createSystemProvider(), username, contactIds);
         uiAddressBook.refrestContactList(uiAddressBook.getUIFormSelectBox(SELECT_GROUP).getValue());
         event.getRequestContext().addUIComponentToUpdateByAjax(mailPortlet.getChild(UIPopupAction.class)) ;

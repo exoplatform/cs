@@ -203,6 +203,9 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
             contactService.removeUserShareAddressBook(
                 SessionProviderFactory.createSessionProvider(), username, uiForm.groupId_, user.getId()) ;
           
+          
+          // + hyphen ?
+          
           List<Contact> contacts = contactService.getContactPageListByGroup(
               SessionProviderFactory.createSessionProvider(), username, uiForm.groupId_).getAll() ;
           for (Contact contact : contacts) {

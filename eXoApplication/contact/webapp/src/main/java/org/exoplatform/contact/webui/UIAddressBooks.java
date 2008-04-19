@@ -437,17 +437,11 @@ public class UIAddressBooks extends UIComponent {
       String username = ContactUtils.getCurrentUser();
       SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
       if (uiAddressBook.sharedAddressBookMap_.containsKey(groupId)) {
-        /*
-        ContactGroup group = ContactUtils.getContactService().getSharedGroup(username, groupId) ;
-        if (group.getEditPermission() == null || !Arrays.asList(group.getEditPermission()).contains(username)) {
-          UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.non-permission", null,
-            ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;          
-        }
-        */
-        contactService.removeSharedAddressBook(SessionProviderFactory.createSystemProvider(), username, groupId) ;
+        //contactService.removeSharedAddressBook(SessionProviderFactory.createSystemProvider(), username, groupId) ;
+
+        contactService.removeUserShareAddressBook(sessionProvider, uiAddressBook.sharedAddressBookMap_
+            .get(groupId).getSharedUserId(), groupId, username) ;
+        
       } else {
         contactService.removeGroup(sessionProvider, username, groupId);
       }

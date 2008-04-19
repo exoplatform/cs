@@ -64,7 +64,7 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
       } 
     } else if (type == "1") {
     	for (var i = 0; i < len; i++) {
-        isDisable = DOMUtil.hasClass(actions[i], "ShareIcon") ;
+        isDisable = DOMUtil.hasClass(actions[i], "ShareIcon");
         if (isDisable == true) {
 	        if (!actions[i].parentNode.getAttribute("oldHref")) {
 	          actions[i].parentNode.setAttribute("oldHref", actions[i].parentNode.href);
@@ -82,11 +82,10 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
       
       // hoang quang hung add :
       if(tr.getAttribute("havePermission")) {
-    		var havePermission = tr.getAttribute("havePermission").toLowerCase() ;
-    		
+    		var havePermission = tr.getAttribute("havePermission").toLowerCase() ;    		
     		if (havePermission == "false") {
     			for (var i = 0; i < len; i++) {    			
-	    			isDisable = DOMUtil.hasClass(actions[i], "EditActionIcon") || DOMUtil.hasClass(actions[i], "ShareIcon") || DOMUtil.hasClass(actions[i], "MoveIcon") || DOMUtil.hasClass(actions[i], "DeleteContactIcon") ;
+	    			isDisable = DOMUtil.hasClass(actions[i], "EditActionIcon") ;
 	        	if (isDisable == false) continue ;
 		        if (!actions[i].parentNode.getAttribute("oldHref")) {
 		          actions[i].parentNode.setAttribute("oldHref", actions[i].parentNode.href);
@@ -96,7 +95,7 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
     			}
       	} else { // havePermission
       		for (var i = 0; i < len; i++) {
-		        isDisable = DOMUtil.hasClass(actions[i], "EditActionIcon") || DOMUtil.hasClass(actions[i], "MoveIcon") || DOMUtil.hasClass(actions[i], "DeleteContactIcon")
+		        isDisable = DOMUtil.hasClass(actions[i], "EditActionIcon")
 		        if (isDisable == false) continue;
 		        if (actions[i].parentNode.getAttribute("oldHref")) {
 		          actions[i].parentNode.href = actions[i].parentNode.getAttribute("oldHref");
@@ -106,10 +105,36 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
      	 		}      		
       	}
       }      
+
+      if(tr.getAttribute("canDeleteShared")) {
+    		var canDeleteShared = tr.getAttribute("canDeleteShared").toLowerCase() ;    		
+    		if (canDeleteShared == "false") {
+    			for (var i = 0; i < len; i++) {    			
+	    			isDisable = DOMUtil.hasClass(actions[i], "DeleteContactIcon") || DOMUtil.hasClass(actions[i], "MoveIcon");
+	        	if (isDisable == false) continue ;
+		        if (!actions[i].parentNode.getAttribute("oldHref")) {
+		          actions[i].parentNode.setAttribute("oldHref", actions[i].parentNode.href);
+		          actions[i].parentNode.style.color = "#cccccc";
+		          actions[i].parentNode.href = "javascript:void(0);";
+		        }    			
+    			}
+      	} else { // havePermission
+      		for (var i = 0; i < len; i++) {
+		        isDisable = DOMUtil.hasClass(actions[i], "DeleteContactIcon")
+		        if (isDisable == false) continue;
+		        if (actions[i].parentNode.getAttribute("oldHref")) {
+		          actions[i].parentNode.href = actions[i].parentNode.getAttribute("oldHref");
+		          actions[i].parentNode.removeAttribute("oldHref");
+		          actions[i].parentNode.removeAttribute("style");
+		        }
+     	 		}      		
+      	}
+      }
+
       // end add  	
     } else {
       for (var i = 0; i < len; i++) {
-        isDisable = DOMUtil.hasClass(actions[i], "EditActionIcon") || DOMUtil.hasClass(actions[i], "ShareIcon") || DOMUtil.hasClass(actions[i], "MoveIcon") || DOMUtil.hasClass(actions[i], "DeleteContactIcon")
+        isDisable = DOMUtil.hasClass(actions[i], "EditActionIcon") || DOMUtil.hasClass(actions[i], "ShareIcon") || DOMUtil.hasClass(actions[i], "MoveIcon")
         if (isDisable == false) continue;
         if (actions[i].parentNode.getAttribute("oldHref")) {
           actions[i].parentNode.href = actions[i].parentNode.getAttribute("oldHref");
@@ -128,53 +153,34 @@ UIContactPortlet.prototype.addressBookCallback = function(evt) {
 	var _e = window.event || evt ;	
 	var src = _e.srcElement || _e.target ;
 	var addressBook = (DOMUtil.hasClass(src, "ItemList")) ? src : DOMUtil.findAncestorByClass(src, "ItemList") ;	
-	
-	//var isPublic = addressBook.getAttribute("addressType") ;	
-	
 	var menuItems = DOMUtil.findDescendantsByClass(UIContextMenuCon.menuElement, "div", "ItemIcon") ;
 	var itemLength = menuItems.length ;	
-
-//	if (isPublic && (isPublic.toLowerCase() == "2")) {
-//		for(var i = 0 ; i < itemLength ; i ++) {
-//			if (DOMUtil.hasClass(menuItems[i],"ShareIcon") || DOMUtil.hasClass(menuItems[i],"EditActionIcon")
-//			|| DOMUtil.hasClass(menuItems[i],"DeleteIcon") || DOMUtil.hasClass(menuItems[i],"ImportContactIcon")
-//			|| DOMUtil.hasClass(menuItems[i],"ContactIcon")) {
-//				if (menuItems[i].parentNode.getAttribute("oldHref")) continue ;
-//				menuItems[i].parentNode.setAttribute("oldHref", menuItems[i].parentNode.href) ;
-//				menuItems[i].parentNode.href = "javascript: void(0) ;" ;
-//				menuItems[i].parentNode.setAttribute("oldColor", DOMUtil.getStyle(menuItems[i].parentNode, "color")) ;
-//				menuItems[i].parentNode.style.color = "#cccccc" ;
-//			}
-//		}
-//	} else if(isPublic.toLowerCase() == "1") {
-//			for(var i = 0 ; i < itemLength ; i ++) {
-//				if (DOMUtil.hasClass(menuItems[i],"ShareIcon") || DOMUtil.hasClass(menuItems[i],"ImportAddressIcon") 
-//				|| DOMUtil.hasClass(menuItems[i],"ImportContactIcon")|| DOMUtil.hasClass(menuItems[i],"ContactIcon")) {
-//					if (menuItems[i].parentNode.getAttribute("oldHref")) continue ;
-//					menuItems[i].parentNode.setAttribute("oldHref", menuItems[i].parentNode.href) ;
-//					menuItems[i].parentNode.href = "javascript: void(0) ;" ;
-//					menuItems[i].parentNode.setAttribute("oldColor", DOMUtil.getStyle(menuItems[i].parentNode, "color")) ;
-//					menuItems[i].parentNode.style.color = "#cccccc" ;
-//				} else {
-//					if (!menuItems[i].parentNode.getAttribute("oldHref")) continue ;
-//					menuItems[i].parentNode.href = menuItems[i].parentNode.getAttribute("oldHref") ;
-//					menuItems[i].parentNode.style.color = menuItems[i].parentNode.getAttribute("oldColor") ;
-//					menuItems[i].parentNode.removeAttribute("oldColor") ;
-//					menuItems[i].parentNode.removeAttribute("oldHref") ;
-//				}
-//			}
-//	}	else {
-//		for(var i = 0 ; i < itemLength ; i ++) {
-//			if (DOMUtil.hasClass(menuItems[i],"ShareIcon") || DOMUtil.hasClass(menuItems[i],"EditActionIcon") || DOMUtil.hasClass(menuItems[i],"DeleteIcon") || DOMUtil.hasClass(menuItems[i],"ImportContactIcon")) {
-//				if (!menuItems[i].parentNode.getAttribute("oldHref")) continue ;
-//				menuItems[i].parentNode.href = menuItems[i].parentNode.getAttribute("oldHref") ;
-//				menuItems[i].parentNode.style.color = menuItems[i].parentNode.getAttribute("oldColor") ;
-//				menuItems[i].parentNode.removeAttribute("oldColor") ;
-//				menuItems[i].parentNode.removeAttribute("oldHref") ;
-//			}
-//		}
-//	}
 	
+	var havePermission = addressBook.getAttribute("havePermission") ;
+	if (havePermission == "false") {
+		for(var i = 0 ; i < itemLength ; i ++) {
+			if (DOMUtil.hasClass(menuItems[i],"ContactIcon") || DOMUtil.hasClass(menuItems[i],"PasteIcon")
+				|| DOMUtil.hasClass(menuItems[i],"EditActionIcon")) {
+				if (menuItems[i].parentNode.getAttribute("oldHref")) continue ;
+				menuItems[i].parentNode.setAttribute("oldHref", menuItems[i].parentNode.href) ;
+				menuItems[i].parentNode.href = "javascript: void(0) ;" ;
+				menuItems[i].parentNode.setAttribute("oldColor", DOMUtil.getStyle(menuItems[i].parentNode, "color")) ;
+				menuItems[i].parentNode.style.color = "#cccccc" ;
+			}
+		}		
+	} else if (havePermission == "true") {
+		for(var i = 0 ; i < itemLength ; i ++) {
+			if (DOMUtil.hasClass(menuItems[i],"ContactIcon") || DOMUtil.hasClass(menuItems[i],"PasteIcon")
+				|| DOMUtil.hasClass(menuItems[i],"EditActionIcon")) {
+				if (!menuItems[i].parentNode.getAttribute("oldHref")) continue ;
+				menuItems[i].parentNode.href = menuItems[i].parentNode.getAttribute("oldHref") ;
+				menuItems[i].parentNode.style.color = menuItems[i].parentNode.getAttribute("oldColor") ;
+				menuItems[i].parentNode.removeAttribute("oldColor") ;
+				menuItems[i].parentNode.removeAttribute("oldHref") ;
+			}
+		}		
+	}
+
 	var isDefault = addressBook.getAttribute("isDefault") ;
 	if (isDefault == "true") {
 		for(var i = 0 ; i < itemLength ; i ++) {
@@ -186,7 +192,7 @@ UIContactPortlet.prototype.addressBookCallback = function(evt) {
 				menuItems[i].parentNode.style.color = "#cccccc" ;
 			}
 		}
-	} else {
+	} else if (isDefault == "false") {
     for(var i = 0 ; i < itemLength ; i ++) {
 			if (DOMUtil.hasClass(menuItems[i],"EditActionIcon") || DOMUtil.hasClass(menuItems[i],"DeleteIcon")) {
 				if (!menuItems[i].parentNode.getAttribute("oldHref")) continue ;
@@ -197,6 +203,7 @@ UIContactPortlet.prototype.addressBookCallback = function(evt) {
 			}
 		}
   }
+  
 //	
 //	var isList = addressBook.getAttribute("isList") ;
 //	if (isList == "true") {
@@ -419,16 +426,16 @@ UIContactPortlet.prototype.switchLayout = function(layout) {
       if(contactLayout3.style.display != "block") {
         contactLayout3.style.display = "block";             
       }
-      if(contactLayout4) {
-        if(contactLayout4.style.display != "block") {
-          contactLayout4.style.display = "block";
-        }
-      }
-      if(contactLayout5)  {
-        if(contactLayout5.style.display != "block") {
-          contactLayout5.style.display = "block";
-        }
-      }
+	  if(contactLayout4) {
+	      if(contactLayout4.style.display != "block") {
+	        contactLayout4.style.display = "block";
+	      }
+	  }
+	  if(contactLayout5) {
+	      if(contactLayout5.style.display != "block") {
+	        contactLayout5.style.display = "block";
+	      }
+	  }
       panelWorking.style.marginLeft = "225px";   
       Browser.setCookie("contactLayout1", "1", 30);
       Browser.setCookie("contactLayout2", "1", 30);
@@ -490,26 +497,27 @@ UIContactPortlet.prototype.switchLayout = function(layout) {
       break;
     case 4 : 
       if( objRoot != null) {
-        if(contactLayout4 && contactLayout5){
-          if(contactLayout4.style.display == "none" && contactLayout5.style.display == "none") {
-            contactLayout4.style.display = "block";
-            contactLayout5.style.display = "block";
-            Browser.setCookie("contactLayout4", "1", 30);
-            Browser.setCookie("contactLayout5", "1", 30);
-            showCheckedMenu = true;
-          } else {
-            if(!isWelcome) {
-              contactLayout4.style.display = "none";
-              contactLayout5.style.display = "none";
-              Browser.setCookie("contactLayout4", "0", 30);
-              Browser.setCookie("contactLayout5", "0", 30);
-            }
-          } 
-        }
+	  	if(contactLayout4  && contactLayout5) {
+	        if(contactLayout4.style.display == "none" && contactLayout5.style.display == "none") {
+	          contactLayout4.style.display = "block";
+	          contactLayout5.style.display = "block";
+	          Browser.setCookie("contactLayout4", "1", 30);
+	          Browser.setCookie("contactLayout5", "1", 30);
+	          showCheckedMenu = true;
+	        } else {
+	          if(!isWelcome) {
+	            contactLayout4.style.display = "none";
+	            contactLayout5.style.display = "none";
+	            Browser.setCookie("contactLayout4", "0", 30);
+	            Browser.setCookie("contactLayout5", "0", 30);
+	          }
+	        } 
+		}
       }
   }
   this.addCheckedIcon(layout, showCheckedMenu);
 }
+
 UIContactPortlet.prototype.showImMenu = function(obj, event) {
 	var event = window.event || event ;
 	event.cancelBubble = true ;
@@ -674,8 +682,8 @@ UIContactPortlet.prototype.showPopupCustomLayoutView = function(obj, evt) {
   var root = document.getElementById("UIContactPortlet");
   var objWelcome = eXo.core.DOMUtil.findFirstDescendantByClass(root, "div", "UIWelcomeContact");
   var objDetails = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div", "ContactDetailsMenuItem");
-  var objVCard = eXo.core.DOMUtil.findFirstDescendantByClass(root, "div", "UIVCards");
-  if(objWelcome || objVCard) {
+  var objVCards = eXo.core.DOMUtil.findFirstDescendantByClass(root, "div", "UIVCards");
+  if(objWelcome || objVCards) {
     objDetails.style.display = "none";
   } else {
     objDetails.style.display = "block";

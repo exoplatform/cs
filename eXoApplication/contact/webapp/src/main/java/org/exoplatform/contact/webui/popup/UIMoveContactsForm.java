@@ -26,12 +26,14 @@ import java.util.MissingResourceException;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
+import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UIWorkingContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -104,9 +106,11 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UIMoveContactsForm> event) throws Exception {
       UIMoveContactsForm uiMoveContactForm = event.getSource() ;
       String addressBookId = event.getRequestContext().getRequestParameter(OBJECTID);
+      ContactService contactService = ContactUtils.getContactService() ;
+      String username = ContactUtils.getCurrentUser() ;
+      SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
       if (uiMoveContactForm. sharedGroupMap_.containsKey(addressBookId)) {
-        String username = ContactUtils.getCurrentUser() ;
-        ContactGroup group = ContactUtils.getContactService().getSharedGroup(username, addressBookId) ;
+        ContactGroup group = contactService.getSharedGroup(username, addressBookId) ;
         if (group.getEditPermissionUsers() == null || 
             !Arrays.asList(group.getEditPermissionUsers()).contains(username + JCRDataStorage.HYPHEN)) {
           UIApplication uiApp = uiMoveContactForm.getAncestorOfType(UIApplication.class) ;
@@ -119,13 +123,23 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       String type = event.getRequestContext().getRequestParameter("addressType");
       UIContactPortlet uiContactPortlet = uiMoveContactForm.getAncestorOfType(UIContactPortlet.class);
       List<Contact> contacts = new ArrayList<Contact>() ;
+      List<Contact> sharedContacts = new ArrayList<Contact>() ;
       for(String id : uiMoveContactForm.getContactIds()) {
       	Contact contact = uiMoveContactForm.movedContacts.get(id) ;
       	contact.setAddressBook(new String[] {addressBookId}) ;
-      	contacts.add(contact) ;
+        if (contact.getContactType().equals(JCRDataStorage.SHARED)) sharedContacts.add(contact) ;
+        else contacts.add(contact) ;
       }
-      ContactUtils.getContactService().moveContacts(SessionProviderFactory.createSessionProvider()
-        , ContactUtils.getCurrentUser(), contacts, type) ;
+      
+//    add
+      if (sharedContacts.size() > 0 ) {
+        contactService.pasteContacts(sessionProvider, username, addressBookId, type, sharedContacts) ;
+        for (Contact contact : sharedContacts) {
+            contactService.removeUserShareContact(sessionProvider, contact.getPath(), contact.getId(), username) ;  
+        }
+      }
+      if (contacts.size() > 0)
+        contactService.moveContacts(sessionProvider, username, contacts, type) ;
 
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
       if (uiContacts.isDisplaySearchResult()) {
@@ -136,7 +150,8 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
           ContactUtils.isEmpty(uiContacts.getSelectedTag())) {
 
         //select shared contacts        
-        uiContacts.setContact(contacts, false) ;
+        if (contacts.size() > 0) uiContacts.setContact(contacts, false) ;
+        if (sharedContacts.size() > 0) uiContacts.setContact(sharedContacts, false) ;
       }
       uiContacts.updateList() ;
       uiContactPortlet.cancelAction() ;
