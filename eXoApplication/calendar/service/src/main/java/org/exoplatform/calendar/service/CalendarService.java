@@ -29,6 +29,7 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
  *          hung.nguyen@exoplatform.com
  * Jul 11, 2007  
  */
+
 public interface CalendarService {
   
   public List<CalendarCategory> getCategories(SessionProvider sProvider, String username) throws Exception ;
