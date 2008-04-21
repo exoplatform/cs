@@ -24,6 +24,7 @@ import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.impl.GroupImpl;
@@ -125,7 +126,7 @@ public class ContactUtils {
   public static List<Account> getAccounts() throws Exception {
     MailService mailSvr = (MailService)PortalContainer.getComponent(MailService.class) ;
     try {
-      return mailSvr.getAccounts(SessionsUtils.getSessionProvider(), getCurrentUser()) ;
+      return mailSvr.getAccounts(SessionProviderFactory.createSessionProvider(), getCurrentUser()) ;
     } catch (RepositoryException e) {
       return null ;
     } catch (IndexOutOfBoundsException ex) {

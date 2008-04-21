@@ -26,12 +26,12 @@ import java.io.ByteArrayInputStream;
 import net.wimpi.pim.util.versitio.versitException;
 
 import org.exoplatform.contact.ContactUtils;
-import org.exoplatform.contact.SessionsUtils;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UIWorkingContainer;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.upload.UploadResource;
 import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -185,8 +185,8 @@ public class UIImportForm extends UIForm {
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       String importFormat = uiForm.getUIFormSelectBox(UIImportForm.FIELD_TYPE).getValue() ;
       try {
-        ContactUtils.getContactService().getContactImportExports(importFormat).importContact(SessionsUtils
-            .getSessionProvider(), ContactUtils.getCurrentUser(), inputStream, category) ;
+        ContactUtils.getContactService().getContactImportExports(importFormat).importContact(
+            SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), inputStream, category) ;
         UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
         UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;
         uploadService.removeUpload(uploadId) ;

@@ -142,7 +142,7 @@ public class UIAddressBooks extends UIComponent {
     return false ;
   }
   public void setCopyAddress(String add) { copyAddress = add ; }
-  public boolean isDefault(String groupId) throws Exception { return groupId.equals(NewUserListener.DEFAULTGROUP + ContactUtils.getCurrentUser()) ; }
+  public boolean isDefault(String groupId) throws Exception { return groupId.contains(NewUserListener.DEFAULTGROUP) ; }
   
   public void setCopyContacts(List<Contact> contacts) { copyContacts = contacts ; }
   public List<Contact> getCopyContacts() { return copyContacts ; }
