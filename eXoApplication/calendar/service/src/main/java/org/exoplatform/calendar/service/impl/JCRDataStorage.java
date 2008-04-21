@@ -835,13 +835,13 @@ public class JCRDataStorage{
 
   public void saveUserEvent(SessionProvider sProvider, String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception {
     Node calendarNode = getUserCalendarHome(sProvider, username).getNode(calendarId);
-    Node eventFolder = getEventFolder(SessionProvider.createSystemProvider(), event.getFromDateTime()) ;
+    //Node eventFolder = getEventFolder(SessionProvider.createSystemProvider(), event.getFromDateTime()) ;
     if(event.getReminders() != null && event.getReminders().size() > 0) {
       //Need to use system session
       Node reminderFolder = getReminderFolder(SessionProvider.createSystemProvider(), event.getFromDateTime()) ;
-      saveEvent(calendarNode, event, eventFolder, reminderFolder, isNew) ;
+      saveEvent(calendarNode, event, reminderFolder, isNew) ;
     }else {
-      saveEvent(calendarNode, event, eventFolder, null, isNew) ;
+      saveEvent(calendarNode, event, null, isNew) ;
     }
   }
 
@@ -911,9 +911,9 @@ public class JCRDataStorage{
   }
   public void savePublicEvent(SessionProvider sProvider, String calendarId, CalendarEvent event, boolean isNew) throws Exception {
     Node calendarNode = getPublicCalendarHome(sProvider).getNode(calendarId) ;
-    Node eventFolder = getEventFolder(SessionProvider.createSystemProvider(), event.getFromDateTime()) ;
+    //Node eventFolder = getEventFolder(SessionProvider.createSystemProvider(), event.getFromDateTime()) ;
     Node reminderFolder = getReminderFolder(sProvider, event.getFromDateTime()) ;
-    saveEvent(calendarNode, event, eventFolder, reminderFolder, isNew) ;
+    saveEvent(calendarNode, event, reminderFolder, isNew) ;
   }
 
   public CalendarEvent removePublicEvent(SessionProvider sProvider, String calendarId, String eventId) throws Exception {
@@ -980,7 +980,7 @@ public class JCRDataStorage{
     return event ;
   }
 
-  private void saveEvent(Node calendarNode, CalendarEvent event, Node eventFolder, Node reminderFolder, boolean isNew) throws Exception {
+  private void saveEvent(Node calendarNode, CalendarEvent event, Node reminderFolder, boolean isNew) throws Exception {
     Node eventNode ;
     if(isNew) {
       eventNode = calendarNode.addNode(event.getId(), "exo:calendarEvent") ;
@@ -1039,7 +1039,7 @@ public class JCRDataStorage{
     }
     calendarNode.save() ;
 
-    addEvent(eventFolder, event) ;
+    addEvent(event) ;
 
     //calendarNode.getSession().save()  ;
   }
@@ -1104,21 +1104,51 @@ public class JCRDataStorage{
     else reminderFolder.getSession().save() ;
   }
 
-  private void addEvent(Node eventFolder, CalendarEvent event) throws Exception {
+  private void addEvent(CalendarEvent event) throws Exception {
+  	Node eventFolder = getEventFolder(SessionProvider.createSystemProvider(), event.getFromDateTime()) ;
     Node publicEvent ;
-    try {
-      publicEvent = eventFolder.getNode(event.getId()) ;
-    } catch (Exception e) {
-      publicEvent = eventFolder.addNode(event.getId(), "exo:calendarPublicEvent") ;
+    int fromDate ;
+    int toDate ;
+    
+    QueryManager qm = eventFolder.getSession().getWorkspace().getQueryManager();
+    StringBuffer queryString = new StringBuffer("/jcr:root" + eventFolder.getParent().getPath() 
+        + "//element(*,exo:calendarPublicEvent)[@exo:rootEventId='").
+        append(event.getId()).
+        append("']");
+    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
+    QueryResult result = query.execute();
+    NodeIterator it = result.getNodes();
+    boolean isRemoved = false ;
+    while(it.hasNext()) {
+    	it.nextNode().remove() ;
+    	isRemoved = true ;
     }
-    publicEvent.setProperty("exo:id", event.getId()) ;
+    if(isRemoved) eventFolder.save() ;
+    CalendarEvent ev = new CalendarEvent() ;
+    publicEvent = eventFolder.addNode(ev.getId(), "exo:calendarPublicEvent") ;
+    publicEvent.setProperty("exo:id", ev.getId()) ;
+    publicEvent.setProperty("exo:rootEventId", event.getId()) ;
     publicEvent.setProperty("exo:eventType", event.getEventType()) ;
     publicEvent.setProperty("exo:calendarId", event.getCalendarId()) ;
     java.util.Calendar dateTime = Utils.getInstanceTempCalendar() ;
     dateTime.setTime(event.getFromDateTime()) ;
+    fromDate = dateTime.get(java.util.Calendar.DATE) ;
     publicEvent.setProperty("exo:fromDateTime", dateTime) ;
     dateTime.setTime(event.getToDateTime()) ;
-    publicEvent.setProperty("exo:toDateTime", dateTime) ;
+    toDate = dateTime.get(java.util.Calendar.DATE) ;
+    if(toDate > fromDate) {
+    	java.util.Calendar tmpTime = Utils.getInstanceTempCalendar() ;
+    	tmpTime.setTime(event.getFromDateTime()) ;
+    	tmpTime.set(java.util.Calendar.HOUR, 0) ;
+    	tmpTime.set(java.util.Calendar.MINUTE, 0) ;
+    	tmpTime.set(java.util.Calendar.SECOND, 0) ;
+    	tmpTime.set(java.util.Calendar.MILLISECOND, 0) ;
+    	tmpTime.setTimeInMillis(tmpTime.getTimeInMillis() + (24 * 60 * 59 * 1000)) ;
+    	publicEvent.setProperty("exo:toDateTime", tmpTime) ;
+    }else {
+    	publicEvent.setProperty("exo:toDateTime", dateTime) ;
+    }
+    
     publicEvent.setProperty("exo:participant", event.getParticipant()) ;
     try{
       if(!eventFolder.isNew()) eventFolder.save() ;
@@ -1127,6 +1157,32 @@ public class JCRDataStorage{
       eventFolder.getSession().refresh(true) ;
       eventFolder.getSession().save() ;
       //e.printStackTrace() ;
+    }
+    if(toDate > fromDate) {
+    	java.util.Calendar cal = Utils.getInstanceTempCalendar() ;
+      cal.setTime(event.getFromDateTime()) ;
+      cal.set(java.util.Calendar.HOUR, 0) ;
+      cal.set(java.util.Calendar.MINUTE, 0) ;
+      cal.set(java.util.Calendar.SECOND, 0) ;
+      cal.set(java.util.Calendar.MILLISECOND, 0) ;
+      
+      for(int i = fromDate + 1; i <= toDate ; i++) {
+    		cal.roll(java.util.Calendar.DATE, true) ;
+    		Node dateFolder = getEventFolder(SessionProvider.createSystemProvider(), cal.getTime()) ;
+    		ev = new CalendarEvent() ;
+    		eventFolder.getSession().getWorkspace().copy(publicEvent.getPath(), dateFolder.getPath() + "/" + ev.getId()) ;
+    		dateFolder.getSession().save() ;
+    		if(i <= toDate) {
+    			Node newEvent = dateFolder.getNode(ev.getId()) ;
+    			newEvent.setProperty("exo:id", ev.getId()) ;
+    			newEvent.setProperty("exo:fromDateTime", cal) ;
+    			java.util.Calendar tmpCal = Utils.getInstanceTempCalendar() ;
+    			if(i == toDate) tmpCal.setTime(event.getToDateTime()) ;
+    			else tmpCal.setTimeInMillis(cal.getTimeInMillis() + 24 * 60 * 59 * 1000) ;
+    			newEvent.setProperty("exo:toDateTime", tmpCal) ;
+    			newEvent.save() ;    			    			
+    		}    		
+    	}
     }
   }
 
@@ -1849,7 +1905,7 @@ public class JCRDataStorage{
 
   public void saveEventToSharedCalendar(SessionProvider sProvider, String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception  {
     Node sharedCalendarHome = getSharedCalendarHome(sProvider) ;
-    Node eventFolder = getEventFolder(SessionProvider.createSystemProvider(), event.getFromDateTime()) ;
+    //Node eventFolder = getEventFolder(SessionProvider.createSystemProvider(), event.getFromDateTime()) ;
     if(sharedCalendarHome.hasNode(username)) {
       Node userNode = sharedCalendarHome.getNode(username) ;
       PropertyIterator iter = userNode.getReferences() ;
@@ -1858,7 +1914,7 @@ public class JCRDataStorage{
         calendar = iter.nextProperty().getParent() ;
         if(calendar.getProperty("exo:id").getString().equals(calendarId)) {
           Node reminderFolder = getReminderFolder(sProvider, event.getFromDateTime()) ;
-          saveEvent(calendar, event, eventFolder, reminderFolder, isNew) ;
+          saveEvent(calendar, event, reminderFolder, isNew) ;
           calendar.save() ;
           break ;
         }
@@ -1892,36 +1948,26 @@ public class JCRDataStorage{
     Node event ;
     String from ;
     String to ;
-    //System.out.println(eventQuery.getFromDate().getTime());
-    //System.out.println(eventQuery.getToDate().getTime());
-    // searchEvent(sysProvider, username, eventQuery, publicCalendarIds)
     for(String par : pars) {
       eventQuery.setParticipants(new String[]{par}) ;
-      //System.out.println("eventQuery.getQueryStatement() ========>" + eventQuery.getQueryStatement()) ;
       query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH);
       QueryResult result = query.execute();
       NodeIterator it = result.getNodes();
-      //System.out.println(par + " ========>" + it.getSize()) ;
       StringBuilder timeValues = new StringBuilder() ;
-      //System.out.println("query form " + eventQuery.getFromDate().getTime());
-      //System.out.println("query to " + eventQuery.getToDate().getTime());
       while(it.hasNext()) {
         event = it.nextNode() ;
         java.util.Calendar fromCal = event.getProperty("exo:fromDateTime").getDate() ;
         java.util.Calendar toCal = event.getProperty("exo:toDateTime").getDate() ;
-        //System.out.println("event form " + fromCal.getTime());
-        //System.out.println("event to " + toCal.getTime());
-        //if(fromCal.before(eventQuery.getFromDate())) fromCal.setTimeInMillis(eventQuery.getFromDate().getTimeInMillis()) ;
-        //System.out.println(" from after" +fromCal.getTime());
-        //System.out.println("event form " + fromCal.getTime());
-        //System.out.println("event to "+toCal.getTime());
-        //if(toCal.after(eventQuery.getToDate())) toCal.setTimeInMillis(eventQuery.getToDate().getTimeInMillis()) ;
         if(fromCal.getTimeInMillis() < eventQuery.getFromDate().getTimeInMillis())
-          from = String.valueOf(eventQuery.getFromDate().getTimeInMillis()) ;
-        else from = String.valueOf(fromCal.getTimeInMillis()) ;
-        if(toCal.getTimeInMillis() > eventQuery.getToDate().getTimeInMillis())
-          to = String.valueOf(eventQuery.getToDate().getTimeInMillis()) ;
-        else to = String.valueOf(toCal.getTimeInMillis()) ;
+        	from = String.valueOf(eventQuery.getFromDate().getTimeInMillis()) ;
+        else 
+        	from = String.valueOf(fromCal.getTimeInMillis()) ;
+        if(toCal.getTimeInMillis() > eventQuery.getToDate().getTimeInMillis()){
+        	GregorianCalendar cal = new GregorianCalendar() ;
+        	cal.setTimeInMillis(eventQuery.getToDate().getTimeInMillis() - 1000) ;
+        	to = String.valueOf(cal.getTimeInMillis()) ;
+        } else to = String.valueOf(toCal.getTimeInMillis()) ;
+        
         if(timeValues != null && timeValues.length() > 0) timeValues.append(",") ;
         timeValues.append(from).append(",").append(to) ;
       }
