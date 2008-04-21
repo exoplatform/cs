@@ -25,6 +25,7 @@ package org.exoplatform.mail.service;
 public class MailSetting {
   
   public static long NEVER_CHECK_AUTO = 0;
+  public static long FIVE_MINS = 5 ;
   public static long TEN_MINS = 10;
   public static long TWENTY_MINS = 20;
   public static long THIRTY_MINS = 30;

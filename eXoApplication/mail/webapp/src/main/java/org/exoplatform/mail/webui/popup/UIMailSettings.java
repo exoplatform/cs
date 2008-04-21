@@ -24,9 +24,7 @@ import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.webui.UIMailPortlet;
-import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
-import org.exoplatform.mail.webui.UINavigationContainer;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
@@ -77,6 +75,7 @@ public class UIMailSettings extends UIForm implements UIPopupComponent {
     
     List<SelectItemOption<String>> periodCheckAuto = new ArrayList<SelectItemOption<String>>();
     periodCheckAuto.add(new SelectItemOption<String>("Never", String.valueOf(MailSetting.NEVER_CHECK_AUTO)));
+    periodCheckAuto.add(new SelectItemOption<String>("5 minutes", String.valueOf(MailSetting.TEN_MINS)));
     periodCheckAuto.add(new SelectItemOption<String>("10 minutes", String.valueOf(MailSetting.TEN_MINS)));
     periodCheckAuto.add(new SelectItemOption<String>("20 minutes", String.valueOf(MailSetting.TWENTY_MINS)));
     periodCheckAuto.add(new SelectItemOption<String>("30 minutes", String.valueOf(MailSetting.THIRTY_MINS)));
@@ -165,9 +164,8 @@ public class UIMailSettings extends UIForm implements UIPopupComponent {
       if (defaultAcc != null && !defaultAcc.equals(accountId)) {
         uiSelectAccount.updateAccount() ;
         uiSelectAccount.setSelectedValue(defaultAcc) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectAccount.getAncestorOfType(UINavigationContainer.class)) ;
       }
-		  event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
+		  event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
 		  uiPortlet.cancelAction();
 	  }
   }

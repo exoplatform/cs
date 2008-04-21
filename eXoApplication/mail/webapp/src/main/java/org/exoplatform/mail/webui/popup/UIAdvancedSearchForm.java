@@ -182,13 +182,6 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     return getUIFormSelectBox(SEARCH_BODY_CONDITION).getValue();
   }
   
-  public String getFromDateValue() {
-    return getUIFormDateTimeInput(FIELD_FROM_DATE).getValue() ;
-  }
-  public String getToDateValue() {
-    return getUIFormDateTimeInput(FIELD_FROM_DATE).getValue() ;
-  }
-  
   public Calendar getFromDate() {
     return getUIFormDateTimeInput(FIELD_FROM_DATE).getCalendar();
   } 

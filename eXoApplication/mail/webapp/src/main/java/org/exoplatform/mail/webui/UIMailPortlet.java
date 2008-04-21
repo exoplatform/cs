@@ -17,7 +17,10 @@
 package org.exoplatform.mail.webui;
 
 
+import org.exoplatform.mail.service.MailService;
+import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -53,6 +56,13 @@ public class UIMailPortlet extends UIPortletApplication {
   
   public String getCurrentUser() {
     return Util.getPortalRequestContext().getRemoteUser() ;
+  }
+  
+  public long getPeriodCheckAuto() throws Exception {
+    MailService mailSrv = getApplicationComponent(MailService.class) ;
+    MailSetting mailSetting = mailSrv.getMailSetting(SessionProviderFactory.createSystemProvider(), getCurrentUser()) ;
+    Long period = mailSetting.getPeriodCheckAuto() * 60 * 1000 ;
+    return period ;
   }
   
   public void renderPopupMessages() throws Exception {
