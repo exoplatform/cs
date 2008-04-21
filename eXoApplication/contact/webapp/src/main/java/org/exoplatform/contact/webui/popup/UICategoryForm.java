@@ -18,8 +18,6 @@ package org.exoplatform.contact.webui.popup;
 
 import java.util.List;
 
-import javax.jcr.PathNotFoundException;
-
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
@@ -118,10 +116,21 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
           return ; 
         }
       }    
+      ContactService contactService = ContactUtils.getContactService() ;
+      String username = ContactUtils.getCurrentUser() ;
+      
       ContactGroup group = new ContactGroup() ;
       if (!uiCategoryForm.isNew_) {
-        ContactGroup oldGroup = ContactUtils.getContactService().getGroup(
-            SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(),uiCategoryForm.groupId_) ;
+        ContactGroup oldGroup = contactService.getGroup(
+            SessionProviderFactory.createSessionProvider(), username,uiCategoryForm.groupId_) ;
+        if (oldGroup == null)
+          oldGroup = contactService.getSharedGroup(username, uiCategoryForm.groupId_) ;
+        if (oldGroup == null) {
+          uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.category-deleted", null,
+              ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ; 
+        }
         group.setEditPermissionGroups(oldGroup.getEditPermissionGroups()) ;
         group.setEditPermissionUsers(oldGroup.getEditPermissionUsers()) ;
         group.setViewPermissionGroups(oldGroup.getViewPermissionGroups()) ;
@@ -130,15 +139,8 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
       }
       group.setName(groupName) ;
       group.setDescription(uiCategoryForm.getUIFormTextAreaInput(FIELD_DESCRIPTION_INPUT).getValue()) ;
-      try {
-        ContactUtils.getContactService().saveGroup(
-            SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), group, uiCategoryForm.isNew_) ;
-      } catch (PathNotFoundException e) {
-        uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.category-deleted", null,
-            ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ; 
-      } 
+      contactService.saveGroup(
+          SessionProviderFactory.createSessionProvider(), username, group, uiCategoryForm.isNew_) ;
       UIPopupContainer popupContainer = uiCategoryForm.getAncestorOfType(UIPopupContainer.class) ;
       if (popupContainer != null) {
         UICategorySelect uiCategorySelect = popupContainer.findFirstComponentOfType(UICategorySelect.class);

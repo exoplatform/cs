@@ -522,17 +522,14 @@ public class JCRDataStorage {
     }
     
     if (groupNode == null && !isNew) throw new PathNotFoundException() ;
-    if (groupNode != null) {
-      groupNode.setProperty("exo:name", group.getName());
-      groupNode.setProperty("exo:description", group.getDescription());      
-      groupNode.setProperty("exo:editPermissionUsers", group.getEditPermissionUsers()) ;
-      groupNode.setProperty("exo:viewPermissionUsers", group.getViewPermissionUsers()) ;
-      groupNode.setProperty("exo:editPermissionGroups", group.getEditPermissionGroups()) ;
-      groupNode.setProperty("exo:viewPermissionGroups", group.getViewPermissionGroups()) ;
-      
-      if(groupNode.isNew()) groupNode.getSession().save() ;
-      else groupNode.save() ;
-    }
+    groupNode.setProperty("exo:name", group.getName());
+    groupNode.setProperty("exo:description", group.getDescription());
+    groupNode.setProperty("exo:editPermissionUsers", group.getEditPermissionUsers()) ;
+    groupNode.setProperty("exo:viewPermissionUsers", group.getViewPermissionUsers()) ;
+    groupNode.setProperty("exo:editPermissionGroups", group.getEditPermissionGroups()) ;
+    groupNode.setProperty("exo:viewPermissionGroups", group.getViewPermissionGroups()) ;
+    if (isNew) groupNode.getSession().save() ;
+    else groupNode.save() ;
   }
   /*
   private Node getSharedAddressBookHome(SessionProvider sProvider) throws Exception {
