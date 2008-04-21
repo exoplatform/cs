@@ -53,7 +53,7 @@ import org.exoplatform.webui.event.EventListener;
       @EventConfig(listeners = UICalendarView.AddEventActionListener.class),  
       @EventConfig(listeners = UICalendarView.DeleteEventActionListener.class, confirm="UICalendarVIew.msg.confirm-delete"),
       @EventConfig(listeners = UICalendarView.AddCategoryActionListener.class),
-      @EventConfig(listeners = UICalendarView.ChangeCategoryActionListener.class), 
+      //@EventConfig(listeners = UICalendarView.ChangeCategoryActionListener.class), 
       @EventConfig(listeners = UICalendarView.ViewActionListener.class),
       @EventConfig(listeners = UICalendarView.EditActionListener.class), 
       @EventConfig(listeners = UICalendarView.DeleteActionListener.class, confirm="UICalendarVIew.msg.confirm-delete"),

@@ -16,8 +16,6 @@
  **/
 package org.exoplatform.calendar.webui;
 
-import java.util.Calendar;
-
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
@@ -72,9 +70,7 @@ public class UICalendarViewContainer extends UIContainer  {
         UIWeekView uiView = getChild(UIWeekView.class) ;
         if(uiView == null) uiView =  addChild(UIWeekView.class, null, null) ;
         uiView.isShowCustomView_ = false ;
-        //uiView.calendar_.setFirstDayOfWeek(Integer.parseInt(calendarSetting.getWeekStartOn())) ;
         if(getRenderedChild() != null) uiView.setCurrentCalendar(((CalendarView)getRenderedChild()).getCurrentCalendar()) ;
-        /*uiView.calendarSetting_.setWeekStartOn(calendarSetting.getWeekStartOn()) ;*/
         setRenderedChild(viewType) ;
       } else
         if(MONTH_VIEW.equals(viewType)) {
@@ -111,13 +107,9 @@ public class UICalendarViewContainer extends UIContainer  {
                 if(uiView == null) uiView =  addChild(UIWeekView.class, null, null) ;
                 uiView.isShowCustomView_ = true ;
                 if(getRenderedChild() != null) uiView.setCurrentCalendar(((CalendarView)getRenderedChild()).getCurrentCalendar()) ;
-               /* System.out.println("Working view"+Calendar.SUNDAY);
-                uiView.calendarSetting_.setWeekStartOn(String.valueOf(Calendar.SUNDAY)) ;*/
-                //uiView.calendar_.setFirstDayOfWeek(Calendar.SUNDAY) ;
                 setRenderedChild(WEEK_VIEW) ;
               }
     refresh() ;
-    //((CalendarView)getRenderedChild()).setLastUpdatedEventId(null) ;
   }
   public void refresh() throws Exception {
     for(UIComponent comp : getChildren()) {

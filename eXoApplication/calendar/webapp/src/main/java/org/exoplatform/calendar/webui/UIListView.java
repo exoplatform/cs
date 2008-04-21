@@ -47,7 +47,7 @@ import org.exoplatform.webui.form.UIFormSelectBox;
     events = {
       @EventConfig(listeners = UICalendarView.AddEventActionListener.class),      
       @EventConfig(listeners = UICalendarView.DeleteEventActionListener.class, confirm="UICalendarVIew.msg.confirm-delete"),
-      @EventConfig(listeners = UICalendarView.ChangeCategoryActionListener.class), 
+      //@EventConfig(listeners = UICalendarView.ChangeCategoryActionListener.class), 
       @EventConfig(listeners = UICalendarView.AddCategoryActionListener.class), 
       @EventConfig(listeners = UICalendarView.SwitchViewActionListener.class),
       @EventConfig(listeners = UICalendarView.GotoDateActionListener.class),
@@ -109,7 +109,7 @@ public class UIListView extends UICalendarView {
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     EventQuery eventQuery = new EventQuery() ;
-    if(categoryId_ != null && categoryId_.trim().length() > 0 && !categoryId_.toLowerCase().equals("null")) eventQuery.setCategoryId(new String[]{categoryId_}) ;
+    if(!CalendarUtils.isEmpty(categoryId_) && !categoryId_.toLowerCase().equals("null")) eventQuery.setCategoryId(new String[]{categoryId_}) ;
     java.util.Calendar fromcalendar = getBeginDay(new GregorianCalendar(getCurrentYear(),  getCurrentMonth(),  getCurrentDay())) ;
     eventQuery.setFromDate(fromcalendar) ;
     java.util.Calendar tocalendar = getEndDay(new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getCurrentDay())) ;
@@ -219,6 +219,7 @@ public class UIListView extends UICalendarView {
   }
   public void setCategoryId(String catetoryId) {
     categoryId_  = catetoryId ;
+    setSelectedCategory(catetoryId) ;
   }
   public String getSelectedCategory() {
     return categoryId_ ;
@@ -252,7 +253,7 @@ public class UIListView extends UICalendarView {
       uiListView.refresh() ;
       UIMiniCalendar uiMiniCalendar = uiListView.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
       uiMiniCalendar.setCategoryId(categoryId) ;
-      uiListView.getUIFormSelectBox(EVENT_CATEGORIES).setValue(categoryId) ;
+     //uiListView.getUIFormSelectBox(EVENT_CATEGORIES).setValue(categoryId) ;
       UIPreview uiPreview = uiListView.getAncestorOfType(UIListContainer.class).getChild(UIPreview.class) ;
       if(uiListView.getEvents().length >0) {
         uiPreview.setEvent(uiListView.getEvents()[0]) ;

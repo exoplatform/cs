@@ -60,6 +60,7 @@ public class UIYearView extends UICalendarView {
   
   private final static String VALUE = "value".intern() ; 
   private String categoryId_ = null ;
+  
   public UIYearView() throws Exception {
     super() ;
   }
@@ -70,7 +71,7 @@ public class UIYearView extends UICalendarView {
   protected void yearBack(int years) {
     calendar_.add(Calendar.YEAR, years) ;
   }
-  private Map<Integer, String> getValueMap() { return yearData_ ; }
+  protected Map<Integer, String> getValueMap() { return yearData_ ; }
   
   public void refresh() throws Exception { 
     System.out.println("\n\n>>>>>>>>>> YEAR VIEW") ;
@@ -83,13 +84,14 @@ public class UIYearView extends UICalendarView {
     CalendarService calendarService = getApplicationComponent(CalendarService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     EventQuery eventQuery = new EventQuery() ;
-    if(categoryId_ != null && categoryId_.trim().length() > 0 && !categoryId_.toLowerCase().equals("null")) {
+    if(!CalendarUtils.isEmpty(categoryId_) && !categoryId_.toLowerCase().equals("null")) {
       eventQuery.setCategoryId(new String[]{categoryId_}) ;
     }
     eventQuery.setFromDate(beginYear) ;
     eventQuery.setToDate(endYear) ;
     yearData_ = calendarService.searchHightLightEvent(getSession(), username, eventQuery, getPublicCalendars());
     UIFormSelectBox uiCategory = getUIFormSelectBox(EVENT_CATEGORIES) ;
+    uiCategory.setValue(categoryId_) ;
     uiCategory.setOnChange("Onchange") ;
   }
 
@@ -98,16 +100,18 @@ public class UIYearView extends UICalendarView {
     // TODO Auto-generated method stub
     return null;
   }
+  public String getSelectedCategory() {
+    return categoryId_ ;
+  }
   public void setCategoryId(String categoryId) {
     categoryId_ = categoryId ;
-    UIFormSelectBox uiCategory = getUIFormSelectBox(EVENT_CATEGORIES) ;
-    uiCategory.setValue(categoryId) ;
+    setSelectedCategory(categoryId) ;
   }
 
   static  public class OnchangeActionListener extends EventListener<UIYearView> {
     public void execute(Event<UIYearView> event) throws Exception {
       UIYearView uiYearView = event.getSource() ;
-      String categoryId = uiYearView.getSelectedCategory() ;
+      String categoryId = uiYearView.getUIFormSelectBox(EVENT_CATEGORIES).getValue() ;
       uiYearView.setCategoryId(categoryId) ;
       UIMiniCalendar uiMiniCalendar = uiYearView.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
       uiMiniCalendar.setCategoryId(categoryId) ;

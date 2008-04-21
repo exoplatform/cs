@@ -264,13 +264,16 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   protected String getSelectedCategory() {
     return getUIFormSelectBox(EVENT_CATEGORIES).getValue() ;
   }
+  public void setSelectedCategory(String id) {
+    getUIFormSelectBox(EVENT_CATEGORIES).setValue(id) ;
+   }
+  
   protected String[] getMonthsName() { 
     return monthsMap_.values().toArray(new String[]{})  ;
   }
   protected String[] getDaysName() { 
     return daysMap_.values().toArray(new String[]{})  ;
   }
-
   protected Calendar getDateByValue(int year, int month, int day, int type, int value) {
     Calendar cl = new GregorianCalendar(year, month, day) ;
     switch (type){
@@ -311,7 +314,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     }
     getUIFormSelectBox(EVENT_CATEGORIES).setOptions(options) ;
     getUIFormSelectBox(EVENT_CATEGORIES).setValue(null) ;
-    if (this instanceof UIYearView) ((UIYearView) this).setCategoryId(null) ;
   }
 
   public List<CalendarEvent> getList() throws Exception {
@@ -647,7 +649,8 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       UICalendarView listView = event.getSource() ;
       UICalendarPortlet calendarPortlet = listView.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = calendarPortlet.getChild(UIPopupAction.class) ;
-      popupAction.activate(UIEventCategoryManager.class, 470) ;
+      UIEventCategoryManager uiCalendarViewMan = popupAction.activate(UIEventCategoryManager.class, 470) ;
+      uiCalendarViewMan.categoryId_ = listView.getSelectedCategory() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
