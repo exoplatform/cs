@@ -135,7 +135,7 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       if (sharedContacts.size() > 0 ) {
         contactService.pasteContacts(sessionProvider, username, addressBookId, type, sharedContacts) ;
         for (Contact contact : sharedContacts) {
-            contactService.removeUserShareContact(sessionProvider, contact.getPath(), contact.getId(), username) ;  
+            contactService.removeUserShareContact(SessionProviderFactory.createSystemProvider(), contact.getPath(), contact.getId(), username) ;  
         }
       }
       if (contacts.size() > 0)

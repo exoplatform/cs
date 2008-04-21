@@ -78,10 +78,6 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      
-      System.out.println("\n\n size : " + uploadResource.getUploadedSize() + "\n\n");
-      
-      
       String mimeType = uploadResource.getMimeType() ;
       String fileName = uploadResource.getFileName() ;
       boolean isImage = false ;
