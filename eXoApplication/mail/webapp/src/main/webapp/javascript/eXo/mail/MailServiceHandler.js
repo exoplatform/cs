@@ -15,6 +15,7 @@ function MailServiceHandler() {
   this.STOP_CHECK_MAIL_ACTION = 'stop check mail action';
   this.MAX_TRY = 3;
   this.tryCount = 0;
+  this.isUpdateUI_ = true ;
 }
 
 MailServiceHandler.prototype = new eXo.cs.webservice.core.WebserviceHandler();
@@ -25,7 +26,7 @@ MailServiceHandler.prototype.initService = function(uiId, userName, accountId, c
   this.accountId = accountId;
   this.userName = userName;
   if (this.checkMailInterval &&
-      !isNaN(this.checkMailInterval)) {
+      !isNaN(this.checkMailInterval) && (parseInt(this.checkMailInterval) > 0) ) {
     this.checkMailInterval = parseInt(this.checkMailInterval);
     window.setInterval(eXo.mail.MailServiceHandler.checkMailWrapper, this.checkMailInterval);
   }
@@ -87,11 +88,12 @@ MailServiceHandler.prototype.checkMailWrapper = function() {
   eXo.mail.MailServiceHandler.checkMail();
 };
 
-MailServiceHandler.prototype.checkMail = function() {
+MailServiceHandler.prototype.checkMail = function(isUpdateUI) {
   if (!this.accountId ||
       !this.userName) {
     return;
   }
+  this.isUpdateUI_ = isUpdateUI ;
   this.activeAction = this.CHECK_MAIL_ACTION;
   this.tryCount = 0;
   eXo.core.Browser.setCookie('cs.mail.checkingmail' + this.accountId, 'true');
@@ -119,7 +121,9 @@ MailServiceHandler.prototype.updateUI = function(status) {
   }
   var statusTextNode = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'StatusText');
   if (this.checkMailInfobarNode.style.display == 'none') {
-    this.checkMailInfobarNode.style.display = 'block';
+    if (this.isUpdateUI_) {
+    	this.checkMailInfobarNode.style.display = 'block';
+    } 
   }
   if (statusTxt != '') {
     statusTextNode.innerHTML = statusTxt;

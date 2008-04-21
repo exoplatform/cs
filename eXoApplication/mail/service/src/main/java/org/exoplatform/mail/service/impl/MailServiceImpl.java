@@ -503,12 +503,14 @@ public class MailServiceImpl implements MailService{
             checkingLog_.get(key).setStatusMsg("Fetching message " + (i + 1) + "/" + totalNew) ;
             t1 = System.currentTimeMillis();
             msg = messages[i] ;   
-            msg.setFlag(Flags.Flag.SEEN, true);
-            if (isImap) msg.setFlag(Flags.Flag.FLAGGED, true);
-            if (deleteOnServer) msg.setFlag(Flags.Flag.DELETED, true);
             try {
-              storage_.saveMessage(sProvider, username, account.getId(), msg, folderId, spamFilter) ;
-              account.setLastCheckedDate(MimeMessageParser.getReceivedDate(msg).getTime()) ;
+              boolean saved = storage_.saveMessage(sProvider, username, account.getId(), msg, folderId, spamFilter) ;
+              if (saved) {
+                msg.setFlag(Flags.Flag.SEEN, true);
+                if (isImap) msg.setFlag(Flags.Flag.FLAGGED, true);
+                if (deleteOnServer) msg.setFlag(Flags.Flag.DELETED, true);
+                account.setLastCheckedDate(MimeMessageParser.getReceivedDate(msg).getTime()) ; 
+              }
             } catch(Exception e) {
               checkingLog_.get(key).setStatusMsg("An error occurs while fetching messsge " + i) ;
               e.printStackTrace() ;
