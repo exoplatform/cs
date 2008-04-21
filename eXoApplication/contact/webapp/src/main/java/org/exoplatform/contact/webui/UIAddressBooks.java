@@ -439,9 +439,8 @@ public class UIAddressBooks extends UIComponent {
       if (uiAddressBook.sharedAddressBookMap_.containsKey(groupId)) {
         //contactService.removeSharedAddressBook(SessionProviderFactory.createSystemProvider(), username, groupId) ;
 
-        contactService.removeUserShareAddressBook(sessionProvider, uiAddressBook.sharedAddressBookMap_
-            .get(groupId).getSharedUserId(), groupId, username) ;
-        
+        contactService.removeUserShareAddressBook(SessionProviderFactory.createSystemProvider()
+            , uiAddressBook.sharedAddressBookMap_.get(groupId).getSharedUserId(), groupId, username) ;
       } else {
         contactService.removeGroup(sessionProvider, username, groupId);
       }
