@@ -4,6 +4,7 @@ import org.exoplatform.calendar.webui.UIMonthView;
 def rcontext = _ctx.getRequestContext() ;
 rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.getFilterSelect("'+uiform.id+'") ;') ;
 uicomponent.update() ;
+uicomponent.setSelectedCategory(uicomponent.getSelectedCategory()) ;
 %>
 <div class="UIHeaderBar ListBar">
 		<a href="javascript: void(0) ;" onclick="eXo.calendar.UICalendarPortlet.runAction(this) ;" actionLink="<%=uicomponent.event("AddEvent",uicomponent.TYPE_EVENT)%>" class="ControlButton">

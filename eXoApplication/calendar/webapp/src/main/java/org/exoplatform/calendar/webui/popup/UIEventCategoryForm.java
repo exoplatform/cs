@@ -21,7 +21,9 @@ import javax.jcr.RepositoryException;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventCategory;
+import org.exoplatform.calendar.webui.CalendarView;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
+import org.exoplatform.calendar.webui.UICalendarView;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -126,7 +128,9 @@ public class UIEventCategoryForm extends UIForm {
         UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
         uiViewContainer.refresh() ;
         uiViewContainer.updateCategory() ;
-        
+        if(uiViewContainer.getRenderedChild() instanceof CalendarView) {
+          ((UICalendarView)uiViewContainer.getRenderedChild()).setSelectedCategory(uiManager.categoryId_) ; 
+        }
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;

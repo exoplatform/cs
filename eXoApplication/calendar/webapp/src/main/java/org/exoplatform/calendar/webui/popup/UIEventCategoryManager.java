@@ -54,6 +54,7 @@ import org.exoplatform.webui.event.EventListener;
 public class UIEventCategoryManager extends UIContainer implements UIPopupComponent {
   public static String[] BEAN_FIELD = {"name"};
   private static String[] ACTION = {"Edit", "Delete"} ;
+  public String categoryId_ ;
   public UIEventCategoryManager() throws Exception {
     this.setName("UIEventCategoryManager") ;
     UIGrid categoryList = addChild(UIGrid.class, null , "UIEventCategoryList") ;
