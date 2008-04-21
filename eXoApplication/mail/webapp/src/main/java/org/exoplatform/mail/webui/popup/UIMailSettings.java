@@ -75,7 +75,7 @@ public class UIMailSettings extends UIForm implements UIPopupComponent {
     
     List<SelectItemOption<String>> periodCheckAuto = new ArrayList<SelectItemOption<String>>();
     periodCheckAuto.add(new SelectItemOption<String>("Never", String.valueOf(MailSetting.NEVER_CHECK_AUTO)));
-    periodCheckAuto.add(new SelectItemOption<String>("5 minutes", String.valueOf(MailSetting.TEN_MINS)));
+    periodCheckAuto.add(new SelectItemOption<String>("5 minutes", String.valueOf(MailSetting.FIVE_MINS)));
     periodCheckAuto.add(new SelectItemOption<String>("10 minutes", String.valueOf(MailSetting.TEN_MINS)));
     periodCheckAuto.add(new SelectItemOption<String>("20 minutes", String.valueOf(MailSetting.TWENTY_MINS)));
     periodCheckAuto.add(new SelectItemOption<String>("30 minutes", String.valueOf(MailSetting.THIRTY_MINS)));
