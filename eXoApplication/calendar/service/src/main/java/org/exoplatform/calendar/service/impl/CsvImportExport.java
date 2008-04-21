@@ -109,6 +109,8 @@ public class CsvImportExport implements CalendarImportExport {
     int lineCount = 0 ;
     List<CalendarEvent> eventList = new ArrayList<CalendarEvent>() ;
     while ((line = in.readLine()) != null) {
+      String tempLine = line ;
+      if(!line.endsWith("\"")) line = tempLine + in.readLine() ;
       if(lineCount > 0) {
         List<String> l = parse(line);
         if(!Utils.isEmpty(l.get(dataMap.get(EV_SUMMARY)))) {
@@ -207,7 +209,7 @@ public class CsvImportExport implements CalendarImportExport {
               eventObj.setDescription(l.get(dataMap.get(EV_DESCRIPTION)))  ;
             }
             if(!Utils.isEmpty(l.get(dataMap.get(EV_STATUS)))) {
-              eventObj.setRepeatType(l.get(dataMap.get(EV_STATUS)))  ;
+              eventObj.setEventState(l.get(dataMap.get(EV_STATUS)))  ;
             }
             if(!Utils.isEmpty(l.get(dataMap.get(EV_PRIORITY)))) {
               eventObj.setPriority(l.get(dataMap.get(EV_PRIORITY)))  ;
