@@ -644,15 +644,17 @@
 
 .highPriorityIcon {
 	width: 16px;
-	height: 16px;
+	height: 12px;
 }
+
 .normalPriorityIcon {
 	width: 16px;
-	height: 16px;
+	height: 12px;
 }
+
 .lowPriorityIcon{
 	width: 16px;
-	height: 16px;
+	height: 12px;
 }
 
 .UIListContainer .Result {

@@ -125,15 +125,15 @@
 }
 
 .UICalendarPortlet .highPriorityIcon {
-	background: url('icons/CalendarIcons .gif') no-repeat left -806px;
+	background: url('icons/CalendarIcons.gif') no-repeat left -808px;
 }
 
 .UICalendarPortlet .normalPriorityIcon {
-	background: url('icons/CalendarIcons.gif') no-repeat left -1014px;
+	background: url('icons/CalendarIcons.gif') no-repeat left -1016px;
 }
 
 .UICalendarPortlet .lowPriorityIcon{
-	background: url('icons/CalendarIcons.gif') no-repeat left -936px;
+	background: url('icons/CalendarIcons.gif') no-repeat left -938px;
 }
 
 .UICalendarPortlet .LayoutSwitcherIcon {
