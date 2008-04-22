@@ -1643,3 +1643,63 @@ UICalendarPortlet.prototype.showHideWorkingSetting = function() {
 eXo.calendar.UICalendarPortlet = new UICalendarPortlet() ;
 eXo.calendar.UIResizeEvent = new UIResizeEvent() ;
 eXo.calendar.UISelection = new UISelection() ;
+
+
+UIDesktop.prototype.showHideWindow = function(uiWindow, clickedElement) {
+  if(typeof(uiWindow) == "string") this.object = document.getElementById(uiWindow) ;
+  else this.object = uiWindow ;
+  this.object.maxIndex = eXo.desktop.UIDesktop.resetZIndex(this.object) ;
+  var numberOfFrame = 10 ;
+  if(this.object.style.display == "block") {
+    eXo.animation.ImplodeExplode.implode(this.object, clickedElement, "UIPageDesktop", numberOfFrame, false) ;
+    eXo.desktop.UIWindow.saveWindowProperties(this.object, "HIDE");
+    this.object.isShowed = false ;
+  } else {
+		this.object.isShowed = true ;
+    var uiDockBar = document.getElementById("UIDockBar") ;
+		var uiPageDesktop	= document.getElementById("UIPageDesktop") ;
+    eXo.desktop.UIDockbar.resetDesktopShowedStatus(uiPageDesktop, uiDockBar) ;
+    eXo.animation.ImplodeExplode.explode(this.object, clickedElement, "UIPageDesktop", numberOfFrame, false) ;
+    eXo.desktop.UIWindow.saveWindowProperties(this.object, "SHOW");
+
+  	if(eXo.core.Browser.isIE6()) {
+  		this.object.style.filter =  "" ;
+  	}
+		//fix display scroll in first time.
+		var blockResizes = eXo.core.DOMUtil.findDescendantsByClass(this.object, "div", "UIResizableBlock");
+		if (blockResizes.length > 1) blockResizes[0].style.overflow = "hidden" ;
+		eXo.calendar.UICalendarPortlet.delay = window.setTimeout("eXo.calendar.UICalendarPortlet.fixFirstLoad() ;", 1000) ;
+  }
+};
+
+UICalendarPortlet.prototype.fixFirstLoad = function() {
+	if(this.firstRun) return ;
+	if(document.getElementById("UIPageDesktop")) {
+			if(document.getElementById("UIWeekView")) {
+				eXo.calendar.UICalendarMan.initWeek() ;
+				eXo.calendar.UIWeekView.setSize() ;
+				this.firstRun = true ;
+			}
+		}		
+	if(this.delay) {
+		window.clearTimeout(this.delay) ;
+	}
+} ;
+
+UIWindow.prototype.endResizeWindowEvt = function(evt) {
+	// Re initializes the scroll tabs managers on the page
+	eXo.portal.UIPortalControl.initAllManagers() ;
+	eXo.desktop.UIWindow.portletWindow = null ;
+	eXo.desktop.UIWindow.resizableObject = null ;
+	this.onmousemove = null ;
+	this.onmouseup = null ;
+	if((eXo.core.Browser.browserType != "ie")) {
+		if(document.getElementById("UIWeekView")) {
+			eXo.calendar.UICalendarMan.initWeek() ;
+			eXo.calendar.UIWeekView.setSize() ;
+		}
+		if(document.getElementById("UIMonthView")) {
+			eXo.calendar.UICalendarMan.initMonth() ;
+		}
+	}
+} ; 
