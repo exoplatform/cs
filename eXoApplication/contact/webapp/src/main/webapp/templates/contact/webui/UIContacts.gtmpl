@@ -1,4 +1,5 @@
  <%
+ 	import org.exoplatform.contact.service.impl.JCRDataStorage;
 	import org.exoplatform.contact.service.ContactGroup;
 	import org.exoplatform.contact.service.Tag;
 	import org.exoplatform.contact.service.ContactService;
@@ -212,7 +213,7 @@
 	  	 	    </thead>
 	  	 	    <% if(isDisplaySearchResult) { %>
 	  	 	    <tbody>
-	  	 	    <% 
+	  	 	    <%   
 	  	 	    		Map tagMap = uicomponent.getTagMap() ;
 	  	 	    		Map privateGroupMap = uicomponent.getPrivateGroupMap() ;
 	  	 	    		Map sharedGroupMap = uicomponent.getSharedGroupMap() ;
@@ -231,6 +232,8 @@
 		  	 	    			}	
 								    groupName = buffer.toString() ;
 								  } else if (contactType.equals("0")) {
+								  
+								
 		  	 	    			groupName = privateGroupMap.get(addressBooks[0]) ;								  
 								  	if (groupName == null) continue ;								  
 								  } else if (contactType.equals("1")){
@@ -281,7 +284,7 @@
 									if (selectedContact != null && contact.getId().equals(selectedContact)) cssClass = "Selected" ;
 	  	 	    %>
 								
-  						<tr class="UIContactList $cssClass" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" canDeleteShared="<%=uicomponent.canDeleteShared(contact.getAddressBook()[0])%>"> 
+  						<tr class="UIContactList $cssClass" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" canDeleteShared="<%=uicomponent.canDeleteShared(contact.getAddressBook()[0])%>" isOwner="<%=contact.isOwner()%>"> 
   						  <td class="text" style="padding-left: 7px;">
   						  	<%
   						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
@@ -294,7 +297,7 @@
 								
 									<% 
 										icon = "OfflineIcon"
-										if (contact.isOwner()&& contact.getOwnerId().equals(ContactUtils.getCurrentUser())) icon = "OwnerIcon" ; 	
+										if (contact.getContactType().equals(JCRDataStorage.PRIVATE) && contact.isOwner()&& contact.getOwnerId().equals(ContactUtils.getCurrentUser())) icon = "OwnerIcon" ; 	
 								  %>
 									<div class="State $icon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.available")%>">
 										<a href="$actionLink">
@@ -362,7 +365,7 @@
 										if (contact.getId().equals(uicomponent.getSelectedContact())) cssClass = "Selected" ;								
 						%>
 							
-  						<tr class="UIContactList $cssClass" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" canDeleteShared="<%=uicomponent.canDeleteShared(contact.getAddressBook()[0])%>">
+  						<tr class="UIContactList $cssClass" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" canDeleteShared="<%=uicomponent.canDeleteShared(contact.getAddressBook()[0])%>" isOwner="<%=contact.isOwner()%>">
   						  <td class="text" style="padding-left: 7px;">
   						  	<%
   						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
@@ -374,7 +377,8 @@
 								<td class="text">
 									<% 
 										icon = "OfflineIcon"
-										if (contact.isOwner()&& contact.getOwnerId().equals(ContactUtils.getCurrentUser())) icon = "OwnerIcon" ; 	
+										if (contact.getContactType().equals(JCRDataStorage.PRIVATE) && contact.isOwner()&& contact.getOwnerId().equals(ContactUtils.getCurrentUser()))
+										  icon = "OwnerIcon" ; 	
 								  %>
 								
 									<div class="State $icon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.available")%>">
@@ -504,7 +508,7 @@
 		
 				%>	
 		  <div class="LeftVCardsContent">
-		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" canDeleteShared="<%=uicomponent.canDeleteShared(contact.getAddressBook()[0])%>">
+		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" canDeleteShared="<%=uicomponent.canDeleteShared(contact.getAddressBook()[0])%>" isOwner="<%=contact.isOwner()%>">
 			  	<div class="TitleVCards" >
 			  		<% 
 										icon = "OfflineIcon"
@@ -647,7 +651,7 @@
 				}
 			%>
 			<div class="RightVCardsContent">
-		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" canDeleteShared="<%=uicomponent.canDeleteShared(contact.getAddressBook()[0])%>">
+		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" canDeleteShared="<%=uicomponent.canDeleteShared(contact.getAddressBook()[0])%>" isOwner="<%=contact.isOwner()%>">
 			  	<div class="TitleVCards" >
 			  	<% 
 										icon = "OfflineIcon"

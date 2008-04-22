@@ -418,7 +418,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         }
         for (String id : contactIds) {
           Contact contact = uiContacts.contactMap.get(id) ;         
-          if (contact.getContactType().equals(JCRDataStorage.PUBLIC) || (contact.getContactType()
+          if (contact.isOwner() || contact.getContactType().equals(JCRDataStorage.PUBLIC) || (contact.getContactType()
               .equals(JCRDataStorage.SHARED)&& !uiContacts.canDeleteShared(contact.getAddressBook()[0]))) {
             uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-move", null
                 , ApplicationMessage.WARNING)) ;
@@ -426,8 +426,9 @@ public class UIContacts extends UIForm implements UIPopupComponent {
             return ;
           }
           movedContacts.put(id, contact) ;
-        } 
+        }
       }  
+      
       UIContactPortlet uiContactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
       UIMoveContactsForm uiMoveForm = popupAction.activate(UIMoveContactsForm.class, 540) ;
@@ -475,20 +476,20 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       List<Contact> sharedContacts = new ArrayList<Contact>();
       for(String contactId : contactIds) {
       	Contact contact = uiContacts.contactMap.get(contactId) ;
-        if (contact.getContactType().equals(JCRDataStorage.SHARED) && !uiContacts.canDeleteShared(contact.getAddressBook()[0])) {
+        if (contact.getContactType().equals(JCRDataStorage.PUBLIC) || (contact.isOwner())){
+          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-move", null
+              , ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+          return ;
+        } else if (contact.getContactType().equals(JCRDataStorage.SHARED) && !uiContacts.canDeleteShared(contact.getAddressBook()[0])) {
           uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-move", null
               , ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
           return ;          
         }
-        if (contact.getContactType().equals(JCRDataStorage.PUBLIC)){
-          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-move", null
-              , ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
-          return ;
-        }
+        
       	if(contact != null) {
       		contact.setAddressBook(new String[] { addressBookId }) ;
       		if (contact.getContactType().equals(JCRDataStorage.SHARED)) sharedContacts.add(contact) ;
