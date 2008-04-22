@@ -90,6 +90,7 @@ public class UIAccountSetting extends UIFormTabPane {
   public static final String FIELD_LEAVE_ON_SERVER = "leaveMailOnServer";
 //  public static final String FIELD_SKIP_OVER_SIZE = "skipMessageOverMaxSize";
   public static final String FIELD_MARK_AS_DELETED = "markItAsDeleted";
+  public static final String FIELD_IS_SAVE_PASSWORD = "isSavePassword" ;
   private String accountId_ = null;
   UIFormCheckBoxInput<Boolean> leaveOnServer_ ;
 //  UIFormStringInput skipOverSize_;
@@ -109,6 +110,7 @@ public class UIAccountSetting extends UIFormTabPane {
     identityInputSet.addUIFormInput(new UIFormStringInput(FIELD_EMAIL_ADDRESS, null, null));
     identityInputSet.addUIFormInput(new UIFormStringInput(FIELD_REPLYTO_ADDRESS, null, null));
     identityInputSet.addUIFormInput(new UIFormTextAreaInput(FIELD_MAIL_SIGNATURE, null, null));
+    identityInputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_IS_SAVE_PASSWORD, null, null));
     addUIFormInput(identityInputSet); 
     
     UIFormInputWithActions serverInputSet = new UIFormInputWithActions(TAB_SERVER_SETTINGS);
@@ -207,6 +209,11 @@ public class UIAccountSetting extends UIFormTabPane {
     return uiInput.getUIStringInput(FIELD_MAIL_SIGNATURE).getValue();
   }
   
+  public boolean isSavePassword() {
+    UIFormInputWithActions uiInput = getChildById(TAB_IDENTITY_SETTINGS);
+    return uiInput.getUIFormCheckBoxInput(FIELD_IS_SAVE_PASSWORD).isChecked();
+  }
+  
   public String getFieldReplyAddress() {
     UIFormInputWithActions uiInput = getChildById(TAB_IDENTITY_SETTINGS);
     return uiInput.getUIStringInput(FIELD_REPLYTO_ADDRESS).getValue();
@@ -255,6 +262,7 @@ public class UIAccountSetting extends UIFormTabPane {
     uiIdentityInput.getUIStringInput(FIELD_EMAIL_ADDRESS).setValue(account.getEmailAddress()) ;
     uiIdentityInput.getUIStringInput(FIELD_REPLYTO_ADDRESS).setValue(account.getEmailReplyAddress()) ;
     uiIdentityInput.getUIStringInput(FIELD_MAIL_SIGNATURE).setValue(account.getSignature()) ;
+    uiIdentityInput.getUIFormCheckBoxInput(FIELD_IS_SAVE_PASSWORD).setChecked(account.isSavePassword()) ;
     
     UIFormInputWithActions uiServerInput = getChildById(TAB_SERVER_SETTINGS) ;
     uiServerInput.getUIStringInput(FIELD_INCOMING_SERVER).setValue(account.getIncomingHost()) ;
@@ -399,13 +407,15 @@ public class UIAccountSetting extends UIFormTabPane {
       acc.setSignature(uiSetting.getFieldMailSignature()) ;
       acc.setCheckedAuto(uiSetting.getFieldCheckMailAuto()) ;
       acc.setIncomingUser(userName) ; 
-      acc.setIncomingPassword(uiSetting.getFieldIncomingPassword()) ; 
+      if (uiSetting.isSavePassword()) acc.setIncomingPassword(uiSetting.getFieldIncomingPassword()) ;
+      else acc.setIncomingPassword("") ;
       acc.setIncomingHost(uiSetting.getFieldIncomingServer()) ;
       acc.setIncomingPort(uiSetting.getFieldIncomingPort()) ;  
       acc.setIncomingSsl(uiSetting.getFieldIsSSL()) ;
       acc.setIncomingFolder(uiSetting.getFieldIncomingFolder()) ;
       acc.setOutgoingHost(uiSetting.getFieldOutgoingServer()) ;
       acc.setOutgoingPort(uiSetting.getFieldOutgoingPort()) ;
+      acc.setIsSavePassword(uiSetting.isSavePassword()) ;
       acc.setServerProperty(Utils.SVR_SMTP_USER, userName) ;
       if(uiSetting.getFieldProtocol().equals(Utils.POP3)){
         boolean leaveOnServer = uiSetting.getFieldLeaveOnServer() ;

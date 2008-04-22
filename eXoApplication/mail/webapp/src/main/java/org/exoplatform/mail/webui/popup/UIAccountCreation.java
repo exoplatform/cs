@@ -21,7 +21,6 @@ import java.util.Map;
 
 import javax.mail.AuthenticationFailedException;
 
-import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
@@ -29,7 +28,6 @@ import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.Selector;
 import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
-import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UINavigationContainer;
@@ -37,6 +35,7 @@ import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.WizardStep;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -255,7 +254,7 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       UIAccountWizardStep5 uiAccWs5 = uiAccCreation.getChildById(UIAccountCreation.INPUT_STEP5) ;
       String accname, description, displayName, email, replyMail, signature, protocol, popHost, 
       popPort, smtpHost, smtpPort, storeFolder, incomingUserName, incomingPassword ;
-      boolean isSSL ;
+      boolean isSSL, isSavePass ;
       accname = uiAccWs1.getAccName() ;
       description = uiAccWs1.getAccDescription() ;
       displayName = uiAccWs2.getOutgoingName() ;
@@ -271,6 +270,8 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       isSSL = uiAccWs3.getIsSSL() ;
       incomingUserName = uiAccWs4.getUserName() ;
       incomingPassword = uiAccWs4.getPassword() ;
+      isSavePass = uiAccWs4.getIsSavePass() ;
+      
       Account acc = new Account() ;
 
       if(!uiAccWs4.getIsSavePass()) incomingPassword = null ;
@@ -282,7 +283,8 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       acc.setEmailReplyAddress(replyMail) ;
       acc.setSignature(signature) ;
       acc.setIncomingUser(incomingUserName); 
-      acc.setIncomingPassword(incomingPassword);
+      if (isSavePass || uiAccWs5.isGetmail()) acc.setIncomingPassword(incomingPassword);
+      else acc.setIncomingPassword(incomingPassword);
       acc.setIncomingHost(popHost);
       acc.setIncomingPort(popPort);  
       acc.setProtocol(protocol);  
@@ -291,6 +293,7 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       acc.setServerProperty(Utils.SVR_SMTP_USER, incomingUserName);
       acc.setOutgoingHost(smtpHost);
       acc.setOutgoingPort(smtpPort);
+      acc.setIsSavePassword(isSavePass) ;
 
       UIApplication uiApp = uiAccCreation.getAncestorOfType(UIApplication.class) ;
       UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
@@ -315,15 +318,13 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       } 
       if(uiAccWs5.isGetmail()) {
         try {
-          MailService mailSvr = MailUtils.getMailService() ;
-          String username = uiPortlet.getCurrentUser() ;
           uiPortlet.findFirstComponentOfType(UIMessageList.class).init(acc.getId());
           UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class);
           uiSelectAccount.setSelectedValue(acc.getId());
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet); 
-          mailSvr.checkMail(username, acc.getId()) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UINavigationContainer.class)); 
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class)); 
+          WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+          context.getJavascriptManager().importJavascript("eXo.mail.MailServiceHandler","/mail/javascript/");
+          context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.checkMail(true) ;");
         } catch (AuthenticationFailedException afe) {
           uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.userName-password-incorrect", null, ApplicationMessage.ERROR)) ;
           uiAccCreation.viewStep(4) ;

@@ -30,6 +30,7 @@ public class CheckingInfo {
   public static final int REQUEST_STOP_STATUS = 202;
   public static final int EXECUTING_FILTER = 203;
   public static final int CONNECTION_FAILURE = 102 ;
+  public static final int RETRY_PASSWORD = 103 ;
   
   private int totalMsg_ = 0 ;
   private int fetching_ = 0  ;

@@ -132,6 +132,9 @@ public class JCRDataStorage{
       account.setCheckedAuto(accountNode.getProperty(Utils.EXO_CHECKMAILAUTO).getBoolean());
     } catch(Exception e) { }
     try {
+      account.setIsSavePassword(accountNode.getProperty(Utils.EXO_IS_SAVE_PASSWORD).getBoolean());
+    } catch(Exception e) { }
+    try {
       account.setEmptyTrashWhenExit(accountNode.getProperty(Utils.EXO_EMPTYTRASH).getBoolean());
     } catch(Exception e) { }
     try {
@@ -434,6 +437,7 @@ public class JCRDataStorage{
       newAccount.setProperty(Utils.EXO_SIGNATURE, account.getSignature());
       newAccount.setProperty(Utils.EXO_DESCRIPTION, account.getDescription());
       newAccount.setProperty(Utils.EXO_CHECKMAILAUTO, account.checkedAuto());
+      newAccount.setProperty(Utils.EXO_IS_SAVE_PASSWORD, account.isSavePassword());
       newAccount.setProperty(Utils.EXO_EMPTYTRASH, account.isEmptyTrashWhenExit());
       newAccount.setProperty(Utils.EXO_PLACESIGNATURE, account.getPlaceSignature());
       if (account.getLastCheckedDate() != null)

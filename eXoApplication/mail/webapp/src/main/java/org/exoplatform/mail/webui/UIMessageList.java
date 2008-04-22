@@ -31,6 +31,7 @@ import org.exoplatform.mail.service.SpamFilter;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIAddContactForm;
+import org.exoplatform.mail.webui.popup.UIComfirmPassword;
 import org.exoplatform.mail.webui.popup.UIComposeForm;
 import org.exoplatform.mail.webui.popup.UIExportForm;
 import org.exoplatform.mail.webui.popup.UIImportForm;
@@ -97,7 +98,8 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
       @EventConfig(listeners = UIMessageList.ImportActionListener.class),
       @EventConfig(listeners = UIMessageList.ExportActionListener.class),
       @EventConfig(listeners = UIMessageList.SortActionListener.class),
-      @EventConfig(listeners = UIMessageList.RefreshActionListener.class)
+      @EventConfig(listeners = UIMessageList.RefreshActionListener.class),
+      @EventConfig(listeners = UIMessageList.ComfirmPasswordActionListener.class)
     }
 )
 
@@ -1076,7 +1078,7 @@ public class UIMessageList extends UIForm {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
     }
   }
-
+  
   static public class SortActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ;
@@ -1106,6 +1108,17 @@ public class UIMessageList extends UIForm {
         return;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
+    }
+  }
+  
+  static public class ComfirmPasswordActionListener extends EventListener<UIMessageList> {
+    public void execute(Event<UIMessageList> event) throws Exception {
+      UIMessageList uiMessageList = event.getSource() ;    
+      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);    
+      UIComfirmPassword uiComfirmPassword = uiMessageList.createUIComponent(UIComfirmPassword.class,null, null);
+      uiPopupAction.activate(uiComfirmPassword, 600, 0, true);             
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);   
     }
   }
 }

@@ -397,7 +397,6 @@ public class MailServiceImpl implements MailService{
 		JobSchedulerService schedulerService = 
 			(JobSchedulerService) container.getComponentInstanceOfType(JobSchedulerService.class);
 		schedulerService.addPeriodJob(info, periodInfo) ;
-		
   }
   
   public List<Message> checkNewMessage(SessionProvider sProvider, String username, String accountId) throws Exception {
@@ -435,8 +434,12 @@ public class MailServiceImpl implements MailService{
         try {
           store.connect();
         } catch(AuthenticationFailedException e) {
+          if (!account.isSavePassword()) {
+            account.setIncomingPassword("") ;          
+            updateAccount(sProvider, username, account) ;
+          }
           info.setStatusMsg("The username or password may be wrong. Connecting falied !");
-          info.setStatusCode(CheckingInfo.CONNECTION_FAILURE) ;
+          info.setStatusCode(CheckingInfo.RETRY_PASSWORD) ;
           return messageList ;
         } catch (MessagingException  e) {
           info.setStatusMsg("Connecting falied. Please check server configuration !");
@@ -521,7 +524,6 @@ public class MailServiceImpl implements MailService{
             t2 = System.currentTimeMillis();
             System.out.println(" [DEBUG] Message " + i + " saved : " + (t2-t1) + " ms");
           }
-          saveAccount(sProvider, username, account, false) ;
           
           Calendar cc = GregorianCalendar.getInstance();
           javax.mail.Message firstMsg = messages[0] ;
@@ -534,6 +536,9 @@ public class MailServiceImpl implements MailService{
           tt2 = System.currentTimeMillis();
           System.out.println(" ### Check mail finished total took: " + (tt2 - tt1) + " ms") ;
         }
+        
+        if (!account.isSavePassword()) account.setIncomingPassword("") ;          
+        updateAccount(sProvider, username, account) ;
         
         folder.close(true);      
         store.close();

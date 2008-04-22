@@ -134,20 +134,12 @@ public class MailWebservice implements ResourceContainer {
     }
     StringBuffer buffer = new StringBuffer();
     if (checkingInfo != null) {
-      if (checkingInfo.getStatusCode() == CheckingInfo.FINISHED_CHECKMAIL_STATUS) {
+      if (checkingInfo.getStatusCode() == CheckingInfo.FINISHED_CHECKMAIL_STATUS ||
+          checkingInfo.getStatusCode() == CheckingInfo.CONNECTION_FAILURE || 
+          checkingInfo.getStatusCode() == CheckingInfo.RETRY_PASSWORD) {
         buffer.append("<info>");
         buffer.append("  <checkingmail>");
-        buffer.append("    <status>" + CheckingInfo.FINISHED_CHECKMAIL_STATUS + "</status>");
-        buffer.append("    <statusmsg>" + checkingInfo.getStatusMsg() + "</statusmsg>");
-        buffer.append("  </checkingmail>");
-        buffer.append("</info>");
-        mailService.removeCheckingInfo(userName, accountId);
-        return Response.Builder.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
-      }
-      if (checkingInfo.getStatusCode() == CheckingInfo.CONNECTION_FAILURE) {
-        buffer.append("<info>");
-        buffer.append("  <checkingmail>");
-        buffer.append("    <status>" + CheckingInfo.CONNECTION_FAILURE + "</status>");
+        buffer.append("    <status>" + checkingInfo.getStatusCode() + "</status>");
         buffer.append("    <statusmsg>" + checkingInfo.getStatusMsg() + "</statusmsg>");
         buffer.append("  </checkingmail>");
         buffer.append("</info>");
