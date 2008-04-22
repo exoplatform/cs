@@ -84,6 +84,13 @@
   overflow: hidden;
   line-height: 17px;
 }
+.UICalendarPortlet .UICalendars .SharedCalendarIcon {
+  padding-left: 19px;
+  float: left;
+  width: 90px;
+  overflow: hidden;
+  line-height: 17px;
+}
 
 .UICalendarPortlet .UICalendars .UIForm input.checkbox {
   margin: 2px 0px 0px 2px;

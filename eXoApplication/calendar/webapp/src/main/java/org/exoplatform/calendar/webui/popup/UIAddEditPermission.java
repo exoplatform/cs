@@ -23,6 +23,8 @@ import org.apache.poi.hssf.record.SCLRecord;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.webui.UICalendarPortlet;
+import org.exoplatform.calendar.webui.UICalendars;
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -137,6 +139,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
       //scalService.saveCalendarCategory(SessionProviderFactory.createSessionProvider(), username, calendarCategory, isNew)
       addEdit.updateGrid(cal);
       event.getRequestContext().addUIComponentToUpdateByAjax(addEdit) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(addEdit.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UICalendars.class)) ;
     }
   }
  public class data {

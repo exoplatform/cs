@@ -27,6 +27,7 @@ import org.exoplatform.calendar.Colors;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
+import org.exoplatform.calendar.webui.UICalendars;
 import org.exoplatform.calendar.webui.UIFormColorPicker;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -58,7 +59,7 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
     events = {
       @EventConfig(listeners = UISharedForm.SaveActionListener.class),    
       @EventConfig(listeners = UISharedForm.SelectPermissionActionListener.class, phase = Phase.DECODE),  
-      @EventConfig(listeners = UISharedForm.CancelActionListener.class, phase = Phase.DECODE)
+      @EventConfig(listeners = UISharedForm.CloseActionListener.class, phase = Phase.DECODE)
     }
 )
 public class UISharedForm extends UIForm implements UIPopupComponent, UISelector{
@@ -144,7 +145,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     getUIStringInput(FIELD_USER).setValue(value) ;
   }
   public String[] getActions() {
-    return new String[] {"Save","Cancel"} ;
+    return new String[] {"Save","Close"} ;
   }
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
@@ -170,7 +171,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         return ;
       }
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
-      OrganizationService oService = uiForm.getApplicationComponent(OrganizationService.class) ;
+      OrganizationService oService = CalendarUtils.getOrganizationService() ;
       SessionProvider sProvider = SessionProviderFactory.createSessionProvider() ;
       String username = CalendarUtils.getCurrentUser() ;
 
@@ -223,6 +224,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       uiForm.setSharedUser(null) ;
       uiForm.permission_.clear() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddEdit) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddEdit.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UICalendars.class)) ;
     }
   }
   static  public class SelectPermissionActionListener extends EventListener<UISharedForm> {
@@ -237,7 +239,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       event.getRequestContext().addUIComponentToUpdateByAjax(childPopup) ;
     }
   }
-  static  public class CancelActionListener extends EventListener<UISharedForm> {
+  static  public class CloseActionListener extends EventListener<UISharedForm> {
     public void execute(Event<UISharedForm> event) throws Exception {
       UISharedForm uiForm = event.getSource() ;
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;

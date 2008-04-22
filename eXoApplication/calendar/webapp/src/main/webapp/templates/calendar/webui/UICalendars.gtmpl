@@ -105,12 +105,14 @@
 						List calendars = groupData.getCalendars() ;
 						for(calendar in calendars) {
 						String calId = calendar.getId() ;
+            String icon = "CalendarIcon" ;
+            if(calendar.getViewPermission()!= null && calendar.getViewPermission().length > 0) { icon = "SharedCalendarIcon"}
 						if(uicomponent.getChildById(calId) != null) {
 				%>
   					<div class="CalendarItem">
   						<div class="$calendar.calendarColor">
   							<div class="CheckBox"><%uiform.renderField(calId)%></div>
-  							<div class="CalendarIcon"><a>$calendar.name</a></div>
+  							<div class="$icon"><a>$calendar.name</a></div>
   							<div class="DownArrow1Icon"  calColor="$calendar.calendarColor" id="$calId" calType="0" title="<%=uiform.getLabel("calendarActions")%>" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
   							<div style="clear: both"><span></span></div>
   						</div>
