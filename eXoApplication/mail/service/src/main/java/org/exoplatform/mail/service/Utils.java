@@ -135,6 +135,7 @@ public class Utils {
   public static final String EXO_CONVERSATION = "exo:conversation".intern();
   public static final String EXO_CONVERSATIONID = "exo:conversationId".intern();
   public static final String EXO_LAST_CHECKED_TIME = "exo:lastCheckedTime".intern() ;
+  public static final String EXO_IS_SAVE_PASSWORD  = "exo:isSavePassword".intern() ;
 
   public static final String EXO_MAIL_SETTING = "exo:mailSetting".intern();
   public static final String EXO_NUMBER_MSG_PER_PAGE = "exo:numberMsgPerPage".intern();

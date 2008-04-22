@@ -40,6 +40,7 @@ public class Account {
   private String description ;
   private boolean checkedAuto_ ;
   private boolean emptyTrashWhenExit ;
+  private boolean isSavePassword_ ;
   private String placeSignature;
   private Date lastCheckedDate_ ;
   
@@ -118,6 +119,12 @@ public class Account {
    */
   public boolean checkedAuto() { return checkedAuto_; }
   public void setCheckedAuto(boolean checkedAuto) { checkedAuto_ = checkedAuto; }
+  
+  /**
+   * @return Return a boolean value that will set whether save password
+   */  
+  public boolean isSavePassword() { return isSavePassword_; }
+  public void setIsSavePassword(boolean isSavePassword) { isSavePassword_ = isSavePassword ; }
   
   /**
    * @return Return a boolean value that will set to empty trash folder when exit
