@@ -262,10 +262,10 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
             .getPublicContactsByAddressBook(SessionProviderFactory.createSystemProvider(), remover).getAll() ;
           for (Contact user : users)
             contactService.removeUserShareContact(
-                SessionProviderFactory.createSessionProvider(), username, uiForm.contactId_, user.getId()) ;
+                SessionProviderFactory.createSystemProvider(), username, uiForm.contactId_, user.getId()) ;
         } else {
           removePerUser(contact, remover + JCRDataStorage.HYPHEN) ;
-          contactService.removeUserShareContact(SessionProviderFactory.createSessionProvider()
+          contactService.removeUserShareContact(SessionProviderFactory.createSystemProvider()
               , username, uiForm.contactId_, remover) ;
         }        
         contactService.saveContact(SessionProviderFactory.createSessionProvider(), username, contact, false) ;
