@@ -31,6 +31,22 @@
 	color: #292929;
 }
 
+.UIEmpty {
+	margin: 0px;
+	border: none;
+	min-width: 1px;
+	background: none;
+	color:none;
+}
+
+.UIWindow .UIEmpty {
+	margin: 0px;
+	border: none;
+	min-width: 1px;
+	background: none;
+	color:none;
+}
+
 .UICalendarPortlet .UIRightPopupMenuContainer a {
   white-space: nowrap; 
   display: block;

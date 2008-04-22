@@ -17,7 +17,10 @@ DragDrop.prototype.findDropableTarget4Cal = function(dndEvent, dropableTargets, 
   var len = dropableTargets.length ;
   for(var i = 0 ; i < len ; i++) {
     var ele =  dropableTargets[i] ;
-    
+    if(document.getElementById("UIPageDesktop")) {
+			mousexInPage = eXo.core.Browser.findMouseXInPage(mouseEvent) + eXo.calendar.UICalendarPortlet.getScrollLeft(ele) ;
+  		mouseyInPage = eXo.core.Browser.findMouseYInPage(mouseEvent) + eXo.calendar.UICalendarPortlet.getScrollTop(ele) ;
+		}
     if(dragObject != ele && this.isIn(mousexInPage, mouseyInPage, ele)) {
       if(foundTarget == null) {
         foundTarget = ele ;
@@ -127,7 +130,8 @@ UICalendarDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj,
   UIMonthViewNode.appendChild(EventMonthContentNode);
   if (document.getElementById("UIPageDesktop")) document.body.appendChild(UIMonthViewNode);
 	else document.getElementById("UIMonthView").appendChild(UIMonthViewNode);
-  
+
+	
   this.DragDrop.initCallback = this.initCallback ;
   this.DragDrop.dragCallback = this.dragCallback ;
   this.DragDrop.dropCallback = this.dropCallback ;
@@ -164,7 +168,7 @@ UICalendarDragDrop.prototype.dragCallback = function(dndEvent) {
       dragObject.style.display == 'none') {
     dragObject.style.display = 'block' ;
   }
-
+	dragObject.style.zIndex = 2000 ; // fix for IE 
   eXo.calendar.UICalendarDragDrop.synDragObjectPos(dndEvent) ;
   
   // Re-find target
