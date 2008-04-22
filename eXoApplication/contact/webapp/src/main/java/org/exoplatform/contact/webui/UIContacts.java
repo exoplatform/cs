@@ -457,12 +457,14 @@ public class UIContacts extends UIForm implements UIPopupComponent {
             !Arrays.asList(group.getEditPermissionUsers()).contains(username + JCRDataStorage.HYPHEN)) {
           boolean canEdit = false ;
           String[] editPerGroups = group.getEditPermissionGroups() ;
-          for (String editPer : editPerGroups)
-            if (ContactUtils.getUserGroups().contains(editPer)) canEdit = true ;          
+          if (editPerGroups != null)
+            for (String editPer : editPerGroups)
+              if (ContactUtils.getUserGroups().contains(editPer)) canEdit = true ;          
           if (canEdit == false) {
             uiApp.addMessage(new ApplicationMessage("UIContacts.msg.non-permission", null
                 , ApplicationMessage.WARNING)) ;
               event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
               return ;
           }
         }
