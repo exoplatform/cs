@@ -72,8 +72,9 @@ UIWeekView.prototype.distributeEvent = function() {
 } ;
 
 UIWeekView.prototype.onResize = function() {
-	if(!eXo.core.Browser.isFF()) return ;
-	eXo.calendar.UIWeekView.setSize() ;
+	//if(eXo.core.Browser.browserType == "ie") {		
+		eXo.calendar.UIWeekView.setSize() ;
+	//}
 } ;
 
 UIWeekView.prototype.setSize = function() {
@@ -136,8 +137,9 @@ UIWeekView.prototype.showInCol = function(obj) {
 	var left = parseFloat((eXo.core.Browser.findPosXInContainer(obj, container) - 1)/container.offsetWidth)*100 ;
 	var width = parseFloat((obj.offsetWidth - 2)/container.offsetWidth)*100 ;
 	items = eXo.calendar.UICalendarPortlet.sortByAttribute(items, "starttime") ;
-	if(!eXo.core.Browser.isFF()) UIWeekView.adjustWidth(items, obj.offsetWidth, eXo.core.Browser.findPosXInContainer(obj, container)) ;
-	else eXo.calendar.UICalendarPortlet.adjustWidth(items, width, left) ;
+//	if(eXo.core.Browser.browserType == "ie") UIWeekView.adjustWidth(items, obj.offsetWidth, eXo.core.Browser.findPosXInContainer(obj, container)) ;
+//	else eXo.calendar.UICalendarPortlet.adjustWidth(items, width, left) ;
+	UIWeekView.adjustWidth(items, obj.offsetWidth, eXo.core.Browser.findPosXInContainer(obj, container)) ;
 } ;
 
 UIWeekView.prototype.dragStart = function(evt) {
@@ -175,6 +177,8 @@ UIWeekView.prototype.drag = function(evt) {
   }
 	if (UIWeekView.isCol(_e)) {
 		var posX = eXo.core.Browser.findPosXInContainer(UIWeekView.currentCol, UIWeekView.dragElement.offsetParent) ;
+//		var uiControlWorkspace = document.getElementById("UIControlWorkspace") ;
+//		if(uiControlWorkspace) posX += uiControlWorkspace.offsetWidth ;
 		UIWeekView.dragElement.style.left = posX + "px" ;
 	}
 } ;
@@ -229,11 +233,15 @@ UIWeekView.prototype.isCol = function(evt) {
 	var UIWeekView = eXo.calendar.UIWeekView ;
 	if (!UIWeekView.dragElement) return false;
 	var Browser = eXo.core.Browser ;
+	var isIE = (Browser.browserType == "ie")?true:false ;
+	var isDesktop = (document.getElementById("UIPageDesktop"))?true:false ;
 	var mouseX = Browser.findMouseXInPage(evt) ;
 	var len = UIWeekView.cols.length ;
 	var colX = 0 ;
+	var uiControlWorkspace = document.getElementById("UIControlWorkspace") ;
 	for(var i = 1 ; i < len ; i ++) {
 		colX = Browser.findPosX(UIWeekView.cols[i]) ;
+		if(uiControlWorkspace && isIE && (!isDesktop || Browser.isIE7())) colX -= uiControlWorkspace.offsetWidth ;
 		if ((mouseX > colX) && (mouseX < colX + UIWeekView.cols[i].offsetWidth)){
 			return UIWeekView.currentCol = UIWeekView.cols[i] ;
 		}
@@ -686,3 +694,81 @@ UIWeekView.prototype.callbackSelectionX = function() {
 } ;
 eXo.calendar.UIHorizontalResize = new UIHorizontalResize() ;
 eXo.calendar.UIWeekView = new UIWeekView() ;
+
+eXo.portal.UIControlWorkspace.showWorkspace = function() {
+	var cws = eXo.portal.UIControlWorkspace ;
+	var uiWorkspace = document.getElementById(this.id) ;
+	var uiWorkspaceContainer = document.getElementById("UIWorkspaceContainer") ;
+	var uiWorkspacePanel = document.getElementById("UIWorkspacePanel") ;
+	var slidebar = document.getElementById("ControlWorkspaceSlidebar") ;
+	var uiControlWorkspace = document.getElementById("UIControlWorkspace") ;
+	if(cws.showControlWorkspace) {
+		// hides the workspace
+		cws.showControlWorkspace = false ;
+		uiWorkspaceContainer.style.display = "none" ;
+		slidebar.style.display = "block" ;
+		eXo.portal.UIControlWorkspace.width = eXo.portal.UIControlWorkspace.slidebar.offsetWidth ;
+		uiWorkspace.style.width = slidebar.offsetWidth + "px";
+		eXo.portal.UIWorkingWorkspace.onResize(null, null) ;
+	} else {
+		
+		cws.showControlWorkspace = true ;
+		slidebar.style.display = "none" ;
+		eXo.portal.UIControlWorkspace.width = cws.defaultWidth;
+		uiWorkspace.style.width = cws.defaultWidth + "px" ;
+		eXo.portal.UIWorkingWorkspace.onResize(null, null) ;
+		uiWorkspaceContainer.style.display = "block" ;
+		uiWorkspaceContainer.style.width = cws.defaultWidth + "px" ;
+		uiWorkspacePanel.style.height = (eXo.portal.UIControlWorkspace.height - 
+																		 eXo.portal.UIControlWorkspace.uiWorkspaceControl.offsetHeight - 23) + "px" ;
+		/*23 is height of User Workspace Title*/
+
+		eXo.webui.UIVerticalScroller.init();
+		eXo.portal.UIPortalControl.fixHeight();		
+	}
+
+	/* Reorganize opened windows */
+//	eXo.portal.UIWorkingWorkspace.reorganizeWindows(this.showControlWorkspace);
+	/* Resize Dockbar */
+	var uiPageDesktop = document.getElementById("UIPageDesktop") ;
+	if(uiPageDesktop) eXo.desktop.UIDockbar.resizeDockBar() ;
+	/* Resizes the scrollable containers */
+	eXo.portal.UIPortalControl.initAllManagers();
+	
+	/* BEGIN - Check positon of widgets in order to avoid hide widgets when we expand/collapse workspace*/
+	if(uiPageDesktop) {
+		var DOMUtil = eXo.core.DOMUtil ;
+		var uiWidget = DOMUtil.findChildrenByClass(uiPageDesktop, "div", "UIWidget") ;
+		var uiControlWorkspace = document.getElementById("UIControlWorkspace") ;
+		var size = uiWidget.length ;
+		var limitX = 50 ;
+			
+		for(var i = 0 ; i < size ; i ++) {
+			var dragObject = uiWidget[i] ;
+			if (cws.showControlWorkspace) {
+				dragObject.style.left = (dragObject.offsetLeft - uiControlWorkspace.offsetWidth) + "px";				
+			}
+			else {				
+				dragObject.style.left = (dragObject.offsetLeft + uiControlWorkspace.offsetWidth + dragObject.offsetWidth) + "px";				
+			}
+			var offsetHeight = uiPageDesktop.offsetHeight - dragObject.offsetHeight  - limitX;
+	  	var offsetTop = dragObject.offsetTop ;
+	  	var offsetWidth = uiPageDesktop.offsetWidth - dragObject.offsetWidth - limitX ;
+	  	var offsetLeft = dragObject.offsetLeft ;
+	  	
+	  	if (dragObject.offsetLeft < 0) dragObject.style.left = "0px" ;
+	  	if (dragObject.offsetTop < 0) dragObject.style.top = "0px" ;
+	  	if (offsetTop > offsetHeight) dragObject.style.top = (offsetHeight + limitX) + "px" ;
+	  	if (offsetLeft > offsetWidth) dragObject.style.left = (offsetWidth + limitX) + "px" ;				
+		}		
+	}
+	/* -- END -- */
+	var params = [ {name: "objectId", value : cws.showControlWorkspace} ] ;
+	ajaxAsyncGetRequest(eXo.env.server.createPortalURL(this.id, "SetVisible", true, params), false) ;
+	if((eXo.core.Browser.browserType != "ie") && !document.getElementById("UIPageDesktop")) {
+		if(document.getElementById("UIWeekView")) {
+		eXo.calendar.UICalendarMan.initWeek() ;
+		eXo.calendar.UIWeekView.setSize() ;
+		}
+	}
+};
