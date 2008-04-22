@@ -358,15 +358,14 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       @SuppressWarnings("unused")
       UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
       contactIds = uiContacts.getCheckedContacts() ;
-      SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
       List<String> newContactIds = new ArrayList<String>();
       for (String contactId : contactIds) {
         Contact contact = uiContacts.contactMap.get(contactId) ;
         newContactIds.add(contactId + JCRDataStorage.SPLIT + contact.getContactType()) ;
       }
       try {
-        ContactUtils.getContactService().addTag(
-            sessionProvider, ContactUtils.getCurrentUser(), newContactIds, tagId);
+        ContactUtils.getContactService().addTag(SessionProviderFactory
+            .createSessionProvider(), ContactUtils.getCurrentUser(), newContactIds, tagId);
       } catch (PathNotFoundException e) {
         uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-deleted", null,
             ApplicationMessage.WARNING)) ;
@@ -498,7 +497,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       if (sharedContacts.size() > 0 ) {
         contactService.pasteContacts(sessionProvider, username, addressBookId, type, sharedContacts) ;
         for (Contact contact : sharedContacts) {
-            contactService.removeUserShareContact(sessionProvider, contact.getPath(), contact.getId(), username) ;  
+            contactService.removeUserShareContact(SessionProviderFactory.createSystemProvider(), contact.getPath(), contact.getId(), username) ;  
         }
       }
       if (contacts.size() > 0)
@@ -594,7 +593,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       }
       
       if (!uiContacts.isSelectSharedContacts)
-        removedContacts = contactService.removeContacts(SessionProviderFactory.createSystemProvider(), username, contactIds) ;
+        removedContacts = contactService.removeContacts(SessionProviderFactory.createSessionProvider(), username, contactIds) ;
       if (ContactUtils.isEmpty(uiContacts.selectedGroup) && ContactUtils.isEmpty(uiContacts.selectedTag_)) {
         uiContacts.setContact(removedContacts, false) ;
       }
@@ -888,9 +887,22 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   static public class SharedContactsActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource() ;
+      Map<String, Contact> mapContacts = new LinkedHashMap<String, Contact>() ;
+      for (String contactId : uiContacts.getCheckedContacts()) {
+        Contact contact = uiContacts.contactMap.get(contactId) ;        
+        String contactType = contact.getContactType() ; 
+        if (contactType.equals(JCRDataStorage.PUBLIC) || contactType.equals(JCRDataStorage.SHARED)) {
+          UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-share", null
+              , ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
+        mapContacts.put(contactId, contact) ;
+      }
       String objectId = event.getRequestContext().getRequestParameter(OBJECTID);
       if (!ContactUtils.isEmpty(objectId) || uiContacts.getCheckedContacts().size() == 1) {
-        if (ContactUtils.isEmpty(objectId)) objectId = uiContacts.getCheckedContacts().get(0) ;        
+        if (ContactUtils.isEmpty(objectId)) objectId = uiContacts.getCheckedContacts().get(0) ; 
         UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
         UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
         UIPopupContainer uiPopupContainer = popupAction.activate(UIPopupContainer.class, 400) ;
@@ -898,20 +910,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         UIAddEditPermission uiAddNewEditPermission = uiPopupContainer.addChild(UIAddEditPermission.class, null, null); 
         uiAddNewEditPermission.initContact(uiContacts.contactMap.get(objectId)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;  
-      } else {
-        Map<String, Contact> mapContacts = new LinkedHashMap<String, Contact>() ;
-        for (String contactId : uiContacts.getCheckedContacts()) {
-          Contact contact = uiContacts.contactMap.get(contactId) ;        
-          String contactType = contact.getContactType() ; 
-          if (contactType.equals(JCRDataStorage.PUBLIC) || contactType.equals(JCRDataStorage.SHARED)) {
-            UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
-            uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-share", null
-                , ApplicationMessage.WARNING)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-            return ;
-          }
-          mapContacts.put(contactId, contact) ;
-        }
+      } else {        
         UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
         UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
         UIPopupContainer uiPopupContainer = popupAction.activate(UIPopupContainer.class, 600) ;

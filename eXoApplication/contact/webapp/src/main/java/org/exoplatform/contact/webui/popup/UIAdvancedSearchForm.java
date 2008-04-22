@@ -122,7 +122,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent {
       if(!ContactUtils.isEmpty(gender)) filter.setGender(ContactUtils.filterString(gender, false)) ;
       
       DataPageList resultPageList = ContactUtils.getContactService()
-        .searchContact(SessionProviderFactory.createSystemProvider(), ContactUtils.getCurrentUser(), filter) ;
+        .searchContact(SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), filter) ;
       UIContactPortlet uiContactPortlet = uiAdvancedSearchForm.getAncestorOfType(UIContactPortlet.class) ;
       uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class).setSelectedGroup(null) ;
       uiContactPortlet.findFirstComponentOfType(UITags.class).setSelectedTag(null) ;      
