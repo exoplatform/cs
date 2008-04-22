@@ -21,7 +21,7 @@
 	sdf.setCalendar(uicomponent.getInstanceTempCalendar()) ;
 	DateFormat sdtf = new  SimpleDateFormat("MM/d") ;
  	sdtf.setCalendar(uicomponent.getInstanceTempCalendar()) ;
- 	uicomponent.updateMiniCal();
+ 	//uicomponent.updateMiniCal();
 	Map data = uicomponent.getData() ;
 %>
 <div class="UIMiniCalendar">

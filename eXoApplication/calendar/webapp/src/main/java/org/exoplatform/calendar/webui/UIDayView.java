@@ -17,7 +17,6 @@
 package org.exoplatform.calendar.webui;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -51,12 +50,12 @@ import org.exoplatform.webui.event.EventListener;
     template = "app:/templates/calendar/webui/UIDayView.gtmpl", 
     events = {
       @EventConfig(listeners = UICalendarView.AddEventActionListener.class),  
-      @EventConfig(listeners = UICalendarView.DeleteEventActionListener.class, confirm="UICalendarVIew.msg.confirm-delete"),
+      @EventConfig(listeners = UICalendarView.DeleteEventActionListener.class, confirm="UICalendarView.msg.confirm-delete"),
       @EventConfig(listeners = UICalendarView.AddCategoryActionListener.class),
       //@EventConfig(listeners = UICalendarView.ChangeCategoryActionListener.class), 
       @EventConfig(listeners = UICalendarView.ViewActionListener.class),
       @EventConfig(listeners = UICalendarView.EditActionListener.class), 
-      @EventConfig(listeners = UICalendarView.DeleteActionListener.class, confirm="UICalendarVIew.msg.confirm-delete"),
+      @EventConfig(listeners = UICalendarView.DeleteActionListener.class, confirm="UICalendarView.msg.confirm-delete"),
       @EventConfig(listeners = UICalendarView.GotoDateActionListener.class),
       @EventConfig(listeners = UICalendarView.SwitchViewActionListener.class),
       @EventConfig(listeners = UICalendarView.QuickAddActionListener.class), 

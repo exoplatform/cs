@@ -49,6 +49,7 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -266,8 +267,8 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   }
   public void setSelectedCategory(String id) {
     getUIFormSelectBox(EVENT_CATEGORIES).setValue(id) ;
-   }
-  
+  }
+
   protected String[] getMonthsName() { 
     return monthsMap_.values().toArray(new String[]{})  ;
   }
@@ -512,6 +513,13 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   }  
 
 
+  @Override
+  public void processRender(WebuiRequestContext arg0) throws Exception {
+    refresh() ;
+    super.processRender(arg0);
+  }
+
+
   static  public class AddEventActionListener extends EventListener<UICalendarView> {
     public void execute(Event<UICalendarView> event) throws Exception {
       UICalendarView uiForm = event.getSource() ;
@@ -605,7 +613,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           uiCalendarView.removeEvents(list) ;
           //uiCalendarView.removeEvents(uiCalendarView.canEditPermission_) ;
           //uiListView.getSelectedCategory()
-          uiListView.refresh() ;
+          uiListView.setSelectedEvent(null) ;
           UIListContainer  uiListContainer = uiCalendarView.getParent() ;
           uiListContainer.refresh() ;
           if(uiCalendarView.allDelete_) {

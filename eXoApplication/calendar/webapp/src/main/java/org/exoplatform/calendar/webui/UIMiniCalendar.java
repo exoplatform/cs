@@ -109,6 +109,18 @@ public class UIMiniCalendar extends UICalendarView  {
   public String getSelectedCategory() {
     return categoryId_  ;
   }
+  public void refresh() throws Exception {
+    dataMap.clear() ;
+    EventQuery eventQuery = new EventQuery() ;
+    /*if(categoryId_ != null && categoryId_.toLowerCase().equals("null")) {
+      eventQuery.setCategoryId(new String[]{categoryId_}) ;
+    }*/
+    eventQuery.setFromDate(getBeginDateOfMonth()) ;
+    eventQuery.setToDate(getEndDateOfMonth()) ;
+    CalendarService calendarService = CalendarUtils.getCalendarService() ;
+    dataMap = calendarService.searchHightLightEvent(getSession(), CalendarUtils.getCurrentUser(), eventQuery, getPublicCalendars());
+    //updateMiniCal() ;
+  }
   static  public class MoveNextActionListener extends EventListener<UIMiniCalendar> {
     public void execute(Event<UIMiniCalendar> event) throws Exception {
       UIMiniCalendar miniCal = event.getSource() ;
@@ -134,7 +146,7 @@ public class UIMiniCalendar extends UICalendarView  {
         miniCal.calendar_.add(Calendar.YEAR, -1) ;
       }
       miniCal.setCurrentDay(1);
-      miniCal.updateMiniCal() ;
+      //miniCal.updateMiniCal() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(miniCal.getParent()) ;
     }
   }
