@@ -10,7 +10,7 @@ UIWeekView.prototype.mousePos = function(evt){
 } ;
 
 UIWeekView.prototype.onLoad = function(){
-	if(eXo.core.Browser.isFF()) {
+	if(eXo.core.Browser.browserType != "ie") {
 		window.setTimeout("eXo.calendar.UICalendarPortlet.checkFilter() ;", 1500) ;
 		return ;
 	}

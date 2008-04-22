@@ -269,7 +269,7 @@ UICalendarPortlet.prototype.show = function(obj, evt) {
     items[1].href = String(items[1].href).replace("')", "&categoryId=" + selectedCategory + "')") ;
     
   }
-	eXo.calendar.UICalendarPortlet.swapMenu(uiPopupCategory, obj, contentContainer) ;
+	eXo.calendar.UICalendarPortlet.swapMenu(uiPopupCategory, obj) ;
 	
 	if (calType && (calType != "0") ) {
 
@@ -855,15 +855,28 @@ UICalendarPortlet.prototype.showContextMenu = function(compid) {
 	UIContextMenu.attach("EventBoxes","UIDayViewEventRightMenu") ;
 	UIContextMenu.attach(["EventWeekContent","EventAlldayContainer"],"UIWeekViewRightMenu") ;
 	UIContextMenu.attach("UIListViewRow","UIListViewEventRightMenu") ;
-	//this.fixIE() ;
+	this.fixIE() ;
 } ;
 
 UICalendarPortlet.prototype.fixIE = function(){
-	if (eXo.core.Browser.isFF()) return ;
-	var portlet = document.getElementById(this.portletName) ;
-	var uiResizeBlock = eXo.core.DOMUtil.findAncestorByClass(portlet,"UIResizableBlock") ;
-	if(!uiResizeBlock && document.getElementById("UIPageDesktop")) return ;
-	uiResizeBlock.style.position = "relative" ;
+	var isDesktop = document.getElementById("UIPageDesktop") ;
+	if(isDesktop) {
+		this.runTimes = true ;
+	} else this.runTimes = null ;
+	if(!this.runTimes) return
+	if ((eXo.core.Browser.browserType == "ie") && isDesktop) {
+  	var portlet = document.getElementById(this.portletName);
+  	var uiResizeBlock = eXo.core.DOMUtil.findAncestorByClass(portlet, "UIResizableBlock");
+		var relative = eXo.core.DOMUtil.findFirstDescendantByClass(uiResizeBlock,"div", "FixIE") ;
+		relative.className = "UIResizableBlock" ;
+		var style = {
+			position:"relative",
+			height: uiResizeBlock.offsetHeight + 'px',
+			width:"100%",
+			overflow:"auto"
+		} ;
+		this.setStyle(relative,style) ;
+  }
 } ;
 
 UICalendarPortlet.prototype.listViewCallack = function(evt){
@@ -1234,6 +1247,46 @@ UICalendarPortlet.prototype.showView = function(obj, evt) {
 	eXo.calendar.UICalendarPortlet.swapMenu(oldmenu, obj) ;
 } ;
 
+UICalendarPortlet.prototype.getScrollTop = function(obj) {
+  var curtop = 0 ;  
+  while (obj) {
+    if(obj.scrollTop) curtop += obj.scrollTop ;
+    obj = obj.parentNode ;    
+  }
+  return curtop ;
+} ;
+
+UICalendarPortlet.prototype.getScrollLeft = function(obj) {
+  var curleft = 0 ;  
+  while (obj) {
+    if(obj.scrollLeft) curleft += obj.scrollLeft ;
+    obj = obj.parentNode ;    
+  }
+  return curleft ;
+} ;
+
+UICalendarPortlet.prototype.swapIeMenu = function(menu, clickobj){
+	var DOMUtil = eXo.core.DOMUtil ;
+	var Browser = eXo.core.Browser ;
+	var x = Browser.findPosXInContainer(clickobj,menu.offsetParent) - this.getScrollLeft(clickobj) ;
+	var y = Browser.findPosYInContainer(clickobj,menu.offsetParent) - this.getScrollTop(clickobj) + clickobj.offsetHeight ;
+	var browserHeight = document.documentElement.clientHeight ;
+	var uiRightClickPopupMenu = (!DOMUtil.hasClass(menu,"UIRightClickPopupMenu"))?DOMUtil.findFirstDescendantByClass(menu, "div","UIRightClickPopupMenu") : menu ;
+	this.showHide(menu) ;
+	if((y + uiRightClickPopupMenu.offsetHeight) > browserHeight) {
+		y = browserHeight - uiRightClickPopupMenu.offsetHeight ;
+	}
+	//TODO: fix on IE7 when there is the ControlWorkspace. This bug occurs only developing parameter assigned false
+	if (Browser.isIE7()) {
+		var uiControWorkspace = document.getElementById("UIControlWorkspace") ;
+		if(uiControWorkspace) x -= uiControWorkspace.offsetWidth ;
+	}
+	DOMUtil.addClass(menu, "UICalendarPortlet UIEmpty") ;
+	menu.style.zIndex = 2000 ;
+	menu.style.left = x + "px" ;
+	menu.style.top = y + "px" ;
+} ;
+
 UICalendarPortlet.prototype.swapMenu = function(oldmenu, clickobj) {
   var DOMUtil = eXo.core.DOMUtil ;
 	var Browser = eXo.core.Browser ;
@@ -1241,42 +1294,53 @@ UICalendarPortlet.prototype.swapMenu = function(oldmenu, clickobj) {
   var uiDesktop = document.getElementById("UIPageDesktop") ;
   var uiWorkSpaceWidth = (document.getElementById("UIControlWorkspace"))? document.getElementById("UIControlWorkspace").offsetWidth : 0 ;
 	uiWorkSpaceWidth = (document.all) ? 2*uiWorkSpaceWidth : uiWorkSpaceWidth ;
-  var menuX = Browser.findPosX(clickobj) - uiWorkSpaceWidth ;
-	var menuY = Browser.findPosY(clickobj) + clickobj.offsetHeight ;
-  if(uiDesktop) {
-  	var portlet = DOMUtil.findAncestorByClass(document.getElementById(UICalendarPortlet.portletName), "UIResizableBlock") ;
-    var uiWindow = DOMUtil.findAncestorByClass(portlet, "UIWindow") ;
-    menuX = menuX - uiWindow.offsetLeft  -  portlet.scrollLeft ;
-    menuY = menuY - uiWindow.offsetTop  -  portlet.scrollTop ;
-  }
+//  var menuX = Browser.findPosX(clickobj) - uiWorkSpaceWidth ;
+//	var menuY = Browser.findPosY(clickobj) + clickobj.offsetHeight ;
+//  if(uiDesktop) {
+//  	var portlet = DOMUtil.findAncestorByClass(document.getElementById(UICalendarPortlet.portletName), "UIResizableBlock") ;
+//    var uiWindow = DOMUtil.findAncestorByClass(portlet, "UIWindow") ;
+//    menuX = menuX - uiWindow.offsetLeft  -  portlet.scrollLeft ;
+//    menuY = menuY - uiWindow.offsetTop  -  portlet.scrollTop ;
+//  }
   if(document.getElementById("tmpMenuElement")) DOMUtil.removeElement(document.getElementById("tmpMenuElement")) ;
 	var tmpMenuElement = oldmenu.cloneNode(true) ;
 	tmpMenuElement.setAttribute("id","tmpMenuElement") ;
-	UICalendarPortlet.menuElement = tmpMenuElement ;
-  document.getElementById(UICalendarPortlet.portletName).appendChild(tmpMenuElement) ;	
-  if(arguments.length > 2) {
+	this.menuElement = tmpMenuElement ;
+	if (uiDesktop) {
+		document.body.appendChild(this.menuElement) ;
+		this.swapIeMenu(this.menuElement,clickobj) ;
+		return ;
+	}	else {
+	  document.getElementById(this.portletName).appendChild(tmpMenuElement) ;		
+	}
+	
+  var menuX = Browser.findPosX(clickobj) - uiWorkSpaceWidth ;
+	var menuY = Browser.findPosY(clickobj) + clickobj.offsetHeight ;
+	if(arguments.length > 2) {
     menuY -= arguments[2].scrollTop ;
   }
-	UICalendarPortlet.menuElement.style.top = menuY + "px" ;
-	UICalendarPortlet.menuElement.style.left = menuX + "px" ;	
-	UICalendarPortlet.showHide(UICalendarPortlet.menuElement) ;
-  if(uiDesktop) {    
-    var uiRightClick = (DOMUtil.findFirstDescendantByClass(UICalendarPortlet.menuElement, "div", "UIRightClickPopupMenu")) ? DOMUtil.findFirstDescendantByClass(UICalendarPortlet.menuElement, "div", "UIRightClickPopupMenu") : UICalendarPortlet.menuElement ;
-    var mnuBottom = eXo.core.Browser.findPosYInContainer(UICalendarPortlet.menuElement, uiDesktop) + uiRightClick.offsetHeight ;
-    var widBottom = uiWindow.offsetTop + uiWindow.offsetHeight ;
-    if(mnuBottom > widBottom) {
-      menuY -= (mnuBottom - widBottom - clickobj.offsetHeight - uiWindow.scrollTop) ;
-      UICalendarPortlet.menuElement.style.top = menuY + "px" ;
-    }
-  } else {
+	
+	this.menuElement.style.top = menuY + "px" ;
+	this.menuElement.style.left = menuX + "px" ;	
+	this.showHide(this.menuElement) ;
+//  if(uiDesktop) {    
+//    var uiRightClick = (DOMUtil.findFirstDescendantByClass(UICalendarPortlet.menuElement, "div", "UIRightClickPopupMenu")) ? DOMUtil.findFirstDescendantByClass(UICalendarPortlet.menuElement, "div", "UIRightClickPopupMenu") : UICalendarPortlet.menuElement ;
+//    var mnuBottom = eXo.core.Browser.findPosYInContainer(UICalendarPortlet.menuElement, uiDesktop) + uiRightClick.offsetHeight ;
+//    var widBottom = uiWindow.offsetTop + uiWindow.offsetHeight ;
+//    if(mnuBottom > widBottom) {
+//      menuY -= (mnuBottom - widBottom - clickobj.offsetHeight - uiWindow.scrollTop) ;
+//      UICalendarPortlet.menuElement.style.top = menuY + "px" ;
+//    }
+//  } else {
     var uiRightClick = (DOMUtil.findFirstDescendantByClass(UICalendarPortlet.menuElement, "div", "UIRightClickPopupMenu")) ? DOMUtil.findFirstDescendantByClass(UICalendarPortlet.menuElement, "div", "UIRightClickPopupMenu") : UICalendarPortlet.menuElement ;
     var mnuBottom = UICalendarPortlet.menuElement.offsetTop +  uiRightClick.offsetHeight - window.document.documentElement.scrollTop ;
     if(window.document.documentElement.clientHeight < mnuBottom) {
       menuY += (window.document.documentElement.clientHeight - mnuBottom) ;
       UICalendarPortlet.menuElement.style.top = menuY + "px" ;      
     }
-  }
+//  }
 } ;
+
 UICalendarPortlet.prototype.isAllday = function(form) {
 	try{
 		if (typeof(form) == "string") form = document.getElementById(form) ;		
@@ -1444,7 +1508,6 @@ UICalendarPortlet.prototype.initCheck = function(container) {
 	dateAll.onclick = function() {		
 		eXo.calendar.UICalendarPortlet.checkAllInBusy(this) ;
 	}
-	//eXo.calendar.UICalendarPortlet.dateAll = dateAll ;
 	eXo.calendar.UICalendarPortlet.initSelectionX(firstTr) ;
 } ;
 

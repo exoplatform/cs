@@ -4,10 +4,11 @@
 	import org.exoplatform.calendar.webui.popup.UIPopupAction ;
 	import org.exoplatform.calendar.service.CalendarSetting;
 %>
+<div class="FixIE">
 <div><div style="width: 940px;" ><span style="display: none;"></span></div></div>
 <div style="_width: expression(this.previousSibling.offsetWidth - 22 + 'px'); !border: 1px solid white;">
 	<div class="ApplicationMinWidth">
-		<div class="UICalendarPortlet" oncontextmenu="return false" id="$uicomponent.id">
+		<div class="UICalendarPortlet" id="$uicomponent.id">
 		<%
 			timeStep = uicomponent.getCalendarSetting().getTimeInterval() ; 
 		  workingStart = uicomponent.getCalendarSetting().getWorkingTimeBegin() ;
@@ -29,10 +30,14 @@
 		    <%uicomponent.renderChild(UIActionBar.class)%>
 				<%uicomponent.renderChild(UICalendarWorkingContainer.class)%>
 			</div>
-		<%
-			uicomponent.renderPopupMessages() ;
-			uicomponent.renderChild(UIPopupAction.class) ;
-		%>  
+		
 	  </div>
 	</div>
+</div>
+</div>
+<div class="UICalendarPortlet UIEmpty">
+<%
+	uicomponent.renderPopupMessages() ;
+	uicomponent.renderChild(UIPopupAction.class) ;
+%>
 </div>

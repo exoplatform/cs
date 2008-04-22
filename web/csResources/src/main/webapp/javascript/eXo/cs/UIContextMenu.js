@@ -140,10 +140,10 @@ UIContextMenu.prototype.show = function(evt) {
 			callback = callback + "(_e)" ;
 			eval(callback) ;
 		}
-		var extraX = (document.getElementById("UIControlWorkspace")) ? document.getElementById("UIControlWorkspace").offsetWidth : 0 ;
-		var extraY = 0 ;
-		var top = eXo.core.Browser.findMouseYInPage(_e) - extraY ;
-		var left = eXo.core.Browser.findMouseXInPage(_e) - extraX ;
+//		var extraX = (document.getElementById("UIControlWorkspace")) ? document.getElementById("UIControlWorkspace").offsetWidth : 0 ;
+//		var extraY = 0 ;
+//		var top = eXo.core.Browser.findMouseYInPage(_e) - extraY ;
+//		var left = eXo.core.Browser.findMouseXInPage(_e) - extraX ;
 		eXo.core.DOMUtil.listHideElements(UIContextMenu.menuElement) ;
 		var ln = eXo.core.DOMUtil.hideElementList.length ;
 		if (ln > 0) {
@@ -151,22 +151,25 @@ UIContextMenu.prototype.show = function(evt) {
 				eXo.core.DOMUtil.hideElementList[i].style.display = "none" ;
 			}
 		}
-    if (document.getElementById("UIPageDesktop")) {
-      var uiWindow = eXo.core.DOMUtil.findAncestorByClass(document.getElementById(UIContextMenu.portletName), "UIWindow") ;
-      var extra = (document.getElementById("UIControlWorkspace")) ? document.getElementById("UIControlWorkspace").offsetWidth : 0 ;
-      top -= uiWindow.offsetTop ;
-      left -= (uiWindow.offsetLeft)  ;
-		}
-		UIContextMenu.menuElement.style.left = left - 2 + "px" ;
-		UIContextMenu.menuElement.style.top = top - 1 + "px" ;
-		UIContextMenu.menuElement.style.display = 'block' ;
+		UIContextMenu.swapMenu(document.getElementById(menuElementId), _e) ;
+//    if (document.getElementById("UIPageDesktop")) {
+//			UIContextMenu.swapMenu(document.getElementById(menuElementId), _e) ;
+//			return ;
+//      var uiWindow = eXo.core.DOMUtil.findAncestorByClass(document.getElementById(UIContextMenu.portletName), "UIWindow") ;
+//      var extra = (document.getElementById("UIControlWorkspace")) ? document.getElementById("UIControlWorkspace").offsetWidth : 0 ;
+//      top -= uiWindow.offsetTop ;
+//      left -= (uiWindow.offsetLeft)  ;
+//		}
+//		UIContextMenu.menuElement.style.left = left - 2 + "px" ;
+//		UIContextMenu.menuElement.style.top = top - 1 + "px" ;
+//		UIContextMenu.menuElement.style.display = 'block' ;
 		UIContextMenu.menuElement.onmouseover = UIContextMenu.autoHide ;
 		UIContextMenu.menuElement.onmouseout = UIContextMenu.autoHide ;		
-		if (!UIContextMenu.IE) {			
-      var portlet = document.getElementById(UIContextMenu.portletName) ;
-      if(UIContextMenu.hasChild(portlet, menuElementId)) portlet.removeChild(UIContextMenu.hasChild(portlet, menuElementId)) ;
-      portlet.appendChild(UIContextMenu.menuElement) ;
-		}
+//		if (!UIContextMenu.IE) {			
+//      var portlet = document.getElementById(UIContextMenu.portletName) ;
+//      if(UIContextMenu.hasChild(portlet, menuElementId)) portlet.removeChild(UIContextMenu.hasChild(portlet, menuElementId)) ;
+//      portlet.appendChild(UIContextMenu.menuElement) ;
+//		}
 		return false ;
 	}
 	return UIContextMenu.getReturnValue(_e) ;
@@ -239,24 +242,63 @@ UIContextMenu.prototype.showHide = function(obj) {
 	}
 } ;
 
-UIContextMenu.prototype.swapMenu = function(oldmenu, clickobj) {
-	var UIContextMenu = eXo.webui.UIContextMenu ;
+UIContextMenu.prototype.swapIe6Menu = function(oldmenu, evt){
+	var DOMUtil = eXo.core.DOMUtil;
+	var Browser = eXo.core.Browser;
+	var UIContextMenu = eXo.webui.UIContextMenu;
+	if (document.getElementById("tmpMenuElement")) DOMUtil.removeElement(document.getElementById("tmpMenuElement"));
+	var tmpMenuElement = oldmenu.cloneNode(true);
+	tmpMenuElement.setAttribute("id", "tmpMenuElement");
+	DOMUtil.addClass(tmpMenuElement, "UICalendarPortlet UIEmpty");
+	UIContextMenu.menuElement = tmpMenuElement;
+	document.body.appendChild(tmpMenuElement);
+  var portlet = document.getElementById(UIContextMenu.portletName) ;
+  if(UIContextMenu.hasChild(portlet, menuElementId)) portlet.removeChild(UIContextMenu.hasChild(portlet, menuElementId)) ;
+  portlet.appendChild(UIContextMenu.menuElement) ;
+
+	var menuX = Browser.findMouseXInPage(evt);
+	var menuY = Browser.findMouseYInPage(evt);
+	
+	UIContextMenu.menuElement.style.top = menuY + "px";
+	UIContextMenu.menuElement.style.left = menuX + "px";
+	UIContextMenu.showHide(UIContextMenu.menuElement);
+}	
+
+UIContextMenu.prototype.swapMenu = function(oldmenu, evt) {
+	var DOMUtil = eXo.core.DOMUtil ;
 	var Browser = eXo.core.Browser ;
-	var menuX = Browser.findPosX(clickobj) ;
-	var menuY = Browser.findPosY(clickobj) + clickobj.offsetHeight ;
-	if (arguments.length > 2) { // Customize position of menu with an object that have 2 properties x, y 
-		menuX = arguments[2].x ;
-		menuY = arguments[2].y ;
-	}
-	var tmpNode = document.getElementById("tmpMenuElement") ;
-	if(tmpNode) eXo.core.DOMUtil.removeElement(tmpNode) ;
+	var UIContextMenu = eXo.webui.UIContextMenu ;
+	if(document.getElementById("tmpMenuElement")) DOMUtil.removeElement(document.getElementById("tmpMenuElement")) ;
 	var tmpMenuElement = oldmenu.cloneNode(true) ;
 	tmpMenuElement.setAttribute("id","tmpMenuElement") ;
+	DOMUtil.addClass(tmpMenuElement, "UICalendarPortlet UIEmpty") ;
 	UIContextMenu.menuElement = tmpMenuElement ;
-	document.getElementById("UIPortalApplication").appendChild(tmpMenuElement) ;
-	UIContextMenu.menuElement.style.top = menuY + "px" ;
-	UIContextMenu.menuElement.style.left = menuX + "px" ;	
+	var uiApplication = document.getElementById("UIPortalApplication") ;
+	document.body.insertBefore(UIContextMenu.menuElement,uiApplication) ;
+	//document.body.appendChild(tmpMenuElement) ;
+	var menuX = Browser.findMouseXInPage(evt) ;
+	var menuY = Browser.findMouseYInPage(evt) ;
+	UIContextMenu.menuElement.style.zIndex = 2000 ;
+	UIContextMenu.menuElement.style.top = menuY - 2  + "px" ;
+	UIContextMenu.menuElement.style.left = menuX - 2 + "px" ;	
 	UIContextMenu.showHide(UIContextMenu.menuElement) ;
+//	var UIContextMenu = eXo.webui.UIContextMenu ;
+//	var Browser = eXo.core.Browser ;
+//	var menuX = Browser.findPosX(clickobj) ;
+//	var menuY = Browser.findPosY(clickobj) + clickobj.offsetHeight ;
+//	if (arguments.length > 2) { // Customize position of menu with an object that have 2 properties x, y 
+//		menuX = arguments[2].x ;
+//		menuY = arguments[2].y ;
+//	}
+//	var tmpNode = document.getElementById("tmpMenuElement") ;
+//	if(tmpNode) eXo.core.DOMUtil.removeElement(tmpNode) ;
+//	var tmpMenuElement = oldmenu.cloneNode(true) ;
+//	tmpMenuElement.setAttribute("id","tmpMenuElement") ;
+//	UIContextMenu.menuElement = tmpMenuElement ;
+//	document.getElementById("UIPortalApplication").appendChild(tmpMenuElement) ;
+//	UIContextMenu.menuElement.style.top = menuY + "px" ;
+//	UIContextMenu.menuElement.style.left = menuX + "px" ;	
+//	UIContextMenu.showHide(UIContextMenu.menuElement) ;
 } ;
 
 eXo.webui.UIContextMenu = new UIContextMenu() ;
