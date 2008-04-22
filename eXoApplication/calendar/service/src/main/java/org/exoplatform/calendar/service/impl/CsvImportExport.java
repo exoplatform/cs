@@ -212,7 +212,12 @@ public class CsvImportExport implements CalendarImportExport {
               eventObj.setEventState(l.get(dataMap.get(EV_STATUS)))  ;
             }
             if(!Utils.isEmpty(l.get(dataMap.get(EV_PRIORITY)))) {
-              eventObj.setPriority(l.get(dataMap.get(EV_PRIORITY)))  ;
+              for(int i = 0 ; i < CalendarEvent.PRIORITY.length ; i++ ) {
+                 if(CalendarEvent.PRIORITY[i].equals(l.get(dataMap.get(EV_PRIORITY)).toLowerCase())) {
+                   eventObj.setPriority(String.valueOf(i))  ;
+                   break ;
+                 }
+              }
             }
           } 
           /* System.out.println("Found " + l.size() + " items.");
@@ -252,7 +257,19 @@ public class CsvImportExport implements CalendarImportExport {
   }
 
   public OutputStream exportCalendar(SessionProvider sProvider, String username, List<String> calendarIds, String type) throws Exception {
-    // TODO Auto-generated method stub
+    /*List<CalendarEvent> events = new ArrayList<CalendarEvent>();
+    if(type.equals(PRIVATE_TYPE)) {
+      events = storage_.getUserEventByCalendar(sProvider, username, calendarIds) ;
+    }else if(type.equals(SHARED_TYPE)) {
+      events = storage_.getSharedEventByCalendars(sProvider, username, calendarIds) ;
+    }else if(type.equals(PUBLIC_TYPE)){
+      events = storage_.getGroupEventByCalendar(sProvider, calendarIds) ;
+    }
+    for(CalendarEvent exoEvent : events) {
+      if(exoEvent.getEventType().equals(CalendarEvent.TYPE_EVENT)){
+        
+      }
+    }*/
     return null;
   }
 
