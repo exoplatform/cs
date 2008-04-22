@@ -48,7 +48,6 @@
 	DateFormat wf = new  SimpleDateFormat("EEE, dd/MMM") ;
 	DateFormat tempFormat = new  SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss") ;
 	tempFormat.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
-	
 %>
 <div class="UIWeekView">
   <div class="TitleBar">

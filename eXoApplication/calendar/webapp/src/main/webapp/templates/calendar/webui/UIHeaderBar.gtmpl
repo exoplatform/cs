@@ -20,7 +20,7 @@ uicomponent.setSelectedCategory(uicomponent.getSelectedCategory()) ;
 		</a>
 		<%if((uicomponent instanceof UIListView) || (uicomponent instanceof UIMonthView)){%>
 			<div class="SeparatorLine"><span></span></div>
-			<a href="<%=uicomponent.event("DeleteEvent")%>" class="ControlButton">
+			<a href="<%=uicomponent.event("DeleteEvent",uicomponent.id,"id")%>" class="ControlButton">
 				<div class="IconHolder DeleteEventIcon">
 					<%=_ctx.appRes("UIHeaderBar.label.Delete")%>
 				</div>

@@ -46,14 +46,14 @@ import org.exoplatform.webui.form.UIFormSelectBox;
     //template =  "app:/templates/calendar/webui/UIEventView.gtmpl",
     events = {
       @EventConfig(listeners = UICalendarView.AddEventActionListener.class),      
-      @EventConfig(listeners = UICalendarView.DeleteEventActionListener.class, confirm="UICalendarVIew.msg.confirm-delete"),
+      @EventConfig(listeners = UICalendarView.DeleteEventActionListener.class, confirm="UICalendarView.msg.confirm-delete"),
       //@EventConfig(listeners = UICalendarView.ChangeCategoryActionListener.class), 
       @EventConfig(listeners = UICalendarView.AddCategoryActionListener.class), 
       @EventConfig(listeners = UICalendarView.SwitchViewActionListener.class),
       @EventConfig(listeners = UICalendarView.GotoDateActionListener.class),
       @EventConfig(listeners = UICalendarView.ViewActionListener.class),
       @EventConfig(listeners = UICalendarView.EditActionListener.class), 
-      @EventConfig(listeners = UICalendarView.DeleteActionListener.class, confirm="UICalendarVIew.msg.confirm-delete"),
+      @EventConfig(listeners = UICalendarView.DeleteActionListener.class, confirm="UICalendarView.msg.confirm-delete"),
       @EventConfig(listeners = UIListView.CloseSearchActionListener.class),
       @EventConfig(listeners = UIListView.ViewDetailActionListener.class),
       @EventConfig(listeners = UICalendarView.MoveNextActionListener.class), 
@@ -123,6 +123,38 @@ public class UIListView extends UICalendarView {
     uiCategory.setOnChange("Onchange") ;
     UIListContainer uiContainer = getParent() ;
     UIPreview view = uiContainer.getChild(UIPreview.class) ;
+    if(CalendarUtils.isEmpty(getSelectedEvent())) {
+      if(getEvents().length > 0) { 
+        setSelectedEvent(getEvents()[0].getId()) ;  
+        view.setEvent(getEvents()[0]) ;
+        setLastUpdatedEventId(getEvents()[0].getId()) ;
+
+      } else {
+        setSelectedEvent(null) ;
+        view.setEvent(null) ;
+        setLastUpdatedEventId(null) ;
+      }
+    } else {
+      if(getEvents().length > 0) {
+        for(CalendarEvent cal : getEvents()) {
+          if(cal.getId().equals(getSelectedEvent())) {
+            view.setEvent(cal) ;
+            setLastUpdatedEventId(getSelectedEvent()) ;
+            break ;
+          }
+        }
+
+      } else {
+        setSelectedEvent(null) ;
+        view.setEvent(null) ;
+        setLastUpdatedEventId(null) ;
+      }
+    }
+    
+    //UIListContainer uiContainer = getParent() ;
+    /*UIPreview view = uiContainer.getChild(UIPreview.class) ;
+    
+    
     if(getEvents().length > 0) { 
       setSelectedEvent(getEvents()[0].getId()) ;  
       view.setEvent(getEvents()[0]) ;
@@ -132,7 +164,7 @@ public class UIListView extends UICalendarView {
       view.setEvent(null) ;
       setLastUpdatedEventId(null) ;
     }
-    view.refresh() ;
+    view.refresh() ;*/
   }
 
   public void update(EventPageList pageList) throws Exception {

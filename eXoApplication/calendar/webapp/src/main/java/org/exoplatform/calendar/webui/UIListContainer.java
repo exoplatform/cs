@@ -20,8 +20,6 @@ import java.util.Calendar;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
-import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
-
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen
@@ -43,16 +41,6 @@ public class UIListContainer extends UIContainer implements CalendarView {
     UIListView list = getChild(UIListView.class) ;
     list.refresh() ;
     UIPreview view = getChild(UIPreview.class) ;
-    if(list.getEvents().length > 0) { 
-      list.setSelectedEvent(list.getEvents()[0].getId()) ;  
-      view.setEvent(list.getEvents()[0]) ;
-      list.setLastUpdatedEventId(list.getEvents()[0].getId()) ;
-    }
-    else {
-      list.setSelectedEvent(null) ;
-      view.setEvent(null) ;
-      list.setLastUpdatedEventId(null) ;
-    }
     view.refresh() ;
   }
   public void update() throws Exception {
