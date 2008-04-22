@@ -63,6 +63,8 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
         }
       } 
     } else if (type == "1") {
+    	
+    	
     	for (var i = 0; i < len; i++) {
         isDisable = DOMUtil.hasClass(actions[i], "ShareIcon");
         if (isDisable == true) {
@@ -133,15 +135,54 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
 
       // end add  	
     } else {
-      for (var i = 0; i < len; i++) {
-        isDisable = DOMUtil.hasClass(actions[i], "EditActionIcon") || DOMUtil.hasClass(actions[i], "ShareIcon") || DOMUtil.hasClass(actions[i], "MoveIcon")
-        if (isDisable == false) continue;
-        if (actions[i].parentNode.getAttribute("oldHref")) {
-          actions[i].parentNode.href = actions[i].parentNode.getAttribute("oldHref");
-          actions[i].parentNode.removeAttribute("oldHref");
-          actions[i].parentNode.removeAttribute("style");
-        }
-      } 
+    	// hung.hoang add
+      if(tr.getAttribute("isOwner")) {
+    		var isOwner = tr.getAttribute("isOwner").toLowerCase() ;    		
+    		if (isOwner == "true") {
+    			
+    			
+    			for (var i = 0; i < len; i++) {    			
+	    			isDisable = DOMUtil.hasClass(actions[i], "DeleteContactIcon") || DOMUtil.hasClass(actions[i], "MoveIcon");
+	        	if (isDisable == false) continue ;
+		        if (!actions[i].parentNode.getAttribute("oldHref")) {
+		          actions[i].parentNode.setAttribute("oldHref", actions[i].parentNode.href);
+		          actions[i].parentNode.style.color = "#cccccc";
+		          actions[i].parentNode.href = "javascript:void(0);";
+		        }    			
+    			}
+      	} else {
+      		for (var i = 0; i < len; i++) {
+		        isDisable = DOMUtil.hasClass(actions[i], "DeleteContactIcon") || DOMUtil.hasClass(actions[i], "MoveIcon") ;
+		        if (isDisable == false) continue;
+		        if (actions[i].parentNode.getAttribute("oldHref")) {
+		          actions[i].parentNode.href = actions[i].parentNode.getAttribute("oldHref");
+		          actions[i].parentNode.removeAttribute("oldHref");
+		          actions[i].parentNode.removeAttribute("style");
+		        }
+     	 		} 
+     	 		for (var i = 0; i < len; i++) {
+		        isDisable = DOMUtil.hasClass(actions[i], "EditActionIcon") || DOMUtil.hasClass(actions[i], "ShareIcon") || DOMUtil.hasClass(actions[i], "MoveIcon")
+		        if (isDisable == false) continue;
+		        if (actions[i].parentNode.getAttribute("oldHref")) {
+		          actions[i].parentNode.href = actions[i].parentNode.getAttribute("oldHref");
+		          actions[i].parentNode.removeAttribute("oldHref");
+		          actions[i].parentNode.removeAttribute("style");
+		        }
+        	}
+     	 		     		
+      	}
+      	
+      	
+      }
+
+      // end add
+    	
+    	
+    	
+       
+      
+      
+      
     }
   }
 	eXo.webui.UIContextMenuCon.changeAction(UIContextMenuCon.menuElement, id) ;
