@@ -14,10 +14,6 @@
 	border: none;
 }
 
-.UICalendarPortlet .UIAttachFileForm .SelectFileFrame {
-	width: 300px;
-}
-
 /********************* UICalendarCategoryManager ***************************/
 .UICalendarPortlet .UICalendarCategoryManager {
 	padding: 10px;
@@ -50,10 +46,6 @@
 
 .UICalendarPortlet .UIEventCategoryManager .UIGrid .ActionContainer {
 	width: 60px;
-}
-
-.UICalendarPortlet .SelectFileFrame {
-	width: 300px;
 }
 
 .UICalendarPortlet .SelectMemberIcon {

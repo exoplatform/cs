@@ -205,9 +205,10 @@
 .Yellow {background-color: #FFFF00;}    
 
 .EventTitle{
-	background-color:black ;
-	opacity: 0.3 ;
-	filter:alpha(opacity=30) ;
+	background-color:#000000 ;
+	filter:alpha(opacity=30);
+	-moz-opacity:0.3;
+	opacity:0.3;
 }
 
 .EventTitle p{
