@@ -695,7 +695,7 @@ public class JCRDataStorage {
           break ;
         }
         valueList.add(value) ;
-      }
+      }  
       if(!isExist) {
         Value value2add = addressBookNode.getSession().getValueFactory().createValue(sharedAddress);
         valueList.add(value2add) ;
