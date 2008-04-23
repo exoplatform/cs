@@ -136,6 +136,7 @@ UIMailPortlet.prototype.switchLayout = function(layout) {
 	var	layout3 = document.getElementById("SpliterResizableArea") ;
 	var resizePane = document.getElementById("ResizeReadingPane");
 	var workingarea = document.getElementById("UIMessageArea");
+	var uiMessageGrid = document.getElementById("uiMessageGrid") ;
 	var layoutState = false;
     
 	switch(layout) {
@@ -192,13 +193,15 @@ UIMailPortlet.prototype.switchLayout = function(layout) {
 		case 3 :
 			if (layout3.style.display == "none") {
 				layout3.style.display = "block" ;
-				layout2.style.height = "220px" ;
+				//layout2.style.height = "220px" ;
 				Browser.setCookie("layout3", "1", 30);
 				if (layout3.style.display != "none" && layout2.style.display != "none") {
+				  uiMessageGrid.style.height = "200px" ;
 					resizePane.style.display = "block";
 				}
         layoutState = true;
 			} else {				
+				uiMessageGrid.style.height = "100%" ;
 				layout3.style.display = "none" ;	
 				layout2.style.height = "100%" ;			
 		    resizePane.style.display = "none";
