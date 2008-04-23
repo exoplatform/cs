@@ -35,7 +35,6 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
-import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormSelectBox;
@@ -64,7 +63,6 @@ public class UITaskDetailTab extends UIFormInputWithActions {
   final public static String FIELD_TO_TIME = "toTime".intern() ;
 
   final public static String FIELD_CHECKALL = "allDay".intern() ;
-  // final public static String FIELD_REPEAT = "repeat".intern() ;
   final public static String FIELD_DELEGATION = "delegation".intern() ;
 
   final public static String FIELD_PRIORITY = "priority".intern() ; 
@@ -78,7 +76,6 @@ public class UITaskDetailTab extends UIFormInputWithActions {
     super(arg0);
     setComponentConfig(getClass(), null) ;
     actionField_ = new HashMap<String, List<ActionData>>() ;
-    //CalendarSetting calendarSetting = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     addUIFormInput(new UIFormStringInput(FIELD_EVENT, FIELD_EVENT, null).addValidator(MandatoryValidator.class)) ;
     addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION, FIELD_DESCRIPTION, null)) ;
@@ -105,7 +102,6 @@ public class UITaskDetailTab extends UIFormInputWithActions {
     addUIFormInput(new UIFormDateTimePicker(FIELD_TO, FIELD_TO, new Date(), false));
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_CHECKALL, FIELD_CHECKALL, null));
     addUIFormInput(new UIFormStringInput(FIELD_DELEGATION, FIELD_DELEGATION, null));
-    // addUIFormInput(new UIFormSelectBox(FIELD_REPEAT, FIELD_REPEAT, getRepeater())) ;
     addUIFormInput(new UIFormSelectBox(FIELD_PRIORITY, FIELD_PRIORITY, getPriority())) ;
 
     ActionData addEmailAddress = new ActionData() ;
@@ -176,7 +172,7 @@ public class UITaskDetailTab extends UIFormInputWithActions {
     attachments_ = attachment ;
   }
 
-  private List<SelectItemOption<String>> getCalendar() throws Exception {
+  protected List<SelectItemOption<String>> getCalendar() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
@@ -194,21 +190,13 @@ public class UITaskDetailTab extends UIFormInputWithActions {
     options.add(new SelectItemOption<String>("low", "3")) ;
     return options ;
   }
-  private List<SelectItemOption<String>> getRepeater() {
+  protected List<SelectItemOption<String>> getRepeater() {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     for(String s : CalendarEvent.REPEATTYPES) {
       options.add(new SelectItemOption<String>(s,s)) ;
     }
     return options ;
   }
-  /*private List<SelectItemOption<String>> getReminder() {
-    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    for(String rmdType : Reminder.REMINDER_TYPES) {
-      options.add(new SelectItemOption<String>(rmdType, rmdType)) ;
-    }
-    return options ;
-  }*/
-  
   public void setActionField(String fieldName, List<ActionData> actions) throws Exception {
     actionField_.put(fieldName, actions) ;
   }
@@ -216,7 +204,6 @@ public class UITaskDetailTab extends UIFormInputWithActions {
   public List<ActionData> getActionField(String fieldName) {return actionField_.get(fieldName) ;}
 
   public UIFormComboBox getUIFormComboBox(String id) {
-    // TODO Auto-generated method stub
     return findComponentById(id);
   }  
   

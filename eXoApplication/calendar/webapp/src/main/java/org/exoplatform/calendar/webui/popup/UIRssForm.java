@@ -60,33 +60,22 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
     }
 )
 public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
-  //final static private String NAME = "name".intern() ;
   final static private String URL = "url".intern() ;
   final static private String DESCRIPTION = "description".intern() ;
   final static private String LINK = "link".intern() ;
   final static private String COPYRIGHT = "copyright".intern() ;
   final static private String TITLE = "title".intern() ;
-  //final static private String VERSION = "version".intern() ;
   final static private String PUBLIC_DATE = "pubDate".intern() ;
   final static private String INFOR = "info".intern() ;
   final static private String MESSAGE = "message".intern() ;
   final static private String DESCRIPTIONS = "descriptions".intern() ;
   final static private String COPYRIGHTS = "copyrights".intern() ;
-  
-  /*final static private String[] version = 
-    new String[]{"rss_2.0","rss_1.0","rss_0.94","rss_0.93","rss_0.92","rss_0.91","rss_0.90"} ;*/
   public UIRssForm() throws Exception{
     super("UIRssForm");
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     UIFormInputWithActions rssInfo = new UIFormInputWithActions("rssInfo") ;
-    //rssInfo.addUIFormInput(new UIFormStringInput(NAME, NAME, "eXoCalendar.rss")) ;
     rssInfo.addUIFormInput(new UIFormStringInput(TITLE, TITLE, "eXoCalendar").addValidator(MandatoryValidator.class)) ;
-    //List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    /*for(String vs : version) {
-      options.add(new SelectItemOption<String>(vs, vs)) ;
-    }*/
-    //rssInfo.addUIFormInput(new UIFormSelectBox(VERSION, VERSION, options)) ;
     String url = calendarService.getCalendarSetting(SessionProviderFactory.createSessionProvider(), username).getBaseURL() ;
     if(CalendarUtils.isEmpty(url)) url = CalendarUtils.getServerBaseUrl() + "calendar/iCalRss" ;
     rssInfo.addUIFormInput(new UIFormStringInput(URL, URL, url).addValidator(MandatoryValidator.class)) ;
@@ -135,22 +124,22 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
         return ;
       }
       RssData rssData = new RssData() ;
-      String tempName = uiForm.getUIStringInput(uiForm.TITLE).getValue() ;
+      String tempName = uiForm.getUIStringInput(TITLE).getValue() ;
       if(tempName != null && tempName.length() > 0) {
         if(tempName.length() > 4 && tempName.substring(tempName.length() - 4).equals(".rss")) rssData.setName(tempName);
         else rssData.setName(tempName + ".rss") ;
       }else {
         rssData.setName("eXoCalendar.rss") ;
       }      
-      rssData.setUrl(uiForm.getUIStringInput(uiForm.URL).getValue()) ;
-      rssData.setDescription(uiForm.getUIStringInput(uiForm.DESCRIPTION).getValue()) ;
-      rssData.setCopyright(uiForm.getUIStringInput(uiForm.COPYRIGHT).getValue()) ;
-      rssData.setLink(uiForm.getUIStringInput(uiForm.LINK).getValue()) ;
-      String title = uiForm.getUIStringInput(uiForm.TITLE).getValue() ;
+      rssData.setUrl(uiForm.getUIStringInput(URL).getValue()) ;
+      rssData.setDescription(uiForm.getUIStringInput(DESCRIPTION).getValue()) ;
+      rssData.setCopyright(uiForm.getUIStringInput(COPYRIGHT).getValue()) ;
+      rssData.setLink(uiForm.getUIStringInput(LINK).getValue()) ;
+      String title = uiForm.getUIStringInput(TITLE).getValue() ;
       rssData.setTitle(title) ;
       rssData.setVersion("rss_2.0") ;
-      if(uiForm.getUIFormDateTimeInput(uiForm.PUBLIC_DATE).getCalendar() != null)
-      rssData.setPubDate(uiForm.getUIFormDateTimeInput(uiForm.PUBLIC_DATE).getCalendar().getTime()) ;
+      if(uiForm.getUIFormDateTimeInput(PUBLIC_DATE).getCalendar() != null)
+      rssData.setPubDate(uiForm.getUIFormDateTimeInput(PUBLIC_DATE).getCalendar().getTime()) ;
       calendarService.generateRss(SessionProviderFactory.createSystemProvider(), Util.getPortalRequestContext().getRemoteUser(), calendarIds, rssData) ;
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       calendarPortlet.cancelAction() ;  

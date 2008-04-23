@@ -20,12 +20,9 @@ import java.text.DateFormat;
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -38,7 +35,6 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormSelectBox;
-import org.exoplatform.webui.form.UIFormStringInput;
 
 /**
  * Created by The eXo Platform SARL
@@ -106,26 +102,13 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     timeFormat.add(new SelectItemOption<String>("24 Hours", "HH:mm")) ;
     addUIFormInput(new UIFormSelectBox(TIME_FORMAT, TIME_FORMAT, timeFormat)) ;
     UIFormSelectBox localeSelect = new UIFormSelectBox(LOCATION, LOCATION, getLocales()) ;
-    //localeSelect.setOnChange("ChangeLocale") ;
     addUIFormInput(localeSelect) ;
-    
     addUIFormInput(new UIFormSelectBox(TIMEZONE, TIMEZONE, getTimeZones(null))) ;
-   /* List<ActionData> showAllActions = new ArrayList<ActionData>() ;
-    ActionData actionShowAllTimeZone = new ActionData() ;
-    //actionShowAllTimeZone.setActionListener("ShowAllTimeZone") ;
-    actionShowAllTimeZone.setActionType(ActionData.TYPE_ICON) ;
-    actionShowAllTimeZone.setCssIconClass("ShowAllTimeZone") ;
-    actionShowAllTimeZone.setActionName("ShowAllTimeZone") ;
-    showAllActions.add(actionShowAllTimeZone) ;
-    setActionField(TIMEZONE, showAllActions)  ;*/
-    
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(ISSHOWWORKINGTIME, ISSHOWWORKINGTIME, false)) ;
     List<SelectItemOption<String>> startTimes = new ArrayList<SelectItemOption<String>>() ;
     List<SelectItemOption<String>> endTimes = CalendarUtils.getTimesSelectBoxOptions(CalendarUtils.TIMEFORMAT, 30) ;
     addUIFormInput(new UIFormSelectBox(WORKINGTIME_BEGIN, WORKINGTIME_BEGIN, startTimes)) ;
     addUIFormInput(new UIFormSelectBox(WORKINGTIME_END, WORKINGTIME_END, endTimes)) ;
-
-    //addUIFormInput(new UIFormStringInput(BASE_URL, BASE_URL, null)) ;
   }
   protected UIForm getParentFrom() {
     return (UIForm)getParent() ;
@@ -258,12 +241,6 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     cal.setTime(dateTimeFormat.parse(date)); 
     getUIFormSelectBox(WORKINGTIME_END).setValue(timeFormat.format(cal.getTime())) ;
   }
- /* protected String getBaseUrl() {
-    return getUIStringInput(BASE_URL).getValue() ;
-  }*/
-  /*protected void setBaseUrl(String value) {
-    getUIStringInput(BASE_URL).setValue(value) ;
-  }*/
   public List<SelectItemOption<String>> getTimeZones(String locale) {
     return CalendarUtils.getTimeZoneSelectBoxOptions(TimeZone.getAvailableIDs()) ;
   }

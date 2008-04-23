@@ -28,7 +28,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
@@ -82,7 +81,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   public final static String ACT_ADDNEW_EVENT = "QuickAddNewEvent".intern() ;
   public final static String ACT_ADDNEW_TASK = "QuickAddNewTask".intern() ;
   public final static String[] CONTEXT_MENU = {ACT_ADDNEW_EVENT, ACT_ADDNEW_TASK}  ;
-  //public final static String ACT_GOTO_DATE = "GotoDate".intern() ;
   public final static String ACT_VIEW = "View".intern() ;
   public final static String ACT_EDIT = "Edit".intern() ;
   public final static String ACT_DELETE = "Delete".intern() ;
@@ -126,15 +124,11 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   public UICalendarView() throws Exception{
     initCategories() ;
     applySeting() ;
-    calendar_ = getInstanceTempCalendar() ; //CalendarUtils.getInstanceTempCalendar() ;
+    calendar_ = getInstanceTempCalendar() ;  
     calendar_.setLenient(false) ;
-    /*int gmtoffset = calendar_.get(Calendar.DST_OFFSET) + calendar_.get(Calendar.ZONE_OFFSET);
-    calendar_.setTimeInMillis(System.currentTimeMillis() - gmtoffset) ; */
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy k:m:s z");
     simpleDateFormat.setCalendar(calendar_) ;
     dfs_ = new DateFormatSymbols() ;
-    //dfs_ = new DateFormatSymbols(new Locale(getCalendarSetting().getLocation())) ;
-    System.out.println("\n\n GMT Time " + simpleDateFormat.format(calendar_.getTime()));
     for(int i = 0; i< dfs_.getMonths().length; i++) {
       monthsMap_.put(i, dfs_.getMonths()[i]) ;
     }
@@ -153,7 +147,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   }
   protected Calendar getInstanceTempCalendar() { 
     if(instanceTempCalendar_ != null) return instanceTempCalendar_ ; 
-    //System.out.println("created in " + this.getId() );
     Calendar  calendar = GregorianCalendar.getInstance() ;
     calendar.setLenient(false) ;
     int gmtoffset = calendar.get(Calendar.DST_OFFSET) + calendar.get(Calendar.ZONE_OFFSET);
@@ -172,9 +165,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       calendarSetting_ = calService.getCalendarSetting(getSession(), username) ;
     } 
     dateTimeFormat_ = getDateFormat() + " " + getTimeFormat() ;
-    TimeZone settingTimeZone = TimeZone.getTimeZone(calendarSetting_.getTimeZone()) ;
-    //dfs_ =  new DateFormatSymbols(new Locale(calendarSetting_.getLocation())) ;
-    //calendar_ = getInstanceTempCalendar() ;
   }
   public void setViewType(String viewType) { this.viewType_ = viewType ; }
   public String getViewType() { return viewType_ ; }
@@ -282,13 +272,12 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     case TYPE_WEEK : cl.add(Calendar.WEEK_OF_YEAR, value) ;break;
     case TYPE_MONTH : cl.add(Calendar.MONTH, value) ;break;
     case TYPE_YEAR : cl.add(Calendar.YEAR, value) ;break;
-    default: System.out.println("Invalid type.");break;
+    default:break;
     }
     return cl ;
   }
 
   protected int getDaysInMonth() {
-    //Calendar cal = new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getCurrentDay()) ;
     return calendar_.getActualMaximum(Calendar.DAY_OF_MONTH) ;
   }
   protected int getDaysInMonth(int month, int year) {
@@ -427,7 +416,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     return  QUICKEDIT_MENU ;
   }
   protected List<String> getDisplayTimes(String timeFormat, int timeInterval) {
-    // List<String> times = new ArrayList<String>() ;
     if(displayTimes_ == null) {
       displayTimes_ =   new ArrayList<String>() ;
       Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
@@ -444,7 +432,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     return displayTimes_ ;
   }
   protected Map<String, String> getTimeSteps(String timeFormat, int timeInterval) {
-    //Map<String, String> times = new LinkedHashMap<String, String>() ;
     if(timeSteps_ == null) {
       timeSteps_ = new LinkedHashMap<String, String>() ;
       Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
@@ -511,19 +498,14 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       return arg ;
     }
   }  
-
-
   @Override
   public void processRender(WebuiRequestContext arg0) throws Exception {
     refresh() ;
     super.processRender(arg0);
   }
-
-
   static  public class AddEventActionListener extends EventListener<UICalendarView> {
     public void execute(Event<UICalendarView> event) throws Exception {
       UICalendarView uiForm = event.getSource() ;
-      System.out.println(" ===========> AddEventActionListener") ;
       CalendarService calendarService =  CalendarUtils.getCalendarService() ; 
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       String username = event.getRequestContext().getRemoteUser() ;
@@ -535,10 +517,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       } else {
         String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
         String formTime = event.getRequestContext().getRequestParameter(CURRENTTIME) ;
-        String timeZone = event.getRequestContext().getRequestParameter(TIMEZONE) ;
-        /*if(TimeZone.getDefault().getRawOffset() != (Long.parseLong(timeZone) * 60 * 1000)) {
-          formTime =  String.valueOf(Long.parseLong(formTime) +(TimeZone.getDefault().getRawOffset() - (Long.parseLong(timeZone) * 60 * 1000))) ;
-        }*/
         String value = uiForm.getUIFormSelectBox(EVENT_CATEGORIES).getValue() ;
         UICalendarPortlet uiPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
         UIPopupAction uiParenPopup = uiPortlet.getChild(UIPopupAction.class) ;
@@ -573,9 +551,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   static  public class DeleteEventActionListener extends EventListener<UICalendarView> {
     public void execute(Event<UICalendarView> event) throws Exception {
       UICalendarView uiCalendarView = event.getSource() ;
-      System.out.println(" ===========> DeleteEventActionListener") ;
       UIApplication uiApp = uiCalendarView.getAncestorOfType(UIApplication.class) ;
-      //uiCalendarView.refresh() ;
       uiCalendarView.allDelete_ = true ;
       UICalendarPortlet calPortlet = uiCalendarView.getAncestorOfType(UICalendarPortlet.class) ;
       calPortlet.cancelAction() ;
@@ -587,7 +563,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         } else {
           try {
             uiCalendarView.removeEvents(list) ;
-            ((UIMonthView)uiCalendarView).refreshEvents() ;
+            ((UIMonthView)uiCalendarView).refresh() ;
             if(uiCalendarView.allDelete_) {
               uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.delete-event-successfully", null)) ;
             } else {
@@ -611,13 +587,10 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         }
         try {
           uiCalendarView.removeEvents(list) ;
-          //uiCalendarView.removeEvents(uiCalendarView.canEditPermission_) ;
-          //uiListView.getSelectedCategory()
           uiListView.setSelectedEvent(null) ;
           UIListContainer  uiListContainer = uiCalendarView.getParent() ;
           uiListContainer.refresh() ;
           if(uiCalendarView.allDelete_) {
-            //System.out.println("allDelete: " + uiCalendarView.allDelete_)  ;
             uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.delete-event-successfully", null)) ;
           } else {
             uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.can-not-delete-all-event",null)) ;
@@ -636,7 +609,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         return ;
       }
       UIMiniCalendar uiMiniCalendar = uiCalendarView.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
-      //uiMiniCalendar.updateMiniCal() ;
       uiCalendarView.setLastUpdatedEventId(null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView.getParent()) ;
@@ -644,8 +616,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   }
   static  public class ChangeCategoryActionListener extends EventListener<UICalendarView> {
     public void execute(Event<UICalendarView> event) throws Exception {
-      //UICalendarView uiForm = event.getSource() ;
-      System.out.println(" ===========> ChangeCategoryActionListener") ;
     }
   }
   static  public class EventSelectActionListener extends EventListener<UICalendarView> {
@@ -666,7 +636,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
 
   static  public class ViewActionListener extends EventListener<UICalendarView> {
     public void execute(Event<UICalendarView> event) throws Exception {
-      System.out.println("ViewActionListener");
       UICalendarView uiCalendarView = event.getSource() ;
       UICalendarPortlet uiPortlet = uiCalendarView.getAncestorOfType(UICalendarPortlet.class) ;
       CalendarEvent eventCalendar = null ;
@@ -674,11 +643,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         UIListView uiListView = (UIListView)uiCalendarView ;
         if(!uiListView.isDisplaySearchResult()) uiCalendarView.refresh() ;
       }  
-      //String username = event.getRequestContext().getRemoteUser() ;
-      //String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
       String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      //String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
-      //CalendarService calService = uiCalendarView.getApplicationComponent(CalendarService.class) ;
       if(uiCalendarView.getDataMap() != null) {
         eventCalendar = uiCalendarView.getDataMap().get(eventId) ;
       }
@@ -700,11 +665,8 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           uiPreview.setShowPopup(true) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
         }
-        //event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView.getParent()) ;
       } else {
         UICalendarWorkingContainer uiWorkingContainer = uiCalendarView.getAncestorOfType(UICalendarWorkingContainer.class) ;
-        UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
-        //uiMiniCalendar.updateMiniCal() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
         UIApplication uiApp = uiCalendarView.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.event-not-found", null)) ;
@@ -715,7 +677,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
 
   static  public class EditActionListener extends EventListener<UICalendarView> {
     public void execute(Event<UICalendarView> event) throws Exception {
-      System.out.println("EditEventActionListener");
       UICalendarView uiCalendarView = event.getSource() ;
       UICalendarPortlet uiPortlet = uiCalendarView.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
@@ -732,16 +693,10 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         boolean canEdit = false ;
         if(CalendarUtils.PRIVATE_TYPE.equals(calType)) {
           canEdit = true ;
-          //options = null ;
         } else if (CalendarUtils.SHARED_TYPE.equals(calType)) {
           GroupCalendarData calendarData = calendarService.getSharedCalendars(uiCalendarView.getSystemSession(), CalendarUtils.getCurrentUser(), true)  ;
           if(calendarData.getCalendarById(calendarId) != null)
             canEdit = CalendarUtils.canEdit(null, calendarData.getCalendarById(calendarId).getEditPermission(), username) ;
-          /* if(canEdit) {
-            for(org.exoplatform.calendar.service.Calendar cal : calendarData.getCalendars()) {
-              options.add(new SelectItemOption<String>(cal.getName(), cal.getId())) ;
-            }
-          }*/
         } else if (CalendarUtils.PUBLIC_TYPE.equals(calType)) {
           OrganizationService oSevices = uiCalendarView.getApplicationComponent(OrganizationService.class) ;
           List<GroupCalendarData> publicData = uiCalendarView.getPublicCalendars(username) ;
@@ -751,13 +706,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
               break ;
             }
           }
-          /* if(canEdit) {
-            for(GroupCalendarData calendarData : publicData) {
-              for(org.exoplatform.calendar.service.Calendar cal : calendarData.getCalendars()) {
-                options.add(new SelectItemOption<String>(cal.getName(), cal.getId())) ;
-              }
-            }
-          }*/
         }
         if(canEdit) {
           if(CalendarEvent.TYPE_EVENT.equals(eventCalendar.getEventType())) {
@@ -785,8 +733,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         }
       } else {
         UICalendarWorkingContainer uiWorkingContainer = uiCalendarView.getAncestorOfType(UICalendarWorkingContainer.class) ;
-        UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
-        //uiMiniCalendar.updateMiniCal() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
         UIApplication uiApp = uiCalendarView.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.event-not-found", null)) ;
@@ -797,7 +743,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   static  public class DeleteActionListener extends EventListener<UICalendarView> {
     public void execute(Event<UICalendarView> event) throws Exception {
       UICalendarView uiCalendarView = event.getSource() ;
-      System.out.println("\n\n QuickDeleteEventActionListener");
       String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
       String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
@@ -833,7 +778,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         }
         UICalendarViewContainer uiContainer = uiCalendarView.getAncestorOfType(UICalendarViewContainer.class) ;
         UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
-        //uiMiniCalendar.updateMiniCal() ;
         uiCalendarView.setLastUpdatedEventId(null) ;
         if(uiContainer.getRenderedChild() instanceof UIListContainer) {
           ((UIListContainer)uiContainer.getRenderedChild()).getChild(UIListView.class).setDisplaySearchResult(false) ;
@@ -878,21 +822,14 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   static  public class GotoDateActionListener extends EventListener<UICalendarView> {
     public void execute(Event<UICalendarView> event) throws Exception {
       try {
-        System.out.println("GotoDateActionListener  mini calendar ");
         UICalendarView calendarview = event.getSource() ;
         String viewType = event.getRequestContext().getRequestParameter(OBJECTID) ;
         String currentTime = event.getRequestContext().getRequestParameter("currentTime") ;
-        String year = event.getRequestContext().getRequestParameter(YEAR) ;
-        String month = event.getRequestContext().getRequestParameter(MONTH) ;
-        String day = event.getRequestContext().getRequestParameter(DAY) ;
         UICalendarPortlet portlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
         UICalendarViewContainer uiContainer = portlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
         UIMiniCalendar uiMiniCalendar = portlet.findFirstComponentOfType(UIMiniCalendar.class) ;
         Calendar cal = calendarview.getInstanceTempCalendar() ;
         cal.setTimeInMillis(Long.parseLong(currentTime)) ;
-        /* cal.set(Calendar.DATE, Integer.parseInt(day)) ;
-        cal.set(Calendar.MONTH, Integer.parseInt(month)) ;
-        cal.set(Calendar.YEAR, Integer.parseInt(year)) ;*/
         int type = Integer.parseInt(viewType) ; 
         uiContainer.initView(UICalendarViewContainer.TYPES[type]) ;
         switch (type){
@@ -916,11 +853,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
             uiView.setCurrentCalendar(cal) ;
             uiView.refresh() ;
           }
-          /*if(calendarview instanceof UIMiniCalendar) {
-            ((UIMiniCalendar)calendarview).setCurrentCalendar(cal) ;
-            ((UIMiniCalendar)calendarview).updateMiniCal() ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
-          }*/
         }break;
         case TYPE_WEEK : {
           UIWeekView uiView = uiContainer.getChild(UIWeekView.class) ;
@@ -933,7 +865,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           uiView.setCurrentCalendar(cal) ;
           uiView.refresh() ;
           uiContainer.setRenderedChild(UIMonthView.class) ;
-          //event.getRequestContext().addUIComponentToUpdateByAjax(uiView) ;
         }break;
         case TYPE_YEAR :{
           UIYearView uiView = uiContainer.getChild(UIYearView.class) ;
@@ -942,10 +873,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           uiView.refresh() ;
           uiContainer.setRenderedChild(UIYearView.class) ;
         }break;
-        default: System.out.println("Invalid type.");break;
+        default:break;
         }
         uiMiniCalendar.setCurrentCalendar(cal) ;
-        //uiMiniCalendar.updateMiniCal() ;
         UIActionBar uiActionBar = portlet.findFirstComponentOfType(UIActionBar.class) ;
         uiActionBar.setCurrentView(uiContainer.getRenderedChild().getId()) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
@@ -972,7 +902,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   }
   static  public class QuickAddActionListener extends EventListener<UICalendarView> {
     public void execute(Event<UICalendarView> event) throws Exception {
-      System.out.println("QuickAddActionListener");
       UICalendarView calendarview = event.getSource() ;
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
       UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;
@@ -987,22 +916,16 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       String startTime = event.getRequestContext().getRequestParameter("startTime") ;
       String finishTime = event.getRequestContext().getRequestParameter("finishTime") ;
       String currentTime = event.getRequestContext().getRequestParameter(CURRENTTIME) ;
-      String timeZone = event.getRequestContext().getRequestParameter(TIMEZONE) ;
       try {
         Long.parseLong(currentTime) ;
-        //System.out.println("client time " + new Date(Long.parseLong(currentTime)));
         long amount =  Long.parseLong(finishTime) - Long.parseLong(startTime) ;
         startTime = currentTime ;
         finishTime = String.valueOf(Long.parseLong(currentTime) + amount) ;
-        //finishTime = String.valueOf(Long.parseLong(finishTime) +(TimeZone.getDefault().getRawOffset() - (Long.parseLong(timeZone) * 60 * 1000))) ;
-      } catch (Exception e) {
-        System.out.println("clientTime" + currentTime);
-      }
+      } catch (Exception e) {}
       String selectedCategory = calendarview.getUIFormSelectBox(EVENT_CATEGORIES).getValue() ;
       UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
       UIQuickAddEvent uiQuickAddEvent = uiPopupAction.activate(UIQuickAddEvent.class, 600) ;
-      //System.out.println(selectedCategory);
       if(!CalendarUtils.isEmpty(selectedCategory)) 
         uiQuickAddEvent.setSelectedCategory(selectedCategory) ;
       else uiQuickAddEvent.setSelectedCategory("Meeting") ; 
@@ -1040,7 +963,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         UICalendarPortlet uiClendarPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
         UIMiniCalendar uiMiniCalendar = uiClendarPortlet.findFirstComponentOfType(UIMiniCalendar.class);
         uiMiniCalendar.setCurrentCalendar(calendarview.getCurrentCalendar()) ;
-        //uiMiniCalendar.updateMiniCal() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
       } catch (Exception e) {
@@ -1060,7 +982,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         UICalendarPortlet uiClendarPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
         UIMiniCalendar uiMiniCalendar = uiClendarPortlet.findFirstComponentOfType(UIMiniCalendar.class);
         uiMiniCalendar.setCurrentCalendar(calendarview.getCurrentCalendar()) ;
-        //uiMiniCalendar.updateMiniCal() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
       } catch (Exception e) {

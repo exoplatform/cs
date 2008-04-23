@@ -3,8 +3,6 @@ package org.exoplatform.calendar.webui ;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import org.exoplatform.webui.form.UIFormSelectBox;
 /**
  * Represents an optgroup in a select element
  * Holds a list of SelectItemOption that represent the options inside this optgroup

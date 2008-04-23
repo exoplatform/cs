@@ -42,11 +42,9 @@ import org.exoplatform.webui.event.EventListener;
     lifecycle = UIFormLifecycle.class,
     template =  "app:/templates/calendar/webui/UIDefaultPreview.gtmpl",
     events = {
-      //@EventConfig(listeners = UIPreview.ViewActionListener.class),  
       @EventConfig(listeners = UIPreview.DownloadActionListener.class),  
       @EventConfig(listeners = UICalendarView.EditActionListener.class),  
       @EventConfig(listeners = UICalendarView.DeleteActionListener.class, confirm="UICalendarView.msg.confirm-delete")
-
     }
 )
 public class UIPreview extends UICalendarView implements UIPopupComponent {
@@ -68,17 +66,6 @@ public class UIPreview extends UICalendarView implements UIPopupComponent {
   public void setEvent(CalendarEvent event) { event_ = event ; }
 
   public void refresh() throws Exception {
-    /*if(event_ != null) {
-      CalendarService calService = getApplicationComponent(CalendarService.class) ;
-      String username = Util.getPortalRequestContext().getRemoteUser() ;
-      CalendarEvent event = null ;
-      if(CalendarUtils.PUBLIC_TYPE.equals(event_.getCalType())) {
-        event = calService.getGroupEvent(event_.getCalendarId(), event_.getId()) ;
-      } else {
-        event = calService.getUserEvent(username, event_.getCalendarId(), event_.getId()) ;
-      }
-      if( event != null) event_ = event ;
-    } */
   }
 
   public void activate() throws Exception {
@@ -105,14 +92,6 @@ public class UIPreview extends UICalendarView implements UIPopupComponent {
     }
     return null ;
   }
-  /* public String getImage(Attachment attach) throws Exception {
-    if(attach.getMimeType().contains("image")) {
-      DownloadService dservice = getApplicationComponent(DownloadService.class) ;
-      return CalendarUtils.getDataSource(attach, dservice) ;
-    }
-    return null ;
-  }*/
-
   public String getDownloadLink(Attachment attach) throws Exception {
     DownloadService dservice = getApplicationComponent(DownloadService.class) ;
     return CalendarUtils.getDataSource(attach, dservice) ;
@@ -142,28 +121,6 @@ public class UIPreview extends UICalendarView implements UIPopupComponent {
         event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + downloadLink + "');");
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPreview) ;
       }
-      /* 
-      String downloadLink = uiPreview.getDownloadLink(attach) ;
-      System.out.println("Download " + downloadLink);
-      event.getRequestContext().getJavascriptManager().addCustomizedOnLoadScript("ajaxRedirect('" + downloadLink + "');");
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPreview) ;*/
-    }
-  }
-  static  public class ViewActionListener extends EventListener<UIPreview> {
-    public void execute(Event<UIPreview> event) throws Exception {
-      UIPreview uiView = event.getSource() ;
-      System.out.println("\n\n ViewActionListener");
-      /* CalendarEvent eventCalendar = null ;
-      String username = event.getRequestContext().getRemoteUser() ;
-      String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
-      String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      try {
-        CalendarService calService = uiView.getApplicationComponent(CalendarService.class) ;
-        eventCalendar = calService.getUserEvent(username, calendarId, eventId) ;
-      } catch (Exception e){
-        e.printStackTrace() ;
-      }
-       */
     }
   }
 }

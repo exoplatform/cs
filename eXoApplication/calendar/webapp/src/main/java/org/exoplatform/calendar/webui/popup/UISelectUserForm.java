@@ -71,13 +71,14 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
   public static String FIRST_NAME = "firstName";
   public static String EMAIL = "email";
 
-  private Map<String, User> userData_ = new HashMap<String, User>() ;
+  protected Map<String, User> userData_ = new HashMap<String, User>() ;
   private boolean isShowSearch_ = false ;
   protected String tabId_ = null ;
   protected String groupId_ = null ;
   protected Collection<String> pars_ ;
   public UIPageIterator uiIterator_ ;
 
+  @SuppressWarnings("unchecked")
   public List<User> getData() throws Exception {
     for(Object obj : uiIterator_.getCurrentPageData()){
       User user = (User)obj ;
@@ -107,14 +108,8 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
     OrganizationService service = getApplicationComponent(OrganizationService.class) ;
     ObjectPageList objPageList = new ObjectPageList(service.getUserHandler().getUserPageList(0).getAll(), 10) ;
     uiIterator_.setPageList(objPageList) ;
-    /*for(String s : pars) {
-      if(getUIFormCheckBoxInput(s) != null) getUIFormCheckBoxInput(s).setChecked(true) ;
-    }*/
     pars_ = pars ;
   }
-  /*public void  initSearchForm() throws Exception{
-
-  }*/
   private List<SelectItemOption<String>> getGroups() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     OrganizationService orgService = CalendarUtils.getOrganizationService() ;
@@ -160,12 +155,10 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
   }
   static  public class AddActionListener extends EventListener<UISelectUserForm> {
     public void execute(Event<UISelectUserForm> event) throws Exception { 
-      System.out.println("======== >>>UISelectUserForm.SaveActionListener");
       UISelectUserForm uiForm = event.getSource();
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIEventForm uiEventForm = uiContainer.findFirstComponentOfType(UIEventForm.class) ;
       if(uiEventForm != null) {
-
         StringBuilder sb = new StringBuilder() ;
         for(Object o : uiForm.uiIterator_.getCurrentPageData()) {
           User u = (User)o ;
@@ -190,7 +183,6 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
         uiEventForm.setSelectedTab(uiForm.tabId_) ;
         uiEventForm.setParticipant(sb.toString()) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getParent()) ;
-        //((UIEventAttenderTab)uiEventForm.getChildById(uiEventForm.TAB_EVENTATTENDER)).updateParticipants(sb.toString()) ;
       } 
     }  
   } 
@@ -203,7 +195,6 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
   }
   static  public class ReplaceActionListener extends EventListener<UISelectUserForm> {
     public void execute(Event<UISelectUserForm> event) throws Exception { 
-      System.out.println("======== >>>UISelectUserForm.SaveActionListener");
       UISelectUserForm uiForm = event.getSource();
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIEventForm uiEventForm = uiContainer.findFirstComponentOfType(UIEventForm.class) ;
@@ -225,22 +216,21 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
         }
         uiEventForm.setSelectedTab(uiForm.tabId_) ;
         uiEventForm.setParticipant(sb.toString()) ;
-        //((UIEventAttenderTab)uiEventForm.getChildById(uiEventForm.TAB_EVENTATTENDER)).updateParticipants(sb.toString()) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getParent()) ;
       } 
       UIPopupAction chilPopup =  uiContainer.getChild(UIPopupAction.class) ;
       chilPopup.deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(chilPopup) ;
-      //event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getChildById(uiEventForm.TAB_EVENTSHARE)) ;
     }  
   } 
+  @SuppressWarnings("unchecked")
   static  public class SearchActionListener extends EventListener<UISelectUserForm> {
     public void execute(Event<UISelectUserForm> event) throws Exception {
       UISelectUserForm uiForm = event.getSource() ;
       OrganizationService service = uiForm.getApplicationComponent(OrganizationService.class) ;
       String keyword = uiForm.getUIStringInput(FIELD_KEYWORD).getValue();
       String filter = uiForm.getUIFormSelectBox(FIELD_FILTER).getValue() ;
-      uiForm.groupId_ = null ; //uiForm.getSelectedGroup() ;
+      uiForm.groupId_ = null ;  
       uiForm.setSelectedGroup(null) ;
       if(CalendarUtils.isEmpty(keyword)) {
         uiForm.init(uiForm.pars_) ;

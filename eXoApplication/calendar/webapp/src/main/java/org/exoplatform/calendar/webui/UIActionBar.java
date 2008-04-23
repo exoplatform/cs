@@ -16,13 +16,7 @@
  **/
 package org.exoplatform.calendar.webui;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.TimeZone;
-
-import javax.mail.search.FromTerm;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
@@ -33,7 +27,6 @@ import org.exoplatform.calendar.webui.popup.UIFeed;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.calendar.webui.popup.UIQuickAddEvent;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -91,7 +84,6 @@ public class UIActionBar extends UIContainer  {
       }
       String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
       String formTime = event.getRequestContext().getRequestParameter(CURRENTTIME) ;
-      String timeZone = event.getRequestContext().getRequestParameter(TIMEZONE) ;
       String categoryId = event.getRequestContext().getRequestParameter(CATEGORYID) ;
       UICalendarPortlet uiPortlet = uiActionBar.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
@@ -146,7 +138,6 @@ public class UIActionBar extends UIContainer  {
       renderedChild.setCurrentCalendar(CalendarUtils.getInstanceTempCalendar()) ;
       renderedChild.refresh() ;
       uiMiniCalendar.setCurrentCalendar(CalendarUtils.getInstanceTempCalendar()) ;
-      //uiMiniCalendar.updateMiniCal() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarContainer) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
@@ -159,9 +150,7 @@ public class UIActionBar extends UIContainer  {
       UIPopupAction popupAction = calendarPortlet.getChild(UIPopupAction.class) ;
       UICalendarSettingForm uiCalendarSettingForm = popupAction.activate(UICalendarSettingForm.class, 600) ;
       CalendarService cservice = CalendarUtils.getCalendarService() ;
-      //String username = Util.getPortalRequestContext().getRemoteUser() ;
       CalendarSetting calendarSetting = calendarPortlet.getCalendarSetting() ;
-        //cservice.getCalendarSetting(uiActionBar.getSession(), username) ;
       uiCalendarSettingForm.init(calendarSetting, cservice) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }

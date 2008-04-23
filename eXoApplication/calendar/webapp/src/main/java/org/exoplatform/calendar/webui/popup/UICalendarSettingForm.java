@@ -32,7 +32,6 @@ import org.exoplatform.calendar.webui.UIActionBar;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UICalendars;
-import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -70,12 +69,6 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
   final private static String DEFAULT_CALENDAR_TAB = "defaultCalendarTab".intern() ;
   final private static String DEFAULT_CALENDARS = "defaultCalendars".intern() ;
   final private static String DEFAULT_CALENDARS_NOTE = "note".intern() ;
-
-  final private static String PREFIX_PRIVATE = "private".intern() ;
-  final private static String PREFIX_SHARED  = "shared".intern() ;
-  final private static String  PREFIX_PUBLIC = "public".intern() ;
-
-
   private Map<String, String> names_ = new HashMap<String, String>() ;
   public String[] sharedCalendarColors_  = null ;
   public UICalendarSettingForm() throws Exception{
@@ -101,8 +94,8 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       settingTab.setWeekStartOn(calendarSetting.getWeekStartOn()) ;
       settingTab.setDateFormat(calendarSetting.getDateFormat()) ;
       settingTab.setTimeFormat(calendarSetting.getTimeFormat()) ;
-      settingTab.getUIFormSelectBox(settingTab.WORKINGTIME_BEGIN).setOptions(CalendarUtils.getTimesSelectBoxOptions(calendarSetting.getTimeFormat(), 30)) ;
-      settingTab.getUIFormSelectBox(settingTab.WORKINGTIME_END).setOptions(CalendarUtils.getTimesSelectBoxOptions(calendarSetting.getTimeFormat(), 30)) ;
+      settingTab.getUIFormSelectBox(UICalendarSettingTab.WORKINGTIME_BEGIN).setOptions(CalendarUtils.getTimesSelectBoxOptions(calendarSetting.getTimeFormat(), 30)) ;
+      settingTab.getUIFormSelectBox(UICalendarSettingTab.WORKINGTIME_END).setOptions(CalendarUtils.getTimesSelectBoxOptions(calendarSetting.getTimeFormat(), 30)) ;
       if(calendarSetting.getLocation() == null) {
         calendarSetting.setLocation(Util.getPortalRequestContext().getLocale().getISO3Country()) ;
       }
@@ -212,7 +205,6 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     try {
       label = super.getLabel(id) ;
     } catch (Exception e) {
-      //e.printStackTrace() ;
     }
     return label ;
   }
@@ -235,9 +227,6 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       calendarSetting.setSharedCalendarsColors(uiForm.sharedCalendarColors_) ;
       calendarSetting.setViewType(settingTab.getViewType()) ;
       calendarSetting.setTimeInterval(Long.parseLong(settingTab.getTimeInterval())) ;
-      /*if(settingTab.getViewType().equals(CalendarSetting.WORKING_VIEW))
-        calendarSetting.setWeekStartOn(String.valueOf(1)) ;
-      else */  
       calendarSetting.setWeekStartOn(settingTab.getWeekStartOn()) ;
       calendarSetting.setDateFormat(settingTab.getDateFormat()) ;
       calendarSetting.setTimeFormat(settingTab.getTimeFormat()) ;
@@ -279,9 +268,6 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
         unCheckList.addAll(defaultFilterCalendars) ;
         defaultFilterCalendars.clear() ;
       }
-      /*for(String id : unCheckList) {
-        if(uiCalendars.getUIFormCheckBoxInput(id) != null)  uiCalendars.getUIFormCheckBoxInput(id).setChecked(true) ;
-      }*/
       uiCalendars.checkAll() ;
       calendarService.saveCalendarSetting(uiForm.getSession(), event.getRequestContext().getRemoteUser(), calendarSetting) ;
       calendarPortlet.setCalendarSetting(calendarSetting) ;
@@ -292,14 +278,11 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       uiViewContainer.refresh() ;
       calendarPortlet.findFirstComponentOfType(UIActionBar.class).setCurrentView(viewType) ;
       calendarPortlet.cancelAction() ;
-      UIMiniCalendar miniCal = calendarPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
-      //miniCal.updateMiniCal() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarPortlet) ;
     }
   }
   static  public class ChangeLocaleActionListener extends EventListener<UICalendarSettingForm> {
     public void execute(Event<UICalendarSettingForm> event) throws Exception {
-      System.out.println("ChangeLocaleActionListener");
       UICalendarSettingForm uiForm = event.getSource() ;
       String locale = uiForm.getUIFormSelectBox(UICalendarSettingTab.LOCATION).getValue() ;
       UICalendarSettingTab calendarSettingTab = uiForm.getChildById(UICalendarSettingForm.SETTING_CALENDAR_TAB) ;

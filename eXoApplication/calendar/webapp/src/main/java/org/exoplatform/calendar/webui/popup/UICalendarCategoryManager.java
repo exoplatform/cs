@@ -101,7 +101,6 @@ public class UICalendarCategoryManager extends UIContainer implements UIPopupCom
     public void execute(Event<UICalendarCategoryManager> event) throws Exception {
       UICalendarCategoryManager uiManager = event.getSource() ;
       UICalendarPortlet calendarPortlet = uiManager.getAncestorOfType(UICalendarPortlet.class) ;
-      String id = event.getRequestContext().getRequestParameter(OBJECTID) ;
       String calendarCategoryId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       CalendarService calService = uiManager.getApplicationComponent(CalendarService.class) ;
       String username = event.getRequestContext().getRemoteUser() ;

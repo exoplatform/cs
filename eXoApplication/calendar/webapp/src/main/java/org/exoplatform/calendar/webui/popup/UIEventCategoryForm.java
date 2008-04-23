@@ -113,16 +113,12 @@ public class UIEventCategoryForm extends UIForm {
         if(uiForm.isAddNew_) calendarService.saveEventCategory(SessionProviderFactory.createSessionProvider(), username, eventCat, null, true) ;
         else { 
           eventCat = uiForm.getEventCategory() ;
-         /* EventCategory newEventCategory = new EventCategory() ;
-          newEventCategory.setName(name) ;
-          newEventCategory.setDescription(uiForm.getCategoryDescription()) ;*/
           calendarService.saveEventCategory(SessionProviderFactory.createSessionProvider(), username, eventCat, new String[]{name, uiForm.getCategoryDescription()}, false) ; 
         }
         uiManager.updateGrid() ;
         uiForm.reset() ;
         UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
         UIMiniCalendar uiMiniCalendar = calendarPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
-        //uiMiniCalendar.updateMiniCal() ;
         uiMiniCalendar.setCategoryId(null) ;
         UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
         UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;

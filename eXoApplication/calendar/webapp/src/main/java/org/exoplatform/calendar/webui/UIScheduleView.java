@@ -20,7 +20,6 @@ import java.util.LinkedHashMap;
 
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.core.UIComponent;
 
 /**
  * Created by The eXo Platform SARL
@@ -39,7 +38,6 @@ public class UIScheduleView extends UICalendarView  {
 
   @Override
   public void refresh() throws Exception {
-    System.out.println("\n\n>>>>>>>>>> SCHEDULE VIEW") ;
     // TODO Auto-generated method stub
   }
 

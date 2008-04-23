@@ -100,7 +100,6 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
 		calendarDetail.addUIFormInput(new UIFormSelectBox(LOCALE, LOCALE, getLocales())) ;
 		calendarDetail.addUIFormInput(new UIFormSelectBox(TIMEZONE, TIMEZONE, getTimeZones())) ;
 		calendarDetail.addUIFormInput(new UIFormColorPicker(SELECT_COLOR, SELECT_COLOR, Colors.COLORS)) ;
-		//calendarDetail.addUIFormInput(new UIFormSelectBox(SELECT_COLOR, SELECT_COLOR, getColors())) ;
 		List<ActionData> actions = new ArrayList<ActionData>() ;
 		ActionData addCategory = new ActionData() ;
 		addCategory.setActionListener("AddCategory") ;
@@ -110,8 +109,6 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
 		calendarDetail.setActionField(CATEGORY, actions) ;
 		setSelectedTab(calendarDetail.getId()) ;
 		addChild(calendarDetail) ;
-
-		//UIFormInputWithActions sharing = new UIFormInputWithActions(INPUT_SHARE) ;
 		UIGroupCalendarTab sharing = new UIGroupCalendarTab(INPUT_SHARE) ;
 		sharing.addUIFormInput(new UIFormInputInfo(SELECT_GROUPS, SELECT_GROUPS, null)) ;
 		sharing.addUIFormInput(new UIFormStringInput(EDIT_PERMISSION, null, null)) ;
@@ -121,7 +118,6 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
 			else sharing.addUIFormInput(new UIFormCheckBoxInput<Boolean>(group, group, false)) ;
 			if(sharing.getUIFormInputInfo(group+PERMISSION_SUB) == null) {
 				sharing.addUIFormInput(new UIFormStringInput(group+PERMISSION_SUB ,group+PERMISSION_SUB, null)) ;
-
 				actions = new ArrayList<ActionData> () ;
 				ActionData editPermission = new ActionData() ;
 				editPermission.setActionListener("SelectPermission") ;
@@ -142,16 +138,6 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
 		}
 		addChild(sharing) ;
 	}
-
-	/*@SuppressWarnings("unchecked")
-  private List<SelectItemOption<String>> getColors() {
-    List<SelectItemOption<String>> colors = new ArrayList<SelectItemOption<String>>() ;
-    for(String color : Colors.COLORNAME) {
-      colors.add(new SelectItemOption<String>(color, color)) ;
-    }
-    Collections.sort(colors, new CalendarUtils.SelectComparator()) ;
-    return colors;
-  }*/
 
 	public String[] getActions(){
 		return new String[]{"Save", "Reset", "Cancel"} ;
@@ -186,7 +172,6 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
 			if(uiPermInput != null) uiPermInput.setEditable(!isLock) ;
 			if(isLock) shareTab.setActionField(group + PERMISSION_SUB, null) ;
 		}
-		/*shareTab.getUIStringInput(EDIT_PERMISSION).setEditable(!isLock) ;*/
 	}
 	public void activate() throws Exception {
 		// TODO Auto-generated method stub
@@ -239,7 +224,6 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
 
 	}
 	public void init(Calendar calendar) throws Exception {
-		//reset() ;
 		isAddNew_ = false ;
 		calendarId_ = calendar.getId() ;
 		setDisplayName(calendar.getName()) ;
@@ -247,7 +231,6 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
 		if(CalendarUtils.PUBLIC_TYPE.equals(calType_)) {
 			UIFormInputWithActions calendarDetail = getChildById(INPUT_CALENDAR) ;
 			calendarDetail.removeChildById(CATEGORY) ;
-			//calendarDetail.getUIFormSelectBox(CATEGORY).setRendered(false) ;
 			calendarDetail.setActionField(CATEGORY, null) ;
 			UIFormInputWithActions sharing = getChildById(INPUT_SHARE) ;
 			for(String groupId : calendar.getGroups()) {
@@ -439,7 +422,6 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
 	}
 	static  public class ResetActionListener extends EventListener<UICalendarForm> {
 		public void execute(Event<UICalendarForm> event) throws Exception {
-			System.out.println("\n\n ResetActionListener");
 			UICalendarForm uiForm = event.getSource() ;
 			uiForm.resetField() ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;

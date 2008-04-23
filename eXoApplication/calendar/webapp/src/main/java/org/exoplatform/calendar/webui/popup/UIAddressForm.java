@@ -18,10 +18,7 @@ package org.exoplatform.calendar.webui.popup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.commons.utils.ObjectPageList;
@@ -33,7 +30,6 @@ import org.exoplatform.contact.service.DataPageList;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.impl.NewUserListener;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.impl.GroupImpl;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -73,9 +69,6 @@ import org.exoplatform.webui.form.UIFormStringInput;
 public class UIAddressForm extends UIForm implements UIPopupComponent { 
   final public static String FIELD_KEYWORD = "keyWord".intern() ;
   final public static String FIELD_GROUP = "group".intern() ;
-
-  private List<Contact> alreadyCheckedContact = new ArrayList<Contact>();
-
   private String recipientsType = "";
   protected String selectedAddressId_ = "" ;
   private UIPageIterator uiPageIterator_ ;
@@ -124,6 +117,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
 
   public void activate() throws Exception {}
   public void deActivate() throws Exception {} 
+  @SuppressWarnings("unchecked")
   public List<Contact> getContacts() throws Exception { 
     return new ArrayList<Contact>(uiPageIterator_.getCurrentPageData());
   }
@@ -142,14 +136,12 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     getUIFormSelectBox(FIELD_GROUP).setOptions(getGroups()) ;
     ObjectPageList objPageList = new ObjectPageList(contactList, 10) ;
     uiPageIterator_.setPageList(objPageList) ;
-    //contactMap_.clear();
     for (Contact contact : contactList) {
       UIFormCheckBoxInput uiCheckbox = getUIFormCheckBoxInput(contact.getId()) ;
       if(uiCheckbox == null) {
         uiCheckbox = new UIFormCheckBoxInput<Boolean>(contact.getId(), contact.getId(), false) ;
         addUIFormInput(uiCheckbox);
       } 
-      //contactMap_.put(contact.getId(), contact);
     }
   }
   public List<Contact> getCheckedContact() throws Exception {
@@ -168,24 +160,20 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   protected void updateCurrentPage(int page) throws Exception{
     uiPageIterator_.setCurrentPage(page) ;
   }
-  
+
   static public class AddActionListener extends EventListener<UIAddressForm> {
     public void execute(Event<UIAddressForm> event) throws Exception {
-      System.out.println("======== >>>>>>UIAddressForm.AddActionListener") ;
       UIAddressForm uiForm = event.getSource() ;
-
       if(uiForm.getCheckedContact().size() <= 0) {
         UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIAddressForm.msg.contact-email-required",null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UITaskForm uiTaskForm = uiContainer.findFirstComponentOfType(UITaskForm.class) ;
       UIEventForm uiEventForm = uiContainer.findFirstComponentOfType(UIEventForm.class) ;
       StringBuffer sb = new StringBuffer() ;
-
       if(uiTaskForm != null) {
         if(uiTaskForm.getEmailAddress() != null && uiTaskForm.getEmailAddress().trim().length() > 0) {
           sb.append(uiTaskForm.getEmailAddress()) ;
@@ -195,7 +183,6 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
           sb.append(uiEventForm.getEmailAddress()) ;
         }
       }
-
       List<String> listMail = Arrays.asList( sb.toString().split(CalendarUtils.COMMA)) ; 
       String email = null ;
       for(Contact c : uiForm.getCheckedContact()) {
@@ -205,7 +192,6 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
           if(email != null) sb.append(email) ;
         }
       }
-
       if(uiTaskForm != null) {
         uiTaskForm.setSelectedTab(UITaskForm.TAB_TASKREMINDER) ;
         uiTaskForm.setEmailAddress(sb.toString()) ;
@@ -220,7 +206,6 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
 
   static  public class ReplaceActionListener extends EventListener<UIAddressForm> {
     public void execute(Event<UIAddressForm> event) throws Exception { 
-      System.out.println("======== >>>UIAddressForm.ReplaceActionListener");
       UIAddressForm uiForm = event.getSource();
       if(uiForm.getCheckedContact().size() <= 0) {
         UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
@@ -228,7 +213,6 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UITaskForm uiTaskForm = uiContainer.findFirstComponentOfType(UITaskForm.class) ;
       UIEventForm uiEventForm = uiContainer.findFirstComponentOfType(UIEventForm.class) ;
@@ -247,11 +231,9 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         uiEventForm.setEmailAddress(sb.toString()) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm) ;
       } 
-      //UIPopupAction parentPopup = uiContainer.getAncestorOfType(UIPopupAction.class) ;
       UIPopupAction chilPopup =  uiContainer.getChild(UIPopupAction.class) ;
       chilPopup.deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(chilPopup) ;
-      //event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
     }  
   } 
   static  public class SearchActionListener extends EventListener<UIAddressForm> {
@@ -268,7 +250,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
           filter.setCategories(new String[]{uiForm.selectedAddressId_}) ;
         } 
         if(!CalendarUtils.isEmpty(text))
-        filter.setText(CalendarUtils.encodeJCRText(text)) ;
+          filter.setText(CalendarUtils.encodeJCRText(text)) ;
         DataPageList resultPageList = 
           contactService.searchContact(SessionProviderFactory.createSystemProvider(), event.getRequestContext().getRemoteUser(), filter) ;
         uiForm.setContactList(resultPageList.getAll()) ;
@@ -278,7 +260,6 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIAddressForm.msg.keyword-error", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        //e.printStackTrace() ;
       }
     }
   }
@@ -305,14 +286,12 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UIAddressForm> event) throws Exception {
       UIAddressForm uiAddressForm = event.getSource();  
       UIPopupContainer uiContainer = uiAddressForm.getAncestorOfType(UIPopupContainer.class) ;
-      //UIPopupAction parentPopup = uiContainer.getAncestorOfType(UIPopupAction.class) ;
       UIPopupAction chilPopup =  uiContainer.getChild(UIPopupAction.class) ;
       chilPopup.deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(chilPopup) ;
-      //event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
     }
   }
-  
+
   static  public class ShowPageActionListener extends EventListener<UIAddressForm> {
     public void execute(Event<UIAddressForm> event) throws Exception {
       UIAddressForm uiAddressForm = event.getSource() ;

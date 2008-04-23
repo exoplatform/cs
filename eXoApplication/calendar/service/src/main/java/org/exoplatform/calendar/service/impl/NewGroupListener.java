@@ -4,15 +4,11 @@
  **************************************************************************/
 package org.exoplatform.calendar.service.impl;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
 
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
-import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.Group;
@@ -30,7 +26,6 @@ public class NewGroupListener extends GroupEventListener {
 
 	protected CalendarService calendarService_;
 
-	private String defaultCalendarName;
 	private String defaultCalendarDescription;
 	private String defaultLocale ;
 	private String defaultTimeZone ;

@@ -23,12 +23,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
-import org.exoplatform.calendar.Colors;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendars;
-import org.exoplatform.calendar.webui.UIFormColorPicker;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.OrganizationService;
@@ -66,28 +64,14 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
   final static public String FIELD_NAME = "calendarName".intern() ;
   final static public String FIELD_USER = "username".intern() ;
   final static public String FIELD_EDIT = "canEdit".intern() ;
-  //final static public String USER_NAME = "username".intern() ;
   private Map<String, String> permission_ = new HashMap<String, String>() ;
   private String calendarId_ ;
-  private boolean isAddNew_ = true ;
+  protected boolean isAddNew_ = true ;
   public UISharedForm() throws Exception{
     UIFormInputWithActions inputset = new UIFormInputWithActions("UIInputUserSelect") ;
     inputset.addChild(new UIFormInputInfo(FIELD_NAME, FIELD_NAME, null)) ;
     inputset.addUIFormInput(new UIFormStringInput(FIELD_USER, FIELD_USER, null)) ;
-    /*List<Color> colors = new ArrayList<Color>() ;
-    for(String coString : Calendar.COLORS) {
-      //colors.add(new Color()) ;
-      
-    }*/
-    
-    //inputset.addUIFormInput(new UIFormColorPicker(FIELD_NAME, FIELD_NAME, Colors.COLORS)) ; 
     List<ActionData> actions = new ArrayList<ActionData>() ;
-    /* ActionData selectGroupAction = new ActionData() ;
-    selectGroupAction.setActionListener("SelectPermission") ;
-    selectGroupAction.setActionName("SelectGroup") ;
-    selectGroupAction.setActionType(ActionData.TYPE_ICON) ;
-    selectGroupAction.setActionParameter(UISelectComponent.TYPE_GROUP) ;
-    actions.add(selectGroupAction) ;*/
     ActionData selectUserAction = new ActionData() ;
     selectUserAction.setActionListener("SelectPermission") ;
     selectUserAction.setActionName("SelectUser") ;
@@ -95,14 +79,6 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     selectUserAction.setActionType(ActionData.TYPE_ICON) ;
     selectUserAction.setActionParameter(UISelectComponent.TYPE_USER) ;
     actions.add(selectUserAction) ;
-
-    /*ActionData selectMemberAction = new ActionData() ;
-    selectMemberAction.setActionListener("SelectPermission") ;
-    selectMemberAction.setActionName("SelectMemberShip") ;
-    selectMemberAction.setActionType(ActionData.TYPE_ICON) ;
-    selectMemberAction.setCssIconClass("SelectMemberIcon") ;
-    selectMemberAction.setActionParameter(UISelectComponent.TYPE_MEMBERSHIP) ;
-    actions.add(selectMemberAction) ;*/
     inputset.setActionField(FIELD_USER, actions) ;
     inputset.addChild(new UIFormCheckBoxInput<Boolean>(FIELD_EDIT, FIELD_EDIT, null)) ;
     addChild(inputset) ;
@@ -115,12 +91,6 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     boolean canEdit = false ;
     if(cal.getEditPermission() != null) {
       canEdit = Arrays.asList(cal.getEditPermission()).contains(username) ;
-      /*for(String editPerm : cal.getEditPermission() ) {
-        if(editPerm !=null && editPerm.equals(username)) {
-          canEdit = true ;
-          break ;
-        }
-      }*/
     }
     setCanEdit(canEdit) ;
   }

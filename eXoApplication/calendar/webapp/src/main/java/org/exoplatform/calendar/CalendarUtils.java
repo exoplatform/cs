@@ -362,6 +362,7 @@ public class CalendarUtils {
     return false ;
   } 
   
+  @SuppressWarnings("unchecked")
   public static boolean canEdit(OrganizationService oService, String[] savePerms, String username) throws Exception {
     StringBuffer sb = new StringBuffer(username) ;
     if(oService != null) {

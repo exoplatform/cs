@@ -16,7 +16,6 @@
  */
 package org.exoplatform.calendar.webui.popup;
 
-import java.security.acl.Group;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,8 +26,6 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInputWithActions;
-import org.exoplatform.webui.form.UIFormStringInput;
-import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 
 /**
  * Created by The eXo Platform SAS

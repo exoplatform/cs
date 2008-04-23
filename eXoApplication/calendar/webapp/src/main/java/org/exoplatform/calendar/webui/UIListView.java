@@ -43,11 +43,9 @@ import org.exoplatform.webui.form.UIFormSelectBox;
  */
 @ComponentConfig(   
     lifecycle = UIFormLifecycle.class,
-    //template =  "app:/templates/calendar/webui/UIEventView.gtmpl",
     events = {
       @EventConfig(listeners = UICalendarView.AddEventActionListener.class),      
       @EventConfig(listeners = UICalendarView.DeleteEventActionListener.class, confirm="UICalendarView.msg.confirm-delete"),
-      //@EventConfig(listeners = UICalendarView.ChangeCategoryActionListener.class), 
       @EventConfig(listeners = UICalendarView.AddCategoryActionListener.class), 
       @EventConfig(listeners = UICalendarView.SwitchViewActionListener.class),
       @EventConfig(listeners = UICalendarView.GotoDateActionListener.class),
@@ -71,7 +69,6 @@ public class UIListView extends UICalendarView {
   private boolean isSearchResult = false ;
   private String lastViewId_ = null ;
   private String categoryId_ = null ;
-  //private long currentPage_ = 1 ;
   public UIListView() throws Exception{
     if(getEvents().length > 0 ) {
       selectedEvent_ = getEvents()[0].getId() ;
@@ -87,24 +84,6 @@ public class UIListView extends UICalendarView {
       return "app:/templates/calendar/webui/UIListView.gtmpl" ;
     }
   }
-
-/*
-  public void refresh() throws Exception{
-    CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    String username = Util.getPortalRequestContext().getRemoteUser() ;
-    EventQuery eventQuery = new EventQuery() ;
-    java.util.Calendar fromcalendar = getBeginDay(new GregorianCalendar(getCurrentYear(),  getCurrentMonth(),  getCurrentDay())) ;
-    eventQuery.setFromDate(fromcalendar) ;
-    java.util.Calendar tocalendar = getEndDay(new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getCurrentDay())) ;
-    eventQuery.setToDate(tocalendar) ;
-    if(!getViewType().equals(TYPE_BOTH)) {
-      eventQuery.setEventType(getViewType()) ;
-    }
-    update(new EventPageList(calendarService.getEvent(getSystemSession(), username, eventQuery, getPublicCalendars()), 10)) ;
-    UIFormSelectBox uiCategory = getUIFormSelectBox(EVENT_CATEGORIES) ;
-    uiCategory.setOnChange("Onchange") ;
-  }*/
-
   public void refresh() throws Exception{
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
@@ -117,7 +96,9 @@ public class UIListView extends UICalendarView {
     if(!getViewType().equals(TYPE_BOTH)) {
       eventQuery.setEventType(getViewType()) ;
     }
-    update(new EventPageList(calendarService.getEvents(getSession(), username, eventQuery, getPublicCalendars()), 10)) ;
+    UIListContainer uiListContainer = getParent() ;
+    if(uiListContainer.isDisplaySearchResult()) update(pageList_) ;
+    else update(new EventPageList(calendarService.getEvents(getSession(), username, eventQuery, getPublicCalendars()), 10)) ;
     UIFormSelectBox uiCategory = getUIFormSelectBox(EVENT_CATEGORIES) ;
     uiCategory.setValue(categoryId_) ;
     uiCategory.setOnChange("Onchange") ;
@@ -128,7 +109,6 @@ public class UIListView extends UICalendarView {
         setSelectedEvent(getEvents()[0].getId()) ;  
         view.setEvent(getEvents()[0]) ;
         setLastUpdatedEventId(getEvents()[0].getId()) ;
-
       } else {
         setSelectedEvent(null) ;
         view.setEvent(null) ;
@@ -150,23 +130,7 @@ public class UIListView extends UICalendarView {
         setLastUpdatedEventId(null) ;
       }
     }
-    
-    //UIListContainer uiContainer = getParent() ;
-    /*UIPreview view = uiContainer.getChild(UIPreview.class) ;
-    
-    
-    if(getEvents().length > 0) { 
-      setSelectedEvent(getEvents()[0].getId()) ;  
-      view.setEvent(getEvents()[0]) ;
-      setLastUpdatedEventId(getEvents()[0].getId()) ;
-    } else {
-      setSelectedEvent(null) ;
-      view.setEvent(null) ;
-      setLastUpdatedEventId(null) ;
-    }
-    view.refresh() ;*/
   }
-
   public void update(EventPageList pageList) throws Exception {
     pageList_ = pageList ;
     updateCurrentPage(pageList_.getCurrentPage()) ;
@@ -213,9 +177,6 @@ public class UIListView extends UICalendarView {
     public void execute(Event<UIListView> event) throws Exception {
       UIListView uiListView = event.getSource();
       String eventId = event.getRequestContext().getRequestParameter(OBJECTID);
-      String calendarId = event.getRequestContext().getRequestParameter(CALENDARID);
-      String calType = event.getRequestContext().getRequestParameter(CALTYPE);
-      String username = event.getRequestContext().getRemoteUser() ;
       UIListContainer uiListContainer = uiListView.getAncestorOfType(UIListContainer.class);
       UIPreview uiPreview = uiListContainer.getChild(UIPreview.class);
       CalendarEvent calendarEvent = null ;
@@ -285,7 +246,6 @@ public class UIListView extends UICalendarView {
       uiListView.refresh() ;
       UIMiniCalendar uiMiniCalendar = uiListView.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
       uiMiniCalendar.setCategoryId(categoryId) ;
-     //uiListView.getUIFormSelectBox(EVENT_CATEGORIES).setValue(categoryId) ;
       UIPreview uiPreview = uiListView.getAncestorOfType(UIListContainer.class).getChild(UIPreview.class) ;
       if(uiListView.getEvents().length >0) {
         uiPreview.setEvent(uiListView.getEvents()[0]) ;

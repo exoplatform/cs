@@ -17,11 +17,8 @@
 package org.exoplatform.calendar.webui;
 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
-import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 
 /**
  * Created by The eXo Platform SARL
@@ -31,12 +28,7 @@ import org.exoplatform.webui.event.EventListener;
  */
 
 @ComponentConfig(
-    lifecycle = UIContainerLifecycle.class ,
-    template =  "app:/templates/calendar/webui/UICalendarContainer.gtmpl",
-    events = {
-      @EventConfig(listeners = UICalendarContainer.AddCalendarCategoryActionListener.class),
-      @EventConfig(listeners = UICalendarContainer.AddCalendarActionListener.class)
-    }
+    lifecycle = UIContainerLifecycle.class
 )
 public class UICalendarContainer extends UIContainer  {
   public UICalendarContainer() throws Exception {
@@ -44,15 +36,4 @@ public class UICalendarContainer extends UIContainer  {
     addChild(UIMiniCalendar.class, null, null) ;
     addChild(UICalendars.class, null, null) ;    
   } 
-  
-  static  public class AddCalendarCategoryActionListener extends EventListener<UICalendarContainer> {
-    public void execute(Event<UICalendarContainer> event) throws Exception {
-      UICalendarContainer uicomp = event.getSource() ;
-    }
-  }
-  static  public class AddCalendarActionListener extends EventListener<UICalendarContainer> {
-    public void execute(Event<UICalendarContainer> event) throws Exception {
-      UICalendarContainer uicomp = event.getSource() ;
-    }
-  }
 }

@@ -37,7 +37,7 @@ public class UIFormComboBox extends UIFormInputBase<String>  {
   /**
    * The size of the list (number of select options)
    */
-  private int size_ = 1 ;
+  protected int size_ = 1 ;
 
   /**
    * The list of options

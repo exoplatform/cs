@@ -44,14 +44,12 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 
@@ -253,7 +251,6 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
         if(priority != null && priority.trim().length() > 0) query.setPriority(priority) ;
         String username = CalendarUtils.getCurrentUser() ;
         UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
-        System.out.println(query.getQueryStatement());
         EventPageList resultPageList =  
           CalendarUtils.getCalendarService().searchEvent(uiForm.getSession(), username, query, uiForm.getPublicCalendars()) ;
         UICalendarViewContainer calendarViewContainer = 

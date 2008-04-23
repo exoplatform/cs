@@ -19,18 +19,15 @@ package org.exoplatform.calendar.webui.popup;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Attachment;
-import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
-import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.webui.CalendarView;
 import org.exoplatform.calendar.webui.SelectItem;
@@ -52,7 +49,6 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
-import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormTabPane;
 
@@ -110,7 +106,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     try {
       label = super.getLabel(id) ;
     } catch (Exception e) {
-    	e.printStackTrace() ;
+    	//e.printStackTrace() ;
     }
     return label ;
   }
@@ -153,10 +149,6 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       setSelectedEventPriority(eventCalendar.getPriority()) ;
       setEventReminders(eventCalendar.getReminders()) ;
       setAttachments(eventCalendar.getAttachment()) ;
-      /*taskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_CALENDAR).setEnable(false) ;
-      if(CalendarUtils.SHARED_TYPE.equals(calType_)) {
-        taskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_CATEGORY).setRendered(false) ;
-      }*/
 
       if(CalendarUtils.SHARED_TYPE.equals(calType_) || CalendarUtils.PUBLIC_TYPE.equals(calType_)){
 
@@ -225,10 +217,6 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   }
 
   protected boolean isEventDetailValid(CalendarSetting calendarSetting){
-    /*if(CalendarUtils.isEmpty(getEventSumary())) {
-      errorMsg_ = getId() + ".msg.event-summary-required" ;
-      return false ;
-    }*/
     if(CalendarUtils.isEmpty(getCalendarId())) {
       errorMsg_ = getId() + ".msg.event-calendar-required" ;
       return false ;
@@ -476,7 +464,6 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
         taskDetailTab.getUIFormSelectBox(UIEventReminderTab.POPUP_IS_REPEAT).setValue(String.valueOf(r.isRepeat())) ;
         taskDetailTab.getUIFormSelectBox(UIEventReminderTab.POPUP_REPEAT_INTERVAL).setValue(String.valueOf(r.getRepeatInterval())) ;
       } else {
-        System.out.println("\n\n reminder not supported");
       }      
     }
   }
@@ -532,7 +519,6 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   static  public class AddCategoryActionListener extends EventListener<UITaskForm> {
     public void execute(Event<UITaskForm> event) throws Exception {
       UITaskForm uiForm = event.getSource() ;
-      System.out.println("\n\n AddCategoryActionListener");
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = uiContainer.getChild(UIPopupAction.class) ;
       uiChildPopup.activate(UIEventCategoryManager.class, 470) ;
@@ -542,7 +528,6 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   }
   static  public class AddEmailAddressActionListener extends EventListener<UITaskForm> {
     public void execute(Event<UITaskForm> event) throws Exception {
-      System.out.println("\n\n AddEmailAddressActionListener");
       UITaskForm uiForm = event.getSource() ;
       uiForm.setSelectedTab(TAB_TASKREMINDER) ;
       if(!uiForm.getEmailReminder()) {
@@ -561,7 +546,6 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   static  public class AddAttachmentActionListener extends EventListener<UITaskForm> {
     public void execute(Event<UITaskForm> event) throws Exception {
       UITaskForm uiForm = event.getSource() ;
-      //UIPopupAction uiParentPopup = uiForm.getAncestorOfType(UIPopupAction.class) ;
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = uiContainer.getChild(UIPopupAction.class) ;
       uiChildPopup.activate(UIAttachFileForm.class, 500) ;
@@ -587,14 +571,11 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   }
   static  public class AddCalendarActionListener extends EventListener<UITaskForm> {
     public void execute(Event<UITaskForm> event) throws Exception {
-      //UITaskForm uiForm = event.getSource() ;
-      System.out.println( "\n\n ==========> AddCalendarActionListener");
     }
   }
 
   static  public class SelectUserActionListener extends EventListener<UITaskForm> {
     public void execute(Event<UITaskForm> event) throws Exception {
-      System.out.println( "\n\n ==========> AddParticipantActionListener");
       UITaskForm uiForm = event.getSource() ;
       UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiPopupAction = uiPopupContainer.getChild(UIPopupAction.class) ;
@@ -682,7 +663,6 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
           calendarView.setLastUpdatedEventId(calendarEvent.getId()) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
           UIMiniCalendar uiMiniCalendar = calendarPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
-          //uiMiniCalendar.updateMiniCal() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
           uiForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
