@@ -302,7 +302,7 @@
 			<%
 		//}
 	%>
-  <div class="UIMessageList SpliterResizableListArea" >
+  <div id="uiMessageGrid" class="UIMessageList SpliterResizableListArea" >
     <% /* <div class="AdvancedTooltipTmpl" id="mailAdvancedTooltipTmpl">
       <div class="Item">
         <div class="Key">Email: </div>

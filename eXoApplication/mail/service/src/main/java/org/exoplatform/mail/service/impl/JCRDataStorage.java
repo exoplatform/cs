@@ -665,13 +665,10 @@ public class JCRDataStorage{
   
   private void setMultiPart(Multipart multipart, Node node) {
     try {
-      int i = 0 ;
-      int n = multipart.getCount() ;
-      while( i < n) {
+      for (int i = 0, n = multipart.getCount(); i < n; i++) {
         setPart(multipart.getBodyPart(i), node);
-        i++ ;
       }     
-    }catch(Exception e) {
+    } catch(Exception e) {
       e.printStackTrace() ;
     }   
   }
@@ -681,22 +678,22 @@ public class JCRDataStorage{
       String disposition = part.getDisposition();
       String contentType = part.getContentType();
       if (disposition == null) {
-        if (part.getContent() instanceof MimeMultipart) {
+        if (part.isMimeType("text/plain") || part.isMimeType("text/html")) {
+          setMessageBody(part, node);
+        } else if (part.isMimeType("multipart/*")) {
           MimeMultipart mimeMultiPart = (MimeMultipart) part.getContent() ;
-          for (int i = 0; i< mimeMultiPart.getCount(); i++) {
+          for (int i = 0; i < mimeMultiPart.getCount(); i++) {
             // for each part, set the body content
             setPart(mimeMultiPart.getBodyPart(i), node);
           }
-        } else {
-          setMessageBody(part, node);
+        } else if (part.isMimeType("message/*")) {
+          setPart((Part)part.getContent(), node);
         }
-      } else {
-        if (disposition.equalsIgnoreCase(Part.INLINE)) {
-          /* this must be presented INLINE, hence inside the body of the message */
-          if (part.isMimeType("text/plain") || part.isMimeType("text/html")) {
-            setMessageBody(part, node);
-          }
-        } else if (disposition.equalsIgnoreCase(Part.ATTACHMENT)) {
+      } else if (disposition.equalsIgnoreCase(Part.INLINE) || disposition.equalsIgnoreCase(Part.ATTACHMENT)) {
+        /* this must be presented INLINE, hence inside the body of the message */
+        if (part.isMimeType("text/plain") || part.isMimeType("text/html")) {
+          setMessageBody(part, node);
+        } else {
           /* this part must be presented as an attachment, hence we add it to the attached files */
           InputStream is = part.getInputStream();
           Node nodeFile = node.addNode(MimeUtility.decodeText(part.getFileName()), Utils.NT_FILE);
