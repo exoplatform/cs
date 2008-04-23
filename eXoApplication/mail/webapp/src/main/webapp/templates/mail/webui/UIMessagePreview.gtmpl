@@ -351,17 +351,24 @@
       						  	<div class="AttachmentContent">
                         <%
                           attLink = MailUtils.getImageSource(attach, dservice) ;
+                          boolean isImage = false ;
                           if (attLink != null ) {
                             if (attach.getMimeType().indexOf("image") > -1) {
-                              
+                              isImage = true ; 
                             } else if (attach.getMimeType().indexOf("msword") > -1) {
                               attLink = "/mail/skin/DefaultSkin/webui/skinIcons/24x24/icons/WordIcon.gif";
                             } else if (attach.getMimeType().indexOf("pdf") > -1) {
                               attLink = "/mail/skin/DefaultSkin/webui/skinIcons/24x24/icons/PDFIcon.gif";
-                            } 
+                            }
+                            if (isImage) {
                         %> 
-      						  		    <img class="AttachmentFile" src="$attLink">
+      						  		    <img class="AttachmentFile" style="height:auto ;width: 200px;padding-right: 5px" src="$attLink">
       						  		<%
+                            } else {
+                        %>
+                            <img class="AttachmentFile" src="$attLink">
+                        <%     
+                            }
                           }
                         %> 
                         <div class="AttachmentBox">
