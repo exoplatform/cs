@@ -18,7 +18,6 @@ package org.exoplatform.calendar.service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.exoplatform.services.jcr.util.IdGenerator;
 
@@ -90,8 +89,6 @@ public class CalendarEvent {
   private String[] participant ;
   private List<Reminder> reminders ;
   private List<Attachment> attachment ;
-  private Map<String, String> properties ;
-  
   public CalendarEvent() {
     id = "Event" + IdGenerator.generate() ;
   }

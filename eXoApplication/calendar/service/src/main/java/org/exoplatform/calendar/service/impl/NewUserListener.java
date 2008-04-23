@@ -16,10 +16,6 @@
  */
 package org.exoplatform.calendar.service.impl;
 
-import java.util.Locale;
-
-import net.sf.cglib.core.Local;
-
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarService;

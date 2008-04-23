@@ -78,7 +78,6 @@ public class Calendar {
   private String name ;
   private String calendarPath ;
   private String calendarColor = POWDERBLUE ;
-  private String calendarSharedColor = null ;
   private String description ;
   private String timeZone ;
   private String locale ;
@@ -90,8 +89,6 @@ public class Calendar {
   private boolean isPublic = false ;
   private String categoryId ;
   private String[] groups ;
-  //private List<EventCategory> eventCategories ;
-  
   public Calendar() throws Exception{
     id = "calendar" + IdGenerator.generate() ;
     timeZone = TimeZone.getDefault().getID() ;
@@ -141,8 +138,4 @@ public class Calendar {
   public String getCalendarOwner() {
     return calendarOwner;
   }
-  
-  //public List<EventCategory> getEventCategories() { return eventCategories ; }
-  //public void setEventCategories(List<EventCategory> evCate) { eventCategories = evCate ; }
-  
 }

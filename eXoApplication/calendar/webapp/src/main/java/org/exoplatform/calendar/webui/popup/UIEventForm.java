@@ -21,7 +21,6 @@ import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -126,8 +125,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
 	private String oldCalendarId_ = null ;
 	private String newCalendarId_ = null ;
 	private String newCategoryId_ = null ;
-	//protected LinkedHashMap<String, String> participants_ = new LinkedHashMap<String, String>() ;
-
 	public UIEventForm() throws Exception {
 		super("UIEventForm");
 		UIEventDetailTab eventDetailTab =  new UIEventDetailTab(TAB_EVENTDETAIL) ;
@@ -160,7 +157,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
 		try {
 			return super.getLabel(id) ;
 		} catch (Exception e) {
-			e.printStackTrace() ;
+			//e.printStackTrace() ;
 			return id ;
 		}
 	}
@@ -182,7 +179,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
 		attenderTab.getUIFormComboBox(UIEventAttenderTab.FIELD_FROM_TIME).setOptions(fromOptions) ;
 		attenderTab.getUIFormComboBox(UIEventAttenderTab.FIELD_TO_TIME).setOptions(toOptions) ;
 		if(eventCalendar != null) {
-			// oldCalendarId_ = calType_ + CalendarUtils.COLON + eventCalendar.getCalendarId();
 			isAddNew_ = false ;
 			calendarEvent_ = eventCalendar ;
 			setEventSumary(eventCalendar.getSummary()) ;
@@ -206,7 +202,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
 			setSelectedEventState(eventCalendar.getEventState()) ;
 			setMeetingInvitation(eventCalendar.getInvitation()) ;
 			StringBuffer pars = new StringBuffer() ;
-			//pars.append(Util.getPortalRequestContext().getRemoteUser()) ;
 			if(eventCalendar.getParticipant() != null) {
 				for(String par : eventCalendar.getParticipant()) {
 					if(!CalendarUtils.isEmpty(pars.toString())) pars.append(",") ;
@@ -214,7 +209,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
 				}
 			}
 			setParticipant(pars.toString()) ;
-			//attenderTab.updateParticipants(pars.toString());
 			boolean isContains = false ;
 			CalendarService calService = CalendarUtils.getCalendarService();
 			List<EventCategory> listCategory = 
@@ -306,10 +300,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
 	} 
 
 	protected boolean isEventDetailValid(CalendarSetting calendarSetting){
-		/* if(CalendarUtils.isEmpty(getEventSumary())) {
-      errorMsg_ = "UIEventForm.msg.event-summary-required" ;
-      return false ;
-    }*/
 		if(CalendarUtils.isEmpty(getCalendarId())) {
 			errorMsg_ = "UIEventForm.msg.event-calendar-required" ;
 			return false ;
@@ -613,9 +603,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
 				setPopupRepeat(String.valueOf(rm.isRepeat())) ;
 				setPopupRemindBefore(String.valueOf(rm.getAlarmBefore()));
 				setPopupRepeatInterval(rm.getRepeatInterval()) ;
-			} else {
-				System.out.println("\n\n reminder not supported");
-			}
+			} else {}
 		}
 	}
 	protected List<Reminder>  getEventReminders(Date fromDateTime, List<Reminder> currentReminders) {
@@ -706,11 +694,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
 		String participants = getParticipantValues() ;
 		if(CalendarUtils.isEmpty(participants)) return null ;
 		else {
-			/*String[] pars = participant.split(CalendarUtils.COMMA) ;
-      for(int i = 0; i < pars.length; i++) {
-        pars[i] = pars[i].trim() ;
-      }
-      return pars ;*/
 			return participants.split(CalendarUtils.COMMA) ;
 		}
 	} 
@@ -734,11 +717,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
 		((UIEventAttenderTab)getChildById(TAB_EVENTATTENDER)).updateParticipants(values) ;
 	}
 
-	/*private void initParticipantCheckBox(String id) {
-    UIEventAttenderTab eventAttenderTab = getChildById(TAB_EVENTATTENDER) ;
-    UIFormCheckBoxInput<Boolean> input = eventAttenderTab.getChildById(id) ;
-    if(input == null) eventAttenderTab.addUIFormInput(new UIFormCheckBoxInput<Boolean>(id,id, false)) ;
-  }*/
 	protected SessionProvider getSession() {
 		return SessionProviderFactory.createSessionProvider() ;
 	}
@@ -830,7 +808,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
 	static  public class AddCategoryActionListener extends EventListener<UIEventForm> {
 		public void execute(Event<UIEventForm> event) throws Exception {
 			UIEventForm uiForm = event.getSource() ;
-			System.out.println("\n\n AddCategoryActionListener");
 			UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
 			UIPopupAction uiChildPopup = uiContainer.getChild(UIPopupAction.class) ;
 			uiChildPopup.activate(UIEventCategoryManager.class, 470) ;
@@ -839,7 +816,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
 	}
 	static  public class AddEmailAddressActionListener extends EventListener<UIEventForm> {
 		public void execute(Event<UIEventForm> event) throws Exception {
-			System.out.println("\n\n AddEmailAddressActionListener");
 			UIEventForm uiForm = event.getSource() ;
 			if(!uiForm.getEmailReminder()) {
 				UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
@@ -857,7 +833,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
 	static  public class AddAttachmentActionListener extends EventListener<UIEventForm> {
 		public void execute(Event<UIEventForm> event) throws Exception {
 			UIEventForm uiForm = event.getSource() ;
-			//UIPopupAction uiParentPopup = uiForm.getAncestorOfType(UIPopupAction.class) ;
 			UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
 			UIPopupAction uiChildPopup = uiContainer.getChild(UIPopupAction.class) ;
 			uiChildPopup.activate(UIAttachFileForm.class, 500) ;
@@ -883,7 +858,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
 	}
 	static  public class AddParticipantActionListener extends EventListener<UIEventForm> {
 		public void execute(Event<UIEventForm> event) throws Exception {
-			System.out.println( "\n\n ==========> AddParticipantActionListener");
 			UIEventForm uiForm = event.getSource() ;
 			UIEventAttenderTab tabAttender = uiForm.getChildById(TAB_EVENTATTENDER) ;
 			String values = uiForm.getParticipantValues() ;
@@ -900,47 +874,27 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
 	}
 	static  public class MoveNextActionListener extends EventListener<UIEventForm> {
 		public void execute(Event<UIEventForm> event) throws Exception {
-			System.out.println( "\n\n ==========> MoveNextActionListener");
 			UIEventForm uiForm = event.getSource() ;
 			UIEventDetailTab uiEventDetailTab = uiForm.getChildById(TAB_EVENTDETAIL) ;
 			UIEventAttenderTab uiEventAttenderTab =  uiForm.getChildById(TAB_EVENTATTENDER) ;
-			//boolean isCheckFreeTime = uiEventAttenderTab.getUIFormCheckBoxInput(UIEventAttenderTab.FIELD_CHECK_TIME).isChecked() ;
-			// if(isCheckFreeTime) {
-			//CalendarSetting calSetting = uiForm.getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
 			uiEventAttenderTab.moveNextDay() ;
 			uiEventDetailTab.getUIFormDateTimePicker(UIEventDetailTab.FIELD_FROM).setCalendar(uiEventAttenderTab.calendar_) ;
 			uiEventDetailTab.getUIFormDateTimePicker(UIEventDetailTab.FIELD_TO).setCalendar(uiEventAttenderTab.calendar_) ;
 			uiForm.setSelectedTab(TAB_EVENTATTENDER) ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
-			/*} else {
-        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.check-free-busy-required", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }*/
 		}
 	}
 
 	static  public class MovePreviousActionListener extends EventListener<UIEventForm> {
 		public void execute(Event<UIEventForm> event) throws Exception {
-			System.out.println( "\n\n ==========> MovePreviousActionListener");
 			UIEventForm uiForm = event.getSource() ;
 			UIEventDetailTab uiEventDetailTab = uiForm.getChildById(TAB_EVENTDETAIL) ;
 			UIEventAttenderTab uiEventAttenderTab =  uiForm.getChildById(TAB_EVENTATTENDER) ;
-			//boolean isCheckFreeTime = uiEventAttenderTab.getUIFormCheckBoxInput(UIEventAttenderTab.FIELD_CHECK_TIME).isChecked() ;
-			/*if(isCheckFreeTime) {*/
 			uiEventAttenderTab.movePreviousDay() ;
 			uiEventDetailTab.getUIFormDateTimePicker(UIEventDetailTab.FIELD_FROM).setCalendar(uiEventAttenderTab.calendar_) ;
 			uiEventDetailTab.getUIFormDateTimePicker(UIEventDetailTab.FIELD_TO).setCalendar(uiEventAttenderTab.calendar_) ;
-			//uiForm.setEventFromDate(date, calSetting.getDateFormat(), calSetting.getTimeFormat()) ;
 			uiForm.setSelectedTab(TAB_EVENTATTENDER) ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
-			/*} else {
-        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.check-free-busy-required", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }*/
 		}
 	}
 	static  public class DeleteUserActionListener extends EventListener<UIEventForm> {
@@ -978,14 +932,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
 			UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
 			CalendarSetting calSetting = calendarPortlet.getCalendarSetting() ;
 			CalendarService calService = CalendarUtils.getCalendarService() ;
-			//SessionProvider sessionProvider = SessionsUtils.getSystemProvider() ;
 			if(uiForm.isEventDetailValid(calSetting)) {
 				String username = event.getRequestContext().getRemoteUser() ;
 				String calendarId = uiForm.getCalendarId() ;
-				/* int count = 1;
-        int interval = 60 ;
-        long start_milisec = new Date().getTime() ;
-        System.out.println("\n\n Starting add  event ...." ); */
 				Date from = uiForm.getEventFromDate(calSetting.getDateFormat(), calSetting.getTimeFormat()) ;
 				Date to = uiForm.getEventToDate(calSetting.getDateFormat(),calSetting.getTimeFormat()) ;
 				if(from.after(to)) {
@@ -1006,22 +955,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
 					calendarEvent = new CalendarEvent() ;
 					String[] pars = uiForm.getParticipants() ;
 					String eventId = null ;
-					/*Calendar temp =  CalendarUtils.getInstanceTempCalendar() ;
-          temp.setTime(from) ;
-          Calendar cal = CalendarUtils.getBeginDay(temp) ;
-          Calendar calEnd = CalendarUtils.getEndDay(temp) ;
-          int t = 1 ;
-          while (cal.before(calEnd)) { */
 					if(!uiForm.isAddNew_){
 						calendarEvent = uiForm.calendarEvent_ ; 
 					}
-
-					/*cal.add(Calendar.MINUTE, interval) ;
-            from = cal.getTime() ;*/
 					calendarEvent.setFromDateTime(from) ;
-					/*cal.setTime(to) ;
-            cal.add(Calendar.MINUTE, interval) ;
-            to = cal.getTime() ; */
 					calendarEvent.setToDateTime(to);
 					if(pars != null && pars.length > 0) calendarEvent.setParticipant(pars) ;
 					if(uiForm.getMeetingInvitation() != null) calendarEvent.setInvitation(uiForm.getMeetingInvitation()) ;
@@ -1063,23 +1000,12 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
 						listEvent.add(calendarEvent) ;
 						calService.moveEvent(uiForm.getSession(), fromCal, toCal, fromType, toType, listEvent, username) ;
 					}
-
-					/*System.out.println("\n\n added .  " + calendarEvent.getSummary() +" " +(new Date().getTime() - start_milisec) + " ss");
-            t++ ;
-          } 
-
-          long end_milisec = new Date().getTime() ;
-          long amount = end_milisec - start_milisec ;
-          System.out.println("\n\n Finished.  " + amount + " ss");
-					 */ 
-
 					CalendarView calendarView = (CalendarView)uiViewContainer.getRenderedChild() ;
 					if(calendarView instanceof UIListContainer)((UIListContainer)calendarView).setDisplaySearchResult(false) ;
 					uiViewContainer.refresh() ;
 					calendarView.setLastUpdatedEventId(eventId) ;
 					event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
 					UIMiniCalendar uiMiniCalendar = calendarPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
-					//uiMiniCalendar.updateMiniCal() ;
 					event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
 					uiForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
 					event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
@@ -1116,12 +1042,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
 		public void execute(Event<UIEventForm> event) throws Exception {
 			UIEventForm uiForm = event.getSource() ;
 			UIEventAttenderTab attendTab = uiForm.getChildById(TAB_EVENTATTENDER) ;
-			UIEventDetailTab eventDetailTab = uiForm.getChildById(TAB_EVENTDETAIL) ;
 			UIFormInputWithActions eventShareTab = uiForm.getChildById(TAB_EVENTSHARE) ;
-			UIFormDateTimePicker fromField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_FROM) ;
-			UIFormDateTimePicker toField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_TO) ;
-			Calendar fromDate = fromField.getCalendar() ;
-			Calendar toDate =  toField.getCalendar() ;
 			String values = uiForm.getParticipantValues() ;
 			UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
 			boolean isCheckFreeTime = attendTab.getUIFormCheckBoxInput(UIEventAttenderTab.FIELD_CHECK_TIME).isChecked() ;
@@ -1135,14 +1056,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
 				event.getRequestContext().addUIComponentToUpdateByAjax(eventShareTab) ;
 				event.getRequestContext().addUIComponentToUpdateByAjax(attendTab) ;
 			} else {
-				/*if(fromDate.get(Calendar.DATE) != toDate.get(Calendar.DATE)) {
-          if(isCheckFreeTime) attendTab.getUIFormCheckBoxInput(UIEventAttenderTab.FIELD_CHECK_TIME).setChecked(false) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(eventShareTab) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(attendTab) ;
-          uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.can-not-check", null));
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;
-        }  */
 				StringBuilder sb1 = new StringBuilder() ;
 				StringBuilder sb2 = new StringBuilder() ;
 				for(String uName : values.split(CalendarUtils.COMMA)) {
@@ -1170,7 +1083,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
 
 	static public class CancelActionListener extends EventListener<UIEventForm> {
 		public void execute(Event<UIEventForm> event) throws Exception {
-			System.out.println("CancelActionListener ========>") ;
 			UIEventForm uiForm = event.getSource() ;
 			UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class);
 			uiPopupAction.deActivate() ;

@@ -20,7 +20,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +30,6 @@ import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.webui.UIFormComboBox;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.services.organization.User;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.model.SelectItemOption;
@@ -86,11 +84,6 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
         if(vl == null) newPars.add(par.trim()) ;  			
       }
     }
-   /* for(String id : parMap_.keySet()) {
-      UIFormCheckBoxInput input = getUIFormCheckBoxInput(id) ;
-      if(input == null)
-      addUIFormInput(new UIFormCheckBoxInput<Boolean>(id, id, false)) ;
-    }*/
     boolean isCheckFreeTime = getUIFormCheckBoxInput(FIELD_CHECK_TIME).isChecked() ;
     if(newPars.size() > 0 && isCheckFreeTime) {
       EventQuery eventQuery = new EventQuery() ;
@@ -105,7 +98,7 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
   }
 
 
-  private Map<String, String> getMap(){ 
+  protected Map<String, String> getMap(){ 
     for(String id : parMap_.keySet()) {
       if(getUIFormCheckBoxInput(id) == null) addUIFormInput(new UIFormCheckBoxInput<Boolean>(id, id, false)) ;
     }
@@ -141,15 +134,15 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
     updateParticipants(values.toString()) ;
   }
 
-  private UIForm getParentFrom() {
+  protected UIForm getParentFrom() {
     return getAncestorOfType(UIForm.class) ;
   }
-  private String getFormName() { 
+  protected String getFormName() { 
     UIForm uiForm = getAncestorOfType(UIForm.class);
     return uiForm.getId() ; 
   }
 
-  private String getFromFieldValue() {
+  protected String getFromFieldValue() {
     return getUIFormComboBox(FIELD_FROM_TIME).getValue() ;
   }
   protected void setEventFromDate(Date date, String timeFormat) {
@@ -159,7 +152,7 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
     timeField.setValue(df.format(date)) ;
     calendar_.setTime(date) ;
   }
-  private boolean getEventAllDate() {
+  protected boolean getEventAllDate() {
     return false;
   }
   protected void setEventToDate(Date date, String timeFormat) {
@@ -169,7 +162,7 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
     timeField.setValue(df.format(date)) ;
   }  
 
-  private boolean isAllDateFieldChecked() {
+  protected boolean isAllDateFieldChecked() {
     return getUIFormCheckBoxInput(FIELD_DATEALL).isChecked() ;
   }
   @Override
@@ -177,9 +170,6 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
     super.processRender(arg0);
   }
   public String getUserTimeZone(String username) throws Exception {
-    /*CalendarUtils.getCalendarService().getCalendarSetting(SessionProviderFactory.createSessionProvider(), username) ;
-    //return String.valueOf(TimeZone.getTimeZone(getAncestorOfType(UICalendarPortlet.class).getCalendarSetting().getTimeZone()).getRawOffset()) ;
-    return CalendarUtils.getTimeZone(getAncestorOfType(UICalendarPortlet.class).getCalendarSetting().getTimeZone()) ;*/
      String timeZone = CalendarUtils.getCalendarService().getCalendarSetting(SessionProviderFactory.createSystemProvider(), CalendarUtils.getCurrentUser()).getTimeZone() ;
      return CalendarUtils.getTimeZone(timeZone) ;
   }

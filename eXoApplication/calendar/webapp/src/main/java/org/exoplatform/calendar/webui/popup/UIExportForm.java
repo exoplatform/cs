@@ -71,14 +71,11 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
   final static private String TYPE = "type".intern() ;
   private String calType = "0" ;
   private Map<String,String> names_ = new HashMap<String, String>() ;
-  
+
   public UIExportForm() throws Exception {
-    CalendarService calendarService = CalendarUtils.getCalendarService();
     addUIFormInput(new UIFormStringInput(NAME, NAME, null)) ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ; 
-    //for(String exportType : calendarService.getExportImportType()) {
-      options.add(new SelectItemOption<String>(CalendarServiceImpl.ICALENDAR, CalendarServiceImpl.ICALENDAR)) ;
-    //}
+    options.add(new SelectItemOption<String>(CalendarServiceImpl.ICALENDAR, CalendarServiceImpl.ICALENDAR)) ;
     addUIFormInput(new UIFormSelectBox(TYPE, TYPE, options)) ;
   }
   public void setCalType(String type) {calType = type ; }
@@ -145,8 +142,8 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      String type = uiForm.getUIFormSelectBox(uiForm.TYPE).getValue() ;
-      String name = uiForm.getUIStringInput(uiForm.NAME).getValue() ;
+      String type = uiForm.getUIFormSelectBox(TYPE).getValue() ;
+      String name = uiForm.getUIStringInput(NAME).getValue() ;
       CalendarImportExport importExport = calendarService.getCalendarImportExports(type) ;
       OutputStream out = null ;
       try {
@@ -165,7 +162,6 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
         event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + downloadLink + "');") ;
         calendarPortlet.cancelAction() ;      
       }catch(Exception e) {
-        //e.printStackTrace() ;
         uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.event-does-not-existing", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;

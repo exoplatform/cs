@@ -20,8 +20,6 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import javax.jcr.Node;
-
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen
@@ -50,7 +48,7 @@ public class CalendarSetting {
   private String viewType ;
   private long timeInterval ;
   private String weekStartOn ;
-  public static String dateFormat ;
+  private String dateFormat ;
   private String timeFormat ;
   private String location ;
   private String timeZone ;
@@ -88,7 +86,7 @@ public class CalendarSetting {
   public void setWeekStartOn(String weekStartOn) { this.weekStartOn = weekStartOn ; }
   public String getWeekStartOn() { return weekStartOn ; }
 
-  public void setDateFormat(String dateFormat) { this.dateFormat = dateFormat ; }
+  public void setDateFormat(String dFormat) {dateFormat = dFormat ; }
   public String getDateFormat() { return dateFormat ; }
 
   public void setTimeFormat(String timeFormat) { this.timeFormat = timeFormat ; }

@@ -28,6 +28,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -38,8 +39,6 @@ import javax.jcr.NodeIterator;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarImportExport;
-import org.exoplatform.calendar.service.CalendarSetting;
-import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
@@ -82,15 +81,7 @@ public class CsvImportExport implements CalendarImportExport {
     EV_DESCRIPTION, EV_LOCATION,EV_MILEAGE, EV_PRIORITY, EV_PRIVATE, EV_SENSITIVITY, EV_STATUS} ;
 
   private static final String PRIVATE_TYPE = "0".intern() ;
-  private static final String SHARED_TYPE = "1".intern() ;
-  private static final String PUBLIC_TYPE = "2".intern() ;
   private JCRDataStorage storage_ ;
-
-  /* public static void main(String[] argv) throws IOException {
-    System.out.println(CSV_PATTERN);
-    new CSVRE().process(new BufferedReader(new InputStreamReader(System.in)));
-  }*/
-
   /** Construct a regex-based CSV parser. */
 
   public CsvImportExport(JCRDataStorage dataStore) {
@@ -118,8 +109,7 @@ public class CsvImportExport implements CalendarImportExport {
           CalendarEvent eventObj = new CalendarEvent() ;
           eventObj.setEventType(CalendarEvent.TYPE_EVENT) ;
           eventObj.setCalType(PRIVATE_TYPE) ;
-          DateFormat df = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a") ;
-          // System.out.println("df " + df.getTimeInstance().getCalendar().getTime());
+          DateFormat df = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a", Locale.ENGLISH) ;
           //Event Summnary
           if(!Utils.isEmpty(l.get(dataMap.get(EV_SUMMARY)))) eventObj.setSummary(l.get(dataMap.get(EV_SUMMARY))) ;
           //Event fromdate
@@ -220,10 +210,6 @@ public class CsvImportExport implements CalendarImportExport {
               }
             }
           } 
-          /* System.out.println("Found " + l.size() + " items.");
-        for (int i = 0; i < l.size(); i++) {
-          System.out.print(l.get(i) + ",");
-        }*/
          if(isValid) eventList.add(eventObj) ;
         }
       }
@@ -235,7 +221,7 @@ public class CsvImportExport implements CalendarImportExport {
   /** Parse one line.
    * @return List of Strings, minus their double quotes
    */
-  public List parse(String line) {
+  public List<String> parse(String line) {
     List<String> list = new ArrayList<String>();
     Matcher m = csvRE.matcher(line);
     // For each field
@@ -257,26 +243,12 @@ public class CsvImportExport implements CalendarImportExport {
   }
 
   public OutputStream exportCalendar(SessionProvider sProvider, String username, List<String> calendarIds, String type) throws Exception {
-    /*List<CalendarEvent> events = new ArrayList<CalendarEvent>();
-    if(type.equals(PRIVATE_TYPE)) {
-      events = storage_.getUserEventByCalendar(sProvider, username, calendarIds) ;
-    }else if(type.equals(SHARED_TYPE)) {
-      events = storage_.getSharedEventByCalendars(sProvider, username, calendarIds) ;
-    }else if(type.equals(PUBLIC_TYPE)){
-      events = storage_.getGroupEventByCalendar(sProvider, calendarIds) ;
-    }
-    for(CalendarEvent exoEvent : events) {
-      if(exoEvent.getEventType().equals(CalendarEvent.TYPE_EVENT)){
-        
-      }
-    }*/
     return null;
   }
 
   public void importCalendar(SessionProvider sProvider, String username, InputStream csvInputStream, String calendarName) throws Exception {
     List<CalendarEvent> data = process(new BufferedReader(new InputStreamReader(csvInputStream))) ;
     if(data.size() > 0) {
-      GregorianCalendar currentDateTime = new GregorianCalendar() ;
       NodeIterator iter = storage_.getCalendarCategoryHome(sProvider, username).getNodes() ;
       Node cat = null;
       String categoryId ;
@@ -290,7 +262,6 @@ public class CsvImportExport implements CalendarImportExport {
       }
       if(!isExists) {
         CalendarCategory calendarCate = new CalendarCategory() ;
-        currentDateTime = new GregorianCalendar() ;
         calendarCate.setDescription("Imported icalendar category") ;
         calendarCate.setName("Imported") ;
         categoryId = calendarCate.getId() ;
@@ -300,7 +271,7 @@ public class CsvImportExport implements CalendarImportExport {
       }
       org.exoplatform.calendar.service.Calendar exoCalendar = new org.exoplatform.calendar.service.Calendar() ;
       exoCalendar.setName(calendarName) ;
-      exoCalendar.setCalendarColor(exoCalendar.COLORS[new Random().nextInt(exoCalendar.COLORS.length -1)]) ;
+      exoCalendar.setCalendarColor(org.exoplatform.calendar.service.Calendar.COLORS[new Random().nextInt(org.exoplatform.calendar.service.Calendar.COLORS.length -1)]) ;
       exoCalendar.setDescription("") ;
       exoCalendar.setCategoryId(categoryId) ;
       exoCalendar.setPublic(true) ;

@@ -17,13 +17,10 @@
 package org.exoplatform.calendar.webui;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
@@ -69,7 +66,6 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
     }
 )
 public class UIMonthView extends UICalendarView {
-  private Map<String, String> calendarIds_ = new HashMap<String, String>() ;
   private LinkedHashMap<String, CalendarEvent> dataMap_ = new LinkedHashMap<String, CalendarEvent>() ;
   public UIMonthView() throws Exception{
     super() ;
@@ -82,7 +78,7 @@ public class UIMonthView extends UICalendarView {
     cal.set(Calendar.DATE, day);
     return cal.getActualMaximum(java.util.Calendar.WEEK_OF_MONTH) ;
   }
-  protected void refreshEvents() throws Exception {
+  public void refresh() throws Exception {
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     EventQuery eventQuery = new EventQuery() ;
@@ -106,25 +102,6 @@ public class UIMonthView extends UICalendarView {
       addChild(input) ;
       eventIter.remove() ;
     }
-  }
-  /*protected void addCalendarId(String id) {calendarIds_.put(id,id) ;}
-  protected Map<String, String> getCalendarIds() {return calendarIds_ ;}
-  protected void refreshSelectedCalendarIds() throws Exception {
-    CalendarService calendarService = getApplicationComponent(CalendarService.class) ;
-    String username = Util.getPortalRequestContext().getRemoteUser() ;
-    for(Calendar c : calendarService.getUserCalendars(SessionsUtils.getSessionProvider(), username, false)) {
-      if(c != null) addCalendarId(c.getId()) ;
-    }
-  }*/
-
-  public void refresh() throws Exception {
-    System.out.println("\n\n>>>>>>>>>> MONTH VIEW") ;
-    //refreshSelectedCalendarIds() ;
-    refreshEvents() ;
-
-    //System.out.println("\n\n Begin month view " + getBeginDateOfMonthView().getTime());
-    //System.out.println("\n\n End month view " + getEndDateOfMonthView().getTime());
-
   }
   public java.util.Calendar getBeginDateOfMonthView() throws Exception{
     java.util.Calendar temCal = getBeginDateOfMonth() ;
@@ -178,7 +155,6 @@ public class UIMonthView extends UICalendarView {
   }
   static  public class UpdateEventActionListener extends EventListener<UIMonthView> {
     public void execute(Event<UIMonthView> event) throws Exception {
-      System.out.println("UpdateEventActionListener");
       UIMonthView calendarview = event.getSource() ;
       UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
       String username = event.getRequestContext().getRemoteUser() ;
@@ -202,11 +178,8 @@ public class UIMonthView extends UICalendarView {
               UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;
               uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null, 1)) ;
               event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-              
               calendarview.refresh() ;
-              //calendarview.eventData_.put(ce.getId(), ce) ;
               event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
-              
               return ;
             }
           }
@@ -230,10 +203,8 @@ public class UIMonthView extends UICalendarView {
             CalendarUtils.getCalendarService().savePublicEvent(calendarview.getSystemSession(), calendarId, calEvent, false) ;          
           }
           UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
-          //uiMiniCalendar.updateMiniCal() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
           calendarview.refresh() ;
-          //calendarview.dataMap_.put(calEvent.getId(), calEvent) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ; 
         }
       } catch (Exception e) {

@@ -183,9 +183,7 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
     public void execute(Event<UIBreadcumbs> event) throws Exception {
       UIBreadcumbs uiBreadcumbs = event.getSource() ;
       UIGroupSelector uiGroupSelector = uiBreadcumbs.getParent() ;
-      //String objectId =  event.getRequestContext().getRequestParameter(OBJECTID) ;
       uiBreadcumbs.setSelectPath(uiGroupSelector.getCurrentGroup().getId());     
-      //String selectGroupId = uiBreadcumbs.getSelectLocalPath().getId() ;
       uiGroupSelector.changeGroup(uiGroupSelector.getCurrentGroup().getId()) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiGroupSelector) ;
     }

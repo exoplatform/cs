@@ -19,10 +19,8 @@ package org.exoplatform.calendar.webui ;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 /**
@@ -189,12 +187,7 @@ final public UIFormSelectBox setOptions(List<SelectItem> options) {
   
   @SuppressWarnings("unchecked")
 public void processRender(WebuiRequestContext context) throws Exception {
-    ResourceBundle res = context.getApplicationResourceBundle() ;
     UIForm uiForm = getAncestorOfType(UIForm.class) ;
-    String formId = null ;
-    if(uiForm.getId().equals("UISearchForm")) formId = uiForm.<UIComponent>getParent().getId() ;
-    else formId = uiForm.getId() ;
-   
     Writer w =  context.getWriter() ;
     w.write("<select class=\"selectbox\" name=\""); w.write(name); w.write("\"") ;
     if(onchange_ != null) {

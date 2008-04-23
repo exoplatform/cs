@@ -52,7 +52,6 @@ import org.exoplatform.webui.event.EventListener;
       @EventConfig(listeners = UICalendarView.AddEventActionListener.class),  
       @EventConfig(listeners = UICalendarView.DeleteEventActionListener.class, confirm="UICalendarView.msg.confirm-delete"),
       @EventConfig(listeners = UICalendarView.AddCategoryActionListener.class),
-      //@EventConfig(listeners = UICalendarView.ChangeCategoryActionListener.class), 
       @EventConfig(listeners = UICalendarView.ViewActionListener.class),
       @EventConfig(listeners = UICalendarView.EditActionListener.class), 
       @EventConfig(listeners = UICalendarView.DeleteActionListener.class, confirm="UICalendarView.msg.confirm-delete"),
@@ -74,11 +73,10 @@ public class UIDayView extends UICalendarView {
   }
   @Override
   public void refresh() throws Exception {
-    System.out.println("\n\n>>>>>>>>>> DAY VIEW") ;
     eventData_.clear() ;
     allDayEvent_.clear() ;
-    Calendar begin = getBeginDay(getCurrentCalendar()) ; //getBeginDay(new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getCurrentDay())) ;
-    Calendar end = getEndDay(getCurrentCalendar()) ;//getEndDay(new GregorianCalendar(getCurrentYear(), getCurrentMonth(), getCurrentDay())) ;
+    Calendar begin = getBeginDay(getCurrentCalendar()) ;  
+    Calendar end = getEndDay(getCurrentCalendar()) ; 
     end.add(Calendar.MILLISECOND, -1) ;
     List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
@@ -86,10 +84,6 @@ public class UIDayView extends UICalendarView {
     EventQuery eventQuery = new EventQuery() ;
     eventQuery.setFromDate(begin) ;
     eventQuery.setToDate(end) ;
-    //eventQuery.setFilterCalendarIds(getFilterCalendarIds()) ;
-  /*  System.out.println("\n\n " + begin.getTime());
-    System.out.println("\n\n " + end.getTime());
-    System.out.println("eventQuery " + eventQuery.getQueryStatement());*/
     events = calendarService.getEvents(getSystemSession(), username, eventQuery, getPublicCalendars()) ;
     Iterator<CalendarEvent> iter = events.iterator() ;
     while (iter.hasNext()) {
@@ -126,13 +120,13 @@ public class UIDayView extends UICalendarView {
       String username = event.getRequestContext().getRemoteUser() ;
       CalendarEvent ce = calendarview.eventData_.get(eventId) ;
       if(ce != null) {
-        
+
         if(!ce.getCalType().equals(CalendarUtils.PRIVATE_TYPE)) {
           CalendarService calService = CalendarUtils.getCalendarService() ;
           org.exoplatform.calendar.service.Calendar calendar = null ;
           if(ce.getCalType().equals(CalendarUtils.SHARED_TYPE)){
             calendar = 
-            calService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true).getCalendarById(calendarId) ;
+              calService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true).getCalendarById(calendarId) ;
           } else if(ce.getCalType().equals(CalendarUtils.PUBLIC_TYPE)) {
             calendar = calService.getGroupCalendar(SessionProviderFactory.createSystemProvider(), calendarId) ;
           }
@@ -140,34 +134,29 @@ public class UIDayView extends UICalendarView {
             UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;
             uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null, 1)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-            
             calendarview.refresh() ;
-            //calendarview.eventData_.put(ce.getId(), ce) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
-            
             return ;
           }
         }
-        
+
         try {
           int hoursBg = (Integer.parseInt(startTime)/60) ;
           int minutesBg = (Integer.parseInt(startTime)%60) ;
 
           int hoursEnd = (Integer.parseInt(endTime)/60) ;
           int minutesEnd = (Integer.parseInt(endTime)%60) ;
-          
-          Calendar cal = calendarview.getInstanceTempCalendar()  ; //calendarview.getBeginDay(new GregorianCalendar(calendarview.getCurrentYear(), calendarview.getCurrentMonth(), calendarview.getCurrentDay())) ;
+
+          Calendar cal = calendarview.getInstanceTempCalendar()  ;  
           cal.setTime(calendarview.getCurrentDate()) ;
-          //cal.setTimeInMillis(Long.parseLong(startTime)) ;
           cal.set(Calendar.HOUR_OF_DAY, hoursBg) ;
           cal.set(Calendar.MINUTE, minutesBg) ; 
           ce.setFromDateTime(cal.getTime());
           cal.set(Calendar.HOUR_OF_DAY, hoursEnd) ;
           cal.set(Calendar.MINUTE, minutesEnd) ; 
-          //cal.setTimeInMillis(Long.parseLong(endTime)) ;
           ce.setToDateTime(cal.getTime()) ;        
+          //TODO check this code for logic
           if(ce.getToDateTime().before(ce.getFromDateTime())) {
-            //System.out.println("\n\n UIDayView updateEvent to date must after from date");
             return ;
           }
           if(ce.getCalType().equals(CalendarUtils.PRIVATE_TYPE)) {
@@ -182,8 +171,6 @@ public class UIDayView extends UICalendarView {
         }
       } else  {
         UICalendarWorkingContainer uiWorkingContainer = calendarview.getAncestorOfType(UICalendarWorkingContainer.class) ;
-        UIMiniCalendar uiMiniCalendar = uiWorkingContainer.findFirstComponentOfType(UIMiniCalendar.class) ;
-        //uiMiniCalendar.updateMiniCal() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
         UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.event-not-found", null)) ;
@@ -191,7 +178,6 @@ public class UIDayView extends UICalendarView {
       }
       calendarview.setLastUpdatedEventId(eventId) ;
       calendarview.refresh() ;
-      //calendarview.eventData_.put(ce.getId(), ce) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
     }
   }

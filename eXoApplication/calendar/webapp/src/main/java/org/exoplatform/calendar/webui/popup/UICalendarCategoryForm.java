@@ -23,10 +23,8 @@ import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendars;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -103,12 +101,6 @@ public class UICalendarCategoryForm extends UIForm {
       UICalendarCategoryManager uiManager = uiForm.getAncestorOfType(UICalendarCategoryManager.class) ;
       String categoryName = uiForm.getCategoryName() ;
       String description = uiForm.getCategoryDescription() ;
-      UIApplication app = uiForm.getAncestorOfType(UIApplication.class) ;
-      /*if(CalendarUtils.isEmpty(categoryName)) {
-        app.addMessage(new ApplicationMessage("UICalendarCategoryForm.msg.category-name-required", null, ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(app.getUIPopupMessages()) ;
-        return ;
-      }*/
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       try {
         CalendarService calendarService = CalendarUtils.getCalendarService() ;

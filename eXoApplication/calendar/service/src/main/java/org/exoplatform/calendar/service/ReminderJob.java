@@ -36,8 +36,6 @@ import org.exoplatform.mail.service.ServerConfiguration;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.scheduler.JobInfo;
-import org.exoplatform.services.scheduler.JobSchedulerService;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
@@ -64,7 +62,6 @@ public class ReminderJob implements Job {
 			fromCalendar.setTimeInMillis(tmpTime) ;
 			JobDataMap jdatamap = context.getJobDetail().getJobDataMap();
 			ServerConfiguration config = new ServerConfiguration();
-			String timeZone = jdatamap.getString("timeZone");
 			config.setUserName(jdatamap.getString("account"));
 			config.setPassword(jdatamap.getString("password"));
 			config.setSsl(true);
@@ -77,12 +74,10 @@ public class ReminderJob implements Job {
 			path.append("//element(*,exo:reminder)");
 			path.append("[@exo:remindDateTime <= xs:dateTime('"	+ ISO8601.format(fromCalendar)
 					+ "') and @exo:reminderType = 'email' and @exo:isOver = 'false']");
-			//System.out.println("\n\n\n path >>>>>" + path.toString());
 			QueryManager queryManager = calendarHome.getSession().getWorkspace().getQueryManager();
 			Query query = queryManager.createQuery(path.toString(), Query.XPATH);
 			QueryResult results = query.execute();
 			NodeIterator iter = results.getNodes();
-			//System.out.println("\n\n\n >>>>>" + iter.getSize());
 			Message message;
 			Node reminder;
 			List<Message> messageList = new ArrayList<Message>();
@@ -91,7 +86,6 @@ public class ReminderJob implements Job {
 				String to = reminder.getProperty("exo:email").getString();				
 				if (to != null && to.length() > 0) {
 					message = new Message();
-          
 					message.setMessageTo(to);
 					message.setSubject("eXo calendar reminder!");
 					message.setMessageBody(reminder.getProperty("exo:eventSummary").getString());

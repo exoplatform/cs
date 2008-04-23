@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.poi.hssf.record.SCLRecord;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
@@ -35,9 +34,6 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
-import org.exoplatform.webui.form.UIFormInputInfo;
-import org.exoplatform.webui.form.UIFormSelectBox;
-import org.exoplatform.webui.form.UIFormStringInput;
 
 /**
  * Created by The eXo Platform SAS
@@ -65,7 +61,6 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
     permissionList.configure("viewPermission", BEAN_FIELD, ACTION);
     permissionList.getUIPageIterator().setId("PermissionListIterator") ;
     addChild(UISharedForm.class, null, null) ;
-    ///shareForm.init(null, cal, true);
   }
   public void activate() throws Exception {
     // TODO Auto-generated method stub
@@ -93,7 +88,6 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
     UIGrid permissionList = getChild(UIGrid.class) ;
     ObjectPageList objPageList = new ObjectPageList(dataRow, 10) ;
     permissionList.getUIPageIterator().setPageList(objPageList) ;   
-    //cal.getEditPermission()
   }
   
   static public class EditActionListener extends EventListener<UIAddEditPermission> {
@@ -136,7 +130,6 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
         cal.setEditPermission(newPerms.toArray(new String[newPerms.size()])) ;
       }
       calService.saveUserCalendar(SessionProviderFactory.createSessionProvider(), username, cal, false) ;
-      //scalService.saveCalendarCategory(SessionProviderFactory.createSessionProvider(), username, calendarCategory, isNew)
       addEdit.updateGrid(cal);
       event.getRequestContext().addUIComponentToUpdateByAjax(addEdit) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(addEdit.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UICalendars.class)) ;

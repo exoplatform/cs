@@ -17,7 +17,6 @@
 package org.exoplatform.calendar.webui;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -29,13 +28,11 @@ import java.util.Map;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
-import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.web.command.handler.GetApplicationHandler;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -84,8 +81,6 @@ public class UIWeekView extends UICalendarView {
   }
 
   public void refresh() throws Exception {
-    if(isShowCustomView_) System.out.println("\n\n>>>>>>>>>> WORKING VIEW") ;
-    else System.out.println("\n\n>>>>>>>>>> WEEK VIEW") ;
     eventData_.clear() ;
     allWeekData_.clear() ;
     int i = 0 ;
@@ -139,10 +134,10 @@ public class UIWeekView extends UICalendarView {
     if(isShowCustomView_) temCal.setFirstDayOfWeek(Calendar.SUNDAY) ; 
     else temCal.setFirstDayOfWeek(Integer.parseInt(calendarSetting_.getWeekStartOn())) ;
     if(temCal.getFirstDayOfWeek() > calendar_.get(Calendar.DAY_OF_WEEK)) {
-    	temCal.set(java.util.Calendar.WEEK_OF_YEAR, getCurrentWeek()-1) ;
+      temCal.set(java.util.Calendar.WEEK_OF_YEAR, getCurrentWeek()-1) ;
     } else {
-    	temCal.set(java.util.Calendar.WEEK_OF_YEAR, getCurrentWeek()) ;
-    	
+      temCal.set(java.util.Calendar.WEEK_OF_YEAR, getCurrentWeek()) ;
+
     }
     int amout = temCal.getFirstDayOfWeek() - calendar_.get(Calendar.DAY_OF_WEEK) ;
     if(isShowCustomView_) amout = amout + 1 ;
@@ -187,15 +182,7 @@ public class UIWeekView extends UICalendarView {
       String username = event.getRequestContext().getRemoteUser() ;
       CalendarEvent eventCalendar = calendarview.getDataMap().get(eventId) ;
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
-      /*if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
-        eventCalendar = calendarService.getUserEvent(username, calendarId, eventId) ;
-      } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
-        eventCalendar = calendarService.getUserEvent(username, calendarId, eventId) ;
-      } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
-        eventCalendar = calendarService.getGroupEvent(calendarId, eventId) ;
-      }*/
       if(eventCalendar != null) {
-
         if(!eventCalendar.getCalType().equals(CalendarUtils.PRIVATE_TYPE)) {
           CalendarService calService = CalendarUtils.getCalendarService() ;
           org.exoplatform.calendar.service.Calendar calendar = null ;
@@ -206,29 +193,18 @@ public class UIWeekView extends UICalendarView {
             calendar = calService.getGroupCalendar(SessionProviderFactory.createSystemProvider(), calendarId) ;
           }
           if(!CalendarUtils.canEdit(calendarview.getApplicationComponent(OrganizationService.class), calendar.getEditPermission(), username)) {
-            //if(!listEditPermission.contains(CalendarUtils.getCurrentUser())) {
             UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;
             uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null, 1)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-
             calendarview.refresh() ;
-            //calendarview.eventData_.put(ce.getId(), ce) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
-
             return ;
           }
         } 
 
         try {
           Calendar cal = calendarview.getInstanceTempCalendar() ;
-          //cal.setTime(eventCalendar.getFromDateTime()) ;
-          //String key = calendarview.keyGen(cal.get(Calendar.DATE), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)) ;       
-          //calendarview.eventData_.get(key).remove(eventId) ;
           cal.setTimeInMillis(Long.parseLong(currentDate)) ;
-          /* Calendar calBegin = cal ;
-        Calendar calEnd = cal ;*/
-          /* calBegin.setTimeInMillis(Long.parseLong(currentDate)) ;
-        calEnd.setTimeInMillis(Long.parseLong(currentDate)) ;*/
           int hoursBg = (Integer.parseInt(startTime)/60) ;
           int minutesBg = (Integer.parseInt(startTime)%60) ;
           int hoursEnd = (Integer.parseInt(finishTime)/60) ;
@@ -240,7 +216,6 @@ public class UIWeekView extends UICalendarView {
           cal.set(Calendar.MINUTE, minutesEnd) ;
           eventCalendar.setToDateTime(cal.getTime()) ;
           if(eventCalendar.getToDateTime().before(eventCalendar.getFromDateTime())) {
-            System.out.println("\n\n UIWeekView updateEvent to date must after from date");
             return ;
           }
           if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
@@ -251,12 +226,8 @@ public class UIWeekView extends UICalendarView {
             calendarService.savePublicEvent(calendarview.getSystemSession(), calendarId, eventCalendar, false) ;          
           }
           calendarview.setLastUpdatedEventId(eventId) ;
-          /*key = calendarview.keyGen(cal.get(Calendar.DATE), cal.get(Calendar.MONTH), cal.get(Calendar.YEAR)) ;
-          System.out.println("\n\n key " +key);
-          calendarview.eventData_.get(key).put(eventId, eventCalendar) ;*/
           calendarview.refresh() ;
           UIMiniCalendar uiMiniCalendar = calendarview.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
-          //uiMiniCalendar.updateMiniCal() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
         } catch (Exception e) {
@@ -280,13 +251,6 @@ public class UIWeekView extends UICalendarView {
         CalendarEvent eventCalendar = calendarview.getDataMap().get(eventId) ;
         if(eventCalendar != null) {
           CalendarService calendarService = CalendarUtils.getCalendarService() ;
-          /*if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
-          eventCalendar = calendarService.getUserEvent(username, calendarId, eventId) ;
-        } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
-          eventCalendar = calendarService.getUserEvent(username, calendarId, eventId) ;
-        } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
-          eventCalendar = calendarService.getGroupEvent(calendarId, eventId) ;
-        }*/
           Calendar calBegin = calendarview.getInstanceTempCalendar() ;
           Calendar calEnd = calendarview.getInstanceTempCalendar() ;
           long unit = 15*60*1000 ;
@@ -295,7 +259,6 @@ public class UIWeekView extends UICalendarView {
           calEnd.setTimeInMillis((Long.parseLong(finishTime)/unit)*unit) ;
           eventCalendar.setToDateTime(calEnd.getTime()) ;
           if(eventCalendar.getToDateTime().before(eventCalendar.getFromDateTime())) {
-            System.out.println("\n\n UIWeekView updateEvent to date must after from date");
             return ;
           }
           if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
@@ -307,9 +270,7 @@ public class UIWeekView extends UICalendarView {
           }
           calendarview.setLastUpdatedEventId(eventId) ;
           calendarview.refresh() ;
-          ///calendarview.allWeekData_.put(eventCalendar.getId(), eventCalendar) ;
           UIMiniCalendar uiMiniCalendar = calendarview.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
-          //uiMiniCalendar.updateMiniCal() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
         }

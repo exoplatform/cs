@@ -18,13 +18,11 @@ package org.exoplatform.calendar.webui;
 
 import java.io.Writer;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.calendar.Colors;
 import org.exoplatform.calendar.Colors.Color;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInput;
 import org.exoplatform.webui.form.UIFormInputBase;
@@ -132,7 +130,7 @@ public class UIFormColorPicker extends UIFormInputBase<String>  {
   protected String renderOnChangeEvent(UIForm uiForm) throws Exception {
     return uiForm.event(onchange_, (String)null);
   }
-  private UIForm getUIform() {
+  protected UIForm getUIform() {
     return getAncestorOfType(UIForm.class) ; 
   }
 
@@ -164,7 +162,6 @@ public class UIFormColorPicker extends UIFormInputBase<String>  {
       w.write("</div>") ;
       w.write("<div class=\"CalendarTableColor\" selectedColor=\""+encodeValue(value_).toString()+" \">") ;
       int i = 0 ;
-      int index = 0 ;
       int count = 0 ;
       while(i <= size()/items())  {
         w.write("<div class='UIColorLine'>") ; 
