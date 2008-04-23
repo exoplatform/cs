@@ -1139,11 +1139,11 @@ public class JCRDataStorage{
     if(toDate > fromDate) {
     	java.util.Calendar tmpTime = Utils.getInstanceTempCalendar() ;
     	tmpTime.setTime(event.getFromDateTime()) ;
-    	tmpTime.set(java.util.Calendar.HOUR_OF_DAY, 0) ;
+    	tmpTime.set(java.util.Calendar.HOUR, 0) ;
     	tmpTime.set(java.util.Calendar.MINUTE, 0) ;
     	tmpTime.set(java.util.Calendar.SECOND, 0) ;
     	tmpTime.set(java.util.Calendar.MILLISECOND, 0) ;
-    	tmpTime.setTimeInMillis(tmpTime.getTimeInMillis() + (24 * 60 * 59 * 1000)) ;
+    	tmpTime.setTimeInMillis(tmpTime.getTimeInMillis() + (24 * 60 * 60 * 1000) - 1000) ;
     	publicEvent.setProperty("exo:toDateTime", tmpTime) ;
     }else {
     	publicEvent.setProperty("exo:toDateTime", dateTime) ;
@@ -1161,7 +1161,7 @@ public class JCRDataStorage{
     if(toDate > fromDate) {
     	java.util.Calendar cal = Utils.getInstanceTempCalendar() ;
       cal.setTime(event.getFromDateTime()) ;
-      cal.set(java.util.Calendar.HOUR_OF_DAY, 0) ;
+      cal.set(java.util.Calendar.HOUR, 0) ;
       cal.set(java.util.Calendar.MINUTE, 0) ;
       cal.set(java.util.Calendar.SECOND, 0) ;
       cal.set(java.util.Calendar.MILLISECOND, 0) ;
@@ -1178,7 +1178,7 @@ public class JCRDataStorage{
     			newEvent.setProperty("exo:fromDateTime", cal) ;
     			java.util.Calendar tmpCal = Utils.getInstanceTempCalendar() ;
     			if(i == toDate) tmpCal.setTime(event.getToDateTime()) ;
-    			else tmpCal.setTimeInMillis(cal.getTimeInMillis() + 24 * 60 * 59 * 1000) ;
+    			else tmpCal.setTimeInMillis(cal.getTimeInMillis() + (24 * 60 * 60 * 1000) - 1000) ;
     			newEvent.setProperty("exo:toDateTime", tmpCal) ;
     			newEvent.save() ;    			    			
     		}    		
