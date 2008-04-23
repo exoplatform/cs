@@ -78,13 +78,8 @@
 	margin-left: 4px;
 }
 
-.UICalendarPortlet .CalendarWorkingWorkspace .UIActionBar .SelectButton a {
-	display: block;
-	padding: 1px 0px 0px 0px;
-}
-
 .UICalendarPortlet .CalendarWorkingWorkspace .SelectButton .IconHolder {
-	margin: 0px 7px ;
+	margin: 4px 7px 0px 7px;
 	line-height: 25px;
 }
 
