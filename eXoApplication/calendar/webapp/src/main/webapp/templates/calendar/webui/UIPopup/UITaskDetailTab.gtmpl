@@ -14,6 +14,7 @@
 	      }else {
 	        actionLink = (uiForm.event(action.actionListener)) ;
 	      }
+        if(actionLabel.length() > 35) {actionLabel = actionLabel.substring(0, 35) + "..." ;}
 		    println "<a title=\"" + actionLabel + "\" href=\"" + actionLink +"\">";
 	      if(action.actionType == action.TYPE_ICON) {
 	        println "<img src=\"/eXoResources/skin/DefaultSkin/background/Blank.gif\" class=\"" + action.cssIconClass +"\"/>" ;
@@ -30,7 +31,7 @@
 	def rcontext = _ctx.getRequestContext() ;	
 	rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.isAllday("UITaskForm") ;') ;	
 %>
-<div class="UIAddNewEvent" id="$uicomponent.id">
+<div id="$uicomponent.id" class="UIAddNewEvent">
   <table class="UIFormGrid">
     <tbody>
       <tr>
