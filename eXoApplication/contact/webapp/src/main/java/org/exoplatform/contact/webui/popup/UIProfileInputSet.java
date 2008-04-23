@@ -120,7 +120,11 @@ public class UIProfileInputSet extends UIFormInputWithActions {
   protected String getFieldNickName() { return getUIStringInput(FIELD_NICKNAME_INPUT).getValue() ; }
   protected void setFieldNickName(String s) { getUIStringInput(FIELD_NICKNAME_INPUT).setValue(s); }
 
-  protected String getFieldGender() { return getChild(UIFormRadioBoxInput.class).getValue() ; }
+  protected String getFieldGender() {
+    String value = getChild(UIFormRadioBoxInput.class).getValue() ; 
+    if (!value.equals(FIELD_GENDER_BOX)) return value ;
+    return null ;
+  }
   protected void setFieldGender(String s) { gender = s ; }
 
   protected Date getFieldBirthday(){

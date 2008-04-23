@@ -418,9 +418,14 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         }
         for (String id : contactIds) {
           Contact contact = uiContacts.contactMap.get(id) ;         
-          if (contact.isOwner() || contact.getContactType().equals(JCRDataStorage.PUBLIC) || (contact.getContactType()
+          if (contact.getContactType().equals(JCRDataStorage.PUBLIC) || (contact.getContactType()
               .equals(JCRDataStorage.SHARED)&& !uiContacts.canDeleteShared(contact.getAddressBook()[0]))) {
             uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-move", null
+                , ApplicationMessage.WARNING)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return ;
+          } else if (contact.isOwner()) {
+            uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-move-defaultContact", null
                 , ApplicationMessage.WARNING)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return ;
@@ -476,7 +481,13 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       List<Contact> sharedContacts = new ArrayList<Contact>();
       for(String contactId : contactIds) {
       	Contact contact = uiContacts.contactMap.get(contactId) ;
-        if (contact.getContactType().equals(JCRDataStorage.PUBLIC) || (contact.isOwner())){
+        if (contact.getContactType().equals(JCRDataStorage.PRIVATE) && (contact.isOwner())){ 
+          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-move-defaultContact", null
+              , ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+          return ;          
+        } else if (contact.getContactType().equals(JCRDataStorage.PUBLIC)){
           uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-move", null
               , ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -569,8 +580,15 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         }
       }
       for (String id : contactIds) {
-        Contact contact = uiContacts.contactMap.get(id) ;    
-        if (contact.getContactType().equals(JCRDataStorage.PUBLIC) ||(contact.getContactType().equals
+        Contact contact = uiContacts.contactMap.get(id) ;
+        if (contact.getContactType().equals(JCRDataStorage.PRIVATE) && contact.isOwner()) {
+          UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-delete-defaultContact", null
+              , ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        } else if (contact.getContactType().equals(JCRDataStorage.PUBLIC) ||(contact.getContactType().equals
             (JCRDataStorage.SHARED) && !uiContacts.canDeleteShared(contact.getAddressBook()[0]))) {
           UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-delete", null
