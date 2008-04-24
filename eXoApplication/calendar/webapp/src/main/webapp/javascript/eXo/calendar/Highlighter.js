@@ -21,6 +21,8 @@ Highlighter.prototype.isInCell = function(cell, _e) {
 		cellX = eXo.core.Browser.findPosX(cell) - eXo.calendar.UICalendarPortlet.getScrollLeft(cell) ;
 		cellY = eXo.core.Browser.findPosY(cell) - eXo.calendar.UICalendarPortlet.getScrollTop(cell) ;
 	}
+	var uiControlWorkspace = document.getElementById("UIControlWorkspace") ;
+	if(document.all && uiControlWorkspace && (!document.getElementById("UIPageDesktop") ||  eXo.core.Browser.isIE7())) cellX -= uiControlWorkspace.offsetWidth ;
 	if (
 		 (mouseX > cellX) && (mouseX < (cellX + cell.offsetWidth))
 	&& (mouseY > cellY) && (mouseY < (cellY + cell.offsetHeight))
@@ -205,3 +207,110 @@ Highlighter.prototype.setCallback = function(str) {
 } ;
 
 eXo.calendar.Highlighter = new Highlighter() ;
+
+function UIHSelection() {
+} ;
+
+UIHSelection.prototype.isInCell = function(cell, _e) {
+	var UIHSelection = eXo.calendar.UIHSelection ;
+	var cellX = eXo.core.Browser.findPosX(cell) - UIHSelection.container.scrollLeft ;
+	var cellY = eXo.core.Browser.findPosY(cell) - UIHSelection.container.scrollTop ;
+	var mouseX = eXo.core.Browser.findMouseXInPage(_e) ;
+	var mouseY = eXo.core.Browser.findMouseYInPage(_e) ;
+	if(document.getElementById("UIPageDesktop")) {
+		mouseX = eXo.core.Browser.findMouseXInPage(_e) ;
+		mouseY = eXo.core.Browser.findMouseYInPage(_e) ;
+		cellX = eXo.core.Browser.findPosX(cell) - eXo.calendar.UICalendarPortlet.getScrollLeft(cell) ;
+		cellY = eXo.core.Browser.findPosY(cell) - eXo.calendar.UICalendarPortlet.getScrollTop(cell) ;
+	}
+	var uiControlWorkspace = document.getElementById("UIControlWorkspace") ;
+	if(document.all && uiControlWorkspace && (!document.getElementById("UIPageDesktop") || eXo.core.Browser.isIE7())) cellX -= uiControlWorkspace.offsetWidth ;
+	if (
+		 (mouseX > cellX) && (mouseX < (cellX + cell.offsetWidth))
+	&& (mouseY > cellY) && (mouseY < (cellY + cell.offsetHeight))
+	) { return true ;}
+	return false ;
+} ;
+
+UIHSelection.prototype.getCurrentIndex = function(evt){
+	var cells = eXo.calendar.UIHSelection.cells ;
+	var len = cells.length ;
+	for(var i = 0 ; i < len ; i++) {
+		var isCell = eXo.calendar.UIHSelection.isInCell(cells[i],evt) ;
+		if(isCell) return cells[i].cellIndex ;
+	}
+} ;
+
+UIHSelection.prototype.setAttr = function(sIndex, eIndex, cells){
+	for(var i = sIndex; i <= eIndex ; i++) {
+		eXo.core.DOMUtil.addClass(cells[i],"UserSelection") ;
+	}
+} ;
+
+UIHSelection.prototype.removeAttr = function(sIndex, eIndex, cells){
+	var len = cells.length ;
+	var DOMUtil = eXo.core.DOMUtil ;
+	for(var i = 0; i < len ; i++) {
+		if((i>=sIndex) && (i<=eIndex)) continue ;
+		if(DOMUtil.hasClass(cells[i],"UserSelection")) DOMUtil.replaceClass(cells[i],"UserSelection","") ;
+	}
+} ;
+
+UIHSelection.prototype.removeAllAttr = function(){
+	var cells = this.cells ;
+	var len = cells.length ;
+	var DOMUtil = eXo.core.DOMUtil ;
+	for(var i = 0; i < len ; i++) {
+		if(DOMUtil.hasClass(cells[i],"UserSelection")) DOMUtil.replaceClass(cells[i],"UserSelection","") ;
+	}
+} ;
+
+UIHSelection.prototype.start = function(){
+	var UIHSelection = eXo.calendar.UIHSelection ;
+	var table = eXo.core.DOMUtil.findAncestorByTagName(this, "table") ;
+	var callback = table.getAttribute("eXoCallback") ;
+	if (callback) UIHSelection.callback = callback ;
+	UIHSelection.startIndex = this.cellIndex ;
+	UIHSelection.cells = eXo.core.DOMUtil.getChildrenByTagName(this.parentNode, "th") ;
+	UIHSelection.container = this.parentNode
+	eXo.core.DOMUtil.addClass(this,"UserSelection") ;
+	document.onmousemove = UIHSelection.execute ;
+	document.onmouseup =  UIHSelection.end ;
+	UIHSelection.firstCell = UIHSelection.cells[UIHSelection.startIndex] ;
+	UIHSelection.lastCell = UIHSelection.cells[UIHSelection.startIndex] ;
+} ;
+
+UIHSelection.prototype.execute = function(evt){
+	var _e = window.event || evt ;
+	var UIHSelection = eXo.calendar.UIHSelection ;
+	var sIndex = UIHSelection.startIndex ;
+	var eIndex = UIHSelection.getCurrentIndex(_e) ;
+	var cells = UIHSelection.cells ;
+	if(eIndex) {
+		if (eIndex < sIndex) {
+			UIHSelection.setAttr(eIndex, sIndex, cells) ;
+			UIHSelection.removeAttr(eIndex, sIndex, cells) ;
+			UIHSelection.firstCell = cells[eIndex] ;
+			UIHSelection.lastCell = cells[sIndex] ;
+		}else {
+			UIHSelection.setAttr(sIndex, eIndex, cells) ;
+			UIHSelection.removeAttr(sIndex, eIndex, cells) ;
+			UIHSelection.firstCell = cells[sIndex] ;
+			UIHSelection.lastCell = cells[eIndex] ;
+		}
+	}
+} ;
+
+UIHSelection.prototype.end = function(){
+	var UIHSelection = eXo.calendar.UIHSelection ;
+	UIHSelection.removeAllAttr() ;
+	UIHSelection.startIndex = null ;
+	UIHSelection.endIndex = null ;
+	UIHSelection.cells = null ;
+	UIHSelection.container = null ;
+	document.onmousemove = null ;
+	document.onmouseup = null ;
+	if (UIHSelection.callback) eval(UIHSelection.callback) ;
+} ;
+
+eXo.calendar.UIHSelection = new UIHSelection() ;

@@ -1090,6 +1090,13 @@
 	-moz-user-select : none ;
 }
 
+.UIWeekView .UIGrid .UserSelection {
+	background: #cccccc ;
+	opacity: 0.5 ;
+	filter:alpha(opacity=50) ;
+	-moz-user-select : none ;
+}
+
 .BlueBlock {
 	background: green ;
 	position: absolute ;

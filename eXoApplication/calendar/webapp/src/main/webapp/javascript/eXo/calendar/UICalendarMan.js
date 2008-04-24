@@ -586,7 +586,6 @@ GUIMan.prototype.initMonth = function(){
     this.tableData[i] = rowData;
   }
   this.paintMonth();
-  if(eXo.core.Browser.isFF()) this.setDynamicSize4Month();
   this.scrollTo();
   this.initDND();
 };
@@ -690,11 +689,10 @@ GUIMan.prototype.initSelectionDayEvent = function() {
 } ;
 
 GUIMan.prototype.initSelectionDaysEvent = function() {
-  var Highlighter = eXo.calendar.Highlighter ;
   for(var i=0; i<this.dayNodes.length; i++) {
     var link = eXo.core.DOMUtil.getChildrenByTagName(this.dayNodes[i],"a")[0] ;    
     if (link) link.onmousedown = this.cancelEvent ;
-    this.dayNodes[i].onmousedown = Highlighter.start ;
+    this.dayNodes[i].onmousedown = eXo.calendar.UIHSelection.start ;
   }
 } ;
  
