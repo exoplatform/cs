@@ -305,10 +305,7 @@ public class UIContactForm extends UIFormTabPane {
             } else {
               contactService.saveSharedContact(username, contact) ;
             }  
-          } /*else {      
-            
-            contactService.savePublicContact(contact, false) ;
-          }*/
+          }
         } catch(PathNotFoundException e) {
           uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.contact-deleted", null,
               ApplicationMessage.WARNING)) ;
