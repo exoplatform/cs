@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.jcr.PathNotFoundException;
+
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
@@ -30,8 +32,10 @@ import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIGrid;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 import org.exoplatform.webui.event.Event;
@@ -261,8 +265,18 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
           List<Contact> users = contactService
             .getPublicContactsByAddressBook(SessionProviderFactory.createSystemProvider(), remover).getAll() ;
           for (Contact user : users)
-            contactService.removeUserShareContact(
-                SessionProviderFactory.createSystemProvider(), username, uiForm.contactId_, user.getId()) ;
+            try {
+              contactService.removeUserShareContact(
+                  SessionProviderFactory.createSystemProvider(), username, uiForm.contactId_, user.getId()) ;
+            } catch (PathNotFoundException e) {
+              UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+              uiApp.addMessage(new ApplicationMessage("UIAddEditPermission.msg.cannot-deleteShared", null,
+                  ApplicationMessage.WARNING)) ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              return ;
+            }
+            
+            
         } else {
           removePerUser(contact, remover + JCRDataStorage.HYPHEN) ;
           contactService.removeUserShareContact(SessionProviderFactory.createSystemProvider()
