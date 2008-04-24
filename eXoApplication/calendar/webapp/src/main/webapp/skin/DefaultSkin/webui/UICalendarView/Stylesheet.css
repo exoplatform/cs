@@ -177,6 +177,10 @@
 	*width: 97%;
 }
 
+.UIPageDesktop .UIWeekView .EventWeekBar .UIGrid {
+	_width: 98.9%;
+}
+
 .UIWeekView .EventWeekContent {
 	padding: 0px 0px 0px 1px;
 	*padding: 0px;
@@ -299,6 +303,7 @@
 
 .UIWeekView .EventAlldayContainer {
 	height: 13px;
+	border: 1px solid #808080;
 }
 
 .UIWeekView .EventAlldayContainer .LeftResizeEvent {
@@ -380,6 +385,10 @@
 	border: 0px;
 	background-color: #ffffff;
 	*width: 97%;
+}
+
+.UIWindow .UIWeekView .UIGrid {
+	_width: 98.8%;
 }
 
 .UIScheduleView .TimeBusy{
