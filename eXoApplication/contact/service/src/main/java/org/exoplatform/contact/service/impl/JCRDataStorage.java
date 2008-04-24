@@ -70,7 +70,7 @@ public class JCRDataStorage {
   final private static String SHARED_ADDRESSBOOK = "SharedAddressBook".intern() ;
   final private static String SHARED_MIXIN = "exo:contactShared".intern();
   final private static String SHARED_PROP = "exo:sharedId".intern();
-  final private static String USERS_PATH = "usersPath".intern() ;
+  final public static String USERS_PATH = "usersPath".intern() ;
   final public static String PRIVATE = "0".intern();
   final public static String SHARED = "1".intern();
   final public static String PUBLIC = "2".intern();
