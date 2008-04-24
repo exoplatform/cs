@@ -332,6 +332,10 @@
 	background: url('icons/AddNewFolderIcon.gif') no-repeat left center;
 }
 
+.UIMailPortlet .AddTagIcon {
+	background: url('icons/AddNewTagIcon.gif') no-repeat left center;
+}
+
 .UIMailPortlet .CheckItem {
 	background: url('icons/CheckItem.gif') no-repeat left center;
 }

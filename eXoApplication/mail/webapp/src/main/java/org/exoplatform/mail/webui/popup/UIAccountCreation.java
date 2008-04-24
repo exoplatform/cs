@@ -21,6 +21,7 @@ import java.util.Map;
 
 import javax.mail.AuthenticationFailedException;
 
+import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
@@ -324,6 +325,8 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet); 
           WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
           context.getJavascriptManager().importJavascript("eXo.mail.MailServiceHandler","/mail/javascript/");
+          context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.init(eXo.cs.webservice.core.WebserviceManager) ;") ;
+          context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.initService('checkMailInfobar', '" + MailUtils.getCurrentUser() + "', '" + acc.getId() + "') ;") ;
           context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.checkMail(true) ;");
         } catch (AuthenticationFailedException afe) {
           uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.userName-password-incorrect", null, ApplicationMessage.ERROR)) ;

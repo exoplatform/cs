@@ -570,6 +570,10 @@ public class MailServiceImpl implements MailService{
       }
     return folders ;
   }
+  
+  public void addTag(SessionProvider sProvider, String username, String accountId, Tag tag) throws Exception {
+    storage_.addTag(sProvider, username, accountId, tag) ;
+  }
 
   public void addTag(SessionProvider sProvider, String username, String accountId, List<Message> messages, List<Tag> tag)
       throws Exception {

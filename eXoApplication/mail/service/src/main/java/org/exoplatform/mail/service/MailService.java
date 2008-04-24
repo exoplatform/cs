@@ -177,6 +177,17 @@ public interface MailService {
   public List<Tag> getTags(SessionProvider sProvider, String username, String accountId) throws Exception ;
   
   public Tag getTag(SessionProvider sProvider, String username, String accountId, String tagId) throws Exception;
+  
+  /** This method should:
+   * 1. Check the tag name to see if  the tag name is configured in the account
+   * 2. If not create a new tag
+   * @param username
+   * @param accountId
+   * @param tag
+   * @throws Exception
+   */
+  public void addTag(SessionProvider sProvider, String username, String accountId, Tag tag) throws Exception ;
+  
   /** This method should:
     * 1. Check the tag name to see if  the tag name is configured in the account
     * 2. Check to see if the tag is already set in the message

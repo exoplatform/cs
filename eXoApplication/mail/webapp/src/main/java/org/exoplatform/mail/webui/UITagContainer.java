@@ -25,11 +25,14 @@ import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.Tag;
+import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIEditTagForm;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -47,6 +50,7 @@ import org.exoplatform.webui.form.UIForm;
     template =  "app:/templates/mail/webui/UITagContainer.gtmpl",
     events = {
         @EventConfig(listeners = UITagContainer.ChangeTagActionListener.class),
+        @EventConfig(listeners = UITagContainer.AddTagActionListener.class),
         @EventConfig(listeners = UITagContainer.EditTagActionListener.class),
         @EventConfig(listeners = UITagContainer.RemoveTagActionListener.class,confirm="UITagContainer.msg.confirm-remove-tag"),
         @EventConfig(listeners = UITagContainer.EmptyTagActionListener.class),
@@ -111,6 +115,10 @@ public class UITagContainer extends UIForm {
     return Calendar.COLORS ;
   }
   
+  public String[] getActions() {
+    return new String[] {"AddTag"} ;
+  }
+  
   static public class ChangeTagActionListener extends EventListener<UITagContainer> {
     public void execute(Event<UITagContainer> event) throws Exception {
       String tagId = event.getRequestContext().getRequestParameter(OBJECTID) ;
@@ -136,6 +144,24 @@ public class UITagContainer extends UIForm {
     }
   }
 
+  static public class AddTagActionListener extends EventListener<UITagContainer> {
+    public void execute(Event<UITagContainer> event) throws Exception {
+      UITagContainer uiTag = event.getSource();
+      UIMailPortlet uiPortlet = uiTag.getAncestorOfType(UIMailPortlet.class);
+      String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      if(Utils.isEmptyField(accId)) {
+        UIApplication uiApp = uiTag.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
+      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class);
+      UIEditTagForm uiTagForm = uiTag.createUIComponent(UIEditTagForm.class, null, null) ;
+      uiPopupAction.activate(uiTagForm, 600, 0, true);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
+    }
+  }
+  
   static public class EditTagActionListener extends EventListener<UITagContainer> {
     public void execute(Event<UITagContainer> event) throws Exception {
       String tagId = event.getRequestContext().getRequestParameter(OBJECTID) ;      

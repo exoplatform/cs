@@ -122,6 +122,12 @@ public class UISelectAccount extends UIForm {
   static  public class EditAccountActionListener extends EventListener<UISelectAccount> {
     public void execute(Event<UISelectAccount> event) throws Exception {
       UISelectAccount uiForm = event.getSource() ;
+      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      if(Utils.isEmptyField(uiForm.getSelectedValue())) {
+        uiApp.addMessage(new ApplicationMessage("UISelectAccount.msg.account-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      } 
       UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
       UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 730) ;
