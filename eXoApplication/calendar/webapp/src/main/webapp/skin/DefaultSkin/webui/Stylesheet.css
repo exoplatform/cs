@@ -101,10 +101,11 @@
 
 .UICalendarPortlet .TitleBar {
   background: url('background/CalendarBackground.gif') repeat-x  center -51px;	
-  height: 23px;
-  line-height: 23px ;
+  height: 22px;
+  line-height: 22px ;
   font-weight: bold ;
-	border-left: 1px solid #c7c7c7;
+	border: 1px solid #c7c7c7;
+	border-right: none;
 }
 
 .UICalendarPortlet .CurrentTitleBar {
