@@ -21,7 +21,6 @@
 	sdf.setCalendar(uicomponent.getInstanceTempCalendar()) ;
 	DateFormat sdtf = new  SimpleDateFormat("MM/d") ;
  	sdtf.setCalendar(uicomponent.getInstanceTempCalendar()) ;
- 	//uicomponent.updateMiniCal();
 	Map data = uicomponent.getData() ;
 %>
 <div class="UIMiniCalendar">
@@ -98,8 +97,9 @@
 				      } else if (validDay == 1 && dayOfMonth > daysInMonth) {
 				        validDay = 0;
 				      }
-				       	clazz = "" ;
+				       	styleClass = "" ;
 				       	highlight = "" ;
+                dayStyle = ""
 						   dayActionLink = uicomponent.TYPE_DAY +"&currentTime="+ calendar.getTime().getTime() ;
 				       actionLink = uicomponent.event("GotoDate", dayActionLink) ;
 				      if (validDay) {
@@ -107,19 +107,22 @@
 						    	highlight = "Highlight" ;
 						    } 
 					      if (uicomponent.isCurrentDay(dayOfMonth, currentMonth, currentYear )) {
-						       clazz = "Today";
-						     } else  {
-						       if(calendar.get(Calendar.DAY_OF_YEAR) == currentDay) {
-						       	clazz = "SelectedDay";
-						       }  
-						     }
+						       styleClass = "Today";
+						    } else if(calendar.get(Calendar.DAY_OF_YEAR) == currentDay)  {
+						        styleClass = "SelectedDay";
+						    } 
+                if(calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                  dayStyle = "Sunday" ;
+                } else if(calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+                  dayStyle = "Saturday" ;
+                }
 				       //sdf.setCalendar(calendar) ;
 				       %>
 				      
-				        <td class="$highlight $clazz">
+				        <td class="$highlight $styleClass $dayStyle">
 				        	<a href="$actionLink">
 				        		<div class="MiniCalendarActions">
-				       				<%=sdf.format(calendar.getTime())%> 
+                      <%=sdf.format(calendar.getTime())%> 
 				       			</div>
 				       		</a>
 				       	</td>

@@ -1608,7 +1608,7 @@ public class JCRDataStorage{
       NodeIterator it = query.execute().getNodes();   
       mapData = updateMap(mapData, it, eventQuery.getFromDate(), eventQuery.getToDate(), calSetting.getFilterPrivateCalendars()) ;
     }
-    // shared event
+    // shared events
     if(getSharedCalendarHome(systemSession).hasNode(username)) {
       PropertyIterator iter = getSharedCalendarHome(systemSession).getNode(username).getReferences() ;
       while(iter.hasNext()) {
@@ -1637,35 +1637,35 @@ public class JCRDataStorage{
 
 
   private Map<Integer, String> updateMap(Map<Integer, String> data, NodeIterator it, java.util.Calendar fromDate, java.util.Calendar toDate, String[] filterCalIds) throws Exception {
+    int fromDayOfYear = fromDate.get(java.util.Calendar.DAY_OF_YEAR) ;
+    int toDayOfYear = toDate.get(java.util.Calendar.DAY_OF_YEAR) ;
     boolean isVictory = false ;
     while(it.hasNext() && !isVictory) {
       Node eventNode = it.nextNode() ;
       if(filterCalIds == null || !Arrays.asList(filterCalIds).contains(eventNode.getProperty("exo:calendarId").getString())) {
         java.util.Calendar eventFormDate = eventNode.getProperty("exo:fromDateTime").getDate() ;
         java.util.Calendar eventToDate = eventNode.getProperty("exo:toDateTime").getDate() ;
-
-        if(eventFormDate.before(fromDate) && eventToDate.after(toDate)) {
-          isVictory = true ;
-          while(toDate.after(fromDate)) {
-            data.put(fromDate.get(java.util.Calendar.DAY_OF_YEAR), VALUE) ;
-            fromDate.add(java.util.Calendar.DATE, 1) ;
+        int eventFromDayOfYear = eventFormDate.get(java.util.Calendar.DAY_OF_YEAR) ;
+        int eventToDayOfYear = eventToDate.get(java.util.Calendar.DAY_OF_YEAR) ;
+        Integer begin = -1 ;
+        Integer end = -1 ;
+        if(fromDayOfYear >= eventFromDayOfYear) {
+          begin = fromDayOfYear ;
+          if(toDayOfYear <= eventToDayOfYear) {
+            end = toDayOfYear ;
+            isVictory = true ;
+          } else {
+            end = eventToDayOfYear ;
           }
-        } else if(eventFormDate.after(fromDate) && eventToDate.after(toDate)) {
-          while(toDate.after(eventFormDate)) {
-            data.put(eventFormDate.get(java.util.Calendar.DAY_OF_YEAR), VALUE) ;
-            eventFormDate.add(java.util.Calendar.DATE, 1) ;
-          }
-        } else if(eventFormDate.after(fromDate) && eventToDate.before(toDate)) {
-          while (eventToDate.after(eventFormDate)) {
-            data.put(eventFormDate.get(java.util.Calendar.DAY_OF_YEAR), VALUE) ;
-            eventFormDate.add(java.util.Calendar.DATE, 1) ;
-          }
-        } else if(eventFormDate.before(fromDate) && eventToDate.before(toDate)){
-          while(eventToDate.after(fromDate)) {
-            data.put(fromDate.get(java.util.Calendar.DAY_OF_YEAR), VALUE) ;
-            fromDate.add(java.util.Calendar.DATE, 1) ;
+        } else {
+          begin = eventFromDayOfYear ;
+          if(toDayOfYear <= eventToDayOfYear) {
+            end = toDayOfYear ;
+          } else {
+            end = eventToDayOfYear ;
           }
         }
+        if(begin > 0 && end > 0) for(Integer i = begin; i <= end; i++) data.put(i, VALUE);
       }
     }
     return data ;
@@ -1673,9 +1673,6 @@ public class JCRDataStorage{
   public void shareCalendar(SessionProvider sProvider, String username, String calendarId, List<String> receiverUsers) throws Exception {
     Node sharedCalendarHome = getSharedCalendarHome(sProvider) ;
     Node calendarNode = getUserCalendarHome(sProvider, username).getNode(calendarId) ;
-    // CalendarSetting usCalSetting = getCalendarSetting(sProvider, username) ;
-    //List<String> calColors = Arrays.asList(usCalSetting.getSharedCalendarsColors()) ;
-
     Value[] values = {};
     if (calendarNode.isNodeType(SHARED_MIXIN)) {     
       values = calendarNode.getProperty(SHARED_PROP).getValues();
