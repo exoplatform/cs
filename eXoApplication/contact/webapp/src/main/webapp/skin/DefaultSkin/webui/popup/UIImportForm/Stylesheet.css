@@ -1,26 +1,26 @@
-.UIImportForm {
+.UIContactPortlet .UIImportForm {
 	padding: 15px 20px;
 	background: #f3f3f3;
 }
 
-.UIImportForm .HorizontalLayout {
+.UIContactPortlet .UIImportForm .HorizontalLayout {
 	border: none;
 }
 
 
-.UIImportForm .UIFormGrid td.FieldLabel {
+.UIContactPortlet .UIImportForm .UIFormGrid td.FieldLabel {
 	line-height: 20px;
 }
 
-.UIImportForm .HorizontalLayout .categoryInput {
+.UIContactPortlet .UIImportForm .HorizontalLayout .categoryInput {
 	width: 100%;
 	padding: 0px;
 }
 
-.UIImportForm .categoryInput .UIFormGrid td {
+.UIContactPortlet .UIImportForm .categoryInput .UIFormGrid td {
 	padding: 0px;
 }
 
-.UIImportForm .categoryInput .UIFormGrid td.FieldLabel {
+.UIContactPortlet .UIImportForm .categoryInput .UIFormGrid td.FieldLabel {
 	display: none;
 }

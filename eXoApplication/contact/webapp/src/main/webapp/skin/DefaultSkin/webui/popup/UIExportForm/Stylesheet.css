@@ -1,32 +1,32 @@
-.UIExportContactForm {
+.UIContactPortlet .UIExportContactForm {
 	padding: 10px ;
 }
 
-.UIExportContactForm .ExportContact {
+.UIContactPortlet .UIExportContactForm .ExportContact {
 	border: 1px solid #aeaeae;
 	background: #f7f7f7;
 }
 
-.UIExportContactForm .WorkingContainer {
+.UIContactPortlet .UIExportContactForm .WorkingContainer {
 	border: 1px solid white;
 	padding: 5px 15px 10px 15px;
 }
 
-.UIExportContactForm .Title {
+.UIContactPortlet .UIExportContactForm .Title {
 	line-height: 30px;
 	font-weight: bold;
 }
 
-.UIExportContactForm .State {
+.UIContactPortlet .UIExportContactForm .State {
 	width: auto;
 	padding-left: 18px;
 	line-height: 12px;
 }
 
-.UIExportContactForm .ExportForm {
+.UIContactPortlet .UIExportContactForm .ExportForm {
 	padding: 10px;
 }
 
-.UIExportContactForm .UIGrid .text {
+.UIContactPortlet .UIExportContactForm .UIGrid .text {
 	white-space: nowrap;
 }

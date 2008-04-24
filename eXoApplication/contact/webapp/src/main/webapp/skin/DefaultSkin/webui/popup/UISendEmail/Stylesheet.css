@@ -1,9 +1,9 @@
-.UISendEmail {
+.UIContactPortlet .UISendEmail {
 	padding: 20px 10px;
 	background: #f3f3f3;
 }
 
-.UISendEmail .HorizontalLayout {
+.UIContactPortlet .UISendEmail .HorizontalLayout {
 	border: none;
 	width: 400px;
 	margin: auto;	
