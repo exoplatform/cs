@@ -1,16 +1,16 @@
-.UIImageForm {
+.UIContactPortlet .UIImageForm {
 	background: #f3f3f3;
 	padding: 20px;
 }
 
-.UIImageForm .UIForm .HorizontalLayout {
+.UIContactPortlet .UIImageForm .UIForm .HorizontalLayout {
 	border: none;
 }
 
-.UIImageForm .UIFormGrid td.FieldLabel {
+.UIContactPortlet .UIImageForm .UIFormGrid td.FieldLabel {
 	white-space: nowrap;
 }
 
-.UIImageForm .SelectFileFrame {
+.UIContactPortlet .UIImageForm .SelectFileFrame {
 	width: 300px;
 }

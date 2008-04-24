@@ -1,76 +1,76 @@
-.UIMessageCompose .MailListActionsbar .ControlButton {
+.UIContactPortlet .UIMessageCompose .MailListActionsbar .ControlButton {
 	float: left;
 	line-height: 26px;
 	cursor: pointer;
 }
 
-.UIMessageCompose .MailListActionsbar{
+.UIContactPortlet .UIMessageCompose .MailListActionsbar{
 	color: #000000;
 	margin: 3px 0px 0px 0px;
 	line-height: 26px;
 	padding-top: 2px;
 }
 
-.UIMessageCompose .MailListActionsbar a:hover {
+.UIContactPortlet .UIMessageCompose .MailListActionsbar a:hover {
 	background: url('background/ControlButtonBG1x26.gif') repeat-x ;
 	color: #058ee6; border: 1px solid #cbcbcb;
 	height: 24px;
 }
 
-.UIMessageCompose .MailListActionsbar .UIRightClickPopupMenu a {
+.UIContactPortlet .UIMessageCompose .MailListActionsbar .UIRightClickPopupMenu a {
 	color: #000000;
 	margin: 3px 0px 0px 0px;
 	line-height: 26px;
 }
 
-.UIMessageCompose .MailListActionsbar .UIRightClickPopupMenu a:hover {
+.UIContactPortlet .UIMessageCompose .MailListActionsbar .UIRightClickPopupMenu a:hover {
 	background: none;
 	color: #058ee6; border: none;
 	height: 24px;
 }
 
-.UIMessageCompose .MailListActionsbar .ControlButton .Label {
+.UIContactPortlet .UIMessageCompose .MailListActionsbar .ControlButton .Label {
 	line-height: 24px;
 }
 
-.UIMessageCompose .MailListActionsbar .SeparatorLine {
+.UIContactPortlet .UIMessageCompose .MailListActionsbar .SeparatorLine {
   float: left;
   margin: 3px 5px 2px 5px;
 }
 
-.UIMessageCompose .MailListActionsbar .ControlButton .IconHolder {
+.UIContactPortlet .UIMessageCompose .MailListActionsbar .ControlButton .IconHolder {
 	line-height: 26px;
 	margin: 1px 7px 0px 7px;
 	padding-left: 26px;
 	width: auto;
 }
 
-.UIMessageCompose .MailListActionsbar .ControlButton .SendMailIcon {
+.UIContactPortlet .UIMessageCompose .MailListActionsbar .ControlButton .SendMailIcon {
 	background: url('icons/24x24/SendMail.gif') no-repeat;
 }
 
-.UIMessageCompose .MailListActionsbar .ControlButton .SaveAsADraftIcon {
+.UIContactPortlet .UIMessageCompose .MailListActionsbar .ControlButton .SaveAsADraftIcon {
 	background: url('icons/24x24/SaveAsADraft.gif') no-repeat;
 }
 
-.UIMessageCompose .MailListActionsbar .ControlButton .DiscardIcon {
+.UIContactPortlet .UIMessageCompose .MailListActionsbar .ControlButton .DiscardIcon {
 	background: url('icons/24x24/Discard.gif') no-repeat;
 }
 
-.UIMessageCompose .MailListActionsbar .ControlButton .AttachFileIcon {
+.UIContactPortlet .UIMessageCompose .MailListActionsbar .ControlButton .AttachFileIcon {
 	background: url('icons/24x24/AttachFiles.gif') no-repeat;
 }
 
-.UIMessageCompose .MailListActionsbar .ControlButton .PriorityIcon {
+.UIContactPortlet .UIMessageCompose .MailListActionsbar .ControlButton .PriorityIcon {
 	background: url('icons/24x24/MessagePriority.gif') no-repeat left;
 	height: auto;
 }
 
-.UIMessageCompose .MailListActionsbar .ControlButton .EditorOptionsIcon {
+.UIContactPortlet .UIMessageCompose .MailListActionsbar .ControlButton .EditorOptionsIcon {
 	background: url('icons/24x24/EditorOptions.gif') no-repeat left;
 }
 
-.UIMessageCompose .MailListActionsbar .ControlButton .DownArrow1Icon {
+.UIContactPortlet .UIMessageCompose .MailListActionsbar .ControlButton .DownArrow1Icon {
 	line-height: 24px;
 	padding-right: 16px;
 	background-position: right;
@@ -78,84 +78,83 @@
 
 /*===========================Compose Message Address==================================*/
 
-.UIMessageCompose .MessageAddress {
+.UIContactPortlet .UIMessageCompose .MessageAddress {
 	background: #f3f3f3;
 	float: none;
 }
 
-.UIMessageCompose .MessageAddress .AddAddress {
+.UIContactPortlet .UIMessageCompose .MessageAddress .AddAddress {
 	width: 100px;
 	float: right;
 	padding: 0px 25px;
 }
 
-.UIMessageCompose .MessageAddress .AddAddress a {
+.UIContactPortlet .UIMessageCompose .MessageAddress .AddAddress a {
 	color:#126ca5;
 }
 
-.UIMessageCompose .MessageAddress .UIComposeForm .UIFormGrid {
+.UIContactPortlet .UIMessageCompose .MessageAddress .UIComposeForm .UIFormGrid {
 	width: 95%;
 }
 
-.UIMessageCompose table {
+.UIContactPortlet .UIMessageCompose table {
 	background: none;
 }
 
-.UIMessageCompose .UIForm .HorizontalLayout td.FieldLabel {
+.UIContactPortlet .UIMessageCompose .UIForm .HorizontalLayout td.FieldLabel {
 	font-weight: bold;
 	width: 120px;
 }
 
-.UIMessageCompose .UIForm .HorizontalLayout td {
+.UIContactPortlet .UIMessageCompose .UIForm .HorizontalLayout td {
 	border: none;
 }	
 
-.UIMessageCompose .UIForm .HorizontalLayout .FieldCCAndBCC {
+.UIContactPortlet .UIMessageCompose .UIForm .HorizontalLayout .FieldCCAndBCC {
 	padding: 6px 0px 2px 0px;
 	width: 165px;
 }
 
-.UIMessageCompose .UIForm .HorizontalLayout .FieldCCAndBCC .LabelLink {
+.UIContactPortlet .UIMessageCompose .UIForm .HorizontalLayout .FieldCCAndBCC .LabelLink {
 	color: #2A82C6;
 }
 
-.UIMessageCompose .UIForm .HorizontalLayout .FieldCCAndBCC a {
+.UIContactPortlet .UIMessageCompose .UIForm .HorizontalLayout .FieldCCAndBCC a {
 	color: #2A82C6;
 }
 
-.UIMessageCompose .UIForm .HorizontalLayout .FieldCCAndBCC a:hover {
+.UIContactPortlet .UIMessageCompose .UIForm .HorizontalLayout .FieldCCAndBCC a:hover {
 	color: #058ee6;
 }
-	
-	
-.UIMessageCompose .UIForm .HorizontalLayout {
+
+.UIContactPortlet .UIMessageCompose .UIForm .HorizontalLayout {
 	padding: 10px 0px;
 	border: 1px solid #cccccc;
 }
 
-.UIMessageCompose .UIForm .HorizontalLayout input {
+.UIContactPortlet .UIMessageCompose .UIForm .HorizontalLayout input {
 	width: 90%;
 }
 
-.UIMessageCompose .UIForm .HorizontalLayout select {
+.UIContactPortlet .UIMessageCompose .UIForm .HorizontalLayout select {
 	width: 98%;
 }
 
-.UIMessageCompose .UIForm .HorizontalLayout .FieldLabel .HoverButton {
+.UIContactPortlet .UIMessageCompose .UIForm .HorizontalLayout .FieldLabel .HoverButton {
 	line-height: 21px; width: 71px; height: 21px; float: right;
 }
 
-.UIMessageCompose .UIForm .HorizontalLayout .FieldLabel a:hover {
+.UIContactPortlet .UIMessageCompose .UIForm .HorizontalLayout .FieldLabel a:hover {
 	background: url('background/ButtonMail.gif') no-repeat;
 	width: 71px; height: 21px;
 }
 
-.UIMessageCompose .UIForm .HorizontalLayout textarea {
+.UIContactPortlet .UIMessageCompose .UIForm .HorizontalLayout textarea {
 	width: 90%; height: 40px; 
 	font-family: tahoma;
 }
 
-.UIMessageCompose .MessageAddress .ZipFileIcon {
+.UIContactPortlet .UIMessageCompose .MessageAddress .ZipFileIcon {
 	float: left;
 	background: url('icons/16x16/ZipFile.gif') no-repeat left;
 	line-height: 16px; 
@@ -163,7 +162,7 @@
 	width: auto;
 }
 
-.UIMessageCompose .MessageAddress .RemoveButton {
+.UIContactPortlet .UIMessageCompose .MessageAddress .RemoveButton {
 	float: left;
 	margin: 0px 0px 0px 5px;
 	color: #126ca5;
