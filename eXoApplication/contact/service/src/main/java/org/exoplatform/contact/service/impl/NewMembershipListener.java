@@ -16,7 +16,18 @@
  */
 package org.exoplatform.contact.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.jcr.Node;
+import javax.jcr.NodeIterator;
+import javax.jcr.query.Query;
+import javax.jcr.query.QueryManager;
+import javax.jcr.query.QueryResult;
+
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.MembershipEventListener;
 
@@ -28,15 +39,48 @@ import org.exoplatform.services.organization.MembershipEventListener;
  */
 public class NewMembershipListener extends MembershipEventListener {
   private ContactService cservice_ ;
-  public NewMembershipListener(ContactService cservice) throws Exception {
+  private NodeHierarchyCreator nodeHierarchyCreator_ ;
+  public NewMembershipListener(ContactService cservice, NodeHierarchyCreator nodeHierarchyCreator) throws Exception {
   	cservice_ = cservice ;
+    nodeHierarchyCreator_ = nodeHierarchyCreator ;
   }
   
   public void postSave(Membership m, boolean isNew) throws Exception {
   	cservice_.addGroupToPersonalContact(m.getUserName(), m.getGroupId()) ;
+    JCRDataStorage storage_ = new JCRDataStorage(nodeHierarchyCreator_) ;
+    Node publicContactHome = storage_.getPublicContactHome(SessionProvider.createSystemProvider()) ;      
+    String usersPath = nodeHierarchyCreator_.getJcrPath(JCRDataStorage.USERS_PATH) ;
+    QueryManager qm = publicContactHome.getSession().getWorkspace().getQueryManager();
+    List<String> recievedUser = new ArrayList<String>() ;
+    recievedUser.add(m.getUserName()) ;
+    
+    StringBuffer queryString = new StringBuffer("/jcr:root" + usersPath 
+        + "//element(*,exo:contactGroup)[@exo:viewPermissionGroups='").append( m.getGroupId() + "']") ;        
+    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
+    QueryResult result = query.execute();
+    NodeIterator nodes = result.getNodes() ;
+    while (nodes.hasNext()) {
+      Node address = nodes.nextNode() ;
+      storage_.shareAddressBook(SessionProvider.createSystemProvider(), address.getProperty("exo:sharedUserId")
+          .getString(), address.getProperty("exo:id").getString(),recievedUser) ;
+    }
   }
   
   public void preDelete(Membership m) throws Exception {
-    
+    JCRDataStorage storage_ = new JCRDataStorage(nodeHierarchyCreator_) ;
+    Node publicContactHome = storage_.getPublicContactHome(SessionProvider.createSystemProvider()) ;      
+    String usersPath = nodeHierarchyCreator_.getJcrPath(JCRDataStorage.USERS_PATH) ;
+    QueryManager qm = publicContactHome.getSession().getWorkspace().getQueryManager();
+    StringBuffer queryString = new StringBuffer("/jcr:root" + usersPath 
+        + "//element(*,exo:contactGroup)[@exo:viewPermissionGroups='").append( m.getGroupId() + "']") ;        
+    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
+    QueryResult result = query.execute();
+    NodeIterator nodes = result.getNodes() ;
+    while (nodes.hasNext()) {
+      Node address = nodes.nextNode() ;
+      storage_.removeUserShareAddressBook(
+          SessionProvider.createSystemProvider(), address.getProperty("exo:sharedUserId")
+          .getString(), address.getProperty("exo:id").getString(), m.getUserName()) ;
+    }
   }
 }

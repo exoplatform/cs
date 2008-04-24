@@ -22,6 +22,10 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
+import javax.jcr.query.Query;
+import javax.jcr.query.QueryManager;
+import javax.jcr.query.QueryResult;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
@@ -85,6 +89,46 @@ public class NewUserListener extends UserEventListener {
     	contact.setOwnerId(user.getUserName()) ;
     	cservice_.saveContact(sysProvider, user.getUserName(), contact, true) ;
     	
+      
+      // added 23-4
+      JCRDataStorage storage_ = new JCRDataStorage(nodeHierarchyCreator_) ;
+      Node publicContactHome = storage_.getPublicContactHome(SessionProvider.createSystemProvider()) ;      
+      String usersPath = nodeHierarchyCreator_.getJcrPath(JCRDataStorage.USERS_PATH) ;
+      QueryManager qm = publicContactHome.getSession().getWorkspace().getQueryManager();
+      List<String> recievedUser = new ArrayList<String>() ;
+      recievedUser.add(user.getUserName()) ;
+      
+      for (Object object : objGroupIds) {  
+        String groupId = ((GroupImpl)object).getId() ;
+        StringBuffer queryString = new StringBuffer("/jcr:root" + usersPath 
+            + "//element(*,exo:contactGroup)[@exo:viewPermissionGroups='").append(groupId + "']") ;        
+        Query query = qm.createQuery(queryString.toString(), Query.XPATH);
+        QueryResult result = query.execute();
+        NodeIterator nodes = result.getNodes() ;
+        while (nodes.hasNext()) {
+          Node address = nodes.nextNode() ;
+          storage_.shareAddressBook(SessionProvider.createSystemProvider(), address.getProperty("exo:sharedUserId")
+              .getString(), address.getProperty("exo:id").getString(),recievedUser) ;
+        }
+        
+        /*// lookup shared contacts
+        queryString = new StringBuffer("/jcr:root" + usersPath 
+            + "//element(*,exo:contact)[@exo:viewPermissionGroups='").append(groupId + "']") ;        
+        query = qm.createQuery(queryString.toString(), Query.XPATH);
+        result = query.execute();
+        nodes = result.getNodes() ;
+        while (nodes.hasNext()) {
+          Node contactNode = nodes.nextNode() ;
+          String split = "/" ;
+          String temp = contactNode.getPath().split(usersPath)[1] ;
+          String userId = temp.split(split)[1] ;
+          storage_.shareContact(SessionProvider.createSystemProvider(), userId,
+              new String[] {contactNode.getProperty("exo:id").getString()}, recievedUser) ;
+        }*/
+      }
+
+      
+      
       Node userApp = nodeHierarchyCreator_.getUserApplicationNode(SessionProvider.createSystemProvider(), user.getUserName()) ;
       //reparePermissions(userApp, user.getUserName()) ;
       //reparePermissions(userApp.getNode("ContactApplication"), user.getUserName()) ;
@@ -93,8 +137,11 @@ public class NewUserListener extends UserEventListener {
       userApp.getSession().save() ;   
       
       sysProvider.close();
-  	}
+  	} else {
+     //System.out.println("===============> edit users"); 
+    }
   }
+
   
   private void reparePermissions(Node node, String owner) throws Exception {
   	ExtendedNode extNode = (ExtendedNode)node ;
