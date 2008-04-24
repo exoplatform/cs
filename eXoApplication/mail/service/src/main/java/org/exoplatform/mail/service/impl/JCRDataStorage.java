@@ -1067,6 +1067,18 @@ public class JCRDataStorage{
     return tagHome ;   
   }
 
+  public void addTag(SessionProvider sProvider, String username, String accountId, Tag tag) throws Exception {
+    Node tagHome = getTagHome(sProvider, username, accountId) ;
+    if(!tagHome.hasNode(tag.getId())) {
+      Node tagNode = tagHome.addNode(tag.getId(), Utils.EXO_MAILTAG) ;
+      tagNode.setProperty(Utils.EXO_ID, tag.getId()) ;
+      tagNode.setProperty(Utils.EXO_NAME, tag.getName()) ;
+      tagNode.setProperty(Utils.EXO_DESCRIPTION, tag.getDescription()) ;
+      tagNode.setProperty(Utils.EXO_COLOR, tag.getColor()) ;
+      tagHome.save() ;
+    }      
+  }
+  
   public void addTag(SessionProvider sProvider, String username, String accountId, List<Message> messages, List<Tag> tagList)
   throws Exception {    
     Map<String, String> tagMap = new HashMap<String, String> () ;
@@ -1108,10 +1120,18 @@ public class JCRDataStorage{
     while (iter.hasNext()){
       Node tagNode = (Node)iter.next() ;
       Tag tag = new Tag();
-      tag.setId((tagNode.getProperty(Utils.EXO_ID).getString())) ;
-      tag.setName(tagNode.getProperty(Utils.EXO_NAME).getString()) ;
-      tag.setDescription(tagNode.getProperty(Utils.EXO_DESCRIPTION).getString()) ;
-      tag.setColor(tagNode.getProperty(Utils.EXO_COLOR).getString()) ;
+      try {
+        tag.setId((tagNode.getProperty(Utils.EXO_ID).getString())) ;
+      } catch(PathNotFoundException e) { }
+      try {
+        tag.setName(tagNode.getProperty(Utils.EXO_NAME).getString()) ;
+      } catch(PathNotFoundException e) { }
+      try {
+        tag.setDescription(tagNode.getProperty(Utils.EXO_DESCRIPTION).getString()) ;
+      } catch(PathNotFoundException e) { }
+      try {
+        tag.setColor(tagNode.getProperty(Utils.EXO_COLOR).getString()) ;
+      } catch(PathNotFoundException e) { } 
       tags.add(tag);
     }
     return tags ;
@@ -1124,10 +1144,18 @@ public class JCRDataStorage{
     while (iter.hasNext()){
       Node tagNode = (Node)iter.next() ;
       if (tagNode.getProperty(Utils.EXO_ID).getString().equals(tagId)) {
-        tag.setId((tagNode.getProperty(Utils.EXO_ID).getString())) ;
-        tag.setName(tagNode.getProperty(Utils.EXO_NAME).getString()) ;
-        tag.setDescription(tagNode.getProperty(Utils.EXO_DESCRIPTION).getString()) ;
-        tag.setColor(tagNode.getProperty(Utils.EXO_COLOR).getString()) ;
+        try {
+          tag.setId((tagNode.getProperty(Utils.EXO_ID).getString())) ;
+        } catch(PathNotFoundException e) { }
+        try {
+          tag.setName(tagNode.getProperty(Utils.EXO_NAME).getString()) ;
+        } catch(PathNotFoundException e) { }
+        try {
+          tag.setDescription(tagNode.getProperty(Utils.EXO_DESCRIPTION).getString()) ;
+        } catch(PathNotFoundException e) { }
+        try {
+          tag.setColor(tagNode.getProperty(Utils.EXO_COLOR).getString()) ;
+        } catch(PathNotFoundException e) { } 
       }
     }
     return tag ;

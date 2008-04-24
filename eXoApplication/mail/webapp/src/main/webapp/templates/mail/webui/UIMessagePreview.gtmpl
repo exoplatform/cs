@@ -379,7 +379,7 @@
       											String name = attach.getName().trim() ;
      												for (int i = 0; i < MailUtils.SUPPORTED_VIEW_TYPE_ATTACH.length; i++) {
      												  String type = MailUtils.SUPPORTED_VIEW_TYPE_ATTACH[i].trim() ;
-     												  if(name.substring(name.lastIndexOf(".") + 1, name.length()).equals(type))
+     												  if(name.substring(name.lastIndexOf(".") + 1, name.length()).equalsIgnoreCase(type))
         												validType = true ;
         										}
         										if (validType) {

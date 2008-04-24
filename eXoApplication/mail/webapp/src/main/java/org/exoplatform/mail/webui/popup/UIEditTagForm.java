@@ -118,30 +118,38 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
         return ;
       }
 
-      try {      
-        uiEditTagForm.setTag(tagId);        
-        List<Tag> tagList = mailService.getTags(SessionProviderFactory.createSystemProvider(), username, accountId);
-        for (Tag tag : tagList) {
-          if(tag.getName().equals(newTagName)&&!tag.getId().equals(tagId)) {
-            uiApp.addMessage(new ApplicationMessage("UIEditTagForm.msg.tag-already-exists", new Object[]{newTagName})) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-            return ;
+      if (tagId != null) {
+        try {      
+          uiEditTagForm.setTag(tagId);        
+          List<Tag> tagList = mailService.getTags(SessionProviderFactory.createSystemProvider(), username, accountId);
+          for (Tag tag : tagList) {
+            if(tag.getName().equals(newTagName)&&!tag.getId().equals(tagId)) {
+              uiApp.addMessage(new ApplicationMessage("UIEditTagForm.msg.tag-already-exists", new Object[]{newTagName})) ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              return ;
+            }
+            if (tag.getId().equals(tagId)){
+              tag.setName(newTagName);
+              tag.setColor(color);
+              tag.setDescription(description);
+              mailService.updateTag(SessionProviderFactory.createSystemProvider(), username, accountId, tag);
+            }
           }
-          if (tag.getId().equals(tagId)){
-            tag.setName(newTagName);
-            tag.setColor(color);
-            tag.setDescription(description);
-            mailService.updateTag(SessionProviderFactory.createSystemProvider(), username, accountId, tag);
-          }
+        } catch (Exception e){
+          uiApp.addMessage(new ApplicationMessage("UIRenameTagForm.msg.error-rename-tag", null)) ;
+          e.printStackTrace() ;
         }
-      } catch (Exception e){
-        uiApp.addMessage(new ApplicationMessage("UIRenameTagForm.msg.error-rename-tag", null)) ;
-        e.printStackTrace() ;
+        UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
+        uiMessageList.updateList();
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class)) ;
+      } else {
+        Tag newTag = new Tag() ;
+        newTag.setName(newTagName);
+        newTag.setColor(color);
+        newTag.setDescription(description);
+        mailService.addTag(SessionProviderFactory.createSystemProvider(), username, accountId, newTag);
       }
-      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
-      uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UITagContainer.class)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class)) ;
       uiEditTagForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiEditTagForm.getAncestorOfType(UIPopupAction.class)) ;
     }
