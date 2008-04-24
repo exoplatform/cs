@@ -156,7 +156,7 @@
 
 .UIWeekView .UIGrid th {
 	background: url('../background/CalendarBackground.gif') repeat-x center -106px;	
-  height: 23px;
+  height: 22px;
 	border-right: 1px solid #c7c7c7;
 	width: 13.2%;
 	border-top:none;
@@ -168,7 +168,7 @@
 }
 
 .UIWeekView .EventWeekBar .UIGrid th {
-	border-left: 1px solid #c7c7c7;
+	border: 1px solid #c7c7c7;
 }
 
 .UIWeekView .UIGrid {
