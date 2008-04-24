@@ -15,7 +15,6 @@
 @import url("popup/UIExportAddressBookForm/Stylesheet.css") ;
 @import url("popup/UIImportForm/Stylesheet.css") ;
 @import url("UIWelcomeContact/Stylesheet.css") ;
-@import url("skinIcons/24x24/Stylesheet.css") ;
 @import url("UIComposeForm/Stylesheet.css") ;
 @import url('UIColorPicker/Stylesheet.css') ;
 
@@ -134,6 +133,7 @@
 
 /* Popup Menu Positioning*/
 .UIActionBar .SelectButton .UIPopupCategory {
+	top: 25px;
 	left: 7px ;
 }
 
