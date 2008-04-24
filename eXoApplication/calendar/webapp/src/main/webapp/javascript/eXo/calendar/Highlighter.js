@@ -11,10 +11,16 @@ Highlighter.prototype.getPos = function(cell) {
 
 Highlighter.prototype.isInCell = function(cell, _e) {
 	var Highlighter = eXo.calendar.Highlighter ;
-	var cellX = eXo.core.Browser.findPosXInContainer(cell, Highlighter.container) ;
-	var cellY = eXo.core.Browser.findPosYInContainer(cell, Highlighter.container) - Highlighter.container.scrollTop ;
-	var mouseX = eXo.core.Browser.findMouseRelativeX(Highlighter.container, _e) ;
-	var mouseY = eXo.core.Browser.findMouseRelativeY(Highlighter.container, _e) ;
+	var cellX = eXo.core.Browser.findPosX(cell) - Highlighter.container.scrollLeft ;
+	var cellY = eXo.core.Browser.findPosY(cell) - Highlighter.container.scrollTop ;
+	var mouseX = eXo.core.Browser.findMouseXInPage(_e) ;
+	var mouseY = eXo.core.Browser.findMouseYInPage(_e) ;
+	if(document.getElementById("UIPageDesktop")) {
+		mouseX = eXo.core.Browser.findMouseXInPage(_e) ;
+		mouseY = eXo.core.Browser.findMouseYInPage(_e) ;
+		cellX = eXo.core.Browser.findPosX(cell) - eXo.calendar.UICalendarPortlet.getScrollLeft(cell) ;
+		cellY = eXo.core.Browser.findPosY(cell) - eXo.calendar.UICalendarPortlet.getScrollTop(cell) ;
+	}
 	if (
 		 (mouseX > cellX) && (mouseX < (cellX + cell.offsetWidth))
 	&& (mouseY > cellY) && (mouseY < (cellY + cell.offsetHeight))
