@@ -63,10 +63,18 @@ public class UIActionBar extends UIContainer  {
       UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class) ; 
       UIPopupContainer uiPopupContainer = uiPopupAction.activate(UIPopupContainer.class,800) ;  
       uiPopupContainer.setId("AddNewContact") ;
-      UICategorySelect categorySelect = uiPopupContainer.addChild(UICategorySelect.class, null, null) ;
-      categorySelect.setPrivateGroupMap(
-          uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class).getPrivateGroupMap()) ;
-      //categorySelect.addCategories() ;
+      UICategorySelect uiCategorySelect = uiPopupContainer.addChild(UICategorySelect.class, null, null) ;
+      UIAddressBooks uiAddressBooks = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
+      Map<String, String> addresses = uiAddressBooks.getPrivateGroupMap() ;
+      for (SharedAddressBook address : uiAddressBooks.getSharedGroups().values())
+        if (uiAddressBooks.havePermission(address.getId())) {
+          if (uiAddressBooks.isDefault(address.getId())) {
+            addresses.put(address.getId(), address.getSharedUserId() + " - " + address.getName()) ;
+          } else {
+            addresses.put(address.getId(), address.getName()) ;
+          }  
+        }
+      uiCategorySelect.setPrivateGroupMap(addresses) ;
       UIContactForm contactForm = uiPopupContainer.addChild(UIContactForm.class, null, null) ;
       contactForm.setNew(true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;

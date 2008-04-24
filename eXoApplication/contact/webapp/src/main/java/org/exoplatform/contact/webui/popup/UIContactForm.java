@@ -96,8 +96,6 @@ public class UIContactForm extends UIFormTabPane {
   
   private Contact contact_ = null ;
   private boolean isNew_ = true;
-  private boolean isShared = false ;
-  
   public UIContactForm() throws Exception {
     super("UIContactForm");
     UIProfileInputSet ProfileTab = new UIProfileInputSet(INPUT_PROFILETAB) ;
@@ -136,10 +134,7 @@ public class UIContactForm extends UIFormTabPane {
   }
   public String[] getActions() { return new String[] {"Save", "Cancel"} ; }  
   public void setNew(boolean isNew) { isNew_ = isNew ; }
-  
-  public void setShared(boolean shared) { isShared = shared ; }
-  public boolean isShared() { return isShared ; }
-  
+
   public void setValues(Contact contact) throws Exception {
     contact_ = contact ;
     UIProfileInputSet profileTab = getChildById(INPUT_PROFILETAB) ;
@@ -278,7 +273,9 @@ public class UIContactForm extends UIFormTabPane {
         String category = uiCategorySelect.getSelectedCategory();        
         contact.setAddressBook(new String[] { category });
         ContactGroup group ;
-        if (uiContactForm.isShared) {
+        UIAddressBooks uiAddressBooks = uiContactForm
+        .getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class) ;
+        if (uiAddressBooks.getSharedGroups().containsKey(category)) {
           group = contactService.getSharedGroup(username, category) ;
           contact.setViewPermissionUsers(group.getViewPermissionUsers()) ;
           contact.setViewPermissionGroups(group.getViewPermissionGroups()) ;
