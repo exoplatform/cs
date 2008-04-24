@@ -72,16 +72,16 @@ public class UIYearView extends UICalendarView {
   public void refresh() throws Exception { 
     yearData_.clear() ;
     Calendar cal =  new GregorianCalendar(getCurrentYear(), 0, 1, 0, 0, 0) ;
-    Calendar cal2 = new GregorianCalendar(getCurrentYear(), 0, 1, 0, 0, 0) ;
     Calendar beginYear = CalendarUtils.getBeginDay(cal) ;
-    cal2.add(Calendar.YEAR, 1) ;
-    Calendar endYear = CalendarUtils.getEndDay(cal2) ;
+    cal.add(Calendar.YEAR, 1) ;
+    cal.add(Calendar.MILLISECOND, -1) ;
+    Calendar endYear = cal ;
     CalendarService calendarService = getApplicationComponent(CalendarService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
     EventQuery eventQuery = new EventQuery() ;
-    if(!CalendarUtils.isEmpty(categoryId_) && !categoryId_.toLowerCase().equals("null")) {
+     if(!CalendarUtils.isEmpty(categoryId_) && !categoryId_.toLowerCase().equals("null")) {
       eventQuery.setCategoryId(new String[]{categoryId_}) ;
-    }
+    } 
     eventQuery.setFromDate(beginYear) ;
     eventQuery.setToDate(endYear) ;
     yearData_ = calendarService.searchHightLightEvent(getSession(), username, eventQuery, getPublicCalendars());

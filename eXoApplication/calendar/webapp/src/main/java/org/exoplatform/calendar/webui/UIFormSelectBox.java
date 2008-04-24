@@ -19,8 +19,10 @@ package org.exoplatform.calendar.webui ;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 /**
@@ -212,10 +214,21 @@ public void processRender(WebuiRequestContext context) throws Exception {
     w.write("</select>\n") ;
     if (this.isMandatory()) w.write(" *");
   }
+  protected UIForm getFrom() {
+    return getAncestorOfType(UIForm.class) ;
+  }
   
   private String processRenderOptionGroup(SelectItemOptionGroup group) {
 	  StringBuffer result = new StringBuffer();
-	  result.append("<optgroup label=\""); result.append(group.getLabel()); result.append("\">") ;
+    String label = group.getLabel() ;
+    try {
+      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+      ResourceBundle res = context.getApplicationResourceBundle() ;     
+      label = res.getString(getFrom().getId() + ".optionGroup.label." + label);      
+    } catch (Exception e) {
+      System.out.println("Could not find: " + getFrom().getId() + ".optionGroup.label." + label);
+    }
+	  result.append("<optgroup label=\""); result.append(label); result.append("\">") ;
 		for (SelectItemOption<String> option : group.getOptions())
 			result.append(processRenderOption(option));
 	  result.append("</optgroup>") ;
