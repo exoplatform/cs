@@ -686,11 +686,10 @@ UIWeekView.prototype.cancelBubble = function(evt) {
 } ;
 
 UIWeekView.prototype.callbackSelectionX = function() {
-	var Highlighter = eXo.calendar.Highlighter ;
-	Highlighter.block[0].style.display = "none" ;
-	var startTime = parseInt(Highlighter.firstCell.getAttribute("startTime")) ;
-	var endTime = parseInt(Highlighter.lastCell.getAttribute("startTime")) + 24*60*60*1000 - 1 ;
-	eXo.webui.UIForm.submitEvent("UIWeekView" ,'QuickAdd','&objectId=Event&startTime=' + startTime + '&finishTime=' + endTime) ;	
+	var UIHSelection = eXo.calendar.UIHSelection ;
+	var startTime = parseInt(UIHSelection.firstCell.getAttribute("startTime")) ;
+	var endTime = parseInt(UIHSelection.lastCell.getAttribute("startTime")) + 24*60*60*1000 - 1 ;
+	eXo.webui.UIForm.submitEvent("UIWeekView" ,'QuickAdd','&objectId=Event&startTime=' + startTime + '&finishTime=' + endTime) ;
 } ;
 eXo.calendar.UIHorizontalResize = new UIHorizontalResize() ;
 eXo.calendar.UIWeekView = new UIWeekView() ;
