@@ -1690,24 +1690,6 @@ UICalendarPortlet.prototype.fixFirstLoad = function() {
 	}
 } ;
 
-UIWindow.prototype.endResizeWindowEvt = function(evt) {
-	// Re initializes the scroll tabs managers on the page
-	eXo.portal.UIPortalControl.initAllManagers() ;
-	eXo.desktop.UIWindow.portletWindow = null ;
-	eXo.desktop.UIWindow.resizableObject = null ;
-	this.onmousemove = null ;
-	this.onmouseup = null ;
-	if((eXo.core.Browser.browserType != "ie")) {
-		if(document.getElementById("UIWeekView")) {
-			eXo.calendar.UICalendarMan.initWeek() ;
-			eXo.calendar.UIWeekView.setSize() ;
-		}
-		if(document.getElementById("UIMonthView")) {
-			eXo.calendar.UICalendarMan.initMonth() ;
-		}
-	}
-} ; 
-
 eXo.portal.UIControlWorkspace.showWorkspace = function() {
 	var cws = eXo.portal.UIControlWorkspace ;
 	var uiWorkspace = document.getElementById(this.id) ;
@@ -1785,3 +1767,64 @@ eXo.portal.UIControlWorkspace.showWorkspace = function() {
 		}
 	}
 };
+
+UICalendarPortlet.prototype.fixForMaximize = function() {
+	if((eXo.core.Browser.browserType != "ie")) {
+		if(document.getElementById("UIWeekView")) {
+			eXo.calendar.UICalendarMan.initWeek() ;
+			eXo.calendar.UIWeekView.setSize() ;
+		}
+		if(document.getElementById("UIMonthView")) {
+			eXo.calendar.UICalendarMan.initMonth() ;
+		}
+	}
+} ;
+
+UIWindow.prototype.endResizeWindowEvt = function(evt) {
+	// Re initializes the scroll tabs managers on the page
+	eXo.portal.UIPortalControl.initAllManagers() ;
+	eXo.desktop.UIWindow.portletWindow = null ;
+	eXo.desktop.UIWindow.resizableObject = null ;
+	this.onmousemove = null ;
+	this.onmouseup = null ;
+	eXo.calendar.UICalendarPortlet.fixForMaximize() ;
+} ; 
+
+UIWindow.prototype.maximizeWindowEvt = function(evt) {
+	var domUtil = eXo.core.DOMUtil ;
+	var portletWindow = domUtil.findAncestorByClass(this, "UIResizeObject") ;
+	
+	var uiWindow = eXo.desktop.UIWindow ;
+	var uiPageDesktop = document.getElementById("UIPageDesktop") ;
+  var desktopWidth = uiPageDesktop.offsetWidth  ;
+  var desktopHeight = uiPageDesktop.offsetHeight  ;
+  var uiResizableBlock = domUtil.findDescendantsByClass(portletWindow, "div", "UIResizableBlock") ;
+  
+  if(portletWindow.maximized) {
+    portletWindow.style.top = uiWindow.posY + "px" ;
+    portletWindow.style.left = uiWindow.posX + "px" ;
+    portletWindow.style.width = uiWindow.originalWidth + "px" ;
+    portletWindow.maximized = false ;
+    for(var i = 0; i < uiResizableBlock.length; i++) {
+      uiResizableBlock[i].style.height = uiResizableBlock[i].originalHeight + "px" ;
+    }
+    this.className = "ControlIcon MaximizedIcon" ;
+  } else {
+    uiWindow.backupObjectProperties(portletWindow, uiResizableBlock) ;
+    portletWindow.style.top = "0px" ;
+    portletWindow.style.left = "0px" ;
+    portletWindow.style.width = "100%" ;
+				portletWindow.style.height = "auto";
+    var delta = eXo.core.Browser.getBrowserHeight() - portletWindow.clientHeight ;
+    for(var i = 0; i < uiResizableBlock.length; i++) {
+  			uiResizableBlock[i].style.height =  (parseInt(uiResizableBlock[i].clientHeight) + delta) + "px" ;
+    }
+    portletWindow.style.height = portletWindow.clientHeight + "px";
+    portletWindow.maximized = true ;
+    this.className = "ControlIcon RestoreIcon" ;
+				eXo.desktop.UIWindow.saveWindowProperties(portletWindow);
+  }
+  // Re initializes the scroll tabs managers on the page
+	eXo.portal.UIPortalControl.initAllManagers() ;
+	eXo.calendar.UICalendarPortlet.fixForMaximize() ;
+} ;
