@@ -568,7 +568,7 @@
 	white-space: nowrap;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .UIGrid .ReadItem .SubjectItem{
+.UIMailPortlet .MailWorkingWorkspace .UIGrid .SubjectItem{
 	display: block; 
 	float: left; 
 	width: 90%;
