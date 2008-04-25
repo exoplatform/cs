@@ -273,6 +273,9 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     return getAncestorOfType(UIWorkingContainer.class)
       .findFirstComponentOfType(UIAddressBooks.class).getSharedGroups() ;
   }
+  public List<String> getPublicContactGroups() throws Exception {
+    return Arrays.asList(ContactUtils.getUserGroups().toArray(new String[] {})) ;
+  }
   /*
   public boolean checkExistContacts(String contactId) throws Exception {
     ContactService contactService = ContactUtils.getContactService() ;

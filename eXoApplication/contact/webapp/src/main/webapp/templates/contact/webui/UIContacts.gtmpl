@@ -237,18 +237,30 @@
 		  	 	    			groupName = privateGroupMap.get(addressBooks[0]) ;								  
 								  	if (groupName == null) continue ;								  
 								  } else if (contactType.equals("1")){
-									  	SharedAddressBook add =  sharedGroupMap.get(addressBooks[0]) ;
-											StringBuffer buffer ;
-								  		if (add != null)  buffer = new StringBuffer(add.getName()) ;
-								  		else {
-								  			buffer = new StringBuffer(_ctx.appRes(uicomponent.getName() + ".label.sharedContacts")) ;
+								  	SharedAddressBook add = null ;							  	 
+								  	for (String address : addressBooks) {
+								  		if (sharedGroupMap.containsKey(address)) {
+								  			add = sharedGroupMap.get(address) ;
 								  		}
-							  			for (String address : addressBooks) { 
-							  				if (!address.contains(NewUserListener.DEFAULTGROUP)) {
-							  					buffer.append(", ").append(address) ;
-							  				}
-							  			}
-								  		groupName = buffer.toString() ;
+								  	}
+										StringBuffer buffer ;
+							  		if (add != null)  {
+							  			if (add.getId().contains(NewUserListener.DEFAULTGROUP)) {
+							  				buffer = new StringBuffer(add.getSharedUserId() + " - " + add.getName()) ;
+							  			} else {
+							  				buffer = new StringBuffer(add.getName()) ;
+							  			}							  			
+							  		}
+							  		else {
+							  			buffer = new StringBuffer(_ctx.appRes(uicomponent.getName() + ".label.sharedContacts")) ;
+							  		}
+							  		List<String> publicAddress = uicomponent.getPublicContactGroups() ;
+						  			for (String address : addressBooks) { 
+						  				if (publicAddress.contains(address)) {
+						  					buffer.append(", ").append(address) ;
+						  				}
+						  			}
+							  		groupName = buffer.toString() ;
 								  }
 								  
   	 	    				String actionLink  = uicomponent.event("SelectedContact", contact.getId()) ;
