@@ -870,7 +870,6 @@ public class JCRDataStorage{
     Node events = reminders.getParent().getNode(EVENTS) ;
     if(events != null && events.hasNode(eventNode.getName())) events.getNode(eventNode.getName()).remove() ;
     if(!reminders.isNew())reminders.save() ;
-    System.out.println("remove rmd");
   } 
 
   public CalendarEvent getGroupEvent(SessionProvider sProvider, String calendarId, String eventId) throws Exception {
@@ -1141,7 +1140,7 @@ public class JCRDataStorage{
     if(toDate > fromDate) {
     	java.util.Calendar tmpTime = Utils.getInstanceTempCalendar() ;
     	tmpTime.setTime(event.getFromDateTime()) ;
-    	tmpTime.set(java.util.Calendar.HOUR, 0) ;
+    	tmpTime.set(java.util.Calendar.HOUR_OF_DAY, 0) ;
     	tmpTime.set(java.util.Calendar.MINUTE, 0) ;
     	tmpTime.set(java.util.Calendar.SECOND, 0) ;
     	tmpTime.set(java.util.Calendar.MILLISECOND, 0) ;
@@ -1163,7 +1162,7 @@ public class JCRDataStorage{
     if(toDate > fromDate) {
     	java.util.Calendar cal = Utils.getInstanceTempCalendar() ;
       cal.setTime(event.getFromDateTime()) ;
-      cal.set(java.util.Calendar.HOUR, 0) ;
+      cal.set(java.util.Calendar.HOUR_OF_DAY, 0) ;
       cal.set(java.util.Calendar.MINUTE, 0) ;
       cal.set(java.util.Calendar.SECOND, 0) ;
       cal.set(java.util.Calendar.MILLISECOND, 0) ;
