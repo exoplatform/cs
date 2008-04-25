@@ -255,5 +255,8 @@ public class UIListView extends UICalendarView {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiListView.getParent());           
     }
   }
+  public CalendarEvent getSelectedEventObj() {
+    return eventMap_.get(selectedEvent_) ;
+  }
 }
 

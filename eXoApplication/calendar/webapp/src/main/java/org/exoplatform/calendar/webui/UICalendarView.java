@@ -500,7 +500,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   }  
   @Override
   public void processRender(WebuiRequestContext arg0) throws Exception {
-    refresh() ;
+    if(this instanceof UIListView) {} else refresh() ;
     super.processRender(arg0);
   }
   static  public class AddEventActionListener extends EventListener<UICalendarView> {
@@ -682,7 +682,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
       UIPopupContainer uiPopupContainer = uiPopupAction.activate(UIPopupContainer.class, 700) ;
       CalendarEvent eventCalendar = null ;
-      if(uiCalendarView instanceof UIListView) {
+      if(uiCalendarView instanceof UIListView || uiCalendarView instanceof UIPreview) {
         uiCalendarView.getAncestorOfType(UIListContainer.class).refresh() ;
       } else uiCalendarView.refresh() ;
       String username = event.getRequestContext().getRemoteUser() ;

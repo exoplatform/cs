@@ -66,6 +66,9 @@ public class UIPreview extends UICalendarView implements UIPopupComponent {
   public void setEvent(CalendarEvent event) { event_ = event ; }
 
   public void refresh() throws Exception {
+    if(getAncestorOfType(UIListContainer.class) != null) {
+     event_ = getAncestorOfType(UIListContainer.class).findFirstComponentOfType(UIListView.class).getSelectedEventObj() ;
+    }
   }
 
   public void activate() throws Exception {

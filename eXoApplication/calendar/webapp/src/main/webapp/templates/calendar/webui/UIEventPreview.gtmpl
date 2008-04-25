@@ -47,12 +47,12 @@ uiform.begin() ;
 		         </div>
 		          <%if(attachFile.getMimeType().startsWith("image"))  {
 		        	%> 	
-		        	 	<img id="$attachFile.id" class="Img" style="display:none;"  />
+		        	 	<img id="$attachFile.id" class="Img" style="display:none;"/>
 		          <%}%>
 		         <div class="Actions" style="white-space: nowrap;">
 		         <%if(attachFile.getMimeType().startsWith("image"))  {
 		         		String rndString = String.valueOf(new Date().getTime());
-		         		String src = uicomponent.getDownloadLink(attachFile) ; // "/${uicomponent.getPortalName()}/jcr?workspace=${attachFile.workspace}&hash=${rndString}&path=${attachFile.getDataPath()}" ;
+		         		String src = uicomponent.getDownloadLink(attachFile) ; 
 		         %>
 		         	 <a imgSource="$src"  onclick="javaScript:document.getElementById('$attachFile.id').src=this.getAttribute('imgSource'); document.getElementById('$attachFile.id').style.display='block'" class="IconHolder ViewAttachmentIcon">
 			         	<%=uiform.getLabel('View')%>
@@ -122,11 +122,9 @@ uiform.begin() ;
 	               	<%=uiform.getLabel('Invitation')%>
 	               </td>
 	               <td class="Text">
-		               <%
-		               		for(invit in event.getInvitation()) {
-		               			%><div>$invit</div><%
-		               		}
-		               %>
+		               <%for(invit in event.getInvitation()) {%>
+                     <div>$invit</div>
+                    <%}%>
 	               </td>
 	              </tr>                    
 	              <tr>
@@ -135,11 +133,9 @@ uiform.begin() ;
 	               	<%=uiform.getLabel('Participant')%>
 	               </td>
 	               <td class="Text">
-		               <%
-		               		for(par in event.getParticipant()) {
-		               			%><div>$par</div><%
-		               		}
-		               %>
+		               <%	for(par in event.getParticipant()) {%>
+                   <div>$par</div>
+                   <%}%>
 	               </td>
 	              </tr>
 	             </table>
