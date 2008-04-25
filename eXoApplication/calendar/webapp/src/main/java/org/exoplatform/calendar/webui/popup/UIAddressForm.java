@@ -187,7 +187,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       String email = null ;
       for(Contact c : uiForm.getCheckedContact()) {
         email = c.getEmailAddress() ;
-        if(!listMail.contains(email)) {
+        if(!CalendarUtils.isEmpty(email) && !listMail.contains(email)) {
           if(sb != null && sb.length() > 0) sb.append(CalendarUtils.COMMA) ;
           if(email != null) sb.append(email) ;
         }
@@ -218,8 +218,10 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       UIEventForm uiEventForm = uiContainer.findFirstComponentOfType(UIEventForm.class) ;
       StringBuilder sb = new StringBuilder() ;
       for(Contact c : uiForm.getCheckedContact()) {
-        if(sb != null && sb.length() > 0) sb.append(CalendarUtils.COMMA) ;
-        sb.append(c.getEmailAddress()) ;
+        if(!CalendarUtils.isEmpty(c.getEmailAddress())) {
+          if(sb != null && sb.length() > 0) sb.append(CalendarUtils.COMMA) ;
+          sb.append(c.getEmailAddress()) ;
+        }
       }
       if(uiTaskForm != null) {
         uiTaskForm.setSelectedTab(UITaskForm.TAB_TASKREMINDER) ;

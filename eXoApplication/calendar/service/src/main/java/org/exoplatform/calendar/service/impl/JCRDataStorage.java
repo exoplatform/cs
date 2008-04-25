@@ -869,7 +869,8 @@ public class JCRDataStorage{
     if(reminders.hasNode(eventNode.getName())) reminders.getNode(eventNode.getName()).remove() ;
     Node events = reminders.getParent().getNode(EVENTS) ;
     if(events != null && events.hasNode(eventNode.getName())) events.getNode(eventNode.getName()).remove() ;
-    //node.save() ;  	
+    if(!reminders.isNew())reminders.save() ;
+    System.out.println("remove rmd");
   } 
 
   public CalendarEvent getGroupEvent(SessionProvider sProvider, String calendarId, String eventId) throws Exception {
@@ -993,6 +994,7 @@ public class JCRDataStorage{
         eventNode = calendarNode.addNode(tempEvent.getId(), "exo:calendarEvent") ;
         eventNode.setProperty("exo:id", tempEvent.getId()) ;
       }
+      removeReminder(SessionProvider.createSystemProvider(), eventNode) ;
     }
     eventNode.setProperty("exo:summary", event.getSummary()) ;
     eventNode.setProperty("exo:calendarId", event.getCalendarId()) ;
