@@ -214,10 +214,10 @@ public class MessageFilter {
       else stringBuffer.append("(") ;
       switch (getFromCondition()) {
         case Utils.CONDITION_CONTAIN :
-          stringBuffer.append(" jcr:contains(@exo:from, '" + from_ + "')") ;
+          stringBuffer.append(" jcr:like(@exo:from, '%" + from_ + "%')") ;
           break;
         case Utils.CONDITION_NOT_CONTAIN :
-          stringBuffer.append(" fn:not(jcr:contains(@exo:from, '" + from_ + "'))") ;
+          stringBuffer.append(" fn:not(jcr:like(@exo:from, '%" + from_ + "%'))") ;
           break;
         case Utils.CONDITION_IS :
           stringBuffer.append(" @exo:from = '" + from_ + "'") ;
@@ -241,10 +241,10 @@ public class MessageFilter {
       else stringBuffer.append("(") ;
       switch (getToCondition()) {
         case Utils.CONDITION_CONTAIN :
-          stringBuffer.append(" jcr:contains(@exo:to, '" + to_ + "')") ;
+          stringBuffer.append(" jcr:like(@exo:to, '%" + to_ + "%')") ;
           break;
         case Utils.CONDITION_NOT_CONTAIN :
-          stringBuffer.append(" fn:not(jcr:contains(@exo:to, '" + to_ + "'))") ;
+          stringBuffer.append(" fn:not(jcr:like(@exo:to, '%" + to_ + "%'))") ;
           break;
         case Utils.CONDITION_IS :
           stringBuffer.append(" @exo:to = '" + to_ + "'") ;
