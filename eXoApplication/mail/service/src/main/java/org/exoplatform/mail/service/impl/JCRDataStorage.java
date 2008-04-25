@@ -583,7 +583,25 @@ public class JCRDataStorage{
     String msgId = MimeMessageParser.getMessageId(msg) ;
     Calendar gc = MimeMessageParser.getReceivedDate(msg) ;
     Node msgHomeNode = getDateStoreNode(sProvider, username, accId, gc.getTime()) ;
-    if (msgHomeNode.hasNode(msgId)) return true;
+    if (msgHomeNode.hasNode(msgId)) {
+      Node msgNode = msgHomeNode.getNode(msgId) ;
+      try {
+        Value[] propFolders = msgNode.getProperty(Utils.EXO_FOLDERS).getValues();
+        String[] folders = new String[propFolders.length + 1];
+        if (!propFolders[0].getString().equalsIgnoreCase(folderId)) {
+          folders[0] = folderId ;
+          for (int i = 0; i < propFolders.length; i++) {
+            folders[i+1] = propFolders[i].getString();
+          }
+        }
+        msgNode.setProperty(Utils.EXO_ISUNREAD, true) ;
+        msgNode.setProperty(Utils.EXO_STAR, false) ; 
+        msgNode.setProperty(Utils.EXO_FOLDERS, folders);
+        msgNode.save() ;
+        increaseFolderItem(sProvider, username, accId, folderId) ;
+      } catch(Exception e) { }
+      return true;
+    }
     System.out.println("   [DEBUG] Saving message to JCR ...") ;
     t1 = System.currentTimeMillis();
     Node node = msgHomeNode.addNode(msgId, Utils.EXO_MESSAGE) ;
@@ -649,7 +667,13 @@ public class JCRDataStorage{
 
     System.out.println("   [DEBUG] Updating number message to folder ...") ;
     t1 = System.currentTimeMillis();
-    
+    increaseFolderItem(sProvider, username, accId, folderId) ;
+    t2 = System.currentTimeMillis();
+    System.out.println("   [DEBUG] Updated number message to folder finished : " + (t2 - t1) + " ms") ;
+    return true ;
+  }
+  
+  private void increaseFolderItem(SessionProvider sProvider, String username, String accId, String folderId) throws Exception {
     Node folderHomeNode = getFolderHome(sProvider, username, accId) ;
     try { 
       Node folderNode = folderHomeNode.getNode(folderId);
@@ -657,11 +681,7 @@ public class JCRDataStorage{
       folderNode.setProperty(Utils.EXO_TOTALMESSAGE , folderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() + 1) ;
       folderNode.save();
     } catch(PathNotFoundException e) { }
-    
-    t2 = System.currentTimeMillis();
-    System.out.println("   [DEBUG] Updated number message to folder finished : " + (t2 - t1) + " ms") ;
-    return true ;
-  }
+  } 
   
   private void setMultiPart(Multipart multipart, Node node) {
     try {
