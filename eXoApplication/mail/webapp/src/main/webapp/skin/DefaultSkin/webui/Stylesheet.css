@@ -600,23 +600,24 @@
 	float: right;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .MessageHeader .MessageAttachment .MonthDate {
-	margin: 1px 3px 1px 3px;
-	float: right;
+.UIMailPortlet .MailWorkingWorkspace .MonthDate {
+	margin: 3px 3px 1px 3px;
 	color:#2276AB;
-    font-weight:bold;
+  font-weight:bold;
+  white-space: nowrap;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .MessageHeader .MessageAddress .SenderAddress {
-	margin: 0px 3px 0px 3px;
-	float: left;
+.UIMailPortlet .MailWorkingWorkspace .SenderAddress {
+	margin: 3px 3px 0px 3px;
 	font-weight: bold;
 	color:#2276AB;
+	white-space: nowrap;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .MessageHeader .MessageAddress .HeadlineText {
-	margin: 0px 3px 0px 3px;
-	float: left;
+.UIMailPortlet .MailWorkingWorkspace .HeadlineText {
+	margin: 3px 3px 0px 3px;
+	white-space: nowrap;
+	overflow: hidden; 
 }
 
 .UIMailPortlet .MailWorkingWorkspace .TotalMessageIcon {

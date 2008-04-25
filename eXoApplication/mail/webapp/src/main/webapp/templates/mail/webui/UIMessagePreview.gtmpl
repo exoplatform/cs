@@ -6,6 +6,7 @@
   import org.exoplatform.mail.MailUtils;  
   import org.exoplatform.download.DownloadService;
   import org.exoplatform.calendar.service.CalendarEvent;
+  import javax.mail.internet.MimeUtility;
   
   import org.exoplatform.mail.webui.UIMessageList ;
   import org.exoplatform.mail.webui.UIMessagePreview ;
@@ -57,39 +58,54 @@
           <div class="MiddleLeftViewBoxStyle">
             <div class="MiddleRightViewBoxStyle">
               <div class="MiddleCenterViewBoxStyle">
-                <div class="MessageHeader">
-                  <div class="MessageCheck">
-                    <div><a href="<%=uicomponent.event("AddStar", msg.getId())%>"><div  class="$starClass" title="Add star for this message"><span></span></div></a></div>
-                    <div style="clear: left;"><span></span></div>
-                  </div>
-                  <div class="MessageAddress">
-                    <div class="FieldContainer">
-                      <div class="SenderAddress">
+              
+                <table style="width: 100%;">
+                  <body>
+                    <tr>
+                      <td>
+                        <div  class="$starClass" title="Add star for this message"><span></span></div>
+                      </td>
+                      <td style="width: auto; white-space: nowrap;">
+                        <div class="SenderAddress">
                         <%
                           if (!MailUtils.isFieldEmpty(msg.getFrom())) {
                             InternetAddress[] fromAddress2 = Utils.getInternetAddress(msg.getFrom());
                             InternetAddress from2 = fromAddress2[0];
                         %>
-                            <span><%=Utils.getPersonal(from2)%> &lt; <%=from2.getAddress()%> &gt; </span>
+                            <%=Utils.getPersonal(from2)%> &lt; <%=from2.getAddress()%> &gt; 
                         <%} %>    
-                      </div>
-                      <div class="HeadlineText">Click here to expand contents of message ...</div>
-                      <div style="clear: left;"><span></span></div>
-                    </div>
-                  </div>
-                  <div class="MessageAttachment" >
-                    <% if (msg.getAttachments().size() > 0) { %>
-                      <div class="AttachmentIcon"><span></span></div>
-                    <% } %>
-
-                    <div class="MonthDate">
-                      <%=MailUtils.formatDate(msg.getReceivedDate())%>
-                    </div>
-
-                    <div style="clear: right;"><span></span></div>
-                  </div>
-                  <div style="clear: both;"><span></span></div>
-                </div>
+                        </div>
+                      </td>
+                      <td style="width: 100%; white-space: nowrap; oveflow: hidden;">
+                        <table style="white-space: nowrap; width: 100%; table-layout: fixed;">
+                          <tr>
+                            <td>
+                              <div class="HeadlineText" title="Click here to expand contents of message">
+                              <%
+                                String body = MailUtils.html2text(msg.getMessageBody()) ;
+                                if (body.length() > 90) body = body.substring(0, 90) ;
+                                print(body) ;
+                              %> ...</div>
+                            </td>
+                          </tr>
+                        </table>
+                       </td>
+                      <td >
+                        <% if (msg.getAttachments().size() > 0) { %>
+                        <div class="AttachmentIcon"><span></span></div>
+                        <% } %>
+                      </td>
+                      <td style="width: auto; white-space: nowrap;">
+                        <div class="MonthDate">
+                        <%=MailUtils.formatDate(msg.getReceivedDate())%>
+                        </div>
+                      </td>
+                    </tr>
+                  </body>
+                </table>
+                
+                
+                
               </div>
             </div>
           </div>

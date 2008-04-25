@@ -231,4 +231,12 @@ public class MailUtils {
     }
     return isInvalid ;
   }
+  
+  public static String html2text(String str) throws Exception {
+    str = str.replaceAll("<[^>]*>", "");
+    str = str.replaceAll("&nbsp;", "");
+    str = str.replaceAll("&quot;", "\"");
+    str = str.replaceAll("\n", "");
+    return str;
+  }
 }
