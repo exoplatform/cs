@@ -33,6 +33,7 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.ServerConfiguration;
+import org.exoplatform.mail.service.Utils;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.log.ExoLogger;
@@ -86,6 +87,7 @@ public class ReminderJob implements Job {
 				String to = reminder.getProperty("exo:email").getString();				
 				if (to != null && to.length() > 0) {
 					message = new Message();
+          message.setContentType(Utils.MIMETYPE_TEXTHTML) ;
 					message.setMessageTo(to);
 					message.setSubject("eXo calendar reminder!");
 					message.setMessageBody(reminder.getProperty("exo:eventSummary").getString());

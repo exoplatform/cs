@@ -32,4 +32,5 @@ public interface CalendarView {
   public Calendar getCurrentCalendar() ;
   public void setLastUpdatedEventId(String eventId) ;
   public String getLastUpdatedEventId() ;
+  public void setSelectedCategory(String id) throws Exception ;
 }
