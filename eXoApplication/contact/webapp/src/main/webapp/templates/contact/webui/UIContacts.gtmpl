@@ -237,7 +237,10 @@
 		  	 	    			groupName = privateGroupMap.get(addressBooks[0]) ;								  
 								  	if (groupName == null) continue ;								  
 								  } else if (contactType.equals("1")){
-								  	SharedAddressBook add =  sharedGroupMap.get(addressBooks[0]) ;
+								  	SharedAddressBook add = null ; 
+								  	for (String address : addressBooks) {
+								  		if (sharedGroupMap.containsKey(address)) add = sharedGroupMap.get(address) ;
+								  	}
 										StringBuffer buffer ;
 							  		if (add != null)  {
 							  			if (add.getId().contains(NewUserListener.DEFAULTGROUP)) {
