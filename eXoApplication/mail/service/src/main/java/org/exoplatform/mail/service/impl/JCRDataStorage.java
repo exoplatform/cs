@@ -588,7 +588,8 @@ public class JCRDataStorage{
       try {
         Value[] propFolders = msgNode.getProperty(Utils.EXO_FOLDERS).getValues();
         String[] folders = new String[propFolders.length + 1];
-        if (!propFolders[0].getString().equalsIgnoreCase(folderId)) {
+        String sendFolderId = Utils.createFolderId(accId, Utils.FD_SENT, false) ;
+        if (propFolders[0].getString().equalsIgnoreCase(sendFolderId)) {
           folders[0] = folderId ;
           for (int i = 0; i < propFolders.length; i++) {
             folders[i+1] = propFolders[i].getString();
