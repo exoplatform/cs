@@ -682,7 +682,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
       UIPopupContainer uiPopupContainer = uiPopupAction.activate(UIPopupContainer.class, 700) ;
       CalendarEvent eventCalendar = null ;
-      uiCalendarView.refresh() ;
+      if(uiCalendarView instanceof UIListView) {
+        uiCalendarView.getAncestorOfType(UIListContainer.class).refresh() ;
+      } else uiCalendarView.refresh() ;
       String username = event.getRequestContext().getRemoteUser() ;
       String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
       String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
