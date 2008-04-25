@@ -870,7 +870,6 @@ public class JCRDataStorage{
     Node events = reminders.getParent().getNode(EVENTS) ;
     if(events != null && events.hasNode(eventNode.getName())) events.getNode(eventNode.getName()).remove() ;
     if(!reminders.isNew())reminders.save() ;
-    System.out.println("remove rmd");
   } 
 
   public CalendarEvent getGroupEvent(SessionProvider sProvider, String calendarId, String eventId) throws Exception {
