@@ -593,12 +593,12 @@ public class JCRDataStorage{
           for (int i = 0; i < propFolders.length; i++) {
             folders[i+1] = propFolders[i].getString();
           }
+          msgNode.setProperty(Utils.EXO_ISUNREAD, true) ;
+          msgNode.setProperty(Utils.EXO_STAR, false) ; 
+          msgNode.setProperty(Utils.EXO_FOLDERS, folders);
+          msgNode.save() ;
+          increaseFolderItem(sProvider, username, accId, folderId) ;
         }
-        msgNode.setProperty(Utils.EXO_ISUNREAD, true) ;
-        msgNode.setProperty(Utils.EXO_STAR, false) ; 
-        msgNode.setProperty(Utils.EXO_FOLDERS, folders);
-        msgNode.save() ;
-        increaseFolderItem(sProvider, username, accId, folderId) ;
       } catch(Exception e) { }
       return true;
     }
