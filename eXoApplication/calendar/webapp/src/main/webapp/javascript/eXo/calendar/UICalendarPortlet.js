@@ -576,11 +576,9 @@ UICalendarPortlet.prototype.showEvent = function() {
 } ;
 
 UICalendarPortlet.prototype.onLoad = function(){
-	if(eXo.core.Browser.isFF()) {
-		window.setTimeout("eXo.calendar.UICalendarPortlet.checkFilter() ;", 1000) ;
-		return ;
-	}
-	eXo.calendar.UICalendarPortlet.checkFilter() ;	
+	if(this.runFirstTime == true) return ;
+	window.setTimeout("eXo.calendar.UICalendarPortlet.checkFilter() ;", 2000) ;
+	this.runFirstTime = true	;
 };
 
 UICalendarPortlet.prototype.browserResizeCallback = function() {
@@ -1672,7 +1670,7 @@ UIDesktop.prototype.showHideWindow = function(uiWindow, clickedElement) {
 		//fix display scroll in first time.
 		var blockResizes = eXo.core.DOMUtil.findDescendantsByClass(this.object, "div", "UIResizableBlock");
 		if (blockResizes.length > 1) blockResizes[0].style.overflow = "hidden" ;
-		eXo.calendar.UICalendarPortlet.delay = window.setTimeout("eXo.calendar.UICalendarPortlet.fixFirstLoad() ;", 1000) ;
+		eXo.calendar.UICalendarPortlet.delay = window.setTimeout("eXo.calendar.UICalendarPortlet.fixFirstLoad() ;", 2000) ;
   }
 };
 
