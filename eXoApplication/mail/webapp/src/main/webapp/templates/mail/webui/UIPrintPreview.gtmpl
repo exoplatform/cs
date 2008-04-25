@@ -54,7 +54,12 @@
       <div style="clear: both;"><span></span></div>
     </div>
     <div class="PrintContent"  >
-      <%=msg.getMessageBody()%>
+      <%
+        if (msg.getContentType().indexOf("text/plain") > -1) {    
+          println(msg.getMessageBody().replaceAll("\n", "<br>")) ;
+      } else {    
+        println(msg.getMessageBody()) ; 
+      } %>
     </div>
     <% 
       if (msg.getAttachments().size() > 0) {
