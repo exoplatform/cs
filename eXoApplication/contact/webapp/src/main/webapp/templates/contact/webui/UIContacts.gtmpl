@@ -237,18 +237,25 @@
 		  	 	    			groupName = privateGroupMap.get(addressBooks[0]) ;								  
 								  	if (groupName == null) continue ;								  
 								  } else if (contactType.equals("1")){
-									  	SharedAddressBook add =  sharedGroupMap.get(addressBooks[0]) ;
-											StringBuffer buffer ;
-								  		if (add != null)  buffer = new StringBuffer(add.getName()) ;
-								  		else {
-								  			buffer = new StringBuffer(_ctx.appRes(uicomponent.getName() + ".label.sharedContacts")) ;
-								  		}
-							  			for (String address : addressBooks) { 
-							  				if (!address.contains(NewUserListener.DEFAULTGROUP)) {
-							  					buffer.append(", ").append(address) ;
-							  				}
+								  	SharedAddressBook add =  sharedGroupMap.get(addressBooks[0]) ;
+										StringBuffer buffer ;
+							  		if (add != null)  {
+							  			if (add.getId().contains(NewUserListener.DEFAULTGROUP)) {
+							  				buffer = new StringBuffer(add.getSharedUserId() + " - " + add.getName()) ;
+							  			} else {
+							  				buffer = new StringBuffer(add.getName()) ;
 							  			}
-								  		groupName = buffer.toString() ;
+							  			
+							  		}
+							  		else {
+							  			buffer = new StringBuffer(_ctx.appRes(uicomponent.getName() + ".label.sharedContacts")) ;
+							  		}
+						  			//for (String address : addressBooks) { 
+						  			//	if (!address.contains(NewUserListener.DEFAULTGROUP)) {
+						  			//		buffer.append(", ").append(address) ;
+						  			//	}
+						  			//}
+							  		groupName = buffer.toString() ;
 								  }
 								  
   	 	    				String actionLink  = uicomponent.event("SelectedContact", contact.getId()) ;
