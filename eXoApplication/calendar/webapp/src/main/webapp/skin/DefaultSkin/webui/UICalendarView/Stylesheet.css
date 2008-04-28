@@ -160,7 +160,6 @@
 	border-right: 1px solid #c7c7c7;
 	width: 13.2%;
 	border-top:none;
-	border-bottom:none;
 	border-left: none;
 	*width: 14%;
 	-moz-user-select: none ;
@@ -482,16 +481,17 @@
 
 .UIYearView .WeekSuburdbar {
 	background: url('../background/CalendarBackground.gif') repeat-x center -106px;	
-	height: 23px;
+	height: 22px;
 	text-align: center;
-	line-height: 23px;
+	line-height: 22px;
+	border-bottom: 1px solid #c7c7c7;
 }
 
 .UIYearView .CurrentWeekSuburdbar {
 	background: url('../background/CalendarBackground.gif') repeat-x center -27px;	
-	height: 23px;
+	height: 22px;
 	text-align: center;
-	line-height: 23px;
+	line-height: 22px;
 }
 
 .UIYearView .WeekList .SundayTitle {
@@ -854,7 +854,7 @@
 
 .UIMonthView .EventMonthContent  .WeekList {
 	background: url('../background/CalendarBackground.gif') repeat-x center -51px;	
-  height: 23px;
+  height: 22px;
 	border-left: 1px solid #c7c7c7;
 }
 

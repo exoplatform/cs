@@ -115,7 +115,8 @@
 }
 
 .UICalendarPortlet .UICalendars .TitleBar {
-	border-left: none;
+	border: none;
+	border-bottom: 1px solid #c7c7c7;
 }
 
 .UICalendarPortlet .UICalendars a:hover {

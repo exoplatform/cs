@@ -108,6 +108,14 @@
 	border-right: none;
 }
 
+.UICalendarPortlet .UIWeekView .TitleBar {
+	border-bottom: none;
+}
+
+.UICalendarPortlet .UIListContainer .TitleBar {
+	border-bottom: none;
+}
+
 .UICalendarPortlet .CurrentTitleBar {
   background: url('background/CalendarBackground.gif') repeat-x center -27px;	
   height: 23px;
