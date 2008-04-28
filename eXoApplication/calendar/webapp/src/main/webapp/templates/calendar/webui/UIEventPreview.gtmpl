@@ -76,17 +76,17 @@ uiform.begin() ;
 	               <td class="Text" style="width: 100px;">
 	               		<%=uiform.getLabel('Place')%>
 	               </td>
-	               <td class="Text"><%=(event.getLocation() == null)? "" : event.getLocation()%></td>
+	               <td class="Text"><%=(CalendarUtils.isEmpty(event.getLocation()))? "" : event.getLocation()%></td>
 	              </tr> 
 	              <tr>
 	               <td ></td>
 	               <td class="Text"><%=uiform.getLabel('RepeatEvent')%></td>
-	               <td class="Text"><%=(event.getRepeatType() == null)? "" : event.getRepeatType()%></td>
+	               <td class="Text"><%=(CalendarUtils.isEmpty(event.getRepeatType()))? "" : uicomponent.getLabel(event.getRepeatType())%></td>
 	              </tr> 
 	              <tr>
 	               <td ></td>
 	               <td class="Text"><%=uiform.getLabel('Description')%></td>
-	               <td class="Text"><%=(event.getDescription() == null)? "" : event.getDescription()%></td>
+	               <td class="Text"><%=(CalendarUtils.isEmpty(event.getDescription()))? "" : event.getDescription()%></td>
 	              </tr> 
 	              <tr>
 	               <td ></td>
@@ -109,12 +109,12 @@ uiform.begin() ;
 	               <td class="Text">
 	               	<%=uiform.getLabel('EventSharing')%>
 	               </td>
-	               <td class="Text"><%=(event.isPrivate() == null)? "" : !event.isPrivate()%></td>
+	               <td class="Text"><%=(CalendarUtils.isEmpty(String.valueOf(event.isPrivate())))? "" : uicomponent.getLabel(String.valueOf(!event.isPrivate()))%></td>
 	              </tr> 
 	              <tr>
 	               <td ></td>
 	               <td class="Text"><%=uiform.getLabel('ShowAs')%></td>
-	               <td class="Text"><%=(event.getStatus() == null)? "" : event.getStatus()%></td>
+	               <td class="Text"><%=(CalendarUtils.isEmpty(event.getEventState()))? "" : uicomponent.getLabel(event.getEventState())%></td>
 	              </tr> 
 	              <tr>
 	               <td ></td>

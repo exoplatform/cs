@@ -85,7 +85,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
       String calendarName = uiForm.getUIStringInput(UIImportForm.NAME).getValue() ;
       UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-      if(calendarName == null || calendarName.length() == 0) {
+      if(CalendarUtils.isEmpty(calendarName)) {
         UploadResource resource = uploadService.getUploadResource(input.getUploadId()) ;
         if(resource == null) {
           uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.file-name-error", null));

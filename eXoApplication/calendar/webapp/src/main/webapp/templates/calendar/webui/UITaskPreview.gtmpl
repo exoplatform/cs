@@ -64,13 +64,13 @@ uiform.begin() ;
 			        						<td class="Text">
 			        							<%=uiform.getLabel('Status')%>
 			        						</td>
-			        						<td class="Text"><%=(task.getEventState()==null)?"" : task.getEventState()%></td>
+			        						<td class="Text"><%=(CalendarUtils.isEmpty(task.getEventState()))?"" : uicomponent.getLabel(task.getEventState())%></td>
 			        					</tr>	
 			        					<tr>
 			        						<td class="Text">
 			        							<%=uiform.getLabel('Priority')%>
 			        						</td>
-			        						<td class="Text"><%=(uicomponent.getPriority(task.getPriority()) ==null)? "" : uicomponent.getPriority(task.getPriority())%></td>
+			        						<td class="Text"><%=(CalendarUtils.isEmpty(uicomponent.getPriority(task.getPriority()))) ? uicomponent.getLabel("none") : uicomponent.getLabel(uicomponent.getPriority(task.getPriority()))%></td>
 			        					</tr>	
 			        					<tr>
 			        						<td class="Text">
@@ -88,7 +88,7 @@ uiform.begin() ;
 			        						<td class="Text">
 			        							<%=uiform.getLabel('TaskDelegation')%>
 			        						</td>
-			        						<td class="Text"><%=(task.getTaskDelegator() ==null)? "" : task.getTaskDelegator()%></td>
+			        						<td class="Text"><%=(CalendarUtils.isEmpty(task.getTaskDelegator()))? "" : task.getTaskDelegator()%></td>
 			        					</tr>	
 			        					<tr>
 			        						<td class="Text">

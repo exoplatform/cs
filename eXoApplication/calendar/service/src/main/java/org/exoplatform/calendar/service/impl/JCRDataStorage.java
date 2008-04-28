@@ -1650,6 +1650,7 @@ public class JCRDataStorage{
         java.util.Calendar eventToDate = eventNode.getProperty("exo:toDateTime").getDate() ;
         int eventFromDayOfYear = eventFormDate.get(java.util.Calendar.DAY_OF_YEAR) ;
         int eventToDayOfYear = eventToDate.get(java.util.Calendar.DAY_OF_YEAR) ;
+        System.out.println("event form day " + eventFromDayOfYear +" event to day "+eventToDayOfYear);
         Integer begin = -1 ;
         Integer end = -1 ;
         if(fromDayOfYear >= eventFromDayOfYear) {
@@ -1668,6 +1669,7 @@ public class JCRDataStorage{
             end = eventToDayOfYear ;
           }
         }
+        System.out.println("form day " + begin +"  to day "+end);
         if(begin > 0 && end > 0) for(Integer i = begin; i <= end; i++) data.put(i, VALUE);
       }
     }
