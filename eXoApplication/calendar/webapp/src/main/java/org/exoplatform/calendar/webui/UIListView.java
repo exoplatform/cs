@@ -206,7 +206,6 @@ public class UIListView extends UICalendarView {
   }
   public void setLastViewId(String lastViewId_) {
     this.lastViewId_ = lastViewId_;
-    System.out.println("Setup it");
   }
 
   public String getLastViewId() {
