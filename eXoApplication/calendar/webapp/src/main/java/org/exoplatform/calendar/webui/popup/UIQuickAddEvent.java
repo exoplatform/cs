@@ -293,8 +293,10 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
           email.setFromDateTime(from) ;      
           reminders.add(email) ;
           calEvent.setReminders(reminders) ;
+          calEvent.setRepeatType(CalendarEvent.RP_NOREPEAT) ;
         } else {
           calEvent.setEventType(CalendarEvent.TYPE_TASK) ;
+          calEvent.setEventState(CalendarEvent.NEEDS_ACTION) ;
         }
         calEvent.setEventCategoryId(uiForm.getEventCategory());
         calEvent.setFromDateTime(from);

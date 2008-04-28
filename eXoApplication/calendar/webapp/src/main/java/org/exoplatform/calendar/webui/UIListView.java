@@ -26,6 +26,7 @@ import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventPageList;
 import org.exoplatform.calendar.service.EventQuery;
+import org.exoplatform.calendar.webui.popup.UIAddressForm;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -226,8 +227,14 @@ public class UIListView extends UICalendarView {
       UICalendarPortlet uiPortlet = uiListView.getAncestorOfType(UICalendarPortlet.class) ;
       UISearchForm uiSearchForm = uiPortlet.findFirstComponentOfType(UISearchForm.class) ;
       uiSearchForm.reset() ;
+      UIActionBar uiActionBar = uiPortlet.findFirstComponentOfType(UIActionBar.class) ;
+      uiActionBar.setCurrentView(uiListView.getLastViewId()) ;
+      UICalendarViewContainer uiCalViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+      uiCalViewContainer.initView(uiListView.getLastViewId()) ;
+      uiListView.setLastViewId(null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiSearchForm) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiListView.getParent()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiCalViewContainer) ;
     }
   }
   static  public class ShowPageActionListener extends EventListener<UIListView> {

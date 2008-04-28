@@ -90,9 +90,11 @@ public class UISearchForm extends UIForm {
           CalendarUtils.getCalendarService().searchEvent(SessionProviderFactory.createSessionProvider(), username, eventQuery,uiForm.getPublicCalendars()) ;
         UICalendarViewContainer calendarViewContainer = 
           calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+        String currentView = calendarViewContainer.getRenderedChild().getId() ;
         calendarViewContainer.initView(UICalendarViewContainer.LIST_VIEW) ;
         UIListView uiListView = calendarViewContainer.findFirstComponentOfType(UIListView.class) ;
-        calendarViewContainer.setRenderedChild(UICalendarViewContainer.LIST_VIEW) ;
+        if(!uiListView.isDisplaySearchResult()) uiListView.setLastViewId(currentView) ;
+        //calendarViewContainer.setRenderedChild(UICalendarViewContainer.LIST_VIEW) ;
         uiListView.update(resultPageList) ;
         uiListView.setViewType(UIListView.TYPE_BOTH) ;
         uiListView.setDisplaySearchResult(true) ;

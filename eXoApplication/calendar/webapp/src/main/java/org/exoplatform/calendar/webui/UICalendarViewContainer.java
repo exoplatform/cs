@@ -90,7 +90,7 @@ public class UICalendarViewContainer extends UIContainer  {
               if(uiView == null) uiView =  addChild(UIListContainer.class, null, null) ;
               UIListView uiListView = uiView.getChild(UIListView.class) ;
               uiListView.setShowEventAndTask(false) ;
-              uiListView.setDisplaySearchResult(false) ;
+              //uiListView.setDisplaySearchResult(false) ;
               uiListView.setCategoryId(null) ;
               uiListView.refresh() ;
               uiListView.isShowEvent_ = true ;
