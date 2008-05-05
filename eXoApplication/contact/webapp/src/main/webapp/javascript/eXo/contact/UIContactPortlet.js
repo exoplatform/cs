@@ -198,12 +198,10 @@ UIContactPortlet.prototype.addressBookCallback = function(evt) {
 	var itemLength = menuItems.length ;	
 	
 	var havePermission = addressBook.getAttribute("havePermission") ;
-	
-	
 	if (havePermission == "false") {
 		for(var i = 0 ; i < itemLength ; i ++) {
 			if (DOMUtil.hasClass(menuItems[i],"ContactIcon") || DOMUtil.hasClass(menuItems[i],"PasteIcon")
-				|| DOMUtil.hasClass(menuItems[i],"EditActionIcon")) {
+				|| DOMUtil.hasClass(menuItems[i],"EditActionIcon") || DOMUtil.hasClass(menuItems[i],"ImportContactIcon")) {
 				if (menuItems[i].parentNode.getAttribute("oldHref")) continue ;
 				menuItems[i].parentNode.setAttribute("oldHref", menuItems[i].parentNode.href) ;
 				menuItems[i].parentNode.href = "javascript: void(0) ;" ;
@@ -214,7 +212,7 @@ UIContactPortlet.prototype.addressBookCallback = function(evt) {
 	} else if (havePermission == "true") {
 		for(var i = 0 ; i < itemLength ; i ++) {
 			if (DOMUtil.hasClass(menuItems[i],"ContactIcon") || DOMUtil.hasClass(menuItems[i],"PasteIcon")
-				|| DOMUtil.hasClass(menuItems[i],"EditActionIcon")) {
+				|| DOMUtil.hasClass(menuItems[i],"EditActionIcon") || DOMUtil.hasClass(menuItems[i],"ImportContactIcon")) {
 				if (!menuItems[i].parentNode.getAttribute("oldHref")) continue ;
 				menuItems[i].parentNode.href = menuItems[i].parentNode.getAttribute("oldHref") ;
 				menuItems[i].parentNode.style.color = menuItems[i].parentNode.getAttribute("oldColor") ;

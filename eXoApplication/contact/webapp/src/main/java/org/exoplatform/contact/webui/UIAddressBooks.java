@@ -290,7 +290,17 @@ public class UIAddressBooks extends UIComponent {
         uiPopupContainer.setId("ImportAddress") ;
       }
       UIImportForm uiImportForm = uiPopupContainer.addChild(UIImportForm.class, null, null) ; 
-      uiImportForm.setGroup(uiAddressBook.privateAddressBookMap_) ;
+      
+      Map<String, String> addresses = uiAddressBook.privateAddressBookMap_ ;
+      for (SharedAddressBook address : uiAddressBook.sharedAddressBookMap_.values())
+        if (uiAddressBook.havePermission(address.getId())) {
+          if (uiAddressBook.isDefault(address.getId())) {
+            addresses.put(address.getId(), address.getSharedUserId() + ContactUtils.SCORE + address.getName() + ContactUtils.SHARED) ;
+          } else {
+            addresses.put(address.getId(), address.getName() + ContactUtils.SHARED) ;
+          }  
+        }
+      uiImportForm.setGroup(addresses) ;
       uiImportForm.addConponent() ;      
       if (!ContactUtils.isEmpty(addressBookId)) uiImportForm.setValues(addressBookId) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction); 
@@ -313,9 +323,9 @@ public class UIAddressBooks extends UIComponent {
       for (SharedAddressBook address : uiAddressBook.sharedAddressBookMap_.values())
         if (uiAddressBook.havePermission(address.getId())) {
           if (uiAddressBook.isDefault(address.getId())) {
-            addresses.put(address.getId(), address.getSharedUserId() + " - " + address.getName()) ;
+            addresses.put(address.getId(), address.getSharedUserId() + ContactUtils.SCORE + address.getName() + ContactUtils.SHARED) ;
           } else {
-            addresses.put(address.getId(), address.getName()) ;
+            addresses.put(address.getId(), address.getName() + ContactUtils.SHARED) ;
           }  
         }
       uiCategorySelect.setPrivateGroupMap(addresses) ;    

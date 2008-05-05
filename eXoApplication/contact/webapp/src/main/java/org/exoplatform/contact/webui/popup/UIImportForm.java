@@ -26,7 +26,10 @@ import java.io.ByteArrayInputStream;
 import net.wimpi.pim.util.versitio.versitException;
 
 import org.exoplatform.contact.ContactUtils;
+import org.exoplatform.contact.service.ContactImportExport;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.service.impl.JCRDataStorage;
+import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UIWorkingContainer;
@@ -184,9 +187,17 @@ public class UIImportForm extends UIForm {
       }
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       String importFormat = uiForm.getUIFormSelectBox(UIImportForm.FIELD_TYPE).getValue() ;
+
+      ContactImportExport service = ContactUtils.getContactService().getContactImportExports(importFormat) ;
+      
       try {
-        ContactUtils.getContactService().getContactImportExports(importFormat).importContact(
-            SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), inputStream, category) ;
+        if (uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class).getSharedGroups().containsKey(category)) {
+          service.importContact(
+              SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), inputStream, category + JCRDataStorage.HYPHEN) ;
+        } else {
+          service.importContact(
+              SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), inputStream, category) ;
+        }        
         UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
         UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;
         uploadService.removeUpload(uploadId) ;

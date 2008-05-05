@@ -69,9 +69,9 @@ public class UIActionBar extends UIContainer  {
       for (SharedAddressBook address : uiAddressBooks.getSharedGroups().values())
         if (uiAddressBooks.havePermission(address.getId())) {
           if (uiAddressBooks.isDefault(address.getId())) {
-            addresses.put(address.getId(), address.getSharedUserId() + " - " + address.getName()) ;
+            addresses.put(address.getId(), address.getSharedUserId() + ContactUtils.SCORE + address.getName() + ContactUtils.SHARED) ;
           } else {
-            addresses.put(address.getId(), address.getName()) ;
+            addresses.put(address.getId(), address.getName() + ContactUtils.SHARED) ;
           }  
         }
       uiCategorySelect.setPrivateGroupMap(addresses) ;
@@ -90,7 +90,18 @@ public class UIActionBar extends UIContainer  {
       UIPopupContainer uiPopupContainer =  uiPopupAction.activate(UIPopupContainer.class, 600) ;
       uiPopupContainer.setId("ImportAddress") ;      
       UIImportForm importForm = uiPopupContainer.addChild(UIImportForm.class, null, null) ; 
-      importForm.setGroup(uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class).getPrivateGroupMap()) ;
+      
+      UIAddressBooks uiAddressBook = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
+      Map<String, String> addresses = uiAddressBook.getPrivateGroupMap() ;
+      for (SharedAddressBook address : uiAddressBook.getSharedGroups().values())
+        if (uiAddressBook.havePermission(address.getId())) {
+          if (uiAddressBook.isDefault(address.getId())) {
+            addresses.put(address.getId(), address.getSharedUserId() + ContactUtils.SCORE + address.getName() + ContactUtils.SHARED) ;
+          } else {
+            addresses.put(address.getId(), address.getName() + ContactUtils.SHARED) ;
+          }  
+        }
+      importForm.setGroup(addresses) ;
       importForm.addConponent() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;

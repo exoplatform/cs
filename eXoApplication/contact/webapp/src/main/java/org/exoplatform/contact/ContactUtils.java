@@ -37,6 +37,9 @@ import org.exoplatform.webui.core.model.SelectItemOption;
  * Jul 11, 2007  
  */
 public class ContactUtils {
+  
+  final public static String SCORE = " - ".intern() ;
+  final public static String SHARED = " (Shared)".intern() ;
   private static String AKONG = "@" ;
   public static final String HTTP = "http://" ; 
   public static String[] specialString = {"!", "#", "$", "%", "^", "&"

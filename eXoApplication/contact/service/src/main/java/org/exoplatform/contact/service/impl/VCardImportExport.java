@@ -470,10 +470,19 @@ public class VCardImportExport implements ContactImportExport {
       // Then store it to JCR storage
       // ////////////////////////////////
 
-      contact.setAddressBook(new String[] { groupId });
-      ContactService contactService = (ContactService) PortalContainer
-          .getComponent(ContactService.class);
-      contactService.saveContact(sProvider, username, contact, true);
+      // added 5-5
+      ContactService contactService = 
+        (ContactService) PortalContainer.getComponent(ContactService.class);
+      if (groupId.contains(JCRDataStorage.HYPHEN)) {
+        String newGroupId = groupId.replace(JCRDataStorage.HYPHEN, "") ;
+        contact.setAddressBook(new String[] { newGroupId }) ;
+        contactService.saveContactToSharedAddressBook(username, newGroupId, contact, true) ;
+      } else {
+        contact.setAddressBook(new String[] { groupId });      
+        contactService.saveContact(sProvider, username, contact, true);
+      }
+      
+      
     }
   }
 
