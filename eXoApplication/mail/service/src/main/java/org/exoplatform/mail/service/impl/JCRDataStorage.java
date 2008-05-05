@@ -579,6 +579,10 @@ public class JCRDataStorage{
   }
   
   public boolean saveMessage(SessionProvider sProvider, String username, String accId, javax.mail.Message msg, String folderId, SpamFilter spamFilter) throws Exception {
+    return saveMessage(sProvider, username, accId, msg, folderId, spamFilter, null) ;
+  }
+  
+  public boolean saveMessage(SessionProvider sProvider, String username, String accId, javax.mail.Message msg, String folderId, SpamFilter spamFilter, List<String> filterList) throws Exception {
     long t1, t2, t3, t4 ;
     String msgId = MimeMessageParser.getMessageId(msg) ;
     Calendar gc = MimeMessageParser.getReceivedDate(msg) ;
@@ -600,12 +604,15 @@ public class JCRDataStorage{
           msgNode.save() ;
           increaseFolderItem(sProvider, username, accId, folderId) ;
         }
-      } catch(Exception e) { }
+      } catch(Exception e) {
+        // e.printStackTrace() ;
+      }
       return true;
     }
     System.out.println("   [DEBUG] Saving message to JCR ...") ;
     t1 = System.currentTimeMillis();
     Node node = msgHomeNode.addNode(msgId, Utils.EXO_MESSAGE) ;
+    String[] folderIds = { folderId };
     try {
       node.setProperty(Utils.EXO_ID, msgId);
       node.setProperty(Utils.EXO_ACCOUNT, accId);
@@ -628,18 +635,29 @@ public class JCRDataStorage{
 
       node.setProperty(Utils.EXO_PRIORITY, MimeMessageParser.getPriority(msg));
 
-      String[] folderIds = { folderId };
+      List<String> folderList = new ArrayList<String>() ;
+      List<String> tagList = new ArrayList<String>() ;
+      MessageFilter filter ;
+      if (filterList != null) {
+        for (int i = 0; i < filterList.size(); i ++) {
+          filter = getFilterById(sProvider, username, accId, filterList.get(i)) ;
+          folderList.add(filter.getApplyFolder()) ;
+          tagList.add(filter.getApplyTag()) ;
+        }
+        folderIds = folderList.toArray(new String[] {}) ;
+      }
 
       if (spamFilter != null && spamFilter.checkSpam(msg)) {
         folderIds = new String[] { Utils.createFolderId(accId, Utils.FD_SPAM, false) } ;
       }
       node.setProperty(Utils.EXO_FOLDERS, folderIds);
+      node.setProperty(Utils.EXO_TAGS, tagList.toArray(new String[] {}));
 
       ArrayList<String> values = new ArrayList<String>() ;
       Enumeration enu = msg.getAllHeaders() ;
       while (enu.hasMoreElements()) {
         Header header = (Header)enu.nextElement() ;
-        values.add(header.getName()+"="+header.getValue()) ;
+        values.add(header.getName() + "=" + header.getValue()) ;
       }
       node.setProperty(Utils.EXO_HEADERS, values.toArray(new String[]{}));
 
@@ -668,20 +686,25 @@ public class JCRDataStorage{
 
     System.out.println("   [DEBUG] Updating number message to folder ...") ;
     t1 = System.currentTimeMillis();
-    increaseFolderItem(sProvider, username, accId, folderId) ;
+    
+    for (int i = 0; i < folderIds.length; i++) {
+      increaseFolderItem(sProvider, username, accId, folderIds[i]) ;
+    }
     t2 = System.currentTimeMillis();
     System.out.println("   [DEBUG] Updated number message to folder finished : " + (t2 - t1) + " ms") ;
     return true ;
   }
   
   private void increaseFolderItem(SessionProvider sProvider, String username, String accId, String folderId) throws Exception {
-    Node folderHomeNode = getFolderHome(sProvider, username, accId) ;
+    Node folderHome = getFolderHome(sProvider, username, accId) ;
     try { 
-      Node folderNode = folderHomeNode.getNode(folderId);
-      folderNode.setProperty(Utils.EXO_UNREADMESSAGES, folderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() + 1) ;
-      folderNode.setProperty(Utils.EXO_TOTALMESSAGE , folderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() + 1) ;
-      folderNode.save();
-    } catch(PathNotFoundException e) { }
+      Node node = folderHome.getNode(folderId);
+      node.setProperty(Utils.EXO_UNREADMESSAGES, node.getProperty(Utils.EXO_UNREADMESSAGES).getLong() + 1) ;
+      node.setProperty(Utils.EXO_TOTALMESSAGE , node.getProperty(Utils.EXO_TOTALMESSAGE).getLong() + 1) ;
+      node.save();
+    } catch(PathNotFoundException e) { 
+      e.printStackTrace() ;
+    }
   } 
   
   private void setMultiPart(Multipart multipart, Node node) {
@@ -694,7 +717,7 @@ public class JCRDataStorage{
     }   
   }
 
-  private void setPart(Part part, Node node){
+  private void setPart(Part part, Node node) {
     try {
       String disposition = part.getDisposition();
       String contentType = part.getContentType();

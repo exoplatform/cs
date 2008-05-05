@@ -43,11 +43,18 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.MimeMessage.RecipientType;
+import javax.mail.search.AndTerm;
+import javax.mail.search.BodyTerm;
 import javax.mail.search.ComparisonTerm;
 import javax.mail.search.FlagTerm;
+import javax.mail.search.FromStringTerm;
+import javax.mail.search.NotTerm;
 import javax.mail.search.OrTerm;
+import javax.mail.search.RecipientStringTerm;
 import javax.mail.search.SearchTerm;
 import javax.mail.search.SentDateTerm;
+import javax.mail.search.SubjectTerm;
 import javax.mail.util.ByteArrayDataSource;
 
 import org.exoplatform.container.ExoContainer;
@@ -463,24 +470,51 @@ public class MailServiceImpl implements MailService{
         folder.open(javax.mail.Folder.READ_WRITE);
         
         javax.mail.Message[] messages ;
+        Map<javax.mail.Message, List<String>> msgMap = new HashMap<javax.mail.Message, List<String>>();
+        SearchTerm searchTerm = null;
         if (account.getLastCheckedDate() == null) {
-          messages = folder.getMessages() ;
+          messages = folder.getMessages() ;   // If the first time this account check mail then it will fetch all messages
         } else {
-          SearchTerm unseenFlag = new FlagTerm(new Flags(Flags.Flag.SEEN), false) ;
+          searchTerm = new FlagTerm(new Flags(Flags.Flag.SEEN), false) ;
           SentDateTerm dateTerm = new SentDateTerm(ComparisonTerm.GT, account.getLastCheckedDate());
-          unseenFlag = new OrTerm(unseenFlag, dateTerm) ;
-          if (isImap) unseenFlag = new FlagTerm(new Flags(Flags.Flag.FLAGGED), false) ;
-          messages = folder.search(unseenFlag) ;
+          searchTerm = new OrTerm(searchTerm, dateTerm) ;
+          if (isImap) searchTerm = new FlagTerm(new Flags(Flags.Flag.FLAGGED), false) ;
+          messages = folder.search(searchTerm) ;
         }
+        
+        javax.mail.Message[] fMessages ;
+        // Loop all filters to find the destination of new message.
+        List<MessageFilter> filters = getFilters(sProvider, username, accountId) ;
+        SearchTerm st ;
+        for (MessageFilter filter : filters) {
+          st = getSearchTerm(searchTerm, filter) ;
+          fMessages = folder.search(st) ;
+          List<String> fl ;
+          for (int k = 0; k < fMessages.length; k++) {
+            if (msgMap.containsKey(fMessages[k])) {
+              fl =  msgMap.get(fMessages[k]) ;
+              fl.add(filter.getId()) ;
+              msgMap.put(fMessages[k], fl) ;
+            } else {
+              fl = new ArrayList<String>() ;
+              fl.add(filter.getId()) ;
+              msgMap.put(fMessages[k], fl) ;
+            }
+          }
+        }
+        for (int l = 0; l < messages.length; l++) 
+          if (!msgMap.containsKey(messages[l])) 
+            msgMap.put(messages[l], null) ;
+        
         boolean leaveOnServer = (isPop3 && Boolean.valueOf(account.getPopServerProperties().get(Utils.SVR_POP_LEAVE_ON_SERVER))) ;
         boolean markAsDelete = (isImap && Boolean.valueOf(account.getImapServerProperties().get(Utils.SVR_IMAP_MARK_AS_DELETE))) ;
         
-        boolean deleteOnServer = (isPop3 && !leaveOnServer) || (isImap && markAsDelete);
+        boolean deleteOnServer = (isPop3 && !leaveOnServer) || (isImap && markAsDelete) ;
         
-        totalNew = messages.length ;
+        totalNew = msgMap.size() ;
        
-        System.out.println(" #### Folder contains " + totalNew + " messages !");
-        tt1 = System.currentTimeMillis();
+        System.out.println(" #### Folder contains " + totalNew + " messages !") ;
+        tt1 = System.currentTimeMillis() ;
 
         if (totalNew > 0) {
           info.setTotalMsg(totalNew) ;
@@ -500,14 +534,16 @@ public class MailServiceImpl implements MailService{
             storage_.saveFolder(sProvider, username, account.getId(), storeFolder) ;
           }
           javax.mail.Message msg ;
+          List<String> filterList ;
           while (i < totalNew && !info.isRequestStop()) {
             System.out.println(" [DEBUG] Fetching message " + (i + 1) + " ...") ;
             checkingLog_.get(key).setFetching(i + 1) ;
             checkingLog_.get(key).setStatusMsg("Fetching message " + (i + 1) + "/" + totalNew) ;
             t1 = System.currentTimeMillis();
             msg = messages[i] ;   
+            filterList = msgMap.get(msg) ;
             try {
-              boolean saved = storage_.saveMessage(sProvider, username, account.getId(), msg, folderId, spamFilter) ;
+              boolean saved = storage_.saveMessage(sProvider, username, account.getId(), msg, folderId, spamFilter, filterList) ;
               if (saved) {
                 msg.setFlag(Flags.Flag.SEEN, true);
                 if (isImap) msg.setFlag(Flags.Flag.FLAGGED, true);
@@ -525,14 +561,6 @@ public class MailServiceImpl implements MailService{
             System.out.println(" [DEBUG] Message " + i + " saved : " + (t2-t1) + " ms");
           }
           
-          Calendar cc = GregorianCalendar.getInstance();
-          javax.mail.Message firstMsg = messages[0] ;
-          cc = MimeMessageParser.getReceivedDate(firstMsg);
-          System.out.println(" [DEBUG] Executing the filter ...") ;
-          t1 = System.currentTimeMillis();
-          storage_.execActionFilter(sProvider, username, accountId, cc);
-          t2 = System.currentTimeMillis();
-          System.out.println(" [DEBUG] Executed the filter finished : " + (t2 - t1) + " ms") ;
           tt2 = System.currentTimeMillis();
           System.out.println(" ### Check mail finished total took: " + (tt2 - tt1) + " ms") ;
         }
@@ -550,6 +578,78 @@ public class MailServiceImpl implements MailService{
       e.printStackTrace();
     }
     return messageList;
+  }
+  
+  public SearchTerm getSearchTerm(SearchTerm sTerm, MessageFilter filter) throws Exception {
+    if (!Utils.isEmptyField(filter.getFrom())) {
+      FromStringTerm fsTerm = new FromStringTerm(filter.getFrom()) ;
+      if (filter.getFromCondition() == Utils.CONDITION_CONTAIN) {
+        if (sTerm == null) {
+          sTerm = fsTerm ;
+        } else {
+          sTerm = new AndTerm(sTerm, fsTerm) ;
+        }
+      } else if (filter.getFromCondition() == Utils.CONDITION_NOT_CONTAIN) {
+        if (sTerm == null) {
+          sTerm = new NotTerm(fsTerm) ;
+        } else {
+          sTerm = new AndTerm(sTerm, new NotTerm(fsTerm)) ;
+        }
+      }
+    }
+    
+    if (!Utils.isEmptyField(filter.getTo())) {
+      RecipientStringTerm toTerm = new RecipientStringTerm(RecipientType.TO, filter.getTo()) ;
+      if (filter.getToCondition() == Utils.CONDITION_CONTAIN) {
+        if (sTerm == null) {
+          sTerm = toTerm ;
+        } else {
+          sTerm = new AndTerm(sTerm, toTerm) ;
+        }
+      } else if (filter.getToCondition() == Utils.CONDITION_NOT_CONTAIN) {
+        if (sTerm == null) {
+          sTerm = new NotTerm(toTerm) ;
+        } else {
+          sTerm = new AndTerm(sTerm, new NotTerm(toTerm)) ;
+        }
+      }
+    }
+    
+    if (!Utils.isEmptyField(filter.getSubject())) {
+      SubjectTerm subjectTerm = new SubjectTerm(filter.getSubject()) ;
+      if (filter.getSubjectCondition() == Utils.CONDITION_CONTAIN) {
+        if (sTerm == null) {
+          sTerm = subjectTerm ;
+        } else {
+          sTerm = new AndTerm(sTerm, subjectTerm) ;
+        }
+      } else if (filter.getSubjectCondition() == Utils.CONDITION_NOT_CONTAIN) {
+        if (sTerm == null) {
+          sTerm = new NotTerm(subjectTerm) ;
+        } else {
+          sTerm = new AndTerm(sTerm, new NotTerm(subjectTerm)) ;
+        }
+      }
+    }
+    
+    if (!Utils.isEmptyField(filter.getBody())) {
+      BodyTerm bodyTerm = new BodyTerm(filter.getBody()) ;
+      if (filter.getSubjectCondition() == Utils.CONDITION_CONTAIN) {
+        if (sTerm == null) {
+          sTerm = bodyTerm ;
+        } else {
+          sTerm = new AndTerm(sTerm, bodyTerm) ;
+        }
+      } else if (filter.getSubjectCondition() == Utils.CONDITION_NOT_CONTAIN) {
+        if (sTerm == null) {
+          sTerm = new NotTerm(bodyTerm) ;
+        } else {
+          sTerm = new AndTerm(sTerm, new NotTerm(bodyTerm)) ;
+        }
+      }
+    }
+    
+    return sTerm ; 
   }
   
   public void createAccount(SessionProvider sProvider, String username, Account account) throws Exception {
