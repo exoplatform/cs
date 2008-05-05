@@ -67,20 +67,27 @@ public class NewMembershipListener extends MembershipEventListener {
   }
   
   public void preDelete(Membership m) throws Exception {
-    JCRDataStorage storage_ = new JCRDataStorage(nodeHierarchyCreator_) ;
-    Node publicContactHome = storage_.getPublicContactHome(SessionProvider.createSystemProvider()) ;      
-    String usersPath = nodeHierarchyCreator_.getJcrPath(JCRDataStorage.USERS_PATH) ;
-    QueryManager qm = publicContactHome.getSession().getWorkspace().getQueryManager();
-    StringBuffer queryString = new StringBuffer("/jcr:root" + usersPath 
-        + "//element(*,exo:contactGroup)[@exo:viewPermissionGroups='").append( m.getGroupId() + "']") ;        
-    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
-    QueryResult result = query.execute();
-    NodeIterator nodes = result.getNodes() ;
-    while (nodes.hasNext()) {
-      Node address = nodes.nextNode() ;
-      storage_.removeUserShareAddressBook(
-          SessionProvider.createSystemProvider(), address.getProperty("exo:sharedUserId")
-          .getString(), address.getProperty("exo:id").getString(), m.getUserName()) ;
-    }
+//    System.out.println("\n\n 11111111 \n\n");
+    //try {
+      JCRDataStorage storage_ = new JCRDataStorage(nodeHierarchyCreator_) ;
+      Node publicContactHome = storage_.getPublicContactHome(SessionProvider.createSystemProvider()) ;      
+      String usersPath = nodeHierarchyCreator_.getJcrPath(JCRDataStorage.USERS_PATH) ;
+      QueryManager qm = publicContactHome.getSession().getWorkspace().getQueryManager();
+      StringBuffer queryString = new StringBuffer("/jcr:root" + usersPath 
+          + "//element(*,exo:contactGroup)[@exo:viewPermissionGroups='").append( m.getGroupId() + "']") ;        
+      Query query = qm.createQuery(queryString.toString(), Query.XPATH);
+      QueryResult result = query.execute();
+      NodeIterator nodes = result.getNodes() ;
+      while (nodes.hasNext()) {
+        Node address = nodes.nextNode() ;
+        storage_.removeUserShareAddressBook(
+            SessionProvider.createSystemProvider(), address.getProperty("exo:sharedUserId")
+            .getString(), address.getProperty("exo:id").getString(), m.getUserName()) ;
+      }      
+    /*} catch (ReferentialIntegrityException e) {
+      
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }*/
   }
 }

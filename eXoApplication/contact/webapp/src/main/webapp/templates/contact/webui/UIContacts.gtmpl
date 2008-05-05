@@ -62,7 +62,6 @@
 	if(uicomponent.getViewContactsList()) {
 		if(isDisplaySearchResult) {
 %>
-			
 				<div class="Result">
 					<div class="UIAddressPageList" style="float: right; width: 250px">
 						<div class="ContactIteratorContainer">
@@ -76,7 +75,37 @@
 						  </div>
 					  </div>
 					</div>
-					<div class="TitleSearch"><%=_ctx.appRes(uicomponent.getName() + ".label.searchResult")%></div>
+					<div class="TitleSearch" style="float: left; margin-left: 10px"><%=_ctx.appRes(uicomponent.getName() + ".label.searchResult")%></div>
+					
+					<a href="<%=uicomponent.event("MoveContacts")%>" class="ControlButton">
+						<div class="Icon MoveIcon"><%=_ctx.appRes(uicomponent.getName() + ".label.move")%></div>
+					</a>					
+					<!--<div class="SeparatorLine"><span></span></div>-->
+					
+					<a href="#" class="ControlButton">
+						<div class="Icon ChatIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.instantMessage")%>"><span></span></div>
+					</a>
+					<a href="<%=uicomponent.event("Tag")%>" class="ControlButton">
+						<div class="Icon SelectTagIcon"title="<%=_ctx.appRes(uicomponent.getName() + ".label.tag")%>"><span></span></div>
+					</a>
+					<a href="<%=uicomponent.event("SendEmail")%>" class="ControlButton">
+						<div class="Icon MessageIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.email")%>"><span></span></div>
+					</a>
+				<!--	<div class="SeparatorLine"><span></span></div>-->
+					<a href="<%=uicomponent.event("DeleteContacts", uicomponent.id, "null")%>" class="ControlButton">
+						<div class="Icon DustBin16x16Icon " title="<%=_ctx.appRes(uicomponent.getName() + ".label.delete")%>"><span></span></div>
+					</a>
+					
+					<a href="<%= uicomponent.event("Print") %>" class="ControlButton">
+							<div class="Icon PrintIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.print")%>"><span></span></div>
+					</a>
+				
+					<a href="<%=uicomponent.event("CopyContact")%>" class="ControlButton">
+							<div class="Icon CopyContactIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.copyContacts")%>"><span></span></div>
+					</a>
+					
+					
+					
 					<div style="clear: both;"><span></span></div>
 				</div>
 	<% } else { %>

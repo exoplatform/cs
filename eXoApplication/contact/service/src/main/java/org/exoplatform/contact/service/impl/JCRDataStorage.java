@@ -935,15 +935,15 @@ public class JCRDataStorage {
     return new ContactPageList(username, result.getNodes(), 10, queryString.toString(), true, SHARED) ;
   }
   
+  
   public Contact getPublicContact(String contactId) throws Exception {
-    Node contactHomeNode = getPublicContactHome(SessionProvider.createSystemProvider());
-    if(contactHomeNode.hasNode(contactId)) {
-      Node contactNode = contactHomeNode.getNode(contactId);
-      Contact contact = new Contact();
-      contact = getContact(contactNode, PUBLIC);
-      return contact;
+    //Node contactHomeNode = getPublicContactHome(SessionProvider.createSystemProvider());
+    Node contactHomeNode = getUserContactHome(SessionProvider.createSystemProvider(), contactId) ;
+    try {
+      return getContact(contactHomeNode.getNode(contactId), PUBLIC);
+    } catch (PathNotFoundException e) {
+      return null ;
     }
-    return null;
   }
 
   public ContactPageList getPublicContactsByAddressBook(SessionProvider sysProvider, String groupId) throws Exception {   

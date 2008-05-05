@@ -57,7 +57,18 @@ public class NewUserListener extends UserEventListener {
   	nodeHierarchyCreator_ = nodeHierarchyCreator ;  	
   }
   
-  public void postSave(User user, boolean isNew) throws Exception {  	
+  public void postSave(User user, boolean isNew) throws Exception { 
+    Contact contact = null ;
+    if (isNew) contact = new Contact() ;
+    else contact = cservice_.getPublicContact(user.getUserName()) ;
+    if (contact != null) {
+      contact.setFullName(user.getFirstName() + " " + user.getLastName()) ;
+      contact.setFirstName(user.getFirstName()) ;
+      contact.setLastName(user.getLastName()) ;
+      contact.setEmailAddress(user.getEmail()) ;    
+      Calendar cal = new GregorianCalendar() ;
+      contact.setLastUpdated(cal.getTime()) ;
+    }
   	if(isNew) {
   		ContactGroup group = new ContactGroup() ;
   		group.setId(DEFAULTGROUP+user.getUserName()) ;
@@ -65,19 +76,10 @@ public class NewUserListener extends UserEventListener {
     	group.setDescription("Default address book") ;
     	SessionProvider sysProvider = SessionProvider.createSystemProvider() ;
     	cservice_.saveGroup(sysProvider, user.getUserName(), group, true) ;
-    	Contact contact = new Contact() ;
+
     	contact.setId(user.getUserName()) ;
-    	contact.setFullName(user.getFirstName() + " " + user.getLastName()) ;
-    	contact.setFirstName(user.getFirstName()) ;
-    	contact.setLastName(user.getLastName()) ;
-      
-      
-    	contact.setEmailAddress(user.getEmail()) ;
-    	Calendar cal = new GregorianCalendar() ;
-    	contact.setLastUpdated(cal.getTime()) ;
     	List<String> groupIds = new ArrayList<String>()  ;
-    	groupIds.add(group.getId()) ;
-      
+    	groupIds.add(group.getId()) ;      
       OrganizationService organizationService = 
         (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
       Object[] objGroupIds = organizationService.getGroupHandler().findGroupsOfUser(user.getUserName()).toArray() ;
@@ -138,7 +140,9 @@ public class NewUserListener extends UserEventListener {
       
       sysProvider.close();
   	} else {
-     //System.out.println("===============> edit users"); 
+      if (contact != null) {
+        cservice_.saveContact(SessionProvider.createSystemProvider(), user.getUserName(), contact, true) ; 
+      }
     }
   }
 
