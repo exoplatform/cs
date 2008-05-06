@@ -723,7 +723,7 @@ public class JCRDataStorage{
       String contentType = part.getContentType();
       if (disposition == null) {
         if (part.isMimeType("text/plain") || part.isMimeType("text/html")) {
-          setMessageBody(part, node);
+          appendMessageBody(part, node);
         } else if (part.isMimeType("multipart/*")) {
           MimeMultipart mimeMultiPart = (MimeMultipart) part.getContent() ;
           for (int i = 0; i < mimeMultiPart.getCount(); i++) {
@@ -736,7 +736,7 @@ public class JCRDataStorage{
       } else if (disposition.equalsIgnoreCase(Part.INLINE) || disposition.equalsIgnoreCase(Part.ATTACHMENT)) {
         /* this must be presented INLINE, hence inside the body of the message */
         if (part.isMimeType("text/plain") || part.isMimeType("text/html")) {
-          setMessageBody(part, node);
+          appendMessageBody(part, node);
         } else {
           /* this part must be presented as an attachment, hence we add it to the attached files */
           InputStream is = part.getInputStream();
@@ -758,7 +758,7 @@ public class JCRDataStorage{
     }
   }
 
-  private void setMessageBody(Part part, Node node) throws Exception {
+  private void appendMessageBody(Part part, Node node) throws Exception {
     StringBuffer messageBody =new StringBuffer();
     InputStream is = part.getInputStream();
     String contentType = part.getContentType() ;
@@ -773,7 +773,13 @@ public class JCRDataStorage{
     while ((inputLine = reader.readLine()) != null) {
       messageBody.append(inputLine + "\n");
     }
-    node.setProperty(Utils.EXO_BODY, messageBody.toString());
+    String content = "" ;
+    try {
+      content = node.getProperty(Utils.EXO_BODY).getString();
+      if (content == null) content = "" ;
+      else content += "<br>" ;
+    } catch(PathNotFoundException e) { }
+    node.setProperty(Utils.EXO_BODY, content + messageBody.toString());
   }
   
   public String setAddress(String strAddress) throws Exception {

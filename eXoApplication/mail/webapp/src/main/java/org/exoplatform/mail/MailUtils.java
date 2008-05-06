@@ -233,10 +233,14 @@ public class MailUtils {
   }
   
   public static String html2text(String str) throws Exception {
-    str = str.replaceAll("<[^>]*>", "");
-    str = str.replaceAll("&nbsp;", "");
-    str = str.replaceAll("&quot;", "\"");
-    str = str.replaceAll("\n", "");
+    if (str != null) {
+      str = str.replaceAll("<[^>]*>", "");
+      str = str.replaceAll("&nbsp;", "");
+      str = str.replaceAll("&quot;", "\"");
+      str = str.replaceAll("\n", "");
+    } else {
+      str = "" ;
+    }
     return str;
   }
 }

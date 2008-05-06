@@ -25,6 +25,7 @@ import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -349,7 +350,7 @@ public class MailServiceImpl implements MailService{
       }
       mimeMessage.setContent(multipPartRoot);
     } else {
-      if (message.getContentType().indexOf("text/plain") > -1)
+      if (message.getContentType() != null && message.getContentType().indexOf("text/plain") > -1)
         mimeMessage.setText(message.getMessageBody());
       else
         mimeMessage.setContent(message.getMessageBody(), "text/html");
@@ -472,7 +473,7 @@ public class MailServiceImpl implements MailService{
         folder.open(javax.mail.Folder.READ_WRITE);
         
         javax.mail.Message[] messages ;
-        Map<javax.mail.Message, List<String>> msgMap = new HashMap<javax.mail.Message, List<String>>();
+        LinkedHashMap<javax.mail.Message, List<String>> msgMap = new LinkedHashMap<javax.mail.Message, List<String>>();
         SearchTerm searchTerm = null;
         if (lastCheckedDate == null) {
           messages = folder.getMessages() ;   // If the first time this account check mail then it will fetch all messages
@@ -496,13 +497,13 @@ public class MailServiceImpl implements MailService{
               fl =  msgMap.get(fMessages[k]) ;
               fl.add(filter.getId()) ;
               if (lastCheckedDate == null) msgMap.put(fMessages[k], fl) ;
-              else if (!(isImap && !MimeMessageParser.getReceivedDate(fMessages[k]).getTime().after(account.getLastCheckedDate())))
+              else if (!(isImap && !MimeMessageParser.getReceivedDate(fMessages[k]).getTime().after(lastCheckedDate)))
                 msgMap.put(fMessages[k], fl) ;
             } else {
               fl = new ArrayList<String>() ;
               fl.add(filter.getId()) ;
               if (lastCheckedDate == null) msgMap.put(fMessages[k], fl) ;
-              else if (!(isImap && !MimeMessageParser.getReceivedDate(fMessages[k]).getTime().after(account.getLastCheckedDate())))
+              else if (!(isImap && !MimeMessageParser.getReceivedDate(fMessages[k]).getTime().after(lastCheckedDate)))
                 msgMap.put(fMessages[k], fl) ;
             }
           }
@@ -510,7 +511,7 @@ public class MailServiceImpl implements MailService{
         for (int l = 0; l < messages.length; l++) 
           if (!msgMap.containsKey(messages[l]))
             if (lastCheckedDate == null) msgMap.put(messages[l], null) ;
-            else if (!(isImap && !MimeMessageParser.getReceivedDate(messages[l]).getTime().after(account.getLastCheckedDate())))
+            else if (!(isImap && !MimeMessageParser.getReceivedDate(messages[l]).getTime().after(lastCheckedDate)))
               msgMap.put(messages[l], null) ;
         
         boolean leaveOnServer = (isPop3 && Boolean.valueOf(account.getPopServerProperties().get(Utils.SVR_POP_LEAVE_ON_SERVER))) ;
