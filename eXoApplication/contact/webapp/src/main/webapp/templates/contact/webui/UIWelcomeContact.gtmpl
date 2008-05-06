@@ -12,25 +12,24 @@
 					<div class="UIWelcomeContact" >
 					
 					  <div class="WelcomeContact">
-					    <div class="LabelWelcomeContact">Welcome to</div>
-					    <div class="LabelComment">please do not select to this Contact !</div>
+					    <div class="LabelWelcomeContact"><%=_ctx.appRes("UIWelcomeContact.label.label0")%></div>
+					    <div class="LabelComment"><%=_ctx.appRes("UIWelcomeContact.label.label1")%></div>
 					    <div style="clear: both;"><span></span></div>
 					  </div>
 					  <div class="LogoContact">
 					    <span></span>
 					  </div>
 					  <div class="OverviewContact">
-					    Overview
+					    <%=_ctx.appRes("UIWelcomeContact.label.label2")%>
 					  </div>
 					  <div class="ContentContact">
-							    The eXo Address Book shows all contacts you have either entered manually or imported from a file. And it automatically 
-shows all the contacts that work on the same projects like you ...
+					  		<%=_ctx.appRes("UIWelcomeContact.label.label3")%>
 							  </div>
 					  <div class="FeaturesContact">
-					    Features
+					  	<%=_ctx.appRes("UIWelcomeContact.label.label4")%>
 					  </div>
 					  <div class="ContentContact">
-					    eXo Contact is an open-source Contact that is built on foudation of eXo WebOS with variety of new features designed to make your e-Contact experience more productive and convenience, as a new way to view your Contacts inbox and conversation and help to reduce risks and annoyances such as phishing and junk Contact. Easy to approach the basics as writing, reading, finding and much more...
+					  	<%=_ctx.appRes("UIWelcomeContact.label.label5")%>
 					  </div>
 				  </div>
 					

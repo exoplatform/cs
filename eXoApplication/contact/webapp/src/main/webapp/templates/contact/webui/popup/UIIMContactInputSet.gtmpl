@@ -39,25 +39,25 @@
                                   <div class="MiddleRightRightClickPopupMenu">
                                     <div class="UIRightPopupMenuContainer">
                                       <span class="MenuItem">   
-                                        <div class="ItemIcon ContactIcon" fieldname="google">Google Talk</div>
+                                        <div class="ItemIcon ContactIcon" fieldname="google"><%=_ctx.appRes(uicomponent.getName() + ".label.googleTalk")%></div>
                                       </span>
                                       <span class="MenuItem">   
-                                        <div class="ItemIcon ContactIcon" fieldname="msn">MSN</div>
+                                        <div class="ItemIcon ContactIcon" fieldname="msn"><%=_ctx.appRes(uicomponent.getName() + ".label.msn")%></div>
                                       </span>
                                       <span class="MenuItem">   
-                                        <div class="ItemIcon ContactIcon" fieldname="aolAim">AOL/AIM</div>
+                                        <div class="ItemIcon ContactIcon" fieldname="aolAim"><%=_ctx.appRes(uicomponent.getName() + ".label.aol-aim")%></div>
                                       </span>
                                       <span class="MenuItem">   
-                                        <div class="ItemIcon ContactIcon" fieldname="yahoo">Yahoo</div>
+                                        <div class="ItemIcon ContactIcon" fieldname="yahoo"><%=_ctx.appRes(uicomponent.getName() + ".label.yahoo")%></div>
                                       </span>
                                       <span class="MenuItem">   
-                                        <div class="ItemIcon ContactIcon" fieldname="irc">IRC</div>
+                                        <div class="ItemIcon ContactIcon" fieldname="irc"><%=_ctx.appRes(uicomponent.getName() + ".label.IRC")%></div>
                                       </span>
                                       <span class="MenuItem">   
-                                        <div class="ItemIcon ContactIcon" fieldname="skype">Skype</div>
+                                        <div class="ItemIcon ContactIcon" fieldname="skype"><%=_ctx.appRes(uicomponent.getName() + ".label.skype")%></div>
                                       </span>
                                       <span class="MenuItem">   
-                                        <div class="ItemIcon ContactIcon" fieldname="icq">ICQ</div>
+                                        <div class="ItemIcon ContactIcon" fieldname="icq"><%=_ctx.appRes(uicomponent.getName() + ".label.ICQ")%></div>
                                       </span>
                                     </div>
                                   </div>

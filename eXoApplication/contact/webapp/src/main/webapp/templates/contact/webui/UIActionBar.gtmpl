@@ -3,11 +3,12 @@
 		<div class="HeaderToolbar">
 			<div class="LeftBar">
 				<div class="RightBar">
+				
 					<div class="CenterBar">
 					
 						<div class="SelectButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 							<div class="IconHolder BlueCirclePlusIcon" >
-								<div class="DownArrow1Icon">Add New</div>
+								<div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.getName() + ".label.addNew")%></div>
 							</div>
 							<% /*Begin Popup Menu*/ %>
 								<div style="position: relative;">
@@ -49,20 +50,20 @@
 						</div>
 						
           <a href="<%=uicomponent.event("ImportContact")%>" class="ControlButton">
-						<div class="ImportAddressIcon" title="Import Address">
+						<div class="ImportAddressIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.importAddress")%>">
 							<span></span>
 						</div>
           </a>
           
           <a href="<%=uicomponent.event("ExportContact")%>" class="ControlButton">
-						<div class="ExportAddressIcon" title="Export Address">
+						<div class="ExportAddressIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.exportAddress")%>">
 							<span></span>
 						</div>
           </a>
 						<div class="SeparatorLine"><span></span></div>
 						<div class="SelectButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 							<div class="IconHolder ViewIcon">
-								<div class="DownArrow1Icon">Contacts View</div>
+								<div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.getName() + ".label.contactsView")%></div>
 							</div>
 							<% /*Begin Popup Menu*/ %>
 								<div style="position: relative;">
@@ -102,11 +103,14 @@
 			      			</div>
 			      		</div>
 			      		<% /*End Popup Menu*/ %>
+							<!--div class="IconHolder ViewIcon">
+								<div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.getName() + ".label.contactsView")%></div>
+							</div-->
 						</div>
 						
 						<div class="SelectButton" onclick="eXo.contact.UIContactPortlet.showPopupCustomLayoutView(this, event);">
 							<div class="IconHolder CustomLayoutIcon">
-								<div class="DownArrow1Icon">Custom Layout View</div>
+								<div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.getName() + ".label.layoutView")%></div>
 							</div>
 							<% /*Begin Popup Menu*/ %>
 									<div style="position: relative;">
@@ -123,27 +127,27 @@
 						              		<div class="UIRightPopupMenuContainer" id="customLayoutViewMenu">
 																<div class="MenuItem" onclick="javascript:eXo.contact.UIContactPortlet.switchLayout(0)" >
 							                    <div class="ItemIcon CheckedMenu">
-							                      Default
+							                      <%=_ctx.appRes(uicomponent.getName() + ".label.default")%>
 							                    </div>
 						                    </div>
                                 <div class="MenuItem" onclick="javascript:eXo.contact.UIContactPortlet.switchLayout(1)" >   
 							                    <div class="ItemIcon">
-							                      Navigation
+							                      <%=_ctx.appRes(uicomponent.getName() + ".label.navigation")%>
 							                    </div>
 						                    </div>
 						                    <div class="MenuItem" onclick="javascript:eXo.contact.UIContactPortlet.switchLayout(2)" >   
 							                    <div class="ItemIcon">
-							                       Addressbooks
+							                       <%=_ctx.appRes(uicomponent.getName() + ".label.addressbooks")%>
 							                    </div>
 						                    </div>
 						                    <div class="MenuItem" onclick="javascript:eXo.contact.UIContactPortlet.switchLayout(3)" >
 							                    <div class="ItemIcon">
-							                      Tags
+							                      <%=_ctx.appRes(uicomponent.getName() + ".label.tags")%>
 							                    </div>
 						                    </div>
                                 <div class="MenuItem ContactDetailsMenuItem" onclick="javascript:eXo.contact.UIContactPortlet.switchLayout(4)" >
 							                    <div class="ItemIcon">
-							                      Details
+							                      <%=_ctx.appRes(uicomponent.getName() + ".label.details")%>
 							                    </div>
 						                    </div>
 															</div>
@@ -159,6 +163,9 @@
 				      			</div>
 				      		</div>
 				      		<% /*End Popup Menu*/ %>
+							<!--div class="IconHolder CustomLayoutIcon">
+								<div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.getName() + ".label.customLayoutView")%></div>
+							</div-->
 						</div>
 						
 						<!--a href="#">

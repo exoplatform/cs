@@ -24,14 +24,14 @@
 								
 									<a href="<%=uicomponent.event("Send")%>" class="ControlButton">
 										<div class="IconHolder SendMailIcon">
-											<div class="Label">Send mail</div>
+											<div class="Label"><%=_ctx.appRes(uicomponent.getName() + ".label.sendMail")%></div>
 										</div>
 									</a>
 									<div class="SeparatorLine"><span></span></div>
 									
 									<a href="<%=uicomponent.event("DiscardChange")%>" class="ControlButton">
 										<div class="IconHolder DiscardIcon">
-											<div class="Label">Discard</div>
+											<div class="Label"><%=_ctx.appRes(uicomponent.getName() + ".label.discard")%></div>
 										</div>
 									</a>
 									
@@ -61,20 +61,20 @@
             <div class="HorizontalLayout">
             <table class="UIFormGrid">
               <tr>
-                <td class="FieldLabel">From :&nbsp;&nbsp;</td>
+                <td class="FieldLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.from")%>&nbsp;&nbsp;</td>
                 <td class="FieldComponent">
                   <%uicomponent.renderField(uicomponent.FIELD_FROM)%>
                 </td>  
               </tr>
               <tr>
-                <td class="FieldLabel">To :&nbsp;&nbsp;</td>
+                <td class="FieldLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.to")%> :&nbsp;&nbsp;</td>
                 <td class="FieldComponent"  colspan="2">
                   <%uicomponent.renderField(uicomponent.FIELD_TO)%> 
                 </td>
               </tr>
               
               <tr>
-                <td class="FieldLabel">Subject :&nbsp;&nbsp;</td>
+                <td class="FieldLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.subject")%> :&nbsp;&nbsp;</td>
                 <td class="FieldComponent" colspan="2" style="padding:4px;">
                   <%uicomponent.renderField(uicomponent.FIELD_SUBJECT)%>
                 </td>
