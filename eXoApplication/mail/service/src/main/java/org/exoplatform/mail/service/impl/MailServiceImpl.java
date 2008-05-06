@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -419,6 +420,7 @@ public class MailServiceImpl implements MailService{
     String protocol = account.getProtocol();
     boolean isPop3 = account.getProtocol().equals(Utils.POP3) ;
     boolean isImap = account.getProtocol().equals(Utils.IMAP) ;
+    Date lastCheckedDate = account.getLastCheckedDate() ;
     try {
       Properties props = System.getProperties();
       String socketFactoryClass = "javax.net.SocketFactory";
@@ -472,13 +474,12 @@ public class MailServiceImpl implements MailService{
         javax.mail.Message[] messages ;
         Map<javax.mail.Message, List<String>> msgMap = new HashMap<javax.mail.Message, List<String>>();
         SearchTerm searchTerm = null;
-        if (account.getLastCheckedDate() == null) {
+        if (lastCheckedDate == null) {
           messages = folder.getMessages() ;   // If the first time this account check mail then it will fetch all messages
         } else {
           searchTerm = new FlagTerm(new Flags(Flags.Flag.SEEN), false) ;
-          SentDateTerm dateTerm = new SentDateTerm(ComparisonTerm.GT, account.getLastCheckedDate());
+          SentDateTerm dateTerm = new SentDateTerm(ComparisonTerm.GT, lastCheckedDate);
           searchTerm = new OrTerm(searchTerm, dateTerm) ;
-          if (isImap) searchTerm = new FlagTerm(new Flags(Flags.Flag.FLAGGED), false) ;
           messages = folder.search(searchTerm) ;
         }
         
@@ -494,17 +495,23 @@ public class MailServiceImpl implements MailService{
             if (msgMap.containsKey(fMessages[k])) {
               fl =  msgMap.get(fMessages[k]) ;
               fl.add(filter.getId()) ;
-              msgMap.put(fMessages[k], fl) ;
+              if (lastCheckedDate == null) msgMap.put(fMessages[k], fl) ;
+              else if (!(isImap && !MimeMessageParser.getReceivedDate(fMessages[k]).getTime().after(account.getLastCheckedDate())))
+                msgMap.put(fMessages[k], fl) ;
             } else {
               fl = new ArrayList<String>() ;
               fl.add(filter.getId()) ;
-              msgMap.put(fMessages[k], fl) ;
+              if (lastCheckedDate == null) msgMap.put(fMessages[k], fl) ;
+              else if (!(isImap && !MimeMessageParser.getReceivedDate(fMessages[k]).getTime().after(account.getLastCheckedDate())))
+                msgMap.put(fMessages[k], fl) ;
             }
           }
         }
         for (int l = 0; l < messages.length; l++) 
-          if (!msgMap.containsKey(messages[l])) 
-            msgMap.put(messages[l], null) ;
+          if (!msgMap.containsKey(messages[l]))
+            if (lastCheckedDate == null) msgMap.put(messages[l], null) ;
+            else if (!(isImap && !MimeMessageParser.getReceivedDate(messages[l]).getTime().after(account.getLastCheckedDate())))
+              msgMap.put(messages[l], null) ;
         
         boolean leaveOnServer = (isPop3 && Boolean.valueOf(account.getPopServerProperties().get(Utils.SVR_POP_LEAVE_ON_SERVER))) ;
         boolean markAsDelete = (isImap && Boolean.valueOf(account.getImapServerProperties().get(Utils.SVR_IMAP_MARK_AS_DELETE))) ;
@@ -546,7 +553,6 @@ public class MailServiceImpl implements MailService{
               boolean saved = storage_.saveMessage(sProvider, username, account.getId(), msg, folderId, spamFilter, filterList) ;
               if (saved) {
                 msg.setFlag(Flags.Flag.SEEN, true);
-                if (isImap) msg.setFlag(Flags.Flag.FLAGGED, true);
                 if (deleteOnServer) msg.setFlag(Flags.Flag.DELETED, true);
                 account.setLastCheckedDate(MimeMessageParser.getReceivedDate(msg).getTime()) ; 
               }
