@@ -55,7 +55,7 @@
     </div>
     <div class="PrintContent"  >
       <%
-        if (msg.getContentType().indexOf("text/plain") > -1) {    
+        if (msg.getContentType().toLowerCase().indexOf("text/plain") > -1) {    
           println(msg.getMessageBody().replaceAll("\n", "<br>")) ;
       } else {    
         println(msg.getMessageBody()) ; 
