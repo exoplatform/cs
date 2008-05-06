@@ -138,19 +138,38 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   public void setSelectSharedContacts(boolean selected) { isSelectSharedContacts = selected ; }
   public boolean isSelectSharedContacts() { return isSelectSharedContacts ; }
   public boolean havePermission(Contact contact) throws Exception {
-
+    if (!contact.getContactType().equals(JCRDataStorage.SHARED)) return true ;
     // contact shared
     String currentUser = ContactUtils.getCurrentUser() ;
-    if (contact.getEditPermissionUsers() == null ||
+    if (contact.getEditPermissionUsers() != null &&
         !Arrays.asList(contact.getEditPermissionUsers()).contains(currentUser + JCRDataStorage.HYPHEN)) {
-      boolean canEdit = false ;
-      String[] editPerGroups = contact.getEditPermissionGroups() ;
-      if (editPerGroups != null)
-        for (String editPer : editPerGroups)
-          if (ContactUtils.getUserGroups().contains(editPer)) canEdit = true ;          
-      if (canEdit == false) return false ;
+      return true ;
     }
-    return true ;    
+    String[] editPerGroups = contact.getEditPermissionGroups() ;
+    if (editPerGroups != null)
+      for (String editPer : editPerGroups)
+        if (ContactUtils.getUserGroups().contains(editPer)) {
+          return true ;
+        }    
+    Map<String, SharedAddressBook> sharedGroupMap = getAncestorOfType(UIWorkingContainer.class)
+        .findFirstComponentOfType(UIAddressBooks.class).getSharedGroups() ;
+    for (String address : contact.getAddressBook()) {
+      try {
+        SharedAddressBook add = sharedGroupMap.get(address) ;
+        if (add.getEditPermissionUsers() != null &&
+            Arrays.asList(add.getEditPermissionUsers()).contains(currentUser + JCRDataStorage.HYPHEN)) {
+          return true ;
+        }
+        editPerGroups = add.getEditPermissionGroups() ;
+
+        if (editPerGroups != null)
+          for (String editPer : editPerGroups)
+            if (ContactUtils.getUserGroups().contains(editPer)) {
+              return true ;
+            }
+      } catch (NullPointerException e) { return false ; }
+    }
+    return false ;    
   }
   
   public boolean canDeleteShared(String add) throws Exception {

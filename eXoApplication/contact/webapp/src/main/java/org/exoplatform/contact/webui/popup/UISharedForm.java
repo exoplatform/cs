@@ -232,7 +232,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
             contactGroup.setEditPermissionGroups(editMapGroups.keySet().toArray(new String[] {})) ; 
             
 //          set permisson for contacts in this address book
-            List<Contact> contacts = contactService
+            /*List<Contact> contacts = contactService
               .getContactPageListByGroup(sessionProvider, username, uiForm.group_.getId()).getAll() ;
             Map<String, String> viewMapContact = new LinkedHashMap<String, String>() ;
             //for (String user : receiveUsers) viewMapContact.put(user, user) ;                            
@@ -248,7 +248,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
               addPerUsers(contact, viewMapContact, editMapContact) ;
               addPerGroups(contact, viewMapGroup, editMapGroup) ;              
               contactService.saveContact(sessionProvider, username, contact, false);
-            }
+            }*/
           }
           if (uiForm.isNew_) {
             String[] viewPerUsers = contactGroup.getViewPermissionUsers() ;
@@ -276,7 +276,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
             
             
 //          set permisson for contacts in this address book
-            List<Contact> contacts = contactService.getContactPageListByGroup(
+            /*List<Contact> contacts = contactService.getContactPageListByGroup(
                 sessionProvider, username, uiForm.group_.getId()).getAll() ;
             Map<String, String> viewMapContact = new LinkedHashMap<String, String>() ;
             for (String user : receiveUsers) viewMapContact.put(user, user) ;                            
@@ -293,7 +293,9 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
               addPerUsers(contact, viewMapContact, editMapContact) ;
               addPerGroups(contact, viewMapGroup, editMapGroup) ;              
               contactService.saveContact(sessionProvider, username, contact, false);
-            }            
+            }
+            */
+            
           } else { // change permission
             if (!uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).isChecked()) {
               List<String> newPerUsers = new ArrayList<String>() ; 
@@ -313,7 +315,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
               contactGroup.setEditPermissionGroups(newPerGroups.toArray(new String[newPerGroups.size()])) ;
               
               // 
-              List<Contact> contacts = contactService
+             /* List<Contact> contacts = contactService
                 .getContactPageListByGroup(sessionProvider, username, uiForm.group_.getId()).getAll() ;
               for (Contact contact : contacts) {
                 if(contact.getEditPermissionUsers() != null) {
@@ -336,6 +338,8 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
                 }
                 contactService.saveContact(sessionProvider, username, contact, false) ;
               }
+              */
+              
             }
             uiForm.getUIStringInput(UISharedForm.FIELD_USER).setEditable(true) ;
           }
@@ -346,9 +350,9 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
           event.getRequestContext().addUIComponentToUpdateByAjax(
               uiForm.getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class)) ;
           
-          UIContacts uiContacts = uiForm.getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIContacts.class) ;
+          /*UIContacts uiContacts = uiForm.getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIContacts.class) ;
           uiContacts.updateList() ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;*/
         } else { // shared contact
           
           

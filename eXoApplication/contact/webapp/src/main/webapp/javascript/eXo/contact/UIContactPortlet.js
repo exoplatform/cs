@@ -84,7 +84,7 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
       
       // hoang quang hung add :
       if(tr.getAttribute("havePermission")) {
-    		var havePermission = tr.getAttribute("havePermission").toLowerCase() ;    		
+    		var havePermission = tr.getAttribute("havePermission").toLowerCase() ;		
     		if (havePermission == "false") {
     			for (var i = 0; i < len; i++) {    			
 	    			isDisable = DOMUtil.hasClass(actions[i], "EditActionIcon") ;

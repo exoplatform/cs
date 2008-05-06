@@ -113,7 +113,7 @@ public class NewUserListener extends UserEventListener {
               .getString(), address.getProperty("exo:id").getString(),recievedUser) ;
         }
         
-        /*// lookup shared contacts
+        // lookup shared contacts
         queryString = new StringBuffer("/jcr:root" + usersPath 
             + "//element(*,exo:contact)[@exo:viewPermissionGroups='").append(groupId + "']") ;        
         query = qm.createQuery(queryString.toString(), Query.XPATH);
@@ -126,11 +126,9 @@ public class NewUserListener extends UserEventListener {
           String userId = temp.split(split)[1] ;
           storage_.shareContact(SessionProvider.createSystemProvider(), userId,
               new String[] {contactNode.getProperty("exo:id").getString()}, recievedUser) ;
-        }*/
+        }
       }
 
-      
-      
       Node userApp = nodeHierarchyCreator_.getUserApplicationNode(SessionProvider.createSystemProvider(), user.getUserName()) ;
       //reparePermissions(userApp, user.getUserName()) ;
       //reparePermissions(userApp.getNode("ContactApplication"), user.getUserName()) ;
