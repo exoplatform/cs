@@ -142,7 +142,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     // contact shared
     String currentUser = ContactUtils.getCurrentUser() ;
     if (contact.getEditPermissionUsers() != null &&
-        !Arrays.asList(contact.getEditPermissionUsers()).contains(currentUser + JCRDataStorage.HYPHEN)) {
+        Arrays.asList(contact.getEditPermissionUsers()).contains(currentUser + JCRDataStorage.HYPHEN)) {
       return true ;
     }
     String[] editPerGroups = contact.getEditPermissionGroups() ;
@@ -161,7 +161,6 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           return true ;
         }
         editPerGroups = add.getEditPermissionGroups() ;
-
         if (editPerGroups != null)
           for (String editPer : editPerGroups)
             if (ContactUtils.getUserGroups().contains(editPer)) {

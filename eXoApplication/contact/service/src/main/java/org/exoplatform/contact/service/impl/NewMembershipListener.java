@@ -17,7 +17,10 @@
 package org.exoplatform.contact.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -27,6 +30,7 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
+import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -59,6 +63,14 @@ public class NewMembershipListener extends MembershipEventListener {
     List<String> recievedUser = new ArrayList<String>() ;
     recievedUser.add(m.getUserName()) ;
     
+    // add new group for public contact
+    Contact contact = cservice_.getPublicContact(m.getUserName()) ;
+    List<String> groups = new ArrayList<String>() ;
+    for (String group  : contact.getAddressBook()) groups.add(group) ;
+    groups.add(m.getGroupId()) ;
+    contact.setAddressBook(groups.toArray(new String[] {})) ;
+    cservice_.saveContact(SessionProvider.createSystemProvider(), m.getUserName(), contact, false) ;
+    
     StringBuffer queryString = new StringBuffer("/jcr:root" + usersPath 
         + "//element(*,exo:contactGroup)[@exo:viewPermissionGroups='").append( m.getGroupId() + "']") ;        
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
@@ -87,14 +99,17 @@ public class NewMembershipListener extends MembershipEventListener {
   }
   
   public void preDelete(Membership m) throws Exception {
-    OrganizationService organizationService = 
+    /*OrganizationService organizationService = 
       (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
-    Object[] objGroupIds = organizationService.getGroupHandler().findGroupsOfUser(m.getUserName()).toArray() ;
-    List<String> groupIds = new ArrayList<String>() ;
-    for (Object object : objGroupIds) {
-      groupIds.add(((GroupImpl)object).getId()) ;
-    }
+    Object[] objGroupIds = organizationService.getGroupHandler().findGroupsOfUser(m.getUserName()).toArray() ;*/
+
+    //  remove group of public contact
+    Contact contact = cservice_.getPublicContact(m.getUserName()) ;
+    Map<String, String> groupIds = new LinkedHashMap<String, String>() ;
+    for (String group  : contact.getAddressBook()) groupIds.put(group, group) ;
     groupIds.remove(m.getGroupId()) ;
+    contact.setAddressBook(groupIds.keySet().toArray(new String[] {})) ;
+    cservice_.saveContact(SessionProvider.createSystemProvider(), m.getUserName(), contact, false) ;
     
     try {
       JCRDataStorage storage_ = new JCRDataStorage(nodeHierarchyCreator_) ;
@@ -114,7 +129,7 @@ public class NewMembershipListener extends MembershipEventListener {
         
 //      user shared if belong another groups shared
         for (Value groupShared : address.getProperty("exo:viewPermissionGroups").getValues()) {
-          if (groupIds.contains(groupShared.getString())) {
+          if (groupIds.keySet().contains(groupShared.getString())) {
             List<String> reciever = new ArrayList<String>() ;
             reciever.add(m.getUserName()) ;
             storage_.shareAddressBook( SessionProvider.createSystemProvider(), address.getProperty("exo:sharedUserId")
@@ -139,7 +154,7 @@ public class NewMembershipListener extends MembershipEventListener {
 
         // user shared if belong another groups shared
         for (Value groupShared : contactNode.getProperty("exo:viewPermissionGroups").getValues()) {
-          if (groupIds.contains(groupShared.getString())) {
+          if (groupIds.keySet().contains(groupShared.getString())) {
             List<String> reciever = new ArrayList<String>() ;
             reciever.add(m.getUserName()) ;
             storage_.shareContact(SessionProvider.createSystemProvider(), 

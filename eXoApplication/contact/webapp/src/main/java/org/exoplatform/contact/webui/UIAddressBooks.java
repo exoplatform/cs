@@ -111,16 +111,15 @@ public class UIAddressBooks extends UIComponent {
   public boolean havePermission(String groupId) throws Exception { 
     String currentUser = ContactUtils.getCurrentUser() ;
     SharedAddressBook sharedAddressBook = sharedAddressBookMap_.get(groupId) ;
-    if (sharedAddressBook.getEditPermissionUsers() == null ||
-        !Arrays.asList(sharedAddressBook.getEditPermissionUsers()).contains(currentUser + JCRDataStorage.HYPHEN)) {
-      boolean canEdit = false ;
-      String[] editPerGroups = sharedAddressBook.getEditPermissionGroups() ;
-      if (editPerGroups != null)
-        for (String editPer : editPerGroups)
-          if (ContactUtils.getUserGroups().contains(editPer)) canEdit = true ;          
-      if (canEdit == false) return false ;
+    if (sharedAddressBook.getEditPermissionUsers() != null &&
+        Arrays.asList(sharedAddressBook.getEditPermissionUsers()).contains(currentUser + JCRDataStorage.HYPHEN)) {
+      return true ;
     }
-    return true ;
+    String[] editPerGroups = sharedAddressBook.getEditPermissionGroups() ;
+    if (editPerGroups != null)
+      for (String editPer : editPerGroups)
+        if (ContactUtils.getUserGroups().contains(editPer)) return true ;
+    return false ;
   }
   
   public void setSelectedGroup(String groupId) { selectedGroup = groupId ; }
@@ -237,7 +236,13 @@ public class UIAddressBooks extends UIComponent {
               sessionProvider, addressBookId).getAll().toArray(new Contact[] {});
         } else {
         	SharedAddressBook address = uiAddressBook.sharedAddressBookMap_.get(addressBookId) ;
-          uiExportForm.setSelectedGroup(address.getName()) ;
+          
+          
+          if (uiAddressBook.isDefault(address.getId())) {
+            uiExportForm.setSelectedGroup(address.getSharedUserId() + ContactUtils.SCORE + address.getName() + ContactUtils.SHARED) ;
+          } else {
+            uiExportForm.setSelectedGroup(address.getName() + ContactUtils.SHARED) ;
+          } 
           contacts = contactService.getSharedContactsByAddressBook(
               sessionProvider, username, address).getAll().toArray(new Contact[] {}) ;
         }

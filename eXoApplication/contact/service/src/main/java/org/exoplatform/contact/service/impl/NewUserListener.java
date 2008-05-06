@@ -19,7 +19,9 @@ package org.exoplatform.contact.service.impl;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -78,15 +80,16 @@ public class NewUserListener extends UserEventListener {
     	cservice_.saveGroup(sysProvider, user.getUserName(), group, true) ;
 
     	contact.setId(user.getUserName()) ;
-    	List<String> groupIds = new ArrayList<String>()  ;
-    	groupIds.add(group.getId()) ;      
+      Map<String, String> groupIds = new LinkedHashMap<String, String>() ;
+    	groupIds.put(group.getId(), group.getId()) ;      
       OrganizationService organizationService = 
         (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
       Object[] objGroupIds = organizationService.getGroupHandler().findGroupsOfUser(user.getUserName()).toArray() ;
       for (Object object : objGroupIds) {
-        groupIds.add(((GroupImpl)object).getId()) ;
+        String id = ((GroupImpl)object).getId() ;
+        groupIds.put(id, id) ;
       }
-    	contact.setAddressBook(groupIds.toArray(new String[]{})) ;
+    	contact.setAddressBook(groupIds.keySet().toArray(new String[] {})) ;
     	contact.setOwner(true) ;
     	contact.setOwnerId(user.getUserName()) ;
     	cservice_.saveContact(sysProvider, user.getUserName(), contact, true) ;
@@ -139,7 +142,7 @@ public class NewUserListener extends UserEventListener {
       sysProvider.close();
   	} else {
       if (contact != null) {
-        cservice_.saveContact(SessionProvider.createSystemProvider(), user.getUserName(), contact, true) ; 
+        cservice_.saveContact(SessionProvider.createSystemProvider(), user.getUserName(), contact, false) ; 
       }
     }
   }

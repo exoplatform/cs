@@ -76,7 +76,7 @@
 				}
 		%>
 	
-		<div id="$groupId" addressType="0" class="ItemList $cssClass PrivateAddressBook" isDefault="<%=uicomponent.isDefault(groupId)%>">
+		<div id="$groupId" addressType="0" class="ItemList $cssClass PrivateAddressBook" isDefault="<%=uicomponent.isDefault(groupId)%>"  havePermission="true">
 			<a href="$actionLink"  class="IconHolder $icon">
 				<%=contactGroup.getName()%>
 			</a>
