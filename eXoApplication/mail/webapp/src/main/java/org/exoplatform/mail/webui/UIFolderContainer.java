@@ -153,9 +153,14 @@ public class UIFolderContainer extends UIContainer {
       UIMessageList uiMessageList = uiMsgArea.getChild(UIMessageList.class) ;
       UIMessagePreview uiMsgPreview = uiMsgArea.getChild(UIMessagePreview.class) ;
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      if (uiFolder.getSelectedFolder() !=null  && uiFolder.getSelectedFolder().equals(folderId)) {
-        uiMessageList.updateList();
-      } else {
+      boolean isRefesh = true ;
+      if (uiFolder.getSelectedFolder() != null  && uiFolder.getSelectedFolder().equals(folderId)) {
+        try {
+          uiMessageList.updateList();
+          isRefesh = false ;
+        } catch(Exception e) { } 
+      } 
+      if (isRefesh) {
         uiFolder.setSelectedFolder(folderId) ;
         MessageFilter filter = new MessageFilter("Folder"); 
         filter.setAccountId(accountId);
