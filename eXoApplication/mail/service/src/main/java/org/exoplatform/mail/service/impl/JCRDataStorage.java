@@ -775,6 +775,9 @@ public class JCRDataStorage{
     }
     String content = "" ;
     try {
+      String ct = node.getProperty(Utils.EXO_CONTENT_TYPE).getString() ;
+      if ((ct.indexOf("text/html") > -1 && contentType.indexOf("text/html") > -1) ||
+          (ct.indexOf("text/plain") > -1 && contentType.indexOf("text/plain") > -1))
       content = node.getProperty(Utils.EXO_BODY).getString();
       if (content == null) content = "" ;
       else content += "<br>" ;
