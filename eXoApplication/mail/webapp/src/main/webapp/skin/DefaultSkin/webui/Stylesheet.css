@@ -503,6 +503,10 @@
 	font-size:11px;
 }
 
+.UIRightClickPopupMenu .SelectItem {
+	background: #dee4f2 ;
+}
+
 /*================================== UIGrid==============================*/
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageList {
