@@ -65,10 +65,10 @@ public class NewMembershipListener extends MembershipEventListener {
     
     // add new group for public contact
     Contact contact = cservice_.getPublicContact(m.getUserName()) ;
-    List<String> groups = new ArrayList<String>() ;
-    for (String group  : contact.getAddressBook()) groups.add(group) ;
-    groups.add(m.getGroupId()) ;
-    contact.setAddressBook(groups.toArray(new String[] {})) ;
+    Map<String, String> groups = new LinkedHashMap<String, String>() ;
+    for (String group  : contact.getAddressBook()) groups.put(group, group) ;
+    groups.put(m.getGroupId(), m.getGroupId()) ;
+    contact.setAddressBook(groups.keySet().toArray(new String[] {})) ;
     cservice_.saveContact(SessionProvider.createSystemProvider(), m.getUserName(), contact, false) ;
     
     StringBuffer queryString = new StringBuffer("/jcr:root" + usersPath 
