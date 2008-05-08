@@ -37,6 +37,7 @@ import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
+import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -548,13 +549,17 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           drafts.setTotalMessage(drafts.getTotalMessage() + 1);
           mailSvr.saveFolder(SessionProviderFactory.createSystemProvider(), usename, accountId, drafts);
         } else {
-          mailSvr.saveMessage(SessionProviderFactory.createSystemProvider(), usename, accountId, message, false) ;
+          mailSvr.saveMessage(SessionProviderFactory.createSystemProvider(), usename, accountId, uiForm.parentPath_, message, false) ;
         }
       } catch (Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.save-draft-error", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         e.printStackTrace() ;
         uiChildPopup.deActivate() ;
+      }
+      if (uiFolderContainer.getSelectedFolder().equals(Utils.createFolderId(accountId, Utils.FD_DRAFTS, false))) {
+        uiPortlet.findFirstComponentOfType(UIMessageList.class).updateList() ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class)) ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer) ;
       uiPortlet.cancelAction();

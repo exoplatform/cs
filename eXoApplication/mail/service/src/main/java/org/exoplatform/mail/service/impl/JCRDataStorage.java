@@ -537,23 +537,31 @@ public class JCRDataStorage{
       }
       nodeMsg.setProperty(Utils.EXO_HEADERS, values.toArray(new String[message.getHeaders().size()]));
       
-      if (isNew) {
-        List<Attachment> attachments = message.getAttachments();
-        if(attachments != null) { 
-          Iterator<Attachment> it = attachments.iterator();
-          while (it.hasNext()) {
-            Attachment file = it.next();
-            Node nodeFile = null;
-            if (!nodeMsg.hasNode(file.getName())) nodeFile = nodeMsg.addNode(file.getName(), Utils.NT_FILE);
-            else nodeFile = nodeMsg.getNode(file.getName());
-            Node nodeContent = null;
-            if (!nodeFile.hasNode(Utils.JCR_CONTENT)) nodeContent = nodeFile.addNode(Utils.JCR_CONTENT, Utils.NT_RESOURCE);
-            else nodeContent = nodeFile.getNode(Utils.JCR_CONTENT);
-            nodeContent.setProperty(Utils.JCR_MIMETYPE, file.getMimeType());
-            nodeContent.setProperty(Utils.JCR_DATA, file.getInputStream());
-            nodeContent.setProperty(Utils.JCR_LASTMODIFIED, Calendar.getInstance().getTimeInMillis());
-            nodeMsg.setProperty(Utils.EXO_HASATTACH, true);
-          }
+      List<Attachment> attachments = message.getAttachments();
+      if (!isNew) {
+        NodeIterator nit = nodeMsg.getNodes() ;
+        while(nit.hasNext()) {
+          Node attNode = nit.nextNode() ;
+          try {
+            attNode.remove() ;
+          } catch(PathNotFoundException e) { }
+        }
+        nodeMsg.setProperty(Utils.EXO_HASATTACH, false);
+      }
+      if(attachments != null && attachments.size() > 0) {
+        Iterator<Attachment> it = attachments.iterator();
+        while (it.hasNext()) {
+          Attachment file = it.next();
+          Node nodeFile = null;
+          if (!nodeMsg.hasNode(file.getName())) nodeFile = nodeMsg.addNode(file.getName(), Utils.NT_FILE);
+          else nodeFile = nodeMsg.getNode(file.getName());
+          Node nodeContent = null;
+          if (!nodeFile.hasNode(Utils.JCR_CONTENT)) nodeContent = nodeFile.addNode(Utils.JCR_CONTENT, Utils.NT_RESOURCE);
+          else nodeContent = nodeFile.getNode(Utils.JCR_CONTENT);
+          nodeContent.setProperty(Utils.JCR_MIMETYPE, file.getMimeType());
+          nodeContent.setProperty(Utils.JCR_DATA, file.getInputStream());
+          nodeContent.setProperty(Utils.JCR_LASTMODIFIED, Calendar.getInstance().getTimeInMillis());
+          nodeMsg.setProperty(Utils.EXO_HASATTACH, true);
         }
       }
       
