@@ -281,7 +281,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           message.setFolders(new String[]{ Utils.createFolderId(accId, Utils.FD_SENT, false) }) ;
         }
         message.setReplyTo(message.getMessageTo()) ;
-        mailSvr.saveMessage(SessionProviderFactory.createSystemProvider(), username, accId, message.getPath(), message) ;  
+        mailSvr.saveMessage(SessionProviderFactory.createSystemProvider(), username, accId, message.getPath(), message, true) ;  
         
 
         uiChildPopup.deActivate() ;

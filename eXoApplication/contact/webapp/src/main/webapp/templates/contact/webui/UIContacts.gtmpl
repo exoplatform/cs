@@ -490,25 +490,9 @@
 		<div class="UIAddressPageList">
 						<div class="ContactIteratorContainer">
 	  					<div class="RightPageIteratorBlock">
-	  						
-	  						<% if (uicomponent.isPrintForm()) { 
-	  								 int size = uicomponent.getContacts().length ;
-	  								 int end ;
-	  								 if (size < 10) end = size ;
-	  								 else end = 10 ;
-		  							 contactRange = _ctx.appRes(uicomponent.getName() + ".label.contacts") + "&nbsp;" + "1" + " - " + end + "&nbsp;" +_ctx.appRes(uicomponent.getName() + ".label.of") + "&nbsp;" + size ;
-	  							
-	  						 %>
-	  							<a href="<%=uicomponent.event("FirstPage")%>" title="<%=_ctx.appRes(uicomponent.getName() + ".label.firstPage")%>" class="$cssPreviousPage FirstPageArrow"/></a>        
-	  						<a href="<%=uicomponent.event("PreviousPage")%>" title="<%=_ctx.appRes(uicomponent.getName() + ".label.previousPage")%>" class="$cssPreviousPage PreviousPageArrow"></a>
-								<div class="Number">$contactRange</div>
-	  				 		<a href="<%=uicomponent.event("NextPage")%>" title="<%=_ctx.appRes(uicomponent.getName() + ".label.nextPage")%>" class="$cssNextPage NextPageArrow"/></a>
-	 				  		<a href="<%=uicomponent.event("LastPage")%>" title="<%=_ctx.appRes(uicomponent.getName() + ".label.lastPage")%>" class="$cssNextPage LastPageArrow"></a>
-						    <div style="clear: left;"><span></span></div>
 	  						<% 
-	  							} else {	
+	  							if (!uicomponent.isPrintForm()) {	
 	  						 %>
-	  						<% /* delete <span> to fix bug print icon - 531 */ %>
 	  						<a href="<%=uicomponent.event("FirstPage")%>" title="<%=_ctx.appRes(uicomponent.getName() + ".label.firstPage")%>" class="$cssPreviousPage FirstPageArrow"/><span></span></a>        
 	  						<a href="<%=uicomponent.event("PreviousPage")%>" title="<%=_ctx.appRes(uicomponent.getName() + ".label.previousPage")%>" class="$cssPreviousPage PreviousPageArrow"><span></span></a>
 								<div class="Number">$contactRange</div>

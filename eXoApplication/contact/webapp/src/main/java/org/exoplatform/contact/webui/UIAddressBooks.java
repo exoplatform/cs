@@ -572,7 +572,10 @@ public class UIAddressBooks extends UIComponent {
           contacts = service.getPublicContactsByAddressBook(provide, groupId).getAll() ;
         }  
         LinkedHashMap<String, Contact> contactMap = new LinkedHashMap<String, Contact> () ;
-        for (Contact contact : contacts) contactMap.put(contact.getId(), contact) ;
+        for (int index = 0; index < 10; index ++ ) {
+          Contact contact = contacts.get(index) ;
+          if (contact != null) contactMap.put(contact.getId(), contact) ;
+        }
         uiContacts.setContactMap(contactMap) ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(workingContainer) ;

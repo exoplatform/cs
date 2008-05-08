@@ -215,7 +215,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       List<Contact> contactList = pageList_.getPage(pageList_.getCurrentPage(),ContactUtils.getCurrentUser()) ;
       if(contactList.size() == 0 && pageList_.getCurrentPage() > 1) {
         contactList = pageList_.getPage(pageList_.getCurrentPage() - 1,ContactUtils.getCurrentUser()) ;
-      }        
+      }
       for(Contact contact : contactList) {
         UIFormCheckBoxInput<Boolean> checkbox = new UIFormCheckBoxInput<Boolean>(contact.getId(),contact.getId(), false) ;
         addUIFormInput(checkbox);
@@ -588,12 +588,12 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIContacts uiContacts = event.getSource();
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
       List<String> contactIds = new ArrayList<String>();
+      UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
       if (!ContactUtils.isEmpty(contactId) && !contactId.toString().equals("null")) {
         contactIds.add(contactId) ;
       } else {
         contactIds = uiContacts.getCheckedContacts() ;
-        if (contactIds.size() == 0) {
-          UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
+        if (contactIds.size() == 0) {          
           uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-toDelete", null,
               ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -603,7 +603,6 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       for (String id : contactIds) {
         Contact contact = uiContacts.contactMap.get(id) ;
         if (contact.getContactType().equals(JCRDataStorage.PRIVATE) && contact.isOwner()) {
-          UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-delete-defaultContact", null
               , ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
@@ -611,7 +610,6 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           return ;
         } else if (contact.getContactType().equals(JCRDataStorage.PUBLIC) ||(contact.getContactType().equals
             (JCRDataStorage.SHARED) && !uiContacts.canDeleteShared(contact.getAddressBook()[0]))) {
-          UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-delete", null
               , ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
@@ -628,12 +626,11 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       for (String id : contactIds) {
         Contact contact = uiContacts.contactMap.get(id) ;    
         if (contact.getContactType().equals(JCRDataStorage.SHARED)) {
-          contactService.removeUserShareContact(SessionProviderFactory.createSystemProvider()
-              , contact.getPath(), contactId, username) ;
-          removedContacts.add(contact) ;  
+            contactService.removeUserShareContact(SessionProviderFactory.createSystemProvider()
+                , contact.getPath(), id, username) ;
+            removedContacts.add(contact) ;
         }
-      }
-      
+      }      
       if (!uiContacts.isSelectSharedContacts)
         removedContacts = contactService.removeContacts(SessionProviderFactory.createSessionProvider(), username, contactIds) ;
       if (ContactUtils.isEmpty(uiContacts.selectedGroup) && ContactUtils.isEmpty(uiContacts.selectedTag_)) {
