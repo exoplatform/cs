@@ -437,7 +437,7 @@
               </td>
               <td style="padding: 0px auto;">
                 <% 
-                  if (msg.getAttachments().size() > 0) {
+                  if (msg.hasAttachment()) {
                 %>
                 <a href="$actionLink"><div class="AttachmentIcon"><span></span></div></a>
                 <%}%>

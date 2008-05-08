@@ -252,7 +252,12 @@ public class UIMessageList extends UIForm {
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
 
       Message msg = uiMessageList.messageList_.get(msgId);
+      
       if (msg != null) {
+        if (msg.hasAttachment()) {
+          MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
+          msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, accountId, msg) ;
+        }
         if (msg.isUnread()) {
           List<Message> msgIds  = new ArrayList<Message>();
           msgIds.add(msg);
@@ -784,6 +789,12 @@ public class UIMessageList extends UIForm {
       if (msgId != null) message = uiMessageList.messageList_.get(msgId) ;
       else  message = uiMessageList.getCheckedMessage().get(0);
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+      if (message != null && message.hasAttachment()) {
+        String username = MailUtils.getCurrentUser();
+        String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+        MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
+        message = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, accountId, message) ;
+      }
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
       UIPrintPreview uiPrintPreview = uiPopup.activate(UIPrintPreview.class, 700) ;
       uiPrintPreview.setPrintMessage(message) ;
@@ -1023,6 +1034,11 @@ public class UIMessageList extends UIForm {
       uiPopup.activate(uiExportForm, 600, 0, true);
       try {
         Message msg = uiMessageList.messageList_.get(msgId);
+        if (msg != null && msg.hasAttachment()) {
+          String username = uiPortlet.getCurrentUser() ;
+          MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
+          msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, accId, msg) ;
+        }
         uiExportForm.setExportMessage(msg);
       } catch (Exception e) { }
 

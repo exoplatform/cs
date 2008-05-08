@@ -811,4 +811,8 @@ public class MailServiceImpl implements MailService{
     }
     return account ;
   }
+  
+  public Message loadAttachments(SessionProvider sProvider, String username, String accountId, Message msg) throws Exception {
+    return storage_.loadAttachments(sProvider, username, accountId, msg) ;
+  }
 }

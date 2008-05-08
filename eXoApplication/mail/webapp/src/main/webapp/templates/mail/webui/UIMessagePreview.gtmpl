@@ -91,7 +91,7 @@
                         </table>
                        </td>
                       <td >
-                        <% if (msg.getAttachments().size() > 0) { %>
+                        <% if (msg.hasAttachment() && msg.getAttachments() != null && msg.getAttachments().size() > 0) { %>
                         <div class="AttachmentIcon"><span></span></div>
                         <% } %>
                       </td>
@@ -354,7 +354,7 @@
                   </div> 
                 <%}%>
                 <%
-                  if (msg.getAttachments().size() > 0) {
+                  if (msg.hasAttachment() && msg.getAttachments() != null && msg.getAttachments().size() > 0) {
                 %>
                   <div class="AttachmentContainer">
     						  	<div class="AttachmentTitle"><%=_ctx.appRes(uicomponent.id+ ".label.attachments") %>:</div>            

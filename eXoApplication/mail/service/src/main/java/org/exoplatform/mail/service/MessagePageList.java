@@ -200,6 +200,9 @@ public class MessagePageList extends JCRPageList {
       msg.setSize(messageNode.getProperty(Utils.EXO_SIZE).getLong());
     } catch(Exception e) { }
     try { 
+      msg.setHasAttachment(messageNode.getProperty(Utils.EXO_HASATTACH).getBoolean());
+    } catch(Exception e) { }
+    try { 
       msg.setHasStar(messageNode.getProperty(Utils.EXO_STAR).getBoolean());
     } catch(Exception e) { }
     try { 
@@ -236,22 +239,6 @@ public class MessagePageList extends JCRPageList {
         if (index != -1) msg.setHeader(property.substring(0, index), property.substring(index+1));
       }
     } catch(Exception e) { }
-    
-    NodeIterator msgAttachmentIt = messageNode.getNodes();
-    List<Attachment> attachments = new ArrayList<Attachment>();
-    while (msgAttachmentIt.hasNext()) {
-      Node node = msgAttachmentIt.nextNode();
-      if (node.isNodeType(Utils.NT_FILE)) {
-        JCRMessageAttachment file = new JCRMessageAttachment();
-        file.setId(node.getPath());
-        file.setMimeType(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_MIMETYPE).getString());
-        file.setName(node.getName());
-        file.setWorkspace(node.getSession().getWorkspace().getName()) ;
-        file.setSize(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_DATA).getLength());
-        attachments.add(file);
-      }
-    }
-    msg.setAttachements(attachments);
     
     GregorianCalendar cal = new GregorianCalendar();
     try {

@@ -42,6 +42,7 @@ public class Message extends MessageHeader {
   private String contentType;
   private boolean isUnread = true ;
   private long size ;
+  private boolean hasAttach = false ;
   private boolean hasStar = false;
   private ServerConfiguration serverConfiguration;
   
@@ -114,6 +115,9 @@ public class Message extends MessageHeader {
   
   public long getSize() { return size; }
   public void setSize(long size) { this.size = size; }
+  
+  public boolean hasAttachment() { return hasAttach ; }
+  public void setHasAttachment(boolean hasAttach) { this.hasAttach = hasAttach ; } 
   
   public boolean hasStar() { return hasStar; }
   public void setHasStar(boolean star) { hasStar = star; }

@@ -362,4 +362,6 @@ public interface MailService {
   public List<Message> getReferencedMessages(SessionProvider sProvider, String username, String accountId, String msgPath) throws Exception ;
   
   public Account getDefaultAccount(SessionProvider sProvider, String username) throws Exception ;
+  
+  public Message loadAttachments(SessionProvider sProvider, String username, String accountId, Message msg) throws Exception ;
 }

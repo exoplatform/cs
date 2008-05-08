@@ -62,7 +62,7 @@
       } %>
     </div>
     <% 
-      if (msg.getAttachments().size() > 0) {
+      if (msg.hasAttachment() && msg.getAttachments() != null && msg.getAttachments().size() > 0) {
     %>
       <div class="PrintAttachments"  >
         <div class="AttachmentTitle"><%=_ctx.appRes(uicomponent.id+ ".label.attachments") %>:</div>

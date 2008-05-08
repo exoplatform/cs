@@ -291,6 +291,9 @@ public class JCRDataStorage{
     try {
       msg.setSize(messageNode.getProperty(Utils.EXO_SIZE).getLong());
     } catch(Exception e) { }
+    try { 
+      msg.setHasAttachment(messageNode.getProperty(Utils.EXO_HASATTACH).getBoolean());
+    } catch(Exception e) { }
     try {
       msg.setHasStar(messageNode.getProperty(Utils.EXO_STAR).getBoolean());
     } catch(Exception e) { }
@@ -326,23 +329,6 @@ public class JCRDataStorage{
         if (index != -1) msg.setHeader(property.substring(0, index), property.substring(index+1));
       }
     } catch(Exception e) { }
-    
-    NodeIterator msgAttachmentIt = messageNode.getNodes();
-    List<Attachment> attachments = new ArrayList<Attachment>();
-    while (msgAttachmentIt.hasNext()) {
-      Node node = msgAttachmentIt.nextNode();
-      if (node.isNodeType(Utils.NT_FILE)) {
-        JCRMessageAttachment file = new JCRMessageAttachment();
-        file.setId(node.getPath());
-        file.setMimeType(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_MIMETYPE).getString());
-        file.setName(node.getName());
-        file.setWorkspace(node.getSession().getWorkspace().getName()) ;
-        file.setSize(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_DATA).getLength());
-        //file.setInputStream(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_DATA).getStream());
-        attachments.add(file);
-      }
-    }
-    msg.setAttachements(attachments);
     
     GregorianCalendar cal = new GregorianCalendar();
     try {
@@ -697,9 +683,8 @@ public class JCRDataStorage{
   }
   
   private void increaseFolderItem(SessionProvider sProvider, String username, String accId, String folderId) throws Exception {
-    Node folderHome = getFolderHome(sProvider, username, accId) ;
     try { 
-      Node node = folderHome.getNode(folderId);
+      Node node = getFolderNodeById(sProvider, username, accId, folderId) ;
       node.setProperty(Utils.EXO_UNREADMESSAGES, node.getProperty(Utils.EXO_UNREADMESSAGES).getLong() + 1) ;
       node.setProperty(Utils.EXO_TOTALMESSAGE , node.getProperty(Utils.EXO_TOTALMESSAGE).getLong() + 1) ;
       node.save();
@@ -1548,5 +1533,28 @@ public class JCRDataStorage{
       msgList.add(getMessage(msgNode)) ;
     }
     return msgList ;
+  }
+  
+  public Message loadAttachments(SessionProvider sProvider, String username, String accountId, Message msg) throws Exception {
+    try {
+      Node messageNode = getDateStoreNode(sProvider, username, accountId, msg.getReceivedDate()).getNode(msg.getId());
+      NodeIterator msgAttachmentIt = messageNode.getNodes();
+      List<Attachment> attachments = new ArrayList<Attachment>();
+      while (msgAttachmentIt.hasNext()) {
+        Node node = msgAttachmentIt.nextNode();
+        if (node.isNodeType(Utils.NT_FILE)) {
+          JCRMessageAttachment file = new JCRMessageAttachment();
+          file.setId(node.getPath());
+          file.setMimeType(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_MIMETYPE).getString());
+          file.setName(node.getName());
+          file.setWorkspace(node.getSession().getWorkspace().getName()) ;
+          file.setSize(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_DATA).getLength());
+          attachments.add(file);
+        }
+      }
+      msg.setAttachements(attachments);
+    } catch(PathNotFoundException e) {}
+    
+    return msg ;
   }
 }

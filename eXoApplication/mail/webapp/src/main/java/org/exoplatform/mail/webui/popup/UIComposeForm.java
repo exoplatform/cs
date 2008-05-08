@@ -224,9 +224,13 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           setFieldSubjectValue(msg.getSubject());
           setFieldToValue(msg.getMessageTo());
           setFieldContentValue(formatContent(msg));
-          for (Attachment att : msg.getAttachments()) {
-            attachments_.add(att);
-            refreshUploadFileList();
+          if (msg != null && msg.hasAttachment()) {
+            String username = MailUtils.getCurrentUser();
+            msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
+            for (Attachment att : msg.getAttachments()) {
+              attachments_.add(att);
+              refreshUploadFileList();
+            }
           }
           break;
         case MESSAGE_REPLY :
@@ -235,9 +239,15 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           String content = getReplyContent(msg);   
           setFieldContentValue(content);
           if (mailSetting.replyWithAttach()) {
-            for (Attachment att : msg.getAttachments()) {
-              attachments_.add(att);
-              refreshUploadFileList();
+            if (msg != null && msg.hasAttachment()) {
+              if (msg.getAttachments() == null) {
+                String username = MailUtils.getCurrentUser();
+                msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
+              }
+              for (Attachment att : msg.getAttachments()) {
+                attachments_.add(att);
+                refreshUploadFileList();
+              }
             }
           }
           break ;
@@ -250,9 +260,15 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           String replyContent = getReplyContent(msg);
           setFieldContentValue(replyContent);
           if (mailSetting.replyWithAttach()) {
-            for (Attachment att : msg.getAttachments()) {
-              attachments_.add(att);
-              refreshUploadFileList();
+            if (msg != null && msg.hasAttachment()) {
+              if (msg.getAttachments() == null) {
+                String username = MailUtils.getCurrentUser();
+                msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
+              }
+              for (Attachment att : msg.getAttachments()) {
+                attachments_.add(att);
+                refreshUploadFileList();
+              }
             }
           }
           break;
@@ -266,9 +282,15 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           setFieldContentValue(forwardedText);
           setFieldToValue("");
           if (mailSetting.forwardWithAtt()) {
-            for (Attachment att : msg.getAttachments()) {
-              attachments_.add(att);
-              refreshUploadFileList();
+            if (msg != null && msg.hasAttachment()) {
+              if (msg.getAttachments() == null) {
+                String username = MailUtils.getCurrentUser();
+                msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
+              }
+              for (Attachment att : msg.getAttachments()) {
+                attachments_.add(att);
+                refreshUploadFileList();
+              }
             }
           }
           break ;
@@ -463,7 +485,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       }
       
       try {
-
         mailSvr.sendMessage(SessionProviderFactory.createSystemProvider(), usename, message) ;
       } catch(Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-error", null)) ;
