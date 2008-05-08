@@ -38,7 +38,7 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
  */
 
 @ComponentConfig(
-    template = "app:/templates/mail/webui/UIEventReminderTab.gtmpl"
+    template = "app:/templates/mail/webui/popup/UIEventReminderTab.gtmpl"
 ) 
 public class UIEventReminderTab extends UIFormInputWithActions {
 

@@ -53,7 +53,7 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template =  "app:/templates/mail/webui/UIAccountSetting.gtmpl",
+    template =  "app:/templates/mail/webui/popup/UIAccountSetting.gtmpl",
     events = {
         @EventConfig(listeners = UIAccountSetting.SelectAccountActionListener.class),
         @EventConfig(listeners = UIAccountSetting.AddNewAccountActionListener.class),

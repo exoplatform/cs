@@ -46,7 +46,7 @@ import org.exoplatform.webui.form.UIFormSelectBox;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/mail/webui/UIMailSettings.gtmpl",
+    template = "app:/templates/mail/webui/popup/UIMailSettings.gtmpl",
     events = {
         @EventConfig(listeners = UIMailSettings.SaveActionListener.class),
         @EventConfig(listeners = UIMailSettings.CancelActionListener.class)

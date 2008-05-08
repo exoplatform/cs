@@ -45,7 +45,7 @@ import org.exoplatform.webui.form.UIForm;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/mail/webui/UIMoveMessageForm.gtmpl",
+    template = "app:/templates/mail/webui/popup/UIMoveMessageForm.gtmpl",
     events = {
       @EventConfig(listeners = UIMoveMessageForm.SaveActionListener.class), 
       @EventConfig(listeners = UIMoveMessageForm.CancelActionListener.class)

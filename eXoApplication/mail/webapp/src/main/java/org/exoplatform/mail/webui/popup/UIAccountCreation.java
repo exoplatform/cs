@@ -54,7 +54,7 @@ import org.exoplatform.webui.form.UIFormTabPane;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template =  "app:/templates/mail/webui/UIAccountCreation.gtmpl",
+    template =  "app:/templates/mail/webui/popup/UIAccountCreation.gtmpl",
     events = {
       @EventConfig(listeners = UIAccountCreation.ViewStepActionListener.class),
       @EventConfig(listeners = UIAccountCreation.ChangeServerTypeActionListener.class),

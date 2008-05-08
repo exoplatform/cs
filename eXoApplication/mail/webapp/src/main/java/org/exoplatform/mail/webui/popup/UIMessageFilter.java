@@ -46,7 +46,7 @@ import org.exoplatform.webui.form.UIForm;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template =  "app:/templates/mail/webui/UIMessageFilter.gtmpl",
+    template =  "app:/templates/mail/webui/popup/UIMessageFilter.gtmpl",
     events = {
       @EventConfig(listeners = UIMessageFilter.SelectFilterActionListener.class), 
       @EventConfig(listeners = UIMessageFilter.AddFilterActionListener.class), 

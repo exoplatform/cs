@@ -53,7 +53,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template =  "app:/templates/mail/webui/UIAddMessageFilter.gtmpl",
+    template =  "app:/templates/mail/webui/popup/UIAddMessageFilter.gtmpl",
     events = {
       @EventConfig(listeners = UIAddMessageFilter.SaveActionListener.class), 
       @EventConfig(listeners = UIAddMessageFilter.CancelActionListener.class)

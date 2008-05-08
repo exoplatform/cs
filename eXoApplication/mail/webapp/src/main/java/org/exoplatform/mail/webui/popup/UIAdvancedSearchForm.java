@@ -54,7 +54,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template =  "app:/templates/mail/webui/UIAdvancedSearchForm.gtmpl",
+    template =  "app:/templates/mail/webui/popup/UIAdvancedSearchForm.gtmpl",
     events = {
       @EventConfig(listeners = UIAdvancedSearchForm.SearchActionListener.class), 
       @EventConfig(listeners = UIAdvancedSearchForm.CancelActionListener.class)

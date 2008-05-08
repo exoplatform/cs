@@ -67,7 +67,7 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/mail/webui/UIComposeForm.gtmpl",
+    template = "app:/templates/mail/webui/popup/UIComposeForm.gtmpl",
     events = {
       @EventConfig(listeners = UIComposeForm.SendActionListener.class),      
       @EventConfig(listeners = UIComposeForm.SaveDraftActionListener.class),

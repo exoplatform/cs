@@ -58,7 +58,7 @@ import org.exoplatform.webui.form.validator.EmailAddressValidator;
 
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class, 
-    template = "app:/templates/mail/webui/UIAddContactForm.gtmpl", 
+    template = "app:/templates/mail/webui/popup/UIAddContactForm.gtmpl", 
     events = {
       @EventConfig(listeners = UIAddContactForm.AddGroupActionListener.class),
       @EventConfig(listeners = UIAddContactForm.ChangeImageActionListener.class),

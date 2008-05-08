@@ -45,7 +45,7 @@ import org.exoplatform.webui.form.UIFormSelectBox;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template =  "app:/templates/mail/webui/UIAddressBookForm.gtmpl",
+    template =  "app:/templates/mail/webui/popup/UIAddressBookForm.gtmpl",
     events = {  
     	@EventConfig(listeners = UIAddressBookForm.AddNewGroupActionListener.class),
       @EventConfig(listeners = UIAddressBookForm.AddContactActionListener.class),
