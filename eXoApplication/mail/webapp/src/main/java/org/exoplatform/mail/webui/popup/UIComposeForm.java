@@ -495,17 +495,23 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       
       try {
         MailSetting setting = mailSvr.getMailSetting(SessionProviderFactory.createSystemProvider(), usename);
-        if (setting.saveMessageInSent()) {
-          message.setFolders(new String[]{ Utils.createFolderId(accountId, Utils.FD_SENT, false) }) ;
-        }
+        boolean isSaved = setting.saveMessageInSent() ; 
         if (!uiForm.fromDrafts()) {
-          message.setReplyTo(message.getMessageTo()) ;
-          mailSvr.saveMessage(SessionProviderFactory.createSystemProvider(), usename, accountId, uiForm.parentPath_, message) ;  
+          if (isSaved) {
+            message.setReplyTo(message.getMessageTo()) ;
+            message.setFolders(new String[]{ Utils.createFolderId(accountId, Utils.FD_SENT, false) }) ;
+            mailSvr.saveMessage(SessionProviderFactory.createSystemProvider(), usename, accountId, uiForm.parentPath_, message, true) ;
+          }
         } else {
           Folder drafts = mailSvr.getFolder(SessionProviderFactory.createSystemProvider(), usename, accountId, Utils.createFolderId(accountId, Utils.FD_DRAFTS, false));
+          if (isSaved) {
+            message.setFolders(new String[]{ Utils.createFolderId(accountId, Utils.FD_SENT, false) }) ;
+            mailSvr.saveMessage(SessionProviderFactory.createSystemProvider(), usename, accountId, uiForm.parentPath_, message, false) ;
+          } else {
+            mailSvr.removeMessage(SessionProviderFactory.createSystemProvider(), usename, accountId, message);
+          }
           drafts.setTotalMessage(drafts.getTotalMessage() - 1);
           mailSvr.saveFolder(SessionProviderFactory.createSystemProvider(), usename, accountId, drafts);
-          mailSvr.removeMessage(SessionProviderFactory.createSystemProvider(), usename, accountId, message);
         }
         UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
         uiMessageList.updateList();
@@ -537,7 +543,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         String draftFolderId = Utils.createFolderId(accountId, Utils.FD_DRAFTS, false) ;
         message.setFolders(new String[]{ draftFolderId }) ;
         if (!uiForm.fromDrafts()) {
-          mailSvr.saveMessage(SessionProviderFactory.createSystemProvider(), usename, accountId, uiForm.parentPath_, message) ;
+          mailSvr.saveMessage(SessionProviderFactory.createSystemProvider(), usename, accountId, uiForm.parentPath_, message, true) ;
           Folder drafts = mailSvr.getFolder(SessionProviderFactory.createSystemProvider(), usename, accountId, draftFolderId);
           drafts.setTotalMessage(drafts.getTotalMessage() + 1);
           mailSvr.saveFolder(SessionProviderFactory.createSystemProvider(), usename, accountId, drafts);

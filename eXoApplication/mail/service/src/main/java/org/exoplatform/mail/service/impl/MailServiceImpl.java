@@ -191,8 +191,8 @@ public class MailServiceImpl implements MailService{
     return storage_.getMessagePageList(sProvider, username, filter);
   }
   
-  public void saveMessage(SessionProvider sProvider, String username, String accountId, String targetMsgPath, Message message) throws Exception {
-    storage_.saveMessage(sProvider, username, accountId, targetMsgPath, message) ;
+  public void saveMessage(SessionProvider sProvider, String username, String accountId, String targetMsgPath, Message message, boolean isNew) throws Exception {
+    storage_.saveMessage(sProvider, username, accountId, targetMsgPath, message, isNew) ;
   }
   
   public List<Message> getMessagesByTag(SessionProvider sProvider, String username, String accountId, String tagId) throws Exception {

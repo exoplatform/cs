@@ -485,8 +485,8 @@ public class JCRDataStorage{
     }
   }
   
-  public void saveMessage(SessionProvider sProvider, String username, String accountId, String targetMsgPath, Message message) throws Exception {
-    Node msgNode = saveMessage(sProvider, username, accountId, message, true) ;
+  public void saveMessage(SessionProvider sProvider, String username, String accountId, String targetMsgPath, Message message, boolean isNew) throws Exception {
+    Node msgNode = saveMessage(sProvider, username, accountId, message, isNew) ;
     if (targetMsgPath != null && !targetMsgPath.equals("")) {
       Node mailHome = getMailHomeNode(sProvider, username) ;
       Node targetNode = (Node) mailHome.getSession().getItem(targetMsgPath) ;
