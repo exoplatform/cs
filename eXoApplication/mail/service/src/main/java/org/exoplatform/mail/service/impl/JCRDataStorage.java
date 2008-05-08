@@ -642,7 +642,8 @@ public class JCRDataStorage{
         for (int i = 0; i < filterList.size(); i ++) {
           filter = getFilterById(sProvider, username, accId, filterList.get(i)) ;
           folderList.add(filter.getApplyFolder()) ;
-          tagList.add(filter.getApplyTag()) ;
+          String tagId = filter.getApplyTag() ;
+          if (tagId != null) tagList.add(tagId) ;
         }
         folderIds = folderList.toArray(new String[] {}) ;
       }
