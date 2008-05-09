@@ -689,10 +689,10 @@ public class UIMessageList extends UIForm {
       String trashFolderId = Utils.createFolderId(accountId, Utils.FD_TRASH, false) ;
       String selectedFolderId = uiMessageList.getSelectedFolderId() ;
       if (selectedFolderId != null && selectedFolderId.equals(trashFolderId)) { 
-        mailSrv.removeMessage(SessionProviderFactory.createSystemProvider(), username, accountId, appliedMsgList);
+        mailSrv.removeMessages(SessionProviderFactory.createSystemProvider(), username, accountId, appliedMsgList, true);
       } else {
         for (Message message : appliedMsgList)
-          mailSrv.moveMessages(SessionProviderFactory.createSystemProvider(), username, accountId, message, message.getFolders()[0], trashFolderId);
+          mailSrv.moveMessage(SessionProviderFactory.createSystemProvider(), username, accountId, message, message.getFolders()[0], trashFolderId);
       }
 
       if (msgPreview != null && appliedMsgList.contains(msgPreview)) uiMessagePreview.setMessage(null);
@@ -727,7 +727,7 @@ public class UIMessageList extends UIForm {
       SpamFilter spamFilter = mailSrv.getSpamFilter(SessionProviderFactory.createSystemProvider(), username, accountId);
 
       for(Message message: checkedMessageList) {
-        mailSrv.moveMessages(SessionProviderFactory.createSystemProvider(), username, accountId, message, message.getFolders()[0], Utils.createFolderId(accountId, Utils.FD_SPAM, false));
+        mailSrv.moveMessage(SessionProviderFactory.createSystemProvider(), username, accountId, message, message.getFolders()[0], Utils.createFolderId(accountId, Utils.FD_SPAM, false));
         spamFilter.reportSpam(message);
       }       
       mailSrv.saveSpamFilter(SessionProviderFactory.createSystemProvider(), username, accountId, spamFilter);
@@ -762,7 +762,7 @@ public class UIMessageList extends UIForm {
       SpamFilter spamFilter = mailSrv.getSpamFilter(SessionProviderFactory.createSystemProvider(), username, accountId);
 
       for(Message message: checkedMessageList) {
-        mailSrv.moveMessages(SessionProviderFactory.createSystemProvider(), username, accountId, message, message.getFolders()[0], Utils.createFolderId(accountId, Utils.FD_INBOX, false));
+        mailSrv.moveMessage(SessionProviderFactory.createSystemProvider(), username, accountId, message, message.getFolders()[0], Utils.createFolderId(accountId, Utils.FD_INBOX, false));
         spamFilter.notSpam(message);
       }       
       mailSrv.saveSpamFilter(SessionProviderFactory.createSystemProvider(), username, accountId, spamFilter);
@@ -942,16 +942,22 @@ public class UIMessageList extends UIForm {
       MailService mailSrv = MailUtils.getMailService();
       String username = MailUtils.getCurrentUser();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+      UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class) ;
       UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class);
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       List<Message> appliedMsgList = uiMessageList.getCheckedMessage();
-      for(Message message : appliedMsgList) {
-        mailSrv.moveMessages(SessionProviderFactory.createSystemProvider(), username, accountId, message, message.getFolders()[0], folderId);
+      String fromFolderId = uiFolderContainer.getSelectedFolder() ;
+      if (fromFolderId != null) {
+        mailSrv.moveMessages(SessionProviderFactory.createSystemProvider(), username, accountId, appliedMsgList, fromFolderId, folderId) ;
+      } else {
+        for (Message message : appliedMsgList) {
+          mailSrv.moveMessage(SessionProviderFactory.createSystemProvider(), username, accountId, message, message.getFolders()[0], folderId);
+        }
       }       
       uiMessageList.updateList();     
       Message msgPreview = uiMsgPreview.getMessage();
       if (msgPreview != null && appliedMsgList.contains(msgPreview)) uiMsgPreview.setMessage(null);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));  
     }
   }

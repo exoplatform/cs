@@ -366,14 +366,62 @@ public class JCRDataStorage{
     } catch(PathNotFoundException e) {}
   }
 
-  public void removeMessage(SessionProvider sProvider, String username, String accountId, List<Message> messages) throws Exception {
-    //  loops on the message names array, and removes each message
+  public void removeMessages(SessionProvider sProvider, String username, String accountId, List<Message> messages, boolean moveReference) throws Exception {
+    Node msgHome = getMessageHome(sProvider, username, accountId);
     for (Message message : messages) {
-      removeMessage(sProvider, username, accountId, message);
+      Node msgStoreNode = getDateStoreNode(sProvider, username, accountId, message.getReceivedDate());
+      try {
+        Node node = msgStoreNode.getNode(message.getId()) ;
+        if (moveReference) moveReference(node) ;
+        NodeType[] nts = node.getMixinNodeTypes() ;
+        for (int i = 0 ;i < nts.length; i++) {
+          node.removeMixin(nts[i].getName()) ;
+        }
+        node.remove() ;
+      } catch(PathNotFoundException e) {}
     }
+    msgHome.getSession().save();
   }
   
-  public void moveMessages(SessionProvider sProvider, String username, String accountId, Message msg, String currentFolderId, String destFolderId) throws Exception {
+  public void moveMessages(SessionProvider sProvider, String username, String accountId, List<Message> msgList, String currentFolderId, String destFolderId) throws Exception {
+    Node messageHome = getMessageHome(sProvider, username, accountId);
+    Node currentFolderNode = getFolderNodeById(sProvider, username, accountId, currentFolderId);
+    Node destFolderNode = getFolderNodeById(sProvider, username, accountId, destFolderId);
+    int unreadNumber = 0 ;
+    int totalMessage = 0 ;
+    for (Message msg : msgList) {
+      try {
+        Node msgNode = (Node)messageHome.getSession().getItem(msg.getPath()) ;
+        moveReference(msgNode) ;
+        if (msgNode.hasProperty(Utils.EXO_FOLDERS)) {
+          if (msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean()) unreadNumber++ ;
+          Value[] propFolders = msgNode.getProperty(Utils.EXO_FOLDERS).getValues();
+          String[] folderIds = new String[propFolders.length];
+          for (int i = 0; i < propFolders.length; i++) {
+            String folderId = propFolders[i].getString() ;
+            if (currentFolderId.equals(folderId)) folderIds[i] = destFolderId ;
+            else folderIds[i] = folderId;
+          }
+          msgNode.setProperty(Utils.EXO_FOLDERS, folderIds);
+          msgNode.save();
+          totalMessage++ ;
+        }
+      } catch(Exception e) {}
+    }
+    try {
+      currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() - unreadNumber));
+      destFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (destFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() + unreadNumber));
+    } catch(Exception e) {}
+    
+    try {
+      currentFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (currentFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() - totalMessage));
+      destFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (destFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() + totalMessage));
+    } catch(Exception e) {}
+    currentFolderNode.save();
+    destFolderNode.save();
+  }
+  
+  public void moveMessage(SessionProvider sProvider, String username, String accountId, Message msg, String currentFolderId, String destFolderId) throws Exception {
     Node messageHome = getMessageHome(sProvider, username, accountId);
     Node msgNode = (Node)messageHome.getSession().getItem(msg.getPath()) ;
     moveReference(msgNode) ;
@@ -1402,7 +1450,7 @@ public class JCRDataStorage{
         if (!Utils.isEmptyField(applyFolder) && (getFolder(sProvider, username, accountId, applyFolder) != null)) {
           Folder folder = getFolder(sProvider, username, accountId, applyFolder);
           if (folder !=null)
-            moveMessages(sProvider, username, accountId, msg, msg.getFolders()[0], applyFolder);  
+            moveMessage(sProvider, username, accountId, msg, msg.getFolders()[0], applyFolder);  
         }
         if (!Utils.isEmptyField(applyTag)) {
           Tag tag = getTag(sProvider, username, accountId, applyTag);

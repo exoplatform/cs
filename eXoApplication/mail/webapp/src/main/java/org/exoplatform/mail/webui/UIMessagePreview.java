@@ -263,7 +263,7 @@ public class UIMessagePreview extends UIComponent {
 				MailService mailSrv = uiMsgPreview.getApplicationComponent(MailService.class);
 				String username = MailUtils.getCurrentUser();
 				String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-				mailSrv.moveMessages(SessionProviderFactory.createSystemProvider(), username, accountId, msg, msg.getFolders()[0],  Utils.createFolderId(accountId, Utils.FD_TRASH, false));
+				mailSrv.moveMessage(SessionProviderFactory.createSystemProvider(), username, accountId, msg, msg.getFolders()[0],  Utils.createFolderId(accountId, Utils.FD_TRASH, false));
 				uiMsgList.updateList();
 				uiMsgPreview.setMessage(null);
 			}

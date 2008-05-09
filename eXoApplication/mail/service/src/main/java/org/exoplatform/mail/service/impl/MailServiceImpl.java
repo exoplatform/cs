@@ -187,12 +187,16 @@ public class MailServiceImpl implements MailService{
     storage_.removeMessage(sProvider, username, accountId, message);
   }
 
-  public void removeMessage(SessionProvider sProvider, String username,String accountId, List<Message> messages) throws Exception {
-    storage_.removeMessage(sProvider, username, accountId, messages);
+  public void removeMessages(SessionProvider sProvider, String username, String accountId, List<Message> messages, boolean moveReference) throws Exception {
+    storage_.removeMessages(sProvider, username, accountId, messages, moveReference);
   } 
   
-  public void moveMessages(SessionProvider sProvider, String username,String accountId, Message msg, String currentFolderId, String destFolderId) throws Exception {
-    storage_.moveMessages(sProvider, username, accountId, msg, currentFolderId, destFolderId);
+  public void moveMessages(SessionProvider sProvider, String username, String accountId, List<Message> msgList, String currentFolderId, String destFolderId) throws Exception {
+    storage_.moveMessages(sProvider, username, accountId, msgList, currentFolderId, destFolderId) ;
+  }
+  
+  public void moveMessage(SessionProvider sProvider, String username,String accountId, Message msg, String currentFolderId, String destFolderId) throws Exception {
+    storage_.moveMessage(sProvider, username, accountId, msg, currentFolderId, destFolderId);
   }
 
   public MessagePageList getMessagePageList(SessionProvider sProvider, String username, MessageFilter filter) throws Exception {
@@ -761,7 +765,7 @@ public class MailServiceImpl implements MailService{
       if (folder != null && (msg.getFolders()[0] != applyFolder)) {
         Folder appFolder = getFolder(sProvider, username, accountId, applyFolder);
         if (appFolder != null)
-          moveMessages(sProvider, username, accountId, msg, msg.getFolders()[0], applyFolder);
+          moveMessage(sProvider, username, accountId, msg, msg.getFolders()[0], applyFolder);
       }
     }
     if (!Utils.isEmptyField(applyTag)) {

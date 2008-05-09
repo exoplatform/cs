@@ -306,9 +306,11 @@ public interface MailService {
    * @param messageId
    * @throws Exception
    */
-  public void removeMessage(SessionProvider sProvider, String username, String accountId, List<Message> messages) throws Exception ;
+  public void removeMessages(SessionProvider sProvider, String username, String accountId, List<Message> messages, boolean moveReference) throws Exception ;
   
-  public void moveMessages(SessionProvider sProvider, String username,String accountId, Message msg, String currentFolderId, String destFolderId) throws Exception ;
+  public void moveMessages(SessionProvider sProvider, String username, String accountId, List<Message> msgList, String currentFolderId, String destFolderId) throws Exception ;
+  
+  public void moveMessage(SessionProvider sProvider, String username,String accountId, Message msg, String currentFolderId, String destFolderId) throws Exception ;
 
   public void sendMessages(List<Message> msgList, ServerConfiguration serverConfig) throws Exception ;
   

@@ -212,24 +212,25 @@ public class UIFolderContainer extends UIContainer {
   
   static public class EmptyFolderActionListener extends EventListener<UIFolderContainer> {
     public void execute(Event<UIFolderContainer> event) throws Exception {
-      String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIFolderContainer uiFolderContainer = event.getSource() ;
+      String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIMailPortlet uiPortlet = uiFolderContainer.getAncestorOfType(UIMailPortlet.class);
+      UIMessageArea uiMsgArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class);
+      UIMessageList uiMsgList = uiMsgArea.getChild(UIMessageList.class) ;
+      UIMessagePreview uiMsgPreview = uiMsgArea.getChild(UIMessagePreview.class);
+      UIFolderContainer uiFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
+      
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
-      MessageFilter filter = new MessageFilter("");
-      filter.setFolder(new String[] {folderId});
-      filter.setAccountId(accountId);
-      List<Message> messages = mailSrv.getMessages(SessionProviderFactory.createSystemProvider(), username, filter);
-      mailSrv.removeMessage(SessionProviderFactory.createSystemProvider(), username, accountId, messages);
-      UIMessageArea uiMsgArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class);
-      UIMessageList uiMessageList = uiMsgArea.getChild(UIMessageList.class) ;
-      UIMessagePreview uiMsgPreview = uiMsgArea.getChild(UIMessagePreview.class);
-      UIFolderContainer uiFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
-      uiMessageList.updateList();
-      if	(uiMsgPreview.getMessage()!=null){
-      	if (messages.contains(uiMsgPreview.getMessage().getId()))
+      
+      List<Message> msgList = mailSrv.getMessagesByFolder(SessionProviderFactory.createSystemProvider(), username, accountId, folderId) ;
+      mailSrv.removeMessages(SessionProviderFactory.createSystemProvider(), username, accountId, msgList, false);
+      
+      uiMsgList.updateList();
+      Message msgPreview = uiMsgPreview.getMessage() ;
+      if (msgPreview != null) {
+      	if (msgList.contains(msgPreview.getId()))
       		uiMsgPreview.setMessage(null);
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;
@@ -280,7 +281,7 @@ public class UIFolderContainer extends UIContainer {
 	  for (Message msg : msgList) {
 		if (msgPre != null && msg.getId().equals(msgPre.getId())) containPreview = true ;
 		String trashFolderId = Utils.createFolderId(accountId, Utils.FD_TRASH, false) ;
-		 mailSrv.moveMessages(SessionProviderFactory.createSystemProvider(), username, accountId, msg, folderId, trashFolderId) ;
+		 mailSrv.moveMessage(SessionProviderFactory.createSystemProvider(), username, accountId, msg, folderId, trashFolderId) ;
 		}	      		 
 	  uiMsgList.updateList() ;
 	  if (containPreview) uiMsgPreview.setMessage(null);

@@ -83,7 +83,7 @@ public class UISelectFolder extends UIFormInputSet {
   }
   
   public SelectItemOptionGroup addChildOption(String folderPath,  SelectItemOptionGroup optionList) throws Exception {
-    level += "&nbsp;&nbsp;&nbsp;&nbsp;" ;
+    level += "----" ;
     for (Folder cf : getSubFolders(folderPath)) {
       if (cf != null) {
         optionList.addOption(new org.exoplatform.mail.webui.SelectItemOption<String>(level + " " + cf.getLabel(), cf.getId()));

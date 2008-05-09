@@ -84,9 +84,15 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
       String accountId =  uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       String destFolder = uiMoveMessageForm.getChild(UISelectFolder.class).getSelectedValue();
       List<Message> appliedMsgList = uiMessageList.getCheckedMessage() ;
-      for(Message message: uiMoveMessageForm.getMessageList()) {
-         mailSrv.moveMessages(SessionProviderFactory.createSystemProvider(), username, accountId, message, message.getFolders()[0], destFolder);
-      }       
+      UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class) ;
+      String fromFolderId = uiFolderContainer.getSelectedFolder() ;
+      if (fromFolderId != null) {
+        mailSrv.moveMessages(SessionProviderFactory.createSystemProvider(), username, accountId, uiMoveMessageForm.getMessageList(), fromFolderId, destFolder) ;
+      } else {
+        for (Message message : uiMoveMessageForm.getMessageList()) {
+          mailSrv.moveMessage(SessionProviderFactory.createSystemProvider(), username, accountId, message, message.getFolders()[0], destFolder);
+        }
+      }
       uiMessageList.updateList(); 
       Message msgPreview = uiMsgPreview.getMessage();
       if (msgPreview != null && appliedMsgList.contains(msgPreview)) uiMsgPreview.setMessage(null);
