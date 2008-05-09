@@ -52,8 +52,6 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
     var len = actions.length ;
     if(type == "2") {
       for (var i = 0; i < len; i++) {
-      	
-      	// change variable name to "isEnable" ?
         isDisable = DOMUtil.hasClass(actions[i], "EditActionIcon") || DOMUtil.hasClass(actions[i], "ShareIcon") || DOMUtil.hasClass(actions[i], "MoveIcon") || DOMUtil.hasClass(actions[i], "DeleteContactIcon") ;
         if (isDisable == false) continue;
         if (!actions[i].parentNode.getAttribute("oldHref")) {
@@ -63,8 +61,6 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
         }
       } 
     } else if (type == "1") {
-    	
-    	
     	for (var i = 0; i < len; i++) {
         isDisable = DOMUtil.hasClass(actions[i], "ShareIcon");
         if (isDisable == true) {
@@ -131,16 +127,11 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
 		        }
      	 		}      		
       	}
-      }
-
-      // end add  	
-    } else {
-    	// hung.hoang add
+      }	
+    } else { // type = "0"
       if(tr.getAttribute("isOwner")) {
     		var isOwner = tr.getAttribute("isOwner").toLowerCase() ;    		
     		if (isOwner == "true") {
-    			
-    			
     			for (var i = 0; i < len; i++) {    			
 	    			isDisable = DOMUtil.hasClass(actions[i], "DeleteContactIcon") || DOMUtil.hasClass(actions[i], "MoveIcon");
 	        	if (isDisable == false) continue ;
@@ -168,15 +159,9 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
 		          actions[i].parentNode.removeAttribute("oldHref");
 		          actions[i].parentNode.removeAttribute("style");
 		        }
-        	}
-     	 		     		
-      	}
-      	
-      	
+        	}	     		
+      	}	
       }
-
-      // end add 
-      
     }
   }
 	eXo.webui.UIContextMenuCon.changeAction(UIContextMenuCon.menuElement, id) ;
@@ -191,35 +176,6 @@ UIContactPortlet.prototype.addressBookCallback = function(evt) {
 	var menuItems = DOMUtil.findDescendantsByClass(UIContextMenuCon.menuElement, "div", "ItemIcon") ;
 	var itemLength = menuItems.length ;	
 
-	if (addressBook.getAttribute("havePermission")) {
-		var havePermission = addressBook.getAttribute("havePermission") ;
-		if (havePermission == "false") {
-		for(var i = 0 ; i < itemLength ; i ++) {
-			if (DOMUtil.hasClass(menuItems[i],"ContactIcon") || DOMUtil.hasClass(menuItems[i],"PasteIcon")
-				|| DOMUtil.hasClass(menuItems[i],"EditActionIcon") || DOMUtil.hasClass(menuItems[i],"ImportContactIcon")) {
-				if (menuItems[i].parentNode.getAttribute("oldHref")) continue ;
-				menuItems[i].parentNode.setAttribute("oldHref", menuItems[i].parentNode.href) ;
-				menuItems[i].parentNode.href = "javascript: void(0) ;" ;
-				menuItems[i].parentNode.setAttribute("oldColor", DOMUtil.getStyle(menuItems[i].parentNode, "color")) ;
-				menuItems[i].parentNode.style.color = "#cccccc" ;
-			}
-		}		
-	} else if (havePermission == "true") {
-		for(var i = 0 ; i < itemLength ; i ++) {
-			if (DOMUtil.hasClass(menuItems[i],"ContactIcon") || DOMUtil.hasClass(menuItems[i],"PasteIcon")
-				|| DOMUtil.hasClass(menuItems[i],"EditActionIcon") || DOMUtil.hasClass(menuItems[i],"ImportContactIcon")) {
-				if (!menuItems[i].parentNode.getAttribute("oldHref")) continue ;
-				menuItems[i].parentNode.href = menuItems[i].parentNode.getAttribute("oldHref") ;
-				menuItems[i].parentNode.style.color = menuItems[i].parentNode.getAttribute("oldColor") ;
-				menuItems[i].parentNode.removeAttribute("oldColor") ;
-				menuItems[i].parentNode.removeAttribute("oldHref") ;
-			}
-		}		
-	}
-		
-	}
-	
-
 	var isDefault = addressBook.getAttribute("isDefault") ;
 	if (addressBook.getAttribute("addressType") == "0") {
 		if (isDefault == "true") {
@@ -232,7 +188,7 @@ UIContactPortlet.prototype.addressBookCallback = function(evt) {
 					menuItems[i].parentNode.style.color = "#cccccc" ;
 				}
 			}
-		} else if (isDefault == "false" && havePermission == "true") {
+		} else { // isDefault = false
 	    for(var i = 0 ; i < itemLength ; i ++) {
 				if (DOMUtil.hasClass(menuItems[i],"EditActionIcon") || DOMUtil.hasClass(menuItems[i],"DeleteIcon")) {
 					if (!menuItems[i].parentNode.getAttribute("oldHref")) continue ;
@@ -244,6 +200,30 @@ UIContactPortlet.prototype.addressBookCallback = function(evt) {
 			}
   	}		
 	} else if (addressBook.getAttribute("addressType") == "1") {
+  	var havePermission = addressBook.getAttribute("havePermission") ;
+		if (havePermission == "false") {
+			for(var i = 0 ; i < itemLength ; i ++) {
+				if (DOMUtil.hasClass(menuItems[i],"ContactIcon") || DOMUtil.hasClass(menuItems[i],"PasteIcon")
+					|| DOMUtil.hasClass(menuItems[i],"EditActionIcon") || DOMUtil.hasClass(menuItems[i],"ImportContactIcon")) {
+					if (menuItems[i].parentNode.getAttribute("oldHref")) continue ;
+					menuItems[i].parentNode.setAttribute("oldHref", menuItems[i].parentNode.href) ;
+					menuItems[i].parentNode.href = "javascript: void(0) ;" ;
+					menuItems[i].parentNode.setAttribute("oldColor", DOMUtil.getStyle(menuItems[i].parentNode, "color")) ;
+					menuItems[i].parentNode.style.color = "#cccccc" ;
+				}
+			}		
+		} else {
+			for(var i = 0 ; i < itemLength ; i ++) {
+				if (DOMUtil.hasClass(menuItems[i],"ContactIcon") || DOMUtil.hasClass(menuItems[i],"PasteIcon")
+					|| DOMUtil.hasClass(menuItems[i],"EditActionIcon") || DOMUtil.hasClass(menuItems[i],"ImportContactIcon")) {
+					if (!menuItems[i].parentNode.getAttribute("oldHref")) continue ;
+					menuItems[i].parentNode.href = menuItems[i].parentNode.getAttribute("oldHref") ;
+					menuItems[i].parentNode.style.color = menuItems[i].parentNode.getAttribute("oldColor") ;
+					menuItems[i].parentNode.removeAttribute("oldColor") ;
+					menuItems[i].parentNode.removeAttribute("oldHref") ;
+				}
+			}		
+		}  
 		if (isDefault == "true") {
 			for(var i = 0 ; i < itemLength ; i ++) {
 				if (DOMUtil.hasClass(menuItems[i],"EditActionIcon")) {
@@ -254,17 +234,7 @@ UIContactPortlet.prototype.addressBookCallback = function(evt) {
 					menuItems[i].parentNode.style.color = "#cccccc" ;
 				}
 			}
-		} else if (isDefault == "false" && havePermission == "true") {
-	    for(var i = 0 ; i < itemLength ; i ++) {
-				if (DOMUtil.hasClass(menuItems[i],"EditActionIcon")) {
-					if (!menuItems[i].parentNode.getAttribute("oldHref")) continue ;
-					menuItems[i].parentNode.href = menuItems[i].parentNode.getAttribute("oldHref") ;
-					menuItems[i].parentNode.style.color = menuItems[i].parentNode.getAttribute("oldColor") ;
-					menuItems[i].parentNode.removeAttribute("oldColor") ;
-					menuItems[i].parentNode.removeAttribute("oldHref") ;
-				}
-			}
-  	}	
+		}		
 	}
 	
   

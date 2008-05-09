@@ -231,6 +231,20 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   }
   
   public Contact[] getContacts() throws Exception {
+    if (isSelectSharedContacts) {
+      setContacts(ContactUtils.getContactService().getSharedContacts( ContactUtils.getCurrentUser())); 
+    } else {
+      UIAddressBooks uiAddressBooks = getAncestorOfType(
+          UIWorkingContainer.class).findFirstComponentOfType(UIAddressBooks.class) ;
+      if (!ContactUtils.isEmpty(selectedGroup)) {
+        if (!uiAddressBooks.getPrivateGroupMap().containsKey(selectedGroup) && !uiAddressBooks.getSharedGroups().containsKey(selectedGroup)
+            && !ContactUtils.getUserGroups().contains(selectedGroup)) setContacts(null) ;
+        else if (uiAddressBooks.getSharedGroups().containsKey(selectedGroup)) {
+          setContacts(ContactUtils.getContactService().getSharedContactsByAddressBook(SessionProviderFactory
+              .createSystemProvider(),ContactUtils.getCurrentUser(), uiAddressBooks.getSharedGroups().get(selectedGroup)));
+        }
+      }
+    }
     return contactMap.values().toArray(new Contact[]{}) ;
   }
   public LinkedHashMap<String, Contact> getContactMap() { return contactMap ;}
