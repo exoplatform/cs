@@ -70,7 +70,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
       @EventConfig(listeners = UIMessageList.ReplyActionListener.class),
       @EventConfig(listeners = UIMessageList.ReplyAllActionListener.class),
       @EventConfig(listeners = UIMessageList.ForwardActionListener.class), 
-      @EventConfig(listeners = UIMessageList.DeleteActionListener.class),
+      @EventConfig(listeners = UIMessageList.DeleteActionListener.class, confirm="UIMessageList.msg.confirm-remove-message"),
       @EventConfig(listeners = UIMessageList.ReportSpamActionListener.class),
       @EventConfig(listeners = UIMessageList.NotSpamActionListener.class),
       @EventConfig(listeners = UIMessageList.PrintActionListener.class),
@@ -659,7 +659,7 @@ public class UIMessageList extends UIForm {
   static public class DeleteActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
-      String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      String msgId = null ;
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();

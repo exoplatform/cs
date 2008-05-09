@@ -103,7 +103,9 @@ public class UIRenameFolderForm extends UIForm implements UIPopupComponent {
         }
       } catch (Exception e){
         uiApp.addMessage(new ApplicationMessage("UIRenameFolderForm.msg.error-rename-folder", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         e.printStackTrace() ;
+        return ;
       }
       uiMailPortlet.cancelAction();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMailPortlet.getChild(UIPopupAction.class)) ;

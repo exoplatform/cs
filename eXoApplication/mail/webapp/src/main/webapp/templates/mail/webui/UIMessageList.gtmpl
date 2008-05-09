@@ -23,7 +23,7 @@
     <div class="IconHolder ForwardIcon"><span></span></div>
   </a>
   <div class="SeparatorLine"><span></span></div>
-  <a href="<%=uicomponent.event("Delete")%>" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.delete") %>">
+  <a href="<%=uicomponent.event("Delete", uicomponent.id, "id" )%>" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.delete") %>">
     <div class="IconHolder DeleteIcon"><span></span></div>
   </a>
   <% if (!uicomponent.selectedSpamFolder()) { %>
@@ -277,7 +277,7 @@
             <a class="MenuItem" href="<%=uicomponent.event("AddTag", "id")%>">   
               <div class="ItemIcon TagMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.tag") %> </div>
             </a>          
-            <a class="MenuItem" href="<%=uicomponent.event("Delete", "id")%>">   
+            <a class="MenuItem" href="<%=uicomponent.event("Delete", uicomponent.id, "id")%>">   
               <div class="ItemIcon DeleteMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.delete") %></div>
             </a>
             <a class="MenuItem" href="<%=uicomponent.event("AddContact", "id")%>">   

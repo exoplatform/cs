@@ -70,7 +70,7 @@ import org.exoplatform.webui.event.EventListener;
 				@EventConfig(listeners = UIMessagePreview.AddStarActionListener.class),
 				@EventConfig(listeners = UIMessagePreview.ReplyActionListener.class),
 				@EventConfig(listeners = UIMessagePreview.ReplyAllActionListener.class),
-				@EventConfig(listeners = UIMessagePreview.DeleteActionListener.class),
+				@EventConfig(listeners = UIMessagePreview.DeleteActionListener.class, confirm="UIMessagePreview.msg.confirm-remove-message"),
 				@EventConfig(listeners = UIMessagePreview.ForwardActionListener.class), 
 				@EventConfig(listeners = UIMessagePreview.PrintActionListener.class),
 				@EventConfig(listeners = UIMessagePreview.ExportActionListener.class),
