@@ -338,14 +338,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
       UIPopupContainer popupContainer =  popupAction.activate(UIPopupContainer.class, 800) ;
       popupContainer.setId("AddNewContact");
-      //UICategorySelect uiCategorySelect = popupContainer.addChild(UICategorySelect.class, null, null) ;
-      UIContactForm uiContactForm = popupContainer.addChild(UIContactForm.class, null, null) ;      
-      
-      /*uiCategorySelect.setPrivateGroupMap(contactPortlet
-          .findFirstComponentOfType(UIAddressBooks.class).getPrivateGroupMap()) ;*/
-      //uiCategorySelect.addCategories() ;
-      //uiCategorySelect.setValue(contact.getAddressBook()[0]) ;
-      //if (contact.getContactType().equals(JCRDataStorage.SHARED))  uiCategorySelect.disableSelect() ;
+      UIContactForm uiContactForm = popupContainer.addChild(UIContactForm.class, null, null) ;
       uiContactForm.setValues(contact);
       uiContactForm.setNew(false) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
