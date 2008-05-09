@@ -140,7 +140,15 @@ public class MailServiceImpl implements MailService{
 
   public Folder getFolder(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception {
     return storage_.getFolder(sProvider, username, accountId, folderId);
-  } 
+  }
+  
+  public String getFolderParentId(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception {
+    return storage_.getFolderParentId(sProvider, username, accountId, folderId) ;
+  }
+  
+  public boolean isExistFolder(SessionProvider sProvider, String username, String accountId, String parentId, String folderName) throws Exception {
+    return storage_.isExistFolder(sProvider, username, accountId, parentId, folderName) ;
+  }
   
   public void saveFolder(SessionProvider sProvider, String username, String accountId, Folder folder) throws Exception {
     storage_.saveFolder(sProvider, username, accountId, folder);

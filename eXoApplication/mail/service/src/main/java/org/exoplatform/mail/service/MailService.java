@@ -113,7 +113,22 @@ public interface MailService {
    * @return Folder
    * @throws Exception
    */
-  public Folder getFolder(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception ;  
+  public Folder getFolder(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception ;
+  
+  /**
+   * This method should:
+   * 1. Check if the folder name is exist in same parent 
+   * @param username
+   * @param accountId
+   * @param parentId
+   * @param folderName
+   * @throws Exception
+   */
+  
+  public String getFolderParentId(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception ;
+  
+  public boolean isExistFolder(SessionProvider sProvider, String username, String accountId, String parentId, String folderName) throws Exception ;
+  
   /**
    * This method should:
    * 1. Get account

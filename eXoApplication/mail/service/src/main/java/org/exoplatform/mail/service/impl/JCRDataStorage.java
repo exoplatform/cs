@@ -823,6 +823,12 @@ public class JCRDataStorage{
     return folder ;
   }
   
+  public String getFolderParentId(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception {
+    Node parentNode = getFolderNodeById(sProvider, username, accountId, folderId).getParent() ;
+    if (parentNode != null) return parentNode.getProperty(Utils.EXO_ID).getString();
+    else return null ;
+  }
+  
   public Node getFolderNodeById(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception {
     Session sess = getMailHomeNode(sProvider, username).getSession();
     QueryManager qm = sess.getWorkspace().getQueryManager();
@@ -881,6 +887,20 @@ public class JCRDataStorage{
     myFolder.setProperty(Utils.EXO_TOTALMESSAGE, folder.getTotalMessage());
     myFolder.setProperty(Utils.EXO_PERSONAL, folder.isPersonalFolder()) ;
     home.getSession().save();
+  }
+  
+  public boolean isExistFolder(SessionProvider sProvider, String username, String accountId, String parentId, String folderName) throws Exception {
+    boolean isExist = false ;
+    try {
+      Node parentNode = getFolderNodeById(sProvider, username, accountId, parentId);
+      NodeIterator nit = parentNode.getNodes() ;
+      while (nit.hasNext()) {
+        Node node = nit.nextNode() ;
+        String fn = node.getProperty(Utils.EXO_LABEL).getString() ;
+        if (fn.trim().equals(folderName)) isExist = true ;
+      }
+    } catch(PathNotFoundException e) { }
+    return isExist ;
   }
   
   public void saveFolder(SessionProvider sProvider, String username, String accountId, String parentId, Folder folder) throws Exception {

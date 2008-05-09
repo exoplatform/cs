@@ -90,8 +90,8 @@ public class UIRenameFolderForm extends UIForm implements UIPopupComponent {
       }
       
       try {
-        String newFolderId = accountId + "UserFolder" + newFolderName;
-        if (mailService.getFolder(SessionProviderFactory.createSystemProvider(), username, accountId, newFolderId) == null) {
+        String folderParentId =  mailService.getFolderParentId(SessionProviderFactory.createSystemProvider(), username, accountId, folderId) ;
+        if (!mailService.isExistFolder(SessionProviderFactory.createSystemProvider(), username, accountId, folderParentId, newFolderName)) {
           Folder folder =  mailService.getFolder(SessionProviderFactory.createSystemProvider(), username, accountId, folderId);
           folder.setLabel(newFolderName) ;
           folder.setName(newFolderName) ;
