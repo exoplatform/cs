@@ -685,7 +685,7 @@ public class JCRDataStorage{
           filter = getFilterById(sProvider, username, accId, filterList.get(i)) ;
           folderList.add(filter.getApplyFolder()) ;
           String tagId = filter.getApplyTag() ;
-          if (tagId != null) tagList.add(tagId) ;
+          if (tagId != null && tagId != "") tagList.add(tagId) ;
         }
         folderIds = folderList.toArray(new String[] {}) ;
       }
@@ -694,7 +694,8 @@ public class JCRDataStorage{
         folderIds = new String[] { Utils.createFolderId(accId, Utils.FD_SPAM, false) } ;
       }
       node.setProperty(Utils.EXO_FOLDERS, folderIds);
-      node.setProperty(Utils.EXO_TAGS, tagList.toArray(new String[] {}));
+      if (tagList.size() > 0)
+        node.setProperty(Utils.EXO_TAGS, tagList.toArray(new String[] {}));
 
       ArrayList<String> values = new ArrayList<String>() ;
       Enumeration enu = msg.getAllHeaders() ;

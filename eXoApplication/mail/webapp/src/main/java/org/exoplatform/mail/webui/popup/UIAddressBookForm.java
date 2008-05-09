@@ -28,8 +28,10 @@ import org.exoplatform.download.DownloadService;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -181,9 +183,17 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
         List<String> contactIds = new ArrayList<String>();
         
         // hung edit
-        contactIds.add(contact.getId()) ;
-        contactServ.removeContacts(SessionProviderFactory.createSystemProvider(), username, contactIds);
-        uiAddressBook.refrestContactList(uiAddressBook.getUIFormSelectBox(SELECT_GROUP).getValue());
+        if (!contact.getId().equals(MailUtils.getCurrentUser())) {
+          contactIds.add(contact.getId()) ;
+          contactServ.removeContacts(SessionProviderFactory.createSystemProvider(), username, contactIds);
+          uiAddressBook.refrestContactList(uiAddressBook.getUIFormSelectBox(SELECT_GROUP).getValue());
+        } else {
+          UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UIAddressBookForm.msg.cannot-delete-this-contact", null)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
+        
         event.getRequestContext().addUIComponentToUpdateByAjax(mailPortlet.getChild(UIPopupAction.class)) ;
       } catch(Exception e) {
         e.printStackTrace();
