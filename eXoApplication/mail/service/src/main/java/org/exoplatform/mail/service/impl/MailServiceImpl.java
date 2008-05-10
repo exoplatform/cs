@@ -426,6 +426,7 @@ public class MailServiceImpl implements MailService{
     String key = username + ":" + accountId ;
     checkingLog_.put(key, info) ;
     long t1, t2 , tt1, tt2;
+    if (Utils.isEmptyField(account.getIncomingPassword())) info.setStatusCode(CheckingInfo.RETRY_PASSWORD) ;
     System.out.println(" #### Getting mail from " + account.getIncomingHost() + " ... !");
     info.setStatusMsg("Getting mail from " + account.getIncomingHost() + " ... !") ;
     List<Message> messageList = new ArrayList<Message>();

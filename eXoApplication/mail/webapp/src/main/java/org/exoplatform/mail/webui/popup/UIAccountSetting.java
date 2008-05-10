@@ -110,7 +110,6 @@ public class UIAccountSetting extends UIFormTabPane {
     identityInputSet.addUIFormInput(new UIFormStringInput(FIELD_EMAIL_ADDRESS, null, null));
     identityInputSet.addUIFormInput(new UIFormStringInput(FIELD_REPLYTO_ADDRESS, null, null));
     identityInputSet.addUIFormInput(new UIFormTextAreaInput(FIELD_MAIL_SIGNATURE, null, null));
-    identityInputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_IS_SAVE_PASSWORD, null, null));
     addUIFormInput(identityInputSet); 
     
     UIFormInputWithActions serverInputSet = new UIFormInputWithActions(TAB_SERVER_SETTINGS);
@@ -122,6 +121,7 @@ public class UIAccountSetting extends UIFormTabPane {
     serverInputSet.addUIFormInput(new UIFormStringInput(FIELD_INCOMING_PORT, null, null));
     serverInputSet.addUIFormInput(new UIFormStringInput(FIELD_INCOMING_ACCOUNT, null, null));
     serverInputSet.addUIFormInput(new UIFormStringInput(FIELD_INCOMING_PASSWORD, null, null).setType(UIFormStringInput.PASSWORD_TYPE));
+    serverInputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_IS_SAVE_PASSWORD, null, null));
     UIFormCheckBoxInput<Boolean> ssl = new UIFormCheckBoxInput<Boolean>(FIELD_IS_INCOMING_SSL, null, null);//getFieldIsSSL()
     ssl.setOnChange("ChangeSSL"); 
     serverInputSet.addUIFormInput(ssl);
@@ -210,7 +210,7 @@ public class UIAccountSetting extends UIFormTabPane {
   }
   
   public boolean isSavePassword() {
-    UIFormInputWithActions uiInput = getChildById(TAB_IDENTITY_SETTINGS);
+    UIFormInputWithActions uiInput = getChildById(TAB_SERVER_SETTINGS);
     return uiInput.getUIFormCheckBoxInput(FIELD_IS_SAVE_PASSWORD).isChecked();
   }
   
@@ -262,13 +262,13 @@ public class UIAccountSetting extends UIFormTabPane {
     uiIdentityInput.getUIStringInput(FIELD_EMAIL_ADDRESS).setValue(account.getEmailAddress()) ;
     uiIdentityInput.getUIStringInput(FIELD_REPLYTO_ADDRESS).setValue(account.getEmailReplyAddress()) ;
     uiIdentityInput.getUIStringInput(FIELD_MAIL_SIGNATURE).setValue(account.getSignature()) ;
-    uiIdentityInput.getUIFormCheckBoxInput(FIELD_IS_SAVE_PASSWORD).setChecked(account.isSavePassword()) ;
     
     UIFormInputWithActions uiServerInput = getChildById(TAB_SERVER_SETTINGS) ;
     uiServerInput.getUIStringInput(FIELD_INCOMING_SERVER).setValue(account.getIncomingHost()) ;
     uiServerInput.getUIStringInput(FIELD_INCOMING_PORT).setValue(account.getIncomingPort()) ;
     uiServerInput.getUIStringInput(FIELD_INCOMING_ACCOUNT).setValue(account.getIncomingUser()) ;
     uiServerInput.getUIStringInput(FIELD_INCOMING_PASSWORD).setValue(account.getIncomingPassword()) ;
+    uiServerInput.getUIFormCheckBoxInput(FIELD_IS_SAVE_PASSWORD).setChecked(account.isSavePassword()) ;
     
     uiServerInput.getUIStringInput(FIELD_OUTGOING_SERVER).setValue(account.getOutgoingHost()) ;
     uiServerInput.getUIStringInput(FIELD_OUTGOING_PORT).setValue(account.getOutgoingPort()) ;
