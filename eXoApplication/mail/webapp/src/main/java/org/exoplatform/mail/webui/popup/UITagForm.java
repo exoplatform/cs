@@ -171,10 +171,10 @@ public class UITagForm extends UIForm implements UIPopupComponent{
           return;
         }
       } else {
-        UIApplication uiApp = uiTagForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UITagForm.msg.name-tag-no-value", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
+//        UIApplication uiApp = uiTagForm.getAncestorOfType(UIApplication.class) ;
+//        uiApp.addMessage(new ApplicationMessage("UITagForm.msg.name-tag-no-value", null)) ;
+//        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+//        return ;
       }
       
       tagList.addAll(uiTagForm.getCheckedTags());
