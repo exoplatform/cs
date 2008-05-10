@@ -23,6 +23,7 @@ import java.util.List;
 import javax.mail.internet.InternetAddress;
 
 import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
@@ -240,6 +241,21 @@ public class UIMessageList extends UIForm {
     }
     return tagList;
   } 
+  
+  public List<Folder> getFolders(Message msg) throws Exception {
+    UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class) ;
+    String username = uiPortlet.getCurrentUser() ;
+    MailService mailSrv = getApplicationComponent(MailService.class) ;
+    List<Folder> folderList = new ArrayList<Folder>() ;
+    String[] folders = msg.getFolders() ;
+    if (folders != null && folders.length > 0) {
+      for (int i = 0; i < folders.length; i++) {
+        Folder folder = mailSrv.getFolder(SessionProviderFactory.createSystemProvider(), username, accountId_, folders[i]) ;
+        folderList.add(folder) ;
+      }
+    }
+    return folderList ;
+  }
 
   static public class SelectMessageActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {

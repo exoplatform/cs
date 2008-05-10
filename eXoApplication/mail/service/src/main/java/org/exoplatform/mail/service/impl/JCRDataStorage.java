@@ -874,8 +874,12 @@ public class JCRDataStorage{
   
   public String getFolderParentId(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception {
     Node parentNode = getFolderNodeById(sProvider, username, accountId, folderId).getParent() ;
-    if (parentNode != null) return parentNode.getProperty(Utils.EXO_ID).getString();
-    else return null ;
+    try {
+      if (parentNode != null) return parentNode.getProperty(Utils.EXO_ID).getString();
+      else return null ;
+    } catch(PathNotFoundException e) {
+      return null ;
+    }
   }
   
   public Node getFolderNodeById(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception {
@@ -948,7 +952,7 @@ public class JCRDataStorage{
         String fn = node.getProperty(Utils.EXO_LABEL).getString() ;
         if (fn.trim().equals(folderName)) isExist = true ;
       }
-    } catch(PathNotFoundException e) { }
+    } catch(Exception e) { }
     return isExist ;
   }
   

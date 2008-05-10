@@ -2,6 +2,7 @@
  import org.exoplatform.mail.service.Message;
  import org.exoplatform.mail.service.Utils;
  import org.exoplatform.mail.service.Tag ;
+ import org.exoplatform.mail.service.Folder;
  import javax.mail.internet.InternetAddress;
  import org.exoplatform.mail.service.MessagePageList;
  import org.exoplatform.mail.MailUtils;
@@ -443,8 +444,12 @@
                 <%}%>
               </td>
               <% 
-                if (uicomponent.getMessageFilter().getName().equals("Search")) 
-                  print(" <td style=\"border-right:0px;\"> [" + msg.getFolders()[0].substring(msg.getFolders()[0].indexOf("Folder") + 6, msg.getFolders()[0].length()) + "] </td> ") ;
+                if (uicomponent.getMessageFilter().getName().equals("Search")) {
+                  print(" <td style=\"border-right:0px;\">") ;
+                  for (Folder folder : uicomponent.getFolders(msg))
+                    print(" [" + folder.getLabel() + "] ")
+                  print("</td> ") ;
+                }
               %>
               <td class="$readStatus">
               <% 
