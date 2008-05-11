@@ -109,6 +109,13 @@ public class UIMessageList extends UIForm {
   public final int MODE_THREAD = 2 ;
   public final int MODE_CONVERSATION = 3 ;
   
+  public final int VIEW_ALL = 1 ;
+  public final int VIEW_STARRED = 2 ;
+  public final int VIEW_UNSTARRED = 3 ;
+  public final int VIEW_UNREAD = 4 ;
+  public final int VIEW_READ = 5 ;
+  public final int VIEW_ATTACHMENT = 6 ; 
+  
   private String selectedMessageId_ = null ;
   private String selectedFolderId_ = null ;
   private String selectedTagId_ = null ;
@@ -119,6 +126,7 @@ public class UIMessageList extends UIForm {
   private MessageFilter msgFilter_;
   private String accountId_ ;
   public int viewMode = MODE_THREAD ;
+  public int viewing_ = VIEW_ALL ;
   public LinkedHashMap<String, Message> messageList_ = new LinkedHashMap<String, Message>();
 
   public UIMessageList() throws Exception {}
@@ -133,9 +141,11 @@ public class UIMessageList extends UIForm {
     if (viewMode == MODE_THREAD || viewMode == MODE_CONVERSATION) filter.setHasStructure(true) ;
     if (accountId != null && accountId != "") {
       filter.setAccountId(accountId) ;
-      if (filter.getFolder() == null) {        
-        selectedFolderId_ = Utils.createFolderId(accountId, Utils.FD_INBOX, false);
-        filter.setFolder(new String[] { selectedFolderId_ });
+      if (filter.getFolder() == null) {
+        if (!filter.getName().equals("Search")) {
+          selectedFolderId_ = Utils.createFolderId(accountId, Utils.FD_INBOX, false);
+          filter.setFolder(new String[] { selectedFolderId_ });
+        }
       } else {
         selectedFolderId_ = filter.getFolder()[0];
       }
@@ -404,6 +414,7 @@ public class UIMessageList extends UIForm {
         return ;
       }
       uiMessageList.filterMessage("");
+      uiMessageList.viewing_ = uiMessageList.VIEW_ALL ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
@@ -488,6 +499,7 @@ public class UIMessageList extends UIForm {
         return ;
       }
       uiMessageList.filterMessage("@" + Utils.EXO_STAR + "='true'");
+      uiMessageList.viewing_ = uiMessageList.VIEW_STARRED ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
@@ -504,6 +516,7 @@ public class UIMessageList extends UIForm {
         return ;
       }
       uiMessageList.filterMessage("@" + Utils.EXO_STAR + "='false'");
+      uiMessageList.viewing_ = uiMessageList.VIEW_UNSTARRED ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
@@ -520,6 +533,7 @@ public class UIMessageList extends UIForm {
         return ;
       }
       uiMessageList.filterMessage("@" + Utils.EXO_ISUNREAD + "='true'");
+      uiMessageList.viewing_ = uiMessageList.VIEW_UNREAD ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
@@ -536,6 +550,7 @@ public class UIMessageList extends UIForm {
         return ;
       }
       uiMessageList.filterMessage("@" + Utils.EXO_ISUNREAD + "='false'");
+      uiMessageList.viewing_ = uiMessageList.VIEW_READ ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
@@ -552,6 +567,7 @@ public class UIMessageList extends UIForm {
         return ;
       }
       uiMessageList.filterMessage("@" + Utils.EXO_HASATTACH + "='true'");
+      uiMessageList.viewing_ = uiMessageList.VIEW_ATTACHMENT ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }

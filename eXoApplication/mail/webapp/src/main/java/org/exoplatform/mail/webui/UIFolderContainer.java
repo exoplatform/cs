@@ -197,14 +197,18 @@ public class UIFolderContainer extends UIContainer {
       UINavigationContainer uiNavigationContainer = uiFolderContainer.getAncestorOfType(UINavigationContainer.class);
       String accountId = uiNavigationContainer.getChild(UISelectAccount.class).getSelectedValue();
       
-      Account account = mailService.getAccountById(SessionProviderFactory.createSystemProvider(), username, accountId);
-      Folder folder = mailService.getFolder(SessionProviderFactory.createSystemProvider(), username, accountId, folderId);  
-      mailService.removeUserFolder(SessionProviderFactory.createSystemProvider(), username, account, folder);     
+      mailService.removeUserFolder(SessionProviderFactory.createSystemProvider(), username, accountId, folderId);     
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
       UIFolderContainer uiFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
-      uiMessageList.setMessageFilter(null);
-      uiMessageList.init(accountId);
-      uiFolder.setSelectedFolder(Utils.createFolderId(accountId, Utils.FD_INBOX, false));
+      if (folderId.equals(uiFolderContainer.getSelectedFolder())) {
+        uiMessageList.setMessageFilter(null);
+        uiMessageList.init(accountId);
+        uiFolder.setSelectedFolder(Utils.createFolderId(accountId, Utils.FD_INBOX, false));
+        uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null) ;
+      } else if (uiFolderContainer.getSelectedFolder() == null && uiMessageList.getMessageFilter().getName().equals("Search")) {
+        uiMessageList.updateList() ;
+        uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null) ;
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent()) ;
     }
