@@ -150,7 +150,7 @@ public interface MailService {
    * @param folder
    * @throws Exception
    */
-  public void removeUserFolder(SessionProvider sProvider, String username, Account account, Folder folder) throws Exception ;
+  public void removeUserFolder(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception ;
   
   /**
    * This method should: 
@@ -224,7 +224,7 @@ public interface MailService {
     * @param tags
     * @throws Exception
     */
-   public void removeMessageTag(SessionProvider sProvider, String username, String accountId, List<Message> messages, List<String> tags) throws Exception ;
+   public void removeTagsInMessages(SessionProvider sProvider, String username, String accountId, List<Message> messages, List<String> tags) throws Exception ;
   /**
    * This method should:
    * 1. Find all the message that has the tag , remove the tag from the message and save

@@ -155,12 +155,8 @@ public class MailServiceImpl implements MailService{
   }
 
 
-  public void removeUserFolder(SessionProvider sProvider, String username, Folder folder) throws Exception {
-    storage_.removeUserFolder(sProvider, username, folder);
-  }
-
-  public void removeUserFolder(SessionProvider sProvider, String username, Account account, Folder folder) throws Exception {
-    storage_.removeUserFolder(sProvider, username, account, folder);
+  public void removeUserFolder(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception {
+    storage_.removeUserFolder(sProvider, username, accountId, folderId);
   }
   
   public List<MessageFilter> getFilters(SessionProvider sProvider, String username, String accountId) throws Exception {
@@ -708,9 +704,8 @@ public class MailServiceImpl implements MailService{
     return storage_.getTag(sProvider, username, accountId, tagId);
   }
 
-  public void removeMessageTag(SessionProvider sProvider, String username, String accountId, List<Message> messageIds, List<String> tags)
-      throws Exception {
-    storage_.removeMessageTag(sProvider, username, accountId, messageIds, tags);   
+  public void removeTagsInMessages(SessionProvider sProvider, String username, String accountId, List<Message> msgList, List<String> tagIdList) throws Exception {
+    storage_.removeTagsInMessages(sProvider, username, accountId, msgList, tagIdList);   
   }
 
   public void removeTag(SessionProvider sProvider, String username, String accountId, String tag) throws Exception {

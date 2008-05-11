@@ -105,19 +105,19 @@ public class MessagePageList extends JCRPageList {
                 if (refMsgFolder.equals(sentFolderId)) {
                   existRefNode = true ; 
                   Message refMsg = getMessage(refNode, refFolders) ;
-                  currentListPage_.put(refMsg.getId(), refMsg) ;
+                  if (refMsg.getFolders() != null && refMsg.getFolders().length > 0) currentListPage_.put(refMsg.getId(), refMsg) ;
                   currentListPage_ = getMessageList(currentListPage_, refNode, curMsgFolder, refFolders) ;
                 }
               }
             } catch(Exception e) { }
             if (Utils.SHOWCONVERSATION && (!currentNode.isNodeType("exo:messageMixin") || !existRefNode)) {
               Message msg = getMessage(currentNode, refFolders) ;
-              currentListPage_.put(msg.getId(), msg) ;
+              if (msg.getFolders() != null && msg.getFolders().length > 0) currentListPage_.put(msg.getId(), msg) ;
               currentListPage_ = getMessageList(currentListPage_, currentNode, curMsgFolder, refFolders) ;
             }
           } else {
             Message msg = getMessage(currentNode, null) ;
-            currentListPage_.put(msg.getId(), msg) ;
+            if (msg.getFolders() != null && msg.getFolders().length > 0) currentListPage_.put(msg.getId(), msg) ;
           }
         } else {
           break ;
@@ -134,13 +134,15 @@ public class MessagePageList extends JCRPageList {
     while (prosIter.hasNext()) {
       msgNode = prosIter.nextProperty().getParent() ;
       if (msgNode.isNodeType("exo:message")) {
-        String msgFolder = msgNode.getProperty(Utils.EXO_FOLDERS).getValues()[0].getString() ;
-        if (folderId.equals(msgFolder) || sentFolderId.equals(msgFolder)) {
-          Message msg = getMessage(msgNode, refFolders) ;
-          msg.setIsRootConversation(false) ;
-          listPage.put(msg.getId(), msg) ;
-          if (msgNode.isNodeType("mix:referenceable")) listPage = getMessageList(listPage, msgNode, folderId, refFolders) ; 
-        }
+        try {
+          String msgFolder = msgNode.getProperty(Utils.EXO_FOLDERS).getValues()[0].getString() ;
+          if (folderId.equals(msgFolder) || sentFolderId.equals(msgFolder)) {
+            Message msg = getMessage(msgNode, refFolders) ;
+            msg.setIsRootConversation(false) ;
+            if (msg.getFolders() != null && msg.getFolders().length > 0) listPage.put(msg.getId(), msg) ;
+            if (msgNode.isNodeType("mix:referenceable")) listPage = getMessageList(listPage, msgNode, folderId, refFolders) ; 
+          }
+        } catch(Exception e) {}
       }
     }
     return listPage ;
@@ -269,7 +271,7 @@ public class MessagePageList extends JCRPageList {
           sibling.removeAll(referedMessageIds) ;
           if (refMsg != null) {
             refMsg.setReferedMessageIds((new ArrayList<String>(sibling))) ;
-            currentListPage_.put(refNode.getName(),  refMsg) ;
+            if (refMsg.getFolders() != null && refMsg.getFolders().length > 0) currentListPage_.put(refNode.getName(),  refMsg) ;
           }
         }
       } catch(Exception e) { }
@@ -288,12 +290,14 @@ public class MessagePageList extends JCRPageList {
     Node msgNode ;
     while (prosIter.hasNext()) {
       msgNode = prosIter.nextProperty().getParent() ;
-      for(int i=0; i < refFolders.length; i ++) {
-        if (refFolders[i].equals(msgNode.getProperty(Utils.EXO_FOLDERS).getValues()[0].getString())) {
-          String id = msgNode.getProperty(Utils.EXO_ID).getString() ;
-          if (!referedMessageIds.contains(id)) referedMessageIds.add(id) ;
-          break ;
-        }
+      for (int i = 0; i < refFolders.length; i ++) {
+        try {
+          if (refFolders[i].equals(msgNode.getProperty(Utils.EXO_FOLDERS).getValues()[0].getString())) {
+            String id = msgNode.getProperty(Utils.EXO_ID).getString() ;
+            if (!referedMessageIds.contains(id)) referedMessageIds.add(id) ;
+            break ;
+          }
+        } catch(Exception e) {}
       }
     }
     return referedMessageIds ;
@@ -305,17 +309,19 @@ public class MessagePageList extends JCRPageList {
     while (prosIter.hasNext()) {
       msgNode = prosIter.nextProperty().getParent() ;
       if (msgNode.isNodeType("exo:message")) {
-        String msgFolderId = msgNode.getProperty(Utils.EXO_FOLDERS).getValues()[0].getString() ;
-        String msgNodeId = msgNode.getProperty(Utils.EXO_ID).getString() ;
-        for(int i=0; i < refFolders.length; i ++) {
-          if (refFolders[i].equals(msgFolderId)) {
-            if (!list.contains(msgNodeId)) list.add(msgNodeId) ;
-            if (msgNode.isNodeType("mix:referenceable")) {
-              list = getGroupedMessageIds(list, msgNode, refFolders) ;
+        try {
+          String msgFolderId = msgNode.getProperty(Utils.EXO_FOLDERS).getValues()[0].getString() ;
+          String msgNodeId = msgNode.getProperty(Utils.EXO_ID).getString() ;
+          for(int i=0; i < refFolders.length; i ++) {
+            if (refFolders[i].equals(msgFolderId)) {
+              if (!list.contains(msgNodeId)) list.add(msgNodeId) ;
+              if (msgNode.isNodeType("mix:referenceable")) {
+                list = getGroupedMessageIds(list, msgNode, refFolders) ;
+              }
+              break ;
             }
-            break ;
           }
-        }
+        } catch(Exception e) { }
       }
     }
     return list ;

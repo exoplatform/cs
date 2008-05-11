@@ -48,6 +48,7 @@ import org.exoplatform.webui.form.UIFormRadioBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.EmailAddressValidator;
+import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 /**
  * Created by The eXo Platform SARL
@@ -60,9 +61,9 @@ import org.exoplatform.webui.form.validator.EmailAddressValidator;
     lifecycle = UIFormLifecycle.class, 
     template = "app:/templates/mail/webui/popup/UIAddContactForm.gtmpl", 
     events = {
-      @EventConfig(listeners = UIAddContactForm.AddGroupActionListener.class),
-      @EventConfig(listeners = UIAddContactForm.ChangeImageActionListener.class),
-      @EventConfig(listeners = UIAddContactForm.DeleteImageActionListener.class),
+      @EventConfig(listeners = UIAddContactForm.AddGroupActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIAddContactForm.ChangeImageActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIAddContactForm.DeleteImageActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIAddContactForm.SaveActionListener.class),
       @EventConfig(listeners = UIAddContactForm.CancelActionListener.class, phase = Phase.DECODE)
     }
@@ -96,8 +97,8 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
       options.add(new SelectItemOption<String>(group.getName(), group.getId()));
     }
     addUIFormInput(new UIFormSelectBox(SELECT_GROUP, SELECT_GROUP, options));
-    addUIFormInput(new UIFormStringInput(FIRST_NAME, FIRST_NAME, null));
-    addUIFormInput(new UIFormStringInput(LAST_NAME, LAST_NAME, null));
+    addUIFormInput(new UIFormStringInput(FIRST_NAME, FIRST_NAME, null).addValidator(MandatoryValidator.class));
+    addUIFormInput(new UIFormStringInput(LAST_NAME, LAST_NAME, null).addValidator(MandatoryValidator.class));
     addUIFormInput(new UIFormStringInput(NICKNAME, NICKNAME, null));
     List<SelectItemOption<String>> genderOptions = new ArrayList<SelectItemOption<String>>() ;
     genderOptions.add(new SelectItemOption<String>(MALE, MALE));
@@ -106,7 +107,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
     addUIFormInput(new UIFormInputInfo(BIRTHDAY, BIRTHDAY, null)) ;
     
     List<SelectItemOption<String>> datesOptions = new ArrayList<SelectItemOption<String>>() ;
-    datesOptions.add(new SelectItemOption<String>("- "+DAY+" -", DAY)) ;
+    datesOptions.add(new SelectItemOption<String>("- " + DAY + " -", DAY)) ;
     for (int i = 1; i < 32; i ++) {
       String date = i + "" ;
       datesOptions.add(new SelectItemOption<String>(date, date)) ;
@@ -114,7 +115,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
     addUIFormInput(new UIFormSelectBox(DAY, DAY, datesOptions)) ;
     
     List<SelectItemOption<String>> monthOptions = new ArrayList<SelectItemOption<String>>() ;
-    monthOptions.add(new SelectItemOption<String>("-"+MONTH+"-", MONTH)) ;
+    monthOptions.add(new SelectItemOption<String>("-" + MONTH + "-", MONTH)) ;
     for (int i = 1; i < 13; i ++) {
       String month = i + "" ;
       monthOptions.add(new SelectItemOption<String>(month, month)) ;
@@ -125,7 +126,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
     String strDate = date.substring(date.lastIndexOf("/") + 1, date.length()) ; 
     int thisYear = Integer.parseInt(strDate) ;
     List<SelectItemOption<String>> yearOptions = new ArrayList<SelectItemOption<String>>() ;
-    yearOptions.add(new SelectItemOption<String>("- "+YEAR+" -", YEAR)) ;
+    yearOptions.add(new SelectItemOption<String>("- " + YEAR + " -", YEAR)) ;
     for (int i = thisYear; i >= 1900; i --) {
       String year = i + "" ;
       yearOptions.add(new SelectItemOption<String>(year, year)) ;

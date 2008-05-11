@@ -38,6 +38,7 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormSelectBox;
@@ -56,13 +57,13 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
     lifecycle = UIFormLifecycle.class,
     template =  "app:/templates/mail/webui/popup/UIAccountSetting.gtmpl",
     events = {
-        @EventConfig(listeners = UIAccountSetting.SelectAccountActionListener.class),
-        @EventConfig(listeners = UIAccountSetting.AddNewAccountActionListener.class),
-        @EventConfig(listeners = UIAccountSetting.DeleteAccountActionListener.class),
+        @EventConfig(listeners = UIAccountSetting.SelectAccountActionListener.class, phase = Phase.DECODE),
+        @EventConfig(listeners = UIAccountSetting.AddNewAccountActionListener.class, phase = Phase.DECODE),
+        @EventConfig(listeners = UIAccountSetting.DeleteAccountActionListener.class, phase = Phase.DECODE),
         @EventConfig(listeners = UIAccountSetting.SaveActionListener.class),
-        @EventConfig(listeners = UIAccountSetting.CancelActionListener.class),
-        @EventConfig(listeners = UIAccountSetting.ChangeServerTypeActionListener.class),
-        @EventConfig(listeners = UIAccountSetting.ChangeSSLActionListener.class)
+        @EventConfig(listeners = UIAccountSetting.CancelActionListener.class, phase = Phase.DECODE),
+        @EventConfig(listeners = UIAccountSetting.ChangeServerTypeActionListener.class, phase = Phase.DECODE),
+        @EventConfig(listeners = UIAccountSetting.ChangeSSLActionListener.class, phase = Phase.DECODE)
     }
 )
 

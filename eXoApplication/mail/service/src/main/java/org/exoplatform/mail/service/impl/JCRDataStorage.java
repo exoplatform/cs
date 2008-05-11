@@ -440,11 +440,19 @@ public class JCRDataStorage{
       msgNode.save();
       // Update number of unread messages
       if (isUnread) {
-        currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() - 1));
-        destFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (destFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() + 1));
+        try {
+          currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() - 1));
+        } catch(Exception e) {}
+        try {
+          destFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (destFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() + 1));
+        } catch(Exception e) {}
       }
-      currentFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (currentFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() - 1));
-      destFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (destFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() + 1));
+      try {  
+        currentFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (currentFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() - 1));
+      } catch(Exception e) {}
+      try {
+        destFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (destFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() + 1));
+      } catch(Exception e) {}
       currentFolderNode.save();
       destFolderNode.save();
     }
@@ -975,33 +983,33 @@ public class JCRDataStorage{
     myFolder.setProperty(Utils.EXO_PERSONAL, folder.isPersonalFolder()) ;
     home.getSession().save();
   }
-
-  public void removeUserFolder(SessionProvider sProvider, String username, Folder folder) throws Exception {
-    // gets the mail home node
-    Session sess = getMailHomeNode(sProvider, username).getSession();
-    QueryManager qm = sess.getWorkspace().getQueryManager();
-    // gets the specified folder node
-    StringBuffer queryString = new StringBuffer("//element(*,exo:folder)[@exo:name='").
-    append(folder.getName()).
-    append("']");
-    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
-    QueryResult result = query.execute();
-    NodeIterator it = result.getNodes();
-    // removes the folder it it exists
-    if (it.hasNext()) it.nextNode().remove();
-    sess.save();
+  
+  private void removeFolderInMessages(SessionProvider sProvider, String username, String accountId, List<Node> msgNodes, String folderId) throws Exception {
+    for (Node msgNode : msgNodes) {
+      try {
+        Value[] propFolders = msgNode.getProperty(Utils.EXO_FOLDERS).getValues();
+        String[] oldFolderIds = new String[propFolders.length];
+        for (int i = 0; i < propFolders.length; i++) {
+          oldFolderIds[i] = propFolders[i].getString();
+        }
+        List<String> folderList = new ArrayList<String>(Arrays.asList(oldFolderIds)); 
+        folderList.remove(folderId);
+        msgNode.setProperty(Utils.EXO_FOLDERS, folderList.toArray(new String[folderList.size()]));
+        msgNode.save();
+      } catch(Exception e) { }
+    }
   }
 
-  public void removeUserFolder(SessionProvider sProvider, String username, Account account, Folder folder) throws Exception {
-    //  gets the specified folder
-    Node node = getFolderNodeById(sProvider, username, account.getId(), folder.getId()); 
+  public void removeUserFolder(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception {
+    List<Node> msgNodes = getMessageNodeByFolder(sProvider, username, accountId, folderId);
+    removeFolderInMessages(sProvider, username, accountId, msgNodes, folderId);
+
+    Node node = getFolderNodeById(sProvider, username, accountId, folderId); 
     if (node != null) {
       node.remove();
     }
     node.getSession().save();
-  }
-  
-  
+  } 
   
   public Node getFilterHome(SessionProvider sProvider, String username, String accountId) throws Exception {
     Node accountHome = getMailHomeNode(sProvider, username).getNode(accountId);
@@ -1199,8 +1207,7 @@ public class JCRDataStorage{
     }      
   }
   
-  public void addTag(SessionProvider sProvider, String username, String accountId, List<Message> messages, List<Tag> tagList)
-  throws Exception {    
+  public void addTag(SessionProvider sProvider, String username, String accountId, List<Message> messages, List<Tag> tagList) throws Exception {    
     Map<String, String> tagMap = new HashMap<String, String> () ;
     Node tagHome = getTagHome(sProvider, username, accountId) ;
     for(Tag tag : tagList) {
@@ -1281,10 +1288,9 @@ public class JCRDataStorage{
     return tag ;
   }
 
-  public void removeMessageTag(SessionProvider sProvider, String username, String accountId, List<Message> messages, List<String> tagIds) 
-  throws Exception {
+  public void removeTagsInMessages(SessionProvider sProvider, String username, String accountId, List<Message> msgList, List<String> tagIds) throws Exception {
     Node mailHome = getMailHomeNode(sProvider, username) ;
-    for (Message msg : messages) {
+    for (Message msg : msgList) {
       try {
         Node msgNode = (Node) mailHome.getSession().getItem(msg.getPath());
         try {
@@ -1309,14 +1315,13 @@ public class JCRDataStorage{
     List<Message> listMessage = getMessageByTag(sProvider, username, accountId, tagId);
     List<String> listTag = new ArrayList<String>();
     listTag.add(tagId);
-    removeMessageTag(sProvider, username, accountId, listMessage, listTag);
+    removeTagsInMessages(sProvider, username, accountId, listMessage, listTag);
 
     // remove tag node
     Node tagHomeNode = getTagHome(sProvider, username, accountId) ;
     if (tagHomeNode.hasNode(tagId)) {
       tagHomeNode.getNode(tagId).remove() ;
     }
-
     tagHomeNode.getSession().save() ;
   } 
   
@@ -1331,8 +1336,7 @@ public class JCRDataStorage{
     tagHome.save();
   }
 
-  public List<Message> getMessageByTag(SessionProvider sProvider, String username, String accountId, String tagId)
-  throws Exception {
+  public List<Message> getMessageByTag(SessionProvider sProvider, String username, String accountId, String tagId) throws Exception {
     List<Message> messages = new ArrayList<Message>();
     Node mailHomeNode = getMailHomeNode(sProvider, username) ;
     QueryManager qm = mailHomeNode.getSession().getWorkspace().getQueryManager();
@@ -1347,6 +1351,22 @@ public class JCRDataStorage{
       messages.add(message);
     }
     return messages;
+  }
+  
+  private List<Node> getMessageNodeByFolder(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception {
+    List<Node> msgNodes = new ArrayList<Node>();
+    Node mailHomeNode = getMailHomeNode(sProvider, username) ;
+    QueryManager qm = mailHomeNode.getSession().getWorkspace().getQueryManager();
+    StringBuffer queryString = new StringBuffer("/jcr:root" + mailHomeNode.getNode(accountId).getPath() + "//element(*,exo:message)[@exo:folders='").
+    append(folderId).
+    append("']");
+    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
+    QueryResult result = query.execute();
+    NodeIterator it = result.getNodes();
+    while(it.hasNext()) {
+      msgNodes.add(it.nextNode());
+    }
+    return msgNodes;
   }
   
   public Node getSpamFilterHome(SessionProvider sProvider, String username, String accountId) throws Exception {
