@@ -67,6 +67,7 @@ public class NewUserListener extends UserEventListener {
   }
   
   public void postSave(User user, boolean isNew) throws Exception {
+    if(!isNew) return ;
     String fullName     = user.getFullName();
     String email        = user.getEmail();
     // Once eXo is connected to LDAP users, the password will be correct !!!
