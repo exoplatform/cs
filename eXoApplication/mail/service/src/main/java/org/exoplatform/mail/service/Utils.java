@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -35,6 +36,7 @@ import javax.mail.Store;
 import javax.mail.URLName;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 
@@ -305,8 +307,12 @@ public class Utils {
   
   public static javax.mail.internet.MimeMessage mergeToMimeMessage(Message message, javax.mail.internet.MimeMessage mimeMessage) throws Exception {
     InternetAddress addressFrom = new InternetAddress(message.getFrom());
+    String status = "";
+    if (message.getFrom() != null) 
+      addressFrom = new InternetAddress(message.getFrom());
+    
     mimeMessage.setFrom(addressFrom);
-    if (message.getMessageTo() != null) 
+    if(message.getMessageTo() != null) 
       mimeMessage.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(message.getMessageTo()));
     
     if(message.getMessageCc() != null) 
@@ -325,29 +331,32 @@ public class Utils {
     
     MimeMultipart  multipPartContent = new MimeMultipart("alternative");
     
-    MimeBodyPart contentPartRoot = new MimeBodyPart();
-    contentPartRoot.setContent(multipPartContent);
-
-    MimeBodyPart  mimeBodyPart1 = new MimeBodyPart();
-    mimeBodyPart1.setContent(message.getMessageBody(), "text/html");
-    multipPartContent.addBodyPart(mimeBodyPart1);
-    
-    multipPartRoot.addBodyPart(contentPartRoot);
-    
     List<Attachment> attachList = message.getAttachments();
-    if (attachList != null) {
+    if (attachList != null && attachList.size() != 0) {
+      MimeBodyPart contentPartRoot = new MimeBodyPart();
+      contentPartRoot.setContent(multipPartContent);
+      
+      MimeBodyPart  mimeBodyPart1 = new MimeBodyPart();
+      mimeBodyPart1.setContent(message.getMessageBody(), message.getContentType());
+      multipPartContent.addBodyPart(mimeBodyPart1);
+      multipPartRoot.addBodyPart(contentPartRoot);
+      
       for (Attachment att : attachList) {
-        JCRMessageAttachment attach = (JCRMessageAttachment) att;
-        InputStream is = attach.getInputStream();
-
+        InputStream is = att.getInputStream();
         MimeBodyPart mimeBodyPart = new MimeBodyPart();
         ByteArrayDataSource byteArrayDataSource = new ByteArrayDataSource(is, att.getMimeType());
         mimeBodyPart.setDataHandler(new DataHandler(byteArrayDataSource));
 
         mimeBodyPart.setDisposition(Part.ATTACHMENT);
-        mimeBodyPart.setFileName(attach.getName());
+        mimeBodyPart.setFileName(att.getName());
         multipPartRoot.addBodyPart(mimeBodyPart);
-      }        
+      }
+      mimeMessage.setContent(multipPartRoot);
+    } else {
+      if (message.getContentType() != null && message.getContentType().indexOf("text/plain") > -1)
+        mimeMessage.setText(message.getMessageBody());
+      else
+        mimeMessage.setContent(message.getMessageBody(), "text/html");
     }
     mimeMessage.setHeader("X-Priority", String.valueOf(message.getPriority()));
     String priority = "Normal";
@@ -358,7 +367,11 @@ public class Utils {
     }     
     if (message.getPriority() != 0 ) mimeMessage.setHeader("Importance", priority);
     
-    mimeMessage.setContent(multipPartRoot);
+    Iterator iter = message.getHeaders().keySet().iterator() ;
+    while (iter.hasNext()) {
+      String key = iter.next().toString() ;
+      mimeMessage.setHeader(key, message.getHeaders().get(key)) ;
+    }
     
     return mimeMessage;
   }
