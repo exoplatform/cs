@@ -59,7 +59,7 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
     events = {
         @EventConfig(listeners = UIAccountSetting.SelectAccountActionListener.class, phase = Phase.DECODE),
         @EventConfig(listeners = UIAccountSetting.AddNewAccountActionListener.class, phase = Phase.DECODE),
-        @EventConfig(listeners = UIAccountSetting.DeleteAccountActionListener.class, phase = Phase.DECODE),
+        @EventConfig(listeners = UIAccountSetting.DeleteAccountActionListener.class, phase = Phase.DECODE, confirm="UIAccountSetting.msg.confirm-remove-account"),
         @EventConfig(listeners = UIAccountSetting.SaveActionListener.class),
         @EventConfig(listeners = UIAccountSetting.CancelActionListener.class, phase = Phase.DECODE),
         @EventConfig(listeners = UIAccountSetting.ChangeServerTypeActionListener.class, phase = Phase.DECODE),
@@ -367,6 +367,7 @@ public class UIAccountSetting extends UIFormTabPane {
         if (uiAccSetting.getAccounts().size() > 0) {
           String newSelectedAcc = uiAccSetting.getAccounts().get(0).getId() ;
           uiAccSetting.setSelectedAccountId(newSelectedAcc) ;
+          uiSelectAccount.updateAccount() ;
           if (removedAccId.equals(uiSelectAccount.getSelectedValue()))
             uiSelectAccount.setSelectedValue(newSelectedAcc) ;
           String defaultAcc = mailSetting.getDefaultAccount();
@@ -382,8 +383,8 @@ public class UIAccountSetting extends UIFormTabPane {
           mailSetting.setDefaultAccount(null) ;
           mailSvr.saveMailSetting(SessionProviderFactory.createSystemProvider(), username, mailSetting) ;
           event.getSource().getAncestorOfType(UIMailPortlet.class).cancelAction() ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectAccount) ;
         }
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectAccount) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectAccount.getAncestorOfType(UINavigationContainer.class)) ;
       } catch(Exception e) {
