@@ -56,7 +56,7 @@ public class MailSetting {
   
   public MailSetting() {
     numberMsgPerPage = 20;
-    periodCheckAuto = FIVE_MINS;
+    periodCheckAuto = NEVER_CHECK_AUTO;
     useWysiwyg = true; 
     formatAsOriginal = true;
     replyWithAtt = true; 
