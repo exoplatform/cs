@@ -158,7 +158,7 @@ public class MessagePageList extends JCRPageList {
   private boolean isAvaiableMessage(Node node, String[] refFolders) throws Exception {
     return previousListPage.size() > 0 && 
       previousListPage.containsKey(node.getName()) && 
-      (refFolders == null || previousListPage.get(node.getName()).getReferedMessageIds().size() != getReferedMessageIds(node, refFolders).size()) ;
+      (refFolders == null || previousListPage.get(node.getName()).getReferedMessageIds().size() == getReferedMessageIds(node, refFolders).size()) ;
   }
   
   /**
