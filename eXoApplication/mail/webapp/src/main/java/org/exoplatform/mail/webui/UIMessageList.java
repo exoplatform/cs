@@ -423,6 +423,7 @@ public class UIMessageList extends UIForm {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+      if (uiMessageList.viewMode == uiMessageList.MODE_LIST) return ;
       if (uiMessageList.viewMode == uiMessageList.MODE_CONVERSATION) {
         UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class) ;
         List<Message> showedMsgs = new ArrayList<Message>();
@@ -443,12 +444,13 @@ public class UIMessageList extends UIForm {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+      if (uiMessageList.viewMode == uiMessageList.MODE_THREAD) return ;
       if (uiMessageList.viewMode == uiMessageList.MODE_CONVERSATION) {
         UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class) ;
         List<Message> showedMsgs = new ArrayList<Message>();
         showedMsgs.add(uiMsgPreview.getMessage()) ;
         uiMsgPreview.setShowedMessages(showedMsgs);
-      } else {
+      } else if (uiMessageList.viewMode == uiMessageList.MODE_LIST){
         MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
         String username = uiPortlet.getCurrentUser();
         MessageFilter filter = uiMessageList.getMessageFilter() ;
@@ -464,7 +466,8 @@ public class UIMessageList extends UIForm {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
-      if (uiMessageList.viewMode != uiMessageList.MODE_CONVERSATION) {
+      if (uiMessageList.viewMode == uiMessageList.MODE_CONVERSATION) return ;
+      if (uiMessageList.viewMode == uiMessageList.MODE_THREAD) {
         UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class) ;
         List<Message> showedMsgs = new ArrayList<Message>();
         Message msg = uiMsgPreview.getMessage();
@@ -475,7 +478,7 @@ public class UIMessageList extends UIForm {
           }
         }
         uiMsgPreview.setShowedMessages(showedMsgs);
-      } else if (uiMessageList.viewMode != uiMessageList.MODE_THREAD) {
+      } else if (uiMessageList.viewMode == uiMessageList.MODE_LIST) {
         MailService mailSrv = uiMessageList.getApplicationComponent(MailService.class);
         String username = uiPortlet.getCurrentUser();
         MessageFilter filter = uiMessageList.getMessageFilter() ;
