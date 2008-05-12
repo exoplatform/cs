@@ -274,10 +274,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           }
           break;
         case MESSAGE_FOWARD : 
-          System.out.println("1======>>> " + msg.getSubject()) ;
-          System.out.println("2======>>> " + msg.getFrom()) ;
-          System.out.println("3======>>> " + msg.getSendDate()) ;
-          System.out.println("4======>>> " + msg.getMessageTo()) ;
           String toAddress = msg.getMessageTo() != null ? msg.getMessageTo() : "" ;
           setFieldSubjectValue("Fwd: " + msg.getSubject());
           String forwardedText = "<br><br>-------- Original Message --------<br>" +
