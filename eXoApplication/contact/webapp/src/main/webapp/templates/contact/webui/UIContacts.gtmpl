@@ -75,10 +75,9 @@
 						  </div>
 					  </div>
 					</div>
-					<div class="TitleSearch" style="float: left; margin-left: 10px"><%=_ctx.appRes(uicomponent.getName() + ".label.searchResult")%></div>
 					
 					<a href="<%=uicomponent.event("MoveContacts")%>" class="ControlButton">
-						<div class="Icon MoveIcon"><%=_ctx.appRes(uicomponent.getName() + ".label.move")%></div>
+						<div class="Icon MoveIcon" style="width: auto; padding-left: 20px"><%=_ctx.appRes(uicomponent.getName() + ".label.move")%></div>
 					</a>					
 					<!--<div class="SeparatorLine"><span></span></div>-->
 					
@@ -104,6 +103,7 @@
 							<div class="Icon CopyContactIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.copyContacts")%>"><span></span></div>
 					</a>
 					
+					<div class="TitleSearch" style="float: left; margin-left: 10px"><%=_ctx.appRes(uicomponent.getName() + ".label.searchResult")%></div>
 					
 					
 					<div style="clear: both;"><span></span></div>

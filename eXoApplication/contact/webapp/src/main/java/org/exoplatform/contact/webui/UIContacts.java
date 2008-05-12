@@ -120,8 +120,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   @SuppressWarnings("unused")
   private boolean isPrintDetail = false ;
   private boolean isSelectSharedContacts = false ;
-  
   public UIContacts() throws Exception { } 
+  
   public String[] getActions() { return new String[] {"Cancel"} ; }
   public void activate() throws Exception { }
   public void deActivate() throws Exception { } 
@@ -307,28 +307,9 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   }
   public List<String> getPublicContactGroups() throws Exception {
     return Arrays.asList(ContactUtils.getUserGroups().toArray(new String[] {})) ;
-  }
-  /*
-  public boolean checkExistContacts(String contactId) throws Exception {
-    ContactService contactService = ContactUtils.getContactService() ;
-    String username = ContactUtils.getCurrentUser() ;
-    SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
-    if (contactService.getContact(sessionProvider, username, contactId) != null
-        || contactService.getPublicContact(contactId) != null
-        || contactService.getSharedContact(sessionProvider, username, contactId) != null
-        || contactService.getSharedContactAddressBook(username, contactId) != null)
-      return true ;    
-    return false ;
   }  
-  */
-  
   public String getDefaultGroup() { return NewUserListener.DEFAULTGROUP ;}
-  /*
-  public boolean isPublic(String contactId) {
-    if ( contactMap.get(contactId).getContactType().equals(JCRDataStorage.PUBLIC)) return true ;
-    return false ;
-  }
-  */
+
   static public class EditContactActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource();
@@ -797,7 +778,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         
         if(type != null)
           pageList = ContactUtils.getContactService().getContactPageListByGroup(
-            SessionProviderFactory.createSystemProvider(),ContactUtils.getCurrentUser(), filter, type) ; 
+            SessionProviderFactory.createSystemProvider(),ContactUtils.getCurrentUser(), filter, type) ;
+        
       } else {      //selected group = null ;
           pageList = uiContacts.pageList_ ;
           if (pageList != null) {

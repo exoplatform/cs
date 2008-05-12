@@ -7,7 +7,9 @@
 					<div class="CenterBar">
 					
 						<div class="SelectButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
-							
+							<div class="IconHolder BlueCirclePlusIcon" >
+								<div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.getName() + ".label.addNew")%></div>
+							</div>
 							<% /*Begin Popup Menu*/ %>
 								<div style="position: relative;">
 			      			<div class="UIPopupCategory" style="display: none;">
@@ -44,9 +46,6 @@
 								    </div>
 			      			</div>
 			      		</div>
-			      	<div class="IconHolder BlueCirclePlusIcon" >
-								<div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.getName() + ".label.addNew")%></div>
-							</div>	
 			      		<% /*End Popup Menu*/ %>
 						</div>
 						
@@ -63,7 +62,9 @@
           </a>
 						<div class="SeparatorLine"><span></span></div>
 						<div class="SelectButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
-							
+							<div class="IconHolder ViewIcon">
+								<div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.getName() + ".label.contactsView")%></div>
+							</div>
 							<% /*Begin Popup Menu*/ %>
 								<div style="position: relative;">
 			      			<div class="UIPopupCategory" style="display: none;">
@@ -102,16 +103,15 @@
 			      			</div>
 			      		</div>
 			      		<% /*End Popup Menu*/ %>
-			      	<div class="IconHolder ViewIcon">
-								<div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.getName() + ".label.contactsView")%></div>
-							</div>	
 							<!--div class="IconHolder ViewIcon">
 								<div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.getName() + ".label.contactsView")%></div>
 							</div-->
 						</div>
 						
 						<div class="SelectButton" onclick="eXo.contact.UIContactPortlet.showPopupCustomLayoutView(this, event);">
-							
+							<div class="IconHolder CustomLayoutIcon">
+								<div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.getName() + ".label.layoutView")%></div>
+							</div>
 							<% /*Begin Popup Menu*/ %>
 									<div style="position: relative;">
 			      			<div class="UIPopupCategory" style="display: none;">
@@ -163,9 +163,6 @@
 				      			</div>
 				      		</div>
 				      		<% /*End Popup Menu*/ %>
-				      	<div class="IconHolder CustomLayoutIcon">
-									<div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.getName() + ".label.layoutView")%></div>
-								</div>	
 							<!--div class="IconHolder CustomLayoutIcon">
 								<div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.getName() + ".label.customLayoutView")%></div>
 							</div-->
