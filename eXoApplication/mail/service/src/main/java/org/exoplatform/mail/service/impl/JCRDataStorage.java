@@ -831,7 +831,10 @@ public class JCRDataStorage{
           (ct.indexOf("text/plain") > -1 && contentType.indexOf("text/plain") > -1))
       content = node.getProperty(Utils.EXO_BODY).getString();
       if (content == null) content = "" ;
-      else content += "<br>" ;
+      else {
+        if (contentType.indexOf("text/plain") > -1) content += "\r\n" ;
+        else if (contentType.indexOf("text/html") > -1) content += "<br>" ;
+      }
     } catch(PathNotFoundException e) { }
     node.setProperty(Utils.EXO_BODY, content + messageBody.toString());
   }
