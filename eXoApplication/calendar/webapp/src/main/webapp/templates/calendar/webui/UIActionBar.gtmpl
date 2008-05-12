@@ -94,7 +94,7 @@
 						<div class="ControlButton" onclick="eXo.calendar.UICalendarPortlet.showView(this, event);">
 							<a class="SwitchButton" >
 								<div class="IconHolder LayoutSwitcherIcon" title="<%=_ctx.appRes(uicomponent.id + '.label.ShowHide')%>">
-									<div class="DownArrow1Icon"><span></span></div>
+									<span></span>
 								</div>
 							</a>
 							<% /*Begin Popup Menu*/ %>
