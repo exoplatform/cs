@@ -705,6 +705,7 @@
 
 .UIContactPortlet .FileNameLabel {
 	overflow: hidden;
-	width: 300px;
 	white-space: nowrap;
+	margin-top: 3px;
+	max-width: 300px;
 }
