@@ -102,7 +102,7 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
   }
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
-  
+
   static  public class GenerateRssActionListener extends EventListener<UIRssForm> {
     public void execute(Event<UIRssForm> event) throws Exception {
       UIRssForm uiForm = event.getSource() ;
@@ -125,7 +125,12 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
       }
       RssData rssData = new RssData() ;
       String tempName = uiForm.getUIStringInput(TITLE).getValue() ;
-      if(tempName != null && tempName.length() > 0) {
+      if(tempName != null && tempName.trim().length() > 0) {
+        if(!CalendarUtils.isNameValid(tempName, CalendarUtils.SPECIALCHARACTER)) {
+          uiApp.addMessage(new ApplicationMessage("UIRssForm.msg.feed-name-invalid", null)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
         if(tempName.length() > 4 && tempName.substring(tempName.length() - 4).equals(".rss")) rssData.setName(tempName);
         else rssData.setName(tempName + ".rss") ;
       }else {
@@ -139,7 +144,7 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
       rssData.setTitle(title) ;
       rssData.setVersion("rss_2.0") ;
       if(uiForm.getUIFormDateTimeInput(PUBLIC_DATE).getCalendar() != null)
-      rssData.setPubDate(uiForm.getUIFormDateTimeInput(PUBLIC_DATE).getCalendar().getTime()) ;
+        rssData.setPubDate(uiForm.getUIFormDateTimeInput(PUBLIC_DATE).getCalendar().getTime()) ;
       calendarService.generateRss(SessionProviderFactory.createSystemProvider(), Util.getPortalRequestContext().getRemoteUser(), calendarIds, rssData) ;
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       calendarPortlet.cancelAction() ;  
@@ -149,7 +154,7 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
       return ;
     }
   }
-  
+
   static  public class CancelActionListener extends EventListener<UIRssForm> {
     public void execute(Event<UIRssForm> event) throws Exception {
       UIRssForm uiForm = event.getSource() ;

@@ -135,7 +135,13 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     public void execute(Event<UISharedForm> event) throws Exception {
       UISharedForm uiForm = event.getSource() ;
       String names = uiForm.getUIStringInput(FIELD_USER).getValue() ;
-      if(names == null || names.length() < 1) {
+      if(CalendarUtils.isEmpty(names)) {
+        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.invalid-username", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
+      if(!CalendarUtils.isNameValid(names, CalendarUtils.SPECIALCHARACTER)) {
         UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.invalid-username", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -145,7 +151,6 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       OrganizationService oService = CalendarUtils.getOrganizationService() ;
       SessionProvider sProvider = SessionProviderFactory.createSessionProvider() ;
       String username = CalendarUtils.getCurrentUser() ;
-
       List<String> receiverUsers  = new ArrayList<String>() ;
       StringBuffer sb = new StringBuffer() ;
       for(String name : Arrays.asList(names.split(CalendarUtils.COMMA))) {
@@ -162,7 +167,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.not-found-user", new Object[]{sb.toString()}, 1)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;
+        return ;
       }
       if(receiverUsers.contains(username)) {
         UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
@@ -170,7 +175,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-        
+
       Calendar cal = calendarService.getUserCalendar(sProvider, username, uiForm.calendarId_) ;
       Map<String, String> perms = new HashMap<String, String>() ;
       if(cal.getViewPermission() != null)
