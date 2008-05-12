@@ -1311,8 +1311,10 @@ public class JCRDataStorage {
   public void addTag(SessionProvider sysProvider, String username, List<String> contactIds, List<Tag> tags) throws Exception {
     Node tagHomeNode = getTagHome(sysProvider, username);
     Map<String, String> tagMap = new HashMap<String, String> () ;
+    String newTag = null ;
     for(Tag tag : tags) {
       if(!tagHomeNode.hasNode(tag.getId())) {
+        newTag = tag.getId() ;
         Node tagNode = tagHomeNode.addNode(tag.getId(), "exo:contactTag") ;
         tagNode.setProperty("exo:id", tag.getId());
         tagNode.setProperty("exo:name", tag.getName());
@@ -1361,6 +1363,10 @@ public class JCRDataStorage {
         }
       }
       if (contactNode == null) {
+        if (contactIds.get(0).equals(contact) && (newTag != null)) {
+          tagHomeNode.getNode(newTag).remove() ;
+          tagHomeNode.getSession().save() ;
+        }
         throw new PathNotFoundException() ;
       } else {
         Map<String, String> thisTagMap = new HashMap<String, String> () ;
