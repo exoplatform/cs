@@ -133,11 +133,11 @@
 	    <init-params>
         <value-param>
         	<name>defaultEditPermission</name>
-        	<value>*:*</value><!-- Multi value membership, use coma (,) to split values-->
+        	<value>*.*</value><!-- Multi value membership, use coma (,) to split values-->
         </value-param>
         <value-param>
         	<name>defaultViewPermission</name>
-        	<value>*:*</value><!-- Multi value membership, use coma (,) to split values-->
+        	<value>*.*</value><!-- Multi value membership, use coma (,) to split values-->
         </value-param>
         
         <value-param>

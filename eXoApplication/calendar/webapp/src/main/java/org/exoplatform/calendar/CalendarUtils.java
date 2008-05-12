@@ -356,7 +356,7 @@ public class CalendarUtils {
     if(savePerms != null)
       for(String sp : savePerms) {
         for (String cp : checkPerms) {
-          if( sp.equals(cp)) {return true ;}      
+          if( sp.equals(cp) || sp.equals("*.*")) {return true ;}      
         }
       }
     return false ;
@@ -368,8 +368,8 @@ public class CalendarUtils {
     if(oService != null) {
       Collection<Membership> memberShipsType = oService.getMembershipHandler().findMembershipsByUser(username) ;
       for(Membership mp : memberShipsType) {
-        sb.append(CalendarUtils.COMMA).append(mp.getMembershipType() +
-            CalendarUtils.COLON+ mp.getGroupId()).append(CalendarUtils.COMMA).append(CalendarUtils.STAR + CalendarUtils.COLON+ mp.getGroupId()) ;
+        sb.append(CalendarUtils.COMMA).append("*." + mp.getMembershipType()) ; /*+
+            CalendarUtils.COLON+ mp.getGroupId()).append(CalendarUtils.COMMA).append(CalendarUtils.STAR + CalendarUtils.COLON+ mp.getGroupId()) ;*/
       }
     }
     return CalendarUtils.hasEditPermission(savePerms, sb.toString().split(CalendarUtils.COMMA)) ;

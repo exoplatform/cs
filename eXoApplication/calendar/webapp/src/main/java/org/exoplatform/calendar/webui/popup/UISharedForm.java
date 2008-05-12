@@ -121,8 +121,9 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
   public void deActivate() throws Exception {}
 
   public void updateSelect(String selectField, String value) throws Exception {
+    System.out.println("value " + value);
     UIFormStringInput fieldInput = getUIStringInput(selectField) ;
-    permission_.put(value, value) ;
+    permission_.put(value, value.substring(value.lastIndexOf(":/") + 2)) ;
     StringBuilder sb = new StringBuilder() ;
     for(String s : permission_.values()) {
       if(sb != null && sb.length() > 0) sb.append(CalendarUtils.COMMA) ;
