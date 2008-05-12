@@ -150,11 +150,8 @@
 }
 
 .UIWeekView .EventWeekContent {
-	overflow-y:auto;
-	overflow-x:hidden;
+	overflow:auto;
 	height: 420px;
-	padding: 0px 0px 0px 1px;
-	*padding: 0px;
 }
 
 .UIWeekView .UIGrid th {
@@ -163,7 +160,6 @@
 	border-right: 1px solid #c7c7c7;
 	width: 13.2%;
 	border-top:none;
-	border-bottom:none;
 	border-left: none;
 	*width: 14%;
 	-moz-user-select: none ;
@@ -171,7 +167,7 @@
 }
 
 .UIWeekView .EventWeekBar .UIGrid th {
-	border-left: 1px solid #c7c7c7;
+	border: 1px solid #c7c7c7;
 }
 
 .UIWeekView .UIGrid {
@@ -182,6 +178,11 @@
 
 .UIPageDesktop .UIWeekView .EventWeekBar .UIGrid {
 	_width: 98.9%;
+}
+
+.UIWeekView .EventWeekContent {
+	padding: 0px 0px 0px 1px;
+	*padding: 0px;
 }
 
 .UIPageDesktop .UIWeekView .EventWeekBar {
@@ -385,10 +386,6 @@
 	*width: 97%;
 }
 
-.UIWindow .UIWeekView .UIGrid {
-	_width: 98.8%;
-}
-
 .UIScheduleView .TimeBusy{
 	border: 1px solid #ffffff;
 	background: #FFF6A3;
@@ -487,6 +484,7 @@
 	height: 22px;
 	text-align: center;
 	line-height: 22px;
+	border-bottom: 1px solid #c7c7c7;
 }
 
 .UIYearView .CurrentWeekSuburdbar {
@@ -1080,6 +1078,7 @@
 	font-size: 10px;
 	line-height: 10px;
 }
+
 .UserSelectionBlock {
 	background: #cccccc ;
 	position: absolute ;
