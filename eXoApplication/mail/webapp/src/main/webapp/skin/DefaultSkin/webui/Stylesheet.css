@@ -26,6 +26,18 @@
 	border: 1px solid #b7b7b7;
 	margin: 7px;
 }
+
+.UIWindow .UIEmpty {
+	margin: 0px;
+	border: none ;
+	min-width: none ;
+}
+
+.UIEmpty {
+	background: none;
+	border: none;
+	margin: 0px;
+}
 /******************************************** MailBanner ****************************************/
 
 
