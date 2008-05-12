@@ -217,6 +217,7 @@
 	padding-left: 30px;
 	line-height: 24px; 
 	margin: 2px 0px; width: auto;
+	background-position: 4px center;
 }
 
 .UIMailPortlet .UINavigationContainer .MyFolder .TitleBar {
@@ -511,8 +512,9 @@
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageList {
 	padding-left: 1px;
+	overflow: hidden;
+	!overflow: auto;
 	overflow-y: auto;
-	overflow-x: hidden;
 	height: 200px ;
 	_width: 99.5%;
 }
@@ -523,42 +525,44 @@
 	width: 22px; height: 22px;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .UIGrid {
+.UIMailPortlet .UIMessageList .UIGrid {
 	background: #ffffff;
 	border-bottom: 1px solid #e8e8e8;
 	border-right: none;
 	border-left: none;	
 }
 
-.UIMailPortlet .MailWorkingWorkspace .UIGrid thead {
+.UIMailPortlet .UIMessageList .UIGrid thead {
 	border-right: none;
 	border-left: none;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .UIGrid th {
+.UIMailPortlet .UIMessageList .UIGrid th {
 	background: url(background/ThGridRepeatBg1x19.gif) repeat-x;
 	border: 1px solid #d2d4dc;
 	border-left: none;
 	border-right: 1px solid #e8e8e8;
 	text-align: left;
 	padding: 0px 5px;
+	white-space: nowrap;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .UIGrid td.Border {
+.UIMailPortlet .UIMessageList .UIGrid td.Border {
 	border-right: 1px solid #e8e8e8;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .UIGrid td {
+.UIMailPortlet .UIMessageList .UIGrid td {
 	height: 20px; line-height: 20px;
 	border-left: none;
 	border-right: 1px solid #e8e8e8;
 	padding: 0px 0px 0px 6px;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .UIGrid td a {
+.UIMailPortlet .UIMessageList .UIGrid td a {
 	display: block;
 	white-space: nowrap;
 	overflow: hidden ;
+	width: 100%;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIGrid .IconTag {
@@ -1604,6 +1608,26 @@
 
 .UIFolderForm .UIForm .UIFormGrid td.FieldLabel {
 	line-height: 20px;
+}
+
+/******************************* UIComfirmPassword ******************************/
+.UIComfirmPassword {
+	padding: 10px;
+}
+
+.UIComfirmPassword .HorizontalLayout {
+	padding: 15px;
+	background: #F3F3F3;
+}
+
+/******************* UIPopupDeleteAccountContainer ****************/
+.UIPopupDeleteAccountContainer {
+	padding: 10px;
+}
+
+.UIPopupDeleteAccountContainer .UIAccountList {
+	padding: 10px;
+	background: #F3F3F3;
 }
 
 /******************************* invitation mail ******************************/

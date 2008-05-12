@@ -57,7 +57,7 @@
                                   <%=_ctx.appRes(uicomponent.id+ ".label.layout-default") %> 
   					                    </div>
   				                    </a>
-  				                    <da class="MenuItem" onclick="javascript:eXo.mail.UIMailPortlet.switchLayout(1)">   
+  				                    <a class="MenuItem" onclick="javascript:eXo.mail.UIMailPortlet.switchLayout(1)">   
   					                    <div class="ItemIcon HideFolderListIcon">
                                   <%=_ctx.appRes(uicomponent.id+ ".label.hide-navigator-pane") %>
   					                    </div>
