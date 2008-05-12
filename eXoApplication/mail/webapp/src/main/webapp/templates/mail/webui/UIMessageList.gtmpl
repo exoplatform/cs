@@ -469,7 +469,7 @@
               </td>
               <% 
                 if (uicomponent.getMessageFilter().getName().equals("Search")) {
-                  print(" <td style=\"border-right:0px;\">") ;
+                  print(" <td style=\"border-right:0px; white-space: nowrap;\">") ;
                   for (Folder folder : uicomponent.getFolders(msg))
                     if (folder != null) print(" [" + folder.getLabel() + "] ")
                   print("</td> ") ;

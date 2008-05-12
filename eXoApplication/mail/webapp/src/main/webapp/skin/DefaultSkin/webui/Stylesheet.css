@@ -356,13 +356,13 @@
 	cursor: pointer;
 }
 
-.UIMailPortlet .MailWorkingWorkspace  .UIActionBar a.ControlButton {
+.UIMailPortlet .MailWorkingWorkspace  .UIActionBar a {
 	color: #000000;
 	margin: 4px 1px 0px 1px;
 	line-height: 26px;
 }
 
-.UIMailPortlet .MailWorkingWorkspace  .UIActionBar a:hover.ControlButton {
+.UIMailPortlet .MailWorkingWorkspace  .UIActionBar a:hover {
 	background: url('background/ControlButtonBG1x26.gif') repeat-x ;
 	color: #058ee6; border: 1px solid #cbcbcb;
 	margin: 3px 0px 0px 0px;
@@ -390,13 +390,25 @@
 }
 
 .UIMailPortlet .UIActionBar .UIPopupCategory {
-	left: -5px;
+	left: 8px;
 	position:absolute;
-	top: 28px;
+	top: 0px;
 }
 
 .UIMailPortlet .UIActionBar .UIPopupCategory .UIRightClickPopupMenu {
 	width: 150px;
+}
+
+.UIMailPortlet .UIActionBar  .UIPopupCategory a {
+	color: #000000;
+	margin:4px 0px 0px 0px;
+}
+
+.UIMailPortlet .UIActionBar  .UIPopupCategory a:hover {
+	background: #dee4f2;
+	color: #058ee6; border: none;
+  line-height:26px;
+  margin:4px 0px 0px 0px;
 }
 
 /*================================= MailContainer ================*/

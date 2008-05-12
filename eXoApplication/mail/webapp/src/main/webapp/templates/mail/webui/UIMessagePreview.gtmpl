@@ -91,7 +91,7 @@
                         </table>
                        </td>
                       <td >
-                        <% if (msg.hasAttachment() && msg.getAttachments() != null && msg.getAttachments().size() > 0) { %>
+                        <% if (msg.getAttachments().size() > 0) { %>
                         <div class="AttachmentIcon"><span></span></div>
                         <% } %>
                       </td>
@@ -328,9 +328,9 @@
                   if (!MailUtils.isInvitation(msg)) {
                   String frameId = "IframeMessagePreview" + msgIndex ;
                   String textAreaId = "MessageDetails" + msgIndex ;
-                  String contentType = msg.getContentType().toLowerCase() ;
+                  String contentType = msg.getContentType() ;
                   if (contentType.indexOf(";") > -1) {
-                    contentType = contentType.substring(0, contentType.indexOf(";")).toLowerCase() ;
+                    contentType = contentType.substring(0, contentType.indexOf(";"))
                   }
                 %>
                 <iframe src="" style="border: 0px" frameborder="0" class="MessageDetails" id="$frameId"></iframe>
@@ -354,7 +354,7 @@
                   </div> 
                 <%}%>
                 <%
-                  if (msg.hasAttachment() && msg.getAttachments() != null && msg.getAttachments().size() > 0) {
+                  if (msg.getAttachments().size() > 0) {
                 %>
                   <div class="AttachmentContainer">
     						  	<div class="AttachmentTitle"><%=_ctx.appRes(uicomponent.id+ ".label.attachments") %>:</div>            
@@ -369,7 +369,7 @@
                           attLink = MailUtils.getImageSource(attach, dservice) ;
                           boolean isImage = false ;
                           if (attLink != null ) {
-                            if (attach.getMimeType().toLowerCase().indexOf("image") > -1) {
+                            if (attach.getMimeType().indexOf("image") > -1) {
                               isImage = true ; 
                             } else if (attach.getMimeType().indexOf("msword") > -1) {
                               attLink = "/mail/skin/DefaultSkin/webui/skinIcons/24x24/icons/WordIcon.gif";

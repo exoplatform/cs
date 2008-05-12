@@ -150,8 +150,11 @@
 }
 
 .UIWeekView .EventWeekContent {
-	overflow:auto;
+	overflow-y:auto;
+	overflow-x:hidden;
 	height: 420px;
+	padding: 0px 0px 0px 1px;
+	*padding: 0px;
 }
 
 .UIWeekView .UIGrid th {
@@ -174,16 +177,11 @@
 .UIWeekView .UIGrid {
 	border: 0px;
 	background-color: white;
-	*width: 97%;
+	_width: 97%;
 }
 
 .UIPageDesktop .UIWeekView .EventWeekBar .UIGrid {
 	_width: 98.9%;
-}
-
-.UIWeekView .EventWeekContent {
-	padding: 0px 0px 0px 1px;
-	*padding: 0px;
 }
 
 .UIPageDesktop .UIWeekView .EventWeekBar {
