@@ -1092,19 +1092,13 @@
 
 /*=======================Print Priview Mail========================*/
 .UIMailPortlet .MailWorkingWorkspace .UIMessagePreview .printWrapper {
-    left: 0px; 
-    top: -7px; 
-    width: 100%; 
-    position: absolute; 
-    height: 100%;
-    background: #ffffff;
-    overflow: auto;
+  background: #ffffff;
 }
 
 .UIMailPortlet .PrintPreview {
 	padding: 8px;
 	border-bottom:1px solid #BBBBBB; 
-	margin:15px;
+	margin: 15px;
 }
 
 .UIMailPortlet .PrintPreview .PrintHeader {
@@ -1135,7 +1129,6 @@
 
 .UIMailPortlet .PrintPreview .PrintAddress {
 	padding: 8px; 
-	height: 30px;
 }
 
 .UIMailPortlet .PrintPreview .PrintAddress .FromAndTo {

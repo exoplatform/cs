@@ -104,13 +104,13 @@ UIMailPortlet.prototype.showPrintPreview = function(obj1) {
 	uiMailPortletNode.appendChild(mailWorkingWorkspaceNode) ;
 
   // Fit UIMailPortlet to window.
-  with(uiMessagePreviewNode.style) {
-    width = '100%' ;
-    height = '100%' ;
-    position = 'absolute' ;
-    top = '0px' ;
-    left = '0px' ;
-  }
+  //with(uiMessagePreviewNode.style) {
+    //width = '100%' ;
+    //height = '100%' ;
+    //position = 'absolute' ;
+    //top = '0px' ;
+    //left = '0px' ;
+  //}
 	document.body.appendChild(uiMailPortletNode) ;
 } ;
 
