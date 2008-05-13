@@ -258,17 +258,25 @@ public class UIMessagePreview extends UIComponent {
 			UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
 			UIMessageArea uiMsgArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class);
 			UIMessageList uiMsgList = uiMsgArea.getChild(UIMessageList.class) ;
+      UIFolderContainer uiFolderCon = uiPortlet.findFirstComponentOfType(UIFolderContainer.class) ;
 			Message msg = uiMsgPreview.getShowedMessageById(msgId) ;
-			if (msg != null) {
-				MailService mailSrv = uiMsgPreview.getApplicationComponent(MailService.class);
-				String username = MailUtils.getCurrentUser();
-				String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-				mailSrv.moveMessage(SessionProviderFactory.createSystemProvider(), username, accountId, msg, msg.getFolders()[0],  Utils.createFolderId(accountId, Utils.FD_TRASH, false));
-				uiMsgList.updateList();
-				uiMsgPreview.setMessage(null);
+      MailService mailSrv = uiMsgPreview.getApplicationComponent(MailService.class);
+      String username = MailUtils.getCurrentUser();
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+			
+      if (msg != null) {
+        String selectedFolderId = uiFolderCon.getSelectedFolder() ;
+        if (selectedFolderId != null && selectedFolderId.equals(Utils.createFolderId(accountId, Utils.FD_TRASH, false))) { 
+          mailSrv.removeMessage(SessionProviderFactory.createSystemProvider(), username, accountId, msg);
+        } else {
+          mailSrv.moveMessage(SessionProviderFactory.createSystemProvider(), username, accountId, msg, msg.getFolders()[0],  Utils.createFolderId(accountId, Utils.FD_TRASH, false));
+        }        
+        uiMsgList.updateList();
+        uiMsgPreview.setMessage(null);
 			}
-			uiMsgPreview.setShowedMessages(null) ;
-			event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UINavigationContainer.class));
+      
+      uiMsgPreview.setShowedMessages(null) ;
+			event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderCon.getParent());
 			event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgArea);
 		}
 	}
