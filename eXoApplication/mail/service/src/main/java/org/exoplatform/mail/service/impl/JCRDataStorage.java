@@ -784,25 +784,24 @@ public class JCRDataStorage{
         } else if (part.isMimeType("message/*")) {
           setPart((Part)part.getContent(), node);
         }
-      } else if (disposition.equalsIgnoreCase(Part.INLINE) || disposition.equalsIgnoreCase(Part.ATTACHMENT)) {
+      } else if (disposition.equalsIgnoreCase(Part.INLINE)) {
         /* this must be presented INLINE, hence inside the body of the message */
-        if (part.isMimeType("text/plain") || part.isMimeType("text/html")) {
+        if (part.isMimeType("text/plain") || part.isMimeType("text/html")) 
           appendMessageBody(part, node);
+      } else if (disposition.equalsIgnoreCase(Part.ATTACHMENT)){
+        /* this part must be presented as an attachment, hence we add it to the attached files */
+        InputStream is = part.getInputStream();
+        Node nodeFile = node.addNode(MimeUtility.decodeText(part.getFileName()), Utils.NT_FILE);
+        Node nodeContent = nodeFile.addNode(Utils.JCR_CONTENT, Utils.NT_RESOURCE);
+        if (contentType.indexOf(";") > 0) {
+          String[] type = contentType.split(";") ;
+          nodeContent.setProperty(Utils.JCR_MIMETYPE, type[0]) ;
         } else {
-          /* this part must be presented as an attachment, hence we add it to the attached files */
-          InputStream is = part.getInputStream();
-          Node nodeFile = node.addNode(MimeUtility.decodeText(part.getFileName()), Utils.NT_FILE);
-          Node nodeContent = nodeFile.addNode(Utils.JCR_CONTENT, Utils.NT_RESOURCE);
-          if (contentType.indexOf(";") > 0) {
-            String[] type = contentType.split(";") ;
-            nodeContent.setProperty(Utils.JCR_MIMETYPE, type[0]) ;
-          } else {
-            nodeContent.setProperty(Utils.JCR_MIMETYPE, contentType);
-          }
-          nodeContent.setProperty(Utils.JCR_DATA, is) ;
-          nodeContent.setProperty(Utils.JCR_LASTMODIFIED, Calendar.getInstance().getTimeInMillis()) ;
-          node.setProperty(Utils.EXO_HASATTACH, true) ;
+          nodeContent.setProperty(Utils.JCR_MIMETYPE, contentType);
         }
+        nodeContent.setProperty(Utils.JCR_DATA, is) ;
+        nodeContent.setProperty(Utils.JCR_LASTMODIFIED, Calendar.getInstance().getTimeInMillis()) ;
+        node.setProperty(Utils.EXO_HASATTACH, true) ;
       }
     } catch(Exception e) {
       e.printStackTrace() ;
