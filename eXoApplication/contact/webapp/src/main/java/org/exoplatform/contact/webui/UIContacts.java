@@ -120,8 +120,11 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   @SuppressWarnings("unused")
   private boolean isPrintDetail = false ;
   private boolean isSelectSharedContacts = false ;
+  private List<Contact> listBeforePrint = new ArrayList<Contact>() ; 
+  
   public UIContacts() throws Exception { } 
   
+  public void setListBeforePrint(List<Contact> contacts) { listBeforePrint = contacts ; }  
   public String[] getActions() { return new String[] {"Cancel"} ; }
   public void activate() throws Exception { }
   public void deActivate() throws Exception { } 
@@ -963,6 +966,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         return ;
       }
       LinkedHashMap<String, Contact> contactMap = new LinkedHashMap<String, Contact> () ;
+      uiContacts.setListBeforePrint(Arrays.asList(uiContacts.getContacts())) ;
       for (String contactId : contactIds) contactMap.put(contactId, uiContacts.contactMap.get(contactId)) ;
       uiContacts.contactMap = contactMap ;
       uiContacts.viewListBeforePrint = uiContacts.viewContactsList ;
@@ -1018,7 +1022,25 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIContacts uiContacts = event.getSource() ;
       uiContacts.isPrintForm = false ;
       uiContacts.viewContactsList = uiContacts.viewListBeforePrint ;
-      uiContacts.updateList() ;
+      uiContacts.getChildren().clear() ;
+      uiContacts.contactMap.clear();
+      UIContactPreview contactPreview = 
+        uiContacts.getAncestorOfType(UIContactContainer.class).getChild(UIContactPreview.class) ;    
+      if (uiContacts.listBeforePrint != null && uiContacts.listBeforePrint.size() > 0) {
+        for(Contact contact : uiContacts.listBeforePrint) {
+          UIFormCheckBoxInput<Boolean> checkbox = new UIFormCheckBoxInput<Boolean>(contact.getId(),contact.getId(), false) ;
+          uiContacts.addUIFormInput(checkbox);
+          uiContacts.contactMap.put(contact.getId(), contact) ; 
+        }
+        Contact[] array = uiContacts.contactMap.values().toArray(new Contact[]{}) ;
+        if (array.length > 0) {
+          Contact firstContact = array[0] ;
+          contactPreview.setContact(firstContact) ;
+          uiContacts.selectedContact = firstContact.getId() ;
+        } else contactPreview.setContact(null) ;
+      } else contactPreview.setContact(null) ;
+      uiContacts.setListBeforePrint(new ArrayList<Contact>()) ;
+      //uiContacts.updateList() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
     }
   }

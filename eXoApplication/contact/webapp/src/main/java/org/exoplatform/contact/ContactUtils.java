@@ -44,6 +44,12 @@ public class ContactUtils {
   public static final String HTTP = "http://" ; 
   public static String[] specialString = {"!", "#", "$", "%", "^", "&"
                                             , ":", ">", "<", "~", "`", "]", "'", "/"} ;
+  
+  // add
+  public static String encodeJCRText(String str) {
+    return str.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").
+      replaceAll("'", "&apos;").replaceAll("\"", "&quot;") ;
+  }
   public static String filterString(String text, boolean isEmail) {
 
     for (String str : specialString) {
