@@ -110,14 +110,21 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       String username = ContactUtils.getCurrentUser() ;
       SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
       if (uiMoveContactForm. sharedGroupMap_.containsKey(addressBookId)) {
-        ContactGroup group = contactService.getSharedGroup(username, addressBookId) ;
+        ContactGroup group = contactService.getSharedGroup(username, addressBookId) ;        
         if (group.getEditPermissionUsers() == null || 
             !Arrays.asList(group.getEditPermissionUsers()).contains(username + JCRDataStorage.HYPHEN)) {
-          UIApplication uiApp = uiMoveContactForm.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UIMoveContactsForm.msg.non-permission", null,
-            ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;  
+          boolean canEdit = false ;
+          String[] editPerGroups = group.getEditPermissionGroups() ;
+          if (editPerGroups != null)
+            for (String editPer : editPerGroups)
+              if (ContactUtils.getUserGroups().contains(editPer)) canEdit = true ;          
+          if (!canEdit) {
+            UIApplication uiApp = uiMoveContactForm.getAncestorOfType(UIApplication.class) ;
+            uiApp.addMessage(new ApplicationMessage("UIMoveContactsForm.msg.non-permission", null,
+              ApplicationMessage.WARNING)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return ; 
+          }           
         }
       }
       String type = event.getRequestContext().getRequestParameter("addressType");
