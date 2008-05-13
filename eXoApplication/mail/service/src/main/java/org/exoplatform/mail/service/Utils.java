@@ -245,7 +245,7 @@ public class Utils {
   public static boolean isNumber(String number) {
     try {
       Long.parseLong(number.trim()) ;
-    } catch(NumberFormatException nfe) {
+    } catch(Exception nfe) {
       return false;
     }
     return true ;
