@@ -34,7 +34,7 @@
 .UIContactPortlet .UISearchForm input {
 	width: 140px;
 	float: right;
-	margin: 3px 8px;
+	margin: 0px 8px;
 }
 
 .UIContactPortlet .UISearchForm .Search {
@@ -42,7 +42,7 @@
   height: 16px;
   width: 16px;
   float: right;
-  margin: 8px 5px 0px 0px;
+  margin: 5px 5px 0px 0px;
   cursor: pointer;
   display: block;
 }
@@ -59,7 +59,7 @@
   background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/FindIcon.gif') no-repeat ;	
   height: 16px; width: 16px;
   float: right; cursor: pointer;
-  margin: 8px 0px 0px 2px;
+  margin: 5px 0px 0px 2px;
   display: block;
 }
 
@@ -482,6 +482,7 @@
 	text-align: left;
 	border-bottom: 1px solid #d8d8d8;
 	border-top: none;
+	padding-top: 0px;
 }
 
 .UIContactPortlet .UIContactContainer .UIGrid .Icon {

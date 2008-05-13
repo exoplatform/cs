@@ -368,7 +368,7 @@
                 else classArrowFrom = "DownArrow1Icon" ;
               }
     		    %>
-    		  	<a href = "$sortedBySender"><div class="$classArrowFrom" title="Sort by sender">$head</div></a>
+    		  	<a href = "$sortedBySender" ><div class="$classArrowFrom" style="width: 100%; cursor: pointer;" title="Sort by sender">$head</div></a>
     		  </th>
     		  <th style="width: 24px;">
     		    <a hreft = ""><div class="AttachmentIcon" title="Attchments"><span></span></div></a>
@@ -385,10 +385,10 @@
                  else classArrowSubject = "DownArrow1Icon"
                }
            %>
-    		  	<a href = "$sortedBySubject"><div class="$classArrowSubject" title="Sort by subject">Subject</div></a>
+    		  	<a href = "$sortedBySubject"><div class="$classArrowSubject" title="Sort by subject" style="width: 95%; cursor: pointer;">Subject</div></a>
     		  </th>
    	      <th style="width: 24px;"><div class="TotalMessageIcon" title="Total message(s) in conversation"><span></span></div></th>
-   	      <th style="width: 120px; padding-left: 8px;">
+   	      <th style="width: 80px; padding-left: 8px;">
          	  <%
          	     String sortedByReceivedDate = uicomponent.event("Sort",Utils.EXO_RECEIVEDDATE);
              	  String classArrowDate = "";
@@ -397,7 +397,7 @@
                   else classArrowDate = "DownArrow1Icon"
                 }
             %>
-    		    <a href = "$sortedByReceivedDate"><div class="$classArrowDate" title="Sort by Date & time">Date & Time</div></a>
+    		    <a href = "$sortedByReceivedDate"><div class="$classArrowDate" title="Sort by Date & time" >Date & Time</div></a>
    	      </th>
    	      <th style="width: 50px; padding-left: 8px;">
        	    <%

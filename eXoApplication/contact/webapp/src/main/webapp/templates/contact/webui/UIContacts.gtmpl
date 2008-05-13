@@ -160,11 +160,11 @@
 					<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
 	  				<thead>
 	  					<tr>
-	  			      <th style="width: 23px; padding-left: 7px;" class="text">
+	  			      <th style="width: 23px;" class="text">
 	  			      	<input type="checkbox" class="checkbox" title="<%=_ctx.appRes(uicomponent.getName() + ".label.checkAll")%>" value="4"/>
 	  			      </th>
 	  						<th style="width: 24px;" class="text"><div class="Icon BlueTag"><span></span></div></th>
-	  		        <th style="width: 24%; padding-left: 7px;" class="text">
+	  		        <th style="width: 24%;" class="text">
 	  		        	
 	  		        	<%
 	  		        		String fullName = uicomponent.fullName ;
@@ -184,10 +184,10 @@
 			              }
     		    			%>
 	  		        	<a href="$sortedByName">
-	  		        	<div class="$classArrowName" title="<%=_ctx.appRes(uicomponent.getName() + ".label.sortByName")%>"> <%=_ctx.appRes(uicomponent.getName() + ".label.name")%> </div>
+	  		        	<div style="width: 90%; cursor: pointer;" class="$classArrowName" title="<%=_ctx.appRes(uicomponent.getName() + ".label.sortByName")%>"> <%=_ctx.appRes(uicomponent.getName() + ".label.name")%> </div>
 	  		        	</a>
 	  		        </th>
-	 	      	    <th class="text" style="padding-left: 7px;">
+	 	      	    <th class="text">
 	 	      	    
 	 	      	    	<%
 	 	      	    		String emailAddress = uicomponent.emailAddress ;
@@ -206,10 +206,10 @@
     		    			%>
 	 	      	    
 	 	      	    	<a href="$sortedByEmail">
-	  		        	<div class="$classArrowEmail" title="<%=_ctx.appRes(uicomponent.getName() + ".label.sortByEmail")%>"><%=_ctx.appRes(uicomponent.getName() + ".label.email")%></div>
+	  		        	<div style="width: 100%; cursor: pointer;" class="$classArrowEmail" title="<%=_ctx.appRes(uicomponent.getName() + ".label.sortByEmail")%>"><%=_ctx.appRes(uicomponent.getName() + ".label.email")%></div>
 	  		        	</a>
 	  		        </th>
-	 	      	    <th style="width: 120px; padding-left: 7px;" class="text">
+	 	      	    <th style="width: 120px; " class="text">
 	 	      	    
 	 	      	    	<%
 	 	      	    		String jobTitle = uicomponent.jobTitle ;
@@ -228,14 +228,14 @@
     		    			%>
 	 	      	    
 	  		        	<a href="$sortedByOrganition">
-	  		        	<div class="$classArrowOrganition" style="padding-right:26px;" title="<%=_ctx.appRes(uicomponent.getName() + ".label.sortByJobTitle")%>"><%=_ctx.appRes(uicomponent.getName() + ".label.jobTitle")%></div>
+	  		        	<div style="width: 70%; cursor: pointer;" class="$classArrowOrganition" style="padding-right:26px;" title="<%=_ctx.appRes(uicomponent.getName() + ".label.sortByJobTitle")%>"><%=_ctx.appRes(uicomponent.getName() + ".label.jobTitle")%></div>
 	 	      	    	</a>
 	 	      	    </th>
-	 	      	    <th style="width: 120px; padding-left: 7px;"> <%=_ctx.appRes(uicomponent.getName() + ".label.workPhone")%> </th>
+	 	      	    <th style="width: 120px; "> <%=_ctx.appRes(uicomponent.getName() + ".label.workPhone")%> </th>
 	 	      	    <% 
 	 	      	    	if(isDisplaySearchResult) {	
 	 	      	    %>
-	 	      	    	<th style="padding-left: 7px;"> <%=_ctx.appRes(uicomponent.getName() + ".label.addressBook")%> </th>
+	 	      	    	<th > <%=_ctx.appRes(uicomponent.getName() + ".label.addressBook")%> </th>
 	 	      	    <% } %>
 	 	      	    	
 	  	 	      </tr>
