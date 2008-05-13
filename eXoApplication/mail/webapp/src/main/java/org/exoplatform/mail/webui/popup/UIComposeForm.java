@@ -224,6 +224,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         case MESSAGE_IN_DRAFT :
           setFieldSubjectValue(msg.getSubject());
           setFieldToValue(msg.getMessageTo());
+          setFieldCcValue(msg.getMessageCc()) ;
+          setFieldBccValue(msg.getMessageBcc()) ;
           setFieldContentValue(formatContent(msg));
           if (msg != null && msg.hasAttachment()) {
             String username = MailUtils.getCurrentUser();
@@ -360,6 +362,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   public String getFieldBccValue() {
     return getUIFormTextAreaInput(FIELD_BCC).getValue() ;
   }
+  
   public void setFieldBccValue(String value) {
     getUIFormTextAreaInput(FIELD_BCC).setValue(value);
   }

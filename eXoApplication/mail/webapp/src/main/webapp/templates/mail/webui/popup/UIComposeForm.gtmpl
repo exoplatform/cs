@@ -192,27 +192,25 @@
 	                </td>
 	              </tr>
 	              <%
-                  if (uicomponent.showCc_) {
+                  String displayCc = "display:none" ;
+                  if (uicomponent.showCc_) { displayCc = "" ; }
                 %>
-  	              <tr id="FIELD_CC">
+  	              <tr id="FIELD_CC" style="$displayCc">
   	                <td class="FieldLabel"><a href="<%=uicomponent.event("ToCC")%>">Cc</a> :&nbsp;&nbsp;</td>
   	                <td class="FieldComponent" colspan="2">
   	                  <%uicomponent.renderField(uicomponent.FIELD_CC)%> 
   	                </td>
   	              </tr>
 	              <%
-                  }
-                  if (uicomponent.showBcc_) {
+                  String displayBcc = "display:none" ;
+                  if (uicomponent.showBcc_) { displayBcc = "" ; }
                 %>
-                  <tr id="FIELD_BCC">
+                  <tr id="FIELD_BCC" style="$displayBcc">
   	                <td class="FieldLabel"><a href="<%=uicomponent.event("ToBCC")%>">Bcc</a> :&nbsp;&nbsp;</td>
   	                <td class="FieldComponent" colspan="2">
   	                  <%uicomponent.renderField(uicomponent.FIELD_BCC)%> 
   	                </td>
   	              </tr>
-                <%
-                  }
-                %>
 	              <tr>
 	                <td class="FieldLabel">Subject :&nbsp;&nbsp;</td>
 	                <td class="FieldComponent" colspan="2" style="padding:4px;">
