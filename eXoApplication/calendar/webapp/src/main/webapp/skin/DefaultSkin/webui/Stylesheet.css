@@ -132,6 +132,10 @@
 	margin: 3px auto;
 }
 
+.UICalendarPortlet .UIForm .HorizontalLayout .setting input.checkbox {
+  margin:4px 0px 0px 0px;
+  _margin: 2px 0px 0px 0px;
+}
 /*=====================Table Color===========================*/
 
 .UIPopupCategory .UIContextMenuContainer {

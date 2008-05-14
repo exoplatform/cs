@@ -76,6 +76,7 @@
 	padding-left: 26px;
 	background-position: left center;
 	background-repeat: no-repeat; 
+	cursor: pointer;
 }
 
 .UIContactPortlet .SeparatorLine {
@@ -243,14 +244,10 @@
 
 .UIContactPortlet .UINavigationContainer .ItemList {
 	padding: 0px 13px;
-	height: 24px; line-height: 24px;
+	line-height: 24px;
 	overflow: hidden;
 	white-space: nowrap;
 	width: 180px;
-}
-
-.UIContactPortlet .UINavigationContainer .ItemList a {
-	padding: 3px 0px 3px 26px;
 }
 
 .UIContactPortlet .UINavigationContainer .UIPopupCategory a.MenuItem {
