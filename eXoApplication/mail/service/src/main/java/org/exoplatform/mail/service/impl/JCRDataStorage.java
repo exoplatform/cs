@@ -1524,11 +1524,12 @@ public class JCRDataStorage{
   }
   
   private Node getMatchingThread(SessionProvider sProvider, String username, String accountId, String inReplyToHeader, Node msg) throws Exception {
+    Node accountNode = getMailHomeNode(sProvider, username).getNode(accountId) ;
     Node converNode = null ;
     if (inReplyToHeader.equals(msg.getName())) return null ;
-    Session sess = getMailHomeNode(sProvider, username).getSession();
+    Session sess = accountNode.getSession();
     QueryManager qm = sess.getWorkspace().getQueryManager() ;
-    StringBuffer queryString = new StringBuffer("//element(*,exo:message)[@exo:id='").
+    StringBuffer queryString = new StringBuffer("/jcr:root" + accountNode.getPath() + "//element(*,exo:message)[@exo:id='").
     append(inReplyToHeader).
     append("']");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
@@ -1539,7 +1540,7 @@ public class JCRDataStorage{
   }
   
   public void addMessageToThread(SessionProvider sProvider, String username, String accountId, String inReplyToHeader, Node msgNode) throws Exception {
-    Node converNode = getMatchingThread(sProvider, username, accountId, inReplyToHeader, msgNode) ;  
+    Node converNode = getMatchingThread(sProvider, username, accountId, inReplyToHeader, msgNode) ;
     try {
       if (converNode != null && converNode.isNodeType("exo:message")) {
         //TODO: add when save message
