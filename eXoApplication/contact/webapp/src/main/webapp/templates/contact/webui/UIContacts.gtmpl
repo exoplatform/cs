@@ -102,12 +102,9 @@
 					<a href="<%=uicomponent.event("CopyContact")%>" class="ControlButton">
 							<div class="Icon CopyContactIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.copyContacts")%>"><span></span></div>
 					</a>
-					
-					<div class="TitleSearch" style="float: left; margin-left: 10px"><%=_ctx.appRes(uicomponent.getName() + ".label.searchResult")%></div>
-					
-					
 					<div style="clear: both;"><span></span></div>
 				</div>
+				<div class="TitleSearch" ><%=_ctx.appRes(uicomponent.getName() + ".label.searchResult")%></div>
 	<% } else { %>
 				<div class="UIContactActionsBar">
 					<a href="<%=uicomponent.event("MoveContacts")%>" class="ControlButton">

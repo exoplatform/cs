@@ -336,11 +336,15 @@
 	_margin-right: 2px;
 }
 
-.UIContactPortlet .Result .TitleSearch {
+.UIContactPortlet .TitleSearch {
 	text-align: center;
-	height: 23px;
-	padding-left: 60px;
+	line-height: 23px;
 	font-size: 12px;
+	background: url('background/BgTitleBar1x24.gif') repeat-x;
+	border-left: 1px solid #CCCCCC;
+	border-right: 1px solid #CCCCCC;
+	font-weight: bold;
+	_margin: 0px 2px 0px 3px;
 }
 
 .UIContactPortlet .UIContactActionsBar {
