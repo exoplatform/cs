@@ -70,15 +70,14 @@ UIDateTimePicker.prototype.show = function() {
 	  top = y + "px" ;
   }
 	
-		var drag = document.getElementById("blockCaledar");
-		var innerWidth = drag.offsetWidth;
-		drag.onmousedown = function(evt) {
-			var event = evt || window.event;
-			event.cancelBubble = true;
-			drag.style.position = "absolute";
-			drag.style.width = innerWidth + "px";
-			eXo.core.DragDrop.init(null, drag, drag, event);
-	 	}
+	var drag = document.getElementById("blockCaledar");		
+	drag.onmousedown = this.initDND ;
+} ;
+
+UIDateTimePicker.prototype.initDND = function(evt) {
+	var _e = evt || window.event;
+	_e.cancelBubble = true ;
+	eXo.core.DragDrop.init(null, this, this.parentNode.parentNode, evt);
 } ;
 
 UIDateTimePicker.prototype.getTypeFormat = function() {
@@ -132,7 +131,7 @@ UIDateTimePicker.prototype.renderCalendar = function() {
   var startDayOfWeek = this.getDayOfWeek(this.currentDate.getFullYear(), this.currentDate.getMonth() + 1, dayOfMonth) ;
   var daysInMonth = this.getDaysInMonth(this.currentDate.getFullYear(), this.currentDate.getMonth()) ;
   var clazz = null;
-	var table = '<div id="blockCaledar" class="BlockCalendar">' ;
+	var table = '<div id="blockCaledar" class="BlockCalendar"><span></span></div>' ;
 	table += 		'<div class="UICalendar" onmousedown="event.cancelBubble = true">' ;
 	table += 		'	<table class="MonthYearBox">' ;
 	table += 		'	  <tr>' ;
@@ -187,7 +186,7 @@ UIDateTimePicker.prototype.renderCalendar = function() {
 		table += 		'	</div>' ;
 	}
 	table += 		'</div>' ;
-	table += 		'</div>' ;
+	//table += 		'</div>' ;
 	return table ;
 } ;
 
