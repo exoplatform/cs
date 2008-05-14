@@ -65,7 +65,7 @@
 
 .UICalendarPortlet .UICalendars .CalendarGroupIcon {
   padding-left: 19px;
-  margin: 1px 3px 0px 0px;
+  margin: 2px 3px 0px 2px;
   float: left;
   line-height: 16px;
   font-weight: bold;
@@ -83,6 +83,7 @@
   width: 90px;
   overflow: hidden;
   line-height: 17px;
+  margin-top: 1px;
 }
 .UICalendarPortlet .UICalendars .SharedCalendarIcon {
   padding-left: 19px;
@@ -90,10 +91,6 @@
   width: 90px;
   overflow: hidden;
   line-height: 17px;
-}
-
-.UICalendarPortlet .UICalendars .UIForm input.checkbox {
-  margin: 2px 0px 0px 2px;
 }
 
 .UICalendarPortlet .UICalendars .DownArrow1Icon {
@@ -126,6 +123,7 @@
 .UICalendarPortlet .UICalendars .CalendarItem {
 	border: 1px solid #c7c7c7;
 	margin-top: 6px;
+	_height: 20px;
 }
 
 .UICalendarPortlet .UICalendars .UIVTabContent {
