@@ -75,11 +75,8 @@ public class NewUserListener extends UserEventListener {
     
     Account acc = new Account();
     
-    // it is the case at spff
-    //String incomingUserName = email;
-    // but normally
-    String incomingUserName = user.getUserName();
-    
+    String incomingUserName = email;
+
     acc.setLabel(fullName + " (Default)") ;
     acc.setDescription("") ;
     acc.setUserDisplayName(fullName) ;
