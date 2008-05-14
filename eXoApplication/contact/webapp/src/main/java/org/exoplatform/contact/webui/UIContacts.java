@@ -234,7 +234,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   }
   
   public Contact[] getContacts() throws Exception {
-    if (isSelectSharedContacts) {
+    if (isSelectSharedContacts && !isPrintForm) {
       setContacts(ContactUtils.getContactService().getSharedContacts( ContactUtils.getCurrentUser())); 
     } else {
       UIAddressBooks uiAddressBooks = getAncestorOfType(
