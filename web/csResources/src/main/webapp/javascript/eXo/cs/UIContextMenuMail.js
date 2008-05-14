@@ -5,8 +5,8 @@ UIContextMenuMail.prototype.portletCssClass = "UIMailPortlet" ;
 UIContextMenuMail.prototype.setup = function(evt) {
 	var _e = window.event || evt ;
 	var type = _e.type ;
-	if(type == "mouseover") document.body.oncontextmenu = eXo.webui.UIContextMenuMail.show;
-	if(type == "mouseout") document.body.oncontextmenu = function() { return true ;} ;
+	if(type == "mouseover") document.oncontextmenu = eXo.webui.UIContextMenuMail.show;
+	if(type == "mouseout") document.oncontextmenu = function() { return true ;} ;
 } ;
 
 UIContextMenuMail.prototype.show = function(evt) {

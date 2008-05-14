@@ -26,8 +26,8 @@ UIContextMenu.prototype.init = function(conf) {
 UIContextMenu.prototype.setup = function(evt) {
 	var _e = window.event || evt ;
 	var type = _e.type ;
-	if(type == "mouseover") document.body.oncontextmenu = eXo.webui.UIContextMenu.show;
-	if(type == "mouseout") document.body.oncontextmenu = function() { return true ;} ;
+	if(type == "mouseover") document.oncontextmenu = eXo.webui.UIContextMenu.show;
+	if(type == "mouseout") document.oncontextmenu = function() { return true ;} ;
 } ;
 
 UIContextMenu.prototype.attach = function(classNames, menuId) {
