@@ -38,7 +38,6 @@ MaskLayerControl.prototype.showPicture = function(node) {
   imageNode.src = imgSrcNode.src ;
   imageNode.setAttribute('alt', 'Click to close.') ;
   with (imageNode.style) {
-    width = '100%' ;
     height = '100%' ;
   }
   containerNode.appendChild(imageNode) ;
