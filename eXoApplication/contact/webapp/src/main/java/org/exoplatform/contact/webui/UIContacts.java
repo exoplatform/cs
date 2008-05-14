@@ -242,7 +242,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       if (!ContactUtils.isEmpty(selectedGroup)) {
         if (!uiAddressBooks.getPrivateGroupMap().containsKey(selectedGroup) && !uiAddressBooks.getSharedGroups().containsKey(selectedGroup)
             && !ContactUtils.getUserGroups().contains(selectedGroup)) setContacts(null) ;
-        else if (uiAddressBooks.getSharedGroups().containsKey(selectedGroup)) {
+        else if (uiAddressBooks.getSharedGroups().containsKey(selectedGroup) && !isPrintForm) {
           setContacts(ContactUtils.getContactService().getSharedContactsByAddressBook(SessionProviderFactory
               .createSystemProvider(),ContactUtils.getCurrentUser(), uiAddressBooks.getSharedGroups().get(selectedGroup)));
         }
