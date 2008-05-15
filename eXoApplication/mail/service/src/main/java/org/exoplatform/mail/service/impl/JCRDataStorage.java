@@ -175,10 +175,11 @@ public class JCRDataStorage{
     return account ;
   }
   public Message getMessageById(SessionProvider sProvider, String username, String accountId, String msgId) throws Exception {
-    Session sess = getMailHomeNode(sProvider, username).getSession();
+    Node accountNode = getMailHomeNode(sProvider, username).getNode(accountId) ;
+    Session sess = accountNode.getSession();
     QueryManager qm = sess.getWorkspace().getQueryManager();
     // gets the specified folder node
-    StringBuffer queryString = new StringBuffer("//element(*,exo:message)[@exo:id='").
+    StringBuffer queryString = new StringBuffer("/jcr:root" + accountNode.getPath() + "//element(*,exo:message)[@exo:id='").
     append(msgId).
     append("']");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
@@ -893,10 +894,11 @@ public class JCRDataStorage{
   }
   
   public Node getFolderNodeById(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception {
-    Session sess = getMailHomeNode(sProvider, username).getSession();
+    Node accountNode = getMailHomeNode(sProvider, username).getNode(accountId) ;
+    Session sess = accountNode.getSession();
     QueryManager qm = sess.getWorkspace().getQueryManager();
     // gets the specified folder node
-    StringBuffer queryString = new StringBuffer("//element(*,exo:folder)[@exo:id='").
+    StringBuffer queryString = new StringBuffer("/jcr:root" + accountNode.getPath() + "//element(*,exo:folder)[@exo:id='").
     append(folderId).
     append("']");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
@@ -1340,9 +1342,9 @@ public class JCRDataStorage{
 
   public List<Message> getMessageByTag(SessionProvider sProvider, String username, String accountId, String tagId) throws Exception {
     List<Message> messages = new ArrayList<Message>();
-    Node mailHomeNode = getMailHomeNode(sProvider, username) ;
-    QueryManager qm = mailHomeNode.getSession().getWorkspace().getQueryManager();
-    StringBuffer queryString = new StringBuffer("/jcr:root" + mailHomeNode.getNode(accountId).getPath() + "//element(*,exo:message)[@exo:tags='").
+    Node accountNode = getMailHomeNode(sProvider, username).getNode(accountId) ;
+    QueryManager qm = accountNode.getSession().getWorkspace().getQueryManager();
+    StringBuffer queryString = new StringBuffer("/jcr:root" + accountNode.getPath() + "//element(*,exo:message)[@exo:tags='").
     append(tagId).
     append("']");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
@@ -1357,9 +1359,9 @@ public class JCRDataStorage{
   
   private List<Node> getMessageNodeByFolder(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception {
     List<Node> msgNodes = new ArrayList<Node>();
-    Node mailHomeNode = getMailHomeNode(sProvider, username) ;
-    QueryManager qm = mailHomeNode.getSession().getWorkspace().getQueryManager();
-    StringBuffer queryString = new StringBuffer("/jcr:root" + mailHomeNode.getNode(accountId).getPath() + "//element(*,exo:message)[@exo:folders='").
+    Node accountNode = getMailHomeNode(sProvider, username).getNode(accountId) ;
+    QueryManager qm = accountNode.getSession().getWorkspace().getQueryManager();
+    StringBuffer queryString = new StringBuffer("/jcr:root" + accountNode.getPath() + "//element(*,exo:message)[@exo:folders='").
     append(folderId).
     append("']");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);

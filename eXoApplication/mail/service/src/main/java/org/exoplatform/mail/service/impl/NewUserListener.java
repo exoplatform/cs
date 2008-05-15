@@ -85,6 +85,7 @@ public class NewUserListener extends UserEventListener {
     acc.setSignature("") ;
     acc.setIncomingUser(incomingUserName); 
     acc.setIncomingPassword(password);
+    acc.setIsSavePassword(true) ;
     acc.setIncomingHost(incomingHost);
     acc.setIncomingPort(incomingPort);  
     acc.setProtocol(protocol);  
