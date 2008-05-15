@@ -320,11 +320,11 @@
 		                    	<%=uiform.getLabel("ExportCalendar")%>
 		                    </div>
 		                   </a>
-		                   <a class="MenuItem" style="color: gray;">   
+		                   <div class="MenuItem" style="color: gray;">   
 		                    <div class="ItemIcon  SendMailCalendarIcon">
 		                    	<%=uiform.getLabel("SendMailCalendar")%>
 		                    </div>
-		                   </a>
+		                   </div>
 		                   <a class="MenuItem" href="<%=uicomponent.event("ShareCalendar","id")%>">   
 		                    <div class="ItemIcon  SharedCalendarIcon">
 		                    	<%=uiform.getLabel("ShareCalendar")%>
