@@ -281,7 +281,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       uiForm.setContactList(resultPageList.getAll()) ;
       uiForm.getUIStringInput(UIAddressForm.FIELD_KEYWORD).setValue(null) ;
       uiForm.getUIFormSelectBox(UIAddressForm.FIELD_GROUP).setValue(uiForm.selectedAddressId_) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
     }
   }
   static  public class CancelActionListener extends EventListener<UIAddressForm> {
@@ -299,7 +299,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       UIAddressForm uiAddressForm = event.getSource() ;
       int page = Integer.parseInt(event.getRequestContext().getRequestParameter(OBJECTID)) ;
       uiAddressForm.updateCurrentPage(page) ; 
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressForm);           
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressForm.getAncestorOfType(UIPopupAction.class));           
     }
   }
 }
