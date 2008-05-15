@@ -491,15 +491,15 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
             if(!CalendarUtils.isEmpty(typedPerms)) {
               for(String s : typedPerms.split(CalendarUtils.COMMA)){
                 if(!CalendarUtils.isEmpty(s)) {
-                  if(s.equals("*.*")) listPermission.add(s) ;
-                  else if(s.lastIndexOf(".") > -1) {
-                    String typeName = s.substring(s.lastIndexOf(".")+ 1, s.length()) ;
-                    if(orgService.getMembershipTypeHandler().findMembershipType(typeName) != null) {
-                      listPermission.add(s) ;
-                    } 
+                  if(orgService.getUserHandler().findUserByName(s) != null) {             
+                    listPermission.add(s) ;
                   } else {
-                    if(orgService.getUserHandler().findUserByName(s) != null) {             
-                      listPermission.add(s) ;
+                    if(s.equals("*.*")) listPermission.add(s) ; 
+                    else if(s.indexOf("*.") > -1) {
+                      String typeName = s.substring(s.lastIndexOf(".")+ 1, s.length()) ;
+                      if(orgService.getMembershipTypeHandler().findMembershipType(typeName) != null) {
+                        listPermission.add(s) ;
+                      } 
                     }
                   }
                 }
