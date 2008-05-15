@@ -21,12 +21,10 @@
 						<div class="Title ControlButton">
 							<%=_ctx.appRes(uicomponent.id + ".label.CalendarView")%>
 						</div>
-						<div class="ControlButton" onclick="eXo.calendar.UICalendarPortlet.showView(this, event);">
-							<a class="SwitchButton" href="#">	
+						<div class="SelectButton" onclick="eXo.calendar.UICalendarPortlet.showView(this, event);">
 								<div class="IconHolder <%=uicomponent.getCurrentView()%>Icon">
 									<div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.id + ".label." + uicomponent.getCurrentView())%></div>
 								</div>
-							</a>
 							<% /*Begin Popup Menu*/ %>
 		      				<div class="UIRightClickPopupMenu" style="display: none;">
 		      					<div class="UIContextMenuContainer">
@@ -92,7 +90,7 @@
 						</span>
 						<div class="SeparatorLine"><span></span></div>
 						<div class="ControlButton" onclick="eXo.calendar.UICalendarPortlet.showView(this, event);">
-							<a class="SwitchButton" >
+							<a class="SwitchButton">
 								<div class="IconHolder LayoutSwitcherIcon" title="<%=_ctx.appRes(uicomponent.id + '.label.ShowHide')%>">
 									<span></span>
 								</div>
