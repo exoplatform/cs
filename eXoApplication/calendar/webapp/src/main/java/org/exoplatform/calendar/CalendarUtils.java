@@ -463,7 +463,7 @@ public class CalendarUtils {
 
   public static String encodeJCRText(String str) {
     return str.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").
-    replaceAll("'", "&apos;").replaceAll("\"", "&quot;") ;
+    replaceAll("'", "&apos;").replaceAll("\"", "&quot;");
   }
 
   public static String encodeHTML(String htmlContent) throws Exception {

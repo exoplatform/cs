@@ -23,6 +23,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.jcr.PathNotFoundException;
+
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.Colors;
 import org.exoplatform.calendar.service.Calendar;
@@ -213,8 +215,16 @@ public class UICalendars extends UIForm  {
       UICalendarPortlet calendarPortlet = uiCalendars.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = calendarPortlet.getChild(UIPopupAction.class) ;
       popupAction.deActivate() ;
-      popupAction.activate(UIEventCategoryManager.class, 470) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+      try {
+        popupAction.activate(UIEventCategoryManager.class, 470) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+      } catch (PathNotFoundException e) {
+        UIApplication uiApp = uiCalendars.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(calendarPortlet) ;
+        return;
+      }
     }
   }
   static  public class EditGroupActionListener extends EventListener<UICalendars> {
@@ -266,40 +276,49 @@ public class UICalendars extends UIForm  {
   static  public class AddEventActionListener extends EventListener<UICalendars> {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiComponent = event.getSource() ;
-      String calendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
-      if(!calType.equals(CalendarUtils.PRIVATE_TYPE)) {
-        if(!uiComponent.canAddTaskAndEvent(uiComponent, calendarId, calType)) {
-          UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null, 1)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return;
-        }
-      }
-
-      String clientTime = event.getRequestContext().getRequestParameter(CURRENTTIME) ;
-      String categoryId = event.getRequestContext().getRequestParameter("categoryId") ;
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
-      UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
-      popupAction.deActivate() ;
-      UIQuickAddEvent uiQuickAddEvent = popupAction.activate(UIQuickAddEvent.class, 600) ;
-      uiQuickAddEvent.setEvent(true) ;  
-      uiQuickAddEvent.setId("UIQuickAddEvent") ;
-      uiQuickAddEvent.update(calType, null) ;
-      uiQuickAddEvent.setSelectedCalendar(calendarId) ;
-      uiQuickAddEvent.init(uiCalendarPortlet.getCalendarSetting(), clientTime, null) ;
-      if(categoryId != null && categoryId.trim().length() >0 && !categoryId.toLowerCase().equals("null")) {
-        uiQuickAddEvent.setSelectedCategory(categoryId) ;
-      } else {
-        uiQuickAddEvent.setSelectedCategory("Meeting") ;
+      try {
+        String calendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+        String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
+        if(!calType.equals(CalendarUtils.PRIVATE_TYPE)) {
+          if(!uiComponent.canAddTaskAndEvent(uiComponent, calendarId, calType)) {
+            UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
+            uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null, 1)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return;
+          }
+        }
+        String clientTime = event.getRequestContext().getRequestParameter(CURRENTTIME) ;
+        String categoryId = event.getRequestContext().getRequestParameter("categoryId") ;
+        UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
+        popupAction.deActivate() ;
+        UIQuickAddEvent uiQuickAddEvent = popupAction.activate(UIQuickAddEvent.class, 600) ;
+        uiQuickAddEvent.setEvent(true) ;  
+        uiQuickAddEvent.setId("UIQuickAddEvent") ;
+        uiQuickAddEvent.update(calType, null) ;
+        uiQuickAddEvent.setSelectedCalendar(calendarId) ;
+        uiQuickAddEvent.init(uiCalendarPortlet.getCalendarSetting(), clientTime, null) ;
+        if(categoryId != null && categoryId.trim().length() >0 && !categoryId.toLowerCase().equals("null")) {
+          uiQuickAddEvent.setSelectedCategory(categoryId) ;
+        } else {
+          uiQuickAddEvent.setSelectedCategory("Meeting") ;
+        }
+        event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+      } catch (PathNotFoundException e) {
+        UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarPortlet) ;
+        return;
       }
-      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
 
   static  public class AddTaskActionListener extends EventListener<UICalendars> {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiComponent = event.getSource() ;
+      UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
+      try {
       String calendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       String clientTime = event.getRequestContext().getRequestParameter(CURRENTTIME) ;
       String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
@@ -312,7 +331,6 @@ public class UICalendars extends UIForm  {
           return;
         }
       }
-      UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
       popupAction.deActivate() ;
       UIQuickAddEvent uiQuickAddEvent = popupAction.activate(UIQuickAddEvent.class, 600) ;
@@ -327,6 +345,13 @@ public class UICalendars extends UIForm  {
         uiQuickAddEvent.setSelectedCategory("Meeting") ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+      } catch (PathNotFoundException e) {
+        UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarPortlet) ;
+        return;
+      }
     }
   }
 
@@ -363,6 +388,12 @@ public class UICalendars extends UIForm  {
         uiCalendarForm.init(calendar) ;
         popupAction.activate(uiPopupContainer, 600, 0, true) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+      } else {
+        UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarPortlet) ;
+        return;
       }	
     }
   }
@@ -373,7 +404,6 @@ public class UICalendars extends UIForm  {
       String calendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
       CalendarService calService = CalendarUtils.getCalendarService() ;
-
       if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
         calService.removeUserCalendar(uiComponent.getSession(), username, calendarId) ;
       }else if(calType.equals(CalendarUtils.SHARED_TYPE)) {

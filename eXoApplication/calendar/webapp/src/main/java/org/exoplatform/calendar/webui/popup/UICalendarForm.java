@@ -484,16 +484,31 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
           calendar.setPublic(isPublic) ;
           calendar.setGroups(selected.toArray((new String[]{})));
           List<String> listPermission = new ArrayList<String>() ;
-          /*for(String groupIdSelected : selected) {
-						String values	= uiForm.getUIStringInput(groupIdSelected + PERMISSION_SUB).getValue() ;
-						if(!CalendarUtils.isEmpty(values)) uiForm.updateSelect(groupIdSelected + PERMISSION_SUB, values) ;
-					}*/
+          OrganizationService orgService = CalendarUtils.getOrganizationService() ;
           for(String groupIdSelected : selected) {
-            if(uiForm.perms_.get(groupIdSelected + PERMISSION_SUB) != null)
-              for(String s : uiForm.perms_.get(groupIdSelected + PERMISSION_SUB).keySet()){
-                if(!CalendarUtils.isEmpty(s)) listPermission.add(uiForm.perms_.get(groupIdSelected + PERMISSION_SUB).get(s)) ;
+            UIFormInputWithActions sharedTab = uiForm.getChildById(UICalendarForm.INPUT_SHARE) ;
+            String typedPerms = sharedTab.getUIStringInput(groupIdSelected + PERMISSION_SUB).getValue();
+            if(!CalendarUtils.isEmpty(typedPerms)) {
+              for(String s : typedPerms.split(CalendarUtils.COMMA)){
+                if(!CalendarUtils.isEmpty(s)) {
+                  if(s.equals("*.*")) listPermission.add(s) ;
+                  else if(s.lastIndexOf(".") > -1) {
+                    String typeName = s.substring(s.lastIndexOf(".")+ 1, s.length()) ;
+                    if(orgService.getMembershipTypeHandler().findMembershipType(typeName) != null) {
+                      listPermission.add(s) ;
+                    } 
+                  } else {
+                    if(orgService.getUserHandler().findUserByName(s) != null) {             
+                      listPermission.add(s) ;
+                    }
+                  }
+                }
               }
-            if(!listPermission.contains(CalendarUtils.getCurrentUser())) listPermission.add(CalendarUtils.getCurrentUser()) ;
+            }
+            if(!listPermission.contains(CalendarUtils.getCurrentUser()) && !listPermission.contains("*.*")) 
+            { 
+              listPermission.add(CalendarUtils.getCurrentUser()) ;
+            }
           }        
           calendar.setEditPermission(listPermission.toArray(new String[]{})) ;
           calendarService.savePublicCalendar(sProvider, calendar, uiForm.isAddNew_, username) ;
