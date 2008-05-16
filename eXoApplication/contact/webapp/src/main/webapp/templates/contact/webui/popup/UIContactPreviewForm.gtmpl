@@ -125,7 +125,7 @@
 											</div>
 											<% } %>
 											
-											<div class="showOnMap"><a href="#" onclick="eXo.contact.UIContactPortlet.showMap('64 rue d archereau 75019 paris, france', '<%=contact.getFullName()%>');return false;"><%=_ctx.appRes(uicomponent.getName() + ".label.map")%></a></div>
+											
 										</div>
 										<div class="RightContent">
 										<% if (!ContactUtils.isEmpty(contact.getWorkPhone1())) { %>
