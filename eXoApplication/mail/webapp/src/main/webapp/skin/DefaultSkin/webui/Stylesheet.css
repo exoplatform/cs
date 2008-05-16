@@ -1489,36 +1489,46 @@
 
 .UIMailPortlet .UIContactsPopup .InfoContainer .LeftContent {
 	float: left;
-	width: 250px;
+	width: 46%;
+	padding-right: 10px;
 }
 
 .UIMailPortlet .UIContactsPopup .InfoContainer .RightContent {
-	margin-left: 255px;
-}
-
-.UIMailPortlet .UIContactsPopup .InfoContainer .Content .InfoLabel1 {
 	float: left;
-	width: 60px;
+	width: 46%;
+	padding-left: 10px;
 }
 
 .UIMailPortlet .UIContactsPopup .InfoContainer .Content .InfoLabel {
-	width: 90px;
-	float: left;
+  white-space: nowrap;
 }
 
-.UIMailPortlet .UIContactsPopup .InfoContainer .Content .Info1 {
-	margin-left: 65px;
+
+.UIMailPortlet .UIContactsPopup .InfoContainer .Content .InfoTitle1 {
+	white-space: nowrap;
+  padding: 0px 10px 0px 4px;
+  width: 100%;
 }
 
-.UIMailPortlet .UIContactsPopup .InfoContainer .Content .Info {
-	background: none;
-	margin-left: 100px;
+.UIMailPortlet .UIContactsPopup .InfoContainer .Content .InfoTitle2 {
+	white-space: nowrap;
+  width: 100%; 
+  table-layout: fixed;
+}
+
+.UIMailPortlet .UIContactsPopup .InfoContainer .Content .InfoTitle3 {
+	white-space: nowrap;
+  overflow: hidden; 
+}
+
+.UIMailPortlet .UIContactsPopup .InfoContainer .Content .InfoTitle {
+	white-space: nowrap;
+  padding: 0px 10px 0px 2px;
 }
 
 .UIMailPortlet .UIContactsPopup .InfoContainer .Content .Email {
 	background: url(skinIcons/16x16/icons/EmailIcon.gif) no-repeat left center;
 	padding-left: 20px;
-	margin-left: 60px;
 }
 
 .UIMailPortlet .UIContactsPopup .SelectFileFrame {
