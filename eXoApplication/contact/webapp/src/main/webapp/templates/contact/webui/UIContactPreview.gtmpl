@@ -107,7 +107,7 @@
 												<div class="Info"><%=(ContactUtils.isEmpty(contact.getWorkCountry()) ? "_" : contact.getWorkCountry())%></div>
 												<div style="clear: left;"><span></span></div>
 											</div>
-											<div class="showOnMap"><a href="#" onclick="eXo.contact.UIContactPortlet.showMap('64 rue d archereau 75019 paris, france', '<%=contact.getFullName()%>');return false;">Map</a></div>
+											
 										</div>
 										<div class="RightContent">
 											<div class="InfoItem">
