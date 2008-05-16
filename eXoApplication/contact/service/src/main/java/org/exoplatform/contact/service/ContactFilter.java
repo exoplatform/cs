@@ -41,9 +41,12 @@ public class ContactFilter {
   private String jobTitle ;
   private String emailAddress ;
   private String isOwner = null ;
-  
+  private String username = null ;
   
   public ContactFilter() { isAscending = true ; }
+  
+  public String getUsername()  { return username ; }
+  public void   setUsername(String s) { username = s ; }
   
   public void setText(String fullTextSearch) { this.text = fullTextSearch ; }
   public String getText() { return text ; }
@@ -103,7 +106,43 @@ public class ContactFilter {
     
     //  desclared full text query
     if(text != null && text.length() > 0) {
-      stringBuffer.append("jcr:contains(., '").append(text).append("')") ;
+      if (username != null && text.equalsIgnoreCase(username)) {
+        stringBuffer.append("@exo:id = '" + text + "' or ")
+                    .append("@exo:fullName = '" + text + "' or ")
+                    .append("@exo:firstName = '" + text + "' or")
+                    .append("@exo:lastName = '" + text + "' or")
+                    .append("@exo:nickName = '" + text + "' or")
+                    .append("@exo:jobTitle = '" + text + "' or")
+                    .append("@exo:workAddress = '" + text + "' or")
+                    .append("@exo:workCity = '" + text + "' or")
+                    .append("@exo:workState_province = '" + text + "' or")
+                    .append("@exo:workPhone1 = '" + text + "' or")
+                    .append("@exo:workPhone2 = '" + text + "' or")
+                    .append("@exo:workFax = '" + text + "' or")
+                    .append("@exo:mobilePhone = '" + text + "' or")
+                    .append("@exo:webPage = '" + text + "' or")
+                    .append("@exo:exoId = '" + text + "' or")
+                    .append("@exo:googleId = '" + text + "' or")
+                    .append("@exo:msnId = '" + text + "' or")
+                    .append("@exo:aolId = '" + text + "' or")
+                    .append("@exo:yahooId = '" + text + "' or")
+                    .append("@exo:icrId = '" + text + "' or")
+                    .append("@exo:skypeId = '" + text + "' or")
+                    .append("@exo:icqId = '" + text + "' or")
+                    .append("@exo:homeAddress = '" + text + "' or")
+                    .append("@exo:homeCity = '" + text + "' or")
+                    .append("@exo:homeState_province = '" + text + "' or")
+                    .append("@exo:homePostalCode = '" + text + "' or")
+                    .append("@exo:homeCountry = '" + text + "' or")
+                    .append("@exo:homePhone1 = '" + text + "' or")
+                    .append("@exo:homePhone2 = '" + text + "' or")
+                    .append("@exo:homeFax = '" + text + "' or")
+                    .append("@exo:personalSite = '" + text + "' or")
+                    .append("@exo:note = '" + text + "' or")                    
+                    .append("@exo:workCountry = '" + text + "'") ;
+      } else {
+        stringBuffer.append("jcr:contains(., '").append(text).append("')") ;
+      }      
       hasConjuntion = true ;
     }
     

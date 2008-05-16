@@ -170,7 +170,7 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
 UIContactPortlet.prototype.addressBookCallback = function(evt) {
 	var UIContextMenuCon = eXo.webui.UIContextMenuCon ;
 	var DOMUtil = eXo.core.DOMUtil ;
-	var _e = window.event || evt ;	
+	var _e = window.event || evt ;
 	var src = _e.srcElement || _e.target ;
 	var addressBook = (DOMUtil.hasClass(src, "ItemList")) ? src : DOMUtil.findAncestorByClass(src, "ItemList") ;	
 	var menuItems = DOMUtil.findDescendantsByClass(UIContextMenuCon.menuElement, "div", "ItemIcon") ;
@@ -180,7 +180,7 @@ UIContactPortlet.prototype.addressBookCallback = function(evt) {
 	if (addressBook.getAttribute("addressType") == "0") {
 		if (isDefault == "true") {
 			for(var i = 0 ; i < itemLength ; i ++) {
-				if (DOMUtil.hasClass(menuItems[i],"EditActionIcon") || DOMUtil.hasClass(menuItems[i],"DeleteIcon")) {
+				if (DOMUtil.hasClass(menuItems[i],"DeleteIcon")) {
 					if (menuItems[i].parentNode.getAttribute("oldHref")) continue ;
 					menuItems[i].parentNode.setAttribute("oldHref", menuItems[i].parentNode.href) ;
 					menuItems[i].parentNode.href = "javascript: void(0) ;" ;
@@ -190,7 +190,7 @@ UIContactPortlet.prototype.addressBookCallback = function(evt) {
 			}
 		} else { // isDefault = false
 	    for(var i = 0 ; i < itemLength ; i ++) {
-				if (DOMUtil.hasClass(menuItems[i],"EditActionIcon") || DOMUtil.hasClass(menuItems[i],"DeleteIcon")) {
+				if (DOMUtil.hasClass(menuItems[i],"DeleteIcon")) {
 					if (!menuItems[i].parentNode.getAttribute("oldHref")) continue ;
 					menuItems[i].parentNode.href = menuItems[i].parentNode.getAttribute("oldHref") ;
 					menuItems[i].parentNode.style.color = menuItems[i].parentNode.getAttribute("oldColor") ;
@@ -198,7 +198,7 @@ UIContactPortlet.prototype.addressBookCallback = function(evt) {
 					menuItems[i].parentNode.removeAttribute("oldHref") ;
 				}
 			}
-  	}		
+  	}
 	} else if (addressBook.getAttribute("addressType") == "1") {
   	var havePermission = addressBook.getAttribute("havePermission") ;
 		if (havePermission == "false") {
@@ -223,18 +223,18 @@ UIContactPortlet.prototype.addressBookCallback = function(evt) {
 					menuItems[i].parentNode.removeAttribute("oldHref") ;
 				}
 			}		
-		}  
-		if (isDefault == "true") {
-			for(var i = 0 ; i < itemLength ; i ++) {
-				if (DOMUtil.hasClass(menuItems[i],"EditActionIcon")) {
-					if (menuItems[i].parentNode.getAttribute("oldHref")) continue ;
-					menuItems[i].parentNode.setAttribute("oldHref", menuItems[i].parentNode.href) ;
-					menuItems[i].parentNode.href = "javascript: void(0) ;" ;
-					menuItems[i].parentNode.setAttribute("oldColor", DOMUtil.getStyle(menuItems[i].parentNode, "color")) ;
-					menuItems[i].parentNode.style.color = "#cccccc" ;
-				}
-			}
-		}		
+		} 
+//		if (isDefault == "true") {
+//			for(var i = 0 ; i < itemLength ; i ++) {
+//				if (DOMUtil.hasClass(menuItems[i],"EditActionIcon")) {
+//					if (menuItems[i].parentNode.getAttribute("oldHref")) continue ;
+//					menuItems[i].parentNode.setAttribute("oldHref", menuItems[i].parentNode.href) ;
+//					menuItems[i].parentNode.href = "javascript: void(0) ;" ;
+//					menuItems[i].parentNode.setAttribute("oldColor", DOMUtil.getStyle(menuItems[i].parentNode, "color")) ;
+//					menuItems[i].parentNode.style.color = "#cccccc" ;
+//				}
+//			}
+//		}		
 	}
 	
   

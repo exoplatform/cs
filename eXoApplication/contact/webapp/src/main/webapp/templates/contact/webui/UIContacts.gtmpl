@@ -248,20 +248,30 @@
 	  	 	    			String[] addressBooks = contact.getAddressBook() ;
 	  	 	    			contactType = contact.getContactType() ;   			
 	  	 	    			if (contactType.equals("2")) {
-		  	 	    			StringBuffer buffer = new StringBuffer("")
+		  	 	    			StringBuffer buffer = new StringBuffer("") ;
+		  	 	    			
+		  	 	    			//for (String address : addressBooks) {
+		  	 	    			//	if (address.equals(NewUserListener.DEFAULTGROUP + ContactUtils.getCurrentUser())) {
+		  	 	    			//		address = privateGroupMap.get(NewUserListener.DEFAULTGROUP + ContactUtils.getCurrentUser()) ;
+		  	 	    			//	} else if (address.equals(NewUserListener.DEFAULTGROUP + contact.getId())) continue ;		  	 	    				
+		  	 	    			//	if(buffer.length() > 0) buffer.append(", ").append(address) ;
+		  	 	    			//	else buffer.append(address) ;
+		  	 	    			//}	
 		  	 	    			for (String address : addressBooks) {
-		  	 	    				if (address.equals(NewUserListener.DEFAULTGROUP + ContactUtils.getCurrentUser())) {
-		  	 	    					address = NewUserListener.DEFAULTGROUPNAME ;
-		  	 	    				} else if (address.equals(NewUserListener.DEFAULTGROUP + contact.getId())) continue ;		  	 	    				
-		  	 	    				if(buffer.length() > 0) buffer.append(", ").append(address) ;
-		  	 	    				else buffer.append(address) ;
-		  	 	    			}	
+		  	 	    				if (!address.contains(NewUserListener.DEFAULTGROUP)) {
+		  	 	    					if(buffer.length() > 0) buffer.append(", ").append(address) ;
+			  	 	    				else buffer.append(address) ;
+		  	 	    				}	  	 	    				
+		  	 	    			}
 								    groupName = buffer.toString() ;
 								  } else if (contactType.equals("0")) {
-								  
-								
-		  	 	    			groupName = privateGroupMap.get(addressBooks[0]) ;								  
-								  	if (groupName == null) continue ;								  
+								  	StringBuffer buffer = new StringBuffer("") ;
+								  	for (String address : addressBooks) {
+								  		if (privateGroupMap.containsKey(address)) address = privateGroupMap.get(address);
+		  	 	    				if(buffer.length() > 0) buffer.append(", ").append(address) ;
+		  	 	    				else buffer.append(address) ;
+		  	 	    			}
+										groupName = buffer.toString() ;								  							  
 								  } else if (contactType.equals("1")){
 								  	SharedAddressBook add = null ;							  	 
 								  	for (String address : addressBooks) {

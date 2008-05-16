@@ -96,6 +96,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
         @EventConfig(listeners = UIContacts.CloseSearchActionListener.class),
         @EventConfig(listeners = UIContacts.PrintActionListener.class), 
 //        @EventConfig(listeners = UIContacts.ChatActionListener.class),
+        @EventConfig(listeners = UIContacts.RefreshActionListener.class),
         @EventConfig(listeners = UIContacts.PrintDetailsActionListener.class)
     }
 )
@@ -1045,4 +1046,10 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     }
   }
   
+  static  public class RefreshActionListener extends EventListener<UIContacts> {
+    public void execute(Event<UIContacts> event) throws Exception {
+      System.out.println("\n\n hahaha \n\n");
+    }
+  }
+ 
 }
