@@ -77,7 +77,7 @@ public class NewUserListener extends UserEventListener {
     
     String incomingUserName = email;
 
-    acc.setLabel(fullName + " (Default)") ;
+    acc.setLabel(fullName) ;
     acc.setDescription("") ;
     acc.setUserDisplayName(fullName) ;
     acc.setEmailAddress(email) ;
