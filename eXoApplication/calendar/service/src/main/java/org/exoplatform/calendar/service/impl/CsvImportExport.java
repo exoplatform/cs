@@ -275,6 +275,7 @@ public class CsvImportExport implements CalendarImportExport {
       exoCalendar.setDescription("") ;
       exoCalendar.setCategoryId(categoryId) ;
       exoCalendar.setPublic(true) ;
+      exoCalendar.setCalendarOwner(username) ;
       storage_.saveUserCalendar(sProvider, username, exoCalendar, true) ;   
       for(CalendarEvent exoEvent : data) {
         exoEvent.setCalendarId(exoCalendar.getId()) ;

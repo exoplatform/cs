@@ -120,6 +120,11 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   private SessionProvider getSystemSession() {
     return SessionProviderFactory.createSystemProvider() ;
   }
+  public void setSelectedEventState(String value) {
+    UIFormInputWithActions taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
+    taskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_STATUS).setValue(value) ;
+  }
+  
   public void initForm(CalendarSetting calSetting, CalendarEvent eventCalendar, String formTime) throws Exception {
     reset() ;
     String dateFormat = calSetting.getDateFormat() ;
@@ -149,6 +154,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       setSelectedEventPriority(eventCalendar.getPriority()) ;
       setEventReminders(eventCalendar.getReminders()) ;
       setAttachments(eventCalendar.getAttachment()) ;
+      setSelectedEventState(eventCalendar.getEventState()) ;
 
       if(CalendarUtils.SHARED_TYPE.equals(calType_) || CalendarUtils.PUBLIC_TYPE.equals(calType_)){
 

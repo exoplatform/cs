@@ -93,6 +93,12 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
       }
       if(CalendarUtils.isEmpty(calendarName)) {
         calendarName = resource.getFileName() ;
+      } else {
+        if(!CalendarUtils.isNameValid(calendarName, CalendarUtils.SPECIALCHARACTER)) {
+          uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.file-name-invalid", null));
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
       }
       try {
         String username = Util.getPortalRequestContext().getRemoteUser() ;
