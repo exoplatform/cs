@@ -328,7 +328,7 @@
 											i ++ ;
 										}		
 									}		
-  	 	    				cssClass = "" ;
+  	 	    				cssClass = "Normal" ;
   	 	    				String selectedContact = uicomponent.getSelectedContact() ;
 									if (selectedContact != null && contact.getId().equals(selectedContact)) cssClass = "Selected" ;
 	  	 	    %>
@@ -410,7 +410,7 @@
 												i ++ ;
 											}		
 										}	
-										cssClass = "" ;
+										cssClass = "Normal" ;
 										if (contact.getId().equals(uicomponent.getSelectedContact())) cssClass = "Selected" ;								
 						%>
 							

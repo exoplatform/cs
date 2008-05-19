@@ -414,6 +414,11 @@
 	margin: 0px 1px;
 }
 
+.UIContactPortlet .UIContactContainer .Normal {
+	background: #ffffff;
+	margin: 0px 1px;
+}
+
 .UIContactPortlet .UIContactContainer .Selected a {
 	color: #058ee6;
 }
@@ -724,6 +729,11 @@
 }
 
 .UIEmpty .OwnerIcon {
+	width: auto;
+	padding-left: 20px;
+}
+
+.UIEmpty .OfflineIcon {
 	width: auto;
 	padding-left: 20px;
 }
