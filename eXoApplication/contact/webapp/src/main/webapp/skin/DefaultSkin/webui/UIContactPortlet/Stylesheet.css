@@ -669,36 +669,46 @@
 
 .UIContactPortlet .InfoContainer .LeftContent {
 	float: left;
-	width: 250px;
+	width: 46%;
+	padding-right: 10px;
 }
 
 .UIContactPortlet .InfoContainer .RightContent {
-	margin-left: 255px;
-}
-
-.UIContactPortlet .InfoContainer .Content .InfoLabel1 {
 	float: left;
-	width: 60px;
+	width: 46%;
+	padding-left: 10px;
 }
 
 .UIContactPortlet .InfoContainer .Content .InfoLabel {
-	width: 120px;
-	float: left;
+  white-space: nowrap;
 }
 
-.UIContactPortlet .InfoContainer .Content .Info1 {
-	margin-left: 65px;
+
+.UIContactPortlet .InfoContainer .Content .InfoTitle1 {
+	white-space: nowrap;
+  padding: 0px 10px 0px 4px;
+  width: 100%;
 }
 
-.UIContactPortlet .InfoContainer .Content .Info {
-	background: none;
-	margin-left: 100px;
+.UIContactPortlet .InfoContainer .Content .InfoTitle2 {
+	white-space: nowrap;
+  width: 100%; 
+  table-layout: fixed;
+}
+
+.UIContactPortlet .InfoContainer .Content .InfoTitle3 {
+	white-space: nowrap;
+  overflow: hidden; 
+}
+
+.UIContactPortlet .InfoContainer .Content .InfoTitle {
+	white-space: nowrap;
+  padding: 0px 10px 0px 2px;
 }
 
 .UIContactPortlet .InfoContainer .Content .Email {
 	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/EmailIcon.gif') no-repeat left center;
 	padding-left: 20px;
-	margin-left: 60px;
 }
 
 .UIContactPortlet .SelectFileFrame {
