@@ -73,7 +73,7 @@
 
 .UICalendarPortlet .UICalendars .CalendarGroupIcon a {
 	overflow: hidden;
-	width: 103px;
+	width: 98px;
 	display: block;
 	cursor: pointer;
 }
@@ -81,7 +81,7 @@
 .UICalendarPortlet .UICalendars .CalendarIcon {
   padding-left: 19px;
   float: left;
-  width: 90px;
+  width: 85px;
   overflow: hidden;
   line-height: 17px;
   white-space: nowrap;
@@ -92,7 +92,7 @@
 .UICalendarPortlet .UICalendars .SharedCalendarIcon {
   padding-left: 19px;
   float: left;
-  width: 85px;
+  width: 80px;
   overflow: hidden;
   line-height: 17px;
 }
