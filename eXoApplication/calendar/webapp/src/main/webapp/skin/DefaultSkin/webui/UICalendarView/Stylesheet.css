@@ -270,6 +270,7 @@
 .UIWeekView .EventContainerBorder {
 	border:1px solid #808080;
 	-moz-user-select : none ;
+	overflow: hidden;
 }
 
 .UIWeekView .EventContainerBar {
