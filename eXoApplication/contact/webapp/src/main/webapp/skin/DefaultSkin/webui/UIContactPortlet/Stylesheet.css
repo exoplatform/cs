@@ -721,3 +721,8 @@
 	margin-top: 3px;
 	max-width: 300px;
 }
+
+.UIEmpty .OwnerIcon {
+	width: auto;
+	padding-left: 20px;
+}

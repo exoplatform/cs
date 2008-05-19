@@ -333,12 +333,12 @@
 	  	 	    %>
 								
   						<tr class="UIContactList $cssClass" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" canDeleteShared="<%=uicomponent.canDeleteShared(contact.getAddressBook()[0])%>" isOwner="<%=contact.isOwner()%>"> 
-  						  <td class="text" style="padding-left: 7px;">
+  						  <td class="text" style="padding-left: 7px; width:23px;">
   						  	<%
   						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
   						  	%>
   						  </td>
-								<td class="text" style="padding: 0px;">
+								<td class="text" style="padding: 0px;width: 24px;">
 									<div class="$iconTag" title="<%=tagsName.toString() %>"><span></span></div>
 								</td>
 								<td class="text">
@@ -414,12 +414,12 @@
 						%>
 							
   						<tr class="UIContactList $cssClass" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" canDeleteShared="<%=uicomponent.canDeleteShared(contact.getAddressBook()[0])%>" isOwner="<%=contact.isOwner()%>">
-  						  <td class="text" style="padding-left: 7px;">
+  						  <td class="text" style="padding-left: 7px; width: 23px;">
   						  	<%
   						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
   						  	%>
   						  </td>
-								<td class="text" style="padding: 0px;">
+								<td class="text" style="padding: 0px; width: 24px;">
 									<div class="$iconTag" title="<%=tagsName.toString()%>"><span></span></div>
 								</td>
 								<td class="text">
