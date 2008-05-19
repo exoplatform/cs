@@ -243,6 +243,7 @@
 	  	 	    		Map tagMap = uicomponent.getTagMap() ;
 	  	 	    		Map privateGroupMap = uicomponent.getPrivateGroupMap() ;
 	  	 	    		Map sharedGroupMap = uicomponent.getSharedGroupMap() ;
+	  	 	    		List<String> publicAddress = uicomponent.getPublicContactGroups() ;
 	  	 	    		for(contact in contacts) {
 	  	 	    			String groupName ;	  	 	    			
 	  	 	    			String[] addressBooks = contact.getAddressBook() ;
@@ -268,6 +269,7 @@
 								  	StringBuffer buffer = new StringBuffer("") ;
 								  	for (String address : addressBooks) {
 								  		if (privateGroupMap.containsKey(address)) address = privateGroupMap.get(address);
+								  		else if (!publicAddress.contains(address)) continue ;
 		  	 	    				if(buffer.length() > 0) buffer.append(", ").append(address) ;
 		  	 	    				else buffer.append(address) ;
 		  	 	    			}
@@ -290,7 +292,6 @@
 							  		else {
 							  			buffer = new StringBuffer(_ctx.appRes(uicomponent.getName() + ".label.sharedContacts")) ;
 							  		}
-							  		List<String> publicAddress = uicomponent.getPublicContactGroups() ;
 						  			for (String address : addressBooks) { 
 						  				if (publicAddress.contains(address)) {
 						  					buffer.append(", ").append(address) ;

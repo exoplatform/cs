@@ -303,7 +303,7 @@ public class UIContactForm extends UIFormTabPane {
             if ( uiAddressBooks.getSharedGroups().containsKey(contact.getAddressBook()[0])) {
               contactService.saveContactToSharedAddressBook(username, contact.getAddressBook()[0], contact, false) ;
             } else {
-              contactService.saveSharedContact(username, contact) ;
+              contactService.saveSharedContact(username, contact) ;              
             }  
           }
         } catch(PathNotFoundException e) {

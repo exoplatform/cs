@@ -460,7 +460,11 @@ public class UIAddressBooks extends UIComponent {
         uiContacts.setContacts(
             contactService.getContactPageListByTag(sessionProvider, username, selectedTag)) ;
       }
-      event.getRequestContext().addUIComponentToUpdateByAjax(workingContainer);
+      if (uiContacts.isDisplaySearchResult()) {
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook);
+      } else {
+        event.getRequestContext().addUIComponentToUpdateByAjax(workingContainer);
+      }      
     }
   }
 

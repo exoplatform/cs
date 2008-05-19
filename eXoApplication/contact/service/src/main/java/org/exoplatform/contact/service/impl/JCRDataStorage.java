@@ -879,10 +879,12 @@ public class JCRDataStorage {
   public void saveSharedContact(String username, Contact contact) throws Exception  {
     Node sharedContactMock = getSharedContact(username) ;
     PropertyIterator iter = sharedContactMock.getReferences() ;
+    boolean isEdit = false ;
     while(iter.hasNext()) {
       try{
         Node contactNode = iter.nextProperty().getParent() ;
         if(contactNode.getName().equals(contact.getId())) {
+          isEdit = true ;
           saveContact(contactNode.getParent(), contact, false) ;
           contactNode.getParent().getSession().save() ;
           return ;
@@ -891,6 +893,7 @@ public class JCRDataStorage {
         e.printStackTrace() ;
       }
     }
+    if (!isEdit) throw new PathNotFoundException() ;
   }
 
   public void saveContactToSharedAddressBook(String username, String addressBookId, Contact contact, boolean isNew) throws Exception  {
