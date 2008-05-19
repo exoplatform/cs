@@ -118,7 +118,7 @@
 			                          <tr>
 			                            <td>
 			                              <div class="InfoTitle3 Email">
-				                              <a href="#">
+				                              <a href="<%=uicomponent.event("SendEmail", contact.getEmailAddress())%>">
 				                                <%= contact.getEmailAddress()%>
 				                              </a>
 				                             </div>
@@ -136,7 +136,7 @@
 								</div>
 								
 								<div class="InfoContainer">
-									<div class="TitleInfo">Work</div>
+									<div class="TitleInfo"><%=_ctx.appRes(uicomponent.getName() + ".label.work")%></div>
 									
 									  <div class="Content">
                       <div class="LeftContent">
@@ -314,7 +314,7 @@
 								</div>
 								
 								<div class="InfoContainer">
-									<div class="TitleInfo">Instant Messaging Contacts</div>
+									<div class="TitleInfo"><%=_ctx.appRes(uicomponent.getName() + ".label.instantMessaginContacts")%></div>
 									
 									  <div class="Content">
                       <div class="LeftContent">
@@ -388,7 +388,7 @@
                       </div>
                       <div class="RightContent">
                         <table>
-                           <% if (contact.getBirthday() != null){ %>
+                          <!-- <% if (contact.getBirthday() != null){ %>
                           <tr>
                             <td class="InfoLabel">
                               <div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.birthday")%></div>
@@ -403,7 +403,7 @@
 			                        </table>
 			                      </td>
                           </tr>
-                          <% } %>
+                          <% } %>-->
                           <% if (!ContactUtils.isEmpty(contact.getYahooId())) { %>
                           <tr>
                             <td class="InfoLabel">
