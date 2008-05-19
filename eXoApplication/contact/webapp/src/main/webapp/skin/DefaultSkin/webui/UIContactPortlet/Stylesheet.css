@@ -470,6 +470,7 @@
 	_padding-left: 0px;
 	overflow-y: auto;
 	overflow-x: hidden;
+	_overflow-x: auto;
 	_width: 99.5%;
 }
 
