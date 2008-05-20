@@ -821,8 +821,11 @@ public class JCRDataStorage{
         }
       } else if (disposition.equalsIgnoreCase(Part.INLINE)) {
         /* this must be presented INLINE, hence inside the body of the message */
-        if (part.isMimeType("text/plain") || part.isMimeType("text/html")) 
+        if (part.isMimeType("text/plain") || part.isMimeType("text/html")) { 
           body = appendMessageBody(part, node, body);
+        } else if (part.isMimeType("message/*")) {
+          body = setPart((Part)part.getContent(), node, body);
+        }
       } else if (disposition.equalsIgnoreCase(Part.ATTACHMENT)){
         /* this part must be presented as an attachment, hence we add it to the attached files */
         InputStream is = part.getInputStream();
