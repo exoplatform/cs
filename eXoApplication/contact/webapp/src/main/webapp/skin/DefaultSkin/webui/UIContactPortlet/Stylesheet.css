@@ -87,6 +87,7 @@
 .UIContactPortlet .ControlButton {
 	float: left;
 	margin: 0px 3px;
+	cursor: pointer;
 }
 
 .UIContactPortlet .SelectButton {
