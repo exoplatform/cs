@@ -215,7 +215,16 @@ public class UIMessageList extends UIForm {
     getChildren().clear();
     messageList_.clear();    
     if(pageList_ != null) {
-      for (Message message : pageList_.getPage(page, MailUtils.getCurrentUser())) {
+      List<Message> msgList = new ArrayList<Message>() ;
+      try {
+        msgList = pageList_.getPage(page, MailUtils.getCurrentUser()) ;
+      } catch(Exception e) {
+        String username = MailUtils.getCurrentUser();
+        MailService mailSrv = MailUtils.getMailService();
+        setMessagePageList(mailSrv.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, getMessageFilter()));
+        return ;
+      }
+      for (Message message : msgList) {
         UIFormCheckBoxInput<Boolean> uiCheckBox = new UIFormCheckBoxInput<Boolean>(message.getId(), message.getId(), false);
         addUIFormInput(uiCheckBox);
         messageList_.put(message.getId(), message);
