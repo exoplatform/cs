@@ -19,8 +19,6 @@ package org.exoplatform.mail.service;
 import java.io.InputStream;
 import java.text.Format;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -29,18 +27,15 @@ import java.util.Map;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
-import javax.mail.Multipart;
 import javax.mail.Part;
 import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.URLName;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.MimeUtility;
 import javax.mail.util.ByteArrayDataSource;
-
-import org.exoplatform.services.jcr.util.IdGenerator;
 
 /**
  * Created by The eXo Platform SARL
@@ -307,57 +302,25 @@ public class Utils {
   
   public static javax.mail.internet.MimeMessage mergeToMimeMessage(Message message, javax.mail.internet.MimeMessage mimeMessage) throws Exception {
     InternetAddress addressFrom = new InternetAddress(message.getFrom());
-    String status = "";
-    if (message.getFrom() != null) 
+    if (message.getFrom() != null) { 
       addressFrom = new InternetAddress(message.getFrom());
-    
+    }
     mimeMessage.setFrom(addressFrom);
-    if(message.getMessageTo() != null) 
+    
+    if(message.getMessageTo() != null) { 
       mimeMessage.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(message.getMessageTo()));
-    
-    if(message.getMessageCc() != null) 
+    }
+    if(message.getMessageCc() != null) { 
       mimeMessage.setRecipients(javax.mail.Message.RecipientType.CC, InternetAddress.parse(message.getMessageCc(), true));
-    
-    if(message.getMessageBcc() != null)    
+    }
+    if(message.getMessageBcc() != null) {    
       mimeMessage.setRecipients(javax.mail.Message.RecipientType.BCC, InternetAddress.parse(message.getMessageBcc(), false));
-    
-    if(message.getReplyTo() != null)    
+    }
+    if(message.getReplyTo() != null) {    
       mimeMessage.setReplyTo(Utils.getInternetAddress(message.getReplyTo()));
-    
+    }
     mimeMessage.setSubject(message.getSubject());
     mimeMessage.setSentDate(message.getSendDate());
-    
-    MimeMultipart  multipPartRoot = new MimeMultipart("mixed");
-    
-    MimeMultipart  multipPartContent = new MimeMultipart("alternative");
-    
-    List<Attachment> attachList = message.getAttachments();
-    if (attachList != null && attachList.size() != 0) {
-      MimeBodyPart contentPartRoot = new MimeBodyPart();
-      contentPartRoot.setContent(multipPartContent);
-      
-      MimeBodyPart  mimeBodyPart1 = new MimeBodyPart();
-      mimeBodyPart1.setContent(message.getMessageBody(), message.getContentType());
-      multipPartContent.addBodyPart(mimeBodyPart1);
-      multipPartRoot.addBodyPart(contentPartRoot);
-      
-      for (Attachment att : attachList) {
-        InputStream is = att.getInputStream();
-        MimeBodyPart mimeBodyPart = new MimeBodyPart();
-        ByteArrayDataSource byteArrayDataSource = new ByteArrayDataSource(is, att.getMimeType());
-        mimeBodyPart.setDataHandler(new DataHandler(byteArrayDataSource));
-
-        mimeBodyPart.setDisposition(Part.ATTACHMENT);
-        mimeBodyPart.setFileName(att.getName());
-        multipPartRoot.addBodyPart(mimeBodyPart);
-      }
-      mimeMessage.setContent(multipPartRoot);
-    } else {
-      if (message.getContentType() != null && message.getContentType().indexOf("text/plain") > -1)
-        mimeMessage.setText(message.getMessageBody());
-      else
-        mimeMessage.setContent(message.getMessageBody(), "text/html");
-    }
     mimeMessage.setHeader("X-Priority", String.valueOf(message.getPriority()));
     String priority = "Normal";
     if (message.getPriority() == Utils.PRIORITY_HIGH) {
@@ -365,102 +328,89 @@ public class Utils {
     } else if (message.getPriority() == Utils.PRIORITY_LOW) {
       priority = "Low";
     }     
-    if (message.getPriority() != 0 ) mimeMessage.setHeader("Importance", priority);
-    
+    if (message.getPriority() != 0 ) mimeMessage.setHeader("Importance", priority);    
     Iterator iter = message.getHeaders().keySet().iterator() ;
     while (iter.hasNext()) {
       String key = iter.next().toString() ;
       mimeMessage.setHeader(key, message.getHeaders().get(key)) ;
     }
     
-    return mimeMessage;
-  }
-  
-  public static Message mergeFromMimeMessage(Message message, javax.mail.Message mimeMessage) throws Exception {
-    Calendar gc = MimeMessageParser.getReceivedDate(mimeMessage) ;
-    message.setMessageTo(InternetAddress.toString(mimeMessage.getRecipients(javax.mail.Message.RecipientType.TO)));
-    message.setMessageCc(InternetAddress.toString(mimeMessage.getRecipients(javax.mail.Message.RecipientType.CC)));
-    message.setMessageBcc(InternetAddress.toString(mimeMessage.getRecipients(javax.mail.Message.RecipientType.BCC)));
-    message.setSubject(mimeMessage.getSubject());
-    message.setContentType(mimeMessage.getContentType());
-    message.setFrom(InternetAddress.toString(mimeMessage.getFrom()));
-    message.setReplyTo(InternetAddress.toString(mimeMessage.getReplyTo()));
-    message.setReceivedDate(gc.getTime());
-    if (mimeMessage.getSentDate() != null) message.setSendDate(mimeMessage.getSentDate());
-    else message.setSendDate(gc.getTime()) ;
-    message.setSize(mimeMessage.getSize());
-    message.setUnread(true);
-    message.setHasStar(false);       
-    message.setPriority(MimeMessageParser.getPriority(mimeMessage));
+    MimeMultipart  mixedPart = new MimeMultipart("mixed");
+    MimeMultipart  alternativePart = new MimeMultipart("alternative");
     
-    message.setAttachements(new ArrayList<Attachment>());
-    
-    Object obj = mimeMessage.getContent() ;
-    if (obj instanceof Multipart) {
-      setMultiPart((Multipart)obj, message);
-    } else {
-      setPart(mimeMessage, message);
-    }
-    return message;
-  }
-  
-  private static void setMultiPart(Multipart multipart, Message newMail) {
-    try {
-      int i = 0 ;
-      int n = multipart.getCount() ;
-      while( i < n) {
-        setPart(multipart.getBodyPart(i), newMail);
-        i++ ;
-      }     
-    }catch(Exception e) {
-      e.printStackTrace() ;
-    }   
-  }
+    String contentType = "text/plain" ;
+    if (message.getContentType().toLowerCase().indexOf("text/html") > -1) contentType = "text/html" ;
+    List<Attachment> attachList = message.getAttachments();
+    if (attachList != null && attachList.size() > 0) {
+      MimeBodyPart contentPartRoot = new MimeBodyPart();
+      MimeBodyPart textBodyPart = new MimeBodyPart();
+      textBodyPart.setContent(html2text(decodeHTML(message.getMessageBody())), "text/plain");
+      alternativePart.addBodyPart(textBodyPart);
+      
+      MimeBodyPart  htmlBodyPart = new MimeBodyPart();
+      htmlBodyPart.setContent(text2html(decodeHTML(message.getMessageBody())), "text/html");
+      alternativePart.addBodyPart(htmlBodyPart);
+      
+      contentPartRoot.setContent(alternativePart);
+      mixedPart.addBodyPart(contentPartRoot);
+      
+      for (Attachment att : attachList) {
+        InputStream is = att.getInputStream();
+        MimeBodyPart attachPart = new MimeBodyPart();
+        ByteArrayDataSource byteArrayDataSource = new ByteArrayDataSource(is, att.getMimeType());
+        attachPart.setDataHandler(new DataHandler(byteArrayDataSource));
 
-  private static void setPart(Part part, Message newMail){
-    try {
-      String disposition = part.getDisposition();
-      String contentType = part.getContentType();
-      if (disposition == null) {
-        if (part.isMimeType("text/plain") || part.isMimeType("text/html")) {
-          newMail.setMessageBody((String)part.getContent());
-        } else {
-          MimeMultipart mimeMultiPart = (MimeMultipart)part.getContent() ;
-          for (int i=0; i<mimeMultiPart.getCount();i++) {
-            // for each part, set the body content
-            setPart(mimeMultiPart.getBodyPart(i), newMail);
-          }
-        }
-      } else {
-        if (disposition.equalsIgnoreCase(Part.INLINE)) {
-          /* this must be presented INLINE, hence inside the body of the message */
-          if (part.isMimeType("text/plain") || part.isMimeType("text/html")) {
-            newMail.setMessageBody((String)part.getContent());
-          }
-        } else {
-          /* this part must be presented as an attachment, hence we add it to the attached files */
-          BufferAttachment file = new BufferAttachment();
-          file.setId("Attachment" + IdGenerator.generate());
-          file.setName(part.getFileName());
-          InputStream is = part.getInputStream();
-          file.setInputStream(is);
-          file.setSize(is.available());
-          if (contentType.indexOf(";") > 0) {
-            String[] type = contentType.split(";") ;
-            file.setMimeType(type[0]);
-          } else {
-            file.setMimeType(contentType) ;
-          }
-          newMail.getAttachments().add(file);
-        }
+        attachPart.setDisposition(Part.ATTACHMENT);
+        attachPart.setFileName(att.getName());
+        mixedPart.addBodyPart(attachPart);
       }
-    } catch(Exception e) {
-      e.printStackTrace() ;
+      mimeMessage.setContent(mixedPart);
+    } else if (message.getContentType() != null && contentType.equals("text/plain")) {
+      mimeMessage.setText(html2text(decodeHTML(message.getMessageBody())));
+    } else {
+      mimeMessage.setContent(message.getMessageBody(), "text/html");
     }
+    
+    return mimeMessage ;
   }
   
   public static String encodeJCRTextSearch(String str) {
     return str.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").
     replaceAll("'", "&apos;").replaceAll("\"", "&quot;") ;
+  }
+  
+  public static String encodeHTML(String htmlContent) throws Exception {
+    return (!isEmptyField(htmlContent)) ? htmlContent.replaceAll("&", "&amp;").replaceAll("\"", "&quot;")
+        .replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\"", "&quot;").replaceAll("'", "&#39;") : "" ;
+  }
+  
+  public static String decodeHTML(String htmlContent) throws Exception {
+    return (!isEmptyField(htmlContent)) ? htmlContent.replaceAll("&amp;", "&").replaceAll( "&quot;", "\"")
+        .replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&quot;", "\"").replaceAll("&#39;", "'") : "" ;
+  }
+  
+  public static String decodeText(String str) throws Exception {
+    if (isEmptyField(str)) return str ;
+    return MimeUtility.decodeText(str) ;
+  } 
+  
+  public static String html2text(String str) throws Exception {
+    if (str != null) {
+      str = str.replaceAll("<[^>]*>", "");
+      str = str.replaceAll("&nbsp;", "");
+      str = str.replaceAll("&quot;", "\"");
+    } else {
+      str = "" ;
+    }
+    return str;
+  }
+  
+  public static String text2html(String str) throws Exception {
+    if (str != null) {
+      str = str.replaceAll("\n", "<br>");
+    } else {
+      str = "" ;
+    }
+    return str;
   }
 }

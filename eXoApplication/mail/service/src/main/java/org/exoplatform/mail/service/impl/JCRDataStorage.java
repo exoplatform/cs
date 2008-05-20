@@ -667,19 +667,18 @@ public class JCRDataStorage{
     try {
       node.setProperty(Utils.EXO_ID, msgId);
       node.setProperty(Utils.EXO_ACCOUNT, accId);
-      node.setProperty(Utils.EXO_FROM, InternetAddress.toString(msg.getFrom()));
-      node.setProperty(Utils.EXO_TO, InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.TO)));
-      node.setProperty(Utils.EXO_CC, InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.CC)));
-      node.setProperty(Utils.EXO_BCC, InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.BCC)));
-      node.setProperty(Utils.EXO_REPLYTO, InternetAddress.toString(msg.getReplyTo()));
-      node.setProperty(Utils.EXO_SUBJECT, msg.getSubject());
+      node.setProperty(Utils.EXO_FROM, Utils.decodeText(InternetAddress.toString(msg.getFrom())));
+      node.setProperty(Utils.EXO_TO, Utils.decodeText(InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.TO))));
+      node.setProperty(Utils.EXO_CC, Utils.decodeText(InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.CC))));
+      node.setProperty(Utils.EXO_BCC, Utils.decodeText(InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.BCC))));
+      node.setProperty(Utils.EXO_REPLYTO, Utils.decodeText(InternetAddress.toString(msg.getReplyTo())));
+      node.setProperty(Utils.EXO_SUBJECT, Utils.decodeText(msg.getSubject()));
       node.setProperty(Utils.EXO_RECEIVEDDATE, gc);
       Calendar sc = GregorianCalendar.getInstance() ;
       if (msg.getSentDate() != null) sc.setTime(msg.getSentDate()) ;
       else sc = gc ;
       node.setProperty(Utils.EXO_SENDDATE, sc) ;
-
-      node.setProperty(Utils.EXO_CONTENT_TYPE, msg.getContentType()) ;
+      
       node.setProperty(Utils.EXO_SIZE, Math.abs(msg.getSize())) ;
       node.setProperty(Utils.EXO_ISUNREAD, true) ;
       node.setProperty(Utils.EXO_STAR, false) ;     
@@ -717,14 +716,20 @@ public class JCRDataStorage{
       System.out.println("     [DEBUG] Saved body and attachment of message .... size : " + Math.abs(msg.getSize()) + " B") ;
       t2 = System.currentTimeMillis();
       Object obj = msg.getContent() ;
+      String contentType = "text/plain" ;
+      if (msg.isMimeType("text/html") || msg.isMimeType("multipart/alternative")) contentType = "text/html" ;
+      String body = "" ;
       if (obj instanceof Multipart) {
-        setMultiPart((Multipart)obj, node);
+        body = setMultiPart((Multipart)obj, node, body);
       } else {
-        setPart(msg, node);
+        body = setPart(msg, node, body);
       }
+      node.setProperty(Utils.EXO_CONTENT_TYPE, contentType) ;
+      node.setProperty(Utils.EXO_BODY, Utils.decodeText(body)) ;
       t3 = System.currentTimeMillis();
       System.out.println("     [DEBUG] Saved body (and attachments) of message finished : " + (t3 - t2) + " ms") ;
-    } catch (Exception e) { 
+    } catch (Exception e) {
+      e.printStackTrace() ;
       System.out.println("   [DEBUG] Cancel saving message to JCR.") ;
       return false ; 
     }
@@ -758,47 +763,76 @@ public class JCRDataStorage{
       e.printStackTrace() ;
     }
   } 
-  
-  private void setMultiPart(Multipart multipart, Node node) {
+
+  private String setMultiPart(Multipart multipart, Node node, String body) {
     try {
-      for (int i = 0, n = multipart.getCount(); i < n; i++) {
-        setPart(multipart.getBodyPart(i), node);
-      }     
+      boolean readText = true ;
+      if (multipart.getContentType().toLowerCase().indexOf("multipart/alternative") > -1) {
+        Part bodyPart ;
+        for (int i = 0; i < multipart.getCount(); i++) {
+          bodyPart = multipart.getBodyPart(i) ;
+          if (bodyPart.isMimeType("text/html")) {
+            body = setPart(bodyPart, node, body) ;
+            readText = false ;
+          }
+        }
+      } 
+      if (readText) {
+        for (int i = 0, n = multipart.getCount(); i < n; i++) {
+          body = setPart(multipart.getBodyPart(i), node, body);
+        }     
+      }
     } catch(Exception e) {
       e.printStackTrace() ;
     }   
+    return body ;
   }
 
-  private void setPart(Part part, Node node) {
+  private String setPart(Part part, Node node, String body) {
     try {
       String disposition = part.getDisposition();
-      String contentType = part.getContentType();
+      String ct = part.getContentType();
       if (disposition == null) {
         if (part.isMimeType("text/plain") || part.isMimeType("text/html")) {
-          appendMessageBody(part, node);
+          body = appendMessageBody(part, node, body);
+        } else if (part.isMimeType("multipart/alternative")) {
+          Part bodyPart ;
+          boolean readText = true ;
+          MimeMultipart mimeMultiPart = (MimeMultipart) part.getContent() ;
+          for (int i = 0; i < mimeMultiPart.getCount(); i++) {
+            bodyPart = mimeMultiPart.getBodyPart(i) ;
+            if (bodyPart.isMimeType("text/html")) {
+              body = setPart(bodyPart, node, body) ;
+              readText = false ;
+            }
+          }
+          if (readText){
+            for (int i = 0; i < mimeMultiPart.getCount(); i++) {
+              body = setPart(mimeMultiPart.getBodyPart(i), node, body);
+            }
+          }
         } else if (part.isMimeType("multipart/*")) {
           MimeMultipart mimeMultiPart = (MimeMultipart) part.getContent() ;
           for (int i = 0; i < mimeMultiPart.getCount(); i++) {
-            // for each part, set the body content
-            setPart(mimeMultiPart.getBodyPart(i), node);
+            body = setPart(mimeMultiPart.getBodyPart(i), node, body);
           }
         } else if (part.isMimeType("message/*")) {
-          setPart((Part)part.getContent(), node);
+          body = setPart((Part)part.getContent(), node, body);
         }
       } else if (disposition.equalsIgnoreCase(Part.INLINE)) {
         /* this must be presented INLINE, hence inside the body of the message */
         if (part.isMimeType("text/plain") || part.isMimeType("text/html")) 
-          appendMessageBody(part, node);
+          body = appendMessageBody(part, node, body);
       } else if (disposition.equalsIgnoreCase(Part.ATTACHMENT)){
         /* this part must be presented as an attachment, hence we add it to the attached files */
         InputStream is = part.getInputStream();
-        Node nodeFile = node.addNode(MimeUtility.decodeText(part.getFileName()), Utils.NT_FILE);
+        Node nodeFile = node.addNode(Utils.decodeText(part.getFileName()), Utils.NT_FILE);
         Node nodeContent = nodeFile.addNode(Utils.JCR_CONTENT, Utils.NT_RESOURCE);
-        if (contentType.indexOf(";") > 0) {
-          String[] type = contentType.split(";") ;
+        if (ct.indexOf(";") > 0) {
+          String[] type = ct.split(";") ;
           nodeContent.setProperty(Utils.JCR_MIMETYPE, type[0]) ;
         } else {
-          nodeContent.setProperty(Utils.JCR_MIMETYPE, contentType);
+          nodeContent.setProperty(Utils.JCR_MIMETYPE, ct);
         }
         nodeContent.setProperty(Utils.JCR_DATA, is) ;
         nodeContent.setProperty(Utils.JCR_LASTMODIFIED, Calendar.getInstance().getTimeInMillis()) ;
@@ -807,36 +841,42 @@ public class JCRDataStorage{
     } catch(Exception e) {
       e.printStackTrace() ;
     }
+    return body ;
   }
 
-  private void appendMessageBody(Part part, Node node) throws Exception {
+  private String appendMessageBody(Part part, Node node, String body) throws Exception {
     StringBuffer messageBody =new StringBuffer();
     InputStream is = part.getInputStream();
-    String contentType = part.getContentType() ;
+    String ct = part.getContentType() ;
     String charset = "UTF-8" ;
-    if(contentType != null){
-      String cs = new ContentType(contentType).getParameter("charset");
+    if(ct != null){
+      String cs = new ContentType(ct).getParameter("charset");
       if (cs != null) { charset = cs ; }
     }
     BufferedReader reader = new BufferedReader(new InputStreamReader(is , charset));
-    String inputLine;
+    String inputLine ;
+    
+    String breakLine = "" ;
+    if (part.isMimeType("text/plain")) breakLine = "\n" ;
     
     while ((inputLine = reader.readLine()) != null) {
-      messageBody.append(inputLine + "\n");
+      messageBody.append(inputLine + breakLine) ;
     }
-    String content = "" ;
-    try {
-      String ct = node.getProperty(Utils.EXO_CONTENT_TYPE).getString() ;
-      if ((ct.indexOf("text/html") > -1 && contentType.indexOf("text/html") > -1) ||
-          (ct.indexOf("text/plain") > -1 && contentType.indexOf("text/plain") > -1))
-      content = node.getProperty(Utils.EXO_BODY).getString();
-      if (content == null) content = "" ;
-      else {
-        if (contentType.indexOf("text/plain") > -1) content += "\r\n" ;
-        else if (contentType.indexOf("text/html") > -1) content += "<br>" ;
+
+    if (part.isMimeType("text/plain")) {
+      if (body != null && !body.equals("")) {
+        body = body + "\n" +  Utils.encodeHTML(messageBody.toString()) ;
+      } else {
+        body =  Utils.encodeHTML(messageBody.toString()) ;
       }
-    } catch(PathNotFoundException e) { }
-    node.setProperty(Utils.EXO_BODY, content + messageBody.toString());
+    } else if (part.isMimeType("text/html")) {
+      if (body != null && !body.equals("")) {
+        body = body + "<br>" + messageBody.toString() ;
+      } else {
+        body = messageBody.toString() ;
+      }
+    }
+    return body ;
   }
   
   public String setAddress(String strAddress) throws Exception {
