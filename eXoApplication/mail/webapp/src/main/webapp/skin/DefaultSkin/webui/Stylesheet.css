@@ -1591,6 +1591,10 @@
 	margin: 5px;
 }
 
+.UIMailPortlet .UIPopupActionAddressContainer {
+  min-width: 600px;
+}
+
 .UIAddNewContact .ProfileContent .AvatarContent img {
 	border: 1px solid #545454;
 }

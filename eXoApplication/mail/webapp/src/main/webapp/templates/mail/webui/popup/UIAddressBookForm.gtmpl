@@ -4,6 +4,8 @@
   import org.exoplatform.download.DownloadService;
 %>
 <% uiform.begin()%> 
+<div><div style="width: 600px;" ><span style="display: none;"></span></div></div>
+<div id="$uicomponent.id" style="_width: expression(this.previousSibling.offsetWidth - 2 + 'px'); !border: 1px solid white;">
 <div class="UIContactsPopup"> 
   <div class="UISearch">
     <div class="UIActionBar">
@@ -272,5 +274,6 @@
       </tr>
     </table>
   </div>
+</div>
 </div>
 <% uiform.end()%> 
