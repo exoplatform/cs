@@ -39,6 +39,7 @@ import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
+import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -562,7 +563,23 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         uiChildPopup.deActivate() ;
       }
       if (uiFolderContainer.getSelectedFolder().equals(Utils.createFolderId(accountId, Utils.FD_DRAFTS, false))) {
-        uiPortlet.findFirstComponentOfType(UIMessageList.class).updateList() ;
+        UIMessageList uiMsgList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
+        UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class) ;
+        uiMsgList.setMessagePageList(mailSvr.getMessagePageList(SessionProviderFactory.createSystemProvider(), usename, uiMsgList.getMessageFilter())) ;
+        List<Message> showedMsg = uiMsgPreview.getShowedMessages() ;
+        try {
+          if (showedMsg != null && showedMsg.size() > 0) {
+            for (Message msg : showedMsg) {
+              if (message.getId().equals(msg.getId())) {
+                int index = showedMsg.indexOf(msg) ;
+                showedMsg.remove(index) ;
+                message = mailSvr.loadAttachments(SessionProviderFactory.createSystemProvider(), usename, accountId, 
+                    mailSvr.getMessageById(SessionProviderFactory.createSystemProvider(), usename, accountId, message.getId())) ;
+                showedMsg.add(index, message) ;
+              }
+            }
+          }
+        }catch(Exception e) {}
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class)) ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer) ;
