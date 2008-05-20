@@ -367,7 +367,7 @@ public class UIAddressBooks extends UIComponent {
       }
       uiCategoryForm.setNew(false) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());
+     //event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());
     }
   }
   
@@ -385,7 +385,7 @@ public class UIAddressBooks extends UIComponent {
       SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;  
       uiAddNewEditPermission.initGroup(contactService.getGroup(sessionProvider, username, groupId)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());
     }
   }
 

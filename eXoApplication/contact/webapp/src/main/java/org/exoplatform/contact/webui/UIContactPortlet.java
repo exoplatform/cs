@@ -20,6 +20,7 @@ import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPopupMessages;
+import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
@@ -43,7 +44,10 @@ public class UIContactPortlet extends UIPortletApplication {
     //addChild(UIBannerContainer.class, null, null) ;
     addChild(UIActionBar.class, null, null) ;
     addChild(UIWorkingContainer.class, null, null) ;
-    addChild(UIPopupAction.class, null, null) ;
+    UIPopupAction uiPopupAction = addChild(UIPopupAction.class, null, null) ;
+    uiPopupAction.setId("UIContactPopupAction") ;
+    UIPopupWindow uiPopupWindow = uiPopupAction.getChild(UIPopupWindow.class) ;
+    uiPopupWindow.setId("UIContactPopupWindow") ;
   }
 
   public void renderPopupMessages() throws Exception {

@@ -78,7 +78,7 @@ public class UIActionBar extends UIContainer  {
       UIContactForm contactForm = uiPopupContainer.addChild(UIContactForm.class, null, null) ;
       contactForm.setNew(true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar.getParent()) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar.getParent()) ;
     }  
   }
   
@@ -134,7 +134,7 @@ public class UIActionBar extends UIContainer  {
       importForm.setGroup(addresses) ;
       importForm.addConponent() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
     }  
   }
 
@@ -157,14 +157,12 @@ public class UIActionBar extends UIContainer  {
       
       if (isList.equals("true")) uiContacts.setViewContactsList(true) ;
       else uiContacts.setViewContactsList(false) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
       
       // remove when print address book improved
      /* event.getRequestContext().addUIComponentToUpdateByAjax(
           uiContactPortlet.findFirstComponentOfType(UINavigationContainer.class)) ;*/
     }  
   }
-  
-  
-  
+
 }
