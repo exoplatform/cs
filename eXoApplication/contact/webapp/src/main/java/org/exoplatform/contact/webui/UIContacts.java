@@ -32,6 +32,7 @@ import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.service.DataPageList;
 import org.exoplatform.contact.service.JCRPageList;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.Tag;
@@ -136,7 +137,41 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       return true ;
     } catch (ClassNotFoundException e) {
       return false ;
+    } catch (Exception ex) {
+      ex.printStackTrace() ;
+      return false ;
     }
+  }
+  
+  // only called when refresh brower
+  @SuppressWarnings({ "unchecked", "unused" })
+  private void refreshData() throws Exception {
+    if (isDisplaySearchResult()) return ;
+    if (selectedGroup != null) {
+      if (getPrivateGroupMap().containsKey(selectedGroup)) {
+        setContacts(ContactUtils.getContactService().getContactPageListByGroup(
+            SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), selectedGroup));
+      } else if (ContactUtils.getUserGroups().contains(selectedGroup)) {
+        setContacts(ContactUtils.getContactService()
+            .getPublicContactsByAddressBook(SessionProviderFactory.createSystemProvider(), selectedGroup));
+      }
+    } else if (selectedTag_ != null) {
+      DataPageList pageList =ContactUtils.getContactService().getContactPageListByTag(
+          SessionProviderFactory.createSystemProvider(), ContactUtils.getCurrentUser(), selectedTag_) ;
+      if (pageList != null) {
+        List<Contact> contacts = new ArrayList<Contact>() ;
+        contacts = pageList.getAll() ;
+        if (getSortedBy().equals(UIContacts.fullName)) {
+          Collections.sort(contacts, new FullNameComparator()) ;
+        } else if (getSortedBy().equals(UIContacts.emailAddress)) {
+          Collections.sort(contacts, new EmailComparator()) ;
+        } else if (getSortedBy().equals(UIContacts.jobTitle)) {
+          Collections.sort(contacts, new JobTitleComparator()) ;
+        }
+        pageList.setList(contacts) ;     
+      }
+      setContacts(pageList) ;
+    }    
   }
   
   public void setSelectSharedContacts(boolean selected) { isSelectSharedContacts = selected ; }
@@ -1048,7 +1083,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   
   static  public class RefreshActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
-      System.out.println("\n\n hahaha \n\n");
+      UIContacts uiContacts = event.getSource() ;
+      uiContacts.refreshData() ;
     }
   }
  

@@ -12,7 +12,7 @@
 	import org.exoplatform.contact.service.impl.NewUserListener;
 	import java.util.HashMap;
 	import java.util.Map;
-	
+
 	uiform.begin() ;
 	def rcontext = _ctx.getRequestContext() ; 
   rcontext.getJavascriptManager().importJavascript("eXo.cs.FormHelper","/csResources/javascript") ;

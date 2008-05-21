@@ -94,7 +94,12 @@ public class UIImportForm extends UIForm {
       options.add(new SelectItemOption<String>(type, type)) ;
     }
     addUIFormInput(new UIFormSelectBox(FIELD_TYPE, FIELD_TYPE, options)) ;
-    addUIFormInput(new UIFormUploadInput(FIELD_UPLOAD, FIELD_UPLOAD)) ;    
+    
+    UIFormUploadInput formUploadInput = new UIFormUploadInput(FIELD_UPLOAD, FIELD_UPLOAD) ;
+   
+    
+    
+    addUIFormInput(formUploadInput) ;    
   }
   
   public String getLabel(String id) throws Exception {
