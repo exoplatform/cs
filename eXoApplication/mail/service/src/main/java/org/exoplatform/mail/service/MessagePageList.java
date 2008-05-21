@@ -84,7 +84,8 @@ public class MessagePageList extends JCRPageList {
     if (currentListPage_ != null) previousListPage = currentListPage_;
     currentListPage_ = new LinkedHashMap<String, Message>() ;
     
-    for(int i = 0; i < pageSize; i ++) {
+    int i = 0 ;
+    while(i < pageSize) {
       if(iter_.hasNext()){
         currentNode = iter_.nextNode() ;
           Value[] values = {};
@@ -95,29 +96,39 @@ public class MessagePageList extends JCRPageList {
           String[] refFolders = new String[] {sentFolderId, curMsgFolder} ;
           if (hasStructure_) {
             try {
-              values = currentNode.getProperty("exo:conversationId").getValues();
+              values = currentNode.getProperty(Utils.EXO_CONVERSATIONID).getValues();
               for (int j = 0; j < values.length; j++) {
-                Value value = values[j];
-                String uuid = value.getString();
+                Value value = values[j] ;
+                String uuid = value.getString() ;
                 Node refNode = currentNode.getSession().getNodeByUUID(uuid);
                 String refMsgFolder = refNode.getProperty(Utils.EXO_FOLDERS).getValues()[0].getString() ;
                 if (refMsgFolder.equals(curMsgFolder)) existRefNode = true ;
                 if (refMsgFolder.equals(sentFolderId)) {
                   existRefNode = true ; 
                   Message refMsg = getMessage(refNode, refFolders) ;
-                  if (refMsg.getFolders() != null && refMsg.getFolders().length > 0) currentListPage_.put(refMsg.getId(), refMsg) ;
-                  currentListPage_ = getMessageList(currentListPage_, refNode, curMsgFolder, refFolders) ;
+                  if (refMsg.getFolders() != null && refMsg.getFolders().length > 0) {
+                    currentListPage_.put(refMsg.getId(), refMsg) ;
+                    i++ ;
+                    currentListPage_ = getMessageList(currentListPage_, refNode, curMsgFolder, refFolders) ;
+                  }
                 }
               }
             } catch(Exception e) { }
-            if (Utils.SHOWCONVERSATION && (!currentNode.isNodeType("exo:messageMixin") || !existRefNode)) {
+            
+            if (!currentNode.isNodeType("exo:messageMixin") || !existRefNode) {
               Message msg = getMessage(currentNode, refFolders) ;
-              if (msg.getFolders() != null && msg.getFolders().length > 0) currentListPage_.put(msg.getId(), msg) ;
-              currentListPage_ = getMessageList(currentListPage_, currentNode, curMsgFolder, refFolders) ;
+              if (msg.getFolders() != null && msg.getFolders().length > 0) {
+                currentListPage_.put(msg.getId(), msg) ;
+                i++ ;
+                currentListPage_ = getMessageList(currentListPage_, currentNode, curMsgFolder, refFolders) ;
+              }
             }
           } else {
             Message msg = getMessage(currentNode, null) ;
-            if (msg.getFolders() != null && msg.getFolders().length > 0) currentListPage_.put(msg.getId(), msg) ;
+            if (msg.getFolders() != null && msg.getFolders().length > 0) {
+              currentListPage_.put(msg.getId(), msg) ;
+              i++ ;
+            }
           }
         } else {
           break ;
@@ -139,8 +150,10 @@ public class MessagePageList extends JCRPageList {
           if (folderId.equals(msgFolder) || sentFolderId.equals(msgFolder)) {
             Message msg = getMessage(msgNode, refFolders) ;
             msg.setIsRootConversation(false) ;
-            if (msg.getFolders() != null && msg.getFolders().length > 0) listPage.put(msg.getId(), msg) ;
-            if (msgNode.isNodeType("mix:referenceable")) listPage = getMessageList(listPage, msgNode, folderId, refFolders) ; 
+            if (msg.getFolders() != null && msg.getFolders().length > 0) {
+              listPage.put(msg.getId(), msg) ;
+              if (msgNode.isNodeType("mix:referenceable")) listPage = getMessageList(listPage, msgNode, folderId, refFolders) ;
+            }
           }
         } catch(Exception e) {}
       }
