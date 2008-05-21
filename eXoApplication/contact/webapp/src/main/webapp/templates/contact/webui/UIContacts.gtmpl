@@ -35,7 +35,10 @@
   String lastPageAction = "#" ; 
 
   Contact[] contacts = uicomponent.getContacts();
-  if (pageList != null && (contacts.length != 0)) {
+  
+  if (pageList == null || contacts.length == 0) {
+		availableContact = 0 ;	  
+  } else {
     currentPage = pageList.getCurrentPage();
     availablePage = pageList.getAvailablePage() ;
     availableContact =  pageList.getAvailable() ;
@@ -63,6 +66,8 @@
 		if(isDisplaySearchResult) {
 %>
 				<div class="Result">
+					
+					<% if (availableContact > 10) { %>
 					<div class="UIAddressPageList" style="float: right; width: 250px">
 						<div class="ContactIteratorContainer">
 	  					<div class="RightPageIteratorBlock">
@@ -75,6 +80,7 @@
 						  </div>
 					  </div>
 					</div>
+					<% } %>
 					
 					<a href="<%=uicomponent.event("MoveContacts")%>" class="ControlButton">
 						<div class="MoveIcon" style="width: auto; padding-left: 20px"><%=_ctx.appRes(uicomponent.getName() + ".label.move")%></div>
@@ -135,6 +141,7 @@
 							<div class="Icon CopyContactIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.copyContacts")%>"><span></span></div>
 					</a>
 					
+					<% if (availableContact > 10) { %>
 					<div class="UIAddressPageList">
 						<div class="ContactIteratorContainer">
 	  					<div class="RightPageIteratorBlock">
@@ -147,6 +154,8 @@
 						  </div>
 					  </div>
 					</div>
+					<% } %>
+					
 					<div style="clear: both;"><span></span></div>
 				</div>
 				<% 
@@ -501,13 +510,15 @@
 	  						<% 
 	  							if (!uicomponent.isPrintForm()) {	
 	  						 %>
+	  						 
+	  						<% if (availableContact > 10) { %> 
 	  						<a href="<%=uicomponent.event("FirstPage")%>" title="<%=_ctx.appRes(uicomponent.getName() + ".label.firstPage")%>" class="$cssPreviousPage FirstPageArrow"/><span></span></a>        
 	  						<a href="<%=uicomponent.event("PreviousPage")%>" title="<%=_ctx.appRes(uicomponent.getName() + ".label.previousPage")%>" class="$cssPreviousPage PreviousPageArrow"><span></span></a>
 								<div class="Number">$contactRange</div>
 	  				 		<a href="<%=uicomponent.event("NextPage")%>" title="<%=_ctx.appRes(uicomponent.getName() + ".label.nextPage")%>" class="$cssNextPage NextPageArrow"/><span></span></a>
 	 				  		<a href="<%=uicomponent.event("LastPage")%>" title="<%=_ctx.appRes(uicomponent.getName() + ".label.lastPage")%>" class="$cssNextPage LastPageArrow"><span></span></a>
 						    <div style="clear: left;"><span></span></div>
-						  
+						  	<% } %>
 						  <% } %>
 						  </div>
 					  </div>
