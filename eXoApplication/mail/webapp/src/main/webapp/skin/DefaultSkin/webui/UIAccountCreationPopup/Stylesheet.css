@@ -23,10 +23,6 @@
 	font-weight: bold;
 }
 
-.UIMailPortlet .UIAccountCreationWizard .FieldLabel {
-	width: 170px;
-}
-
 .UIMailPortlet .UIAccountCreationWizard .UIWizardAction {
 	height: 36px;
   padding: 0px 0px 0px 15px;
@@ -80,10 +76,6 @@
 	height: 200px;
 }
 
-.UIMailPortlet .UIAccountCreationWizard .UIForm .HorizontalLayout .UIFormInputSet {
-	width: 400px;
-	margin: auto;
-}
 
 .UIMailPortlet .UIAccountCreationWizard .UIAction {
 	float: right;

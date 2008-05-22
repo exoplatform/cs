@@ -99,6 +99,8 @@
 
 .UIContactPortlet .UIMessageCompose table {
 	background: none;
+	margin: 0px;
+	width: 100%;
 }
 
 .UIContactPortlet .UIMessageCompose .UIForm .HorizontalLayout td.FieldLabel {
@@ -137,7 +139,7 @@
 }
 
 .UIContactPortlet .UIMessageCompose .UIForm .HorizontalLayout select {
-	width: 98%;
+	width: 90%;
 }
 
 .UIContactPortlet .UIMessageCompose .UIForm .HorizontalLayout .FieldLabel .HoverButton {

@@ -270,3 +270,7 @@
 	width: 16px ; height: 16px;
 }
 
+.UICalendarPortlet .UIFormGrid {
+  width: auto;
+  margin: auto;
+}

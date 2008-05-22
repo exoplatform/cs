@@ -17,6 +17,11 @@
 	padding: 0px;
 }
 
+.UIContactPortlet .UIImportForm .categoryInput .UIFormGrid {
+	margin: 0px;
+	width: 100%;
+}
+
 .UIContactPortlet .UIImportForm .categoryInput .UIFormGrid td {
 	padding: 0px;
 }
