@@ -45,124 +45,119 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
 		id = tr.getAttribute("id") ;
     //eXo.webui.UIContextMenuCon.changeAction(UIContextMenuCon.menuElement, id) ;
 	}
-  if(tr.getAttribute("type")) {
-    var type = tr.getAttribute("type").toLowerCase() ;
-    var actions = DOMUtil.findDescendantsByClass(UIContextMenuCon.menuElement, "div", "ItemIcon") ;
-    var isDisable = null ;
-    var len = actions.length ;
-    if(type == "2") {
-      for (var i = 0; i < len; i++) {
-        isDisable = DOMUtil.hasClass(actions[i], "EditActionIcon") || DOMUtil.hasClass(actions[i], "ShareIcon") || DOMUtil.hasClass(actions[i], "MoveIcon") || DOMUtil.hasClass(actions[i], "DeleteContactIcon") ;
+  var type = tr.getAttribute("type").toLowerCase() ;
+	var isOwner = tr.getAttribute("isOwner").toLowerCase() ;  
+	
+  var actions = DOMUtil.findDescendantsByClass(UIContextMenuCon.menuElement, "div", "ItemIcon") ;
+  var isDisable = null ;
+  var len = actions.length ;
+  if(type == "2") {
+    for (var i = 0; i < len; i++) {
+      isDisable = DOMUtil.hasClass(actions[i], "EditActionIcon") || DOMUtil.hasClass(actions[i], "ShareIcon") || DOMUtil.hasClass(actions[i], "MoveIcon") || DOMUtil.hasClass(actions[i], "DeleteContactIcon") ;
+      if (isDisable == false) continue;
+      if (!actions[i].parentNode.getAttribute("oldHref")) {
+        actions[i].parentNode.setAttribute("oldHref", actions[i].parentNode.href);
+        actions[i].parentNode.style.color = "#cccccc";
+        actions[i].parentNode.href = "javascript:void(0);";
+      }
+    } 
+  } else if (type == "1") {
+  	for (var i = 0; i < len; i++) {
+      isDisable = DOMUtil.hasClass(actions[i], "ShareIcon");
+      if (isDisable == true) {
+        if (!actions[i].parentNode.getAttribute("oldHref")) {
+          actions[i].parentNode.setAttribute("oldHref", actions[i].parentNode.href);
+          actions[i].parentNode.style.color = "#cccccc";
+          actions[i].parentNode.href = "javascript:void(0);";
+        }		
+			}else {
+				if (actions[i].parentNode.getAttribute("oldHref")) {
+          actions[i].parentNode.href = actions[i].parentNode.getAttribute("oldHref");
+          actions[i].parentNode.removeAttribute("oldHref");
+          actions[i].parentNode.removeAttribute("style");
+        }
+			}
+    }  
+    
+    // hoang quang hung add :
+    
+		var havePermission = tr.getAttribute("havePermission").toLowerCase() ;		
+		if (havePermission == "false") {
+			for (var i = 0; i < len; i++) {    			
+  			isDisable = DOMUtil.hasClass(actions[i], "EditActionIcon") ;
+      	if (isDisable == false) continue ;
+        if (!actions[i].parentNode.getAttribute("oldHref")) {
+          actions[i].parentNode.setAttribute("oldHref", actions[i].parentNode.href);
+          actions[i].parentNode.style.color = "#cccccc";
+          actions[i].parentNode.href = "javascript:void(0);";
+        }    			
+			}
+  	} else { // havePermission
+  		for (var i = 0; i < len; i++) {
+        isDisable = DOMUtil.hasClass(actions[i], "EditActionIcon")
         if (isDisable == false) continue;
+        if (actions[i].parentNode.getAttribute("oldHref")) {
+          actions[i].parentNode.href = actions[i].parentNode.getAttribute("oldHref");
+          actions[i].parentNode.removeAttribute("oldHref");
+          actions[i].parentNode.removeAttribute("style");
+        }
+ 	 		}      		
+  	}
+		var isSharedAddress = tr.getAttribute("isSharedAddress").toLowerCase() ;    		
+		if ((isSharedAddress == "true" && havePermission == "false") || (isOwner == "true")) {
+			for (var i = 0; i < len; i++) {    			
+  			isDisable = DOMUtil.hasClass(actions[i], "DeleteContactIcon") || DOMUtil.hasClass(actions[i], "MoveIcon");
+      	if (isDisable == false) continue ;
         if (!actions[i].parentNode.getAttribute("oldHref")) {
           actions[i].parentNode.setAttribute("oldHref", actions[i].parentNode.href);
           actions[i].parentNode.style.color = "#cccccc";
           actions[i].parentNode.href = "javascript:void(0);";
         }
-      } 
-    } else if (type == "1") {
-    	for (var i = 0; i < len; i++) {
-        isDisable = DOMUtil.hasClass(actions[i], "ShareIcon");
-        if (isDisable == true) {
-	        if (!actions[i].parentNode.getAttribute("oldHref")) {
-	          actions[i].parentNode.setAttribute("oldHref", actions[i].parentNode.href);
-	          actions[i].parentNode.style.color = "#cccccc";
-	          actions[i].parentNode.href = "javascript:void(0);";
-	        }		
-				}else {
-					if (actions[i].parentNode.getAttribute("oldHref")) {
-	          actions[i].parentNode.href = actions[i].parentNode.getAttribute("oldHref");
-	          actions[i].parentNode.removeAttribute("oldHref");
-	          actions[i].parentNode.removeAttribute("style");
-	        }
-				}
-      }  
-      
-      // hoang quang hung add :
-      if(tr.getAttribute("havePermission")) {
-    		var havePermission = tr.getAttribute("havePermission").toLowerCase() ;		
-    		if (havePermission == "false") {
-    			for (var i = 0; i < len; i++) {    			
-	    			isDisable = DOMUtil.hasClass(actions[i], "EditActionIcon") ;
-	        	if (isDisable == false) continue ;
-		        if (!actions[i].parentNode.getAttribute("oldHref")) {
-		          actions[i].parentNode.setAttribute("oldHref", actions[i].parentNode.href);
-		          actions[i].parentNode.style.color = "#cccccc";
-		          actions[i].parentNode.href = "javascript:void(0);";
-		        }    			
-    			}
-      	} else { // havePermission
-      		for (var i = 0; i < len; i++) {
-		        isDisable = DOMUtil.hasClass(actions[i], "EditActionIcon")
-		        if (isDisable == false) continue;
-		        if (actions[i].parentNode.getAttribute("oldHref")) {
-		          actions[i].parentNode.href = actions[i].parentNode.getAttribute("oldHref");
-		          actions[i].parentNode.removeAttribute("oldHref");
-		          actions[i].parentNode.removeAttribute("style");
-		        }
-     	 		}      		
-      	}
-      }      
-
-      if(tr.getAttribute("canDeleteShared")) {
-    		var canDeleteShared = tr.getAttribute("canDeleteShared").toLowerCase() ;    		
-    		if (canDeleteShared == "false") {
-    			for (var i = 0; i < len; i++) {    			
-	    			isDisable = DOMUtil.hasClass(actions[i], "DeleteContactIcon") || DOMUtil.hasClass(actions[i], "MoveIcon");
-	        	if (isDisable == false) continue ;
-		        if (!actions[i].parentNode.getAttribute("oldHref")) {
-		          actions[i].parentNode.setAttribute("oldHref", actions[i].parentNode.href);
-		          actions[i].parentNode.style.color = "#cccccc";
-		          actions[i].parentNode.href = "javascript:void(0);";
-		        }    			
-    			}
-      	} else { // havePermission
-      		for (var i = 0; i < len; i++) {
-		        isDisable = DOMUtil.hasClass(actions[i], "DeleteContactIcon")
-		        if (isDisable == false) continue;
-		        if (actions[i].parentNode.getAttribute("oldHref")) {
-		          actions[i].parentNode.href = actions[i].parentNode.getAttribute("oldHref");
-		          actions[i].parentNode.removeAttribute("oldHref");
-		          actions[i].parentNode.removeAttribute("style");
-		        }
-     	 		}      		
-      	}
-      }	
-    } else { // type = "0"
-      if(tr.getAttribute("isOwner")) {
-    		var isOwner = tr.getAttribute("isOwner").toLowerCase() ;    		
-    		if (isOwner == "true") {
-    			for (var i = 0; i < len; i++) {    			
-	    			isDisable = DOMUtil.hasClass(actions[i], "DeleteContactIcon") || DOMUtil.hasClass(actions[i], "MoveIcon");
-	        	if (isDisable == false) continue ;
-		        if (!actions[i].parentNode.getAttribute("oldHref")) {
-		          actions[i].parentNode.setAttribute("oldHref", actions[i].parentNode.href);
-		          actions[i].parentNode.style.color = "#cccccc";
-		          actions[i].parentNode.href = "javascript:void(0);";
-		        }    			
-    			}
-      	} else {
-      		for (var i = 0; i < len; i++) {
-		        isDisable = DOMUtil.hasClass(actions[i], "DeleteContactIcon") || DOMUtil.hasClass(actions[i], "MoveIcon") ;
-		        if (isDisable == false) continue;
-		        if (actions[i].parentNode.getAttribute("oldHref")) {
-		          actions[i].parentNode.href = actions[i].parentNode.getAttribute("oldHref");
-		          actions[i].parentNode.removeAttribute("oldHref");
-		          actions[i].parentNode.removeAttribute("style");
-		        }
-     	 		} 
-     	 		for (var i = 0; i < len; i++) {
-		        isDisable = DOMUtil.hasClass(actions[i], "EditActionIcon") || DOMUtil.hasClass(actions[i], "ShareIcon") || DOMUtil.hasClass(actions[i], "MoveIcon")
-		        if (isDisable == false) continue;
-		        if (actions[i].parentNode.getAttribute("oldHref")) {
-		          actions[i].parentNode.href = actions[i].parentNode.getAttribute("oldHref");
-		          actions[i].parentNode.removeAttribute("oldHref");
-		          actions[i].parentNode.removeAttribute("style");
-		        }
-        	}	     		
-      	}	
-      }
-    }
+			}
+  	} else { // havePermission
+  		for (var i = 0; i < len; i++) {
+        isDisable = DOMUtil.hasClass(actions[i], "DeleteContactIcon") || DOMUtil.hasClass(actions[i], "MoveIcon");
+        if (isDisable == false) continue;
+        if (actions[i].parentNode.getAttribute("oldHref")) {
+          actions[i].parentNode.href = actions[i].parentNode.getAttribute("oldHref");
+          actions[i].parentNode.removeAttribute("oldHref");
+          actions[i].parentNode.removeAttribute("style");
+        }
+ 	 		}      		
+  	}
+  
+    
+  } else { // type = "0"  		
+		if (isOwner == "true") {
+			for (var i = 0; i < len; i++) {    			
+  			isDisable = DOMUtil.hasClass(actions[i], "DeleteContactIcon") || DOMUtil.hasClass(actions[i], "MoveIcon");
+      	if (isDisable == false) continue ;
+        if (!actions[i].parentNode.getAttribute("oldHref")) {
+          actions[i].parentNode.setAttribute("oldHref", actions[i].parentNode.href);
+          actions[i].parentNode.style.color = "#cccccc";
+          actions[i].parentNode.href = "javascript:void(0);";
+        }    			
+			}
+  	} else {
+  		for (var i = 0; i < len; i++) {
+        isDisable = DOMUtil.hasClass(actions[i], "DeleteContactIcon") || DOMUtil.hasClass(actions[i], "MoveIcon") ;
+        if (isDisable == false) continue;
+        if (actions[i].parentNode.getAttribute("oldHref")) {
+          actions[i].parentNode.href = actions[i].parentNode.getAttribute("oldHref");
+          actions[i].parentNode.removeAttribute("oldHref");
+          actions[i].parentNode.removeAttribute("style");
+        }
+ 	 		} 
+ 	 		for (var i = 0; i < len; i++) {
+        isDisable = DOMUtil.hasClass(actions[i], "EditActionIcon") || DOMUtil.hasClass(actions[i], "ShareIcon") || DOMUtil.hasClass(actions[i], "MoveIcon")
+        if (isDisable == false) continue;
+        if (actions[i].parentNode.getAttribute("oldHref")) {
+          actions[i].parentNode.href = actions[i].parentNode.getAttribute("oldHref");
+          actions[i].parentNode.removeAttribute("oldHref");
+          actions[i].parentNode.removeAttribute("style");
+        }
+    	}	     		
+  	}
   }
 	eXo.webui.UIContextMenuCon.changeAction(UIContextMenuCon.menuElement, id) ;
 } ;
@@ -724,5 +719,12 @@ UIContactPortlet.prototype.showPopupCustomLayoutView = function(obj, evt) {
   }
   eXo.webui.UIPopupSelectCategory.show(obj, evt);
 };
+
+UIContactPortlet.prototype.refreshData = function() {
+	window.onload = function() {
+		if(!document.getElementById("UIContacts")) return ;
+		eXo.webui.UIForm.submitForm('contact#UIContacts','Refresh', true)		
+	} ;
+} ;
 
 eXo.contact.UIContactPortlet = new UIContactPortlet() ;

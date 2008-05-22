@@ -423,19 +423,18 @@ public class JCRDataStorage {
     List<Contact> contacts = new ArrayList<Contact>() ;
     for (String contactId : contactIds) {
       Contact contact = getContact(sysProvider, username, contactId);
-      if(canRemove(username, contact)) {
-        contactHomeNode.getNode(contactId).remove();
-        contactHomeNode.getSession().save(); 
-        contacts.add(contact) ;
-      }
+      contactHomeNode.getNode(contactId).remove();
+      contactHomeNode.getSession().save(); 
+      contacts.add(contact) ;
+      
     }
     return contacts ;
   }
-  
+  /*
   private boolean canRemove(String username, Contact contact) {
     return true ;
   }
-  
+  */
   
   public void moveContacts(SessionProvider sysProvider, String username, List<Contact> contacts, String addressType ) throws Exception {
     Node privateContactHome = getUserContactHome(sysProvider, username);
@@ -795,8 +794,10 @@ public class JCRDataStorage {
       }
     } 
   }
+  */
   
   public void removeSharedContact(SessionProvider sProvider, String username, String addressBookId, String contactId) throws Exception {
+    /*
     Node sharedContactMock = getSharedContact(username) ;
     PropertyIterator iter1 = sharedContactMock.getReferences() ;
     while(iter1.hasNext()) {
@@ -811,7 +812,8 @@ public class JCRDataStorage {
       }
     }
     sharedContactMock.getSession().save() ;
-    //////////////////////////
+    */
+    
     Node sharedAddressBookMock = getSharedAddressBook(username) ;
     PropertyIterator iter2 = sharedAddressBookMock.getReferences() ;
     Node addressBook ;      
@@ -819,17 +821,16 @@ public class JCRDataStorage {
       addressBook = iter2.nextProperty().getParent() ;
       
       // need improved
-      //if(addressBook.getName().equals(addressBookId)) {
-      Node contactHomeNode = addressBook.getParent().getParent().getNode(CONTACTS) ;
-      try {
-        contactHomeNode.getNode(contactId).remove() ;        
-        contactHomeNode.getSession().save() ;
-        break ;
-      } catch (PathNotFoundException e) { }
-      
-      //}
+      if(addressBook.getName().equals(addressBookId)) {
+        Node contactHomeNode = addressBook.getParent().getParent().getNode(CONTACTS) ;
+        try {
+          contactHomeNode.getNode(contactId).remove() ;        
+          contactHomeNode.getSession().save() ;
+          break ;
+        } catch (PathNotFoundException e) { }      
+      }
     }
-  }*/
+  }
 
   public Contact getSharedContact(SessionProvider sProvider, String username, String contactId) throws Exception {
     /*Node sharedAddressBookHome = getSharedAddressBookHome(SessionProvider.createSystemProvider()) ;
