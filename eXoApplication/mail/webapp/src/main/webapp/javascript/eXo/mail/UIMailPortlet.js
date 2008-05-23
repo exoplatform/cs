@@ -437,7 +437,7 @@ UIMailPortlet.prototype.resizeIframe = function(textAreaId, frameId, styleExpand
 	doc.open();
 	doc.write(str);
 	doc.close();
-	if (isDesktop) {
+	if (false) {
 		frame.style.height = "100%";
 		if(!eXo.core.Browser.isFF()) frame.style.width = "96%";
 	} else {

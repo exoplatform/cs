@@ -410,6 +410,7 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       System.out.println("\n\n ChangeCheckedActionListener"); UIAccountCreation uiAccCreation = event.getSource() ;
       UIAccountWizardStep3 uiWs3 = uiAccCreation.getChildById(INPUT_STEP3) ;
       uiWs3.setDefaultValue(uiWs3.getServerType(), uiWs3.getIsSSL()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAccCreation.getParent()) ;
     } 
   }
 }
