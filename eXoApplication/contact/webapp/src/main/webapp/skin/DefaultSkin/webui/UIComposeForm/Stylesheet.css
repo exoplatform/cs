@@ -4,11 +4,13 @@
 	cursor: pointer;
 }
 
+.UIContactPortlet .UIMessageCompose {
+	padding: 10px;
+}
+
 .UIContactPortlet .UIMessageCompose .MailListActionsbar{
 	color: #000000;
-	margin: 3px 0px 0px 0px;
 	line-height: 26px;
-	padding-top: 2px;
 }
 
 .UIContactPortlet .UIMessageCompose .MailListActionsbar a:hover {
