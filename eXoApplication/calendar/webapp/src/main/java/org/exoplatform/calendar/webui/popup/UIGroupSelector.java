@@ -17,7 +17,9 @@
 package org.exoplatform.calendar.webui.popup;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.exoplatform.calendar.CalendarUtils;
@@ -101,6 +103,7 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
   public boolean isSelectMemberShip() {return TYPE_MEMBERSHIP.equals(type_);}
   @SuppressWarnings({ "unchecked", "cast" })
   public List<String> getList() throws Exception {
+	  
     List<String> children = new ArrayList<String>() ; 
     OrganizationService service = getApplicationComponent(OrganizationService.class) ;
     
@@ -123,6 +126,7 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
         children.add(((Group)child).getGroupName()) ;
       }
     }
+    Collections.sort(children) ;
     return children ;
   }
   public void setSelectedGroups(List groups){

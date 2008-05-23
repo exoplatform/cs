@@ -168,7 +168,7 @@ public class MailUtils {
   
   public static String encodeHTML(String htmlContent) throws Exception {
     return (!isFieldEmpty(htmlContent)) ? htmlContent.replaceAll("&", "&amp;").replaceAll("\"", "&quot;")
-        .replaceAll("<", "&lt;").replaceAll(">", "&gt;") : "" ;
+        .replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\"", "&quot;").replaceAll("'", "&#39;") : "" ;
   }
   
   public static boolean isInvitation(Message msg) throws Exception {
@@ -233,10 +233,14 @@ public class MailUtils {
   }
   
   public static String html2text(String str) throws Exception {
-    str = str.replaceAll("<[^>]*>", "");
-    str = str.replaceAll("&nbsp;", "");
-    str = str.replaceAll("&quot;", "\"");
-    str = str.replaceAll("\n", "");
+    if (str != null) {
+      str = str.replaceAll("<[^>]*>", "");
+      str = str.replaceAll("&nbsp;", "");
+      str = str.replaceAll("&quot;", "\"");
+      str = str.replaceAll("\n", "");
+    } else {
+      str = "" ;
+    }
     return str;
   }
 }

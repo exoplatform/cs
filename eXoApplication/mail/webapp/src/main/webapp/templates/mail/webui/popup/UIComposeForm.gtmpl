@@ -55,7 +55,7 @@
 									
 									<div class="SeparatorLine"><span></span></div>
 									
-									<div class="ControlButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" style="position: relative;">
+									<div class="ControlButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" >
 										<div class="IconHolder PriorityIcon">
 											<div class="Label DownArrow1Icon">Message Priority</div>
 										</div>
@@ -108,7 +108,7 @@
 									
 									<div class="SeparatorLine"><span></span></div>
 									
-									<div class="ControlButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" style="position: relative;">
+									<div class="ControlButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" >
 										<div class="IconHolder EditorOptionsIcon">
 											<div class="Label DownArrow1Icon">Editor Options</div>
 										</div>
@@ -177,7 +177,7 @@
           	<div>
 	            <table class="UIFormGrid">
 	              <tr>
-	                <td class="FieldLabel" >From :&nbsp;&nbsp;</td>
+	                <td class="FieldLabel">From :&nbsp;&nbsp;</td>
 	                <td class="FieldComponent" style="width: 62%;"><%uicomponent.renderField(uicomponent.FIELD_FROM)%></td>
 	                <td class="FieldCCAndBCC">
 	                  <a  href="<%=uicomponent.event("ShowCc")%>">|Add CC|</a> 
@@ -192,27 +192,25 @@
 	                </td>
 	              </tr>
 	              <%
-                  if (uicomponent.showCc_) {
+                  String displayCc = "display:none" ;
+                  if (uicomponent.showCc_) { displayCc = "" ; }
                 %>
-  	              <tr id="FIELD_CC">
+  	              <tr id="FIELD_CC" style="$displayCc">
   	                <td class="FieldLabel"><a href="<%=uicomponent.event("ToCC")%>">Cc</a> :&nbsp;&nbsp;</td>
   	                <td class="FieldComponent" colspan="2">
   	                  <%uicomponent.renderField(uicomponent.FIELD_CC)%> 
   	                </td>
   	              </tr>
 	              <%
-                  }
-                  if (uicomponent.showBcc_) {
+                  String displayBcc = "display:none" ;
+                  if (uicomponent.showBcc_) { displayBcc = "" ; }
                 %>
-                  <tr id="FIELD_BCC">
+                  <tr id="FIELD_BCC" style="$displayBcc">
   	                <td class="FieldLabel"><a href="<%=uicomponent.event("ToBCC")%>">Bcc</a> :&nbsp;&nbsp;</td>
   	                <td class="FieldComponent" colspan="2">
   	                  <%uicomponent.renderField(uicomponent.FIELD_BCC)%> 
   	                </td>
   	              </tr>
-                <%
-                  }
-                %>
 	              <tr>
 	                <td class="FieldLabel">Subject :&nbsp;&nbsp;</td>
 	                <td class="FieldComponent" colspan="2" style="padding:4px;">

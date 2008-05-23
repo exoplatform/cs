@@ -29,14 +29,14 @@
 		        String rowCssClass = "OddRow" ;
 		        if(even) rowCssClass = "EvenRow" ;  
 		        even = !even ;
+		        if(uicomponent.getType() != null) {
+		        	key = uicomponent.getType() +  ":/" + uicomponent.getCurrentGroup().getId() +  ":/" + user ;
+		        	if(uicomponent.isSelectMemberShip()) {
+		        		key = uicomponent.getType() +  ":/" + uicomponent.getCurrentGroup().getId() +  ":/*." + user ;
+		        	}
+		        } else {
 		        	key = "" ;
-			        if(uicomponent.isSelectMemberShip()){ 
-			        		 key = user + ":" +  uicomponent.getCurrentGroup().getId() ;
-			        } else if(uicomponent.isSelectUser()){ 
-			        	key = user ;
-			        } else if(uicomponent.isSelectGroup()){ 
-			        	key = uicomponent.getCurrentGroup().getId()+"/"+user ;
-			        }
+		        }
 			          
 	      %>
 			      <div class="$rowCssClass">

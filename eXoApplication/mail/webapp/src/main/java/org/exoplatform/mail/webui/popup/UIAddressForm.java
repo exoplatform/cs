@@ -57,7 +57,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
  * Sep 25, 2007
  */
 @ComponentConfig(lifecycle = UIFormLifecycle.class, 
-    template = "app:/templates/mail/webui/UIAddressForm.gtmpl", 
+    template = "app:/templates/mail/webui/popup/UIAddressForm.gtmpl", 
     events = {
       @EventConfig(listeners = UIAddressForm.ChangeGroupActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIAddressForm.SearchContactActionListener.class),

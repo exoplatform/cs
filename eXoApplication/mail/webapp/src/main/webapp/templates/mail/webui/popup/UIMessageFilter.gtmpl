@@ -9,7 +9,7 @@
     <div class="FilterSettingCategory">
       <div class="CategoryControlBar">
         <div class="Title">Filter</div>
-        <a href="<%=uicomponent.event("DeleteFilter")%>" title="<%=_ctx.appRes(uicomponent.id+  ".label.delete-filter") %>"><div class="ControlBarIcon FilterDelete"><span></span></div></a>
+        <a href="<%=uicomponent.event("DeleteFilter",uicomponent.id,"id")%>" title="<%=_ctx.appRes(uicomponent.id+  ".label.delete-filter") %>"><div class="ControlBarIcon FilterDelete"><span></span></div></a>
         <a href="<%=uicomponent.event("EditFilter")%>" title="<%=_ctx.appRes(uicomponent.id+  ".label.edit-filter") %>"><div class="ControlBarIcon FilterEdit"><span></span></div></a>
         <a href="<%=uicomponent.event("AddFilter")%>" title="<%=_ctx.appRes(uicomponent.id+  ".label.add-filter") %>"><div class="ControlBarIcon FilterAdd"><span></span></div></a>
         <div style="clear: both;"><span></span></div>

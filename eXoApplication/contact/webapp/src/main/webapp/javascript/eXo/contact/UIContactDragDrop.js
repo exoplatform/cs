@@ -74,7 +74,7 @@ UIContactDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj, 
   }
   
   var uiContactPortletNode = document.createElement('div') ;
-  uiContactPortletNode.className = 'UIContactPortlet' ;
+  uiContactPortletNode.className = 'UIContactPortlet UIEmpty' ;
   
   var uiContactContainerNode = document.createElement('div') ;
   uiContactContainerNode.className = 'UIContactContainer' ;
@@ -91,6 +91,7 @@ UIContactDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj, 
   if (!this.listView) {
     contactListNode.className = 'UIVCards' ;
     contactListNode.appendChild(dragBlock.cloneNode(true)) ;
+		contactListNode.style.border = "none" ;
   } else {
     contactListNode = document.createElement('table') ;
     contactListNode.setAttribute("class", "UIGrid") ;
@@ -114,9 +115,9 @@ UIContactDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj, 
       tmpNode.appendChild(dragBlock.cloneNode(true)) ;
     }  
     contactListNode.appendChild(tmpNode);
+		uiContactPortletNode.style.border = 'solid 1px #A5A5A5' ;
   }
-  with(uiContactPortletNode.style) {
-    border = 'solid 1px #A5A5A5' ;
+  with(uiContactPortletNode.style) {    
     position = 'absolute' ;
     width = blockWidth + 'px' ;
     display = 'none' ;

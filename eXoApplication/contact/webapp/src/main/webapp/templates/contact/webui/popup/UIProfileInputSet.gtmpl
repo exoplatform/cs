@@ -1,5 +1,7 @@
 <%
 uiForm = uicomponent.getParentFrom() ;
+
+
 %>
 <div class="Profile $uicomponent.id">
   <div class="FormContainer ProfileContainer">
@@ -133,7 +135,7 @@ uiForm = uicomponent.getParentFrom() ;
 		<div class="Label"><%=_ctx.appRes(uicomponent.getParent().id + ".label.picture")%></div>
 		<% String imageLink = uicomponent.getImageSource() ; %>
 		<div class="Avatar">
-			<img src="<%=(imageLink == null ? "/contact/skin/DefaultSkin/webui/background/Img2.gif": imageLink)%>" width=63 height=81 class="ImgAvatar"/>
+			<img src="<%=(imageLink == null ? "/contact/skin/DefaultSkin/webui/background/Img2.gif": imageLink)%>" width=63 height=81 class="ImgAvatar" />
 		</div>
 		<div class="Action">	
 			<a href="<%=uicomponent.getParent().event("ChangeImage")%>"><%=_ctx.appRes(uicomponent.getParent().id + ".label.change")%> | </a>
@@ -142,4 +144,4 @@ uiForm = uicomponent.getParentFrom() ;
 	</div>
 	
 	<div style="clear: left;"><span></span></div>
-</div>				        
+</div>        

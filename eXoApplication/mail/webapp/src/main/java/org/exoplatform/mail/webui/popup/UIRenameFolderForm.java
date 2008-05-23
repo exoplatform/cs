@@ -23,6 +23,7 @@ import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
+import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -41,6 +42,8 @@ import org.exoplatform.webui.form.UIFormStringInput;
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen
  *          hung.nguyen@exoplatform.com
+ *          Nam Phung
+ *          phunghainam@gmail.com
  * Aus 01, 2007 2:48:18 PM 
  */
 @ComponentConfig(
@@ -90,8 +93,8 @@ public class UIRenameFolderForm extends UIForm implements UIPopupComponent {
       }
       
       try {
-        String newFolderId = accountId + "UserFolder" + newFolderName;
-        if (mailService.getFolder(SessionProviderFactory.createSystemProvider(), username, accountId, newFolderId) == null) {
+        String folderParentId =  mailService.getFolderParentId(SessionProviderFactory.createSystemProvider(), username, accountId, folderId) ;
+        if (!mailService.isExistFolder(SessionProviderFactory.createSystemProvider(), username, accountId, folderParentId, newFolderName)) {
           Folder folder =  mailService.getFolder(SessionProviderFactory.createSystemProvider(), username, accountId, folderId);
           folder.setLabel(newFolderName) ;
           folder.setName(newFolderName) ;
@@ -103,11 +106,17 @@ public class UIRenameFolderForm extends UIForm implements UIPopupComponent {
         }
       } catch (Exception e){
         uiApp.addMessage(new ApplicationMessage("UIRenameFolderForm.msg.error-rename-folder", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         e.printStackTrace() ;
+        return ;
       }
       uiMailPortlet.cancelAction();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMailPortlet.getChild(UIPopupAction.class)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer) ;
+      UIMessageList uiMsgList = uiMailPortlet.findFirstComponentOfType(UIMessageList.class) ;
+      if (uiMsgList.getMessageFilter().getName().equals("Search")) {
+        uiMsgList.updateList() ;
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMailPortlet.findFirstComponentOfType(UIMessageArea.class)) ;      
     }
   }

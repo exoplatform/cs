@@ -120,6 +120,11 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   private SessionProvider getSystemSession() {
     return SessionProviderFactory.createSystemProvider() ;
   }
+  public void setSelectedEventState(String value) {
+    UIFormInputWithActions taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
+    taskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_STATUS).setValue(value) ;
+  }
+  
   public void initForm(CalendarSetting calSetting, CalendarEvent eventCalendar, String formTime) throws Exception {
     reset() ;
     String dateFormat = calSetting.getDateFormat() ;
@@ -149,19 +154,24 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       setSelectedEventPriority(eventCalendar.getPriority()) ;
       setEventReminders(eventCalendar.getReminders()) ;
       setAttachments(eventCalendar.getAttachment()) ;
-      boolean isContains = false ;
-      CalendarService calService = CalendarUtils.getCalendarService();
-      List<EventCategory> listCategory = 
-        calService.getEventCategories(SessionProviderFactory.createSessionProvider(), CalendarUtils.getCurrentUser());
-      for(EventCategory eventCat : listCategory) {
-        isContains = eventCat.getName().toLowerCase().equals(eventCalendar.getEventCategoryId().toLowerCase()) ;
-        if(isContains) break ;
-      }
-      if(!isContains) {
-        SelectItemOption<String> item = new SelectItemOption<String>(eventCalendar.getEventCategoryId(), eventCalendar.getEventCategoryId()) ;
-        taskDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).getOptions().add(item) ;
-        newCategoryId_ = eventCalendar.getEventCategoryId() ;
-        taskDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).setValue(eventCalendar.getEventCategoryId());
+      setSelectedEventState(eventCalendar.getEventState()) ;
+
+      if(CalendarUtils.SHARED_TYPE.equals(calType_) || CalendarUtils.PUBLIC_TYPE.equals(calType_)){
+
+        boolean isContains = false ;
+        CalendarService calService = CalendarUtils.getCalendarService();
+        List<EventCategory> listCategory = 
+          calService.getEventCategories(SessionProviderFactory.createSessionProvider(), CalendarUtils.getCurrentUser());
+        for(EventCategory eventCat : listCategory) {
+          isContains = eventCat.getName().toLowerCase().equals(eventCalendar.getEventCategoryId().toLowerCase()) ;
+          if(isContains) break ;
+        }
+        if(!isContains) {
+          SelectItemOption<String> item = new SelectItemOption<String>(eventCalendar.getEventCategoryId(), eventCalendar.getEventCategoryId()) ;
+          taskDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).getOptions().add(item) ;
+          newCategoryId_ = eventCalendar.getEventCategoryId() ;
+          taskDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).setValue(eventCalendar.getEventCategoryId());
+        }
       }
 
     } else {
@@ -641,7 +651,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
             String fromType = uiForm.oldCalendarId_.split(CalendarUtils.COLON)[0].trim() ;
             String toType = uiForm.newCalendarId_.split(CalendarUtils.COLON)[0].trim() ;
 
-            if(uiForm.newCategoryId_ != null){
+            if((uiForm.calType_.equals(CalendarUtils.SHARED_TYPE) || uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)) && uiForm.newCategoryId_ != null){
               EventCategory evc = new EventCategory() ;
               evc.setName(uiForm.newCategoryId_ ) ;
               calService.saveEventCategory(uiForm.getSession(), username, evc, null, true) ;

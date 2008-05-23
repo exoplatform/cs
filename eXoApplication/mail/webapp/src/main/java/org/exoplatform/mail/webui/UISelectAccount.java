@@ -67,6 +67,14 @@ public class UISelectAccount extends UIForm {
     addChild(uiSelect) ; 
   }
   
+  public String getLabel(String id) {
+    try {
+      return super.getLabel(id) ; 
+    } catch(Exception e) {
+      return id ;
+    }
+  }
+  
   private List<SelectItemOption<String>> getValues() throws Exception {
     MailService mailSvr = getApplicationComponent(MailService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
@@ -77,6 +85,7 @@ public class UISelectAccount extends UIForm {
     for(Account acc : accountList) {
       SelectItemOption<String> option = new SelectItemOption<String>(acc.getLabel(), acc.getId());
       if (defaultAcc != null && acc.getId().equals(defaultAcc)) {
+        option = new SelectItemOption<String>(acc.getLabel() + " (" + getLabel("default") + ")", acc.getId());
         option.setSelected(true);
       }
       options.add(option) ;

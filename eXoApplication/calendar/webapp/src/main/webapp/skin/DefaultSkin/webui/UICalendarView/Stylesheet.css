@@ -270,6 +270,7 @@
 .UIWeekView .EventContainerBorder {
 	border:1px solid #808080;
 	-moz-user-select : none ;
+	overflow: hidden;
 }
 
 .UIWeekView .EventContainerBar {
@@ -608,7 +609,7 @@
 
 .UIListView table {
 	width: 99.4%;
-	_width: 96.4%;
+	_width: 99%;
 	background-color: #ffffff;
 }
 
@@ -620,6 +621,7 @@
 	background: url('../background/CalendarBackground.gif') repeat-x center -162px;		
   height: 20px;
 	border-right: 1px solid #c7c7c7;
+	padding: 0px 0px 0px 7px;
 }
 
 .UIListView .EventIcon {
@@ -664,13 +666,14 @@
 }
 
 .UIListContainer .Result {
-	line-height: 23px;
+	line-height: 22px;
 	text-align: center;
 	font-weight: bold;
 	background: url('../background/CalendarBackground.gif') repeat-x center -106px;
-	border-left: 1px solid #cccccc;
-	border-right: 1px solid #cccccc;
+	border: 1px solid #cccccc;
+	border-top: none;
 	margin-right: 5px;
+	_margin: 0px 4px 0px 6px;
 }
 
 .UIPreview {

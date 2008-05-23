@@ -24,6 +24,7 @@ import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -77,9 +78,14 @@ public class UIFolderForm extends UIForm implements UIPopupComponent {
         return ;
       }
       try {
-        String folderId = Utils.createFolderId(accountId, folderName, true);
-        Folder folder = mailSvr.getFolder(SessionProviderFactory.createSystemProvider(), username, accountId, folderId) ;
-        if(folder == null) {
+        String folderId = Utils.KEY_FOLDERS + IdGenerator.generate() ;
+        Folder folder = null ; 
+        boolean isExist = false ; 
+        try {
+          isExist = mailSvr.isExistFolder(SessionProviderFactory.createSystemProvider(), username, accountId, uiForm.getParentPath(), folderName) ;
+        } catch(Exception e) { }
+       
+        if(!isExist) {
           folder = new Folder() ;
           folder.setId(folderId);
           folder.setName(folderName) ;
@@ -96,7 +102,9 @@ public class UIFolderForm extends UIForm implements UIPopupComponent {
         }
       } catch (Exception e){
         uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.error-create-folder", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         e.printStackTrace() ;
+        return ;
       }
       uiForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;

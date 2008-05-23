@@ -3,6 +3,15 @@
 	background: #f3f3f3;
 }
 
+.UICalendarPortlet .UIInsertAddress .UISearch {
+	padding: 0px;
+	height: 37px;
+}
+
+.UICalendarPortlet .UIInsertAddress .UISearch .UIBarStyle .NormalBarStyle {
+	height: 37px;
+}
+
 .UICalendarPortlet .UIInsertAddress .InsertAddressContainer {
 	padding: 10px;
 	border: 1px solid #c0c0c0;

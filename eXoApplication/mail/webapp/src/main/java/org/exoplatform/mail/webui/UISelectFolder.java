@@ -23,9 +23,7 @@ import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.form.UIFormInputSet;
-import org.exoplatform.webui.form.UIFormSelectBox;
 
 /**
  * Created by The eXo Platform SAS
@@ -41,44 +39,17 @@ public class UISelectFolder extends UIFormInputSet {
   public UISelectFolder(String accountId) throws Exception {  
     setId("UISelectFolder");
     accountId_ = accountId ;
-    addUIFormInput(new UIFormSelectBox(SELECT_FOLDER, SELECT_FOLDER, getOptions()));
+    setId("UISelectFolder");
+    accountId_ = accountId ;
+    addUIFormInput(new org.exoplatform.mail.webui.UIFormSelectBox(SELECT_FOLDER, SELECT_FOLDER, getOptions()));
   }
   
   public void setSelectedValue(String s) {
-     getUIFormSelectBox(SELECT_FOLDER).setValue(s) ;
+    ((org.exoplatform.mail.webui.UIFormSelectBox)getChildById(SELECT_FOLDER)).setValue(s) ;
   }
   
   public String getSelectedValue() {
-    return getUIFormSelectBox(SELECT_FOLDER).getValue() ;
-  }
-  
-  public List<SelectItemOption<String>> getOptions() throws Exception {
-    List<SelectItemOption<String>> optionList = new ArrayList<SelectItemOption<String>>();  
-    optionList.add(new SelectItemOption<String>("All Folder", ""));
-    for (Folder cf : getDefaultFolders()) {
-      optionList.add(new SelectItemOption<String>(cf.getName(), cf.getId()));
-    }
-    for (Folder cf : getCustomizeFolders()) {
-      optionList.add(new SelectItemOption<String>(cf.getName(), cf.getId()));
-      if (getSubFolders(cf.getPath()).size() > 0) { 
-        optionList = addChildOption(cf.getPath(), optionList);
-      }
-    }
-    return optionList;
-  }
-  
-  public List<SelectItemOption<String>> addChildOption(String folderPath,  List<SelectItemOption<String>> optionList) throws Exception {
-    level += "----" ;
-    for (Folder cf : getSubFolders(folderPath)) {
-      if (cf != null) {
-        optionList.add(new SelectItemOption<String>(level + " " + cf.getName(), cf.getId()));
-        if (getSubFolders(cf.getPath()).size() > 0) { 
-          optionList = addChildOption(cf.getPath(), optionList);
-        }
-      }
-    }
-    level = level.substring(0, level.length() - 4);
-    return optionList ;
+    return ((org.exoplatform.mail.webui.UIFormSelectBox)getChildById(SELECT_FOLDER)).getValue() ;
   }
   
   public List<Folder> getDefaultFolders() throws Exception{
@@ -109,5 +80,38 @@ public class UISelectFolder extends UIFormInputSet {
       //e.printStackTrace() ;
     }
     return folders ;
+  }
+  
+  public SelectItemOptionGroup addChildOption(String folderPath,  SelectItemOptionGroup optionList) throws Exception {
+    level += "----" ;
+    for (Folder cf : getSubFolders(folderPath)) {
+      if (cf != null) {
+        optionList.addOption(new org.exoplatform.mail.webui.SelectItemOption<String>(level + " " + cf.getLabel(), cf.getId()));
+        if (getSubFolders(cf.getPath()).size() > 0) { 
+          optionList = addChildOption(cf.getPath(), optionList);
+        }
+      }
+    }
+    level = level.substring(0, level.length() - 4);
+    return optionList ;
+  }
+  
+  public List<SelectItem> getOptions() throws Exception {
+    List<SelectItem> options = new ArrayList<SelectItem>() ;
+    SelectItemOptionGroup defaultFolders = new SelectItemOptionGroup("default-folder");
+    for(Folder df : getDefaultFolders()) {
+      defaultFolders.addOption(new org.exoplatform.mail.webui.SelectItemOption<String>(df.getLabel(), df.getId())) ;
+    }
+    options.add(defaultFolders);
+    SelectItemOptionGroup customizeFolders = new SelectItemOptionGroup("my-folder");
+    for(Folder cf : getCustomizeFolders()) {
+      customizeFolders.addOption(new org.exoplatform.mail.webui.SelectItemOption<String>(cf.getLabel(), cf.getId())) ;
+        if (getSubFolders(cf.getPath()).size() > 0) { 
+          customizeFolders = addChildOption(cf.getPath(), customizeFolders);
+        }
+    }
+    options.add(customizeFolders);
+      
+    return options ;
   }
 }

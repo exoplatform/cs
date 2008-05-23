@@ -1137,6 +1137,7 @@ public class JCRDataStorage{
     dateTime.setTime(event.getFromDateTime()) ;
     fromDate = dateTime.get(java.util.Calendar.DATE) ;
     publicEvent.setProperty("exo:fromDateTime", dateTime) ;
+    publicEvent.setProperty("exo:eventState", event.getEventState()) ;
     dateTime.setTime(event.getToDateTime()) ;
     toDate = dateTime.get(java.util.Calendar.DATE) ;
     if(toDate > fromDate) {
@@ -1956,23 +1957,26 @@ public class JCRDataStorage{
       StringBuilder timeValues = new StringBuilder() ;
       while(it.hasNext()) {
         event = it.nextNode() ;
-        java.util.Calendar fromCal = event.getProperty("exo:fromDateTime").getDate() ;
-        java.util.Calendar toCal = event.getProperty("exo:toDateTime").getDate() ;
-        if(fromCal.getTimeInMillis() < eventQuery.getFromDate().getTimeInMillis())
-          from = String.valueOf(eventQuery.getFromDate().getTimeInMillis()) ;
-        else 
-          from = String.valueOf(fromCal.getTimeInMillis()) ;
-        if(toCal.getTimeInMillis() > eventQuery.getToDate().getTimeInMillis()){
-          GregorianCalendar cal = new GregorianCalendar() ;
-          cal.setTimeInMillis(eventQuery.getToDate().getTimeInMillis() - 1000) ;
-          to = String.valueOf(cal.getTimeInMillis()) ;
-        } else to = String.valueOf(toCal.getTimeInMillis()) ;
+        if(event.hasProperty("exo:eventState") && CalendarEvent.ST_BUSY.equals(event.getProperty("exo:eventState").getValue().getString()))
+        {
+          java.util.Calendar fromCal = event.getProperty("exo:fromDateTime").getDate() ;
+          java.util.Calendar toCal = event.getProperty("exo:toDateTime").getDate() ;
+          if(fromCal.getTimeInMillis() < eventQuery.getFromDate().getTimeInMillis())
+            from = String.valueOf(eventQuery.getFromDate().getTimeInMillis()) ;
+          else 
+            from = String.valueOf(fromCal.getTimeInMillis()) ;
+          if(toCal.getTimeInMillis() > eventQuery.getToDate().getTimeInMillis()){
+            GregorianCalendar cal = new GregorianCalendar() ;
+            cal.setTimeInMillis(eventQuery.getToDate().getTimeInMillis() - 1000) ;
+            to = String.valueOf(cal.getTimeInMillis()) ;
+          } else to = String.valueOf(toCal.getTimeInMillis()) ;
 
-        if(timeValues != null && timeValues.length() > 0) timeValues.append(",") ;
-        timeValues.append(from).append(",").append(to) ;
-      }
-      participantMap.put(par, timeValues.toString()) ;
-    }    
+          if(timeValues != null && timeValues.length() > 0) timeValues.append(",") ;
+          timeValues.append(from).append(",").append(to) ;
+          participantMap.put(par, timeValues.toString()) ;
+        }
+      }    
+    }
     return participantMap ;
   }
 

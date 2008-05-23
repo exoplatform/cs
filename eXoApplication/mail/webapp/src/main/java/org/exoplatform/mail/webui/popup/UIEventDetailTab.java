@@ -45,7 +45,7 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
  */
 
 @ComponentConfig(
-    template = "app:/templates/mail/webui/UIEventDetailTab.gtmpl"
+    template = "app:/templates/mail/webui/popup/UIEventDetailTab.gtmpl"
 ) 
 public class UIEventDetailTab extends UIFormInputWithActions {
 

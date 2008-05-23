@@ -192,6 +192,7 @@ public class ICalendarImportExport implements CalendarImportExport{
 		exoCalendar.setDescription(iCalendar.getProductId().getValue()) ;
 		exoCalendar.setCategoryId(categoryId) ;
 		exoCalendar.setPublic(true) ;
+    exoCalendar.setCalendarOwner(username) ;
 		storage_.saveUserCalendar(sProvider, username, exoCalendar, true) ;   
 
 		ComponentList componentList = iCalendar.getComponents() ;

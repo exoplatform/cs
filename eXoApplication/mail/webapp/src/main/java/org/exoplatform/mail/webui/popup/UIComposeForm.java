@@ -37,7 +37,9 @@ import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
+import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
+import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -67,7 +69,7 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/mail/webui/UIComposeForm.gtmpl",
+    template = "app:/templates/mail/webui/popup/UIComposeForm.gtmpl",
     events = {
       @EventConfig(listeners = UIComposeForm.SendActionListener.class),      
       @EventConfig(listeners = UIComposeForm.SaveDraftActionListener.class),
@@ -223,10 +225,16 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         case MESSAGE_IN_DRAFT :
           setFieldSubjectValue(msg.getSubject());
           setFieldToValue(msg.getMessageTo());
+          setFieldCcValue(msg.getMessageCc()) ;
+          setFieldBccValue(msg.getMessageBcc()) ;
           setFieldContentValue(formatContent(msg));
-          for (Attachment att : msg.getAttachments()) {
-            attachments_.add(att);
-            refreshUploadFileList();
+          if (msg != null && msg.hasAttachment()) {
+            String username = MailUtils.getCurrentUser();
+            msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
+            for (Attachment att : msg.getAttachments()) {
+              attachments_.add(att);
+              refreshUploadFileList();
+            }
           }
           break;
         case MESSAGE_REPLY :
@@ -235,9 +243,15 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           String content = getReplyContent(msg);   
           setFieldContentValue(content);
           if (mailSetting.replyWithAttach()) {
-            for (Attachment att : msg.getAttachments()) {
-              attachments_.add(att);
-              refreshUploadFileList();
+            if (msg != null && msg.hasAttachment()) {
+              if (msg.getAttachments() == null) {
+                String username = MailUtils.getCurrentUser();
+                msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
+              }
+              for (Attachment att : msg.getAttachments()) {
+                attachments_.add(att);
+                refreshUploadFileList();
+              }
             }
           }
           break ;
@@ -250,25 +264,38 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           String replyContent = getReplyContent(msg);
           setFieldContentValue(replyContent);
           if (mailSetting.replyWithAttach()) {
-            for (Attachment att : msg.getAttachments()) {
-              attachments_.add(att);
-              refreshUploadFileList();
+            if (msg != null && msg.hasAttachment()) {
+              if (msg.getAttachments() == null) {
+                String username = MailUtils.getCurrentUser();
+                msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
+              }
+              for (Attachment att : msg.getAttachments()) {
+                attachments_.add(att);
+                refreshUploadFileList();
+              }
             }
           }
-          break ;
-        case MESSAGE_FOWARD :
+          break;
+        case MESSAGE_FOWARD : 
+          String toAddress = msg.getMessageTo() != null ? msg.getMessageTo() : "" ;
           setFieldSubjectValue("Fwd: " + msg.getSubject());
           String forwardedText = "<br><br>-------- Original Message --------<br>" +
               "Subject: " + msg.getSubject() + "<br>Date: " + msg.getSendDate() + 
               "<br> From: " + msg.getFrom().replaceAll("\"", "").replaceAll("<", "&quot;").replaceAll(">", "&quot;") + 
-              "<br> To: " + msg.getMessageTo().replaceAll("\"", "").replaceAll("<", "&quot;").replaceAll(">", "&quot;") + 
+              "<br> To: " + toAddress.replaceAll("\"", "").replaceAll("<", "&quot;").replaceAll(">", "&quot;") + 
               "<br><br>" + formatContent(msg) ;         
           setFieldContentValue(forwardedText);
           setFieldToValue("");
           if (mailSetting.forwardWithAtt()) {
-            for (Attachment att : msg.getAttachments()) {
-              attachments_.add(att);
-              refreshUploadFileList();
+            if (msg != null && msg.hasAttachment()) {
+              if (msg.getAttachments() == null) {
+                String username = MailUtils.getCurrentUser();
+                msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
+              }
+              for (Attachment att : msg.getAttachments()) {
+                attachments_.add(att);
+                refreshUploadFileList();
+              }
             }
           }
           break ;
@@ -336,6 +363,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   public String getFieldBccValue() {
     return getUIFormTextAreaInput(FIELD_BCC).getValue() ;
   }
+  
   public void setFieldBccValue(String value) {
     getUIFormTextAreaInput(FIELD_BCC).setValue(value);
   }
@@ -463,7 +491,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       }
       
       try {
-
         mailSvr.sendMessage(SessionProviderFactory.createSystemProvider(), usename, message) ;
       } catch(Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-error", null)) ;
@@ -474,17 +501,23 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       
       try {
         MailSetting setting = mailSvr.getMailSetting(SessionProviderFactory.createSystemProvider(), usename);
-        if (setting.saveMessageInSent()) {
-          message.setFolders(new String[]{ Utils.createFolderId(accountId, Utils.FD_SENT, false) }) ;
-        }
+        boolean isSaved = setting.saveMessageInSent() ; 
         if (!uiForm.fromDrafts()) {
-          message.setReplyTo(message.getMessageTo()) ;
-          mailSvr.saveMessage(SessionProviderFactory.createSystemProvider(), usename, accountId, uiForm.parentPath_, message) ;  
+          if (isSaved) {
+            message.setReplyTo(message.getMessageTo()) ;
+            message.setFolders(new String[]{ Utils.createFolderId(accountId, Utils.FD_SENT, false) }) ;
+            mailSvr.saveMessage(SessionProviderFactory.createSystemProvider(), usename, accountId, uiForm.parentPath_, message, true) ;
+          }
         } else {
           Folder drafts = mailSvr.getFolder(SessionProviderFactory.createSystemProvider(), usename, accountId, Utils.createFolderId(accountId, Utils.FD_DRAFTS, false));
+          if (isSaved) {
+            message.setFolders(new String[]{ Utils.createFolderId(accountId, Utils.FD_SENT, false) }) ;
+            mailSvr.saveMessage(SessionProviderFactory.createSystemProvider(), usename, accountId, uiForm.parentPath_, message, false) ;
+          } else {
+            mailSvr.removeMessage(SessionProviderFactory.createSystemProvider(), usename, accountId, message);
+          }
           drafts.setTotalMessage(drafts.getTotalMessage() - 1);
           mailSvr.saveFolder(SessionProviderFactory.createSystemProvider(), usename, accountId, drafts);
-          mailSvr.removeMessage(SessionProviderFactory.createSystemProvider(), usename, accountId, message);
         }
         UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
         uiMessageList.updateList();
@@ -516,18 +549,38 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         String draftFolderId = Utils.createFolderId(accountId, Utils.FD_DRAFTS, false) ;
         message.setFolders(new String[]{ draftFolderId }) ;
         if (!uiForm.fromDrafts()) {
-          mailSvr.saveMessage(SessionProviderFactory.createSystemProvider(), usename, accountId, uiForm.parentPath_, message) ;
+          mailSvr.saveMessage(SessionProviderFactory.createSystemProvider(), usename, accountId, uiForm.parentPath_, message, true) ;
           Folder drafts = mailSvr.getFolder(SessionProviderFactory.createSystemProvider(), usename, accountId, draftFolderId);
           drafts.setTotalMessage(drafts.getTotalMessage() + 1);
           mailSvr.saveFolder(SessionProviderFactory.createSystemProvider(), usename, accountId, drafts);
         } else {
-          mailSvr.saveMessage(SessionProviderFactory.createSystemProvider(), usename, accountId, message, false) ;
+          mailSvr.saveMessage(SessionProviderFactory.createSystemProvider(), usename, accountId, uiForm.parentPath_, message, false) ;
         }
       } catch (Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.save-draft-error", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         e.printStackTrace() ;
         uiChildPopup.deActivate() ;
+      }
+      if (uiFolderContainer.getSelectedFolder().equals(Utils.createFolderId(accountId, Utils.FD_DRAFTS, false))) {
+        UIMessageList uiMsgList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
+        UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class) ;
+        uiMsgList.setMessagePageList(mailSvr.getMessagePageList(SessionProviderFactory.createSystemProvider(), usename, uiMsgList.getMessageFilter())) ;
+        List<Message> showedMsg = uiMsgPreview.getShowedMessages() ;
+        try {
+          if (showedMsg != null && showedMsg.size() > 0) {
+            for (Message msg : showedMsg) {
+              if (message.getId().equals(msg.getId())) {
+                int index = showedMsg.indexOf(msg) ;
+                showedMsg.remove(index) ;
+                message = mailSvr.loadAttachments(SessionProviderFactory.createSystemProvider(), usename, accountId, 
+                    mailSvr.getMessageById(SessionProviderFactory.createSystemProvider(), usename, accountId, message.getId())) ;
+                showedMsg.add(index, message) ;
+              }
+            }
+          }
+        }catch(Exception e) {}
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class)) ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer) ;
       uiPortlet.cancelAction();

@@ -113,7 +113,22 @@ public interface MailService {
    * @return Folder
    * @throws Exception
    */
-  public Folder getFolder(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception ;  
+  public Folder getFolder(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception ;
+  
+  /**
+   * This method should:
+   * 1. Check if the folder name is exist in same parent 
+   * @param username
+   * @param accountId
+   * @param parentId
+   * @param folderName
+   * @throws Exception
+   */
+  
+  public String getFolderParentId(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception ;
+  
+  public boolean isExistFolder(SessionProvider sProvider, String username, String accountId, String parentId, String folderName) throws Exception ;
+  
   /**
    * This method should:
    * 1. Get account
@@ -135,7 +150,7 @@ public interface MailService {
    * @param folder
    * @throws Exception
    */
-  public void removeUserFolder(SessionProvider sProvider, String username, Account account, Folder folder) throws Exception ;
+  public void removeUserFolder(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception ;
   
   /**
    * This method should: 
@@ -209,7 +224,7 @@ public interface MailService {
     * @param tags
     * @throws Exception
     */
-   public void removeMessageTag(SessionProvider sProvider, String username, String accountId, List<Message> messages, List<String> tags) throws Exception ;
+   public void removeTagsInMessages(SessionProvider sProvider, String username, String accountId, List<Message> messages, List<String> tags) throws Exception ;
   /**
    * This method should:
    * 1. Find all the message that has the tag , remove the tag from the message and save
@@ -259,7 +274,7 @@ public interface MailService {
   
   public List<Message> getMessages(SessionProvider sProvider, String username, MessageFilter filter) throws Exception ;
   
-  public void saveMessage(SessionProvider sProvider, String username, String accountId, String targetMsgPath, Message message) throws Exception ;
+  public void saveMessage(SessionProvider sProvider, String username, String accountId, String targetMsgPath, Message message, boolean isNew) throws Exception ;
   
   public void saveMessage(SessionProvider sProvider, String username, String accountId, Message message, boolean isNew) throws Exception;
   /**
@@ -291,9 +306,11 @@ public interface MailService {
    * @param messageId
    * @throws Exception
    */
-  public void removeMessage(SessionProvider sProvider, String username, String accountId, List<Message> messages) throws Exception ;
+  public void removeMessages(SessionProvider sProvider, String username, String accountId, List<Message> messages, boolean moveReference) throws Exception ;
   
-  public void moveMessages(SessionProvider sProvider, String username,String accountId, Message msg, String currentFolderId, String destFolderId) throws Exception ;
+  public void moveMessages(SessionProvider sProvider, String username, String accountId, List<Message> msgList, String currentFolderId, String destFolderId) throws Exception ;
+  
+  public void moveMessage(SessionProvider sProvider, String username,String accountId, Message msg, String currentFolderId, String destFolderId) throws Exception ;
 
   public void sendMessages(List<Message> msgList, ServerConfiguration serverConfig) throws Exception ;
   
@@ -362,4 +379,6 @@ public interface MailService {
   public List<Message> getReferencedMessages(SessionProvider sProvider, String username, String accountId, String msgPath) throws Exception ;
   
   public Account getDefaultAccount(SessionProvider sProvider, String username) throws Exception ;
+  
+  public Message loadAttachments(SessionProvider sProvider, String username, String accountId, Message msg) throws Exception ;
 }

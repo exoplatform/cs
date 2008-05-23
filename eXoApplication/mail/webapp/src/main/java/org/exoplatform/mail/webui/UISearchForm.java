@@ -93,6 +93,7 @@ public class UISearchForm extends UIForm {
         uiMessageList.setSelectedFolderId(null);
         uiMessageList.setSelectedTagId(null);
         uiMessageList.setMessageFilter(filter);
+        uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null);
         UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
         uiFolderContainer.setSelectedFolder(null);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);

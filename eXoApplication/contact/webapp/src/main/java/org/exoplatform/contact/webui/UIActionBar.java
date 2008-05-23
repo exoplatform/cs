@@ -69,58 +69,16 @@ public class UIActionBar extends UIContainer  {
       for (SharedAddressBook address : uiAddressBooks.getSharedGroups().values())
         if (uiAddressBooks.havePermission(address.getId())) {
           if (uiAddressBooks.isDefault(address.getId())) {
-            addresses.put(address.getId(), address.getSharedUserId() + " - " + address.getName()) ;
+            addresses.put(address.getId(), address.getSharedUserId() + ContactUtils.SCORE + address.getName() + ContactUtils.SHARED) ;
           } else {
-            addresses.put(address.getId(), address.getName()) ;
+            addresses.put(address.getId(), address.getName() + ContactUtils.SHARED) ;
           }  
         }
       uiCategorySelect.setPrivateGroupMap(addresses) ;
       UIContactForm contactForm = uiPopupContainer.addChild(UIContactForm.class, null, null) ;
       contactForm.setNew(true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar.getParent()) ;
-    }  
-  }
-  
-  static public class ImportContactActionListener extends EventListener<UIActionBar> {
-    public void execute(Event<UIActionBar> event) throws Exception {
-      UIActionBar uiForm = event.getSource() ;
-      UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
-      UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
-      UIPopupContainer uiPopupContainer =  uiPopupAction.activate(UIPopupContainer.class, 600) ;
-      uiPopupContainer.setId("ImportAddress") ;      
-      UIImportForm importForm = uiPopupContainer.addChild(UIImportForm.class, null, null) ; 
-      importForm.setGroup(uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class).getPrivateGroupMap()) ;
-      importForm.addConponent() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
-    }  
-  }
-
-  static public class AddAddressBookActionListener extends EventListener<UIActionBar> {
-    public void execute(Event<UIActionBar> event) throws Exception {
-      UIActionBar uiActionBar = event.getSource() ;
-      UIContactPortlet uiContactPortlet = uiActionBar.getAncestorOfType(UIContactPortlet.class) ;
-      UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
-      uiPopupAction.activate(UICategoryForm.class, 500) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-    }  
-  }
-  
-  static public class ChangeViewActionListener extends EventListener<UIActionBar> {
-    public void execute(Event<UIActionBar> event) throws Exception {      
-      UIActionBar uiActionBar = event.getSource() ;
-      String isList = event.getRequestContext().getRequestParameter(OBJECTID);
-      UIContactPortlet uiContactPortlet = uiActionBar.getParent() ; 
-      UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
-      
-      if (isList.equals("true")) uiContacts.setViewContactsList(true) ;
-      else uiContacts.setViewContactsList(false) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
-      
-      // remove when print address book improved
-     /* event.getRequestContext().addUIComponentToUpdateByAjax(
-          uiContactPortlet.findFirstComponentOfType(UINavigationContainer.class)) ;*/
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar.getParent()) ;
     }  
   }
   
@@ -154,4 +112,57 @@ public class UIActionBar extends UIContainer  {
     }  
   }
   
+  static public class ImportContactActionListener extends EventListener<UIActionBar> {
+    public void execute(Event<UIActionBar> event) throws Exception {
+      UIActionBar uiForm = event.getSource() ;
+      UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
+      UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
+      UIPopupContainer uiPopupContainer =  uiPopupAction.activate(UIPopupContainer.class, 600) ;
+      uiPopupContainer.setId("ImportAddress") ;      
+      UIImportForm importForm = uiPopupContainer.addChild(UIImportForm.class, null, null) ; 
+      
+      UIAddressBooks uiAddressBook = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
+      Map<String, String> addresses = uiAddressBook.getPrivateGroupMap() ;
+      for (SharedAddressBook address : uiAddressBook.getSharedGroups().values())
+        if (uiAddressBook.havePermission(address.getId())) {
+          if (uiAddressBook.isDefault(address.getId())) {
+            addresses.put(address.getId(), address.getSharedUserId() + ContactUtils.SCORE + address.getName() + ContactUtils.SHARED) ;
+          } else {
+            addresses.put(address.getId(), address.getName() + ContactUtils.SHARED) ;
+          }  
+        }
+      importForm.setGroup(addresses) ;
+      importForm.addConponent() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
+    }  
+  }
+
+  static public class AddAddressBookActionListener extends EventListener<UIActionBar> {
+    public void execute(Event<UIActionBar> event) throws Exception {
+      UIActionBar uiActionBar = event.getSource() ;
+      UIContactPortlet uiContactPortlet = uiActionBar.getAncestorOfType(UIContactPortlet.class) ;
+      UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
+      uiPopupAction.activate(UICategoryForm.class, 500) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+    }  
+  }
+  
+  static public class ChangeViewActionListener extends EventListener<UIActionBar> {
+    public void execute(Event<UIActionBar> event) throws Exception {      
+      UIActionBar uiActionBar = event.getSource() ;
+      String isList = event.getRequestContext().getRequestParameter(OBJECTID);
+      UIContactPortlet uiContactPortlet = uiActionBar.getParent() ; 
+      UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
+      
+      if (isList.equals("true")) uiContacts.setViewContactsList(true) ;
+      else uiContacts.setViewContactsList(false) ;
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+      
+      // remove when print address book improved
+     /* event.getRequestContext().addUIComponentToUpdateByAjax(
+          uiContactPortlet.findFirstComponentOfType(UINavigationContainer.class)) ;*/
+    }  
+  }
+
 }

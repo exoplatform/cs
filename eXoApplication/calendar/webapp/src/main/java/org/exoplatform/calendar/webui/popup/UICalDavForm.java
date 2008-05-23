@@ -144,6 +144,11 @@ public class UICalDavForm extends UIFormTabPane implements UIPopupComponent{
       RssData rssData = new RssData() ;
       String tempName = uiForm.getUIStringInput(UICalDavForm.TITLE).getValue() ;
       if(tempName != null && tempName.length() > 0) {
+        if(!CalendarUtils.isNameValid(tempName, CalendarUtils.SPECIALCHARACTER)) {
+          uiApp.addMessage(new ApplicationMessage("UIRssForm.msg.feed-name-invalid", null)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
         if(tempName.length() > 4 && tempName.substring(tempName.length() - 4).equals(".rss")) rssData.setName(tempName);
         else rssData.setName(tempName + ".rss") ;
       }else {

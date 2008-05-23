@@ -204,7 +204,7 @@ public class UITagContainer extends UIForm {
       List<Message> listMessage = mailSrv.getMessageByTag(SessionProviderFactory.createSystemProvider(), username, accountId, tagId);
       List<String> listTag = new ArrayList<String>();
       listTag.add(tagId);
-      mailSrv.removeMessageTag(SessionProviderFactory.createSystemProvider(), username, accountId, listMessage, listTag);
+      mailSrv.removeTagsInMessages(SessionProviderFactory.createSystemProvider(), username, accountId, listMessage, listTag);
       uiMessageList.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTag);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());

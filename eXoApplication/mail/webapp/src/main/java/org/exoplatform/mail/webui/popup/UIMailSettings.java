@@ -23,8 +23,12 @@ import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
+import org.exoplatform.mail.service.MessageFilter;
+import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageList;
+import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
@@ -46,7 +50,7 @@ import org.exoplatform.webui.form.UIFormSelectBox;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/mail/webui/UIMailSettings.gtmpl",
+    template = "app:/templates/mail/webui/popup/UIMailSettings.gtmpl",
     events = {
         @EventConfig(listeners = UIMailSettings.SaveActionListener.class),
         @EventConfig(listeners = UIMailSettings.CancelActionListener.class)
@@ -160,10 +164,17 @@ public class UIMailSettings extends UIForm implements UIPopupComponent {
       setting.setSaveMessageInSent(uiSetting.getUIFormCheckBoxInput(SAVE_SENT_MESSAGE).isChecked());
       mailSrv.saveMailSetting(SessionProviderFactory.createSystemProvider(), username, setting);
 		  UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
-		  uiMessageList.setMessagePageList(mailSrv.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, uiMessageList.getMessageFilter()));
+      MessageFilter filter = uiMessageList.getMessageFilter() ;
       if (defaultAcc != null && !defaultAcc.equals(accountId)) {
         uiSelectAccount.updateAccount() ;
         uiSelectAccount.setSelectedValue(defaultAcc) ;
+        uiPortlet.findFirstComponentOfType(UIFolderContainer.class).setSelectedFolder(Utils.createFolderId(accountId, Utils.FD_INBOX, false));
+        uiMessageList.setSelectedFolderId(defaultAcc) ;
+        uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null);
+        uiMessageList.setMessageFilter(null);
+        uiMessageList.init(defaultAcc);
+      } else {
+        uiMessageList.setMessagePageList(mailSrv.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, filter));
       }
 		  event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
 		  uiPortlet.cancelAction();

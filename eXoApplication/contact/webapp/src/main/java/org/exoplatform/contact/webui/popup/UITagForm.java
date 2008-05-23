@@ -247,8 +247,17 @@ public class UITagForm extends UIForm implements UIPopupComponent {
         contactIds.add(contact.getId()) ;
         newContactIds.add(contact.getId() + JCRDataStorage.SPLIT + contact.getContactType()) ;
       }
-      contactService.removeContactTag(
-          SessionProviderFactory.createSystemProvider(), username, newContactIds, checkedTags) ;
+      try {
+        contactService.removeContactTag(
+            SessionProviderFactory.createSystemProvider(), username, newContactIds, checkedTags) ;
+      } catch (PathNotFoundException e) {
+        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UITagForm.msg.contact-not-exist-remove", null, 
+            ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
+      
       UIContactPortlet contactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       UITags uiTags = contactPortlet.findFirstComponentOfType(UITags.class) ;
       String selectedTag = uiTags.getSelectedTag() ;

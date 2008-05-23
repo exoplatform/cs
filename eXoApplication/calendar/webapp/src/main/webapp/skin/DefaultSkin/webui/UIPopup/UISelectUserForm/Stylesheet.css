@@ -13,7 +13,7 @@
 }
 
 .UICalendarPortlet .UISelectUserForm .UIGrid th {
-	background: url('../../background/CalendarBackground.gif') repeat-x center -162px;
+	background: url('background/ThGridTitle1x20.gif') repeat-x;
 	line-height: 17px; height: 18px;
 	text-align: left;
 	padding: 0px 5px;

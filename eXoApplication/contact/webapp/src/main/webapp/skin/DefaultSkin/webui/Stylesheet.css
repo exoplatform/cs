@@ -21,15 +21,26 @@
 .UIWindow .UIContactPortlet {
 	margin: 0px;
 	border: none;
-	min-width: 750px;
+	min-width: 900px;
 }
 
 .UIContactPortlet {
 	background: white;
 	border: 1px solid #b7b7b7;
-	margin: 7px;
+	margin: 5px;
 }
 
+.UIWindow .UIEmpty {
+	margin: 0px;
+	border: none ;
+	min-width: none ;
+}
+
+.UIEmpty {
+	background: none;
+	border: none;
+	margin: 0px;
+}
 /***************************** PopUp ****************************/
 
 
@@ -100,6 +111,9 @@
 	height : 16px ;
 }
 
+.UIContactPortlet .UIAddEditPermission .UISharedForm .UIFormInputSet{
+  width: auto;
+}
 /*=====================Table Color===========================*/
 
 .UIPopupCategory .UIContextMenuContainer {
@@ -133,7 +147,6 @@
 
 /* Popup Menu Positioning*/
 .UIActionBar .SelectButton .UIPopupCategory {
-	top: 25px;
 	left: 7px ;
 }
 
@@ -179,3 +192,7 @@
 .Wheat {background-color: #F5DEB3;}    
 .Yellow {background-color: #FFFF00;}    
 
+.UIContactPortlet .UIFormGrid {
+  width: auto;
+  margin: auto;
+}

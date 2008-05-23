@@ -2,6 +2,7 @@
  import org.exoplatform.mail.service.Message;
  import org.exoplatform.mail.service.Utils;
  import org.exoplatform.mail.service.Tag ;
+ import org.exoplatform.mail.service.Folder;
  import javax.mail.internet.InternetAddress;
  import org.exoplatform.mail.service.MessagePageList;
  import org.exoplatform.mail.MailUtils;
@@ -23,7 +24,7 @@
     <div class="IconHolder ForwardIcon"><span></span></div>
   </a>
   <div class="SeparatorLine"><span></span></div>
-  <a href="<%=uicomponent.event("Delete")%>" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.delete") %>">
+  <a href="<%=uicomponent.event("Delete", uicomponent.id, "id" )%>" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.delete") %>">
     <div class="IconHolder DeleteIcon"><span></span></div>
   </a>
   <% if (!uicomponent.selectedSpamFolder()) { %>
@@ -132,15 +133,27 @@
                           <div class="MiddleLeftRightClickPopupMenu">
                             <div class="MiddleRightRightClickPopupMenu">
                               <div class="UIRightPopupMenuContainer">
-                              <a class="MenuItem" href="<%=uicomponent.event("ViewAsList")%>">   
-                              <div class="ItemIcon ListIcon"><%=_ctx.appRes(uicomponent.id+ ".label.list") %></div>
-                            </a>
-                            <a class="MenuItem" href="<%=uicomponent.event("ViewAsThread")%>">   
-                              <div class="ItemIcon ThreadIcon"><%=_ctx.appRes(uicomponent.id+ ".label.thread") %></div>
-                            </a>
-                            <a class="MenuItem" href="<%=uicomponent.event("ViewAsConversation")%>">   
-                              <div class="ItemIcon ConversationIcon"><%=_ctx.appRes(uicomponent.id+ ".label.conversation") %></div>
-                            </a>
+                              <% 
+                                String listSelected = "";
+                                if (uicomponent.viewMode == uicomponent.MODE_LIST) listSelected = "SelectItem" ;  
+                              %>
+                              <a class="MenuItem $listSelected" href="<%=uicomponent.event("ViewAsList")%>">   
+                                <div class="ItemIcon ListIcon"><%=_ctx.appRes(uicomponent.id+ ".label.list") %></div>
+                              </a>
+                              <% 
+                                String threadSelected = "";
+                                if (uicomponent.viewMode == uicomponent.MODE_THREAD) threadSelected = "SelectItem" ;  
+                              %>
+                              <a class="MenuItem $threadSelected" href="<%=uicomponent.event("ViewAsThread")%>">   
+                                <div class="ItemIcon ThreadIcon"><%=_ctx.appRes(uicomponent.id+ ".label.thread") %></div>
+                              </a>
+                              <% 
+                                String conversationSelected = "";
+                                if (uicomponent.viewMode == uicomponent.MODE_CONVERSATION) conversationSelected = "SelectItem" ;  
+                              %>
+                              <a class="MenuItem $conversationSelected" href="<%=uicomponent.event("ViewAsConversation")%>">   
+                                <div class="ItemIcon ConversationIcon"><%=_ctx.appRes(uicomponent.id+ ".label.conversation") %></div>
+                              </a>
                               </div>
                             </div>
                           </div>
@@ -153,22 +166,46 @@
                        </div>
                      </div>
                     <!--end-->
-                    <a class="MenuItem" href="<%=uicomponent.event("ViewAll")%>">   
+                    <% 
+                      String viewSelected = "";
+                      if (uicomponent.viewing_ == uicomponent.VIEW_ALL) viewSelected = "SelectItem" ;  
+                    %>
+                    <a class="MenuItem $viewSelected" href="<%=uicomponent.event("ViewAll")%>">   
                       <div class="ItemIcon AllMessagesIcon"><%=_ctx.appRes(uicomponent.id+ ".label.view-all-messages") %></div>
                     </a>
-	                  <a class="MenuItem" href="<%=uicomponent.event("ViewStarred")%>">   
+                    <% 
+                      viewSelected = "";
+                      if (uicomponent.viewing_ == uicomponent.VIEW_STARRED) viewSelected = "SelectItem" ;  
+                    %>
+	                  <a class="MenuItem $viewSelected" href="<%=uicomponent.event("ViewStarred")%>">   
 	                    <div class="ItemIcon StarredIcon"><%=_ctx.appRes(uicomponent.id+ ".label.view-starred-messages") %></div>
 	                  </a>
-	                  <a class="MenuItem" href="<%=uicomponent.event("ViewUnstarred")%>">   
+                    <% 
+                      viewSelected = "";
+                      if (uicomponent.viewing_ == uicomponent.VIEW_UNSTARRED) viewSelected = "SelectItem" ;  
+                    %>
+	                  <a class="MenuItem $viewSelected" href="<%=uicomponent.event("ViewUnstarred")%>">   
 	                    <div class="ItemIcon UnStarredIcon"><%=_ctx.appRes(uicomponent.id+ ".label.view-unstarred-messages") %></div>
 	                  </a>
-	                  <a class="MenuItem" href="<%=uicomponent.event("ViewUnread")%>">   
+                    <% 
+                      viewSelected = "";
+                      if (uicomponent.viewing_ == uicomponent.VIEW_UNREAD) viewSelected = "SelectItem" ;  
+                    %>
+	                  <a class="MenuItem $viewSelected" href="<%=uicomponent.event("ViewUnread")%>">   
 	                    <div class="ItemIcon UnreadMessagesIcon"><%=_ctx.appRes(uicomponent.id+ ".label.view-unread-messages") %></div>
 	                  </a>
-	                  <a class="MenuItem" href="<%=uicomponent.event("ViewRead")%>">   
+                    <% 
+                      viewSelected = "";
+                      if (uicomponent.viewing_ == uicomponent.VIEW_READ) viewSelected = "SelectItem" ;  
+                    %>
+	                  <a class="MenuItem $viewSelected" href="<%=uicomponent.event("ViewRead")%>">   
 	                    <div class="ItemIcon ReadMessagesIcon"><%=_ctx.appRes(uicomponent.id+ ".label.view-read-messages") %></div>
 	                  </a>
-	                  <a class="MenuItem" href="<%=uicomponent.event("ViewAttachment")%>">   
+                    <% 
+                      viewSelected = "";
+                      if (uicomponent.viewing_ == uicomponent.VIEW_ATTACHMENT) viewSelected = "SelectItem" ;  
+                    %>
+	                  <a class="MenuItem $viewSelected" href="<%=uicomponent.event("ViewAttachment")%>">   
 	                    <div class="ItemIcon MessagesAttachmentIcon"><%=_ctx.appRes(uicomponent.id+ ".label.view-with-attachment") %></div>
 	                  </a>
 	                </div>
@@ -187,42 +224,53 @@
       
     </div>
   </div>
-
-  <div class="UIMessagePageList">
-    <div class="MailIteratorContainer">
-      <div class="RightPageIteratorBlock">
-        <%
-          MessagePageList pageList = uicomponent.getMessagePageList();
-          String cssPreviousPage = "FloatBlockHidden";
-          String cssNextPage = "FloatBlockHidden";
-          long currentPage = 1;
-          String mailRange = "";
-          if (pageList != null && (uicomponent.getMessageList().size() != 0)) {
-            currentPage = pageList.getCurrentPage();
-            if (currentPage > 1) cssPreviousPage = "FloatBlock";
-            if (currentPage < pageList.getAvailablePage()) cssNextPage = "FloatBlock";
-            long fromIndex = (pageList.getCurrentPage()-1)* pageList.getPageSize() + 1;
-            long endIndex = fromIndex + pageList.getPageSize() - 1;
-            if (pageList.getCurrentPage() == pageList.getAvailablePage()) endIndex = pageList.getAvailable();
-            if (fromIndex < endIndex) mailRange = fromIndex + " " + _ctx.appRes(uicomponent.id+ ".label.to-index") + " " + endIndex + " " + _ctx.appRes(uicomponent.id+ ".label.of") + " " + pageList.getAvailable();
-            else if (fromIndex == endIndex) mailRange = fromIndex + " " + _ctx.appRes(uicomponent.id+ ".label.of") + " " + pageList.getAvailable()
-          }         
-        %>
-        <a title="First Page" class="$cssPreviousPage FirstPageArrow" href="<%=uicomponent.event("FirstPage")%>"/></a>        
-        <a title="Previous Page" class="$cssPreviousPage PreviousPageArrow" href="<%=uicomponent.event("PreviousPage")%>"></a>
-        <div class="Number">$currentPage</div>
-        <a title="Next Page" class="$cssNextPage NextPageArrow" href="<%=uicomponent.event("NextPage")%>"/></a>
-        <a title="Last Page" class="$cssNextPage LastPageArrow" href="<%=uicomponent.event("LastPage")%>"><span></span></a>
-        <div style="clear: left;"><span></span></div>
-      </div>
-      <div class="LeftPageIteratorBlock">
-        <div class="TotalPages"><%=_ctx.appRes(uicomponent.id+ ".label.messages") %>
-        	<span class="MailQuantity"> $mailRange </span>
+  <%
+    MessagePageList pageList = uicomponent.getMessagePageList();
+    if (pageList != null && pageList.getAvailablePage() > 1) {
+  %>
+    <div class="UIMessagePageList">
+      <div class="MailIteratorContainer">
+        <div class="RightPageIteratorBlock">
+          <%
+            String cssPreviousPage = "FloatBlockHidden";
+            String cssNextPage = "FloatBlockHidden";
+            long currentPage = 1;
+            String mailRange = "";
+            if (pageList != null && (uicomponent.getMessageList().size() != 0)) {
+              currentPage = pageList.getCurrentPage();
+              if (currentPage > 1) cssPreviousPage = "FloatBlock";
+              if (currentPage < pageList.getAvailablePage()) cssNextPage = "FloatBlock";
+              long fromIndex = (pageList.getCurrentPage()-1)* pageList.getPageSize() + 1;
+              long endIndex = fromIndex + pageList.getPageSize() - 1;
+              if (pageList.getCurrentPage() == pageList.getAvailablePage()) endIndex = pageList.getAvailable();
+              if (fromIndex < endIndex) mailRange = fromIndex + " " + _ctx.appRes(uicomponent.id+ ".label.to-index") + " " + endIndex ;
+              else if (fromIndex == endIndex) mailRange = fromIndex ;
+            }         
+          %>
+          <a title="First Page" class="$cssPreviousPage FirstPageArrow" href="<%=uicomponent.event("FirstPage")%>"/></a>        
+          <a title="Previous Page" class="$cssPreviousPage PreviousPageArrow" href="<%=uicomponent.event("PreviousPage")%>"></a>
+          <div class="Number">$currentPage / <%=pageList.getAvailablePage()%></div>
+          <a title="Next Page" class="$cssNextPage NextPageArrow" href="<%=uicomponent.event("NextPage")%>"/></a>
+          <a title="Last Page" class="$cssNextPage LastPageArrow" href="<%=uicomponent.event("LastPage")%>"><span></span></a>
+          <div style="clear: left;"><span></span></div>
         </div>
+        <div class="LeftPageIteratorBlock">
+          <%
+            String nvLabel = "" ;
+            if (uicomponent.viewMode == uicomponent.MODE_LIST) nvLabel = "messages" ;
+            else if (uicomponent.viewMode == uicomponent.MODE_THREAD) nvLabel = "threads" ;
+            else if (uicomponent.viewMode == uicomponent.MODE_CONVERSATION) nvLabel = "conversations" ;
+          %>
+          <div class="TotalPages"><%=_ctx.appRes(uicomponent.id + ".label." + nvLabel)%>
+          	<span class="MailQuantity"> $mailRange </span>
+          </div>
+        </div>
+        <div style="clear: right;"><span></span></div>
       </div>
-      <div style="clear: right;"><span></span></div>
     </div>
-  </div>
+  <%
+    }
+  %>
   <div style="clear: left;"><span></span></div>
   </div>
   
@@ -265,7 +313,7 @@
             <a class="MenuItem" href="<%=uicomponent.event("AddTag", "id")%>">   
               <div class="ItemIcon TagMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.tag") %> </div>
             </a>          
-            <a class="MenuItem" href="<%=uicomponent.event("Delete", "id")%>">   
+            <a class="MenuItem" href="<%=uicomponent.event("Delete", uicomponent.id, "id")%>">   
               <div class="ItemIcon DeleteMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.delete") %></div>
             </a>
             <a class="MenuItem" href="<%=uicomponent.event("AddContact", "id")%>">   
@@ -331,7 +379,7 @@
                 else classArrowFrom = "DownArrow1Icon" ;
               }
     		    %>
-    		  	<a href = "$sortedBySender"><div class="$classArrowFrom" title="Sort by sender">$head</div></a>
+    		  	<a href = "$sortedBySender" ><div class="$classArrowFrom" style="width: 100%; cursor: pointer;" title="Sort by sender">$head</div></a>
     		  </th>
     		  <th style="width: 24px;">
     		    <a hreft = ""><div class="AttachmentIcon" title="Attchments"><span></span></div></a>
@@ -348,10 +396,10 @@
                  else classArrowSubject = "DownArrow1Icon"
                }
            %>
-    		  	<a href = "$sortedBySubject"><div class="$classArrowSubject" title="Sort by subject">Subject</div></a>
+    		  	<a href = "$sortedBySubject"><div class="$classArrowSubject" title="Sort by subject" style="width: 95%; cursor: pointer;">Subject</div></a>
     		  </th>
    	      <th style="width: 24px;"><div class="TotalMessageIcon" title="Total message(s) in conversation"><span></span></div></th>
-   	      <th style="width: 120px; padding-left: 8px;">
+   	      <th style="width: 80px; padding-left: 8px;">
          	  <%
          	     String sortedByReceivedDate = uicomponent.event("Sort",Utils.EXO_RECEIVEDDATE);
              	  String classArrowDate = "";
@@ -360,7 +408,7 @@
                   else classArrowDate = "DownArrow1Icon"
                 }
             %>
-    		    <a href = "$sortedByReceivedDate"><div class="$classArrowDate" title="Sort by Date & time">Date & Time</div></a>
+    		    <a href = "$sortedByReceivedDate"><div class="$classArrowDate" title="Sort by Date & time" >Date & Time</div></a>
    	      </th>
    	      <th style="width: 50px; padding-left: 8px;">
        	    <%
@@ -425,14 +473,18 @@
               </td>
               <td style="padding: 0px auto;">
                 <% 
-                  if (msg.getAttachments().size() > 0) {
+                  if (msg.hasAttachment()) {
                 %>
                 <a href="$actionLink"><div class="AttachmentIcon"><span></span></div></a>
                 <%}%>
               </td>
               <% 
-                if (uicomponent.getMessageFilter().getName().equals("Search")) 
-                  print(" <td style=\"border-right:0px;\"> [" + msg.getFolders()[0].substring(msg.getFolders()[0].indexOf("Folder") + 6, msg.getFolders()[0].length()) + "] </td> ") ;
+                if (uicomponent.getMessageFilter().getName().equals("Search")) {
+                  print(" <td style=\"border-right:0px; white-space: nowrap;\">") ;
+                  for (Folder folder : uicomponent.getFolders(msg))
+                    if (folder != null) print(" [" + folder.getLabel() + "] ")
+                  print("</td> ") ;
+                }
               %>
               <td class="$readStatus">
               <% 

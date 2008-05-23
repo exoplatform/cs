@@ -66,7 +66,7 @@ public class UIProfileInputSet extends UIFormInputWithActions {
   private byte[] imageBytes = null;
   private String fileName = null ;
   private String imageMimeType = null ;
-
+  
   public UIProfileInputSet(String id) throws Exception {
     super(id) ;  
     setComponentConfig(getClass(), null) ;  

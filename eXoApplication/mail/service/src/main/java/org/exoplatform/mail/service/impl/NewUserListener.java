@@ -67,6 +67,7 @@ public class NewUserListener extends UserEventListener {
   }
   
   public void postSave(User user, boolean isNew) throws Exception {
+    if(!isNew) return ;
     String fullName     = user.getFullName();
     String email        = user.getEmail();
     // Once eXo is connected to LDAP users, the password will be correct !!!
@@ -74,12 +75,9 @@ public class NewUserListener extends UserEventListener {
     
     Account acc = new Account();
     
-    // it is the case at spff
-    //String incomingUserName = email;
-    // but normally
-    String incomingUserName = user.getUserName();
-    
-    acc.setLabel(fullName + " (Default)") ;
+    String incomingUserName = email;
+
+    acc.setLabel(fullName) ;
     acc.setDescription("") ;
     acc.setUserDisplayName(fullName) ;
     acc.setEmailAddress(email) ;
@@ -87,6 +85,7 @@ public class NewUserListener extends UserEventListener {
     acc.setSignature("") ;
     acc.setIncomingUser(incomingUserName); 
     acc.setIncomingPassword(password);
+    acc.setIsSavePassword(true) ;
     acc.setIncomingHost(incomingHost);
     acc.setIncomingPort(incomingPort);  
     acc.setProtocol(protocol);  

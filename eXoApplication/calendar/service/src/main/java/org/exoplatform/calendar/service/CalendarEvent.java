@@ -44,6 +44,7 @@ public class CalendarEvent {
   final public static String PRIORITY_LOW = "low".intern() ;
   final public static String PRIORITY_NORMAL = "normal".intern() ;
   final public static String PRIORITY_HIGH = "high".intern() ;
+  
   final public static String[] PRIORITY = {PRIORITY_NONE, PRIORITY_HIGH, PRIORITY_NORMAL, PRIORITY_LOW} ;
   
   final public static String DRAFT = "draft".intern() ;
@@ -52,6 +53,11 @@ public class CalendarEvent {
   final public static String[] EVENT_STATUS = {TENTATIVE, CONFIRMED, CANCELLED} ;
   final public static String[] TASK_STATUS = {NEEDS_ACTION, COMPLETED, IN_PROCESS, CANCELLED} ;
   final public static String[] JOURNAL_STATUS = {DRAFT, FINAL, CANCELLED} ;
+  
+  final public static String IS_PUBLIC = "public".intern() ;
+  final public static String IS_PRIVATE = "private".intern() ;
+  final public static String ST_AVAILABLE = "available".intern() ;
+  final public static String ST_BUSY = "busy".intern() ;
   
   final public static String RP_NOREPEAT = "norepeat".intern() ;
   final public static String RP_DAILY = "daily".intern() ;

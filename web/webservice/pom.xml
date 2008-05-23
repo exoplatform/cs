@@ -2,7 +2,7 @@
   <parent>
     <groupId>org.exoplatform.cs</groupId>
     <artifactId>config</artifactId>
-    <version>1.0</version>
+    <version>trunk</version>
   </parent> 
 
   <modelVersion>4.0.0</modelVersion>
@@ -17,8 +17,7 @@
     <dependency>
       <groupId>org.exoplatform.ws.rest</groupId>
       <artifactId>exo.rest.core</artifactId>
-      <!--version>${org.exoplatform.core.version}</version-->
-      <version>1.0</version>
+      <version>${org.exoplatform.core.version}</version>
     </dependency>
     <dependency>
       <groupId>org.exoplatform.core</groupId>

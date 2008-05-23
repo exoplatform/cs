@@ -64,6 +64,8 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
   final static public String FIELD_NAME = "calendarName".intern() ;
   final static public String FIELD_USER = "username".intern() ;
   final static public String FIELD_EDIT = "canEdit".intern() ;
+  final public static String SPECIALCHARACTER[] = {CalendarUtils.SEMICOLON,CalendarUtils.SLASH,CalendarUtils.BACKSLASH,"'","|",">","<","\"", "?", "!", "@", "#", "$", "%","^","&","*"} ;
+  
   private Map<String, String> permission_ = new HashMap<String, String>() ;
   private String calendarId_ ;
   protected boolean isAddNew_ = true ;
@@ -122,7 +124,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
 
   public void updateSelect(String selectField, String value) throws Exception {
     UIFormStringInput fieldInput = getUIStringInput(selectField) ;
-    permission_.put(value, value) ;
+    permission_.put(value.substring(value.lastIndexOf(":/") + 2), value.substring(value.lastIndexOf(":/") + 2)) ;
     StringBuilder sb = new StringBuilder() ;
     for(String s : permission_.values()) {
       if(sb != null && sb.length() > 0) sb.append(CalendarUtils.COMMA) ;
@@ -134,7 +136,13 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     public void execute(Event<UISharedForm> event) throws Exception {
       UISharedForm uiForm = event.getSource() ;
       String names = uiForm.getUIStringInput(FIELD_USER).getValue() ;
-      if(names == null || names.length() < 1) {
+      if(CalendarUtils.isEmpty(names)) {
+        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.invalid-username", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
+      if(!CalendarUtils.isNameValid(names, SPECIALCHARACTER)) {
         UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.invalid-username", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -144,7 +152,6 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       OrganizationService oService = CalendarUtils.getOrganizationService() ;
       SessionProvider sProvider = SessionProviderFactory.createSessionProvider() ;
       String username = CalendarUtils.getCurrentUser() ;
-
       List<String> receiverUsers  = new ArrayList<String>() ;
       StringBuffer sb = new StringBuffer() ;
       for(String name : Arrays.asList(names.split(CalendarUtils.COMMA))) {
@@ -161,7 +168,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.not-found-user", new Object[]{sb.toString()}, 1)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;
+        return ;
       }
       if(receiverUsers.contains(username)) {
         UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
@@ -169,7 +176,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-        
+
       Calendar cal = calendarService.getUserCalendar(sProvider, username, uiForm.calendarId_) ;
       Map<String, String> perms = new HashMap<String, String>() ;
       if(cal.getViewPermission() != null)

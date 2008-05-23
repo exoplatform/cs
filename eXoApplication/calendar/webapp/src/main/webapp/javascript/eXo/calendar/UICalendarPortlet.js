@@ -607,6 +607,15 @@ UICalendarPortlet.prototype.sortByAttribute = function(obj, attribute) {
 				obj[i] = obj[j] ;
 				obj[j] = tmp ;
 			}
+      if(attribute2 == attribute1) {
+        var end1 = parseInt(obj[i].getAttribute("endtime")) ;
+        var end2 = parseInt(obj[j].getAttribute("endtime")) ;
+				if(end2 > end1){
+          tmp = obj[i] ;
+  				obj[i] = obj[j] ;
+  				obj[j] = tmp ;
+        }
+			}
 		}
 	}
 	return obj ;
@@ -1758,11 +1767,14 @@ eXo.portal.UIControlWorkspace.showWorkspace = function() {
 	/* -- END -- */
 	var params = [ {name: "objectId", value : cws.showControlWorkspace} ] ;
 	ajaxAsyncGetRequest(eXo.env.server.createPortalURL(this.id, "SetVisible", true, params), false) ;
-	if((eXo.core.Browser.browserType != "ie") && !document.getElementById("UIPageDesktop")) {
+  if((eXo.core.Browser.browserType != "ie") && !document.getElementById("UIPageDesktop")) {
 		if(document.getElementById("UIWeekView")) {
-		eXo.calendar.UICalendarMan.initWeek() ;
-		eXo.calendar.UIWeekView.setSize() ;
+  		eXo.calendar.UICalendarMan.initWeek() ;
+  		eXo.calendar.UIWeekView.setSize() ;
 		}
+    if(document.getElementById("UIMonthView")) {
+      eXo.calendar.UICalendarMan.initMonth() ;
+    }
 	}
 };
 

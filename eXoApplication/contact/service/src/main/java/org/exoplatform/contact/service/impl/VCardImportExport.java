@@ -90,9 +90,9 @@ public class VCardImportExport implements ContactImportExport {
     		}else if (publicContactGroupHome.hasNode(address)){
     			publicAddress.add(address) ;
     		} else {
-    			String[] array = address.split(":") ;
+    			String[] array = address.split(JCRDataStorage.HYPHEN) ;
     			if(array.length == 2) {
-    				contactList.addAll(storage_.getSharedContactsByAddressBook(sProvider, username, new SharedAddressBook(null, array[1], array[0])).getAll()) ;
+    				contactList.addAll(storage_.getSharedContactsByAddressBook(sProvider, username, new SharedAddressBook(null, array[0], array[1])).getAll()) ;
     			}    		  
         }
   		}catch(RepositoryException re) {
@@ -118,7 +118,6 @@ public class VCardImportExport implements ContactImportExport {
   }
   
   public OutputStream exportContact(String username, List<Contact> contacts) throws Exception {
-
     ContactIOFactory ciof = Pim.getContactIOFactory();
     ContactModelFactory cmf = Pim.getContactModelFactory();
     ContactMarshaller marshaller = ciof.createContactMarshaller();
@@ -470,10 +469,19 @@ public class VCardImportExport implements ContactImportExport {
       // Then store it to JCR storage
       // ////////////////////////////////
 
-      contact.setAddressBook(new String[] { groupId });
-      ContactService contactService = (ContactService) PortalContainer
-          .getComponent(ContactService.class);
-      contactService.saveContact(sProvider, username, contact, true);
+      // added 5-5
+      ContactService contactService = 
+        (ContactService) PortalContainer.getComponent(ContactService.class);
+      if (groupId.contains(JCRDataStorage.HYPHEN)) {
+        String newGroupId = groupId.replace(JCRDataStorage.HYPHEN, "") ;
+        contact.setAddressBook(new String[] { newGroupId }) ;
+        contactService.saveContactToSharedAddressBook(username, newGroupId, contact, true) ;
+      } else {
+        contact.setAddressBook(new String[] { groupId });      
+        contactService.saveContact(sProvider, username, contact, true);
+      }
+      
+      
     }
   }
 

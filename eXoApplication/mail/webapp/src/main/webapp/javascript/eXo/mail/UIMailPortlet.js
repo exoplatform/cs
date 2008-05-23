@@ -104,13 +104,13 @@ UIMailPortlet.prototype.showPrintPreview = function(obj1) {
 	uiMailPortletNode.appendChild(mailWorkingWorkspaceNode) ;
 
   // Fit UIMailPortlet to window.
-  with(uiMessagePreviewNode.style) {
-    width = '100%' ;
-    height = '100%' ;
-    position = 'absolute' ;
-    top = '0px' ;
-    left = '0px' ;
-  }
+  //with(uiMessagePreviewNode.style) {
+    //width = '100%' ;
+    //height = '100%' ;
+    //position = 'absolute' ;
+    //top = '0px' ;
+    //left = '0px' ;
+  //}
 	document.body.appendChild(uiMailPortletNode) ;
 } ;
 
@@ -415,7 +415,7 @@ UIMailPortlet.prototype.restoreFolderState = function() {
     return;
   }
   var folderState = eXo.core.Browser.getCookie('cs.mail.folderstate');
-	this.uiFolderContainerNode = document.getElementById('UIFolderContainer');
+  this.uiFolderContainerNode = document.getElementById('UIFolderContainer');
   var folderNodes = eXo.core.DOMUtil.findDescendantsByClass(this.uiFolderContainerNode, 'div', 'Folder');
   for (var i=0; i<folderNodes.length; i++) {
     var folderIdTmp = folderNodes[i].getAttribute('folder');
@@ -431,7 +431,7 @@ UIMailPortlet.prototype.resizeIframe = function(textAreaId, frameId, styleExpand
 	var textAreas = document.getElementById(textAreaId) ;
 	var expandMessage = eXo.core.DOMUtil.findAncestorByClass(frame, "ExpandMessage");
 	var str = textAreas.value ;
-	if (contentType.indexOf("text/plain") > -1) str = str.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br>") ;
+	if (contentType.indexOf("text/plain") > -1) str = str.replace(/\n/g, "<br>") ;
 	var doc = frame.contentWindow.document ;
 	var isDesktop = (document.getElementById("UIPageDesktop") != null) ? true : false;
 	doc.open();

@@ -4,6 +4,8 @@
   import org.exoplatform.download.DownloadService;
 %>
 <% uiform.begin()%> 
+<div><div style="width: 600px;" ><span style="display: none;"></span></div></div>
+<div id="$uicomponent.id" style="_width: expression(this.previousSibling.offsetWidth - 2 + 'px'); !border: 1px solid white;">
 <div class="UIContactsPopup"> 
   <div class="UISearch">
     <div class="UIActionBar">
@@ -118,51 +120,119 @@
                       <div style="clear: left;"><span></span></div>
                       <div class="InfoContainer">
                         <div class="TitleInfo">Profile</div>
-                        <div class="Content">
-                          <div class="LeftContent">
-                            <div class="InfoItem">
-                              <div class="InfoLabel">Nick name:</div>
-                              <div class="Info"><%= (selectedContact.getNickName() != null) ? selectedContact.getNickName() : "_"%></div>
-                              <div style="clear: left;"><span></span></div>
-                            </div>
-                            <div class="InfoItem">
-                              <div class="InfoLabel">Gender:</div>
-                              <div class="Info"><%= (selectedContact.getGender() != null) ? selectedContact.getGender() : "_"%></div>
-                              <div style="clear: left;"><span></span></div>
-                            </div>
-                            <div class="InfoItem">
-                              <div class="InfoLabel">Job Title:</div>
-                              <div class="Info"><%= (selectedContact.getJobTitle() != null) ? selectedContact.getJobTitle() : "_"%></div>
-                              <div style="clear: left;"><span></span></div>
-                            </div>
-                          </div>
-                          <div class="RightContent">
-                            <div class="InfoItem">
-                              <div class="InfoLabel1">Birthday:</div>
-                              <%
-                                String birthday = null ; 
-                                if (selectedContact.getBirthday() != null) {
-                              	String birth = selectedContact.getBirthday().toString() ;
-                              	String a = birth.substring(0, 10); String b = birth.substring(23,28) ;
-                              	birthday = a+ b;
-                              	}
-                               %>
-                              <div class="Info1"><%= (birthday != null) ? birthday : "_"%></div>
-                            </div>
-                            <div class="InfoItem">
-                              <div class="InfoLabel1">Email:</div>
-                              <div class="Info1 Email">
-                                <a href="#">
-                                <%= (selectedContact.getEmailAddress() != null) ? selectedContact.getEmailAddress() : "_"%>
-                                </a>
-                              </div>
-                              <div style="clear: left;"><span></span></div>
-                            </div>                                                  
-                          </div>
-                          <div style="clear: left;"><span></span></div>
+                          <div class="Content">
+                            <div class="LeftContent">
+                        
+	                        <table>
+	                          <tr>
+	                            <td class="InfoLabel">
+	                              <div class="InfoLabel">Nick name:</div>
+	                            </td>
+	                            <td class="InfoTitle1">
+				                        <table class="InfoTitle2" >
+				                          <tr>
+				                            <td>
+	                                    <div class="InfoTitle3"><%= (selectedContact.getNickName() != null) ? selectedContact.getNickName() : "_"%></div>
+	                                  </td>
+				                          </tr>
+				                        </table>
+	                            </td>
+	                          </tr>
+	                          
+	                          <tr>
+	                            <td class="InfoLabel">
+	                              <div class="InfoLabel">Gender:</div>
+	                            </td>
+	                            <td class="InfoTitle1">
+				                        <table class="InfoTitle2" >
+				                          <tr>
+				                            <td>
+	                                    <div class="InfoTitle3"><%= (selectedContact.getGender() != null) ? selectedContact.getGender() : "_"%></div>
+	                                   </td>
+				                          </tr>
+				                        </table>
+	                            </td>
+	                          </tr>
+	                          
+	                          <tr>
+	                            <td class="InfoLabel">
+	                              <div class="InfoLabel">Job Title:</div>
+	                            </td>
+	                            <td class="InfoTitle1">
+				                        <table class="InfoTitle2" >
+				                          <tr>
+				                            <td>
+	                                    <div class="InfoTitle3"><%= (selectedContact.getJobTitle() != null) ? selectedContact.getJobTitle() : "_"%></div>
+	                                  </td>
+				                          </tr>
+				                        </table>
+	                            </td>
+	                          </tr>
+	                        </table>
+	                       </div>
+	                       <div class="RightContent">
+	                         <table>
+	                          <tr>
+	                            <td class="InfoLabel">
+	                              <div class="InfoLabel">Birthday:</div>
+	                            </td>
+	                            <td class="InfoTitle1">
+				                        <table class="InfoTitle2" >
+				                          <tr>
+				                            <td>
+				                              <%
+				                                String birthday = null ; 
+				                                if (selectedContact.getBirthday() != null) {
+				                              	String birth = selectedContact.getBirthday().toString() ;
+				                              	String a = birth.substring(0, 10); String b = birth.substring(23,28) ;
+				                              	birthday = a+ b;
+				                              	}
+				                               %>
+				                              <div class="InfoTitle3"><%= (birthday != null) ? birthday : "_"%></div>
+				                            </td>
+				                          </tr>
+				                        </table>
+				                       </td>
+	                          </tr>
+	                          
+	                          <tr>
+	                            <td class="InfoLabel">
+	                              <div class="InfoLabel">Email:</div>
+	                            </td>
+	                            <td class="InfoTitle1">
+				                        <table class="InfoTitle2" >
+				                          <tr>
+				                            <td>
+				                              <div class="InfoTitle3 Email">
+					                              <a href="#">
+					                                <%= (selectedContact.getEmailAddress() != null) ? selectedContact.getEmailAddress() : "_"%>
+					                              </a>
+					                             </div>
+				                            </td>
+				                          </tr>
+				                        </table>
+				                       </td>
+	                          </tr>
+	                          
+	                          <tr>
+	                            <td class="InfoLabel">
+	                              <div class="InfoLabel">&nbsp;</div>
+	                            </td>
+	                            <td class="InfoTitle1">
+				                        <table class="InfoTitle2" >
+				                          <tr>
+				                            <td>
+				                              <div class="InfoTitle3">&nbsp;</div>
+				                            </td>
+				                          </tr>
+				                        </table>
+				                       </td>
+	                          </tr>
+	                        </table>
+	                       </div>
+                         <div style="clear: left;"><span></span></div>
                         </div>
                       </div>
-                      <div style="clear: left;"><span></span></div>
                       
                     </div>
                     <% } %>
@@ -204,5 +274,6 @@
       </tr>
     </table>
   </div>
+</div>
 </div>
 <% uiform.end()%> 

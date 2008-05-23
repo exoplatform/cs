@@ -53,7 +53,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template =  "app:/templates/mail/webui/UIAddMessageFilter.gtmpl",
+    template =  "app:/templates/mail/webui/popup/UIAddMessageFilter.gtmpl",
     events = {
       @EventConfig(listeners = UIAddMessageFilter.SaveActionListener.class), 
       @EventConfig(listeners = UIAddMessageFilter.CancelActionListener.class)
@@ -91,26 +91,14 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
     List<SelectItemOption<String>>  options2 = new ArrayList<SelectItemOption<String>>() ;
     options2.add(new SelectItemOption<String>("contains", String.valueOf(Utils.CONDITION_CONTAIN)));
     options2.add(new SelectItemOption<String>("doesn't contain", String.valueOf(Utils.CONDITION_NOT_CONTAIN)));
-    options2.add(new SelectItemOption<String>("is", String.valueOf(Utils.CONDITION_IS)));
-    options2.add(new SelectItemOption<String>("is not", String.valueOf(Utils.CONDITION_NOT_IS)));
-    options2.add(new SelectItemOption<String>("starts with", String.valueOf(Utils.CONDITION_STARTS_WITH)));
-    options2.add(new SelectItemOption<String>("ends with", String.valueOf(Utils.CONDITION_ENDS_WITH)));
     addUIFormInput(new UIFormSelectBox(FILTER_TO_CONDITION, FILTER_TO_CONDITION, options2));
     List<SelectItemOption<String>>  options3 = new ArrayList<SelectItemOption<String>>() ;
     options3.add(new SelectItemOption<String>("contains", String.valueOf(Utils.CONDITION_CONTAIN)));
     options3.add(new SelectItemOption<String>("doesn't contain", String.valueOf(Utils.CONDITION_NOT_CONTAIN)));
-    options3.add(new SelectItemOption<String>("is", String.valueOf(Utils.CONDITION_IS)));
-    options3.add(new SelectItemOption<String>("is not", String.valueOf(Utils.CONDITION_NOT_IS)));
-    options3.add(new SelectItemOption<String>("starts with", String.valueOf(Utils.CONDITION_STARTS_WITH)));
-    options3.add(new SelectItemOption<String>("ends with", String.valueOf(Utils.CONDITION_ENDS_WITH)));
     addUIFormInput(new UIFormSelectBox(FILTER_FROM_CONDITION, FILTER_FROM_CONDITION, options3));
     List<SelectItemOption<String>>  options4 = new ArrayList<SelectItemOption<String>>() ;
     options4.add(new SelectItemOption<String>("contains", String.valueOf(Utils.CONDITION_CONTAIN)));
-    options4.add(new SelectItemOption<String>("doesn't contain", String.valueOf(Utils.CONDITION_NOT_CONTAIN)));
-    options4.add(new SelectItemOption<String>("is", String.valueOf(Utils.CONDITION_IS)));
-    options4.add(new SelectItemOption<String>("is not", String.valueOf(Utils.CONDITION_NOT_IS)));
-    options4.add(new SelectItemOption<String>("starts with", String.valueOf(Utils.CONDITION_STARTS_WITH)));
-    options4.add(new SelectItemOption<String>("ends with", String.valueOf(Utils.CONDITION_ENDS_WITH)));
+    options4.add(new SelectItemOption<String>("doesn't contain", String.valueOf(Utils.CONDITION_NOT_CONTAIN))); 
     addUIFormInput(new UIFormSelectBox(FILTER_SUBJECT_CONDITION, FILTER_SUBJECT_CONDITION, options4));
     String username = MailUtils.getCurrentUser();
     MailService mailSrv = MailUtils.getMailService();

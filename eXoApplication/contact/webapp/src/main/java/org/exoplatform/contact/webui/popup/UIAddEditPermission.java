@@ -208,8 +208,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
                 SessionProviderFactory.createSessionProvider(), username, uiForm.groupId_, user.getId()) ;
           
           
-          // + hyphen ?
-          
+          /*
           List<Contact> contacts = contactService.getContactPageListByGroup(
               SessionProviderFactory.createSessionProvider(), username, uiForm.groupId_).getAll() ;
           for (Contact contact : contacts) {
@@ -217,6 +216,8 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
             contactService.saveContact(SessionProviderFactory.createSessionProvider()
                 , username,contact , false) ;
           }
+          */
+          
         } else {
           if(group.getViewPermissionUsers() != null) {
             List<String> newPerms = new ArrayList<String>() ;
@@ -238,23 +239,25 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
           }        
           contactService.removeUserShareAddressBook(SessionProviderFactory.createSessionProvider()
               , username, uiForm.groupId_, remover) ;
+          
+          /*
           List<Contact> contacts = contactService.getContactPageListByGroup(
               SessionProviderFactory.createSessionProvider(), username, uiForm.groupId_).getAll() ;
-          for (Contact contact : contacts) {
-            
+          for (Contact contact : contacts) {            
             removePerUser(contact, remover + JCRDataStorage.HYPHEN) ;
             contactService.saveContact(SessionProviderFactory.createSessionProvider()
                 , username,contact , false) ;
           }
+          */
         }
         contactService.saveGroup(SessionProviderFactory.createSessionProvider(), username, group, false) ;
         uiForm.updateGroupGrid(group); 
         event.getRequestContext().addUIComponentToUpdateByAjax(
             uiForm.getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class)) ;
-        
+        /*
         UIContacts uiContacts = uiForm.getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIContacts.class) ;
         uiContacts.updateList() ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;*/
       } else {
         
         // ko luu ca object contact vi co the ko dung den delete va edit

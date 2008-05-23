@@ -20,10 +20,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -43,11 +45,18 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.MimeMessage.RecipientType;
+import javax.mail.search.AndTerm;
+import javax.mail.search.BodyTerm;
 import javax.mail.search.ComparisonTerm;
 import javax.mail.search.FlagTerm;
+import javax.mail.search.FromStringTerm;
+import javax.mail.search.NotTerm;
 import javax.mail.search.OrTerm;
+import javax.mail.search.RecipientStringTerm;
 import javax.mail.search.SearchTerm;
 import javax.mail.search.SentDateTerm;
+import javax.mail.search.SubjectTerm;
 import javax.mail.util.ByteArrayDataSource;
 
 import org.exoplatform.container.ExoContainer;
@@ -131,19 +140,23 @@ public class MailServiceImpl implements MailService{
 
   public Folder getFolder(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception {
     return storage_.getFolder(sProvider, username, accountId, folderId);
-  } 
+  }
+  
+  public String getFolderParentId(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception {
+    return storage_.getFolderParentId(sProvider, username, accountId, folderId) ;
+  }
+  
+  public boolean isExistFolder(SessionProvider sProvider, String username, String accountId, String parentId, String folderName) throws Exception {
+    return storage_.isExistFolder(sProvider, username, accountId, parentId, folderName) ;
+  }
   
   public void saveFolder(SessionProvider sProvider, String username, String accountId, Folder folder) throws Exception {
     storage_.saveFolder(sProvider, username, accountId, folder);
   }
 
 
-  public void removeUserFolder(SessionProvider sProvider, String username, Folder folder) throws Exception {
-    storage_.removeUserFolder(sProvider, username, folder);
-  }
-
-  public void removeUserFolder(SessionProvider sProvider, String username, Account account, Folder folder) throws Exception {
-    storage_.removeUserFolder(sProvider, username, account, folder);
+  public void removeUserFolder(SessionProvider sProvider, String username, String accountId, String folderId) throws Exception {
+    storage_.removeUserFolder(sProvider, username, accountId, folderId);
   }
   
   public List<MessageFilter> getFilters(SessionProvider sProvider, String username, String accountId) throws Exception {
@@ -170,20 +183,24 @@ public class MailServiceImpl implements MailService{
     storage_.removeMessage(sProvider, username, accountId, message);
   }
 
-  public void removeMessage(SessionProvider sProvider, String username,String accountId, List<Message> messages) throws Exception {
-    storage_.removeMessage(sProvider, username, accountId, messages);
+  public void removeMessages(SessionProvider sProvider, String username, String accountId, List<Message> messages, boolean moveReference) throws Exception {
+    storage_.removeMessages(sProvider, username, accountId, messages, moveReference);
   } 
   
-  public void moveMessages(SessionProvider sProvider, String username,String accountId, Message msg, String currentFolderId, String destFolderId) throws Exception {
-    storage_.moveMessages(sProvider, username, accountId, msg, currentFolderId, destFolderId);
+  public void moveMessages(SessionProvider sProvider, String username, String accountId, List<Message> msgList, String currentFolderId, String destFolderId) throws Exception {
+    storage_.moveMessages(sProvider, username, accountId, msgList, currentFolderId, destFolderId) ;
+  }
+  
+  public void moveMessage(SessionProvider sProvider, String username,String accountId, Message msg, String currentFolderId, String destFolderId) throws Exception {
+    storage_.moveMessage(sProvider, username, accountId, msg, currentFolderId, destFolderId);
   }
 
   public MessagePageList getMessagePageList(SessionProvider sProvider, String username, MessageFilter filter) throws Exception {
     return storage_.getMessagePageList(sProvider, username, filter);
   }
   
-  public void saveMessage(SessionProvider sProvider, String username, String accountId, String targetMsgPath, Message message) throws Exception {
-    storage_.saveMessage(sProvider, username, accountId, targetMsgPath, message) ;
+  public void saveMessage(SessionProvider sProvider, String username, String accountId, String targetMsgPath, Message message, boolean isNew) throws Exception {
+    storage_.saveMessage(sProvider, username, accountId, targetMsgPath, message, isNew) ;
   }
   
   public List<Message> getMessagesByTag(SessionProvider sProvider, String username, String accountId, String tagId) throws Exception {
@@ -341,7 +358,7 @@ public class MailServiceImpl implements MailService{
       }
       mimeMessage.setContent(multipPartRoot);
     } else {
-      if (message.getContentType().indexOf("text/plain") > -1)
+      if (message.getContentType() != null && message.getContentType().indexOf("text/plain") > -1)
         mimeMessage.setText(message.getMessageBody());
       else
         mimeMessage.setContent(message.getMessageBody(), "text/html");
@@ -405,6 +422,7 @@ public class MailServiceImpl implements MailService{
     String key = username + ":" + accountId ;
     checkingLog_.put(key, info) ;
     long t1, t2 , tt1, tt2;
+    if (Utils.isEmptyField(account.getIncomingPassword())) info.setStatusCode(CheckingInfo.RETRY_PASSWORD) ;
     System.out.println(" #### Getting mail from " + account.getIncomingHost() + " ... !");
     info.setStatusMsg("Getting mail from " + account.getIncomingHost() + " ... !") ;
     List<Message> messageList = new ArrayList<Message>();
@@ -412,6 +430,7 @@ public class MailServiceImpl implements MailService{
     String protocol = account.getProtocol();
     boolean isPop3 = account.getProtocol().equals(Utils.POP3) ;
     boolean isImap = account.getProtocol().equals(Utils.IMAP) ;
+    Date lastCheckedDate = account.getLastCheckedDate() ;
     try {
       Properties props = System.getProperties();
       String socketFactoryClass = "javax.net.SocketFactory";
@@ -463,24 +482,56 @@ public class MailServiceImpl implements MailService{
         folder.open(javax.mail.Folder.READ_WRITE);
         
         javax.mail.Message[] messages ;
-        if (account.getLastCheckedDate() == null) {
-          messages = folder.getMessages() ;
+        LinkedHashMap<javax.mail.Message, List<String>> msgMap = new LinkedHashMap<javax.mail.Message, List<String>>();
+        SearchTerm searchTerm = null;
+        if (lastCheckedDate == null) {
+          messages = folder.getMessages() ;   // If the first time this account check mail then it will fetch all messages
         } else {
-          SearchTerm unseenFlag = new FlagTerm(new Flags(Flags.Flag.SEEN), false) ;
-          SentDateTerm dateTerm = new SentDateTerm(ComparisonTerm.GT, account.getLastCheckedDate());
-          unseenFlag = new OrTerm(unseenFlag, dateTerm) ;
-          if (isImap) unseenFlag = new FlagTerm(new Flags(Flags.Flag.FLAGGED), false) ;
-          messages = folder.search(unseenFlag) ;
+          searchTerm = new FlagTerm(new Flags(Flags.Flag.SEEN), false) ;
+          SentDateTerm dateTerm = new SentDateTerm(ComparisonTerm.GT, lastCheckedDate);
+          searchTerm = new OrTerm(searchTerm, dateTerm) ;
+          messages = folder.search(searchTerm) ;
         }
+        
+        javax.mail.Message[] fMessages ;
+        // Loop all filters to find the destination of new message.
+        List<MessageFilter> filters = getFilters(sProvider, username, accountId) ;
+        SearchTerm st ;
+        for (MessageFilter filter : filters) {
+          st = getSearchTerm(searchTerm, filter) ;
+          fMessages = folder.search(st) ;
+          List<String> fl ;
+          for (int k = 0; k < fMessages.length; k++) {
+            if (msgMap.containsKey(fMessages[k])) {
+              fl =  msgMap.get(fMessages[k]) ;
+              fl.add(filter.getId()) ;
+              if (lastCheckedDate == null) msgMap.put(fMessages[k], fl) ;
+              else if (!(isImap && !MimeMessageParser.getReceivedDate(fMessages[k]).getTime().after(lastCheckedDate)))
+                msgMap.put(fMessages[k], fl) ;
+            } else {
+              fl = new ArrayList<String>() ;
+              fl.add(filter.getId()) ;
+              if (lastCheckedDate == null) msgMap.put(fMessages[k], fl) ;
+              else if (!(isImap && !MimeMessageParser.getReceivedDate(fMessages[k]).getTime().after(lastCheckedDate)))
+                msgMap.put(fMessages[k], fl) ;
+            }
+          }
+        }
+        for (int l = 0; l < messages.length; l++) 
+          if (!msgMap.containsKey(messages[l]))
+            if (lastCheckedDate == null) msgMap.put(messages[l], null) ;
+            else if (!(isImap && !MimeMessageParser.getReceivedDate(messages[l]).getTime().after(lastCheckedDate)))
+              msgMap.put(messages[l], null) ;
+        
         boolean leaveOnServer = (isPop3 && Boolean.valueOf(account.getPopServerProperties().get(Utils.SVR_POP_LEAVE_ON_SERVER))) ;
         boolean markAsDelete = (isImap && Boolean.valueOf(account.getImapServerProperties().get(Utils.SVR_IMAP_MARK_AS_DELETE))) ;
         
-        boolean deleteOnServer = (isPop3 && !leaveOnServer) || (isImap && markAsDelete);
+        boolean deleteOnServer = (isPop3 && !leaveOnServer) || (isImap && markAsDelete) ;
         
-        totalNew = messages.length ;
+        totalNew = msgMap.size() ;
        
-        System.out.println(" #### Folder contains " + totalNew + " messages !");
-        tt1 = System.currentTimeMillis();
+        System.out.println(" #### Folder contains " + totalNew + " messages !") ;
+        tt1 = System.currentTimeMillis() ;
 
         if (totalNew > 0) {
           info.setTotalMsg(totalNew) ;
@@ -500,17 +551,18 @@ public class MailServiceImpl implements MailService{
             storage_.saveFolder(sProvider, username, account.getId(), storeFolder) ;
           }
           javax.mail.Message msg ;
+          List<String> filterList ;
           while (i < totalNew && !info.isRequestStop()) {
             System.out.println(" [DEBUG] Fetching message " + (i + 1) + " ...") ;
             checkingLog_.get(key).setFetching(i + 1) ;
             checkingLog_.get(key).setStatusMsg("Fetching message " + (i + 1) + "/" + totalNew) ;
             t1 = System.currentTimeMillis();
             msg = messages[i] ;   
+            filterList = msgMap.get(msg) ;
             try {
-              boolean saved = storage_.saveMessage(sProvider, username, account.getId(), msg, folderId, spamFilter) ;
+              boolean saved = storage_.saveMessage(sProvider, username, account.getId(), msg, folderId, spamFilter, filterList) ;
               if (saved) {
                 msg.setFlag(Flags.Flag.SEEN, true);
-                if (isImap) msg.setFlag(Flags.Flag.FLAGGED, true);
                 if (deleteOnServer) msg.setFlag(Flags.Flag.DELETED, true);
                 account.setLastCheckedDate(MimeMessageParser.getReceivedDate(msg).getTime()) ; 
               }
@@ -525,14 +577,6 @@ public class MailServiceImpl implements MailService{
             System.out.println(" [DEBUG] Message " + i + " saved : " + (t2-t1) + " ms");
           }
           
-          Calendar cc = GregorianCalendar.getInstance();
-          javax.mail.Message firstMsg = messages[0] ;
-          cc = MimeMessageParser.getReceivedDate(firstMsg);
-          System.out.println(" [DEBUG] Executing the filter ...") ;
-          t1 = System.currentTimeMillis();
-          storage_.execActionFilter(sProvider, username, accountId, cc);
-          t2 = System.currentTimeMillis();
-          System.out.println(" [DEBUG] Executed the filter finished : " + (t2 - t1) + " ms") ;
           tt2 = System.currentTimeMillis();
           System.out.println(" ### Check mail finished total took: " + (tt2 - tt1) + " ms") ;
         }
@@ -550,6 +594,78 @@ public class MailServiceImpl implements MailService{
       e.printStackTrace();
     }
     return messageList;
+  }
+  
+  public SearchTerm getSearchTerm(SearchTerm sTerm, MessageFilter filter) throws Exception {
+    if (!Utils.isEmptyField(filter.getFrom())) {
+      FromStringTerm fsTerm = new FromStringTerm(filter.getFrom()) ;
+      if (filter.getFromCondition() == Utils.CONDITION_CONTAIN) {
+        if (sTerm == null) {
+          sTerm = fsTerm ;
+        } else {
+          sTerm = new AndTerm(sTerm, fsTerm) ;
+        }
+      } else if (filter.getFromCondition() == Utils.CONDITION_NOT_CONTAIN) {
+        if (sTerm == null) {
+          sTerm = new NotTerm(fsTerm) ;
+        } else {
+          sTerm = new AndTerm(sTerm, new NotTerm(fsTerm)) ;
+        }
+      }
+    }
+    
+    if (!Utils.isEmptyField(filter.getTo())) {
+      RecipientStringTerm toTerm = new RecipientStringTerm(RecipientType.TO, filter.getTo()) ;
+      if (filter.getToCondition() == Utils.CONDITION_CONTAIN) {
+        if (sTerm == null) {
+          sTerm = toTerm ;
+        } else {
+          sTerm = new AndTerm(sTerm, toTerm) ;
+        }
+      } else if (filter.getToCondition() == Utils.CONDITION_NOT_CONTAIN) {
+        if (sTerm == null) {
+          sTerm = new NotTerm(toTerm) ;
+        } else {
+          sTerm = new AndTerm(sTerm, new NotTerm(toTerm)) ;
+        }
+      }
+    }
+    
+    if (!Utils.isEmptyField(filter.getSubject())) {
+      SubjectTerm subjectTerm = new SubjectTerm(filter.getSubject()) ;
+      if (filter.getSubjectCondition() == Utils.CONDITION_CONTAIN) {
+        if (sTerm == null) {
+          sTerm = subjectTerm ;
+        } else {
+          sTerm = new AndTerm(sTerm, subjectTerm) ;
+        }
+      } else if (filter.getSubjectCondition() == Utils.CONDITION_NOT_CONTAIN) {
+        if (sTerm == null) {
+          sTerm = new NotTerm(subjectTerm) ;
+        } else {
+          sTerm = new AndTerm(sTerm, new NotTerm(subjectTerm)) ;
+        }
+      }
+    }
+    
+    if (!Utils.isEmptyField(filter.getBody())) {
+      BodyTerm bodyTerm = new BodyTerm(filter.getBody()) ;
+      if (filter.getSubjectCondition() == Utils.CONDITION_CONTAIN) {
+        if (sTerm == null) {
+          sTerm = bodyTerm ;
+        } else {
+          sTerm = new AndTerm(sTerm, bodyTerm) ;
+        }
+      } else if (filter.getSubjectCondition() == Utils.CONDITION_NOT_CONTAIN) {
+        if (sTerm == null) {
+          sTerm = new NotTerm(bodyTerm) ;
+        } else {
+          sTerm = new AndTerm(sTerm, new NotTerm(bodyTerm)) ;
+        }
+      }
+    }
+    
+    return sTerm ; 
   }
   
   public void createAccount(SessionProvider sProvider, String username, Account account) throws Exception {
@@ -588,9 +704,8 @@ public class MailServiceImpl implements MailService{
     return storage_.getTag(sProvider, username, accountId, tagId);
   }
 
-  public void removeMessageTag(SessionProvider sProvider, String username, String accountId, List<Message> messageIds, List<String> tags)
-      throws Exception {
-    storage_.removeMessageTag(sProvider, username, accountId, messageIds, tags);   
+  public void removeTagsInMessages(SessionProvider sProvider, String username, String accountId, List<Message> msgList, List<String> tagIdList) throws Exception {
+    storage_.removeTagsInMessages(sProvider, username, accountId, msgList, tagIdList);   
   }
 
   public void removeTag(SessionProvider sProvider, String username, String accountId, String tag) throws Exception {
@@ -646,7 +761,7 @@ public class MailServiceImpl implements MailService{
       if (folder != null && (msg.getFolders()[0] != applyFolder)) {
         Folder appFolder = getFolder(sProvider, username, accountId, applyFolder);
         if (appFolder != null)
-          moveMessages(sProvider, username, accountId, msg, msg.getFolders()[0], applyFolder);
+          moveMessage(sProvider, username, accountId, msg, msg.getFolders()[0], applyFolder);
       }
     }
     if (!Utils.isEmptyField(applyTag)) {
@@ -703,5 +818,9 @@ public class MailServiceImpl implements MailService{
         account = getAccounts(sProvider, username).get(0) ;
     }
     return account ;
+  }
+  
+  public Message loadAttachments(SessionProvider sProvider, String username, String accountId, Message msg) throws Exception {
+    return storage_.loadAttachments(sProvider, username, accountId, msg) ;
   }
 }

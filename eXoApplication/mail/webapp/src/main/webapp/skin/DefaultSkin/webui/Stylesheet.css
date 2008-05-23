@@ -18,13 +18,25 @@
 .UIWindow .UIMailPortlet {
 	margin: 0px;
 	border: none;
-	min-width: 880px;
+	min-width: 940px;
 }
 
 .UIMailPortlet {
 	background: white;
 	border: 1px solid #b7b7b7;
-	margin: 7px;
+	margin: 5px;
+}
+
+.UIWindow .UIEmpty {
+	margin: 0px;
+	border: none ;
+	min-width: none ;
+}
+
+.UIEmpty {
+	background: none;
+	border: none;
+	margin: 0px;
 }
 /******************************************** MailBanner ****************************************/
 
@@ -116,6 +128,7 @@
 	line-height: 20px;
 	height: 20px;
 	border: 1px solid #A5A5A5;
+	font-size: 11px;
 }
 
 .UIMailPortlet .UISelectAccount .UIRightClickPopupMenu {
@@ -217,6 +230,7 @@
 	padding-left: 30px;
 	line-height: 24px; 
 	margin: 2px 0px; width: auto;
+	background-position: 4px center;
 }
 
 .UIMailPortlet .UINavigationContainer .MyFolder .TitleBar {
@@ -355,13 +369,13 @@
 	cursor: pointer;
 }
 
-.UIMailPortlet .MailWorkingWorkspace  .UIActionBar a.ControlButton {
+.UIMailPortlet .MailWorkingWorkspace  .UIActionBar a {
 	color: #000000;
 	margin: 4px 1px 0px 1px;
 	line-height: 26px;
 }
 
-.UIMailPortlet .MailWorkingWorkspace  .UIActionBar a:hover.ControlButton {
+.UIMailPortlet .MailWorkingWorkspace  .UIActionBar a:hover {
 	background: url('background/ControlButtonBG1x26.gif') repeat-x ;
 	color: #058ee6; border: 1px solid #cbcbcb;
 	margin: 3px 0px 0px 0px;
@@ -389,13 +403,25 @@
 }
 
 .UIMailPortlet .UIActionBar .UIPopupCategory {
-	left: -5px;
+	left: 8px;
 	position:absolute;
-	top: 28px;
+	top: 0px;
 }
 
 .UIMailPortlet .UIActionBar .UIPopupCategory .UIRightClickPopupMenu {
 	width: 150px;
+}
+
+.UIMailPortlet .UIActionBar  .UIPopupCategory a {
+	color: #000000;
+	margin:4px 0px 0px 0px;
+}
+
+.UIMailPortlet .UIActionBar  .UIPopupCategory a:hover {
+	background: #dee4f2;
+	color: #058ee6; border: none;
+  line-height:26px;
+  margin:4px 0px 0px 0px;
 }
 
 /*================================= MailContainer ================*/
@@ -503,12 +529,17 @@
 	font-size:11px;
 }
 
+.UIRightClickPopupMenu .SelectItem {
+	background: #dee4f2 ;
+}
+
 /*================================== UIGrid==============================*/
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageList {
 	padding-left: 1px;
+	overflow: hidden;
+	!overflow: auto;
 	overflow-y: auto;
-	overflow-x: hidden;
 	height: 200px ;
 	_width: 99.5%;
 }
@@ -519,42 +550,44 @@
 	width: 22px; height: 22px;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .UIGrid {
+.UIMailPortlet .UIMessageList .UIGrid {
 	background: #ffffff;
 	border-bottom: 1px solid #e8e8e8;
 	border-right: none;
 	border-left: none;	
 }
 
-.UIMailPortlet .MailWorkingWorkspace .UIGrid thead {
+.UIMailPortlet .UIMessageList .UIGrid thead {
 	border-right: none;
 	border-left: none;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .UIGrid th {
+.UIMailPortlet .UIMessageList .UIGrid th {
 	background: url(background/ThGridRepeatBg1x19.gif) repeat-x;
 	border: 1px solid #d2d4dc;
 	border-left: none;
 	border-right: 1px solid #e8e8e8;
 	text-align: left;
 	padding: 0px 5px;
+	white-space: nowrap;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .UIGrid td.Border {
+.UIMailPortlet .UIMessageList .UIGrid td.Border {
 	border-right: 1px solid #e8e8e8;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .UIGrid td {
+.UIMailPortlet .UIMessageList .UIGrid td {
 	height: 20px; line-height: 20px;
 	border-left: none;
 	border-right: 1px solid #e8e8e8;
 	padding: 0px 0px 0px 6px;
 }
 
-.UIMailPortlet .MailWorkingWorkspace .UIGrid td a {
+.UIMailPortlet .UIMessageList .UIGrid td a {
 	display: block;
 	white-space: nowrap;
 	overflow: hidden ;
+	width: 100%;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIGrid .IconTag {
@@ -630,6 +663,11 @@
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageCompose table {
 	background: none;
+}
+
+.UIMailPortlet .MailWorkingWorkspace .UIMessageCompose table {
+	background: none;
+	width: 97%;
 }
 
 .UIMailPortlet .MailWorkingWorkspace input.checkbox {
@@ -1060,19 +1098,13 @@
 
 /*=======================Print Priview Mail========================*/
 .UIMailPortlet .MailWorkingWorkspace .UIMessagePreview .printWrapper {
-    left: 0px; 
-    top: -7px; 
-    width: 100%; 
-    position: absolute; 
-    height: 100%;
-    background: #ffffff;
-    overflow: auto;
+  background: #ffffff;
 }
 
 .UIMailPortlet .PrintPreview {
 	padding: 8px;
 	border-bottom:1px solid #BBBBBB; 
-	margin:15px;
+	margin: 15px;
 }
 
 .UIMailPortlet .PrintPreview .PrintHeader {
@@ -1103,7 +1135,6 @@
 
 .UIMailPortlet .PrintPreview .PrintAddress {
 	padding: 8px; 
-	height: 30px;
 }
 
 .UIMailPortlet .PrintPreview .PrintAddress .FromAndTo {
@@ -1371,6 +1402,9 @@
 	line-height: 20px;
 	height: 20px;
 	padding-left: 24px;
+	overflow: hidden;
+	white-space: nowrap;
+	width:160px;
 }
 
 .UIMailPortlet .UIContactsPopup .RightContacts .ContactContainer {
@@ -1458,36 +1492,46 @@
 
 .UIMailPortlet .UIContactsPopup .InfoContainer .LeftContent {
 	float: left;
-	width: 250px;
+	width: 46%;
+	padding-right: 10px;
 }
 
 .UIMailPortlet .UIContactsPopup .InfoContainer .RightContent {
-	margin-left: 255px;
-}
-
-.UIMailPortlet .UIContactsPopup .InfoContainer .Content .InfoLabel1 {
 	float: left;
-	width: 60px;
+	width: 46%;
+	padding-left: 10px;
 }
 
 .UIMailPortlet .UIContactsPopup .InfoContainer .Content .InfoLabel {
-	width: 90px;
-	float: left;
+  white-space: nowrap;
 }
 
-.UIMailPortlet .UIContactsPopup .InfoContainer .Content .Info1 {
-	margin-left: 65px;
+
+.UIMailPortlet .UIContactsPopup .InfoContainer .Content .InfoTitle1 {
+	white-space: nowrap;
+  padding: 0px 10px 0px 4px;
+  width: 100%;
 }
 
-.UIMailPortlet .UIContactsPopup .InfoContainer .Content .Info {
-	background: none;
-	margin-left: 100px;
+.UIMailPortlet .UIContactsPopup .InfoContainer .Content .InfoTitle2 {
+	white-space: nowrap;
+  width: 100%; 
+  table-layout: fixed;
+}
+
+.UIMailPortlet .UIContactsPopup .InfoContainer .Content .InfoTitle3 {
+	white-space: nowrap;
+  overflow: hidden; 
+}
+
+.UIMailPortlet .UIContactsPopup .InfoContainer .Content .InfoTitle {
+	white-space: nowrap;
+  padding: 0px 10px 0px 2px;
 }
 
 .UIMailPortlet .UIContactsPopup .InfoContainer .Content .Email {
 	background: url(skinIcons/16x16/icons/EmailIcon.gif) no-repeat left center;
 	padding-left: 20px;
-	margin-left: 60px;
 }
 
 .UIMailPortlet .UIContactsPopup .SelectFileFrame {
@@ -1547,6 +1591,10 @@
 	margin: 5px;
 }
 
+.UIMailPortlet .UIPopupActionAddressContainer {
+  min-width: 600px;
+}
+
 .UIAddNewContact .ProfileContent .AvatarContent img {
 	border: 1px solid #545454;
 }
@@ -1600,6 +1648,26 @@
 
 .UIFolderForm .UIForm .UIFormGrid td.FieldLabel {
 	line-height: 20px;
+}
+
+/******************************* UIComfirmPassword ******************************/
+.UIComfirmPassword {
+	padding: 10px;
+}
+
+.UIComfirmPassword .HorizontalLayout {
+	padding: 15px;
+	background: #F3F3F3;
+}
+
+/******************* UIPopupDeleteAccountContainer ****************/
+.UIPopupDeleteAccountContainer {
+	padding: 10px;
+}
+
+.UIPopupDeleteAccountContainer .UIAccountList {
+	padding: 10px;
+	background: #F3F3F3;
 }
 
 /******************************* invitation mail ******************************/
@@ -1682,3 +1750,7 @@
 .Wheat {background-color: #F5DEB3;}    
 .Yellow {background-color: #FFFF00;} 
 
+.UIMailPortlet .UIFormGrid {
+  width: auto;
+  margin: auto;
+}

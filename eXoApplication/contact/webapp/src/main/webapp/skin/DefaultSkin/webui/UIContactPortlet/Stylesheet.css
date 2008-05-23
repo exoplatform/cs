@@ -34,7 +34,7 @@
 .UIContactPortlet .UISearchForm input {
 	width: 140px;
 	float: right;
-	margin: 3px 8px;
+	margin: 0px 8px;
 }
 
 .UIContactPortlet .UISearchForm .Search {
@@ -42,7 +42,7 @@
   height: 16px;
   width: 16px;
   float: right;
-  margin: 8px 5px 0px 0px;
+  margin: 5px 5px 0px 0px;
   cursor: pointer;
   display: block;
 }
@@ -59,7 +59,7 @@
   background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/FindIcon.gif') no-repeat ;	
   height: 16px; width: 16px;
   float: right; cursor: pointer;
-  margin: 8px 0px 0px 2px;
+  margin: 5px 0px 0px 2px;
   display: block;
 }
 
@@ -76,6 +76,7 @@
 	padding-left: 26px;
 	background-position: left center;
 	background-repeat: no-repeat; 
+	cursor: pointer;
 }
 
 .UIContactPortlet .SeparatorLine {
@@ -86,6 +87,7 @@
 .UIContactPortlet .ControlButton {
 	float: left;
 	margin: 0px 3px;
+	cursor: pointer;
 }
 
 .UIContactPortlet .SelectButton {
@@ -243,14 +245,10 @@
 
 .UIContactPortlet .UINavigationContainer .ItemList {
 	padding: 0px 13px;
-	height: 24px; line-height: 24px;
+	line-height: 24px;
 	overflow: hidden;
 	white-space: nowrap;
 	width: 180px;
-}
-
-.UIContactPortlet .UINavigationContainer .ItemList a {
-	padding: 3px 0px 3px 26px;
 }
 
 .UIContactPortlet .UINavigationContainer .UIPopupCategory a.MenuItem {
@@ -336,9 +334,15 @@
 	_margin-right: 2px;
 }
 
-.UIContactPortlet .Result .TitleSearch {
+.UIContactPortlet .TitleSearch {
 	text-align: center;
-	height: 23px;
+	line-height: 23px;
+	font-size: 12px;
+	background: url('background/BgTitleBar1x24.gif') repeat-x;
+	border-left: 1px solid #CCCCCC;
+	border-right: 1px solid #CCCCCC;
+	font-weight: bold;
+	_margin: 0px 2px 0px 3px;
 }
 
 .UIContactPortlet .UIContactActionsBar {
@@ -361,6 +365,12 @@
 	width: 20px; height: 20px;
 	background-repeat: no-repeat;
 	background-position: center;
+}
+
+.UIContactPortlet .UIContactContainer .Result .Icon {
+	margin: 2px 7px 0px 7px;
+	width: 20px; height: 20px;
+	background-repeat: no-repeat;
 }
 
 .UIContactPortlet .UIContactContainer .UIContactActionsBar .IconHolder {
@@ -402,6 +412,11 @@
 
 .UIContactPortlet .UIContactContainer .Selected {
 	background: #e6e8f5;
+	margin: 0px 1px;
+}
+
+.UIContactPortlet .UIContactContainer .Normal {
+	background: #ffffff;
 	margin: 0px 1px;
 }
 
@@ -461,6 +476,7 @@
 	_padding-left: 0px;
 	overflow-y: auto;
 	overflow-x: hidden;
+	_overflow-x: auto;
 	_width: 99.5%;
 }
 
@@ -474,6 +490,8 @@
 	text-align: left;
 	border-bottom: 1px solid #d8d8d8;
 	border-top: none;
+	padding-top: 0px;
+	white-space: nowrap;
 }
 
 .UIContactPortlet .UIContactContainer .UIGrid .Icon {
@@ -502,6 +520,7 @@
 .UIContactPortlet .UIContactContainer td {
 	border-top: none;
 	padding-left: 10px;
+	white-space: nowrap;
 }
 
 .UIContactPortlet .UIContactContainer .text {
@@ -659,36 +678,46 @@
 
 .UIContactPortlet .InfoContainer .LeftContent {
 	float: left;
-	width: 250px;
+	width: 46%;
+	padding-right: 10px;
 }
 
 .UIContactPortlet .InfoContainer .RightContent {
-	margin-left: 255px;
-}
-
-.UIContactPortlet .InfoContainer .Content .InfoLabel1 {
 	float: left;
-	width: 60px;
+	width: 46%;
+	padding-left: 10px;
 }
 
 .UIContactPortlet .InfoContainer .Content .InfoLabel {
-	width: 120px;
-	float: left;
+  white-space: nowrap;
 }
 
-.UIContactPortlet .InfoContainer .Content .Info1 {
-	margin-left: 65px;
+
+.UIContactPortlet .InfoContainer .Content .InfoTitle1 {
+	white-space: nowrap;
+  padding: 0px 10px 0px 4px;
+  width: 100%;
 }
 
-.UIContactPortlet .InfoContainer .Content .Info {
-	background: none;
-	margin-left: 100px;
+.UIContactPortlet .InfoContainer .Content .InfoTitle2 {
+	white-space: nowrap;
+  width: 100%; 
+  table-layout: fixed;
+}
+
+.UIContactPortlet .InfoContainer .Content .InfoTitle3 {
+	white-space: nowrap;
+  overflow: hidden; 
+}
+
+.UIContactPortlet .InfoContainer .Content .InfoTitle {
+	white-space: nowrap;
+  padding: 0px 10px 0px 2px;
 }
 
 .UIContactPortlet .InfoContainer .Content .Email {
 	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/EmailIcon.gif') no-repeat left center;
 	padding-left: 20px;
-	margin-left: 60px;
 }
 
 .UIContactPortlet .SelectFileFrame {
@@ -697,6 +726,17 @@
 
 .UIContactPortlet .FileNameLabel {
 	overflow: hidden;
-	width: 300px;
 	white-space: nowrap;
+	margin-top: 3px;
+	max-width: 300px;
+}
+
+.UIEmpty .OwnerIcon {
+	width: auto;
+	padding-left: 20px;
+}
+
+.UIEmpty .OfflineIcon {
+	width: auto;
+	padding-left: 20px;
 }

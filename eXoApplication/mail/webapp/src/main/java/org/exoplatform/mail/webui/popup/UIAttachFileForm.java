@@ -43,7 +43,7 @@ import org.exoplatform.webui.form.UIFormUploadInput;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template =  "app:/templates/mail/webui/UIAttachFileForm.gtmpl",
+    template =  "app:/templates/mail/webui/popup/UIAttachFileForm.gtmpl",
     events = {
       @EventConfig(listeners = UIAttachFileForm.AddMoreActionListener.class), 
       @EventConfig(listeners = UIAttachFileForm.SaveActionListener.class), 

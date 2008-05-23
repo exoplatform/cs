@@ -58,17 +58,20 @@ public class UISearchForm extends UIForm {
       UISearchForm uiForm = event.getSource() ;
       String text = uiForm.getUIStringInput(UISearchForm.FIELD_SEARCHVALUE).getValue() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-      if(ContactUtils.isEmpty(text)) {
+      if(ContactUtils.isEmpty(text.trim())) {
         uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.no-text-to-search", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-  
-      ContactFilter filter = new ContactFilter() ;
-      filter.setText(ContactUtils.filterString(text, true)) ;
+      String textFiltered = ContactUtils.filterString(text, true) ;
+      DataPageList resultPageList =  null ;
+      if (!ContactUtils.isEmpty(textFiltered)) {
+        ContactFilter filter = new ContactFilter() ;
+        filter.setText(textFiltered) ;
+        resultPageList = ContactUtils.getContactService()
+          .searchContact(SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), filter) ;
+      }
       
-      DataPageList resultPageList = ContactUtils.getContactService()
-        .searchContact(SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), filter) ;
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class).setSelectedGroup(null) ;
       uiContactPortlet.findFirstComponentOfType(UITags.class).setSelectedTag(null) ;      

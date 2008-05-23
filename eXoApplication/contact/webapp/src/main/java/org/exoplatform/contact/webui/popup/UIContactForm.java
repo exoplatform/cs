@@ -303,7 +303,7 @@ public class UIContactForm extends UIFormTabPane {
             if ( uiAddressBooks.getSharedGroups().containsKey(contact.getAddressBook()[0])) {
               contactService.saveContactToSharedAddressBook(username, contact.getAddressBook()[0], contact, false) ;
             } else {
-              contactService.saveSharedContact(username, contact) ;
+              contactService.saveSharedContact(username, contact) ;              
             }  
           }
         } catch(PathNotFoundException e) {
@@ -315,16 +315,17 @@ public class UIContactForm extends UIFormTabPane {
       }      
       UIContactPortlet uiContactPortlet = uiContactForm.getAncestorOfType(UIContactPortlet.class) ;
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
-      UIContactPreview uiContactPreview = uiContactPortlet.findFirstComponentOfType(UIContactPreview.class) ;
+      String selectedContact = uiContacts.getSelectedContact() ;
       if(uiContacts.isDisplaySearchResult()) {
       	List<Contact> contacts = new ArrayList<Contact>() ;
       	contacts.add(contact) ;
       	uiContacts.setContact(contacts, true) ;
-      }      
-      String selectedContact = uiContacts.getSelectedContact() ;
-      if (!ContactUtils.isEmpty(selectedContact) && selectedContact.equals(contact.getId())) 
-        uiContactPreview.setContact(contact) ;
+      }
       uiContacts.updateList() ;
+      if (!ContactUtils.isEmpty(selectedContact) && selectedContact.equals(contact.getId())) {
+        uiContactPortlet.findFirstComponentOfType(UIContactPreview.class).setContact(contact) ;
+        uiContacts.setSelectedContact(selectedContact) ;
+      }        
       uiContactPortlet.cancelAction() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet.getChild(UIWorkingContainer.class)) ;
     }
