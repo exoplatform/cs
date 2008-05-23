@@ -23,9 +23,11 @@ import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
+import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UINavigationContainer;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -396,9 +398,11 @@ public class UIAccountSetting extends UIFormTabPane {
   static  public class SaveActionListener extends EventListener<UIAccountSetting> {
     public void execute(Event<UIAccountSetting> event) throws Exception {
       UIAccountSetting uiSetting = event.getSource() ;
+      UIMailPortlet uiPortlet = uiSetting.getAncestorOfType(UIMailPortlet.class) ;
       MailService mailSrv = uiSetting.getApplicationComponent(MailService.class) ;
       String username = Util.getPortalRequestContext().getRemoteUser() ;
-      Account acc = mailSrv.getAccountById(SessionProviderFactory.createSystemProvider(), username, uiSetting.getSelectedAccountId()) ;
+      String editedAccountId = uiSetting.getSelectedAccountId() ;
+      Account acc = mailSrv.getAccountById(SessionProviderFactory.createSystemProvider(), username, editedAccountId) ;
       String userName = uiSetting.getFieldIncomingAccount() ;
       
       acc.setProtocol(uiSetting.getFieldProtocol()) ;
@@ -433,6 +437,12 @@ public class UIAccountSetting extends UIFormTabPane {
       UIApplication uiApp = uiSetting.getAncestorOfType(UIApplication.class) ;
       try {
         mailSrv.updateAccount(SessionProviderFactory.createSystemProvider(), username, acc) ;
+        UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;
+        String accountId = uiSelectAccount.getSelectedValue();
+        uiSelectAccount.updateAccount() ;
+        uiSelectAccount.setSelectedValue(accountId) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectAccount) ;
+        
         uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.edit-acc-successfully", null)) ;
         event.getSource().getAncestorOfType(UIMailPortlet.class).cancelAction();
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
