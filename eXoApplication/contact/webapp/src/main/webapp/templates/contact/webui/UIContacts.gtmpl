@@ -235,10 +235,10 @@
     		    			%>
 	 	      	    
 	  		        	<a href="$sortedByOrganition">
-	  		        	<div style="width: 70%; cursor: pointer;" class="$classArrowOrganition" style="padding-right:26px;" title="<%=_ctx.appRes(uicomponent.getName() + ".label.sortByJobTitle")%>"><%=_ctx.appRes(uicomponent.getName() + ".label.jobTitle")%></div>
+	  		        	<div style="width: 70%; cursor: pointer; white-space: nowrap;" class="$classArrowOrganition" style="padding-right:26px;" title="<%=_ctx.appRes(uicomponent.getName() + ".label.sortByJobTitle")%>"><%=_ctx.appRes(uicomponent.getName() + ".label.jobTitle")%></div>
 	 	      	    	</a>
 	 	      	    </th>
-	 	      	    <th style="width: 120px; "> <%=_ctx.appRes(uicomponent.getName() + ".label.workPhone")%> </th>
+	 	      	    <th style="width: 120px; "><div style="white-space: nowrap;"> <%=_ctx.appRes(uicomponent.getName() + ".label.workPhone")%></div> </th>
 	 	      	    <% 
 	 	      	    	if(isDisplaySearchResult) {	
 	 	      	    %>
@@ -374,7 +374,7 @@
 										<%=(ContactUtils.isEmpty(contact.getJobTitle()) ? "_" : contact.getJobTitle())%>
 									</a>
 								</td>
-								<td>
+								<td style="width: 120px;">
 									<a href="$actionLink">
 										<%=(contact.getWorkPhone1()==null ? (ContactUtils.isEmpty(contact.getWorkPhone2()) ? "_" : contact.getWorkPhone2()) : contact.getWorkPhone1())%>
 									</a>

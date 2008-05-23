@@ -491,6 +491,7 @@
 	border-bottom: 1px solid #d8d8d8;
 	border-top: none;
 	padding-top: 0px;
+	white-space: nowrap;
 }
 
 .UIContactPortlet .UIContactContainer .UIGrid .Icon {
@@ -519,6 +520,7 @@
 .UIContactPortlet .UIContactContainer td {
 	border-top: none;
 	padding-left: 10px;
+	white-space: nowrap;
 }
 
 .UIContactPortlet .UIContactContainer .text {
