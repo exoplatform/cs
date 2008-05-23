@@ -46,7 +46,6 @@ import javax.mail.Part;
 import javax.mail.internet.ContentType;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMultipart;
-import javax.mail.internet.MimeUtility;
 
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
@@ -388,35 +387,76 @@ public class JCRDataStorage{
     Node messageHome = getMessageHome(sProvider, username, accountId);
     Node currentFolderNode = getFolderNodeById(sProvider, username, accountId, currentFolderId);
     Node destFolderNode = getFolderNodeById(sProvider, username, accountId, destFolderId);
-    int unreadNumber = 0 ;
-    int totalMessage = 0 ;
+    int inUnreadNumber = 0, deUnreadNumber = 0, inTotalMessage = 0, deTotalMessage = 0 ;
     for (Message msg : msgList) {
       try {
         Node msgNode = (Node)messageHome.getSession().getItem(msg.getPath()) ;
-        moveReference(msgNode) ;
-        if (msgNode.hasProperty(Utils.EXO_FOLDERS)) {
-          if (msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean()) unreadNumber++ ;
-          Value[] propFolders = msgNode.getProperty(Utils.EXO_FOLDERS).getValues();
-          String[] folderIds = new String[propFolders.length];
+        boolean isUnread = msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean() ;
+        String sentFolderId = Utils.createFolderId(accountId, Utils.FD_SENT, false) ;
+        Value[] propFolders = msgNode.getProperty(Utils.EXO_FOLDERS).getValues() ;
+        boolean moveReference = true ;
+        String[] folderIds = new String[propFolders.length];
+        if (propFolders.length == 1) {
+          if (destFolderId.equals(sentFolderId)) {
+            folderIds[0] = sentFolderId ;
+            if (!propFolders[0].getString().equals(sentFolderId)) {
+              if (isUnread) { 
+                inUnreadNumber++ ;
+                deUnreadNumber++ ;
+              }
+              deTotalMessage++ ;
+              inTotalMessage++ ;
+            } else {
+              if (isUnread) { 
+                inUnreadNumber++ ;
+              }
+              inTotalMessage++ ;
+            }
+            moveReference = false ;            
+          } else {
+            folderIds[0] = destFolderId ;
+            if (propFolders[0].getString().equals(sentFolderId)) {
+              if (isUnread) { 
+                inUnreadNumber++ ;
+              }
+              inTotalMessage++ ;
+            } else if (!currentFolderId.equals(destFolderId)) {
+              if (isUnread) { 
+                inUnreadNumber++ ;
+                deUnreadNumber++ ;
+              }
+              deTotalMessage++ ;
+              inTotalMessage++ ;
+            }
+          }
+        } else {
           for (int i = 0; i < propFolders.length; i++) {
             String folderId = propFolders[i].getString() ;
             if (currentFolderId.equals(folderId)) folderIds[i] = destFolderId ;
             else folderIds[i] = folderId;
           }
-          msgNode.setProperty(Utils.EXO_FOLDERS, folderIds);
-          msgNode.save();
-          totalMessage++ ;
+          if (isUnread) { 
+            inUnreadNumber++ ;
+            deUnreadNumber++ ;
+          }
+          deTotalMessage++ ;
+          inTotalMessage++ ;
         }
+        if (moveReference) moveReference(msgNode) ;
+       
+        msgNode.setProperty(Utils.EXO_FOLDERS, folderIds);
+        msgNode.save();
+      
       } catch(Exception e) {}
     }
     try {
-      currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() - unreadNumber));
-      destFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (destFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() + unreadNumber));
+      currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() - deUnreadNumber));
+      destFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (destFolderNode.getProperty(Utils.EXO_UNREADMESSAGES).getLong() + inUnreadNumber));
     } catch(Exception e) {}
     
     try {
-      currentFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (currentFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() - totalMessage));
-      destFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (destFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() + totalMessage));
+      currentFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (currentFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() - deTotalMessage));
+      destFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (destFolderNode.getProperty(Utils.EXO_TOTALMESSAGE).getLong() + inTotalMessage));
     } catch(Exception e) {}
     currentFolderNode.save();
     destFolderNode.save();

@@ -171,7 +171,7 @@ public class MessagePageList extends JCRPageList {
   private boolean isAvaiableMessage(Node node, String[] refFolders) throws Exception {
     return previousListPage.size() > 0 && 
       previousListPage.containsKey(node.getName()) && 
-      (refFolders == null || previousListPage.get(node.getName()).getReferedMessageIds().size() == getReferedMessageIds(node, refFolders).size()) ;
+      (refFolders == null || previousListPage.get(node.getName()).getGroupedMessageIds().size() == getGroupedMessageIds(new ArrayList<String>(), node, refFolders).size()) ;
   }
   
   /**
@@ -283,7 +283,7 @@ public class MessagePageList extends JCRPageList {
           List<String> sibling = refMsg.getReferedMessageIds() ;
           sibling.removeAll(referedMessageIds) ;
           if (refMsg != null) {
-            refMsg.setReferedMessageIds((new ArrayList<String>(sibling))) ;
+            refMsg.setReferedMessageIds(sibling) ;
             if (refMsg.getFolders() != null && refMsg.getFolders().length > 0) currentListPage_.put(refNode.getName(),  refMsg) ;
           }
         }
