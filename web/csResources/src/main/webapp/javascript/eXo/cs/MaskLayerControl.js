@@ -33,6 +33,7 @@ MaskLayerControl.prototype.showPicture = function(node) {
     left = '5%' ;
     width = '90%' ;
     height = '95%' ;
+    textAlign = 'center' ;
   }
   var imageNode = document.createElement('img') ;
   imageNode.src = imgSrcNode.src ;
@@ -43,7 +44,7 @@ MaskLayerControl.prototype.showPicture = function(node) {
   containerNode.appendChild(imageNode) ;
   containerNode.setAttribute('title', 'Click to close') ;
   containerNode.onclick = this.hidePicture ;
-  maskNode = eXo.core.UIMaskLayer.createMask('UIPortalApplication', containerNode, 100, 'CENTER') ;
+  maskNode = eXo.core.UIMaskLayer.createMask('UIPortalApplication', containerNode, 30, 'CENTER') ;
   eXo.core.Browser.addOnScrollCallback('MaskLayerControl', this.scrollHandler) ;
 } ;
 
