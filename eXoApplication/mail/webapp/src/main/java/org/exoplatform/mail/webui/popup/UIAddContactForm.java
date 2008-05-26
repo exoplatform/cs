@@ -31,6 +31,8 @@ import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.webui.SelectItem;
+import org.exoplatform.mail.webui.SelectItemOptionGroup;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -91,12 +93,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
   public Contact selectedContact_  ;
   
   public UIAddContactForm() throws Exception { 
-    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
-    ContactService contactSrv = getApplicationComponent(ContactService.class);
-    for (ContactGroup group : contactSrv.getGroups(SessionProviderFactory.createSystemProvider(), MailUtils.getCurrentUser())) {
-      options.add(new SelectItemOption<String>(group.getName(), group.getId()));
-    }
-    addUIFormInput(new UIFormSelectBox(SELECT_GROUP, SELECT_GROUP, options));
+    addUIFormInput(new org.exoplatform.mail.webui.UIFormSelectBox(SELECT_GROUP, SELECT_GROUP, getOptions()));
     addUIFormInput(new UIFormStringInput(FIRST_NAME, FIRST_NAME, null).addValidator(MandatoryValidator.class));
     addUIFormInput(new UIFormStringInput(LAST_NAME, LAST_NAME, null).addValidator(MandatoryValidator.class));
     addUIFormInput(new UIFormStringInput(NICKNAME, NICKNAME, null));
@@ -138,10 +135,25 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
     .addValidator(EmailAddressValidator.class));
   }
   
+  public List<SelectItem> getOptions() throws Exception {
+    String username = MailUtils.getCurrentUser();
+    ContactService contactSrv = getApplicationComponent(ContactService.class);
+    List<SelectItem> options = new ArrayList<SelectItem>() ;
+    SelectItemOptionGroup personalContacts = new SelectItemOptionGroup("personal-contacts");
+    for(ContactGroup pcg : contactSrv.getGroups(SessionProviderFactory.createSystemProvider(), username)) {
+      personalContacts.addOption(new org.exoplatform.mail.webui.SelectItemOption<String>(pcg.getName(), pcg.getId())) ;
+    }
+    options.add(personalContacts);
+       
+    return options ;
+  }
+  
   public void fillDatas(Contact ct) throws Exception {
     isEdited_ = true ;
     selectedContact_ = ct ;
-    getUIFormSelectBox(SELECT_GROUP).setSelectedValues(ct.getAddressBook());
+    ((org.exoplatform.mail.webui.UIFormSelectBox)getChildById(SELECT_GROUP)).setSelectedValues(ct.getAddressBook());
+    ((org.exoplatform.mail.webui.UIFormSelectBox)getChildById(SELECT_GROUP)).setEditable(false) ;
+    ((org.exoplatform.mail.webui.UIFormSelectBox)getChildById(SELECT_GROUP)).setEnable(false) ;
     getUIStringInput(FIRST_NAME).setValue(ct.getFirstName());
     getUIStringInput(LAST_NAME).setValue(ct.getLastName());
     getUIStringInput(NICKNAME).setValue(ct.getNickName());
@@ -165,12 +177,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
   }
   
   public void refreshGroupList() throws Exception{
-    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
-    ContactService contactSrv = getApplicationComponent(ContactService.class);
-    for (ContactGroup group : contactSrv.getGroups(SessionProviderFactory.createSystemProvider(), MailUtils.getCurrentUser())) {
-      options.add(new SelectItemOption<String>(group.getName(), group.getId()));
-    }
-    getUIFormSelectBox(SELECT_GROUP).setOptions(options);
+    ((org.exoplatform.mail.webui.UIFormSelectBox)getChildById(SELECT_GROUP)).setOptions(getOptions());
   } 
   
   public void setFirstNameField(String firstName) throws Exception {
@@ -239,7 +246,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
       UIAddContactForm uiContact = event.getSource() ;
       UIMailPortlet uiPortlet = uiContact.getAncestorOfType(UIMailPortlet.class); 
       UIApplication uiApp = uiContact.getAncestorOfType(UIApplication.class) ;
-      String groupId = uiContact.getUIFormSelectBox(SELECT_GROUP).getValue();
+      String groupId = ((org.exoplatform.mail.webui.UIFormSelectBox)uiContact.getChildById(SELECT_GROUP)).getValue();
       String firstName = uiContact.getUIStringInput(FIRST_NAME).getValue();
       String lastName = uiContact.getUIStringInput(LAST_NAME).getValue();
       String email = uiContact.getUIStringInput(EMAIL).getValue();
@@ -333,14 +340,12 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
   }
   
   static  public class DeleteImageActionListener extends EventListener<UIAddContactForm> {
-    @Override
     public void execute(Event<UIAddContactForm> event) throws Exception {
       UIAddContactForm uiContactForm = event.getSource() ;
       uiContactForm.setImage(null) ;
       uiContactForm.setFileName(null) ;
       uiContactForm.setMimeType(null) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(
-        uiContactForm.getAncestorOfType(UIPopupAction.class)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContactForm.getAncestorOfType(UIPopupAction.class)) ;
     }
   }
   
@@ -350,7 +355,9 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
       input.read(imageBytes_) ;
     } else imageBytes_ = null ;
   }
-  protected byte[] getImage() {return imageBytes_ ;}
+  protected byte[] getImage() {
+    return imageBytes_ ; 
+  }
 
   protected String getMimeType() { return imageMimeType_ ;} ;
   protected void setMimeType(String mimeType) {imageMimeType_ = mimeType ;} 
