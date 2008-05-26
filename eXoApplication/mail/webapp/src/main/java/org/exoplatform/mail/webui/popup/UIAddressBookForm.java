@@ -24,7 +24,6 @@ import java.util.Map;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
-import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.webui.SelectItem;
@@ -200,7 +199,6 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
   static public class DeleteContactActionListener extends EventListener<UIAddressBookForm> {
     public void execute(Event<UIAddressBookForm> event) throws Exception {
       UIAddressBookForm uiAddressBook = event.getSource() ;
-      UIMailPortlet mailPortlet = uiAddressBook.getAncestorOfType(UIMailPortlet.class);
       Contact contact = uiAddressBook.getSelectedContact();
       UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
       if (contact != null) {
@@ -229,7 +227,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
             return ;
           }
 
-          event.getRequestContext().addUIComponentToUpdateByAjax(mailPortlet.getChild(UIPopupAction.class)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent()) ;
         } catch(Exception e) {
           e.printStackTrace();
         } 

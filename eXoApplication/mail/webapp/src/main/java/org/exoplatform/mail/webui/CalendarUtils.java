@@ -232,25 +232,26 @@ public class CalendarUtils {
     return options ;
   }
   
+  public static boolean hasEditPermission(String[] savePerms, String[] checkPerms) {
+    if(savePerms != null)
+      for(String sp : savePerms) {
+        for (String cp : checkPerms) {
+          if( sp.equals(cp) || sp.equals("*.*")) {return true ;}      
+        }
+      }
+    return false ;
+  } 
+
+  @SuppressWarnings("unchecked")
   public static boolean canEdit(OrganizationService oService, String[] savePerms, String username) throws Exception {
     StringBuffer sb = new StringBuffer(username) ;
     if(oService != null) {
       Collection<Membership> memberShipsType = oService.getMembershipHandler().findMembershipsByUser(username) ;
       for(Membership mp : memberShipsType) {
-        sb.append(CalendarUtils.COMMA).append(mp.getMembershipType() +
-            CalendarUtils.COLON+ mp.getGroupId()).append(CalendarUtils.COMMA).append(CalendarUtils.STAR + CalendarUtils.COLON+ mp.getGroupId()) ;
+        sb.append(CalendarUtils.COMMA).append("*." + mp.getMembershipType()) ; /*+
+            CalendarUtils.COLON+ mp.getGroupId()).append(CalendarUtils.COMMA).append(CalendarUtils.STAR + CalendarUtils.COLON+ mp.getGroupId()) ;*/
       }
     }
     return CalendarUtils.hasEditPermission(savePerms, sb.toString().split(CalendarUtils.COMMA)) ;
   }
-  
-  public static boolean hasEditPermission(String[] savePerms, String[] checkPerms) {
-    if(savePerms != null)
-    for(String sp : savePerms) {
-      for (String cp : checkPerms) {
-        if( sp.equals(cp)) {return true ;}      
-      }
-    }
-    return false ;
-  } 
 }
