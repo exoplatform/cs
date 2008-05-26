@@ -30,7 +30,7 @@
 		        if(even) rowCssClass = "EvenRow" ;  
 		        even = !even ;
 						if (uicomponent.isSelectGroup()) {
-		        	key = uicomponent.getCurrentGroup().getId() +  ":/" + user ;
+		        	key = uicomponent.getCurrentGroup().getId() +  "/" + user ;
 		       	} else if (uicomponent.isSelectUser()) {
 		       		key = user ;
 		       	}      

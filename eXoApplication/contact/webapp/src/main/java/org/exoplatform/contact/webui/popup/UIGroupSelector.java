@@ -17,7 +17,6 @@
 package org.exoplatform.contact.webui.popup;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -190,8 +189,6 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID) ; 
       uiGroupSelector.changeGroup(groupId) ;   
       if (uiGroupSelector.isSelectGroup()) {
-        System.out.println("\n\n id :" + groupId + "\n\n");
-         
         if (groupId == null) uiGroupSelector.isNull = true ;
         else  uiGroupSelector.isNull = false ;
       }
