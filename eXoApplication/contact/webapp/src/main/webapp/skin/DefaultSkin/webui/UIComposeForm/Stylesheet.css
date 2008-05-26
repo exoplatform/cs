@@ -103,6 +103,7 @@
 	background: none;
 	margin: 0px;
 	width: 100%;
+	_width: 97%;
 }
 
 .UIContactPortlet .UIMessageCompose .UIForm .HorizontalLayout td.FieldLabel {

@@ -724,13 +724,6 @@
 	width: 340px;
 }
 
-.UIContactPortlet .FileNameLabel {
-	overflow: hidden;
-	white-space: nowrap;
-	margin-top: 3px;
-	max-width: 300px;
-}
-
 .UIEmpty .OwnerIcon {
 	width: auto;
 	padding-left: 20px;
