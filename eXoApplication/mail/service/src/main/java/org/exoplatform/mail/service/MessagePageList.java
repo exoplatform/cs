@@ -169,9 +169,14 @@ public class MessagePageList extends JCRPageList {
    * @throws Exception
    */
   private boolean isAvaiableMessage(Node node, String[] refFolders) throws Exception {
-    return previousListPage.size() > 0 && 
-      previousListPage.containsKey(node.getName()) && 
-      (refFolders == null || previousListPage.get(node.getName()).getGroupedMessageIds().size() == getGroupedMessageIds(new ArrayList<String>(), node, refFolders).size()) ;
+    if (previousListPage.size() > 0 && previousListPage.containsKey(node.getName())) {
+      Message msg = previousListPage.get(node.getName()) ;
+      if (msg.isRootConversation() && 
+        (refFolders == null || msg.getGroupedMessageIds().size() == getGroupedMessageIds(new ArrayList<String>(), node, refFolders).size())) {
+        return true ;
+      }
+    }
+    return false ;
   }
   
   /**

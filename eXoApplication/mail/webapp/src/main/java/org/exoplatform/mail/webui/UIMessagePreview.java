@@ -272,10 +272,16 @@ public class UIMessagePreview extends UIComponent {
           mailSrv.moveMessage(SessionProviderFactory.createSystemProvider(), username, accountId, msg, msg.getFolders()[0],  Utils.createFolderId(accountId, Utils.FD_TRASH, false));
         }        
         uiMsgList.updateList();
-        uiMsgPreview.setMessage(null);
+        List<Message> showedMsgList = uiMsgPreview.getShowedMessages() ;
+        if (showedMsgList != null && showedMsgList.size() > 1) {
+          showedMsgList.remove(msg) ;
+          uiMsgPreview.setShowedMessages(showedMsgList) ;
+        } else {
+          uiMsgPreview.setMessage(null);
+          uiMsgPreview.setShowedMessages(null) ;
+        }
 			}
       
-      uiMsgPreview.setShowedMessages(null) ;
 			event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderCon.getParent());
 			event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgArea);
 		}
