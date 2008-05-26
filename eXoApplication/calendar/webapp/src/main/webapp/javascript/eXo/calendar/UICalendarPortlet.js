@@ -867,14 +867,11 @@ UICalendarPortlet.prototype.showContextMenu = function(compid) {
 
 UICalendarPortlet.prototype.fixIE = function(){
 	var isDesktop = document.getElementById("UIPageDesktop") ;
-	if(isDesktop) {
-		this.runTimes = true ;
-	} else this.runTimes = null ;
-	if(!this.runTimes) return
 	if ((eXo.core.Browser.browserType == "ie") && isDesktop) {
   	var portlet = document.getElementById(this.portletName);
   	var uiResizeBlock = eXo.core.DOMUtil.findAncestorByClass(portlet, "UIResizableBlock");
 		var relative = eXo.core.DOMUtil.findFirstDescendantByClass(uiResizeBlock,"div", "FixIE") ;
+		if(!relative) return ;
 		relative.className = "UIResizableBlock" ;
 		var style = {
 			position:"relative",
