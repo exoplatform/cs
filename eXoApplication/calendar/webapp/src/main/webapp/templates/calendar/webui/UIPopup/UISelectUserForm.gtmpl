@@ -22,10 +22,10 @@
                     	<%=uiform.getLabel(uiform.FIELD_KEYWORD)%>
                     </div>
                     <%uiform.renderField(uiform.FIELD_KEYWORD)%>
-                    <a class="SearchIcon" href="<%=uicomponent.event('Search')%>" title="Quick Search"><span></span></a>
                   	<div class="FilterSelect">
                   		<%uiform.renderField(uiform.FIELD_FILTER)%>
                   	</div>  
+                  	<a class="SearchIcon" href="<%=uicomponent.event('Search')%>" title="Quick Search"><span></span></a>
                   </div>
                 	
                 	<div class="AddressesGroup">
