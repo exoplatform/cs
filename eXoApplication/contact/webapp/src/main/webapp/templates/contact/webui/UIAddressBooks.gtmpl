@@ -130,7 +130,7 @@
 				String[] array = group.split("/") ;
 				int i = array.length - 1 ;
 				name = array[i] ;
-				String actionLink  = uicomponent.event("SelectPublicGroup", group) ;				
+				String actionLink  = uicomponent.event("SelectPublicGroup", group) ;	
 				if(group.equals(uicomponent.getSelectedGroup()))	cssClass = "Selected" ;	
 			%>
 				<div id="$group" title="$group" class="ItemList $cssClass PublicAddressBook" addressType="2" >

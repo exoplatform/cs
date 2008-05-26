@@ -17,6 +17,7 @@
 package org.exoplatform.contact.webui.popup;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +34,7 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.impl.GroupImpl;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -174,9 +176,9 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         return ;
       } 
       String username = ContactUtils.getCurrentUser() ;
-      if(!ContactUtils.isEmpty(names)) {
-        OrganizationService organizationService = 
-          (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+      OrganizationService organizationService = 
+        (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+      if(!ContactUtils.isEmpty(names)) {        
         try {
           if (names.indexOf(",") > 0) {
             String[] array = names.split(",") ;
@@ -199,13 +201,22 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
       
       List<String> receiveUsersByGroups = new ArrayList<String>() ;
+      
+      // improve get user
       if (!ContactUtils.isEmpty(groups)) {
         String[] arrayGroups = groups.split(",") ; 
         for (String group : arrayGroups) {
+          Object[] objGroupIds = organizationService.getGroupHandler()
+            .findGroups(organizationService.getGroupHandler().findGroupById(group)).toArray() ;
+          for (Object object : objGroupIds) {
+            String groupId = ((GroupImpl)object).getId() ;
+            receiveGroups.add(groupId) ;
+            for (Contact contact : contactService.getPublicContactsByAddressBook(SessionProviderFactory.createSystemProvider(), groupId).getAll()) {
+              receiveUsersByGroups.add(contact.getId()) ;
+            }            
+          }          
           receiveGroups.add(group) ;
-          List<Contact> contacts = contactService
-            .getPublicContactsByAddressBook(SessionProviderFactory.createSystemProvider(), group.trim()).getAll() ; 
-          for (Contact contact : contacts) {
+          for (Contact contact : contactService.getPublicContactsByAddressBook(SessionProviderFactory.createSystemProvider(), group.trim()).getAll()) {
             receiveUsersByGroups.add(contact.getId()) ;
           }
         }        
