@@ -26,6 +26,8 @@ import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.webui.SelectItem;
+import org.exoplatform.mail.webui.SelectItemOptionGroup;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -33,11 +35,9 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
-import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormSelectBox;
 
 /**
  * Created by The eXo Platform SARL
@@ -68,12 +68,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
   public UIAddressBookForm() throws Exception {
     String username = MailUtils.getCurrentUser();
     ContactService contactSrv = getApplicationComponent(ContactService.class);
-    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
-    options.add(new SelectItemOption<String>(ALL_GROUP, ""));
-    for (ContactGroup group : contactSrv.getGroups(SessionProviderFactory.createSystemProvider(), username)) {
-      options.add(new SelectItemOption<String>(group.getName(), group.getId()));
-    }
-    UIFormSelectBox uiSelectGroup = new UIFormSelectBox(SELECT_GROUP, SELECT_GROUP, options);
+    org.exoplatform.mail.webui.UIFormSelectBox uiSelectGroup = new org.exoplatform.mail.webui.UIFormSelectBox(SELECT_GROUP, SELECT_GROUP, getOptions());
     uiSelectGroup.setOnChange("ChangeGroup");
     addUIFormInput(uiSelectGroup);
     
@@ -82,6 +77,31 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
     contactList_ = new ArrayList<Contact>(contactMap_.values());
     
     if (contactList_.size() > 0) selectedContact = contactList_.get(0);
+  }
+  
+  public List<SelectItem> getOptions() throws Exception {
+    String username = MailUtils.getCurrentUser();
+    ContactService contactSrv = getApplicationComponent(ContactService.class);
+    List<SelectItem> options = new ArrayList<SelectItem>() ;
+    SelectItemOptionGroup personalContacts = new SelectItemOptionGroup("personal-contacts");
+    for(ContactGroup pcg : contactSrv.getGroups(SessionProviderFactory.createSystemProvider(), username)) {
+      personalContacts.addOption(new org.exoplatform.mail.webui.SelectItemOption<String>(pcg.getName(), pcg.getId())) ;
+    }
+    options.add(personalContacts);
+    /*  
+    SelectItemOptionGroup sharedContacts = new SelectItemOptionGroup("shared-contacts");
+    for(SharedAddressBook scg : contactSrv.getSharedAddressBooks(SessionProviderFactory.createSystemProvider(), username)) {
+      sharedContacts.addOption(new org.exoplatform.mail.webui.SelectItemOption<String>(scg.getId(), scg.getName())) ;
+    }
+    options.add(sharedContacts);
+    
+    SelectItemOptionGroup publicContacts = new SelectItemOptionGroup("public-contacts");
+    for(String publicCg : MailUtils.getUserGroups()) {
+      publicContacts.addOption(new org.exoplatform.mail.webui.SelectItemOption<String>(publicCg, publicCg)) ;
+    }
+    options.add(publicContacts);
+    */
+    return options ;
   }
   
   public Contact getSelectedContact() { return this.selectedContact; }
@@ -108,18 +128,11 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
   }
   
   public void updateGroup(String selectedGroup) throws Exception {
-    String username = MailUtils.getCurrentUser();
-    ContactService contactSrv = getApplicationComponent(ContactService.class);
-    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>();
-    options.add(new SelectItemOption<String>(ALL_GROUP, ""));
-    for (ContactGroup group : contactSrv.getGroups(SessionProviderFactory.createSystemProvider(), username)) {
-      options.add(new SelectItemOption<String>(group.getName(), group.getId()));
-    }
-    getUIFormSelectBox(SELECT_GROUP).setOptions(options);
-    getUIFormSelectBox(SELECT_GROUP).setValue(selectedGroup);
+    ((org.exoplatform.mail.webui.UIFormSelectBox)getChildById(SELECT_GROUP)).setOptions(getOptions());
+    ((org.exoplatform.mail.webui.UIFormSelectBox)getChildById(SELECT_GROUP)).setValue(selectedGroup);
   }
   
-  public String[] getActions() { return new String[] {"Close"}; }
+  public String[] getActions() { return new String[] { "Close" } ; }
   
   public void activate() throws Exception { }
 
@@ -150,15 +163,27 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
   static public class EditContactActionListener extends EventListener<UIAddressBookForm> {
     public void execute(Event<UIAddressBookForm> event) throws Exception {
       UIAddressBookForm uiAddBook = event.getSource() ;
-      UIPopupActionContainer uiActionContainer = uiAddBook.getParent() ;
-      UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
-      UIPopupActionContainer uiPopupContainer = uiChildPopup.activate(UIPopupActionContainer.class, 730) ;
-      uiPopupContainer.setId("UIPopupAddContactForm") ;
-      UIAddContactForm uiAddContact = uiPopupContainer.createUIComponent(UIAddContactForm.class, null, null) ;
-      uiPopupContainer.addChild(uiAddContact) ;
-      uiAddContact.fillDatas(uiAddBook.getSelectedContact()) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
-      
+      Contact selectedContact = uiAddBook.getSelectedContact() ;
+      UIApplication uiApp = uiAddBook.getAncestorOfType(UIApplication.class) ;
+      if (selectedContact != null) {
+        if (selectedContact.getContactType().equals("2") ||(selectedContact.getContactType().equals("1"))) {
+          uiApp.addMessage(new ApplicationMessage("UIAddressBookForm.msg.cannot-edit", null)) ;;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
+        UIPopupActionContainer uiActionContainer = uiAddBook.getParent() ;
+        UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
+        UIPopupActionContainer uiPopupContainer = uiChildPopup.activate(UIPopupActionContainer.class, 730) ;
+        uiPopupContainer.setId("UIPopupAddContactForm") ;
+        UIAddContactForm uiAddContact = uiPopupContainer.createUIComponent(UIAddContactForm.class, null, null) ;
+        uiPopupContainer.addChild(uiAddContact) ;
+        uiAddContact.fillDatas(selectedContact) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
+      } else {
+        uiApp.addMessage(new ApplicationMessage("UIAddressBookForm.msg.no-selected-contact-to-edit", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
     }
   }
   
@@ -166,48 +191,61 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
     public void execute(Event<UIAddressBookForm> event) throws Exception {
       UIAddressBookForm uiAddressBook = event.getSource() ;
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
-      UIMailPortlet uiPortlet = uiAddressBook.getAncestorOfType(UIMailPortlet.class);
       uiAddressBook.setSelectedContact(uiAddressBook.contactMap_.get(contactId));
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.getChild(UIPopupAction.class)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent()) ;
     }
   }
   
   static public class DeleteContactActionListener extends EventListener<UIAddressBookForm> {
     public void execute(Event<UIAddressBookForm> event) throws Exception {
       UIAddressBookForm uiAddressBook = event.getSource() ;
-      UIMailPortlet mailPortlet = uiAddressBook.getAncestorOfType(UIMailPortlet.class);
       Contact contact = uiAddressBook.getSelectedContact();
-      String username = MailUtils.getCurrentUser();
-      ContactService contactServ = uiAddressBook.getApplicationComponent(ContactService.class);
-      try {
-        List<String> contactIds = new ArrayList<String>();
-        
-        // hung edit
-        if (!contact.getId().equals(MailUtils.getCurrentUser())) {
-          contactIds.add(contact.getId()) ;
-          contactServ.removeContacts(SessionProviderFactory.createSystemProvider(), username, contactIds);
-          uiAddressBook.refrestContactList(uiAddressBook.getUIFormSelectBox(SELECT_GROUP).getValue());
-        } else {
-          UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UIAddressBookForm.msg.cannot-delete-this-contact", null)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;
-        }
-        
-        event.getRequestContext().addUIComponentToUpdateByAjax(mailPortlet.getChild(UIPopupAction.class)) ;
-      } catch(Exception e) {
-        e.printStackTrace();
-      } 
+      UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
+      if (contact != null) {
+        String username = MailUtils.getCurrentUser();
+        ContactService contactServ = uiAddressBook.getApplicationComponent(ContactService.class);
+        try {
+          if (contact.isOwner()) {
+            uiApp.addMessage(new ApplicationMessage("UIAddressBookForm.msg.cannot-delete-ownerContact", null)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return ;
+          } else if (contact.getContactType().equals("2") ||(contact.getContactType().equals("1"))) {
+            uiApp.addMessage(new ApplicationMessage("UIAddressBookForm.msg.cannot-delete", null)) ;;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return ;
+          }
+          
+          List<String> contactIds = new ArrayList<String>();
+          // hung edit
+          if (!contact.getId().equals(MailUtils.getCurrentUser())) {
+            contactIds.add(contact.getId()) ;
+            contactServ.removeContacts(SessionProviderFactory.createSystemProvider(), username, contactIds);
+            uiAddressBook.refrestContactList(((org.exoplatform.mail.webui.UIFormSelectBox)uiAddressBook.getChildById(SELECT_GROUP)).getValue());
+          } else {
+            uiApp.addMessage(new ApplicationMessage("UIAddressBookForm.msg.cannot-delete-this-contact", null)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return ;
+          }
+
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent()) ;
+        } catch(Exception e) {
+          e.printStackTrace();
+        } 
+      } else {
+        uiApp.addMessage(new ApplicationMessage("UIAddressBookForm.msg.no-selected-contact-to-delete", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
     }
   }
   
   static public class ChangeGroupActionListener extends EventListener<UIAddressBookForm> {
     public void execute(Event<UIAddressBookForm> event) throws Exception {
       UIAddressBookForm uiAddressBook = event.getSource();
-      UIMailPortlet uiPortlet = uiAddressBook.getAncestorOfType(UIMailPortlet.class);
-      String selectedGroupId = uiAddressBook.getUIFormSelectBox(SELECT_GROUP).getValue();
+      String selectedGroupId = ((org.exoplatform.mail.webui.UIFormSelectBox)uiAddressBook.getChildById(SELECT_GROUP)).getValue();
       uiAddressBook.refrestContactList(selectedGroupId);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.getChild(UIPopupAction.class)) ;
+      ((org.exoplatform.mail.webui.UIFormSelectBox)uiAddressBook.getChildById(SELECT_GROUP)).setValue(selectedGroupId);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent()) ;
     }
   }
   

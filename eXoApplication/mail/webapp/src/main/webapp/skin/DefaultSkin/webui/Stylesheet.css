@@ -1556,10 +1556,6 @@
 	margin: 10px 10px 0px 10px;
 }
 
-.UIMailPortlet .UIAddNewContact .AddGroupContact .HorizontalLayout  td.FieldLabel {
-	width: 240px;
-}
-
 .UIMailPortlet .UIAddNewContact .UIForm .HorizontalLayout {
 	border: 1px solid #c9c9c9;
 	padding: 10px;
@@ -1577,6 +1573,7 @@
 .UIMailPortlet .UIAddNewContact .ProfileContent .UIFormGrid {
 	float: left;
 	width: 480px;
+	margin: 0px;
 }
 
 .UIMailPortlet .UIAddNewContact .ProfileContent .AvatarContent {
