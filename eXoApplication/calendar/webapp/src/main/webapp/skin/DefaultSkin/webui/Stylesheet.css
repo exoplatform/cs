@@ -267,3 +267,8 @@
   width: auto;
   margin: auto;
 }
+
+.UICalendarPortlet .UISharedForm .UIFormGrid {
+  width: 100%;
+  margin: 0px;
+}
