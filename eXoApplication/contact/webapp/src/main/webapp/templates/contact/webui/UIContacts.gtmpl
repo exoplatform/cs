@@ -362,7 +362,7 @@
 										icon = "OfflineIcon"
 										if (contact.getContactType().equals(JCRDataStorage.PRIVATE) && contact.isOwner()&& contact.getOwnerId().equals(ContactUtils.getCurrentUser())) icon = "OwnerIcon" ; 	
 								  %>
-									<div class="State $icon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.available")%>">
+									<div class="State $icon">
 										<a href="$actionLink">
 											<%=(ContactUtils.isEmpty(contact.getFullName()) ? "_" : contact.getFullName())%>
 										</a>
@@ -444,7 +444,7 @@
 										  icon = "OwnerIcon" ; 	
 								  %>
 								
-									<div class="State $icon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.available")%>">
+									<div class="State $icon">
 										<a href="$actionLink">
 											<%=(ContactUtils.isEmpty(contact.getFullName()) ? "" : contact.getFullName())%>
 										</a>
