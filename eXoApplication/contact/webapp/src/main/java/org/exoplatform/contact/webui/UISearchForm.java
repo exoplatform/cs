@@ -58,7 +58,7 @@ public class UISearchForm extends UIForm {
       UISearchForm uiForm = event.getSource() ;
       String text = uiForm.getUIStringInput(UISearchForm.FIELD_SEARCHVALUE).getValue() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-      if(ContactUtils.isEmpty(text.trim())) {
+      if(ContactUtils.isEmpty(text)) {
         uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.no-text-to-search", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
