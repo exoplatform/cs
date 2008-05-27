@@ -84,7 +84,7 @@
 					<% } %>
 					
 					<a href="<%=uicomponent.event("MoveContacts")%>" class="ControlButton">
-						<div class="MoveIcon" style="width: auto; padding-left: 20px"><%=_ctx.appRes(uicomponent.getName() + ".label.move")%></div>
+						<div class="Icon MoveIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.move")%>"><span></span></div>
 					</a>					
 					<!--<div class="SeparatorLine"><span></span></div>-->
 					<!--
@@ -116,9 +116,9 @@
 	<% } else { %>
 				<div class="UIContactActionsBar">
 					<a href="<%=uicomponent.event("MoveContacts")%>" class="ControlButton">
-						<div class="IconHolder MoveIcon"><%=_ctx.appRes(uicomponent.getName() + ".label.move")%></div>
+						<div class="Icon MoveIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.move")%>"><span></span></div>
 					</a>					
-					<div class="SeparatorLine"><span></span></div>
+					<!--<div class="SeparatorLine"><span></span></div>-->
 					
 					<!--call javascript here when already-->
 					<!--
