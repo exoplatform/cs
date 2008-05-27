@@ -165,6 +165,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
       UIAddressBookForm uiAddBook = event.getSource() ;
       Contact selectedContact = uiAddBook.getSelectedContact() ;
       UIApplication uiApp = uiAddBook.getAncestorOfType(UIApplication.class) ;
+      String groupId = ((org.exoplatform.mail.webui.UIFormSelectBox)uiAddBook.getChildById(SELECT_GROUP)).getValue();
       if (selectedContact != null) {
         if (selectedContact.getContactType().equals("2") ||(selectedContact.getContactType().equals("1"))) {
           uiApp.addMessage(new ApplicationMessage("UIAddressBookForm.msg.cannot-edit", null)) ;;
@@ -177,7 +178,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
         uiPopupContainer.setId("UIPopupAddContactForm") ;
         UIAddContactForm uiAddContact = uiPopupContainer.createUIComponent(UIAddContactForm.class, null, null) ;
         uiPopupContainer.addChild(uiAddContact) ;
-        uiAddContact.fillDatas(selectedContact) ;
+        uiAddContact.fillDatas(selectedContact, groupId) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
       } else {
         uiApp.addMessage(new ApplicationMessage("UIAddressBookForm.msg.no-selected-contact-to-edit", null)) ;

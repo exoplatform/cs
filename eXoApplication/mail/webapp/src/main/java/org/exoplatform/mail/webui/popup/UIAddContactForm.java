@@ -90,6 +90,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
   private String fileName_ = null ;
   private String imageMimeType_ = null ;
   public boolean isEdited_ = false ;
+  public String selectedGroup_ ;
   public Contact selectedContact_  ;
   
   public UIAddContactForm() throws Exception { 
@@ -148,10 +149,11 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
     return options ;
   }
   
-  public void fillDatas(Contact ct) throws Exception {
+  public void fillDatas(Contact ct, String groupId) throws Exception {
     isEdited_ = true ;
+    selectedGroup_ = groupId ;
     selectedContact_ = ct ;
-    ((org.exoplatform.mail.webui.UIFormSelectBox)getChildById(SELECT_GROUP)).setSelectedValues(ct.getAddressBook());
+    ((org.exoplatform.mail.webui.UIFormSelectBox)getChildById(SELECT_GROUP)).setSelectedValues(new String[] {groupId});
     ((org.exoplatform.mail.webui.UIFormSelectBox)getChildById(SELECT_GROUP)).setEditable(false) ;
     ((org.exoplatform.mail.webui.UIFormSelectBox)getChildById(SELECT_GROUP)).setEnable(false) ;
     getUIStringInput(FIRST_NAME).setValue(ct.getFirstName());
@@ -250,7 +252,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
       String firstName = uiContact.getUIStringInput(FIRST_NAME).getValue();
       String lastName = uiContact.getUIStringInput(LAST_NAME).getValue();
       String email = uiContact.getUIStringInput(EMAIL).getValue();
-      if (MailUtils.isFieldEmpty(groupId)) {  
+      if (!uiContact.isEdited_ && MailUtils.isFieldEmpty(groupId)) {  
         uiApp.addMessage(new ApplicationMessage("UIAddContactForm.msg.group-required", null, ApplicationMessage.INFO)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
@@ -262,7 +264,6 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
       Contact contact ;
       if(uiContact.isEdited_) contact = uiContact.selectedContact_ ;
       else contact = new Contact();
-      contact.setAddressBook(new String[] {groupId});
       contact.setFullName(firstName + " " + lastName);
       contact.setFirstName(firstName);
       contact.setLastName(lastName);
@@ -296,16 +297,25 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
       contact.setJobTitle(uiContact.getJobTitle());
       ContactService contactSrv = uiContact.getApplicationComponent(ContactService.class);
       try {
-        contactSrv.saveContact(SessionProviderFactory.createSystemProvider(), uiPortlet.getCurrentUser(), contact, true);
+        if(!uiContact.isEdited_) {
+          contact.setAddressBook(new String[] {groupId}) ;
+          contactSrv.saveContact(SessionProviderFactory.createSystemProvider(), uiPortlet.getCurrentUser(), contact, true);
+        } else {
+          contactSrv.saveContact(SessionProviderFactory.createSystemProvider(), uiPortlet.getCurrentUser(), contact, false);
+        }
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiContact.getParent()) ;
         UIAddressBookForm uiAddress = uiPortlet.findFirstComponentOfType(UIAddressBookForm.class);
         if (uiAddress != null) {
-          uiAddress.updateGroup(groupId);
-          uiAddress.refrestContactList(groupId);
+          if(!uiContact.isEdited_) { 
+            uiAddress.updateGroup(groupId) ;
+            uiAddress.refrestContactList(groupId);
+          } else {
+            uiAddress.refrestContactList(uiContact.selectedGroup_);
+          }
           uiAddress.setSelectedContact(contact);
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiAddress) ;
         }
         uiContact.getAncestorOfType(UIPopupAction.class).deActivate() ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiAddress.getParent()) ;
       } catch(Exception e) { e.printStackTrace() ; }
     }
   }
