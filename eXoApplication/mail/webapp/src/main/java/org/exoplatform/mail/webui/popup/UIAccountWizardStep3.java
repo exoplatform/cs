@@ -22,11 +22,14 @@ import java.util.List;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.WizardStep;
+import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 /**
  * Created by The eXo Platform SARL
@@ -49,7 +52,7 @@ public class UIAccountWizardStep3 extends UIFormInputSet  implements WizardStep{
   
   private List<String> infoMessage_ = new ArrayList<String>() ;
   
-  public UIAccountWizardStep3(String id){
+  public UIAccountWizardStep3(String id) throws Exception {
     super(id) ;
     setComponentConfig(getClass(), null) ; 
     addChild(new UIFormSelectBox(FIELD_SERVERTYPE, null, getServerTypeValues())) ;
@@ -58,11 +61,11 @@ public class UIAccountWizardStep3 extends UIFormInputSet  implements WizardStep{
     addChild(new UIFormCheckBoxInput<Boolean>(FIELD_USESSL, null,null)) ;
     UIFormCheckBoxInput uiCheckBox = getUIFormCheckBoxInput(FIELD_USESSL) ;
     uiCheckBox.setOnChange(UIAccountCreation.ACT_CHANGE_SSL) ;
-    addChild(new UIFormStringInput(FIELD_INCOMING_SERVER, null, null)) ;
-    addChild(new UIFormStringInput(FIELD_INCOMINGPORT, null, null)) ;
-    addChild(new UIFormStringInput(FIELD_OUTGOING_SERVER, null, null)) ;
-    addChild(new UIFormStringInput(FIELD_OUTGOINGPORT, null, null)) ;
-    addChild(new UIFormStringInput(FIELD_STOREFOLDER, null,null)) ;
+    addChild(new UIFormStringInput(FIELD_INCOMING_SERVER, null, null).addValidator(MandatoryValidator.class)) ;
+    addChild(new UIFormStringInput(FIELD_INCOMINGPORT, null, null).addValidator(MandatoryValidator.class)) ;
+    addChild(new UIFormStringInput(FIELD_OUTGOING_SERVER, null, null).addValidator(MandatoryValidator.class)) ;
+    addChild(new UIFormStringInput(FIELD_OUTGOINGPORT, null, null).addValidator(MandatoryValidator.class)) ;
+    addChild(new UIFormStringInput(FIELD_STOREFOLDER, null,null).addValidator(MandatoryValidator.class)) ;
     setDefaultValue(uiSelect.getValue(), uiCheckBox.isChecked()) ;
     resetFields() ;
     infoMessage_.clear() ;
@@ -97,12 +100,30 @@ public class UIAccountWizardStep3 extends UIFormInputSet  implements WizardStep{
   }
 
   public boolean isFieldsValid() {
-    return !(Utils.isEmptyField(getIncomingServer()) 
-             || Utils.isEmptyField(getOutgoingServer()) 
-             || Utils.isEmptyField(getStoreFolder()))
-             && (Utils.isNumber(getIncomingPort()) 
-             && Utils.isNumber(getOutgoingPort())) ;
-    //return isValid_ ;
+    UIApplication uiApp = getAncestorOfType(UIApplication.class) ;
+    boolean isValid = true ;
+    if (Utils.isEmptyField(getIncomingServer())) {
+      uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.incoming-server-requirement", null, ApplicationMessage.WARNING)) ;
+      isValid = false ;
+    } 
+    if (Utils.isEmptyField(getOutgoingServer())) {
+      uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.outgoing-server-requirement", null, ApplicationMessage.WARNING)) ;
+      isValid = false ;
+    }
+    if (Utils.isEmptyField(getStoreFolder())) {
+      uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.store-folder-requirement", null, ApplicationMessage.WARNING)) ;
+      isValid = false ;
+    }
+    if (!Utils.isNumber(getIncomingPort())) {
+      uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.incoming-port-is-not-number", null, ApplicationMessage.WARNING)) ;
+      isValid = false ;
+    }
+    if (!Utils.isNumber(getOutgoingPort())) {
+      uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.outgoing-port-is-not-number", null, ApplicationMessage.WARNING)) ;
+      isValid = false ;
+    }
+    
+    return isValid ;
   }
   
   protected void fieldsValid(boolean isValid) {

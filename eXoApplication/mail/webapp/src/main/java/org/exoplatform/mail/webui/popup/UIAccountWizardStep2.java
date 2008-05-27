@@ -23,9 +23,12 @@ import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.WizardStep;
+import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
+import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 /**
  * Created by The eXo Platform SARL
@@ -46,8 +49,8 @@ public class UIAccountWizardStep2 extends UIFormInputSet implements WizardStep{
   public UIAccountWizardStep2(String id) throws Exception {
     setId(id) ;
     setComponentConfig(getClass(), null) ; 
-    addChild(new UIFormStringInput(FIELD_OUTGOINGNAME, null, null)) ;
-    addChild(new UIFormStringInput(FIELD_EMAILADDRESS, null, null)) ;
+    addChild(new UIFormStringInput(FIELD_OUTGOINGNAME, null, null).addValidator(MandatoryValidator.class)) ;
+    addChild(new UIFormStringInput(FIELD_EMAILADDRESS, null, null).addValidator(MandatoryValidator.class)) ;
     addChild(new UIFormStringInput(FIELD_EMAILREPLY, null, null)) ;
     addChild(new UIFormTextAreaInput(FIELD_SIGNATURE, null, null)) ;
     infoMessage_.clear() ;
@@ -73,12 +76,28 @@ public class UIAccountWizardStep2 extends UIFormInputSet implements WizardStep{
   }
   
   public boolean isFieldsValid() {
+    UIApplication uiApp = getAncestorOfType(UIApplication.class) ;
+    boolean isValid = true ;
     try {
-      return (!Utils.isEmptyField(getOutgoingName()) && !Utils.isEmptyField(getEmailAddress()) && 
-          MailUtils.isValidEmailAddresses(getEmailAddress()) &&  MailUtils.isValidEmailAddresses(getEmailReply())) ;
+      if (Utils.isEmptyField(getOutgoingName())) {
+        uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.display-name-requirement", null, ApplicationMessage.WARNING)) ;
+        isValid = false ;
+      } 
+      if (Utils.isEmptyField(getEmailAddress())) {
+        uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.email-address-requirement", null, ApplicationMessage.WARNING)) ;
+        isValid = false ;
+      } else if(!MailUtils.isValidEmailAddresses(getEmailAddress())) {
+        uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.email-address-is-invalid", null, ApplicationMessage.WARNING)) ;
+        isValid = false ;
+      }
+      if (!MailUtils.isValidEmailAddresses(getEmailReply())) {
+        uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.reply-address-is-invalid", null, ApplicationMessage.WARNING)) ;
+        isValid = false ;
+      }
     } catch(Exception e) {
       return false ;
     }
+    return isValid ;
   }
   protected void fieldsValid(boolean isValid) {
     isValid_ = isValid ;
