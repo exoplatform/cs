@@ -22,6 +22,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.jcr.PathNotFoundException;
+
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
@@ -390,7 +392,16 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
             addPerUsers(contact, viewMapUsers, editMapUsers) ;
             addPerGroups(contact, viewMapGroups, editMapGroups) ;
             
-            contactService.saveContact(sessionProvider, username, contact, false) ;
+            try {
+              contactService.saveContact(sessionProvider, username, contact, false) ;
+            }  catch (PathNotFoundException e) {
+              uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.contact-not-existed", null, 
+                  ApplicationMessage.WARNING)) ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              return ;              
+            }
+            
+            
             UIAddEditPermission uiAddEdit = uiForm.getParent() ;
             uiAddEdit.updateContactGrid(contact);
             event.getRequestContext().addUIComponentToUpdateByAjax(uiAddEdit) ; 

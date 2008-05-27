@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
 
+import javax.jcr.PathNotFoundException;
+
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
@@ -141,9 +143,18 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
               if (uiContacts.getSharedGroupMap().containsKey(add)) addressId = add ;
             contactService.removeSharedContact(SessionProviderFactory.createSystemProvider(), username, addressId, id) ;
           } else {
+            
+            try {
             contactService.removeUserShareContact(
                 SessionProviderFactory.createSystemProvider(), contact.getPath(), contact.getId(), username) ;
-          }
+            } catch (PathNotFoundException e) {
+              UIApplication uiApp = uiMoveContactForm.getAncestorOfType(UIApplication.class) ;
+              uiApp.addMessage(new ApplicationMessage("UIMoveContactsForm.msg.contact-not-existed", null, 
+                  ApplicationMessage.WARNING)) ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              return ;              
+            }
+           }
         }
         contact.setAddressBook(new String[] { addressBookId }) ;
         if (contact.getContactType().equals(JCRDataStorage.SHARED)) sharedContacts.add(contact) ;
@@ -154,8 +165,17 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       if (sharedContacts.size() > 0 ) {
         contactService.pasteContacts(sessionProvider, username, addressBookId, type, sharedContacts) ;
       }
-      if (contacts.size() > 0)
-        contactService.moveContacts(sessionProvider, username, contacts, type) ;
+      if (contacts.size() > 0) {
+        try {
+          contactService.moveContacts(sessionProvider, username, contacts, type) ;
+        } catch (PathNotFoundException e) {
+          UIApplication uiApp = uiMoveContactForm.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UIMoveContactsForm.msg.contact-not-existed", null, 
+              ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;              
+        }
+       }
       if (uiContacts.isDisplaySearchResult()) {
         for (String contactId : uiMoveContactForm.getContactIds()) {
           uiMoveContactForm.movedContacts.get(contactId).setContactType(type) ;
