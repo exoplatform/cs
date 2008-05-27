@@ -228,11 +228,12 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     calendarId_ = calendar.getId() ;
     setDisplayName(calendar.getName()) ;
     setDescription(calendar.getDescription()) ;
+    UIFormInputWithActions sharing = getChildById(INPUT_SHARE) ;
+    sharing.setRendered(true) ;
     if(CalendarUtils.PUBLIC_TYPE.equals(calType_)) {
       UIFormInputWithActions calendarDetail = getChildById(INPUT_CALENDAR) ;
       calendarDetail.removeChildById(CATEGORY) ;
       calendarDetail.setActionField(CATEGORY, null) ;
-      UIFormInputWithActions sharing = getChildById(INPUT_SHARE) ;
       for(String groupId : calendar.getGroups()) {
         UIFormCheckBoxInput checkbox = sharing.getUIFormCheckBoxInput(groupId) ;
         StringBuffer sb = new StringBuffer() ;
@@ -253,6 +254,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     {
       setSelectedGroup(calendar.getCategoryId()) ;
       lockCheckBoxFields(true) ;
+      sharing.setRendered(false) ; 
     }
     setLocale(calendar.getLocale()) ;
     setTimeZone(calendar.getTimeZone()) ;
