@@ -211,16 +211,7 @@
 .UIContactPortlet .UINavigationContainer .TitleBar {
 	background: url('background/BgTitleBar1x24.gif') repeat-x;
 	height: 24px; line-height: 24px;
-	padding-right: 5px;
-}
-
-.UIContactPortlet .UINavigationContainer .DownArrow3Icon {
-	float: left;
-	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/BlackDownArrow.gif') no-repeat left center;
-	cursor:pointer;
-	margin: 2px;
-	height:16px;
-	width:16px;
+	padding:0px 5px;
 }
 
 .UIContactPortlet .UINavigationContainer .TitleIcon {
@@ -234,6 +225,7 @@
 	line-height: 20px;
 	margin: 0px 0px 5px 0px;
 	height: 20px;
+	padding: 0px 8px;
 }
 
 .UIContactPortlet .UINavigationContainer .ActionIcon {
