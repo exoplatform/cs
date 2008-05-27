@@ -142,7 +142,7 @@ public class UITaskDetailTab extends UIFormInputWithActions {
       fileUpload.setActionListener("") ;
       fileUpload.setActionType(ActionData.TYPE_ICON) ;
       fileUpload.setCssIconClass("AttachmentIcon ZipFileIcon") ;
-      fileUpload.setActionName(attachdata.getName() + " ("+ CalendarUtils.convertSize(attachdata.getSize()) +")" ) ;
+      fileUpload.setActionName(attachdata.getName() + "-("+ CalendarUtils.convertSize(attachdata.getSize()) +")" ) ;
       fileUpload.setShowLabel(true) ;
       uploadedFiles.add(fileUpload) ;
       ActionData removeAction = new ActionData() ;

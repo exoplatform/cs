@@ -14,7 +14,13 @@
 	      }else {
 	        actionLink = (uiForm.event(action.actionListener)) ;
 	      }
-        if(actionLabel.length() > 35) {actionLabel = actionLabel.substring(0, 35) + "..." ;}
+	      if(actionLabel.lastIndexOf("-(") > 0)
+	      {
+	        String temp = actionLabel.substring(0, actionLabel.lastIndexOf("-(")) ;
+	        String sizeLabel = actionLabel.substring(actionLabel.lastIndexOf("-(")) ;
+	        if(temp.length() > 30) {
+	        actionLabel = temp.substring(0, 30) + "..." + sizeLabel ;}
+	      }
 		    println "<a title=\"" + actionLabel + "\" href=\"" + actionLink +"\">";
 	      if(action.actionType == action.TYPE_ICON) {
 	        println "<img src=\"/eXoResources/skin/DefaultSkin/background/Blank.gif\" class=\"" + action.cssIconClass +"\"/>" ;
