@@ -22,9 +22,12 @@ import java.util.List;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.WizardStep;
+import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
+import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 /**
  * Created by The eXo Platform SARL
@@ -39,10 +42,10 @@ public class UIAccountWizardStep1 extends UIFormInputSet implements WizardStep {
   public boolean isValid_ = false ;
   private List<String> infoMessage_ = new ArrayList<String>() ;
   
-  public UIAccountWizardStep1(String id) {
+  public UIAccountWizardStep1(String id) throws Exception {
     setId(id) ;
     setComponentConfig(getClass(), null) ;  
-    addChild(new UIFormStringInput(FIELD_ACCNAME, null, null)) ;
+    addChild(new UIFormStringInput(FIELD_ACCNAME, null, null).addValidator(MandatoryValidator.class)) ;
     addChild(new UIFormTextAreaInput(FIELD_ACCDESCRIPTION, null, null)) ;
     infoMessage_.clear() ;
     infoMessage_.add("UIAccountWizardStep1.info.label1") ;
@@ -65,8 +68,11 @@ public class UIAccountWizardStep1 extends UIFormInputSet implements WizardStep {
     setAccDescription(description) ;
   }
   public boolean isFieldsValid() {
+    if (Utils.isEmptyField(getAccName())) {
+      UIApplication uiApp = getAncestorOfType(UIApplication.class) ;
+      uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.account-name-requirement", null, ApplicationMessage.WARNING)) ;
+    }
     return !Utils.isEmptyField(getAccName()) ;
-    //return isValid_ ;
   }
   protected void fieldsValid(boolean isValid) {
     isValid_ = isValid ;

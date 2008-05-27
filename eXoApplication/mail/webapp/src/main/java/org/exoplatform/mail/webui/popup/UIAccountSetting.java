@@ -19,15 +19,14 @@ package org.exoplatform.mail.webui.popup;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Utils;
-import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
-import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UINavigationContainer;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -124,7 +123,10 @@ public class UIAccountSetting extends UIFormTabPane {
     serverInputSet.addUIFormInput(new UIFormStringInput(FIELD_INCOMING_SERVER, null, null).addValidator(MandatoryValidator.class));
     serverInputSet.addUIFormInput(new UIFormStringInput(FIELD_INCOMING_PORT, null, null).addValidator(MandatoryValidator.class));
     serverInputSet.addUIFormInput(new UIFormStringInput(FIELD_INCOMING_ACCOUNT, null, null).addValidator(MandatoryValidator.class));
-    serverInputSet.addUIFormInput(new UIFormStringInput(FIELD_INCOMING_PASSWORD, null, null).setType(UIFormStringInput.PASSWORD_TYPE).addValidator(MandatoryValidator.class));
+    UIFormStringInput passwordField = new UIFormStringInput(FIELD_INCOMING_PASSWORD, null, null) ;
+    passwordField.setType(UIFormStringInput.PASSWORD_TYPE) ;
+    passwordField.addValidator(MandatoryValidator.class) ;
+    serverInputSet.addUIFormInput(passwordField);
     serverInputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_IS_SAVE_PASSWORD, null, null));
     UIFormCheckBoxInput<Boolean> ssl = new UIFormCheckBoxInput<Boolean>(FIELD_IS_INCOMING_SSL, null, null);//getFieldIsSSL()
     ssl.setOnChange("ChangeSSL"); 
@@ -185,7 +187,7 @@ public class UIAccountSetting extends UIFormTabPane {
   
   public String getFieldIncomingPassword() {
     UIFormInputWithActions uiInput = getChildById(TAB_SERVER_SETTINGS);
-    return uiInput.getUIStringInput(FIELD_INCOMING_PASSWORD).getValue();
+    return uiInput.getUIStringInput(FIELD_INCOMING_PASSWORD).getValue() ;
   }  
   
   public String getFieldIncomingServer() {
@@ -399,31 +401,65 @@ public class UIAccountSetting extends UIFormTabPane {
     public void execute(Event<UIAccountSetting> event) throws Exception {
       UIAccountSetting uiSetting = event.getSource() ;
       UIMailPortlet uiPortlet = uiSetting.getAncestorOfType(UIMailPortlet.class) ;
+      UIApplication uiApp = uiSetting.getAncestorOfType(UIApplication.class) ;
       MailService mailSrv = uiSetting.getApplicationComponent(MailService.class) ;
       String username = Util.getPortalRequestContext().getRemoteUser() ;
       String editedAccountId = uiSetting.getSelectedAccountId() ;
       Account acc = mailSrv.getAccountById(SessionProviderFactory.createSystemProvider(), username, editedAccountId) ;
       String userName = uiSetting.getFieldIncomingAccount() ;
+      String email = uiSetting.getFieldMailAddress() ;
+      String reply = uiSetting.getFieldReplyAddress() ;
+      String incomingPort = uiSetting.getFieldIncomingPort() ;
+      String outgoingPort = uiSetting.getFieldOutgoingPort() ;
+      String password = uiSetting.getFieldIncomingPassword() ;
+      
+      if (!MailUtils.isValidEmailAddresses(email)) {
+        uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.email-address-is-invalid", null, ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      } 
+      if (!MailUtils.isFieldEmpty(reply) && !MailUtils.isValidEmailAddresses(reply)) {
+        uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.reply-address-is-invalid", null, ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
+      if (!Utils.isNumber(incomingPort)) {
+        uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.incoming-port-is-not-number", null, ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
+      if (!Utils.isNumber(outgoingPort)) {
+        uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.outgoing-port-is-not-number", null, ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
+      
+      if (MailUtils.isFieldEmpty(password)) {
+        uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.field-password-is-required", null, ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       
       acc.setProtocol(uiSetting.getFieldProtocol()) ;
       acc.setLabel(uiSetting.getFieldAccountNameValue()) ;
       acc.setUserDisplayName(uiSetting.getDisplayName()) ;
       acc.setDescription(uiSetting.getFieldAccountDescription()) ;
-      acc.setEmailAddress(uiSetting.getFieldMailAddress()) ;
-      acc.setEmailReplyAddress(uiSetting.getFieldReplyAddress()) ;
+      acc.setEmailAddress(email) ;
+      acc.setEmailReplyAddress(reply) ;
       acc.setSignature(uiSetting.getFieldMailSignature()) ;
       acc.setCheckedAuto(uiSetting.getFieldCheckMailAuto()) ;
       acc.setIncomingUser(userName) ; 
-      if (uiSetting.isSavePassword()) acc.setIncomingPassword(uiSetting.getFieldIncomingPassword()) ;
+      if (uiSetting.isSavePassword()) acc.setIncomingPassword(password) ;
       else acc.setIncomingPassword("") ;
       acc.setIncomingHost(uiSetting.getFieldIncomingServer()) ;
-      acc.setIncomingPort(uiSetting.getFieldIncomingPort()) ;  
+      acc.setIncomingPort(incomingPort) ;  
       acc.setIncomingSsl(uiSetting.getFieldIsSSL()) ;
       acc.setIncomingFolder(uiSetting.getFieldIncomingFolder()) ;
       acc.setOutgoingHost(uiSetting.getFieldOutgoingServer()) ;
-      acc.setOutgoingPort(uiSetting.getFieldOutgoingPort()) ;
+      acc.setOutgoingPort(outgoingPort) ;
       acc.setIsSavePassword(uiSetting.isSavePassword()) ;
       acc.setServerProperty(Utils.SVR_SMTP_USER, userName) ;
+      
       if(uiSetting.getFieldProtocol().equals(Utils.POP3)){
         boolean leaveOnServer = uiSetting.getFieldLeaveOnServer() ;
         //String skipOverSize = uiSetting.getFieldSkipOverSize() ;
@@ -434,7 +470,6 @@ public class UIAccountSetting extends UIFormTabPane {
         acc.setImapServerProperty(Utils.SVR_IMAP_MARK_AS_DELETE, String.valueOf(markAsDelete)) ;
       }
       
-      UIApplication uiApp = uiSetting.getAncestorOfType(UIApplication.class) ;
       try {
         mailSrv.updateAccount(SessionProviderFactory.createSystemProvider(), username, acc) ;
         UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;
