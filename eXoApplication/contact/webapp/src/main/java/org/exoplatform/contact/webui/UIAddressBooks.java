@@ -436,21 +436,30 @@ public class UIAddressBooks extends UIComponent {
   static public class DeleteGroupActionListener extends EventListener<UIAddressBooks> {
     public void execute(Event<UIAddressBooks> event) throws Exception {
       UIAddressBooks uiAddressBook = event.getSource();
+      UIWorkingContainer workingContainer = uiAddressBook.getAncestorOfType(UIWorkingContainer.class);
+      UIContacts uiContacts = workingContainer.findFirstComponentOfType(UIContacts.class) ;
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID);
       ContactService contactService = ContactUtils.getContactService();
       String username = ContactUtils.getCurrentUser();
       SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
+      List <Contact> removedContacts = new ArrayList<Contact>() ;
+      
+      
       if (uiAddressBook.sharedAddressBookMap_.containsKey(groupId)) {
         //contactService.removeSharedAddressBook(SessionProviderFactory.createSystemProvider(), username, groupId) ;
-
+        if (uiContacts.isDisplaySearchResult())
+          removedContacts = contactService.getSharedContactsByAddressBook(SessionProviderFactory
+            .createSystemProvider(), username, uiAddressBook.sharedAddressBookMap_.get(groupId)).getAll() ;
         contactService.removeUserShareAddressBook(SessionProviderFactory.createSystemProvider()
             , uiAddressBook.sharedAddressBookMap_.get(groupId).getSharedUserId(), groupId, username) ;
       } else {
+        if (uiContacts.isDisplaySearchResult())
+          removedContacts = contactService.getContactPageListByGroup(
+              sessionProvider, username, groupId).getAll() ;
         contactService.removeGroup(sessionProvider, username, groupId);
       }
       if (groupId.equals(uiAddressBook.copyAddress)) uiAddressBook.copyAddress = null ;      
-      UIWorkingContainer workingContainer = uiAddressBook.getAncestorOfType(UIWorkingContainer.class);
-      UIContacts uiContacts = workingContainer.findFirstComponentOfType(UIContacts.class) ;
+      
       if (groupId.equals(uiAddressBook.selectedGroup)) {
         uiAddressBook.selectedGroup = null;
         uiContacts.setContacts(null);
@@ -461,10 +470,10 @@ public class UIAddressBooks extends UIComponent {
             contactService.getContactPageListByTag(sessionProvider, username, selectedTag)) ;
       }
       if (uiContacts.isDisplaySearchResult()) {
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook);
-      } else {
-        event.getRequestContext().addUIComponentToUpdateByAjax(workingContainer);
-      }      
+        uiContacts.setContact(removedContacts, false) ;
+        uiContacts.updateList() ;
+      }
+      event.getRequestContext().addUIComponentToUpdateByAjax(workingContainer);     
     }
   }
 
