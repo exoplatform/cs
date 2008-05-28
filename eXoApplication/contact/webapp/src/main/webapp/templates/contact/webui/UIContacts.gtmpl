@@ -340,6 +340,7 @@
 											i ++ ;
 										}		
 									}		
+
   	 	    				cssClass = "Normal" ;
   	 	    				String selectedContact = uicomponent.getSelectedContact() ;
 									if (selectedContact != null && contact.getId().equals(selectedContact)) cssClass = "Selected" ;
@@ -422,6 +423,10 @@
 												i ++ ;
 											}		
 										}	
+											// add to improve spf-491
+										if (!ContactUtils.isEmpty(uicomponent.selectedTag_)) {
+											iconTag = "Icon " + tagMap.get(uicomponent.selectedTag_).getColor() + "Tag" ;
+										}
 										cssClass = "Normal" ;
 										if (contact.getId().equals(uicomponent.getSelectedContact())) cssClass = "Selected" ;								
 						%>
@@ -552,7 +557,9 @@
 								}	
 							}
 						}
-		
+						if (!ContactUtils.isEmpty(uicomponent.selectedTag_)) {
+							iconTag = "Icon " + tagMap.get(uicomponent.selectedTag_).getColor() + "Tag" ;
+						}
 				%>	
 		  <div class="LeftVCardsContent">
 		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" isSharedAddress = "<%=uicomponent.isSharedAddress(contact.getAddressBook())%>" isOwner="<%=contact.isOwner()%>">
@@ -702,6 +709,9 @@
 							break ;
 						}	
 					}
+				}
+				if (!ContactUtils.isEmpty(uicomponent.selectedTag_)) {
+					iconTag = "Icon " + tagMap.get(uicomponent.selectedTag_).getColor() + "Tag" ;
 				}
 			%>
 			<div class="RightVCardsContent">
