@@ -69,7 +69,10 @@ UIDateTimePicker.prototype.show = function() {
 	  left = x + "px" ;
 	  top = y + "px" ;
   }
-	
+  if(eXo.core.Browser.isIE6()){
+		var ifr = eXo.core.DOMUtil.findDescendantById(clndr, this.calendarId + "IFrame") ;
+		ifr.style.height = (eXo.core.DOMUtil.findNextElementByTagName(ifr, "div").offsetHeight - 5) + "px";
+	}
 	var drag = document.getElementById("blockCaledar");		
 	drag.onmousedown = this.initDND ;
 } ;
