@@ -1,9 +1,6 @@
 <div class="UITags" id="<%=uicomponent.getId()%>">
 	<div class="TitleBar">
-		<div class="DownArrow3Icon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.collapse-expand")%>"><span></span></div>
 		<div class="TitleIcon BlueTag"><%=_ctx.appRes(uicomponent.getName() + ".label.tags")%></div>
-		
-  	<div style="clear: none"><span></span></div>
 	</div>
 	<div class="ListContent">
 		<%  
