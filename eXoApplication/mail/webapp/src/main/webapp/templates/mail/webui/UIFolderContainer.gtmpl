@@ -75,7 +75,7 @@
       cssClass = "SelectedLabel" ;
     }
   %>
-  <a href="$actionLink"  class="Icon Folder $icon $cssClass" folder="$id">$name
+  <a href="$actionLink"  class="Icon Folder $icon $cssClass" folder="$id"><%=_ctx.appRes(uicomponent.getName() + ".label." + name)%>
     <% if(msgQuantity > 0) { print "<span class=\"MailQuantity\">($msgQuantity)</span>"}%>
   </a>
   <%}%>
@@ -210,10 +210,12 @@
           long pUnreadMess = cf.getNumberOfUnreadMessage();
           String pCssClass = "CloseFolder" ;
           String selectedClass = "NormalLabel";
+          String collapse = _ctx.appRes(uicomponent.id+ ".label.click-to-collapse") ;
+          String title = _ctx.appRes(uicomponent.id+ ".label.click-to-expand") + "," + _ctx.appRes(uicomponent.id+ ".label.click-to-collapse") ;
           String pActionLink = uicomponent.event('ChangeFolder', pid);
           if(pid.equals(uicomponent.getSelectedFolder())) selectedClass = "SelectedLabel" ;
           StringBuilder builder = new StringBuilder() ;
-          builder.append("<div class=\"IconFolder Folder $selectedClass $pCssClass\" onClick=\"javascript:eXo.mail.UIMailPortlet.collapseExpandFolder(this)\" folder=\"").append(pid).append("\">");
+          builder.append("<div title=\"$collapse \" titlefolder=\"$title\" class=\"IconFolder Folder $selectedClass $pCssClass\" onClick=\"javascript:eXo.mail.UIMailPortlet.collapseExpandFolder(this)\" folder=\"").append(pid).append("\">");
           builder.append("<a class=\"FolderLink\" href=\"$pActionLink\" onclick=\"event.cancelBubble = true;\" folder=\"").append(pid).append("\">");
           builder.append(name);
           if(pUnreadMess > 0) builder.append("<span class=\"MailQuantity\">($pUnreadMess)</span>");
@@ -237,9 +239,11 @@
       String pCssClass = "CloseFolder" ;
       String pActionLink = uicomponent.event('ChangeFolder', pid);
       String selectedClass = "NormalLabel";
+      String collapse = _ctx.appRes(uicomponent.id+ ".label.click-to-collapse") ;
+      String title = _ctx.appRes(uicomponent.id+ ".label.click-to-expand") + "," + _ctx.appRes(uicomponent.id+ ".label.click-to-collapse") ;
       if(pid.equals(uicomponent.getSelectedFolder())) selectedClass = "SelectedLabel" ;
       StringBuilder builder = new StringBuilder() ;
-      builder.append("<div class=\"IconFolder Folder $selectedClass $pCssClass\" onClick=\"javascript:eXo.mail.UIMailPortlet.collapseExpandFolder(this)\" folder=\"").append(pid).append("\">");
+      builder.append("<div title=\"$collapse \" titlefolder=\"$title\" class=\"IconFolder Folder $selectedClass $pCssClass\" onClick=\"javascript:eXo.mail.UIMailPortlet.collapseExpandFolder(this)\" folder=\"").append(pid).append("\">");
       builder.append("<a class=\"FolderLink\" href=\"$pActionLink\" onclick=\"event.cancelBubble = true;\" folder=\"").append(pid).append("\">");
       builder.append(name);
       if(pUnreadMess > 0) builder.append("<span class=\"MailQuantity\">($pUnreadMess)</span>");

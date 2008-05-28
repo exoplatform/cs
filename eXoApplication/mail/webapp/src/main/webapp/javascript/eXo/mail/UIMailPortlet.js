@@ -359,21 +359,27 @@ UIMailPortlet.prototype.showHideField = function(chk,fields) {
 UIMailPortlet.prototype.collapseExpandFolder = function(obj, folderState) {
 	var DOMUtil = eXo.core.DOMUtil;
 	var colExpContainerNode = DOMUtil.findNextElementByTagName(obj, "div");
-	
+	var ftitle = obj.getAttribute("titlefolder");
+	var collapse = ftitle.substring(ftitle.indexOf(",") + 1, ftitle.length) + " ";
+	var expand = ftitle.substring(0, ftitle.indexOf(",")) + " " ; 
 	var objClass = obj.className;
   var folderId = obj.getAttribute('folder');
   if (!folderState) {
     if (objClass.indexOf(" OpenFolder") != -1) { 
       obj.className = objClass.replace('OpenFolder', 'CloseFolder');
+      obj.title = expand ;
       folderState = '0';
     } else if (objClass.indexOf(" CloseFolder") != -1) { 
       obj.className = objClass.replace('CloseFolder', 'OpenFolder');
+      obj.title = collapse ;
       folderState = '1';
     }
   } else if (folderState == '1') {
     obj.className = objClass.replace('CloseFolder', 'OpenFolder');
+    obj.title = collapse ;
   } else if (folderState == '0') {
     obj.className = objClass.replace('OpenFolder', 'CloseFolder');
+    obj.title = expand ;
   }
   
   var collapseContainerNode = DOMUtil.findAncestorByClass(obj, 'Collapse');
