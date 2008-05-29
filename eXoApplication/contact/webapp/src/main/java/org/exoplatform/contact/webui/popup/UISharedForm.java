@@ -509,9 +509,13 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       uiGroupSelector.setType(permType) ;
       uiGroupSelector.setSelectedGroups(null) ;
       
-      if (permType.equals(UISelectComponent.TYPE_USER))      
+      if (permType.equals(UISelectComponent.TYPE_USER)) {
+        uiGroupSelector.setId("UIUserSelector") ;
         uiGroupSelector.setComponent(uiForm, new String[]{UISharedForm.FIELD_USER}) ;
-      else uiGroupSelector.setComponent(uiForm, new String[]{UISharedForm.FIELD_GROUP}) ;
+      } else {
+        uiGroupSelector.setId("UIGroupSelector") ;
+        uiGroupSelector.setComponent(uiForm, new String[]{UISharedForm.FIELD_GROUP}) ;
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(childPopup) ;  
     }
   }

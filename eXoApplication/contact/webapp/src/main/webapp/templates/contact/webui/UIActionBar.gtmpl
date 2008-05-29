@@ -7,26 +7,26 @@
 					<div class="CenterBar">
 					
 					<a href="<%=uicomponent.event("AddContact")%>" class="SelectButton">
-						<div class="IconHolder AddContactIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.importAddress")%>">
+						<div class="IconHolder AddContactIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.addContact")%>">
 							<%=_ctx.appRes(uicomponent.getName() + ".label.contact")%>
 						</div>
           </a>
           
 					<a href="<%=uicomponent.event("AddAddressBook")%>" class="SelectButton">
-						<div class="IconHolder AddAddressBookIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.importAddress")%>">
+						<div class="IconHolder AddAddressBookIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.addAddressBook")%>">
 							<%=_ctx.appRes(uicomponent.getName() + ".label.addressBook")%>
 						</div>
           </a>
           <div class="SeparatorLine"><span></span></div>	
           <a href="<%=uicomponent.event("ImportContact")%>" class="SelectButton">
 						<div class="IconHolder ImportAddressIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.importAddress")%>">
-							Import
+							<%=_ctx.appRes(uicomponent.getName() + ".label.importAddress")%>
 						</div>
           </a>
           
           <a href="<%=uicomponent.event("ExportContact")%>" class="SelectButton">
 						<div class="IconHolder ExportAddressIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.exportAddress")%>">
-							Export
+							<%=_ctx.appRes(uicomponent.getName() + ".label.exportAddress")%>
 						</div>
           </a>
 						<div class="SeparatorLine"><span></span></div>
