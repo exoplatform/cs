@@ -129,9 +129,9 @@ public class UIProfileInputSet extends UIFormInputWithActions {
     ResourceBundle res = context.getApplicationResourceBundle() ;
     try {
       if  (getChild(UIFormRadioBoxInput.class).getValue().equalsIgnoreCase(MALE)) {
-        value =  res.getString(getParent().getId() + ".label." + MALE);
+        value =  res.getString(((UIContactForm)getParent()).getId() + ".label." + MALE);
       } else {
-        value = res.getString(getParent().getId() + ".label." + FEMALE) ;
+        value = res.getString(((UIContactForm)getParent()).getId() + ".label." + FEMALE) ;
       }
     } catch (MissingResourceException e) {      
       e.printStackTrace() ;
@@ -144,7 +144,7 @@ public class UIProfileInputSet extends UIFormInputWithActions {
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
     ResourceBundle res = context.getApplicationResourceBundle() ;
     try {
-      if (s.equals(res.getString(getParent().getId() + ".label." + MALE))) {
+      if (s.equals(res.getString(((UIContactForm)getParent()).getId() + ".label." + MALE))) {
         gender = MALE ;
       } else gender = FEMALE ;      
     } catch (Exception e) { }
