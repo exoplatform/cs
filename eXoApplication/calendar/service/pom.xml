@@ -37,7 +37,7 @@
       <artifactId>exo.cs.eXoApplication.mail.service</artifactId>
       <version>${org.exoplatform.cs.version}</version>      
     </dependency>
-    
+    <!--
 	<dependency>
     	<groupId>org.exoplatform.ws</groupId>
   		<artifactId>exo.ws.frameworks.cometd.service</artifactId>
@@ -50,7 +50,7 @@
       <artifactId>exo.ws.frameworks.json</artifactId>                                                                                    
       <version>provided</version>                                                                                                           
     </dependency>
-	
+	-->
     <dependency>
       <groupId>ical4j</groupId>
       <artifactId>ical4j</artifactId>

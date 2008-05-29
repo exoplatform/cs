@@ -37,10 +37,6 @@ import org.exoplatform.mail.service.Utils;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.ws.frameworks.cometd.ContinuationService;
-import org.exoplatform.ws.frameworks.json.JsonGenerator;
-import org.exoplatform.ws.frameworks.json.impl.JsonGeneratorImpl;
-import org.exoplatform.ws.frameworks.json.value.JsonValue;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
@@ -148,7 +144,7 @@ public class ReminderJob implements Job {
     } catch (Exception e) {
       //e.printStackTrace();			
     }
-    try{
+   /* try{
       if(!reminders.isEmpty()) {
         JsonGenerator generatorImpl = new JsonGeneratorImpl();
         JsonValue json = generatorImpl.createJsonObject(new ReminderBean("root", reminders));
@@ -159,7 +155,7 @@ public class ReminderJob implements Job {
 
     } catch (Exception e) {
       //e.printStackTrace() ;
-    }
+    }*/
     if (log_.isDebugEnabled()) log_.debug("File plan job done");
   }
 
