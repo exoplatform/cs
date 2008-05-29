@@ -387,7 +387,13 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   }
   protected String isEmailRepeat() {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_TASKREMINDER) ;
-    return eventDetailTab.getUIStringInput(UIEventReminderTab.EMAIL_IS_REPEAT).getValue() ;
+    return String.valueOf("repeat".equals(eventDetailTab.getUIFormSelectBox(UIEventReminderTab.EMAIL_IS_REPEAT).getValue())) ;
+  }
+  public void setEmailRepeat(String value) {
+    UIFormInputWithActions eventReminderTab =  getChildById(TAB_TASKREMINDER) ;
+    if(Boolean.parseBoolean(value)) value = "repeat" ;
+    else value = "no-repeat" ;
+    eventReminderTab.getUIFormSelectBox(UIEventReminderTab.EMAIL_IS_REPEAT).setValue(value) ;
   }
   protected String getEmailRepeatInterVal() {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_TASKREMINDER) ;
@@ -422,8 +428,15 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   }
   protected String isPopupRepeat() {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_TASKREMINDER) ;
-    return eventDetailTab.getUIStringInput(UIEventReminderTab.POPUP_IS_REPEAT).getValue() ;
+    return String.valueOf("repeat".equals(eventDetailTab.getUIFormSelectBox(UIEventReminderTab.POPUP_IS_REPEAT).getValue())) ;
   }
+  protected void setPopupRepeat(String value) {
+    UIFormInputWithActions eventReminderTab =  getChildById(TAB_TASKREMINDER) ;
+    if(Boolean.parseBoolean(value)) value = "repeat" ;
+    else value = "no-repeat" ;
+    eventReminderTab.getUIFormSelectBox(UIEventReminderTab.POPUP_IS_REPEAT).setValue(value) ;
+  }
+  
   protected String getPopupRepeatInterVal() {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_TASKREMINDER) ;
     return eventDetailTab.getUIStringInput(UIEventReminderTab.POPUP_REPEAT_INTERVAL).getValue() ;
@@ -461,13 +474,15 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       if(Reminder.TYPE_EMAIL.equals(r.getReminderType())) {
         setEmailReminder(true) ;
         setEmailAddress(r.getEmailAddress()) ;
+        setEmailRepeat(String.valueOf(r.isRepeat())) ;
         setEmailReminderBefore(String.valueOf(r.getAlarmBefore())) ;
-        taskDetailTab.getUIFormSelectBox(UIEventReminderTab.EMAIL_IS_REPEAT).setValue(String.valueOf(r.isRepeat())) ;
+        //taskDetailTab.getUIFormSelectBox(UIEventReminderTab.EMAIL_IS_REPEAT).setValue(String.valueOf(r.isRepeat())) ;
         taskDetailTab.getUIFormSelectBox(UIEventReminderTab.EMAIL_REPEAT_INTERVAL).setValue(String.valueOf(r.getRepeatInterval())) ;
       }else if(Reminder.TYPE_POPUP.equals(r.getReminderType())) {
         setPopupReminder(true) ;
+        setPopupRepeat(String.valueOf(r.isRepeat())) ;
         taskDetailTab.getUIFormSelectBox(UIEventReminderTab.POPUP_REMIND_BEFORE).setValue(String.valueOf(r.getAlarmBefore())) ;
-        taskDetailTab.getUIFormSelectBox(UIEventReminderTab.POPUP_IS_REPEAT).setValue(String.valueOf(r.isRepeat())) ;
+        //taskDetailTab.getUIFormSelectBox(UIEventReminderTab.POPUP_IS_REPEAT).setValue(String.valueOf(r.isRepeat())) ;
         taskDetailTab.getUIFormSelectBox(UIEventReminderTab.POPUP_REPEAT_INTERVAL).setValue(String.valueOf(r.getRepeatInterval())) ;
       } else {
       }      

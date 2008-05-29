@@ -1125,7 +1125,7 @@ UICalendarPortlet.prototype.filterByCategory = function() {
 		if (category == events[i].getAttribute("eventCat")) {
 			events[i].style.display = "block" ;
 		}
-		else if (category == "") {
+		else if (category == "" || category == "all") {
 			events[i].style.display = "block" ;
 		}
 		else events[i].style.display = "none" ;
@@ -1152,7 +1152,7 @@ UICalendarPortlet.prototype.runFilterByCategory = function(selectobj) {
 		if (category == events[i].getAttribute("eventCat")) {
 			events[i].style.display = "block" ;
 		}
-		else if (category == "") {
+		else if (category == "" || category == "all") {
 			events[i].style.display = "block" ;
 		}
 		else events[i].style.display = "none" ;

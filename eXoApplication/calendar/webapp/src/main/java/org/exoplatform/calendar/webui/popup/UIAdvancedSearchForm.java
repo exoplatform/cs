@@ -81,7 +81,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
   public UIAdvancedSearchForm() throws Exception{
     addChild(new UIFormStringInput(TEXT, TEXT, null)) ;
     List<SelectItemOption<String>> types = new ArrayList<SelectItemOption<String>>() ;
-    types.add(new SelectItemOption<String>("Event and Task", "")) ;
+    types.add(new SelectItemOption<String>("", "")) ;
     types.add(new SelectItemOption<String>(CalendarEvent.TYPE_EVENT, CalendarEvent.TYPE_EVENT)) ;
     types.add(new SelectItemOption<String>(CalendarEvent.TYPE_TASK, CalendarEvent.TYPE_TASK)) ;
     UIFormSelectBox type =  new UIFormSelectBox(TYPE, TYPE, types) ;

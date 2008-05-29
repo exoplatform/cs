@@ -244,7 +244,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<EventCategory> eventCategories = calendarService.getEventCategories(getSession(), Util.getPortalRequestContext().getRemoteUser()) ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    options.add(new SelectItemOption<String>("all", "")) ;
+    options.add(new SelectItemOption<String>("all", "all")) ;
     for(EventCategory category : eventCategories) {
       options.add(new SelectItemOption<String>(category.getName(), category.getName())) ;
     }
@@ -253,6 +253,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     //categoryInput.setValue("Meeting") ;
   }
   protected String getSelectedCategory() {
+    if("all".equals(getUIFormSelectBox(EVENT_CATEGORIES).getValue())) return null ;
     return getUIFormSelectBox(EVENT_CATEGORIES).getValue() ;
   }
   public void setSelectedCategory(String id) {
@@ -298,7 +299,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<EventCategory> eventCategories = calendarService.getEventCategories(getSession(), Util.getPortalRequestContext().getRemoteUser()) ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    options.add(new SelectItemOption<String>("all", "")) ;
+    options.add(new SelectItemOption<String>("all", "all")) ;
     for(EventCategory category : eventCategories) {
       options.add(new SelectItemOption<String>(category.getName(), category.getName())) ;
     }

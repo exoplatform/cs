@@ -25,7 +25,8 @@
           <description>save the monitor data  periodically</description>
           <property name="timeZone" value="This is TimeZone"/>          
           <property name="account" value="exoservice@gmail.com"/>          
-          <property name="password" value="exoadmin"/>          
+          <property name="password" value="exoadmin"/>
+					<property name="ssl" value="true"/>              
           <property name="outgoing" value="smtp.gmail.com"/>          
           <property name="port" value="465"/>          
         </properties-param>
@@ -56,7 +57,7 @@
 	    <init-params>
         <value-param>
         	<name>defaultEventCategories</name>
-        	<value>Birthday,Calls,Clients,Holiday,Meeting,Universary</value><!-- Multi value, use coma (,) to split values-->
+        	<value>Anniversary,Calls,Clients,Holiday,Meeting</value><!-- Multi value, use coma (,) to split values-->
         </value-param>
         <value-param>
         	<name>defaultCalendarCategory</name>
