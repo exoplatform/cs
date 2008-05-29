@@ -22,7 +22,7 @@
 				          <div class="MiddleRightRightClickPopupMenu">
 	              		<div class="UIRightPopupMenuContainer">
 	                    <a class="MenuItem" href="<%=uicomponent.event("AddAddress")%>">   
-		                    <div class="ItemIcon AddressIcon">
+		                    <div class="ItemIcon AddAddressBookIcon">
 		                      <%=_ctx.appRes(uicomponent.getName() + ".label.addAddress")%>
 		                    </div>
 	                    </a>
@@ -147,7 +147,7 @@
   						<div class="UIRightPopupMenuContainer">
   						
 				  			<a class="MenuItem" href="<%=uicomponent.event("AddContact", "id")%>">   
-			            <div class="ItemIcon ContactIcon">
+			            <div class="ItemIcon AddContactIcon">
 			              <%=_ctx.appRes(uicomponent.getName() + ".label.addContact")%>
 			            </div>
 				        </a>
@@ -238,7 +238,7 @@
 	          <div class="MiddleRightRightClickPopupMenu">
   						<div class="UIRightPopupMenuContainer">
 				  			<a class="MenuItem" href="<%=uicomponent.event("AddContact", "id")%>">   
-			            <div class="ItemIcon ContactIcon">
+			            <div class="ItemIcon AddContactIcon">
 			              <%=_ctx.appRes(uicomponent.getName() + ".label.addContact")%>
 			            </div>
 				        </a>
@@ -332,7 +332,7 @@
 	          <div class="MiddleRightRightClickPopupMenu">
   						<div class="UIRightPopupMenuContainer">
 				  			<a class="MenuItem" href="javascript:void(0) ;" style="color:#cccccc">   
-			            <div class="ItemIcon ContactIcon">
+			            <div class="ItemIcon AddContactIcon">
 			              <%=_ctx.appRes(uicomponent.getName() + ".label.addContact")%>
 			            </div>
 				        </a>

@@ -121,16 +121,17 @@
 	color: black;
 }
 
-.UIContactPortlet .UIActionBar .ControlButton {
-	margin: 0px 3px 0px 3px;
+.UIContactPortlet .UIActionBar a{
+	line-height: 24px;
+	margin: 3px 1px 0px 1px;
 }
 
-.UIContactPortlet .UIActionBar .ControlButton a:hover {
+.UIContactPortlet .UIActionBar a:hover {
 	background: url('background/ControlButtonBG1x26.gif') repeat-x ;
 	border: 1px solid #9d9d9d;
 	color: #126ca5;
-	height: 24px;
 	line-height: 24px;
+	margin: 3px 0px 0px 0px;
 }
 
 .UIContactPortlet .UIActionBar .Label {
@@ -145,20 +146,6 @@
 .UIContactPortlet .UIActionBar .DownArrow1Icon {
 	background-position: right center;
 	padding-right: 16px;
-}
-
-.UIContactPortlet .UIActionBar .ImportAddressIcon {
-	height: 26px; width: 21px;
-	margin: 4px 5px 0px 60px;
-	_margin: 4px 5px 0px 30px;
-	float: left;
-	cursor: pointer;
-}
-.UIContactPortlet .UIActionBar .ExportAddressIcon {
-	height: 26px; width: 21px;
-	margin: 4px 0px 0px 0px;
-	float: left;
-	cursor: pointer;
 }
 
 .UIContactPortlet .UIActionBar .UIPopupCategory {
