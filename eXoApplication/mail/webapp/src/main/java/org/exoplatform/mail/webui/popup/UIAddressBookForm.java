@@ -66,17 +66,10 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
   List<Contact> contactList_ = new ArrayList<Contact>();
   
   public UIAddressBookForm() throws Exception {
-    String username = MailUtils.getCurrentUser();
-    ContactService contactSrv = getApplicationComponent(ContactService.class);
     org.exoplatform.mail.webui.UIFormSelectBox uiSelectGroup = new org.exoplatform.mail.webui.UIFormSelectBox(SELECT_GROUP, SELECT_GROUP, getOptions());
     uiSelectGroup.setOnChange("ChangeGroup");
     addUIFormInput(uiSelectGroup);
-    
-    List<Contact> contactList = contactSrv.getAllContact(SessionProviderFactory.createSystemProvider(), username);
-    for (Contact ct : contactList) contactMap_.put(ct.getId(), ct);
-    contactList_ = new ArrayList<Contact>(contactMap_.values());
-    
-    if (contactList_.size() > 0) selectedContact = contactList_.get(0);
+    refrestContactList(uiSelectGroup.getValue());
   }
   
   public List<SelectItem> getOptions() throws Exception {
@@ -118,7 +111,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
     ContactService contactSrv = getApplicationComponent(ContactService.class);
     List<Contact> contactList = new ArrayList<Contact>();
     if (groupId != null && groupId != "") contactList = contactSrv.getContactPageListByGroup(SessionProviderFactory.createSystemProvider(), username, groupId).getAll();
-    else contactList = contactSrv.getAllContact(SessionProviderFactory.createSystemProvider(), username);
+    else contactList = contactSrv.getContactPageListByGroup(SessionProviderFactory.createSystemProvider(), username, contactSrv.getGroups(SessionProviderFactory.createSystemProvider(), username).get(0).getId()).getAll();
     contactMap_.clear();
     for (Contact ct : contactList) contactMap_.put(ct.getId(), ct);
 
