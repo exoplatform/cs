@@ -1155,6 +1155,7 @@ public class UIMessageList extends UIForm {
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       uiMessageList.setAscending(!uiMessageList.isAscending_);
       uiMessageList.setSortedBy(sortedBy);
+      uiMessageList.viewMode = uiMessageList.MODE_LIST ;
       MessageFilter msgFilter = uiMessageList.getMessageFilter();
       msgFilter.setAccountId(accountId);
       msgFilter.setOrderBy(uiMessageList.getSortedBy());
