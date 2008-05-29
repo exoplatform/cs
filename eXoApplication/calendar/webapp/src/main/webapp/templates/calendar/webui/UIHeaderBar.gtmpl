@@ -47,7 +47,7 @@ uicomponent.setSelectedCategory(uicomponent.getSelectedCategory()) ;
 			                  %>
 		                    <a href="<%=uicomponent.event("SwitchView",type)%>" class="MenuItem">   
 			                    <div class="ItemIcon $icon">
-			                    	$type
+			                    	<%=_ctx.appRes("UIHeaderBar.label."+type)%>
 			                    </div>
 		                    </a>
 			                 <%}
@@ -67,7 +67,7 @@ uicomponent.setSelectedCategory(uicomponent.getSelectedCategory()) ;
   	<% /*End Popup Menu*/ %>
 			<div class="ControlButton">
 				<div class="IconHolder <%=uicomponent.getViewType()%>Icon">
-					<%=uicomponent.getViewType()%>
+					<%=_ctx.appRes("UIHeaderBar.label."+uicomponent.getViewType())%>
 				</div>
 			</div>
 	

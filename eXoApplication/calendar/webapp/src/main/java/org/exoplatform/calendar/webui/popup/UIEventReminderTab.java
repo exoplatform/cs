@@ -60,12 +60,12 @@ public class UIEventReminderTab extends UIFormInputWithActions {
     setComponentConfig(getClass(), null) ;
     actionField_ = new HashMap<String, List<ActionData>>() ;
     List<SelectItemOption<String>> isPopupRepeatOptions = new ArrayList<SelectItemOption<String>>() ;
-    isPopupRepeatOptions.add(new SelectItemOption<String>("no repeat", "false")) ;
-    isPopupRepeatOptions.add(new SelectItemOption<String>("repeat", "true")) ;
+    isPopupRepeatOptions.add(new SelectItemOption<String>("no-repeat", "no-repeat")) ;
+    isPopupRepeatOptions.add(new SelectItemOption<String>("repeat", "repeat")) ;
     
     List<SelectItemOption<String>> isMailRepeatOptions = new ArrayList<SelectItemOption<String>>() ;
-    isMailRepeatOptions.add(new SelectItemOption<String>("no repeat", "false")) ;
-    isMailRepeatOptions.add(new SelectItemOption<String>("repeat", "true")) ;
+    isMailRepeatOptions.add(new SelectItemOption<String>("no-repeat", "no-repeat")) ;
+    isMailRepeatOptions.add(new SelectItemOption<String>("repeat", "repeat")) ;
     
     List<SelectItemOption<String>> emailRemindOptions = getReminderTimes(5,60) ;
     List<SelectItemOption<String>> popupRemindOptions = getReminderTimes(5,60) ;
