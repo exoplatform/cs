@@ -33,7 +33,7 @@
 }
 
 .UIMailPortlet .DownArrow3Icon {
-	background: url('icons/BlackDownArrow.gif') no-repeat left center;
+	/*background: url('icons/BlackDownArrow.gif') no-repeat left center;*/
 	height: 16px; width: 16px;
 	cursor: pointer;
 }
