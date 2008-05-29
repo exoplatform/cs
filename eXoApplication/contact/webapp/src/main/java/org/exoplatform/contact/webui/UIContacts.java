@@ -272,6 +272,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   }
   
   public Contact[] getContacts() throws Exception {
+    /*
     if (isSelectSharedContacts && !isPrintForm) {
       setContacts(ContactUtils.getContactService().getSharedContacts( ContactUtils.getCurrentUser())); 
     } else {
@@ -286,6 +287,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         }
       }
     }
+    */
     return contactMap.values().toArray(new Contact[]{}) ;
   }
   public LinkedHashMap<String, Contact> getContactMap() { return contactMap ;}
@@ -863,7 +865,6 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         if(type != null)
           pageList = ContactUtils.getContactService().getContactPageListByGroup(
             SessionProviderFactory.createSystemProvider(),ContactUtils.getCurrentUser(), filter, type) ;
-        
       } else {      //selected group = null ;
           pageList = uiContacts.pageList_ ;
           if (pageList != null) {
