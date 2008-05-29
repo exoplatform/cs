@@ -563,6 +563,22 @@ UIMailPortlet.prototype.swapMenu = function(oldmenu, clickobj) {
   }
 } ;
 
+UIMailPortlet.prototype.showPopupMenu = function(obj, event) {
+	var popup = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div", "UIPopupCategory") ;
+	eXo.webui.UIPopupSelectCategory.show(obj, event);
+	if(eXo.core.Browser.isIE6()) {
+		if(eXo.core.DOMUtil.findDescendantsByTagName(popup, "iframe").length > 0) return ;
+		var ifr = document.createElement("iframe") ;
+		ifr.setAttribute("border", "0") ;
+		ifr.style.width = "95%" ;
+		ifr.style.height = eXo.core.DOMUtil.findFirstDescendantByClass(popup, "div", "UIRightClickPopupMenu").offsetHeight + "px" ;
+		ifr.style.position = "absolute" ;
+		ifr.style.left = "0px" ;
+		ifr.style.zIndex = -1  ;
+		popup.appendChild(ifr) ;
+	}
+} ;
+
 UIMailPortlet.prototype.showHide = function(obj) {
 	if (obj.style.display != "block") {
 		obj.style.display = "block" ;

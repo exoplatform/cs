@@ -55,7 +55,7 @@
 									
 									<div class="SeparatorLine"><span></span></div>
 									
-									<div class="ControlButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" >
+									<div class="ControlButton" onclick="eXo.mail.UIMailPortlet.showPopupMenu(this, event);" >
 										<div class="IconHolder PriorityIcon">
 											<div class="Label DownArrow1Icon">Message Priority</div>
 										</div>
@@ -108,14 +108,14 @@
 									
 									<div class="SeparatorLine"><span></span></div>
 									
-									<div class="ControlButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" >
+									<div class="ControlButton" onclick="eXo.mail.UIMailPortlet.showPopupMenu(this, event);" >
 										<div class="IconHolder EditorOptionsIcon">
 											<div class="Label DownArrow1Icon">Editor Options</div>
 										</div>
 										<% /*Begin Popup Menu*/ %>
-										<div style="position: relative;">
+										<div style="position: relative;left: 80px;">
 					      			<div class="UIPopupCategory" style="display: none;">
-					      				<div class="UIRightClickPopupMenu" style="display: block; left: 80px;">
+					      				<div class="UIRightClickPopupMenu" style="display: block; ">
 					      					<div class="UIContextMenuContainer">
 													  <div class="TopLeftRightClickPopupMenu">
 							          			<div class="TopRightRightClickPopupMenu">
