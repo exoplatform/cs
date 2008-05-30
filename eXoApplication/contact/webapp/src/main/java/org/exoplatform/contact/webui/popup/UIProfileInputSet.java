@@ -136,8 +136,7 @@ public class UIProfileInputSet extends UIFormInputWithActions {
     } catch (MissingResourceException e) {      
       e.printStackTrace() ;
     }
-    if (!ContactUtils.isEmpty(value)) return value ;
-    return null ;
+    return value ;
   }
   protected void setFieldGender(String s) {
     if (ContactUtils.isEmpty(s)) return ;
