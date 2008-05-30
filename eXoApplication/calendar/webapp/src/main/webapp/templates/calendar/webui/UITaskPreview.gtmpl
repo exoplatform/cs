@@ -35,7 +35,7 @@ uiform.begin() ;
         						<td style="border-right: 1px solid #c7c7c7;width: 185px;">
 				        		<%for(attachFile in task.getAttachment()){%>
 						         <div class="AttachmentIcon"  style="">
-						          $attachFile.name  
+						          <a href="<%=uicomponent.event('Download',attachFile.getId())%>">$attachFile.name</a>  
 						         	<%=CalendarUtils.convertSize(attachFile.size)%> 
 						         </div>
 						          <%if(attachFile.getMimeType().startsWith("image")) {
@@ -51,9 +51,6 @@ uiform.begin() ;
 							         <%=uiform.getLabel('View')%>
 							         </a> 
 						         <%}%>
-							         <a href="<%=uicomponent.event('Download',attachFile.getId())%>" class="IconHolder DownLoadAttachmentIcon" style="padding-left:15px;">
-							         		<%=uiform.getLabel('Download')%>
-							         </a>
 						         </div> 
 						         <div style="clear:left;"><span></span></div>
 						         <%}%> 
