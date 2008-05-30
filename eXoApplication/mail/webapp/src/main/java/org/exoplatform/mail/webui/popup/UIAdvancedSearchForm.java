@@ -128,10 +128,10 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     options4.add(new SelectItemOption<String>("ends with", String.valueOf(Utils.CONDITION_ENDS_WITH)));
     addUIFormInput(new UIFormSelectBox(SEARCH_SUBJECT_CONDITION, SEARCH_SUBJECT_CONDITION, options4));
     List<SelectItemOption<String>>  priorities = new ArrayList<SelectItemOption<String>>() ;
-    priorities.add(new SelectItemOption<String>(" -- Choose Priority -- ", "0"));
-    priorities.add(new SelectItemOption<String>("High", String.valueOf(Utils.PRIORITY_HIGH)));
-    priorities.add(new SelectItemOption<String>("Normal", String.valueOf(Utils.PRIORITY_NORMAL)));
-    priorities.add(new SelectItemOption<String>("Low", String.valueOf(Utils.PRIORITY_LOW)));
+    priorities.add(new SelectItemOption<String>(" -- Choose Priority -- ", "priority.0"));
+    priorities.add(new SelectItemOption<String>("High", "priority." +String.valueOf(Utils.PRIORITY_HIGH)));
+    priorities.add(new SelectItemOption<String>("Normal", "priority." + String.valueOf(Utils.PRIORITY_NORMAL)));
+    priorities.add(new SelectItemOption<String>("Low", "priority."  + String.valueOf(Utils.PRIORITY_LOW)));
     addUIFormInput(new UIFormSelectBox(SEARCH_PRIORITY, SEARCH_PRIORITY, priorities));
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(SEARCH_HAS_STAR, SEARCH_HAS_STAR, false));
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(SEARCH_HAS_ATTACH, SEARCH_HAS_ATTACH, false));
