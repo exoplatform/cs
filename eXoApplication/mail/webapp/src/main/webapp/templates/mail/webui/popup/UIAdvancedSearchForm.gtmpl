@@ -86,7 +86,7 @@
 				  </tr>
 				  <tr>
 				    <td class="FieldLabel">
-	            From date:
+            <%=_ctx.appRes(uicomponent.id+ ".label.from-date") %>:
 	          </td>
 	          <td class="FieldComponent Short"  colspan="2">
 	          <%
@@ -94,7 +94,7 @@
 	          %>
 	          </td>
 	          <td class="FieldLabel" style="width: 25px">
-	            To:
+            <%=_ctx.appRes(uicomponent.id+ ".label.to-date") %>:
 	          </td>
 	          <td class="FieldComponent Short" >
 	          <%
@@ -109,8 +109,8 @@
 	              uicomponent.renderField(uicomponent.SEARCH_HAS_STAR);
 	            %>
 	          </td>
-	          <td class="FieldLabel" style="text-align: left;">Has Star</td>
-	          <td class="FieldLabel" style="width: 25px">Priority: </td>
+	          <td class="FieldLabel" style="text-align: left;"><%=_ctx.appRes(uicomponent.id+ ".label.has-star") %></td>
+	          <td class="FieldLabel" style="width: 25px"><%=_ctx.appRes(uicomponent.id+ ".label.priority") %>: </td>
 	          <td class="FieldComponent FieldShort">
 	            <%
 	              uicomponent.renderField(uicomponent.SEARCH_PRIORITY);
@@ -124,7 +124,7 @@
 	            uicomponent.renderField(uicomponent.SEARCH_HAS_ATTACH);
 	          %>
 	          </td>
-	          <td class="FieldLabel" style="text-align: left;">Has Attachment</td>
+	          <td class="FieldLabel" style="text-align: left;"><%=_ctx.appRes(uicomponent.id+ ".label.has-attachment") %></td>
 	          <td colspan="2">&nbsp;</td>
 				  </tr>
 				</table>
