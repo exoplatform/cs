@@ -1639,6 +1639,11 @@
 	padding: 25px 10px;
 }
 
+.UIImportForm .UIForm .HorizontalLayout .UIFormGrid{
+	margin: 0px;
+	width: 100%;
+}
+
 .UIFolderForm .UIForm .HorizontalLayout {
 	border: none;
 }
