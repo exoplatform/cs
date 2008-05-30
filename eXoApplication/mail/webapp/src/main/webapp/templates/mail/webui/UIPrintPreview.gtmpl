@@ -7,10 +7,14 @@
   import javax.mail.internet.InternetAddress;
   import org.exoplatform.download.DownloadService;
   import org.exoplatform.web.application.JavascriptManager;
+  import org.exoplatform.webui.application.WebuiRequestContext;
+  import java.util.Locale;
   def rcontext = _ctx.getRequestContext() ;
   JavascriptManager jsmanager = rcontext.getJavascriptManager();
   jsmanager.importJavascript('eXo.mail.UIMailPortlet');
   jsmanager.addOnLoadJavascript("eXo.mail.UIMailPortlet.showPrintPreview(document.getElementById('printWrapper'))");
+  WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+  Locale locale = context.getParentAppRequestContext().getLocale() ;
 %>
 
 <div id="printWrapper" class="printWrapper">
@@ -50,7 +54,7 @@
         %>
         </div>
       </div>
-      <div class="DateAndTime"><%=MailUtils.formatDate('EEEE, MMMM dd, yyyy HH:mm aaa', msg.getReceivedDate())%></div>
+      <div class="DateAndTime"><%=MailUtils.formatDate('EEEE, MMMM dd, yyyy HH:mm aaa', msg.getReceivedDate(), locale)%></div>
       <div style="clear: both;"><span></span></div>
     </div>
     <div class="PrintContent"  >

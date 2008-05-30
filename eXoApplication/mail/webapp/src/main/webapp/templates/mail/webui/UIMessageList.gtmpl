@@ -6,9 +6,14 @@
  import javax.mail.internet.InternetAddress;
  import org.exoplatform.mail.service.MessagePageList;
  import org.exoplatform.mail.MailUtils;
+ import org.exoplatform.webui.application.WebuiRequestContext;
+ import java.util.Locale;
  String compId = uicomponent.getId() ; 
  def rcontext = _ctx.getRequestContext() ;	
  rcontext.getJavascriptManager().addJavascript('eXo.mail.CheckBox.init("UIListUsers") ;') ;
+   
+ WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+ Locale locale = context.getParentAppRequestContext().getLocale() ;
 %>
 
 <% /*Start Message Action Bar*/ %>
@@ -43,7 +48,7 @@
   
   <div class="SelectButton">
     <div class="MoreActionsIcon"  onclick="eXo.mail.UIMailPortlet.showMenu(this, event);">
-      <div class="DownArrow1Icon">More Actions</div>
+      <div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.id+ ".label.more-actions") %></div>
       
       <% /*Begin Popup Menu*/ %>
       <div style="position: relative;">
@@ -101,7 +106,7 @@
   
   <div class="SelectButton">
     <div class="View" onclick="eXo.mail.UIMailPortlet.showView(this, event);">
-      <div class="DownArrow1Icon">View</div>
+      <div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.id+ ".label.view") %></div>
       
       <% /*Begin Popup Menu*/ %>
       <div style="position: relative;">
@@ -247,11 +252,11 @@
               else if (fromIndex == endIndex) mailRange = fromIndex ;
             }         
           %>
-          <a title="First Page" class="$cssPreviousPage FirstPageArrow" href="<%=uicomponent.event("FirstPage")%>"/></a>        
-          <a title="Previous Page" class="$cssPreviousPage PreviousPageArrow" href="<%=uicomponent.event("PreviousPage")%>"></a>
+          <a title="<%=_ctx.appRes(uicomponent.id+ '.label.first-page') %>" class="$cssPreviousPage FirstPageArrow" href="<%=uicomponent.event("FirstPage")%>"/></a>        
+          <a title="<%=_ctx.appRes(uicomponent.id+ '.label.previous-page') %>" class="$cssPreviousPage PreviousPageArrow" href="<%=uicomponent.event("PreviousPage")%>"></a>
           <div class="Number">$currentPage / <%=pageList.getAvailablePage()%></div>
-          <a title="Next Page" class="$cssNextPage NextPageArrow" href="<%=uicomponent.event("NextPage")%>"/></a>
-          <a title="Last Page" class="$cssNextPage LastPageArrow" href="<%=uicomponent.event("LastPage")%>"><span></span></a>
+          <a title="<%=_ctx.appRes(uicomponent.id+ '.label.next-page') %>" class="$cssNextPage NextPageArrow" href="<%=uicomponent.event("NextPage")%>"/></a>
+          <a title="<%=_ctx.appRes(uicomponent.id+ '.label.last-page') %>" class="$cssNextPage LastPageArrow" href="<%=uicomponent.event("LastPage")%>"><span></span></a>
           <div style="clear: left;"><span></span></div>
         </div>
         <div class="LeftPageIteratorBlock">
@@ -396,7 +401,7 @@
                  else classArrowSubject = "DownArrow1Icon"
                }
            %>
-    		  	<a href = "$sortedBySubject"><div class="$classArrowSubject" title="Sort by subject" style="width: 95%; cursor: pointer;">Subject</div></a>
+    		  	<a href = "$sortedBySubject"><div class="$classArrowSubject" title="Sort by subject" style="width: 95%; cursor: pointer;"><%=_ctx.appRes(uicomponent.id+ ".label.subject") %></div></a>
     		  </th>
    	      <th style="width: 24px;"><div class="TotalMessageIcon" title="Total message(s) in conversation"><span></span></div></th>
    	      <th style="width: 80px; padding-left: 8px;">
@@ -408,7 +413,7 @@
                   else classArrowDate = "DownArrow1Icon"
                 }
             %>
-    		    <a href = "$sortedByReceivedDate"><div class="$classArrowDate" title="Sort by Date & time" >Date & Time</div></a>
+    		    <a href = "$sortedByReceivedDate"><div class="$classArrowDate" title="Sort by Date & time" ><%=_ctx.appRes(uicomponent.id+ ".label.date-time") %></div></a>
    	      </th>
    	      <th style="width: 50px; padding-left: 8px;">
        	    <%
@@ -419,7 +424,7 @@
        	         else classArrowSize = "DownArrow1Icon"
        	       }
             %>
-   	        <a href = "$sortedBySize"><div class="$classArrowSize" title="Sort by Size">Size</div></a>
+   	        <a href = "$sortedBySize"><div class="$classArrowSize" title="Sort by Size"><%=_ctx.appRes(uicomponent.id+ ".label.size") %></div></a>
    	      </th>
    	      <th style="width: 30px;">
        	    <%
@@ -432,7 +437,7 @@
       
       
       <% 
-        public int show(Message msg, int i, int l) {
+        public int show(Message msg, int i, int l, Locale locale) {
           if (msg != null && (uicomponent.viewMode != uicomponent.MODE_CONVERSATION || msg.isRootConversation())) {
             l ++ ;
             String actionLink = uicomponent.event("SelectMessage", msg.getId());
@@ -542,9 +547,9 @@
               <td class="$readStatus">
                 <a href="$actionLink">
                   <%if (msg.getReceivedDate() != null) { %>
-                    <%=MailUtils.formatDate(msg.getReceivedDate())%>
+                    <%=MailUtils.formatDate(msg.getReceivedDate(), locale)%>
                   <%} else if (msg.getSendDate() != null){%>
-                    <%=MailUtils.formatDate(msg.getSendDate())%>
+                    <%=MailUtils.formatDate(msg.getSendDate(), locale)%>
                   <%}%>
                 </a>
               </td>
@@ -569,7 +574,7 @@
             if (msg != null && msg.getReferedMessageIds().size() > 0) {
               for (String referedMsg: msg.getReferedMessageIds()) {
                 Message childMsg = uicomponent.messageList_.get(referedMsg) ;
-                i = show(childMsg, i, l);
+                i = show(childMsg, i, l, locale);
               }
               l-- ;
             }
@@ -586,7 +591,7 @@
           int l = 0 ;
     			for(Message msg : uicomponent.getMessageList()) {
             if (msg.isRootConversation()) 
-            i = show(msg, i, l);
+            i = show(msg, i, l, locale);
           } // end of for loop
         %>
       	</tbody>
