@@ -144,7 +144,7 @@ public class UIFormComboBox extends UIFormInputBase<String>  {
   public void processRender(WebuiRequestContext context) throws Exception {
     context.getJavascriptManager().addJavascript("eXo.calendar.UICombobox.init('" + getId()+ "');") ;  
     Writer w =  context.getWriter() ;
-      w.write("<div class='UIComboboxList'><div>") ;
+      w.write("<div class='UIComboboxList'><div class='UIComboboxContainer'>") ;
         for(SelectItemOption item : options_) {
           w.write("<a href='javascript:void(0);' value='" + item.getValue()+ "' class='UIComboboxItem'>") ;
             w.write("<div class='UIComboboxIcon'>") ;
