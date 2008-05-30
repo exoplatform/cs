@@ -15,7 +15,7 @@
                         <div class="RightTab">                
                           <div class="MiddleTab">
                             <div class="TabIcon SettingsIcon"><span></span></div>
-                            <a href="#" class="Title">General Settings</a>
+                            <a href="#" class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.general-settings") %></a>
                             <div style="clear:left;"><span></span></div>
                           </div>
                         </div>
@@ -60,49 +60,49 @@
                 <div class="FormContainer">
                   <table class="UIFormGrid">
                   <tr>
-                  <td class="FieldLabel">Default Account :</td>
+                  <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.default-account") %> :</td>
                   <td class="FieldComponent">
                     <%uicomponent.renderField(uicomponent.DEFAULT_ACCOUNT)%>
                   </td>
                 </tr>
                     <tr>
-                      <td class="FieldLabel">Number of conversations to display per page:</td>
+                      <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.number-shows") %> :</td>
                       <td class="FieldComponent">
                         <%uicomponent.renderField(uicomponent.NUMBER_MSG_PER_PAGE)%>
                       </td>
                     </tr>
                     <tr>
-                      <td class="FieldLabel">Auto check mail in every:</td>
+                      <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.auto-check") %> :</td>
                       <td class="FieldComponent">
                         <%uicomponent.renderField(uicomponent.PERIOD_CHECK_AUTO)%>
                       </td>
                     </tr>
                     <tr>
-                      <td class="FieldLabel">Compose message in:</td>
+                      <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.compose-in") %> :</td>
                       <td class="FieldComponent">
                         <%uicomponent.renderField(uicomponent.COMPOSE_MESSAGE_IN)%>
                       </td>
                     </tr>
                     <tr>
-                      <td class="FieldLabel">Reply/Forward messages as:</td>
+                      <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.reply-forward-as") %> :</td>
                       <td class="FieldComponent">
                         <%uicomponent.renderField(uicomponent.FORMAT_AS_ORIGINAL)%>
                       </td>
                     </tr>
                     <tr>
-                      <td class="FieldLabel">Reply message with:</td>
+                      <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.reply-with") %> :</td>
                       <td class="FieldComponent">
                         <%uicomponent.renderField(uicomponent.REPLY_WITH_ATTACH)%>
                       </td>
                     </tr>
                     <tr>
-                      <td class="FieldLabel">Forward message with:</td>
+                      <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.reply-with") %> :</td>
                       <td class="FieldComponent">
                         <%uicomponent.renderField(uicomponent.FORWARD_WITH_ATTACH)%>
                       </td>
                     </tr>
                     <tr>
-                      <td class="FieldLabel">Save sent messages in Sent Folder:</td>
+                      <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.save-sent") %> :</td>
                       <td class="FieldComponent">
                         <%uicomponent.renderField(uicomponent.SAVE_SENT_MESSAGE)%>
                       </td>

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
@@ -43,6 +44,7 @@ import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -311,7 +313,9 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     String msgContent = formatContent(msg) ;
     String content = msgContent ;
     if (isVisualEditor) {
-      content = "<br><br><div> On " + MailUtils.formatDate("MMM dd, yyyy HH:mm aaa", msg.getSendDate()) + ", " + msg.getFrom() + " wrote: <br>" ;
+      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+      Locale locale = context.getParentAppRequestContext().getLocale() ;
+      content = "<br><br><div> On " + MailUtils.formatDate("MMM dd, yyyy HH:mm aaa", msg.getSendDate(), locale) + ", " + msg.getFrom() + " wrote: <br>" ;
       content += "<blockquote style=\"border-left:1px #cccccc solid ; margin-left: 10px; padding-left: 5px;\">" + msgContent + "</blockquote></div>" ;
     }
     return content ;
