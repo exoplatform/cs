@@ -18,6 +18,7 @@ package org.exoplatform.calendar.webui.popup;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
@@ -27,6 +28,7 @@ import org.exoplatform.calendar.webui.UICalendars;
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIGrid;
@@ -80,16 +82,26 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
 
   public void updateGrid(Calendar cal) throws Exception {
     List<data> dataRow = new ArrayList<data>() ;
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    ResourceBundle res = context.getApplicationResourceBundle() ;   
     if(cal.getViewPermission() != null) {
       for(String username : cal.getViewPermission() ) {
-        dataRow.add(new data(username, (cal.getEditPermission()!= null && Arrays.asList(cal.getEditPermission()).contains(username)))) ;
+        boolean canEdit = cal.getEditPermission()!= null && Arrays.asList(cal.getEditPermission()).contains(username) ;
+        String label = getId() + ".label." + String.valueOf(canEdit);  
+        String editPerm = String.valueOf(canEdit);  
+        try {
+          editPerm = res.getString(label);
+        } catch (Exception e) {
+          System.out.println("Can not find " + label);
+        }
+        dataRow.add(new data(username,  editPerm)) ;
       }
     }
     UIGrid permissionList = getChild(UIGrid.class) ;
     ObjectPageList objPageList = new ObjectPageList(dataRow, 10) ;
     permissionList.getUIPageIterator().setPageList(objPageList) ;   
   }
-  
+
   static public class EditActionListener extends EventListener<UIAddEditPermission> {
     public void execute(Event<UIAddEditPermission> event) throws Exception {
       UIAddEditPermission addEdit = event.getSource();
@@ -136,17 +148,21 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
       event.getRequestContext().addUIComponentToUpdateByAjax(addEdit.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UICalendars.class)) ;
     }
   }
- public class data {
+  public class data {
     String viewPermission = null ;
     String editPermission = null ;
 
-  public  String getViewPermission() {return viewPermission ;}
-  public  String getEditPermission() {return editPermission ;}
-    
+    public  String getViewPermission() {return viewPermission ;}
+    public  String getEditPermission() {return editPermission ;}
+
     public data(String username, boolean canEdit) {
       viewPermission = username ;
       editPermission = String.valueOf(canEdit) ;
     }
+    public data(String username, String canEdit) {
+      viewPermission = username ;
+      editPermission = canEdit ;
+    }
   }
- 
+
 }
