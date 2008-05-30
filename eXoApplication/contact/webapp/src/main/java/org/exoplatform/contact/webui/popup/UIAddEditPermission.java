@@ -363,6 +363,8 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
     String viewPermission = null ;
     String editPermission = null ;
 
+    
+    // edit here
     public  String getViewPermission() {return viewPermission ;}
     public  String getEditPermission() {return editPermission ;}
       
