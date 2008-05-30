@@ -219,6 +219,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   public void deActivate() throws Exception {}
 
   public void updateSelect(String selectField, String value) throws Exception {
+    if(value.lastIndexOf("/") > 0) value = value.substring(value.lastIndexOf("/") + 1) ;
     getUIStringInput(selectField).setValue(value) ;
   }
 
