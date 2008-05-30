@@ -113,7 +113,7 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
   private List<SelectItemOption<String>> getGroups() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     OrganizationService orgService = CalendarUtils.getOrganizationService() ;
-    options.add(new SelectItemOption<String>("all", "")) ;
+    options.add(new SelectItemOption<String>("all", "all")) ;
     for( Object g : orgService.getGroupHandler().getAllGroups()) { 
       Group  cg = (Group)g ;
       options.add(new SelectItemOption<String>(cg.getGroupName(), cg.getId())) ;
@@ -146,7 +146,7 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
     return isShowSearch_;
   }
   public String getSelectedGroup() {
-
+    if("all".equals(getUIFormSelectBox(FIELD_GROUP).getValue())) return null ;
     return getUIFormSelectBox(FIELD_GROUP).getValue() ;
   }
   public void setSelectedGroup(String selectedGroup) {
