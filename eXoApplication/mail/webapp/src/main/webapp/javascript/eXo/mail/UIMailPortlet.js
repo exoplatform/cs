@@ -525,7 +525,8 @@ UIMailPortlet.prototype.swapMenu = function(oldmenu, clickobj) {
 	var UIMailPortlet = eXo.mail.UIMailPortlet ;
   var uiDesktop = document.getElementById("UIPageDesktop") ;
   var uiWorkSpaceWidth = (document.getElementById("UIControlWorkspace"))? document.getElementById("UIControlWorkspace").offsetWidth : 0 ;
-	uiWorkSpaceWidth = (document.all) ? 2*uiWorkSpaceWidth : uiWorkSpaceWidth ;
+	//uiWorkSpaceWidth = (document.all) ? 2*uiWorkSpaceWidth : uiWorkSpaceWidth ;
+  uiWorkSpaceWidth = (eXo.core.Browser.isIE7()) ? 2*uiWorkSpaceWidth : uiWorkSpaceWidth ;
   var menuX = Browser.findPosX(clickobj) - uiWorkSpaceWidth ;
 	var menuY = Browser.findPosY(clickobj) + clickobj.offsetHeight ;
   if(uiDesktop) {
