@@ -1094,7 +1094,7 @@ public class JCRDataStorage{
     summary.append("From       : ").append(cal.get(java.util.Calendar.HOUR_OF_DAY)).append(":") ;
     summary.append(cal.get(java.util.Calendar.MINUTE)).append(" - ") ;
     summary.append(cal.get(java.util.Calendar.DATE)).append("/") ;
-    summary.append(cal.get(java.util.Calendar.MONTH)).append("/") ;
+    summary.append(cal.get(java.util.Calendar.MONTH) + 1).append("/") ;
     summary.append(cal.get(java.util.Calendar.YEAR)).append("<br>") ;
     cal.setTime(eventNode.getProperty("exo:toDateTime").getDate().getTime()) ;
     summary.append("To         : ").append(cal.get(java.util.Calendar.HOUR_OF_DAY)).append(":") ;
