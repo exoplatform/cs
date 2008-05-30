@@ -568,10 +568,11 @@ UIMailPortlet.prototype.showPopupMenu = function(obj, event) {
 	eXo.webui.UIPopupSelectCategory.show(obj, event);
 	if(eXo.core.Browser.isIE6()) {
 		if(eXo.core.DOMUtil.findDescendantsByTagName(popup, "iframe").length > 0) return ;
+		var uiRightClickPopupMenu = eXo.core.DOMUtil.findFirstDescendantByClass(popup, "div", "UIRightClickPopupMenu")
 		var ifr = document.createElement("iframe") ;
-		ifr.setAttribute("border", "0") ;
-		ifr.style.width = "95%" ;
-		ifr.style.height = eXo.core.DOMUtil.findFirstDescendantByClass(popup, "div", "UIRightClickPopupMenu").offsetHeight + "px" ;
+		ifr.frameBorder = 0 ;
+		ifr.style.width = uiRightClickPopupMenu.offsetWidth + "px" ;
+		ifr.style.height = uiRightClickPopupMenu.offsetHeight + "px" ;
 		ifr.style.position = "absolute" ;
 		ifr.style.left = "0px" ;
 		ifr.style.zIndex = -1  ;
