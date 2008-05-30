@@ -86,7 +86,9 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
   public UIAdvancedSearchForm() throws Exception {}
   
   public void init(String accountId) throws Exception {
-    addUIFormInput(new UISelectFolder(accountId));
+    UISelectFolder uiSelectFolder = new UISelectFolder() ;
+    addUIFormInput(uiSelectFolder);
+    uiSelectFolder.init(accountId) ;
     
     addUIFormInput(new UIFormStringInput(FIELD_TO_SEARCH, null, null)) ;  
     addUIFormInput(new UIFormStringInput(FIELD_FROM_SEARCH, null, null)) ;  

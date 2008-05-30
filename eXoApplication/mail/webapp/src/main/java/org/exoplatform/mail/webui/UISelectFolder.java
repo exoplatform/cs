@@ -23,6 +23,7 @@ import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInputSet;
 
 /**
@@ -36,11 +37,11 @@ public class UISelectFolder extends UIFormInputSet {
   public String level = "" ;
   public String accountId_ = "";
   
-  public UISelectFolder(String accountId) throws Exception {  
+  public UISelectFolder() throws Exception { }
+  
+  public void init(String accountId) throws Exception {
     setId("UISelectFolder");
-    accountId_ = accountId ;
-    setId("UISelectFolder");
-    accountId_ = accountId ;
+    accountId_ = accountId ; 
     addUIFormInput(new org.exoplatform.mail.webui.UIFormSelectBox(SELECT_FOLDER, SELECT_FOLDER, getOptions()));
   }
   
@@ -96,11 +97,15 @@ public class UISelectFolder extends UIFormInputSet {
     return optionList ;
   }
   
+  protected UIForm getUIForm() {
+    return getAncestorOfType(UIForm.class) ;
+  }
+  
   public List<SelectItem> getOptions() throws Exception {
     List<SelectItem> options = new ArrayList<SelectItem>() ;
     SelectItemOptionGroup defaultFolders = new SelectItemOptionGroup("default-folder");
     for(Folder df : getDefaultFolders()) {
-      defaultFolders.addOption(new org.exoplatform.mail.webui.SelectItemOption<String>(df.getLabel(), df.getId())) ;
+      defaultFolders.addOption(new org.exoplatform.mail.webui.SelectItemOption<String>(getUIForm().getLabel(df.getLabel()), df.getId())) ;
     }
     options.add(defaultFolders);
     SelectItemOptionGroup customizeFolders = new SelectItemOptionGroup("my-folder");

@@ -102,8 +102,9 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
     addUIFormInput(new UIFormSelectBox(FILTER_SUBJECT_CONDITION, FILTER_SUBJECT_CONDITION, options4));
     String username = MailUtils.getCurrentUser();
     MailService mailSrv = MailUtils.getMailService();
-    
-    addUIFormInput(new UISelectFolder(accountId));
+    UISelectFolder uiSelectFolder = new UISelectFolder() ;
+    addUIFormInput(uiSelectFolder);
+    uiSelectFolder.init(accountId) ;
     
     List<SelectItemOption<String>> tagList = new ArrayList<SelectItemOption<String>>();   
     tagList.add(new SelectItemOption<String>("-- Choose tag --", ""));       
