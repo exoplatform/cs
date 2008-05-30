@@ -59,8 +59,10 @@ public class UIImportForm extends UIForm implements UIPopupComponent {
   public UIImportForm() throws Exception { }
   
   public void init(String accId) throws Exception {
-    addUIFormInput(new UIFormUploadInput(CHOOSE_MIME_MESSAGE, CHOOSE_MIME_MESSAGE));   
-    addUIFormInput(new UISelectFolder(accId));
+    addUIFormInput(new UIFormUploadInput(CHOOSE_MIME_MESSAGE, CHOOSE_MIME_MESSAGE));
+    UISelectFolder uiSelectFolder = new UISelectFolder() ;
+    addUIFormInput(uiSelectFolder);
+    uiSelectFolder.init(accId) ;
   }
   
   public void setSelectedFolder(String value) throws Exception {
