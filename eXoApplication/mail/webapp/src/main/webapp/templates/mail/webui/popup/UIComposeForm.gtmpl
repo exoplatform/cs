@@ -25,7 +25,7 @@
 								
 									<a href="<%=uicomponent.event("Send")%>" class="ControlButton">
 										<div class="IconHolder SendMailIcon">
-											<div class="Label">Send mail</div>
+											<div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.send-mail") %></div>
 										</div>
 									</a>
 									
@@ -33,7 +33,7 @@
 									
 									<a href="<%=uicomponent.event("SaveDraft")%>" class="ControlButton">
 										<div class="IconHolder SaveAsADraftIcon">
-											<div class="Label">Save as a Draft</div>
+											<div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.save-as-a-draft") %></div>
 										</div>
 									</a>
 									
@@ -41,7 +41,7 @@
 									
 									<a href="<%=uicomponent.event("DiscardChange")%>" class="ControlButton">
 										<div class="IconHolder DiscardIcon">
-											<div class="Label">Discard</div>
+											<div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.discard") %></div>
 										</div>
 									</a>
 									
@@ -49,7 +49,7 @@
 									
 									<a href="<%=uicomponent.event("Attachment")%>" class="ControlButton">
 										<div class="IconHolder AttachFileIcon">
-											<div class="Label">Attach File</div>
+											<div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.attach-file") %></div>
 										</div>
 									</a>
 									
@@ -57,7 +57,7 @@
 									
 									<div class="ControlButton" onclick="eXo.mail.UIMailPortlet.showPopupMenu(this, event);" >
 										<div class="IconHolder PriorityIcon">
-											<div class="Label DownArrow1Icon">Message Priority</div>
+											<div class="Label DownArrow1Icon"><%=_ctx.appRes(uicomponent.id+ ".label.message-priority") %></div>
 										</div>
 										<% /*Begin Popup Menu*/ %>
 										<div style="position: relative;">
@@ -77,19 +77,19 @@
 																	  String lowCssClass = "";
 	                                  if (uicomponent.getPriority() == Utils.PRIORITY_LOW) lowCssClass = "CheckItem";
 																	%>
-							                    <a class="MenuItem" href="$lowPriorityLink"> <div class="ItemIcon $lowCssClass"> Low priority </div> </a>
+							                    <a class="MenuItem" href="$lowPriorityLink"> <div class="ItemIcon $lowCssClass"> <%=_ctx.appRes(uicomponent.id+ ".label.low-priority") %> </div> </a>
 							                    <%  
 							                      String normalPriorityLink = uicomponent.event("ChangePriority", String.valueOf(Utils.PRIORITY_NORMAL));
 							                      String normalCssClass = "";
 							                      if (uicomponent.getPriority() == Utils.PRIORITY_NORMAL) normalCssClass = "CheckItem";
 							                    %>
-							                    <a class="MenuItem" href="$normalPriorityLink"> <div class="ItemIcon $normalCssClass">Normal priority </div> </a>
+							                    <a class="MenuItem" href="$normalPriorityLink"> <div class="ItemIcon $normalCssClass"><%=_ctx.appRes(uicomponent.id+ ".label.normal-priority") %></div> </a>
 							                    <%  
 							                      String highPriorityLink = uicomponent.event("ChangePriority", String.valueOf(Utils.PRIORITY_HIGH)); 
 							                      String highCssClass = "";
 							                      if (uicomponent.getPriority() == Utils.PRIORITY_HIGH) highCssClass = "CheckItem";
 							                    %>
-							                    <a class="MenuItem" href="$highPriorityLink"> <div class="ItemIcon $highCssClass"> High priority </div> </a>
+							                    <a class="MenuItem" href="$highPriorityLink"> <div class="ItemIcon $highCssClass"> <%=_ctx.appRes(uicomponent.id+ ".label.hight-priority") %> </div> </a>
 																</div>
 								          		</div>
 								        		</div>
@@ -110,7 +110,7 @@
 									
 									<div class="ControlButton" onclick="eXo.mail.UIMailPortlet.showPopupMenu(this, event);" >
 										<div class="IconHolder EditorOptionsIcon">
-											<div class="Label DownArrow1Icon">Editor Options</div>
+											<div class="Label DownArrow1Icon"><%=_ctx.appRes(uicomponent.id+ ".label.editor-options") %></div>
 										</div>
 										<% /*Begin Popup Menu*/ %>
 										<div style="position: relative;left: 80px;">
@@ -132,7 +132,7 @@
                                   %>
                                   <a class="MenuItem" href="$chooseEditor">   
                                     <div class="ItemIcon $checkVisualEditor">
-                                      Rich text editor
+                                      <%=_ctx.appRes(uicomponent.id+ ".label.rich-text-editor") %>
                                      </div>
                                   </a>
                                   <%
@@ -142,7 +142,7 @@
                                   %>
                                   <a class="MenuItem" href="$chooseEditor">   
                                     <div class="ItemIcon $checkPlainEditor">
-                                      Plain text
+                                    <%=_ctx.appRes(uicomponent.id+ ".label.plain-text") %>
                                     </div>
                                   </a>        
 																</div>
@@ -177,16 +177,16 @@
           	<div>
 	            <table class="UIFormGrid">
 	              <tr>
-	                <td class="FieldLabel">From :&nbsp;&nbsp;</td>
+	                <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.from") %> :&nbsp;&nbsp;</td>
 	                <td class="FieldComponent" style="width: 62%;"><%uicomponent.renderField(uicomponent.FIELD_FROM)%></td>
 	                <td class="FieldCCAndBCC">
-	                  <a  href="<%=uicomponent.event("ShowCc")%>">|Add CC|</a> 
-	                  <a  href="<%=uicomponent.event("ShowBcc")%>">Add BCC|</a>
+	                  <a  href="<%=uicomponent.event("ShowCc")%>">|<%=_ctx.appRes(uicomponent.id+ ".label.add-cc") %>|</a> 
+	                  <a  href="<%=uicomponent.event("ShowBcc")%>"><%=_ctx.appRes(uicomponent.id+ ".label.add-bcc") %>|</a>
                     <%// javascript:eXo.mail.UIMailPortlet.showHideAddMoreAddress('FIELD_BCC') %>
 	                </td>
 	              </tr>
 	              <tr>
-	                <td class="FieldLabel"><a href="<%=uicomponent.event("To")%>">To</a> :&nbsp;&nbsp;</td>
+	                <td class="FieldLabel"><a href="<%=uicomponent.event("To")%>"><%=_ctx.appRes(uicomponent.id+ ".label.to") %></a> :&nbsp;&nbsp;</td>
 	                <td class="FieldComponent"  colspan="2">
 	                  <%uicomponent.renderField(uicomponent.FIELD_TO)%> 
 	                </td>
@@ -196,7 +196,7 @@
                   if (uicomponent.showCc_) { displayCc = "" ; }
                 %>
   	              <tr id="FIELD_CC" style="$displayCc">
-  	                <td class="FieldLabel"><a href="<%=uicomponent.event("ToCC")%>">Cc</a> :&nbsp;&nbsp;</td>
+  	                <td class="FieldLabel"><a href="<%=uicomponent.event("ToCC")%>"><%=_ctx.appRes(uicomponent.id+ ".label.cc") %></a> :&nbsp;&nbsp;</td>
   	                <td class="FieldComponent" colspan="2">
   	                  <%uicomponent.renderField(uicomponent.FIELD_CC)%> 
   	                </td>
@@ -206,13 +206,13 @@
                   if (uicomponent.showBcc_) { displayBcc = "" ; }
                 %>
                   <tr id="FIELD_BCC" style="$displayBcc">
-  	                <td class="FieldLabel"><a href="<%=uicomponent.event("ToBCC")%>">Bcc</a> :&nbsp;&nbsp;</td>
+  	                <td class="FieldLabel"><a href="<%=uicomponent.event("ToBCC")%>"><%=_ctx.appRes(uicomponent.id+ ".label.bcc") %></a> :&nbsp;&nbsp;</td>
   	                <td class="FieldComponent" colspan="2">
   	                  <%uicomponent.renderField(uicomponent.FIELD_BCC)%> 
   	                </td>
   	              </tr>
 	              <tr>
-	                <td class="FieldLabel">Subject :&nbsp;&nbsp;</td>
+	                <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.subject") %> :&nbsp;&nbsp;</td>
 	                <td class="FieldComponent" colspan="2" style="padding:4px;">
 	                  <%uicomponent.renderField(uicomponent.FIELD_SUBJECT)%>
 	                </td>

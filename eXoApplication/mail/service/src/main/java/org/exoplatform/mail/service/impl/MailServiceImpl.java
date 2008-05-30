@@ -388,11 +388,11 @@ public class MailServiceImpl implements MailService{
       }
       status = "Mail Delivered !";
     } catch (AddressException e) {
-      status = "There was an error parsing the addresses. Sending Falied !" + e.getMessage(); 
+      status = "There was an error parsing the addresses. Sending Failed !" + e.getMessage(); 
     } catch(AuthenticationFailedException e) {
-      status = "The Username or Password may be wrong. Sending Falied !" + e.getMessage(); 
+      status = "The Username or Password may be wrong. Sending Failed !" + e.getMessage(); 
     } catch (SMTPSendFailedException e) {
-      status = "Sorry,There was an error sending the message. Sending Falied !" + e.getMessage();           
+      status = "Sorry,There was an error sending the message. Sending Failed !" + e.getMessage();           
     } catch (MessagingException e) {
       status = "There was an unexpected error. Sending Failed ! " + e.getMessage();
     } catch (Exception e) {
@@ -457,15 +457,15 @@ public class MailServiceImpl implements MailService{
             account.setIncomingPassword("") ;          
             updateAccount(sProvider, username, account) ;
           }
-          info.setStatusMsg("The username or password may be wrong. Connecting falied !");
+          info.setStatusMsg("The username or password may be wrong.");
           info.setStatusCode(CheckingInfo.RETRY_PASSWORD) ;
           return messageList ;
         } catch (MessagingException  e) {
-          info.setStatusMsg("Connecting falied. Please check server configuration !");
+          info.setStatusMsg("Connecting failed. Please check server configuration.");
           info.setStatusCode(CheckingInfo.CONNECTION_FAILURE) ;
           return messageList ;
         } catch (Exception e) {
-          info.setStatusMsg("There was an unexpected error. Connecting falied !");
+          info.setStatusMsg("There was an unexpected error. Connecting failed.");
           info.setStatusCode(CheckingInfo.CONNECTION_FAILURE) ;
           return messageList ;
         }
