@@ -1,15 +1,20 @@
 .UICalendarPortlet .UIComboboxList {
-	background: white ;
 	position: absolute ;
-	border: solid 1px gray ;
-	overflow-y: auto ;
 	display: none ;
-	max-height: 150px;
 }
 
-.UICalendarPortlet .UIComboboxList {
+.UICalendarPortlet .UIComboboxList .UIComboboxContainer {
+	background: white ;
+	border: solid 1px gray ;
+	overflow-y: auto ;
+	max-height: 150px;
+	display:block ;
+}
+
+.UICalendarPortlet .UIComboboxList .UIComboboxContainer {
 	*height: 150px ;
 }
+
 
 .UICalendarPortlet .UIComboboxList .UIComboboxItem {
 	display: block ;

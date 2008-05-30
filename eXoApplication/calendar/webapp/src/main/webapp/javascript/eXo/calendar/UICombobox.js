@@ -40,9 +40,9 @@ UICombobox.prototype.show = function(evt) {
 } ;
 UICombobox.prototype.fixForIE6 = function() {
   if(!eXo.core.Browser.isIE6) return ;
-  if(document.getElementById("UIComboboxIframe")) eXo.core.DOMUtil.removeElement(document.getElementById("UIComboboxIframe")) ;
+  if(eXo.core.DOMUtil.getChildrenByTagName(eXo.calendar.UICombobox.list,"iframe").length > 0) return ;
 	var iframe = document.createElement("iframe") ;
-  iframe.setAttribute("id", "UIComboboxIframe") ;
+  iframe.frameBorder = 0 ;
   iframe.style.position = "absolute" ;
   iframe.style.top = "0px" ;
   iframe.style.left = "0px" ;  
