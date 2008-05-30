@@ -521,7 +521,6 @@
 .UIContactPortlet .UIContactContainer td {
 	border-top: none;
 	padding-left: 10px;
-	white-space: nowrap;
 }
 
 .UIContactPortlet .UIContactContainer .text {
