@@ -23,6 +23,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
@@ -36,6 +37,7 @@ import org.exoplatform.mail.webui.SelectItemOptionGroup;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -119,8 +121,10 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
       monthOptions.add(new SelectItemOption<String>(month, month)) ;
     }
     addUIFormInput(new UIFormSelectBox(MONTH, MONTH, monthOptions)) ;
-
-    String date = MailUtils.formatDate("dd/MM/yyyy", new Date()) ;
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    Locale locale = context.getParentAppRequestContext().getLocale() ;
+    
+    String date = MailUtils.formatDate("dd/MM/yyyy", new Date(), locale) ;
     String strDate = date.substring(date.lastIndexOf("/") + 1, date.length()) ; 
     int thisYear = Integer.parseInt(strDate) ;
     List<SelectItemOption<String>> yearOptions = new ArrayList<SelectItemOption<String>>() ;

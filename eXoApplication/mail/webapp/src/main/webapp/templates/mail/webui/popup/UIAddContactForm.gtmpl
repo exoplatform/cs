@@ -6,7 +6,7 @@
     <table class="UIFormGrid">
       <tbody>
         <tr>
-          <td class="FieldLabel">Address Book</td>
+          <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.address-book") %></td>
           <td class="FieldComponent">
             <% uicomponent.renderField(uicomponent.SELECT_GROUP)%>
             <% if (!uicomponent.isEdited_) {%><a href="<%=uicomponent.event("AddGroup")%>" title="Add Address Book"><img class="AddNewNodeIcon" src="/eXoResources/skin/DefaultSkin/background/Blank.gif"/></a><%}%> 
@@ -27,31 +27,31 @@
               <table class="UIFormGrid">
                 <tbody>
                   <tr>
-                    <td class="FieldLabel"> First Name </td>
+                    <td class="FieldLabel"> <%=_ctx.appRes(uicomponent.id+ ".label.first-name") %> </td>
                     <td class="FieldComponent">
                       <% uicomponent.renderField(uicomponent.FIRST_NAME)%>
                     </td>
                   </tr>
                   <tr>
-                    <td class="FieldLabel"> Last Name </td>
+                    <td class="FieldLabel"> <%=_ctx.appRes(uicomponent.id+ ".label.last-name") %> </td>
                     <td class="FieldComponent">
                       <% uicomponent.renderField(uicomponent.LAST_NAME)%>
                     </td>
                   </tr>
                   <tr>
-                    <td class="FieldLabel"> Nick Name </td>
+                    <td class="FieldLabel"> <%=_ctx.appRes(uicomponent.id+ ".label.nick-name") %> </td>
                     <td class="FieldComponent">
                       <% uicomponent.renderField(uicomponent.NICKNAME)%>
                     </td>
                   </tr>
                   <tr>
-                    <td class="FieldLabel"> Gender </td>
+                    <td class="FieldLabel"> <%=_ctx.appRes(uicomponent.id+ ".label.gender") %> </td>
                     <td class="FieldComponent">
                       <% uicomponent.renderField(uicomponent.GENDER)%>
                     </td>
                   </tr>
                   <tr>
-                    <td class="FieldLabel"> Birthday </td>
+                    <td class="FieldLabel"> <%=_ctx.appRes(uicomponent.id+ ".label.birthday") %> </td>
                     <td class="FieldComponent">
                       <% uicomponent.renderField(uicomponent.DAY)%>
                       <span>-</span>  
@@ -61,13 +61,13 @@
                     </td>
                   </tr>
                   <tr>
-                    <td class="FieldLabel"> Job Title </td>
+                    <td class="FieldLabel"> <%=_ctx.appRes(uicomponent.id+ ".label.job-title") %> </td>
                     <td class="FieldComponent">
                     <% uicomponent.renderField(uicomponent.JOBTITLE)%>
                     </td>
                   </tr>
                   <tr>
-                    <td class="FieldLabel"> Email </td>
+                    <td class="FieldLabel"> <%=_ctx.appRes(uicomponent.id+ ".label.email") %> </td>
                     <td class="FieldComponent">
                     <% uicomponent.renderField(uicomponent.EMAIL)%>
                     </td>
@@ -82,7 +82,7 @@
       </tbody>
     </table>
     <div class="AvatarContent">
-      <div class="Label">Picture:</div>
+      <div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.picture") %>:</div>
       <% 
       	String imageLink = uicomponent.getImageSource() ; 
       %>
@@ -90,8 +90,8 @@
         <img src="<%=(imageLink == null ? "/contact/skin/DefaultSkin/webui/background/Img2.gif": imageLink)%>" width=63 height=81 class="ImgAvatar"/>
       </div>
       <div class="Action">  
-        <a href="<%=uicomponent.event("ChangeImage")%>">Change | </a>
-        <a href="<%=uicomponent.event("DeleteImage")%>">Delete</a>      
+        <a href="<%=uicomponent.event("ChangeImage")%>"><%=_ctx.appRes(uicomponent.id+ ".label.change") %> | </a>
+        <a href="<%=uicomponent.event("DeleteImage")%>"><%=_ctx.appRes(uicomponent.id+ ".label.delete") %></a>      
       </div>
     </div>
     

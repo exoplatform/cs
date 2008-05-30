@@ -10,45 +10,45 @@
 	    	<div class="FinterName">
 		      <table class="UIFormGrid">
 		        <tr>
-		  	      <td class="FieldLabel" style="width: 90px">Filter name:</td>
+		  	      <td class="FieldLabel" style="width: 90px"><%=_ctx.appRes(uicomponent.id+ ".label.filter-name") %>:</td>
 		          <td class="FieldComponent" colspan="2"><%uicomponent.renderField(uicomponent.FILTER_NAME)%></td>
 		        </tr>
 		      </table>
 		    </div>
 	      <div class="AddMessageFilter">
 	      	<div class="WorkingContent">
-			      <div class="Title">If all of the flowing rules are true ...</div>
+			      <div class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.if-all-of-the-flowing-true") %></div>
 			      <table class="UIFormGrid">
 			        <tr>
-			  	      <td class="FieldLabel">From header:</td>
+			  	      <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.from") %>:</td>
 			  	      <td class="FieldComponent" style="width: 130px;">
                   <%uicomponent.renderField(uicomponent.FILTER_FROM_CONDITION)%>
 								</td>
 			          <td class="FieldComponent" style="width: 130px;"><%uicomponent.renderField(uicomponent.FILTER_FROM)%></td>
 			        </tr>
 			        <tr>
-			  	      <td class="FieldLabel">To header:</td>
+			  	      <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.to") %>:</td>
 			  	      <td class="FieldComponent" style="width: 130px;">
                   <%uicomponent.renderField(uicomponent.FILTER_TO_CONDITION)%>  
 								</td>
 			          <td class="FieldComponent" style="width: 130px;"><%uicomponent.renderField(uicomponent.FILTER_TO)%></td>
 			        </tr>
 			        <tr>
-			  	      <td class="FieldLabel">Subject:</td>
+			  	      <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.subject") %>:</td>
 			  	      <td class="FieldComponent" style="width: 130px;">
 			  	        <%uicomponent.renderField(uicomponent.FILTER_SUBJECT_CONDITION)%>  
 								</td>
 			          <td class="FieldComponent" style="width: 130px;"><%uicomponent.renderField(uicomponent.FILTER_SUBJECT)%>  </td>
 			        </tr>
 			        <tr>
-			  	      <td class="FieldLabel">Body:</td>
+			  	      <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.body") %>:</td>
 			  	      <td class="FieldComponent" style="width: 130px;">
                   <%uicomponent.renderField(uicomponent.FILTER_BODY_CONDITION)%>  
 								</td>
 			          <td class="FieldComponent" style="width: 130px;"><%uicomponent.renderField(uicomponent.FILTER_BODY)%></td>
 			        </tr>
 			      </table>
-			      <div class="Title">Then ...</div>
+			      <div class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.then") %> ...</div>
 			      <table class="UIFormGrid">
 			        <tr>
 			  	      <td class="FieldLabel"><%=uicomponent.getLabel(uicomponent.FILTER_APPLY_FOLDER)%>:</td>
