@@ -34,7 +34,7 @@
 .UIContactPortlet .UISearchForm input {
 	width: 140px;
 	float: right;
-	margin: 0px 8px;
+	margin: 0px 8px 0px 0px;
 }
 
 .UIContactPortlet .UISearchForm .Search {
