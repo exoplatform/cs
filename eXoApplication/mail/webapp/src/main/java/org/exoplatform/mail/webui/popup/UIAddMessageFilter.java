@@ -107,7 +107,7 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
     uiSelectFolder.init(accountId) ;
     
     List<SelectItemOption<String>> tagList = new ArrayList<SelectItemOption<String>>();   
-    tagList.add(new SelectItemOption<String>("-- Choose tag --", ""));       
+    tagList.add(new SelectItemOption<String>("Choose a tag", "choose-tag"));       
     for (Tag tag : mailSrv.getTags(SessionProviderFactory.createSystemProvider(), username, accountId)) {   
       tagList.add(new SelectItemOption<String>(tag.getName(), tag.getId()));       
     }    
@@ -215,7 +215,8 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
   }
   
   public String getApplyTag() throws Exception {
-    return getUIStringInput(FILTER_APPLY_TAG).getValue();
+    String tagId = getUIStringInput(FILTER_APPLY_TAG).getValue();
+    return tagId.equals("choose-tag") ? "" : tagId ;
   }
   
   public void setApplyTag(String s) throws Exception {
