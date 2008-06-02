@@ -741,6 +741,9 @@
 	font-weight: bold;
 	font-size: 11px;
 	margin: 5px 0px 0px 10px; 
+	overflow:hidden;
+	white-space:nowrap;
+	width:90%;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessagePreview .MaximizeReadingPane {
