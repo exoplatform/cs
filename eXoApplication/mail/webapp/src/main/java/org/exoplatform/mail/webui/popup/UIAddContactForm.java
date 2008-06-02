@@ -256,6 +256,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
       String firstName = uiContact.getUIStringInput(FIRST_NAME).getValue();
       String lastName = uiContact.getUIStringInput(LAST_NAME).getValue();
       String email = uiContact.getUIStringInput(EMAIL).getValue();
+      
       if (!uiContact.isEdited_ && MailUtils.isFieldEmpty(groupId)) {  
         uiApp.addMessage(new ApplicationMessage("UIAddContactForm.msg.group-required", null, ApplicationMessage.INFO)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -267,7 +268,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
       }
       Contact contact ;
       if(uiContact.isEdited_) contact = uiContact.selectedContact_ ;
-      else contact = new Contact();
+      else contact = new Contact() ;
       contact.setFullName(firstName + " " + lastName);
       contact.setFirstName(firstName);
       contact.setLastName(lastName);
@@ -307,7 +308,6 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
         } else {
           contactSrv.saveContact(SessionProviderFactory.createSystemProvider(), uiPortlet.getCurrentUser(), contact, false);
         }
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiContact.getParent()) ;
         UIAddressBookForm uiAddress = uiPortlet.findFirstComponentOfType(UIAddressBookForm.class);
         if (uiAddress != null) {
           if(!uiContact.isEdited_) { 
@@ -317,9 +317,12 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
             uiAddress.refrestContactList(uiContact.selectedGroup_);
           }
           uiAddress.setSelectedContact(contact);
+          uiContact.getAncestorOfType(UIPopupAction.class).deActivate() ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiAddress.getParent()) ;
+        } else {
+          uiContact.getAncestorOfType(UIPopupAction.class).deActivate() ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiContact.getAncestorOfType(UIPopupAction.class)) ;
         }
-        uiContact.getAncestorOfType(UIPopupAction.class).deActivate() ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiAddress.getParent()) ;
       } catch(Exception e) { e.printStackTrace() ; }
     }
   }
