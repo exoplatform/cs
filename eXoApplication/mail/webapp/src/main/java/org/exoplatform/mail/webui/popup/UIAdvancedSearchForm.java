@@ -202,7 +202,8 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
   }
   
   public long getPriority() {
-    return Long.valueOf(getUIFormSelectBox(SEARCH_PRIORITY).getValue()) ;
+    String value = getUIFormSelectBox(SEARCH_PRIORITY).getValue() ;
+    return Long.valueOf(value.substring(value.indexOf(".")+1), value.length()) ;
   }
 
   public void resetFields() { reset() ; }
