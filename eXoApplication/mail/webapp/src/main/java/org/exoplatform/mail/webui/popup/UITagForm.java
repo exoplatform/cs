@@ -62,8 +62,8 @@ import org.exoplatform.webui.form.UIFormStringInput;
     }  
 )
 public class UITagForm extends UIForm implements UIPopupComponent{
-  public static final String SELECT_AVAIABLE_TAG = "Tag Name";
-  public static final String TAG_COLOR = "Choose Color" ;
+  public static final String SELECT_AVAIABLE_TAG = "tag-name";
+  public static final String TAG_COLOR = "choose-color" ;
   public static final String TAG_MESSAGE = "TagMessage";
   
   private Map<String, Message> messageMap = new HashMap<String, Message>() ;
@@ -82,6 +82,14 @@ public class UITagForm extends UIForm implements UIPopupComponent{
     }
   }
   
+  public String getLabel(String id) {
+    try {
+      return super.getLabel(id) ;
+    } catch (Exception e) {
+      return id ;
+    }
+  }
+  
   public String[] getActions() { return new String[] {"Add", "Remove", "Cancel"}; }
   
   public List<Tag> getTagList() {
@@ -95,7 +103,7 @@ public class UITagForm extends UIForm implements UIPopupComponent{
     String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
     MailService mailSrv = getApplicationComponent(MailService.class);
     for(Message msg : messageList) {
-      String mesSub = "Sub : " + ((msg.getSubject().length() >= 30) ? (msg.getSubject().substring(0, 30) + "...") : msg.getSubject());
+      String mesSub = getLabel("subject") + " : " + ((msg.getSubject().length() >= 30) ? (msg.getSubject().substring(0, 30) + "...") : msg.getSubject());
       UIFormInputInfo uiTags = new UIFormInputInfo(TAG_MESSAGE, TAG_MESSAGE, null);
       String tags = "";
       if (msg.getTags() != null && msg.getTags().length > 0) {
@@ -104,7 +112,7 @@ public class UITagForm extends UIForm implements UIPopupComponent{
           Tag tag = mailSrv.getTag(SessionProviderFactory.createSystemProvider(), username, accountId, msg.getTags()[i]);
           tags += "[" + tag.getName() + "]";
         }
-      } else tags = "No tag";
+      } else tags = getLabel("no-tag") ;
       
       uiTags.setName(mesSub);
       uiTags.setValue(tags);
@@ -128,7 +136,6 @@ public class UITagForm extends UIForm implements UIPopupComponent{
     return tagList;
   }
   
-  public String getLabel(String id) { return id ;}
   public String getSelectedColor() {
     return getChild(UIFormColorPicker.class).getValue() ;
   }
