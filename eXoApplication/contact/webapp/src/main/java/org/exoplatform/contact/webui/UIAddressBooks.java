@@ -22,6 +22,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
@@ -46,6 +48,7 @@ import org.exoplatform.mail.service.Account;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -84,14 +87,35 @@ public class UIAddressBooks extends UIComponent {
   private List<Contact> copyContacts = new ArrayList<Contact>();
   private String copyAddress = null ;
   public UIAddressBooks() throws Exception { }
-
+  
   public List<ContactGroup> getGroups() throws Exception {
     List<ContactGroup> groupList = ContactUtils.getContactService()
       .getGroups(SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser());
     privateAddressBookMap_.clear() ;
-    for (ContactGroup group : groupList) privateAddressBookMap_.put(group.getId(), group.getName()) ; 
+    for (ContactGroup group : groupList) {
+      
+      // task 825
+      String groupName = group.getName() ;
+      if (group.getId().equals(NewUserListener.DEFAULTGROUP + ContactUtils.getCurrentUser()) &&  groupName.equals(NewUserListener.DEFAULTGROUPNAME)
+          && group.getDescription().equals(NewUserListener.DEFAULTGROUPDES)) {
+        WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+        ResourceBundle res = context.getApplicationResourceBundle() ;
+        try {
+          groupName = res.getString("UIAddressBooks.label.defaultAddName");
+          String des = res.getString("UIAddressBooks.label.defaultAddDes");
+          group.setName(groupName) ;
+          group.setDescription(des) ;          
+          ContactUtils.getContactService().saveGroup(
+              SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), group, false) ;
+        } catch (MissingResourceException e) {      
+          e.printStackTrace() ;
+        }
+      }
+      privateAddressBookMap_.put(group.getId(), groupName) ; 
+    }
     return groupList;
   }
+  
   public String[] getPublicContactGroups() throws Exception {
   	return ContactUtils.getUserGroups().toArray(new String[] {}) ;
   }
