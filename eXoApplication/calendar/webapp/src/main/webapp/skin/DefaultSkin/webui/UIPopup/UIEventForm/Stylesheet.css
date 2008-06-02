@@ -345,3 +345,6 @@
 .UICalendarPortlet .UIQuickAddEvent .UIFormGrid .FieldComponent .Time .UIComboboxInput{
 	width: 120px;
 }
+.UICalendarPortlet .UIAddNewEvent .NewEventAttendee .UserSelection {
+	background: #C41616 ;
+}
