@@ -6,7 +6,7 @@
 	
 		<div class="AccountSettingCategory">
 			<div class="CategoryControlBar">
-				<div class="Title">Accounts</div>
+				<div class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.accounts") %></div>
         <a href="<%=uicomponent.event("DeleteAccount", uicomponent.id, "id")%>" title="<%=_ctx.appRes(uicomponent.id+  ".label.delete-acc") %>"><div class="DeleteIcon"><span></span></div></a>
 				<div style="clear: both;"><span></span></div> 
 			</div>

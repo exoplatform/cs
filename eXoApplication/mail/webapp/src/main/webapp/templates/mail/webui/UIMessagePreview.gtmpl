@@ -29,7 +29,7 @@
 	<div class="ReadingPaneBar">
 		<div class="Subject"><span><%=_ctx.appRes(uicomponent.id+ ".label.subject") %>:</span><span>
 		<%
-		  String subject = "(No Subject)"
+		  String subject = "(" + _ctx.appRes(uicomponent.id+ ".label.no-subject") + ")"
 		  if (msgRoot.getSubject() != null && msgRoot.getSubject() != "") {
 		    subject = msgRoot.getSubject();
 		  }
@@ -68,7 +68,7 @@
                   <body>
                     <tr>
                       <td>
-                        <div  class="$starClass" title="Add star for this message"><span></span></div>
+                        <div  class="$starClass" title="<%=_ctx.appRes(uicomponent.id+ '.label.add-star-for-this-message') %>"><span></span></div>
                       </td>
                       <td style="width: auto; white-space: nowrap;">
                         <div class="SenderAddress">
@@ -85,7 +85,7 @@
                         <table style="white-space: nowrap; width: 100%; table-layout: fixed;">
                           <tr>
                             <td>
-                              <div class="HeadlineText" title="Click here to expand contents of message">
+                              <div class="HeadlineText" title="<%=_ctx.appRes(uicomponent.id+ '.label.click-here-to-expand') %>">
                               <%
                                 String body = MailUtils.html2text(msg.getMessageBody()) ;
                                 if (body.length() > 90) body = body.substring(0, 90) ;
@@ -138,7 +138,7 @@
   						<div class="MiddleCenterViewBoxStyle">
   							<div class="MessageHeader">
   								<div class="MessageCheck">
-  									<div><a href="<%=uicomponent.event("AddStar", msg.getId())%>"><div  class="$starClass" title="Add star for this message"><span></span></div></a></div>
+  									<div><a href="<%=uicomponent.event("AddStar", msg.getId())%>"><div  class="$starClass" title="<%=_ctx.appRes(uicomponent.id+ '.label.add-star-for-this-message') %>"><span></span></div></a></div>
   									<div style="clear: left;"><span></span></div>
   								</div>
   								<div id="CollapseMessageAddressPreview" class="CollapseMessageAddress" onclick="javascript:eXo.mail.UIMailPortlet.showHideMessageDetails(this);">
@@ -151,7 +151,7 @@
   										      <span><%=Utils.getPersonal(from1)%> &lt; <%=from1.getAddress()%> &gt; </span>
                         <%} %>    
   										</span>
-                      <span class="Title">To:</span>
+                      <span class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.to") %>:</span>
                       <span class="LinkAddress"> 
                         <%
                           try {
@@ -250,7 +250,7 @@
                       </div>
                   <%} %>
                   <div class="FieldContainer">
-                    <div class="Title">Date & time:</div>
+                    <div class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.date-time") %>:</div>
                     <div class="Address"><%=MailUtils.formatDate('EEEE, dd MMMM, yyyy HH:mm:ss aaa', msg.getReceivedDate(), locale)%></div>
                     <div style="clear: left;"><span></span></div>
                   </div>
@@ -259,9 +259,9 @@
                   
   								<div class="MessageActions" >
   									<div class="DownArrow1Icon"><span></span></div>
-  									<div class="ShowHideTitle" onclick="javascript:eXo.mail.UIMailPortlet.showHideMessageHeader(this)">Show details</div>
+  									<div class="ShowHideTitle" onclick="javascript:eXo.mail.UIMailPortlet.showHideMessageHeader(this)" showhideheader="<%=_ctx.appRes(uicomponent.id+ '.label.show-details') %> ,<%=_ctx.appRes(uicomponent.id+ '.label.hide-details') %>"><%=_ctx.appRes(uicomponent.id+ ".label.show-details") %></div>
   									<div class="MonthDate"></div>
-  									<div class="Actions" title="Actions on this message" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+  									<div class="Actions" title="<%=_ctx.appRes(uicomponent.id+ '.label.action-on-this-messge') %>" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
                     <% /*Begin Popup Menu*/ %>
                       <div style="position: relative;">
                         <div class="UIPopupCategory" style="display: none;">
@@ -405,11 +405,11 @@
         										}
         										if (validType) {
       										%>
-														<span class="Icon ViewDownloadIcon"><a href="#">View</a></span>
+														<span class="Icon ViewDownloadIcon"><a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.view") %></a></span>
 													<% 
       											}	
       										%>
-														<span class="Icon DownloadIcon"> <a href="$downloadAction">Download</a></span></div>
+														<span class="Icon DownloadIcon"> <a href="$downloadAction"><%=_ctx.appRes(uicomponent.id+ ".label.download") %></a></span></div>
       						  		</div>
       						  		<div style="clear: left;"><span></span></div>
       						  	</div>
