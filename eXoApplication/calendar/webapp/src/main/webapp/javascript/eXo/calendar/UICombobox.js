@@ -39,7 +39,7 @@ UICombobox.prototype.show = function(evt) {
 	document.onmousedown = eXo.calendar.UICombobox.hide ;
 } ;
 UICombobox.prototype.fixForIE6 = function() {
-  if(!eXo.core.Browser.isIE6) return ;
+  if(!eXo.core.Browser.isIE6()) return ;
   if(eXo.core.DOMUtil.getChildrenByTagName(eXo.calendar.UICombobox.list,"iframe").length > 0) return ;
 	var iframe = document.createElement("iframe") ;
   iframe.frameBorder = 0 ;

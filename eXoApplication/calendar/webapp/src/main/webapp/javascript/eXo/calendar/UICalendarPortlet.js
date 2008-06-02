@@ -1575,7 +1575,7 @@ UICalendarPortlet.prototype.initSelectionX = function(tr) {
 	cell = eXo.core.DOMUtil.findDescendantsByTagName(tr, "td", "UICellBlock").slice(1);
 	var len = cell.length ;
 	for(var i = 0 ; i < len ; i ++) {
-		cell[i].onmousedown = eXo.calendar.Highlighter.start ;
+		cell[i].onmousedown = eXo.calendar.UIHSelection.start ;//eXo.calendar.Highlighter.start ;
 	}
 } ;
 
@@ -1592,16 +1592,16 @@ UICalendarPortlet.prototype.getTimeFormat = function(input) {
 } ;
 
 UICalendarPortlet.prototype.callbackSelectionX = function() {
-	var Highlighter = eXo.calendar.Highlighter ;
+	var Highlighter = eXo.calendar.UIHSelection ;
 	var DOMUtil = eXo.core.DOMUtil ;
 	var len = Math.abs(Highlighter.firstCell.cellIndex - Highlighter.lastCell.cellIndex - 1) ;
 	var start = (Highlighter.firstCell.cellIndex - 1)*15 ;
 	var end = start + len*15 ;
 	var timeTable = DOMUtil.findAncestorByTagName(Highlighter.firstCell, "table") ;
 	var dateValue = timeTable.getAttribute("datevalue") ;
-	var uiTabContentContainer = DOMUtil.findAncestorByClass(Highlighter.startCell, "UITabContentContainer") ;
+	var uiTabContentContainer = DOMUtil.findAncestorByClass(Highlighter.firstCell, "UITabContentContainer") ;
 	var UIComboboxInputs = DOMUtil.findDescendantsByClass(uiTabContentContainer, "input","UIComboboxInput") ;
-	var len = UIComboboxInputs.length ;
+	len = UIComboboxInputs.length ;
 	var name = null ;
 	var timeFormat = this.getTimeFormat(UIComboboxInputs[0]) ;
 	start = this.minToTime(start, timeFormat) ;
@@ -1616,9 +1616,8 @@ UICalendarPortlet.prototype.callbackSelectionX = function() {
 		if (name.indexOf("from") >= 0) UIComboboxInputs[i].value = start ;
 		else  UIComboboxInputs[i].value = end ;
 	}
-	DOMUtil.addClass(Highlighter.block[1], "BlueBlock") ;
-	Highlighter.block[1].style.width = parseFloat(Highlighter.block[1].offsetWidth/Highlighter.container.offsetWidth)*100  + "%" ;
-	Highlighter.block[1].style.left = parseFloat(Highlighter.block[1].offsetLeft/Highlighter.container.offsetWidth)*100  + "%" ;
+	var cells = eXo.core.DOMUtil.getChildrenByTagName(Highlighter.firstCell.parentNode, "td") ;
+	Highlighter.setAttr(Highlighter.firstCell.cellIndex, Highlighter.lastCell.cellIndex, cells) ;
 } ;
 
 UICalendarPortlet.prototype.initSettingTab = function(cpid) {

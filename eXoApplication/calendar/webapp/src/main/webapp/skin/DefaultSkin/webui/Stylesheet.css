@@ -240,13 +240,6 @@
 	-moz-user-select : none ;
 }
 
-.BlueBlock {
-	background: green ;
-	position: absolute ;
-	z-index: 1 ;
-	-moz-user-select : none ;
-}
-
 .UICalendarPortlet .SelectFileFrame {
 	width: 340px;
 }

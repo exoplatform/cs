@@ -271,8 +271,10 @@ UIHSelection.prototype.start = function(){
 	var callback = table.getAttribute("eXoCallback") ;
 	if (callback) UIHSelection.callback = callback ;
 	UIHSelection.startIndex = this.cellIndex ;
-	UIHSelection.cells = eXo.core.DOMUtil.getChildrenByTagName(this.parentNode, "th") ;
-	UIHSelection.container = this.parentNode
+  var cell = (eXo.core.DOMUtil.findAncestorById(this,"eventAttender"))? "td" : "th" ;
+	UIHSelection.cells = eXo.core.DOMUtil.getChildrenByTagName(this.parentNode, cell) ;
+	UIHSelection.container = this.parentNode ;
+  UIHSelection.removeAllAttr() ;
 	eXo.core.DOMUtil.addClass(this,"UserSelection") ;
 	document.onmousemove = UIHSelection.execute ;
 	document.onmouseup =  UIHSelection.end ;
