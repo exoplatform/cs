@@ -345,11 +345,11 @@
 				<div style="background: #ffe98f; padding: 2px 0px 5px 10px; height: 18px; display: none" id="checkMailInfobar">
 					<div class="LoadingIcon"><span></span></div>
 					<div style=" float: left; margin-top: 2px" class="StatusText"> 
-            Starting ...
+            <%=_ctx.appRes(uicomponent.id+ ".label.starting") %> ...
           </div>
-					<div style=" float: left; margin: 2px 0px 0px 5px; color: #00f; cursor: pointer" class="StopCheckMail" onclick="eXo.mail.MailServiceHandler.stopCheckMail()">stop</div>
-          <div style=" float: right; padding-right: 10px; margin-top: 2px; color: #00f; cursor: pointer; display:none" class="Hide" onclick="document.getElementById('checkMailInfobar').style.display = 'none'">| Hide</div>
-					<div style="float: right; padding-right: 5px; margin-top: 2px;" class="Here"><a style=" color: #00f;" href="<%=uicomponent.event("Refresh")%> "> Refresh</a></div>
+					<div style=" float: left; margin: 2px 0px 0px 5px; color: #00f; cursor: pointer" class="StopCheckMail" onclick="eXo.mail.MailServiceHandler.stopCheckMail()"><%=_ctx.appRes(uicomponent.id+ ".label.stop") %></div>
+          <div style=" float: right; padding-right: 10px; margin-top: 2px; color: #00f; cursor: pointer; display:none" class="Hide" onclick="document.getElementById('checkMailInfobar').style.display = 'none'">| <%=_ctx.appRes(uicomponent.id+ ".label.hide") %></div>
+					<div style="float: right; padding-right: 5px; margin-top: 2px;" class="Here"><a style=" color: #00f;" href="<%=uicomponent.event("Refresh")%> "> <%=_ctx.appRes(uicomponent.id+ ".label.refresh") %></a></div>
 					<div style="clear: both;"><span></span></div>
 				</div>
 			<%
@@ -365,8 +365,8 @@
   	<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
     	<thead>
     		<tr>
-    			<th style="width: 20px; padding-left: 7px; " class="Border"><input type="checkbox" class="checkbox" title="Check all" value="4"/></th>
-    			<th style="width: 24px;"><div class="StarredIcon" title="Add star for this message"><span></span></div></th>
+    			<th style="width: 20px; padding-left: 7px; " class="Border"><input type="checkbox" class="checkbox" title="<%=_ctx.appRes(uicomponent.id+ '.label.check-all') %>" value="4"/></th>
+    			<th style="width: 24px;"><div class="StarredIcon" title="<%=_ctx.appRes(uicomponent.id+ '.label.add-star-for-this-message') %>"><span></span></div></th>
     		  <th style="padding-left: 8px; width: 20%;">
     		    <%
     		      String sortedBySender = uicomponent.event("Sort",Utils.EXO_FROM);
@@ -384,10 +384,10 @@
                 else classArrowFrom = "DownArrow1Icon" ;
               }
     		    %>
-    		  	<a href = "$sortedBySender" ><div class="$classArrowFrom" style="width: 100%; cursor: pointer;" title="Sort by sender">$head</div></a>
+    		  	<a href = "$sortedBySender" ><div class="$classArrowFrom" style="width: 100%; cursor: pointer;" title="<%=_ctx.appRes(uicomponent.id+ '.label.sort-by-sender') %>">$head</div></a>
     		  </th>
     		  <th style="width: 24px;">
-    		    <a hreft = ""><div class="AttachmentIcon" title="Attchments"><span></span></div></a>
+    		    <a hreft = ""><div class="AttachmentIcon" title="<%=_ctx.appRes(uicomponent.id+ '.label.attachment') %>"><span></span></div></a>
     		  </th>
           <% 
             if (uicomponent.getMessageFilter().getName().equals("Search")) print(" <th style=\"width:20px; border-right:0px;\"> </th> ") ;
@@ -401,9 +401,9 @@
                  else classArrowSubject = "DownArrow1Icon"
                }
            %>
-    		  	<a href = "$sortedBySubject"><div class="$classArrowSubject" title="Sort by subject" style="width: 95%; cursor: pointer;"><%=_ctx.appRes(uicomponent.id+ ".label.subject") %></div></a>
+    		  	<a href = "$sortedBySubject"><div class="$classArrowSubject" title="<%=_ctx.appRes(uicomponent.id+ '.label.sort-by-subject') %>" style="width: 95%; cursor: pointer;"><%=_ctx.appRes(uicomponent.id+ ".label.subject") %></div></a>
     		  </th>
-   	      <th style="width: 24px;"><div class="TotalMessageIcon" title="Total message(s) in conversation"><span></span></div></th>
+   	      <th style="width: 24px;"><div class="TotalMessageIcon" title="<%=_ctx.appRes(uicomponent.id+ '.label.total-messages-in-conversation') %>"><span></span></div></th>
    	      <th style="width: 80px; padding-left: 8px;">
          	  <%
          	     String sortedByReceivedDate = uicomponent.event("Sort",Utils.EXO_RECEIVEDDATE);
@@ -413,7 +413,7 @@
                   else classArrowDate = "DownArrow1Icon"
                 }
             %>
-    		    <a href = "$sortedByReceivedDate"><div class="$classArrowDate" title="Sort by Date & time" ><%=_ctx.appRes(uicomponent.id+ ".label.date-time") %></div></a>
+    		    <a href = "$sortedByReceivedDate"><div class="$classArrowDate" title="<%=_ctx.appRes(uicomponent.id+ '.label.sort-by-date-time') %>" ><%=_ctx.appRes(uicomponent.id+ ".label.date-time") %></div></a>
    	      </th>
    	      <th style="width: 50px; padding-left: 8px;">
        	    <%
@@ -424,13 +424,13 @@
        	         else classArrowSize = "DownArrow1Icon"
        	       }
             %>
-   	        <a href = "$sortedBySize"><div class="$classArrowSize" title="Sort by Size"><%=_ctx.appRes(uicomponent.id+ ".label.size") %></div></a>
+   	        <a href = "$sortedBySize"><div class="$classArrowSize" title="<%=_ctx.appRes(uicomponent.id+ '.label.sort-by-size') %>"><%=_ctx.appRes(uicomponent.id+ ".label.size") %></div></a>
    	      </th>
    	      <th style="width: 30px;">
        	    <%
                String sortedByPriority = uicomponent.event("Sort",Utils.EXO_PRIORITY);
             %>
-   	        <a href = "$sortedByPriority"><div class="PriorityIcon" title="Sort by Priority"><span></span></div></a>
+   	        <a href = "$sortedByPriority"><div class="PriorityIcon" title="<%=_ctx.appRes(uicomponent.id+ '.label.sort-by-priority') %>"><span></span></div></a>
    	      </th>
     	 	</tr>
     	</thead>

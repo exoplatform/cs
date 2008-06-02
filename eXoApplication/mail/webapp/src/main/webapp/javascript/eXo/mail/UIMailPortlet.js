@@ -273,14 +273,17 @@ UIMailPortlet.prototype.showHideMessageHeader = function(obj) {
 	var decorator = DOMUtil.findAncestorByClass(obj, "DecoratorBox");
 	var colapse = DOMUtil.findDescendantById(decorator, "CollapseMessageAddressPreview");
 	var expand = DOMUtil.findDescendantById(decorator, "MessageAddressPreview");
+	var showhide = obj.getAttribute("showhideheader");
+    var show = showhide.substring(0, showhide.indexOf(",")) ;
+    var hide = showhide.substring(showhide.indexOf(",")+ 1, showhide.length) ;
 	if (colapse.style.display == "none") {
 		expand.style.display = "none";
 		colapse.style.display = "block"
-		obj.innerHTML = "Show details";
+		obj.innerHTML = show ;
 	} else {
 		colapse.style.display = "none"
 		expand.style.display = "block";
-		obj.innerHTML = "Hide details";
+		obj.innerHTML = hide ;
 	}
   var icons = eXo.core.DOMUtil.findDescendantsByClass(obj.parentNode, 'div', 'DownArrow1Icon') ;
   if (icons.length > 0) {
