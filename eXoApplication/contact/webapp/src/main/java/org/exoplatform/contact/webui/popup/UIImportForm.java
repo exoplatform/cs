@@ -178,6 +178,7 @@ public class UIImportForm extends UIForm {
         uiformInput.getUploadDataAsStream().read(input) ;
         inputStream = new ByteArrayInputStream(input) ;
       }
+      /*
       boolean canImport = false ;
       String[] array = uploadResource.getMimeType().split("/") ;
       String extend = array[array.length - 1] ;
@@ -190,6 +191,7 @@ public class UIImportForm extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
+      */
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       String importFormat = uiForm.getUIFormSelectBox(UIImportForm.FIELD_TYPE).getValue() ;
 
@@ -207,7 +209,7 @@ public class UIImportForm extends UIForm {
         UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;
         uploadService.removeUpload(uploadId) ;
         uiContacts.updateList() ;        
-      } catch (versitException ex) {
+      } catch (Exception ex) {
 //        ex.printStackTrace() ;
         uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.invalid-format", null, 
             ApplicationMessage.WARNING)) ;
