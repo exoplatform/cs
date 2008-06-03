@@ -6,14 +6,14 @@
           for(i in 1..(uicomponent.getNumberFile())) {
         %>
         <tr>
-          <td class="FieldLabel">Attach file</td>
+          <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.upload") %></td>
           <td class="FieldComponent">
             <%uicomponent.renderField(uicomponent.FIELD_UPLOAD + String.valueOf(i))%>
           </td>
         </tr>
         <% } %>
         <tr>
-        <td><a href="<%=uicomponent.event("AddMore")%>">[Add more]</a></td>
+        <td><a href="<%=uicomponent.event("AddMore")%>">[<%=_ctx.appRes(uicomponent.id+ ".label.add-more") %>]</a></td>
         <td class="FieldComponent">
         </td>
       </tr>
