@@ -2,6 +2,8 @@
 	import java.text.DateFormat;
 	import java.text.SimpleDateFormat;
 	import java.util.Calendar;
+	import java.util.Locale;
+	import org.exoplatform.webui.application.WebuiRequestContext;
 	uiform.begin() ;
 	def rcontext = _ctx.getRequestContext() ;
 	rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.setSelected("'+uiform.id+'") ;') ;
@@ -17,7 +19,10 @@
  	//monthViewAction = uicomponent.TYPE_MONTH +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=1" ;
 	//yearViewAction = uicomponent.TYPE_YEAR +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=1" ;
 	dateTimeFormat = uicomponent.getDateTimeFormat() ;
-	DateFormat df = new SimpleDateFormat(dateTimeFormat) ;
+	WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+ 	Locale locale = context.getParentAppRequestContext().getLocale() ;
+ 	
+	DateFormat df = new SimpleDateFormat(dateTimeFormat, locale) ;
 	boolean isDisplaySearchResult = uicomponent.isDisplaySearchResult() ;
 	if(isDisplaySearchResult) {
 %> 
@@ -39,6 +44,9 @@
 						</td>
 						<td>
 							<div class="Title">
+							<a href="<%=uicomponent.event("GotoDate",monthViewAction)%>">
+								$currentDayName
+							</a>,
 							<a href="<%=uicomponent.event('GotoDate',monthViewAction)%>">
 								$currentMonthName
 							</a>, $currentDay, 

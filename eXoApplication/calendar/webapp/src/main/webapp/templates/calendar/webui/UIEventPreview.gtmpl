@@ -3,11 +3,18 @@ import org.exoplatform.calendar.service.CalendarEvent;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import org.exoplatform.calendar.CalendarUtils;
+import java.util.Locale;
+import org.exoplatform.webui.application.WebuiRequestContext;
+
+WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+Locale locale = context.getParentAppRequestContext().getLocale() ;
+	
 dateTimeFormat = uicomponent.getDateTimeFormat() ;
-DateFormat df = new SimpleDateFormat(dateTimeFormat) ;
+DateFormat df = new SimpleDateFormat(dateTimeFormat, locale) ;
 df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
 CalendarEvent event = uicomponent.getEvent() ;		
 color = uicomponent.getColors().get(event.getCalType() + CalendarUtils.COLON + event.getCalendarId()) ;
+ 	
 uiform.begin() ;
 %>
 <div class="UIPreview">

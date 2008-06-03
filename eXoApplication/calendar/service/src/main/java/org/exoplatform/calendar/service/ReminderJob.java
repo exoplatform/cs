@@ -74,7 +74,7 @@ public class ReminderJob implements Job {
       StringBuffer path = new StringBuffer(getReminderPath(fromCalendar));
       path.append("//element(*,exo:reminder)");
       path.append("[@exo:remindDateTime <= xs:dateTime('"	+ ISO8601.format(fromCalendar)
-          + "') and @exo:isOver = 'false']");
+          + "') and @exo:reminderType = 'email' and @exo:isOver = 'false']");
       // and @exo:reminderType = 'email' 
       QueryManager queryManager = calendarHome.getSession().getWorkspace().getQueryManager();
       Query query = queryManager.createQuery(path.toString(), Query.XPATH);
@@ -90,7 +90,7 @@ public class ReminderJob implements Job {
             message = new Message();
             message.setContentType(Utils.MIMETYPE_TEXTHTML) ;
             message.setMessageTo(to);
-            message.setSubject("eXo calendar reminder!");
+            message.setSubject("[reminder] eXo calendar notify mail !");
             message.setMessageBody(reminder.getProperty("exo:eventSummary").getString());
             message.setFrom(jdatamap.getString("account")) ;
             if(reminder.getProperty("exo:isRepeat").getBoolean()) {
@@ -106,6 +106,7 @@ public class ReminderJob implements Job {
                   java.util.Calendar cal = new GregorianCalendar() ;
                   cal.setTimeInMillis(remindTime + interval) ;
                   reminder.setProperty("exo:remindDateTime", cal) ;
+                  reminder.setProperty("exo:isOver", false) ;
                 }
               }
             }else {
