@@ -23,8 +23,6 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.io.ByteArrayInputStream;
 
-import net.wimpi.pim.util.versitio.versitException;
-
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.ContactImportExport;
 import org.exoplatform.contact.service.ContactService;
