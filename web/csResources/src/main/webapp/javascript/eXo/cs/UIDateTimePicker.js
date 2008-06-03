@@ -9,8 +9,17 @@ function UIDateTimePicker() {
 
 UIDateTimePicker.prototype = eXo.webui.UICalendar ;
 
+UIDateTimePicker.prototype.getLang = function() {
+	var weekdays = String(this.dateField.getAttribute("daysname")).trim() ;
+	var months = String(this.dateField.getAttribute("monthsname")).trim() ;
+	this.weekdays = weekdays.split(",") ;
+	this.months = months.split(",") ;
+} ;
+
 UIDateTimePicker.prototype.show = function() {
+	eXo.cs.UIDateTimePicker.getLang() ;
 	document.onmousedown = new Function('eXo.cs.UIDateTimePicker.hide()') ;
+	
   var str = this.dateField.getAttribute("format") ;
   str = str.replace(/d{2}/,"(\\d{1,2}\\") ;
   str = str.replace(/M{2}/,"\\d{1,2}\\") ;
