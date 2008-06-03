@@ -868,7 +868,7 @@ public class JCRDataStorage{
     if(eventNode.hasProperty("exo:fromDateTime")) {
       Node reminders = getReminderFolder(SessionProvider.createSystemProvider(), eventNode.getProperty("exo:fromDateTime").getDate().getTime()) ;
       if(reminders.hasNode(eventNode.getName())) reminders.getNode(eventNode.getName()).remove() ;
-      Node events = reminders.getParent().getNode(EVENTS) ;
+      Node events = reminders.getParent().getNode(CALENDAR_REMINDER) ;
       if(events != null && events.hasNode(eventNode.getName())) events.getNode(eventNode.getName()).remove() ;
       if(!reminders.isNew())reminders.save() ;
     }
@@ -1112,21 +1112,8 @@ public class JCRDataStorage{
     Node publicEvent ;
     int fromDate ;
     int toDate ;
-
-    QueryManager qm = eventFolder.getSession().getWorkspace().getQueryManager();
-    StringBuffer queryString = new StringBuffer("/jcr:root" + eventFolder.getParent().getPath() 
-        + "//element(*,exo:calendarPublicEvent)[@exo:rootEventId='").
-        append(event.getId()).
-        append("']");
-    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
-    QueryResult result = query.execute();
-    NodeIterator it = result.getNodes();
-    boolean isRemoved = false ;
-    while(it.hasNext()) {
-      it.nextNode().remove() ;
-      isRemoved = true ;
-    }
-    if(isRemoved) eventFolder.save() ;
+	syncRemoveEvent(eventFolder, event.getId()) ;
+	
     CalendarEvent ev = new CalendarEvent() ;
     publicEvent = eventFolder.addNode(ev.getId(), "exo:calendarPublicEvent") ;
     publicEvent.setProperty("exo:id", ev.getId()) ;
@@ -1190,14 +1177,20 @@ public class JCRDataStorage{
     }
   }
 
-  private void syncRemoveEvent(Node eventFolder, String eventId) {
-    Node publicEvent ;
-    try {
-      publicEvent = eventFolder.getNode(eventId) ;
-      publicEvent.remove() ;
-      eventFolder.getSession().refresh(true) ;
-      eventFolder.getSession().save() ;
-    } catch (Exception e) {
+  private void syncRemoveEvent(Node eventFolder, String rootEventId) throws Exception{
+  	QueryManager qm = eventFolder.getSession().getWorkspace().getQueryManager();
+    StringBuffer queryString = new StringBuffer("/jcr:root" + eventFolder.getParent().getParent().getParent().getPath() 
+        + "//element(*,exo:calendarPublicEvent)[@exo:rootEventId='").
+        append(rootEventId).
+        append("']");
+    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
+    QueryResult result = query.execute();
+    NodeIterator it = result.getNodes();
+    if(it.getSize() > 0) {
+    	while(it.hasNext()) {
+        it.nextNode().remove() ;
+      }
+    	eventFolder.getSession().save() ;
     }
   }
   private Node getReminderFolder(SessionProvider sysProvider, Date fromDate)throws Exception {
