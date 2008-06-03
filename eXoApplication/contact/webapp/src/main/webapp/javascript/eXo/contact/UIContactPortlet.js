@@ -382,6 +382,7 @@ UIContactPortlet.prototype.printList = function (obj){
 	obj = eXo.contact.UIContactPortlet.disableAction(obj) ;
 	var printContainer = obj.cloneNode(true) ;
 	var UIAction = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div", "UIAction") ;
+	if(eXo.core.DOMUtil.findChildrenByClass(document.body, "div", "UIPrintContainer").length > 0) return ;
 	var div = document.createElement("div") ;
 	div.className = "UIContactPortlet UIPrintContainer" ;
 	div.appendChild(printContainer) ;

@@ -146,7 +146,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   // only called when refresh brower
   @SuppressWarnings({ "unchecked", "unused" })
   private void refreshData() throws Exception {
-    if (isDisplaySearchResult()) return ;
+    if (isDisplaySearchResult() || isPrintForm) return ;
     if (selectedGroup != null) {
       if (getPrivateGroupMap().containsKey(selectedGroup)) {
         setContacts(ContactUtils.getContactService().getContactPageListByGroup(
@@ -154,6 +154,11 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       } else if (ContactUtils.getUserGroups().contains(selectedGroup)) {
         setContacts(ContactUtils.getContactService()
             .getPublicContactsByAddressBook(SessionProviderFactory.createSystemProvider(), selectedGroup));
+      } else {
+        UIAddressBooks uiAddressBooks = getAncestorOfType(
+            UIWorkingContainer.class).findFirstComponentOfType(UIAddressBooks.class) ;       
+        setContacts(ContactUtils.getContactService().getSharedContactsByAddressBook(SessionProviderFactory
+            .createSystemProvider(),ContactUtils.getCurrentUser(), uiAddressBooks.getSharedGroups().get(selectedGroup))); 
       }
     } else if (selectedTag_ != null) {
       DataPageList pageList =ContactUtils.getContactService().getContactPageListByTag(
@@ -171,7 +176,9 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         pageList.setList(contacts) ;     
       }
       setContacts(pageList) ;
-    }    
+    } else if (isSelectSharedContacts) {
+      setContacts(ContactUtils.getContactService().getSharedContacts( ContactUtils.getCurrentUser())); 
+    }
   }
   
   public void setSelectSharedContacts(boolean selected) { isSelectSharedContacts = selected ; }
