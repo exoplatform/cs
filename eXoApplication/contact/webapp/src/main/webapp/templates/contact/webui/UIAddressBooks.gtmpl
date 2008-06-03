@@ -80,20 +80,37 @@
 		<% } %>		
 	</div>
 	
-	<div class="PersonalAddress">
-		<div class="AddressTitle">
-			<% 
-				
+			<%
 				cssClass = "" ;
 				if (uicomponent.isSelectSharedContacts()) cssClass = "Selected" ;
 				String sharedContactLink  = uicomponent.event("SelectSharedContact") ;
 			 %>
+	<div class="PersonalAddress">
+	
+		<% 
+			if (uicomponent.hasSharedContacts() == true) {
+		 %>
+		<div class="AddressTitle">			
+			<div class="Label $cssClass" style="font-weight: bold;">
+				<a href="$sharedContactLink">
+					<%=_ctx.appRes(uicomponent.getName() + ".label.sharedContacts")%>
+				</a>	
+			</div>
+		</div>
+		<% 
+			} else {
+		 %>
+		<div class="AddressTitle">			
 			<div class="Label $cssClass" >
 				<a href="$sharedContactLink">
 					<%=_ctx.appRes(uicomponent.getName() + ".label.sharedContacts")%>
 				</a>	
 			</div>
 		</div>
+		
+		<% 
+			}
+		 %>
 		<% 
 		Map sharedGroups =	uicomponent.getSharedGroups() ;
 		for(group in sharedGroups.keySet()) {

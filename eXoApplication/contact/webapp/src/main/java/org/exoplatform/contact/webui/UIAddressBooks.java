@@ -88,6 +88,12 @@ public class UIAddressBooks extends UIComponent {
   private String copyAddress = null ;
   public UIAddressBooks() throws Exception { }
   
+  @SuppressWarnings("unused")
+  private boolean hasSharedContacts() throws Exception {
+    if (ContactUtils.getContactService().getSharedContacts( ContactUtils.getCurrentUser()).getAvailable() > 0) return true ;
+    return false ;
+  }
+  
   public List<ContactGroup> getGroups() throws Exception {
     List<ContactGroup> groupList = ContactUtils.getContactService()
       .getGroups(SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser());
