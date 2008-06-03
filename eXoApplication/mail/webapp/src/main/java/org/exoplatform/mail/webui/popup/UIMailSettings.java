@@ -78,33 +78,33 @@ public class UIMailSettings extends UIForm implements UIPopupComponent {
     addUIFormInput(new UIFormSelectBox(NUMBER_MSG_PER_PAGE, NUMBER_MSG_PER_PAGE, numberPerPage));  
     
     List<SelectItemOption<String>> periodCheckAuto = new ArrayList<SelectItemOption<String>>();
-    periodCheckAuto.add(new SelectItemOption<String>("Never", String.valueOf(MailSetting.NEVER_CHECK_AUTO)));
-    periodCheckAuto.add(new SelectItemOption<String>("5 minutes", String.valueOf(MailSetting.FIVE_MINS)));
-    periodCheckAuto.add(new SelectItemOption<String>("10 minutes", String.valueOf(MailSetting.TEN_MINS)));
-    periodCheckAuto.add(new SelectItemOption<String>("20 minutes", String.valueOf(MailSetting.TWENTY_MINS)));
-    periodCheckAuto.add(new SelectItemOption<String>("30 minutes", String.valueOf(MailSetting.THIRTY_MINS)));
-    periodCheckAuto.add(new SelectItemOption<String>("1 hour", String.valueOf(MailSetting.ONE_HOUR)));
+    periodCheckAuto.add(new SelectItemOption<String>("Never", "period." + String.valueOf(MailSetting.NEVER_CHECK_AUTO)));
+    periodCheckAuto.add(new SelectItemOption<String>("5 minutes", "period." + String.valueOf(MailSetting.FIVE_MINS)));
+    periodCheckAuto.add(new SelectItemOption<String>("10 minutes", "period." + String.valueOf(MailSetting.TEN_MINS)));
+    periodCheckAuto.add(new SelectItemOption<String>("20 minutes", "period." + String.valueOf(MailSetting.TWENTY_MINS)));
+    periodCheckAuto.add(new SelectItemOption<String>("30 minutes", "period." + String.valueOf(MailSetting.THIRTY_MINS)));
+    periodCheckAuto.add(new SelectItemOption<String>("1 hour", "period" + String.valueOf(MailSetting.ONE_HOUR)));
     addUIFormInput(new UIFormSelectBox(PERIOD_CHECK_AUTO, PERIOD_CHECK_AUTO, periodCheckAuto));
     
     List<SelectItemOption<String>> useWysiwyg = new ArrayList<SelectItemOption<String>>();
-    useWysiwyg.add(new SelectItemOption<String>("Rich text editor (HTML format)", "true"));
-    useWysiwyg.add(new SelectItemOption<String>("Plain text", "false"));
+    useWysiwyg.add(new SelectItemOption<String>("Rich text editor (HTML format)", "editor.true"));
+    useWysiwyg.add(new SelectItemOption<String>("Plain text", "editor.false"));
     addUIFormInput(new UIFormSelectBox(COMPOSE_MESSAGE_IN, COMPOSE_MESSAGE_IN, useWysiwyg));
     
     List<SelectItemOption<String>> formatAsOriginal = new ArrayList<SelectItemOption<String>>();
-    formatAsOriginal.add(new SelectItemOption<String>("Format of the original message", "true"));
-    formatAsOriginal.add(new SelectItemOption<String>("Text only","false" ));
+    formatAsOriginal.add(new SelectItemOption<String>("Format of the original message", "format.true"));
+    formatAsOriginal.add(new SelectItemOption<String>("Text only","format.false" ));
     addUIFormInput(new UIFormSelectBox(FORMAT_AS_ORIGINAL, FORMAT_AS_ORIGINAL, formatAsOriginal));
     
 
     List<SelectItemOption<String>> replyWithAtt = new ArrayList<SelectItemOption<String>>();
-    replyWithAtt.add(new SelectItemOption<String>("Original message included attachment", "true"));
-    replyWithAtt.add(new SelectItemOption<String>("Original message", "false"));
+    replyWithAtt.add(new SelectItemOption<String>("Original message included attachment", "replywith.true"));
+    replyWithAtt.add(new SelectItemOption<String>("Original message", "replywith.false"));
     addUIFormInput(new UIFormSelectBox(REPLY_WITH_ATTACH, REPLY_WITH_ATTACH, replyWithAtt));
     
     List<SelectItemOption<String>> forwardWithAtt = new ArrayList<SelectItemOption<String>>();
-    forwardWithAtt.add(new SelectItemOption<String>("Original message included attachment", "true"));
-    forwardWithAtt.add(new SelectItemOption<String>("Original message", "false"));
+    forwardWithAtt.add(new SelectItemOption<String>("Original message included attachment", "forwardwith.true"));
+    forwardWithAtt.add(new SelectItemOption<String>("Original message", "forwardwith.false"));
     addUIFormInput(new UIFormSelectBox(FORWARD_WITH_ATTACH, FORWARD_WITH_ATTACH, forwardWithAtt));
     
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(SAVE_SENT_MESSAGE, SAVE_SENT_MESSAGE, false));
@@ -129,11 +129,11 @@ public class UIMailSettings extends UIForm implements UIPopupComponent {
     if (setting != null) {
       getUIFormSelectBox(DEFAULT_ACCOUNT).setValue(setting.getDefaultAccount()) ;
       getUIFormSelectBox(NUMBER_MSG_PER_PAGE).setValue(String.valueOf(setting.getNumberMsgPerPage()));
-      getUIFormSelectBox(PERIOD_CHECK_AUTO).setValue(String.valueOf(setting.getPeriodCheckAuto()));
-      getUIFormSelectBox(COMPOSE_MESSAGE_IN).setValue(String.valueOf(setting.useWysiwyg()));
-      getUIFormSelectBox(FORMAT_AS_ORIGINAL).setValue(String.valueOf(setting.formatAsOriginal()));
-      getUIFormSelectBox(REPLY_WITH_ATTACH).setValue(String.valueOf(setting.replyWithAttach()));
-      getUIFormSelectBox(FORWARD_WITH_ATTACH).setValue(String.valueOf(setting.forwardWithAtt()));
+      getUIFormSelectBox(PERIOD_CHECK_AUTO).setValue("period." + String.valueOf(setting.getPeriodCheckAuto()));
+      getUIFormSelectBox(COMPOSE_MESSAGE_IN).setValue("editor." + String.valueOf(setting.useWysiwyg()));
+      getUIFormSelectBox(FORMAT_AS_ORIGINAL).setValue("format." + String.valueOf(setting.formatAsOriginal()));
+      getUIFormSelectBox(REPLY_WITH_ATTACH).setValue("replywith." + String.valueOf(setting.replyWithAttach()));
+      getUIFormSelectBox(FORWARD_WITH_ATTACH).setValue("forwardwith." + String.valueOf(setting.forwardWithAtt()));
       getUIFormCheckBoxInput(SAVE_SENT_MESSAGE).setChecked(setting.saveMessageInSent());
     }
   }
@@ -156,11 +156,16 @@ public class UIMailSettings extends UIForm implements UIPopupComponent {
       String defaultAcc = uiSetting.getUIFormSelectBox(DEFAULT_ACCOUNT).getValue() ;
 		  setting.setDefaultAccount(defaultAcc) ;
       setting.setNumberMsgPerPage(Long.valueOf(uiSetting.getUIFormSelectBox(NUMBER_MSG_PER_PAGE).getValue())) ;
-		  setting.setPeriodCheckAuto(Long.valueOf(uiSetting.getUIFormSelectBox(PERIOD_CHECK_AUTO).getValue())) ;
-      setting.setUseWysiwyg(Boolean.valueOf(uiSetting.getUIFormSelectBox(COMPOSE_MESSAGE_IN).getValue())) ;
-      setting.setFormatAsOriginal(Boolean.valueOf(uiSetting.getUIFormSelectBox(FORMAT_AS_ORIGINAL).getValue())) ;
-      setting.setReplyWithAttach(Boolean.valueOf(uiSetting.getUIFormSelectBox(REPLY_WITH_ATTACH).getValue()));
-      setting.setForwardWithAtt(Boolean.valueOf(uiSetting.getUIFormSelectBox(FORWARD_WITH_ATTACH).getValue()));
+      String period = uiSetting.getUIFormSelectBox(PERIOD_CHECK_AUTO).getValue() ;
+		  setting.setPeriodCheckAuto(Long.valueOf(period.substring(period.indexOf(".") + 1, period.length()))) ;
+      String editor = uiSetting.getUIFormSelectBox(COMPOSE_MESSAGE_IN).getValue() ;
+      setting.setUseWysiwyg(Boolean.valueOf(editor.substring(editor.indexOf(".") + 1, editor.length()))) ;
+      String format = uiSetting.getUIFormSelectBox(FORMAT_AS_ORIGINAL).getValue() ;
+      setting.setFormatAsOriginal(Boolean.valueOf(format.substring(format.indexOf(".") + 1, format.length()))) ;
+      String replyWith = uiSetting.getUIFormSelectBox(REPLY_WITH_ATTACH).getValue() ;
+      setting.setReplyWithAttach(Boolean.valueOf(replyWith.substring(replyWith.indexOf(".") + 1, replyWith.length())));
+      String forwardWith = uiSetting.getUIFormSelectBox(FORWARD_WITH_ATTACH).getValue() ;
+      setting.setForwardWithAtt(Boolean.valueOf(forwardWith.substring(forwardWith.indexOf(".") + 1, forwardWith.length())));
       setting.setSaveMessageInSent(uiSetting.getUIFormCheckBoxInput(SAVE_SENT_MESSAGE).isChecked());
       mailSrv.saveMailSetting(SessionProviderFactory.createSystemProvider(), username, setting);
 		  UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
