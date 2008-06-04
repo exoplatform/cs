@@ -31,7 +31,7 @@ import org.exoplatform.webui.core.UIPopupMessages;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
-import org.exoplatform.ws.frameworks.cometd.ContinuationService;
+//import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 
 /**
  * Author : Nguyen Quang Hung
@@ -84,14 +84,14 @@ public class UICalendarPortlet extends UIPortletApplication {
     return Util.getPortalRequestContext().getRemoteUser() ;
   }
   
-  public String getUserToken() {
+  //Use for popup reminder
+  /*public String getUserToken() {
     return this.getContinuationService().getUserToken(this.getRemoteUser());
   }
   
   protected ContinuationService getContinuationService() {
     ContinuationService continuation = getApplicationComponent(ContinuationService.class) ;
     return continuation;
-
   }
-  
+  */
 }
