@@ -23,13 +23,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.form.UIForm;
@@ -124,31 +121,11 @@ public class UIProfileInputSet extends UIFormInputWithActions {
   protected void setFieldNickName(String s) { getUIStringInput(FIELD_NICKNAME_INPUT).setValue(s); }
 
   protected String getFieldGender() {
-    String value = null ; //= getChild(UIFormRadioBoxInput.class).getValue() ;
-    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-    ResourceBundle res = context.getApplicationResourceBundle() ;
-    try {
-      if  (getChild(UIFormRadioBoxInput.class).getValue().equalsIgnoreCase(MALE)) {
-        value =  res.getString(((UIContactForm)getParent()).getId() + ".label." + MALE);
-      } else {
-        value = res.getString(((UIContactForm)getParent()).getId() + ".label." + FEMALE) ;
-      }
-    } catch (MissingResourceException e) {      
-      e.printStackTrace() ;
-    }
-    return value ;
+    String value = getChild(UIFormRadioBoxInput.class).getValue() ; 
+    if (!value.equals(FIELD_GENDER_BOX)) return value ;
+    return null ;
   }
-  protected void setFieldGender(String s) {
-    if (ContactUtils.isEmpty(s)) return ;
-    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-    ResourceBundle res = context.getApplicationResourceBundle() ;
-    try {
-      if (s.equals(res.getString(((UIContactForm)getParent()).getId() + ".label." + MALE))) {
-        gender = MALE ;
-      } else gender = FEMALE ;      
-    } catch (Exception e) { }
-    
-  }
+  protected void setFieldGender(String s) { gender = s ; }
 
   protected Date getFieldBirthday(){
     int day, month, year ;

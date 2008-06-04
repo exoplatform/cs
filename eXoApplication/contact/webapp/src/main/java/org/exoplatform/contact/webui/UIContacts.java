@@ -279,22 +279,6 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   }
   
   public Contact[] getContacts() throws Exception {
-    /*
-    if (isSelectSharedContacts && !isPrintForm) {
-      setContacts(ContactUtils.getContactService().getSharedContacts( ContactUtils.getCurrentUser())); 
-    } else {
-      UIAddressBooks uiAddressBooks = getAncestorOfType(
-          UIWorkingContainer.class).findFirstComponentOfType(UIAddressBooks.class) ;
-      if (!ContactUtils.isEmpty(selectedGroup)) {
-        if (!uiAddressBooks.getPrivateGroupMap().containsKey(selectedGroup) && !uiAddressBooks.getSharedGroups().containsKey(selectedGroup)
-            && !ContactUtils.getUserGroups().contains(selectedGroup)) setContacts(null) ;
-        else if (uiAddressBooks.getSharedGroups().containsKey(selectedGroup) && !isPrintForm) {
-          setContacts(ContactUtils.getContactService().getSharedContactsByAddressBook(SessionProviderFactory
-              .createSystemProvider(),ContactUtils.getCurrentUser(), uiAddressBooks.getSharedGroups().get(selectedGroup)));
-        }
-      }
-    }
-    */
     return contactMap.values().toArray(new Contact[]{}) ;
   }
   public LinkedHashMap<String, Contact> getContactMap() { return contactMap ;}
@@ -571,15 +555,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
               if (uiContacts.getSharedGroupMap().containsKey(add)) addressId = add ;
             contactService.removeSharedContact(SessionProviderFactory.createSystemProvider(), username, addressId, contactId) ;
           } else {
-            try {
-              contactService.removeUserShareContact(
-                  SessionProviderFactory.createSystemProvider(), contact.getPath(), contact.getId(), username) ;              
-            } catch (PathNotFoundException e) {
-              uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-not-existed", null, 
-                  ApplicationMessage.WARNING)) ;
-              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-              return ;              
-            }
+            contactService.removeUserShareContact(
+                SessionProviderFactory.createSystemProvider(), contact.getPath(), contact.getId(), username) ;
           }
         }
         contact.setAddressBook(new String[] { addressBookId }) ;
@@ -589,16 +566,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       if (sharedContacts.size() > 0 ) {
         contactService.pasteContacts(sessionProvider, username, addressBookId, type, sharedContacts) ;
       }
-      if (contacts.size() > 0) {
-        try {
-          contactService.moveContacts(sessionProvider, username, contacts, type);           
-        }  catch (PathNotFoundException e) {
-          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-not-existed", null, 
-              ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;              
-        }
-      }
+      if (contacts.size() > 0)
+        contactService.moveContacts(sessionProvider, username, contacts, type); 
 
       // update addressbook when search
       if (uiContacts.isSearchResult) {
@@ -692,26 +661,12 @@ public class UIContacts extends UIForm implements UIPopupComponent {
               if (uiContacts.getSharedGroupMap().containsKey(add)) addressBookId = add ;
             contactService.removeSharedContact(SessionProviderFactory.createSystemProvider(), username, addressBookId, contactId) ;
           } else {
-            try {
-              contactService.removeUserShareContact(
-                  SessionProviderFactory.createSystemProvider(), contact.getPath(), id, username) ;
-            } catch (PathNotFoundException e) {
-              uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-not-existed", null, 
-                  ApplicationMessage.WARNING)) ;
-              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-              return ;              
-            }
+            contactService.removeUserShareContact(
+                SessionProviderFactory.createSystemProvider(), contact.getPath(), id, username) ;
           }
           removedContacts.add(contact) ;
         } else if (!uiContacts.isSelectSharedContacts) {
-          try {
-            removedContacts = contactService.removeContacts(SessionProviderFactory.createSessionProvider(), username, contactIds) ;          
-          } catch (PathNotFoundException e) {
-            uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-not-existed", null, 
-                ApplicationMessage.WARNING)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-            return ;              
-          }
+          removedContacts = contactService.removeContacts(SessionProviderFactory.createSessionProvider(), username, contactIds) ;          
         }
       }
       if (ContactUtils.isEmpty(uiContacts.selectedGroup) && ContactUtils.isEmpty(uiContacts.selectedTag_)) {
@@ -872,6 +827,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         if(type != null)
           pageList = ContactUtils.getContactService().getContactPageListByGroup(
             SessionProviderFactory.createSystemProvider(),ContactUtils.getCurrentUser(), filter, type) ;
+        
       } else {      //selected group = null ;
           pageList = uiContacts.pageList_ ;
           if (pageList != null) {

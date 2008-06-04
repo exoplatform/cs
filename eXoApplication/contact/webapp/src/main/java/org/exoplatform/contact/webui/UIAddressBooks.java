@@ -87,7 +87,7 @@ public class UIAddressBooks extends UIComponent {
   private List<Contact> copyContacts = new ArrayList<Contact>();
   private String copyAddress = null ;
   public UIAddressBooks() throws Exception { }
-
+  
   @SuppressWarnings("unused")
   private boolean hasSharedContacts() throws Exception {
     if (ContactUtils.getContactService().getSharedContacts( ContactUtils.getCurrentUser()).getAvailable() > 0) return true ;
@@ -121,6 +121,7 @@ public class UIAddressBooks extends UIComponent {
     }
     return groupList;
   }
+  
   public String[] getPublicContactGroups() throws Exception {
   	return ContactUtils.getUserGroups().toArray(new String[] {}) ;
   }

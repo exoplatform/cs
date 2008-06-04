@@ -45,13 +45,6 @@
                   </div>
                 </a>
         			
-        				
-				        <a class="MenuItem" href="<%=uicomponent.event("SendEmail", "id")%>">   
-			            <div class="ItemIcon EmailIcon">
-			              <%=_ctx.appRes(uicomponent.getName() + ".label.sendEmail")%>
-			            </div>
-				        </a>
-				        
 	        			<a class="MenuItem" href="<%=uicomponent.event("Print", "id")%>">   
                   <div class="ItemIcon PrintIcon">
                     <%=_ctx.appRes(uicomponent.getName() + ".label.printContacts")%>

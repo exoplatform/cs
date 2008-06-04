@@ -10,3 +10,7 @@
 .UIContactPortlet .UIImageForm .UIFormGrid td.FieldLabel {
 	white-space: nowrap;
 }
+
+.UIContactPortlet .UIImageForm .SelectFileFrame {
+	width: 300px;
+}

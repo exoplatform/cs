@@ -121,17 +121,16 @@
 	color: black;
 }
 
-.UIContactPortlet .UIActionBar a{
-	line-height: 24px;
-	margin: 3px 1px 0px 1px;
+.UIContactPortlet .UIActionBar .ControlButton {
+	margin: 0px 3px 0px 3px;
 }
 
-.UIContactPortlet .UIActionBar a:hover {
+.UIContactPortlet .UIActionBar .ControlButton a:hover {
 	background: url('background/ControlButtonBG1x26.gif') repeat-x ;
 	border: 1px solid #9d9d9d;
 	color: #126ca5;
+	height: 24px;
 	line-height: 24px;
-	margin: 3px 0px 0px 0px;
 }
 
 .UIContactPortlet .UIActionBar .Label {
@@ -146,6 +145,20 @@
 .UIContactPortlet .UIActionBar .DownArrow1Icon {
 	background-position: right center;
 	padding-right: 16px;
+}
+
+.UIContactPortlet .UIActionBar .ImportAddressIcon {
+	height: 26px; width: 21px;
+	margin: 4px 5px 0px 60px;
+	_margin: 4px 5px 0px 30px;
+	float: left;
+	cursor: pointer;
+}
+.UIContactPortlet .UIActionBar .ExportAddressIcon {
+	height: 26px; width: 21px;
+	margin: 4px 0px 0px 0px;
+	float: left;
+	cursor: pointer;
 }
 
 .UIContactPortlet .UIActionBar .UIPopupCategory {
@@ -198,7 +211,16 @@
 .UIContactPortlet .UINavigationContainer .TitleBar {
 	background: url('background/BgTitleBar1x24.gif') repeat-x;
 	height: 24px; line-height: 24px;
-	padding:0px 5px;
+	padding: 0px 5px;
+}
+
+.UIContactPortlet .UINavigationContainer .DownArrow3Icon {
+	float: left;
+	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/BlackDownArrow.gif') no-repeat left center;
+	cursor:pointer;
+	margin: 2px;
+	height:16px;
+	width:16px;
 }
 
 .UIContactPortlet .UINavigationContainer .TitleIcon {
@@ -700,6 +722,13 @@
 
 .UIContactPortlet .SelectFileFrame {
 	width: 340px;
+}
+
+.UIContactPortlet .FileNameLabel {
+	overflow: hidden;
+	white-space: nowrap;
+	margin-top: 3px;
+	max-width: 300px;
 }
 
 .UIEmpty .OwnerIcon {

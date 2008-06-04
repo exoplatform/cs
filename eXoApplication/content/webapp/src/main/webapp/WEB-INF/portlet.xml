@@ -19,7 +19,6 @@
       <portlet-mode>help</portlet-mode>
     </supports>
     <supported-locale>en</supported-locale>
-    <supported-locale>fr</supported-locale>
     <resource-bundle>locale.portlet.rssreader.RSSReaderPortlet</resource-bundle>
     <portlet-info>
       <title>RSS Reader Portlet</title>

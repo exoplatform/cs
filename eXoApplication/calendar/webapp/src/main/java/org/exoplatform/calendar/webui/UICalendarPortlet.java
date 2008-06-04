@@ -21,8 +21,6 @@ import java.util.TimeZone;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
-import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.RootContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -31,7 +29,6 @@ import org.exoplatform.webui.core.UIPopupMessages;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
-//import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 
 /**
  * Author : Nguyen Quang Hung
@@ -84,14 +81,9 @@ public class UICalendarPortlet extends UIPortletApplication {
     return Util.getPortalRequestContext().getRemoteUser() ;
   }
   
-  //Use for popup reminder
-  /*public String getUserToken() {
-    return this.getContinuationService().getUserToken(this.getRemoteUser());
+  public String getUserToken() {
+    return "" ;
   }
   
-  protected ContinuationService getContinuationService() {
-    ContinuationService continuation = getApplicationComponent(ContinuationService.class) ;
-    return continuation;
-  }
-  */
+  
 }

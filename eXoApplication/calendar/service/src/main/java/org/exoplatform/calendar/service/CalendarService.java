@@ -358,7 +358,7 @@ public interface CalendarService {
   
   public CalendarImportExport getCalendarImportExports(String type) ;
   public String[] getExportImportType() throws Exception ;
-  public void generateRss(SessionProvider sProvider, String username, List<String> calendarIds, RssData rssData) throws Exception ;
+  public int generateRss(SessionProvider sProvider, String username, List<String> calendarIds, RssData rssData) throws Exception ;
   public List<FeedData> getFeeds(SessionProvider sProvider, String username) throws Exception  ;
   public Node getRssHome(SessionProvider sProvider, String username) throws Exception ;
   
@@ -372,7 +372,7 @@ public interface CalendarService {
   public void saveEventToSharedCalendar(SessionProvider sProvider, String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception  ;
   public Map<String, String> checkFreeBusy(SessionProvider sysProvider, EventQuery eventQuery) throws Exception  ;
   
-  public void generateCalDav(SessionProvider sProvider, String username, List<String> calendarIds, RssData rssData) throws Exception ;
+  public int generateCalDav(SessionProvider sProvider, String username, List<String> calendarIds, RssData rssData) throws Exception ;
   public void removeSharedEvent(SessionProvider sessionProvider, String username, String calendarId, String eventId) throws Exception ;
   
   public boolean hasEditPermission(SessionProvider sProvider, String sharedCalendarId, String username) throws Exception ;

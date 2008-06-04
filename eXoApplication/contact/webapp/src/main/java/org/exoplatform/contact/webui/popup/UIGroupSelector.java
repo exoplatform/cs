@@ -172,6 +172,7 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
     }
   }
 
+  @SuppressWarnings("unused")
   private List<LocalPath> getPath(List<LocalPath> list, String id) throws Exception {
     if(list == null) list = new ArrayList<LocalPath>(5);
     if(id == null) return list;

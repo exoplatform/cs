@@ -1547,6 +1547,12 @@
 .UIMailPortlet .SelectFileFrame {
 	width: 340px;
 }
+
+.UIMailPortlet .FileNameLabel {
+	overflow: hidden;
+	width: 300px;
+	white-space: nowrap;
+}
 /******************************* UIAddNewContact ******************************/
 
 .UIMailPortlet .UIAddNewContact {
@@ -1611,11 +1617,6 @@
 	padding: 25px 10px;
 }
 
-.UIImportForm .UIForm .HorizontalLayout .UIFormGrid{
-	margin: 0px;
-	width: 100%;
-}
-
 .UIImportForm .UIForm .HorizontalLayout {
 	border: none;
 }
@@ -1642,6 +1643,11 @@
 	background: #F3F3F3;
 	border: 1px solid #c9c9c9;
 	padding: 25px 10px;
+}
+
+.UIImportForm .UIForm .HorizontalLayout .UIFormGrid{
+	margin: 0px;
+	width: 100%;
 }
 
 .UIFolderForm .UIForm .HorizontalLayout {

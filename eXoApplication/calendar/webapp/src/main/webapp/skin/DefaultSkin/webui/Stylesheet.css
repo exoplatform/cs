@@ -244,6 +244,13 @@
 	width: 340px;
 }
 
+
+.UICalendarPortlet .FileNameLabel {
+	width: 300px;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
 .UICalendarPortlet .SelectMemberIcon {
 	width: 16px ; height: 16px;
 }
@@ -259,9 +266,4 @@
 .UICalendarPortlet .UIFormGrid {
   width: auto;
   margin: auto;
-}
-
-.UICalendarPortlet .UISharedForm .UIFormGrid {
-  width: 100%;
-  margin: 0px;
 }

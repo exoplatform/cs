@@ -163,7 +163,12 @@ public class UICalDavForm extends UIFormTabPane implements UIPopupComponent{
       rssData.setVersion("rss_2.0") ;
       if(uiForm.getUIFormDateTimeInput(UICalDavForm.PUBLIC_DATE).getCalendar() != null)
       rssData.setPubDate(uiForm.getUIFormDateTimeInput(UICalDavForm.PUBLIC_DATE).getCalendar().getTime()) ;
-      calendarService.generateCalDav(SessionProviderFactory.createSystemProvider(), Util.getPortalRequestContext().getRemoteUser(), calendarIds, rssData) ;
+      int result = calendarService.generateCalDav(SessionProviderFactory.createSystemProvider(), Util.getPortalRequestContext().getRemoteUser(), calendarIds, rssData) ;
+      if(result < 0) {
+        uiApp.addMessage(new ApplicationMessage("UIRssForm.msg.no-data-generated", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       calendarPortlet.cancelAction() ;  
       Object[] object = new Object[]{title} ;

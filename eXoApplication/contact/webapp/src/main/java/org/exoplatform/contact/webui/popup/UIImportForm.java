@@ -176,14 +176,12 @@ public class UIImportForm extends UIForm {
         uiformInput.getUploadDataAsStream().read(input) ;
         inputStream = new ByteArrayInputStream(input) ;
       }
-      
-      // fix bug 712 ;
-      /*boolean canImport = false ;
-      String mimeType = uploadResource.getMimeType() ;
-      //String extend = array[array.length - 1] ;
+      /*
+      boolean canImport = false ;
+      String[] array = uploadResource.getMimeType().split("/") ;
+      String extend = array[array.length - 1] ;
       for(String type : uiForm.Types) {        
-        if (mimeType.contains(type)) canImport = true ;        
-        //if (extend.equalsIgnoreCase(type)) canImport = true ;
+        if (extend.equalsIgnoreCase(type)) canImport = true ;
       }
       if(!canImport) {
         uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.fileName-error", null, 

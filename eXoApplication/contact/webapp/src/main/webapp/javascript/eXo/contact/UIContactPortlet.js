@@ -198,7 +198,7 @@ UIContactPortlet.prototype.addressBookCallback = function(evt) {
   	var havePermission = addressBook.getAttribute("havePermission") ;
 		if (havePermission == "false") {
 			for(var i = 0 ; i < itemLength ; i ++) {
-				if (DOMUtil.hasClass(menuItems[i],"AddContactIcon") || DOMUtil.hasClass(menuItems[i],"PasteIcon")
+				if (DOMUtil.hasClass(menuItems[i],"ContactIcon") || DOMUtil.hasClass(menuItems[i],"PasteIcon")
 					|| DOMUtil.hasClass(menuItems[i],"EditActionIcon") || DOMUtil.hasClass(menuItems[i],"ImportContactIcon")) {
 					if (menuItems[i].parentNode.getAttribute("oldHref")) continue ;
 					menuItems[i].parentNode.setAttribute("oldHref", menuItems[i].parentNode.href) ;
@@ -209,7 +209,7 @@ UIContactPortlet.prototype.addressBookCallback = function(evt) {
 			}		
 		} else {
 			for(var i = 0 ; i < itemLength ; i ++) {
-				if (DOMUtil.hasClass(menuItems[i],"AddContactIcon") || DOMUtil.hasClass(menuItems[i],"PasteIcon")
+				if (DOMUtil.hasClass(menuItems[i],"ContactIcon") || DOMUtil.hasClass(menuItems[i],"PasteIcon")
 					|| DOMUtil.hasClass(menuItems[i],"EditActionIcon") || DOMUtil.hasClass(menuItems[i],"ImportContactIcon")) {
 					if (!menuItems[i].parentNode.getAttribute("oldHref")) continue ;
 					menuItems[i].parentNode.href = menuItems[i].parentNode.getAttribute("oldHref") ;

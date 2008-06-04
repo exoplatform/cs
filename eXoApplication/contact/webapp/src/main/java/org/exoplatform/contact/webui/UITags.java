@@ -31,11 +31,9 @@ import org.exoplatform.contact.service.DataPageList;
 import org.exoplatform.contact.service.JCRPageList;
 import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.webui.UIContacts.FullNameComparator;
-import org.exoplatform.contact.webui.popup.UIComposeForm;
 import org.exoplatform.contact.webui.popup.UIExportForm;
 import org.exoplatform.contact.webui.popup.UIEditTagForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
-import org.exoplatform.mail.service.Account;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -59,7 +57,6 @@ import org.exoplatform.webui.event.EventListener;
         @EventConfig(listeners = UITags.EditTagActionListener.class),
         @EventConfig(listeners = UITags.ExportAddressActionListener.class),
         @EventConfig(listeners = UITags.PrintActionListener.class),
-        @EventConfig(listeners = UITags.SendEmailActionListener.class),
         @EventConfig(listeners = UITags.DeleteTagActionListener.class, confirm = "UITags.msg.confirm-delete")        
     }
 )
@@ -199,42 +196,4 @@ public class UITags extends UIComponent {
     }
   }
   
-  static  public class SendEmailActionListener extends EventListener<UITags> {
-    public void execute(Event<UITags> event) throws Exception {
-      UITags uiTags = event.getSource() ;
-      UIContactPortlet uiContactPortlet = uiTags.getAncestorOfType(UIContactPortlet.class);
-      UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class);
-      String tagId = event.getRequestContext().getRequestParameter(OBJECTID);
-      
-      String username = ContactUtils.getCurrentUser();
-      ContactService contactService = ContactUtils.getContactService();
-      List<String> addresses = new ArrayList<String>() ;  
-      for (Contact contact : contactService.getContactPageListByTag(
-          SessionProviderFactory.createSystemProvider(), username, tagId).getAll()) {
-        String email = contact.getEmailAddress() ;
-        if (!ContactUtils.isEmpty(email)) addresses.add(email) ;
-      }      
-      if (addresses.size() < 1) {
-        UIApplication uiApp = uiTags.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UITags.msg.no-email-found", null,
-          ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;        
-      }
-      StringBuffer buffer = new StringBuffer(addresses.get(0)) ;
-      for (int i = 1; i < addresses.size(); i ++) {
-        buffer.append(", " + addresses.get(i)) ;
-      }
-      List<Account> acc = ContactUtils.getAccounts() ;
-      if (acc == null || acc.size() < 1) {
-        UIApplication uiApp = uiTags.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.invalidAcc", null,
-            ApplicationMessage.WARNING)) ;
-        return ;
-      }
-      UIComposeForm uiComposeForm = uiPopupAction.activate(UIComposeForm.class, 850) ;
-      uiComposeForm.init(acc, buffer.toString()) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
-    }
-  }  
 }

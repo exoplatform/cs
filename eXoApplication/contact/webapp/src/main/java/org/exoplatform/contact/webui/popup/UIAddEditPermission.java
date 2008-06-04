@@ -43,7 +43,6 @@ import org.exoplatform.webui.core.UIGrid;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import org.exoplatform.webui.form.UIFormRadioBoxInput;
 import org.exoplatform.webui.form.UIFormStringInput;
 
 /**
@@ -367,8 +366,6 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
     String viewPermission = null ;
     String editPermission = null ;
 
-    
-    // edit here
     public  String getViewPermission() {return viewPermission ;}
     public  String getEditPermission() {
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;

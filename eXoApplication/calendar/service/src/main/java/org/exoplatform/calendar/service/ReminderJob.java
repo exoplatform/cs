@@ -37,10 +37,6 @@ import org.exoplatform.mail.service.Utils;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.log.ExoLogger;
-//import org.exoplatform.ws.frameworks.cometd.ContinuationService;
-//import org.exoplatform.ws.frameworks.json.JsonGenerator;
-//import org.exoplatform.ws.frameworks.json.impl.JsonGeneratorImpl;
-//import org.exoplatform.ws.frameworks.json.value.JsonValue;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
@@ -119,7 +115,7 @@ public class ReminderJob implements Job {
             messageList.add(message);
             reminder.save() ;
           }
-        } /*else if(Reminder.TYPE_POPUP.equals(reminder.getProperty("exo:reminderType").getString())){
+        } else if(Reminder.TYPE_POPUP.equals(reminder.getProperty("exo:reminderType").getString())){
           Reminder rem = new Reminder(Reminder.TYPE_POPUP) ;
           rem.setSummary(reminder.getProperty("exo:eventSummary").getString());
           rem.setFromDateTime(reminder.getProperty("exo:fromDateTime").getDate().getTime()) ;
@@ -143,22 +139,23 @@ public class ReminderJob implements Job {
           }
           reminders.add(rem);
           reminder.save() ;
-        }*/
+        }
       }
       if(!messageList.isEmpty()) mailService.sendMessages(messageList, config);
     } catch (Exception e) {
       //e.printStackTrace();			
     }
-    /*
-    try{
+   /* try{
       if(!reminders.isEmpty()) {
         JsonGenerator generatorImpl = new JsonGeneratorImpl();
         JsonValue json = generatorImpl.createJsonObject(new ReminderBean("root", reminders));
         ContinuationService continuation = (ContinuationService) container.getComponentInstanceOfType(ContinuationService.class);      
-        if(continuation != null) continuation.sendMessage("root", "/eXo/Application/Calendar/messages", json);        
+        if(continuation != null) continuation.sendMessage("root", "/eXo/Application/Calendar/messages", json);
+        //System.out.println("\n\n json obj " + json.toString());
       }
+
     } catch (Exception e) {
-      e.printStackTrace() ;
+      //e.printStackTrace() ;
     }*/
     if (log_.isDebugEnabled()) log_.debug("File plan job done");
   }

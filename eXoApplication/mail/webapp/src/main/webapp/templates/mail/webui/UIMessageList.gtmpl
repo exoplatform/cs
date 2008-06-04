@@ -46,11 +46,11 @@
   </a>
   <div class="SeparatorLine"><span></span></div>
   
-  <div class="SelectButton">
-    <div class="MoreActionsIcon"  onclick="eXo.mail.UIMailPortlet.showMenu(this, event);">
+  <div class="SelectButton" onclick="eXo.mail.UIMailPortlet.showMenu(this, event);">
+    <div class="MoreActionsIcon"  >
       <div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.id+ ".label.more-actions") %></div>
-      
-      <% /*Begin Popup Menu*/ %>
+    </div>
+    <% /*Begin Popup Menu*/ %>
       <div style="position: relative;">
         <div class="UIPopupCategory" style="display: none;">
           <div class="UIRightClickPopupMenu" style="display: block;">
@@ -100,15 +100,13 @@
         </div>
       </div>
       <% /*End Popup Menu*/ %>
-      
-    </div>
   </div>
   
-  <div class="SelectButton">
-    <div class="View" onclick="eXo.mail.UIMailPortlet.showView(this, event);">
+  <div class="SelectButton" onclick="eXo.mail.UIMailPortlet.showView(this, event);">
+    <div class="View" >
       <div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.id+ ".label.view") %></div>
-      
-      <% /*Begin Popup Menu*/ %>
+    </div>
+    <% /*Begin Popup Menu*/ %>
       <div style="position: relative;">
         <div class="UIPopupCategory" style="display: none;">
           <div class="UIRightClickPopupMenu" style="display: block;">
@@ -226,8 +224,6 @@
         </div>
       </div>
     <% /*End Popup Menu*/ %>
-      
-    </div>
   </div>
   <%
     MessagePageList pageList = uicomponent.getMessagePageList();
