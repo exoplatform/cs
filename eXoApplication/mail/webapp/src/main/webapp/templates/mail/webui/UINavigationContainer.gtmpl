@@ -1,0 +1,12 @@
+<%
+  import org.exoplatform.mail.webui.UISearchForm ;
+	import org.exoplatform.mail.webui.UISelectAccount ;
+	import org.exoplatform.mail.webui.UIFolderContainer ;
+	import org.exoplatform.mail.webui.UITagContainer ; 
+%>
+<div class="UINavigationContainer" id="<%=uicomponent.getId()%>">
+  <%uicomponent.renderChild(UISearchForm.class);%>
+	<%uicomponent.renderChild(UISelectAccount.class);%>
+	<%uicomponent.renderChild(UIFolderContainer.class);%>
+	<%uicomponent.renderChild(UITagContainer.class);%>
+</div>

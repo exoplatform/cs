@@ -1,0 +1,211 @@
+<div style="width: 570px; display: block; visibility: visible; z-index: 4; top: 131px; left: 309px;" id="SearchUser" exo:minheight="200" exo:minwidth="200" class="UIPopupWindow UIDragObject">
+  <div class="NormalStyle">
+   	<div class="TopLeftCornerDecorator">
+     	<div class="TopRightCornerDecorator">
+       	<div class="TopCenterDecorator">
+         	<div class="OverflowContainer">
+          	<div class="PopupTitleIcon"><span></span></div>
+          	<div onclick="" title="Close Window" class="CloseButton"><span></span></div>
+           	<div class="PopupTitle">Add event Category</div>
+         	</div>
+       	</div>
+     	</div>
+    </div>
+    <div class="MiddleLeftSideDecorator">
+      <div class="MiddleRightSideDecorator">
+       	<div class="MiddleCenterDecorator">
+         	<div class="UIWindowContent">
+         		<div style="width: 100%;">
+         			<div class="PopupContent" style="height: 300px;">
+         				<div class="UIForm UIAddEventCategory">
+         					<form class="UIForm">
+         						<div class="UIHorizontalLayout">
+	         						<div class="FormContainer">
+	         							<div class="UIPermissionManager">
+     											<div class="UIPermissionInfo">
+     												<table class="UIGrid" cellspacing="0" borderspacing="0">
+     													<thead>
+     														<tr>
+	 																<th>Event Category</th>
+	 																<th>Description</th>
+	 																<th>Action</th>
+     														</tr>
+     													</thead>
+     													<tbody>
+     														<tr class="EvenRow">
+     															<td class="text">Meeting</td>
+     															<td class="text"></td>
+     															<td style="width: 50px;">
+     																<div class="ActionContainer" style="margin: 0px auto;">
+     																	<div class="OverflowContainer" style="margin: auto;">
+     																		<a class="EditIcon" title="Edit" href="#"><span></span></a>
+     																		<a class="DeleteIcon" title="Delete" href="#"><span></span></a>
+     																	</div>
+     																</div>
+     															</td>
+     														</tr>
+     														<tr class="OddRow">
+     															<td class="text">Football</td>
+     															<td class="text"></td>
+     															<td style="width: 50px;">
+     																<div class="ActionContainer" style="margin: 0px auto;">
+     																	<div class="OverflowContainer" style="margin: auto;">
+     																		<a class="EditIcon" title="Edit" href="#"><span></span></a>
+     																		<a class="DeleteIcon" title="Delete" href="#"><span></span></a>
+     																	</div>
+     																</div>
+     															</td>
+	 															</tr>
+	 															<tr class="EvenRow">
+     															<td class="text">Football</td>
+     															<td class="text"></td>
+     															<td style="width: 50px;">
+     																<div class="ActionContainer" style="margin: 0px auto;">
+     																	<div class="OverflowContainer" style="margin: auto;">
+     																		<a class="EditIcon" title="Edit" href="#"><span></span></a>
+     																		<a class="DeleteIcon" title="Delete" href="#"><span></span></a>
+     																	</div>
+     																</div>
+     															</td>
+	 															</tr>
+	 															<tr class="OddRow">
+     															<td class="text">Holiday</td>
+     															<td class="text"></td>
+     															<td style="width: 50px;">
+     																<div class="ActionContainer" style="margin: 0px auto;">
+     																	<div class="OverflowContainer" style="margin: auto;">
+     																		<a class="EditIcon" title="Edit" href="#"><span></span></a>
+     																		<a class="DeleteIcon" title="Delete" href="#"><span></span></a>
+     																	</div>
+     																</div>
+     															</td>
+	 															</tr>
+	 															<tr class="EvenRow">
+     															<td class="text">Tennis</td>
+     															<td class="text"></td>
+     															<td style="width: 50px;">
+     																<div class="ActionContainer" style="margin: 0px auto;">
+     																	<div class="OverflowContainer" style="margin: auto;">
+     																		<a class="EditIcon" title="Edit" href="#"><span></span></a>
+     																		<a class="DeleteIcon" title="Delete" href="#"><span></span></a>
+     																	</div>
+     																</div>
+     															</td>
+     														</tr>
+     													</tbody>
+     												</table>
+														<div class="UIPageIterator">
+															<div class="PageIteratorContainer">
+																<div class="RightPageIteratorBlock">
+													    	  <a href="#" class="Icon LastTopPageIcon" title=""></a>
+													    	  <a class="Icon DisableLastTopPageIcon" title=""></a>        
+													    	  <a href="#" class="Icon LastPageIcon" title=""></a>
+													    	  <a class="Icon DisableLastPageIcon" title=""><span></span></a>
+																 	<div class="Number">
+												           	<a href="#" class="PageSelected">1</a>
+												           	<a href="#">2</a>
+																 	</div>
+													    	 	  <a href="#" class="Icon NextPageIcon" title=""><span></span></a>
+													    	  	<a class="Icon DisableNextPageIcon" title=""><span></span></a>
+													    	  	<a href="#" class="Icon NextTopPageIcon" title=""></a>
+													    	  	<a class="Icon DisableNextTopPageIcon" title=""><span></span></a>
+																  	<div style="clear: left"><span></span></div>
+																 </div>
+																 <div class="LeftPageIteratorBlock">
+																  	<div class="TotalPages">Total pages</div>
+																  	<div class="PagesTotalNumber">1</div>
+																  	<div style="clear: left"><span></span></div>
+																  </div>
+															  </div>
+															  <div style="clear: right"><span></span></div>
+															</div>        												
+ 												  	</div>
+ 														<div class="UIFormWithTitle UIPermissionForm">
+ 														<div class="TitleBar">Add/Edit a permission to that Calendar</div>
+ 														<form class="UIForm">
+ 															<div class="HorizontalLayout">
+ 																<div class="FormContainer">
+     															<div class="UIFormGrid">
+     																<tbody>
+     																	<tr>
+     																		<td class="FieldComponent">
+     																			<td class="permission">
+     																				<td class="UIFormInputSet">
+     																					<div class="UIFormInputSetWithAction">
+     																						<div class="FormContainer">
+							         														<table class="UIFormGrid">
+							         															<tbody>
+							         																<tr>
+							         																	<td class="FieldLabel">Category:</td>
+							         																	<td class="FieldComponent">
+							         																		<input type="text" value="" name="3"/>
+							         																	</td>
+							         																</tr>
+							         															</tbody>
+							         														</table>
+							         													</div>
+							         													<div class="FormContainer">
+							         														<table class="UIFormGrid">
+							         															<tbody>
+							         																<tr>
+							         																	<td class="FieldLabel">Description:</td>
+							         																	<td class="FieldComponent">
+							         																		<textarea class="textarea" name="description"></textarea>
+							         																	</td>
+							         																</tr>
+							         															</tbody>
+							         														</table>
+							         													</div>
+     																					</div>
+     																				</td>
+     																			</td>
+     																		</td>
+     																	</tr>
+     																</tbody>
+     															</div>
+ 																	<div class="UIAction"> 
+																    <table class="ActionContainer" align="center">
+																		  <tr>
+																			  <td align="center">
+      																	  <a href="#" class="ActionButton LightBlueStyle">
+																          	<div class="ButtonLeft">
+																            	<div class="ButtonRight">
+																              	<div class="ButtonMiddle"> Save </div>
+																              </div>
+																            </div>
+																          </a>
+																          <a href="#" class="ActionButton LightBlueStyle">
+																          	<div class="ButtonLeft">
+																            	<div class="ButtonRight">
+																              	<div class="ButtonMiddle"> Cancel </div>
+																              </div>
+																            </div>
+																          </a>
+                                        </td>
+                                    	</tr>
+ 	                                  </table>
+																  </div>
+																</div>
+															</div>
+         										</div>
+         									</div>
+     										</div>
+     									</form>
+     								</div>
+     							</div>
+     						</div>
+     					</div>
+     				</div>
+ 				 	</div>
+    		</div>
+   		</div>
+  	</div>
+   	<div class="BottomLeftCornerDecorator">
+    	<div class="BottomRightCornerDecorator">
+       	<div class="BottomCenterDecorator">
+     			<div class="ResizeButton"><span></span></div>
+    		</div>
+    	</div>
+   	</div>
+ 	</div>
+</div>

@@ -1,0 +1,19 @@
+<%
+	import org.exoplatform.contact.webui.UIContactPreview;
+	import org.exoplatform.contact.webui.UIContacts;
+	String compId = uicomponent.getId() ;
+%>
+
+<div class="UIContactContainer SpliterContainer" id="$compId">
+<!--  Start UIContacts-->
+	<div class="UIMessageArea" id="uiMessageListResizableArea">
+	<% uicomponent.renderChild(UIContacts.class) ;%>		
+	</div>	
+<!--  End UIContacts -->
+	<div class="ResizeReadingPane" onmousedown = "eXo.cs.Spliter.doResize(event, this) ;"><span></span></div>
+		
+<!--  Start UIContactPreview-->
+	<% uicomponent.renderChild(UIContactPreview.class) ;%>	
+<!--  End UIContactPreview -->		
+		
+</div>

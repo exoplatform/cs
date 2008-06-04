@@ -1,0 +1,10 @@
+.UIContactPortlet .UITagForm {
+	background: #f3f3f3;
+	padding: 20px 10px;
+}
+
+.UIContactPortlet .UITagForm .HorizontalLayout {
+	border: none;
+	width: 440px;
+	margin: auto;
+}

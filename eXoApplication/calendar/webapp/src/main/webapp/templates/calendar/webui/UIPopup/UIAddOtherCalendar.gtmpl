@@ -1,0 +1,226 @@
+<div style="width: 550px; display: block; visibility: visible; z-index: 4; top: 131px; left: 309px;" id="SearchUser" exo:minheight="200" exo:minwidth="200" class="UIPopupWindow UIDragObject">
+  <div class="NormalStyle">
+   	<div class="TopLeftCornerDecorator">
+     	<div class="TopRightCornerDecorator">
+       	<div class="TopCenterDecorator">
+         	<div class="OverflowContainer">
+          	<div class="PopupTitleIcon"><span></span></div>
+          	<div onclick="" title="Close Window" class="CloseButton"><span></span></div>
+           	<div class="PopupTitle">Add other Calendar</div>
+         	</div>
+       	</div>
+     	</div>
+    </div>
+    <div class="MiddleLeftSideDecorator">
+      <div class="MiddleRightSideDecorator">
+       	<div class="MiddleCenterDecorator">
+         	<div class="UIWindowContent">
+         		<div style="width: 100%;">
+         			<div class="PopupContent" style="height: 300px;">
+         				<div class="UIForm UIAddOtherCalendar">
+         					<form class="UIForm">
+         						<div class="UIHorizontalLayout">
+         							<div class="FormContainer">
+         								<div class="SearchPublic">
+         									<div class="LeftSearchPublic">
+         										<div class="RightSearchPublic">
+         											<div class="MiddleSerchPublic">
+         												<table class="UIFormGrid">
+				         									<tr>
+				         										<td class="FieldLabel">Search public calendar:</td>
+				         										<td class="FieldComponent">
+				         											<input type="text" value="" name="search public calendar"></input>
+				         											<div class="UIAction"> 
+																	      <table class="ActionContainer" align="center">
+    																		  <tr>
+    																			  <td align="center">
+	      																		  <a href="#" class="ActionButton LightBlueStyle">
+																	          	  <div class="ButtonLeft">
+																	            	  <div class="ButtonRight">
+																	              	  <div class="ButtonMiddle"> Browser </div>
+																	                </div>
+																	              </div>
+																	            </a>
+	                                          </td>
+                                        	</tr>
+ 	                                      </table>
+																	    </div>
+																	    <div style="clear: left;"><span></span></div>
+																		</td>
+				         									</tr>
+				         								</table>
+         											</div>
+         										</div>
+         									</div>
+         								</div>
+         								<div class="UIPropertyTab">
+         									<table class="UIGrid">
+         										<thead>
+     													<tr>
+ 																<th></th>
+ 																<th>Calendar</th>
+ 																<th>Description</th>
+ 																<th>Action</th>
+ 															</tr>
+ 														</thead>
+ 														<tbody>
+ 															<tr class="EvenRow">
+     														<td align="center">
+     															<div class="Icon16x16 default16x16"><span></span></div>
+     														</td>
+         												<td class="text">anonymous-view</td>
+     															<td class="text"></td>
+     															<td style="width: 80px;">
+     																<div class="ActionContainer" style="margin: 0px auto;">
+     																	<div class="OverflowContainer" style="margin: auto;">
+     																		<a class="PreviewIcon" title="Preview calendar" href="#"><span></span></a>
+     																		<a class="AddIcon" title="Add calendar" href="#"><span></span></a>
+     																		<a class="DeleteIcon" title="Delete" href="#"><span></span></a>
+     																	</div>
+     																</div>
+     															</td>
+     														</tr>
+     														<tr class="OddRow">	
+ 																	<td align="center">
+ 																		<div class="Icon16x16 default16x16"><span></span></div>
+ 																	</td>
+     															<td class="text">taxonomy-mac</td>
+     															<td class="text"></td>
+     															<td style="width: 80px;">
+     																<div class="ActionContainer" style="margin: 0px auto;">
+     																	<div class="OverflowContainer" style="margin: auto;">
+     																		<a class="PreviewIcon" title="Preview calendar" href="#"><span></span></a>
+     																		<a class="AddIcon" title="Add calendar" href="#"><span></span></a>
+     																		<a class="DeleteIcon" title="Delete" href="#"><span></span></a>
+     																	</div>
+     																</div>
+     															</td>
+ 																</tr>
+ 																<tr class="EvenRow">
+     															<td align="center">
+ 																		<div class="Icon16x16 default16x16"><span></span></div>
+ 																	</td>
+     															<td class="text">taxonomy-list</td>
+     															<td class="text"></td>
+     															<td style="width: 80px;">
+     																<div class="ActionContainer" style="margin: 0px auto;">
+     																	<div class="OverflowContainer" style="margin: auto;">
+     																		<a class="PreviewIcon" title="Preview calendar" href="#"><span></span></a>
+     																		<a class="AddIcon" title="Add calendar" href="#"><span></span></a>
+     																		<a class="DeleteIcon" title="Delete" href="#"><span></span></a>
+     																	</div>
+     																</div>
+     															</td>
+ 																</tr>
+ 																<tr class="OddRow">
+     															<td align="center">
+ 																		<div class="Icon16x16 default16x16"><span></span></div>
+ 																	</td>
+     															<td class="text">taxonomy-thumbnails</td>
+     															<td class="text"></td>
+     															<td style="width: 80px;">
+     																<div class="ActionContainer" style="margin: 0px auto;">
+     																	<div class="OverflowContainer" style="margin: auto;">
+     																		<a class="PreviewIcon" title="Preview calendar" href="#"><span></span></a>
+     																		<a class="AddIcon" title="Add calendar" href="#"><span></span></a>
+     																		<a class="DeleteIcon" title="Delete" href="#"><span></span></a>
+     																	</div>
+     																</div>
+     															</td>
+     														</tr>
+     														<tr class="EvenRow">
+     															<td align="center">
+ 																		<div class="Icon16x16 default16x16"><span></span></div>
+ 																	</td>
+     															<td class="text">amin-view</td>
+     															<td class="text"></td>
+     															<td style="width: 80px;">
+     																<div class="ActionContainer" style="margin: 0px auto;">
+     																	<div class="OverflowContainer" style="margin: auto;">
+     																		<a class="PreviewIcon" title="Preview calendar" href="#"><span></span></a>
+     																		<a class="AddIcon" title="Add calendar" href="#"><span></span></a>
+     																		<a class="DeleteIcon" title="Delete" href="#"><span></span></a>
+     																	</div>
+     																</div>
+     															</td>
+     														</tr>
+     														<tr class="OddRow">
+     															<td align="center">
+ 																		<div class="Icon16x16 default16x16"><span></span></div>
+ 																	</td>
+     															<td class="text">simple-view</td>
+     															<td class="text"></td>
+     															<td style="width: 80px;">
+     																<div class="ActionContainer" style="margin: 0px auto;">
+     																	<div class="OverflowContainer" style="margin: auto;">
+     																		<a class="PreviewIcon" title="Preview calendar" href="#"><span></span></a>
+     																		<a class="AddIcon" title="Add calendar" href="#"><span></span></a>
+     																		<a class="DeleteIcon" title="Delete" href="#"><span></span></a>
+     																	</div>
+     																</div>
+     															</td>
+     														</tr>
+     													</tbody>
+	         									</table>
+	         									<div class="UIPageIterator">
+															<div class="PageIteratorContainer">
+																<div class="RightPageIteratorBlock">
+													    	  <a href="#" class="Icon LastTopPageIcon" title=""></a>
+													    	  <a class="Icon DisableLastTopPageIcon" title=""></a>        
+													    	  <a href="#" class="Icon LastPageIcon" title=""></a>
+													    	  <a class="Icon DisableLastPageIcon" title=""><span></span></a>
+																	<div class="Number">
+											            	<a href="#" class="PageSelected">1</a>
+											            	<a href="#">2</a>
+																	</div>
+													    	  <a href="#" class="Icon NextPageIcon" title=""><span></span></a>
+													    	  <a class="Icon DisableNextPageIcon" title=""><span></span></a>
+													    	  <a href="#" class="Icon NextTopPageIcon" title=""></a>
+													    	  <a class="Icon DisableNextTopPageIcon" title=""><span></span></a>
+																 	<div style="clear: left"><span></span></div>
+																</div>
+																<div class="LeftPageIteratorBlock">
+																	<div class="TotalPages">Total pages</div>
+																  <div class="PagesTotalNumber">1</div>
+																  <div style="clear: left"><span></span></div>
+																</div>
+														  </div>
+														  <div style="clear: right"><span></span></div>
+														</div>        												
+ 												 </div>
+ 						       		 </div>
+ 					       		 </form>
+ 					
+ 				       		 </div>
+ 				       		 <div class="UIAction"> 
+				             <table class="ActionContainer" align="center">
+						  				 <tr>
+							 					 <td align="center">
+  														 <a href="#" class="ActionButton LightBlueStyle">
+				          	  			 <div class="ButtonLeft">
+				            	         <div class="ButtonRight">
+				              	         <div class="ButtonMiddle"> Save </div>
+				                       </div>
+				                     </div>
+				                   </a>
+  										   </td>
+								       </tr>
+ 	                   </table>
+				           </div>
+					       </div>
+         				
+         			</div>
+         		</div>
+ 				 	</div>
+    		</div>
+   		</div>
+  	</div>
+   	<div class="BottomLeftCornerDecorator">
+    	<div class="BottomRightCornerDecorator">
+       	<div class="BottomCenterDecorator">
+     			<div class="ResizeButton"><span></span></div>
+    		</div>
+    	</div>
+   	</div>
+ 	</div>
+</div>

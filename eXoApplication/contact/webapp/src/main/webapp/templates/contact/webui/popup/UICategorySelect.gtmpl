@@ -1,0 +1,18 @@
+<% uiform.begin()%>
+<div class="UIForm AddContact">
+		<div class="HorizontalLayout">
+	  	<table class="UIFormGrid">
+	  		<tbody>
+	  		
+	  		<%for (field in uiform.getChildren()) { %>
+	  			<tr>
+	  				<td class="FieldComponent">	  				
+	  				  <% if (field.isRendered()) uiform.renderField(field) %>
+	  				</td>	  				
+	  			</tr>
+					<%}%>  		
+	  		</tbody>
+	  	</table>
+	  </div>
+</div>
+<% uiform.end() %>

@@ -1,0 +1,198 @@
+@import url("skinIcons/16x16/Stylesheet.css");
+@import url("skinIcons/24x24/Stylesheet.css");
+@import url('UIVCards/Stylesheet.css') ;
+@import url("UIContactPortlet/Stylesheet.css") ;
+@import url("UIMoveContactsForm/Stylesheet.css") ;
+@import url("UILDAPCategoryForm/Stylesheet.css") ;
+@import url("UIAddNewAddressBook/Stylesheet.css") ;
+@import url("popup/UIAddNewContact/Stylesheet.css") ;
+@import url("popup/UIProfileInputSet/Stylesheet.css") ;
+@import url("popup/UICategoryForm/Stylesheet.css") ;
+@import url("popup/UIImageForm/Stylesheet.css") ;
+@import url("popup/UISendEmail/Stylesheet.css") ;
+@import url("popup/UITagForm/Stylesheet.css") ;
+@import url("popup/UIExportForm/Stylesheet.css") ;
+@import url("popup/UIExportAddressBookForm/Stylesheet.css") ;
+@import url("popup/UIImportForm/Stylesheet.css") ;
+@import url("UIWelcomeContact/Stylesheet.css") ;
+@import url("UIComposeForm/Stylesheet.css") ;
+@import url('UIColorPicker/Stylesheet.css') ;
+
+.UIWindow .UIContactPortlet {
+	margin: 0px;
+	border: none;
+	min-width: 900px;
+}
+
+.UIContactPortlet {
+	background: white;
+	border: 1px solid #b7b7b7;
+	margin: 5px;
+}
+
+.UIWindow .UIEmpty {
+	margin: 0px;
+	border: none ;
+	min-width: none ;
+}
+
+.UIEmpty {
+	background: none;
+	border: none;
+	margin: 0px;
+}
+/***************************** PopUp ****************************/
+
+
+/*-----------------------UITagInfo-------------------*/
+
+.UIContactPortlet .UITagInfo {
+	padding: 10px;
+	background: #f3f3f3;
+}
+
+.UIContactPortlet .UITagInfo .UIFormGrid {
+	margin: auto;
+	border: 1px solid #a5a5a6;
+	background: white;
+}
+
+.UIContactPortlet .UITagInfo .UIFormGrid th {
+	background: url('background/BGTitle1x21.gif') repeat-x ;
+	height: 21px;
+	line-height: 21px;
+	padding-left: 4px;
+	text-align: left;
+}
+
+.UIContactPortlet .UITagInfo .UIFormGrid td {
+	padding: 0px 4px;
+	line-height: 20px;
+}
+
+.UIContactPortlet .UITagInfo .UIFormGrid .TagIcon {
+	height: 23px;
+	width: 20px;
+	margin: auto;
+}
+
+.UIContactPortlet .UITagInfo .UIFormGrid .Border {
+	border-right: 1px solid #EBE7EA;
+	width: 30px;
+}
+
+.UIContactPortlet .UIContactPortlet .UIWorkingContainer .UISearchForm {
+  background: url('background/SearchForm1x34.gif') repeat-x;	
+  line-height: 34px;
+	padding:4px 13px 0px 0px;
+	border: 1px solid #c7c7c7;
+	margin-bottom: 4px;
+}
+
+.UIContactPortlet .SelectUserIcon {
+	width : 16px ;
+	height : 16px ;
+}
+
+.UIContactPortlet .SelectMemberIcon {
+	width : 16px ;
+	height : 16px ;
+}
+.UIContactPortlet .SelectGroupIcon {
+	width : 16px ;
+	height : 16px ;
+}
+.UIMailPortlet .UIMessageCompose table {
+	background: none;
+}
+
+.UIContactPortlet .ContactIcon {
+	width : 16px ;
+	height : 16px ;
+}
+
+.UIContactPortlet .UIAddEditPermission .UISharedForm .UIFormInputSet{
+  width: auto;
+}
+/*=====================Table Color===========================*/
+
+.UIPopupCategory .UIContextMenuContainer {
+	white-space: nowrap;
+}
+
+.UIPopupCategory .ContactTableColor {
+	background: #e4eaf5;
+	padding: 5px;
+	margin: 1px;
+}
+
+.UIPopupCategory .ContactTableColor .ColorCell {
+ width: 12px; height: 12px;
+ margin: 2px;
+ border: 1px solid #ffffff;
+}
+
+.UIPopupCategory .ContactTableColor .ColorCell img {
+ width: 12px; height: 12px;
+}
+
+.UIPopupCategory .ContactTableColor .SelectedColorCell {
+	background: url('skinIcons/icons/CalendarIcons.gif') no-repeat left -342px;
+	width: 12px; height: 12px;
+}
+
+.UIPopupCategory .ContactTableColor a:hover {
+	border: 1px solid red; 
+}
+
+/* Popup Menu Positioning*/
+.UIActionBar .SelectButton .UIPopupCategory {
+	left: 7px ;
+}
+
+.selection {
+	background-color: rgb(204, 204, 204);
+	position: absolute ;
+	opacity: 0.66 ;
+	width: 100% ;
+}
+
+/* Colors*/
+.Olive {background-color: #808000; }
+.OliveDrab {background-color: #6B8E23;}   
+.Orange {background-color: #FFA500;}    
+.OrangeRed {background-color: #FF4500;}    
+.Orchid {background-color: #DA70D6;}    
+.PaleGoldenRod {background-color: #EEE8AA;}    
+.PaleGreen {background-color: #98FB98;}    
+.PaleTurquoise {background-color: #AFEEEE;}    
+.PaleVioletRed {background-color: #D87093;}    
+.PapayaWhip  {background-color: #FFEFD5;}    
+.PeachPuff {background-color: #FFDAB9;}    
+.Peru {background-color: #CD853F;}    
+.Pink {background-color: #FFC0CB ;}   
+.Plum {background-color: #DDA0DD ;}   
+.PowderBlue {background-color: #B0E0E6;}    
+.Purple {background-color: #800080;}    
+.Red {background-color: #FF0000;}    
+.RosyBrown {background-color: #BC8F8F;}    
+.RoyalBlue {background-color: #4169E1;}    
+.SaddleBrown {background-color: #8B4513;}    
+.Salmon {background-color: #FA8072;}    
+.SandyBrown {background-color: #F4A460;}    
+.SeaGreen {background-color: #2E8B57;}    
+.SeaShell {background-color: #FFF5EE;}    
+.Sienna {background-color: #A0522D;}    
+.Silver {background-color: #C0C0C0;}    
+.SkyBlue {background-color: #87CEEB;}
+.Thistle {background-color: #D8BFD8;}    
+.Tomato {background-color: #FF6347;}    
+.Turquoise {background-color: #40E0D0;}    
+.Violet {background-color: #EE82EE;}    
+.Wheat {background-color: #F5DEB3;}    
+.Yellow {background-color: #FFFF00;}    
+
+.UIContactPortlet .UIFormGrid {
+  width: auto;
+  margin: auto;
+}

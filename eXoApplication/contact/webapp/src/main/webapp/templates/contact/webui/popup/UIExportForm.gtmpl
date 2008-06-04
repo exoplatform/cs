@@ -1,0 +1,103 @@
+<%
+  import java.util.ArrayList;
+
+  import org.exoplatform.contact.service.Contact;
+  import org.exoplatform.contact.ContactUtils;
+	uiform.begin()
+%>
+
+<div class="UIExportContactForm $uicomponent.id">
+	<div class="ExportContact">
+		<div class="WorkingContainer">
+		  <div class="Title">
+		  <% 
+		    if (!ContactUtils.isEmpty(uicomponent.getSelectedGroup())) {
+		      text = uicomponent.getSelectedGroup();
+		  %>
+		      <%=_ctx.appRes(uicomponent.getName() + ".label.addressBook")%> <%=text%>
+		  <%} else if (!ContactUtils.isEmpty(uicomponent.getSelectedTag())) {
+		      text = uicomponent.getSelectedTag();
+		  %>
+		      <%=_ctx.appRes(uicomponent.getName() + ".label.tag")%> <%=text%>
+		  <%} %>
+
+		  </div>
+	  
+			<div class="UIMessageList">
+				<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
+		  		<thead>
+		  			<tr>
+		  		    <th style="width: 23px; padding-left: 3px;" class="text"><input type="checkbox" class="checkbox" title="Check all" value="4" onclick="eXo.contact.UIContactPortlet.toggleSelectAll(this) ;"/></th>
+		  		    <th style="width: 40%; padding-left: 2px;" class="text">
+		  		      	<div>  <%=_ctx.appRes(uicomponent.getName() + ".label.name")%> </div>
+		  		    </th>
+		 	      	<th class="text" style="padding-left: 7px;">
+		  		    	 	<div><%=_ctx.appRes(uicomponent.getName() + ".label.email")%></div>
+		  		    </th>
+		  	 	  </tr>
+		  	 	</thead>
+		  	 	<tbody>
+		  	 		<%  
+							Contact[] contacts = uicomponent.getContacts();
+							for(contact in contacts) {
+								checkboxField = uicomponent.getChildById(contact.getId()) ;
+						%>
+		  			<tr class="UIContactList" selectedTag="<%=uicomponent.getSelectedTag()%>">
+		  			  <td class="text" style="padding-left: 7px;">
+		  			  	<%
+		  			  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
+		  			  	%>
+		  			  </td>
+							<td class="text">
+								<div class="State OnlineIcon" title="Available">
+									<%=(contact.getFullName()==null ? "" : contact.getFullName())%>
+								</div>
+							</td>
+							<td class="text"><%=(contact.getEmailAddress()==null ? "" : contact.getEmailAddress())%></td>
+		
+		   			</tr>
+		     	<% } %>  
+		  	  </tbody>
+				</table>
+			</div>
+			
+			<div class="ExportForm">
+			  <table class="UIFormGrid">
+			    <tr>
+			      <td class="FieldLabel"><%= _ctx.appRes("UIExportForm.label.name") %></td>
+			      <td class="FieldComponent"><%uicomponent.renderField(uicomponent.getChildById(uicomponent.NAME))%></td>
+			    </tr>
+			    <tr>
+			      <td class="FieldLabel"><%= _ctx.appRes("UIExportForm.label.type") %></td>
+			      <td class="FieldComponent"><%uicomponent.renderField(uicomponent.getChildById(uicomponent.TYPE))%></td>
+			    </tr>
+			  </table>
+		  </div>
+		</div>
+	</div>  
+        
+	<div class="UIAction"> 
+		<table class="ActionContainer" align="center">
+		  <tr>
+		    <td align="center"> 
+		  
+		      <a href="<%=uicomponent.event("Save")%>" class="ActionButton LightBlueStyle">
+		        <div class="ButtonLeft">
+		          <div class="ButtonRight">
+		            <div class="ButtonMiddle">  <%=_ctx.appRes(uicomponent.getName() + ".label.ok")%>  </div>
+		          </div>
+		        </div>
+		      </a>
+		      <a href="<%=uicomponent.event("Cancel")%>" class="ActionButton LightBlueStyle">
+		        <div class="ButtonLeft">
+		          <div class="ButtonRight">
+		            <div class="ButtonMiddle">  <%=_ctx.appRes(uicomponent.getName() + ".label.cancel")%>  </div>
+		          </div>
+		        </div>
+		      </a>
+		    </td>
+		  </tr>
+		</table>
+  </div>        
+</div>
+<%uiform.end()%>	

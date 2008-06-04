@@ -1,0 +1,140 @@
+<div style="width: 550px; display: block; visibility: visible; z-index: 4; top: 50px; left: 309px;" id="SearchUser" exo:minheight="400" exo:minwidth="200" class="UIPopupWindow UIDragObject">
+  <div class="NormalStyle">
+   	<div class="TopLeftCornerDecorator">
+     	<div class="TopRightCornerDecorator">
+       	<div class="TopCenterDecorator">
+         	<div class="OverflowContainer">
+          	<div class="PopupTitleIcon"><span></span></div>
+          	<div onclick="" title="Close Window" class="CloseButton"><span></span></div>
+           	<div class="PopupTitle">Reminder</div>
+         	</div>
+       	</div>
+     	</div>
+    </div>
+    <div class="MiddleLeftSideDecorator">
+      <div class="MiddleRightSideDecorator">
+       	<div class="MiddleCenterDecorator">
+         	<div class="UIWindowContent">
+         		<div class="UIReminder">
+         			<div class="ReminderContainer">
+         			
+         				<div class="Title"> Go to the My Dinh </div>
+         				<div class="Title">Due: Monday, june 25,2007 9:45 AM</div>
+         				<table cellspacing="0" borderspacing="0" id="PermissionInfo" class="UIGrid">
+								  <thead>
+								  	<tr>
+								      <th style="width: 24px;"><div class="TaskIcon"><span></span></div></th>
+								      <th>Subject</th>
+								      <th>Due in</th>
+								    </tr>
+								  </thead>
+								  <tbody>
+							      <tr class="EvenRow">
+										  <td style="padding: 0px;"><div class="TaskIcon"><span></span></div></td>
+											<td class="text">Go to the My Dinh</td>
+										  <td class="text">2 hours Overdue</td>
+								    </tr>
+							      <tr class="OddRow">
+										  <td style="padding: 0px;"><div class="TaskIcon"><span></span></div></td>
+											<td class="text">Go to the My Dinh</td>
+										  <td class="text">2 hours Overdue</td>
+								    </tr>
+							      <tr class="EvenRow">
+										  <td style="padding: 0px;"><div class="TaskIcon"><span></span></div></td>
+											<td class="text">Go to the My Dinh</td>
+										  <td class="text">2 hours Overdue</td>
+								    </tr>
+								    <tr class="OddRow">
+										  <td style="padding: 0px;"><div class="TaskIcon"><span></span></div></td>
+											<td class="text">Go to the My Dinh</td>
+										  <td class="text">2 hours Overdue</td>
+								    </tr>
+								    <tr class="EvenRow">
+										  <td style="padding: 0px;"><div class="TaskIcon"><span></span></div></td>
+											<td class="text">Go to the My Dinh</td>
+										  <td class="text">2 hours Overdue</td>
+								    </tr>
+								    <tr class="OddRow">
+										  <td style="padding: 0px;"><div class="TaskIcon"><span></span></div></td>
+											<td class="text">Go to the My Dinh</td>
+										  <td class="text">2 hours Overdue</td>
+								    </tr>
+								  </tbody>
+								</table>
+         				<div class="UIAction"> 
+						      <table class="ActionContainer" align="center">
+								  	<tr>
+									  	<td align="center">
+  											<a href="#" class="ActionButton LightBlueStyle">
+						          	  <div class="ButtonLeft">
+						            	  <div class="ButtonRight">
+						              	  <div class="ButtonMiddle"> View item </div>
+						                </div>
+						              </div>
+						            </a>
+						            <a href="#" class="ActionButton LightBlueStyle">
+						          	  <div class="ButtonLeft">
+						            	  <div class="ButtonRight">
+						              	  <div class="ButtonMiddle"> Dismiss </div>
+						                </div>
+						              </div>
+						            </a>
+  										</td>
+										</tr>
+ 	                </table>
+						    </div>
+						    <div class="Text">click Snooze to be reminded again in:</div>
+						    <div class="SelectBox">
+	  	           	<select name="user.gender" class="selectbox">
+										<option value="" selected="selected">Medium</option>
+									</select>
+								</div>
+								<div class="Button">
+									<div class="UIAction"> 
+							      <table class="ActionContainer" align="center">
+									  	<tr>
+										  	<td align="center">
+  												<a href="#" class="ActionButton LightBlueStyle">
+							          	  <div class="ButtonLeft">
+							            	  <div class="ButtonRight">
+							              	  <div class="ButtonMiddle"> Snooze </div>
+							                </div>
+							              </div>
+							            </a>
+      									</td>
+											</tr>
+ 	                  </table>
+							    </div>
+								</div>
+								<div style="clear: left;"><span></span></div> 
+         			</div>
+         			<div class="UIAction"> 
+					      <table class="ActionContainer" align="center">
+								  <tr>
+									  <td align="center">
+	  									<a href="#" class="ActionButton LightBlueStyle">
+					          	  <div class="ButtonLeft">
+					            	  <div class="ButtonRight">
+					              	  <div class="ButtonMiddle"> Cancel </div>
+					                </div>
+					              </div>
+					            </a>
+  									</td>
+									</tr>
+ 	              </table>
+					    </div>
+         		</div>
+         	</div>
+    		</div>
+   		</div>
+  	</div>
+   	<div class="BottomLeftCornerDecorator">
+    	<div class="BottomRightCornerDecorator">
+       	<div class="BottomCenterDecorator">
+     			<div class="ResizeButton"><span></span></div>
+    		</div>
+    	</div>
+   	</div>
+ 	</div>
+</div>
+      
