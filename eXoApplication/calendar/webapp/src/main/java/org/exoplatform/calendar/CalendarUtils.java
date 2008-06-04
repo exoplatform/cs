@@ -418,7 +418,7 @@ public class CalendarUtils {
     for(org.exoplatform.calendar.service.Calendar c : calendars) {
       privGrp.addOption(new org.exoplatform.calendar.webui.SelectItemOption<String>(c.getName(), CalendarUtils.PRIVATE_TYPE + CalendarUtils.COLON + c.getId())) ;
     }
-    options.add(privGrp);
+    if(privGrp.getOptions().size() > 0) options.add(privGrp);
     // shared calendars group
     GroupCalendarData gcd = calendarService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true);
     if(gcd != null) {
@@ -430,7 +430,7 @@ public class CalendarUtils {
           sharedGrp.addOption(new org.exoplatform.calendar.webui.SelectItemOption<String>(owner + c.getName(), CalendarUtils.SHARED_TYPE + CalendarUtils.COLON + c.getId())) ;
         }
       }
-      options.add(sharedGrp);
+      if(sharedGrp.getOptions().size() > 0) options.add(sharedGrp);
     }
     // public calendars group
     List<GroupCalendarData> lgcd = calendarService.getGroupCalendars(SessionProviderFactory.createSystemProvider(), CalendarUtils.getUserGroups(username), false, username) ;
@@ -445,7 +445,7 @@ public class CalendarUtils {
         }
 
       }
-      options.add(pubGrp);
+      if(pubGrp.getOptions().size() > 0)  options.add(pubGrp);
     }
     return options ;
   }
