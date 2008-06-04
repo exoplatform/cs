@@ -297,7 +297,9 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
           mailSrv.runFilter(SessionProviderFactory.createSystemProvider(), username, accountId, filter);
         uiPortlet.findFirstComponentOfType(UIMessageFilter.class).setSelectedFilterId(filter.getId());
       } catch (Exception e) {
-        e.printStackTrace();
+        uiApp.addMessage(new ApplicationMessage("UIAddMessageFilter.msg.contain-special-characters", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
       }
       UIPopupAction uiPopupAction = uiAddFilter.getAncestorOfType(UIPopupAction.class) ;
       uiPopupAction.deActivate();
