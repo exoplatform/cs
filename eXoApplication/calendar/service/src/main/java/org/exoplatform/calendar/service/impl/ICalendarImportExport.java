@@ -81,11 +81,14 @@ public class ICalendarImportExport implements CalendarImportExport{
 		}else if(type.equals(PUBLIC_TYPE)){
 			events = storage_.getGroupEventByCalendar(sProvider, calendarIds) ;
 		}
+    if(events.isEmpty()) return null ;
 		net.fortuna.ical4j.model.Calendar calendar = new net.fortuna.ical4j.model.Calendar();
 		calendar.getProperties().add(new ProdId("-//Ben Fortuna//iCal4j 1.0//EN"));
 		calendar.getProperties().add(Version.VERSION_2_0);
 		calendar.getProperties().add(CalScale.GREGORIAN);
-		for(CalendarEvent exoEvent : events) {
+		int eventCounter = 0 ;
+    for(CalendarEvent exoEvent : events) {
+      eventCounter ++ ;
 			if(exoEvent.getEventType().equals(CalendarEvent.TYPE_EVENT)){
 				long start = exoEvent.getFromDateTime().getTime() ;
 				long end = exoEvent.getToDateTime().getTime() ;
@@ -150,7 +153,7 @@ public class ICalendarImportExport implements CalendarImportExport{
 				calendar.getComponents().add(event);
 			}
 		}
-
+    if(eventCounter == 0) return null ;
 		ByteArrayOutputStream bout = new ByteArrayOutputStream();
 		CalendarOutputter output = new CalendarOutputter();
 		try {

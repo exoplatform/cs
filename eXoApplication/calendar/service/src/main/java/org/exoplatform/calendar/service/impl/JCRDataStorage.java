@@ -1108,9 +1108,7 @@ public class JCRDataStorage{
     Node publicEvent ;
     int fromDate ;
     int toDate ;
-    
     syncRemoveEvent(eventFolder, event.getId()) ;
-    
     CalendarEvent ev = new CalendarEvent() ;
     publicEvent = eventFolder.addNode(ev.getId(), "exo:calendarPublicEvent") ;
     publicEvent.setProperty("exo:id", ev.getId()) ;
@@ -1175,7 +1173,7 @@ public class JCRDataStorage{
   }
 
   private void syncRemoveEvent(Node eventFolder, String rootEventId) throws Exception{
-  	QueryManager qm = eventFolder.getSession().getWorkspace().getQueryManager();
+    QueryManager qm = eventFolder.getSession().getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + eventFolder.getParent().getParent().getParent().getPath() 
         + "//element(*,exo:calendarPublicEvent)[@exo:rootEventId='").
         append(rootEventId).
@@ -1184,10 +1182,10 @@ public class JCRDataStorage{
     QueryResult result = query.execute();
     NodeIterator it = result.getNodes();
     if(it.getSize() > 0) {
-    	while(it.hasNext()) {
+      while(it.hasNext()) {
         it.nextNode().remove() ;
       }
-    	eventFolder.getSession().save() ;
+      eventFolder.getSession().save() ;
     }
   }
   
@@ -1442,7 +1440,7 @@ public class JCRDataStorage{
     return feeds ;
   }
 
-  public void generateRss(SessionProvider sProvider ,String username, List<String> calendarIds, RssData rssData, 
+  public int generateRss(SessionProvider sProvider ,String username, List<String> calendarIds, RssData rssData, 
       CalendarImportExport importExport) throws Exception {
     Node rssHomeNode = getRssHome(sProvider, username) ;
     Node iCalHome = null ;
@@ -1492,21 +1490,28 @@ public class JCRDataStorage{
           entries.add(entry);
           entry.getEnclosures() ;     
         }                   
-      }      
-      feed.setEntries(entries);      
-      feed.setEncoding("UTF-8") ;     
-      SyndFeedOutput output = new SyndFeedOutput();      
-      String feedXML = output.outputString(feed);      
-      feedXML = StringUtils.replace(feedXML,"&amp;","&");      
-      storeXML(feedXML, rssHomeNode, rssData.getName(), rssData); 
-      rssHomeNode.getSession().save() ;
+      }
+      if(!entries.isEmpty()) {
+        feed.setEntries(entries);      
+        feed.setEncoding("UTF-8") ;     
+        SyndFeedOutput output = new SyndFeedOutput();      
+        String feedXML = output.outputString(feed);      
+        feedXML = StringUtils.replace(feedXML,"&amp;","&");      
+        storeXML(feedXML, rssHomeNode, rssData.getName(), rssData); 
+        rssHomeNode.getSession().save() ;
+      } else {
+        System.out.println("No data to make rss!");
+        return -1 ;
+      }
     } catch (Exception e) {
       e.printStackTrace();
-    }     
+      return -1 ;
+    }  
+    return 1 ;
   }
 
 
-  public void generateCalDav(SessionProvider sProvider ,String username, List<String> calendarIds, RssData rssData, 
+  public int generateCalDav(SessionProvider sProvider ,String username, List<String> calendarIds, RssData rssData, 
       CalendarImportExport importExport) throws Exception {
     Node rssHomeNode = getRssHome(sProvider, username) ;
     Node WebDaveiCalHome = null ;
@@ -1550,6 +1555,7 @@ public class JCRDataStorage{
           entry.getEnclosures() ;     
         }                   
       }      
+      if(!entries.isEmpty()) {
       feed.setEntries(entries);      
       feed.setEncoding("UTF-8") ;     
       SyndFeedOutput output = new SyndFeedOutput();      
@@ -1557,9 +1563,15 @@ public class JCRDataStorage{
       feedXML = StringUtils.replace(feedXML,"&amp;","&");      
       storeXML(feedXML, rssHomeNode, rssData.getName(), rssData); 
       rssHomeNode.getSession().save() ;
+      } else {
+        System.out.println("No data to make caldav!");
+        return -1 ;
+      }
     } catch (Exception e) {
       e.printStackTrace();
+      return -1 ;
     }     
+    return 1 ;
   }
 
   private void storeXML(String feedXML, Node rssHome, String rssNodeName, RssData rssData) throws Exception{

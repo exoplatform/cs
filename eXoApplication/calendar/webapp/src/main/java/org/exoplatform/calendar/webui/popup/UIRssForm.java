@@ -70,11 +70,13 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
   final static private String MESSAGE = "message".intern() ;
   final static private String DESCRIPTIONS = "descriptions".intern() ;
   final static private String COPYRIGHTS = "copyrights".intern() ;
+  final static private String INPUT_RSSINFO = "rssInfo".intern() ;
+  final static private String INPUT_RSSCAL = "rssCalendars".intern() ;
   public UIRssForm() throws Exception{
     super("UIRssForm");
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
-    UIFormInputWithActions rssInfo = new UIFormInputWithActions("rssInfo") ;
+    UIFormInputWithActions rssInfo = new UIFormInputWithActions(INPUT_RSSINFO) ;
     rssInfo.addUIFormInput(new UIFormStringInput(TITLE, TITLE, "eXoCalendar").addValidator(MandatoryValidator.class)) ;
     String url = calendarService.getCalendarSetting(SessionProviderFactory.createSessionProvider(), username).getBaseURL() ;
     if(CalendarUtils.isEmpty(url)) url = CalendarUtils.getServerBaseUrl() + "calendar/iCalRss" ;
@@ -85,7 +87,7 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
     rssInfo.addUIFormInput(new UIFormDateTimeInput(PUBLIC_DATE, PUBLIC_DATE, new Date(), false)) ;
     setSelectedTab(rssInfo.getId()) ;
     addUIFormInput(rssInfo) ;
-    UIFormInputWithActions rssCalendars = new UIFormInputWithActions("rssCalendars") ;
+    UIFormInputWithActions rssCalendars = new UIFormInputWithActions(INPUT_RSSCAL) ;
     rssCalendars.addUIFormInput(new UIFormInputInfo(INFOR,INFOR, null)) ; 
     List<Calendar> calendars = calendarService.getUserCalendars(SessionProviderFactory.createSessionProvider(), username, true) ;
     for(Calendar calendar : calendars) {
@@ -94,10 +96,10 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
     addUIFormInput(rssCalendars) ;
   }
   public void init() throws Exception{
-    UIFormInputWithActions rssInfo = getChildById("rssInfo") ;
+    UIFormInputWithActions rssInfo = getChildById(INPUT_RSSINFO) ;
     rssInfo.getUIFormTextAreaInput(DESCRIPTION).setValue(getLabel(DESCRIPTIONS)) ;
     rssInfo.getUIStringInput(COPYRIGHT).setValue(getLabel(COPYRIGHTS)) ;
-    UIFormInputWithActions rssTab = getChildById("rssCalendars") ;
+    UIFormInputWithActions rssTab = getChildById(INPUT_RSSCAL) ;
     rssTab.getUIFormInputInfo(INFOR).setValue(getLabel(MESSAGE)) ;
   }
   public void activate() throws Exception {}
@@ -108,7 +110,7 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
       UIRssForm uiForm = event.getSource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       CalendarService calendarService = CalendarUtils.getCalendarService();
-      UIFormInputWithActions rssCalendars = uiForm.getChildById("rssCalendars") ;
+      UIFormInputWithActions rssCalendars = uiForm.getChildById(INPUT_RSSCAL) ;
       List<UIComponent> children = rssCalendars.getChildren() ;
       List<String> calendarIds = new ArrayList<String> () ;
       for(UIComponent child : children) {
@@ -145,7 +147,12 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
       rssData.setVersion("rss_2.0") ;
       if(uiForm.getUIFormDateTimeInput(PUBLIC_DATE).getCalendar() != null)
         rssData.setPubDate(uiForm.getUIFormDateTimeInput(PUBLIC_DATE).getCalendar().getTime()) ;
-      calendarService.generateRss(SessionProviderFactory.createSystemProvider(), Util.getPortalRequestContext().getRemoteUser(), calendarIds, rssData) ;
+      int result = calendarService.generateRss(SessionProviderFactory.createSystemProvider(), Util.getPortalRequestContext().getRemoteUser(), calendarIds, rssData) ;
+      if(result < 0) {
+        uiApp.addMessage(new ApplicationMessage("UIRssForm.msg.no-data-generated", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       calendarPortlet.cancelAction() ;  
       Object[] object = new Object[]{title} ;
