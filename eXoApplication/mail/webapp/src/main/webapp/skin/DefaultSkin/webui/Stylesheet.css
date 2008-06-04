@@ -572,6 +572,7 @@
 	text-align: left;
 	padding: 0px 5px;
 	white-space: nowrap;
+	line-height: 15px;
 }
 
 .UIMailPortlet .UIMessageList .UIGrid td.Border {
@@ -627,7 +628,7 @@
 }
 
 .UIMailPortlet .MailWorkingWorkspace .AttachmentIcon {
-	margin: 0px 3px 0px 3px;
+	margin: 2px 3px 0px 3px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .MessageHeader .MessageAttachment .AttachmentIcon {
