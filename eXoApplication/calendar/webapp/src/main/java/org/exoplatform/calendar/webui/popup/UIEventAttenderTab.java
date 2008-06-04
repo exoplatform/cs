@@ -89,8 +89,8 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
         }
       }
     }
-    boolean isCheckFreeTime = getUIFormCheckBoxInput(FIELD_CHECK_TIME).isChecked() ;
-    if(newPars.size() > 0 && isCheckFreeTime) {
+    //boolean isCheckFreeTime = getUIFormCheckBoxInput(FIELD_CHECK_TIME).isChecked() ;
+    if(newPars.size() > 0) {
       EventQuery eventQuery = new EventQuery() ;
       eventQuery.setFromDate(CalendarUtils.getBeginDay(calendar_)) ;
       eventQuery.setToDate(CalendarUtils.getEndDay(calendar_)) ;
@@ -101,8 +101,10 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
       parMap_.putAll(parsMap) ;
     }
   }
-
-
+  
+  public boolean isCheckFreeTime() {
+    return getUIFormCheckBoxInput(FIELD_CHECK_TIME).isChecked() ;
+  }
   protected Map<String, String> getMap(){ 
     for(String id : parMap_.keySet()) {
       if(getUIFormCheckBoxInput(id) == null) addUIFormInput(new UIFormCheckBoxInput<Boolean>(id, id, false)) ;
