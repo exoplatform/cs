@@ -164,13 +164,13 @@ public class UIMonthView extends UICalendarView {
       try {
         CalendarEvent calEvent = calendarview.getDataMap().get(eventId); 
         if(calEvent != null) {
-          
+
           if(!calEvent.getCalType().equals(CalendarUtils.PRIVATE_TYPE)) {
             CalendarService calService = CalendarUtils.getCalendarService() ;
             org.exoplatform.calendar.service.Calendar calendar = null ;
             if(calEvent.getCalType().equals(CalendarUtils.SHARED_TYPE)){
               calendar = 
-              calService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true).getCalendarById(calendarId) ;
+                calService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true).getCalendarById(calendarId) ;
             } else if(calEvent.getCalType().equals(CalendarUtils.PUBLIC_TYPE)) {
               calendar = calService.getGroupCalendar(SessionProviderFactory.createSystemProvider(), calendarId) ;
             }
@@ -183,7 +183,7 @@ public class UIMonthView extends UICalendarView {
               return ;
             }
           }
-          
+
           java.util.Calendar tempCalFrom = calendarview.getInstanceTempCalendar() ;
           tempCalFrom.setTimeInMillis((Long.parseLong(value))) ;
           java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
