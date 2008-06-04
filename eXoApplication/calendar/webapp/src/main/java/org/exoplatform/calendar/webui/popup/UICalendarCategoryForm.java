@@ -16,15 +16,20 @@
  **/
 package org.exoplatform.calendar.webui.popup;
 
+import java.util.List;
+
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendars;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -104,11 +109,27 @@ public class UICalendarCategoryForm extends UIForm {
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       try {
         CalendarService calendarService = CalendarUtils.getCalendarService() ;
+        String username = Util.getPortalRequestContext().getRemoteUser() ;
+        if(uiForm.isAddNew())  {
+          List<CalendarCategory> gData = calendarService.getCategories(SessionProviderFactory.createSessionProvider(), username) ;
+          boolean existed = false ;
+          for(CalendarCategory cal : gData) {
+            if (cal.getName().trim().toLowerCase().equals(categoryName.trim().toLowerCase())) {
+              existed = true ;
+              break ;
+            }
+          }
+          if(existed) {
+            UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+            uiApp.addMessage(new ApplicationMessage("UICalendarCategoryForm.msg.group-existed", null));
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return ;
+          }
+        }
         CalendarCategory category = new CalendarCategory() ;
         if(!uiForm.isAddNew()) category.setId(uiForm.getCategoryId()) ; 
         category.setName(categoryName) ;
         category.setDescription(description) ;
-        String username = Util.getPortalRequestContext().getRemoteUser() ;
         calendarService.saveCalendarCategory(SessionProviderFactory.createSessionProvider(), username, category, uiForm.isAddNew()) ;
         UICalendarForm uiCalendarForm = calendarPortlet.findFirstComponentOfType(UICalendarForm.class) ;
         if(uiCalendarForm != null) {

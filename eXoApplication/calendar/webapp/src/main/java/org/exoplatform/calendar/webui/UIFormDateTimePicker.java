@@ -18,11 +18,13 @@ package org.exoplatform.calendar.webui;
 
 import java.io.Writer;
 import java.text.DateFormat;
+import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.form.UIFormInputBase;
@@ -37,16 +39,17 @@ public class UIFormDateTimePicker extends UIFormInputBase<String>  {
   /**
    * The DateFormat
    */
- // private DateFormat dateFormat_ ;
+  // private DateFormat dateFormat_ ;
   /**
    * Whether to display the full time (with hours, minutes and seconds), not only the date
    */
-  
+
   private String dateStyle_ = "MM/dd/yyyy" ;
   private String timeStyle_ = "HH:mm:ss" ;
   private Date date_ ;
   private boolean isDisplayTime_ ;
-  
+  private Locale locale_ = Locale.getDefault() ;
+
   public UIFormDateTimePicker(String name, String bindField, Date date, boolean isDisplayTime) {
     super(name, bindField, String.class) ;
     date_ = date ;
@@ -54,7 +57,39 @@ public class UIFormDateTimePicker extends UIFormInputBase<String>  {
     if(date != null) value_ = getFormater().format(date) ;
     if(date != null) value_ = getFormater().format(date) ;
   }
-  
+  private String getDaysName() { 
+    DateFormatSymbols     dfs_ = new DateFormatSymbols(locale_) ;
+    StringBuffer sb = new StringBuffer() ;
+    for(String n : dfs_.getWeekdays()) {
+      if(n != null && n.trim().length() > 0) {
+        if(sb.length() > 0) sb.append(",") ;
+        sb.append(n.substring(0,1)) ;
+      }
+    }
+    return sb.toString() ;
+  }
+
+  protected String getMonthsName() { 
+    DateFormatSymbols     dfs_ = new DateFormatSymbols(locale_) ;
+    StringBuffer sb = new StringBuffer() ;
+    for(String n : dfs_.getMonths()) {
+      if(n != null && n.trim().length() > 0) {
+        if(sb.length() > 0) sb.append(",") ;
+        sb.append(n) ;
+      }
+    }
+    return sb.toString() ;
+  }
+
+  public UIFormDateTimePicker(String name, String bindField, Date date, boolean isDisplayTime, Locale locale) {
+    super(name, bindField, String.class) ;
+    date_ = date ;
+    isDisplayTime_ = isDisplayTime ; 
+    locale_ = locale ;
+    if(date != null) value_ = getFormater().format(date) ;
+    if(date != null) value_ = getFormater().format(date) ;
+  }
+
   public UIFormDateTimePicker(String name, String bindField, Date date, boolean isDisplayTime, String dateStyle) {
     super(name, bindField, String.class) ;
     dateStyle_ = dateStyle ;
@@ -79,7 +114,7 @@ public class UIFormDateTimePicker extends UIFormInputBase<String>  {
    * TODO : Display time depending on the locale of the client.
    * @param isDisplayTime
    */
-  
+
   public UIFormDateTimePicker(String name, String bindField, Date date, String dateStyle) {
     this(name, bindField, date, false, dateStyle) ;
   }
@@ -89,11 +124,11 @@ public class UIFormDateTimePicker extends UIFormInputBase<String>  {
   public void setDisplayTime(boolean isDisplayTime) {
     isDisplayTime_ = isDisplayTime;
   }
-  
+
   public void setCalendar(Calendar date) { 
     date_ = date.getTime() ;
     value_ = getFormater().format(date.getTime()) ; 
-   }
+  }
   public Calendar getCalendar() {
     try {
       Calendar calendar = new GregorianCalendar() ;
@@ -115,7 +150,7 @@ public class UIFormDateTimePicker extends UIFormInputBase<String>  {
   public void setDateFormatStyle(String dateStyle) {
     dateStyle_ = dateStyle ;
     value_ = getFormater().format(date_) ;
-    
+
   }
   public void setTimeFormatStyle(String timeStyle) {
     timeStyle_ = timeStyle ;
@@ -129,11 +164,12 @@ public class UIFormDateTimePicker extends UIFormInputBase<String>  {
     if(isDisplayTime_) return dateStyle_ + " " + timeStyle_ ;
     return dateStyle_ ;
   }
-  private DateFormat getFormater() {return new SimpleDateFormat(getFormatStyle()) ;}
+  private DateFormat getFormater() {
+    return new SimpleDateFormat(getFormatStyle(), locale_) ;}
   public void processRender(WebuiRequestContext context) throws Exception {
     context.getJavascriptManager().importJavascript("eXo.cs.UIDateTimePicker","/csResources/javascript/") ;
     Writer w = context.getWriter();
-    w.write("<input format='" + getFormatStyle() + "' type='text' onfocus='eXo.cs.UIDateTimePicker.init(this,") ;
+    w.write("<input monthsName='"+ getMonthsName()+"' daysName='"+getDaysName()+"' format='" + getFormatStyle() + "' type='text' onfocus='eXo.cs.UIDateTimePicker.init(this,") ;
     w.write(String.valueOf(isDisplayTime_));
     w.write(");' onkeyup='eXo.cs.UIDateTimePicker.show();' name='") ;
     w.write(getName()) ; w.write('\'') ;

@@ -431,7 +431,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
     eventDetailTab.getUIFormTextAreaInput(UIEventReminderTab.FIELD_EMAIL_ADDRESS).setValue(value) ;
   }
 
-  protected boolean getPopupReminder() {
+ /* protected boolean getPopupReminder() {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTREMINDER) ;
     return eventDetailTab.getUIFormCheckBoxInput(UIEventReminderTab.REMIND_BY_POPUP).isChecked() ;
   }
@@ -447,7 +447,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
   protected void setPopupReminderTime(String value) {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTREMINDER) ;
     eventDetailTab.getUIStringInput(UIEventReminderTab.POPUP_REMIND_BEFORE).setValue(value) ;
-  }
+  }*/
   
   protected void setEventReminders(List<Reminder> reminders){
     for(Reminder r : reminders) {
@@ -455,13 +455,13 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
         setEmailReminder(true) ;
         setEmailAddress(r.getEmailAddress()) ;
         setEmailReminderTime(String.valueOf(r.getAlarmBefore())) ; 
-      }else if(Reminder.TYPE_POPUP.equals(r.getReminderType())) {
+      }/*else if(Reminder.TYPE_POPUP.equals(r.getReminderType())) {
         setPopupReminder(true) ;
         setPopupReminderTime(String.valueOf(r.getAlarmBefore())) ;
         //setPopupReminderSnooze(r.getSnooze()) ;
       } else {
         System.out.println("\n\n reminder not supported");
-      }
+      }*/
     }
   }
   protected String getEmailRemindBefore() {
@@ -476,14 +476,14 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
     UIEventReminderTab eventReminderTab =  getChildById(TAB_EVENTREMINDER) ;
     return eventReminderTab.getUIFormSelectBox(UIEventReminderTab.EMAIL_REPEAT_INTERVAL).getValue() ;
   }
-  protected String isPopupRepeat() {
+ /* protected String isPopupRepeat() {
     UIEventReminderTab eventReminderTab =  getChildById(TAB_EVENTREMINDER) ;
     return eventReminderTab.getUIFormSelectBox(UIEventReminderTab.POPUP_IS_REPEAT).getValue() ;
   }
   protected String getPopupRepeatInterVal() {
     UIEventReminderTab eventReminderTab =  getChildById(TAB_EVENTREMINDER) ;
     return eventReminderTab.getUIFormSelectBox(UIEventReminderTab.POPUP_REPEAT_INTERVAL).getValue() ;
-  }
+  }*/
   protected List<Reminder>  getEventReminders(Date fromDateTime, List<Reminder> currentReminders) {
     List<Reminder> reminders = new ArrayList<Reminder>() ;
     if(getEmailReminder()) {
@@ -504,7 +504,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
       email.setFromDateTime(fromDateTime) ;      
       reminders.add(email) ;
     }
-    if(getPopupReminder()) {
+    /*if(getPopupReminder()) {
       Reminder popup = new Reminder() ;
       if(currentReminders != null) {
         for(Reminder rm : currentReminders) {
@@ -520,7 +520,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
       popup.setRepeatInterval(Long.parseLong(getPopupRepeatInterVal())) ;
       popup.setFromDateTime(fromDateTime) ;
       reminders.add(popup) ;
-    }
+    }*/
     return reminders ;
   }
 

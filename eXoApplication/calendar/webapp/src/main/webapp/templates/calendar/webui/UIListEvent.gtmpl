@@ -1,6 +1,8 @@
 <%
 	import java.text.DateFormat;
 	import java.text.SimpleDateFormat;
+	import java.util.Locale;
+	import org.exoplatform.webui.application.WebuiRequestContext;
 	uiform.begin() ;
 	
 	int currentDay = uicomponent.getCurrentDay() ;
@@ -13,8 +15,10 @@
  		monthViewAction = uicomponent.TYPE_MONTH +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=1" ;
 	yearViewAction = uicomponent.TYPE_YEAR +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=1" ;
 	
+	WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+ 	Locale locale = context.getParentAppRequestContext().getLocale() ;
 	dateTimeFormat = uicomponent.getDateTimeFormat() ;
-	DateFormat df = new SimpleDateFormat(dateTimeFormat) ;
+	DateFormat df = new SimpleDateFormat(dateTimeFormat, locale) ;
 	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
 	selectedEvent = uicomponent.getSelectedEvent() ;
 	def rcontext = _ctx.getRequestContext() ;

@@ -415,7 +415,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     taskDetailTab.getUIFormTextAreaInput(UIEventReminderTab.FIELD_EMAIL_ADDRESS).setValue(value) ;
   }
 
-  protected boolean getPopupReminder() {
+  /*protected boolean getPopupReminder() {
     UIEventReminderTab taskDetailTab =  getChildById(TAB_TASKREMINDER) ;
     return taskDetailTab.getUIFormCheckBoxInput(UIEventReminderTab.REMIND_BY_POPUP).isChecked() ;
   }
@@ -459,7 +459,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   protected void setPopupReminderSnooze(long value) {
     UIFormInputWithActions taskDetailTab =  getChildById(TAB_TASKREMINDER) ;
     taskDetailTab.getUIFormSelectBox(UIEventReminderTab.POPUP_REPEAT_INTERVAL).setValue(String.valueOf(value)) ;
-  }
+  }*/
   protected List<Attachment>  getAttachments(String eventId, boolean isAddNew) {
     UITaskDetailTab taskDetailTab = getChild(UITaskDetailTab.class) ;
     return taskDetailTab.getAttachments() ;
@@ -479,14 +479,14 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
         setEmailReminderBefore(String.valueOf(r.getAlarmBefore())) ;
         //taskDetailTab.getUIFormSelectBox(UIEventReminderTab.EMAIL_IS_REPEAT).setValue(String.valueOf(r.isRepeat())) ;
         taskDetailTab.getUIFormSelectBox(UIEventReminderTab.EMAIL_REPEAT_INTERVAL).setValue(String.valueOf(r.getRepeatInterval())) ;
-      }else if(Reminder.TYPE_POPUP.equals(r.getReminderType())) {
+      }/*else if(Reminder.TYPE_POPUP.equals(r.getReminderType())) {
         setPopupReminder(true) ;
         setPopupRepeat(String.valueOf(r.isRepeat())) ;
         taskDetailTab.getUIFormSelectBox(UIEventReminderTab.POPUP_REMIND_BEFORE).setValue(String.valueOf(r.getAlarmBefore())) ;
         //taskDetailTab.getUIFormSelectBox(UIEventReminderTab.POPUP_IS_REPEAT).setValue(String.valueOf(r.isRepeat())) ;
         taskDetailTab.getUIFormSelectBox(UIEventReminderTab.POPUP_REPEAT_INTERVAL).setValue(String.valueOf(r.getRepeatInterval())) ;
       } else {
-      }      
+      }      */
     }
   }
 
@@ -502,7 +502,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       email.setFromDateTime(fromDateTime) ;
       reminders.add(email) ;
     }
-    if(getPopupReminder()) {
+    /*if(getPopupReminder()) {
       Reminder popup = new Reminder() ;
       popup.setReminderType(Reminder.TYPE_POPUP) ;
       popup.setAlarmBefore(Long.parseLong(getPopupReminderTime())) ;
@@ -510,7 +510,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       popup.setRepeatInterval(Long.parseLong(getPopupRepeatInterVal())) ;
       popup.setFromDateTime(fromDateTime) ;
       reminders.add(popup) ;
-    }
+    }*/
     return reminders ;
   }
 

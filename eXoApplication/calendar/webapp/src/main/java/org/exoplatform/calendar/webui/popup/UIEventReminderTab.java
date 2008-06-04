@@ -49,10 +49,10 @@ public class UIEventReminderTab extends UIFormInputWithActions {
   final public static String EMAIL_REPEAT_INTERVAL = "emailRepeatInterval".intern() ;
   final public static String EMAIL_IS_REPEAT = "emailIsRepeat".intern() ;
   
-  final public static String REMIND_BY_POPUP = "popupReminder".intern() ;
+ /* final public static String REMIND_BY_POPUP = "popupReminder".intern() ;
   final public static String POPUP_REMIND_BEFORE = "popupReminderTime".intern() ;
   final public static String POPUP_REPEAT_INTERVAL = "popupRepeatInterval".intern() ;
-  final public static String POPUP_IS_REPEAT = "popupIsRepeat".intern() ;
+  final public static String POPUP_IS_REPEAT = "popupIsRepeat".intern() ;*/
 
   private Map<String, List<ActionData>> actionField_ ;
   public UIEventReminderTab(String arg0) throws Exception {
@@ -85,11 +85,11 @@ public class UIEventReminderTab extends UIFormInputWithActions {
     List<SelectItemOption<String>> emailRemindBeforeOptions = getReminderTimes(5,60) ;
     List<SelectItemOption<String>> popupRemindBeforeOptions = getReminderTimes(5,60) ;
     
-    addUIFormInput(new UIFormCheckBoxInput<Boolean>(REMIND_BY_POPUP, REMIND_BY_POPUP, false)) ;
+   /* addUIFormInput(new UIFormCheckBoxInput<Boolean>(REMIND_BY_POPUP, REMIND_BY_POPUP, false)) ;
     addUIFormInput(new UIFormSelectBox(POPUP_REMIND_BEFORE, POPUP_REMIND_BEFORE, popupRemindBeforeOptions));
     addUIFormInput(new UIFormSelectBox(POPUP_IS_REPEAT, POPUP_IS_REPEAT, isPopupRepeatOptions));
     addUIFormInput(new UIFormSelectBox(POPUP_REPEAT_INTERVAL, POPUP_REPEAT_INTERVAL, emailRemindBeforeOptions));
-    
+    */
     
   }
   protected UIForm getParentFrom() {

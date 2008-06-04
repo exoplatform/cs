@@ -1945,8 +1945,6 @@ public class JCRDataStorage{
       query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH);
       QueryResult result = query.execute();
       NodeIterator it = result.getNodes();
-      System.out.println("\n\n" + eventQuery.getQueryStatement());
-      System.out.println("\n\n size ====>" + it.getSize());
       StringBuilder timeValues = new StringBuilder() ;
       while(it.hasNext()) {
         event = it.nextNode() ;

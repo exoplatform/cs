@@ -33,6 +33,8 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import javax.jcr.PathNotFoundException;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 
 import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.CalendarEvent;
@@ -185,7 +187,25 @@ public class CalendarUtils {
     }
     return options ;
   }
+  public static List<SelectItemOption<String>> getTimesSelectBoxOptions(String labelFormat, String valueFormat, long timeInteval, Locale locale) {
+    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+    Calendar cal = getInstanceTempCalendar() ;
+    cal.set(Calendar.DST_OFFSET, 0) ;
+    cal.set(Calendar.HOUR_OF_DAY, 0) ;
+    cal.set(Calendar.MINUTE, 0) ;
+    cal.set(Calendar.MILLISECOND, 0) ;
 
+    DateFormat dfLabel = new SimpleDateFormat(labelFormat, locale) ;
+    dfLabel.setCalendar(cal) ;
+    DateFormat dfValue = new SimpleDateFormat(valueFormat, locale) ;
+    dfValue.setCalendar(cal) ;
+    int time = 0 ;
+    while (time ++ < 24*60/(timeInteval)) {
+      options.add(new SelectItemOption<String>(dfLabel.format(cal.getTime()), dfValue.format(cal.getTime()))) ;
+      cal.add(java.util.Calendar.MINUTE, (int)timeInteval) ;
+    }
+    return options ;
+  }
   public static List<SelectItemOption<String>> getTimesSelectBoxOptions(String timeFormat, int timeInteval) {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     Calendar cal = getInstanceTempCalendar() ;
@@ -398,7 +418,7 @@ public class CalendarUtils {
     for(org.exoplatform.calendar.service.Calendar c : calendars) {
       privGrp.addOption(new org.exoplatform.calendar.webui.SelectItemOption<String>(c.getName(), CalendarUtils.PRIVATE_TYPE + CalendarUtils.COLON + c.getId())) ;
     }
-    options.add(privGrp);
+    if(privGrp.getOptions().size() > 0) options.add(privGrp);
     // shared calendars group
     GroupCalendarData gcd = calendarService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true);
     if(gcd != null) {
@@ -410,7 +430,7 @@ public class CalendarUtils {
           sharedGrp.addOption(new org.exoplatform.calendar.webui.SelectItemOption<String>(owner + c.getName(), CalendarUtils.SHARED_TYPE + CalendarUtils.COLON + c.getId())) ;
         }
       }
-      options.add(sharedGrp);
+      if(sharedGrp.getOptions().size() > 0) options.add(sharedGrp);
     }
     // public calendars group
     List<GroupCalendarData> lgcd = calendarService.getGroupCalendars(SessionProviderFactory.createSystemProvider(), CalendarUtils.getUserGroups(username), false, username) ;
@@ -425,7 +445,7 @@ public class CalendarUtils {
         }
 
       }
-      options.add(pubGrp);
+      if(pubGrp.getOptions().size() > 0)  options.add(pubGrp);
     }
     return options ;
   }
@@ -482,5 +502,19 @@ public class CalendarUtils {
     else if (size > 1024) str += df.format(((double) size)/(1024)) + " KB" ;
     else str += size + " B" ;
     return str ;
+  }
+  
+  public static boolean isValidEmailAddresses(String addressList) throws Exception {
+    boolean isInvalid = true ;
+    try {
+      InternetAddress[] iAdds = InternetAddress.parse(addressList, true);
+      String emailRegex = "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+\\.[A-Za-z]{2,5}" ;
+      for (int i = 0 ; i < iAdds.length; i ++) {
+        if(!iAdds[i].getAddress().toString().matches(emailRegex)) isInvalid = false;
+      }
+    } catch(AddressException e) {
+      return false ;
+    }
+    return isInvalid ;
   }
 }

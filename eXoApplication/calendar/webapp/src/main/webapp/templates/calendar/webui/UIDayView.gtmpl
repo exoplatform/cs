@@ -8,6 +8,7 @@
 	import java.util.TimeZone;
 	import java.util.Date;
 	import java.util.Locale;
+	import org.exoplatform.webui.application.WebuiRequestContext;
 	import java.util.SimpleTimeZone;
 	uiform.begin() ;
 	
@@ -27,12 +28,15 @@
 	timeFormat = uicomponent.getTimeFormat() ;
 	dateTimeFormat = uicomponent.getDateTimeFormat() ;
 	timeInterval = uicomponent.getTimeInterval() ;
-	DateFormat df = new SimpleDateFormat(dateFormat) ;
+	WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+ 	Locale locale = context.getParentAppRequestContext().getLocale() ;
+ 	
+	DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
 	df.setCalendar(uicomponent.getInstanceTempCalendar()) ;
 	//String currentDate = df.format(uicomponent.getCurrentCalendar().getTime()) ;
-	DateFormat tf = new SimpleDateFormat(timeFormat) ;
+	DateFormat tf = new SimpleDateFormat(timeFormat, locale) ;
 	tf.setCalendar(uicomponent.getInstanceTempCalendar()) ;
-	DateFormat dtf = new SimpleDateFormat(dateTimeFormat) ;
+	DateFormat dtf = new SimpleDateFormat(dateTimeFormat, locale) ;
 	dtf.setCalendar(uicomponent.getInstanceTempCalendar()) ;
 	def rcontext = _ctx.getRequestContext() ;	
 	String startWorkingTime = uicomponent.getStartTime() ;
@@ -112,7 +116,7 @@
 	            		flag = true ;
 	            		style = "" ;
 									if(isShowWorkingTime) {style = "WorkOffTime" ;}	
-	            		for(h in uicomponent.getDisplayTimes(timeFormat, timeInterval)) {
+	            		for(h in uicomponent.getDisplayTimes(timeFormat, timeInterval, locale)) {
 	            			if(isShowWorkingTime) {
 		            			if(h.equals(startWorkingTime)) {style = "" ;}
 		            			if(h.equals(endWorkingTime)) {style = "WorkOffTime" ;}
