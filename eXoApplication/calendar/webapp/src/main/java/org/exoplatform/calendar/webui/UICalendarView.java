@@ -624,10 +624,13 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
             return ;
           }
           try {
+            UIListContainer  uiListContainer = uiCalendarView.getParent() ;
+            long currentPage = uiListView.getCurrentPage() ;
             uiCalendarView.removeEvents(list) ;
             uiListView.setSelectedEvent(null) ;
-            UIListContainer  uiListContainer = uiCalendarView.getParent() ;
+            uiListView.setLastUpdatedEventId(null) ;
             uiListContainer.refresh() ;
+            if(currentPage <= uiListView.getAvailablePage()) uiListView.updateCurrentPage(currentPage) ;
             if(uiCalendarView.allDelete_) {
               uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.delete-event-successfully", null)) ;
             } else {
@@ -679,7 +682,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         CalendarEvent eventCalendar = null ;
         if(uiCalendarView instanceof UIListView) {
           UIListView uiListView = (UIListView)uiCalendarView ;
+          long pageNum = uiListView.getCurrentPage() ;
           if(!uiListView.isDisplaySearchResult()) uiCalendarView.refresh() ;
+          uiListView.updateCurrentPage(pageNum) ; 
         }  
         String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
         if(uiCalendarView.getDataMap() != null) {
@@ -721,12 +726,28 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
         UIPopupContainer uiPopupContainer = uiPopupAction.activate(UIPopupContainer.class, 700) ;
         CalendarEvent eventCalendar = null ;
-        if(uiCalendarView instanceof UIListView || uiCalendarView instanceof UIPreview) {
-          uiCalendarView.getAncestorOfType(UIListContainer.class).refresh() ;
+        String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+        if(uiCalendarView instanceof UIListView ) {
+          UIListContainer listContainer = uiCalendarView.getAncestorOfType(UIListContainer.class) ;
+          UIListView uiListView = listContainer.findFirstComponentOfType(UIListView.class) ;
+          long pageNum = uiListView.getCurrentPage() ;
+          listContainer.refresh() ;
+          uiListView.updateCurrentPage(pageNum) ; 
+          uiListView.setSelectedEvent(eventId) ;
+        } else if( uiCalendarView instanceof UIPreview) {
+          UIPreview uiPreview = (UIPreview)uiCalendarView ;
+          UIListContainer listContainer = uiCalendarView.getAncestorOfType(UIListContainer.class) ;
+          UIListView uiListView = listContainer.findFirstComponentOfType(UIListView.class) ;
+          long pageNum = uiListView.getCurrentPage() ;
+          listContainer.refresh() ;
+          uiListView.updateCurrentPage(pageNum) ; 
+          uiListView.setSelectedEvent(eventId) ;
+          eventCalendar = uiListView.getSelectedEventObj() ;
+          uiPreview.setEvent(eventCalendar) ;
+          uiPreview.refresh() ;
         } else uiCalendarView.refresh() ;
         String username = event.getRequestContext().getRemoteUser() ;
         String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
-        String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
         String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
         if(uiCalendarView.getDataMap() != null && uiCalendarView.getDataMap().get(eventId) != null) {
           eventCalendar = uiCalendarView.getDataMap().get(eventId) ;
@@ -822,8 +843,22 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           uiCalendarView.setLastUpdatedEventId(null) ;
           if(uiContainer.getRenderedChild() instanceof UIListContainer) {
             ((UIListContainer)uiContainer.getRenderedChild()).getChild(UIListView.class).setDisplaySearchResult(false) ;
+          } 
+          if(event.getSource() instanceof UIListView) {
+            UIListView listView = (UIListView) event.getSource() ;
+            long currentPage = listView.getCurrentPage() ;
+            uiContainer.refresh() ;
+            if(currentPage <= listView.getAvailablePage()) listView.updateCurrentPage(currentPage) ;
+          } else if(event.getSource() instanceof UIPreview) {
+            UIPreview preview = (UIPreview) event.getSource() ;
+            UIListContainer listContainer = preview.getAncestorOfType(UIListContainer.class) ;
+            UIListView listView = listContainer.findFirstComponentOfType(UIListView.class) ;
+            long currentPage = listView.getCurrentPage() ;
+            uiContainer.refresh() ;
+            if(currentPage <= listView.getAvailablePage()) listView.updateCurrentPage(currentPage) ;
+          } else {
+            uiContainer.refresh() ;
           }
-          uiContainer.refresh() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
         } else {
