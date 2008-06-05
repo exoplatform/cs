@@ -282,10 +282,10 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           String toAddress = msg.getMessageTo() != null ? msg.getMessageTo() : "" ;
           setFieldSubjectValue("Fwd: " + msg.getSubject());
           String forwardedText = "<br><br>-------- Original Message --------<br>" +
-              "Subject: " + msg.getSubject() + "<br>Date: " + msg.getSendDate() + 
-              "<br> From: " + msg.getFrom().replaceAll("\"", "").replaceAll("<", "&quot;").replaceAll(">", "&quot;") + 
-              "<br> To: " + toAddress.replaceAll("\"", "").replaceAll("<", "&quot;").replaceAll(">", "&quot;") + 
-              "<br><br>" + formatContent(msg) ;         
+              "Subject: " + MailUtils.encodeHTML(msg.getSubject()) + "<br>Date: " + msg.getSendDate() + 
+              "<br> From: " + MailUtils.encodeHTML(msg.getFrom()) + 
+              "<br> To: " + MailUtils.encodeHTML(toAddress) + 
+              "<br><br>" + MailUtils.encodeHTML(formatContent(msg)) ;         
           setFieldContentValue(forwardedText);
           setFieldToValue("");
           if (mailSetting.forwardWithAtt()) {
