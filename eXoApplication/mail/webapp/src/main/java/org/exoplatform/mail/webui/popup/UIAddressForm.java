@@ -28,12 +28,16 @@ import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.DataPageList;
+import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.impl.NewUserListener;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.webui.SelectItem;
 import org.exoplatform.mail.webui.SelectItemOptionGroup;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.impl.GroupImpl;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -87,8 +91,15 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     addUIFormInput(uiSelect) ;
     uiPageList_ = new UIPageIterator() ;
     uiPageList_.setId("UIMailAddressPage") ;
+    String username = MailUtils.getCurrentUser();
+    ContactService contactSrv = getApplicationComponent(ContactService.class);
+    List<ContactGroup> groups = contactSrv.getGroups(SessionProviderFactory.createSystemProvider(), username) ;
+    if (groups != null && groups.size() > 0) {
+      String category = groups.get(0).getId() ;
+      setContactList(category) ;
+    }
   }
-
+  
   public List<SelectItem> getOptions() throws Exception {
     String username = MailUtils.getCurrentUser();
     ContactService contactSrv = getApplicationComponent(ContactService.class);
@@ -98,7 +109,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       personalContacts.addOption(new org.exoplatform.mail.webui.SelectItemOption<String>(pcg.getName(), pcg.getId())) ;
     }
     options.add(personalContacts);
-    /*  
+      
     SelectItemOptionGroup sharedContacts = new SelectItemOptionGroup("shared-contacts");
     for(SharedAddressBook scg : contactSrv.getSharedAddressBooks(SessionProviderFactory.createSystemProvider(), username)) {
       sharedContacts.addOption(new org.exoplatform.mail.webui.SelectItemOption<String>(scg.getId(), scg.getName())) ;
@@ -106,11 +117,19 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     options.add(sharedContacts);
     
     SelectItemOptionGroup publicContacts = new SelectItemOptionGroup("public-contacts");
-    for(String publicCg : MailUtils.getUserGroups()) {
+    OrganizationService organizationService = 
+      (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+    Object[] objGroupIds = organizationService.getGroupHandler().findGroupsOfUser(username).toArray() ;
+    List<String> groupIds = new ArrayList<String>() ;
+    for (Object object : objGroupIds) {
+      groupIds.add(((GroupImpl)object).getId()) ;
+    }
+    for(String publicCg : groupIds) {
       publicContacts.addOption(new org.exoplatform.mail.webui.SelectItemOption<String>(publicCg, publicCg)) ;
     }
+    
     options.add(publicContacts);
-    */
+    
     return options ;
   }
   
@@ -135,8 +154,8 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   }
   
   public UIPageIterator  getUIPageIterator() {  return uiPageList_ ; }
-  public long getAvailablePage(){ return uiPageList_.getAvailablePage() ;}
-  public long getCurrentPage() { return uiPageList_.getCurrentPage();}
+  public long getAvailablePage(){ return uiPageList_.getAvailablePage() ; }
+  public long getCurrentPage() { return uiPageList_.getCurrentPage(); }
   
   protected void updateCurrentPage(int page) throws Exception{
     uiPageList_.setCurrentPage(page) ;
@@ -146,7 +165,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     ContactService contactSrv = getApplicationComponent(ContactService.class);
     ContactFilter filter = new ContactFilter() ;
     if(!MailUtils.isFieldEmpty(groupId)) {
-      filter.setCategories(new String[]{groupId}) ;
+      filter.setCategories(new String[]{ groupId }) ;
     }  
     DataPageList resultPageList = 
       contactSrv.searchContact(SessionProviderFactory.createSystemProvider(), MailUtils.getCurrentUser(), filter) ;
@@ -184,10 +203,10 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       uiAddressForm.selectedAddressId_ = category ;
       ContactFilter filter = new ContactFilter() ;
       if(!MailUtils.isFieldEmpty(uiAddressForm.selectedAddressId_)) {
-        filter.setCategories(new String[]{uiAddressForm.selectedAddressId_}) ;
+        filter.setCategories(new String[]{ uiAddressForm.selectedAddressId_ }) ;
       }
       DataPageList resultPageList = 
-        contactService.searchContact(SessionProviderFactory.createSystemProvider(), event.getRequestContext().getRemoteUser(), filter) ;
+        contactService.searchContact(SessionProviderFactory.createSystemProvider(), MailUtils.getCurrentUser(), filter) ;
       uiAddressForm.setContactList(resultPageList.getAll()) ;
       uiAddressForm.getUIStringInput(UIAddressForm.CONTACT_SEARCH).setValue(null) ;
       ((org.exoplatform.mail.webui.UIFormSelectBox)uiAddressForm.getChildById(UIAddressForm.CONTACT_GROUP)).setValue(uiAddressForm.selectedAddressId_) ;
@@ -219,6 +238,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIAddressForm.msg.search-error-keyword", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
       }
     }
   }
@@ -246,20 +266,22 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         uiEventForm.setSelectedTab(UIEventForm.TAB_EVENTREMINDER) ;
         uiEventForm.setEmailAddress(sb.toString()) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm) ;
-      }
-      if (uiAddressForm.getRecipientType().equals("to")) {
-        uiComposeForm.setFieldToValue(toAddress) ;
-        uiComposeForm.setToContacts(new ArrayList<Contact>(uiAddressForm.checkedList_.values())) ;
-      }
+      } else if (uiComposeForm != null) {
+        if (uiAddressForm.getRecipientType().equals("to")) {
+          uiComposeForm.setFieldToValue(toAddress) ;
+          uiComposeForm.setToContacts(new ArrayList<Contact>(uiAddressForm.checkedList_.values())) ;
+        }
 
-      if (uiAddressForm.getRecipientType().equals("cc")) {
-        uiComposeForm.setFieldCcValue(toAddress) ;
-        uiComposeForm.setCcContacts(new ArrayList<Contact>(uiAddressForm.checkedList_.values())) ;
-      }
+        if (uiAddressForm.getRecipientType().equals("cc")) {
+          uiComposeForm.setFieldCcValue(toAddress) ;
+          uiComposeForm.setCcContacts(new ArrayList<Contact>(uiAddressForm.checkedList_.values())) ;
+        }
 
-      if (uiAddressForm.getRecipientType().equals("bcc")) {
-        uiComposeForm.setFieldBccValue(toAddress) ;
-        uiComposeForm.setBccContacts(new ArrayList<Contact>(uiAddressForm.checkedList_.values())) ;
+        if (uiAddressForm.getRecipientType().equals("bcc")) {
+          uiComposeForm.setFieldBccValue(toAddress) ;
+          uiComposeForm.setBccContacts(new ArrayList<Contact>(uiAddressForm.checkedList_.values())) ;
+        }
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressForm);
       }
     }
   }
@@ -291,23 +313,28 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       if(uiEventForm != null) {
         uiEventForm.setSelectedTab(UIEventForm.TAB_EVENTREMINDER) ;
         uiEventForm.setEmailAddress(sb.toString()) ;
+        uiAddressForm.checkedList_ = uiAddressForm.newCheckedList_ ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm) ;
-      }
-      if (uiAddressForm.getRecipientType().equals("to")) {
-        uiComposeForm.setFieldToValue(toAddress) ;
-        uiComposeForm.setToContacts(new ArrayList<Contact>(uiAddressForm.newCheckedList_.values())) ;
-      }
+        return ;
+      } else if (uiComposeForm != null) {
+        if (uiAddressForm.getRecipientType().equals("to")) {
+          uiComposeForm.setFieldToValue(toAddress) ;
+          uiComposeForm.setToContacts(new ArrayList<Contact>(uiAddressForm.newCheckedList_.values())) ;
+        }
 
-      if (uiAddressForm.getRecipientType().equals("cc")) {
-        uiComposeForm.setFieldCcValue(toAddress) ;
-        uiComposeForm.setCcContacts(new ArrayList<Contact>(uiAddressForm.newCheckedList_.values())) ;
-      }
+        if (uiAddressForm.getRecipientType().equals("cc")) {
+          uiComposeForm.setFieldCcValue(toAddress) ;
+          uiComposeForm.setCcContacts(new ArrayList<Contact>(uiAddressForm.newCheckedList_.values())) ;
+        }
 
-      if (uiAddressForm.getRecipientType().equals("bcc")) {
-        uiComposeForm.setFieldBccValue(toAddress) ;
-        uiComposeForm.setBccContacts(new ArrayList<Contact>(uiAddressForm.newCheckedList_.values())) ;
+        if (uiAddressForm.getRecipientType().equals("bcc")) {
+          uiComposeForm.setFieldBccValue(toAddress) ;
+          uiComposeForm.setBccContacts(new ArrayList<Contact>(uiAddressForm.newCheckedList_.values())) ;
+        }
+        
+        uiAddressForm.checkedList_ = uiAddressForm.newCheckedList_ ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiComposeForm) ;
       }
-      uiAddressForm.checkedList_ = uiAddressForm.newCheckedList_ ;
     }
   }
 
