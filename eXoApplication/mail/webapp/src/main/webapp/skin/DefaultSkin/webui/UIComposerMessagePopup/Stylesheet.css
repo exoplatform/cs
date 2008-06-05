@@ -109,6 +109,7 @@
 
 .UIMessageCompose .UIForm .HorizontalLayout td {
 	border: none;
+	white-space:normal;
 }	
 
 .UIMessageCompose .UIForm .HorizontalLayout .FieldCCAndBCC {
