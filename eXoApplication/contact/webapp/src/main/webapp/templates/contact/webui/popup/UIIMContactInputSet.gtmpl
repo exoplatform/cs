@@ -3,7 +3,7 @@
   
   def rcontext = _ctx.getRequestContext() ;
   JavascriptManager jsmanager = rcontext.getJavascriptManager();
-  jsmanager.addOnLoadJavascript('eXo.contact.UIContactPortlet.imFormOnload(\'' + uicomponent.id + '\')');
+  jsmanager.addJavascript('eXo.contact.UIContactPortlet.imFormOnload(\'' + uicomponent.id + '\');');
 %>
 <div class="UIIMContact $uicomponent.id" id="$uicomponent.id">
   <div class="FormContainer ProfileContainer">

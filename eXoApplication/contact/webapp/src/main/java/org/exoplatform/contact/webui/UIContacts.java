@@ -692,28 +692,16 @@ public class UIContacts extends UIForm implements UIPopupComponent {
               if (uiContacts.getSharedGroupMap().containsKey(add)) addressBookId = add ;
             contactService.removeSharedContact(SessionProviderFactory.createSystemProvider(), username, addressBookId, contactId) ;
           } else {
-            try {
-              contactService.removeUserShareContact(
-                  SessionProviderFactory.createSystemProvider(), contact.getPath(), id, username) ;
-            } catch (PathNotFoundException e) {
-              uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-not-existed", null, 
-                  ApplicationMessage.WARNING)) ;
-              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-              return ;              
-            }
+            contactService.removeUserShareContact(
+                SessionProviderFactory.createSystemProvider(), contact.getPath(), id, username) ;
           }
           removedContacts.add(contact) ;
-        } else if (!uiContacts.isSelectSharedContacts) {
-          try {
-            removedContacts = contactService.removeContacts(SessionProviderFactory.createSessionProvider(), username, contactIds) ;          
-          } catch (PathNotFoundException e) {
-            uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-not-existed", null, 
-                ApplicationMessage.WARNING)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-            return ;              
-          }
         }
       }
+      if (!uiContacts.isSelectSharedContacts) {
+        removedContacts.addAll(contactService.removeContacts(SessionProviderFactory.createSessionProvider(), username, contactIds)) ;          
+      }
+      
       if (ContactUtils.isEmpty(uiContacts.selectedGroup) && ContactUtils.isEmpty(uiContacts.selectedTag_)) {
         uiContacts.setContact(removedContacts, false) ;
       }
@@ -726,7 +714,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
     }
-  } 
+  }  
   
   static public class ExportContactActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
