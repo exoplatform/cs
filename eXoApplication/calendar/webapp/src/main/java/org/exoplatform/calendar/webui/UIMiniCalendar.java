@@ -83,8 +83,10 @@ public class UIMiniCalendar extends UICalendarView  {
   public java.util.Calendar getEndDateOfMonthView() throws Exception{
     java.util.Calendar temCal = getEndDateOfMonth() ;
     int amount = temCal.getMaximum(java.util.Calendar.DAY_OF_WEEK) - temCal.get(java.util.Calendar.DAY_OF_WEEK) ; 
-    temCal.add(java.util.Calendar.DATE, amount) ;
-    return CalendarUtils.getEndDay(temCal) ;  
+    /*temCal.add(java.util.Calendar.DATE, amount) ;
+    return CalendarUtils.getEndDay(temCal) ;  */
+    temCal.add(java.util.Calendar.DATE, getWeeksOfTheMonth(getCurrentYear(), getCurrentMonth(), 1)*7) ;
+    return getBeginDay(temCal) ;
   }
   public java.util.Calendar getBeginDateOfMonth() throws Exception{
     java.util.Calendar temCal = getInstanceTempCalendar() ;
