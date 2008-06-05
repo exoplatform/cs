@@ -22,6 +22,7 @@ import org.exoplatform.services.rest.transformer.StringOutputTransformer;
 import org.exoplatform.services.scheduler.JobSchedulerService;
 import org.quartz.JobDetail;
 
+
 /**
  * @author Uoc Nguyen
  * 
@@ -172,6 +173,6 @@ public class MailWebservice implements ResourceContainer {
   public String getUserName() throws Exception {
     AuthenticationService authService = (AuthenticationService) ExoContainerContext
         .getCurrentContainer().getComponentInstanceOfType(AuthenticationService.class);
-    return authService.getCurrentIdentity().getUsername();
+    return authService.getCurrentIdentity().getUserId();
   }
 }

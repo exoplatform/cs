@@ -33,7 +33,8 @@ import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.organization.auth.AuthenticationService;
-import org.exoplatform.services.organization.auth.Identity;
+import org.exoplatform.services.security.*; ;
+
 
 /**
  * Created by The eXo Platform SAS . <br/>
