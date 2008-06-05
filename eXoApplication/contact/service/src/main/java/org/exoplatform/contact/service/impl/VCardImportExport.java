@@ -279,6 +279,7 @@ public class VCardImportExport implements ContactImportExport {
 
     // die here when image size about 1mb
     net.wimpi.pim.contact.model.Contact[] pimContacts = unmarshaller.unmarshallContacts(input);
+
     for (int index = 0; index < pimContacts.length; index++) {
       Contact contact = new Contact();
       PersonalIdentity identity = pimContacts[index].getPersonalIdentity();
@@ -480,8 +481,6 @@ public class VCardImportExport implements ContactImportExport {
         contact.setAddressBook(new String[] { groupId });      
         contactService.saveContact(sProvider, username, contact, true);
       }
-      
-      
     }
   }
 

@@ -422,11 +422,12 @@ public class JCRDataStorage {
     Node contactHomeNode = getUserContactHome(sysProvider, username);
     List<Contact> contacts = new ArrayList<Contact>() ;
     for (String contactId : contactIds) {
-      Contact contact = getContact(sysProvider, username, contactId);
-      contactHomeNode.getNode(contactId).remove();
-      contactHomeNode.getSession().save(); 
-      contacts.add(contact) ;
-      
+      if (contactHomeNode.hasNode(contactId)) {
+        Contact contact = getContact(sysProvider, username, contactId);
+        contactHomeNode.getNode(contactId).remove();
+        contactHomeNode.getSession().save(); 
+        contacts.add(contact) ;
+      }  
     }
     return contacts ;
   }
