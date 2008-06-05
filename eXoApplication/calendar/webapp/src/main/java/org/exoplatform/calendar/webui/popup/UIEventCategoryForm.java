@@ -29,6 +29,7 @@ import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.web.command.handler.GetApplicationHandler;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -115,7 +116,14 @@ public class UIEventCategoryForm extends UIForm {
           eventCat = uiForm.getEventCategory() ;
           calendarService.saveEventCategory(SessionProviderFactory.createSessionProvider(), username, eventCat, new String[]{name, uiForm.getCategoryDescription()}, false) ; 
         }
+        Long currentPage = uiManager.getCurrentPage() ;
         uiManager.updateGrid() ;
+        if(currentPage <= uiManager.getAvailablePage()) 
+          uiManager.setCurrentPage(currentPage.intValue()) ;
+        else {
+          currentPage = uiManager.getAvailablePage() ;
+          uiManager.setCurrentPage(currentPage.intValue()) ;
+        }
         uiForm.reset() ;
         UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
         UIMiniCalendar uiMiniCalendar = calendarPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
