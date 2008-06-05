@@ -22,6 +22,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -709,12 +710,20 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     eventDetailTab.getUIFormTextAreaInput(FIELD_MEETING).setValue(sb.toString()) ;
   }
 
-  protected String[] getParticipants() {
+  protected String[] getParticipants() throws Exception {
     String participants = getParticipantValues() ;
     if(CalendarUtils.isEmpty(participants)) return null ;
     else {
-      participants.trim() ;
-      return participants.split(CalendarUtils.COMMA) ;
+      OrganizationService orgService = CalendarUtils.getOrganizationService() ;
+      Map<String, String> parMap = new HashMap<String, String> () ;
+      for(String user : participants.split(CalendarUtils.COMMA))  {
+        if(orgService.getUserHandler().findUserByName(user.trim()) != null) {
+          parMap.put(user.trim(), user.trim()) ;
+        } else if(CalendarUtils.isValidEmailAddresses(user.trim())) {
+          //parMap.put(user.trim(), user.trim()) ;
+        }
+      }
+      return parMap.values().toArray(new String[parMap.values().size()]) ;
     }
   } 
   protected String  getParticipantValues() {
@@ -995,7 +1004,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         }
         calendarEvent.setFromDateTime(from) ;
         calendarEvent.setToDateTime(to);
-        if(pars != null && pars.length > 0) calendarEvent.setParticipant(pars) ;
+        /*if(pars != null && pars.length > 0) */
+        calendarEvent.setParticipant(pars) ;
         if(CalendarUtils.isEmpty(uiForm.getInvitationEmail())) calendarEvent.setInvitation(null) ;
         else 
           if(CalendarUtils.isValidEmailAddresses(uiForm.getInvitationEmail())) {
