@@ -652,7 +652,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       if (uiComposeForm.getToContacts() != null && uiComposeForm.getToContacts().size() > 0) {
         uiAddressForm.setAlreadyCheckedContact(uiComposeForm.getToContacts());
       } 
-      uiAddressForm.setContactList("") ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
     }
   }
@@ -666,7 +665,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       if (uiComposeForm.getCcContacts()!= null && uiComposeForm.getCcContacts().size()>0) {        
        uiAddressForm.setAlreadyCheckedContact(uiComposeForm.getCcContacts());      
       }
-      uiAddressForm.setContactList("") ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
     }
   }
@@ -681,7 +679,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       if (uiComposeForm.getCcContacts()!= null && uiComposeForm.getBccContacts().size()>0) {        
        uiAddressForm.setAlreadyCheckedContact(uiComposeForm.getBccContacts());
       }
-      uiAddressForm.setContactList("") ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
     }   
   }

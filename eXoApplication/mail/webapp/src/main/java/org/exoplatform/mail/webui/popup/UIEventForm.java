@@ -556,7 +556,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
         UIPopupActionContainer uiActionContainer = uiForm.getAncestorOfType(UIPopupActionContainer.class) ;    
         UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
         UIAddressForm uiAddressForm = uiChildPopup.activate(UIAddressForm.class, 650) ; 
-        uiAddressForm.setContactList("") ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
       }
     }
