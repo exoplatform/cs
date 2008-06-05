@@ -1566,6 +1566,10 @@
 	margin-top: 10px;
 }
 
+.UIMailPortlet .UIAddNewContact .ProfileContent input.radio {
+	_width: 28px;
+}
+
 .UIMailPortlet .UIAddNewContact .ProfileContent .HorizontalLayout select {
 	width: 61px;
 }
