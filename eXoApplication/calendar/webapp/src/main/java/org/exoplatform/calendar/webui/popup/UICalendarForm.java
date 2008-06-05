@@ -492,6 +492,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
             String typedPerms = sharedTab.getUIStringInput(groupIdSelected + PERMISSION_SUB).getValue();
             if(!CalendarUtils.isEmpty(typedPerms)) {
               for(String s : typedPerms.split(CalendarUtils.COMMA)){
+                s = s.trim() ;
                 if(!CalendarUtils.isEmpty(s)) {
                   if(orgService.getUserHandler().findUserByName(s) != null) {             
                     listPermission.add(s) ;
@@ -512,7 +513,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
               listPermission.add(CalendarUtils.getCurrentUser()) ;
             }
           }        
-          calendar.setEditPermission(listPermission.toArray(new String[]{})) ;
+          calendar.setEditPermission(listPermission.toArray(new String[listPermission.size()])) ;
           calendarService.savePublicCalendar(sProvider, calendar, uiForm.isAddNew_, username) ;
         } 
         UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
