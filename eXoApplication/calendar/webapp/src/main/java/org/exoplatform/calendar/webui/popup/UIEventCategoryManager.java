@@ -63,7 +63,16 @@ public class UIEventCategoryManager extends UIContainer implements UIPopupCompon
     addChild(UIEventCategoryForm.class, null, null) ;
     updateGrid() ;
   }
-
+  
+  public long getCurrentPage() {
+    return getChild(UIGrid.class).getUIPageIterator().getCurrentPage() ;
+  }
+  public long getAvailablePage() {
+    return getChild(UIGrid.class).getUIPageIterator().getAvailablePage() ;
+  }
+  public void setCurrentPage(int page) throws Exception {
+    getChild(UIGrid.class).getUIPageIterator().setCurrentPage(page) ;
+  }
   public void activate() throws Exception {
     // TODO Auto-generated method stub
 
@@ -124,7 +133,9 @@ public class UIEventCategoryManager extends UIContainer implements UIPopupCompon
       UIMiniCalendar uiMiniCalendar = calendarPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
+      Long currentPage  = uiManager.getCurrentPage() ;
       uiManager.updateGrid() ;
+      if(currentPage <= uiManager.getAvailablePage()) uiManager.setCurrentPage(currentPage.intValue()) ;
       uiManager.resetForm() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiManager) ;
       UIEventDetailTab uiEventDetailTab = calendarPortlet.findFirstComponentOfType(UIEventDetailTab.class) ;
