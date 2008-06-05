@@ -666,6 +666,7 @@
 }
 
 .UIListContainer .Result {
+  height: 22px;
 	line-height: 22px;
 	text-align: center;
 	font-weight: bold;
@@ -673,7 +674,6 @@
 	border: 1px solid #cccccc;
 	border-top: none;
 	margin-right: 5px;
-	_margin: 0px 4px 0px 6px;
 }
 
 .UIPreview {
