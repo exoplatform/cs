@@ -72,7 +72,9 @@
 		<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
   		<thead>
   			<tr>
+  				<%if(!isDisplaySearchResult) {%>
   				<th style="width: 30px;"><input type="checkbox" class="checkbox" title="<%=uiform.getLabel('CheckAll')%>" value="4"/></th>
+  				<%}%>
   			  <th style="width: 24px;"><div class="AttachmentIcon" title="Attachment of event">&nbsp;</div></th>
   		    <th >
   		    	<%=uiform.getLabel('Summary')%>
@@ -89,7 +91,7 @@
   				<%
   					for(event in uicomponent.getEvents()){
   					rowStyle = "" ;
-  					if(event.getId().equals(uicomponent.getLastUpdatedEventId())) {rowStyle = "background:#B0E0E6;";}
+  					if(event.getId().equals(uicomponent.getSelectedEvent())) {rowStyle = "background:#B0E0E6;";}
   					attachIcon = "" ;
   					if(!event.getAttachment().isEmpty()) {attachIcon = "AttachmentIcon" ;}
   					%>
@@ -98,7 +100,9 @@
 		  						String classIcon = event.getEventType() + "Icon" ;
 		  						String actionLink = uicomponent.event("ViewDetail", event.getId()+"&calendarId="+event.getCalendarId()+"&calType="+event.getCalType()) ;		  
 		  					%>
+		  					<%if(!isDisplaySearchResult) {%>
 		  					<td><%uicomponent.renderField(uicomponent.getChildById(event.getId()))%></td>
+		  					<%}%>
 		  					<td style="padding: 1px;"><div class="$attachIcon">&nbsp;</div></td>
 								<td class="text">
 									<a href="$actionLink" class="ControlButton">

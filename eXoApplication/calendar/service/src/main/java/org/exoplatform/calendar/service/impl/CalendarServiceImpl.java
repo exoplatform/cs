@@ -18,6 +18,7 @@ package org.exoplatform.calendar.service.impl;
 
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -50,7 +51,7 @@ public class CalendarServiceImpl implements CalendarService{
   final public static String EXPORTEDCSV = "ExportedCsv(.csv)".intern() ;
 
   private JCRDataStorage storage_ ;
-  private Map<String, CalendarImportExport> calendarImportExport_ = new HashMap<String, CalendarImportExport>() ;
+  private Map<String, CalendarImportExport> calendarImportExport_ = new LinkedHashMap<String, CalendarImportExport>() ;
 
   public CalendarServiceImpl(NodeHierarchyCreator nodeHierarchyCreator) throws Exception {
     storage_ = new JCRDataStorage(nodeHierarchyCreator) ;

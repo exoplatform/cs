@@ -102,7 +102,7 @@ public class UIPreview extends UICalendarView implements UIPopupComponent {
   @Override
   LinkedHashMap<String, CalendarEvent> getDataMap() {
     LinkedHashMap<String, CalendarEvent> dataMap = new LinkedHashMap<String, CalendarEvent>() ;
-    dataMap.put(event_.getId(), event_) ;
+    if(event_ != null) dataMap.put(event_.getId(), event_) ;
     return dataMap ;
   }
 

@@ -30,6 +30,7 @@ import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.data.CalendarOutputter;
 import net.fortuna.ical4j.model.ComponentList;
 import net.fortuna.ical4j.model.DateTime;
+import net.fortuna.ical4j.model.Parameter;
 import net.fortuna.ical4j.model.Property;
 import net.fortuna.ical4j.model.PropertyList;
 import net.fortuna.ical4j.model.ValidationException;
@@ -53,6 +54,7 @@ import org.exoplatform.calendar.service.CalendarImportExport;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.Reminder;
+import org.exoplatform.common.http.client.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 
@@ -83,7 +85,7 @@ public class ICalendarImportExport implements CalendarImportExport{
 		}
     if(events.isEmpty()) return null ;
 		net.fortuna.ical4j.model.Calendar calendar = new net.fortuna.ical4j.model.Calendar();
-		calendar.getProperties().add(new ProdId("-//Ben Fortuna//iCal4j 1.0//EN"));
+    calendar.getProperties().add(new ProdId("-//Ben Fortuna//iCal4j 1.0//EN"));
 		calendar.getProperties().add(Version.VERSION_2_0);
 		calendar.getProperties().add(CalScale.GREGORIAN);
 		int eventCounter = 0 ;

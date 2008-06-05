@@ -70,6 +70,7 @@ public class UIListView extends UICalendarView {
   private boolean isSearchResult = false ;
   private String lastViewId_ = null ;
   private String categoryId_ = null ;
+  private String keyWords_ = null ;
   public UIListView() throws Exception{
     if(getEvents().length > 0 ) {
       selectedEvent_ = getEvents()[0].getId() ;
@@ -98,8 +99,8 @@ public class UIListView extends UICalendarView {
       eventQuery.setEventType(getViewType()) ;
     }
     UIListContainer uiListContainer = getParent() ;
-    if(uiListContainer.isDisplaySearchResult()) update(pageList_) ;
-    else update(new EventPageList(calendarService.getEvents(getSession(), username, eventQuery, getPublicCalendars()), 10)) ;
+    if(uiListContainer.isDisplaySearchResult())  { update(pageList_) ;
+    } else update(new EventPageList(calendarService.getEvents(getSession(), username, eventQuery, getPublicCalendars()), 10)) ;
     UIFormSelectBox uiCategory = getUIFormSelectBox(EVENT_CATEGORIES) ;
     uiCategory.setValue(categoryId_) ;
     uiCategory.setOnChange("Onchange") ;
@@ -107,12 +108,15 @@ public class UIListView extends UICalendarView {
     UIPreview view = uiContainer.getChild(UIPreview.class) ;
     if(CalendarUtils.isEmpty(getSelectedEvent())) {
       if(getEvents().length > 0) { 
-        setSelectedEvent(getEvents()[0].getId()) ;  
+        String eventId = getEvents()[0].getId() ;
+        setSelectedEvent(eventId) ;  
+        setLastViewId(eventId) ;  
+        setLastUpdatedEventId(eventId) ;
         view.setEvent(getEvents()[0]) ;
-        setLastUpdatedEventId(getEvents()[0].getId()) ;
       } else {
         setSelectedEvent(null) ;
         view.setEvent(null) ;
+        setLastViewId(null) ;
         setLastUpdatedEventId(null) ;
       }
     } else {
@@ -264,6 +268,14 @@ public class UIListView extends UICalendarView {
   }
   public CalendarEvent getSelectedEventObj() {
     return eventMap_.get(selectedEvent_) ;
+  }
+
+  public void setKeyWords(String keyWords) {
+    this.keyWords_ = keyWords;
+  }
+
+  public String getKeyWords() {
+    return keyWords_;
   }
 }
 
