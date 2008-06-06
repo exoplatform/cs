@@ -278,7 +278,8 @@ public class VCardImportExport implements ContactImportExport {
     unmarshaller.setEncoding(ENCODING);
 
     // die here when image size about 1mb
-    net.wimpi.pim.contact.model.Contact[] pimContacts = unmarshaller.unmarshallContacts(input);
+    net.wimpi.pim.contact.model.Contact[] pimContacts = unmarshaller.unmarshallContacts(input);    
+    List<Contact> contacts = new ArrayList<Contact>() ;
     for (int index = 0; index < pimContacts.length; index++) {
       Contact contact = new Contact();
       PersonalIdentity identity = pimContacts[index].getPersonalIdentity();
@@ -469,21 +470,22 @@ public class VCardImportExport implements ContactImportExport {
       // Then store it to JCR storage
       // ////////////////////////////////
 
-      // added 5-5
-      ContactService contactService = 
-        (ContactService) PortalContainer.getComponent(ContactService.class);
-      if (groupId.contains(JCRDataStorage.HYPHEN)) {
-        String newGroupId = groupId.replace(JCRDataStorage.HYPHEN, "") ;
-        contact.setAddressBook(new String[] { newGroupId }) ;
-        contactService.saveContactToSharedAddressBook(username, newGroupId, contact, true) ;
-      } else {
-        contact.setAddressBook(new String[] { groupId });      
-        contactService.saveContact(sProvider, username, contact, true);
-      }
-      
-      
+      contact.setAddressBook(new String[] { groupId }) ;
+      contacts.add(contact) ;
     }
+    /*ContactService contactService = 
+      (ContactService) PortalContainer.getComponent(ContactService.class);*/
+
+    if (groupId.contains(JCRDataStorage.HYPHEN)) {
+      String newGroupId = groupId.replace(JCRDataStorage.HYPHEN, "") ;
+      storage_.saveContactsToSharedAddressBook(username, newGroupId, contacts, true) ;
+    } else {
+      storage_.saveContacts(sProvider, username, contacts, true);
+    }
+    
+    
   }
+  
 
   private void addPhoneNumber(ContactModelFactory cmf, Communications comm, String number,
       boolean isHome, boolean isFax, boolean isCellular) {

@@ -499,6 +499,15 @@ public class JCRDataStorage {
     contactHomeNode.getSession().save();    
   }
 
+//add to use when import 
+  public void saveContacts(SessionProvider sProvider, String username, List<Contact> contacts, boolean isNew) throws Exception {
+    Node contactHomeNode = getUserContactHome(sProvider, username);
+    for (Contact contact : contacts) {
+      saveContact(contactHomeNode, contact, isNew) ;      
+    }
+    contactHomeNode.getSession().save();    
+  }
+  
   public void saveGroup(SessionProvider sProvider, String username, ContactGroup group, boolean isNew) throws Exception {
     Node groupNode = null ;
     if (isNew) {
@@ -908,6 +917,26 @@ public class JCRDataStorage {
         Node contactHomeNode = addressBook.getParent().getParent().getNode(CONTACTS) ;
         contact.setOwner(false) ;
         saveContact(contactHomeNode, contact, isNew) ;
+        contactHomeNode.getSession().save() ;   
+        return ;
+      }
+    }      
+  }
+  
+//add to use when import
+  public void saveContactsToSharedAddressBook(String username, String addressBookId, List<Contact> contacts, boolean isNew) throws Exception  {
+    Node sharedAddressBookMock = getSharedAddressBook(username) ;
+    PropertyIterator iter = sharedAddressBookMock.getReferences() ;
+    Node addressBook ;      
+    while(iter.hasNext()) {
+      addressBook = iter.nextProperty().getParent() ;
+      if(addressBook.getName().equals(addressBookId)) {
+        Node contactHomeNode = addressBook.getParent().getParent().getNode(CONTACTS) ;
+        for (Contact contact : contacts) {
+          contact.setOwner(false) ;
+          contact.setAddressBook(new String[] { addressBookId }) ;
+          saveContact(contactHomeNode, contact, isNew) ;
+        }        
         contactHomeNode.getSession().save() ;   
         return ;
       }
