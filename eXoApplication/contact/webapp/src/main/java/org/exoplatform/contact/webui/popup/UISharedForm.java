@@ -208,6 +208,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       if (!ContactUtils.isEmpty(groups)) {
         String[] arrayGroups = groups.split(",") ; 
         for (String group : arrayGroups) {
+          group = group.trim() ;
           Object[] objGroupIds = organizationService.getGroupHandler()
             .findGroups(organizationService.getGroupHandler().findGroupById(group)).toArray() ;
           for (Object object : objGroupIds) {
@@ -216,7 +217,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
             for (Contact contact : contactService.getPublicContactsByAddressBook(SessionProviderFactory.createSystemProvider(), groupId).getAll()) {
               receiveUsersByGroups.put(contact.getId(), contact.getId()) ;
             }            
-          }          
+          }
           receiveGroups.add(group) ;
           for (Contact contact : contactService.getPublicContactsByAddressBook(SessionProviderFactory.createSystemProvider(), group.trim()).getAll()) {
             receiveUsersByGroups.put(contact.getId(), contact.getId()) ;
@@ -225,7 +226,6 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       }
       receiveUsersByGroups.remove(ContactUtils.getCurrentUser()) ;
       // xong phan xu ly recieve users
-      
       if (receiveUsers.size() > 0 || receiveUsersByGroups.size() > 0) {
         if (uiForm.isSharedGroup) {
           ContactGroup contactGroup = uiForm.group_ ;
