@@ -1960,7 +1960,7 @@ public class JCRDataStorage{
       StringBuilder timeValues = new StringBuilder() ;
       while(it.hasNext()) {
         event = it.nextNode() ;
-        if(event.hasProperty("exo:eventState") && CalendarEvent.ST_BUSY.equals(event.getProperty("exo:eventState").getValue().getString()))
+        if(event.hasProperty("exo:eventState") && !CalendarEvent.ST_AVAILABLE.equals(event.getProperty("exo:eventState").getValue().getString()))
         {
           java.util.Calendar fromCal = event.getProperty("exo:fromDateTime").getDate() ;
           java.util.Calendar toCal = event.getProperty("exo:toDateTime").getDate() ;
