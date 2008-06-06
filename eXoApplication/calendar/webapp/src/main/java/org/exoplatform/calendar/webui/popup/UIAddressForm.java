@@ -179,7 +179,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
           sb.append(uiTaskForm.getEmailAddress()) ;
         }
       } else if (uiEventForm != null) {
-        if(uiEventForm.getEmailAddress() != null && uiEventForm.getEmailAddress().length > 0) {
+        if(uiEventForm.getEmailAddress() != null && uiEventForm.getEmailAddress().trim().length() > 0) {
           sb.append(uiEventForm.getEmailAddress()) ;
         }
       }
