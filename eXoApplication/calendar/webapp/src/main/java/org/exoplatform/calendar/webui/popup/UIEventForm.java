@@ -115,6 +115,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   final public static String ITEM_PRIVATE = "private".intern() ;
   final public static String ITEM_AVAILABLE = "available".intern() ;
   final public static String ITEM_BUSY = "busy".intern() ;
+  final public static String ITEM_OUTSIDE = "outside".intern() ;
 
   final public static String ITEM_REPEAT = "true".intern() ;
   final public static String ITEM_UNREPEAT = "false".intern() ;
@@ -294,6 +295,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     options.add(new SelectItemOption<String>(ITEM_BUSY, ITEM_BUSY)) ;
     options.add(new SelectItemOption<String>(ITEM_AVAILABLE, ITEM_AVAILABLE)) ;
+    options.add(new SelectItemOption<String>(ITEM_OUTSIDE, ITEM_OUTSIDE)) ;
     return options ;
   }
 
@@ -306,7 +308,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   public void updateSelect(String selectField, String value) throws Exception {
   } 
 
-  protected boolean isEventDetailValid(CalendarSetting calendarSetting){
+  protected boolean isEventDetailValid(CalendarSetting calendarSetting) throws Exception{
     if(CalendarUtils.isEmpty(getCalendarId())) {
       errorMsg_ = "UIEventForm.msg.event-calendar-required" ;
       return false ;
@@ -551,11 +553,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     eventReminderTab.getUIFormSelectBox(UIEventReminderTab.EMAIL_REMIND_BEFORE).setValue(value) ;
   }
 
-  protected String getEmailAddress() {
+  protected String getEmailAddress() throws Exception {
     UIEventReminderTab eventReminderTab =  getChildById(TAB_EVENTREMINDER) ;
     return eventReminderTab.getUIFormTextAreaInput(UIEventReminderTab.FIELD_EMAIL_ADDRESS).getValue() ;
   }
-
   public void setEmailAddress(String value) {
     UIEventReminderTab eventReminderTab =  getChildById(TAB_EVENTREMINDER) ;
     eventReminderTab.getUIFormTextAreaInput(UIEventReminderTab.FIELD_EMAIL_ADDRESS).setValue(value) ;
@@ -617,7 +618,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       } else {}*/
     }
   }
-  protected List<Reminder>  getEventReminders(Date fromDateTime, List<Reminder> currentReminders) {
+  protected List<Reminder>  getEventReminders(Date fromDateTime, List<Reminder> currentReminders) throws Exception {
     List<Reminder> reminders = new ArrayList<Reminder>() ;
     if(getEmailReminder()) {
       Reminder email = new Reminder() ;
@@ -631,7 +632,15 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       }     
       email.setReminderType(Reminder.TYPE_EMAIL) ;
       email.setAlarmBefore(Long.parseLong(getEmailRemindBefore())) ;
-      email.setEmailAddress(getEmailAddress()) ;
+      StringBuffer sbAddress = new StringBuffer() ;
+      for(String s : getEmailAddress().split(CalendarUtils.COMMA)) {
+        s = s.trim() ;
+        if(CalendarUtils.isEmailValid(s)) {
+          if(sbAddress.length() > 0) sbAddress.append(CalendarUtils.COMMA) ;
+          sbAddress.append(s) ;
+        }  
+      }
+      email.setEmailAddress(sbAddress.toString()) ;
       email.setRepeate(Boolean.parseBoolean(isEmailRepeat())) ;
       email.setRepeatInterval(Long.parseLong(getEmailRepeatInterVal())) ;
       email.setFromDateTime(fromDateTime) ;      

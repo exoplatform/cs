@@ -503,8 +503,8 @@ public class CalendarUtils {
     else str += size + " B" ;
     return str ;
   }
-  
-  public static boolean isValidEmailAddresses(String addressList) throws Exception {
+
+  public static boolean isValidEmailAddresses(String addressList) {
     boolean isInvalid = true ;
     try {
       InternetAddress[] iAdds = InternetAddress.parse(addressList, true);
@@ -516,5 +516,28 @@ public class CalendarUtils {
       return false ;
     }
     return isInvalid ;
+  }
+
+  public static String parseEmailAddress(String address) {
+    try {
+      InternetAddress[] iAdds = InternetAddress.parse(address, true);
+      return iAdds[0].getAddress() ;
+    }catch (Exception e) {
+      e.printStackTrace() ;
+      return null ;
+    }
+  }
+
+  public static boolean isEmailValid(String value) {
+    String emailRegex = "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+\\.[A-Za-z]{2,5}" ;
+    return (value!= null && value.trim().length() > 0 && value.trim().matches(emailRegex)) ;
+  }
+  public static boolean isUserExisted(OrganizationService orgSevice, String value) {
+    try {
+      return (!isEmpty(value) && orgSevice.getUserHandler().findUserByName(value) != null) ;
+    } catch( Exception e) {
+      e.printStackTrace() ;
+      return false ;
+    }
   }
 }

@@ -48,7 +48,7 @@ public class UIFormDateTimePicker extends UIFormInputBase<String>  {
   private String timeStyle_ = "HH:mm:ss" ;
   private Date date_ ;
   private boolean isDisplayTime_ ;
-  private Locale locale_ = Locale.getDefault() ;
+  private Locale locale_  ;
 
   public UIFormDateTimePicker(String name, String bindField, Date date, boolean isDisplayTime) {
     super(name, bindField, String.class) ;
@@ -58,6 +58,9 @@ public class UIFormDateTimePicker extends UIFormInputBase<String>  {
     if(date != null) value_ = getFormater().format(date) ;
   }
   private String getDaysName() { 
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    Locale locale = context.getParentAppRequestContext().getLocale() ;
+    if(locale_ == null) locale_ = locale ;
     DateFormatSymbols     dfs_ = new DateFormatSymbols(locale_) ;
     StringBuffer sb = new StringBuffer() ;
     for(String n : dfs_.getWeekdays()) {
@@ -70,6 +73,9 @@ public class UIFormDateTimePicker extends UIFormInputBase<String>  {
   }
 
   protected String getMonthsName() { 
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    Locale locale = context.getParentAppRequestContext().getLocale() ;
+    if(locale_ == null) locale_ = locale ;
     DateFormatSymbols     dfs_ = new DateFormatSymbols(locale_) ;
     StringBuffer sb = new StringBuffer() ;
     for(String n : dfs_.getMonths()) {
@@ -165,6 +171,9 @@ public class UIFormDateTimePicker extends UIFormInputBase<String>  {
     return dateStyle_ ;
   }
   private DateFormat getFormater() {
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    Locale locale = context.getParentAppRequestContext().getLocale() ;
+    if(locale_ == null) locale_ = locale ;
     return new SimpleDateFormat(getFormatStyle(), locale_) ;}
   public void processRender(WebuiRequestContext context) throws Exception {
     context.getJavascriptManager().importJavascript("eXo.cs.UIDateTimePicker","/csResources/javascript/") ;

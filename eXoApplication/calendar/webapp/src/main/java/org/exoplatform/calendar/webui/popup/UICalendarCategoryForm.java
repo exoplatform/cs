@@ -110,25 +110,32 @@ public class UICalendarCategoryForm extends UIForm {
       try {
         CalendarService calendarService = CalendarUtils.getCalendarService() ;
         String username = Util.getPortalRequestContext().getRemoteUser() ;
+        boolean existed = false ;
+        List<CalendarCategory> gData = calendarService.getCategories(SessionProviderFactory.createSessionProvider(), username) ;
         if(uiForm.isAddNew())  {
-          List<CalendarCategory> gData = calendarService.getCategories(SessionProviderFactory.createSessionProvider(), username) ;
-          boolean existed = false ;
           for(CalendarCategory cal : gData) {
             if (cal.getName().trim().toLowerCase().equals(categoryName.trim().toLowerCase())) {
               existed = true ;
               break ;
             }
           }
-          if(existed) {
-            UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-            uiApp.addMessage(new ApplicationMessage("UICalendarCategoryForm.msg.group-existed", null));
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-            return ;
+        } else {
+          for(CalendarCategory cal : gData) {
+            if (!cal.getId().equals(uiForm.getCategoryId()) &&  cal.getName().trim().toLowerCase().equals(categoryName.trim().toLowerCase())) {
+              existed = true ;
+              break ;
+            }
           }
+        }
+        if(existed) {
+          UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UICalendarCategoryForm.msg.group-existed", null));
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
         }
         CalendarCategory category = new CalendarCategory() ;
         if(!uiForm.isAddNew()) category.setId(uiForm.getCategoryId()) ; 
-        category.setName(categoryName) ;
+        category.setName(categoryName.trim()) ;
         category.setDescription(description) ;
         calendarService.saveCalendarCategory(SessionProviderFactory.createSessionProvider(), username, category, uiForm.isAddNew()) ;
         UICalendarForm uiCalendarForm = calendarPortlet.findFirstComponentOfType(UICalendarForm.class) ;

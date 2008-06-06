@@ -58,6 +58,7 @@ public class CalendarEvent {
   final public static String IS_PRIVATE = "private".intern() ;
   final public static String ST_AVAILABLE = "available".intern() ;
   final public static String ST_BUSY = "busy".intern() ;
+  final public static String ST_OUTSIDE = "outside".intern() ;
   
   final public static String RP_NOREPEAT = "norepeat".intern() ;
   final public static String RP_DAILY = "daily".intern() ;
