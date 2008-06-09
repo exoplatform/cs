@@ -554,7 +554,6 @@ UICalendarPortlet.prototype.adjustWidth = function(el,totalWidth) {
 UICalendarPortlet.prototype.showEvent = function() {
 	this.init() ;
 	var EventDayContainer = eXo.core.DOMUtil.findAncestorByClass(this.viewer,"EventDayContainer") ;
-	//EventDayContainer.scrollTop = (this.workingStart) ? this.workingStart : 0 ;
 	if (!this.init()) return ;
   this.viewType = "UIDayView" ;
 	var el = this.getElements(this.viewer) ;
@@ -662,32 +661,16 @@ UIResizeEvent.prototype.start = function(evt, innerElement, outerElement, contai
 UIResizeEvent.prototype.execute = function(evt) {
 	var _e = window.event || evt ;
 	var UIResizeEvent = eXo.calendar.UIResizeEvent ;	
-	//var height = UIResizeEvent.outerElement.offsetHeight ;
 	var mouseY = eXo.core.Browser.findMouseRelativeY(UIResizeEvent.container,_e) ;
 	var mDelta = _e.clientY - UIResizeEvent.posY ;
-//	var delta = posY + height - mouseY ;
-	if (mouseY <= UIResizeEvent.uppermost) { return ;
-		//if (mouseY >= (posY + height)) {
-			UIResizeEvent.outerElement.style.height = (UIResizeEvent.minHeight - 2) + "px" ;
-			UIResizeEvent.innerElement.style.height = (UIResizeEvent.minHeight - 22) + "px" ;
-			window.document.title = mouseY + " --- " + UIResizeEvent.uppermost;
-		//}
+	if (mouseY <= UIResizeEvent.uppermost) {
+		return ;
 	} else {
 		if (mDelta%UIResizeEvent.interval == 0) {
 			UIResizeEvent.outerElement.style.height = UIResizeEvent.beforeHeight - 2 + mDelta + "px" ;
 			UIResizeEvent.innerElement.style.height = UIResizeEvent.innerElementHeight + mDelta + "px" ;
 			
 		}
-//		if (delta >= UIResizeEvent.interval) {
-//			UIResizeEvent.outerElement.style.height = parseInt(UIResizeEvent.outerElement.style.height) - UIResizeEvent.interval + "px" ;
-//			UIResizeEvent.innerElement.style.height = parseInt(UIResizeEvent.innerElement.style.height) - UIResizeEvent.interval + "px" ;
-//			window.document.title = "2 :" + height + "-" + UIResizeEvent.minHeight ;
-//		}
-//		if (mouseY >= (posY + height)) {
-//			UIResizeEvent.outerElement.style.height = parseInt(UIResizeEvent.outerElement.style.height) + UIResizeEvent.interval + "px" ;
-//			UIResizeEvent.innerElement.style.height = parseInt(UIResizeEvent.innerElement.style.height) + UIResizeEvent.interval + "px" ;
-//			window.document.title = "3 :" + height + "-" + UIResizeEvent.minHeight ;
-//		}
 	}
 } ;
 
@@ -915,17 +898,11 @@ UICalendarPortlet.prototype.dayViewCallback = function(evt){
 		var eventId = src.getAttribute("eventid") ;
 		var calendarId = src.getAttribute("calid") ;
 		var calType = src.getAttribute("calType") ;
-//		map = {
-//			"objectId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"objectId="+eventId ,
-//			"calendarId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"calendarId="+calendarId
-//		} ;
-//		if (calType) {
-			map = {
-				"objectId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"objectId=" + eventId ,
-				"calendarId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"calendarId=" + calendarId,
-				"calType\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"calType=" + calType
-			} ;
-//		}
+		map = {
+			"objectId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"objectId=" + eventId ,
+			"calendarId\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"calendarId=" + calendarId,
+			"calType\s*=\s*[A-Za-z0-9_]*(?=&|'|\")":"calType=" + calType
+		} ;
 	}
 	eXo.webui.UIContextMenu.changeAction(eXo.webui.UIContextMenu.menuElement, map) ;
 } ;
@@ -1298,14 +1275,6 @@ UICalendarPortlet.prototype.swapMenu = function(oldmenu, clickobj) {
   var uiDesktop = document.getElementById("UIPageDesktop") ;
   var uiWorkSpaceWidth = (document.getElementById("UIControlWorkspace"))? document.getElementById("UIControlWorkspace").offsetWidth : 0 ;
 	uiWorkSpaceWidth = (document.all) ? 2*uiWorkSpaceWidth : uiWorkSpaceWidth ;
-//  var menuX = Browser.findPosX(clickobj) - uiWorkSpaceWidth ;
-//	var menuY = Browser.findPosY(clickobj) + clickobj.offsetHeight ;
-//  if(uiDesktop) {
-//  	var portlet = DOMUtil.findAncestorByClass(document.getElementById(UICalendarPortlet.portletName), "UIResizableBlock") ;
-//    var uiWindow = DOMUtil.findAncestorByClass(portlet, "UIWindow") ;
-//    menuX = menuX - uiWindow.offsetLeft  -  portlet.scrollLeft ;
-//    menuY = menuY - uiWindow.offsetTop  -  portlet.scrollTop ;
-//  }
   if(document.getElementById("tmpMenuElement")) DOMUtil.removeElement(document.getElementById("tmpMenuElement")) ;
 	var tmpMenuElement = oldmenu.cloneNode(true) ;
 	tmpMenuElement.setAttribute("id","tmpMenuElement") ;
@@ -1327,22 +1296,12 @@ UICalendarPortlet.prototype.swapMenu = function(oldmenu, clickobj) {
 	this.menuElement.style.top = menuY + "px" ;
 	this.menuElement.style.left = menuX + "px" ;	
 	this.showHide(this.menuElement) ;
-//  if(uiDesktop) {    
-//    var uiRightClick = (DOMUtil.findFirstDescendantByClass(UICalendarPortlet.menuElement, "div", "UIRightClickPopupMenu")) ? DOMUtil.findFirstDescendantByClass(UICalendarPortlet.menuElement, "div", "UIRightClickPopupMenu") : UICalendarPortlet.menuElement ;
-//    var mnuBottom = eXo.core.Browser.findPosYInContainer(UICalendarPortlet.menuElement, uiDesktop) + uiRightClick.offsetHeight ;
-//    var widBottom = uiWindow.offsetTop + uiWindow.offsetHeight ;
-//    if(mnuBottom > widBottom) {
-//      menuY -= (mnuBottom - widBottom - clickobj.offsetHeight - uiWindow.scrollTop) ;
-//      UICalendarPortlet.menuElement.style.top = menuY + "px" ;
-//    }
-//  } else {
     var uiRightClick = (DOMUtil.findFirstDescendantByClass(UICalendarPortlet.menuElement, "div", "UIRightClickPopupMenu")) ? DOMUtil.findFirstDescendantByClass(UICalendarPortlet.menuElement, "div", "UIRightClickPopupMenu") : UICalendarPortlet.menuElement ;
     var mnuBottom = UICalendarPortlet.menuElement.offsetTop +  uiRightClick.offsetHeight - window.document.documentElement.scrollTop ;
     if(window.document.documentElement.clientHeight < mnuBottom) {
       menuY += (window.document.documentElement.clientHeight - mnuBottom) ;
       UICalendarPortlet.menuElement.style.top = menuY + "px" ;      
     }
-//  }
 } ;
 
 UICalendarPortlet.prototype.isAllday = function(form) {
@@ -1726,7 +1685,6 @@ eXo.portal.UIControlWorkspace.showWorkspace = function() {
 	}
 
 	/* Reorganize opened windows */
-//	eXo.portal.UIWorkingWorkspace.reorganizeWindows(this.showControlWorkspace);
 	/* Resize Dockbar */
 	var uiPageDesktop = document.getElementById("UIPageDesktop") ;
 	if(uiPageDesktop) eXo.desktop.UIDockbar.resizeDockBar() ;
