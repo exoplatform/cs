@@ -314,7 +314,6 @@ WeekMan.prototype.resetEventWeekIndex = function() {
 WeekMan.prototype.createDays = function() {
   // Create 7 days
   var len = (eXo.calendar.UICalendarPortlet.weekdays && document.getElementById("UIWeekView"))?eXo.calendar.UICalendarPortlet.weekdays: 7 ;
-
   for (var i=0; i<len; i++) {
     this.days[i] = new DayMan();
     // link days
@@ -347,6 +346,7 @@ WeekMan.prototype.putEvents2Days = function(){
     var endWeekTime = eventObj.endTime > this.endWeek ? this.endWeek : eventObj.endTime;
     var startDay = (new Date(parseInt(startWeekTime))).getDay();
     var endDay = (new Date(parseInt(endWeekTime))).getDay();
+	endDay = (endDay == 0) ? 6: endDay ;
     // fix date
     var delta = (new Date(eventObj.endTime)) - (new Date(eventObj.startTime));
     delta /= (1000 * 60 * 60 * 24);
