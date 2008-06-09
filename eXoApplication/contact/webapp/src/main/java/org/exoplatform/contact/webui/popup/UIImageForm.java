@@ -49,7 +49,6 @@ import org.exoplatform.webui.form.UIFormUploadInput;
 )
 public class UIImageForm extends UIForm implements UIPopupComponent{
   public static final String FIELD_UPLOAD = "upload".intern() ;
-  public static final String[] imageTypes = { ".gif", ".jpg", ".jpeg", ".tiff", ".bmp", ".png" } ;
    
   public UIImageForm() throws Exception {
     this.setMultiPart(true) ;
@@ -81,7 +80,7 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
       String mimeType = uploadResource.getMimeType() ;
       String fileName = uploadResource.getFileName() ;
       boolean isImage = false ;
-      for(String imageType : imageTypes)
+      for(String imageType : ContactUtils.imageTypes)
         if (fileName.toLowerCase().endsWith(imageType)) isImage = true ;
       if(ContactUtils.isEmpty(fileName) || (!isImage)) {
         uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.fileName-error", null, 
