@@ -929,11 +929,12 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           return ;
         }
         StringBuffer buffer = new StringBuffer() ;
-        String email = uiContacts.contactMap.get(contactIds.get(0)).getEmailAddress() ;
-        if (!ContactUtils.isEmpty(email)) buffer.append(email) ; 
-        for (int i = 1; i < contactIds.size(); i ++) {
-          email = uiContacts.contactMap.get(contactIds.get(i)).getEmailAddress() ;
-          if (!ContactUtils.isEmpty(email)) buffer.append(", " + email) ;
+        for (String id : contactIds) {
+          String email = uiContacts.contactMap.get(id).getEmailAddress() ;
+          if (!ContactUtils.isEmpty(email)) {
+            if (buffer.length() > 0) buffer.append(", " + email) ;
+            else buffer.append(email) ;
+          }
         }
         emails = buffer.toString() ; 
       }
