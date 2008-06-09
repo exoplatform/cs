@@ -44,6 +44,7 @@ public class ContactUtils {
   public static final String HTTP = "http://" ; 
   public static String[] specialString = {"!", "#", "$", "%", "^", "&"
                                             , ":", ">", "<", "~", "`", "]", "'", "/"} ;
+  public static final String[] imageTypes = { ".gif", ".jpg", ".jpeg", ".tiff", ".bmp", ".png", ".tif" } ;
   
   // add
   public static String encodeJCRText(String str) {

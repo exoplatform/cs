@@ -342,6 +342,8 @@ public class UIContactForm extends UIFormTabPane {
   static  public class ChangeImageActionListener extends EventListener<UIContactForm> {
     public void execute(Event<UIContactForm> event) throws Exception {
       UIContactForm uiContactForm = event.getSource() ;
+      UIProfileInputSet profileInputSet = uiContactForm.getChildById(INPUT_PROFILETAB) ;
+      profileInputSet.setFieldGender(profileInputSet.getFieldGender()) ;
       UIPopupContainer popupContainer = uiContactForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction popupAction = popupContainer.getChild(UIPopupAction.class) ;
       popupAction.activate(UIImageForm.class, 500) ;
