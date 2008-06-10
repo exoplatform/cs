@@ -123,9 +123,12 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   private boolean isPrintDetail = false ;
   private boolean isSelectSharedContacts = false ;
   private List<Contact> listBeforePrint = new ArrayList<Contact>() ; 
-  
-  public UIContacts() throws Exception { } 
-  
+  private String selectedTagBeforeSearch_ = null ;
+  private String selectedGroupBeforeSearch = null ;
+  private boolean isSelectSharedContactsBeforeSearch = false ;
+  private boolean viewListBeforeSearch = true ;
+  public UIContacts() throws Exception { }
+
   public void setListBeforePrint(List<Contact> contacts) { listBeforePrint = contacts ; }  
   public String[] getActions() { return new String[] {"Cancel"} ; }
   public void activate() throws Exception { }
@@ -143,7 +146,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     }
   }
   
-  // only called when refresh brower
+  
+  // only called when refresh brower and close search ;
   @SuppressWarnings({ "unchecked", "unused" })
   private void refreshData() throws Exception {
     if (isDisplaySearchResult() || isPrintForm) return ;
@@ -344,6 +348,26 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   }  
   public String getDefaultGroup() { return NewUserListener.DEFAULTGROUP ;}
 
+  public String getSelectedTagBeforeSearch_() { return selectedTagBeforeSearch_; }
+  public void setSelectedTagBeforeSearch_(String selectedTagBeforeSearch_) {
+    this.selectedTagBeforeSearch_ = selectedTagBeforeSearch_;
+  }
+
+  public String getSelectedGroupBeforeSearch() { return selectedGroupBeforeSearch; }
+  public void setSelectedGroupBeforeSearch(String selectedGroupBeforeSearch) {
+    this.selectedGroupBeforeSearch = selectedGroupBeforeSearch;
+  }
+
+  public boolean isSelectSharedContactsBeforeSearch() { return isSelectSharedContactsBeforeSearch; }
+  public void setSelectSharedContactsBeforeSearch(boolean isSelectSharedContactsBeforeSearch) {
+    this.isSelectSharedContactsBeforeSearch = isSelectSharedContactsBeforeSearch;
+  }
+  
+  public boolean isViewListBeforeSearch() { return viewListBeforeSearch; }
+  public void setViewListBeforeSearch(boolean viewListBeforeSearch) {
+    this.viewListBeforeSearch = viewListBeforeSearch;
+  }
+  
   static public class EditContactActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource();
@@ -887,8 +911,17 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource() ;
       uiContacts.setDisplaySearchResult(false) ;
-      uiContacts.setContacts(null) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+      uiContacts.setSelectedGroup(uiContacts.selectedGroupBeforeSearch) ;
+      uiContacts.setSelectedTag(uiContacts.selectedTagBeforeSearch_) ;
+      uiContacts.setSelectSharedContacts(uiContacts.isSelectSharedContactsBeforeSearch) ;
+      uiContacts.setViewContactsList(uiContacts.viewListBeforeSearch) ;
+      uiContacts.refreshData() ;
+      if (ContactUtils.isEmpty(uiContacts.selectedGroup) && ContactUtils.isEmpty(uiContacts.selectedTag_)
+          && !uiContacts.isSelectSharedContacts) uiContacts.setContacts(null) ;
+      UIWorkingContainer uiWorkingContainer = uiContacts.getAncestorOfType(UIWorkingContainer.class) ;
+      uiWorkingContainer.findFirstComponentOfType(UIAddressBooks.class).setSelectedGroup(uiContacts.selectedGroup) ;
+      uiWorkingContainer.findFirstComponentOfType(UITags.class).setSelectedTag(uiContacts.selectedTag_) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
     }
   }
   
