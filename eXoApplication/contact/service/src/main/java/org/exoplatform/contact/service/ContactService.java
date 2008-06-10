@@ -17,6 +17,7 @@
 package org.exoplatform.contact.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
@@ -39,6 +40,7 @@ public interface ContactService {
   public ContactPageList getContactPageListByGroup(SessionProvider sProvider, String username, ContactFilter filter, String type) throws Exception;
   public DataPageList searchContact(SessionProvider sProvider, String username, ContactFilter filter) throws Exception ;
   public void removeSharedContact(SessionProvider sProvider, String username, String addressBookId, String contactId) throws Exception ;
+  public Map<String, String> searchEmails(SessionProvider sysProvider, String username, ContactFilter filter)throws Exception ;
   
   public ContactPageList getPublicContactsByAddressBook(SessionProvider sProvider, String addressBookId) throws Exception ;
   public List<GroupContactData> getPublicContacts(SessionProvider sProvider, String[] groupIds) throws Exception ;

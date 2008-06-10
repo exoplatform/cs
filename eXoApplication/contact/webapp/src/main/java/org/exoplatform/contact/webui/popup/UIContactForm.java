@@ -187,7 +187,7 @@ public class UIContactForm extends UIFormTabPane {
       UIContactForm uiContactForm = event.getSource() ;
       UIApplication uiApp = uiContactForm.getAncestorOfType(UIApplication.class) ;
       UIProfileInputSet profileTab = uiContactForm.getChildById(INPUT_PROFILETAB) ;
-      
+      /*
       if (ContactUtils.isEmpty(profileTab.getFieldFirstName())) {  
         uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.firstName-required", null, 
             ApplicationMessage.WARNING)) ;
@@ -199,7 +199,7 @@ public class UIContactForm extends UIFormTabPane {
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
-      }
+      }*/
       Contact contact ;
       if (uiContactForm.isNew_) contact = new Contact() ;
       else contact = uiContactForm.contact_ ;

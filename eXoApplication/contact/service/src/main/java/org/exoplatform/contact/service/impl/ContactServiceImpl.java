@@ -60,6 +60,10 @@ public class ContactServiceImpl implements ContactService {
     return storage_.getPersonalContact(userId) ;
   }
   
+  public Map<String, String> searchEmails(SessionProvider sysProvider, String username, ContactFilter filter)throws Exception {
+    return storage_.searchEmails(sysProvider, username, filter) ;
+  }
+  
   /*
   public ContactPageList getContactPageListByTag(String username, ContactFilter filter) throws Exception {
     return storage_.getContactPageListByTag(username, filter);

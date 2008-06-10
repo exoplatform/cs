@@ -46,6 +46,7 @@ import org.exoplatform.contact.service.DataPageList;
 import org.exoplatform.contact.service.GroupContactData;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.Tag;
+import org.exoplatform.contact.service.Utils;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -1647,6 +1648,96 @@ public class JCRDataStorage {
     return new DataPageList(contactList, 10, null, false) ;
   }
 
+  public Map<String, String> searchEmails(SessionProvider sysProvider, String username, ContactFilter filter)throws Exception {
+    Map<String, String> emails = new LinkedHashMap<String, String>() ;
+    filter.setUsername(username) ;
+    
+    //public contacts
+    Node publicContactHome = getPublicContactHome(SessionProvider.createSystemProvider()) ; 
+    String usersPath = nodeHierarchyCreator_.getJcrPath(USERS_PATH) ;
+    filter.setAccountPath(usersPath) ;
+    // minus shared contacts
+    filter.setOwner("true") ; 
+    QueryManager qm = publicContactHome.getSession().getWorkspace().getQueryManager() ;
+    Query query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
+    NodeIterator itpublic = query.execute().getNodes();
+    while(itpublic.hasNext()) {
+      Node contactNode = itpublic.nextNode() ;
+      if (contactNode.hasProperty("exo:emailAddress"))
+        emails.put(contactNode.getProperty("exo:id").getString(), contactNode.getProperty("exo:fullName").getString() 
+          + Utils.SPLIT + contactNode.getProperty("exo:emailAddress").getString()) ;
+    }
+    filter.setOwner(null) ;
+    
+    // private contacts
+    if(username != null && username.length() > 0) {
+      Node contactHome = getUserContactHome(sysProvider, username) ;
+      filter.setAccountPath(contactHome.getPath()) ;      
+      qm = contactHome.getSession().getWorkspace().getQueryManager() ;
+      query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
+      NodeIterator it = query.execute().getNodes() ;
+      while(it.hasNext()) {
+        Node contactNode = it.nextNode() ;
+        if (contactNode.hasProperty("exo:emailAddress"))
+          emails.put(contactNode.getProperty("exo:id").getString(), contactNode.getProperty("exo:fullName").getString() 
+            + Utils.SPLIT + contactNode.getProperty("exo:emailAddress").getString()) ;        
+      }
+    }
+    
+    //share contacts
+    try {
+      Node sharedContact = getSharedContact(username) ;      
+      PropertyIterator iter = sharedContact.getReferences() ;
+      while(iter.hasNext()) {
+        try{
+          Node sharedContactHomeNode = iter.nextProperty().getParent().getParent() ;
+          filter.setAccountPath(sharedContactHomeNode.getPath()) ;
+          
+          // add
+          String split = "/" ;
+          String temp = sharedContactHomeNode.getPath().split(usersPath)[1] ;
+          String userId = temp.split(split)[1] ;
+          filter.setUsername(userId) ;
+          
+          qm = sharedContactHomeNode.getSession().getWorkspace().getQueryManager() ;      
+          query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
+          NodeIterator it = query.execute().getNodes() ;
+          while(it.hasNext()) {
+            Node contactNode = it.nextNode() ;
+            if (contactNode.hasProperty("exo:emailAddress"))
+              emails.put(contactNode.getProperty("exo:id").getString(), contactNode.getProperty("exo:fullName").getString() 
+                + Utils.SPLIT + contactNode.getProperty("exo:emailAddress").getString()) ;  
+          }
+        }catch(Exception e){
+          e.printStackTrace() ;
+        }
+      }
+    } catch (PathNotFoundException e) { }
+    
+    Node sharedAddressBookMock = getSharedAddressBook(username) ;
+    PropertyIterator iter = sharedAddressBookMock.getReferences() ;
+    Node addressBook ;      
+    while(iter.hasNext()) {
+      addressBook = iter.nextProperty().getParent() ;
+      Node contactHomeNode = addressBook.getParent().getParent().getNode(CONTACTS) ;
+      filter.setAccountPath(contactHomeNode.getPath()) ;
+      // add
+      filter.setCategories(new String[] {addressBook.getName()}) ;
+      filter.setUsername(addressBook.getProperty("exo:sharedUserId").getString()) ;
+      qm = contactHomeNode.getSession().getWorkspace().getQueryManager() ;      
+      query = qm.createQuery(filter.getStatement(), Query.XPATH) ;  
+      NodeIterator it = query.execute().getNodes() ;
+      while(it.hasNext()) {
+        Node contactNode = it.nextNode() ;
+        if (contactNode.hasProperty("exo:emailAddress"))
+          emails.put(contactNode.getProperty("exo:id").getString(), contactNode.getProperty("exo:fullName").getString() 
+            + Utils.SPLIT + contactNode.getProperty("exo:emailAddress").getString()) ; 
+      }
+    }
+    return emails ;
+  }
+  
+  
   // no public ;
   private void copyNodes(SessionProvider sProvider, String username,Node srcHomeNode, NodeIterator iter, String destAddress, String destType ) throws Exception {
     if (destType.equals(PRIVATE)) {        
