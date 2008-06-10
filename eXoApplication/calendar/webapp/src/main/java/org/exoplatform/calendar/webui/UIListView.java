@@ -116,7 +116,7 @@ public class UIListView extends UICalendarView {
       } else {
         setSelectedEvent(null) ;
         view.setEvent(null) ;
-        setLastViewId(null) ;
+        //setLastViewId(null) ;
         setLastUpdatedEventId(null) ;
       }
     } else {
