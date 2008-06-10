@@ -454,20 +454,19 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       return displayTimes_ ;
     }
     protected List<String> getDisplayTimes(String timeFormat, int timeInterval, Locale locale) {
-      if(displayTimes_ == null) {
-        displayTimes_ =   new ArrayList<String>() ;
-        Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
-        cal.set(Calendar.HOUR_OF_DAY, 0) ;
-        cal.set(Calendar.MINUTE, 0) ;
-        cal.set(Calendar.MILLISECOND, 0) ;
-        DateFormat df = new SimpleDateFormat(timeFormat, locale) ;
-        df.setCalendar(cal) ;
-        for(int i = 0; i < 24*(60/timeInterval); i++) {
-          displayTimes_.add(df.format(cal.getTime())) ;
-          cal.add(java.util.Calendar.MINUTE, timeInterval) ;
-        }
+      List<String> displayTimes =   new ArrayList<String>() ;
+      Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
+      cal.set(Calendar.HOUR_OF_DAY, 0) ;
+      cal.set(Calendar.MINUTE, 0) ;
+      cal.set(Calendar.MILLISECOND, 0) ;
+      DateFormat valuedf = new SimpleDateFormat(CalendarUtils.TIMEFORMAT, locale) ;
+      DateFormat df = new SimpleDateFormat(timeFormat, locale) ;
+      df.setCalendar(cal) ;
+      for(int i = 0; i < 24*(60/timeInterval); i++) {
+        displayTimes.add(valuedf.format(cal.getTime()) +"_"+ df.format(cal.getTime())) ;
+        cal.add(java.util.Calendar.MINUTE, timeInterval) ;
       }
-      return displayTimes_ ;
+      return displayTimes ;
     }
     protected Map<String, String> getTimeSteps(String timeFormat, int timeInterval) {
       if(timeSteps_ == null) {

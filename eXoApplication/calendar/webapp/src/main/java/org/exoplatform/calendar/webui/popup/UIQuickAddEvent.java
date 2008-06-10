@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
@@ -36,6 +37,7 @@ import org.exoplatform.calendar.webui.UIListContainer;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -128,23 +130,27 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   private void setEventFromDate(Date value, String dateFormat, String timeFormat) {
     UIFormDateTimePicker fromField = getChildById(FIELD_FROM) ;
     UIFormComboBox timeFile = getChildById(FIELD_FROM_TIME) ;
-    DateFormat df = new SimpleDateFormat(dateFormat) ;
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    Locale locale = context.getParentAppRequestContext().getLocale() ;
+    DateFormat df = new SimpleDateFormat(dateFormat ,locale) ;
     fromField.setValue(df.format(value)) ;
-    DateFormat tf = new SimpleDateFormat(timeFormat) ;
+    DateFormat tf = new SimpleDateFormat(timeFormat, locale) ;
     timeFile.setValue(tf.format(value)) ;
   }
   private Date getEventFromDate(String dateFormat, String timeFormat) throws Exception {
     try {
       UIFormDateTimePicker fromField = getChildById(FIELD_FROM) ;
       UIFormComboBox timeFile = getChildById(FIELD_FROM_TIME) ;
+      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+      Locale locale = context.getParentAppRequestContext().getLocale() ;
       if(getIsAllDay()) {
-        DateFormat df = new SimpleDateFormat(dateFormat) ;
+        DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
         df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
         return CalendarUtils.getBeginDay(df.parse(fromField.getValue())).getTime();
       } 
-      DateFormat df = new SimpleDateFormat(dateFormat + " "  + timeFormat) ;
+      DateFormat df = new SimpleDateFormat(dateFormat + " "  + timeFormat, locale) ;
       df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
-      return df.parse(fromField.getValue() + " " + timeFile.getValue() ) ;
+      return df.parse(fromField.getValue() + " " + timeFile.getValue()) ;
     }
     catch (Exception e) {
       e.printStackTrace() ;
@@ -155,22 +161,26 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
   private void setEventToDate(Date value,String dateFormat,  String timeFormat) {
     UIFormDateTimePicker toField =  getChildById(FIELD_TO) ;
     UIFormComboBox timeField =  getChildById(FIELD_TO_TIME) ;
-    DateFormat df = new SimpleDateFormat(dateFormat) ;
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    Locale locale = context.getParentAppRequestContext().getLocale() ;
+    DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
     toField.setValue(df.format(value)) ;
-    DateFormat tf = new SimpleDateFormat(timeFormat) ;
+    DateFormat tf = new SimpleDateFormat(timeFormat, locale) ;
     timeField.setValue(tf.format(value)) ;
   }
   private Date getEventToDate(String dateFormat, String timeFormat) throws Exception {
     try {
       UIFormDateTimePicker toField = getChildById(FIELD_TO) ;
       UIFormComboBox timeFile = getChildById(FIELD_TO_TIME) ;
+      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+      Locale locale = context.getParentAppRequestContext().getLocale() ;
       if(getIsAllDay()) {
-        DateFormat df = new SimpleDateFormat(dateFormat) ;
+        DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
         df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
         df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
         return CalendarUtils.getEndDay(df.parse(toField.getValue())).getTime();
       } 
-      DateFormat df = new SimpleDateFormat(dateFormat + " " + timeFormat) ;
+      DateFormat df = new SimpleDateFormat(dateFormat + " " + timeFormat, locale) ;
       df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
       return df.parse(toField.getValue() + " " + timeFile.getValue() ) ;
     } catch (Exception e) {

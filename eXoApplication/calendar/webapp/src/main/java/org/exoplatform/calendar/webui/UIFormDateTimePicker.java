@@ -176,6 +176,8 @@ public class UIFormDateTimePicker extends UIFormInputBase<String>  {
     if(locale_ == null) locale_ = locale ;
     return new SimpleDateFormat(getFormatStyle(), locale_) ;}
   public void processRender(WebuiRequestContext context) throws Exception {
+    Locale locale = context.getParentAppRequestContext().getLocale() ;
+    locale_ = locale ;
     context.getJavascriptManager().importJavascript("eXo.cs.UIDateTimePicker","/csResources/javascript/") ;
     Writer w = context.getWriter();
     w.write("<input monthsName='"+ getMonthsName()+"' daysName='"+getDaysName()+"' format='" + getFormatStyle() + "' type='text' onfocus='eXo.cs.UIDateTimePicker.init(this,") ;

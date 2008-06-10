@@ -177,7 +177,7 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     getUIFormCheckBoxInput(ISSHOWWORKINGTIME).setChecked(value) ;
   }
   protected String getWorkingBegin() throws Exception {
-    java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
+  /*  java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
     DateFormat dateFormat = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     DateFormat timeFormat = new SimpleDateFormat(getTimeFormat()) ;
     DateFormat dateTimeFormat = new SimpleDateFormat(CalendarUtils.DATETIMEFORMAT) ;
@@ -186,8 +186,8 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     dateTimeFormat.setCalendar(cal) ;
     String value = getUIFormSelectBox(WORKINGTIME_BEGIN).getValue() ;
     String date = dateFormat.format(cal.getTime()) + " " + value ;
-    cal.setTime(dateTimeFormat.parse(date)); 
-    return timeFormat.format(cal.getTime()) ;
+    cal.setTime(dateTimeFormat.parse(date)); */
+    return getUIFormSelectBox(WORKINGTIME_BEGIN).getValue() ;
   }
   protected String getWorkingBegin(Locale locale) throws Exception {
     java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
@@ -221,7 +221,7 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     return  cal.getTime()  ;
   }
   protected void setWorkingBegin(String value, String format) throws Exception {
-    java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
+    /*java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
     DateFormat dateFormat = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     DateFormat timeFormat = new SimpleDateFormat(CalendarUtils.TIMEFORMAT) ;
     DateFormat dateTimeFormat = new SimpleDateFormat(format) ;
@@ -229,11 +229,11 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     timeFormat.setCalendar(cal) ;
     dateTimeFormat.setCalendar(cal) ;
     String date = dateFormat.format(cal.getTime()) + " " + value ;
-    cal.setTime(dateTimeFormat.parse(date)); 
-    getUIFormSelectBox(WORKINGTIME_BEGIN).setValue(timeFormat.format(cal.getTime())) ;
+    cal.setTime(dateTimeFormat.parse(date)); */
+    getUIFormSelectBox(WORKINGTIME_BEGIN).setValue(value) ;
   }
   protected String getWorkingEnd() throws Exception{
-    java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
+  /*  java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
     DateFormat dateFormat = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     DateFormat timeFormat = new SimpleDateFormat(getTimeFormat()) ;
     DateFormat dateTimeFormat = new SimpleDateFormat(CalendarUtils.DATETIMEFORMAT) ;
@@ -242,8 +242,8 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     dateTimeFormat.setCalendar(cal) ;
     String value = getUIFormSelectBox(WORKINGTIME_END).getValue() ;
     String date = dateFormat.format(cal.getTime()) + " " + value ;
-    cal.setTime(dateTimeFormat.parse(date)); 
-    return timeFormat.format(cal.getTime()) ;
+    cal.setTime(dateTimeFormat.parse(date)); */
+    return getUIFormSelectBox(WORKINGTIME_END).getValue() ;
   }
 
   protected Date getWorkingEndTime() throws Exception{
@@ -258,7 +258,7 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     return  cal.getTime();
   }
   protected void setWorkingEnd(String value, String format) throws Exception {
-    java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
+   /* java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
     DateFormat dateFormat = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     DateFormat timeFormat = new SimpleDateFormat(CalendarUtils.TIMEFORMAT) ;
     DateFormat dateTimeFormat = new SimpleDateFormat(format) ;
@@ -266,8 +266,8 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     timeFormat.setCalendar(cal) ;
     dateTimeFormat.setCalendar(cal) ;
     String date = dateFormat.format(cal.getTime()) + " " + value ;
-    cal.setTime(dateTimeFormat.parse(date)); 
-    getUIFormSelectBox(WORKINGTIME_END).setValue(timeFormat.format(cal.getTime())) ;
+    cal.setTime(dateTimeFormat.parse(date)); */
+    getUIFormSelectBox(WORKINGTIME_END).setValue(value) ;
   }
   public List<SelectItemOption<String>> getTimeZones(String locale) {
     return CalendarUtils.getTimeZoneSelectBoxOptions(TimeZone.getAvailableIDs()) ;

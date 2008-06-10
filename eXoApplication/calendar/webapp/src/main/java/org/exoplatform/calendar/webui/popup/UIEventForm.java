@@ -416,12 +416,14 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     UIFormDateTimePicker fromField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_FROM) ;
     UIFormComboBox timeField = eventDetailTab.getUIFormComboBox(UIEventDetailTab.FIELD_FROM_TIME) ;
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    Locale locale = context.getParentAppRequestContext().getLocale() ;
     if(getEventAllDate()) {
-      DateFormat df = new SimpleDateFormat(dateFormat) ;
+      DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
       df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
       return CalendarUtils.getBeginDay(df.parse(fromField.getValue())).getTime();
     } 
-    DateFormat df = new SimpleDateFormat(dateFormat + " " + timeFormat) ;
+    DateFormat df = new SimpleDateFormat(dateFormat + " " + timeFormat, locale) ;
     df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
     return df.parse(fromField.getValue() + " " + timeField.getValue()) ;
   }
@@ -435,10 +437,12 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     UIEventAttenderTab eventAttenderTab = getChildById(TAB_EVENTATTENDER) ;
     UIFormDateTimePicker fromField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_FROM) ;
     UIFormComboBox timeField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_FROM_TIME) ;
-    DateFormat df = new SimpleDateFormat(dateFormat) ;
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    Locale locale = context.getParentAppRequestContext().getLocale() ;
+    DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
     df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
     fromField.setValue(df.format(date)) ;
-    df = new SimpleDateFormat(timeFormat) ;
+    df = new SimpleDateFormat(timeFormat, locale) ;
     df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
     timeField.setValue(df.format(date)) ;
     eventAttenderTab.setEventFromDate(date, timeFormat) ;
@@ -448,12 +452,14 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     UIFormDateTimePicker toField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_TO) ;
     UIFormComboBox timeField = eventDetailTab.getUIFormComboBox(UIEventDetailTab.FIELD_TO_TIME) ;
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    Locale locale = context.getParentAppRequestContext().getLocale() ;
     if(getEventAllDate()) {
-      DateFormat df = new SimpleDateFormat(dateFormat) ;
+      DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
       df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
       return CalendarUtils.getEndDay(df.parse(toField.getValue())).getTime();
     } 
-    DateFormat df = new SimpleDateFormat(dateFormat + " " + timeFormat) ;
+    DateFormat df = new SimpleDateFormat(dateFormat + " " + timeFormat, locale) ;
     df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
     return df.parse(toField.getValue() + " " + timeField.getValue()) ;
   }
@@ -462,10 +468,12 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     UIEventAttenderTab eventAttenderTab = getChildById(TAB_EVENTATTENDER) ;
     UIFormDateTimePicker toField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_TO) ;
     UIFormComboBox timeField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_TO_TIME) ;
-    DateFormat df = new SimpleDateFormat(dateFormat) ;
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    Locale locale = context.getParentAppRequestContext().getLocale() ;
+    DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
     df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
     toField.setValue(df.format(date)) ;
-    df = new SimpleDateFormat(timeFormat) ;
+    df = new SimpleDateFormat(timeFormat, locale) ;
     df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
     timeField.setValue(df.format(date)) ;
     eventAttenderTab.setEventToDate(date, timeFormat) ;

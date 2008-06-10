@@ -49,7 +49,7 @@
 	DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
 	DateFormat tf = new SimpleDateFormat(timeFormat, locale) ;
 	tf.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
-	DateFormat dtf = new SimpleDateFormat(dateTimeFormat, locale) ;
+	DateFormat dtf = new SimpleDateFormat(dateFormat+" "+CalendarUtils.TIMEFORMAT, locale) ;
 	DateFormat wf = new  SimpleDateFormat("EEE, dd/MMM", locale) ;
 	DateFormat tempFormat =  new  SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss", Locale.ENGLISH) ;
 	tempFormat.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
@@ -229,8 +229,10 @@
 					boolean flag = false ;
 					style = "" ;
 					if(isShowWorkingTime) {style = "WorkOffTime" ;}	
-					for(time in uicomponent.getDisplayTimes(timeFormat, timeInterval, locale)){
-						if(isShowWorkingTime) {
+					for(full in uicomponent.getDisplayTimes(timeFormat, timeInterval, locale)){
+					String time = full.substring(0,full.lastIndexOf("_")) ;
+					String display = full.substring(full.lastIndexOf("_")+1) ;
+				if(isShowWorkingTime) {
         			if(time.equals(startWorkingTime)) {style = "" ;}
         			if(time.equals(endWorkingTime)) {style = "WorkOffTime" ;}
         		}
@@ -240,7 +242,7 @@
           <tr class="$style" style="$styleWidth">
             <td class="TdTime">
               <div class="TdTime">
-                <%if(!flag) {println time;}%>
+                <%if(!flag) {println display;}%>
               </div>
             </td>
             <%
