@@ -119,7 +119,8 @@ public class ReminderJob implements Job {
             messageList.add(message);
             reminder.save() ;
           }
-        } else if(Reminder.TYPE_POPUP.equals(reminder.getProperty("exo:reminderType").getString())){
+        } 
+        /*else if(Reminder.TYPE_POPUP.equals(reminder.getProperty("exo:reminderType").getString())){
           Reminder rem = new Reminder(Reminder.TYPE_POPUP) ;
           rem.setSummary(reminder.getProperty("exo:eventSummary").getString());
           rem.setFromDateTime(reminder.getProperty("exo:fromDateTime").getDate().getTime()) ;
@@ -143,7 +144,7 @@ public class ReminderJob implements Job {
           }
           reminders.add(rem);
           reminder.save() ;
-        }
+        }*/
       }
       if(!messageList.isEmpty()) mailService.sendMessages(messageList, config);
     } catch (Exception e) {
