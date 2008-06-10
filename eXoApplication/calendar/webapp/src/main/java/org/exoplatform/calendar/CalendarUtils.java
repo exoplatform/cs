@@ -51,6 +51,7 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.impl.GroupImpl;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.core.model.SelectItemOption;
 
@@ -136,10 +137,11 @@ public class CalendarUtils {
     cal.set(Calendar.HOUR_OF_DAY, 0) ;
     cal.set(Calendar.MINUTE, 0) ;
     cal.set(Calendar.MILLISECOND, 0) ;
-
-    DateFormat df = new SimpleDateFormat(timeFormat) ;
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    Locale locale = context.getParentAppRequestContext().getLocale() ;
+    DateFormat df = new SimpleDateFormat(timeFormat, locale) ;
     df.setCalendar(cal) ;
-    DateFormat df2 = new SimpleDateFormat(TIMEFORMAT) ;
+    DateFormat df2 = new SimpleDateFormat(TIMEFORMAT, locale) ;
     df.setCalendar(cal) ;
     int time = 0 ;
     while (time ++ < 24*60/(15)) {
@@ -155,10 +157,11 @@ public class CalendarUtils {
     cal.set(Calendar.HOUR_OF_DAY, 0) ;
     cal.set(Calendar.MINUTE, 0) ;
     cal.set(Calendar.MILLISECOND, 0) ;
-
-    DateFormat dfLabel = new SimpleDateFormat(labelFormat) ;
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    Locale locale = context.getParentAppRequestContext().getLocale() ;
+    DateFormat dfLabel = new SimpleDateFormat(labelFormat, locale) ;
     dfLabel.setCalendar(cal) ;
-    DateFormat dfValue = new SimpleDateFormat(valueFormat) ;
+    DateFormat dfValue = new SimpleDateFormat(valueFormat, locale) ;
     dfValue.setCalendar(cal) ;
     int time = 0 ;
     while (time ++ < 24*60/(15)) {
@@ -175,10 +178,11 @@ public class CalendarUtils {
     cal.set(Calendar.HOUR_OF_DAY, 0) ;
     cal.set(Calendar.MINUTE, 0) ;
     cal.set(Calendar.MILLISECOND, 0) ;
-
-    DateFormat dfLabel = new SimpleDateFormat(labelFormat) ;
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    Locale locale = context.getParentAppRequestContext().getLocale() ;
+    DateFormat dfLabel = new SimpleDateFormat(labelFormat, locale) ;
     dfLabel.setCalendar(cal) ;
-    DateFormat dfValue = new SimpleDateFormat(valueFormat) ;
+    DateFormat dfValue = new SimpleDateFormat(valueFormat, locale) ;
     dfValue.setCalendar(cal) ;
     int time = 0 ;
     while (time ++ < 24*60/(timeInteval)) {
@@ -212,10 +216,11 @@ public class CalendarUtils {
     cal.set(Calendar.HOUR_OF_DAY, 0) ;
     cal.set(Calendar.MINUTE, 0) ;
     cal.set(Calendar.MILLISECOND, 0) ;
-
-    DateFormat df = new SimpleDateFormat(timeFormat) ;
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    Locale locale = context.getParentAppRequestContext().getLocale() ;
+    DateFormat df = new SimpleDateFormat(timeFormat, locale) ;
     df.setCalendar(cal) ;
-    DateFormat df2 = new SimpleDateFormat(TIMEFORMAT) ;
+    DateFormat df2 = new SimpleDateFormat(TIMEFORMAT, locale) ;
     df2.setCalendar(cal) ;
     int time = 0 ;
     while (time ++ < 24*60/(timeInteval)) {
@@ -266,7 +271,10 @@ public class CalendarUtils {
     DateFormat df = new SimpleDateFormat(timeFormat) ;
     return df.format(date) ;    
   }
-
+  public static String parse(Date date, String timeFormat, Locale locale) throws Exception {
+    DateFormat df = new SimpleDateFormat(timeFormat, locale) ;
+    return df.format(date) ;    
+  }
   static public String getCurrentUser() throws Exception {
     return Util.getPortalRequestContext().getRemoteUser() ; 
   }

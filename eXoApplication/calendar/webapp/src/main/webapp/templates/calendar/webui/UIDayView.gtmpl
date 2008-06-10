@@ -116,17 +116,19 @@
 	            		flag = true ;
 	            		style = "" ;
 									if(isShowWorkingTime) {style = "WorkOffTime" ;}	
-	            		for(h in uicomponent.getDisplayTimes(timeFormat, timeInterval, locale)) {
+									for(full in uicomponent.getDisplayTimes(timeFormat, timeInterval, locale)){
+					String time = full.substring(0,full.lastIndexOf("_")) ;
+					String display = full.substring(full.lastIndexOf("_")+1) ;
 	            			if(isShowWorkingTime) {
-		            			if(h.equals(startWorkingTime)) {style = "" ;}
-		            			if(h.equals(endWorkingTime)) {style = "WorkOffTime" ;}
+		            			if(time.equals(startWorkingTime)) {style = "" ;}
+		            			if(time.equals(endWorkingTime)) {style = "WorkOffTime" ;}
 		            		}
 	            			cssClass = "TdDotLine" ;
 	            			if(flag) {cssClass = "TdLine" ;} ;
                   %>
                   <tr class="$style">
                     <td class="TdTime">
-                      <%if(flag){print h;} else { print "&nbsp;";}%>
+                      <%if(flag){print display;} else { print "&nbsp;";}%>
                     </td>
                   </tr>
                   <%
@@ -173,7 +175,9 @@
 			            		if(isShowWorkingTime) {style = "WorkOffTime" ;}
 			            		Calendar cl = uicomponent.getInstanceTempCalendar() ;
 			            		cl = uicomponent.getBeginDay(uicomponent.getCurrentCalendar()) ;	
-									    for(h in uicomponent.getDisplayTimes(timeFormat, timeInterval)) {
+									  for(full in uicomponent.getDisplayTimes(timeFormat, timeInterval, locale)){
+					String h = full.substring(0,full.lastIndexOf("_")) ;
+					String display = full.substring(full.lastIndexOf("_")+1) ;
 			            			if(isShowWorkingTime) {
 				            			if(h.equals(startWorkingTime)) {style=""}
 				            			if(h.equals(endWorkingTime)) {style="WorkOffTime"}

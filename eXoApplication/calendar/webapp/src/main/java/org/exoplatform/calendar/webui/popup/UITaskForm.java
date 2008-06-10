@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Attachment;
@@ -41,6 +42,7 @@ import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -308,12 +310,14 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     UITaskDetailTab taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
     UIFormComboBox timeField = taskDetailTab.getUIFormComboBox(UITaskDetailTab.FIELD_FROM_TIME) ;
     UIFormDateTimePicker fromField = taskDetailTab.getChildById(UITaskDetailTab.FIELD_FROM) ;
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    Locale locale = context.getParentAppRequestContext().getLocale() ;
     if(getEventAllDate()) {
-      DateFormat df = new SimpleDateFormat(dateFormat) ;
+      DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
       df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
       return CalendarUtils.getBeginDay(df.parse(fromField.getValue())).getTime();
     } 
-    DateFormat df = new SimpleDateFormat(dateFormat + " "  + timeFormat) ;
+    DateFormat df = new SimpleDateFormat(dateFormat + " "  + timeFormat, locale) ;
     df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
     return df.parse(fromField.getValue() + " " + timeField.getValue()) ;
   }
@@ -324,10 +328,12 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   }
   protected void setEventFromDate(Date date,String dateFormat, String timeFormat) throws Exception{
     UITaskDetailTab taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    Locale locale = context.getParentAppRequestContext().getLocale() ;
     ((UIFormDateTimePicker)taskDetailTab.getChildById(UITaskDetailTab.FIELD_FROM))
-    .setValue(CalendarUtils.parse(date, dateFormat)) ;
+    .setValue(CalendarUtils.parse(date, dateFormat, locale)) ;
     taskDetailTab.getUIFormComboBox(UITaskDetailTab.FIELD_FROM_TIME)
-    .setValue(CalendarUtils.parse(date,timeFormat)) ;    
+    .setValue(CalendarUtils.parse(date,timeFormat, locale)) ;    
 
   }
 
@@ -335,12 +341,14 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     UITaskDetailTab taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
     UIFormComboBox timeField = taskDetailTab.getUIFormComboBox(UITaskDetailTab.FIELD_TO_TIME) ;
     UIFormDateTimePicker toField = taskDetailTab.getChildById(UITaskDetailTab.FIELD_TO) ;
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    Locale locale = context.getParentAppRequestContext().getLocale() ;
     if(getEventAllDate()) {
-      DateFormat df = new SimpleDateFormat(dateFormat) ;
+      DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
       df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
       return CalendarUtils.getEndDay(df.parse(toField.getValue())).getTime();
     } 
-    DateFormat df = new SimpleDateFormat(dateFormat + " " + timeFormat) ;
+    DateFormat df = new SimpleDateFormat(dateFormat + " " + timeFormat, locale) ;
     df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
     return df.parse(toField.getValue() + " " + timeField.getValue()) ;
   }
@@ -351,10 +359,12 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   }
   protected void setEventToDate(Date date,String dateFormat,  String timeFormat) throws Exception{
     UITaskDetailTab taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    Locale locale = context.getParentAppRequestContext().getLocale() ;
     ((UIFormDateTimePicker)taskDetailTab.getChildById(UITaskDetailTab.FIELD_TO))
-    .setValue(CalendarUtils.parse(date, dateFormat)) ;
+    .setValue(CalendarUtils.parse(date, dateFormat, locale)) ;
     taskDetailTab.getUIFormComboBox(UITaskDetailTab.FIELD_TO_TIME)
-    .setValue(CalendarUtils.parse(date, timeFormat)) ; 
+    .setValue(CalendarUtils.parse(date, timeFormat, locale)) ; 
   }
 
   protected boolean getEventAllDate() {
