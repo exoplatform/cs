@@ -36,6 +36,7 @@ import org.exoplatform.webui.form.UIFormRadioBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.EmailAddressValidator;
+import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 /**
  * Created by The eXo Platform SARL
@@ -70,8 +71,8 @@ public class UIProfileInputSet extends UIFormInputWithActions {
   public UIProfileInputSet(String id) throws Exception {
     super(id) ;  
     setComponentConfig(getClass(), null) ;  
-    addUIFormInput(new UIFormStringInput(FIELD_FIRSTNAME_INPUT, FIELD_FIRSTNAME_INPUT, null));
-    addUIFormInput(new UIFormStringInput(FIELD_LASTNAME_INPUT, FIELD_LASTNAME_INPUT, null));
+    addUIFormInput(new UIFormStringInput(FIELD_FIRSTNAME_INPUT, FIELD_FIRSTNAME_INPUT, null).addValidator(MandatoryValidator.class));
+    addUIFormInput(new UIFormStringInput(FIELD_LASTNAME_INPUT, FIELD_LASTNAME_INPUT, null).addValidator(MandatoryValidator.class));
     addUIFormInput(new UIFormStringInput(FIELD_NICKNAME_INPUT, FIELD_NICKNAME_INPUT, null));
     List<SelectItemOption<String>> genderOptions = new ArrayList<SelectItemOption<String>>() ;
     genderOptions.add(new SelectItemOption<String>(MALE, MALE));

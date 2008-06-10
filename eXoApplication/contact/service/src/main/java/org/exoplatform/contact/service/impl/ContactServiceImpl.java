@@ -73,6 +73,10 @@ public class ContactServiceImpl implements ContactService {
     return storage_.getContactPageListByGroup(sProvider, username, filter, type) ;
   }
   
+  public Map<String, String> searchEmails(SessionProvider sysProvider, String username, ContactFilter filter)throws Exception {
+    return storage_.searchEmails(sysProvider, username, filter) ;
+  }
+  
   public List<String> getAllEmailAddressByGroup(SessionProvider sProvider, String username, String groupId) throws Exception {
     return storage_.getAllEmailAddressByGroup(sProvider, username, groupId);
   }
