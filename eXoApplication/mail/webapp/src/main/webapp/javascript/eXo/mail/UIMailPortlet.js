@@ -412,8 +412,9 @@ UIMailPortlet.prototype.updateFolderState = function(folderId, folderState) {
     this.uiFolderContainerNode = document.getElementById('UIFolderContainer');
   }
   // Save state to cookie
-  var dateExpire = new Date();
-  dateExpire.setYear(dateExpire.getYear() + 49);
+  /*var dateExpire = new Date();
+  dateExpire.setYear(dateExpire.getYear() + 49);*/
+  var dateExpire = 365 ;
   eXo.core.Browser.setCookie('cs.mail.lastfoldershow', folderId, dateExpire);
   eXo.core.Browser.setCookie('cs.mail.folderstate', folderState, dateExpire);
 };
