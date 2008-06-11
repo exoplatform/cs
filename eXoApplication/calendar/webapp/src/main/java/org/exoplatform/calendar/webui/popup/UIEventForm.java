@@ -816,6 +816,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     message.setMessageBody(sbBody.toString()) ;
     StringBuffer sbAddress = new StringBuffer() ;
     for(String s : toId.split(CalendarUtils.COMMA)) {
+      s = s.trim() ;
       User reciver = orSvr.getUserHandler().findUserByName(s.trim()) ;
       if(reciver.getEmail() != null)
         if(!CalendarUtils.isEmpty(sbAddress.toString())) sbAddress.append(CalendarUtils.COMMA) ;
@@ -823,6 +824,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     }
     if(event.getInvitation()!= null) {
       for(String s : event.getInvitation()) {
+        s = s.trim() ; 
         if(sbAddress.length() > 0) sbAddress.append(",") ;
         sbAddress.append(s) ;
       }
@@ -1090,7 +1092,13 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
           Account acc = CalendarUtils.getMailService().getDefaultAccount(uiForm.getSession(), username);
           if(acc != null) {
             try {
-              uiForm.sendMail(CalendarUtils.getMailService(), CalendarUtils.getOrganizationService(), calSetting, acc, username, uiForm.getParticipantValues(), calendarEvent) ;
+              StringBuffer recive = new StringBuffer() ; 
+              for(String rc : uiForm.getParticipants()) {
+                rc = rc.trim() ;
+                if(recive.length() > 0) recive.append(CalendarUtils.COMMA) ;
+                recive.append(rc) ;
+              }
+              uiForm.sendMail(CalendarUtils.getMailService(), CalendarUtils.getOrganizationService(), calSetting, acc, username, recive.toString(), calendarEvent) ;
             } catch (Exception e) {
               e.printStackTrace() ;
               uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.error-send-email", null));
