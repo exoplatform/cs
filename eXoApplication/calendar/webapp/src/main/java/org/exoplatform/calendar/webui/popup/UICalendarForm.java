@@ -86,12 +86,12 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   final public static String PERMISSION_SUB = "_permission".intern() ;
   public Map<String, String> permission_ = new HashMap<String, String>() ;
   public Map<String, Map<String, String>> perms_ = new HashMap<String, Map<String, String>>() ;
-  public String calendarId_ = null ;
+  //public String calendarId_ = null ;
+  public Calendar calendar_ = null ;
   public String calType_ =  CalendarUtils.PRIVATE_TYPE ;
   private boolean isAddNew_ = true ;
   public UICalendarForm() throws Exception{
     super("UICalendarForm");
-
     UIFormInputWithActions calendarDetail = new UIFormInputWithActions(INPUT_CALENDAR) ;
     calendarDetail.addUIFormInput(new UIFormStringInput(DISPLAY_NAME, DISPLAY_NAME, null).addValidator(MandatoryValidator.class)) ;
     calendarDetail.addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, null)) ;
@@ -191,7 +191,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       if(uiInputIfo != null) uiInputIfo.setValue(null) ;
     }
     if(isAddNew_) {
-      calendarId_ = null ;
+      calendar_ = null ;
       calType_ = CalendarUtils.PRIVATE_TYPE ;
       setDisplayName(null) ;
       setDescription(null) ;
@@ -201,7 +201,8 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       setSelectedColor(null) ;
       lockCheckBoxFields(false) ;
     } else {
-      Calendar calendar = null ;
+      
+    /*  //Calendar calendar = null ;
       CalendarService calService = CalendarUtils.getCalendarService() ;
       String username = Util.getPortalRequestContext().getRemoteUser() ;
       if(CalendarUtils.PRIVATE_TYPE.equals(calType_)) {
@@ -218,13 +219,15 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       } else if(CalendarUtils.PUBLIC_TYPE.equals(calType_)) {
         calendar = calService.getGroupCalendar(getSystemSession(), calendarId_) ;
       }
-      if(calendar != null) init(calendar) ;
+      if(calendar != null) */
+        init(calendar_) ;
     }
 
   }
   public void init(Calendar calendar) throws Exception {
     isAddNew_ = false ;
-    calendarId_ = calendar.getId() ;
+    calendar_ = calendar ;
+    //calendarId_ = calendar.getId() ;
     setDisplayName(calendar.getName()) ;
     setDescription(calendar.getDescription()) ;
     UIFormInputWithActions sharing = getChildById(INPUT_SHARE) ;
@@ -451,7 +454,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
         boolean isPublic = uiForm.isPublic() ;
         if(isPublic) uiForm.calType_ = CalendarUtils.PUBLIC_TYPE ;
         Calendar calendar = new Calendar() ;
-        if(!uiForm.isAddNew_) calendar.setId(uiForm.calendarId_) ;
+        if(!uiForm.isAddNew_) calendar = uiForm.calendar_ ;
         calendar.setName(displayName) ;
         calendar.setDescription(uiForm.getDescription()) ;
         calendar.setLocale(uiForm.getLocale()) ;
