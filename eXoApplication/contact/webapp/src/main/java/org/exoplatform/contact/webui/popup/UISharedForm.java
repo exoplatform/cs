@@ -148,6 +148,11 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     UIFormStringInput fieldInput = getUIStringInput(selectField) ;
     Map<String, String> permission ;
     if (selectField.equals(FIELD_USER)) {
+      // add to fix bug 902
+      if (!ContactUtils.isEmpty(fieldInput.getValue()))
+        for (String user : fieldInput.getValue().split(","))
+          permissionUser_.put(user.trim(), user.trim()) ;
+      
       permissionUser_.put(value, value) ;
       permission = permissionUser_ ;
     } else {
