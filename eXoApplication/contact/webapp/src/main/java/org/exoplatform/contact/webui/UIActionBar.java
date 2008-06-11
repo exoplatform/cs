@@ -154,7 +154,13 @@ public class UIActionBar extends UIContainer  {
       String isList = event.getRequestContext().getRequestParameter(OBJECTID);
       UIContactPortlet uiContactPortlet = uiActionBar.getParent() ; 
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
-      
+      if (uiContacts.isDisplaySearchResult()) {
+        UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.cannot-changeView", null,
+          ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;        
+      }      
       if (isList.equals("true")) uiContacts.setViewContactsList(true) ;
       else uiContacts.setViewContactsList(false) ;
       //event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
