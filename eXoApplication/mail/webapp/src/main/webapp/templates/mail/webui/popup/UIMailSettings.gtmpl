@@ -1,6 +1,5 @@
 <% uiform.begin() %>
 <div class="UIMailSetting">
-  fdhfg
   <div class="UITabSelector">
     <div class="UITabPane">
       <div class="TabPaneContent">

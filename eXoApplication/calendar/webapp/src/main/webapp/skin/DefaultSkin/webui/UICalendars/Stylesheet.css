@@ -95,6 +95,7 @@
   width: 80px;
   overflow: hidden;
   line-height: 17px;
+  white-space: nowrap;
 }
 
 .UICalendarPortlet .UICalendars .DownArrow1Icon {

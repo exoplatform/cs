@@ -143,7 +143,7 @@
 				if(group.equals(uicomponent.getSelectedGroup()))	cssClass = "Selected" ;	
 			%>
 				<div id="$group" title="$group" class="ItemList $cssClass PublicAddressBook" addressType="2" >
-					<a href="$actionLink" class="IconHolder AddressIcon" >$name</a>
+					<div onclick="$actionLink" class="IconHolder AddressIcon" >$name</div>
 				</div>
 		<% } %>
 	</div>
