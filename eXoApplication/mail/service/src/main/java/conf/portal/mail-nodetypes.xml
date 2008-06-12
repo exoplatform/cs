@@ -191,14 +191,25 @@
   	  </propertyDefinition> 
     </propertyDefinitions>    
     <childNodeDefinitions>
-      <childNodeDefinition name="*" defaultPrimaryType="nt:file" autoCreated="false" mandatory="false"
-        onParentVersion="VERSION" protected="false" sameNameSiblings="true">
-        <requiredPrimaryTypes>
-          <requiredPrimaryType>nt:file</requiredPrimaryType>
-        </requiredPrimaryTypes>
-      </childNodeDefinition>      
-    </childNodeDefinitions>
+	  <childNodeDefinition name="*" defaultPrimaryType="" autoCreated="false" mandatory="false"
+	    onParentVersion="COPY" protected="false" sameNameSiblings="false">
+	      <requiredPrimaryTypes>
+	        <requiredPrimaryType>nt:unstructured</requiredPrimaryType>
+	      </requiredPrimaryTypes>
+	  </childNodeDefinition>	      
+	</childNodeDefinitions>
   </nodeType>
+  
+  <nodeType	name="exo:mailAttachment" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+ 	<supertypes>
+ 	  <supertype>nt:file</supertype>
+ 	</supertypes>
+ 	<propertyDefinitions>
+  	  <propertyDefinition name="exo:fileName" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  		<valueConstraints/>
+  	  </propertyDefinition>	  		
+  	</propertyDefinitions>	
+  </nodeType>	  
   
   <nodeType name="exo:group" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
   	<supertypes>

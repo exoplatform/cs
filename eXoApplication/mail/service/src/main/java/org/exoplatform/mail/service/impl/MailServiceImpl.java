@@ -18,6 +18,8 @@ package org.exoplatform.mail.service.impl;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -59,6 +61,8 @@ import javax.mail.search.SentDateTerm;
 import javax.mail.search.SubjectTerm;
 import javax.mail.util.ByteArrayDataSource;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.mail.service.Account;
@@ -92,6 +96,8 @@ import com.sun.mail.smtp.SMTPSendFailedException;
  */
 public class MailServiceImpl implements MailService{
 
+  private static final Log logger = LogFactory.getLog(MailServiceImpl.class);
+  
   private JCRDataStorage storage_ ;
   //will be use map for multi import/export email type 
   private EMLImportExport emlImportExport_ ;
@@ -254,7 +260,7 @@ public class MailServiceImpl implements MailService{
       }});
     */
     Session session = Session.getInstance(props, null);
-    System.out.println(" #### Sending email ... ");
+    logger.debug(" #### Sending email ... ");
     Transport transport = session.getTransport(Utils.SVR_SMTP);
     transport.connect(outgoingHost, smtpUser, acc.getIncomingPassword()) ;
     Message msg = send(session, transport, message);
@@ -291,7 +297,7 @@ public class MailServiceImpl implements MailService{
     Session session = Session.getInstance(props, null);
     Transport transport = session.getTransport(Utils.SVR_SMTP);
     transport.connect(serverConfig.getOutgoingHost(), serverConfig.getUserName(), serverConfig.getPassword()) ;
-    System.out.println(" #### Sending email ... ");
+    logger.debug(" #### Sending email ... ");
     int i = 0;
     for (Message msg : msgList) {
       msg.setServerConfiguration(serverConfig);
@@ -299,10 +305,15 @@ public class MailServiceImpl implements MailService{
         send(session , transport, msg);
         i++;
       } catch(Exception e) {
-        System.out.println(" #### Info : send fail at message " + i + " \n");
+        logger.error(" #### Info : send fail at message " + i + " \n");
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+        StringBuffer sb = sw.getBuffer();
+        logger.error(sb.toString());
       }
     }
-    System.out.println(" #### Info : Sent " + i + " email(s)");
+    logger.debug(" #### Info : Sent " + i + " email(s)");
     transport.close();
   }
   
@@ -398,9 +409,9 @@ public class MailServiceImpl implements MailService{
     } catch (Exception e) {
       status = "There was an unexpected error. Sending Falied !" + e.getMessage();
     } finally {
-      //System.out.println(" #### Info : " + status);      
+      //logger.debug(" #### Info : " + status);      
     } 
-    System.out.println(" #### Info : " + status) ;
+    logger.debug(" #### Info : " + status) ;
     
     return message ;
   }
@@ -423,7 +434,9 @@ public class MailServiceImpl implements MailService{
     checkingLog_.put(key, info) ;
     long t1, t2 , tt1, tt2;
     if (Utils.isEmptyField(account.getIncomingPassword())) info.setStatusCode(CheckingInfo.RETRY_PASSWORD) ;
-    System.out.println(" #### Getting mail from " + account.getIncomingHost() + " ... !");
+    
+    // TODO : to change log level later
+    logger.error(" #### Getting mail from " + account.getIncomingHost() + " ... !");
     info.setStatusMsg("Getting mail from " + account.getIncomingHost() + " ... !") ;
     List<Message> messageList = new ArrayList<Message>();
     int totalNew = -1;
@@ -472,11 +485,12 @@ public class MailServiceImpl implements MailService{
         
         javax.mail.Folder folder = store.getFolder(storeURL.getFile());
         if (!folder.exists()) {
-          System.out.println(" #### Folder " + incomingFolder + " is not exists !");
+          logger.error(" #### Folder " + incomingFolder + " is not exists !");
           info.setStatusMsg("Folder " + incomingFolder + " is not exists") ;
           continue ;
         } else {
-          System.out.println(" #### Getting mails from folder " + incomingFolder + " !");
+          // TODO : to change log level later
+          logger.error(" #### Getting mails from folder " + incomingFolder + " !");
           info.setStatusMsg("Getting mails from folder " + incomingFolder + " !") ;
         }
         folder.open(javax.mail.Folder.READ_WRITE);
@@ -530,7 +544,9 @@ public class MailServiceImpl implements MailService{
         
         totalNew = msgMap.size() ;
        
-        System.out.println(" #### Folder contains " + totalNew + " messages !") ;
+        // TODO : to change log level later
+        logger.error(" #### Folder contains " + totalNew + " messages !") ;
+        System.setProperty("mail.mime.base64.ignoreerrors","true") ; // this line fix for base64 encode problem with corrupted attachments
         tt1 = System.currentTimeMillis() ;
 
         if (totalNew > 0) {
@@ -553,11 +569,11 @@ public class MailServiceImpl implements MailService{
           javax.mail.Message msg ;
           List<String> filterList ;
           while (i < totalNew && !info.isRequestStop()) {
-            System.out.println(" [DEBUG] Fetching message " + (i + 1) + " ...") ;
+            msg = messages[i] ; 
+            logger.debug("Fetching message " + (i + 1) + " ... \n[ Subject: " + msg.getSubject() + " ]") ;
             checkingLog_.get(key).setFetching(i + 1) ;
             checkingLog_.get(key).setStatusMsg("Fetching message " + (i + 1) + "/" + totalNew) ;
-            t1 = System.currentTimeMillis();
-            msg = messages[i] ;   
+            t1 = System.currentTimeMillis();  
             filterList = msgMap.get(msg) ;
             try {
               boolean saved = storage_.saveMessage(sProvider, username, account.getId(), msg, folderId, spamFilter, filterList) ;
@@ -574,11 +590,13 @@ public class MailServiceImpl implements MailService{
             }  
             i ++ ;          
             t2 = System.currentTimeMillis();
-            System.out.println(" [DEBUG] Message " + i + " saved : " + (t2-t1) + " ms");
+            // TODO : to change log level later
+            logger.error("Message " + i + " saved : " + (t2-t1) + " ms");
           }
           
           tt2 = System.currentTimeMillis();
-          System.out.println(" ### Check mail finished total took: " + (tt2 - tt1) + " ms") ;
+          // TODO : to change log level later
+          logger.error(" ### Check mail finished total took: " + (tt2 - tt1) + " ms") ;
         }
         
         if (!account.isSavePassword()) account.setIncomingPassword("") ;          
