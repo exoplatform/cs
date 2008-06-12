@@ -74,11 +74,8 @@ public class UIActionBar extends UIContainer  {
   static public class QuickAddEventActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ;
-      CalendarService calendarService = uiActionBar.getApplicationComponent(CalendarService.class) ;
       UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
-      List<org.exoplatform.calendar.service.Calendar> privateCalendars = 
-        calendarService.getUserCalendars(uiActionBar.getSession(), CalendarUtils.getCurrentUser(), true) ;
-      if(privateCalendars.isEmpty()) {
+      if(CalendarUtils.getCalendarOption().isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.calendar-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;

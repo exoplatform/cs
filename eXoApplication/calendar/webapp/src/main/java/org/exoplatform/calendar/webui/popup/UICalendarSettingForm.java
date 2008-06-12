@@ -76,13 +76,13 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     UICalendarSettingTab setting = new UICalendarSettingTab(SETTING_CALENDAR_TAB) ;//.setRendered(true) ;
     addUIFormInput(setting) ;
     setSelectedTab(setting.getId()) ;
-    UIFormInputWithActions defaultCalendars = new UIFormInputWithActions(DEFAULT_CALENDAR_TAB) ;    
-    addUIFormInput(defaultCalendars) ;
+    UICalendarSettingDisplayTab defaultCalendarsTab  = new UICalendarSettingDisplayTab(DEFAULT_CALENDAR_TAB) ;    
+    addUIFormInput(defaultCalendarsTab) ;
   }
 
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
-
+  public Map<String, String> getChildIds() {return names_ ;}
   public void init(CalendarSetting calendarSetting, CalendarService cservice) throws Exception{
     names_.clear() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
@@ -109,7 +109,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       if(calendarSetting.getBaseURL() == null) calendarSetting.setBaseURL(CalendarUtils.getServerBaseUrl() + "calendar/iCalRss") ;
       //settingTab.setBaseUrl(calendarSetting.getBaseURL()) ;
     }
-    UIFormInputWithActions defaultCalendarsTab = getChildById(DEFAULT_CALENDAR_TAB) ;    
+    UICalendarSettingDisplayTab defaultCalendarsTab = getChildById(DEFAULT_CALENDAR_TAB) ;    
     List<String> filteredCalendars = new ArrayList<String>() ;
     if(calendarSetting != null && calendarSetting.getFilterPrivateCalendars() != null) {
       filteredCalendars.addAll(Arrays.asList(calendarSetting.getFilterPrivateCalendars())) ;
