@@ -543,45 +543,48 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     static  public class AddEventActionListener extends EventListener<UICalendarView> {
       public void execute(Event<UICalendarView> event) throws Exception {
         UICalendarView uiForm = event.getSource() ;
-        CalendarService calendarService =  CalendarUtils.getCalendarService() ; 
         UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
         String username = event.getRequestContext().getRemoteUser() ;
-        List<org.exoplatform.calendar.service.Calendar> privateCalendars = 
-          calendarService.getUserCalendars(uiForm.getSession(), username, true) ;
-        if(privateCalendars.isEmpty()) {
+        if(CalendarUtils.getCalendarOption().isEmpty()) {
           uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.calendar-list-empty", null)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }  
+        List<EventCategory> eventCategories = CalendarUtils.getCalendarService().getEventCategories(uiForm.getSession(), username) ;
+        if(eventCategories.isEmpty()) {
+          uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.event-category-list-empty", null)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }  
+        String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
+        String formTime = event.getRequestContext().getRequestParameter(CURRENTTIME) ;
+        String value = uiForm.getUIFormSelectBox(EVENT_CATEGORIES).getValue() ;
+        UICalendarPortlet uiPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
+        UIPopupAction uiParenPopup = uiPortlet.getChild(UIPopupAction.class) ;
+        UIPopupContainer uiPopupContainer = uiParenPopup.activate(UIPopupContainer.class, 700) ;
+        if(CalendarEvent.TYPE_TASK.equals(type)) {
+          uiPopupContainer.setId(UIPopupContainer.UITASKPOPUP) ;
+          UITaskForm uiTaskForm = uiPopupContainer.addChild(UITaskForm.class, null, null) ;
+          uiTaskForm.initForm(uiPortlet.getCalendarSetting(), null, formTime) ;
+          uiTaskForm.update(CalendarUtils.PRIVATE_TYPE,  CalendarUtils.getCalendarOption()) ;
+          if(CalendarUtils.isEmpty(value)) uiTaskForm.setSelectedCategory("Meeting") ;
+          else uiTaskForm.setSelectedCategory(value) ;  
         } else {
-          String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
-          String formTime = event.getRequestContext().getRequestParameter(CURRENTTIME) ;
-          String value = uiForm.getUIFormSelectBox(EVENT_CATEGORIES).getValue() ;
-          UICalendarPortlet uiPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
-          UIPopupAction uiParenPopup = uiPortlet.getChild(UIPopupAction.class) ;
-          UIPopupContainer uiPopupContainer = uiParenPopup.activate(UIPopupContainer.class, 700) ;
-          if(CalendarEvent.TYPE_TASK.equals(type)) {
-            uiPopupContainer.setId(UIPopupContainer.UITASKPOPUP) ;
-            UITaskForm uiTaskForm = uiPopupContainer.addChild(UITaskForm.class, null, null) ;
-            uiTaskForm.initForm(uiPortlet.getCalendarSetting(), null, formTime) ;
-            uiTaskForm.update(CalendarUtils.PRIVATE_TYPE,  CalendarUtils.getCalendarOption()) ;
-            if(CalendarUtils.isEmpty(value)) uiTaskForm.setSelectedCategory("Meeting") ;
-            else uiTaskForm.setSelectedCategory(value) ;  
-          } else {
-            uiPopupContainer.setId(UIPopupContainer.UIEVENTPOPUP) ;
-            UIEventForm uiEventForm =  uiPopupContainer.addChild(UIEventForm.class, null, null) ;
-            uiEventForm.initForm(uiPortlet.getCalendarSetting(), null, formTime) ;
-            uiEventForm.update(CalendarUtils.PRIVATE_TYPE, CalendarUtils.getCalendarOption()) ;
-            uiEventForm.setSelectedEventState(UIEventForm.ITEM_BUSY) ;
-            uiEventForm.setParticipant(username) ;
-            uiEventForm.setEmailAddress(CalendarUtils.getOrganizationService().getUserHandler().findUserByName(username).getEmail()) ;
-            uiEventForm.setEmailRemindBefore(String.valueOf(5));
-            uiEventForm.setEmailReminder(true) ;
-            uiEventForm.setEmailRepeat(String.valueOf(false)) ;
-            if(CalendarUtils.isEmpty(value)) uiEventForm.setSelectedCategory("Meeting") ;  
-            else  uiEventForm.setSelectedCategory(value) ;
-          }
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiParenPopup) ;     
+          uiPopupContainer.setId(UIPopupContainer.UIEVENTPOPUP) ;
+          UIEventForm uiEventForm =  uiPopupContainer.addChild(UIEventForm.class, null, null) ;
+          uiEventForm.initForm(uiPortlet.getCalendarSetting(), null, formTime) ;
+          uiEventForm.update(CalendarUtils.PRIVATE_TYPE, CalendarUtils.getCalendarOption()) ;
+          uiEventForm.setSelectedEventState(UIEventForm.ITEM_BUSY) ;
+          uiEventForm.setParticipant(username) ;
+          uiEventForm.setEmailAddress(CalendarUtils.getOrganizationService().getUserHandler().findUserByName(username).getEmail()) ;
+          uiEventForm.setEmailRemindBefore(String.valueOf(5));
+          uiEventForm.setEmailReminder(true) ;
+          uiEventForm.setEmailRepeat(String.valueOf(false)) ;
+          if(CalendarUtils.isEmpty(value)) uiEventForm.setSelectedCategory("Meeting") ;  
+          else  uiEventForm.setSelectedCategory(value) ;
         }
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiParenPopup) ;     
       }
     }
 
@@ -723,7 +726,10 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         UICalendarView uiCalendarView = event.getSource() ;
         UICalendarPortlet uiPortlet = uiCalendarView.getAncestorOfType(UICalendarPortlet.class) ;
         UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
-        UIPopupContainer uiPopupContainer = uiPopupAction.activate(UIPopupContainer.class, 700) ;
+
+        UIPopupContainer uiPopupContainer = uiPortlet.createUIComponent(UIPopupContainer.class, null, null) ;
+
+        //uiPopupAction.activate(UIPopupContainer.class, 700) ;
         CalendarEvent eventCalendar = null ;
         String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
         if(uiCalendarView instanceof UIListView ) {
@@ -776,6 +782,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
               uiEventForm.initForm(uiPortlet.getCalendarSetting(), eventCalendar, null) ;
               uiEventForm.setSelectedCalendarId(calendarId) ;
               uiPopupContainer.addChild(uiEventForm) ;
+              uiPopupAction.activate(uiPopupContainer, 700, 0) ;
               event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
             } else if(CalendarEvent.TYPE_TASK.equals(eventCalendar.getEventType())) {
               uiPopupContainer.setId(UIPopupContainer.UITASKPOPUP) ;
@@ -784,6 +791,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
               uiTaskForm.initForm(uiPortlet.getCalendarSetting(), eventCalendar, null) ;
               uiTaskForm.setSelectedCalendarId(calendarId) ;
               uiPopupContainer.addChild(uiTaskForm) ;
+              uiPopupAction.activate(uiPopupContainer, 700, 0) ;
               event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
             }
           } else {
@@ -977,16 +985,19 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     }
     static  public class QuickAddActionListener extends EventListener<UICalendarView> {
       public void execute(Event<UICalendarView> event) throws Exception {
-        UICalendarView calendarview = event.getSource() ;
-        CalendarService calendarService = CalendarUtils.getCalendarService() ;
-        UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;
-        List<org.exoplatform.calendar.service.Calendar> privateCalendars = 
-          calendarService.getUserCalendars(calendarview.getSession(), CalendarUtils.getCurrentUser(), true) ;
-        if(privateCalendars.isEmpty()) {
+        UICalendarView uiForm = event.getSource() ;
+        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+        if(CalendarUtils.getCalendarOption().isEmpty()) {
           uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.calendar-list-empty", null)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
         }
+        List<EventCategory> eventCategories = CalendarUtils.getCalendarService().getEventCategories(uiForm.getSession(), CalendarUtils.getCurrentUser()) ;
+        if(eventCategories.isEmpty()) {
+          uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.event-category-list-empty", null)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }  
         String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
         String startTime = event.getRequestContext().getRequestParameter("startTime") ;
         String finishTime = event.getRequestContext().getRequestParameter("finishTime") ;
@@ -997,8 +1008,8 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           startTime = currentTime ;
           finishTime = String.valueOf(Long.parseLong(currentTime) + amount) ;
         } catch (Exception e) {}
-        String selectedCategory = calendarview.getUIFormSelectBox(EVENT_CATEGORIES).getValue() ;
-        UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
+        String selectedCategory = uiForm.getUIFormSelectBox(EVENT_CATEGORIES).getValue() ;
+        UICalendarPortlet uiPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
         UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
         UIQuickAddEvent uiQuickAddEvent = uiPopupAction.activate(UIQuickAddEvent.class, 600) ;
         if(!CalendarUtils.isEmpty(selectedCategory)) 
@@ -1024,7 +1035,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         uiQuickAddEvent.init(uiPortlet.getCalendarSetting(), startTime, finishTime) ;
         uiQuickAddEvent.update(CalendarUtils.PRIVATE_TYPE, null) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(calendarview) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
       }
     }
     static  public class MoveNextActionListener extends EventListener<UIMonthView> {
