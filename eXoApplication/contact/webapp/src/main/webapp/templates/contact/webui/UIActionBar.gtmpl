@@ -6,58 +6,27 @@
 				
 					<div class="CenterBar">
 					
-						<div class="SelectButton" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
-							<div class="IconHolder BlueCirclePlusIcon" >
-								<div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.getName() + ".label.addNew")%></div>
-							</div>
-							<% /*Begin Popup Menu*/ %>
-								<div style="position: relative;">
-			      			<div class="UIPopupCategory" style="display: none;">
-			      				<div class="UIRightClickPopupMenu" style="display: block;">
-			      					<div class="UIContextMenuContainer">
-											  <div class="TopLeftRightClickPopupMenu">
-					          			<div class="TopRightRightClickPopupMenu">
-					            			<div class="TopCenterRightClickPopupMenu"><span></span></div>
-					          			</div>
-					        			</div>
-								        <div class="MiddleLeftRightClickPopupMenu">
-								          <div class="MiddleRightRightClickPopupMenu">
-					              		<div class="UIRightPopupMenuContainer">
-					                    <a class="MenuItem" href="<%=uicomponent.event("AddContact")%>">   
-						                    <div class="ItemIcon ContactIcon">
-						                      <%=_ctx.appRes(uicomponent.getName() + ".label.contact")%>
-						                    </div>
-					                    </a>
-					                    <a class="MenuItem" href="<%=uicomponent.event("AddAddressBook")%>">   
-						                    <div class="ItemIcon AddressIcon">
-						                      <%=_ctx.appRes(uicomponent.getName() + ".label.addressBook")%>
-						                    </div>
-					                    </a>
-					             
-														</div>
-						          		</div>
-						        		</div>
-									      <div class="BottomLeftRightClickPopupMenu">
-								        <div class="BottomRightRightClickPopupMenu">
-								          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
-								        </div>
-								      </div>
-					      			</div>
-								    </div>
-			      			</div>
-			      		</div>
-			      		<% /*End Popup Menu*/ %>
-						</div>
-						
-          <a href="<%=uicomponent.event("ImportContact")%>" class="ControlButton">
-						<div class="ImportAddressIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.importAddress")%>">
-							<span></span>
+					<a href="<%=uicomponent.event("AddContact")%>" class="SelectButton">
+						<div class="IconHolder AddContactIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.addContact")%>">
+							<%=_ctx.appRes(uicomponent.getName() + ".label.contact")%>
 						</div>
           </a>
           
-          <a href="<%=uicomponent.event("ExportContact")%>" class="ControlButton">
-						<div class="ExportAddressIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.exportAddress")%>">
-							<span></span>
+					<a href="<%=uicomponent.event("AddAddressBook")%>" class="SelectButton">
+						<div class="IconHolder AddAddressBookIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.addAddressBook")%>">
+							<%=_ctx.appRes(uicomponent.getName() + ".label.addressBook")%>
+						</div>
+          </a>
+          <div class="SeparatorLine"><span></span></div>	
+          <a href="<%=uicomponent.event("ImportContact")%>" class="SelectButton">
+						<div class="IconHolder ImportAddressIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.importAddress")%>">
+							<%=_ctx.appRes(uicomponent.getName() + ".label.importAddress")%>
+						</div>
+          </a>
+          
+          <a href="<%=uicomponent.event("ExportContact")%>" class="SelectButton">
+						<div class="IconHolder ExportAddressIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.exportAddress")%>">
+							<%=_ctx.appRes(uicomponent.getName() + ".label.exportAddress")%>
 						</div>
           </a>
 						<div class="SeparatorLine"><span></span></div>

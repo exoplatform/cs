@@ -183,6 +183,15 @@
 .UIContactPortlet .SelectMemberIcon {
 	background:transparent url(icons/SmallMemberIcon.gif) no-repeat;
 }
+
 .UIContactPortlet .SelectGroupIcon {
 	background:transparent url(icons/SmallGroupIcon.gif) no-repeat;
+}
+
+.UIContactPortlet .AddContactIcon {
+	background:transparent url(icons/AddContactIcon.gif) no-repeat left center;
+}
+
+.UIContactPortlet .AddAddressBookIcon {
+	background:transparent url(icons/AddAddressBookIcon.gif) no-repeat;
 }
