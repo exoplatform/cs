@@ -711,9 +711,9 @@ public class JCRDataStorage{
         msgNode.save() ;
         increaseFolderItem(sProvider, username, accId, folderId) ;
       }
+      return true ; 
     } catch(Exception e) {
       // e.printStackTrace() ;
-      return true;
     }
 
     logger.debug("Saving message to JCR ...") ;
