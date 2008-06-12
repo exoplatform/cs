@@ -694,7 +694,11 @@ public class JCRDataStorage{
     long t1, t2, t3, t4 ;
     String msgId = MimeMessageParser.getMessageId(msg) ;
     Calendar gc = MimeMessageParser.getReceivedDate(msg) ;
-    Node msgHomeNode = getDateStoreNode(sProvider, username, accId, gc.getTime()) ;   
+    Node msgHomeNode = getDateStoreNode(sProvider, username, accId, gc.getTime()) ; 
+    
+    // TODO : Nam, you don't put anything here, any comment ... how terrible to know what happens :-)
+    // Seems we check if there is a duplicate mail, 
+    // any other points???
     try {
       Node msgNode = msgHomeNode.getNode(msgId) ;
       Value[] propFolders = msgNode.getProperty(Utils.EXO_FOLDERS).getValues();
@@ -711,40 +715,41 @@ public class JCRDataStorage{
         msgNode.save() ;
         increaseFolderItem(sProvider, username, accId, folderId) ;
       }
+      logger.error("DUPLICATE MAIL ... removed !!!");
       return true ; 
     } catch(Exception e) {
-      // e.printStackTrace() ;
+      // do nothing here
     }
 
     logger.debug("Saving message to JCR ...") ;
     t1 = System.currentTimeMillis();
+    
+    Node node = null ;
+    
+    //////////////////////////////////////////////////////
+    // TODO :
+    // You could replace (comment) this block ...
     try {
-      Node node = null ;
+      node = msgHomeNode.addNode(msgId, Utils.EXO_MESSAGE) ;
+    } catch(Exception e) {        
+      // generating another msgId
+      msgId = "Message" + IdGenerator.generate() ;
+      node = msgHomeNode.addNode(msgId, Utils.EXO_MESSAGE) ;
       
-      //////////////////////////////////////////////////////
-      // TODO :
-      // You could replace (comment) this block ...
-      try {
-        node = msgHomeNode.addNode(msgId, Utils.EXO_MESSAGE) ;
-      } catch(Exception e) {        
-        // generating another msgId
-        msgId = "Message" + IdGenerator.generate() ;
-        node = msgHomeNode.addNode(msgId, Utils.EXO_MESSAGE) ;
-        
-        // Make sure that you're going to work with the same msgId elsewhere, it should be in these methods :
-        // checkSpam
-        // node.setProperty
-        // addToThread
-        // ...
-        // This one doesn't work, I tested and it failed (impossible to change the msg header)
-        //msg.setHeader("Message-ID", msgId);
-      }
-      // ... by this block (uncomment it) to test with all mails (don't need to have a mail that raises exception)
-      //msgId = "message" + IdGenerator.generate();
-      //node = msgHomeNode.addNode(msgId, Utils.EXO_MESSAGE) ;
-      //////////////////////////////////////////////////////
-      
-      
+      // Make sure that you're going to work with the same msgId elsewhere, it should be in these methods :
+      // checkSpam
+      // node.setProperty
+      // addToThread
+      // ...
+      // This one doesn't work, I tested and it failed (impossible to change the msg header)
+      //msg.setHeader("Message-ID", msgId);
+    }
+    // ... by this block (uncomment it) to test with all mails (don't need to have a mail that raises exception)
+    //msgId = "message" + IdGenerator.generate();
+    //node = msgHomeNode.addNode(msgId, Utils.EXO_MESSAGE) ;
+    //////////////////////////////////////////////////////
+    
+    try {
       msgHomeNode.save() ;
       String[] folderIds = { folderId };
       node.setProperty(Utils.EXO_ID, msgId);
@@ -795,7 +800,7 @@ public class JCRDataStorage{
       }
       node.setProperty(Utils.EXO_HEADERS, values.toArray(new String[]{}));
 
-      logger.debug("\n Saved body and attachment of message .... size : " + Math.abs(msg.getSize()) + " B") ;
+      logger.debug("Saved body and attachment of message .... size : " + Math.abs(msg.getSize()) + " B") ;
       t2 = System.currentTimeMillis();
       Object obj = msg.getContent() ;
       String contentType = "text/plain" ;
@@ -809,13 +814,13 @@ public class JCRDataStorage{
       node.setProperty(Utils.EXO_CONTENT_TYPE, contentType) ;
       node.setProperty(Utils.EXO_BODY, Utils.decodeText(body)) ;
       t3 = System.currentTimeMillis();
-      logger.debug("\n Saved body (and attachments) of message finished : " + (t3 - t2) + " ms") ;
+      logger.debug("Saved body (and attachments) of message finished : " + (t3 - t2) + " ms") ;
       
       node.save() ;
       
       t4 = System.currentTimeMillis();
-      logger.info("\n Saved total message to JCR finished : " + (t4 - t1) + " ms") ;
-      logger.info("\n Adding message to thread ...") ;
+      logger.info("Saved total message to JCR finished : " + (t4 - t1) + " ms") ;
+      logger.info("Adding message to thread ...") ;
       t1 = System.currentTimeMillis();
       addMessageToThread(sProvider, username, accId, MimeMessageParser.getInReplyToHeader(msg), node) ;
       t2 = System.currentTimeMillis();

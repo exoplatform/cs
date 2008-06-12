@@ -39,7 +39,6 @@ import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimeUtility;
 import javax.mail.util.ByteArrayDataSource;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -408,7 +407,6 @@ public class Utils {
       String ret = MimeUtility.decodeText(str) ;
       return ret;
     } catch (Exception e) {
-      logger.error("Exception while decoding text !!");
       StringWriter sw = new StringWriter();
       PrintWriter pw = new PrintWriter(sw);
       e.printStackTrace(pw);

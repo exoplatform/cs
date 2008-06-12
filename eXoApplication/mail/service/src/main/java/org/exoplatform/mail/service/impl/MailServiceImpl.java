@@ -578,8 +578,9 @@ public class MailServiceImpl implements MailService{
             try {
               boolean saved = storage_.saveMessage(sProvider, username, account.getId(), msg, folderId, spamFilter, filterList) ;
               if (saved) {
-                msg.setFlag(Flags.Flag.SEEN, true);
-                if (deleteOnServer) msg.setFlag(Flags.Flag.DELETED, true);
+                //TODO : khdung, just for THIS TEST (tell me change it back if I forgot, thx)
+                //msg.setFlag(Flags.Flag.SEEN, true);
+                //if (deleteOnServer) msg.setFlag(Flags.Flag.DELETED, true);
                 account.setLastCheckedDate(MimeMessageParser.getReceivedDate(msg).getTime()) ; 
               }
             } catch(Exception e) {
