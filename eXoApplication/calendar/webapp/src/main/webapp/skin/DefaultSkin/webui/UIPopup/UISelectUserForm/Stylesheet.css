@@ -47,7 +47,6 @@
 
 .UICalendarPortlet .UISelectUserForm .UIAddressSearchForm input{
 	float: left;
-	margin: 10px 0px 0px 3px;
 	width: 170px;
 	height: 14px;
 }
@@ -55,7 +54,7 @@
 .UICalendarPortlet .UISelectUserForm .UIAddressSearchForm .SearchIcon {
   float: left;
   height: 20px; width: 24px;
-  margin: 10px;
+  margin-left: 10px;
 }
 
 .UICalendarPortlet .UISelectUserForm .UIAddressSearchForm .SearchTitle {
@@ -79,11 +78,13 @@
 
 .UICalendarPortlet .UISelectUserForm .AddressesGroup select {
 	width: 160px;
-	margin: 10px 0px 0px 0px;
 	font-size: 11px;
+	line-height: 0px;
 }
 .UICalendarPortlet .UISelectUserForm .GroupSelect {
 	float:left;
+	padding-top: 10px;
+	line-height: 0px;
 }
 /*********************************************ListAddress*****************************************/
 
@@ -122,13 +123,15 @@
 }
 .UICalendarPortlet .UISelectUserForm .QuickSet {
 	float:left;
+	padding-top: 10px;
 }
 
 .UICalendarPortlet .UISelectUserForm .FilterSelect {
 	float:left;
+	line-height: 0px;
 }
+
 .UICalendarPortlet .UISelectUserForm .FilterSelect select{
-	margin: 10px 0px 0px 0px;
 	font-size: 10px;
 	height: 18px;
 }
