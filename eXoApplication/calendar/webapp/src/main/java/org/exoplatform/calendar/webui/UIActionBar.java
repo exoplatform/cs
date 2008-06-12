@@ -22,6 +22,7 @@ import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
+import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.webui.popup.UICalendarSettingForm;
 import org.exoplatform.calendar.webui.popup.UIFeed;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
@@ -82,6 +83,12 @@ public class UIActionBar extends UIContainer  {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
+      List<EventCategory> eventCategories = CalendarUtils.getCalendarService().getEventCategories(uiActionBar.getSession(), CalendarUtils.getCurrentUser()) ;
+      if(eventCategories.isEmpty()) {
+        uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.event-category-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }  
       String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
       String formTime = event.getRequestContext().getRequestParameter(CURRENTTIME) ;
       String categoryId = event.getRequestContext().getRequestParameter(CATEGORYID) ;

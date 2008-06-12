@@ -65,7 +65,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
   final static public String FIELD_USER = "username".intern() ;
   final static public String FIELD_EDIT = "canEdit".intern() ;
   final public static String SPECIALCHARACTER[] = {CalendarUtils.SEMICOLON,CalendarUtils.SLASH,CalendarUtils.BACKSLASH,"'","|",">","<","\"", "?", "!", "@", "#", "$", "%","^","&","*"} ;
-  
+
   private Map<String, String> permission_ = new HashMap<String, String>() ;
   private String calendarId_ ;
   protected boolean isAddNew_ = true ;
@@ -114,7 +114,12 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     return getUIFormCheckBoxInput(FIELD_EDIT).isChecked() ;
   }
   protected void setSharedUser(String value) {
-    getUIStringInput(FIELD_USER).setValue(value) ;
+    UIFormInputWithActions inputset = getChildById("UIInputUserSelect") ;
+    inputset.getUIStringInput(FIELD_USER).setValue(value) ;
+  }
+  protected String getSharedUser() {
+    UIFormInputWithActions inputset = getChildById("UIInputUserSelect") ;
+    return inputset.getUIStringInput(FIELD_USER).getValue() ;
   }
   public String[] getActions() {
     return new String[] {"Save","Close"} ;
@@ -207,6 +212,17 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
   static  public class SelectPermissionActionListener extends EventListener<UISharedForm> {
     public void execute(Event<UISharedForm> event) throws Exception {
       UISharedForm uiForm = event.getSource() ;
+      String currentValue = uiForm.getSharedUser() ;
+      uiForm.permission_.clear() ;
+      if(!CalendarUtils.isEmpty(currentValue)) {
+        OrganizationService orgService = CalendarUtils.getOrganizationService() ;
+        for(String s :currentValue.split(CalendarUtils.COMMA)) {
+          s = s.trim() ;
+          if(orgService.getUserHandler().findUserByName(s) != null) {
+            uiForm.permission_.put(s, s) ;
+          }
+        }
+      }
       String permType = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIPopupAction childPopup = uiForm.getAncestorOfType(UIPopupContainer.class).getChild(UIPopupAction.class) ;
       UIGroupSelector uiGroupSelector = childPopup.activate(UIGroupSelector.class, 500) ;
