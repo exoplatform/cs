@@ -17,8 +17,6 @@
  	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS, String.valueOf(Calendar.DATE)) ;
  	monthViewAction = uicomponent.TYPE_MONTH +"&currentTime="+ uicomponent.getCurrentCalendar().getTimeInMillis();
 	yearViewAction = uicomponent.TYPE_YEAR +"&currentTime="+ uicomponent.getCurrentCalendar().getTimeInMillis();
- 	//monthViewAction = uicomponent.TYPE_MONTH +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=1" ;
-	//yearViewAction = uicomponent.TYPE_YEAR +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=1" ;
 	dateTimeFormat = uicomponent.getDateTimeFormat() ;
 	WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
  	Locale locale = context.getParentAppRequestContext().getLocale() ;
@@ -45,9 +43,7 @@
 						</td>
 						<td>
 							<div class="Title">
-							<a href="<%=uicomponent.event("GotoDate",monthViewAction)%>">
-								$currentDayName
-							</a>,
+							 $currentDayName,
 							<a href="<%=uicomponent.event('GotoDate',monthViewAction)%>">
 								$currentMonthName
 							</a>, $currentDay, 
