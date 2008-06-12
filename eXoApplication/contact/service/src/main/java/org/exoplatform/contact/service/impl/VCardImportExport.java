@@ -292,10 +292,9 @@ public class VCardImportExport implements ContactImportExport {
       String lastName = identity.getLastname();
       contact.setLastName(lastName);
       String firstName = identity.getFirstname();
-      contact.setFirstName(identity.getFirstname() + " " + additionName);
-      
-      int size = identity.getAdditionalNameCount();
-      
+      if (firstName.trim().equals(additionName.trim())) contact.setFirstName(firstName) ;
+      else contact.setFirstName(firstName + " " + additionName);
+      int size = identity.getAdditionalNameCount();      
       String nickName = "";
       size = identity.getNicknameCount();
       for (int i = 0; i < size; i++) {
