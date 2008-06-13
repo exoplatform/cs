@@ -23,14 +23,16 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventQuery;
+import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UIFormComboBox;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.services.organization.OrganizationConfig;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -115,9 +117,13 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
 
   protected String[] getParticipants() { return parMap_.keySet().toArray(new String[]{}) ; } 
 
-  protected String getDateValue() {
-    DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
+  protected String getDateValue() throws Exception  {
+    CalendarSetting calSetting = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    Locale locale = context.getParentAppRequestContext().getLocale() ;
+    DateFormat df = new SimpleDateFormat(calSetting.getDateFormat(),locale) ;
     df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
+    System.out.println(df.format(calendar_.getTime()));
     return df.format(calendar_.getTime()) ;
   }
   protected void moveNextDay() throws Exception{
