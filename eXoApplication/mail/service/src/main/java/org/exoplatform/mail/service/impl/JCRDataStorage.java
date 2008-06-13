@@ -694,6 +694,8 @@ public class JCRDataStorage{
   public boolean saveMessage(SessionProvider sProvider, String username, String accId, javax.mail.Message msg, String folderId, SpamFilter spamFilter, List<String> filterList) throws Exception {
     long t1, t2, t3, t4 ;
     String msgId = MimeMessageParser.getMessageId(msg) ;
+    //TODO : to change the log level later
+    logger.error("MessageId = " + msgId);
     Calendar gc = MimeMessageParser.getReceivedDate(msg) ;
     Node msgHomeNode = getDateStoreNode(sProvider, username, accId, gc.getTime()) ; 
     
@@ -730,9 +732,11 @@ public class JCRDataStorage{
     // You could replace (comment) this block ...
     try {
       node = msgHomeNode.addNode(msgId, Utils.EXO_MESSAGE) ;
-    } catch(Exception e) {        
+    } catch(Exception e) {  
+      
       // generating another msgId
       msgId = "Message" + IdGenerator.generate() ;
+      logger.error("The MessageId is NOT GOOD, generated another one = " + msgId);
       node = msgHomeNode.addNode(msgId, Utils.EXO_MESSAGE) ;
       
       // Make sure that you're going to work with the same msgId elsewhere, it should be in these methods :

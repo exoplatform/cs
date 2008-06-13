@@ -570,7 +570,7 @@ public class MailServiceImpl implements MailService{
           List<String> filterList ;
           while (i < totalNew && !info.isRequestStop()) {
             msg = messages[i] ; 
-            logger.error("Fetching message " + (i + 1) + " ... \n[ Subject: " + msg.getSubject() + " ]") ;
+            logger.error("Fetching message " + (i + 1) + " ...") ;
             checkingLog_.get(key).setFetching(i + 1) ;
             checkingLog_.get(key).setStatusMsg("Fetching message " + (i + 1) + "/" + totalNew) ;
             t1 = System.currentTimeMillis();  
@@ -578,9 +578,8 @@ public class MailServiceImpl implements MailService{
             try {
               boolean saved = storage_.saveMessage(sProvider, username, account.getId(), msg, folderId, spamFilter, filterList) ;
               if (saved) {
-                //TODO : khdung, just for THIS TEST (tell me change it back if I forgot, thx)
-                //msg.setFlag(Flags.Flag.SEEN, true);
-                //if (deleteOnServer) msg.setFlag(Flags.Flag.DELETED, true);
+                msg.setFlag(Flags.Flag.SEEN, true);
+                if (deleteOnServer) msg.setFlag(Flags.Flag.DELETED, true);
                 account.setLastCheckedDate(MimeMessageParser.getReceivedDate(msg).getTime()) ; 
               }
             } catch(Exception e) {
