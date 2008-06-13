@@ -212,19 +212,31 @@ public class UIWeekView extends UICalendarView {
               event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
               return ;
             }
-
             Calendar cal = calendarview.getInstanceTempCalendar() ;
-            cal.setTimeInMillis(Long.parseLong(currentDate)) ;
             int hoursBg = (Integer.parseInt(startTime)/60) ;
             int minutesBg = (Integer.parseInt(startTime)%60) ;
             int hoursEnd = (Integer.parseInt(finishTime)/60) ;
             int minutesEnd = (Integer.parseInt(finishTime)%60) ;
-            cal.set(Calendar.HOUR_OF_DAY, hoursBg) ;
-            cal.set(Calendar.MINUTE, minutesBg) ;
-            eventCalendar.setFromDateTime(cal.getTime()) ;
-            cal.set(Calendar.HOUR_OF_DAY, hoursEnd) ;
-            cal.set(Calendar.MINUTE, minutesEnd) ;
-            eventCalendar.setToDateTime(cal.getTime()) ;
+            try {
+              cal.setTimeInMillis(Long.parseLong(currentDate)) ;
+              if(hoursBg < cal.getMinimum(Calendar.HOUR_OF_DAY)) {
+                hoursBg = 0 ;
+                minutesBg = 0 ;
+              }
+              cal.set(Calendar.HOUR_OF_DAY, hoursBg) ;
+              cal.set(Calendar.MINUTE, minutesBg) ;
+              eventCalendar.setFromDateTime(cal.getTime()) ;
+              if(hoursEnd >= 24) {
+                hoursEnd = 23 ;
+                minutesEnd = 59 ;
+              }
+              cal.set(Calendar.HOUR_OF_DAY, hoursEnd) ;
+              cal.set(Calendar.MINUTE, minutesEnd) ;
+              eventCalendar.setToDateTime(cal.getTime()) ;
+            } catch (Exception e) {
+              e.printStackTrace() ;
+              return ;
+            }
             if(eventCalendar.getToDateTime().before(eventCalendar.getFromDateTime())) {
               return ;
             }
