@@ -11,7 +11,7 @@
    				while (i < contacts.length) {  	
       	%>
       	<tr>
-      		<td class="FieldLabel">Contact <%=contacts[i]%> :</td>
+      		<td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.contact")%> &nbsp; <%=contacts[i]%> :</td>
       		<td class="FieldComponent" colspan="2"><%=tags[i]%></td>      	
 	      <% i ++ ; 
 	      	 }
@@ -23,16 +23,22 @@
 	      %>
               <tr>
 	              <%fieldName = uicomponent.getLabel(field.getName());%>
-	              <%//TODO: Tung.Pham modified
-	              	//if(!fieldName.equals(uicomponent.getId())) {
+	              <%
 	              	if(fieldName != null && fieldName.length() > 0 && !fieldName.equals(uicomponent.getId())) {
 	              %>                        
-  	              <td class="FieldLabel">
-                    <%/*if(fieldName != null && fieldName.length() > 0) {*/%> 
-                      <%=uicomponent.getLabel(field.getName()) %>
-                    <%/*}*/%>
+  	              <td class="FieldLabel"> 
+                    <%=uicomponent.getLabel(field.getName()) %>
                   </td>
-  	              <td class="FieldComponent"><% uiform.renderField(field) %></td>
+  	              <td class="FieldComponent">
+  	              <% 
+  	              	if (uicomponent.tags.containsValue(field.getName())) { 
+  	              	name = field.getName() ;
+  	               %>
+		  	              <input type="checkbox" class="checkbox" value="false" name="$name"/>
+		  	          <% } else {%>
+  	              		<% uiform.renderField(field) %>
+  	              <% } %>
+  	              </td>
 	              <%} else {%>
 	                <td class="FieldComponent" colspan="2"><% uiform.renderField(field) %></td>
 	              <%}%>

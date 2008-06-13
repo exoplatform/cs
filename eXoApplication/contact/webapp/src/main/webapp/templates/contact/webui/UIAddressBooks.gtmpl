@@ -92,8 +92,8 @@
 		<% 
 			if (uicomponent.hasSharedContacts() == true) {
 		 %>
-		<div class="AddressTitle">			
-			<div class="Label $cssClass" style="font-weight: bold;">
+		<div class="AddressTitle  $cssClass">			
+			<div class="Label" style="font-weight: bold;">
 				<a href="$sharedContactLink">
 					<%=_ctx.appRes(uicomponent.getName() + ".label.sharedContacts")%>
 				</a>	
@@ -102,8 +102,8 @@
 		<% 
 			} else {
 		 %>
-		<div class="AddressTitle">			
-			<div class="Label $cssClass" >
+		<div class="AddressTitle $cssClass">			
+			<div class="Label" >
 				<a href="$sharedContactLink">
 					<%=_ctx.appRes(uicomponent.getName() + ".label.sharedContacts")%>
 				</a>	
