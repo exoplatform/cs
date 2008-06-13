@@ -707,16 +707,18 @@ public class JCRDataStorage{
       String sendFolderId = Utils.createFolderId(accId, Utils.FD_SENT, false) ;
       if (propFolders[0].getString().equalsIgnoreCase(sendFolderId)) {
         folders[0] = folderId ;
-        for (int i = 0; i < propFolders.length; i++) {
-          folders[i+1] = propFolders[i].getString();
-        }
+//        for (int i = 0; i < propFolders.length; i++) {
+//          folders[i+1] = propFolders[i].getString();
+//        }
         msgNode.setProperty(Utils.EXO_ISUNREAD, true) ;
         msgNode.setProperty(Utils.EXO_STAR, false) ; 
         msgNode.setProperty(Utils.EXO_FOLDERS, folders);
-        msgNode.save() ;
+        msgHomeNode.save() ;
         increaseFolderItem(sProvider, username, accId, folderId) ;
+        logger.error("Saved message that was sent by myself") ;
+      } else {
+        logger.error("DUPLICATE MAIL ... removed !!!");
       }
-      logger.error("DUPLICATE MAIL ... removed !!!");
       return true ; 
     } catch(Exception e) {
       // do nothing here
