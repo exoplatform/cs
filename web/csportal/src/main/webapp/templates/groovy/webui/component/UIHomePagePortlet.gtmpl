@@ -3,7 +3,7 @@
 		<div class="HomePortletAdBackround">
 			<div class="AdImage">
 				<div class="EmptyBlock"><span></span></div>
-				<div class="ProductSlogan">Leading Future OpenSource Collaboration</div>
+				<div class="ProductSlogan"><%=_ctx.appRes("UIHomePagePortlet.slogan")%></div>
 				<div class="ProductIntro">Innovative Collaboration Suite with shared Calendars, WebMail, Forums and Contact Management</div>
 			</div>
 		</div>
@@ -23,14 +23,6 @@
 						<div class="AccountInfos">
 							<div class="AccountTitle">Manager</div>
 							<div class="Username">Username:<span>john</span></div>
-							<div class="Passwords">Password:<span>exo</span></div>
-						</div>
-					</div>
-					<div class="SeparatorLine"><span></span></div>
-					<div class="AccountBlock NormalUser">
-						<div class="AccountInfos">
-							<div class="AccountTitle">User</div>
-							<div class="Username">Username:<span>mary</span></div>
 							<div class="Passwords">Password:<span>exo</span></div>
 						</div>
 					</div>

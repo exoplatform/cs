@@ -36,12 +36,12 @@
                     <field  name="description"><string>member membership type</string></field>
                   </object>
                 </value>                
-                <value>
+                <!-- value>
                   <object type="org.exoplatform.services.organization.OrganizationConfig$MembershipType">
                     <field  name="type"><string>validator</string></field>
                     <field  name="description"><string>validator membership type</string></field>
                   </object>
-                </value>
+                </value-->
               </collection>
             </field>
 
@@ -189,8 +189,7 @@
                     <field  name="email"><string>root@localhost</string></field>
                     <field  name="groups">
                       <string>
-                      	manager:/platform/administrators,manager:/platform/users,
-                      	member:/organization/management/executive-board
+                      	manager:/platform/administrators,manager:/platform/users
                       </string>
                     </field>
                   </object>
@@ -211,18 +210,6 @@
                     </field>
                   </object>
                 </value>                                                        
-                <value>
-                  <object type="org.exoplatform.services.organization.OrganizationConfig$User">
-                    <field  name="userName"><string>marry</string></field>
-                    <field  name="password"><string>exo</string></field>
-                    <field  name="firstName"><string>Marry</string></field>
-                    <field  name="lastName"><string>Kelly</string></field>
-                    <field  name="email"><string>marry@localhost</string></field>
-                    <field  name="groups">
-                      <string>member:/platform/users</string>
-                    </field>
-                  </object>
-                </value>
                 <value>
                   <object type="org.exoplatform.services.organization.OrganizationConfig$User">
                     <field  name="userName"><string>demo</string></field>
@@ -266,7 +253,6 @@
               <collection type="java.util.HashSet">
                 <value><string>root</string></value>
                 <value><string>john</string></value>
-                <value><string>marry</string></value>
                 <value><string>demo</string></value>
               </collection>
             </field>
