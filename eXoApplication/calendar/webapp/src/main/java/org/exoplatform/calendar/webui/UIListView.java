@@ -110,7 +110,7 @@ public class UIListView extends UICalendarView {
       if(getEvents().length > 0) { 
         String eventId = getEvents()[0].getId() ;
         setSelectedEvent(eventId) ;  
-        setLastViewId(eventId) ;  
+        //setLastViewId(eventId) ;  
         setLastUpdatedEventId(eventId) ;
         view.setEvent(getEvents()[0]) ;
       } else {
