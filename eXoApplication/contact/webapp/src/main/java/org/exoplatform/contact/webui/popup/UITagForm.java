@@ -31,6 +31,7 @@ import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.webui.UIContactPortlet;
+import org.exoplatform.contact.webui.UIContactPreview;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UIFormColorPicker;
 import org.exoplatform.contact.webui.UITags;
@@ -288,6 +289,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       uiContacts.updateList() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTags) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(contactPortlet.findFirstComponentOfType(UIContactPreview.class)) ;
       contactPortlet.cancelAction() ; 
     }
   }
