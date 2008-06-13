@@ -68,6 +68,11 @@ public class UICalendarSettingDisplayTab extends UIFormInputWithActions {
     }
     return  infoFields;
   }
+  public List<Calendar> getShareCalendars() throws Exception {
+    CalendarService calendarService = CalendarUtils.getCalendarService();
+    String  username = CalendarUtils.getCurrentUser() ;
+    return ((UICalendarSettingForm)getParentFrom()).getSharedCalendars(calendarService, username) ;
+  }
   public List<UIComponent> getUIFormPublicCheckboxs() throws Exception {
     List<UIComponent> infoFields = new ArrayList<UIComponent>() ;
     CalendarService calendarService = CalendarUtils.getCalendarService();
