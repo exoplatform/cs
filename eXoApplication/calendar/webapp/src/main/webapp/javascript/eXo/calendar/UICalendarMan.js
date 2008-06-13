@@ -608,7 +608,7 @@ GUIMan.prototype.initWeek = function() {
   this.eventAlldayNode = DOMUtil.findFirstDescendantByClass(EventMan.rootNode, 'td', 'EventAllday');
   this.dayNodes = EventMan.dayNodes;
   this.paintWeek();
-  if(eXo.core.Browser.isFF()) this.setDynamicSize4Week();
+  this.setDynamicSize4Week();
   this.initSelectionDayEvent();
   this.initSelectionDaysEvent();
 };
