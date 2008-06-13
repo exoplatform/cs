@@ -217,6 +217,11 @@ public class Utils {
   public static final String[] TAG_COLOR = {TAG_RED, TAG_BLUE, TAG_GREEN, TAG_BROWN, TAG_ORANGE, TAG_PING, TAG_YELLOW, TAG_VIOLET};
   public static final String[] MIME_MAIL_TYPES = {"eml"};
   
+  // TODO
+  public static final byte NO_MAIL_DUPLICATE = 0;
+  public static final byte MAIL_DUPLICATE_IN_SAME_FOLDER = 1;
+  public static final byte MAIL_DUPLICATE_IN_OTHER_FOLDER = 2;
+  
   public static final boolean SHOWCONVERSATION = true ;
   
   public static boolean isEmptyField(String value) {
