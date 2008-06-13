@@ -106,8 +106,13 @@ public class MimeMessageParser {
         dateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z") ;
         return dateFormat.parse(dateStr);
       } catch(ParseException ex) {
-        dateFormat = new SimpleDateFormat("d MMM yyyy HH:mm:ss Z") ;
-        return dateFormat.parse(dateStr);
+        try {
+          dateFormat = new SimpleDateFormat("d MMM yyyy HH:mm:ss Z") ;
+          return dateFormat.parse(dateStr);
+        } catch(ParseException exx) {
+          System.out.println(" [WARNING] Cannot parse date time from message: " + dateStr) ;
+          return null ;
+        }
       }
     }
   }

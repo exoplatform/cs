@@ -46,6 +46,7 @@ import javax.mail.Part;
 import javax.mail.internet.ContentType;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.MimeUtility;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -696,9 +697,7 @@ public class JCRDataStorage{
     Calendar gc = MimeMessageParser.getReceivedDate(msg) ;
     Node msgHomeNode = getDateStoreNode(sProvider, username, accId, gc.getTime()) ; 
     
-    // TODO : Nam, you don't put anything here, any comment ... how terrible to know what happens :-)
-    // Seems we check if there is a duplicate mail, 
-    // any other points???
+    // Check if there is a duplicate mail
     try {
       Node msgNode = msgHomeNode.getNode(msgId) ;
       Value[] propFolders = msgNode.getProperty(Utils.EXO_FOLDERS).getValues();
@@ -721,7 +720,7 @@ public class JCRDataStorage{
       // do nothing here
     }
 
-    logger.debug("Saving message to JCR ...") ;
+    logger.error("Saving message to JCR ...") ;
     t1 = System.currentTimeMillis();
     
     Node node = null ;
@@ -759,7 +758,7 @@ public class JCRDataStorage{
       node.setProperty(Utils.EXO_CC, Utils.decodeText(InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.CC))));
       node.setProperty(Utils.EXO_BCC, Utils.decodeText(InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.BCC))));
       node.setProperty(Utils.EXO_REPLYTO, Utils.decodeText(InternetAddress.toString(msg.getReplyTo())));
-      node.setProperty(Utils.EXO_SUBJECT, Utils.decodeText(msg.getSubject()));
+      node.setProperty(Utils.EXO_SUBJECT, Utils.decodeText(MimeUtility.unfold(msg.getSubject())));
       node.setProperty(Utils.EXO_RECEIVEDDATE, gc);
       Calendar sc = GregorianCalendar.getInstance() ;
       if (msg.getSentDate() != null) sc.setTime(msg.getSentDate()) ;
@@ -800,7 +799,7 @@ public class JCRDataStorage{
       }
       node.setProperty(Utils.EXO_HEADERS, values.toArray(new String[]{}));
 
-      logger.debug("Saved body and attachment of message .... size : " + Math.abs(msg.getSize()) + " B") ;
+      logger.error("Saved body and attachment of message .... size : " + Math.abs(msg.getSize()) + " B") ;
       t2 = System.currentTimeMillis();
       Object obj = msg.getContent() ;
       String contentType = "text/plain" ;
@@ -814,32 +813,32 @@ public class JCRDataStorage{
       node.setProperty(Utils.EXO_CONTENT_TYPE, contentType) ;
       node.setProperty(Utils.EXO_BODY, Utils.decodeText(body)) ;
       t3 = System.currentTimeMillis();
-      logger.debug("Saved body (and attachments) of message finished : " + (t3 - t2) + " ms") ;
+      logger.error("Saved body (and attachments) of message finished : " + (t3 - t2) + " ms") ;
       
       node.save() ;
       
       t4 = System.currentTimeMillis();
-      logger.info("Saved total message to JCR finished : " + (t4 - t1) + " ms") ;
-      logger.info("Adding message to thread ...") ;
+      logger.error("Saved total message to JCR finished : " + (t4 - t1) + " ms") ;
+      logger.error("Adding message to thread ...") ;
       t1 = System.currentTimeMillis();
       addMessageToThread(sProvider, username, accId, MimeMessageParser.getInReplyToHeader(msg), node) ;
       t2 = System.currentTimeMillis();
-      logger.debug("Added message to thread finished : " + (t2 - t1) + " ms") ;
+      logger.error("Added message to thread finished : " + (t2 - t1) + " ms") ;
 
-      logger.debug("Updating number message to folder ...") ;
+      logger.error("Updating number message to folder ...") ;
       t1 = System.currentTimeMillis();
       
       for (int i = 0; i < folderIds.length; i++) {
         increaseFolderItem(sProvider, username, accId, folderIds[i]) ;
       }
       t2 = System.currentTimeMillis();
-      logger.debug("Updated number message to folder finished : " + (t2 - t1) + " ms") ;
+      logger.error("Updated number message to folder finished : " + (t2 - t1) + " ms") ;
       return true ;
       
     } catch (Exception e) {
       e.printStackTrace() ;
       msgHomeNode.refresh(true) ;
-      logger.warn(" [WARNING] Cancel saving message to JCR.") ;
+      logger.error(" [WARNING] Cancel saving message to JCR.") ;
       return false ; 
     }
   }

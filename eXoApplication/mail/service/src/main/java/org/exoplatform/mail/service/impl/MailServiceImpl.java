@@ -570,7 +570,7 @@ public class MailServiceImpl implements MailService{
           List<String> filterList ;
           while (i < totalNew && !info.isRequestStop()) {
             msg = messages[i] ; 
-            logger.debug("Fetching message " + (i + 1) + " ... \n[ Subject: " + msg.getSubject() + " ]") ;
+            logger.error("Fetching message " + (i + 1) + " ... \n[ Subject: " + msg.getSubject() + " ]") ;
             checkingLog_.get(key).setFetching(i + 1) ;
             checkingLog_.get(key).setStatusMsg("Fetching message " + (i + 1) + "/" + totalNew) ;
             t1 = System.currentTimeMillis();  
