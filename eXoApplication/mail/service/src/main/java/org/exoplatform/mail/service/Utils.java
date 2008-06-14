@@ -17,6 +17,8 @@
 package org.exoplatform.mail.service;
 
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -37,6 +39,9 @@ import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimeUtility;
 import javax.mail.util.ByteArrayDataSource;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * Created by The eXo Platform SARL
  * Author : Pham Tuan
@@ -44,6 +49,8 @@ import javax.mail.util.ByteArrayDataSource;
  * Aug 20, 2007  
  */
 public class Utils {
+  
+  private static final Log logger = LogFactory.getLog(Utils.class);
   
   public static final String SVR_SMTP = "smtp" ;
   public static final String SVR_SMTP_HOST = "mail.smtp.host".intern() ;
@@ -86,6 +93,7 @@ public class Utils {
   public static final String KEY_ACCOUNT = "account".intern() ;
   public static final String KEY_HEADER = "mailHeader".intern() ;
   public static final String KEY_CONVERSATION = "Conversation".intern() ;
+  public static final String KEY_ATTACHMENT = "attachment".intern() ;
   
   public static final String EXO_ACCOUNT = "exo:account".intern() ;
   public static final String EXO_ID = "exo:id".intern() ;
@@ -133,6 +141,8 @@ public class Utils {
   public static final String EXO_CONVERSATIONID = "exo:conversationId".intern();
   public static final String EXO_LAST_CHECKED_TIME = "exo:lastCheckedTime".intern() ;
   public static final String EXO_IS_SAVE_PASSWORD  = "exo:isSavePassword".intern() ;
+  public static final String EXO_MAIL_ATTACHMENT = "exo:mailAttachment".intern() ;
+  public static final String EXO_ATT_NAME = "exo:fileName".intern() ;
 
   public static final String EXO_MAIL_SETTING = "exo:mailSetting".intern();
   public static final String EXO_NUMBER_MSG_PER_PAGE = "exo:numberMsgPerPage".intern();
@@ -206,6 +216,11 @@ public class Utils {
   public static final String TAG_YELLOW = "Yellow".intern() ;
   public static final String[] TAG_COLOR = {TAG_RED, TAG_BLUE, TAG_GREEN, TAG_BROWN, TAG_ORANGE, TAG_PING, TAG_YELLOW, TAG_VIOLET};
   public static final String[] MIME_MAIL_TYPES = {"eml"};
+  
+  // TODO
+  public static final byte NO_MAIL_DUPLICATE = 0;
+  public static final byte MAIL_DUPLICATE_IN_SAME_FOLDER = 1;
+  public static final byte MAIL_DUPLICATE_IN_OTHER_FOLDER = 2;
   
   public static final boolean SHOWCONVERSATION = true ;
   
@@ -390,8 +405,20 @@ public class Utils {
   }
   
   public static String decodeText(String str) throws Exception {
-    if (isEmptyField(str)) return str ;
-    return MimeUtility.decodeText(str) ;
+    if (isEmptyField(str)) 
+      return str ;
+    //TODO : khdung
+    try {
+      String ret = MimeUtility.decodeText(str) ;
+      return ret;
+    } catch (Exception e) {
+      StringWriter sw = new StringWriter();
+      PrintWriter pw = new PrintWriter(sw);
+      e.printStackTrace(pw);
+      StringBuffer sb = sw.getBuffer();
+      logger.error(sb.toString());
+    }
+    return str;  
   } 
   
   public static String html2text(String str) throws Exception {
