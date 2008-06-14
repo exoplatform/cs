@@ -184,11 +184,14 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
 
       Calendar cal = calendarService.getUserCalendar(sProvider, username, uiForm.calendarId_) ;
       Map<String, String> perms = new HashMap<String, String>() ;
-      if(cal.getViewPermission() != null)
+      if(cal.getViewPermission() != null) {
         for(String v : cal.getViewPermission()) {
           perms.put(v,String.valueOf(cal.getEditPermission()!= null && Arrays.asList(cal.getEditPermission()).contains(v))) ;
         }
+      }
+      List<String> newUsers = new ArrayList<String>() ;
       for(String u : receiverUsers) {
+        if(perms.get(u) == null) newUsers.add(u) ; 
         perms.put(u, String.valueOf(uiForm.canEdit())) ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
@@ -199,7 +202,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       }
       cal.setEditPermission(tempList.toArray(new String[tempList.size()])) ;
       calendarService.saveUserCalendar(sProvider, username, cal, false) ;
-      calendarService.shareCalendar(SessionProviderFactory.createSystemProvider(), username, uiForm.calendarId_, receiverUsers) ;
+      calendarService.shareCalendar(SessionProviderFactory.createSystemProvider(), username, uiForm.calendarId_, newUsers) ;
       UIAddEditPermission uiAddEdit = uiForm.getParent() ;
       uiAddEdit.updateGrid(cal);
       uiForm.setCanEdit(false) ;
