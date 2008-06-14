@@ -587,50 +587,31 @@ public class MailServiceImpl implements MailService {
               fl = msgMap.get(fMessages[k]);
               fl.add(filter.getId());
               if (lastCheckedDate == null) {
-                // Nam, temporarily
-                if (storage_.checkDuplicateStatus(sProvider, username, null, accountId,
-                    fMessages[k], null, folderId) != Utils.MAIL_DUPLICATE_IN_SAME_FOLDER)
                   msgMap.put(fMessages[k], fl);
-              } else if (!(isImap && !MimeMessageParser.getReceivedDate(fMessages[k]).getTime()
-                  .after(lastCheckedDate))) {
-                // Nam, temporarily
-                if (storage_.checkDuplicateStatus(sProvider, username, null, accountId,
-                    fMessages[k], null, folderId) != Utils.MAIL_DUPLICATE_IN_SAME_FOLDER)
+              } else if (!(isImap && !MimeMessageParser.getReceivedDate(fMessages[k]).getTime().after(lastCheckedDate))) {
                   msgMap.put(fMessages[k], fl);
               }
             } else {
               fl = new ArrayList<String>();
               fl.add(filter.getId());
               if (lastCheckedDate == null) {
-                // Nam, temporarily
-                if (storage_.checkDuplicateStatus(sProvider, username, null, accountId,
-                    fMessages[k], null, folderId) != Utils.MAIL_DUPLICATE_IN_SAME_FOLDER)
                   msgMap.put(fMessages[k], fl);
-              } else if (!(isImap && !MimeMessageParser.getReceivedDate(fMessages[k]).getTime()
-                  .after(lastCheckedDate))) {
-                // Nam, temporarily
-                if (storage_.checkDuplicateStatus(sProvider, username, null, accountId,
-                    fMessages[k], null, folderId) != Utils.MAIL_DUPLICATE_IN_SAME_FOLDER)
+              } else if (!(isImap && !MimeMessageParser.getReceivedDate(fMessages[k]).getTime().after(lastCheckedDate))) {
                   msgMap.put(fMessages[k], fl);
               }
             }
           }
         }
 
-        for (int l = 0; l < messages.length; l++)
-          if (!msgMap.containsKey(messages[l]))
+        for (int l = 0; l < messages.length; l++) {
+          if (!msgMap.containsKey(messages[l])) {
             if (lastCheckedDate == null) {
-              // Nam, temporarily
-              if (storage_.checkDuplicateStatus(sProvider, username, null, accountId, messages[l],
-                  null, folderId) != Utils.MAIL_DUPLICATE_IN_SAME_FOLDER)
                 msgMap.put(messages[l], null);
-            } else if (!(isImap && !MimeMessageParser.getReceivedDate(messages[l]).getTime().after(
-                lastCheckedDate))) {
-              // Nam, temporarily
-              if (storage_.checkDuplicateStatus(sProvider, username, null, accountId, messages[l],
-                  null, folderId) != Utils.MAIL_DUPLICATE_IN_SAME_FOLDER)
+            } else if (!(isImap && !MimeMessageParser.getReceivedDate(messages[l]).getTime().after(lastCheckedDate))) {
                 msgMap.put(messages[l], null);
-            }
+            } 
+          }
+        }
         totalNew = msgMap.size();
 
         logger.warn("=============================================================");
@@ -638,6 +619,7 @@ public class MailServiceImpl implements MailService {
         logger.warn(" #### Folder contains " + totalNew + " messages !");
 
         tt1 = System.currentTimeMillis();
+        boolean saved = false ;
 
         if (totalNew > 0) {
           boolean leaveOnServer = (isPop3 && Boolean.valueOf(account.getPopServerProperties().get(
@@ -667,15 +649,16 @@ public class MailServiceImpl implements MailService {
           }
           javax.mail.Message msg;
           List<String> filterList;
+          List<javax.mail.Message> msgList = new ArrayList<javax.mail.Message>(msgMap.keySet()) ;
           while (i < totalNew && !info.isRequestStop()) {
-            msg = messages[i];
+            msg = msgList.get(i);
             logger.warn("Fetching message " + (i + 1) + " ...");
             checkingLog_.get(key).setFetching(i + 1);
             checkingLog_.get(key).setStatusMsg("Fetching message " + (i + 1) + "/" + totalNew);
             t1 = System.currentTimeMillis();
             filterList = msgMap.get(msg);
             try {
-              boolean saved = storage_.saveMessage(sProvider, username, account.getId(), msg,
+              saved = storage_.saveMessage(sProvider, username, account.getId(), msg,
                   folderId, spamFilter, filterList);
               if (saved) {
                 msg.setFlag(Flags.Flag.SEEN, true);
