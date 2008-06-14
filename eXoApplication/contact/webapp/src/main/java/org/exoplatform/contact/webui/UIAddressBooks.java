@@ -503,6 +503,11 @@ public class UIAddressBooks extends UIComponent {
         uiContacts.setContact(removedContacts, false) ;
         uiContacts.updateList() ;
       }
+      
+      // add to fix bug 
+      if (uiContacts.getSelectedGroup() != null && groupId.equals(uiContacts.getSelectedGroup()))
+        uiContacts.setSelectedGroup(null) ;
+      
       event.getRequestContext().addUIComponentToUpdateByAjax(workingContainer);     
     }
   }
