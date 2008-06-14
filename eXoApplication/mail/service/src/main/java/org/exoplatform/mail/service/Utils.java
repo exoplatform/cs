@@ -41,6 +41,7 @@ import javax.mail.util.ByteArrayDataSource;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.exoplatform.services.scheduler.JobSchedulerService;
 
 /**
  * Created by The eXo Platform SARL
@@ -51,6 +52,9 @@ import org.apache.commons.logging.LogFactory;
 public class Utils {
   
   private static final Log logger = LogFactory.getLog(Utils.class);
+  
+  public static MailService mailService_;
+  public static JobSchedulerService schedulerService_;
   
   public static final String SVR_SMTP = "smtp" ;
   public static final String SVR_SMTP_HOST = "mail.smtp.host".intern() ;
@@ -440,4 +444,20 @@ public class Utils {
     }
     return str;
   }
+  
+  // TODO : khdung
+  
+  public static void setMailService(MailService mailService) {
+    mailService_ = mailService;
+  }
+  public static void setScheduleService(JobSchedulerService schedulerService) {
+    schedulerService_ = schedulerService;
+  }
+  public static MailService getMailService() {
+    return mailService_;
+  }
+  public static JobSchedulerService getJobSchedulerService() {
+    return schedulerService_;
+  }
+
 }

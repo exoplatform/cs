@@ -456,8 +456,14 @@ public class MailServiceImpl implements MailService {
     Class clazz = Class.forName("org.exoplatform.mail.service.CheckMailJob");
     JobInfo info = new JobInfo(username + ":" + accountId, "CollaborationSuite-webmail", clazz);
     ExoContainer container = ExoContainerContext.getCurrentContainer();
+    MailService mailService = (MailService) container.getComponentInstanceOfType(MailService.class);
     JobSchedulerService schedulerService = (JobSchedulerService) container
         .getComponentInstanceOfType(JobSchedulerService.class);
+    
+    // Make sure that we set the static references ... should be improved !!!
+    Utils.setMailService(mailService);
+    Utils.setScheduleService(schedulerService);
+    
     schedulerService.addPeriodJob(info, periodInfo);
   }
 

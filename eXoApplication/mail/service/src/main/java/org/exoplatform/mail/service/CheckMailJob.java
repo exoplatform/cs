@@ -56,16 +56,18 @@ public class CheckMailJob extends Thread implements Job, Runnable  {
 	}*/
 	
 	private static Log log_ = ExoLogger.getLogger("job.RecordsJob");
-	public void execute(JobExecutionContext context) throws JobExecutionException {
-		try {
-			ExoContainer container = ExoContainerContext.getCurrentContainer();
-			MailService mailService = 
-				(MailService) container.getComponentInstanceOfType(MailService.class);
-			JobSchedulerService schedulerService = 
-				(JobSchedulerService) container.getComponentInstanceOfType(JobSchedulerService.class);
-			String name = context.getJobDetail().getName() ;
-			JobInfo info = new JobInfo(context.getJobDetail().getName(), "CollaborationSuite-webmail", context.getJobDetail().getJobClass()) ;
-			if(name != null && name.indexOf(":") > 0) {
+
+  public void execute(JobExecutionContext context) throws JobExecutionException {
+    try {
+      //TODO : khdung
+      // getting service references from ExoContainer is risky ... this one is another thread.
+      // it's better (and of course correct) if we get static references.
+      MailService mailService = Utils.getMailService();
+      JobSchedulerService schedulerService = Utils.getJobSchedulerService();
+      String name = context.getJobDetail().getName();
+      JobInfo info = new JobInfo(context.getJobDetail().getName(), "CollaborationSuite-webmail",
+          context.getJobDetail().getJobClass());
+      if (name != null && name.indexOf(":") > 0) {
 				String[] array = name.split(":") ;
 			  mailService.checkNewMessage(SessionProvider.createSystemProvider(), array[0].trim(), array[1].trim()) ;
 			}
