@@ -172,14 +172,18 @@ public class UISelectAccount extends UIForm {
     public void execute(Event<UISelectAccount> event) throws Exception {
       UISelectAccount uiSelectAcc = event.getSource() ;
       UIMailPortlet uiPortlet = uiSelectAcc.getAncestorOfType(UIMailPortlet.class);
-      String accId = uiSelectAcc.getSelectedValue() ;
-      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
-      MessageFilter filter = new MessageFilter("Folder");
-      filter.setAccountId(accId);
-      filter.setFolder(new String[] {Utils.createFolderId(accId, Utils.FD_INBOX, false)}) ;
-      uiMessageList.setMessageFilter(filter);
-      uiMessageList.init(accId);
-      uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null);
+      try {
+        String accId = uiSelectAcc.getSelectedValue() ;
+        UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
+        MessageFilter filter = new MessageFilter("Folder");
+        filter.setAccountId(accId);
+        filter.setFolder(new String[] {Utils.createFolderId(accId, Utils.FD_INBOX, false)}) ;
+        uiMessageList.setMessageFilter(filter);
+        uiMessageList.init(accId);
+        uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null);
+      } catch(Exception e) { 
+        // do nothing
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
     }
   }  
