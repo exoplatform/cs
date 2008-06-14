@@ -252,6 +252,7 @@ public class CalendarUtils {
         String str = "(GMT " + ((timeZone.getRawOffset() >= 0) ? "+" : "") 
         + hrStr + ":" + minStr + ") " + tz ;
         //subZoneMap.put(tz,  str) ;
+        //System.out.println("\n\n str "+ str + " saving " + timeZone.getDSTSavings() +" raw off " +  timeZone.getRawOffset()); 
         options.add(new SelectItemOption<String>(str, tz)) ;
       } 
     }
@@ -377,7 +378,7 @@ public class CalendarUtils {
   static public String getTimeZone(String timezone) {
     TimeZone timeZone = TimeZone.getTimeZone(timezone) ;
     int rawOffset = timeZone.getRawOffset()  ;
-    return String.valueOf(timeZone.getDSTSavings()/60000 - rawOffset /60000) ;
+    return String.valueOf(0 - (rawOffset /60000 + timeZone.getDSTSavings()/60000)) ;
   }
 
   public static boolean hasEditPermission(String[] savePerms, String[] checkPerms) {
