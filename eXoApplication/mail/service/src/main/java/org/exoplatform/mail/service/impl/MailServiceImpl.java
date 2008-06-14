@@ -471,8 +471,7 @@ public class MailServiceImpl implements MailService {
     if (Utils.isEmptyField(account.getIncomingPassword()))
       info.setStatusCode(CheckingInfo.RETRY_PASSWORD);
 
-    // TODO : to change log level later
-    logger.error(" #### Getting mail from " + account.getIncomingHost() + " ... !");
+    logger.warn(" #### Getting mail from " + account.getIncomingHost() + " ... !");
     info.setStatusMsg("Getting mail from " + account.getIncomingHost() + " ... !");
     List<Message> messageList = new ArrayList<Message>();
     int totalNew = -1;
@@ -482,14 +481,7 @@ public class MailServiceImpl implements MailService {
     Date lastCheckedDate = account.getLastCheckedDate();
     try {
       Properties props = System.getProperties();
-      props.setProperty("mail.mime.base64.ignoreerrors", "true"); // this line
-                                                                  // fix for
-                                                                  // base64
-                                                                  // encode
-                                                                  // problem
-                                                                  // with
-                                                                  // corrupted
-                                                                  // attachments
+      props.setProperty("mail.mime.base64.ignoreerrors", "true"); // this line fix for base64 encode problem with corrupted attachments
 
       String socketFactoryClass = "javax.net.SocketFactory";
       if (account.isIncomingSsl())
@@ -517,7 +509,7 @@ public class MailServiceImpl implements MailService {
           // Later : so for each more folder you need to connect again :-)
           store.connect();
         } catch (AuthenticationFailedException e) {
-          logger.error("Exception while connecting to server : " + e.getMessage());
+          logger.warn("Exception while connecting to server : " + e.getMessage());
           
           // Later : you only think about wrong password ...?
           if (!account.isSavePassword()) {
@@ -529,14 +521,14 @@ public class MailServiceImpl implements MailService {
           return messageList;
           
         } catch (MessagingException e) {
-          logger.error("Exception while connecting to server : " + e.getMessage());
+          logger.warn("Exception while connecting to server : " + e.getMessage());
           
           info.setStatusMsg("Connecting failed. Please check server configuration.");
           info.setStatusCode(CheckingInfo.CONNECTION_FAILURE);
           return messageList;
           
         } catch (Exception e) {
-          logger.error("Exception while connecting to server : " + e.getMessage());
+          logger.warn("Exception while connecting to server : " + e.getMessage());
           StringWriter sw = new StringWriter();
           PrintWriter pw = new PrintWriter(sw);
           e.printStackTrace(pw);
@@ -550,12 +542,11 @@ public class MailServiceImpl implements MailService {
 
         javax.mail.Folder folder = store.getFolder(storeURL.getFile());
         if (!folder.exists()) {
-          logger.error(" #### Folder " + incomingFolder + " is not exists !");
+          logger.warn(" #### Folder " + incomingFolder + " is not exists !");
           info.setStatusMsg("Folder " + incomingFolder + " is not exists");
           continue;
         } else {
-          // TODO : to change log level later
-          logger.error(" #### Getting mails from folder " + incomingFolder + " !");
+          logger.warn(" #### Getting mails from folder " + incomingFolder + " !");
           info.setStatusMsg("Getting mails from folder " + incomingFolder + " !");
         }
         folder.open(javax.mail.Folder.READ_WRITE);
@@ -642,10 +633,9 @@ public class MailServiceImpl implements MailService {
             }
         totalNew = msgMap.size();
 
-        // TODO : to change log level later
-        logger.error("=============================================================");
-        logger.error("=============================================================");
-        logger.error(" #### Folder contains " + totalNew + " messages !");
+        logger.warn("=============================================================");
+        logger.warn("=============================================================");
+        logger.warn(" #### Folder contains " + totalNew + " messages !");
 
         tt1 = System.currentTimeMillis();
 
@@ -679,7 +669,7 @@ public class MailServiceImpl implements MailService {
           List<String> filterList;
           while (i < totalNew && !info.isRequestStop()) {
             msg = messages[i];
-            logger.error("Fetching message " + (i + 1) + " ...");
+            logger.warn("Fetching message " + (i + 1) + " ...");
             checkingLog_.get(key).setFetching(i + 1);
             checkingLog_.get(key).setStatusMsg("Fetching message " + (i + 1) + "/" + totalNew);
             t1 = System.currentTimeMillis();
@@ -701,13 +691,11 @@ public class MailServiceImpl implements MailService {
             }
             i++;
             t2 = System.currentTimeMillis();
-            // TODO : to change log level later
-            logger.error("Message " + i + " saved : " + (t2 - t1) + " ms");
+            logger.warn("Message " + i + " saved : " + (t2 - t1) + " ms");
           }
 
           tt2 = System.currentTimeMillis();
-          // TODO : to change log level later
-          logger.error(" ### Check mail finished total took: " + (tt2 - tt1) + " ms");
+          logger.warn(" ### Check mail finished total took: " + (tt2 - tt1) + " ms");
         }
 
         if (!account.isSavePassword())
@@ -722,8 +710,8 @@ public class MailServiceImpl implements MailService {
           info.setStatusMsg("Check mail finished !");
         info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);
 
-        logger.error("/////////////////////////////////////////////////////////////");
-        logger.error("/////////////////////////////////////////////////////////////");
+        logger.warn("/////////////////////////////////////////////////////////////");
+        logger.warn("/////////////////////////////////////////////////////////////");
 
       }
     } catch (Exception e) {
