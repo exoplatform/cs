@@ -757,11 +757,11 @@ public class JCRDataStorage {
           Session session = mailHome.getSession();
           try {
             nodeFile = (Node) session.getItem(file.getId());
-          } catch (PathNotFoundException e) {
+          } catch (Exception e) {
             Node attHome = null;
             try {
               attHome = nodeMsg.getNode(Utils.KEY_ATTACHMENT);
-            } catch (PathNotFoundException pne) {
+            } catch(Exception pne) {
               attHome = nodeMsg.addNode(Utils.KEY_ATTACHMENT, Utils.NT_UNSTRUCTURED);
             }
             nodeFile = attHome.addNode("attachment" + IdGenerator.generate(),
