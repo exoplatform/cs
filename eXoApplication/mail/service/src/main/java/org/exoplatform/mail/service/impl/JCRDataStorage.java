@@ -805,17 +805,24 @@ public class JCRDataStorage {
     Calendar gc = MimeMessageParser.getReceivedDate(msg);
     Node msgHomeNode = getDateStoreNode(sProvider, username, accId, gc.getTime());
 
-    // check duplicate
-    byte checkDuplicate = checkDuplicateStatus(sProvider, username, msgHomeNode, accId, msg, msgId, folderId); 
-    if (checkDuplicate == Utils.MAIL_DUPLICATE_IN_OTHER_FOLDER) {
-      // there is a duplicate but in another folder
-      return true;
-    }
-    
-    if (checkDuplicate == Utils.MAIL_DUPLICATE_IN_SAME_FOLDER) {
-      // will "never" come here
-      // but we need to make sure ... 
-      return false;
+    try {
+      Node msgNode = msgHomeNode.getNode(msgId);
+      logger.warn("Check duplicate ......................................" + msg.getSubject());
+      // check duplicate
+      byte checkDuplicate = checkDuplicateStatus(sProvider, username, msgHomeNode, accId, msgNode, folderId); 
+      if (checkDuplicate == Utils.MAIL_DUPLICATE_IN_OTHER_FOLDER) {
+        // there is a duplicate but in another folder
+        return true;
+      }
+      
+      if (checkDuplicate == Utils.MAIL_DUPLICATE_IN_SAME_FOLDER) {
+        // will "never" come here
+        // but we need to make sure ...
+        return false ;
+      }
+      
+    } catch(Exception e) {
+      
     }
     
     logger.warn("Saving message to JCR ...");
@@ -2041,19 +2048,9 @@ public class JCRDataStorage {
    * @return
    */
   public byte checkDuplicateStatus(SessionProvider sProvider, String username, Node msgHomeNode,
-      String accId, javax.mail.Message msg, String msgId, String folderId) {
+      String accId, Node msgNode, String folderId) {
     byte ret = Utils.NO_MAIL_DUPLICATE;
     try {
-      if (msgHomeNode == null) {
-        Calendar gc = MimeMessageParser.getReceivedDate(msg);
-        msgHomeNode = getDateStoreNode(sProvider, username, accId, gc.getTime());        
-      }
-      
-      if (msgId == null) {
-        msgId = MimeMessageParser.getMessageId(msg);         
-      }
-      logger.warn("Check duplicate ......................................");
-      Node msgNode = msgHomeNode.getNode(msgId);
       Value[] propFolders = msgNode.getProperty(Utils.EXO_FOLDERS).getValues();
       for (int i = 0; i < propFolders.length; i++) {
         if (propFolders[i].getString().indexOf(folderId) > -1) {
