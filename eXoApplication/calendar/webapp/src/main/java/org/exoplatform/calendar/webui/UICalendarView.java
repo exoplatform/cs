@@ -823,7 +823,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         uiPortlet.cancelAction() ;
         org.exoplatform.calendar.service.Calendar calendar = null ;
         try {
-          if(CalendarUtils.PRIVATE_TYPE.equals(uiCalendarView)) {
+          if(CalendarUtils.PRIVATE_TYPE.equals(calType)) {
             calendar = calendarService.getUserCalendar(uiCalendarView.getSession(), username, calendarId) ;
           } else if (CalendarUtils.SHARED_TYPE.equals(calType)) {
             GroupCalendarData calendarData = calendarService.getSharedCalendars(uiCalendarView.getSystemSession(), CalendarUtils.getCurrentUser(), true)  ;

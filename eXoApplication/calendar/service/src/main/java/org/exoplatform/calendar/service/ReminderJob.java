@@ -57,7 +57,11 @@ public class ReminderJob implements Job {
       MailService mailService = 
         (MailService) container.getComponentInstanceOfType(MailService.class);			
       if (log_.isDebugEnabled()) log_.debug("Calendar reminder service");
-      java.util.Calendar fromCalendar = new GregorianCalendar();
+      java.util.Calendar fromCalendar = GregorianCalendar.getInstance();
+      fromCalendar.setLenient(false) ;
+      int gmtoffset = fromCalendar.get(java.util.Calendar.DST_OFFSET) + fromCalendar.get(java.util.Calendar.ZONE_OFFSET);
+      fromCalendar.setTimeInMillis(System.currentTimeMillis() - gmtoffset) ; 
+      
       long tmpTime = fromCalendar.getTimeInMillis() ;
       tmpTime = tmpTime + (7 * 60 * 60 * 1000) ;
       fromCalendar.setTimeInMillis(tmpTime) ;
