@@ -464,10 +464,6 @@ public class UIAddressBooks extends UIComponent {
 
   static public class DeleteGroupActionListener extends EventListener<UIAddressBooks> {
     public void execute(Event<UIAddressBooks> event) throws Exception {
-      
-      
-      System.out.println("\n\n deleteeeeeeee \n\n");
-      
       UIAddressBooks uiAddressBook = event.getSource();
       UIWorkingContainer workingContainer = uiAddressBook.getAncestorOfType(UIWorkingContainer.class);
       UIContacts uiContacts = workingContainer.findFirstComponentOfType(UIContacts.class) ;
@@ -506,6 +502,10 @@ public class UIAddressBooks extends UIComponent {
         uiContacts.setContact(removedContacts, false) ;
         uiContacts.updateList() ;
       }
+      
+//    add to fix bug 
+      if (uiContacts.getSelectedGroup() != null && groupId.equals(uiContacts.getSelectedGroup()))
+        uiContacts.setSelectedGroup(null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(workingContainer);     
     }
   }
