@@ -811,7 +811,7 @@ public class JCRDataStorage {
 
     try {
       Node msgNode = msgHomeNode.getNode(msgId);
-      logger.warn("Check duplicate ......................................" + msg.getSubject());
+      logger.warn("Check duplicate ......................................");
       // check duplicate
       byte checkDuplicate = checkDuplicateStatus(sProvider, username, msgHomeNode, accId, msgNode, folderId); 
       if (checkDuplicate == Utils.MAIL_DUPLICATE_IN_OTHER_FOLDER) {
