@@ -154,7 +154,7 @@ public class UIWeekView extends UICalendarView {
     else temCal.setFirstDayOfWeek(Integer.parseInt(calendarSetting_.getWeekStartOn())) ;
     temCal.setTime(getBeginDateOfWeek().getTime()) ;
     int amout = 6 ;
-    if(isShowCustomView_) amout = amout - 1 ;
+    if(isShowCustomView_) amout = amout - 2 ;
     temCal.add(Calendar.DATE, amout) ;
     return getEndDay(temCal) ;
   }
