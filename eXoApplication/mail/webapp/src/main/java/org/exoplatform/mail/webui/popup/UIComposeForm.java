@@ -325,9 +325,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     String msgContent = msg.getMessageBody();
     if (msg.getContentType().indexOf("text/plain") > -1) {
       msgContent = MailUtils.encodeHTML(msg.getMessageBody()).replace("\n", "<br>") ;
-    } else {
-      msgContent = MailUtils.encodeHTML(msgContent) ;
-    }
+    } 
     return msgContent ;
   }
   
