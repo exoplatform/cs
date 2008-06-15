@@ -133,14 +133,14 @@ public class VCardImportExport implements ContactImportExport {
       // a personal identity
       PersonalIdentity pid = cmf.createPersonalIdentity();
       pid.setFormattedName(nullToEmptyString(contact.getFullName()));
-      pid.setFirstname(nullToEmptyString(contact.getFirstName()));
-      pid.setLastname(nullToEmptyString(contact.getLastName()));
+      pid.setFirstname(nullToEmptyString(contact.getFirstName()).replaceAll(";", "_"));
+      pid.setLastname(nullToEmptyString(contact.getLastName()).replaceAll(";", "_"));
       
       String firstName = contact.getFirstName();
       if ((firstName != null) && !firstName.equals("")) {
         StringTokenizer tokens = new StringTokenizer(firstName, ",", false);
         while (tokens.hasMoreTokens())
-          pid.addAdditionalName(tokens.nextToken().trim());
+          pid.addAdditionalName(tokens.nextToken().trim().replaceAll(";", "_"));
       } else
         pid.addAdditionalName("");
 
@@ -287,14 +287,23 @@ public class VCardImportExport implements ContactImportExport {
       } catch (IndexOutOfBoundsException e) {
         additionName = "" ;
       }
-      String fullName = identity.getFormattedName();
+      String fullName = nullToEmptyString(identity.getFormattedName());
       contact.setFullName(fullName);
       String lastName = identity.getLastname();
-      contact.setLastName(lastName);
       String firstName = identity.getFirstname();
-
-      if (firstName.trim().equals(additionName.trim())) contact.setFirstName(firstName) ;
-      else contact.setFirstName(firstName + " " + additionName);
+      
+      int indexComma = fullName.indexOf(";");
+      if (indexComma >= 0) {
+        int indexSpace = fullName.indexOf(" ") ;
+        firstName = fullName.substring(0, indexSpace).trim() ;
+        contact.setFirstName(firstName) ;
+        lastName = fullName.substring(indexSpace, fullName.length()).trim() ;
+      } else {
+        if (firstName.trim().equals(additionName.trim())) contact.setFirstName(firstName) ;
+        else contact.setFirstName(firstName + " " + additionName);
+      }
+       
+      contact.setLastName(lastName); 
       
       int size = identity.getAdditionalNameCount();      
       String nickName = "";
