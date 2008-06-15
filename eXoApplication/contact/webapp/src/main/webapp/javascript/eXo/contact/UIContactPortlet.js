@@ -406,20 +406,36 @@ UIContactPortlet.prototype.checkLayout = function() {
     var layout4state = parseInt(eXo.core.Browser.getCookie('contactLayout4'));
     var layout5state = parseInt(eXo.core.Browser.getCookie('contactLayout5'));
     if(layout1State == 0) {
-      eXo.contact.UIContactPortlet.switchLayout(1);
-    }
+      this.switchLayout(1);
+	  this.addCheckedIcon(1, false) ;
+	  this.addCheckedIcon(0, false) ;
+    } else {
+	  this.addCheckedIcon(1, true) ;
+	}
     
     if(layout2State == 0) {
       eXo.contact.UIContactPortlet.switchLayout(2);
-    }
+	  this.addCheckedIcon(2, false) ;
+	  this.addCheckedIcon(0, false) ;
+    } else {
+	  this.addCheckedIcon(2, true) ;
+	}
     
     if(layout3State == 0) {   
       eXo.contact.UIContactPortlet.switchLayout(3);
-    }
+      this.addCheckedIcon(3, false) ;
+	  this.addCheckedIcon(0, false) ;
+    } else {
+	  this.addCheckedIcon(3, true) ;
+	}
     
     if(layout4state == 0 && layout5state == 0) {
       eXo.contact.UIContactPortlet.switchLayout(4);  
-    }
+	  this.addCheckedIcon(4, false) ;
+	  this.addCheckedIcon(0, false) ;
+    } else {
+	  this.addCheckedIcon(4, true) ;
+	}
   }
   catch(e) {
     window.alert(e.message);
@@ -476,6 +492,7 @@ UIContactPortlet.prototype.switchLayout = function(layout) {
       this.addCheckedIcon(2,true);
       this.addCheckedIcon(3,true);
       this.addCheckedIcon(4, true);
+	  this.isDefaultLayout() ;
       return;
     case 1 :
       if(contactLayout1.style.display == "none") {
@@ -545,7 +562,9 @@ UIContactPortlet.prototype.switchLayout = function(layout) {
 		}
       }
   }
+  
   this.addCheckedIcon(layout, showCheckedMenu);
+  this.isDefaultLayout() ;
 }
 
 UIContactPortlet.prototype.showImMenu = function(obj, event) {
@@ -580,8 +599,7 @@ UIContactPortlet.prototype.showImMenu = function(obj, event) {
  */
 UIContactPortlet.prototype.addCheckedIcon = function(layout, visible) {
   layout = parseInt(layout);
-  var itemIcon = eXo.core.DOMUtil.findDescendantsByClass(
-                document.getElementById("customLayoutViewMenu"), "div", "ItemIcon")[layout];
+  var itemIcon = eXo.core.DOMUtil.findDescendantsByClass(document.getElementById("customLayoutViewMenu"), "div", "ItemIcon")[layout];
   if(visible) {
     itemIcon.className = 'ItemIcon CheckedMenu';
   } else {
@@ -630,6 +648,18 @@ UIContactPortlet.prototype.synchonizeMenu = function(menuRoot, menu4Remove){
       }
     }
   }
+} ;
+
+UIContactPortlet.prototype.isDefaultLayout = function() {
+	var itemIcons = eXo.core.DOMUtil.findDescendantsByClass(document.getElementById("customLayoutViewMenu"), "div", "ItemIcon");
+	var len = itemIcons.length ;
+	var j = 0 ;
+	for(var i = 1 ; i < len ; i++) {
+		if(eXo.core.DOMUtil.hasClass(itemIcons[i], "CheckedMenu") && (itemIcons[i].parentNode.style.display != "none")) j++ ;
+	}
+	if(j==3 || j==4) this.addCheckedIcon(0, true);
+	else this.addCheckedIcon(0, false);
+	console.log(j) ;
 } ;
 
 UIContactPortlet.prototype.showImField = function() {
