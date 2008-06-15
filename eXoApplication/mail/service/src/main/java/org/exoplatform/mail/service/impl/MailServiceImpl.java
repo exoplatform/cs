@@ -608,12 +608,14 @@ public class MailServiceImpl implements MailService {
             }
           }
         }
-
+        
+        boolean afterTime = false ;
         for (int l = 0; l < messages.length; l++) {
           if (!msgMap.containsKey(messages[l])) {
             if (lastCheckedDate == null) {
                 msgMap.put(messages[l], null);
-            } else if (!(isImap && !MimeMessageParser.getReceivedDate(messages[l]).getTime().after(lastCheckedDate))) {
+            } else if (afterTime || !(isImap && !MimeMessageParser.getReceivedDate(messages[l]).getTime().after(lastCheckedDate))) {
+                afterTime = true ;
                 msgMap.put(messages[l], null);
             } 
           }
