@@ -523,8 +523,10 @@ public class JCRDataStorage {
         }
         if (moveReference)
           moveReference(msgNode);
+        msgNode.setProperty(Utils.EXO_FOLDERS, folderIds);
         msgNode.save();
       } catch (Exception e) {
+        e.printStackTrace() ;
       }
     }
     try {
@@ -533,6 +535,7 @@ public class JCRDataStorage {
       destFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (destFolderNode.getProperty(
           Utils.EXO_UNREADMESSAGES).getLong() + inUnreadNumber));
     } catch (Exception e) {
+      e.printStackTrace() ;
     }
 
     try {
@@ -541,6 +544,7 @@ public class JCRDataStorage {
       destFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (destFolderNode.getProperty(
           Utils.EXO_TOTALMESSAGE).getLong() + inTotalMessage));
     } catch (Exception e) {
+      e.printStackTrace() ;
     }
     currentFolderNode.save();
     destFolderNode.save();
