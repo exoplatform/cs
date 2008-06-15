@@ -277,18 +277,22 @@ public class UIContactForm extends UIFormTabPane {
         .getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class) ;
         if (uiAddressBooks.getSharedGroups().containsKey(category)) {
           group = contactService.getSharedGroup(username, category) ;
+          /*
           contact.setViewPermissionUsers(group.getViewPermissionUsers()) ;
           contact.setViewPermissionGroups(group.getViewPermissionGroups()) ;
           contact.setEditPermissionUsers(group.getEditPermissionUsers()) ;
           contact.setEditPermissionGroups(group.getEditPermissionGroups()) ;          
+          */
           contactService.saveContactToSharedAddressBook(username, category, contact, true) ;          
           contact.setContactType(JCRDataStorage.SHARED) ;
         } else {
           group = contactService.getGroup(sessionProvider, username, category) ;
+          /*
           contact.setViewPermissionUsers(group.getViewPermissionUsers()) ;
           contact.setViewPermissionGroups(group.getViewPermissionGroups()) ;
           contact.setEditPermissionUsers(group.getEditPermissionUsers()) ;
           contact.setEditPermissionGroups(group.getEditPermissionGroups()) ;                    
+          */
           contactService.saveContact(sessionProvider, username, contact, true);          
           contact.setContactType(JCRDataStorage.PRIVATE) ;
         }        
