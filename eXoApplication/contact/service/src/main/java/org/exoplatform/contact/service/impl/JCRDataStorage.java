@@ -1330,14 +1330,14 @@ public class JCRDataStorage {
       if (contactNode == null) {
         throw new PathNotFoundException() ;
       } else {
+        Map<String, String> thisTagMap = new HashMap<String, String> () ;
+        thisTagMap = tagMap ;
         Value[] values = null ;
         if(contactNode.hasProperty("exo:tags")){
           values = contactNode.getProperty("exo:tags").getValues() ;
-          for(Value value : values) tagMap.put(value.getString(), value.getString()) ;         
+          for(Value value : values) thisTagMap.put(value.getString(), value.getString()) ;         
         }
-        contactNode.setProperty("exo:tags", tagMap.values().toArray(new String[]{})) ;
-        if (values != null)
-          for(Value value : values) tagMap.remove(value.getString()) ;
+        contactNode.setProperty("exo:tags", thisTagMap.values().toArray(new String[]{})) ;
         contactNode.save() ;
       }
     }
