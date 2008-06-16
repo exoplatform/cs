@@ -166,7 +166,7 @@ public class UIDayView extends UICalendarView {
                 hoursEnd = 23 ;
                 minutesEnd = 59 ;
               }
-              cal.add(Calendar.HOUR_OF_DAY, hoursEnd) ;
+              cal.set(Calendar.HOUR_OF_DAY, hoursEnd) ;
               cal.set(Calendar.MINUTE, minutesEnd) ; 
               ce.setToDateTime(cal.getTime()) ; 
             } catch (Exception e) {
