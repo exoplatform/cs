@@ -13,20 +13,6 @@
       <show-info-bar>false</show-info-bar>
     </application>  
   </page>
-  
-  <page>
-  	<page-id>group::platform/guest::sitemap</page-id>
-  	<owner-type>group</owner-type>
-    <owner-id>platform/guest</owner-id>
-    <name>sitemap</name>
-    <access-permissions>*:/platform/guests</access-permissions>
-    <edit-permission>*:/platform/administrators</edit-permission>
-    <application>
-      <instance-id>group#platform/guests:/web/SiteMapPortlet/sitemapportlet</instance-id>
-      <title>SiteMap</title>
-      <show-info-bar>false</show-info-bar>      
-    </application>  
-  </page>           
        
 </page-set>
 
