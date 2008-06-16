@@ -32,6 +32,7 @@ import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UIWorkingContainer;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.portal.webui.UILoginForm;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.upload.UploadResource;
 import org.exoplatform.upload.UploadService;
@@ -154,42 +155,27 @@ public class UIImportForm extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;        
       }
-      UIFormUploadInput uiformInput = uiForm.getUIInput(FIELD_UPLOAD) ;      
-      UploadResource uploadResource = uiformInput.getUploadResource() ;
+      UIFormUploadInput uiformInput = uiForm.getUIInput(FIELD_UPLOAD) ;  
+      UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;
+      UploadResource uploadResource = uploadService.getUploadResource(uiformInput.getUploadId()) ;
 
       
       // uploadResource.getUploadedSize() ;
       
-      ByteArrayInputStream inputStream ;
+      //ByteArrayInputStream inputStream ;
       String uploadId = uiformInput.getUploadId() ;
       if (uploadResource == null) {
-       // if (uiForm.importBytes_ == null) {
         uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.uploadResource-empty", null, 
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ; 
-       // }        
-//        uploadResource = uiForm.uploadResource_ ;
-//        inputStream = new ByteArrayInputStream(uiForm.importBytes_) ;
-      } else {
-        byte[] input = new byte[uiformInput.getUploadDataAsStream().available()] ;
-        uiformInput.getUploadDataAsStream().read(input) ;
-        inputStream = new ByteArrayInputStream(input) ;
-      }
-      /*
-      boolean canImport = false ;
-      String[] array = uploadResource.getMimeType().split("/") ;
-      String extend = array[array.length - 1] ;
-      for(String type : uiForm.Types) {        
-        if (extend.equalsIgnoreCase(type)) canImport = true ;
-      }
-      if(!canImport) {
-        uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.fileName-error", null, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
+      /*
+      byte[] input = new byte[uiformInput.getUploadDataAsStream().available()] ;
+      uiformInput.getUploadDataAsStream().read(input) ;
+      inputStream = new ByteArrayInputStream(input) ; 
       */
+
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       String importFormat = uiForm.getUIFormSelectBox(UIImportForm.FIELD_TYPE).getValue() ;
 
@@ -198,17 +184,15 @@ public class UIImportForm extends UIForm {
       try {
         if (uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class).getSharedGroups().containsKey(category)) {
           service.importContact(
-              SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), inputStream, category + JCRDataStorage.HYPHEN) ;
+              SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), uiformInput.getUploadDataAsStream(), category + JCRDataStorage.HYPHEN) ;
         } else {
           service.importContact(
-              SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), inputStream, category) ;
+              SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), uiformInput.getUploadDataAsStream(), category) ;
         }        
         UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
-        UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;
         uploadService.removeUpload(uploadId) ;
         uiContacts.updateList() ;        
       } catch (Exception ex) {
-//        ex.printStackTrace() ;
         uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.invalid-format", null, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
