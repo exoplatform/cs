@@ -365,3 +365,98 @@
 		<% /*End Popup Menu*/ %>
 <%uiform.end()%>
 </div>
+<div class="UICalendarTasks">
+  <div class="TitleBar">
+		<div class="Title">
+			Tasks
+		</div>
+		<div class="ActionsButton" title="Tasks Actions" onclick="eXo.calendar.UICalendarPortlet.showMainMenu(this, event);">
+		  <% /*Begin Popup Menu - Main */ %>
+		     
+	    <div class="UIRightClickPopupMenu" style="display: none ;">
+	    	<div class="UIContextMenuContainer">
+					<div class="TopLeftRightClickPopupMenu">
+		  			<div class="TopRightRightClickPopupMenu">
+		    			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+		  			</div>
+					</div>
+	        <div class="MiddleLeftRightClickPopupMenu">
+	          <div class="MiddleRightRightClickPopupMenu">
+		      		<div class="UIRightPopupMenuContainer">
+		            <a class="MenuItem" href="#">   
+		              <div class="ItemIcon AddGroupIcon">
+		              <%=uiform.getLabel("AddGroup")%>
+		              </div>
+		            </a>
+		            <a class="MenuItem" href="#">   
+		              <div class="ItemIcon AddCalendarIcon">
+		              <%=uiform.getLabel("AddCalendar")%>
+		              </div>
+		            </a>
+		          </div>
+	  		    </div>
+					</div>
+		      <div class="BottomLeftRightClickPopupMenu">
+		        <div class="BottomRightRightClickPopupMenu">
+		          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+		        </div>
+		      </div>
+		  	</div>
+		  </div>
+				<% /*End Popup Menu*/ %>
+		</div>
+	  <div style="clear: both"><span></span></div>
+	</div>
+	<div class="ContentContainer">
+    <div class="MyCalendar">
+			<div class="CalendarTitle">
+				<div class="CollapserFlatStyle"><span></span></div>
+				<div class="Label">
+					Needs action
+				</div>
+			</div>
+			<div class="MyCalendarContainer">
+			  <a href="#" style="white-space:">
+			    <div class="TasksColor" style="background: red;"><span></span></div>
+			    <div class="TasksName">Tasks kfhls skdfs kksf skjkl skfjs fkjfhdkj hdkjfh sdjkshk </div>
+			    <div style="clear: left;"><span></span></div>
+			  </a>
+			  <a href="#" style="white-space:">
+			    <div class="TasksColor" style="background: red;"><span></span></div>
+			    <div class="TasksName">Tasks kfhls skdfs kksf skjkl skfjs fkjfhdkj hdkjfh sdjkshk </div>
+			    <div style="clear: left;"><span></span></div>
+			  </a>
+			  <a href="#" style="white-space:">
+			    <div class="TasksColor" style="background: red;"><span></span></div>
+			    <div class="TasksName">Tasks kfhls skdfs kksf skjkl skfjs fkjfhdkj hdkjfh sdjkshk </div>
+			    <div style="clear: left;"><span></span></div>
+			  </a>
+			</div>
+		</div>
+		<div class="MyCalendar">
+			<div class="CalendarTitle">
+				<div class="CollapserFlatStyle"><span></span></div>
+				<div class="Label">
+					In process
+				</div>
+			</div>
+			<div class="MyCalendarContainer">
+			  <a href="#" style="white-space:">
+			    <div class="TasksColor" style="background: red;"><span></span></div>
+			    <div class="TasksName">Tasks kfhls skdfs kksf skjkl skfjs fkjfhdkj hdkjfh sdjkshk </div>
+			    <div style="clear: left;"><span></span></div>
+			  </a>
+			  <a href="#" style="white-space:">
+			    <div class="TasksColor" style="background: red;"><span></span></div>
+			    <div class="TasksName">Tasks kfhls skdfs kksf skjkl skfjs fkjfhdkj hdkjfh sdjkshk </div>
+			    <div style="clear: left;"><span></span></div>
+			  </a>
+			  <a href="#" style="white-space:">
+			    <div class="TasksColor" style="background: red;"><span></span></div>
+			    <div class="TasksName">Tasks kfhls skdfs kksf skjkl skfjs fkjfhdkj hdkjfh sdjkshk </div>
+			    <div style="clear: left;"><span></span></div>
+			  </a>
+			</div>
+		</div>
+  </div>
+</div>
