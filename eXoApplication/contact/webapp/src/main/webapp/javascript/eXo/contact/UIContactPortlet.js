@@ -301,29 +301,15 @@ UIContactPortlet.prototype.printpreview = function (obj){
 	var DOMUtil = eXo.core.DOMUtil ;
 	var UIPortalApplication = document.getElementById("UIPortalApplication") ;
 	var UIContactPreview = DOMUtil.findAncestorByClass(obj, "UIContactPreview") ;
-	var div = document.createElement("div") ;
 	var form = eXo.core.DOMUtil.findAncestorByTagName(obj, "form") ;
 	var printLabel = DOMUtil.findFirstDescendantByClass(obj, 'div','ButtonMiddle') ;
-	obj.href = "javascript:window.print() ;" ;
 	if(obj.getAttribute("printLabel")) printLabel.innerHTML = obj.getAttribute("printLabel") ;
-	if(obj.getAttribute("onclick")) obj.removeAttribute("onclick") ;
+	if(obj.getAttribute("onclick")) obj.removeAttribute("onclick") ;	
+	var printButton = obj.cloneNode(true) ;
+	printButton.href = "javascript:window.print() ;" ;
+	obj.parentNode.appendChild(printButton) ;
+	DOMUtil.removeElement(obj) ;	
 	eXo.contact.UIContactPortlet.printList(form.id) ;
-//	div.className = "UIContactPortlet" ;
-//	div.appendChild(UIContactPreview.cloneNode(true)) ;
-//	UIPortalApplication.style.display = "none" ;
-//	var bg = document.body.style.background ;
-//	document.body.style.background = "transparent" ;
-//	document.body.appendChild(div) ;
-//	var button = DOMUtil.findDescendantsByClass(div, "a", "ActionButton") ;
-//	button[0].href = "#" ;
-//	button[0].onclick = function(){
-//		document.body.removeChild(div) ;
-//		UIPortalApplication.style.display = "block" ;
-//		document.body.style.background = bg ;
-//	}
-//	DOMUtil.findFirstDescendantByClass(button[1], 'div','ButtonMiddle').style.display = "block" ;
-//	button[2].style.display = "none" ;
-//	
 } ;
 
 UIContactPortlet.prototype.disableAction = function(cont){
