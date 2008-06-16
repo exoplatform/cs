@@ -174,6 +174,7 @@ UIContextMenu.prototype.swapMenu = function(oldmenu, mousePos) {
 	var DOMUtil = eXo.core.DOMUtil ;
 	var Browser = eXo.core.Browser ;
 	var browserHeight = eXo.core.Browser.getBrowserHeight() + document.documentElement.scrollTop || document.body.scrollTop ;
+	var browserWidth = eXo.core.Browser.getBrowserWidth() + document.documentElement.scrollLeft || document.body.scrollLeft ;
 	if(document.getElementById("tmpMenuElement")) DOMUtil.removeElement(document.getElementById("tmpMenuElement")) ;
 	var tmpMenuElement = oldmenu.cloneNode(true) ;
 	tmpMenuElement.setAttribute("id","tmpMenuElement") ;
@@ -187,6 +188,7 @@ UIContextMenu.prototype.swapMenu = function(oldmenu, mousePos) {
 	this.menuElement.style.display = "block" ;
 	this.menuElement.style.visibility = "hidden" ;
 	if((this.menuElement.offsetHeight + mousePos.y) > browserHeight) this.menuElement.style.top = mousePos.y - this.menuElement.offsetHeight + 2  + "px" ;	
+	if((this.menuElement.offsetWidth + mousePos.x) > browserWidth) this.menuElement.style.left = mousePos.x - this.menuElement.offsetWidth + 2  + "px" ;	
 	this.menuElement.style.display = "none" ;
 	this.menuElement.style.visibility = "visible" ;
 	this.showHide() ;
