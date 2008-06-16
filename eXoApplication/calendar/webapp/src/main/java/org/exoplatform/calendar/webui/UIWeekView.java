@@ -291,18 +291,42 @@ public class UIWeekView extends UICalendarView {
           if(eventCalendar.getToDateTime().before(eventCalendar.getFromDateTime())) {
             return ;
           }
-          if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
-            calendarService.saveUserEvent(calendarview.getSession(), username, calendarId, eventCalendar, false) ;
-          }else if(calType.equals(CalendarUtils.SHARED_TYPE)){
-            calendarService.saveEventToSharedCalendar(calendarview.getSystemSession(), username, calendarId, eventCalendar, false) ;
-          }else if(calType.equals(CalendarUtils.PUBLIC_TYPE)){
-            calendarService.savePublicEvent(calendarview.getSystemSession(), calendarId, eventCalendar, false) ;          
+          org.exoplatform.calendar.service.Calendar calendar = null ;
+          if(CalendarUtils.PRIVATE_TYPE.equals(calType)) {
+            calendar = calendarService.getUserCalendar(calendarview.getSession(), username, calendarId) ;
+          } else if(CalendarUtils.SHARED_TYPE.equals(calType)) {
+            if(calendarService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true) != null)
+              calendar = 
+                calendarService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true).getCalendarById(calendarId) ;
+          } else if(CalendarUtils.PUBLIC_TYPE.equals(calType)) {
+            calendar = calendarService.getGroupCalendar(SessionProviderFactory.createSystemProvider(), calendarId) ;
           }
-          calendarview.setLastUpdatedEventId(eventId) ;
-          calendarview.refresh() ;
-          UIMiniCalendar uiMiniCalendar = calendarview.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+          if(calendar == null) {
+            UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;
+            uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          } else {
+            if(!CalendarUtils.PRIVATE_TYPE.equals(calType) && !CalendarUtils.canEdit(calendarview.getApplicationComponent(OrganizationService.class), calendar.getEditPermission(), username)) {
+              UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;
+              uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit-event", null, 1)) ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              calendarview.refresh() ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+              return ;
+            }
+            if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
+              calendarService.saveUserEvent(calendarview.getSession(), username, calendarId, eventCalendar, false) ;
+            }else if(calType.equals(CalendarUtils.SHARED_TYPE)){
+              calendarService.saveEventToSharedCalendar(calendarview.getSystemSession(), username, calendarId, eventCalendar, false) ;
+            }else if(calType.equals(CalendarUtils.PUBLIC_TYPE)){
+              calendarService.savePublicEvent(calendarview.getSystemSession(), calendarId, eventCalendar, false) ;          
+            }
+            calendarview.setLastUpdatedEventId(eventId) ;
+            calendarview.refresh() ;
+            UIMiniCalendar uiMiniCalendar = calendarview.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
+          }
         }
       } catch (Exception e) {
         e.printStackTrace() ;
