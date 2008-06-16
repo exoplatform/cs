@@ -440,18 +440,21 @@ public class JCRDataStorage {
   
   public void moveContacts(SessionProvider sysProvider, String username, List<Contact> contacts, String addressType ) throws Exception {
     Node privateContactHome = getUserContactHome(sysProvider, username);
+    /*
     ContactGroup group ;
     if (addressType.equals(PRIVATE)) {
       group = getGroup(sysProvider, username, contacts.get(0).getAddressBook()[0]) ;
     } else {
       group = getSharedGroup(username, contacts.get(0).getAddressBook()[0]) ;
-    }    
+    } */   
     for(Contact contact : contacts) {
+      /*
       contact.setViewPermissionUsers(group.getViewPermissionUsers()) ;
       contact.setEditPermissionUsers(group.getEditPermissionUsers()) ;
       contact.setViewPermissionGroups(group.getViewPermissionGroups()) ;
       contact.setEditPermissionGroups(group.getEditPermissionGroups()) ;
-  		if(addressType.equals(PRIVATE)) {        
+  		*/
+      if(addressType.equals(PRIVATE)) {        
     	  saveContact(sysProvider, username, contact, false) ; // ? why false
     	}else if(addressType.equals(SHARED)) {
   		 saveContactToSharedAddressBook(username, contact.getAddressBook()[0], contact, true) ;
@@ -1858,12 +1861,13 @@ public class JCRDataStorage {
     for (Contact contact : contacts) {
       if (destType.equals(PRIVATE)) {
         Node contactHomeNode = getUserContactHome(sProvider, username);
+        /*
         ContactGroup group = getGroup(sProvider, username, destAddress) ;
         contact.setEditPermissionUsers(group.getEditPermissionUsers()) ;
         contact.setViewPermissionUsers(group.getViewPermissionUsers()) ;
         contact.setEditPermissionGroups(group.getEditPermissionGroups()) ;
         contact.setViewPermissionGroups(group.getViewPermissionGroups()) ;
-        
+        */
         saveCopyContact(contactHomeNode, contact, destAddress, destType) ; 
       } else if (destType.equals(SHARED)) {
         Node sharedAddressBookMock = getSharedAddressBook(username) ;
@@ -1873,11 +1877,13 @@ public class JCRDataStorage {
           addressBook = iter.nextProperty().getParent() ;
           if(addressBook.getName().equals(destAddress)) {
             Node contactHomeNode = addressBook.getParent().getParent().getNode(CONTACTS) ;
+            /*
             ContactGroup group = getGroup(addressBook) ;
             contact.setEditPermissionUsers(group.getEditPermissionUsers()) ;
             contact.setViewPermissionUsers(group.getViewPermissionUsers()) ;
             contact.setEditPermissionGroups(group.getEditPermissionGroups()) ;
             contact.setViewPermissionGroups(group.getViewPermissionGroups()) ;
+            */
             saveCopyContact(contactHomeNode, contact, destAddress, destType) ;   
             break ;
           }
