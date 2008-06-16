@@ -172,6 +172,7 @@ UIContactDragDrop.prototype.dragCallback = function(dndEvent) {
   } else {
     if (this.foundTargetObjectCatch) {
       this.foundTargetObjectCatch.style[eXo.contact.UIContactDragDrop.scKey] = this.foundTargetObjectCatchStyle ;
+	  if(eXo.core.Browser.isIE6()) this.foundTargetObjectCatch.removeAttribute("style") ;
     }
     this.foundTargetObjectCatch = null ;
   }
@@ -181,6 +182,7 @@ UIContactDragDrop.prototype.dropCallback = function(dndEvent) {
   eXo.core.DOMUtil.removeElement(dndEvent.dragObject) ;
   if (this.foundTargetObjectCatch) {
     this.foundTargetObjectCatch.style[eXo.contact.UIContactDragDrop.scKey] = this.foundTargetObjectCatchStyle ;
+	if(eXo.core.Browser.isIE6()) this.foundTargetObjectCatch.removeAttribute("style") ;
   }
   this.foundTargetObjectCatch = dndEvent.foundTargetObject ;
   if (this.foundTargetObjectCatch) {
