@@ -604,7 +604,7 @@ UIContactPortlet.prototype.imFormOnload = function(root){
   for (var i=1; i<inputLst.length; i++) {
     var trTag = eXo.core.DOMUtil.findAncestorByTagName(inputLst[i], 'tr') ;
     if (inputLst[i].value != '') {
-      trTag.style.display = 'table-row' ;
+      //trTag.style.display = 'table-row' ;
       menu4Remove[menu4Remove.length] = inputLst[i].name ;
     } else {
       trTag.style.display = 'none' ;
@@ -645,7 +645,6 @@ UIContactPortlet.prototype.isDefaultLayout = function() {
 	}
 	if(j==3 || j==4) this.addCheckedIcon(0, true);
 	else this.addCheckedIcon(0, false);
-	console.log(j) ;
 } ;
 
 UIContactPortlet.prototype.showImField = function() {
@@ -656,11 +655,11 @@ UIContactPortlet.prototype.showImField = function() {
   var imFields = domUtil.findDescendantsByTagName(uiIMContact, 'input') ;
   for (var i=0; i<imFields.length; i++) {
     if (imFields[i].name == fieldName) {
-			try{
-	      var trTag = domUtil.findAncestorByTagName(imFields[i], 'tr') ;
-	      if(eXo.core.Browser.browserType == "ie") trTag.style.display = 'block' ;
-				else trTag.removeAttribute("style") ;
-			}catch(e){}
+	try{
+	    var trTag = domUtil.findAncestorByTagName(imFields[i], 'tr') ;
+	    if(eXo.core.Browser.browserType == "ie") trTag.style.display = 'block' ;
+		else trTag.removeAttribute("style") ;
+	}catch(e){}
       var aTag = domUtil.findAncestorByTagName(menuItem, 'span') ;				
       aTag.style.display = 'none' ;
       break ;
