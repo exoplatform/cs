@@ -18,9 +18,12 @@ package org.exoplatform.calendar.webui.popup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.CalendarUtils.SelectComparator;
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
@@ -113,30 +116,62 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
 
   public String[] getActions() { return new String[]{"Add", "Replace", "Cancel"}; }
 
-  //private Map<String, Contact> contactMap_ = new HashMap<String, Contact>(); 
-
   public void activate() throws Exception {}
   public void deActivate() throws Exception {} 
   @SuppressWarnings("unchecked")
-  public List<Contact> getContacts() throws Exception { 
-    return new ArrayList<Contact>(uiPageIterator_.getCurrentPageData());
+  public List<ContactData> getContacts() throws Exception { 
+    return new ArrayList<ContactData>(uiPageIterator_.getCurrentPageData());
   }
+  @SuppressWarnings("unchecked")
   public void setContactList(String groupId) throws Exception {
     ContactService contactSrv = getApplicationComponent(ContactService.class);
     ContactFilter filter = new ContactFilter() ;
     if(!CalendarUtils.isEmpty(groupId)) {
       filter.setCategories(new String[]{groupId}) ;
     }  
-    DataPageList resultPageList = 
-      contactSrv.searchContact(SessionProviderFactory.createSystemProvider(), CalendarUtils.getCurrentUser(), filter) ;
-    setContactList(resultPageList.getAll());
+    Map<String, String> resultMap = contactSrv.searchEmails(SessionProviderFactory.createSystemProvider(), CalendarUtils.getCurrentUser(), filter) ;
+    List<ContactData> data = new ArrayList<ContactData>() ;
+    for(String ct : resultMap.keySet()) {
+      String id  = ct ;
+      String value = resultMap.get(id) ; 
+      if(resultMap.get(id) != null && resultMap.get(id).trim().length() > 0) {
+        if(value.lastIndexOf("::") > 0) {
+          String fullName = value.split("::")[0] ;
+          String email = value.split("::")[1] ;
+          data.add(new ContactData(id, fullName, email)) ;
+        }
+      }
+    }
+    //TODO it is slow down when sort
+    //Collections.sort(data, new CalendarUtils.ContactComparator()) ;
+    setContactList(data);
   }
+  @SuppressWarnings("unchecked")
+  public void setContactList(ContactFilter filter) throws Exception {
+    ContactService contactSrv = getApplicationComponent(ContactService.class);
+    Map<String, String> resultMap = contactSrv.searchEmails(SessionProviderFactory.createSystemProvider(), CalendarUtils.getCurrentUser(), filter) ;
+    List<ContactData> data = new ArrayList<ContactData>() ;
+    for(String ct : resultMap.keySet()) {
+      String id  = ct ;
+      String value = resultMap.get(id) ; 
+      if(resultMap.get(id) != null && resultMap.get(id).trim().length() > 0) {
+        if(value.lastIndexOf("::") > 0) {
+          String fullName = value.split("::")[0] ;
+          String email = value.split("::")[1] ;
+          data.add(new ContactData(id, fullName, email)) ;
+        }
+      }
 
-  public void setContactList(List<Contact> contactList) throws Exception {
+    }
+    //TODO it is slow down when sort
+    //Collections.sort(data, new CalendarUtils.ContactComparator()) ;
+    setContactList(data);
+  }
+  public void setContactList(List<ContactData> contactList) throws Exception {
     getUIFormSelectBox(FIELD_GROUP).setOptions(getGroups()) ;
     ObjectPageList objPageList = new ObjectPageList(contactList, 10) ;
     uiPageIterator_.setPageList(objPageList) ;
-    for (Contact contact : contactList) {
+    for (ContactData contact : contactList) {
       UIFormCheckBoxInput uiCheckbox = getUIFormCheckBoxInput(contact.getId()) ;
       if(uiCheckbox == null) {
         uiCheckbox = new UIFormCheckBoxInput<Boolean>(contact.getId(), contact.getId(), false) ;
@@ -144,9 +179,9 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       } 
     }
   }
-  public List<Contact> getCheckedContact() throws Exception {
-    List<Contact> contactList = new ArrayList<Contact>();  
-    for (Contact contact : getContacts()) {
+  public List<ContactData> getCheckedContact() throws Exception {
+    List<ContactData> contactList = new ArrayList<ContactData>();  
+    for (ContactData contact : getContacts()) {
       UIFormCheckBoxInput<Boolean> uiCheckbox = getChildById(contact.getId());
       if (uiCheckbox!=null && uiCheckbox.isChecked()) {
         contactList.add(contact);
@@ -185,8 +220,8 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       }
       List<String> listMail = Arrays.asList( sb.toString().split(CalendarUtils.COMMA)) ; 
       String email = null ;
-      for(Contact c : uiForm.getCheckedContact()) {
-        email = c.getEmailAddress() ;
+      for(ContactData c : uiForm.getCheckedContact()) {
+        email = c.getEmail() ;
         if(!CalendarUtils.isEmpty(email) && !listMail.contains(email)) {
           if(sb != null && sb.length() > 0) sb.append(CalendarUtils.COMMA) ;
           if(email != null) sb.append(email) ;
@@ -217,10 +252,10 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       UITaskForm uiTaskForm = uiContainer.findFirstComponentOfType(UITaskForm.class) ;
       UIEventForm uiEventForm = uiContainer.findFirstComponentOfType(UIEventForm.class) ;
       StringBuilder sb = new StringBuilder() ;
-      for(Contact c : uiForm.getCheckedContact()) {
-        if(!CalendarUtils.isEmpty(c.getEmailAddress())) {
+      for(ContactData c : uiForm.getCheckedContact()) {
+        if(!CalendarUtils.isEmpty(c.getEmail())) {
           if(sb != null && sb.length() > 0) sb.append(CalendarUtils.COMMA) ;
-          sb.append(c.getEmailAddress()) ;
+          sb.append(c.getEmail()) ;
         }
       }
       if(uiTaskForm != null) {
@@ -241,7 +276,6 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   static  public class SearchActionListener extends EventListener<UIAddressForm> {
     public void execute(Event<UIAddressForm> event) throws Exception {
       UIAddressForm uiForm = event.getSource();  
-      ContactService contactService = uiForm.getApplicationComponent(ContactService.class) ;
       String text = uiForm.getUIStringInput(UIAddressForm.FIELD_KEYWORD).getValue() ;
       String category = uiForm.getUIFormSelectBox(UIAddressForm.FIELD_GROUP).getValue() ;
       if(category.equals(NewUserListener.DEFAULTGROUP)) category = category + CalendarUtils.getCurrentUser() ;
@@ -251,11 +285,8 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         if(!CalendarUtils.isEmpty(uiForm.selectedAddressId_)) {
           filter.setCategories(new String[]{uiForm.selectedAddressId_}) ;
         } 
-        if(!CalendarUtils.isEmpty(text))
-          filter.setText(CalendarUtils.encodeJCRText(text)) ;
-        DataPageList resultPageList = 
-          contactService.searchContact(SessionProviderFactory.createSystemProvider(), event.getRequestContext().getRemoteUser(), filter) ;
-        uiForm.setContactList(resultPageList.getAll()) ;
+        if(!CalendarUtils.isEmpty(text)) filter.setText(CalendarUtils.encodeJCRText(text)) ;
+        uiForm.setContactList(filter) ;
         uiForm.getUIFormSelectBox(UIAddressForm.FIELD_GROUP).setValue(category) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
       } catch (Exception e) {
@@ -268,17 +299,10 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   static  public class ChangeGroupActionListener extends EventListener<UIAddressForm> {
     public void execute(Event<UIAddressForm> event) throws Exception {
       UIAddressForm uiForm = event.getSource();  
-      ContactService contactService = uiForm.getApplicationComponent(ContactService.class) ;
       String category = uiForm.getUIFormSelectBox(UIAddressForm.FIELD_GROUP).getValue() ;
       if(category.equals(NewUserListener.DEFAULTGROUP)) category = category + CalendarUtils.getCurrentUser() ;
       uiForm.selectedAddressId_ = category ;
-      ContactFilter filter = new ContactFilter() ;
-      if(!CalendarUtils.isEmpty(uiForm.selectedAddressId_)) {
-        filter.setCategories(new String[]{uiForm.selectedAddressId_}) ;
-      }
-      DataPageList resultPageList = 
-        contactService.searchContact(SessionProviderFactory.createSystemProvider(), event.getRequestContext().getRemoteUser(), filter) ;
-      uiForm.setContactList(resultPageList.getAll()) ;
+      uiForm.setContactList(category) ;
       uiForm.getUIStringInput(UIAddressForm.FIELD_KEYWORD).setValue(null) ;
       uiForm.getUIFormSelectBox(UIAddressForm.FIELD_GROUP).setValue(uiForm.selectedAddressId_) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
@@ -301,5 +325,41 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       uiAddressForm.updateCurrentPage(page) ; 
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressForm.getAncestorOfType(UIPopupAction.class));           
     }
+  }
+  public class ContactData {
+    private String id ;
+    private String fullName ;
+    private String email ;
+
+    public ContactData(String id,String fullName,String email){
+      this.id = id ;
+      this.fullName = fullName;
+      this.email = email ;
+    }
+
+    public void setId(String id) {
+      this.id = id;
+    }
+
+    public String getId() {
+      return id;
+    }
+
+    public void setFullName(String fullName) {
+      this.fullName = fullName;
+    }
+
+    public String getFullName() {
+      return fullName;
+    }
+
+    public void setEmail(String email) {
+      this.email = email;
+    }
+
+    public String getEmail() {
+      return email;
+    }
+
   }
 }
