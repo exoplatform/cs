@@ -201,7 +201,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       setSelectedColor(null) ;
       lockCheckBoxFields(false) ;
     } else {
-    /*  //Calendar calendar = null ;
+      /*  //Calendar calendar = null ;
       CalendarService calService = CalendarUtils.getCalendarService() ;
       String username = Util.getPortalRequestContext().getRemoteUser() ;
       if(CalendarUtils.PRIVATE_TYPE.equals(calType_)) {
@@ -219,7 +219,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
         calendar = calService.getGroupCalendar(getSystemSession(), calendarId_) ;
       }
       if(calendar != null) */
-        init(calendar_) ;
+      init(calendar_) ;
     }
 
   }
@@ -404,11 +404,13 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       uiForm.setSelectedTab(INPUT_SHARE) ;
       String value = event.getRequestContext().getRequestParameter(OBJECTID) ;
       String permType = value.split(CalendarUtils.COLON)[0] ;
-      String permissionIsChecked = value.split(CalendarUtils.COLON)[1].split(PERMISSION_SUB)[0] ;
-      UIFormCheckBoxInput checkBox = uiForm.getUIFormCheckBoxInput(permissionIsChecked) ;
+      String fieldId = value.split(CalendarUtils.COLON)[1] ;
+      String checkBoxId = fieldId.split(PERMISSION_SUB)[0] ;
+      UIGroupCalendarTab shareTab = uiForm.getChildById(INPUT_SHARE) ;
+      UIFormCheckBoxInput checkBox = shareTab.getUIFormCheckBoxInput(checkBoxId) ;
       if(!checkBox.isChecked()) {
         UIApplication app = uiForm.getAncestorOfType(UIApplication.class) ;
-        app.addMessage(new ApplicationMessage("UICalendarForm.msg.checkbox-notchecked", new String[]{permissionIsChecked}, ApplicationMessage.WARNING)) ;
+        app.addMessage(new ApplicationMessage("UICalendarForm.msg.checkbox-notchecked", new String[]{checkBoxId}, ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(app.getUIPopupMessages()) ;
         return ;
       }
@@ -417,6 +419,15 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
         app.addMessage(new ApplicationMessage("UICalendarForm.msg.checkbox-public-notchecked", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(app.getUIPopupMessages()) ;
         return ;
+      }
+      String currentUsers = shareTab.getUIStringInput(fieldId).getValue() ;
+      if(uiForm.perms_.get(fieldId) != null) uiForm.perms_.get(fieldId).clear() ;
+      if(!CalendarUtils.isEmpty(currentUsers)) {
+        for(String user : currentUsers.split(CalendarUtils.COMMA)) {
+          user = user.trim() ;
+          String fullKey = permType + ":/" + fieldId +  ":/" + user ;
+          uiForm.updateSelect(fieldId, fullKey) ;
+        }
       }
       UIGroupSelector uiGroupSelector = uiForm.createUIComponent(UIGroupSelector.class, null, null);
       uiGroupSelector.setType(permType) ;
