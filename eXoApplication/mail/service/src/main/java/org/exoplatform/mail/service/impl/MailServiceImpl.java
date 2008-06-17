@@ -289,7 +289,12 @@ public class MailServiceImpl implements MailService {
     Session session = Session.getInstance(props, null);
     logger.debug(" #### Sending email ... ");
     Transport transport = session.getTransport(Utils.SVR_SMTP);
-    transport.connect(outgoingHost, smtpUser, acc.getIncomingPassword());
+    // khdung
+    try {
+      transport.connect(outgoingHost, smtpUser, acc.getIncomingPassword());
+    } catch (Exception e) {
+      // do nothing ... if there is an exception, keep continuing
+    }
     Message msg = send(session, transport, message);
     transport.close();
 
