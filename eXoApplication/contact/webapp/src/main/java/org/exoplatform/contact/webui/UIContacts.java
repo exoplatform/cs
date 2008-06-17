@@ -683,7 +683,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
             String addressBookId = null ;
             for (String add : contact.getAddressBook())
               if (uiContacts.getSharedGroupMap().containsKey(add)) addressBookId = add ;
-            contactService.removeSharedContact(SessionProviderFactory.createSystemProvider(), username, addressBookId, contactId) ;
+            contactService.removeSharedContact(SessionProviderFactory.createSystemProvider(), username, addressBookId, id) ;
           } else {
             contactService.removeUserShareContact(
                 SessionProviderFactory.createSystemProvider(), contact.getPath(), id, username) ;
