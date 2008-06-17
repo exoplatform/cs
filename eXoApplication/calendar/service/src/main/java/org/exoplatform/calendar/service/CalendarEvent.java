@@ -51,7 +51,7 @@ public class CalendarEvent {
   final public static String FINAL = "final".intern() ;
   
   final public static String[] EVENT_STATUS = {TENTATIVE, CONFIRMED, CANCELLED} ;
-  final public static String[] TASK_STATUS = {NEEDS_ACTION, COMPLETED, IN_PROCESS, CANCELLED} ;
+  final public static String[] TASK_STATUS = {NEEDS_ACTION, IN_PROCESS, COMPLETED, CANCELLED} ;
   final public static String[] JOURNAL_STATUS = {DRAFT, FINAL, CANCELLED} ;
   
   final public static String IS_PUBLIC = "public".intern() ;

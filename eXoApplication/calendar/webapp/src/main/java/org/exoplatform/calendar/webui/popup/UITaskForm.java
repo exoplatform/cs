@@ -25,8 +25,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import net.wimpi.pim.contact.model.Organization;
-
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.CalendarEvent;
@@ -38,6 +36,7 @@ import org.exoplatform.calendar.webui.CalendarView;
 import org.exoplatform.calendar.webui.SelectItem;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
+import org.exoplatform.calendar.webui.UICalendars;
 import org.exoplatform.calendar.webui.UIFormComboBox;
 import org.exoplatform.calendar.webui.UIFormDateTimePicker;
 import org.exoplatform.calendar.webui.UIListContainer;
@@ -734,7 +733,9 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
           calendarView.setLastUpdatedEventId(calendarEvent.getId()) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
           UIMiniCalendar uiMiniCalendar = calendarPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
+          UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendars) ;
           uiForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
         }catch (Exception e) {

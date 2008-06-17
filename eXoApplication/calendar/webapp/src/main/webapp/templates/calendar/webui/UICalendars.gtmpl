@@ -1,16 +1,18 @@
 <%
 	import org.exoplatform.calendar.service.GroupCalendarData;
+	import org.exoplatform.calendar.service.CalendarEvent;
+	import org.exoplatform.calendar.CalendarUtils;
 	def rcontext = _ctx.getRequestContext() ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkLayout() ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.getFilterForm("' + uiform.id + '") ;') ;
   //rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkFilter() ;') ;
 %>
-<div class="UICalendars" >
 <%uiform.begin()%>
-	<div class="TitleBar">
-		<div class="Title">
+	<div class="UICalendars" >
+		<div class="TitleBar">
+			<div class="Title">
 			<%=uiform.getLabel("calendars")%>
-		</div>
+			</div>
 		<div class="ActionsButton" title="<%=uiform.getLabel("calendarActions")%>" onclick="eXo.calendar.UICalendarPortlet.showMainMenu(this, event);">
 			<% /*Begin Popup Menu - Main */ %>
 	     
@@ -363,100 +365,75 @@
 			    </div>
 			  </div>
 		<% /*End Popup Menu*/ %>
-<%uiform.end()%>
-</div>
-<div class="UICalendarTasks">
-  <div class="TitleBar">
-		<div class="Title">
-			Tasks
-		</div>
-		<div class="ActionsButton" title="Tasks Actions" onclick="eXo.calendar.UICalendarPortlet.showMainMenu(this, event);">
-		  <% /*Begin Popup Menu - Main */ %>
-		     
-	    <div class="UIRightClickPopupMenu" style="display: none ;">
-	    	<div class="UIContextMenuContainer">
-					<div class="TopLeftRightClickPopupMenu">
-		  			<div class="TopRightRightClickPopupMenu">
-		    			<div class="TopCenterRightClickPopupMenu"><span></span></div>
-		  			</div>
-					</div>
-	        <div class="MiddleLeftRightClickPopupMenu">
-	          <div class="MiddleRightRightClickPopupMenu">
-		      		<div class="UIRightPopupMenuContainer">
-		            <a class="MenuItem" href="#">   
-		              <div class="ItemIcon AddGroupIcon">
-		              <%=uiform.getLabel("AddGroup")%>
-		              </div>
-		            </a>
-		            <a class="MenuItem" href="#">   
-		              <div class="ItemIcon AddCalendarIcon">
-		              <%=uiform.getLabel("AddCalendar")%>
-		              </div>
-		            </a>
-		          </div>
-	  		    </div>
-					</div>
-		      <div class="BottomLeftRightClickPopupMenu">
-		        <div class="BottomRightRightClickPopupMenu">
-		          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
-		        </div>
-		      </div>
-		  	</div>
-		  </div>
-				<% /*End Popup Menu*/ %>
-		</div>
-	  <div style="clear: both"><span></span></div>
 	</div>
-	<div class="ContentContainer">
-    <div class="MyCalendar">
-			<div class="CalendarTitle">
-				<div class="CollapserFlatStyle"><span></span></div>
-				<div class="Label">
-					Needs action
+	<%if(uicomponent.isShowTaskList()){%>
+		<div class="UICalendarTasks">
+		  <div class="TitleBar">
+				<div class="Title">
+					<%=uiform.getLabel("tasks")%>
 				</div>
-			</div>
-			<div class="MyCalendarContainer">
-			  <a href="#" style="white-space:">
-			    <div class="TasksColor" style="background: red;"><span></span></div>
-			    <div class="TasksName">Tasks kfhls skdfs kksf skjkl skfjs fkjfhdkj hdkjfh sdjkshk </div>
-			    <div style="clear: left;"><span></span></div>
-			  </a>
-			  <a href="#" style="white-space:">
-			    <div class="TasksColor" style="background: red;"><span></span></div>
-			    <div class="TasksName">Tasks kfhls skdfs kksf skjkl skfjs fkjfhdkj hdkjfh sdjkshk </div>
-			    <div style="clear: left;"><span></span></div>
-			  </a>
-			  <a href="#" style="white-space:">
-			    <div class="TasksColor" style="background: red;"><span></span></div>
-			    <div class="TasksName">Tasks kfhls skdfs kksf skjkl skfjs fkjfhdkj hdkjfh sdjkshk </div>
-			    <div style="clear: left;"><span></span></div>
-			  </a>
-			</div>
-		</div>
-		<div class="MyCalendar">
-			<div class="CalendarTitle">
-				<div class="CollapserFlatStyle"><span></span></div>
-				<div class="Label">
-					In process
+				<div class="ActionsButton" title="Tasks Actions" onclick="eXo.calendar.UICalendarPortlet.showMainMenu(this, event);">
+				 <!-- 
+				  <% /*Begin Popup Menu - Main */ %>
+				     
+			    <div class="UIRightClickPopupMenu" style="display: none ;">
+			    	<div class="UIContextMenuContainer">
+							<div class="TopLeftRightClickPopupMenu">
+				  			<div class="TopRightRightClickPopupMenu">
+				    			<div class="TopCenterRightClickPopupMenu"><span></span></div>
+				  			</div>
+							</div>
+			        <div class="MiddleLeftRightClickPopupMenu">
+			          <div class="MiddleRightRightClickPopupMenu">
+				      		<div class="UIRightPopupMenuContainer">
+				            <a class="MenuItem" href="#">   
+				              <div class="ItemIcon AddGroupIcon">
+				              <%=uiform.getLabel("AddGroup")%>
+				              </div>
+				            </a>
+				            <a class="MenuItem" href="#">   
+				              <div class="ItemIcon AddCalendarIcon">
+				              <%=uiform.getLabel("AddCalendar")%>
+				              </div>
+				            </a>
+				          </div>
+			  		    </div>
+							</div>
+				      <div class="BottomLeftRightClickPopupMenu">
+				        <div class="BottomRightRightClickPopupMenu">
+				          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
+				        </div>
+				      </div>
+				  	</div>
+				  </div>
+						<% /*End Popup Menu*/ %>
+				 -->
 				</div>
+			  <div style="clear: both"><span></span></div>
 			</div>
-			<div class="MyCalendarContainer">
-			  <a href="#" style="white-space:">
-			    <div class="TasksColor" style="background: red;"><span></span></div>
-			    <div class="TasksName">Tasks kfhls skdfs kksf skjkl skfjs fkjfhdkj hdkjfh sdjkshk </div>
-			    <div style="clear: left;"><span></span></div>
-			  </a>
-			  <a href="#" style="white-space:">
-			    <div class="TasksColor" style="background: red;"><span></span></div>
-			    <div class="TasksName">Tasks kfhls skdfs kksf skjkl skfjs fkjfhdkj hdkjfh sdjkshk </div>
-			    <div style="clear: left;"><span></span></div>
-			  </a>
-			  <a href="#" style="white-space:">
-			    <div class="TasksColor" style="background: red;"><span></span></div>
-			    <div class="TasksName">Tasks kfhls skdfs kksf skjkl skfjs fkjfhdkj hdkjfh sdjkshk </div>
-			    <div style="clear: left;"><span></span></div>
-			  </a>
-			</div>
+			<div class="ContentContainer">
+		    <div class="MyCalendar">
+					<%for(String status in uicomponent.getTaskStatus()){%>
+						<div class="CalendarTitle">
+							<div class="CollapserFlatStyle"><span></span></div>
+							<div class="Label">
+								<%=uiform.getLabel("task."+status)%>
+							</div>
+						</div>
+						<div class="MyCalendarContainer">
+						  <%for(CalendarEvent task in uicomponent.getAllTask(uicomponent.getCurrentMiniBeginDate(),uicomponent.getCurrentMiniEndDate(), status)){
+						  	color = uicomponent.getColorMap().get(task.calType +CalendarUtils.COLON+ task.getCalendarId()) ;
+						  %>
+							  <a href="#" style="white-space:">
+							    <div class="TasksColor" style="background: $color"><span></span></div>
+							    <div class="TasksName" title="$task.summary">$task.summary</div>
+							    <div style="clear: left;"><span></span></div>
+							  </a>
+						  <%}%>
+						</div>
+					<%}%>
+				</div>
+		  </div>
 		</div>
-  </div>
-</div>
+	<%}%>
+<%uiform.end()%>
