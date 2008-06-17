@@ -42,6 +42,7 @@ import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.webui.SelectItem;
 import org.exoplatform.calendar.webui.SelectItemOptionGroup;
+import org.exoplatform.calendar.webui.popup.UIAddressForm.ContactData;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
@@ -411,7 +412,13 @@ public class CalendarUtils {
       return name1.compareToIgnoreCase(name2) ;
     }
   }
-
+  static public class ContactComparator implements Comparator{
+    public int compare(Object o1, Object o2) throws ClassCastException {
+      String name1 = ((ContactData) o1).getFullName() ;
+      String name2 = ((ContactData) o2).getFullName() ;
+      return name1.compareToIgnoreCase(name2) ;
+    }
+  }
   public static List<SelectItem> getCalendarOption() throws Exception {
     List<SelectItem> options = new ArrayList<SelectItem>() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
