@@ -49,7 +49,7 @@
 		  			  	%>
 		  			  </td>
 							<td class="text">
-								<div class="State OnlineIcon" title="Available">
+								<div class="State OfflineIcon" title="Available">
 									<%=(contact.getFullName()==null ? "" : contact.getFullName())%>
 								</div>
 							</td>
