@@ -91,39 +91,44 @@ public class ReminderJob implements Job {
       Message message;
       Node reminder;
       while (iter.hasNext()) {
-        reminder = iter.nextNode();
-        if(Reminder.TYPE_EMAIL.equals(reminder.getProperty("exo:reminderType").getString())){
-          String to = reminder.getProperty("exo:email").getString();				
-          if (to != null && to.length() > 0) {
-            message = new Message();
-            message.setContentType(Utils.MIMETYPE_TEXTHTML) ;
-            message.setMessageTo(to);
-            message.setSubject("[reminder] eXo calendar notify mail !");
-            message.setMessageBody(reminder.getProperty("exo:eventSummary").getString());
-            message.setFrom(jdatamap.getString("account")) ;
-            if(reminder.getProperty("exo:isRepeat").getBoolean()) {
-              long fromTime = reminder.getProperty("exo:fromDateTime").getDate().getTimeInMillis() ;
-              long remindTime = reminder.getProperty("exo:remindDateTime").getDate().getTimeInMillis() ;
-              long interval = reminder.getProperty("exo:repeatInterval").getLong() * 60 * 1000 ;
-              if (fromCalendar.getTimeInMillis() >= fromTime) {
-                reminder.setProperty("exo:isOver", true) ;
-              }else {
-                if((remindTime + interval) > fromTime) {
+      	try {
+      		reminder = iter.nextNode();
+          if(Reminder.TYPE_EMAIL.equals(reminder.getProperty("exo:reminderType").getString())){
+            String to = reminder.getProperty("exo:email").getString();				
+            if (to != null && to.length() > 0) {
+              message = new Message();
+              message.setContentType(Utils.MIMETYPE_TEXTHTML) ;
+              message.setMessageTo(to);
+              message.setSubject("[reminder] eXo calendar notify mail !");
+              message.setMessageBody(reminder.getProperty("exo:eventSummary").getString());
+              message.setFrom(jdatamap.getString("account")) ;
+              if(reminder.getProperty("exo:isRepeat").getBoolean()) {
+                long fromTime = reminder.getProperty("exo:fromDateTime").getDate().getTimeInMillis() ;
+                long remindTime = reminder.getProperty("exo:remindDateTime").getDate().getTimeInMillis() ;
+                long interval = reminder.getProperty("exo:repeatInterval").getLong() * 60 * 1000 ;
+                if (fromCalendar.getTimeInMillis() >= fromTime) {
                   reminder.setProperty("exo:isOver", true) ;
                 }else {
-                  java.util.Calendar cal = new GregorianCalendar() ;
-                  cal.setTimeInMillis(remindTime + interval) ;
-                  reminder.setProperty("exo:remindDateTime", cal) ;
-                  reminder.setProperty("exo:isOver", false) ;
+                  if((remindTime + interval) > fromTime) {
+                    reminder.setProperty("exo:isOver", true) ;
+                  }else {
+                    java.util.Calendar cal = new GregorianCalendar() ;
+                    cal.setTimeInMillis(remindTime + interval) ;
+                    reminder.setProperty("exo:remindDateTime", cal) ;
+                    reminder.setProperty("exo:isOver", false) ;
+                  }
                 }
+              }else {
+                reminder.setProperty("exo:isOver", true) ;
               }
-            }else {
-              reminder.setProperty("exo:isOver", true) ;
+              messageList.add(message);
+              reminder.save() ;
             }
-            messageList.add(message);
-            reminder.save() ;
           }
-        } 
+      	}catch(Exception e) {
+      		e.printStackTrace() ;
+      	}
+         
         /*else if(Reminder.TYPE_POPUP.equals(reminder.getProperty("exo:reminderType").getString())){
           Reminder rem = new Reminder(Reminder.TYPE_POPUP) ;
           rem.setSummary(reminder.getProperty("exo:eventSummary").getString());
@@ -154,7 +159,7 @@ public class ReminderJob implements Job {
     } catch (Exception e) {
       //e.printStackTrace();			
     }
-    try{
+    /*try{
       if(!reminders.isEmpty()) {
         JsonGenerator generatorImpl = new JsonGeneratorImpl();
         JsonValue json = generatorImpl.createJsonObject(new ReminderBean("root", reminders));
@@ -165,7 +170,7 @@ public class ReminderJob implements Job {
 
     } catch (Exception e) {
       //e.printStackTrace() ;
-    }
+    }*/
     if (log_.isDebugEnabled()) log_.debug("File plan job done");
   }
 
