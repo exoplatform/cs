@@ -62,7 +62,7 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
       @EventConfig(listeners = UIContactForm.SaveActionListener.class),      
       @EventConfig(listeners = UIContactForm.CancelActionListener.class, phase=Phase.DECODE),
       @EventConfig(phase = Phase.DECODE,listeners = UIContactForm.ChangeImageActionListener.class),
-      @EventConfig(listeners = UIContactForm.DeleteImageActionListener.class)
+      @EventConfig(phase = Phase.DECODE,listeners = UIContactForm.DeleteImageActionListener.class)
     }
 )
 public class UIContactForm extends UIFormTabPane {
