@@ -16,6 +16,7 @@
  **/
 package org.exoplatform.calendar.webui;
 
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -27,8 +28,10 @@ import javax.jcr.PathNotFoundException;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.Colors;
 import org.exoplatform.calendar.service.Calendar;
+import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
+import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.webui.popup.UIAddEditPermission;
 import org.exoplatform.calendar.webui.popup.UICalDavForm;
@@ -98,14 +101,54 @@ public class UICalendars extends UIForm  {
   public static String CURRENTTIME = "ct".intern() ;
   public static String TIMEZONE = "tz".intern() ;
 
+  private boolean isShowTaskList_ = false ;
   private String[] publicCalendarIds = {} ;
   private LinkedHashMap<String, String> colorMap_ = new LinkedHashMap<String, String>() ;
 
   public UICalendars() throws Exception {
 
   } 
-
+  public String getLabel(String key) {
+    try {
+      return super.getLabel(key) ;
+    } catch (Exception e) {
+      e.printStackTrace() ;
+      return key ;
+    }
+  }
   public String[] getPublicCalendarIds(){ return publicCalendarIds ; }
+  public void setShowTaskList(boolean isShowTaskList) {
+    this.isShowTaskList_ = isShowTaskList;
+  }
+
+  public boolean isShowTaskList() {
+    return isShowTaskList_;
+  }
+  public java.util.Calendar getCurrentMiniBeginDate() {
+    UIMiniCalendar miniCal = getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
+    java.util.Calendar temCal = miniCal.getInstanceTempCalendar() ;
+    temCal.setTime(miniCal.getCurrentDate()) ;
+    return miniCal.getBeginDay(temCal) ;
+  }
+  public java.util.Calendar getCurrentMiniEndDate() {
+    UIMiniCalendar miniCal = getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
+    java.util.Calendar temCal = miniCal.getInstanceTempCalendar() ;
+    temCal.setTime(miniCal.getCurrentDate()) ;
+    return miniCal.getEndDay(temCal) ;
+  }
+  public String[] getTaskStatus() {
+    return CalendarEvent.TASK_STATUS ;
+  }
+  public List<CalendarEvent> getAllTask(java.util.Calendar formDate,java.util.Calendar toDate, String taskStatus) throws Exception {
+    List<CalendarEvent> list = new ArrayList<CalendarEvent>() ;
+    EventQuery eq = new EventQuery() ;
+    if(!CalendarUtils.isEmpty(taskStatus)) eq.setState(taskStatus) ;
+    eq.setEventType(CalendarEvent.TYPE_TASK) ;
+    eq.setFromDate(formDate) ;
+    eq.setToDate(toDate) ;
+    list = CalendarUtils.getCalendarService().getEvents(getSession(), CalendarUtils.getCurrentUser(), eq, null) ;
+    return list ;
+  }
   private SessionProvider getSession() {
     return SessionProviderFactory.createSessionProvider() ;
   }
