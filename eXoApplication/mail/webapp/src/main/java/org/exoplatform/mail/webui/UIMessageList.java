@@ -943,7 +943,7 @@ public class UIMessageList extends UIForm {
       for (Message msg : uiMessageList.getCheckedMessage()) {
         if (msg.getTags() != null && msg.getTags().length > 0) {
           for (int i=0 ; i < msg.getTags().length; i++) {
-            tagIdList.add(msg.getTags()[i]) ;
+            if (!tagIdList.contains(msg.getTags()[i])) tagIdList.add(msg.getTags()[i]) ;
           }
         }
         msg.setTags(tagIdList.toArray(new String[]{})) ;
