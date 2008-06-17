@@ -128,7 +128,7 @@ public class JCRDataStorage{
   }
 
   private Node getUserCalendarServiceHome(SessionProvider sProvider, String username) throws Exception {
-    Node userApp = nodeHierarchyCreator_.getUserApplicationNode(sProvider, username)  ;
+  	Node userApp = nodeHierarchyCreator_.getUserApplicationNode(sProvider, username)  ;
     Node calendarRoot ; 
     try {
       return userApp.getNode(CALENDAR_APP) ;
