@@ -22,6 +22,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+import javax.mail.internet.InternetAddress;
+
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.container.PortalContainer;
@@ -281,12 +283,28 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         case MESSAGE_FOWARD : 
           String toAddress = msg.getMessageTo() != null ? msg.getMessageTo() : "" ;
           setFieldSubjectValue("Fwd: " + msg.getSubject());
-          String forwardedText = "<br><br>-------- Original Message --------<br>" +
-              "Subject: " + MailUtils.encodeHTML(msg.getSubject()) + "<br>Date: " + msg.getSendDate() + 
-              "<br> From: " + MailUtils.encodeHTML(msg.getFrom()) + 
-              "<br> To: " + MailUtils.encodeHTML(toAddress) + 
-              "<br><br>" + formatContent(msg) ;         
-          setFieldContentValue(forwardedText);
+          StringBuffer forwardTxt = new StringBuffer("<br><br>-------- Original Message --------<br>") ;
+          forwardTxt.append("Subject: ").append(MailUtils.encodeHTML(msg.getSubject())).append("<br>") ;
+          forwardTxt.append("Date: ").append(msg.getSendDate()).append("<br>") ;
+          forwardTxt.append("From: ") ;
+          
+          InternetAddress[] addresses = Utils.getInternetAddress(msg.getFrom()) ;
+          for (int i = 0 ; i < addresses.length; i++) {
+            if (i > 0) forwardTxt.append(", ") ;
+            forwardTxt.append(Utils.getPersonal(addresses[i])).append(" \"").append(addresses[i].getAddress()).append("\"") ;
+          }
+          forwardTxt.append("<br>To: ") ;
+          
+          InternetAddress[] toAddresses = Utils.getInternetAddress(toAddress) ;
+          for (int i = 0 ; i < toAddresses.length; i++) {
+            if (i > 0) forwardTxt.append(", ") ;
+            forwardTxt.append(Utils.getPersonal(toAddresses[i])).append(" \"").append(toAddresses[i].getAddress()).append("\"") ;
+          }
+          
+          forwardTxt.append("<br><br>").append(formatContent(msg)) ;
+      
+          setFieldContentValue(forwardTxt.toString()) ;
+          
           setFieldToValue("");
           if (mailSetting.forwardWithAtt()) {
             if (msg != null && msg.hasAttachment()) {
@@ -468,7 +486,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
       UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class) ;
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
+      String accountId = uiForm.getFieldFromValue() ;
       String usename = uiPortlet.getCurrentUser() ;
       MailService mailSvr = uiForm.getApplicationComponent(MailService.class) ;
       UIPopupAction uiChildPopup = uiForm.getAncestorOfType(UIPopupAction.class) ;
