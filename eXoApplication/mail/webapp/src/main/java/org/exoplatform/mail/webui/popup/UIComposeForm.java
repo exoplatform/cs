@@ -285,7 +285,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
               "Subject: " + MailUtils.encodeHTML(msg.getSubject()) + "<br>Date: " + msg.getSendDate() + 
               "<br> From: " + MailUtils.encodeHTML(msg.getFrom()) + 
               "<br> To: " + MailUtils.encodeHTML(toAddress) + 
-              "<br><br>" + MailUtils.encodeHTML(formatContent(msg)) ;         
+              "<br><br>" + formatContent(msg) ;         
           setFieldContentValue(forwardedText);
           setFieldToValue("");
           if (mailSetting.forwardWithAtt()) {
@@ -564,7 +564,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         e.printStackTrace() ;
         uiChildPopup.deActivate() ;
       }
-      if (uiFolderContainer.getSelectedFolder().equals(Utils.createFolderId(accountId, Utils.FD_DRAFTS, false))) {
+      String selectedFolder = uiFolderContainer.getSelectedFolder() ;
+      if (selectedFolder != null && selectedFolder.equals(Utils.createFolderId(accountId, Utils.FD_DRAFTS, false))) {
         UIMessageList uiMsgList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
         UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class) ;
         uiMsgList.setMessagePageList(mailSvr.getMessagePageList(SessionProviderFactory.createSystemProvider(), usename, uiMsgList.getMessageFilter())) ;
