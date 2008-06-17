@@ -1,0 +1,42 @@
+<div class="UIHomePagePortlet" id="$uicomponent.id">
+	<div class="PortletDecoration">
+		<div class="HomePortletAdBackround">
+			<div class="AdImage">
+				<div class="EmptyBlock"><span></span></div>
+				<div class="ProductSlogan"><%=_ctx.appRes("UIHomePagePortlet.slogan")%></div>
+				<div class="ProductIntro"><%=_ctx.appRes("UIHomePagePortlet.description")%></div>
+			</div>
+		</div>
+		<div class="HomePortletContent">
+			<div class="InstructionTitle"><%=_ctx.appRes("UIHomePagePortlet.accounts")%></div>
+			<div class="UserAccountsContainer">
+				<div class="AccountsContainerDeco">
+					<div class="AccountBlock AdministratorUser">
+						<div class="AccountInfos">
+							<div class="AccountTitle"><%=_ctx.appRes("UIHomePagePortlet.administrator")%></div>
+							<div class="Username"><%=_ctx.appRes("UIHomePagePortlet.username")%><span>root</span></div>
+							<div class="Passwords"><%=_ctx.appRes("UIHomePagePortlet.password")%><span>exo</span></div>
+						</div>
+					</div>
+					<div class="SeparatorLine"><span></span></div>
+					<div class="AccountBlock ManagerUser">
+						<div class="AccountInfos">
+							<div class="AccountTitle"><%=_ctx.appRes("UIHomePagePortlet.manager")%></div>
+							<div class="Username"><%=_ctx.appRes("UIHomePagePortlet.username")%><span>john</span></div>
+							<div class="Passwords"><%=_ctx.appRes("UIHomePagePortlet.password")%><span>exo</span></div>
+						</div>
+					</div>
+					<div class="SeparatorLine"><span></span></div>
+					<div class="AccountBlock DemoUser" style="margin-right: 0px;">
+						<div class="AccountInfos">
+							<div class="AccountTitle"><%=_ctx.appRes("UIHomePagePortlet.demo")%></div>
+							<div class="Username"><%=_ctx.appRes("UIHomePagePortlet.username")%><span>demo</span></div>
+							<div class="Passwords"><%=_ctx.appRes("UIHomePagePortlet.password")%><span>exo</span></div>
+						</div>
+					</div>
+					<div style="clear: both"><span></span></div>
+				</div>
+			</div>
+		</div>
+	</div>		
+</div>

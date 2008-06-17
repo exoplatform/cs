@@ -10,7 +10,7 @@
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>*:/platform/administrators</edit-permission>
     <application>
-      <instance-id>portal#classic:/web/HomePagePortlet/homepageportlet</instance-id>
+      <instance-id>portal#classic:/csResources/CSHomePagePortlet/homepageportlet</instance-id>
       <title>Home Page</title>
       <show-info-bar>false</show-info-bar>
       <show-application-state>false</show-application-state>

@@ -19,9 +19,20 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
   <!--           LISTENER                                                 -->
   <!-- ================================================================== -->
   <listener>
+    <listener-class>org.exoplatform.services.portletcontainer.impl.servlet.PortletApplicationListener</listener-class>
+  </listener>
+  <listener>
     <listener-class>org.exoplatform.portal.webui.skin.SkinListener</listener-class>
   </listener>
   <listener>
     <listener-class>org.exoplatform.portal.webui.javascript.JavascriptListener</listener-class>
   </listener>    
+  <servlet>
+    <servlet-name>PortletWrapper</servlet-name>
+    <servlet-class>org.exoplatform.services.portletcontainer.impl.servlet.ServletWrapper</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PortletWrapper</servlet-name>
+    <url-pattern>/PortletWrapper</url-pattern>
+  </servlet-mapping>
 </web-app>
