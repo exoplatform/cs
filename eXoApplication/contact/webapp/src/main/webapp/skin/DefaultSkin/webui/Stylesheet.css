@@ -145,6 +145,10 @@
 	border: 1px solid red; 
 }
 
+.UISharedContactsForm .UIForm .UIFormGrid td.FieldLabel {
+	white-space: nowrap;
+}
+
 /* Popup Menu Positioning*/
 .UIActionBar .SelectButton .UIPopupCategory {
 	left: 7px ;
