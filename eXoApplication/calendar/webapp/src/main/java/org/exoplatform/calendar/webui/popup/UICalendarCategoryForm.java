@@ -145,7 +145,7 @@ public class UICalendarCategoryForm extends UIForm {
         }
         uiManager.updateGrid() ;
         uiForm.reset() ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiManager) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiManager.getAncestorOfType(UIPopupAction.class)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(calendarPortlet.findFirstComponentOfType(UICalendars.class)) ;
       } catch (Exception e) {
         e.printStackTrace() ; 
