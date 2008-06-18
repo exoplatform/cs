@@ -120,7 +120,7 @@ public class UICalendarCategoryManager extends UIContainer implements UIPopupCom
         uiCalendarForm.reloadCategory() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarForm.getChildById(UICalendarForm.INPUT_CALENDAR)) ;
       }
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiManager) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiManager.getAncestorOfType(UIPopupAction.class)) ;
     }
   }
 }

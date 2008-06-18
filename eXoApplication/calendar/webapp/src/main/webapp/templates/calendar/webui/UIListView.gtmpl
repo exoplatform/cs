@@ -72,6 +72,7 @@
   				<th style="width: 30px;"><input type="checkbox" class="checkbox" title="<%=uiform.getLabel('CheckAll')%>" value="4"/></th>
   				<%}%>
   			  <th style="width: 24px;"><div class="AttachmentIcon" title="Attachment of event">&nbsp;</div></th>
+  		    <th ><%=uiform.getLabel('Priority')%></th>
   		    <th >
   		    	<%=uiform.getLabel('Summary')%>
   		    </th>
@@ -100,6 +101,7 @@
 		  					<td><%uicomponent.renderField(uicomponent.getChildById(event.getId()))%></td>
 		  					<%}%>
 		  					<td style="padding: 1px;"><div class="$attachIcon">&nbsp;</div></td>
+								<td class="text"><div class="<%=(uicomponent.getPriority(event.getPriority()) == null)? "" :  uicomponent.getPriority(event.getPriority())%>PriorityIcon">&nbsp;</div></td>
 								<td class="text">
 									<a href="$actionLink" class="ControlButton">
 										<%=event.getSummary()%>

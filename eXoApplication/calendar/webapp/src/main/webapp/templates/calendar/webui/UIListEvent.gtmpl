@@ -59,6 +59,7 @@
   			<tr>
 					<th style="width: 30px;"><input type="checkbox" class="checkbox" title="<%=uiform.getLabel('CheckAll')%>" value="4"/></th>
   			  <th style="width: 24px;"><div class="AttachmentIcon" title="Attachment of event"><span></span></div></th>
+  		    <th ><%=uiform.getLabel('Priority')%></th>
   		    <th><%=uiform.getLabel('Event')%></th>
  	      	<th><%=uiform.getLabel('Start')%></th>
  	      	<th><%=uiform.getLabel('End')%></th>
@@ -77,11 +78,12 @@
   						<tr class="UIListViewRow" style="$rowStyle" eventid="<%=event.getId()%>" calid="<%=event.getCalendarId()%>" calType=<%=event.getCalType()%>>
 								<td><%uicomponent.renderField(uicomponent.getChildById(event.getId()))%></td>
 		  					<td style="padding: 0px;"><div class="$attachIcon" >&nbsp;</div></td>
+		  					<td class="text"><div class="<%=(uicomponent.getPriority(event.getPriority()) == null)? "" :  uicomponent.getPriority(event.getPriority())%>PriorityIcon">&nbsp;</div></td>			
 		  					<td class="text">
 									<a href="$actionLink" class="ControlButton">
 										<%=event.getSummary()%>
 									</a>	
-								</td>								
+								</td>					
 								<td class="text"><%=df.format(event.getFromDateTime())%></td>
 								<td class="text"><%=df.format(event.getToDateTime())%></td>
 								<td class="text"><%=(event.getDescription() == null)? "": event.getDescription()%></td>
