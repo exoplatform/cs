@@ -294,6 +294,12 @@ public class MailServiceImpl implements MailService {
       transport.connect(outgoingHost, smtpUser, acc.getIncomingPassword());
     } catch (Exception e) {
       // do nothing ... if there is an exception, keep continuing
+      try {
+        transport.connect() ;
+      } catch(Exception ex) {
+        logger.warn("#### Can not connect to smtp server ...") ;
+        return null ;
+      }
     }
     Message msg = send(session, transport, message);
     transport.close();
@@ -330,8 +336,17 @@ public class MailServiceImpl implements MailService {
     props.put(Utils.SVR_SMTP_SOCKET_FACTORY_FALLBACK, "false");
     Session session = Session.getInstance(props, null);
     Transport transport = session.getTransport(Utils.SVR_SMTP);
-    transport.connect(serverConfig.getOutgoingHost(), serverConfig.getUserName(), serverConfig
+    try {
+      transport.connect(serverConfig.getOutgoingHost(), serverConfig.getUserName(), serverConfig
         .getPassword());
+    } catch(Exception e) {
+      try {
+        transport.connect() ;
+      } catch(Exception ex) {
+        logger.warn("#### Can not connect to smtp server ...") ;
+        return ;
+      }
+    }
     logger.debug(" #### Sending email ... ");
     int i = 0;
     for (Message msg : msgList) {
