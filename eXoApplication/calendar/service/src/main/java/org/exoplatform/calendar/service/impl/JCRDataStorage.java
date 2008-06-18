@@ -1940,6 +1940,7 @@ public class JCRDataStorage{
     eventQuery.setFilterCalendarIds(filterList.toArray(new String[]{})) ;
     events.addAll(getUserEvents(sProvider, username, eventQuery)) ;
     events.addAll(getSharedEvents(SessionProvider.createSystemProvider(), username, eventQuery)) ;
+    if(publicCalendarIds != null && publicCalendarIds.length > 0) eventQuery.setCalendarId(publicCalendarIds) ;
     events.addAll(getPublicEvents(SessionProvider.createSystemProvider(), eventQuery)) ;
     return events ;
   }
