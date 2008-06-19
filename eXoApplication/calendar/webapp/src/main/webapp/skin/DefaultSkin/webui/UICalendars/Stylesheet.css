@@ -69,6 +69,7 @@
   float: left;
   line-height: 16px;
   font-weight: bold;
+  white-space: nowrap;
 }
 
 .UICalendarPortlet .UICalendars .CalendarGroupIcon a {
