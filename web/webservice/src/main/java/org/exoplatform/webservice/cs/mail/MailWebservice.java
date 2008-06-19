@@ -173,6 +173,6 @@ public class MailWebservice implements ResourceContainer {
   public String getUserName() throws Exception {
     AuthenticationService authService = (AuthenticationService) ExoContainerContext
         .getCurrentContainer().getComponentInstanceOfType(AuthenticationService.class);
-    return authService.getCurrentIdentity().getUserId();
+    return authService.getCurrentIdentity().getUsername();
   }
 }
