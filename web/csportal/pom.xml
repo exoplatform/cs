@@ -10,7 +10,18 @@
   <packaging>war</packaging> 
   <version>${org.exoplatform.cs.version}</version>
   <name>eXo CS Portal web module</name>
-  <build>    
+   <dependencies>
+    <dependency>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.web.portal</artifactId>
+      <version>${org.exoplatform.portal.version}</version>
+          <type>war</type>
+         <scope>runtime</scope>      
+    </dependency>
+  </dependencies> 
+  
+  <build>  
+ <!-- 
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -26,6 +37,7 @@
                 <exclude>WEB-INF/conf/</exclude>
 								<exclude>WEB-INF/classes/locale/navigation/</exclude>
 								<exclude>WEB-INF/classes/locale/portal/webui*.properties</exclude>
+                <exclude>WEB-INF/conf/scripts/groovy/SkinConfigScript.groovy</exclude>								
                 <exclude>templates/groovy/webui/component/UIHomePagePortlet.gtmpl</exclude>
                 <exclude>templates/skin/webui/component/UIHomePagePortlet/</exclude>                     												
               </excludes>
@@ -41,6 +53,8 @@
           </webResources>
          </configuration>
        </plugin>
+
     </plugins>
+            -->   
   </build>
 </project>
