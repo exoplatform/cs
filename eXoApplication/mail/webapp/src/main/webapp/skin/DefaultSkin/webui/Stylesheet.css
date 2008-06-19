@@ -258,6 +258,9 @@
 	height: 24px; line-height: 24px;
 	color: #1e1f21;
 	padding-left: 28px;
+	white-space: nowrap;
+	overflow: hidden;
+	width: 160px;
 }
 
 .UIMailPortlet .MyFolder .MyFolderContent {
