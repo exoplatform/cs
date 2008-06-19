@@ -463,9 +463,13 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     message.setHasStar(false);
     message.setPriority(priority);
     message.setAttachements(this.getAttachFileList()) ;
+    long attSize = 0 ;
+    for (Attachment att : this.getAttachFileList()) {
+      attSize += att.getSize() ;
+    }
     message.setMessageBody(body) ;
     message.setUnread(false);
-    message.setSize(body.getBytes().length) ;
+    message.setSize(body.getBytes().length + attSize) ;
     message.setReplyTo(account.getEmailReplyAddress());
     if (getComposeType() == MESSAGE_REPLY || getComposeType() == MESSAGE_REPLY_ALL || getComposeType() == MESSAGE_FOWARD) {
       message.setHeader(Utils.HEADER_IN_REPLY_TO, getMessage().getId()) ;

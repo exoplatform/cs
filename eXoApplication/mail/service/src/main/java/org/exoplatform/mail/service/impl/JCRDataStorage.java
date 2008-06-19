@@ -854,7 +854,7 @@ public class JCRDataStorage {
           .getRecipients(javax.mail.Message.RecipientType.BCC))));
       node.setProperty(Utils.EXO_REPLYTO, Utils.decodeText(InternetAddress.toString(msg
           .getReplyTo())));
-      node.setProperty(Utils.EXO_SUBJECT, Utils.decodeText(MimeUtility.unfold(msg.getSubject())));
+      node.setProperty(Utils.EXO_SUBJECT, Utils.decodeText(msg.getSubject()));
       node.setProperty(Utils.EXO_RECEIVEDDATE, gc);
       Calendar sc = GregorianCalendar.getInstance();
       if (msg.getSentDate() != null)
