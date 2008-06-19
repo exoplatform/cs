@@ -36,6 +36,42 @@
     </portlet-preferences>
      
   </portlet>
+  
+  <portlet>
+    <description xml:lang="EN">HomePage Demo Portlet</description>
+    <portlet-name>CSHomePageDemoPortlet</portlet-name>
+    <display-name xml:lang="EN">HomePage Demo Portlet</display-name>
+    <portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>    
+    
+    <init-param>
+      <name>webui.configuration</name>
+      <value>/WEB-INF/conf/portlet/web/HomePagePortlet/webui/configuration.xml</value>
+    </init-param>    
+
+    <expiration-cache>0</expiration-cache>
+    <supports>
+      <mime-type>text/html</mime-type>
+      <portlet-mode>help</portlet-mode>
+    </supports>
+    <supported-locale>en</supported-locale>
+    <resource-bundle>locale.portlet.web.CSDemoHomePage</resource-bundle>
+    
+    <portlet-info>
+      <title>HomePage Portlet</title>
+      <short-title>HomePage Portlet</short-title>
+      <keywords>homepage</keywords>
+    </portlet-info>    
+     
+    <portlet-preferences>
+      <preference>
+        <name>template</name>
+        <value>app:/templates/groovy/webui/component/UIHomePageDemo.gtmpl</value>
+        <read-only>false</read-only>
+      </preference>
+    </portlet-preferences>
+     
+  </portlet> 
+  
   <portlet>
     <description xml:lang="EN">Footer Portlet</description>
     <portlet-name>CSFooterPortlet</portlet-name>
