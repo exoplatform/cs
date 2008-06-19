@@ -45,7 +45,7 @@
     
     <init-param>
       <name>webui.configuration</name>
-      <value>/WEB-INF/conf/portlet/web/HomePagePortlet/webui/configuration.xml</value>
+      <value>/WEB-INF/conf/portlet/web/HomePageDemoPortlet/webui/configuration.xml</value>
     </init-param>    
 
     <expiration-cache>0</expiration-cache>
@@ -57,9 +57,9 @@
     <resource-bundle>locale.portlet.web.CSDemoHomePage</resource-bundle>
     
     <portlet-info>
-      <title>HomePage Portlet</title>
-      <short-title>HomePage Portlet</short-title>
-      <keywords>homepage</keywords>
+      <title>HomePage Demo Portlet</title>
+      <short-title>HomePage DemoPortlet</short-title>
+      <keywords>homepagedemo</keywords>
     </portlet-info>    
      
     <portlet-preferences>
