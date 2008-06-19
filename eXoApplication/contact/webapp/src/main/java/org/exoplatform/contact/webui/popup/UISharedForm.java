@@ -36,7 +36,6 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.OrganizationService;
-import org.exoplatform.services.organization.impl.GroupImpl;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -365,8 +364,9 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
             contact.setEditPermissionUsers(newEditPerUsers.toArray(new String[] {})) ;
             
             List<String> newEditPerGroups = new ArrayList<String>() ;
-            for (String edit : contact.getEditPermissionGroups()) 
-              if (!receiveGroups.keySet().contains(edit)) newEditPerGroups.add(edit) ; 
+            if (contact.getEditPermissionGroups() != null)
+              for (String edit : contact.getEditPermissionGroups()) 
+                if (!receiveGroups.keySet().contains(edit)) newEditPerGroups.add(edit) ; 
             contact.setEditPermissionGroups(newEditPerGroups.toArray(new String[] {})) ;
           }
           contactService.saveContact(sessionProvider, username, contact, false) ;
@@ -434,6 +434,16 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       uiGroupSelector.setSelectedGroups(null) ;
       
       if (permType.equals(UISelectComponent.TYPE_USER)) {
+        // add to fix bug cs 997
+        String users = uiForm.getUIStringInput(FIELD_USER).getValue() ;
+        uiForm.permissionUser_.clear() ;
+        if (!ContactUtils.isEmpty(users)) {
+          if (users.indexOf(",") < 0) uiForm.permissionUser_.put(users.trim(), users.trim()) ;
+          else {
+            for (String user : users.split(",")) uiForm.permissionUser_.put(user.trim(), user.trim()) ;              
+          }          
+        }
+        
         uiGroupSelector.setId("UIUserSelector") ;
         uiGroupSelector.setComponent(uiForm, new String[]{UISharedForm.FIELD_USER}) ;
       } else {
