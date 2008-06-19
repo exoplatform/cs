@@ -24,6 +24,7 @@ import java.util.Map;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -159,11 +160,11 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
             String[] array = names.split(",") ;
             for(String name : array) {
               organizationService.getUserHandler().findUserByName(name.trim()).getFullName();
-              receiverUser.add(name.trim()) ;
+              receiverUser.add(name.trim() + JCRDataStorage.HYPHEN) ;
             }
           } else {
             organizationService.getUserHandler().findUserByName(names.trim()).getFullName();
-            receiverUser.add(names.trim()) ;
+            receiverUser.add(names.trim() + JCRDataStorage.HYPHEN) ;
           }
         } catch (NullPointerException e) {
           uiApp.addMessage(new ApplicationMessage("UISharedContactsForm.msg.not-exist-username", null,
@@ -180,7 +181,7 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
           List<Contact> contacts = contactService
             .getPublicContactsByAddressBook(SessionProviderFactory.createSystemProvider(), group).getAll() ; 
           for (Contact contact : contacts) {
-            receiverUser.add(contact.getId()) ;
+            receiverUser.add(contact.getId() + JCRDataStorage.HYPHEN) ;
           }
         }        
       } 

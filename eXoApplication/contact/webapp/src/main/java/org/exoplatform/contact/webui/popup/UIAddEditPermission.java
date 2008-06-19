@@ -144,7 +144,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
         ContactGroup group = ContactUtils.getContactService().getGroup(
             SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), addEdit.groupId_) ;        
         shareForm.setGroup(group) ;
-        if (Arrays.asList(group.getViewPermissionGroups()).contains(reciever)) {
+        if (group.getViewPermissionGroups() != null && Arrays.asList(group.getViewPermissionGroups()).contains(reciever)) {
           shareForm.getUIStringInput(UISharedForm.FIELD_GROUP).setValue(reciever) ;
           shareForm.getUIStringInput(UISharedForm.FIELD_USER).setValue(null) ;
           shareForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).setChecked(
@@ -159,7 +159,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
         Contact contact = ContactUtils.getContactService().getContact(
             SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), addEdit.contactId_) ;        
         shareForm.setContact(contact) ;
-        if (Arrays.asList(contact.getViewPermissionGroups()).contains(reciever)) {
+        if (contact.getViewPermissionGroups() != null && Arrays.asList(contact.getViewPermissionGroups()).contains(reciever)) {
           shareForm.getUIStringInput(UISharedForm.FIELD_GROUP).setValue(reciever) ;
           shareForm.getUIStringInput(UISharedForm.FIELD_USER).setValue(null) ;
           shareForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).setChecked(
@@ -185,7 +185,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
             SessionProviderFactory.createSessionProvider(), username, uiForm.groupId_) ;
         
         // delete group permission
-        if (Arrays.asList(group.getViewPermissionGroups()).contains(remover)) {
+        if (group.getViewPermissionGroups() != null && Arrays.asList(group.getViewPermissionGroups()).contains(remover)) {
           if(group.getViewPermissionGroups() != null) {
             List<String> newPerms = new ArrayList<String>() ;
             for(String s : group.getViewPermissionGroups()) {
@@ -266,7 +266,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
         // ko luu ca object contact vi co the ko dung den delete va edit
         Contact contact = contactService.getContact(
             SessionProviderFactory.createSessionProvider(), username, uiForm.contactId_) ;
-        if (Arrays.asList(contact.getViewPermissionGroups()).contains(remover)) {
+        if (contact.getViewPermissionGroups() != null && Arrays.asList(contact.getViewPermissionGroups()).contains(remover)) {
           removePerGroup(contact, remover) ;
           List<Contact> users = contactService
             .getPublicContactsByAddressBook(SessionProviderFactory.createSystemProvider(), remover).getAll() ;
