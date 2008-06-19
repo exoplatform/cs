@@ -1140,6 +1140,7 @@
 	border-bottom: 1px solid #bbbbbb;
 	margin: 8px;
 	padding:5px 0px;
+	height: 14px;
 }
 
 .UIMailPortlet .PrintPreview .PrintAddress {
@@ -1163,6 +1164,7 @@
 
 .UIMailPortlet .PrintPreview .PrintContent {
 	padding: 16px 8px;
+	width: 99%;
 }
 
 .UIMailPortlet .PrintPreview .PrintAttachments .AttachmentTitle {
