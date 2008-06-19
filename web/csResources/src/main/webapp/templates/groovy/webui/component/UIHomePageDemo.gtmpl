@@ -1,0 +1,48 @@
+<div class="UIHomePagePortlet" id="$uicomponent.id">
+	<div class="PortletDecoration">
+		<div class="HomePortletAdBackround">
+			<div class="AdImage">
+				<div class="EmptyBlock"><span></span></div>
+				<div class="ProductSlogan"><%=_ctx.appRes("UIHomePagePortlet.slogan")%></div>
+				<div class="ProductIntro">
+				   <%=_ctx.appRes("UIHomePagePortlet.description")%><br/>
+				   <%=_ctx.appRes("UIHomePagePortlet.instructions")%><br/>
+				   <%=_ctx.appRes("UIHomePagePortlet.feedback")%><br/>
+				</div>
+			</div>
+		</div>
+	
+		<div class="HomePortletContent">
+			<div class="UserAccountsContainer">
+				<div class="AccountsContainerDeco">
+					<a class="AccountBlock AdministratorUser" href="contact">
+						<div class="AccountInfos">							
+							<div class="AccountTitle"><%=_ctx.appRes("UIHomePagePortlet.contact")%></div>
+							<div class="Username"><%=_ctx.appRes("UIHomePagePortlet.contact1")%></div>
+							<div class="Passwords"><%=_ctx.appRes("UIHomePagePortlet.contact2")%></div>
+						</div>
+					</a>
+					<div class="SeparatorLine"><span></span></div>
+					<a class="AccountBlock ManagerUser" href="mail">
+						<div class="AccountInfos">
+							<div class="AccountTitle"><%=_ctx.appRes("UIHomePagePortlet.mail")%></div>
+							<div class="Username"><%=_ctx.appRes("UIHomePagePortlet.mail1")%></div>
+							<div class="Passwords"><%=_ctx.appRes("UIHomePagePortlet.mail2")%></div>
+						</div>
+					</a>
+					<div class="SeparatorLine"><span></span></div>
+					<a class="AccountBlock DemoUser" style="margin-right: 0px;" href="calendar">
+						<div class="AccountInfos">
+							<div class="AccountTitle"><%=_ctx.appRes("UIHomePagePortlet.calendar")%></div>
+							<div class="Username"><%=_ctx.appRes("UIHomePagePortlet.calendar1")%></div>
+							<div class="Passwords"><%=_ctx.appRes("UIHomePagePortlet.calendar2")%></div>
+						</div>
+					</a>
+					<div style="clear: both"><span></span></div>
+				</div>
+			</div>
+			<div class="InstructionTitle"><%=_ctx.appRes("UIHomePagePortlet.accounts")%></div>			
+
+		</div>
+	</div>		
+</div>
