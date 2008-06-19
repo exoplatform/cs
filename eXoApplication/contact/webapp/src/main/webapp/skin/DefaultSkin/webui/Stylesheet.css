@@ -149,6 +149,10 @@
 	white-space: nowrap;
 }
 
+.UISharedContactsForm .UIForm .UIFormGrid td.FieldComponent {
+	white-space: nowrap;
+}
+
 /* Popup Menu Positioning*/
 .UIActionBar .SelectButton .UIPopupCategory {
 	left: 7px ;
