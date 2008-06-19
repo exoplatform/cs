@@ -13,7 +13,9 @@
     <application>
       <instance-id>group#platform/users:/mail/MailPortlet/mail</instance-id>    
       <title>Mail Portlet</title>
-      <show-info-bar>true</show-info-bar>      
+      <show-info-bar>false</show-info-bar>
+      <show-application-state>false</show-application-state>
+      <show-application-mode>false</show-application-mode>
     </application>  
   </page>
   
@@ -28,7 +30,9 @@
     <application>
       <instance-id>group#platform/users:/calendar/CalendarPortlet/calendar</instance-id>    
       <title>Calendar Portlet</title>
-      <show-info-bar>true</show-info-bar>      
+      <show-info-bar>false</show-info-bar>
+      <show-application-state>false</show-application-state>
+      <show-application-mode>false</show-application-mode>  
     </application>  
   </page>
   
@@ -42,8 +46,10 @@
     
     <application>
       <instance-id>group#platform/users:/contact/ContactPortlet/contact</instance-id>    
-      <title>Contact Portlet</title>
-      <show-info-bar>true</show-info-bar>      
+      <title>AddressBook Portlet</title>
+      <show-info-bar>false</show-info-bar>
+      <show-application-state>false</show-application-state>
+      <show-application-mode>false</show-application-mode> 
     </application>  
   </page>
  
