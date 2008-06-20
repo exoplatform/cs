@@ -3,7 +3,7 @@
 		<div class="HomePortletAdBackround">
 			<div class="AdImage">
 				<div class="EmptyBlock"><span></span></div>
-				<div class="ProductSlogan"><%=_ctx.appRes("UIHomePagePortlet.slogan")%></div>
+				<div class="ProductSlogan">Leading Future OpenSource Collaboration</div>
 				<div class="ProductIntro">Innovative Collaboration Suite with shared Calendars, WebMail, Forums and Contact Management</div>
 			</div>
 		</div>
