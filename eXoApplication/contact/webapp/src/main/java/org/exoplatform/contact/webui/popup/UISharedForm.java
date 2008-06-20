@@ -230,6 +230,14 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         }        
       }      
       receiveUsersByGroups.remove(ContactUtils.getCurrentUser()) ;
+
+      if (receiveGroups.size() == 0 && receiveUsers.size() == 0) {
+        uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.shared-yourself", null,
+            ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
+      
       // xong phan xu ly recieve users
 
       // if (receiveUsers.size() > 0 || receiveUsersByGroups.size() > 0) {
