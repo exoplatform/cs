@@ -214,7 +214,7 @@ public void processRender(WebuiRequestContext context) throws Exception {
     w.write("</select>\n") ;
     if (this.isMandatory()) w.write(" *");
   }
-  protected UIForm getFrom() {
+  protected UIForm getUIForm() {
     return getAncestorOfType(UIForm.class) ;
   }
   
@@ -224,9 +224,9 @@ public void processRender(WebuiRequestContext context) throws Exception {
     try {
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
       ResourceBundle res = context.getApplicationResourceBundle() ;     
-      label = res.getString(getFrom().getId() + ".optionGroup.label." + label);      
+      label = res.getString(getUIForm().getId() + ".optionGroup.label." + label);      
     } catch (Exception e) {
-      System.out.println("Could not find: " + getFrom().getId() + ".optionGroup.label." + label);
+      System.out.println("Could not find: " + getUIForm().getId() + ".optionGroup.label." + label);
     }
 	  result.append("<optgroup label=\""); result.append(label); result.append("\">") ;
 		for (SelectItemOption<String> option : group.getOptions())

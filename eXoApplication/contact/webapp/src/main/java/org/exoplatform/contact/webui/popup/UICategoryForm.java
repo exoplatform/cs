@@ -38,6 +38,8 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
+import org.exoplatform.webui.form.validator.MandatoryValidator;
+import org.exoplatform.webui.event.Event.Phase;
 
 /**
  * Created by The eXo Platform SARL
@@ -50,7 +52,7 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
     template = "system:/groovy/webui/form/UIForm.gtmpl", 
     events = {
       @EventConfig(listeners = UICategoryForm.SaveActionListener.class),      
-      @EventConfig(listeners = UICategoryForm.CancelActionListener.class)
+      @EventConfig(listeners = UICategoryForm.CancelActionListener.class, phase = Phase.DECODE)
     }
 )
 public class UICategoryForm extends UIForm implements UIPopupComponent {
@@ -60,8 +62,8 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
   public static final String FIELD_DESCRIPTION_INPUT = "description";
   public String editedAddName = null ;
   
-  public UICategoryForm() {
-    addUIFormInput(new UIFormStringInput(FIELD_CATEGORYNAME_INPUT, FIELD_CATEGORYNAME_INPUT, null));    
+  public UICategoryForm() throws Exception {
+    addUIFormInput(new UIFormStringInput(FIELD_CATEGORYNAME_INPUT, FIELD_CATEGORYNAME_INPUT, null).addValidator(MandatoryValidator.class));    
     addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION_INPUT, FIELD_DESCRIPTION_INPUT, null)) ;    
   }
   
@@ -99,12 +101,12 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
       UICategoryForm uiCategoryForm = event.getSource() ;
       String  groupName = uiCategoryForm.getUIStringInput(FIELD_CATEGORYNAME_INPUT).getValue(); 
       UIApplication uiApp = uiCategoryForm.getAncestorOfType(UIApplication.class) ;
-      if (ContactUtils.isEmpty(groupName)) {
+      /*if (ContactUtils.isEmpty(groupName)) {
         uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.categoryName-required", null,
           ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
-      }
+      }*/
       UIContactPortlet uiContactPortlet = uiCategoryForm.getAncestorOfType(UIContactPortlet.class) ;
       UIAddressBooks uiAddressBook = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
       if (uiAddressBook.getPrivateGroupMap().values().contains(groupName)) {

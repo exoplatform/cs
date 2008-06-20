@@ -45,7 +45,7 @@ import org.exoplatform.webui.form.UIForm;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/mail/webui/UIMoveMessageForm.gtmpl",
+    template = "app:/templates/mail/webui/popup/UIMoveMessageForm.gtmpl",
     events = {
       @EventConfig(listeners = UIMoveMessageForm.SaveActionListener.class), 
       @EventConfig(listeners = UIMoveMessageForm.CancelActionListener.class)
@@ -60,7 +60,9 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
   public UIMoveMessageForm() throws Exception { }
   
   public void init(String accountId) throws Exception {
-    addUIFormInput(new UISelectFolder(accountId));
+    UISelectFolder uiSelectFolder= new UISelectFolder() ;
+    addUIFormInput(uiSelectFolder);
+    uiSelectFolder.init(accountId) ;
   }
   
   public void setMessageList(List<Message> messageList){
@@ -84,9 +86,15 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
       String accountId =  uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       String destFolder = uiMoveMessageForm.getChild(UISelectFolder.class).getSelectedValue();
       List<Message> appliedMsgList = uiMessageList.getCheckedMessage() ;
-      for(Message message: uiMoveMessageForm.getMessageList()) {
-         mailSrv.moveMessages(SessionProviderFactory.createSystemProvider(), username, accountId, message, message.getFolders()[0], destFolder);
-      }       
+      UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class) ;
+      String fromFolderId = uiFolderContainer.getSelectedFolder() ;
+      if (fromFolderId != null) {
+        mailSrv.moveMessages(SessionProviderFactory.createSystemProvider(), username, accountId, uiMoveMessageForm.getMessageList(), fromFolderId, destFolder) ;
+      } else {
+        for (Message message : uiMoveMessageForm.getMessageList()) {
+          mailSrv.moveMessage(SessionProviderFactory.createSystemProvider(), username, accountId, message, message.getFolders()[0], destFolder);
+        }
+      }
       uiMessageList.updateList(); 
       Message msgPreview = uiMsgPreview.getMessage();
       if (msgPreview != null && appliedMsgList.contains(msgPreview)) uiMsgPreview.setMessage(null);

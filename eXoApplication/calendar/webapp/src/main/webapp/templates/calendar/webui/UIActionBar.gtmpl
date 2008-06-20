@@ -51,11 +51,13 @@
 				                    <%}
 				                    else {
 				                    %>
+				                    <!-- 
 				                    <span class="MenuItem" style="color:gray;">   
 						                    <div class="ItemIcon $icon ">
 						                      $label
 						                    </div>
 					                    </span>
+					                   -->
 				                    <%}
 				                    }}%>
 													</div>
@@ -82,17 +84,19 @@
 								<%=_ctx.appRes(uicomponent.id + ".label.RSS")%>
 							</div>
 						</a>
+						<!--
 						<div class="SeparatorLine"><span></span></div>
 						<span class="ControlButton" style="color:gray;margin-top: 4px;">
 							<div class="IconHolder PrintCalendarIcon">
 								<%=_ctx.appRes(uicomponent.id + ".label.Print")%>
 							</div>
 						</span>
+						-->
 						<div class="SeparatorLine"><span></span></div>
 						<div class="ControlButton" onclick="eXo.calendar.UICalendarPortlet.showView(this, event);">
 							<a class="SwitchButton">
 								<div class="IconHolder LayoutSwitcherIcon" title="<%=_ctx.appRes(uicomponent.id + '.label.ShowHide')%>">
-									<div class="DownArrow1Icon"><span></span></div>
+									<span></span>
 								</div>
 							</a>
 							<% /*Begin Popup Menu*/ %>

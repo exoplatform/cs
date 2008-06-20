@@ -22,9 +22,12 @@ import java.util.List;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.WizardStep;
+import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 /**
  * Created by The eXo Platform SARL
@@ -43,8 +46,8 @@ public class UIAccountWizardStep4 extends UIFormInputSet implements WizardStep {
   public UIAccountWizardStep4(String id) throws Exception {
     setId(id) ;
     setComponentConfig(getClass(), null) ; 
-    addUIFormInput(new UIFormStringInput(FIELD_USERNAME, null, null)) ;
-    addUIFormInput(new UIFormStringInput(FIELD_PASSWORD, null, null).setType(UIFormStringInput.PASSWORD_TYPE)) ;
+    addUIFormInput(new UIFormStringInput(FIELD_USERNAME, null, null).addValidator(MandatoryValidator.class)) ;
+    addUIFormInput(new UIFormStringInput(FIELD_PASSWORD, null, null).setType(UIFormStringInput.PASSWORD_TYPE).addValidator(MandatoryValidator.class)) ;
     UIFormCheckBoxInput isSavePassField = new UIFormCheckBoxInput<Boolean>(FIELD_SAVEPASSWORD, FIELD_SAVEPASSWORD, null) ;
     isSavePassField.setChecked(true) ;
     addChild(isSavePassField) ;
@@ -68,8 +71,18 @@ public class UIAccountWizardStep4 extends UIFormInputSet implements WizardStep {
     setPassword(password) ;
   }
   public boolean isFieldsValid() {
-    return !(Utils.isEmptyField(getUserName()) || Utils.isEmptyField(getPassword())) ;
-    //return isValid_ ;
+    UIApplication uiApp = getAncestorOfType(UIApplication.class) ;
+    boolean isValid = true ;
+    if (Utils.isEmptyField(getUserName())) {
+      uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.username-requirement", null, ApplicationMessage.WARNING)) ;
+      isValid = false ;
+    } 
+    if (Utils.isEmptyField(getPassword())) {
+      uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.password-requirement", null, ApplicationMessage.WARNING)) ;
+      isValid = false ;
+    } 
+    
+    return isValid ;
   }
   protected void fieldsValid(boolean isValid) {
     isValid_ = isValid ;

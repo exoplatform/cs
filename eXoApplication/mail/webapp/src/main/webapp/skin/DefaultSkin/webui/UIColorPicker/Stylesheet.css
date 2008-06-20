@@ -40,7 +40,6 @@
 	font-size: 11px ;
 	margin-left: 16px ;
 }
-
 .UIMailPortlet .UIFormColorPicker .MailTableColor {
 	display: none;
  	position: absolute;
@@ -48,6 +47,7 @@
 	padding: 2px;
   border: solid 1px #cccccc ;
 }
+ 
 
 .UIMailPortlet .MailTableColor .ColorCell {
  width: 12px; height: 12px;
@@ -58,7 +58,6 @@
 .UIMailPortlet .MailTableColor .ColorCell img {
  width: 12px; height: 12px;
 }
-
 .UIMailPortlet .MailTableColor .SelectedColorCell {
 	border: solid 1px red ;
 }

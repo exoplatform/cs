@@ -99,7 +99,7 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
             uiEventDetailTab.addToUploadFileList(file) ;
           }
           uiEventDetailTab.refreshUploadFileList() ;
-          //event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiEventDetailTab) ;
         } else if(uiTaskForm != null) {
           uiTaskForm.setSelectedTab(UITaskForm.TAB_TASKDETAIL) ;
           UITaskDetailTab uiTaskDetailTab = uiTaskForm.getChild(UITaskDetailTab.class) ;
@@ -107,9 +107,8 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
             uiTaskDetailTab.addToUploadFileList(file) ;  
           }
           uiTaskDetailTab.refreshUploadFileList() ;
-          //event.getRequestContext().addUIComponentToUpdateByAjax(uiTaskForm) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiTaskDetailTab) ;
         }
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer) ;
         UIPopupAction uiPopupAction = uiPopupContainer.getChild(UIPopupAction.class) ;
         uiPopupAction.deActivate() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;

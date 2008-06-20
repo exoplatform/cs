@@ -51,9 +51,7 @@ import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactImportExport;
-import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.SharedAddressBook;
-import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 /**
@@ -90,9 +88,9 @@ public class VCardImportExport implements ContactImportExport {
     		}else if (publicContactGroupHome.hasNode(address)){
     			publicAddress.add(address) ;
     		} else {
-    			String[] array = address.split(":") ;
+    			String[] array = address.split(JCRDataStorage.HYPHEN) ;
     			if(array.length == 2) {
-    				contactList.addAll(storage_.getSharedContactsByAddressBook(sProvider, username, new SharedAddressBook(null, array[1], array[0])).getAll()) ;
+    				contactList.addAll(storage_.getSharedContactsByAddressBook(sProvider, username, new SharedAddressBook(null, array[0], array[1])).getAll()) ;
     			}    		  
         }
   		}catch(RepositoryException re) {
@@ -118,7 +116,6 @@ public class VCardImportExport implements ContactImportExport {
   }
   
   public OutputStream exportContact(String username, List<Contact> contacts) throws Exception {
-
     ContactIOFactory ciof = Pim.getContactIOFactory();
     ContactModelFactory cmf = Pim.getContactModelFactory();
     ContactMarshaller marshaller = ciof.createContactMarshaller();
@@ -136,14 +133,14 @@ public class VCardImportExport implements ContactImportExport {
       // a personal identity
       PersonalIdentity pid = cmf.createPersonalIdentity();
       pid.setFormattedName(nullToEmptyString(contact.getFullName()));
-      pid.setFirstname(nullToEmptyString(contact.getFirstName()));
-      pid.setLastname(nullToEmptyString(contact.getLastName()));
+      pid.setFirstname(nullToEmptyString(contact.getFirstName()).replaceAll(";", "_"));
+      pid.setLastname(nullToEmptyString(contact.getLastName()).replaceAll(";", "_"));
       
       String firstName = contact.getFirstName();
       if ((firstName != null) && !firstName.equals("")) {
         StringTokenizer tokens = new StringTokenizer(firstName, ",", false);
         while (tokens.hasMoreTokens())
-          pid.addAdditionalName(tokens.nextToken().trim());
+          pid.addAdditionalName(tokens.nextToken().trim().replaceAll(";", "_"));
       } else
         pid.addAdditionalName("");
 
@@ -279,7 +276,8 @@ public class VCardImportExport implements ContactImportExport {
     unmarshaller.setEncoding(ENCODING);
 
     // die here when image size about 1mb
-    net.wimpi.pim.contact.model.Contact[] pimContacts = unmarshaller.unmarshallContacts(input);
+    net.wimpi.pim.contact.model.Contact[] pimContacts = unmarshaller.unmarshallContacts(input);    
+    List<Contact> contacts = new ArrayList<Contact>() ;
     for (int index = 0; index < pimContacts.length; index++) {
       Contact contact = new Contact();
       PersonalIdentity identity = pimContacts[index].getPersonalIdentity();
@@ -289,15 +287,25 @@ public class VCardImportExport implements ContactImportExport {
       } catch (IndexOutOfBoundsException e) {
         additionName = "" ;
       }
-      String fullName = identity.getFormattedName();
+      String fullName = nullToEmptyString(identity.getFormattedName());
       contact.setFullName(fullName);
       String lastName = identity.getLastname();
-      contact.setLastName(lastName);
       String firstName = identity.getFirstname();
-      contact.setFirstName(identity.getFirstname() + " " + additionName);
       
-      int size = identity.getAdditionalNameCount();
+      int indexComma = fullName.indexOf(";");
+      if (indexComma >= 0) {
+        int indexSpace = fullName.indexOf(" ") ;
+        firstName = fullName.substring(0, indexSpace).trim() ;
+        contact.setFirstName(firstName) ;
+        lastName = fullName.substring(indexSpace, fullName.length()).trim() ;
+      } else {
+        if (firstName.trim().equals(additionName.trim())) contact.setFirstName(firstName) ;
+        else contact.setFirstName(firstName + " " + additionName);
+      }
+       
+      contact.setLastName(lastName); 
       
+      int size = identity.getAdditionalNameCount();      
       String nickName = "";
       size = identity.getNicknameCount();
       for (int i = 0; i < size; i++) {
@@ -470,11 +478,20 @@ public class VCardImportExport implements ContactImportExport {
       // Then store it to JCR storage
       // ////////////////////////////////
 
-      contact.setAddressBook(new String[] { groupId });
-      ContactService contactService = (ContactService) PortalContainer
-          .getComponent(ContactService.class);
-      contactService.saveContact(sProvider, username, contact, true);
+      contact.setAddressBook(new String[] { groupId }) ;
+      contacts.add(contact) ;
     }
+    /*ContactService contactService = 
+      (ContactService) PortalContainer.getComponent(ContactService.class);*/
+
+    if (groupId.contains(JCRDataStorage.HYPHEN)) {
+      String newGroupId = groupId.replace(JCRDataStorage.HYPHEN, "") ;
+      storage_.saveContactsToSharedAddressBook(username, newGroupId, contacts, true) ;
+    } else {
+      storage_.saveContacts(sProvider, username, contacts, true);
+    }
+    
+    
   }
 
   private void addPhoneNumber(ContactModelFactory cmf, Communications comm, String number,

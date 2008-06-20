@@ -153,9 +153,14 @@ public class UIFolderContainer extends UIContainer {
       UIMessageList uiMessageList = uiMsgArea.getChild(UIMessageList.class) ;
       UIMessagePreview uiMsgPreview = uiMsgArea.getChild(UIMessagePreview.class) ;
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      if (uiFolder.getSelectedFolder() !=null  && uiFolder.getSelectedFolder().equals(folderId)) {
-        uiMessageList.updateList();
-      } else {
+      boolean isRefesh = true ;
+      if (uiFolder.getSelectedFolder() != null  && uiFolder.getSelectedFolder().equals(folderId)) {
+        try {
+          uiMessageList.updateList();
+          isRefesh = false ;
+        } catch(Exception e) { } 
+      } 
+      if (isRefesh) {
         uiFolder.setSelectedFolder(folderId) ;
         MessageFilter filter = new MessageFilter("Folder"); 
         filter.setAccountId(accountId);
@@ -192,14 +197,18 @@ public class UIFolderContainer extends UIContainer {
       UINavigationContainer uiNavigationContainer = uiFolderContainer.getAncestorOfType(UINavigationContainer.class);
       String accountId = uiNavigationContainer.getChild(UISelectAccount.class).getSelectedValue();
       
-      Account account = mailService.getAccountById(SessionProviderFactory.createSystemProvider(), username, accountId);
-      Folder folder = mailService.getFolder(SessionProviderFactory.createSystemProvider(), username, accountId, folderId);  
-      mailService.removeUserFolder(SessionProviderFactory.createSystemProvider(), username, account, folder);     
+      mailService.removeUserFolder(SessionProviderFactory.createSystemProvider(), username, accountId, folderId);     
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
       UIFolderContainer uiFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
-      uiMessageList.setMessageFilter(null);
-      uiMessageList.init(accountId);
-      uiFolder.setSelectedFolder(Utils.createFolderId(accountId, Utils.FD_INBOX, false));
+      if (folderId.equals(uiFolderContainer.getSelectedFolder())) {
+        uiMessageList.setMessageFilter(null);
+        uiMessageList.init(accountId);
+        uiFolder.setSelectedFolder(Utils.createFolderId(accountId, Utils.FD_INBOX, false));
+        uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null) ;
+      } else if (uiFolderContainer.getSelectedFolder() == null && uiMessageList.getMessageFilter().getName().equals("Search")) {
+        uiMessageList.updateList() ;
+        uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null) ;
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent()) ;
     }
@@ -207,24 +216,25 @@ public class UIFolderContainer extends UIContainer {
   
   static public class EmptyFolderActionListener extends EventListener<UIFolderContainer> {
     public void execute(Event<UIFolderContainer> event) throws Exception {
-      String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIFolderContainer uiFolderContainer = event.getSource() ;
+      String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIMailPortlet uiPortlet = uiFolderContainer.getAncestorOfType(UIMailPortlet.class);
+      UIMessageArea uiMsgArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class);
+      UIMessageList uiMsgList = uiMsgArea.getChild(UIMessageList.class) ;
+      UIMessagePreview uiMsgPreview = uiMsgArea.getChild(UIMessagePreview.class);
+      UIFolderContainer uiFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
+      
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
-      MessageFilter filter = new MessageFilter("");
-      filter.setFolder(new String[] {folderId});
-      filter.setAccountId(accountId);
-      List<Message> messages = mailSrv.getMessages(SessionProviderFactory.createSystemProvider(), username, filter);
-      mailSrv.removeMessage(SessionProviderFactory.createSystemProvider(), username, accountId, messages);
-      UIMessageArea uiMsgArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class);
-      UIMessageList uiMessageList = uiMsgArea.getChild(UIMessageList.class) ;
-      UIMessagePreview uiMsgPreview = uiMsgArea.getChild(UIMessagePreview.class);
-      UIFolderContainer uiFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
-      uiMessageList.updateList();
-      if	(uiMsgPreview.getMessage()!=null){
-      	if (messages.contains(uiMsgPreview.getMessage().getId()))
+      
+      List<Message> msgList = mailSrv.getMessagesByFolder(SessionProviderFactory.createSystemProvider(), username, accountId, folderId) ;
+      mailSrv.removeMessages(SessionProviderFactory.createSystemProvider(), username, accountId, msgList, false);
+      
+      uiMsgList.updateList();
+      Message msgPreview = uiMsgPreview.getMessage() ;
+      if (msgPreview != null) {
+      	if (msgList.contains(msgPreview.getId()))
       		uiMsgPreview.setMessage(null);
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;
@@ -273,10 +283,10 @@ public class UIFolderContainer extends UIContainer {
 	  boolean containPreview = false ;
 	  Message msgPre = uiMsgPreview.getMessage() ;
 	  for (Message msg : msgList) {
-		if (msgPre != null && msg.getId().equals(msgPre.getId())) containPreview = true ;
-		String trashFolderId = Utils.createFolderId(accountId, Utils.FD_TRASH, false) ;
-		 mailSrv.moveMessages(SessionProviderFactory.createSystemProvider(), username, accountId, msg, folderId, trashFolderId) ;
-		}	      		 
+	    if (msgPre != null && msg.getId().equals(msgPre.getId())) containPreview = true ;
+	    String trashFolderId = Utils.createFolderId(accountId, Utils.FD_TRASH, false) ;
+	    mailSrv.moveMessage(SessionProviderFactory.createSystemProvider(), username, accountId, msg, folderId, trashFolderId) ;
+	  }	      		 
 	  uiMsgList.updateList() ;
 	  if (containPreview) uiMsgPreview.setMessage(null);
 	  event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;

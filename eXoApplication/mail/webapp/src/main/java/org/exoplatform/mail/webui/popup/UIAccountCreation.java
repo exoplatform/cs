@@ -44,6 +44,7 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIFormTabPane;
 /**
  * Created by The eXo Platform SARL
@@ -54,16 +55,16 @@ import org.exoplatform.webui.form.UIFormTabPane;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template =  "app:/templates/mail/webui/UIAccountCreation.gtmpl",
+    template =  "app:/templates/mail/webui/popup/UIAccountCreation.gtmpl",
     events = {
-      @EventConfig(listeners = UIAccountCreation.ViewStepActionListener.class),
-      @EventConfig(listeners = UIAccountCreation.ChangeServerTypeActionListener.class),
-      @EventConfig(listeners = UIAccountCreation.ChangeCheckedActionListener.class),
-      @EventConfig(listeners = UIAccountCreation.SelectFolderActionListener.class),
-      @EventConfig(listeners = UIAccountCreation.NextActionListener.class),
-      @EventConfig(listeners = UIAccountCreation.BackActionListener.class),
-      @EventConfig(listeners = UIAccountCreation.FinishActionListener.class),
-      @EventConfig(listeners = UIAccountCreation.CancelActionListener.class, confirm = "UIAccountCreation.msg.confirm-cancel") 
+      @EventConfig(listeners = UIAccountCreation.ViewStepActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIAccountCreation.ChangeServerTypeActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIAccountCreation.ChangeCheckedActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIAccountCreation.SelectFolderActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIAccountCreation.NextActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIAccountCreation.BackActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIAccountCreation.FinishActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIAccountCreation.CancelActionListener.class, phase = Phase.DECODE, confirm = "UIAccountCreation.msg.confirm-cancel") 
     }
 )
 public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent, Selector {
@@ -223,6 +224,21 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       String step = event.getRequestContext().getRequestParameter(OBJECTID) ;
       WizardStep wss = (WizardStep)uiAccCreation.getChildById(uiAccCreation.getCurrentChild()) ;
       if(wss.isFieldsValid()) { 
+        UIAccountWizardStep4 uiAccWs4 = uiAccCreation.getChildById(UIAccountCreation.INPUT_STEP4) ;
+        if(uiAccWs4.isRendered()) {
+          UIAccountWizardStep1 uiAccWs1 = uiAccCreation.getChildById(UIAccountCreation.INPUT_STEP1) ;
+          UIAccountWizardStep2 uiAccWs2 = uiAccCreation.getChildById(UIAccountCreation.INPUT_STEP2) ;
+          UIAccountWizardStep3 uiAccWs3 = uiAccCreation.getChildById(UIAccountCreation.INPUT_STEP3) ;
+          UIAccountWizardStep5 uiAccWs5 = uiAccCreation.getChildById(UIAccountCreation.INPUT_STEP5) ;
+          String accname = uiAccWs1.getAccName() ;
+          String accOutgoingName = uiAccWs2.getOutgoingName() ;
+          String email = uiAccWs2.getEmailAddress() ;
+          String serverName = uiAccWs3.getIncomingServer();
+          String serverType = uiAccWs3.getServerType(); 
+          String storeFolder = uiAccWs3.getStoreFolder() ;
+          uiAccCreation.password_  = uiAccWs4.getPassword() ;
+          uiAccWs5.fillFields(accname, accOutgoingName, email, serverName, serverType, storeFolder) ;
+        }
         uiAccCreation.viewStep(Integer.parseInt(step)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiAccCreation.getAncestorOfType(UIPopupAction.class)) ;
       } else {
@@ -322,12 +338,12 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
           uiPortlet.findFirstComponentOfType(UIMessageList.class).init(acc.getId());
           UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class);
           uiSelectAccount.setSelectedValue(acc.getId());
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet); 
           WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-          context.getJavascriptManager().importJavascript("eXo.mail.MailServiceHandler","/mail/javascript/");
-          context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.init(eXo.cs.webservice.core.WebserviceManager) ;") ;
           context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.initService('checkMailInfobar', '" + MailUtils.getCurrentUser() + "', '" + acc.getId() + "') ;") ;
+          context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.setCheckmailTimeout(" + 
+              uiAccCreation.getApplicationComponent(MailService.class).getMailSetting(SessionProviderFactory.createSystemProvider(), MailUtils.getCurrentUser()).getPeriodCheckAuto() + ") ;") ;
           context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.checkMail(true) ;");
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet); 
         } catch (AuthenticationFailedException afe) {
           uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.userName-password-incorrect", null, ApplicationMessage.ERROR)) ;
           uiAccCreation.viewStep(4) ;
@@ -357,8 +373,8 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       WizardStep wss = (WizardStep) selectedTab ;
       if(!wss.isFieldsValid()) {
         UIApplication uiApp = uiAccCreation.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.fields-requirement", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
       } else {
         if(uiAccWs4.isRendered()) {
           String accname = uiAccWs1.getAccName() ;
@@ -403,6 +419,7 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       UIAccountCreation uiAccCreation = event.getSource() ;
       UIAccountWizardStep3 uiWs3 = uiAccCreation.getChildById(INPUT_STEP3) ;
       uiWs3.setDefaultValue(uiWs3.getServerType(), uiWs3.getIsSSL()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAccCreation.getParent()) ;
     } 
   }
   public static class ChangeCheckedActionListener extends EventListener<UIAccountCreation> {
@@ -410,6 +427,7 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       System.out.println("\n\n ChangeCheckedActionListener"); UIAccountCreation uiAccCreation = event.getSource() ;
       UIAccountWizardStep3 uiWs3 = uiAccCreation.getChildById(INPUT_STEP3) ;
       uiWs3.setDefaultValue(uiWs3.getServerType(), uiWs3.getIsSSL()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAccCreation.getParent()) ;
     } 
   }
 }

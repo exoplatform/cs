@@ -19,7 +19,9 @@ package org.exoplatform.contact.service.impl;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -52,39 +54,43 @@ public class NewUserListener extends UserEventListener {
   private NodeHierarchyCreator nodeHierarchyCreator_ ;
   public static String DEFAULTGROUP = "default".intern() ;
   public static String DEFAULTGROUPNAME = "My contacts".intern() ;
+  public static String DEFAULTGROUPDES = "Default address book".intern() ;
   public NewUserListener(ContactService cservice, NodeHierarchyCreator nodeHierarchyCreator) throws Exception {
   	cservice_ = cservice ;
   	nodeHierarchyCreator_ = nodeHierarchyCreator ;  	
   }
   
-  public void postSave(User user, boolean isNew) throws Exception {  	
+  public void postSave(User user, boolean isNew) throws Exception { 
+    Contact contact = null ;
+    if (isNew) contact = new Contact() ;
+    else contact = cservice_.getPublicContact(user.getUserName()) ;
+    if (contact != null) {
+      contact.setFullName(user.getFirstName() + " " + user.getLastName()) ;
+      contact.setFirstName(user.getFirstName()) ;
+      contact.setLastName(user.getLastName()) ;
+      contact.setEmailAddress(user.getEmail()) ;    
+      Calendar cal = new GregorianCalendar() ;
+      contact.setLastUpdated(cal.getTime()) ;
+    }
   	if(isNew) {
   		ContactGroup group = new ContactGroup() ;
   		group.setId(DEFAULTGROUP+user.getUserName()) ;
     	group.setName(DEFAULTGROUPNAME) ;
-    	group.setDescription("Default address book") ;
+    	group.setDescription(DEFAULTGROUPDES) ;
     	SessionProvider sysProvider = SessionProvider.createSystemProvider() ;
     	cservice_.saveGroup(sysProvider, user.getUserName(), group, true) ;
-    	Contact contact = new Contact() ;
+
     	contact.setId(user.getUserName()) ;
-    	contact.setFullName(user.getFirstName() + " " + user.getLastName()) ;
-    	contact.setFirstName(user.getFirstName()) ;
-    	contact.setLastName(user.getLastName()) ;
-      
-      
-    	contact.setEmailAddress(user.getEmail()) ;
-    	Calendar cal = new GregorianCalendar() ;
-    	contact.setLastUpdated(cal.getTime()) ;
-    	List<String> groupIds = new ArrayList<String>()  ;
-    	groupIds.add(group.getId()) ;
-      
+      Map<String, String> groupIds = new LinkedHashMap<String, String>() ;
+    	groupIds.put(group.getId(), group.getId()) ;      
       OrganizationService organizationService = 
         (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
       Object[] objGroupIds = organizationService.getGroupHandler().findGroupsOfUser(user.getUserName()).toArray() ;
       for (Object object : objGroupIds) {
-        groupIds.add(((GroupImpl)object).getId()) ;
+        String id = ((GroupImpl)object).getId() ;
+        groupIds.put(id, id) ;
       }
-    	contact.setAddressBook(groupIds.toArray(new String[]{})) ;
+    	contact.setAddressBook(groupIds.keySet().toArray(new String[] {})) ;
     	contact.setOwner(true) ;
     	contact.setOwnerId(user.getUserName()) ;
     	cservice_.saveContact(sysProvider, user.getUserName(), contact, true) ;
@@ -111,7 +117,7 @@ public class NewUserListener extends UserEventListener {
               .getString(), address.getProperty("exo:id").getString(),recievedUser) ;
         }
         
-        /*// lookup shared contacts
+        // lookup shared contacts
         queryString = new StringBuffer("/jcr:root" + usersPath 
             + "//element(*,exo:contact)[@exo:viewPermissionGroups='").append(groupId + "']") ;        
         query = qm.createQuery(queryString.toString(), Query.XPATH);
@@ -124,11 +130,9 @@ public class NewUserListener extends UserEventListener {
           String userId = temp.split(split)[1] ;
           storage_.shareContact(SessionProvider.createSystemProvider(), userId,
               new String[] {contactNode.getProperty("exo:id").getString()}, recievedUser) ;
-        }*/
+        }
       }
 
-      
-      
       Node userApp = nodeHierarchyCreator_.getUserApplicationNode(SessionProvider.createSystemProvider(), user.getUserName()) ;
       //reparePermissions(userApp, user.getUserName()) ;
       //reparePermissions(userApp.getNode("ContactApplication"), user.getUserName()) ;
@@ -138,7 +142,9 @@ public class NewUserListener extends UserEventListener {
       
       sysProvider.close();
   	} else {
-     //System.out.println("===============> edit users"); 
+      if (contact != null) {
+        cservice_.saveContact(SessionProvider.createSystemProvider(), user.getUserName(), contact, false) ; 
+      }
     }
   }
 

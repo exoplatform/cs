@@ -2,9 +2,12 @@
 	import java.text.DateFormat;
 	import java.text.SimpleDateFormat;
 	import java.util.Calendar;
+	import java.util.Locale;
+	import org.exoplatform.webui.application.WebuiRequestContext;
 	uiform.begin() ;
 	def rcontext = _ctx.getRequestContext() ;
 	rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.setSelected("'+uiform.id+'") ;') ;
+	rcontext.getJavascriptManager().addJavascript('eXo.cs.CheckBox.init("'+uiform.id+'") ;') ;
 	int currentDay = uicomponent.getCurrentDay() ;
 	int currentMonth = uicomponent.getCurrentMonth() ;
 	String currentMonthName = uicomponent.getMonthName(currentMonth) ;
@@ -14,10 +17,11 @@
  	String linkDayPrevious = uicomponent.event(uicomponent.ACT_PREVIOUS, String.valueOf(Calendar.DATE)) ;
  	monthViewAction = uicomponent.TYPE_MONTH +"&currentTime="+ uicomponent.getCurrentCalendar().getTimeInMillis();
 	yearViewAction = uicomponent.TYPE_YEAR +"&currentTime="+ uicomponent.getCurrentCalendar().getTimeInMillis();
- 	//monthViewAction = uicomponent.TYPE_MONTH +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=1" ;
-	//yearViewAction = uicomponent.TYPE_YEAR +"&"+ uicomponent.YEAR +"="+ currentYear +"&"+ uicomponent.MONTH +"="+ currentMonth +"&"+ uicomponent.DAY + "=1" ;
 	dateTimeFormat = uicomponent.getDateTimeFormat() ;
-	DateFormat df = new SimpleDateFormat(dateTimeFormat) ;
+	WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+ 	Locale locale = context.getParentAppRequestContext().getLocale() ;
+ 	
+	DateFormat df = new SimpleDateFormat(dateTimeFormat, locale) ;
 	boolean isDisplaySearchResult = uicomponent.isDisplaySearchResult() ;
 	if(isDisplaySearchResult) {
 %> 
@@ -39,6 +43,7 @@
 						</td>
 						<td>
 							<div class="Title">
+							 $currentDayName,
 							<a href="<%=uicomponent.event('GotoDate',monthViewAction)%>">
 								$currentMonthName
 							</a>, $currentDay, 
@@ -63,7 +68,9 @@
 		<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
   		<thead>
   			<tr>
+  				<%if(!isDisplaySearchResult) {%>
   				<th style="width: 30px;"><input type="checkbox" class="checkbox" title="<%=uiform.getLabel('CheckAll')%>" value="4"/></th>
+  				<%}%>
   			  <th style="width: 24px;"><div class="AttachmentIcon" title="Attachment of event">&nbsp;</div></th>
   		    <th >
   		    	<%=uiform.getLabel('Summary')%>
@@ -80,7 +87,7 @@
   				<%
   					for(event in uicomponent.getEvents()){
   					rowStyle = "" ;
-  					if(event.getId().equals(uicomponent.getLastUpdatedEventId())) {rowStyle = "background:#B0E0E6;";}
+  					if(event.getId().equals(uicomponent.getSelectedEvent())) {rowStyle = "background:#B0E0E6;";}
   					attachIcon = "" ;
   					if(!event.getAttachment().isEmpty()) {attachIcon = "AttachmentIcon" ;}
   					%>
@@ -89,7 +96,9 @@
 		  						String classIcon = event.getEventType() + "Icon" ;
 		  						String actionLink = uicomponent.event("ViewDetail", event.getId()+"&calendarId="+event.getCalendarId()+"&calType="+event.getCalType()) ;		  
 		  					%>
+		  					<%if(!isDisplaySearchResult) {%>
 		  					<td><%uicomponent.renderField(uicomponent.getChildById(event.getId()))%></td>
+		  					<%}%>
 		  					<td style="padding: 1px;"><div class="$attachIcon">&nbsp;</div></td>
 								<td class="text">
 									<a href="$actionLink" class="ControlButton">

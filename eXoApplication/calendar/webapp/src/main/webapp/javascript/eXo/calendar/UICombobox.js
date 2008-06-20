@@ -35,9 +35,22 @@ UICombobox.prototype.show = function(evt) {
 	var left = eXo.core.Browser.findPosXInContainer(this, UICombobox.list.offsetParent) ;
 	UICombobox.list.style.top = top + "px" ;	
 	UICombobox.list.style.left = left + "px" ;
+  UICombobox.fixForIE6() ;
 	document.onmousedown = eXo.calendar.UICombobox.hide ;
 } ;
-
+UICombobox.prototype.fixForIE6 = function() {
+  if(!eXo.core.Browser.isIE6()) return ;
+  if(eXo.core.DOMUtil.getChildrenByTagName(eXo.calendar.UICombobox.list,"iframe").length > 0) return ;
+	var iframe = document.createElement("iframe") ;
+  iframe.frameBorder = 0 ;
+  iframe.style.position = "absolute" ;
+  iframe.style.top = "0px" ;
+  iframe.style.left = "0px" ;  
+  iframe.style.width = "100%" ;
+  iframe.style.zIndex = -1 ;
+  iframe.style.height = eXo.calendar.UICombobox.list.firstChild.offsetHeight + "px" ;
+  eXo.calendar.UICombobox.list.appendChild(iframe) ;
+} ;
 UICombobox.prototype.cancelBubbe = function(evt) {
 	var _e = window.event || evt ;
 	_e.cancelBubble = true ;

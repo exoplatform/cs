@@ -2,7 +2,7 @@
   <parent>
     <groupId>org.exoplatform.cs</groupId>
     <artifactId>config</artifactId>
-    <version>1.0</version>
+    <version>rc3</version>
   </parent> 
 
   <modelVersion>4.0.0</modelVersion>
@@ -25,12 +25,12 @@
       <artifactId>exo.portal.component.resources</artifactId>
       <version>${org.exoplatform.portal.version}</version>
     </dependency>
-    
-  	<dependency>
-      <groupId>org.exoplatform.jcr</groupId>
-      <artifactId>exo.jcr.component.ext</artifactId>
-      <version>${org.exoplatform.jcr.version}</version>      
-    </dependency> 
-    
+
+    <dependency>
+    	<groupId>org.exoplatform.jcr</groupId>
+    	<artifactId>exo.jcr.component.ext</artifactId>
+    	<version>${org.exoplatform.jcr.version}</version>
+    </dependency>
+
   </dependencies>
 </project>

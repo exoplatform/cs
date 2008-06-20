@@ -8,6 +8,7 @@
 	import java.util.TimeZone;
 	import java.util.Date;
 	import java.util.Locale;
+	import org.exoplatform.webui.application.WebuiRequestContext;
 	import java.util.SimpleTimeZone;
 	uiform.begin() ;
 	
@@ -27,12 +28,15 @@
 	timeFormat = uicomponent.getTimeFormat() ;
 	dateTimeFormat = uicomponent.getDateTimeFormat() ;
 	timeInterval = uicomponent.getTimeInterval() ;
-	DateFormat df = new SimpleDateFormat(dateFormat) ;
+	WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+ 	Locale locale = context.getParentAppRequestContext().getLocale() ;
+ 	
+	DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
 	df.setCalendar(uicomponent.getInstanceTempCalendar()) ;
 	//String currentDate = df.format(uicomponent.getCurrentCalendar().getTime()) ;
-	DateFormat tf = new SimpleDateFormat(timeFormat) ;
+	DateFormat tf = new SimpleDateFormat(timeFormat, locale) ;
 	tf.setCalendar(uicomponent.getInstanceTempCalendar()) ;
-	DateFormat dtf = new SimpleDateFormat(dateTimeFormat) ;
+	DateFormat dtf = new SimpleDateFormat(dateTimeFormat, locale) ;
 	dtf.setCalendar(uicomponent.getInstanceTempCalendar()) ;
 	def rcontext = _ctx.getRequestContext() ;	
 	String startWorkingTime = uicomponent.getStartTime() ;
@@ -57,6 +61,9 @@
 					</td>
 					<td>
 						<div class="Title $cssClass">
+							<a href="<%=uicomponent.event("GotoDate",monthViewAction)%>">
+							$currentDayName
+						</a>,
 						<a href="<%=uicomponent.event("GotoDate",monthViewAction)%>">
 							$currentMonthName
 						</a>, $currentDay, 
@@ -97,6 +104,7 @@
     </tbody>
     </table>
   </div>
+  <div style="position:relative ;"><span></span></div>
   <div class="EventDayContainer" style="position:relative ;">
     <div class="EventDayContent">
       <table class="UIGrid" id="UIDayViewGrid" cellspacing="0" borderspacing="0" cellpadding="0" style="table-layout: fixed;">
@@ -109,17 +117,19 @@
 	            		flag = true ;
 	            		style = "" ;
 									if(isShowWorkingTime) {style = "WorkOffTime" ;}	
-	            		for(h in uicomponent.getDisplayTimes(timeFormat, timeInterval)) {
+									for(full in uicomponent.getDisplayTimes(timeFormat, timeInterval, locale)){
+					String time = full.substring(0,full.lastIndexOf("_")) ;
+					String display = full.substring(full.lastIndexOf("_")+1) ;
 	            			if(isShowWorkingTime) {
-		            			if(h.equals(startWorkingTime)) {style = "" ;}
-		            			if(h.equals(endWorkingTime)) {style = "WorkOffTime" ;}
+		            			if(time.equals(startWorkingTime)) {style = "" ;}
+		            			if(time.equals(endWorkingTime)) {style = "WorkOffTime" ;}
 		            		}
 	            			cssClass = "TdDotLine" ;
 	            			if(flag) {cssClass = "TdLine" ;} ;
                   %>
                   <tr class="$style">
                     <td class="TdTime">
-                      <%if(flag){print h;} else { print "&nbsp;";}%>
+                      <%if(flag){print display;} else { print "&nbsp;";}%>
                     </td>
                   </tr>
                   <%
@@ -166,7 +176,9 @@
 			            		if(isShowWorkingTime) {style = "WorkOffTime" ;}
 			            		Calendar cl = uicomponent.getInstanceTempCalendar() ;
 			            		cl = uicomponent.getBeginDay(uicomponent.getCurrentCalendar()) ;	
-									    for(h in uicomponent.getDisplayTimes(timeFormat, timeInterval)) {
+									  for(full in uicomponent.getDisplayTimes(timeFormat, timeInterval, locale)){
+					String h = full.substring(0,full.lastIndexOf("_")) ;
+					String display = full.substring(full.lastIndexOf("_")+1) ;
 			            			if(isShowWorkingTime) {
 				            			if(h.equals(startWorkingTime)) {style=""}
 				            			if(h.equals(endWorkingTime)) {style="WorkOffTime"}
@@ -195,6 +207,7 @@
       </table>
     </div>
   </div>
+  <div style="position:relative ;"><span></span></div>
 </div>
 <% /*Begin Popup Menu*/ %>
 <div class="UIRightClickPopupMenu" id="UIDayViewRightMenu" exocallback="eXo.calendar.UICalendarPortlet.dayViewCallback">

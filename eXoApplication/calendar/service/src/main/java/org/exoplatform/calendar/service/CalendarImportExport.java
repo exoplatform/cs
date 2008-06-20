@@ -32,5 +32,6 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 public interface CalendarImportExport {  
   public void importCalendar(SessionProvider sProvider, String username, InputStream icalInputStream, String calendarName) throws Exception ;
   public OutputStream exportCalendar(SessionProvider sProvider, String username, List<String> calendarIds, String type) throws Exception ;
+  public OutputStream exportEventCalendar(SessionProvider sProvider, String username, String calendarId, String type, String eventId) throws Exception ;
   public List<CalendarEvent> getEventObjects(InputStream icalInputStream) throws Exception ;
 }

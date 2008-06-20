@@ -18,6 +18,8 @@ package org.exoplatform.contact.webui.popup;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 import javax.jcr.PathNotFoundException;
 
@@ -33,6 +35,7 @@ import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -208,8 +211,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
                 SessionProviderFactory.createSessionProvider(), username, uiForm.groupId_, user.getId()) ;
           
           
-          // + hyphen ?
-          
+          /*
           List<Contact> contacts = contactService.getContactPageListByGroup(
               SessionProviderFactory.createSessionProvider(), username, uiForm.groupId_).getAll() ;
           for (Contact contact : contacts) {
@@ -217,6 +219,8 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
             contactService.saveContact(SessionProviderFactory.createSessionProvider()
                 , username,contact , false) ;
           }
+          */
+          
         } else {
           if(group.getViewPermissionUsers() != null) {
             List<String> newPerms = new ArrayList<String>() ;
@@ -238,23 +242,25 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
           }        
           contactService.removeUserShareAddressBook(SessionProviderFactory.createSessionProvider()
               , username, uiForm.groupId_, remover) ;
+          
+          /*
           List<Contact> contacts = contactService.getContactPageListByGroup(
               SessionProviderFactory.createSessionProvider(), username, uiForm.groupId_).getAll() ;
-          for (Contact contact : contacts) {
-            
+          for (Contact contact : contacts) {            
             removePerUser(contact, remover + JCRDataStorage.HYPHEN) ;
             contactService.saveContact(SessionProviderFactory.createSessionProvider()
                 , username,contact , false) ;
           }
+          */
         }
         contactService.saveGroup(SessionProviderFactory.createSessionProvider(), username, group, false) ;
         uiForm.updateGroupGrid(group); 
         event.getRequestContext().addUIComponentToUpdateByAjax(
             uiForm.getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class)) ;
-        
+        /*
         UIContacts uiContacts = uiForm.getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIContacts.class) ;
         uiContacts.updateList() ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;*/
       } else {
         
         // ko luu ca object contact vi co the ko dung den delete va edit
@@ -361,7 +367,20 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
     String editPermission = null ;
 
     public  String getViewPermission() {return viewPermission ;}
-    public  String getEditPermission() {return editPermission ;}
+    public  String getEditPermission() {
+      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+      ResourceBundle res = context.getApplicationResourceBundle() ;
+      try {
+        if (editPermission != null && editPermission.equalsIgnoreCase("true")) {
+          return  res.getString("UIAddEditPermission.label.true");
+        } else {
+          return res.getString("UIAddEditPermission.label.false");
+        }
+      } catch (MissingResourceException e) {      
+        e.printStackTrace() ;
+        return editPermission ;
+      }
+    }
       
     public data(String username, boolean canEdit) {
       if (username.endsWith(JCRDataStorage.HYPHEN))

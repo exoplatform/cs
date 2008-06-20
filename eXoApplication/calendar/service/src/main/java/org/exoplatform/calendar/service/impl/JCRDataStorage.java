@@ -868,7 +868,7 @@ public class JCRDataStorage{
     if(eventNode.hasProperty("exo:fromDateTime")) {
       Node reminders = getReminderFolder(SessionProvider.createSystemProvider(), eventNode.getProperty("exo:fromDateTime").getDate().getTime()) ;
       if(reminders.hasNode(eventNode.getName())) reminders.getNode(eventNode.getName()).remove() ;
-      Node events = reminders.getParent().getNode(EVENTS) ;
+      Node events = reminders.getParent().getNode(CALENDAR_REMINDER) ;
       if(events != null && events.hasNode(eventNode.getName())) events.getNode(eventNode.getName()).remove() ;
       if(!reminders.isNew())reminders.save() ;
     }
@@ -1094,13 +1094,13 @@ public class JCRDataStorage{
     summary.append("From       : ").append(cal.get(java.util.Calendar.HOUR_OF_DAY)).append(":") ;
     summary.append(cal.get(java.util.Calendar.MINUTE)).append(" - ") ;
     summary.append(cal.get(java.util.Calendar.DATE)).append("/") ;
-    summary.append(cal.get(java.util.Calendar.MONTH)).append("/") ;
+    summary.append(cal.get(java.util.Calendar.MONTH) + 1).append("/") ;
     summary.append(cal.get(java.util.Calendar.YEAR)).append("<br>") ;
     cal.setTime(eventNode.getProperty("exo:toDateTime").getDate().getTime()) ;
     summary.append("To         : ").append(cal.get(java.util.Calendar.HOUR_OF_DAY)).append(":") ;
     summary.append(cal.get(java.util.Calendar.MINUTE)).append(" - ") ;
     summary.append(cal.get(java.util.Calendar.DATE)).append("/") ;
-    summary.append(cal.get(java.util.Calendar.MONTH)).append("/") ;
+    summary.append(cal.get(java.util.Calendar.MONTH) + 1).append("/") ;
     summary.append(cal.get(java.util.Calendar.YEAR)).append("<br>") ;
     reminderNode.setProperty("exo:eventSummary", summary.toString()) ;
     if(!reminderFolder.isNew()) reminderFolder.save() ;
@@ -1112,21 +1112,8 @@ public class JCRDataStorage{
     Node publicEvent ;
     int fromDate ;
     int toDate ;
+    syncRemoveEvent(eventFolder, event.getId()) ;
 
-    QueryManager qm = eventFolder.getSession().getWorkspace().getQueryManager();
-    StringBuffer queryString = new StringBuffer("/jcr:root" + eventFolder.getParent().getPath() 
-        + "//element(*,exo:calendarPublicEvent)[@exo:rootEventId='").
-        append(event.getId()).
-        append("']");
-    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
-    QueryResult result = query.execute();
-    NodeIterator it = result.getNodes();
-    boolean isRemoved = false ;
-    while(it.hasNext()) {
-      it.nextNode().remove() ;
-      isRemoved = true ;
-    }
-    if(isRemoved) eventFolder.save() ;
     CalendarEvent ev = new CalendarEvent() ;
     publicEvent = eventFolder.addNode(ev.getId(), "exo:calendarPublicEvent") ;
     publicEvent.setProperty("exo:id", ev.getId()) ;
@@ -1137,6 +1124,7 @@ public class JCRDataStorage{
     dateTime.setTime(event.getFromDateTime()) ;
     fromDate = dateTime.get(java.util.Calendar.DATE) ;
     publicEvent.setProperty("exo:fromDateTime", dateTime) ;
+    publicEvent.setProperty("exo:eventState", event.getEventState()) ;
     dateTime.setTime(event.getToDateTime()) ;
     toDate = dateTime.get(java.util.Calendar.DATE) ;
     if(toDate > fromDate) {
@@ -1189,14 +1177,20 @@ public class JCRDataStorage{
     }
   }
 
-  private void syncRemoveEvent(Node eventFolder, String eventId) {
-    Node publicEvent ;
-    try {
-      publicEvent = eventFolder.getNode(eventId) ;
-      publicEvent.remove() ;
-      eventFolder.getSession().refresh(true) ;
+  private void syncRemoveEvent(Node eventFolder, String rootEventId) throws Exception{
+    QueryManager qm = eventFolder.getSession().getWorkspace().getQueryManager();
+    StringBuffer queryString = new StringBuffer("/jcr:root" + eventFolder.getParent().getParent().getParent().getPath() 
+        + "//element(*,exo:calendarPublicEvent)[@exo:rootEventId='").
+        append(rootEventId).
+        append("']");
+    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
+    QueryResult result = query.execute();
+    NodeIterator it = result.getNodes();
+    if(it.getSize() > 0) {
+      while(it.hasNext()) {
+        it.nextNode().remove() ;
+      }
       eventFolder.getSession().save() ;
-    } catch (Exception e) {
     }
   }
   private Node getReminderFolder(SessionProvider sysProvider, Date fromDate)throws Exception {
@@ -1450,7 +1444,7 @@ public class JCRDataStorage{
     return feeds ;
   }
 
-  public void generateRss(SessionProvider sProvider ,String username, List<String> calendarIds, RssData rssData, 
+  public int generateRss(SessionProvider sProvider ,String username, List<String> calendarIds, RssData rssData, 
       CalendarImportExport importExport) throws Exception {
     Node rssHomeNode = getRssHome(sProvider, username) ;
     Node iCalHome = null ;
@@ -1500,21 +1494,28 @@ public class JCRDataStorage{
           entries.add(entry);
           entry.getEnclosures() ;     
         }                   
-      }      
-      feed.setEntries(entries);      
-      feed.setEncoding("UTF-8") ;     
-      SyndFeedOutput output = new SyndFeedOutput();      
-      String feedXML = output.outputString(feed);      
-      feedXML = StringUtils.replace(feedXML,"&amp;","&");      
-      storeXML(feedXML, rssHomeNode, rssData.getName(), rssData); 
-      rssHomeNode.getSession().save() ;
+      }
+      if(!entries.isEmpty()) {
+        feed.setEntries(entries);      
+        feed.setEncoding("UTF-8") ;     
+        SyndFeedOutput output = new SyndFeedOutput();      
+        String feedXML = output.outputString(feed);      
+        feedXML = StringUtils.replace(feedXML,"&amp;","&");      
+        storeXML(feedXML, rssHomeNode, rssData.getName(), rssData); 
+        rssHomeNode.getSession().save() ;
+      } else {
+        System.out.println("No data to make rss!");
+        return -1 ;
+      }
     } catch (Exception e) {
       e.printStackTrace();
-    }     
+      return -1 ;
+    }  
+    return 1 ;
   }
 
 
-  public void generateCalDav(SessionProvider sProvider ,String username, List<String> calendarIds, RssData rssData, 
+  public int generateCalDav(SessionProvider sProvider ,String username, List<String> calendarIds, RssData rssData, 
       CalendarImportExport importExport) throws Exception {
     Node rssHomeNode = getRssHome(sProvider, username) ;
     Node WebDaveiCalHome = null ;
@@ -1558,6 +1559,7 @@ public class JCRDataStorage{
           entry.getEnclosures() ;     
         }                   
       }      
+      if(!entries.isEmpty()) {
       feed.setEntries(entries);      
       feed.setEncoding("UTF-8") ;     
       SyndFeedOutput output = new SyndFeedOutput();      
@@ -1565,9 +1567,15 @@ public class JCRDataStorage{
       feedXML = StringUtils.replace(feedXML,"&amp;","&");      
       storeXML(feedXML, rssHomeNode, rssData.getName(), rssData); 
       rssHomeNode.getSession().save() ;
+      } else {
+        System.out.println("No data to make caldav!");
+        return -1 ;
+      }
     } catch (Exception e) {
       e.printStackTrace();
+      return -1 ;
     }     
+    return 1 ;
   }
 
   private void storeXML(String feedXML, Node rssHome, String rssNodeName, RssData rssData) throws Exception{
@@ -1956,23 +1964,26 @@ public class JCRDataStorage{
       StringBuilder timeValues = new StringBuilder() ;
       while(it.hasNext()) {
         event = it.nextNode() ;
-        java.util.Calendar fromCal = event.getProperty("exo:fromDateTime").getDate() ;
-        java.util.Calendar toCal = event.getProperty("exo:toDateTime").getDate() ;
-        if(fromCal.getTimeInMillis() < eventQuery.getFromDate().getTimeInMillis())
-          from = String.valueOf(eventQuery.getFromDate().getTimeInMillis()) ;
-        else 
-          from = String.valueOf(fromCal.getTimeInMillis()) ;
-        if(toCal.getTimeInMillis() > eventQuery.getToDate().getTimeInMillis()){
-          GregorianCalendar cal = new GregorianCalendar() ;
-          cal.setTimeInMillis(eventQuery.getToDate().getTimeInMillis() - 1000) ;
-          to = String.valueOf(cal.getTimeInMillis()) ;
-        } else to = String.valueOf(toCal.getTimeInMillis()) ;
+        if(event.hasProperty("exo:eventState") && !CalendarEvent.ST_AVAILABLE.equals(event.getProperty("exo:eventState").getValue().getString()))
+        {
+          java.util.Calendar fromCal = event.getProperty("exo:fromDateTime").getDate() ;
+          java.util.Calendar toCal = event.getProperty("exo:toDateTime").getDate() ;
+          if(fromCal.getTimeInMillis() < eventQuery.getFromDate().getTimeInMillis())
+            from = String.valueOf(eventQuery.getFromDate().getTimeInMillis()) ;
+          else 
+            from = String.valueOf(fromCal.getTimeInMillis()) ;
+          if(toCal.getTimeInMillis() > eventQuery.getToDate().getTimeInMillis()){
+            GregorianCalendar cal = new GregorianCalendar() ;
+            cal.setTimeInMillis(eventQuery.getToDate().getTimeInMillis() - 1000) ;
+            to = String.valueOf(cal.getTimeInMillis()) ;
+          } else to = String.valueOf(toCal.getTimeInMillis()) ;
 
-        if(timeValues != null && timeValues.length() > 0) timeValues.append(",") ;
-        timeValues.append(from).append(",").append(to) ;
-      }
-      participantMap.put(par, timeValues.toString()) ;
-    }    
+          if(timeValues != null && timeValues.length() > 0) timeValues.append(",") ;
+          timeValues.append(from).append(",").append(to) ;
+          participantMap.put(par, timeValues.toString()) ;
+        }
+      }    
+    }
     return participantMap ;
   }
 

@@ -1,0 +1,279 @@
+<%
+ import org.exoplatform.contact.service.Contact;
+ import org.exoplatform.mail.MailUtils;
+  import org.exoplatform.download.DownloadService;
+%>
+<% uiform.begin()%> 
+<div><div style="width: 600px;" ><span style="display: none;"></span></div></div>
+<div id="$uicomponent.id" style="_width: expression(this.previousSibling.offsetWidth - 2 + 'px'); !border: 1px solid white;">
+<div class="UIContactsPopup"> 
+  <div class="UISearch">
+    <div class="UIActionBar">
+      <div class="UIToolbar">
+        <div class="HeaderToolbar">
+          <div class="LeftBar">
+            <div class="RightBar">
+              <div class="CenterBar">
+                <a class="ControlButton" href="<%=uicomponent.event("AddNewGroup")%>">
+                  <div class="IconHolder AddGroup">
+                    <div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.add-new-group") %></div>
+                  </div>
+                </a>
+                <a class="ControlButton" href="<%=uicomponent.event("AddContact")%>">
+                  <div class="IconHolder AddContact">
+                    <div class="Label"> <%=_ctx.appRes(uicomponent.id+ ".label.add-new-contact") %> </div>
+                  </div>
+                </a>
+                <a class="ControlButton" href="<%=uicomponent.event("EditContact")%>">
+                  <div class="IconHolder EditContact">
+                    <div class="Label"> <%=_ctx.appRes(uicomponent.id+ ".label.edit-contact") %> </div>
+                  </div>
+                </a>
+                <a class="ControlButton" href="<%=uicomponent.event("DeleteContact",uicomponent.id,"id")%>">
+                  <div class="IconHolder DeleteContact">
+                    <div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.delete-contact") %></div>
+                  </div>
+                </a>
+               
+                <!--  
+                <div class="SearchForm">
+                  <a href="#"><div title="Search" class="Search"><span></span></div></a>
+                  <input type="text" name="search" id="search" class="Input"/>
+                  <div class="LabelSearch"><%=_ctx.appRes(uicomponent.id+ ".label.search") %>:</div>
+                  <div style="clear: right;"><span></span></div>
+                </div>
+                -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>   
+  </div> 
+    
+  <div class="WorkContainer">
+    <div class="BoxWorkContainer">
+      <div class="LeftContacts">
+        <div class="UISelectAccount">
+          <%uicomponent.renderField(uicomponent.SELECT_GROUP)%>
+          <div style="clear: left;"><span></span></div>
+        </div>
+        
+        <div class="ContactContainer">
+          <div class="Title ContactIcon">
+            <%=_ctx.appRes(uicomponent.id+ ".label.contact") %>
+          </div>
+          <div class="ListContact">
+            <% 
+              if (uicomponent.getContacts().size() > 0) {
+                for (Contact contact : uicomponent.getContacts()) { 
+                  String classCss = "NormalItem";
+                  if (contact.getId().equals(uicomponent.getSelectedContact().getId())) classCss += " CheckItem";
+                  String selectContact = uicomponent.event("SelectContact", contact.getId());
+            %>
+                  <a href="$selectContact"><div class="$classCss"><%=contact.getFirstName()%>&nbsp;<%=contact.getLastName()%> </div></a>
+            <% 
+                } 
+              }
+            %>
+          </div>
+        </div>
+       
+      </div>
+      
+      <div class="RightContacts">
+        <div class="ContactContainer">
+          <div class="IconHolder ContactPopup">
+            <div class="Title ContactIcon">
+              <%=_ctx.appRes(uicomponent.id+ ".label.contact") %>
+            </div>
+          </div>
+          
+          
+          
+          <div class="DecoratorBox">
+            <div class="ViewBoxStyle">
+              <div class="TopLeftViewBoxStyle">
+                <div class="TopRightViewBoxStyle">
+                  <div class="TopCenterViewBoxStyle"><span></span></div>                    
+                </div>
+              </div>
+              <%
+                Contact selectedContact = uicomponent.getSelectedContact();
+              %>
+              <div class="MiddleLeftViewBoxStyle">
+                <div class="MiddleRightViewBoxStyle">
+                  <div class="MiddleCenterViewBoxStyle">
+                    <%  if (selectedContact != null) {%>
+                    <div class="ContactPreviewContainer">   
+                    <% 
+                      DownloadService dservice ;  
+                      String imageLink ;  
+                      dservice = uicomponent.getDownloadService() ;
+                      imageLink = MailUtils.getImageSource(selectedContact, dservice) ;
+                    %>
+                    <img src="<%=(imageLink == null ?  "/contact/skin/DefaultSkin/webui/background/Img2.gif": imageLink)%>" width=63 height=81  class="Avatar"/>         
+                      <div class="Member">
+                        <div class="State"><%=selectedContact.getFullName()%></div>
+                        <div class="Job"><%= (selectedContact.getJobTitle() != null) ? selectedContact.getJobTitle() : "_"%></div>
+                      </div>
+                      <div style="clear: left;"><span></span></div>
+                      <div class="InfoContainer">
+                        <div class="TitleInfo"><%=_ctx.appRes(uicomponent.id+ ".label.profile") %></div>
+                          <div class="Content">
+                            <div class="LeftContent">
+                        
+	                        <table>
+	                          <tr>
+	                            <td class="InfoLabel">
+	                              <div class="InfoLabel"><%=_ctx.appRes(uicomponent.id+ ".label.nick-name") %>:</div>
+	                            </td>
+	                            <td class="InfoTitle1">
+				                        <table class="InfoTitle2" >
+				                          <tr>
+				                            <td>
+	                                    <div class="InfoTitle3"><%= (selectedContact.getNickName() != null) ? selectedContact.getNickName() : "_"%></div>
+	                                  </td>
+				                          </tr>
+				                        </table>
+	                            </td>
+	                          </tr>
+	                          
+	                          <tr>
+	                            <td class="InfoLabel">
+	                              <div class="InfoLabel"><%=_ctx.appRes(uicomponent.id+ ".label.gender") %>:</div>
+	                            </td>
+	                            <td class="InfoTitle1">
+				                        <table class="InfoTitle2" >
+				                          <tr>
+				                            <td>
+	                                    <div class="InfoTitle3"><%= (selectedContact.getGender() != null) ? selectedContact.getGender() : "_"%></div>
+	                                   </td>
+				                          </tr>
+				                        </table>
+	                            </td>
+	                          </tr>
+	                          
+	                          <tr>
+	                            <td class="InfoLabel">
+	                              <div class="InfoLabel"><%=_ctx.appRes(uicomponent.id+ ".label.job-title") %>:</div>
+	                            </td>
+	                            <td class="InfoTitle1">
+				                        <table class="InfoTitle2" >
+				                          <tr>
+				                            <td>
+	                                    <div class="InfoTitle3"><%= (selectedContact.getJobTitle() != null) ? selectedContact.getJobTitle() : "_"%></div>
+	                                  </td>
+				                          </tr>
+				                        </table>
+	                            </td>
+	                          </tr>
+	                        </table>
+	                       </div>
+	                       <div class="RightContent">
+	                         <table>
+	                          <tr>
+	                            <td class="InfoLabel">
+	                              <div class="InfoLabel"><%=_ctx.appRes(uicomponent.id+ ".label.birthday") %>:</div>
+	                            </td>
+	                            <td class="InfoTitle1">
+				                        <table class="InfoTitle2" >
+				                          <tr>
+				                            <td>
+				                              <%
+				                                String birthday = null ; 
+				                                if (selectedContact.getBirthday() != null) {
+				                              	String birth = selectedContact.getBirthday().toString() ;
+				                              	String a = birth.substring(0, 10); String b = birth.substring(23,28) ;
+				                              	birthday = a+ b;
+				                              	}
+				                               %>
+				                              <div class="InfoTitle3"><%= (birthday != null) ? birthday : "_"%></div>
+				                            </td>
+				                          </tr>
+				                        </table>
+				                       </td>
+	                          </tr>
+	                          
+	                          <tr>
+	                            <td class="InfoLabel">
+	                              <div class="InfoLabel"><%=_ctx.appRes(uicomponent.id+ ".label.email") %>:</div>
+	                            </td>
+	                            <td class="InfoTitle1">
+				                        <table class="InfoTitle2" >
+				                          <tr>
+				                            <td>
+				                              <div class="InfoTitle3 Email">
+					                              <a href="#">
+					                                <%= (selectedContact.getEmailAddress() != null) ? selectedContact.getEmailAddress() : "_"%>
+					                              </a>
+					                             </div>
+				                            </td>
+				                          </tr>
+				                        </table>
+				                       </td>
+	                          </tr>
+	                          
+	                          <tr>
+	                            <td class="InfoLabel">
+	                              <div class="InfoLabel">&nbsp;</div>
+	                            </td>
+	                            <td class="InfoTitle1">
+				                        <table class="InfoTitle2" >
+				                          <tr>
+				                            <td>
+				                              <div class="InfoTitle3">&nbsp;</div>
+				                            </td>
+				                          </tr>
+				                        </table>
+				                       </td>
+	                          </tr>
+	                        </table>
+	                       </div>
+                         <div style="clear: left;"><span></span></div>
+                        </div>
+                      </div>
+                      
+                    </div>
+                    <% } %>
+                  </div>  
+                </div>
+              </div>
+              <div class="BottomLeftViewBoxStyle">
+                <div class="BottomRightViewBoxStyle">
+                  <div class="BottomCenterViewBoxStyle"><span></span></div>                   
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>    
+      </div>
+      
+      <div style="clear: left;"><span></span></div>
+    </div>
+  </div>
+  <div class="UIAction">
+    <table class="ActionContainer" align="center">
+      <tr>
+        <td align="center">
+          <% for(action in uicomponent.getActions()) { 
+                 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
+                 String link = uicomponent.event(action) ;
+          %>
+          <a href="$link" class="ActionButton LightBlueStyle">
+          <div class="ButtonLeft">
+            <div class="ButtonRight">
+              <div class="ButtonMiddle">
+                $actionLabel
+                  </div>
+                </div>
+            </div>
+          </a>
+          <%}%>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+</div>
+<% uiform.end()%> 

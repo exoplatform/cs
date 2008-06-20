@@ -29,9 +29,11 @@ import java.util.Date;
  */
 
 public class Utils {
+  final public static String SPLIT = "::".intern();
   
   public static String formatDate(String format, Date date) {
     Format formatter = new SimpleDateFormat(format);
     return formatter.format(date);
   }
+  
 }

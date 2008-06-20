@@ -28,6 +28,7 @@ import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
+import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.UISelectFolder;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -54,7 +55,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template =  "app:/templates/mail/webui/UIAdvancedSearchForm.gtmpl",
+    template =  "app:/templates/mail/webui/popup/UIAdvancedSearchForm.gtmpl",
     events = {
       @EventConfig(listeners = UIAdvancedSearchForm.SearchActionListener.class), 
       @EventConfig(listeners = UIAdvancedSearchForm.CancelActionListener.class)
@@ -85,7 +86,9 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
   public UIAdvancedSearchForm() throws Exception {}
   
   public void init(String accountId) throws Exception {
-    addUIFormInput(new UISelectFolder(accountId));
+    UISelectFolder uiSelectFolder = new UISelectFolder() ;
+    addUIFormInput(uiSelectFolder);
+    uiSelectFolder.init(accountId) ;
     
     addUIFormInput(new UIFormStringInput(FIELD_TO_SEARCH, null, null)) ;  
     addUIFormInput(new UIFormStringInput(FIELD_FROM_SEARCH, null, null)) ;  
@@ -125,10 +128,10 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     options4.add(new SelectItemOption<String>("ends with", String.valueOf(Utils.CONDITION_ENDS_WITH)));
     addUIFormInput(new UIFormSelectBox(SEARCH_SUBJECT_CONDITION, SEARCH_SUBJECT_CONDITION, options4));
     List<SelectItemOption<String>>  priorities = new ArrayList<SelectItemOption<String>>() ;
-    priorities.add(new SelectItemOption<String>(" -- Choose Priority -- ", "0"));
-    priorities.add(new SelectItemOption<String>("High", String.valueOf(Utils.PRIORITY_HIGH)));
-    priorities.add(new SelectItemOption<String>("Normal", String.valueOf(Utils.PRIORITY_NORMAL)));
-    priorities.add(new SelectItemOption<String>("Low", String.valueOf(Utils.PRIORITY_LOW)));
+    priorities.add(new SelectItemOption<String>(" -- Choose Priority -- ", "priority.0"));
+    priorities.add(new SelectItemOption<String>("High", "priority." +String.valueOf(Utils.PRIORITY_HIGH)));
+    priorities.add(new SelectItemOption<String>("Normal", "priority." + String.valueOf(Utils.PRIORITY_NORMAL)));
+    priorities.add(new SelectItemOption<String>("Low", "priority."  + String.valueOf(Utils.PRIORITY_LOW)));
     addUIFormInput(new UIFormSelectBox(SEARCH_PRIORITY, SEARCH_PRIORITY, priorities));
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(SEARCH_HAS_STAR, SEARCH_HAS_STAR, false));
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(SEARCH_HAS_ATTACH, SEARCH_HAS_ATTACH, false));
@@ -199,7 +202,8 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
   }
   
   public long getPriority() {
-    return Long.valueOf(getUIFormSelectBox(SEARCH_PRIORITY).getValue()) ;
+    String value = getUIFormSelectBox(SEARCH_PRIORITY).getValue() ;
+    return Long.valueOf(value.substring(value.indexOf(".")+1), value.length()) ;
   }
 
   public void resetFields() { reset() ; }
@@ -266,6 +270,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
       uiMessageList.setMessageFilter(filter);
       try {
         uiMessageList.setMessagePageList(mailService.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, filter));
+        uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null);
         UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
         uiFolderContainer.setSelectedFolder(null);
         uiPortlet.cancelAction();

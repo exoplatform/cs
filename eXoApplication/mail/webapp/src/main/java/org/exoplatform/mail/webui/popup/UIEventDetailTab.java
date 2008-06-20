@@ -45,7 +45,7 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
  */
 
 @ComponentConfig(
-    template = "app:/templates/mail/webui/UIEventDetailTab.gtmpl"
+    template = "app:/templates/mail/webui/popup/UIEventDetailTab.gtmpl"
 ) 
 public class UIEventDetailTab extends UIFormInputWithActions {
 
@@ -74,7 +74,7 @@ public class UIEventDetailTab extends UIFormInputWithActions {
     actionField_ = new HashMap<String, List<ActionData>>() ;
     addUIFormInput(new UIFormStringInput(FIELD_EVENT, FIELD_EVENT, null)) ;
     addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION, FIELD_DESCRIPTION, null)) ;
-    addUIFormInput(new UIFormSelectBox(FIELD_CALENDAR, FIELD_CALENDAR, null)) ;
+    addUIFormInput(new org.exoplatform.mail.webui.UIFormSelectBox(FIELD_CALENDAR, FIELD_CALENDAR, null)) ;
     addUIFormInput(new UIFormSelectBox(FIELD_CATEGORY, FIELD_CATEGORY, UIEventForm.getCategory())) ;
 
     ActionData addCategoryAction = new ActionData() ;
@@ -108,9 +108,9 @@ public class UIEventDetailTab extends UIFormInputWithActions {
 
   private List<SelectItemOption<String>> getPriority() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    options.add(new SelectItemOption<String>("High", "1")) ;
-    options.add(new SelectItemOption<String>("Normal", "2")) ;
-    options.add(new SelectItemOption<String>("Low", "3")) ;
+    options.add(new SelectItemOption<String>("high", "1")) ;
+    options.add(new SelectItemOption<String>("normal", "2")) ;
+    options.add(new SelectItemOption<String>("low", "3")) ;
     return options ;
   }
   

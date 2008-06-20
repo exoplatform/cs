@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
@@ -93,11 +94,11 @@ public class UIEventDetailTab extends UIFormInputWithActions {
     addUIFormInput(new UIFormComboBox(FIELD_FROM_TIME, FIELD_FROM_TIME, options));
     addUIFormInput(new UIFormComboBox(FIELD_TO_TIME, FIELD_TO_TIME,  options));
     
-    
-    
     //addUIFormInput(new UIFormSelectBox(FIELD_FROM_TIME, FIELD_FROM_TIME, options));
     //addUIFormInput(new UIFormSelectBox(FIELD_TO_TIME, FIELD_TO_TIME,  options));
-
+    /*WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    Locale locale = context.getParentAppRequestContext().getLocale() ;*/
+    
     addUIFormInput(new UIFormDateTimePicker(FIELD_FROM, FIELD_FROM, new Date(), false));
     addUIFormInput(new UIFormDateTimePicker(FIELD_TO, FIELD_TO, new Date(), false));
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_CHECKALL, FIELD_CHECKALL, null));
@@ -124,7 +125,7 @@ public class UIEventDetailTab extends UIFormInputWithActions {
       fileUpload.setActionListener("") ;
       fileUpload.setActionType(ActionData.TYPE_ICON) ;
       fileUpload.setCssIconClass("AttachmentIcon ZipFileIcon") ;
-      fileUpload.setActionName(attachdata.getName() + " (" + CalendarUtils.convertSize(attachdata.getSize()) + ")" ) ;
+      fileUpload.setActionName(attachdata.getName() + "-(" + CalendarUtils.convertSize(attachdata.getSize()) + ")" ) ;
       fileUpload.setShowLabel(true) ;
       uploadedFiles.add(fileUpload) ;
       ActionData removeAction = new ActionData() ;

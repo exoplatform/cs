@@ -33,6 +33,8 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import javax.jcr.PathNotFoundException;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 
 import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.CalendarEvent;
@@ -49,6 +51,7 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.impl.GroupImpl;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.core.model.SelectItemOption;
 
@@ -134,10 +137,11 @@ public class CalendarUtils {
     cal.set(Calendar.HOUR_OF_DAY, 0) ;
     cal.set(Calendar.MINUTE, 0) ;
     cal.set(Calendar.MILLISECOND, 0) ;
-
-    DateFormat df = new SimpleDateFormat(timeFormat) ;
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    Locale locale = context.getParentAppRequestContext().getLocale() ;
+    DateFormat df = new SimpleDateFormat(timeFormat, locale) ;
     df.setCalendar(cal) ;
-    DateFormat df2 = new SimpleDateFormat(TIMEFORMAT) ;
+    DateFormat df2 = new SimpleDateFormat(TIMEFORMAT, locale) ;
     df.setCalendar(cal) ;
     int time = 0 ;
     while (time ++ < 24*60/(15)) {
@@ -153,10 +157,11 @@ public class CalendarUtils {
     cal.set(Calendar.HOUR_OF_DAY, 0) ;
     cal.set(Calendar.MINUTE, 0) ;
     cal.set(Calendar.MILLISECOND, 0) ;
-
-    DateFormat dfLabel = new SimpleDateFormat(labelFormat) ;
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    Locale locale = context.getParentAppRequestContext().getLocale() ;
+    DateFormat dfLabel = new SimpleDateFormat(labelFormat, locale) ;
     dfLabel.setCalendar(cal) ;
-    DateFormat dfValue = new SimpleDateFormat(valueFormat) ;
+    DateFormat dfValue = new SimpleDateFormat(valueFormat, locale) ;
     dfValue.setCalendar(cal) ;
     int time = 0 ;
     while (time ++ < 24*60/(15)) {
@@ -173,10 +178,11 @@ public class CalendarUtils {
     cal.set(Calendar.HOUR_OF_DAY, 0) ;
     cal.set(Calendar.MINUTE, 0) ;
     cal.set(Calendar.MILLISECOND, 0) ;
-
-    DateFormat dfLabel = new SimpleDateFormat(labelFormat) ;
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    Locale locale = context.getParentAppRequestContext().getLocale() ;
+    DateFormat dfLabel = new SimpleDateFormat(labelFormat, locale) ;
     dfLabel.setCalendar(cal) ;
-    DateFormat dfValue = new SimpleDateFormat(valueFormat) ;
+    DateFormat dfValue = new SimpleDateFormat(valueFormat, locale) ;
     dfValue.setCalendar(cal) ;
     int time = 0 ;
     while (time ++ < 24*60/(timeInteval)) {
@@ -185,17 +191,36 @@ public class CalendarUtils {
     }
     return options ;
   }
+  public static List<SelectItemOption<String>> getTimesSelectBoxOptions(String labelFormat, String valueFormat, long timeInteval, Locale locale) {
+    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+    Calendar cal = getInstanceTempCalendar() ;
+    cal.set(Calendar.DST_OFFSET, 0) ;
+    cal.set(Calendar.HOUR_OF_DAY, 0) ;
+    cal.set(Calendar.MINUTE, 0) ;
+    cal.set(Calendar.MILLISECOND, 0) ;
 
+    DateFormat dfLabel = new SimpleDateFormat(labelFormat, locale) ;
+    dfLabel.setCalendar(cal) ;
+    DateFormat dfValue = new SimpleDateFormat(valueFormat, locale) ;
+    dfValue.setCalendar(cal) ;
+    int time = 0 ;
+    while (time ++ < 24*60/(timeInteval)) {
+      options.add(new SelectItemOption<String>(dfLabel.format(cal.getTime()), dfValue.format(cal.getTime()))) ;
+      cal.add(java.util.Calendar.MINUTE, (int)timeInteval) ;
+    }
+    return options ;
+  }
   public static List<SelectItemOption<String>> getTimesSelectBoxOptions(String timeFormat, int timeInteval) {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     Calendar cal = getInstanceTempCalendar() ;
     cal.set(Calendar.HOUR_OF_DAY, 0) ;
     cal.set(Calendar.MINUTE, 0) ;
     cal.set(Calendar.MILLISECOND, 0) ;
-
-    DateFormat df = new SimpleDateFormat(timeFormat) ;
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    Locale locale = context.getParentAppRequestContext().getLocale() ;
+    DateFormat df = new SimpleDateFormat(timeFormat, locale) ;
     df.setCalendar(cal) ;
-    DateFormat df2 = new SimpleDateFormat(TIMEFORMAT) ;
+    DateFormat df2 = new SimpleDateFormat(TIMEFORMAT, locale) ;
     df2.setCalendar(cal) ;
     int time = 0 ;
     while (time ++ < 24*60/(timeInteval)) {
@@ -227,6 +252,7 @@ public class CalendarUtils {
         String str = "(GMT " + ((timeZone.getRawOffset() >= 0) ? "+" : "") 
         + hrStr + ":" + minStr + ") " + tz ;
         //subZoneMap.put(tz,  str) ;
+        //System.out.println("\n\n str "+ str + " saving " + timeZone.getDSTSavings() +" raw off " +  timeZone.getRawOffset()); 
         options.add(new SelectItemOption<String>(str, tz)) ;
       } 
     }
@@ -246,7 +272,10 @@ public class CalendarUtils {
     DateFormat df = new SimpleDateFormat(timeFormat) ;
     return df.format(date) ;    
   }
-
+  public static String parse(Date date, String timeFormat, Locale locale) throws Exception {
+    DateFormat df = new SimpleDateFormat(timeFormat, locale) ;
+    return df.format(date) ;    
+  }
   static public String getCurrentUser() throws Exception {
     return Util.getPortalRequestContext().getRemoteUser() ; 
   }
@@ -349,14 +378,14 @@ public class CalendarUtils {
   static public String getTimeZone(String timezone) {
     TimeZone timeZone = TimeZone.getTimeZone(timezone) ;
     int rawOffset = timeZone.getRawOffset()  ;
-    return String.valueOf(timeZone.getDSTSavings()/60000 - rawOffset /60000) ;
+    return String.valueOf(0 - (rawOffset /60000 + timeZone.getDSTSavings()/60000)) ;
   }
 
   public static boolean hasEditPermission(String[] savePerms, String[] checkPerms) {
     if(savePerms != null)
       for(String sp : savePerms) {
         for (String cp : checkPerms) {
-          if( sp.equals(cp)) {return true ;}      
+          if( sp.equals(cp) || sp.equals("*.*")) {return true ;}      
         }
       }
     return false ;
@@ -368,8 +397,8 @@ public class CalendarUtils {
     if(oService != null) {
       Collection<Membership> memberShipsType = oService.getMembershipHandler().findMembershipsByUser(username) ;
       for(Membership mp : memberShipsType) {
-        sb.append(CalendarUtils.COMMA).append(mp.getMembershipType() +
-            CalendarUtils.COLON+ mp.getGroupId()).append(CalendarUtils.COMMA).append(CalendarUtils.STAR + CalendarUtils.COLON+ mp.getGroupId()) ;
+        sb.append(CalendarUtils.COMMA).append("*." + mp.getMembershipType()) ; /*+
+            CalendarUtils.COLON+ mp.getGroupId()).append(CalendarUtils.COMMA).append(CalendarUtils.STAR + CalendarUtils.COLON+ mp.getGroupId()) ;*/
       }
     }
     return CalendarUtils.hasEditPermission(savePerms, sb.toString().split(CalendarUtils.COMMA)) ;
@@ -398,7 +427,7 @@ public class CalendarUtils {
     for(org.exoplatform.calendar.service.Calendar c : calendars) {
       privGrp.addOption(new org.exoplatform.calendar.webui.SelectItemOption<String>(c.getName(), CalendarUtils.PRIVATE_TYPE + CalendarUtils.COLON + c.getId())) ;
     }
-    options.add(privGrp);
+    if(privGrp.getOptions().size() > 0) options.add(privGrp);
     // shared calendars group
     GroupCalendarData gcd = calendarService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true);
     if(gcd != null) {
@@ -410,7 +439,7 @@ public class CalendarUtils {
           sharedGrp.addOption(new org.exoplatform.calendar.webui.SelectItemOption<String>(owner + c.getName(), CalendarUtils.SHARED_TYPE + CalendarUtils.COLON + c.getId())) ;
         }
       }
-      options.add(sharedGrp);
+      if(sharedGrp.getOptions().size() > 0) options.add(sharedGrp);
     }
     // public calendars group
     List<GroupCalendarData> lgcd = calendarService.getGroupCalendars(SessionProviderFactory.createSystemProvider(), CalendarUtils.getUserGroups(username), false, username) ;
@@ -425,7 +454,7 @@ public class CalendarUtils {
         }
 
       }
-      options.add(pubGrp);
+      if(pubGrp.getOptions().size() > 0)  options.add(pubGrp);
     }
     return options ;
   }
@@ -463,7 +492,7 @@ public class CalendarUtils {
 
   public static String encodeJCRText(String str) {
     return str.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").
-    replaceAll("'", "&apos;").replaceAll("\"", "&quot;") ;
+    replaceAll("'", "&apos;").replaceAll("\"", "&quot;");
   }
 
   public static String encodeHTML(String htmlContent) throws Exception {
@@ -482,5 +511,51 @@ public class CalendarUtils {
     else if (size > 1024) str += df.format(((double) size)/(1024)) + " KB" ;
     else str += size + " B" ;
     return str ;
+  }
+
+  public static boolean isValidEmailAddresses(String addressList) {
+    boolean isInvalid = true ;
+    try {
+      InternetAddress[] iAdds = InternetAddress.parse(addressList, true);
+      String emailRegex = "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+\\.[A-Za-z]{2,5}" ;
+      for (int i = 0 ; i < iAdds.length; i ++) {
+        if(!iAdds[i].getAddress().toString().matches(emailRegex)) isInvalid = false;
+      }
+    } catch(AddressException e) {
+      return false ;
+    }
+    return isInvalid ;
+  }
+
+  public static String parseEmailAddress(String address) {
+    try {
+      InternetAddress[] iAdds = InternetAddress.parse(address, true);
+      return iAdds[0].getAddress() ;
+    }catch (Exception e) {
+      e.printStackTrace() ;
+      return null ;
+    }
+  }
+  public static boolean isEmailValid(String value) {
+    String emailRegex = "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+\\.[A-Za-z]{2,5}" ;
+    return (value!= null && value.trim().length() > 0 && value.trim().matches(emailRegex)) ;
+  }
+  public static boolean isAllEmailValid(String addressList) {
+    boolean isValid = true ;
+    if(CalendarUtils.isEmpty(addressList)) return false ;
+    for(String s : addressList.split(CalendarUtils.COMMA)) {
+      s = s.trim() ;
+      if(!isEmailValid(s)) isValid = false ;
+      break ;
+    }
+    return isValid  ;
+  }
+  public static boolean isUserExisted(OrganizationService orgSevice, String value) {
+    try {
+      return (!isEmpty(value) && orgSevice.getUserHandler().findUserByName(value) != null) ;
+    } catch( Exception e) {
+      e.printStackTrace() ;
+      return false ;
+    }
   }
 }

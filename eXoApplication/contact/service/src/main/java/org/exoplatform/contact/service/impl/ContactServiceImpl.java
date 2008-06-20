@@ -73,6 +73,10 @@ public class ContactServiceImpl implements ContactService {
     return storage_.getContactPageListByGroup(sProvider, username, filter, type) ;
   }
   
+  public Map<String, String> searchEmails(SessionProvider sysProvider, String username, ContactFilter filter)throws Exception {
+    return storage_.searchEmails(sysProvider, username, filter) ;
+  }
+  
   public List<String> getAllEmailAddressByGroup(SessionProvider sProvider, String username, String groupId) throws Exception {
     return storage_.getAllEmailAddressByGroup(sProvider, username, groupId);
   }
@@ -145,6 +149,11 @@ public class ContactServiceImpl implements ContactService {
   /*public void removeSharedAddressBook(SessionProvider sProvider, String username, String addressBookId) throws Exception {
   	storage_.removeSharedAddressBook(sProvider, username, addressBookId) ;
   }*/
+  
+  public void removeSharedContact(SessionProvider sProvider, String username, String addressBookId, String contactId) throws Exception { 
+    storage_.removeSharedContact(sProvider, username, addressBookId, contactId) ;
+  }
+  
   public void saveContactToSharedAddressBook(String username, String addressBookId, Contact contact, boolean isNew) throws Exception {
   	storage_.saveContactToSharedAddressBook(username, addressBookId, contact, isNew) ;
   }

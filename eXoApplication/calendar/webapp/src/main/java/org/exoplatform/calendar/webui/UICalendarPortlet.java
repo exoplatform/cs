@@ -22,6 +22,7 @@ import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPopupMessages;
@@ -75,4 +76,14 @@ public class UICalendarPortlet extends UIPortletApplication {
     WebuiRequestContext  context =  WebuiRequestContext.getCurrentInstance() ;
     popupMess.processRender(context);
   }
+  
+  public String getRemoteUser() {
+    return Util.getPortalRequestContext().getRemoteUser() ;
+  }
+  
+  public String getUserToken() {
+    return "" ;
+  }
+  
+  
 }

@@ -1,0 +1,98 @@
+<%
+  import org.exoplatform.mail.webui.UISelectFolder;
+%>
+<%uiform.begin()%>  
+<div class="UIAddMessageFilter">
+
+	<div class="UIForm">
+	  <div class="HorizontalLayout">
+	    <div class="FormContainer">
+	    	<div class="FinterName">
+		      <table class="UIFormGrid">
+		        <tr>
+		  	      <td class="FieldLabel" style="width: 90px"><%=_ctx.appRes(uicomponent.id+ ".label.filter-name") %>:</td>
+		          <td class="FieldComponent" colspan="2"><%uicomponent.renderField(uicomponent.FILTER_NAME)%></td>
+		        </tr>
+		      </table>
+		    </div>
+	      <div class="AddMessageFilter">
+	      	<div class="WorkingContent">
+			      <div class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.if-all-of-the-flowing-true") %></div>
+			      <table class="UIFormGrid">
+			        <tr>
+			  	      <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.from") %>:</td>
+			  	      <td class="FieldComponent" style="width: 130px;">
+                  <%uicomponent.renderField(uicomponent.FILTER_FROM_CONDITION)%>
+								</td>
+			          <td class="FieldComponent" style="width: 130px;"><%uicomponent.renderField(uicomponent.FILTER_FROM)%></td>
+			        </tr>
+			        <tr>
+			  	      <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.to") %>:</td>
+			  	      <td class="FieldComponent" style="width: 130px;">
+                  <%uicomponent.renderField(uicomponent.FILTER_TO_CONDITION)%>  
+								</td>
+			          <td class="FieldComponent" style="width: 130px;"><%uicomponent.renderField(uicomponent.FILTER_TO)%></td>
+			        </tr>
+			        <tr>
+			  	      <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.subject") %>:</td>
+			  	      <td class="FieldComponent" style="width: 130px;">
+			  	        <%uicomponent.renderField(uicomponent.FILTER_SUBJECT_CONDITION)%>  
+								</td>
+			          <td class="FieldComponent" style="width: 130px;"><%uicomponent.renderField(uicomponent.FILTER_SUBJECT)%>  </td>
+			        </tr>
+			        <tr>
+			  	      <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.body") %>:</td>
+			  	      <td class="FieldComponent" style="width: 130px;">
+                  <%uicomponent.renderField(uicomponent.FILTER_BODY_CONDITION)%>  
+								</td>
+			          <td class="FieldComponent" style="width: 130px;"><%uicomponent.renderField(uicomponent.FILTER_BODY)%></td>
+			        </tr>
+			      </table>
+			      <div class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.then") %> ...</div>
+			      <table class="UIFormGrid">
+			        <tr>
+			  	      <td class="FieldLabel"><%=uicomponent.getLabel(uicomponent.FILTER_APPLY_FOLDER)%>:</td>
+			  	      <td class="FieldComponent SelectFolder" style="width: 270px; padding:0px;"><%uicomponent.renderChild(UISelectFolder.class)%></td>
+			        </tr>
+              <tr>
+                <td class="FieldLabel"><%=uicomponent.getLabel(uicomponent.FILTER_APPLY_TAG)%>:</td>
+                <td class="FieldComponent SelectTag" style="width: 270px;"><%uicomponent.renderField(uicomponent.FILTER_APPLY_TAG)%></td>
+              </tr>
+              <tr>
+              <td class="FieldLabel"><%=uicomponent.getLabel(uicomponent.APPLY_ALL_MESSAGE)%></td>
+              <td class="FieldComponent SelectTag" style="align-left: 1px"><%uicomponent.renderField(uicomponent.APPLY_ALL_MESSAGE)%></td>
+            </tr>
+			      </table>
+			    </div>
+			  </div>
+        
+        <div class="UIAction">
+          <table class="ActionContainer" align="center">
+            <tr>
+              <td align="center">
+                <% for(action in uicomponent.getActions()) { 
+                         String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
+                         String link = uicomponent.event(action) ;
+                %>
+                <a href="$link" class="ActionButton LightBlueStyle">
+                  <div class="ButtonLeft">
+                    <div class="ButtonRight">
+                      <div class="ButtonMiddle">
+                        $actionLabel
+                      </div>
+                    </div>
+                  </div>
+                </a>
+                <%}%>
+              </td>
+            </tr>
+          </table>
+        </div>
+        
+	    </div>
+	  </div>
+	</div>
+
+</div>
+<%uiform.end()%>  
+ 

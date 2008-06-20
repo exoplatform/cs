@@ -31,6 +31,7 @@ import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.webui.UIContactPortlet;
+import org.exoplatform.contact.webui.UIContactPreview;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UIFormColorPicker;
 import org.exoplatform.contact.webui.UITags;
@@ -67,8 +68,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
   public static final String NO_TAG_INFO = "no Tag";
   public static final String FIELD_COLOR= "color";
   
-  public static String[] FIELD_TAG_BOX_KEY = null;
-  public static String[] FIELD_TAG_BOX_LABLE = null;
+  Map<String, String> tags = new LinkedHashMap<String, String>() ;
   private List<Contact> contacts_ = new ArrayList<Contact>();
   private String[] tagNames = null ;
   private String[] contactNames = null ;
@@ -82,8 +82,11 @@ public class UITagForm extends UIForm implements UIPopupComponent {
     int i = 0 ;
     contactNames = new String[contacts_.size()] ;
     tagNames = new String[contacts_.size()] ;
-    Map<String, Tag> tags = 
+    Map<String, Tag> tapMap = 
       getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UITags.class).getTagMap() ;
+    for(Tag tag : tapMap.values()) {
+      tags.put(tag.getId(), tag.getName()) ;
+    }
     for (Contact contact : contacts_) {
       String[] tagIds  = null ;
       if (contact != null) { 
@@ -91,7 +94,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
         StringBuffer buffer = new StringBuffer() ;          
         if (tagIds != null && tagIds.length > 0) {
           for (int j = 0; j < tagIds.length; j ++) {
-            Tag tag = tags.get(tagIds[j]) ;  
+            Tag tag = tapMap.get(tagIds[j]) ;  
             if (tag != null && buffer.length() < 1) {
               buffer.append(tag.getName()) ;
             }
@@ -108,16 +111,8 @@ public class UITagForm extends UIForm implements UIPopupComponent {
     }
     addUIFormInput(new UIFormStringInput(FIELD_TAGNAME_INPUT, FIELD_TAGNAME_INPUT, null));
     addUIFormInput(new UIFormColorPicker(FIELD_COLOR, FIELD_COLOR, Colors.COLORS)) ;
-    
-    FIELD_TAG_BOX_KEY = new String[tags.size()];
-    FIELD_TAG_BOX_LABLE = new String[tags.size()] ;
-    int k = 0 ;
-    for (String tagId : tags.keySet()) {
-      Tag tag = tags.get(tagId) ;
-      FIELD_TAG_BOX_KEY[k] = tag.getId();
-      FIELD_TAG_BOX_LABLE[k] = tag.getName() ;
-      addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_TAG_BOX_LABLE[k], FIELD_TAG_BOX_KEY[k], false));
-      k ++ ;
+    for (String tagName : tags.values()) {
+      addUIFormInput(new UIFormCheckBoxInput<Boolean>(tagName, tagName, false));
     }
   }
   public List<Contact> getContacts() { return contacts_ ;}
@@ -149,9 +144,9 @@ public class UITagForm extends UIForm implements UIPopupComponent {
 
   public List<String> getCheckedTags() throws Exception {
     List<String> checkedTags = new ArrayList<String>();
-    for (int i = 0; i < FIELD_TAG_BOX_LABLE.length; i ++) {
-      if (getUIFormCheckBoxInput(FIELD_TAG_BOX_LABLE[i]).isChecked()) {
-        checkedTags.add(FIELD_TAG_BOX_KEY[i]);
+    for (String tagId : tags.keySet()) {
+      if (getUIFormCheckBoxInput(tags.get(tagId)).isChecked()) {
+        checkedTags.add(tagId);
       }
     }
     return checkedTags;
@@ -247,8 +242,17 @@ public class UITagForm extends UIForm implements UIPopupComponent {
         contactIds.add(contact.getId()) ;
         newContactIds.add(contact.getId() + JCRDataStorage.SPLIT + contact.getContactType()) ;
       }
-      contactService.removeContactTag(
-          SessionProviderFactory.createSystemProvider(), username, newContactIds, checkedTags) ;
+      try {
+        contactService.removeContactTag(
+            SessionProviderFactory.createSystemProvider(), username, newContactIds, checkedTags) ;
+      } catch (PathNotFoundException e) {
+        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UITagForm.msg.contact-not-exist-remove", null, 
+            ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
+      
       UIContactPortlet contactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       UITags uiTags = contactPortlet.findFirstComponentOfType(UITags.class) ;
       String selectedTag = uiTags.getSelectedTag() ;
@@ -279,6 +283,12 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       uiContacts.updateList() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTags) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
+      
+      if (uiContacts.getContactMap().size() == 0) {
+        UIContactPreview uiContactPreview = contactPortlet.findFirstComponentOfType(UIContactPreview.class) ;
+        uiContactPreview.setContact(null) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPreview) ;
+      }      
       contactPortlet.cancelAction() ; 
     }
   }

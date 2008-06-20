@@ -67,6 +67,14 @@ public class UISelectAccount extends UIForm {
     addChild(uiSelect) ; 
   }
   
+  public String getLabel(String id) {
+    try {
+      return super.getLabel(id) ; 
+    } catch(Exception e) {
+      return id ;
+    }
+  }
+  
   private List<SelectItemOption<String>> getValues() throws Exception {
     MailService mailSvr = getApplicationComponent(MailService.class) ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
@@ -77,6 +85,7 @@ public class UISelectAccount extends UIForm {
     for(Account acc : accountList) {
       SelectItemOption<String> option = new SelectItemOption<String>(acc.getLabel(), acc.getId());
       if (defaultAcc != null && acc.getId().equals(defaultAcc)) {
+        option = new SelectItemOption<String>(acc.getLabel() + " (" + getLabel("default") + ")", acc.getId());
         option.setSelected(true);
       }
       options.add(option) ;
@@ -163,14 +172,18 @@ public class UISelectAccount extends UIForm {
     public void execute(Event<UISelectAccount> event) throws Exception {
       UISelectAccount uiSelectAcc = event.getSource() ;
       UIMailPortlet uiPortlet = uiSelectAcc.getAncestorOfType(UIMailPortlet.class);
-      String accId = uiSelectAcc.getSelectedValue() ;
-      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
-      MessageFilter filter = new MessageFilter("Folder");
-      filter.setAccountId(accId);
-      filter.setFolder(new String[] {Utils.createFolderId(accId, Utils.FD_INBOX, false)}) ;
-      uiMessageList.setMessageFilter(filter);
-      uiMessageList.init(accId);
-      uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null);
+      try {
+        String accId = uiSelectAcc.getSelectedValue() ;
+        UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
+        MessageFilter filter = new MessageFilter("Folder");
+        filter.setAccountId(accId);
+        filter.setFolder(new String[] {Utils.createFolderId(accId, Utils.FD_INBOX, false)}) ;
+        uiMessageList.setMessageFilter(filter);
+        uiMessageList.init(accId);
+        uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null);
+      } catch(Exception e) { 
+        // do nothing
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
     }
   }  

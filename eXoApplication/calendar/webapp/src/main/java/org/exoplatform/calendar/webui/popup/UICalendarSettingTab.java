@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -64,12 +65,12 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     super(compId);
     setComponentConfig(getClass(), null) ;
     List<SelectItemOption<String>> viewTypes = new ArrayList<SelectItemOption<String>>() ;
-    viewTypes.add(new SelectItemOption<String>("Day view", CalendarSetting.DAY_VIEW)) ;
-    viewTypes.add(new SelectItemOption<String>("Week view", CalendarSetting.WEEK_VIEW)) ;
-    viewTypes.add(new SelectItemOption<String>("Working view", CalendarSetting.WORKING_VIEW)) ;
-    viewTypes.add(new SelectItemOption<String>("Month view", CalendarSetting.MONTH_VIEW)) ;
-    viewTypes.add(new SelectItemOption<String>("Year view", CalendarSetting.YEAR_VIEW)) ;
-    viewTypes.add(new SelectItemOption<String>("List view", CalendarSetting.LIST_VIEW)) ;
+    viewTypes.add(new SelectItemOption<String>(CalendarSetting.DAY_VIEW, CalendarSetting.DAY_VIEW)) ;
+    viewTypes.add(new SelectItemOption<String>(CalendarSetting.WEEK_VIEW, CalendarSetting.WEEK_VIEW)) ;
+    viewTypes.add(new SelectItemOption<String>(CalendarSetting.WORKING_VIEW, CalendarSetting.WORKING_VIEW)) ;
+    viewTypes.add(new SelectItemOption<String>(CalendarSetting.MONTH_VIEW, CalendarSetting.MONTH_VIEW)) ;
+    viewTypes.add(new SelectItemOption<String>(CalendarSetting.YEAR_VIEW, CalendarSetting.YEAR_VIEW)) ;
+    viewTypes.add(new SelectItemOption<String>(CalendarSetting.LIST_VIEW, CalendarSetting.LIST_VIEW)) ;
     //viewTypes.add(new SelectItemOption<String>("Schedule view", CalendarSetting.SCHEDULE_VIEW)) ;
 
     addUIFormInput(new UIFormSelectBox(VIEW_TYPE, VIEW_TYPE, viewTypes)) ;
@@ -77,29 +78,28 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     List<SelectItemOption<String>> timeInterval = new ArrayList<SelectItemOption<String>>() ;
     int i = 5 ;
     while(i < 121) {
-      timeInterval.add(new SelectItemOption<String>(i + " minutes", String.valueOf(i))) ;
+      timeInterval.add(new SelectItemOption<String>(String.valueOf(i), String.valueOf(i)+"-itv")) ;
       i += 5;
     }
     addUIFormInput(new UIFormSelectBox(TIME_INTERVAL, TIME_INTERVAL, timeInterval)) ;
-
     List<SelectItemOption<String>> weekStartOn = new ArrayList<SelectItemOption<String>>() ;
     DateFormatSymbols dfs = new DateFormatSymbols() ;  ;
     for(int id =1 ;id<  dfs.getWeekdays().length; id++) {
-      weekStartOn.add(new SelectItemOption<String>(dfs.getWeekdays()[id], String.valueOf(id))) ;
+      weekStartOn.add(new SelectItemOption<String>(String.valueOf(id)+"-wst", String.valueOf(id)+"-wst")) ;
     }
 
     addUIFormInput(new UIFormSelectBox(WEEK_START_ON, WEEK_START_ON, weekStartOn)) ;
 
     List<SelectItemOption<String>> dateFormat = new ArrayList<SelectItemOption<String>>() ;
-    dateFormat.add(new SelectItemOption<String>("dd/mm/yyyy", "dd/MM/yyyy")) ;
-    dateFormat.add(new SelectItemOption<String>("dd-mm-yyyy", "dd-MM-yyyy")) ;
-    dateFormat.add(new SelectItemOption<String>("mm/dd/yyyy", "MM/dd/yyyy")) ;
-    dateFormat.add(new SelectItemOption<String>("mm-dd-yyyy", "MM-dd-yyyy")) ;
+    dateFormat.add(new SelectItemOption<String>("dd/MM/yyyy", "dd/MM/yyyy")) ;
+    dateFormat.add(new SelectItemOption<String>("dd-MM-yyyy", "dd-MM-yyyy")) ;
+    dateFormat.add(new SelectItemOption<String>("MM/dd/yyyy", "MM/dd/yyyy")) ;
+    dateFormat.add(new SelectItemOption<String>("MM-dd-yyyy", "MM-dd-yyyy")) ;
     addUIFormInput(new UIFormSelectBox(DATE_FORMAT, DATE_FORMAT, dateFormat)) ;
 
     List<SelectItemOption<String>> timeFormat = new ArrayList<SelectItemOption<String>>() ;
-    timeFormat.add(new SelectItemOption<String>("AM/PM", "hh:mm a")) ;
-    timeFormat.add(new SelectItemOption<String>("24 Hours", "HH:mm")) ;
+    timeFormat.add(new SelectItemOption<String>("AM/PM", "AM/PM")) ;
+    timeFormat.add(new SelectItemOption<String>("24-Hours", "24-Hours")) ;
     addUIFormInput(new UIFormSelectBox(TIME_FORMAT, TIME_FORMAT, timeFormat)) ;
     UIFormSelectBox localeSelect = new UIFormSelectBox(LOCATION, LOCATION, getLocales()) ;
     addUIFormInput(localeSelect) ;
@@ -128,15 +128,19 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     getUIFormSelectBox(VIEW_TYPE).setValue(value) ;
   }
   protected String getTimeInterval() {
-    return getUIFormSelectBox(TIME_INTERVAL).getValue() ;
+    String value = getUIFormSelectBox(TIME_INTERVAL).getValue() ;
+    return value.substring(0, value.lastIndexOf("-itv")) ;
   }
   protected void setTimeInterval(String value) {
+    value = value + "-itv" ;
     getUIFormSelectBox(TIME_INTERVAL).setValue(value) ;
   }
   protected String getWeekStartOn() {
-    return getUIFormSelectBox(WEEK_START_ON).getValue() ;
+    String value = getUIFormSelectBox(WEEK_START_ON).getValue()  ;
+    return value.substring(0, value.lastIndexOf("-wst")) ;
   }
   protected void setWeekStartOn(String value) {
+    value = value + "-wst" ;
     getUIFormSelectBox(WEEK_START_ON).setValue(value) ;
   }
   protected String getDateFormat() {
@@ -146,10 +150,13 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     getUIFormSelectBox(DATE_FORMAT).setValue(value) ;
   }
   protected String getTimeFormat() {
-    return getUIFormSelectBox(TIME_FORMAT).getValue() ;
+    if("AM/PM".equals(getUIFormSelectBox(TIME_FORMAT).getValue()))
+      return "hh:mm a" ;
+    else return "HH:mm" ;
   }
   protected void setTimeFormat(String value) {
-    getUIFormSelectBox(TIME_FORMAT).setValue(value) ;
+    if("hh:mm a".endsWith(value)) getUIFormSelectBox(TIME_FORMAT).setValue("AM/PM") ;
+    else getUIFormSelectBox(TIME_FORMAT).setValue("24-Hours") ;
   }
   protected String getLocale() {
     return getUIFormSelectBox(LOCATION).getValue() ;
@@ -170,6 +177,19 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     getUIFormCheckBoxInput(ISSHOWWORKINGTIME).setChecked(value) ;
   }
   protected String getWorkingBegin() throws Exception {
+  /*  java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
+    DateFormat dateFormat = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
+    DateFormat timeFormat = new SimpleDateFormat(getTimeFormat()) ;
+    DateFormat dateTimeFormat = new SimpleDateFormat(CalendarUtils.DATETIMEFORMAT) ;
+    dateFormat.setCalendar(cal) ;
+    timeFormat.setCalendar(cal) ;
+    dateTimeFormat.setCalendar(cal) ;
+    String value = getUIFormSelectBox(WORKINGTIME_BEGIN).getValue() ;
+    String date = dateFormat.format(cal.getTime()) + " " + value ;
+    cal.setTime(dateTimeFormat.parse(date)); */
+    return getUIFormSelectBox(WORKINGTIME_BEGIN).getValue() ;
+  }
+  protected String getWorkingBegin(Locale locale) throws Exception {
     java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
     DateFormat dateFormat = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     DateFormat timeFormat = new SimpleDateFormat(getTimeFormat()) ;
@@ -182,7 +202,6 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     cal.setTime(dateTimeFormat.parse(date)); 
     return timeFormat.format(cal.getTime()) ;
   }
-
   protected Date getWorkingBeginTime() throws Exception {
     java.util.Calendar cal = CalendarUtils.getBeginDay(CalendarUtils.getInstanceTempCalendar()) ;
     DateFormat dateFormat = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
@@ -192,8 +211,17 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     cal.setTime(dateTimeFormat.parse(date)); 
     return  cal.getTime()  ;
   }
+  protected Date getWorkingBeginTime(Locale locale) throws Exception {
+    java.util.Calendar cal = CalendarUtils.getBeginDay(CalendarUtils.getInstanceTempCalendar()) ;
+    DateFormat dateFormat = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
+    DateFormat dateTimeFormat = new SimpleDateFormat(CalendarUtils.DATETIMEFORMAT) ;
+    String value = getUIFormSelectBox(WORKINGTIME_BEGIN).getValue() ;
+    String date = dateFormat.format(cal.getTime()) + " " + value ;
+    cal.setTime(dateTimeFormat.parse(date)); 
+    return  cal.getTime()  ;
+  }
   protected void setWorkingBegin(String value, String format) throws Exception {
-    java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
+    /*java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
     DateFormat dateFormat = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     DateFormat timeFormat = new SimpleDateFormat(CalendarUtils.TIMEFORMAT) ;
     DateFormat dateTimeFormat = new SimpleDateFormat(format) ;
@@ -201,11 +229,11 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     timeFormat.setCalendar(cal) ;
     dateTimeFormat.setCalendar(cal) ;
     String date = dateFormat.format(cal.getTime()) + " " + value ;
-    cal.setTime(dateTimeFormat.parse(date)); 
-    getUIFormSelectBox(WORKINGTIME_BEGIN).setValue(timeFormat.format(cal.getTime())) ;
+    cal.setTime(dateTimeFormat.parse(date)); */
+    getUIFormSelectBox(WORKINGTIME_BEGIN).setValue(value) ;
   }
   protected String getWorkingEnd() throws Exception{
-    java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
+  /*  java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
     DateFormat dateFormat = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     DateFormat timeFormat = new SimpleDateFormat(getTimeFormat()) ;
     DateFormat dateTimeFormat = new SimpleDateFormat(CalendarUtils.DATETIMEFORMAT) ;
@@ -214,8 +242,8 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     dateTimeFormat.setCalendar(cal) ;
     String value = getUIFormSelectBox(WORKINGTIME_END).getValue() ;
     String date = dateFormat.format(cal.getTime()) + " " + value ;
-    cal.setTime(dateTimeFormat.parse(date)); 
-    return timeFormat.format(cal.getTime()) ;
+    cal.setTime(dateTimeFormat.parse(date)); */
+    return getUIFormSelectBox(WORKINGTIME_END).getValue() ;
   }
 
   protected Date getWorkingEndTime() throws Exception{
@@ -230,7 +258,7 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     return  cal.getTime();
   }
   protected void setWorkingEnd(String value, String format) throws Exception {
-    java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
+   /* java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
     DateFormat dateFormat = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     DateFormat timeFormat = new SimpleDateFormat(CalendarUtils.TIMEFORMAT) ;
     DateFormat dateTimeFormat = new SimpleDateFormat(format) ;
@@ -238,8 +266,8 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     timeFormat.setCalendar(cal) ;
     dateTimeFormat.setCalendar(cal) ;
     String date = dateFormat.format(cal.getTime()) + " " + value ;
-    cal.setTime(dateTimeFormat.parse(date)); 
-    getUIFormSelectBox(WORKINGTIME_END).setValue(timeFormat.format(cal.getTime())) ;
+    cal.setTime(dateTimeFormat.parse(date)); */
+    getUIFormSelectBox(WORKINGTIME_END).setValue(value) ;
   }
   public List<SelectItemOption<String>> getTimeZones(String locale) {
     return CalendarUtils.getTimeZoneSelectBoxOptions(TimeZone.getAvailableIDs()) ;

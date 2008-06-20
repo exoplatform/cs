@@ -23,13 +23,17 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventQuery;
+import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UIFormComboBox;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.model.SelectItemOption;
@@ -74,18 +78,21 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
   }
 
   protected void updateParticipants(String values) throws Exception{
+    OrganizationService orgService = getApplicationComponent(OrganizationService.class) ;
     parMap_.clear() ;
     Map<String, String> tmpMap = new HashMap<String, String>() ;
     List<String> newPars = new ArrayList<String>() ;
     if(!CalendarUtils.isEmpty(values)) {
       for(String par : values.split(CalendarUtils.COMMA)) {
-        String vl = tmpMap.get(par) ;
-        parMap_.put(par.trim(), vl) ;
-        if(vl == null) newPars.add(par.trim()) ;  			
+        if(orgService.getUserHandler().findUserByName(par) != null)  {
+          String vl = tmpMap.get(par) ;
+          parMap_.put(par.trim(), vl) ;
+          if(vl == null) newPars.add(par.trim()) ;
+        }
       }
     }
-    boolean isCheckFreeTime = getUIFormCheckBoxInput(FIELD_CHECK_TIME).isChecked() ;
-    if(newPars.size() > 0 && isCheckFreeTime) {
+    //boolean isCheckFreeTime = getUIFormCheckBoxInput(FIELD_CHECK_TIME).isChecked() ;
+    if(newPars.size() > 0) {
       EventQuery eventQuery = new EventQuery() ;
       eventQuery.setFromDate(CalendarUtils.getBeginDay(calendar_)) ;
       eventQuery.setToDate(CalendarUtils.getEndDay(calendar_)) ;
@@ -96,21 +103,27 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
       parMap_.putAll(parsMap) ;
     }
   }
-
-
+  
+  public boolean isCheckFreeTime() {
+    return getUIFormCheckBoxInput(FIELD_CHECK_TIME).isChecked() ;
+  }
   protected Map<String, String> getMap(){ 
     for(String id : parMap_.keySet()) {
       if(getUIFormCheckBoxInput(id) == null) addUIFormInput(new UIFormCheckBoxInput<Boolean>(id, id, false)) ;
     }
     return parMap_ ; 
-    
+
   }
 
   protected String[] getParticipants() { return parMap_.keySet().toArray(new String[]{}) ; } 
 
-  protected String getDateValue() {
-    DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
+  protected String getDateValue() throws Exception  {
+    CalendarSetting calSetting = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    Locale locale = context.getParentAppRequestContext().getLocale() ;
+    DateFormat df = new SimpleDateFormat(calSetting.getDateFormat(),locale) ;
     df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
+    System.out.println(df.format(calendar_.getTime()));
     return df.format(calendar_.getTime()) ;
   }
   protected void moveNextDay() throws Exception{
@@ -170,10 +183,10 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
     super.processRender(arg0);
   }
   public String getUserTimeZone(String username) throws Exception {
-     String timeZone = CalendarUtils.getCalendarService().getCalendarSetting(SessionProviderFactory.createSystemProvider(), CalendarUtils.getCurrentUser()).getTimeZone() ;
-     return CalendarUtils.getTimeZone(timeZone) ;
+    String timeZone = CalendarUtils.getCalendarService().getCalendarSetting(SessionProviderFactory.createSystemProvider(), CalendarUtils.getCurrentUser()).getTimeZone() ;
+    return CalendarUtils.getTimeZone(timeZone) ;
   }
-  
+
   public String getServerTimeZone() {
     return CalendarUtils.getTimeZone(TimeZone.getDefault().getID()) ;
   }

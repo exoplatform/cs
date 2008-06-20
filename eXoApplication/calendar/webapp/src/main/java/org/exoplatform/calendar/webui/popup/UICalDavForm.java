@@ -144,6 +144,11 @@ public class UICalDavForm extends UIFormTabPane implements UIPopupComponent{
       RssData rssData = new RssData() ;
       String tempName = uiForm.getUIStringInput(UICalDavForm.TITLE).getValue() ;
       if(tempName != null && tempName.length() > 0) {
+        if(!CalendarUtils.isNameValid(tempName, CalendarUtils.SPECIALCHARACTER)) {
+          uiApp.addMessage(new ApplicationMessage("UIRssForm.msg.feed-name-invalid", null)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
         if(tempName.length() > 4 && tempName.substring(tempName.length() - 4).equals(".rss")) rssData.setName(tempName);
         else rssData.setName(tempName + ".rss") ;
       }else {
@@ -158,7 +163,12 @@ public class UICalDavForm extends UIFormTabPane implements UIPopupComponent{
       rssData.setVersion("rss_2.0") ;
       if(uiForm.getUIFormDateTimeInput(UICalDavForm.PUBLIC_DATE).getCalendar() != null)
       rssData.setPubDate(uiForm.getUIFormDateTimeInput(UICalDavForm.PUBLIC_DATE).getCalendar().getTime()) ;
-      calendarService.generateCalDav(SessionProviderFactory.createSystemProvider(), Util.getPortalRequestContext().getRemoteUser(), calendarIds, rssData) ;
+      int result = calendarService.generateCalDav(SessionProviderFactory.createSystemProvider(), Util.getPortalRequestContext().getRemoteUser(), calendarIds, rssData) ;
+      if(result < 0) {
+        uiApp.addMessage(new ApplicationMessage("UIRssForm.msg.no-data-generated", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       calendarPortlet.cancelAction() ;  
       Object[] object = new Object[]{title} ;

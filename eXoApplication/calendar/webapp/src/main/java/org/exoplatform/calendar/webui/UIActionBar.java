@@ -22,6 +22,7 @@ import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
+import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.webui.popup.UICalendarSettingForm;
 import org.exoplatform.calendar.webui.popup.UIFeed;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
@@ -73,15 +74,18 @@ public class UIActionBar extends UIContainer  {
   static public class QuickAddEventActionListener extends EventListener<UIActionBar> {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ;
-      CalendarService calendarService = uiActionBar.getApplicationComponent(CalendarService.class) ;
       UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
-      List<org.exoplatform.calendar.service.Calendar> privateCalendars = 
-        calendarService.getUserCalendars(uiActionBar.getSession(), CalendarUtils.getCurrentUser(), true) ;
-      if(privateCalendars.isEmpty()) {
+      if(CalendarUtils.getCalendarOption().isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.calendar-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
+      List<EventCategory> eventCategories = CalendarUtils.getCalendarService().getEventCategories(uiActionBar.getSession(), CalendarUtils.getCurrentUser()) ;
+      if(eventCategories.isEmpty()) {
+        uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.event-category-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }  
       String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
       String formTime = event.getRequestContext().getRequestParameter(CURRENTTIME) ;
       String categoryId = event.getRequestContext().getRequestParameter(CATEGORYID) ;
@@ -161,7 +165,13 @@ public class UIActionBar extends UIContainer  {
       UIActionBar uiActionBar = event.getSource() ;
       UICalendarPortlet calendarPortlet = uiActionBar.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = calendarPortlet.getChild(UIPopupAction.class) ;
-      popupAction.activate(UIFeed.class, 600) ;
+      UIFeed feed = popupAction.activate(UIFeed.class, 600) ;
+      UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
+      if(feed.getFeeds().isEmpty()) {
+        uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.feed-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }

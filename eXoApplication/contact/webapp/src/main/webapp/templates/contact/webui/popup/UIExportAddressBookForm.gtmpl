@@ -1,8 +1,8 @@
 <%
   import org.exoplatform.contact.service.ContactGroup;
-  
+  import org.exoplatform.contact.ContactUtils;
   import org.exoplatform.webui.core.model.SelectItemOption;
-  
+  import org.exoplatform.contact.service.impl.NewUserListener;
   import org.exoplatform.webui.form.UIFormSelectBox;
   import org.exoplatform.webui.form.UIFormStringInput;
   
@@ -47,6 +47,9 @@
 						Map sharedGroups = uicomponent.getSharedContactGroups();
 						for(group in sharedGroups.keySet()) {
 							checkboxField = uicomponent.getChildById(group) ;
+							String groupName = sharedGroups.get(group).getName() + ContactUtils.SHARED ;
+							if (group.contains(NewUserListener.DEFAULTGROUP)) groupName = sharedGroups.get(group).getSharedUserId() + ContactUtils.SCORE + sharedGroups.get(group).getName() + ContactUtils.SHARED;
+							
 					%>
   						<tr class="UIContactList">
   						  <td class="text" style="padding-left: 7px;">
@@ -55,7 +58,7 @@
   						  	%>
   						  </td>
 							<td class="text">
-									<%=sharedGroups.get(group).getName()%>
+									<%=groupName%>
 							</td>
 
    			     	</tr>
@@ -78,6 +81,9 @@
 
    			     	</tr>
 		     	<% } %>
+			     	
+			     	
+			     	
   	   			</tbody>
 				</table>
 			</div>
@@ -112,7 +118,7 @@
 
                 <div class="ButtonLeft">
                   <div class="ButtonRight">
-                    <div class="ButtonMiddle"> <%=_ctx.appRes(uicomponent.getName() + ".label.cancel")%></div>
+                    <div class="ButtonMiddle">  <%=_ctx.appRes(uicomponent.getName() + ".label.cancel")%> </div>
                   </div>
                 </div>
               </a>

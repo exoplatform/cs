@@ -21,18 +21,26 @@ function MailServiceHandler() {
 
 MailServiceHandler.prototype = new eXo.cs.webservice.core.WebserviceHandler();
 
-MailServiceHandler.prototype.initService = function(uiId, userName, accountId, checkMailInterval) {
-  this.checkMailInterval = checkMailInterval;
+MailServiceHandler.prototype.initService = function(uiId, userName, accountId) {
   this.uiId = uiId;
   this.accountId = accountId;
   this.userName = userName;
+  if (eXo.core.Browser.getCookie('cs.mail.checkingmail' + this.accountId) == 'true') {
+    this.checkMail();
+  }
+};
+
+MailServiceHandler.prototype.setCheckmailTimeout = function(checkMailInterval) {
+  this.checkMailInterval = checkMailInterval;
+  if (this.autoCheckMailTimeoutId) {
+  	try {
+      window.clearInterval(this.autoCheckMailTimeoutId);
+    } catch (e) {};
+  }
   if (this.checkMailInterval &&
       !isNaN(this.checkMailInterval) && (parseInt(this.checkMailInterval) > 0) ) {
     this.checkMailInterval = parseInt(this.checkMailInterval);
-    window.setInterval(eXo.mail.MailServiceHandler.checkMailWrapper, this.checkMailInterval);
-  }
-  if (eXo.core.Browser.getCookie('cs.mail.checkingmail' + this.accountId) == 'true') {
-    this.checkMail();
+    this.autoCheckMailTimeoutId = window.setInterval(eXo.mail.MailServiceHandler.checkMailWrapper, checkMailInterval);
   }
 };
 
@@ -150,4 +158,4 @@ MailServiceHandler.prototype.destroy = function() {
   }
 };
 
-eXo.mail.MailServiceHandler = new MailServiceHandler() ;
+eXo.mail.MailServiceHandler = eXo.mail.MailServiceHandler || new MailServiceHandler() ;

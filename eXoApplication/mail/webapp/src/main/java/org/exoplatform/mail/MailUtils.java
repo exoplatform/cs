@@ -25,6 +25,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -139,12 +140,12 @@ public class MailUtils {
     return false ;
   }
   
-  public static String formatDate(String format, Date date) {
-    Format formatter = new SimpleDateFormat(format);
+  public static String formatDate(String format, Date date, Locale locale) {
+    Format formatter = new SimpleDateFormat(format, locale);
     return formatter.format(date);
   }
   
-  public static String formatDate(Date date) {
+  public static String formatDate(Date date, Locale locale) {
     Calendar systemDate =  new GregorianCalendar() ;
     Calendar cal =  new GregorianCalendar() ;
     cal.setTime(date);
@@ -152,23 +153,22 @@ public class MailUtils {
     boolean isSameMonth = (systemDate.get(Calendar.MONTH) == cal.get(Calendar.MONTH)) ;
     boolean isSameWeek = (isSameMonth && (systemDate.get(Calendar.WEEK_OF_MONTH) == cal.get(Calendar.WEEK_OF_MONTH)));
     boolean isSameDate = (isSameWeek && (systemDate.get(Calendar.DAY_OF_WEEK) == cal.get(Calendar.DAY_OF_WEEK)));
-    
     if (isSameYear) 
       if (isSameDate) 
-        return (new SimpleDateFormat("HH:mm aaa")).format(date);
+        return (new SimpleDateFormat("HH:mm aaa", locale)).format(date);
       else if (isSameWeek)
-        return (new SimpleDateFormat("EEEE")).format(date);
+        return (new SimpleDateFormat("EEEE", locale)).format(date);
       else if (isSameMonth)
-        return (new SimpleDateFormat("EEEE, dd")).format(date);
+        return (new SimpleDateFormat("EEEE, dd", locale)).format(date);
       else 
-        return (new SimpleDateFormat("MMM dd")).format(date);
+        return (new SimpleDateFormat("MMM dd", locale)).format(date);
     else 
-      return (new SimpleDateFormat("MMM dd, yyyy")).format(date);
+      return (new SimpleDateFormat("MMM dd, yyyy", locale)).format(date);
   }
   
   public static String encodeHTML(String htmlContent) throws Exception {
     return (!isFieldEmpty(htmlContent)) ? htmlContent.replaceAll("&", "&amp;").replaceAll("\"", "&quot;")
-        .replaceAll("<", "&lt;").replaceAll(">", "&gt;") : "" ;
+        .replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\"", "&quot;").replaceAll("'", "&#39;") : "" ;
   }
   
   public static boolean isInvitation(Message msg) throws Exception {
@@ -233,10 +233,14 @@ public class MailUtils {
   }
   
   public static String html2text(String str) throws Exception {
-    str = str.replaceAll("<[^>]*>", "");
-    str = str.replaceAll("&nbsp;", "");
-    str = str.replaceAll("&quot;", "\"");
-    str = str.replaceAll("\n", "");
+    if (str != null) {
+      str = str.replaceAll("<[^>]*>", "");
+      str = str.replaceAll("&nbsp;", "");
+      str = str.replaceAll("&quot;", "\"");
+      str = str.replaceAll("\n", "");
+    } else {
+      str = "" ;
+    }
     return str;
   }
 }

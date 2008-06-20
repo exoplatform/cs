@@ -22,9 +22,12 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import javax.jcr.PathNotFoundException;
+
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
@@ -105,16 +108,18 @@ public class UIMonthView extends UICalendarView {
   }
   public java.util.Calendar getBeginDateOfMonthView() throws Exception{
     java.util.Calendar temCal = getBeginDateOfMonth() ;
+    temCal.setFirstDayOfWeek(java.util.Calendar.SUNDAY) ;
     int amount = temCal.getFirstDayOfWeek() - temCal.get(java.util.Calendar.DAY_OF_WEEK) ;
     temCal.add(java.util.Calendar.DATE, amount) ;
     return getBeginDay(temCal) ;
   }
 
   public java.util.Calendar getEndDateOfMonthView() throws Exception{
-    java.util.Calendar temCal = getEndDateOfMonth() ;
+    java.util.Calendar temCal = getBeginDateOfMonthView() ;
+    temCal.setFirstDayOfWeek(java.util.Calendar.SUNDAY) ;
     int amount = temCal.getMaximum(java.util.Calendar.DAY_OF_WEEK) - temCal.get(java.util.Calendar.DAY_OF_WEEK) ; 
-    temCal.add(java.util.Calendar.DATE, amount) ;
-    return getEndDay(temCal) ;
+    temCal.add(java.util.Calendar.DATE, getWeeksOfTheMonth(getCurrentYear(), getCurrentMonth(), 1)*7) ;
+    return getBeginDay(temCal) ;
   }
 
   public java.util.Calendar getBeginDateOfMonth() throws Exception{
@@ -161,55 +166,68 @@ public class UIMonthView extends UICalendarView {
       String value = event.getRequestContext().getRequestParameter(OBJECTID) ;
       String eventId = event.getRequestContext().getRequestParameter(EVENTID) ;
       String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
+      CalendarService calService = CalendarUtils.getCalendarService() ;
       try {
         CalendarEvent calEvent = calendarview.getDataMap().get(eventId); 
         if(calEvent != null) {
-          
-          if(!calEvent.getCalType().equals(CalendarUtils.PRIVATE_TYPE)) {
-            CalendarService calService = CalendarUtils.getCalendarService() ;
-            org.exoplatform.calendar.service.Calendar calendar = null ;
-            if(calEvent.getCalType().equals(CalendarUtils.SHARED_TYPE)){
-              calendar = 
-              calService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true).getCalendarById(calendarId) ;
-            } else if(calEvent.getCalType().equals(CalendarUtils.PUBLIC_TYPE)) {
-              calendar = calService.getGroupCalendar(SessionProviderFactory.createSystemProvider(), calendarId) ;
-            }
-            if(!CalendarUtils.canEdit(calendarview.getApplicationComponent(OrganizationService.class), calendar.getEditPermission(), CalendarUtils.getCurrentUser())) {
+          org.exoplatform.calendar.service.Calendar calendar = null ;
+          if(calEvent.getCalType().equals(CalendarUtils.PRIVATE_TYPE)) {
+            calendar = calService.getUserCalendar(calendarview.getSession(), username, calendarId) ;
+          } else if(calEvent.getCalType().equals(CalendarUtils.SHARED_TYPE)){
+            if(calService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true) != null)
+              calendar = calService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true).getCalendarById(calendarId) ;
+          } else if(calEvent.getCalType().equals(CalendarUtils.PUBLIC_TYPE)) {
+            calendar = calService.getGroupCalendar(SessionProviderFactory.createSystemProvider(), calendarId) ;
+          }
+          if(calendar == null) {
+            UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;
+            uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          } else {
+            if(!CalendarUtils.PRIVATE_TYPE.equals(calEvent.getCalType()) && !CalendarUtils.canEdit(calendarview.getApplicationComponent(OrganizationService.class), calendar.getEditPermission(), CalendarUtils.getCurrentUser())) {
               UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;
-              uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null, 1)) ;
+              uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit-event", null, 1)) ;
               event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
               calendarview.refresh() ;
               event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ;
               return ;
             }
+            java.util.Calendar tempCalFrom = calendarview.getInstanceTempCalendar() ;
+            tempCalFrom.setTimeInMillis((Long.parseLong(value))) ;
+            java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
+            Long amount = calEvent.getToDateTime().getTime() - calEvent.getFromDateTime().getTime() ;
+            cal.setTime(calEvent.getFromDateTime()) ;
+            cal.set(Calendar.DATE, tempCalFrom.get(Calendar.DATE)) ;
+            cal.set(Calendar.MONTH, tempCalFrom.get(Calendar.MONTH)) ;
+            cal.set(Calendar.YEAR, tempCalFrom.get(Calendar.YEAR)) ;
+            calEvent.setFromDateTime(cal.getTime()) ;
+            cal.setTimeInMillis(calEvent.getFromDateTime().getTime() + amount) ;
+            calEvent.setToDateTime(cal.getTime()) ;
+            if(calEvent.getCalType().equals(CalendarUtils.PRIVATE_TYPE)) {
+              CalendarUtils.getCalendarService().saveUserEvent(calendarview.getSession(), username, calendarId, calEvent, false) ;
+            }else if(calEvent.getCalType().equals(CalendarUtils.SHARED_TYPE)){
+              CalendarUtils.getCalendarService().saveEventToSharedCalendar(calendarview.getSystemSession(), username, calendarId, calEvent, false) ;
+            }else if(calEvent.getCalType().equals(CalendarUtils.PUBLIC_TYPE)){
+              CalendarUtils.getCalendarService().savePublicEvent(calendarview.getSystemSession(), calendarId, calEvent, false) ;          
+            }
+            UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
+            calendarview.refresh() ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ; 
           }
-          
-          java.util.Calendar tempCalFrom = calendarview.getInstanceTempCalendar() ;
-          tempCalFrom.setTimeInMillis((Long.parseLong(value))) ;
-          java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
-          Long amount = calEvent.getToDateTime().getTime() - calEvent.getFromDateTime().getTime() ;
-          cal.setTime(calEvent.getFromDateTime()) ;
-          cal.set(Calendar.DATE, tempCalFrom.get(Calendar.DATE)) ;
-          cal.set(Calendar.MONTH, tempCalFrom.get(Calendar.MONTH)) ;
-          cal.set(Calendar.YEAR, tempCalFrom.get(Calendar.YEAR)) ;
-          calEvent.setFromDateTime(cal.getTime()) ;
-          cal.setTimeInMillis(calEvent.getFromDateTime().getTime() + amount) ;
-          calEvent.setToDateTime(cal.getTime()) ;
-          if(calEvent.getCalType().equals(CalendarUtils.PRIVATE_TYPE)) {
-            CalendarUtils.getCalendarService().saveUserEvent(calendarview.getSession(), username, calendarId, calEvent, false) ;
-          }else if(calEvent.getCalType().equals(CalendarUtils.SHARED_TYPE)){
-            CalendarUtils.getCalendarService().saveEventToSharedCalendar(calendarview.getSystemSession(), username, calendarId, calEvent, false) ;
-          }else if(calEvent.getCalType().equals(CalendarUtils.PUBLIC_TYPE)){
-            CalendarUtils.getCalendarService().savePublicEvent(calendarview.getSystemSession(), calendarId, calEvent, false) ;          
-          }
-          UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
-          calendarview.refresh() ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(calendarview.getParent()) ; 
         }
-      } catch (Exception e) {
+
+      } catch (PathNotFoundException e) {
         e.printStackTrace() ;
+        UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
       }
+      UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+      CalendarSetting setting = calService.getCalendarSetting(calendarview.getSession(), username) ;
+      uiViewContainer.refresh() ;
+      uiPortlet.setCalendarSetting(setting) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
     }
   }
 }

@@ -4,11 +4,13 @@
 	cursor: pointer;
 }
 
+.UIContactPortlet .UIMessageCompose {
+	padding: 10px;
+}
+
 .UIContactPortlet .UIMessageCompose .MailListActionsbar{
 	color: #000000;
-	margin: 3px 0px 0px 0px;
 	line-height: 26px;
-	padding-top: 2px;
 }
 
 .UIContactPortlet .UIMessageCompose .MailListActionsbar a:hover {
@@ -99,6 +101,9 @@
 
 .UIContactPortlet .UIMessageCompose table {
 	background: none;
+	margin: 0px;
+	width: 100%;
+	_width: 97%;
 }
 
 .UIContactPortlet .UIMessageCompose .UIForm .HorizontalLayout td.FieldLabel {
@@ -137,7 +142,7 @@
 }
 
 .UIContactPortlet .UIMessageCompose .UIForm .HorizontalLayout select {
-	width: 98%;
+	width: 90%;
 }
 
 .UIContactPortlet .UIMessageCompose .UIForm .HorizontalLayout .FieldLabel .HoverButton {

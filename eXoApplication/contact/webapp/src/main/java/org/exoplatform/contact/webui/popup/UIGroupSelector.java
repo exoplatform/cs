@@ -68,9 +68,9 @@ import org.exoplatform.webui.organization.UIGroupMembershipSelector;
 public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopupComponent, UISelectComponent {
   private UIComponent uiComponent ;
   private String type_ = null ;
-  private List selectedGroup_ ;
-  public String selectedChildGroup = null ;
+  private List selectedGroups_ ;
   private String returnFieldName = null ;
+  private boolean isNull = true ;
 
   public UIGroupSelector() throws Exception {}
 
@@ -116,24 +116,31 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
         children.add(child) ;
       } 
     } else if(TYPE_GROUP.equals(type_)) {
-      Collection  groups = service.getGroupHandler().findGroups(this.getCurrentGroup()) ;    
-      for(Object child : groups){
-        children.add(((Group)child).getGroupName()) ;
-      }
+      if (!isNull) {
+        Collection  groups = service.getGroupHandler().findGroups(this.getCurrentGroup()) ;    
+        for(Object child : groups){
+          children.add(((Group)child).getGroupName()) ;
+        }
+      } else {
+        Collection  groups = service.getGroupHandler().findGroups(null) ;    
+        for(Object child : groups){
+          children.add(((Group)child).getGroupName()) ;
+        }        
+      }      
     }
     return children ;
   }
   public void setSelectedGroups(List groups){
     if(groups != null) {
-      selectedGroup_ = groups ;
-      getChild(UITree.class).setSibbling(selectedGroup_) ;
+      selectedGroups_ = groups ;
+      getChild(UITree.class).setSibbling(selectedGroups_) ;
     }
   }
   public void changeGroup(String groupId) throws Exception {    
     super.changeGroup(groupId) ;  
-    if(selectedGroup_ != null) {
+    if(selectedGroups_ != null) {
       UITree tree = getChild(UITree.class);
-      tree.setSibbling(selectedGroup_);
+      tree.setSibbling(selectedGroups_);
       tree.setChildren(null);
     }
   }
@@ -165,6 +172,7 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
     }
   }
 
+  @SuppressWarnings("unused")
   private List<LocalPath> getPath(List<LocalPath> list, String id) throws Exception {
     if(list == null) list = new ArrayList<LocalPath>(5);
     if(id == null) return list;
@@ -179,20 +187,11 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
   static  public class ChangeNodeActionListener extends EventListener<UITree> {   
     public void execute(Event<UITree> event) throws Exception {
       UIGroupSelector uiGroupSelector = event.getSource().getAncestorOfType(UIGroupSelector.class) ;
-      String groupId = event.getRequestContext().getRequestParameter(OBJECTID) ;      
-      OrganizationService service = uiGroupSelector.getApplicationComponent(OrganizationService.class) ;
-      Group group = service.getGroupHandler().findGroupById(groupId) ;
-      if (service.getGroupHandler().findGroups(group).size() > 0 || !uiGroupSelector.isSelectGroup()) {
-        uiGroupSelector.changeGroup(groupId) ;
-        uiGroupSelector.selectedChildGroup = null ;  
-      } else {
-        uiGroupSelector.selectedChildGroup = groupId ;
-        UIBreadcumbs uiBreadcumb = uiGroupSelector.getChild(UIBreadcumbs.class);
-        uiBreadcumb.setPath(uiGroupSelector.getPath(null, groupId)) ;        
-        UITree tree = uiGroupSelector.getChild(UITree.class);
-        tree.setSelected(group) ;
-        tree.setSibbling((List)service.getGroupHandler().findGroups(service.getGroupHandler().findGroupById(group.getParentId())));
-        tree.setChildren(null) ;
+      String groupId = event.getRequestContext().getRequestParameter(OBJECTID) ; 
+      uiGroupSelector.changeGroup(groupId) ;   
+      if (uiGroupSelector.isSelectGroup()) {
+        if (groupId == null) uiGroupSelector.isNull = true ;
+        else  uiGroupSelector.isNull = false ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiGroupSelector) ;
     }
@@ -201,11 +200,10 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
   static  public class SelectPathActionListener extends EventListener<UIBreadcumbs> {
     public void execute(Event<UIBreadcumbs> event) throws Exception {
       UIBreadcumbs uiBreadcumbs = event.getSource() ;
-      UIGroupSelector uiGroupSelector = uiBreadcumbs.getParent() ;
-      //String objectId =  event.getRequestContext().getRequestParameter(OBJECTID) ;
-      uiBreadcumbs.setSelectPath(uiGroupSelector.getCurrentGroup().getId());     
-      //String selectGroupId = uiBreadcumbs.getSelectLocalPath().getId() ;
-      uiGroupSelector.changeGroup(uiGroupSelector.getCurrentGroup().getId()) ;
+      UIGroupSelector uiGroupSelector = uiBreadcumbs.getParent() ;  
+      String objectId =  event.getRequestContext().getRequestParameter(OBJECTID) ;
+      uiBreadcumbs.setSelectPath(objectId);     
+      uiGroupSelector.changeGroup(objectId) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiGroupSelector) ;
     }
   }

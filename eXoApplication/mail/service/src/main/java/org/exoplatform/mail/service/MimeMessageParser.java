@@ -16,14 +16,22 @@
  */
 package org.exoplatform.mail.service;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.GregorianCalendar;
 
+import javax.mail.Header;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * Created by The eXo Platform SAS
@@ -32,6 +40,7 @@ import javax.mail.internet.MimeMessage;
  * Mar 15, 2008  
  */
 public class MimeMessageParser {
+  private static final Log logger = LogFactory.getLog(MimeMessageParser.class);
   
   public static Calendar getReceivedDate(javax.mail.Message msg) throws Exception {
     Calendar gc = GregorianCalendar.getInstance() ;
@@ -97,8 +106,13 @@ public class MimeMessageParser {
         dateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z") ;
         return dateFormat.parse(dateStr);
       } catch(ParseException ex) {
-        dateFormat = new SimpleDateFormat("d MMM yyyy HH:mm:ss Z") ;
-        return dateFormat.parse(dateStr);
+        try {
+          dateFormat = new SimpleDateFormat("d MMM yyyy HH:mm:ss Z") ;
+          return dateFormat.parse(dateStr);
+        } catch(ParseException exx) {
+          System.out.println(" [WARNING] Cannot parse date time from message: " + dateStr) ;
+          return null ;
+        }
       }
     }
   }
@@ -136,6 +150,46 @@ public class MimeMessageParser {
     if (msgIdHeaders != null && msgIdHeaders[0]!= null)
       return msgIdHeaders[0] ;
     return "" ;
+  }
+  
+  // TODO : khdung
+  // I implemented a new getMessageId that returns a MD5 string based on all headers of the message.
+  // The purpose is to replace the previous getMessageId ... to better remove duplicate mails (and
+  // to deal with the case when the message-id is null)
+  /**
+   * @return a MD5 string
+   */
+  public static String getMD5MsgId(javax.mail.Message msg) throws Exception {
+    // first construct a key by joining all headers
+    String key = "";
+    long t1 = System.currentTimeMillis();
+    Enumeration enu = msg.getAllHeaders() ;
+    while (enu.hasMoreElements()) {
+      Header header = (Header)enu.nextElement() ;
+      key += header.getValue() ;
+    }
+    String md5 = getMD5(key);
+    long t2 = System.currentTimeMillis();
+    //TODO : change the log level later
+    // just to have an idea about how this method slows down the checking mail
+    logger.error("getMD5MsgId spending time : " + (t2-t1) + "ms");
+    return md5;
+  }
+  /**
+   * separated getMD5 method ... for a general use.
+   * @param s
+   * @return a MD5 string
+   */
+  public static String getMD5(String s) {
+    try {
+      MessageDigest m = MessageDigest.getInstance("MD5");
+      m.update(s.getBytes(), 0, s.length());
+      return "" + new BigInteger(1, m.digest()).toString(16);
+    } catch (NoSuchAlgorithmException e) {
+      // almost never ... but the idea is we should control all exceptions
+      logger.error("MD5 is not supported !!!");
+    }
+    return s;
   }
   
   public static String getInReplyToHeader(javax.mail.Message message) throws Exception {

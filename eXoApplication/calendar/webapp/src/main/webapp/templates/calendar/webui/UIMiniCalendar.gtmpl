@@ -3,6 +3,8 @@
 	import java.text.SimpleDateFormat;
 	import java.util.Map ;
 	import org.exoplatform.calendar.CalendarUtils;
+	import java.util.Locale;
+	import org.exoplatform.webui.application.WebuiRequestContext;
 	
 	int currentYear = uicomponent.getCurrentYear() ;
 	int currentMonth = uicomponent.getCurrentMonth() ;
@@ -17,9 +19,12 @@
  	if(uicomponent.isCurrentMonth(currentMonth, currentYear)) {
 		cssClass = "CalendarMatchedEventContent" ;
 	}
-	DateFormat sdf = new  SimpleDateFormat("d") ;
+	
+  WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+ 	Locale locale = context.getParentAppRequestContext().getLocale() ;
+	DateFormat sdf = new  SimpleDateFormat("d", locale) ;
 	sdf.setCalendar(uicomponent.getInstanceTempCalendar()) ;
-	DateFormat sdtf = new  SimpleDateFormat("MM/d") ;
+	DateFormat sdtf = new  SimpleDateFormat("MM/d", locale) ;
  	sdtf.setCalendar(uicomponent.getInstanceTempCalendar()) ;
 	Map data = uicomponent.getData() ;
 %>

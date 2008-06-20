@@ -73,7 +73,7 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
       UIFormUploadInput input = (UIFormUploadInput)uiForm.getUIInput(FIELD_UPLOAD);
       UploadResource uploadResource = input.getUploadResource() ;
       if(uploadResource == null) {
-        uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.selectFile-required", null, 
+        uiApp.addMessage(new ApplicationMessage("UIImageForm.msg.selectFile-required", null, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;

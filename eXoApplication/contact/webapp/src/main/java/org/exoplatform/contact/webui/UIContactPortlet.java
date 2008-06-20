@@ -20,6 +20,7 @@ import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPopupMessages;
+import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
@@ -33,11 +34,20 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
     template = "app:/templates/contact/webui/UIContactPortlet.gtmpl"
 )
 public class UIContactPortlet extends UIPortletApplication {
+  
+  // replace when portal fix bug show image
+  private boolean isRefreshed = false ;
+  public void setRefreshed(boolean b) { isRefreshed = b ; }
+  public boolean isRefreshed() { return isRefreshed ; }
+
   public UIContactPortlet() throws Exception {
     //addChild(UIBannerContainer.class, null, null) ;
     addChild(UIActionBar.class, null, null) ;
     addChild(UIWorkingContainer.class, null, null) ;
-    addChild(UIPopupAction.class, null, null) ;
+    UIPopupAction uiPopupAction = addChild(UIPopupAction.class, null, null) ;
+    uiPopupAction.setId("UIContactPopupAction") ;
+    UIPopupWindow uiPopupWindow = uiPopupAction.getChild(UIPopupWindow.class) ;
+    uiPopupWindow.setId("UIContactPopupWindow") ;
   }
 
   public void renderPopupMessages() throws Exception {

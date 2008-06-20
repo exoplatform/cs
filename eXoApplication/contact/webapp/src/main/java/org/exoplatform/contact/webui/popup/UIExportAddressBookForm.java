@@ -26,6 +26,7 @@ import java.util.MissingResourceException;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.SharedAddressBook;
+import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadResource;
@@ -115,7 +116,7 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
     for (String group : sharedGroupMap_.keySet()) {
       UIFormCheckBoxInput uiCheckBox = getChildById(group);
       if (uiCheckBox != null && uiCheckBox.isChecked()) {
-        checked.add(group);
+        checked.add(group + JCRDataStorage.HYPHEN + sharedGroupMap_.get(group).getSharedUserId());
       }
     }
     for (String group : publicGroupMap_.keySet()) {
@@ -173,12 +174,9 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
       }else {
         dresource.setDownloadName("eXoExported.vcf");
       }
-      String downloadLink = dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;
-      
-      event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + downloadLink + "');") ;
-      
-      uiContactPortlet.cancelAction() ;
-      
+      String downloadLink = dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;      
+      event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + downloadLink + "');") ;      
+      uiContactPortlet.cancelAction() ;      
     }
   }
   

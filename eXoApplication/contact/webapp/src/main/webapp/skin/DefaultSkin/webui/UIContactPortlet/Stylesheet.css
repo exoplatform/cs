@@ -34,7 +34,7 @@
 .UIContactPortlet .UISearchForm input {
 	width: 140px;
 	float: right;
-	margin: 3px 8px;
+	margin: 0px 8px 0px 0px;
 }
 
 .UIContactPortlet .UISearchForm .Search {
@@ -42,7 +42,7 @@
   height: 16px;
   width: 16px;
   float: right;
-  margin: 8px 5px 0px 0px;
+  margin: 5px 5px 0px 0px;
   cursor: pointer;
   display: block;
 }
@@ -59,7 +59,7 @@
   background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/FindIcon.gif') no-repeat ;	
   height: 16px; width: 16px;
   float: right; cursor: pointer;
-  margin: 8px 0px 0px 2px;
+  margin: 5px 0px 0px 2px;
   display: block;
 }
 
@@ -76,6 +76,7 @@
 	padding-left: 26px;
 	background-position: left center;
 	background-repeat: no-repeat; 
+	cursor: pointer;
 }
 
 .UIContactPortlet .SeparatorLine {
@@ -86,6 +87,7 @@
 .UIContactPortlet .ControlButton {
 	float: left;
 	margin: 0px 3px;
+	cursor: pointer;
 }
 
 .UIContactPortlet .SelectButton {
@@ -119,16 +121,17 @@
 	color: black;
 }
 
-.UIContactPortlet .UIActionBar .ControlButton {
-	margin: 0px 3px 0px 3px;
+.UIContactPortlet .UIActionBar a{
+	line-height: 24px;
+	margin: 3px 1px 0px 1px;
 }
 
-.UIContactPortlet .UIActionBar .ControlButton a:hover {
+.UIContactPortlet .UIActionBar a:hover {
 	background: url('background/ControlButtonBG1x26.gif') repeat-x ;
 	border: 1px solid #9d9d9d;
 	color: #126ca5;
-	height: 24px;
 	line-height: 24px;
+	margin: 3px 0px 0px 0px;
 }
 
 .UIContactPortlet .UIActionBar .Label {
@@ -143,20 +146,6 @@
 .UIContactPortlet .UIActionBar .DownArrow1Icon {
 	background-position: right center;
 	padding-right: 16px;
-}
-
-.UIContactPortlet .UIActionBar .ImportAddressIcon {
-	height: 26px; width: 21px;
-	margin: 4px 5px 0px 60px;
-	_margin: 4px 5px 0px 30px;
-	float: left;
-	cursor: pointer;
-}
-.UIContactPortlet .UIActionBar .ExportAddressIcon {
-	height: 26px; width: 21px;
-	margin: 4px 0px 0px 0px;
-	float: left;
-	cursor: pointer;
 }
 
 .UIContactPortlet .UIActionBar .UIPopupCategory {
@@ -201,28 +190,17 @@
 .UIContactPortlet .UINavigationContainer .UITags {
 	background: white;
 	border: 1px solid #a5a5a5;
-	margin: 1px 0px;
 	padding: 0px;
-	width: auto;
 }
 
 .UIContactPortlet .UINavigationContainer .TitleBar {
 	background: url('background/BgTitleBar1x24.gif') repeat-x;
 	height: 24px; line-height: 24px;
-	padding-right: 5px;
-}
-
-.UIContactPortlet .UINavigationContainer .DownArrow3Icon {
-	float: left;
-	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/BlackDownArrow.gif') no-repeat left center;
-	cursor:pointer;
-	margin: 2px;
-	height:16px;
-	width:16px;
+	padding:0px 5px;
 }
 
 .UIContactPortlet .UINavigationContainer .TitleIcon {
-	padding-left: 20px;	
+	padding-left: 5px;	
 	color: #3d3d3d; font-weight: bold;	
 	float: left;
 }
@@ -232,6 +210,7 @@
 	line-height: 20px;
 	margin: 0px 0px 5px 0px;
 	height: 20px;
+	padding: 0px 8px;
 }
 
 .UIContactPortlet .UINavigationContainer .ActionIcon {
@@ -243,14 +222,10 @@
 
 .UIContactPortlet .UINavigationContainer .ItemList {
 	padding: 0px 13px;
-	height: 24px; line-height: 24px;
+	line-height: 24px;
 	overflow: hidden;
 	white-space: nowrap;
 	width: 180px;
-}
-
-.UIContactPortlet .UINavigationContainer .ItemList a {
-	padding: 3px 0px 3px 26px;
 }
 
 .UIContactPortlet .UINavigationContainer .UIPopupCategory a.MenuItem {
@@ -336,9 +311,15 @@
 	_margin-right: 2px;
 }
 
-.UIContactPortlet .Result .TitleSearch {
+.UIContactPortlet .TitleSearch {
 	text-align: center;
-	height: 23px;
+	line-height: 23px;
+	font-size: 12px;
+	background: url('background/BgTitleBar1x24.gif') repeat-x;
+	border-left: 1px solid #CCCCCC;
+	border-right: 1px solid #CCCCCC;
+	font-weight: bold;
+	_margin: 0px 2px 0px 3px;
 }
 
 .UIContactPortlet .UIContactActionsBar {
@@ -361,6 +342,12 @@
 	width: 20px; height: 20px;
 	background-repeat: no-repeat;
 	background-position: center;
+}
+
+.UIContactPortlet .UIContactContainer .Result .Icon {
+	margin: 2px 7px 0px 7px;
+	width: 20px; height: 20px;
+	background-repeat: no-repeat;
 }
 
 .UIContactPortlet .UIContactContainer .UIContactActionsBar .IconHolder {
@@ -402,6 +389,11 @@
 
 .UIContactPortlet .UIContactContainer .Selected {
 	background: #e6e8f5;
+	margin: 0px 1px;
+}
+
+.UIContactPortlet .UIContactContainer .Normal {
+	background: #ffffff;
 	margin: 0px 1px;
 }
 
@@ -461,6 +453,7 @@
 	_padding-left: 0px;
 	overflow-y: auto;
 	overflow-x: hidden;
+	_overflow-x: auto;
 	_width: 99.5%;
 }
 
@@ -474,6 +467,8 @@
 	text-align: left;
 	border-bottom: 1px solid #d8d8d8;
 	border-top: none;
+	padding-top: 0px;
+	white-space: nowrap;
 }
 
 .UIContactPortlet .UIContactContainer .UIGrid .Icon {
@@ -659,44 +654,58 @@
 
 .UIContactPortlet .InfoContainer .LeftContent {
 	float: left;
-	width: 250px;
+	width: 46%;
+	padding-right: 10px;
 }
 
 .UIContactPortlet .InfoContainer .RightContent {
-	margin-left: 255px;
-}
-
-.UIContactPortlet .InfoContainer .Content .InfoLabel1 {
 	float: left;
-	width: 60px;
+	width: 46%;
+	padding-left: 10px;
 }
 
 .UIContactPortlet .InfoContainer .Content .InfoLabel {
-	width: 120px;
-	float: left;
+  white-space: nowrap;
 }
 
-.UIContactPortlet .InfoContainer .Content .Info1 {
-	margin-left: 65px;
+
+.UIContactPortlet .InfoContainer .Content .InfoTitle1 {
+	white-space: nowrap;
+  padding: 0px 10px 0px 4px;
+  width: 100%;
 }
 
-.UIContactPortlet .InfoContainer .Content .Info {
-	background: none;
-	margin-left: 100px;
+.UIContactPortlet .InfoContainer .Content .InfoTitle2 {
+	white-space: nowrap;
+  width: 100%; 
+  table-layout: fixed;
+}
+
+.UIContactPortlet .InfoContainer .Content .InfoTitle3 {
+	white-space: nowrap;
+  overflow: hidden; 
+}
+
+.UIContactPortlet .InfoContainer .Content .InfoTitle {
+	white-space: nowrap;
+  padding: 0px 10px 0px 2px;
 }
 
 .UIContactPortlet .InfoContainer .Content .Email {
 	background: url('/contact/skin/DefaultSkin/webui/skinIcons/16x16/icons/EmailIcon.gif') no-repeat left center;
 	padding-left: 20px;
-	margin-left: 60px;
 }
 
 .UIContactPortlet .SelectFileFrame {
 	width: 340px;
 }
 
-.UIContactPortlet .FileNameLabel {
-	overflow: hidden;
-	width: 300px;
-	white-space: nowrap;
+.UIEmpty .OwnerIcon {
+	width: auto;
+	padding-left: 20px;
+}
+
+.UIEmpty .OfflineIcon {
+	width: auto;
+	padding-left: 20px;
 }

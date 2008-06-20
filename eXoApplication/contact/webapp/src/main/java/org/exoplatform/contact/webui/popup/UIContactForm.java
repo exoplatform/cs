@@ -187,7 +187,7 @@ public class UIContactForm extends UIFormTabPane {
       UIContactForm uiContactForm = event.getSource() ;
       UIApplication uiApp = uiContactForm.getAncestorOfType(UIApplication.class) ;
       UIProfileInputSet profileTab = uiContactForm.getChildById(INPUT_PROFILETAB) ;
-      
+      /*
       if (ContactUtils.isEmpty(profileTab.getFieldFirstName())) {  
         uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.firstName-required", null, 
             ApplicationMessage.WARNING)) ;
@@ -199,7 +199,7 @@ public class UIContactForm extends UIFormTabPane {
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
-      }
+      }*/
       Contact contact ;
       if (uiContactForm.isNew_) contact = new Contact() ;
       else contact = uiContactForm.contact_ ;
@@ -277,18 +277,22 @@ public class UIContactForm extends UIFormTabPane {
         .getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class) ;
         if (uiAddressBooks.getSharedGroups().containsKey(category)) {
           group = contactService.getSharedGroup(username, category) ;
+          /*
           contact.setViewPermissionUsers(group.getViewPermissionUsers()) ;
           contact.setViewPermissionGroups(group.getViewPermissionGroups()) ;
           contact.setEditPermissionUsers(group.getEditPermissionUsers()) ;
           contact.setEditPermissionGroups(group.getEditPermissionGroups()) ;          
+          */
           contactService.saveContactToSharedAddressBook(username, category, contact, true) ;          
           contact.setContactType(JCRDataStorage.SHARED) ;
         } else {
           group = contactService.getGroup(sessionProvider, username, category) ;
+          /*
           contact.setViewPermissionUsers(group.getViewPermissionUsers()) ;
           contact.setViewPermissionGroups(group.getViewPermissionGroups()) ;
           contact.setEditPermissionUsers(group.getEditPermissionUsers()) ;
           contact.setEditPermissionGroups(group.getEditPermissionGroups()) ;                    
+          */
           contactService.saveContact(sessionProvider, username, contact, true);          
           contact.setContactType(JCRDataStorage.PRIVATE) ;
         }        
@@ -303,7 +307,7 @@ public class UIContactForm extends UIFormTabPane {
             if ( uiAddressBooks.getSharedGroups().containsKey(contact.getAddressBook()[0])) {
               contactService.saveContactToSharedAddressBook(username, contact.getAddressBook()[0], contact, false) ;
             } else {
-              contactService.saveSharedContact(username, contact) ;
+              contactService.saveSharedContact(username, contact) ;              
             }  
           }
         } catch(PathNotFoundException e) {
@@ -315,16 +319,17 @@ public class UIContactForm extends UIFormTabPane {
       }      
       UIContactPortlet uiContactPortlet = uiContactForm.getAncestorOfType(UIContactPortlet.class) ;
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
-      UIContactPreview uiContactPreview = uiContactPortlet.findFirstComponentOfType(UIContactPreview.class) ;
+      String selectedContact = uiContacts.getSelectedContact() ;
       if(uiContacts.isDisplaySearchResult()) {
       	List<Contact> contacts = new ArrayList<Contact>() ;
       	contacts.add(contact) ;
       	uiContacts.setContact(contacts, true) ;
-      }      
-      String selectedContact = uiContacts.getSelectedContact() ;
-      if (!ContactUtils.isEmpty(selectedContact) && selectedContact.equals(contact.getId())) 
-        uiContactPreview.setContact(contact) ;
+      }
       uiContacts.updateList() ;
+      if (!ContactUtils.isEmpty(selectedContact) && selectedContact.equals(contact.getId())) {
+        uiContactPortlet.findFirstComponentOfType(UIContactPreview.class).setContact(contact) ;
+        uiContacts.setSelectedContact(selectedContact) ;
+      }        
       uiContactPortlet.cancelAction() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet.getChild(UIWorkingContainer.class)) ;
     }
@@ -341,6 +346,8 @@ public class UIContactForm extends UIFormTabPane {
   static  public class ChangeImageActionListener extends EventListener<UIContactForm> {
     public void execute(Event<UIContactForm> event) throws Exception {
       UIContactForm uiContactForm = event.getSource() ;
+      UIProfileInputSet profileInputSet = uiContactForm.getChildById(INPUT_PROFILETAB) ;
+      profileInputSet.setFieldGender(profileInputSet.getFieldGender()) ;
       UIPopupContainer popupContainer = uiContactForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction popupAction = popupContainer.getChild(UIPopupAction.class) ;
       popupAction.activate(UIImageForm.class, 500) ;

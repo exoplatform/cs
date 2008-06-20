@@ -198,9 +198,9 @@ public class ContentDAOImpl extends BaseContentService implements ContentDAO {
   }
   
 //  public List<String> getTypes() {
-////    List<String> types = new ArrayList<String>();
-////    types.add("rss") ;
-////    types.add("desc") ;
-////    return types ;
+//    List<String> types = new ArrayList<String>();
+//    types.add("rss") ;
+//    types.add("desc") ;
+//    return types ;
 //  }
 }

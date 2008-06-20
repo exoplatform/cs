@@ -1,5 +1,4 @@
   <%
-  //Test commit
 	import java.text.DateFormat;
 	import java.text.SimpleDateFormat;
 	import java.util.Calendar;
@@ -7,6 +6,7 @@
 	import java.util.GregorianCalendar;
 	import java.util.Locale;
 	import org.exoplatform.calendar.CalendarUtils;
+	import org.exoplatform.webui.application.WebuiRequestContext;
 	uiform.begin() ;
  	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
 	def rcontext = _ctx.getRequestContext() ;
@@ -25,17 +25,20 @@
 	dateFormat = uicomponent.getDateFormat() ;
 	timeFormat = uicomponent.getTimeFormat() ;
 	dateTimeFormat = uicomponent.getDateTimeFormat() ;
-	DateFormat df = new SimpleDateFormat(dateFormat) ;
+	WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+ 	Locale locale = context.getParentAppRequestContext().getLocale() ;
+	
+	DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
 	df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
-	DateFormat sdf = new  SimpleDateFormat("d") ;
+	DateFormat sdf = new  SimpleDateFormat("d", locale) ;
 	sdf.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
-	DateFormat sdtf = new  SimpleDateFormat("MMM/dd") ;
+	DateFormat sdtf = new  SimpleDateFormat("MMM/dd", locale) ;
 	sdtf.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
-	DateFormat tf = new SimpleDateFormat(timeFormat) ;
+	DateFormat tf = new SimpleDateFormat(timeFormat, locale) ;
 	tf.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
-	DateFormat dtf = new SimpleDateFormat(dateTimeFormat) ;
+	DateFormat dtf = new SimpleDateFormat(dateTimeFormat, locale) ;
 	dtf.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
-	DateFormat wf = new  SimpleDateFormat("EEE, dd/MMM") ;
+	DateFormat wf = new  SimpleDateFormat("EEE, dd/MMM", locale) ;
 	wf.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
 	DateFormat tempFormat = new  SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss", Locale.ENGLISH) ;
 	tempFormat.setCalendar(uicomponent.getInstanceTempCalendar()) ;
@@ -259,3 +262,4 @@
 	      	</div>
 
   		<% /*End Popup Menu*/ %>
+  		

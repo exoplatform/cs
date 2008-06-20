@@ -12,7 +12,7 @@
 	import org.exoplatform.contact.service.impl.NewUserListener;
 	import java.util.HashMap;
 	import java.util.Map;
-	
+
 	uiform.begin() ;
 	def rcontext = _ctx.getRequestContext() ; 
   rcontext.getJavascriptManager().importJavascript("eXo.cs.FormHelper","/csResources/javascript") ;
@@ -23,6 +23,7 @@
   //rcontext.getJavascriptManager().addOnLoadJavascript('eXo.cs.TableDnD.init(\'UIListUsers\')');
   rcontext.getJavascriptManager().addOnLoadJavascript('eXo.cs.CheckBox.init("' + uiform.id + '")') ;
   rcontext.getJavascriptManager().addOnLoadJavascript('eXo.contact.UIContactPortlet.checkLayoutView()') ;
+  rcontext.getJavascriptManager().addJavascript('eXo.contact.UIContactPortlet.refreshData();') ;
 	boolean isDisplaySearchResult = uicomponent.isDisplaySearchResult() ;
 	JCRPageList pageList = uicomponent.getContactPageList();
   String cssPreviousPage = "FloatBlockHidden";
@@ -35,7 +36,10 @@
   String lastPageAction = "#" ; 
 
   Contact[] contacts = uicomponent.getContacts();
-  if (pageList != null && (contacts.length != 0)) {
+  
+  if (pageList == null || contacts.length == 0) {
+		availableContact = 0 ;	  
+  } else {
     currentPage = pageList.getCurrentPage();
     availablePage = pageList.getAvailablePage() ;
     availableContact =  pageList.getAvailable() ;
@@ -62,8 +66,9 @@
 	if(uicomponent.getViewContactsList()) {
 		if(isDisplaySearchResult) {
 %>
-			
 				<div class="Result">
+					
+					<% if (availableContact > 10) { %>
 					<div class="UIAddressPageList" style="float: right; width: 250px">
 						<div class="ContactIteratorContainer">
 	  					<div class="RightPageIteratorBlock">
@@ -76,20 +81,52 @@
 						  </div>
 					  </div>
 					</div>
-					<div class="TitleSearch"><%=_ctx.appRes(uicomponent.getName() + ".label.searchResult")%></div>
-					<div style="clear: both;"><span></span></div>
-				</div>
-	<% } else { %>
-				<div class="UIContactActionsBar">
-					<a href="<%=uicomponent.event("MoveContacts")%>" class="ControlButton">
-						<div class="IconHolder MoveIcon"><%=_ctx.appRes(uicomponent.getName() + ".label.move")%></div>
-					</a>					
-					<div class="SeparatorLine"><span></span></div>
+					<% } %>
 					
-					<!--call javascript here when already-->
+					<a href="<%=uicomponent.event("MoveContacts")%>" class="ControlButton">
+						<div class="Icon MoveIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.move")%>"><span></span></div>
+					</a>					
+					<!--<div class="SeparatorLine"><span></span></div>-->
+					<!--
 					<a href="#" class="ControlButton">
 						<div class="Icon ChatIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.instantMessage")%>"><span></span></div>
 					</a>
+					-->
+					<a href="<%=uicomponent.event("Tag")%>" class="ControlButton">
+						<div class="Icon SelectTagIcon"title="<%=_ctx.appRes(uicomponent.getName() + ".label.tag")%>"><span></span></div>
+					</a>
+					<a href="<%=uicomponent.event("SendEmail")%>" class="ControlButton">
+						<div class="Icon MessageIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.email")%>"><span></span></div>
+					</a>
+				<!--	<div class="SeparatorLine"><span></span></div>-->
+					<a href="<%=uicomponent.event("DeleteContacts", uicomponent.id, "null")%>" class="ControlButton">
+						<div class="Icon DustBin16x16Icon " title="<%=_ctx.appRes(uicomponent.getName() + ".label.delete")%>"><span></span></div>
+					</a>
+					
+					<a href="<%= uicomponent.event("Print") %>" class="ControlButton">
+							<div class="Icon PrintIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.print")%>"><span></span></div>
+					</a>
+				
+					<a href="<%=uicomponent.event("CopyContact")%>" class="ControlButton">
+							<div class="Icon CopyContactIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.copyContacts")%>"><span></span></div>
+					</a>
+					<div style="clear: both;"><span></span></div>
+				</div>
+				<div class="TitleSearch" ><%=_ctx.appRes(uicomponent.getName() + ".label.searchResult")%></div>
+	<% } else { %>
+				<div class="UIContactActionsBar">
+					<a href="<%=uicomponent.event("MoveContacts")%>" class="ControlButton">
+						<div class="Icon MoveIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.move")%>"><span></span></div>
+					</a>					
+					<!--<div class="SeparatorLine"><span></span></div>-->
+					
+					<!--call javascript here when already-->
+					<!--
+					<a href="#" class="ControlButton">
+						<div class="Icon ChatIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.instantMessage")%>"><span></span></div>
+					</a>
+					-->
+					
 					<a href="<%=uicomponent.event("Tag")%>" class="ControlButton">
 						<div class="Icon SelectTagIcon"title="<%=_ctx.appRes(uicomponent.getName() + ".label.tag")%>"><span></span></div>
 					</a>
@@ -109,6 +146,7 @@
 							<div class="Icon CopyContactIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.copyContacts")%>"><span></span></div>
 					</a>
 					
+					<% if (availableContact > 10) { %>
 					<div class="UIAddressPageList">
 						<div class="ContactIteratorContainer">
 	  					<div class="RightPageIteratorBlock">
@@ -121,6 +159,8 @@
 						  </div>
 					  </div>
 					</div>
+					<% } %>
+					
 					<div style="clear: both;"><span></span></div>
 				</div>
 				<% 
@@ -131,11 +171,11 @@
 					<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
 	  				<thead>
 	  					<tr>
-	  			      <th style="width: 23px; padding-left: 7px;" class="text">
+	  			      <th style="width: 23px;" class="text">
 	  			      	<input type="checkbox" class="checkbox" title="<%=_ctx.appRes(uicomponent.getName() + ".label.checkAll")%>" value="4"/>
 	  			      </th>
 	  						<th style="width: 24px;" class="text"><div class="Icon BlueTag"><span></span></div></th>
-	  		        <th style="width: 24%; padding-left: 7px;" class="text">
+	  		        <th style="width: 24%;" class="text">
 	  		        	
 	  		        	<%
 	  		        		String fullName = uicomponent.fullName ;
@@ -155,10 +195,10 @@
 			              }
     		    			%>
 	  		        	<a href="$sortedByName">
-	  		        	<div class="$classArrowName" title="<%=_ctx.appRes(uicomponent.getName() + ".label.sortByName")%>"> <%=_ctx.appRes(uicomponent.getName() + ".label.name")%> </div>
+	  		        	<div style="width: 90%; cursor: pointer;" class="$classArrowName" title="<%=_ctx.appRes(uicomponent.getName() + ".label.sortByName")%>"> <%=_ctx.appRes(uicomponent.getName() + ".label.name")%> </div>
 	  		        	</a>
 	  		        </th>
-	 	      	    <th class="text" style="padding-left: 7px;">
+	 	      	    <th class="text">
 	 	      	    
 	 	      	    	<%
 	 	      	    		String emailAddress = uicomponent.emailAddress ;
@@ -177,10 +217,10 @@
     		    			%>
 	 	      	    
 	 	      	    	<a href="$sortedByEmail">
-	  		        	<div class="$classArrowEmail" title="<%=_ctx.appRes(uicomponent.getName() + ".label.sortByEmail")%>"><%=_ctx.appRes(uicomponent.getName() + ".label.email")%></div>
+	  		        	<div style="width: 95%; cursor: pointer;" class="$classArrowEmail" title="<%=_ctx.appRes(uicomponent.getName() + ".label.sortByEmail")%>"><%=_ctx.appRes(uicomponent.getName() + ".label.email")%></div>
 	  		        	</a>
 	  		        </th>
-	 	      	    <th style="width: 120px; padding-left: 7px;" class="text">
+	 	      	    <th style="width: 120px; " class="text">
 	 	      	    
 	 	      	    	<%
 	 	      	    		String jobTitle = uicomponent.jobTitle ;
@@ -199,14 +239,14 @@
     		    			%>
 	 	      	    
 	  		        	<a href="$sortedByOrganition">
-	  		        	<div class="$classArrowOrganition" style="padding-right:26px;" title="<%=_ctx.appRes(uicomponent.getName() + ".label.sortByJobTitle")%>"><%=_ctx.appRes(uicomponent.getName() + ".label.jobTitle")%></div>
+	  		        	<div style="width: 70%; cursor: pointer; white-space: nowrap;" class="$classArrowOrganition" style="padding-right:26px;" title="<%=_ctx.appRes(uicomponent.getName() + ".label.sortByJobTitle")%>"><%=_ctx.appRes(uicomponent.getName() + ".label.jobTitle")%></div>
 	 	      	    	</a>
 	 	      	    </th>
-	 	      	    <th style="width: 120px; padding-left: 7px;"> <%=_ctx.appRes(uicomponent.getName() + ".label.workPhone")%> </th>
+	 	      	    <th style="width: 120px; "><div style="white-space: nowrap;"> <%=_ctx.appRes(uicomponent.getName() + ".label.workPhone")%></div> </th>
 	 	      	    <% 
 	 	      	    	if(isDisplaySearchResult) {	
 	 	      	    %>
-	 	      	    	<th style="padding-left: 7px;"> <%=_ctx.appRes(uicomponent.getName() + ".label.addressBook")%> </th>
+	 	      	    	<th > <%=_ctx.appRes(uicomponent.getName() + ".label.addressBook")%> </th>
 	 	      	    <% } %>
 	 	      	    	
 	  	 	      </tr>
@@ -217,25 +257,37 @@
 	  	 	    		Map tagMap = uicomponent.getTagMap() ;
 	  	 	    		Map privateGroupMap = uicomponent.getPrivateGroupMap() ;
 	  	 	    		Map sharedGroupMap = uicomponent.getSharedGroupMap() ;
+	  	 	    		List<String> publicAddress = uicomponent.getPublicContactGroups() ;
 	  	 	    		for(contact in contacts) {
 	  	 	    			String groupName ;	  	 	    			
 	  	 	    			String[] addressBooks = contact.getAddressBook() ;
 	  	 	    			contactType = contact.getContactType() ;   			
 	  	 	    			if (contactType.equals("2")) {
-		  	 	    			StringBuffer buffer = new StringBuffer("")
+		  	 	    			StringBuffer buffer = new StringBuffer("") ;
+		  	 	    			
+		  	 	    			//for (String address : addressBooks) {
+		  	 	    			//	if (address.equals(NewUserListener.DEFAULTGROUP + ContactUtils.getCurrentUser())) {
+		  	 	    			//		address = privateGroupMap.get(NewUserListener.DEFAULTGROUP + ContactUtils.getCurrentUser()) ;
+		  	 	    			//	} else if (address.equals(NewUserListener.DEFAULTGROUP + contact.getId())) continue ;		  	 	    				
+		  	 	    			//	if(buffer.length() > 0) buffer.append(", ").append(address) ;
+		  	 	    			//	else buffer.append(address) ;
+		  	 	    			//}	
 		  	 	    			for (String address : addressBooks) {
-		  	 	    				if (address.equals(NewUserListener.DEFAULTGROUP + ContactUtils.getCurrentUser())) {
-		  	 	    					address = NewUserListener.DEFAULTGROUPNAME ;
-		  	 	    				} else if (address.equals(NewUserListener.DEFAULTGROUP + contact.getId())) continue ;		  	 	    				
-		  	 	    				if(buffer.length() > 0) buffer.append(", ").append(address) ;
-		  	 	    				else buffer.append(address) ;
-		  	 	    			}	
+		  	 	    				if (!address.contains(NewUserListener.DEFAULTGROUP)) {
+		  	 	    					if(buffer.length() > 0) buffer.append(", ").append(address) ;
+			  	 	    				else buffer.append(address) ;
+		  	 	    				}	  	 	    				
+		  	 	    			}
 								    groupName = buffer.toString() ;
 								  } else if (contactType.equals("0")) {
-								  
-								
-		  	 	    			groupName = privateGroupMap.get(addressBooks[0]) ;								  
-								  	if (groupName == null) continue ;								  
+								  	StringBuffer buffer = new StringBuffer("") ;
+								  	for (String address : addressBooks) {
+								  		if (privateGroupMap.containsKey(address)) address = privateGroupMap.get(address);
+								  		else if (!publicAddress.contains(address)) continue ;
+		  	 	    				if(buffer.length() > 0) buffer.append(", ").append(address) ;
+		  	 	    				else buffer.append(address) ;
+		  	 	    			}
+										groupName = buffer.toString() ;								  							  
 								  } else if (contactType.equals("1")){
 								  	SharedAddressBook add = null ;							  	 
 								  	for (String address : addressBooks) {
@@ -254,7 +306,6 @@
 							  		else {
 							  			buffer = new StringBuffer(_ctx.appRes(uicomponent.getName() + ".label.sharedContacts")) ;
 							  		}
-							  		List<String> publicAddress = uicomponent.getPublicContactGroups() ;
 						  			for (String address : addressBooks) { 
 						  				if (publicAddress.contains(address)) {
 						  					buffer.append(", ").append(address) ;
@@ -291,18 +342,18 @@
 											i ++ ;
 										}		
 									}		
-  	 	    				cssClass = "" ;
+  	 	    				cssClass = "Normal" ;
   	 	    				String selectedContact = uicomponent.getSelectedContact() ;
 									if (selectedContact != null && contact.getId().equals(selectedContact)) cssClass = "Selected" ;
 	  	 	    %>
 								
-  						<tr class="UIContactList $cssClass" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" canDeleteShared="<%=uicomponent.canDeleteShared(contact.getAddressBook()[0])%>" isOwner="<%=contact.isOwner()%>"> 
-  						  <td class="text" style="padding-left: 7px;">
+  						<tr class="UIContactList $cssClass" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" isSharedAddress = "<%=uicomponent.isSharedAddress(contact.getAddressBook())%>" isOwner="<%=contact.isOwner()%>"> 
+  						  <td class="text" style="padding-left: 7px; width:23px;">
   						  	<%
   						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
   						  	%>
   						  </td>
-								<td class="text" style="padding: 0px;">
+								<td class="text" style="padding: 0px;width: 24px;">
 									<div class="$iconTag" title="<%=tagsName.toString() %>"><span></span></div>
 								</td>
 								<td class="text">
@@ -311,7 +362,7 @@
 										icon = "OfflineIcon"
 										if (contact.getContactType().equals(JCRDataStorage.PRIVATE) && contact.isOwner()&& contact.getOwnerId().equals(ContactUtils.getCurrentUser())) icon = "OwnerIcon" ; 	
 								  %>
-									<div class="State $icon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.available")%>">
+									<div class="State $icon">
 										<a href="$actionLink">
 											<%=(ContactUtils.isEmpty(contact.getFullName()) ? "_" : contact.getFullName())%>
 										</a>
@@ -327,7 +378,7 @@
 										<%=(ContactUtils.isEmpty(contact.getJobTitle()) ? "_" : contact.getJobTitle())%>
 									</a>
 								</td>
-								<td>
+								<td style="width: 120px;">
 									<a href="$actionLink">
 										<%=(contact.getWorkPhone1()==null ? (ContactUtils.isEmpty(contact.getWorkPhone2()) ? "_" : contact.getWorkPhone2()) : contact.getWorkPhone1())%>
 									</a>
@@ -373,17 +424,20 @@
 												i ++ ;
 											}		
 										}	
-										cssClass = "" ;
+										if (!ContactUtils.isEmpty(uicomponent.selectedTag_)) {
+											iconTag = "Icon " + tagMap.get(uicomponent.selectedTag_).getColor() + "Tag" ;
+										}
+										cssClass = "Normal" ;
 										if (contact.getId().equals(uicomponent.getSelectedContact())) cssClass = "Selected" ;								
 						%>
 							
-  						<tr class="UIContactList $cssClass" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" canDeleteShared="<%=uicomponent.canDeleteShared(contact.getAddressBook()[0])%>" isOwner="<%=contact.isOwner()%>">
-  						  <td class="text" style="padding-left: 7px;">
+  						<tr class="UIContactList $cssClass" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" isSharedAddress = "<%=uicomponent.isSharedAddress(contact.getAddressBook())%>" isOwner="<%=contact.isOwner()%>">
+  						  <td class="text" style="padding-left: 7px; width: 23px;">
   						  	<%
   						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
   						  	%>
   						  </td>
-								<td class="text" style="padding: 0px;">
+								<td class="text" style="padding: 0px; width: 24px;">
 									<div class="$iconTag" title="<%=tagsName.toString()%>"><span></span></div>
 								</td>
 								<td class="text">
@@ -393,7 +447,7 @@
 										  icon = "OwnerIcon" ; 	
 								  %>
 								
-									<div class="State $icon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.available")%>">
+									<div class="State $icon">
 										<a href="$actionLink">
 											<%=(ContactUtils.isEmpty(contact.getFullName()) ? "" : contact.getFullName())%>
 										</a>
@@ -461,32 +515,18 @@
 		<div class="UIAddressPageList">
 						<div class="ContactIteratorContainer">
 	  					<div class="RightPageIteratorBlock">
-	  						
-	  						<% if (uicomponent.isPrintForm()) { 
-	  								 int size = uicomponent.getContacts().length ;
-	  								 int end ;
-	  								 if (size < 10) end = size ;
-	  								 else end = 10 ;
-		  							 contactRange = _ctx.appRes(uicomponent.getName() + ".label.contacts") + "&nbsp;" + "1" + " - " + end + "&nbsp;" +_ctx.appRes(uicomponent.getName() + ".label.of") + "&nbsp;" + size ;
-	  							
-	  						 %>
-	  							<a href="<%=uicomponent.event("FirstPage")%>" title="<%=_ctx.appRes(uicomponent.getName() + ".label.firstPage")%>" class="$cssPreviousPage FirstPageArrow"/></a>        
-	  						<a href="<%=uicomponent.event("PreviousPage")%>" title="<%=_ctx.appRes(uicomponent.getName() + ".label.previousPage")%>" class="$cssPreviousPage PreviousPageArrow"></a>
-								<div class="Number">$contactRange</div>
-	  				 		<a href="<%=uicomponent.event("NextPage")%>" title="<%=_ctx.appRes(uicomponent.getName() + ".label.nextPage")%>" class="$cssNextPage NextPageArrow"/></a>
-	 				  		<a href="<%=uicomponent.event("LastPage")%>" title="<%=_ctx.appRes(uicomponent.getName() + ".label.lastPage")%>" class="$cssNextPage LastPageArrow"></a>
-						    <div style="clear: left;"><span></span></div>
 	  						<% 
-	  							} else {	
+	  							if (!uicomponent.isPrintForm()) {	
 	  						 %>
-	  						<% /* delete <span> to fix bug print icon - 531 */ %>
+	  						 
+	  						<% if (availableContact > 10) { %> 
 	  						<a href="<%=uicomponent.event("FirstPage")%>" title="<%=_ctx.appRes(uicomponent.getName() + ".label.firstPage")%>" class="$cssPreviousPage FirstPageArrow"/><span></span></a>        
 	  						<a href="<%=uicomponent.event("PreviousPage")%>" title="<%=_ctx.appRes(uicomponent.getName() + ".label.previousPage")%>" class="$cssPreviousPage PreviousPageArrow"><span></span></a>
 								<div class="Number">$contactRange</div>
 	  				 		<a href="<%=uicomponent.event("NextPage")%>" title="<%=_ctx.appRes(uicomponent.getName() + ".label.nextPage")%>" class="$cssNextPage NextPageArrow"/><span></span></a>
 	 				  		<a href="<%=uicomponent.event("LastPage")%>" title="<%=_ctx.appRes(uicomponent.getName() + ".label.lastPage")%>" class="$cssNextPage LastPageArrow"><span></span></a>
 						    <div style="clear: left;"><span></span></div>
-						  
+						  	<% } %>
 						  <% } %>
 						  </div>
 					  </div>
@@ -517,10 +557,13 @@
 								}	
 							}
 						}
+						if (!ContactUtils.isEmpty(uicomponent.selectedTag_)) {
+							iconTag = "Icon " + tagMap.get(uicomponent.selectedTag_).getColor() + "Tag" ;
+						}
 		
 				%>	
 		  <div class="LeftVCardsContent">
-		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" canDeleteShared="<%=uicomponent.canDeleteShared(contact.getAddressBook()[0])%>" isOwner="<%=contact.isOwner()%>">
+		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" isSharedAddress = "<%=uicomponent.isSharedAddress(contact.getAddressBook())%>" isOwner="<%=contact.isOwner()%>">
 			  	<div class="TitleVCards" >
 			  		<% 
 										icon = "OfflineIcon"
@@ -547,13 +590,20 @@
                                   Tag tag = tagMap.get(tagId) ;
                                   if (tag != null) {
                                 %>
-                                <a class="MenuItem" href="<%=uicomponent.event("SelectTag", "$tagId")%>">   
+                                		
+                                	<% if (!uicomponent.isPrintForm()) { %>
+                                <a class="MenuItem" href="<%=uicomponent.event("SelectTag", "$tagId")%>">
                                   <div class="ItemIcon <%=tag.getColor()%>Tag"><%=tag.getName()%></div>
                                 </a>
+                                <% 
+                                 	} else { 	
+                                 %>
+                                  <div class="ItemIcon <%=tag.getColor()%>Tag"><%=tag.getName()%></div>
+                                  <% 
+                                  	}
+                                   %>                                
                                 <% }
-                                 }%>
-  
-                                
+                                 }%> 
                               </div>
                             </div>
                           </div>
@@ -661,9 +711,13 @@
 						}	
 					}
 				}
+			if (!ContactUtils.isEmpty(uicomponent.selectedTag_)) {
+				iconTag = "Icon " + tagMap.get(uicomponent.selectedTag_).getColor() + "Tag" ;
+			}	
+				
 			%>
 			<div class="RightVCardsContent">
-		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" canDeleteShared="<%=uicomponent.canDeleteShared(contact.getAddressBook()[0])%>" isOwner="<%=contact.isOwner()%>">
+		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" isSharedAddress = "<%=uicomponent.isSharedAddress(contact.getAddressBook())%>"  isOwner="<%=contact.isOwner()%>">
 			  	<div class="TitleVCards" >
 			  	<% 
 										icon = "OfflineIcon"
@@ -691,9 +745,17 @@
                                 Tag tag = tagMap.get(tagId) ;
                                 if (tag != null) {
                               %>
-                              <a class="MenuItem" href="<%=uicomponent.event("SelectTag", "$tagId")%>">   
-                                <div class="ItemIcon <%=tag.getColor()%>Tag"><%=tag.getName()%></div>
-                              </a> 
+                              <% if (!uicomponent.isPrintForm()) { %>
+                                <a class="MenuItem" href="<%=uicomponent.event("SelectTag", "$tagId")%>">
+                                  <div class="ItemIcon <%=tag.getColor()%>Tag"><%=tag.getName()%></div>
+                                </a>
+                                <% 
+                                 	} else { 	
+                                 %>
+                                  <div class="ItemIcon <%=tag.getColor()%>Tag"><%=tag.getName()%></div>
+                                  <% 
+                                  	}
+                                   %>  
                               <% }
                                 }%>
                             </div>
@@ -935,23 +997,7 @@
 	                      <%=_ctx.appRes(uicomponent.getName() + ".label.sendEmail")%>
 	                    </div>
                     </a>
-                     
-                    <% if (uicomponent.canChat()) { %>
-                    <a class="MenuItem" href="javascript:eXo.require('eXo.communication.chat.webui.eXoChatLoader', '/exomessenger/javascript/'); eXo.communication.chat.webui.eXoChatLoader.init('<%=org.exoplatform.contact.ContactUtils.getCurrentUser();%>');">
-	                    <div class="ItemIcon InstantMessage">
-	                      <%=_ctx.appRes(uicomponent.getName() + ".label.instantMessage")%>
-	                    </div>
-                    </a> 
-                    <% 
-                    	} else {                     
-                    %>
-		                  <a class="MenuItem" href="javascript:void(0) ;" style="color:#cccccc">   
-						            <div class="ItemIcon InstantMessage">
-						              <%=_ctx.appRes(uicomponent.getName() + ".label.instantMessage")%>
-						            </div>
-						        	</a>
-				        	<% } %>
-                  
+                    
                   
                     <a class="MenuItem" href="<%=uicomponent.event("Tag", "id")%>">   
 	                    <div class="ItemIcon VioletTag">

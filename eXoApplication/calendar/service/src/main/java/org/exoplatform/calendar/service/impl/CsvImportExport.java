@@ -245,6 +245,10 @@ public class CsvImportExport implements CalendarImportExport {
   public OutputStream exportCalendar(SessionProvider sProvider, String username, List<String> calendarIds, String type) throws Exception {
     return null;
   }
+  public OutputStream exportEventCalendar(SessionProvider sProvider, String username, String calendarId, String type, String eventId) throws Exception {
+    return null;
+  }
+
 
   public void importCalendar(SessionProvider sProvider, String username, InputStream csvInputStream, String calendarName) throws Exception {
     List<CalendarEvent> data = process(new BufferedReader(new InputStreamReader(csvInputStream))) ;
@@ -275,6 +279,7 @@ public class CsvImportExport implements CalendarImportExport {
       exoCalendar.setDescription("") ;
       exoCalendar.setCategoryId(categoryId) ;
       exoCalendar.setPublic(true) ;
+      exoCalendar.setCalendarOwner(username) ;
       storage_.saveUserCalendar(sProvider, username, exoCalendar, true) ;   
       for(CalendarEvent exoEvent : data) {
         exoEvent.setCalendarId(exoCalendar.getId()) ;

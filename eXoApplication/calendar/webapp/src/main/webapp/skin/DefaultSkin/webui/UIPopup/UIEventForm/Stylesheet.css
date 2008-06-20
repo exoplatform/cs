@@ -6,11 +6,20 @@
 	background: #f4f4f4;
 	border: 1px solid #c9c9c9;
 	margin-bottom: 4px;
+	_width: 97%;
 }
 
 .UICalendarPortlet .UIAddNewEvent .ReminderByEmail input.checkbox{
 	float: left;
 	margin-right: 3px;
+}
+
+.UICalendarPortlet .UIAddNewEvent .ReminderByEmail .FieldLabel {
+  line-height: 18px;
+}
+
+.UICalendarPortlet .UIAddNewEvent .ReminderByPopup .FieldLabel {
+  line-height: 18px;
 }
 
 .UICalendarPortlet .UIAddNewEvent .ReminderByPopup input.checkbox{
@@ -30,6 +39,7 @@
 	background: #f4f4f4;
 	padding: 6px;
 	border: 1px solid #c9c9c9;
+	_width: 97%;
 }
 
 .UICalendarPortlet .UIAddNewEvent .UIFormGrid{
@@ -334,4 +344,7 @@
 
 .UICalendarPortlet .UIQuickAddEvent .UIFormGrid .FieldComponent .Time .UIComboboxInput{
 	width: 120px;
+}
+.UICalendarPortlet .UIAddNewEvent .NewEventAttendee .UserSelection {
+	background: #C41616 ;
 }

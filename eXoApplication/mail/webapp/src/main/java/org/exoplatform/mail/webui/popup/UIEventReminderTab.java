@@ -38,7 +38,7 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
  */
 
 @ComponentConfig(
-    template = "app:/templates/mail/webui/UIEventReminderTab.gtmpl"
+    template = "app:/templates/mail/webui/popup/UIEventReminderTab.gtmpl"
 ) 
 public class UIEventReminderTab extends UIFormInputWithActions {
 
@@ -49,10 +49,10 @@ public class UIEventReminderTab extends UIFormInputWithActions {
   final public static String EMAIL_REPEAT_INTERVAL = "emailRepeatInterval".intern() ;
   final public static String EMAIL_IS_REPEAT = "emailIsRepeat".intern() ;
   
-  final public static String REMIND_BY_POPUP = "popupReminder".intern() ;
+  /*final public static String REMIND_BY_POPUP = "popupReminder".intern() ;
   final public static String POPUP_REMIND_BEFORE = "popupReminderTime".intern() ;
   final public static String POPUP_REPEAT_INTERVAL = "popupRepeatInterval".intern() ;
-  final public static String POPUP_IS_REPEAT = "popupIsRepeat".intern() ;
+  final public static String POPUP_IS_REPEAT = "popupIsRepeat".intern() ;*/
 
   private Map<String, List<ActionData>> actionField_ ;
   public UIEventReminderTab(String arg0) throws Exception {
@@ -77,10 +77,10 @@ public class UIEventReminderTab extends UIFormInputWithActions {
     addMailActions.add(addEmailAddress) ;
     setActionField(FIELD_EMAIL_ADDRESS, addMailActions) ;
 
-    addUIFormInput(new UIFormCheckBoxInput<Boolean>(REMIND_BY_POPUP, REMIND_BY_POPUP, false)) ;
+   /* addUIFormInput(new UIFormCheckBoxInput<Boolean>(REMIND_BY_POPUP, REMIND_BY_POPUP, false)) ;
     addUIFormInput(new UIFormSelectBox(POPUP_REMIND_BEFORE, POPUP_REMIND_BEFORE, remindOptions));
     addUIFormInput(new UIFormSelectBox(POPUP_IS_REPEAT, POPUP_IS_REPEAT, options));
-    addUIFormInput(new UIFormSelectBox(POPUP_REPEAT_INTERVAL, POPUP_REPEAT_INTERVAL, remindOptions));
+    addUIFormInput(new UIFormSelectBox(POPUP_REPEAT_INTERVAL, POPUP_REPEAT_INTERVAL, remindOptions));*/
     
     
   }
@@ -90,8 +90,12 @@ public class UIEventReminderTab extends UIFormInputWithActions {
   
   public List<SelectItemOption<String>> getReminderTimes(int steps, int maxValue) {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+    String label = "minutes" ; 
+    try {
+      label = getParentFrom().getLabel("minutes") ;
+    } catch(Exception e) {} 
     for(int i = 1; i <= maxValue/steps ; i++) {
-      options.add(new SelectItemOption<String>(String.valueOf(i*steps)+" minutes", String.valueOf(i*steps))) ;      
+      options.add(new SelectItemOption<String>(String.valueOf(i*steps) + " " + label, String.valueOf(i*steps))) ;      
     }
     return options ;
   }

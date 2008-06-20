@@ -9,8 +9,17 @@ function UIDateTimePicker() {
 
 UIDateTimePicker.prototype = eXo.webui.UICalendar ;
 
+UIDateTimePicker.prototype.getLang = function() {
+	var weekdays = String(this.dateField.getAttribute("daysname")).trim() ;
+	var months = String(this.dateField.getAttribute("monthsname")).trim() ;
+	this.weekdays = weekdays.split(",") ;
+	this.months = months.split(",") ;
+} ;
+
 UIDateTimePicker.prototype.show = function() {
+	eXo.cs.UIDateTimePicker.getLang() ;
 	document.onmousedown = new Function('eXo.cs.UIDateTimePicker.hide()') ;
+	
   var str = this.dateField.getAttribute("format") ;
   str = str.replace(/d{2}/,"(\\d{1,2}\\") ;
   str = str.replace(/M{2}/,"\\d{1,2}\\") ;
@@ -69,16 +78,18 @@ UIDateTimePicker.prototype.show = function() {
 	  left = x + "px" ;
 	  top = y + "px" ;
   }
-	
-		var drag = document.getElementById("blockCaledar");
-		var innerWidth = drag.offsetWidth;
-		drag.onmousedown = function(evt) {
-			var event = evt || window.event;
-			event.cancelBubble = true;
-			drag.style.position = "absolute";
-			drag.style.width = innerWidth + "px";
-			eXo.core.DragDrop.init(null, drag, drag, event);
-	 	}
+  if(eXo.core.Browser.isIE6()){
+		var ifr = eXo.core.DOMUtil.findDescendantById(clndr, this.calendarId + "IFrame") ;
+		ifr.style.height = (eXo.core.DOMUtil.findNextElementByTagName(ifr, "div").offsetHeight - 5) + "px";
+	}
+	var drag = document.getElementById("blockCaledar");		
+	drag.onmousedown = this.initDND ;
+} ;
+
+UIDateTimePicker.prototype.initDND = function(evt) {
+	var _e = evt || window.event;
+	_e.cancelBubble = true ;
+	eXo.core.DragDrop.init(null, this, this.parentNode.parentNode, evt);
 } ;
 
 UIDateTimePicker.prototype.getTypeFormat = function() {
@@ -132,7 +143,7 @@ UIDateTimePicker.prototype.renderCalendar = function() {
   var startDayOfWeek = this.getDayOfWeek(this.currentDate.getFullYear(), this.currentDate.getMonth() + 1, dayOfMonth) ;
   var daysInMonth = this.getDaysInMonth(this.currentDate.getFullYear(), this.currentDate.getMonth()) ;
   var clazz = null;
-	var table = '<div id="blockCaledar" class="BlockCalendar">' ;
+	var table = '<div id="blockCaledar" class="BlockCalendar"><span></span></div>' ;
 	table += 		'<div class="UICalendar" onmousedown="event.cancelBubble = true">' ;
 	table += 		'	<table class="MonthYearBox">' ;
 	table += 		'	  <tr>' ;
@@ -187,7 +198,7 @@ UIDateTimePicker.prototype.renderCalendar = function() {
 		table += 		'	</div>' ;
 	}
 	table += 		'</div>' ;
-	table += 		'</div>' ;
+	//table += 		'</div>' ;
 	return table ;
 } ;
 

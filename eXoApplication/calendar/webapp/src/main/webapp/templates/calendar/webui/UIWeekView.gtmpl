@@ -6,6 +6,7 @@
 	import java.text.SimpleDateFormat;
 	import org.exoplatform.calendar.CalendarUtils;
 	import java.util.Locale;
+	import org.exoplatform.webui.application.WebuiRequestContext;
 	uiform.begin()
  	_ctx.include("app:/templates/calendar/webui/UIHeaderBar.gtmpl");
  	Calendar currentCalendar = uicomponent.getCurrentCalendar() ;
@@ -31,21 +32,25 @@
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarMan.initWeek() ;') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UIWeekView.init() ;') ;
   rcontext.getJavascriptManager().addOnLoadJavascript('eXo.calendar.UICalendarPortlet.onLoad') ;
+  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkFilter() ;') ;
 	rcontext.getJavascriptManager().addOnResizeJavascript('eXo.calendar.UIWeekView.onResize') ;
  	monthViewAction = uicomponent.TYPE_MONTH +"&currentTime="+ uicomponent.getCurrentCalendar().getTimeInMillis();
 	yearViewAction = uicomponent.TYPE_YEAR +"&currentTime="+ uicomponent.getCurrentCalendar().getTimeInMillis();
  	
+ 	WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+ 	Locale locale = context.getParentAppRequestContext().getLocale() ;
+ 	String currentMonthName = uicomponent.getMonthName(currentMonth) ;
  	dateFormat = uicomponent.getDateFormat() ;
 	timeFormat = uicomponent.getTimeFormat() ;
 	dateTimeFormat = uicomponent.getDateTimeFormat() ;
 	String startWorkingTime = uicomponent.getStartTime() ;
 	String endWorkingTime = uicomponent.getEndTime() ;
 	boolean isShowWorkingTime = uicomponent.isShowWorkingTime() ;
-	DateFormat df = new SimpleDateFormat(dateFormat) ;
-	DateFormat tf = new SimpleDateFormat(timeFormat) ;
+	DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
+	DateFormat tf = new SimpleDateFormat(timeFormat, locale) ;
 	tf.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
-	DateFormat dtf = new SimpleDateFormat(dateTimeFormat) ;
-	DateFormat wf = new  SimpleDateFormat("EEE, dd/MMM") ;
+	DateFormat dtf = new SimpleDateFormat(dateFormat+" "+CalendarUtils.TIMEFORMAT, locale) ;
+	DateFormat wf = new  SimpleDateFormat("EEE, dd/MMM", locale) ;
 	DateFormat tempFormat =  new  SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss", Locale.ENGLISH) ;
 	tempFormat.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
 %>
@@ -63,9 +68,10 @@
           </td>
           <td>
             <div class="Title">
-              <%=uiform.getLabel('Week')%>
-              $weekNumber, <a href="<%=uicomponent.event('GotoDate',yearViewAction)%>">$currentYear
-              </a>
+              <%=uiform.getLabel("Week")%>
+              $weekNumber, 
+              <a href="<%=uicomponent.event('GotoDate',monthViewAction)%>">$currentMonthName</a>
+							<a href="<%=uicomponent.event('GotoDate',yearViewAction)%>">$currentYear</a>
             </div>
           </td>
           <td>
@@ -121,7 +127,7 @@
                 <span></span>
               </div>
             </td>
-            <td colspan="$numberOfDays" class="EventAllday" numberOfDays="$numberOfDays" onresize="eXo.calendar.UICalendarMan.initWeek() ;">
+            <td colspan="$numberOfDays" class="EventAllday" numberOfDays="$numberOfDays">
               <div style="position: relative;">
                 <% for (event in uicomponent.getEventList().values()) {
 									begindate =  event.getFromDateTime().getTime() ;  
@@ -223,8 +229,10 @@
 					boolean flag = false ;
 					style = "" ;
 					if(isShowWorkingTime) {style = "WorkOffTime" ;}	
-					for(time in uicomponent.getDisplayTimes(timeFormat, timeInterval)){
-						if(isShowWorkingTime) {
+					for(full in uicomponent.getDisplayTimes(timeFormat, timeInterval, locale)){
+					String time = full.substring(0,full.lastIndexOf("_")) ;
+					String display = full.substring(full.lastIndexOf("_")+1) ;
+				if(isShowWorkingTime) {
         			if(time.equals(startWorkingTime)) {style = "" ;}
         			if(time.equals(endWorkingTime)) {style = "WorkOffTime" ;}
         		}
@@ -234,7 +242,7 @@
           <tr class="$style" style="$styleWidth">
             <td class="TdTime">
               <div class="TdTime">
-                <%if(!flag) {println time;}%>
+                <%if(!flag) {println display;}%>
               </div>
             </td>
             <%

@@ -113,7 +113,7 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
   private List<SelectItemOption<String>> getGroups() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     OrganizationService orgService = CalendarUtils.getOrganizationService() ;
-    options.add(new SelectItemOption<String>("all", "")) ;
+    options.add(new SelectItemOption<String>("all", "all")) ;
     for( Object g : orgService.getGroupHandler().getAllGroups()) { 
       Group  cg = (Group)g ;
       options.add(new SelectItemOption<String>(cg.getGroupName(), cg.getId())) ;
@@ -146,7 +146,7 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
     return isShowSearch_;
   }
   public String getSelectedGroup() {
-
+    if("all".equals(getUIFormSelectBox(FIELD_GROUP).getValue())) return null ;
     return getUIFormSelectBox(FIELD_GROUP).getValue() ;
   }
   public void setSelectedGroup(String selectedGroup) {
@@ -160,22 +160,24 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
       UIEventForm uiEventForm = uiContainer.findFirstComponentOfType(UIEventForm.class) ;
       if(uiEventForm != null) {
         StringBuilder sb = new StringBuilder() ;
+        int count = 0;
         for(Object o : uiForm.uiIterator_.getCurrentPageData()) {
           User u = (User)o ;
           UIFormCheckBoxInput input = uiForm.getUIFormCheckBoxInput(u.getUserName()) ;
           if(input != null && input.isChecked()) {
+            count++ ;
             if(!uiForm.pars_.contains(u.getUserName())) {
               if(!CalendarUtils.isEmpty(sb.toString())) sb.append(CalendarUtils.COMMA) ;
               sb.append(u.getUserName()) ;
             }
           }
         }
-        if(CalendarUtils.isEmpty(sb.toString())) {
+        if(count == 0) {
           UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UISelectUserForm.msg.user-required",null)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
-        }
+        } 
         for(String s : uiForm.pars_) {
           if(!CalendarUtils.isEmpty(sb.toString())) sb.append(CalendarUtils.COMMA) ;
           sb.append(s) ;

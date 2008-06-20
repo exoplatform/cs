@@ -10,13 +10,7 @@
     <access-permissions>*:/platform/users</access-permissions>
     <edit-permission>*:/platform/administrators</edit-permission>
     <show-max-window>true</show-max-window>
-    
-    <application>
-      <instance-id>group#platform/users:/content/RSSReaderPortlet/content</instance-id>    
-      <title>RSS Reader Portlet</title>
-      <show-info-bar>true</show-info-bar>
-      <show-application-state>true</show-application-state>
-    </application>
+
     
     <application>
       <instance-id>group#platform/users:/mail/MailPortlet/mail</instance-id>    
@@ -38,8 +32,9 @@
       <show-info-bar>true</show-info-bar>
       <show-application-state>true</show-application-state>
     </application>
-          
+
   </page>
+
   
   <page>
  		<page-id>group::platform/users::mail</page-id>
@@ -85,36 +80,7 @@
       <show-info-bar>true</show-info-bar>      
     </application>  
   </page>
-  
-  <page>
-  	<page-id>group::platform/users::content</page-id>
-  	<owner-type>group</owner-type>
-    <owner-id>platform/users</owner-id>
-    <name>content</name>
-    <access-permissions>*:/platform/users</access-permissions>
-    <edit-permission>*:/platform/administrators</edit-permission>
-    
-    <application>
-      <instance-id>group#platform/users:/content/RSSReaderPortlet/content</instance-id>    
-      <title>RSS Reader Portlet</title>
-      <show-info-bar>true</show-info-bar>      
-    </application>  
-  </page>
-  
-  <page>
-  	<page-id>group::platform/users::sitemap</page-id>
-  	<owner-type>group</owner-type>
-    <owner-id>platform/users</owner-id>
-    <name>sitemap</name>
-    <access-permissions>*:platform/users</access-permissions>
-    <edit-permission>*:/platform/administrators</edit-permission>
-    
-    <application>
-      <instance-id>group#platform/users:/web/SiteMapPortlet/sitemapportlet</instance-id>
-      <title>Site Map</title>
-      <show-info-bar>false</show-info-bar>      
-    </application>  
-  </page>
+ 
     	  
 </page-set>
 

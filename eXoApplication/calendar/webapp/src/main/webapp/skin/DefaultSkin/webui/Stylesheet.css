@@ -27,7 +27,7 @@
 .UICalendarPortlet {
 	background: white;
 	border: 1px solid #b7b7b7;
-	margin: 7px;
+	margin: 5px;
 	color: #292929;
 }
 
@@ -132,6 +132,10 @@
 	margin: 3px auto;
 }
 
+.UICalendarPortlet .UIForm .HorizontalLayout .setting input.checkbox {
+  margin:4px 0px 0px 0px;
+  _margin: 2px 0px 0px 0px;
+}
 /*=====================Table Color===========================*/
 
 .UIPopupCategory .UIContextMenuContainer {
@@ -162,12 +166,10 @@
 
 .UIPopupCategory .CalendarTableColor a:hover {
 	border: 1px solid red; 
-	margin: 2px;
 }
 
 /* Popup Menu Positioning*/
 .UIActionBar .SelectButton .UIPopupCategory {
-	top: 25px;
 	left: 7px ;
 }
 
@@ -238,13 +240,6 @@
 	-moz-user-select : none ;
 }
 
-.BlueBlock {
-	background: green ;
-	position: absolute ;
-	z-index: 1 ;
-	-moz-user-select : none ;
-}
-
 .UICalendarPortlet .SelectFileFrame {
 	width: 340px;
 }
@@ -267,3 +262,26 @@
 .UICalendarPortlet .SelectGroupIcon {
 	width: 16px ; height: 16px;
 }
+
+.UICalendarPortlet .UISharedForm .UIFormGrid {
+  width: 100%;
+  margin: 0px;
+}
+
+.UICalendarPortlet .MoreEvent {
+  width: 200px;
+  background-color: #e9edf9;
+  border: 1px solid #b7b7b7;
+}
+
+.UICalendarPortlet .MoreEvent .MoreEventBar {
+  background: url('skinIcons/icons/CloseMore.gif') no-repeat right;
+  height: 16px;
+  padding: 4px 16px 3px 0px;
+  margin-right: 4px;
+}
+
+.UICalendarPortlet .MoreEvent .MoreEventContainer {
+  padding: 8px;
+}
+

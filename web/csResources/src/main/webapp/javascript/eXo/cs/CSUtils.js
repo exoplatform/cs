@@ -2,10 +2,10 @@ if(!eXo.cs){
 	eXo.cs = {} ;
 }
 /********************* Checkbox Manager ******************/
-function CheckBox() {
+function CheckBoxManager() {
 } ;
 
-CheckBox.prototype.init = function(cont) {
+CheckBoxManager.prototype.init = function(cont) {
 	if(typeof(cont) == "string") cont = document.getElementById(cont) ;
 	var checkboxes = eXo.core.DOMUtil.findDescendantsByClass(cont, "input", "checkbox") ;
 	if(checkboxes.length <=0) return ;
@@ -20,7 +20,7 @@ CheckBox.prototype.init = function(cont) {
 	}
 } ;
 
-CheckBox.prototype.checkAll = function() {
+CheckBoxManager.prototype.checkAll = function() {
 	var CheckBox = eXo.cs.CheckBox ;
 	var checked = this.checked ;
 	var items = CheckBox.items ;
@@ -31,7 +31,7 @@ CheckBox.prototype.checkAll = function() {
 	}	
 } ;
 
-CheckBox.prototype.check = function() {
+CheckBoxManager.prototype.check = function() {
 	var CheckBox = eXo.cs.CheckBox ;
 	var checked = this.checked ;
 	var len = CheckBox.items.length ;
@@ -45,11 +45,11 @@ CheckBox.prototype.check = function() {
 	}
 } ;
 
-eXo.cs.CheckBox = new CheckBox() ;
+eXo.cs.CheckBox = new CheckBoxManager() ;
 
 /********************* Pane Spliter ******************/
 
-function Spliter() {
+function LayoutSpliter() {
 } ;
 
 /**
@@ -58,7 +58,7 @@ function Spliter() {
  * @param {Object} markerobj : Click object
  * This function to resize pane
  */
-Spliter.prototype.doResize = function(e , markerobj) {
+LayoutSpliter.prototype.doResize = function(e , markerobj) {
   _e = (window.event) ? window.event : e ;
   var DOMUtil = eXo.core.DOMUtil ;
   this.posY = eXo.core.Browser.findMouseYInPage(_e) ;
@@ -78,7 +78,7 @@ Spliter.prototype.doResize = function(e , markerobj) {
   document.onmouseup = eXo.cs.Spliter.clear ;
 } ;
 
-Spliter.prototype.adjustHeight = function(evt) {
+LayoutSpliter.prototype.adjustHeight = function(evt) {
   evt = (window.event) ? window.event : evt ;
   var Spliter = eXo.cs.Spliter ;
   var delta = eXo.core.Browser.findMouseYInPage(evt) - Spliter.posY ;
@@ -89,7 +89,7 @@ Spliter.prototype.adjustHeight = function(evt) {
   Spliter.afterArea.style.height =  afterHeight + "px" ;
 } ;
 
-Spliter.prototype.clear = function() {
+LayoutSpliter.prototype.clear = function() {
   try {
     var Spliter = eXo.cs.Spliter ;
     document.onmousemove = null ;
@@ -101,7 +101,7 @@ Spliter.prototype.clear = function() {
   } catch(e) {window.statuts = "Message : " + e.message ;} ;
 } ;
 
-eXo.cs.Spliter = new Spliter() ;
+eXo.cs.Spliter = new LayoutSpliter() ;
 
 /********************* Utility function for CS ******************/
 

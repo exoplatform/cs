@@ -63,16 +63,24 @@ public class UISearchForm extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-  
-      ContactFilter filter = new ContactFilter() ;
-      filter.setText(ContactUtils.filterString(text, true)) ;
+      String textFiltered = ContactUtils.filterString(text, true) ;
+      DataPageList resultPageList =  null ;
+      if (!ContactUtils.isEmpty(textFiltered)) {
+        ContactFilter filter = new ContactFilter() ;
+        filter.setText(textFiltered) ;
+        resultPageList = ContactUtils.getContactService()
+          .searchContact(SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), filter) ;
+      }
       
-      DataPageList resultPageList = ContactUtils.getContactService()
-        .searchContact(SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), filter) ;
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class).setSelectedGroup(null) ;
       uiContactPortlet.findFirstComponentOfType(UITags.class).setSelectedTag(null) ;      
-      UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;      
+      UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;    
+      uiContacts.setSelectedGroupBeforeSearch(uiContacts.getSelectedGroup()) ;
+      uiContacts.setSelectedTagBeforeSearch_(uiContacts.getSelectedTag()) ;
+      uiContacts.setSelectSharedContactsBeforeSearch(uiContacts.isSelectSharedContacts()) ;
+      uiContacts.setViewListBeforeSearch(uiContacts.viewContactsList) ;
+      
       uiContacts.setContacts(resultPageList) ;
       uiContacts.setDisplaySearchResult(true) ;
       uiContacts.setViewContactsList(true) ; 

@@ -85,17 +85,22 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
       String calendarName = uiForm.getUIStringInput(UIImportForm.NAME).getValue() ;
       UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      UploadResource resource = uploadService.getUploadResource(input.getUploadId()) ;
+      if(resource == null) {
+        uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.file-name-error", null));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       if(CalendarUtils.isEmpty(calendarName)) {
-        UploadResource resource = uploadService.getUploadResource(input.getUploadId()) ;
-        if(resource == null) {
-          uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.file-name-error", null));
+        calendarName = resource.getFileName() ;
+      } else {
+        if(!CalendarUtils.isNameValid(calendarName, CalendarUtils.SPECIALCHARACTER)) {
+          uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.file-name-invalid", null));
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
         }
-        calendarName = resource.getFileName() ;
       }
       try {
-        
         String username = Util.getPortalRequestContext().getRemoteUser() ;
         CalendarService calendarService = CalendarUtils.getCalendarService() ;
         calendarService.getCalendarImportExports(importFormat).importCalendar(SessionProviderFactory.createSystemProvider(), username, input.getUploadDataAsStream(), calendarName) ;

@@ -7,6 +7,8 @@
   import org.exoplatform.download.DownloadService;
   import org.exoplatform.calendar.service.CalendarEvent;
   import javax.mail.internet.MimeUtility;
+  import org.exoplatform.webui.application.WebuiRequestContext;
+  import java.util.Locale;
   
   import org.exoplatform.mail.webui.UIMessageList ;
   import org.exoplatform.mail.webui.UIMessagePreview ;
@@ -15,6 +17,9 @@
   rcontext.getJavascriptManager().importJavascript('eXo.cs.MaskLayerControl','/csResources/javascript/');
   rcontext.getJavascriptManager().addOnLoadJavascript('eXo.cs.MaskLayerControl.init(\'' + uicomponent.getId() + '\')');
   rcontext.getJavascriptManager().importJavascript("eXo.mail.UIMailPortlet","/mail/javascript/");
+  
+  WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+  Locale locale = context.getParentAppRequestContext().getLocale() ;
 %>
 <div class="UIMessagePreview" id="<%=uicomponent.getId()%>">
 <%
@@ -24,14 +29,14 @@
 	<div class="ReadingPaneBar">
 		<div class="Subject"><span><%=_ctx.appRes(uicomponent.id+ ".label.subject") %>:</span><span>
 		<%
-		  String subject = "(No Subject)"
+		  String subject = "(" + _ctx.appRes(uicomponent.id+ ".label.no-subject") + ")"
 		  if (msgRoot.getSubject() != null && msgRoot.getSubject() != "") {
 		    subject = msgRoot.getSubject();
 		  }
 		%>
 		<%=subject%>
 		</span></div>
-		<div><a href="javascript:eXo.mail.UIMailPortlet.showHidePreviewPane()"><span id="ActionReadingPane" class="MaximizeReadingPane" title="Maximize Reading Pane"></span></a></div>
+		<div><a href="javascript:eXo.mail.UIMailPortlet.showHidePreviewPane()"><span id="ActionReadingPane" class="MaximizeReadingPane" title="<%=_ctx.appRes(uicomponent.id+ '.label.maximize-reading-pane') %>"></span></a></div>
 		<div style="clear:both;"><span></span></div>
 	</div>
   
@@ -63,7 +68,7 @@
                   <body>
                     <tr>
                       <td>
-                        <div  class="$starClass" title="Add star for this message"><span></span></div>
+                        <div  class="$starClass" title="<%=_ctx.appRes(uicomponent.id+ '.label.add-star-for-this-message') %>"><span></span></div>
                       </td>
                       <td style="width: auto; white-space: nowrap;">
                         <div class="SenderAddress">
@@ -80,7 +85,7 @@
                         <table style="white-space: nowrap; width: 100%; table-layout: fixed;">
                           <tr>
                             <td>
-                              <div class="HeadlineText" title="Click here to expand contents of message">
+                              <div class="HeadlineText" title="<%=_ctx.appRes(uicomponent.id+ '.label.click-here-to-expand') %>">
                               <%
                                 String body = MailUtils.html2text(msg.getMessageBody()) ;
                                 if (body.length() > 90) body = body.substring(0, 90) ;
@@ -91,13 +96,13 @@
                         </table>
                        </td>
                       <td >
-                        <% if (msg.getAttachments().size() > 0) { %>
+                        <% if (msg.hasAttachment() && msg.getAttachments() != null && msg.getAttachments().size() > 0) { %>
                         <div class="AttachmentIcon"><span></span></div>
                         <% } %>
                       </td>
                       <td style="width: auto; white-space: nowrap;">
                         <div class="MonthDate">
-                        <%=MailUtils.formatDate(msg.getReceivedDate())%>
+                        <%=MailUtils.formatDate(msg.getReceivedDate(), locale)%>
                         </div>
                       </td>
                     </tr>
@@ -133,7 +138,7 @@
   						<div class="MiddleCenterViewBoxStyle">
   							<div class="MessageHeader">
   								<div class="MessageCheck">
-  									<div><a href="<%=uicomponent.event("AddStar", msg.getId())%>"><div  class="$starClass" title="Add star for this message"><span></span></div></a></div>
+  									<div><a href="<%=uicomponent.event("AddStar", msg.getId())%>"><div  class="$starClass" title="<%=_ctx.appRes(uicomponent.id+ '.label.add-star-for-this-message') %>"><span></span></div></a></div>
   									<div style="clear: left;"><span></span></div>
   								</div>
   								<div id="CollapseMessageAddressPreview" class="CollapseMessageAddress" onclick="javascript:eXo.mail.UIMailPortlet.showHideMessageDetails(this);">
@@ -146,7 +151,7 @@
   										      <span><%=Utils.getPersonal(from1)%> &lt; <%=from1.getAddress()%> &gt; </span>
                         <%} %>    
   										</span>
-                      <span class="Title">To:</span>
+                      <span class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.to") %>:</span>
                       <span class="LinkAddress"> 
                         <%
                           try {
@@ -245,8 +250,8 @@
                       </div>
                   <%} %>
                   <div class="FieldContainer">
-                    <div class="Title">Date & time:</div>
-                    <div class="Address"><%=MailUtils.formatDate('EEEE, dd MMMM, yyyy HH:mm:ss aaa', msg.getReceivedDate())%></div>
+                    <div class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.date-time") %>:</div>
+                    <div class="Address"><%=MailUtils.formatDate('EEEE, dd MMMM, yyyy HH:mm:ss aaa', msg.getReceivedDate(), locale)%></div>
                     <div style="clear: left;"><span></span></div>
                   </div>
                   </div>
@@ -254,9 +259,9 @@
                   
   								<div class="MessageActions" >
   									<div class="DownArrow1Icon"><span></span></div>
-  									<div class="ShowHideTitle" onclick="javascript:eXo.mail.UIMailPortlet.showHideMessageHeader(this)">Show details</div>
+  									<div class="ShowHideTitle" onclick="javascript:eXo.mail.UIMailPortlet.showHideMessageHeader(this)" showhideheader="<%=_ctx.appRes(uicomponent.id+ '.label.show-details') %> ,<%=_ctx.appRes(uicomponent.id+ '.label.hide-details') %>"><%=_ctx.appRes(uicomponent.id+ ".label.show-details") %></div>
   									<div class="MonthDate"></div>
-  									<div class="Actions" title="Actions on this message" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+  									<div class="Actions" title="<%=_ctx.appRes(uicomponent.id+ '.label.action-on-this-messge') %>" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
                     <% /*Begin Popup Menu*/ %>
                       <div style="position: relative;">
                         <div class="UIPopupCategory" style="display: none;">
@@ -329,8 +334,13 @@
                   String frameId = "IframeMessagePreview" + msgIndex ;
                   String textAreaId = "MessageDetails" + msgIndex ;
                   String contentType = msg.getContentType() ;
-                  if (contentType.indexOf(";") > -1) {
-                    contentType = contentType.substring(0, contentType.indexOf(";"))
+                  if (contentType != null) {
+                    if (contentType.indexOf(";") > -1) {
+                      contentType = contentType.substring(0, contentType.indexOf(";")) ;
+                    }
+                    contentType = contentType.toLowerCase()
+                  } else {
+                    contentType = "text/plain" ;
                   }
                 %>
                 <iframe src="" style="border: 0px" frameborder="0" class="MessageDetails" id="$frameId"></iframe>
@@ -354,7 +364,7 @@
                   </div> 
                 <%}%>
                 <%
-                  if (msg.getAttachments().size() > 0) {
+                  if (msg.hasAttachment() && msg.getAttachments() != null && msg.getAttachments().size() > 0) {
                 %>
                   <div class="AttachmentContainer">
     						  	<div class="AttachmentTitle"><%=_ctx.appRes(uicomponent.id+ ".label.attachments") %>:</div>            
@@ -369,7 +379,7 @@
                           attLink = MailUtils.getImageSource(attach, dservice) ;
                           boolean isImage = false ;
                           if (attLink != null ) {
-                            if (attach.getMimeType().indexOf("image") > -1) {
+                            if (attach.getMimeType().toLowerCase().indexOf("image") > -1) {
                               isImage = true ; 
                             } else if (attach.getMimeType().indexOf("msword") > -1) {
                               attLink = "/mail/skin/DefaultSkin/webui/skinIcons/24x24/icons/WordIcon.gif";
@@ -400,11 +410,11 @@
         										}
         										if (validType) {
       										%>
-														<span class="Icon ViewDownloadIcon"><a href="#">View</a></span>
+														<span class="Icon ViewDownloadIcon"><a href="#"><%=_ctx.appRes(uicomponent.id+ ".label.view") %></a></span>
 													<% 
       											}	
       										%>
-														<span class="Icon DownloadIcon"> <a href="$downloadAction">Download</a></span></div>
+														<span class="Icon DownloadIcon"> <a href="$downloadAction"><%=_ctx.appRes(uicomponent.id+ ".label.download") %></a></span></div>
       						  		</div>
       						  		<div style="clear: left;"><span></span></div>
       						  	</div>

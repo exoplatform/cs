@@ -47,11 +47,15 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UIContactPreview extends UIComponent  {
   private Contact contact_ = null ; 
+  private boolean isMaximized_ = false ;  
   public UIContactPreview() throws Exception { }
   
   public void setContact(Contact c) { contact_ = c; }
   public Contact getContact() { return contact_; }
 
+  public void setIsMaximized(boolean isMaximize) { isMaximized_ = isMaximize ; }
+  public boolean getIsMaximize() { return isMaximized_ ; }
+  
   public String getImageSource() throws Exception {
     return ContactUtils.getImageSource(contact_, getApplicationComponent(DownloadService.class)) ; 
   }

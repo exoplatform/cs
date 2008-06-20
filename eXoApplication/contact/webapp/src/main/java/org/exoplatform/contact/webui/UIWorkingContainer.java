@@ -32,6 +32,6 @@ import org.exoplatform.webui.core.UIContainer;
 public class UIWorkingContainer extends UIContainer  {
   public UIWorkingContainer() throws Exception {
     addChild(UINavigationContainer.class, null, null) ;
-    addChild(UIContactContainer.class, null, null) ;  
+    addChild(UIContactContainer.class, null, null) ;
   }  
 }
