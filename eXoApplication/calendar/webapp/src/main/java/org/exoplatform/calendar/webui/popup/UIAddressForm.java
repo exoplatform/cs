@@ -31,6 +31,7 @@ import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.DataPageList;
 import org.exoplatform.contact.service.SharedAddressBook;
+import org.exoplatform.contact.service.Utils;
 import org.exoplatform.contact.service.impl.NewUserListener;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -135,9 +136,9 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       String id  = ct ;
       String value = resultMap.get(id) ; 
       if(resultMap.get(id) != null && resultMap.get(id).trim().length() > 0) {
-        if(value.lastIndexOf("::") > 0) {
-          String fullName = value.split("::")[0] ;
-          String email = value.split("::")[1] ;
+        if(value.lastIndexOf(Utils.SPLIT) > 0) {
+          String fullName = value.substring(0,value.lastIndexOf(Utils.SPLIT)) ;
+          String email = value.substring(value.lastIndexOf(Utils.SPLIT) + Utils.SPLIT.length()) ;
           data.add(new ContactData(id, fullName, email)) ;
         }
       }
@@ -155,9 +156,9 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       String id  = ct ;
       String value = resultMap.get(id) ; 
       if(resultMap.get(id) != null && resultMap.get(id).trim().length() > 0) {
-        if(value.lastIndexOf("::") > 0) {
-          String fullName = value.split("::")[0] ;
-          String email = value.split("::")[1] ;
+        if(value.lastIndexOf(Utils.SPLIT) > 0) {
+          String fullName = value.substring(0,value.lastIndexOf(Utils.SPLIT)) ;
+          String email = value.substring(value.lastIndexOf(Utils.SPLIT) + Utils.SPLIT.length()) ;
           data.add(new ContactData(id, fullName, email)) ;
         }
       }

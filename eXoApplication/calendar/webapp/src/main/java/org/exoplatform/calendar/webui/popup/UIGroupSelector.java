@@ -70,6 +70,7 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
   private String type_ = null ;
   private List selectedGroup_ ;
   private String returnFieldName = null ;
+  private boolean isFilter_ = true ;
 
   public UIGroupSelector() throws Exception {}
 
@@ -103,16 +104,18 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
   public boolean isSelectMemberShip() {return TYPE_MEMBERSHIP.equals(type_);}
   @SuppressWarnings({ "unchecked", "cast" })
   public List<String> getList() throws Exception {
-	  
+
     List<String> children = new ArrayList<String>() ; 
     OrganizationService service = getApplicationComponent(OrganizationService.class) ;
-    
+
     String currenUser = CalendarUtils.getCurrentUser();
-    
+
     if(TYPE_USER.equals(type_)){
       PageList userPageList = service.getUserHandler().findUsersByGroup(this.getCurrentGroup().getId()) ;    
       for(Object child : userPageList.getAll()){
-        if(!((User)child).getUserName().equals(currenUser)) {
+        if(isFilter_){
+          if(!((User)child).getUserName().equals(currenUser)) children.add(((User)child).getUserName()) ;
+        } else  {
           children.add(((User)child).getUserName()) ;
         }
       }
@@ -158,6 +161,14 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
 
   public String getType() {
     return type_;
+  }
+
+  public void setFilter(boolean isFilter) {
+    this.isFilter_ = isFilter;
+  }
+
+  public boolean isFilter() {
+    return isFilter_;
   }
 
   static  public class SelectMembershipActionListener extends EventListener<UIGroupSelector> {   
