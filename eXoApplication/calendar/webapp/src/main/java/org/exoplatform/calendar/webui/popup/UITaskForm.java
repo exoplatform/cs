@@ -652,6 +652,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       UIGroupSelector uiGroupSelector = uiPopupAction.activate(UIGroupSelector.class,500) ;
       uiGroupSelector.setType(UISelectComponent.TYPE_USER) ;
       uiGroupSelector.setSelectedGroups(null) ;
+      uiGroupSelector.setFilter(false) ;
       uiForm.setEventDelegation(value) ;
       uiGroupSelector.setComponent(uiForm,new String[]{UITaskDetailTab.FIELD_DELEGATION}) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;

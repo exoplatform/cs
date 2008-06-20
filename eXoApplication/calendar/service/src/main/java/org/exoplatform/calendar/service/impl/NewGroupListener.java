@@ -72,7 +72,8 @@ public class NewGroupListener extends GroupEventListener {
 		calendar.setViewPermission(perms.toArray(new String[perms.size()])) ;
 		perms.clear() ;
 		for(String s : editPermission) {
-			if(!perms.contains(s)) perms.add(s) ;
+      String groupKey = groupId + "/:" + s ;
+			if(!perms.contains(groupKey)) perms.add(groupKey) ;
 			//if(s.split(":").length > 0) perms.add(s.split(":")[0].trim() + ":" + groupId) ;
 		}
 		calendar.setEditPermission(perms.toArray(new String[perms.size()])) ;

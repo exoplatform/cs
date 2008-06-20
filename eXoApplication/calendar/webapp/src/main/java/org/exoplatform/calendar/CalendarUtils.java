@@ -49,6 +49,7 @@ import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.impl.GroupImpl;
@@ -80,8 +81,14 @@ public class CalendarUtils {
   final public static String SLASH = "/".intern() ;
   final public static String BACKSLASH = "\\".intern() ;
   final public static String DOUBLESCORE = "--".intern() ;
-
   final public static String UNDERSCORE = "_".intern() ;
+
+  final public static String SLASH_COLON = "/:".intern() ;
+  final public static String COLON_SLASH = ":/".intern() ;
+  final public static String ANY = "*.*".intern() ;
+  final public static String ANY_OF = "*.".intern() ;
+  final public static String DOT = ".".intern() ;
+
   final public static String TIMEFORMAT  = "HH:mm".intern() ;
   final public static String DATEFORMAT = "MM/dd/yyyy".intern() ;
   final public static String DATETIMEFORMAT = DATEFORMAT + " " +TIMEFORMAT ;   
@@ -386,7 +393,7 @@ public class CalendarUtils {
     if(savePerms != null)
       for(String sp : savePerms) {
         for (String cp : checkPerms) {
-          if( sp.equals(cp) || sp.equals("*.*")) {return true ;}      
+          if(sp.equals(cp)) {return true ;}      
         }
       }
     return false ;
@@ -397,14 +404,33 @@ public class CalendarUtils {
     StringBuffer sb = new StringBuffer(username) ;
     if(oService != null) {
       Collection<Membership> memberShipsType = oService.getMembershipHandler().findMembershipsByUser(username) ;
-      for(Membership mp : memberShipsType) {
-        sb.append(CalendarUtils.COMMA).append("*." + mp.getMembershipType()) ; /*+
-            CalendarUtils.COLON+ mp.getGroupId()).append(CalendarUtils.COMMA).append(CalendarUtils.STAR + CalendarUtils.COLON+ mp.getGroupId()) ;*/
+      Collection<Group> groups = oService.getGroupHandler().findGroupsOfUser(username) ;
+      for(Group g : groups) {
+        sb.append(CalendarUtils.COMMA).append(g.getId()).append(SLASH_COLON).append(ANY) ;
+        sb.append(CalendarUtils.COMMA).append(g.getId()).append(SLASH_COLON).append(username) ;
+        for(Membership mp : memberShipsType) {
+          sb.append(CalendarUtils.COMMA).append(g.getId()).append(SLASH_COLON).append(ANY_OF + mp.getMembershipType()) ;
+        }
       }
     }
     return CalendarUtils.hasEditPermission(savePerms, sb.toString().split(CalendarUtils.COMMA)) ;
   }
-
+  public static boolean isMemberShipType(Collection<Membership> mbsh, String value) {
+    if(!isEmpty(value))
+      for (String check : value.split(COMMA)) { 
+        check = check.trim() ;
+        if(check.lastIndexOf(ANY_OF) > -1) {
+          if(ANY.equals(check)) return true ;
+          value = check.substring(check.lastIndexOf(ANY_OF) + ANY_OF.length()) ;
+          if(mbsh!= null && !mbsh.isEmpty()) {
+            for(Membership mb : mbsh) {
+              if(mb.getMembershipType().equals(value)) return true ; 
+            }
+          }
+        }
+      }
+    return false ;
+  }
   static public class SelectComparator implements Comparator{
     public int compare(Object o1, Object o2) throws ClassCastException {
       String name1 = ((SelectItemOption) o1).getLabel() ;

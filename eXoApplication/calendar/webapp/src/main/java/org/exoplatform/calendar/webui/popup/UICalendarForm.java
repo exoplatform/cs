@@ -17,6 +17,7 @@
 package org.exoplatform.calendar.webui.popup;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +35,9 @@ import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.Group;
+import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -84,6 +87,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   final public static String TIMEZONE = "timeZone" ;
   final public static String LOCALE = "locale" ;
   final public static String PERMISSION_SUB = "_permission".intern() ;
+
   public Map<String, String> permission_ = new HashMap<String, String>() ;
   public Map<String, Map<String, String>> perms_ = new HashMap<String, Map<String, String>>() ;
   //public String calendarId_ = null ;
@@ -237,17 +241,31 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       calendarDetail.setActionField(CATEGORY, null) ;
       for(String groupId : calendar.getGroups()) {
         UIFormCheckBoxInput checkbox = sharing.getUIFormCheckBoxInput(groupId) ;
-        StringBuffer sb = new StringBuffer() ;
+        UIFormStringInput uiInput = sharing.getUIStringInput(groupId + PERMISSION_SUB) ;
         if(checkbox != null) { 
           checkbox.setChecked(true) ;
+          StringBuffer sb = new StringBuffer() ;
+          List<String> checkList = new ArrayList<String>() ;
           if(calendar.getEditPermission() != null) {
             for(String s : calendar.getEditPermission()) {
-              if(!CalendarUtils.isEmpty(sb.toString())) sb.append(CalendarUtils.COMMA) ;
+              if(s.lastIndexOf(CalendarUtils.SLASH_COLON) > -1) {
+                String id = s.split(CalendarUtils.SLASH_COLON)[0].trim() ;
+                String perm = s.split(CalendarUtils.SLASH_COLON)[1].trim() ;
+                if(groupId.equals(id)) {
+                  if(!checkList.contains(s.split(CalendarUtils.SLASH_COLON)[1])) {
+                    checkList.add(perm) ;
+                    if(sb.length() > 0) sb.append(CalendarUtils.COMMA) ;
+                    sb.append(perm) ;
+                  }
+                }
+              }
+              /*if(!CalendarUtils.isEmpty(sb.toString())) sb.append(CalendarUtils.COMMA) ;
               if(s.startsWith("*")) sb.append(UIGroupSelector.TYPE_MEMBERSHIP + ":/"+ groupId + ":/"+ s) ;
-              else sb.append(UIGroupSelector.TYPE_USER + ":/"+ groupId + ":/"+ s) ;
-              updateSelect(groupId + PERMISSION_SUB, sb.toString())  ;
+              else sb.append(UIGroupSelector.TYPE_USER + ":/"+ groupId + ":/"+ s) ;*/
+              //updateSelect(groupId + PERMISSION_SUB, sb.toString())  ;
             }
           }
+          uiInput.setValue(sb.toString()) ;
         }
       }
     }
@@ -320,7 +338,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     StringBuilder sb = new StringBuilder() ;
     Map<String, String> temp = new HashMap<String, String>() ;
     String key = value.substring(0, selectField.lastIndexOf(PERMISSION_SUB));
-    String tempS = value.substring(value.lastIndexOf(":/") + 2) ;
+    String tempS = value.substring(value.lastIndexOf(CalendarUtils.COLON_SLASH) + 2) ;
     if(perms_.get(selectField) == null) {
       temp.put(key, tempS) ;
     } else {
@@ -425,7 +443,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       if(!CalendarUtils.isEmpty(currentUsers)) {
         for(String user : currentUsers.split(CalendarUtils.COMMA)) {
           user = user.trim() ;
-          String fullKey = permType + ":/" + fieldId +  ":/" + user ;
+          String fullKey = permType + CalendarUtils.COLON_SLASH + fieldId +  CalendarUtils.COLON_SLASH + user ;
           uiForm.updateSelect(fieldId, fullKey) ;
         }
       }
@@ -436,6 +454,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = uiPopupContainer.getChild(UIPopupAction.class) ;
       uiChildPopup.activate(uiGroupSelector, 500, 0, true) ;
+      uiGroupSelector.setFilter(false) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
     }
@@ -500,29 +519,41 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
           List<String> listPermission = new ArrayList<String>() ;
           OrganizationService orgService = CalendarUtils.getOrganizationService() ;
           for(String groupIdSelected : selected) {
+            String groupKey = groupIdSelected + CalendarUtils.SLASH_COLON ;
             UIFormInputWithActions sharedTab = uiForm.getChildById(UICalendarForm.INPUT_SHARE) ;
             String typedPerms = sharedTab.getUIStringInput(groupIdSelected + PERMISSION_SUB).getValue();
             if(!CalendarUtils.isEmpty(typedPerms)) {
               for(String s : typedPerms.split(CalendarUtils.COMMA)){
                 s = s.trim() ;
                 if(!CalendarUtils.isEmpty(s)) {
-                  if(orgService.getUserHandler().findUserByName(s) != null) {             
-                    listPermission.add(s) ;
+                  //User user = orgService.getUserHandler().findUserByName(s) ;
+                  List<User> users = orgService.getUserHandler().findUsersByGroup(groupIdSelected).getAll() ;
+                  boolean isExisted = false ;
+                  for(User u : users) {
+                    if(u.getUserName().equals(s)) {
+                      isExisted = true ;
+                      break ;
+                    }
+                  }
+                  if(isExisted) {             
+                    listPermission.add(groupKey + s) ;
                   } else {
-                    if(s.equals("*.*")) listPermission.add(s) ; 
-                    else if(s.indexOf("*.") > -1) {
-                      String typeName = s.substring(s.lastIndexOf(".")+ 1, s.length()) ;
+                    if(s.equals(CalendarUtils.ANY)) listPermission.add(groupKey + s) ; 
+                    else if(s.indexOf(CalendarUtils.ANY_OF) > -1) {
+                      String typeName = s.substring(s.lastIndexOf(CalendarUtils.DOT)+ 1, s.length()) ;
                       if(orgService.getMembershipTypeHandler().findMembershipType(typeName) != null) {
-                        listPermission.add(s) ;
+                        listPermission.add(groupKey + s) ;
                       } 
                     }
                   }
                 }
               }
             }
-            if(!listPermission.contains(CalendarUtils.getCurrentUser()) && !listPermission.contains("*.*")) 
+            Collection<Membership> mbsh = CalendarUtils.getOrganizationService().getMembershipHandler().findMembershipsByUser(username) ;
+            if(!listPermission.contains(groupKey + CalendarUtils.getCurrentUser()) 
+                && !CalendarUtils.isMemberShipType(mbsh, typedPerms))
             { 
-              listPermission.add(CalendarUtils.getCurrentUser()) ;
+              listPermission.add(groupKey + CalendarUtils.getCurrentUser()) ;
             }
           }        
           calendar.setEditPermission(listPermission.toArray(new String[listPermission.size()])) ;
