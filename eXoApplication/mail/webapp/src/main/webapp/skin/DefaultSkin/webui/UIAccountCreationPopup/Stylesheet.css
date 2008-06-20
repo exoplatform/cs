@@ -73,7 +73,7 @@
 	border-top: 1px solid white;
 	border-bottom: 1px solid white;
 	padding: 10px 0px;
-	height: 200px;
+	height: 190px;
 }
 
 
@@ -84,4 +84,8 @@
 
 .UIMailPortlet .UIAccountCreationWizard .UITabPane .TabPaneContent {
 	padding: 0px;
+}
+
+.UIMailPortlet .UIAccountCreationWizard .UITabPane {
+	height: 99.5%;
 }
