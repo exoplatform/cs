@@ -16,6 +16,9 @@
  */
 package org.exoplatform.contact.webui.popup;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.jcr.PathNotFoundException;
 
 import org.exoplatform.contact.Colors;
@@ -36,6 +39,7 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.UIFormTextAreaInput;
 
 
 /**
@@ -56,18 +60,12 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
   private Tag tag_ = null ;
   public static final String FIELD_TAGNAME_INPUT = "tagName";
   public static final String FIELD_COLOR = "color";
- /* public static final String RED = "Red".intern() ;
-  public static final String BLUE = "Blue".intern() ;
-  public static final String GREEN = "Green".intern() ;*/
+  public static final String FIELD_DESCRIPTION_INPUT = "description";
+  private boolean isNew = true ;
   
   public UIEditTagForm() {
     addUIFormInput(new UIFormStringInput(FIELD_TAGNAME_INPUT, FIELD_TAGNAME_INPUT, null));
-    /*
-    List<SelectItemOption<String>> colors = new ArrayList<SelectItemOption<String>>() ;
-    colors.add(new SelectItemOption<String>(RED,RED)) ;
-    colors.add(new SelectItemOption<String>(BLUE,BLUE)) ;
-    colors.add(new SelectItemOption<String>(GREEN,GREEN)) ;
-    */
+    addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION_INPUT, FIELD_DESCRIPTION_INPUT, null)) ;
     addUIFormInput(new UIFormColorPicker(FIELD_COLOR, FIELD_COLOR, Colors.COLORS)) ;   
   }
   
@@ -76,17 +74,23 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
   public void deActivate() throws Exception { }
 
   public void setValues(Tag tag) throws Exception {
+    isNew = false ;
     tag_ = tag ;
     if (tag != null) {
       getUIStringInput(FIELD_TAGNAME_INPUT).setValue(tag.getName()) ;
+      getUIFormTextAreaInput(FIELD_DESCRIPTION_INPUT).setValue(tag.getDescription()) ;
       getChild(UIFormColorPicker.class).setValue(tag.getColor()) ;
     }
   }
+  public boolean isNew() { return isNew; }
+  public void setNew(boolean isNew) { this.isNew = isNew; }  
+  
   
   static  public class SaveActionListener extends EventListener<UIEditTagForm> {
     public void execute(Event<UIEditTagForm> event) throws Exception {
       UIEditTagForm uiEditTagForm = event.getSource() ;
-      String  tagName = uiEditTagForm.getUIStringInput(FIELD_TAGNAME_INPUT).getValue(); 
+      String tagName = uiEditTagForm.getUIStringInput(FIELD_TAGNAME_INPUT).getValue(); 
+      String des = uiEditTagForm.getUIFormTextAreaInput(FIELD_DESCRIPTION_INPUT).getValue() ;
       UIApplication uiApp = uiEditTagForm.getAncestorOfType(UIApplication.class) ;
       if (ContactUtils.isEmpty(tagName)) {
         uiApp.addMessage(new ApplicationMessage("UIEditTagForm.msg.tagName-required", null, 
@@ -94,10 +98,9 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       }
-      Tag tag = uiEditTagForm.tag_ ;
       UIContactPortlet uiContactPortlet = uiEditTagForm.getAncestorOfType(UIContactPortlet.class) ;
       UITags uiTags = uiContactPortlet.findFirstComponentOfType(UITags.class) ;
-      if (!tag.getName().equals(tagName))
+      if (uiEditTagForm.isNew) {
         for (Tag oldTag : uiTags.getTagMap().values()) 
           if (oldTag.getName().equals(tagName)) {
             uiApp.addMessage(new ApplicationMessage("UIEditTagForm.msg.tagName-existed", null, 
@@ -105,23 +108,41 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return ;
           }
-      tag.setName(tagName) ;
-      tag.setColor(uiEditTagForm.getChild(UIFormColorPicker.class).getValue()) ;
-      try {
-        ContactUtils.getContactService().updateTag(
-            SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), tag) ;
-      } catch (PathNotFoundException e) {
-        uiApp.addMessage(new ApplicationMessage("UIEditTagForm.msg.tag-deleted", null, 
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
+        Tag tag = new Tag() ;
+        tag.setName(tagName) ;
+        tag.setDescription(des) ;
+        tag.setColor(uiEditTagForm.getChild(UIFormColorPicker.class).getValue()) ;
+        List<Tag> tags = new ArrayList<Tag>() ;
+        tags.add(tag) ;
+        ContactUtils.getContactService().addTag(SessionProviderFactory.createSessionProvider()
+            , ContactUtils.getCurrentUser(), null, tags) ;        
+      } else {
+        Tag tag = uiEditTagForm.tag_ ;
+        if (!tag.getName().equals(tagName))
+          for (Tag oldTag : uiTags.getTagMap().values()) 
+            if (oldTag.getName().equals(tagName)) {
+              uiApp.addMessage(new ApplicationMessage("UIEditTagForm.msg.tagName-existed", null, 
+                  ApplicationMessage.WARNING)) ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              return ;
+            }
+        tag.setName(tagName) ;
+        tag.setDescription(des) ;
+        tag.setColor(uiEditTagForm.getChild(UIFormColorPicker.class).getValue()) ;
+        try {
+          ContactUtils.getContactService().updateTag(
+              SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), tag) ;
+        } catch (PathNotFoundException e) {
+          uiApp.addMessage(new ApplicationMessage("UIEditTagForm.msg.tag-deleted", null, 
+              ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
       }
-      
-      
-      
       WebuiRequestContext context = event.getRequestContext() ;
       context.addUIComponentToUpdateByAjax(uiTags) ;
-      context.addUIComponentToUpdateByAjax(uiContactPortlet.findFirstComponentOfType(UIContacts.class)) ;
+      if (!uiEditTagForm.isNew)
+        context.addUIComponentToUpdateByAjax(uiContactPortlet.findFirstComponentOfType(UIContacts.class)) ;
       uiContactPortlet.cancelAction() ;
     }
   }

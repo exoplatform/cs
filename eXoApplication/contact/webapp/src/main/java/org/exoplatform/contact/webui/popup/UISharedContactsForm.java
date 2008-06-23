@@ -224,9 +224,23 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
       uiGroupSelector.setType(permType) ;
       uiGroupSelector.setSelectedGroups(null) ;
       
-      if (permType.equals(UISelectComponent.TYPE_USER))      
-        uiGroupSelector.setComponent(uiForm, new String[]{UISharedContactsForm.FIELD_USER}) ;
-      else uiGroupSelector.setComponent(uiForm, new String[]{UISharedContactsForm.FIELD_GROUP}) ;
+      if (permType.equals(UISelectComponent.TYPE_USER)) {
+//      add to fix bug cs 997
+        String users = uiForm.getUIStringInput(FIELD_USER).getValue() ;
+        uiForm.permissionUser_.clear() ;
+        if (!ContactUtils.isEmpty(users)) {
+          if (users.indexOf(",") < 0) uiForm.permissionUser_.put(users.trim(), users.trim()) ;
+          else {
+            for (String user : users.split(",")) uiForm.permissionUser_.put(user.trim(), user.trim()) ;              
+          }          
+        }
+        
+        uiGroupSelector.setId("UIUserSelector") ;
+        uiGroupSelector.setComponent(uiForm, new String[]{UISharedForm.FIELD_USER}) ;
+      } else {
+        uiGroupSelector.setId("UIGroupSelector") ;
+        uiGroupSelector.setComponent(uiForm, new String[]{UISharedForm.FIELD_GROUP}) ;
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(childPopup) ;  
     }
   }

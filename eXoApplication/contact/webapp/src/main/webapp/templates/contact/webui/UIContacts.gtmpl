@@ -93,7 +93,7 @@
 					</a>
 					-->
 					<a href="<%=uicomponent.event("Tag")%>" class="ControlButton">
-						<div class="Icon SelectTagIcon"title="<%=_ctx.appRes(uicomponent.getName() + ".label.tag")%>"><span></span></div>
+						<div class="Icon BlueTagIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.tag")%>"><span></span></div>
 					</a>
 					<a href="<%=uicomponent.event("SendEmail")%>" class="ControlButton">
 						<div class="Icon MessageIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.email")%>"><span></span></div>
@@ -126,7 +126,7 @@
 					</a>
 					-->
 					<a href="<%=uicomponent.event("Tag")%>" class="ControlButton">
-						<div class="Icon SelectTagIcon"title="<%=_ctx.appRes(uicomponent.getName() + ".label.tag")%>"><span></span></div>
+						<div class="Icon BlueTagIcon"title="<%=_ctx.appRes(uicomponent.getName() + ".label.tag")%>"><span></span></div>
 					</a>
 					<a href="<%=uicomponent.event("SendEmail")%>" class="ControlButton">
 						<div class="Icon MessageIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.email")%>"><span></span></div>
@@ -172,7 +172,7 @@
 	  			      <th style="width: 23px;" class="text">
 	  			      	<input type="checkbox" class="checkbox" title="<%=_ctx.appRes(uicomponent.getName() + ".label.checkAll")%>" value="4"/>
 	  			      </th>
-	  						<th style="width: 24px;" class="text"><div class="Icon BlueTag"><span></span></div></th>
+	  						<th style="width: 24px;" class="text"><div class="Icon BlueTagIcon"><span></span></div></th>
 	  		        <th style="width: 24%;" class="text">
 	  		        	
 	  		        	<%
@@ -323,19 +323,19 @@
 										if (tag != null) {
 											tagsName.append(tag.getName()) ;
 											hasComma = true ;
-											iconTag = "Icon " + tag.getColor() + "Tag" ;
+											iconTag = "Icon2 " + tag.getColor() + "Tag" ;
 										} else { hasComma = false ; }
 										i = 1 ;
 										while (i < tagIds.length) {
 											tag = tagMap.get(tagIds[i]) ;
 											if (tag != null && hasComma) {
 												tagsName.append(", " + tag.getName()) ;
-												if (ContactUtils.isEmpty(iconTag)) iconTag = "Icon " + tag.getColor() + "Tag" ;
+												if (ContactUtils.isEmpty(iconTag)) iconTag = "Icon2 " + tag.getColor() + "Tag" ;
 											}
 											else if (tag != null) {
 													tagsName.append(tag.getName()) ;
 													hasComma = true ;
-													if (ContactUtils.isEmpty(iconTag)) iconTag = "Icon " + tag.getColor() + "Tag" ;
+													if (ContactUtils.isEmpty(iconTag)) iconTag = "Icon2 " + tag.getColor() + "Tag" ;
 											}
 											i ++ ;
 										}		
@@ -406,26 +406,26 @@
 											if (tag != null) {
 												tagsName.append(tag.getName()) ;
 												hasComma = true ;
-												iconTag = "Icon " + tag.getColor() + "Tag" ;
+												iconTag = "Icon2 " + tag.getColor() + "Tag" ;
 											} else { hasComma = false ; }
 											i = 1 ;
 											while (i < tagIds.length) {
 												tag = tagMap.get(tagIds[i]) ;
 												if (tag != null && hasComma) {
 													tagsName.append(", " + tag.getName()) ;
-													if (ContactUtils.isEmpty(iconTag)) iconTag = "Icon " + tag.getColor() + "Tag" ;
+													if (ContactUtils.isEmpty(iconTag)) iconTag = "Icon2 " + tag.getColor() + "Tag" ;
 												}
 												else if (tag != null) {
 														tagsName.append(tag.getName()) ;
 														hasComma = true ;
-														if (ContactUtils.isEmpty(iconTag)) iconTag = "Icon " + tag.getColor() + "Tag" ;
+														if (ContactUtils.isEmpty(iconTag)) iconTag = "Icon2 " + tag.getColor() + "Tag" ;
 												}
 												i ++ ;
 											}		
 										}	
 											// add to improve spf-491
 										if (!ContactUtils.isEmpty(uicomponent.selectedTag_)) {
-											iconTag = "Icon " + tagMap.get(uicomponent.selectedTag_).getColor() + "Tag" ;
+											iconTag = "Icon2 " + tagMap.get(uicomponent.selectedTag_).getColor() + "Tag" ;
 										}
 										cssClass = "Normal" ;
 										if (contact.getId().equals(uicomponent.getSelectedContact())) cssClass = "Selected" ;								
@@ -552,13 +552,13 @@
 							for (String tagId : tagIds) { 
 								Tag tag = tagMap.get(tagId) ;
 								if (tag != null) {
-									iconTag = "Icon " + tag.getColor() + "Tag" ;
+									iconTag = "Icon2 " + tag.getColor() + "Tag" ;
 									break ;
 								}	
 							}
 						}
 						if (!ContactUtils.isEmpty(uicomponent.selectedTag_)) {
-							iconTag = "Icon " + tagMap.get(uicomponent.selectedTag_).getColor() + "Tag" ;
+							iconTag = "Icon2 " + tagMap.get(uicomponent.selectedTag_).getColor() + "Tag" ;
 						}
 				%>	
 		  <div class="LeftVCardsContent">
@@ -705,13 +705,13 @@
 					for (String tagId : tagIds) { 
 						Tag tag = tagMap.get(tagId) ;
 						if (tag != null) {
-							iconTag = "Icon " + tag.getColor() + "Tag" ;
+							iconTag = "Icon2 " + tag.getColor() + "Tag" ;
 							break ;
 						}	
 					}
 				}
 				if (!ContactUtils.isEmpty(uicomponent.selectedTag_)) {
-					iconTag = "Icon " + tagMap.get(uicomponent.selectedTag_).getColor() + "Tag" ;
+					iconTag = "Icon2 " + tagMap.get(uicomponent.selectedTag_).getColor() + "Tag" ;
 				}
 			%>
 			<div class="RightVCardsContent">
@@ -998,7 +998,7 @@
                    
                   
                     <a class="MenuItem" href="<%=uicomponent.event("Tag", "id")%>">   
-	                    <div class="ItemIcon VioletTag">
+	                    <div class="ItemIcon BlueTagIcon">
 	                      <%=_ctx.appRes(uicomponent.getName() + ".label.tag")%>
 	                    </div>
                     </a>

@@ -56,6 +56,7 @@ import org.exoplatform.webui.event.EventListener;
     template =  "app:/templates/contact/webui/UITags.gtmpl",
     events = {
         @EventConfig(listeners = UITags.SelectTagActionListener.class),
+        @EventConfig(listeners = UITags.AddTagActionListener.class),
         @EventConfig(listeners = UITags.EditTagActionListener.class),
         @EventConfig(listeners = UITags.ExportAddressActionListener.class),
         @EventConfig(listeners = UITags.PrintActionListener.class),
@@ -78,16 +79,19 @@ public class UITags extends UIComponent {
     return tags;
   }
   public Map<String, Tag> getTagMap() { return tagMap_ ; }
-/*  
-  public boolean canPrint(String tagId) {        
-    if (ContactUtils.isEmpty(selectedTag_) || ContactUtils.isEmpty(tagId) || !tagId.equals(selectedTag_) 
-        || getAncestorOfType(UIWorkingContainer.class).findFirstComponentOfType(UIContacts.class).getViewContactsList()) {
-      return false ;
-    }
-    return true ;
-  }*/
   public void setSelectedTag(String id) { selectedTag_ = id ; }
   public String getSelectedTag() { return selectedTag_ ; }
+  
+  static  public class AddTagActionListener extends EventListener<UITags> {
+    public void execute(Event<UITags> event) throws Exception {
+      UITags uiForm = event.getSource() ;
+      UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
+      UIPopupAction popupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
+      UIEditTagForm uiEditTagForm = popupAction.activate(UIEditTagForm.class, 500) ;
+      uiEditTagForm.setNew(true) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+    }
+  }
   
   static  public class SelectTagActionListener extends EventListener<UITags> {
     @SuppressWarnings("unchecked")
