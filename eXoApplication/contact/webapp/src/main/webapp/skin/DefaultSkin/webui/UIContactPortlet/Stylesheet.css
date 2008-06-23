@@ -79,6 +79,14 @@
 	cursor: pointer;
 }
 
+.UIContactPortlet .IconHolder2 {
+	line-height: 26px;
+	margin: 2px 7px;
+	padding-left: 26px;
+	background-repeat: no-repeat; 
+	cursor: pointer;
+}
+
 .UIContactPortlet .SeparatorLine {
   background: url('background/SeparatorLine2x26.gif') no-repeat ;	
   height: 26px; width: 2px;
@@ -474,6 +482,10 @@
 .UIContactPortlet .UIContactContainer .UIGrid .Icon {
 	width: 24px; height: 18px;
 	background-position: center;
+}
+
+.UIContactPortlet .UIContactContainer .UIGrid .Icon2 {
+	width: 24px; height: 18px;
 }
 
 .UIContactPortlet .UIContactContainer .UIGrid .State {

@@ -1361,7 +1361,7 @@ public class JCRDataStorage {
       }
       tagMap.put(tag.getId(), tag.getId()) ;
     }
-    
+    if (contactIds == null || contactIds.size() == 0) return ;
     for(String contact : contactIds) {
       Node contactNode = null ;
       String contactId = contact.split(SPLIT)[0] ;

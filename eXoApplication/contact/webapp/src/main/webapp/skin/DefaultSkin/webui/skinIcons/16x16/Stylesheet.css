@@ -14,36 +14,12 @@
 	background: url('icons/EmailListIcon.gif') no-repeat left center;
 }
 
-.UIContactPortlet .RoyalBlueTag {
-	background: url('icons/BlueTag.gif') no-repeat left center;
-}
-
-.UIContactPortlet .RedTag {
-	background: url('icons/RedTag.gif') no-repeat left center;
-}
-
-.UIContactPortlet .TurquoiseTag {
-	background: url('icons/GreenTag.gif') no-repeat left center;
-}
-
-.UIContactPortlet .VioletTag {
-	background: url('icons/VioletTag.gif') no-repeat left center;
-}
-
 .UIContactPortlet .MultipTag {
 	background: url('icons/MultipTag.gif') no-repeat left center;
 }
-.UIContactPortlet .OrangeRedTag {
-	background: url('icons/OrangeTag.gif') no-repeat left center;
-}
-.UIContactPortlet .PinkTag {
-	background: url('icons/PingTag.gif') no-repeat left center;
-}
-.UIContactPortlet .PlumTag {
-	background: url('icons/PingVioletTag.gif') no-repeat left center;
-}
-.UIContactPortlet .YellowTag {
-	background: url('icons/YellowTag.gif') no-repeat left center;
+
+.UIContactPortlet .BlueTagIcon {
+	background:transparent url(icons/BlueTag.gif) no-repeat left center;
 }
 
 
@@ -194,4 +170,8 @@
 
 .UIContactPortlet .AddAddressBookIcon {
 	background:transparent url(icons/AddAddressBookIcon.gif) no-repeat;
+}
+
+.UIContactPortlet .AddTagIcon {
+	background:transparent url(icons/AddNewTagIcon.gif) no-repeat left center;
 }
