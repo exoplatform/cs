@@ -260,3 +260,7 @@
   width: 100%;
   margin: 0px;
 }
+
+.UICalendarPortlet .UIForm .UIFormGrid td.FieldComponent {
+	white-space: nowrap;
+}

@@ -1758,3 +1758,8 @@
 .Violet {background-color: #EE82EE;}    
 .Wheat {background-color: #F5DEB3;}    
 .Yellow {background-color: #FFFF00;} 
+
+
+.UIMailPortlet .UIForm .UIFormGrid td.FieldComponent {
+	white-space: nowrap;
+}
