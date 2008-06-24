@@ -285,3 +285,6 @@
   padding: 8px;
 }
 
+.UICalendarPortlet .UIForm .UIFormGrid td.FieldComponent {
+	white-space: nowrap;
+}

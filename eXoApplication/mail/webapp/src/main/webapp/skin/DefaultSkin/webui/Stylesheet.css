@@ -1766,4 +1766,6 @@
 .Yellow {background-color: #FFFF00;} 
 
 
-
+.UIMailPortlet .UIForm .UIFormGrid td.FieldComponent {
+	white-space: nowrap;
+}
