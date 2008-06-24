@@ -93,7 +93,7 @@
 					</a>
 					-->
 					<a href="<%=uicomponent.event("Tag")%>" class="ControlButton">
-						<div class="Icon BlueTagIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.tag")%>"><span></span></div>
+						<div class="Icon SelectTagIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.tag")%>"><span></span></div>
 					</a>
 					<a href="<%=uicomponent.event("SendEmail")%>" class="ControlButton">
 						<div class="Icon MessageIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.email")%>"><span></span></div>
@@ -126,7 +126,7 @@
 					</a>
 					-->
 					<a href="<%=uicomponent.event("Tag")%>" class="ControlButton">
-						<div class="Icon BlueTagIcon"title="<%=_ctx.appRes(uicomponent.getName() + ".label.tag")%>"><span></span></div>
+						<div class="Icon SelectTagIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.tag")%>"><span></span></div>
 					</a>
 					<a href="<%=uicomponent.event("SendEmail")%>" class="ControlButton">
 						<div class="Icon MessageIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.email")%>"><span></span></div>

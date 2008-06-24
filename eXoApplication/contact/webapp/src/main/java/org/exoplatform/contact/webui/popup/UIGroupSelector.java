@@ -18,7 +18,9 @@ package org.exoplatform.contact.webui.popup;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.contact.ContactUtils;
@@ -108,9 +110,13 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
     OrganizationService service = getApplicationComponent(OrganizationService.class) ;
     if(TYPE_USER.equals(type_)){
       PageList userPageList = service.getUserHandler().findUsersByGroup(this.getCurrentGroup().getId()) ;    
+      // add to fix bug cs-1025
+      Map<String, String> users = new LinkedHashMap<String, String>() ;
       for(Object child : userPageList.getAll()){
-        children.add(((User)child).getUserName()) ;
+        String user = ((User)child).getUserName() ;
+        users.put(user, user) ;
       }
+      children.addAll(users.keySet()) ;
     } else if(TYPE_MEMBERSHIP.equals(type_)) {
       for(String child :  getListMemberhip()){
         children.add(child) ;
