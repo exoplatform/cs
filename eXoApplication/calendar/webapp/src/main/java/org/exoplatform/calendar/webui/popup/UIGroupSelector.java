@@ -17,7 +17,6 @@
 package org.exoplatform.calendar.webui.popup;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -104,19 +103,19 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
   public boolean isSelectMemberShip() {return TYPE_MEMBERSHIP.equals(type_);}
   @SuppressWarnings({ "unchecked", "cast" })
   public List<String> getList() throws Exception {
-
     List<String> children = new ArrayList<String>() ; 
     OrganizationService service = getApplicationComponent(OrganizationService.class) ;
-
     String currenUser = CalendarUtils.getCurrentUser();
-
     if(TYPE_USER.equals(type_)){
       PageList userPageList = service.getUserHandler().findUsersByGroup(this.getCurrentGroup().getId()) ;    
       for(Object child : userPageList.getAll()){
-        if(isFilter_){
-          if(!((User)child).getUserName().equals(currenUser)) children.add(((User)child).getUserName()) ;
-        } else  {
-          children.add(((User)child).getUserName()) ;
+        User useObj = ((User)child) ;
+        if(!children.contains(useObj.getUserName())) {
+          if(isFilter_){
+            if(!useObj.getUserName().equals(currenUser)) children.add(useObj.getUserName()) ;
+          } else  {
+            children.add(useObj.getUserName()) ;
+          }
         }
       }
     } else if(TYPE_MEMBERSHIP.equals(type_)) {
