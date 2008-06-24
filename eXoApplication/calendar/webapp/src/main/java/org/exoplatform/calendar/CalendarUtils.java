@@ -64,41 +64,37 @@ import org.exoplatform.webui.core.model.SelectItemOption;
  *          hung.nguyen@exoplatform.com
  * Jul 11, 2007  
  */
+
 public class CalendarUtils {
 
-  final public static String PRIVATE_CALENDARS = "privateCalendar".intern() ;
-  final public static String SHARED_CALENDARS = "sharedCalendar".intern() ;
-  final public static String PUBLIC_CALENDARS = "publicCalendar".intern() ;
+  public static final String PRIVATE_CALENDARS = "privateCalendar".intern();
+  public static final String SHARED_CALENDARS = "sharedCalendar".intern();
+  public static final String PUBLIC_CALENDARS = "publicCalendar".intern();
+  public static final String PRIVATE_TYPE = "0".intern();
+  public static final String SHARED_TYPE = "1".intern();
+  public static final String PUBLIC_TYPE = "2".intern();
+  public static final String SEMICOLON = ";".intern();
+  public static final String COLON = ":".intern();
+  public static final String COMMA = ",".intern();
+  public static final String STAR = "*".intern();
+  public static final String SLASH = "/".intern();
+  public static final String BACKSLASH = "\\".intern();
+  public static final String DOUBLESCORE = "--".intern();
+  public static final String UNDERSCORE = "_".intern();
+  public static final String SLASH_COLON = "/:".intern() ;
+  public static final String COLON_SLASH = ":/".intern() ;
+  public static final String ANY = "*.*".intern();
+  public static final String ANY_OF = "*.".intern();
+  public static final String DOT = ".".intern();
+  public static final String TIMEFORMAT  = "HH:mm".intern();
+  public static final String DATEFORMAT = "MM/dd/yyyy".intern();
+  public static final String DATETIMEFORMAT = DATEFORMAT +" " +TIMEFORMAT;   
+  public static final int DEFAULT_TIMEITERVAL = 15;
+  public static final long MILISECONS_OF_DAY = 24*60*59*1000;
+  public static final String EXO_INVITATION = "X-Exo-Invitation".intern();
+  public static final String SPECIALCHARACTER[] = {SEMICOLON,COMMA,SLASH,BACKSLASH,"'","|",">","<","\"", "?", "!", "@", "#", "$", "%","^","&","*"};
 
-  public static final String PRIVATE_TYPE = "0".intern() ;
-  public static final String SHARED_TYPE = "1".intern() ;
-  public static final String PUBLIC_TYPE = "2".intern() ;
-
-  final public static String SEMICOLON = ";".intern() ;
-  final public static String COLON = ":".intern() ;
-  final public static String COMMA = ",".intern() ;
-  final public static String STAR = "*".intern() ;
-  final public static String SLASH = "/".intern() ;
-  final public static String BACKSLASH = "\\".intern() ;
-  final public static String DOUBLESCORE = "--".intern() ;
-  final public static String UNDERSCORE = "_".intern() ;
-
-  final public static String SLASH_COLON = "/:".intern() ;
-  final public static String COLON_SLASH = ":/".intern() ;
-  final public static String ANY = "*.*".intern() ;
-  final public static String ANY_OF = "*.".intern() ;
-  final public static String DOT = ".".intern() ;
-
-  final public static String TIMEFORMAT  = "HH:mm".intern() ;
-  final public static String DATEFORMAT = "MM/dd/yyyy".intern() ;
-  final public static String DATETIMEFORMAT = DATEFORMAT + " " +TIMEFORMAT ;   
-  final public static int DEFAULT_TIMEITERVAL = 15 ;
-  final public static long MILISECONS_OF_DAY = 24*60*59*1000 ;
-  final public static String EXO_INVITATION = "X-Exo-Invitation".intern() ;
-
-  final public static String SPECIALCHARACTER[] = {SEMICOLON,COMMA,SLASH,BACKSLASH,"'","|",">","<","\"", "?", "!", "@", "#", "$", "%","^","&","*"} ;
-
-  static public String[] getUserGroups(String username) throws Exception {
+  public static final String[] getUserGroups(String username) throws Exception {
     OrganizationService organization = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
     Object[] objs = organization.getGroupHandler().findGroupsOfUser(username).toArray() ;
     String[] groups = new String[objs.length] ;

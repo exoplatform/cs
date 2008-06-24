@@ -16,6 +16,7 @@
  **/
 package org.exoplatform.calendar.webui.popup;
 
+import javax.jcr.ItemExistsException;
 import javax.jcr.RepositoryException;
 
 import org.exoplatform.calendar.CalendarUtils;
@@ -98,14 +99,16 @@ public class UIEventCategoryForm extends UIForm {
       UIEventCategoryForm uiForm = event.getSource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       String name = uiForm.getUIStringInput(UIEventCategoryForm.EVENT_CATEGORY_NAME).getValue() ;
+      String description = uiForm.getUIStringInput(UIEventCategoryForm.DESCRIPTION).getValue() ;
       if(!CalendarUtils.isNameValid(name, CalendarUtils.SPECIALCHARACTER)) {
         uiApp.addMessage(new ApplicationMessage("UIEventCategoryForm.msg.name-invalid", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ; 
         return ;
       }
+      if(!CalendarUtils.isEmpty(name)) name = name.trim().toLowerCase() ;
+      if(!CalendarUtils.isEmpty(description)) description = name.trim().toLowerCase() ;
       UIEventCategoryManager uiManager = uiForm.getAncestorOfType(UIEventCategoryManager.class) ;
       CalendarService calendarService = CalendarUtils.getCalendarService();
-      String description = uiForm.getUIStringInput(UIEventCategoryForm.DESCRIPTION).getValue() ;
       String username = Util.getPortalRequestContext().getRemoteUser() ;
       EventCategory eventCat = new EventCategory() ;
       eventCat.setName(name) ;
@@ -152,8 +155,8 @@ public class UIEventCategoryForm extends UIForm {
             event.getRequestContext().addUIComponentToUpdateByAjax(uiTaskForm.getChildById(UITaskForm.TAB_TASKDETAIL)) ;
           }
         }
-      } catch (RepositoryException e) {
-        uiApp.addMessage(new ApplicationMessage("UIEventCategoryForm.msg.name-invalid", null)) ;
+      } catch (ItemExistsException e) {
+        uiApp.addMessage(new ApplicationMessage("UIEventCategoryForm.msg.name-exist", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ; 
         return ;
       } catch (Exception e) {

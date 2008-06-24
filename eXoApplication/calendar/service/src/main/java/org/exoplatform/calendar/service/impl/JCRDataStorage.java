@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.jcr.ItemExistsException;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.PropertyIterator;
@@ -652,22 +653,22 @@ public class JCRDataStorage{
     String name = null ;
     String description = null ;
     if(isNew){
-      if(eventCategoryHome.hasNode(eventCategory.getName())) return ;
-      eventCategoryNode = eventCategoryHome.addNode(eventCategory.getName(), "exo:eventCategory") ;
-      name = eventCategory.getName() ;
+      if(eventCategoryHome.hasNode(eventCategory.getName().toLowerCase())) throw new ItemExistsException() ;
+      eventCategoryNode = eventCategoryHome.addNode(eventCategory.getName().toLowerCase(), "exo:eventCategory") ;
+      name = eventCategory.getName().toLowerCase() ;
       description = eventCategory.getDescription() ;
       if(eventCategory.isDataInit()) reparePermissions(eventCategoryNode, username) ;
     }else {
-      eventCategoryNode = eventCategoryHome.getNode(eventCategory.getName()) ;
-      if(eventCategory.getName().equals(values[0])) {
-        name = eventCategory.getName() ;
+      eventCategoryNode = eventCategoryHome.getNode(eventCategory.getName().toLowerCase()) ;
+      if(eventCategory.getName().toLowerCase().equals(values[0].toLowerCase())) {
+        name = eventCategory.getName().toLowerCase() ;
         description = values[1] ;
       } else {
-        if(eventCategoryHome.hasNode(values[0]))return ; 
+        if(eventCategoryHome.hasNode(values[0].toLowerCase()))throw new ItemExistsException() ; 
         else {
           eventCategoryNode.remove() ;
-          eventCategoryHome.addNode(values[0], "exo:eventCategory") ;
-          name = values[0] ;
+          eventCategoryHome.addNode(values[0].toLowerCase(), "exo:eventCategory") ;
+          name = values[0].toLowerCase() ;
           description = values[1] ;
           Node calendarHome = getUserCalendarHome(sProvider, username) ;
           QueryManager qm = calendarHome.getSession().getWorkspace().getQueryManager();
