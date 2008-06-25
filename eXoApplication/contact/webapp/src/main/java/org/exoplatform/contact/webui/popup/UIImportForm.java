@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
-import java.io.ByteArrayInputStream;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.ContactImportExport;

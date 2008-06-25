@@ -277,6 +277,8 @@ public class VCardImportExport implements ContactImportExport {
 
     // die here when image size about 1mb
     net.wimpi.pim.contact.model.Contact[] pimContacts = unmarshaller.unmarshallContacts(input);    
+    if (pimContacts == null || pimContacts.length == 0) throw new Exception() ;
+    
     List<Contact> contacts = new ArrayList<Contact>() ;
     for (int index = 0; index < pimContacts.length; index++) {
       Contact contact = new Contact();
