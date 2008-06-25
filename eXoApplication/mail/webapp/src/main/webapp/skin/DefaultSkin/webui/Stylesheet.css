@@ -318,6 +318,9 @@
 	line-height: 20px;
 	color: #3d3d3d;
 	display: block;
+	white-space: nowrap;
+	overflow: hidden;
+	width: 80%;
 }
 
 
@@ -399,7 +402,7 @@
 
 .UIMailPortlet .MailWorkingWorkspace .IconTagHolder {
 	line-height: 24px;
-	margin: 0px 7px;
+	margin: 0px 7px 0px 0px;
 	padding-left: 30px;
 }
 
