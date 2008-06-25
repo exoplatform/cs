@@ -64,12 +64,22 @@
 			<div class="ExportForm">
 			  <table class="UIFormGrid">
 			    <tr>
+			      <% 
+			      	field = uicomponent.getChildById(uicomponent.NAME) ;
+			      	if (field != null) {
+			       %>
 			      <td class="FieldLabel"><%= _ctx.appRes("UIExportForm.label.name") %></td>
-			      <td class="FieldComponent"><%uicomponent.renderField(uicomponent.getChildById(uicomponent.NAME))%></td>
+			      <td class="FieldComponent"><%uicomponent.renderField(field)%></td>
+			      <% } %>
 			    </tr>
 			    <tr>
+			      <% 
+			      	field = uicomponent.getChildById(uicomponent.TYPE) ;
+			      	if (field != null) {
+			       %>
 			      <td class="FieldLabel"><%= _ctx.appRes("UIExportForm.label.type") %></td>
-			      <td class="FieldComponent"><%uicomponent.renderField(uicomponent.getChildById(uicomponent.TYPE))%></td>
+			      <td class="FieldComponent"><%uicomponent.renderField(field)%></td>
+			      <% } %>
 			    </tr>
 			  </table>
 		  </div>
