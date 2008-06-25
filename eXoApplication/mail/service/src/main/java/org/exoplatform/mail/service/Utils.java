@@ -272,10 +272,12 @@ public class Utils {
   
   public static String getPersonal(InternetAddress address) throws Exception {
     String personal = "";
-    if (address.getPersonal() != null && address.getPersonal() != "") {
-      personal = address.getPersonal();
-    } else { 
-      personal = address.getAddress(); 
+    if (address != null) {
+      if (address.getPersonal() != null && address.getPersonal() != "") {
+        personal = address.getPersonal();
+      } else { 
+        personal = address.getAddress(); 
+      }
     }
     return personal;
   }
