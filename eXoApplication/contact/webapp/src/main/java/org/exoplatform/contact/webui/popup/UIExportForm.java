@@ -97,6 +97,12 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
 
   public void setContacts(Contact[] contacts) throws Exception { contacts_ = contacts; }
   public Contact[] getContacts() throws Exception {
+    if (contactMap.size() == 0) {
+      UIApplication uiApp = getAncestorOfType(UIApplication.class) ;
+      uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.tooMany-contacts", null, 
+          ApplicationMessage.WARNING)) ;
+      getAncestorOfType(UIContactPortlet.class).cancelAction() ;
+    }
     return contactMap.values().toArray(new Contact[] {});
   }
 
