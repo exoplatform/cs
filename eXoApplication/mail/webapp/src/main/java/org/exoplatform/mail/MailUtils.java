@@ -171,6 +171,11 @@ public class MailUtils {
         .replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\"", "&quot;").replaceAll("'", "&#39;") : "" ;
   }
   
+  public static String decodeHTML(String htmlContent) throws Exception {
+    return (!isFieldEmpty(htmlContent)) ? htmlContent.replaceAll("&amp;", "&").replaceAll( "&quot;", "\"")
+        .replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&quot;", "\"").replaceAll("&#39;", "'") : "" ;
+  }
+  
   public static boolean isInvitation(Message msg) throws Exception {
     String inviteHeader = msg.getHeader("X-Exo-Invitation") ;
     if (inviteHeader != null) return true ;
@@ -242,5 +247,15 @@ public class MailUtils {
       str = "" ;
     }
     return str;
+  }
+  
+  public static String convertTextToHtmlLink(String s) throws Exception {
+    if (isFieldEmpty(s)) return "" ;
+    s = decodeHTML(s);
+    // for external link with form http:// , https://, ftp://
+    s = s.replaceAll("(https?|ftp)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]", "<a target=\"_blank\" href=\"$0\"> $0 </a>") ;
+    // for email 
+    s = s.replaceAll("[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+\\.[A-Za-z]{2,5}", "<a target=\"_blank\" href=\"mailto:$0\"> $0 </a>") ;
+    return s ;
   }
 }
