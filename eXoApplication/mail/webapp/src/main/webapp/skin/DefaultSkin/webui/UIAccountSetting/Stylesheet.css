@@ -1,5 +1,6 @@
 .UIMailPortlet .UIAccountSetting {
 	background: #f3f3f3;
+	min-width: 645px;
 }
 
 .UIMailPortlet .UIAccountSetting .AccountSetting {
@@ -10,7 +11,7 @@
 /*===========================AccountSettingCategory===========================*/
 
 .UIMailPortlet .UIAccountSetting .AccountSettingCategory {
-	width: 212px; height: 355px;
+	width: 212px; height: 342px;
 	float: left;
 	background: white;
 	border: 1px solid #a5a5a5;
@@ -103,7 +104,6 @@
 .UIMailPortlet .UIAccountSetting .UIForm .HorizontalLayout .serverSettings {
 	overflow-y: auto;
 	overflow-x: hidden;
-	*width: 432px;
 }
 
 .UIMailPortlet .UIAccountSetting .UITabPane .UIForm {
