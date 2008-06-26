@@ -40,8 +40,12 @@ import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.GroupCalendarData;
-import org.exoplatform.calendar.webui.SelectItem;
-import org.exoplatform.calendar.webui.SelectItemOptionGroup;
+import org.exoplatform.webui.core.model.SelectItem;
+import org.exoplatform.webui.core.model.SelectItemOption;
+import org.exoplatform.webui.core.model.SelectOption;
+import org.exoplatform.webui.core.model.SelectOptionGroup;
+/*import org.exoplatform.calendar.webui.SelectItem;
+import org.exoplatform.calendar.webui.SelectItemOptionGroup;*/
 import org.exoplatform.calendar.webui.popup.UIAddressForm.ContactData;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
@@ -55,7 +59,6 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.impl.GroupImpl;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
-import org.exoplatform.webui.core.model.SelectItemOption;
 
 
 /**
@@ -451,21 +454,21 @@ public class CalendarUtils {
      */
 
     // private calendars group
-    SelectItemOptionGroup privGrp = new SelectItemOptionGroup(CalendarUtils.PRIVATE_CALENDARS);
+    SelectOptionGroup privGrp = new SelectOptionGroup(CalendarUtils.PRIVATE_CALENDARS);
     List<org.exoplatform.calendar.service.Calendar> calendars = calendarService.getUserCalendars(SessionProviderFactory.createSessionProvider(), username, true) ;
     for(org.exoplatform.calendar.service.Calendar c : calendars) {
-      privGrp.addOption(new org.exoplatform.calendar.webui.SelectItemOption<String>(c.getName(), CalendarUtils.PRIVATE_TYPE + CalendarUtils.COLON + c.getId())) ;
+      privGrp.addOption(new SelectOption(c.getName(), CalendarUtils.PRIVATE_TYPE + CalendarUtils.COLON + c.getId())) ;
     }
     if(privGrp.getOptions().size() > 0) options.add(privGrp);
     // shared calendars group
     GroupCalendarData gcd = calendarService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true);
     if(gcd != null) {
-      SelectItemOptionGroup sharedGrp = new SelectItemOptionGroup(CalendarUtils.SHARED_CALENDARS);
+      SelectOptionGroup sharedGrp = new SelectOptionGroup(CalendarUtils.SHARED_CALENDARS);
       for(org.exoplatform.calendar.service.Calendar c : gcd.getCalendars()) {
         if(CalendarUtils.canEdit(null, c.getEditPermission(), username)){
           String owner = "" ;
           if(c.getCalendarOwner() != null) owner = c.getCalendarOwner() + "- " ;
-          sharedGrp.addOption(new org.exoplatform.calendar.webui.SelectItemOption<String>(owner + c.getName(), CalendarUtils.SHARED_TYPE + CalendarUtils.COLON + c.getId())) ;
+          sharedGrp.addOption(new SelectOption(owner + c.getName(), CalendarUtils.SHARED_TYPE + CalendarUtils.COLON + c.getId())) ;
         }
       }
       if(sharedGrp.getOptions().size() > 0) options.add(sharedGrp);
@@ -474,11 +477,11 @@ public class CalendarUtils {
     List<GroupCalendarData> lgcd = calendarService.getGroupCalendars(SessionProviderFactory.createSystemProvider(), CalendarUtils.getUserGroups(username), false, username) ;
     if(lgcd != null) {
       OrganizationService oService = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
-      SelectItemOptionGroup pubGrp = new SelectItemOptionGroup(CalendarUtils.PUBLIC_CALENDARS);
+      SelectOptionGroup pubGrp = new SelectOptionGroup(CalendarUtils.PUBLIC_CALENDARS);
       for(GroupCalendarData g : lgcd) {
         for(org.exoplatform.calendar.service.Calendar c : g.getCalendars()){
           if(CalendarUtils.canEdit(oService, c.getEditPermission(), username)){
-            pubGrp.addOption(new org.exoplatform.calendar.webui.SelectItemOption<String>(c.getName(), CalendarUtils.PUBLIC_TYPE + CalendarUtils.COLON + c.getId())) ;
+            pubGrp.addOption(new SelectOption(c.getName(), CalendarUtils.PUBLIC_TYPE + CalendarUtils.COLON + c.getId())) ;
           }
         }
 

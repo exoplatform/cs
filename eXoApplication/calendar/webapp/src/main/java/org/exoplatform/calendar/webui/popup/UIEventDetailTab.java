@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
@@ -36,6 +35,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormSelectBox;
+import org.exoplatform.webui.form.UIFormSelectBoxWithGroups;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
@@ -77,7 +77,7 @@ public class UIEventDetailTab extends UIFormInputWithActions {
     actionField_ = new HashMap<String, List<ActionData>>() ;
     addUIFormInput(new UIFormStringInput(FIELD_EVENT, FIELD_EVENT, null).addValidator(MandatoryValidator.class)) ;
     addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION, FIELD_DESCRIPTION, null)) ;
-    addUIFormInput(new org.exoplatform.calendar.webui.UIFormSelectBox(FIELD_CALENDAR, FIELD_CALENDAR, null)) ;
+    addUIFormInput(new UIFormSelectBoxWithGroups(FIELD_CALENDAR, FIELD_CALENDAR, null)) ;
     addUIFormInput(new UIFormSelectBox(FIELD_CATEGORY, FIELD_CATEGORY, UIEventForm.getCategory())) ;
 
     ActionData addCategoryAction = new ActionData() ;
@@ -192,7 +192,7 @@ public class UIEventDetailTab extends UIFormInputWithActions {
   public UIFormDateTimePicker getUIFormDateTimePicker (String id) {
     return findComponentById(id) ;
   }
-  public org.exoplatform.calendar.webui.UIFormSelectBox getUIFormSelectBoxGroup(String id) {
+  public UIFormSelectBoxWithGroups getUIFormSelectBoxGroup(String id) {
   	return findComponentById(id) ;
   }
 }
