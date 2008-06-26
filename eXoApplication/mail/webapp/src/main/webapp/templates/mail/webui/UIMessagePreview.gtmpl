@@ -348,7 +348,15 @@
                   rcontext.getJavascriptManager().addJavascript("eXo.mail.UIMailPortlet.resizeIframe('" + textAreaId + "', '" + frameId + "', '" + styleExpand + "', '" + contentType + "');") ;
                 %>
   							<textarea id="$textAreaId" class="MessageDetails" style="display:none">
-                    <%=MailUtils.encodeHTML(msg.getMessageBody())%>
+                  <%
+                    if (contentType.indexOf("text/plain") >= 0) {
+                      String msgBody = msg.getMessageBody();
+                      msgBody = MailUtils.convertTextToHtmlLink(msgBody) ;
+                      println(MailUtils.encodeHTML(msgBody)) ;
+                    } else {
+                      println(MailUtils.encodeHTML(msg.getMessageBody())) ;
+                    }
+                  %>
   							</textarea>
                 <%} else {%>
                   <div class="InvitationBG">
