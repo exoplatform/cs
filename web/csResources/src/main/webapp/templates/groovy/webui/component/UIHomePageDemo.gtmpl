@@ -15,7 +15,7 @@
 		<div class="HomePortletContent">
 			<div class="UserAccountsContainer">
 				<div class="AccountsContainerDeco">
-					<a class="AccountBlock ContactPortlet" href="contact">
+					<a class="AccountBlock ContactPortlet" href="/portal/private/classic/contact">
 						<div class="AccountInfos">							
 							<div class="AccountTitle"><%=_ctx.appRes("UIHomePagePortlet.contact")%></div>
 							<div class="Username"><%=_ctx.appRes("UIHomePagePortlet.contact1")%></div>
@@ -23,7 +23,7 @@
 						</div>
 					</a>
 					<div class="SeparatorLine"><span></span></div>
-					<a class="AccountBlock MailPortlet" href="mail">
+					<a class="AccountBlock MailPortlet" href="/portal/private/classic/mail">
 						<div class="AccountInfos">
 							<div class="AccountTitle"><%=_ctx.appRes("UIHomePagePortlet.mail")%></div>
 							<div class="Username"><%=_ctx.appRes("UIHomePagePortlet.mail1")%></div>
@@ -31,7 +31,7 @@
 						</div>
 					</a>
 					<div class="SeparatorLine"><span></span></div>
-					<a class="AccountBlock CalendarPortlet" style="margin-right: 0px;" href="calendar">
+					<a class="AccountBlock CalendarPortlet" style="margin-right: 0px;" href="/portal/private/classic/calendar">
 						<div class="AccountInfos">
 							<div class="AccountTitle"><%=_ctx.appRes("UIHomePagePortlet.calendar")%></div>
 							<div class="Username"><%=_ctx.appRes("UIHomePagePortlet.calendar1")%></div>
