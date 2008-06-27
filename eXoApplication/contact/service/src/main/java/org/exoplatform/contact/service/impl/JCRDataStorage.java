@@ -962,6 +962,7 @@ public class JCRDataStorage {
   }
   
   public ContactPageList getSharedContactsByAddressBook(SessionProvider sProvider, String username, SharedAddressBook addressBook) throws Exception {
+    if (addressBook == null) return null ;
     Node contactHome = getUserContactHome(SessionProvider.createSystemProvider(), addressBook.getSharedUserId()) ;
     QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 

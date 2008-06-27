@@ -95,7 +95,6 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
   public String getViewQuery() { return viewQuery_; }
   public void setViewQuery(String view) { viewQuery_ = view; }
 
-  public void setContacts(Contact[] contacts) throws Exception { contacts_ = contacts; }
   public Contact[] getContacts() throws Exception {
     if (contactMap.size() == 0) {
       UIApplication uiApp = getAncestorOfType(UIApplication.class) ;
@@ -105,7 +104,8 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
     }
     return contactMap.values().toArray(new Contact[] {});
   }
-
+  public void setContacts(Contact[] contacts) throws Exception { contacts_ = contacts; }
+  
   public void setSelectedGroup(String s) throws Exception { selectedGroup = s; }
   public String getSelectedGroup() { return selectedGroup; }
 
