@@ -38,7 +38,7 @@
           InternetAddress[] fromAddress = Utils.getInternetAddress(msg.getFrom());
           InternetAddress from = fromAddress[0];
         %>
-        <div class="PrintFrom"><%=_ctx.appRes(uicomponent.id+ ".label.from") %>: <span style="font-weight:bold;"><%=Utils.getPersonal(from)%></span> &lt; <%=from.getAddress()%> &gt;</div>
+        <div class="PrintFrom"><%=_ctx.appRes(uicomponent.id+ ".label.from") %>: <span style="font-weight:bold;"><%=Utils.getPersonal(from)%></span> <% print((from != null) ? ("&lt; " + from.getAddress() + " &gt;") : "")%></div>
         <div class="PrintTo"><%=_ctx.appRes(uicomponent.id+ ".label.to") %>:
         <%
           if (!MailUtils.isFieldEmpty(msg.getMessageTo())) { 
@@ -47,7 +47,7 @@
               InternetAddress address = toAddress[i];
               if (i > 0) print(",");
         %>
-              <%=Utils.getPersonal(address)%> &lt; <%=address.getAddress()%> &gt;
+              <%=Utils.getPersonal(address)%> <% print((address != null) ? ("&lt; " + address.getAddress() + " &gt;") : "")%>
         <%  
             } 
           } 
