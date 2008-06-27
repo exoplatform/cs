@@ -33,6 +33,7 @@ import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UIFormComboBox;
 import org.exoplatform.calendar.webui.UIFormDateTimePicker;
+import org.exoplatform.calendar.webui.UIFormSelectBoxWithGroups;
 import org.exoplatform.calendar.webui.UIListContainer;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -93,7 +94,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     addUIFormInput(new UIFormComboBox(FIELD_FROM_TIME, FIELD_FROM_TIME, options));
     addUIFormInput(new UIFormComboBox(FIELD_TO_TIME, FIELD_TO_TIME, options));
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_ALLDAY, FIELD_ALLDAY, false));
-    addUIFormInput(new org.exoplatform.calendar.webui.UIFormSelectBox(FIELD_CALENDAR, FIELD_CALENDAR, null)) ;
+    addUIFormInput(new UIFormSelectBoxWithGroups(FIELD_CALENDAR, FIELD_CALENDAR, null)) ;
     addUIFormInput(new UIFormSelectBox(FIELD_CATEGORY, FIELD_CATEGORY, UIEventForm.getCategory())) ;
   }
 
@@ -225,7 +226,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
     value = calType_ + CalendarUtils.COLON + value ;
     getUIFormSelectBoxGroup(FIELD_CALENDAR).setValue(value) ;
   }
-  public org.exoplatform.calendar.webui.UIFormSelectBox getUIFormSelectBoxGroup(String id) {
+  public UIFormSelectBoxWithGroups getUIFormSelectBoxGroup(String id) {
     return findComponentById(id) ;
   }
   public void setSelectedCategory(String value) {getUIFormSelectBox(FIELD_CATEGORY).setValue(value) ;}

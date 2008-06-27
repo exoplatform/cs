@@ -1,4 +1,4 @@
-package org.exoplatform.calendar.webui ;
+package org.exoplatform.calendar.webui;
 
 
 /**

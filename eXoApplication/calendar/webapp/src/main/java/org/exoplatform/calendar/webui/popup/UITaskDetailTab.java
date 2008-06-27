@@ -29,6 +29,7 @@ import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.webui.UIFormComboBox;
 import org.exoplatform.calendar.webui.UIFormDateTimePicker;
+import org.exoplatform.calendar.webui.UIFormSelectBoxWithGroups;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -79,7 +80,7 @@ public class UITaskDetailTab extends UIFormInputWithActions {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     addUIFormInput(new UIFormStringInput(FIELD_EVENT, FIELD_EVENT, null).addValidator(MandatoryValidator.class)) ;
     addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION, FIELD_DESCRIPTION, null)) ;
-    addUIFormInput(new org.exoplatform.calendar.webui.UIFormSelectBox(FIELD_CALENDAR, FIELD_CALENDAR, null)) ;
+    addUIFormInput(new UIFormSelectBoxWithGroups(FIELD_CALENDAR, FIELD_CALENDAR, null)) ;
     addUIFormInput(new UIFormSelectBox(FIELD_CATEGORY, FIELD_CATEGORY, UIEventForm.getCategory())) ;
     addUIFormInput(new UIFormSelectBox(FIELD_STATUS, FIELD_STATUS, getStatus())) ;
 
@@ -207,7 +208,7 @@ public class UITaskDetailTab extends UIFormInputWithActions {
     return findComponentById(id);
   }  
   
-  public org.exoplatform.calendar.webui.UIFormSelectBox getUIFormSelectBoxGroup(String id) {
+  public UIFormSelectBoxWithGroups getUIFormSelectBoxGroup(String id) {
     return findComponentById(id);
   }
   
