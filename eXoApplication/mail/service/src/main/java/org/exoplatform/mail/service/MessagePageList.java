@@ -161,24 +161,18 @@ public class MessagePageList extends JCRPageList {
     return listPage ;
   }
   
-  /**
-   * 
-   * @param node
-   * @param refFolders
-   * @return Matching this node to message object is necessary or not. We can get it in old page if it is avaiable instead of rematch it.
-   * @throws Exception
-   */
-  private boolean isAvaiableMessage(Node node, String[] refFolders) throws Exception {
-    if (previousListPage.size() > 0 && previousListPage.containsKey(node.getName())) {
-      Message msg = previousListPage.get(node.getName()) ;
-      if (msg.isRootConversation() && 
-        (refFolders == null || msg.getGroupedMessageIds().size() == getGroupedMessageIds(new ArrayList<String>(), node, refFolders).size())) {
-        return true ;
+  /*
+    private boolean isAvaiableMessage(Node node, String[] refFolders) throws Exception {
+      if (previousListPage.size() > 0 && previousListPage.containsKey(node.getName())) {
+        Message msg = previousListPage.get(node.getName()) ;
+        if (msg.isRootConversation() && 
+          (refFolders == null || msg.getGroupedMessageIds().size() == getGroupedMessageIds(new ArrayList<String>(), node, refFolders).size())) {
+          return true ;
+        }
       }
+      return false ;
     }
-    return false ;
-  }
-  
+  */
   /**
    * 
    * @param messageNode
@@ -187,7 +181,7 @@ public class MessagePageList extends JCRPageList {
    * @throws Exception
    */
   private Message getMessage(Node messageNode, String[] refFolders) throws Exception {
-    if (isAvaiableMessage(messageNode, refFolders)) return previousListPage.get(messageNode.getName()) ;
+    //if (isAvaiableMessage(messageNode, refFolders)) return previousListPage.get(messageNode.getName()) ;
     
     Message msg = new Message();
     if (messageNode.hasProperty(Utils.EXO_ID)) msg.setId(messageNode.getProperty(Utils.EXO_ID).getString());
