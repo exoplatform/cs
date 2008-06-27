@@ -68,7 +68,7 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
   private boolean                        isAscending_     = true;
   private String                         viewQuery_       = null;
   private Contact[]                      contacts_        = null;
-  
+  private boolean needAlert = false ;
   
   public UIExportForm() throws Exception {
     setId("UIExportForm") ;
@@ -96,7 +96,9 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
   public void setViewQuery(String view) { viewQuery_ = view; }
 
   public Contact[] getContacts() throws Exception {
-    if (contactMap.size() == 0) {
+    if (contactMap.size() == 0 && needAlert == false) {
+      needAlert = true ;
+    } else if (contactMap.size() == 0) {
       UIApplication uiApp = getAncestorOfType(UIApplication.class) ;
       uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.tooMany-contacts", null, 
           ApplicationMessage.WARNING)) ;
