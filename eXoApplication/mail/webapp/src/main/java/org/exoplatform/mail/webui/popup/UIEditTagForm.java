@@ -148,6 +148,7 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
         newTag.setColor(color);
         newTag.setDescription(description);
         mailService.addTag(SessionProviderFactory.createSystemProvider(), username, accountId, newTag);
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class)) ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UITagContainer.class)) ;
       uiEditTagForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
