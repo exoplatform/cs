@@ -589,13 +589,14 @@
 	border-left: none;
 	border-right: 1px solid #e8e8e8;
 	padding: 0px 0px 0px 6px;
+	white-space
 }
 
 .UIMailPortlet .UIMessageList .UIGrid td a {
 	display: block;
 	white-space: nowrap;
 	overflow: hidden ;
-	width: 100%;
+	width: 80%;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIGrid .IconTag {

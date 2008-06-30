@@ -46,8 +46,8 @@
   </a>
   <div class="SeparatorLine"><span></span></div>
   
-  <div class="SelectButton"  onclick="eXo.mail.UIMailPortlet.showMenu(this, event);">
-    <div class="MoreActionsIcon" >
+  <div class="SelectButton" onclick="eXo.mail.UIMailPortlet.showMenu(this, event);">
+    <div class="MoreActionsIcon"  >
       <div class="DownArrow1Icon"><%=_ctx.appRes(uicomponent.id+ ".label.more-actions") %></div>
     </div>
     <% /*Begin Popup Menu*/ %>
@@ -385,9 +385,6 @@
     		  <th style="width: 24px;">
     		    <a hreft = ""><div class="AttachmentIcon" title="<%=_ctx.appRes(uicomponent.id+ '.label.attachment') %>"><span></span></div></a>
     		  </th>
-          <% 
-            if (uicomponent.getMessageFilter().getName().equals("Search")) print(" <th style=\"width:20px; border-right:0px;\"> </th> ") ;
-          %>
    	      <th style="padding-left: 24px;width:40%;">
        	   <%
              String sortedBySubject = uicomponent.event("Sort",Utils.EXO_SUBJECT);
@@ -479,16 +476,15 @@
                 <a href="$actionLink"><div class="AttachmentIcon"><span></span></div></a>
                 <%}%>
               </td>
+
+              <td class="$readStatus" >
               <% 
                 if (uicomponent.getMessageFilter().getName().equals("Search")) {
-                  print(" <td style=\"border-right:0px; white-space: nowrap;\">") ;
+                  print(" <div style=\"border-right:0px; white-space: nowrap; float: left;\">") ;
                   for (Folder folder : uicomponent.getFolders(msg))
-                    if (folder != null) print(" [" + folder.getLabel() + "] ")
-                  print("</td> ") ;
+                    if (folder != null) print(" [" + folder.getLabel() + "]&nbsp; ")
+                  print("</div> ") ;
                 }
-              %>
-              <td class="$readStatus">
-              <% 
                 if (msg.getTags() != null && msg.getTags().length > 0) {
                   String colorCss = "";
                   String title = "";
@@ -501,11 +497,11 @@
                     title += "[" + tag.getName() + "] ";
                   }
                 %>
-                  <a href="$actionLink" class="$colorCss SubjectItem" title="$title" >
+                  <a href="$actionLink" class="$colorCss SubjectItem" title="$title" style="float: left;" >
                 <%
                   } else {
                 %>
-                <a href="$actionLink">
+                <a href="$actionLink" style="float: left;">
                 <%
                   }
                   if (!msg.isRootConversation() && uicomponent.viewMode == uicomponent.MODE_THREAD) {
