@@ -1557,9 +1557,7 @@
 }
 
 .UIMailPortlet .FileNameLabel {
-	overflow: hidden;
-	width: 300px;
-	white-space: nowrap;
+	white-space: normal;
 }
 /******************************* UIAddNewContact ******************************/
 
@@ -1771,6 +1769,14 @@
 .Yellow {background-color: #FFFF00;} 
 
 
+.UIMailPortlet .UIViewAllHeaders {
+	padding: 16px;
+}
+
 .UIMailPortlet .UIForm .UIFormGrid td.FieldComponent {
 	white-space: nowrap;
+}
+
+.UIMailPortlet .UIMessageCompose .UIForm .UIFormGrid td.FieldComponent {
+	white-space: normal;
 }

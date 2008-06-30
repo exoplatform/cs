@@ -380,7 +380,7 @@
                 else classArrowFrom = "DownArrow1Icon" ;
               }
     		    %>
-    		  	<a href = "$sortedBySender" ><div class="$classArrowFrom" style="width: 100%; cursor: pointer; margin-top: 3px;" title="<%=_ctx.appRes(uicomponent.id+ '.label.sort-by-sender') %>">$head</div></a>
+    		  	<a href = "$sortedBySender" ><div class="$classArrowFrom" style="width: 90%; cursor: pointer; margin-top: 3px;" title="<%=_ctx.appRes(uicomponent.id+ '.label.sort-by-sender') %>">$head</div></a>
     		  </th>
     		  <th style="width: 24px;">
     		    <a hreft = ""><div class="AttachmentIcon" title="<%=_ctx.appRes(uicomponent.id+ '.label.attachment') %>"><span></span></div></a>
