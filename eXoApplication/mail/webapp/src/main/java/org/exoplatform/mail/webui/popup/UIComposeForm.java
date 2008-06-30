@@ -291,14 +291,14 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           InternetAddress[] addresses = Utils.getInternetAddress(msg.getFrom()) ;
           for (int i = 0 ; i < addresses.length; i++) {
             if (i > 0) forwardTxt.append(", ") ;
-            forwardTxt.append(Utils.getPersonal(addresses[i])).append(" \"").append(addresses[i].getAddress()).append("\"") ;
+            if (addresses[i] != null) forwardTxt.append(Utils.getPersonal(addresses[i])).append(" \"").append(addresses[i].getAddress()).append("\"") ;
           }
           forwardTxt.append("<br>To: ") ;
           
           InternetAddress[] toAddresses = Utils.getInternetAddress(toAddress) ;
           for (int i = 0 ; i < toAddresses.length; i++) {
             if (i > 0) forwardTxt.append(", ") ;
-            forwardTxt.append(Utils.getPersonal(toAddresses[i])).append(" \"").append(toAddresses[i].getAddress()).append("\"") ;
+            if (toAddresses[i] != null) forwardTxt.append(Utils.getPersonal(toAddresses[i])).append(" \"").append(toAddresses[i].getAddress()).append("\"") ;
           }
           
           forwardTxt.append("<br><br>").append(formatContent(msg)) ;
