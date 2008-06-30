@@ -40,6 +40,11 @@
 	margin: 0px;
 	min-width: 0px ;
 }
+
+
+.UIMailPortlet .FileNameLabel {
+	white-space: normal;
+}
 /******************************************** MailBanner ****************************************/
 
 
@@ -1764,7 +1769,14 @@
 .Wheat {background-color: #F5DEB3;}    
 .Yellow {background-color: #FFFF00;} 
 
+.UIMailPortlet .UIViewAllHeaders {
+	padding: 16px;
+}
 
 .UIMailPortlet .UIForm .UIFormGrid td.FieldComponent {
 	white-space: nowrap;
+}
+
+.UIMailPortlet .UIMessageCompose .UIForm .UIFormGrid td.FieldComponent {
+	white-space: normal;
 }
