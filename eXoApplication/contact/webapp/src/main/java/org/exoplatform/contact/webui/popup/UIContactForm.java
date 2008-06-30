@@ -26,7 +26,6 @@ import javax.jcr.PathNotFoundException;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
-import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.webui.UIAddressBooks;
@@ -187,19 +186,6 @@ public class UIContactForm extends UIFormTabPane {
       UIContactForm uiContactForm = event.getSource() ;
       UIApplication uiApp = uiContactForm.getAncestorOfType(UIApplication.class) ;
       UIProfileInputSet profileTab = uiContactForm.getChildById(INPUT_PROFILETAB) ;
-      /*
-      if (ContactUtils.isEmpty(profileTab.getFieldFirstName())) {  
-        uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.firstName-required", null, 
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ; 
-      }      
-      if (ContactUtils.isEmpty(profileTab.getFieldLastName())) {  
-        uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.lastName-required", null, 
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ; 
-      }*/
       Contact contact ;
       if (uiContactForm.isNew_) contact = new Contact() ;
       else contact = uiContactForm.contact_ ;
@@ -267,35 +253,26 @@ public class UIContactForm extends UIFormTabPane {
       ContactService contactService = ContactUtils.getContactService();  
       String username = ContactUtils.getCurrentUser() ;
       SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
+
       if (uiContactForm.isNew_) {
         UIPopupContainer popupContainer = uiContactForm.getParent() ;
         UICategorySelect uiCategorySelect = popupContainer.getChild(UICategorySelect.class); 
         String category = uiCategorySelect.getSelectedCategory();        
         contact.setAddressBook(new String[] { category });
-        ContactGroup group ;
         UIAddressBooks uiAddressBooks = uiContactForm
         .getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class) ;
         if (uiAddressBooks.getSharedGroups().containsKey(category)) {
-          group = contactService.getSharedGroup(username, category) ;
-          /*
-          contact.setViewPermissionUsers(group.getViewPermissionUsers()) ;
-          contact.setViewPermissionGroups(group.getViewPermissionGroups()) ;
-          contact.setEditPermissionUsers(group.getEditPermissionUsers()) ;
-          contact.setEditPermissionGroups(group.getEditPermissionGroups()) ;          
-          */
           contactService.saveContactToSharedAddressBook(username, category, contact, true) ;          
           contact.setContactType(JCRDataStorage.SHARED) ;
-        } else {
-          group = contactService.getGroup(sessionProvider, username, category) ;
-          /*
-          contact.setViewPermissionUsers(group.getViewPermissionUsers()) ;
-          contact.setViewPermissionGroups(group.getViewPermissionGroups()) ;
-          contact.setEditPermissionUsers(group.getEditPermissionUsers()) ;
-          contact.setEditPermissionGroups(group.getEditPermissionGroups()) ;                    
-          */
+        } else if (uiAddressBooks.getPrivateGroupMap().containsKey(category)){
           contactService.saveContact(sessionProvider, username, contact, true);          
           contact.setContactType(JCRDataStorage.PRIVATE) ;
-        }        
+        } else {
+          uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.address-deleted", null,
+              ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
       } else {
         try {
           String contactType = contact.getContactType() ;
