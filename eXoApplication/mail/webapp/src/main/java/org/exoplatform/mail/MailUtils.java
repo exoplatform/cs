@@ -258,4 +258,12 @@ public class MailUtils {
     s = s.replaceAll("[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+\\.[A-Za-z]{2,5}", "<a target=\"_blank\" href=\"mailto:$0\"> $0 </a>") ;
     return s ;
   }
+  
+  public static String insertTargetToHtmlLink(String s) throws Exception {
+    if (isFieldEmpty(s)) return "" ;
+    s = decodeHTML(s);
+    // for a tag we insert "target=_blank" to open in other window or tab
+    s = s.replaceAll("<(A|a)(.*?)>(.*?)</(A|a)>", "<a $2 target=\"_blank\"> $3 </a>") ;
+    return s ;
+  }
 }

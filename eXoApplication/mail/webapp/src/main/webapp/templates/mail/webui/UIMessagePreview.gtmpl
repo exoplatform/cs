@@ -349,12 +349,13 @@
                 %>
   							<textarea id="$textAreaId" class="MessageDetails" style="display:none">
                   <%
+                  String msgBody = msg.getMessageBody();
                     if (contentType.indexOf("text/plain") >= 0) {
-                      String msgBody = msg.getMessageBody();
-                      msgBody = MailUtils.convertTextToHtmlLink(msgBody) ;
-                      println(MailUtils.encodeHTML(msgBody)) ;
+                      msgBody = MailUtils.convertTextToHtmlLink(msgBody);
+                      println(MailUtils.encodeHTML(msgBody));
                     } else {
-                      println(MailUtils.encodeHTML(msg.getMessageBody())) ;
+                      msgBody = MailUtils.insertTargetToHtmlLink(msgBody);
+                      println(MailUtils.encodeHTML(msgBody));
                     }
                   %>
   							</textarea>
