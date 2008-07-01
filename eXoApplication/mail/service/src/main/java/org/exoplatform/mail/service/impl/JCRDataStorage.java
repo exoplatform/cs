@@ -755,13 +755,18 @@ public class JCRDataStorage {
       }
       if (attachments != null && attachments.size() > 0) {
         Iterator<Attachment> it = attachments.iterator();
+        boolean makeNewAtt = isNew ;
         while (it.hasNext()) {
           Attachment file = it.next();
           Node nodeFile = null;
           Session session = mailHome.getSession();
           try {
-            nodeFile = (Node) session.getItem(file.getId());
+            if (!isNew) nodeFile = (Node) session.getItem(file.getId());
           } catch (Exception e) {
+            makeNewAtt = true ;
+          }
+          
+          if (makeNewAtt) {
             Node attHome = null;
             try {
               attHome = nodeMsg.getNode(Utils.KEY_ATTACHMENT);
