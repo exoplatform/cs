@@ -716,10 +716,15 @@ public class UIContacts extends UIForm implements UIPopupComponent {
             String addressBookId = null ;
             for (String add : contact.getAddressBook())
               if (uiContacts.getSharedGroupMap().containsKey(add)) addressBookId = add ;
-            contactService.removeSharedContact(SessionProviderFactory.createSystemProvider(), username, addressBookId, id) ;
+            try {
+              contactService.removeSharedContact(
+                  SessionProviderFactory.createSystemProvider(), username, addressBookId, id) ;              
+            } catch (PathNotFoundException e) { }
           } else {
-            contactService.removeUserShareContact(
-                SessionProviderFactory.createSystemProvider(), contact.getPath(), id, username) ;
+            try {
+              contactService.removeUserShareContact(
+                  SessionProviderFactory.createSystemProvider(), contact.getPath(), id, username) ;              
+            } catch (PathNotFoundException e) { }
           }
           removedContacts.add(contact) ;
         }

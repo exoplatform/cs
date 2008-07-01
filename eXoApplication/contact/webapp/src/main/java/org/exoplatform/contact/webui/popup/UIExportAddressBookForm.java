@@ -147,7 +147,6 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
   static  public class SaveActionListener extends EventListener<UIExportAddressBookForm> {
     public void execute(Event<UIExportAddressBookForm> event) throws Exception {
       UIExportAddressBookForm uiForm = event.getSource() ;
-      UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class);
       List<String> groupIds = uiForm.getCheckedGroups() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       if (groupIds.size() < 1) {

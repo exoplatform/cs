@@ -285,8 +285,10 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
             
         } else {
           removePerUser(contact, remover + JCRDataStorage.HYPHEN) ;
-          contactService.removeUserShareContact(SessionProviderFactory.createSystemProvider()
-              , username, uiForm.contactId_, remover) ;
+          try {
+            contactService.removeUserShareContact(SessionProviderFactory.createSystemProvider()
+                , username, uiForm.contactId_, remover) ;            
+          } catch (PathNotFoundException e) { }
         }        
         contactService.saveContact(SessionProviderFactory.createSessionProvider(), username, contact, false) ;
         uiForm.updateContactGrid(contact);
