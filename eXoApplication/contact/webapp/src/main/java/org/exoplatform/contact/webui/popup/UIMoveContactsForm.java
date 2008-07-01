@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
 
+import javax.jcr.PathNotFoundException;
+
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactGroup;
@@ -141,8 +143,10 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
               if (uiContacts.getSharedGroupMap().containsKey(add)) addressId = add ;
             contactService.removeSharedContact(SessionProviderFactory.createSystemProvider(), username, addressId, id) ;
           } else {
-            contactService.removeUserShareContact(
-                SessionProviderFactory.createSystemProvider(), contact.getPath(), contact.getId(), username) ;
+            try {
+              contactService.removeUserShareContact(
+                  SessionProviderFactory.createSystemProvider(), contact.getPath(), contact.getId(), username) ;              
+            } catch (PathNotFoundException e) { }
           }
         }
         contact.setAddressBook(new String[] { addressBookId }) ;
