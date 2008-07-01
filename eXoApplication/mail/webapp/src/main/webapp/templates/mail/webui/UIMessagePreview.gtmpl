@@ -17,6 +17,8 @@
   rcontext.getJavascriptManager().importJavascript('eXo.cs.MaskLayerControl','/csResources/javascript/');
   rcontext.getJavascriptManager().addOnLoadJavascript('eXo.cs.MaskLayerControl.init(\'' + uicomponent.getId() + '\')');
   rcontext.getJavascriptManager().importJavascript("eXo.mail.UIMailPortlet","/mail/javascript/");
+  // Fix for show image in IE6
+  //rcontext.getJavascriptManager().addJavascript("if(eXo.core.Browser.isIE6()) {top.location.reload() };") ;
   
   WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
   Locale locale = context.getParentAppRequestContext().getLocale() ;
@@ -387,21 +389,24 @@
                         <%
                           attLink = MailUtils.getImageSource(attach, dservice) ;
                           boolean isImage = false ;
+                          boolean isSupportedIcon = false ;
                           if (attLink != null ) {
                             if (attach.getMimeType().toLowerCase().indexOf("image") > -1) {
                               isImage = true ; 
                             } else if (attach.getMimeType().indexOf("msword") > -1) {
+                              isSupportedIcon = true ;
                               attLink = "/mail/skin/DefaultSkin/webui/skinIcons/24x24/icons/WordIcon.gif";
                             } else if (attach.getMimeType().indexOf("pdf") > -1) {
+                              isSupportedIcon = true ;
                               attLink = "/mail/skin/DefaultSkin/webui/skinIcons/24x24/icons/PDFIcon.gif";
                             }
                             if (isImage) {
                         %> 
-      						  		    <img class="AttachmentFile" style="height:auto ;width: 200px;padding-right: 5px" src="$attLink">
+      						  		      <img class="AttachmentFile" style="height:auto ;width: 200px;padding-right: 5px" src="$attLink">
       						  		<%
-                            } else {
+                            } else if (isSupportedIcon){
                         %>
-                            <img class="AttachmentFile" src="$attLink">
+                              <img class="AttachmentFile" src="$attLink">
                         <%     
                             }
                           }
