@@ -247,41 +247,52 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UIAddressForm> event) throws Exception {
       UIAddressForm uiAddressForm = event.getSource() ;
       UIMailPortlet uiPortlet = uiAddressForm.getAncestorOfType(UIMailPortlet.class) ;
-      String toAddress = "";
       uiAddressForm.checkedList_.clear() ;
+      uiAddressForm.newCheckedList_.clear() ;
+      String toAddress = "";
+      StringBuffer sb = new StringBuffer() ;
       for (Contact ct : uiAddressForm.getCheckedContact()) {
-        if(ct.getEmailAddress() != null) {
-          toAddress += ct.getFullName() + "<" + ct.getEmailAddress() + "> ," ;
-          uiAddressForm.checkedList_.put(ct.getId(), ct) ;
-        }
+        uiAddressForm.newCheckedList_.put(ct.getId(), ct) ;
       }
-      StringBuilder sb = new StringBuilder() ;
+      for (Contact contact : uiAddressForm.newCheckedList_.values()) {
+        if(contact.getEmailAddress() != null)
+        toAddress += contact.getFullName() + "<" + contact.getEmailAddress() + "> ," ;
+      }
+      List<String> listMail = Arrays.asList( sb.toString().split(MailUtils.COMMA)) ; 
+      String email = null ;
       for(Contact c : uiAddressForm.getCheckedContact()) {
-        if(sb != null && sb.length() > 0) sb.append(MailUtils.COMMA) ;
-        sb.append(c.getEmailAddress()) ;
+        email = c.getEmailAddress() ;
+        if(!listMail.contains(email)) {
+          if(sb != null && sb.length() > 0) sb.append(MailUtils.COMMA) ;
+          if(email != null) sb.append(email) ;
+        }
       }
       UIComposeForm uiComposeForm = uiPortlet.findFirstComponentOfType(UIComposeForm.class) ;
       UIEventForm uiEventForm = uiPortlet.findFirstComponentOfType(UIEventForm.class) ;
       if(uiEventForm != null) {
         uiEventForm.setSelectedTab(UIEventForm.TAB_EVENTREMINDER) ;
         uiEventForm.setEmailAddress(sb.toString()) ;
+        uiAddressForm.checkedList_ = uiAddressForm.newCheckedList_ ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm) ;
+        return ;
       } else if (uiComposeForm != null) {
         if (uiAddressForm.getRecipientType().equals("to")) {
           uiComposeForm.setFieldToValue(toAddress) ;
-          uiComposeForm.setToContacts(new ArrayList<Contact>(uiAddressForm.checkedList_.values())) ;
+          uiComposeForm.setToContacts(new ArrayList<Contact>(uiAddressForm.newCheckedList_.values())) ;
         }
 
         if (uiAddressForm.getRecipientType().equals("cc")) {
           uiComposeForm.setFieldCcValue(toAddress) ;
-          uiComposeForm.setCcContacts(new ArrayList<Contact>(uiAddressForm.checkedList_.values())) ;
+          uiComposeForm.setCcContacts(new ArrayList<Contact>(uiAddressForm.newCheckedList_.values())) ;
         }
 
         if (uiAddressForm.getRecipientType().equals("bcc")) {
           uiComposeForm.setFieldBccValue(toAddress) ;
-          uiComposeForm.setBccContacts(new ArrayList<Contact>(uiAddressForm.checkedList_.values())) ;
+          uiComposeForm.setBccContacts(new ArrayList<Contact>(uiAddressForm.newCheckedList_.values())) ;
         }
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressForm);
+        
+        uiAddressForm.checkedList_ = uiAddressForm.newCheckedList_ ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiComposeForm) ;
       }
     }
   }

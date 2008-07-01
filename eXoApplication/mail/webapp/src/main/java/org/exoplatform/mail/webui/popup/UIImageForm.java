@@ -21,6 +21,7 @@ import java.io.ByteArrayInputStream;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.upload.UploadResource;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -97,14 +98,20 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
       uiContactForm.setFileName(fileName) ;
       UIPopupAction popupAction = uiPopupActionContainer.getChild(UIPopupAction.class) ;
       popupAction.deActivate() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction.getParent()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContactForm) ;
     }
   }
 
   static  public class CancelActionListener extends EventListener<UIImageForm> {
     public void execute(Event<UIImageForm> event) throws Exception {
       UIImageForm uiForm = event.getSource() ;
-      UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
-      uiPopupAction.deActivate() ;
+      UIPopupActionContainer uiPopupActionContainer = uiForm.getAncestorOfType(UIPopupActionContainer.class) ;
+      UIAddContactForm uiContactForm =  uiPopupActionContainer.findFirstComponentOfType(UIAddContactForm.class) ;
+      UIPopupAction popupAction = uiPopupActionContainer.getChild(UIPopupAction.class) ;
+      popupAction.deActivate() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction.getParent()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContactForm) ;
      }
   }  
 }
