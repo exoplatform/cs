@@ -25,6 +25,8 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import javax.jcr.PathNotFoundException;
+
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
@@ -480,8 +482,10 @@ public class UIAddressBooks extends UIComponent {
         if (uiContacts.isDisplaySearchResult())
           removedContacts = contactService.getSharedContactsByAddressBook(SessionProviderFactory
             .createSystemProvider(), username, uiAddressBook.sharedAddressBookMap_.get(groupId)).getAll() ;
-        contactService.removeUserShareAddressBook(SessionProviderFactory.createSystemProvider()
-            , uiAddressBook.sharedAddressBookMap_.get(groupId).getSharedUserId(), groupId, username) ;
+        try {
+          contactService.removeUserShareAddressBook(SessionProviderFactory.createSystemProvider()
+              , uiAddressBook.sharedAddressBookMap_.get(groupId).getSharedUserId(), groupId, username) ;          
+        } catch (PathNotFoundException e) { }
       } else {
         if (uiContacts.isDisplaySearchResult())
           removedContacts = contactService.getContactPageListByGroup(

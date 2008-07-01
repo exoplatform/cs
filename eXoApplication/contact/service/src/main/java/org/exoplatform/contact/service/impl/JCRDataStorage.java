@@ -388,6 +388,7 @@ public class JCRDataStorage {
   }
 
   public ContactGroup getGroup(SessionProvider sProvider, String username, String groupId) throws Exception {
+    if (groupId == null) return null ;
     Node contactGroupHomeNode = getUserContactGroupHome(sProvider, username);
     //String str = groupId.replaceAll("/", "") ;
     if (contactGroupHomeNode.hasNode(groupId))

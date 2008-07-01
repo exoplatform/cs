@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
-import java.io.ByteArrayInputStream;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.ContactImportExport;
@@ -32,7 +31,6 @@ import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UIWorkingContainer;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.portal.webui.UILoginForm;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.upload.UploadResource;
 import org.exoplatform.upload.UploadService;
@@ -182,13 +180,19 @@ public class UIImportForm extends UIForm {
       ContactImportExport service = ContactUtils.getContactService().getContactImportExports(importFormat) ;
       
       try {
-        if (uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class).getSharedGroups().containsKey(category)) {
+        UIAddressBooks uiAddressBooks = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
+        if (uiAddressBooks.getSharedGroups().containsKey(category)) {
           service.importContact(
               SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), uiformInput.getUploadDataAsStream(), category + JCRDataStorage.HYPHEN) ;
-        } else {
+        } else if (uiAddressBooks.getPrivateGroupMap().containsKey(category)){
           service.importContact(
               SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), uiformInput.getUploadDataAsStream(), category) ;
-        }        
+        } else {
+          uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.address-deleted", null, 
+              ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
         UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
         uploadService.removeUpload(uploadId) ;
         uiContacts.updateList() ;        
