@@ -346,5 +346,7 @@
 	width: 120px;
 }
 .UICalendarPortlet .UIAddNewEvent .NewEventAttendee .UserSelection {
-	background: #C41616 ;
+	background: #006600 ;
+	filter:alpha(opacity=75);
+	opacity: 0.75
 }
