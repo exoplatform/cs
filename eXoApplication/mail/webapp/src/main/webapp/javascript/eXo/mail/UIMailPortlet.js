@@ -125,7 +125,7 @@ UIMailPortlet.prototype.closePrint = function() {
 	for(var i = 0 ; i < document.body.childNodes.length ; i++) {
 		if(document.body.childNodes[i].className == "UIMailPortlet") DOMUtil.removeElement(document.body.childNodes[i]) ;		
 	}
-	//document.body.removeChild(uiMailPortlet);
+	window.scroll(0,0) ;
 } ;
 
 UIMailPortlet.prototype.switchLayout = function(layout) {	
