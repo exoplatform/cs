@@ -64,6 +64,8 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
   private Map<String, String> privateGroupMap_ = new HashMap<String, String>() ;
   private Map<String, String> publicGroupMap_ = new HashMap <String, String>() ;
   private Map<String, SharedAddressBook> sharedGroupMap_ = new HashMap <String, SharedAddressBook>() ;
+  private boolean isExceed = false ;
+  private boolean needAlert = false ;
   
   public UIExportAddressBookForm() throws Exception { }
   public String getLabel(String id) throws Exception {
@@ -72,12 +74,26 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
     } catch (MissingResourceException mre) {
       return id ;
     }
-  } 
+  }
   
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
   
-  public Map<String, String> getContactGroups() { return privateGroupMap_; }
+  public Map<String, String> getContactGroups() throws Exception {
+    if (isExceed) {
+      needAlert = true ;
+      isExceed = false ;
+      return privateGroupMap_;
+    }
+    if (needAlert && !isExceed) {
+      UIApplication uiApp = getAncestorOfType(UIApplication.class) ;
+      uiApp.addMessage(new ApplicationMessage("UIExportAddressBookForm.many-Contacts", null,
+          ApplicationMessage.WARNING)) ;
+      needAlert = false ;
+      return privateGroupMap_;
+    }
+    return privateGroupMap_;  
+  }
   public void setContactGroups(Map<String, String> contactGroups) { privateGroupMap_ = contactGroups ; }
 
   public Map<String, SharedAddressBook> getSharedContactGroups() { return sharedGroupMap_; }
@@ -148,8 +164,10 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
+      uiForm.isExceed = true ;
       OutputStream out = ContactUtils.getContactService().getContactImportExports(exportFormat).exportContact(
           SessionProviderFactory.createSystemProvider(), ContactUtils.getCurrentUser(), groupIds.toArray(new String[]{})) ;
+      uiForm.isExceed = false ;
       if(out == null) {
       	 uiApp.addMessage(new ApplicationMessage("UIExportAddressBookForm.msg.there-is-not-contacts-exists", null,
            ApplicationMessage.WARNING)) ;
@@ -176,7 +194,7 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
       }
       String downloadLink = dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;      
       event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + downloadLink + "');") ;      
-      uiContactPortlet.cancelAction() ;      
+      //uiContactPortlet.cancelAction() ;      
     }
   }
   
