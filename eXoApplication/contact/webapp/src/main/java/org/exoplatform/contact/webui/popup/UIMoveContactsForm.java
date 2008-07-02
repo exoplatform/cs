@@ -146,7 +146,13 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
             try {
               contactService.removeUserShareContact(
                   SessionProviderFactory.createSystemProvider(), contact.getPath(), contact.getId(), username) ;              
-            } catch (PathNotFoundException e) { }
+            } catch (PathNotFoundException e) {
+              UIApplication uiApp = uiMoveContactForm.getAncestorOfType(UIApplication.class) ;
+              uiApp.addMessage(new ApplicationMessage("UIMoveContactsForm.msg.contact-not-existed", null, 
+                  ApplicationMessage.WARNING)) ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              return ; 
+            }
           }
         }
         contact.setAddressBook(new String[] { addressBookId }) ;

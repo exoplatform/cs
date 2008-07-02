@@ -585,7 +585,12 @@ public class UIContacts extends UIForm implements UIPopupComponent {
             try {
               contactService.removeUserShareContact(
                   SessionProviderFactory.createSystemProvider(), contact.getPath(), contact.getId(), username) ;              
-            } catch (PathNotFoundException e) { }
+            } catch (PathNotFoundException e) { 
+              uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-not-existed", null, 
+                  ApplicationMessage.WARNING)) ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              return ; 
+            }
           }
         }
         contact.setAddressBook(new String[] { addressBookId }) ;
@@ -696,7 +701,13 @@ public class UIContacts extends UIForm implements UIPopupComponent {
             try {
               contactService.removeUserShareContact(
                   SessionProviderFactory.createSystemProvider(), contact.getPath(), id, username) ;
-            } catch (PathNotFoundException e) { }            
+            } catch (PathNotFoundException e) {
+              uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-not-existed", null
+                  , ApplicationMessage.WARNING)) ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              return ;
+            }            
           }
           removedContacts.add(contact) ;
         }
