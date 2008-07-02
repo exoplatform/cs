@@ -38,6 +38,7 @@ import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UIFormDateTimePicker;
 import org.exoplatform.calendar.webui.UIListView;
 import org.exoplatform.calendar.webui.UIPreview;
+import org.exoplatform.calendar.webui.UIWeekView;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -258,6 +259,9 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
         UICalendarViewContainer calendarViewContainer = 
           calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
         String currentView = calendarViewContainer.getRenderedChild().getId() ;
+        if(calendarViewContainer.getRenderedChild() instanceof UIWeekView) {
+          if(((UIWeekView)calendarViewContainer.getRenderedChild()).isShowCustomView()) currentView = UICalendarViewContainer.WORKING_VIEW;
+        }
         calendarViewContainer.initView(UICalendarViewContainer.LIST_VIEW) ;
         UIListView uiListView = calendarViewContainer.findFirstComponentOfType(UIListView.class) ;
         calendarPortlet.cancelAction() ;
