@@ -103,7 +103,8 @@ public class UITagForm extends UIForm implements UIPopupComponent{
     String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
     MailService mailSrv = getApplicationComponent(MailService.class);
     for(Message msg : messageList) {
-      String mesSub = getLabel("subject") + " : " + ((msg.getSubject().length() >= 30) ? (msg.getSubject().substring(0, 30) + "...") : msg.getSubject());
+      String subject = (msg.getSubject() != null) ? msg.getSubject() : "" ;
+      String mesSub = getLabel("subject") + " : " + ((subject.length() >= 30) ? (subject.substring(0, 30) + "...") : subject);
       UIFormInputInfo uiTags = new UIFormInputInfo(TAG_MESSAGE, TAG_MESSAGE, null);
       String tags = "";
       if (msg.getTags() != null && msg.getTags().length > 0) {
