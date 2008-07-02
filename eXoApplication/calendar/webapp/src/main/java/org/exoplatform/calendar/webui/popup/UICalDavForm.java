@@ -25,6 +25,7 @@ import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.RssData;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
+import org.exoplatform.calendar.webui.UIFormDateTimePicker;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
@@ -72,22 +73,23 @@ public class UICalDavForm extends UIFormTabPane implements UIPopupComponent{
   final static private String MESSAGE = "message".intern() ;
   final static private String DESCRIPTIONS = "descriptions".intern() ;
   final static private String COPYRIGHTS = "copyrights".intern() ;
-  
+  final static private String INFO_TAB = "rssInfo".intern() ;
+  final static private String CALENDAR_TAB = "rssCalendars".intern() ;
   public UICalDavForm() throws Exception{
     super("UICalDavForm");
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = Util.getPortalRequestContext().getRemoteUser() ;
-    UIFormInputWithActions rssInfo = new UIFormInputWithActions("rssInfo") ;
+    UIFormInputWithActions rssInfo = new UIFormInputWithActions(INFO_TAB) ;
     rssInfo.addUIFormInput(new UIFormStringInput(TITLE, TITLE, "eXoCalendarCalDav").addValidator(MandatoryValidator.class)) ;
     String url = calendarService.getCalendarSetting(SessionProviderFactory.createSessionProvider(), username).getBaseURL();
     if(CalendarUtils.isEmpty(url)) url = CalendarUtils.getServerBaseUrl() + "calendar/iCalRss" ;
     rssInfo.addUIFormInput(new UIFormStringInput(URL, URL, url).addValidator(MandatoryValidator.class)) ;
-    rssInfo.addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, DESCRIPTIONS).addValidator(MandatoryValidator.class)) ;
-    rssInfo.addUIFormInput(new UIFormStringInput(COPYRIGHT, COPYRIGHT, "Copyright by 2000-2005 eXo Platform SARL").addValidator(MandatoryValidator.class)) ;
-    rssInfo.addUIFormInput(new UIFormDateTimeInput(PUBLIC_DATE, PUBLIC_DATE, new Date(), false)) ;
+    rssInfo.addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, null).addValidator(MandatoryValidator.class)) ;
+    rssInfo.addUIFormInput(new UIFormStringInput(COPYRIGHT, COPYRIGHT, null).addValidator(MandatoryValidator.class)) ;
+    rssInfo.addUIFormInput(new UIFormDateTimePicker(PUBLIC_DATE, PUBLIC_DATE, new Date(), false)) ;
     setSelectedTab(rssInfo.getId()) ;
     addUIFormInput(rssInfo) ;
-    UIFormInputWithActions rssCalendars = new UIFormInputWithActions("rssCalendars") ;
+    UIFormInputWithActions rssCalendars = new UIFormInputWithActions(CALENDAR_TAB) ;
     rssCalendars.addUIFormInput(new UIFormInputInfo(INFOR,INFOR, null)) ; 
     List<Calendar> calendars = calendarService.getUserCalendars(SessionProviderFactory.createSessionProvider(), username, true) ;
     for(Calendar calendar : calendars) {
@@ -121,6 +123,10 @@ public class UICalDavForm extends UIFormTabPane implements UIPopupComponent{
     RepositoryService repositoryService  = getApplicationComponent(RepositoryService.class) ;      
     return repositoryService.getCurrentRepository() ;
   }
+  private UIFormDateTimePicker getUIDateTimePicker(String id) {
+    UIFormInputWithActions rssInfo = getChildById("rssInfo") ;
+    return rssInfo.getChildById(id) ;
+  }
   static  public class GenerateActionListener extends EventListener<UICalDavForm> {
     public void execute(Event<UICalDavForm> event) throws Exception {
       UICalDavForm uiForm = event.getSource() ;
@@ -136,7 +142,9 @@ public class UICalDavForm extends UIFormTabPane implements UIPopupComponent{
           }
         }
       }
-      if(calendarIds.size() == 0) {
+      if(calendarIds.size() <= 0) {
+        uiForm.setSelectedTab(CALENDAR_TAB) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
         uiApp.addMessage(new ApplicationMessage("UIRssForm.msg.there-is-not-calendar", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
@@ -145,6 +153,8 @@ public class UICalDavForm extends UIFormTabPane implements UIPopupComponent{
       String tempName = uiForm.getUIStringInput(UICalDavForm.TITLE).getValue() ;
       if(tempName != null && tempName.length() > 0) {
         if(!CalendarUtils.isNameValid(tempName, CalendarUtils.SPECIALCHARACTER)) {
+          uiForm.setSelectedTab(INFO_TAB) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
           uiApp.addMessage(new ApplicationMessage("UIRssForm.msg.feed-name-invalid", null)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
@@ -161,8 +171,8 @@ public class UICalDavForm extends UIFormTabPane implements UIPopupComponent{
       String title = uiForm.getUIStringInput(UICalDavForm.TITLE).getValue() ;
       rssData.setTitle(title) ;
       rssData.setVersion("rss_2.0") ;
-      if(uiForm.getUIFormDateTimeInput(UICalDavForm.PUBLIC_DATE).getCalendar() != null)
-      rssData.setPubDate(uiForm.getUIFormDateTimeInput(UICalDavForm.PUBLIC_DATE).getCalendar().getTime()) ;
+      if(uiForm.getUIDateTimePicker(UICalDavForm.PUBLIC_DATE).getCalendar() != null)
+      rssData.setPubDate(uiForm.getUIDateTimePicker(UICalDavForm.PUBLIC_DATE).getCalendar().getTime()) ;
       int result = calendarService.generateCalDav(SessionProviderFactory.createSystemProvider(), Util.getPortalRequestContext().getRemoteUser(), calendarIds, rssData) ;
       if(result < 0) {
         uiApp.addMessage(new ApplicationMessage("UIRssForm.msg.no-data-generated", null)) ;
@@ -174,7 +184,6 @@ public class UICalDavForm extends UIFormTabPane implements UIPopupComponent{
       Object[] object = new Object[]{title} ;
       uiApp.addMessage(new ApplicationMessage("UIRssForm.msg.feed-has-been-generated", object)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-      return ;
     }
   }
 
