@@ -61,18 +61,15 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
     }
 )
 public class UISharedForm extends UIForm implements UIPopupComponent, UISelector{
-  final static public String FIELD_NAME = "calendarName".intern() ;
-  final static public String FIELD_USER = "username".intern() ;
-  final static public String FIELD_EDIT = "canEdit".intern() ;
   final public static String SPECIALCHARACTER[] = {CalendarUtils.SEMICOLON,CalendarUtils.SLASH,CalendarUtils.BACKSLASH,"'","|",">","<","\"", "?", "!", "@", "#", "$", "%","^","&","*"} ;
-
+  final public static String SHARED_TAB = "UIInputUserSelect".intern() ;
   private Map<String, String> permission_ = new HashMap<String, String>() ;
   private String calendarId_ ;
   protected boolean isAddNew_ = true ;
   public UISharedForm() throws Exception{
-    UIFormInputWithActions inputset = new UIFormInputWithActions("UIInputUserSelect") ;
-    inputset.addChild(new UIFormInputInfo(FIELD_NAME, FIELD_NAME, null)) ;
-    inputset.addUIFormInput(new UIFormStringInput(FIELD_USER, FIELD_USER, null)) ;
+    UISharedTab inputset = new UISharedTab(SHARED_TAB) ;
+    inputset.addChild(new UIFormInputInfo(UISharedTab.FIELD_NAME, UISharedTab.FIELD_NAME, null)) ;
+    inputset.addUIFormInput(new UIFormStringInput(UISharedTab.FIELD_USER, UISharedTab.FIELD_USER, null)) ;
     List<ActionData> actions = new ArrayList<ActionData>() ;
     ActionData selectUserAction = new ActionData() ;
     selectUserAction.setActionListener("SelectPermission") ;
@@ -81,8 +78,8 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     selectUserAction.setActionType(ActionData.TYPE_ICON) ;
     selectUserAction.setActionParameter(UISelectComponent.TYPE_USER) ;
     actions.add(selectUserAction) ;
-    inputset.setActionField(FIELD_USER, actions) ;
-    inputset.addChild(new UIFormCheckBoxInput<Boolean>(FIELD_EDIT, FIELD_EDIT, null)) ;
+    inputset.setActionField(UISharedTab.FIELD_USER, actions) ;
+    inputset.addChild(new UIFormCheckBoxInput<Boolean>(UISharedTab.FIELD_EDIT, UISharedTab.FIELD_EDIT, null)) ;
     addChild(inputset) ;
   }
 
@@ -105,21 +102,26 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
   }
   public void setSelectedCalendarId(String id) { calendarId_ = id ;}
   public void setCalendarName(String value) {
-    getUIFormInputInfo(FIELD_NAME).setValue(value) ;
+    UISharedTab inputset = getChildById(SHARED_TAB) ;
+    inputset.calendarName_ = value ;
+    if(!CalendarUtils.isEmpty(value) && value.trim().length() >= 30) value = value.substring(0, 35)+"..." ; 
+    inputset.getUIFormInputInfo(UISharedTab.FIELD_NAME).setValue(value) ;
   }
   protected void setCanEdit(boolean canEdit) {
-    getUIFormCheckBoxInput(FIELD_EDIT).setChecked(canEdit) ;
+    UISharedTab inputset = getChildById(SHARED_TAB) ;
+    inputset.getUIFormCheckBoxInput(UISharedTab.FIELD_EDIT).setChecked(canEdit) ;
   }
   protected boolean canEdit() {
-    return getUIFormCheckBoxInput(FIELD_EDIT).isChecked() ;
+    UISharedTab inputset = getChildById(SHARED_TAB) ;
+    return inputset.getUIFormCheckBoxInput(UISharedTab.FIELD_EDIT).isChecked() ;
   }
   protected void setSharedUser(String value) {
-    UIFormInputWithActions inputset = getChildById("UIInputUserSelect") ;
-    inputset.getUIStringInput(FIELD_USER).setValue(value) ;
+    UISharedTab inputset = getChildById(SHARED_TAB) ;
+    inputset.getUIStringInput(UISharedTab.FIELD_USER).setValue(value) ;
   }
   protected String getSharedUser() {
-    UIFormInputWithActions inputset = getChildById("UIInputUserSelect") ;
-    return inputset.getUIStringInput(FIELD_USER).getValue() ;
+    UISharedTab inputset = getChildById(SHARED_TAB) ;
+    return inputset.getUIStringInput(UISharedTab.FIELD_USER).getValue() ;
   }
   public String[] getActions() {
     return new String[] {"Save","Close"} ;
@@ -128,7 +130,8 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
   public void deActivate() throws Exception {}
 
   public void updateSelect(String selectField, String value) throws Exception {
-    UIFormStringInput fieldInput = getUIStringInput(selectField) ;
+    UISharedTab inputset = getChildById(SHARED_TAB) ;
+    UIFormStringInput fieldInput = inputset.getUIStringInput(selectField) ;
     permission_.put(value.substring(value.lastIndexOf(":/") + 2), value.substring(value.lastIndexOf(":/") + 2)) ;
     StringBuilder sb = new StringBuilder() ;
     for(String s : permission_.values()) {
@@ -140,7 +143,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
   static  public class SaveActionListener extends EventListener<UISharedForm> {
     public void execute(Event<UISharedForm> event) throws Exception {
       UISharedForm uiForm = event.getSource() ;
-      String names = uiForm.getUIStringInput(FIELD_USER).getValue() ;
+      String names = uiForm.getUIStringInput(UISharedTab.FIELD_USER).getValue() ;
       if(CalendarUtils.isEmpty(names)) {
         UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.invalid-username", null)) ;
@@ -231,7 +234,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       UIGroupSelector uiGroupSelector = childPopup.activate(UIGroupSelector.class, 500) ;
       uiGroupSelector.setType(permType) ;
       uiGroupSelector.setSelectedGroups(null) ;
-      uiGroupSelector.setComponent(uiForm, new String[]{UISharedForm.FIELD_USER}) ;
+      uiGroupSelector.setComponent(uiForm, new String[]{UISharedTab.FIELD_USER}) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(childPopup) ;
     }
   }
