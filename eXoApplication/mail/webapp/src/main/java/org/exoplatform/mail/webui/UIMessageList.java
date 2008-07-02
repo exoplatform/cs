@@ -218,6 +218,9 @@ public class UIMessageList extends UIForm {
       List<Message> msgList = new ArrayList<Message>() ;
       try {
         msgList = pageList_.getPage(page, MailUtils.getCurrentUser()) ;
+        if (page > 1 && msgList.size() == 0) {
+          msgList = pageList_.getPage(page - 1, MailUtils.getCurrentUser()) ;
+        }
       } catch(Exception e) {
         String username = MailUtils.getCurrentUser();
         MailService mailSrv = MailUtils.getMailService();
