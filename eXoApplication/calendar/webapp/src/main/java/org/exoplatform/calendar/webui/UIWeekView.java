@@ -172,7 +172,7 @@ public class UIWeekView extends UICalendarView {
     }
     return dataMap ;
   }
-  protected boolean isShowCustomView() {return isShowCustomView_ ;}
+  public boolean isShowCustomView() {return isShowCustomView_ ;}
   static  public class UpdateEventActionListener extends EventListener<UIWeekView> {
     public void execute(Event<UIWeekView> event) throws Exception {
       UIWeekView calendarview = event.getSource() ;
