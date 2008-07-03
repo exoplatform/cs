@@ -55,6 +55,7 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
 
   public static final String FIELD_UPLOAD = "upload" ;  
   public int numberFile = 5 ;
+  public static final int MAX_SIZE = 10*1024*1024 ;
 
   public UIAttachFileForm() throws Exception {
     setMultiPart(true) ;
@@ -79,6 +80,7 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
       UIAttachFileForm uiForm = event.getSource();
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       List<BufferAttachment> fileAttachList = new ArrayList<BufferAttachment>();
+      long attSize = 0;
       try {
         for (int i = 1; i <= uiForm.getNumberFile(); i++) {        
           UIFormUploadInput input = (UIFormUploadInput)uiForm.getUIInput(FIELD_UPLOAD + String.valueOf(i));
@@ -108,7 +110,14 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
         UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
         UIComposeForm uiComposeForm = uiPortlet.findFirstComponentOfType(UIComposeForm.class);
         for (Attachment att : fileAttachList) {
-          uiComposeForm.addToUploadFileList(att) ;
+          attSize += att.getSize();
+          if (attSize < MAX_SIZE) {
+            uiComposeForm.addToUploadFileList(att) ;
+          } else {
+            uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.size-attachs-must-be-smaller-than-10M", null, ApplicationMessage.WARNING)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return ;
+          }
         }
         uiComposeForm.refreshUploadFileList() ;
       } 
