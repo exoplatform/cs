@@ -601,7 +601,6 @@
 	display: block;
 	white-space: nowrap;
 	overflow: hidden ;
-	width: 80%;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIGrid .IconTag {
@@ -617,12 +616,11 @@
 
 .UIMailPortlet .MailWorkingWorkspace .UIGrid .SubjectItem{
 	display: block; 
-	float: left; 
-	width: 90%;
 	overflow: hidden; 
 	white-space: nowrap; 
 	margin-right: 3px;
 	padding-left: 20px;
+	_float: left;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIGrid .ReadItem .IconTag {
