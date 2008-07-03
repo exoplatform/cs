@@ -236,14 +236,23 @@ public class UIMessageList extends UIForm {
   }
 
   public List<Message> getCheckedMessage() throws Exception {
-    List<Message> messageList = new ArrayList<Message>();
+    List<Message> checkedList = new ArrayList<Message>();
     for (Message msg : getMessageList()) {
       UIFormCheckBoxInput<Boolean> uiCheckbox = getChildById(msg.getId());
       if (uiCheckbox != null && uiCheckbox.isChecked()) {
-        messageList.add(msg);
+        checkedList.add(msg);
+        if (viewMode == MODE_CONVERSATION) {
+          Message childMsg ;
+          for (String childMsgId : msg.getGroupedMessageIds()) {
+            childMsg = messageList_.get(childMsgId);
+            if (childMsg != null && 
+               !childMsg.getFolders()[0].equals(Utils.createFolderId(accountId_, Utils.FD_SENT, false))) 
+              checkedList.add(childMsg) ;
+          }
+        }
       }
     }
-    return messageList;
+    return checkedList;
   }
 
   public List<Tag> getTags(Message msg) throws Exception {
