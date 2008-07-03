@@ -1555,10 +1555,6 @@
 .UIMailPortlet .UIContactsPopup .SelectFileFrame {
 	width: 300px;
 }
-
-.UIMailPortlet .SelectFileFrame {
-	width: 340px;
-}
 /******************************* UIAddNewContact ******************************/
 
 .UIMailPortlet .UIAddNewContact {
