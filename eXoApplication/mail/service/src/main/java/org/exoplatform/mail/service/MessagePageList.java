@@ -18,10 +18,8 @@ package org.exoplatform.mail.service;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -45,7 +43,6 @@ public class MessagePageList extends JCRPageList {
   private NodeIterator iter_ = null ;
   private boolean isQuery_ = false ;
   private String value_ ;
-  Map<String, Message> previousListPage ;
   private boolean hasStructure_ ;
   
   public MessagePageList(NodeIterator iter, long pageSize, String value, boolean isQuery , boolean hasStructure) throws Exception{
@@ -80,8 +77,6 @@ public class MessagePageList extends JCRPageList {
       position = (page-1) * pageSize ;
       iter_.skip(position) ;
     }
-    previousListPage = new HashMap<String, Message>() ;
-    if (currentListPage_ != null) previousListPage = currentListPage_;
     currentListPage_ = new LinkedHashMap<String, Message>() ;
     
     int i = 0 ;

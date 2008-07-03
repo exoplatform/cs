@@ -608,22 +608,24 @@ public class MailServiceImpl implements MailService {
           st = getSearchTerm(searchTerm, filter);
           fMessages = folder.search(st);
           List<String> fl;
+          boolean afterTime = false ;
           for (int k = 0; k < fMessages.length; k++) {
             if (msgMap.containsKey(fMessages[k])) {
               fl = msgMap.get(fMessages[k]);
               fl.add(filter.getId());
               if (lastCheckedDate == null) {
-                  msgMap.put(fMessages[k], fl);
-              } else if (!(isImap && !MimeMessageParser.getReceivedDate(fMessages[k]).getTime().after(lastCheckedDate))) {
-                  msgMap.put(fMessages[k], fl);
+                msgMap.put(fMessages[k], fl);
+              } else if (afterTime || !(isImap && !MimeMessageParser.getReceivedDate(fMessages[k]).getTime().after(lastCheckedDate))) {
+                afterTime = true ;
+                msgMap.put(fMessages[k], fl);
               }
             } else {
               fl = new ArrayList<String>();
               fl.add(filter.getId());
               if (lastCheckedDate == null) {
-                  msgMap.put(fMessages[k], fl);
-              } else if (!(isImap && !MimeMessageParser.getReceivedDate(fMessages[k]).getTime().after(lastCheckedDate))) {
-                  msgMap.put(fMessages[k], fl);
+                msgMap.put(fMessages[k], fl);
+              } else if (afterTime || !(isImap && !MimeMessageParser.getReceivedDate(fMessages[k]).getTime().after(lastCheckedDate))) {
+                msgMap.put(fMessages[k], fl);
               }
             }
           }

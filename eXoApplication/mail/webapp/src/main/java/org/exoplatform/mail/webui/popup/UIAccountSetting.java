@@ -117,6 +117,8 @@ public class UIAccountSetting extends UIFormTabPane {
     
     UIFormInputWithActions serverInputSet = new UIFormInputWithActions(TAB_SERVER_SETTINGS);
     UIFormSelectBox serverType = new UIFormSelectBox(FIELD_SERVER_TYPE, null, getServerTypeValues()) ;
+    serverType.setEditable(false);
+    serverType.setEnable(false);
     serverType.setOnChange("ChangeServerType");
     serverInputSet.addUIFormInput(serverType) ;
     
