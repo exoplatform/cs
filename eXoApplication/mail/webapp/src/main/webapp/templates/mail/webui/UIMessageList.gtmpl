@@ -477,10 +477,10 @@
                 <%}%>
               </td>
 
-              <td class="$readStatus" >
+              <td class="$readStatus"><div style="_width: 600%;">
               <% 
                 if (uicomponent.getMessageFilter().getName().equals("Search")) {
-                  print(" <div style=\"border-right:0px; white-space: nowrap; float: left;\">") ;
+                  print(" <div style=\"border-right:0px; float: left\">") ;
                   for (Folder folder : uicomponent.getFolders(msg))
                     if (folder != null) print(" [" + folder.getLabel() + "]&nbsp; ")
                   print("</div> ") ;
@@ -497,11 +497,11 @@
                     title += "[" + tag.getName() + "] ";
                   }
                 %>
-                  <a href="$actionLink" class="$colorCss SubjectItem" title="$title" style="float: left;" >
+                  <a href="$actionLink" class="$colorCss SubjectItem" title="$title" >
                 <%
                   } else {
                 %>
-                <a href="$actionLink" style="float: left;">
+                <a href="$actionLink" >
                 <%
                   }
                   if (!msg.isRootConversation() && uicomponent.viewMode == uicomponent.MODE_THREAD) {
@@ -518,6 +518,7 @@
                   <%=msg.getSubject()%></div>
                 </a>
                 <div style="clear: left;"><span></span></div>
+                </div>
               </td>                     
               <td class="text">
                 <% 
