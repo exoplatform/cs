@@ -851,12 +851,36 @@ public class JCRDataStorage {
       node.setProperty(Utils.EXO_ID, msgId);
       node.setProperty(Utils.EXO_ACCOUNT, accId);
       node.setProperty(Utils.EXO_FROM, Utils.decodeText(InternetAddress.toString(msg.getFrom())));
-      node.setProperty(Utils.EXO_TO, Utils.decodeText(InternetAddress.toString(msg
-          .getRecipients(javax.mail.Message.RecipientType.TO))));
-      node.setProperty(Utils.EXO_CC, Utils.decodeText(InternetAddress.toString(msg
-          .getRecipients(javax.mail.Message.RecipientType.CC))));
-      node.setProperty(Utils.EXO_BCC, Utils.decodeText(InternetAddress.toString(msg
-          .getRecipients(javax.mail.Message.RecipientType.BCC))));
+      String to = ""; 
+      try {
+        to = InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.TO));
+      } catch (Exception e) { 
+        String[] tos = msg.getHeader("To") ;
+        for (int i = 0 ; i < tos.length; i++) {
+          to += tos[i] + "," ; 
+        }
+      }
+      node.setProperty(Utils.EXO_TO, Utils.decodeText(to));
+      String cc = ""; 
+      try {
+        cc = InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.CC));
+      } catch (Exception e) { 
+        String[] ccs = msg.getHeader("Cc") ;
+        for (int i = 0 ; i < ccs.length; i++) {
+          cc += ccs[i] + "," ; 
+        }
+      }
+      node.setProperty(Utils.EXO_CC, Utils.decodeText(cc));
+      String bcc = ""; 
+      try {
+        bcc = InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.BCC));
+      } catch (Exception e) { 
+        String[] bccs = msg.getHeader("Cc") ;
+        for (int i = 0 ; i < bccs.length; i++) {
+          bcc += bccs[i] + "," ; 
+        }
+      }
+      node.setProperty(Utils.EXO_BCC, Utils.decodeText(bcc));
       node.setProperty(Utils.EXO_REPLYTO, Utils.decodeText(InternetAddress.toString(msg
           .getReplyTo())));
       node.setProperty(Utils.EXO_SUBJECT, Utils.decodeText(msg.getSubject()));
