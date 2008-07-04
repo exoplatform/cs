@@ -32,8 +32,10 @@ import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.webui.CalendarUtils;
 import org.exoplatform.mail.webui.SelectItem;
-import org.exoplatform.mail.webui.SelectItemOptionGroup;
+import org.exoplatform.mail.webui.SelectOption;
+import org.exoplatform.mail.webui.SelectOptionGroup;
 import org.exoplatform.mail.webui.Selector;
+import org.exoplatform.mail.webui.UIFormSelectBoxWithGroups;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
@@ -151,9 +153,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
   public void update(String calType, List<SelectItem> options) throws Exception{
     UIEventDetailTab uiEventDetailTab = getChildById(TAB_EVENTDETAIL) ;
     if(options != null) {
-      ((org.exoplatform.mail.webui.UIFormSelectBox)uiEventDetailTab.getChildById(UIEventDetailTab.FIELD_CALENDAR)).setOptions(options) ;
+      ((UIFormSelectBoxWithGroups)uiEventDetailTab.getChildById(UIEventDetailTab.FIELD_CALENDAR)).setOptions(options) ;
     }else {
-      ((org.exoplatform.mail.webui.UIFormSelectBox)uiEventDetailTab.getChildById(UIEventDetailTab.FIELD_CALENDAR)).setOptions(getCalendarOption()) ;
+      ((UIFormSelectBoxWithGroups)uiEventDetailTab.getChildById(UIEventDetailTab.FIELD_CALENDAR)).setOptions(getCalendarOption()) ;
     }
     calType_ = calType ;
   }
@@ -168,21 +170,21 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
      */
 
     // private calendars group
-    SelectItemOptionGroup privGrp = new SelectItemOptionGroup("private-calendars");
+    SelectOptionGroup privGrp = new SelectOptionGroup("private-calendars");
     List<org.exoplatform.calendar.service.Calendar> calendars = calendarService.getUserCalendars(SessionProviderFactory.createSessionProvider(), username, true) ;
     for(org.exoplatform.calendar.service.Calendar c : calendars) {
-      privGrp.addOption(new org.exoplatform.mail.webui.SelectItemOption<String>(c.getName(), CalendarUtils.PRIVATE_TYPE + CalendarUtils.COLON + c.getId())) ;
+      privGrp.addOption(new SelectOption(c.getName(), CalendarUtils.PRIVATE_TYPE + CalendarUtils.COLON + c.getId())) ;
     }
     options.add(privGrp);
     // shared calendars group
     GroupCalendarData gcd = calendarService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true);
     if(gcd != null) {
-      SelectItemOptionGroup sharedGrp = new SelectItemOptionGroup("shared-calendars");
+      SelectOptionGroup sharedGrp = new SelectOptionGroup("shared-calendars");
       for(org.exoplatform.calendar.service.Calendar c : gcd.getCalendars()) {
         if(CalendarUtils.canEdit(null, c.getEditPermission(), username)){
           String owner = "" ;
           if(c.getCalendarOwner() != null) owner = c.getCalendarOwner() + "- " ;
-          sharedGrp.addOption(new org.exoplatform.mail.webui.SelectItemOption<String>(owner + c.getName(), CalendarUtils.SHARED_TYPE + CalendarUtils.COLON + c.getId())) ;
+          sharedGrp.addOption(new SelectOption(owner + c.getName(), CalendarUtils.SHARED_TYPE + CalendarUtils.COLON + c.getId())) ;
         }
       }
       options.add(sharedGrp);
@@ -191,11 +193,11 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
     List<GroupCalendarData> lgcd = calendarService.getGroupCalendars(SessionProviderFactory.createSystemProvider(), CalendarUtils.getUserGroups(username), false, username) ;
     if(lgcd != null) {
       OrganizationService oService = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
-      SelectItemOptionGroup pubGrp = new SelectItemOptionGroup("public-calendars");
+      SelectOptionGroup pubGrp = new SelectOptionGroup("public-calendars");
       for(GroupCalendarData g : lgcd) {
         for(org.exoplatform.calendar.service.Calendar c : g.getCalendars()){
           if(CalendarUtils.canEdit(oService, c.getEditPermission(), username)){
-            pubGrp.addOption(new org.exoplatform.mail.webui.SelectItemOption<String>(c.getName(), CalendarUtils.PUBLIC_TYPE + CalendarUtils.COLON + c.getId())) ;
+            pubGrp.addOption(new SelectOption(c.getName(), CalendarUtils.PUBLIC_TYPE + CalendarUtils.COLON + c.getId())) ;
           }
         }
 
@@ -303,7 +305,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     //return eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CALENDAR).getValue() ;
     
-    String value = ((org.exoplatform.mail.webui.UIFormSelectBox)eventDetailTab.getChildById(UIEventDetailTab.FIELD_CALENDAR)).getValue() ;
+    String value = ((UIFormSelectBoxWithGroups)eventDetailTab.getChildById(UIEventDetailTab.FIELD_CALENDAR)).getValue() ;
     if (!CalendarUtils.isEmpty(value) && value.split(CalendarUtils.COLON).length>0) {
       calType_ = value.split(CalendarUtils.COLON)[0] ; 
       return value.split(CalendarUtils.COLON)[1] ;      
@@ -314,7 +316,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
   public void setSelectedCalendarId(String value) {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     value = calType_ + CalendarUtils.COLON + value ;
-    ((org.exoplatform.mail.webui.UIFormSelectBox)eventDetailTab.getChildById(UIEventDetailTab.FIELD_CALENDAR)).setValue(value) ;
+    ((UIFormSelectBoxWithGroups)eventDetailTab.getChildById(UIEventDetailTab.FIELD_CALENDAR)).setValue(value) ;
   }
 
   protected String getEventCategory() {
