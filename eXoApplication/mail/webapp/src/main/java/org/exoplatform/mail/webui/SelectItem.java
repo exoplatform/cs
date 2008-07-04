@@ -1,4 +1,4 @@
-package org.exoplatform.mail.webui ;
+package org.exoplatform.mail.webui;
 
 
 /**

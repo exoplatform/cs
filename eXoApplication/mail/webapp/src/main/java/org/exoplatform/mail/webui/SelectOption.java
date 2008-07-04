@@ -14,21 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.mail.webui ;
+package org.exoplatform.mail.webui;
+
 
 
 /**
  * Created by The eXo Platform SARL
- * Author : Tuan Nguyen
- *          tuan08@users.sourceforge.net
- * Jun 26, 2006
+ * Author : Philippe Aristote
+ *          philippe.aristote@gmail.com
  * 
  * An item in a UIFormInputItemSelector
  * Each item is actually held in a SelectItemCategory, which is held by the UIFormInputItemSelector
  * @see SelectItemCategory
  * @see org.exoplatform.webui.form.UIFormInputItemSelector
  */
-public class SelectItemOption <T extends Object> extends SelectItem {
+public class SelectOption extends SelectItem {
   /**
    * The label of the item
    */
@@ -36,7 +36,7 @@ public class SelectItemOption <T extends Object> extends SelectItem {
   /**
    * THe value of the item
    */
-  protected  T value_ ;
+  protected  String value_ ;
   /**
    * The icon url of the item
    */
@@ -54,11 +54,11 @@ public class SelectItemOption <T extends Object> extends SelectItem {
    */
   protected boolean disabled_ = false;
   
-  public SelectItemOption(String label, T value, String icon) {
+  public SelectOption(String label, String value, String icon) {
     this(label, value, "", icon);
   }
   
-  public SelectItemOption(String label, T value, String desc, String icon) {
+  public SelectOption(String label, String value, String desc, String icon) {
 	super(label);
     //label_ = label ;
     value_ = value ;
@@ -66,7 +66,7 @@ public class SelectItemOption <T extends Object> extends SelectItem {
     icon_ = icon ;
   }
   
-  public SelectItemOption(String label, T value, String desc, String icon, boolean selected) {
+  public SelectOption(String label, String value, String desc, String icon, boolean selected) {
     this(label, value, desc, icon);
     selected_ = selected;
   }
@@ -74,19 +74,19 @@ public class SelectItemOption <T extends Object> extends SelectItem {
   public boolean isDisabled() {return disabled_;}
   public void setDisabled(boolean disabled) {this.disabled_ = disabled;}
 
-  public SelectItemOption(String label, T value) {
+  public SelectOption(String label, String value) {
     this(label, value, "", null);
   }
   
-  public SelectItemOption(T value) {
+  public SelectOption(String value) {
     this(value.toString(), value, "", null);
   }
   
 //  public  String getLabel() {  return label_ ;}
 //  public void setLabel(String s) { label_ = s ; }
   
-  public T getValue() { return value_ ; }
-  public void   setValue(T s) { value_ =  s ; }
+  public String getValue() { return value_ ; }
+  public void   setValue(String s) { value_ =  s ; }
   
   public  String getDescription() { return description_ ; }
   public  void   setDescription(String s) { description_ = s ;}

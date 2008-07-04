@@ -33,7 +33,9 @@ import org.exoplatform.contact.service.impl.NewUserListener;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.webui.SelectItem;
-import org.exoplatform.mail.webui.SelectItemOptionGroup;
+import org.exoplatform.mail.webui.SelectOption;
+import org.exoplatform.mail.webui.SelectOptionGroup;
+import org.exoplatform.mail.webui.UIFormSelectBoxWithGroups;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.organization.OrganizationService;
@@ -86,7 +88,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   }
   public UIAddressForm() throws Exception {
     addUIFormInput(new UIFormStringInput(CONTACT_SEARCH, CONTACT_SEARCH, null)) ;
-    org.exoplatform.mail.webui.UIFormSelectBox uiSelect = new org.exoplatform.mail.webui.UIFormSelectBox(CONTACT_GROUP, CONTACT_GROUP, getOptions()) ;
+    UIFormSelectBoxWithGroups uiSelect = new UIFormSelectBoxWithGroups(CONTACT_GROUP, CONTACT_GROUP, getOptions()) ;
     uiSelect.setOnChange("ChangeGroup") ;
     addUIFormInput(uiSelect) ;
     uiPageList_ = new UIPageIterator() ;
@@ -104,19 +106,19 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     String username = MailUtils.getCurrentUser();
     ContactService contactSrv = getApplicationComponent(ContactService.class);
     List<SelectItem> options = new ArrayList<SelectItem>() ;
-    SelectItemOptionGroup personalContacts = new SelectItemOptionGroup("personal-contacts");
+    SelectOptionGroup personalContacts = new SelectOptionGroup("personal-contacts");
     for(ContactGroup pcg : contactSrv.getGroups(SessionProviderFactory.createSystemProvider(), username)) {
-      personalContacts.addOption(new org.exoplatform.mail.webui.SelectItemOption<String>(pcg.getName(), pcg.getId())) ;
+      personalContacts.addOption(new SelectOption(pcg.getName(), pcg.getId())) ;
     }
     options.add(personalContacts);
       
-    SelectItemOptionGroup sharedContacts = new SelectItemOptionGroup("shared-contacts");
+    SelectOptionGroup sharedContacts = new SelectOptionGroup("shared-contacts");
     for(SharedAddressBook scg : contactSrv.getSharedAddressBooks(SessionProviderFactory.createSystemProvider(), username)) {
-      sharedContacts.addOption(new org.exoplatform.mail.webui.SelectItemOption<String>(scg.getId(), scg.getName())) ;
+      sharedContacts.addOption(new SelectOption(scg.getId(), scg.getName())) ;
     }
     options.add(sharedContacts);
     
-    SelectItemOptionGroup publicContacts = new SelectItemOptionGroup("public-contacts");
+    SelectOptionGroup publicContacts = new SelectOptionGroup("public-contacts");
     OrganizationService organizationService = 
       (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
     Object[] objGroupIds = organizationService.getGroupHandler().findGroupsOfUser(username).toArray() ;
@@ -125,7 +127,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       groupIds.add(((GroupImpl)object).getId()) ;
     }
     for(String publicCg : groupIds) {
-      publicContacts.addOption(new org.exoplatform.mail.webui.SelectItemOption<String>(publicCg, publicCg)) ;
+      publicContacts.addOption(new SelectOption(publicCg, publicCg)) ;
     }
     
     options.add(publicContacts);
@@ -198,7 +200,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UIAddressForm> event) throws Exception {
       UIAddressForm uiAddressForm = event.getSource();  
       ContactService contactService = uiAddressForm.getApplicationComponent(ContactService.class) ;
-      String category = ((org.exoplatform.mail.webui.UIFormSelectBox)uiAddressForm.getChildById(UIAddressForm.CONTACT_GROUP)).getValue() ;
+      String category = ((UIFormSelectBoxWithGroups)uiAddressForm.getChildById(UIAddressForm.CONTACT_GROUP)).getValue() ;
       if(category.equals(NewUserListener.DEFAULTGROUP)) category = category + MailUtils.getCurrentUser() ;
       uiAddressForm.selectedAddressId_ = category ;
       ContactFilter filter = new ContactFilter() ;
@@ -209,7 +211,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         contactService.searchContact(SessionProviderFactory.createSystemProvider(), MailUtils.getCurrentUser(), filter) ;
       uiAddressForm.setContactList(resultPageList.getAll()) ;
       uiAddressForm.getUIStringInput(UIAddressForm.CONTACT_SEARCH).setValue(null) ;
-      ((org.exoplatform.mail.webui.UIFormSelectBox)uiAddressForm.getChildById(UIAddressForm.CONTACT_GROUP)).setValue(uiAddressForm.selectedAddressId_) ;
+      ((UIFormSelectBoxWithGroups)uiAddressForm.getChildById(UIAddressForm.CONTACT_GROUP)).setValue(uiAddressForm.selectedAddressId_) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressForm) ;
     }
   }
@@ -219,7 +221,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       UIAddressForm uiForm = event.getSource() ;  
       ContactService contactService = uiForm.getApplicationComponent(ContactService.class) ;
       String text = uiForm.getUIStringInput(UIAddressForm.CONTACT_SEARCH).getValue() ;
-      String category = ((org.exoplatform.mail.webui.UIFormSelectBox)uiForm.getChildById(UIAddressForm.CONTACT_GROUP)).getValue() ;
+      String category = ((UIFormSelectBoxWithGroups)uiForm.getChildById(UIAddressForm.CONTACT_GROUP)).getValue() ;
       if(category.equals(NewUserListener.DEFAULTGROUP)) category = category + MailUtils.getCurrentUser() ;
       uiForm.selectedAddressId_ = category ;
       try {
@@ -232,7 +234,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         DataPageList resultPageList = 
           contactService.searchContact(SessionProviderFactory.createSystemProvider(), event.getRequestContext().getRemoteUser(), filter) ;
         uiForm.setContactList(resultPageList.getAll()) ;
-        ((org.exoplatform.mail.webui.UIFormSelectBox)uiForm.getChildById(UIAddressForm.CONTACT_GROUP)).setValue(category) ;
+        ((UIFormSelectBoxWithGroups)uiForm.getChildById(UIAddressForm.CONTACT_GROUP)).setValue(category) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
       } catch (Exception e) {
         UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
