@@ -20,11 +20,14 @@ import javax.jcr.Node;
 import javax.jcr.Session;
 import javax.jcr.SimpleCredentials;
 
+import org.apache.commons.logging.Log;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer;
+import org.exoplatform.container.StandaloneContainer;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.LogService;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.test.BasicTestCase;
@@ -36,46 +39,33 @@ import org.exoplatform.test.BasicTestCase;
  *          hung.nguyen@exoplatform.com 					
  * july 3, 2007  
  */
-public class BaseMailTestCase extends BasicTestCase {
+public abstract class BaseMailTestCase extends BasicTestCase {
   
-  final protected static String NT_UNSTRUCTURED = "nt:unstructured".intern() ;
-  final protected static String NT_FOLDER = "nt:folder".intern() ;
-  final protected static String NT_FILE = "nt:file".intern() ;    
-  final protected static String ADMIN = "admin".intern() ;
-    
-  final protected static String DEFAULT_WS = "production".intern() ;
-  final protected static String MAIL_HOME = "mailHome".intern() ;
+  protected static Log          log = ExoLogger.getLogger("sample.services.test");  
+  protected RepositoryService   repositoryService;
+  protected StandaloneContainer container;
   
-  protected Node rootNode_;
-  protected Node mailHomeNode_;
-  protected Node systemNode_;
-  protected ManageableRepository repository_;
-  protected SimpleCredentials credentials_;
-  protected PortalContainer manager_;  
-  protected OrganizationService orgService_;  
-  protected Session session_ ;  
-  protected MailService mailService_ ;
+  protected final String REPO_NAME = "repository".intern();
+  protected final String SYSTEM_WS = "system".intern();
+  protected final String COLLABORATION_WS = "collaboration".intern();
+  protected Node root_ ;
   public void setUp() throws Exception{
-    
-    LogService logService = 
-      (LogService) RootContainer.getInstance().getComponentInstanceOfType(LogService.class); 
+    String containerConf = getClass().getResource("/conf/portal/test-configuration.xml").toString();
+    String loginConf = Thread.currentThread().getContextClassLoader().getResource("login.conf").toString();
 
-    logService.setLogLevel("org.exoplatform.services.jcr", LogService.DEBUG, true);     
+    StandaloneContainer.addConfigurationURL(containerConf);
+    container = StandaloneContainer.getInstance();
     
-    manager_ = PortalContainer.getInstance() ;
-    if(System.getProperty("java.security.auth.login.config") == null)
-      System.setProperty("java.security.auth.login.config", "src/main/login.conf" );
+    if (System.getProperty("java.security.auth.login.config") == null)
+      System.setProperty("java.security.auth.login.config", loginConf);
 
-    credentials_ = new SimpleCredentials("exo", "exo".toCharArray());
-
-    RepositoryService repositoryService = 
-      (RepositoryService) manager_.getComponentInstanceOfType(RepositoryService.class);
-        
-    repository_ = repositoryService.getDefaultRepository();
-    mailService_ = (MailService)manager_.getComponentInstanceOfType(MailService.class) ;
+    repositoryService = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
     
-    session_ = repository_.getSystemSession(DEFAULT_WS) ;   
-    rootNode_ = session_.getRootNode(); 
-    
+    // Initialize datas
+    Session session = repositoryService.getRepository(REPO_NAME).getSystemSession(COLLABORATION_WS);
+    root_ = session.getRootNode();    
+  }
+  public void tearDown() throws Exception {
+    //Remove datas    
   }
 }

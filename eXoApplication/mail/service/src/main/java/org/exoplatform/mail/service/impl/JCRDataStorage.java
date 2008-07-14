@@ -87,7 +87,8 @@ public class JCRDataStorage {
       mailNode = userApp.getNode(MAIL_SERVICE);
     } catch (PathNotFoundException e) {
       mailNode = userApp.addNode(MAIL_SERVICE, Utils.NT_UNSTRUCTURED);
-      userApp.save();
+      if(userApp.isNew()) userApp.getSession().save() ;
+      else userApp.save();
     }
     return mailNode;
   }

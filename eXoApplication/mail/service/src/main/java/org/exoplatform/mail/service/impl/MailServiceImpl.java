@@ -548,7 +548,6 @@ public class MailServiceImpl implements MailService {
           
         } catch (MessagingException e) {
           logger.warn("Exception while connecting to server : " + e.getMessage());
-          
           info.setStatusMsg("Connecting failed. Please check server configuration.");
           info.setStatusCode(CheckingInfo.CONNECTION_FAILURE);
           return messageList;
