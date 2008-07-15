@@ -12,7 +12,7 @@
           <container class="org.exoplatform.services.jcr.impl.storage.jdbc.JDBCWorkspaceDataContainer">
             <properties>
               <property name="sourceName" value="jdbcexo"/>
-              <property name="dialect" value="hsqldb"/>
+              <property name="dialect" value="${dialect}"/>
               <!-- property name="db-type" value="mysql"/ -->
               <property name="multi-db" value="false"/>
               <property name="update-storage" value="true"/>
@@ -38,7 +38,7 @@
          </cache>
          <query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
           <properties>
-            <property name="indexDir" value="../temp/jcrlucenedb/index"/>
+            <property name="indexDir" value="../temp/jcrlucenedb/system"/>
           </properties>
          </query-handler>
          <lock-manager>
@@ -56,7 +56,7 @@
           <container class="org.exoplatform.services.jcr.impl.storage.jdbc.JDBCWorkspaceDataContainer">
             <properties>
               <property name="sourceName" value="jdbcexo"/>
-              <property name="dialect" value="hsqldb"/>
+              <property name="dialect" value="${dialect}"/>
               <!-- property name="db-type" value="mysql"/ -->
               <property name="multi-db" value="false"/>
               <property name="update-storage" value="true"/>
@@ -82,7 +82,7 @@
          </cache>
          <query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
           <properties>
-            <property name="indexDir" value="../temp/jcrlucenedb/index"/>
+            <property name="indexDir" value="../temp/jcrlucenedb/collaboration"/>
           </properties>
          </query-handler>
          <lock-manager>
@@ -94,7 +94,7 @@
 			     </persister>
 			   </lock-manager>
        </workspace>
-     </workspaces>
+      </workspaces>
     </repository>
   </repositories>
 </repository-service>
