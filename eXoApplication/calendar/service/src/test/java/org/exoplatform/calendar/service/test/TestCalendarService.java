@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (C) 2003-2007 eXo Platform SAS.
  *
  * This program is free software; you can redistribute it and/or
@@ -13,55 +13,60 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
- **/
+ */
 package org.exoplatform.calendar.service.test;
 
-import java.io.ByteArrayInputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+
+import javax.jcr.PathNotFoundException;
 
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
-import org.exoplatform.calendar.service.CalendarEvent;
+import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.GroupCalendarData;
-import org.exoplatform.calendar.service.Reminder;
-import org.exoplatform.calendar.service.impl.ICalendarImportExport;
+import org.exoplatform.services.jcr.ext.app.SessionProviderService;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.organization.User;
+import org.exoplatform.services.organization.impl.UserImpl;
+
 
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen
  *          hung.nguyen@exoplatform.com
- * July 3, 2007  
+ * July 3, 2008  
  */
-public class TestCalendarService extends BaseCalendarTestCase{
 
-  public void testCalendarService() throws Exception {
-    assertNull(null) ;
+
+public class TestCalendarService extends BaseCalendarServiceTestCase{
+	private CalendarService calendarService_ ;
+	private SessionProvider sProvider_ ;
+  private final static String username = "root".intern() ;
+  
+	public void setUp() throws Exception {
+    super.setUp() ;
+    calendarService_ = (CalendarService) container.getComponentInstanceOfType(CalendarService.class) ;
+    SessionProviderService sessionProviderService = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class) ;
+    sProvider_ = sessionProviderService.getSystemSessionProvider(null) ;
   }
   
-  public void testCalendar() throws Exception {
-    assertNull(null) ;
-    
-    /*CalendarCategory calCategory = new CalendarCategory() ;
-    //calCategory.setId("categoryId") ;
+  public void testCalendarService() throws Exception { }
+  
+public void testCalendar() throws Exception {
+    CalendarCategory calCategory = new CalendarCategory() ;
     calCategory.setName("categoryName") ;
     calCategory.setDescription("Description") ;
-    //calCategory.setCalendars(new String [] {""}) ;
-    calendarService_.saveCalendarCategory("nqhung", calCategory, true) ;
-    
-    
+    calendarService_.saveCalendarCategory(sProvider_, "root", calCategory, true) ;
+
+    //create/get calendar in private folder
     Calendar cal = new Calendar() ;
-    //cal.setId("id") ;
     cal.setName("myCalendar") ;
     cal.setDescription("Desscription") ;
     cal.setCategoryId(calCategory.getId()) ;
-    cal.setPublic(true) ;
-    //create/get calendar in private folder
-    calendarService_.saveUserCalendar("nqhung", cal, true) ;
-    Calendar myCal = calendarService_.getUserCalendar("nqhung", cal.getId()) ;
+    cal.setPublic(true) ;    
+    calendarService_.saveUserCalendar(sProvider_, username, cal, true) ;
+    Calendar myCal = calendarService_.getUserCalendar(sProvider_,username, cal.getId()) ;
     assertNotNull(myCal) ;
     assertEquals(myCal.getName(), "myCalendar") ;
     
@@ -70,77 +75,77 @@ public class TestCalendarService extends BaseCalendarTestCase{
     cal.setGroups(new String[] {"users", "admin"}) ;
     cal.setViewPermission(new String [] {"member:/users", "member:/admin"}) ;
     cal.setEditPermission(new String [] {"admin"}) ;
-    calendarService_.saveGroupCalendar(cal, true) ;
-    myCal = calendarService_.getGroupCalendar(cal.getId()) ;
-    assertNotNull(myCal) ;
-    assertEquals(myCal.getName(), "myCalendar") ;
+    calendarService_.savePublicCalendar(sProvider_, cal, true, username) ;
+    Calendar publicCal = calendarService_.getGroupCalendar(sProvider_, cal.getId()) ;
+    assertNotNull(publicCal) ;
+    assertEquals(publicCal.getName(), "myCalendar") ;
     
     //get calendar in private folder by categoryID
-    List<Calendar> calendares = calendarService_.getUserCalendarsByCategory("nqhung", calCategory.getId()) ;
+    List<Calendar> calendares = calendarService_.getUserCalendarsByCategory(sProvider_, username, calCategory.getId()) ;
     assertNotNull(calendares);
     assertEquals(calendares.size(), 1) ;
     
     //get calendar in public folder by groupId
-    List<GroupCalendarData> groupCalendarList = calendarService_.getGroupCalendars(new String[] {"users"}) ;
+    List<GroupCalendarData> groupCalendarList = calendarService_.getGroupCalendars(sProvider_, new String[] {"users"}, true, username) ;
     assertNotNull(groupCalendarList);
     assertEquals(groupCalendarList.size(), 1) ;
     
-    groupCalendarList = calendarService_.getGroupCalendars(new String[] {"admin"});
+    groupCalendarList = calendarService_.getGroupCalendars(sProvider_, new String[] {"admin"}, true, username);
     assertNotNull(groupCalendarList);
     assertEquals(groupCalendarList.size(), 1) ;
     
-    groupCalendarList = calendarService_.getGroupCalendars(new String[] {"admin1"}) ;
+    groupCalendarList = calendarService_.getGroupCalendars(sProvider_, new String[] {"admin1"}, true, username) ;
     assertNotNull(groupCalendarList);
     assertEquals(groupCalendarList.size(), 0) ;
     
     //update public calendar 
     cal.setPublic(false) ;
     cal.setName("myCalendarUpdated") ;
-    calendarService_.saveGroupCalendar(cal, false) ;
-    myCal = calendarService_.getGroupCalendar(cal.getId()) ;
-    assertEquals(myCal.getName(),"myCalendarUpdated") ; 
+    calendarService_.savePublicCalendar(sProvider_, cal, false, username) ;
+    myCal = calendarService_.getGroupCalendar(sProvider_, cal.getId()) ;
+    assertEquals(myCal.getName(),"myCalendarUpdated") ;
     
     //remove public calendar
-    Calendar removeCal = calendarService_.removeGroupCalendar(cal.getId()) ;
+    Calendar removeCal = calendarService_.removePublicCalendar(sProvider_,cal.getId()) ;
     assertEquals(removeCal.getName(), "myCalendarUpdated") ;
     
     //remove private calendar
-    removeCal = calendarService_.removeUserCalendar("nqhung", cal.getId()) ;
+    removeCal = calendarService_.removeUserCalendar(sProvider_, username, cal.getId()) ;
     assertEquals(removeCal.getName(), "myCalendar") ;
     
     //remove private calendar category
-    assertNotNull(calendarService_.removeCalendarCategory("nqhung", calCategory.getId())) ;*/
+    assertNotNull(calendarService_.removeCalendarCategory(sProvider_, username, calCategory.getId())) ;
   }
   
-  /*public void testCalendarCategory() throws Exception {
+
+  public void testCalendarCategory() throws Exception {
     CalendarCategory calCategory = new CalendarCategory() ;
-    //calCategory.setId("categoryId") ;
     calCategory.setName("categoryName") ;
     calCategory.setDescription("Description") ;
     //calCategory.setCalendars(new String [] {"calendar1", "calendar2"}) ;
-    calendarService_.saveCalendarCategory("nqhung", calCategory, true) ;
-    List<GroupCalendarData> categories = calendarService_.getCalendarCategories("nqhung") ;
+    calendarService_.saveCalendarCategory(sProvider_, username, calCategory, true) ;
+    List<GroupCalendarData> categories = calendarService_.getCalendarCategories(sProvider_, username, true) ;
     assertEquals(categories.size(), 1) ;
     
     //get calendar category
-    calCategory = calendarService_.getCalendarCategory("nqhung", calCategory.getId()) ;
+    calCategory = calendarService_.getCalendarCategory(sProvider_, username, calCategory.getId()) ;
     assertEquals(calCategory.getName(), "categoryName") ;
     
     // update calendar category
     calCategory.setName("categoryNameUpdated") ;
-    calendarService_.saveCalendarCategory("nqhung", calCategory, false) ;
+    calendarService_.saveCalendarCategory(sProvider_, username, calCategory, false) ;
     
     //remove calendar category
-    CalendarCategory removeCate = calendarService_.removeCalendarCategory("nqhung", calCategory.getId()) ;
+    CalendarCategory removeCate = calendarService_.removeCalendarCategory(sProvider_, username, calCategory.getId()) ;
     assertEquals(removeCate.getName(), "categoryNameUpdated") ;
   }
-  
+
   public void testEventCategory() throws Exception {
     CalendarCategory calCategory = new CalendarCategory() ;
     calCategory.setName("categoryName") ;
     calCategory.setDescription("Description") ;
     //calCategory.setCalendars(new String [] {""}) ;
-    calendarService_.saveCalendarCategory("nqhung", calCategory, true) ;
+    calendarService_.saveCalendarCategory(sProvider_, username, calCategory, true) ;
     
     Calendar cal = new Calendar() ;
     cal.setName("myCalendar") ;
@@ -148,107 +153,29 @@ public class TestCalendarService extends BaseCalendarTestCase{
     cal.setCategoryId(calCategory.getId()) ;
     cal.setPublic(true) ;
     //create/get calendar in private folder
-    calendarService_.saveUserCalendar("nqhung", cal, true) ;
-    Calendar myCal = calendarService_.getUserCalendar("nqhung", cal.getId()) ;
+    calendarService_.saveUserCalendar(sProvider_, username, cal, true) ;
+    Calendar myCal = calendarService_.getUserCalendar(sProvider_, username, cal.getId()) ;
     assertNotNull(myCal) ;
     assertEquals(myCal.getName(), "myCalendar") ;
     
     EventCategory eventCategory = new EventCategory() ;
-    eventCategory.setName("eventCategoryName") ;
+    String name = "eventCategoryName" ;
+    eventCategory.setName(name) ;
     eventCategory.setDescription("description") ;
-    calendarService_.saveEventCategory("nqhung", eventCategory, null, true) ;
+    calendarService_.saveEventCategory(sProvider_, username, eventCategory, null, true) ;
+    assertNotNull(calendarService_.getEventCategory(sProvider_, username, name.toLowerCase())) ;
     
     //update Event category
-    eventCategory.setDescription("eventCategoryNameUpdated") ;
-    calendarService_.saveEventCategory("nqhung", eventCategory, null, false) ;
+    calendarService_.saveEventCategory(sProvider_, username, eventCategory
+        , new String[] { name, "descriptionUpdate"}, false) ;
+    String des = calendarService_.getEventCategory(sProvider_, username, name.toLowerCase()).getDescription() ;
+    assertEquals(des, "descriptionUpdate") ;
     
     //remove Event category
-     calendarService_.removeEventCategory("nqhung", eventCategory.getName()) ;
-    //assertNotNull(eventCat) ;
-   // assertEquals(eventCat.getDescription(), "eventCategoryNameUpdated") ;
-    
-    calendarService_.removeUserCalendar("nqhung", cal.getId()) ;
-    calendarService_.removeCalendarCategory("nqhung", calCategory.getId()) ;
+    calendarService_.removeEventCategory(sProvider_, username, eventCategory.getName()) ;
+
+    assertNotNull(calendarService_.removeUserCalendar(sProvider_, username, cal.getId())) ;
+    assertNotNull(calendarService_.removeCalendarCategory(sProvider_, username, calCategory.getId())) ;
   }
-  
-  public void testCalendarEvent() throws Exception {
-    CalendarCategory calCategory = new CalendarCategory() ;
-    //calCategory.setId("categoryId") ;
-    calCategory.setName("categoryName") ;
-    calCategory.setDescription("Description") ;
-    //calCategory.setCalendars(new String [] {""}) ;
-    calendarService_.saveCalendarCategory("nqhung", calCategory, true) ;
-    
-    Calendar cal = new Calendar() ;
-    //cal.setId("calendarId") ;
-    cal.setName("myCalendar") ;
-    cal.setDescription("Desscription") ;
-    cal.setCategoryId(calCategory.getId()) ;
-    cal.setPublic(true) ;
-    calendarService_.saveUserCalendar("nqhung", cal, true) ;
-    
-    EventCategory eventCategory = new EventCategory() ;
-    //eventCategory.setId("eventCategoryId") ;
-    eventCategory.setName("eventCategoryName") ;
-    eventCategory.setDescription("description") ;
-    calendarService_.saveEventCategory("nqhung", eventCategory, null, true) ;
-    
-    CalendarEvent event = new CalendarEvent() ;
-    //event.setId("eventId") ;
-    event.setCalendarId(cal.getId()) ;
-    event.setEventCategoryId(eventCategory.getName()) ;
-    event.setDescription("description") ;
-    event.setSummary("myEvent") ;
-    event.setEventState("free") ;
-    event.setEventType("event") ;
-    event.setFromDateTime(new Date()) ;
-    event.setToDateTime(new Date()) ;
-    event.setInvitation(new String [] {"nqhung@yahoo.com", "dvminh@yahoo.com", "ptuan@yahoo.com"}) ;
-    event.setLocation("meeting room") ;
-    event.setPriority("1") ;
-    event.setPrivate(true) ;
-    
-    Reminder reminder = new Reminder() ;
-    //reminder.setId("reminderId") ;
-    reminder.setEventId("eventId") ;
-    reminder.setAlarmBefore(5) ;
-    reminder.setReminderType("via mail") ;
-    reminder.setRepeatInterval(2) ;
-    List<Reminder> reminders = new ArrayList<Reminder>() ;
-    reminders.add(reminder) ;
-    
-    event.setReminders(reminders) ;
-    
-    calendarService_.saveUserEvent("nqhung", cal.getId(), event, true) ;
-    CalendarEvent ev = calendarService_.getUserEvent("nqhung", cal.getId(), event.getId()) ;
-    assertNotNull(ev) ;
-    
-    //update event
-    event.setSummary("myEventUpdated") ;
-    event.setStatus("TENTATIVE") ;
-    calendarService_.saveUserEvent("nqhung", cal.getId(), event, false) ;
-    ev = calendarService_.getUserEvent("nqhung", cal.getId(), event.getId()) ;
-    assertEquals(event.getSummary(), "myEventUpdated") ;
-    
-    //get event list
-    List<String> calendarIds = new ArrayList<String>() ;
-    calendarIds.add(cal.getId()) ;
-    List<CalendarEvent> events = calendarService_.getUserEventByCalendar("nqhung", calendarIds) ;
-    assertEquals(events.size(), 1) ;
-    
-    //export/import ical
-    ICalendarImportExport importExport = (ICalendarImportExport)calendarService_.getCalendarImportExports("ICalendar");
-    OutputStream ical = importExport.exportCalendar("nqhung", calendarIds, "0") ;
-    System.out.println("\n\n\n" + ical.toString()) ;
-    ByteArrayInputStream icalInputStream = new ByteArrayInputStream(ical.toString().getBytes()) ;
-    importExport.importCalendar("nqhung", icalInputStream, "importClanedar") ;
-    List<GroupCalendarData> cateList = calendarService_.getCalendarCategories("nqhung") ;
-    assertEquals(cateList.size(), 2) ;
-    List<Calendar> calList = calendarService_.getUserCalendars("nqhung") ;
-    assertEquals(calList.size(), 2) ;
-    //remove event
-    ev = calendarService_.removeUserEvent("nqhung", cal.getId(), event.getId()) ;
-    assertNotNull(ev);     
-    
-  }*/
+
 }

@@ -81,6 +81,8 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
   public void setValues(String groupId, boolean isShared) throws Exception {
     ContactService contactService = ContactUtils.getContactService();
     String username = ContactUtils.getCurrentUser() ;
+    
+    // delete this var ;
     SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
     ContactGroup contactGroup ;
     if (isShared) {
@@ -121,6 +123,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
       ContactService contactService = ContactUtils.getContactService() ;
       String username = ContactUtils.getCurrentUser() ;
       
+      // dont need set some properties if edit group ;
       ContactGroup group = new ContactGroup() ;
       if (!uiCategoryForm.isNew_) {
         ContactGroup oldGroup = contactService.getGroup(
