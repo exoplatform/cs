@@ -29,10 +29,11 @@
   rcontext.getJavascriptManager().importJavascript('eXo.calendar.UIWeekView','/calendar/javascript/') ;
   int defaultTimeInterval = uicomponent.getDefaultTimeInterval() ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.getWorkingdays('+numberOfDays+') ;') ;
-  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarMan.initWeek() ;') ;
-  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UIWeekView.init() ;') ;
-  rcontext.getJavascriptManager().addOnLoadJavascript('eXo.calendar.UICalendarPortlet.onLoad') ;
-  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkFilter() ;') ;
+//  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarMan.initWeek() ;') ;
+//  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UIWeekView.init() ;') ;
+//  rcontext.getJavascriptManager().addOnLoadJavascript('eXo.calendar.UICalendarPortlet.onLoad') ;
+//  rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkFilter() ;') ;
+	rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.onLoad() ;') ;
 	rcontext.getJavascriptManager().addOnResizeJavascript('eXo.calendar.UIWeekView.onResize') ;
  	monthViewAction = uicomponent.TYPE_MONTH +"&currentTime="+ uicomponent.getCurrentCalendar().getTimeInMillis();
 	yearViewAction = uicomponent.TYPE_YEAR +"&currentTime="+ uicomponent.getCurrentCalendar().getTimeInMillis();

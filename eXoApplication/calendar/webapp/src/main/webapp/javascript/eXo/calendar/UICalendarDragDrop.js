@@ -1,6 +1,3 @@
-/**
- * @author uocnb
- */
 
 // Create new method for special context
 DragDrop.prototype.findDropableTarget4Cal = function(dndEvent, dropableTargets, mouseEvent) {
@@ -35,6 +32,10 @@ DragDrop.prototype.findDropableTarget4Cal = function(dndEvent, dropableTargets, 
   return foundTarget ;
 } ;
 
+/**
+ * @author uocnb
+ * @constructor
+ */
 function UICalendarDragDrop() {
   this.scKey = 'background' ;
   this.scValue = '#c0c0c0' ;
