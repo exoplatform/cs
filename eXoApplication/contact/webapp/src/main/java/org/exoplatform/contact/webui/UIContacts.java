@@ -199,11 +199,13 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       return true ;
     }
     String[] editPerGroups = contact.getEditPermissionGroups() ;
-    if (editPerGroups != null)
+    if (editPerGroups != null) {
+      List<String> userGroups = ContactUtils.getUserGroups() ;
       for (String editPer : editPerGroups)
-        if (ContactUtils.getUserGroups().contains(editPer)) {
+        if (userGroups.contains(editPer)) {
           return true ;
-        }    
+        }      
+    }
     Map<String, SharedAddressBook> sharedGroupMap = getAncestorOfType(UIWorkingContainer.class)
         .findFirstComponentOfType(UIAddressBooks.class).getSharedGroups() ;
     for (String address : contact.getAddressBook()) {
