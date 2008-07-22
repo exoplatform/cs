@@ -1545,6 +1545,7 @@ public class JCRDataStorage {
       } else {
         if(contactNode.hasProperty("exo:tags")){
           Value[] values = contactNode.getProperty("exo:tags").getValues() ;
+          if (values == null || values.length == 0) continue ;
           List<String> tagList = new ArrayList<String>() ;
           for(Value value : values) { tagList.add(value.getString()) ; }
           for(String tag : tags) {
