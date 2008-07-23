@@ -56,10 +56,10 @@ public class ContactServiceImpl implements ContactService {
     return storage_.getAllContact(sProvider, username);
   }
   
-  public Contact getPersonalContact(String userId) throws Exception {
+ /* public Contact getPersonalContact(String userId) throws Exception {
     return storage_.getPersonalContact(userId) ;
   }
-  
+  */
   public Map<String, String> searchEmails(SessionProvider sysProvider, String username, ContactFilter filter)throws Exception {
     return storage_.searchEmails(sysProvider, username, filter) ;
   }
@@ -177,10 +177,10 @@ public class ContactServiceImpl implements ContactService {
   public List<GroupContactData> getPublicContacts(SessionProvider sProvider, String[] groupIds) throws Exception {
     return storage_.getPublicContacts(sProvider, groupIds);
   }
-  
+/*  
   public List<String> getPublicAddressBookContacts(SessionProvider sProvider, String[] groupIds) throws Exception{
     return storage_.getPublicAddressBookContacts(sProvider, groupIds);
-  }
+  }*/
 /*  public Contact removePublicContact(SessionProvider sProvider, String contactId) throws Exception {
     return storage_.removePublicContact(sProvider, contactId);
   }*/
