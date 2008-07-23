@@ -25,7 +25,6 @@ import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -60,7 +59,6 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
   private String groupId_ ;
   public static final String FIELD_CATEGORYNAME_INPUT = "categoryName";
   public static final String FIELD_DESCRIPTION_INPUT = "description";
-  public String editedAddName = null ;
   
   public UICategoryForm() throws Exception {
     addUIFormInput(new UIFormStringInput(FIELD_CATEGORYNAME_INPUT, FIELD_CATEGORYNAME_INPUT, null).addValidator(MandatoryValidator.class));    
@@ -81,20 +79,16 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
   public void setValues(String groupId, boolean isShared) throws Exception {
     ContactService contactService = ContactUtils.getContactService();
     String username = ContactUtils.getCurrentUser() ;
-    
-    // delete this var ;
-    SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
-    ContactGroup contactGroup ;
+    ContactGroup contactGroup = null ;
     if (isShared) {
       contactGroup = contactService.getSharedGroup(username, groupId) ;
     } else {
-      contactGroup = contactService.getGroup(sessionProvider, username, groupId) ;       
+      contactGroup = contactService.getGroup(SessionProviderFactory.createSessionProvider(), username, groupId) ;       
     }  
     if (contactGroup != null) {
       groupId_ = groupId ;
       getUIStringInput(FIELD_CATEGORYNAME_INPUT).setValue(contactGroup.getName()) ;
       getUIFormTextAreaInput(FIELD_DESCRIPTION_INPUT).setValue(contactGroup.getDescription()) ;
-      editedAddName = contactGroup.getName() ;
     }
   }
   
@@ -103,45 +97,34 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
       UICategoryForm uiCategoryForm = event.getSource() ;
       String  groupName = uiCategoryForm.getUIStringInput(FIELD_CATEGORYNAME_INPUT).getValue(); 
       UIApplication uiApp = uiCategoryForm.getAncestorOfType(UIApplication.class) ;
-      /*if (ContactUtils.isEmpty(groupName)) {
-        uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.categoryName-required", null,
-          ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ; 
-      }*/
+    
+      ContactService contactService = ContactUtils.getContactService() ;
+      String username = ContactUtils.getCurrentUser() ;
+      ContactGroup group = null ;
+      if (uiCategoryForm.isNew_) group = new ContactGroup() ;
+      else {
+        group = contactService.getGroup(
+            SessionProviderFactory.createSessionProvider(), username,uiCategoryForm.groupId_) ;
+        if (group == null)
+          group = contactService.getSharedGroup(username, uiCategoryForm.groupId_) ;
+        if (group == null) {
+          uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.category-deleted", null,
+              ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ; 
+        }
+      }      
       UIContactPortlet uiContactPortlet = uiCategoryForm.getAncestorOfType(UIContactPortlet.class) ;
       UIAddressBooks uiAddressBook = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
       if (uiAddressBook.getPrivateGroupMap().values().contains(groupName)) {
-        if (uiCategoryForm.isNew_ || (!uiCategoryForm.isNew_  && uiCategoryForm.editedAddName != null 
-            && !groupName.equals(uiCategoryForm.editedAddName))) {
+        if (uiCategoryForm.isNew_ || (!uiCategoryForm.isNew_ && !groupName.equals(group.getName()))) {
           uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.existed-categoryName", null,
               ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ; 
         }
       }    
-      ContactService contactService = ContactUtils.getContactService() ;
-      String username = ContactUtils.getCurrentUser() ;
       
-      // dont need set some properties if edit group ;
-      ContactGroup group = new ContactGroup() ;
-      if (!uiCategoryForm.isNew_) {
-        ContactGroup oldGroup = contactService.getGroup(
-            SessionProviderFactory.createSessionProvider(), username,uiCategoryForm.groupId_) ;
-        if (oldGroup == null)
-          oldGroup = contactService.getSharedGroup(username, uiCategoryForm.groupId_) ;
-        if (oldGroup == null) {
-          uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.category-deleted", null,
-              ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ; 
-        }
-        group.setEditPermissionGroups(oldGroup.getEditPermissionGroups()) ;
-        group.setEditPermissionUsers(oldGroup.getEditPermissionUsers()) ;
-        group.setViewPermissionGroups(oldGroup.getViewPermissionGroups()) ;
-        group.setViewPermissionUsers(oldGroup.getViewPermissionUsers()) ;
-        group.setId(uiCategoryForm.groupId_) ;
-      }
       group.setName(groupName) ;
       group.setDescription(uiCategoryForm.getUIFormTextAreaInput(FIELD_DESCRIPTION_INPUT).getValue()) ;
       contactService.saveGroup(
