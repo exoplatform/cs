@@ -21,6 +21,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 import javax.jcr.PathNotFoundException;
 
@@ -38,6 +39,7 @@ import org.exoplatform.contact.webui.UITags;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -65,7 +67,6 @@ import org.exoplatform.webui.form.UIFormStringInput;
 )
 public class UITagForm extends UIForm implements UIPopupComponent {
   public static final String FIELD_TAGNAME_INPUT = "tagName";
-  public static final String NO_TAG_INFO = "no Tag";
   public static final String FIELD_COLOR= "color";
   
   Map<String, String> tags = new LinkedHashMap<String, String>() ;
@@ -103,7 +104,15 @@ public class UITagForm extends UIForm implements UIPopupComponent {
             }
           }
         }
-        if (ContactUtils.isEmpty(buffer.toString())) buffer.append(NO_TAG_INFO) ;
+        if (ContactUtils.isEmpty(buffer.toString())) {
+          WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+          ResourceBundle res = context.getApplicationResourceBundle() ;
+          try {
+            buffer.append(res.getString("UITagForm.label.noTag")) ;
+          } catch (MissingResourceException e) {      
+            e.printStackTrace() ;
+          }
+        }
         contactNames[i] = contact.getFullName() ;
         tagNames[i] = buffer.toString() ;
         i ++ ;
