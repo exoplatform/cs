@@ -30,6 +30,7 @@ UIWeekView.prototype.init = function() {
 		if(allEvents[i].style.display != "none") this.items.push(allEvents[i]) ;
 	}
 	var len = UIWeekView.items.length ;
+	if(len <= 0) return ;
 	var marker = null ;
 	for(var i = 0 ; i < len ; i ++){		
 		var height = parseInt(this.items[i].getAttribute("endtime")) - parseInt(this.items[i].getAttribute("starttime")) ;
@@ -54,7 +55,6 @@ UIWeekView.prototype.init = function() {
 	var EventWeekContent = DOMUtil.findAncestorByClass(this.container,"EventWeekContent") ;
 	EventWeekContent.scrollTop = (UICalendarPortlet.workingStart) ? UICalendarPortlet.workingStart : 0 ;
 	UICalendarPortlet.setFocus(this.container, this.items, EventWeekContent) ;
-//	window.clearTimeout(this.onloadTimeout) ;
 } ;
 
 UIWeekView.prototype.distributeEvent = function() {
@@ -79,10 +79,11 @@ UIWeekView.prototype.onResize = function() {
 
 UIWeekView.prototype.setSize = function() {
 	var UIWeekView = eXo.calendar.UIWeekView ;
+	if(!UIWeekView.cols) return ;
 	var len = UIWeekView.cols.length ;
 	for(var i = 1 ; i < len ; i ++) {
 		UIWeekView.showInCol(UIWeekView.cols[i]) ;
-	}
+	}	
 } ;
 
 UIWeekView.prototype.adjustWidth = function(el) {
