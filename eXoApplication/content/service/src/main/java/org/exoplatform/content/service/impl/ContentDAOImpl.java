@@ -54,7 +54,8 @@ public class ContentDAOImpl extends BaseContentService implements ContentDAO {
   private Node createNode(Node parent, String name) throws Exception {
     if(parent.hasNode(name)) return parent.getNode(name) ;
     Node node = parent.addNode(name) ;
-    parent.save() ;
+    if(parent.isNew()) parent.getSession().save() ;
+    else parent.save() ;
     return node ;
   }
   
