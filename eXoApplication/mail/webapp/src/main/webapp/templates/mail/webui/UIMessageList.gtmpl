@@ -591,7 +591,7 @@
       <% 
         } else {
       %>
-          <tbody><tr><td colspan="10">
+          <tbody><tr><td colspan="9">
             <div class="MessageNotice">
             <%=_ctx.appRes(uicomponent.id+ ".label.there-are-no-messages") %>
           </div>
