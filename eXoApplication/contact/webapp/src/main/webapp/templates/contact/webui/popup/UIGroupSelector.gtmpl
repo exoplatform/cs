@@ -36,9 +36,7 @@
 		       	}      
 	      %>
 			      <div class="$rowCssClass">
-			        <div class="ItemIcon"><span></span></div>
-			        	<a href="<%=uicomponent.event('SelectMembership',key)%>">$user</a>	
-			        	<div style="clear: left"><span></span></div>								           
+			        	<a class="ItemIcon" href="<%=uicomponent.event('SelectMembership',key)%>">$user</a>	
 			      </div>
 	      <%}
 	      } else if (uicomponent.isSelectGroup()){
@@ -49,9 +47,7 @@
 			      key = "/" + user ;    
 	      %>
 			      <div class="$rowCssClass">
-			        <div class="ItemIcon"><span></span></div>
-			        	<a href="<%=uicomponent.event('SelectMembership',key)%>">$user</a>	
-			        	<div style="clear: left"><span></span></div>								           
+			        	<a class="ItemIcon" href="<%=uicomponent.event('SelectMembership',key)%>">$user</a>	
 			      </div>
 	      <%}		
 	      
