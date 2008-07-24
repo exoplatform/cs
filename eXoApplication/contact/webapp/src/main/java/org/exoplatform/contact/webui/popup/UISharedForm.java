@@ -186,16 +186,11 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
       if(!ContactUtils.isEmpty(names)) {        
         try {
-          if (names.indexOf(",") > 0) {
-            String[] array = names.split(",") ;
-            for(String name : array) {
-              organizationService.getUserHandler().findUserByName(name.trim()).getFullName();
-              if (!name.trim().equals(username)) receiveUsers.put(name.trim() + JCRDataStorage.HYPHEN, name.trim() + JCRDataStorage.HYPHEN) ;
-            }
-          } else {
-            organizationService.getUserHandler().findUserByName(names.trim()).getFullName();
-            if (!names.trim().equals(username)) receiveUsers.put(names.trim() + JCRDataStorage.HYPHEN, names.trim() + JCRDataStorage.HYPHEN) ;
-          }
+          String[] array = names.split(",") ;
+          for(String name : array) {
+            organizationService.getUserHandler().findUserByName(name.trim()).getFullName();
+            if (!name.trim().equals(username)) receiveUsers.put(name.trim() + JCRDataStorage.HYPHEN, name.trim() + JCRDataStorage.HYPHEN) ;
+          }  
         } catch (NullPointerException e) {
           uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.not-exist-username", null,
               ApplicationMessage.WARNING)) ;
