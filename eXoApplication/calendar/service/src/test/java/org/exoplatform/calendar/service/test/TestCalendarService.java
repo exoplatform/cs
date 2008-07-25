@@ -16,15 +16,22 @@
  */
 package org.exoplatform.calendar.service.test;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.jcr.PathNotFoundException;
 
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
+import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.GroupCalendarData;
+import org.exoplatform.calendar.service.impl.CalendarServiceImpl;
 import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.User;
@@ -69,6 +76,28 @@ public void testCalendar() throws Exception {
     Calendar myCal = calendarService_.getUserCalendar(sProvider_,username, cal.getId()) ;
     assertNotNull(myCal) ;
     assertEquals(myCal.getName(), "myCalendar") ;
+    
+    // shared calendar, get shared calendars 
+    List<String> receiverUser = new ArrayList<String>() ;
+    receiverUser.add("sharedUser") ;
+    calendarService_.shareCalendar(sProvider_, username, cal.getId(), receiverUser) ;
+    Calendar calendar = calendarService_.getSharedCalendars(sProvider_, "sharedUser", true).getCalendarById(cal.getId()) ;
+    assertEquals("myCalendar", calendar.getName()) ;
+    
+    CalendarEvent calendarEvent = new CalendarEvent() ;
+    calendarEvent.setCalendarId(cal.getId()) ;
+    calendarEvent.setSummary("calendarEvent") ;
+    calendarEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
+    calendarEvent.setFromDateTime(new Date()) ;
+    calendarEvent.setToDateTime(new Date()) ;
+    calendarService_.saveEventToSharedCalendar(sProvider_, "sharedUser", cal.getId(), calendarEvent, true) ;
+    List<String> calendarIds = new ArrayList<String>() ;
+    calendarIds.add(cal.getId()) ;
+    
+    CalendarEvent event = calendarService_.getUserEventByCalendar(sProvider_, username, calendarIds).get(0) ;
+    assertEquals("calendarEvent", event.getSummary()) ;
+    calendarService_.removeSharedCalendar(sProvider_, "sharedUser", cal.getId()) ;
+    assertNull(calendarService_.getSharedCalendars(sProvider_, "sharedUser", true)) ;
     
     //create/get calendar in public folder
     cal.setPublic(false) ;
@@ -157,13 +186,40 @@ public void testCalendar() throws Exception {
     Calendar myCal = calendarService_.getUserCalendar(sProvider_, username, cal.getId()) ;
     assertNotNull(myCal) ;
     assertEquals(myCal.getName(), "myCalendar") ;
-    
+
     EventCategory eventCategory = new EventCategory() ;
     String name = "eventCategoryName" ;
     eventCategory.setName(name) ;
     eventCategory.setDescription("description") ;
     calendarService_.saveEventCategory(sProvider_, username, eventCategory, null, true) ;
     assertNotNull(calendarService_.getEventCategory(sProvider_, username, name.toLowerCase())) ;
+
+    // import, export calendar
+    CalendarEvent calendarEvent = new CalendarEvent() ;
+    calendarEvent.setCalendarId(cal.getId()) ;
+    calendarEvent.setSummary("sum") ;
+    calendarEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
+    calendarEvent.setFromDateTime(new Date()) ;
+    calendarEvent.setToDateTime(new Date()) ;
+    calendarService_.saveUserEvent(sProvider_, username, cal.getId(), calendarEvent, true) ;
+    
+    List<String> calendarIds = new ArrayList<String>() ;
+    calendarIds.add(cal.getId()) ;
+    OutputStream out = calendarService_.getCalendarImportExports(
+        CalendarServiceImpl.ICALENDAR).exportCalendar(sProvider_, username, calendarIds, "0") ;
+    ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
+    
+    assertNotNull(calendarService_.removeUserEvent(sProvider_, username, cal.getId(), calendarEvent.getId())) ;
+    assertEquals(0, calendarService_.getUserEventByCalendar(sProvider_, username, calendarIds).size()) ;
+    assertNotNull(calendarService_.removeUserCalendar(sProvider_, username, cal.getId())) ;
+    
+    calendarService_.getCalendarImportExports(CalendarServiceImpl.ICALENDAR)
+     .importCalendar(sProvider_, username, is, "importedCalendar") ;
+    List<Calendar> cals = calendarService_.getUserCalendars(sProvider_, username, true) ;
+    List<String> newCalendarIds = new ArrayList<String>() ;
+    for (Calendar calendar : cals) newCalendarIds.add(calendar.getId()) ;
+    List<CalendarEvent> events = calendarService_.getUserEventByCalendar(sProvider_, username, newCalendarIds) ;
+    assertEquals(events.get(0).getSummary(), "sum") ;
     
     //update Event category
     calendarService_.saveEventCategory(sProvider_, username, eventCategory
@@ -174,8 +230,8 @@ public void testCalendar() throws Exception {
     //remove Event category
     calendarService_.removeEventCategory(sProvider_, username, eventCategory.getName()) ;
 
-    assertNotNull(calendarService_.removeUserCalendar(sProvider_, username, cal.getId())) ;
+    assertNotNull(calendarService_.removeUserCalendar(sProvider_, username, newCalendarIds.get(0))) ;
     assertNotNull(calendarService_.removeCalendarCategory(sProvider_, username, calCategory.getId())) ;
   }
-
+  
 }
