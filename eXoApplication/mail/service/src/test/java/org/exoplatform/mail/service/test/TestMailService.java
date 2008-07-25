@@ -17,6 +17,8 @@
 package org.exoplatform.mail.service.test;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.exoplatform.mail.service.Account;
@@ -27,12 +29,6 @@ import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.organization.OrganizationService;
-import org.exoplatform.services.organization.impl.mock.DummyOrganizationService;
-
-import com.sun.corba.se.impl.javax.rmi.CORBA.Util;
-
-import sun.util.calendar.CalendarSystem;
 
 
 /**
@@ -45,7 +41,8 @@ public class TestMailService extends BaseMailTestCase{
   private MailService mailService_ ;
   private SessionProvider sProvider ;
   private  String username = "root" ;
-
+  public static final String TEXT_PLAIN =  "text/plain".intern() ;
+  public static final String TEXT_HTML =  "text/html".intern() ;
 
   public void setUp() throws Exception {
     super.setUp() ;
@@ -57,9 +54,51 @@ public class TestMailService extends BaseMailTestCase{
     assertNotNull(mailService_) ;
     assertNotNull(sProvider) ;
   }
-
+  public Account createAccountObj(String protocol) {
+    Account account = new Account() ;
+    Folder folder = new Folder() ;
+    folder.setName("inbox") ;
+    folder.setPersonalFolder(false) ;
+    List<Folder> folders = new ArrayList<Folder>() ;
+    folders.add(folder) ;
+    account.setCheckedAuto(false) ;
+    account.setDefaultFolder(folders) ;
+    account.setEmptyTrashWhenExit(false) ;
+    account.setIncomingFolder("inbox") ;
+    account.setProtocol(protocol) ;
+    if(Utils.POP3.equals(protocol)) {
+      account.setDescription("Create "+protocol+" account") ;
+      account.setEmailAddress("exomailtest@gmail.com") ;
+      account.setEmailReplyAddress("exomailtest@gmail.com")  ;
+      account.setIncomingHost("pop.gmail.com") ;
+      account.setIncomingPassword("exoadmin") ;
+      account.setIncomingPort("995") ;
+      account.setIncomingSsl(true) ;
+      account.setIncomingUser("exomailtest@gmail.com") ;
+      account.setIsSavePassword(true) ;
+      account.setLabel("exomail test account") ;
+      account.setOutgoingHost("smtp.gmail.com") ;
+      account.setOutgoingPort("465") ;
+      account.setPlaceSignature("exomailtest pop") ;
+    } else if(Utils.IMAP.equals(protocol)) {
+      account.setDescription("Create "+protocol+" account") ;
+      account.setEmailAddress("exoservice@gmail.com") ;
+      account.setEmailReplyAddress("exoservice@gmail.com")  ;
+      account.setIncomingHost("imap.gmail.com") ;
+      account.setIncomingPassword("exoadmin") ;
+      account.setIncomingPort("993") ;
+      account.setIncomingSsl(true) ;
+      account.setIncomingUser("exoservice@gmail.com") ;
+      account.setIsSavePassword(true) ;
+      account.setLabel("exoservice test account") ;
+      account.setOutgoingHost("smtp.gmail.com") ;
+      account.setOutgoingPort("465") ;
+      account.setPlaceSignature("exosevice imap") ;
+    }
+    return  account ;
+  } 
+  //Create account
   public void testAccount() throws Exception {
-
 
     System.out.println("\n\n Test POP Account" );
     Account  account = createAccountObj(Utils.POP3) ;
@@ -83,58 +122,147 @@ public class TestMailService extends BaseMailTestCase{
     String defaultId = defaultAcc.getId() ;
     System.out.println("\n\n defaltAcc id " + defaultId);
 
-    System.out.println("\n\n check  message from POP acc");
-    List<Message> message =  mailService_.checkNewMessage(sProvider, username, accId) ;
-    
-    
-    assertEquals(message.isEmpty(), true) ;
-    System.out.println("\n\n unread messages " + message.size());
-    System.out.println("\n\n get message from default acc");
-    assertNull(gettMessage(accId)) ;
+
+    mailService_.removeAccount(sProvider, username, accId) ;
+    assertNull(mailService_.getAccountById(sProvider, username, accId)) ;
+    mailService_.removeAccount(sProvider, username, accId2) ;
+    assertNull(mailService_.getAccountById(sProvider, username, accId2)) ;
 
   }
-  public Account createAccountObj(String protocol) {
-    Account account = new Account() ;
+
+  //Send mail
+  public void testSendMail() throws Exception {
+    Account accPop = createAccountObj(Utils.POP3) ;
+    mailService_.createAccount(sProvider, username, accPop) ;
+
+    Account accImap = createAccountObj(Utils.IMAP) ;
+    mailService_.createAccount(sProvider, username, accImap) ;
+    StringBuffer sbBody = new StringBuffer("") ;
+    
+    Message message = new Message() ;
+    message.setContentType(TEXT_HTML) ;
+    message.setSubject("This message has been sent form "+accPop.getEmailAddress()) ;
+    message.setFrom(accPop.getEmailAddress()) ;
+    message.setMessageTo(accImap.getEmailAddress()) ;
+    sbBody.append("<b>Hello "+accImap.getIncomingUser()+"</b>").append("<br/>").append(Calendar.getInstance().getTime().toString()) ;
+    message.setMessageBody(sbBody.toString()) ;
+    mailService_.sendMessage(sProvider, username, accPop.getId(), message) ;
+    System.out.println("\n\n Message has been sent use POP !");
+    
+    message.setContentType(TEXT_HTML) ;
+    message.setSubject("This message has been sent form "+accImap.getEmailAddress()) ;
+    message.setFrom(accImap.getEmailAddress()) ;
+    message.setMessageTo(accPop.getEmailAddress()) ;
+    sbBody.append("<b>Hello "+accPop.getIncomingUser()+"</b>").append("<br/>").append(Calendar.getInstance().getTime().toString()) ;
+    message.setMessageBody(sbBody.toString()) ;
+    mailService_.sendMessage(sProvider, username, accImap.getId(), message) ;
+    
+    System.out.println("\n\n Message has been sent use IMAP !");
+    
+    mailService_.removeAccount(sProvider, username, accPop.getId()) ;
+    mailService_.removeAccount(sProvider, username, accImap.getId()) ;
+
+  }
+
+  //Check mail form POP and IMAP server
+  public void testGetMailFormServer() throws Exception {
+    Account accPop = createAccountObj(Utils.POP3) ;
+    mailService_.createAccount(sProvider, username, accPop) ;
+    
+    Account accImap = createAccountObj(Utils.IMAP) ;
+    mailService_.createAccount(sProvider, username, accImap) ;
+
+    mailService_.checkNewMessage(sProvider, username, accPop.getId()) ;
+    
+    MessageFilter filter = new MessageFilter("testFilter") ;
+    filter.setAccountId(accPop.getId()) ;
+    assertNotNull(mailService_.getMessages(sProvider, username, filter)) ;
+    //assertEquals(mailService_.getMessages(sProvider, username, filter).size(),1) ;
+    filter.setAccountId(accImap.getId()) ;
+    assertNotNull(mailService_.getMessages(sProvider, username, filter)) ;
+    //assertEquals(mailService_.getMessages(sProvider, username, filter).size(),0) ;
+
+    assertNotNull(mailService_.getFolders(sProvider, username, accPop.getId(), false)) ;
+    System.out.println("\n\n server folder " + mailService_.getFolders(sProvider, username, accPop.getId(), false).size());
+    
+    mailService_.removeAccount(sProvider, username, accPop.getId()) ;
+    mailService_.removeAccount(sProvider, username, accImap.getId()) ;
+  }
+  
+  //Add custom folder
+  public void testAddFolder() throws Exception {
+    Account accPop = createAccountObj(Utils.POP3) ;
+    mailService_.createAccount(sProvider, username, accPop) ;
     Folder folder = new Folder() ;
-    folder.setName("inbox") ;
-    List<Folder> folders = new ArrayList<Folder>() ;
-    folders.add(folder) ;
-    account.setCheckedAuto(false) ;
-    account.setDefaultFolder(folders) ;
-    account.setDescription("Create account") ;
-    account.setEmailAddress("exomailtest@gmail.com") ;
-    account.setEmailReplyAddress("exomailtest@gmail.com")  ;
-    account.setEmptyTrashWhenExit(false) ;
-    account.setIncomingFolder("inbox") ;
-    if(Utils.POP3.equals(protocol)) account.setIncomingHost("pop.gmail.com") ;
-    if(Utils.IMAP.equals(protocol)) account.setIncomingHost("imap.gmail.com") ;
-    account.setIncomingPassword("exoadmin") ;
-    account.setIncomingPort("995") ;
-    account.setIncomingSsl(true) ;
-    account.setIncomingUser("exomailtest@gmail.com") ;
-    account.setIsSavePassword(true) ;
-    account.setLabel("exomail test account") ;
-    account.setOutgoingHost("smtp.gmail.com") ;
-    account.setOutgoingPort("465") ;
-    account.setPlaceSignature("exo mail") ;
-    account.setProtocol(protocol) ;
-    account.setUserDisplayName("mail") ;
-    return  account ;
-  } 
-  public List<Message> checkMailFormServer(String protocol, String accountId) {
-    List<Message> message = null ;
-
-    if(Utils.POP3.equals(protocol)) {
-      
-    } else if (Utils.IMAP.equals(protocol)) {
-
+    folder.setId("folderId1") ;
+    folder.setName("folder test") ;
+    folder.setLabel("folder 1") ;
+    mailService_.saveFolder(sProvider, username, accPop.getId(), folder) ;
+    folder = new Folder() ;
+    folder.setId("folderId1.1") ;
+    folder.setName("folder test 1.1") ;
+    folder.setLabel("folder 1.1");
+    mailService_.saveFolder(sProvider, username, accPop.getId(), folder) ;
+    
+    Folder folderChild = new Folder() ;
+    folderChild.setId("folderId2") ;
+    folder.setLabel("folder 2") ;
+    folderChild.setName("child folder ") ;
+    mailService_.saveFolder(sProvider, username, accPop.getId(), folder.getId(), folderChild) ;
+    List<Folder> fs = new ArrayList<Folder>() ;
+    assertNotNull(mailService_.getFolders(sProvider, username, accPop.getId())) ;
+    fs.addAll(mailService_.getFolders(sProvider, username, accPop.getId())) ;
+    for(Folder f : fs) {
+      System.out.println("\n\n " + f.getLabel());
     }
-    return message ;
+    System.out.println("\n\n total folder size " + mailService_.getFolders(sProvider, username, accPop.getId()).size());
+    //assertEquals(mailService_.getFolders(sProvider, username, accPop.getId()).size(), 2) ;
+    
+    mailService_.removeAccount(sProvider, username, accPop.getId()) ;
   }
-  public List<Message> gettMessage(String accountId) throws Exception {
-    System.out.println("\n\n getMessage ");
-    MessageFilter filter = new MessageFilter("filter1") ;
-    filter.setAccountId(accountId) ;
-    return mailService_.getMessages(sProvider, username, filter) ;
+  
+  //Save and move message 
+  public void testSaveMessage() throws Exception {
+    Account accPop = createAccountObj(Utils.POP3) ;
+    mailService_.createAccount(sProvider, username, accPop) ;
+    StringBuffer sbBody = new StringBuffer("") ;
+    Message message = new Message() ;
+    message.setContentType(TEXT_HTML) ;
+    message.setSubject("This message has been sent form "+accPop.getEmailAddress()) ;
+    message.setFrom(accPop.getEmailAddress()) ;
+    message.setMessageTo(accPop.getEmailAddress()) ;
+    sbBody.append("<b>Hello "+accPop.getIncomingUser()+"</b>").append("<br/>").append(Calendar.getInstance().getTime().toString()) ;
+    message.setMessageBody(accPop.toString()) ;
+    
+    Folder folder = new Folder() ;
+    folder.setId("folderId1") ;
+    folder.setName("folder test") ;
+    folder.setLabel("folder 1") ;
+    mailService_.saveFolder(sProvider, username, accPop.getId(), folder) ;
+    
+    
+    Folder desfolder = new Folder() ;
+    desfolder.setId("folderId2") ;
+    desfolder.setName("folder test 2 ") ;
+    desfolder.setLabel("folder 2") ;
+    mailService_.saveFolder(sProvider, username, accPop.getId(), desfolder) ;
+    
+    message.setFolders(new String[]{folder.getId()}) ;
+    message.setReceivedDate(new Date()) ;
+    mailService_.saveMessage(sProvider, username, accPop.getId(), message, true) ;
+    assertNotNull(mailService_.getMessagesByFolder(sProvider, username, accPop.getId(), folder.getId())) ;
+    assertEquals(mailService_.getMessagesByFolder(sProvider, username, accPop.getId(), folder.getId()).size(), 1) ;
+    
+    message = mailService_.getMessageById(sProvider, username, accPop.getId(), message.getId()) ;
+    mailService_.moveMessage(sProvider, username, accPop.getId(), message, folder.getId(), desfolder.getId()) ;
+    assertEquals(mailService_.getMessagesByFolder(sProvider, username, accPop.getId(), folder.getId()).size(), 0) ;
+    
+    assertNotNull(mailService_.getMessagesByFolder(sProvider, username, accPop.getId(), desfolder.getId())) ;
+    assertEquals(mailService_.getMessagesByFolder(sProvider, username, accPop.getId(), desfolder.getId()).size(), 1) ;
+    mailService_.removeMessage(sProvider, username, accPop.getId(), message) ;
+    assertEquals(mailService_.getMessagesByFolder(sProvider, username, accPop.getId(), desfolder.getId()).size(), 0) ;
+    
+    
+    mailService_.removeAccount(sProvider, username, accPop.getId()) ;
   }
 }
