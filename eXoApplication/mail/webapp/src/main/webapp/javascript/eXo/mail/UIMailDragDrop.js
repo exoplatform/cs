@@ -27,7 +27,7 @@ UIMailDragDrop.prototype.getAllDropableSets = function() {
   for (var i=0; i<folderList.length; i++) {
     this.dropableSets[this.dropableSets.length] = folderList[i] ;
   }
-  folderList = this.DOMUtil.findDescendantsByClass(uiFolderContainerNode, 'a', 'FolderLink') ;
+  folderList = this.DOMUtil.findDescendantsByClass(uiFolderContainerNode, 'div', 'Folder') ;
   for (var i=0; i<folderList.length; i++) {
     this.dropableSets[this.dropableSets.length] = folderList[i] ;
   }
