@@ -16,26 +16,22 @@
  */
 package org.exoplatform.calendar.service.test;
 
+import java.util.Date;
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
-import javax.jcr.PathNotFoundException;
 
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventCategory;
+import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.impl.CalendarServiceImpl;
 import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.organization.User;
-import org.exoplatform.services.organization.impl.UserImpl;
 
 
 /**
@@ -234,4 +230,76 @@ public void testCalendar() throws Exception {
     assertNotNull(calendarService_.removeCalendarCategory(sProvider_, username, calCategory.getId())) ;
   }
   
+  public void testPublicEvent() throws Exception {
+    CalendarCategory calCategory = new CalendarCategory();
+    calCategory.setName("CalendarCategoryName");
+    calCategory.setDescription("CaldendarCategoryDescription");
+    calendarService_.saveCalendarCategory(sProvider_, username, calCategory, true);
+    
+    Calendar cal = new Calendar();
+    cal.setName("CalendarName") ;
+    cal.setDescription("CalendarDesscription") ;
+    cal.setCategoryId(calCategory.getId()) ;
+    cal.setPublic(true) ;
+    calendarService_.savePublicCalendar(sProvider_, cal, true, username) ;
+    
+    EventCategory eventCategory = new EventCategory();
+    eventCategory.setName("EventCategoryName1");
+    eventCategory.setDescription("EventCategoryDescription");
+    calendarService_.saveEventCategory(sProvider_, username, eventCategory, null, true) ;
+    
+    CalendarEvent calEvent = new CalendarEvent();
+    calEvent.setEventCategoryId(eventCategory.getName());
+    calEvent.setSummary("Have a meeting");
+    java.util.Calendar fromCal = java.util.Calendar.getInstance();
+    java.util.Calendar toCal = java.util.Calendar.getInstance(); 
+    toCal.add(java.util.Calendar.HOUR, 1) ;
+    calEvent.setFromDateTime(fromCal.getTime());
+    calEvent.setToDateTime(toCal.getTime());
+    calendarService_.savePublicEvent(sProvider_, cal.getId() , calEvent, true);
+    
+    assertNotNull(calendarService_.getGroupEvent(sProvider_, cal.getId(), calEvent.getId()));
+    
+    calendarService_.removeEventCategory(sProvider_, username, eventCategory.getName()) ;
+    calendarService_.removeUserCalendar(sProvider_, username, cal.getId()) ;
+    calendarService_.removeCalendarCategory(sProvider_, username, calCategory.getId()) ;
+  }
+  
+  public void testPrivateEvent() throws Exception {
+    CalendarCategory calCategory = new CalendarCategory();
+    calCategory.setName("CalendarCategoryName");
+    calCategory.setDescription("CaldendarCategoryDescription");
+    calendarService_.saveCalendarCategory(sProvider_, username, calCategory, true);
+    
+    Calendar cal = new Calendar();
+    cal.setName("CalendarName") ;
+    cal.setDescription("CalendarDesscription") ;
+    cal.setCategoryId(calCategory.getId()) ;
+    cal.setPublic(false) ;
+    calendarService_.saveUserCalendar(sProvider_, username, cal, true) ;
+    
+    EventCategory eventCategory = new EventCategory();
+    eventCategory.setName("EventCategoryName2");
+    eventCategory.setDescription("EventCategoryDescription");
+    calendarService_.saveEventCategory(sProvider_, username, eventCategory, null, true) ;
+    
+    CalendarEvent calEvent = new CalendarEvent();
+    calEvent.setEventCategoryId(eventCategory.getName());
+    calEvent.setSummary("Have a meeting");
+    java.util.Calendar fromCal = java.util.Calendar.getInstance();
+    java.util.Calendar toCal = java.util.Calendar.getInstance(); 
+    toCal.add(java.util.Calendar.HOUR, 1) ;
+    calEvent.setFromDateTime(fromCal.getTime());
+    calEvent.setToDateTime(toCal.getTime());
+    calendarService_.saveUserEvent(sProvider_, username, cal.getId() , calEvent, true);
+    
+    EventQuery query = new EventQuery();
+    query.setCategoryId(new String[] {eventCategory.getName()});
+    
+    assertEquals(calendarService_.getUserEvents(sProvider_, username, query).size(), 1);
+    
+    calendarService_.removeEventCategory(sProvider_, username, eventCategory.getName()) ;
+    calendarService_.removeUserCalendar(sProvider_, username, cal.getId()) ;
+    calendarService_.removeCalendarCategory(sProvider_, username, calCategory.getId()) ;
+  }
 }
