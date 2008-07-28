@@ -3,7 +3,7 @@
   <groupId>org.exoplatform.cs</groupId>
   <artifactId>config</artifactId>
   <name>eXo Collaboration Suite Config</name>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.0.2-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <modules>
