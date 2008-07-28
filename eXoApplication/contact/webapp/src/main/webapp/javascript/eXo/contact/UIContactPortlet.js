@@ -104,7 +104,7 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
  	 		}      		
   	}
 		var isSharedAddress = tr.getAttribute("isSharedAddress").toLowerCase() ;    		
-		if ((isSharedAddress == "true" && havePermission == "false") || (isOwner == "true")) {
+		if ((isSharedAddress == "true" && (havePermission == "false" || isOwner == "true"))) {
 			for (var i = 0; i < len; i++) {    			
   			isDisable = DOMUtil.hasClass(actions[i], "DeleteContactIcon") || DOMUtil.hasClass(actions[i], "MoveIcon");
       	if (isDisable == false) continue ;
