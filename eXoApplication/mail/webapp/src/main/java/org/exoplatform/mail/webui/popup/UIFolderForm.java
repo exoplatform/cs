@@ -68,6 +68,7 @@ public class UIFolderForm extends UIForm implements UIPopupComponent {
       MailService mailSvr = uiForm.getApplicationComponent(MailService.class) ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       String folderName = uiForm.getUIStringInput(FIELD_NAME).getValue() ;
+      //TODO should folderName.trim() before check existed
       UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
       String username = uiPortlet.getCurrentUser() ;
       String accountId =  uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;

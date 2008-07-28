@@ -449,6 +449,7 @@ public class JCRDataStorage {
         if (moveReference)
           moveReference(node);
         NodeType[] nts = node.getMixinNodeTypes();
+        //TODO should use for each
         for (int i = 0; i < nts.length; i++) {
           node.removeMixin(nts[i].getName());
         }
@@ -561,6 +562,7 @@ public class JCRDataStorage {
       Node destFolderNode = getFolderNodeById(sProvider, username, accountId, destFolderId);
       Value[] propFolders = msgNode.getProperty(Utils.EXO_FOLDERS).getValues();
       String[] folderIds = new String[propFolders.length];
+      //TODO should use for each
       for (int i = 0; i < propFolders.length; i++) {
         String folderId = propFolders[i].getString();
         if (currentFolderId.equals(folderId))
@@ -753,6 +755,7 @@ public class JCRDataStorage {
         }
         nodeMsg.setProperty(Utils.EXO_HASATTACH, false);
       }
+      //TODO should use: attachments.isEmpty()
       if (attachments != null && attachments.size() > 0) {
         Iterator<Attachment> it = attachments.iterator();
         boolean makeNewAtt = isNew ;
@@ -1199,7 +1202,7 @@ public class JCRDataStorage {
       return null;
     }
   }
-
+  //TODO should change to private
   public Node getFolderNodeById(SessionProvider sProvider, String username, String accountId,
       String folderId) throws Exception {
     Node accountNode = getMailHomeNode(sProvider, username).getNode(accountId);
@@ -1308,6 +1311,11 @@ public class JCRDataStorage {
       try {
         Value[] propFolders = msgNode.getProperty(Utils.EXO_FOLDERS).getValues();
         String[] oldFolderIds = new String[propFolders.length];
+        //TODO use for each, and we can remove the folder id in this loop
+        /*List<String> folderList = new ArrayList<String>(Arrays.asList(oldFolderIds));
+        for (Value v : propFolders) {
+           if(!v.getString().equals(folderId)) folderList.add(v.getString()) ;
+        }*/
         for (int i = 0; i < propFolders.length; i++) {
           oldFolderIds[i] = propFolders[i].getString();
         }
@@ -1639,6 +1647,7 @@ public class JCRDataStorage {
     NodeIterator iter = tagHomeNode.getNodes();
     while (iter.hasNext()) {
       Node tagNode = (Node) iter.next();
+      //TODO should break loop when matching the tag node
       if (tagNode.getProperty(Utils.EXO_ID).getString().equals(tagId)) {
         try {
           tag.setId((tagNode.getProperty(Utils.EXO_ID).getString()));

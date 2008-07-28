@@ -281,6 +281,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           }
           break;
         case MESSAGE_FOWARD : 
+          //TODO should replate text by value form resource boundle
           String toAddress = msg.getMessageTo() != null ? msg.getMessageTo() : "" ;
           setFieldSubjectValue("Fwd: " + msg.getSubject());
           StringBuffer forwardTxt = new StringBuffer("<br><br>-------- Original Message --------<br>") ;
@@ -477,6 +478,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     return message;
   }
   
+  //TODO return directly
   public boolean fromDrafts() {    
     if (getMessage() != null && getMessage().getFolders()[0].equals(Utils.createFolderId(accountId_, Utils.FD_DRAFTS, false)) || getComposeType() == MESSAGE_IN_DRAFT) { 
       return true;
@@ -591,6 +593,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         UIMessageList uiMsgList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
         UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class) ;
         uiMsgList.setMessagePageList(mailSvr.getMessagePageList(SessionProviderFactory.createSystemProvider(), usename, uiMsgList.getMessageFilter())) ;
+        //TODO check this code because it does nothing here
         List<Message> showedMsg = uiMsgPreview.getShowedMessages() ;
         try {
           if (showedMsg != null && showedMsg.size() > 0) {
@@ -605,6 +608,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
             }
           }
         }catch(Exception e) {}
+        //
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class)) ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer) ;

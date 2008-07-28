@@ -76,7 +76,7 @@ public class UIMailSettings extends UIForm implements UIPopupComponent {
       numberPerPage.add(new SelectItemOption<String>(String.valueOf(10*i)));
     }
     addUIFormInput(new UIFormSelectBox(NUMBER_MSG_PER_PAGE, NUMBER_MSG_PER_PAGE, numberPerPage));  
-    
+    //TODO should replace text by resource boundle
     List<SelectItemOption<String>> periodCheckAuto = new ArrayList<SelectItemOption<String>>();
     periodCheckAuto.add(new SelectItemOption<String>("Never", "period." + String.valueOf(MailSetting.NEVER_CHECK_AUTO)));
     periodCheckAuto.add(new SelectItemOption<String>("5 minutes", "period." + String.valueOf(MailSetting.FIVE_MINS)));

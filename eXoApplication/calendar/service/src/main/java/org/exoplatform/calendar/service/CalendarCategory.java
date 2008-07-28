@@ -29,8 +29,7 @@ public class CalendarCategory {
   private String name ;
   private String description ;
   private boolean isDataInit = false ;
-  //private String[] calendars ;
-  
+
   public CalendarCategory() {
     id = "CalendarCategory" + IdGenerator.generate() ;
   }
@@ -46,8 +45,5 @@ public class CalendarCategory {
 
 	public void setDataInit(boolean isDataInit) {	this.isDataInit = isDataInit ; }
 	public boolean isDataInit() {	return isDataInit ;	}
-
-  //public String[] getCalendars() { return calendars ; }
-  //public void setCalendars(String[] calendars) { this.calendars = calendars ; }
 
 }

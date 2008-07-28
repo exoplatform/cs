@@ -31,363 +31,487 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
  */
 
 public interface CalendarService {
-  
-  public List<CalendarCategory> getCategories(SessionProvider sProvider, String username) throws Exception ;
+
   /**
-   * This method should:
-   * 1. Get calendar service root node by current user
-   * 2. Check exists of Calendar category list in cache
-   * 3. Get calendar category list and return
-   * @param username
-   * @param isShowAll TODO
-   * @return Calendar Category list
+   * The method gets all calendar category of current user from data base
+   * @param userSession The session of current user this will be create after user login
+   * @param username current user name(or user id)
+   * @return List of CalendarCategory object
    * @throws Exception
+   * @see CalendarCategory
    */
-  public List<GroupCalendarData> getCalendarCategories(SessionProvider sProvider, String username, boolean isShowAll) throws Exception ;
+  public List<CalendarCategory> getCategories(SessionProvider userSession, String username) throws Exception ;
+
   /**
-   * This method should:
-   * 1. Get calendar service root node by current user
-   * 2. Get calendar category
-   * @param username
-   * @param calendarCategoryId
-   * @return calendarCategory
+   * The method gets all groups of private calendar, and each GroupCalendar containts List of Calendar object
+   * @param userSession The session of current user this will be create after user login
+   * @param username current user name(or user id)
+   * @param isShowAll The parameter to make sure that the user want to show all calendar or not, if it is <b>true</b> then 
+   * it gets all calendars, if <b>false</b> it will check from calendar setting to know which calendar will be shown
+   * @return List<GroupCalendarData> List of GroupCalendarData
    * @throws Exception
+   * @see  Calendar, GroupCalendarData, CalendarSetting
    */
-  public CalendarCategory getCalendarCategory(SessionProvider sProvider, String username, String calendarCategoryId) throws Exception ;
+  public List<GroupCalendarData> getCalendarCategories(SessionProvider userSession, String username, boolean isShowAll) throws Exception ;
+
   /**
-   * This method should:
-   * 1. Get calendar service root node by current user
-   * 2. Check isNew parameter
-   * 3. Create new or update Calendar category
-   * 4. Invalidate cache
-   * @param username
-   * @param CalendarCategory
-   * @param isNew
-   * @throws Exception
-   */
-  public void saveCalendarCategory(SessionProvider sProvider, String username, CalendarCategory calendarCategory, boolean isNew) throws Exception ; 
-  /**
-   * This method should:
-   * 1. Get calendar service root node by current user
-   * 2. Remove calendarCategory
-   * 3. Invalidate cache
+   * The method gets the calendar category by given id
+   * @param userSession
    * @param username
    * @param calendarCategoryId
    * @return CalendarCategory
    * @throws Exception
+   * @see CalendarCategory
    */
-  public CalendarCategory removeCalendarCategory(SessionProvider sProvider, String username, String calendarCategoryId) throws Exception ;
-  
-  
+  public CalendarCategory getCalendarCategory(SessionProvider userSession, String username, String calendarCategoryId) throws Exception ;
+
   /**
-   * This method should:
-   * 1. Get calendar service root node by current user
-   * 2. Get calendar from private folder
+   * Save details of category to data
+   * @param userSession
+   * @param username
+   * @param calendarCategory the object that contants infomations about the category
+   * @param isNew the boolean value to point out that add new category or update
+   * @throws Exception
+   * @see CalendarCategory
+   */
+  public void saveCalendarCategory(SessionProvider userSession, String username, CalendarCategory calendarCategory, boolean isNew) throws Exception ; 
+
+  /**
+   * The method used for removing one category by id
+   * @param userSession
+   * @param username
+   * @param calendarCategoryId
+   * @return
+   * @throws Exception
+   */
+  public CalendarCategory removeCalendarCategory(SessionProvider userSession, String username, String calendarCategoryId) throws Exception ;
+
+  /**
+   * The method get private calendar by given calendarId, and all calendar related to this category will be removed
+   * @param userSession
    * @param username
    * @param calendarId
-   * @return Calendar
+   * @return Calendar object returned contants details of a calendar
    * @throws Exception
+   * @see Calendar
    */
-  public Calendar getUserCalendar(SessionProvider sProvider, String username, String calendarId) throws Exception ;
-  
-  public List<Calendar> getUserCalendars(SessionProvider sProvider, String username, boolean isShowAll) throws Exception ;
+  public Calendar getUserCalendar(SessionProvider userSession, String username, String calendarId) throws Exception ;
+
   /**
-   * This method should:
-   * 1. Get calendar service root node by current user
-   * 2. Check exists of calendar list in cache
-   * 3. Get calendar list by category and return
+   * The method queries all private calendars of current user
+   * @param userSession
    * @param username
-   * @return Calendar list
+   * @param isShowAll boolean value if equals <b>true</b> will get all private calendars, equals <b>false</b> it will take only 
+   * the calendars in current user's setting
+   * @return List of calendar object
    * @throws Exception
-   */  
-  public List<Calendar> getUserCalendarsByCategory(SessionProvider sProvider, String username, String calendarCategoryId) throws Exception ;
+   * @see Calendar, CalendarSetting
+   */
+  public List<Calendar> getUserCalendars(SessionProvider userSession, String username, boolean isShowAll) throws Exception ;
+
   /**
-   * This method should:
-   * 1. Check calendar is private or public
-   * 2. Check isNew parameter
-   * 3. Create new of update calendar in private folder or service folder(public) 
-   * 3. Invalidate cache
+   * The method look up all private calendars by given category id
+   * @param userSession
+   * @param username
+   * @param calendarCategoryId
+   * @return List calendar object
+   * @throws Exception
+   * @see Calendar, CalendarCategory
+   */
+  public List<Calendar> getUserCalendarsByCategory(SessionProvider userSession, String username, String calendarCategoryId) throws Exception ;
+
+  /**
+   * The method saves private calendar infomations in to data base
+   * @param userSession
    * @param username
    * @param calendar
+   * @param isNew Boolean value to know add new calendar or update infomations only
+   * @throws Exception
+   */
+  public void saveUserCalendar(SessionProvider userSession, String username, Calendar calendar, boolean isNew) throws Exception ;
+
+  /**
+   * Remove private calendar by given id, all events and tasks belong to this calendar will be removed
+   * @param userSession
+   * @param username
+   * @param calendarId
+   * @return
+   * @throws Exception
+   */
+  public Calendar removeUserCalendar(SessionProvider userSession, String username, String calendarId) throws Exception ;
+
+  /**
+   * The method save all infomations about shared calendar, it will be updated original calendar
+   * @param systemSession
+   * @param username
+   * @param calendar the oject contants infomations
+   * @throws Exception
+   * @see Calendar
+   */
+  public void saveSharedCalendar(SessionProvider systemSession, String username, Calendar calendar) throws Exception ;
+
+  /**
+   * The method  gets all calendar of a group user, we called it is group calendar
+   * it means the calendar for group of users and depen on the permission the user will have right to view or edit that calendar
+   * @param systemSession
+   * @param calendarId
+   * @return Calendar object contants infomations
+   * @throws Exception
+   */
+  public Calendar getGroupCalendar(SessionProvider systemSession, String calendarId) throws Exception ;  
+
+  /**
+   * The method  gets all the group calendar data of current user and list of calendars belong to that group
+   * with group calendar data it will classify calendar to each group
+   * @param systemSession
+   * @param groupIds
+   * @param isShowAll
+   * @param username
+   * @return List of GroupCalendarData and each GroupCalendarData contants List of calendar object too
+   * @throws Exception
+   * @see GroupCalendarData, Calendar
+   */
+  public List<GroupCalendarData> getGroupCalendars(SessionProvider systemSession, String[] groupIds, boolean isShowAll, String username) throws Exception ;  
+
+  /**
+   * The method save calendar to public area (group calendar)
+   * @param systemSession
+   * @param calendar
+   * @param isNew Boolean value will be checked is it add new or update infomations only
+   * @param username
+   * @throws Exception
+   */
+  public void savePublicCalendar(SessionProvider systemSession, Calendar calendar, boolean isNew, String username) throws Exception ;  
+
+  /**
+   * Remove the group calendar form data base, every events, tasks inside this calendar will be removed too
+   * @param systemSession
+   * @param calendarId
+   * @return
+   * @throws Exception
+   */
+  public Calendar removePublicCalendar(SessionProvider systemSession, String calendarId) throws Exception ;
+
+  /**
+   * The method gets all categories of event
+   * @param userSession
+   * @param username
+   * @return List event category object
+   * @throws Exception
+   */
+  public List<EventCategory> getEventCategories(SessionProvider userSession, String username) throws Exception ;
+
+  /**
+   * Save event category to data base, every user will have their own category to classify events, and it will use unique name in data base
+   * @param userSession
+   * @param username
+   * @param eventCategory
+   * @param values 
    * @param isNew
    * @throws Exception
    */
-  public void saveUserCalendar(SessionProvider sProvider, String username, Calendar calendar, boolean isNew) throws Exception ;
-  
+  public void saveEventCategory(SessionProvider userSession, String username, EventCategory eventCategory, String[] values, boolean isNew) throws Exception ;
+
   /**
-   * This method should:
-   * 1. Save shared calendar
-   * 3. Update shared calendar  
+   * Remove event category, all events and tasks belong to this category will be destroyed
+   * @param userSession
    * @param username
-   * @param calendar
+   * @param eventCategoryName The unique name of category
    * @throws Exception
    */
-  public void saveSharedCalendar(SessionProvider sProvider, String username, Calendar calendar) throws Exception ;
-  
-  
+  public void removeEventCategory(SessionProvider userSession, String username, String eventCategoryName) throws Exception ;  
+
   /**
-   * This method should:
-   * 1. Get calendar service root node
-   * 2. Get group node
-   * 3. Remove calendar
-   * 4. Invalidate cache
+   * The method gets category of event by given id
+   * @param userSession
    * @param username
-   * @param groupId
+   * @param eventCategoryId
+   * @return event category object contents infomations
+   * @throws Exception
+   * @see EventCategory
+   */
+  public EventCategory getEventCategory(SessionProvider userSession, String username, String eventCategoryId) throws Exception ;
+
+  /**
+   * The method gets list events and tasks of given private calendar ids 
+   * @param userSession
+   * @param username
+   * @param calendarIds
+   * @return List of events and tasks
+   * @throws Exception
+   */
+  public List<CalendarEvent> getUserEventByCalendar(SessionProvider userSession, String username, List<String> calendarIds) throws Exception ;
+
+  /**
+   * The method gets all events and tasks by given conditions in event query
+   * @param userSession
+   * @param username
+   * @param eventQuery
+   * @return List of CalendarEvent object (events and tasks)
+   * @throws Exception
+   */
+  public List<CalendarEvent> getUserEvents(SessionProvider userSession, String username, EventQuery eventQuery) throws Exception ;
+
+  /**
+   * The method save infomation to an event or a task by given private calendar id to data
+   * @param userSession
+   * @param username
    * @param calendarId
-   * @return Calendar
+   * @param event
+   * @param isNew
    * @throws Exception
    */
-  public Calendar removeUserCalendar(SessionProvider sProvider, String username, String calendarId) throws Exception ;
-  
-  
+  public void saveUserEvent(SessionProvider userSession, String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception ;
+
+  /**
+   * Remove given event or task in private calendar with calendar id, all attachments and reminders will be removed
+   * @param userSession
+   * @param username
+   * @param calendarId
+   * @param eventId
+   * @return
+   * @throws Exception
+   */
+  public CalendarEvent removeUserEvent(SessionProvider userSession, String username, String calendarId, String eventId) throws Exception ;
+
+  /**
+   * The menthod gets event or task form group calendar by given calendar id
+   * @param systemSession
+   * @param calendarId
+   * @param eventId
+   * @return CalendarEvent object containts infomations and attachments, reminders
+   * @throws Exception
+   * @see Reminder, CalendarEvent
+   */
+  public CalendarEvent getGroupEvent(SessionProvider systemSession, String calendarId, String eventId) throws Exception ;
+
+  /**
+   * The method gets events and tasks by given public calendar ids  
+   * @param systemSession
+   * @param calendarIds
+   * @return List calendar event object
+   * @throws Exception
+   */
+  public List<CalendarEvent> getGroupEventByCalendar(SessionProvider systemSession, List<String> calendarIds) throws Exception ;
+
+  /**
+   * The method gets events and tasks by given event query
+   * @param systemSession
+   * @param eventQuery
+   * @return List calendar event object
+   * @throws Exception
+   */
+  public List<CalendarEvent> getPublicEvents(SessionProvider systemSession, EventQuery eventQuery) throws Exception ;
+  /**
+   * Save event or task by given group calendar id
+   * @param systemSession
+   * @param calendarId
+   * @param event
+   * @param isNew
+   * @throws Exception
+   */
+  public void savePublicEvent(SessionProvider systemSession, String calendarId, CalendarEvent event, boolean isNew) throws Exception ;
+
+  /**
+   * Remove event or task
+   * @param systemSession
+   * @param calendarId
+   * @param eventId
+   * @return
+   * @throws Exception
+   */
+  public CalendarEvent removePublicEvent(SessionProvider systemSession, String calendarId, String eventId) throws Exception ;
+
   /**
    * 
-   * This method should:
-   * 1. Get calendar service root node
-   * 2. Get group node
-   * 3. Get calendar
+   * @param userSession
    * @param username
-   * @param groupId
-   * @param calendarId
-   * @return Calendar
+   * @param setting
    * @throws Exception
    */
-  public Calendar getGroupCalendar(SessionProvider sProvider, String calendarId) throws Exception ;  
+  public void saveCalendarSetting(SessionProvider userSession, String username, CalendarSetting setting) throws Exception ;
+
   /**
-   * This method should:
-   * 1. Get calendar service root node
-   * 2. Check exists of calendar list in cache
-   * 3. Get calendar list
-   * @param isShowAll TODO
-   * @param username TODO
+   * 
+   * @param userSession
    * @param username
-   * @return Calendar list
+   * @return
    * @throws Exception
    */
-  public List<GroupCalendarData> getGroupCalendars(SessionProvider sProvider, String[] groupId, boolean isShowAll, String username) throws Exception ;  
+  public CalendarSetting getCalendarSetting(SessionProvider userSession, String username) throws Exception ;
+
   /**
-   * This method should:
-   * 1. Check calendar is private or public
-   * 2. Check isNew parameter
-   * 3. Create new of update calendar in private folder or service folder(public) 
-   * 3. Invalidate cache
-   * @param calendar
-   * @param isNew
-   * @param username TODO
-   * @param username
-   * @throws Exception
+   * The method  gets Import/Export implement class to import or export ics,csv
+   * @param type 
+   * @return CalendarImportExport
+   * @see ICalendarImportExport, CsvImportExport
    */
-  public void savePublicCalendar(SessionProvider sProvider, Calendar calendar, boolean isNew, String username) throws Exception ;  
-  /**
-   * This method should:
-   * 1. Get calendar service root node by current user
-   * 2. Remove calendar
-   * 3. Invalidate cache
-   * @param username
-   * @param calendarId
-   * @return Calendar
-   * @throws Exception
-   */
-  public Calendar removePublicCalendar(SessionProvider sProvider, String calendarId) throws Exception ;
-  
-  
-  public List<EventCategory> getEventCategories(SessionProvider sProvider, String username) throws Exception ;
-  /**
-   * This method should:
-   * 1. Get calendar service root node by current user
-   * 2. Check isNew parameter
-   * 3. Create new or update category
-   * 4. Invalidate cache 
-   * @param username
-   * @param calendarId
-   * @param category
-   * @param values
-   * @param isNew
-   * @throws Exception
-   */
-  public void saveEventCategory(SessionProvider sProvider, String username, EventCategory eventCategory, String[] values, boolean isNew) throws Exception ;
-  /**
-   * This method should:
-   * 1. Get calendar service root node by current user
-   * 2. Get calendar by id 
-   * 3. Remove event category 
-   * 4. Invalidate cache
-   * @param username
-   * @param calendarId
-   * @param categoryId
-   * @return EventCategory
-   * @throws Exception
-   */
-  public void removeEventCategory(SessionProvider sProvider, String username, String eventCategoryName) throws Exception ;  
-  /**
-   * This method should:
-   * 1. Get calendar service root node by current user
-   * 2. Get calendar by id 
-   * 3. Remove event category 
-   * 4. Invalidate cache
-   * @param username
-   * @param calendarId
-   * @param categoryId
-   * @return EventCategory
-   * @throws Exception
-   */
-  public EventCategory getEventCategory(SessionProvider sProvider, String username, String eventCategoryId) throws Exception ;
-  
-  
-  /**
-   * This method should:
-   * 1. Get calendar service root node by current user
-   * 2. Get calendar and event category by parameters id 
-   * 3. Get and return Event object
-   * @param username
-   * @param calendarId
-   * @param eventCategoryId
-   * @param eventId
-   * @return Event
-   * @throws Exception
-   */
-  //public CalendarEvent getUserEvent(SessionProvider sProvider, String username, String calendarId, String eventId) throws Exception ;
-  /**
-   * This method should:
-   * 1. Get calendar service root node by current user
-   * 2. Check exists of event list in cache
-   * 3. Get event list and return
-   * @param username
-   * @param calendarId
-   * @return event list
-   * @throws Exception
-   */
-  public List<CalendarEvent> getUserEventByCalendar(SessionProvider sProvider, String username, List<String> calendarIds) throws Exception ;
-  /**
-   * This method should:
-   * 1. Get calendar service root node by current user
-   * 2. Check exists of event list in cache
-   * 3. Get event list and return
-   * @param EventQuery
-   * @return event list
-   * @throws Exception
-   */
-  public List<CalendarEvent> getUserEvents(SessionProvider sProvider, String username, EventQuery eventQuery) throws Exception ;
-  /**
-   * This method should:
-   * 1. Get calendar service root node by username
-   * 2. Get calendar and even catetory by parameters id
-   * 3. Check isNew parameter
-   * 4. Save new or update event
-   * 5. Invalidate cache
-   * @param username
-   * @param calendarId
-   * @param eventCategoryId
-   * @param event
-   * @param isNew
-   * @throws Exception
-   */  
-  public void saveUserEvent(SessionProvider sProvider, String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception ;
-  /**
-   * This method should:
-   * 1. Get calendar service root node by current user
-   * 2. Get calendar and category by parameters id 
-   * 3. Remove event
-   * 4. Invalidate cache
-   * @param username
-   * param calendarId
-   * param eventCategoryId
-   * @param eventId
-   * @return Event
-   * @throws Exception
-   */
-  public CalendarEvent removeUserEvent(SessionProvider sProvider, String username, String calendarId, String eventId) throws Exception ;
-  
-  
-  /**
-   * This method should:
-   * 1. Get calendar service root node
-   * 2. Get calendar and event category by parameters id 
-   * 3. Get and return Event object
-   * @param calendarId
-   * @param eventCategoryId
-   * @param eventId
-   * @return Event
-   * @throws Exception
-   */
-  public CalendarEvent getGroupEvent(SessionProvider sProvider, String calendarId, String eventId) throws Exception ;
-  /**
-   * This method should:
-   * 1. Get calendar service root node by current user
-   * 2. Check exists of event list in cache
-   * 3. Get event list and return
-   * @param username
-   * @param calendarId
-   * @return event list
-   * @throws Exception
-   */
-  public List<CalendarEvent> getGroupEventByCalendar(SessionProvider sProvider, List<String> calendarIds) throws Exception ;
-  public List<CalendarEvent> getPublicEvents(SessionProvider sProvider, EventQuery eventQuery) throws Exception ;
-  /**
-   * This method should:
-   * 1. Get calendar service root node by username
-   * 2. Get calendar and even catetory by parameters id
-   * 3. Check isNew parameter
-   * 4. Save new or update event
-   * 5. Invalidate cache
-   * @param username
-   * @param calendarId
-   * @param eventCategoryId
-   * @param event
-   * @param isNew
-   * @throws Exception
-   */  
-  public void savePublicEvent(SessionProvider sProvider, String calendarId, CalendarEvent event, boolean isNew) throws Exception ;
-  /**
-   * This method should:
-   * 1. Get calendar service root node by current user
-   * 2. Get calendar and category by parameters id 
-   * 3. Remove event
-   * 4. Invalidate cache
-   * @param username
-   * param calendarId
-   * param eventCategoryId
-   * @param eventId
-   * @return Event
-   * @throws Exception
-   */
-  public CalendarEvent removePublicEvent(SessionProvider sProvider, String calendarId, String eventId) throws Exception ;
-  
-  public void saveCalendarSetting(SessionProvider sProvider, String username, CalendarSetting setting) throws Exception ;
-  public CalendarSetting getCalendarSetting(SessionProvider sProvider, String username) throws Exception ;
-  
   public CalendarImportExport getCalendarImportExports(String type) ;
-  public String[] getExportImportType() throws Exception ;
-  public int generateRss(SessionProvider sProvider, String username, List<String> calendarIds, RssData rssData) throws Exception ;
-  public List<FeedData> getFeeds(SessionProvider sProvider, String username) throws Exception  ;
-  public Node getRssHome(SessionProvider sProvider, String username) throws Exception ;
-  
-  public EventPageList searchEvent(SessionProvider sProvider, String username, EventQuery query, String[] publicCalendarIds)throws Exception ;
-  public Map<Integer, String > searchHightLightEvent(SessionProvider sProvider, String username, EventQuery eventQuery, String[] publicCalendarIds)throws Exception ; 
-  
-  public void shareCalendar(SessionProvider sProvider, String username, String calendarId, List<String> receiverUsers) throws Exception ;
-  public GroupCalendarData getSharedCalendars(SessionProvider sProvider, String username, boolean isShowAll) throws Exception ;
-  public List<CalendarEvent> getEvents(SessionProvider sProvider, String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception ;
-  public void removeSharedCalendar(SessionProvider sProvider, String username, String calendarId) throws Exception  ;
-  public void saveEventToSharedCalendar(SessionProvider sProvider, String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception  ;
-  public Map<String, String> checkFreeBusy(SessionProvider sysProvider, EventQuery eventQuery) throws Exception  ;
-  
-  public int generateCalDav(SessionProvider sProvider, String username, List<String> calendarIds, RssData rssData) throws Exception ;
-  public void removeSharedEvent(SessionProvider sessionProvider, String username, String calendarId, String eventId) throws Exception ;
-  
-  public boolean hasEditPermission(SessionProvider sProvider, String sharedCalendarId, String username) throws Exception ;
-  
-  public void moveEvent(SessionProvider sProvider, String formCalendar, String toCalendar, String formType, String toType, List<CalendarEvent> calEvents, String username) throws Exception ;
+
   /**
-   * This method should:
-   * 1. update event attenders information
-   * 2. update free / busy time of user
-   * @param fromUserId : the inviter id
-   * @param toUserId : the recive id list
-   * @param calendarType : 0 = private, 1 = shared, 2 = public
-   * @param calendarId : calendar id
-   * @param eventId : evnet id
-   * @param answer : 0 = no, 1 = yes , 2 = maybe 
+   * 
+   * @return types of inport/export
+   * @throws Exception
+   */
+  public String[] getExportImportType() throws Exception ;
+
+  /**
+   * 
+   * @param systemSession
+   * @param username
+   * @param calendarIds
+   * @param rssData
+   * @return
+   * @throws Exception
+   * @see RssData
+   */
+  public int generateRss(SessionProvider systemSession, String username, List<String> calendarIds, RssData rssData) throws Exception ;
+
+  /**
+   * 
+   * @param systemSession
+   * @param username
+   * @return List of FeedData
+   * @throws Exception
+   * @see FeedData
+   */
+  public List<FeedData> getFeeds(SessionProvider systemSession, String username) throws Exception  ;
+
+  /**
+   * 
+   * @param systemSession
+   * @param username
+   * @return
+   * @throws Exception
+   */
+  public Node getRssHome(SessionProvider systemSession, String username) throws Exception ;
+
+  /**
+   * 
+   * @param userSession
+   * @param username
+   * @param query
+   * @param publicCalendarIds
+   * @return
+   * @throws Exception
+   */
+  public EventPageList searchEvent(SessionProvider userSession, String username, EventQuery query, String[] publicCalendarIds)throws Exception ;
+
+  /**
+   * 
+   * @param userSession
+   * @param username
+   * @param eventQuery
+   * @param publicCalendarIds
+   * @return
+   * @throws Exception
+   */
+  public Map<Integer, String > searchHightLightEvent(SessionProvider userSession, String username, EventQuery eventQuery, String[] publicCalendarIds)throws Exception ; 
+
+  /**
+   * 
+   * @param systemSession
+   * @param username
+   * @param calendarId
+   * @param receiverUsers
+   * @throws Exception
+   */
+  public void shareCalendar(SessionProvider systemSession, String username, String calendarId, List<String> receiverUsers) throws Exception ;
+
+  /**
+   * 
+   * @param systemSession
+   * @param username
+   * @param isShowAll
+   * @return
+   * @throws Exception
+   */
+  public GroupCalendarData getSharedCalendars(SessionProvider systemSession, String username, boolean isShowAll) throws Exception ;
+
+  /**
+   * 
+   * @param userSession
+   * @param username
+   * @param eventQuery
+   * @param publicCalendarIds
+   * @return
+   * @throws Exception
+   */
+  public List<CalendarEvent> getEvents(SessionProvider userSession, String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception ;
+
+  /**
+   * 
+   * @param systemSesssion
+   * @param username
+   * @param calendarId
+   * @throws Exception
+   */
+  public void removeSharedCalendar(SessionProvider systemSesssion, String username, String calendarId) throws Exception  ;
+
+  /**
+   * 
+   * @param systemSession
+   * @param username
+   * @param calendarId
+   * @param event
+   * @param isNew
+   * @throws Exception
+   */
+  public void saveEventToSharedCalendar(SessionProvider systemSession, String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception  ;
+
+  /**
+   * The method  will check the time free or busy of the user, it depents on events and tasks of this user 
+   * now it only check on one day and if the events and tasks marked with busy, out side status will be checked 
+   * @param systemSession We use system session here because the data store at public area
+   * @param eventQuery The query object it containts query statement to look up the data 
+   * @return Map data with key is user name (or user id), and value is the a pair of <i>from time</i> and <i>to time</i> by miliseconds and sperate by coma(,)
+   * @throws Exception
+   * @see EventQuery
+   */
+  public Map<String, String> checkFreeBusy(SessionProvider systemSession, EventQuery eventQuery) throws Exception  ;
+
+  /**
+   * 
+   * @param systemSession
+   * @param username
+   * @param calendarIds
+   * @param rssData
+   * @return
+   * @throws Exception
+   */
+  public int generateCalDav(SessionProvider systemSession, String username, List<String> calendarIds, RssData rssData) throws Exception ;
+
+  /**
+   * 
+   * @param systemSession
+   * @param username
+   * @param calendarId
+   * @param eventId
+   * @throws Exception
+   */
+  public void removeSharedEvent(SessionProvider systemSession, String username, String calendarId, String eventId) throws Exception ;
+
+  /**
+   * The method  move and save events form private calendars share calendars public calendars each other
+   * @param userSession
+   * @param formCalendar
+   * @param toCalendar
+   * @param formType
+   * @param toType
+   * @param calEvents
+   * @param username
+   * @throws Exception
+   */
+  public void moveEvent(SessionProvider userSession, String formCalendar, String toCalendar, String formType, String toType, List<CalendarEvent> calEvents, String username) throws Exception ;
+
+  /**
+   * 
+   * @param fromUserId
+   * @param toUserId
+   * @param calType
+   * @param calendarId
+   * @param eventId
+   * @param answer
    * @throws Exception
    */
   public void confirmInvitation(String fromUserId, String toUserId,int calType,String calendarId, String eventId, int answer) throws Exception ;
