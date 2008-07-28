@@ -159,7 +159,7 @@ public class JCRDataStorage {
     return Str;
   }
 
- /* public Contact getPersonalContact(String userId) throws Exception {
+  public Contact getPersonalContact(String userId) throws Exception {
     Node contactHome = getUserContactHome(SessionProvider.createSystemProvider(), userId) ;
     try {
       return getContact(contactHome.getNode(userId), JCRDataStorage.PUBLIC) ;
@@ -167,7 +167,7 @@ public class JCRDataStorage {
       return null ;
     } 
   }
-  */
+  
   
   private Contact getContact(Node contactNode, String contactType) throws Exception {
     Contact contact = new Contact();

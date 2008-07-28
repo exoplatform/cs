@@ -178,7 +178,7 @@ public interface ContactService {
    */
   public void addGroupToPersonalContact(String userId, String groupId) throws Exception ;
   
- // public Contact getPersonalContact(String userId) throws Exception ;
+  public Contact getPersonalContact(String userId) throws Exception ;
   
   /**
    * get all personal address books of user

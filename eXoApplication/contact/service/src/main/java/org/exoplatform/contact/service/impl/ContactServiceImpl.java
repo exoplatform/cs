@@ -56,10 +56,10 @@ public class ContactServiceImpl implements ContactService {
     return storage_.getAllContact(sProvider, username);
   }
   
- /* public Contact getPersonalContact(String userId) throws Exception {
+  public Contact getPersonalContact(String userId) throws Exception {
     return storage_.getPersonalContact(userId) ;
   }
-  */
+  
   public Map<String, String> searchEmails(SessionProvider sysProvider, String username, ContactFilter filter)throws Exception {
     return storage_.searchEmails(sysProvider, username, filter) ;
   }
