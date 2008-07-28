@@ -156,16 +156,11 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
         OrganizationService organizationService = 
           (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
         try {
-          if (names.indexOf(",") > 0) {
-            String[] array = names.split(",") ;
-            for(String name : array) {
-              organizationService.getUserHandler().findUserByName(name.trim()).getFullName();
-              receiverUser.add(name.trim() + JCRDataStorage.HYPHEN) ;
-            }
-          } else {
-            organizationService.getUserHandler().findUserByName(names.trim()).getFullName();
-            receiverUser.add(names.trim() + JCRDataStorage.HYPHEN) ;
-          }
+          String[] array = names.split(",") ;
+          for(String name : array) {
+            organizationService.getUserHandler().findUserByName(name.trim()).getFullName();
+            receiverUser.add(name.trim() + JCRDataStorage.HYPHEN) ;
+          }         
         } catch (NullPointerException e) {
           uiApp.addMessage(new ApplicationMessage("UISharedContactsForm.msg.not-exist-username", null,
               ApplicationMessage.WARNING)) ;
@@ -185,7 +180,7 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
           }
         }        
       } 
-      receiverUser.remove(ContactUtils.getCurrentUser()) ;
+      receiverUser.remove(username + JCRDataStorage.HYPHEN) ;
       if (receiverUser.size() > 0) {
         Map<String, String> viewMap = new LinkedHashMap<String, String>() ;
         for (String user : receiverUser) viewMap.put(user, user) ;
