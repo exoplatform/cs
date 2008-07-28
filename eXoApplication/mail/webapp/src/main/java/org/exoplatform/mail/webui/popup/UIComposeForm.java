@@ -281,6 +281,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           }
           break;
         case MESSAGE_FOWARD : 
+          //TODO should replate text by value form resource boundle
           String toAddress = msg.getMessageTo() != null ? msg.getMessageTo() : "" ;
           setFieldSubjectValue("Fwd: " + msg.getSubject());
           StringBuffer forwardTxt = new StringBuffer("<br><br>-------- Original Message --------<br>") ;
@@ -477,6 +478,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     return message;
   }
   
+  //TODO return directly
   public boolean fromDrafts() {    
     if (getMessage() != null && getMessage().getFolders()[0].equals(Utils.createFolderId(accountId_, Utils.FD_DRAFTS, false)) || getComposeType() == MESSAGE_IN_DRAFT) { 
       return true;
@@ -591,6 +593,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         UIMessageList uiMsgList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
         UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class) ;
         uiMsgList.setMessagePageList(mailSvr.getMessagePageList(SessionProviderFactory.createSystemProvider(), usename, uiMsgList.getMessageFilter())) ;
+        //TODO check this code because it does nothing here
         List<Message> showedMsg = uiMsgPreview.getShowedMessages() ;
         try {
           if (showedMsg != null && showedMsg.size() > 0) {
@@ -605,6 +608,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
             }
           }
         }catch(Exception e) {}
+        //
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class)) ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer) ;
@@ -668,11 +672,24 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       UIComposeForm uiComposeForm = event.getSource() ;
       UIPopupActionContainer uiActionContainer = uiComposeForm.getAncestorOfType(UIPopupActionContainer.class) ;    
       UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
-      UIAddressForm uiAddressForm = uiChildPopup.activate(UIAddressForm.class, 650) ; 
-      uiAddressForm.setRecipientsType(FIELD_TO);
-      if (uiComposeForm.getToContacts() != null && uiComposeForm.getToContacts().size() > 0) {
-        uiAddressForm.setAlreadyCheckedContact(uiComposeForm.getToContacts());
-      } 
+      UIAddressForm uiAddress = uiChildPopup.activate(UIAddressForm.class, 650) ; 
+      
+      uiAddress.setRecipientsType(FIELD_TO);
+      String toAddressString = uiComposeForm.getFieldToValue() ;
+      InternetAddress[] toAddresses = Utils.getInternetAddress(toAddressString) ;
+      List<String> emailList = new ArrayList<String>();
+      for (int i = 0 ; i < toAddresses.length; i++) {
+        if (toAddresses[i] != null) emailList.add(toAddresses[i].getAddress());
+      }
+      List<Contact> toContact = uiComposeForm.getToContacts() ;
+      if (toContact != null && toContact.size() > 0) {
+        List<Contact> contactList = new ArrayList<Contact>();
+        for (Contact ct : toContact) {
+          if (emailList.contains(ct.getEmailAddress())) contactList.add(ct) ;
+        }
+        uiAddress.setAlreadyCheckedContact(contactList);
+      }
+      
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
     }
   }
@@ -681,11 +698,24 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       UIComposeForm uiComposeForm = event.getSource() ;
       UIPopupActionContainer uiActionContainer = uiComposeForm.getAncestorOfType(UIPopupActionContainer.class) ;    
       UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
-      UIAddressForm uiAddressForm = uiChildPopup.activate(UIAddressForm.class,650) ; 
-      uiAddressForm.setRecipientsType(FIELD_CC);
-      if (uiComposeForm.getCcContacts()!= null && uiComposeForm.getCcContacts().size()>0) {        
-       uiAddressForm.setAlreadyCheckedContact(uiComposeForm.getCcContacts());      
+      UIAddressForm uiAddress = uiChildPopup.activate(UIAddressForm.class, 650) ; 
+      
+      uiAddress.setRecipientsType(FIELD_CC);
+      String ccAddressString = uiComposeForm.getFieldCcValue() ;
+      InternetAddress[] ccAddresses = Utils.getInternetAddress(ccAddressString) ;
+      List<String> emailList = new ArrayList<String>();
+      for (int i = 0 ; i < ccAddresses.length; i++) {
+        if (ccAddresses[i] != null) emailList.add(ccAddresses[i].getAddress());
       }
+      List<Contact> ccContact = uiComposeForm.getCcContacts() ;
+      if (ccContact != null && ccContact.size() > 0) {
+        List<Contact> contactList = new ArrayList<Contact>();
+        for (Contact ct : ccContact) {
+          if (emailList.contains(ct.getEmailAddress())) contactList.add(ct) ;
+        }
+        uiAddress.setAlreadyCheckedContact(contactList);
+      }
+      
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
     }
   }
@@ -695,11 +725,24 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       UIComposeForm uiComposeForm = event.getSource() ;
       UIPopupActionContainer uiActionContainer = uiComposeForm.getAncestorOfType(UIPopupActionContainer.class) ;    
       UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
-      UIAddressForm uiAddressForm = uiChildPopup.activate(UIAddressForm.class,650) ; 
-      uiAddressForm.setRecipientsType(FIELD_BCC);
-      if (uiComposeForm.getCcContacts()!= null && uiComposeForm.getBccContacts().size()>0) {        
-       uiAddressForm.setAlreadyCheckedContact(uiComposeForm.getBccContacts());
+      UIAddressForm uiAddress = uiChildPopup.activate(UIAddressForm.class, 650) ; 
+      
+      uiAddress.setRecipientsType(FIELD_BCC);
+      String bccAddressString = uiComposeForm.getFieldBccValue() ;
+      InternetAddress[] bccAddresses = Utils.getInternetAddress(bccAddressString) ;
+      List<String> emailList = new ArrayList<String>();
+      for (int i = 0 ; i < bccAddresses.length; i++) {
+        if (bccAddresses[i] != null) emailList.add(bccAddresses[i].getAddress());
       }
+      List<Contact> bccContact = uiComposeForm.getBccContacts() ;
+      if (bccContact != null && bccContact.size() > 0) {
+        List<Contact> contactList = new ArrayList<Contact>();
+        for (Contact ct : bccContact) {
+          if (emailList.contains(ct.getEmailAddress())) contactList.add(ct) ;
+        }
+        uiAddress.setAlreadyCheckedContact(contactList);
+      }
+      
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
     }   
   }

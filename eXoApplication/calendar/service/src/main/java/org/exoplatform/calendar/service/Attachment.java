@@ -41,10 +41,13 @@ public class Attachment  {
   private String name ;
   private String mimeType ;
   private long size ;
-  //private InputStream data ;
   private  byte[] imageBytes ;
   private Calendar lastModified ;
   private String workspace ;
+  /**
+   * This class use for keep data and infomation about attachments
+   * the id will automatic generate when create new object
+   */
   public Attachment() {
     id =  "Attachment" + IdGenerator.generate() ;
   }
@@ -60,7 +63,7 @@ public class Attachment  {
 
   public String getName() { return name ; }
   public void setName(String name_) { this.name = name_ ; }
-
+  
   public String getDataPath() throws Exception {
     Node attachmentData ;
     try{

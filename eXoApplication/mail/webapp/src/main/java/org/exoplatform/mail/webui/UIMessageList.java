@@ -105,6 +105,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 )
 
 public class UIMessageList extends UIForm {
+  //TODO should use by static way
   public final int MODE_LIST = 1 ;
   public final int MODE_THREAD = 2 ;
   public final int MODE_CONVERSATION = 3 ;
@@ -205,6 +206,7 @@ public class UIMessageList extends UIForm {
     updateList();
   }
 
+  //TODO check pageList_ null before getCurrentPage()
   public void updateList() throws Exception {
     long page = pageList_.getCurrentPage();
     if (pageList_ == null) page = 1 ;
@@ -218,6 +220,9 @@ public class UIMessageList extends UIForm {
       List<Message> msgList = new ArrayList<Message>() ;
       try {
         msgList = pageList_.getPage(page, MailUtils.getCurrentUser()) ;
+        if (page > 1 && msgList.size() == 0) {
+          msgList = pageList_.getPage(page - 1, MailUtils.getCurrentUser()) ;
+        }
       } catch(Exception e) {
         String username = MailUtils.getCurrentUser();
         MailService mailSrv = MailUtils.getMailService();
@@ -233,14 +238,23 @@ public class UIMessageList extends UIForm {
   }
 
   public List<Message> getCheckedMessage() throws Exception {
-    List<Message> messageList = new ArrayList<Message>();
+    List<Message> checkedList = new ArrayList<Message>();
     for (Message msg : getMessageList()) {
       UIFormCheckBoxInput<Boolean> uiCheckbox = getChildById(msg.getId());
       if (uiCheckbox != null && uiCheckbox.isChecked()) {
-        messageList.add(msg);
+        checkedList.add(msg);
+        if (viewMode == MODE_CONVERSATION) {
+          Message childMsg ;
+          for (String childMsgId : msg.getGroupedMessageIds()) {
+            childMsg = messageList_.get(childMsgId);
+            if (childMsg != null && 
+               !childMsg.getFolders()[0].equals(Utils.createFolderId(accountId_, Utils.FD_SENT, false))) 
+              checkedList.add(childMsg) ;
+          }
+        }
       }
     }
-    return messageList;
+    return checkedList;
   }
 
   public List<Tag> getTags(Message msg) throws Exception {
@@ -250,6 +264,7 @@ public class UIMessageList extends UIForm {
     List<Tag> tagList = new ArrayList<Tag>();
     try {
       if (msg.getTags() != null && msg.getTags().length > 0) {
+        //TODO should use for each
         for (int i = 0; i < msg.getTags().length; i++) {
           Tag tag = mailSrv.getTag(SessionProviderFactory.createSystemProvider(), username, accountId_, msg.getTags()[i]);
           tagList.add(tag);
@@ -324,7 +339,7 @@ public class UIMessageList extends UIForm {
       }          
     }
   }
-
+  //TODO listener never use
   static public class ReadActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
 

@@ -3,27 +3,28 @@
   <groupId>org.exoplatform.cs</groupId>
   <artifactId>config</artifactId>
   <name>eXo Collaboration Suite Config</name>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <modules>
-    <module>web/csportal</module>
-    <module>web/csResources</module>
-    <module>web/webservice</module>
-    
-    <module>eXoApplication/mail/webapp</module>
-    <module>eXoApplication/mail/service</module>
-    
-    <module>eXoApplication/calendar/webapp</module>
-    <module>eXoApplication/calendar/service</module>
-    
-    <module>eXoApplication/contact/webapp</module>
-    <module>eXoApplication/contact/service</module>
-    
-    <module>eXoApplication/content/webapp</module>
-    <module>eXoApplication/content/service</module>
 
+
+    <module>eXoApplication/content/service</module>    
+    <module>eXoApplication/content/webapp</module>
+  
+    <module>eXoApplication/contact/service</module>    
+    <module>eXoApplication/calendar/service</module>    
+    <module>eXoApplication/mail/service</module>  
+    <module>web/webservice</module>
+        
+    <module>eXoApplication/mail/webapp</module>    
+    <module>eXoApplication/contact/webapp</module>   
+    <module>eXoApplication/calendar/webapp</module> 
+
+    <module>web/csResources</module>    
+    <module>web/csportal</module>
     <module>web/csdemo</module>
+
   </modules>
 
   <build>
@@ -115,11 +116,11 @@
       <properties>
         <org.exoplatform.kernel.version>2.0.1</org.exoplatform.kernel.version>
         <org.exoplatform.core.version>2.0.2</org.exoplatform.core.version>
-	<org.exoplatform.ws.version>1.1.2</org.exoplatform.ws.version>
+	    <org.exoplatform.ws.version>1.1.2</org.exoplatform.ws.version>
         <org.exoplatform.jcr.version>1.8.3</org.exoplatform.jcr.version>
         <org.exoplatform.pc.version>2.0</org.exoplatform.pc.version>
         <org.exoplatform.portal.version>2.1</org.exoplatform.portal.version>
-        <org.exoplatform.cs.version>1.0.1-SNAPSHOT</org.exoplatform.cs.version>
+        <org.exoplatform.cs.version>1.0.2-SNAPSHOT</org.exoplatform.cs.version>
         <test.classes>Test</test.classes>
         <test.skip>true</test.skip>
 

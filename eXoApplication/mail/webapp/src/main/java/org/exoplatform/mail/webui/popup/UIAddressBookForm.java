@@ -27,7 +27,9 @@ import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.webui.SelectItem;
-import org.exoplatform.mail.webui.SelectItemOptionGroup;
+import org.exoplatform.mail.webui.SelectOption;
+import org.exoplatform.mail.webui.SelectOptionGroup;
+import org.exoplatform.mail.webui.UIFormSelectBoxWithGroups;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -66,7 +68,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
   List<Contact> contactList_ = new ArrayList<Contact>();
   
   public UIAddressBookForm() throws Exception {
-    org.exoplatform.mail.webui.UIFormSelectBox uiSelectGroup = new org.exoplatform.mail.webui.UIFormSelectBox(SELECT_GROUP, SELECT_GROUP, getOptions());
+    UIFormSelectBoxWithGroups uiSelectGroup = new UIFormSelectBoxWithGroups(SELECT_GROUP, SELECT_GROUP, getOptions());
     uiSelectGroup.setOnChange("ChangeGroup");
     addUIFormInput(uiSelectGroup);
     refrestContactList(uiSelectGroup.getValue());
@@ -76,9 +78,9 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
     String username = MailUtils.getCurrentUser();
     ContactService contactSrv = getApplicationComponent(ContactService.class);
     List<SelectItem> options = new ArrayList<SelectItem>() ;
-    SelectItemOptionGroup personalContacts = new SelectItemOptionGroup("personal-contacts");
+    SelectOptionGroup personalContacts = new SelectOptionGroup("personal-contacts");
     for(ContactGroup pcg : contactSrv.getGroups(SessionProviderFactory.createSystemProvider(), username)) {
-      personalContacts.addOption(new org.exoplatform.mail.webui.SelectItemOption<String>(pcg.getName(), pcg.getId())) ;
+      personalContacts.addOption(new SelectOption(pcg.getName(), pcg.getId())) ;
     }
     options.add(personalContacts);
     /*  
@@ -110,6 +112,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
     String username = MailUtils.getCurrentUser();
     ContactService contactSrv = getApplicationComponent(ContactService.class);
     List<Contact> contactList = new ArrayList<Contact>();
+    //TODO should be check groupId.trim().length > 0 
     if (groupId != null && groupId != "") contactList = contactSrv.getContactPageListByGroup(SessionProviderFactory.createSystemProvider(), username, groupId).getAll();
     else contactList = contactSrv.getContactPageListByGroup(SessionProviderFactory.createSystemProvider(), username, contactSrv.getGroups(SessionProviderFactory.createSystemProvider(), username).get(0).getId()).getAll();
     contactMap_.clear();
@@ -121,8 +124,8 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
   }
   
   public void updateGroup(String selectedGroup) throws Exception {
-    ((org.exoplatform.mail.webui.UIFormSelectBox)getChildById(SELECT_GROUP)).setOptions(getOptions());
-    ((org.exoplatform.mail.webui.UIFormSelectBox)getChildById(SELECT_GROUP)).setValue(selectedGroup);
+    ((UIFormSelectBoxWithGroups)getChildById(SELECT_GROUP)).setOptions(getOptions());
+    ((UIFormSelectBoxWithGroups)getChildById(SELECT_GROUP)).setValue(selectedGroup);
   }
   
   public String[] getActions() { return new String[] { "Close" } ; }
@@ -158,7 +161,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
       UIAddressBookForm uiAddBook = event.getSource() ;
       Contact selectedContact = uiAddBook.getSelectedContact() ;
       UIApplication uiApp = uiAddBook.getAncestorOfType(UIApplication.class) ;
-      String groupId = ((org.exoplatform.mail.webui.UIFormSelectBox)uiAddBook.getChildById(SELECT_GROUP)).getValue();
+      String groupId = ((UIFormSelectBoxWithGroups)uiAddBook.getChildById(SELECT_GROUP)).getValue();
       if (selectedContact != null) {
         if (selectedContact.getContactType().equals("2") ||(selectedContact.getContactType().equals("1"))) {
           uiApp.addMessage(new ApplicationMessage("UIAddressBookForm.msg.cannot-edit", null)) ;;
@@ -214,7 +217,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
           if (!contact.getId().equals(MailUtils.getCurrentUser())) {
             contactIds.add(contact.getId()) ;
             contactServ.removeContacts(SessionProviderFactory.createSystemProvider(), username, contactIds);
-            uiAddressBook.refrestContactList(((org.exoplatform.mail.webui.UIFormSelectBox)uiAddressBook.getChildById(SELECT_GROUP)).getValue());
+            uiAddressBook.refrestContactList(((UIFormSelectBoxWithGroups)uiAddressBook.getChildById(SELECT_GROUP)).getValue());
           } else {
             uiApp.addMessage(new ApplicationMessage("UIAddressBookForm.msg.cannot-delete-this-contact", null)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -236,9 +239,9 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
   static public class ChangeGroupActionListener extends EventListener<UIAddressBookForm> {
     public void execute(Event<UIAddressBookForm> event) throws Exception {
       UIAddressBookForm uiAddressBook = event.getSource();
-      String selectedGroupId = ((org.exoplatform.mail.webui.UIFormSelectBox)uiAddressBook.getChildById(SELECT_GROUP)).getValue();
+      String selectedGroupId = ((UIFormSelectBoxWithGroups)uiAddressBook.getChildById(SELECT_GROUP)).getValue();
       uiAddressBook.refrestContactList(selectedGroupId);
-      ((org.exoplatform.mail.webui.UIFormSelectBox)uiAddressBook.getChildById(SELECT_GROUP)).setValue(selectedGroupId);
+      ((UIFormSelectBoxWithGroups)uiAddressBook.getChildById(SELECT_GROUP)).setValue(selectedGroupId);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent()) ;
     }
   }

@@ -104,8 +104,7 @@
     </tbody>
     </table>
   </div>
-  <div style="position:relative ;"><span></span></div>
-  <div class="EventDayContainer" style="position:relative ;">
+  <div class="EventDayContainer" style="position:relative; display: block;">
     <div class="EventDayContent">
       <table class="UIGrid" id="UIDayViewGrid" cellspacing="0" borderspacing="0" cellpadding="0" style="table-layout: fixed;">
         <tbody>
@@ -207,7 +206,6 @@
       </table>
     </div>
   </div>
-  <div style="position:relative ;"><span></span></div>
 </div>
 <% /*Begin Popup Menu*/ %>
 <div class="UIRightClickPopupMenu" id="UIDayViewRightMenu" exocallback="eXo.calendar.UICalendarPortlet.dayViewCallback">

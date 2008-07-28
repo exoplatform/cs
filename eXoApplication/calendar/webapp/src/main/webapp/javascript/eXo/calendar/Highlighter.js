@@ -1,7 +1,18 @@
+
+/**
+ * Class control dragging selection in the month view
+ * @author <a href="mailto:dung14000@gmail.com">Hoang Manh Dung</a>
+ * @constructor
+ */
 function Highlighter() {
 
 }
 
+/**
+ * Gets index of cell in time table in the month view
+ * @param {Object} cell A cell in time table
+ * @return Object contains two properties that are cellIndex and rowIndex
+ */
 Highlighter.prototype.getPos = function(cell) {
 	return {
 		"x" : cell.cellIndex,
@@ -9,6 +20,12 @@ Highlighter.prototype.getPos = function(cell) {
 	}
 } ;
 
+/**
+ * Checks mouse over in cell or not
+ * @param {Object} cell A cell in time table
+ * @param {Object} _e Mouse event
+ * @return Boolean value
+ */
 Highlighter.prototype.isInCell = function(cell, _e) {
 	var Highlighter = eXo.calendar.Highlighter ;
 	var cellX = eXo.core.Browser.findPosX(cell) - Highlighter.container.scrollLeft ;
@@ -30,6 +47,10 @@ Highlighter.prototype.isInCell = function(cell, _e) {
 	return false ;
 } ;
 
+/**
+ * Gets position of mouse in index of cell
+ * @param {Object} evt Mouse event
+ */
 Highlighter.prototype.getMousePos = function(evt) {
 	var Highlighter = eXo.calendar.Highlighter ;
 	var _e = window.event || evt ;
@@ -43,6 +64,9 @@ Highlighter.prototype.getMousePos = function(evt) {
 	}
 } ;
 
+/**
+ * Hide all selection block
+ */
 Highlighter.prototype.hideAll = function() {
 	var obj  = (arguments.length >0) ? arguments[0]: null ;
 	var blocks = eXo.calendar.Highlighter.block ;
@@ -53,6 +77,11 @@ Highlighter.prototype.hideAll = function() {
 	}
 } ;
 
+/**
+ * Hides the selection blocks out of selected period of time
+ * @param {Object} start Start time
+ * @param {Object} end End time
+ */
 Highlighter.prototype.hideBlock = function(start,end) {
 	var blocks = eXo.calendar.Highlighter.block ;
 	var len = blocks.length ;
@@ -61,6 +90,10 @@ Highlighter.prototype.hideBlock = function(start,end) {
 	}
 } ;
 
+/**
+ * Creates a selection block
+ * @param {Object} cell A cell in time table
+ */
 Highlighter.prototype.createBlock = function(cell) {
 	var DOMUtil = eXo.core.DOMUtil ;
 	var table = DOMUtil.findAncestorByTagName(cell, "table") ;
@@ -80,6 +113,10 @@ Highlighter.prototype.createBlock = function(cell) {
 	eXo.calendar.Highlighter.block = block ;
 } ;
 
+/**
+ * Sets up dragging selection when mouse down on the month view
+ * @param {Object} evt Mouse event
+ */
 Highlighter.prototype.start = function(evt) {
 	try{		
 	var Highlighter = eXo.calendar.Highlighter ;
@@ -113,6 +150,10 @@ Highlighter.prototype.start = function(evt) {
 	} catch(e) {alert(e.message) ;}
 } ;
 
+/**
+ * Executes dragging selection
+ * @param {Object} evt Mouse event
+ */
 Highlighter.prototype.execute = function(evt) {
 	var Highlighter = eXo.calendar.Highlighter ;
 	var _e = window.event || evt ;	
@@ -195,6 +236,10 @@ Highlighter.prototype.execute = function(evt) {
 	}			
 } ;
 
+/**
+ * Ends dragging selection, this method clean up some unused properties and execute callback function
+ * @param {Object} evt Mouse event
+ */
 Highlighter.prototype.end = function(evt) {
 	var Highlighter = eXo.calendar.Highlighter;
 	if (Highlighter.callback) eval(Highlighter.callback) ;	
@@ -208,9 +253,20 @@ Highlighter.prototype.setCallback = function(str) {
 
 eXo.calendar.Highlighter = new Highlighter() ;
 
+/**
+ * Class control horizontal dragging selection in the month view
+ * @author <a href="mailto:dung14000@gmail.com">Hoang Manh Dung</a>
+ * @constructor
+ */
 function UIHSelection() {
 } ;
 
+/**
+ * Checks mouse over in cell or not
+ * @param {Object} cell A cell in the dragging table
+ * @param {Object} _e Mouse event
+ * @return Boolean value
+ */
 UIHSelection.prototype.isInCell = function(cell, _e) {
 	var UIHSelection = eXo.calendar.UIHSelection ;
 	var cellX = eXo.core.Browser.findPosX(cell) - UIHSelection.container.scrollLeft ;
@@ -232,6 +288,11 @@ UIHSelection.prototype.isInCell = function(cell, _e) {
 	return false ;
 } ;
 
+/**
+ * Gets cellIndex of cell
+ * @param {Object} evt Mouse event
+ * return cellIndex of current cell
+ */
 UIHSelection.prototype.getCurrentIndex = function(evt){
 	var cells = eXo.calendar.UIHSelection.cells ;
 	var len = cells.length ;
@@ -241,12 +302,24 @@ UIHSelection.prototype.getCurrentIndex = function(evt){
 	}
 } ;
 
+/**
+ * Sets attribute for cells
+ * @param {Object} sIndex Start cellIndex
+ * @param {Object} eIndex End cellIndex
+ * @param {Object} cells A cell in time table
+ */
 UIHSelection.prototype.setAttr = function(sIndex, eIndex, cells){
 	for(var i = sIndex; i <= eIndex ; i++) {
 		eXo.core.DOMUtil.addClass(cells[i],"UserSelection") ;
 	}
 } ;
 
+/**
+ * Removes attribute for cells
+ * @param {Object} sIndex Start cellIndex
+ * @param {Object} eIndex End cellIndex
+ * @param {Object} cells A cell in time table
+ */
 UIHSelection.prototype.removeAttr = function(sIndex, eIndex, cells){
 	var len = cells.length ;
 	var DOMUtil = eXo.core.DOMUtil ;
@@ -256,6 +329,9 @@ UIHSelection.prototype.removeAttr = function(sIndex, eIndex, cells){
 	}
 } ;
 
+/**
+ * Sets all attribute for cells
+ */
 UIHSelection.prototype.removeAllAttr = function(){
 	var cells = this.cells ;
 	var len = cells.length ;
@@ -265,6 +341,10 @@ UIHSelection.prototype.removeAllAttr = function(){
 	}
 } ;
 
+/**
+ * Sets up horizontal dragging selection when mouse down on time table
+ * @param {Object} evt Mouse event
+ */
 UIHSelection.prototype.start = function(){
 	var UIHSelection = eXo.calendar.UIHSelection ;
 	var table = eXo.core.DOMUtil.findAncestorByTagName(this, "table") ;
@@ -282,6 +362,9 @@ UIHSelection.prototype.start = function(){
 	UIHSelection.lastCell = UIHSelection.cells[UIHSelection.startIndex] ;
 } ;
 
+/**
+ * Executes horizontal dragging selection
+ */
 UIHSelection.prototype.execute = function(evt){
 	var _e = window.event || evt ;
 	var UIHSelection = eXo.calendar.UIHSelection ;
@@ -303,6 +386,9 @@ UIHSelection.prototype.execute = function(evt){
 	}
 } ;
 
+/**
+ * Ends horizontal dragging selection, this method clean up some unused properties and execute callback function
+ */
 UIHSelection.prototype.end = function(){
 	var UIHSelection = eXo.calendar.UIHSelection ;
 	UIHSelection.removeAllAttr() ;

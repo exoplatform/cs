@@ -100,6 +100,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     addUIFormInput(uiFormDateTimeInputAfterDate) ;  
     
     List<SelectItemOption<String>>  options1 = new ArrayList<SelectItemOption<String>>() ;
+    //TODO should replace string values here by resource bundle
     options1.add(new SelectItemOption<String>("contains", String.valueOf(Utils.CONDITION_CONTAIN)));
     options1.add(new SelectItemOption<String>("doesn't contain", String.valueOf(Utils.CONDITION_NOT_CONTAIN)));
     addUIFormInput(new UIFormSelectBox(SEARCH_BODY_CONDITION, SEARCH_BODY_CONDITION, options1));
@@ -205,7 +206,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     String value = getUIFormSelectBox(SEARCH_PRIORITY).getValue() ;
     return Long.valueOf(value.substring(value.indexOf(".")+1), value.length()) ;
   }
-
+  //TODO method never use
   public void resetFields() { reset() ; }
   
   public void activate() throws Exception { }
@@ -268,6 +269,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
       uiMessageList.setSelectedFolderId(null);
       uiMessageList.setSelectedTagId(null);
       uiMessageList.setMessageFilter(filter);
+      uiMessageList.viewMode = uiMessageList.MODE_LIST ;
       try {
         uiMessageList.setMessagePageList(mailService.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, filter));
         uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null);

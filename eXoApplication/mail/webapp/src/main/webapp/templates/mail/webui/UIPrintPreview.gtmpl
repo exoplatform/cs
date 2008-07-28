@@ -76,12 +76,15 @@
           for (Attachment attach : msg.getAttachments()) {
             attLink = MailUtils.getImageSource(attach, dservice) ;
             boolean isImage = false ;
+            boolean isSupportedIcon = false ;
             if (attLink != null ) {
-              if (attach.getMimeType().indexOf("image") > -1) {
+              if (attach.getMimeType().toLowerCase().indexOf("image") > -1) {
                 isImage = true ;
               } else if (attach.getMimeType().indexOf("msword") > -1) {
+                isSupportedIcon = true ;
                 attLink = "/mail/skin/DefaultSkin/webui/skinIcons/24x24/icons/WordIcon.gif";
               } else if (attach.getMimeType().indexOf("pdf") > -1) {
+                isSupportedIcon = true ;
                 attLink = "/mail/skin/DefaultSkin/webui/skinIcons/24x24/icons/PDFIcon.gif";
               }
             }
@@ -93,7 +96,7 @@
             %> 
                 <img class="AttachmentFile" style="height:auto ;width: 200px;padding-right: 5px" src="$attLink">
             <%
-              } else {
+              } else if (isSupportedIcon) {
             %>
                 <img class="AttachmentFile" src="$attLink">
             <%     
@@ -123,7 +126,7 @@
           <% 
              String actionLabel = _ctx.appRes(uicomponent.getName() + ".action.Print") ;             
           %>
-          <a href="" onclick="eXo.mail.UIMailPortlet.printMessage()" class="ActionButton LightBlueStyle">
+          <a href="javascript:void(0);" onclick="eXo.mail.UIMailPortlet.printMessage()" class="ActionButton LightBlueStyle">
             <div class="ButtonLeft">
               <div class="ButtonRight">
                 <div class="ButtonMiddle">

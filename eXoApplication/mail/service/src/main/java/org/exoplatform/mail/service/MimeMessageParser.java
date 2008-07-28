@@ -25,6 +25,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import javax.mail.Header;
 import javax.mail.MessagingException;
@@ -99,15 +100,15 @@ public class MimeMessageParser {
   private static Date parseDate(String dateStr) throws ParseException {
     SimpleDateFormat dateFormat ; 
     try {
-      dateFormat = new SimpleDateFormat("EEE, d MMM yy HH:mm:ss Z") ;
+      dateFormat = new SimpleDateFormat("EEE, d MMM yy HH:mm:ss Z", Locale.ENGLISH) ;
       return dateFormat.parse(dateStr);
     } catch(ParseException e) {
       try {
-        dateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z") ;
+        dateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z", Locale.ENGLISH) ;
         return dateFormat.parse(dateStr);
       } catch(ParseException ex) {
         try {
-          dateFormat = new SimpleDateFormat("d MMM yyyy HH:mm:ss Z") ;
+          dateFormat = new SimpleDateFormat("d MMM yyyy HH:mm:ss Z", Locale.ENGLISH) ;
           return dateFormat.parse(dateStr);
         } catch(ParseException exx) {
           System.out.println(" [WARNING] Cannot parse date time from message: " + dateStr) ;

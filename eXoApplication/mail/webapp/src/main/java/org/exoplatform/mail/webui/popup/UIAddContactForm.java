@@ -33,7 +33,8 @@ import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.webui.SelectItem;
-import org.exoplatform.mail.webui.SelectItemOptionGroup;
+import org.exoplatform.mail.webui.SelectOptionGroup;
+import org.exoplatform.mail.webui.UIFormSelectBoxWithGroups;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -96,7 +97,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
   public Contact selectedContact_  ;
   
   public UIAddContactForm() throws Exception { 
-    addUIFormInput(new org.exoplatform.mail.webui.UIFormSelectBox(SELECT_GROUP, SELECT_GROUP, getOptions()));
+    addUIFormInput(new UIFormSelectBoxWithGroups(SELECT_GROUP, SELECT_GROUP, getOptions()));
     addUIFormInput(new UIFormStringInput(FIRST_NAME, FIRST_NAME, null).addValidator(MandatoryValidator.class));
     addUIFormInput(new UIFormStringInput(LAST_NAME, LAST_NAME, null).addValidator(MandatoryValidator.class));
     addUIFormInput(new UIFormStringInput(NICKNAME, NICKNAME, null));
@@ -144,9 +145,9 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
     String username = MailUtils.getCurrentUser();
     ContactService contactSrv = getApplicationComponent(ContactService.class);
     List<SelectItem> options = new ArrayList<SelectItem>() ;
-    SelectItemOptionGroup personalContacts = new SelectItemOptionGroup("personal-contacts");
+    SelectOptionGroup personalContacts = new SelectOptionGroup("personal-contacts");
     for(ContactGroup pcg : contactSrv.getGroups(SessionProviderFactory.createSystemProvider(), username)) {
-      personalContacts.addOption(new org.exoplatform.mail.webui.SelectItemOption<String>(pcg.getName(), pcg.getId())) ;
+      personalContacts.addOption(new org.exoplatform.mail.webui.SelectOption(pcg.getName(), pcg.getId())) ;
     }
     options.add(personalContacts);
        
@@ -157,9 +158,9 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
     isEdited_ = true ;
     selectedGroup_ = groupId ;
     selectedContact_ = ct ;
-    ((org.exoplatform.mail.webui.UIFormSelectBox)getChildById(SELECT_GROUP)).setSelectedValues(new String[] {groupId});
-    ((org.exoplatform.mail.webui.UIFormSelectBox)getChildById(SELECT_GROUP)).setEditable(false) ;
-    ((org.exoplatform.mail.webui.UIFormSelectBox)getChildById(SELECT_GROUP)).setEnable(false) ;
+    ((UIFormSelectBoxWithGroups)getChildById(SELECT_GROUP)).setSelectedValues(new String[] {groupId});
+    ((UIFormSelectBoxWithGroups)getChildById(SELECT_GROUP)).setEditable(false) ;
+    ((UIFormSelectBoxWithGroups)getChildById(SELECT_GROUP)).setEnable(false) ;
     getUIStringInput(FIRST_NAME).setValue(ct.getFirstName());
     getUIStringInput(LAST_NAME).setValue(ct.getLastName());
     getUIStringInput(NICKNAME).setValue(ct.getNickName());
@@ -183,7 +184,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
   }
   
   public void refreshGroupList() throws Exception{
-    ((org.exoplatform.mail.webui.UIFormSelectBox)getChildById(SELECT_GROUP)).setOptions(getOptions());
+    ((UIFormSelectBoxWithGroups)getChildById(SELECT_GROUP)).setOptions(getOptions());
   } 
   
   public void setFirstNameField(String firstName) throws Exception {
@@ -252,7 +253,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
       UIAddContactForm uiContact = event.getSource() ;
       UIMailPortlet uiPortlet = uiContact.getAncestorOfType(UIMailPortlet.class); 
       UIApplication uiApp = uiContact.getAncestorOfType(UIApplication.class) ;
-      String groupId = ((org.exoplatform.mail.webui.UIFormSelectBox)uiContact.getChildById(SELECT_GROUP)).getValue();
+      String groupId = ((UIFormSelectBoxWithGroups)uiContact.getChildById(SELECT_GROUP)).getValue();
       String firstName = uiContact.getUIStringInput(FIRST_NAME).getValue();
       String lastName = uiContact.getUIStringInput(LAST_NAME).getValue();
       String email = uiContact.getUIStringInput(EMAIL).getValue();

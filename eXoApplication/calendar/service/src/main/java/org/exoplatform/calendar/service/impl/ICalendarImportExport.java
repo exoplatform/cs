@@ -30,7 +30,6 @@ import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.data.CalendarOutputter;
 import net.fortuna.ical4j.model.ComponentList;
 import net.fortuna.ical4j.model.DateTime;
-import net.fortuna.ical4j.model.Parameter;
 import net.fortuna.ical4j.model.Property;
 import net.fortuna.ical4j.model.PropertyList;
 import net.fortuna.ical4j.model.ValidationException;
@@ -50,11 +49,10 @@ import net.fortuna.ical4j.model.property.Version;
 
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
-import org.exoplatform.calendar.service.CalendarImportExport;
 import org.exoplatform.calendar.service.CalendarEvent;
+import org.exoplatform.calendar.service.CalendarImportExport;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.Reminder;
-import org.exoplatform.common.http.client.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 
@@ -259,6 +257,7 @@ public class ICalendarImportExport implements CalendarImportExport{
 	public void importCalendar(SessionProvider sProvider, String username, InputStream icalInputStream, String calendarName) throws Exception {
 		CalendarBuilder calendarBuilder = new CalendarBuilder() ;
 		net.fortuna.ical4j.model.Calendar iCalendar = calendarBuilder.build(icalInputStream) ;
+    // TODO currentDateTime is initialized many time
 		GregorianCalendar currentDateTime = new GregorianCalendar() ;
 		NodeIterator iter = storage_.getCalendarCategoryHome(sProvider, username).getNodes() ;
 		Node cat = null;

@@ -288,6 +288,7 @@ public class JCRDataStorage{
     calendarHome.getSession().save() ;
   }
 
+  @SuppressWarnings("deprecation")
   public Calendar removeUserCalendar(SessionProvider sProvider, String username, String calendarId) throws Exception {
     Node calendarHome = getUserCalendarHome(sProvider, username) ;
     if(calendarHome.hasNode(calendarId)) {
@@ -303,7 +304,7 @@ public class JCRDataStorage{
       }
       calNode.remove() ;
       calendarHome.save() ;
-      calendarHome.getSession().save() ;
+      //calendarHome.getSession().save() ;
       return calendar ;
     }
     return null ;
@@ -1607,7 +1608,7 @@ public class JCRDataStorage{
   public EventPageList searchEvent(SessionProvider sProvider, String username, EventQuery eventQuery, String[] publicCalendarIds)throws Exception {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>()  ; 
     events.addAll(getUserEvents(sProvider, username, eventQuery)) ;
-    events.addAll(getPublicEvents(SessionProvider.createSystemProvider(), eventQuery)) ;
+    if(publicCalendarIds.length > 0) events.addAll(getPublicEvents(SessionProvider.createSystemProvider(), eventQuery)) ;
     events.addAll(getSharedEvents(SessionProvider.createSystemProvider(), username, eventQuery)) ; 
     return new EventPageList(events, 10) ;    
   }
@@ -1689,6 +1690,7 @@ public class JCRDataStorage{
     }
     return data ;
   }
+  @SuppressWarnings("deprecation")
   public void shareCalendar(SessionProvider sProvider, String username, String calendarId, List<String> receiverUsers) throws Exception {
     Node sharedCalendarHome = getSharedCalendarHome(sProvider) ;
     Node calendarNode = getUserCalendarHome(sProvider, username).getNode(calendarId) ;
@@ -1884,6 +1886,7 @@ public class JCRDataStorage{
 
   public void removeSharedCalendar(SessionProvider sProvider, String username, String calendarId) throws Exception {
     Node sharedCalendarHome = getSharedCalendarHome(sProvider) ;
+    // TODO use try catch
     if(sharedCalendarHome.hasNode(username)) {
       Node userNode = sharedCalendarHome.getNode(username) ;
       String uuid = userNode.getProperty("jcr:uuid").getString() ;
@@ -1966,8 +1969,10 @@ public class JCRDataStorage{
     eventQuery.setFilterCalendarIds(filterList.toArray(new String[]{})) ;
     events.addAll(getUserEvents(sProvider, username, eventQuery)) ;
     events.addAll(getSharedEvents(SessionProvider.createSystemProvider(), username, eventQuery)) ;
-    if(publicCalendarIds != null && publicCalendarIds.length > 0) eventQuery.setCalendarId(publicCalendarIds) ;
-    events.addAll(getPublicEvents(SessionProvider.createSystemProvider(), eventQuery)) ;
+    if(publicCalendarIds != null && publicCalendarIds.length > 0) { 
+      eventQuery.setCalendarId(publicCalendarIds) ;
+      events.addAll(getPublicEvents(SessionProvider.createSystemProvider(), eventQuery)) ;
+    }
     return events ;
   }
 
@@ -2036,22 +2041,6 @@ public class JCRDataStorage{
         }
       }      
     }
-  }
-
-  public boolean hasEditPermission(SessionProvider sProvider, String sharedCalendarId, String username) throws Exception {
-    if(getSharedCalendarHome(sProvider).hasNode(username)) {
-      Node userNode = getSharedCalendarHome(sProvider).getNode(username) ;
-      PropertyIterator iter = userNode.getReferences() ;
-      Node calendar ;
-      while(iter.hasNext()) {
-        calendar = iter.nextProperty().getParent() ;
-        if(calendar.getProperty("exo:id").getString().equals(sharedCalendarId)) {
-          Value[] editValues = calendar.getProperty("exo:editPermissions").getValues() ;
-          return Arrays.asList(editValues).contains(username) ;
-        }
-      }
-    }  
-    return false;
   }
 
   public void moveEvent(SessionProvider sProvider, String fromCalendar, String toCalendar, String fromType, String toType, List<CalendarEvent> calEvents, String username) throws Exception {

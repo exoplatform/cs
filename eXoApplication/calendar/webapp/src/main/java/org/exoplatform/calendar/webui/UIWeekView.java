@@ -172,7 +172,7 @@ public class UIWeekView extends UICalendarView {
     }
     return dataMap ;
   }
-  protected boolean isShowCustomView() {return isShowCustomView_ ;}
+  public boolean isShowCustomView() {return isShowCustomView_ ;}
   static  public class UpdateEventActionListener extends EventListener<UIWeekView> {
     public void execute(Event<UIWeekView> event) throws Exception {
       UIWeekView calendarview = event.getSource() ;
@@ -259,11 +259,12 @@ public class UIWeekView extends UICalendarView {
           uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         }
+        //TODO souldn't refresh this
         UICalendarViewContainer uiViewContainer = uiCalendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
         CalendarSetting setting = calService.getCalendarSetting(calendarview.getSession(), username) ;
         uiViewContainer.refresh() ;
         uiCalendarPortlet.setCalendarSetting(setting) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarPortlet) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarPortlet) ; 
       }
     }
   }

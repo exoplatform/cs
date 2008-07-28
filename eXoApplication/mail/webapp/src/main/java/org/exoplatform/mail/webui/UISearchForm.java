@@ -67,6 +67,7 @@ public class UISearchForm extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
+      //TODO should use mandatory validater
       if(text == null || text.length() == 0) {
         uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.no-text-to-search", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -93,6 +94,7 @@ public class UISearchForm extends UIForm {
         uiMessageList.setSelectedFolderId(null);
         uiMessageList.setSelectedTagId(null);
         uiMessageList.setMessageFilter(filter);
+        uiMessageList.viewMode = uiMessageList.MODE_LIST ;
         uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null);
         UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
         uiFolderContainer.setSelectedFolder(null);

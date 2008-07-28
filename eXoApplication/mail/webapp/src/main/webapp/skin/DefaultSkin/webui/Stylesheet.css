@@ -132,13 +132,22 @@
 	border: 1px solid #A5A5A5;
 	font-size: 11px;
 }
-
+/*
 .UIMailPortlet .UISelectAccount .UIRightClickPopupMenu {
 	 top :5px;
 	 left:100px ;
+}*/
+
+.UIMailPortlet .UISelectAccount .UIPopupCategory {
+	top:21px;
+	left:0px ;
 }
 
-.UIMailPortlet .UISelectAccount .ItemSelectorContainer {
+.UIMailPortlet .UISelectAccount .UIRightClickPopupMenu {
+	position:static ;
+}
+
+.UIMailPortlet .UISelectAccount .UIPopup {
 	width: 194px;
 	float: left;
 	margin: 7px 0px 1px 0px;
@@ -225,7 +234,6 @@
 
 .UIMailPortlet .UINavigationContainer .UIFolderContainer a {
 	display: block;
-	border: solid 1px white ;
 }
 
 .UIMailPortlet .UINavigationContainer .UIFolderContainer .Icon {
@@ -411,8 +419,7 @@
 }
 
 .UIMailPortlet .UIActionBar .UIPopupCategory {
-	left: 8px;
-	position:absolute;
+	left: 0px;
 	top: 0px;
 }
 
@@ -596,7 +603,6 @@
 	display: block;
 	white-space: nowrap;
 	overflow: hidden ;
-	width: 80%;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIGrid .IconTag {
@@ -612,12 +618,11 @@
 
 .UIMailPortlet .MailWorkingWorkspace .UIGrid .SubjectItem{
 	display: block; 
-	float: left; 
-	width: 90%;
 	overflow: hidden; 
 	white-space: nowrap; 
 	margin-right: 3px;
 	padding-left: 20px;
+	_float: left;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIGrid .ReadItem .IconTag {
@@ -1028,9 +1033,8 @@
 }
 
 .UIMailPortlet .TitleBar .UIPopupCategory {
-	left: 20px;
-	position:absolute;
-	top: 20px;
+	left: 1px;
+	top: 17px;
 	width: auto;
 }
 
@@ -1549,10 +1553,6 @@
 
 .UIMailPortlet .UIContactsPopup .SelectFileFrame {
 	width: 300px;
-}
-
-.UIMailPortlet .SelectFileFrame {
-	width: 340px;
 }
 
 .UIMailPortlet .FileNameLabel {

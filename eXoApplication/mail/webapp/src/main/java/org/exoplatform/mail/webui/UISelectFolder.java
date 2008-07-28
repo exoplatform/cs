@@ -42,15 +42,15 @@ public class UISelectFolder extends UIFormInputSet {
   public void init(String accountId) throws Exception {
     setId("UISelectFolder");
     accountId_ = accountId ; 
-    addUIFormInput(new org.exoplatform.mail.webui.UIFormSelectBox(SELECT_FOLDER, SELECT_FOLDER, getOptions()));
+    addUIFormInput(new UIFormSelectBoxWithGroups(SELECT_FOLDER, SELECT_FOLDER, getOptions()));
   }
   
   public void setSelectedValue(String s) {
-    ((org.exoplatform.mail.webui.UIFormSelectBox)getChildById(SELECT_FOLDER)).setValue(s) ;
+    ((UIFormSelectBoxWithGroups)getChildById(SELECT_FOLDER)).setValue(s) ;
   }
   
   public String getSelectedValue() {
-    return ((org.exoplatform.mail.webui.UIFormSelectBox)getChildById(SELECT_FOLDER)).getValue() ;
+    return ((UIFormSelectBoxWithGroups)getChildById(SELECT_FOLDER)).getValue() ;
   }
   
   public List<Folder> getDefaultFolders() throws Exception{
@@ -83,11 +83,11 @@ public class UISelectFolder extends UIFormInputSet {
     return folders ;
   }
   
-  public SelectItemOptionGroup addChildOption(String folderPath,  SelectItemOptionGroup optionList) throws Exception {
+  public SelectOptionGroup addChildOption(String folderPath,  SelectOptionGroup optionList) throws Exception {
     level += "----" ;
     for (Folder cf : getSubFolders(folderPath)) {
       if (cf != null) {
-        optionList.addOption(new org.exoplatform.mail.webui.SelectItemOption<String>(level + " " + cf.getLabel(), cf.getId()));
+        optionList.addOption(new SelectOption(level + " " + cf.getLabel(), cf.getId()));
         if (getSubFolders(cf.getPath()).size() > 0) { 
           optionList = addChildOption(cf.getPath(), optionList);
         }
@@ -103,14 +103,14 @@ public class UISelectFolder extends UIFormInputSet {
   
   public List<SelectItem> getOptions() throws Exception {
     List<SelectItem> options = new ArrayList<SelectItem>() ;
-    SelectItemOptionGroup defaultFolders = new SelectItemOptionGroup("default-folder");
+    SelectOptionGroup defaultFolders = new SelectOptionGroup("default-folder");
     for(Folder df : getDefaultFolders()) {
-      defaultFolders.addOption(new org.exoplatform.mail.webui.SelectItemOption<String>(getUIForm().getLabel(df.getLabel()), df.getId())) ;
+      defaultFolders.addOption(new SelectOption(getUIForm().getLabel(df.getLabel()), df.getId())) ;
     }
     options.add(defaultFolders);
-    SelectItemOptionGroup customizeFolders = new SelectItemOptionGroup("my-folder");
+    SelectOptionGroup customizeFolders = new SelectOptionGroup("my-folder");
     for(Folder cf : getCustomizeFolders()) {
-      customizeFolders.addOption(new org.exoplatform.mail.webui.SelectItemOption<String>(cf.getLabel(), cf.getId())) ;
+      customizeFolders.addOption(new SelectOption(cf.getLabel(), cf.getId())) ;
         if (getSubFolders(cf.getPath()).size() > 0) { 
           customizeFolders = addChildOption(cf.getPath(), customizeFolders);
         }

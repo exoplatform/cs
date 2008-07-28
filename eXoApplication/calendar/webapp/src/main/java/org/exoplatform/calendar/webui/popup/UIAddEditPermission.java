@@ -107,7 +107,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
       UIAddEditPermission addEdit = event.getSource();
       UISharedForm shareForm = addEdit.getChild(UISharedForm.class);
       String resiceUser = event.getRequestContext().getRequestParameter(OBJECTID);
-      UIFormCheckBoxInput checkBox = shareForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT) ;
+      UIFormCheckBoxInput checkBox = shareForm.getUIFormCheckBoxInput(UISharedTab.FIELD_EDIT) ;
       CalendarService calService = CalendarUtils.getCalendarService() ;
       String username = CalendarUtils.getCurrentUser() ;
       shareForm.setSharedUser(resiceUser) ;

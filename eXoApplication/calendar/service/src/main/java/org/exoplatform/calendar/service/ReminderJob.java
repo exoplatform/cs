@@ -63,6 +63,7 @@ public class ReminderJob implements Job {
       fromCalendar.setTimeInMillis(System.currentTimeMillis() - gmtoffset) ; 
       
       long tmpTime = fromCalendar.getTimeInMillis() ;
+      // TODO : what do you add (7 * 60 * 60 * 1000) for ?
       tmpTime = tmpTime + (7 * 60 * 60 * 1000) ;
       fromCalendar.setTimeInMillis(tmpTime) ;
       JobDataMap jdatamap = context.getJobDetail().getJobDataMap();
@@ -140,7 +141,7 @@ public class ReminderJob implements Job {
     path.append(getPublicServiceHome().getPath());
     path.append("/").append(year).append("/").append(month).append("/").append(day);
     path.append("/").append(CALENDAR_REMINDER);
-    return path.toString();
+    return path.toString(); 
   }
   private Node getPublicServiceHome() throws Exception {
     ExoContainer container = ExoContainerContext.getCurrentContainer();

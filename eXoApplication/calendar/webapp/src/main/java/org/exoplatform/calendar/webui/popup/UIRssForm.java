@@ -25,6 +25,7 @@ import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.RssData;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
+import org.exoplatform.calendar.webui.UIFormDateTimePicker;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -83,8 +84,8 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
     rssInfo.addUIFormInput(new UIFormStringInput(URL, URL, url).addValidator(MandatoryValidator.class)) ;
     rssInfo.addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, null).addValidator(MandatoryValidator.class)) ;
     rssInfo.addUIFormInput(new UIFormStringInput(COPYRIGHT, COPYRIGHT, null).addValidator(MandatoryValidator.class)) ;
-    rssInfo.addUIFormInput(new UIFormStringInput(LINK, LINK, "www.exoplatform.org").addValidator(MandatoryValidator.class)) ;    
-    rssInfo.addUIFormInput(new UIFormDateTimeInput(PUBLIC_DATE, PUBLIC_DATE, new Date(), false)) ;
+    rssInfo.addUIFormInput(new UIFormStringInput(LINK, LINK, null).addValidator(MandatoryValidator.class)) ;    
+    rssInfo.addUIFormInput(new UIFormDateTimePicker(PUBLIC_DATE, PUBLIC_DATE, new Date(), false)) ;
     setSelectedTab(rssInfo.getId()) ;
     addUIFormInput(rssInfo) ;
     UIFormInputWithActions rssCalendars = new UIFormInputWithActions(INPUT_RSSCAL) ;
@@ -99,12 +100,16 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
     UIFormInputWithActions rssInfo = getChildById(INPUT_RSSINFO) ;
     rssInfo.getUIFormTextAreaInput(DESCRIPTION).setValue(getLabel(DESCRIPTIONS)) ;
     rssInfo.getUIStringInput(COPYRIGHT).setValue(getLabel(COPYRIGHTS)) ;
+    rssInfo.getUIStringInput(LINK).setValue(getLabel(LINK+"-"+URL)) ;
     UIFormInputWithActions rssTab = getChildById(INPUT_RSSCAL) ;
     rssTab.getUIFormInputInfo(INFOR).setValue(getLabel(MESSAGE)) ;
   }
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
-
+  private UIFormDateTimePicker getUIDateTimePicker(String id) {
+    UIFormInputWithActions rssInfo = getChildById(INPUT_RSSINFO) ;
+    return rssInfo.getChildById(id) ;
+  }
   static  public class GenerateRssActionListener extends EventListener<UIRssForm> {
     public void execute(Event<UIRssForm> event) throws Exception {
       UIRssForm uiForm = event.getSource() ;
@@ -120,7 +125,9 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
           }
         }
       }
-      if(calendarIds.size() == 0) {
+      if(calendarIds.size() <= 0) {
+        uiForm.setSelectedTab(INPUT_RSSCAL) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
         uiApp.addMessage(new ApplicationMessage("UIRssForm.msg.there-is-not-calendar", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
@@ -129,6 +136,8 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
       String tempName = uiForm.getUIStringInput(TITLE).getValue() ;
       if(tempName != null && tempName.trim().length() > 0) {
         if(!CalendarUtils.isNameValid(tempName, CalendarUtils.SPECIALCHARACTER)) {
+          uiForm.setSelectedTab(INPUT_RSSINFO) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
           uiApp.addMessage(new ApplicationMessage("UIRssForm.msg.feed-name-invalid", null)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
@@ -145,10 +154,12 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
       String title = uiForm.getUIStringInput(TITLE).getValue() ;
       rssData.setTitle(title) ;
       rssData.setVersion("rss_2.0") ;
-      if(uiForm.getUIFormDateTimeInput(PUBLIC_DATE).getCalendar() != null)
-        rssData.setPubDate(uiForm.getUIFormDateTimeInput(PUBLIC_DATE).getCalendar().getTime()) ;
+      if(uiForm.getUIDateTimePicker(PUBLIC_DATE).getCalendar() != null)
+        rssData.setPubDate(uiForm.getUIDateTimePicker(PUBLIC_DATE).getCalendar().getTime()) ;
       int result = calendarService.generateRss(SessionProviderFactory.createSystemProvider(), Util.getPortalRequestContext().getRemoteUser(), calendarIds, rssData) ;
       if(result < 0) {
+        uiForm.setSelectedTab(INPUT_RSSINFO) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
         uiApp.addMessage(new ApplicationMessage("UIRssForm.msg.no-data-generated", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;

@@ -300,6 +300,7 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       acc.setEmailReplyAddress(replyMail) ;
       acc.setSignature(signature) ;
       acc.setIncomingUser(incomingUserName); 
+      //TODO the same action in if
       if (isSavePass || uiAccWs5.isGetmail()) acc.setIncomingPassword(incomingPassword);
       else acc.setIncomingPassword(incomingPassword);
       acc.setIncomingHost(popHost);
@@ -407,6 +408,7 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       else uiPortlet.cancelAction();
     }
   }
+  //TODO action never use
   public static class SelectFolderActionListener extends EventListener<UIAccountCreation> {
     public void execute(Event<UIAccountCreation> event) throws Exception {
       System.out.println("\n\n SelectFolderActionListener");

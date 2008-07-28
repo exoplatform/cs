@@ -46,7 +46,6 @@ import javax.mail.Part;
 import javax.mail.internet.ContentType;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMultipart;
-import javax.mail.internet.MimeUtility;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -449,6 +448,7 @@ public class JCRDataStorage {
         if (moveReference)
           moveReference(node);
         NodeType[] nts = node.getMixinNodeTypes();
+        //TODO should use for each
         for (int i = 0; i < nts.length; i++) {
           node.removeMixin(nts[i].getName());
         }
@@ -561,6 +561,7 @@ public class JCRDataStorage {
       Node destFolderNode = getFolderNodeById(sProvider, username, accountId, destFolderId);
       Value[] propFolders = msgNode.getProperty(Utils.EXO_FOLDERS).getValues();
       String[] folderIds = new String[propFolders.length];
+      //TODO should use for each
       for (int i = 0; i < propFolders.length; i++) {
         String folderId = propFolders[i].getString();
         if (currentFolderId.equals(folderId))
@@ -753,6 +754,7 @@ public class JCRDataStorage {
         }
         nodeMsg.setProperty(Utils.EXO_HASATTACH, false);
       }
+      //TODO should use: attachments.isEmpty()
       if (attachments != null && attachments.size() > 0) {
         Iterator<Attachment> it = attachments.iterator();
         boolean makeNewAtt = isNew ;
@@ -851,12 +853,36 @@ public class JCRDataStorage {
       node.setProperty(Utils.EXO_ID, msgId);
       node.setProperty(Utils.EXO_ACCOUNT, accId);
       node.setProperty(Utils.EXO_FROM, Utils.decodeText(InternetAddress.toString(msg.getFrom())));
-      node.setProperty(Utils.EXO_TO, Utils.decodeText(InternetAddress.toString(msg
-          .getRecipients(javax.mail.Message.RecipientType.TO))));
-      node.setProperty(Utils.EXO_CC, Utils.decodeText(InternetAddress.toString(msg
-          .getRecipients(javax.mail.Message.RecipientType.CC))));
-      node.setProperty(Utils.EXO_BCC, Utils.decodeText(InternetAddress.toString(msg
-          .getRecipients(javax.mail.Message.RecipientType.BCC))));
+      String to = ""; 
+      try {
+        to = InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.TO));
+      } catch (Exception e) { 
+        String[] tos = msg.getHeader("To") ;
+        for (int i = 0 ; i < tos.length; i++) {
+          to += tos[i] + "," ; 
+        }
+      }
+      node.setProperty(Utils.EXO_TO, Utils.decodeText(to));
+      String cc = ""; 
+      try {
+        cc = InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.CC));
+      } catch (Exception e) { 
+        String[] ccs = msg.getHeader("Cc") ;
+        for (int i = 0 ; i < ccs.length; i++) {
+          cc += ccs[i] + "," ; 
+        }
+      }
+      node.setProperty(Utils.EXO_CC, Utils.decodeText(cc));
+      String bcc = ""; 
+      try {
+        bcc = InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.BCC));
+      } catch (Exception e) { 
+        String[] bccs = msg.getHeader("Cc") ;
+        for (int i = 0 ; i < bccs.length; i++) {
+          bcc += bccs[i] + "," ; 
+        }
+      }
+      node.setProperty(Utils.EXO_BCC, Utils.decodeText(bcc));
       node.setProperty(Utils.EXO_REPLYTO, Utils.decodeText(InternetAddress.toString(msg
           .getReplyTo())));
       node.setProperty(Utils.EXO_SUBJECT, Utils.decodeText(msg.getSubject()));
@@ -1175,7 +1201,7 @@ public class JCRDataStorage {
       return null;
     }
   }
-
+  //TODO should change to private
   public Node getFolderNodeById(SessionProvider sProvider, String username, String accountId,
       String folderId) throws Exception {
     Node accountNode = getMailHomeNode(sProvider, username).getNode(accountId);
@@ -1284,6 +1310,11 @@ public class JCRDataStorage {
       try {
         Value[] propFolders = msgNode.getProperty(Utils.EXO_FOLDERS).getValues();
         String[] oldFolderIds = new String[propFolders.length];
+        //TODO use for each, and we can remove the folder id in this loop
+        /*List<String> folderList = new ArrayList<String>(Arrays.asList(oldFolderIds));
+        for (Value v : propFolders) {
+           if(!v.getString().equals(folderId)) folderList.add(v.getString()) ;
+        }*/
         for (int i = 0; i < propFolders.length; i++) {
           oldFolderIds[i] = propFolders[i].getString();
         }
@@ -1615,6 +1646,7 @@ public class JCRDataStorage {
     NodeIterator iter = tagHomeNode.getNodes();
     while (iter.hasNext()) {
       Node tagNode = (Node) iter.next();
+      //TODO should break loop when matching the tag node
       if (tagNode.getProperty(Utils.EXO_ID).getString().equals(tagId)) {
         try {
           tag.setId((tagNode.getProperty(Utils.EXO_ID).getString()));
