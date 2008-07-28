@@ -29,6 +29,7 @@ import org.exoplatform.webui.core.UIContainer;
 @ComponentConfig(
     template =  "app:/templates/mail/webui/UIContactManager.jstmpl"
 )
+//TODO class never used
 public class UIContactManager extends UIContainer  {
   
   public UIContactManager() throws Exception {

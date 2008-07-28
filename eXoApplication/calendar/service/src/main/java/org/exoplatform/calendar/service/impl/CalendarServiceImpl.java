@@ -17,7 +17,6 @@
 package org.exoplatform.calendar.service.impl;
 
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,8 +90,6 @@ public class CalendarServiceImpl implements CalendarService{
   public Calendar removeUserCalendar(SessionProvider sProvider, String username, String calendarId) throws Exception {
     return storage_.removeUserCalendar(sProvider, username, calendarId);
   }
-
-
   public Calendar getGroupCalendar(SessionProvider sProvider, String calendarId) throws Exception {
     return storage_.getGroupCalendar(sProvider, calendarId);
   }
@@ -115,17 +112,6 @@ public class CalendarServiceImpl implements CalendarService{
   public void removeEventCategory(SessionProvider sProvider, String username, String eventCategoryName) throws Exception {
     storage_.removeEventCategory(sProvider, username,eventCategoryName);
   }  
-  /*public void saveGroupEventCategory(Calendar calendar, EventCategory eventCategory, boolean isNew) throws Exception {
-    storage_.saveGroupEventCategory(calendar, eventCategory, isNew) ;
-  }
-  public EventCategory removeGroupEventCategory(String calendarId, String eventCategoryId) throws Exception {
-    return storage_.removeGroupEventCategory(calendarId, eventCategoryId);
-  }*/
-
-
-  /*public CalendarEvent getUserEvent(SessionProvider sProvider, String username, String calendarId, String eventId) throws Exception {
-    return storage_.getUserEvent(sProvider, username, calendarId, eventId);
-  }*/
   public List<CalendarEvent> getUserEventByCalendar(SessionProvider sProvider, String username, List<String> calendarIds) throws Exception {
     return storage_.getUserEventByCalendar(sProvider, username, calendarIds);
   }
@@ -233,9 +219,6 @@ public class CalendarServiceImpl implements CalendarService{
 
   }
 
-  public boolean hasEditPermission(SessionProvider sProvider, String sharedCalendarId, String username) throws Exception {
-    return storage_.hasEditPermission(sProvider, sharedCalendarId, username);
-  }
   public void moveEvent(SessionProvider sProvider, String formCalendar, String toCalendar,String fromType, String toType, List<CalendarEvent> calEvents, String username) throws Exception {
     storage_.moveEvent(sProvider, formCalendar,toCalendar, fromType, toType, calEvents, username)  ;
   }

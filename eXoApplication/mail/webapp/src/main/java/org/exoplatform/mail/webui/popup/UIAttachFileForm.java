@@ -82,10 +82,18 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
       List<BufferAttachment> fileAttachList = new ArrayList<BufferAttachment>();
       long attSize = 0;
       try {
-        for (int i = 1; i <= uiForm.getNumberFile(); i++) {        
+        for (int i = 1; i <= uiForm.getNumberFile(); i++) { 
+          
           UIFormUploadInput input = (UIFormUploadInput)uiForm.getUIInput(FIELD_UPLOAD + String.valueOf(i));
           UploadResource uploadResource = input.getUploadResource() ;
+          //TODO should check maxSize in this loop
           if (uploadResource != null) {
+            /*attSize = attSize + ((long)uploadResource.getUploadedSize()) ;
+            if(attSize > MAX_SIZE) {
+              uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.size-attachs-must-be-smaller-than-10M", null, ApplicationMessage.WARNING)) ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              return ;
+            }*/
             BufferAttachment attachFile = new BufferAttachment() ;
             attachFile.setId("Attachment" + IdGenerator.generate());
             attachFile.setName(uploadResource.getFileName()) ;

@@ -110,6 +110,7 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
     return mailSrv.getTag(SessionProviderFactory.createSystemProvider(), username, accountId, getSelectedFilter().getApplyTag());
   }
   
+  //TODO should replace text with resource boundle
   public String getCondition(int i) throws Exception {
     switch(i) {
       case Utils.CONDITION_CONTAIN :
