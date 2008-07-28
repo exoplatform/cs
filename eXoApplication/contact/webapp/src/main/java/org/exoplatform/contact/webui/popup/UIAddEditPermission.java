@@ -186,24 +186,29 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
         
         // delete group permission
         if (group.getViewPermissionGroups() != null && Arrays.asList(group.getViewPermissionGroups()).contains(remover)) {
-          if(group.getViewPermissionGroups() != null) {
-            List<String> newPerms = new ArrayList<String>() ;
-            for(String s : group.getViewPermissionGroups()) {
-              if(!s.equals(remover)) {
-                newPerms.add(s) ;
-              }
+          List<String> newPerms = new ArrayList<String>() ;
+          newPerms.addAll(Arrays.asList(group.getViewPermissionGroups())) ;
+          newPerms.remove(remover) ;
+          /*
+          for(String s : group.getViewPermissionGroups()) {
+            if(!s.equals(remover)) {
+              newPerms.add(s) ;
             }
-            group.setViewPermissionGroups(newPerms.toArray(new String[newPerms.size()])) ;
-          }
+          }*/
+          group.setViewPermissionGroups(newPerms.toArray(new String[newPerms.size()])) ;
           if(group.getEditPermissionGroups() != null) {
-            List<String> newPerms = new ArrayList<String>() ;
+            newPerms.clear() ;
+            newPerms.addAll(Arrays.asList(group.getEditPermissionGroups())) ;
+            newPerms.remove(remover) ;
+            
+            /*
             for(String s : group.getEditPermissionGroups()) {
               if(!s.equals(remover)) {
                 newPerms.add(s) ;
               }
-            }
+            }*/
             group.setEditPermissionGroups(newPerms.toArray(new String[newPerms.size()])) ;
-          }        
+          }
           List<Contact> users = contactService
             .getPublicContactsByAddressBook(SessionProviderFactory.createSystemProvider(), remover).getAll() ;
           for (Contact user : users)
@@ -224,20 +229,26 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
         } else {
           if(group.getViewPermissionUsers() != null) {
             List<String> newPerms = new ArrayList<String>() ;
+            newPerms.addAll(Arrays.asList(group.getViewPermissionUsers())) ;
+            newPerms.remove(remover + JCRDataStorage.HYPHEN) ;
+            /*
             for(String s : group.getViewPermissionUsers()) {
               if(!s.equals(remover + JCRDataStorage.HYPHEN)) {
                 newPerms.add(s) ;
               }
-            }
+            }*/
             group.setViewPermissionUsers(newPerms.toArray(new String[newPerms.size()])) ;
           }
           if(group.getEditPermissionUsers() != null) {
             List<String> newPerms = new ArrayList<String>() ;
+            newPerms.addAll(Arrays.asList(group.getEditPermissionUsers())) ;
+            newPerms.remove(remover + JCRDataStorage.HYPHEN) ;
+            /*
             for(String s : group.getEditPermissionUsers()) {
               if(!s.equals(remover + JCRDataStorage.HYPHEN)) {
                 newPerms.add(s) ;
               }
-            }
+            }*/
             group.setEditPermissionUsers(newPerms.toArray(new String[newPerms.size()])) ;
           }        
           contactService.removeUserShareAddressBook(SessionProviderFactory.createSessionProvider()
@@ -326,40 +337,52 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
     private void removePerUser(Contact contact, String removedUser) {
       if(contact.getViewPermissionUsers() != null) {
         List<String> newPerms = new ArrayList<String>() ;
+        newPerms.addAll(Arrays.asList(contact.getViewPermissionUsers())) ;
+        newPerms.remove(removedUser) ;
+        /*
         for(String s : contact.getViewPermissionUsers()) {
           if(!s.equals(removedUser)) {
             newPerms.add(s) ;
           }
-        }
+        }*/
         contact.setViewPermissionUsers(newPerms.toArray(new String[newPerms.size()])) ;
       }
       if(contact.getEditPermissionUsers() != null) {
         List<String> newPerms = new ArrayList<String>() ;
+        newPerms.addAll(Arrays.asList(contact.getEditPermissionUsers())) ;
+        newPerms.remove(removedUser) ;
+        /*
         for(String s : contact.getEditPermissionUsers()) {
           if(!s.equals(removedUser)) {
             newPerms.add(s) ;
           }
-        }
+        }*/
         contact.setEditPermissionUsers(newPerms.toArray(new String[newPerms.size()])) ;
       }
     }
     private void removePerGroup(Contact contact, String removedGroup) {
       if(contact.getViewPermissionGroups() != null) {
         List<String> newPerms = new ArrayList<String>() ;
+        newPerms.addAll(Arrays.asList(contact.getViewPermissionGroups())) ;
+        newPerms.remove(removedGroup) ;
+        /*
         for(String s : contact.getViewPermissionGroups()) {
           if(!s.equals(removedGroup)) {
             newPerms.add(s) ;
           }
-        }
+        }*/
         contact.setViewPermissionGroups(newPerms.toArray(new String[newPerms.size()])) ;
       }
       if(contact.getEditPermissionGroups() != null) {
         List<String> newPerms = new ArrayList<String>() ;
+        newPerms.addAll(Arrays.asList(contact.getEditPermissionGroups())) ;
+        newPerms.remove(removedGroup) ;
+        /*
         for(String s : contact.getEditPermissionGroups()) {
           if(!s.equals(removedGroup)) {
             newPerms.add(s) ;
           }
-        }
+        }*/
         contact.setEditPermissionGroups(newPerms.toArray(new String[newPerms.size()])) ;
       }
     }
