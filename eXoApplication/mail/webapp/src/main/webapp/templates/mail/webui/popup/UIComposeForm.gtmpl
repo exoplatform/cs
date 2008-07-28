@@ -182,7 +182,7 @@
 	                <td class="FieldCCAndBCC">
 	                  <a  href="<%=uicomponent.event("ShowCc")%>">|<%=_ctx.appRes(uicomponent.id+ ".label.add-cc") %>|</a> 
 	                  <a  href="<%=uicomponent.event("ShowBcc")%>"><%=_ctx.appRes(uicomponent.id+ ".label.add-bcc") %>|</a>
-                    <%// javascript:eXo.mail.UIMailPortlet.showHideAddMoreAddress('FIELD_BCC') %>
+                    <%/* javascript:eXo.mail.UIMailPortlet.showHideAddMoreAddress('FIELD_BCC')*/ %>
 	                </td>
 	              </tr>
 	              <tr>

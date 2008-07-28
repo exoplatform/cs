@@ -105,6 +105,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 )
 
 public class UIMessageList extends UIForm {
+  //TODO should use by static way
   public final int MODE_LIST = 1 ;
   public final int MODE_THREAD = 2 ;
   public final int MODE_CONVERSATION = 3 ;
@@ -205,6 +206,7 @@ public class UIMessageList extends UIForm {
     updateList();
   }
 
+  //TODO check pageList_ null before getCurrentPage()
   public void updateList() throws Exception {
     long page = pageList_.getCurrentPage();
     if (pageList_ == null) page = 1 ;
@@ -262,6 +264,7 @@ public class UIMessageList extends UIForm {
     List<Tag> tagList = new ArrayList<Tag>();
     try {
       if (msg.getTags() != null && msg.getTags().length > 0) {
+        //TODO should use for each
         for (int i = 0; i < msg.getTags().length; i++) {
           Tag tag = mailSrv.getTag(SessionProviderFactory.createSystemProvider(), username, accountId_, msg.getTags()[i]);
           tagList.add(tag);
@@ -336,7 +339,7 @@ public class UIMessageList extends UIForm {
       }          
     }
   }
-
+  //TODO listener never use
   static public class ReadActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
 

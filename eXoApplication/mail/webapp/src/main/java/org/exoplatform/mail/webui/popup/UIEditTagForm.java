@@ -108,10 +108,11 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
       String accountId =  uiMailPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
       String tagId = uiEditTagForm.getTagId();
       String newTagName = uiEditTagForm.getUIStringInput(NEW_TAG_NAME).getValue() ;
+      //TODO should call newTagName.trim() before check existed tag
       String description = uiEditTagForm.getUIFormTextAreaInput(DESCRIPTION).getValue() ;
       String color = uiEditTagForm.getSelectedColor(); 
       UIApplication uiApp = uiEditTagForm.getAncestorOfType(UIApplication.class) ;
-
+      
       if(Utils.isEmptyField(newTagName)) {
         uiApp.addMessage(new ApplicationMessage("UIEditTagForm.msg.name-required", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
