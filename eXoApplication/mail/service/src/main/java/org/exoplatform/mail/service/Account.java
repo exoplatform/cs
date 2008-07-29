@@ -18,7 +18,6 @@ package org.exoplatform.mail.service;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.services.jcr.util.IdGenerator;
@@ -47,10 +46,6 @@ public class Account {
   private Map<String, String> serverProperties ;  
   private Map<String, String> popServerProperties ;
   private Map<String, String> imapServerProperties ;
-  private List<Folder> defaultFolders ;
-  private List<Folder> userFolders ;  
-
-  //  private MailServerConfiguration mailServerConfiguration ;
   
   public Account() {
     id = Utils.KEY_ACCOUNT + IdGenerator.generate() ;
@@ -71,18 +66,6 @@ public class Account {
    */
   public String getLabel() { return label ; }
   public void   setLabel(String s) { label = s ; }
-  
-  /**
-   * @return Return a list of the default folder: Inbox, Sent, Draft, Spam and Trash
-   */
-  public List<Folder> getDefaultFolder() { return defaultFolders ; }
-  public void setDefaultFolder(List<Folder> folders) { defaultFolders = folders ; }
-  
-  /**
-   * @return Return a list of the folder that is created by the user
-   */
-  public List<Folder> getUserFolder() { return userFolders ; }
-  public void setUserFolder(List<Folder> folders) { userFolders = folders ; }
   
   /**
    * @return Return a description_ of account
@@ -145,8 +128,6 @@ public class Account {
   /**
    * @return Return a mail server configuration of account
    */
-//  public MailServerConfiguration getConfiguration() { return mailServerConfiguration ; }
-//  public void setConfiguration(MailServerConfiguration config) { mailServerConfiguration = config ; }
   
   public Folder  getFolderByName(String name) { return null ; }
   

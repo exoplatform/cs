@@ -95,6 +95,7 @@ public class UIAccountSetting extends UIFormTabPane {
   public static final String FIELD_MARK_AS_DELETED = "markItAsDeleted";
   public static final String FIELD_IS_SAVE_PASSWORD = "isSavePassword" ;
   private String accountId_ = null;
+  //TODO don't keep these components
   UIFormCheckBoxInput<Boolean> leaveOnServer_ ;
 //  UIFormStringInput skipOverSize_;
   UIFormCheckBoxInput<Boolean> markAsDelete_;
@@ -119,7 +120,7 @@ public class UIAccountSetting extends UIFormTabPane {
     UIFormSelectBox serverType = new UIFormSelectBox(FIELD_SERVER_TYPE, null, getServerTypeValues()) ;
     serverType.setEditable(false);
     serverType.setEnable(false);
-    serverType.setOnChange("ChangeServerType");
+    //serverType.setOnChange("ChangeServerType");
     serverInputSet.addUIFormInput(serverType) ;
     
     serverInputSet.addUIFormInput(new UIFormStringInput(FIELD_INCOMING_SERVER, null, null).addValidator(MandatoryValidator.class));
@@ -491,7 +492,7 @@ public class UIAccountSetting extends UIFormTabPane {
       }
     }
   }
-  
+  //TODO this actionlistener not use anymore
   static	public class ChangeServerTypeActionListener extends EventListener<UIAccountSetting> {
   	public void execute(Event<UIAccountSetting> event) throws Exception {
   		UIAccountSetting uiSetting = event.getSource() ; 

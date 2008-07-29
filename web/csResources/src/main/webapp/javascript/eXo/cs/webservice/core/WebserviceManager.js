@@ -5,7 +5,7 @@
 if (!window.console) {
   window.console = {
     info:function(){},
-    warm:function(){},
+    warn:function(){},
     error: function(){},
     dir: function(){}
   }

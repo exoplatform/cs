@@ -32,6 +32,7 @@ import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -79,6 +80,7 @@ public class UIMailSettings extends UIForm implements UIPopupComponent {
     //TODO should replace text by resource boundle
     List<SelectItemOption<String>> periodCheckAuto = new ArrayList<SelectItemOption<String>>();
     periodCheckAuto.add(new SelectItemOption<String>("Never", "period." + String.valueOf(MailSetting.NEVER_CHECK_AUTO)));
+    //TODO change to id
     periodCheckAuto.add(new SelectItemOption<String>("5 minutes", "period." + String.valueOf(MailSetting.FIVE_MINS)));
     periodCheckAuto.add(new SelectItemOption<String>("10 minutes", "period." + String.valueOf(MailSetting.TEN_MINS)));
     periodCheckAuto.add(new SelectItemOption<String>("20 minutes", "period." + String.valueOf(MailSetting.TWENTY_MINS)));
@@ -150,14 +152,15 @@ public class UIMailSettings extends UIForm implements UIPopupComponent {
 		  UIMailPortlet uiPortlet = uiSetting.getAncestorOfType(UIMailPortlet.class);
       String username = uiPortlet.getCurrentUser();
       UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;
-      String accountId = uiSelectAccount.getSelectedValue();
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
 		  MailService mailSrv = MailUtils.getMailService();
-		  MailSetting setting = new MailSetting();
+		  MailSetting setting = mailSrv.getMailSetting(SessionProviderFactory.createSystemProvider(), username);
       String defaultAcc = uiSetting.getUIFormSelectBox(DEFAULT_ACCOUNT).getValue() ;
 		  setting.setDefaultAccount(defaultAcc) ;
       setting.setNumberMsgPerPage(Long.valueOf(uiSetting.getUIFormSelectBox(NUMBER_MSG_PER_PAGE).getValue())) ;
       String period = uiSetting.getUIFormSelectBox(PERIOD_CHECK_AUTO).getValue() ;
-		  setting.setPeriodCheckAuto(Long.valueOf(period.substring(period.indexOf(".") + 1, period.length()))) ;
+      period = period.substring(period.indexOf(".") + 1, period.length());
+		  setting.setPeriodCheckAuto(Long.valueOf(period)) ;
       String editor = uiSetting.getUIFormSelectBox(COMPOSE_MESSAGE_IN).getValue() ;
       setting.setUseWysiwyg(Boolean.valueOf(editor.substring(editor.indexOf(".") + 1, editor.length()))) ;
       String format = uiSetting.getUIFormSelectBox(FORMAT_AS_ORIGINAL).getValue() ;
@@ -181,8 +184,13 @@ public class UIMailSettings extends UIForm implements UIPopupComponent {
       } else {
         uiMessageList.setMessagePageList(mailSrv.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, filter));
       }
-		  event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
-		  uiPortlet.cancelAction();
+      uiSetting.getAncestorOfType(UIPopupAction.class).deActivate() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
+      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+      if (setting.getPeriodCheckAuto() != Long.valueOf(period)) { 
+        context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.initService('checkMailInfobar', '" + MailUtils.getCurrentUser() + "', '" + defaultAcc + "') ;") ;
+        context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.setCheckmailTimeout(" + period + ") ;") ;
+      }
 	  }
   }
 

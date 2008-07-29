@@ -60,7 +60,6 @@ import org.exoplatform.webui.form.UIFormTabPane;
       @EventConfig(listeners = UIAccountCreation.ViewStepActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIAccountCreation.ChangeServerTypeActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIAccountCreation.ChangeCheckedActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UIAccountCreation.SelectFolderActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIAccountCreation.NextActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIAccountCreation.BackActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIAccountCreation.FinishActionListener.class, phase = Phase.DECODE),
@@ -122,7 +121,6 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       chidrenMap_.put(getChildren().indexOf(c) + 1, c.getId()) ;
     }
     setSelectedTab(getCurrentChild()) ;
-    //setRenderedChild(getCurrentChild()) ;
   }
 
   public boolean showStepActions() {return isShowStepActions_ ;}
@@ -145,18 +143,15 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
   protected void viewStep(int step) {  
     currentStep_ = step ;
     setSelectedTab(chidrenMap_.get(getCurrentStep())) ;
-    //setRenderedChild(chidrenMap_.get(getCurrentStep())) ;
   }
   
   protected void nextStep() {
     currentStep_ ++ ;
     setSelectedTab(chidrenMap_.get(getCurrentStep())) ;
-    //setRenderedChild(chidrenMap_.get(getCurrentStep())) ;
   }
   protected void backStep() {
     currentStep_ -- ;
     setSelectedTab(chidrenMap_.get(getCurrentStep())) ;
-    //setRenderedChild(chidrenMap_.get(getCurrentStep())) ;
   }
 
   public String[] getActions(){
@@ -167,10 +162,6 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       return new String[]{"Back", "Finish", "Cancel"} ;
     }
     return new String[]{"Back", "Next", "Cancel"} ;
-  }
-
-  protected void loadForm() {
-
   }
   
   protected void saveForm(String currentUser, Account account) throws Exception {
@@ -408,16 +399,9 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       else uiPortlet.cancelAction();
     }
   }
-  //TODO action never use
-  public static class SelectFolderActionListener extends EventListener<UIAccountCreation> {
-    public void execute(Event<UIAccountCreation> event) throws Exception {
-      System.out.println("\n\n SelectFolderActionListener");
-    } 
-  }
 
   public static class ChangeServerTypeActionListener extends EventListener<UIAccountCreation> {
     public void execute(Event<UIAccountCreation> event) throws Exception {
-      System.out.println("\n\n ChangeServerTypeActionListener");
       UIAccountCreation uiAccCreation = event.getSource() ;
       UIAccountWizardStep3 uiWs3 = uiAccCreation.getChildById(INPUT_STEP3) ;
       uiWs3.setDefaultValue(uiWs3.getServerType(), uiWs3.getIsSSL()) ;
@@ -425,8 +409,8 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
     } 
   }
   public static class ChangeCheckedActionListener extends EventListener<UIAccountCreation> {
-    public void execute(Event<UIAccountCreation> event) throws Exception {
-      System.out.println("\n\n ChangeCheckedActionListener"); UIAccountCreation uiAccCreation = event.getSource() ;
+    public void execute(Event<UIAccountCreation> event) throws Exception { 
+      UIAccountCreation uiAccCreation = event.getSource() ;
       UIAccountWizardStep3 uiWs3 = uiAccCreation.getChildById(INPUT_STEP3) ;
       uiWs3.setDefaultValue(uiWs3.getServerType(), uiWs3.getIsSSL()) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAccCreation.getParent()) ;

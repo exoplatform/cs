@@ -21,7 +21,6 @@ import java.io.ByteArrayInputStream;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.service.Utils;
-import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.upload.UploadResource;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;

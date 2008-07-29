@@ -17,8 +17,6 @@
 package org.exoplatform.mail.service;
 
 import org.apache.commons.logging.Log;
-import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.scheduler.JobInfo;
@@ -43,29 +41,27 @@ public class CheckMailJob extends Thread implements Job, Runnable  {
     }
 	} 
 	
-	public void destroy() {
+	@SuppressWarnings("deprecation")
+  public void destroy() {
 		//System.out.println("\n\n\n\n >>>>>>>> detroy \n\n\n") ;
 		thread.stop() ;
 		thread = null ;
-	}
-	/*public void stop() { 
-	    if ( thread != null ) { 
-	    	thread.stop(); 
-	    	thread = null; 
-	    } 
-	}*/
+	} 
 	
 	private static Log log_ = ExoLogger.getLogger("job.RecordsJob");
-	public void execute(JobExecutionContext context) throws JobExecutionException {
-		try {
-			ExoContainer container = ExoContainerContext.getCurrentContainer();
-			MailService mailService = 
-				(MailService) container.getComponentInstanceOfType(MailService.class);
-			JobSchedulerService schedulerService = 
-				(JobSchedulerService) container.getComponentInstanceOfType(JobSchedulerService.class);
-			String name = context.getJobDetail().getName() ;
-			JobInfo info = new JobInfo(context.getJobDetail().getName(), "CollaborationSuite-webmail", context.getJobDetail().getJobClass()) ;
-			if(name != null && name.indexOf(":") > 0) {
+
+  @SuppressWarnings("deprecation")
+  public void execute(JobExecutionContext context) throws JobExecutionException {
+    try {
+      //TODO : khdung
+      // getting service references from ExoContainer is risky ... this one is another thread.
+      // it's better (and of course correct) if we get static references.
+      MailService mailService = Utils.getMailService();
+      JobSchedulerService schedulerService = Utils.getJobSchedulerService();
+      String name = context.getJobDetail().getName();
+      JobInfo info = new JobInfo(context.getJobDetail().getName(), "CollaborationSuite-webmail",
+          context.getJobDetail().getJobClass());
+      if (name != null && name.indexOf(":") > 0) {
 				String[] array = name.split(":") ;
 			  mailService.checkNewMessage(SessionProvider.createSystemProvider(), array[0].trim(), array[1].trim()) ;
 			}
