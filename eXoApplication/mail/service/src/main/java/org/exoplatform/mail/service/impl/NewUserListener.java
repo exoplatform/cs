@@ -66,6 +66,7 @@ public class NewUserListener extends UserEventListener {
     outgoingPort   = params.getValueParam("outgoingPort").getValue() ;
   }
   
+  @SuppressWarnings("deprecation")
   public void postSave(User user, boolean isNew) throws Exception {
     if(!isNew) return ;
     String fullName     = user.getFullName();

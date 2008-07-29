@@ -130,9 +130,6 @@ public class UIFormColorPicker extends UIFormInputBase<String>  {
   protected String renderOnChangeEvent(UIForm uiForm) throws Exception {
     return uiForm.event(onchange_, (String)null);
   }
-  private UIForm getUIform() {
-    return getAncestorOfType(UIForm.class) ; 
-  }
 
   private String renderJsActions() {
     StringBuffer sb = new StringBuffer("") ;
@@ -162,7 +159,6 @@ public class UIFormColorPicker extends UIFormInputBase<String>  {
       w.write("</div>") ;
       w.write("<div class=\"MailTableColor\" selectedColor=\""+encodeValue(value_).toString()+" \">") ;
       int i = 0 ;
-      int index = 0 ;
       int count = 0 ;
       while(i <= size()/items())  {
         w.write("<div class='UIColorLine'>") ; 

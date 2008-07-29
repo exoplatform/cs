@@ -480,7 +480,7 @@ public class MailServiceImpl implements MailService {
     JobSchedulerService schedulerService = (JobSchedulerService) container
         .getComponentInstanceOfType(JobSchedulerService.class);
     
-    // Make sure that we set the static references ... should be improved !!!
+    //TODO Should not keep mailService and schdulerService in until class - Make sure that we set the static references ... should be improved !!!
     Utils.setMailService(mailService);
     Utils.setScheduleService(schedulerService);
     

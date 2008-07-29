@@ -356,6 +356,7 @@ public class MessagePageList extends JCRPageList {
     return messageList;
   }
 
+  @SuppressWarnings("deprecation")
   private Session getJCRSession(String username) throws Exception {
     RepositoryService  repositoryService = (RepositoryService)PortalContainer.getComponent(RepositoryService.class) ;
     SessionProvider sessionProvider = SessionProvider.createSystemProvider() ;

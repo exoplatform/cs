@@ -112,8 +112,8 @@ public class JCRDataStorage {
     }
     return accounts;
   }
-
-  public Account getAccount(Node accountNode) throws Exception {
+  
+  private Account getAccount(Node accountNode) throws Exception {
     Account account = new Account();
     account.setId(accountNode.getProperty(Utils.EXO_ID).getString());
     try {
@@ -204,7 +204,6 @@ public class JCRDataStorage {
     Node accountNode = getMailHomeNode(sProvider, username).getNode(accountId);
     Session sess = accountNode.getSession();
     QueryManager qm = sess.getWorkspace().getQueryManager();
-    // gets the specified folder node
     StringBuffer queryString = new StringBuffer("/jcr:root" + accountNode.getPath()
         + "//element(*,exo:message)[@exo:id='").append(msgId).append("']");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
@@ -811,7 +810,6 @@ public class JCRDataStorage {
       throws Exception {
     long t1, t2, t3, t4;
     String msgId = MimeMessageParser.getMessageId(msg);
-    // TODO : to change the log level later
     logger.warn("MessageId = " + msgId);
     Calendar gc = MimeMessageParser.getReceivedDate(msg);
     Node msgHomeNode = getDateStoreNode(sProvider, username, accId, gc.getTime());

@@ -17,8 +17,6 @@
 package org.exoplatform.mail.service;
 
 import org.apache.commons.logging.Log;
-import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.scheduler.JobInfo;
@@ -43,20 +41,16 @@ public class CheckMailJob extends Thread implements Job, Runnable  {
     }
 	} 
 	
-	public void destroy() {
+	@SuppressWarnings("deprecation")
+  public void destroy() {
 		//System.out.println("\n\n\n\n >>>>>>>> detroy \n\n\n") ;
 		thread.stop() ;
 		thread = null ;
-	}
-	/*public void stop() { 
-	    if ( thread != null ) { 
-	    	thread.stop(); 
-	    	thread = null; 
-	    } 
-	}*/
+	} 
 	
 	private static Log log_ = ExoLogger.getLogger("job.RecordsJob");
 
+  @SuppressWarnings("deprecation")
   public void execute(JobExecutionContext context) throws JobExecutionException {
     try {
       //TODO : khdung

@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.mail.MailUtils;
-import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
