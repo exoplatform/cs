@@ -102,10 +102,5 @@ public class UIAccountWizardStepIntro extends UIFormInputSet implements WizardSt
   protected String getSelectType() {
     return getUIFormSelectBox(FIELD_SELECT).getValue() ;
   }
-  public void fillFields(Account acc) {
-    // TODO Auto-generated method stub
-
-  }
-
-
+  public void fillFields(Account acc) { }
 }

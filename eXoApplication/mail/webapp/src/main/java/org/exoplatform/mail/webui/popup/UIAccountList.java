@@ -73,14 +73,9 @@ public class UIAccountList extends UIGrid  implements UIPopupComponent{
     getUIPageIterator().setPageList(objPageList) ; 
   }
 
-  public void activate() throws Exception {
-    // TODO Auto-generated method stub
-
-  }
-  public void deActivate() throws Exception {
-    // TODO Auto-generated method stub
-
-  }
+  public void activate() throws Exception { }
+  
+  public void deActivate() throws Exception { }
   public String[] getButtons(){
     return new String[] {"Close"} ;
   }
