@@ -178,7 +178,6 @@ public class UIImportForm extends UIForm {
       String importFormat = uiForm.getUIFormSelectBox(UIImportForm.FIELD_TYPE).getValue() ;
 
       ContactImportExport service = ContactUtils.getContactService().getContactImportExports(importFormat) ;
-      
       try {
         UIAddressBooks uiAddressBooks = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
         if (uiAddressBooks.getSharedGroups().containsKey(category)) {
@@ -195,7 +194,12 @@ public class UIImportForm extends UIForm {
         }
         UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
         uploadService.removeUpload(uploadId) ;
-        uiContacts.updateList() ;        
+        uiContacts.updateList() ; 
+      } catch (IndexOutOfBoundsException e) {
+          uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.too-many-contact", null, 
+              ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
       } catch (Exception ex) {
         uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.invalid-format", null, 
             ApplicationMessage.WARNING)) ;
