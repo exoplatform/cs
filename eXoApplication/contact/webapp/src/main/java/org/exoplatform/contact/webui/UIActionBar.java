@@ -164,10 +164,6 @@ public class UIActionBar extends UIContainer  {
       if (isList.equals("true")) uiContacts.setViewContactsList(true) ;
       else uiContacts.setViewContactsList(false) ;
       //event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
-      
-      // remove when print address book improved
-     /* event.getRequestContext().addUIComponentToUpdateByAjax(
-          uiContactPortlet.findFirstComponentOfType(UINavigationContainer.class)) ;*/
     }  
   }
 
