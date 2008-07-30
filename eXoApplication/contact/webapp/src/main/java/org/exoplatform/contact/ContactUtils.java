@@ -42,9 +42,8 @@ public class ContactUtils {
   final public static String SHARED = " (Shared)".intern() ;
   private static String AKONG = "@" ;
   public static final String HTTP = "http://" ; 
-  public static String[] specialString = {"!", "#", "$", "%", "^", "&"
+  public static String[] specialString = {"!", "#", "%", "&"
                                             , ":", ">", "<", "~", "`", "]", "'", "/"} ;
-  public static final String[] imageTypes = { ".gif", ".jpg", ".jpeg", ".tiff", ".bmp", ".png", ".tif" } ;
   
   // add
   public static String encodeJCRText(String str) {
@@ -52,7 +51,6 @@ public class ContactUtils {
       replaceAll("'", "&apos;").replaceAll("\"", "&quot;") ;
   }
   public static String filterString(String text, boolean isEmail) {
-
     for (String str : specialString) {
       text = text.replaceAll(str, "") ;
     }
