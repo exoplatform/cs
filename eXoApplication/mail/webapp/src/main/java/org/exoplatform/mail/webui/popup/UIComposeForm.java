@@ -478,12 +478,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     return message;
   }
   
-  //TODO return directly
   public boolean fromDrafts() {    
-    if (getMessage() != null && getMessage().getFolders()[0].equals(Utils.createFolderId(accountId_, Utils.FD_DRAFTS, false)) || getComposeType() == MESSAGE_IN_DRAFT) { 
-      return true;
-    } 
-    return false;
+    return (getMessage() != null && getMessage().getFolders()[0].equals(Utils.createFolderId(accountId_, Utils.FD_DRAFTS, false)) || getComposeType() == MESSAGE_IN_DRAFT) ;
   }
 
   static public class SendActionListener extends EventListener<UIComposeForm> {

@@ -79,28 +79,26 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UIAttachFileForm> event) throws Exception {
       UIAttachFileForm uiForm = event.getSource();
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-      List<BufferAttachment> fileAttachList = new ArrayList<BufferAttachment>();
+      List<BufferAttachment> attachList = new ArrayList<BufferAttachment>();
       long attSize = 0;
       try {
-        for (int i = 1; i <= uiForm.getNumberFile(); i++) { 
-          
+        for (int i = 1; i <= uiForm.getNumberFile(); i++) {  
           UIFormUploadInput input = (UIFormUploadInput)uiForm.getUIInput(FIELD_UPLOAD + String.valueOf(i));
           UploadResource uploadResource = input.getUploadResource() ;
-          //TODO should check maxSize in this loop
           if (uploadResource != null) {
-            /*attSize = attSize + ((long)uploadResource.getUploadedSize()) ;
+            attSize = attSize + ((long)uploadResource.getUploadedSize()) ;
             if(attSize > MAX_SIZE) {
               uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.size-attachs-must-be-smaller-than-10M", null, ApplicationMessage.WARNING)) ;
               event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
               return ;
-            }*/
+            }
             BufferAttachment attachFile = new BufferAttachment() ;
             attachFile.setId("Attachment" + IdGenerator.generate());
             attachFile.setName(uploadResource.getFileName()) ;
             attachFile.setInputStream(input.getUploadDataAsStream()) ;
             attachFile.setMimeType(uploadResource.getMimeType()) ;
             attachFile.setSize((long)uploadResource.getUploadedSize());
-            fileAttachList.add(attachFile);
+            attachList.add(attachFile);
           }
         }
       } catch(Exception e) {
@@ -110,22 +108,15 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
         return ;
       }     
       
-      if (fileAttachList.isEmpty()) {
+      if (attachList.isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.file-empty-error", null, ApplicationMessage.INFO)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       } else {
         UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
         UIComposeForm uiComposeForm = uiPortlet.findFirstComponentOfType(UIComposeForm.class);
-        for (Attachment att : fileAttachList) {
-          attSize += att.getSize();
-          if (attSize < MAX_SIZE) {
-            uiComposeForm.addToUploadFileList(att) ;
-          } else {
-            uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.size-attachs-must-be-smaller-than-10M", null, ApplicationMessage.WARNING)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-            return ;
-          }
+        for (Attachment att : attachList) {
+          uiComposeForm.addToUploadFileList(att) ;
         }
         uiComposeForm.refreshUploadFileList() ;
       } 

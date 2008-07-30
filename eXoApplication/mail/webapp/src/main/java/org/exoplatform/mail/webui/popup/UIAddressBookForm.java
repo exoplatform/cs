@@ -112,8 +112,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
     String username = MailUtils.getCurrentUser();
     ContactService contactSrv = getApplicationComponent(ContactService.class);
     List<Contact> contactList = new ArrayList<Contact>();
-    //TODO should be check groupId.trim().length > 0 
-    if (groupId != null && groupId != "") contactList = contactSrv.getContactPageListByGroup(SessionProviderFactory.createSystemProvider(), username, groupId).getAll();
+    if (groupId != null && groupId.trim().length() > 0 ) contactList = contactSrv.getContactPageListByGroup(SessionProviderFactory.createSystemProvider(), username, groupId).getAll();
     else contactList = contactSrv.getContactPageListByGroup(SessionProviderFactory.createSystemProvider(), username, contactSrv.getGroups(SessionProviderFactory.createSystemProvider(), username).get(0).getId()).getAll();
     contactMap_.clear();
     for (Contact ct : contactList) contactMap_.put(ct.getId(), ct);

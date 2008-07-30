@@ -34,7 +34,6 @@ public class CheckMailJob extends Thread implements Job, Runnable  {
 		
 	}
 	public void start() { 
-		//System.out.println("\n\n\n\n >>>>>>>> Started \n\n\n") ;
 		if ( thread == null ) { 
     	thread = new Thread(this); 
     	thread.start(); 
@@ -43,7 +42,6 @@ public class CheckMailJob extends Thread implements Job, Runnable  {
 	
 	@SuppressWarnings("deprecation")
   public void destroy() {
-		//System.out.println("\n\n\n\n >>>>>>>> detroy \n\n\n") ;
 		thread.stop() ;
 		thread = null ;
 	} 
@@ -52,27 +50,27 @@ public class CheckMailJob extends Thread implements Job, Runnable  {
 
   @SuppressWarnings("deprecation")
   public void execute(JobExecutionContext context) throws JobExecutionException {
-    try {
-      //TODO : khdung
-      // getting service references from ExoContainer is risky ... this one is another thread.
-      // it's better (and of course correct) if we get static references.
-      MailService mailService = Utils.getMailService();
-      JobSchedulerService schedulerService = Utils.getJobSchedulerService();
-      String name = context.getJobDetail().getName();
-      JobInfo info = new JobInfo(context.getJobDetail().getName(), "CollaborationSuite-webmail",
-          context.getJobDetail().getJobClass());
-      if (name != null && name.indexOf(":") > 0) {
-				String[] array = name.split(":") ;
+	  try {
+		  //TODO : khdung
+		  // getting service references from ExoContainer is risky ... this one is another thread.
+		  // it's better (and of course correct) if we get static references.
+		  MailService mailService = Utils.getMailService();
+		  JobSchedulerService schedulerService = Utils.getJobSchedulerService();
+		  String name = context.getJobDetail().getName();
+		  JobInfo info = new JobInfo(context.getJobDetail().getName(), "CollaborationSuite-webmail",
+				  context.getJobDetail().getJobClass());
+		  if (name != null && name.indexOf(":") > 0) {
+			  String[] array = name.split(":") ;
 			  mailService.checkNewMessage(SessionProvider.createSystemProvider(), array[0].trim(), array[1].trim()) ;
-			}
-			schedulerService.removeJob(info) ;
-			System.out.println("\n\n####  Checking mail of " + context.getJobDetail().getName()+ " finished ");
-			
-		} catch (Exception e) {
-			e.printStackTrace();			
-		}
-		if (log_.isDebugEnabled())
-			log_.debug("File plan job done");
-	}
-	
+		  }
+		  schedulerService.removeJob(info) ;
+		  System.out.println("\n\n####  Checking mail of " + context.getJobDetail().getName()+ " finished ");
+
+	  } catch (Exception e) {
+		  e.printStackTrace();			
+	  }
+	  if (log_.isDebugEnabled()) {
+		log_.debug("File plan job done");
+	  }
+  }
 }
