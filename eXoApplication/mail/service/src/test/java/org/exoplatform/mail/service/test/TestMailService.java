@@ -62,7 +62,6 @@ public class TestMailService extends BaseMailTestCase{
     List<Folder> folders = new ArrayList<Folder>() ;
     folders.add(folder) ;
     account.setCheckedAuto(false) ;
-    account.setDefaultFolder(folders) ;
     account.setEmptyTrashWhenExit(false) ;
     account.setIncomingFolder("inbox") ;
     account.setProtocol(protocol) ;
