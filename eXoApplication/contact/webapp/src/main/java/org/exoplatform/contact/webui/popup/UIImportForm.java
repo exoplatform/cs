@@ -189,7 +189,12 @@ public class UIImportForm extends UIForm {
         }
         UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
         uploadService.removeUpload(uploadId) ;
-        uiContacts.updateList() ;        
+        uiContacts.updateList() ; 
+      } catch (IndexOutOfBoundsException e) {
+        uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.too-many-contact", null, 
+            ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
       } catch (Exception ex) {
 //        ex.printStackTrace() ;
         uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.invalid-format", null, 

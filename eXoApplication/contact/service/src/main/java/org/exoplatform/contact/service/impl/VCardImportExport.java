@@ -67,6 +67,7 @@ public class VCardImportExport implements ContactImportExport {
   private static String          eXoSkypeId  = "EXO-SKYPEID";
   private static String          eXoMsnId    = "EXO-MSNID";
   private static String          eXoYahooId  = "EXO-YAHOOID";
+  private static int          maxLength = 150 ;
   
   private static String ENCODING = "UTF-8";
   private JCRDataStorage storage_ ;
@@ -278,6 +279,7 @@ public class VCardImportExport implements ContactImportExport {
     // die here when image size about 1mb
     net.wimpi.pim.contact.model.Contact[] pimContacts = unmarshaller.unmarshallContacts(input);    
     if (pimContacts == null || pimContacts.length == 0) throw new Exception() ;
+    if (pimContacts.length > maxLength) throw new IndexOutOfBoundsException() ; 
     
     List<Contact> contacts = new ArrayList<Contact>() ;
     for (int index = 0; index < pimContacts.length; index++) {
