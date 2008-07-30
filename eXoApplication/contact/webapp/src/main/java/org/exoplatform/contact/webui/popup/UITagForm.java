@@ -273,8 +273,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
           List<String> newTags = new ArrayList<String>() ;
           for (String tag : oldTag) {
             if (!checkedTags.contains(tag)) newTags.add(tag) ;
-          }
-             
+          }             
           contact.setTags(newTags.toArray(new String[] {})) ;
           contacts.add(contact) ;
         }
@@ -287,7 +286,8 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       if (uiContacts.getContactMap().size() == 0) {
         UIContactPreview uiContactPreview = contactPortlet.findFirstComponentOfType(UIContactPreview.class) ;
         uiContactPreview.setContact(null) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPreview) ;
+        if (uiContactPreview.isRendered())
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPreview) ;
       }      
       contactPortlet.cancelAction() ; 
     }
