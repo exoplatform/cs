@@ -627,7 +627,10 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       // update addressbook when search
       if (uiContacts.isSearchResult) {
         for (String contactId : contactIds) {
-          uiContacts.contactMap.get(contactId).setContactType(type) ;
+          Contact contact = uiContacts.contactMap.get(contactId) ;
+          contact.setContactType(type) ;
+          contact.setViewPermissionUsers(null) ;
+          contact.setViewPermissionGroups(null) ;
         }
       } else if (uiContacts.isSelectSharedContacts  && !ContactUtils.isEmpty(addressBookId)) { //select shared contacts        
         if (contacts.size() > 0) uiContacts.setContact(contacts, false) ;
