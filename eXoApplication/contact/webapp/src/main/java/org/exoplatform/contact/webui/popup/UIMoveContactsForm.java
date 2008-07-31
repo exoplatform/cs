@@ -168,7 +168,10 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
         contactService.moveContacts(sessionProvider, username, contacts, type) ;
       if (uiContacts.isDisplaySearchResult()) {
         for (String contactId : uiMoveContactForm.getContactIds()) {
-          uiMoveContactForm.movedContacts.get(contactId).setContactType(type) ;
+          Contact contact = uiMoveContactForm.movedContacts.get(contactId) ;
+          contact.setContactType(type) ;
+          contact.setViewPermissionGroups(null) ;
+          contact.setViewPermissionUsers(null) ;
         }
       } else if (ContactUtils.isEmpty(uiContacts.getSelectedGroup()) && 
           ContactUtils.isEmpty(uiContacts.getSelectedTag())) {
