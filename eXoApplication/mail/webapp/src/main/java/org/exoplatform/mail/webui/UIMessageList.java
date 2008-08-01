@@ -339,10 +339,10 @@ public class UIMessageList extends UIForm {
       }          
     }
   }
-  //TODO listener never use
+
   static public class ReadActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
-
+      // need to implement
     }
   }
 

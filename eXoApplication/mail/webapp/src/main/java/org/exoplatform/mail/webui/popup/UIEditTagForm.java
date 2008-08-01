@@ -22,7 +22,6 @@ import org.exoplatform.mail.Colors;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Tag;
-import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
@@ -36,9 +35,11 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
+import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 
 /**
@@ -51,7 +52,7 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
     template = "system:/groovy/webui/form/UIForm.gtmpl",
     events = {
       @EventConfig(listeners = UIEditTagForm.SaveActionListener.class), 
-      @EventConfig(listeners = UIEditTagForm.CancelActionListener.class)
+      @EventConfig(listeners = UIEditTagForm.CancelActionListener.class, phase = Phase.DECODE)
     }
 )
 public class UIEditTagForm extends UIForm implements UIPopupComponent {
@@ -61,8 +62,9 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
   final public static String COLOR = "color" ;
   
   private String tagId;
-  public UIEditTagForm() {       
-    addUIFormInput(new UIFormStringInput(NEW_TAG_NAME, NEW_TAG_NAME, null)) ;
+  
+  public UIEditTagForm() throws Exception {       
+    addUIFormInput(new UIFormStringInput(NEW_TAG_NAME, NEW_TAG_NAME, null).addValidator(MandatoryValidator.class)) ;
     addUIFormInput(new UIFormColorPicker(COLOR, COLOR, Colors.COLORS)) ;
     addUIFormInput(new UIFormTextAreaInput(DESCRIPTION,DESCRIPTION,null)) ;    
   }
@@ -99,41 +101,36 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
  
   static  public class SaveActionListener extends EventListener<UIEditTagForm> {
     public void execute(Event<UIEditTagForm> event) throws Exception {
-      UIEditTagForm uiEditTagForm  = event.getSource() ;
-      UIMailPortlet uiPortlet = uiEditTagForm.getAncestorOfType(UIMailPortlet.class);
-      UIMailPortlet uiMailPortlet = uiEditTagForm.getAncestorOfType(UIMailPortlet.class);
-      MailService mailService = uiEditTagForm.getApplicationComponent(MailService.class) ;
+      UIEditTagForm editTagForm  = event.getSource() ;
+      UIMailPortlet uiPortlet = editTagForm.getAncestorOfType(UIMailPortlet.class);
+      MailService mailService = editTagForm.getApplicationComponent(MailService.class);
 
-      String username = uiMailPortlet.getCurrentUser() ;
-      String accountId =  uiMailPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
-      String tagId = uiEditTagForm.getTagId();
-      String newTagName = uiEditTagForm.getUIStringInput(NEW_TAG_NAME).getValue().trim() ;
-      String description = uiEditTagForm.getUIFormTextAreaInput(DESCRIPTION).getValue() ;
-      String color = uiEditTagForm.getSelectedColor(); 
-      UIApplication uiApp = uiEditTagForm.getAncestorOfType(UIApplication.class) ;
-      
-      if(Utils.isEmptyField(newTagName)) {
-        uiApp.addMessage(new ApplicationMessage("UIEditTagForm.msg.name-required", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
+      String username = uiPortlet.getCurrentUser() ;
+      String accountId =  uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
+      String tagId = editTagForm.getTagId();
+      String newTagName = editTagForm.getUIStringInput(NEW_TAG_NAME).getValue().trim() ;
+      String description = editTagForm.getUIFormTextAreaInput(DESCRIPTION).getValue() ;
+      String color = editTagForm.getSelectedColor(); 
+      UIApplication uiApp = editTagForm.getAncestorOfType(UIApplication.class) ;
+
+      List<Tag> tagList = mailService.getTags(SessionProviderFactory.createSystemProvider(), username, accountId);
+      for (Tag tag : tagList) {
+        if(tag.getName().equals(newTagName) && !tag.getId().equals(tagId)) {
+          uiApp.addMessage(new ApplicationMessage("UIEditTagForm.msg.tag-already-exists", new Object[]{newTagName})) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
       }
-
+      
       if (tagId != null) {
         try {      
-          uiEditTagForm.setTag(tagId);        
-          List<Tag> tagList = mailService.getTags(SessionProviderFactory.createSystemProvider(), username, accountId);
-          for (Tag tag : tagList) {
-            if(tag.getName().equals(newTagName)&&!tag.getId().equals(tagId)) {
-              uiApp.addMessage(new ApplicationMessage("UIEditTagForm.msg.tag-already-exists", new Object[]{newTagName})) ;
-              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-              return ;
-            }
-            if (tag.getId().equals(tagId)){
-              tag.setName(newTagName);
-              tag.setColor(color);
-              tag.setDescription(description);
-              mailService.updateTag(SessionProviderFactory.createSystemProvider(), username, accountId, tag);
-            }
+          editTagForm.setTag(tagId);        
+          Tag tag =  mailService.getTag(SessionProviderFactory.createSystemProvider(), username, accountId, tagId);
+          if (tag != null) {
+            tag.setName(newTagName);
+            tag.setColor(color);
+            tag.setDescription(description);
+            mailService.updateTag(SessionProviderFactory.createSystemProvider(), username, accountId, tag);
           }
         } catch (Exception e){
           uiApp.addMessage(new ApplicationMessage("UIRenameTagForm.msg.error-rename-tag", null)) ;
@@ -151,8 +148,8 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class)) ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UITagContainer.class)) ;
-      uiEditTagForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiEditTagForm.getAncestorOfType(UIPopupAction.class)) ;
+      editTagForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(editTagForm.getAncestorOfType(UIPopupAction.class)) ;
     }
   }
   
