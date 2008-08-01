@@ -49,6 +49,4 @@ public class UIBannerContainer extends UIContainer  {
   public UIBannerContainer() throws Exception {
     addChild(UISearchForm.class, null, null) ;
   }
-
-  
 }
