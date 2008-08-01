@@ -30,7 +30,6 @@ import javax.jcr.PathNotFoundException;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
-import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
@@ -173,6 +172,7 @@ public class UIWeekView extends UICalendarView {
     return dataMap ;
   }
   public boolean isShowCustomView() {return isShowCustomView_ ;}
+  
   static  public class UpdateEventActionListener extends EventListener<UIWeekView> {
     public void execute(Event<UIWeekView> event) throws Exception {
       UIWeekView calendarview = event.getSource() ;
@@ -259,12 +259,6 @@ public class UIWeekView extends UICalendarView {
           uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         }
-        //TODO souldn't refresh this
-        UICalendarViewContainer uiViewContainer = uiCalendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
-        CalendarSetting setting = calService.getCalendarSetting(calendarview.getSession(), username) ;
-        uiViewContainer.refresh() ;
-        uiCalendarPortlet.setCalendarSetting(setting) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarPortlet) ; 
       }
     }
   }

@@ -27,7 +27,6 @@ import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.webui.UIFormComboBox;
 import org.exoplatform.calendar.webui.UIFormDateTimePicker;
-import org.exoplatform.calendar.webui.UIFormSelectBoxWithGroups;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.model.SelectItemOption;
@@ -36,6 +35,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormSelectBox;
+import org.exoplatform.webui.form.UIFormSelectBoxWithGroups;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
@@ -79,7 +79,6 @@ public class UIEventDetailTab extends UIFormInputWithActions {
     addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION, FIELD_DESCRIPTION, null)) ;
     addUIFormInput(new UIFormSelectBoxWithGroups(FIELD_CALENDAR, FIELD_CALENDAR, null)) ;
     addUIFormInput(new UIFormSelectBox(FIELD_CATEGORY, FIELD_CATEGORY, UIEventForm.getCategory())) ;
-
     ActionData addCategoryAction = new ActionData() ;
     addCategoryAction.setActionType(ActionData.TYPE_ICON) ;
     addCategoryAction.setActionName(UIEventForm.ACT_ADDCATEGORY) ;
@@ -87,18 +86,10 @@ public class UIEventDetailTab extends UIFormInputWithActions {
     List<ActionData> addCategoryActions = new ArrayList<ActionData>() ;
     addCategoryActions.add(addCategoryAction) ;
     setActionField(FIELD_CATEGORY, addCategoryActions) ;
-
     addUIFormInput(new UIFormInputInfo(FIELD_ATTACHMENTS, FIELD_ATTACHMENTS, null)) ;
     setActionField(FIELD_ATTACHMENTS, getUploadFileList()) ;
-    
     addUIFormInput(new UIFormComboBox(FIELD_FROM_TIME, FIELD_FROM_TIME, options));
     addUIFormInput(new UIFormComboBox(FIELD_TO_TIME, FIELD_TO_TIME,  options));
-    
-    //addUIFormInput(new UIFormSelectBox(FIELD_FROM_TIME, FIELD_FROM_TIME, options));
-    //addUIFormInput(new UIFormSelectBox(FIELD_TO_TIME, FIELD_TO_TIME,  options));
-    /*WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-    Locale locale = context.getParentAppRequestContext().getLocale() ;*/
-    
     addUIFormInput(new UIFormDateTimePicker(FIELD_FROM, FIELD_FROM, new Date(), false));
     addUIFormInput(new UIFormDateTimePicker(FIELD_TO, FIELD_TO, new Date(), false));
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_CHECKALL, FIELD_CHECKALL, null));
@@ -109,10 +100,8 @@ public class UIEventDetailTab extends UIFormInputWithActions {
     addEmailAddress.setActionType(ActionData.TYPE_ICON) ;
     addEmailAddress.setActionName(UIEventForm.ACT_ADDEMAIL) ;
     addEmailAddress.setActionListener(UIEventForm.ACT_ADDEMAIL) ;
-
     List<ActionData> addMailActions = new ArrayList<ActionData>() ;
     addMailActions.add(addEmailAddress) ;
-
   }
   protected UIForm getParentFrom() {
     return (UIForm)getParent() ;

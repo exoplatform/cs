@@ -85,7 +85,7 @@ public class CalendarEvent {
   /**
    * Types: TYPE_EVENT, TYPE_TASK, TYPE_JOURNAL
    */ 
-  private String eventType ;
+  private String eventType = TYPE_EVENT ;
 
   /**
    * Values: LOW, NORMAL, HIGHT

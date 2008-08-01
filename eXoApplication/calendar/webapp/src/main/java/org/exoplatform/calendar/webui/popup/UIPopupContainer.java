@@ -38,11 +38,8 @@ public class UIPopupContainer extends UIContainer implements UIPopupComponent {
     uiPopupAction.getChild(UIPopupWindow.class).setId("UICalendarChildPopupWindow") ;
     
   }
-  public void activate() throws Exception {
-    // TODO Auto-generated method stub
-  }
+  public void activate() throws Exception {}
 
-  public void deActivate() throws Exception {
-  }
+  public void deActivate() throws Exception {}
 
 }

@@ -32,12 +32,11 @@ public class Utils {
   public static final String EXO_LABEL = "exo:label".intern() ;
   public static final String EXO_DESCRIPTION = "exo:description".intern() ;
   public static final String EXO_NAME = "exo:name".intern() ;
-
+  
   
   public static final String EXO_EVEN_TATTACHMENT = "exo:eventAttachment".intern() ;
   public static final String EXO_FILE_NAME = "exo:fileName".intern() ;
   
-  //public static final String ATTACHMENT_ID = "exo:attachmentId".intern() ; ;
   public static final String ATTACHMENT_NODE = "attachment".intern() ; ;
   public static final String REMINDERS_NODE = "reminders".intern() ; ;
   
@@ -57,14 +56,23 @@ public class Utils {
   public static final int DENY = 0 ;
   public static final int ACCEPT = 1 ;
   public static final int NOTSURE = 2 ;
+  
+  /**
+   * The method creates instance calendar object with time zone is GMT 0
+   * @return GregorianCalendar
+   */
   public static GregorianCalendar getInstanceTempCalendar() { 
 	  GregorianCalendar  calendar = new GregorianCalendar() ;
 		int gmtoffset = calendar.get(Calendar.DST_OFFSET) + calendar.get(Calendar.ZONE_OFFSET);
 		calendar.setTimeInMillis(System.currentTimeMillis() - gmtoffset) ;
 		return  calendar;
 	}
-  
-  public static boolean isEmpty(String s) {
-    return s == null || s.trim().length() == 0 ;
+  /**
+   * The method validates the string value is empty or not
+   * @param string String input value
+   * @return boolean value
+   */
+  public static boolean isEmpty(String string) {
+    return string == null || string.trim().length() == 0 ;
   }
 }

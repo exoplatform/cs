@@ -114,13 +114,6 @@ public class UIFormDateTimePicker extends UIFormInputBase<String>  {
   public UIFormDateTimePicker(String name, String bindField, Date date) {
     this(name, bindField, date, true) ;
   }
-  /**
-   * By default, creates a date of format Month/Day/Year
-   * If isDisplayTime is true, adds the time of format Hours:Minutes:Seconds
-   * TODO : Display time depending on the locale of the client.
-   * @param isDisplayTime
-   */
-
   public UIFormDateTimePicker(String name, String bindField, Date date, String dateStyle) {
     this(name, bindField, date, false, dateStyle) ;
   }

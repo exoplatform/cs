@@ -39,7 +39,6 @@ import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.service.impl.CalendarServiceImpl;
 import org.exoplatform.calendar.webui.CalendarView;
-import org.exoplatform.calendar.webui.SelectItem;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UIFormComboBox;
@@ -62,6 +61,7 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.core.model.SelectItem;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -174,8 +174,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     ((UIFormDateTimePicker)eventDetailTab.getChildById(UIEventDetailTab.FIELD_FROM)).setDateFormatStyle(calSetting.getDateFormat()) ;
     ((UIFormDateTimePicker)eventDetailTab.getChildById(UIEventDetailTab.FIELD_TO)).setDateFormatStyle(calSetting.getDateFormat()) ;
     UIEventAttenderTab attenderTab = getChildById(TAB_EVENTATTENDER) ;
-    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-    Locale locale = context.getParentAppRequestContext().getLocale() ;
     List<SelectItemOption<String>> fromTimes 
     = CalendarUtils.getTimesSelectBoxOptions(calSetting.getTimeFormat(),calSetting.getTimeFormat(), calSetting.getTimeInterval()) ;
     List<SelectItemOption<String>> toTimes 
@@ -219,6 +217,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       setParticipant(pars.toString()) ;
       boolean isContains = false ;
       CalendarService calService = CalendarUtils.getCalendarService();
+      System.out.println("\n\n event category list " + eventCalendar.getEventCategoryId());
       List<EventCategory> listCategory = 
         calService.getEventCategories(SessionProviderFactory.createSessionProvider(), CalendarUtils.getCurrentUser());
       for(EventCategory eventCat : listCategory) {
@@ -1049,15 +1048,15 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
               to = tempCal.getTime() ;
             }
             CalendarEvent calendarEvent  = null ;
-            calendarEvent = new CalendarEvent() ;
             String[] pars = uiForm.getParticipants() ;
             String eventId = null ;
-            if(!uiForm.isAddNew_){
-              calendarEvent = uiForm.calendarEvent_ ; 
+            if(uiForm.isAddNew_){
+              calendarEvent = new CalendarEvent() ;
+            } else {
+              calendarEvent = uiForm.calendarEvent_ ;
             }
             calendarEvent.setFromDateTime(from) ;
             calendarEvent.setToDateTime(to);
-            /*if(pars != null && pars.length > 0) */
             calendarEvent.setParticipant(pars) ;
             if(CalendarUtils.isEmpty(uiForm.getInvitationEmail())) calendarEvent.setInvitation(null) ;
             else 
@@ -1069,6 +1068,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
                 }
                 if(!emails.isEmpty()) calendarEvent.setInvitation(emails.toArray(new String[emails.size()])) ;
               }
+            calendarEvent.setCalendarId(uiForm.getCalendarId()) ;
             calendarEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
             calendarEvent.setSummary(uiForm.getEventSumary()) ;
             calendarEvent.setDescription(uiForm.getEventDescription()) ;

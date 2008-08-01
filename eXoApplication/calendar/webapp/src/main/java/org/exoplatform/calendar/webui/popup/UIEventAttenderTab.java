@@ -123,7 +123,6 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
     Locale locale = context.getParentAppRequestContext().getLocale() ;
     DateFormat df = new SimpleDateFormat(calSetting.getDateFormat(),locale) ;
     df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
-    System.out.println(df.format(calendar_.getTime()));
     return df.format(calendar_.getTime()) ;
   }
   protected void moveNextDay() throws Exception{

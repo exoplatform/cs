@@ -66,7 +66,6 @@ public class NewGroupListener extends GroupEventListener {
 		calendar.setCalendarColor(Calendar.SEASHELL);
 		List<String> perms = new ArrayList<String>() ;
 		for(String s : viewPermission) {
-			//if(s.split(":").length > 0) perms.add(s.split(":")[0].trim() + ":" + groupId) ;
 			if(!perms.contains(s)) perms.add(s) ;
 		}
 		calendar.setViewPermission(perms.toArray(new String[perms.size()])) ;
@@ -74,11 +73,8 @@ public class NewGroupListener extends GroupEventListener {
 		for(String s : editPermission) {
       String groupKey = groupId + "/:" + s ;
 			if(!perms.contains(groupKey)) perms.add(groupKey) ;
-			//if(s.split(":").length > 0) perms.add(s.split(":")[0].trim() + ":" + groupId) ;
 		}
 		calendar.setEditPermission(perms.toArray(new String[perms.size()])) ;
 		calendarService_.savePublicCalendar(sProvider, calendar, isNew, null) ;
-
-//		calendarService_.saveCalendarSetting(sProvider, username, new CalendarSetting());
 	}
 }

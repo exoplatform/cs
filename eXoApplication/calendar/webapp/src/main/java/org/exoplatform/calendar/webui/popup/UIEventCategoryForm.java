@@ -17,20 +17,17 @@
 package org.exoplatform.calendar.webui.popup;
 
 import javax.jcr.ItemExistsException;
-import javax.jcr.RepositoryException;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.webui.CalendarView;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
-import org.exoplatform.calendar.webui.UICalendarView;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.web.command.handler.GetApplicationHandler;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;

@@ -16,19 +16,6 @@
  **/
 package org.exoplatform.calendar.service.test;
 
-import java.io.ByteArrayInputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.exoplatform.calendar.service.Calendar;
-import org.exoplatform.calendar.service.CalendarCategory;
-import org.exoplatform.calendar.service.CalendarEvent;
-import org.exoplatform.calendar.service.EventCategory;
-import org.exoplatform.calendar.service.GroupCalendarData;
-import org.exoplatform.calendar.service.Reminder;
-import org.exoplatform.calendar.service.impl.ICalendarImportExport;
 
 /**
  * Created by The eXo Platform SARL

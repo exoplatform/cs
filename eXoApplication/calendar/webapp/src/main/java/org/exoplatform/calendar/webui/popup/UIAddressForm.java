@@ -18,18 +18,14 @@ package org.exoplatform.calendar.webui.popup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
-import org.exoplatform.calendar.CalendarUtils.SelectComparator;
 import org.exoplatform.commons.utils.ObjectPageList;
-import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
-import org.exoplatform.contact.service.DataPageList;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.Utils;
 import org.exoplatform.contact.service.impl.NewUserListener;
@@ -50,7 +46,6 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
-//import org.exoplatform.contact.webui.*;
 /**
  * Created by The eXo Platform SARL
  * Author : Pham Tuan
@@ -143,8 +138,6 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         }
       }
     }
-    //TODO it is slow down when sort
-    //Collections.sort(data, new CalendarUtils.ContactComparator()) ;
     setContactList(data);
   }
   @SuppressWarnings("unchecked")
@@ -162,10 +155,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
           data.add(new ContactData(id, fullName, email)) ;
         }
       }
-
     }
-    //TODO it is slow down when sort
-    //Collections.sort(data, new CalendarUtils.ContactComparator()) ;
     setContactList(data);
   }
   public void setContactList(List<ContactData> contactList) throws Exception {

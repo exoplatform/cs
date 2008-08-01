@@ -172,10 +172,7 @@ public class UICalendars extends UIForm  {
           colorMap_.put(Calendar.TYPE_PRIVATE + CalendarUtils.COLON + calendar.getId(), calendar.getCalendarColor()) ;
           if(getUIFormCheckBoxInput(calendar.getId()) == null){
             addUIFormInput(new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false).setChecked(true)) ;
-          } else {
-            //TODO wait for dunghm about javaScript
-            //getUIFormCheckBoxInput(calendar.getId()).setChecked(true) ;
-          }
+          } 
         }
       }
     }
@@ -228,7 +225,7 @@ public class UICalendars extends UIForm  {
     return colorMap_;
   }
   public String[] getColors() {
-    return Colors.COLORNAME ;
+    return Colors.COLORNAMES ;
   }
   private boolean canAddTaskAndEvent(UICalendars uiComponent, String calendarId, String calType) throws Exception {
     CalendarService calService = CalendarUtils.getCalendarService() ;

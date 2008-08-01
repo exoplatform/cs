@@ -62,15 +62,9 @@ public class UICalendarCategoryManager extends UIContainer implements UIPopupCom
     updateGrid() ;
   }
 
-  public void activate() throws Exception {
-    // TODO Auto-generated method stub
-
-  }
+  public void activate() throws Exception {}
   
-  public void deActivate() throws Exception {
-    // TODO Auto-generated method stub
-
-  }
+  public void deActivate() throws Exception {}
   public void processRender(WebuiRequestContext context) throws Exception {
     Writer w =  context.getWriter() ;
     w.write("<div id=\"UICalendarCategoryManager\" class=\"UICalendarCategoryManager\">");

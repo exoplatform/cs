@@ -176,13 +176,8 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       if(isLock) shareTab.setActionField(group + PERMISSION_SUB, null) ;
     }
   }
-  public void activate() throws Exception {
-    // TODO Auto-generated method stub
-
-  }
-  public void deActivate() throws Exception {
-    // TODO Auto-generated method stub
-  }
+  public void activate() throws Exception {}
+  public void deActivate() throws Exception {}
   public void resetField() throws Exception {
     permission_.clear() ;
     perms_.clear() ;
@@ -467,6 +462,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     }
   }
   static  public class SaveActionListener extends EventListener<UICalendarForm> {
+    @SuppressWarnings("unchecked")
     public void execute(Event<UICalendarForm> event) throws Exception {
       try {
         UICalendarForm uiForm = event.getSource() ;
@@ -479,7 +475,6 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
         }
         String username = Util.getPortalRequestContext().getRemoteUser() ;
         CalendarService calendarService = CalendarUtils.getCalendarService() ;
-        SessionProvider sProvider = SessionProviderFactory.createSystemProvider() ;
         boolean isPublic = uiForm.isPublic() ;
         if(isPublic) uiForm.calType_ = CalendarUtils.PUBLIC_TYPE ;
         Calendar calendar = new Calendar() ;
@@ -499,7 +494,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
           calendar.setCategoryId(uiForm.getSelectedGroup()) ;
           calendarService.saveUserCalendar(SessionProviderFactory.createSessionProvider(), username, calendar, uiForm.isAddNew_) ;    
         } else if(CalendarUtils.SHARED_TYPE.equals(uiForm.calType_)) {
-          calendarService.saveSharedCalendar(sProvider, username, calendar) ;
+          calendarService.saveSharedCalendar(uiForm.getSystemSession(), username, calendar) ;
         }else if (CalendarUtils.PUBLIC_TYPE.equals(uiForm.calType_)) {
           Object[] groupList = uiForm.getPublicGroups() ;
           List<String> selected = new ArrayList<String>() ;
@@ -557,7 +552,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
             }
           }        
           calendar.setEditPermission(listPermission.toArray(new String[listPermission.size()])) ;
-          calendarService.savePublicCalendar(sProvider, calendar, uiForm.isAddNew_, username) ;
+          calendarService.savePublicCalendar(uiForm.getSystemSession(), calendar, uiForm.isAddNew_, username) ;
         } 
         UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
         calendarPortlet.setCalendarSetting(null) ;
