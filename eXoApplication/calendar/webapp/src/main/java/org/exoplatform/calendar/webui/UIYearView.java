@@ -92,7 +92,6 @@ public class UIYearView extends UICalendarView {
 
   @Override
   public LinkedHashMap<String, CalendarEvent> getDataMap() {
-    // TODO Auto-generated method stub
     return null;
   }
   public String getSelectedCategory() {

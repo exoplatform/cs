@@ -153,29 +153,6 @@ public class CsvImportExport implements CalendarImportExport {
               }
               if(isValid) eventObj.setToDateTime(cal.getTime()) ;
             }
-            //TODO check againt for reminders
-            //Event reminders
-            /*if(!Utils.isEmpty(l.get(dataMap.get(EV_HASREMINDER)))) {
-            if(Boolean.parseBoolean(l.get(dataMap.get(EV_HASREMINDER)))) {
-              if(!Utils.isEmpty(l.get(dataMap.get(EV_REMINDERDATE))) && !Utils.isEmpty(l.get(dataMap.get(EV_REMINDERTIME)))) {
-                try {
-                  List<Reminder> rmList = new ArrayList<Reminder>() ;
-                  Calendar cal = GregorianCalendar.getInstance() ;  
-                  cal.setTime(df.parse(l.get(dataMap.get(EV_REMINDERDATE)) + " " + l.get(dataMap.get(EV_REMINDERTIME)))) ;
-                  Reminder rm = new Reminder() ;
-                  rm.setReminderType(Reminder.TYPE_POPUP) ;
-                  rm.setEventId(eventObj.getId()) ;
-                  rm.setFromDateTime(eventObj.getFromDateTime()) ;
-                  rm.setRepeate(false);
-                  rm.setAlarmBefore(cal.getTimeInMillis()) ;
-                  rmList.add(rm) ;
-                  eventObj.setReminders(rmList) ;
-                } catch (Exception e) {
-                  e.printStackTrace() ;
-                }
-              }
-            }
-          }*/
             //Event oner 9
             //Event Participants 10
             if(!Utils.isEmpty(l.get(dataMap.get(EV_ATTENDEES)))) {
@@ -289,7 +266,6 @@ public class CsvImportExport implements CalendarImportExport {
   }
 	public List<CalendarEvent> getEventObjects(InputStream icalInputStream)
 			throws Exception {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

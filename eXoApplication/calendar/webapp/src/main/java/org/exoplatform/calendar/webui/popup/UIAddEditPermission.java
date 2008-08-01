@@ -64,14 +64,8 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
     permissionList.getUIPageIterator().setId("PermissionListIterator") ;
     addChild(UISharedForm.class, null, null) ;
   }
-  public void activate() throws Exception {
-    // TODO Auto-generated method stub
-
-  }
-  public void deActivate() throws Exception {
-    // TODO Auto-generated method stub
-
-  }
+  public void activate() throws Exception {}
+  public void deActivate() throws Exception {}
 
   public void init(String username, Calendar cal, boolean isAddNew) throws Exception{
     UISharedForm shareForm = getChild(UISharedForm.class) ;

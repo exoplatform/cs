@@ -33,7 +33,6 @@ import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.webui.CalendarView;
-import org.exoplatform.calendar.webui.SelectItem;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UICalendars;
@@ -51,6 +50,7 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.core.model.SelectItem;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -669,9 +669,12 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       if(uiForm.isEventDetailValid(calendarPortlet.getCalendarSetting())) {
         String username = event.getRequestContext().getRemoteUser() ;
         String calendarId = uiForm.getCalendarId() ;
-        CalendarEvent calendarEvent = new CalendarEvent() ;
-        if(!uiForm.isAddNew_){
-          calendarEvent = uiForm.calendarEvent_ ; 
+        CalendarEvent calendarEvent = null ;
+        if(uiForm.isAddNew_){
+          calendarEvent = new CalendarEvent() ; 
+          calendarEvent.setEventType(CalendarEvent.TYPE_TASK) ;
+        } else {
+          calendarEvent = uiForm.calendarEvent_ ;
         }
         calendarEvent.setEventType(CalendarEvent.TYPE_TASK) ;
         calendarEvent.setSummary(uiForm.getEventSumary()) ;

@@ -32,42 +32,42 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 public interface CalendarImportExport {  
   
   /**
-   * 
-   * @param systemSession
-   * @param username
-   * @param icalInputStream
-   * @param calendarName
+   * The method imports events form icalendar(.ics) or outlook calendar exported .csv file to the system
+   * @param userSession session of current user
+   * @param username current user name or id
+   * @param icalInputStream data input stream
+   * @param calendarName given calendar name, if the name is null, default calendar name is file name
    * @throws Exception
    */
-  public void importCalendar(SessionProvider systemSession, String username, InputStream icalInputStream, String calendarName) throws Exception ;
+  public void importCalendar(SessionProvider userSession, String username, InputStream icalInputStream, String calendarName) throws Exception ;
   
   /**
-   * 
-   * @param systemSession
-   * @param username
-   * @param calendarIds
-   * @param type
-   * @return
+   * The method exports events form calendar to icalendar file (.ics) or .csv file
+   * @param userSession session of current user
+   * @param username current user name or id
+   * @param calendarIds the group calendar ids, if you want to export events from public calendars
+   * @param type The type of calendar will be exported
+   * @return data output stream
    * @throws Exception
    */
-  public OutputStream exportCalendar(SessionProvider systemSession, String username, List<String> calendarIds, String type) throws Exception ;
+  public OutputStream exportCalendar(SessionProvider userSession, String username, List<String> calendarIds, String type) throws Exception ;
   
   /**
-   * 
-   * @param systemSession
-   * @param username
-   * @param calendarId
-   * @param type
-   * @param eventId
-   * @return
+   * The method export calendar event to output stream by given event id
+   * @param userSession session of current user
+   * @param username current user name or id
+   * @param calendarId given calendar id, the calendar event belong to
+   * @param type The type of calendar will be exported
+   * @param eventId given event id
+   * @return data output stream
    * @throws Exception
    */
-  public OutputStream exportEventCalendar(SessionProvider systemSession, String username, String calendarId, String type, String eventId) throws Exception ;
+  public OutputStream exportEventCalendar(SessionProvider userSession, String username, String calendarId, String type, String eventId) throws Exception ;
   
   /**
-   * 
-   * @param icalInputStream
-   * @return
+   * The method maps the input stream to event object
+   * @param icalInputStream the input stream
+   * @return List of calendar event objects contant infomations
    * @throws Exception
    */
   public List<CalendarEvent> getEventObjects(InputStream icalInputStream) throws Exception ;

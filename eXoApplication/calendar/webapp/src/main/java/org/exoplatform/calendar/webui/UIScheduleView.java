@@ -37,13 +37,10 @@ public class UIScheduleView extends UICalendarView  {
   }
 
   @Override
-  public void refresh() throws Exception {
-    // TODO Auto-generated method stub
-  }
+  public void refresh() throws Exception {}
 
   @Override
   LinkedHashMap<String, CalendarEvent> getDataMap() {
-    // TODO Auto-generated method stub
     return null;
   }  
 }

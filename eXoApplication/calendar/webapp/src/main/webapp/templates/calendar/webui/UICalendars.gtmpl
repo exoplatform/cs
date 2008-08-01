@@ -424,7 +424,7 @@
 						  <%for(CalendarEvent task in uicomponent.getAllTask(uicomponent.getCurrentMiniBeginDate(),uicomponent.getCurrentMiniEndDate(), status)){
 						  	color = uicomponent.getColorMap().get(task.calType +CalendarUtils.COLON+ task.getCalendarId()) ;
 						  %>
-							  <a href="#" style="white-space:">
+							  <a style="white-space:nowrap;">
 							    <div class="TasksColor" style="background: $color"><span></span></div>
 							    <div class="TasksName" title="$task.summary">$task.summary</div>
 							    <div style="clear: left;"><span></span></div>

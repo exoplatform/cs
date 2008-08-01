@@ -55,21 +55,13 @@ public class ReminderJob implements Job {
   private static Log log_ = ExoLogger.getLogger("job.RecordsJob");
   public void execute(JobExecutionContext context) throws JobExecutionException {
     List<Message> messageList = new ArrayList<Message>();
-    List<Reminder> reminders = new ArrayList<Reminder>();
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     try {
       MailService mailService = 
         (MailService) container.getComponentInstanceOfType(MailService.class);			
       if (log_.isDebugEnabled()) log_.debug("Calendar reminder service");
-      java.util.Calendar fromCalendar = GregorianCalendar.getInstance();
+      java.util.Calendar fromCalendar = org.exoplatform.calendar.service.Utils.getInstanceTempCalendar() ;
       fromCalendar.setLenient(false) ;
-      int gmtoffset = fromCalendar.get(java.util.Calendar.DST_OFFSET) + fromCalendar.get(java.util.Calendar.ZONE_OFFSET);
-      fromCalendar.setTimeInMillis(System.currentTimeMillis() - gmtoffset) ; 
-      
-      long tmpTime = fromCalendar.getTimeInMillis() ;
-      // TODO : what do you add (7 * 60 * 60 * 1000) for ?
-      tmpTime = tmpTime + (7 * 60 * 60 * 1000) ;
-      fromCalendar.setTimeInMillis(tmpTime) ;
       JobDataMap jdatamap = context.getJobDetail().getJobDataMap();
       ServerConfiguration config = new ServerConfiguration();
       config.setUserName(jdatamap.getString("account"));

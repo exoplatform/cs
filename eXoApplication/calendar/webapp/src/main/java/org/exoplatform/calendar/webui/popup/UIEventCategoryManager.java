@@ -73,15 +73,9 @@ public class UIEventCategoryManager extends UIContainer implements UIPopupCompon
   public void setCurrentPage(int page) throws Exception {
     getChild(UIGrid.class).getUIPageIterator().setCurrentPage(page) ;
   }
-  public void activate() throws Exception {
-    // TODO Auto-generated method stub
+  public void activate() throws Exception {}
 
-  }
-
-  public void deActivate() throws Exception {
-    // TODO Auto-generated method stub
-
-  }
+  public void deActivate() throws Exception {}
   public void resetForm() {
     getChild(UIEventCategoryForm.class).reset() ;
   }

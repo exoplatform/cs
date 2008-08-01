@@ -126,7 +126,7 @@ public class UIFormComboBox extends UIFormInputBase<String>  {
   protected String renderOnChangeEvent(UIForm uiForm) throws Exception {
     return uiForm.event(onchange_, (String)null);
   }
-  private UIForm getUIform() {
+  public UIForm getUIform() {
     return getAncestorOfType(UIForm.class) ; 
   }
   
