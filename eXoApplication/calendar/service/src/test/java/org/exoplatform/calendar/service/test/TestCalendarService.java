@@ -26,6 +26,7 @@ import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
@@ -56,7 +57,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
   
   public void testCalendarService() throws Exception { }
   
-public void testCalendar() throws Exception {
+  public void testCalendar() throws Exception {
     CalendarCategory calCategory = new CalendarCategory() ;
     calCategory.setName("categoryName") ;
     calCategory.setDescription("Description") ;
@@ -67,33 +68,11 @@ public void testCalendar() throws Exception {
     cal.setName("myCalendar") ;
     cal.setDescription("Desscription") ;
     cal.setCategoryId(calCategory.getId()) ;
-    cal.setPublic(true) ;    
+    cal.setPublic(true) ;
     calendarService_.saveUserCalendar(sProvider_, username, cal, true) ;
     Calendar myCal = calendarService_.getUserCalendar(sProvider_,username, cal.getId()) ;
     assertNotNull(myCal) ;
     assertEquals(myCal.getName(), "myCalendar") ;
-    
-    // shared calendar, get shared calendars 
-    List<String> receiverUser = new ArrayList<String>() ;
-    receiverUser.add("sharedUser") ;
-    calendarService_.shareCalendar(sProvider_, username, cal.getId(), receiverUser) ;
-    Calendar calendar = calendarService_.getSharedCalendars(sProvider_, "sharedUser", true).getCalendarById(cal.getId()) ;
-    assertEquals("myCalendar", calendar.getName()) ;
-    
-    CalendarEvent calendarEvent = new CalendarEvent() ;
-    calendarEvent.setCalendarId(cal.getId()) ;
-    calendarEvent.setSummary("calendarEvent") ;
-    calendarEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
-    calendarEvent.setFromDateTime(new Date()) ;
-    calendarEvent.setToDateTime(new Date()) ;
-    calendarService_.saveEventToSharedCalendar(sProvider_, "sharedUser", cal.getId(), calendarEvent, true) ;
-    List<String> calendarIds = new ArrayList<String>() ;
-    calendarIds.add(cal.getId()) ;
-    
-    CalendarEvent event = calendarService_.getUserEventByCalendar(sProvider_, username, calendarIds).get(0) ;
-    assertEquals("calendarEvent", event.getSummary()) ;
-    calendarService_.removeSharedCalendar(sProvider_, "sharedUser", cal.getId()) ;
-    assertNull(calendarService_.getSharedCalendars(sProvider_, "sharedUser", true)) ;
     
     //create/get calendar in public folder
     cal.setPublic(false) ;
@@ -140,8 +119,59 @@ public void testCalendar() throws Exception {
     
     //remove private calendar category
     assertNotNull(calendarService_.removeCalendarCategory(sProvider_, username, calCategory.getId())) ;
+    
+    // calendar setting
+    CalendarSetting setting = new CalendarSetting() ;
+    setting.setBaseURL("url") ;
+    setting.setLocation("location") ;
+    calendarService_.saveCalendarSetting(sProvider_, username, setting) ;
+    assertEquals("url",calendarService_.getCalendarSetting(sProvider_, username).getBaseURL()) ;
+    
   }
   
+  public void testSharedCalendar() throws Exception {
+    CalendarCategory calCategory = new CalendarCategory() ;
+    calCategory.setName("categoryName") ;
+    calendarService_.saveCalendarCategory(sProvider_, "root", calCategory, true) ;
+
+    Calendar cal = new Calendar() ;
+    cal.setName("myCalendar") ;
+    cal.setCategoryId(calCategory.getId()) ;
+    cal.setPublic(true) ;    
+    calendarService_.saveUserCalendar(sProvider_, username, cal, true) ;
+
+    List<String> receiverUser = new ArrayList<String>() ;
+    receiverUser.add("sharedUser") ;
+    calendarService_.shareCalendar(sProvider_, username, cal.getId(), receiverUser) ;
+    Calendar sharedCalendar = calendarService_.getSharedCalendars(sProvider_, "sharedUser", true).getCalendarById(cal.getId()) ;
+    assertEquals("myCalendar", sharedCalendar.getName()) ;
+    
+    sharedCalendar.setDescription("shared description") ;
+    calendarService_.saveSharedCalendar(sProvider_, "sharedUser", sharedCalendar) ;
+    Calendar editedCalendar = calendarService_.getSharedCalendars(sProvider_, "sharedUser", true).getCalendarById(cal.getId()) ;
+    assertEquals("shared description", editedCalendar.getDescription()) ;
+    
+    CalendarEvent calendarEvent = new CalendarEvent() ;
+    calendarEvent.setCalendarId(cal.getId()) ;
+    calendarEvent.setSummary("calendarEvent") ;
+    calendarEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
+    calendarEvent.setFromDateTime(new Date()) ;
+    calendarEvent.setToDateTime(new Date()) ;
+    calendarService_.saveEventToSharedCalendar(sProvider_, "sharedUser", cal.getId(), calendarEvent, true) ;
+    List<String> calendarIds = new ArrayList<String>() ;
+    calendarIds.add(cal.getId()) ;
+     
+    CalendarEvent event = calendarService_.getUserEventByCalendar(sProvider_, username, calendarIds).get(0) ;
+    assertEquals("calendarEvent", event.getSummary()) ;
+    
+    calendarService_.removeSharedEvent(sProvider_, "sharedUser", cal.getId(), calendarEvent.getId()) ;
+    List<CalendarEvent> events = calendarService_.getUserEventByCalendar(sProvider_, username, calendarIds);
+    assertEquals(0, events.size()) ;
+    
+    calendarService_.removeSharedCalendar(sProvider_, "sharedUser", cal.getId()) ;
+    assertNull(calendarService_.getSharedCalendars(sProvider_, "sharedUser", true)) ;
+    calendarService_.removeCalendarCategory(sProvider_, username, calCategory.getId()) ;
+  }
 
   public void testCalendarCategory() throws Exception {
     CalendarCategory calCategory = new CalendarCategory() ;
@@ -151,6 +181,8 @@ public void testCalendar() throws Exception {
     calendarService_.saveCalendarCategory(sProvider_, username, calCategory, true) ;
     List<GroupCalendarData> categories = calendarService_.getCalendarCategories(sProvider_, username, true) ;
     assertEquals(categories.size(), 1) ;
+    assertEquals(1, calendarService_.getCategories(sProvider_, username).size()) ;
+    
     
     //get calendar category
     calCategory = calendarService_.getCalendarCategory(sProvider_, username, calCategory.getId()) ;
@@ -188,6 +220,7 @@ public void testCalendar() throws Exception {
     eventCategory.setName(name) ;
     eventCategory.setDescription("description") ;
     calendarService_.saveEventCategory(sProvider_, username, eventCategory, null, true) ;
+    assertEquals(1, calendarService_.getEventCategories(sProvider_, username).size()) ;
     assertNotNull(calendarService_.getEventCategory(sProvider_, username, name.toLowerCase())) ;
 
     // import, export calendar
