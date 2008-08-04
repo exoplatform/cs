@@ -19,12 +19,14 @@ package org.exoplatform.contact.service.test;
 import java.util.Arrays;
 
 import org.exoplatform.contact.service.Contact;
+import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.contact.service.Tag;
 
 
 /**
@@ -36,13 +38,14 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 
 public class TestContactService extends BaseContactServiceTestCase{
-	private static ContactService contactService_ ;
-	private static SessionProvider sProvider_ ;
+  private static ContactService contactService_ ;
+  private static SessionProvider sProvider_ ;
   private String userRoot_ = "root" ;
   private String userMarry_ = "marry ";
   private String userJohn_ = "john";
   private String userDemo_ = "demo";
-	public void setUp() throws Exception {
+  
+  public void setUp() throws Exception {
     super.setUp() ;
     contactService_ = (ContactService) container.getComponentInstanceOfType(ContactService.class) ;
     SessionProviderService sessionProviderService = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class) ;
@@ -73,13 +76,14 @@ public class TestContactService extends BaseContactServiceTestCase{
     assertEquals(rootGroup1_.getName(), "newName");
     
   //  add Group To Personal Contact
-    /*Contact contact = createContact() ;
+    Contact contact = createContact() ; 
+    contact.setAddressBook(new String[]{rootGroup1_.getId(), rootGroup2_.getId()});
     contact.setId(userRoot_) ;
     contactService_.saveContact(sProvider_, userRoot_, contact, true);
-    
-    assertEquals(contactService_.getGroups(sProvider_, userRoot_).size(), 3);
+    assertEquals(contact.getAddressBook().length, 2);
     contactService_.addGroupToPersonalContact(userRoot_, marryGroup_.getId());
-    assertEquals(contactService_.getGroups(sProvider_, userRoot_).size(), 4);*/
+    contact = contactService_.getContact(sProvider_, userRoot_, contact.getId());
+    assertEquals(contact.getAddressBook().length, 3);
     
   //  remove group:
     assertNotNull(contactService_.removeGroup(sProvider_, userRoot_, rootGroup2_.getId()));
@@ -88,9 +92,11 @@ public class TestContactService extends BaseContactServiceTestCase{
   // share group:
     shareGroup.setEditPermissionUsers(new String[]{userJohn_});
     contactService_.shareAddressBook(sProvider_, userRoot_, shareGroup.getId(), Arrays.asList(new String[]{userJohn_, userDemo_}));
+    
+    johnGroup_.setEditPermissionGroups(new String[]{userRoot_});
+    contactService_.shareAddressBook(sProvider_, userJohn_, johnGroup_.getId(), Arrays.asList(new String[]{userRoot_}));
   
   // get shared addressbooks:
-    assertNotNull(contactService_.getSharedAddressBooks(sProvider_, userJohn_));
     assertEquals(contactService_.getSharedAddressBooks(sProvider_, userJohn_).size(), 1);
     
   // get shared group:
@@ -136,7 +142,7 @@ public class TestContactService extends BaseContactServiceTestCase{
     assertNotNull(contactService_.getContactPageListByGroup(sProvider_, userRoot_, rootGroup1_.getId()));
     assertEquals(contactService_.getContactPageListByGroup(sProvider_, userRoot_, rootGroup1_.getId()).getAll().size(), 3);
     
-    // get all email address by group:
+  // get all email address by group:
     assertNotNull(contactService_.getAllEmailAddressByGroup(sProvider_, userRoot_, rootGroup1_.getId()));
     assertEquals(contactService_.getAllEmailAddressByGroup(sProvider_, userRoot_, rootGroup1_.getId()).size(), 3);
     
@@ -197,6 +203,7 @@ public class TestContactService extends BaseContactServiceTestCase{
     
   // get all email by shared group:
     shareContact.setEmailAddress("maivanha1610@gmail.com");
+    shareContact.setFullName("Mai Van Ha");
     contactService_.saveContact(sProvider_, userRoot_, shareContact, false);
     assertEquals(contactService_.getAllEmailBySharedGroup(userJohn_, shareGroup.getId()).get(0), "maivanha1610@gmail.com");
     
@@ -215,6 +222,67 @@ public class TestContactService extends BaseContactServiceTestCase{
   //  remove contact:
     assertNotNull(contactService_.removeContacts(sProvider_, userRoot_, Arrays.asList(new String[]{contact2.getId()})));
     assertNull(contactService_.getContact(sProvider_, userRoot_, contact2.getId()));
+    
+  //  paste AddressBook
+    contactService_.pasteAddressBook(sProvider_, userJohn_, johnGroup_.getId(), JCRDataStorage.PRIVATE, shareGroup.getId(), JCRDataStorage.SHARED);
+    assertEquals(contactService_.getSharedContactsByAddressBook(sProvider_, userJohn_, sharedAddressBook).getAll().size(), 2);
+    
+  // paste contact:
+    contactService_.pasteContacts(sProvider_, userJohn_, shareGroup.getId(), JCRDataStorage.SHARED, Arrays.asList(new Contact[]{contact3}));
+    assertEquals(contactService_.getSharedContactsByAddressBook(sProvider_, userJohn_, sharedAddressBook).getAll().size(), 3);
+    
+	/**
+	 * test Search
+	 */
+	// search contact:
+	  ContactFilter contactFilter = createContactFilter("maivanha1610@gmail.com", new String(), new String(), new String(), new String(), 
+	  													new String(), new String(), new String(), new String(), new String());
+	  assertEquals(contactService_.searchContact(sProvider_, userRoot_, contactFilter).getAll().get(0).getEmailAddress(), 
+			  		shareContact.getEmailAddress());
+	  
+	// search email:
+	  contactFilter.setAccountPath(" /jcr:root/Users/root/ApplicationData/ContactApplication/contacts");
+	  contactFilter.setCategories(new String[]{});
+	  assertEquals(contactService_.searchEmails(sProvider_, userRoot_, contactFilter).size(), 1);
+    
+  /**
+   * Test Tag:
+   */
+    Tag tag = createTag("tag1");
+  // add new and get tag:
+    contactService_.addTag(sProvider_, userRoot_, 
+    					   Arrays.asList(new String[]{contact1.getId() + "::" + JCRDataStorage.PRIVATE, 
+    									 				contact4.getId() + "::" + JCRDataStorage.PRIVATE}), 
+    					   Arrays.asList(new Tag[]{tag}));
+    assertNotNull(contactService_.getTag(sProvider_, userRoot_, tag.getId()));
+    
+  // update tag:
+    tag.setName("Mai Van Ha");
+    contactService_.updateTag(sProvider_, userRoot_, tag);
+    assertEquals(contactService_.getTag(sProvider_, userRoot_, tag.getId()).getName(), "Mai Van Ha");
+    
+  // getTags:
+    assertEquals(contactService_.getTags(sProvider_, userRoot_).size(), 1);
+    
+  // getContactPageListByTag
+    assertEquals(contactService_.getContactPageListByTag(sProvider_, userRoot_, tag.getId()).getAll().size(), 2);
+    
+  // removeContactTag
+    contactService_.removeContactTag(sProvider_, userRoot_, 
+							    		Arrays.asList(new String[]{contact4.getId() + "::" + JCRDataStorage.PRIVATE}), 
+							    		Arrays.asList(new String[]{tag.getId()}));
+    assertEquals(contactService_.getContactPageListByTag(sProvider_, userRoot_, tag.getId()).getAll().size(), 1);
+    
+  // add tag:
+    contactService_.addTag(sProvider_, userRoot_, 
+    						Arrays.asList(new String[]{contact1.getId() + "::" + JCRDataStorage.PRIVATE,
+    													contact4.getId() + "::" + JCRDataStorage.PRIVATE}), 
+    						tag.getId());
+    assertEquals(contactService_.getContactPageListByTag(sProvider_, userRoot_, tag.getId()).getAll().size(), 2);
+    
+  // remove tag:
+    contactService_.removeTag(sProvider_, userRoot_, tag.getId());
+    assertNull(contactService_.getTag(sProvider_, userRoot_, tag.getId()));
     
   }
   
@@ -275,6 +343,30 @@ public class TestContactService extends BaseContactServiceTestCase{
     
     contact.setNote("note");
     return contact;
+  }
+  
+  private Tag createTag(String tabName){
+	  Tag tag = new Tag();
+	  tag.setName(tabName);
+	  tag.setDescription("description");
+	  tag.setColor("Red");
+	  return tag;
+  }
+  
+  private ContactFilter createContactFilter(String text, String fullName, String firstName, String lastName, String nickName, String gender,
+		  									String jobtitle, String emailAddress, String isOwner, String userName){
+	  ContactFilter contactFilter = new ContactFilter();
+	  contactFilter.setText(text);
+	  contactFilter.setFullName(fullName);
+	  contactFilter.setFirstName(firstName);
+	  contactFilter.setLastName(lastName);
+	  contactFilter.setNickName(nickName);
+	  contactFilter.setGender(gender);
+	  contactFilter.setJobTitle(jobtitle);
+	  contactFilter.setEmailAddress(emailAddress);
+	  contactFilter.setOwner(isOwner);
+	  contactFilter.setUsername(userName);
+	  return contactFilter;
   }
   
 }
