@@ -1509,7 +1509,7 @@ public class JCRDataStorage{
         feed.setEncoding("UTF-8") ;     
         SyndFeedOutput output = new SyndFeedOutput();      
         String feedXML = output.outputString(feed);      
-        feedXML = StringUtils.replace(feedXML,"&amp;","&");      
+        feedXML = StringUtils.replace(feedXML,"&amp;","&");
         storeXML(feedXML, rssHomeNode, rssData.getName(), rssData); 
         rssHomeNode.getSession().save() ;
       } else {
