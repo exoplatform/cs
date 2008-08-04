@@ -102,7 +102,7 @@ MailServiceHandler.prototype.checkMail = function(isUpdateUI) {
       !this.userName) {
     return;
   }
-  this.isUpdateUI_ = isUpdateUI ;
+  this.isUpdateUI_ = new Boolean(isUpdateUI) ;
   this.activeAction = this.CHECK_MAIL_ACTION;
   this.tryCount = 0;
   eXo.core.Browser.setCookie('cs.mail.checkingmail' + this.accountId, 'true');
@@ -147,9 +147,9 @@ MailServiceHandler.prototype.destroy = function() {
     stopLabel.style.display = 'none' ;
     if (st == this.RETRY_PASSWORD) {
       eXo.webui.UIForm.submitForm('UIMessageList','ComfirmPassword', true) ;
-    } else if (st != this.CONNECTION_FAILURE){
+    } else if (st == this.FINISHED_CHECKMAIL_STATUS){
       var refeshLabel = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'Here');
-    	eval(eXo.core.DOMUtil.findDescendantsByTagName(refeshLabel, 'a')[0].href)
+    	eval(eXo.core.DOMUtil.findDescendantsByTagName(refeshLabel, 'a')[0].href.replace("%20", ""))
     } else {
     	var hideLabel = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'Hide') ;
       hideLabel.style.display = 'block' ;
