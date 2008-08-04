@@ -1,11 +1,11 @@
 .UIMailPortlet .UIAccountSetting {
-	background: #f3f3f3;
 	min-width: 645px;
 }
 
 .UIMailPortlet .UIAccountSetting .AccountSetting {
 	border: 1px solid #c0c0c0;
 	padding: 10px;
+	background: #f3f3f3;
 }
 
 /*===========================AccountSettingCategory===========================*/
@@ -46,8 +46,9 @@
 }
 
 .UIMailPortlet .UIAccountSetting .AccountSettingCategory .AccountSettingList {
-	padding: 10px 0px;
 	color: #3d3d3d;
+	overflow-y: auto;
+	height: 322px;
 }
 
 .UIMailPortlet .UIAccountSetting .AccountSettingCategory .NormalItem {
