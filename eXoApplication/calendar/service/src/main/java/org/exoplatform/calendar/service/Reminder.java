@@ -35,8 +35,10 @@ public class Reminder {
   final public static String TYPE_BOTH = "both".intern() ;
   final public static String[] REMINDER_TYPES = {TYPE_EMAIL, TYPE_POPUP} ;
   
+  
   private String id ;
   private String eventId ;
+  private String reminderOwner ;
   private String reminderType = TYPE_EMAIL;
   private long alarmBefore = 0; 
   private String emailAddress ;
@@ -78,4 +80,10 @@ public class Reminder {
   
   public void setSummary(String sm) { this.summary = sm ; }
   public String getSummary() { return summary ; }
+  public void setReminderOwner(String owner) {
+    this.reminderOwner = owner;
+  }
+  public String getReminderOwner() {
+    return reminderOwner;
+  }
 }

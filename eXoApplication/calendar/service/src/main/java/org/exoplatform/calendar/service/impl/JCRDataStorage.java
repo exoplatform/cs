@@ -1025,11 +1025,11 @@ public class JCRDataStorage{
     eventNode.setProperty("exo:invitation",  event.getInvitation()) ;
     eventNode.setProperty("exo:participant", event.getParticipant()) ;
     // add reminder child node
-    /*if(eventNode.hasNode(Utils.REMINDERS_NODE)) {
+    if(eventNode.hasNode(Utils.REMINDERS_NODE)) {
       while (eventNode.getNodes().hasNext()) {
         eventNode.getNodes().nextNode().remove() ;
       }
-    }*/
+    } 
     List<Reminder> reminders = event.getReminders() ;
     if(reminders != null && !reminders.isEmpty()) {
       for(Reminder rm : reminders) {
@@ -1073,6 +1073,7 @@ public class JCRDataStorage{
       reminderNode = catNode.addNode(reminder.getId(), "exo:reminder") ;
     }
     reminderNode.setProperty("exo:eventId", eventNode.getName()) ;
+    reminderNode.setProperty("exo:owner", reminder.getReminderOwner()) ;
     reminderNode.setProperty("exo:alarmBefore", reminder.getAlarmBefore()) ;
     reminderNode.setProperty("exo:repeatInterval", reminder.getRepeatInterval()) ;
     reminderNode.setProperty("exo:reminderType", reminder.getReminderType()) ;
@@ -1268,6 +1269,7 @@ public class JCRDataStorage{
         if(reminderNode.isNodeType("exo:reminder")) {
           Reminder reminder = new Reminder() ;
           reminder.setId(reminderNode.getName()) ;
+          if(reminderNode.hasProperty("exo:owner"))reminder.setReminderOwner(reminderNode.getProperty("exo:owner").getString()) ; 
           if(reminderNode.hasProperty("exo:eventId")) reminder.setEventId(reminderNode.getProperty("exo:eventId").getString()) ;
           if(reminderNode.hasProperty("exo:reminderType")) reminder.setReminderType(reminderNode.getProperty("exo:reminderType").getString()) ;
           if(reminderNode.hasProperty("exo:alarmBefore"))reminder.setAlarmBefore(reminderNode.getProperty("exo:alarmBefore").getLong()) ;

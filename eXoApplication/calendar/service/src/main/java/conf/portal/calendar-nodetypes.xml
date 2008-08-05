@@ -10,6 +10,9 @@
 	  		<propertyDefinition name="exo:eventId" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   				<valueConstraints/>
 	  		</propertyDefinition>
+			<propertyDefinition name="exo:owner" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>
 	  		<propertyDefinition name="exo:alarmBefore" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   				<valueConstraints/>
 	  		</propertyDefinition>

@@ -26,6 +26,8 @@
 		  rcontext.getJavascriptManager().importJavascript('eXo.calendar.UIColorPicker','/calendar/javascript/') ;
 		  rcontext.getJavascriptManager().importJavascript('eXo.calendar.Highlighter','/calendar/javascript/') ;
 		  
+		  println uicomponent.getUserToken() ;
+		  
 		%>
 	    <div class="CalendarWorkingWorkspace">
 		    <%uicomponent.renderChild(UIActionBar.class)%>

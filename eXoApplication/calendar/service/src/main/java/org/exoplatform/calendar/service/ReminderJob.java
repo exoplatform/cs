@@ -17,6 +17,7 @@
 package org.exoplatform.calendar.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -27,7 +28,6 @@ import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
 import org.apache.commons.logging.Log;
-import org.exoplatform.commons.utils.ISO8601;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.mail.service.MailService;
@@ -37,6 +37,9 @@ import org.exoplatform.mail.service.Utils;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.ws.frameworks.cometd.ContinuationService;
+import org.exoplatform.ws.frameworks.json.impl.JsonGeneratorImpl;
+import org.exoplatform.ws.frameworks.json.value.JsonValue;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
@@ -54,10 +57,11 @@ public class ReminderJob implements Job {
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     try {
       MailService mailService = 
-        (MailService) container.getComponentInstanceOfType(MailService.class);			
+        (MailService) container.getComponentInstanceOfType(MailService.class);
+      ContinuationService continuation = (ContinuationService) container.getComponentInstanceOfType(ContinuationService.class);
       if (log_.isDebugEnabled()) log_.debug("Calendar reminder service");
-      java.util.Calendar fromCalendar = org.exoplatform.calendar.service.Utils.getInstanceTempCalendar() ;
-      fromCalendar.setLenient(false) ;
+      java.util.Calendar fromCalendar = Calendar.getInstance() ; //org.exoplatform.calendar.service.Utils.getInstanceTempCalendar() ;
+      //fromCalendar.setLenient(false) ;
       JobDataMap jdatamap = context.getJobDetail().getJobDataMap();
       ServerConfiguration config = new ServerConfiguration();
       config.setUserName(jdatamap.getString("account"));
@@ -69,61 +73,93 @@ public class ReminderJob implements Job {
       Node calendarHome = getPublicServiceHome();
       if(calendarHome == null) return ;
       StringBuffer path = new StringBuffer(getReminderPath(fromCalendar));
-      path.append("//element(*,exo:reminder)");
+      /*path.append("//element(*,exo:reminder)");
       path.append("[@exo:remindDateTime <= xs:dateTime('"	+ ISO8601.format(fromCalendar)
-          + "') and @exo:reminderType = 'email' and @exo:isOver = 'false']");
+          + "') and @exo:isOver = 'false']");*/
+      path.append("//element(*,exo:reminder)");
+      path.append("[@exo:isOver = 'false']");
       QueryManager queryManager = calendarHome.getSession().getWorkspace().getQueryManager();
       Query query = queryManager.createQuery(path.toString(), Query.XPATH);
+      System.out.println("\n\n query state  " + query.getStatement());
       QueryResult results = query.execute();
       NodeIterator iter = results.getNodes();
       Message message;
       Node reminder;
+      List<Reminder> popupReminders = new ArrayList<Reminder>() ;
       while (iter.hasNext()) {
-        try {
-        	reminder = iter.nextNode();
-            if(Reminder.TYPE_EMAIL.equals(reminder.getProperty("exo:reminderType").getString())){
-              String to = reminder.getProperty("exo:email").getString();				
-              if (to != null && to.length() > 0) {
-                message = new Message();
-                message.setContentType(Utils.MIMETYPE_TEXTHTML) ;
-                message.setMessageTo(to);
-                message.setSubject("[reminder] eXo calendar notify mail !");
-                message.setMessageBody(reminder.getProperty("exo:eventSummary").getString());
-                message.setFrom(jdatamap.getString("account")) ;
-                if(reminder.getProperty("exo:isRepeat").getBoolean()) {
-                  long fromTime = reminder.getProperty("exo:fromDateTime").getDate().getTimeInMillis() ;
-                  long remindTime = reminder.getProperty("exo:remindDateTime").getDate().getTimeInMillis() ;
-                  long interval = reminder.getProperty("exo:repeatInterval").getLong() * 60 * 1000 ;
-                  if (fromCalendar.getTimeInMillis() >= fromTime) {
-                    reminder.setProperty("exo:isOver", true) ;
-                  }else {
-                    if((remindTime + interval) > fromTime) {
-                      reminder.setProperty("exo:isOver", true) ;
-                    }else {
-                      java.util.Calendar cal = new GregorianCalendar() ;
-                      cal.setTimeInMillis(remindTime + interval) ;
-                      reminder.setProperty("exo:remindDateTime", cal) ;
-                      reminder.setProperty("exo:isOver", false) ;
-                    }
-                  }
-                }else {
+        reminder = iter.nextNode();
+        boolean isRepeat = reminder.getProperty("exo:isRepeat").getBoolean() ;
+        long fromTime = reminder.getProperty("exo:fromDateTime").getDate().getTimeInMillis() ;
+        long remindTime = reminder.getProperty("exo:remindDateTime").getDate().getTimeInMillis() ;
+        long interval = reminder.getProperty("exo:repeatInterval").getLong() * 60 * 1000 ;
+
+        if(Reminder.TYPE_EMAIL.equals(reminder.getProperty("exo:reminderType").getString())){
+          String to = reminder.getProperty("exo:email").getString();				
+          if (to != null && to.length() > 0) {
+            message = new Message();
+            message.setContentType(Utils.MIMETYPE_TEXTHTML) ;
+            message.setMessageTo(to);
+            message.setSubject("[reminder] eXo calendar notify mail !");
+            message.setMessageBody(reminder.getProperty("exo:eventSummary").getString());
+            message.setFrom(jdatamap.getString("account")) ;
+            if(isRepeat) {
+              if (fromCalendar.getTimeInMillis() >= fromTime) {
+                reminder.setProperty("exo:isOver", true) ;
+              }else {
+                if((remindTime + interval) > fromTime) {
                   reminder.setProperty("exo:isOver", true) ;
+                }else {
+                  java.util.Calendar cal = new GregorianCalendar() ;
+                  cal.setTimeInMillis(remindTime + interval) ;
+                  reminder.setProperty("exo:remindDateTime", cal) ;
+                  reminder.setProperty("exo:isOver", false) ;
                 }
-                messageList.add(message);
-                reminder.save() ;
+              }
+            }else {
+              reminder.setProperty("exo:isOver", true) ;
+            }
+            messageList.add(message);
+            reminder.save() ;
+          }
+        } else {
+          Reminder rmdObj = new Reminder() ;
+          rmdObj.setRepeate(isRepeat) ;
+          if(reminder.hasProperty("exo:owner")) rmdObj.setReminderOwner(reminder.getProperty("exo:owner").getString()) ;
+          if(reminder.hasProperty("exo:eventId")) rmdObj.setId(reminder.getProperty("exo:eventId").getString()) ;
+          rmdObj.setAlarmBefore(remindTime) ;
+          if(isRepeat) {
+            if (fromCalendar.getTimeInMillis() >= fromTime) {
+              reminder.setProperty("exo:isOver", true) ;
+            }else {
+              if((remindTime + interval) > fromTime) {
+                reminder.setProperty("exo:isOver", true) ;
+              }else {
+                java.util.Calendar cal = new GregorianCalendar() ;
+                cal.setTimeInMillis(remindTime + interval) ;
+                reminder.setProperty("exo:remindDateTime", cal) ;
+                reminder.setProperty("exo:isOver", false) ;
               }
             }
-        }catch (Exception e) {
-          e.printStackTrace() ;
+          }else {
+            reminder.setProperty("exo:isOver", true) ;
+          }
+          popupReminders.add(rmdObj) ;
+          reminder.save() ;
         }
       }
       if(!messageList.isEmpty()) mailService.sendMessages(messageList, config);
+      if(!popupReminders.isEmpty()) {
+        for(Reminder rmdObj : popupReminders) {
+          JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
+          JsonValue json = generatorImpl.createJsonObject(rmdObj);
+          continuation.sendMessage(rmdObj.getReminderOwner(), "/eXo/Application/Calendar/messagesd", json);
+        }
+      }
     } catch (Exception e) {
       e.printStackTrace();			
     }
     if (log_.isDebugEnabled()) log_.debug("File plan job done");
   }
-
   private String getReminderPath(java.util.Calendar fromCalendar)
   throws Exception {
     String year = "Y" + String.valueOf(fromCalendar.get(java.util.Calendar.YEAR));
