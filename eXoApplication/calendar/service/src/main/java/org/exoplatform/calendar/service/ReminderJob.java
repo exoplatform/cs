@@ -150,6 +150,7 @@ public class ReminderJob implements Job {
       if(!messageList.isEmpty()) mailService.sendMessages(messageList, config);
       if(!popupReminders.isEmpty()) {
         for(Reminder rmdObj : popupReminders) {
+          System.out.println("\n\n send message to commitd ");
           JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
           JsonValue json = generatorImpl.createJsonObject(rmdObj);
           continuation.sendMessage(rmdObj.getReminderOwner(), "/eXo/Application/Calendar/messagesd", json);

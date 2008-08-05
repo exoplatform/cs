@@ -1025,11 +1025,11 @@ public class JCRDataStorage{
     eventNode.setProperty("exo:invitation",  event.getInvitation()) ;
     eventNode.setProperty("exo:participant", event.getParticipant()) ;
     // add reminder child node
-    if(eventNode.hasNode(Utils.REMINDERS_NODE)) {
+    /*if(eventNode.hasNode(Utils.REMINDERS_NODE)) {
       while (eventNode.getNodes().hasNext()) {
         eventNode.getNodes().nextNode().remove() ;
       }
-    } 
+    } */
     List<Reminder> reminders = event.getReminders() ;
     if(reminders != null && !reminders.isEmpty()) {
       for(Reminder rm : reminders) {

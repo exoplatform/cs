@@ -78,10 +78,10 @@ public class UICalendarPortlet extends UIPortletApplication {
     popupMess.processRender(context);
   }
   
-  public String getRemoteUser() {
-    return Util.getPortalRequestContext().getRemoteUser() ;
+  public String getRemoteUser() throws Exception {
+    return CalendarUtils.getCurrentUser() ;
   }
-  public String getUserToken() {
+  public String getUserToken()throws Exception {
     ContinuationService continuation = getApplicationComponent(ContinuationService.class) ;
     return continuation.getUserToken(this.getRemoteUser());
   }
