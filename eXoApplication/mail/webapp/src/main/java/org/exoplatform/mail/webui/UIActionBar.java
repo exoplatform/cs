@@ -26,7 +26,6 @@ import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIAddressBookForm;
 import org.exoplatform.mail.webui.popup.UIComposeForm;
 import org.exoplatform.mail.webui.popup.UIEventForm;
-import org.exoplatform.mail.webui.popup.UIFeed;
 import org.exoplatform.mail.webui.popup.UIMailSettings;
 import org.exoplatform.mail.webui.popup.UIMessageFilter;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
@@ -53,7 +52,6 @@ import org.exoplatform.webui.event.EventListener;
         @EventConfig(listeners = UIActionBar.CheckMailActionListener.class),
         @EventConfig(listeners = UIActionBar.AddressActionListener.class),
         @EventConfig(listeners = UIActionBar.AddEventActionListener.class),
-        @EventConfig(listeners = UIActionBar.RssActionListener.class),
         @EventConfig(listeners = UIActionBar.FilterActionListener.class),
         @EventConfig(listeners = UIActionBar.MailSettingsActionListener.class)
     }
@@ -155,15 +153,6 @@ public class UIActionBar extends UIContainer {
       uiEventForm.initForm(calendarService.getCalendarSetting(SessionProviderFactory.createSystemProvider() ,MailUtils.getCurrentUser()), null) ;
       uiEventForm.update(CalendarUtils.PRIVATE_TYPE, null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-    }
-  }
-  static public class RssActionListener extends EventListener<UIActionBar> {
-    public void execute(Event<UIActionBar> event) throws Exception {
-      UIActionBar uiActionBar = event.getSource() ; 
-      UIMailPortlet uiPortlet = uiActionBar.getAncestorOfType(UIMailPortlet.class);
-      UIPopupAction uiPopup = uiPortlet.findFirstComponentOfType(UIPopupAction.class);
-      uiPopup.activate(UIFeed.class, 600);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);
     }
   }
   
