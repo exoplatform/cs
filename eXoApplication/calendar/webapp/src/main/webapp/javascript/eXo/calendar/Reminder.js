@@ -14,7 +14,7 @@ Reminder.prototype.init = function(eXoUser, eXoToken){
 } ;
 
 Reminder.prototype.alarm = function(){
-  //alert(eventObj) ;
+  alert(eventObj) ;
 } ;
 
 eXo.calendar.Reminder = new Reminder() ;
