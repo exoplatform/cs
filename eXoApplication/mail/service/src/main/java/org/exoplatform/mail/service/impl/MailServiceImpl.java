@@ -943,7 +943,6 @@ public class MailServiceImpl implements MailService {
   }
 
   public List<AccountData> getAccountDatas(SessionProvider sProvider) throws Exception {
-    // TODO Auto-generated method stub
     return null;
   }
 
