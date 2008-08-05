@@ -272,9 +272,9 @@ public class UIAddressBooks extends UIComponent {
           
           
           if (uiAddressBook.isDefault(address.getId())) {
-            uiExportForm.setSelectedGroup(address.getSharedUserId() + ContactUtils.SCORE + address.getName() + ContactUtils.SHARED) ;
+            uiExportForm.setSelectedGroup(address.getSharedUserId() + ContactUtils.SCORE + address.getName() + ContactUtils.getSharedLable()) ;
           } else {
-            uiExportForm.setSelectedGroup(address.getName() + ContactUtils.SHARED) ;
+            uiExportForm.setSelectedGroup(address.getName() + ContactUtils.getSharedLable()) ;
           } 
           contacts = contactService.getSharedContactsByAddressBook(
               sessionProvider, username, address).getAll().toArray(new Contact[] {}) ;
@@ -333,9 +333,9 @@ public class UIAddressBooks extends UIComponent {
       for (SharedAddressBook address : uiAddressBook.sharedAddressBookMap_.values())
         if (uiAddressBook.havePermission(address.getId())) {
           if (uiAddressBook.isDefault(address.getId())) {
-            addresses.put(address.getId(), address.getSharedUserId() + ContactUtils.SCORE + address.getName() + ContactUtils.SHARED) ;
+            addresses.put(address.getId(), address.getSharedUserId() + ContactUtils.SCORE + address.getName() + ContactUtils.getSharedLable()) ;
           } else {
-            addresses.put(address.getId(), address.getName() + ContactUtils.SHARED) ;
+            addresses.put(address.getId(), address.getName() + ContactUtils.getSharedLable()) ;
           }  
         }
       uiImportForm.setGroup(addresses) ;
@@ -361,9 +361,9 @@ public class UIAddressBooks extends UIComponent {
       for (SharedAddressBook address : uiAddressBook.sharedAddressBookMap_.values())
         if (uiAddressBook.havePermission(address.getId())) {
           if (uiAddressBook.isDefault(address.getId())) {
-            addresses.put(address.getId(), address.getSharedUserId() + ContactUtils.SCORE + address.getName() + ContactUtils.SHARED) ;
+            addresses.put(address.getId(), address.getSharedUserId() + ContactUtils.SCORE + address.getName() + ContactUtils.getSharedLable()) ;
           } else {
-            addresses.put(address.getId(), address.getName() + ContactUtils.SHARED) ;
+            addresses.put(address.getId(), address.getName() + ContactUtils.getSharedLable()) ;
           }  
         }
       uiCategorySelect.setPrivateGroupMap(addresses) ;    

@@ -34,6 +34,8 @@ import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -61,7 +63,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
 
 public class UIAddEditPermission extends UIContainer implements UIPopupComponent {
   public static String[]  BEAN_FIELD = {"viewPermission","editPermission"} ;
-  private static String[] ACTION = {"Edit", "Delete"} ;
+  private static String[] ACTION = {"userId","Edit", "Delete"} ;
   private String groupId_ ;
   private String contactId_ ;
   private boolean isSharedGroup ;
@@ -69,7 +71,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
   public UIAddEditPermission() throws Exception {
     this.setName("UIAddEditPermission");
     UIGrid permissionList = addChild(UIGrid.class, null, "PermissionList") ;
-    permissionList.configure("viewPermission", BEAN_FIELD, ACTION);
+    permissionList.configure("userId", BEAN_FIELD, ACTION);
     permissionList.getUIPageIterator().setId("PermissionListIterator") ;
     addChild(UISharedForm.class, null, null) ;
     ///shareForm.init(null, cal, true);
@@ -189,24 +191,11 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
           List<String> newPerms = new ArrayList<String>() ;
           newPerms.addAll(Arrays.asList(group.getViewPermissionGroups())) ;
           newPerms.remove(remover) ;
-          /*
-          for(String s : group.getViewPermissionGroups()) {
-            if(!s.equals(remover)) {
-              newPerms.add(s) ;
-            }
-          }*/
           group.setViewPermissionGroups(newPerms.toArray(new String[newPerms.size()])) ;
           if(group.getEditPermissionGroups() != null) {
             newPerms.clear() ;
             newPerms.addAll(Arrays.asList(group.getEditPermissionGroups())) ;
             newPerms.remove(remover) ;
-            
-            /*
-            for(String s : group.getEditPermissionGroups()) {
-              if(!s.equals(remover)) {
-                newPerms.add(s) ;
-              }
-            }*/
             group.setEditPermissionGroups(newPerms.toArray(new String[newPerms.size()])) ;
           }
           List<Contact> users = contactService
@@ -215,63 +204,26 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
             contactService.removeUserShareAddressBook(
                 SessionProviderFactory.createSessionProvider(), username, uiForm.groupId_, user.getId()) ;
           
-          
-          /*
-          List<Contact> contacts = contactService.getContactPageListByGroup(
-              SessionProviderFactory.createSessionProvider(), username, uiForm.groupId_).getAll() ;
-          for (Contact contact : contacts) {
-            removePerGroup(contact, remover) ;
-            contactService.saveContact(SessionProviderFactory.createSessionProvider()
-                , username,contact , false) ;
-          }
-          */
-          
         } else {
           if(group.getViewPermissionUsers() != null) {
             List<String> newPerms = new ArrayList<String>() ;
             newPerms.addAll(Arrays.asList(group.getViewPermissionUsers())) ;
             newPerms.remove(remover + JCRDataStorage.HYPHEN) ;
-            /*
-            for(String s : group.getViewPermissionUsers()) {
-              if(!s.equals(remover + JCRDataStorage.HYPHEN)) {
-                newPerms.add(s) ;
-              }
-            }*/
             group.setViewPermissionUsers(newPerms.toArray(new String[newPerms.size()])) ;
           }
           if(group.getEditPermissionUsers() != null) {
             List<String> newPerms = new ArrayList<String>() ;
             newPerms.addAll(Arrays.asList(group.getEditPermissionUsers())) ;
             newPerms.remove(remover + JCRDataStorage.HYPHEN) ;
-            /*
-            for(String s : group.getEditPermissionUsers()) {
-              if(!s.equals(remover + JCRDataStorage.HYPHEN)) {
-                newPerms.add(s) ;
-              }
-            }*/
             group.setEditPermissionUsers(newPerms.toArray(new String[newPerms.size()])) ;
           }        
           contactService.removeUserShareAddressBook(SessionProviderFactory.createSessionProvider()
               , username, uiForm.groupId_, remover) ;
-          
-          /*
-          List<Contact> contacts = contactService.getContactPageListByGroup(
-              SessionProviderFactory.createSessionProvider(), username, uiForm.groupId_).getAll() ;
-          for (Contact contact : contacts) {            
-            removePerUser(contact, remover + JCRDataStorage.HYPHEN) ;
-            contactService.saveContact(SessionProviderFactory.createSessionProvider()
-                , username,contact , false) ;
-          }
-          */
         }
         contactService.saveGroup(SessionProviderFactory.createSessionProvider(), username, group, false) ;
         uiForm.updateGroupGrid(group); 
         event.getRequestContext().addUIComponentToUpdateByAjax(
             uiForm.getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class)) ;
-        /*
-        UIContacts uiContacts = uiForm.getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIContacts.class) ;
-        uiContacts.updateList() ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;*/
       } else {
         
         // ko luu ca object contact vi co the ko dung den delete va edit
@@ -291,9 +243,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
                   ApplicationMessage.WARNING)) ;
               event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
               return ;
-            }
-            
-            
+            }    
         } else {
           removePerUser(contact, remover + JCRDataStorage.HYPHEN) ;
           try {
@@ -339,24 +289,12 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
         List<String> newPerms = new ArrayList<String>() ;
         newPerms.addAll(Arrays.asList(contact.getViewPermissionUsers())) ;
         newPerms.remove(removedUser) ;
-        /*
-        for(String s : contact.getViewPermissionUsers()) {
-          if(!s.equals(removedUser)) {
-            newPerms.add(s) ;
-          }
-        }*/
         contact.setViewPermissionUsers(newPerms.toArray(new String[newPerms.size()])) ;
       }
       if(contact.getEditPermissionUsers() != null) {
         List<String> newPerms = new ArrayList<String>() ;
         newPerms.addAll(Arrays.asList(contact.getEditPermissionUsers())) ;
         newPerms.remove(removedUser) ;
-        /*
-        for(String s : contact.getEditPermissionUsers()) {
-          if(!s.equals(removedUser)) {
-            newPerms.add(s) ;
-          }
-        }*/
         contact.setEditPermissionUsers(newPerms.toArray(new String[newPerms.size()])) ;
       }
     }
@@ -365,24 +303,12 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
         List<String> newPerms = new ArrayList<String>() ;
         newPerms.addAll(Arrays.asList(contact.getViewPermissionGroups())) ;
         newPerms.remove(removedGroup) ;
-        /*
-        for(String s : contact.getViewPermissionGroups()) {
-          if(!s.equals(removedGroup)) {
-            newPerms.add(s) ;
-          }
-        }*/
         contact.setViewPermissionGroups(newPerms.toArray(new String[newPerms.size()])) ;
       }
       if(contact.getEditPermissionGroups() != null) {
         List<String> newPerms = new ArrayList<String>() ;
         newPerms.addAll(Arrays.asList(contact.getEditPermissionGroups())) ;
         newPerms.remove(removedGroup) ;
-        /*
-        for(String s : contact.getEditPermissionGroups()) {
-          if(!s.equals(removedGroup)) {
-            newPerms.add(s) ;
-          }
-        }*/
         contact.setEditPermissionGroups(newPerms.toArray(new String[newPerms.size()])) ;
       }
     }
@@ -390,7 +316,9 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
   public class data {
     String viewPermission = null ;
     String editPermission = null ;
-
+    String userId = null ;
+    
+    public  String getUserId() {return userId ;}
     public  String getViewPermission() {return viewPermission ;}
     public  String getEditPermission() {
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
@@ -407,13 +335,13 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
       }
     }
       
-    public data(String username, boolean canEdit) {
-      if (username.endsWith(JCRDataStorage.HYPHEN))
-        viewPermission = username.replaceFirst(JCRDataStorage.HYPHEN, "") ;
-      else viewPermission = username ;
+    public data(String username, boolean canEdit) throws Exception {
+      userId = username.replaceFirst(JCRDataStorage.HYPHEN, "") ;
+      User user = getApplicationComponent(OrganizationService.class).getUserHandler().findUserByName(userId) ;
+      viewPermission = user.getFullName() + "(" + user.getEmail() + ")" ;
+
       String edit = String.valueOf(canEdit) ;
-      if (edit.endsWith(JCRDataStorage.HYPHEN)) editPermission = edit.replaceFirst(JCRDataStorage.HYPHEN, "") ;
-      else editPermission = edit ;
+      editPermission = edit.replaceFirst(JCRDataStorage.HYPHEN, "") ;
     }
   }
 }

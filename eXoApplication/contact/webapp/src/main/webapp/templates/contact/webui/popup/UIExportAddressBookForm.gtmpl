@@ -47,8 +47,8 @@
 						Map sharedGroups = uicomponent.getSharedContactGroups();
 						for(group in sharedGroups.keySet()) {
 							checkboxField = uicomponent.getChildById(group) ;
-							String groupName = sharedGroups.get(group).getName() + ContactUtils.SHARED ;
-							if (group.contains(NewUserListener.DEFAULTGROUP)) groupName = sharedGroups.get(group).getSharedUserId() + ContactUtils.SCORE + sharedGroups.get(group).getName() + ContactUtils.SHARED;
+							String groupName = sharedGroups.get(group).getName() + ContactUtils.getSharedLable() ;
+							if (group.contains(NewUserListener.DEFAULTGROUP)) groupName = sharedGroups.get(group).getSharedUserId() + ContactUtils.SCORE + sharedGroups.get(group).getName() + ContactUtils.getSharedLable();
 							
 					%>
   						<tr class="UIContactList">

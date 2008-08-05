@@ -69,9 +69,9 @@ public class UIActionBar extends UIContainer  {
       for (SharedAddressBook address : uiAddressBooks.getSharedGroups().values())
         if (uiAddressBooks.havePermission(address.getId())) {
           if (uiAddressBooks.isDefault(address.getId())) {
-            addresses.put(address.getId(), address.getSharedUserId() + ContactUtils.SCORE + address.getName() + ContactUtils.SHARED) ;
+            addresses.put(address.getId(), address.getSharedUserId() + ContactUtils.SCORE + address.getName() + ContactUtils.getSharedLable()) ;
           } else {
-            addresses.put(address.getId(), address.getName() + ContactUtils.SHARED) ;
+            addresses.put(address.getId(), address.getName() + ContactUtils.getSharedLable()) ;
           }  
         }
       uiCategorySelect.setPrivateGroupMap(addresses) ;
@@ -126,9 +126,9 @@ public class UIActionBar extends UIContainer  {
       for (SharedAddressBook address : uiAddressBook.getSharedGroups().values())
         if (uiAddressBook.havePermission(address.getId())) {
           if (uiAddressBook.isDefault(address.getId())) {
-            addresses.put(address.getId(), address.getSharedUserId() + ContactUtils.SCORE + address.getName() + ContactUtils.SHARED) ;
+            addresses.put(address.getId(), address.getSharedUserId() + ContactUtils.SCORE + address.getName() + ContactUtils.getSharedLable()) ;
           } else {
-            addresses.put(address.getId(), address.getName() + ContactUtils.SHARED) ;
+            addresses.put(address.getId(), address.getName() + ContactUtils.getSharedLable()) ;
           }  
         }
       importForm.setGroup(addresses) ;

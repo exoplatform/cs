@@ -73,7 +73,8 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
   private List selectedGroups_ ;
   private String returnFieldName = null ;
   private boolean isNull = true ;
-
+  private static String SEPARATE = "::SEPARATE" ;    	
+  
   public UIGroupSelector() throws Exception {}
 
   public UIComponent getReturnComponent() { return uiComponent ; }
@@ -105,34 +106,33 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
   public boolean isSelectUser() {return TYPE_USER.equals(type_);}
   public boolean isSelectMemberShip() {return TYPE_MEMBERSHIP.equals(type_);}
   @SuppressWarnings({ "unchecked", "cast" })
-  public List<String> getList() throws Exception {
-    List<String> children = new ArrayList<String>() ;
+  public Map<String,String> getList() throws Exception {
+    Map<String,String> children = new LinkedHashMap<String, String>() ; 
     OrganizationService service = getApplicationComponent(OrganizationService.class) ;
     if(TYPE_USER.equals(type_)){
-      PageList userPageList = service.getUserHandler().findUsersByGroup(this.getCurrentGroup().getId()) ;    
-      // add to fix bug cs-1025
-      Map<String, String> users = new LinkedHashMap<String, String>() ;
+      PageList userPageList = service.getUserHandler().findUsersByGroup(this.getCurrentGroup().getId()) ;
       for(Object child : userPageList.getAll()){
-        String user = ((User)child).getUserName() ;
-        users.put(user, user) ;
+        User user = ((User)child) ;
+        children.put(user.getUserName(), user.getFullName() + SEPARATE + user.getEmail()) ;
       }
-      children.addAll(users.keySet()) ;
     } else if(TYPE_MEMBERSHIP.equals(type_)) {
       for(String child :  getListMemberhip()){
-        children.add(child) ;
+        children.put(child,child) ;
       } 
     } else if(TYPE_GROUP.equals(type_)) {
       if (!isNull) {
         Collection  groups = service.getGroupHandler().findGroups(this.getCurrentGroup()) ;    
         for(Object child : groups){
-          children.add(((Group)child).getGroupName()) ;
+          Group group = (Group)child ;
+          children.put(group.getId(), group.getGroupName()) ;
         }
       } else {
         Collection  groups = service.getGroupHandler().findGroups(null) ;    
         for(Object child : groups){
-          children.add(((Group)child).getGroupName()) ;
-        }        
-      }      
+          Group group = (Group)child ;
+          children.put(group.getId(), group.getGroupName()) ;
+        }
+      }    
     }
     return children ;
   }
