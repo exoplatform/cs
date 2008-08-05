@@ -34,6 +34,8 @@ import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -69,7 +71,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
   public UIAddEditPermission() throws Exception {
     this.setName("UIAddEditPermission");
     UIGrid permissionList = addChild(UIGrid.class, null, "PermissionList") ;
-    permissionList.configure("viewPermission", BEAN_FIELD, ACTION);
+    permissionList.configure("userId", BEAN_FIELD, ACTION);
     permissionList.getUIPageIterator().setId("PermissionListIterator") ;
     addChild(UISharedForm.class, null, null) ;
     ///shareForm.init(null, cal, true);
@@ -369,9 +371,9 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
   public class data {
     String viewPermission = null ;
     String editPermission = null ;
+    String userId = null ;
 
-    
-    // edit here
+    public  String getUserId() {return userId ;}
     public  String getViewPermission() {return viewPermission ;}
     public  String getEditPermission() {
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
@@ -388,13 +390,13 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
       }
     }
       
-    public data(String username, boolean canEdit) {
-      if (username.endsWith(JCRDataStorage.HYPHEN))
-        viewPermission = username.replaceFirst(JCRDataStorage.HYPHEN, "") ;
-      else viewPermission = username ;
+    public data(String username, boolean canEdit) throws Exception {
+      userId = username.replaceFirst(JCRDataStorage.HYPHEN, "") ;
+      User user = getApplicationComponent(OrganizationService.class).getUserHandler().findUserByName(userId) ;
+      viewPermission = user.getFullName() + "(" + user.getEmail() + ")" ;
+
       String edit = String.valueOf(canEdit) ;
-      if (edit.endsWith(JCRDataStorage.HYPHEN)) editPermission = edit.replaceFirst(JCRDataStorage.HYPHEN, "") ;
-      else editPermission = edit ;
+      editPermission = edit.replaceFirst(JCRDataStorage.HYPHEN, "") ;
     }
   }
 }

@@ -1,6 +1,7 @@
 <% 
   import  org.exoplatform.webui.core.UIBreadcumbs; 
-  import  org.exoplatform.webui.core.UITree; 
+  import  org.exoplatform.webui.core.UITree;
+  import  java.util.Map;
 %>
 <div class="UIGroupMembershipSelector" id="$uicomponent.id">
   <div class="Container">
@@ -24,39 +25,44 @@
 				  	<%=_ctx.appRes(uicomponent.id+".label.selectGroup")%>
 				  <%}%>
 		    </div>
-	      <div class="OverflowContainer">
-		      <%                
-		      boolean even = true ;
-		     if(uicomponent.getCurrentGroup() != null) {
-			      for(user in uicomponent.getList()){
-			        String rowCssClass = "OddRow" ;
-			        if(even) rowCssClass = "EvenRow" ;  
-			        even = !even ;
-							if (uicomponent.isSelectGroup()) {
-			        	key = uicomponent.getCurrentGroup().getId() +  "/" + user ;
-			       	} else if (uicomponent.isSelectUser()) {
-			       		key = user ;
-			       	}      
-		      %>
-				      <div class="$rowCssClass">
-				        	<a class="ItemIcon" href="<%=uicomponent.event('SelectMembership',key)%>">$user</a>	
-				      </div>
-		      <%}
-		      } else if (uicomponent.isSelectGroup()){
-		      	for(user in uicomponent.getList()){
-			        String rowCssClass = "OddRow" ;
-			        if(even) rowCssClass = "EvenRow" ;  
-			        even = !even ;
-				      key = "/" + user ;    
-		      %>
-				      <div class="$rowCssClass">
-				        	<a class="ItemIcon" href="<%=uicomponent.event('SelectMembership',key)%>">$user</a>	
-				      </div>
-		      <%}		
-		      
-		      }
-		      %>
-	      </div>
+				<div class="OverflowContainer">
+	      <%
+	      boolean even = true ;
+	      if(uicomponent.getCurrentGroup() != null) {
+	      	Map<String,String> children = uicomponent.getList() ;
+		      for(key in children.keySet()){
+		        String rowCssClass = "OddRow" ;
+		        if(even) rowCssClass = "EvenRow" ;  
+		        even = !even ;
+						title = key ;
+						String user = null ;
+						if (uicomponent.isSelectGroup()) {
+		        	user = children.get(key) ;
+		       	} else if (uicomponent.isSelectUser()) {
+		       		String[] value = children.get(key).split(uicomponent.SEPARATE) ;
+		       		user = value[0] ;
+		       		title = value[1] ;
+		       	}
+	      %>
+			      <div class="$rowCssClass">
+			        	<a class="ItemIcon" title="$title" href="<%=uicomponent.event('SelectMembership',key)%>">$user</a>	
+			      </div>
+	      <%}
+	      } else if (uicomponent.isSelectGroup()){
+	      	Map<String,String> children = uicomponent.getList() ;
+	      	for(key in children.keySet()){
+		        String rowCssClass = "OddRow" ;
+		        if(even) rowCssClass = "EvenRow" ;
+		        even = !even ;
+			      user = children.get(key);
+	      %>
+			      <div class="$rowCssClass">
+			        	<a class="ItemIcon" title="$key" href="<%=uicomponent.event('SelectMembership',key)%>">$user</a>	
+			      </div>
+	      <%}
+	      }
+	      %>
+      	</div>
 	    </div>
 	  </div>
 		<div style="clear: left"><span></span></div>
