@@ -290,6 +290,9 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       acc.setSignature(signature) ;
       acc.setIncomingUser(incomingUserName); 
       
+      if (isSavePass || uiAccWs5.isGetmail()) acc.setIncomingPassword(incomingPassword);
+      else acc.setIncomingPassword(null);
+      
       acc.setIncomingHost(popHost);
       acc.setIncomingPort(popPort);  
       acc.setProtocol(protocol);  
