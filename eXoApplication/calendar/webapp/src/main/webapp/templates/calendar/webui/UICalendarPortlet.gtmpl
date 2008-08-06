@@ -6,7 +6,7 @@
 %>
 <div class="FixIE">
 <div><div style="width: 940px;" ><span style="display: none;"></span></div></div>
-<div style="_width: expression(this.previousSibling.offsetWidth - 22 + 'px'); !border: 1px solid white;_margin: auto;">
+<div style="_width: expression(this.previousSibling.offsetWidth - 22 + 'px'); !border: 1px solid white; _margin: auto;">
 	<div class="ApplicationMinWidth">
 		<div class="UICalendarPortlet" id="$uicomponent.id">
 		<%
@@ -25,7 +25,10 @@
 		  rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICombobox','/calendar/javascript/') ;
 		  rcontext.getJavascriptManager().importJavascript('eXo.calendar.UIColorPicker','/calendar/javascript/') ;
 		  rcontext.getJavascriptManager().importJavascript('eXo.calendar.Highlighter','/calendar/javascript/') ;
-		  
+		  rcontext.getJavascriptManager().importJavascript('eXo.core.JSON') ;
+			rcontext.getJavascriptManager().importJavascript('eXo.core.Cometd') ;
+		  rcontext.getJavascriptManager().importJavascript('eXo.calendar.Reminder','/calendar/javascript/') ;
+		  rcontext.getJavascriptManager().addJavascript('eXo.calendar.Reminder.init("'+uicomponent.getRemoteUser()+'","'+uicomponent.getUserToken()+'");') ;
 		%>
 	    <div class="CalendarWorkingWorkspace">
 		    <%uicomponent.renderChild(UIActionBar.class)%>
