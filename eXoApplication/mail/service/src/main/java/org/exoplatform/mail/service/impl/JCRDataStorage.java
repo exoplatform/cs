@@ -884,7 +884,10 @@ public class JCRDataStorage {
       node.setProperty(Utils.EXO_BCC, Utils.decodeText(bcc));
       node.setProperty(Utils.EXO_REPLYTO, Utils.decodeText(InternetAddress.toString(msg
           .getReplyTo())));
-      node.setProperty(Utils.EXO_SUBJECT, Utils.decodeText(msg.getSubject()));
+      String subject = msg.getSubject();
+      if (subject != null ) subject = Utils.decodeText(msg.getSubject());
+      else subject = "";
+      node.setProperty(Utils.EXO_SUBJECT, subject);
       node.setProperty(Utils.EXO_RECEIVEDDATE, gc);
       Calendar sc = GregorianCalendar.getInstance();
       if (msg.getSentDate() != null)
