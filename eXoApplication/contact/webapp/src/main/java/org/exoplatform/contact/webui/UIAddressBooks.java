@@ -49,6 +49,7 @@ import org.exoplatform.contact.webui.popup.UIPopupContainer;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -268,13 +269,9 @@ public class UIAddressBooks extends UIComponent {
               sessionProvider, addressBookId).getAll().toArray(new Contact[] {});
         } else {
         	SharedAddressBook address = uiAddressBook.sharedAddressBookMap_.get(addressBookId) ;
-          
-          
-          if (uiAddressBook.isDefault(address.getId())) {
-            uiExportForm.setSelectedGroup(address.getSharedUserId() + ContactUtils.SCORE + address.getName() + ContactUtils.getSharedLable()) ;
-          } else {
-            uiExportForm.setSelectedGroup(address.getName() + ContactUtils.getSharedLable()) ;
-          } 
+          uiExportForm.setSelectedGroup(address.getName() + " (" +
+              uiAddressBook.getApplicationComponent(OrganizationService.class)
+              .getUserHandler().findUserByName(address.getSharedUserId()).getFullName() + ")") ;
           contacts = contactService.getSharedContactsByAddressBook(
               sessionProvider, username, address).getAll().toArray(new Contact[] {}) ;
         }
@@ -331,11 +328,9 @@ public class UIAddressBooks extends UIComponent {
       Map<String, String> addresses = uiAddressBook.privateAddressBookMap_ ;
       for (SharedAddressBook address : uiAddressBook.sharedAddressBookMap_.values())
         if (uiAddressBook.havePermission(address.getId())) {
-          if (uiAddressBook.isDefault(address.getId())) {
-            addresses.put(address.getId(), address.getSharedUserId() + ContactUtils.SCORE + address.getName() + ContactUtils.getSharedLable()) ;
-          } else {
-            addresses.put(address.getId(), address.getName() + ContactUtils.getSharedLable()) ;
-          }  
+          addresses.put(address.getId(), address.getName() + " (" +
+              uiAddressBook.getApplicationComponent(OrganizationService.class)
+              .getUserHandler().findUserByName(address.getSharedUserId()).getFullName() + ")") ;
         }
       uiImportForm.setGroup(addresses) ;
       uiImportForm.addConponent() ;      
@@ -359,11 +354,9 @@ public class UIAddressBooks extends UIComponent {
       Map<String, String> addresses = uiAddressBook.privateAddressBookMap_ ;
       for (SharedAddressBook address : uiAddressBook.sharedAddressBookMap_.values())
         if (uiAddressBook.havePermission(address.getId())) {
-          if (uiAddressBook.isDefault(address.getId())) {
-            addresses.put(address.getId(), address.getSharedUserId() + ContactUtils.SCORE + address.getName() + ContactUtils.getSharedLable()) ;
-          } else {
-            addresses.put(address.getId(), address.getName() + ContactUtils.getSharedLable()) ;
-          }  
+          addresses.put(address.getId(), address.getName() + " (" +
+              uiAddressBook.getApplicationComponent(OrganizationService.class)
+              .getUserHandler().findUserByName(address.getSharedUserId()).getFullName() + ")") ;
         }
       uiCategorySelect.setPrivateGroupMap(addresses) ;    
       uiCategorySelect.setValue(groupId) ;
@@ -383,17 +376,6 @@ public class UIAddressBooks extends UIComponent {
       if (uiAddressBook.privateAddressBookMap_.containsKey(groupId)) {
         uiCategoryForm.setValues(groupId, false) ; 
       } else {
-        /*
-        String username = ContactUtils.getCurrentUser() ;
-        ContactGroup group = ContactUtils.getContactService().getSharedGroup(username, groupId) ;
-        if (group.getEditPermission() == null || !Arrays.asList(group.getEditPermission()).contains(username)) {
-          UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.non-permission", null,
-            ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;          
-        }
-        */
         uiCategoryForm.setValues(groupId, true) ;
       }
       uiCategoryForm.setNew(false) ;
