@@ -5,7 +5,7 @@
   import org.exoplatform.contact.service.impl.NewUserListener;
   import org.exoplatform.webui.form.UIFormSelectBox;
   import org.exoplatform.webui.form.UIFormStringInput;
-  
+  import org.exoplatform.services.organization.OrganizationService;
 	uiform.begin()
 %>
   
@@ -47,9 +47,8 @@
 						Map sharedGroups = uicomponent.getSharedContactGroups();
 						for(group in sharedGroups.keySet()) {
 							checkboxField = uicomponent.getChildById(group) ;
-							String groupName = sharedGroups.get(group).getName() + ContactUtils.getSharedLable() ;
-							if (group.contains(NewUserListener.DEFAULTGROUP)) groupName = sharedGroups.get(group).getSharedUserId() + ContactUtils.SCORE + sharedGroups.get(group).getName() + ContactUtils.getSharedLable();
-							
+							String shareUser = uicomponent.getApplicationComponent(OrganizationService.class).getUserHandler().findUserByName(sharedGroups.get(group).getSharedUserId()).getFullName() ;
+							groupName =  sharedGroups.get(group).getName() + " (" + shareUser + ")";
 					%>
   						<tr class="UIContactList">
   						  <td class="text" style="padding-left: 7px;">

@@ -12,9 +12,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-
 import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 
@@ -30,7 +27,6 @@ import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.impl.GroupImpl;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.model.SelectItemOption;
 
 /**
@@ -40,19 +36,6 @@ import org.exoplatform.webui.core.model.SelectItemOption;
  * Jul 11, 2007  
  */
 public class ContactUtils {
-  final public static String SCORE = " - ".intern() ;
-
-  public static String getSharedLable() {
-	WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-	ResourceBundle res = context.getApplicationResourceBundle() ;
-	try {
-	  return res.getString("UISharedForm.label.(shared)");
-	} catch (MissingResourceException e) {      
-	  e.printStackTrace() ;
-	  return "(Shared)" ;
-	}
-  } 
-  
   private static String AKONG = "@" ;
   public static final String HTTP = "http://" ; 
   public static String[] specialString = {"!", "#", "%", "&"

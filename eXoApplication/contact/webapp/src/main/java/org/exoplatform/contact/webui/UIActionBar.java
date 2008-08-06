@@ -28,6 +28,7 @@ import org.exoplatform.contact.webui.popup.UIExportAddressBookForm;
 import org.exoplatform.contact.webui.popup.UIImportForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.webui.popup.UIPopupContainer;
+import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -68,11 +69,9 @@ public class UIActionBar extends UIContainer  {
       Map<String, String> addresses = uiAddressBooks.getPrivateGroupMap() ;
       for (SharedAddressBook address : uiAddressBooks.getSharedGroups().values())
         if (uiAddressBooks.havePermission(address.getId())) {
-          if (uiAddressBooks.isDefault(address.getId())) {
-            addresses.put(address.getId(), address.getSharedUserId() + ContactUtils.SCORE + address.getName() + ContactUtils.getSharedLable()) ;
-          } else {
-            addresses.put(address.getId(), address.getName() + ContactUtils.getSharedLable()) ;
-          }  
+          addresses.put(address.getId(), address.getName() + " (" +
+            uiActionBar.getApplicationComponent(OrganizationService.class)
+            .getUserHandler().findUserByName(address.getSharedUserId()).getFullName() + ")") ;
         }
       uiCategorySelect.setPrivateGroupMap(addresses) ;
       UIContactForm contactForm = uiPopupContainer.addChild(UIContactForm.class, null, null) ;
@@ -125,11 +124,9 @@ public class UIActionBar extends UIContainer  {
       Map<String, String> addresses = uiAddressBook.getPrivateGroupMap() ;
       for (SharedAddressBook address : uiAddressBook.getSharedGroups().values())
         if (uiAddressBook.havePermission(address.getId())) {
-          if (uiAddressBook.isDefault(address.getId())) {
-            addresses.put(address.getId(), address.getSharedUserId() + ContactUtils.SCORE + address.getName() + ContactUtils.getSharedLable()) ;
-          } else {
-            addresses.put(address.getId(), address.getName() + ContactUtils.getSharedLable()) ;
-          }  
+          addresses.put(address.getId(), address.getName() + " (" +
+            uiForm.getApplicationComponent(OrganizationService.class)
+            .getUserHandler().findUserByName(address.getSharedUserId()).getFullName() + ")") ; 
         }
       importForm.setGroup(addresses) ;
       importForm.addConponent() ;
