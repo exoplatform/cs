@@ -45,7 +45,7 @@ public class ContactUtils {
   private static String AKONG = "@" ;
   public static final String HTTP = "http://" ; 
   public static String[] specialString = {"!", "#", "%", "&"
-                                            , ":", ">", "<", "~", "`", "]", "'", "/"} ;
+                                            , ":", ">", "<", "~", "`", "]", "'", "/", "-"} ;
   
   public static String getSharedLable() {
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
@@ -64,6 +64,7 @@ public class ContactUtils {
       replaceAll("'", "&apos;").replaceAll("\"", "&quot;") ;
   }
   public static String filterString(String text, boolean isEmail) {
+    if (text == null || text.trim().length() == 0) return "" ;
     for (String str : specialString) {
       text = text.replaceAll(str, "") ;
     }

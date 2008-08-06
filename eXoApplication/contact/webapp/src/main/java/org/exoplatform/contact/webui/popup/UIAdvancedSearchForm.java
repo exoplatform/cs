@@ -116,12 +116,14 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent {
       if(!ContactUtils.isEmpty(lastName)) filter.setLastName(ContactUtils.filterString(lastName, false)) ;
       if(!ContactUtils.isEmpty(nickName)) filter.setNickName(ContactUtils.filterString(nickName, false)) ;      
       if(!ContactUtils.isEmpty(jobTitle)) filter.setJobTitle(ContactUtils.filterString(jobTitle, false)) ;      
-      
-      if(!ContactUtils.isEmpty(email)) filter.setEmailAddress(ContactUtils.filterString(email, true)) ;      
-      
+      if(!ContactUtils.isEmpty(email)) filter.setEmailAddress(ContactUtils.filterString(email, true)) ;            
       if(!ContactUtils.isEmpty(gender)) filter.setGender(ContactUtils.filterString(gender, false)) ;
       
-      DataPageList resultPageList = ContactUtils.getContactService()
+      DataPageList resultPageList = null ;
+      if (!ContactUtils.isEmpty(filter.getText()) || !ContactUtils.isEmpty(filter.getFullName()) || !ContactUtils.isEmpty(filter.getFirstName()) || 
+          !ContactUtils.isEmpty(filter.getLastName()) || !ContactUtils.isEmpty(filter.getNickName()) || !ContactUtils.isEmpty(filter.getJobTitle()) || 
+          !ContactUtils.isEmpty(filter.getEmailAddress()) || !ContactUtils.isEmpty(filter.getText()) || !ContactUtils.isEmpty(filter.getGender()))
+      resultPageList = ContactUtils.getContactService()
         .searchContact(SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), filter) ;
       UIContactPortlet uiContactPortlet = uiAdvancedSearchForm.getAncestorOfType(UIContactPortlet.class) ;
       uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class).setSelectedGroup(null) ;
