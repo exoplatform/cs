@@ -46,7 +46,7 @@ public class Reminder {
   private boolean isRepeat = false ;
   private long repeatInterval = 0 ;
   private String summary ;
-  
+  private String description ;
   public Reminder() {
     id = "Reminder" + IdGenerator.generate() ;
   }
@@ -85,5 +85,11 @@ public class Reminder {
   }
   public String getReminderOwner() {
     return reminderOwner;
+  }
+  public void setDescription(String description) {
+    this.description = description;
+  }
+  public String getDescription() {
+    return description;
   }
 }

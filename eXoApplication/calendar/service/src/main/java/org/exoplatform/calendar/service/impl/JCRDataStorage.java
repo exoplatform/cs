@@ -1111,7 +1111,8 @@ public class JCRDataStorage{
     summary.append(cal.get(java.util.Calendar.DATE)).append("/") ;
     summary.append(cal.get(java.util.Calendar.MONTH) + 1).append("/") ;
     summary.append(cal.get(java.util.Calendar.YEAR)).append("<br>") ;
-    reminderNode.setProperty("exo:eventSummary", summary.toString()) ;
+    reminderNode.setProperty("exo:description", summary.toString()) ;
+    reminderNode.setProperty("exo:eventSummary", eventNode.getProperty("exo:summary").getString()) ;
     if(!reminderFolder.isNew()) reminderFolder.save() ;
     else reminderFolder.getSession().save() ;
   }
@@ -1276,6 +1277,7 @@ public class JCRDataStorage{
           if(reminderNode.hasProperty("exo:email")) reminder.setEmailAddress(reminderNode.getProperty("exo:email").getString()) ;
           if(reminderNode.hasProperty("exo:isRepeat")) reminder.setRepeate(reminderNode.getProperty("exo:isRepeat").getBoolean()) ;
           if(reminderNode.hasProperty("exo:repeatInterval")) reminder.setRepeatInterval(reminderNode.getProperty("exo:repeatInterval").getLong()) ;
+          if(reminderNode.hasProperty("exo:description")) reminder.setDescription(reminderNode.getProperty("exo:description").getString());
           reminder.setFromDateTime(fromDate) ;
           reminders.add(reminder) ;
         }

@@ -40,6 +40,9 @@
 	  		<propertyDefinition name="exo:eventSummary" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   				<valueConstraints/>
 	  		</propertyDefinition>
+				<propertyDefinition name="exo:description" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>
 	  	</propertyDefinitions>	
 	  </nodeType>	
 	  <nodeType	name="exo:eventAttachment" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
