@@ -30,6 +30,7 @@ import javax.jcr.query.QueryResult;
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.container.RootContainer;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.ServerConfiguration;
@@ -58,7 +59,7 @@ public class ReminderJob implements Job {
     try {
       MailService mailService = 
         (MailService) container.getComponentInstanceOfType(MailService.class);
-      ContinuationService continuation = (ContinuationService) container.getComponentInstanceOfType(ContinuationService.class);
+      ContinuationService continuation = getContinuationService() ;
       if (log_.isDebugEnabled()) log_.debug("Calendar reminder service");
       java.util.Calendar fromCalendar = Calendar.getInstance() ; //org.exoplatform.calendar.service.Utils.getInstanceTempCalendar() ;
       //fromCalendar.setLenient(false) ;
@@ -178,6 +179,14 @@ public class ReminderJob implements Job {
     path.append("/").append(year).append("/").append(month).append("/").append(day);
     path.append("/").append(CALENDAR_REMINDER);
     return path.toString(); 
+  }
+  protected ContinuationService getContinuationService() {
+    ExoContainer container = RootContainer.getInstance();
+    container = ((RootContainer)container).getPortalContainer("portal");
+
+    ContinuationService continuation = (ContinuationService) container.getComponentInstanceOfType(ContinuationService.class);
+    return continuation;
+
   }
   private Node getPublicServiceHome() throws Exception {
     ExoContainer container = ExoContainerContext.getCurrentContainer();

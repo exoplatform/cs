@@ -21,6 +21,8 @@ import java.util.TimeZone;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.RootContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -81,8 +83,16 @@ public class UICalendarPortlet extends UIPortletApplication {
   public String getRemoteUser() throws Exception {
     return CalendarUtils.getCurrentUser() ;
   }
+  protected ContinuationService getContinuationService() {
+    ExoContainer container = RootContainer.getInstance();
+    container = ((RootContainer)container).getPortalContainer("portal");
+
+    ContinuationService continuation = (ContinuationService) container.getComponentInstanceOfType(ContinuationService.class);
+    return continuation;
+
+  }
   public String getUserToken()throws Exception {
-    ContinuationService continuation = getApplicationComponent(ContinuationService.class) ;
+    ContinuationService continuation = getContinuationService() ;
     return continuation.getUserToken(this.getRemoteUser());
   }
 }
