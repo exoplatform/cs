@@ -340,7 +340,9 @@ public class Utils {
     if(message.getReplyTo() != null) {    
       mimeMessage.setReplyTo(Utils.getInternetAddress(message.getReplyTo()));
     }
-    mimeMessage.setSubject(message.getSubject());
+    String subject = message.getSubject();
+    if (subject == null ) subject = "";
+    mimeMessage.setSubject(subject);
     mimeMessage.setSentDate(message.getSendDate());
     mimeMessage.setHeader("X-Priority", String.valueOf(message.getPriority()));
     String priority = "Normal";
