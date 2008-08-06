@@ -338,8 +338,8 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
     public data(String username, boolean canEdit) throws Exception {
       userId = username.replaceFirst(JCRDataStorage.HYPHEN, "") ;
       User user = getApplicationComponent(OrganizationService.class).getUserHandler().findUserByName(userId) ;
-      viewPermission = user.getFullName() + "(" + user.getEmail() + ")" ;
-
+      if (user == null) viewPermission = username ;
+      else viewPermission = user.getFullName() + "(" + user.getEmail() + ")" ;
       String edit = String.valueOf(canEdit) ;
       editPermission = edit.replaceFirst(JCRDataStorage.HYPHEN, "") ;
     }
