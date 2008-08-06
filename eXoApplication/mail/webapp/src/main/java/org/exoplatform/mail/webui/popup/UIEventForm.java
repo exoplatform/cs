@@ -555,8 +555,11 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
         uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.email-reminder-required", null));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
       } else {
-        UIPopupActionContainer uiActionContainer = uiForm.getAncestorOfType(UIPopupActionContainer.class) ;    
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiActionContainer) ;
+        UIPopupActionContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupActionContainer.class) ;
+        UIPopupAction uiPopupAction  = uiPopupContainer.getChild(UIPopupAction.class) ;
+        UIAddressForm uiAddressForm = uiPopupAction.activate(UIAddressForm.class, 640) ;
+        uiAddressForm.setContactList("") ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       }
     }
   }
