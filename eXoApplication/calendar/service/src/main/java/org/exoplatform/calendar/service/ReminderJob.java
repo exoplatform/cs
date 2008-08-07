@@ -128,8 +128,8 @@ public class ReminderJob implements Job {
           if(reminder.hasProperty("exo:owner")) rmdObj.setReminderOwner(reminder.getProperty("exo:owner").getString()) ;
           if(reminder.hasProperty("exo:eventId")) rmdObj.setId(reminder.getProperty("exo:eventId").getString()) ;
           if(reminder.hasProperty("exo:owner")) rmdObj.setReminderOwner(reminder.getProperty("exo:owner").getString()) ;
-          if(reminder.hasProperty("exo:remindDateTime")) {
-            Calendar tempCal = reminder.getProperty("exo:remindDateTime").getDate() ;
+          if(reminder.hasProperty("exo:fromDateTime")) {
+            Calendar tempCal = reminder.getProperty("exo:fromDateTime").getDate() ;
             rmdObj.setFromDateTime(tempCal.getTime()) ;
           }
           if(reminder.hasProperty("exo:eventSummary")) rmdObj.setSummary(reminder.getProperty("exo:eventSummary").getString()) ;
