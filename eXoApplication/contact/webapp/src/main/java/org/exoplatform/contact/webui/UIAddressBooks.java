@@ -31,6 +31,7 @@ import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactGroup;
+import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.JCRPageList;
 import org.exoplatform.contact.service.SharedAddressBook;
@@ -253,7 +254,7 @@ public class UIAddressBooks extends UIComponent {
         ContactFilter filter = new ContactFilter();
         filter.setAscending(true);
         filter.setCategories(new String[] { addressBookId });
-        Contact[] contacts = null ;
+        ContactPageList contacts = null ;
         UIExportForm uiExportForm = uiPopupAction.activate(UIExportForm.class, 500) ;
         uiExportForm.setId("ExportForm");
         ContactService contactService = ContactUtils.getContactService() ;
@@ -262,28 +263,31 @@ public class UIAddressBooks extends UIComponent {
         Map<String, String> privateGroup = uiAddressBook.privateAddressBookMap_ ;
         if (privateGroup.containsKey(addressBookId)) {
           uiExportForm.setSelectedGroup(privateGroup.get(addressBookId)) ;
-          contacts = contactService.getContactPageListByGroup(
-              sessionProvider, username, addressBookId).getAll().toArray(new Contact[] {});
+          contacts = contactService.getContactPageListByGroup(sessionProvider, username, addressBookId) ;
         } else if (ContactUtils.getUserGroups().contains(addressBookId)){        
           uiExportForm.setSelectedGroup(addressBookId) ;
-          contacts = contactService.getPublicContactsByAddressBook(
-              sessionProvider, addressBookId).getAll().toArray(new Contact[] {});
+          contacts = contactService.getPublicContactsByAddressBook(sessionProvider, addressBookId);
         } else {
         	SharedAddressBook address = uiAddressBook.sharedAddressBookMap_.get(addressBookId) ;
         	uiExportForm.setSelectedGroup(address.getName() + " (" +
               uiAddressBook.getApplicationComponent(OrganizationService.class)
               .getUserHandler().findUserByName(address.getSharedUserId()).getFullName() + ")") ;
           contacts = contactService.getSharedContactsByAddressBook(
-              sessionProvider, username, address).getAll().toArray(new Contact[] {}) ;
+              sessionProvider, username, address) ;
         }
-        if (contacts == null || contacts.length == 0) {
+        if (contacts == null || contacts.getAvailable() == 0) {
           UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.noContactToExport", null,
             ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;  
+        } else if (contacts.getAvailable() >= 150) {
+	      UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
+	      uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.too-many-contact", null, ApplicationMessage.WARNING)) ;
+	      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+	      return ;          
         }
-        uiExportForm.setContacts(contacts) ;         
+        uiExportForm.setContacts(contacts.getAll().toArray(new Contact[] {})) ;         
         uiExportForm.updateList();
       } else {
         
