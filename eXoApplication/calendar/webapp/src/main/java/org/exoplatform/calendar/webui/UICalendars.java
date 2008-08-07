@@ -366,11 +366,6 @@ public class UICalendars extends UIForm  {
         uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
       }
-      UICalendarViewContainer uiViewContainer = uiCalendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
-      CalendarSetting setting = calService.getCalendarSetting(uiComponent.getSession(), currentUser) ;
-      uiViewContainer.refresh() ;
-      uiCalendarPortlet.setCalendarSetting(setting) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarPortlet) ;
     }
   }
 
@@ -425,11 +420,6 @@ public class UICalendars extends UIForm  {
         uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
       }
-      UICalendarViewContainer uiViewContainer = uiCalendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
-      CalendarSetting setting = calService.getCalendarSetting(uiComponent.getSession(), currentUser) ;
-      uiViewContainer.refresh() ;
-      uiCalendarPortlet.setCalendarSetting(setting) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarPortlet) ;
     }
   }
 
