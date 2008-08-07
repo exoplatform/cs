@@ -125,8 +125,7 @@ public class MailUtils {
   }
   
   public static boolean isFieldEmpty(String s) {
-    if (s == null || s.length() == 0) return true ;
-    return false ;    
+    return (s == null || s.trim().length() == 0);    
   }
   
   public static boolean isChecking(String username, String accountId) throws Exception {
@@ -177,9 +176,7 @@ public class MailUtils {
   }
   
   public static boolean isInvitation(Message msg) throws Exception {
-    String inviteHeader = msg.getHeader("X-Exo-Invitation") ;
-    if (inviteHeader != null) return true ;
-    else return false ;
+    return (msg.getHeader("X-Exo-Invitation") != null) ;
   }
   
   public static String getEventFrom(Message msg) throws Exception {

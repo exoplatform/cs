@@ -1203,21 +1203,19 @@ public class JCRDataStorage {
       return null;
     }
   }
-  //TODO should change to private
-  public Node getFolderNodeById(SessionProvider sProvider, String username, String accountId,
+
+  private Node getFolderNodeById(SessionProvider sProvider, String username, String accountId,
       String folderId) throws Exception {
     Node accountNode = getMailHomeNode(sProvider, username).getNode(accountId);
     Session sess = accountNode.getSession();
     QueryManager qm = sess.getWorkspace().getQueryManager();
-    // gets the specified folder node
     StringBuffer queryString = new StringBuffer("/jcr:root" + accountNode.getPath()
         + "//element(*,exo:folder)[@exo:id='").append(folderId).append("']");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
     QueryResult result = query.execute();
     NodeIterator it = result.getNodes();
     Node node = null;
-    if (it.hasNext())
-      node = it.nextNode();
+    if (it.hasNext()) node = it.nextNode();
     return node;
   }
 
@@ -1269,19 +1267,22 @@ public class JCRDataStorage {
   }
 
   public boolean isExistFolder(SessionProvider sProvider, String username, String accountId,
-      String parentId, String folderName) throws Exception {
+      String parentId, String folderId) throws Exception {
     boolean isExist = false;
-    try {
-      Node parentNode = getFolderNodeById(sProvider, username, accountId, parentId);
-      NodeIterator nit = parentNode.getNodes();
-      while (nit.hasNext()) {
-        Node node = nit.nextNode();
-        String fn = node.getProperty(Utils.EXO_LABEL).getString();
-        if (fn.trim().equals(folderName))
-          isExist = true;
-      }
-    } catch (Exception e) {
+    Node parentNode ;
+    if (parentId != null && parentId.trim().length() > 0) {  
+      parentNode = getFolderNodeById(sProvider, username, accountId, parentId);
+    } else  {
+      parentNode = getFolderHome(sProvider, username, accountId) ;
     }
+    NodeIterator nit = parentNode.getNodes();
+    while (nit.hasNext()) {
+      Node node = nit.nextNode();
+      String fn = node.getProperty(Utils.EXO_LABEL).getString();
+      if (fn.trim().equals(folderId))
+        isExist = true;
+    }
+
     return isExist;
   }
 

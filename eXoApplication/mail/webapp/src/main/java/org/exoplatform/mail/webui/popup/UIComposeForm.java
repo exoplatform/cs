@@ -261,10 +261,29 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           break ;
         case MESSAGE_REPLY_ALL :
           setFieldSubjectValue("Re: " + msg.getSubject());
-          String replyAll = msg.getReplyTo();
-          if (msg.getMessageCc() != null) replyAll += "," + msg.getMessageCc();
-          if (msg.getMessageBcc() != null) replyAll += "," + msg.getMessageBcc();
-          setFieldToValue(replyAll);
+          String replyTo = msg.getReplyTo();
+          setFieldToValue(replyTo);
+          
+          String replyCc = "";
+          
+          String msgTo = (msg.getMessageTo() != null) ? msg.getMessageTo() : "" ;
+          InternetAddress[] msgToAdds = Utils.getInternetAddress(msgTo) ;
+          
+          MailService mailSvr = this.getApplicationComponent(MailService.class) ;
+          Account account = mailSvr.getAccountById(SessionProviderFactory.createSystemProvider(), MailUtils.getCurrentUser(), this.getFieldFromValue());
+          for (int i = 0 ; i < msgToAdds.length; i++) {
+            if (msgToAdds[i] != null && !msgToAdds[i].getAddress().equalsIgnoreCase(account.getEmailAddress())) {
+              if (replyCc.trim().length() > 0) replyCc += ", ";
+              replyCc += msgToAdds[i].toString();
+            }
+          }          
+          if (msg.getMessageCc() != null) replyCc += "," + msg.getMessageCc();
+          
+          if (replyCc.trim().length() > 0) {
+            setFieldCcValue(replyCc);
+            showCc_ = true;
+          }
+          
           String replyContent = getReplyContent(msg);
           setFieldContentValue(replyContent);
           if (mailSetting.replyWithAttach()) {
