@@ -27,7 +27,6 @@ import org.exoplatform.services.jcr.util.IdGenerator;
  * Jul 16, 2007  
  */
 public class Reminder {
-  
   final public static String REPEAT = "1".intern() ;
   final public static String UNREPEAT = "0".intern() ;
   final public static String TYPE_EMAIL = "email".intern() ;

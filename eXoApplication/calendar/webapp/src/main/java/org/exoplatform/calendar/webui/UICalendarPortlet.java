@@ -24,7 +24,6 @@ import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.RootContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPopupMessages;
