@@ -51,6 +51,7 @@ import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactImportExport;
+import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
@@ -91,7 +92,10 @@ public class VCardImportExport implements ContactImportExport {
     		} else {
     			String[] array = address.split(JCRDataStorage.HYPHEN) ;
     			if(array.length == 2) {
-    				contactList.addAll(storage_.getSharedContactsByAddressBook(sProvider, username, new SharedAddressBook(null, array[0], array[1])).getAll()) ;
+            ContactPageList pageList = storage_.getSharedContactsByAddressBook(
+                sProvider, username, new SharedAddressBook(null, array[0], array[1])) ;
+    				if (pageList.getAvailable() + contactList.size() >= 130) throw new ArrayIndexOutOfBoundsException() ;
+            contactList.addAll(pageList.getAll()) ;
     			}    		  
         }
   		}catch(RepositoryException re) {
@@ -101,14 +105,16 @@ public class VCardImportExport implements ContactImportExport {
   	if(privateAddress.size() > 0) {
   		ContactFilter filter = new ContactFilter() ;
   		filter.setCategories(privateAddress.toArray(new String[]{})) ;
-  		contactList.addAll(storage_.getContactPageListByGroup(
-          sProvider, username, filter, JCRDataStorage.PRIVATE).getAll()) ;
+      ContactPageList pageList = storage_.getContactPageListByGroup(sProvider, username, filter, JCRDataStorage.PRIVATE) ;
+      if (pageList.getAvailable() + contactList.size() >= 130) throw new ArrayIndexOutOfBoundsException() ;
+      contactList.addAll(pageList.getAll()) ;
   	}
   	if(publicAddress.size() > 0) {
   		ContactFilter filter = new ContactFilter() ;
   		filter.setCategories(publicAddress.toArray(new String[]{})) ;
-  		contactList.addAll(storage_.getContactPageListByGroup(
-          sProvider, username, filter, JCRDataStorage.PUBLIC).getAll()) ;
+      ContactPageList pageList = storage_.getContactPageListByGroup(sProvider, username, filter, JCRDataStorage.PUBLIC) ;
+      if (pageList.getAvailable() + contactList.size() >= 130) throw new ArrayIndexOutOfBoundsException() ;
+      contactList.addAll(pageList.getAll()) ;
   	}
   	if(contactList.size() > 0) {
   		return exportContact(username, contactList) ;
