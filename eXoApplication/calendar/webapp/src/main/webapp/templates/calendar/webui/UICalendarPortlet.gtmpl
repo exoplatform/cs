@@ -14,7 +14,7 @@
 					<div class="LeftControlInfo">
 						<div class="RightControlInfo">
 							<div class="CenterControlInfo">
-								<a class="ControlInfoLabel" href="#">(3)</a>
+								<a class="ControlInfoLabel" href="#">(0)</a>
 							</div>
 						</div>
 					</div>  
@@ -37,8 +37,10 @@
 					<div class="MLPopupNotification">
 						<div class="MRPopupNotification">
 							<div class="MCPopupNotification">
+								<!-- Message here
 								<a class="Item" href="#"><div class="ItemLabel">You have 3 new messages inbox</div></a>
 								<a class="Item" href="#"><div class="ItemLabel">New event on your calendar </div></a>
+								-->
 							</div>
 						</div>
 					</div>
