@@ -20,7 +20,7 @@
 					</div>  
 					<div style="clear: right"><span></span></div>
 				</div>
-				<div class="UIPopupNotification">
+				<div class="UIPopupNotification" style="visibility: hidden;">
 					<div class="TLPopupNotification">
 						<div class="TRPopupNotification">
 							<div class="TCPopupNotification"><span></span></div>
