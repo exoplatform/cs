@@ -1029,7 +1029,7 @@ public class JCRDataStorage{
       while (eventNode.getNodes().hasNext()) {
         eventNode.getNodes().nextNode().remove() ;
       }
-    }*/
+    } */
     List<Reminder> reminders = event.getReminders() ;
     if(reminders != null && !reminders.isEmpty()) {
       for(Reminder rm : reminders) {
@@ -1073,6 +1073,7 @@ public class JCRDataStorage{
       reminderNode = catNode.addNode(reminder.getId(), "exo:reminder") ;
     }
     reminderNode.setProperty("exo:eventId", eventNode.getName()) ;
+    reminderNode.setProperty("exo:owner", reminder.getReminderOwner()) ;
     reminderNode.setProperty("exo:alarmBefore", reminder.getAlarmBefore()) ;
     reminderNode.setProperty("exo:repeatInterval", reminder.getRepeatInterval()) ;
     reminderNode.setProperty("exo:reminderType", reminder.getReminderType()) ;
@@ -1110,7 +1111,8 @@ public class JCRDataStorage{
     summary.append(cal.get(java.util.Calendar.DATE)).append("/") ;
     summary.append(cal.get(java.util.Calendar.MONTH) + 1).append("/") ;
     summary.append(cal.get(java.util.Calendar.YEAR)).append("<br>") ;
-    reminderNode.setProperty("exo:eventSummary", summary.toString()) ;
+    reminderNode.setProperty("exo:description", summary.toString()) ;
+    reminderNode.setProperty("exo:eventSummary", eventNode.getProperty("exo:summary").getString()) ;
     if(!reminderFolder.isNew()) reminderFolder.save() ;
     else reminderFolder.getSession().save() ;
   }
@@ -1268,12 +1270,14 @@ public class JCRDataStorage{
         if(reminderNode.isNodeType("exo:reminder")) {
           Reminder reminder = new Reminder() ;
           reminder.setId(reminderNode.getName()) ;
+          if(reminderNode.hasProperty("exo:owner"))reminder.setReminderOwner(reminderNode.getProperty("exo:owner").getString()) ; 
           if(reminderNode.hasProperty("exo:eventId")) reminder.setEventId(reminderNode.getProperty("exo:eventId").getString()) ;
           if(reminderNode.hasProperty("exo:reminderType")) reminder.setReminderType(reminderNode.getProperty("exo:reminderType").getString()) ;
           if(reminderNode.hasProperty("exo:alarmBefore"))reminder.setAlarmBefore(reminderNode.getProperty("exo:alarmBefore").getLong()) ;
           if(reminderNode.hasProperty("exo:email")) reminder.setEmailAddress(reminderNode.getProperty("exo:email").getString()) ;
           if(reminderNode.hasProperty("exo:isRepeat")) reminder.setRepeate(reminderNode.getProperty("exo:isRepeat").getBoolean()) ;
           if(reminderNode.hasProperty("exo:repeatInterval")) reminder.setRepeatInterval(reminderNode.getProperty("exo:repeatInterval").getLong()) ;
+          if(reminderNode.hasProperty("exo:description")) reminder.setDescription(reminderNode.getProperty("exo:description").getString());
           reminder.setFromDateTime(fromDate) ;
           reminders.add(reminder) ;
         }
@@ -1509,7 +1513,7 @@ public class JCRDataStorage{
         feed.setEncoding("UTF-8") ;     
         SyndFeedOutput output = new SyndFeedOutput();      
         String feedXML = output.outputString(feed);      
-        feedXML = StringUtils.replace(feedXML,"&amp;","&");
+        feedXML = StringUtils.replace(feedXML,"&amp;","&");      
         storeXML(feedXML, rssHomeNode, rssData.getName(), rssData); 
         rssHomeNode.getSession().save() ;
       } else {

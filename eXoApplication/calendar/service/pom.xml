@@ -44,7 +44,13 @@
 			<scope>provided</scope>
   	</dependency-->
 		
-		<dependency>                                                                                                                         
+	<dependency>
+      <groupId>org.exoplatform.ws</groupId>
+      <artifactId>exo.ws.frameworks.cometd.service</artifactId>
+      <version>trunk</version>
+    </dependency>
+	
+	<dependency>                                                                                                                         
       <groupId>org.exoplatform.ws</groupId>                                                                                              
       <artifactId>exo.ws.frameworks.json</artifactId>                                                                                    
       <version>trunk</version>                                                                                                           

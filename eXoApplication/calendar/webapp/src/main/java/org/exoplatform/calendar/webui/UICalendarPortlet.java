@@ -24,14 +24,13 @@ import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.RootContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPopupMessages;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
-//import org.exoplatform.ws.frameworks.cometd.ContinuationService;
+import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 
 /**
  * Author : Nguyen Quang Hung
@@ -80,18 +79,19 @@ public class UICalendarPortlet extends UIPortletApplication {
     popupMess.processRender(context);
   }
   
-  public String getRemoteUser() {
-    return Util.getPortalRequestContext().getRemoteUser() ;
+  public String getRemoteUser() throws Exception {
+    return CalendarUtils.getCurrentUser() ;
   }
-  
-  public String getUserToken() {
-    return "" ;//this.getContinuationService().getUserToken(this.getRemoteUser());
-  }
-  
-  /*protected ContinuationService getContinuationService() {
-    ContinuationService continuation = getApplicationComponent(ContinuationService.class) ;
+  protected ContinuationService getContinuationService() {
+    ExoContainer container = RootContainer.getInstance();
+    container = ((RootContainer)container).getPortalContainer("portal");
+
+    ContinuationService continuation = (ContinuationService) container.getComponentInstanceOfType(ContinuationService.class);
     return continuation;
 
-  }*/
-  
+  }
+  public String getUserToken()throws Exception {
+    ContinuationService continuation = getContinuationService() ;
+    return continuation.getUserToken(this.getRemoteUser());
+  }
 }

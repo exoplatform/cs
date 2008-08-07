@@ -9,6 +9,7 @@
 @import url("UISearchForm/Stylesheet.css");
 @import url("UIMiniCalendar/Stylesheet.css");
 @import url("UICalendars/Stylesheet.css");
+@import url("UINotification/Stylesheet.css");
 
 @import url("UIPopup/UIFeed/Stylesheet.css") ;
 @import url("UIPopup/UIAddressForm/Stylesheet.css");
@@ -244,6 +245,13 @@
 	width: 340px;
 }
 
+
+.UICalendarPortlet .FileNameLabel {
+	width: 300px;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
 .UICalendarPortlet .SelectMemberIcon {
 	width: 16px ; height: 16px;
 }
@@ -261,6 +269,24 @@
   margin: 0px;
 }
 
+.UICalendarPortlet .MoreEvent {
+  width: 200px;
+  background-color: #e9edf9;
+  border: 1px solid #b7b7b7;
+}
+
+.UICalendarPortlet .MoreEvent .MoreEventBar {
+  background: url('skinIcons/icons/CloseMore.gif') no-repeat right;
+  height: 16px;
+  padding: 4px 16px 3px 0px;
+  margin-right: 4px;
+}
+
+.UICalendarPortlet .MoreEvent .MoreEventContainer {
+  padding: 8px;
+}
+
 .UICalendarPortlet .UIForm .UIFormGrid td.FieldComponent {
 	white-space: nowrap;
 }
+

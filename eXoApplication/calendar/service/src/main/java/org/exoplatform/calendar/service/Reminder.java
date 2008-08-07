@@ -27,7 +27,6 @@ import org.exoplatform.services.jcr.util.IdGenerator;
  * Jul 16, 2007  
  */
 public class Reminder {
-  
   final public static String REPEAT = "1".intern() ;
   final public static String UNREPEAT = "0".intern() ;
   final public static String TYPE_EMAIL = "email".intern() ;
@@ -35,8 +34,10 @@ public class Reminder {
   final public static String TYPE_BOTH = "both".intern() ;
   final public static String[] REMINDER_TYPES = {TYPE_EMAIL, TYPE_POPUP} ;
   
+  
   private String id ;
   private String eventId ;
+  private String reminderOwner ;
   private String reminderType = TYPE_EMAIL;
   private long alarmBefore = 0; 
   private String emailAddress ;
@@ -44,7 +45,7 @@ public class Reminder {
   private boolean isRepeat = false ;
   private long repeatInterval = 0 ;
   private String summary ;
-  
+  private String description ;
   public Reminder() {
     id = "Reminder" + IdGenerator.generate() ;
   }
@@ -78,4 +79,16 @@ public class Reminder {
   
   public void setSummary(String sm) { this.summary = sm ; }
   public String getSummary() { return summary ; }
+  public void setReminderOwner(String owner) {
+    this.reminderOwner = owner;
+  }
+  public String getReminderOwner() {
+    return reminderOwner;
+  }
+  public void setDescription(String description) {
+    this.description = description;
+  }
+  public String getDescription() {
+    return description;
+  }
 }
