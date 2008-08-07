@@ -68,7 +68,6 @@ public class UIFolderForm extends UIForm implements UIPopupComponent {
       MailService mailSvr = uiForm.getApplicationComponent(MailService.class) ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       String folderName = uiForm.getUIStringInput(FIELD_NAME).getValue() ;
-      //TODO should folderName.trim() before check existed
       UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
       String username = uiPortlet.getCurrentUser() ;
       String accountId =  uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
@@ -77,15 +76,15 @@ public class UIFolderForm extends UIForm implements UIPopupComponent {
         uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.name-required", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
-      }
-      try {
+      } else {
+        folderName = folderName.trim();
         String folderId = Utils.KEY_FOLDERS + IdGenerator.generate() ;
-        Folder folder = null ; 
+        Folder folder = null ;
         boolean isExist = false ; 
         try {
           isExist = mailSvr.isExistFolder(SessionProviderFactory.createSystemProvider(), username, accountId, uiForm.getParentPath(), folderName) ;
         } catch(Exception e) { }
-       
+
         if(!isExist) {
           folder = new Folder() ;
           folder.setId(folderId);
@@ -101,11 +100,6 @@ public class UIFolderForm extends UIForm implements UIPopupComponent {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
         }
-      } catch (Exception e){
-        uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.error-create-folder", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        e.printStackTrace() ;
-        return ;
       }
       uiForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
