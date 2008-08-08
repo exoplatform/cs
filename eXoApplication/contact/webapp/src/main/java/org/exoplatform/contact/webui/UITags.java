@@ -18,7 +18,6 @@ package org.exoplatform.contact.webui;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -65,7 +64,6 @@ import org.exoplatform.webui.event.EventListener;
     }
 )
 public class UITags extends UIComponent {
-  
   public UITags() throws Exception { }
   private String selectedTag_ = null ;
   private Map<String, Tag> tagMap_ = new HashMap<String, Tag>() ;
@@ -105,13 +103,14 @@ public class UITags extends UIComponent {
       
       DataPageList pageList =ContactUtils.getContactService().getContactPageListByTag(
           SessionProviderFactory.createSystemProvider(), ContactUtils.getCurrentUser(), tagId) ;
-      if (pageList != null) {
+     /* if (pageList != null) {
         List<Contact> contacts = new ArrayList<Contact>() ;
         contacts = pageList.getAll() ;
         FullNameComparator.isAsc = true ;
         Collections.sort(contacts, new FullNameComparator()) ;          
         pageList.setList(contacts) ;      
-      }
+      }*/
+      FullNameComparator.isAsc = true ;
       uiContacts.setSortedBy(UIContacts.fullName) ;
       uiContacts.setContacts(pageList) ;
       uiContacts.setSelectedGroup(null) ;
@@ -139,23 +138,40 @@ public class UITags extends UIComponent {
       String tagId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = uiContactPortlet.getChild(UIPopupAction.class) ;  
-      UIExportForm uiExportForm = popupAction.activate(UIExportForm.class, 500) ;
-          uiExportForm.setId("ExportForm");
-      uiExportForm.setSelectedTag(uiForm.tagMap_.get(tagId).getName()) ;
-
-      Contact[] contacts = null ;
-      contacts = ContactUtils.getContactService().getContactPageListByTag(SessionProviderFactory
-          .createSystemProvider(), ContactUtils.getCurrentUser(), tagId).getAll().toArray(new Contact[] {});
-      if (contacts == null || contacts.length == 0) {
-        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UITag.msg.noContactToExport", null,
-          ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;  
+      UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ; 
+      if (!ContactUtils.isEmpty(uiContacts.getSelectedTag())) {
+        UIExportForm uiExportForm = popupAction.activate(UIExportForm.class, 500) ;
+        uiExportForm.setId("ExportForm");
+        uiExportForm.setSelectedTag(uiForm.tagMap_.get(tagId).getName()) ;
+        List<Contact> contacts = uiContacts.getContactPageList().getAll() ;
+        if (contacts == null || contacts.size() == 0) {
+          UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UITag.msg.noContactToExport", null,
+            ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;  
+        }
+        uiExportForm.setContacts(contacts.toArray(new Contact[] {})) ;
+        uiExportForm.updateList();
+        event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+      } else {
+        Contact[] contacts = ContactUtils.getContactService().getContactPageListByTag(SessionProviderFactory
+            .createSystemProvider(), ContactUtils.getCurrentUser(), tagId).getAll().toArray(new Contact[] {});
+        if (contacts == null || contacts.length == 0) {
+          UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UITag.msg.noContactToExport", null,
+            ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;  
+        }
+        UIExportForm uiExportForm = popupAction.activate(UIExportForm.class, 500) ;
+        uiExportForm.setId("ExportForm");
+        uiExportForm.setSelectedTag(uiForm.tagMap_.get(tagId).getName()) ;
+        
+        uiExportForm.setContacts(contacts) ;
+        uiExportForm.updateList();
+        event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       }
-      uiExportForm.setContacts(contacts) ;
-      uiExportForm.updateList();
-      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }  
   

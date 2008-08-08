@@ -746,9 +746,9 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         uiContacts.setContact(removedContacts, false) ;
       }
       if (uiContacts.getSelectedTag() != null) {
-        String tagName = uiWorkingContainer.findFirstComponentOfType(UITags.class).getSelectedTag() ;
+        String tagId = uiWorkingContainer.findFirstComponentOfType(UITags.class).getSelectedTag() ;
         uiContacts.setContacts(contactService
-            .getContactPageListByTag(SessionProviderFactory.createSystemProvider(), username, tagName)) ;
+            .getContactPageListByTag(SessionProviderFactory.createSystemProvider(), username, tagId)) ;
       } else {
         uiContacts.updateList() ;
       }
@@ -929,7 +929,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       String name1 = ((Contact) o1).getFullName() ;
       String name2 = ((Contact) o2).getFullName() ;
       if (isAsc == true) return name1.compareToIgnoreCase(name2) ;
-      else return name2.compareToIgnoreCase(name1) ;
+      else return name2.compareTo(name1) ;
     }
   }
   static public class EmailComparator implements Comparator {
@@ -939,7 +939,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       String email2 = ((Contact) o2).getEmailAddress() ;
       if (ContactUtils.isEmpty(email1) || ContactUtils.isEmpty(email2)) return 0 ;
       if (isAsc == true) return email1.compareToIgnoreCase(email2) ;
-      else return email2.compareToIgnoreCase(email1) ;
+      else return email2.compareTo(email1) ;
     }
   }
   static public class JobTitleComparator implements Comparator {
@@ -949,7 +949,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       String job2 = ((Contact) o2).getJobTitle() ;
       if (ContactUtils.isEmpty(job1) || ContactUtils.isEmpty(job2)) return 0 ;
       if (isAsc == true) return job1.compareToIgnoreCase(job2) ;
-      else return job2.compareToIgnoreCase(job1) ;
+      else return job2.compareTo(job1) ;
     }
   }
   
