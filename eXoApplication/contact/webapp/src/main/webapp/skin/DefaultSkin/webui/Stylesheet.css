@@ -212,3 +212,7 @@
 .UIContactPortlet .UISharedForm .UIFormGrid td.FieldLabel {
 	white-space: nowrap;
 }
+
+.UIContactPortlet .UIImportForm .UIFormGrid td.FieldComponent {
+	white-space: normal;
+}
