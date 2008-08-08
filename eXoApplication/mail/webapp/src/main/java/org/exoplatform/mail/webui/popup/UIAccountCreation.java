@@ -324,7 +324,6 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
           context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.initService('checkMailInfobar', '" + MailUtils.getCurrentUser() + "', '" + acc.getId() + "') ;") ;
           context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.setCheckmailTimeout(" + 
               uiAccCreation.getApplicationComponent(MailService.class).getMailSetting(SessionProviderFactory.createSystemProvider(), MailUtils.getCurrentUser()).getPeriodCheckAuto() + ") ;") ;
-          System.out.println("=====########====>>> " + uiAccWs5.isGetmail());
           context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.checkMail(true) ;");
         }
       } catch (Exception e) {

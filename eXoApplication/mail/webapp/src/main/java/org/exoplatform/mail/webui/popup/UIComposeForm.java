@@ -584,7 +584,22 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       String usename = uiPortlet.getCurrentUser() ;
       MailService mailSvr = uiForm.getApplicationComponent(MailService.class) ;
       UIPopupAction uiChildPopup = uiForm.getAncestorOfType(UIPopupAction.class) ;
-      Message message = uiForm.getNewMessage() ;   
+      Message message = uiForm.getNewMessage() ; 
+      
+      if (!MailUtils.isValidEmailAddresses(message.getMessageTo())) {
+        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.invalid-to-field", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      } else if (!MailUtils.isValidEmailAddresses(message.getMessageCc())) {
+        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.invalid-cc-field", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      } else if (!MailUtils.isValidEmailAddresses(message.getMessageBcc())) {
+        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.invalid-bcc-field", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
+      
       message.setReplyTo(message.getMessageTo()) ;
       try {
         String draftFolderId = Utils.createFolderId(accountId, Utils.FD_DRAFTS, false) ;
