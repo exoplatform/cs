@@ -27,6 +27,7 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
+import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -76,13 +77,11 @@ public class ContactPageList extends JCRPageList {
     }
     currentListPage_ = new ArrayList<Contact>() ;
     for(int i = 0; i < pageSize; i ++) {
-      // add != null to fix bug 514
       if(iter_ != null && iter_.hasNext()){
         currentNode = iter_.nextNode() ;
         if(currentNode.isNodeType("exo:contact")) {
-          // hoang quang hung edit
           Contact contact = getContact(currentNode, contactType_) ;
-          if (contact.getId().equalsIgnoreCase(username_))  currentListPage_.add(0, contact) ;
+          if (contact.getId().equalsIgnoreCase(username_) && (contactType_.equals(JCRDataStorage.PRIVATE))) currentListPage_.add(0, contact) ;
           else currentListPage_.add(contact);
         }
       }else {

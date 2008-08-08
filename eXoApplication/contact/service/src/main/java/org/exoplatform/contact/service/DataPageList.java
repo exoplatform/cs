@@ -17,6 +17,8 @@
 package org.exoplatform.contact.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -32,6 +34,7 @@ public class DataPageList extends JCRPageList {
   public DataPageList(List<Contact> contactList, long pageSize, String value, boolean isQuery ) throws Exception {
     super(pageSize) ;
     contactList_ = contactList ;
+    Collections.sort(contactList_, new FullNameComparator()) ;
     value_ = value ;
     isQuery_ = isQuery ;
     setAvailablePage(contactList_.size()) ;
@@ -69,6 +72,13 @@ public class DataPageList extends JCRPageList {
     iter_ = null ;  */  
   }
 	@Override
-	public List<Contact> getAll() throws Exception { return contactList_; }
-	public void setList(List<Contact> contacts) { contactList_ = contacts ; }
+  public List<Contact> getAll() throws Exception { return contactList_; }
+  public void setList(List<Contact> contacts) { contactList_ = contacts ; }
+  static public class FullNameComparator implements Comparator {
+	public int compare(Object o1, Object o2) throws ClassCastException {
+	    String name1 = ((Contact) o1).getFullName() ;
+	    String name2 = ((Contact) o2).getFullName() ;
+	    return name1.compareTo(name2) ;
+	  }
+	}
 }
