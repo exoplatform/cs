@@ -157,6 +157,12 @@ public class TestContactService extends BaseContactServiceTestCase{
     assertNotNull(contactService_.getPublicContactsByAddressBook(sProvider_, "/platform/users"));
     assertEquals(contactService_.getPublicContactsByAddressBook(sProvider_, "/platform/users").getAll().size(), 0);
     
+  // get public contact:
+    assertNull(contactService_.getPublicContact(contact1.getId()));
+    
+  // get all email by public group:
+    assertNotNull(contactService_.getAllEmailByPublicGroup(userRoot_, "/platform/users"));
+    
   // get property of contact:
     assertEquals(contactService_.getContact(sProvider_, userRoot_, contact1.getId()).getFullName(), "fullName");
     
@@ -283,6 +289,15 @@ public class TestContactService extends BaseContactServiceTestCase{
   // remove tag:
     contactService_.removeTag(sProvider_, userRoot_, tag.getId());
     assertNull(contactService_.getTag(sProvider_, userRoot_, tag.getId()));
+    
+  /**
+   * test export/ import:
+   */
+  // get import, export type:
+    assertNotNull(contactService_.getImportExportType());
+    
+  // get contact import/ export:
+    assertNotNull(contactService_.getContactImportExports("x-vcard"));
     
   }
   
