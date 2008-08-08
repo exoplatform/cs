@@ -48,7 +48,7 @@
 .UICalendarPortlet .UISelectUserForm .UIAddressSearchForm input{
 	float: left;
 	width: 170px;
-	height: 14px;
+	height: 13px;
 }
 
 .UICalendarPortlet .UISelectUserForm .UIAddressSearchForm .SearchIcon {
@@ -129,6 +129,7 @@
 .UICalendarPortlet .UISelectUserForm .FilterSelect {
 	float:left;
 	line-height: 0px;
+	margin-left: 4px;
 }
 
 .UICalendarPortlet .UISelectUserForm .FilterSelect select{
