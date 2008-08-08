@@ -319,12 +319,14 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
         uiAccCreation.getAncestorOfType(UIPopupAction.class).deActivate() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiAccCreation.getAncestorOfType(UIPopupAction.class)) ;
         
-        WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-        context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.initService('checkMailInfobar', '" + MailUtils.getCurrentUser() + "', '" + acc.getId() + "') ;") ;
-        context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.setCheckmailTimeout(" + 
-            uiAccCreation.getApplicationComponent(MailService.class).getMailSetting(SessionProviderFactory.createSystemProvider(), MailUtils.getCurrentUser()).getPeriodCheckAuto() + ") ;") ;
-        context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.checkMail(true) ;");
-
+        if (uiAccWs5.isGetmail()) {
+          WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+          context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.initService('checkMailInfobar', '" + MailUtils.getCurrentUser() + "', '" + acc.getId() + "') ;") ;
+          context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.setCheckmailTimeout(" + 
+              uiAccCreation.getApplicationComponent(MailService.class).getMailSetting(SessionProviderFactory.createSystemProvider(), MailUtils.getCurrentUser()).getPeriodCheckAuto() + ") ;") ;
+          System.out.println("=====########====>>> " + uiAccWs5.isGetmail());
+          context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.checkMail(true) ;");
+        }
       } catch (Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIAccountCreation.msg.create-acc-unsuccessfully", null, ApplicationMessage.ERROR)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
