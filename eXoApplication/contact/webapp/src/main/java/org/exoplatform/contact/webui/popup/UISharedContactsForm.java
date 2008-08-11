@@ -29,6 +29,7 @@ import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -140,7 +141,8 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
   } 
   
   static  public class SaveActionListener extends EventListener<UISharedContactsForm> {
-    public void execute(Event<UISharedContactsForm> event) throws Exception {
+    @SuppressWarnings("unchecked")
+	public void execute(Event<UISharedContactsForm> event) throws Exception {
       UISharedContactsForm uiForm = event.getSource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       String names = uiForm.getUIStringInput(FIELD_USER).getValue() ;
@@ -173,10 +175,11 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
       if (!ContactUtils.isEmpty(groups)) {
         String[] arrayGroups = groups.split(",") ; 
         for (String group : arrayGroups) {
-          List<Contact> contacts = contactService
-            .getPublicContactsByAddressBook(SessionProviderFactory.createSystemProvider(), group).getAll() ; 
-          for (Contact contact : contacts) {
-            receiverUser.add(contact.getId() + JCRDataStorage.HYPHEN) ;
+          OrganizationService organizationService = 
+                (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+          List<User> users = organizationService.getUserHandler().findUsersByGroup(group).getAll() ;
+          for (User user : users) {
+            receiverUser.add(user.getUserName() + JCRDataStorage.HYPHEN) ;
           }
         }        
       } 

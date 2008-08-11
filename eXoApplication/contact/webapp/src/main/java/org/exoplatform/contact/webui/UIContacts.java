@@ -647,7 +647,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   
   
   static public class DeleteContactsActionListener extends EventListener<UIContacts> {
-    public void execute(Event<UIContacts> event) throws Exception {
+    @SuppressWarnings("unchecked")
+	public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource();
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
       List<String> contactIds = new ArrayList<String>();
@@ -721,9 +722,22 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         uiContacts.setContact(removedContacts, false) ;
       }
       if (uiContacts.getSelectedTag() != null) {
-        String tagName = uiWorkingContainer.findFirstComponentOfType(UITags.class).getSelectedTag() ;
-        uiContacts.setContacts(contactService
-            .getContactPageListByTag(SessionProviderFactory.createSystemProvider(), username, tagName)) ;
+    	  String tagId = uiWorkingContainer.findFirstComponentOfType(UITags.class).getSelectedTag() ;
+          DataPageList pageList = contactService
+            .getContactPageListByTag(SessionProviderFactory.createSystemProvider(), username, tagId) ;
+          if (pageList != null) {
+            List<Contact> contacts = new ArrayList<Contact>() ;
+            contacts = pageList.getAll() ;
+            if (uiContacts.getSortedBy().equals(UIContacts.fullName)) {
+              Collections.sort(contacts, new FullNameComparator()) ;
+            } else if (uiContacts.getSortedBy().equals(UIContacts.emailAddress)) {
+              Collections.sort(contacts, new EmailComparator()) ;
+            } else if (uiContacts.getSortedBy().equals(UIContacts.jobTitle)) {
+              Collections.sort(contacts, new JobTitleComparator()) ;
+            }  
+            pageList.setList(contacts) ;
+          }
+          uiContacts.setContacts(pageList) ;
       } else {
         uiContacts.updateList() ;
       }
