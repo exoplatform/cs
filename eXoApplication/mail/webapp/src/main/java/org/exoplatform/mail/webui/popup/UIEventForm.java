@@ -452,6 +452,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
   }*/
   
   protected void setEventReminders(List<Reminder> reminders){
+    if(reminders != null)
     for(Reminder r : reminders) {
       if(Reminder.TYPE_EMAIL.equals(r.getReminderType())) {
         setEmailReminder(true) ;
