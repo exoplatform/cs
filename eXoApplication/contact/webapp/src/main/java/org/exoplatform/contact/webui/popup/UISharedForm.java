@@ -36,6 +36,7 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -167,6 +168,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
   } 
   
   static  public class SaveActionListener extends EventListener<UISharedForm> {
+    @SuppressWarnings("unchecked")
     public void execute(Event<UISharedForm> event) throws Exception {
       UISharedForm uiForm = event.getSource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
@@ -220,8 +222,9 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
           }
           */
           receiveGroups.add(group) ;
-          for (Contact contact : contactService.getPublicContactsByAddressBook(SessionProviderFactory.createSystemProvider(), group.trim()).getAll()) {
-            receiveUsersByGroups.put(contact.getId(), contact.getId()) ;
+          List<User> users = organizationService.getUserHandler().findUsersByGroup(group.trim()).getAll() ;
+          for (User user : users ) {
+            receiveUsersByGroups.put(user.getUserName(), user.getUserName()) ;
           }
         }        
       }

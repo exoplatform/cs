@@ -32,6 +32,7 @@ import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.organization.OrganizationService;
@@ -177,6 +178,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
     }
   }
   static public class DeleteActionListener extends EventListener<UIAddEditPermission> {
+    @SuppressWarnings("unchecked")
     public void execute(Event<UIAddEditPermission> event) throws Exception {
       UIAddEditPermission uiForm = event.getSource();
       String remover = event.getRequestContext().getRequestParameter(OBJECTID);
@@ -185,7 +187,6 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
       if (uiForm.isSharedGroup) {
         ContactGroup group = contactService.getGroup(
             SessionProviderFactory.createSessionProvider(), username, uiForm.groupId_) ;
-        
         // delete group permission
         if (group.getViewPermissionGroups() != null && Arrays.asList(group.getViewPermissionGroups()).contains(remover)) {
           List<String> newPerms = new ArrayList<String>() ;
@@ -198,11 +199,12 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
             newPerms.remove(remover) ;
             group.setEditPermissionGroups(newPerms.toArray(new String[newPerms.size()])) ;
           }        
-          List<Contact> users = contactService
-            .getPublicContactsByAddressBook(SessionProviderFactory.createSystemProvider(), remover).getAll() ;
-          for (Contact user : users)
+          OrganizationService organizationService = 
+            (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+          List<User> users = organizationService.getUserHandler().findUsersByGroup(remover).getAll() ;
+          for (User user : users)
             contactService.removeUserShareAddressBook(
-                SessionProviderFactory.createSessionProvider(), username, uiForm.groupId_, user.getId()) ;          
+                SessionProviderFactory.createSessionProvider(), username, uiForm.groupId_, user.getUserName()) ;          
         } else {
           if(group.getViewPermissionUsers() != null) {
             List<String> newPerms = new ArrayList<String>() ;
@@ -229,13 +231,16 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
         Contact contact = contactService.getContact(
             SessionProviderFactory.createSessionProvider(), username, uiForm.contactId_) ;
         if (contact.getViewPermissionGroups() != null && Arrays.asList(contact.getViewPermissionGroups()).contains(remover)) {
-          removePerGroup(contact, remover) ;
-          List<Contact> users = contactService
-            .getPublicContactsByAddressBook(SessionProviderFactory.createSystemProvider(), remover).getAll() ;
-          for (Contact user : users)
+          removePerGroup(contact, remover) ;          
+          
+          OrganizationService organizationService = 
+            (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+          List<User> users = organizationService.getUserHandler().findUsersByGroup(remover).getAll() ;
+
+          for (User user : users)
             try {
               contactService.removeUserShareContact(
-                  SessionProviderFactory.createSystemProvider(), username, uiForm.contactId_, user.getId()) ;
+                  SessionProviderFactory.createSystemProvider(), username, uiForm.contactId_, user.getUserName()) ;
             } catch (PathNotFoundException e) {
               UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
               uiApp.addMessage(new ApplicationMessage("UIAddEditPermission.msg.cannot-deleteShared", null,
