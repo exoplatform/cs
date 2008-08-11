@@ -53,6 +53,8 @@
 .UIMailPortlet .UIMessageFilter .FilterSettingCategory .FilterSettingList {
 	padding: 10px 0px;
 	color: #3d3d3d;
+	overflow-y: auto;
+	height: 315px;
 }
 
 .UIMailPortlet .UIMessageFilter .FilterSettingCategory .FilterSettingList .AddNewFilter{
@@ -62,15 +64,21 @@
 }
 
 .UIMailPortlet .UIMessageFilter .FilterSettingCategory .NormalItem {
-	padding: 0px 27px;
-	line-height: 22px;
-	margin: 2px 0px;
+	line-height:22px;
+	margin:2px 0px;
+	overflow:hidden;
+	padding:0px 0px 0px 27px;
+	white-space:nowrap;
+	width:165px;
 }
 
 .UIMailPortlet .UIMessageFilter .FilterSettingCategory .SelectedItem {
-	padding: 0px 27px;
-	margin: 2px 0px;
-	line-height: 22px;
+	line-height:22px;
+	margin:2px 0px;
+	overflow:hidden;
+	padding:0px 0px 0px 27px;
+	white-space:nowrap;
+	width:165px;
 	background: #cbdaf4 url('icons/SelectedIcon.gif') no-repeat 9px center ;
 }
 /************************************FilterSettingContainer*************************************/
