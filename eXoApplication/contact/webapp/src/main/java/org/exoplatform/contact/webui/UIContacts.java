@@ -918,8 +918,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     public int compare(Object o1, Object o2) throws ClassCastException {
       String name1 = ((Contact) o1).getFullName() ;
       String name2 = ((Contact) o2).getFullName() ;
-      if (isAsc == true) return name1.compareToIgnoreCase(name2) ;
-      else return name2.compareToIgnoreCase(name1) ;
+      if (isAsc == true) return name1.compareTo(name2) ;
+      else return name2.compareTo(name1) ;
     }
   }
   static public class EmailComparator implements Comparator {
@@ -928,8 +928,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       String email1 = ((Contact) o1).getEmailAddress() ;
       String email2 = ((Contact) o2).getEmailAddress() ;
       if (ContactUtils.isEmpty(email1) || ContactUtils.isEmpty(email2)) return 0 ;
-      if (isAsc == true) return email1.compareToIgnoreCase(email2) ;
-      else return email2.compareToIgnoreCase(email1) ;
+      if (isAsc == true) return email1.compareTo(email2) ;
+      else return email2.compareTo(email1) ;
     }
   }
   static public class JobTitleComparator implements Comparator {
@@ -938,8 +938,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       String job1 = ((Contact) o1).getJobTitle() ;
       String job2 = ((Contact) o2).getJobTitle() ;
       if (ContactUtils.isEmpty(job1) || ContactUtils.isEmpty(job2)) return 0 ;
-      if (isAsc == true) return job1.compareToIgnoreCase(job2) ;
-      else return job2.compareToIgnoreCase(job1) ;
+      if (isAsc == true) return job1.compareTo(job2) ;
+      else return job2.compareTo(job1) ;
     }
   }
   
