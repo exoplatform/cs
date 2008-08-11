@@ -32,7 +32,9 @@
 	padding: 7px 1px;
 	background: white;
 	width: 240px;
-	margin : auto;
+	margin : 0px auto 10px auto;
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 .UIContactPortlet .UIMoveContactsForm .MoveContactsFormContainer .ItemList {
