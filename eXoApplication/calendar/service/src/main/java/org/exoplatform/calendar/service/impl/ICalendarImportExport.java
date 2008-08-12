@@ -51,6 +51,7 @@ import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarImportExport;
 import org.exoplatform.calendar.service.EventCategory;
+import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 
@@ -254,7 +255,7 @@ public class ICalendarImportExport implements CalendarImportExport{
     boolean isExists = false ;
     while(iter.hasNext()) {
       cat = iter.nextNode() ;
-      if(cat.getProperty("exo:name").getString().equals("Imported")) {
+      if(cat.getProperty(Utils.EXO_NAME).getString().equals("Imported")) {
         isExists = true ;
         break ;
       }
@@ -266,7 +267,7 @@ public class ICalendarImportExport implements CalendarImportExport{
       categoryId = calendarCate.getId() ;
       storage_.saveCalendarCategory(sProvider, username, calendarCate, true) ;
     }else {
-      categoryId = cat.getProperty("exo:id").getString() ;
+      categoryId = cat.getProperty(Utils.EXO_ID).getString() ;
     }
     Calendar exoCalendar = new Calendar() ;
     exoCalendar.setName(calendarName) ;

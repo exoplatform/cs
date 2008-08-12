@@ -51,7 +51,10 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
 
   final static public String FIELD_UPLOAD = "upload" ;  
   private int maxField = 5 ;
-
+  public static final long MAX_SIZE = 10*1024*1024 ;
+  
+  private long attSize = 0;
+  
   public UIAttachFileForm() throws Exception {
     setMultiPart(true) ;
     int i = 0 ;
@@ -62,6 +65,8 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
   }
 
 
+  public long getAttSize() {return attSize ;}
+  public void setAttSize(long value) { attSize = value ;}
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
 
@@ -71,15 +76,23 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       List<Attachment> files = new ArrayList<Attachment>() ;
       int i = 0 ;
+      long size = uiForm.attSize ;
       while(i++ < uiForm.maxField) {
         UIFormUploadInput input = (UIFormUploadInput)uiForm.getUIInput(FIELD_UPLOAD + String.valueOf(i));
         UploadResource uploadResource = input.getUploadResource() ;
         if(uploadResource != null) {
+          long fileSize = ((long)uploadResource.getUploadedSize()) ;
+          size = size + fileSize ;
+          if(fileSize>= MAX_SIZE || size >= MAX_SIZE) {
+            uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.total-attachts-size-over10M", null, ApplicationMessage.WARNING)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return ;
+          }
           Attachment attachfile = new Attachment() ;
           attachfile.setName(uploadResource.getFileName()) ;
           attachfile.setInputStream(input.getUploadDataAsStream()) ;
           attachfile.setMimeType(uploadResource.getMimeType()) ;
-          attachfile.setSize((long)uploadResource.getUploadedSize());
+          attachfile.setSize(fileSize);
           files.add(attachfile) ;
         }
       }

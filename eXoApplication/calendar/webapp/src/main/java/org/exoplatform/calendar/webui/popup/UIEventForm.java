@@ -554,7 +554,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     UIEventReminderTab eventReminderTab =  getChildById(TAB_EVENTREMINDER) ;
     eventReminderTab.getUIFormSelectBox(UIEventReminderTab.EMAIL_REPEAT_INTERVAL).setValue(String.valueOf(value)) ;
   }
-   protected String isPopupRepeat() {
+  protected String isPopupRepeat() {
     UIEventReminderTab eventReminderTab =  getChildById(TAB_EVENTREMINDER) ;
     return String.valueOf("repeat".equals(eventReminderTab.getUIFormSelectBox(UIEventReminderTab.POPUP_IS_REPEAT).getValue())) ;
   }
@@ -583,7 +583,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     eventReminderTab.getUIFormTextAreaInput(UIEventReminderTab.FIELD_EMAIL_ADDRESS).setValue(value) ;
   }
 
-   protected boolean getPopupReminder() {
+  protected boolean getPopupReminder() {
     UIEventReminderTab eventReminderTab =  getChildById(TAB_EVENTREMINDER) ;
     return eventReminderTab.getUIFormCheckBoxInput(UIEventReminderTab.REMIND_BY_POPUP).isChecked() ;
   }
@@ -614,12 +614,22 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     UIEventDetailTab uiEventDetailTab = getChild(UIEventDetailTab.class) ;
     return uiEventDetailTab.getAttachments() ;
   }
+
+  protected long getTotalAttachment() {
+    UIEventDetailTab uiEventDetailTab = getChild(UIEventDetailTab.class) ;
+    long attSize = 0 ; 
+    for(Attachment att : uiEventDetailTab.getAttachments()) {
+      attSize = attSize + att.getSize() ;
+    }
+    return attSize ;
+  }
+
   protected void setAttachments(List<Attachment> attachment) throws Exception {
     UIEventDetailTab uiEventDetailTab = getChild(UIEventDetailTab.class) ;
     uiEventDetailTab.setAttachments(attachment) ;
     uiEventDetailTab.refreshUploadFileList() ;
   }
-   protected void setPopupRepeatInterval(long value) {
+  protected void setPopupRepeatInterval(long value) {
     UIEventReminderTab eventReminderTab =  getChildById(TAB_EVENTREMINDER) ;
     eventReminderTab.getUIFormSelectBox(UIEventReminderTab.POPUP_REPEAT_INTERVAL).setValue(String.valueOf(value)) ;
   } 
@@ -907,13 +917,16 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       UIEventForm uiForm = event.getSource() ;
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = uiContainer.getChild(UIPopupAction.class) ;
-      uiChildPopup.activate(UIAttachFileForm.class, 500) ;
+      UIAttachFileForm uiAttachFileForm = uiChildPopup.activate(UIAttachFileForm.class, 500) ;
+      uiAttachFileForm.setAttSize(uiForm.getTotalAttachment()) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
     }
   }
   static  public class RemoveAttachmentActionListener extends EventListener<UIEventForm> {
     public void execute(Event<UIEventForm> event) throws Exception {
       UIEventForm uiForm = event.getSource() ;
+      UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+      if(uiContainer != null) uiContainer.deActivate() ;
       UIEventDetailTab uiEventDetailTab = uiForm.getChild(UIEventDetailTab.class) ;
       String attFileId = event.getRequestContext().getRequestParameter(OBJECTID);
       Attachment attachfile = new Attachment();

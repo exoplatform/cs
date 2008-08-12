@@ -1,3 +1,4 @@
+
 <nodeTypes xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0">
   	<nodeType	name="exo:reminder" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
   		<supertypes>
@@ -19,7 +20,7 @@
 	  		<propertyDefinition name="exo:email" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   				<valueConstraints/>
 	  		</propertyDefinition>
-	  		<propertyDefinition name="exo:repeatInterval" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  		<propertyDefinition name="exo:timeInterval" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   				<valueConstraints/>
 	  		</propertyDefinition>	  		
 	  		<propertyDefinition name="exo:reminderType" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
@@ -37,7 +38,7 @@
 	  		<propertyDefinition name="exo:isOver" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   				<valueConstraints/>
 	  		</propertyDefinition>
-	  		<propertyDefinition name="exo:eventSummary" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  		<propertyDefinition name="exo:summary" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   				<valueConstraints/>
 	  		</propertyDefinition>
 				<propertyDefinition name="exo:description" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
@@ -310,7 +311,7 @@
 	  		<propertyDefinition name="exo:workingTimeEnd" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   				<valueConstraints/>
 	  		</propertyDefinition>
-	  		<propertyDefinition name="exo:baseURL" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  		<propertyDefinition name="exo:baseUrl" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   				<valueConstraints/>
 	  		</propertyDefinition>	  					
 	  		<propertyDefinition name="exo:defaultPrivateCalendars" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
