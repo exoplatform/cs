@@ -14,89 +14,125 @@ Reminder.prototype.init = function(eXoUser, eXoToken){
 } ;
 
 Reminder.prototype.alarm = function(eventObj){
-	var a = eXo.core.JSON.parse(eventObj.data);
-	if(!a) return ;
-	var n = eXo.webui.Notification ;
-	var portlet = document.getElementById(eXo.calendar.UICalendarPortlet.portletName) ;
-	var uiNotification = eXo.core.DOMUtil.findFirstDescendantByClass(portlet, "div", "UINotification") ;
-	var uiControlInfo = eXo.core.DOMUtil.findFirstDescendantByClass(uiNotification, "div", "UIControlInfo") ;
-	n.container = eXo.core.DOMUtil.findFirstDescendantByClass(portlet,"div","UIPopupNotification") ;
-	if(n.message && n.message.contains("<div class='ItemLabel'>(" + a.fromDateTime.hours + ":" + a.fromDateTime.minutes + ") " +a.summary+"</div>")) {
-		n.show() ;
+	var a = eXo.core.JSON.parse(eventObj.data);	
+	var message = '<a class="Item" href="#"><div class="ItemLabel">('+ a.fromDateTime.hours + ':' + a.fromDateTime.minutes + ') ' +a.summary+'</div></a>' ;
+	var html = this.generateHTML(message) ;
+	var popup = eXo.core.DOMUtil.findFirstDescendantByClass(this.createMessage(html), "div","UIPopupNotification") ;
+	eXo.webui.Box.config(popup,popup.offsetHeight, 5, this.openCallback, this.closeBox) ;
+	window.focus() ;
+	return ;
+} ;
+
+Reminder.prototype.openCallback = function(obj){
+	obj.onclick = function(){
+		this.style.visibility = "hidden" ;
+	} ;
+}
+Reminder.prototype.closeBox = function(obj){
+	obj.style.visibility = "hidden" ;
+}
+
+Reminder.prototype.createMessage = function(html){
+	var msgBox = null ;
+	if(document.getElementById("msgBox")) {
+		msgBox = document.getElementById("msgBox") ;
+		msgBox.innerHTML = html ;
+	} else {
+		msgBox = document.createElement("div") ;
+		msgBox.id = "msgBox" ;
+		msgBox.className = "UINotification" ;
+		msgBox.innerHTML = html ;
+		document.body.appendChild(msgBox) ;
+	}
+	return msgBox ;
+} ;
+
+Reminder.prototype.generateHTML = function(message){
+	var html = '' ;
+	html += '<div class="UIPopupNotification">';
+	html += '	<div class="TLPopupNotification">';
+	html += '		<div class="TRPopupNotification">';
+	html += '			<div class="TCPopupNotification"><span></span></div>';
+	html += '		</div>';
+	html += '	</div>';
+	html += '	<div class="LPopupTitleNotification">';
+	html += '		<div class="RPopupTitleNotification">';
+	html += '			<div class="CPopupTitleNotification">';
+	html += '				<a class="ItemTitle" href="#">Notification</a>';
+	html += '				<a class="Close" href="#"><span></span></a>';
+	html += '			</div>';
+	html += '		</div>';
+	html += '	</div>';
+	html += '	<div class="MLPopupNotification">';
+	html += '		<div class="MRPopupNotification">';
+	html += '			<div class="MCPopupNotification">';
+	html += 				message;
+	html += '			</div>';
+	html += '		</div>';
+	html += '	</div>';
+	html += '	<div class="BLPopupNotification">';
+	html += '		<div class="BRPopupNotification">';
+	html += '			<div class="BCPopupNotification"><span></span></div>';
+	html += '		</div>';
+	html += '	</div>';
+	html += '</div>';
+	return html ;
+} ;
+
+// Box effect
+function Box(){
+	this.speed = 4 ;
+	this.tmpHeight = 0 ;
+	this.autoClose = true ;
+	this.closeInterval = 10 ;
+}
+
+Box.prototype.config = function(obj, height, speed, openCallback, closeCallback) {
+	this.object = obj;
+	this.maxHeight = height ;
+	if(speed) this.speed = speed ;
+	this.open() ;
+	if(openCallback) this.openCallback = openCallback ;
+	if(closeCallback) this.closeCallback = closeCallback ;
+}
+
+Box.prototype.open = function(){
+	var Box = eXo.webui.Box ;
+	if(Box.tmpHeight < Box.maxHeight){
+		Box.object.style.overflow = "hidden" ;
+		Box.object.style.visibility = "visible" ;
+		Box.object.style.height = Box.tmpHeight + "px" ;
+		Box.tmpHeight += Box.speed ;
+		Box.timer = window.setTimeout(Box.open,10) ;
+	} else {
+		Box.object.style.overflow = "visible" ;
+		Box.tmpHeight = Box.maxHeight ;
+		if(Box.timer) window.clearTimeout(Box.timer) ;
+		if(Box.closeTimer)  window.clearInterval(Box.closeTimer) ;
+		if(Box.autoClose) Box.closeTimer = window.setInterval(Box.close,Box.closeInterval*1000) ;
+		Box.openCallback(Box.object) ;
 		return ;
 	}
-	n.message.push("<div class='ItemLabel'>(" + a.fromDateTime.hours + ":" + a.fromDateTime.minutes + ") " +a.summary+"</div>");
-	n.addMessage() ;
-	n.show() ;
-	n.container.onclick = n.hide ;
-	uiControlInfo.onclick = n.show ;
-} ;
-
-eXo.calendar.Reminder = new Reminder() ;
-
-function Notification(){
-	this.container = null ;
-	this.message = [] ;
-	this.timer = null ;
-	this.timeInterval = null ;
-	this.startHeight = 0 ;
 }
 
-Notification.prototype.createElement = function(message){
-	var a = "<a href='#' class='Item'>" + message + "</a>" ;
-	return a ;
-}
-
-Notification.prototype.addMessage = function(){
-	var	message = this.message ;
-	var i = message.length ;
-	var messageList = eXo.core.DOMUtil.findFirstDescendantByClass(this.container, "div", "MCPopupNotification") ;
-	var html = "" ;
-	while (i--) {
-		html += this.createElement(message[i]);
-	}
-	messageList.innerHTML = html ;	
-	this.containerHeight = message.length*33 + 30 ;
-	var uiControlInfo = eXo.core.DOMUtil.findPreviousElementByTagName(this.container,"div") ;
-	var controlInfoLabel = eXo.core.DOMUtil.findFirstDescendantByClass(uiControlInfo, "a", "ControlInfoLabel") ;
-	controlInfoLabel.innerHTML = "("+message.length+")" ;
-	//this.containerWidth = this.container.offsetWidth ;
-} ;
-
-Notification.prototype.show = function(){
-	var n =	eXo.webui.Notification;
-	if(n.timeInterval) clearInterval(n.timeInterval) ;
-	if(n.startHeight < n.containerHeight) {
-		n.container.style.visibility = "visible" ;
-		n.container.style.overflowY = "hidden" ;
-		n.container.style.height = n.startHeight + "px" ;	
-		n.startHeight += 4;
-		n.timer = setTimeout("eXo.webui.Notification.show() ;",10) ;
+Box.prototype.close = function(){
+	var Box = eXo.webui.Box ;	
+	if(Box.tmpHeight >= 0){
+		Box.object.style.overflow = "hidden" ;
+		Box.object.style.height = Box.tmpHeight + "px" ;
+		Box.tmpHeight -= Box.speed ;
+		Box.timer = window.setTimeout(Box.close,10) ;
 	} else {
-		clearTimeout(n.timer) ;
-		n.timeInterval = setInterval("eXo.webui.Notification.hide()",5000) ;
-		n.container.style.overflowY = "visible" ;
-	}
-} ;
-
-Notification.prototype.hide = function(){
-	var n = eXo.webui.Notification ;
-	if(n.startHeight > 0) {
-		n.container.style.overflowY = "hidden" ;
-		n.startHeight -= 4 ;
-		n.container.style.height = n.startHeight + "px" ;		
-		n.timer = setTimeout("eXo.webui.Notification.hide() ;",10) ;
-		if(n.timeInterval) clearInterval(n.timeInterval) ;
-	} else{
-		n.container.style.visibility = "hidden" ;
-		clearTimeout(n.timer) ;
-		n.startHeight = 0 ;
-		n.container.style.overflowY = "visible" ;
-	}
-} ;
-function printobject(obj) {
-	for(i in obj){
-		console.log(i + " : " + obj[i]) ;
+		Box.object.style.overflow = "visible" ;
+		Box.object.style.visibility = "hidden" ;
+		Box.tmpHeight = 0 ;
+		Box.object.style.height = Box.tmpHeight + "px" ;
+		if(Box.timer) window.clearTimeout(Box.timer) ;
+		if(Box.closeTimer)  window.clearInterval(Box.closeTimer) ;
+		Box.closeCallback(Box.object) ;
+		return ;
 	}
 }
-eXo.webui.Notification = new Notification() ;
+
+eXo.webui.Box = new Box() ;
+eXo.calendar.Reminder = new Reminder() ;
