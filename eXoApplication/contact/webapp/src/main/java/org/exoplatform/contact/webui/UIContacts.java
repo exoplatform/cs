@@ -62,6 +62,7 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
+import org.exoplatform.webui.form.UIFormStringInput;
 
 /**
  * Created by The eXo Platform SARL
@@ -236,7 +237,13 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   public boolean isPrintForm() { return isPrintForm ; }
   public void setPrintDetail(boolean isDetail) { isPrintDetail = isDetail ; }
   
-  public boolean isDisplaySearchResult() {return isSearchResult ;}
+  public boolean isDisplaySearchResult() {
+    if (!isSearchResult) {
+      getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UISearchForm.class)
+        .getChild(UIFormStringInput.class).setValue(null) ;
+    }
+    return isSearchResult ;  
+  }
   public void setDisplaySearchResult(boolean search) { isSearchResult = search ; }
   public void setViewListBeforePrint(boolean isList) { viewListBeforePrint = isList ; }
   
@@ -981,6 +988,11 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIWorkingContainer uiWorkingContainer = uiContacts.getAncestorOfType(UIWorkingContainer.class) ;
       uiWorkingContainer.findFirstComponentOfType(UIAddressBooks.class).setSelectedGroup(uiContacts.selectedGroup) ;
       uiWorkingContainer.findFirstComponentOfType(UITags.class).setSelectedTag(uiContacts.selectedTag_) ;
+      
+      UISearchForm uiSearchForm = uiContacts.getAncestorOfType(
+          UIContactPortlet.class).findFirstComponentOfType(UISearchForm.class) ;
+      uiSearchForm .getChild(UIFormStringInput.class).setValue(null) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiSearchForm) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
     }
   }

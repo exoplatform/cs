@@ -202,8 +202,14 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
           OrganizationService organizationService = 
             (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
           List<User> users = organizationService.getUserHandler().findUsersByGroup(remover).getAll() ;
+          
+          List<String> viewUsers = new ArrayList<String>() ;
+          if (group.getViewPermissionUsers() != null) {
+            viewUsers = Arrays.asList(group.getViewPermissionUsers()) ;
+          }
           for (User user : users)
-            contactService.removeUserShareAddressBook(
+            if (viewUsers.size() > 0 && !viewUsers.contains(user.getUserName() + JCRDataStorage.HYPHEN))
+              contactService.removeUserShareAddressBook(
                 SessionProviderFactory.createSessionProvider(), username, uiForm.groupId_, user.getUserName()) ;          
         } else {
           if(group.getViewPermissionUsers() != null) {
@@ -231,23 +237,27 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
         Contact contact = contactService.getContact(
             SessionProviderFactory.createSessionProvider(), username, uiForm.contactId_) ;
         if (contact.getViewPermissionGroups() != null && Arrays.asList(contact.getViewPermissionGroups()).contains(remover)) {
-          removePerGroup(contact, remover) ;          
-          
+          removePerGroup(contact, remover) ;  
           OrganizationService organizationService = 
             (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
           List<User> users = organizationService.getUserHandler().findUsersByGroup(remover).getAll() ;
-
+ 
+          List<String> viewUsers = new ArrayList<String>() ;
+          if (contact.getViewPermissionUsers() != null) {
+            viewUsers = Arrays.asList(contact.getViewPermissionUsers()) ;
+          }
           for (User user : users)
-            try {
-              contactService.removeUserShareContact(
-                  SessionProviderFactory.createSystemProvider(), username, uiForm.contactId_, user.getUserName()) ;
-            } catch (PathNotFoundException e) {
-              UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-              uiApp.addMessage(new ApplicationMessage("UIAddEditPermission.msg.cannot-deleteShared", null,
-                  ApplicationMessage.WARNING)) ;
-              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-              return ;
-            }    
+            if (viewUsers.size() > 0 && !viewUsers.contains(user.getUserName() + JCRDataStorage.HYPHEN))
+              try {
+                contactService.removeUserShareContact(
+                    SessionProviderFactory.createSystemProvider(), username, uiForm.contactId_, user.getUserName()) ;
+              } catch (PathNotFoundException e) {
+                UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+                uiApp.addMessage(new ApplicationMessage("UIAddEditPermission.msg.cannot-deleteShared", null,
+                    ApplicationMessage.WARNING)) ;
+                event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                return ;
+              }    
         } else {
           removePerUser(contact, remover + JCRDataStorage.HYPHEN) ;
           try {
