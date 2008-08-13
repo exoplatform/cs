@@ -50,7 +50,6 @@ import org.exoplatform.contact.webui.popup.UIPopupContainer;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -595,8 +594,6 @@ public class UIAddressBooks extends UIComponent {
     public void execute(Event<UIAddressBooks> event) throws Exception {
       UIAddressBooks uiAddressBook = event.getSource();
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID);
-      
-      System.out.println("\n\n khukhua \n\n");
       UIWorkingContainer workingContainer = uiAddressBook.getAncestorOfType(UIWorkingContainer.class) ;
       UIContacts uiContacts = workingContainer.findFirstComponentOfType(UIContacts.class) ;      
       UIContactPreview uiContactPreview = workingContainer.findFirstComponentOfType(UIContactPreview.class) ;
