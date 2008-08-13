@@ -464,6 +464,7 @@
 .UIMailPortlet .UIMessageArea .UIMessageActionsBar {
 	background: url('background/BgMessageActionsBar1x29.gif') repeat-x;
 	height: 29px;
+	border-bottom: 1px solid #D2D4DC;
 	padding-left: 8px;
 }
 
