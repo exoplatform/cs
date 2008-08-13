@@ -42,12 +42,17 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
 ) 
 public class UIEventReminderTab extends UIFormInputWithActions {
 
-  
+
   final public static String REMIND_BY_EMAIL = "mailReminder".intern() ;
   final public static String EMAIL_REMIND_BEFORE = "mailReminderTime".intern() ;
   final public static String FIELD_EMAIL_ADDRESS = "mailReminderAddress".intern() ;
   final public static String EMAIL_REPEAT_INTERVAL = "emailRepeatInterval".intern() ;
   final public static String EMAIL_IS_REPEAT = "emailIsRepeat".intern() ;
+
+  final public static String REMIND_BY_POPUP = "popupReminder".intern() ;
+  final public static String POPUP_REMIND_BEFORE = "popupReminderTime".intern() ;
+  final public static String POPUP_REPEAT_INTERVAL = "popupRepeatInterval".intern() ;
+  final public static String POPUP_IS_REPEAT = "popupIsRepeat".intern() ; 
 
   private Map<String, List<ActionData>> actionField_ ;
   public UIEventReminderTab(String arg0) throws Exception {
@@ -57,31 +62,39 @@ public class UIEventReminderTab extends UIFormInputWithActions {
     List<SelectItemOption<String>> isPopupRepeatOptions = new ArrayList<SelectItemOption<String>>() ;
     isPopupRepeatOptions.add(new SelectItemOption<String>("no-repeat", "no-repeat")) ;
     isPopupRepeatOptions.add(new SelectItemOption<String>("repeat", "repeat")) ;
-    
+
     List<SelectItemOption<String>> isMailRepeatOptions = new ArrayList<SelectItemOption<String>>() ;
     isMailRepeatOptions.add(new SelectItemOption<String>("no-repeat", "no-repeat")) ;
     isMailRepeatOptions.add(new SelectItemOption<String>("repeat", "repeat")) ;
-    
-    List<SelectItemOption<String>> emailRemindOptions = getReminderTimes(5,60) ;
-    List<SelectItemOption<String>> popupRemindOptions = getReminderTimes(5,60) ;
+
+    List<SelectItemOption<String>> emailRemindRepeatOptions = getReminderTimes(5,60) ;
+    List<SelectItemOption<String>> emailRemindBeforeOptions = getReminderTimes(5,60) ;
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(REMIND_BY_EMAIL, REMIND_BY_EMAIL, false)) ;
-    addUIFormInput(new UIFormSelectBox(EMAIL_REMIND_BEFORE, EMAIL_REMIND_BEFORE, popupRemindOptions));
+    addUIFormInput(new UIFormSelectBox(EMAIL_REMIND_BEFORE, EMAIL_REMIND_BEFORE, emailRemindBeforeOptions));
     addUIFormInput(new UIFormTextAreaInput(FIELD_EMAIL_ADDRESS, FIELD_EMAIL_ADDRESS, null)) ;
     addUIFormInput(new UIFormSelectBox(EMAIL_IS_REPEAT, EMAIL_IS_REPEAT, isMailRepeatOptions));
-    addUIFormInput(new UIFormSelectBox(EMAIL_REPEAT_INTERVAL, EMAIL_REPEAT_INTERVAL, emailRemindOptions));
+    addUIFormInput(new UIFormSelectBox(EMAIL_REPEAT_INTERVAL, EMAIL_REPEAT_INTERVAL, emailRemindRepeatOptions));
     ActionData addEmailAddress = new ActionData() ;
     addEmailAddress.setActionType(ActionData.TYPE_ICON) ;
     addEmailAddress.setActionName(UIEventForm.ACT_ADDEMAIL) ;
     addEmailAddress.setActionListener(UIEventForm.ACT_ADDEMAIL) ;
-    
+
     List<ActionData> addMailActions = new ArrayList<ActionData>() ;
     addMailActions.add(addEmailAddress) ;
     setActionField(FIELD_EMAIL_ADDRESS, addMailActions) ;
+
+    List<SelectItemOption<String>> popupRemindRepeatOptions = getReminderTimes(5,60) ;
+    List<SelectItemOption<String>> popupRemindBeforeOptions = getReminderTimes(5,60) ;
+    addUIFormInput(new UIFormCheckBoxInput<Boolean>(REMIND_BY_POPUP, REMIND_BY_POPUP, false)) ;
+    addUIFormInput(new UIFormSelectBox(POPUP_REMIND_BEFORE, POPUP_REMIND_BEFORE, popupRemindBeforeOptions));
+    addUIFormInput(new UIFormSelectBox(POPUP_IS_REPEAT, POPUP_IS_REPEAT, isPopupRepeatOptions));
+    addUIFormInput(new UIFormSelectBox(POPUP_REPEAT_INTERVAL, POPUP_REPEAT_INTERVAL, popupRemindRepeatOptions));
+
   }
   protected UIForm getParentFrom() {
     return (UIForm)getParent() ;
   }
-  
+
   public List<SelectItemOption<String>> getReminderTimes(int steps, int maxValue) {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     for(int i = 1; i <= maxValue/steps ; i++) {
@@ -89,7 +102,7 @@ public class UIEventReminderTab extends UIFormInputWithActions {
     }
     return options ;
   }
-  
+
   public void setActionField(String fieldName, List<ActionData> actions) throws Exception {
     actionField_.put(fieldName, actions) ;
   }

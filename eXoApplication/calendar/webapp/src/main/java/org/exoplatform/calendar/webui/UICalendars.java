@@ -328,8 +328,8 @@ public class UICalendars extends UIForm  {
         if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
           calendar = calService.getUserCalendar(uiComponent.getSession(), currentUser, calendarId) ;
         } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
-          if(calService.getSharedCalendars(uiComponent.getSystemSession(), currentUser, true) != null)
-            calendar = calService.getSharedCalendars(uiComponent.getSystemSession(), currentUser, true).getCalendarById(calendarId) ;
+          GroupCalendarData gCalendarData = calService.getSharedCalendars(uiComponent.getSystemSession(), currentUser, true) ;
+          if(gCalendarData != null) calendar = gCalendarData.getCalendarById(calendarId) ;
         } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
           calendar = calService.getGroupCalendar(uiComponent.getSystemSession(), calendarId) ;
         }  
@@ -337,6 +337,7 @@ public class UICalendars extends UIForm  {
           UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarPortlet) ;
         } else {
           if(!CalendarUtils.PRIVATE_TYPE.equals(calType) && !uiComponent.canAddTaskAndEvent(uiComponent, calendarId, calType)) {
             UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
@@ -384,8 +385,8 @@ public class UICalendars extends UIForm  {
         if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
           calendar = calService.getUserCalendar(uiComponent.getSession(), currentUser, calendarId) ;
         } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
-          if(calService.getSharedCalendars(uiComponent.getSystemSession(), currentUser, true) != null)
-            calendar = calService.getSharedCalendars(uiComponent.getSystemSession(), currentUser, true).getCalendarById(calendarId) ;
+          GroupCalendarData gCalendarData = calService.getSharedCalendars(uiComponent.getSystemSession(), currentUser, true) ;
+          if(gCalendarData != null) calendar = gCalendarData.getCalendarById(calendarId) ;
         } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
           calendar = calService.getGroupCalendar(uiComponent.getSystemSession(), calendarId) ;
         }  
@@ -393,6 +394,7 @@ public class UICalendars extends UIForm  {
           UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarPortlet) ;
         } else {
           if(!CalendarUtils.PRIVATE_TYPE.equals(calType) && !uiComponent.canAddTaskAndEvent(uiComponent, calendarId, calType)) {
             UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
@@ -560,14 +562,34 @@ public class UICalendars extends UIForm  {
   static  public class ExportCalendarActionListener extends EventListener<UICalendars> {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiComponent = event.getSource() ;
+      UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
+      String currentUser = CalendarUtils.getCurrentUser() ;
+      CalendarService calService = CalendarUtils.getCalendarService() ;
       String selectedCalendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
-      UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
-      UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
-      popupAction.deActivate() ;
-      UIExportForm exportForm = popupAction.activate(UIExportForm.class, 500) ;
-      exportForm.update(calType, selectedCalendarId) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+      Calendar calendar = null;
+      if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
+        calendar = calService.getUserCalendar(uiComponent.getSession(), currentUser, selectedCalendarId) ;
+      } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
+        GroupCalendarData gCalendarData = calService.getSharedCalendars(uiComponent.getSystemSession(), currentUser, true) ;
+        if(gCalendarData != null) calendar = gCalendarData.getCalendarById(selectedCalendarId) ;
+      } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
+        calendar = calService.getGroupCalendar(uiComponent.getSystemSession(), selectedCalendarId) ;
+      }  
+      if(calendar == null) {
+        UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarPortlet) ;
+      } else {
+        List<Calendar> list = new ArrayList<Calendar>() ;
+        list.add(calendar) ;
+        UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
+        popupAction.deActivate() ;
+        UIExportForm exportForm = popupAction.activate(UIExportForm.class, 500) ;
+        exportForm.update(calType, list, selectedCalendarId) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+      }
     }
   }
   static  public class ExportCalendarsActionListener extends EventListener<UICalendars> {

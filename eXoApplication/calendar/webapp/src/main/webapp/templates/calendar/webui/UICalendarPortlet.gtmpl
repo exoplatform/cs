@@ -9,7 +9,7 @@
 <div style="_width: expression(this.previousSibling.offsetWidth - 22 + 'px'); !border: 1px solid white; _margin: auto;">
 	<div class="ApplicationMinWidth">
 		<div class="UICalendarPortlet" id="$uicomponent.id">
-			<div class="UINotification">
+			<div class="UINotification" style="display:none;">
 				<div class="UIControlInfo">
 					<div class="LeftControlInfo">
 						<div class="RightControlInfo">
@@ -67,12 +67,12 @@
 		  rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICombobox','/calendar/javascript/') ;
 		  rcontext.getJavascriptManager().importJavascript('eXo.calendar.UIColorPicker','/calendar/javascript/') ;
 		  rcontext.getJavascriptManager().importJavascript('eXo.calendar.Highlighter','/calendar/javascript/') ;
-		  rcontext.getJavascriptManager().importJavascript('eXo.core.JSON') ;
-			rcontext.getJavascriptManager().importJavascript('eXo.core.Cometd') ;
-		  rcontext.getJavascriptManager().importJavascript('eXo.calendar.Reminder','/calendar/javascript/') ;
-		  rcontext.getJavascriptManager().addJavascript('eXo.calendar.Reminder.init("'+uicomponent.getRemoteUser()+'","'+uicomponent.getUserToken()+'");') ;
+		  //rcontext.getJavascriptManager().importJavascript('eXo.core.JSON') ;
+			//rcontext.getJavascriptManager().importJavascript('eXo.core.Cometd') ;
+		  //rcontext.getJavascriptManager().importJavascript('eXo.calendar.Reminder','/calendar/javascript/') ;
+		  //rcontext.getJavascriptManager().addJavascript('eXo.calendar.Reminder.init("'+uicomponent.getRemoteUser()+'","'+uicomponent.getUserToken()+'");') ;
 		%>
-	        <div class="CalendarWorkingWorkspace">
+	    <div class="CalendarWorkingWorkspace">
 		    <%uicomponent.renderChild(UIActionBar.class)%>
 				<%uicomponent.renderChild(UICalendarWorkingContainer.class)%>
 			</div>

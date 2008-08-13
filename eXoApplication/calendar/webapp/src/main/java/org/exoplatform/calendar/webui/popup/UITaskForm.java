@@ -269,13 +269,20 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       errorMsg_ = getId() +  ".msg.event-fromdate-notvalid" ;
       return false ;
     }
-    if(getEmailReminder() && CalendarUtils.isEmpty(getEmailAddress())) {
-      errorMsg_ = getId() + ".msg.event-email-required" ;
-      return false ;
-    } 
+    if(getEmailReminder()) {
+      if(CalendarUtils.isEmpty(getEmailAddress())) {
+        errorMsg_ = "UITaskForm.msg.event-email-required" ;
+        return false ;
+      }
+      else if(!CalendarUtils.isAllEmailValid(getEmailAddress())) {
+        errorMsg_ = "UITaskForm.msg.event-email-invalid" ;
+        return false ;
+      } 
+    }
     errorMsg_ = null ;
     return true ;
   }
+
   protected String getEventSumary() {
     UITaskDetailTab taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
     return taskDetailTab.getUIStringInput(UITaskDetailTab.FIELD_EVENT).getValue() ;
@@ -462,7 +469,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     taskDetailTab.getUIFormTextAreaInput(UIEventReminderTab.FIELD_EMAIL_ADDRESS).setValue(value) ;
   }
 
-  /*protected boolean getPopupReminder() {
+  protected boolean getPopupReminder() {
     UIEventReminderTab taskDetailTab =  getChildById(TAB_TASKREMINDER) ;
     return taskDetailTab.getUIFormCheckBoxInput(UIEventReminderTab.REMIND_BY_POPUP).isChecked() ;
   }
@@ -506,7 +513,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   protected void setPopupReminderSnooze(long value) {
     UIFormInputWithActions taskDetailTab =  getChildById(TAB_TASKREMINDER) ;
     taskDetailTab.getUIFormSelectBox(UIEventReminderTab.POPUP_REPEAT_INTERVAL).setValue(String.valueOf(value)) ;
-  }*/
+  }
   protected List<Attachment>  getAttachments(String eventId, boolean isAddNew) {
     UITaskDetailTab taskDetailTab = getChild(UITaskDetailTab.class) ;
     return taskDetailTab.getAttachments() ;
@@ -526,14 +533,13 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
         setEmailReminderBefore(String.valueOf(r.getAlarmBefore())) ;
         //taskDetailTab.getUIFormSelectBox(UIEventReminderTab.EMAIL_IS_REPEAT).setValue(String.valueOf(r.isRepeat())) ;
         taskDetailTab.getUIFormSelectBox(UIEventReminderTab.EMAIL_REPEAT_INTERVAL).setValue(String.valueOf(r.getRepeatInterval())) ;
-      }/*else if(Reminder.TYPE_POPUP.equals(r.getReminderType())) {
+      }else if(Reminder.TYPE_POPUP.equals(r.getReminderType())) {
         setPopupReminder(true) ;
         setPopupRepeat(String.valueOf(r.isRepeat())) ;
         taskDetailTab.getUIFormSelectBox(UIEventReminderTab.POPUP_REMIND_BEFORE).setValue(String.valueOf(r.getAlarmBefore())) ;
         //taskDetailTab.getUIFormSelectBox(UIEventReminderTab.POPUP_IS_REPEAT).setValue(String.valueOf(r.isRepeat())) ;
         taskDetailTab.getUIFormSelectBox(UIEventReminderTab.POPUP_REPEAT_INTERVAL).setValue(String.valueOf(r.getRepeatInterval())) ;
-      } else {
-      }      */
+      } 
     }
   }
 
@@ -549,7 +555,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       email.setFromDateTime(fromDateTime) ;
       reminders.add(email) ;
     }
-    /*if(getPopupReminder()) {
+    if(getPopupReminder()) {
       Reminder popup = new Reminder() ;
       popup.setReminderType(Reminder.TYPE_POPUP) ;
       popup.setAlarmBefore(Long.parseLong(getPopupReminderTime())) ;
@@ -557,7 +563,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       popup.setRepeatInterval(Long.parseLong(getPopupRepeatInterVal())) ;
       popup.setFromDateTime(fromDateTime) ;
       reminders.add(popup) ;
-    }*/
+    }
     return reminders ;
   }
 
@@ -583,7 +589,14 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   private List<SelectItem> getCalendars() throws Exception {
     return CalendarUtils.getCalendarOption() ;
   }
-
+  protected long getTotalAttachment() {
+    UITaskDetailTab uiTaskDetailTab = getChild(UITaskDetailTab.class) ;
+    long attSize = 0 ; 
+    for(Attachment att : uiTaskDetailTab.getAttachments()) {
+      attSize = attSize + att.getSize() ;
+    }
+    return attSize ;
+  }
 
   static  public class AddCategoryActionListener extends EventListener<UITaskForm> {
     public void execute(Event<UITaskForm> event) throws Exception {
@@ -617,13 +630,16 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       UITaskForm uiForm = event.getSource() ;
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = uiContainer.getChild(UIPopupAction.class) ;
-      uiChildPopup.activate(UIAttachFileForm.class, 500) ;
+      UIAttachFileForm uiAttachFileForm = uiChildPopup.activate(UIAttachFileForm.class, 500) ;
+      uiAttachFileForm.setAttSize(uiForm.getTotalAttachment()) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
     }
   }
   static  public class RemoveAttachmentActionListener extends EventListener<UITaskForm> {
     public void execute(Event<UITaskForm> event) throws Exception {
       UITaskForm uiForm = event.getSource() ;
+      UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+      if(uiContainer != null) uiContainer.deActivate() ;
       UITaskDetailTab uiTaskDetailTab = uiForm.getChild(UITaskDetailTab.class) ;
       String attFileId = event.getRequestContext().getRequestParameter(OBJECTID);
       Attachment attachfile = new Attachment();
@@ -679,7 +695,9 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
         calendarEvent.setEventType(CalendarEvent.TYPE_TASK) ;
         calendarEvent.setSummary(uiForm.getEventSumary()) ;
         calendarEvent.setDescription(uiForm.getEventDescription()) ;
-        calendarEvent.setTaskDelegator(uiForm.getEventDelegation()) ;
+        String delegation = uiForm.getEventDelegation() ;
+        if(CalendarUtils.isEmpty(delegation)) { delegation = CalendarUtils.getCurrentUser();}
+        calendarEvent.setTaskDelegator(delegation) ;
         Date from = uiForm.getEventFromDate(calendarPortlet.getCalendarSetting().getDateFormat(), calendarPortlet.getCalendarSetting().getTimeFormat()) ;
         Date to = uiForm.getEventToDate(calendarPortlet.getCalendarSetting().getDateFormat(), calendarPortlet.getCalendarSetting().getTimeFormat()) ;
         if(from.after(to)) {
