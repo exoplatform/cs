@@ -39,9 +39,7 @@
 						if (uicomponent.isSelectGroup()) {
 		        	user = children.get(key) ;
 		       	} else if (uicomponent.isSelectUser()) {
-		       		String[] value = children.get(key).split(uicomponent.SEPARATE) ;
-		       		user = value[0] ;
-		       		title = value[1] ;
+		       		user = key ;
 		       	}
 	      %>
 			      <div class="$rowCssClass">

@@ -2,6 +2,7 @@
 	import org.exoplatform.contact.service.ContactGroup;
 	import java.util.Map;
 	import org.exoplatform.services.organization.OrganizationService;
+	import org.exoplatform.contact.ContactUtils;
 %>
 
 <div class="UIAddressBooks" id="<%=uicomponent.getId()%>">
@@ -118,8 +119,7 @@
 			String actionLink  = uicomponent.event("SelectSharedGroup", group) ;	
 			cssClass = "Normal" ;			
 			if(group.equals(uicomponent.getSelectedGroup()))	cssClass = "Selected" ;
-			String shareUser = uicomponent.getApplicationComponent(OrganizationService.class).getUserHandler().findUserByName(sharedGroups.get(group).getSharedUserId()).getFullName() ;
-			groupName =  sharedGroups.get(group).getName() + " (" + shareUser + ")";
+			groupName = ContactUtils.getDisplayAdddressShared(sharedGroups.get(group).getSharedUserId(), sharedGroups.get(group).getName()) ;
 	 %>
 		<div id="$group" addressType="1" class="ItemList $cssClass ShareAddressBook" havePermission="<%=uicomponent.havePermission(group)%>" isDefault="<%=uicomponent.isDefault(group)%>">
 			<div onclick="$actionLink" class="IconHolder AddressIcon" >

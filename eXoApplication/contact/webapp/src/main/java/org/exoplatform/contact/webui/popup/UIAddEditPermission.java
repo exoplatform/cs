@@ -72,10 +72,9 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
   public UIAddEditPermission() throws Exception {
     this.setName("UIAddEditPermission");
     UIGrid permissionList = addChild(UIGrid.class, null, "PermissionList") ;
-    permissionList.configure("userId", BEAN_FIELD, ACTION);
+    permissionList.configure("viewPermission", BEAN_FIELD, ACTION);
     permissionList.getUIPageIterator().setId("PermissionListIterator") ;
     addChild(UISharedForm.class, null, null) ;
-    ///shareForm.init(null, cal, true);
   }
   public void activate() throws Exception { }
   public void deActivate() throws Exception { }
@@ -331,9 +330,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
   public class data {
     String viewPermission = null ;
     String editPermission = null ;
-    String userId = null ;
-    
-    public  String getUserId() {return userId ;}
+
     public  String getViewPermission() {return viewPermission ;}
     public  String getEditPermission() {
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
@@ -351,10 +348,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
     }
       
     public data(String username, boolean canEdit) throws Exception {
-      userId = username.replaceFirst(JCRDataStorage.HYPHEN, "") ;
-      User user = getApplicationComponent(OrganizationService.class).getUserHandler().findUserByName(userId) ;
-      if (user == null) viewPermission = username ;
-      else viewPermission = user.getFullName() + "(" + user.getEmail() + ")" ;
+      viewPermission = username.replaceFirst(JCRDataStorage.HYPHEN, "") ;
       String edit = String.valueOf(canEdit) ;
       editPermission = edit.replaceFirst(JCRDataStorage.HYPHEN, "") ;
     }

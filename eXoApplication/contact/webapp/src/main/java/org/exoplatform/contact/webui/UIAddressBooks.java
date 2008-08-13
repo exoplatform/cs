@@ -269,9 +269,12 @@ public class UIAddressBooks extends UIComponent {
           contacts = contactService.getPublicContactsByAddressBook(sessionProvider, addressBookId);
         } else {
         	SharedAddressBook address = uiAddressBook.sharedAddressBookMap_.get(addressBookId) ;
+          uiExportForm.setSelectedGroup(ContactUtils
+              .getDisplayAdddressShared(address.getSharedUserId(), address.getName())) ;
+          /*
         	uiExportForm.setSelectedGroup(address.getName() + " (" +
               uiAddressBook.getApplicationComponent(OrganizationService.class)
-              .getUserHandler().findUserByName(address.getSharedUserId()).getFullName() + ")") ;
+              .getUserHandler().findUserByName(address.getSharedUserId()).getFullName() + ")") ;*/
           contacts = contactService.getSharedContactsByAddressBook(
               sessionProvider, username, address) ;
         }
@@ -333,9 +336,12 @@ public class UIAddressBooks extends UIComponent {
       Map<String, String> addresses = uiAddressBook.privateAddressBookMap_ ;
       for (SharedAddressBook address : uiAddressBook.sharedAddressBookMap_.values())
         if (uiAddressBook.havePermission(address.getId())) {
+          addresses.put(address.getId(), ContactUtils
+              .getDisplayAdddressShared(address.getSharedUserId(), address.getName())) ;
+          /*
           addresses.put(address.getId(), address.getName() + " (" +
             uiAddressBook.getApplicationComponent(OrganizationService.class)
-            .getUserHandler().findUserByName(address.getSharedUserId()).getFullName() + ")") ;
+            .getUserHandler().findUserByName(address.getSharedUserId()).getFullName() + ")") ;*/
         }
       uiImportForm.setGroup(addresses) ;
       uiImportForm.addConponent() ;      
@@ -359,9 +365,12 @@ public class UIAddressBooks extends UIComponent {
       Map<String, String> addresses = uiAddressBook.privateAddressBookMap_ ;
       for (SharedAddressBook address : uiAddressBook.sharedAddressBookMap_.values())
         if (uiAddressBook.havePermission(address.getId())) {
+          addresses.put(address.getId(), ContactUtils
+              .getDisplayAdddressShared(address.getSharedUserId(), address.getName())) ;
+          /*
           addresses.put(address.getId(), address.getName() + " (" +
             uiAddressBook.getApplicationComponent(OrganizationService.class)
-            .getUserHandler().findUserByName(address.getSharedUserId()).getFullName() + ")") ;
+            .getUserHandler().findUserByName(address.getSharedUserId()).getFullName() + ")") ;*/
         }
       uiCategorySelect.setPrivateGroupMap(addresses) ;    
       uiCategorySelect.setValue(groupId) ;
@@ -381,17 +390,6 @@ public class UIAddressBooks extends UIComponent {
       if (uiAddressBook.privateAddressBookMap_.containsKey(groupId)) {
         uiCategoryForm.setValues(groupId, false) ; 
       } else {
-        /*
-        String username = ContactUtils.getCurrentUser() ;
-        ContactGroup group = ContactUtils.getContactService().getSharedGroup(username, groupId) ;
-        if (group.getEditPermission() == null || !Arrays.asList(group.getEditPermission()).contains(username)) {
-          UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.non-permission", null,
-            ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;          
-        }
-        */
         uiCategoryForm.setValues(groupId, true) ;
       }
       uiCategoryForm.setNew(false) ;
@@ -598,6 +596,7 @@ public class UIAddressBooks extends UIComponent {
       UIAddressBooks uiAddressBook = event.getSource();
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID);
       
+      System.out.println("\n\n khukhua \n\n");
       UIWorkingContainer workingContainer = uiAddressBook.getAncestorOfType(UIWorkingContainer.class) ;
       UIContacts uiContacts = workingContainer.findFirstComponentOfType(UIContacts.class) ;      
       UIContactPreview uiContactPreview = workingContainer.findFirstComponentOfType(UIContactPreview.class) ;

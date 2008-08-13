@@ -40,6 +40,11 @@ public class ContactUtils {
   public static final String HTTP = "http://" ; 
   public static String[] specialString = {"!", "#", "%", "&"
                                             , ":", ">", "<", "~", "`", "]", "'", "/", "-"} ;
+  
+  public static String getDisplayAdddressShared(String sharedUserId, String addressName) {
+    return sharedUserId + " - " + addressName ;
+  }
+  
   // add
   public static String encodeJCRText(String str) {
     return str.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").

@@ -73,7 +73,7 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
   private List selectedGroups_ ;
   private String returnFieldName = null ;
   private boolean isNull = true ;
-  private static String SEPARATE = "::SEPARATE" ;    	
+  //private static String SEPARATE = "::SEPARATE" ;    	
   
   public UIGroupSelector() throws Exception {}
 
@@ -113,7 +113,8 @@ public class UIGroupSelector extends UIGroupMembershipSelector implements UIPopu
       PageList userPageList = service.getUserHandler().findUsersByGroup(this.getCurrentGroup().getId()) ;
       for(Object child : userPageList.getAll()){
         User user = ((User)child) ;
-        children.put(user.getUserName(), user.getFullName() + SEPARATE + user.getEmail()) ;
+        children.put(user.getUserName(), user.getUserName()) ;
+        //children.put(user.getUserName(), user.getFullName() + SEPARATE + user.getEmail()) ;
       }
     } else if(TYPE_MEMBERSHIP.equals(type_)) {
       for(String child :  getListMemberhip()){
