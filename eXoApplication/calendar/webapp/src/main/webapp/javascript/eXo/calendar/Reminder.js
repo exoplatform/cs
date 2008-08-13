@@ -15,7 +15,7 @@ Reminder.prototype.init = function(eXoUser, eXoToken){
 
 Reminder.prototype.alarm = function(eventObj){
 	var a = eXo.core.JSON.parse(eventObj.data);	
-	var message = '<a class="Item" href="#"><div class="ItemLabel">('+ a.fromDateTime.hours + ':' + a.fromDateTime.minutes + ') ' +a.summary+'</div></a>' ;
+	var message = '<a class="Item" href="#">('+ a.fromDateTime.hours + ':' + a.fromDateTime.minutes + ') ' +a.summary+'</a>' ;
 	var html = this.generateHTML(message) ;
 	var popup = eXo.core.DOMUtil.findFirstDescendantByClass(this.createMessage(html), "div","UIPopupNotification") ;
 	eXo.webui.Box.config(popup,popup.offsetHeight, 5, this.openCallback, this.closeBox) ;
@@ -55,17 +55,13 @@ Reminder.prototype.generateHTML = function(message){
 	html += '			<div class="TCPopupNotification"><span></span></div>';
 	html += '		</div>';
 	html += '	</div>';
-	html += '	<div class="LPopupTitleNotification">';
-	html += '		<div class="RPopupTitleNotification">';
-	html += '			<div class="CPopupTitleNotification">';
-	html += '				<a class="ItemTitle" href="#">Notification</a>';
-	html += '				<a class="Close" href="#"><span></span></a>';
-	html += '			</div>';
-	html += '		</div>';
-	html += '	</div>';
 	html += '	<div class="MLPopupNotification">';
 	html += '		<div class="MRPopupNotification">';
 	html += '			<div class="MCPopupNotification">';
+	html += '				<div class="TitleNotification">';
+	html += '					<a class="ItemTitle" href="#">Notification</a>';
+	html += '					<a class="Close" href="#"><span></span></a>';
+	html += '				</div>';
 	html += 				message;
 	html += '			</div>';
 	html += '		</div>';

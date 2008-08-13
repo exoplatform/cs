@@ -56,25 +56,15 @@
   padding-right: 45px;
 }
 
-.UINotification .UIPopupNotification .LPopupTitleNotification {
-  background: url('../background/Popup.gif') no-repeat left -34px;
-  padding-left: 4px;
-}
-
-.UINotification .UIPopupNotification .CPopupTitleNotification {
+.UINotification .UIPopupNotification .TitleNotification {
   background: url('../background/Popup.gif') repeat-x left -50px ;
   height: 16px;
   padding-left:10px;
 }
 
-.UINotification .UIPopupNotification .RPopupTitleNotification {
-  background: url('../background/Popup.gif') no-repeat right -34px;
-  padding-right:4px;
-}
-
 .UINotification .UIPopupNotification .MLPopupNotification {
   background: url('../background/PopupML.gif') repeat-y left;
-  padding-left: 4px;
+  padding-left: 2px;
 }
 
 .UINotification .UIPopupNotification .MCPopupNotification {
@@ -83,12 +73,12 @@
 
 .UINotification .UIPopupNotification .MRPopupNotification {
   background: url('../background/PopupMR.gif') repeat-y right;
-  padding-right:4px;
+  padding-right: 2px;
 }
 
 .UINotification .UIPopupNotification .BLPopupNotification {
   background: url('../background/Popup.gif') no-repeat left -26px;
-  padding-left:4px;
+  padding-left: 4px;
 }
 
 .UINotification .UIPopupNotification .BCPopupNotification {
@@ -115,28 +105,20 @@
   height: 7px;
   width: 7px;
   float: right;
-  margin: 3px 2px;
+  margin: 3px 5px;
   cursor: pointer;
 }
 
 .UINotification .UIPopupNotification .Item {
-  background: url('../background/LinePopup.gif') left bottom repeat-x;
   display: block;
-}
-
-
-.UINotification .UIPopupNotification .ItemLabel {
-  padding: 5px 0px 0px 10px;
-  height: 28px;
+  margin: 0px 5px;
+  border-bottom: 1px dotted #b7b7b7;
+  padding: 5px 0px 0px 11px;
   line-height: 22px;
   color: red;
-  background: url('../background/Popup.gif') no-repeat left -74px;
-  margin-left: 10px;
-  font-weight: bold;
-  font-size: 12px;
-  cursor: pointer;
+  background: url('../background/Popup.gif') no-repeat 3px -74px;
 }
 
-.UINotification .UIPopupNotification .ItemLabel:hover {
+.UINotification .UIPopupNotification .Item:hover {
   color: black;
 }
