@@ -1226,6 +1226,7 @@ public class JCRDataStorage{
             if(contentNode.hasProperty(Utils.JCR_DATA)) {
               InputStream  inputStream = contentNode.getProperty(Utils.JCR_DATA).getStream() ;
               attachment.setSize(inputStream.available()) ;
+              attachment.setInputStream(inputStream) ;
             }
           }
           attachment.setWorkspace(attchmentNode.getSession().getWorkspace().getName()) ;
