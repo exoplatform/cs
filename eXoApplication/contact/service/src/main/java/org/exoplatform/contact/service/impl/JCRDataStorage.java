@@ -1648,13 +1648,7 @@ public class JCRDataStorage {
         newNode.setProperty("exo:categories", new String [] {destAddress}) ;
         newNode.setProperty("exo:id", newId) ;          
         newNode.setProperty("exo:isOwner", false) ;
-        /*
-        ContactGroup group = getGroup(sProvider, username, destAddress) ;
-        newNode.setProperty("exo:editPermissionUsers", group.getEditPermissionUsers()) ;
-        newNode.setProperty("exo:viewPermissionUsers", group.getViewPermissionUsers()) ;
-        newNode.setProperty("exo:editPermissionGroups", group.getEditPermissionGroups()) ;
-        newNode.setProperty("exo:viewPermissionGroups", group.getViewPermissionGroups()) ;*/
-        //newNode.setProperty("exo:tags", new String [] {}) ;
+        newNode.setProperty("exo:tags", new String [] {}) ;
       }
       contactHomeNode.getSession().save() ;
     } else if (destType.equals(SHARED)) {
@@ -1674,13 +1668,7 @@ public class JCRDataStorage {
             newNode.setProperty("exo:categories", new String [] {destAddress}) ;  
             newNode.setProperty("exo:id", newId) ;
             newNode.setProperty("exo:isOwner", false) ;
-            /*
-            ContactGroup group = getGroup(addressBook) ;            
-            newNode.setProperty("exo:editPermissionUsers", group.getEditPermissionUsers()) ;
-            newNode.setProperty("exo:viewPermissionUsers", group.getViewPermissionUsers()) ;
-            newNode.setProperty("exo:editPermissionGroups", group.getEditPermissionGroups()) ;
-            newNode.setProperty("exo:viewPermissionGroups", group.getViewPermissionGroups()) ;*/
-            //newNode.setProperty("exo:tags", new String [] {}) ; 
+            newNode.setProperty("exo:tags", new String [] {}) ; 
           }  
           contactHomeNode.getSession().save() ;
           break ;         
@@ -1739,13 +1727,6 @@ public class JCRDataStorage {
     for (Contact contact : contacts) {
       if (destType.equals(PRIVATE)) {
         Node contactHomeNode = getUserContactHome(sProvider, username);
-        /*
-        ContactGroup group = getGroup(sProvider, username, destAddress) ;
-        contact.setEditPermissionUsers(group.getEditPermissionUsers()) ;
-        contact.setViewPermissionUsers(group.getViewPermissionUsers()) ;
-        contact.setEditPermissionGroups(group.getEditPermissionGroups()) ;
-        contact.setViewPermissionGroups(group.getViewPermissionGroups()) ;
-        */
         saveCopyContact(contactHomeNode, contact, destAddress, destType) ; 
       } else if (destType.equals(SHARED)) {
         Node sharedAddressBookMock = getSharedAddressBook(username) ;
@@ -1755,18 +1736,10 @@ public class JCRDataStorage {
           addressBook = iter.nextProperty().getParent() ;
           if(addressBook.getName().equals(destAddress)) {
             Node contactHomeNode = addressBook.getParent().getParent().getNode(CONTACTS) ;
-            /*
-            ContactGroup group = getGroup(addressBook) ;
-            contact.setEditPermissionUsers(group.getEditPermissionUsers()) ;
-            contact.setViewPermissionUsers(group.getViewPermissionUsers()) ;
-            contact.setEditPermissionGroups(group.getEditPermissionGroups()) ;
-            contact.setViewPermissionGroups(group.getViewPermissionGroups()) ;
-            */
             saveCopyContact(contactHomeNode, contact, destAddress, destType) ;   
             break ;
           }
-        }        
-      //  saveContactToSharedAddressBook(username, destAddress, contact, true) ;
+        }
       }       
     }
   }
@@ -1822,13 +1795,8 @@ public class JCRDataStorage {
     contactNode.setProperty("exo:webPage", contact.getWebPage());
     
     contactNode.setProperty("exo:note", contact.getNote());
-    contactNode.setProperty("exo:tags", contact.getTags());
+    //contactNode.setProperty("exo:tags", contact.getTags());
     contactNode.setProperty("exo:categories", new String[] {destAddress}); 
-    /*contactNode.setProperty("exo:editPermissionUsers", contact.getEditPermissionUsers());
-    contactNode.setProperty("exo:viewPermissionUsers", contact.getViewPermissionUsers());    
-    contactNode.setProperty("exo:editPermissionGroups", contact.getEditPermissionGroups());
-    contactNode.setProperty("exo:viewPermissionGroups", contact.getViewPermissionGroups());*/
-
     if (contact.getLastUpdated() != null) {
       dateTime.setTime(contact.getLastUpdated()) ;
       contactNode.setProperty("exo:lastUpdated", dateTime);

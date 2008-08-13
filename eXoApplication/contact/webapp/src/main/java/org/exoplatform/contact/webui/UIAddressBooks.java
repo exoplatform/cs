@@ -268,9 +268,12 @@ public class UIAddressBooks extends UIComponent {
           contacts = contactService.getPublicContactsByAddressBook(sessionProvider, addressBookId);
         } else {
         	SharedAddressBook address = uiAddressBook.sharedAddressBookMap_.get(addressBookId) ;
+          uiExportForm.setSelectedGroup(ContactUtils
+              .getDisplayAdddressShared(address.getSharedUserId(), address.getName())) ;
+         /* 
           uiExportForm.setSelectedGroup(address.getName() + " (" +
               uiAddressBook.getApplicationComponent(OrganizationService.class)
-              .getUserHandler().findUserByName(address.getSharedUserId()).getFullName() + ")") ;
+              .getUserHandler().findUserByName(address.getSharedUserId()).getFullName() + ")") ;*/
           contacts = contactService.getSharedContactsByAddressBook(sessionProvider, username, address) ;
         }
         if (contacts == null || contacts.getAvailable() == 0) {
@@ -332,9 +335,12 @@ public class UIAddressBooks extends UIComponent {
       Map<String, String> addresses = uiAddressBook.privateAddressBookMap_ ;
       for (SharedAddressBook address : uiAddressBook.sharedAddressBookMap_.values())
         if (uiAddressBook.havePermission(address.getId())) {
+          addresses.put(address.getId(), ContactUtils
+              .getDisplayAdddressShared(address.getSharedUserId(), address.getName())) ;
+          /*
           addresses.put(address.getId(), address.getName() + " (" +
               uiAddressBook.getApplicationComponent(OrganizationService.class)
-              .getUserHandler().findUserByName(address.getSharedUserId()).getFullName() + ")") ;
+              .getUserHandler().findUserByName(address.getSharedUserId()).getFullName() + ")") ;*/
         }
       uiImportForm.setGroup(addresses) ;
       uiImportForm.addConponent() ;      
@@ -358,9 +364,12 @@ public class UIAddressBooks extends UIComponent {
       Map<String, String> addresses = uiAddressBook.privateAddressBookMap_ ;
       for (SharedAddressBook address : uiAddressBook.sharedAddressBookMap_.values())
         if (uiAddressBook.havePermission(address.getId())) {
+          addresses.put(address.getId(), ContactUtils
+              .getDisplayAdddressShared(address.getSharedUserId(), address.getName())) ;
+          /*
           addresses.put(address.getId(), address.getName() + " (" +
               uiAddressBook.getApplicationComponent(OrganizationService.class)
-              .getUserHandler().findUserByName(address.getSharedUserId()).getFullName() + ")") ;
+              .getUserHandler().findUserByName(address.getSharedUserId()).getFullName() + ")") ;*/
         }
       uiCategorySelect.setPrivateGroupMap(addresses) ;    
       uiCategorySelect.setValue(groupId) ;

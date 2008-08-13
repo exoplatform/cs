@@ -186,19 +186,25 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       String username = ContactUtils.getCurrentUser() ;
       OrganizationService organizationService = 
         (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
-      if(!ContactUtils.isEmpty(names)) {        
-        try {
-          String[] array = names.split(",") ;
-          for(String name : array) {
-            organizationService.getUserHandler().findUserByName(name.trim()).getFullName();
-            if (!name.trim().equals(username)) receiveUsers.put(name.trim() + JCRDataStorage.HYPHEN, name.trim() + JCRDataStorage.HYPHEN) ;
-          }  
-        } catch (NullPointerException e) {
-          uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.not-exist-username", null,
-              ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;
+      if(!ContactUtils.isEmpty(names)) {
+        StringBuilder invalidUsers = new StringBuilder() ;
+        String[] array = names.split(",") ;
+        for(String name : array) {
+          if (organizationService.getUserHandler().findUserByName(name.trim()) != null) {
+            if (!name.trim().equals(username)) {
+              receiveUsers.put(name.trim() + JCRDataStorage.HYPHEN, name.trim() + JCRDataStorage.HYPHEN) ;
+            }
+          } else {
+            if (invalidUsers.length() == 0) invalidUsers.append(name) ;
+            else invalidUsers.append(", " + name) ;
+          }
         }
+        if (invalidUsers.length() > 0) {
+          uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.not-exist-username"
+              , new Object[]{invalidUsers.toString()}, 1 )) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;          
+        }      
       }
       ContactService contactService = ContactUtils.getContactService() ;
       SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
@@ -210,17 +216,6 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         String[] arrayGroups = groups.split(",") ; 
         for (String group : arrayGroups) {
           group = group.trim() ;
-          /*
-          Object[] objGroupIds = organizationService.getGroupHandler()
-            .findGroups(organizationService.getGroupHandler().findGroupById(group)).toArray() ;
-          for (Object object : objGroupIds) {
-            String groupId = ((GroupImpl)object).getId() ;
-            receiveGroups.add(groupId) ;
-            for (Contact contact : contactService.getPublicContactsByAddressBook(SessionProviderFactory.createSystemProvider(), groupId).getAll()) {
-              receiveUsersByGroups.put(contact.getId(), contact.getId()) ;
-            }            
-          }
-          */
           receiveGroups.add(group) ;
           List<User> users = organizationService.getUserHandler().findUsersByGroup(group.trim()).getAll() ;
           for (User user : users ) {

@@ -41,6 +41,10 @@ public class ContactUtils {
   public static String[] specialString = {"!", "#", "%", "&"
                                             , ":", ">", "<", "~", "`", "]", "'", "/", "-"} ;
 
+  public static String getDisplayAdddressShared(String sharedUserId, String addressName) {
+    return sharedUserId + " - " + addressName ;
+  }
+  
   public static String encodeJCRText(String str) {
     return str.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").
       replaceAll("'", "&apos;").replaceAll("\"", "&quot;") ;
