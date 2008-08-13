@@ -94,7 +94,7 @@ MailServiceHandler.prototype.update = function(state, requestObj, action) {
 };
 
 MailServiceHandler.prototype.checkMailWrapper = function() {
-  eXo.mail.MailServiceHandler.checkMail();
+  eXo.mail.MailServiceHandler.checkMail(eXo.mail.MailServiceHandler.isUpdateUI_);
 };
 
 MailServiceHandler.prototype.checkMail = function(isUpdateUI) {
@@ -102,7 +102,9 @@ MailServiceHandler.prototype.checkMail = function(isUpdateUI) {
       !this.userName) {
     return;
   }
-  this.isUpdateUI_ = new Boolean(isUpdateUI) ;
+  
+  this.isUpdateUI_ = isUpdateUI;
+  
   this.activeAction = this.CHECK_MAIL_ACTION;
   this.tryCount = 0;
   eXo.core.Browser.setCookie('cs.mail.checkingmail' + this.accountId, 'true');
@@ -112,6 +114,11 @@ MailServiceHandler.prototype.checkMail = function(isUpdateUI) {
 
 MailServiceHandler.prototype.stopCheckMail = function() {
   if (this.accountId) {
+  	var stopLabel = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'StopCheckMail') ;
+    stopLabel.style.display = 'none' ;
+  	var stopingLabel = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'StopingCheckMail') ;
+    stopingLabel.style.display = 'block' ;
+  	
   	this.activeAction = this.STOP_CHECK_MAIL_ACTION;
     var url = this.SERVICE_BASED_URL + '/stopcheckmail/' + this.userName + '/' + this.accountId + '/';
     this.makeRequest(url, this.HTTP_GET, '', this.STOP_CHECK_MAIL_ACTION);
@@ -145,7 +152,7 @@ MailServiceHandler.prototype.destroy = function() {
     eXo.core.Browser.setCookie('cs.mail.checkingmail' + this.accountId, 'false');
     var stopLabel = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'StopCheckMail') ;
     stopLabel.style.display = 'none' ;
-    if (st == this.RETRY_PASSWORD) {
+    if (st == this.RETRY_PASSWORD && this.isUpdateUI_) {
       eXo.webui.UIForm.submitForm('UIMessageList','ComfirmPassword', true) ;
     } else if (st == this.FINISHED_CHECKMAIL_STATUS){
       var refeshLabel = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'Here');
