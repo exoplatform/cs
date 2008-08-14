@@ -55,8 +55,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
 
 /**
  * Created by The eXo Platform SARL 
- * Author : Nguyen Hai <haiexo10022@gmail.com>
- *          Phung Nam <phunghainam@gmail.com>
+ * Author : Phung Nam <phunghainam@gmail.com>
  * Sep 25, 2007
  */
 @ComponentConfig(lifecycle = UIFormLifecycle.class, 
@@ -80,12 +79,15 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   private String selectedAddressId_ = "" ;
   private String recipientsType_ = "";
   private UIPageIterator uiPageList_ ;
+  
   public void setRecipientsType(String type) {
     recipientsType_ = type;
   }
+  
   public String getRecipientType() {
     return recipientsType_;
   }
+  
   public UIAddressForm() throws Exception {
     addUIFormInput(new UIFormStringInput(CONTACT_SEARCH, CONTACT_SEARCH, null)) ;
     UIFormSelectBoxWithGroups uiSelect = new UIFormSelectBoxWithGroups(CONTACT_GROUP, CONTACT_GROUP, getOptions()) ;
