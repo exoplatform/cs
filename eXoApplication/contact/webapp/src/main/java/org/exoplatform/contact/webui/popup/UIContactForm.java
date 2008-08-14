@@ -253,17 +253,24 @@ public class UIContactForm extends UIFormTabPane {
       ContactService contactService = ContactUtils.getContactService();  
       String username = ContactUtils.getCurrentUser() ;
       SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
-
       if (uiContactForm.isNew_) {
         UIPopupContainer popupContainer = uiContactForm.getParent() ;
         UICategorySelect uiCategorySelect = popupContainer.getChild(UICategorySelect.class); 
         String category = uiCategorySelect.getSelectedCategory();        
         contact.setAddressBook(new String[] { category });
+
         UIAddressBooks uiAddressBooks = uiContactForm
         .getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class) ;
         if (uiAddressBooks.getSharedGroups().containsKey(category)) {
-          contactService.saveContactToSharedAddressBook(username, category, contact, true) ;          
-          contact.setContactType(JCRDataStorage.SHARED) ;
+          if (uiAddressBooks.havePermission(category)) {
+            contactService.saveContactToSharedAddressBook(username, category, contact, true) ;          
+            contact.setContactType(JCRDataStorage.SHARED) ;            
+          } else {
+            uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.removedPer", null, 
+                ApplicationMessage.WARNING)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return ;
+          }          
         } else if (uiAddressBooks.getPrivateGroupMap().containsKey(category)){
           contactService.saveContact(sessionProvider, username, contact, true);          
           contact.setContactType(JCRDataStorage.PRIVATE) ;
@@ -282,10 +289,27 @@ public class UIContactForm extends UIFormTabPane {
             UIAddressBooks uiAddressBooks = uiContactForm
               .getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class) ;
             if ( uiAddressBooks.getSharedGroups().containsKey(contact.getAddressBook()[0])) {
-              contactService.saveContactToSharedAddressBook(username, contact.getAddressBook()[0], contact, false) ;
+              if (uiAddressBooks.havePermission(contact.getAddressBook()[0])) {
+                contactService.saveContactToSharedAddressBook(username, contact.getAddressBook()[0], contact, false) ;                
+              } else {
+                uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.removedPer", null, 
+                    ApplicationMessage.WARNING)) ;
+                event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                return ;
+              }              
             } else {
-              contactService.saveSharedContact(username, contact) ;              
-            }  
+              Contact sharedContact = contactService
+                .getSharedContact(SessionProvider.createSystemProvider(), username, contact.getId()) ;                
+              if (uiContactForm.getAncestorOfType(UIContactPortlet.class)
+                  .findFirstComponentOfType(UIContacts.class).havePermission(sharedContact)) {
+                contactService.saveSharedContact(username, contact) ;                              
+              } else {
+                uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.removedPer", null, 
+                    ApplicationMessage.WARNING)) ;
+                event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                return ;                
+              }
+            }
           }
         } catch(PathNotFoundException e) {
           uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.contact-deleted", null,
@@ -298,9 +322,9 @@ public class UIContactForm extends UIFormTabPane {
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
       String selectedContact = uiContacts.getSelectedContact() ;
       if(uiContacts.isDisplaySearchResult()) {
-      	List<Contact> contacts = new ArrayList<Contact>() ;
-      	contacts.add(contact) ;
-      	uiContacts.setContact(contacts, true) ;
+        List<Contact> contacts = new ArrayList<Contact>() ;
+        contacts.add(contact) ;
+        uiContacts.setContact(contacts, true) ;
       }
       uiContacts.updateList() ;
       if (!ContactUtils.isEmpty(selectedContact) && selectedContact.equals(contact.getId())) {
@@ -322,7 +346,7 @@ public class UIContactForm extends UIFormTabPane {
   
   static  public class ChangeImageActionListener extends EventListener<UIContactForm> {
     public void execute(Event<UIContactForm> event) throws Exception {
-      UIContactForm uiContactForm = event.getSource() ;      
+      UIContactForm uiContactForm = event.getSource() ;
       UIProfileInputSet profileInputSet = uiContactForm.getChildById(INPUT_PROFILETAB) ;
       profileInputSet.setFieldGender(profileInputSet.getFieldGender()) ;
       UIPopupContainer popupContainer = uiContactForm.getAncestorOfType(UIPopupContainer.class) ;
@@ -344,33 +368,4 @@ public class UIContactForm extends UIFormTabPane {
         uiContactForm.getAncestorOfType(UIPopupAction.class)) ;
     }
   }
- /*
-  static  public class SelectPermissionActionListener extends EventListener<UIContactForm> {
-    @Override
-    public void execute(Event<UIContactForm> event) throws Exception {
-      UIContactForm uiForm = event.getSource() ;
-      String permType = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      
-      uiForm.setRenderedChild(INPUT_SHARETAB) ;
-      List<String> checkedGroups = uiForm.getCheckedPublicGroup() ;
-      if(checkedGroups.size() == 0) {
-        UIApplication app = uiForm.getAncestorOfType(UIApplication.class) ;
-        app.addMessage(new ApplicationMessage("UIContactForm.msg.checkbox-public-notchecked", null,
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(app.getUIPopupMessages()) ;
-        return ;
-      }
-      UIGroupSelector uiGroupSelector = uiForm.createUIComponent(UIGroupSelector.class, null, null);
-      uiGroupSelector.setType(permType) ;
-      
-      uiGroupSelector.setSelectedGroups(uiForm.getCheckedObjectSharedGroup()) ;
-      uiGroupSelector.setComponent(uiForm, new String[] { FIELD_EDITPERMISSION });
-      UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-      UIPopupAction uiChildPopup = uiPopupContainer.getChild(UIPopupAction.class) ;
-      uiChildPopup.activate(uiGroupSelector, 500, 0, true) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;      
-    }
-  }
-  */
-  
 }
