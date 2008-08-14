@@ -78,11 +78,20 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
 
   public String getContactsName() {
     StringBuffer buffer = new StringBuffer() ;
+    for (Contact contact : movedContacts.values()) {
+      if (buffer.length() == 0) buffer.append(contact.getFullName()) ;
+      else buffer.append(", " + contact.getFullName()) ;
+    }
+/*    
+    
     String[] contactIds = movedContacts.keySet().toArray(new String[] {}) ;
+    System.out.println("\n\n 11 :" + movedContacts.size() + "\n\n");
+    System.out.println("\n\n 22 :" + movedContacts.get(contactIds[0]) + "\n\n");
+    
     buffer.append(movedContacts.get(contactIds[0]).getFullName()) ;
     for (int i = 1; i < contactIds.length; i ++) {
       buffer.append(", " + movedContacts.get(contactIds[i]).getFullName()) ;
-    }
+    }*/
     return buffer.toString() ;
   }
   
@@ -135,7 +144,7 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       List<Contact> sharedContacts = new ArrayList<Contact>() ;
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
       for(String id : uiMoveContactForm.getContactIds()) {
-      	Contact contact = uiMoveContactForm.movedContacts.get(id) ;
+        Contact contact = uiMoveContactForm.movedContacts.get(id) ;
         if (contact.getContactType().equals(JCRDataStorage.SHARED)) {
           if (uiContacts.isSharedAddress(contact.getAddressBook())) {
             String addressId = null ;
@@ -143,18 +152,17 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
               if (uiContacts.getSharedGroupMap().containsKey(add)) addressId = add ;
             contactService.removeSharedContact(SessionProviderFactory.createSystemProvider(), username, addressId, id) ;
           } else {
-            
             try {
-            contactService.removeUserShareContact(
-                SessionProviderFactory.createSystemProvider(), contact.getPath(), contact.getId(), username) ;
+              contactService.removeUserShareContact(
+                  SessionProviderFactory.createSystemProvider(), contact.getPath(), contact.getId(), username) ;              
             } catch (PathNotFoundException e) {
               UIApplication uiApp = uiMoveContactForm.getAncestorOfType(UIApplication.class) ;
               uiApp.addMessage(new ApplicationMessage("UIMoveContactsForm.msg.contact-not-existed", null, 
                   ApplicationMessage.WARNING)) ;
               event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-              return ;              
+              return ; 
             }
-           }
+          }
         }
         contact.setAddressBook(new String[] { addressBookId }) ;
         if (contact.getContactType().equals(JCRDataStorage.SHARED)) sharedContacts.add(contact) ;
@@ -167,15 +175,15 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       }
       if (contacts.size() > 0) {
         try {
-          contactService.moveContacts(sessionProvider, username, contacts, type) ;
+          contactService.moveContacts(sessionProvider, username, contacts, type) ;                  
         } catch (PathNotFoundException e) {
           UIApplication uiApp = uiMoveContactForm.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UIMoveContactsForm.msg.contact-not-existed", null, 
+          uiApp.addMessage(new ApplicationMessage("UIMoveContactsForm.msg.contact-deleted", null, 
               ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;              
+          return ;
         }
-       }
+      }
       if (uiContacts.isDisplaySearchResult()) {
         for (String contactId : uiMoveContactForm.getContactIds()) {
           Contact contact = uiMoveContactForm.movedContacts.get(contactId) ;
