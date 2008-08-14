@@ -604,8 +604,16 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       if (sharedContacts.size() > 0 ) {
         contactService.pasteContacts(sessionProvider, username, addressBookId, type, sharedContacts) ;
       }
-      if (contacts.size() > 0)
-        contactService.moveContacts(sessionProvider, username, contacts, type); 
+      if (contacts.size() > 0) {
+        try {
+          contactService.moveContacts(sessionProvider, username, contacts, type);           
+        } catch (PathNotFoundException e) {
+          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-deleted", null, 
+              ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;          
+        }
+      }
 
       // update addressbook when search
       if (uiContacts.isSearchResult) {

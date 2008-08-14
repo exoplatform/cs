@@ -78,11 +78,20 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
 
   public String getContactsName() {
     StringBuffer buffer = new StringBuffer() ;
+    for (Contact contact : movedContacts.values()) {
+      if (buffer.length() == 0) buffer.append(contact.getFullName()) ;
+      else buffer.append(", " + contact.getFullName()) ;
+    }
+/*    
+    
     String[] contactIds = movedContacts.keySet().toArray(new String[] {}) ;
+    System.out.println("\n\n 11 :" + movedContacts.size() + "\n\n");
+    System.out.println("\n\n 22 :" + movedContacts.get(contactIds[0]) + "\n\n");
+    
     buffer.append(movedContacts.get(contactIds[0]).getFullName()) ;
     for (int i = 1; i < contactIds.length; i ++) {
       buffer.append(", " + movedContacts.get(contactIds[i]).getFullName()) ;
-    }
+    }*/
     return buffer.toString() ;
   }
   
@@ -164,8 +173,17 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       if (sharedContacts.size() > 0 ) {
         contactService.pasteContacts(sessionProvider, username, addressBookId, type, sharedContacts) ;
       }
-      if (contacts.size() > 0)
-        contactService.moveContacts(sessionProvider, username, contacts, type) ;
+      if (contacts.size() > 0) {
+        try {
+          contactService.moveContacts(sessionProvider, username, contacts, type) ;                  
+        } catch (PathNotFoundException e) {
+          UIApplication uiApp = uiMoveContactForm.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UIMoveContactsForm.msg.contact-deleted", null, 
+              ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
+      }
       if (uiContacts.isDisplaySearchResult()) {
         for (String contactId : uiMoveContactForm.getContactIds()) {
           Contact contact = uiMoveContactForm.movedContacts.get(contactId) ;
