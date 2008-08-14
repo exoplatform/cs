@@ -50,7 +50,6 @@ import org.exoplatform.contact.webui.popup.UIPopupContainer;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -281,7 +280,7 @@ public class UIAddressBooks extends UIComponent {
           uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.noContactToExport", null,
             ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;  
+          return ;
         } else if (contacts.getAvailable() >= 150) {
           UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.too-many-contact", null,

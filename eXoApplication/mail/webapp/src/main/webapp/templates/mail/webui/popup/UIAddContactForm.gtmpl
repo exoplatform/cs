@@ -50,11 +50,19 @@
                   <tr>
                     <td class="FieldLabel"> <%=_ctx.appRes(uicomponent.id+ ".label.gender") %> </td>
                     <td class="FieldComponent">
-                      <input class="radio" type="radio" value="Male" checked name="gender"/>
+                    	<% 
+                    		maleChecked = "" ;
+                    		femaleChecked = "" ;
+                    		gender = uicomponent.getFieldGender() ;
+                    		if (gender != null && gender.equalsIgnoreCase("male")) maleChecked = "checked" ; 
+												else if (gender != null && gender.equalsIgnoreCase("female"))femaleChecked = "checked" ;
+                    	 %>
+                    
+                      <input class="radio" type="radio" value="Male" $maleChecked name="gender"/>
           	 					<span style="padding: 0px 20px 0px 5px" class="Lable">
 												<%=_ctx.appRes(uicomponent.getParent().id+ ".label.male") %>
 											</span>
-											<input class="radio" type="radio" value="Female" name="gender"/>
+											<input class="radio" type="radio" value="Female" $femaleChecked name="gender"/>
 											<span style="padding-left: 3px;" class="Lable">
 											 	 <%=_ctx.appRes(uicomponent.getParent().id+ ".label.female") %>
 											 </span>
