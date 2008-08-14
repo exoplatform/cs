@@ -269,6 +269,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
       uiMessageList.setSelectedFolderId(null);
       uiMessageList.setSelectedTagId(null);
       uiMessageList.setMessageFilter(filter);
+      uiMessageList.viewing_ = uiMessageList.VIEW_ALL;
       uiMessageList.viewMode = uiMessageList.MODE_LIST ;
       try {
         uiMessageList.setMessagePageList(mailService.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, filter));

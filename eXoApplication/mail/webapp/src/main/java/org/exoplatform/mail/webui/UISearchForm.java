@@ -94,6 +94,7 @@ public class UISearchForm extends UIForm {
         uiMessageList.setSelectedFolderId(null);
         uiMessageList.setSelectedTagId(null);
         uiMessageList.setMessageFilter(filter);
+        uiMessageList.viewing_ = uiMessageList.VIEW_ALL;
         uiMessageList.viewMode = uiMessageList.MODE_LIST ;
         uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null);
         UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
