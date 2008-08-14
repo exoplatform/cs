@@ -26,7 +26,6 @@ import javax.jcr.PathNotFoundException;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
-import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.webui.UIAddressBooks;
@@ -345,33 +344,4 @@ public class UIContactForm extends UIFormTabPane {
         uiContactForm.getAncestorOfType(UIPopupAction.class)) ;
     }
   }
- /*
-  static  public class SelectPermissionActionListener extends EventListener<UIContactForm> {
-    @Override
-    public void execute(Event<UIContactForm> event) throws Exception {
-      UIContactForm uiForm = event.getSource() ;
-      String permType = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      
-      uiForm.setRenderedChild(INPUT_SHARETAB) ;
-      List<String> checkedGroups = uiForm.getCheckedPublicGroup() ;
-      if(checkedGroups.size() == 0) {
-        UIApplication app = uiForm.getAncestorOfType(UIApplication.class) ;
-        app.addMessage(new ApplicationMessage("UIContactForm.msg.checkbox-public-notchecked", null,
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(app.getUIPopupMessages()) ;
-        return ;
-      }
-      UIGroupSelector uiGroupSelector = uiForm.createUIComponent(UIGroupSelector.class, null, null);
-      uiGroupSelector.setType(permType) ;
-      
-      uiGroupSelector.setSelectedGroups(uiForm.getCheckedObjectSharedGroup()) ;
-      uiGroupSelector.setComponent(uiForm, new String[] { FIELD_EDITPERMISSION });
-      UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-      UIPopupAction uiChildPopup = uiPopupContainer.getChild(UIPopupAction.class) ;
-      uiChildPopup.activate(uiGroupSelector, 500, 0, true) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;      
-    }
-  }
-  */
-  
 }
