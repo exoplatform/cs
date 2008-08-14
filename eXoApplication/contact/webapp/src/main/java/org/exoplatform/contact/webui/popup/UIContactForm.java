@@ -262,8 +262,15 @@ public class UIContactForm extends UIFormTabPane {
         UIAddressBooks uiAddressBooks = uiContactForm
         .getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class) ;
         if (uiAddressBooks.getSharedGroups().containsKey(category)) {
-          contactService.saveContactToSharedAddressBook(username, category, contact, true) ;          
-          contact.setContactType(JCRDataStorage.SHARED) ;
+          if (uiAddressBooks.havePermission(category)) {
+            contactService.saveContactToSharedAddressBook(username, category, contact, true) ;          
+            contact.setContactType(JCRDataStorage.SHARED) ;            
+          } else {
+            uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.removedPer", null, 
+                ApplicationMessage.WARNING)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return ;
+          }          
         } else if (uiAddressBooks.getPrivateGroupMap().containsKey(category)){
           contactService.saveContact(sessionProvider, username, contact, true);          
           contact.setContactType(JCRDataStorage.PRIVATE) ;
@@ -282,10 +289,27 @@ public class UIContactForm extends UIFormTabPane {
             UIAddressBooks uiAddressBooks = uiContactForm
               .getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class) ;
             if ( uiAddressBooks.getSharedGroups().containsKey(contact.getAddressBook()[0])) {
-              contactService.saveContactToSharedAddressBook(username, contact.getAddressBook()[0], contact, false) ;
+              if (uiAddressBooks.havePermission(contact.getAddressBook()[0])) {
+                contactService.saveContactToSharedAddressBook(username, contact.getAddressBook()[0], contact, false) ;                
+              } else {
+                uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.removedPer", null, 
+                    ApplicationMessage.WARNING)) ;
+                event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                return ;
+              }              
             } else {
-              contactService.saveSharedContact(username, contact) ;              
-            }  
+              Contact sharedContact = contactService
+                .getSharedContact(SessionProvider.createSystemProvider(), username, contact.getId()) ;                
+              if (uiContactForm.getAncestorOfType(UIContactPortlet.class)
+                  .findFirstComponentOfType(UIContacts.class).havePermission(sharedContact)) {
+                contactService.saveSharedContact(username, contact) ;                              
+              } else {
+                uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.removedPer", null, 
+                    ApplicationMessage.WARNING)) ;
+                event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                return ;                
+              }
+            }
           }
         } catch(PathNotFoundException e) {
           uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.contact-deleted", null,

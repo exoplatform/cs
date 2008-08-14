@@ -144,12 +144,12 @@ public class UIAddressBooks extends UIComponent {
 
   public boolean havePermission(String groupId) throws Exception { 
     String currentUser = ContactUtils.getCurrentUser() ;
-    SharedAddressBook sharedAddressBook = sharedAddressBookMap_.get(groupId) ;
-    if (sharedAddressBook.getEditPermissionUsers() != null &&
-        Arrays.asList(sharedAddressBook.getEditPermissionUsers()).contains(currentUser + JCRDataStorage.HYPHEN)) {
+    ContactGroup sharedGroup = ContactUtils.getContactService().getSharedGroup(currentUser, groupId) ;
+    if (sharedGroup.getEditPermissionUsers() != null &&
+        Arrays.asList(sharedGroup.getEditPermissionUsers()).contains(currentUser + JCRDataStorage.HYPHEN)) {
       return true ;
     }
-    String[] editPerGroups = sharedAddressBook.getEditPermissionGroups() ;
+    String[] editPerGroups = sharedGroup.getEditPermissionGroups() ;
     if (editPerGroups != null)
       for (String editPer : editPerGroups)
         if (ContactUtils.getUserGroups().contains(editPer)) return true ;
@@ -158,17 +158,7 @@ public class UIAddressBooks extends UIComponent {
   
   public void setSelectedGroup(String groupId) { selectedGroup = groupId ; }
   public String getSelectedGroup() { return selectedGroup ; }
-
   public Map<String, String> getPrivateGroupMap() { return privateAddressBookMap_ ;}
-  //public Map<String, String> getPublicGroupMap() { return publicAddressBookMap_ ; }
-
-  // to show print address book when contacts view is Thumbnail ;
-  /*public boolean getListView(String groupId) {
-    if (!groupId.equals(selectedGroup)) return true ;    
-    return getAncestorOfType(UIWorkingContainer.class)
-      .findFirstComponentOfType(UIContacts.class).getViewContactsList() ;
-  }*/
-  
   
   public boolean canPaste() {
     if (!ContactUtils.isEmpty(copyAddress) || copyContacts.size() > 0 ) return true ;
@@ -212,6 +202,14 @@ public class UIAddressBooks extends UIComponent {
       else {
         destType = JCRDataStorage.SHARED ;     
       }
+      if (destType.equals(JCRDataStorage.SHARED) && (!uiAddressBook.havePermission(destAddress))) {
+        UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.removedPer", null,
+          ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ; 
+      }
+      
       String srcAddress = uiAddressBook.copyAddress ;
       if (!ContactUtils.isEmpty(srcAddress)) {
         if (destAddress.equals(srcAddress)){
@@ -224,7 +222,7 @@ public class UIAddressBooks extends UIComponent {
         String srcType ;
         if (uiAddressBook.privateAddressBookMap_.containsKey(srcAddress)) srcType = JCRDataStorage.PRIVATE ;
         else if (uiAddressBook.sharedAddressBookMap_.containsKey(srcAddress)) srcType = JCRDataStorage.SHARED ;
-        else srcType = JCRDataStorage.PUBLIC ;    
+        else srcType = JCRDataStorage.PUBLIC ;
         ContactUtils.getContactService().pasteAddressBook(SessionProviderFactory.createSessionProvider()
             , username, srcAddress, srcType, destAddress, destType) ;
       } else {
@@ -270,10 +268,6 @@ public class UIAddressBooks extends UIComponent {
         	SharedAddressBook address = uiAddressBook.sharedAddressBookMap_.get(addressBookId) ;
           uiExportForm.setSelectedGroup(ContactUtils
               .getDisplayAdddressShared(address.getSharedUserId(), address.getName())) ;
-          /*
-        	uiExportForm.setSelectedGroup(address.getName() + " (" +
-              uiAddressBook.getApplicationComponent(OrganizationService.class)
-              .getUserHandler().findUserByName(address.getSharedUserId()).getFullName() + ")") ;*/
           contacts = contactService.getSharedContactsByAddressBook(
               sessionProvider, username, address) ;
         }
@@ -330,17 +324,18 @@ public class UIAddressBooks extends UIComponent {
       } else {
         uiPopupContainer.setId("ImportAddress") ;
       }
-      UIImportForm uiImportForm = uiPopupContainer.addChild(UIImportForm.class, null, null) ; 
-      
+      UIImportForm uiImportForm = uiPopupContainer.addChild(UIImportForm.class, null, null) ;      
       Map<String, String> addresses = uiAddressBook.privateAddressBookMap_ ;
       for (SharedAddressBook address : uiAddressBook.sharedAddressBookMap_.values())
         if (uiAddressBook.havePermission(address.getId())) {
           addresses.put(address.getId(), ContactUtils
               .getDisplayAdddressShared(address.getSharedUserId(), address.getName())) ;
-          /*
-          addresses.put(address.getId(), address.getName() + " (" +
-            uiAddressBook.getApplicationComponent(OrganizationService.class)
-            .getUserHandler().findUserByName(address.getSharedUserId()).getFullName() + ")") ;*/
+        } else if (addressBookId.equals(address.getId())) {
+          UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.removedPer", null,
+            ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
         }
       uiImportForm.setGroup(addresses) ;
       uiImportForm.addConponent() ;      
@@ -366,10 +361,12 @@ public class UIAddressBooks extends UIComponent {
         if (uiAddressBook.havePermission(address.getId())) {
           addresses.put(address.getId(), ContactUtils
               .getDisplayAdddressShared(address.getSharedUserId(), address.getName())) ;
-          /*
-          addresses.put(address.getId(), address.getName() + " (" +
-            uiAddressBook.getApplicationComponent(OrganizationService.class)
-            .getUserHandler().findUserByName(address.getSharedUserId()).getFullName() + ")") ;*/
+        } else if (groupId.equals(address.getId())) {
+          UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.removedPer", null,
+            ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
         }
       uiCategorySelect.setPrivateGroupMap(addresses) ;    
       uiCategorySelect.setValue(groupId) ;
@@ -388,8 +385,14 @@ public class UIAddressBooks extends UIComponent {
       UICategoryForm uiCategoryForm = popupAction.activate(UICategoryForm.class, 500) ;
       if (uiAddressBook.privateAddressBookMap_.containsKey(groupId)) {
         uiCategoryForm.setValues(groupId, false) ; 
-      } else {
+      } else if (uiAddressBook.havePermission(groupId)){
         uiCategoryForm.setValues(groupId, true) ;
+      } else {
+        UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.removedPer", null,
+          ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
       }
       uiCategoryForm.setNew(false) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction);

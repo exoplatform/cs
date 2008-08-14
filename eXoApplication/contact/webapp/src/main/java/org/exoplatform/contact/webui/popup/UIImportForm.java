@@ -127,14 +127,6 @@ public class UIImportForm extends UIForm {
   static  public class AddCategoryActionListener extends EventListener<UIImportForm> {
     public void execute(Event<UIImportForm> event) throws Exception {
       UIImportForm uiForm = event.getSource() ;
-    /*  UIFormUploadInput uiUploadInput = uiForm.getUIInput(FIELD_UPLOAD) ;
-      if (uiUploadInput.getUploadResource() == null) {
-        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.addGroup-required", null, 
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }*/
       UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = uiPopupContainer.getChild(UIPopupAction.class) ;
       uiChildPopup.activate(UICategoryForm.class, 500) ;
@@ -157,10 +149,6 @@ public class UIImportForm extends UIForm {
       UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;
       UploadResource uploadResource = uploadService.getUploadResource(uiformInput.getUploadId()) ;
 
-      
-      // uploadResource.getUploadedSize() ;
-      
-      //ByteArrayInputStream inputStream ;
       String uploadId = uiformInput.getUploadId() ;
       if (uploadResource == null) {
         uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.uploadResource-empty", null, 
@@ -168,12 +156,6 @@ public class UIImportForm extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      /*
-      byte[] input = new byte[uiformInput.getUploadDataAsStream().available()] ;
-      uiformInput.getUploadDataAsStream().read(input) ;
-      inputStream = new ByteArrayInputStream(input) ; 
-      */
-
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       String importFormat = uiForm.getUIFormSelectBox(UIImportForm.FIELD_TYPE).getValue() ;
 
@@ -181,11 +163,17 @@ public class UIImportForm extends UIForm {
       try {
         UIAddressBooks uiAddressBooks = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
         if (uiAddressBooks.getSharedGroups().containsKey(category)) {
-          service.importContact(
-              SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), uiformInput.getUploadDataAsStream(), category + JCRDataStorage.HYPHEN) ;
+          if (!uiAddressBooks.havePermission(category)) {
+            uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.removedPer", null,
+              ApplicationMessage.WARNING)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return ;            
+          }
+          service.importContact(SessionProviderFactory.createSessionProvider()
+              , ContactUtils.getCurrentUser(), uiformInput.getUploadDataAsStream(), category + JCRDataStorage.HYPHEN) ;            
         } else if (uiAddressBooks.getPrivateGroupMap().containsKey(category)){
-          service.importContact(
-              SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), uiformInput.getUploadDataAsStream(), category) ;
+          service.importContact(SessionProviderFactory.createSessionProvider()
+              , ContactUtils.getCurrentUser(), uiformInput.getUploadDataAsStream(), category) ;
         } else {
           uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.address-deleted", null, 
               ApplicationMessage.WARNING)) ;
