@@ -30,7 +30,10 @@ UIWeekView.prototype.init = function() {
 		if(allEvents[i].style.display != "none") this.items.push(allEvents[i]) ;
 	}
 	var len = UIWeekView.items.length ;
-	if(len <= 0) return ;
+	if (len <= 0) {
+  	this.initAllday() ;
+		return;
+  }	
 	var marker = null ;
 	for(var i = 0 ; i < len ; i ++){		
 		var height = parseInt(this.items[i].getAttribute("endtime")) - parseInt(this.items[i].getAttribute("starttime")) ;
