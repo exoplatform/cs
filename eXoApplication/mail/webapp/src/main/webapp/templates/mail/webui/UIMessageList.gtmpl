@@ -516,7 +516,7 @@
                 <%
                   }
                 %>
-                  <%=((msg.getSubject() != null && msg.getSubject().trim().length() > 0) ? msg.getSubject() : _ctx.appRes(uicomponent.id+ ".label.no-subject"))%></div>
+                  <%=((msg.getSubject() != null && msg.getSubject().trim().length() > 0) ? MailUtils.encodeHTML(msg.getSubject()) : _ctx.appRes(uicomponent.id+ ".label.no-subject"))%></div>
                 </a>
                 <div style="clear: left;"><span></span></div>
                 </div>
