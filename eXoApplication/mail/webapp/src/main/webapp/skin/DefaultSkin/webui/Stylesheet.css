@@ -694,23 +694,17 @@
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageList .DownArrow1Icon {
-	height: 16px;
 	line-height: 16px;
 	margin: 3px 0px 0px 0px;
 	cursor: pointer;
 	background-position: right;
-	padding-right: 16px;
-	width: 60px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageList .UpArrow1Icon {
-	height: 16px; 
 	line-height: 16px;
 	margin: 3px 0px 0px 0px;
 	cursor: pointer;
 	background-position: right;
-	padding-right: 16px;
-	width: 65px;
 }
 
 .AdvancedTooltipTmpl {
@@ -1566,6 +1560,7 @@
 	border: 1px solid #c9c9c9;
 	padding: 10px;
 	margin: 10px 10px 0px 10px;
+	min-width: 600px;
 }
 
 .UIMailPortlet .UIAddNewContact .UIForm .HorizontalLayout {
@@ -1588,8 +1583,14 @@
 
 .UIMailPortlet .UIAddNewContact .ProfileContent .UIFormGrid {
 	float: left;
-	width: 480px;
+	width: 400px;
 	margin: 0px;
+}
+
+.UIMailPortlet .UIAddNewContact .ProfileContent .UIFormGrid .UIFormGrid {
+	margin: auto;
+	width: auto;
+	float: none;
 }
 
 .UIMailPortlet .UIAddNewContact .ProfileContent .AvatarContent {
