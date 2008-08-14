@@ -2207,15 +2207,18 @@ eXo.portal.UIControlWorkspace.showWorkspace = function(){
 };
 
 UICalendarPortlet.prototype.fixForMaximize = function(){
-    if ((eXo.core.Browser.browserType != "ie")) {
-        if (document.getElementById("UIWeekView")) {
-            eXo.calendar.UICalendarMan.initWeek();
-            eXo.calendar.UIWeekView.setSize();
-        }
-        if (document.getElementById("UIMonthView")) {
-            eXo.calendar.UICalendarMan.initMonth();
-        }
-    }
+	var obj = document.getElementById(eXo.calendar.UICalendarPortlet.portletName) ;
+	var uiWindow = eXo.core.DOMUtil.findAncestorByClass(obj, "UIWindow");
+	if(uiWindow.style.display == "none") return ;
+  if ((eXo.core.Browser.browserType != "ie")) {
+      if (document.getElementById("UIWeekView")) {
+          eXo.calendar.UICalendarMan.initWeek();
+          eXo.calendar.UIWeekView.setSize();
+      }
+      if (document.getElementById("UIMonthView")) {
+          eXo.calendar.UICalendarMan.initMonth();
+      }
+  }
 };
 
 UIWindow.prototype.endResizeWindowEvt = function(evt){
