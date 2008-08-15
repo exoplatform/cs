@@ -1,6 +1,7 @@
 .UIMailPortlet .UIAccountCreationWizard {
 	background: #f3f3f3;
 	border: 1px solid #c0c0c0;
+	min-width: 450px;
 }
 
 .UIMailPortlet .UIAccountCreationWizard .UIFormTabPane {

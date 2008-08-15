@@ -145,14 +145,6 @@
 	border: 1px solid red; 
 }
 
-.UISharedContactsForm .UIForm .UIFormGrid td.FieldLabel {
-	white-space: nowrap;
-}
-
-.UISharedContactsForm .UIForm .UIFormGrid td.FieldComponent {
-	white-space: nowrap;
-}
-
 /* Popup Menu Positioning*/
 .UIActionBar .SelectButton .UIPopupCategory {
 	left: 7px ;
@@ -203,10 +195,6 @@
 
 .UIContactPortlet .UIForm .UIFormGrid td.FieldComponent {
 	white-space: nowrap;
-}
-
-.UIContactPortlet .UISharedForm .UIFormGrid td.FieldComponent {
-	white-space: normal;
 }
 
 .UIContactPortlet .UISharedForm .UIFormGrid td.FieldLabel {

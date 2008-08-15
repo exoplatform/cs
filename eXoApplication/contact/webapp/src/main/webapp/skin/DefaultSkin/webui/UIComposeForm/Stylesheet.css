@@ -6,6 +6,7 @@
 
 .UIContactPortlet .UIMessageCompose {
 	padding: 10px;
+	min-width: 400px;
 }
 
 .UIContactPortlet .UIMessageCompose .MailListActionsbar{

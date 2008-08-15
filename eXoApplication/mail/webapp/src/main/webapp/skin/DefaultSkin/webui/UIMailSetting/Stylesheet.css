@@ -1,6 +1,6 @@
 
 .UIMailPortlet .UIMailSetting {
-	/*background: #f3f3f3;*/
+	min-width: 600px;
 }
 
 /*****************************FlatTabStyle****************************************/
@@ -34,8 +34,4 @@
 .UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout {
 	border: none;
 	padding: 10px 10px 20px 10px;
-}
-
-.UIMailPortlet .UIMailSetting .UIForm .HorizontalLayout .UIFormGrid td.FieldLabel {
-	width: 250px;
 }

@@ -6,7 +6,3 @@
 .UIContactPortlet .UIImageForm .UIForm .HorizontalLayout {
 	border: none;
 }
-
-.UIContactPortlet .UIImageForm .UIFormGrid td.FieldLabel {
-	white-space: nowrap;
-}
