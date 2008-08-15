@@ -1197,6 +1197,7 @@
 
 .UIMailPortlet .UIAddToContact{
 	padding: 8px;
+	min-width: 400px;
 }
 
 .UIMailPortlet .UIAddToContact .HorizontalLayout {
@@ -1780,4 +1781,12 @@
 
 .UIMailPortlet .UIMessageCompose .UIForm .UIFormGrid td.FieldComponent {
 	white-space: normal;
+}
+
+.UIMailPortlet .UIForm .UIFormGrid td.FieldLabel {
+	white-space: nowrap;
+}
+
+.UIMailPortlet .UIPopupActionEventContainer {
+	min-width: 440px;;
 }

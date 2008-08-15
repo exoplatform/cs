@@ -5,11 +5,11 @@
 
 .UIContactPortlet .Profile .ProfileContainer {
 	float: left;
-	width: 450px;
+	width: 400px;
 }
 
 .UIContactPortlet .Profile .AvatarContent {
-	margin-left: 500px;
+	margin-left: 420px;
 	width: 120px;
 }
 

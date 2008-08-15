@@ -1,5 +1,6 @@
 .UIContactPortlet .UIExportAddressBookForm {
 	padding: 10px ;
+	min-width: 300px;
 }
 
 .UIContactPortlet .UIExportAddressBookForm .ExportContact {

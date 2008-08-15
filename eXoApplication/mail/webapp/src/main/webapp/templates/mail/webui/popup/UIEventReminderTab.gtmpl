@@ -11,7 +11,7 @@
 	  <table class="UIFormGrid">
 	    <tbody>
 	      <tr>
-	        <td class="FieldLabel" style="width: 100px;">
+	        <td class="FieldLabel" >
 	          <%=uiForm.getLabel(uicomponent.EMAIL_REMIND_BEFORE); %>
 	        </td>
 	        <td class="FieldComponent">
@@ -41,7 +41,7 @@
 					</td>
 	      </tr>
 	      <tr>
-	        <td class="FieldLabel" style="width: 70px;">
+	        <td class="FieldLabel" >
 	           <%=uiForm.getLabel(uicomponent.FIELD_EMAIL_ADDRESS)%>
 	        </td>
 	        <td class="FieldComponent">

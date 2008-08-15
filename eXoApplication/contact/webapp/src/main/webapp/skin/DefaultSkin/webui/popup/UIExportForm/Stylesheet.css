@@ -1,10 +1,11 @@
 .UIContactPortlet .UIExportContactForm {
 	padding: 10px ;
+	min-width: 300px;
 }
 
 .UIContactPortlet .UIExportContactForm .ExportContact {
 	border: 1px solid #aeaeae;
-	background: #f7f7f7;
+	background: #f3f3f3;
 }
 
 .UIContactPortlet .UIExportContactForm .WorkingContainer {

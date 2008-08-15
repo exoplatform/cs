@@ -1,6 +1,6 @@
 .UIContactPortlet .AddNewContact {
 	padding: 10px 20px;
-	background: #f3f3f3;
+	min-width: 600px;
 }
 
 .UIContactPortlet .AddNewContact .AddContact .HorizontalLayout {

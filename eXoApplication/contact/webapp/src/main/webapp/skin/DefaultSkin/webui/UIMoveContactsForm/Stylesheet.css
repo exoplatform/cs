@@ -1,6 +1,7 @@
 .UIContactPortlet .UIMoveContactsForm {
 	color: #272727;
 	padding: 10px;
+	min-width: 300px;
 }
 
 .UIContactPortlet .UIMoveContactsForm .MoveContainer {

@@ -1,10 +1,11 @@
 .UIContactPortlet .UIImportForm {
-	padding: 15px 20px;
-	background: #f3f3f3;
+	padding: 10px;
+	min-width: 420px;
 }
 
 .UIContactPortlet .UIImportForm .HorizontalLayout {
-	border: none;
+	padding: 10px;
+	background: #f3f3f3;
 }
 
 

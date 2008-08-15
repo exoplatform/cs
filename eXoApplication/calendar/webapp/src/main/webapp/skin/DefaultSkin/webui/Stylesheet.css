@@ -290,3 +290,6 @@
 	white-space: nowrap;
 }
 
+.UICalendarPortlet .UIForm .UIFormGrid td.FieldLabel {
+	white-space: nowrap;
+}
