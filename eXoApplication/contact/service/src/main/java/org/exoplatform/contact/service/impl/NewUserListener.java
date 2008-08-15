@@ -149,6 +149,7 @@ public class NewUserListener extends UserEventListener {
   }
 
   
+  @SuppressWarnings("unused")
   private void reparePermissions(Node node, String owner) throws Exception {
   	ExtendedNode extNode = (ExtendedNode)node ;
   	if (extNode.canAddMixin("exo:privilegeable")) extNode.addMixin("exo:privilegeable");
