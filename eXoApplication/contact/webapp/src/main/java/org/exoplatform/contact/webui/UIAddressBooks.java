@@ -240,7 +240,6 @@ public class UIAddressBooks extends UIComponent {
     }
   }
   
-  
   static public class ExportAddressActionListener extends EventListener<UIAddressBooks> {
     public void execute(Event<UIAddressBooks> event) throws Exception {
       UIAddressBooks uiAddressBook = event.getSource();
@@ -252,7 +251,7 @@ public class UIAddressBooks extends UIComponent {
         filter.setAscending(true);
         filter.setCategories(new String[] { addressBookId });
         ContactPageList contacts = null ;
-        UIExportForm uiExportForm = uiPopupAction.activate(UIExportForm.class, 500) ;
+        UIExportForm uiExportForm = uiPopupAction.createUIComponent(UIExportForm.class, null, null) ;
         uiExportForm.setId("ExportForm");
         ContactService contactService = ContactUtils.getContactService() ;
         SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
@@ -282,9 +281,10 @@ public class UIAddressBooks extends UIComponent {
         uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.too-many-contact", null, ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;          
-        }
+        }        
         uiExportForm.setContacts(contacts.getAll().toArray(new Contact[] {})) ;         
         uiExportForm.updateList();
+        uiPopupAction.activate(uiExportForm, 500, 0) ;
       } else {
         
         // There is no specific address book so display the address books list        
