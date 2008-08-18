@@ -97,7 +97,9 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     List<SharedAddressBook> addressList = contactService
     .getSharedAddressBooks(SessionProviderFactory.createSystemProvider(), CalendarUtils.getCurrentUser()) ;
     for(SharedAddressBook sa : addressList) {
-      options.add(new SelectItemOption<String>(sa.getName(), sa.getId())) ;
+      String name = "" ;
+      if(!CalendarUtils.isEmpty(sa.getSharedUserId())) name = sa.getSharedUserId() + "-" ;
+      options.add(new SelectItemOption<String>(name + sa.getName(), sa.getId())) ;
     }
     Object[] objGroups = 
       CalendarUtils.getOrganizationService().getGroupHandler().findGroupsOfUser(CalendarUtils.getCurrentUser()).toArray() ;
