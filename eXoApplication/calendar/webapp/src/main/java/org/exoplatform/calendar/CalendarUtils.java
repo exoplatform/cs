@@ -472,9 +472,9 @@ public class CalendarUtils {
       if(sharedGrp.getOptions().size() > 0) options.add(sharedGrp);
     }
     // public calendars group
-    List<GroupCalendarData> lgcd = calendarService.getGroupCalendars(SessionProviderFactory.createSystemProvider(), CalendarUtils.getUserGroups(username), false, username) ;
+    List<GroupCalendarData> lgcd = calendarService.getGroupCalendars(SessionProviderFactory.createSystemProvider(), CalendarUtils.getUserGroups(username), true, username) ;
     if(lgcd != null) {
-      OrganizationService oService = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+      OrganizationService oService = getOrganizationService() ;
       SelectOptionGroup pubGrp = new SelectOptionGroup(CalendarUtils.PUBLIC_CALENDARS);
       for(GroupCalendarData g : lgcd) {
         for(org.exoplatform.calendar.service.Calendar c : g.getCalendars()){
@@ -505,7 +505,7 @@ public class CalendarUtils {
         }
       }
     }
-    List<GroupCalendarData> lgcd = calendarService.getGroupCalendars(SessionProviderFactory.createSystemProvider(), CalendarUtils.getUserGroups(username), false, username) ;
+    List<GroupCalendarData> lgcd = calendarService.getGroupCalendars(SessionProviderFactory.createSystemProvider(), CalendarUtils.getUserGroups(username), true, username) ;
     if(lgcd != null) {
       OrganizationService oService = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
       for(GroupCalendarData g : lgcd) {
