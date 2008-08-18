@@ -32,6 +32,7 @@ import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.impl.NewUserListener;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.webui.CalendarUtils;
 import org.exoplatform.mail.webui.SelectItem;
 import org.exoplatform.mail.webui.SelectOption;
 import org.exoplatform.mail.webui.SelectOptionGroup;
@@ -46,6 +47,7 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIPageIterator;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
@@ -116,7 +118,9 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       
     SelectOptionGroup sharedContacts = new SelectOptionGroup("shared-contacts");
     for(SharedAddressBook scg : contactSrv.getSharedAddressBooks(SessionProviderFactory.createSystemProvider(), username)) {
-      sharedContacts.addOption(new SelectOption(scg.getId(), scg.getName())) ;
+      String name = "" ;
+      if(!CalendarUtils.isEmpty(scg.getSharedUserId())) name = scg.getSharedUserId() + "-" ;
+      sharedContacts.addOption(new SelectOption(name + scg.getName(), scg.getId())) ;
     }
     options.add(sharedContacts);
     
