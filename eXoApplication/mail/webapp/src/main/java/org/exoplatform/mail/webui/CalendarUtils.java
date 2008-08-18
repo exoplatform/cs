@@ -36,6 +36,7 @@ import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.impl.GroupImpl;
@@ -56,10 +57,14 @@ public class CalendarUtils {
   public static final String PRIVATE_TYPE = "0".intern() ;
   public static final String SHARED_TYPE = "1".intern() ;
   public static final String PUBLIC_TYPE = "2".intern() ;
-
+  public static final String ANY = "*.*".intern();
+  public static final String ANY_OF = "*.".intern();
+  public static final String DOT = ".".intern();
   final public static String SEMICOLON = ";".intern() ;
   final public static String COLON = ",".intern() ;
   final public static String COMMA = ",".intern() ;
+  public static final String COLON_SLASH = ":/".intern() ;
+  public static final String SLASH_COLON = "/:".intern() ;
   final public static String STAR = "*".intern() ;
   final public static String UNDERSCORE = "_".intern() ;
   final public static String DOUBLESCORE = "--".intern() ;
@@ -236,20 +241,24 @@ public class CalendarUtils {
     if(savePerms != null)
       for(String sp : savePerms) {
         for (String cp : checkPerms) {
-          if( sp.equals(cp) || sp.equals("*.*")) {return true ;}      
+          if(sp.equals(cp)) {return true ;}      
         }
       }
     return false ;
   } 
 
   @SuppressWarnings("unchecked")
-  public static boolean canEdit(OrganizationService oService, String[] savePerms, String username) throws Exception {
+ public static boolean canEdit(OrganizationService oService, String[] savePerms, String username) throws Exception {
     StringBuffer sb = new StringBuffer(username) ;
     if(oService != null) {
       Collection<Membership> memberShipsType = oService.getMembershipHandler().findMembershipsByUser(username) ;
-      for(Membership mp : memberShipsType) {
-        sb.append(CalendarUtils.COMMA).append("*." + mp.getMembershipType()) ; /*+
-            CalendarUtils.COLON+ mp.getGroupId()).append(CalendarUtils.COMMA).append(CalendarUtils.STAR + CalendarUtils.COLON+ mp.getGroupId()) ;*/
+      Collection<Group> groups = oService.getGroupHandler().findGroupsOfUser(username) ;
+      for(Group g : groups) {
+        sb.append(CalendarUtils.COMMA).append(g.getId()).append(SLASH_COLON).append(ANY) ;
+        sb.append(CalendarUtils.COMMA).append(g.getId()).append(SLASH_COLON).append(username) ;
+        for(Membership mp : memberShipsType) {
+          sb.append(CalendarUtils.COMMA).append(g.getId()).append(SLASH_COLON).append(ANY_OF + mp.getMembershipType()) ;
+        }
       }
     }
     return CalendarUtils.hasEditPermission(savePerms, sb.toString().split(CalendarUtils.COMMA)) ;
