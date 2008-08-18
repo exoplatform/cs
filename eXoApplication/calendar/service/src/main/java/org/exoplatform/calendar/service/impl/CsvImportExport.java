@@ -164,9 +164,9 @@ public class CsvImportExport implements CalendarImportExport {
             }
             //Event categories 14
             if(!Utils.isEmpty(l.get(dataMap.get(EV_CATEGORIES)))) {
-              eventObj.setEventCategoryId(l.get(dataMap.get(EV_CATEGORIES)))  ;
+              eventObj.setEventCategoryId(l.get(dataMap.get(EV_CATEGORIES)).toLowerCase())  ;
             } else {
-              eventObj.setEventCategoryId("csvImported") ;
+              eventObj.setEventCategoryId("csvimported") ;
             }
             //Event Place
             if(!Utils.isEmpty(l.get(dataMap.get(EV_LOCATION)))) {
