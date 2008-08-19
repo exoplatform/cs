@@ -2,6 +2,7 @@
 	import org.exoplatform.contact.service.ContactGroup;
 	import org.exoplatform.contact.service.GroupContactData;
 	import org.exoplatform.contact.service.impl.NewUserListener;
+	import org.exoplatform.contact.ContactUtils;
 	uiform.begin()
 %>
 
@@ -19,7 +20,7 @@
 							String actionLink  = uicomponent.event("SelectGroup", param) ;
 				%>
 				<div class="ItemList">
-					<div class="Icon AddressIcon"><a href="$actionLink"><%=map.get(groupId)%></a></div>
+					<div class="Icon AddressIcon"><a href="$actionLink"><%= ContactUtils.encodeHTML(map.get(groupId)) %></a></div>
 				</div>
 			<% } %>
 			</div>
@@ -42,7 +43,7 @@
 							groupName = sharedGroups.get(groupId).getSharedUserId() + " - " + sharedGroups.get(groupId).getName();
       	%>
 				<div class="ItemList">
-					<div class="Icon AddressIcon"><a href="$actionLink"><%=groupName %></a></div>
+					<div class="Icon AddressIcon"><a href="$actionLink"><%= ContactUtils.encodeHTML(groupName) %></a></div>
 				</div>
 			<% } %>
 			</div>

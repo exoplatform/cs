@@ -50,7 +50,7 @@
 		  			  </td>
 							<td class="text">
 								<div class="State OfflineIcon" title="Available">
-									<%=(contact.getFullName()==null ? "" : contact.getFullName())%>
+									<%=(contact.getFullName()==null ? "" : ContactUtils.encodeHTML(contact.getFullName()))%>
 								</div>
 							</td>
 							<td class="text"><%=(contact.getEmailAddress()==null ? "" : contact.getEmailAddress())%></td>

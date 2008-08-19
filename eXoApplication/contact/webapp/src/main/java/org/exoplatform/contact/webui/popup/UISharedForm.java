@@ -101,7 +101,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       inputset.addChild(formInputInfo) ; 
     } else {
       UIFormInputInfo formInputInfo = new UIFormInputInfo(FIELD_CONTACT, FIELD_CONTACT, null) ;
-      formInputInfo.setValue(contact_.getFullName()) ;
+      formInputInfo.setValue(ContactUtils.encodeHTML(contact_.getFullName())) ;
       inputset.addChild(formInputInfo) ;
     }
     

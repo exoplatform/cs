@@ -76,7 +76,7 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
     StringBuffer buffer = new StringBuffer() ;
     for (Contact contact : contacts.values()) {
       if (buffer.length() > 0) buffer.append(", ") ;
-      buffer.append(contact.getFullName()) ;
+      buffer.append(ContactUtils.encodeHTML(contact.getFullName())) ;
     }
     UIFormInputInfo inputInfo = new UIFormInputInfo(FIELD_CONTACT, FIELD_CONTACT, null) ;
     inputInfo.setValue(buffer.toString()) ;

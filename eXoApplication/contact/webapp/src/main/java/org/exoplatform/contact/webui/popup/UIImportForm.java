@@ -111,7 +111,7 @@ public class UIImportForm extends UIForm {
   public List<SelectItemOption<String>> getCategoryList() throws Exception {
     List<SelectItemOption<String>> categories = new ArrayList<SelectItemOption<String>>() ;
     for(String group : groups_.keySet())
-      categories.add(new SelectItemOption<String>(groups_.get(group),group)) ;
+      categories.add(new SelectItemOption<String>(ContactUtils.encodeHTML(groups_.get(group)),group)) ;
     return categories ;
   }
   public void setGroup(Map<String, String> groups) { groups_ = groups ; }

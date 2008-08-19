@@ -820,10 +820,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       uiPreviewForm.setContact(uiContacts.contactMap.get(contactId)) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
       popupAction.activate(uiPreviewForm, 700, 0) ;
-      
-//    edited 17-4
-      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;  
-//      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
   static public class FirstPageActionListener extends EventListener<UIContacts> {

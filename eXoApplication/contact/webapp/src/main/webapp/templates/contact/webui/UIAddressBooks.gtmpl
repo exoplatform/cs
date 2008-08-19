@@ -76,7 +76,7 @@
 	
 		<div id="$groupId" addressType="0" class="ItemList $cssClass PrivateAddressBook" isDefault="<%=uicomponent.isDefault(groupId)%>">
 			<div onclick="$actionLink"  class="IconHolder $icon">
-				<%=contactGroup.getName()%>
+				<%= ContactUtils.encodeHTML(contactGroup.getName())%>
 			</div>
 		</div>
 		<% } %>		
@@ -123,7 +123,7 @@
 	 %>
 		<div id="$group" addressType="1" class="ItemList $cssClass ShareAddressBook" havePermission="<%=uicomponent.havePermission(group)%>" isDefault="<%=uicomponent.isDefault(group)%>">
 			<div onclick="$actionLink" class="IconHolder AddressIcon" >
-				<%= groupName %>
+				<%= ContactUtils.encodeHTML(groupName) %>
 			</div>
 		</div>
 		<% } %>

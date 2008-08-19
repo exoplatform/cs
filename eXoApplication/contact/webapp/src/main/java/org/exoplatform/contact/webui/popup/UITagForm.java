@@ -104,7 +104,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
           }
         }
         if (ContactUtils.isEmpty(buffer.toString())) buffer.append(NO_TAG_INFO) ;
-        contactNames[i] = contact.getFullName() ;
+        contactNames[i] = ContactUtils.encodeHTML(contact.getFullName()) ;
         tagNames[i] = buffer.toString() ;
         i ++ ;
       }
@@ -116,17 +116,6 @@ public class UITagForm extends UIForm implements UIPopupComponent {
     }
   }
   public List<Contact> getContacts() { return contacts_ ;}
-  /*
-  @SuppressWarnings("unchecked")
-  private List<SelectItemOption<String>> getColors() {    
-    List<SelectItemOption<String>> colors = new ArrayList<SelectItemOption<String>>() ;
-    for (String color : Tag.COLORS) {
-      colors.add(new SelectItemOption<String>(color,color)) ;
-    }
-    Collections.sort(colors, new ContactUtils.SelectComparator()) ;
-    return colors ;
-  }
-  */
   public void setValues(String tagName) throws Exception {
     getUIStringInput(FIELD_TAGNAME_INPUT).setValue(tagName) ;   
   }
