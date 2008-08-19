@@ -17,6 +17,7 @@
 package org.exoplatform.contact.webui;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.exoplatform.contact.ContactUtils;
@@ -65,14 +66,12 @@ public class UIActionBar extends UIContainer  {
       uiPopupContainer.setId("AddNewContact") ;
       UICategorySelect uiCategorySelect = uiPopupContainer.addChild(UICategorySelect.class, null, null) ;
       UIAddressBooks uiAddressBooks = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
-      Map<String, String> addresses = uiAddressBooks.getPrivateGroupMap() ;
+      Map<String, String> privateAddresses = uiAddressBooks.getPrivateGroupMap() ;
+      Map<String, String> addresses = new LinkedHashMap<String, String>() ;
+      addresses.putAll(privateAddresses) ;
       for (SharedAddressBook address : uiAddressBooks.getSharedGroups().values())
         if (uiAddressBooks.havePermission(address.getId())) {
           addresses.put(address.getId(), ContactUtils.getDisplayAdddressShared(address.getSharedUserId(), address.getName())) ;
-          /*
-          addresses.put(address.getId(), address.getName() + " (" +
-            uiActionBar.getApplicationComponent(OrganizationService.class)
-            .getUserHandler().findUserByName(address.getSharedUserId()).getFullName() + ")") ;*/
         }
       uiCategorySelect.setPrivateGroupMap(addresses) ;
       UIContactForm contactForm = uiPopupContainer.addChild(UIContactForm.class, null, null) ;
@@ -121,7 +120,9 @@ public class UIActionBar extends UIContainer  {
       UIImportForm importForm = uiPopupContainer.addChild(UIImportForm.class, null, null) ; 
       
       UIAddressBooks uiAddressBook = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
-      Map<String, String> addresses = uiAddressBook.getPrivateGroupMap() ;
+      Map<String, String> privateAddresses = uiAddressBook.getPrivateGroupMap() ;
+      Map<String, String> addresses = new LinkedHashMap<String, String>() ;
+      addresses.putAll(privateAddresses) ;
       for (SharedAddressBook address : uiAddressBook.getSharedGroups().values())
         if (uiAddressBook.havePermission(address.getId())) {
           addresses.put(address.getId(), ContactUtils
@@ -159,11 +160,6 @@ public class UIActionBar extends UIContainer  {
       }      
       if (isList.equals("true")) uiContacts.setViewContactsList(true) ;
       else uiContacts.setViewContactsList(false) ;
-      //event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
-      
-      // remove when print address book improved
-     /* event.getRequestContext().addUIComponentToUpdateByAjax(
-          uiContactPortlet.findFirstComponentOfType(UINavigationContainer.class)) ;*/
     }  
   }
 
