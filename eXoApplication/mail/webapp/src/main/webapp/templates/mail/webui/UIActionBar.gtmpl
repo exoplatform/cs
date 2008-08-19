@@ -4,7 +4,7 @@
 			<div class="LeftBar">
 				<div class="RightBar">
 					<div class="CenterBar">
-						<a href="javascript:eXo.mail.MailServiceHandler.checkMail(true)" class="ControlButton">
+						<a href="<%=uicomponent.event("CheckMail")%>" class="ControlButton">
 							<div class="IconHolder CheckMailIcon">
 								<div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.check-mail") %></div>
 							</div>
