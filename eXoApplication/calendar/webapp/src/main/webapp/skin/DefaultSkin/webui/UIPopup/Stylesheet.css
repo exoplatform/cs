@@ -1,8 +1,3 @@
-/************************ UIPopup Calendar *********************/
-
-.UICalendarPortlet .UIPopupWindow .PopupContent {
-	background: #f3f3f3;
-}
 
 /********************* UIAttachFileForm ***************************/
 .UICalendarPortlet .UIAttachFileForm {
@@ -17,6 +12,7 @@
 /********************* UICalendarCategoryManager ***************************/
 .UICalendarPortlet .UICalendarCategoryManager {
 	padding: 10px;
+	min-width: 400px;
 }
 
 .UICalendarPortlet .UICalendarCategoryManager .UICalendarCategoryForm {
@@ -42,6 +38,7 @@
 
 .UICalendarPortlet .UIEventCategoryManager {
 	padding: 8px;
+	min-width: 400px;
 }
 
 .UICalendarPortlet .UIEventCategoryManager .UIGrid .ActionContainer {
@@ -73,4 +70,18 @@
 /********************************** UISelectUserForm ***************************************/
 .UISelectUserForm {
 	padding: 10px;
+}
+
+.UICalendarPortlet .UIImportForm {
+	padding: 10px;
+	min-width: 400px;
+}
+
+.UICalendarPortlet .UIImportForm .HorizontalLayout {
+	padding: 10px;
+	background: #f3f3f3;
+}
+
+.UICalendarPortlet .UIQuickAddEvent {
+	min-width: 400px;
 }
