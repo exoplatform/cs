@@ -1,4 +1,5 @@
 .UIMailPortlet .UIAccountSetting {
+  mmin-width: 720px;
 }
 
 .UIMailPortlet .UIAccountSetting .AccountSetting {

@@ -2,7 +2,7 @@
   import org.exoplatform.mail.service.Account; 
 %>
 <div style=" width: 97%; margin:auto;">
-<div><div style="width: 645px;" ><span style="display: none;"></span></div></div>
+<div><div style="width: 720px;" ><span style="display: none;"></span></div></div>
 <div  style="_width: expression(this.previousSibling.offsetWidth - 2 + 'px'); !border: 1px solid white; _margin: auto;">
 <div class="UIAccountSetting">
 	<div class="AccountSetting">
