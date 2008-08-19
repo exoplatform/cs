@@ -76,7 +76,7 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
     StringBuffer buffer = new StringBuffer() ;
     for (Contact contact : contacts.values()) {
       if (buffer.length() > 0) buffer.append(", ") ;
-      buffer.append(contact.getFullName()) ;
+      buffer.append(ContactUtils.encodeHTML(contact.getFullName())) ;
     }
     UIFormInputInfo inputInfo = new UIFormInputInfo(FIELD_CONTACT, FIELD_CONTACT, null) ;
     inputInfo.setValue(buffer.toString()) ;
@@ -142,7 +142,7 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
   
   static  public class SaveActionListener extends EventListener<UISharedContactsForm> {
     @SuppressWarnings("unchecked")
-    public void execute(Event<UISharedContactsForm> event) throws Exception {
+	public void execute(Event<UISharedContactsForm> event) throws Exception {
       UISharedContactsForm uiForm = event.getSource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       String names = uiForm.getUIStringInput(FIELD_USER).getValue() ;
@@ -176,7 +176,7 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
         String[] arrayGroups = groups.split(",") ; 
         for (String group : arrayGroups) {
           OrganizationService organizationService = 
-            (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+                (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
           List<User> users = organizationService.getUserHandler().findUsersByGroup(group).getAll() ;
           for (User user : users) {
             receiverUser.add(user.getUserName() + JCRDataStorage.HYPHEN) ;
@@ -223,7 +223,7 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
       uiGroupSelector.setSelectedGroups(null) ;
       
       if (permType.equals(UISelectComponent.TYPE_USER)) {
-//      add to fix bug cs 997
+        // add to fix bug cs 997
         String users = uiForm.getUIStringInput(FIELD_USER).getValue() ;
         uiForm.permissionUser_.clear() ;
         if (!ContactUtils.isEmpty(users)) {

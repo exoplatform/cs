@@ -32,7 +32,7 @@
   						  	%>
   						  </td>
 							<td class="text">
-									<%=contactGroups.get(group)%>
+									<%= ContactUtils.encodeHTML(contactGroups.get(group))%>
 							</td>
 
    			     	</tr>
@@ -51,7 +51,7 @@
   						  	%>
   						  </td>
 							<td class="text">
-									<%=groupName%>
+									<%= ContactUtils.encodeHTML(groupName) %>
 							</td>
 
    			     	</tr>

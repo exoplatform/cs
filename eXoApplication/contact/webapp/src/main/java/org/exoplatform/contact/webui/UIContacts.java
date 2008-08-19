@@ -237,11 +237,11 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   public void setPrintDetail(boolean isDetail) { isPrintDetail = isDetail ; }
   
   public boolean isDisplaySearchResult() {
-  if (!isSearchResult) {
-    getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UISearchForm.class)
-      .getChild(UIFormStringInput.class).setValue(null) ;
-  }
-  return isSearchResult ;  
+	if (!isSearchResult) {
+	  getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UISearchForm.class)
+	    .getChild(UIFormStringInput.class).setValue(null) ;
+	}
+	return isSearchResult ;  
   }
   public void setDisplaySearchResult(boolean search) { isSearchResult = search ; }
   public void setViewListBeforePrint(boolean isList) { viewListBeforePrint = isList ; }
@@ -549,9 +549,9 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           if (canEdit == false) {
             uiApp.addMessage(new ApplicationMessage("UIContacts.msg.non-permission", null
                 , ApplicationMessage.WARNING)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
-            return ;
+	          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+	          event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+	          return ;
           }
         }
       }
@@ -560,7 +560,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       List<Contact> contacts = new ArrayList<Contact>();
       List<Contact> sharedContacts = new ArrayList<Contact>();
       for(String contactId : contactIds) {
-        Contact contact = uiContacts.contactMap.get(contactId) ;
+      	Contact contact = uiContacts.contactMap.get(contactId) ;
         if (contact.getId().equals(ContactUtils.getCurrentUser())){ 
           uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-move-ownerContact", null
               , ApplicationMessage.WARNING)) ;
@@ -663,7 +663,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   
   static public class DeleteContactsActionListener extends EventListener<UIContacts> {
     @SuppressWarnings("unchecked")
-  public void execute(Event<UIContacts> event) throws Exception {
+	public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource();
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
       List<String> contactIds = new ArrayList<String>();
@@ -737,7 +737,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         uiContacts.setContact(removedContacts, false) ;
       }
       if (uiContacts.getSelectedTag() != null) {
-        String tagId = uiWorkingContainer.findFirstComponentOfType(UITags.class).getSelectedTag() ;
+    	  String tagId = uiWorkingContainer.findFirstComponentOfType(UITags.class).getSelectedTag() ;
           DataPageList pageList = contactService
             .getContactPageListByTag(SessionProviderFactory.createSystemProvider(), username, tagId) ;
           if (pageList != null) {
@@ -820,10 +820,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       uiPreviewForm.setContact(uiContacts.contactMap.get(contactId)) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
       popupAction.activate(uiPreviewForm, 700, 0) ;
-      
-//    edited 17-4
-      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;  
-//      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
   static public class FirstPageActionListener extends EventListener<UIContacts> {

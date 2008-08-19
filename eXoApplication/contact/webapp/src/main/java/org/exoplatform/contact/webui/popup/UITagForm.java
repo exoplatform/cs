@@ -21,7 +21,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 
 import javax.jcr.PathNotFoundException;
 
@@ -39,7 +38,6 @@ import org.exoplatform.contact.webui.UITags;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -67,6 +65,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
 )
 public class UITagForm extends UIForm implements UIPopupComponent {
   public static final String FIELD_TAGNAME_INPUT = "tagName";
+  public static final String NO_TAG_INFO = "no Tag";
   public static final String FIELD_COLOR= "color";
   
   Map<String, String> tags = new LinkedHashMap<String, String>() ;
@@ -104,16 +103,8 @@ public class UITagForm extends UIForm implements UIPopupComponent {
             }
           }
         }
-        if (ContactUtils.isEmpty(buffer.toString())) {
-          WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-          ResourceBundle res = context.getApplicationResourceBundle() ;
-          try {
-            buffer.append(res.getString("UITagForm.label.noTag")) ;
-          } catch (MissingResourceException e) {      
-            e.printStackTrace() ;
-          } 
-        }
-        contactNames[i] = contact.getFullName() ;
+        if (ContactUtils.isEmpty(buffer.toString())) buffer.append(NO_TAG_INFO) ;
+        contactNames[i] = ContactUtils.encodeHTML(contact.getFullName()) ;
         tagNames[i] = buffer.toString() ;
         i ++ ;
       }
@@ -125,17 +116,6 @@ public class UITagForm extends UIForm implements UIPopupComponent {
     }
   }
   public List<Contact> getContacts() { return contacts_ ;}
-  /*
-  @SuppressWarnings("unchecked")
-  private List<SelectItemOption<String>> getColors() {    
-    List<SelectItemOption<String>> colors = new ArrayList<SelectItemOption<String>>() ;
-    for (String color : Tag.COLORS) {
-      colors.add(new SelectItemOption<String>(color,color)) ;
-    }
-    Collections.sort(colors, new ContactUtils.SelectComparator()) ;
-    return colors ;
-  }
-  */
   public void setValues(String tagName) throws Exception {
     getUIStringInput(FIELD_TAGNAME_INPUT).setValue(tagName) ;   
   }
@@ -291,12 +271,13 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       uiContacts.updateList() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTags) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
+      
       if (uiContacts.getContactMap().size() == 0) {
         UIContactPreview uiContactPreview = contactPortlet.findFirstComponentOfType(UIContactPreview.class) ;
         uiContactPreview.setContact(null) ;
         if (uiContactPreview.isRendered())
           event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPreview) ;
-      } 
+      }      
       contactPortlet.cancelAction() ; 
     }
   }

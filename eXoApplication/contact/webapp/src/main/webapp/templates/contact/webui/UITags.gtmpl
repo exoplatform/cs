@@ -1,3 +1,6 @@
+<% 
+	import org.exoplatform.contact.ContactUtils;
+%>
 <div class="UITags" id="<%=uicomponent.getId()%>">
 	<div class="TitleBar">
 		<div class="TitleIcon BlueTag"><%=_ctx.appRes(uicomponent.getName() + ".label.tags")%></div>
@@ -49,7 +52,7 @@
 				color = tag.getColor() + "Tag" ;
 		%>
 			<div  class="TagList ItemList $cssClass" tagId="<%=tag.getId()%>" >
-				<a href="$actionLink" class="IconHolder2 $color" ><%=tag.getName()%></a>
+				<a href="$actionLink" class="IconHolder2 $color" ><%= ContactUtils.encodeHTML(tag.getName())%></a>
 			</div>
 		<% } %>
 	</div>
@@ -81,13 +84,6 @@
                   </div>
                 </a>
         			
-        				
-				        <a class="MenuItem" href="<%=uicomponent.event("SendEmail", "id")%>">   
-			            <div class="ItemIcon EmailIcon">
-			              <%=_ctx.appRes(uicomponent.getName() + ".label.sendEmail")%>
-			            </div>
-				        </a>
-				        
 	        			<a class="MenuItem" href="<%=uicomponent.event("Print", "id")%>">   
                   <div class="ItemIcon PrintIcon">
                     <%=_ctx.appRes(uicomponent.getName() + ".label.printContacts")%>

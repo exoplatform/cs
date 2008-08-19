@@ -111,7 +111,7 @@ public class UIImportForm extends UIForm {
   public List<SelectItemOption<String>> getCategoryList() throws Exception {
     List<SelectItemOption<String>> categories = new ArrayList<SelectItemOption<String>>() ;
     for(String group : groups_.keySet())
-      categories.add(new SelectItemOption<String>(groups_.get(group),group)) ;
+      categories.add(new SelectItemOption<String>(ContactUtils.encodeHTML(groups_.get(group)),group)) ;
     return categories ;
   }
   public void setGroup(Map<String, String> groups) { groups_ = groups ; }
@@ -127,14 +127,6 @@ public class UIImportForm extends UIForm {
   static  public class AddCategoryActionListener extends EventListener<UIImportForm> {
     public void execute(Event<UIImportForm> event) throws Exception {
       UIImportForm uiForm = event.getSource() ;
-    /*  UIFormUploadInput uiUploadInput = uiForm.getUIInput(FIELD_UPLOAD) ;
-      if (uiUploadInput.getUploadResource() == null) {
-        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.addGroup-required", null, 
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }*/
       UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = uiPopupContainer.getChild(UIPopupAction.class) ;
       uiChildPopup.activate(UICategoryForm.class, 500) ;
@@ -153,34 +145,35 @@ public class UIImportForm extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;        
       }
+      UIFormUploadInput uiformInput = uiForm.getUIInput(FIELD_UPLOAD) ;  
       UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;
-      UIFormUploadInput uiformInput = uiForm.getUIInput(FIELD_UPLOAD) ;      
       UploadResource uploadResource = uploadService.getUploadResource(uiformInput.getUploadId()) ;
 
-      //ByteArrayInputStream inputStream ;
       String uploadId = uiformInput.getUploadId() ;
       if (uploadResource == null) {
         uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.uploadResource-empty", null, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
-      } 
-      /*
-        byte[] input = new byte[uiformInput.getUploadDataAsStream().available()] ;
-        uiformInput.getUploadDataAsStream().read(input) ;
-        inputStream = new ByteArrayInputStream(input) ;        
-      */
+      }
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       String importFormat = uiForm.getUIFormSelectBox(UIImportForm.FIELD_TYPE).getValue() ;
+
       ContactImportExport service = ContactUtils.getContactService().getContactImportExports(importFormat) ;
       try {
         UIAddressBooks uiAddressBooks = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
         if (uiAddressBooks.getSharedGroups().containsKey(category)) {
-          service.importContact(
-              SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), uiformInput.getUploadDataAsStream(), category + JCRDataStorage.HYPHEN) ;
-        } else if(uiAddressBooks.getPrivateGroupMap().containsKey(category)) {
-          service.importContact(
-              SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), uiformInput.getUploadDataAsStream(), category) ;
+          if (!uiAddressBooks.havePermission(category)) {
+            uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.removedPer", null,
+              ApplicationMessage.WARNING)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return ;            
+          }
+          service.importContact(SessionProviderFactory.createSessionProvider()
+              , ContactUtils.getCurrentUser(), uiformInput.getUploadDataAsStream(), category + JCRDataStorage.HYPHEN) ;            
+        } else if (uiAddressBooks.getPrivateGroupMap().containsKey(category)){
+          service.importContact(SessionProviderFactory.createSessionProvider()
+              , ContactUtils.getCurrentUser(), uiformInput.getUploadDataAsStream(), category) ;
         } else {
           uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.address-deleted", null, 
               ApplicationMessage.WARNING)) ;
@@ -191,12 +184,11 @@ public class UIImportForm extends UIForm {
         uploadService.removeUpload(uploadId) ;
         uiContacts.updateList() ; 
       } catch (IndexOutOfBoundsException e) {
-        uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.too-many-contact", null, 
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
+          uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.too-many-contact", null, 
+              ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
       } catch (Exception ex) {
-//        ex.printStackTrace() ;
         uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.invalid-format", null, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

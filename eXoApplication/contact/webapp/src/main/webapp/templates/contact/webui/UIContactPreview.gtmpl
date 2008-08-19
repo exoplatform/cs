@@ -44,9 +44,9 @@
 			  				%>
 								<img src="$img" width=63 height=81 class="Avatar"/>
 								<div class="Member">
-									<div class="State"><%= contact.getFullName() %></div>
+									<div class="State"><%= ContactUtils.encodeHTML(contact.getFullName()) %></div>
 									<% if (!ContactUtils.isEmpty(contact.getJobTitle())) { %>
-											 <div class="Job"> <%= contact.getJobTitle() %></div>
+											 <div class="Job"> <%= ContactUtils.encodeHTML(contact.getJobTitle()) %></div>
 									<% } %>
 								</div>
 								<div style="clear: left;"><span></span></div>
@@ -65,7 +65,7 @@
 			                        <table class="InfoTitle2" >
 			                          <tr>
 			                            <td>
-                                    <div class="InfoTitle3"><%= contact.getNickName()%></div>
+                                    <div class="InfoTitle3"><%=ContactUtils.encodeHTML(contact.getNickName())%></div>
                                   </td>
 			                          </tr>
 			                        </table>
@@ -81,7 +81,7 @@
 			                        <table class="InfoTitle2" >
 			                          <tr>
 			                            <td>
-                                    <div class="InfoTitle3"><%= contact.getGender()%></div>
+                                    <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getGender())%></div>
                                    </td>
 			                          </tr>
 			                        </table>
@@ -119,7 +119,7 @@
 			                            <td>
 			                              <div class="InfoTitle3 Email">
 				                              <a href="<%=uicomponent.event("SendEmail", contact.getEmailAddress())%>">
-				                                <%= contact.getEmailAddress()%>
+				                                <%= ContactUtils.encodeHTML(contact.getEmailAddress())%>
 				                              </a>
 				                             </div>
 			                            </td>
@@ -150,7 +150,7 @@
 			                        <table class="InfoTitle2" >
 			                          <tr>
 			                            <td>
-                                    <div class="InfoTitle3"><%= contact.getWorkAddress() %></div>
+                                    <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getWorkAddress()) %></div>
                                   </td>
 			                          </tr>
 			                        </table>
@@ -166,7 +166,7 @@
 			                        <table class="InfoTitle2" >
 			                          <tr>
 			                            <td>
-                                    <div class="InfoTitle3"><%= contact.getWorkCity()%></div>
+                                    <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getWorkCity())%></div>
                                    </td>
 			                          </tr>
 			                        </table>
@@ -182,7 +182,7 @@
 			                        <table class="InfoTitle2" >
 			                          <tr>
 			                            <td>
-                                    <div class="InfoTitle3"><%= contact.getWorkStateProvince()%></div>
+                                    <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getWorkStateProvince())%></div>
                                    </td>
 			                          </tr>
 			                        </table>
@@ -198,7 +198,7 @@
 			                        <table class="InfoTitle2" >
 			                          <tr>
 			                            <td>
-                                    <div class="InfoTitle3"><%= contact.getWorkPostalCode() %></div>
+                                    <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getWorkPostalCode()) %></div>
                                    </td>
 			                          </tr>
 			                        </table>
@@ -214,7 +214,7 @@
 			                        <table class="InfoTitle2" >
 			                          <tr>
 			                            <td>
-                                    <div class="InfoTitle3"><%= contact.getWorkCountry()%></div>
+                                    <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getWorkCountry())%></div>
                                    </td>
 			                          </tr>
 			                        </table>
@@ -234,7 +234,7 @@
 			                        <table class="InfoTitle2" >
 			                          <tr>
 			                            <td>
-			                              <div class="InfoTitle3"><%= contact.getWorkPhone1()%></div>
+			                              <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getWorkPhone1())%></div>
 			                            </td>
 			                          </tr>
 			                        </table>
@@ -250,7 +250,7 @@
 			                        <table class="InfoTitle2" >
 			                          <tr>
 			                            <td>
-			                              <div class="InfoTitle3"><%= contact.getWorkPhone2() %></div>
+			                              <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getWorkPhone2()) %></div>
 			                            </td>
 			                          </tr>
 			                        </table>
@@ -266,7 +266,7 @@
 			                        <table class="InfoTitle2" >
 			                          <tr>
 			                            <td>
-			                              <div class="InfoTitle3"><%= contact.getWorkFax() %></div>
+			                              <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getWorkFax()) %></div>
 			                            </td>
 			                          </tr>
 			                        </table>
@@ -282,7 +282,7 @@
 			                        <table class="InfoTitle2" >
 			                          <tr>
 			                            <td>
-			                              <div class="InfoTitle3"><%= contact.getMobilePhone()%></div>
+			                              <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getMobilePhone())%></div>
 			                            </td>
 			                          </tr>
 			                        </table>
@@ -298,7 +298,7 @@
 			                        <table class="InfoTitle2" >
 			                          <tr>
 			                            <td>
-			                              <div class="InfoTitle3"><a target="_blank" href="<%= contact.getWebPage() %>"><%= contact.getWebPage()%></a></div>
+			                              <div class="InfoTitle3"><a target="_blank" href="<%= contact.getWebPage() %>"><%= ContactUtils.encodeHTML(contact.getWebPage())%></a></div>
 			                            </td>
 			                          </tr>
 			                        </table>
@@ -328,7 +328,7 @@
 			                        <table class="InfoTitle2" >
 			                          <tr>
 			                            <td>
-                                    <div class="InfoTitle3"><%= contact.getExoId() %></div>
+                                    <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getExoId()) %></div>
                                   </td>
 			                          </tr>
 			                        </table>
@@ -344,7 +344,7 @@
 			                        <table class="InfoTitle2" >
 			                          <tr>
 			                            <td>
-                                    <div class="InfoTitle3"><%= contact.getGoogleId()%></div>
+                                    <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getGoogleId())%></div>
                                   </td>
 			                          </tr>
 			                        </table>
@@ -360,7 +360,7 @@
 			                        <table class="InfoTitle2" >
 			                          <tr>
 			                            <td>
-                                    <div class="InfoTitle3"><%= contact.getMsnId()%></div>
+                                    <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getMsnId())%></div>
                                   </td>
 			                          </tr>
 			                        </table>
@@ -376,7 +376,7 @@
 			                        <table class="InfoTitle2" >
 			                          <tr>
 			                            <td>
-                                    <div class="InfoTitle3"><%= contact.getAolId()%></div>
+                                    <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getAolId())%></div>
                                   </td>
 			                          </tr>
 			                        </table>
@@ -413,7 +413,7 @@
 			                        <table class="InfoTitle2" >
 			                          <tr>
 			                            <td>
-			                              <div class="InfoTitle3"><%= contact.getYahooId()%></div>
+			                              <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getYahooId())%></div>
 			                            </td>
 			                          </tr>
 			                        </table>
@@ -429,7 +429,7 @@
 			                        <table class="InfoTitle2" >
 			                          <tr>
 			                            <td>
-			                              <div class="InfoTitle3"><%= contact.getIcrId()%></div>
+			                              <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getIcrId())%></div>
 			                            </td>
 			                          </tr>
 			                        </table>
@@ -445,7 +445,7 @@
 			                        <table class="InfoTitle2" >
 			                          <tr>
 			                            <td>
-			                              <div class="InfoTitle3"><%= contact.getSkypeId()%></div>
+			                              <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getSkypeId())%></div>
 			                            </td>
 			                          </tr>
 			                        </table>
@@ -461,7 +461,7 @@
 			                        <table class="InfoTitle2" >
 			                          <tr>
 			                            <td>
-			                              <div class="InfoTitle3"><%= contact.getIcqId()%></div>
+			                              <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getIcqId())%></div>
 			                            </td>
 			                          </tr>
 			                        </table>
@@ -490,7 +490,7 @@
 			                        <table class="InfoTitle2" >
 			                          <tr>
 			                            <td>
-                                    <div class="InfoTitle3"><%= contact.getHomeAddress()%></div>
+                                    <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getHomeAddress())%></div>
                                   </td>
 			                          </tr>
 			                        </table>
@@ -506,7 +506,7 @@
 			                        <table class="InfoTitle2" >
 			                          <tr>
 			                            <td>
-                                    <div class="InfoTitle3"><%= contact.getHomeCity()%></div>
+                                    <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getHomeCity())%></div>
                                   </td>
 			                          </tr>
 			                        </table>
@@ -522,7 +522,7 @@
 			                        <table class="InfoTitle2" >
 			                          <tr>
 			                            <td>
-                                    <div class="InfoTitle3"><%= contact.getHomeState_province()%></div>
+                                    <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getHomeState_province())%></div>
                                   </td>
 			                          </tr>
 			                        </table>
@@ -538,7 +538,7 @@
 			                        <table class="InfoTitle2" >
 			                          <tr>
 			                            <td>
-                                    <div class="InfoTitle3"><%= contact.getHomePostalCode()%></div>
+                                    <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getHomePostalCode())%></div>
                                   </td>
 			                          </tr>
 			                        </table>
@@ -554,7 +554,7 @@
 			                        <table class="InfoTitle2" >
 			                          <tr>
 			                            <td>
-                                    <div class="InfoTitle3"><%= contact.getHomeCountry()%></div>
+                                    <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getHomeCountry())%></div>
                                   </td>
 			                          </tr>
 			                        </table>
@@ -574,7 +574,7 @@
 			                        <table class="InfoTitle2" >
 			                          <tr>
 			                            <td>
-			                              <div class="InfoTitle3"><%= contact.getHomePhone1()%></div>
+			                              <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getHomePhone1())%></div>
 			                            </td>
 			                          </tr>
 			                        </table>
@@ -590,7 +590,7 @@
 			                        <table class="InfoTitle2" >
 			                          <tr>
 			                            <td>
-			                              <div class="InfoTitle3"><%= contact.getHomePhone2()%></div>
+			                              <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getHomePhone2())%></div>
 			                            </td>
 			                          </tr>
 			                        </table>
@@ -606,7 +606,7 @@
 			                        <table class="InfoTitle2" >
 			                          <tr>
 			                            <td>
-			                              <div class="InfoTitle3"><%= contact.getHomeFax()%></div>
+			                              <div class="InfoTitle3"><%= ContactUtils.encodeHTML(contact.getHomeFax())%></div>
 			                            </td>
 			                          </tr>
 			                        </table>
@@ -622,7 +622,7 @@
 			                        <table class="InfoTitle2" >
 			                          <tr>
 			                            <td>
-			                              <div class="InfoTitle3"><a target="_blank" href="<%= contact.getPersonalSite() %>"><%= contact.getPersonalSite()%></a></div>
+			                              <div class="InfoTitle3"><a target="_blank" href="<%= contact.getPersonalSite() %>"><%= ContactUtils.encodeHTML(contact.getPersonalSite())%></a></div>
 			                            </td>
 			                          </tr>
 			                        </table>
@@ -646,7 +646,7 @@
 									<div class="Content">
 										<!--<div class="LeftContent">					
 											<div class="Member">-->
-												<div class="Job">$note</div>
+												<div class="Job"><%= ContactUtils.encodeHTML(note) %></div>
 											<!--</div>	
 										</div>-->
 									</div>

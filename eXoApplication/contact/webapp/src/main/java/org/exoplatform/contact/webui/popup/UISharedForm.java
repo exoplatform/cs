@@ -101,7 +101,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       inputset.addChild(formInputInfo) ; 
     } else {
       UIFormInputInfo formInputInfo = new UIFormInputInfo(FIELD_CONTACT, FIELD_CONTACT, null) ;
-      formInputInfo.setValue(contact_.getFullName()) ;
+      formInputInfo.setValue(ContactUtils.encodeHTML(contact_.getFullName())) ;
       inputset.addChild(formInputInfo) ;
     }
     
@@ -152,7 +152,6 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       if (!ContactUtils.isEmpty(fieldInput.getValue()))
         for (String user : fieldInput.getValue().split(","))
           permissionUser_.put(user.trim(), user.trim()) ;
-      
       permissionUser_.put(value, value) ;
       permission = permissionUser_ ;
     } else {
@@ -169,13 +168,13 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
   
   static  public class SaveActionListener extends EventListener<UISharedForm> {
     @SuppressWarnings("unchecked")
-    public void execute(Event<UISharedForm> event) throws Exception {
+	public void execute(Event<UISharedForm> event) throws Exception {
       UISharedForm uiForm = event.getSource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       String names = uiForm.getUIStringInput(FIELD_USER).getValue() ;
       String groups = uiForm.getUIStringInput(FIELD_GROUP).getValue() ;
       Map<String, String> receiveUsers = new LinkedHashMap<String, String>() ;
-      List<String> receiveGroups = new ArrayList<String>() ;
+      Map<String, String> receiveGroups = new LinkedHashMap<String, String>() ;
       
       if(ContactUtils.isEmpty(names) && ContactUtils.isEmpty(groups)) {        
         uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.empty-username", null,
@@ -216,22 +215,25 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         String[] arrayGroups = groups.split(",") ; 
         for (String group : arrayGroups) {
           group = group.trim() ;
-          receiveGroups.add(group) ;
-          List<User> users = organizationService.getUserHandler().findUsersByGroup(group.trim()).getAll() ;
-          for (User user : users ) {
+          receiveGroups.put(group, group) ;
+            List<User> users = organizationService.getUserHandler().findUsersByGroup(group.trim()).getAll() ;
+          for (User user : users) {
             receiveUsersByGroups.put(user.getUserName(), user.getUserName()) ;
           }
-        }        
-      }
+        }
+      }      
       receiveUsersByGroups.remove(ContactUtils.getCurrentUser()) ;
+
       if (receiveGroups.size() == 0 && receiveUsers.size() == 0) {
         uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.shared-yourself", null,
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
+      
       // xong phan xu ly recieve users
-      //if (receiveUsers.size() > 0 || receiveUsersByGroups.size() > 0) {
+
+      // if (receiveUsers.size() > 0 || receiveUsersByGroups.size() > 0) {
       if (uiForm.isSharedGroup) {
         ContactGroup contactGroup = uiForm.group_ ;
         if(uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).isChecked()) {
@@ -246,7 +248,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
           Map<String, String> editMapGroups = new LinkedHashMap<String, String>() ; 
           if (editPerGroups != null)
             for (String edit : editPerGroups) editMapGroups.put(edit, edit) ;
-          for (String group : receiveGroups) editMapGroups.put(group, group) ;
+          for (String group : receiveGroups.keySet()) editMapGroups.put(group, group) ;
           contactGroup.setEditPermissionGroups(editMapGroups.keySet().toArray(new String[] {})) ; 
      
         }
@@ -262,7 +264,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
           Map<String, String> viewMapGroups = new LinkedHashMap<String, String>() ; 
           if (viewPerGroups != null)
             for (String view : viewPerGroups) viewMapGroups.put(view, view) ; 
-          for (String user : receiveGroups) viewMapGroups.put(user, user) ;
+          for (String user : receiveGroups.keySet()) viewMapGroups.put(user, user) ;
           contactGroup.setViewPermissionGroups(viewMapGroups.keySet().toArray(new String[] {})) ;
 
           if (receiveUsers.size() > 0 ) {
@@ -286,7 +288,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
             List<String> newPerGroups = new ArrayList<String>() ; 
             if (contactGroup.getEditPermissionGroups() != null)
               for (String edit : contactGroup.getEditPermissionGroups())
-                if(!receiveGroups.contains(edit)) {
+                if(!receiveGroups.keySet().contains(edit)) {
                   newPerGroups.add(edit) ;
               }
             contactGroup.setEditPermissionGroups(newPerGroups.toArray(new String[newPerGroups.size()])) ;              
@@ -294,7 +296,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
           uiForm.getUIStringInput(UISharedForm.FIELD_USER).setEditable(true) ;
         }
         contactService.saveGroup(sessionProvider, username, contactGroup, false) ;
-        UIAddEditPermission uiAddEdit = uiForm.getParent() ;
+        UIAddEditPermission uiAddEdit = uiForm.getParent() ;          
         uiAddEdit.updateGroupGrid(contactGroup);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiAddEdit) ;          
         event.getRequestContext().addUIComponentToUpdateByAjax(
@@ -310,10 +312,10 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
             for (String user : receiveUsers.keySet()) editMapUsers.put(user, user) ;
           }
           Map<String, String> viewMapGroups = new LinkedHashMap<String, String>() ; 
-          for (String user : receiveGroups) viewMapGroups.put(user, user) ; 
+          for (String user : receiveGroups.keySet()) viewMapGroups.put(user, user) ; 
           Map<String, String> editMapGroups = new LinkedHashMap<String, String>() ;
           if(uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).isChecked()) {
-            for (String user : receiveGroups) editMapGroups.put(user, user) ;
+            for (String user : receiveGroups.keySet()) editMapGroups.put(user, user) ;
           }
           Contact contact = uiForm.contact_ ;
           addPerUsers(contact, viewMapUsers, editMapUsers) ;
@@ -354,7 +356,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
             Map<String, String> editMapGroups = new LinkedHashMap<String, String>() ;
             if (editPerUsers != null)
               for (String edit : editPerGroups) editMapGroups.put(edit, edit) ; 
-            for (String user : receiveGroups) editMapGroups.put(user, user) ;
+            for (String user : receiveGroups.keySet()) editMapGroups.put(user, user) ;
             contact.setEditPermissionGroups(editMapGroups.keySet().toArray(new String[] {})) ;
           } else {
             List<String> newEditPerUsers = new ArrayList<String>() ;
@@ -365,7 +367,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
             List<String> newEditPerGroups = new ArrayList<String>() ;
             if (contact.getEditPermissionGroups() != null)
               for (String edit : contact.getEditPermissionGroups()) 
-                if (!receiveGroups.contains(edit)) newEditPerGroups.add(edit) ; 
+                if (!receiveGroups.keySet().contains(edit)) newEditPerGroups.add(edit) ; 
             contact.setEditPermissionGroups(newEditPerGroups.toArray(new String[] {})) ;
           }
           contactService.saveContact(sessionProvider, username, contact, false) ;
@@ -387,7 +389,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).setChecked(false) ;
       uiForm.permissionUser_.clear() ;
       uiForm.permissionGroup_.clear() ;        
-      
+  
       uiForm.isNew_ = true ;
     }
     private static Contact addPerUsers(Contact contact, Map<String, String> viewMap, Map<String, String> editMap) {
@@ -433,7 +435,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       uiGroupSelector.setSelectedGroups(null) ;
       
       if (permType.equals(UISelectComponent.TYPE_USER)) {
-//      add to fix bug cs 997
+        // add to fix bug cs 997
         String users = uiForm.getUIStringInput(FIELD_USER).getValue() ;
         uiForm.permissionUser_.clear() ;
         if (!ContactUtils.isEmpty(users)) {

@@ -263,15 +263,7 @@
 	  	 	    			String[] addressBooks = contact.getAddressBook() ;
 	  	 	    			contactType = contact.getContactType() ;   			
 	  	 	    			if (contactType.equals("2")) {
-		  	 	    			StringBuffer buffer = new StringBuffer("") ;
-		  	 	    			
-		  	 	    			//for (String address : addressBooks) {
-		  	 	    			//	if (address.equals(NewUserListener.DEFAULTGROUP + ContactUtils.getCurrentUser())) {
-		  	 	    			//		address = privateGroupMap.get(NewUserListener.DEFAULTGROUP + ContactUtils.getCurrentUser()) ;
-		  	 	    			//	} else if (address.equals(NewUserListener.DEFAULTGROUP + contact.getId())) continue ;		  	 	    				
-		  	 	    			//	if(buffer.length() > 0) buffer.append(", ").append(address) ;
-		  	 	    			//	else buffer.append(address) ;
-		  	 	    			//}	
+		  	 	    			StringBuffer buffer = new StringBuffer("") ;	
 		  	 	    			for (String address : addressBooks) {
 		  	 	    				if (!address.contains(NewUserListener.DEFAULTGROUP)) {
 		  	 	    					if(buffer.length() > 0) buffer.append(", ").append(address) ;
@@ -284,8 +276,8 @@
 								  	for (String address : addressBooks) {
 								  		if (privateGroupMap.containsKey(address)) address = privateGroupMap.get(address);
 								  		else if (!publicAddress.contains(address)) continue ;
-		  	 	    				if(buffer.length() > 0) buffer.append(", ").append(address) ;
-		  	 	    				else buffer.append(address) ;
+		  	 	    				if(buffer.length() > 0) buffer.append(", ").append(ContactUtils.encodeHTML(address)) ;
+		  	 	    				else buffer.append(ContactUtils.encodeHTML(address)) ;
 		  	 	    			}
 										groupName = buffer.toString() ;								  							  
 								  } else if (contactType.equals("1")){
@@ -297,14 +289,14 @@
 									  	}
 											StringBuffer buffer ;
 								  		if (add != null)  {
-								  			buffer = new StringBuffer(ContactUtils.getDisplayAdddressShared(add.getSharedUserId(), add.getName())) ;
+								  			buffer = new StringBuffer(ContactUtils.getDisplayAdddressShared(add.getSharedUserId(), ContactUtils.encodeHTML(add.getName()))) ;
 								  		}
 								  		else {
 								  			buffer = new StringBuffer(_ctx.appRes(uicomponent.getName() + ".label.sharedContacts")) ;
 								  		}
 							  			for (String address : addressBooks) { 
 							  				if (publicAddress.contains(address)) {
-							  					buffer.append(", ").append(address) ;
+							  					buffer.append(", ").append(ContactUtils.encodeHTML(address)) ;
 							  				}
 							  			}
 								  		groupName = buffer.toString() ;
@@ -360,7 +352,7 @@
 								  %>
 									<div class="State $icon">
 										<a href="$actionLink">
-											<%=(ContactUtils.isEmpty(contact.getFullName()) ? "_" : contact.getFullName())%>
+											<%=(ContactUtils.isEmpty(contact.getFullName()) ? "_" : ContactUtils.encodeHTML(contact.getFullName()))%>
 										</a>
 									</div>
 								</td>
@@ -371,12 +363,12 @@
 								</td>
 								<td class="text">
 									<a href="$actionLink">
-										<%=(ContactUtils.isEmpty(contact.getJobTitle()) ? "_" : contact.getJobTitle())%>
+										<%=(ContactUtils.isEmpty(contact.getJobTitle()) ? "_" : ContactUtils.encodeHTML(contact.getJobTitle()))%>
 									</a>
 								</td>
 								<td style="width: 120px;">
 									<a href="$actionLink">
-										<%=(contact.getWorkPhone1()==null ? (ContactUtils.isEmpty(contact.getWorkPhone2()) ? "_" : contact.getWorkPhone2()) : contact.getWorkPhone1())%>
+										<%=(contact.getWorkPhone1()==null ? (ContactUtils.isEmpty(contact.getWorkPhone2()) ? "_" : ContactUtils.encodeHTML(contact.getWorkPhone2())) : ContactUtils.encodeHTML(contact.getWorkPhone1()))%>
 									</a>
 								</td>
 								
@@ -445,7 +437,7 @@
 								
 									<div class="State $icon">
 										<a href="$actionLink">
-											<%=(ContactUtils.isEmpty(contact.getFullName()) ? "" : contact.getFullName())%>
+											<%=(ContactUtils.isEmpty(contact.getFullName()) ? "" : ContactUtils.encodeHTML(contact.getFullName()))%>
 										</a>
 									</div>
 								</td>
@@ -456,12 +448,12 @@
 								</td>
 								<td class="text">
 									<a href="$actionLink">
-										<%=(ContactUtils.isEmpty(contact.getJobTitle()) ? "_" : contact.getJobTitle())%>
+										<%=(ContactUtils.isEmpty(contact.getJobTitle()) ? "_" : ContactUtils.encodeHTML(contact.getJobTitle()))%>
 									</a>
 								</td>
 								<td>
 									<a href="$actionLink">
-										<%=(contact.getWorkPhone1()==null ? (ContactUtils.isEmpty(contact.getWorkPhone2()) ? "_" : contact.getWorkPhone2()) : contact.getWorkPhone1())%>
+										<%=(contact.getWorkPhone1()==null ? (ContactUtils.isEmpty(contact.getWorkPhone2()) ? "_" : ContactUtils.encodeHTML(contact.getWorkPhone2())) : ContactUtils.encodeHTML(contact.getWorkPhone1()))%>
 									</a>
 								</td>
    			     	</tr>
@@ -565,7 +557,7 @@
 										icon = "OfflineIcon"
 										if (contact.isOwner()&& uicomponent.getDefaultGroup().equals(contact.getAddressBook()[0])) icon = "OwnerIcon" ; 	
 						%>
-				  	<div class="StateIcon $icon"><%= contact.getFullName() %></div>
+				  	<div class="StateIcon $icon"><%= ContactUtils.encodeHTML(contact.getFullName()) %></div>
 			  		<% if (tagIds != null && tagIds.length > 0) { %>
                 <div onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" style="cursor: pointer; display: inline" class="TagIcon $iconTag">
                   <% /*Begin Popup Menu*/ %>
@@ -625,7 +617,7 @@
 						<img src="<%=(imageLink == null ? "/contact/skin/DefaultSkin/webui/background/Img2.gif": imageLink)%>" width=63 height=81 class="AvatasIcon"/>	
 			  		<div class="WorkContainerVCards">
 			  		<% if (!ContactUtils.isEmpty(contact.getJobTitle())) { %>
-			  		  <div class="JobMember"><%= contact.getJobTitle()%></div>
+			  		  <div class="JobMember"><%= ContactUtils.encodeHTML(contact.getJobTitle())%></div>
 			  		<% } %>  
 			  		  <div class="InformationsMember">
 								<% if (!ContactUtils.isEmpty(contact.getEmailAddress())) { %>
@@ -654,6 +646,7 @@
 			  		  			workPhone = contact.getWorkPhone2() ;
 			  		  		}
 			  		  		if (!ContactUtils.isEmpty(workPhone)) {
+			  		  			workPhone = ContactUtils.encodeHTML(workPhone) ;
 			  		  	%>
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent"><%=_ctx.appRes(uicomponent.getName() + ".label.workPhone")%> :</span>
@@ -666,7 +659,7 @@
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent"><%=_ctx.appRes(uicomponent.getName() + ".label.mobile")%> : </span>
 			  		  		<span class="LabelContent">
-			  		  			<%= contact.getMobilePhone() %>
+			  		  			<%= ContactUtils.encodeHTML(contact.getMobilePhone()) %>
 			  		  		</span>
 			  		  	</div>
 			  		  	<% } %>
@@ -674,7 +667,7 @@
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent"><%=_ctx.appRes(uicomponent.getName() + ".label.webSite")%> :</span>
 			  		  		<span class="LabelContent">
-			  		  			<a target="_blank" href="<%= contact.getWebPage() %>"><%= contact.getWebPage()%></a>
+			  		  			<a target="_blank" href="<%= contact.getWebPage() %>"><%= ContactUtils.encodeHTML(contact.getWebPage())%></a>
 			  		  		</span>
 			  		  	</div>
 			  		  	<% } %>
@@ -779,7 +772,7 @@
 						<img src="<%=(ContactUtils.isEmpty(imageLink) ? "/contact/skin/DefaultSkin/webui/background/Img2.gif": imageLink)%>" width=63 height=81 class="AvatasIcon"/>
 			  		<div class="WorkContainerVCards">
 			  		<% if (!ContactUtils.isEmpty(contact.getJobTitle())) { %>
-			  		  <div class="JobMember"><%= contact.getJobTitle()%></div>
+			  		  <div class="JobMember"><%= ContactUtils.encodeHTML(contact.getJobTitle())%></div>
 			  		<% } %>  
 			  		  <div class="InformationsMember">
 			  		  	<% if (!ContactUtils.isEmpty(contact.getEmailAddress())) { %>
@@ -808,6 +801,7 @@
 			  		  			workPhone = contact.getWorkPhone2() ;
 			  		  		}
 			  		  		if (!ContactUtils.isEmpty(workPhone)) {
+			  		  			workPhone = ContactUtils.encodeHTML(workPhone) ;
 			  		  	%>
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent"><%=_ctx.appRes(uicomponent.getName() + ".label.workPhone")%> :</span>
@@ -820,7 +814,7 @@
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent"><%=_ctx.appRes(uicomponent.getName() + ".label.mobile")%> :</span>
 			  		  		<span class="LabelContent">
-			  		  			<%= contact.getMobilePhone() %>
+			  		  			<%= ContactUtils.encodeHTML(contact.getMobilePhone()) %>
 			  		  		</span>
 			  		  	</div>
 			  		  	<% } %>
@@ -828,7 +822,7 @@
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent"><%=_ctx.appRes(uicomponent.getName() + ".label.webSite")%> :</span>
 			  		  		<span class="LabelContent">
-			  		  			<a target="_blank" href="<%= contact.getWebPage() %>"><%= contact.getWebPage()%></a>
+			  		  			<a target="_blank" href="<%= contact.getWebPage() %>"><%= ContactUtils.encodeHTML(contact.getWebPage())%></a>
 			  		  		</span>
 			  		  	</div>
 			  		  	<% } %>
@@ -893,62 +887,9 @@
           </tr>  
         </table>
       </div>
-   <% } 
+   <% }
    		
-   			
-   		
-   %>   
-      
-	
-	<!--
-	<style type="text/css">
-		.UIAction1 {
-			display: none ;
-		}
-		.Printable {
-			display: block ;
-		}
-	</style>
-	<style type="text/css" media="print">	
-	.Printable {
-		display: none ;
-		visibility : hidden ;
-	}
-	</style>
-	<div class="UIAction UIAction1"> 
-        <table class="ActionContainer" align="center">
-        	<tr>
-        		<td align="center">
-		          <% for(action in uicomponent.getActions()) { 
-                	 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;                   
-          		%>
-          		<a href="#" onclick="eXo.contact.UIContactPortlet.cancelPrint(this)" class="ActionButton LightBlueStyle">
-                <div class="ButtonLeft">
-                  <div class="ButtonRight">
-                    <div class="ButtonMiddle">
-                      $actionLabel
-                    </div>
-                  </div>
-                </div>
-           		</a>
-          		<%}%> 
-          		<a href="#" onclick="javascript:window.print() ;" class="ActionButton LightBlueStyle">
-                <div class="ButtonLeft">
-                  <div class="ButtonRight">
-                    <div class="ButtonMiddle">
-                    <%=_ctx.appRes(uicomponent.getName() + ".action.print")%>
-                    </div>
-                  </div>
-                </div>
-           		</a>  
-           		    
-          	</td>
-          </tr>  
-        </table>
-      </div>
-	
-	-->
-	
+   %>
 	
 </div>
 <% } // end of vcard %> 			

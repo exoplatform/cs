@@ -79,8 +79,8 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
   public String getContactsName() {
     StringBuffer buffer = new StringBuffer() ;
     for (Contact contact : movedContacts.values()) {
-      if (buffer.length() == 0) buffer.append(contact.getFullName()) ;
-      else buffer.append(", " + contact.getFullName()) ;
+      if (buffer.length() == 0) buffer.append(ContactUtils.encodeHTML(contact.getFullName())) ;
+      else buffer.append(", " + ContactUtils.encodeHTML(contact.getFullName())) ;
     }
     return buffer.toString() ;
   }
@@ -134,7 +134,7 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       List<Contact> sharedContacts = new ArrayList<Contact>() ;
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
       for(String id : uiMoveContactForm.getContactIds()) {
-        Contact contact = uiMoveContactForm.movedContacts.get(id) ;
+      	Contact contact = uiMoveContactForm.movedContacts.get(id) ;
         if (contact.getContactType().equals(JCRDataStorage.SHARED)) {
           if (uiContacts.isSharedAddress(contact.getAddressBook())) {
             String addressId = null ;
