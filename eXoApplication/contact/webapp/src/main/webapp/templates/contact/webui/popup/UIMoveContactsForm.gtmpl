@@ -37,10 +37,7 @@
 	        for(groupId in sharedGroups.keySet()) { 
 	        	String param = groupId + "&addressType=1" ;
 						String actionLink  = uicomponent.event("SelectGroup", param) ;
-						
-						String groupName = sharedGroups.get(groupId).getName() ;
-						if (groupId.contains(NewUserListener.DEFAULTGROUP)) 
-							groupName = sharedGroups.get(groupId).getSharedUserId() + " - " + sharedGroups.get(groupId).getName();
+						groupName = ContactUtils.getDisplayAdddressShared(sharedGroups.get(groupId).getSharedUserId(), sharedGroups.get(groupId).getName()) ;
       	%>
 				<div class="ItemList">
 					<div class="Icon AddressIcon"><a href="$actionLink"><%= ContactUtils.encodeHTML(groupName) %></a></div>

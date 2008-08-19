@@ -126,10 +126,6 @@ public class UIActionBar extends UIContainer  {
         if (uiAddressBook.havePermission(address.getId())) {
           addresses.put(address.getId(), ContactUtils
               .getDisplayAdddressShared(address.getSharedUserId(), address.getName())) ;
-          /*
-          addresses.put(address.getId(), address.getName() + " (" +
-            uiForm.getApplicationComponent(OrganizationService.class)
-            .getUserHandler().findUserByName(address.getSharedUserId()).getFullName() + ")") ; */
         }
       importForm.setGroup(addresses) ;
       importForm.addConponent() ;
