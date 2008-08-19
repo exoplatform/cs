@@ -260,9 +260,10 @@ public class UITagForm extends UIForm implements UIPopupComponent {
           Contact contact = uiContacts.getContactMap().get(contactId) ;
           String[] oldTag = contact.getTags() ;
           List<String> newTags = new ArrayList<String>() ;
-          for (String tag : oldTag) {
-            if (!checkedTags.contains(tag)) newTags.add(tag) ;
-          }             
+          if (oldTag != null)
+            for (String tag : oldTag) {
+              if (!checkedTags.contains(tag)) newTags.add(tag) ;
+            }             
           contact.setTags(newTags.toArray(new String[] {})) ;
           contacts.add(contact) ;
         }
