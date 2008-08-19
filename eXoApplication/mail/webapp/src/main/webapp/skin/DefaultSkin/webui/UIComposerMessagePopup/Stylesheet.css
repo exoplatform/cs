@@ -199,6 +199,8 @@
 
 .UIMessageCompose .MessageContent {
 	background: #f3f3f3;
+	_padding-left: 2px;
+	_border-right: 1px solid  #cbcbcb;
 }
 
 .UIMessageCompose .MessageContent .PlainTextMessage {
@@ -206,6 +208,7 @@
 	height : 100%;
 	border: 1px solid  #cbcbcb;
 	border-top: none;
+	_border-right: none;
 }
 .UIMessageCompose .MessageContent .PlainTextMessage .textarea {
 	width:99.5%; height: 252px; text-align: left ;
