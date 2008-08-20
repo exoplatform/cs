@@ -21,6 +21,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -79,12 +80,11 @@ public class UICategorySelect extends UIForm {
     UIFormInputWithActions input = getChildById(INPUT_CATEGORY) ;
     input.getUIFormSelectBox(FIELD_CATEGORY).setValue(groupId) ;
   }
-  //public void disableSelect() { getUIFormSelectBox(FIELD_CATEGORY).setEnable(false) ; }
 
   public List<SelectItemOption<String>> getCategoryList() throws Exception {
     List<SelectItemOption<String>> categories = new ArrayList<SelectItemOption<String>>() ;
     for(String group : privateGroupMap_.keySet())
-      categories.add(new SelectItemOption<String>(privateGroupMap_.get(group), group)) ;
+      categories.add(new SelectItemOption<String>(ContactUtils.encodeHTML(privateGroupMap_.get(group)), group)) ;
     return categories ;
   }
   
@@ -102,8 +102,7 @@ public class UICategorySelect extends UIForm {
   
   static  public class AddCategoryActionListener extends EventListener<UICategorySelect> {
     public void execute(Event<UICategorySelect> event) throws Exception {
-      UICategorySelect uiCategorySelect = event.getSource() ;
-      //if (!uiCategorySelect.getUIFormSelectBox(FIELD_CATEGORY).isEnable()) return ;      
+      UICategorySelect uiCategorySelect = event.getSource() ;  
       UIPopupContainer popupContainer = uiCategorySelect.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction popupAction = popupContainer.getChild(UIPopupAction.class) ;
       popupAction.activate(UICategoryForm.class, 425) ;

@@ -1,3 +1,6 @@
+<% 
+	import org.exoplatform.contact.ContactUtils;
+ %>
 <% String fieldName; %>
 <div class="UIForm $uicomponent.id">
   <%uiform.begin()%>
@@ -12,7 +15,7 @@
       	%>
       	<tr>
       		<td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.contact")%> &nbsp; <%=contacts[i]%> :</td>
-      		<td class="FieldComponent" colspan="2"><%=tags[i]%></td>      	
+      		<td class="FieldComponent" colspan="2"><%= ContactUtils.encodeHTML(tags[i]) %></td>      	
 	      <% i ++ ; 
 	      	 }
 	      %>
@@ -22,20 +25,25 @@
 	          if(field.isRendered()) {
 	      %>
               <tr>
-	              <%fieldName = uicomponent.getLabel(field.getName());%>
-	              <%//TODO: Tung.Pham modified
-	              	//if(!fieldName.equals(uicomponent.getId())) {
+	              <%
+	              	fieldName = uicomponent.getLabel(field.getName());
 	              	if(fieldName != null && fieldName.length() > 0 && !fieldName.equals(uicomponent.getId())) {
-	              %>                        
-  	              <td class="FieldLabel">
-                    <%/*if(fieldName != null && fieldName.length() > 0) {*/%> 
-                      <%=uicomponent.getLabel(field.getName()) %>
-                    <%/*}*/%>
-                  </td>
+	              		if (uicomponent.tags.containsKey(field.getName())) {
+	              %>
+		              		<td class="FieldLabel">
+	                      <%= ContactUtils.encodeHTML(uicomponent.tags.get(field.getName())) %>
+	                  	</td>
+	              <% 	} else { %>                
+		  	              <td class="FieldLabel">
+		                      <%=uicomponent.getLabel(field.getName()) %>
+		                  </td>
+                   
+                  <% } %>
+                  
   	              <td class="FieldComponent">
   	              <% 
   	              	if (uicomponent.tags.containsValue(field.getName())) { 
-  	              	name = field.getName() ;
+  	              		name = field.getName() ;
   	               %>
 		  	              <input type="checkbox" class="checkbox" value="false" name="$name"/>
 		  	          <% } else {%>

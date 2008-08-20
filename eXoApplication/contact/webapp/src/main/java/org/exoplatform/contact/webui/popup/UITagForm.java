@@ -68,7 +68,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
   public static final String NO_TAG_INFO = "no Tag";
   public static final String FIELD_COLOR= "color";
   
-  Map<String, String> tags = new LinkedHashMap<String, String>() ;
+  private Map<String, String> tags = new LinkedHashMap<String, String>() ;
   private List<Contact> contacts_ = new ArrayList<Contact>();
   private String[] tagNames = null ;
   private String[] contactNames = null ;
@@ -111,8 +111,8 @@ public class UITagForm extends UIForm implements UIPopupComponent {
     }
     addUIFormInput(new UIFormStringInput(FIELD_TAGNAME_INPUT, FIELD_TAGNAME_INPUT, null));
     addUIFormInput(new UIFormColorPicker(FIELD_COLOR, FIELD_COLOR, Colors.COLORS)) ;
-    for (String tagName : tags.values()) {
-      addUIFormInput(new UIFormCheckBoxInput<Boolean>(tagName, tagName, false));
+    for (String tagId : tags.keySet()) {
+      addUIFormInput(new UIFormCheckBoxInput<Boolean>(tagId, tagId, false));
     }
   }
   public List<Contact> getContacts() { return contacts_ ;}
@@ -134,7 +134,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
   public List<String> getCheckedTags() throws Exception {
     List<String> checkedTags = new ArrayList<String>();
     for (String tagId : tags.keySet()) {
-      if (getUIFormCheckBoxInput(tags.get(tagId)).isChecked()) {
+      if (getUIFormCheckBoxInput(tagId).isChecked()) {
         checkedTags.add(tagId);
       }
     }
