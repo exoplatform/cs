@@ -330,10 +330,14 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
   
   public static class CancelActionListener extends EventListener<UIAddContactForm> {
     public void execute(Event<UIAddContactForm> event) throws Exception {
-      UIAddContactForm uiContactForm = event.getSource();
-      UIPopupAction uiPopupAction = uiContactForm.getAncestorOfType(UIPopupAction.class) ; 
+      UIAddContactForm uiContact = event.getSource();
+      UIMailPortlet uiPortlet = uiContact.getAncestorOfType(UIMailPortlet.class);
+      UIAddressBookForm uiAddress = uiPortlet.findFirstComponentOfType(UIAddressBookForm.class);
+      uiAddress.updateGroup(uiContact.selectedGroup_) ;
+      UIPopupAction uiPopupAction = uiContact.getAncestorOfType(UIPopupAction.class) ; 
       uiPopupAction.deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddress.getParent()) ;
     }
   }
   
