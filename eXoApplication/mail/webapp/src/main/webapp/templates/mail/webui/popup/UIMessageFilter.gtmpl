@@ -1,5 +1,6 @@
 <%
   import org.exoplatform.mail.service.MessageFilter;
+  import org.exoplatform.mail.MailUtils;
 %>
 <%uiform.begin()%>  
 <div class="UIMessageFilter">
@@ -28,7 +29,7 @@
               String cssClass = "NormalItem";
               if (uicomponent.getSelectedFilterId().equals(filter.getId())) cssClass = "SelectedItem";
         %>
-                <a href="$selectFilter"><div class="$cssClass"><%=filter.getName()%></div></a>
+                <a href="$selectFilter"><div class="$cssClass"><%=MailUtils.encodeHTML(filter.getName())%></div></a>
         <%  
             } 
           } else { %>
@@ -43,7 +44,7 @@
     %>
       <div class="FilterSettingContainer">
         <% if (filter != null) { %>
-          <div class="TitleFilterMail"><%=_ctx.appRes(uicomponent.id+ ".label.filter-name") %>: <%=filter.getName()%></div>
+          <div class="TitleFilterMail"><%=_ctx.appRes(uicomponent.id+ ".label.filter-name") %>: <%=MailUtils.encodeHTML(filter.getName())%></div>
           <div class="FilterContent">
             <div class="IntroductionContent">
               <div class="TitleFilter"><%=_ctx.appRes(uicomponent.id+ ".label.this-filter-contains-some-conditions-follow") %> :</div>
@@ -79,7 +80,7 @@
                 %>
                   <div>
                     <%=_ctx.appRes(uicomponent.id+ ".label.folder") %> : 
-                    <%=uicomponent.getFolder().getName()%> 
+                    <%=MailUtils.encodeHTML(uicomponent.getFolder().getName())%> 
                   </div>
                 <% } %> 
                 
@@ -89,7 +90,7 @@
                 %>  
                   <div>
                     <%=_ctx.appRes(uicomponent.id+ ".label.tag") %> : 
-                    <%=uicomponent.getTag().getName().trim()%>
+                    <%=MailUtils.encodeHTML(uicomponent.getTag().getName().trim())%>
                   </div>
                 <% } %> 
               </div>
