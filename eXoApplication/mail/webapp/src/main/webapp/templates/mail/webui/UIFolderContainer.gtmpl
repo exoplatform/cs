@@ -206,7 +206,7 @@
       for (Folder cf : uicomponent.getSubFolders(path)) {
         if (cf != null) {
           String pid = cf.getId() ;
-          String name = cf.getName();
+          String name = MailUtils.encodeHTML(cf.getName());
           long pUnreadMess = cf.getNumberOfUnreadMessage();
           String pCssClass = "CloseFolder" ;
           String selectedClass = "NormalLabel";
@@ -234,7 +234,7 @@
   for (Folder cf : uicomponent.getCustomizeFolders()) {
     if (cf != null) {
       String pid = cf.getId() ;
-      String name = cf.getName();
+      String name = MailUtils.encodeHTML(cf.getName());
       long pUnreadMess = cf.getNumberOfUnreadMessage();
       String pCssClass = "CloseFolder" ;
       String pActionLink = uicomponent.event('ChangeFolder', pid);
