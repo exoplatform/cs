@@ -81,9 +81,7 @@ public class ContactPageList extends JCRPageList {
         currentNode = iter_.nextNode() ;
         if(currentNode.isNodeType("exo:contact")) {
           Contact contact = getContact(currentNode, contactType_) ;
-          if (contact.getId().equalsIgnoreCase(username_) && (contactType_.equals(JCRDataStorage.PRIVATE))) {
-            currentListPage_.add(0, contact) ;
-          }
+          if (contact.getId().equalsIgnoreCase(username_) && (contactType_.equals(JCRDataStorage.PRIVATE))) currentListPage_.add(0, contact) ;
           else currentListPage_.add(contact);
         }
       } else {

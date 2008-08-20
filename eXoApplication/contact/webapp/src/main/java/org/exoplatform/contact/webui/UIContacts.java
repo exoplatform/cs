@@ -281,7 +281,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       for(Contact contact : contactList) {
         UIFormCheckBoxInput<Boolean> checkbox = new UIFormCheckBoxInput<Boolean>(contact.getId(),contact.getId(), false) ;
         addUIFormInput(checkbox);
-        contactMap.put(contact.getId(), contact) ; 
+        contactMap.put(contact.getId(), contact) ;
       }
       Contact[] array = contactMap.values().toArray(new Contact[]{}) ;
       if (array.length > 0) {
@@ -783,8 +783,23 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
       uiContacts.setSelectedContact(contactId) ;
       UIContactContainer uiContactContainer = uiContacts.getAncestorOfType(UIContactContainer.class);
+      Contact oldContact = uiContacts.contactMap.get(contactId) ;
+      Contact newContact = null ;
+      ContactService service = ContactUtils.getContactService() ;
+      String username = ContactUtils.getCurrentUser() ;      
+      if (oldContact.getContactType().equals(JCRDataStorage.PRIVATE)) {
+        newContact = service.getContact(SessionProviderFactory.createSessionProvider(), username, contactId) ;
+      } else if(oldContact.getContactType().equals(JCRDataStorage.SHARED)) {
+        newContact = service.getSharedContactAddressBook( username, contactId) ;
+        if (newContact == null) newContact = service
+          .getSharedContact(SessionProviderFactory.createSystemProvider(), username, contactId) ;
+      } else {
+        newContact = service.getPublicContact(contactId) ;
+      }
+      uiContacts.contactMap.put(contactId, newContact) ;
+      
       UIContactPreview uiContactPreview = uiContactContainer.findFirstComponentOfType(UIContactPreview.class);
-      uiContactPreview.setContact(uiContacts.contactMap.get(contactId));
+      uiContactPreview.setContact(newContact);
       uiContactPreview.setRendered(true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContactContainer);   
     }

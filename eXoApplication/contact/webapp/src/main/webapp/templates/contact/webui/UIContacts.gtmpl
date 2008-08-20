@@ -16,11 +16,8 @@
 	uiform.begin() ;
 	def rcontext = _ctx.getRequestContext() ; 
   rcontext.getJavascriptManager().importJavascript("eXo.cs.FormHelper","/csResources/javascript") ;
-  //rcontext.getJavascriptManager().importJavascript('eXo.cs.TableMan','/csResources/javascript/');
-  //rcontext.getJavascriptManager().importJavascript('eXo.cs.TableDnD','/csResources/javascript/');
 	rcontext.getJavascriptManager().importJavascript("eXo.contact.UIContactDragDrop","/contact/javascript") ;
 	rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactDragDrop.init() ;") ;
-  //rcontext.getJavascriptManager().addOnLoadJavascript('eXo.cs.TableDnD.init(\'UIListUsers\')');
   rcontext.getJavascriptManager().addOnLoadJavascript('eXo.cs.CheckBox.init("' + uiform.id + '")') ;
   rcontext.getJavascriptManager().addOnLoadJavascript('eXo.contact.UIContactPortlet.checkLayoutView()') ;
   rcontext.getJavascriptManager().addJavascript('eXo.contact.UIContactPortlet.refreshData();') ;
@@ -113,7 +110,7 @@
 					<div style="clear: both;"><span></span></div>
 				</div>
 				<div class="TitleSearch" ><%=_ctx.appRes(uicomponent.getName() + ".label.searchResult")%></div>
-	<% } else { %>
+	<% } else if (uicomponent.selectedGroup != null || uicomponent.selectedTag_ != null || uicomponent.isSelectSharedContacts || isDisplaySearchResult) { %>
 				<div class="UIContactActionsBar">
 					<a href="<%=uicomponent.event("MoveContacts")%>" class="ControlButton">
 						<div class="Icon MoveIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.move")%>"><span></span></div>
@@ -163,10 +160,8 @@
 					
 					<div style="clear: both;"><span></span></div>
 				</div>
-				<% 
-						}
-					 %>
-	
+				
+					
 				<div class="UIMessageList  SpliterResizableListArea">
 					<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
 	  				<thead>
@@ -494,6 +489,10 @@
 				
 									
 	  </div>
+
+		<% 
+			}
+		 %>
 <% 
 	} else {      // begin Vcard
 %>
