@@ -170,7 +170,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
      */
 
     // private calendars group
-    SelectOptionGroup privGrp = new SelectOptionGroup("private-calendars");
+    SelectOptionGroup privGrp = new SelectOptionGroup("privateCalendar");
     List<org.exoplatform.calendar.service.Calendar> calendars = calendarService.getUserCalendars(SessionProviderFactory.createSessionProvider(), username, true) ;
     for(org.exoplatform.calendar.service.Calendar c : calendars) {
       privGrp.addOption(new SelectOption(c.getName(), CalendarUtils.PRIVATE_TYPE + CalendarUtils.COLON + c.getId())) ;
@@ -179,7 +179,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
     // shared calendars group
     GroupCalendarData gcd = calendarService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true);
     if(gcd != null) {
-      SelectOptionGroup sharedGrp = new SelectOptionGroup("shared-calendars");
+      SelectOptionGroup sharedGrp = new SelectOptionGroup("sharedCalendar");
       for(org.exoplatform.calendar.service.Calendar c : gcd.getCalendars()) {
         if(CalendarUtils.canEdit(null, c.getEditPermission(), username)){
           String owner = "" ;
@@ -193,7 +193,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
     List<GroupCalendarData> lgcd = calendarService.getGroupCalendars(SessionProviderFactory.createSystemProvider(), CalendarUtils.getUserGroups(username), true, username) ;
     if(lgcd != null) {
       OrganizationService oService = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
-      SelectOptionGroup pubGrp = new SelectOptionGroup("public-calendars");
+      SelectOptionGroup pubGrp = new SelectOptionGroup("publicCalendar");
       for(GroupCalendarData g : lgcd) {
         for(org.exoplatform.calendar.service.Calendar c : g.getCalendars()){
           if(CalendarUtils.canEdit(oService, c.getEditPermission(), username)){
