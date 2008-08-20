@@ -84,7 +84,7 @@ public class ContactPageList extends JCRPageList {
           if (contact.getId().equalsIgnoreCase(username_) && (contactType_.equals(JCRDataStorage.PRIVATE))) currentListPage_.add(0, contact) ;
           else currentListPage_.add(contact);
         }
-      }else {
+      } else {
         break ;
       }
     }
