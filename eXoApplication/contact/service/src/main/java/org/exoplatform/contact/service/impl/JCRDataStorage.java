@@ -1684,8 +1684,7 @@ public class JCRDataStorage {
         try{
           Node sharedContactHomeNode = iter.nextProperty().getParent().getParent() ;
           filter.setAccountPath(sharedContactHomeNode.getPath()) ;
-          
-          // add
+
           String split = "/" ;
           String temp = sharedContactHomeNode.getPath().split(usersPath)[1] ;
           String userId = temp.split(split)[1] ;
@@ -1759,7 +1758,7 @@ public class JCRDataStorage {
         newNode.setProperty("exo:categories", new String [] {destAddress}) ;
         newNode.setProperty("exo:id", newId) ;          
         newNode.setProperty("exo:isOwner", false) ;
-        newNode.setProperty("exo:tags", new String [] {}) ;
+        //newNode.setProperty("exo:tags", new String [] {}) ;
       }
       contactHomeNode.getSession().save() ;
     } else if (destType.equals(SHARED)) {
@@ -1779,7 +1778,7 @@ public class JCRDataStorage {
             newNode.setProperty("exo:categories", new String [] {destAddress}) ;  
             newNode.setProperty("exo:id", newId) ;
             newNode.setProperty("exo:isOwner", false) ;
-            newNode.setProperty("exo:tags", new String [] {}) ; 
+            //newNode.setProperty("exo:tags", new String [] {}) ; 
           }  
           contactHomeNode.getSession().save() ;
           break ;         
@@ -1905,7 +1904,7 @@ public class JCRDataStorage {
     contactNode.setProperty("exo:webPage", contact.getWebPage());
     
     contactNode.setProperty("exo:note", contact.getNote());
-    //contactNode.setProperty("exo:tags", contact.getTags());
+    contactNode.setProperty("exo:tags", contact.getTags());
     contactNode.setProperty("exo:categories", new String[] {destAddress}); 
     /*contactNode.setProperty("exo:editPermissionUsers", contact.getEditPermissionUsers());
     contactNode.setProperty("exo:viewPermissionUsers", contact.getViewPermissionUsers());    

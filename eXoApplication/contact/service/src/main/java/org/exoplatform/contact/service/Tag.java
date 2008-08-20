@@ -30,12 +30,7 @@ public class Tag {
   private String id ;
   private String name ;
   private String description ;
-  private String color ;  
-  /*public static final String RED = "Red".intern() ;
-  public static final String BLUE = "Blue".intern() ;
-  public static final String GREEN = "Green".intern() ;
-  public static final String[] COLORS = {RED, BLUE, GREEN } ;
-  */
+  private String color ;
   public Tag() {
     id = "Tag" + IdGenerator.generate() ;
   }

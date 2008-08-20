@@ -204,8 +204,6 @@ public class UITagForm extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      //  uiContacts.setContact(uiTagForm.contacts_, true) ;
-      //uiContacts.updateList() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTags) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
       uiContactPortlet.cancelAction() ;  
