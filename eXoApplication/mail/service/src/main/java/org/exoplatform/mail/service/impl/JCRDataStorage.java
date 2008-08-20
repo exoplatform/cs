@@ -2016,13 +2016,15 @@ public class JCRDataStorage {
           valueList.add(values[i]);
 
         Node parentNode = null;
-        if (node.hasProperty("exo:conversationId")) {
-          Value[] currentValues = node.getProperty("exo:conversationId").getValues();
-          // TODO: get parent have the same folder with child message
-          if (currentValues.length > 0) {
-            parentNode = node.getSession().getNodeByUUID(currentValues[0].getString());
+        try {
+          if (node.hasProperty("exo:conversationId")) {
+            Value[] currentValues = node.getProperty("exo:conversationId").getValues();
+            // TODO: get parent have the same folder with child message
+            if (currentValues.length > 0) {
+              parentNode = node.getSession().getNodeByUUID(currentValues[0].getString());
+            }
           }
-        }
+        } catch(Exception e) {}
 
         if (parentNode != null) {
           valueList.add(msgNode.getSession().getValueFactory().createValue(parentNode));
