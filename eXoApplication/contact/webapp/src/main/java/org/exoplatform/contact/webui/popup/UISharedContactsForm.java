@@ -228,6 +228,7 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
         }
       	String[] contactIds = uiForm.sharedContacts.keySet().toArray(new String[]{}) ;
       	contactService.shareContact(SessionProviderFactory.createSessionProvider(), username, contactIds, receiverUser) ;  
+        contactService.shareContact(SessionProviderFactory.createSessionProvider(), username, contactIds, receiverUserByGroup) ;
         uiApp.addMessage(new ApplicationMessage("UISharedContactsForm.msg.contacts-shared", null)) ;
         UIContactPortlet contactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
         contactPortlet.cancelAction() ;
@@ -257,7 +258,6 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
             for (String user : users.split(",")) uiForm.permissionUser_.put(user.trim(), user.trim()) ;              
           }          
         }
-        
         uiGroupSelector.setId("UIUserSelector") ;
         uiGroupSelector.setComponent(uiForm, new String[]{UISharedForm.FIELD_USER}) ;
       } else {
