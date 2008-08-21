@@ -240,6 +240,7 @@ public class UIAddressBooks extends UIComponent {
     }
   }
   
+  
   static public class ExportAddressActionListener extends EventListener<UIAddressBooks> {
     public void execute(Event<UIAddressBooks> event) throws Exception {
       UIAddressBooks uiAddressBook = event.getSource();
@@ -288,8 +289,6 @@ public class UIAddressBooks extends UIComponent {
       } else {
         
         // There is no specific address book so display the address books list        
-        UIExportAddressBookForm uiExportForm = uiPopupAction.activate(UIExportAddressBookForm.class, 500) ;
-        uiExportForm.setId("UIExportAddressBookForm");
         Map<String, String> groups = uiAddressBook.privateAddressBookMap_ ;
         Map<String, SharedAddressBook> sharedGroups = uiAddressBook.sharedAddressBookMap_ ;
         Map<String, String> publicGroups = new HashMap<String, String>() ;
@@ -302,6 +301,8 @@ public class UIAddressBooks extends UIComponent {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;   
         }
+        UIExportAddressBookForm uiExportForm = uiPopupAction.activate(UIExportAddressBookForm.class, 500) ;
+        uiExportForm.setId("UIExportAddressBookForm");
         uiExportForm.setContactGroups(groups) ;
         uiExportForm.setPublicContactGroup(publicGroups) ;
         uiExportForm.setSharedContactGroups(sharedGroups) ;
@@ -318,6 +319,13 @@ public class UIAddressBooks extends UIComponent {
       UIContactPortlet uiContactPortlet = uiAddressBook.getAncestorOfType(UIContactPortlet.class);
       UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class);
       String addressBookId = event.getRequestContext().getRequestParameter(OBJECTID);
+      UIPopupContainer uiPopupContainer = uiPopupAction.activate(UIPopupContainer.class, 600) ;
+      if (!ContactUtils.isEmpty(addressBookId)){
+        uiPopupContainer.setId("ImportContacts") ;
+      } else {
+        uiPopupContainer.setId("ImportAddress") ;
+      }
+      UIImportForm uiImportForm = uiPopupContainer.addChild(UIImportForm.class, null, null) ;      
       Map<String, String> addresses = uiAddressBook.privateAddressBookMap_ ;
       for (SharedAddressBook address : uiAddressBook.sharedAddressBookMap_.values())
         if (uiAddressBook.havePermission(address.getId())) {
@@ -329,14 +337,7 @@ public class UIAddressBooks extends UIComponent {
             ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
-        }      
-      UIPopupContainer uiPopupContainer = uiPopupAction.activate(UIPopupContainer.class, 600) ;
-      if (!ContactUtils.isEmpty(addressBookId)){
-        uiPopupContainer.setId("ImportContacts") ;
-      } else {
-        uiPopupContainer.setId("ImportAddress") ;
-      }
-      UIImportForm uiImportForm = uiPopupContainer.addChild(UIImportForm.class, null, null) ;
+        }
       uiImportForm.setGroup(addresses) ;
       uiImportForm.addConponent() ;      
       if (!ContactUtils.isEmpty(addressBookId)) uiImportForm.setValues(addressBookId) ;
@@ -349,7 +350,11 @@ public class UIAddressBooks extends UIComponent {
     public void execute(Event<UIAddressBooks> event) throws Exception {
       UIAddressBooks uiAddressBook = event.getSource() ;  
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      Map<String, String> addresses = uiAddressBook.privateAddressBookMap_ ;
+      UIContactPortlet uiContactPortlet = uiAddressBook.getAncestorOfType(UIContactPortlet.class) ;
+      UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
+      
+      Map<String, String> addresses = new LinkedHashMap<String, String>() ; 
+      addresses.putAll(uiAddressBook.privateAddressBookMap_) ;
       for (SharedAddressBook address : uiAddressBook.sharedAddressBookMap_.values())
         if (uiAddressBook.havePermission(address.getId())) {
           addresses.put(address.getId(), ContactUtils
@@ -361,15 +366,12 @@ public class UIAddressBooks extends UIComponent {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
         }      
-      UIContactPortlet uiContactPortlet = uiAddressBook.getAncestorOfType(UIContactPortlet.class) ;
-      UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class) ; 
       UIPopupContainer popupContainer = uiPopupAction.activate(UIPopupContainer.class, 800) ;
       popupContainer.setId("AddNewContact") ;
       UICategorySelect uiCategorySelect = popupContainer.addChild(UICategorySelect.class, null, null) ;
       UIContactForm uiContactForm = popupContainer.addChild(UIContactForm.class, null, null) ;
       uiContactForm.setNew(true) ;
-      
-      uiCategorySelect.setPrivateGroupMap(addresses) ;
+      uiCategorySelect.setPrivateGroupMap(addresses) ;    
       uiCategorySelect.setValue(groupId) ;
       
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
@@ -382,6 +384,7 @@ public class UIAddressBooks extends UIComponent {
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID);      
       UIAddressBooks uiAddressBook = event.getSource();
       UIContactPortlet uiContactPortlet = uiAddressBook.getAncestorOfType(UIContactPortlet.class);
+
       UIPopupAction popupAction = uiContactPortlet.getChild(UIPopupAction.class);
       UICategoryForm uiCategoryForm = popupAction.activate(UICategoryForm.class, 500) ;
       if (uiAddressBook.privateAddressBookMap_.containsKey(groupId)) {

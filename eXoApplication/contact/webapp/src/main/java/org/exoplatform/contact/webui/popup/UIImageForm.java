@@ -48,7 +48,7 @@ import org.exoplatform.webui.form.UIFormUploadInput;
 )
 public class UIImageForm extends UIForm implements UIPopupComponent{
   public static final String FIELD_UPLOAD = "upload".intern() ;
-   
+
   public UIImageForm() throws Exception {
     this.setMultiPart(true) ;
     addUIFormInput(new UIFormUploadInput(FIELD_UPLOAD, FIELD_UPLOAD)) ;
@@ -60,7 +60,7 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
   public String getDonwloadLink(String fileName, ByteArrayInputStream inputStream) throws Exception {
     DownloadService dservice = getApplicationComponent(DownloadService.class) ;
     InputStreamDownloadResource dresource = new InputStreamDownloadResource(inputStream, "image") ;
-    dresource.setDownloadName(fileName) ;
+    dresource.setDownloadName(fileName) ; 
     return dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;
   }
   
@@ -77,6 +77,12 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
         return ;
       }
       String mimeType = uploadResource.getMimeType() ;
+      if (!mimeType.contains("image")) {
+        uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.invalid-image", null, 
+            ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       String fileName = uploadResource.getFileName() ;
       ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getUploadData()) ;
       UIPopupContainer uiPopupActionContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
@@ -87,6 +93,7 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
       uiProfileInputSet.setFileName(fileName) ;
       UIPopupAction popupAction = uiPopupActionContainer.getChild(UIPopupAction.class) ;
       popupAction.deActivate() ;
+
     }
   }
 
@@ -96,5 +103,5 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
       UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
       uiPopupAction.deActivate() ;
      }
-  }
+  }  
 }
