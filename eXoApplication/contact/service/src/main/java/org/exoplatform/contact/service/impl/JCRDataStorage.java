@@ -1227,6 +1227,7 @@ public class JCRDataStorage {
       Contact contact = getContact(it.nextNode(), PRIVATE) ;
       contacts.put(contact.getId(), contact);
     }
+    
     //query on public contacts
     String usersPath = nodeHierarchyCreator_.getJcrPath(USERS_PATH) ;
     Node publicContactHome = getPublicContactHome(SessionProvider.createSystemProvider());
