@@ -142,11 +142,12 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
   
   static  public class SaveActionListener extends EventListener<UISharedContactsForm> {
     @SuppressWarnings("unchecked")
-	public void execute(Event<UISharedContactsForm> event) throws Exception {
+  public void execute(Event<UISharedContactsForm> event) throws Exception {
       UISharedContactsForm uiForm = event.getSource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       String names = uiForm.getUIStringInput(FIELD_USER).getValue() ;
       String groups = uiForm.getUIStringInput(FIELD_GROUP).getValue() ;
+      List<String> receiverUserByGroup = new ArrayList<String>() ;
       List<String> receiverUser = new ArrayList<String>() ;
       if(ContactUtils.isEmpty(names) && ContactUtils.isEmpty(groups)) {        
         uiApp.addMessage(new ApplicationMessage("UISharedContactsForm.msg.empty-username", null,
@@ -171,42 +172,67 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
         }
       }
       ContactService contactService = ContactUtils.getContactService() ;
-      String username = ContactUtils.getCurrentUser() ;      
+      String username = ContactUtils.getCurrentUser() ;  
+      Map<String, String> viewMapGroups = new LinkedHashMap<String, String>() ;
       if (!ContactUtils.isEmpty(groups)) {
         String[] arrayGroups = groups.split(",") ; 
         for (String group : arrayGroups) {
+          viewMapGroups.put(group.trim(), group.trim()) ;
           OrganizationService organizationService = 
                 (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
-          List<User> users = organizationService.getUserHandler().findUsersByGroup(group).getAll() ;
+          List<User> users = organizationService.getUserHandler().findUsersByGroup(group.trim()).getAll() ;
           for (User user : users) {
-            receiverUser.add(user.getUserName() + JCRDataStorage.HYPHEN) ;
+            receiverUserByGroup.add(user.getUserName() + JCRDataStorage.HYPHEN) ;
           }
         }        
       } 
       receiverUser.remove(username + JCRDataStorage.HYPHEN) ;
-      if (receiverUser.size() > 0) {
-        Map<String, String> viewMap = new LinkedHashMap<String, String>() ;
-        for (String user : receiverUser) viewMap.put(user, user) ;
-        Map<String, String> editMap = new LinkedHashMap<String, String>() ; 
-        if (uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).isChecked()) 
-          for (String user : receiverUser) editMap.put(user, user) ;
+      receiverUserByGroup.remove(username + JCRDataStorage.HYPHEN) ;
+      if (receiverUser.size() > 0 || !ContactUtils.isEmpty(groups)) {
+        Map<String, String> viewMapUsers = new LinkedHashMap<String, String>() ;
+        for (String user : receiverUser) viewMapUsers.put(user, user) ;
+        
+        Map<String, String> editMapUsers = new LinkedHashMap<String, String>() ; 
+        Map<String, String> editMapGroups = new LinkedHashMap<String, String>() ;
+        if (uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).isChecked()) {
+          for (String user : receiverUser) editMapUsers.put(user, user) ;          
+          editMapGroups.putAll(viewMapGroups) ;
+        }
         for (Contact contact : uiForm.sharedContacts.values()) {
           String[] viewPer = contact.getViewPermissionUsers() ;
+          Map<String, String> newViewMapUsers = new LinkedHashMap<String, String>() ;
+          newViewMapUsers.putAll(viewMapUsers) ;
           if (viewPer != null)
-            for (String view : viewPer) viewMap.put(view, view) ;
+            for (String view : viewPer) newViewMapUsers.put(view, view) ;
           String[] editPer = contact.getEditPermissionUsers() ;
+          Map<String, String> newEditMapUsers = new LinkedHashMap<String, String>() ;
+          newEditMapUsers.putAll(editMapUsers) ;
           if (editPer != null)
-            for (String edit : editPer) editMap.put(edit, edit) ; 
-          contact.setViewPermissionUsers(viewMap.keySet().toArray(new String[] {})) ;
-          contact.setEditPermissionUsers(editMap.keySet().toArray(new String[] {})) ;
+            for (String edit : editPer) newEditMapUsers.put(edit, edit) ; 
+          
+          Map<String, String> newViewMapGroups = new LinkedHashMap<String, String>() ;
+          newViewMapGroups.putAll(viewMapGroups) ;
+          String[] viewPerGroup = contact.getViewPermissionGroups() ;
+          if (viewPerGroup != null) 
+            for (String view : viewPerGroup) newViewMapGroups.put(view, view) ;
+          String[] editPerGroup = contact.getEditPermissionGroups() ;
+          Map<String, String> newEditMapGroups = new LinkedHashMap<String, String>() ;
+          newEditMapGroups.putAll(editMapGroups) ;
+          if (editPerGroup != null)
+            for (String edit : editPerGroup) newEditMapGroups.put(edit, edit) ; 
+          contact.setViewPermissionUsers(newViewMapUsers.keySet().toArray(new String[] {})) ;
+          contact.setEditPermissionUsers(newEditMapUsers.keySet().toArray(new String[] {})) ;
+          contact.setViewPermissionGroups(newViewMapGroups.keySet().toArray(new String[] {})) ;
+          contact.setEditPermissionGroups(newEditMapGroups.keySet().toArray(new String[] {})) ;
           contactService.saveContact(SessionProviderFactory.createSessionProvider(), username, contact, false) ;
         }
-      	String[] contactIds = uiForm.sharedContacts.keySet().toArray(new String[]{}) ;
-      	contactService.shareContact(SessionProviderFactory.createSessionProvider(), username, contactIds, receiverUser) ;  
+        String[] contactIds = uiForm.sharedContacts.keySet().toArray(new String[]{}) ;
+        contactService.shareContact(SessionProviderFactory.createSessionProvider(), username, contactIds, receiverUser) ;  
+        contactService.shareContact(SessionProviderFactory.createSessionProvider(), username, contactIds, receiverUserByGroup) ;
         uiApp.addMessage(new ApplicationMessage("UISharedContactsForm.msg.contacts-shared", null)) ;
         UIContactPortlet contactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
         contactPortlet.cancelAction() ;
-      } else {
+      } else if (ContactUtils.isEmpty(groups)){
         uiApp.addMessage(new ApplicationMessage("UISharedContactsForm.msg.invalid-username", null)) ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
