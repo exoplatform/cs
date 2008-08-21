@@ -558,7 +558,7 @@
 			  	<div class="TitleVCards" >
 			  		<% 
 										icon = "OfflineIcon"
-										if (contact.isOwner()&& uicomponent.getDefaultGroup().equals(contact.getAddressBook()[0])) icon = "OwnerIcon" ; 	
+										if (contact.isOwner()&& uicomponent.getDefaultGroup().equals(contact.getAddressBook()[0])) icon = "OwnerIcon" ;
 						%>
 				  	<div class="StateIcon $icon"><%= ContactUtils.encodeHTML(contact.getFullName()) %></div>
 			  		<% if (tagIds != null && tagIds.length > 0) { %>
