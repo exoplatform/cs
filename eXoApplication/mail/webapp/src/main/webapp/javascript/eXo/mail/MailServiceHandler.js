@@ -94,7 +94,7 @@ MailServiceHandler.prototype.update = function(state, requestObj, action) {
 };
 
 MailServiceHandler.prototype.checkMailWrapper = function() {
-  eXo.mail.MailServiceHandler.checkMail(eXo.mail.MailServiceHandler.isUpdateUI_);
+  eXo.mail.MailServiceHandler.checkMail();
 };
 
 MailServiceHandler.prototype.checkMail = function(isUpdateUI) {
@@ -122,6 +122,15 @@ MailServiceHandler.prototype.stopCheckMail = function() {
   	this.activeAction = this.STOP_CHECK_MAIL_ACTION;
     var url = this.SERVICE_BASED_URL + '/stopcheckmail/' + this.userName + '/' + this.accountId + '/';
     this.makeRequest(url, this.HTTP_GET, '', this.STOP_CHECK_MAIL_ACTION);
+  }
+};
+
+
+MailServiceHandler.prototype.showStatusBox = function() {
+  this.checkMailInfobarNode = document.getElementById(this.uiId);
+  var statusTextNode = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'StatusText');
+  if (this.checkMailInfobarNode.style.display == 'none') {
+	  this.checkMailInfobarNode.style.display = 'block';
   }
 };
 
