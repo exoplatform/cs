@@ -60,7 +60,7 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
   public String getDonwloadLink(String fileName, ByteArrayInputStream inputStream) throws Exception {
     DownloadService dservice = getApplicationComponent(DownloadService.class) ;
     InputStreamDownloadResource dresource = new InputStreamDownloadResource(inputStream, "image") ;
-    dresource.setDownloadName(fileName) ;
+    dresource.setDownloadName(fileName) ; 
     return dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;
   }
   
