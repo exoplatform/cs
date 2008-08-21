@@ -160,8 +160,11 @@
 					
 					<div style="clear: both;"><span></span></div>
 				</div>
+				<% } %>
 				
-					
+				<% 
+				if (uicomponent.selectedGroup != null || uicomponent.selectedTag_ != null || uicomponent.isSelectSharedContacts || isDisplaySearchResult) {
+				 %>	
 				<div class="UIMessageList  SpliterResizableListArea">
 					<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
 	  				<thead>
@@ -263,7 +266,10 @@
 		  	 	    				if (!address.contains(NewUserListener.DEFAULTGROUP)) {
 		  	 	    					if(buffer.length() > 0) buffer.append(", ").append(address) ;
 			  	 	    				else buffer.append(address) ;
-		  	 	    				}	  	 	    				
+		  	 	    				} else if (address.equals(NewUserListener.DEFAULTGROUP + ContactUtils.getCurrentUser()) && privateGroupMap.containsKey(address)) {
+		  	 	    					if(buffer.length() > 0) buffer.append(", ").append(privateGroupMap.get(address)) ;
+			  	 	    				else buffer.append(privateGroupMap.get(address)) ;
+		  	 	    				}    				
 		  	 	    			}
 								    groupName = buffer.toString() ;
 								  } else if (contactType.equals("0")) {
@@ -489,10 +495,8 @@
 				
 									
 	  </div>
+<% } %>
 
-		<% 
-			}
-		 %>
 <% 
 	} else {      // begin Vcard
 %>

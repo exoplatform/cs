@@ -90,21 +90,11 @@ public class UIActionBar extends UIContainer  {
       uiExportForm.setId("UIExportAddressBookForm") ;
       UIAddressBooks uiAddressBooks = uiActionBar.getAncestorOfType(UIContactPortlet.class)
         .findFirstComponentOfType(UIAddressBooks.class) ;
-      Map<String, String> groups = uiAddressBooks.getPrivateGroupMap() ;
       Map<String, String> publicGroups = new HashMap<String, String>() ;
-      for (String group : ContactUtils.getUserGroups()) publicGroups.put(group, group) ;      
-      Map<String, SharedAddressBook> sharedGroups = uiAddressBooks.getSharedGroups() ;
-      if ((publicGroups == null || publicGroups.size() == 0) && (groups == null || groups.size() == 0)
-          && (sharedGroups == null || sharedGroups.size() == 0)) {
-        UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.no-addressbook", null,
-          ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;   
-      }      
-      uiExportForm.setContactGroups(groups) ;
+      for (String group : ContactUtils.getUserGroups()) publicGroups.put(group, group) ;
+      uiExportForm.setContactGroups(uiAddressBooks.getPrivateGroupMap()) ;
       uiExportForm.setPublicContactGroup(publicGroups) ;
-      uiExportForm.setSharedContactGroups(sharedGroups) ;      
+      uiExportForm.setSharedContactGroups(uiAddressBooks.getSharedGroups()) ;      
       uiExportForm.updateList();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
     }  

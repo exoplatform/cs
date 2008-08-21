@@ -1222,11 +1222,11 @@ public class JCRDataStorage {
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
     QueryResult result = query.execute();
     NodeIterator it = result.getNodes();    
-    List<Contact> contacts = new ArrayList<Contact>();
+    Map<String, Contact> contacts = new LinkedHashMap<String, Contact>() ;
     while (it.hasNext()) {
-      contacts.add(getContact(it.nextNode(), PRIVATE));
+      Contact contact = getContact(it.nextNode(), PRIVATE) ;
+      contacts.put(contact.getId(), contact);
     }
-    
     //query on public contacts
     String usersPath = nodeHierarchyCreator_.getJcrPath(USERS_PATH) ;
     Node publicContactHome = getPublicContactHome(SessionProvider.createSystemProvider());
@@ -1238,7 +1238,9 @@ public class JCRDataStorage {
     result = query.execute();
     it = result.getNodes();    
     while (it.hasNext()) {
-      contacts.add(getContact(it.nextNode(), PUBLIC));
+      Contact contact = getContact(it.nextNode(), PUBLIC);
+      if (contact.getId().equals(username)) contact.setContactType(PRIVATE) ;
+      contacts.put(contact.getId(), contact);
     }
     
     // query on shared contacts
@@ -1249,8 +1251,10 @@ public class JCRDataStorage {
         try{
           Node contactNode = iter.nextProperty().getParent() ;
           if (contactNode.hasProperty("exo:tags") && 
-              Arrays.asList(ValuesToStrings(contactNode.getProperty("exo:tags").getValues())).contains(tagId))
-            contacts.add(getContact(contactNode, SHARED)) ;
+              Arrays.asList(ValuesToStrings(contactNode.getProperty("exo:tags").getValues())).contains(tagId)) {
+            Contact contact = getContact(contactNode, SHARED) ;
+            contacts.put(contact.getId(), contact) ;
+          }
         }catch(Exception e){
           e.printStackTrace() ;
         }
@@ -1272,10 +1276,11 @@ public class JCRDataStorage {
       result = query.execute();
       it = result.getNodes();    
       while (it.hasNext()) {
-        contacts.add(getContact(it.nextNode(), SHARED));        
+        Contact contact = getContact(it.nextNode(), SHARED);
+        contacts.put(contact.getId(), contact) ;
       }
     }
-    return new DataPageList(contacts, 10, null, false) ;
+    return new DataPageList(Arrays.asList(contacts.values().toArray(new Contact[] {})), 10, null, false) ;
   }
   
   public void addTag(SessionProvider sysProvider, String username, List<String> contactIds, String tagId) throws Exception {
