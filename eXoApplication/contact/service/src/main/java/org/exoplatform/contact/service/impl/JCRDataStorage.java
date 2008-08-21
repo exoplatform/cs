@@ -1371,7 +1371,7 @@ public class JCRDataStorage {
             Node node = iter.nextProperty().getParent() ;
             if(node.getName().equals(contactId)) {
               contactNode = node ;
-              break ;
+              break ; 
             }
           }catch(Exception exx){
             exx.printStackTrace() ;
