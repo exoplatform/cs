@@ -793,19 +793,24 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       boolean isVisualEditor = Boolean.valueOf(event.getRequestContext().getRequestParameter(OBJECTID)) ;  
       String content = "";
       if (isVisualEditor) {
-        content = uiForm.getUIFormTextAreaInput(FIELD_MESSAGECONTENT).getValue() ;
-        uiForm.removeChildById(FIELD_MESSAGECONTENT);
-        UIFormWYSIWYGInput wysiwyg = new UIFormWYSIWYGInput(FIELD_MESSAGECONTENT, null, null, true) ;
-        uiForm.addUIFormInput(wysiwyg) ;
-        wysiwyg.setValue(content);
+        try {
+          content = uiForm.getUIFormTextAreaInput(FIELD_MESSAGECONTENT).getValue() ;
+          uiForm.removeChildById(FIELD_MESSAGECONTENT);
+          UIFormWYSIWYGInput wysiwyg = new UIFormWYSIWYGInput(FIELD_MESSAGECONTENT, null, null, true) ;
+          uiForm.addUIFormInput(wysiwyg) ;
+          wysiwyg.setValue(content);
+          uiForm.setVisualEditor(true) ;
+        } catch(Exception e) { }
       } else {
-        content = uiForm.getChild(UIFormWYSIWYGInput.class).getValue() ;
-        uiForm.removeChild(UIFormWYSIWYGInput.class) ;
-        UIFormTextAreaInput textArea = new UIFormTextAreaInput(FIELD_MESSAGECONTENT, null, null);
-        textArea.setValue(content);
-        uiForm.addUIFormInput(textArea) ;
+        try {
+          content = uiForm.getChild(UIFormWYSIWYGInput.class).getValue() ;
+          uiForm.removeChild(UIFormWYSIWYGInput.class) ;
+          UIFormTextAreaInput textArea = new UIFormTextAreaInput(FIELD_MESSAGECONTENT, null, null);
+          textArea.setValue(content);
+          uiForm.addUIFormInput(textArea) ;
+          uiForm.setVisualEditor(false) ;
+        } catch (Exception e) { }
       }
-      uiForm.setVisualEditor(isVisualEditor) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
     }
   }
