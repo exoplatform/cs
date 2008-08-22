@@ -819,7 +819,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       
       // edited 17-4 
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;  
-      //event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
     }
   }
   
