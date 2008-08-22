@@ -210,7 +210,7 @@ UIMailPortlet.prototype.switchLayout = function(layout) {
 			break ;
 	}
   var csMailLayoutSwitchMenuNode = document.getElementById('_CSMailLayoutSwitchMenu');
-  var menuItems = eXo.core.DOMUtil.findDescendantsByClass(csMailLayoutSwitchMenuNode, 'div', 'MenuItem');
+  var menuItems = eXo.core.DOMUtil.findDescendantsByClass(csMailLayoutSwitchMenuNode, 'a', 'MenuItem');
   var menuItemTexts = eXo.core.DOMUtil.findDescendantsByClass(csMailLayoutSwitchMenuNode, 'div', 'ItemIcon');
   var fontWeight = false;
   for (var i=0; i<menuItems.length; i++) {
