@@ -301,7 +301,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         }
         
         uiAddressForm.checkedList_ = uiAddressForm.newCheckedList_ ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiComposeForm) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiComposeForm.getChildById(UIComposeForm.FIELD_TO_SET)) ;
       }
     }
   }
@@ -353,7 +353,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         }
         
         uiAddressForm.checkedList_ = uiAddressForm.newCheckedList_ ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiComposeForm) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiComposeForm.getChildById(UIComposeForm.FIELD_TO_SET)) ;
       }
     }
   }
