@@ -129,13 +129,16 @@ public class MailUtils {
   }
   
   public static boolean isChecking(String username, String accountId) throws Exception {
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
-    JobSchedulerService schedulerService = 
-      (JobSchedulerService) container.getComponentInstanceOfType(JobSchedulerService.class);
-    List allJobs = schedulerService.getAllJobs() ;
-    for(Object obj : allJobs) {
-      if(((JobDetail)obj).getName().equals(username + ":" + accountId)) return true ; 
-    }
+    try {
+      ExoContainer container = ExoContainerContext.getCurrentContainer();
+      JobSchedulerService schedulerService = 
+        (JobSchedulerService) container.getComponentInstanceOfType(JobSchedulerService.class);
+      List allJobs = schedulerService.getAllJobs() ;
+      for(Object obj : allJobs) {
+        if(((JobDetail)obj).getName().equals(username + ":" + accountId)) return true ; 
+      }
+    } catch(Exception e) { }
+    
     return false ;
   }
   
