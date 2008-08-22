@@ -639,14 +639,14 @@
 								<% 
 									String note ;
 									if (ContactUtils.isEmpty(contact.getNote())) note = "" ;
-									else note = contact.getNote().replaceAll("\n", "<br>") ;								
+									else note = ContactUtils.encodeHTML(contact.getNote()).replaceAll("\n", "<br>") ;								
 								 %>
 								<div class="InfoContainer">
 									<div class="TitleInfo"><%=_ctx.appRes(uicomponent.getName() + ".label.note")%></div>
 									<div class="Content">
 										<!--<div class="LeftContent">					
 											<div class="Member">-->
-												<div class="Job"><%= ContactUtils.encodeHTML(note) %></div>
+												<div class="Job"><%= note %></div>
 											<!--</div>	
 										</div>-->
 									</div>
