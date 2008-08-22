@@ -815,11 +815,11 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       uiPopupContainer.setId("ContactDetails") ;  
       UIContactPreviewForm uiContactPreviewForm = uiPopupContainer.addChild(UIContactPreviewForm.class, null, null) ; 
       uiContactPreviewForm.setPrintForm(false) ;
-      uiContactPreviewForm.setContact(uiContacts.contactMap.get(contactId)) ;
-      
-      // edited 17-4 
+      uiContactPreviewForm.setContact(uiContacts.contactMap.get(contactId)) ; 
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;  
-      //event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+      
+      // add to fix bug cs-1278
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
     }
   }
   
