@@ -181,6 +181,9 @@ public class UIMailSettings extends UIForm implements UIPopupComponent {
         uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null);
         uiMessageList.setMessageFilter(null);
         uiMessageList.init(defaultAcc);
+      } else if (defaultAcc != null && defaultAcc.equals(accountId)){
+        uiSelectAccount.updateAccount() ;
+        uiSelectAccount.setSelectedValue(defaultAcc) ;
       } else {
         uiMessageList.setMessagePageList(mailSrv.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, filter));
       }
