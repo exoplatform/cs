@@ -107,7 +107,6 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
         e.printStackTrace() ;
         return ;
       }     
-      
       if (attachList.isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UIAttachFileForm.msg.file-empty-error", null, ApplicationMessage.INFO)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -119,10 +118,11 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
           uiComposeForm.addToUploadFileList(att) ;
         }
         uiComposeForm.refreshUploadFileList() ;
+        UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
+        uiPopupAction.deActivate();
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiComposeForm.getChildById(UIComposeForm.FIELD_TO_SET)) ;
       } 
-      UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
-      uiPopupAction.deActivate();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupActionContainer.class)) ;
     }
   }
 

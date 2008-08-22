@@ -177,58 +177,7 @@
 			<div class="MessageAddress">
 				<div class="UIForm">
           <div class="HorizontalLayout">
-          	<div>
-	            <table class="UIFormGrid">
-	              <tr>
-	                <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.from") %> :&nbsp;&nbsp;</td>
-	                <td class="FieldComponent" style="width: 62%;"><%uicomponent.renderField(uicomponent.FIELD_FROM)%></td>
-	                <td class="FieldCCAndBCC">
-	                  <a  href="<%=uicomponent.event("ShowCc")%>">|<%=_ctx.appRes(uicomponent.id+ ".label.add-cc") %>|</a> 
-	                  <a  href="<%=uicomponent.event("ShowBcc")%>"><%=_ctx.appRes(uicomponent.id+ ".label.add-bcc") %>|</a>
-                    <%/* javascript:eXo.mail.UIMailPortlet.showHideAddMoreAddress('FIELD_BCC')*/ %>
-	                </td>
-	              </tr>
-	              <tr>
-	                <td class="FieldLabel"><a href="<%=uicomponent.event("To")%>"><%=_ctx.appRes(uicomponent.id+ ".label.to") %></a> :&nbsp;&nbsp;</td>
-	                <td class="FieldComponent"  colspan="2">
-	                  <%uicomponent.renderField(uicomponent.FIELD_TO)%> 
-	                </td>
-	              </tr>
-	              <%
-                  String displayCc = "display:none" ;
-                  if (uicomponent.showCc_) { displayCc = "" ; }
-                %>
-  	              <tr id="FIELD_CC" style="$displayCc">
-  	                <td class="FieldLabel"><a href="<%=uicomponent.event("ToCC")%>"><%=_ctx.appRes(uicomponent.id+ ".label.cc") %></a> :&nbsp;&nbsp;</td>
-  	                <td class="FieldComponent" colspan="2">
-  	                  <%uicomponent.renderField(uicomponent.FIELD_CC)%> 
-  	                </td>
-  	              </tr>
-	              <%
-                  String displayBcc = "display:none" ;
-                  if (uicomponent.showBcc_) { displayBcc = "" ; }
-                %>
-                  <tr id="FIELD_BCC" style="$displayBcc">
-  	                <td class="FieldLabel"><a href="<%=uicomponent.event("ToBCC")%>"><%=_ctx.appRes(uicomponent.id+ ".label.bcc") %></a> :&nbsp;&nbsp;</td>
-  	                <td class="FieldComponent" colspan="2">
-  	                  <%uicomponent.renderField(uicomponent.FIELD_BCC)%> 
-  	                </td>
-  	              </tr>
-	              <tr>
-	                <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.subject") %> :&nbsp;&nbsp;</td>
-	                <td class="FieldComponent" colspan="2" style="padding:4px;">
-	                  <%uicomponent.renderField(uicomponent.FIELD_SUBJECT)%>
-	                </td>
-	              </tr>
-	            </table>
-	          </div>
-            <%
-                if (uicomponent.getUploadFileList().size() > 0) {
-            %>
-            <div>
-               <%uicomponent.renderField(uicomponent.FIELD_FROM_INPUT)%>
-            </div>
-            <% } %>
+              <%uicomponent.renderField(uicomponent.FIELD_TO_SET)%>
           </div>
 				</div>
 			</div>
