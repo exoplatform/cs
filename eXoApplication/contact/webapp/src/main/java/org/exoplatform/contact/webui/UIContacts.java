@@ -796,6 +796,15 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       } else {
         newContact = service.getPublicContact(contactId) ;
       }
+      if (newContact == null) {
+        UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-deleted", null
+            , ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+        return ;
+      }
+      
       uiContacts.contactMap.put(contactId, newContact) ;
       
       UIContactPreview uiContactPreview = uiContactContainer.findFirstComponentOfType(UIContactPreview.class);
