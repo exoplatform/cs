@@ -85,7 +85,6 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
   public boolean isNew() { return isNew; }
   public void setNew(boolean isNew) { this.isNew = isNew; }  
   
-  
   static  public class SaveActionListener extends EventListener<UIEditTagForm> {
     public void execute(Event<UIEditTagForm> event) throws Exception {
       UIEditTagForm uiEditTagForm = event.getSource() ;

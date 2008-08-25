@@ -102,7 +102,7 @@ public class UICategorySelect extends UIForm {
   
   static  public class AddCategoryActionListener extends EventListener<UICategorySelect> {
     public void execute(Event<UICategorySelect> event) throws Exception {
-      UICategorySelect uiCategorySelect = event.getSource() ;    
+      UICategorySelect uiCategorySelect = event.getSource() ;  
       UIPopupContainer popupContainer = uiCategorySelect.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction popupAction = popupContainer.getChild(UIPopupAction.class) ;
       popupAction.activate(UICategoryForm.class, 425) ;

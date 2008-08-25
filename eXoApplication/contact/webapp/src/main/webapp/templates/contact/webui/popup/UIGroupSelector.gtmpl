@@ -7,13 +7,13 @@
   <div class="Container">
 		<div class="SelectedGroupPath"><% uicomponent.renderChild(UIBreadcumbs.class); %></div>
 		<div class="GroupSelector">
-		  <div class="ContentContainer">
+			<div class="ContentContainer">
 			  <div class="MembershipTitle"><%=_ctx.appRes(uicomponent.id+".label.selectGroup")%></div>
 			  <%uicomponent.renderChild(UITree.class);%>
 			</div>
 		</div>
 	  <div class="MembershipSelector">
-	    <div class="ContentContainer">
+	  	<div class="ContentContainer">
 		    <div class="MembershipTitle">
 		    	<%if(uicomponent.isSelectUser()){%>
 		    		<%=_ctx.appRes(uicomponent.id+".label.selectUser")%>
@@ -25,9 +25,9 @@
 				  	<%=_ctx.appRes(uicomponent.id+".label.selectGroup")%>
 				  <%}%>
 		    </div>
-				<div class="OverflowContainer">
-	      <%
-	      boolean even = true ;
+		    <div class="OverflowContainer">
+	      <%                
+	      boolean even = true ;	      
 	      if(uicomponent.getCurrentGroup() != null) {
 	      	Map<String,String> children = uicomponent.getList() ;
 		      for(key in children.keySet()){
@@ -39,9 +39,7 @@
 						if (uicomponent.isSelectGroup()) {
 		        	user = children.get(key) ;
 		       	} else if (uicomponent.isSelectUser()) {
-		       		String[] value = children.get(key).split(uicomponent.SEPARATE) ;
-		       		user = value[0] ;
-		       		title = value[1] ;
+		       		user = key ;
 		       	}
 	      %>
 			      <div class="$rowCssClass">

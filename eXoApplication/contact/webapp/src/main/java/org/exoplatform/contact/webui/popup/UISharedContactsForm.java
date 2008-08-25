@@ -142,7 +142,7 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
   
   static  public class SaveActionListener extends EventListener<UISharedContactsForm> {
     @SuppressWarnings("unchecked")
-  public void execute(Event<UISharedContactsForm> event) throws Exception {
+	public void execute(Event<UISharedContactsForm> event) throws Exception {
       UISharedContactsForm uiForm = event.getSource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       String names = uiForm.getUIStringInput(FIELD_USER).getValue() ;
@@ -226,10 +226,10 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
           contact.setEditPermissionGroups(newEditMapGroups.keySet().toArray(new String[] {})) ;
           contactService.saveContact(SessionProviderFactory.createSessionProvider(), username, contact, false) ;
         }
-        String[] contactIds = uiForm.sharedContacts.keySet().toArray(new String[]{}) ;
+      	String[] contactIds = uiForm.sharedContacts.keySet().toArray(new String[]{}) ;
         
         receiverUser.addAll(receiverUserByGroup) ;
-        contactService.shareContact(SessionProviderFactory.createSessionProvider(), username, contactIds, receiverUser) ;  
+        contactService.shareContact(SessionProviderFactory.createSessionProvider(), username, contactIds, receiverUser) ; 
         //contactService.shareContact(SessionProviderFactory.createSessionProvider(), username, contactIds, receiverUserByGroup) ;
         uiApp.addMessage(new ApplicationMessage("UISharedContactsForm.msg.contacts-shared", null)) ;
         UIContactPortlet contactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
@@ -260,7 +260,6 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
             for (String user : users.split(",")) uiForm.permissionUser_.put(user.trim(), user.trim()) ;              
           }          
         }
-        
         uiGroupSelector.setId("UIUserSelector") ;
         uiGroupSelector.setComponent(uiForm, new String[]{UISharedForm.FIELD_USER}) ;
       } else {

@@ -72,14 +72,12 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
     } catch (MissingResourceException mre) {
       return id ;
     }
-  }
+  } 
   
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
   
-  public Map<String, String> getContactGroups() throws Exception {
-    return privateGroupMap_;  
-  }
+  public Map<String, String> getContactGroups() throws Exception { return privateGroupMap_; }
   public void setContactGroups(Map<String, String> contactGroups) { privateGroupMap_ = contactGroups ; }
 
   public Map<String, SharedAddressBook> getSharedContactGroups() { return sharedGroupMap_; }

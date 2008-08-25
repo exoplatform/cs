@@ -116,9 +116,9 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent {
       if(!ContactUtils.isEmpty(lastName)) filter.setLastName(ContactUtils.filterString(lastName, false)) ;
       if(!ContactUtils.isEmpty(nickName)) filter.setNickName(ContactUtils.filterString(nickName, false)) ;      
       if(!ContactUtils.isEmpty(jobTitle)) filter.setJobTitle(ContactUtils.filterString(jobTitle, false)) ;      
-      if(!ContactUtils.isEmpty(email)) filter.setEmailAddress(ContactUtils.filterString(email, true)) ;            
+      if(!ContactUtils.isEmpty(email)) filter.setEmailAddress(ContactUtils.filterString(email, true)) ;
       if(!ContactUtils.isEmpty(gender)) filter.setGender(ContactUtils.filterString(gender, false)) ;
-      
+
       DataPageList resultPageList = null ;
       if (!ContactUtils.isEmpty(filter.getText()) || !ContactUtils.isEmpty(filter.getFullName()) || !ContactUtils.isEmpty(filter.getFirstName()) || 
           !ContactUtils.isEmpty(filter.getLastName()) || !ContactUtils.isEmpty(filter.getNickName()) || !ContactUtils.isEmpty(filter.getJobTitle()) || 
@@ -133,6 +133,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent {
       uiContacts.setSelectedTagBeforeSearch_(uiContacts.getSelectedTag()) ;
       uiContacts.setSelectSharedContactsBeforeSearch(uiContacts.isSelectSharedContacts()) ;
       uiContacts.setViewListBeforeSearch(uiContacts.viewContactsList) ;
+      
       
       uiContacts.setContacts(resultPageList) ;
       uiContacts.setViewContactsList(true) ;

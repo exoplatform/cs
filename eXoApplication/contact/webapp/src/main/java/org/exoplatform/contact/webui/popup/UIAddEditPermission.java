@@ -72,10 +72,9 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
   public UIAddEditPermission() throws Exception {
     this.setName("UIAddEditPermission");
     UIGrid permissionList = addChild(UIGrid.class, null, "PermissionList") ;
-    permissionList.configure("userId", BEAN_FIELD, ACTION);
+    permissionList.configure("viewPermission", BEAN_FIELD, ACTION);
     permissionList.getUIPageIterator().setId("PermissionListIterator") ;
     addChild(UISharedForm.class, null, null) ;
-    ///shareForm.init(null, cal, true);
   }
   public void activate() throws Exception { }
   public void deActivate() throws Exception { }
@@ -179,7 +178,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
   }
   static public class DeleteActionListener extends EventListener<UIAddEditPermission> {
     @SuppressWarnings("unchecked")
-    public void execute(Event<UIAddEditPermission> event) throws Exception {
+	public void execute(Event<UIAddEditPermission> event) throws Exception {
       UIAddEditPermission uiForm = event.getSource();
       String remover = event.getRequestContext().getRequestParameter(OBJECTID);
       ContactService contactService = ContactUtils.getContactService();
@@ -187,6 +186,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
       if (uiForm.isSharedGroup) {
         ContactGroup group = contactService.getGroup(
             SessionProviderFactory.createSessionProvider(), username, uiForm.groupId_) ;
+        
         // delete group permission
         if (group.getViewPermissionGroups() != null && Arrays.asList(group.getViewPermissionGroups()).contains(remover)) {
           List<String> newPerms = new ArrayList<String>() ;
@@ -198,11 +198,11 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
             newPerms.addAll(Arrays.asList(group.getEditPermissionGroups())) ;
             newPerms.remove(remover) ;
             group.setEditPermissionGroups(newPerms.toArray(new String[newPerms.size()])) ;
-          }        
-          OrganizationService organizationService = 
-            (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
-          List<User> users = organizationService.getUserHandler().findUsersByGroup(remover).getAll() ;
+          }
           
+          OrganizationService organizationService = 
+              (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+          List<User> users = organizationService.getUserHandler().findUsersByGroup(remover).getAll() ;
           List<String> viewUsers = new ArrayList<String>() ;
           if (group.getViewPermissionUsers() != null) {
             viewUsers = Arrays.asList(group.getViewPermissionUsers()) ;
@@ -210,7 +210,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
           for (User user : users)
             if (viewUsers.size() > 0 && !viewUsers.contains(user.getUserName() + JCRDataStorage.HYPHEN))
               contactService.removeUserShareAddressBook(
-                SessionProviderFactory.createSessionProvider(), username, uiForm.groupId_, user.getUserName()) ;          
+                SessionProviderFactory.createSessionProvider(), username, uiForm.groupId_, user.getUserName()) ;
         } else {
           if(group.getViewPermissionUsers() != null) {
             List<String> newPerms = new ArrayList<String>() ;
@@ -237,27 +237,27 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
         Contact contact = contactService.getContact(
             SessionProviderFactory.createSessionProvider(), username, uiForm.contactId_) ;
         if (contact.getViewPermissionGroups() != null && Arrays.asList(contact.getViewPermissionGroups()).contains(remover)) {
-          removePerGroup(contact, remover) ;  
+          removePerGroup(contact, remover) ;
           OrganizationService organizationService = 
-            (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+              (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
           List<User> users = organizationService.getUserHandler().findUsersByGroup(remover).getAll() ;
- 
           List<String> viewUsers = new ArrayList<String>() ;
           if (contact.getViewPermissionUsers() != null) {
             viewUsers = Arrays.asList(contact.getViewPermissionUsers()) ;
           }
           for (User user : users)
-            if (viewUsers.size() > 0 && !viewUsers.contains(user.getUserName() + JCRDataStorage.HYPHEN))
+            if (viewUsers.size() > 0 && !viewUsers.contains(user.getUserName() + JCRDataStorage.HYPHEN)) {            	
               try {
-                contactService.removeUserShareContact(
-                    SessionProviderFactory.createSystemProvider(), username, uiForm.contactId_, user.getUserName()) ;
+            	contactService.removeUserShareContact(
+            	  SessionProviderFactory.createSystemProvider(), username, uiForm.contactId_, user.getUserName()) ;
               } catch (PathNotFoundException e) {
-                UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-                uiApp.addMessage(new ApplicationMessage("UIAddEditPermission.msg.cannot-deleteShared", null,
-                    ApplicationMessage.WARNING)) ;
-                event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-                return ;
+            	UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+            	uiApp.addMessage(new ApplicationMessage("UIAddEditPermission.msg.cannot-deleteShared", null,
+            	  ApplicationMessage.WARNING)) ;
+            	event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            	return ;
               }    
+            }
         } else {
           removePerUser(contact, remover + JCRDataStorage.HYPHEN) ;
           try {
@@ -330,9 +330,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
   public class data {
     String viewPermission = null ;
     String editPermission = null ;
-    String userId = null ;
 
-    public  String getUserId() {return userId ;}
     public  String getViewPermission() {return viewPermission ;}
     public  String getEditPermission() {
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
@@ -350,10 +348,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
     }
       
     public data(String username, boolean canEdit) throws Exception {
-      userId = username.replaceFirst(JCRDataStorage.HYPHEN, "") ;
-      User user = getApplicationComponent(OrganizationService.class).getUserHandler().findUserByName(userId) ;
-      if (user == null) viewPermission = username ;
-      else viewPermission = user.getFullName() + "(" + user.getEmail() + ")" ;
+      viewPermission = username.replaceFirst(JCRDataStorage.HYPHEN, "") ;
       String edit = String.valueOf(canEdit) ;
       editPermission = edit.replaceFirst(JCRDataStorage.HYPHEN, "") ;
     }
