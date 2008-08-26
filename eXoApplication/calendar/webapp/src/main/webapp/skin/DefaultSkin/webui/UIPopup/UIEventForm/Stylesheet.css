@@ -98,6 +98,7 @@
 
 .UICalendarPortlet .UIAddNewEvent .UIFormGrid .FieldComponent .Date {
 	float: left;
+	margin-right: 7px;
 }
 
 .UICalendarPortlet .UIAddNewEvent .UIFormGrid .FieldComponent .Date input{
