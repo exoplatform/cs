@@ -122,7 +122,8 @@ public class UIEventDetailTab extends UIFormInputWithActions {
     List<ActionData> uploadedFiles = new ArrayList<ActionData>() ;
     for(Attachment attachdata : attachments_) {
       ActionData fileUpload = new ActionData() ;
-      fileUpload.setActionListener("") ;
+      fileUpload.setActionListener(UIEventForm.ACT_DOWNLOAD) ;
+      fileUpload.setActionParameter(attachdata.getId()) ;
       fileUpload.setActionType(ActionData.TYPE_ICON) ;
       fileUpload.setCssIconClass("AttachmentIcon ZipFileIcon") ;
       fileUpload.setActionName(attachdata.getName() + "-(" + CalendarUtils.convertSize(attachdata.getSize()) + ")" ) ;

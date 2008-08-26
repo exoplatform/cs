@@ -127,7 +127,7 @@ public class ReminderJob implements Job {
       }
       if(!messageList.isEmpty()) mailService.sendMessages(messageList, config);
     } catch (Exception e) {
-      e.printStackTrace();			
+      //e.printStackTrace();			
     }
     if (log_.isDebugEnabled()) log_.debug("File plan job done");
   }
