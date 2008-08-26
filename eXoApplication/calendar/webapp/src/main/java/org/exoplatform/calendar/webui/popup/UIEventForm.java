@@ -45,6 +45,10 @@ import org.exoplatform.calendar.webui.UIFormComboBox;
 import org.exoplatform.calendar.webui.UIFormDateTimePicker;
 import org.exoplatform.calendar.webui.UIListContainer;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.download.DownloadResource;
+import org.exoplatform.download.DownloadService;
+import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.mail.service.MailService;
@@ -94,6 +98,7 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
       @EventConfig(listeners = UIEventForm.AddEmailAddressActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIEventForm.AddAttachmentActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIEventForm.RemoveAttachmentActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIEventForm.DownloadAttachmentActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIEventForm.AddParticipantActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIEventForm.OnChangeActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIEventForm.CancelActionListener.class, phase = Phase.DECODE)
@@ -121,6 +126,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   final public static String ITEM_UNREPEAT = "false".intern() ;
 
   final public static String ACT_REMOVE = "RemoveAttachment".intern() ;
+  final public static String ACT_DOWNLOAD = "DownloadAttachment".intern() ;
   final public static String ACT_ADDEMAIL = "AddEmailAddress".intern() ;
   final public static String ACT_ADDCATEGORY = "AddCategory".intern() ;
   private boolean isAddNew_ = true ;
@@ -887,6 +893,17 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     svr.sendMessage(getSession(), user.getUserName(), acc.getId(), message) ;
   }
 
+
+  public Attachment getAttachment(String attId) {
+    UIEventDetailTab uiDetailTab = getChildById(TAB_EVENTDETAIL) ;
+    for (Attachment att : uiDetailTab.getAttachments()) {
+      if(att.getId().equals(attId)) {
+        return att ;
+      }
+    }
+    return null;
+  }
+
   static  public class AddCategoryActionListener extends EventListener<UIEventForm> {
     public void execute(Event<UIEventForm> event) throws Exception {
       UIEventForm uiForm = event.getSource() ;
@@ -941,6 +958,23 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
     }
   }
+  static  public class DownloadAttachmentActionListener extends EventListener<UIEventForm> {
+    public void execute(Event<UIEventForm> event) throws Exception {
+      UIEventForm uiForm = event.getSource() ;
+      String attId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      Attachment attach = uiForm.getAttachment(attId) ;
+      if(attach != null) {
+        String mimeType = attach.getMimeType().substring(attach.getMimeType().indexOf("/")+1) ;
+        DownloadResource dresource = new InputStreamDownloadResource(attach.getInputStream(), mimeType);
+        DownloadService dservice = (DownloadService)PortalContainer.getInstance().getComponentInstanceOfType(DownloadService.class);
+        dresource.setDownloadName(attach.getName());
+        String downloadLink = dservice.getDownloadLink(dservice.addDownloadResource(dresource));
+        event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + downloadLink + "');");
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getChildById(TAB_EVENTDETAIL)) ;
+      }
+    }
+  }
+
   static  public class AddParticipantActionListener extends EventListener<UIEventForm> {
     public void execute(Event<UIEventForm> event) throws Exception {
       UIEventForm uiForm = event.getSource() ;
@@ -1221,4 +1255,5 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
+
 }
