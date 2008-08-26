@@ -18,6 +18,7 @@
 	  rcontext.getJavascriptManager().addJavascript("eXo.mail.UIMailPortlet.showContextMenu('" + uicomponent.id + "') ;") ;
 	%>
 	<table style="width:99%	"><tbody><tr><td>
+		<div style="width:940px;"><span></span></div>
 	  <div class="ApplicationMinWidth">
 	  	<div class="UIMailPortlet" id="UIMailPortlet">
 	    <%
