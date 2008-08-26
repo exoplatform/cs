@@ -422,7 +422,7 @@ UICalendarPortlet.prototype.switchLayout = function(layout){
     var Browser = eXo.core.Browser;
     layout = parseInt(layout);
     var layout0 = document.getElementById("UIMiniCalendar");
-    var layout1 = document.getElementById("UICalendars").parentNode;
+    var layout1 = document.getElementById("UICalendars");
     var layout3 = document.getElementById("UICalendarContainer");
     var workingarea = eXo.core.DOMUtil.findNextElementByTagName(layout3, "div");
     
