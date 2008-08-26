@@ -13,7 +13,6 @@
 	  rcontext.getJavascriptManager().importJavascript('eXo.mail.UIMailPortlet','/mail/javascript/');
 	  rcontext.getJavascriptManager().importJavascript('eXo.mail.UIColorPicker','/mail/javascript/') ;
 	  rcontext.getJavascriptManager().importJavascript('eXo.mail.MailServiceHandler','/mail/javascript/') ;
-	  rcontext.getJavascriptManager().addJavascript('eXo.mail.UIMailPortlet.checkLayout() ;') ;
 	  rcontext.getJavascriptManager().addJavascript('eXo.mail.MailServiceHandler.init(eXo.cs.webservice.core.WebserviceManager) ;') ;
 	  rcontext.getJavascriptManager().addJavascript("eXo.mail.UIMailPortlet.showContextMenu('" + uicomponent.id + "') ;") ;
 	%>
