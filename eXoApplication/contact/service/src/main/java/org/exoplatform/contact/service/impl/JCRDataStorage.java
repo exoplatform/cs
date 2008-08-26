@@ -607,6 +607,21 @@ public class JCRDataStorage {
         newValues.remove(value) ;
       }
     }
+    
+    String[] viewPer = ValuesToStrings(contactNode.getProperty("exo:viewPermissionUsers").getValues()) ;
+    if (viewPer != null) {
+      List<String> newViewPer = new ArrayList<String>() ;
+      newViewPer.addAll(Arrays.asList(viewPer)) ;
+      newViewPer.remove(removedUser + HYPHEN) ;
+      contactNode.setProperty("exo:viewPermissionUsers", newViewPer.toArray(new String [] {})) ;      
+      String[] editPer = ValuesToStrings(contactNode.getProperty("exo:editPermissionUsers").getValues()) ;
+      if (editPer != null) {
+        List<String> newEditPer = new ArrayList<String>() ;
+        newEditPer.addAll(Arrays.asList(editPer)) ;
+        newEditPer.remove(removedUser + HYPHEN) ;
+        contactNode.setProperty("exo:editPermissionUsers", newEditPer.toArray(new String [] {})) ;
+      }
+    }    
     contactNode.setProperty(SHARED_PROP, newValues.toArray(new String[] {}));
     contactNode.save() ;
     contactNode.getSession().save();
@@ -624,53 +639,24 @@ public class JCRDataStorage {
         newValues.remove(value) ;
       }
     }
+    String[] viewPer = ValuesToStrings(addressBookNode.getProperty("exo:viewPermissionUsers").getValues()) ;
+    if (viewPer != null) {
+      List<String> newViewPer = new ArrayList<String>() ;
+      newViewPer.addAll(Arrays.asList(viewPer)) ;
+      newViewPer.remove(removedUser + HYPHEN) ;
+      addressBookNode.setProperty("exo:viewPermissionUsers", newViewPer.toArray(new String [] {})) ;      
+      String[] editPer = ValuesToStrings(addressBookNode.getProperty("exo:editPermissionUsers").getValues()) ;
+      if (editPer != null) {
+        List<String> newEditPer = new ArrayList<String>() ;
+        newEditPer.addAll(Arrays.asList(editPer)) ;
+        newEditPer.remove(removedUser + HYPHEN) ;
+        addressBookNode.setProperty("exo:editPermissionUsers", newEditPer.toArray(new String [] {})) ;
+      }
+    }    
     addressBookNode.setProperty(SHARED_PROP, newValues.toArray(new String[] {}));
     addressBookNode.save() ;
     addressBookNode.getSession().save(); 
   }
-  
-  /*
-  public void shareAddressBook(SessionProvider sProvider, String username, String addressBookId, List<String> receiveUsers) throws Exception {
-    Node addressBookNode = getUserContactGroupHome(sProvider, username).getNode(addressBookId);
-    Value[] values = {};
-    if (addressBookNode.isNodeType(SHARED_MIXIN)) {     
-      values = addressBookNode.getProperty(SHARED_PROP).getValues();
-    } else {
-    	addressBookNode.addMixin(SHARED_MIXIN);
-    	addressBookNode.setProperty("exo:sharedUserId", username) ;
-    }
-    
-    List<Value> valueList = new ArrayList<Value>() ;
-  	for(String userId : receiveUsers) {
-      
-    	Node sharedAddress = getSharedAddressBook(userId) ;
-      boolean isExist = false ; 
-      for (int i = 0; i < values.length; i++) {
-        Value value = values[i];
-        String uuid = value.getString();
-        Node refNode = sharedAddress.getSession().getNodeByUUID(uuid);
-        if(refNode.getPath().equals(sharedAddress.getPath())) {
-          isExist = true ; 
-          
-//        add to fix bug 623
-          //valueList.clear() ;
-          break ;
-        }
-        valueList.add(value) ;
-      }
-      if(!isExist) {
-        Value value2add = addressBookNode.getSession().getValueFactory().createValue(sharedAddress);
-        valueList.add(value2add) ;
-      }    
-    }
-  	if(valueList.size() > 0) {
-      // getpropertis luu laj truoc khj set 
-      
-  		addressBookNode.setProperty(SHARED_PROP, valueList.toArray( new Value[valueList.size()]));
-  		addressBookNode.save() ;
-      addressBookNode.getSession().save();
-    }    
-  }*/
 
   public void shareAddressBook(SessionProvider sProvider, String username, String addressBookId, List<String> receiveUsers) throws Exception {
     Node addressBookNode = getUserContactGroupHome(sProvider, username).getNode(addressBookId);

@@ -331,7 +331,7 @@ public class UIAddressBooks extends UIComponent {
         if (uiAddressBook.havePermission(address.getId())) {
           addresses.put(address.getId(), ContactUtils
               .getDisplayAdddressShared(address.getSharedUserId(), address.getName())) ;
-        } else if (addressBookId.equals(address.getId())) {
+        } else if (!ContactUtils.isEmpty(addressBookId) && addressBookId.equals(address.getId())) {
           UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.removedPer", null,
             ApplicationMessage.WARNING)) ;
@@ -359,7 +359,7 @@ public class UIAddressBooks extends UIComponent {
         if (uiAddressBook.havePermission(address.getId())) {
           addresses.put(address.getId(), ContactUtils
               .getDisplayAdddressShared(address.getSharedUserId(), address.getName())) ;
-        } else if (groupId.equals(address.getId())) {
+        } else if (!ContactUtils.isEmpty(groupId) && groupId.equals(address.getId())) {
           UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.removedPer", null,
             ApplicationMessage.WARNING)) ;

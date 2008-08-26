@@ -781,7 +781,6 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource();
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
-      uiContacts.setSelectedContact(contactId) ;
       UIContactContainer uiContactContainer = uiContacts.getAncestorOfType(UIContactContainer.class);
       Contact oldContact = uiContacts.contactMap.get(contactId) ;
       Contact newContact = null ;
@@ -796,17 +795,20 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       } else {
         newContact = service.getPublicContact(contactId) ;
       }
-      
       if (newContact == null) {
         UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-deleted", null
             , ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+        List<Contact> contacts = new ArrayList<Contact>() ;
+        contacts.add(oldContact) ;
+        uiContacts.setContact(contacts, false) ;
+        uiContacts.updateList() ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
         return ;
       }
       uiContacts.contactMap.put(contactId, newContact) ;
-      
+      uiContacts.setSelectedContact(contactId) ;
       UIContactPreview uiContactPreview = uiContactContainer.findFirstComponentOfType(UIContactPreview.class);
       uiContactPreview.setContact(newContact);
       uiContactPreview.setRendered(true) ;
