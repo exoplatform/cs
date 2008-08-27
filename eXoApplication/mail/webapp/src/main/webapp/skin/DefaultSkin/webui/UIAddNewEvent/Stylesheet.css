@@ -61,6 +61,7 @@
 
 .UIMailPortlet .UIAddNewEvent .UIFormGrid .FieldComponent .Date {
 	float: left;
+	margin-right: 7px;
 }
 
 .UIAddNewEvent .UIFormGrid .FieldComponent .Date input{
