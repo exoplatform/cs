@@ -36,11 +36,16 @@ import java.util.regex.Pattern;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 
+import net.fortuna.ical4j.model.Property;
+
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarImportExport;
+import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+
+import sun.util.calendar.CalendarUtils;
 
 /**
  * Created by The eXo Platform SAS
@@ -153,29 +158,6 @@ public class CsvImportExport implements CalendarImportExport {
               }
               if(isValid) eventObj.setToDateTime(cal.getTime()) ;
             }
-            //TODO check againt for reminders
-            //Event reminders
-            /*if(!Utils.isEmpty(l.get(dataMap.get(EV_HASREMINDER)))) {
-            if(Boolean.parseBoolean(l.get(dataMap.get(EV_HASREMINDER)))) {
-              if(!Utils.isEmpty(l.get(dataMap.get(EV_REMINDERDATE))) && !Utils.isEmpty(l.get(dataMap.get(EV_REMINDERTIME)))) {
-                try {
-                  List<Reminder> rmList = new ArrayList<Reminder>() ;
-                  Calendar cal = GregorianCalendar.getInstance() ;  
-                  cal.setTime(df.parse(l.get(dataMap.get(EV_REMINDERDATE)) + " " + l.get(dataMap.get(EV_REMINDERTIME)))) ;
-                  Reminder rm = new Reminder() ;
-                  rm.setReminderType(Reminder.TYPE_POPUP) ;
-                  rm.setEventId(eventObj.getId()) ;
-                  rm.setFromDateTime(eventObj.getFromDateTime()) ;
-                  rm.setRepeate(false);
-                  rm.setAlarmBefore(cal.getTimeInMillis()) ;
-                  rmList.add(rm) ;
-                  eventObj.setReminders(rmList) ;
-                } catch (Exception e) {
-                  e.printStackTrace() ;
-                }
-              }
-            }
-          }*/
             //Event oner 9
             //Event Participants 10
             if(!Utils.isEmpty(l.get(dataMap.get(EV_ATTENDEES)))) {
@@ -187,9 +169,9 @@ public class CsvImportExport implements CalendarImportExport {
             }
             //Event categories 14
             if(!Utils.isEmpty(l.get(dataMap.get(EV_CATEGORIES)))) {
-              eventObj.setEventCategoryId(l.get(dataMap.get(EV_CATEGORIES)))  ;
+              eventObj.setEventCategoryId(l.get(dataMap.get(EV_CATEGORIES)).toLowerCase())  ;
             } else {
-              eventObj.setEventCategoryId("csvImported") ;
+              eventObj.setEventCategoryId("csvimported") ;
             }
             //Event Place
             if(!Utils.isEmpty(l.get(dataMap.get(EV_LOCATION)))) {
@@ -259,7 +241,7 @@ public class CsvImportExport implements CalendarImportExport {
       boolean isExists = false ;
       while(iter.hasNext()) {
         cat = iter.nextNode() ;
-        if(cat.getProperty("exo:name").getString().equals("Imported")) {
+        if(cat.getProperty(Utils.EXO_NAME).getString().equals("Imported")) {
           isExists = true ;
           break ;
         }
@@ -271,7 +253,7 @@ public class CsvImportExport implements CalendarImportExport {
         categoryId = calendarCate.getId() ;
         storage_.saveCalendarCategory(sProvider, username, calendarCate, true) ;
       }else {
-        categoryId = cat.getProperty("exo:id").getString() ;
+        categoryId = cat.getProperty(Utils.EXO_ID).getString() ;
       }
       org.exoplatform.calendar.service.Calendar exoCalendar = new org.exoplatform.calendar.service.Calendar() ;
       exoCalendar.setName(calendarName) ;
@@ -282,6 +264,16 @@ public class CsvImportExport implements CalendarImportExport {
       exoCalendar.setCalendarOwner(username) ;
       storage_.saveUserCalendar(sProvider, username, exoCalendar, true) ;   
       for(CalendarEvent exoEvent : data) {
+        if(!Utils.isEmpty(exoEvent.getEventCategoryId())) {
+          EventCategory evCate = new EventCategory() ;
+          evCate.setName(exoEvent.getEventCategoryId()) ;
+          try{
+            storage_.saveEventCategory(sProvider, username, evCate, null, true) ;
+          }catch(Exception e){ 
+            //e.printStackTrace() ;
+            System.out.println("\n\n event category " + evCate.getName() + " existed !");
+          }
+        }
         exoEvent.setCalendarId(exoCalendar.getId()) ;
         storage_.saveUserEvent(sProvider, username, exoCalendar.getId(), exoEvent, true) ;
       }
@@ -289,7 +281,6 @@ public class CsvImportExport implements CalendarImportExport {
   }
 	public List<CalendarEvent> getEventObjects(InputStream icalInputStream)
 			throws Exception {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

@@ -103,7 +103,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
       try {
         String username = Util.getPortalRequestContext().getRemoteUser() ;
         CalendarService calendarService = CalendarUtils.getCalendarService() ;
-        calendarService.getCalendarImportExports(importFormat).importCalendar(SessionProviderFactory.createSystemProvider(), username, input.getUploadDataAsStream(), calendarName) ;
+        calendarService.getCalendarImportExports(importFormat).importCalendar(SessionProviderFactory.createSessionProvider(), username, input.getUploadDataAsStream(), calendarName) ;
         UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
         UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;
         UICalendarViewContainer uiCalendarViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
@@ -117,7 +117,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
       } catch (Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.file-type-error", null));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        e.printStackTrace() ;
+        //e.printStackTrace() ;
         return ; 
       }
     }

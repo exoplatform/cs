@@ -41,6 +41,10 @@ import org.exoplatform.calendar.webui.UIFormComboBox;
 import org.exoplatform.calendar.webui.UIFormDateTimePicker;
 import org.exoplatform.calendar.webui.UIListContainer;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.download.DownloadResource;
+import org.exoplatform.download.DownloadService;
+import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -71,6 +75,7 @@ import org.exoplatform.webui.form.UIFormTabPane;
       @EventConfig(listeners = UITaskForm.AddCategoryActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UITaskForm.AddEmailAddressActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UITaskForm.AddAttachmentActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UITaskForm.DownloadAttachmentActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UITaskForm.RemoveAttachmentActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UITaskForm.SelectUserActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UITaskForm.CancelActionListener.class, phase = Phase.DECODE)
@@ -584,7 +589,31 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     return CalendarUtils.getCalendarOption() ;
   }
 
-
+  public Attachment getAttachment(String attId) {
+    UITaskDetailTab uiDetailTab = getChildById(TAB_TASKDETAIL) ;
+    for (Attachment att : uiDetailTab.getAttachments()) {
+      if(att.getId().equals(attId)) {
+        return att ;
+      }
+    }
+    return null;
+  }
+  static  public class DownloadAttachmentActionListener extends EventListener<UITaskForm> {
+    public void execute(Event<UITaskForm> event) throws Exception {
+      UITaskForm uiForm = event.getSource() ;
+      String attId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      Attachment attach = uiForm.getAttachment(attId) ;
+      if(attach != null) {
+        String mimeType = attach.getMimeType().substring(attach.getMimeType().indexOf("/")+1) ;
+        DownloadResource dresource = new InputStreamDownloadResource(attach.getInputStream(), mimeType);
+        DownloadService dservice = (DownloadService)PortalContainer.getInstance().getComponentInstanceOfType(DownloadService.class);
+        dresource.setDownloadName(attach.getName());
+        String downloadLink = dservice.getDownloadLink(dservice.addDownloadResource(dresource));
+        event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + downloadLink + "');");
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getChildById(TAB_TASKDETAIL)) ;
+      }
+    }
+  }
   static  public class AddCategoryActionListener extends EventListener<UITaskForm> {
     public void execute(Event<UITaskForm> event) throws Exception {
       UITaskForm uiForm = event.getSource() ;

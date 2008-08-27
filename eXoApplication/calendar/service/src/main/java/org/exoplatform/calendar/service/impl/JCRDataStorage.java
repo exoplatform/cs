@@ -1320,20 +1320,17 @@ public class JCRDataStorage{
           Attachment attachment = new Attachment() ;
           attachment.setId(attchmentNode.getPath()) ;
           if(attchmentNode.hasProperty(Utils.EXO_FILE_NAME)) attachment.setName(attchmentNode.getProperty(Utils.EXO_FILE_NAME).getString()) ;
-          //attachment.setName(attchmentNode.getName()) ;
           Node contentNode = attchmentNode.getNode(Utils.JCR_CONTENT) ; 
           if(contentNode != null) {
             if(contentNode.hasProperty(Utils.JCR_LASTMODIFIED)) attachment.setLastModified(contentNode.getProperty(Utils.JCR_LASTMODIFIED).getDate()) ;
             if(contentNode.hasProperty(Utils.JCR_MIMETYPE)) attachment.setMimeType(contentNode.getProperty(Utils.JCR_MIMETYPE).getString()) ;
             if(contentNode.hasProperty(Utils.JCR_DATA)) {
               InputStream  inputStream = contentNode.getProperty(Utils.JCR_DATA).getStream() ;
-              /*attachment.setInputStream(inputStream) ;*/
               attachment.setSize(inputStream.available()) ;
+              attachment.setInputStream(inputStream) ;
             }
-            //attachment.setId(contentNode.getPath()) ;
           }
           attachment.setWorkspace(attchmentNode.getSession().getWorkspace().getName()) ;
-          //System.out.println("\n\n attachment " + attachment.getWorkspace());
           attachments.add(attachment) ;
         }
       }
@@ -2043,23 +2040,21 @@ public class JCRDataStorage{
     }
   }
 
-  public void moveEvent(SessionProvider sProvider, String fromCalendar, String toCalendar, String fromType, String toType, List<CalendarEvent> calEvents, String username) throws Exception {
+  public void moveEvent(SessionProvider sProvider, String formCalendar, String toCalendar, String fromType, String toType, List<CalendarEvent> calEvents, String username) throws Exception {
     SessionProvider systemSession = SessionProvider.createSystemProvider() ;
     switch (Integer.parseInt(fromType)) {
     case  Calendar.TYPE_PRIVATE :  
-      if(getUserCalendarHome(sProvider, username).hasNode(fromCalendar)) {
-        Node formCalNode = getUserCalendarHome(sProvider, username).getNode(fromCalendar) ;
+      if(getUserCalendarHome(sProvider, username).hasNode(formCalendar)) {
         switch (Integer.parseInt(toType)) {
         case Calendar.TYPE_PRIVATE:
           //move events in side private calendars
           if(getUserCalendarHome(sProvider, username).hasNode(toCalendar)){
-            Node toCalNode = getUserCalendarHome(sProvider, username).getNode(toCalendar) ;
             for(CalendarEvent calEvent : calEvents) {
-              if(fromCalendar.equals(toCalendar)) {
-                saveUserEvent(sProvider, username, toCalendar, calEvent,  false) ;
-              } else {
-                toCalNode.getSession().getWorkspace().move(formCalNode.getNode(calEvent.getId()).getPath(), toCalNode.getPath()+"/"+ calEvent.getId()) ; 
+              if(!formCalendar.equals(toCalendar)) {
+                removeUserEvent(sProvider, username, formCalendar, calEvent.getId()) ;
                 calEvent.setCalendarId(toCalendar) ;
+                saveUserEvent(sProvider, username, toCalendar, calEvent, getUserCalendarHome(sProvider, username).getNode(toCalendar).hasNode(calEvent.getId())) ;
+              } else {
                 saveUserEvent(sProvider, username, toCalendar, calEvent,  false) ;
               }
             }
@@ -2068,24 +2063,20 @@ public class JCRDataStorage{
         case Calendar.TYPE_SHARED:
           //move events form private to shared calendar
           if(getSharedCalendarHome(systemSession).hasNode(username)){
-            //Node toCalNode = getSharedCalendarHome(systemSession).getNode(username).getNode(toCalendar) ;
             for(CalendarEvent calEvent : calEvents) {
-              removeUserEvent(sProvider, username, fromCalendar, calEvent.getId()) ;
-              //toCalNode.getSession().getWorkspace().move(formCalNode.getNode(calEvent.getId()).getPath(), toCalNode.getPath()+"/"+ calEvent.getId()) ; 
+              removeUserEvent(sProvider, username, formCalendar, calEvent.getId()) ;
               calEvent.setCalendarId(toCalendar) ;
-              saveEventToSharedCalendar(systemSession, username, toCalendar, calEvent, true);
+              saveEventToSharedCalendar(systemSession, username, toCalendar, calEvent, getSharedCalendarHome(systemSession).getNode(username).hasNode(calEvent.getId()));
             }
           }
           break;
         case Calendar.TYPE_PUBLIC:
           //move events form private to public calendar
           if(getPublicCalendarHome(systemSession).hasNode(toCalendar)){
-            Node toCalNode = getPublicCalendarHome(systemSession).getNode(toCalendar) ;
             for(CalendarEvent calEvent : calEvents) {
-              //removeUserEvent(systemSession, username, fromCalendar, calEvent.getId()) ;
-              toCalNode.getSession().getWorkspace().move(formCalNode.getNode(calEvent.getId()).getPath(), toCalNode.getPath()+"/"+ calEvent.getId()) ;
+              removeUserEvent(systemSession, username, formCalendar, calEvent.getId()) ;
               calEvent.setCalendarId(toCalendar) ;
-              savePublicEvent(systemSession, toCalendar, calEvent, false) ;
+              savePublicEvent(systemSession, toCalendar, calEvent, getPublicCalendarHome(systemSession).getNode(toCalendar).hasNode(calEvent.getId())) ;
             }
           }
           break;
@@ -2096,30 +2087,25 @@ public class JCRDataStorage{
       break;
     case Calendar.TYPE_SHARED:
       if(getSharedCalendarHome(systemSession).hasNode(username)) {
-        //Node formCalNode = getSharedCalendarHome(systemSession).getNode(username).getNode(fromCalendar) ;
         switch (Integer.parseInt(toType)) {
         case Calendar.TYPE_PRIVATE:
           //move events form share to private calendar
           if(getUserCalendarHome(sProvider, username).hasNode(toCalendar)) {
-            //Node toCalNode = getUserCalendarHome(sProvider, username).getNode(toCalendar) ;
             for(CalendarEvent calEvent : calEvents) {
-              removeSharedEvent(systemSession, username, fromCalendar, calEvent.getId()) ;
-              //toCalNode.getSession().getWorkspace().move(formCalNode.getNode(calEvent.getId()).getPath(), toCalNode.getPath()+"/"+ calEvent.getId()) ;
+              removeSharedEvent(systemSession, username, formCalendar, calEvent.getId()) ;
               calEvent.setCalendarId(toCalendar) ;
-              saveUserEvent(sProvider, username, toCalendar, calEvent, true) ;
+              saveUserEvent(sProvider, username, toCalendar, calEvent, getUserCalendarHome(sProvider, username).getNode(toCalendar).hasNode(calEvent.getId())) ;
             }
           }
           break;
         case Calendar.TYPE_SHARED:
           //   move events in side shared calendars
           if(getSharedCalendarHome(systemSession).hasNode(username)){
-            //Node toCalNode = getSharedCalendarHome(systemSession).getNode(username).getNode(toCalendar) ;
             for(CalendarEvent calEvent : calEvents) {
-              if(!fromCalendar.equals(toCalendar)) {
-                removeSharedEvent(systemSession, username, fromCalendar, calEvent.getId()) ;
-                //toCalNode.getSession().getWorkspace().move(formCalNode.getNode(calEvent.getId()).getPath(), toCalNode.getPath()+"/"+ calEvent.getId()) ;
+              if(!formCalendar.equals(toCalendar)) {
+                removeSharedEvent(systemSession, username, formCalendar, calEvent.getId()) ;
                 calEvent.setCalendarId(toCalendar) ;
-                saveEventToSharedCalendar(systemSession, username, toCalendar, calEvent, true);
+                saveEventToSharedCalendar(systemSession, username, toCalendar, calEvent, getSharedCalendarHome(systemSession).getNode(username).hasNode(calEvent.getId()));
               } else {
                 saveEventToSharedCalendar(systemSession, username, toCalendar, calEvent, false);
               }
@@ -2128,13 +2114,11 @@ public class JCRDataStorage{
           break;
         case Calendar.TYPE_PUBLIC:
           //move events form share to public calendar
-          if(getPublicCalendarHome(systemSession).hasNode(fromCalendar)) {
-            //Node toCalNode = getPublicCalendarHome(systemSession).getNode(toCalendar) ;
+          if(getPublicCalendarHome(systemSession).hasNode(toCalendar)) {
             for(CalendarEvent calEvent : calEvents) {
-              removeSharedEvent(systemSession, username, fromCalendar, calEvent.getId()) ;
-              //toCalNode.getSession().getWorkspace().move(formCalNode.getNode(calEvent.getId()).getPath(), toCalNode.getPath()+"/"+ calEvent.getId()) ;
+              removeSharedEvent(systemSession, username, formCalendar, calEvent.getId()) ;
               calEvent.setCalendarId(toCalendar) ;
-              savePublicEvent(systemSession, toCalendar, calEvent, true) ;
+              savePublicEvent(systemSession, toCalendar, calEvent, getPublicCalendarHome(systemSession).getNode(toCalendar).hasNode(calEvent.getId())) ;
             }
           }
           break;
@@ -2144,28 +2128,23 @@ public class JCRDataStorage{
       }
       break;
     case Calendar.TYPE_PUBLIC:
-      if(getPublicCalendarHome(systemSession).hasNode(fromCalendar)) {
-        Node formCalNode = getPublicCalendarHome(systemSession).getNode(fromCalendar) ;
+      if(getPublicCalendarHome(systemSession).hasNode(formCalendar)) {
         switch (Integer.parseInt(toType)) {
         case Calendar.TYPE_PRIVATE:
           //move events from public to private calendar
           if(getUserCalendarHome(sProvider, username).hasNode(toCalendar)) {
-            Node toCalNode = getUserCalendarHome(sProvider, username).getNode(toCalendar) ;
             for(CalendarEvent calEvent : calEvents) {
-              //removePublicEvent(systemSession, fromCalendar, calEvent.getId()) ;
-              toCalNode.getSession().getWorkspace().move(formCalNode.getNode(calEvent.getId()).getPath(), toCalNode.getPath()+"/"+ calEvent.getId()) ;
+              removePublicEvent(systemSession, formCalendar, calEvent.getId()) ;
               calEvent.setCalendarId(toCalendar) ;
-              saveUserEvent(sProvider, username, toCalendar, calEvent, false) ;
+              saveUserEvent(sProvider, username, toCalendar, calEvent, getUserCalendarHome(sProvider, username).getNode(toCalendar).hasNode(calEvent.getId())) ;
             }
           }
           break;
         case Calendar.TYPE_SHARED:
           //move events from public to shared calendar
           if(getSharedCalendarHome(systemSession).hasNode(username)){
-            //Node toCalNode = getSharedCalendarHome(systemSession).getNode(username).getNode(toCalendar) ;
             for(CalendarEvent calEvent : calEvents) {
-              removePublicEvent(systemSession, fromCalendar, calEvent.getId()) ;
-              //toCalNode.getSession().getWorkspace().move(formCalNode.getNode(calEvent.getId()).getPath(), toCalNode.getPath()+"/"+ calEvent.getId()) ;
+              removePublicEvent(systemSession, formCalendar, calEvent.getId()) ;
               calEvent.setCalendarId(toCalendar) ;
               saveEventToSharedCalendar(systemSession, username, toCalendar, calEvent, true);
             }
@@ -2174,13 +2153,11 @@ public class JCRDataStorage{
         case Calendar.TYPE_PUBLIC:
           //move events in side public calendars
           if(getPublicCalendarHome(systemSession).hasNode(toCalendar)){
-            Node toCalNode = getPublicCalendarHome(systemSession).getNode(toCalendar) ;
             for(CalendarEvent calEvent : calEvents) {
-              if(!fromCalendar.equals(toCalendar)) {
-                //removePublicEvent(systemSession, fromCalendar, calEvent.getId()) ;
-                toCalNode.getSession().getWorkspace().move(formCalNode.getNode(calEvent.getId()).getPath(), toCalNode.getPath()+"/"+ calEvent.getId()) ;
+              if(!formCalendar.equals(toCalendar)) {
+                removePublicEvent(systemSession, formCalendar, calEvent.getId()) ;
                 calEvent.setCalendarId(toCalendar) ;
-                savePublicEvent(systemSession, toCalendar, calEvent, false) ;
+                savePublicEvent(systemSession, toCalendar, calEvent, getPublicCalendarHome(systemSession).getNode(toCalendar).hasNode(calEvent.getId())) ;
               } else {
                 savePublicEvent(systemSession, toCalendar, calEvent,  false) ;
               }
