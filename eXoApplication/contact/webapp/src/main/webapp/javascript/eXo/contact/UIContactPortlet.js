@@ -446,7 +446,8 @@ UIContactPortlet.prototype.switchLayout = function(layout) {
   var panelWorking = document.getElementById('UIContactContainer');
   var objRoot = document.getElementById("UIAddressBooks");
 	objRoot = DOMUtil.findFirstDescendantByClass(objRoot, "div", "PersonalAddress");
-	objRoot = DOMUtil.findFirstDescendantByClass(objRoot, "div", "PrivateAddressBook");	
+	objRoot = DOMUtil.findFirstDescendantByClass(objRoot, "div", "PrivateAddressBook");
+	var showCheckedMenu = false;
   var isWelcome = eXo.core.DOMUtil.findFirstDescendantByClass(contactLayout4, "div", "UIWelcomeContact");
   switch(layout) {
     case 0 : 
