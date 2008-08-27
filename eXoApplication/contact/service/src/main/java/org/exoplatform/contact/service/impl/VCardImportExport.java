@@ -68,58 +68,58 @@ public class VCardImportExport implements ContactImportExport {
   private static String          eXoSkypeId  = "EXO-SKYPEID";
   private static String          eXoMsnId    = "EXO-MSNID";
   private static String          eXoYahooId  = "EXO-YAHOOID";
-  private static int          maxLength = 150 ;
+  private static int             maxLength = 150 ;
   
   private static String ENCODING = "UTF-8";
   private JCRDataStorage storage_ ;
   
   public VCardImportExport (JCRDataStorage storage) throws Exception{
-  	storage_ = storage ;
+    storage_ = storage ;
   }
   
   public OutputStream exportContact(SessionProvider sProvider, String username, String[] addressBookIds) throws Exception {
-  	List<Contact> contactList = new ArrayList<Contact>() ;
-  	List<String> privateAddress = new ArrayList<String> () ;
-  	List<String> publicAddress = new ArrayList<String> () ;
-  	for(String address : addressBookIds){
-  		Node contactGroupHome = storage_.getUserContactGroupHome(sProvider, username) ;
+    List<Contact> contactList = new ArrayList<Contact>() ;
+    List<String> privateAddress = new ArrayList<String> () ;
+    List<String> publicAddress = new ArrayList<String> () ;
+    for(String address : addressBookIds){
+      Node contactGroupHome = storage_.getUserContactGroupHome(sProvider, username) ;
       Node publicContactGroupHome = storage_.getPublicContactHome(sProvider);
-  		try {
-  			if(contactGroupHome.hasNode(address)) {
-    			privateAddress.add(address) ;
-    		}else if (publicContactGroupHome.hasNode(address)){
-    			publicAddress.add(address) ;
-    		} else {
-    			String[] array = address.split(JCRDataStorage.HYPHEN) ;
-    			if(array.length == 2) {
+      try {
+      if(contactGroupHome.hasNode(address)) {
+        privateAddress.add(address) ;
+      } else if (publicContactGroupHome.hasNode(address)){
+        publicAddress.add(address) ;
+      } else {
+        String[] array = address.split(JCRDataStorage.HYPHEN) ;
+        if(array.length == 2) {
             ContactPageList pageList = storage_.getSharedContactsByAddressBook(
-                sProvider, username, new SharedAddressBook(null, array[0], array[1])) ;
-    				if (pageList.getAvailable() + contactList.size() >= 130) throw new ArrayIndexOutOfBoundsException() ;
+              sProvider, username, new SharedAddressBook(null, array[0], array[1])) ;
+          if (pageList.getAvailable() + contactList.size() >= 130) throw new ArrayIndexOutOfBoundsException() ;
             contactList.addAll(pageList.getAll()) ;
-    			}    		  
+        }         
         }
-  		}catch(RepositoryException re) {
-  			publicAddress.add(address) ;
-  		}  		
-  	}
-  	if(privateAddress.size() > 0) {
-  		ContactFilter filter = new ContactFilter() ;
-  		filter.setCategories(privateAddress.toArray(new String[]{})) ;
+      } catch(RepositoryException re) {
+      publicAddress.add(address) ;
+      }     
+    }
+    if(privateAddress.size() > 0) {
+      ContactFilter filter = new ContactFilter() ;
+      filter.setCategories(privateAddress.toArray(new String[]{})) ;
       ContactPageList pageList = storage_.getContactPageListByGroup(sProvider, username, filter, JCRDataStorage.PRIVATE) ;
       if (pageList.getAvailable() + contactList.size() >= 130) throw new ArrayIndexOutOfBoundsException() ;
       contactList.addAll(pageList.getAll()) ;
-  	}
-  	if(publicAddress.size() > 0) {
-  		ContactFilter filter = new ContactFilter() ;
-  		filter.setCategories(publicAddress.toArray(new String[]{})) ;
+    }
+    if(publicAddress.size() > 0) {
+      ContactFilter filter = new ContactFilter() ;
+      filter.setCategories(publicAddress.toArray(new String[]{})) ;
       ContactPageList pageList = storage_.getContactPageListByGroup(sProvider, username, filter, JCRDataStorage.PUBLIC) ;
       if (pageList.getAvailable() + contactList.size() >= 130) throw new ArrayIndexOutOfBoundsException() ;
       contactList.addAll(pageList.getAll()) ;
-  	}
-  	if(contactList.size() > 0) {
-  		return exportContact(username, contactList) ;
-  	}
-  	return null; 
+    }
+    if(contactList.size() > 0) {
+      return exportContact(username, contactList) ;
+    }
+    return null; 
   }
   
   public OutputStream exportContact(String username, List<Contact> contacts) throws Exception {
@@ -285,7 +285,7 @@ public class VCardImportExport implements ContactImportExport {
     // die here when image size about 1mb
     net.wimpi.pim.contact.model.Contact[] pimContacts = unmarshaller.unmarshallContacts(input);    
     if (pimContacts == null || pimContacts.length == 0) throw new Exception() ;
-    if (pimContacts.length > maxLength) throw new IndexOutOfBoundsException() ; 
+    if (pimContacts.length > maxLength) throw new IndexOutOfBoundsException() ;
     
     List<Contact> contacts = new ArrayList<Contact>() ;
     for (int index = 0; index < pimContacts.length; index++) {
@@ -299,10 +299,14 @@ public class VCardImportExport implements ContactImportExport {
       }
       String fullName = nullToEmptyString(identity.getFormattedName());
       contact.setFullName(fullName);
-      
       String lastName = identity.getLastname();
-      String firstName = identity.getFirstname();  
-
+      String firstName = identity.getFirstname();
+      
+      // add 26-8
+      if (fullName == null || fullName.length() == 0) {
+        fullName = firstName + " " + lastName ;
+        contact.setFullName(fullName) ;
+      }
       int indexComma = fullName.indexOf(";");
       if (indexComma >= 0) {
         int indexSpace = fullName.indexOf(" ") ;
@@ -313,7 +317,9 @@ public class VCardImportExport implements ContactImportExport {
         if (firstName.trim().equals(additionName.trim())) contact.setFirstName(firstName) ;
         else contact.setFirstName(firstName + " " + additionName);
       }
-      contact.setLastName(lastName);      
+       
+      contact.setLastName(lastName); 
+      
       int size = identity.getAdditionalNameCount();      
       String nickName = "";
       size = identity.getNicknameCount();
@@ -502,7 +508,6 @@ public class VCardImportExport implements ContactImportExport {
     
     
   }
-  
 
   private void addPhoneNumber(ContactModelFactory cmf, Communications comm, String number,
       boolean isHome, boolean isFax, boolean isCellular) {

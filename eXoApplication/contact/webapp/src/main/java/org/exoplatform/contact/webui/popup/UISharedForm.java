@@ -168,7 +168,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
   
   static  public class SaveActionListener extends EventListener<UISharedForm> {
     @SuppressWarnings("unchecked")
-	public void execute(Event<UISharedForm> event) throws Exception {
+  public void execute(Event<UISharedForm> event) throws Exception {
       UISharedForm uiForm = event.getSource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       String names = uiForm.getUIStringInput(FIELD_USER).getValue() ;
@@ -232,8 +232,6 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       }
       
       // xong phan xu ly recieve users
-
-      // if (receiveUsers.size() > 0 || receiveUsersByGroups.size() > 0) {
       if (uiForm.isSharedGroup) {
         ContactGroup contactGroup = uiForm.group_ ;
         if(uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).isChecked()) {
@@ -301,9 +299,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         event.getRequestContext().addUIComponentToUpdateByAjax(uiAddEdit) ;          
         event.getRequestContext().addUIComponentToUpdateByAjax(
             uiForm.getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class)) ;
-      } else { // shared contact
-        
-        
+      } else { // shared contact 
         if (uiForm.isNew_) {
           Map<String, String> viewMapUsers = new LinkedHashMap<String, String>() ; 
           for (String user : receiveUsers.keySet()) viewMapUsers.put(user, user) ;
@@ -320,6 +316,14 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
           Contact contact = uiForm.contact_ ;
           addPerUsers(contact, viewMapUsers, editMapUsers) ;
           addPerGroups(contact, viewMapGroups, editMapGroups) ;
+          
+          // add to fix bug cs-1300
+          UIContacts uiContacts = uiForm.getAncestorOfType(
+              UIContactPortlet.class).findFirstComponentOfType(UIContacts.class) ;
+          if (uiContacts.getContactMap().get(contact.getId()) != null) {
+            uiContacts.getContactMap().put(contact.getId(), contact) ;
+          }
+     
           
           try {
             contactService.saveContact(sessionProvider, username, contact, false) ;
@@ -378,10 +382,16 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
           
           UIContacts uiContacts = uiForm.getAncestorOfType(
               UIContactPortlet.class).findFirstComponentOfType(UIContacts.class) ;
+          
+//        add to fix bug cs-1300
+          if (uiContacts.getContactMap().get(contact.getId()) != null) {
+            uiContacts.getContactMap().put(contact.getId(), contact) ;
+          }
+          /*
           if (uiContacts.isDisplaySearchResult()) {
             uiContacts.getContactMap().put(contact.getId(), contact) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
-          }
+          }*/
         } 
       }
       uiForm.getUIStringInput(UISharedForm.FIELD_USER).setValue(null) ;
