@@ -607,21 +607,22 @@ public class JCRDataStorage {
         newValues.remove(value) ;
       }
     }
-    
-    String[] viewPer = ValuesToStrings(contactNode.getProperty("exo:viewPermissionUsers").getValues()) ;
-    if (viewPer != null) {
-      List<String> newViewPer = new ArrayList<String>() ;
-      newViewPer.addAll(Arrays.asList(viewPer)) ;
-      newViewPer.remove(removedUser + HYPHEN) ;
-      contactNode.setProperty("exo:viewPermissionUsers", newViewPer.toArray(new String [] {})) ;      
-      String[] editPer = ValuesToStrings(contactNode.getProperty("exo:editPermissionUsers").getValues()) ;
-      if (editPer != null) {
-        List<String> newEditPer = new ArrayList<String>() ;
-        newEditPer.addAll(Arrays.asList(editPer)) ;
-        newEditPer.remove(removedUser + HYPHEN) ;
-        contactNode.setProperty("exo:editPermissionUsers", newEditPer.toArray(new String [] {})) ;
+    try {
+      String[] viewPer = ValuesToStrings(contactNode.getProperty("exo:viewPermissionUsers").getValues()) ;
+      if (viewPer != null) {
+        List<String> newViewPer = new ArrayList<String>() ;
+        newViewPer.addAll(Arrays.asList(viewPer)) ;
+        newViewPer.remove(removedUser + HYPHEN) ;
+        contactNode.setProperty("exo:viewPermissionUsers", newViewPer.toArray(new String [] {})) ;      
+        String[] editPer = ValuesToStrings(contactNode.getProperty("exo:editPermissionUsers").getValues()) ;
+        if (editPer != null) {
+          List<String> newEditPer = new ArrayList<String>() ;
+          newEditPer.addAll(Arrays.asList(editPer)) ;
+          newEditPer.remove(removedUser + HYPHEN) ;
+          contactNode.setProperty("exo:editPermissionUsers", newEditPer.toArray(new String [] {})) ;
+        }
       }
-    }    
+    } catch (PathNotFoundException e) { }
     contactNode.setProperty(SHARED_PROP, newValues.toArray(new String[] {}));
     contactNode.save() ;
     contactNode.getSession().save();
@@ -639,20 +640,26 @@ public class JCRDataStorage {
         newValues.remove(value) ;
       }
     }
-    String[] viewPer = ValuesToStrings(addressBookNode.getProperty("exo:viewPermissionUsers").getValues()) ;
+    String[] viewPer = null ;
+    try {
+      viewPer = ValuesToStrings(addressBookNode.getProperty("exo:viewPermissionUsers").getValues()) ;
+    } catch (PathNotFoundException e) { }
     if (viewPer != null) {
       List<String> newViewPer = new ArrayList<String>() ;
       newViewPer.addAll(Arrays.asList(viewPer)) ;
-      newViewPer.remove(removedUser + HYPHEN) ;
+      newViewPer.remove(removedUser + HYPHEN) ; 
       addressBookNode.setProperty("exo:viewPermissionUsers", newViewPer.toArray(new String [] {})) ;      
-      String[] editPer = ValuesToStrings(addressBookNode.getProperty("exo:editPermissionUsers").getValues()) ;
+      String[] editPer = null ;
+      try {
+        editPer = ValuesToStrings(addressBookNode.getProperty("exo:editPermissionUsers").getValues()) ;
+      } catch (PathNotFoundException e) { }
       if (editPer != null) {
         List<String> newEditPer = new ArrayList<String>() ;
         newEditPer.addAll(Arrays.asList(editPer)) ;
         newEditPer.remove(removedUser + HYPHEN) ;
         addressBookNode.setProperty("exo:editPermissionUsers", newEditPer.toArray(new String [] {})) ;
       }
-    }    
+    }
     addressBookNode.setProperty(SHARED_PROP, newValues.toArray(new String[] {}));
     addressBookNode.save() ;
     addressBookNode.getSession().save(); 
