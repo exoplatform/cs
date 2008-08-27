@@ -291,7 +291,8 @@ public class ICalendarImportExport implements CalendarImportExport{
           try{
             storage_.saveEventCategory(sProvider, username, evCate, null, true) ;
           }catch(Exception e){ 
-            e.printStackTrace() ;
+            //e.printStackTrace() ;
+            System.out.println("\n\n event category " + evCate.getName() + " existed !");
           }
           eventCategoryId = evCate.getName() ;
         }

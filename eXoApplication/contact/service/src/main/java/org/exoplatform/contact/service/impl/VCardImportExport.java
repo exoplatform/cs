@@ -307,6 +307,11 @@ public class VCardImportExport implements ContactImportExport {
         fullName = firstName + " " + lastName ;
         contact.setFullName(fullName) ;
       }
+      // add 26-8
+      if (fullName == null || fullName.length() == 0) {
+        fullName = firstName + " " + lastName ;
+        contact.setFullName(fullName) ;
+      }
       int indexComma = fullName.indexOf(";");
       if (indexComma >= 0) {
         int indexSpace = fullName.indexOf(" ") ;
