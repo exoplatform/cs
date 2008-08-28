@@ -787,13 +787,13 @@ public class MailServiceImpl implements MailService {
 
     if (!Utils.isEmptyField(filter.getBody())) {
       BodyTerm bodyTerm = new BodyTerm(filter.getBody());
-      if (filter.getSubjectCondition() == Utils.CONDITION_CONTAIN) {
+      if (filter.getBodyCondition() == Utils.CONDITION_CONTAIN) {
         if (sTerm == null) {
           sTerm = bodyTerm;
         } else {
           sTerm = new AndTerm(sTerm, bodyTerm);
         }
-      } else if (filter.getSubjectCondition() == Utils.CONDITION_NOT_CONTAIN) {
+      } else if (filter.getBodyCondition() == Utils.CONDITION_NOT_CONTAIN) {
         if (sTerm == null) {
           sTerm = new NotTerm(bodyTerm);
         } else {
