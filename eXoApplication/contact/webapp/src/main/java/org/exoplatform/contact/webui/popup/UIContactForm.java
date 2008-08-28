@@ -299,15 +299,15 @@ public class UIContactForm extends UIFormTabPane {
               }              
             } else {
               Contact sharedContact = contactService
-                .getSharedContact(SessionProvider.createSystemProvider(), username, contact.getId()) ;                
-              if (uiContactForm.getAncestorOfType(UIContactPortlet.class)
+                .getSharedContact(SessionProvider.createSystemProvider(), username, contact.getId()) ; 
+              if (sharedContact == null || !uiContactForm.getAncestorOfType(UIContactPortlet.class)
                   .findFirstComponentOfType(UIContacts.class).havePermission(sharedContact)) {
-                contactService.saveSharedContact(username, contact) ;                              
-              } else {
                 uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.removedPer", null, 
                     ApplicationMessage.WARNING)) ;
                 event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
                 return ;                
+              } else {
+                contactService.saveSharedContact(username, contact) ; 
               }
             }
           }
