@@ -312,7 +312,7 @@ public class UIMessagePreview extends UIComponent {
 			Message msg = uiMsgPreview.getShowedMessageById(msgId) ;
 			if (msg != null) {
 				UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
-				UIPopupActionContainer uiPopupContainer = uiPopup.createUIComponent(UIPopupActionContainer.class, null, null) ;
+				UIPopupActionContainer uiPopupContainer = uiPopup.createUIComponent(UIPopupActionContainer.class, null, "UIPopupActionAddContactContainer") ;
 				uiPopup.activate(uiPopupContainer, 730, 0, true);
 
 				UIAddContactForm uiAddContactForm = uiPopupContainer.createUIComponent(UIAddContactForm.class, null, null);

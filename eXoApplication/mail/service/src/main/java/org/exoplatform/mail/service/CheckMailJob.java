@@ -25,7 +25,7 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-public class CheckMailJob extends Thread implements Job, Runnable  {
+public class CheckMailJob extends Thread implements Job {
   private Thread thread ;
   
 	public CheckMailJob() throws Exception {
