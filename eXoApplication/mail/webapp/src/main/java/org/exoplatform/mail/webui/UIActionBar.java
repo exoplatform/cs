@@ -28,6 +28,7 @@ import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -61,40 +62,21 @@ public class UIActionBar extends UIContainer {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ;
       UIMailPortlet uiPortlet = uiActionBar.getAncestorOfType(UIMailPortlet.class) ;
-      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
-      MailService mailSvr = uiActionBar.getApplicationComponent(MailService.class) ;
       String username =  MailUtils.getCurrentUser() ;
       UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
       String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
+      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
       if(Utils.isEmptyField(accId)) {
         uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
+      } if (MailUtils.isChecking(username, accId)) {
+        System.out.println("####  You are checking mail ");
+        context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.showStatusBox() ;");
+        return ;
       } else {
-        Account acc = mailSvr.getAccountById(SessionProviderFactory.createSystemProvider(), username, accId);
-        if (!Utils.checkConnection(acc)) {
-          uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.conection-false", null)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;
-        }
-      }
-      try {
-      	if(MailUtils.isChecking(username, accId)) {
-      		System.out.println("####  You are checking mail ");
-      		return ; 
-        }else {
-        	mailSvr.checkMail(username, accId) ;        	
-        }      	        
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UINavigationContainer.class)); 
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class)); 
-      } catch (AuthenticationFailedException afe) {
-        afe.printStackTrace() ;
-        uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.userName-password-incorrect", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-      } catch (Exception e) {
-        //e.printStackTrace() ;
-        uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.check-mail-error", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.checkMail(true) ;");
+        context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.showStatusBox() ;");        
       }
     }
   }
