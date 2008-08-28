@@ -333,11 +333,13 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
       UIAddContactForm uiContact = event.getSource();
       UIMailPortlet uiPortlet = uiContact.getAncestorOfType(UIMailPortlet.class);
       UIAddressBookForm uiAddress = uiPortlet.findFirstComponentOfType(UIAddressBookForm.class);
-      uiAddress.updateGroup(uiContact.selectedGroup_) ;
+      if (uiAddress != null) {
+        uiAddress.updateGroup(uiContact.selectedGroup_) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiAddress.getParent()) ;
+      }
       UIPopupAction uiPopupAction = uiContact.getAncestorOfType(UIPopupAction.class) ; 
       uiPopupAction.deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddress.getParent()) ;
     }
   }
   

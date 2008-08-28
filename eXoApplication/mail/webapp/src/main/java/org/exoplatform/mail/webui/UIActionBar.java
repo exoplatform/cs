@@ -16,12 +16,8 @@
  */
 package org.exoplatform.mail.webui;
 
-import javax.mail.AuthenticationFailedException;
-
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.mail.MailUtils;
-import org.exoplatform.mail.service.Account;
-import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIAddressBookForm;
 import org.exoplatform.mail.webui.popup.UIComposeForm;
@@ -99,7 +95,7 @@ public class UIActionBar extends UIContainer {
         return ;
       }
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
-      UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class, null, null) ;
+      UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class, null, "UIPopupActionComposeContainer") ;
       uiPopupAction.activate(uiPopupContainer, 850, 0, true);
       
       UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);

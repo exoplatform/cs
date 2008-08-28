@@ -156,18 +156,6 @@ public class MessagePageList extends JCRPageList {
     return listPage ;
   }
   
-  /*
-    private boolean isAvaiableMessage(Node node, String[] refFolders) throws Exception {
-      if (previousListPage.size() > 0 && previousListPage.containsKey(node.getName())) {
-        Message msg = previousListPage.get(node.getName()) ;
-        if (msg.isRootConversation() && 
-          (refFolders == null || msg.getGroupedMessageIds().size() == getGroupedMessageIds(new ArrayList<String>(), node, refFolders).size())) {
-          return true ;
-        }
-      }
-      return false ;
-    }
-  */
   /**
    * 
    * @param messageNode
@@ -176,8 +164,6 @@ public class MessagePageList extends JCRPageList {
    * @throws Exception
    */
   private Message getMessage(Node messageNode, String[] refFolders) throws Exception {
-    //if (isAvaiableMessage(messageNode, refFolders)) return previousListPage.get(messageNode.getName()) ;
-    
     Message msg = new Message();
     if (messageNode.hasProperty(Utils.EXO_ID)) msg.setId(messageNode.getProperty(Utils.EXO_ID).getString());
     msg.setPath(messageNode.getPath());
