@@ -804,7 +804,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         contacts.add(oldContact) ;
         uiContacts.setContact(contacts, false) ;
         uiContacts.updateList() ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiContactContainer) ;
         return ;
       }
       uiContacts.contactMap.put(contactId, newContact) ;
