@@ -142,6 +142,9 @@ public class UIListView extends UICalendarView {
   protected void updateCurrentPage(long page) throws Exception{
     getChildren().clear() ;
     initCategories() ;
+    UIFormSelectBox uiCategory = getUIFormSelectBox(EVENT_CATEGORIES) ;
+    uiCategory.setValue(categoryId_) ;
+    uiCategory.setOnChange("Onchange") ;
     eventMap_.clear();
     if(pageList_ != null) {
       for(CalendarEvent calendarEvent : pageList_.getPage(page ,CalendarUtils.getCurrentUser())) {
@@ -254,6 +257,7 @@ public class UIListView extends UICalendarView {
       String categoryId = uiListView.getUIFormSelectBox(EVENT_CATEGORIES).getValue() ;
       uiListView.setCategoryId(categoryId) ;
       uiListView.refresh() ;
+      //uiListView.updateCurrentPage(uiListView.pageList_.getCurrentPage()) ;
       UIMiniCalendar uiMiniCalendar = uiListView.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
       uiMiniCalendar.setCategoryId(categoryId) ;
       UIPreview uiPreview = uiListView.getAncestorOfType(UIListContainer.class).getChild(UIPreview.class) ;

@@ -143,14 +143,7 @@ uiform.begin() ;
 	               </td>
 	              </tr>
 	             </table>
-	             <%if(!uicomponent.isShowPopup()){%>
-	             <div class="ActionsContainer">
-	              <a class="ControlButton"  style="color:gray;">
-			           <div class="IconHolder ViewOnCalendar" > 
-			           	 <%=uiform.getLabel('ViewOnCalendar')%>
-			           </div>
-			          </a>
-			          <div class="SeparatorDotLine"><span></span></div>
+	             <%if(!uicomponent.isShowPopup()){%>	              
 			          <a href="<%=uicomponent.event("Edit",event.getId()+"&"+uicomponent.CALENDARID+"="+event.getCalendarId()+"&calType=" +event.getCalType())%>" class="ControlButton">
 			           <div class="IconHolder EditEventIcon">
 			           	 <%=uiform.getLabel('EditEvent')%>
