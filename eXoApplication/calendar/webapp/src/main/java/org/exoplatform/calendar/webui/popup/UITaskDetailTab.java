@@ -41,6 +41,7 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormSelectBoxWithGroups;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
+import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 /**
@@ -140,8 +141,9 @@ public class UITaskDetailTab extends UIFormInputWithActions {
     List<ActionData> uploadedFiles = new ArrayList<ActionData>() ;
     for(Attachment attachdata : attachments_) {
       ActionData fileUpload = new ActionData() ;
-      fileUpload.setActionListener("") ;
-      fileUpload.setActionType(ActionData.TYPE_ICON) ;
+      fileUpload.setActionListener(UIEventForm.ACT_DOWNLOAD) ;
+      fileUpload.setActionParameter(attachdata.getId()) ;
+      fileUpload.setActionType(ActionData.TYPE_LINK) ;
       fileUpload.setCssIconClass("AttachmentIcon ZipFileIcon") ;
       fileUpload.setActionName(attachdata.getName() + "-("+ CalendarUtils.convertSize(attachdata.getSize()) +")" ) ;
       fileUpload.setShowLabel(true) ;

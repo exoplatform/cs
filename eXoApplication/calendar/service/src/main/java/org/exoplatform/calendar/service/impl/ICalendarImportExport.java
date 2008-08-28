@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -271,6 +272,7 @@ public class ICalendarImportExport implements CalendarImportExport{
     }
     Calendar exoCalendar = new Calendar() ;
     exoCalendar.setName(calendarName) ;
+    exoCalendar.setCalendarColor(org.exoplatform.calendar.service.Calendar.COLORS[new Random().nextInt(org.exoplatform.calendar.service.Calendar.COLORS.length -1)]) ;
     exoCalendar.setDescription(iCalendar.getProductId().getValue()) ;
     exoCalendar.setCategoryId(categoryId) ;
     exoCalendar.setPublic(false) ;
@@ -287,18 +289,18 @@ public class ICalendarImportExport implements CalendarImportExport{
         if(event.getProperty(Property.CATEGORIES) != null) {
           EventCategory evCate = new EventCategory() ;
           evCate.setName(event.getProperty(Property.CATEGORIES).getValue()) ;
-          evCate.setDescription(event.getProperty(Property.CATEGORIES).getValue()) ;
           try{
             storage_.saveEventCategory(sProvider, username, evCate, null, true) ;
           }catch(Exception e){ 
-            e.printStackTrace() ;
+            //e.printStackTrace() ;
+            System.out.println("\n\n event category " + evCate.getName() + " existed !");
           }
           eventCategoryId = evCate.getName() ;
-        }
+        } 
         exoEvent = new CalendarEvent() ;
         exoEvent.setCalType(String.valueOf(Calendar.TYPE_PRIVATE)) ;
         exoEvent.setCalendarId(exoCalendar.getId()) ;
-        exoEvent.setEventCategoryId(eventCategoryId) ;
+        if(!Utils.isEmpty(eventCategoryId)) exoEvent.setEventCategoryId(eventCategoryId) ;
         if(event.getSummary() != null) exoEvent.setSummary(event.getSummary().getValue()) ;
         if(event.getDescription() != null) exoEvent.setDescription(event.getDescription().getValue()) ;
         if(event.getStatus() != null) exoEvent.setStatus(event.getStatus().getValue()) ;
@@ -337,7 +339,7 @@ public class ICalendarImportExport implements CalendarImportExport{
           exoEvent.setId(event.getProperty(Property.UID).getValue()) ;
         }
         if(event.getProperty(Property.CATEGORIES) != null) {
-          exoEvent.setEventCategoryId(event.getProperty(Property.CATEGORIES).getValue()) ;
+          exoEvent.setEventCategoryId(event.getProperty(Property.CATEGORIES).getValue().trim().toLowerCase()) ;
         }
         if(event.getSummary() != null) exoEvent.setSummary(event.getSummary().getValue()) ;
         if(event.getDescription() != null) exoEvent.setDescription(event.getDescription().getValue()) ;

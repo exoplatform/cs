@@ -765,7 +765,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
             canEdit = true ;
           } else if (CalendarUtils.SHARED_TYPE.equals(calType)) {
             GroupCalendarData calendarData = calendarService.getSharedCalendars(uiCalendarView.getSystemSession(), CalendarUtils.getCurrentUser(), true)  ;
-            if(calendarData.getCalendarById(calendarId) != null)
+            if(calendarData != null && calendarData.getCalendarById(calendarId) != null)
               canEdit = CalendarUtils.canEdit(null, calendarData.getCalendarById(calendarId).getEditPermission(), username) ;
           } else if (CalendarUtils.PUBLIC_TYPE.equals(calType)) {
             OrganizationService oSevices = uiCalendarView.getApplicationComponent(OrganizationService.class) ;

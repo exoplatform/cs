@@ -117,7 +117,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
       } catch (Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.file-type-error", null));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        e.printStackTrace() ;
+        //e.printStackTrace() ;
         return ; 
       }
     }
