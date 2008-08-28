@@ -36,11 +36,16 @@ import java.util.regex.Pattern;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 
+import net.fortuna.ical4j.model.Property;
+
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarImportExport;
+import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.Utils;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+
+import sun.util.calendar.CalendarUtils;
 
 /**
  * Created by The eXo Platform SAS
@@ -236,7 +241,7 @@ public class CsvImportExport implements CalendarImportExport {
       boolean isExists = false ;
       while(iter.hasNext()) {
         cat = iter.nextNode() ;
-        if(cat.getProperty("exo:name").getString().equals("Imported")) {
+        if(cat.getProperty(Utils.EXO_NAME).getString().equals("Imported")) {
           isExists = true ;
           break ;
         }
@@ -248,7 +253,7 @@ public class CsvImportExport implements CalendarImportExport {
         categoryId = calendarCate.getId() ;
         storage_.saveCalendarCategory(sProvider, username, calendarCate, true) ;
       }else {
-        categoryId = cat.getProperty("exo:id").getString() ;
+        categoryId = cat.getProperty(Utils.EXO_ID).getString() ;
       }
       org.exoplatform.calendar.service.Calendar exoCalendar = new org.exoplatform.calendar.service.Calendar() ;
       exoCalendar.setName(calendarName) ;
@@ -259,6 +264,16 @@ public class CsvImportExport implements CalendarImportExport {
       exoCalendar.setCalendarOwner(username) ;
       storage_.saveUserCalendar(sProvider, username, exoCalendar, true) ;   
       for(CalendarEvent exoEvent : data) {
+        if(!Utils.isEmpty(exoEvent.getEventCategoryId())) {
+          EventCategory evCate = new EventCategory() ;
+          evCate.setName(exoEvent.getEventCategoryId()) ;
+          try{
+            storage_.saveEventCategory(sProvider, username, evCate, null, true) ;
+          }catch(Exception e){ 
+            //e.printStackTrace() ;
+            System.out.println("\n\n event category " + evCate.getName() + " existed !");
+          }
+        }
         exoEvent.setCalendarId(exoCalendar.getId()) ;
         storage_.saveUserEvent(sProvider, username, exoCalendar.getId(), exoEvent, true) ;
       }
