@@ -119,8 +119,15 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
       if (!uiCategoryForm.isNew_) {
         ContactGroup oldGroup = contactService.getGroup(
             SessionProviderFactory.createSessionProvider(), username,uiCategoryForm.groupId_) ;
-        if (oldGroup == null)
+        if (oldGroup == null) {
           oldGroup = contactService.getSharedGroup(username, uiCategoryForm.groupId_) ;
+          if (oldGroup != null && !uiAddressBook.havePermission(oldGroup.getId())) {
+            uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.non-permission", null,
+                ApplicationMessage.WARNING)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return ; 
+          }              
+        }
         if (oldGroup == null) {
           uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.category-deleted", null,
               ApplicationMessage.WARNING)) ;
