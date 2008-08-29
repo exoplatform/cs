@@ -4,7 +4,8 @@
 	import org.exoplatform.contact.ContactUtils;
 	String compId = uicomponent.getId() ;
 	Contact contact = uicomponent.getContact();
-
+	def rcontext = _ctx.getRequestContext() ;
+  rcontext.getJavascriptManager().addJavascript('eXo.contact.UIContactPortlet.checkLayout() ;') ;
 %>
 
 <div class="UIContactPreview" id="<%=uicomponent.getId()%>">
