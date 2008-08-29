@@ -24,11 +24,8 @@ import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.MessageFilter;
-import org.exoplatform.mail.service.Utils;
-import org.exoplatform.mail.webui.UIFolderContainer;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageList;
-import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
@@ -152,17 +149,21 @@ public class UIMailSettings extends UIForm implements UIPopupComponent {
 		  UIMailPortlet uiPortlet = uiSetting.getAncestorOfType(UIMailPortlet.class);
       String username = uiPortlet.getCurrentUser();
       UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;
-      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-		  MailService mailSrv = MailUtils.getMailService();
+      String accountId = uiSelectAccount.getSelectedValue();
+		  
+      MailService mailSrv = MailUtils.getMailService();
 		  MailSetting setting = mailSrv.getMailSetting(SessionProviderFactory.createSystemProvider(), username);
       String defaultAcc = uiSetting.getUIFormSelectBox(DEFAULT_ACCOUNT).getValue() ;
 		  setting.setDefaultAccount(defaultAcc) ;
       setting.setNumberMsgPerPage(Long.valueOf(uiSetting.getUIFormSelectBox(NUMBER_MSG_PER_PAGE).getValue())) ;
+      
       String period = uiSetting.getUIFormSelectBox(PERIOD_CHECK_AUTO).getValue() ;
       period = period.substring(period.indexOf(".") + 1, period.length());
 		  setting.setPeriodCheckAuto(Long.valueOf(period)) ;
+      
       String editor = uiSetting.getUIFormSelectBox(COMPOSE_MESSAGE_IN).getValue() ;
       setting.setUseWysiwyg(Boolean.valueOf(editor.substring(editor.indexOf(".") + 1, editor.length()))) ;
+      
       String format = uiSetting.getUIFormSelectBox(FORMAT_AS_ORIGINAL).getValue() ;
       setting.setFormatAsOriginal(Boolean.valueOf(format.substring(format.indexOf(".") + 1, format.length()))) ;
       String replyWith = uiSetting.getUIFormSelectBox(REPLY_WITH_ATTACH).getValue() ;
@@ -173,22 +174,14 @@ public class UIMailSettings extends UIForm implements UIPopupComponent {
       mailSrv.saveMailSetting(SessionProviderFactory.createSystemProvider(), username, setting);
 		  UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       MessageFilter filter = uiMessageList.getMessageFilter() ;
-      if (defaultAcc != null && !defaultAcc.equals(accountId)) {
+      if (defaultAcc != null && (!accountId.equals(setting.getDefaultAccount()) || accountId.equals(defaultAcc))){
         uiSelectAccount.updateAccount() ;
-        uiSelectAccount.setSelectedValue(defaultAcc) ;
-        uiPortlet.findFirstComponentOfType(UIFolderContainer.class).setSelectedFolder(Utils.createFolderId(accountId, Utils.FD_INBOX, false));
-        uiMessageList.setSelectedFolderId(defaultAcc) ;
-        uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null);
-        uiMessageList.setMessageFilter(null);
-        uiMessageList.init(defaultAcc);
-      } else if (defaultAcc != null && defaultAcc.equals(accountId)){
-        uiSelectAccount.updateAccount() ;
-        uiSelectAccount.setSelectedValue(defaultAcc) ;
+        uiSelectAccount.setSelectedValue(accountId);
         uiMessageList.setMessagePageList(mailSrv.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, filter));
       } else {
         uiMessageList.setMessagePageList(mailSrv.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, filter));
       }
-      uiSetting.getAncestorOfType(UIPopupAction.class).deActivate() ;
+      uiSetting.getAncestorOfType(UIPopupAction.class).deActivate();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
       if (setting.getPeriodCheckAuto() != Long.valueOf(period)) { 

@@ -27,6 +27,7 @@ import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
+import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UINavigationContainer;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -363,7 +364,8 @@ public class UIAccountSetting extends UIFormTabPane {
     public void execute(Event<UIAccountSetting> event) throws Exception {
       UIAccountSetting uiAccSetting = event.getSource() ;
       UIMailPortlet uiPortlet = uiAccSetting.getAncestorOfType(UIMailPortlet.class) ;
-      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
+      UIMessageList uiMsgList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
+      UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class) ;
       UISelectAccount uiSelectAccount = uiPortlet.findFirstComponentOfType(UISelectAccount.class) ;
       String username = uiPortlet.getCurrentUser();
       MailService mailSvr = uiPortlet.getApplicationComponent(MailService.class) ;
@@ -383,6 +385,9 @@ public class UIAccountSetting extends UIFormTabPane {
             mailSvr.saveMailSetting(SessionProviderFactory.createSystemProvider(), username, mailSetting) ;
           }
           uiAccSetting.fillField() ;
+          uiMsgList.setMessageFilter(null);
+          uiMsgList.init(newSelectedAcc);
+          uiMsgPreview.setMessage(null);
           event.getRequestContext().addUIComponentToUpdateByAjax(uiAccSetting.getAncestorOfType(UIPopupActionContainer.class)) ;
         } else {
           uiSelectAccount.updateAccount() ;
@@ -390,9 +395,10 @@ public class UIAccountSetting extends UIFormTabPane {
           mailSetting.setDefaultAccount(null) ;
           mailSvr.saveMailSetting(SessionProviderFactory.createSystemProvider(), username, mailSetting) ;
           event.getSource().getAncestorOfType(UIMailPortlet.class).cancelAction() ;
+          uiMsgList.init(null);
         }
         event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectAccount) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgList.getAncestorOfType(UIMessageArea.class)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectAccount.getAncestorOfType(UINavigationContainer.class)) ;
       } catch(Exception e) {
         e.printStackTrace() ;

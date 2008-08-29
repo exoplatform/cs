@@ -196,7 +196,8 @@ public class UIMessagePreview extends UIComponent {
 				Message msg = uiMsgPreview.getShowedMessageById(msgId);
 				if (msg != null) {
 					UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
-					UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 850) ;
+          UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class, null, "UIPopupActionComposeContainer") ;
+          uiPopupAction.activate(uiPopupContainer, 850, 0, true);
 					UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
 					uiComposeForm.init(accId, msg, uiComposeForm.MESSAGE_REPLY);
 					uiPopupContainer.addChild(uiComposeForm) ;
@@ -218,7 +219,8 @@ public class UIMessagePreview extends UIComponent {
 				Message msg = uiMsgPreview.getShowedMessageById(msgId);
 				if (msg != null) {
 					UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
-					UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 850) ;
+          UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class, null, "UIPopupActionComposeContainer") ;
+          uiPopupAction.activate(uiPopupContainer, 850, 0, true);
 					UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
 					uiComposeForm.init(accId, msg, uiComposeForm.MESSAGE_REPLY_ALL);
 					uiPopupContainer.addChild(uiComposeForm) ;
@@ -240,7 +242,8 @@ public class UIMessagePreview extends UIComponent {
 				Message msg = uiMsgPreview.getShowedMessageById(msgId);
 				if (msg != null) {
 					UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
-					UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 850) ;
+          UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class, null, "UIPopupActionComposeContainer") ;
+          uiPopupAction.activate(uiPopupContainer, 850, 0, true);
 					UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
 					uiComposeForm.init(accId, msg, uiComposeForm.MESSAGE_FOWARD);
 					uiPopupContainer.addChild(uiComposeForm) ;
