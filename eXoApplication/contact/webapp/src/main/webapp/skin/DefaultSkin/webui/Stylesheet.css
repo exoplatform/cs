@@ -17,6 +17,7 @@
 @import url("UIWelcomeContact/Stylesheet.css") ;
 @import url("UIComposeForm/Stylesheet.css") ;
 @import url('UIColorPicker/Stylesheet.css') ;
+@import url('UINotification/Stylesheet.css') ;
 
 .UIWindow .UIContactPortlet {
 	margin: 0px;

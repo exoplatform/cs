@@ -33,11 +33,28 @@
     </dependency>
     
     <dependency>
-	  <groupId>net.wimpi.pim</groupId>
-	  <artifactId>jpim-0.1</artifactId>
-	  <version>1.0</version>
-	  <scope>compile</scope>
-	</dependency>
-	
+		  <groupId>net.wimpi.pim</groupId>
+		  <artifactId>jpim-0.1</artifactId>
+		  <version>1.0</version>
+		  <scope>compile</scope>
+	  </dependency>
+		
+		<dependency>
+      <groupId>org.exoplatform.cs</groupId>
+      <artifactId>exo.cs.eXoApplication.calendar.service</artifactId>
+      <version>${org.exoplatform.cs.version}</version>            
+    </dependency>
+    
+    <dependency>
+      <groupId>org.exoplatform.ws</groupId>
+      <artifactId>exo.ws.frameworks.cometd.service</artifactId>
+      <version>${org.exoplatform.ws.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.ws</groupId>
+      <artifactId>exo.ws.frameworks.json</artifactId>
+      <version>${org.exoplatform.ws.version}</version>
+    </dependency> 
+		
   </dependencies>
 </project>
