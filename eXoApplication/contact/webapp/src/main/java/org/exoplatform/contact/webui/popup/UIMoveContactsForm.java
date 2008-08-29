@@ -155,8 +155,16 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
           }
         }
         contact.setAddressBook(new String[] { addressBookId }) ;
-        if (contact.getContactType().equals(JCRDataStorage.SHARED)) sharedContacts.add(contact) ;
-        else contacts.add(contact) ;
+        if (contact.getContactType().equals(JCRDataStorage.SHARED)) {
+          if (!uiContacts.havePermission(contact)) {
+            UIApplication uiApp = uiMoveContactForm.getAncestorOfType(UIApplication.class) ;
+            uiApp.addMessage(new ApplicationMessage("UIMoveContactsForm.msg.non-permission", null,
+              ApplicationMessage.WARNING)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return ; 
+          }          
+          sharedContacts.add(contact) ;
+        } else contacts.add(contact) ;
       }
       
 //    add
