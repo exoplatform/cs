@@ -68,7 +68,9 @@
 		<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
   		<thead>
   			<tr>
-  				<%if(!isDisplaySearchResult) {%>
+  				<%if(!isDisplaySearchResult) {
+  					uicomponent.refresh() ;  					 
+  				%>
   				<th style="width: 30px;"><input type="checkbox" class="checkbox" title="<%=uiform.getLabel('CheckAll')%>" value="4"/></th>
   				<%}%>
   			  <th style="width: 24px;"><div class="AttachmentIcon" title="Attachment of event">&nbsp;</div></th>

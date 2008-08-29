@@ -87,7 +87,9 @@ public class UIWeekView extends UICalendarView {
     allWeekData_.clear() ;
     int i = 0 ;
     Calendar c = getBeginDateOfWeek() ;
-    while(i++ <7) {
+    int maxDay = 7 ;
+    if(isShowCustomView_) maxDay = 5 ;
+    while(i++ <maxDay) {
       Map<String, CalendarEvent> list = new HashMap<String, CalendarEvent>() ;
       String key = keyGen(c.get(Calendar.DATE), c.get(Calendar.MONTH), c.get(Calendar.YEAR)) ;
       eventData_.put(key, list) ;
@@ -107,7 +109,7 @@ public class UIWeekView extends UICalendarView {
       long eventAmount = endEvent.getTime() - beginEvent.getTime() ;
       i = 0 ;
       c = getBeginDateOfWeek();
-      while(i++ < 7) {
+      while(i++ < maxDay) {
         String key = keyGen(c.get(Calendar.DATE), c.get(Calendar.MONTH), c.get(Calendar.YEAR)) ;
         if(isSameDate(c.getTime(), beginEvent) && (isSameDate(c.getTime(), endEvent)) && eventAmount < CalendarUtils.MILISECONS_OF_DAY){
           eventData_.get(key).put(event.getId(), event) ;
