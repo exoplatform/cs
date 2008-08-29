@@ -16,13 +16,17 @@
  */
 package org.exoplatform.contact.webui;
 
+import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.RootContainer;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPopupMessages;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
+import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 
 /**
  * Author : Nguyen Quang Hung
@@ -63,4 +67,16 @@ public class UIContactPortlet extends UIPortletApplication {
     popupAction.deActivate() ;
     context.addUIComponentToUpdateByAjax(popupAction) ;
   }
+  
+  protected ContinuationService getContinuationService() {
+    ExoContainer container = RootContainer.getInstance();
+    container = ((RootContainer)container).getPortalContainer("portal");
+    ContinuationService continuation = (ContinuationService) container.getComponentInstanceOfType(ContinuationService.class);
+    return continuation;
+  }
+  public String getUserToken()throws Exception {
+    ContinuationService continuation = getContinuationService() ;
+    return continuation.getUserToken(ContactUtils.getCurrentUser());
+  }
+  
 }

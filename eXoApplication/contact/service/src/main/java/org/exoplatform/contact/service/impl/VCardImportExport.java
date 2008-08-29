@@ -47,13 +47,20 @@ import net.wimpi.pim.factory.ContactIOFactory;
 import net.wimpi.pim.factory.ContactModelFactory;
 import net.wimpi.pim.util.versitio.versitException;
 
+import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactImportExport;
 import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.SharedAddressBook;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.RootContainer;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+//import org.exoplatform.calendar.service.R;
+import org.exoplatform.ws.frameworks.cometd.ContinuationService;
+import org.exoplatform.ws.frameworks.json.impl.JsonGeneratorImpl;
+import org.exoplatform.ws.frameworks.json.value.JsonValue;
 
 /**
  * Author : Huu-Dung Kieu huu-dung.kieu@bull.be 16 oct. 07
@@ -287,7 +294,18 @@ public class VCardImportExport implements ContactImportExport {
     if (pimContacts == null || pimContacts.length == 0) throw new Exception() ;
     if (pimContacts.length > maxLength) throw new IndexOutOfBoundsException() ;
     
-    List<Contact> contacts = new ArrayList<Contact>() ;
+    Reminder re = new Reminder() ;
+    JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
+    boolean needAlert = false ;
+    if (pimContacts.length > 50) {
+      needAlert = true ;
+      re.setSummary("Importing..") ;
+      re.setDescription("Imported") ;
+      re.setReminderOwner(username) ;
+      re.setReminderType(Reminder.TYPE_POPUP) ;
+      re.setFromDateTime(new Date()) ;
+    }
+    
     for (int index = 0; index < pimContacts.length; index++) {
       Contact contact = new Contact();
       PersonalIdentity identity = pimContacts[index].getPersonalIdentity();
@@ -302,11 +320,6 @@ public class VCardImportExport implements ContactImportExport {
       String lastName = identity.getLastname();
       String firstName = identity.getFirstname();
       
-      // add 26-8
-      if (fullName == null || fullName.length() == 0) {
-        fullName = firstName + " " + lastName ;
-        contact.setFullName(fullName) ;
-      }
       // add 26-8
       if (fullName == null || fullName.length() == 0) {
         fullName = firstName + " " + lastName ;
@@ -497,23 +510,30 @@ public class VCardImportExport implements ContactImportExport {
       // Now we have the contact object
       // Then store it to JCR storage
       // ////////////////////////////////
-
       contact.setAddressBook(new String[] { groupId }) ;
-      contacts.add(contact) ;
+      if (groupId.contains(JCRDataStorage.HYPHEN)) {
+        String newGroupId = groupId.replace(JCRDataStorage.HYPHEN, "") ;
+        storage_.saveContactToSharedAddressBook(username, newGroupId, contact, true) ;
+      } else {
+        storage_.saveContact(sProvider, username, contact, true);
+      }
+      if (needAlert) {
+        re.setSummary(String.valueOf(index + 1) + " contacts imported ...") ;
+        JsonValue json = generatorImpl.createJsonObject(re);
+        ContinuationService continuation = getContinuationService() ;
+        continuation.sendMessage(username, "/eXo/Application/Contact/messages", json);        
+      }
     }
-    /*ContactService contactService = 
-      (ContactService) PortalContainer.getComponent(ContactService.class);*/
-
-    if (groupId.contains(JCRDataStorage.HYPHEN)) {
-      String newGroupId = groupId.replace(JCRDataStorage.HYPHEN, "") ;
-      storage_.saveContactsToSharedAddressBook(username, newGroupId, contacts, true) ;
-    } else {
-      storage_.saveContacts(sProvider, username, contacts, true);
-    }
-    
-    
   }
 
+  protected ContinuationService getContinuationService() {
+    ExoContainer container = RootContainer.getInstance();
+    container = ((RootContainer)container).getPortalContainer("portal");
+    ContinuationService continuation = (ContinuationService) container.getComponentInstanceOfType(ContinuationService.class);
+    return continuation;
+
+  }
+  
   private void addPhoneNumber(ContactModelFactory cmf, Communications comm, String number,
       boolean isHome, boolean isFax, boolean isCellular) {
     if ((number != null) && !number.equals("")) {

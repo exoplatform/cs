@@ -145,6 +145,7 @@ public class UIAddressBooks extends UIComponent {
   public boolean havePermission(String groupId) throws Exception { 
     String currentUser = ContactUtils.getCurrentUser() ;
     ContactGroup sharedGroup = ContactUtils.getContactService().getSharedGroup(currentUser, groupId) ;
+    if (sharedGroup == null) return false ;
     if (sharedGroup.getEditPermissionUsers() != null &&
         Arrays.asList(sharedGroup.getEditPermissionUsers()).contains(currentUser + JCRDataStorage.HYPHEN)) {
       return true ;

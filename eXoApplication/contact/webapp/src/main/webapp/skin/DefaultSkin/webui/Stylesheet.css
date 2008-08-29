@@ -17,6 +17,7 @@
 @import url("UIWelcomeContact/Stylesheet.css") ;
 @import url("UIComposeForm/Stylesheet.css") ;
 @import url('UIColorPicker/Stylesheet.css') ;
+@import url('UINotification/Stylesheet.css') ;
 
 .UIWindow .UIContactPortlet {
 	margin: 0px;
@@ -192,15 +193,15 @@
 .Wheat {background-color: #F5DEB3;}    
 .Yellow {background-color: #FFFF00;}    
 
-
 .UIContactPortlet .UIForm .UIFormGrid td.FieldComponent {
 	white-space: nowrap;
 }
 
-.UIContactPortlet .UISharedForm .UIFormGrid td.FieldLabel {
+.UIContactPortlet .UIForm .UIFormGrid td.FieldLabel {
 	white-space: nowrap;
 }
 
 .UIContactPortlet .UIImportForm .UIFormGrid td.FieldComponent {
 	white-space: normal;
 }
+
