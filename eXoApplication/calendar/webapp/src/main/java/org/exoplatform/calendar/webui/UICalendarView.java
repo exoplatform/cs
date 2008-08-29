@@ -750,7 +750,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           listContainer.refresh() ;
           uiListView.updateCurrentPage(pageNum) ; 
           uiListView.setSelectedEvent(eventId) ;
-          eventCalendar = uiListView.getSelectedEventObj() ;
+          eventCalendar = uiListView.getDataMap().get(eventId) ;
           uiPreview.setEvent(eventCalendar) ;
           uiPreview.refresh() ;
         } else uiCalendarView.refresh() ;

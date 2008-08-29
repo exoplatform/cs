@@ -70,6 +70,7 @@ public class UIListView extends UICalendarView {
   private String lastViewId_ = null ;
   private String categoryId_ = null ;
   private String keyWords_ = null ;
+  private int currentPage_ = 0 ;
   public UIListView() throws Exception{
     if(getEvents().length > 0 ) {
       selectedEvent_ = getEvents()[0].getId() ;
@@ -100,6 +101,9 @@ public class UIListView extends UICalendarView {
     UIListContainer uiListContainer = getParent() ;
     if(uiListContainer.isDisplaySearchResult())  { update(pageList_) ;
     } else update(new EventPageList(calendarService.getEvents(getSession(), username, eventQuery, getPublicCalendars()), 10)) ;
+    if(currentPage_ > 0 && currentPage_ <= pageList_.getAvailablePage()) {
+      updateCurrentPage(currentPage_) ;
+    }
     UIFormSelectBox uiCategory = getUIFormSelectBox(EVENT_CATEGORIES) ;
     uiCategory.setValue(categoryId_) ;
     uiCategory.setOnChange("Onchange") ;
@@ -247,6 +251,7 @@ public class UIListView extends UICalendarView {
     public void execute(Event<UIListView> event) throws Exception {
       UIListView uiListView = event.getSource() ;
       int page = Integer.parseInt(event.getRequestContext().getRequestParameter(OBJECTID)) ;
+      uiListView.currentPage_ = page ;
       uiListView.updateCurrentPage(page) ; 
       event.getRequestContext().addUIComponentToUpdateByAjax(uiListView.getParent());           
     }
