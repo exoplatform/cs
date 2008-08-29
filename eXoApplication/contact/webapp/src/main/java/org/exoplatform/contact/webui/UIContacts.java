@@ -804,7 +804,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         contacts.add(oldContact) ;
         uiContacts.setContact(contacts, false) ;
         uiContacts.updateList() ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiContactContainer) ;
         return ;
       }
       uiContacts.contactMap.put(contactId, newContact) ;
@@ -1098,7 +1098,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         UIPopupContainer uiPopupContainer = popupAction.activate(UIPopupContainer.class, 400) ;
         uiPopupContainer.setId("UIPermissionContactForm") ;
         UIAddEditPermission uiAddNewEditPermission = uiPopupContainer.addChild(UIAddEditPermission.class, null, null); 
-        uiAddNewEditPermission.initContact(uiContacts.contactMap.get(objectId)) ;
+        uiAddNewEditPermission.initContact(ContactUtils.getContactService().getContact
+            (SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(),objectId)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;  
       } else {        
         UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
