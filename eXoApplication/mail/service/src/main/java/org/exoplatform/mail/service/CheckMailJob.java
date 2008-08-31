@@ -61,7 +61,7 @@ public class CheckMailJob extends Thread implements Job {
 				  context.getJobDetail().getJobClass());
 		  if (name != null && name.indexOf(":") > 0) {
 			  String[] array = name.split(":") ;
-			  mailService.checkNewMessage(SessionProvider.createSystemProvider(), array[0].trim(), array[1].trim()) ;
+        if(array.length > 0) mailService.checkNewMessage(SessionProvider.createSystemProvider(), array[0].trim(), array[1].trim()) ;
 		  }
 		  schedulerService.removeJob(info) ;
 		  System.out.println("\n\n####  Checking mail of " + context.getJobDetail().getName()+ " finished ");

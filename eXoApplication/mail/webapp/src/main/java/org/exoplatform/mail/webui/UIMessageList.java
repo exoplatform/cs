@@ -109,14 +109,14 @@ public class UIMessageList extends UIForm {
   public final int MODE_LIST = 1 ;
   public final int MODE_THREAD = 2 ;
   public final int MODE_CONVERSATION = 3 ;
-  
+
   public final int VIEW_ALL = 1 ;
   public final int VIEW_STARRED = 2 ;
   public final int VIEW_UNSTARRED = 3 ;
   public final int VIEW_UNREAD = 4 ;
   public final int VIEW_READ = 5 ;
   public final int VIEW_ATTACHMENT = 6 ; 
-  
+
   private String selectedMessageId_ = null ;
   private String selectedFolderId_ = null ;
   private String selectedTagId_ = null ;
@@ -248,7 +248,7 @@ public class UIMessageList extends UIForm {
           for (String childMsgId : msg.getGroupedMessageIds()) {
             childMsg = messageList_.get(childMsgId);
             if (childMsg != null && 
-               !childMsg.getFolders()[0].equals(Utils.createFolderId(accountId_, Utils.FD_SENT, false))) 
+                !childMsg.getFolders()[0].equals(Utils.createFolderId(accountId_, Utils.FD_SENT, false))) 
               checkedList.add(childMsg) ;
           }
         }
@@ -275,7 +275,7 @@ public class UIMessageList extends UIForm {
     }
     return tagList;
   } 
-  
+
   public List<Folder> getFolders(Message msg) throws Exception {
     UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class) ;
     String username = uiPortlet.getCurrentUser() ;
@@ -302,7 +302,7 @@ public class UIMessageList extends UIForm {
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
 
       Message msg = uiMessageList.messageList_.get(msgId);
-      
+
       if (msg != null) {
         if (msg.hasAttachment()) {
           MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
@@ -442,7 +442,7 @@ public class UIMessageList extends UIForm {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
-  
+
   static public class ViewAsListActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
@@ -470,7 +470,7 @@ public class UIMessageList extends UIForm {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
-  
+
   static public class ViewAsThreadActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
@@ -499,7 +499,7 @@ public class UIMessageList extends UIForm {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
-  
+
   static public class ViewAsConversationActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
@@ -1138,7 +1138,11 @@ public class UIMessageList extends UIForm {
   static public class FirstPageActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ; 
-      uiMessageList.updateList(1);
+      try {
+        uiMessageList.updateList(1);
+      } catch (Exception e) {
+        e.printStackTrace() ;
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
@@ -1146,9 +1150,13 @@ public class UIMessageList extends UIForm {
   static public class PreviousPageActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ; 
-      MessagePageList pageList = uiMessageList.getMessagePageList(); 
-      if (pageList.getCurrentPage() > 1){
-        uiMessageList.updateList(pageList.getCurrentPage() - 1);
+      try {
+        MessagePageList pageList = uiMessageList.getMessagePageList(); 
+        if (pageList.getCurrentPage() > 1){
+          uiMessageList.updateList(pageList.getCurrentPage() - 1);
+        }
+      } catch (Exception e) {
+        e.printStackTrace() ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
@@ -1157,9 +1165,13 @@ public class UIMessageList extends UIForm {
   static public class NextPageActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ; 
-      MessagePageList pageList = uiMessageList.getMessagePageList(); 
-      if (pageList.getCurrentPage() < pageList.getAvailablePage()){
-        uiMessageList.updateList(pageList.getCurrentPage() + 1);
+      try {
+        MessagePageList pageList = uiMessageList.getMessagePageList(); 
+        if (pageList.getCurrentPage() < pageList.getAvailablePage()){
+          uiMessageList.updateList(pageList.getCurrentPage() + 1);
+        }
+      } catch (Exception e) {
+        e.printStackTrace() ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
@@ -1168,7 +1180,11 @@ public class UIMessageList extends UIForm {
   static public class LastPageActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ; 
-      uiMessageList.updateList(uiMessageList.getMessagePageList().getAvailablePage());
+      try {
+        uiMessageList.updateList(uiMessageList.getMessagePageList().getAvailablePage());
+      } catch (Exception e) {
+        e.printStackTrace() ;
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
@@ -1183,7 +1199,7 @@ public class UIMessageList extends UIForm {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
     }
   }
-  
+
   static public class SortActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ;
@@ -1216,7 +1232,7 @@ public class UIMessageList extends UIForm {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
     }
   }
-  
+
   static public class ComfirmPasswordActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ;    
