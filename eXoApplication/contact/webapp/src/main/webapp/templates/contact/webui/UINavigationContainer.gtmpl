@@ -2,8 +2,8 @@
 	import org.exoplatform.contact.webui.UIAddressBooks;
 	import org.exoplatform.contact.webui.UITags;
 		import org.exoplatform.contact.webui.UISearchForm;
-	def rcontext = _ctx.getRequestContext() ;
-  rcontext.getJavascriptManager().addJavascript('eXo.contact.UIContactPortlet.checkLayout() ;') ;
+	//def rcontext = _ctx.getRequestContext() ;
+  //rcontext.getJavascriptManager().addJavascript('eXo.contact.UIContactPortlet.checkLayout() ;') ;
 %>
 
 <div id="$uicomponent.id" class="UINavigationContainer">

@@ -393,35 +393,39 @@ UIContactPortlet.prototype.checkLayout = function() {
     var layout5state = parseInt(eXo.core.Browser.getCookie('contactLayout5'));
     if(layout1State == 0) {
       this.switchLayout(1);
-	  this.addCheckedIcon(1, false) ;
-	  this.addCheckedIcon(0, false) ;
+		  this.addCheckedIcon(0, false) ;
+		  this.addCheckedIcon(1, false) ;
+			this.addCheckedIcon(2, false) ;
+			this.addCheckedIcon(3, false) ;
     } else {
-	  this.addCheckedIcon(1, true) ;
-	}
+		  this.addCheckedIcon(1, true) ;
+			this.addCheckedIcon(2, true) ;
+			this.addCheckedIcon(3, true) ;
+		}
     
     if(layout2State == 0) {
-      eXo.contact.UIContactPortlet.switchLayout(2);
-	  this.addCheckedIcon(2, false) ;
-	  this.addCheckedIcon(0, false) ;
+      this.switchLayout(2);
+		  this.addCheckedIcon(2, false) ;
+		  this.addCheckedIcon(0, false) ;
     } else {
-	  this.addCheckedIcon(2, true) ;
-	}
+		  this.addCheckedIcon(2, true) ;
+		}
     
     if(layout3State == 0) {   
-      eXo.contact.UIContactPortlet.switchLayout(3);
+      this.switchLayout(3);
       this.addCheckedIcon(3, false) ;
-	  this.addCheckedIcon(0, false) ;
+	  	this.addCheckedIcon(0, false) ;
     } else {
-	  this.addCheckedIcon(3, true) ;
-	}
+		  this.addCheckedIcon(3, true) ;
+		}
     
     if(layout4state == 0 && layout5state == 0) {
-      eXo.contact.UIContactPortlet.switchLayout(4);  
-	  this.addCheckedIcon(4, false) ;
-	  this.addCheckedIcon(0, false) ;
+      this.switchLayout(4);  
+		  this.addCheckedIcon(4, false) ;
+		  this.addCheckedIcon(0, false) ;
     } else {
-	  this.addCheckedIcon(4, true) ;
-	}
+		  this.addCheckedIcon(4, true) ;
+		}
   }
   catch(e) {
     window.alert(e.message);
@@ -485,16 +489,29 @@ UIContactPortlet.prototype.switchLayout = function(layout) {
     case 1 :
       if(contactLayout1.style.display == "none") {
         contactLayout1.style.display = "block";
+				contactLayout2.style.display = "block";
+				contactLayout3.style.display = "block";
         panelWorking.style.marginLeft = "225px";
         Browser.setCookie("contactLayout1", "1", 30);
+				Browser.setCookie("contactLayout2", "1", 30);
+				Browser.setCookie("contactLayout3", "1", 30);
         showCheckedMenu = true;
+				this.addCheckedIcon(2,true);
+				this.addCheckedIcon(3,true);
       } else {
-        contactLayout1.style.display = "none";  
+        contactLayout1.style.display = "none";
+				contactLayout2.style.display = "none";
+				contactLayout3.style.display = "none";
         panelWorking.style.marginLeft = "0px";
         Browser.setCookie("contactLayout1", "0", 30);
+				Browser.setCookie("contactLayout2", "0", 30);
+				Browser.setCookie("contactLayout3", "0", 30);
+				this.addCheckedIcon(2,false);
+				this.addCheckedIcon(3,false);
       }
       break;
     case 2 : 
+			if(contactLayout1.style.display == "none") return ;
       if(contactLayout2.style.display == "none") {
         contactLayout2.style.display = "block";
         showCheckedMenu = true;        
@@ -513,6 +530,7 @@ UIContactPortlet.prototype.switchLayout = function(layout) {
       }
       break;
     case 3 : 
+			if(contactLayout1.style.display == "none") return ;
       if(contactLayout3.style.display == "none") {
         contactLayout3.style.display="block";
         showCheckedMenu = true;
