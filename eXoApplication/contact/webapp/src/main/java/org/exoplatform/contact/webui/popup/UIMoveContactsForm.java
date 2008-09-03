@@ -136,6 +136,13 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       for(String id : uiMoveContactForm.getContactIds()) {
       	Contact contact = uiMoveContactForm.movedContacts.get(id) ;
         if (contact.getContactType().equals(JCRDataStorage.SHARED)) {
+          if (!uiContacts.havePermission(contact)) {
+            UIApplication uiApp = uiMoveContactForm.getAncestorOfType(UIApplication.class) ;
+            uiApp.addMessage(new ApplicationMessage("UIMoveContactsForm.msg.non-permission", null,
+              ApplicationMessage.WARNING)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return ; 
+          } 
           if (uiContacts.isSharedAddress(contact.getAddressBook())) {
             String addressId = null ;
             for (String add : contact.getAddressBook())
@@ -153,18 +160,12 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
               return ; 
             }
           }
-        }
-        contact.setAddressBook(new String[] { addressBookId }) ;
-        if (contact.getContactType().equals(JCRDataStorage.SHARED)) {
-          if (!uiContacts.havePermission(contact)) {
-            UIApplication uiApp = uiMoveContactForm.getAncestorOfType(UIApplication.class) ;
-            uiApp.addMessage(new ApplicationMessage("UIMoveContactsForm.msg.non-permission", null,
-              ApplicationMessage.WARNING)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-            return ; 
-          }          
+          contact.setAddressBook(new String[] { addressBookId }) ;
           sharedContacts.add(contact) ;
-        } else contacts.add(contact) ;
+        } else {
+          contact.setAddressBook(new String[] { addressBookId }) ;
+          sharedContacts.add(contact) ;
+        }
       }
       
 //    add
