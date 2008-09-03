@@ -16,8 +16,9 @@
 	  rcontext.getJavascriptManager().addJavascript('eXo.mail.MailServiceHandler.init(eXo.cs.webservice.core.WebserviceManager) ;') ;
 	  rcontext.getJavascriptManager().addJavascript("eXo.mail.UIMailPortlet.showContextMenu('" + uicomponent.id + "') ;") ;
 	%>
-	<table style="width:99%	"><tbody><tr><td>
-		<div style="width:940px;"><span></span></div>
+  <div style="overflow-x: auto; width: 99%;">
+  <div><div style="width: 970px;" ><span style="display: none;"></span></div></div>
+  <div  style="_width: expression(this.previousSibling.offsetWidth - 22 + 'px'); !border: 1px solid white; _margin: auto;">
 	  <div class="ApplicationMinWidth">
 	  	<div class="UIMailPortlet" id="UIMailPortlet">
 	    <%
@@ -47,4 +48,5 @@
 				</div>
 	    </div>
 	  </div>
-</td></tr></tbody></table>
+  </div>
+</div>  
