@@ -1605,7 +1605,10 @@ public class JCRDataStorage{
   public EventPageList searchEvent(SessionProvider sProvider, String username, EventQuery eventQuery, String[] publicCalendarIds)throws Exception {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>()  ; 
     events.addAll(getUserEvents(sProvider, username, eventQuery)) ;
-    if(publicCalendarIds.length > 0) events.addAll(getPublicEvents(SessionProvider.createSystemProvider(), eventQuery)) ;
+    if(publicCalendarIds.length > 0) {
+      eventQuery.setCalendarId(publicCalendarIds);
+      events.addAll(getPublicEvents(SessionProvider.createSystemProvider(), eventQuery));
+    }
     events.addAll(getSharedEvents(SessionProvider.createSystemProvider(), username, eventQuery)) ; 
     return new EventPageList(events, 10) ;    
   }
