@@ -124,7 +124,7 @@ public class UISelectAccount extends UIForm {
       uiAccContainer.setId("UIAccountPopupCreation");
       uiAccContainer.addChild(UIAccountCreation.class, null, null) ;
       uiPopup.activate(uiAccContainer, 700, 0, true) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
     }
   }
   
