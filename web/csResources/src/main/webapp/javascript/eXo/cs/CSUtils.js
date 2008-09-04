@@ -142,7 +142,8 @@ Utils.prototype.getKeynum = function(event) {
 
 Utils.prototype.captureInput = function(input, action) {
   if(typeof(input) == "string") input = document.getElementById(input) ;
-  input.onkeydown = eXo.cs.Utils.onEnter ;
+	input.form.onsubmit = eXo.cs.Utils.cancelSubmit ;
+  input.onkeypress= eXo.cs.Utils.onEnter ;
 } ;
 
 Utils.prototype.onEnter = function(evt) {
@@ -150,10 +151,9 @@ Utils.prototype.onEnter = function(evt) {
   _e.cancelBubble = true ;
   var keynum = eXo.cs.Utils.getKeynum(_e) ;
   if (keynum == 13) {
-    this.form.onsubmit = eXo.cs.Utils.cancelSubmit ;
     var action = eXo.core.DOMUtil.findPreviousElementByTagName(this, "a") ;
 		if(!action) action = eXo.core.DOMUtil.findNextElementByTagName(this, "a") ;
-    action = String(action.href).replace("javascript:","") ;
+    action = String(action.href).replace("javascript:","").replace("%20","") ;
     eval(action) ;
   }
 } ;
