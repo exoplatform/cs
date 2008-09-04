@@ -158,7 +158,7 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
         return ; 
       }
       if(out == null) {
-      	 uiApp.addMessage(new ApplicationMessage("UIExportAddressBookForm.msg.there-is-not-contacts-exists", null,
+         uiApp.addMessage(new ApplicationMessage("UIExportAddressBookForm.msg.there-is-not-contacts-exists", null,
            ApplicationMessage.WARNING)) ;
          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
          return ;   
@@ -182,16 +182,15 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
         dresource.setDownloadName("eXoExported.vcf");
       }
       String downloadLink = dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;      
-      event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + downloadLink + "');") ;      
-      //uiContactPortlet.cancelAction() ;      
+      event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + downloadLink + "');") ;
+      uiForm.getAncestorOfType(UIContactPortlet.class).cancelAction() ;    
     }
   }
   
   static  public class CancelActionListener extends EventListener<UIExportAddressBookForm> {
     public void execute(Event<UIExportAddressBookForm> event) throws Exception {
       UIExportAddressBookForm uiForm = event.getSource() ;
-      UIContactPortlet contactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
-      contactPortlet.cancelAction() ;
+      uiForm.getAncestorOfType(UIContactPortlet.class).cancelAction() ;
     }
   }  
   
