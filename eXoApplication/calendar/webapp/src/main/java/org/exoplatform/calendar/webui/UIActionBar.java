@@ -113,6 +113,7 @@ public class UIActionBar extends UIContainer  {
       String categoryId = event.getRequestContext().getRequestParameter("categoryId") ;
       UICalendarPortlet uiPortlet = uiActionBar.getAncestorOfType(UICalendarPortlet.class) ;
       UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+      UICalendarContainer uiVContainer = uiPortlet.findFirstComponentOfType(UICalendarContainer.class) ;
       uiViewContainer.initView(viewType);      
       uiViewContainer.refresh() ;
       UIMiniCalendar miniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
@@ -127,6 +128,7 @@ public class UIActionBar extends UIContainer  {
       }
       uiActionBar.setCurrentView(viewType) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiVContainer) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
     }
   }  
