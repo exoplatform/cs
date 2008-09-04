@@ -306,6 +306,8 @@ public class VCardImportExport implements ContactImportExport {
       re.setFromDateTime(new Date()) ;
     }
     
+   // System.out.println("\n\n need alert :" + needAlert + "\n\n");
+    
     for (int index = 0; index < pimContacts.length; index++) {
       Contact contact = new Contact();
       PersonalIdentity identity = pimContacts[index].getPersonalIdentity();
