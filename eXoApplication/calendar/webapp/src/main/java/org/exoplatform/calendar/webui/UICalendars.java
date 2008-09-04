@@ -655,6 +655,7 @@ public class UICalendars extends UIForm  {
       String username = event.getRequestContext().getRemoteUser() ;
       Calendar cal = calService.getUserCalendar(uiComponent.getSession(), username, selectedCalendarId) ;
       uiAddNewEditPermission.init(null, cal, true) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
