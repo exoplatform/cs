@@ -591,6 +591,8 @@ UICalendarPortlet.prototype.setWidth = function(element, width){
 UICalendarPortlet.prototype.getSize = function(el){
     var start = parseInt(el.getAttribute("starttime"));
     var end = parseInt(el.getAttribute("endtime"));
+		var delta = end - start ;
+		if(delta < 30) end = start + 30 ;
     return [start, end];
 };
 
