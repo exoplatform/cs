@@ -568,6 +568,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
     public void execute(Event<UIEventForm> event) throws Exception {
       UIEventForm uiForm = event.getSource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      
       if(uiForm.isEventDetailValid()) {
         String username = event.getRequestContext().getRemoteUser() ;
         String calendarId = uiForm.getCalendarId() ;

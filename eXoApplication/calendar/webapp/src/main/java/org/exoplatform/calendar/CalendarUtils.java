@@ -94,6 +94,7 @@ public class CalendarUtils {
   public static final long MILISECONS_OF_DAY = 24*60*59*1000;
   public static final String EXO_INVITATION = "X-Exo-Invitation".intern();
   public static final String SPECIALCHARACTER[] = {SEMICOLON,COMMA,SLASH,BACKSLASH,"'","|",">","<","\"", "?", "!", "@", "#", "$", "%","^","&","*"};
+  public static final String SIMPLECHARACTER[] = {">","<"};
 
   public static final String[] getUserGroups(String username) throws Exception {
     OrganizationService organization = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
@@ -524,7 +525,7 @@ public class CalendarUtils {
     return str.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").
     replaceAll("'", "&apos;").replaceAll("\"", "&quot;");
   }
-
+  
   public static String encodeHTML(String htmlContent) throws Exception {
     return htmlContent.replaceAll("&", "&amp;").replaceAll("\"", "&quot;")
     .replaceAll("<", "&lt;").replaceAll(">", "&gt;") ;

@@ -719,6 +719,14 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       if(uiForm.isEventDetailValid(calendarPortlet.getCalendarSetting())) {
         String username = event.getRequestContext().getRemoteUser() ;
         String calendarId = uiForm.getCalendarId() ;
+        String summary = uiForm.getEventSumary() ;
+        if(!CalendarUtils.isNameValid(summary, CalendarUtils.SIMPLECHARACTER)){
+          uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.summary-invalid", CalendarUtils.SIMPLECHARACTER, ApplicationMessage.WARNING) ) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
+        String description = uiForm.getEventDescription() ;
+        if(!CalendarUtils.isEmpty(description)) description = description.replaceAll(CalendarUtils.SIMPLECHARACTER[0], "").replaceAll(CalendarUtils.SIMPLECHARACTER[1],"") ;
         CalendarEvent calendarEvent = null ;
         if(uiForm.isAddNew_){
           calendarEvent = new CalendarEvent() ; 
@@ -727,8 +735,8 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
           calendarEvent = uiForm.calendarEvent_ ;
         }
         calendarEvent.setEventType(CalendarEvent.TYPE_TASK) ;
-        calendarEvent.setSummary(uiForm.getEventSumary()) ;
-        calendarEvent.setDescription(uiForm.getEventDescription()) ;
+        calendarEvent.setSummary(summary) ;
+        calendarEvent.setDescription(description) ;
         String delegation = uiForm.getEventDelegation() ;
         if(CalendarUtils.isEmpty(delegation)) { delegation = CalendarUtils.getCurrentUser();}
         calendarEvent.setTaskDelegator(delegation) ;

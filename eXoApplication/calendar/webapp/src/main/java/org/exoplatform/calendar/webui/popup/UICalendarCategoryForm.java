@@ -102,13 +102,19 @@ public class UICalendarCategoryForm extends UIForm {
   static  public class SaveActionListener extends EventListener<UICalendarCategoryForm> {
     public void execute(Event<UICalendarCategoryForm> event) throws Exception {
       UICalendarCategoryForm uiForm = event.getSource() ;
+      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       UICalendarCategoryManager uiManager = uiForm.getAncestorOfType(UICalendarCategoryManager.class) ;
       String categoryName = uiForm.getCategoryName() ;
+      if(!CalendarUtils.isNameValid(categoryName, CalendarUtils.SPECIALCHARACTER)){
+        uiApp.addMessage(new ApplicationMessage("UICalendarCategoryForm.msg.name-invalid", null, ApplicationMessage.WARNING) ) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       String description = uiForm.getCategoryDescription() ;
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       try {
         CalendarService calendarService = CalendarUtils.getCalendarService() ;
-        String username = Util.getPortalRequestContext().getRemoteUser() ;
+        String username = CalendarUtils.getCurrentUser() ;
         boolean existed = false ;
         List<CalendarCategory> gData = calendarService.getCategories(SessionProviderFactory.createSessionProvider(), username) ;
         if(uiForm.isAddNew())  {
@@ -127,7 +133,6 @@ public class UICalendarCategoryForm extends UIForm {
           }
         }
         if(existed) {
-          UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UICalendarCategoryForm.msg.group-existed", null));
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
