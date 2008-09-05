@@ -1060,6 +1060,16 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
       CalendarSetting calSetting = calendarPortlet.getCalendarSetting() ;
       CalendarService calService = CalendarUtils.getCalendarService() ;
+      String summary = uiForm.getEventSumary() ;
+      if(!CalendarUtils.isNameValid(summary, CalendarUtils.SIMPLECHARACTER)){
+        uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.summary-invalid", CalendarUtils.SIMPLECHARACTER, ApplicationMessage.WARNING) ) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
+      String location = uiForm.getEventPlace() ;
+      if(!CalendarUtils.isEmpty(location)) location = location.replaceAll(CalendarUtils.SIMPLECHARACTER[0], "").replaceAll(CalendarUtils.SIMPLECHARACTER[1],"") ;
+      String description = uiForm.getEventDescription() ;
+      if(!CalendarUtils.isEmpty(description)) description = description.replaceAll(CalendarUtils.SIMPLECHARACTER[0], "").replaceAll(CalendarUtils.SIMPLECHARACTER[1],"") ;
       if(!uiForm.isEventDetailValid(calSetting)) {
         uiApp.addMessage(new ApplicationMessage(uiForm.errorMsg_, null));
         uiForm.setSelectedTab(TAB_EVENTDETAIL) ;
@@ -1153,12 +1163,12 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
               }
             calendarEvent.setCalendarId(uiForm.getCalendarId()) ;
             calendarEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
-            calendarEvent.setSummary(uiForm.getEventSumary()) ;
-            calendarEvent.setDescription(uiForm.getEventDescription()) ;
+            calendarEvent.setSummary(summary) ;
+            calendarEvent.setDescription(description) ;
             calendarEvent.setCalType(uiForm.calType_) ;
             calendarEvent.setCalendarId(calendarId) ;
             calendarEvent.setEventCategoryId(uiForm.getEventCategory()) ;
-            calendarEvent.setLocation(uiForm.getEventPlace()) ;
+            calendarEvent.setLocation(location) ;
             calendarEvent.setRepeatType(uiForm.getEventRepeat()) ;
             calendarEvent.setPriority(uiForm.getEventPriority()) ; 
             calendarEvent.setPrivate(UIEventForm.ITEM_PRIVATE.equals(uiForm.getShareType())) ;

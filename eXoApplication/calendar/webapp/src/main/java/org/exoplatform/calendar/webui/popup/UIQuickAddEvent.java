@@ -249,6 +249,14 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
       UIQuickAddEvent uiForm = event.getSource() ;
       UICalendarPortlet uiPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      String summary = uiForm.getEventSummary() ;
+      if(!CalendarUtils.isNameValid(summary, CalendarUtils.SIMPLECHARACTER)){
+        uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.summary-invalid", CalendarUtils.SIMPLECHARACTER, ApplicationMessage.WARNING) ) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
+      String description = uiForm.getEventDescription() ;
+      if(!CalendarUtils.isEmpty(description)) description = description.replaceAll(CalendarUtils.SIMPLECHARACTER[0], "").replaceAll(CalendarUtils.SIMPLECHARACTER[1],"") ;
       if(CalendarUtils.isEmpty(uiForm.getEventCalendar())) {
         uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.calendar-field-required", null, ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -286,8 +294,8 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
       }
       try {
         CalendarEvent calEvent = new CalendarEvent() ;
-        calEvent.setSummary(uiForm.getEventSummary()) ;
-        calEvent.setDescription(uiForm.getEventDescription()) ;
+        calEvent.setSummary(summary) ;
+        calEvent.setDescription(description) ;
         calEvent.setCalendarId(uiForm.getEventCalendar());
         String username = CalendarUtils.getCurrentUser() ;
         if(uiForm.isEvent_){ 

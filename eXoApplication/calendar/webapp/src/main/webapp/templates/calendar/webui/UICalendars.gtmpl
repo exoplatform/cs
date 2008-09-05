@@ -96,7 +96,7 @@
   						<div class="GroupColor1">
   							<div class="CollapserFlatStyle"><span></span></div>
   							<div class="CheckBox"><input class="CalendarGroup" type="checkbox"/></div>
-  							<div class="CalendarGroupIcon"><a>$groupData.name</a></div>
+  							<div class="CalendarGroupIcon"><a title="$groupData.name">$groupData.name</a></div>
   							<div class="DownArrow1Icon" title="<%=uiform.getLabel('groupActions')%>"  id="$groupData.id" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
   							<div style="clear: both;"><span></span></div>
   						</div>
