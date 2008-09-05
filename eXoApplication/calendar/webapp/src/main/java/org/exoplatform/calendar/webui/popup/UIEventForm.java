@@ -32,10 +32,12 @@ import javax.mail.internet.InternetAddress;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Attachment;
+import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
+import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.service.impl.CalendarServiceImpl;
 import org.exoplatform.calendar.webui.CalendarView;
@@ -1054,6 +1056,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       UIEventForm uiForm = event.getSource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
+      UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
       UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
       CalendarSetting calSetting = calendarPortlet.getCalendarSetting() ;
       CalendarService calService = CalendarUtils.getCalendarService() ;
@@ -1094,6 +1097,38 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
               tempCal.setTime(to) ;
               tempCal.add(java.util.Calendar.MILLISECOND, -1) ;
               to = tempCal.getTime() ;
+            }
+
+            Calendar currentCalendar = null ;
+            if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
+              currentCalendar = calService.getUserCalendar(uiForm.getSession(), username, calendarId) ; 
+            } else if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)) {
+              GroupCalendarData gCalendarData = calService.getSharedCalendars(uiForm.getSystemSession(), username, true) ;
+              if( gCalendarData!= null && gCalendarData.getCalendarById(calendarId) != null) currentCalendar = gCalendarData.getCalendarById(calendarId) ;
+            } else  if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)) {
+              currentCalendar = calService.getGroupCalendar(uiForm.getSystemSession(), calendarId) ;
+            }
+            if(currentCalendar == null) {
+              uiPopupAction.deActivate() ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(calendarPortlet) ;
+              uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1));
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              return ;
+            } else {
+              boolean canEdit = false ;
+              if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)) {
+                canEdit = CalendarUtils.canEdit(null, currentCalendar.getEditPermission(), username) ;
+              } else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)) {
+                canEdit = CalendarUtils.canEdit(CalendarUtils.getOrganizationService(), currentCalendar.getEditPermission(), username) ;
+              }
+              if(!canEdit && !uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE) ) {
+                uiPopupAction.deActivate() ;
+                event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+                uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null,1));
+                event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                return ;
+              }
             }
             CalendarEvent calendarEvent  = null ;
             String[] pars = uiForm.getParticipants() ;
@@ -1162,9 +1197,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
               event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
               UIMiniCalendar uiMiniCalendar = calendarPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
               event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
-              uiForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
-              event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
-
+              uiPopupAction.deActivate() ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
             }catch (Exception e) {
               uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.add-event-error", null));
               event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -1182,9 +1216,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
                   }
                   uiForm.sendMail(CalendarUtils.getMailService(), CalendarUtils.getOrganizationService(), calSetting, acc, username, recive.toString(), calendarEvent) ;
                 } catch (Exception e) {
-                  e.printStackTrace() ;
                   uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.error-send-email", null));
                   event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                  e.printStackTrace() ;
                 }
               } else {
                 uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.cant-send-email", null));
@@ -1194,14 +1228,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
           }
         }
       }
-      /*if(uiForm.isEventDetailValid(calSetting)) {
-
-      } else {
-        uiApp.addMessage(new ApplicationMessage(uiForm.errorMsg_, null));
-        //uiForm.setSelectedTab(TAB_EVENTDETAIL) ;
-        //event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-      }*/
     }
   }
   static  public class OnChangeActionListener extends EventListener<UIEventForm> {

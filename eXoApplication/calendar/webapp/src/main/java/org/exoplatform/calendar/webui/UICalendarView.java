@@ -569,7 +569,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           UITaskForm uiTaskForm = uiPopupContainer.addChild(UITaskForm.class, null, null) ;
           uiTaskForm.initForm(uiPortlet.getCalendarSetting(), null, formTime) ;
           uiTaskForm.update(CalendarUtils.PRIVATE_TYPE,  CalendarUtils.getCalendarOption()) ;
-          if(CalendarUtils.isEmpty(value)) uiTaskForm.setSelectedCategory("Meeting") ;
+          if(CalendarUtils.isEmpty(value)) uiTaskForm.setSelectedCategory("meeting") ;
           else uiTaskForm.setSelectedCategory(value) ;  
         } else {
           uiPopupContainer.setId(UIPopupContainer.UIEVENTPOPUP) ;
