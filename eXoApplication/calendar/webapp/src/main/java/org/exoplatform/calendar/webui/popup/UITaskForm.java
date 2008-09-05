@@ -27,10 +27,12 @@ import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Attachment;
+import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
+import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.webui.CalendarView;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
@@ -711,6 +713,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       UITaskForm uiForm = event.getSource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
+      UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
       UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
       CalendarService calService = CalendarUtils.getCalendarService();
       if(uiForm.isEventDetailValid(calendarPortlet.getCalendarSetting())) {
@@ -744,6 +747,39 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
           tempCal.add(java.util.Calendar.MILLISECOND, -1) ;
           to = tempCal.getTime() ;
         }
+        
+        Calendar currentCalendar = null ;
+        if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
+          currentCalendar = calService.getUserCalendar(uiForm.getSession(), username, calendarId) ; 
+        } else if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)) {
+          GroupCalendarData gCalendarData = calService.getSharedCalendars(uiForm.getSystemSession(), username, true) ;
+          if( gCalendarData!= null && gCalendarData.getCalendarById(calendarId) != null) currentCalendar = gCalendarData.getCalendarById(calendarId) ;
+        } else  if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)) {
+          currentCalendar = calService.getGroupCalendar(uiForm.getSystemSession(), calendarId) ;
+        }
+        if(currentCalendar == null) {
+          uiPopupAction.deActivate() ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(calendarPortlet) ;
+          uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1));
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        } else {
+          boolean canEdit = false ;
+          if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)) {
+            canEdit = CalendarUtils.canEdit(null, currentCalendar.getEditPermission(), username) ;
+          } else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)) {
+            canEdit = CalendarUtils.canEdit(CalendarUtils.getOrganizationService(), currentCalendar.getEditPermission(), username) ;
+          }
+          if(!canEdit && !uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE) ) {
+            uiPopupAction.deActivate() ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+            uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null, 1));
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return ;
+          }
+        }
+        
         calendarEvent.setCalType(uiForm.calType_) ;
         calendarEvent.setFromDateTime(from) ;
         calendarEvent.setToDateTime(to);
@@ -789,8 +825,8 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
           UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiMiniCalendar) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendars) ;
-          uiForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
+          uiPopupAction.deActivate() ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
         }catch (Exception e) {
           uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.add-event-error", null));
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
