@@ -97,7 +97,7 @@ public class UIEventCategoryForm extends UIForm {
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       String name = uiForm.getUIStringInput(UIEventCategoryForm.EVENT_CATEGORY_NAME).getValue() ;
       String description = uiForm.getUIStringInput(UIEventCategoryForm.DESCRIPTION).getValue() ;
-      if(!CalendarUtils.isNameValid(name, CalendarUtils.SPECIALCHARACTER)) {
+      if(!CalendarUtils.isNameValid(name, CalendarUtils.EXTENDEDCHARACTER)) {
         uiApp.addMessage(new ApplicationMessage("UIEventCategoryForm.msg.name-invalid", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ; 
         return ;
