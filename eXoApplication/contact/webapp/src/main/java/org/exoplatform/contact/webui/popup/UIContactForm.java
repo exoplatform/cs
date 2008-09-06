@@ -253,6 +253,8 @@ public class UIContactForm extends UIFormTabPane {
       ContactService contactService = ContactUtils.getContactService();  
       String username = ContactUtils.getCurrentUser() ;
       SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
+      UIContactPortlet uiContactPortlet = uiContactForm.getAncestorOfType(UIContactPortlet.class) ;
+      UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
       if (uiContactForm.isNew_) {
         UIPopupContainer popupContainer = uiContactForm.getParent() ;
         UICategorySelect uiCategorySelect = popupContainer.getChild(UICategorySelect.class); 
@@ -289,7 +291,7 @@ public class UIContactForm extends UIFormTabPane {
             UIAddressBooks uiAddressBooks = uiContactForm
               .getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class) ;
             if ( uiAddressBooks.getSharedGroups().containsKey(contact.getAddressBook()[0])) {
-              if (uiAddressBooks.havePermission(contact.getAddressBook()[0])) {
+              if (uiAddressBooks.havePermission(contact.getAddressBook()[0]) || uiContacts.havePermission(contact)) {
                 contactService.saveContactToSharedAddressBook(username, contact.getAddressBook()[0], contact, false) ;                
               } else {
                 uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.removedPer", null, 
@@ -300,8 +302,7 @@ public class UIContactForm extends UIFormTabPane {
             } else {
               Contact sharedContact = contactService
                 .getSharedContact(SessionProvider.createSystemProvider(), username, contact.getId()) ;                
-              if (uiContactForm.getAncestorOfType(UIContactPortlet.class)
-                  .findFirstComponentOfType(UIContacts.class).havePermission(sharedContact)) {
+              if (uiContacts.havePermission(sharedContact)) {
                 contactService.saveSharedContact(username, contact) ;                              
               } else {
                 uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.removedPer", null, 
@@ -317,14 +318,12 @@ public class UIContactForm extends UIFormTabPane {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
         }         
-      }      
-      UIContactPortlet uiContactPortlet = uiContactForm.getAncestorOfType(UIContactPortlet.class) ;
-      UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
+      }
       String selectedContact = uiContacts.getSelectedContact() ;
       if(uiContacts.isDisplaySearchResult()) {
-      	List<Contact> contacts = new ArrayList<Contact>() ;
-      	contacts.add(contact) ;
-      	uiContacts.setContact(contacts, true) ;
+        List<Contact> contacts = new ArrayList<Contact>() ;
+        contacts.add(contact) ;
+        uiContacts.setContact(contacts, true) ;
       }
       uiContacts.updateList() ;
       if (!ContactUtils.isEmpty(selectedContact) && selectedContact.equals(contact.getId())) {
