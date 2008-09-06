@@ -81,7 +81,7 @@ function Box(){
 	this.tmpHeight = 0 ;
 	this.autoClose = true ;
 	this.closeInterval = 10 ;
-}
+};
 
 Box.prototype.config = function(obj, height, speed, openCallback, closeCallback) {
 	this.object = obj;
@@ -90,10 +90,11 @@ Box.prototype.config = function(obj, height, speed, openCallback, closeCallback)
 	this.open() ;
 	if(openCallback) this.openCallback = openCallback ;
 	if(closeCallback) this.closeCallback = closeCallback ;
-}
+};
 
 Box.prototype.open = function(){
 	var Box = eXo.webui.Box ;
+	Box.object.parentNode.style.top = Box.calculateY() + "px" ;
 	if(Box.tmpHeight < Box.maxHeight){
 		Box.object.style.overflow = "hidden" ;
 		Box.object.style.visibility = "visible" ;
@@ -101,6 +102,7 @@ Box.prototype.open = function(){
 		Box.tmpHeight += Box.speed ;
 		Box.timer = window.setTimeout(Box.open,10) ;
 	} else {
+		Box.floatingBox("msgBox",0);
 		Box.object.style.overflow = "visible" ;
 		Box.tmpHeight = Box.maxHeight ;
 		if(Box.timer) window.clearTimeout(Box.timer) ;
@@ -109,7 +111,7 @@ Box.prototype.open = function(){
 		Box.openCallback(Box.object) ;
 		return ;
 	}
-}
+};
 
 Box.prototype.close = function(){
 	var Box = eXo.webui.Box ;	
@@ -128,7 +130,28 @@ Box.prototype.close = function(){
 		Box.closeCallback(Box.object) ;
 		return ;
 	}
-}
+};
+
+Box.prototype.calculateY = function() {
+	var posY = 0;
+	if(document.documentElement && document.documentElement.scrollTop){
+		posY = document.documentElement.scrollTop;
+	} else if(document.body && document.body.scrollTop) {
+		posY = document.body.scrollTop;
+	} else if(window.pageYOffset) {
+		posY = window.pageYOffset;
+	} else if(window.scrollY) {
+		posY = window.scrollY;
+	}
+	return posY ;
+};
+
+Box.prototype.floatingBox = function(objID, posTop){
+	var obj = document.getElementById(objID);
+	var currentTop = this.calculateY();
+	obj.style.top = (currentTop < posTop)? posTop + "px": currentTop + "px";
+	window.setTimeout('eXo.webui.Box.floatingBox("'+objID+'",'+posTop+')', 50);
+};
 
 eXo.webui.Box = new Box() ;
 eXo.calendar.Reminder = new Reminder() ;
