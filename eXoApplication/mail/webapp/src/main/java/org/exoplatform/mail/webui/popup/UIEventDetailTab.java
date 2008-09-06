@@ -109,8 +109,8 @@ public class UIEventDetailTab extends UIFormInputWithActions {
 
   private List<SelectItemOption<String>> getPriority() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
-    options.add(new SelectItemOption<String>("high", "1")) ;
     options.add(new SelectItemOption<String>("normal", "2")) ;
+    options.add(new SelectItemOption<String>("high", "1")) ;
     options.add(new SelectItemOption<String>("low", "3")) ;
     return options ;
   }

@@ -1067,9 +1067,9 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         return ;
       }
       String location = uiForm.getEventPlace() ;
-      if(!CalendarUtils.isEmpty(location)) location = location.replaceAll(CalendarUtils.SIMPLECHARACTER[0], "").replaceAll(CalendarUtils.SIMPLECHARACTER[1],"") ;
+      if(!CalendarUtils.isEmpty(location)) location = location.replaceAll(CalendarUtils.GREATER_THAN, "").replaceAll(CalendarUtils.SMALLER_THAN,"") ;
       String description = uiForm.getEventDescription() ;
-      if(!CalendarUtils.isEmpty(description)) description = description.replaceAll(CalendarUtils.SIMPLECHARACTER[0], "").replaceAll(CalendarUtils.SIMPLECHARACTER[1],"") ;
+      if(!CalendarUtils.isEmpty(description)) description = description.replaceAll(CalendarUtils.GREATER_THAN, "").replaceAll(CalendarUtils.SMALLER_THAN,"") ;
       if(!uiForm.isEventDetailValid(calSetting)) {
         uiApp.addMessage(new ApplicationMessage(uiForm.errorMsg_, null));
         uiForm.setSelectedTab(TAB_EVENTDETAIL) ;

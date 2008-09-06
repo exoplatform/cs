@@ -77,6 +77,13 @@ public class CalendarUtils {
   final public static String DATETIMEFORMAT = DATEFORMAT + " " +TIMEFORMAT ;   
   final public static int DEFAULT_TIMEITERVAL = 15 ;
   final public static long MILISECONS_OF_DAY = 24*60*60*1000 ;
+  public static final String SLASH = "/".intern();
+  public static final String BACKSLASH = "\\".intern();
+  public static final String GREATER_THAN = ">".intern() ;
+  public static final String SMALLER_THAN = "<".intern() ;
+  public static final String EXTENDEDCHARACTER[] = {SEMICOLON,COMMA,SLASH,BACKSLASH,"'","|",GREATER_THAN,SMALLER_THAN,"\"", "?", "!", "@", "#", "$", "%","^","&","*","+","]","["};
+  public static final String SIMPLECHARACTER[] = {GREATER_THAN,SMALLER_THAN};
+  
   static public String[] getUserGroups(String username) throws Exception {
     OrganizationService organization = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
     Object[] objs = organization.getGroupHandler().findGroupsOfUser(username).toArray() ;
@@ -262,5 +269,23 @@ public class CalendarUtils {
       }
     }
     return CalendarUtils.hasEditPermission(savePerms, sb.toString().split(CalendarUtils.COMMA)) ;
+  }
+  public static boolean isNameValid(String name, String[] regexpression) {
+    for(String c : regexpression){ if(name.contains(c)) return false ;}
+    return true ;
+  }
+  public static boolean isEmailValid(String value) {
+    String emailRegex = "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+\\.[A-Za-z]{2,5}" ;
+    return (value!= null && value.trim().length() > 0 && value.trim().matches(emailRegex)) ;
+  }
+  public static boolean isAllEmailValid(String addressList) {
+    boolean isValid = true ;
+    if(CalendarUtils.isEmpty(addressList)) return false ;
+    for(String s : addressList.split(CalendarUtils.COMMA)) {
+      s = s.trim() ;
+      if(!isEmailValid(s)) isValid = false ;
+      break ;
+    }
+    return isValid  ;
   }
 }

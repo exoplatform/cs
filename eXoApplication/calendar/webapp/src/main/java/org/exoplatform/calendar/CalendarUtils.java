@@ -84,6 +84,8 @@ public class CalendarUtils {
   public static final String UNDERSCORE = "_".intern();
   public static final String SLASH_COLON = "/:".intern() ;
   public static final String COLON_SLASH = ":/".intern() ;
+  public static final String GREATER_THAN = ">".intern() ;
+  public static final String SMALLER_THAN = "<".intern() ;
   public static final String ANY = "*.*".intern();
   public static final String ANY_OF = "*.".intern();
   public static final String DOT = ".".intern();
@@ -93,9 +95,9 @@ public class CalendarUtils {
   public static final int DEFAULT_TIMEITERVAL = 15;
   public static final long MILISECONS_OF_DAY = 24*60*59*1000;
   public static final String EXO_INVITATION = "X-Exo-Invitation".intern();
-  public static final String SPECIALCHARACTER[] = {SEMICOLON,COMMA,SLASH,BACKSLASH,"'","|",">","<","\"", "?", "!", "@", "#", "$", "%","^","&","*"};
-  public static final String EXTENDEDCHARACTER[] = {SEMICOLON,COMMA,SLASH,BACKSLASH,"'","|",">","<","\"", "?", "!", "@", "#", "$", "%","^","&","*","+","]","["};
-  public static final String SIMPLECHARACTER[] = {">","<"};
+  public static final String SPECIALCHARACTER[] = {SEMICOLON,COMMA,SLASH,BACKSLASH,"'","|",GREATER_THAN,SMALLER_THAN,"\"", "?", "!", "@", "#", "$", "%","^","&","*"};
+  public static final String EXTENDEDCHARACTER[] = {SEMICOLON,COMMA,SLASH,BACKSLASH,"'","|",GREATER_THAN,SMALLER_THAN,"\"", "?", "!", "@", "#", "$", "%","^","&","*","+","]","["};
+  public static final String SIMPLECHARACTER[] = {GREATER_THAN,SMALLER_THAN};
 
   public static final String[] getUserGroups(String username) throws Exception {
     OrganizationService organization = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
