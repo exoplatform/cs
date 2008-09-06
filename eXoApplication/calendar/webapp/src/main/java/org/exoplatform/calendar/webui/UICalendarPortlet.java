@@ -21,8 +21,6 @@ import java.util.TimeZone;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
-import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.RootContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -38,22 +36,20 @@ import org.exoplatform.ws.frameworks.cometd.ContinuationService;
  * Aug 01, 2007
  */
 @ComponentConfig(
-   lifecycle = UIApplicationLifecycle.class, 
-   template = "app:/templates/calendar/webui/UICalendarPortlet.gtmpl"
-
+    lifecycle = UIApplicationLifecycle.class, 
+    template = "app:/templates/calendar/webui/UICalendarPortlet.gtmpl"
 )
 public class UICalendarPortlet extends UIPortletApplication {
   private CalendarSetting calendarSetting_ ;
   public UICalendarPortlet() throws Exception {
-   calendarSetting_ = CalendarUtils.getCalendarService().getCalendarSetting(SessionProviderFactory.createSessionProvider(), CalendarUtils.getCurrentUser()) ;
-   UIActionBar uiActionBar = addChild(UIActionBar.class, null, null) ;
-   uiActionBar.setCurrentView(UICalendarViewContainer.TYPES[Integer.parseInt(getCalendarSetting().getViewType())]) ;
+    calendarSetting_ = CalendarUtils.getCalendarService().getCalendarSetting(SessionProviderFactory.createSessionProvider(), CalendarUtils.getCurrentUser()) ;
+    UIActionBar uiActionBar = addChild(UIActionBar.class, null, null) ;
+    uiActionBar.setCurrentView(UICalendarViewContainer.TYPES[Integer.parseInt(getCalendarSetting().getViewType())]) ;
     addChild(UICalendarWorkingContainer.class, null, null) ;
     UIPopupAction uiPopup =  addChild(UIPopupAction.class, null, null) ;
     uiPopup.setId("UICalendarPopupAction") ;
     uiPopup.getChild(UIPopupWindow.class).setId("UICalendarPopupWindow") ;
   }
-  
   public CalendarSetting getCalendarSetting() throws Exception{
     if(calendarSetting_ != null ) return calendarSetting_ ;
     calendarSetting_ = CalendarUtils.getCalendarService().getCalendarSetting(SessionProviderFactory.createSessionProvider(), CalendarUtils.getCurrentUser()) ; 
@@ -71,27 +67,17 @@ public class UICalendarPortlet extends UIPortletApplication {
     popupAction.deActivate() ;
     context.addUIComponentToUpdateByAjax(popupAction) ;
   }
-  
   protected void renderPopupMessages() throws Exception {
     UIPopupMessages popupMess = getUIPopupMessages();
     if(popupMess == null)  return ;
     WebuiRequestContext  context =  WebuiRequestContext.getCurrentInstance() ;
     popupMess.processRender(context);
   }
-  
   public String getRemoteUser() throws Exception {
     return CalendarUtils.getCurrentUser() ;
   }
-  protected ContinuationService getContinuationService() {
-    ExoContainer container = RootContainer.getInstance();
-    container = ((RootContainer)container).getPortalContainer("portal");
-
-    ContinuationService continuation = (ContinuationService) container.getComponentInstanceOfType(ContinuationService.class);
-    return continuation;
-
-  }
   public String getUserToken()throws Exception {
-    ContinuationService continuation = getContinuationService() ;
+    ContinuationService continuation = getApplicationComponent(ContinuationService.class) ;
     return continuation.getUserToken(this.getRemoteUser());
   }
 }

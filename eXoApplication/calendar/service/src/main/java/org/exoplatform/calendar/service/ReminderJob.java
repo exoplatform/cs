@@ -165,6 +165,7 @@ public class ReminderJob implements Job {
         System.out.println("\n\n message has been sent !");
       }
     } catch (Exception e) {
+      System.out.println("\n\n Error when run reminder job !");
       //e.printStackTrace();			
     }
     if (log_.isDebugEnabled()) log_.debug("File plan job done");

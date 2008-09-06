@@ -256,7 +256,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         return ;
       }
       String description = uiForm.getEventDescription() ;
-      if(!CalendarUtils.isEmpty(description)) description = description.replaceAll(CalendarUtils.SIMPLECHARACTER[0], "").replaceAll(CalendarUtils.SIMPLECHARACTER[1],"") ;
+      if(!CalendarUtils.isEmpty(description)) description = description.replaceAll(CalendarUtils.GREATER_THAN, "").replaceAll(CalendarUtils.SMALLER_THAN,"") ;
       if(CalendarUtils.isEmpty(uiForm.getEventCalendar())) {
         uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.calendar-field-required", null, ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
