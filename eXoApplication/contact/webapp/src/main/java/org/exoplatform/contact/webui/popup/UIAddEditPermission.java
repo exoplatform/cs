@@ -186,8 +186,6 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
       if (uiForm.isSharedGroup) {
         ContactGroup group = contactService.getGroup(
             SessionProviderFactory.createSessionProvider(), username, uiForm.groupId_) ;
-        
-        // delete group permission
         if (group.getViewPermissionGroups() != null && Arrays.asList(group.getViewPermissionGroups()).contains(remover)) {
           List<String> newPerms = new ArrayList<String>() ;
           newPerms.addAll(Arrays.asList(group.getViewPermissionGroups())) ;
@@ -208,7 +206,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
             viewUsers = Arrays.asList(group.getViewPermissionUsers()) ;
           }
           for (User user : users)
-            if (viewUsers.size() > 0 && !viewUsers.contains(user.getUserName() + JCRDataStorage.HYPHEN))
+            if (!viewUsers.contains(user.getUserName() + JCRDataStorage.HYPHEN))
               contactService.removeUserShareAddressBook(
                 SessionProviderFactory.createSessionProvider(), username, uiForm.groupId_, user.getUserName()) ;
         } else {
@@ -232,8 +230,6 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
         event.getRequestContext().addUIComponentToUpdateByAjax(
             uiForm.getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class)) ;
       } else {
-        
-        // ko luu ca object contact vi co the ko dung den delete va edit
         Contact contact = contactService.getContact(
             SessionProviderFactory.createSessionProvider(), username, uiForm.contactId_) ;
         if (contact.getViewPermissionGroups() != null && Arrays.asList(contact.getViewPermissionGroups()).contains(remover)) {
@@ -245,8 +241,8 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
           if (contact.getViewPermissionUsers() != null) {
             viewUsers = Arrays.asList(contact.getViewPermissionUsers()) ;
           }
-          for (User user : users)
-            if (viewUsers.size() > 0 && !viewUsers.contains(user.getUserName() + JCRDataStorage.HYPHEN)) {            	
+          for (User user : users) {
+            if (!viewUsers.contains(user.getUserName() + JCRDataStorage.HYPHEN)) {          	
               try {
             	contactService.removeUserShareContact(
             	  SessionProviderFactory.createSystemProvider(), username, uiForm.contactId_, user.getUserName()) ;
@@ -258,6 +254,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
             	return ;
               }    
             }
+          }
         } else {
           removePerUser(contact, remover + JCRDataStorage.HYPHEN) ;
           try {
