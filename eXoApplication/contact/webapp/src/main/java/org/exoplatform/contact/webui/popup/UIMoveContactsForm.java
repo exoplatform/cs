@@ -164,7 +164,7 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
           sharedContacts.add(contact) ;
         } else {
           contact.setAddressBook(new String[] { addressBookId }) ;
-          sharedContacts.add(contact) ;
+          contacts.add(contact) ;
         }
       }
       
