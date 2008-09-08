@@ -320,11 +320,11 @@ public class UIContactForm extends UIFormTabPane {
         }         
       }
       String selectedContact = uiContacts.getSelectedContact() ;
-      if(uiContacts.isDisplaySearchResult()) {
-        List<Contact> contacts = new ArrayList<Contact>() ;
-        contacts.add(contact) ;
-        uiContacts.setContact(contacts, true) ;
-      }
+      //if(uiContacts.isDisplaySearchResult()) {
+      List<Contact> contacts = new ArrayList<Contact>() ;
+      contacts.add(contact) ;
+      uiContacts.setContact(contacts, true) ;
+      //}
       uiContacts.updateList() ;
       if (!ContactUtils.isEmpty(selectedContact) && selectedContact.equals(contact.getId())) {
         uiContactPortlet.findFirstComponentOfType(UIContactPreview.class).setContact(contact) ;
