@@ -17,6 +17,39 @@ UIContactDragDrop.prototype.init = function() {
   this.regDnDItem() ;
 } ;
 
+DragDrop.prototype.findDropableTarget = function(dndEvent, dropableTargets, mouseEvent) {
+  if(dropableTargets == null) return null ;
+  var isDesktop = document.getElementById("UIPageDesktop");
+  var extraLeft = 0 ;
+  var extraTop = 0 ;
+  if(isDesktop && dropableTargets[0]){
+	extraLeft = eXo.core.DOMUtil.findAncestorByClass(dropableTargets[0],"UIResizableBlock").scrollLeft ;
+	extraTop = eXo.core.DOMUtil.findAncestorByClass(dropableTargets[0],"UIResizableBlock").scrollTop ;
+  }
+  var mousexInPage = eXo.core.Browser.findMouseXInPage(mouseEvent) + extraLeft;
+  var mouseyInPage = eXo.core.Browser.findMouseYInPage(mouseEvent) + extraTop;
+  
+	var clickObject = dndEvent.clickObject ;
+	var dragObject = dndEvent.dragObject ;
+  var foundTarget = null ;
+  var len = dropableTargets.length ;
+  for(var i = 0 ; i < len ; i++) {
+    var ele =  dropableTargets[i] ;
+    
+    if(dragObject != ele && this.isIn(mousexInPage, mouseyInPage, ele)) {
+      if(foundTarget == null) {
+        foundTarget = ele ;
+      } else {
+        if(this.isAncestor(foundTarget, ele)) {
+          foundTarget = ele ;
+        }
+      } 
+    }
+  }
+ 	
+  return foundTarget ;
+} ;
+
 UIContactDragDrop.prototype.getAllDropableSets = function() {
   var uiAddressBooksNode = document.getElementById('UIAddressBooks') ;
   var addressBooks = this.DOMUtil.findDescendantsByClass(uiAddressBooksNode, 'div', 'ItemList') ;
