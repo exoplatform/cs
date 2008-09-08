@@ -111,6 +111,7 @@
 
 .UIContactPortlet .UIRightClickPopupMenu .ItemIcon {
 	width: auto;
+	line-height: 14px;
 }
 /*********************************** UIActionBar ***************************************/
 
