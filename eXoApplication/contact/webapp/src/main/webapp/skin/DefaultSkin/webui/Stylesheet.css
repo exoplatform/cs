@@ -205,3 +205,6 @@
 	white-space: normal;
 }
 
+.UIContactPortlet .UIContactPreview .DecoratorBox .ViewBoxStyle .TopLeftViewBoxStyle {
+	height: 8px;
+}
