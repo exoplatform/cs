@@ -763,4 +763,10 @@ UIContactPortlet.prototype.refreshData = function() {
 	} ;
 } ;
 
+UIContactPortlet.prototype.showTagMenu = function(obj, event) {
+	eXo.webui.UIPopupSelectCategory.show(obj, event);
+	var uiPopupCategory = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div","UIPopupCategory") ;
+	uiPopupCategory.style.left = obj.offsetWidth - uiPopupCategory.offsetWidth + "px" ;
+} ;
+
 eXo.contact.UIContactPortlet = new UIContactPortlet() ;

@@ -562,9 +562,9 @@
 						%>
 				  	<div class="StateIcon $icon"><%= ContactUtils.encodeHTML(contact.getFullName()) %></div>
 			  		<% if (tagIds != null && tagIds.length > 0) { %>
-                <div onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" style="cursor: pointer; display: inline" class="TagIcon $iconTag">
+                <div onclick="eXo.contact.UIContactPortlet.showTagMenu(this, event);" style="cursor: pointer; display: inline" class="TagIcon $iconTag">
                   <% /*Begin Popup Menu*/ %>
-                  <span style="position: absolute;">
+                  <div style="position: relative;">
                     <div class="UIPopupCategory" style="display: none;">
                       <div class="UIRightClickPopupMenu" style="display: block;">
                         <div class="UIContextMenuContainer">
@@ -606,7 +606,7 @@
                         </div>
                       </div>
                     </div>
-                  </span>
+                  </div>
                   <% /*End Popup Menu*/ %>
                 </div>
 			  		<% } %>
@@ -718,9 +718,9 @@
 			  	
 				  	<div class="StateIcon $icon"><%=(contact.getFullName()==null ? "_" : contact.getFullName())%></div>
 			  		<% if (tagIds != null && tagIds.length > 0) { %>
-					     <div onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" style="cursor: pointer; display: inline" class="TagIcon $iconTag">
+					     <div onclick="eXo.contact.UIContactPortlet.showTagMenu(this, event);" style="cursor: pointer; display: inline" class="TagIcon $iconTag">
                 <% /*Begin Popup Menu*/ %>
-                <div style="position: absolute;">
+                <div style="position: relative;">
                   <div class="UIPopupCategory" style="display: none;">
                     <div class="UIRightClickPopupMenu" style="display: block;">
                       <div class="UIContextMenuContainer">
