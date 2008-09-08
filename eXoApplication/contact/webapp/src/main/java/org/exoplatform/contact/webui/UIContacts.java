@@ -383,6 +383,36 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIContacts uiContacts = event.getSource();
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
       Contact contact = uiContacts.contactMap.get(contactId) ;
+      ContactService service = ContactUtils.getContactService() ;
+      String username = ContactUtils.getCurrentUser() ;
+      if (contact.getContactType().equalsIgnoreCase(JCRDataStorage.PRIVATE)) {
+        try {
+          contact = service.getContact(SessionProviderFactory.createSessionProvider(), username, contactId) ;
+        } catch (NullPointerException e) {
+          UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-deleted", null,
+              ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }        
+      } else  {// shared
+        try {
+          contact = service.getSharedContact(SessionProviderFactory.createSessionProvider(), username, contactId) ;          
+        } catch  (NullPointerException e) {
+          contact = null ;
+        }
+        if (contact == null) {
+          try {
+            contact = service.getSharedContactAddressBook(username, contactId) ;            
+          } catch (NullPointerException e) {
+            UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
+            uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-deleted", null,
+                ApplicationMessage.WARNING)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return ;
+          }
+        }
+      }
       UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
       UIPopupContainer popupContainer =  popupAction.activate(UIPopupContainer.class, 800) ;
