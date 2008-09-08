@@ -486,3 +486,48 @@ UINavigation.prototype.scrollCallback = function() {
 
 eXo.cs.UINavigation = new UINavigation() ;
 
+function LayoutManager(id){
+	this.layoutId = id ;
+}
+
+LayoutManager.prototype.check = function(){
+	var layoutcookie = eXo.core.Browser.getCookie(this.layoutId) ;	
+	var i = layoutcookie.length ;
+	while(i--){
+		if(parseInt(layoutcookie.charAt(i)) <=0) return ;
+		this.layouts[parseInt(layoutcookie.charAt(i))-1].style.display = "none";
+	}
+	if(this.callback) this.callback(layoutcookie) ;
+};
+
+LayoutManager.prototype.switchLayout = function(layout,callback){
+	var layoutcookie = eXo.core.Browser.getCookie(this.layoutId) ;
+	var status = this.setValue(layout,layoutcookie);
+	if (!status) this.layouts[layout-1].style.display = "none" ;
+	else this.layouts[layout-1].style.display = "block" ;
+	if(this.switchCallback) this.switchCallback(layout,status);
+};
+
+LayoutManager.prototype.setValue = function(value, str){
+	var status = null ;
+	if(str.indexOf(value) < 0) {
+		str = str.concat(value);
+		status = false ;
+	}else {
+		str = str.replace(value,'');
+		status = true ;
+	}	
+	eXo.core.Browser.setCookie(this.layoutId,str,1);
+	return status ;
+};
+
+LayoutManager.prototype.reset = function(){
+	var i = this.layouts.length ;
+	while(i--){
+		this.layouts[i].style.display = "block";
+	}
+	eXo.core.Browser.setCookie(this.layoutId,"",1);
+	if(this.resetCallback) this.resetCallback() ;
+};
+
+eXo.cs.UINavigation = new UINavigation() ;
