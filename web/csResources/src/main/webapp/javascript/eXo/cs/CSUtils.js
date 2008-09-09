@@ -500,7 +500,7 @@ LayoutManager.prototype.check = function(){
 	if(this.callback) this.callback(layoutcookie) ;
 };
 
-LayoutManager.prototype.switchLayout = function(layout,callback){
+LayoutManager.prototype.switchLayout = function(layout){
 	var layoutcookie = eXo.core.Browser.getCookie(this.layoutId) ;
 	var status = this.setValue(layout,layoutcookie);
 	if (!status) this.layouts[layout-1].style.display = "none" ;
