@@ -524,7 +524,7 @@ LayoutManager.prototype.setValue = function(value, str){
 LayoutManager.prototype.reset = function(){
 	var i = this.layouts.length ;
 	while(i--){
-		this.layouts[i].style.display = "block";
+		if(this.layouts[i]) this.layouts[i].style.display = "block";
 	}
 	eXo.core.Browser.setCookie(this.layoutId,"",1);
 	if(this.resetCallback) this.resetCallback() ;
