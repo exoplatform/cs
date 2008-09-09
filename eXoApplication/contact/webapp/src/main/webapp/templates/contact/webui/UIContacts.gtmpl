@@ -336,7 +336,7 @@
 									if (selectedContact != null && contact.getId().equals(selectedContact)) cssClass = "Selected" ;
 	  	 	    %>
 								
-  						<tr class="UIContactList $cssClass" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" isSharedAddress = "<%=uicomponent.isSharedAddress(contact.getAddressBook())%>" isOwner="<%=contact.isOwner()%>"> 
+  						<tr class="UIContactList $cssClass" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" isSharedAddress = "<%=uicomponent.isSharedAddress(contact)%>" isOwner="<%=contact.isOwner()%>"> 
   						  <td class="text" style="padding-left: 7px; width:23px;">
   						  	<%
   						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
@@ -420,7 +420,7 @@
 										if (contact.getId().equals(uicomponent.getSelectedContact())) cssClass = "Selected" ;								
 						%>
 							
-  						<tr class="UIContactList $cssClass" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" isSharedAddress = "<%=uicomponent.isSharedAddress(contact.getAddressBook())%>" isOwner="<%=contact.isOwner()%>">
+  						<tr class="UIContactList $cssClass" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" isSharedAddress = "<%=uicomponent.isSharedAddress(contact)%>" isOwner="<%=contact.isOwner()%>">
   						  <td class="text" style="padding-left: 7px; width: 23px;">
   						  	<%
   						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
@@ -554,7 +554,7 @@
 		
 				%>	
 		  <div class="LeftVCardsContent">
-		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" isSharedAddress = "<%=uicomponent.isSharedAddress(contact.getAddressBook())%>" isOwner="<%=contact.isOwner()%>">
+		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" isSharedAddress = "<%=uicomponent.isSharedAddress(contact)%>" isOwner="<%=contact.isOwner()%>">
 			  	<div class="TitleVCards" >
 			  		<% 
 										icon = "OfflineIcon"
@@ -709,7 +709,7 @@
 				
 			%>
 			<div class="RightVCardsContent">
-		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" isSharedAddress = "<%=uicomponent.isSharedAddress(contact.getAddressBook())%>"  isOwner="<%=contact.isOwner()%>">
+		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" isSharedAddress = "<%=uicomponent.isSharedAddress(contact)%>"  isOwner="<%=contact.isOwner()%>">
 			  	<div class="TitleVCards" >
 			  	<% 
 										icon = "OfflineIcon"

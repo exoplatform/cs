@@ -77,18 +77,13 @@ public class Contact {
    * 	0: Private
    * 	1: Shared
    * 	2: Public */
-  private String contactType = JCRDataStorage.PRIVATE ;
-  
+  private String contactType = JCRDataStorage.PRIVATE ;  
   private String[] addressBook ;
   private String[] tags ;
   private String[] editPermissionUsers ;
   private String[] viewPermissionUsers ;
   private String[] editPermissionGroups ;
   private String[] viewPermissionGroups ;
-  
-  // remove 2 these properties
-  /*private String[] sharedForUsers ;
-  private String[] sharedForGroups ;*/
   private boolean isOwner = false ;
   private String ownerId ;
   private ContactAttachment attachment ;
