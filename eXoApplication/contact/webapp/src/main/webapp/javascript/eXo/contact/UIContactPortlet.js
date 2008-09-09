@@ -375,7 +375,7 @@ UIContactPortlet.prototype.printList = function (obj){
 	eXo.core.DOMUtil.removeElement(UIAction) ;
 } ;
 
-UIContactPortlet.prototype.checkLayout = function(obj, event) {
+UIContactPortlet.prototype.checkLayout = function() {
 	eXo.contact.LayoutManager = new LayoutManager("contactLayout");
 	eXo.contact.LayoutManager.layouts = [] ;
 	var DOMUtil = eXo.core.DOMUtil ;
@@ -447,10 +447,12 @@ UIContactPortlet.prototype.checkLayoutCallback = function(layoutcookie){
 
 UIContactPortlet.prototype.resetLayoutCallback = function(){
 	var itemIcons = eXo.core.DOMUtil.findDescendantsByClass(document.getElementById("customLayoutViewMenu"), "div", "ItemIcon");
+	var panelWorking = document.getElementById('UIContactContainer');
 	var i = itemIcons.length ;
 	while(i--){
 		eXo.core.DOMUtil.addClass(itemIcons[i],'CheckedMenu');
-	}  
+	}
+	panelWorking.style.marginLeft = "225px" ;
 };
 
 UIContactPortlet.prototype.switchLayout = function(layout) {
@@ -599,40 +601,6 @@ UIContactPortlet.prototype.showTrTimer = function(e) {
 
 UIContactPortlet.prototype.showMap = function(/*String*/ address, /*String*/ message) {
 	eXo.core.Topic.publish("UIContactPortlet", "/eXo/portlet/map/displayAddress", {address:address, text:message});
-};
-
-/**
- * 
- *  @author Lam Nguyen
- * 
- */
-UIContactPortlet.prototype.checkLayoutView = function() {
-  var objRoot = document.getElementById("UIContactPortlet");
-  var objPopup = eXo.core.DOMUtil.findFirstDescendantByClass(objRoot, "div", "TypeViewContactPortlet");    
-  var objListView = null;
-  var objVCards = null;
-  if(eXo.core.DOMUtil.findFirstDescendantByClass(objPopup, "div", "ContactListIcon")) {
-    objListView =  eXo.core.DOMUtil.findFirstDescendantByClass(objPopup, "div", "ContactListIcon");    
-  } else {
-    objListView = eXo.core.DOMUtil.findFirstDescendantByClass(objPopup, "div", "ContactListIconSelected");
-  }
-  
-  if(eXo.core.DOMUtil.findFirstDescendantByClass(objPopup, "div", "ContactIcon")) {
-    objVCards =  eXo.core.DOMUtil.findFirstDescendantByClass(objPopup, "div", "ContactIcon");    
-  } else {
-    objVCards = eXo.core.DOMUtil.findFirstDescendantByClass(objPopup, "div", "ContactIconSelected");
-  }
-  
-  var objListMenuItem = eXo.core.DOMUtil.findAncestorByClass(objListView, "MenuItem");
-  var objVCardsMenuItem = eXo.core.DOMUtil.findAncestorByClass(objVCards, "MenuItem");  
-
-  if (eXo.core.DOMUtil.findDescendantById(objRoot, "UIListUsers")) {
-    objListMenuItem.style.backgroundColor = "#dee4f2";
-    objVCardsMenuItem.style.backgroundColor = "#f6f6f6";
-  } else {
-    objListMenuItem.style.backgroundColor = "#f6f6f6";
-    objVCardsMenuItem.style.backgroundColor = "#dee4f2";
-  }
 };
 
 UIContactPortlet.prototype.showPopupCustomLayoutView = function(obj, evt) {
