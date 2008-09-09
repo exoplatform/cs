@@ -320,9 +320,7 @@ UIContactPortlet.prototype.disableAction = function(cont){
 		if(eXo.core.DOMUtil.hasClass(a[i],"ActionButton")) continue ;
 		var text = document.createTextNode(a[i].innerHTML) ;
 		a[i].parentNode.appendChild(text) ;
-		eXo.core.DOMUtil.removeElement(a[i]) ;
-//		a[i].removeAttribute("href") ;
-		
+		eXo.core.DOMUtil.removeElement(a[i]) ;	
 	}
 	return cont ;
 } ;
@@ -358,9 +356,6 @@ UIContactPortlet.prototype.cancelPrintList = function (){
 	var UIPortalApplication = document.getElementById("UIPortalApplication") ;
 	if(UIPrintContainer) eXo.core.DOMUtil.removeElement(UIPrintContainer) ;
 	UIPortalApplication.style.display = "block" ;
-	
-//	document.body.style.background = eXo.contact.UIContactPortlet.pageBackground ;
-//	eXo.contact.UIContactPortlet.pageBackground = null ;
 } ;
 
 UIContactPortlet.prototype.printList = function (obj){
@@ -377,61 +372,6 @@ UIContactPortlet.prototype.printList = function (obj){
 	document.body.appendChild(div) ;
 	eXo.core.DOMUtil.removeElement(UIAction) ;
 } ;
-
-/**
- * 
- * @author Lam Nguyen
- * 
- */
-/* 
-UIContactPortlet.prototype.checkLayout = function() {
-  try {
-    var Browser = eXo.core.Browser ;
-    var layout1State = parseInt(eXo.core.Browser.getCookie('contactLayout1'));
-    var layout2State = parseInt(eXo.core.Browser.getCookie('contactLayout2'));
-    var layout3State = parseInt(eXo.core.Browser.getCookie('contactLayout3'));    
-    var layout4state = parseInt(eXo.core.Browser.getCookie('contactLayout4'));
-    var layout5state = parseInt(eXo.core.Browser.getCookie('contactLayout5'));
-    if(layout1State == 0) {
-      this.switchLayout(1);
-		  this.addCheckedIcon(0, false) ;
-		  this.addCheckedIcon(1, false) ;
-			this.addCheckedIcon(2, false) ;
-			this.addCheckedIcon(3, false) ;
-    } else {
-		  this.addCheckedIcon(1, true) ;
-			this.addCheckedIcon(2, true) ;
-			this.addCheckedIcon(3, true) ;
-		}
-    
-    if(layout2State == 0) {
-      this.switchLayout(2);
-		  this.addCheckedIcon(2, false) ;
-		  this.addCheckedIcon(0, false) ;
-    } else {
-		  this.addCheckedIcon(2, true) ;
-		}
-    
-    if(layout3State == 0) {   
-      this.switchLayout(3);
-      this.addCheckedIcon(3, false) ;
-	  	this.addCheckedIcon(0, false) ;
-    } else {
-		  this.addCheckedIcon(3, true) ;
-		}
-    
-    if(layout4state == 0 && layout5state == 0) {
-      this.switchLayout(4);  
-		  this.addCheckedIcon(4, false) ;
-		  this.addCheckedIcon(0, false) ;
-    } else {
-		  this.addCheckedIcon(4, true) ;
-		}
-  }
-  catch(e) {
-    window.alert(e.message);
-  }
-}*/
 
 UIContactPortlet.prototype.checkLayout = function(obj, event) {
 	eXo.contact.LayoutManager = new LayoutManager("contactLayout");
@@ -452,149 +392,6 @@ UIContactPortlet.prototype.checkLayout = function(obj, event) {
 	eXo.contact.LayoutManager.resetCallback = eXo.contact.UIContactPortlet.resetLayoutCallback ;
 	eXo.contact.LayoutManager.check();
 } ;
-
-
-/**
- * 
- *  @author Lam Nguyen
- *  
- *  @param (Object) layout
- */
-/* 
-UIContactPortlet.prototype.switchLayout = function(layout) {
-  var Browser = eXo.core.Browser;
-  var DOMUtil = eXo.core.DOMUtil;
-  layout = parseInt(layout);
-  var contactLayout1 = DOMUtil.findFirstDescendantByClass(document.getElementById("UIContactPortlet"), "div", "UINavigationContainer");                                                   
-  var contactLayout2 = document.getElementById("UIAddressBooks");
-  var contactLayout3 = document.getElementById("UITags");
-  var contactLayout4 = DOMUtil.findFirstDescendantByClass(document.getElementById("UIContactPortlet"), "div", "UIContactPreview");
-  var contactLayout5 = DOMUtil.findFirstDescendantByClass(document.getElementById("UIContactPortlet"), "div", "ResizeReadingPane");
-  var panelWorking = document.getElementById('UIContactContainer');
-  var objRoot = document.getElementById("UIAddressBooks");
-	objRoot = DOMUtil.findFirstDescendantByClass(objRoot, "div", "PersonalAddress");
-	objRoot = DOMUtil.findFirstDescendantByClass(objRoot, "div", "PrivateAddressBook");
-	var showCheckedMenu = false;
-  var isWelcome = eXo.core.DOMUtil.findFirstDescendantByClass(contactLayout4, "div", "UIWelcomeContact");
-  switch(layout) {
-    case 0 : 
-      if(contactLayout1.style.display != "block") {
-        contactLayout1.style.display = "block";
-      } 
-      if(contactLayout2.style.display != "block") {
-        contactLayout2.style.display = "block";
-      }
-      if(contactLayout3.style.display != "block") {
-        contactLayout3.style.display = "block";             
-      }
-	  if(contactLayout4) {
-	      if(contactLayout4.style.display != "block") {
-	        contactLayout4.style.display = "block";
-	      }
-	  }
-	  if(contactLayout5) {
-	      if(contactLayout5.style.display != "block") {
-	        contactLayout5.style.display = "block";
-	      }
-	  }
-      panelWorking.style.marginLeft = "225px";   
-      Browser.setCookie("contactLayout1", "1", 30);
-      Browser.setCookie("contactLayout2", "1", 30);
-      Browser.setCookie("contactLayout3", "1", 30);
-      Browser.setCookie("contactLayout4", "1", 30); 
-      Browser.setCookie("contactLayout5", "1", 30);     
-      this.addCheckedIcon(1,true);
-      this.addCheckedIcon(2,true);
-      this.addCheckedIcon(3,true);
-      this.addCheckedIcon(4, true);
-	  this.isDefaultLayout() ;
-      return;
-    case 1 :
-      if(contactLayout1.style.display == "none") {
-        contactLayout1.style.display = "block";
-				contactLayout2.style.display = "block";
-				contactLayout3.style.display = "block";
-        panelWorking.style.marginLeft = "225px";
-        Browser.setCookie("contactLayout1", "1", 30);
-				Browser.setCookie("contactLayout2", "1", 30);
-				Browser.setCookie("contactLayout3", "1", 30);
-        showCheckedMenu = true;
-				this.addCheckedIcon(2,true);
-				this.addCheckedIcon(3,true);
-      } else {
-        contactLayout1.style.display = "none";
-				contactLayout2.style.display = "none";
-				contactLayout3.style.display = "none";
-        panelWorking.style.marginLeft = "0px";
-        Browser.setCookie("contactLayout1", "0", 30);
-				Browser.setCookie("contactLayout2", "0", 30);
-				Browser.setCookie("contactLayout3", "0", 30);
-				this.addCheckedIcon(2,false);
-				this.addCheckedIcon(3,false);
-      }
-      break;
-    case 2 : 
-			if(contactLayout1.style.display == "none") return ;
-      if(contactLayout2.style.display == "none") {
-        contactLayout2.style.display = "block";
-        showCheckedMenu = true;        
-        if(contactLayout1.style.display == "none") {
-           panelWorking.style.marginLeft = "0px";
-        } else {
-           panelWorking.style.marginLeft ="225px";
-        }
-        Browser.setCookie("contactLayout2", "1", 30);
-      } else {
-        contactLayout2.style.display = "none";
-        Browser.setCookie("contactLayout2", "0", 30);
-        if(contactLayout1.style.display == "none") {
-           panelWorking.style.marginLeft = "0px";
-        }        
-      }
-      break;
-    case 3 : 
-			if(contactLayout1.style.display == "none") return ;
-      if(contactLayout3.style.display == "none") {
-        contactLayout3.style.display="block";
-        showCheckedMenu = true;
-        if(contactLayout1.style.display == "none") {
-           panelWorking.style.marginLeft = "0px";
-        } else {
-           panelWorking.style.marginLeft ="225px";
-        } 
-        Browser.setCookie("contactLayout3", "1", 30);
-      } else {
-        contactLayout3.style.display = "none";
-        Browser.setCookie("contactLayout3", "0", 30);
-        if(contactLayout1.style.display == "none") {
-           panelWorking.style.marginLeft = "0px";
-        }
-      }      
-      break;
-    case 4 : 
-      if( objRoot != null) {
-	  	if(contactLayout4  && contactLayout5) {
-	        if(contactLayout4.style.display == "none" && contactLayout5.style.display == "none") {
-	          contactLayout4.style.display = "block";
-	          contactLayout5.style.display = "block";
-	          Browser.setCookie("contactLayout4", "1", 30);
-	          Browser.setCookie("contactLayout5", "1", 30);
-	          showCheckedMenu = true;
-	        } else {
-	          if(!isWelcome) {
-	            contactLayout4.style.display = "none";
-	            contactLayout5.style.display = "none";
-	            Browser.setCookie("contactLayout4", "0", 30);
-	            Browser.setCookie("contactLayout5", "0", 30);
-	          }
-	        } 
-		}
-      }
-  }
-  
-  this.addCheckedIcon(layout, showCheckedMenu);
-  this.isDefaultLayout() ;
-} ;*/
 
 UIContactPortlet.prototype.swithLayoutCallback = function(layout, status){
 	var layoutMan = eXo.contact.LayoutManager ;
