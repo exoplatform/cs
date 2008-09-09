@@ -74,21 +74,16 @@ public class Contact {
   private String note ;
   /*
    * Contact Type:
-   * 	0: Private
-   * 	1: Shared
-   * 	2: Public */
-  private String contactType = JCRDataStorage.PRIVATE ;
-  
+   *  0: Private
+   *  1: Shared
+   *  2: Public */
+  private String contactType = JCRDataStorage.PRIVATE ;  
   private String[] addressBook ;
   private String[] tags ;
   private String[] editPermissionUsers ;
   private String[] viewPermissionUsers ;
   private String[] editPermissionGroups ;
   private String[] viewPermissionGroups ;
-  
-  // remove 2 these properties
-  /*private String[] sharedForUsers ;
-  private String[] sharedForGroups ;*/
   private boolean isOwner = false ;
   private String ownerId ;
   private ContactAttachment attachment ;
@@ -243,9 +238,9 @@ public class Contact {
   public void setOwner(boolean owner) { isOwner = owner ; }
   
   public void setOwnerId(String ownerId) { this.ownerId = ownerId;}
-	public String getOwnerId() { return ownerId ; }
+  public String getOwnerId() { return ownerId ; }
 
-	public void setAttachment(ContactAttachment attachment) { this.attachment = attachment; }
+  public void setAttachment(ContactAttachment attachment) { this.attachment = attachment; }
   public ContactAttachment getAttachment() { return attachment; }
 
   public Date getLastUpdated()  { return lastUpdated ; }

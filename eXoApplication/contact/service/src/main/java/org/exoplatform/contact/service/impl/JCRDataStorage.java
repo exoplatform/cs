@@ -1529,20 +1529,28 @@ public class JCRDataStorage {
       contacts.put(contact.getId(), contact) ;
     }
     filter.setOwner(null) ;
-    
     // private contacts
     if(username != null && username.length() > 0) {
       Node contactHome = getUserContactHome(sysProvider, username) ;
       filter.setAccountPath(contactHome.getPath()) ;      
       qm = contactHome.getSession().getWorkspace().getQueryManager() ;
-      query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
-      NodeIterator it = query.execute().getNodes() ;
+      query = qm.createQuery(filter.getStatement(), Query.XPATH) ;      
+      NodeIterator it = query.execute().getNodes() ; 
       while(it.hasNext()) {
         Contact contact = getContact(it.nextNode(), PRIVATE) ;
-        contacts.put(contact.getId(), contact) ;        
+        contacts.put(contact.getId(), contact) ; 
+        
+        // need test remove usershare contact 
+/*        String[] adds = contact.getAddressBook() ;
+        if (adds == null || (adds.length == 1 && !adds[0].contains("ContactGroup"))) {
+          List<String> contactIds = new ArrayList<String>() ;
+          contactIds.add(contact.getId()) ;
+          removeContacts(sysProvider, username, contactIds) ;
+        } else {
+          contacts.put(contact.getId(), contact) ;          
+        }*/
       }
     }
-    
     //share contacts
     try {
       Node sharedContact = getSharedContact(username) ;      
@@ -1591,7 +1599,6 @@ public class JCRDataStorage {
       addressBook = iter.nextProperty().getParent() ;
       Node contactHomeNode = addressBook.getParent().getParent().getNode(CONTACTS) ;
       filter.setAccountPath(contactHomeNode.getPath()) ;
-      // add
       filter.setCategories(new String[] {addressBook.getName()}) ;
       filter.setUsername(addressBook.getProperty("exo:sharedUserId").getString()) ;
       qm = contactHomeNode.getSession().getWorkspace().getQueryManager() ;      
@@ -1603,9 +1610,7 @@ public class JCRDataStorage {
       }
     }
     List<Contact> contactList = new ArrayList<Contact>() ;
-    contactList.addAll(contacts.values()) ;
-    
-    //return new DataPageList(Arrays.asList(contacts.values().toArray(new Contact[] {})), 10, null, false) ;    
+    contactList.addAll(contacts.values()) ;    
     return new DataPageList(contactList, 10, null, false) ;
   }
 
