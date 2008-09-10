@@ -86,7 +86,7 @@ public class Colors {
   public static final String N_SANDYBROWN = "SandyBrown".intern() ;
   public static final String N_SEAGREEN = "SeaGreen".intern() ;
   public static final String N_SEASHELL = "SeaShell".intern() ;
-  public static final String N_SIANNA = "Sienna".intern() ;
+  //public static final String N_SIANNA = "Sienna".intern() ;
   public static final String N_SILVER = "Silver".intern() ;
   public static final String N_SKYBLUE = "SkyBlue".intern() ;
   public static final String N_THISTLE = "Thistle".intern() ;
@@ -122,7 +122,7 @@ public class Colors {
   public static final Color O_SANDYBROWN = new Color(H_SANDYBROWN, N_SANDYBROWN) ; 
   public static final Color O_SEAGREEN = new Color(H_SEAGREEN, N_SEAGREEN) ; 
   public static final Color O_SEASHELL = new Color(H_SEASHELL, N_SEASHELL) ; 
-  public static final Color O_SIANNA = new Color(H_SIANNA, N_SIANNA) ; 
+  //public static final Color O_SIANNA = new Color(H_SIANNA, N_SIANNA) ; 
   public static final Color O_SILVER = new Color(H_SILVER, N_SILVER) ; 
   public static final Color O_SKYBLUE = new Color(H_SKYBLUE, N_SKYBLUE) ; 
   public static final Color O_THISTLE = new Color(H_THISTLE, N_THISTLE) ; 
@@ -136,7 +136,7 @@ public class Colors {
     O_POWDERBLUE,O_ORCHID,O_PALEGOLDENROD,O_PALEGREEN,
     O_OLIVE,O_OLIVEDRAB,O_ORANGERED,O_PALETURQUOISE,O_PALEVIOLETRED,O_PAPAYAWHIP,O_PEACHPUFF,
     O_PERU,O_PINK,O_PLUM,O_PURPLE,O_RED,O_ROSYBROWN,O_ROYALBLUE,O_SADDLEBROWN,O_SALMON,
-    O_SANDYBROWN,O_SEAGREEN,O_SEASHELL,O_SIANNA,O_SILVER,O_SKYBLUE,O_THISTLE,O_TOMATO,O_TURQUOISE,
+    O_SANDYBROWN,O_SEAGREEN,O_SEASHELL,O_SILVER,O_SKYBLUE,O_THISTLE,O_TOMATO,O_TURQUOISE,
     O_VIOLET,O_WHEAT,O_YELLOW } ;
    
 /*  public static final Color[] COLORS = { O_RED, O_ROYALBLUE, O_TURQUOISE, O_VIOLET 
@@ -146,7 +146,7 @@ public class Colors {
     N_POWDERBLUE,N_ORCHID,N_PALEGOLDENROD,N_PALEGREEN,
     N_OLIVE,N_OLIVEDRAB,N_ORANGERED,N_PALETURQUOISE,N_PALEVIOLETRED,N_PAPAYAWHIP,N_PEACHPUFF,
     N_PERU,N_PINK,N_PLUM,N_PURPLE,N_RED,N_ROSYBROWN,N_ROYALBLUE,N_SADDLEBROWN,N_SALMON,
-    N_SANDYBROWN,N_SEAGREEN,N_SEASHELL,N_SIANNA,N_SILVER,N_SKYBLUE,N_THISTLE,N_TOMATO,N_TURQUOISE,
+    N_SANDYBROWN,N_SEAGREEN,N_SEASHELL,N_SILVER,N_SKYBLUE,N_THISTLE,N_TOMATO,N_TURQUOISE,
     N_VIOLET,N_WHEAT,N_YELLOW 
   } ;
   
