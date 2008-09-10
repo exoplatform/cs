@@ -181,7 +181,7 @@
 								</div>
 								<div>
 									<div class="<%=(uicomponent.getPriority(event.getPriority()) == null)? "" :  uicomponent.getPriority(event.getPriority())%>PriorityIcon" style="float:left;"><span></span></div>
-									<div class="EventLabel" style="line-height: 17px;height:17px;">$event.summary</div>
+									<div class="EventLabel" style="line-height: 17px;height:17px;" title="<%=event.summary%>" >$event.summary</div>
 								</div>
 							</div>
 						</div>

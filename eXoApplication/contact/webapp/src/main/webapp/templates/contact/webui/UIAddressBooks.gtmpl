@@ -75,7 +75,7 @@
 		%>
 	
 		<div id="$groupId" addressType="0" class="ItemList $cssClass PrivateAddressBook" isDefault="<%=uicomponent.isDefault(groupId)%>">
-			<div onclick="$actionLink"  class="IconHolder $icon">
+			<div onclick="$actionLink"  class="IconHolder $icon" title="<%=ContactUtils.encodeHTML(contactGroup.getName())%>">
 				<%= ContactUtils.encodeHTML(contactGroup.getName())%>
 			</div>
 		</div>
@@ -122,7 +122,7 @@
 			groupName = ContactUtils.getDisplayAdddressShared(sharedGroups.get(group).getSharedUserId(), sharedGroups.get(group).getName()) ;
 	 %>
 		<div id="$group" addressType="1" class="ItemList $cssClass ShareAddressBook" havePermission="<%=uicomponent.havePermission(group)%>" isDefault="<%=uicomponent.isDefault(group)%>">
-			<div onclick="$actionLink" class="IconHolder AddressIcon" >
+			<div onclick="$actionLink" class="IconHolder AddressIcon" title="<%=ContactUtils.encodeHTML(groupName)%>">
 				<%= ContactUtils.encodeHTML(groupName) %>
 			</div>
 		</div>
@@ -144,7 +144,7 @@
 				if(group.equals(uicomponent.getSelectedGroup()))	cssClass = "Selected" ;	
 			%>
 				<div id="$group" title="$group" class="ItemList $cssClass PublicAddressBook" addressType="2" >
-					<div onclick="$actionLink" class="IconHolder AddressIcon" >$name</div>
+					<div onclick="$actionLink" class="IconHolder AddressIcon" title="$name" >$name</div>
 				</div>
 		<% } %>
 	</div>
