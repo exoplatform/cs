@@ -150,18 +150,14 @@
 }
 
 .UIContactPortlet .SandyBrownTag {
-	background: url('icons/TagIcons.gif') no-repeat left -420px;
-}
-
-.UIContactPortlet .SeaGreenTag {
 	background: url('icons/TagIcons.gif') no-repeat left -441px;
 }
 
-.UIContactPortlet .SeaShellTag {
+.UIContactPortlet .SeaGreenTag {
 	background: url('icons/TagIcons.gif') no-repeat left -462px;
 }
 
-.UIContactPortlet .SiennaTag {
+.UIContactPortlet .SeaShellTag {
 	background: url('icons/TagIcons.gif') no-repeat left -483px;
 }
 
