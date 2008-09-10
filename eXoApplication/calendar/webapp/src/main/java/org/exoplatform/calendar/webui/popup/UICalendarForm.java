@@ -473,8 +473,9 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
         }
-        String username = Util.getPortalRequestContext().getRemoteUser() ;
+        displayName = displayName.trim() ;
         CalendarService calendarService = CalendarUtils.getCalendarService() ;
+        String username = Util.getPortalRequestContext().getRemoteUser() ;
         boolean isPublic = uiForm.isPublic() ;
         if(isPublic) uiForm.calType_ = CalendarUtils.PUBLIC_TYPE ;
         Calendar calendar = new Calendar() ;
@@ -521,8 +522,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
               for(String s : typedPerms.split(CalendarUtils.COMMA)){
                 s = s.trim() ;
                 if(!CalendarUtils.isEmpty(s)) {
-                  //User user = orgService.getUserHandler().findUserByName(s) ;
-                  List<User> users = orgService.getUserHandler().findUsersByGroup(groupIdSelected).getAll() ;
+                  List<User> users = orgService.getUserHandler().findUsersByGroup(groupIdSelected).getAll() ;  
                   boolean isExisted = false ;
                   for(User u : users) {
                     if(u.getUserName().equals(s)) {
@@ -538,7 +538,15 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
                       String typeName = s.substring(s.lastIndexOf(CalendarUtils.DOT)+ 1, s.length()) ;
                       if(orgService.getMembershipTypeHandler().findMembershipType(typeName) != null) {
                         listPermission.add(groupKey + s) ;
+                      } else {
+                        uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.name-not-on-group", new Object[]{s,groupKey}, ApplicationMessage.WARNING)) ;
+                        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                        return ;
                       } 
+                    } else {
+                      uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.name-not-on-group", new Object[]{s,groupKey}, ApplicationMessage.WARNING)) ;
+                      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                      return ;
                     }
                   }
                 }
