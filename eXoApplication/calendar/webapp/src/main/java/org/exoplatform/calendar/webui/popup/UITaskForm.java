@@ -170,9 +170,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       setEventReminders(eventCalendar.getReminders()) ;
       setAttachments(eventCalendar.getAttachment()) ;
       setSelectedEventState(eventCalendar.getEventState()) ;
-
       if(CalendarUtils.SHARED_TYPE.equals(calType_) || CalendarUtils.PUBLIC_TYPE.equals(calType_)){
-
         boolean isContains = false ;
         CalendarService calService = CalendarUtils.getCalendarService();
         List<EventCategory> listCategory = 
@@ -188,7 +186,6 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
           taskDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).setValue(eventCalendar.getEventCategoryId());
         }
       }
-
     } else {
       UIMiniCalendar miniCalendar = getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
       java.util.Calendar cal = CalendarUtils.getInstanceTempCalendar() ;
@@ -202,6 +199,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       setEventFromDate(cal.getTime(),dateFormat, timeFormat) ;
       cal.add(java.util.Calendar.MINUTE, (int)calSetting.getTimeInterval()*2) ;
       setEventToDate(cal.getTime(),calSetting.getDateFormat(), calSetting.getTimeFormat()) ;
+      setEventDelegation(CalendarUtils.getCurrentUser()) ;
     }
   }
 
@@ -402,26 +400,28 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     taskDetailTab.getUIFormCheckBoxInput(UITaskDetailTab.FIELD_CHECKALL).setChecked(isCheckAll) ;
   }
   protected String getEventDelegation() throws Exception {
-    UIFormInputWithActions taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
     delegators_.clear() ;
-    String values = taskDetailTab.getUIStringInput(UITaskDetailTab.FIELD_DELEGATION).getValue();
+    String values = getEventDelegationValue() ;
     StringBuffer sb = new StringBuffer() ;
-    OrganizationService orgService = CalendarUtils.getOrganizationService() ;
     if(!CalendarUtils.isEmpty(values)) {
       for(String s : values.split(CalendarUtils.COMMA)) {
         s = s.trim() ;
-        if(s.length() > 0 && orgService.getUserHandler().findUserByName(s) != null) {
-          delegators_.put(s.trim(),s.trim()) ; 
-        }
+        delegators_.put(s.trim(),s.trim()) ; 
       }
       for(String s : delegators_.values()) {
-        if( s!= null && s.trim().length() > 0) {
+        if(!CalendarUtils.isEmpty(s)) {
           if(sb.length() > 0) sb.append(CalendarUtils.COMMA) ;
           sb.append(s) ;
         }
       }
+      return sb.toString() ; 
+    } else {
+      return null ;
     } 
-    return sb.toString() ; 
+  }
+  protected String getEventDelegationValue() throws Exception {
+    UIFormInputWithActions taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
+    return taskDetailTab.getUIStringInput(UITaskDetailTab.FIELD_DELEGATION).getValue();
   }
   protected void setEventDelegation(String value) {
     if(!CalendarUtils.isEmpty(value)) {
@@ -605,7 +605,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     }
     return attSize ;
   }
-  
+
   public Attachment getAttachment(String attId) {
     UITaskDetailTab uiDetailTab = getChildById(TAB_TASKDETAIL) ;
     for (Attachment att : uiDetailTab.getAttachments()) {
@@ -737,9 +737,20 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
         calendarEvent.setEventType(CalendarEvent.TYPE_TASK) ;
         calendarEvent.setSummary(summary) ;
         calendarEvent.setDescription(description) ;
-        String delegation = uiForm.getEventDelegation() ;
-        if(CalendarUtils.isEmpty(delegation)) { delegation = CalendarUtils.getCurrentUser();}
-        calendarEvent.setTaskDelegator(delegation) ;
+        String delegation = uiForm.getEventDelegationValue() ;
+        if(!CalendarUtils.isEmpty(delegation)) {
+          OrganizationService orgService = CalendarUtils.getOrganizationService() ;
+          for(String s : delegation.split(CalendarUtils.COMMA)) {
+            s = s.trim() ;
+            if(!CalendarUtils.isEmpty(s))
+            if(orgService.getUserHandler().findUserByName(s) == null) {
+              uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.name-not-correct", new Object[]{s}, ApplicationMessage.WARNING)) ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              return ;
+            }  
+          }
+        }
+        calendarEvent.setTaskDelegator(uiForm.getEventDelegation()) ;
         Date from = uiForm.getEventFromDate(calendarPortlet.getCalendarSetting().getDateFormat(), calendarPortlet.getCalendarSetting().getTimeFormat()) ;
         Date to = uiForm.getEventToDate(calendarPortlet.getCalendarSetting().getDateFormat(), calendarPortlet.getCalendarSetting().getTimeFormat()) ;
         if(from.after(to)) {
@@ -755,7 +766,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
           tempCal.add(java.util.Calendar.MILLISECOND, -1) ;
           to = tempCal.getTime() ;
         }
-        
+
         Calendar currentCalendar = null ;
         if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
           currentCalendar = calService.getUserCalendar(uiForm.getSession(), username, calendarId) ; 
@@ -787,7 +798,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
             return ;
           }
         }
-        
+
         calendarEvent.setCalType(uiForm.calType_) ;
         calendarEvent.setFromDateTime(from) ;
         calendarEvent.setToDateTime(to);
