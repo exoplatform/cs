@@ -683,6 +683,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       public void execute(Event<UICalendarView> event) throws Exception {
         UICalendarView uiCalendarView = event.getSource() ;
         UICalendarPortlet uiPortlet = uiCalendarView.getAncestorOfType(UICalendarPortlet.class) ;
+        uiPortlet.cancelAction() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
         CalendarEvent eventCalendar = null ;
         if(uiCalendarView instanceof UIListView) {
@@ -698,9 +699,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           eventCalendar = uiCalendarView.getDataMap().get(eventId) ;
         }
         if(eventCalendar != null) {
-          UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
-          UIPopupContainer uiPopupContainer = uiPopupAction.activate(UIPopupContainer.class, 700) ;
-          uiPopupContainer.setId("UIEventPreview");
           if(uiCalendarView instanceof UIListView) {
             UIListView uiListView = (UIListView)uiCalendarView ;
             UIListContainer uiListContainer = uiListView.getParent() ;
@@ -710,6 +708,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
             uiPreview.setEvent(eventCalendar);
             event.getRequestContext().addUIComponentToUpdateByAjax(uiListContainer);
           } else {
+            UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
+            UIPopupContainer uiPopupContainer = uiPopupAction.activate(UIPopupContainer.class, 700) ;
+            uiPopupContainer.setId("UIEventPreview");
             UIPreview uiPreview = uiPopupContainer.addChild(UIPreview.class, null, null) ;
             uiPreview.setEvent(eventCalendar) ;
             uiPreview.setId("UIPreviewPopup") ;
