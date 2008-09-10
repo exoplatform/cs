@@ -98,6 +98,7 @@ public class MimeMessageParser {
   }
        
   private static Date parseDate(String dateStr) throws ParseException {
+    dateStr = dateStr.replaceAll("\r\n", "");
     SimpleDateFormat dateFormat ; 
     try {
       dateFormat = new SimpleDateFormat("EEE, d MMM yy HH:mm:ss Z", Locale.ENGLISH) ;

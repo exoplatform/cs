@@ -181,6 +181,12 @@ public class UITagForm extends UIForm implements UIPopupComponent{
       } 
       
       tagList.addAll(uiTagForm.getCheckedTags());
+      if (tagList.size() <= 0) {
+        UIApplication uiApp = uiTagForm.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UITagForm.msg.have-to-choose-at-least-a-tag", null, ApplicationMessage.INFO)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return;
+      }
       mailSrv.addTag(SessionProviderFactory.createSystemProvider(), username, accountId, uiTagForm.getMessageList(), tagList);
       
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
@@ -211,7 +217,15 @@ public class UITagForm extends UIForm implements UIPopupComponent{
       UIMessageList uiMsgList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       
       List<String> tagList = new ArrayList<String>();
-      for (Tag tag : uiTagForm.getCheckedTags()) tagList.add(tag.getId());      
+      for (Tag tag : uiTagForm.getCheckedTags()) tagList.add(tag.getId()); 
+      
+      if (tagList.size() <= 0) {
+        UIApplication uiApp = uiTagForm.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UITagForm.msg.have-to-choose-at-least-a-tag", null, ApplicationMessage.INFO)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return;
+      }
+      
       mailSrv.removeTagsInMessages(SessionProviderFactory.createSystemProvider(), username, accountId, uiTagForm.getMessageList(), tagList);
       for (Message msg : uiTagForm.getMessageList()) {
         List<String> newTags = new ArrayList<String>() ;
