@@ -108,7 +108,7 @@ uiform.begin() ;
 			        						<td class="Text">
 			        							<%=uiform.getLabel('Note')%>
 			        						</td>
-			        						<td class="Text"><%=(task.getDescription()==null)?"" : task.getDescription()%></td>
+			        						<td class="Text"><pre><%=(task.getDescription()==null)?"" : task.getDescription()%></pre></td>
 			        					</tr>	
 				        			</table>
 				        			<%if(!uicomponent.isShowPopup()){%>
