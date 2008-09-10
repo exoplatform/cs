@@ -153,7 +153,7 @@
                   <div class="$leftClass">
                     <span></span>
                   </div>
-                  <div class="EventAlldayContent" style="float: left; width: 70%; overflow: hidden; white-space: nowrap;">
+                  <div class="EventAlldayContent" style="float: left; width: 70%; overflow: hidden; white-space: nowrap;" title="<%=event.summary%>">
                     <%=event.summary%>
                   </div>
                   <div class="$rightClass">
@@ -211,7 +211,7 @@
           <div style="clear: left;">
             <span></span>
           </div>
-          <div unselectable="on" class="EventContainer">
+          <div unselectable="on" class="EventContainer" title="<%=event.summary%>">
             $event.summary</div>
           <div class="ResizeEventContainer" unselectable="on">
             <span></span>

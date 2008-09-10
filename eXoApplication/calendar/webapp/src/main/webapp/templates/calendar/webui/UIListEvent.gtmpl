@@ -80,7 +80,7 @@
 		  					<td style="padding: 0px;"><div class="$attachIcon" >&nbsp;</div></td>
 		  					<td class="text"><div class="<%=(uicomponent.getPriority(event.getPriority()) == null)? "" :  uicomponent.getPriority(event.getPriority())%>PriorityIcon">&nbsp;</div></td>			
 		  					<td class="text">
-									<a href="$actionLink" class="ControlButton">
+									<a href="$actionLink" class="ControlButton" title="<%=event.summary%>">
 										<%=event.getSummary()%>
 									</a>	
 								</td>					

@@ -52,7 +52,7 @@
 				color = tag.getColor() + "Tag" ;
 		%>
 			<div  class="TagList ItemList $cssClass" tagId="<%=tag.getId()%>" >
-				<a href="$actionLink" class="IconHolder2 $color" ><%= ContactUtils.encodeHTML(tag.getName())%></a>
+				<a href="$actionLink" class="IconHolder2 $color" title="<%=ContactUtils.encodeHTML(tag.getName())%>" ><%= ContactUtils.encodeHTML(tag.getName())%></a>
 			</div>
 		<% } %>
 	</div>
