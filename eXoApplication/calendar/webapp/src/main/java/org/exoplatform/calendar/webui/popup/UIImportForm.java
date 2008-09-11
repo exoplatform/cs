@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
@@ -103,6 +104,14 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
       try {
         String username = Util.getPortalRequestContext().getRemoteUser() ;
         CalendarService calendarService = CalendarUtils.getCalendarService() ;
+        List<Calendar> pCals = calendarService.getUserCalendars(SessionProviderFactory.createSessionProvider(), username, true) ;
+        for(Calendar cal : pCals) {
+            if(cal.getName().trim().toLowerCase().equals(calendarName.toLowerCase())) {
+              uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.name-exist", new Object[]{calendarName}, ApplicationMessage.WARNING)) ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              return ;
+            }
+        }
         calendarService.getCalendarImportExports(importFormat).importCalendar(SessionProviderFactory.createSessionProvider(), username, input.getUploadDataAsStream(), calendarName) ;
         UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
         UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;

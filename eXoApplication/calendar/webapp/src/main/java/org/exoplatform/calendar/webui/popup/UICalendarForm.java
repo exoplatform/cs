@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.TimeZone;
 
 import org.exoplatform.calendar.CalendarUtils;
@@ -476,6 +477,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
         displayName = displayName.trim() ;
         CalendarService calendarService = CalendarUtils.getCalendarService() ;
         String username = Util.getPortalRequestContext().getRemoteUser() ;
+        String calendarCategoryId = uiForm.getSelectedGroup() ;
         boolean isPublic = uiForm.isPublic() ;
         if(isPublic) uiForm.calType_ = CalendarUtils.PUBLIC_TYPE ;
         Calendar calendar = new Calendar() ;
@@ -487,12 +489,28 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
         calendar.setCalendarColor(uiForm.getSelectedColor()) ;
         calendar.setCalendarOwner(username) ;
         if(CalendarUtils.PRIVATE_TYPE.equals(uiForm.calType_)) {
-          if(CalendarUtils.isEmpty(uiForm.getSelectedGroup())) {
+          if(CalendarUtils.isEmpty(calendarCategoryId)) {
             uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.category-empty", null, ApplicationMessage.WARNING) ) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return ;
           }
-          calendar.setCategoryId(uiForm.getSelectedGroup()) ;
+          calendar.setCategoryId(calendarCategoryId) ;
+          List<Calendar> pCals = calendarService.getUserCalendars(uiForm.getSession(), username, true) ;
+          for(Calendar cal : pCals) {
+            if(uiForm.isAddNew_) {
+              if(cal.getName().trim().toLowerCase().equals(displayName.toLowerCase())) {
+                uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.name-exist", new Object[]{displayName}, ApplicationMessage.WARNING)) ;
+                event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                return ;
+              }
+            } else {
+              if(cal.getName().trim().toLowerCase().equals(displayName.toLowerCase()) && !cal.getId().equals(calendar.getId())) {
+                uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.name-exist", new Object[]{displayName}, ApplicationMessage.WARNING)) ;
+                event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                return ;
+              }
+            }
+          }
           calendarService.saveUserCalendar(SessionProviderFactory.createSessionProvider(), username, calendar, uiForm.isAddNew_) ;    
         } else if(CalendarUtils.SHARED_TYPE.equals(uiForm.calType_)) {
           calendarService.saveSharedCalendar(uiForm.getSystemSession(), username, calendar) ;
