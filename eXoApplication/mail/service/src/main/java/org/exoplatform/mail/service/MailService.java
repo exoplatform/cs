@@ -179,10 +179,11 @@ public interface MailService {
    * @param username
    * @param accountId
    * @param filter
+   * @param applyAll TODO
    * @return save filter to database
    * @throws Exception
    */
-  public void saveFilter(SessionProvider sProvider, String username, String accountId, MessageFilter filter) throws Exception ;
+  public void saveFilter(SessionProvider sProvider, String username, String accountId, MessageFilter filter, boolean applyAll) throws Exception ;
   
   /**
    * Remove filter by filter id  
@@ -481,14 +482,6 @@ public interface MailService {
    * @throws Exception
    */
   public OutputStream exportMessage(SessionProvider sProvider, String username,String accountId, Message message) throws Exception;
-  
-  /**
-   * Run given filter. This method will execute the filter and make action on it. 
-   * @param username
-   * @param newSetting
-   * @throws Exception
-   */
-  public void runFilter(SessionProvider sProvider, String username, String accountId, MessageFilter filter) throws Exception ;
   
   /**
    * @param username
