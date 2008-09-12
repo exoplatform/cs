@@ -38,11 +38,13 @@ public class ReminderPeriodJob extends  PeriodJob {
     String password = props.getProperty("password") ;
     String outgoingServer = props.getProperty("outgoing") ;
     String port = props.getProperty("port") ;
+    String isSsl = props.getProperty("ssl") ;
     jdatamap_.put("timeZone", timeZone) ;
     jdatamap_.put("account", account) ;
     jdatamap_.put("password", password) ;
     jdatamap_.put("outgoing", outgoingServer) ;
     jdatamap_.put("port", port) ;
+    jdatamap_.put("ssl", isSsl) ;
  }
   public JobDataMap  getJobDataMap() {  return jdatamap_ ;  }
 }

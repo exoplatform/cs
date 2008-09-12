@@ -55,20 +55,20 @@ import org.exoplatform.webui.form.UIFormUploadInput;
 )
 public class UIImportForm extends UIForm implements UIPopupComponent {
   private static final String CHOOSE_MIME_MESSAGE = "choose-mime-message".intern();
-  
+
   public UIImportForm() throws Exception { }
-  
+
   public void init(String accId) throws Exception {
     addUIFormInput(new UIFormUploadInput(CHOOSE_MIME_MESSAGE, CHOOSE_MIME_MESSAGE));
     UISelectFolder uiSelectFolder = new UISelectFolder() ;
     addUIFormInput(uiSelectFolder);
     uiSelectFolder.init(accId) ;
   }
-  
+
   public void setSelectedFolder(String value) throws Exception {
     getChild(UISelectFolder.class).setSelectedValue(value);
   } 
-  
+
   public void activate() throws Exception { }
 
   public void deActivate() throws Exception { }
@@ -89,11 +89,13 @@ public class UIImportForm extends UIForm implements UIPopupComponent {
         return ;
       }
       String name = uploadResource.getFileName() ;
-      boolean validType = true ;
-      for (int i = 0; i < Utils.MIME_MAIL_TYPES.length; i++) {
-        String type = Utils.MIME_MAIL_TYPES[i].trim() ;
-        if(!name.substring(name.lastIndexOf(".") + 1, name.length()).equals(type))  
-          validType = false ;
+      String fileType = name.substring(name.lastIndexOf(".") + 1, name.length()) ;
+      boolean validType = false ;
+      for (String type : Utils.MIME_MAIL_TYPES) {
+        if(fileType.trim().toLowerCase().equals(type.toLowerCase())) {
+          validType = true ;
+          break ;
+        }
       }
       if(!validType)  {
         uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.file-upload-error", null, 
@@ -119,7 +121,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
     }
   }
-  
+
   static public class CancelActionListener extends EventListener<UIImportForm> {
     public void execute(Event<UIImportForm> event) throws Exception {
       event.getSource().getAncestorOfType(UIMailPortlet.class).cancelAction();

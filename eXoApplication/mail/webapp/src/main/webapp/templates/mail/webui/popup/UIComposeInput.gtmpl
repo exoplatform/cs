@@ -38,57 +38,59 @@
 	}
  
 %>
-<table id="$uicomponent.id" class="UIFormGrid">
-  <tr>
-    <td class="FieldLabel"><%=_ctx.appRes(uiForm.id+ ".label.from") %> :&nbsp;&nbsp;</td>
-    <td class="FieldComponent" style="width: 62%;"><%uiForm.renderField("from")%></td>
-    <td class="FieldCCAndBCC">
-      <a  href="<%=uiForm.event("ShowCc")%>">|<%=_ctx.appRes(uiForm.id+ ".label.add-cc") %>|</a> 
-      <a  href="<%=uiForm.event("ShowBcc")%>"><%=_ctx.appRes(uiForm.id+ ".label.add-bcc") %>|</a>
-    <%/* javascript:eXo.mail.UIMailPortlet.showHideAddMoreAddress('FIELD_BCC')*/ %>
-    </td>
-  </tr>
-  <tr>
-    <td class="FieldLabel"><a href="<%=uiForm.event("To")%>"><%=_ctx.appRes(uiForm.id+ ".label.to") %></a> :&nbsp;&nbsp;</td>
-    <td class="FieldComponent"  colspan="2">
-      <%uiForm.renderField("to")%> 
-    </td>
-  </tr>
-  <%
-  String displayCc = "display:none" ;
-  if (uicomponent.showCc_) { displayCc = "" ; }
-  %>
-  	              <tr id="FIELD_CC" style="$displayCc">
-  	                <td class="FieldLabel"><a href="<%=uiForm.event("ToCC")%>"><%=_ctx.appRes(uiForm.id+ ".label.cc") %></a> :&nbsp;&nbsp;</td>
-  	                <td class="FieldComponent" colspan="2">
-  	                  <%uiForm.renderField("cc")%> 
-  	                </td>
-  	              </tr>
-  <%
-  String displayBcc = "display:none" ;
-  if (uicomponent.showBcc_) { displayBcc = "" ; }
-  %>
-  <tr id="FIELD_BCC" style="$displayBcc">
-  	<td class="FieldLabel"><a href="<%=uiForm.event("ToBCC")%>"><%=_ctx.appRes(uiForm.id+ ".label.bcc") %></a> :&nbsp;&nbsp;</td>
-  	<td class="FieldComponent" colspan="2">
-  	 <%uiForm.renderField("bcc")%> 
-  	</td>
-  </tr>
-  <tr>
-    <td class="FieldLabel"><%=_ctx.appRes(uiForm.id+ ".label.subject") %> :&nbsp;&nbsp;</td>
-    <td class="FieldComponent" colspan="2" style="padding:4px;">
-      <%uiForm.renderField("subject")%>
-    </td>
-  </tr>
-   <%
-     if (uiForm.getUploadFileList().size() > 0) {
-    %> 
-   <tr>
-    <td class="FieldLabel"><%=_ctx.appRes(uiForm.id+ ".label.attachments") %> :&nbsp;&nbsp;</td>
-    <td class="FieldComponent" colspan="2" style="padding:4px;">
-      <%uiForm.renderField("attachments")%>
-      <%renderActions("attachments")%>
-    </td>
-  </tr>
-  <%}%>
-</table>
+<div id="$uicomponent.id">
+	<table class="UIFormGrid">
+	  <tr>
+	    <td class="FieldLabel"><%=_ctx.appRes(uiForm.id+ ".label.from") %> :&nbsp;&nbsp;</td>
+	    <td class="FieldComponent" style="width: 62%;"><%uiForm.renderField("from")%></td>
+	    <td class="FieldCCAndBCC">
+	      <a  href="<%=uiForm.event("ShowCc")%>">|<%=_ctx.appRes(uiForm.id+ ".label.add-cc") %>|</a> 
+	      <a  href="<%=uiForm.event("ShowBcc")%>"><%=_ctx.appRes(uiForm.id+ ".label.add-bcc") %>|</a>
+	    <%/* javascript:eXo.mail.UIMailPortlet.showHideAddMoreAddress('FIELD_BCC')*/ %>
+	    </td>
+	  </tr>
+	  <tr>
+	    <td class="FieldLabel"><a href="<%=uiForm.event("To")%>"><%=_ctx.appRes(uiForm.id+ ".label.to") %></a> :&nbsp;&nbsp;</td>
+	    <td class="FieldComponent"  colspan="2">
+	      <%uiForm.renderField("to")%> 
+	    </td>
+	  </tr>
+	  <%
+	  String displayCc = "display:none" ;
+	  if (uicomponent.showCc_) { displayCc = "" ; }
+	  %>
+	  	              <tr id="FIELD_CC" style="$displayCc">
+	  	                <td class="FieldLabel"><a href="<%=uiForm.event("ToCC")%>"><%=_ctx.appRes(uiForm.id+ ".label.cc") %></a> :&nbsp;&nbsp;</td>
+	  	                <td class="FieldComponent" colspan="2">
+	  	                  <%uiForm.renderField("cc")%> 
+	  	                </td>
+	  	              </tr>
+	  <%
+	  String displayBcc = "display:none" ;
+	  if (uicomponent.showBcc_) { displayBcc = "" ; }
+	  %>
+	  <tr id="FIELD_BCC" style="$displayBcc">
+	  	<td class="FieldLabel"><a href="<%=uiForm.event("ToBCC")%>"><%=_ctx.appRes(uiForm.id+ ".label.bcc") %></a> :&nbsp;&nbsp;</td>
+	  	<td class="FieldComponent" colspan="2">
+	  	 <%uiForm.renderField("bcc")%> 
+	  	</td>
+	  </tr>
+	  <tr>
+	    <td class="FieldLabel"><%=_ctx.appRes(uiForm.id+ ".label.subject") %> :&nbsp;&nbsp;</td>
+	    <td class="FieldComponent" colspan="2" style="padding:4px;">
+	      <%uiForm.renderField("subject")%>
+	    </td>
+	  </tr>
+	   <%
+	     if (uiForm.getUploadFileList().size() > 0) {
+	    %> 
+	   <tr>
+	    <td class="FieldLabel"><%=_ctx.appRes(uiForm.id+ ".label.attachments") %> :&nbsp;&nbsp;</td>
+	    <td class="FieldComponent" colspan="2" style="padding:4px;">
+	      <%uiForm.renderField("attachments")%>
+	      <%renderActions("attachments")%>
+	    </td>
+	  </tr>
+	  <%}%>
+	</table>
+</div>
