@@ -52,8 +52,20 @@ UIMailPortlet.prototype.msgPopupMenuCallback = function(evt) {
 		str.className += " SelectedItem";
 	}
 	id = src.getAttribute("msgId");
-	eXo.webui.UIContextMenuMail.changeAction(UIContextMenuMail.menuElement, id) ;
+	eXo.mail.UIMailPortlet.changeAction(UIContextMenuMail.menuElement, id) ;
 } ;
+
+UIMailPortlet.prototype.changeAction = function(menu,id){
+	var actions = eXo.core.DOMUtil.findDescendantsByTagName(menu, "a") ;
+	var len = actions.length ;
+	var href = "" ;
+	var pattern = /objectId\s*=.*(?=&|\>|'|")/ ;
+	for(var i = 0 ; i < len ; i++) {
+		href = String(actions[i].href) ;
+		if (!pattern.test(href)) continue ;
+		actions[i].href = href.replace(pattern,"objectId="+id) ;
+	}
+};
 
 UIMailPortlet.prototype.defaultFolderPopupMenuCallback = function(evt) {
 	var UIContextMenuMail = eXo.webui.UIContextMenuMail ;
