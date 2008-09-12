@@ -71,12 +71,19 @@ public class UIAddGroupForm extends UIForm implements UIPopupComponent{
       String groupName = uiAddGroupForm.getUIStringInput(GROUP_NAME).getValue() ;
       String groupDescription = uiAddGroupForm.getUIFormTextAreaInput(GROUP_DESCRIPTION).getValue() ;
       String username = MailUtils.getCurrentUser() ;
-      if (groupName == null || groupName.equals("")) {
+      if (groupName == null || groupName.trim().equals("")) {
         uiApp.addMessage(new ApplicationMessage("UIAddGroupForm.msg.group-name-required", null,
           ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       } else {
+        for (ContactGroup group : contactSrv.getGroups(SessionProviderFactory.createSessionProvider(), username))
+          if (group.getName().equalsIgnoreCase(groupName.trim())) {
+            uiApp.addMessage(new ApplicationMessage("UIAddGroupForm.msg.group-name-exist", null,
+                ApplicationMessage.WARNING)) ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return ;
+          }
         ContactGroup group = new ContactGroup();
         group.setName(groupName);
         group.setDescription(groupDescription);
