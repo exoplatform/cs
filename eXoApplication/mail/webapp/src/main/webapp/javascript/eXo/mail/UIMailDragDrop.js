@@ -177,7 +177,11 @@ UIMailDragDrop.prototype.dropCallback = function(dndEvent) {
       formOp = 'MoveDirectMessages' ;
     }
     var uiMsgList = document.getElementById('UIMessageList') ;
-    uiMsgList.action = uiMsgList.action + '&objectId=' + place2MoveId ;
+		if ((uiMsgList.action).indexOf("objectId")>=0) {
+			var pattern = /objectId=.*/ ;
+			uiMsgList.action = (uiMsgList.action).replace(pattern,'objectId=' + place2MoveId) ;
+		} else
+	    uiMsgList.action = uiMsgList.action + '&objectId=' + place2MoveId ;
     eXo.webui.UIForm.submitForm('UIMessageList', formOp, true) ;
   }
 } ;
