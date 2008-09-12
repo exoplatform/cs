@@ -955,31 +955,7 @@ public class JCRDataStorage{
     reminderNode.setProperty(Utils.EXO_EMAIL, reminder.getEmailAddress()) ;
     reminderNode.setProperty(Utils.EXO_IS_REPEAT, reminder.isRepeat()) ;
     reminderNode.setProperty(Utils.EXO_IS_OVER, false) ;
-    StringBuffer sb = new StringBuffer() ;
-   
-   
-    if(CalendarEvent.TYPE_EVENT.equals(eventNode.getProperty(Utils.EXO_EVENT_TYPE).getString())) {
-      if(eventNode.hasProperty(Utils.EXO_PARTICIPANT)) {
-        for(Value v : eventNode.getProperty(Utils.EXO_PARTICIPANT).getValues()) {
-          if(sb.length() > 0) sb.append(Utils.COMMA) ;
-          sb.append(v.getString()) ;
-        }
-        if(reminder.getReminderOwner() != null) {
-          if (sb.length() > 0) sb.append(Utils.COMMA) ;
-          sb.append(reminder.getReminderOwner()) ;
-        }
-      }
-    } else if(CalendarEvent.TYPE_TASK.equals(eventNode.getProperty(Utils.EXO_EVENT_TYPE).getString())){
-      if(eventNode.hasProperty(Utils.EXO_TASK_DELEGATOR)) {
-        sb.append(eventNode.getProperty(Utils.EXO_TASK_DELEGATOR).getString());
-        if(reminder.getReminderOwner() != null) {
-          if (sb.length() > 0) sb.append(Utils.COMMA) ;
-          sb.append(reminder.getReminderOwner()) ;
-        }
-        reminder.setReminderOwner(sb.toString()) ;
-      }
-    }
-    if(sb!= null && sb.length() > 0) reminderNode.setProperty(Utils.EXO_OWNER, sb.toString()) ;
+    reminderNode.setProperty(Utils.EXO_OWNER, reminder.getReminderOwner()) ;
     java.util.Calendar cal = new GregorianCalendar() ;
     if(reminder.getFromDateTime() != null) {
       cal.setTime(reminder.getFromDateTime()) ;
