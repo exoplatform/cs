@@ -1492,7 +1492,7 @@ public class JCRDataStorage {
   }
 
   public void saveFilter(SessionProvider sProvider, String username, String accountId,
-      MessageFilter filter) throws Exception {
+      MessageFilter filter, boolean applyAll) throws Exception {
     Node home = getFilterHome(sProvider, username, accountId);
     Node filterNode = null;
     if (home.hasNode(filter.getId())) { // if the filter exists, gets it
@@ -1515,7 +1515,39 @@ public class JCRDataStorage {
     filterNode.setProperty(Utils.EXO_APPLY_TAG, filter.getApplyTag());
     filterNode.setProperty(Utils.EXO_KEEP_IN_INBOX, filter.keepInInbox());
     filterNode.setProperty(Utils.EXO_APPLY_FOR_ALL, filter.applyForAll());
+    
+    try {
+      if (applyAll) {
+        runFilter(sProvider, username, accountId, filter);
+      }
+    } catch(Exception e) {
+      return ;
+    }
+    
     home.getSession().save();
+  }
+  
+  private void runFilter(SessionProvider sProvider, String username, String accountId,
+      MessageFilter filter) throws Exception {
+    List<Message> msgList = getMessagePageList(sProvider, username, filter).getAll(username);
+    String applyFolder = filter.getApplyFolder();
+    String applyTag = filter.getApplyTag();
+    List<Tag> tagList = new ArrayList<Tag>();
+    for (Message msg : msgList) {
+      Folder folder = getFolder(sProvider, username, accountId, applyFolder);
+      if (folder != null && (msg.getFolders()[0] != applyFolder)) {
+        Folder appFolder = getFolder(sProvider, username, accountId, applyFolder);
+        if (appFolder != null)
+          moveMessage(sProvider, username, accountId, msg, msg.getFolders()[0], applyFolder);
+      }
+    }
+    if (!Utils.isEmptyField(applyTag)) {
+      Tag tag = getTag(sProvider, username, accountId, applyTag);
+      if (tag != null) {
+        tagList.add(tag);
+        addTag(sProvider, username, accountId, msgList, tagList);
+      }
+    }
   }
 
   public void removeFilter(SessionProvider sProvider, String username, String accountId,

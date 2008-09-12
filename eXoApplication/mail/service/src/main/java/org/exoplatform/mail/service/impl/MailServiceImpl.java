@@ -184,8 +184,8 @@ public class MailServiceImpl implements MailService {
   }
 
   public void saveFilter(SessionProvider sProvider, String username, String accountId,
-      MessageFilter filter) throws Exception {
-    storage_.saveFilter(sProvider, username, accountId, filter);
+      MessageFilter filter, boolean applyAll) throws Exception {
+    storage_.saveFilter(sProvider, username, accountId, filter, applyAll);
   }
 
   public void removeFilter(SessionProvider sProvider, String username, String accountId,
@@ -902,29 +902,6 @@ public class MailServiceImpl implements MailService {
   public OutputStream exportMessage(SessionProvider sProvider, String username, String accountId,
       Message message) throws Exception {
     return emlImportExport_.exportMessage(sProvider, username, accountId, message);
-  }
-
-  public void runFilter(SessionProvider sProvider, String username, String accountId,
-      MessageFilter filter) throws Exception {
-    List<Message> msgList = getMessagePageList(sProvider, username, filter).getAll(username);
-    String applyFolder = filter.getApplyFolder();
-    String applyTag = filter.getApplyTag();
-    List<Tag> tagList = new ArrayList<Tag>();
-    for (Message msg : msgList) {
-      Folder folder = getFolder(sProvider, username, accountId, applyFolder);
-      if (folder != null && (msg.getFolders()[0] != applyFolder)) {
-        Folder appFolder = getFolder(sProvider, username, accountId, applyFolder);
-        if (appFolder != null)
-          moveMessage(sProvider, username, accountId, msg, msg.getFolders()[0], applyFolder);
-      }
-    }
-    if (!Utils.isEmptyField(applyTag)) {
-      Tag tag = getTag(sProvider, username, accountId, applyTag);
-      if (tag != null) {
-        tagList.add(tag);
-        addTag(sProvider, username, accountId, msgList, tagList);
-      }
-    }
   }
 
   public SpamFilter getSpamFilter(SessionProvider sProvider, String username, String accountId)
