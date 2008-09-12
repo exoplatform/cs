@@ -7,7 +7,7 @@
       <name>RecordsJob</name>
       <set-method>addPeriodJob</set-method>
       <type>org.exoplatform.calendar.service.ReminderPeriodJob</type>
-      <description>add a job to the JobSchedulerService</description>
+      <description>add e-mail reminder job to the JobSchedulerService</description>
       <init-params>
         <properties-param>
           <name>job.info</name>
@@ -16,7 +16,7 @@
           <property name="groupName" value="CollaborationSuite"/>
           <property name="job" value="org.exoplatform.calendar.service.ReminderJob"/>
           <property name="repeatCount" value="0"/>
-          <property name="period" value="6000"/>     
+          <property name="period" value="180000"/>     
           <property name="startTime" value="+0"/>
           <property name="endTime" value=""/>               
         </properties-param>
@@ -26,9 +26,33 @@
           <property name="timeZone" value="This is TimeZone"/>          
           <property name="account" value="exoservice@gmail.com"/>          
           <property name="password" value="exoadmin"/>          
-		  <property name="ssl" value="true"/> 
+		  		<property name="ssl" value="true"/> 
           <property name="outgoing" value="smtp.gmail.com"/>          
           <property name="port" value="465"/>          
+        </properties-param>
+      </init-params>
+    </component-plugin>
+		<component-plugin>
+      <name>PopupRecordsJob</name>
+      <set-method>addPeriodJob</set-method>
+      <type>org.exoplatform.calendar.service.PopupReminderPeriodJob</type>
+      <description>add popup reminder job to the JobSchedulerService</description>
+      <init-params>
+        <properties-param>
+          <name>job.info</name>
+          <description>save the monitor data  periodically</description>
+          <property name="jobName" value="PopupReminderJob"/>
+          <property name="groupName" value="CollaborationSuite"/>
+          <property name="job" value="org.exoplatform.calendar.service.PopupReminderJob"/>
+          <property name="repeatCount" value="0"/>
+          <property name="period" value="6000"/>     
+          <property name="startTime" value="+0"/>
+          <property name="endTime" value=""/>               
+        </properties-param>
+				<properties-param>
+          <name>popupreminder.info</name>
+          <description>save the monitor data  periodically</description>
+          <property name="portalName" value="portal"/> 
         </properties-param>
       </init-params>
     </component-plugin>

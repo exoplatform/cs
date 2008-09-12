@@ -419,7 +419,20 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       return null ;
     } 
   }
-  protected String getEventDelegationValue() throws Exception {
+  protected String[] getEventDelegationAll() {
+    delegators_.clear() ;
+    String values = getEventDelegationValue() ;
+    if(!CalendarUtils.isEmpty(values)) {
+      for(String s : values.split(CalendarUtils.COMMA)) {
+        s = s.trim() ;
+        delegators_.put(s.trim(),s.trim()) ; 
+      }
+      return delegators_.values().toArray(new String[delegators_.values().size()]) ;
+    } else {
+      return null ;
+    } 
+  }
+  protected String getEventDelegationValue() {
     UIFormInputWithActions taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
     return taskDetailTab.getUIStringInput(UITaskDetailTab.FIELD_DELEGATION).getValue();
   }
@@ -551,7 +564,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     }
   }
 
-  protected List<Reminder>  getEventReminders(Date fromDateTime) {
+  protected List<Reminder>  getEventReminders(Date fromDateTime) throws Exception {
     List<Reminder> reminders = new ArrayList<Reminder>() ;
     if(getEmailReminder()) { 
       Reminder email = new Reminder() ;
@@ -570,6 +583,24 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       popup.setRepeate(Boolean.parseBoolean(isPopupRepeat())) ;
       popup.setRepeatInterval(Long.parseLong(getPopupRepeatInterVal())) ;
       popup.setFromDateTime(fromDateTime) ;
+      StringBuffer sb = new StringBuffer() ;
+      boolean isExist = false ;
+      if(getEventDelegationAll() != null) {
+        for(String s : getEventDelegationAll()) {
+          if(s.equals(CalendarUtils.getCurrentUser())) {
+            isExist = true ;
+            break ;
+          }
+        }
+        for(String s : getEventDelegationAll()) {
+          if(sb.length() > 0) sb.append(CalendarUtils.COMMA) ;
+          sb.append(s) ;
+        }
+      }
+      if(!isExist) {
+        if(sb.length() >0) sb.append(CalendarUtils.COMMA);
+        sb.append(CalendarUtils.getCurrentUser()) ;
+      }
       reminders.add(popup) ;
     }
     return reminders ;
@@ -743,11 +774,11 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
           for(String s : delegation.split(CalendarUtils.COMMA)) {
             s = s.trim() ;
             if(!CalendarUtils.isEmpty(s))
-            if(orgService.getUserHandler().findUserByName(s) == null) {
-              uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.name-not-correct", new Object[]{s}, ApplicationMessage.WARNING)) ;
-              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-              return ;
-            }  
+              if(orgService.getUserHandler().findUserByName(s) == null) {
+                uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.name-not-correct", new Object[]{s}, ApplicationMessage.WARNING)) ;
+                event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                return ;
+              }  
           }
         }
         calendarEvent.setTaskDelegator(uiForm.getEventDelegation()) ;

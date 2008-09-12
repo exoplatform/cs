@@ -695,9 +695,26 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
           }
         }
       } 
-      popup.setReminderOwner(CalendarUtils.getCurrentUser()) ;
+      StringBuffer sb = new StringBuffer() ;
+      boolean isExist = false ;
+      if(getParticipants() != null) {
+        for(String s : getParticipants()) {
+          if(s.equals(CalendarUtils.getCurrentUser())) isExist = true ;
+          break ;
+        }
+        for(String s : getParticipants()) {
+          if(sb.length() >0) sb.append(CalendarUtils.COMMA);
+          sb.append(s);
+        }
+      }
+      
+      if(!isExist) {
+        if(sb.length() >0) sb.append(CalendarUtils.COMMA);
+        sb.append(CalendarUtils.getCurrentUser());
+      }
+      popup.setReminderOwner(sb.toString()) ;
       popup.setReminderType(Reminder.TYPE_POPUP) ;
-      popup.setAlarmBefore(Long.parseLong(getPopupReminderTime())) ;
+      popup.setAlarmBefore(Long.parseLong(getPopupReminderTime()));
       popup.setRepeate(Boolean.parseBoolean(isPopupRepeat())) ;
       popup.setRepeatInterval(Long.parseLong(getPopupRepeatInterVal())) ;
       popup.setFromDateTime(fromDateTime) ;

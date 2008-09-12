@@ -17,6 +17,7 @@
 package org.exoplatform.calendar.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -30,62 +31,57 @@ import org.apache.commons.logging.Log;
 import org.exoplatform.commons.utils.ISO8601;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.mail.service.MailService;
-import org.exoplatform.mail.service.Message;
-import org.exoplatform.mail.service.ServerConfiguration;
+import org.exoplatform.container.RootContainer;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.ws.frameworks.cometd.ContinuationService;
+import org.exoplatform.ws.frameworks.json.impl.JsonGeneratorImpl;
+import org.exoplatform.ws.frameworks.json.value.JsonValue;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-public class ReminderJob implements Job {
-  private static Log log_ = ExoLogger.getLogger("job.RecordsJob");
+public class PopupReminderJob implements Job {
+  private static Log log_ = ExoLogger.getLogger("job.PopupRecordsJob");
   public void execute(JobExecutionContext context) throws JobExecutionException {
-    List<Message> messageList = new ArrayList<Message>();
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
     try {
-      MailService mailService = 
-        (MailService) container.getComponentInstanceOfType(MailService.class);
-      if (log_.isDebugEnabled()) log_.debug("Calendar email reminder service");
+      if (log_.isDebugEnabled()) log_.debug("Calendar popup reminder service");
       java.util.Calendar fromCalendar = GregorianCalendar.getInstance() ;  
       JobDataMap jdatamap = context.getJobDetail().getJobDataMap();
-      ServerConfiguration config = new ServerConfiguration();
-      config.setUserName(jdatamap.getString("account"));
-      config.setPassword(jdatamap.getString("password"));
-      config.setSsl(true);
-      config.setOutgoingHost(jdatamap.getString("outgoing"));
-      config.setOutgoingPort(jdatamap.getString("port"));
+      ExoContainer container = RootContainer.getInstance();
+      container = ((RootContainer)container).getPortalContainer(jdatamap.getString("portalName"));
+      ContinuationService continuation = (ContinuationService) container.getComponentInstanceOfType(ContinuationService.class);
       Node calendarHome = getPublicServiceHome();
       if(calendarHome == null) return ;
       StringBuffer path = new StringBuffer(getReminderPath(fromCalendar));
       path.append("//element(*,exo:reminder)");
       path.append("[@exo:remindDateTime <= xs:dateTime('"	+ ISO8601.format(fromCalendar)
-          + "') and @exo:isOver = 'false' and @exo:reminderType = 'email' ]");
-      /*path.append("//element(*,exo:reminder)");
-      path.append("[@exo:isOver = 'false']");*/
+          + "') and @exo:isOver = 'false' and @exo:reminderType = 'popup' ]"); 
       QueryManager queryManager = calendarHome.getSession().getWorkspace().getQueryManager();
       Query query = queryManager.createQuery(path.toString(), Query.XPATH);
       QueryResult results = query.execute();
       NodeIterator iter = results.getNodes();
-      Message message;
       Node reminder;
+      List<Reminder> popupReminders = new ArrayList<Reminder>() ;
       while (iter.hasNext()) {
         reminder = iter.nextNode();
         boolean isRepeat = reminder.getProperty(Utils.EXO_IS_REPEAT).getBoolean() ;
         long fromTime = reminder.getProperty(Utils.EXO_FROM_DATE_TIME).getDate().getTimeInMillis() ;
         long remindTime = reminder.getProperty(Utils.EXO_REMINDER_DATE).getDate().getTimeInMillis() ;
         long interval = reminder.getProperty(Utils.EXO_TIME_INTERVAL).getLong() * 60 * 1000 ;
-        String to = reminder.getProperty(Utils.EXO_EMAIL).getString();				
-        if (to != null && to.length() > 0) {
-          message = new Message();
-          message.setContentType(org.exoplatform.mail.service.Utils.MIMETYPE_TEXTHTML) ;
-          message.setMessageTo(to);
-          message.setSubject("[reminder] eXo calendar notify mail !");
-          message.setMessageBody(reminder.getProperty(Utils.EXO_DESCRIPTION).getString());
-          message.setFrom(jdatamap.getString("account")) ;
+          Reminder rmdObj = new Reminder() ;
+          rmdObj.setRepeate(isRepeat) ;
+          if(reminder.hasProperty(Utils.EXO_OWNER)) rmdObj.setReminderOwner(reminder.getProperty(Utils.EXO_OWNER).getString()) ;
+          if(reminder.hasProperty(Utils.EXO_EVENT_ID)) rmdObj.setId(reminder.getProperty(Utils.EXO_EVENT_ID).getString()) ;
+          if(reminder.hasProperty(Utils.EXO_FROM_DATE_TIME)) {
+            Calendar tempCal = reminder.getProperty(Utils.EXO_FROM_DATE_TIME).getDate() ;
+            rmdObj.setFromDateTime(tempCal.getTime()) ;
+          }
+          if(reminder.hasProperty(Utils.EXO_SUMMARY)) rmdObj.setSummary(reminder.getProperty(Utils.EXO_SUMMARY).getString()) ;
+          rmdObj.setAlarmBefore(remindTime) ; 
+          if(reminder.hasProperty(Utils.EXO_REMINDER_TYPE)) rmdObj.setReminderType(reminder.getProperty(Utils.EXO_REMINDER_TYPE).getString()) ;
           if(isRepeat) {
             if (fromCalendar.getTimeInMillis() >= fromTime) {
               reminder.setProperty(Utils.EXO_IS_OVER, true) ;
@@ -102,16 +98,21 @@ public class ReminderJob implements Job {
           }else {
             reminder.setProperty(Utils.EXO_IS_OVER, true) ;
           }
-          messageList.add(message);
+          popupReminders.add(rmdObj) ;
           reminder.save() ;
+      }
+      if(!popupReminders.isEmpty()) {
+        for(Reminder rmdObj : popupReminders) {
+          for(String user : rmdObj.getReminderOwner().split(Utils.COMMA)) {
+            JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
+            JsonValue json = generatorImpl.createJsonObject(rmdObj);
+            continuation.sendMessage(user, "/eXo/Application/Calendar/messages", json);
+            System.out.println("\n\n " + user + " has a notify !");
+          }
         }
-      }  
-      if(!messageList.isEmpty()) {
-        mailService.sendMessages(messageList, config);
-        System.out.println("\n\n message has been sent !");
       }
     } catch (Exception e) {
-      System.out.println("\n\n Error when run email reminder job !");
+      System.out.println("\n\n Error when run popup reminder job !");
       //e.printStackTrace();			
     }
     if (log_.isDebugEnabled()) log_.debug("File plan job done");
