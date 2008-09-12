@@ -39,6 +39,7 @@ import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.service.impl.NewUserListener;
 import org.exoplatform.contact.webui.popup.UIAddEditPermission;
+import org.exoplatform.contact.webui.popup.UICategorySelect;
 import org.exoplatform.contact.webui.popup.UIComposeForm;
 import org.exoplatform.contact.webui.popup.UIContactPreviewForm;
 import org.exoplatform.contact.webui.popup.UIExportForm;
@@ -58,10 +59,13 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
+import org.exoplatform.webui.form.UIFormInputWithActions;
+import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 
 /**
@@ -428,6 +432,27 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
       UIPopupContainer popupContainer =  popupAction.activate(UIPopupContainer.class, 800) ;
       popupContainer.setId("AddNewContact");
+      
+      UICategorySelect uiCategorySelect = popupContainer.addChild(UICategorySelect.class, null, null) ;
+      UIAddressBooks uiAddressBooks = uiContacts.getAncestorOfType(UIWorkingContainer.class).findFirstComponentOfType(UIAddressBooks.class) ;
+      Map<String, String> privateGroups = uiAddressBooks.getPrivateGroupMap() ;
+      Map<String, SharedAddressBook> sharedAddress = uiAddressBooks.getSharedGroups() ;
+      List<SelectItemOption<String>> categories = new ArrayList<SelectItemOption<String>>() ;
+      for (String add : contact.getAddressBook()) {
+        if (privateGroups.containsKey(add)) {
+          categories.add(new SelectItemOption<String>(ContactUtils.encodeHTML(privateGroups.get(add)), add)) ;  
+          continue ;
+        } else if (sharedAddress.containsKey(add)) {
+          categories.add(new SelectItemOption<String>(ContactUtils.encodeHTML(ContactUtils
+              .getDisplayAdddressShared(sharedAddress.get(add).getSharedUserId(), sharedAddress.get(add).getName())), add)) ;
+          continue ;
+        }
+      }
+      UIFormInputWithActions input = new UIFormInputWithActions(UICategorySelect.INPUT_CATEGORY) ;
+      UIFormSelectBox uiSelectBox = new UIFormSelectBox(UICategorySelect.FIELD_CATEGORY, UICategorySelect.FIELD_CATEGORY, categories) ;
+      uiSelectBox.setEnable(false) ;
+      input.addUIFormInput(uiSelectBox) ;
+      uiCategorySelect.addUIFormInput(input) ;
       UIContactForm uiContactForm = popupContainer.addChild(UIContactForm.class, null, null) ;
       uiContactForm.setValues(contact);
       uiContactForm.setNew(false) ;
