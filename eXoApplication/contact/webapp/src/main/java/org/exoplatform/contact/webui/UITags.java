@@ -128,39 +128,27 @@ public class UITags extends UIComponent {
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = uiContactPortlet.getChild(UIPopupAction.class) ;  
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ; 
-      if (!ContactUtils.isEmpty(uiContacts.getSelectedTag())) {
-        UIExportForm uiExportForm = popupAction.activate(UIExportForm.class, 500) ;
-        uiExportForm.setId("ExportForm");
-        uiExportForm.setSelectedTag(uiForm.tagMap_.get(tagId).getName()) ;
-        List<Contact> contacts = uiContacts.getContactPageList().getAll() ;
-        if (contacts == null || contacts.size() == 0) {
-          UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UITag.msg.noContactToExport", null,
-            ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;  
-        }
-        uiExportForm.setContacts(contacts.toArray(new Contact[] {})) ;
-        uiExportForm.updateList();
-        event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+      Contact[] contacts = null ;
+      if (!ContactUtils.isEmpty(uiContacts.getSelectedTag()) && uiContacts.getSelectedTag().equals(tagId)) {
+        contacts = uiContacts.getContactPageList().getAll().toArray(new Contact[] {}) ;
       } else {
-        Contact[] contacts = ContactUtils.getContactService().getContactPageListByTag(SessionProviderFactory
+        contacts = ContactUtils.getContactService().getContactPageListByTag(SessionProviderFactory
             .createSystemProvider(), ContactUtils.getCurrentUser(), tagId).getAll().toArray(new Contact[] {});
-        if (contacts == null || contacts.length == 0) {
-          UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UITag.msg.noContactToExport", null,
-            ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;  
-        }
-        UIExportForm uiExportForm = popupAction.activate(UIExportForm.class, 500) ;
-        uiExportForm.setId("ExportForm");
-        uiExportForm.setSelectedTag(uiForm.tagMap_.get(tagId).getName()) ;
-        
-        uiExportForm.setContacts(contacts) ;
-        uiExportForm.updateList();
-        event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       }
+      if (contacts == null || contacts.length == 0) {
+        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UITag.msg.noContactToExport", null,
+          ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;  
+      }
+      UIExportForm uiExportForm = popupAction.activate(UIExportForm.class, 500) ;
+      uiExportForm.setId("ExportForm");
+      uiExportForm.setSelectedTag(uiForm.tagMap_.get(tagId).getName()) ;
+      
+      uiExportForm.setContacts(contacts) ;
+      uiExportForm.updateList();
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   } 
   
