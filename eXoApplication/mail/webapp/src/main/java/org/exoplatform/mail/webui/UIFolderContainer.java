@@ -168,6 +168,7 @@ public class UIFolderContainer extends UIContainer {
         uiMessageList.setSelectedFolderId(folderId);
         uiMessageList.setSelectedTagId(null);
         uiMessageList.init(accountId);
+        uiMessageList.viewing_ =  uiMessageList.VIEW_ALL;
         uiMsgPreview.setMessage(null);
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;
