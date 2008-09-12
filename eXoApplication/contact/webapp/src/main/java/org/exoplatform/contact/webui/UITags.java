@@ -16,7 +16,6 @@
  */
 package org.exoplatform.contact.webui;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -30,11 +29,9 @@ import org.exoplatform.contact.service.DataPageList;
 import org.exoplatform.contact.service.JCRPageList;
 import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.webui.UIContacts.FullNameComparator;
-import org.exoplatform.contact.webui.popup.UIComposeForm;
 import org.exoplatform.contact.webui.popup.UIExportForm;
 import org.exoplatform.contact.webui.popup.UIEditTagForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
-import org.exoplatform.mail.service.Account;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -59,11 +56,11 @@ import org.exoplatform.webui.event.EventListener;
         @EventConfig(listeners = UITags.EditTagActionListener.class),
         @EventConfig(listeners = UITags.ExportAddressActionListener.class),
         @EventConfig(listeners = UITags.PrintActionListener.class),
-        @EventConfig(listeners = UITags.SendEmailActionListener.class),
         @EventConfig(listeners = UITags.DeleteTagActionListener.class, confirm = "UITags.msg.confirm-delete")        
     }
 )
 public class UITags extends UIComponent {
+  
   public UITags() throws Exception { }
   private String selectedTag_ = null ;
   private Map<String, Tag> tagMap_ = new HashMap<String, Tag>() ;
@@ -80,17 +77,6 @@ public class UITags extends UIComponent {
   public void setSelectedTag(String id) { selectedTag_ = id ; }
   public String getSelectedTag() { return selectedTag_ ; }
   
-  static  public class AddTagActionListener extends EventListener<UITags> {
-    public void execute(Event<UITags> event) throws Exception {
-      UITags uiForm = event.getSource() ;
-      UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
-      UIPopupAction popupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
-      UIEditTagForm uiEditTagForm = popupAction.activate(UIEditTagForm.class, 500) ;
-      uiEditTagForm.setNew(true) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
-    }
-  }
-  
   static  public class SelectTagActionListener extends EventListener<UITags> {
     @SuppressWarnings("unchecked")
     public void execute(Event<UITags> event) throws Exception {
@@ -100,16 +86,8 @@ public class UITags extends UIComponent {
       UIWorkingContainer uiWorkingContainer = uiForm.getAncestorOfType(UIWorkingContainer.class) ;
       uiWorkingContainer.findFirstComponentOfType(UIAddressBooks.class).setSelectedGroup(null) ;
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ;
-      
       DataPageList pageList =ContactUtils.getContactService().getContactPageListByTag(
           SessionProviderFactory.createSystemProvider(), ContactUtils.getCurrentUser(), tagId) ;
-     /* if (pageList != null) {
-        List<Contact> contacts = new ArrayList<Contact>() ;
-        contacts = pageList.getAll() ;
-        FullNameComparator.isAsc = true ;
-        Collections.sort(contacts, new FullNameComparator()) ;          
-        pageList.setList(contacts) ;      
-      }*/
       FullNameComparator.isAsc = true ;
       uiContacts.setSortedBy(UIContacts.fullName) ;
       uiContacts.setContacts(pageList) ;
@@ -117,6 +95,17 @@ public class UITags extends UIComponent {
       uiContacts.setSelectedTag(tagId) ;
       uiContacts.setDisplaySearchResult(false) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
+    }
+  }
+  
+  static  public class AddTagActionListener extends EventListener<UITags> {
+    public void execute(Event<UITags> event) throws Exception {
+      UITags uiForm = event.getSource() ;
+      UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
+      UIPopupAction popupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
+      UIEditTagForm uiEditTagForm = popupAction.activate(UIEditTagForm.class, 500) ;
+      uiEditTagForm.setNew(true) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
   
@@ -139,41 +128,29 @@ public class UITags extends UIComponent {
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = uiContactPortlet.getChild(UIPopupAction.class) ;  
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ; 
-      if (!ContactUtils.isEmpty(uiContacts.getSelectedTag())) {
-        UIExportForm uiExportForm = popupAction.activate(UIExportForm.class, 500) ;
-        uiExportForm.setId("ExportForm");
-        uiExportForm.setSelectedTag(uiForm.tagMap_.get(tagId).getName()) ;
-        List<Contact> contacts = uiContacts.getContactPageList().getAll() ;
-        if (contacts == null || contacts.size() == 0) {
-          UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UITag.msg.noContactToExport", null,
-            ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;  
-        }
-        uiExportForm.setContacts(contacts.toArray(new Contact[] {})) ;
-        uiExportForm.updateList();
-        event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+      Contact[] contacts = null ;
+      if (!ContactUtils.isEmpty(uiContacts.getSelectedTag()) && uiContacts.getSelectedTag().equals(tagId)) {
+        contacts = uiContacts.getContactPageList().getAll().toArray(new Contact[] {}) ;
       } else {
-        Contact[] contacts = ContactUtils.getContactService().getContactPageListByTag(SessionProviderFactory
+        contacts = ContactUtils.getContactService().getContactPageListByTag(SessionProviderFactory
             .createSystemProvider(), ContactUtils.getCurrentUser(), tagId).getAll().toArray(new Contact[] {});
-        if (contacts == null || contacts.length == 0) {
-          UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UITag.msg.noContactToExport", null,
-            ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;  
-        }
-        UIExportForm uiExportForm = popupAction.activate(UIExportForm.class, 500) ;
-        uiExportForm.setId("ExportForm");
-        uiExportForm.setSelectedTag(uiForm.tagMap_.get(tagId).getName()) ;
-        
-        uiExportForm.setContacts(contacts) ;
-        uiExportForm.updateList();
-        event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       }
+      if (contacts == null || contacts.length == 0) {
+        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UITag.msg.noContactToExport", null,
+          ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;  
+      }
+      UIExportForm uiExportForm = popupAction.activate(UIExportForm.class, 500) ;
+      uiExportForm.setId("ExportForm");
+      uiExportForm.setSelectedTag(uiForm.tagMap_.get(tagId).getName()) ;
+      
+      uiExportForm.setContacts(contacts) ;
+      uiExportForm.updateList();
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
-  }  
+  } 
   
   static  public class DeleteTagActionListener extends EventListener<UITags> {
     public void execute(Event<UITags> event) throws Exception {
@@ -219,42 +196,4 @@ public class UITags extends UIComponent {
     }
   }
   
-  static  public class SendEmailActionListener extends EventListener<UITags> {
-    public void execute(Event<UITags> event) throws Exception {
-      UITags uiTags = event.getSource() ;
-      UIContactPortlet uiContactPortlet = uiTags.getAncestorOfType(UIContactPortlet.class);
-      UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class);
-      String tagId = event.getRequestContext().getRequestParameter(OBJECTID);
-      
-      String username = ContactUtils.getCurrentUser();
-      ContactService contactService = ContactUtils.getContactService();
-      List<String> addresses = new ArrayList<String>() ;  
-      for (Contact contact : contactService.getContactPageListByTag(
-          SessionProviderFactory.createSystemProvider(), username, tagId).getAll()) {
-        String email = contact.getEmailAddress() ;
-        if (!ContactUtils.isEmpty(email)) addresses.add(email) ;
-      }      
-      if (addresses.size() < 1) {
-        UIApplication uiApp = uiTags.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UITags.msg.no-email-found", null,
-          ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;        
-      }
-      StringBuffer buffer = new StringBuffer(addresses.get(0)) ;
-      for (int i = 1; i < addresses.size(); i ++) {
-        buffer.append(", " + addresses.get(i)) ;
-      }
-      List<Account> acc = ContactUtils.getAccounts() ;
-      if (acc == null || acc.size() < 1) {
-        UIApplication uiApp = uiTags.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.invalidAcc", null,
-            ApplicationMessage.WARNING)) ;
-        return ;
-      }
-      UIComposeForm uiComposeForm = uiPopupAction.activate(UIComposeForm.class, 850) ;
-      uiComposeForm.init(acc, buffer.toString()) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
-    }
-  }  
 }
