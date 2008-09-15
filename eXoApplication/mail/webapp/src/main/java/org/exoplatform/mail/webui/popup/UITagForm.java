@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.mail.Colors;
+import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Tag;
@@ -158,23 +159,30 @@ public class UITagForm extends UIForm implements UIPopupComponent{
       List<Tag> tagList = new ArrayList<Tag>();
 
       if (newTagName != null && newTagName.trim().length() > 0) {
-        boolean isExist = false;
-        newTagName = newTagName.trim();
-        for (Tag tag: mailSrv.getTags(SessionProviderFactory.createSystemProvider(), username, accountId)) {
-          if (tag.getName().equals(newTagName)) { 
-            isExist = true;
-            tagList.add(tag);
+        if (MailUtils.isNameValid(newTagName, MailUtils.SIMPLECHARACTER)) {
+          boolean isExist = false;
+          newTagName = newTagName.trim();
+          for (Tag tag: mailSrv.getTags(SessionProviderFactory.createSystemProvider(), username, accountId)) {
+            if (tag.getName().equals(newTagName)) { 
+              isExist = true;
+              tagList.add(tag);
+            }
           }
-        }
-        if (!isExist) {
-          Tag newTag = new Tag();
-          newTag.setName(newTagName);
-          newTag.setColor(tagColor);
-          newTag.setDescription("Tag's description");
-          tagList.add(newTag);
+          if (!isExist) {
+            Tag newTag = new Tag();
+            newTag.setName(newTagName);
+            newTag.setColor(tagColor);
+            newTag.setDescription("Tag's description");
+            tagList.add(newTag);
+          } else {
+            UIApplication uiApp = uiTagForm.getAncestorOfType(UIApplication.class) ;
+            uiApp.addMessage(new ApplicationMessage("UITagForm.msg.tag-already-exists", null, ApplicationMessage.INFO)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return;
+          }
         } else {
           UIApplication uiApp = uiTagForm.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UITagForm.msg.tag-already-exists", null, ApplicationMessage.INFO)) ;
+          uiApp.addMessage(new ApplicationMessage("UITagForm.msg.tagname-invalid", MailUtils.SIMPLECHARACTER, ApplicationMessage.WARNING) ) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return;
         }

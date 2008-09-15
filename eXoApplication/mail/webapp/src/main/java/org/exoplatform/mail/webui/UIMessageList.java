@@ -550,6 +550,7 @@ public class UIMessageList extends UIForm {
       }
       uiMessageList.filterMessage("@" + Utils.EXO_STAR + "='true'");
       uiMessageList.viewing_ = uiMessageList.VIEW_STARRED ;
+      uiMessageList.viewMode = uiMessageList.MODE_LIST;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
@@ -567,6 +568,7 @@ public class UIMessageList extends UIForm {
       }
       uiMessageList.filterMessage("@" + Utils.EXO_STAR + "='false'");
       uiMessageList.viewing_ = uiMessageList.VIEW_UNSTARRED ;
+      uiMessageList.viewMode = uiMessageList.MODE_LIST;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
@@ -584,6 +586,7 @@ public class UIMessageList extends UIForm {
       }
       uiMessageList.filterMessage("@" + Utils.EXO_ISUNREAD + "='true'");
       uiMessageList.viewing_ = uiMessageList.VIEW_UNREAD ;
+      uiMessageList.viewMode = uiMessageList.MODE_LIST;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
@@ -601,6 +604,7 @@ public class UIMessageList extends UIForm {
       }
       uiMessageList.filterMessage("@" + Utils.EXO_ISUNREAD + "='false'");
       uiMessageList.viewing_ = uiMessageList.VIEW_READ ;
+      uiMessageList.viewMode = uiMessageList.MODE_LIST;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
@@ -618,6 +622,7 @@ public class UIMessageList extends UIForm {
       }
       uiMessageList.filterMessage("@" + Utils.EXO_HASATTACH + "='true'");
       uiMessageList.viewing_ = uiMessageList.VIEW_ATTACHMENT ;
+      uiMessageList.viewMode = uiMessageList.MODE_LIST;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
