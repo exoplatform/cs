@@ -5,8 +5,8 @@
 	import org.exoplatform.calendar.service.CalendarSetting;
 %>
 <div class="FixIE">
-<div><div style="width: 940px;" ><span style="display: none;"></span></div></div>
-<div style="_width: expression(this.previousSibling.offsetWidth - 22 + 'px'); !border: 1px solid white; _margin: auto;">
+<div><div class="FixWidth"><span style="display: none;"></span></div></div>
+<div style="_width: expression(this.previousSibling.offsetWidth - 22 + 'px'); _margin: auto;">
 	<div class="ApplicationMinWidth">
 		<div class="UICalendarPortlet" id="$uicomponent.id">
 			<div class="UINotification" style="display:none;">

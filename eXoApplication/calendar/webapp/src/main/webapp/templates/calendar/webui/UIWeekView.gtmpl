@@ -88,12 +88,11 @@
   </div>
   <div class="EventWeekContainer">
     <div class="EventWeekBar">
-      <table class="UIGrid" id="UIWeekViewGridAllDay" cellspacing="0" borderspacing="0"
+      <table class="UIGrid"  cellspacing="0" borderspacing="0"
         exocallback="eXo.calendar.UIWeekView.callbackSelectionX();">
         <thead>
           <tr>
-            <th style="width: 55px;">
-            </th>
+            <th style="width: 55px;"><div style="width: 55px;"><span></span></div></th>
             <%			
 							cl = uicomponent.getBeginDateOfWeek() ;				
 						  t = 0 ; 
@@ -122,53 +121,53 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>
-              <div style="width: 55px;">
-                <span></span>
-              </div>
-            </td>
-            <td colspan="$numberOfDays" class="EventAllday" numberOfDays="$numberOfDays">
-              <div style="position: relative;">
-                <% for (event in uicomponent.getEventList().values()) {
-									begindate =  event.getFromDateTime().getTime() ;  
-									enddate = event.getToDateTime().getTime() ; 
-									leftClass = "LeftResizeEvent ResizableSign" ;
-									if(event.fromDateTime.before(uicomponent.getBeginDateOfWeek().getTime())){
-									  leftClass = "LeftContinueEvent" ;
-									}  
-									rightClass = "RightResizeEvent ResizableSign" ;
-									if(event.toDateTime.after(uicomponent.getEndDateOfWeek().getTime())){
-									  rightClass = "RightContinueEvent" ;
-									}  		
-								  long 	startTime = event.getFromDateTime().getTime() ;  
-								  long	finishTime = event.getToDateTime().getTime() ;  
-									color = uicomponent.getColors().get(event.calType +CalendarUtils.COLON+ event.getCalendarId()) ;
-									title = tf.format(event.getFromDateTime()) + "->" + tf.format(event.getToDateTime())+ ":&#013; " + event.summary ;
-									actionLink =  uicomponent.event("SaveEvent",event.getId()+"&calendarId="+event.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
-                %>
-                <div class="EventContainer EventAlldayContainer WeekViewEventBoxes $color" eventcat="$event.eventCategoryId" style="position:absolute; border: solid 1px grey;" caltype="$event.calType" eventid="$event.id" calid="$event.calendarId" starttime="$begindate"  endtime="$enddate" 
-                startTimeFull="<%=tempFormat.format(event.getFromDateTime())%>" endTimeFull="<%=tempFormat.format(event.getToDateTime())%>"
-                 title="$title" actionlink="$actionLink">
-                  <div class="$leftClass">
-                    <span></span>
-                  </div>
-                  <div class="EventAlldayContent" style="float: left; width: 70%; overflow: hidden; white-space: nowrap;" title="<%=event.summary%>">
-                    <%=event.summary%>
-                  </div>
-                  <div class="$rightClass">
-                    <span></span>
-                  </div>
-                  <div style="clear: left;">
-                    <span></span>
-                  </div>
-                </div>
-                <%}%>
-              </div>
-            </td>
-          </tr>
+         
         </tbody>
       </table>
+	  
+		<div id="UIWeekViewGridAllDay" class="EventAllday" style="" numberOfDays="$numberOfDays">
+			<div style="width: 55px; float: left; height: 100%; background: white; border-right: 1px solid #ccc"><span></span></div>
+			<div style="margin-left: 55px;">
+				<div class="EventAlldayBoard">
+	                <% for (event in uicomponent.getEventList().values()) {
+										begindate =  event.getFromDateTime().getTime() ;  
+										enddate = event.getToDateTime().getTime() ; 
+										leftClass = "LeftResizeEvent ResizableSign" ;
+										if(event.fromDateTime.before(uicomponent.getBeginDateOfWeek().getTime())){
+										  leftClass = "LeftContinueEvent" ;
+										}  
+										rightClass = "RightResizeEvent ResizableSign" ;
+										if(event.toDateTime.after(uicomponent.getEndDateOfWeek().getTime())){
+										  rightClass = "RightContinueEvent" ;
+										}  		
+									  long 	startTime = event.getFromDateTime().getTime() ;  
+									  long	finishTime = event.getToDateTime().getTime() ;  
+										color = uicomponent.getColors().get(event.calType +CalendarUtils.COLON+ event.getCalendarId()) ;
+										title = tf.format(event.getFromDateTime()) + "->" + tf.format(event.getToDateTime())+ ":&#013; " + event.summary ;
+										actionLink =  uicomponent.event("SaveEvent",event.getId()+"&calendarId="+event.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
+	                %>
+	                <div class="EventContainer EventAlldayContainer WeekViewEventBoxes $color" eventcat="$event.eventCategoryId" style="position:absolute; border: solid 1px grey;" caltype="$event.calType" eventid="$event.id" calid="$event.calendarId" starttime="$begindate"  endtime="$enddate" 
+	                startTimeFull="<%=tempFormat.format(event.getFromDateTime())%>" endTimeFull="<%=tempFormat.format(event.getToDateTime())%>"
+	                 title="$title" actionlink="$actionLink">
+	                  <div class="$leftClass">
+	                    <span></span>
+	                  </div>
+	                  <div class="EventAlldayContent" style="float: left; width: 70%; overflow: hidden; white-space: nowrap;" title="<%=event.summary%>">
+	                    <%=event.summary%>
+	                  </div>
+	                  <div class="$rightClass">
+	                    <span></span>
+	                  </div>
+	                  <div style="clear: left;">
+	                    <span></span>
+	                  </div>
+	                </div>
+	                <%}%>
+	            </div>
+			 </div>
+
+		</div>
+	  
     </div>
     <div class="EventWeekContent" style="position: relative;" onresize="eXo.calendar.UIWeekView.setSize() ;">
       <div class="EventBoard">
@@ -211,7 +210,7 @@
           <div style="clear: left;">
             <span></span>
           </div>
-          <div unselectable="on" class="EventContainer" title="<%=event.summary%>">
+          <div unselectable="on" class="EventContainer" title="$event.summary">
             $event.summary</div>
           <div class="ResizeEventContainer" unselectable="on">
             <span></span>
@@ -223,7 +222,7 @@
 					}
         %>
       </div>
-      <table class="UIGrid" id="UIWeekViewGrid" lastupdatedid="<%=uicomponent.getLastUpdatedEventId()%>"
+      <table class="UIGrid" style="table-layout: fixed; " id="UIWeekViewGrid" lastupdatedid="<%=uicomponent.getLastUpdatedEventId()%>"
         cellspacing="0" borderspacing="0">
         <tbody>
           <% 

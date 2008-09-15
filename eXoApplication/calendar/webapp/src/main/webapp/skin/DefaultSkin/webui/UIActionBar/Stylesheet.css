@@ -67,9 +67,10 @@
 }
 
 .UICalendarPortlet .CalendarWorkingWorkspace .IconHolder {
-	line-height: 25px;
-	margin: 0px 7px;
-	padding-left: 22px;
+  line-height: 25px;
+  margin: 0px 7px;
+  padding-left: 22px;
+  white-space: nowrap;
 }
 
 .UICalendarPortlet .CalendarWorkingWorkspace .LayoutSwitcherIcon {
