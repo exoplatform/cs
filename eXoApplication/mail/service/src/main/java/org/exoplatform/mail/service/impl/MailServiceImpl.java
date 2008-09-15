@@ -599,33 +599,33 @@ public class MailServiceImpl implements MailService {
         // (don't forget duplicate in the SAME folder
         String folderId = Utils.createFolderId(accountId, incomingFolder, false);
 
-        javax.mail.Message[] fMessages;
+        javax.mail.Message[] filteredMsg;
         // Loop all filters to find the destination of new message.
         List<MessageFilter> filters = getFilters(sProvider, username, accountId);
         SearchTerm st;
 
         for (MessageFilter filter : filters) {
           st = getSearchTerm(searchTerm, filter);
-          fMessages = folder.search(st);
+          filteredMsg = folder.search(st);
           List<String> fl;
           boolean afterTime = false ;
-          for (int k = 0; k < fMessages.length; k++) {
-            if (msgMap.containsKey(fMessages[k])) {
-              fl = msgMap.get(fMessages[k]);
+          for (int k = 0; k < filteredMsg.length; k++) {
+            if (msgMap.containsKey(filteredMsg[k])) {
+              fl = msgMap.get(filteredMsg[k]);
               fl.add(filter.getId());
               if (lastCheckedDate == null) {
-                msgMap.put(fMessages[k], fl);
-              } else if (afterTime || !(isImap && !MimeMessageParser.getReceivedDate(fMessages[k]).getTime().after(lastCheckedDate))) {
+                msgMap.put(filteredMsg[k], fl);
+              } else if (afterTime || !(isImap && !MimeMessageParser.getReceivedDate(filteredMsg[k]).getTime().after(lastCheckedDate))) {
                 afterTime = true ;
-                msgMap.put(fMessages[k], fl);
+                msgMap.put(filteredMsg[k], fl);
               }
             } else {
               fl = new ArrayList<String>();
               fl.add(filter.getId());
               if (lastCheckedDate == null) {
-                msgMap.put(fMessages[k], fl);
-              } else if (afterTime || !(isImap && !MimeMessageParser.getReceivedDate(fMessages[k]).getTime().after(lastCheckedDate))) {
-                msgMap.put(fMessages[k], fl);
+                msgMap.put(filteredMsg[k], fl);
+              } else if (afterTime || !(isImap && !MimeMessageParser.getReceivedDate(filteredMsg[k]).getTime().after(lastCheckedDate))) {
+                msgMap.put(filteredMsg[k], fl);
               }
             }
           }
@@ -640,6 +640,10 @@ public class MailServiceImpl implements MailService {
                 afterTime = true ;
                 msgMap.put(messages[l], null);
             } 
+          } else {
+            List<String> temp = msgMap.get(messages[l]);
+            msgMap.remove(messages[l]);
+            msgMap.put(messages[l], temp);
           }
         }
         totalNew = msgMap.size();
