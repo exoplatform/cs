@@ -494,7 +494,7 @@ LayoutManager.prototype.check = function(){
 	var layoutcookie = eXo.core.Browser.getCookie(this.layoutId) ;	
 	var i = layoutcookie.length ;
 	while(i--){
-		if(parseInt(layoutcookie.charAt(i)) <=0) return ;
+		if(!this.layouts[parseInt(layoutcookie.charAt(i))-1]) continue ;
 		this.layouts[parseInt(layoutcookie.charAt(i))-1].style.display = "none";
 	}
 	if(this.callback) this.callback(layoutcookie) ;
