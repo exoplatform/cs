@@ -57,6 +57,9 @@
   background: #dee4f2;
 }
 
+.UIPageDesktop .FixWidth {
+	_width: 940px;
+}
 
 /*==============================Calendar Working Container================================*/
 .UICalendarPortlet .CalendarWorkingWorkspace {

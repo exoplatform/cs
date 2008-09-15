@@ -1141,7 +1141,7 @@ UICalendarPortlet.prototype.weekViewCallback = function(evt){
                 "calType\s*=\s*[A-Za-z0-9_]*(?=&|'|\")": "calType=" + calType
             };
         }
-        obj = DOMUtil.findAncestorByTagName(src, "td").getAttribute("startTime");
+        obj = (DOMUtil.findAncestorByTagName(src, "td"))? DOMUtil.findAncestorByTagName(src, "td").getAttribute("startTime"):null;
         for (var i = 0; i < items.length; i++) {
             if (items[i].className == "EventActionMenu") {
                 items[i].style.display = "block";
@@ -2104,8 +2104,13 @@ UIDesktop.prototype.showHideWindow = function(uiWindow, clickedElement){
 };
 
 UICalendarPortlet.prototype.fixFirstLoad = function(){
-    if (this.firstRun) 
+    if (this.firstRun){
+			if (this.delay) {
+	        window.clearTimeout(this.delay);
+					delete this.delay ;
+	    }
         return;
+		}
     if (document.getElementById("UIPageDesktop")) {
         if (document.getElementById("UIWeekView")) {
             eXo.calendar.UICalendarMan.initWeek();
@@ -2113,9 +2118,7 @@ UICalendarPortlet.prototype.fixFirstLoad = function(){
             this.firstRun = true;
         }
     }
-    if (this.delay) {
-        window.clearTimeout(this.delay);
-    }
+    
 };
 
 eXo.portal.UIControlWorkspace.showWorkspace = function(){

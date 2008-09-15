@@ -177,6 +177,10 @@
 	_width: 97%;
 }
 
+.UIWeekView .EventWeekBar .UIGrid {
+	_width: 98.7%;
+}
+
 .UIPageDesktop .UIWeekView .EventWeekBar .UIGrid {
 	_width: 98.9%;
 }
@@ -186,8 +190,13 @@
 }
 
 .UIWeekView .EventWeekBar {
-	padding: 0px 16px 0px 1px;
-	*padding: 0px 3px 0px 0px;
+	padding: 0px 16px 0px 0px;
+	
+}
+
+.UIWeekView .EventWeekBar table {
+	margin-left: 1px;
+	*margin-left: 0px;
 }
 
 .UIWeekView .EventWeekBar .Day {
@@ -247,8 +256,29 @@
 }
 
 .UIWeekView .EventAllday {
+	position:relative;
 	background: #DFE6F8;
-	border-bottom: 1px solid #c7c7c7;;
+	border: 1px solid #c7c7c7;
+	border-top: none;
+	height:28px;
+	_width: 98.5%;
+	_position:static;
+}
+
+.UIPageDesktop .UIWeekView .EventAllday {
+	position:relative;
+	background: #DFE6F8;
+	border: 1px solid #c7c7c7;
+	border-top: none;
+	_width: 98.5%;
+}
+
+.UIWeekView .EventAlldayBoard {
+	_position:relative;
+}
+
+.UIPageDesktop .UIWeekView .EventAlldayBoard {
+	_position:static;
 }
 
 .UIWeekView .Today {

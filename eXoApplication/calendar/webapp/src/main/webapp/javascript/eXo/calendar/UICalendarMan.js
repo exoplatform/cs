@@ -501,7 +501,8 @@ EventMan.prototype.initWeek = function(rootNode) {
     eventObj.init(allEvents[i]);
     this.events.push(eventObj);
   }
-  this.dayNodes = DOMUtil.findDescendantsByClass(this.rootNode, 'th', 'UICellBlock');
+  var aaa = DOMUtil.findPreviousElementByTagName(this.rootNode,"table");
+  this.dayNodes = DOMUtil.findDescendantsByClass(aaa, 'th', 'UICellBlock');
   this.week = new WeekMan();
   this.week.weekIndex = 0;
 //  this.week.startWeek = parseInt(this.dayNodes[0].getAttribute('starttime'));
@@ -605,8 +606,8 @@ GUIMan.prototype.initWeek = function() {
     eventLabelNode.innerHTML = eventObj.getLabel();
     eventObj.rootNode.setAttribute('used', 'false');
   }
-  this.eventAlldayNode = DOMUtil.findFirstDescendantByClass(EventMan.rootNode, 'td', 'EventAllday');
-  this.dayNodes = EventMan.dayNodes;
+  this.eventAlldayNode = EventMan.rootNode ;//DOMUtil.findFirstDescendantByClass(EventMan.rootNode, 'td', 'EventAllday');
+	this.dayNodes = EventMan.dayNodes;
   this.paintWeek();
   this.setDynamicSize4Week();
   this.initSelectionDayEvent();
@@ -649,7 +650,8 @@ GUIMan.prototype.paintWeek = function() {
       maxEventRow = dayObj.visibleGroup.length;
     }
   }
-  this.eventAlldayNode.style.height = (maxEventRow * this.EVENT_BAR_HEIGH) + 'px';
+  this.eventAlldayNode.style.height = (maxEventRow > 1)?(maxEventRow * this.EVENT_BAR_HEIGH) + 'px':'28px';
+	if(eXo.core.Browser.browserType == "ie") this.eventAlldayNode.firstChild.style.height = (maxEventRow > 1)?(maxEventRow * this.EVENT_BAR_HEIGH) + 'px':'28px';
 };
 
 /**
@@ -662,24 +664,25 @@ GUIMan.prototype.paintWeek = function() {
 GUIMan.prototype.drawEventByMiliseconds = function(eventObj, startTime, endTime, dayInfo) {
   var eventNode = eventObj.rootNode;
   var topPos = dayInfo.eventTop ;
-//  var leftPos = dayInfo.left;
+  var leftPos = dayInfo.left;
   var delta = (new Date(endTime)) - (new Date(startTime));
   delta /= (1000 * 60 * 60 * 24);
-  var eventLen = parseFloat(delta * (dayInfo.width)) - 2;
-  var leftPos = dayInfo.left + ((dayInfo.eventShiftRightPercent * dayInfo.width) / 100) + 1;
-  with (eventNode.style) {
-    position = 'absolute';
-    top = topPos + 'px';
-    left = leftPos + 'px';
-    width = eventLen + 'px';
-  }
+  var eventLen = parseFloat(delta * (dayInfo.width));
+  var leftPos = dayInfo.left + parseFloat((dayInfo.eventShiftRightPercent * dayInfo.width) / 100) + 1;
+	//try{
+	if(!eXo.core.Browser.isIE6() || (document.getElementById("UIPageDesktop")))	leftPos += 55 ;
+  eventNode.style.position = 'absolute';
+  eventNode.style.top = topPos + 'px';
+  eventNode.style.left = leftPos + 'px';
+  eventNode.style.width = eventLen + 'px';
+	//}catch(e){alert(e.message + "-sfdsfs-" +eventLen) ;}
 };
 
 GUIMan.prototype.initSelectionDayEvent = function() { 
   var UISelection = eXo.calendar.UISelection ;
   var container = document.getElementById("UIWeekViewGrid") ;
   UISelection.step = 30 ; 
-  UISelection.block = document.createElement("div")
+  UISelection.block = document.createElement("div") ;
   UISelection.block.className = "UserSelectionBlock" ;
   UISelection.container = container ;
   eXo.core.DOMUtil.findPreviousElementByTagName(container, "div").appendChild(UISelection.block) ;
@@ -791,7 +794,6 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
     dayInfo.eventTop = dayInfo.top + ((this.EVENT_BAR_HEIGH) * i);
     this.drawEventByDay(eventObj, startTime, endTime, dayInfo);
   }
-  
   // Draw invisible events (put all into more)
   if (dayObj.invisibleGroup.length > 0) {
     var moreNode = document.createElement('div');
@@ -800,7 +802,7 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
     with (moreNode.style) {
       position = 'absolute';
       width = dayInfo.width + 'px';
-      left = dayInfo.left + 'px' ;
+      left = dayInfo.left + 55 + 'px' ;
       top = dayInfo.top + ((dayObj.MAX_EVENT_VISIBLE - 1) * this.EVENT_BAR_HEIGH) + 5 + 'px';
       cursor = 'pointer';
       zIndex = '1';
@@ -937,19 +939,17 @@ GUIMan.prototype.drawEventByDay = function(eventObj, startTime, endTime, dayInfo
   }
   var topPos = dayInfo.eventTop ;
   var leftPos = dayInfo.left ;
-  endTime = new Date(endTime);
-  startTime = new Date(startTime);
+  endTime = new Date(parseInt(endTime));
+  startTime = new Date(parseInt(startTime));
   var delta = endTime.getDay() - startTime.getDay();
   if (startTime.getDay() != endTime.getDay()) {
     delta ++ ;
   }
   delta = (delta < 1) ? 1 : delta;
-  var eventLen = (Math.round(delta) * (dayInfo.width)) ;
-  with (eventNode.style) {
-    top = topPos + 'px';
-    left = leftPos + 'px';
-    width = eventLen + 'px';
-  }
+  var eventLen = (Math.round(delta) * (dayInfo.width)) ;  
+	eventNode.style.top = topPos + 'px';
+  eventNode.style.left = leftPos + 'px';
+  eventNode.style.width = eventLen + 'px';
   eventNode.setAttribute('used', 'true');
 };
 
@@ -958,7 +958,7 @@ GUIMan.prototype.setDynamicSize4Month = function() {
   var events = eXo.calendar.UICalendarMan.EventMan.events;
   //var cellWidth = (this.tableData[0])[0].offsetWidth - 1;
   var cellWidth = (this.tableData[0])[0].offsetWidth + (this.tableData[0])[1].offsetWidth + (this.tableData[0])[2].offsetWidth + (this.tableData[0])[3].offsetWidth + (this.tableData[0])[4].offsetWidth + (this.tableData[0])[5].offsetWidth + (this.tableData[0])[6].offsetWidth - 6 ;
-  var totalWidth = cellWidth ;
+  var totalWidth = (cellWidth >0)?cellWidth : 1 ;
   for (var i=0; i<events.length; i++) {
     var eventNode = events[i].rootNode;
 		var d = new Date(events[i].starttime) ;
@@ -993,11 +993,11 @@ GUIMan.prototype.setDynamicSize4Month = function() {
 
 GUIMan.prototype.setDynamicSize4Week = function() {
   var events = eXo.calendar.UICalendarMan.EventMan.week.events;
-  var totalWidth = this.eventAlldayNode.offsetWidth;
+  var totalWidth = (this.eventAlldayNode.offsetWidth > 0)?this.eventAlldayNode.offsetWidth : 1;
   for (var i=0; i<events.length; i++) {
     var eventNode = events[i].rootNode;
-    eventNode.style.width = parseFloat(parseInt(eventNode.style.width)/totalWidth) * 100 + '%';
-    eventNode.style.left = parseFloat(parseInt(eventNode.style.left)/totalWidth) * 100 + '%';
+    eventNode.style.width = parseFloat(eventNode.style.width)/totalWidth * 100 + '%';
+    eventNode.style.left = parseFloat(eventNode.style.left)/totalWidth * 100 + '%';
   }
 };
 
