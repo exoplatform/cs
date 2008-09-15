@@ -463,6 +463,20 @@ UIContactPortlet.prototype.switchLayout = function(layout) {
 	eXo.contact.LayoutManager.switchLayout(layout);
 };
 
+UIContactPortlet.prototype.checkView = function() {
+	var uiContactPortlet = document.getElementById("UIContactPortlet");
+	var viewIcon = eXo.core.DOMUtil.findFirstDescendantByClass(uiContactPortlet,"div","ViewIcon");
+	var menuItems = eXo.core.DOMUtil.findDescendantsByClass(viewIcon.parentNode,"a","MenuItem");
+	var isVcard = document.getElementById("UIVCards") ;
+	if (isVcard) {
+		if(menuItems[0].getAttribute("style")) menuItems[0].removeAttribute("style");
+  	menuItems[1].style.background = "#E6E8F5" ;
+	} else{
+		if(menuItems[1].getAttribute("style")) menuItems[1].removeAttribute("style");
+		menuItems[0].style.background = "#E6E8F5" ;
+	}	
+};
+
 UIContactPortlet.prototype.showImMenu = function(obj, event) {
 	var event = window.event || event ;
 	event.cancelBubble = true ;
@@ -486,13 +500,8 @@ UIContactPortlet.prototype.showImMenu = function(obj, event) {
 	var menuY = eXo.core.Browser.findPosYInContainer(obj, uiPopupCategory.offsetParent) +  obj.offsetHeight ;
 	uiPopupCategory.style.top = menuY + "px" ;
 	uiPopupCategory.style.left = menuX + "px" ;	
-}
+};
 
-/**
- * @author Lam Nguyen
- * 
- * @param {Object} layout
- */
 UIContactPortlet.prototype.addCheckedIcon = function(layout, visible) {
   layout = parseInt(layout);
   var itemIcon = eXo.core.DOMUtil.findDescendantsByClass(document.getElementById("customLayoutViewMenu"), "div", "ItemIcon")[layout];
