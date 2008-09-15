@@ -1365,8 +1365,8 @@ public class JCRDataStorage {
         }
         throw new PathNotFoundException() ;
       } else {
-        Map<String, String> thisTagMap = new HashMap<String, String> () ;
-        thisTagMap = tagMap ;
+        Map<String, String> thisTagMap = new HashMap<String, String>() ;
+        thisTagMap.putAll(tagMap) ;
         Value[] values = null ;
         if(contactNode.hasProperty("exo:tags")){
           values = contactNode.getProperty("exo:tags").getValues() ;
@@ -1733,6 +1733,12 @@ public class JCRDataStorage {
         newNode.setProperty("exo:categories", new String [] {destAddress}) ;
         newNode.setProperty("exo:id", newId) ;          
         newNode.setProperty("exo:isOwner", false) ;
+
+        newNode.setProperty("exo:editPermissionUsers", new String[] {});
+        newNode.setProperty("exo:viewPermissionUsers", new String[] {});    
+        newNode.setProperty("exo:editPermissionGroups", new String[] {});
+        newNode.setProperty("exo:viewPermissionGroups", new String[] {});
+
         //newNode.setProperty("exo:tags", new String [] {}) ;
       }
       contactHomeNode.getSession().save() ;
@@ -1753,6 +1759,11 @@ public class JCRDataStorage {
             newNode.setProperty("exo:categories", new String [] {destAddress}) ;  
             newNode.setProperty("exo:id", newId) ;
             newNode.setProperty("exo:isOwner", false) ;
+            
+            newNode.setProperty("exo:editPermissionUsers", new String[] {});
+            newNode.setProperty("exo:viewPermissionUsers", new String[] {});    
+            newNode.setProperty("exo:editPermissionGroups", new String[] {});
+            newNode.setProperty("exo:viewPermissionGroups", new String[] {});
             //newNode.setProperty("exo:tags", new String [] {}) ; 
           }  
           contactHomeNode.getSession().save() ;
