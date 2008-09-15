@@ -57,8 +57,11 @@ public class MailUtils {
   final public static String COMMA = ",".intern() ;
   final public static String SLASH = "/".intern() ;
   final public static String BACKSLASH = "\\".intern() ;
+  public static final String GREATER_THAN = ">".intern() ;
+  public static final String SMALLER_THAN = "<".intern() ;
   final public static String SPECIALCHARACTER[] = {SEMICOLON,COMMA,SLASH,BACKSLASH,"'","|",">","<","\"", "?", "!", "@", "#", "$", "%","^","&","*"} ;
   final public static String SUPPORTED_VIEW_TYPE_ATTACH[] = {"gif", "png", "jpg", "jpec", "bmp"} ;
+  final public static String SIMPLECHARACTER[] = {GREATER_THAN, SMALLER_THAN, "'", "\""};
   
   static public MailService getMailService() throws Exception {
     return (MailService)PortalContainer.getComponent(MailService.class) ;
@@ -68,8 +71,8 @@ public class MailUtils {
     return Util.getPortalRequestContext().getRemoteUser() ; 
   }
   
-  public static boolean isNameValid(String name, String[] regexpression) {
-    for(String c : regexpression){ if(name.contains(c)) return false ;}
+  public static boolean isNameValid(String name, String[] regex) {
+    for(String c : regex){ if(name.contains(c)) return false ;}
     return true ;
   }
   

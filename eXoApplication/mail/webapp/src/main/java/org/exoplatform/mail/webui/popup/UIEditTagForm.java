@@ -44,7 +44,7 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 /**
  * Created by The eXo Platform SARL
- * Author : Hai Nguyen      
+ * Author : Phung Nam <phunghainam@gmail.com>
  * Aus 01, 2007 2:48:18 PM 
  */
 @ComponentConfig(
@@ -109,6 +109,14 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
       String accountId =  uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
       String tagId = editTagForm.getTagId();
       String newTagName = editTagForm.getUIStringInput(NEW_TAG_NAME).getValue().trim() ;
+      
+      if (!MailUtils.isNameValid(newTagName, MailUtils.SIMPLECHARACTER)) {
+        UIApplication uiApp = editTagForm.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIEditTagForm.msg.tagname-invalid", MailUtils.SIMPLECHARACTER, ApplicationMessage.WARNING) ) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return;
+      }
+      
       String description = editTagForm.getUIFormTextAreaInput(DESCRIPTION).getValue() ;
       String color = editTagForm.getSelectedColor(); 
       UIApplication uiApp = editTagForm.getAncestorOfType(UIApplication.class) ;
