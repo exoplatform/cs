@@ -95,6 +95,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
   public boolean isEdited_ = false ;
   public String selectedGroup_ ;
   public Contact selectedContact_  ;
+  public boolean addedNewGroup_ = false;
   
   public UIAddContactForm() throws Exception { 
     addUIFormInput(new UIFormSelectBoxWithGroups(SELECT_GROUP, SELECT_GROUP, getOptions()));
@@ -193,6 +194,10 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
   
   public void setLastNameField(String lastName) throws Exception {
     getUIStringInput(LAST_NAME).setValue(lastName);
+  }
+  
+  public void setAddedNewGroup(boolean b) {
+    addedNewGroup_ = b;
   }
   
   public String getNickName() { 
@@ -333,8 +338,9 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
       UIAddContactForm uiContact = event.getSource();
       UIMailPortlet uiPortlet = uiContact.getAncestorOfType(UIMailPortlet.class);
       UIAddressBookForm uiAddress = uiPortlet.findFirstComponentOfType(UIAddressBookForm.class);
-      if (uiAddress != null) {
+      if (uiAddress != null && uiContact.addedNewGroup_) {
         uiAddress.updateGroup(uiContact.selectedGroup_) ;
+        uiAddress.refrestContactList(uiContact.selectedGroup_);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiAddress.getParent()) ;
       }
       UIPopupAction uiPopupAction = uiContact.getAncestorOfType(UIPopupAction.class) ; 
