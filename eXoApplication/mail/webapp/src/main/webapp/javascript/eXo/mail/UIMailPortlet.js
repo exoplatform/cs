@@ -180,8 +180,16 @@ UIMailPortlet.prototype.switchLayoutCallback = function(layout,status){
 	var workingarea = document.getElementById("UIMessageArea");
 	if(!status){
 		if(layout == 1) workingarea.style.marginLeft = "0px"
+		if (layout == 3) {
+			document.getElementById("uiMessageGrid").style.overflowY = "visible" ;
+			document.getElementById("uiMessageGrid").style.height = "auto" ;
+		}
 	} else {
 		if(layout == 1) workingarea.style.marginLeft = "225px"
+		if (layout == 3) {
+			document.getElementById("uiMessageGrid").style.overflowY = "auto" ;
+			document.getElementById("uiMessageGrid").style.height = "200px" ;
+		}
 	}
 	eXo.mail.UIMailPortlet.changeMenuLabel(layout, status);
 };
@@ -194,6 +202,10 @@ UIMailPortlet.prototype.checkLayoutCallback = function(layoutcookie){
 		if(parseInt(layoutcookie.charAt(i)) == 1) {
 			var workingarea = document.getElementById("UIMessageArea");
 			workingarea.style.marginLeft = "0px" ;			
+		}
+		if(parseInt(layoutcookie.charAt(i)) == 3) {
+			document.getElementById("uiMessageGrid").style.overflowY = "visible" ;
+			document.getElementById("uiMessageGrid").style.height = "auto" ;			
 		}
 	}
 };
@@ -215,6 +227,7 @@ UIMailPortlet.prototype.checkLayout = function() {
 	eXo.mail.LayoutManager.callback = eXo.mail.UIMailPortlet.checkLayoutCallback;
 	eXo.mail.LayoutManager.resetCallback = eXo.mail.UIMailPortlet.resetLayoutCallback;
 	eXo.mail.LayoutManager.check();
+	this.setScroll() ;
 } ;
 
 UIMailPortlet.prototype.showHideAddMoreAddress = function(add) {	
@@ -413,10 +426,27 @@ UIMailPortlet.prototype.restoreFolderState = function() {
   }
 };
 
+UIMailPortlet.prototype.setScroll = function(){
+	var obj = document.getElementById("uiMessageGrid");
+	if(!obj) return ;
+	var scroll = parseInt(eXo.core.Browser.getCookie("scrollstatus"));
+	obj.scrollTop = scroll ;
+	obj.onclick = eXo.mail.UIMailPortlet.saveScroll ;
+} ;
+
+UIMailPortlet.prototype.saveScroll = function(){
+	eXo.core.Browser.setCookie("scrollstatus",this.scrollTop,1) ;
+};
+
 UIMailPortlet.prototype.resizeIframe = function(textAreaId, frameId, styleExpand, contentType) {
 	var frame = document.getElementById(frameId) ;
 	var textAreas = document.getElementById(textAreaId) ;
 	var expandMessage = eXo.core.DOMUtil.findAncestorByClass(frame, "ExpandMessage");
+	var previewArea = document.getElementById("SpliterResizableArea") ;
+	var beforeDisplay = previewArea.style.display ;
+	if(beforeDisplay == "none"){
+		previewArea.style.display = "block" ;
+	}
 	var str = textAreas.value ;
 	if (contentType.indexOf("text/plain") > -1) str = str.replace(/\n/g, "<br>") ;
 	var doc = frame.contentWindow.document ;
@@ -424,10 +454,10 @@ UIMailPortlet.prototype.resizeIframe = function(textAreaId, frameId, styleExpand
 	doc.open();
 	doc.write(str);
 	doc.close();
-	if (false) {
-		frame.style.height = "100%";
-		if(!eXo.core.Browser.isFF()) frame.style.width = "96%";
-	} else {
+//	if (false) {
+//		frame.style.height = "100%";
+//		if(!eXo.core.Browser.isFF()) frame.style.width = "96%";
+//	} else {
 		if (eXo.core.Browser.isFF()) {
 			doc.body.style.visibility = true;
 			frame.style.height = doc.body.offsetHeight  + 20 + "px" ;
@@ -444,8 +474,9 @@ UIMailPortlet.prototype.resizeIframe = function(textAreaId, frameId, styleExpand
 			frame.style.height = "auto"; 
 			frame.style.height = docHt + 20 + "px"; 
 		}
-	}
+//	}
 	expandMessage.style.display = styleExpand ;
+	previewArea.style.display = beforeDisplay ;
 } ;
 
 UIMailPortlet.prototype.showMenu = function(obj, evt){
