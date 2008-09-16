@@ -251,6 +251,9 @@ public class UITagForm extends UIForm implements UIPopupComponent{
           uiMsgList.messageList_.remove(msg.getId()) ;
         }
       }
+      if (uiMsgList.messageList_.size() % uiMsgList.getMessagePageList().getAvailablePage() == 0) {
+        uiMsgList.updateList();
+      } 
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgList.getAncestorOfType(UIMessageArea.class)) ;
       uiPortlet.cancelAction() ;
     }
