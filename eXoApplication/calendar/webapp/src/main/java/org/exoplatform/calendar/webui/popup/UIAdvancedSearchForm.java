@@ -24,6 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.jcr.query.Query;
+
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
@@ -78,7 +80,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
   final static  private String STATE = "state" ;
   final static  private String FROMDATE = "fromDate" ;
   final static  private String TODATE = "toDate" ;
-  
+
   public UIAdvancedSearchForm() throws Exception{
     addChild(new UIFormStringInput(TEXT, TEXT, null)) ;
     List<SelectItemOption<String>> types = new ArrayList<SelectItemOption<String>>() ;
@@ -131,7 +133,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     getUIStringInput(TEXT).setValue(searchValue) ;
   }  
   public UIFormDateTimePicker getUIFormDateTimePicker(String id){
-  	return findComponentById(id) ;
+    return findComponentById(id) ;
   }
   public String getFromDateValue() {
     return getUIFormDateTimePicker(FROMDATE).getValue() ;
@@ -169,7 +171,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     options.add(new SelectItemOption<String>("low", "3")) ;
     return options ;
   }
-  
+
   private List<SelectItemOption<String>> getStatus() {
     List<SelectItemOption<String>> status = new ArrayList<SelectItemOption<String>>() ;
     status.add(new SelectItemOption<String>("", "")) ;
@@ -199,7 +201,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     return getUIFormSelectBox(TYPE).getValue().equals(CalendarEvent.TYPE_TASK) ; 
   }
   public String getTaskState() {
-   return getUIFormSelectBox(STATE).getValue() ;
+    return getUIFormSelectBox(STATE).getValue() ;
   }
   public String[] getActions() {
     return new String[]{"Search","Cancel"} ;
@@ -225,9 +227,17 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
           return ;
         }
       }
+      String text = uiForm.getUIStringInput(UIAdvancedSearchForm.TEXT).getValue() ;
+      if(!CalendarUtils.isEmpty(text)) {
+        if(!CalendarUtils.isNameValid(text, CalendarUtils.EXTENDEDKEYWORD)) {
+          uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.error-text-to-search", null)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
+      }
       try {
         EventQuery query = new EventQuery() ;
-        String text = uiForm.getUIStringInput(UIAdvancedSearchForm.TEXT).getValue() ;
+        //query.setQueryType(Query.SQL) ;
         if(! CalendarUtils.isEmpty(text)) query.setText(CalendarUtils.encodeJCRText(text)) ;
         query.setEventType(uiForm.getUIFormSelectBox(UIAdvancedSearchForm.TYPE).getValue()) ;
         if(uiForm.isSearchTask()) query.setState(uiForm.getTaskState()) ; 
