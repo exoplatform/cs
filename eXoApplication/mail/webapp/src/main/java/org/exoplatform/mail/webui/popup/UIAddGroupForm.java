@@ -92,6 +92,7 @@ public class UIAddGroupForm extends UIForm implements UIPopupComponent{
         UIAddressBookForm uiAddressBook = uiPortlet.findFirstComponentOfType(UIAddressBookForm.class);
         if (uiAddContact != null) {
           uiAddContact.refreshGroupList() ;
+          uiAddContact.setAddedNewGroup(true);
           event.getRequestContext().addUIComponentToUpdateByAjax(uiAddContact.getParent()) ;
         } else if (uiAddressBook != null) {
           uiAddressBook.updateGroup(group.getId()) ;
