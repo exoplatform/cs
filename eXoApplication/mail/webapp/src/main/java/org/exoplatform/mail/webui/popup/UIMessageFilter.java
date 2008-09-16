@@ -192,7 +192,12 @@ public class UIMessageFilter extends UIForm implements UIPopupComponent{
       MailService mailServ = MailUtils.getMailService();
       try {
         mailServ.removeFilter(SessionProviderFactory.createSystemProvider(), username, accountId, filterId);
-        uiMessageFilter.setSelectedFilterId(null);
+        List<MessageFilter> msgFilters = mailServ.getFilters(SessionProviderFactory.createSystemProvider(), username, accountId);
+        if (msgFilters != null && msgFilters.size() > 0) {
+          uiMessageFilter.setSelectedFilterId(msgFilters.get(0).getId());  
+        } else { 
+          uiMessageFilter.setSelectedFilterId(null);
+        }
         event.getRequestContext().addUIComponentToUpdateByAjax(mailPortlet.getChild(UIPopupAction.class)) ;
       } catch(Exception e) {
         e.printStackTrace();
