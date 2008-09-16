@@ -644,6 +644,7 @@ public class UIMessageList extends UIForm {
       msgFilter.setFolder((getSelectedFolderId() == null) ? null : new String[] {getSelectedFolderId()});
       msgFilter.setTag((getSelectedTagId() == null) ? null : new String[] {getSelectedTagId()});
     }
+    msgFilter.setHasStructure(false) ;
     setMessagePageList(mailSrv.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, msgFilter));
   }
 
