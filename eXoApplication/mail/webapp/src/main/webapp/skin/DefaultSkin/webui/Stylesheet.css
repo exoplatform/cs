@@ -19,6 +19,7 @@
 	margin: 0px;
 	border: none;
 	min-width: 940px;
+	min-height: 200px;
 }
 
 .UIMailPortlet {
@@ -26,6 +27,7 @@
 	border: 1px solid #b7b7b7;
 	margin: 5px;
 	min-width: 940px;
+	min-height: 200px;
 }
 
 .UIWindow .UIEmpty {
