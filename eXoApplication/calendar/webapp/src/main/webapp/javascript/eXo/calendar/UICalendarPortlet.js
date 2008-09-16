@@ -2099,7 +2099,7 @@ UIDesktop.prototype.showHideWindow = function(uiWindow, clickedElement){
         var blockResizes = eXo.core.DOMUtil.findDescendantsByClass(this.object, "div", "UIResizableBlock");
         if (blockResizes.length > 1) 
             blockResizes[0].style.overflow = "hidden";
-        eXo.calendar.UICalendarPortlet.delay = window.setTimeout("eXo.calendar.UICalendarPortlet.fixFirstLoad() ;", 2000);
+        if(uiWindow.indexOf("calendar") >=0) eXo.calendar.UICalendarPortlet.delay = window.setTimeout("eXo.calendar.UICalendarPortlet.fixFirstLoad() ;", 2000);
     }
 };
 
