@@ -19,6 +19,8 @@ package org.exoplatform.calendar.webui;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.jcr.query.Query;
+
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventPageList;
@@ -80,10 +82,17 @@ public class UISearchForm extends UIForm {
         uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.no-text-to-search", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
+      }else {
+       if(!CalendarUtils.isNameValid(text, CalendarUtils.EXTENDEDKEYWORD)) {
+         uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.error-text-to-search", null)) ;
+         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+         return ;
+       }
       }
       try {
         EventQuery eventQuery = new EventQuery() ;
         eventQuery.setText(CalendarUtils.encodeJCRText(text)) ;
+        //eventQuery.setQueryType(Query.SQL) ;
         String username = CalendarUtils.getCurrentUser() ;
         UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
         EventPageList resultPageList = 

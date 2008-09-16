@@ -717,7 +717,7 @@ public class JCRDataStorage{
     List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
     eventQuery.setCalendarPath(calendarHome.getPath()) ;
     QueryManager qm = calendarHome.getSession().getWorkspace().getQueryManager() ;
-    Query query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH) ;
+    Query query = qm.createQuery(eventQuery.getQueryStatement(), eventQuery.getQueryType()) ;
     QueryResult result = query.execute();
     NodeIterator it = result.getNodes();
     CalendarEvent calEvent ;
@@ -793,7 +793,7 @@ public class JCRDataStorage{
     List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
     eventQuery.setCalendarPath(calendarHome.getPath()) ;
     QueryManager qm = calendarHome.getSession().getWorkspace().getQueryManager() ;
-    Query query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH) ;
+    Query query = qm.createQuery(eventQuery.getQueryStatement(), eventQuery.getQueryType()) ;
     QueryResult result = query.execute();
     NodeIterator it = result.getNodes();
     CalendarEvent calEvent ;
@@ -912,6 +912,7 @@ public class JCRDataStorage{
     List<Reminder> reminders = event.getReminders() ;
     if(reminders != null && !reminders.isEmpty()) {
       for(Reminder rm : reminders) {
+        rm.setFromDateTime(event.getFromDateTime()) ;
         addReminder(eventNode, reminderFolder, rm) ;
       }
     }
@@ -1010,11 +1011,11 @@ public class JCRDataStorage{
     publicEvent.setProperty(Utils.EXO_CALENDAR_ID, event.getCalendarId()) ;
     java.util.Calendar dateTime = Utils.getInstanceTempCalendar() ;
     dateTime.setTime(event.getFromDateTime()) ;
-    fromDate = dateTime.get(java.util.Calendar.DATE) ;
+    fromDate = dateTime.get(java.util.Calendar.DAY_OF_YEAR) ;
     publicEvent.setProperty(Utils.EXO_FROM_DATE_TIME, dateTime) ;
     publicEvent.setProperty(Utils.EXO_EVENT_STATE, event.getEventState()) ;
     dateTime.setTime(event.getToDateTime()) ;
-    toDate = dateTime.get(java.util.Calendar.DATE) ;
+    toDate = dateTime.get(java.util.Calendar.DAY_OF_YEAR) ;
     if(toDate > fromDate) {
       java.util.Calendar tmpTime = Utils.getInstanceTempCalendar() ;
       tmpTime.setTime(event.getFromDateTime()) ;
@@ -1044,9 +1045,8 @@ public class JCRDataStorage{
       cal.set(java.util.Calendar.MINUTE, 0) ;
       cal.set(java.util.Calendar.SECOND, 0) ;
       cal.set(java.util.Calendar.MILLISECOND, 0) ;
-
       for(int i = fromDate + 1; i <= toDate ; i++) {
-        cal.roll(java.util.Calendar.DATE, true) ;
+        cal.roll(java.util.Calendar.DAY_OF_YEAR, true) ;
         Node dateFolder = getEventFolder(SessionProvider.createSystemProvider(), cal.getTime()) ;
         ev = new CalendarEvent() ;
         eventFolder.getSession().getWorkspace().copy(publicEvent.getPath(), dateFolder.getPath() + Utils.SLASH + ev.getId()) ;
@@ -1482,9 +1482,11 @@ public class JCRDataStorage{
     events.addAll(getUserEvents(sProvider, username, eventQuery));
     if(publicCalendarIds.length > 0) {
       eventQuery.setCalendarId(publicCalendarIds);
+      //eventQuery.setQueryType(Query.XPATH) ;
       events.addAll(getPublicEvents(SessionProvider.createSystemProvider(), eventQuery));
     }
-    events.addAll(getSharedEvents(SessionProvider.createSystemProvider(), username, eventQuery)); 
+    //eventQuery.setQueryType(Query.XPATH) ;
+    events.addAll(getSharedEvents(SessionProvider.createSystemProvider(), username, eventQuery));
     return new EventPageList(events, 10);    
   }
 
@@ -1718,9 +1720,8 @@ public class JCRDataStorage{
           Node calendar = iter.nextProperty().getParent() ;
           eventQuery.setCalendarPath(calendar.getPath()) ;
           QueryManager qm = calendar.getSession().getWorkspace().getQueryManager() ;
-          Query query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH) ;
+          Query query = qm.createQuery(eventQuery.getQueryStatement(), eventQuery.getQueryType()) ;
           NodeIterator it = query.execute().getNodes();
-
           while(it.hasNext()){
             calEvent = getEvent(sProvider, it.nextNode()) ;
             //if(eventQuery.getFilterCalendarIds()== null || !Arrays.asList(eventQuery.getFilterCalendarIds()).contains(calEvent.getCalendarId())) {

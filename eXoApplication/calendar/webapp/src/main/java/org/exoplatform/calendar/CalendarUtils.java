@@ -97,6 +97,8 @@ public class CalendarUtils {
   public static final String EXO_INVITATION = "X-Exo-Invitation".intern();
   public static final String SPECIALCHARACTER[] = {SEMICOLON,COMMA,SLASH,BACKSLASH,"'","|",GREATER_THAN,SMALLER_THAN,"\"", "?", "!", "@", "#", "$", "%","^","&","*"};
   public static final String EXTENDEDCHARACTER[] = {SEMICOLON,COMMA,SLASH,BACKSLASH,"'","|",GREATER_THAN,SMALLER_THAN,"\"", "?", "!", "@", "#", "$", "%","^","&","*","+","]","["};
+  public static final String EXTENDEDKEYWORD[] = {SEMICOLON,COMMA,SLASH,BACKSLASH,"'","|",
+                                                 GREATER_THAN,SMALLER_THAN,"\"", "?", "!", "@", "#", "$", "%","^","&","*","+","]","[","}","{",")","("};
   public static final String SIMPLECHARACTER[] = {GREATER_THAN,SMALLER_THAN};
 
   public static final String[] getUserGroups(String username) throws Exception {
