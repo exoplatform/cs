@@ -330,39 +330,43 @@ UIWeekView.prototype.rightResizeCallback = function() {
 	var UIWeekView = eXo.calendar.UIWeekView ;
 	var UIHorizontalResize = eXo.calendar.UIHorizontalResize ;	
 	var outer = UIHorizontalResize.outerElement ;
-	var totalWidth = eXo.core.DOMUtil.findAncestorByClass(outer, "EventAllday") ;
-	totalWidth = totalWidth.offsetWidth ;
-	outer.style.left = parseFloat(outer.offsetLeft/totalWidth)*100 + "%" ;
-	var delta = (outer.offsetLeft + outer.offsetWidth) - UIHorizontalResize.beforeEnd ;
+	var totalWidth = outer.parentNode.offsetWidth;
+	var delta = outer.offsetWidth - UIHorizontalResize.beforeWidth ;
 	if (delta != 0) {
+		var weekdays = parseInt(document.getElementById("UIWeekViewGridAllDay").getAttribute("numberofdays"));
 		var UICalendarPortlet = eXo.calendar.UICalendarPortlet
-		var delta = Math.round(delta*(24*7*60*60*1000)/totalWidth) ;
+		var delta = Math.round(delta*(24*weekdays*60*60*1000)/totalWidth) ;
 		var start =  parseInt(outer.getAttribute("startTime")) ;
 		var end = parseInt(outer.getAttribute("endTime")) + delta;
 		var calType = parseInt(outer.getAttribute("calType")) ;
 		var actionLink = UICalendarPortlet.adjustTime(start, end, outer) ;
 		actionLink = actionLink.toString().replace(/'\s*\)/,"&calType=" + calType + "')") ;
 		eval(actionLink) ;
-	}	
+	} else{
+		outer.style.left = parseFloat(outer.offsetLeft/outer.offsetParent.offsetWidth)*100 + "%" ;
+		outer.style.width = parseFloat(outer.offsetWidth/outer.offsetParent.offsetWidth)*100 + "%" ;
+	}
 } ;
 
 UIWeekView.prototype.leftResizeCallback = function() {
 	var UIWeekView = eXo.calendar.UIWeekView ;
-	var UIHorizontalResize = eXo.calendar.UIHorizontalResize ;	
+	var UIHorizontalResize = eXo.calendar.UIHorizontalResize ;
 	var outer = UIHorizontalResize.outerElement ;
-	var totalWidth = eXo.core.DOMUtil.findAncestorByClass(outer, "EventAllday") ;
-	totalWidth = totalWidth.offsetWidth ;
-	outer.style.left = parseFloat(outer.offsetLeft/totalWidth)*100 + "%" ;
-	var delta = outer.offsetLeft - UIHorizontalResize.beforeStart ;
+	var totalWidth = outer.parentNode.offsetWidth;
+	var delta = UIHorizontalResize.beforeWidth - outer.offsetWidth ;
 	if (delta != 0) {
+		var weekdays = parseInt(document.getElementById("UIWeekViewGridAllDay").getAttribute("numberofdays"));
 		var UICalendarPortlet = eXo.calendar.UICalendarPortlet
-		var delta = Math.round(delta*(24*7*60*60*1000)/totalWidth) ;
+		var delta = Math.round(delta*(24*weekdays*60*60*1000)/totalWidth) ;
 		var start =  parseInt(outer.getAttribute("startTime")) + delta ;
 		var end = parseInt(outer.getAttribute("endTime")) ;
 		var calType = parseInt(outer.getAttribute("calType")) ;
 		var actionLink = UICalendarPortlet.adjustTime(start, end, outer) ;
 		actionLink = actionLink.toString().replace(/'\s*\)/,"&calType=" + calType + "')") ;
 		eval(actionLink) ;
+	} else{
+		outer.style.left = parseFloat(outer.offsetLeft/outer.offsetParent.offsetWidth)*100 + "%" ;
+		outer.style.width = parseFloat(outer.offsetWidth/outer.offsetParent.offsetWidth)*100 + "%" ;
 	}	
 } ;
 
@@ -621,8 +625,7 @@ UIHorizontalResize.prototype.start = function(evt, outer, inner) {
 	this.mouseX = _e.clientX ;
 	this.outerBeforeWidth = this.outerElement.offsetWidth - 2 ;
 	this.innerBeforeWidth = this.innerElement.offsetWidth - 2 ;
-	this.beforeStart = this.outerElement.offsetLeft ;
-	this.beforeEnd = this.beforeStart + this.outerBeforeWidth ;
+	this.beforeWidth = this.outerElement.offsetWidth ;
 	document.onmousemove = eXo.calendar.UIHorizontalResize.execute ;
 	document.onmouseup = eXo.calendar.UIHorizontalResize.end ;
 } ;
@@ -650,8 +653,15 @@ UIHorizontalResize.prototype.execute = function(evt) {
 UIHorizontalResize.prototype.end = function(evt) {
 	var	UIHorizontalResize = eXo.calendar.UIHorizontalResize ;
 	if (typeof(UIHorizontalResize.callback) == "function") UIHorizontalResize.callback() ;
-	UIHorizontalResize.outerElement = null ;
-	UIHorizontalResize.innerElement = null ;
+	delete UIHorizontalResize.outerElement ;
+	delete UIHorizontalResize.innerElement ;
+	delete UIHorizontalResize.outerBeforeWidth ;
+	delete UIHorizontalResize.innerBeforeWidth ;
+	delete UIHorizontalResize.beforeWidth ;
+	delete UIHorizontalResize.callback ;
+	delete UIHorizontalResize.mouseX ;
+	delete UIHorizontalResize.isLeft ;
+	delete UIHorizontalResize.beforeLeft ;
 	document.onmousemove = null ;
 	document.onmouseup = null ;
 } ;
