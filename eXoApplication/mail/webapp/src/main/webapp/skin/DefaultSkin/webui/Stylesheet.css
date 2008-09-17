@@ -1796,3 +1796,7 @@
 .UIMailPortlet .UIPopupActionEventContainer {
 	min-width: 440px;;
 }
+
+.UIMailPortlet .UIAccountSetting .UIForm .UIFormGrid td.FieldLabel {
+	white-space: normal;
+}
