@@ -4,11 +4,16 @@
 			<div class="LeftBar">
 				<div class="RightBar">
 					<div class="CenterBar">
-						<a href="javascript:eXo.mail.MailServiceHandler.checkMail(true)" class="ControlButton">
+						<a href="<%=uicomponent.event("CheckMail")%>" class="ControlButton">
 							<div class="IconHolder CheckMailIcon">
 								<div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.check-mail") %></div>
 							</div>
 						</a>
+						<!-- a onclick="eXo.mail.MailServiceHandler.stopCheckMail()" class="ControlButton">
+							<div class="IconHolder StopCheckMailIcon">
+								<div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.stop-check-mail") %></div>
+							</div>
+						</a -->
 						<a href="<%=uicomponent.event("Compose")%>" class="ControlButton">
 							<div class="IconHolder ComposeIcon">
 								<div class="Label"> <%=_ctx.appRes(uicomponent.id+ ".label.compose") %> </div>
