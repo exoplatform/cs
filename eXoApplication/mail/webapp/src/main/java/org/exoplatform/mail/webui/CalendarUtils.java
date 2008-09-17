@@ -190,7 +190,7 @@ public class CalendarUtils {
     return getBeginDay(cal) ;
   }
   public static Calendar getEndDay(Date date)  {
-    Calendar cal = GregorianCalendar.getInstance() ;
+    Calendar cal = getInstanceTempCalendar() ;
     cal.setTime(date) ;
     return getEndDay(cal) ;
   }
@@ -287,5 +287,12 @@ public class CalendarUtils {
       break ;
     }
     return isValid  ;
+  }
+  public static Calendar getInstanceTempCalendar() { 
+    Calendar  calendar = GregorianCalendar.getInstance() ;
+    calendar.setLenient(false) ;
+    int gmtoffset = calendar.get(Calendar.DST_OFFSET) + calendar.get(Calendar.ZONE_OFFSET);
+    calendar.setTimeInMillis(System.currentTimeMillis() - gmtoffset) ; 
+    return  calendar;
   }
 }

@@ -373,7 +373,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
     UIFormSelectBox timeField = eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_TO_TIME) ;
     if(getEventAllDate()) {
       DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
-      return CalendarUtils.getBeginDay(df.parse(toField.getValue())).getTime();
+      df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
+      return CalendarUtils.getEndDay(df.parse(toField.getValue())).getTime();
     } 
     DateFormat df = new SimpleDateFormat(CalendarUtils.DATETIMEFORMAT) ;
     return df.parse(toField.getValue() + " " + timeField.getValue()) ;
@@ -623,6 +624,12 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
         } else if(from.equals(to)) {
           to = CalendarUtils.getEndDay(from).getTime() ;
         } 
+        if(uiForm.getEventAllDate()) {
+          java.util.Calendar tempCal = CalendarUtils.getInstanceTempCalendar() ;
+          tempCal.setTime(to) ;
+          tempCal.add(java.util.Calendar.MILLISECOND, -1) ;
+          to = tempCal.getTime() ;
+        }
         calendarEvent.setCalType(uiForm.calType_) ;
         calendarEvent.setFromDateTime(from) ;
         calendarEvent.setToDateTime(to);
