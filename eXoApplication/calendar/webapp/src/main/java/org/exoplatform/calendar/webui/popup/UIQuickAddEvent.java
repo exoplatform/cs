@@ -178,8 +178,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
       if(getIsAllDay()) {
         DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
         df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
-        df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
-        return CalendarUtils.getEndDay(df.parse(toField.getValue())).getTime();
+        return CalendarUtils.getBeginDay(df.parse(toField.getValue())).getTime();
       } 
       DateFormat df = new SimpleDateFormat(dateFormat + " " + timeFormat, locale) ;
       df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;

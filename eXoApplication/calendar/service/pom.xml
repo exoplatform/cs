@@ -37,20 +37,7 @@
       <artifactId>exo.cs.eXoApplication.mail.service</artifactId>
       <version>${org.exoplatform.cs.version}</version>      
     </dependency>
-    <!--
-	<dependency>
-    	<groupId>org.exoplatform.ws</groupId>
-  		<artifactId>exo.ws.frameworks.cometd.service</artifactId>
-			<version>${org.exoplatform.ws.version}</version>
-			<scope>provided</scope>
-  	</dependency>
-		
-	<dependency>                                                                                                                         
-      <groupId>org.exoplatform.ws</groupId>                                                                                              
-      <artifactId>exo.ws.frameworks.json</artifactId>                                                                                    
-      <version>provided</version>                                                                                                           
-    </dependency>
-	-->
+    
 	<dependency>
       <groupId>org.exoplatform.ws</groupId>
       <artifactId>exo.ws.frameworks.cometd.service</artifactId>

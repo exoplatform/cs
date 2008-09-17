@@ -8,7 +8,9 @@
 .UIMailPortlet .CheckMailIcon {
 	background: url('icons/CheckMailIcon.gif') no-repeat ;
 }
-
+.UIMailPortlet .StopCheckMailIcon {
+	background: url('icons/StopCheckMailIcon.gif') no-repeat ;
+}
 .UIMailPortlet .InboxIcon {
 	background: url('icons/InboxIcon.gif') no-repeat left center ;
 }

@@ -65,6 +65,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.container.RootContainer;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.AccountData;
 import org.exoplatform.mail.service.Attachment;
@@ -76,6 +77,7 @@ import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.MessagePageList;
 import org.exoplatform.mail.service.MimeMessageParser;
+import org.exoplatform.mail.service.Reminder;
 import org.exoplatform.mail.service.ServerConfiguration;
 import org.exoplatform.mail.service.SpamFilter;
 import org.exoplatform.mail.service.Tag;
@@ -85,6 +87,9 @@ import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.scheduler.JobInfo;
 import org.exoplatform.services.scheduler.JobSchedulerService;
 import org.exoplatform.services.scheduler.PeriodInfo;
+import org.exoplatform.ws.frameworks.cometd.ContinuationService;
+import org.exoplatform.ws.frameworks.json.impl.JsonGeneratorImpl;
+import org.exoplatform.ws.frameworks.json.value.JsonValue;
 
 import com.sun.mail.smtp.SMTPSendFailedException;
 
@@ -505,6 +510,9 @@ public class MailServiceImpl implements MailService {
     boolean isPop3 = account.getProtocol().equals(Utils.POP3);
     boolean isImap = account.getProtocol().equals(Utils.IMAP);
     Date lastCheckedDate = account.getLastCheckedDate();
+    ExoContainer container = RootContainer.getInstance();
+    container = ((RootContainer)container).getPortalContainer("portal");
+    ContinuationService continuation = (ContinuationService) container.getComponentInstanceOfType(ContinuationService.class);
     try {
       Properties props = System.getProperties();
       props.setProperty("mail.mime.base64.ignoreerrors", "true"); // this line fix for base64 encode problem with corrupted attachments
@@ -687,6 +695,12 @@ public class MailServiceImpl implements MailService {
           while (i < totalNew && !info.isRequestStop()) {
             msg = msgList.get(i);
             logger.warn("Fetching message " + (i + 1) + " ...");
+           /* JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
+            Reminder rmdObj = new Reminder() ;   
+            rmdObj.setFromDateTime(new Date()) ;
+            rmdObj.setSummary("Fetching message " + (i + 1) + "/" + totalNew) ;
+            JsonValue json = generatorImpl.createJsonObject(rmdObj);
+            continuation.sendMessage(username, "/eXo/Application/mail/messages", json);*/
             checkingLog_.get(key).setFetching(i + 1);
             checkingLog_.get(key).setStatusMsg("Fetching message " + (i + 1) + "/" + totalNew);
             t1 = System.currentTimeMillis();

@@ -27,6 +27,7 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPopupMessages;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
+import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 
 /**
  * Author : Nhu Dinh Thuan
@@ -76,5 +77,12 @@ public class UIMailPortlet extends UIPortletApplication {
     UIPopupAction popupAction = getChild(UIPopupAction.class) ;
     popupAction.deActivate() ;
     context.addUIComponentToUpdateByAjax(popupAction) ;
+  }
+  public String getRemoteUser() throws Exception {
+    return CalendarUtils.getCurrentUser() ;
+  }
+  public String getUserToken()throws Exception {
+    ContinuationService continuation = getApplicationComponent(ContinuationService.class) ;
+    return continuation.getUserToken(this.getRemoteUser());
   }
 } 
