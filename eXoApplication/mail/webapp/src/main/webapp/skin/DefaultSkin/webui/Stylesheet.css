@@ -145,6 +145,7 @@
 .UIMailPortlet .UISelectAccount .UIPopupCategory {
 	top:21px;
 	left:0px ;
+	width: auto;
 }
 
 .UIMailPortlet .UISelectAccount .UIRightClickPopupMenu {
