@@ -890,7 +890,6 @@ public class UIMessageList extends UIForm {
       UIPrintPreview uiPrintPreview = uiPopup.activate(UIPrintPreview.class, 700) ;
       uiPrintPreview.setPrintMessage(message) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class));
     }
   }
 
