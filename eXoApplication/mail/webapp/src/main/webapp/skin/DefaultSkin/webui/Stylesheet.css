@@ -1344,6 +1344,7 @@
 .UIMailPortlet .UIContactsPopup .ContactContainer .IconHolder {
 	margin: 0px;
 	padding-left: 20px;
+	height: 20px;
 }
 
 .UIMailPortlet .UIContactsPopup .Input {
@@ -1428,7 +1429,7 @@
 
 .UIMailPortlet .UIContactsPopup .RightContacts .ContactContainer {
 	border: 1px solid #ccc;
-	_width: 95%;
+	width: 98%;
 }
 
 .UIMailPortlet .UIContactsPopup .BoxSearch {
