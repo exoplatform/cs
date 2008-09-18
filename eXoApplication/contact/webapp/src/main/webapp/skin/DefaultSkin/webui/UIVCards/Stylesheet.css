@@ -1,6 +1,7 @@
 .UIContactPortlet .UIVCards {
 	border: 1px solid #c0c0c0;
 	padding: 1px;
+	margin-top: 4px;
 }
 
 .UIContactPortlet .UIVCards .VCardsBar {
