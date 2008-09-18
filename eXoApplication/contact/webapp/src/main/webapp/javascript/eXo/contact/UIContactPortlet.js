@@ -10,6 +10,8 @@ UIContactPortlet.prototype.toggleSelectAll = function(handler) {
     for (var i=0; i<eLst.length; i++) {
        eLst[i].checked = curState ;
     }
+    if(document.getElementById("ExportForm") != null)
+		eXo.webui.UIForm.submitForm('contact#ExportForm','CheckAll', true)
   }
 } ;
 

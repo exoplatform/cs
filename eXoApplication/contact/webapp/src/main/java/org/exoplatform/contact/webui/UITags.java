@@ -16,6 +16,7 @@
  */
 package org.exoplatform.contact.webui;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -32,6 +33,7 @@ import org.exoplatform.contact.webui.UIContacts.FullNameComparator;
 import org.exoplatform.contact.webui.popup.UIExportForm;
 import org.exoplatform.contact.webui.popup.UIEditTagForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
+import org.exoplatform.contact.webui.popup.UIExportForm.ContactData;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -128,14 +130,14 @@ public class UITags extends UIComponent {
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = uiContactPortlet.getChild(UIPopupAction.class) ;  
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ; 
-      Contact[] contacts = null ;
+      List<Contact> contacts = null ;
       if (!ContactUtils.isEmpty(uiContacts.getSelectedTag()) && uiContacts.getSelectedTag().equals(tagId)) {
-        contacts = uiContacts.getContactPageList().getAll().toArray(new Contact[] {}) ;
+        contacts = uiContacts.getContactPageList().getAll() ;
       } else {
-        contacts = ContactUtils.getContactService().getContactPageListByTag(SessionProviderFactory
-            .createSystemProvider(), ContactUtils.getCurrentUser(), tagId).getAll().toArray(new Contact[] {});
+        contacts = ContactUtils.getContactService().getContactPageListByTag(
+            SessionProviderFactory.createSystemProvider(), ContactUtils.getCurrentUser(), tagId).getAll();
       }
-      if (contacts == null || contacts.length == 0) {
+      if (contacts == null || contacts.size() == 0) {
         UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UITag.msg.noContactToExport", null,
           ApplicationMessage.WARNING)) ;
@@ -144,10 +146,16 @@ public class UITags extends UIComponent {
       }
       UIExportForm uiExportForm = popupAction.activate(UIExportForm.class, 500) ;
       uiExportForm.setId("ExportForm");
-      uiExportForm.setSelectedTag(uiForm.tagMap_.get(tagId).getName()) ;
-      
-      uiExportForm.setContacts(contacts) ;
-      uiExportForm.updateList();
+      uiExportForm.setSelectedTag(uiForm.tagMap_.get(tagId).getName()) ; 
+      List<ContactData> data = new ArrayList<ContactData>() ;
+      for(Contact contact : contacts) {
+        ContactData contactData = uiExportForm.new ContactData(contact.getId(), contact.getFullName(), contact.getEmailAddress()) ;
+        data.add(contactData) ;
+      }
+      Map<String, Contact> contactMap = new HashMap<String, Contact>() ;
+      for (Contact contact : contacts) contactMap.put(contact.getId(), contact) ;
+      uiExportForm.setContacts(contactMap) ;
+      uiExportForm.setContactList(data);
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   } 

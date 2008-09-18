@@ -17,10 +17,13 @@
 package org.exoplatform.contact.service;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.PathNotFoundException;
 import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.query.Query;
@@ -171,8 +174,7 @@ public class ContactPageList extends JCRPageList {
   }
   
 	@Override
-	public List<Contact> getAll() throws Exception { 
-    
+	public List<Contact> getAll() throws Exception {    
     if(iter_ == null) {
       Session session = getJCRSession(username_) ;
       if(isQuery_) {
@@ -186,8 +188,6 @@ public class ContactPageList extends JCRPageList {
       }
       session.logout() ;
     }
-    
-    
     List<Contact> contacts = new ArrayList<Contact>();
     while (iter_.hasNext()) {
       Node contactNode = iter_.nextNode();
@@ -196,6 +196,41 @@ public class ContactPageList extends JCRPageList {
     return contacts; 
   }
 
+	public Map<String, String> getEmails() throws Exception {
+    if(iter_ == null) {
+      Session session = getJCRSession(username_) ;
+      if(isQuery_) {
+        QueryManager qm = session.getWorkspace().getQueryManager() ;
+        Query query = qm.createQuery(value_, Query.XPATH);
+        QueryResult result = query.execute();
+        iter_ = result.getNodes();
+      } else {
+        Node node = (Node)session.getItem(value_) ;
+        iter_ = node.getNodes() ;
+      }
+      session.logout() ;
+    }
+    NodeIterator inter = iter_ ;
+    Map<String, String> emails = new LinkedHashMap<String, String>() ;
+    while (inter.hasNext()) {
+      Node contactNode = inter.nextNode();
+      String email = null ;
+      String fullName = null ;
+      try {
+        email = contactNode.getProperty("exo:emailAddress").getString() ;
+      } catch (PathNotFoundException e) {
+        email = "" ;
+      }
+      try {
+        fullName = contactNode.getProperty("exo:fullName").getString() ;
+      } catch (PathNotFoundException e) {
+        fullName = "" ;
+      }
+      emails.put(contactNode.getProperty("exo:id").getString(), fullName + Utils.SPLIT + email) ;
+    }
+    return emails; 
+  }
+  
   public void setList(List<Contact> contacts) { }
   
   private Session getJCRSession(String username) throws Exception {

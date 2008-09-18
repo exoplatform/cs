@@ -1,9 +1,8 @@
 <%
   import java.util.ArrayList;
-
-  import org.exoplatform.contact.service.Contact;
+  import org.exoplatform.contact.webui.popup.UIExportForm.ContactData;
   import org.exoplatform.contact.ContactUtils;
-	uiform.begin()
+  uiform.begin()
 %>
 
 <div class="UIExportContactForm">
@@ -27,7 +26,12 @@
 				<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
 		  		<thead>
 		  			<tr>
-		  		    <th style="width: 23px; padding-left: 3px;" class="text"><input type="checkbox" class="checkbox" title="Check all" value="4" onclick="eXo.contact.UIContactPortlet.toggleSelectAll(this) ;"/></th>
+		  			<% 
+		  				checked = "" ;
+		  				if (uicomponent.isCheckAll) checked = "checked" ;
+		  			 %>
+		  			
+		  		    <th style="width: 23px; padding-left: 3px;" class="text"><input type="checkbox" $checked class="checkbox" name="checkAll " title="<%=_ctx.appRes(uicomponent.getName() + ".label.checkAll")%>" value="4" onclick="eXo.contact.UIContactPortlet.toggleSelectAll(this) ;"/></th>
 		  		    <th style="width: 40%; padding-left: 2px;" class="text">
 		  		      	<div>  <%=_ctx.appRes(uicomponent.getName() + ".label.name")%> </div>
 		  		    </th>
@@ -38,7 +42,7 @@
 		  	 	</thead>
 		  	 	<tbody>
 		  	 		<%  
-							Contact[] contacts = uicomponent.getContacts();
+							ContactData[] contacts = uicomponent.getContacts();
 							for(contact in contacts) {
 								checkboxField = uicomponent.getChildById(contact.getId()) ;
 						%>
@@ -53,12 +57,14 @@
 									<%=(contact.getFullName()==null ? "" : ContactUtils.encodeHTML(contact.getFullName()))%>
 								</div>
 							</td>
-							<td class="text"><%=(contact.getEmailAddress()==null ? "" : contact.getEmailAddress())%></td>
+							<td class="text"><%=(contact.getEmail()==null ? "" : contact.getEmail())%></td>
 		
 		   			</tr>
 		     	<% } %>  
 		  	  </tbody>
 				</table>
+				
+				<%_ctx.include("app:/templates/contact/webui/popup/UIPageIterator.gtmpl");%>
 			</div>
 			
 			<div class="ExportForm">
