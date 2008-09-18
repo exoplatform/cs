@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.jcr.PathNotFoundException;
 
@@ -783,8 +784,21 @@ public class UIContacts extends UIForm implements UIPopupComponent {
             } catch (PathNotFoundException e) { }
           } else {
             try {
+              String[] tags = contact.getTags() ;
+              if (tags != null && tags.length > 0) {
+                Set<String> tagsMap = uiWorkingContainer.findFirstComponentOfType(UITags.class).getTagMap().keySet() ;
+                List<String> tagsList = new ArrayList<String>() ;
+                tagsList.addAll(Arrays.asList(tags)) ;
+                for (String tagId : tags) {
+                  if (tagsMap.contains(tagId)) {
+                    tagsList.remove(tagId) ;
+                    contact.setTags(tagsList.toArray(new String[] {})) ;
+                    contactService.saveSharedContact(username, contact) ;
+                  }                  
+                }
               contactService.removeUserShareContact(
                   SessionProviderFactory.createSystemProvider(), contact.getPath(), id, username) ;
+              }              
             } catch (PathNotFoundException e) {
               uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-not-existed", null
                   , ApplicationMessage.WARNING)) ;
@@ -798,8 +812,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       }
       if (!uiContacts.isSelectSharedContacts) {
         removedContacts.addAll(contactService.removeContacts(SessionProviderFactory.createSessionProvider(), username, contactIds)) ;          
-      }
-      
+      }      
       if (ContactUtils.isEmpty(uiContacts.selectedGroup) && ContactUtils.isEmpty(uiContacts.selectedTag_)) {
         uiContacts.setContact(removedContacts, false) ;
       }
