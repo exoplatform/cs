@@ -370,12 +370,18 @@ UIContactPortlet.prototype.printList = function (obj){
 	if(eXo.core.DOMUtil.findChildrenByClass(document.body, "div", "UIPrintContainer").length > 0) return ;
 	var div = document.createElement("div") ;
 	div.className = "UIContactPortlet UIPrintContainer" ;
+	div.oncontextmenu = eXo.contact.UIContactPortlet.disableContextMenu ;
 	div.appendChild(printContainer) ;
 	var UIPortalApplication = document.getElementById("UIPortalApplication") ;
 	UIPortalApplication.style.display = "none" ;
 	document.body.appendChild(div) ;
 	eXo.core.DOMUtil.removeElement(UIAction) ;
 } ;
+
+UIContactPortlet.prototype.disableContextMenu = function(evt) {
+	eXo.core.EventManager.cancelBubble(evt);
+	return false ;
+};
 
 UIContactPortlet.prototype.checkLayout = function() {
 	eXo.contact.LayoutManager = new LayoutManager("contactLayout");
@@ -639,5 +645,18 @@ UIContactPortlet.prototype.showTagMenu = function(obj, event) {
 	var uiPopupCategory = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div","UIPopupCategory") ;
 	uiPopupCategory.style.left = obj.offsetWidth - uiPopupCategory.offsetWidth + "px" ;
 } ;
+/*
+UIContactPortlet.prototype.setUpCheckboxCallback = function(obj){
+	obj = (typeof(obj) == "string")? document.getElementById(obj) : obj ;
+	var tbody = eXo.core.DOMUtil.findDescendantsByTagName(obj, "tbody")[0];
+	eXo.core.EventManager.addEvent(tbody,"click",eXo.contact.UIContactPortlet.isChecked);
+};
+
+UIContactPortlet.prototype.isChecked = function(evt){
+	var target = eXo.core.EventManager.getEventTargetByTagName(evt,"input");
+	if(!target || target.checked) return ;
+	var checkall = eXo.core.DOMUtil.findDescendantsByTagName(this.parentNode, "input")[0];
+	checkall.checked = false ;
+};*/
 
 eXo.contact.UIContactPortlet = new UIContactPortlet() ;
