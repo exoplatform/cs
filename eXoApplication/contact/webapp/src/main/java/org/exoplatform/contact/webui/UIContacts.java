@@ -467,11 +467,11 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIContacts uiContacts = event.getSource() ;
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
       List<String> contactIds = new ArrayList<String>();
-      if (!ContactUtils.isEmpty(contactId)) {
+      if (!ContactUtils.isEmpty(contactId) && !contactId.equals("null")) {
         contactIds.add(contactId) ;
       } else {
         contactIds = uiContacts.getCheckedContacts() ;
-        if (contactIds.size() == 0) {
+        if (contactIds.size() == 0 ) {
           UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-toTag", null,
               ApplicationMessage.WARNING)) ;
