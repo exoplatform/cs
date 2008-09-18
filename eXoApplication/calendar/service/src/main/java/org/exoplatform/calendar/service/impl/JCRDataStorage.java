@@ -883,9 +883,9 @@ public class JCRDataStorage{
       try {
         eventNode = calendarNode.getNode(event.getId()) ;
       } catch (Exception e) {
-        CalendarEvent tempEvent = new CalendarEvent() ;
-        eventNode = calendarNode.addNode(tempEvent.getId(), Utils.EXO_CALENDAR_EVENT) ;
-        eventNode.setProperty(Utils.EXO_ID, tempEvent.getId()) ;
+        System.out.println("\n\n event added");
+        eventNode = calendarNode.addNode(event.getId(), Utils.EXO_CALENDAR_EVENT) ;
+        eventNode.setProperty(Utils.EXO_ID, event.getId()) ;
       }
       removeReminder(SessionProvider.createSystemProvider(), eventNode) ;
     }
