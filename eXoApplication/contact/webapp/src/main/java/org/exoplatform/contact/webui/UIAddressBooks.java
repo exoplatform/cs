@@ -26,7 +26,6 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import javax.jcr.PathNotFoundException;
-
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
@@ -35,6 +34,7 @@ import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.JCRPageList;
 import org.exoplatform.contact.service.SharedAddressBook;
+import org.exoplatform.contact.service.Utils;
 import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.service.impl.NewUserListener;
 import org.exoplatform.contact.webui.popup.UIAddEditPermission;
@@ -47,6 +47,7 @@ import org.exoplatform.contact.webui.popup.UIExportForm;
 import org.exoplatform.contact.webui.popup.UIImportForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.webui.popup.UIPopupContainer;
+import org.exoplatform.contact.webui.popup.UIExportForm.ContactData;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -260,15 +261,17 @@ public class UIAddressBooks extends UIComponent {
         String username = ContactUtils.getCurrentUser() ;
         Map<String, String> privateGroup = uiAddressBook.privateAddressBookMap_ ;
         if (privateGroup.containsKey(addressBookId)) {
-          uiExportForm.setSelectedGroup(privateGroup.get(addressBookId)) ;
+          uiExportForm.setSelectedGroup(JCRDataStorage.PRIVATE + Utils.SPLIT +
+              addressBookId + Utils.SPLIT + privateGroup.get(addressBookId)) ;
           contacts = contactService.getContactPageListByGroup(sessionProvider, username, addressBookId) ;
         } else if (ContactUtils.getUserGroups().contains(addressBookId)){        
-          uiExportForm.setSelectedGroup(addressBookId) ;
+          uiExportForm.setSelectedGroup(JCRDataStorage.PUBLIC + Utils.SPLIT +
+              addressBookId + Utils.SPLIT + addressBookId) ;
           contacts = contactService.getPublicContactsByAddressBook(sessionProvider, addressBookId);
         } else {
         	SharedAddressBook address = uiAddressBook.sharedAddressBookMap_.get(addressBookId) ;
-          uiExportForm.setSelectedGroup(ContactUtils
-              .getDisplayAdddressShared(address.getSharedUserId(), address.getName())) ;
+          uiExportForm.setSelectedGroup(JCRDataStorage.SHARED + Utils.SPLIT + 
+              addressBookId + Utils.SPLIT + ContactUtils.getDisplayAdddressShared(address.getSharedUserId(), address.getName())) ;
           contacts = contactService.getSharedContactsByAddressBook(
               sessionProvider, username, address) ;
         }
@@ -278,14 +281,22 @@ public class UIAddressBooks extends UIComponent {
             ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;  
-        } else if (contacts.getAvailable() >= 150) {
-	      UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
-	      uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.too-many-contact", null, ApplicationMessage.WARNING)) ;
-	      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-	      return ;          
-        }        
-        uiExportForm.setContacts(contacts.getAll().toArray(new Contact[] {})) ;         
-        uiExportForm.updateList();
+        }
+        Map<String, String> resultMap = contacts.getEmails() ;
+        List<ContactData> data = new ArrayList<ContactData>() ;
+        for(String ct : resultMap.keySet()) {
+          String id  = ct ;
+          String value = resultMap.get(id) ; 
+          if(resultMap.get(id) != null && resultMap.get(id).trim().length() > 0) {
+            if(value.lastIndexOf(Utils.SPLIT) > 0) {
+              String fullName = value.substring(0,value.lastIndexOf(Utils.SPLIT)) ;
+              String email = value.substring(value.lastIndexOf(Utils.SPLIT) + Utils.SPLIT.length()) ;
+              ContactData contactData = uiExportForm.new ContactData(id, fullName, email) ;
+              data.add(contactData) ;
+            }
+          }
+        }
+        uiExportForm.setContactList(data);
         uiPopupAction.activate(uiExportForm, 500, 0) ;
       } else {
         

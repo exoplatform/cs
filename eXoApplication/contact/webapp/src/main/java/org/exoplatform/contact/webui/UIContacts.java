@@ -50,6 +50,7 @@ import org.exoplatform.contact.webui.popup.UITagForm;
 import org.exoplatform.contact.webui.popup.UIContactForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.webui.popup.UIPopupContainer;
+import org.exoplatform.contact.webui.popup.UIExportForm.ContactData;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -835,8 +836,14 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIExportForm uiExportForm = uiPopupAction.activate(UIExportForm.class, 500) ;
       uiExportForm.setId("ExportForm");
       Contact contact = uiContacts.contactMap.get(contactId) ;
-      uiExportForm.setContacts(new Contact[] { contact }) ;
-      uiExportForm.updateList();
+      List<ContactData> data = new ArrayList<ContactData>() ;
+      ContactData contactData = uiExportForm.new ContactData(contact.getId(), contact.getFullName(), contact.getEmailAddress()) ;
+      data.add(contactData) ;
+      
+      Map<String, Contact> contactMap = new HashMap<String, Contact>() ;
+      contactMap.put(contact.getId(), contact) ;
+      uiExportForm.setContacts(contactMap) ;
+      uiExportForm.setContactList(data);
       event.getRequestContext()
         .addUIComponentToUpdateByAjax(uiContactPortlet.findFirstComponentOfType(UIContactContainer.class));
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
