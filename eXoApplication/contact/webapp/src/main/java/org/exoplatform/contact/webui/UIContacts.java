@@ -796,9 +796,9 @@ public class UIContacts extends UIForm implements UIPopupComponent {
                     contactService.saveSharedContact(username, contact) ;
                   }                  
                 }
+              }              
               contactService.removeUserShareContact(
                   SessionProviderFactory.createSystemProvider(), contact.getPath(), id, username) ;
-              }              
             } catch (PathNotFoundException e) {
               uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-not-existed", null
                   , ApplicationMessage.WARNING)) ;
