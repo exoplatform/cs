@@ -906,7 +906,9 @@ public class JCRDataStorage{
     eventNode.setProperty(Utils.EXO_PRIORITY, event.getPriority()) ;
     eventNode.setProperty(Utils.EXO_IS_PRIVATE, event.isPrivate()) ;
     eventNode.setProperty(Utils.EXO_EVENT_STATE, event.getEventState()) ;
+    if(event.getInvitation() == null) event.setInvitation(new String[]{}) ; 
     eventNode.setProperty(Utils.EXO_INVITATION,  event.getInvitation()) ;
+    if(event.getParticipant() == null) event.setParticipant(new String[]{}) ; 
     eventNode.setProperty(Utils.EXO_PARTICIPANT, event.getParticipant()) ;
     // add reminder child node
     List<Reminder> reminders = event.getReminders() ;

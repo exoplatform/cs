@@ -311,9 +311,7 @@ public class ICalendarImportExport implements CalendarImportExport{
         if(event.getPriority() != null) exoEvent.setPriority(event.getPriority().getValue()) ;
         exoEvent.setPrivate(true) ;
         PropertyList attendees = event.getProperties(Property.ATTENDEE) ;
-        if(attendees.size() < 1) {
-          exoEvent.setInvitation(new String[]{}) ;
-        }else {
+        if(!attendees.isEmpty()) {
           String[] invitation = new String[attendees.size()] ;
           for(int i = 0; i < attendees.size(); i ++) {
             invitation[i] = ((Attendee)attendees.get(i)).getValue() ;

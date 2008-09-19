@@ -78,6 +78,25 @@ public class CalendarUtils {
   public static final String COLON = ":".intern();
   public static final String COMMA = ",".intern();
   public static final String STAR = "*".intern();
+  public static final String PLUS = "+".intern();
+  public static final String AND = "&".intern();
+  public static final String OR = "|".intern();
+  public static final String PERCENT = "%".intern();
+  public static final String QUESTION_MARK = "?".intern();
+  public static final String SINGLE_QUOTE = "'".intern();
+  public static final String QUOTE = "\"".intern();
+  public static final String AT = "@".intern();
+  public static final String EXCLAMATION = "!".intern() ;
+  public static final String SHARP = "#".intern() ;
+  public static final String OPEN_PARENTHESIS = "(".intern() ;
+  public static final String CLOSE_PARENTHESIS = ")".intern() ;
+  public static final String OPEN_SQUARE_BRACKET = "[".intern() ;
+  public static final String CLOSE_SQUARE_BRACKET = "]".intern() ;
+  public static final String OPEN_SHARP_BRACKET = "{".intern() ;
+  public static final String CLOSE_SHARP_BRACKET = "}".intern() ;
+  public static final String MONEY_MARK = "$".intern() ;
+  public static final String EXPONENT = "^".intern() ;
+  public static final String MINUS = "-".intern();
   public static final String SLASH = "/".intern();
   public static final String BACKSLASH = "\\".intern();
   public static final String DOUBLESCORE = "--".intern();
@@ -95,10 +114,16 @@ public class CalendarUtils {
   public static final int DEFAULT_TIMEITERVAL = 15;
   public static final long MILISECONS_OF_DAY = 24*60*59*1000;
   public static final String EXO_INVITATION = "X-Exo-Invitation".intern();
-  public static final String SPECIALCHARACTER[] = {SEMICOLON,COMMA,SLASH,BACKSLASH,"'","|",GREATER_THAN,SMALLER_THAN,"\"", "?", "!", "@", "#", "$", "%","^","&","*"};
-  public static final String EXTENDEDCHARACTER[] = {SEMICOLON,COMMA,SLASH,BACKSLASH,"'","|",GREATER_THAN,SMALLER_THAN,"\"", "?", "!", "@", "#", "$", "%","^","&","*","+","]","["};
-  public static final String EXTENDEDKEYWORD[] = {SEMICOLON,COMMA,SLASH,BACKSLASH,"'","|",
-                                                 GREATER_THAN,SMALLER_THAN,"\"", "?", "!", "@", "#", "$", "%","^","&","*","+","]","[","}","{",")","("};
+  public static final String SPECIALCHARACTER[] = {SEMICOLON,COMMA,SLASH,BACKSLASH,
+    SINGLE_QUOTE,OR,GREATER_THAN,SMALLER_THAN,QUOTE, QUESTION_MARK, EXCLAMATION, 
+    AT, SHARP, MONEY_MARK, PERCENT,EXPONENT,AND,STAR};
+  public static final String EXTENDEDCHARACTER[] = {SEMICOLON,COMMA,SLASH,BACKSLASH,
+    SINGLE_QUOTE,OR,GREATER_THAN,SMALLER_THAN,QUOTE, QUESTION_MARK, EXCLAMATION, 
+    AT, SHARP, MONEY_MARK, PERCENT,EXPONENT,AND,STAR,PLUS,OPEN_SQUARE_BRACKET,CLOSE_SQUARE_BRACKET};
+  public static final String EXTENDEDKEYWORD[] = {SEMICOLON,COMMA,SLASH,BACKSLASH,
+    SINGLE_QUOTE,OR,GREATER_THAN,SMALLER_THAN,QUOTE, QUESTION_MARK, EXCLAMATION, 
+    AT, SHARP, MONEY_MARK, PERCENT,EXPONENT,AND,STAR,PLUS,OPEN_SQUARE_BRACKET,CLOSE_SQUARE_BRACKET,
+    OPEN_SHARP_BRACKET,CLOSE_SHARP_BRACKET,OPEN_PARENTHESIS,CLOSE_PARENTHESIS};
   public static final String SIMPLECHARACTER[] = {GREATER_THAN,SMALLER_THAN};
 
   public static final String[] getUserGroups(String username) throws Exception {
