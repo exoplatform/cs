@@ -1635,7 +1635,7 @@ public class JCRDataStorage {
           + Utils.SPLIT + contactNode.getProperty("exo:emailAddress").getString()) ;
     }
     filter.setOwner(null) ;
-    
+
     // private contacts
     if(username != null && username.length() > 0) {
       Node contactHome = getUserContactHome(sysProvider, username) ;
@@ -1650,7 +1650,7 @@ public class JCRDataStorage {
             + Utils.SPLIT + contactNode.getProperty("exo:emailAddress").getString()) ;        
       }
     }
-    
+
     //share contacts
     try {
       Node sharedContact = getSharedContact(username) ;      
@@ -1679,16 +1679,17 @@ public class JCRDataStorage {
         }
       }
     } catch (PathNotFoundException e) { }
-    
     Node sharedAddressBookMock = getSharedAddressBook(username) ;
     PropertyIterator iter = sharedAddressBookMock.getReferences() ;
-    Node addressBook ;      
+    Node addressBook ;
+    
+//  add if to fix bug 1407
+    boolean hasGroup = (filter.getCategories() != null && filter.getCategories().length > 0) ; 
     while(iter.hasNext()) {
       addressBook = iter.nextProperty().getParent() ;
       Node contactHomeNode = addressBook.getParent().getParent().getNode(CONTACTS) ;
       filter.setAccountPath(contactHomeNode.getPath()) ;
-      // add
-      filter.setCategories(new String[] {addressBook.getName()}) ;
+      if (!hasGroup) filter.setCategories(new String[] {addressBook.getName()}) ;
       filter.setUsername(addressBook.getProperty("exo:sharedUserId").getString()) ;
       qm = contactHomeNode.getSession().getWorkspace().getQueryManager() ;      
       query = qm.createQuery(filter.getStatement(), Query.XPATH) ;  
