@@ -107,7 +107,7 @@ public class ContactFilter {
     //  desclared full text query
     if(text != null && text.length() > 0) {
       if (username != null && text.equalsIgnoreCase(username)) {
-        stringBuffer.append("@exo:id = '" + text + "' or ")
+        stringBuffer.append("(@exo:id = '" + text + "' or ")
                     .append("@exo:fullName = '" + text + "' or ")
                     .append("@exo:firstName = '" + text + "' or")
                     .append("@exo:lastName = '" + text + "' or")
@@ -139,7 +139,7 @@ public class ContactFilter {
                     .append("@exo:homeFax = '" + text + "' or")
                     .append("@exo:personalSite = '" + text + "' or")
                     .append("@exo:note = '" + text + "' or")                    
-                    .append("@exo:workCountry = '" + text + "'") ;
+                    .append("@exo:workCountry = '" + text + "')") ;
       } else {
         stringBuffer.append("jcr:contains(., '").append(text).append("')") ;
       }      
