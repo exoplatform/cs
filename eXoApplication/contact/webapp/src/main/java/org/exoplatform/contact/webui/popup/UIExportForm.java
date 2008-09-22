@@ -62,7 +62,6 @@ import org.exoplatform.webui.form.UIFormStringInput;
     events = {
       @EventConfig(listeners = UIExportForm.SaveActionListener.class),  
       @EventConfig(listeners = UIExportForm.ShowPageActionListener.class),
-      @EventConfig(listeners = UIExportForm.CheckAllActionListener.class),
       @EventConfig(listeners = UIExportForm.CancelActionListener.class)
     }
 )
@@ -74,8 +73,7 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
   private UIPageIterator uiPageIterator_ ;
   private Map<String, String> checkedContacts = new HashMap<String, String>() ;
   private Map<String, Contact> contacts = null ;
-  private boolean isCheckAll = false ;
-  
+
   public UIExportForm() throws Exception {
     setId("UIExportForm") ;
     uiPageIterator_ = new UIPageIterator() ;
@@ -116,7 +114,14 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
     return new ArrayList<ContactData>(uiPageIterator_.getCurrentPageData());
   }
   public void setSelectedGroup(String address) throws Exception { selectedGroup = address ; }
-  public String getSelectedGroup() { return selectedGroup.split(Utils.SPLIT)[2]; }
+  public String getSelectedGroup() {
+    try {
+      return selectedGroup.split(Utils.SPLIT)[2];       
+    } catch (NullPointerException e) {
+      return null ;
+    }
+    
+  }
   
   public List<String> getCheckedCurrentPage() throws Exception {
     List<String> checkedContacts = new ArrayList<String>();
@@ -137,23 +142,17 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
   public long getCurrentPage() { return uiPageIterator_.getCurrentPage();}
   protected void updateCurrentPage(int page) throws Exception{
     uiPageIterator_.setCurrentPage(page) ;
-    if (isCheckAll) {
-      for (ContactData contactData : getContacts()) {
+    for (ContactData contactData : getContacts())
+      if (checkedContacts.containsKey(contactData.getId())) {
         UIFormCheckBoxInput uiCheckBox = getChildById(contactData.getId());
         uiCheckBox.setChecked(true) ;
       }
-    } else {
-      for (ContactData contactData : getContacts())
-        if (checkedContacts.containsKey(contactData.getId())) {
-          UIFormCheckBoxInput uiCheckBox = getChildById(contactData.getId());
-          uiCheckBox.setChecked(true) ;
-        }      
-    }
   }
   
   static  public class SaveActionListener extends EventListener<UIExportForm> {
     public void execute(Event<UIExportForm> event) throws Exception {
       UIExportForm uiForm = event.getSource() ;
+      boolean isExportAll = event.getRequestContext().getRequestParameter(OBJECTID).equals("all");
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class);
       Map<String, String> contactIds = uiForm.checkedContacts ;
       for (ContactData contact : uiForm.getContacts()) {
@@ -161,14 +160,13 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
         if (uiCheckBox.isChecked()) {
           uiForm.checkedContacts.put(contact.getId(), contact.getId());
         } else {
-          uiForm.isCheckAll = false ;
           uiForm.checkedContacts.remove(contact.getId()) ;
         }
       }      
       for (String contactId : uiForm.getCheckedCurrentPage()) contactIds.put(contactId, contactId) ;
       
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-      if (contactIds.size() == 0) {  
+      if (!isExportAll && contactIds.size() == 0) {
         uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.check-contact-required", null, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -188,7 +186,7 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
       List<Contact> contacts = new ArrayList<Contact>() ;
       if (!ContactUtils.isEmpty(uiForm.getSelectedGroup())) {
         String[] address = uiForm.selectedGroup.split(Utils.SPLIT) ;
-        if (uiForm.isCheckAll) {
+        if (isExportAll) {
           ContactPageList pageList = null ;          
           if (address[0].equals(JCRDataStorage.PRIVATE)) {
             pageList = contactService.getContactPageListByGroup(
@@ -209,9 +207,6 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
           }
           contacts.addAll(pageList.getAll()) ;          
         } else {
-          
-          System.out.println("\n\n aa :" + contactIds.size() + "\n\n");
-          
           if (contactIds.size() >= 150) {
             uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.manyContacts", null, 
                 ApplicationMessage.WARNING)) ;
@@ -233,7 +228,7 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
           }          
         }
       } else {
-        if (uiForm.isCheckAll) {
+        if (isExportAll) {
           contacts.addAll(uiForm.contacts.values()) ;
         } else {
           for(String contactId : contactIds.keySet()) {
@@ -273,31 +268,18 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
       contactPortlet.cancelAction() ;
     }
   }
-  
-  static  public class CheckAllActionListener extends EventListener<UIExportForm> {
-    public void execute(Event<UIExportForm> event) throws Exception {
-      UIExportForm uiForm = event.getSource() ;
-      uiForm.isCheckAll = !uiForm.isCheckAll ;
-      if (!uiForm.isCheckAll) {
-        uiForm.checkedContacts.clear() ;
-      }
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
-    }
-  }
 
   static  public class ShowPageActionListener extends EventListener<UIExportForm> {
     public void execute(Event<UIExportForm> event) throws Exception {
       UIExportForm uiExportForm = event.getSource() ;
-      if (!uiExportForm.isCheckAll) {
-        for (ContactData contact : uiExportForm.getContacts()) {
-          String contactId = contact.getId() ;
-          UIFormCheckBoxInput uiCheckBox = uiExportForm.getChildById(contactId);
-          if (uiCheckBox.isChecked()) {
-            uiExportForm.checkedContacts.put(contactId, contactId);
-          } else {
-            uiExportForm.checkedContacts.remove(contactId) ;
-          }
-        }        
+      for (ContactData contact : uiExportForm.getContacts()) {
+        String contactId = contact.getId() ;
+        UIFormCheckBoxInput uiCheckBox = uiExportForm.getChildById(contactId);
+        if (uiCheckBox.isChecked()) {
+          uiExportForm.checkedContacts.put(contactId, contactId);
+        } else {
+          uiExportForm.checkedContacts.remove(contactId) ;
+        }
       }
       int page = Integer.parseInt(event.getRequestContext().getRequestParameter(OBJECTID)) ;
       uiExportForm.updateCurrentPage(page) ;

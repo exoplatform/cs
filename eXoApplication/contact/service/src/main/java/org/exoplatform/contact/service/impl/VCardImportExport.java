@@ -326,7 +326,7 @@ public class VCardImportExport implements ContactImportExport {
         firstName = fullName.substring(0, indexSpace).trim() ;
         contact.setFirstName(firstName) ;
         lastName = fullName.substring(indexSpace, fullName.length()).trim() ;
-      } else {
+      } else if (firstName != null && firstName.length() > 0){
         if (firstName.trim().equals(additionName.trim())) contact.setFirstName(firstName) ;
         else contact.setFirstName(firstName + " " + additionName);
       }
