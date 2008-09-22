@@ -240,7 +240,7 @@ public class UIMessageList extends UIForm {
   public List<Message> getCheckedMessage() throws Exception {
     List<Message> checkedList = new ArrayList<Message>();
     for (Message msg : getMessageList()) {
-      UIFormCheckBoxInput<Boolean> uiCheckbox = getChildById(msg.getId());
+      UIFormCheckBoxInput uiCheckbox = getUIFormCheckBoxInput(msg.getId());
       if (uiCheckbox != null && uiCheckbox.isChecked()) {
         checkedList.add(msg);
         if (viewMode == MODE_CONVERSATION) {
@@ -356,7 +356,7 @@ public class UIMessageList extends UIForm {
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
       UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class, null, "UIPopupActionComposeContainer") ;
       uiPopupAction.activate(uiPopupContainer, 850, 0, true);
-      
+
       UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
       uiComposeForm.init(accountId, msg, uiComposeForm.MESSAGE_IN_DRAFT);
       uiPopupContainer.addChild(uiComposeForm) ;
@@ -1107,7 +1107,7 @@ public class UIMessageList extends UIForm {
   static public class ExportActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ;   
-      String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      //String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
@@ -1119,37 +1119,35 @@ public class UIMessageList extends UIForm {
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
       if(uiMessageList.getCheckedMessage().isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
       } else if (uiMessageList.getCheckedMessage().size() > 1){
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-many-messages", null, ApplicationMessage.INFO)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
       }
-      if (msgId == null) msgId = uiMessageList.getCheckedMessage().get(0).getId();
-
-      UIExportForm uiExportForm = uiPopup.createUIComponent(UIExportForm.class, null, null);
-      uiPopup.activate(uiExportForm, 600, 0, true);
       try {
-        Message msg = uiMessageList.messageList_.get(msgId);
-        if (msg != null && msg.hasAttachment()) {
-          String username = uiPortlet.getCurrentUser() ;
-          MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
-          msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, accId, msg) ;
+        Message msg = uiMessageList.getCheckedMessage().get(0) ;
+        if (msg != null) {
+          UIExportForm uiExportForm = uiPopup.activate(UIExportForm.class, 600);
+          if(msg.hasAttachment()) {
+            String username = uiPortlet.getCurrentUser() ;
+            MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
+            msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, accId, msg) ;
+          }
+          uiExportForm.setExportMessage(msg);
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);
         }
-        uiExportForm.setExportMessage(msg);
-      } catch (Exception e) { }
-
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);  
+      } catch (Exception e) {
+        System.out.println("\n\n error when export");
+      }
     }
   }
 
   static public class FirstPageActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ; 
-      try {
-        uiMessageList.updateList(1);
-      } catch (Exception e) {
-        e.printStackTrace() ;
-      }
+      uiMessageList.updateList(1);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
@@ -1157,13 +1155,9 @@ public class UIMessageList extends UIForm {
   static public class PreviousPageActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ; 
-      try {
-        MessagePageList pageList = uiMessageList.getMessagePageList(); 
-        if (pageList.getCurrentPage() > 1){
-          uiMessageList.updateList(pageList.getCurrentPage() - 1);
-        }
-      } catch (Exception e) {
-        e.printStackTrace() ;
+      MessagePageList pageList = uiMessageList.getMessagePageList(); 
+      if (pageList.getCurrentPage() > 1){
+        uiMessageList.updateList(pageList.getCurrentPage() - 1);
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
@@ -1172,13 +1166,9 @@ public class UIMessageList extends UIForm {
   static public class NextPageActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ; 
-      try {
-        MessagePageList pageList = uiMessageList.getMessagePageList(); 
-        if (pageList.getCurrentPage() < pageList.getAvailablePage()){
-          uiMessageList.updateList(pageList.getCurrentPage() + 1);
-        }
-      } catch (Exception e) {
-        e.printStackTrace() ;
+      MessagePageList pageList = uiMessageList.getMessagePageList(); 
+      if (pageList.getCurrentPage() < pageList.getAvailablePage()){
+        uiMessageList.updateList(pageList.getCurrentPage() + 1);
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
@@ -1187,11 +1177,7 @@ public class UIMessageList extends UIForm {
   static public class LastPageActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource() ; 
-      try {
-        uiMessageList.updateList(uiMessageList.getMessagePageList().getAvailablePage());
-      } catch (Exception e) {
-        e.printStackTrace() ;
-      }
+      uiMessageList.updateList(uiMessageList.getMessagePageList().getAvailablePage());
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
   }
