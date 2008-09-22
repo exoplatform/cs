@@ -16,6 +16,7 @@
  */
 package org.exoplatform.mail.webui.popup;
 
+import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;
@@ -32,8 +33,10 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 
 /**
@@ -47,21 +50,21 @@ import org.exoplatform.webui.form.UIFormStringInput;
     template = "system:/groovy/webui/form/UIForm.gtmpl",
     events = {
       @EventConfig(listeners = UIFolderForm.SaveActionListener.class), 
-      @EventConfig(listeners = UIFolderForm.CancelActionListener.class)
+      @EventConfig(listeners = UIFolderForm.CancelActionListener.class, phase = Phase.DECODE)
     }
 )
 public class UIFolderForm extends UIForm implements UIPopupComponent {
   final public static String FIELD_NAME = "folderName" ;
-  
+
   private String parentPath_ ;
-  
-  public UIFolderForm() { 
-    addUIFormInput(new UIFormStringInput(FIELD_NAME, FIELD_NAME, null)) ;
+
+  public UIFolderForm() throws Exception { 
+    addUIFormInput(new UIFormStringInput(FIELD_NAME, FIELD_NAME, null).addValidator(MandatoryValidator.class)) ;
   }
 
   public String getParentPath() { return parentPath_; }
   public void setParentPath(String s) { parentPath_ = s ; }
-  
+
   static  public class SaveActionListener extends EventListener<UIFolderForm> {
     public void execute(Event<UIFolderForm> event) throws Exception {
       UIFolderForm uiForm = event.getSource() ;
@@ -72,34 +75,29 @@ public class UIFolderForm extends UIForm implements UIPopupComponent {
       String username = uiPortlet.getCurrentUser() ;
       String accountId =  uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
       UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class) ;
-      if(Utils.isEmptyField(folderName)) {
-        uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.name-required", null)) ;
+      folderName = folderName.trim();
+      if(!MailUtils.isNameValid(folderName, MailUtils.SIMPLECHARACTER)) {
+        uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.name-invalid", MailUtils.SIMPLECHARACTER, ApplicationMessage.WARNING) ) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return;
+      }
+      String folderId = Utils.KEY_FOLDERS + IdGenerator.generate() ;
+      Folder folder = null ;
+      try {
+        mailSvr.isExistFolder(SessionProviderFactory.createSystemProvider(), username, accountId, uiForm.getParentPath(), folderName) ;
+      } catch(Exception e) { 
+        uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.folder-exist", new Object[]{folderName})) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
+      }
+      folder = new Folder() ;
+      folder.setId(folderId);
+      folder.setName(folderName) ;
+      folder.setLabel(folderName) ;
+      if (uiForm.getParentPath() != null && !"".equals(uiForm.getParentPath().trim())) {
+        mailSvr.saveFolder(SessionProviderFactory.createSystemProvider(), username, accountId, uiForm.getParentPath(), folder) ;
       } else {
-        folderName = folderName.trim();
-        String folderId = Utils.KEY_FOLDERS + IdGenerator.generate() ;
-        Folder folder = null ;
-        boolean isExist = false ; 
-        try {
-          isExist = mailSvr.isExistFolder(SessionProviderFactory.createSystemProvider(), username, accountId, uiForm.getParentPath(), folderName) ;
-        } catch(Exception e) { }
-
-        if(!isExist) {
-          folder = new Folder() ;
-          folder.setId(folderId);
-          folder.setName(folderName) ;
-          folder.setLabel(folderName) ;
-          if (uiForm.getParentPath() != null && !"".equals(uiForm.getParentPath().trim())) {
-            mailSvr.saveFolder(SessionProviderFactory.createSystemProvider(), username, accountId, uiForm.getParentPath(), folder) ;
-          } else {
-            mailSvr.saveFolder(SessionProviderFactory.createSystemProvider(), username, accountId, folder) ;
-          }
-        } else {
-          uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.folder-exist", new Object[]{folderName})) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;
-        }
+        mailSvr.saveFolder(SessionProviderFactory.createSystemProvider(), username, accountId, folder) ;
       }
       uiForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
@@ -107,7 +105,7 @@ public class UIFolderForm extends UIForm implements UIPopupComponent {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class)) ;
     }
   }
-  
+
   static  public class CancelActionListener extends EventListener<UIFolderForm> {
     public void execute(Event<UIFolderForm> event) throws Exception {
       UIFolderForm uiForm = event.getSource() ;
