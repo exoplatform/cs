@@ -20,6 +20,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -53,6 +54,7 @@ import org.exoplatform.webui.form.UIFormSelectBoxWithGroups;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
+import org.jmock.core.constraint.IsAnything;
 
 /**
  * Created by The eXo Platform SARL
@@ -178,7 +180,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
       if(getIsAllDay()) {
         DateFormat df = new SimpleDateFormat(dateFormat, locale) ;
         df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
-        return CalendarUtils.getBeginDay(df.parse(toField.getValue())).getTime();
+        return CalendarUtils.getEndDay(df.parse(toField.getValue())).getTime();
       } 
       DateFormat df = new SimpleDateFormat(dateFormat + " " + timeFormat, locale) ;
       df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
@@ -368,7 +370,14 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         uiEventForm.setEventSumary(uiForm.getEventSummary()) ;
         uiEventForm.setEventDescription(uiForm.getEventDescription()) ;
         uiEventForm.setEventFromDate(uiForm.getEventFromDate(dateFormat, timeFormat),dateFormat, timeFormat) ;
-        uiEventForm.setEventToDate(uiForm.getEventToDate(dateFormat, timeFormat),dateFormat, timeFormat) ;
+        Date to = uiForm.getEventToDate(dateFormat, timeFormat) ;
+        if(uiForm.getIsAllDay()) {
+          java.util.Calendar tempCal = CalendarUtils.getInstanceTempCalendar() ;
+          tempCal.setTime(to) ;
+          tempCal.add(java.util.Calendar.MILLISECOND, -1) ;
+          to = tempCal.getTime() ;
+        }
+        uiEventForm.setEventToDate(to,dateFormat, timeFormat) ;
         uiEventForm.setEventAllDate(uiForm.getIsAllDay()) ;
         uiEventForm.setSelectedCategory(uiForm.getEventCategory()) ;
         String username = CalendarUtils.getCurrentUser() ;
