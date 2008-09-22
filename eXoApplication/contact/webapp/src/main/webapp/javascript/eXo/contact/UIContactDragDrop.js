@@ -197,6 +197,7 @@ UIContactDragDrop.prototype.dragCallback = function(dndEvent) {
     if (this.foundTargetObjectCatch != dndEvent.foundTargetObject) {
       if(this.foundTargetObjectCatch) {
         this.foundTargetObjectCatch.style[eXo.contact.UIContactDragDrop.scKey] = this.foundTargetObjectCatchStyle ;
+				if(eXo.core.Browser.browserType == "ie") this.foundTargetObjectCatch.removeAttribute("style") ;
       }
       this.foundTargetObjectCatch = dndEvent.foundTargetObject ;
       this.foundTargetObjectCatchStyle = this.foundTargetObjectCatch.style[eXo.contact.UIContactDragDrop.scKey] ;

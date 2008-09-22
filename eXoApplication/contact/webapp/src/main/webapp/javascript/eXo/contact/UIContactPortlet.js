@@ -2,16 +2,16 @@ function UIContactPortlet() {
 	
 }
 
-UIContactPortlet.prototype.toggleSelectAll = function(handler) {
-  rootElement = eXo.core.DOMUtil.findAncestorByClass(handler, 'UIGrid') ;
-  if (rootElement) {
-    var eLst = eXo.core.DOMUtil.findDescendantsByClass(rootElement, 'input', 'checkbox') ;
-    var curState = handler.checked ;
-    for (var i=0; i<eLst.length; i++) {
-       eLst[i].checked = curState ;
-    }
-  }
-} ;
+//UIContactPortlet.prototype.toggleSelectAll = function(handler) {
+//  rootElement = eXo.core.DOMUtil.findAncestorByClass(handler, 'UIGrid') ;
+//  if (rootElement) {
+//    var eLst = eXo.core.DOMUtil.findDescendantsByClass(rootElement, 'input', 'checkbox') ;
+//    var curState = handler.checked ;
+//    for (var i=0; i<eLst.length; i++) {
+//       eLst[i].checked = curState ;
+//    }
+//  }
+//} ;
 
 UIContactPortlet.prototype.showContextMenu = function(compid) {
 	var UIContextMenuCon = eXo.webui.UIContextMenuCon ;//eXo.contact.ContextMenu ;
@@ -406,6 +406,10 @@ UIContactPortlet.prototype.swithLayoutCallback = function(layout, status){
 	var uiContactPortlet = eXo.contact.UIContactPortlet ;
 	var panelWorking = document.getElementById('UIContactContainer');
 	var layoutcookie = eXo.core.Browser.getCookie(layoutMan.layoutId);
+	
+	if((layout == 2) || (layout == 3)){
+		if(layoutcookie.indexOf('1') >= 0) return ;
+	}
 	if(!status) {
 		layoutMan.layouts[layout-1].style.display = "none" ;
 		uiContactPortlet.addCheckedIcon(layout,false) ;
@@ -418,8 +422,10 @@ UIContactPortlet.prototype.swithLayoutCallback = function(layout, status){
 			if(layoutcookie.indexOf('2') < 0) layoutcookie = layoutcookie.concat(2) ;
 			if(layoutcookie.indexOf('3') < 0) layoutcookie = layoutcookie.concat(3) ;
 			eXo.core.Browser.setCookie(layoutMan.layoutId,layoutcookie,1);
-		}		
+		}
+		
 	} else {
+		
 		layoutMan.layouts[layout-1].style.display = "block" ;
 		uiContactPortlet.addCheckedIcon(layout,true) ;
 		if(layout == 1){			
