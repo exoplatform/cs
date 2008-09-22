@@ -48,6 +48,7 @@ import org.exoplatform.mail.webui.popup.UIPrintPreview;
 import org.exoplatform.mail.webui.popup.UITagForm;
 import org.exoplatform.mail.webui.popup.UIViewAllHeaders;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -136,7 +137,14 @@ public class UIMessagePreview extends UIComponent {
 	public DownloadService getDownloadService() { 
 		return getApplicationComponent(DownloadService.class) ; 
 	}
-
+  public String getPortalName() {
+    PortalContainer pcontainer =  PortalContainer.getInstance() ;
+    return pcontainer.getPortalContainerInfo().getContainerName() ;  
+  }
+  public String getRepository() throws Exception {
+    RepositoryService rService = getApplicationComponent(RepositoryService.class) ;    
+    return rService.getCurrentRepository().getConfiguration().getName() ;
+  }
 	public static class DownloadAttachmentActionListener extends EventListener<UIMessagePreview> {
 		public void execute(Event<UIMessagePreview> event) throws Exception {
 			UIMessagePreview uiMsgPreview = event.getSource();

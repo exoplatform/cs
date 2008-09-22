@@ -94,7 +94,7 @@ public class JCRDataStorage {
   }
 
   public Account getAccountById(SessionProvider sProvider, String username, String id)
-      throws Exception {
+  throws Exception {
     Node mailHome = getMailHomeNode(sProvider, username);
     if (mailHome.hasNode(id)) {
       return getAccount(mailHome.getNode(id));
@@ -113,7 +113,7 @@ public class JCRDataStorage {
     }
     return accounts;
   }
-  
+
   private Account getAccount(Node accountNode) throws Exception {
     Account account = new Account();
     account.setId(accountNode.getProperty(Utils.EXO_ID).getString());
@@ -192,7 +192,7 @@ public class JCRDataStorage {
         int index = property.indexOf('=');
         if (index != -1)
           account
-              .setImapServerProperty(property.substring(0, index), property.substring(index + 1));
+          .setImapServerProperty(property.substring(0, index), property.substring(index + 1));
       }
     } catch (Exception e) {
     }
@@ -286,7 +286,7 @@ public class JCRDataStorage {
   }
 
   public List<Message> getMessages(SessionProvider sProvider, String username, MessageFilter filter)
-      throws Exception {
+  throws Exception {
     Node homeMsg = getMessageHome(sProvider, username, filter.getAccountId());
     filter.setAccountPath(homeMsg.getPath());
     QueryManager qm = homeMsg.getSession().getWorkspace().getQueryManager();
@@ -412,7 +412,7 @@ public class JCRDataStorage {
   }
 
   public void removeAccount(SessionProvider sProvider, String username, String accountId)
-      throws Exception {
+  throws Exception {
     Node homeNode = getMailHomeNode(sProvider, username);
     // gets the specified account, and removes it
     if (homeNode.hasNode(accountId)) {
@@ -600,7 +600,7 @@ public class JCRDataStorage {
   }
 
   public void saveAccount(SessionProvider sProvider, String username, Account account, boolean isNew)
-      throws Exception {
+  throws Exception {
     // creates or updates an account, depending on the isNew flag
     Node mailHome = getMailHomeNode(sProvider, username);
     Node newAccount = null;
@@ -633,7 +633,7 @@ public class JCRDataStorage {
         values.add(key + "=" + account.getServerProperties().get(key));
       }
       newAccount.setProperty(Utils.EXO_SERVERPROPERTIES, values.toArray(new String[account
-          .getServerProperties().size()]));
+                                                                                   .getServerProperties().size()]));
 
       if (account.getPopServerProperties() != null) {
         it = account.getPopServerProperties().keySet().iterator();
@@ -643,7 +643,7 @@ public class JCRDataStorage {
           values.add(key + "=" + account.getPopServerProperties().get(key));
         }
         newAccount.setProperty(Utils.EXO_POPSERVERPROPERTIES, values.toArray(new String[account
-            .getPopServerProperties().size()]));
+                                                                                        .getPopServerProperties().size()]));
       }
 
       if (account.getImapServerProperties() != null) {
@@ -654,7 +654,7 @@ public class JCRDataStorage {
           values.add(key + "=" + account.getImapServerProperties().get(key));
         }
         newAccount.setProperty(Utils.EXO_IMAPSERVERPROPERTIES, values.toArray(new String[account
-            .getImapServerProperties().size()]));
+                                                                                         .getImapServerProperties().size()]));
       }
       // saves changes
       mailHome.getSession().save();
@@ -662,7 +662,7 @@ public class JCRDataStorage {
   }
 
   public void saveMailSetting(SessionProvider sProvider, String username, MailSetting newSetting)
-      throws Exception {
+  throws Exception {
     Node mailHome = getMailHomeNode(sProvider, username);
     Node settingNode = null;
     try {
@@ -767,7 +767,7 @@ public class JCRDataStorage {
           } catch (Exception e) {
             makeNewAtt = true ;
           }
-          
+
           if (makeNewAtt) {
             Node attHome = null;
             try {
@@ -799,16 +799,16 @@ public class JCRDataStorage {
     }
     return nodeMsg;
   }
-  
+
   public boolean saveMessage(SessionProvider sProvider, String username, String accId,
       javax.mail.Message msg, String folderId, SpamFilter spamFilter) throws Exception {
     return saveMessage(sProvider, username, accId, msg, folderId, spamFilter, null);
   }
 
-  
+
   public boolean saveMessage(SessionProvider sProvider, String username, String accId,
       javax.mail.Message msg, String folderId, SpamFilter spamFilter, List<String> filterList)
-      throws Exception {
+  throws Exception {
     long t1, t2, t3, t4;
     String msgId = MimeMessageParser.getMessageId(msg);
     logger.warn("MessageId = " + msgId);
@@ -824,17 +824,17 @@ public class JCRDataStorage {
         // there is a duplicate but in another folder
         return true;
       }
-      
+
       if (checkDuplicate == Utils.MAIL_DUPLICATE_IN_SAME_FOLDER) {
         // will "never" come here
         // but we need to make sure ...
         return false ;
       }
-      
+
     } catch(Exception e) {
-      
+
     }
-    
+
     logger.warn("Saving message to JCR ...");
     t1 = System.currentTimeMillis();
     Node node = null;
@@ -1234,7 +1234,7 @@ public class JCRDataStorage {
   }
 
   public List<Folder> getFolders(SessionProvider sProvider, String username, String accountId)
-      throws Exception {
+  throws Exception {
     List<Folder> folders = new ArrayList<Folder>();
     Node folderHomeNode = getFolderHome(sProvider, username, accountId);
     NodeIterator iter = folderHomeNode.getNodes();
@@ -1246,7 +1246,7 @@ public class JCRDataStorage {
   }
 
   public void saveFolder(SessionProvider sProvider, String username, String accountId, Folder folder)
-      throws Exception {
+  throws Exception {
     // gets folder home node of the specified account
     Node home = getFolderHome(sProvider, username, accountId);
     Node myFolder = null;
@@ -1343,7 +1343,7 @@ public class JCRDataStorage {
   }
 
   public Node getFilterHome(SessionProvider sProvider, String username, String accountId)
-      throws Exception {
+  throws Exception {
     Node accountHome = getMailHomeNode(sProvider, username).getNode(accountId);
     if (accountHome.hasNode(Utils.KEY_FILTER))
       return accountHome.getNode(Utils.KEY_FILTER);
@@ -1355,7 +1355,7 @@ public class JCRDataStorage {
   }
 
   public List<MessageFilter> getFilters(SessionProvider sProvider, String username, String accountId)
-      throws Exception {
+  throws Exception {
     List<MessageFilter> filterList = new ArrayList<MessageFilter>();
     Node filterHomeNode = getFilterHome(sProvider, username, accountId);
     NodeIterator iter = filterHomeNode.getNodes();
@@ -1515,7 +1515,7 @@ public class JCRDataStorage {
     filterNode.setProperty(Utils.EXO_APPLY_TAG, filter.getApplyTag());
     filterNode.setProperty(Utils.EXO_KEEP_IN_INBOX, filter.keepInInbox());
     filterNode.setProperty(Utils.EXO_APPLY_FOR_ALL, filter.applyForAll());
-    
+
     try {
       if (applyAll) {
         runFilter(sProvider, username, accountId, filter);
@@ -1523,10 +1523,10 @@ public class JCRDataStorage {
     } catch(Exception e) {
       return ;
     }
-    
+
     home.getSession().save();
   }
-  
+
   private void runFilter(SessionProvider sProvider, String username, String accountId,
       MessageFilter filter) throws Exception {
     List<Message> msgList = getMessagePageList(sProvider, username, filter).getAll(username);
@@ -1560,7 +1560,7 @@ public class JCRDataStorage {
   }
 
   public Node getMessageHome(SessionProvider sProvider, String username, String accountId)
-      throws Exception {
+  throws Exception {
     Node accountHome = getMailHomeNode(sProvider, username).getNode(accountId);
     Node msgHome = null;
     try {
@@ -1573,7 +1573,7 @@ public class JCRDataStorage {
   }
 
   public Node getFolderHome(SessionProvider sProvider, String username, String accountId)
-      throws Exception {
+  throws Exception {
     Node accountHome = getMailHomeNode(sProvider, username).getNode(accountId);
     Node folderHome = null;
     try {
@@ -1586,7 +1586,7 @@ public class JCRDataStorage {
   }
 
   public Node getTagHome(SessionProvider sProvider, String username, String accountId)
-      throws Exception {
+  throws Exception {
     Node accountHome = getMailHomeNode(sProvider, username).getNode(accountId);
     Node tagHome = null;
     try {
@@ -1599,7 +1599,7 @@ public class JCRDataStorage {
   }
 
   public void addTag(SessionProvider sProvider, String username, String accountId, Tag tag)
-      throws Exception {
+  throws Exception {
     Node tagHome = getTagHome(sProvider, username, accountId);
     if (!tagHome.hasNode(tag.getId())) {
       Node tagNode = tagHome.addNode(tag.getId(), Utils.EXO_MAILTAG);
@@ -1646,7 +1646,7 @@ public class JCRDataStorage {
   }
 
   public List<Tag> getTags(SessionProvider sProvider, String username, String accountId)
-      throws Exception {
+  throws Exception {
     List<Tag> tags = new ArrayList<Tag>();
     Node tagHomeNode = getTagHome(sProvider, username, accountId);
     NodeIterator iter = tagHomeNode.getNodes();
@@ -1675,7 +1675,7 @@ public class JCRDataStorage {
   }
 
   public Tag getTag(SessionProvider sProvider, String username, String accountId, String tagId)
-      throws Exception {
+  throws Exception {
     Node tagHomeNode = getTagHome(sProvider, username, accountId);
     Tag tag = new Tag();
     NodeIterator iter = tagHomeNode.getNodes();
@@ -1729,7 +1729,7 @@ public class JCRDataStorage {
   }
 
   public void removeTag(SessionProvider sProvider, String username, String accountId, String tagId)
-      throws Exception {
+  throws Exception {
     // remove this tag in all messages
     List<Message> listMessage = getMessageByTag(sProvider, username, accountId, tagId);
     List<String> listTag = new ArrayList<String>();
@@ -1745,7 +1745,7 @@ public class JCRDataStorage {
   }
 
   public void updateTag(SessionProvider sProvider, String username, String accountId, Tag tag)
-      throws Exception {
+  throws Exception {
     Node tagHome = getTagHome(sProvider, username, accountId);
     if (tagHome.hasNode(tag.getId())) {
       Node tagNode = tagHome.getNode(tag.getId());
@@ -1790,7 +1790,7 @@ public class JCRDataStorage {
   }
 
   public Node getSpamFilterHome(SessionProvider sProvider, String username, String accountId)
-      throws Exception {
+  throws Exception {
     Node accountHome = getMailHomeNode(sProvider, username).getNode(accountId);
     if (accountHome.hasNode(Utils.KEY_SPAM_FILTER))
       return accountHome.getNode(Utils.KEY_SPAM_FILTER);
@@ -1799,7 +1799,7 @@ public class JCRDataStorage {
   }
 
   public SpamFilter getSpamFilter(SessionProvider sProvider, String username, String accountId)
-      throws Exception {
+  throws Exception {
     Node accountNode = getSpamFilterHome(sProvider, username, accountId);
     NodeIterator it = accountNode.getNodes();
     Node spamFilterNode = null;
@@ -1867,7 +1867,7 @@ public class JCRDataStorage {
   }
 
   public String getFolderHomePath(SessionProvider sProvider, String username, String accountId)
-      throws Exception {
+  throws Exception {
     return getFolderHome(sProvider, username, accountId).getPath();
   }
 
@@ -2091,7 +2091,7 @@ public class JCRDataStorage {
       Message msg) throws Exception {
     try {
       Node messageNode = getDateStoreNode(sProvider, username, accountId, msg.getReceivedDate())
-          .getNode(msg.getId());
+      .getNode(msg.getId());
       NodeIterator msgAttachmentIt = messageNode.getNode(Utils.KEY_ATTACHMENT).getNodes();
       List<Attachment> attachments = new ArrayList<Attachment>();
       while (msgAttachmentIt.hasNext()) {
@@ -2104,6 +2104,7 @@ public class JCRDataStorage {
           file.setName(node.getProperty(Utils.EXO_ATT_NAME).getString());
           file.setWorkspace(node.getSession().getWorkspace().getName());
           file.setSize(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_DATA).getLength());
+          file.setPath("/" + file.getWorkspace() + node.getPath()) ;
           attachments.add(file);
         }
       }
@@ -2146,15 +2147,15 @@ public class JCRDataStorage {
       msgNode.setProperty(Utils.EXO_FOLDERS, folders);
       msgHomeNode.save();
       increaseFolderItem(sProvider, username, accId, folderId);
-      
+
       logger.warn("DUPLICATE MAIL IN ANOTHER FOLDER ... ");
 
       ret = Utils.MAIL_DUPLICATE_IN_OTHER_FOLDER;
     } catch (Exception e) {
       // do nothing here
     }
-    
+
     return ret;
   }  
-  
+
 }
