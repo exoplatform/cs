@@ -26,6 +26,7 @@ import java.util.List;
 import javax.portlet.ActionResponse;
 import javax.xml.namespace.QName;
 
+import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
@@ -41,6 +42,7 @@ import org.exoplatform.mail.webui.Selector;
 import org.exoplatform.mail.webui.UIFormSelectBoxWithGroups;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -540,7 +542,12 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
     }*/
     return reminders ;
   }
-
+  protected SessionProvider getSession() {
+    return SessionProviderFactory.createSessionProvider() ;
+  }
+  protected SessionProvider getSystemSession() {
+    return SessionProviderFactory.createSystemProvider() ;
+  }
   protected String getEventPriority() {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     return eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_PRIORITY).getValue() ;
@@ -640,6 +647,41 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
         calendarEvent.setPriority(uiForm.getEventPriority()) ; 
         calendarEvent.setReminders(uiForm.getEventReminders(from, calendarEvent.getReminders())) ;
         try {
+          Calendar currentCalendar = null ;
+          CalendarService calService = CalendarUtils.getCalendarService() ;
+          if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
+            currentCalendar = calService.getUserCalendar(uiForm.getSession(), username, calendarId) ; 
+          } else if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)) {
+            GroupCalendarData gCalendarData = calService.getSharedCalendars(uiForm.getSystemSession(), username, true) ;
+            if( gCalendarData!= null && gCalendarData.getCalendarById(calendarId) != null) currentCalendar = gCalendarData.getCalendarById(calendarId) ;
+          } else  if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)) {
+            currentCalendar = calService.getGroupCalendar(uiForm.getSystemSession(), calendarId) ;
+          }
+          if(currentCalendar == null) {
+            uiPopupAction.deActivate() ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+            uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.have-no-calendar", null, 1));
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            ActionResponse actResponse = event.getRequestContext().getResponse() ;
+            actResponse.setEvent(new QName("RefreshCalendar"), null) ;
+            return ;
+          } else { 
+            boolean canEdit = false ;
+            if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)) {
+              canEdit = CalendarUtils.canEdit(null, currentCalendar.getEditPermission(), username) ;
+            } else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)) {
+              canEdit = CalendarUtils.canEdit(CalendarUtils.getOrganizationService(), currentCalendar.getEditPermission(), username) ;
+            }
+            if(!canEdit && !uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE) ) {
+              uiPopupAction.deActivate() ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+              uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.have-no-permission-to-edit", null,1));
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              ActionResponse actResponse = event.getRequestContext().getResponse() ;
+              actResponse.setEvent(new QName("RefreshCalendar"), null) ;
+              return ;
+            }
+          }
           if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
             CalendarUtils.getCalendarService().saveUserEvent(SessionProviderFactory.createSystemProvider(), username, calendarId, calendarEvent, uiForm.isAddNew_) ;
           }else if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)){

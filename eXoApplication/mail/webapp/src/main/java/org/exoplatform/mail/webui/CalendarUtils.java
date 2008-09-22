@@ -109,7 +109,9 @@ public class CalendarUtils {
   static public CalendarService getCalendarService() throws Exception {
     return (CalendarService)PortalContainer.getComponent(CalendarService.class) ;
   }
-
+  static public OrganizationService getOrganizationService() throws Exception {
+    return (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+  }
   public static List<SelectItemOption<String>> getTimesSelectBoxOptions(String timeFormat) {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     Calendar cal = getBeginDay(GregorianCalendar.getInstance()) ;
