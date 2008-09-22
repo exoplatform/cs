@@ -29,7 +29,8 @@ abstract public class Attachment {
   private String name ;
   private String mimeType ;
   private long size ;
-   
+  private String path ;
+  
   public String getId() { return id ; }
   public void setId(String id) { this.id = id ; }
   
@@ -43,4 +44,10 @@ abstract public class Attachment {
   public void setName(String name_) { this.name = name_ ; }
   //TODO: should not have  Session in the api
   public abstract InputStream getInputStream() throws Exception ;
+  public void setPath(String path) {
+    this.path = path;
+  }
+  public String getPath() {
+    return path;
+  }
 }
