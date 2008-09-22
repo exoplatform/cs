@@ -9,39 +9,39 @@ CheckBoxManager.prototype.init = function(cont) {
 	if(typeof(cont) == "string") cont = document.getElementById(cont) ;
 	var checkboxes = eXo.core.DOMUtil.findDescendantsByClass(cont, "input", "checkbox") ;
 	if(checkboxes.length <=0) return ;
-	this.allItems = checkboxes[0] ;
-	this.items = checkboxes.slice(1) ;
-	this.allItems.onclick = eXo.cs.CheckBox.checkAll ;
-	var len = this.items.length ;
-	this.checkedItem = 0 ;
-	for(var i = 0 ; i < len ; i ++) {
-		if(this.items[i].checked) this.checkedItem++ ;
-		this.items[i].onclick = eXo.cs.CheckBox.check ;
+	checkboxes[0].onclick = this.checkAll ;
+	var len = checkboxes.length ;
+	for(var i = 1 ; i < len ; i ++) {
+		checkboxes[i].onclick = this.check ;
 	}
 } ;
 
 CheckBoxManager.prototype.checkAll = function() {
-	var CheckBox = eXo.cs.CheckBox ;
 	var checked = this.checked ;
-	var items = CheckBox.items ;
+	var items = eXo.cs.CheckBox.getItems(this) ;
 	var len = items.length ;
-	CheckBox.checkedItem = (checked) ? len : 0 ;
-	for(var i = 0 ; i < len ; i ++) {
+	for(var i = 1 ; i < len ; i ++) {
 		items[i].checked = checked ;
 	}	
 } ;
 
+CheckBoxManager.prototype.getItems = function(obj) {
+	var table = eXo.core.DOMUtil.findAncestorByTagName(obj, "table");
+	var checkboxes = eXo.core.DOMUtil.findDescendantsByClass(table, "input","checkbox");
+	return checkboxes ;
+} ;
+
 CheckBoxManager.prototype.check = function() {
-	var CheckBox = eXo.cs.CheckBox ;
-	var checked = this.checked ;
-	var len = CheckBox.items.length ;
-	if (!checked) {
-		if(CheckBox.checkedItem > 0) CheckBox.checkedItem-- ;
-		CheckBox.allItems.checked = false ;
-	}
-	else {
-		if(CheckBox.checkedItem < len) CheckBox.checkedItem++ ;
-		if(CheckBox.checkedItem == len)	CheckBox.allItems.checked = true ;
+	var checkboxes = eXo.cs.CheckBox.getItems(this) ;
+	var len = checkboxes.length ;
+	var state = true ;
+	if (!this.checked) {
+		checkboxes[0].checked = false ;
+	} else {
+		for(var i = 1; i < len ;i++){
+			state = state && checkboxes[i].checked ;
+		}
+		checkboxes[0].checked = state ;
 	}
 } ;
 
