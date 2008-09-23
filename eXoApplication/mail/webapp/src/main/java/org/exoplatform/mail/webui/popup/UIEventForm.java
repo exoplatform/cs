@@ -23,9 +23,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import javax.portlet.ActionResponse;
-import javax.xml.namespace.QName;
-
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
@@ -662,8 +659,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
             event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
             uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.have-no-calendar", null, 1));
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-            ActionResponse actResponse = event.getRequestContext().getResponse() ;
-            actResponse.setEvent(new QName("RefreshCalendar"), null) ;
+            /*ActionResponse actResponse = event.getRequestContext().getResponse() ;
+            actResponse.setEvent(new QName("RefreshCalendar"), null) ;*/
             return ;
           } else { 
             boolean canEdit = false ;
@@ -677,8 +674,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
               event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
               uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.have-no-permission-to-edit", null,1));
               event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-              ActionResponse actResponse = event.getRequestContext().getResponse() ;
-              actResponse.setEvent(new QName("RefreshCalendar"), null) ;
+              /*ActionResponse actResponse = event.getRequestContext().getResponse() ;
+              actResponse.setEvent(new QName("RefreshCalendar"), null) ;*/
               return ;
             }
           }
@@ -689,8 +686,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
           }else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)){
             CalendarUtils.getCalendarService().savePublicEvent(SessionProviderFactory.createSystemProvider(), calendarId, calendarEvent, uiForm.isAddNew_) ;          
           }
-          ActionResponse actResponse = event.getRequestContext().getResponse() ;
-          actResponse.setEvent(new QName("RefreshCalendar"), null) ;
+         /* ActionResponse actResponse = event.getRequestContext().getResponse() ;
+          actResponse.setEvent(new QName("RefreshCalendar"), null) ;*/
           uiPopupAction.deActivate() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
         }catch (Exception e) {

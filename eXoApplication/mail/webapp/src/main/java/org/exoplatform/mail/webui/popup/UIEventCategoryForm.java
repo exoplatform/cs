@@ -17,8 +17,6 @@
 package org.exoplatform.mail.webui.popup;
 
 import javax.jcr.RepositoryException;
-import javax.portlet.ActionResponse;
-import javax.xml.namespace.QName;
 
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventCategory;
@@ -119,8 +117,8 @@ public class UIEventCategoryForm extends UIForm {
           eventCat = uiForm.getEventCategory() ;
           calendarService.saveEventCategory(SessionProviderFactory.createSessionProvider(), username, eventCat, new String[]{name, uiForm.getCategoryDescription()}, false) ; 
         }
-        ActionResponse actResponse = event.getRequestContext().getResponse() ;
-        actResponse.setEvent(new QName("RefreshCalendar"), null) ;
+        /*ActionResponse actResponse = event.getRequestContext().getResponse() ;
+        actResponse.setEvent(new QName("RefreshCalendar"), null) ;*/
         UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class);
         uiEventForm.setSelectedTab(UIEventForm.TAB_EVENTDETAIL) ;
         uiEventForm.refreshCategory() ;
