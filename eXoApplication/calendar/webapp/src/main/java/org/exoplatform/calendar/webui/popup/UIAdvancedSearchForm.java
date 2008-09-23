@@ -24,8 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.jcr.query.Query;
-
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
@@ -95,13 +93,13 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     CalendarService cservice = CalendarUtils.getCalendarService() ;
     options.add(new SelectItemOption<String>("", "")) ;
     for(Calendar cal : cservice.getUserCalendars(getSession(), username, true)) {
-      options.add(new SelectItemOption<String>(cal.getName(), cal.getId())) ;
+      options.add(new SelectItemOption<String>(cal.getName(), Calendar.TYPE_PRIVATE + CalendarUtils.COLON + cal.getId())) ;
     }
     List<GroupCalendarData> groupCals  = cservice.getGroupCalendars(getSystemSession(), CalendarUtils.getUserGroups(username), true, username) ;
     for(GroupCalendarData groupData : groupCals) {
       if(groupData != null) {
         for(Calendar cal : groupData.getCalendars()) {
-          options.add(new SelectItemOption<String>(cal.getName(), cal.getId())) ;
+          options.add(new SelectItemOption<String>(cal.getName(), Calendar.TYPE_PUBLIC + CalendarUtils.COLON + cal.getId())) ;
         }
       }
     }
@@ -110,7 +108,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
       for(Calendar cal : sharedData.getCalendars()) {
         String owner = "" ;
         if(cal.getCalendarOwner() != null) owner = cal.getCalendarOwner() + "- " ;
-        options.add(new SelectItemOption<String>(owner + cal.getName(), cal.getId())) ;
+        options.add(new SelectItemOption<String>(owner + cal.getName(), Calendar.TYPE_SHARED + CalendarUtils.COLON + cal.getId())) ;
       }
     }
     addChild(new UIFormSelectBox(CALENDAR, CALENDAR, options)) ;

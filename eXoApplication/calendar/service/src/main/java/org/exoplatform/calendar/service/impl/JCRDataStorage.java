@@ -883,7 +883,7 @@ public class JCRDataStorage{
       try {
         eventNode = calendarNode.getNode(event.getId()) ;
       } catch (Exception e) {
-        System.out.println("\n\n event added");
+        //System.out.println("\n\n event added");
         eventNode = calendarNode.addNode(event.getId(), Utils.EXO_CALENDAR_EVENT) ;
         eventNode.setProperty(Utils.EXO_ID, event.getId()) ;
       }
@@ -1481,14 +1481,35 @@ public class JCRDataStorage{
 
   public EventPageList searchEvent(SessionProvider sProvider, String username, EventQuery eventQuery, String[] publicCalendarIds)throws Exception {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>(); 
-    events.addAll(getUserEvents(sProvider, username, eventQuery));
-    if(publicCalendarIds.length > 0) {
-      eventQuery.setCalendarId(publicCalendarIds);
-      //eventQuery.setQueryType(Query.XPATH) ;
-      events.addAll(getPublicEvents(SessionProvider.createSystemProvider(), eventQuery));
+    if(eventQuery.getCalendarId() == null) {
+      events.addAll(getUserEvents(sProvider, username, eventQuery));
+      if(publicCalendarIds != null && publicCalendarIds.length > 0) {
+        eventQuery.setCalendarId(publicCalendarIds);
+        events.addAll(getPublicEvents(SessionProvider.createSystemProvider(), eventQuery));
+        eventQuery.setCalendarId(null) ;
+      }
+      events.addAll(getSharedEvents(SessionProvider.createSystemProvider(), username, eventQuery));
+    } else {
+      String calFullId = eventQuery.getCalendarId()[0] ;
+      if(calFullId.split(Utils.COLON).length > 0) {
+        String[] calId = new String[]{calFullId.split(Utils.COLON)[1]} ;
+        int type = Integer.parseInt(calFullId.split(Utils.COLON)[0]) ;
+        eventQuery.setCalendarId(calId) ;
+        switch (type) {
+        case Calendar.TYPE_PRIVATE:
+          events.addAll(getUserEvents(sProvider, username, eventQuery));
+          return new EventPageList(events, 10);    
+        case Calendar.TYPE_SHARED:
+          events.addAll(getSharedEvents(SessionProvider.createSystemProvider(), username, eventQuery));
+          return new EventPageList(events, 10);    
+        case Calendar.TYPE_PUBLIC:
+          events.addAll(getPublicEvents(SessionProvider.createSystemProvider(), eventQuery));
+          return new EventPageList(events, 10);    
+        default:
+          break;
+        }
+      }
     }
-    //eventQuery.setQueryType(Query.XPATH) ;
-    events.addAll(getSharedEvents(SessionProvider.createSystemProvider(), username, eventQuery));
     return new EventPageList(events, 10);    
   }
 
