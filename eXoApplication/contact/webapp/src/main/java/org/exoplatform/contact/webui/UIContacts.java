@@ -233,14 +233,16 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   
   public boolean isSharedAddress(Contact contact) throws Exception {
     ContactService service = ContactUtils.getContactService() ;
-    String username = ContactUtils.getCurrentUser() ;    
+    String username = ContactUtils.getCurrentUser() ;
     for (String add : contact.getAddressBook()) {
       if (getSharedGroupMap().containsKey(add)) {
         if (selectedGroup != null && add.equals(selectedGroup)) return true ;
         if (isSearchResult || selectedTag_ != null) {
           try {
+            // should priority non permission first ?
             if (service.getSharedContact(SessionProviderFactory.createSystemProvider()
-                , username, contact.getId()) != null) return false ;            
+                , username, contact.getId()) != null) return false ;         
+            else return true ;
           } catch (PathNotFoundException e) { return false ; }
           
         }
