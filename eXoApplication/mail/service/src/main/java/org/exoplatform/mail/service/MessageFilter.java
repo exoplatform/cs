@@ -359,6 +359,14 @@ public class MessageFilter {
       hasConjuntion = true ;
     }
     
+    if (hasStructure_) {
+      if(hasConjuntion) stringBuffer.append(" and (") ;
+      else stringBuffer.append("(") ;
+      stringBuffer.append(" @exo:isRoot = 'true'") ;
+      stringBuffer.append(")") ;
+      hasConjuntion = true ;
+    }
+    
     stringBuffer.append("]") ;
     
     if (orderBy_ != null && orderBy_.trim().length() >0) {

@@ -147,6 +147,7 @@ public class Utils {
   public static final String EXO_IS_SAVE_PASSWORD  = "exo:isSavePassword".intern() ;
   public static final String EXO_MAIL_ATTACHMENT = "exo:mailAttachment".intern() ;
   public static final String EXO_ATT_NAME = "exo:fileName".intern() ;
+  public static final String EXO_IS_ROOT = "exo:isRoot".intern();
 
   public static final String EXO_MAIL_SETTING = "exo:mailSetting".intern();
   public static final String EXO_NUMBER_MSG_PER_PAGE = "exo:numberMsgPerPage".intern();

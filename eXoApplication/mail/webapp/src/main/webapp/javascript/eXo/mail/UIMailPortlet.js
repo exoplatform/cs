@@ -129,7 +129,7 @@ UIMailPortlet.prototype.showPrintPreview = function(obj1) {
 	if (eXo.core.Browser.isFF()) {
 			doc.body.style.visibility = "visible";
 			frame.style.height = doc.documentElement.offsetHeight  + 20 + "px" ;
-			frame.style.width = "96%";
+			frame.style.width = doc.body.scrollWidth + "px";
 		} else {
 			var docHt = 0, sh, oh;
 			if (doc.height) {
@@ -139,7 +139,7 @@ UIMailPortlet.prototype.showPrintPreview = function(obj1) {
 				if (doc.body.offsetHeight) docHt = oh = doc.body.offsetHeight;
 				if (sh && oh) docHt = Math.max(sh, oh);
 			}
-			frame.style.width = "96%";
+			frame.style.width = doc.body.scrollWidth + "px";
 			frame.style.height = "auto"; 
 			frame.style.height = docHt + 20 + "px"; 
 		}

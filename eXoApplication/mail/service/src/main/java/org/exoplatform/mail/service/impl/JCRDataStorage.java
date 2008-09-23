@@ -367,15 +367,6 @@ public class JCRDataStorage {
     }
 
     try {
-      Value[] propTags = messageNode.getProperty(Utils.EXO_TAGS).getValues();
-      String[] tags = new String[propTags.length];
-      for (int i = 0; i < propTags.length; i++) {
-        tags[i] = propTags[i].getString();
-      }
-      msg.setTags(tags);
-    } catch (Exception e) {
-    }
-    try {
       Value[] propFolders = messageNode.getProperty(Utils.EXO_FOLDERS).getValues();
       String[] folders = new String[propFolders.length];
       for (int i = 0; i < propFolders.length; i++) {
@@ -384,6 +375,17 @@ public class JCRDataStorage {
       msg.setFolders(folders);
     } catch (Exception e) {
     }
+    
+    try {
+      Value[] propTags = messageNode.getProperty(Utils.EXO_TAGS).getValues();
+      String[] tags = new String[propTags.length];
+      for (int i = 0; i < propTags.length; i++) {
+        tags[i] = propTags[i].getString();
+      }
+      msg.setTags(tags);
+    } catch (Exception e) {
+    }
+    
 
     try {
       Value[] properties = messageNode.getProperty(Utils.EXO_HEADERS).getValues();
@@ -426,7 +428,7 @@ public class JCRDataStorage {
     Node msgStoreNode = getDateStoreNode(sProvider, username, accountId, message.getReceivedDate());
     try {
       Node node = msgStoreNode.getNode(message.getId());
-      moveReference(node);
+      node = moveReference(accountId, node);
       NodeType[] nts = node.getMixinNodeTypes();
       for (int i = 0; i < nts.length; i++) {
         node.removeMixin(nts[i].getName());
@@ -446,7 +448,7 @@ public class JCRDataStorage {
       try {
         Node node = msgStoreNode.getNode(message.getId());
         if (moveReference)
-          moveReference(node);
+          node = moveReference(accountId, node);
         NodeType[] nts = node.getMixinNodeTypes();
         //TODO should use for each
         for (int i = 0; i < nts.length; i++) {
@@ -521,9 +523,10 @@ public class JCRDataStorage {
           deTotalMessage++;
           inTotalMessage++;
         }
-        if (moveReference)
-          moveReference(msgNode);
+
         msgNode.setProperty(Utils.EXO_FOLDERS, folderIds);
+        if (moveReference)
+          msgNode = moveReference(accountId, msgNode);
         msgNode.save();
       } catch (Exception e) {
         e.printStackTrace() ;
@@ -554,7 +557,7 @@ public class JCRDataStorage {
       Message msg, String currentFolderId, String destFolderId) throws Exception {
     Node messageHome = getMessageHome(sProvider, username, accountId);
     Node msgNode = (Node) messageHome.getSession().getItem(msg.getPath());
-    moveReference(msgNode);
+    msgNode = moveReference(accountId, msgNode);
     if (msgNode.hasProperty(Utils.EXO_FOLDERS)) {
       Boolean isUnread = msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean();
       Node currentFolderNode = getFolderNodeById(sProvider, username, accountId, currentFolderId);
@@ -1987,10 +1990,12 @@ public class JCRDataStorage {
       if (converNode != null && converNode.isNodeType("exo:message")) {
         // TODO: add when save message
         msgNode.addMixin("mix:referenceable");
-        createReference(msgNode, converNode);
+        createReference(msgNode, converNode);     
+        msgNode = setIsRoot(accountId, msgNode, converNode);
         msgNode.save();
         converNode.save();
       } else {
+        msgNode.setProperty(Utils.EXO_IS_ROOT, true);
         msgNode.addMixin("mix:referenceable");
         msgNode.save();
       }
@@ -1998,7 +2003,63 @@ public class JCRDataStorage {
       e.printStackTrace();
     }
   }
+  
+  private Node setIsRoot(String accountId, Node msgNode, Node converNode) throws Exception {
+    boolean isRoot = true;
+    try {
+      Value[] propFoldersMsgNode = msgNode.getProperty(Utils.EXO_FOLDERS).getValues();
+      String[] foldersMsgNode = new String[propFoldersMsgNode.length];
+      for (int i = 0; i < propFoldersMsgNode.length; i++) {
+        foldersMsgNode[i] = propFoldersMsgNode[i].getString();
+      }
+      
+      Value[] propFoldersConverNode = converNode.getProperty(Utils.EXO_FOLDERS).getValues();
+      String[] foldersConverNode = new String[propFoldersConverNode.length];
+      for (int i = 0; i < propFoldersConverNode.length; i++) {
+        foldersConverNode[i] = propFoldersConverNode[i].getString();
+      }
+      
+      for (int i = 0; i< foldersMsgNode.length; i++) {
+        for (int j = 0; j < foldersConverNode.length; j++) {
+          if (foldersConverNode[j].equals(Utils.createFolderId(accountId, Utils.FD_SENT, false)) ||
+              foldersConverNode[j].equals(foldersMsgNode[i])) {
+            isRoot = false;
+          }
+        }
+      }
+    } catch (Exception e) {
+    }
+    msgNode.setProperty(Utils.EXO_IS_ROOT, isRoot);
+    return msgNode;
+  }
 
+  private Node setIsRoot(String accountId, Node msgNode) throws Exception {
+    Node coverNode;
+    PropertyIterator iter = msgNode.getReferences();
+    msgNode.setProperty(Utils.EXO_IS_ROOT, true);
+    while (iter.hasNext()) {
+      coverNode = iter.nextProperty().getParent();
+      coverNode = setIsRoot(accountId, coverNode, msgNode);
+      coverNode.save();
+    }
+    
+    Value[] values = {};
+    if (msgNode.isNodeType("exo:messageMixin")) {
+      values = msgNode.getProperty("exo:conversationId").getValues();
+    } 
+    for (int i = 0; i < values.length; i++) {
+      Value value = values[i];
+      String uuid = value.getString();
+      Node refNode = msgNode.getSession().getNodeByUUID(uuid);
+      msgNode = setIsRoot(accountId, msgNode, refNode);
+      if (!msgNode.getProperty(Utils.EXO_IS_ROOT).getBoolean()) {
+        refNode.save();
+        break;
+      }
+    }
+    return msgNode;
+  }
+  
   private void createReference(Node msgNode, Node converNode) throws Exception {
     List<Value> valueList = new ArrayList<Value>();
     Value[] values = {};
@@ -2033,7 +2094,7 @@ public class JCRDataStorage {
    * Move reference : to first parent if it is exist, if not move reference to
    * first child message.
    */
-  private void moveReference(Node node) throws Exception {
+  private Node moveReference(String accountId, Node node) throws Exception {
     List<Value> valueList = new ArrayList<Value>();
     Value[] values = {};
     PropertyIterator iter = node.getReferences();
@@ -2066,11 +2127,12 @@ public class JCRDataStorage {
 
         if (firstNode == null)
           firstNode = msgNode;
-
-        msgNode.setProperty("exo:conversationId", valueList.toArray(new Value[valueList.size()]));
         msgNode.save();
       }
     }
+    
+    node = setIsRoot(accountId, node);
+    return node;
   }
 
   public List<Message> getReferencedMessages(SessionProvider sProvider, String username,
