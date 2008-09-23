@@ -264,7 +264,7 @@
 	  	 	    			if (contactType.equals("2")) {
 		  	 	    			StringBuffer buffer = new StringBuffer("") ;	
 		  	 	    			for (String address : addressBooks) {
-		  	 	    				if (!address.contains(NewUserListener.DEFAULTGROUP)) {
+		  	 	    				if (!address.contains(NewUserListener.DEFAULTGROUP) && publicAddress.contains(address)) {
 		  	 	    					if(buffer.length() > 0) buffer.append(", ").append(address) ;
 			  	 	    				else buffer.append(address) ;
 		  	 	    				} else if (address.equals(NewUserListener.DEFAULTGROUP + ContactUtils.getCurrentUser()) && privateGroupMap.containsKey(address)) {
