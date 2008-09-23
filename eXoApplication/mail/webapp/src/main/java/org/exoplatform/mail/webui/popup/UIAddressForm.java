@@ -197,6 +197,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     }
   }
 
+  @SuppressWarnings("unchecked")
   public List<Contact> getCheckedContact() throws Exception {
     List<Contact> contactList = new ArrayList<Contact>();
     for (Contact contact : new ArrayList<Contact>(uiPageList_.getCurrentPageData())) {
