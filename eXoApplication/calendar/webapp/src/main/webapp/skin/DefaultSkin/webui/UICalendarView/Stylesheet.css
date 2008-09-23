@@ -336,18 +336,29 @@
 	background: url('../background/CalendarBackground.gif') no-repeat left -130px;
 	width: 2px;
 	height: 11px;
-	float: left;
 	cursor: w-resize;
-	margin: 1px 3px 0px 0px ;
+	margin-top: 1px;
+	position:absolute;
+	top:0px;
+	left:0px;
+}
+.UIWeekView .EventAlldayContainer .EventAlldayContent {
+	overflow: hidden;
+	white-space: nowrap;
+	margin:0px 2px 0px 2px;
+	width: auto;
+	_width: 100% ;
 }
 
 .UIWeekView .EventAlldayContainer .RightResizeEvent {
 	background: url('../background/CalendarBackground.gif') no-repeat right -130px;	
 	width: 2px;
 	height: 11px;
-	float: right;
 	cursor: w-resize;
 	margin: 1px 0px 0px 0px ;
+	position:absolute;
+	top:0px;
+	right:0px;
 }
 
 .UIWeekView .EventAlldayContainer .RightContinueEvent {

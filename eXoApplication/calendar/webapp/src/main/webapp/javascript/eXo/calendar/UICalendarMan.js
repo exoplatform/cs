@@ -501,8 +501,8 @@ EventMan.prototype.initWeek = function(rootNode) {
     eventObj.init(allEvents[i]);
     this.events.push(eventObj);
   }
-  var aaa = DOMUtil.findPreviousElementByTagName(this.rootNode,"table");
-  this.dayNodes = DOMUtil.findDescendantsByClass(aaa, 'th', 'UICellBlock');
+  var table = DOMUtil.findPreviousElementByTagName(this.rootNode,"table");
+  this.dayNodes = DOMUtil.findDescendantsByClass(table, 'th', 'UICellBlock');
   this.week = new WeekMan();
   this.week.weekIndex = 0;
 //  this.week.startWeek = parseInt(this.dayNodes[0].getAttribute('starttime'));
@@ -603,7 +603,6 @@ GUIMan.prototype.initWeek = function() {
   for (var i=0; i<events.length; i++) {
     var eventObj = events[i];
     var eventLabelNode = eXo.core.DOMUtil.findFirstDescendantByClass(eventObj.rootNode, 'div', 'EventAlldayContent');
-    eventLabelNode.innerHTML = eventObj.getLabel();
     eventObj.rootNode.setAttribute('used', 'false');
   }
   this.eventAlldayNode = EventMan.rootNode ;//DOMUtil.findFirstDescendantByClass(EventMan.rootNode, 'td', 'EventAllday');
