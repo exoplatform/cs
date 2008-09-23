@@ -152,7 +152,7 @@
 	                  <div class="$leftClass">
 	                    <span></span>
 	                  </div>
-	                  <div class="EventAlldayContent" style="float: left; width: 70%; overflow: hidden; white-space: nowrap;" title="<%=event.summary%>">
+	                  <div class="EventAlldayContent" title="<%=event.summary%>">
 	                    <%=event.summary%>
 	                  </div>
 	                  <div class="$rightClass">
