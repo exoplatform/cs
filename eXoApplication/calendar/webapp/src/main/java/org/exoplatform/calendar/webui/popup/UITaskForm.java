@@ -601,6 +601,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
         if(sb.length() >0) sb.append(CalendarUtils.COMMA);
         sb.append(CalendarUtils.getCurrentUser()) ;
       }
+      popup.setReminderOwner(sb.toString()) ;
       reminders.add(popup) ;
     }
     return reminders ;
