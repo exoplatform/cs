@@ -727,6 +727,7 @@ public class JCRDataStorage {
       nodeMsg.setProperty(Utils.EXO_STAR, message.hasStar());
       nodeMsg.setProperty(Utils.EXO_PRIORITY, message.getPriority());
       nodeMsg.setProperty(Utils.EXO_ISUNREAD, message.isUnread());
+      nodeMsg.setProperty(Utils.EXO_IS_ROOT, message.isRootConversation());
       nodeMsg.setProperty(Utils.EXO_CONTENT_TYPE, message.getContentType());
       if (message.getSendDate() != null)
         nodeMsg.setProperty(Utils.EXO_SENDDATE, message.getSendDate().getTime());
@@ -2188,7 +2189,7 @@ public class JCRDataStorage {
    * @param folderId
    * @return
    */
-  public byte checkDuplicateStatus(SessionProvider sProvider, String username, Node msgHomeNode,
+  private byte checkDuplicateStatus(SessionProvider sProvider, String username, Node msgHomeNode,
       String accId, Node msgNode, String folderId) {
     byte ret = Utils.NO_MAIL_DUPLICATE;
     try {
@@ -2216,7 +2217,6 @@ public class JCRDataStorage {
     } catch (Exception e) {
       // do nothing here
     }
-
     return ret;
   }  
 
