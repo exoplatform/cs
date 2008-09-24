@@ -1427,6 +1427,8 @@
 	padding: 10px;
 	overflow: auto;
 	background: #fff;
+	height:200px;
+  overflow-y:auto;
 }
 
 .UIMailPortlet .UIContactsPopup .ContactContainer .NormalItem {
