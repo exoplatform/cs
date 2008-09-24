@@ -31,6 +31,7 @@ import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
 import org.exoplatform.contact.service.impl.JCRDataStorage;
+import org.exoplatform.contact.service.impl.NewUserListener;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -78,17 +79,36 @@ public class ContactPageList extends JCRPageList {
       position = (page-1) * pageSize ;
       iter_.skip(position) ;
     }
+    boolean containDefault = false ;
     currentListPage_ = new ArrayList<Contact>() ;
     for(int i = 0; i < pageSize; i ++) {
       if(iter_ != null && iter_.hasNext()){
         currentNode = iter_.nextNode() ;
         if(currentNode.isNodeType("exo:contact")) {
           Contact contact = getContact(currentNode, contactType_) ;
-          if (contact.getId().equalsIgnoreCase(username_) && (contactType_.equals(JCRDataStorage.PRIVATE))) currentListPage_.add(0, contact) ;
+          if (contact.getId().equalsIgnoreCase(username_) && (contactType_.equals(JCRDataStorage.PRIVATE))) {
+            currentListPage_.add(0, contact) ;
+            containDefault = true ;
+          }
           else currentListPage_.add(contact);
         }
       } else {
         break ;
+      }
+    }
+    
+//  add to take default contact to first of list
+    if (!containDefault && contactType_.equals(JCRDataStorage.PRIVATE) 
+        && value_.contains(NewUserListener.DEFAULTGROUP + username_) && iter_ != null) {
+      iter_.skip(0) ;
+      while (iter_.hasNext()) {
+        Node defaultNode = iter_.nextNode() ;
+        if (defaultNode.getProperty("exo:id").getString().equals(username_)) {
+          Contact defaultContact = getContact(defaultNode, contactType_) ;
+          currentListPage_.remove(currentListPage_.size() - 1) ;
+          currentListPage_.add(0, defaultContact) ;
+          break ;
+        }
       }
     }
     iter_ = null ;    
