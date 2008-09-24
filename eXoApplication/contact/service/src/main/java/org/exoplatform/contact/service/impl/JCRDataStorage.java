@@ -659,7 +659,7 @@ public class JCRDataStorage {
   public void shareAddressBook(SessionProvider sProvider, String username, String addressBookId, List<String> receiveUsers) throws Exception {
     Node addressBookNode = getUserContactGroupHome(sProvider, username).getNode(addressBookId);
     Value[] values = {};
-    if (addressBookNode.isNodeType(SHARED_MIXIN)) {     
+    if (addressBookNode.isNodeType(SHARED_MIXIN)) {
       values = addressBookNode.getProperty(SHARED_PROP).getValues();
     } else {
       addressBookNode.addMixin(SHARED_MIXIN);
@@ -685,17 +685,17 @@ public class JCRDataStorage {
         valueList.add(value2add) ;
       }    
     }
+
     if(valueList.size() > 0) {
-      
       Map<String, Value> newValue = new LinkedHashMap<String, Value>() ;
       for (Value value : values )
         newValue.put(value.getString(), value) ;
       for (Value value : valueList)
         newValue.put(value.getString(), value) ;
       addressBookNode.setProperty(SHARED_PROP, newValue.values().toArray(new Value[newValue.size()]));
-      addressBookNode.save() ;
-      addressBookNode.getSession().save();
-    }    
+    } else addressBookNode.setProperty(SHARED_PROP, new Value[] {}); // add to fix bug cs-1449
+    addressBookNode.save() ;
+    addressBookNode.getSession().save();
   }
   
   public void shareContact(SessionProvider sProvider, String username, String[] contactIds, List<String> receiveUsers) throws Exception {

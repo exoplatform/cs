@@ -268,11 +268,13 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
           if (receiveUsers.size() > 0 ) {
             contactService.shareAddressBook(
                 SessionProviderFactory.createSystemProvider(), username, contactGroup.getId(), Arrays.asList(receiveUsers.keySet().toArray(new String[] {}))) ;
-          }              
-          if (receiveUsersByGroups.size() > 0) {
+          }     
+          
+          // remove if  to fix bug cs-1449
+          //if (receiveUsersByGroups.size() > 0) {
             contactService.shareAddressBook(
                 SessionProviderFactory.createSystemProvider(), username, contactGroup.getId(), Arrays.asList(receiveUsersByGroups.keySet().toArray(new String[] {}))) ;
-          }            
+          //}            
         } else { // change permission
           if (!uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).isChecked()) {
             List<String> newPerUsers = new ArrayList<String>() ; 
