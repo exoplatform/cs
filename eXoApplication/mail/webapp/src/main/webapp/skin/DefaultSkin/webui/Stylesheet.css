@@ -20,16 +20,14 @@
 .UIWindow .UIMailPortlet {
 	margin: 0px;
 	border: none;
-	min-width: 940px;
-	min-height: 200px;
+	min-width: 940px;	
 }
 
 .UIMailPortlet {
 	background: white;
 	border: 1px solid #b7b7b7;
 	margin: 5px;
-	min-width: 940px;
-	min-height: 200px;
+	min-width: 940px;	
 }
 
 .UIWindow .UIEmpty {
@@ -43,11 +41,6 @@
 	border: none;
 	margin: 0px;
 	min-width: 0px ;
-}
-
-
-.UIMailPortlet .FileNameLabel {
-	white-space: normal;
 }
 /******************************************** MailBanner ****************************************/
 
@@ -704,23 +697,17 @@
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageList .DownArrow1Icon {
-	height: 16px;
 	line-height: 16px;
 	margin: 3px 0px 0px 0px;
 	cursor: pointer;
 	background-position: right;
-	padding-right: 16px;
-	width: 60px;
 }
 
 .UIMailPortlet .MailWorkingWorkspace .UIMessageList .UpArrow1Icon {
-	height: 16px; 
 	line-height: 16px;
 	margin: 3px 0px 0px 0px;
 	cursor: pointer;
 	background-position: right;
-	padding-right: 16px;
-	width: 65px;
 }
 
 .AdvancedTooltipTmpl {
@@ -1428,7 +1415,7 @@
 	overflow: auto;
 	background: #fff;
 	height:200px;
-  overflow-y:auto;
+	overflow-y:auto;
 }
 
 .UIMailPortlet .UIContactsPopup .ContactContainer .NormalItem {
@@ -1569,6 +1556,10 @@
 .UIMailPortlet .UIContactsPopup .SelectFileFrame {
 	width: 300px;
 }
+
+.UIMailPortlet .FileNameLabel {
+	white-space: normal;
+}
 /******************************* UIAddNewContact ******************************/
 
 .UIMailPortlet .UIAddNewContact {
@@ -1599,7 +1590,7 @@
 
 .UIMailPortlet .UIAddNewContact .ProfileContent .UIFormGrid {
 	float: left;
-	width: 480px;
+	width: 400px;
 	margin: 0px;
 }
 
@@ -1644,11 +1635,6 @@
 	padding: 25px 10px;
 }
 
-.UIImportForm .UIForm .HorizontalLayout .UIFormGrid{
-	margin: 0px;
-	width: 100%;
-}
-
 .UIImportForm .UIForm .HorizontalLayout {
 	border: none;
 }
@@ -1675,6 +1661,11 @@
 	background: #F3F3F3;
 	border: 1px solid #c9c9c9;
 	padding: 25px 10px;
+}
+
+.UIImportForm .UIForm .HorizontalLayout .UIFormGrid{
+	margin: 0px;
+	width: 100%;
 }
 
 .UIFolderForm .UIForm .HorizontalLayout {
@@ -1784,6 +1775,7 @@
 .Violet {background-color: #EE82EE;}    
 .Wheat {background-color: #F5DEB3;}    
 .Yellow {background-color: #FFFF00;} 
+
 
 .UIMailPortlet .UIViewAllHeaders {
 	padding: 16px;
