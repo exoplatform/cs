@@ -216,7 +216,7 @@
     		    			%>
 	 	      	    
 	 	      	    	<a href="$sortedByEmail">
-	  		        	<div style="width: 95%; cursor: pointer;" class="$classArrowEmail" title="<%=_ctx.appRes(uicomponent.getName() + ".label.sortByEmail")%>"><%=_ctx.appRes(uicomponent.getName() + ".label.email")%></div>
+	  		        	<div style="width: 80%; cursor: pointer;" class="$classArrowEmail" title="<%=_ctx.appRes(uicomponent.getName() + ".label.sortByEmail")%>"><%=_ctx.appRes(uicomponent.getName() + ".label.email")%></div>
 	  		        	</a>
 	  		        </th>
 	 	      	    <th style="width: 120px; " class="text">
