@@ -365,16 +365,20 @@
 	background: url('../background/CalendarBackground.gif') no-repeat left -142px;	
 	width: 8px;
 	height: 9px;
-	float: right;
 	margin: 2px 0px 0px 0px ;
+	position:absolute;
+	top:0px;
+	right:0px;
 }
 
 .UIWeekView .EventAlldayContainer .LeftContinueEvent {
 	background: url('../background/CalendarBackground.gif') no-repeat left -152px;	
 	width: 8px;
 	height: 9px;
-	float: left;
 	margin: 2px 0px 0px 0px ;
+	position:absolute;
+	top:0px;
+	left:0px;
 }
 
 .UIWeekView .WorkOffTime {
@@ -945,11 +949,46 @@
 	border: 1px solid #ffffff;
 }
 
-.UIMonthView .EventMonthContent .EventOnDayLabel {
-	line-height: 20px;
-	text-align: center;
-	-moz-user-select : none ;
+.UIMonthView .EventMonthContent .EventCheckbox{
+	 position:absolute;
+	 top:3px;
+	 left:2px;
+}
+.UIMonthView .EventMonthContent .EventSummary{
+	margin: 0px 0px  0px 15px;
+	padding-left:2px;
+}
+
+.UIMonthView .EventMonthContent .EventLabel {
+	line-height: 17px;
+	height:17px;
+	margin-left:2px;
+	_width:100%;
+	overflow:hidden;
 	white-space: nowrap;
+	-moz-user-select : none ;
+}
+
+.UICalendarPortlet .MoreEvent {
+	position:absolute;
+	cursor:pointer;
+	z-index:1;
+}
+
+.UICalendarPortlet .MoreEvent .MoreEventBar {
+  background: url('../skinIcons/icons/CloseMore.gif') no-repeat right;
+  height: 16px;
+  margin-right: 1px;
+	_margin-right: 0px;
+}
+
+.UICalendarPortlet .MoreEvent .MoreEventContainer {
+	position:absolute;
+	background-color: #e9edf9;
+  border: 1px solid #b7b7b7;
+	width:100%;
+	display:none;
+	_padding-left:1px;
 }
 
 /*====================View Task List =====================*/

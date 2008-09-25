@@ -195,7 +195,7 @@ EventObject.prototype.toString = function(){
 function DayMan(){
   this.previousDay = false;
   this.nextDay = false;
-  this.MAX_EVENT_VISIBLE = 4;
+  this.MAX_EVENT_VISIBLE = (document.getElementById("UIWeekView"))?100 : 4;
   this.totalEventVisible = 0;
   this.visibleGroup = new Array();
   this.invisibleGroup = new Array();
@@ -344,9 +344,9 @@ WeekMan.prototype.putEvents2Days = function(){
     var eventObj = this.events[i];
     var startWeekTime = eventObj.weekStartTimeIndex[this.weekIndex];
     var endWeekTime = eventObj.endTime > this.endWeek ? this.endWeek : eventObj.endTime;
-    var startDay = (new Date(parseInt(startWeekTime))).getDay();
-    var endDay = (new Date(parseInt(endWeekTime))).getDay();
-	endDay = (endDay == 0) ? 6: endDay ;
+		var deltaStartWeek = (new Date(parseInt(this.startWeek))).getDay()*1000*60*60*24 ;
+    var startDay = (new Date(parseInt(startWeekTime) - deltaStartWeek)).getDay() ;
+    var endDay = (new Date(parseInt(endWeekTime) - deltaStartWeek)).getDay() ;
     // fix date
     var delta = (new Date(eventObj.endTime)) - (new Date(eventObj.startTime));
     delta /= (1000 * 60 * 60 * 24);
@@ -576,7 +576,7 @@ GUIMan.prototype.initMonth = function(){
   for (var i=0; i<events.length; i++) {
     var eventObj = events[i];
     var eventLabelNode = eXo.core.DOMUtil.findFirstDescendantByClass(eventObj.rootNode, 'div', 'EventLabel');
-    eventLabelNode.innerHTML = eventObj.getLabel();
+    //eventLabelNode.innerHTML = eventObj.getLabel();
     eventObj.rootNode.setAttribute('title', eventObj.name);
   }
   this.rowContainerDay = DOMUtil.findFirstDescendantByClass(eXo.calendar.UICalendarMan.EventMan.rootNode, 'div', 'RowContainerDay');
@@ -798,27 +798,17 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
     var moreNode = document.createElement('div');
     moreNode.className = 'MoreEvent';
     this.rowContainerDay.appendChild(moreNode);
-    with (moreNode.style) {
-      position = 'absolute';
+    with (moreNode.style) {			
       width = dayInfo.width + 'px';
-      left = dayInfo.left + 55 + 'px' ;
+      left = dayInfo.left + 'px' ;
       top = dayInfo.top + ((dayObj.MAX_EVENT_VISIBLE - 1) * this.EVENT_BAR_HEIGH) + 5 + 'px';
-      cursor = 'pointer';
-      zIndex = '1';
     }
-    moreNode.onclick = this.showMore;
     var moreContainerNode = document.createElement('div');
-    with (moreContainerNode.style) {
-      backgroundColor = '#fff';
-      position = 'absolute';
-      display = 'none';
-      top = '0px';
-      left = '0px';
-			height = ((dayObj.MAX_EVENT_VISIBLE - 2) * this.EVENT_BAR_HEIGH) + 'px';
-    }
-    moreContainerNode.className = 'MoreContainer' ;
-    moreContainerNode.onmouseover = this.delayMore ;
-    moreContainerNode.onmouseout = this.hideMore ;
+		var moreEventBar = document.createElement('div');
+		var moreEventList = document.createElement('div');
+		moreEventBar.className = "MoreEventBar" ;
+		moreEventBar.innerHTML = "<span></span>" ;
+    moreContainerNode.className = 'MoreEventContainer' ;
     // Create invisible event
     var cnt = 0
     for (var i=0; i<dayObj.invisibleGroup.length; i++) {
@@ -847,72 +837,64 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
         eXo.core.DOMUtil.removeElement(eventObj.rootNode);
         eventNode.setAttribute('moremaster', 'true');
         eventObj.rootNode = eventNode;
-        checkboxState = null;
+        checkboxState = "";
       }
       // Remove checkbox on clone event
-      try {
-        var checkBoxTmp = eventNode.getElementsByTagName('input')[0];
-        checkBoxTmp.style.display = checkboxState;
-      } catch(e) {}
-      moreContainerNode.appendChild(eventNode);
+
+      var checkBoxTmp = eventNode.getElementsByTagName('input')[0];
+      checkBoxTmp.style.display = checkboxState;
+
+      moreEventList.appendChild(eventNode);
       var topPos = this.EVENT_BAR_HEIGH * i;
       with (eventNode.style) {
         display = 'block';
         position = 'absolute';
-        top = topPos + 'px';
+        top = topPos + 16 + 'px';
         left = '0px';
         width = dayInfo.width + 'px';
       }
       eventNode.setAttribute('used', 'true');
     }
     var moreLabel = document.createElement('div');
-    with (moreLabel.style) {
-      position = 'absolute';
-      top = '0px';
-      left = '0px';
-      padding = '2px';
-    }
     moreLabel.innerHTML = 'more ' + cnt + '+';
+		moreContainerNode.style.height = this.EVENT_BAR_HEIGH*cnt + 16 + "px";		
     moreLabel.style.color = '#00f';
+		moreLabel.onclick = this.showMore;
     moreNode.appendChild(moreLabel);
+		moreContainerNode.appendChild(moreEventBar);
+		moreContainerNode.appendChild(moreEventList)
     moreNode.appendChild(moreContainerNode);
     dayObj.moreNode = moreNode;
   }
 };
 
-GUIMan.prototype.hideElement = function(){
-	var GUIMan = eXo.calendar.UICalendarMan.GUIMan;
-	GUIMan.moreNode.style.display = "none" ;
-	if (GUIMan.hideMoreTimeoutId) {
-    window.clearTimeout(GUIMan.hideMoreTimeoutId);
-    GUIMan.hideMoreTimeoutId = null;
-		GUIMan.moreNode = null;
-  }	
-}
-
-GUIMan.prototype.delayMore = function(){
-  var GUIMan = eXo.calendar.UICalendarMan.GUIMan;
-  if (GUIMan.hideMoreTimeoutId) {
-    window.clearTimeout(GUIMan.hideMoreTimeoutId);
-    GUIMan.hideMoreTimeoutId = null;
-  }	
-} ;
-
-GUIMan.prototype.showMore = function() {
-  var moreNode = this;
-	var GUIMan = eXo.calendar.UICalendarMan.GUIMan;
-  var moreContainerNode = eXo.core.DOMUtil.findFirstDescendantByClass(moreNode, 'div', 'MoreContainer');
-  if (!moreContainerNode.style.display || 
-      moreContainerNode.style.display == 'none') {
-    moreContainerNode.style.display = 'block';
-  }
-	GUIMan.moreNode = moreContainerNode ;
+GUIMan.prototype.hideMore = function(){
+	var ln = eXo.core.DOMUtil.hideElementList.length ;
+	if (ln > 0) {
+		for (var i = 0; i < ln; i++) {
+			eXo.core.DOMUtil.hideElementList[i].style.display = "none" ;
+		}
+		eXo.core.DOMUtil.hideElementList.clear() ;
+	}
 };
 
-
-GUIMan.prototype.hideMore = function() {
-  var GUIMan = eXo.calendar.UICalendarMan.GUIMan;
-	GUIMan.hideMoreTimeoutId = window.setTimeout(GUIMan.hideElement, 1500);
+GUIMan.prototype.showMore = function(evt) {
+  var moreNode = this;
+	var GUIMan = eXo.calendar.UICalendarMan.GUIMan;
+  var moreContainerNode = eXo.core.DOMUtil.findNextElementByTagName(moreNode, 'div');
+	eXo.core.EventManager.cancelBubble(evt);
+	GUIMan.hideMore();
+  if (!moreContainerNode.style.display || moreContainerNode.style.display == 'none') {
+    moreContainerNode.style.display = 'block';
+		moreContainerNode.style.top = '0px';
+		var currentHeight = moreContainerNode.offsetParent.offsetParent.offsetHeight + moreContainerNode.offsetParent.offsetParent.scrollTop ;
+		var currentTop = moreContainerNode.parentNode.offsetTop + moreContainerNode.offsetHeight;
+		if(currentTop > currentHeight){
+			moreContainerNode.style.top = - moreContainerNode.offsetHeight + "px";
+		}
+		eXo.core.DOMUtil.listHideElements(moreContainerNode);
+  }
+	GUIMan.moreNode = moreContainerNode ;
 };
 
 /**
@@ -1021,13 +1003,13 @@ GUIMan.prototype.callbackHighlighter = function() {
   eXo.webui.UIForm.submitEvent('UIMonthView' ,'QuickAdd','&objectId=Event&startTime=' + startTime + '&finishTime=' + endTime +'&ct='+currentTime+ '&tz=' + timezoneOffset); 
 } ;
 
-GUIMan.prototype.callbackHighlighterDays = function() {
-  var Highlighter = eXo.calendar.Highlighter ;
-  Highlighter.block[0].style.display = "none" ;
-  var startTime = parseInt(Highlighter.firstCell.getAttribute("startTime")) ;
-  var endTime = parseInt(Highlighter.lastCell.getAttribute("startTime")) + 24*60*60*1000 - 1 ;
-  eXo.webui.UIForm.submitEvent("UIWeekView" ,'QuickAdd','&objectId=Event&startTime=' + startTime + '&finishTime=' + endTime) ; 
-} ;
+//GUIMan.prototype.callbackHighlighterDays = function() {
+//  var Highlighter = eXo.calendar.Highlighter ;
+//  Highlighter.block[0].style.display = "none" ;
+//  var startTime = parseInt(Highlighter.firstCell.getAttribute("startTime")) ;
+//  var endTime = parseInt(Highlighter.lastCell.getAttribute("startTime")) + 24*60*60*1000 - 1 ;
+//  eXo.webui.UIForm.submitEvent("UIWeekView" ,'QuickAdd','&objectId=Event&startTime=' + startTime + '&finishTime=' + endTime) ; 
+//} ;
 
 eXo.calendar.UICalendarMan = {
   initMonth : function(rootNode) {

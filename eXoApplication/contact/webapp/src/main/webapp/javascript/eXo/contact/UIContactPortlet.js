@@ -511,7 +511,7 @@ UIContactPortlet.prototype.checkView = function() {
 	var uiContactPortlet = document.getElementById("UIContactPortlet");
 	var viewIcon = eXo.core.DOMUtil.findFirstDescendantByClass(uiContactPortlet,"div","ViewIcon");
 	var menuItems = eXo.core.DOMUtil.findDescendantsByClass(viewIcon.parentNode,"a","MenuItem");
-	var isVcard = document.getElementById("UIVCards") ;
+	var isVcard = document.getElementById("UIVCards") && eXo.core.DOMUtil.findAncestorByClass(isVcard,"UIContactContainer");
 	if (isVcard) {
 		if(menuItems[0].getAttribute("style")) menuItems[0].removeAttribute("style");
   	menuItems[1].style.background = "#E6E8F5" ;
@@ -679,7 +679,7 @@ UIContactPortlet.prototype.refreshData = function() {
 UIContactPortlet.prototype.showTagMenu = function(obj, event) {
 	eXo.webui.UIPopupSelectCategory.show(obj, event);
 	var uiPopupCategory = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div","UIPopupCategory") ;
-	uiPopupCategory.style.left = obj.offsetWidth - uiPopupCategory.offsetWidth + "px" ;
+	uiPopupCategory.style.left = - eXo.core.DOMUtil.findFirstDescendantByClass(uiPopupCategory,"div","UIRightClickPopupMenu").offsetWidth + "px" ;
 } ;
 /*
 UIContactPortlet.prototype.setUpCheckboxCallback = function(obj){
