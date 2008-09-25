@@ -1,8 +1,10 @@
 <%
   import org.exoplatform.mail.service.Tag;
   import org.exoplatform.mail.MailUtils;
+	def rcontext = _ctx.getRequestContext() ;
+	rcontext.getJavascriptManager().addJavascript('eXo.mail.UIMailPortlet.initNavigationAction("'+uiform.id+'");'); 
+	uiform.begin()
 %>
-<% uiform.begin()%>
 <div class="UITagContainer">
 	<div class="TitleBar">
 		<div class="DownArrow3Icon" title="Collapse/Expand all"><span></span></div>
@@ -55,7 +57,7 @@
     </div>
   <div style="clear: both"><span></span></div>
 	</div>	
-	
+	<div>
 	<% /*Popup menu*/ %>
 	<div class="UIRightClickPopupMenu" id="UITagListPopupMenu" eXoCallback="eXo.mail.UIMailPortlet.tagListPopupMenuCallback">
 		<div class="UIContextMenuContainer">
@@ -127,6 +129,7 @@
 		    }
 	    }  
 	  %>
+	</div>
 	</div>
 </div>
 <% uiform.end() %>

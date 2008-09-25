@@ -5,9 +5,10 @@
 %>
 <div class="UIFolderContainer" id="<%=uicomponent.getId()%>">
 <%  
+	String compId = uicomponent.getId() ;
   def rcontext = _ctx.getRequestContext() ;
 	rcontext.getJavascriptManager().addOnLoadJavascript('eXo.mail.UIMailPortlet.restoreFolderState()');  
-	String compId = uicomponent.getId() ;
+	rcontext.getJavascriptManager().addJavascript('eXo.mail.UIMailPortlet.initNavigationAction("'+compId+'");'); 
 %>
 <div class="TitleBar">
   <div class="DownArrow3Icon" title="Collapse this Panel"><span></span></div>
@@ -60,6 +61,7 @@
   </div>
   <div style="clear: both"><span></span></div>
 </div>
+<div>
 <div class="MailFolderList">
   <%for(Folder f : uicomponent.getDefaultFolders()) {
     String id = f.getId() ;
@@ -257,6 +259,7 @@
   }
   //printNodes(uicomponent.getCustomerFolderPath());  
 %>
+</div>
 </div>
 </div>
 </div>
