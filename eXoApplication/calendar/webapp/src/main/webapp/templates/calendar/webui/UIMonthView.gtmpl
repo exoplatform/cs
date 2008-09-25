@@ -14,6 +14,7 @@
   rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarMan','/calendar/javascript/') ;
   rcontext.getJavascriptManager().addOnLoadJavascript('eXo.calendar.UICalendarPortlet.onLoad') ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkFilter() ;') ;
+	rcontext.getJavascriptManager().addOnResizeJavascript('eXo.calendar.UICalendarPortlet.onLoad') ;
  	int currentDay = uicomponent.getCurrentDay() ;
 	int currentMonth = uicomponent.getCurrentMonth() ;
 	String currentMonthName = uicomponent.getMonthName(currentMonth) ;
@@ -176,12 +177,12 @@
 					startTime="$startTime" endTime="$endTime" >
 						<div class="EventOnDayBorder $color">
 							<div class="EventOnDayContent">
-								<div style="float:left;margin-left:2px;">
+								<div class="EventCheckbox">
 									<%uicomponent.renderField(uicomponent.getChildById(event.id))%>
 								</div>
-								<div>
-									<div class="<%=(uicomponent.getPriority(event.getPriority()) == null)? "" :  uicomponent.getPriority(event.getPriority())%>PriorityIcon" style="float:left;"><span></span></div>
-									<div class="EventLabel" style="line-height: 17px;height:17px;" title="<%=event.summary%>" >$event.summary</div>
+								<div class="EventSummary" <%=(uicomponent.getPriority(event.getPriority()) == null)? "":" style='_padding-left:12px;'" %>>
+									<div class="<%=(uicomponent.getPriority(event.getPriority()) == null)? "" :  uicomponent.getPriority(event.getPriority())%>PriorityIcon"><span></span></div>
+									<div class="EventLabel EventPriority" title="<%=event.summary%>" >$event.summary</div>
 								</div>
 							</div>
 						</div>
