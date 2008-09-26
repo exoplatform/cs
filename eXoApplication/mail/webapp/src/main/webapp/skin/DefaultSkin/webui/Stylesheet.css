@@ -278,7 +278,7 @@
 }
 
 .UIMailPortlet .UINavigationContainer .FolderCollapseIcon{
-	background: url('background/ExpanIcon.gif') no-repeat left right; 
+	background: url('background/ExpanIcon.gif') no-repeat right; 
 }
 
 .UIMailPortlet .UIFolderContainer .NormalLabel {
