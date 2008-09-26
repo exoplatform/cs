@@ -693,7 +693,13 @@ public class JCRDataStorage {
       for (Value value : valueList)
         newValue.put(value.getString(), value) ;
       addressBookNode.setProperty(SHARED_PROP, newValue.values().toArray(new Value[newValue.size()]));
-    } else addressBookNode.setProperty(SHARED_PROP, new Value[] {}); // add to fix bug cs-1449
+    } else {
+      try {
+        addressBookNode.getProperty(SHARED_PROP) ;
+      } catch (PathNotFoundException e) {
+        addressBookNode.setProperty(SHARED_PROP, new Value[] {}); // add to fix bug cs-1449
+      }     
+    }
     addressBookNode.save() ;
     addressBookNode.getSession().save();
   }
