@@ -838,6 +838,8 @@ UIResizeEvent.prototype.execute = function(evt){
             
         }
     }
+		var min = (eXo.core.Browser.isIE6())?(UIResizeEvent.outerElement.offsetTop - 1) : UIResizeEvent.outerElement.offsetTop;
+		eXo.calendar.UICalendarPortlet.updateTitle(UIResizeEvent.outerElement, UIResizeEvent.outerElement.offsetTop, 1);
 };
 
 /**
@@ -956,14 +958,19 @@ UICalendarPortlet.prototype.dragStart = function(evt){
  * @param {Object} events DOM elemnt contains a calendar event
  * @param {Object} min Time in minutes
  */
-UICalendarPortlet.prototype.updateTitle = function(events, min){
+UICalendarPortlet.prototype.updateTitle = function(events, min, type){
     var timeFormat = events.getAttribute("timeFormat");
     var title = eXo.core.DOMUtil.findDescendantsByTagName(events, "p")[0];
+		var delta = parseInt(events.getAttribute("endtime")) - parseInt(events.getAttribute("starttime")) ;
     timeFormat = (timeFormat) ? eval(timeFormat) : {
         am: "AM",
         pm: "PM"
     };
-    title.innerHTML = eXo.calendar.UICalendarPortlet.minToTime(min, timeFormat);
+		if (type == 1) {
+			title.innerHTML = this.minToTime(min, timeFormat) + " - " + this.minToTime(min + events.offsetHeight, timeFormat);
+			return ;
+		}	
+    title.innerHTML = this.minToTime(min, timeFormat) + " - " + this.minToTime(min + delta, timeFormat);
 }
 
 /**
@@ -998,7 +1005,7 @@ UICalendarPortlet.prototype.dragEnd = function(){
             actionLink = actionLink.replace(/'\s*\)/, "&calType=" + calType + "')");
         eval(actionLink);
     }
-    title.innerHTML = titleName;
+    //title.innerHTML = titleName;
 };
 
 /* for adjusting time */

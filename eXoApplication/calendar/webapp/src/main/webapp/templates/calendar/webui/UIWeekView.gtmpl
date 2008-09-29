@@ -204,7 +204,7 @@
           </div>
           <div class="EventContainerBar EventTitle" title="<%=uiform.getLabel('moveEvent')%>">
             <p unselectable="on">
-              $begin 
+              $begin - $end
             </p>
           </div>
           <div style="clear: left;">
