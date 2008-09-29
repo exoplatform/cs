@@ -155,7 +155,7 @@
                     <div unselectable="on" class="EventContainerBar EventTitle" title="<%=uiform.getLabel('moveEvent')%>">
                     	
                     	<p>
-	                      <%=tf.format(ce.getFromDateTime())%> -> <%=tf.format(ce.getToDateTime())%>
+	                      <%=tf.format(ce.getFromDateTime())%> - <%=tf.format(ce.getToDateTime())%>
                       </p>
                     </div>
                     <div style="clear:left;"><span></span></div>
