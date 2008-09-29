@@ -978,8 +978,15 @@
 .UICalendarPortlet .MoreEvent .MoreEventBar {
   background: url('../skinIcons/icons/CloseMore.gif') no-repeat right;
   height: 16px;
+	padding: 2px 0px 0px 3px;
   margin-right: 1px;
 	_margin-right: 0px;
+	color:#00f;
+}
+
+.UICalendarPortlet .MoreEvent .MoreEventLabel {
+ padding: 0px 0px 0px 3px;
+ color:#00f;
 }
 
 .UICalendarPortlet .MoreEvent .MoreEventContainer {

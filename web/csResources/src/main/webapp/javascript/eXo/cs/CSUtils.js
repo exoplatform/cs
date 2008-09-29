@@ -392,12 +392,9 @@ EventManager.prototype.removeEvent = function( obj, type, fn ) {
     obj.removeEventListener( type, fn, false );
 };
 
-EventManager.prototype.removeEvent = function( obj, type, fn ) {
-  if ( obj.detachEvent ) {
-    obj.detachEvent( 'on'+type, obj[type+fn] );
-    obj[type+fn] = null;
-  } else
-    obj.removeEventListener( type, fn, false );
+EventManager.prototype.getMouseButton = function(evt) {
+	var evt = evt || window.event;
+	return evt.button ;
 };
 
 EventManager.prototype.getEventTarget = function(evt){

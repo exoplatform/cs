@@ -668,13 +668,11 @@ GUIMan.prototype.drawEventByMiliseconds = function(eventObj, startTime, endTime,
   delta /= (1000 * 60 * 60 * 24);
   var eventLen = parseFloat(delta * (dayInfo.width));
   var leftPos = dayInfo.left + parseFloat((dayInfo.eventShiftRightPercent * dayInfo.width) / 100) + 1;
-	//try{
 	if(!eXo.core.Browser.isIE6() || (document.getElementById("UIPageDesktop")))	leftPos += 55 ;
   eventNode.style.position = 'absolute';
   eventNode.style.top = topPos + 'px';
   eventNode.style.left = leftPos + 'px';
   eventNode.style.width = eventLen + 'px';
-	//}catch(e){alert(e.message + "-sfdsfs-" +eventLen) ;}
 };
 
 GUIMan.prototype.initSelectionDayEvent = function() { 
@@ -808,6 +806,7 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
 		var moreEventList = document.createElement('div');
 		moreEventBar.className = "MoreEventBar" ;
 		moreEventBar.innerHTML = "<span></span>" ;
+		moreEventBar.onclick = this.hideMore ;
     moreContainerNode.className = 'MoreEventContainer' ;
     // Create invisible event
     var cnt = 0
@@ -843,22 +842,22 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
 
       var checkBoxTmp = eventNode.getElementsByTagName('input')[0];
       checkBoxTmp.style.display = checkboxState;
-
+			eventNode.ondblclick = eXo.calendar.UICalendarPortlet.ondblclickCallback ;
       moreEventList.appendChild(eventNode);
       var topPos = this.EVENT_BAR_HEIGH * i;
-      with (eventNode.style) {
-        display = 'block';
-        position = 'absolute';
-        top = topPos + 16 + 'px';
-        left = '0px';
-        width = dayInfo.width + 'px';
-      }
+
+      eventNode.style.display = 'block';
+      eventNode.style.position = 'absolute';
+      eventNode.style.top = topPos + 16 + 'px';
+      eventNode.style.left = '0px';
+      eventNode.style.width = dayInfo.width + 'px';
+
       eventNode.setAttribute('used', 'true');
     }
     var moreLabel = document.createElement('div');
+		moreLabel.className = "MoreEventLabel";
     moreLabel.innerHTML = 'more ' + cnt + '+';
-		moreContainerNode.style.height = this.EVENT_BAR_HEIGH*cnt + 16 + "px";		
-    moreLabel.style.color = '#00f';
+		moreContainerNode.style.height = this.EVENT_BAR_HEIGH*cnt + 16 + "px";
 		moreLabel.onclick = this.showMore;
     moreNode.appendChild(moreLabel);
 		moreContainerNode.appendChild(moreEventBar);
@@ -893,6 +892,18 @@ GUIMan.prototype.showMore = function(evt) {
 			moreContainerNode.style.top = - moreContainerNode.offsetHeight + "px";
 		}
 		eXo.core.DOMUtil.listHideElements(moreContainerNode);
+		moreContainerNode.onclick = eXo.core.EventManager.cancelBubble ;
+		moreContainerNode.onmousedown = function(evt){
+			eXo.core.EventManager.cancelEvent(evt);
+			if(eXo.core.EventManager.getMouseButton(evt) == 2) eXo.core.DOMUtil.hideElementList.remove(this);
+		}
+		moreContainerNode.oncontextmenu = function(evt){
+				eXo.core.EventManager.cancelEvent(evt);
+				eXo.core.DOMUtil.hideElementList.remove(this);
+				eXo.webui.UIContextMenu.show(evt) ;
+				eXo.core.DOMUtil.hideElementList.push(this);
+				return false;
+		}
   }
 	GUIMan.moreNode = moreContainerNode ;
 };
