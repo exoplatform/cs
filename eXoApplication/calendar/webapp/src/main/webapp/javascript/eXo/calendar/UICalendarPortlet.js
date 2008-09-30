@@ -212,13 +212,19 @@ UICalendarPortlet.prototype.setting = function(){
 /**
  * Scroll vertical scrollbar to position of active calendar event
  * @param {Object} obj DOM element
- * @param {Object} events DOM element contains calendar events
  * @param {Object} container DOM element contains all calendar events
  */
-UICalendarPortlet.prototype.setFocus = function(obj, events, container){
-    events = this.getBlockElements(events);
+UICalendarPortlet.prototype.setFocus = function(obj, container){
+    var events = eXo.core.DOMUtil.findDescendantsByClass(obj,"div", "EventContainerBorder");
+	events = this.getBlockElements(events);
     var len = events.length;
-    var scrollTop = (events[0]) ? events[0].offsetTop : 0;
+	var scrollTop =  this.timeToMin((new Date()).getTime());
+	if(this.workingStart){
+		if(len == 0) scrollTop = this.workingStart ;
+		else {
+			scrollTop = (this.hasEventThrough(scrollTop,events))? scrollTop : this.workingStart ;
+		}
+	}	
     var lastUpdatedId = obj.getAttribute("lastUpdatedId");
     if (lastUpdatedId && (lastUpdatedId != "null")) {
         for (var i = 0; i < len; i++) {
@@ -228,10 +234,25 @@ UICalendarPortlet.prototype.setFocus = function(obj, events, container){
             }
         }
     }
-    else {
-        scrollTop = (this.workingStart) ? (this.workingStart + 15) : scrollTop;
-    }
-    container.scrollTop = scrollTop - 15;
+    container.scrollTop = scrollTop;
+};
+/**
+ * 
+ * @param {Object} min minutes
+ * @param {Object} events array of calendar events
+ */
+UICalendarPortlet.prototype.hasEventThrough = function(min,events){
+	var start = 0 ;
+	var end = 0 ;
+	var i = events.length
+	while(i--){
+		start = parseInt(events[i].getAttribute("starttime")) ;
+		end = parseInt(events[i].getAttribute("endtime")) ;
+		if((start <= min) && (end >= min)){
+			return true ;
+		}
+	}
+	return false;
 };
 
 /**
@@ -677,6 +698,7 @@ UICalendarPortlet.prototype.adjustWidth = function(el, totalWidth){
 UICalendarPortlet.prototype.showEvent = function(){
     this.init();
     var EventDayContainer = eXo.core.DOMUtil.findAncestorByClass(this.viewer, "EventDayContainer");
+    this.setFocus(this.viewer, EventDayContainer);
     if (!this.init()) 
         return;
     this.viewType = "UIDayView";
@@ -694,7 +716,6 @@ UICalendarPortlet.prototype.showEvent = function(){
     }
     this.items = el;
     this.adjustWidth(this.items);
-    this.setFocus(this.viewer, el, EventDayContainer);
     this.items = null;
     this.viewer = null;
 };

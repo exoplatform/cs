@@ -24,12 +24,14 @@ UIWeekView.prototype.init = function() {
 	var uiCalendarViewContainer = document.getElementById("UICalendarViewContainer") ;
 	var allEvents = DOMUtil.findDescendantsByClass(uiCalendarViewContainer, "div", "EventContainerBorder") ;
 	this.container = document.getElementById("UIWeekViewGrid") ;
+  var EventWeekContent = DOMUtil.findAncestorByClass(this.container,"EventWeekContent") ;
 	this.items = new Array() ;
   eXo.calendar.UICalendarPortlet.viewType = "UIWeekView" ;
 	for(var i = 0 ; i < allEvents.length ; i ++) {
 		if(allEvents[i].style.display != "none") this.items.push(allEvents[i]) ;
 	}
 	var len = UIWeekView.items.length ;
+  UICalendarPortlet.setFocus(this.container, EventWeekContent) ;
 	if (len <= 0) {
   	this.initAllday() ;
 		return;
@@ -55,9 +57,7 @@ UIWeekView.prototype.init = function() {
 	this.distributeEvent() ;
 	this.setSize() ;
 	this.initAllday() ;
-	var EventWeekContent = DOMUtil.findAncestorByClass(this.container,"EventWeekContent") ;
-	EventWeekContent.scrollTop = (UICalendarPortlet.workingStart) ? UICalendarPortlet.workingStart : 0 ;
-	UICalendarPortlet.setFocus(this.container, this.items, EventWeekContent) ;
+	UICalendarPortlet.setFocus(this.container, EventWeekContent) ;
 } ;
 
 UIWeekView.prototype.distributeEvent = function() {
