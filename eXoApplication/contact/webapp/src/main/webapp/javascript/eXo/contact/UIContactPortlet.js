@@ -511,8 +511,8 @@ UIContactPortlet.prototype.checkView = function() {
 	var uiContactPortlet = document.getElementById("UIContactPortlet");
 	var viewIcon = eXo.core.DOMUtil.findFirstDescendantByClass(uiContactPortlet,"div","ViewIcon");
 	var menuItems = eXo.core.DOMUtil.findDescendantsByClass(viewIcon.parentNode,"a","MenuItem");
-	var isVcard = document.getElementById("UIVCards") && eXo.core.DOMUtil.findAncestorByClass(isVcard,"UIContactContainer");
-	if (isVcard) {
+	var isVcard = document.getElementById("UIVCards");
+	if (isVcard && eXo.core.DOMUtil.findAncestorByClass(isVcard,"UIContactContainer")) {
 		if(menuItems[0].getAttribute("style")) menuItems[0].removeAttribute("style");
   	menuItems[1].style.background = "#E6E8F5" ;
 	} else{
