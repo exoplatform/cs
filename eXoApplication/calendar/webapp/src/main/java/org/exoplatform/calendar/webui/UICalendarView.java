@@ -165,8 +165,8 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     try {
       calendarSetting_ = getAncestorOfType(UICalendarPortlet.class).getCalendarSetting() ;
     } catch (Exception e) {
-      CalendarService calService = getApplicationComponent(CalendarService.class) ;
-      String username = Util.getPortalRequestContext().getRemoteUser() ;
+      CalendarService calService = CalendarUtils.getCalendarService() ;
+      String username = CalendarUtils.getCurrentUser() ;
       calendarSetting_ = calService.getCalendarSetting(getSession(), username) ;
     } 
     dateTimeFormat_ = getDateFormat() + " " + getTimeFormat() ;
@@ -247,7 +247,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
 
   public void initCategories() throws Exception {
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    List<EventCategory> eventCategories = calendarService.getEventCategories(getSession(), Util.getPortalRequestContext().getRemoteUser()) ;
+    List<EventCategory> eventCategories = calendarService.getEventCategories(getSession(), CalendarUtils.getCurrentUser()) ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     options.add(new SelectItemOption<String>("all", "all")) ;
     for(EventCategory category : eventCategories) {
@@ -320,7 +320,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     }
     public void update() throws Exception {
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
-      List<EventCategory> eventCategories = calendarService.getEventCategories(getSession(), Util.getPortalRequestContext().getRemoteUser()) ;
+      List<EventCategory> eventCategories = calendarService.getEventCategories(getSession(), CalendarUtils.getCurrentUser()) ;
       List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
       options.add(new SelectItemOption<String>("all", "all")) ;
       for(EventCategory category : eventCategories) {
@@ -334,7 +334,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
       List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
       if(privateCalendarIds.size() > 0) {
-        events = calendarService.getUserEventByCalendar(getSession(), Util.getPortalRequestContext().getRemoteUser(), privateCalendarIds)  ;
+        events = calendarService.getUserEventByCalendar(getSession(), CalendarUtils.getCurrentUser(), privateCalendarIds)  ;
       }
       if(publicCalendarIds.size() > 0) {
         if(events.size() > 0) {
@@ -546,7 +546,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       public void execute(Event<UICalendarView> event) throws Exception {
         UICalendarView uiForm = event.getSource() ;
         UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-        String username = event.getRequestContext().getRemoteUser() ;
+        String username = CalendarUtils.getCurrentUser() ;
         if(CalendarUtils.getCalendarOption().isEmpty()) {
           uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.calendar-list-empty", null)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -755,7 +755,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           uiPreview.setEvent(eventCalendar) ;
           uiPreview.refresh() ;
         } else uiCalendarView.refresh() ;
-        String username = event.getRequestContext().getRemoteUser() ;
+        String username = CalendarUtils.getCurrentUser() ;
         String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
         String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
         if(uiCalendarView.getDataMap() != null && uiCalendarView.getDataMap().get(eventId) != null) {
@@ -819,8 +819,8 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
         String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
         String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
-        String username = event.getRequestContext().getRemoteUser() ;
-        CalendarService calendarService = uiCalendarView.getApplicationComponent(CalendarService.class) ;
+        String username = CalendarUtils.getCurrentUser() ;
+        CalendarService calendarService = CalendarUtils.getCalendarService() ;
         UICalendarPortlet uiPortlet = uiCalendarView.getAncestorOfType(UICalendarPortlet.class) ;
         uiPortlet.cancelAction() ;
         org.exoplatform.calendar.service.Calendar calendar = null ;

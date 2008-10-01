@@ -163,7 +163,7 @@ public class UICalendars extends UIForm  {
 
   protected List<GroupCalendarData> getPrivateCalendars() throws Exception{
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    String username = CalendarUtils.getCurrentUser() ;
     List<GroupCalendarData> groupCalendars = calendarService.getCalendarCategories(getSession(), username, false) ;
     for(GroupCalendarData group : groupCalendars) {
       List<Calendar> calendars = group.getCalendars() ;
@@ -180,7 +180,7 @@ public class UICalendars extends UIForm  {
   }
 
   protected List<GroupCalendarData> getPublicCalendars() throws Exception{
-    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    String username = CalendarUtils.getCurrentUser() ;
     String[] groups = CalendarUtils.getUserGroups(username) ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<GroupCalendarData> groupCalendars = calendarService.getGroupCalendars(getSystemSession(), groups, false, username) ;
@@ -304,7 +304,7 @@ public class UICalendars extends UIForm  {
       UICalendarPortlet uiPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       uiPortlet.cancelAction() ;
       CalendarService calService = uiComponent.getApplicationComponent(CalendarService.class) ;
-      String username = event.getRequestContext().getRemoteUser() ;
+      String username = CalendarUtils.getCurrentUser() ;
       calService.removeCalendarCategory(uiComponent.getSession(), username, calendarCategoryId) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent) ; 
       UICalendarWorkingContainer uiWorkingContainer = uiPortlet.findFirstComponentOfType(UICalendarWorkingContainer.class) ;
@@ -429,7 +429,7 @@ public class UICalendars extends UIForm  {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiComponent = event.getSource() ;
       String calendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      String username = event.getRequestContext().getRemoteUser() ;
+      String username = CalendarUtils.getCurrentUser() ;
       String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
@@ -481,7 +481,7 @@ public class UICalendars extends UIForm  {
   static  public class RemoveCalendarActionListener extends EventListener<UICalendars> {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiComponent = event.getSource() ;
-      String username = event.getRequestContext().getRemoteUser() ;
+      String username = CalendarUtils.getCurrentUser() ;
       String calendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
       CalendarService calService = CalendarUtils.getCalendarService() ;
@@ -618,7 +618,7 @@ public class UICalendars extends UIForm  {
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
       popupAction.deActivate() ;
       UIExportForm exportForm = popupAction.activate(UIExportForm.class, 500) ;
-      String username = event.getRequestContext().getRemoteUser() ;
+      String username = CalendarUtils.getCurrentUser() ;
       exportForm.initCheckBox(CalendarUtils.getCalendarService().getUserCalendarsByCategory(uiComponent.getSession(), username, groupId), null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
@@ -667,7 +667,7 @@ public class UICalendars extends UIForm  {
       uiPopupContainer.setId("UIPermissionSelectPopup") ;
       UIAddEditPermission uiAddNewEditPermission = uiPopupContainer.addChild(UIAddEditPermission.class, null, null);
       CalendarService calService = CalendarUtils.getCalendarService() ;
-      String username = event.getRequestContext().getRemoteUser() ;
+      String username = CalendarUtils.getCurrentUser() ;
       Calendar cal = calService.getUserCalendar(uiComponent.getSession(), username, selectedCalendarId) ;
       uiAddNewEditPermission.init(null, cal, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent) ;
@@ -684,7 +684,7 @@ public class UICalendars extends UIForm  {
       CalendarService calService = CalendarUtils.getCalendarService() ;
       SessionProvider session = uiComponent.getSession() ;
       SessionProvider systemSession = uiComponent.getSystemSession() ;
-      String username = event.getRequestContext().getRemoteUser() ;
+      String username = CalendarUtils.getCurrentUser() ;
       try{
         Calendar calendar = null ;
         if(CalendarUtils.PRIVATE_TYPE.equals(calType)) {

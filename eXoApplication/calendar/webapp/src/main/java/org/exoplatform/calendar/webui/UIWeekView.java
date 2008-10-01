@@ -96,7 +96,7 @@ public class UIWeekView extends UICalendarView {
       c.add(Calendar.DATE, 1) ;
     }
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    String username = CalendarUtils.getCurrentUser() ;
     EventQuery eventQuery = new EventQuery() ;
     eventQuery.setFromDate(getBeginDateOfWeek()) ;
     eventQuery.setToDate(getEndDateOfWeek()) ;
@@ -185,7 +185,7 @@ public class UIWeekView extends UICalendarView {
       String startTime = event.getRequestContext().getRequestParameter("startTime") ;
       String finishTime = event.getRequestContext().getRequestParameter("finishTime") ;
       String currentDate = event.getRequestContext().getRequestParameter("currentDate") ;
-      String username = event.getRequestContext().getRemoteUser() ;
+      String username = CalendarUtils.getCurrentUser() ;
       CalendarEvent eventCalendar = calendarview.getDataMap().get(eventId) ;
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
       if(eventCalendar != null) {
@@ -274,7 +274,7 @@ public class UIWeekView extends UICalendarView {
       String startTime = event.getRequestContext().getRequestParameter("startTime") ;
       String finishTime = event.getRequestContext().getRequestParameter("finishTime") ;
       try {
-        String username = event.getRequestContext().getRemoteUser() ;
+        String username = CalendarUtils.getCurrentUser() ;
         CalendarEvent eventCalendar = calendarview.getDataMap().get(eventId) ;
         if(eventCalendar != null) {
           CalendarService calendarService = CalendarUtils.getCalendarService() ;

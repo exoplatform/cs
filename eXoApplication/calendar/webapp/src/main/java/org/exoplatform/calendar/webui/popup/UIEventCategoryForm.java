@@ -106,7 +106,7 @@ public class UIEventCategoryForm extends UIForm {
       if(!CalendarUtils.isEmpty(description)) description = name.trim().toLowerCase() ;
       UIEventCategoryManager uiManager = uiForm.getAncestorOfType(UIEventCategoryManager.class) ;
       CalendarService calendarService = CalendarUtils.getCalendarService();
-      String username = Util.getPortalRequestContext().getRemoteUser() ;
+      String username = CalendarUtils.getCurrentUser() ;
       EventCategory eventCat = new EventCategory() ;
       eventCat.setName(name) ;
       eventCat.setDescription(description) ;

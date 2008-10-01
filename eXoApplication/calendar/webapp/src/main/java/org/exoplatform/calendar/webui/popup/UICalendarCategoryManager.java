@@ -19,6 +19,7 @@ package org.exoplatform.calendar.webui.popup;
 import java.io.Writer;
 import java.util.List;
 
+import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
@@ -73,7 +74,7 @@ public class UICalendarCategoryManager extends UIContainer implements UIPopupCom
   }
   public void updateGrid() throws Exception {
     CalendarService calService = getApplicationComponent(CalendarService.class) ;
-    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    String username = CalendarUtils.getCurrentUser() ;
     List<CalendarCategory> categories = calService.getCategories(SessionProviderFactory.createSessionProvider(), username) ;
     UIGrid uiGrid = getChild(UIGrid.class) ; 
     ObjectPageList objPageList = new ObjectPageList(categories, 20) ;
@@ -97,7 +98,7 @@ public class UICalendarCategoryManager extends UIContainer implements UIPopupCom
       UICalendarPortlet calendarPortlet = uiManager.getAncestorOfType(UICalendarPortlet.class) ;
       String calendarCategoryId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       CalendarService calService = uiManager.getApplicationComponent(CalendarService.class) ;
-      String username = event.getRequestContext().getRemoteUser() ;
+      String username = CalendarUtils.getCurrentUser() ;
       calService.removeCalendarCategory(SessionProviderFactory.createSessionProvider(), username, calendarCategoryId) ;
       UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;
       UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;

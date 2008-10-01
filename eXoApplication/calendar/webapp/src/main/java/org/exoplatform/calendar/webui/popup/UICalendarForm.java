@@ -154,7 +154,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     return SessionProviderFactory.createSystemProvider() ;
   }
   private  List<SelectItemOption<String>> getCategory() throws Exception {
-    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    String username = CalendarUtils.getCurrentUser() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<CalendarCategory> categories = calendarService.getCategories(getSession(), username) ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
@@ -296,7 +296,8 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   }
   protected String getSelectedGroup() {
     UIFormInputWithActions calendarDetail = getChildById(INPUT_CALENDAR) ;
-    return calendarDetail.getUIFormSelectBox(CATEGORY).getValue() ;
+    if(calendarDetail.getUIFormSelectBox(CATEGORY) != null) return calendarDetail.getUIFormSelectBox(CATEGORY).getValue() ;
+    else return null ;
   }
   public void setSelectedGroup(String value) {
     UIFormInputWithActions calendarDetail = getChildById(INPUT_CALENDAR) ;
@@ -371,7 +372,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   }
   private Object[] getPublicGroups() throws Exception {
     OrganizationService organization = getApplicationComponent(OrganizationService.class) ;
-    String currentUser = Util.getPortalRequestContext().getRemoteUser() ;
+    String currentUser = CalendarUtils.getCurrentUser() ;
     return organization.getGroupHandler().findGroupsOfUser(currentUser).toArray() ;
   }
 
@@ -476,7 +477,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
         }
         displayName = displayName.trim() ;
         CalendarService calendarService = CalendarUtils.getCalendarService() ;
-        String username = Util.getPortalRequestContext().getRemoteUser() ;
+        String username = CalendarUtils.getCurrentUser() ;
         String calendarCategoryId = uiForm.getSelectedGroup() ;
         boolean isPublic = uiForm.isPublic() ;
         if(isPublic) uiForm.calType_ = CalendarUtils.PUBLIC_TYPE ;

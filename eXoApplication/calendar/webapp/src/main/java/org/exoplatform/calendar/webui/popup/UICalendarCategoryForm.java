@@ -71,7 +71,7 @@ public class UICalendarCategoryForm extends UIForm {
   public void init(String categoryId) throws Exception{
     setAddNew(false) ;
     CalendarService calService = getApplicationComponent(CalendarService.class) ;
-    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    String username = CalendarUtils.getCurrentUser() ;
     CalendarCategory category = calService.getCalendarCategory(SessionProviderFactory.createSessionProvider(), username, categoryId) ;
     setCategoryId(category.getId()) ;
     setCategoryName(category.getName()) ;

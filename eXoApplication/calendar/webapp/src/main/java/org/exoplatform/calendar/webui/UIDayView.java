@@ -83,7 +83,7 @@ public class UIDayView extends UICalendarView {
     end.add(Calendar.MILLISECOND, -1) ;
     List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    String username = CalendarUtils.getCurrentUser() ;
     EventQuery eventQuery = new EventQuery() ;
     eventQuery.setFromDate(begin) ;
     eventQuery.setToDate(end) ;
@@ -121,7 +121,7 @@ public class UIDayView extends UICalendarView {
       String calendarId = event.getRequestContext().getRequestParameter("calendarId") ;
       String startTime = event.getRequestContext().getRequestParameter("startTime") ;
       String endTime = event.getRequestContext().getRequestParameter("finishTime") ;
-      String username = event.getRequestContext().getRemoteUser() ;
+      String username = CalendarUtils.getCurrentUser() ;
       CalendarEvent ce = calendarview.eventData_.get(eventId) ;
       if(ce != null) {
         CalendarService calService = CalendarUtils.getCalendarService() ;

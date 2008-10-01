@@ -206,7 +206,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   public static List<SelectItemOption<String>> getCategory() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    List<EventCategory> eventCategories = calendarService.getEventCategories(SessionProviderFactory.createSessionProvider(), Util.getPortalRequestContext().getRemoteUser()) ;
+    List<EventCategory> eventCategories = calendarService.getEventCategories(SessionProviderFactory.createSessionProvider(), CalendarUtils.getCurrentUser()) ;
     for(EventCategory category : eventCategories) {
       options.add(new SelectItemOption<String>(category.getName(), category.getName())) ;
     }
@@ -749,7 +749,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
       CalendarService calService = CalendarUtils.getCalendarService();
       if(uiForm.isEventDetailValid(calendarPortlet.getCalendarSetting())) {
-        String username = event.getRequestContext().getRemoteUser() ;
+        String username = CalendarUtils.getCurrentUser() ;
         String calendarId = uiForm.getCalendarId() ;
         String summary = uiForm.getEventSumary() ;
         if(!CalendarUtils.isNameValid(summary, CalendarUtils.SIMPLECHARACTER)){

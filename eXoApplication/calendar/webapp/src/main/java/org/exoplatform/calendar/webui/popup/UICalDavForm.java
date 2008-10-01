@@ -77,7 +77,7 @@ public class UICalDavForm extends UIFormTabPane implements UIPopupComponent{
   public UICalDavForm() throws Exception{
     super("UICalDavForm");
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    String username = CalendarUtils.getCurrentUser() ;
     UIFormInputWithActions rssInfo = new UIFormInputWithActions(INFO_TAB) ;
     rssInfo.addUIFormInput(new UIFormStringInput(TITLE, TITLE, "eXoCalendarCalDav").addValidator(MandatoryValidator.class)) ;
     String url = calendarService.getCalendarSetting(SessionProviderFactory.createSessionProvider(), username).getBaseURL();
@@ -172,7 +172,7 @@ public class UICalDavForm extends UIFormTabPane implements UIPopupComponent{
       rssData.setVersion("rss_2.0") ;
       if(uiForm.getUIDateTimePicker(UICalDavForm.PUBLIC_DATE).getCalendar() != null)
       rssData.setPubDate(uiForm.getUIDateTimePicker(UICalDavForm.PUBLIC_DATE).getCalendar().getTime()) ;
-      int result = calendarService.generateCalDav(SessionProviderFactory.createSystemProvider(), Util.getPortalRequestContext().getRemoteUser(), calendarIds, rssData) ;
+      int result = calendarService.generateCalDav(SessionProviderFactory.createSystemProvider(), CalendarUtils.getCurrentUser(), calendarIds, rssData) ;
       if(result < 0) {
         uiApp.addMessage(new ApplicationMessage("UIRssForm.msg.no-data-generated", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

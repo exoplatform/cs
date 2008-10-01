@@ -75,7 +75,7 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
   public UIRssForm() throws Exception{
     super("UIRssForm");
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    String username = CalendarUtils.getCurrentUser() ;
     UIFormInputWithActions rssInfo = new UIFormInputWithActions(INPUT_RSSINFO) ;
     rssInfo.addUIFormInput(new UIFormStringInput(TITLE, TITLE, "eXoCalendar").addValidator(MandatoryValidator.class)) ;
     String url = calendarService.getCalendarSetting(SessionProviderFactory.createSessionProvider(), username).getBaseURL() ;
@@ -155,7 +155,7 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
       rssData.setVersion("rss_2.0") ;
       if(uiForm.getUIDateTimePicker(PUBLIC_DATE).getCalendar() != null)
         rssData.setPubDate(uiForm.getUIDateTimePicker(PUBLIC_DATE).getCalendar().getTime()) ;
-      int result = calendarService.generateRss(SessionProviderFactory.createSystemProvider(), Util.getPortalRequestContext().getRemoteUser(), calendarIds, rssData) ;
+      int result = calendarService.generateRss(SessionProviderFactory.createSystemProvider(), CalendarUtils.getCurrentUser(), calendarIds, rssData) ;
       if(result < 0) {
         uiForm.setSelectedTab(INPUT_RSSINFO) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
