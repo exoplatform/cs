@@ -214,8 +214,16 @@ UICalendarPortlet.prototype.setting = function(){
  * @param {Object} obj DOM element
  * @param {Object} container DOM element contains all calendar events
  */
-UICalendarPortlet.prototype.setFocus = function(obj, container){
-    var events = eXo.core.DOMUtil.findDescendantsByClass(obj,"div", "EventContainerBorder");
+UICalendarPortlet.prototype.setFocus = function(){
+  if(document.getElementById("UIWeekView")){
+    var obj = eXo.calendar.UIWeekView.container ;
+    var container = eXo.core.DOMUtil.findAncestorByClass(obj,"EventWeekContent") ;
+  }
+  if(document.getElementById("UIDayView")){
+    var obj = this.viewer ;
+    var container = eXo.core.DOMUtil.findAncestorByClass(obj, "EventDayContainer");
+  }
+  var events = eXo.core.DOMUtil.findDescendantsByClass(obj,"div", "EventContainerBorder");
 	events = this.getBlockElements(events);
     var len = events.length;
 	var scrollTop =  this.timeToMin((new Date()).getTime());
@@ -506,6 +514,7 @@ UICalendarPortlet.prototype.switchLayout = function(layout){
             }
             break;
     }
+    if(eXo.core.Browser.isFF() && document.getElementById("UIWeekView")) eXo.calendar.UIWeekView.onResize();
 };
 /* for event */
 /**
@@ -654,6 +663,7 @@ UICalendarPortlet.prototype.adjustWidth = function(el, totalWidth){
     var width = "";
     for (var i = 0; i < inter.length; i++) {
         var totalWidth = (arguments.length > 1) ? arguments[1] : parseFloat(100);
+        totalWidth -= 2 ;
         var offsetLeft = parseFloat(0);
         var left = parseFloat(0);
         if (arguments.length > 2) {
@@ -1658,6 +1668,7 @@ UICalendarPortlet.prototype.swapMenu = function(oldmenu, clickobj){
         DOMUtil.removeElement(document.getElementById("tmpMenuElement"));
     var tmpMenuElement = oldmenu.cloneNode(true);
     tmpMenuElement.setAttribute("id", "tmpMenuElement");
+    tmpMenuElement.style.zIndex = 1 ;
     this.menuElement = tmpMenuElement;
     if (uiDesktop) {
         document.body.appendChild(this.menuElement);
@@ -1789,7 +1800,7 @@ UISelection.prototype.start = function(evt){
         UISelection.block.style.left = UISelection.startX + "px";
         UISelection.block.style.top = UISelection.startY + "px";
         UISelection.block.style.height = UISelection.step + "px";
-        
+        UISelection.block.style.zIndex = 1; 
         eXo.calendar.UICalendarPortlet.resetZIndex(UISelection.block);
         document.onmousemove = UISelection.execute;
         document.onmouseup = UISelection.clear;
@@ -2143,6 +2154,7 @@ UICalendarPortlet.prototype.fixFirstLoad = function(){
         if (document.getElementById("UIWeekView")) {
             eXo.calendar.UICalendarMan.initWeek();
             eXo.calendar.UIWeekView.setSize();
+            eXo.calendar.UICalendarPortlet.setFocus();
             this.firstRun = true;
         }
     }

@@ -31,7 +31,7 @@ UIWeekView.prototype.init = function() {
 		if(allEvents[i].style.display != "none") this.items.push(allEvents[i]) ;
 	}
 	var len = UIWeekView.items.length ;
-  UICalendarPortlet.setFocus(this.container, EventWeekContent) ;
+  UICalendarPortlet.setFocus() ;
 	if (len <= 0) {
   	this.initAllday() ;
 		return;
@@ -57,7 +57,7 @@ UIWeekView.prototype.init = function() {
 	this.distributeEvent() ;
 	this.setSize() ;
 	this.initAllday() ;
-	UICalendarPortlet.setFocus(this.container, EventWeekContent) ;
+	UICalendarPortlet.setFocus() ;
 } ;
 
 UIWeekView.prototype.distributeEvent = function() {
@@ -96,6 +96,7 @@ UIWeekView.prototype.adjustWidth = function(el) {
 	var width = "" ;
 	for(var i = 0 ; i < inter.length ; i ++) {
 		var totalWidth = (arguments.length > 1) ? arguments[1] : parseFloat(100) ;
+    totalWidth -= 10 ;
 		var offsetLeft = parseFloat(0) ;
 		var left = parseFloat(0) ;
 		if(arguments.length > 2) {
