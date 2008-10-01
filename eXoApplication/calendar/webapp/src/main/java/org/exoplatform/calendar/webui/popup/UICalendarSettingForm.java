@@ -85,7 +85,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
   public Map<String, String> getChildIds() {return names_ ;}
   public void init(CalendarSetting calendarSetting, CalendarService cservice) throws Exception{
     names_.clear() ;
-    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    String username = CalendarUtils.getCurrentUser() ;
     if(calendarSetting != null) {
       sharedCalendarColors_ = calendarSetting.getSharedCalendarsColors() ;
       UICalendarSettingTab settingTab = getChildById(SETTING_CALENDAR_TAB) ;
@@ -247,7 +247,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
       UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;
-      String username = event.getRequestContext().getRemoteUser() ;
+      String username = CalendarUtils.getCurrentUser() ;
       List<String> defaultFilterCalendars = new ArrayList<String>() ;
       List<String> unCheckList = new ArrayList<String>() ;
       defaultFilterCalendars = uiForm.getUnCheckedList(uiForm.getPrivateCalendars(calendarService, username)) ;
@@ -269,7 +269,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
         defaultFilterCalendars.clear() ;
       }
       uiCalendars.checkAll() ;
-      calendarService.saveCalendarSetting(uiForm.getSession(), event.getRequestContext().getRemoteUser(), calendarSetting) ;
+      calendarService.saveCalendarSetting(uiForm.getSession(), CalendarUtils.getCurrentUser(), calendarSetting) ;
       calendarPortlet.setCalendarSetting(calendarSetting) ;
       String viewType = UICalendarViewContainer.TYPES[Integer.parseInt(calendarSetting.getViewType())] ;
       UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;

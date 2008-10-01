@@ -83,7 +83,7 @@ public class UIMonthView extends UICalendarView {
   }
   public void refresh() throws Exception {
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    String username = CalendarUtils.getCurrentUser() ;
     EventQuery eventQuery = new EventQuery() ;
     eventQuery.setFromDate(getBeginDateOfMonthView()) ;
     eventQuery.setToDate(getEndDateOfMonthView()) ;
@@ -161,7 +161,7 @@ public class UIMonthView extends UICalendarView {
     public void execute(Event<UIMonthView> event) throws Exception {
       UIMonthView calendarview = event.getSource() ;
       UICalendarPortlet uiPortlet = calendarview.getAncestorOfType(UICalendarPortlet.class) ;
-      String username = event.getRequestContext().getRemoteUser() ;
+      String username = CalendarUtils.getCurrentUser() ;
       String value = event.getRequestContext().getRequestParameter(OBJECTID) ;
       String eventId = event.getRequestContext().getRequestParameter(EVENTID) ;
       String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;

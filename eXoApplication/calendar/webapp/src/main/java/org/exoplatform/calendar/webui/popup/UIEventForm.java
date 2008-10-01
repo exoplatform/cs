@@ -280,7 +280,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   public static List<SelectItemOption<String>> getCategory() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    List<EventCategory> eventCategories = calendarService.getEventCategories(SessionProviderFactory.createSessionProvider(), Util.getPortalRequestContext().getRemoteUser()) ;
+    List<EventCategory> eventCategories = calendarService.getEventCategories(SessionProviderFactory.createSessionProvider(),CalendarUtils.getCurrentUser()) ;
     for(EventCategory category : eventCategories) {
       options.add(new SelectItemOption<String>(category.getName(), category.getName())) ;
     }
@@ -1108,7 +1108,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return ;
           }else {
-            String username = event.getRequestContext().getRemoteUser() ;
+            String username = CalendarUtils.getCurrentUser() ;
             String calendarId = uiForm.getCalendarId() ;
             Date from = uiForm.getEventFromDate(calSetting.getDateFormat(), calSetting.getTimeFormat()) ;
             Date to = uiForm.getEventToDate(calSetting.getDateFormat(),calSetting.getTimeFormat()) ;

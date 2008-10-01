@@ -102,7 +102,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
         }
       }
       try {
-        String username = Util.getPortalRequestContext().getRemoteUser() ;
+        String username = CalendarUtils.getCurrentUser() ;
         CalendarService calendarService = CalendarUtils.getCalendarService() ;
         List<Calendar> pCals = calendarService.getUserCalendars(SessionProviderFactory.createSessionProvider(), username, true) ;
         for(Calendar cal : pCals) {

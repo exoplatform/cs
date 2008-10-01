@@ -76,8 +76,8 @@ public class UIYearView extends UICalendarView {
     cal.add(Calendar.YEAR, 1) ;
     cal.add(Calendar.MILLISECOND, -1) ;
     Calendar endYear = cal ;
-    CalendarService calendarService = getApplicationComponent(CalendarService.class) ;
-    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    CalendarService calendarService = CalendarUtils.getCalendarService() ;
+    String username = CalendarUtils.getCurrentUser() ;
     EventQuery eventQuery = new EventQuery() ;
      if(!CalendarUtils.isEmpty(categoryId_) && !categoryId_.toLowerCase().equals("null")&& !categoryId_.toLowerCase().equals("all")) {
       eventQuery.setCategoryId(new String[]{categoryId_}) ;

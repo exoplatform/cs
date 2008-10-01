@@ -42,6 +42,7 @@ import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.webui.popup.UIAddressForm.ContactData;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.container.RootContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.service.MailService;
@@ -475,8 +476,8 @@ public class CalendarUtils {
   }
   public static List<SelectItem> getCalendarOption() throws Exception {
     List<SelectItem> options = new ArrayList<SelectItem>() ;
-    CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    CalendarService calendarService = getCalendarService() ;
+    String username = getCurrentUser();
     /*
      * Modified by Philippe (philippe.aristote@gmail.com)
      * Uses SelectItemOptionGroup to differienciate private, shared and public groups
@@ -522,8 +523,8 @@ public class CalendarUtils {
 
   public static List<org.exoplatform.calendar.service.Calendar> getCalendars() throws Exception {
     List<org.exoplatform.calendar.service.Calendar> list = new ArrayList<org.exoplatform.calendar.service.Calendar>() ;
-    CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    String username = Util.getPortalRequestContext().getRemoteUser() ;
+    CalendarService calendarService = getCalendarService() ;
+    String username = getCurrentUser() ;
     List<org.exoplatform.calendar.service.Calendar> calendars = calendarService.getUserCalendars(SessionProviderFactory.createSessionProvider(), username, true) ;
     for(org.exoplatform.calendar.service.Calendar c : calendars) {
       list.add(c) ;

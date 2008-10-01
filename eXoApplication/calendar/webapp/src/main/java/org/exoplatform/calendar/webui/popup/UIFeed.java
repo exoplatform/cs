@@ -48,7 +48,7 @@ public class UIFeed extends UIForm implements UIPopupComponent{
   
   public List getFeeds() throws Exception {
     CalendarService calService = CalendarUtils.getCalendarService() ;
-    return calService.getFeeds(SessionProviderFactory.createSessionProvider(), Util.getPortalRequestContext().getRemoteUser()) ;
+    return calService.getFeeds(SessionProviderFactory.createSessionProvider(), CalendarUtils.getCurrentUser()) ;
   }
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}  
