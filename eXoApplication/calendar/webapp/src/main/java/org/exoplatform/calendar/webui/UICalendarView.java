@@ -47,7 +47,6 @@ import org.exoplatform.calendar.webui.popup.UIPopupContainer;
 import org.exoplatform.calendar.webui.popup.UIQuickAddEvent;
 import org.exoplatform.calendar.webui.popup.UITaskForm;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;

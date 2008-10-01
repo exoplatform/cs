@@ -19,8 +19,6 @@ package org.exoplatform.calendar.webui;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.jcr.query.Query;
-
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventPageList;
