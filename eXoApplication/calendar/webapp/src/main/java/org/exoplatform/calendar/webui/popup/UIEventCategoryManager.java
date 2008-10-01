@@ -22,10 +22,14 @@ import java.util.List;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventCategory;
+import org.exoplatform.calendar.webui.UIActionBar;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UICalendars;
+import org.exoplatform.calendar.webui.UIListContainer;
+import org.exoplatform.calendar.webui.UIListView;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
+import org.exoplatform.calendar.webui.UISearchForm;
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -123,6 +127,21 @@ public class UIEventCategoryManager extends UIContainer implements UIPopupCompon
       UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendars) ; 
       UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+      if(uiViewContainer.getRenderedChild()  instanceof UIListContainer) {
+        UIListContainer list = (UIListContainer)uiViewContainer.getRenderedChild() ;
+        UIListView uiListView = list.getChild(UIListView.class) ;
+        if(uiListView.isDisplaySearchResult()) {
+          uiListView.setDisplaySearchResult(false) ;
+          uiListView.setCategoryId(null) ;
+          uiListView.refresh() ;
+          uiListView.setLastViewId(null) ;
+          UISearchForm uiSearchForm = calendarPortlet.findFirstComponentOfType(UISearchForm.class) ;
+          uiSearchForm.reset() ;
+          UIActionBar uiActionBar = calendarPortlet.findFirstComponentOfType(UIActionBar.class) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiSearchForm) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
+        }
+      }
       uiViewContainer.updateCategory() ;
       uiViewContainer.refresh() ;
       UIMiniCalendar uiMiniCalendar = calendarPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;

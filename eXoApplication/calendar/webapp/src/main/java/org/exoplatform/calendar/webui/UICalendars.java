@@ -47,7 +47,6 @@ import org.exoplatform.calendar.webui.popup.UIPopupContainer;
 import org.exoplatform.calendar.webui.popup.UIQuickAddEvent;
 import org.exoplatform.calendar.webui.popup.UIRssForm;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -309,6 +308,21 @@ public class UICalendars extends UIForm  {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent) ; 
       UICalendarWorkingContainer uiWorkingContainer = uiPortlet.findFirstComponentOfType(UICalendarWorkingContainer.class) ;
       UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+      if(uiViewContainer.getRenderedChild()  instanceof UIListContainer) {
+        UIListContainer list = (UIListContainer)uiViewContainer.getRenderedChild() ;
+        UIListView uiListView = list.getChild(UIListView.class) ;
+        if(uiListView.isDisplaySearchResult()) {
+          uiListView.setDisplaySearchResult(false) ;
+          uiListView.setCategoryId(null) ;
+          uiListView.refresh() ;
+          uiListView.setLastViewId(null) ;
+          UISearchForm uiSearchForm = uiPortlet.findFirstComponentOfType(UISearchForm.class) ;
+          uiSearchForm.reset() ;
+          UIActionBar uiActionBar = uiPortlet.findFirstComponentOfType(UIActionBar.class) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiSearchForm) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
+        }
+      }
       uiViewContainer.refresh() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingContainer) ;
     }
@@ -541,6 +555,21 @@ public class UICalendars extends UIForm  {
       UICalendarPortlet uiPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       uiPortlet.cancelAction() ;
       UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+      if(uiViewContainer.getRenderedChild()  instanceof UIListContainer) {
+        UIListContainer list = (UIListContainer)uiViewContainer.getRenderedChild() ;
+        UIListView uiListView = list.getChild(UIListView.class) ;
+        if(uiListView.isDisplaySearchResult()) {
+          uiListView.setDisplaySearchResult(false) ;
+          uiListView.setCategoryId(null) ;
+          uiListView.refresh() ;
+          uiListView.setLastViewId(null) ;
+          UISearchForm uiSearchForm = uiPortlet.findFirstComponentOfType(UISearchForm.class) ;
+          uiSearchForm.reset() ;
+          UIActionBar uiActionBar = uiPortlet.findFirstComponentOfType(UIActionBar.class) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiSearchForm) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
+        }
+      }
       CalendarSetting setting = calService.getCalendarSetting(uiComponent.getSession(), username) ;
       uiViewContainer.refresh() ;
       uiPortlet.setCalendarSetting(setting) ;
