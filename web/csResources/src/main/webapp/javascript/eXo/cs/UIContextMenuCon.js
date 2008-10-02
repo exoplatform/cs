@@ -21,11 +21,6 @@ UIContextMenuCon.prototype.show = function(evt) {
 	var currentPortlet = eXo.core.DOMUtil.findAncestorByClass(UIContextMenu.attachedElement, UIContextMenu.portletCssClass) ;
 	if (menuElementId) {
 		UIContextMenu.menuElement = eXo.core.DOMUtil.findDescendantById(currentPortlet, menuElementId) ; //document.getElementById(menuElementId) ;
-		var callback = UIContextMenu.getCallback(UIContextMenu.menuElement) ;
-		if(callback) {
-			callback = callback + "(_e)" ;
-			eval(callback) ;
-		}
 		eXo.core.DOMUtil.listHideElements(UIContextMenu.menuElement) ;
 		var ln = eXo.core.DOMUtil.hideElementList.length ;
 		if (ln > 0) {
@@ -33,7 +28,8 @@ UIContextMenuCon.prototype.show = function(evt) {
 				eXo.core.DOMUtil.hideElementList[i].style.display = "none" ;
 			}
 		}
-		UIContextMenu.swapMenu(document.getElementById(menuElementId), menuPos) ;
+		UIContextMenu.swapMenu(document.getElementById(menuElementId), menuPos,_e) ;
+		if(!UIContextMenu.menuElement) return false;
 		UIContextMenu.menuElement.onmouseover = UIContextMenu.autoHide ;
 		UIContextMenu.menuElement.onmouseout = UIContextMenu.autoHide ;		
 		return false ;

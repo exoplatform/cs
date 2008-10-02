@@ -33,7 +33,8 @@ UIContextMenuMail.prototype.show = function(evt) {
 				eXo.core.DOMUtil.hideElementList[i].style.display = "none" ;
 			}
 		}
-		UIContextMenu.swapMenu(document.getElementById(menuElementId), menuPos) ;
+		UIContextMenu.swapMenu(document.getElementById(menuElementId), menuPos,_e) ;
+		if(!UIContextMenu.menuElement) return false;
 		UIContextMenu.menuElement.onmouseover = UIContextMenu.autoHide ;
 		UIContextMenu.menuElement.onmouseout = UIContextMenu.autoHide ;		
 		return false ;
