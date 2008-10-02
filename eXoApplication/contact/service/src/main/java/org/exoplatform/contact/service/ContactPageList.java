@@ -98,7 +98,7 @@ public class ContactPageList extends JCRPageList {
     }
     
 //  add to take default contact to first of list
-    if (!containDefault && contactType_.equals(JCRDataStorage.PRIVATE) 
+    if (page == 1 && !containDefault && contactType_.equals(JCRDataStorage.PRIVATE) 
         && value_.contains(NewUserListener.DEFAULTGROUP + username_) && iter_ != null) {
       iter_.skip(0) ;
       while (iter_.hasNext()) {
