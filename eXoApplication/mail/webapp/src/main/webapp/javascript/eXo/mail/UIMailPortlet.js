@@ -122,6 +122,7 @@ UIMailPortlet.prototype.showPrintPreview = function(obj1) {
 	mailWorkingWorkspaceNode.appendChild(uiMessagePreviewNode) ;
 	uiMailPortletNode.appendChild(mailWorkingWorkspaceNode) ;	
 	document.body.appendChild(uiMailPortletNode) ;
+	frame.style.width = printContent.offsetWidth + "px";
 	var doc = frame.contentWindow.document ;
 	doc.open();
 	doc.write(str);
@@ -129,7 +130,7 @@ UIMailPortlet.prototype.showPrintPreview = function(obj1) {
 	if (eXo.core.Browser.isFF()) {
 			doc.body.style.visibility = "visible";
 			frame.style.height = doc.documentElement.offsetHeight  + 20 + "px" ;
-			frame.style.width = doc.body.scrollWidth + "px";
+			frame.style.width = doc.body.offsetWidth + "px";
 		} else {
 			var docHt = 0, sh, oh;
 			if (doc.height) {
