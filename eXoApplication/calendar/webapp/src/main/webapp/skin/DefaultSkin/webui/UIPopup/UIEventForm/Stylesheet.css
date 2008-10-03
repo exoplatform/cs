@@ -333,6 +333,7 @@
 	float: left;
 	background: none;
 	margin-right: 7px;
+	_margin-right: 1px;
 }
 
 .UICalendarPortlet .UIQuickAddEvent .UIFormGrid .FieldComponent .Date input{
