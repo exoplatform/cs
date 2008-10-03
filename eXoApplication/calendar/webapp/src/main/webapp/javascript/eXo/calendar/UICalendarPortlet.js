@@ -1717,7 +1717,6 @@ UICalendarPortlet.prototype.showHideField = function(chk, fields){
     var len = fields.length;
     for (var i = 0; i < len; i++) {
         fields[i].style.visibility = display;
-        i
     }
 };
 
