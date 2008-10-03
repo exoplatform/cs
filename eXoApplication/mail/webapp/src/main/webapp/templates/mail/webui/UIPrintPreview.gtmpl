@@ -12,7 +12,7 @@
   def rcontext = _ctx.getRequestContext() ;
   JavascriptManager jsmanager = rcontext.getJavascriptManager();
   jsmanager.importJavascript('eXo.mail.UIMailPortlet');
-  jsmanager.addOnLoadJavascript("eXo.mail.UIMailPortlet.showPrintPreview(document.getElementById('printWrapper'))");
+  jsmanager.addJavascript("eXo.mail.UIMailPortlet.showPrintPreview(document.getElementById('printWrapper'));");
   WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
   Locale locale = context.getParentAppRequestContext().getLocale() ;
 %>
@@ -115,7 +115,7 @@
   </div>
   <%}%>
   <% uiform.end() %>
-  <!--  End PrintPriview -->
+
   <style type="text/css" media="print">
     .DisablePrint{display:none;}
   </style>
