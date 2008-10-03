@@ -402,9 +402,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       calendar_.add(field, amount) ;
     }
     protected void removeEvents(List<CalendarEvent> events) throws Exception {
-      CalendarService calService = getApplicationComponent(CalendarService.class) ;
+      CalendarService calService = CalendarUtils.getCalendarService() ;
       String username = CalendarUtils.getCurrentUser() ;
-      OrganizationService orService = getApplicationComponent(OrganizationService.class) ;
+      OrganizationService orService = CalendarUtils.getOrganizationService() ;
       for (CalendarEvent ce : events) {
         org.exoplatform.calendar.service.Calendar cal = null ;
         if(CalendarUtils.PUBLIC_TYPE.equals(ce.getCalType())){
@@ -424,6 +424,17 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
             allDelete_ = false ;
           }
         }
+      }
+    }
+    protected void moveEvents(List<CalendarEvent> events, String toCalendarId, String toType)throws Exception{
+      CalendarService calService = CalendarUtils.getCalendarService() ;
+      String username = CalendarUtils.getCurrentUser() ;
+      for (CalendarEvent ce : events) {
+        if(CalendarUtils.isEmpty(toCalendarId )) toCalendarId = ce.getCalendarId() ;
+        if(CalendarUtils.isEmpty(toType)) toType = ce.getCalType() ;
+        List<CalendarEvent> list = new ArrayList<CalendarEvent>(){} ;
+        list.add(ce) ;
+        calService.moveEvent(getSession(), ce.getCalendarId(), toCalendarId, ce.getCalType(), toType, list, username) ;
       }
     }
     protected Calendar getBeginDay(Calendar cal) {
