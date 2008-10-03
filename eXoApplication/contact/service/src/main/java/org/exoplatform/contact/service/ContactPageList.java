@@ -46,6 +46,10 @@ public class ContactPageList extends JCRPageList {
   private boolean isQuery_ = false ;
   private String value_ ;
   private String contactType_ = "0" ;
+
+  // add to fix bug 1484
+  private long pageReturn = 0 ;
+  
   public ContactPageList(String username, NodeIterator iter, long pageSize, String value, boolean isQuery, String type ) throws Exception{
     super(pageSize) ;
     username_ = username;
@@ -77,7 +81,12 @@ public class ContactPageList extends JCRPageList {
     if(page == 1) position = 0;
     else {
       position = (page-1) * pageSize ;
-      iter_.skip(position) ;
+      if (pageReturn == page) {
+        try {
+          iter_.skip(position - 1) ;
+        } catch (Exception e) { System.out.println("\n iter exception");}        
+      } else iter_.skip(position) ;
+      
     }
     boolean containDefault = false ;
     currentListPage_ = new ArrayList<Contact>() ;
@@ -87,6 +96,10 @@ public class ContactPageList extends JCRPageList {
         if(currentNode.isNodeType("exo:contact")) {
           Contact contact = getContact(currentNode, contactType_) ;
           if (contact.getId().equalsIgnoreCase(username_) && (contactType_.equals(JCRDataStorage.PRIVATE))) {
+            if (page > 1) {
+              i -- ;
+              continue ;
+            }
             currentListPage_.add(0, contact) ;
             containDefault = true ;
           }
@@ -105,6 +118,8 @@ public class ContactPageList extends JCRPageList {
         Node defaultNode = iter_.nextNode() ;
         if (defaultNode.getProperty("exo:id").getString().equals(username_)) {
           Contact defaultContact = getContact(defaultNode, contactType_) ;
+          if (iter_.getSize() % pageSize == 0) pageReturn =  iter_.getSize()/pageSize ;
+          else pageReturn = iter_.getSize()/pageSize + 1 ; 
           currentListPage_.remove(currentListPage_.size() - 1) ;
           currentListPage_.add(0, defaultContact) ;
           break ;
