@@ -22,33 +22,23 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.scheduler.JobInfo;
 import org.exoplatform.services.scheduler.JobSchedulerService;
 import org.quartz.Job;
+import org.quartz.JobDataMap;
+import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-public class CheckMailJob extends Thread implements Job {
-  private Thread thread ;
+public class CheckMailJob implements Job {
+
   
-	public CheckMailJob() throws Exception {
-		setDaemon(true) ;	
-		start() ;
+	public static final String CHECKMAIL_GROUP = "CollaborationSuite-webmail";
+  public static final String USERNAME = "userName";
+  public static final String ACCOUNTID = "acountId";
+  private static Log log = ExoLogger.getLogger("job.CheckMailJob");
+  
+  public CheckMailJob() throws Exception {
 		
 	}
-	public void start() { 
-		if ( thread == null ) { 
-    	thread = new Thread(this); 
-    	thread.start(); 
-    }
-	} 
-	
-	@SuppressWarnings("deprecation")
-  public void destroy() {
-		thread.stop() ;
-		thread = null ;
-	} 
-	
-	private static Log log_ = ExoLogger.getLogger("job.RecordsJob");
 
-  @SuppressWarnings("deprecation")
   public void execute(JobExecutionContext context) throws JobExecutionException {
 	  try {
 		  //TODO : khdung
@@ -56,21 +46,40 @@ public class CheckMailJob extends Thread implements Job {
 		  // it's better (and of course correct) if we get static references.
 		  MailService mailService = Utils.getMailService();
 		  JobSchedulerService schedulerService = Utils.getJobSchedulerService();
-		  String name = context.getJobDetail().getName();
-		  JobInfo info = new JobInfo(context.getJobDetail().getName(), "CollaborationSuite-webmail",
-				  context.getJobDetail().getJobClass());
-		  if (name != null && name.indexOf(":") > 0) {
-			  String[] array = name.split(":") ;
-        if(array.length > 0) mailService.checkNewMessage(SessionProvider.createSystemProvider(), array[0].trim(), array[1].trim()) ;
+		  
+		  JobDetail jobDetail = context.getJobDetail();
+		  JobDataMap dataMap = jobDetail.getJobDataMap();
+		  
+		  String username = dataMap.getString(USERNAME);
+		  String accountId = dataMap.getString(ACCOUNTID);
+		  if (username!= null && accountId !=null) {
+		    mailService.checkNewMessage(SessionProvider.createSystemProvider(), username.trim(), accountId.trim()) ;
 		  }
+		  
+		  String name = jobDetail.getName();
+		  JobInfo info = new JobInfo(name, CHECKMAIL_GROUP, CheckMailJob.class);
+		  
+		  // Antipattern a job should not unregister himself
 		  schedulerService.removeJob(info) ;
-		  System.out.println("\n\n####  Checking mail of " + context.getJobDetail().getName()+ " finished ");
+
 
 	  } catch (Exception e) {
-		  e.printStackTrace();			
+		  log.error("Mail check failed for " + context.getJobDetail().getName(), e);
 	  }
-	  if (log_.isDebugEnabled()) {
-		log_.debug("File plan job done");
+	  if (log.isDebugEnabled()) {
+      log.debug("\n\n####  Checking mail of " + context.getJobDetail().getName() + " finished ");
 	  }
   }
+  
+  private static String getJobName(String userId, String accountId) {
+    return userId + ":" + accountId;
+  }
+  
+  public static JobInfo getJobInfo(String userId, String accountId) {
+    String name =  getJobName(userId, accountId);
+    JobInfo info = new JobInfo(name, CheckMailJob.CHECKMAIL_GROUP, CheckMailJob.class);
+    info.setDescription("Check emails for user " + userId + " on acount " + accountId);
+    return info;
+  }
+  
 }

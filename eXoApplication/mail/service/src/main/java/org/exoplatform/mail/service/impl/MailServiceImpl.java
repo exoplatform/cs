@@ -68,6 +68,7 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.AccountData;
 import org.exoplatform.mail.service.Attachment;
+import org.exoplatform.mail.service.CheckMailJob;
 import org.exoplatform.mail.service.CheckingInfo;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
@@ -85,6 +86,8 @@ import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.scheduler.JobInfo;
 import org.exoplatform.services.scheduler.JobSchedulerService;
 import org.exoplatform.services.scheduler.PeriodInfo;
+import org.quartz.JobDataMap;
+import org.quartz.JobDetail;
 
 import com.sun.mail.smtp.SMTPSendFailedException;
 
@@ -473,8 +476,12 @@ public class MailServiceImpl implements MailService {
   public void checkMail(String username, String accountId) throws Exception {
     Calendar cal = new GregorianCalendar();
     PeriodInfo periodInfo = new PeriodInfo(cal.getTime(), null, 1, 86400000);
-    Class clazz = Class.forName("org.exoplatform.mail.service.CheckMailJob");
-    JobInfo info = new JobInfo(username + ":" + accountId, "CollaborationSuite-webmail", clazz);
+
+    JobInfo info = CheckMailJob.getJobInfo(username, accountId);
+    JobDataMap jobData = new JobDataMap();
+    jobData.put(CheckMailJob.USERNAME, username);
+    jobData.put(CheckMailJob.ACCOUNTID, accountId);
+    
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     MailService mailService = (MailService) container.getComponentInstanceOfType(MailService.class);
     JobSchedulerService schedulerService = (JobSchedulerService) container
@@ -483,8 +490,22 @@ public class MailServiceImpl implements MailService {
     //TODO Should not keep mailService and schdulerService in until class - Make sure that we set the static references ... should be improved !!!
     Utils.setMailService(mailService);
     Utils.setScheduleService(schedulerService);
-
-    schedulerService.addPeriodJob(info, periodInfo);
+    
+    // TODO current implementation is inefficient
+    /// Need to upgrade to 2.0.3 and use this instead : 
+    //boolean jobExists = (schedulerService.getJob(info) != null);
+    boolean jobExists = false;
+    for (Object obj : schedulerService.getAllJobs()) {
+      if (((JobDetail) obj).getName().equals(username + ":" + accountId)) {
+        jobExists = true;
+        break;
+      }
+    }
+    
+    // add job is it does not exist
+    if (!jobExists) {
+      schedulerService.addPeriodJob(info, periodInfo, jobData);
+    }
   }
 
   public List<Message> checkNewMessage(SessionProvider sProvider, String username, String accountId)
