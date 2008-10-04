@@ -3,10 +3,7 @@
  */
 package org.exoplatform.webservice.cs.mail;
 
-import java.util.List;
-
 import org.exoplatform.common.http.HTTPMethods;
-import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.mail.service.CheckingInfo;
 import org.exoplatform.mail.service.MailService;
@@ -19,9 +16,6 @@ import org.exoplatform.services.rest.URIParam;
 import org.exoplatform.services.rest.URITemplate;
 import org.exoplatform.services.rest.container.ResourceContainer;
 import org.exoplatform.services.rest.transformer.StringOutputTransformer;
-import org.exoplatform.services.scheduler.JobSchedulerService;
-import org.quartz.JobDetail;
-
 
 /**
  * @author Uoc Nguyen
@@ -46,20 +40,14 @@ public class MailWebservice implements ResourceContainer {
     cacheControl.setNoStore(true);
     MailService mailService = (MailService) ExoContainerContext
         .getCurrentContainer().getComponentInstanceOfType(MailService.class);
-    boolean isExists = false;
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
-    JobSchedulerService schedulerService = (JobSchedulerService) container
-        .getComponentInstanceOfType(JobSchedulerService.class);
-    List allJobs = schedulerService.getAllJobs();
-    for (Object obj : allJobs) {
-      if (((JobDetail) obj).getName().equals(userName + ":" + accountId)) {
-        isExists = true;
-      }
-    }
-
-    if (!isExists) mailService.checkMail(userName, accountId);
     
     CheckingInfo checkingInfo = mailService.getCheckingInfo(userName, accountId);
+   
+    // try to start if no checking info available
+    if (checkingInfo == null) {
+      mailService.checkMail(userName, accountId);
+    }
+    
     StringBuffer buffer = new StringBuffer();
     buffer.append("<info>");
     buffer.append("  <checkingmail>");
@@ -173,6 +161,6 @@ public class MailWebservice implements ResourceContainer {
   public String getUserName() throws Exception {
     AuthenticationService authService = (AuthenticationService) ExoContainerContext
         .getCurrentContainer().getComponentInstanceOfType(AuthenticationService.class);
-    return authService.getCurrentIdentity().getUserId() ;
+    return authService.getCurrentIdentity().getUserId();
   }
 }
