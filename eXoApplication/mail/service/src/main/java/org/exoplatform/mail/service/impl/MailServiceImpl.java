@@ -105,11 +105,14 @@ public class MailServiceImpl implements MailService {
   private EMLImportExport           emlImportExport_;
 
   private Map<String, CheckingInfo> checkingLog_;
+  
+  private JobSchedulerService schedulerService_;
 
-  public MailServiceImpl(NodeHierarchyCreator nodeHierarchyCreator) throws Exception {
+  public MailServiceImpl(NodeHierarchyCreator nodeHierarchyCreator, JobSchedulerService schedulerService) throws Exception {
     storage_ = new JCRDataStorage(nodeHierarchyCreator);
     emlImportExport_ = new EMLImportExport(storage_);
     checkingLog_ = new HashMap<String, CheckingInfo>();
+    this.schedulerService_ = schedulerService;
   }
 
   public void removeCheckingInfo(String username, String accountId) throws Exception {
@@ -117,7 +120,7 @@ public class MailServiceImpl implements MailService {
     checkingLog_.remove(key);
   }
 
-  public CheckingInfo getCheckingInfo(String username, String accountId) throws Exception {
+  public CheckingInfo getCheckingInfo(String username, String accountId) {
     String key = username + ":" + accountId;
     return checkingLog_.get(key);
   }
@@ -474,38 +477,59 @@ public class MailServiceImpl implements MailService {
   }
 
   public void checkMail(String username, String accountId) throws Exception {
-    Calendar cal = new GregorianCalendar();
-    PeriodInfo periodInfo = new PeriodInfo(cal.getTime(), null, 1, 86400000);
+
+    JobDetail job = loadCheckmailJob(username, accountId);
+    
+    // trigger now
+    schedulerService_.executeJob(job.getName(), job.getGroup(), job.getJobDataMap());
+  }
+  
+  public void stopCheckMail(String username, String accountId)  {
+    CheckingInfo checkingInfo = getCheckingInfo(username, accountId);
+    if (checkingInfo != null) {
+      checkingInfo.setRequestStop(true);
+      System.out.println("Requested check loop to stop ");
+    } 
+  }
+
+  /**
+   * Load or register the CheckMailJob against scheduler
+   * @return
+   * @throws Exception 
+   */
+  private JobDetail loadCheckmailJob(String username, String accountId) throws Exception {
 
     JobInfo info = CheckMailJob.getJobInfo(username, accountId);
-    JobDataMap jobData = new JobDataMap();
-    jobData.put(CheckMailJob.USERNAME, username);
-    jobData.put(CheckMailJob.ACCOUNTID, accountId);
-    
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
-    MailService mailService = (MailService) container.getComponentInstanceOfType(MailService.class);
-    JobSchedulerService schedulerService = (JobSchedulerService) container
-    .getComponentInstanceOfType(JobSchedulerService.class);
-
-    //TODO Should not keep mailService and schdulerService in until class - Make sure that we set the static references ... should be improved !!!
-    Utils.setMailService(mailService);
-    Utils.setScheduleService(schedulerService);
-    
-    // TODO current implementation is inefficient
-    /// Need to upgrade to 2.0.3 and use this instead : 
-    //boolean jobExists = (schedulerService.getJob(info) != null);
-    boolean jobExists = false;
-    for (Object obj : schedulerService.getAllJobs()) {
-      if (((JobDetail) obj).getName().equals(username + ":" + accountId)) {
-        jobExists = true;
-        break;
-      }
-    }
+    JobDetail job = findCheckmailJob(username, accountId);
     
     // add job is it does not exist
-    if (!jobExists) {
-      schedulerService.addPeriodJob(info, periodInfo, jobData);
+    if (job == null) {
+      JobDataMap jobData = new JobDataMap();
+      jobData.put(CheckMailJob.USERNAME, username);
+      jobData.put(CheckMailJob.ACCOUNTID, accountId);     
+      
+      // start now, execute once 
+      // TODO :schedule as specified by account settings
+      PeriodInfo periodInfo = new PeriodInfo(new GregorianCalendar().getTime(), null, 1, 24*60*60*1000);
+      schedulerService_.addPeriodJob(info, periodInfo, jobData);
+      
+      job = findCheckmailJob(username, accountId);
     }
+    return job;
+  }
+
+  private JobDetail findCheckmailJob(String username,
+                                     String accountId) throws Exception {
+    // TODO current implementation is inefficient
+    /// Need to upgrade to 2.0.3 and use this instead : 
+    //schedulerService_.getJob(info) 
+    for (Object obj : schedulerService_.getAllJobs()) {
+      JobDetail tmp = (JobDetail) obj;
+      if (tmp.getName().equals(username + ":" + accountId)) {
+        return tmp;
+      }
+    }
+    return null;
   }
 
   public List<Message> checkNewMessage(SessionProvider sProvider, String username, String accountId)
@@ -709,7 +733,16 @@ public class MailServiceImpl implements MailService {
             javax.mail.Message msg;
             List<String> filterList;
             List<javax.mail.Message> msgList = new ArrayList<javax.mail.Message>(msgMap.keySet()) ;
-            while (i < totalNew && !info.isRequestStop()) {
+            while (i < totalNew) {
+              
+              if(info.isRequestStop()) {
+                if (logger.isDebugEnabled()) {
+                  logger.debug("Stop requested on checkmail for " + account.getId());
+                }
+                removeCheckingInfo(username, accountId);
+                break;
+              }
+              
               msg = msgList.get(i);
               logger.warn("Fetching message " + (i + 1) + " ...");
               /* JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
@@ -729,6 +762,8 @@ public class MailServiceImpl implements MailService {
                   msg.setFlag(Flags.Flag.SEEN, true);
                   if (deleteOnServer)
                     msg.setFlag(Flags.Flag.DELETED, true);
+                  
+                  
                   account.setLastCheckedDate(MimeMessageParser.getReceivedDate(msg).getTime());
                 }
               } catch (Exception e) {
@@ -756,6 +791,8 @@ public class MailServiceImpl implements MailService {
             info.setStatusMsg("There is no new messages !");
           else
             info.setStatusMsg("Check mail finished !");
+          
+          
           info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);
 
           logger.warn("/////////////////////////////////////////////////////////////");
@@ -763,7 +800,7 @@ public class MailServiceImpl implements MailService {
 
         }
       } catch (Exception e) {
-        e.printStackTrace();
+        logger.error("Error while checking emails for " + username + " on account " + accountId, e);
       }
     }
     return messageList;
@@ -998,4 +1035,6 @@ public class MailServiceImpl implements MailService {
       Message msg) throws Exception {
     return storage_.loadAttachments(sProvider, username, accountId, msg);
   }
+
+
 }

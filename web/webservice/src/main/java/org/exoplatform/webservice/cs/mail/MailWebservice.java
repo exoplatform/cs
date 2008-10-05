@@ -73,14 +73,16 @@ public class MailWebservice implements ResourceContainer {
     MailService mailService = (MailService) ExoContainerContext
         .getCurrentContainer().getComponentInstanceOfType(MailService.class);
     StringBuffer buffer = new StringBuffer();
-    CheckingInfo checkingInfo = mailService.getCheckingInfo(userName, accountId);
     
+    mailService.stopCheckMail(userName, accountId);
+    
+    CheckingInfo checkingInfo = mailService.getCheckingInfo(userName, accountId);   
     if (checkingInfo != null) {
-      checkingInfo.setRequestStop(true);
-      while (checkingInfo.getStatusCode() != CheckingInfo.FINISHED_CHECKMAIL_STATUS) {
-        Thread.sleep(MailWebservice.MIN_SLEEP_TIMEOUT);
-        continue;
-      }
+//      checkingInfo.setRequestStop(true);
+//      while (checkingInfo.getStatusCode() != CheckingInfo.FINISHED_CHECKMAIL_STATUS) {
+//        Thread.sleep(MailWebservice.MIN_SLEEP_TIMEOUT);
+//        continue;
+//      }
 
       buffer.append("<info>");
       buffer.append("  <checkingmail>");
