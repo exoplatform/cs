@@ -17,17 +17,20 @@
 package org.exoplatform.mail.service;
 
 import org.apache.commons.logging.Log;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.scheduler.JobInfo;
-import org.exoplatform.services.scheduler.JobSchedulerService;
+import org.quartz.InterruptableJob;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.quartz.UnableToInterruptJobException;
 
-public class CheckMailJob implements Job {
+public class CheckMailJob implements Job, InterruptableJob {
 
   
 	public static final String CHECKMAIL_GROUP = "CollaborationSuite-webmail";
@@ -35,40 +38,44 @@ public class CheckMailJob implements Job {
   public static final String ACCOUNTID = "acountId";
   private static Log log = ExoLogger.getLogger("job.CheckMailJob");
   
+  private String username;
+  private String accountId;
+  
   public CheckMailJob() throws Exception {
 		
 	}
 
   public void execute(JobExecutionContext context) throws JobExecutionException {
-	  try {
-		  //TODO : khdung
-		  // getting service references from ExoContainer is risky ... this one is another thread.
-		  // it's better (and of course correct) if we get static references.
-		  MailService mailService = Utils.getMailService();
-		  JobSchedulerService schedulerService = Utils.getJobSchedulerService();
+	    
+	    MailService mailService = getMailService();
 		  
 		  JobDetail jobDetail = context.getJobDetail();
 		  JobDataMap dataMap = jobDetail.getJobDataMap();
 		  
-		  String username = dataMap.getString(USERNAME);
-		  String accountId = dataMap.getString(ACCOUNTID);
+		  username = dataMap.getString(USERNAME);
+		  accountId = dataMap.getString(ACCOUNTID);
+		  
+	    try {
 		  if (username!= null && accountId !=null) {
-		    mailService.checkNewMessage(SessionProvider.createSystemProvider(), username.trim(), accountId.trim()) ;
+		    mailService.checkNewMessage(SessionProvider.createSystemProvider(), username, accountId) ;
 		  }
-		  
-		  String name = jobDetail.getName();
-		  JobInfo info = new JobInfo(name, CHECKMAIL_GROUP, CheckMailJob.class);
-		  
-		  // Antipattern a job should not unregister himself
-		  schedulerService.removeJob(info) ;
 
-
+    } catch (InterruptedException ie) {
+      getMailService().stopCheckMail(username, accountId);
 	  } catch (Exception e) {
 		  log.error("Mail check failed for " + context.getJobDetail().getName(), e);
+	  } finally {
+  	  if (log.isDebugEnabled()) {
+        log.debug("\n\n####  Checking mail of " + context.getJobDetail().getName() + " finished ");
+  	  }
 	  }
-	  if (log.isDebugEnabled()) {
-      log.debug("\n\n####  Checking mail of " + context.getJobDetail().getName() + " finished ");
-	  }
+  }
+
+  private MailService getMailService() {
+    ExoContainer container = ExoContainerContext.getCurrentContainer();	    
+    MailService mailService = (MailService) container.getComponentInstanceOfType(MailService.class);
+    //JobSchedulerService schedulerService = (JobSchedulerService) container.getComponentInstanceOfType(JobSchedulerService.class);
+    return mailService;
   }
   
   private static String getJobName(String userId, String accountId) {
@@ -80,6 +87,11 @@ public class CheckMailJob implements Job {
     JobInfo info = new JobInfo(name, CheckMailJob.CHECKMAIL_GROUP, CheckMailJob.class);
     info.setDescription("Check emails for user " + userId + " on acount " + accountId);
     return info;
+  }
+
+  public void interrupt() throws UnableToInterruptJobException {
+    System.out.println("\n\n######### CALLED INTERRUPT!\n\n");
+    getMailService().stopCheckMail(username, accountId);
   }
   
 }

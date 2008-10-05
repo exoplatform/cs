@@ -448,6 +448,14 @@ public interface MailService {
   public void checkMail(String username, String accountId) throws Exception ;
   
   /**
+   * Requests to stop mail checking
+   * @param username userid
+   * @param accountId mail account
+   * @throws Exception
+   */
+  public void stopCheckMail(String username, String accountId) ;
+  
+  /**
    * This method get mail settings
    * @param username
    * @return MailSetting
