@@ -20,15 +20,19 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.contact.CalendarUtils;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.webui.popup.UICategoryForm;
 import org.exoplatform.contact.webui.popup.UICategorySelect;
 import org.exoplatform.contact.webui.popup.UIContactForm;
+import org.exoplatform.contact.webui.popup.UIEventForm;
 import org.exoplatform.contact.webui.popup.UIExportAddressBookForm;
 import org.exoplatform.contact.webui.popup.UIImportForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.webui.popup.UIPopupContainer;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -51,6 +55,7 @@ import org.exoplatform.webui.event.EventListener;
         @EventConfig(listeners = UIActionBar.AddAddressBookActionListener.class),
         @EventConfig(listeners = UIActionBar.ChangeViewActionListener.class),
         @EventConfig(listeners = UIActionBar.ImportContactActionListener.class),
+        @EventConfig(listeners = UIActionBar.AddEventActionListener.class),
         @EventConfig(listeners = UIActionBar.ExportContactActionListener.class)
     }
 )
@@ -153,4 +158,21 @@ public class UIActionBar extends UIContainer  {
     }  
   }
 
+  static public class AddEventActionListener extends EventListener<UIActionBar> {
+    public void execute(Event<UIActionBar> event) throws Exception {     
+      UIActionBar uiActionBar = event.getSource() ;
+      CalendarService calendarService = uiActionBar.getApplicationComponent(CalendarService.class);
+      UIContactPortlet uiPortlet = uiActionBar.getParent() ;
+      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
+      UIPopupContainer uiPopupContainer = uiPopupAction.activate(UIPopupContainer.class,800) ;  
+      uiPopupContainer.setId("AddNewEvent") ;
+      uiPopupAction.activate(uiPopupContainer, 600, 0, true) ;
+      UIEventForm uiEventForm = uiPopupContainer.createUIComponent(UIEventForm.class, null, null);
+      uiPopupContainer.addChild(uiEventForm) ;
+      uiEventForm.initForm(calendarService.getCalendarSetting(SessionProviderFactory.createSystemProvider() ,ContactUtils.getCurrentUser()), null) ;
+      uiEventForm.update(CalendarUtils.PRIVATE_TYPE, null) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+    }
+  }
+  
 }

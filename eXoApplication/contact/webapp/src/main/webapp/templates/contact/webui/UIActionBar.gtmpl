@@ -10,13 +10,21 @@
 						<div class="IconHolder AddContactIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.addContact")%>">
 							<%=_ctx.appRes(uicomponent.getName() + ".label.contact")%>
 						</div>
-          </a>
+          			</a>
           
 					<a href="<%=uicomponent.event("AddAddressBook")%>" class="SelectButton">
 						<div class="IconHolder AddAddressBookIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.addAddressBook")%>">
 							<%=_ctx.appRes(uicomponent.getName() + ".label.addressBook")%>
 						</div>
-          </a>
+         			 </a>
+          			 
+          			 <a href="<%=uicomponent.event("AddEvent")%>" class="SelectButton">
+						<div class="IconHolder AddEventIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.addEvent")%>">
+							<%=_ctx.appRes(uicomponent.getName() + ".label.event")%>
+						</div>
+         			 </a>         
+          
+          
           <div class="SeparatorLine"><span></span></div>	
           <a href="<%=uicomponent.event("ImportContact")%>" class="SelectButton">
 						<div class="IconHolder ImportAddressIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.importAddress")%>">

@@ -199,17 +199,17 @@ public class ContactPageList extends JCRPageList {
   }
   
   private String [] ValuesToStrings(Value[] Val) throws Exception {
-  	if(Val.length == 1)
-  		return new String[]{Val[0].getString()};
-		String[] Str = new String[Val.length];
-		for(int i = 0; i < Val.length; ++i) {
-		  Str[i] = Val[i].getString();
-		}
-		return Str;
+    if(Val.length == 1)
+      return new String[]{Val[0].getString()};
+    String[] Str = new String[Val.length];
+    for(int i = 0; i < Val.length; ++i) {
+      Str[i] = Val[i].getString();
+    }
+    return Str;
   }
   
-	@Override
-	public List<Contact> getAll() throws Exception {    
+  @Override
+  public List<Contact> getAll() throws Exception {    
     if(iter_ == null) {
       Session session = getJCRSession(username_) ;
       if(isQuery_) {
@@ -231,7 +231,7 @@ public class ContactPageList extends JCRPageList {
     return contacts; 
   }
 
-	public Map<String, String> getEmails() throws Exception {
+  public Map<String, String> getEmails() throws Exception {
     if(iter_ == null) {
       Session session = getJCRSession(username_) ;
       if(isQuery_) {
