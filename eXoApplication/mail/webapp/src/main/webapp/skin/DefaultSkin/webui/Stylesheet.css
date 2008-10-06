@@ -1411,7 +1411,6 @@
 }
 
 .UIMailPortlet .UIContactsPopup .ContactContainer .ListContact {
-	padding: 10px;
 	overflow: auto;
 	background: #fff;
 	height:200px;
@@ -1424,7 +1423,7 @@
 	padding-left: 24px;
 	overflow: hidden;
 	white-space: nowrap;
-	width:160px;
+	width:150px;
 }
 
 .UIMailPortlet .UIContactsPopup .RightContacts .ContactContainer {
