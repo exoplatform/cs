@@ -1575,6 +1575,10 @@
 	background: white;
 }
 
+.UIMailPortlet .UIAddNewContact .AddGroupContact .HorizontalLayout {
+	height: 28px;
+}
+
 .UIMailPortlet .UIAddNewContact .ProfileContent {
 	margin-top: 10px;
 }
@@ -1799,7 +1803,6 @@
 .UIMailPortlet .UIAccountSetting .UIForm .UIFormGrid td.FieldLabel {
 	white-space: normal;
 }
-
 
 .UIMailPortlet .UIComposeForm .MessageAddress input.checkbox {
 	float: left;
