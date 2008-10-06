@@ -263,6 +263,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     String username = MailUtils.getCurrentUser();
     MailSetting mailSetting = mailSrv.getMailSetting(SessionProviderFactory.createSystemProvider(), MailUtils.getCurrentUser());
     UIComposeInput inputSet = getChildById(FIELD_TO_SET) ;
+    String replyContent = "";
     switch (getComposeType()) {
       case MESSAGE_IN_DRAFT :
         setFieldSubjectValue(msg.getSubject());
@@ -281,8 +282,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       case MESSAGE_REPLY :
         setFieldToValue(msg.getReplyTo());
         setFieldSubjectValue("Re: " + msg.getSubject());
-        String content = getReplyContent(msg);   
-        setFieldContentValue(content);
         if (msg != null && msg.hasAttachment()) {
           if (msg.getAttachments() == null) {
             msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
@@ -290,7 +289,14 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           for (Attachment att : msg.getAttachments()) {
             attachments_.add(att);
           }
-          if (mailSetting.replyWithAttach()) addOriginalMessageAsAttach(msg);
+        }
+        if (mailSetting.replyWithAttach()) addOriginalMessageAsAttach(msg);
+        else {
+          replyContent = getReplyContent(msg);
+        }
+        setFieldContentValue(replyContent);
+        
+        if (attachments_.size() > 0) {
           for (ActionData actionData : getUploadFileList()) {
             inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(), null, null));
           }
@@ -323,8 +329,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           setShowCc(true);
         }
   
-        String replyContent = getReplyContent(msg);
-        setFieldContentValue(replyContent);
         if (msg != null && msg.hasAttachment()) {
           if (msg.getAttachments() == null) {
             msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
@@ -332,8 +336,14 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           for (Attachment att : msg.getAttachments()) {
             attachments_.add(att);
           }
-          if (mailSetting.replyWithAttach()) addOriginalMessageAsAttach(msg);
-          
+        }
+        if (mailSetting.replyWithAttach()) addOriginalMessageAsAttach(msg);
+        else {
+          replyContent = getReplyContent(msg);
+        }
+        setFieldContentValue(replyContent);
+        
+        if (attachments_.size() > 0) {
           for (ActionData actionData : getUploadFileList()) {
             inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(), null, null));
           }
