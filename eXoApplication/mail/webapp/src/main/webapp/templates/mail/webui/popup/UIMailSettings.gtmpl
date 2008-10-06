@@ -86,12 +86,6 @@
                       </td>
                     </tr>
                     <tr>
-                      <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.reply-forward-as") %> :</td>
-                      <td class="FieldComponent">
-                        <%uicomponent.renderField(uicomponent.FORMAT_AS_ORIGINAL)%>
-                      </td>
-                    </tr>
-                    <tr>
                       <td class="FieldLabel"><%=_ctx.appRes(uicomponent.id+ ".label.reply-with") %> :</td>
                       <td class="FieldComponent">
                         <%uicomponent.renderField(uicomponent.REPLY_WITH_ATTACH)%>

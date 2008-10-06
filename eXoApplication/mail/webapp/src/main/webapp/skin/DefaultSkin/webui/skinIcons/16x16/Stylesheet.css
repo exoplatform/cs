@@ -131,6 +131,10 @@
 	background: url('icons/MoveMessageIcon.gif') no-repeat left 6px;
 }
 
+.UIMailPortlet .CreateFilterIcon {
+	background: url('icons/FilterAddIcon.gif') no-repeat left 6px;
+}
+
 .UIMailPortlet .TagMailIcon {
 	background: url('icons/VioletTag.gif') no-repeat left 6px;
 }

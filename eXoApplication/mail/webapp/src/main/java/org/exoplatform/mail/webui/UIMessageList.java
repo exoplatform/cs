@@ -32,6 +32,7 @@ import org.exoplatform.mail.service.SpamFilter;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIAddContactForm;
+import org.exoplatform.mail.webui.popup.UIAddMessageFilter;
 import org.exoplatform.mail.webui.popup.UIComfirmPassword;
 import org.exoplatform.mail.webui.popup.UIComposeForm;
 import org.exoplatform.mail.webui.popup.UIExportForm;
@@ -70,7 +71,8 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
       @EventConfig(listeners = UIMessageList.RemoveStarActionListener.class),
       @EventConfig(listeners = UIMessageList.ReplyActionListener.class),
       @EventConfig(listeners = UIMessageList.ReplyAllActionListener.class),
-      @EventConfig(listeners = UIMessageList.ForwardActionListener.class), 
+      @EventConfig(listeners = UIMessageList.ForwardActionListener.class),
+      @EventConfig(listeners = UIMessageList.CreateFilterActionListener.class),
       @EventConfig(listeners = UIMessageList.DeleteActionListener.class, confirm="UIMessageList.msg.confirm-remove-message"),
       @EventConfig(listeners = UIMessageList.ReportSpamActionListener.class),
       @EventConfig(listeners = UIMessageList.NotSpamActionListener.class),
@@ -747,6 +749,44 @@ public class UIMessageList extends UIForm {
     }
   }  
 
+  static  public class CreateFilterActionListener extends EventListener<UIMessageList> {
+    public void execute(Event<UIMessageList> event) throws Exception {
+      UIMessageList uiMessageList = event.getSource() ;
+      UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
+      String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      
+      // Verify
+      UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+      List<Message> checkedMsgs = uiMessageList.getCheckedMessage() ;
+      if(checkedMsgs.isEmpty()) {
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return;
+      } else if (checkedMsgs.size() > 1){
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-many-messages", null, ApplicationMessage.INFO)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return;
+      }
+      
+      Message message ;
+      if (msgId != null) message = uiMessageList.messageList_.get(msgId) ;
+      else  message = uiMessageList.getCheckedMessage().get(0);
+      
+      String from = Utils.getAddresses(message.getFrom())[0];
+      MessageFilter filter = new MessageFilter(from);
+      filter.setFrom(from);
+      filter.setFromCondition(Utils.CONDITION_CONTAIN);
+      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
+      UIAddMessageFilter uiEditMessageFilter = uiPopupAction.createUIComponent(UIAddMessageFilter.class, null, null);
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      uiEditMessageFilter.init(accountId);
+      uiPopupAction.activate(uiEditMessageFilter, 650, 0, false) ;
+      uiEditMessageFilter.setCurrentFilter(filter);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIMessageArea.class)) ;
+    }
+  }
+  
   static public class DeleteActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
       UIMessageList uiMessageList = event.getSource();
@@ -1130,11 +1170,12 @@ public class UIMessageList extends UIForm {
         return ;
       }
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
-      if(uiMessageList.getCheckedMessage().isEmpty()) {
+      List<Message> checkedMsgs = uiMessageList.getCheckedMessage() ;
+      if(checkedMsgs.isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
-      } else if (uiMessageList.getCheckedMessage().size() > 1){
+      } else if (checkedMsgs.size() > 1){
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-many-messages", null, ApplicationMessage.INFO)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;

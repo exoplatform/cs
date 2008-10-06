@@ -289,23 +289,28 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
       filter.setBodyCondition(Integer.valueOf(bodyCondition));
       filter.setApplyFolder(applyFolder);
       filter.setApplyTag(applyTag);
-      //filter.setKeepInInbox(keepInbox);
       filter.setApplyForAll(applyForAll) ;
       try {
         mailSrv.saveFilter(SessionProviderFactory.createSystemProvider(), username, accountId, filter, uiAddFilter.getApplyAll());
-        uiPortlet.findFirstComponentOfType(UIMessageFilter.class).setSelectedFilterId(filter.getId());
       } catch (Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIAddMessageFilter.msg.contain-special-characters", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
+      UIMessageFilter uiMsgFilter = uiPortlet.findFirstComponentOfType(UIMessageFilter.class);
+      if (uiMsgFilter != null) {
+        uiMsgFilter.setSelectedFilterId(filter.getId());
+      }
+      
       UIPopupAction uiPopupAction = uiAddFilter.getAncestorOfType(UIPopupAction.class) ;
-      uiPopupAction.deActivate();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddFilter.getAncestorOfType(UIPopupActionContainer.class)) ;
-      UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
-      uiMessageList.updateList();
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UINavigationContainer.class));
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
+      uiPopupAction.deActivate() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      if (filter.applyForAll()) {
+        UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
+        uiMessageList.updateList();
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UINavigationContainer.class));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
+      }
     }
   }
   
@@ -314,7 +319,7 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
       UIAddMessageFilter uiAddMessageFilter = event.getSource();
       UIPopupAction uiPopupAction = uiAddMessageFilter.getAncestorOfType(UIPopupAction.class) ;
       uiPopupAction.deActivate() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddMessageFilter.getAncestorOfType(UIPopupActionContainer.class)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
 }

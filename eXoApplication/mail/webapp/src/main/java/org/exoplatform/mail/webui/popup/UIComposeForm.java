@@ -16,6 +16,8 @@
  */
 package org.exoplatform.mail.webui.popup;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -33,6 +35,7 @@ import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
+import org.exoplatform.mail.service.BufferAttachment;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
@@ -45,6 +48,7 @@ import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -56,6 +60,7 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
@@ -135,7 +140,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       options.add(itemOption) ;
     }
 
-    UIComposeInput toSet = new UIComposeInput(FIELD_TO_SET);   
+    UIComposeInput toSet = new UIComposeInput(FIELD_TO_SET);
     toSet.addUIFormInput(new UIFormSelectBox(FIELD_FROM, FIELD_FROM, options)) ;
     toSet.addUIFormInput(new UIFormStringInput(FIELD_TO, null, null)) ;
 
@@ -152,8 +157,9 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
 
     toSet.addUIFormInput(new UIFormInputInfo(FIELD_ATTACHMENTS, FIELD_ATTACHMENTS, null)) ;
     toSet.setActionField(FIELD_ATTACHMENTS, getUploadFileList()) ;
+    
     addUIFormInput(toSet) ;
-
+    
     MailSetting mailSetting = mailSrv.getMailSetting(SessionProviderFactory.createSystemProvider(), username);
     isVisualEditor = mailSetting.useWysiwyg() ;
     if (isVisualEditor) {
@@ -194,9 +200,22 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       removeAction.setActionParameter(attachdata.getId());
       removeAction.setCssIconClass("LabelLink");
       removeAction.setActionType(ActionData.TYPE_LINK) ;
+      removeAction.setBreakLine(true);
       uploadedFiles.add(removeAction) ;
     }
     return uploadedFiles ;
+  }
+  
+  public List<String> getCheckedAttach() throws Exception {
+    List<String> checkedAttach = new ArrayList<String>();
+    for (Attachment att : attachments_) {
+      UIComposeInput inputSet = getChildById(FIELD_TO_SET) ;
+      UIFormCheckBoxInput uiCheckbox = inputSet.getChildById(att.getId());
+      if (uiCheckbox != null && uiCheckbox.isChecked()) {
+        checkedAttach.add(att.getId());
+      }
+    }
+    return checkedAttach;
   }
 
   public void refreshUploadFileList() throws Exception {
@@ -206,13 +225,21 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   
   public void addToUploadFileList(Attachment attachfile) {
     attachments_.add(attachfile) ;
+    UIComposeInput inputSet = getChildById(FIELD_TO_SET) ;
+    inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(attachfile.getId(), null, null).setChecked(true));
   }
   
   public void removeFromUploadFileList(Attachment attachfile) {
+    UIComposeInput inputSet = getChildById(FIELD_TO_SET) ;
+    inputSet.removeChildById(attachfile.getId());
     attachments_.remove(attachfile);
   }  
   
   public void removeUploadFileList() {
+    UIComposeInput inputSet = getChildById(FIELD_TO_SET) ;
+    for (Attachment att : attachments_) {
+      inputSet.removeChildById(att.getId());
+    }
     attachments_.clear() ;
   }
   
@@ -233,7 +260,9 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       return ;
     }
     MailService mailSrv = MailUtils.getMailService();
+    String username = MailUtils.getCurrentUser();
     MailSetting mailSetting = mailSrv.getMailSetting(SessionProviderFactory.createSystemProvider(), MailUtils.getCurrentUser());
+    UIComposeInput inputSet = getChildById(FIELD_TO_SET) ;
     switch (getComposeType()) {
       case MESSAGE_IN_DRAFT :
         setFieldSubjectValue(msg.getSubject());
@@ -242,7 +271,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         setFieldBccValue(msg.getMessageBcc()) ;
         setFieldContentValue(formatContent(msg));
         if (msg != null && msg.hasAttachment()) {
-          String username = MailUtils.getCurrentUser();
           msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
           for (Attachment att : msg.getAttachments()) {
             attachments_.add(att);
@@ -255,17 +283,18 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         setFieldSubjectValue("Re: " + msg.getSubject());
         String content = getReplyContent(msg);   
         setFieldContentValue(content);
-        if (mailSetting.replyWithAttach()) {
-          if (msg != null && msg.hasAttachment()) {
-            if (msg.getAttachments() == null) {
-              String username = MailUtils.getCurrentUser();
-              msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
-            }
-            for (Attachment att : msg.getAttachments()) {
-              attachments_.add(att);
-              refreshUploadFileList();
-            }
+        if (msg != null && msg.hasAttachment()) {
+          if (msg.getAttachments() == null) {
+            msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
           }
+          for (Attachment att : msg.getAttachments()) {
+            attachments_.add(att);
+          }
+          if (mailSetting.replyWithAttach()) addOriginalMessageAsAttach(msg);
+          for (ActionData actionData : getUploadFileList()) {
+            inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(), null, null));
+          }
+          refreshUploadFileList();
         }
         break ;
       case MESSAGE_REPLY_ALL :
@@ -296,57 +325,64 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   
         String replyContent = getReplyContent(msg);
         setFieldContentValue(replyContent);
-        if (mailSetting.replyWithAttach()) {
-          if (msg != null && msg.hasAttachment()) {
-            if (msg.getAttachments() == null) {
-              String username = MailUtils.getCurrentUser();
-              msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
-            }
-            for (Attachment att : msg.getAttachments()) {
-              attachments_.add(att);
-              refreshUploadFileList();
-            }
+        if (msg != null && msg.hasAttachment()) {
+          if (msg.getAttachments() == null) {
+            msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
           }
+          for (Attachment att : msg.getAttachments()) {
+            attachments_.add(att);
+          }
+          if (mailSetting.replyWithAttach()) addOriginalMessageAsAttach(msg);
+          
+          for (ActionData actionData : getUploadFileList()) {
+            inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(), null, null));
+          }
+          refreshUploadFileList();
         }
         break;
       case MESSAGE_FOWARD : 
         String toAddress = msg.getMessageTo() != null ? msg.getMessageTo() : "" ;
         setFieldSubjectValue("Fwd: " + msg.getSubject());
-        StringBuffer forwardTxt = new StringBuffer("<br><br>-------- Original Message --------<br>") ;
-        forwardTxt.append("Subject: ").append(MailUtils.encodeHTML(msg.getSubject())).append("<br>") ;
-        forwardTxt.append("Date: ").append(msg.getSendDate()).append("<br>") ;
-        forwardTxt.append("From: ") ;
-  
-        InternetAddress[] addresses = Utils.getInternetAddress(msg.getFrom()) ;
-        for (int i = 0 ; i < addresses.length; i++) {
-          if (i > 0) forwardTxt.append(", ") ;
-          if (addresses[i] != null) forwardTxt.append(Utils.getPersonal(addresses[i])).append(" \"").append(addresses[i].getAddress()).append("\"") ;
-        }
-        forwardTxt.append("<br>To: ") ;
-  
-        InternetAddress[] toAddresses = Utils.getInternetAddress(toAddress) ;
-        for (int i = 0 ; i < toAddresses.length; i++) {
-          if (i > 0) forwardTxt.append(", ") ;
-          if (toAddresses[i] != null) forwardTxt.append(Utils.getPersonal(toAddresses[i])).append(" \"").append(toAddresses[i].getAddress()).append("\"") ;
-        }
-  
-        forwardTxt.append("<br><br>").append(formatContent(msg)) ;
-  
-        setFieldContentValue(forwardTxt.toString()) ;
-  
+        
         setFieldToValue("");
-        if (mailSetting.forwardWithAtt()) {
-          if (msg != null && msg.hasAttachment()) {
-            if (msg.getAttachments() == null) {
-              String username = MailUtils.getCurrentUser();
-              msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
-            }
-            for (Attachment att : msg.getAttachments()) {
-              attachments_.add(att);
-              refreshUploadFileList();
-            }
+        if (msg != null && msg.hasAttachment()) {
+          if (msg.getAttachments() == null) {
+            msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
+          }
+          for (Attachment att : msg.getAttachments()) {
+            attachments_.add(att);
           }
         }
+        
+        StringBuffer forwardTxt = new StringBuffer("");;
+        if (!mailSetting.forwardWithAtt()) {
+          forwardTxt.append("<br><br>-------- Original Message --------<br>") ;
+          forwardTxt.append("Subject: ").append(MailUtils.encodeHTML(msg.getSubject())).append("<br>") ;
+          forwardTxt.append("Date: ").append(msg.getSendDate()).append("<br>") ;
+          forwardTxt.append("From: ") ;
+    
+          InternetAddress[] addresses = Utils.getInternetAddress(msg.getFrom()) ;
+          for (int i = 0 ; i < addresses.length; i++) {
+            if (i > 0) forwardTxt.append(", ") ;
+            if (addresses[i] != null) forwardTxt.append(Utils.getPersonal(addresses[i])).append(" \"").append(addresses[i].getAddress()).append("\"") ;
+          }
+          forwardTxt.append("<br>To: ") ;
+    
+          InternetAddress[] toAddresses = Utils.getInternetAddress(toAddress) ;
+          for (int i = 0 ; i < toAddresses.length; i++) {
+            if (i > 0) forwardTxt.append(", ") ;
+            if (toAddresses[i] != null) forwardTxt.append(Utils.getPersonal(toAddresses[i])).append(" \"").append(toAddresses[i].getAddress()).append("\"") ;
+          }
+    
+          forwardTxt.append("<br><br>").append(formatContent(msg)) ; 
+        } else {
+          addOriginalMessageAsAttach(msg);
+        }
+        refreshUploadFileList();
+        for (ActionData actionData : getUploadFileList()) {
+          inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(), null, null).setChecked(true));
+        }
+        setFieldContentValue(forwardTxt.toString()) ;
         break ;
       default :
         break;
@@ -371,6 +407,20 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       msgContent = MailUtils.encodeHTML(msg.getMessageBody()).replace("\n", "<br>") ;
     } 
     return msgContent ;
+  }
+  
+  private void addOriginalMessageAsAttach(Message msg) throws Exception {
+    MailService mailSrv = MailUtils.getMailService();
+    String username = MailUtils.getCurrentUser();
+    BufferAttachment att = new BufferAttachment();
+    ByteArrayOutputStream outputStream = (ByteArrayOutputStream) mailSrv.exportMessage(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg);
+    ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+    att.setSize((long)inputStream.available());
+    att.setId("Attachment" + IdGenerator.generate());
+    att.setName(msg.getSubject() + ".eml");
+    att.setInputStream(inputStream);
+    att.setMimeType("eml");
+    attachments_.add(att);
   }
 
   public long getPriority() { return priority_; }  
@@ -497,10 +547,18 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     message.setMessageBcc(bcc) ;
     message.setHasStar(false);
     message.setPriority(priority);
-    message.setAttachements(this.getAttachFileList()) ;
+    
+    List<Attachment> attachments = new ArrayList<Attachment>();
+    for (Attachment att : this.getAttachFileList()) {
+      if (getCheckedAttach().contains(att.getId()))
+        attachments.add(att);
+    }
+    
+    message.setAttachements(attachments) ;
     long attSize = 0 ;
     for (Attachment att : this.getAttachFileList()) {
-      attSize += att.getSize() ;
+      if (getCheckedAttach().contains(att.getId()))
+        attSize += att.getSize() ;
     }
     message.setMessageBody(body) ;
     message.setUnread(false);

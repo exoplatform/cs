@@ -42,6 +42,7 @@ public interface MailService {
    * @throws Exception
    */
   public List<Account> getAccounts(SessionProvider sProvider, String username) throws Exception ;
+  
   /**
    * This method should:
    * 1. Check if the list of the accounts is cached. If not call the method List<Account> getAccounts(String username)
@@ -95,6 +96,7 @@ public interface MailService {
    * @throws Exception
    */
   public List<Folder> getFolders(SessionProvider sProvider, String username, String accountId) throws Exception ;
+  
   /**
    * Get folders depend on they are personal folders or default folders
    * @param username
@@ -264,6 +266,7 @@ public interface MailService {
     * @throws Exception
     */
    public void addTag(SessionProvider sProvider, String username, String accountId, List<Message> messages, List<Tag> tag) throws Exception ;
+   
    /**
     * Remove the tag from the message
     * Save the message into the database
