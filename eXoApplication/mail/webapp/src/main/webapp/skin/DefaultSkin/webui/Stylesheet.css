@@ -1579,6 +1579,11 @@
 	background: white;
 }
 
+.UIMailPortlet .UIAddNewContact .AddGroupContact .HorizontalLayout {
+	height: 28px;
+}
+
+
 .UIMailPortlet .UIAddNewContact .ProfileContent {
 	margin-top: 10px;
 }
