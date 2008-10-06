@@ -35,9 +35,11 @@ import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.JCRMessageAttachment;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
+import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.popup.UIAddContactForm;
+import org.exoplatform.mail.webui.popup.UIAddMessageFilter;
 import org.exoplatform.mail.webui.popup.UIComposeForm;
 import org.exoplatform.mail.webui.popup.UIEventForm;
 import org.exoplatform.mail.webui.popup.UIExportForm;
@@ -73,6 +75,7 @@ import org.exoplatform.webui.event.EventListener;
 				@EventConfig(listeners = UIMessagePreview.ReplyAllActionListener.class),
 				@EventConfig(listeners = UIMessagePreview.DeleteActionListener.class, confirm="UIMessagePreview.msg.confirm-remove-message"),
 				@EventConfig(listeners = UIMessagePreview.ForwardActionListener.class), 
+        @EventConfig(listeners = UIMessagePreview.CreateFilterActionListener.class),
 				@EventConfig(listeners = UIMessagePreview.PrintActionListener.class),
 				@EventConfig(listeners = UIMessagePreview.ExportActionListener.class),
 				@EventConfig(listeners = UIMessagePreview.AddTagActionListener.class),
@@ -199,20 +202,18 @@ public class UIMessagePreview extends UIComponent {
 			String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
 			UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class) ;
 			String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-
+      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
 			if (msgId != null) {
 				Message msg = uiMsgPreview.getShowedMessageById(msgId);
 				if (msg != null) {
-					UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
           UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class, null, "UIPopupActionComposeContainer") ;
           uiPopupAction.activate(uiPopupContainer, 850, 0, true);
 					UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
 					uiComposeForm.init(accId, msg, uiComposeForm.MESSAGE_REPLY);
 					uiPopupContainer.addChild(uiComposeForm) ;
-					event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
 				}
 			}
-			event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
 		}
 	}
 
@@ -223,19 +224,18 @@ public class UIMessagePreview extends UIComponent {
 			UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class) ;
 			String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
 
+      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
 			if (msgId != null) {
 				Message msg = uiMsgPreview.getShowedMessageById(msgId);
 				if (msg != null) {
-					UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
           UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class, null, "UIPopupActionComposeContainer") ;
           uiPopupAction.activate(uiPopupContainer, 850, 0, true);
 					UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
 					uiComposeForm.init(accId, msg, uiComposeForm.MESSAGE_REPLY_ALL);
 					uiPopupContainer.addChild(uiComposeForm) ;
-					event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
 				}
 			}
-			event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
 		}
 	}
 
@@ -258,9 +258,39 @@ public class UIMessagePreview extends UIComponent {
 					event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
 				}
 			}
-			event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview) ;
 		}
 	}
+  
+  static public class CreateFilterActionListener extends EventListener<UIMessagePreview> {
+    public void execute(Event<UIMessagePreview> event) throws Exception {
+      UIMessagePreview uiMsgPreview = event.getSource() ; 
+      String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class) ;
+      String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
+      if (msgId != null) {
+        Message msg = uiMsgPreview.getShowedMessageById(msgId);
+        if (msg != null) {
+          UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class, null, "UIPopupActionComposeContainer") ;
+          uiPopupAction.activate(uiPopupContainer, 850, 0, true);
+          UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
+          uiComposeForm.init(accId, msg, uiComposeForm.MESSAGE_FOWARD);
+          uiPopupContainer.addChild(uiComposeForm) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+        }
+        String from = Utils.getAddresses(msg.getFrom())[0];
+        MessageFilter filter = new MessageFilter(from);
+        filter.setFrom(from);
+        filter.setFromCondition(Utils.CONDITION_CONTAIN);
+        UIAddMessageFilter uiEditMessageFilter = uiPopupAction.createUIComponent(UIAddMessageFilter.class, null, null);
+        String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+        uiEditMessageFilter.init(accountId);
+        uiPopupAction.activate(uiEditMessageFilter, 650, 0, false) ;
+        uiEditMessageFilter.setCurrentFilter(filter);
+    }
+    event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
+  }
+  }
 
 	static public class DeleteActionListener extends EventListener<UIMessagePreview> {
 		public void execute(Event<UIMessagePreview> event) throws Exception {
@@ -304,13 +334,10 @@ public class UIMessagePreview extends UIComponent {
 			String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
 			UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class);
 			Message msg = uiMsgPreview.getShowedMessageById(msgId) ;
-			if (msg != null) {
-				UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
-				UIPrintPreview uiPrintPreview = uiPopup.activate(UIPrintPreview.class, 700) ;
-				uiPrintPreview.setPrintMessage(msg) ;
-				event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
-			}
-			event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview);
+			UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
+			UIPrintPreview uiPrintPreview = uiPopup.activate(UIPrintPreview.class, 700) ;
+			uiPrintPreview.setPrintMessage(msg) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
 		}
 	}
 

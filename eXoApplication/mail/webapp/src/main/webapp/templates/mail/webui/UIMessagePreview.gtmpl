@@ -288,6 +288,9 @@
                                       <a class="MenuItem" href="<%=uicomponent.event("Forward", msg.getId())%>">   
                                         <div class="ItemIcon ForwardMailIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.forward") %> </div>
                                       </a>
+                                      <a class="MenuItem" href="<%=uicomponent.event("CreateFilter", msg.getId())%>">   
+                                        <div class="ItemIcon CreateFilterIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.create-filter-from-this") %> </div>
+                                      </a>
                                       <a class="MenuItem" href="<%=uicomponent.event("Print", msg.getId())%>">   
                                         <div class="ItemIcon PrintMailIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.print") %> </div>
                                       </a>

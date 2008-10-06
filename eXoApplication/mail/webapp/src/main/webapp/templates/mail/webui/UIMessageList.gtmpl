@@ -308,6 +308,9 @@
               <div class="ItemIcon ForwardMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.forward") %></div>
             </a>
             <% } %>
+            <a class="MenuItem" href="<%=uicomponent.event("CreateFilter", "id")%>">   
+              <div class="ItemIcon CreateFilterIcon"><%=_ctx.appRes(uicomponent.id+ ".label.create-filter-from-this") %></div>
+            </a>
             <a class="MenuItem" href="<%=uicomponent.event("MoveMessages", "id")%>">   
               <div class="ItemIcon MoveMailIcon"><%=_ctx.appRes(uicomponent.id+ ".label.move-to-folder") %></div>
             </a>

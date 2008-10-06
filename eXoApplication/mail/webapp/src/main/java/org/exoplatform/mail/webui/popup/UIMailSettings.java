@@ -59,7 +59,6 @@ public class UIMailSettings extends UIForm implements UIPopupComponent {
   public static final String NUMBER_MSG_PER_PAGE = "number-of-conversation".intern() ;
   public static final String PERIOD_CHECK_AUTO = "period-check-mail".intern() ;
   public static final String COMPOSE_MESSAGE_IN = "compose-message-in".intern();
-  public static final String FORMAT_AS_ORIGINAL = "reply-forward-as".intern();
   public static final String REPLY_WITH_ATTACH = "reply-message-with".intern();
   public static final String FORWARD_WITH_ATTACH = "forward-message-with".intern();
   public static final String SAVE_SENT_MESSAGE = "save-sent-message".intern();
@@ -90,12 +89,6 @@ public class UIMailSettings extends UIForm implements UIPopupComponent {
     useWysiwyg.add(new SelectItemOption<String>("Plain text", "editor.false"));
     addUIFormInput(new UIFormSelectBox(COMPOSE_MESSAGE_IN, COMPOSE_MESSAGE_IN, useWysiwyg));
     
-    List<SelectItemOption<String>> formatAsOriginal = new ArrayList<SelectItemOption<String>>();
-    formatAsOriginal.add(new SelectItemOption<String>("Format of the original message", "format.true"));
-    formatAsOriginal.add(new SelectItemOption<String>("Text only","format.false" ));
-    addUIFormInput(new UIFormSelectBox(FORMAT_AS_ORIGINAL, FORMAT_AS_ORIGINAL, formatAsOriginal));
-    
-
     List<SelectItemOption<String>> replyWithAtt = new ArrayList<SelectItemOption<String>>();
     replyWithAtt.add(new SelectItemOption<String>("Original message included attachment", "replywith.true"));
     replyWithAtt.add(new SelectItemOption<String>("Original message", "replywith.false"));
@@ -130,7 +123,6 @@ public class UIMailSettings extends UIForm implements UIPopupComponent {
       getUIFormSelectBox(NUMBER_MSG_PER_PAGE).setValue(String.valueOf(setting.getNumberMsgPerPage()));
       getUIFormSelectBox(PERIOD_CHECK_AUTO).setValue("period." + String.valueOf(setting.getPeriodCheckAuto()));
       getUIFormSelectBox(COMPOSE_MESSAGE_IN).setValue("editor." + String.valueOf(setting.useWysiwyg()));
-      getUIFormSelectBox(FORMAT_AS_ORIGINAL).setValue("format." + String.valueOf(setting.formatAsOriginal()));
       getUIFormSelectBox(REPLY_WITH_ATTACH).setValue("replywith." + String.valueOf(setting.replyWithAttach()));
       getUIFormSelectBox(FORWARD_WITH_ATTACH).setValue("forwardwith." + String.valueOf(setting.forwardWithAtt()));
       getUIFormCheckBoxInput(SAVE_SENT_MESSAGE).setChecked(setting.saveMessageInSent());
@@ -164,8 +156,6 @@ public class UIMailSettings extends UIForm implements UIPopupComponent {
       String editor = uiSetting.getUIFormSelectBox(COMPOSE_MESSAGE_IN).getValue() ;
       setting.setUseWysiwyg(Boolean.valueOf(editor.substring(editor.indexOf(".") + 1, editor.length()))) ;
       
-      String format = uiSetting.getUIFormSelectBox(FORMAT_AS_ORIGINAL).getValue() ;
-      setting.setFormatAsOriginal(Boolean.valueOf(format.substring(format.indexOf(".") + 1, format.length()))) ;
       String replyWith = uiSetting.getUIFormSelectBox(REPLY_WITH_ATTACH).getValue() ;
       setting.setReplyWithAttach(Boolean.valueOf(replyWith.substring(replyWith.indexOf(".") + 1, replyWith.length())));
       String forwardWith = uiSetting.getUIFormSelectBox(FORWARD_WITH_ATTACH).getValue() ;
