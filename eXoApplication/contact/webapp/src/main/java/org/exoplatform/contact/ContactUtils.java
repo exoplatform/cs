@@ -37,12 +37,23 @@ import org.exoplatform.webui.core.model.SelectItemOption;
  */
 public class ContactUtils {
   private static String AKONG = "@" ;
+  final public static String COMMA = ",".intern() ;
   public static final String HTTP = "http://" ; 
   public static String[] specialString = {"!", "#", "%", "&"
                                             , ":", ">", "<", "~", "`", "]", "'", "/", "-"} ;
 
   public static String getDisplayAdddressShared(String sharedUserId, String addressName) {
     return sharedUserId + " - " + addressName ;
+  }
+  
+  public static String encodeJCRText(String str) {
+    return str.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").
+    replaceAll("'", "&apos;").replaceAll("\"", "&quot;") ;
+  }
+  
+  public static boolean isNameValid(String name, String[] regex) {
+    for(String c : regex){ if(name.contains(c)) return false ;}
+    return true ;
   }
   
   // add

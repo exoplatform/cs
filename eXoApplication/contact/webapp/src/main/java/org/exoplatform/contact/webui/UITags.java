@@ -27,7 +27,6 @@ import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.DataPageList;
-import org.exoplatform.contact.service.JCRPageList;
 import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.webui.UIContacts.FullNameComparator;
 import org.exoplatform.contact.webui.popup.UIExportForm;
@@ -191,15 +190,11 @@ public class UITags extends UIComponent {
       uiContacts.setPrintForm(true) ;
       //uiContacts.setSelectedGroup(null) ;
 
-      if (ContactUtils.isEmpty(uiTags.selectedTag_) || 
-          (!ContactUtils.isEmpty(uiTags.selectedTag_) && !uiTags.selectedTag_.equals(tagId))) {
-        JCRPageList pageList = ContactUtils.getContactService().getContactPageListByTag(
-            SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), tagId) ;
-        LinkedHashMap<String, Contact> contactMap = new LinkedHashMap<String, Contact>() ;
-        List<Contact> contacts = pageList.getPage(pageList.getCurrentPage(), ContactUtils.getCurrentUser()) ;
-        for (Contact contact : contacts) contactMap.put(contact.getId(), contact) ;
-        uiContacts.setContactMap(contactMap) ;
-      }
+      List<Contact> contacts = ContactUtils.getContactService().getContactPageListByTag(
+          SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), tagId).getAll() ;
+      LinkedHashMap<String, Contact> contactMap = new LinkedHashMap<String, Contact>() ;
+      for (Contact contact : contacts) contactMap.put(contact.getId(), contact) ;
+      uiContacts.setContactMap(contactMap) ;   
       event.getRequestContext().addUIComponentToUpdateByAjax(workingContainer) ;  
     }
   }

@@ -391,20 +391,17 @@ public class VCardImportExport implements ContactImportExport {
       String workPhone1 = null;
       String workPhone2 = null;
       String workFax = null;
-      
       Communications communication = pimContacts[index].getCommunications();
       if (communication != null) {
         for (Iterator iters = communication.getPhoneNumbers(); iters.hasNext();) {
           PhoneNumber phone = (PhoneNumber) iters.next();
-
-          if (phone.isHome() && phone.isFax())
-            homeFax = phone.getNumber();
-          else if (phone.isHome() && phone.isVoice()) {
+          if (phone.isHome() && phone.isFax()) {
+            homeFax = phone.getNumber();            
+          } else if (phone.isHome() && phone.isVoice()) {
             if (homePhone1 == null)
               homePhone1 = phone.getNumber();
             else if (homePhone2 == null)
               homePhone2 = phone.getNumber();
-
           } else if (phone.isWork() && phone.isFax()) {
             workFax = phone.getNumber();
           } else if (phone.isWork() && phone.isVoice()) {
@@ -412,11 +409,27 @@ public class VCardImportExport implements ContactImportExport {
               workPhone1 = phone.getNumber();
             else if (workPhone2 == null)
               workPhone2 = phone.getNumber();
-
           } else if (phone.isCellular()) {
             mobilePhone = phone.getNumber();
+          } else if (phone.isHome()) { // add to fix bug cs-1478
+            if (homePhone1 == null)
+              homePhone1 = phone.getNumber();
+            else if (homePhone2 == null)
+              homePhone2 = phone.getNumber();
           }
-
+        }
+//      add to fix bug cs-1478
+        for (Iterator iters = communication.getPhoneNumbers(); iters.hasNext();) {
+          PhoneNumber phone = (PhoneNumber) iters.next();
+          if (phone.isHome() || phone.isWork() || phone.isCellular()) continue ;
+          if (homePhone1 == null)
+            homePhone1 = phone.getNumber();
+          else if (homePhone2 == null)
+            homePhone2 = phone.getNumber();
+          else if (workPhone1 == null)
+            workPhone1 = phone.getNumber();
+          else if (workPhone2 == null)
+            workPhone2 = phone.getNumber();
         }
         String emailAddress = "";
         for (Iterator iters = communication.getEmailAddresses() ; iters.hasNext();) {

@@ -104,7 +104,8 @@ UIContactPortlet.prototype.contactCallback = function(evt) {
  		
 // 		change to fix bug cs -1443
 		if (isSharedAddress == "true") {	
-		  if (havePermission == "true" && isOwner == "false") {
+		  var havePermissionAdd = tr.getAttribute("havePermissionAdd").toLowerCase() ;	
+		  if (havePermissionAdd == "true" && isOwner == "false") {
 		    for (var i = 0; i < len; i++) {
 	          isDisable = DOMUtil.hasClass(actions[i], "DeleteContactIcon") || DOMUtil.hasClass(actions[i], "MoveIcon");
 	          if (isDisable == false) continue;

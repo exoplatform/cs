@@ -191,3 +191,7 @@
 .UIContactPortlet .YellowTag {
 	background: url('icons/TagIcons.gif') no-repeat left -651px;
 }
+
+.UIContactPortlet .AddEventIcon {
+	background: url('icons/AddEvent.gif') no-repeat left;
+}

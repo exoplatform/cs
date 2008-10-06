@@ -197,6 +197,29 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   
   public void setSelectSharedContacts(boolean selected) { isSelectSharedContacts = selected ; }
   public boolean isSelectSharedContacts() { return isSelectSharedContacts ; }
+  public boolean havePermissionAdd(Contact contact) throws Exception {
+    if (!contact.getContactType().equals(JCRDataStorage.SHARED)) return false ;
+    Map<String, SharedAddressBook> sharedGroupMap = getAncestorOfType(
+        UIWorkingContainer.class).findFirstComponentOfType(UIAddressBooks.class).getSharedGroups() ;
+    String currentUser = ContactUtils.getCurrentUser() ;
+    for (String address : contact.getAddressBook()) { 
+      SharedAddressBook add = sharedGroupMap.get(address) ;
+      if (add != null) {
+        if (add.getEditPermissionUsers() != null &&
+            Arrays.asList(add.getEditPermissionUsers()).contains(currentUser + JCRDataStorage.HYPHEN)) {
+          return true ;
+        }
+        String[] editPerGroups = add.getEditPermissionGroups() ;
+        if (editPerGroups != null)
+          for (String editPer : editPerGroups)
+            if (ContactUtils.getUserGroups().contains(editPer)) {
+              return true ;
+            }
+        return false ;
+      }
+    }
+    return false ;
+  }
   public boolean havePermission(Contact contact) throws Exception {
     if (!contact.getContactType().equals(JCRDataStorage.SHARED)) return true ;
     // contact shared
@@ -232,12 +255,16 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   }
   
   public boolean isSharedAddress(Contact contact) throws Exception {
-    ContactService service = ContactUtils.getContactService() ;
+  /*  ContactService service = ContactUtils.getContactService() ;
     String username = ContactUtils.getCurrentUser() ;
+    */
+    if (isSelectSharedContacts) return false ;
     for (String add : contact.getAddressBook()) {
       if (getSharedGroupMap().containsKey(add)) {
-        if (selectedGroup != null && add.equals(selectedGroup)) return true ;
-        if (isSearchResult || selectedTag_ != null) {
+        return true ;
+        
+        //if (selectedGroup != null && add.equals(selectedGroup)) return true ;
+        /*if (isSearchResult || selectedTag_ != null) {
           try {
             // should priority non permission first ?
             if (service.getSharedContact(SessionProviderFactory.createSystemProvider()
@@ -245,7 +272,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
             else return true ;
           } catch (PathNotFoundException e) { return false ; }
           
-        }
+        }*/
       }
     }
     return false ;
@@ -550,6 +577,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
       List<String> contactIds = new ArrayList<String>();
       UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
+      UIContactPortlet uiContactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
+      UIAddressBooks addressBooks = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
       
       Map<String, Contact> movedContacts = new HashMap<String, Contact>() ;
       if (!ContactUtils.isEmpty(contactId) && !contactId.equals("null")) {
@@ -563,9 +592,40 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
         }
-        
-        // need improve
         for (String id : contactIds) {
+          Contact contact = uiContacts.contactMap.get(id) ;         
+          if (contact.getContactType().equals(JCRDataStorage.PUBLIC)) {
+            uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-move", null
+                , ApplicationMessage.WARNING)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return ;
+          } else if (contact.getContactType().equals(JCRDataStorage.SHARED)&& uiContacts.isSharedAddress(contact)) {
+            if (contact.isOwner()) {
+              uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-move", null
+                  , ApplicationMessage.WARNING)) ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              return ;
+            } else {
+              String groupId = null ;
+              for (String add : contact.getAddressBook())
+                if (addressBooks.getSharedGroups().containsKey(add)) groupId = add ;                    
+              if (groupId != null && !addressBooks.havePermission(groupId)) {
+                uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-move", null
+                    , ApplicationMessage.WARNING)) ;
+                event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                return ;
+              }            
+            }    
+          } else if (contact.getId().equals(ContactUtils.getCurrentUser())) {
+            uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-move-ownerContact", null
+                , ApplicationMessage.WARNING)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return ;
+          }
+          movedContacts.put(id, contact) ;
+        }
+
+        /*for (String id : contactIds) {
           Contact contact = uiContacts.contactMap.get(id) ;         
           if (contact.getContactType().equals(JCRDataStorage.PUBLIC)
                   || (contact.getContactType().equals(JCRDataStorage.SHARED) && uiContacts.isSharedAddress(
@@ -581,14 +641,13 @@ public class UIContacts extends UIForm implements UIPopupComponent {
             return ;
           }
           movedContacts.put(id, contact) ;
-        }
+        }*/ 
       }  
       
-      UIContactPortlet uiContactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
+      
       UIPopupAction popupAction = uiContactPortlet.getChild(UIPopupAction.class) ;
       UIMoveContactsForm uiMoveForm = popupAction.activate(UIMoveContactsForm.class, 540) ;
       uiMoveForm.setContacts(movedContacts) ;
-      UIAddressBooks addressBooks = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
       uiMoveForm.setPrivateGroupMap(addressBooks.getPrivateGroupMap()) ;
       uiMoveForm.setSharedGroupMap(addressBooks.getSharedGroups()) ;
       //event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent());
@@ -637,14 +696,31 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
           return ;          
-        } else if (contact.getContactType().equals(JCRDataStorage.PUBLIC)
-                || (contact.getContactType().equals(JCRDataStorage.SHARED) && uiContacts.isSharedAddress(
-                    contact) && (!uiContacts.havePermission(contact) || contact.isOwner()))) {
+        } if (contact.getContactType().equals(JCRDataStorage.PUBLIC)) {
           uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-move", null
               , ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
           return ;
+        } else if (contact.getContactType().equals(JCRDataStorage.SHARED)&& uiContacts.isSharedAddress(contact)) {
+          if (contact.isOwner()) {
+            uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-move", null
+                , ApplicationMessage.WARNING)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+            return ;
+          } else {
+            String groupId = null ;
+            for (String add : contact.getAddressBook())
+              if (uiAddressBooks.getSharedGroups().containsKey(add)) groupId = add ;                    
+            if (groupId != null && !uiAddressBooks.havePermission(groupId)) {
+              uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-move", null
+                  , ApplicationMessage.WARNING)) ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+              return ;
+            }            
+          }    
         }
       }
       for(String contactId : contactIds) {
@@ -738,11 +814,13 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
       List<String> contactIds = new ArrayList<String>();
       UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
+      UIWorkingContainer uiWorkingContainer = uiContacts.getAncestorOfType(UIWorkingContainer.class) ;
+      UIAddressBooks addressBooks = uiWorkingContainer.findFirstComponentOfType(UIAddressBooks.class) ;
       if (!ContactUtils.isEmpty(contactId) && !contactId.toString().equals("null")) {
         contactIds.add(contactId) ;
       } else {
         contactIds = uiContacts.getCheckedContacts() ;
-        if (contactIds.size() == 0) {          
+        if (contactIds.size() == 0) {        
           uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-toDelete", null,
               ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -757,17 +835,34 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
-        } else if (contact.getContactType().equals(JCRDataStorage.PUBLIC)
-                || (contact.getContactType().equals(JCRDataStorage.SHARED) && uiContacts.isSharedAddress(
-                        contact) && (!uiContacts.havePermission(contact) || contact.isOwner()))) {
+        } else if (contact.getContactType().equals(JCRDataStorage.PUBLIC)) {
           uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-delete", null
               , ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
+        } else if (contact.getContactType().equals(JCRDataStorage.SHARED)&& uiContacts.isSharedAddress(contact)) {
+          if (contact.isOwner()) {
+            uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-delete", null
+                , ApplicationMessage.WARNING)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return ;
+          } else {
+            String groupId = null ;
+            for (String add : contact.getAddressBook())
+              if (addressBooks.getSharedGroups().containsKey(add)) groupId = add ;                    
+            if (groupId != null && !addressBooks.havePermission(groupId)) {
+              uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-delete", null
+                  , ApplicationMessage.WARNING)) ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              return ;
+            }            
+          } 
         }
       }
-      UIWorkingContainer uiWorkingContainer = uiContacts.getAncestorOfType(UIWorkingContainer.class) ;
+      
       ContactService contactService = ContactUtils.getContactService() ;
       String username = ContactUtils.getCurrentUser() ;
       List <Contact> removedContacts = new ArrayList<Contact>() ;

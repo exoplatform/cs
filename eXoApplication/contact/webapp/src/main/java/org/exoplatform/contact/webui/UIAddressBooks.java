@@ -32,7 +32,6 @@ import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.ContactService;
-import org.exoplatform.contact.service.JCRPageList;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.Utils;
 import org.exoplatform.contact.service.impl.JCRDataStorage;
@@ -623,29 +622,26 @@ public class UIAddressBooks extends UIComponent {
       uiContacts.setPrintForm(true) ;
       //uiContacts.setSelectedTag(null) ;
 
-      if (ContactUtils.isEmpty(uiAddressBook.selectedGroup) || 
-          (!ContactUtils.isEmpty(uiAddressBook.selectedGroup) && !uiAddressBook.selectedGroup.equals(groupId))) {
-        ContactService service = ContactUtils.getContactService() ;
-        String username = ContactUtils.getCurrentUser() ;
-        SessionProvider provide = SessionProviderFactory.createSessionProvider() ;
-        List<Contact> contacts = new ArrayList<Contact>();
-        if (uiAddressBook.privateAddressBookMap_.containsKey(groupId)) {
-          JCRPageList pageList = service.getContactPageListByGroup(provide, username, groupId) ;
-          contacts = pageList.getPage(pageList.getCurrentPage(), username) ;
-        } else if (uiAddressBook.sharedAddressBookMap_.containsKey(groupId)){
-          JCRPageList pageList = service.getSharedContactsByAddressBook(
-              provide, username, uiAddressBook.sharedAddressBookMap_.get(groupId)) ;
-          contacts = pageList.getPage(pageList.getCurrentPage(), username) ;
-        } else {
-          JCRPageList pageList = service.getPublicContactsByAddressBook(provide, groupId) ;
-          contacts = pageList.getPage(pageList.getCurrentPage(), username) ;
-        }
-        LinkedHashMap<String, Contact> contactMap = new LinkedHashMap<String, Contact> () ;
-        for (Contact contact : contacts) {
-          contactMap.put(contact.getId(), contact) ;
-        }
-        uiContacts.setContactMap(contactMap) ;
+      ContactService service = ContactUtils.getContactService() ;
+      String username = ContactUtils.getCurrentUser() ;
+      SessionProvider provide = SessionProviderFactory.createSessionProvider() ;
+      ContactPageList pageList = null ;
+      if (uiAddressBook.privateAddressBookMap_.containsKey(groupId)) {
+        pageList = service.getContactPageListByGroup(provide, username, groupId) ;
+      } else if (uiAddressBook.sharedAddressBookMap_.containsKey(groupId)){
+         pageList = service.getSharedContactsByAddressBook(
+            provide, username, uiAddressBook.sharedAddressBookMap_.get(groupId)) ;
+
+      } else {
+         pageList = service.getPublicContactsByAddressBook(provide, groupId) ;
       }
+      LinkedHashMap<String, Contact> contactMap = new LinkedHashMap<String, Contact> () ;
+      
+      if (pageList == null) return ;
+      for (Contact contact : pageList.getAll()) {
+        contactMap.put(contact.getId(), contact) ;
+      }
+      uiContacts.setContactMap(contactMap) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(workingContainer) ;
     }
   }
