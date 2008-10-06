@@ -142,34 +142,35 @@
 }
 /*=====================Table Color===========================*/
 
-.UIPopupCategory .UIContextMenuContainer {
+.UIContextMenuContainer {
 	white-space: nowrap;
 }
 
-.UIPopupCategory .CalendarTableColor {
+.UIContextMenuContainer .CalendarTableColor {
 	background: #e4eaf5;
 	padding: 5px;
 	margin: 1px;
 }
 
-.UIPopupCategory .CalendarTableColor .ColorCell {
+.UIContextMenuContainer .CalendarTableColor .ColorCell {
  width: 12px; height: 12px;
  margin: 2px;
  border: 1px solid #ffffff;
 }
 
-.UIPopupCategory .CalendarTableColor .ColorCell img {
+.UIContextMenuContainer .CalendarTableColor .ColorCell img {
  width: 12px; height: 12px;
 }
 
-.UIPopupCategory .CalendarTableColor .SelectedColorCell {
+.UIContextMenuContainer .CalendarTableColor .SelectedColorCell {
 	background: url('skinIcons/icons/CalendarIcons.gif') no-repeat left -342px;
 	width: 12px; height: 12px;
 	border: 1px solid red;
 }
 
-.UIPopupCategory .CalendarTableColor a:hover {
-	border: 1px solid red; 
+.UIContextMenuContainer .CalendarTableColor a:hover {
+	border: 1px solid red;
+	margin: 2px;
 }
 
 /* Popup Menu Positioning*/
@@ -276,6 +277,3 @@
 	white-space: nowrap;
 }
 
-.UICalendarPortlet .UIForm .UIFormGrid td.FieldLabel {
-	white-space: nowrap;
-}

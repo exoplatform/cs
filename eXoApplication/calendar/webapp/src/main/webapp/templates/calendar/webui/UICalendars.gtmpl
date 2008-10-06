@@ -92,12 +92,12 @@
 				%>
 				<div class="UIVTab">  	
   				<div class="CalendarSelectedFlatStyle">
-  					<div class="GroupItem">
+  					<div class="GroupItem"   id="$groupData.id">
   						<div class="GroupColor1">
   							<div class="CollapserFlatStyle"><span></span></div>
   							<div class="CheckBox"><input class="CalendarGroup" type="checkbox"/></div>
-  							<div class="CalendarGroupIcon"><a title="$groupData.name">$groupData.name</a></div>
-  							<div class="DownArrow1Icon" title="<%=uiform.getLabel('groupActions')%>"  id="$groupData.id" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
+  							<div class="CalendarGroupIcon"><span title="$groupData.name">$groupData.name</span></div>
+  							<div class="DownArrow1Icon" title="<%=uiform.getLabel('groupActions')%>"  id="$groupData.id"><span></span></div>
   							<div style="clear: both;"><span></span></div>
   						</div>
   					</div>
@@ -111,10 +111,10 @@
             if(calendar.getViewPermission()!= null && calendar.getViewPermission().length > 0) { icon = "SharedCalendarIcon"}
 						if(uicomponent.getChildById(calId) != null) {
 				%>
-  					<div class="CalendarItem $calendar.calendarColor">
+  					<div class="CalendarItem $calendar.calendarColor" calColor="$calendar.calendarColor" id="$calId" calType="0" >
   							<div class="CheckBox"><%uiform.renderField(calId)%></div>
-  							<div class="$icon" title="$calendar.name"><a>$calendar.name</a></div>
-  							<div class="DownArrow1Icon"  calColor="$calendar.calendarColor" id="$calId" calType="0" title="<%=uiform.getLabel("calendarActions")%>" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
+  							<div class="$icon" title="$calendar.name"><span>$calendar.name</span></div>
+  							<div class="DownArrow1Icon"><span></span></div>
   							<div style="clear: both"><span></span></div>
   					</div>
 				<% }
@@ -154,10 +154,10 @@
 							owner = calendar.getCalendarOwner() + "- " ;
 						}
 				%>
-  					<div class="CalendarItem $color">
+  					<div class="CalendarItem $color"  calColor="$color" id="$calId" calType="1" >
   							<div class="CheckBox"><%uiform.renderField(calendar.getId())%></div>
-  							<div class="CalendarIcon" title="<%=owner + calendar.getName()%>"><a><%=owner + calendar.getName()%></a></div>
-  							<div class="DownArrow1Icon" calColor="$color" id="$calId" calType="1" title="<%=uiform.getLabel("calendarActions")%>" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
+  							<div class="CalendarIcon" title="<%=owner + calendar.getName()%>"><span><%=owner + calendar.getName()%></span></div>
+  							<div class="DownArrow1Icon"><span></span></div>
   							<div style="clear:both;"><span></span></div>
   					</div>
 				<%
@@ -193,7 +193,7 @@
   						<div class="GroupColor1">
   							<div title="Collapser calendar group" class="CollapserFlatStyle" title="<%=uiform.getLabel("groupActions")%>"><span></span></div>
   							<div class="CheckBox"><input class="CalendarGroup" type="checkbox"/></div>
-  							<div class="CalendarGroupIcon"><a title="$title">$label</a></div>
+  							<div class="CalendarGroupIcon"><span title="$title">$label</span></div>
   							<div style="clear: both"><span></span></div>
   						</div>
   					</div>
@@ -205,10 +205,10 @@
 							calId = calendar.getId() ;
 							if(uicomponent.getChildById(calId) != null) {
 				%>
-  					<div class="CalendarItem $calendar.calendarColor">
+  					<div class="CalendarItem $calendar.calendarColor"  calColor="$calendar.calendarColor" canEdit="<%=uicomponent.canEdit(calendar.getEditPermission())%>" id="$calId" calType="2" >
   							<div class="CheckBox"><%uiform.renderField(calendar.getId())%></div>
-  							<div class="CalendarIcon" title="<%=calendar.getName()%>"><a><%=calendar.getName()%></a></div>
-  							<div class="DownArrow1Icon" calColor="$calendar.calendarColor" canEdit="<%=uicomponent.canEdit(calendar.getEditPermission())%>" id="$calId" calType="2" title="<%=uiform.getLabel("calendarActions")%>" onclick="eXo.calendar.UICalendarPortlet.show(this, event);"><span></span></div>
+  							<div class="CalendarIcon" title="<%=calendar.getName()%>"><span><%=calendar.getName()%></span></div>
+  							<div class="DownArrow1Icon"><span></span></div>
   							<div style="clear: both"><span></span></div>
   					</div>
 				<%
@@ -225,10 +225,8 @@
 		<!-- end public calendars -->
 	</div>
 	<% /*Begin Popup Menu - Calendar group*/ %>
-	      <div class="UIPopupCategory" style="display: none;">
-	      	<div class="PopupCategoryDecorator">
 	      
-		        <div class="UIRightClickPopupMenu" style="display: block ;">
+		        <div class="UIRightClickPopupMenu" style="display: none;" id="CalendarGroupPopupMenu" eXoCallback="eXo.calendar.UICalendarPortlet.calendarMenuCallback">
 		        	<div class="UIContextMenuContainer">
 							  <div class="TopLeftRightClickPopupMenu">
 		      			<div class="TopRightRightClickPopupMenu">
@@ -274,14 +272,10 @@
 	  					</div>
 	  				</div>
 	  			
-			    </div>
-			  </div>
 		<% /*End Popup Menu*/ %>
 	<% /*Begin Popup Menu - Calendar*/ %>
-	      <div class="UIPopupCategory" style="display: none;">
-	      	<div class="PopupCategoryDecorator">
 	      
-		        <div class="UIRightClickPopupMenu" style="display: block;">
+		        <div class="UIRightClickPopupMenu" style="display: none;" id="CalendarPopupMenu" eXoCallback="eXo.calendar.UICalendarPortlet.calendarMenuCallback">
 		        	<div class="UIContextMenuContainer">
 							  <div class="TopLeftRightClickPopupMenu">
 		      			<div class="TopRightRightClickPopupMenu">
@@ -361,9 +355,6 @@
 			        </div>
 	  					</div>
 	  				</div>
-	  			
-			    </div>
-			  </div>
 		<% /*End Popup Menu*/ %>
 	</div>
 	<%if(uicomponent.isShowTaskList()){%>
@@ -372,43 +363,7 @@
 				<div class="Title">
 					<%=uiform.getLabel("tasks")%>
 				</div>
-				<div class="ActionsButton" title="Tasks Actions" onclick="eXo.calendar.UICalendarPortlet.showMainMenu(this, event);">
-				 <!-- 
-				  <% /*Begin Popup Menu - Main */ %>
-				     
-			    <div class="UIRightClickPopupMenu" style="display: none ;">
-			    	<div class="UIContextMenuContainer">
-							<div class="TopLeftRightClickPopupMenu">
-				  			<div class="TopRightRightClickPopupMenu">
-				    			<div class="TopCenterRightClickPopupMenu"><span></span></div>
-				  			</div>
-							</div>
-			        <div class="MiddleLeftRightClickPopupMenu">
-			          <div class="MiddleRightRightClickPopupMenu">
-				      		<div class="UIRightPopupMenuContainer">
-				            <a class="MenuItem" href="#">   
-				              <div class="ItemIcon AddGroupIcon">
-				              <%=uiform.getLabel("AddGroup")%>
-				              </div>
-				            </a>
-				            <a class="MenuItem" href="#">   
-				              <div class="ItemIcon AddCalendarIcon">
-				              <%=uiform.getLabel("AddCalendar")%>
-				              </div>
-				            </a>
-				          </div>
-			  		    </div>
-							</div>
-				      <div class="BottomLeftRightClickPopupMenu">
-				        <div class="BottomRightRightClickPopupMenu">
-				          <div class="BottomCenterRightClickPopupMenu"><span></span></div>
-				        </div>
-				      </div>
-				  	</div>
-				  </div>
-						<% /*End Popup Menu*/ %>
-				 -->
-				</div>
+				<div class="ActionsButton" title="Tasks Actions" onclick="eXo.calendar.UICalendarPortlet.showMainMenu(this, event);"><span></span></div>
 			  <div style="clear: both"><span></span></div>
 			</div>
 			<div class="ContentContainer">

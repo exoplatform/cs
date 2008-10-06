@@ -161,6 +161,7 @@ UIContextMenu.prototype.hide = function() {
 } ;
 
 UIContextMenu.prototype.showHide = function() {
+	if(!this.menuElement) return ;
 	if (this.menuElement.style.display != "block") {
 		this.hide() ;
 		this.menuElement.style.display = "block" ;
@@ -170,7 +171,7 @@ UIContextMenu.prototype.showHide = function() {
 	}
 } ;
 
-UIContextMenu.prototype.swapMenu = function(oldmenu, mousePos) {
+UIContextMenu.prototype.swapMenu = function(oldmenu, mousePos,evt) {
 	var DOMUtil = eXo.core.DOMUtil ;
 	var Browser = eXo.core.Browser ;
 	var browserHeight = eXo.core.Browser.getBrowserHeight() + document.documentElement.scrollTop || document.body.scrollTop ;
@@ -180,7 +181,13 @@ UIContextMenu.prototype.swapMenu = function(oldmenu, mousePos) {
 	tmpMenuElement.setAttribute("id","tmpMenuElement") ;
 	DOMUtil.addClass(tmpMenuElement, this.portletCssClass + " UIEmpty") ;
 	this.menuElement = tmpMenuElement ;
+	var callback = this.getCallback(tmpMenuElement) ;
+	if(callback) {
+		callback = callback + "(evt)" ;
+		eval(callback) ;
+	}
 	var uiApplication = document.getElementById("UIPortalApplication") ;
+	if(this.menuElement){
 	document.body.insertBefore(this.menuElement,uiApplication) ;	
 	this.menuElement.style.zIndex = 2000 ;
 	this.menuElement.style.top = mousePos.y - 2  + "px" ;
@@ -191,7 +198,8 @@ UIContextMenu.prototype.swapMenu = function(oldmenu, mousePos) {
 	if((this.menuElement.offsetWidth + mousePos.x) > browserWidth) this.menuElement.style.left = mousePos.x - this.menuElement.offsetWidth + 2  + "px" ;	
 	this.menuElement.style.display = "none" ;
 	this.menuElement.style.visibility = "visible" ;
-	this.showHide() ;
+	}
+	this.showHide() ;	
 } ;
 
 UIContextMenu.prototype.show = function(evt) {
@@ -206,11 +214,6 @@ UIContextMenu.prototype.show = function(evt) {
 	var currentPortlet = eXo.core.DOMUtil.findAncestorByClass(UIContextMenu.attachedElement, UIContextMenu.portletCssClass) ;
 	if (menuElementId) {
 		UIContextMenu.menuElement = eXo.core.DOMUtil.findDescendantById(currentPortlet, menuElementId) ; //document.getElementById(menuElementId) ;
-		var callback = UIContextMenu.getCallback(UIContextMenu.menuElement) ;
-		if(callback) {
-			callback = callback + "(_e)" ;
-			eval(callback) ;
-		}
 		eXo.core.DOMUtil.listHideElements(UIContextMenu.menuElement) ;
 		var ln = eXo.core.DOMUtil.hideElementList.length ;
 		if (ln > 0) {
@@ -218,7 +221,8 @@ UIContextMenu.prototype.show = function(evt) {
 				eXo.core.DOMUtil.hideElementList[i].style.display = "none" ;
 			}
 		}
-		UIContextMenu.swapMenu(document.getElementById(menuElementId), menuPos) ;
+		UIContextMenu.swapMenu(document.getElementById(menuElementId), menuPos,_e) ;
+		if(!UIContextMenu.menuElement) return false;
 		UIContextMenu.menuElement.onmouseover = UIContextMenu.autoHide ;
 		UIContextMenu.menuElement.onmouseout = UIContextMenu.autoHide ;		
 		return false ;

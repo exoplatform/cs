@@ -212,13 +212,27 @@ UICalendarPortlet.prototype.setting = function(){
 /**
  * Scroll vertical scrollbar to position of active calendar event
  * @param {Object} obj DOM element
- * @param {Object} events DOM element contains calendar events
  * @param {Object} container DOM element contains all calendar events
  */
-UICalendarPortlet.prototype.setFocus = function(obj, events, container){
-    events = this.getBlockElements(events);
+UICalendarPortlet.prototype.setFocus = function(){
+  if(document.getElementById("UIWeekView")){
+    var obj = eXo.calendar.UIWeekView.container ;
+    var container = eXo.core.DOMUtil.findAncestorByClass(obj,"EventWeekContent") ;
+  }
+  if(document.getElementById("UIDayView")){
+    var obj = this.viewer ;
+    var container = eXo.core.DOMUtil.findAncestorByClass(obj, "EventDayContainer");
+  }
+  var events = eXo.core.DOMUtil.findDescendantsByClass(obj,"div", "EventContainerBorder");
+	events = this.getBlockElements(events);
     var len = events.length;
-    var scrollTop = (events[0]) ? events[0].offsetTop : 0;
+	var scrollTop =  this.timeToMin((new Date()).getTime());
+	if(this.workingStart){
+		if(len == 0) scrollTop = this.workingStart ;
+		else {
+			scrollTop = (this.hasEventThrough(scrollTop,events))? scrollTop : this.workingStart ;
+		}
+	}	
     var lastUpdatedId = obj.getAttribute("lastUpdatedId");
     if (lastUpdatedId && (lastUpdatedId != "null")) {
         for (var i = 0; i < len; i++) {
@@ -228,10 +242,25 @@ UICalendarPortlet.prototype.setFocus = function(obj, events, container){
             }
         }
     }
-    else {
-        scrollTop = (this.workingStart) ? (this.workingStart + 15) : scrollTop;
-    }
-    container.scrollTop = scrollTop - 15;
+    container.scrollTop = scrollTop;
+};
+/**
+ * 
+ * @param {Object} min minutes
+ * @param {Object} events array of calendar events
+ */
+UICalendarPortlet.prototype.hasEventThrough = function(min,events){
+	var start = 0 ;
+	var end = 0 ;
+	var i = events.length
+	while(i--){
+		start = parseInt(events[i].getAttribute("starttime")) ;
+		end = parseInt(events[i].getAttribute("endtime")) ;
+		if((start <= min) && (end >= min)){
+			return true ;
+		}
+	}
+	return false;
 };
 
 /**
@@ -297,84 +326,152 @@ UICalendarPortlet.prototype.showMainMenu = function(obj, evt){
     eXo.calendar.UICalendarPortlet.swapMenu(oldmenu, obj);
 };
 
+UICalendarPortlet.prototype.calendarMenuCallback = function(evt){
+  var DOMUtil = eXo.core.DOMUtil ;
+  var obj = eXo.core.EventManager.getEventTargetByClass(evt,"CalendarItem") || eXo.core.EventManager.getEventTargetByClass(evt,"GroupItem");
+  var calType = obj.getAttribute("calType");
+  var calName = obj.getAttribute("calName");
+  var calColor = obj.getAttribute("calColor");
+  var canEdit = String(obj.getAttribute("canedit")).toLowerCase();
+  var menu = eXo.webui.UIContextMenu.menuElement ;
+  var d = new Date();
+  var currentTime = d.getTime();
+  var timezoneOffset = d.getTimezoneOffset();
+  var selectedCategory = (eXo.calendar.UICalendarPortlet.selectedCategory) ? eXo.calendar.UICalendarPortlet.selectedCategory : null;
+  if(!menu || !obj.id) {
+    eXo.webui.UIContextMenu.menuElement = null ;
+    return ;
+  } 
+  var value = "" ;
+  value = "objectId=" + obj.id;
+  if (calType) {
+      value += "&calType=" + calType;
+  }
+  if (calName) {
+      value += "&calName=" + calName;
+  }
+  if (calColor) {
+      value += "&calColor=" + calColor;
+  }
+  var items = DOMUtil.findDescendantsByTagName(menu, "a");  
+  for (var i = 0; i < items.length; i++) {
+      if (DOMUtil.hasClass(items[i].firstChild, "SelectedColorCell")) {
+          items[i].firstChild.className = items[i].firstChild.className.toString().replace(/SelectedColorCell/, "");
+      }
+      if (DOMUtil.hasClass(items[i], calColor)) {
+          var selectedCell = items[i].firstChild;
+          DOMUtil.addClass(selectedCell, "SelectedColorCell");
+      }
+      if (items[i].href.indexOf("ChangeColor") != -1) {
+          value = value.replace(/calColor\s*=\s*\w*/, "calColor=" + items[i].className.split(" ")[0]);
+      }
+      items[i].href = String(items[i].href).replace(/objectId\s*=.*(?='|")/, value);
+  }
+  items[0].href = String(items[0].href).replace("')", "&ct=" + currentTime + "&tz=" + timezoneOffset + "')");
+  if (DOMUtil.findAncestorByClass(obj, "CalendarItem")) {
+      items[1].href = String(items[1].href).replace("')", "&ct=" + currentTime + "&tz=" + timezoneOffset + "')");
+      items[0].href = String(items[0].href).replace("')", "&categoryId=" + selectedCategory + "')");
+      items[1].href = String(items[1].href).replace("')", "&categoryId=" + selectedCategory + "')");
+      
+  }
+  if (calType && (calType != "0")) {
+  
+      var actions = DOMUtil.findDescendantsByTagName(menu, "a");
+      for (var j = 0; j < actions.length; j++) {
+          if ((actions[j].href.indexOf("EditCalendar") >= 0) ||
+          (actions[j].href.indexOf("ShareCalendar") >= 0) ||
+          (actions[j].href.indexOf("ChangeColorCalendar") >= 0)) {
+              actions[j].style.display = "none";
+          }
+      }
+  }
+  if (canEdit && (canEdit == "true")) {
+      for (var j = 0; j < actions.length; j++) {
+          if (actions[j].href.indexOf("EditCalendar") >= 0) {
+              actions[j].style.display = "block";
+          }
+      }
+  }
+} ;
+
 /**
  * Show/hide Calendar and Group Calendar item
  * @param {Object} obj DOM Element to click
  * @param {Object} evt Mouse event
  */
-UICalendarPortlet.prototype.show = function(obj, evt){
-    var _e = window.event || evt;
-    _e.cancelBubble = true;
-    var DOMUtil = eXo.core.DOMUtil;
-    var portlet = document.getElementById(this.portletName).parentNode;
-    var contentContainer = DOMUtil.findFirstDescendantByClass(portlet, "div", "ContentContainer");
-    var uiPopupCategory = DOMUtil.findNextElementByTagName(contentContainer, "div");
-    var d = new Date();
-    var currentTime = d.getTime();
-    var timezoneOffset = d.getTimezoneOffset();
-    var selectedCategory = (eXo.calendar.UICalendarPortlet.selectedCategory) ? eXo.calendar.UICalendarPortlet.selectedCategory : null;
-    if (DOMUtil.findAncestorByClass(obj, "CalendarItem")) {
-        uiPopupCategory = DOMUtil.findNextElementByTagName(uiPopupCategory, "div");
-    }
-    if (!uiPopupCategory) 
-        return;
-    var value = "";
-    var calType = obj.getAttribute("calType");
-    var calName = obj.getAttribute("calName");
-    var calColor = obj.getAttribute("calColor");
-    var canEdit = String(obj.getAttribute("canedit")).toLowerCase();
-    value = "objectId=" + obj.id;
-    if (calType) {
-        value += "&calType=" + calType;
-    }
-    if (calName) {
-        value += "&calName=" + calName;
-    }
-    if (calColor) {
-        value += "&calColor=" + calColor;
-    }
-    var items = DOMUtil.findDescendantsByTagName(uiPopupCategory, "a");
-    for (var i = 0; i < items.length; i++) {
-        if (DOMUtil.hasClass(items[i].firstChild, "SelectedColorCell")) {
-            items[i].firstChild.className = items[i].firstChild.className.toString().replace(/SelectedColorCell/, "");
-        }
-        if (DOMUtil.hasClass(items[i], calColor)) {
-            var selectedCell = items[i].firstChild;
-            DOMUtil.addClass(selectedCell, "SelectedColorCell");
-        }
-        if (items[i].href.indexOf("ChangeColor") != -1) {
-            value = value.replace(/calColor\s*=\s*\w*/, "calColor=" + items[i].className.split(" ")[0]);
-        }
-        items[i].href = String(items[i].href).replace(/objectId\s*=.*(?='|")/, value);
-    }
-    items[0].href = String(items[0].href).replace("')", "&ct=" + currentTime + "&tz=" + timezoneOffset + "')");
-    if (DOMUtil.findAncestorByClass(obj, "CalendarItem")) {
-        items[1].href = String(items[1].href).replace("')", "&ct=" + currentTime + "&tz=" + timezoneOffset + "')");
-        items[0].href = String(items[0].href).replace("')", "&categoryId=" + selectedCategory + "')");
-        items[1].href = String(items[1].href).replace("')", "&categoryId=" + selectedCategory + "')");
-        
-    }
-    eXo.calendar.UICalendarPortlet.swapMenu(uiPopupCategory, obj);
-    
-    if (calType && (calType != "0")) {
-    
-        var actions = DOMUtil.findDescendantsByTagName(eXo.calendar.UICalendarPortlet.menuElement, "a");
-        for (var j = 0; j < actions.length; j++) {
-            if ((actions[j].href.indexOf("EditCalendar") >= 0) ||
-            (actions[j].href.indexOf("ShareCalendar") >= 0) ||
-            (actions[j].href.indexOf("ChangeColorCalendar") >= 0)) {
-                actions[j].style.display = "none";
-            }
-        }
-    }
-    if (canEdit && (canEdit == "true")) {
-        for (var j = 0; j < actions.length; j++) {
-            if (actions[j].href.indexOf("EditCalendar") >= 0) {
-                actions[j].style.display = "block";
-            }
-        }
-    }
-};
+//UICalendarPortlet.prototype.show = function(obj, evt){ return ; // TODO: Remove this method after testing in CS 1.1
+//    var _e = window.event || evt;
+//    _e.cancelBubble = true;
+//    var DOMUtil = eXo.core.DOMUtil;
+//    var portlet = document.getElementById(this.portletName).parentNode;
+//    var contentContainer = DOMUtil.findFirstDescendantByClass(portlet, "div", "ContentContainer");
+//    var uiPopupCategory = DOMUtil.findNextElementByTagName(contentContainer, "div");
+//    var d = new Date();
+//    var currentTime = d.getTime();
+//    var timezoneOffset = d.getTimezoneOffset();
+//    var selectedCategory = (eXo.calendar.UICalendarPortlet.selectedCategory) ? eXo.calendar.UICalendarPortlet.selectedCategory : null;
+//    if (DOMUtil.findAncestorByClass(obj, "CalendarItem")) {
+//        uiPopupCategory = DOMUtil.findNextElementByTagName(uiPopupCategory, "div");
+//    }
+//    if (!uiPopupCategory) 
+//        return;
+//    var value = "";
+//    var calType = obj.getAttribute("calType");
+//    var calName = obj.getAttribute("calName");
+//    var calColor = obj.getAttribute("calColor");
+//    var canEdit = String(obj.getAttribute("canedit")).toLowerCase();
+//    value = "objectId=" + obj.id;
+//    if (calType) {
+//        value += "&calType=" + calType;
+//    }
+//    if (calName) {
+//        value += "&calName=" + calName;
+//    }
+//    if (calColor) {
+//        value += "&calColor=" + calColor;
+//    }
+//    var items = DOMUtil.findDescendantsByTagName(uiPopupCategory, "a");
+//    for (var i = 0; i < items.length; i++) {
+//        if (DOMUtil.hasClass(items[i].firstChild, "SelectedColorCell")) {
+//            items[i].firstChild.className = items[i].firstChild.className.toString().replace(/SelectedColorCell/, "");
+//        }
+//        if (DOMUtil.hasClass(items[i], calColor)) {
+//            var selectedCell = items[i].firstChild;
+//            DOMUtil.addClass(selectedCell, "SelectedColorCell");
+//        }
+//        if (items[i].href.indexOf("ChangeColor") != -1) {
+//            value = value.replace(/calColor\s*=\s*\w*/, "calColor=" + items[i].className.split(" ")[0]);
+//        }
+//        items[i].href = String(items[i].href).replace(/objectId\s*=.*(?='|")/, value);
+//    }
+//    items[0].href = String(items[0].href).replace("')", "&ct=" + currentTime + "&tz=" + timezoneOffset + "')");
+//    if (DOMUtil.findAncestorByClass(obj, "CalendarItem")) {
+//        items[1].href = String(items[1].href).replace("')", "&ct=" + currentTime + "&tz=" + timezoneOffset + "')");
+//        items[0].href = String(items[0].href).replace("')", "&categoryId=" + selectedCategory + "')");
+//        items[1].href = String(items[1].href).replace("')", "&categoryId=" + selectedCategory + "')");
+//        
+//    }
+//    eXo.calendar.UICalendarPortlet.swapMenu(uiPopupCategory, obj);
+//    
+//    if (calType && (calType != "0")) {
+//    
+//        var actions = DOMUtil.findDescendantsByTagName(eXo.calendar.UICalendarPortlet.menuElement, "a");
+//        for (var j = 0; j < actions.length; j++) {
+//            if ((actions[j].href.indexOf("EditCalendar") >= 0) ||
+//            (actions[j].href.indexOf("ShareCalendar") >= 0) ||
+//            (actions[j].href.indexOf("ChangeColorCalendar") >= 0)) {
+//                actions[j].style.display = "none";
+//            }
+//        }
+//    }
+//    if (canEdit && (canEdit == "true")) {
+//        for (var j = 0; j < actions.length; j++) {
+//            if (actions[j].href.indexOf("EditCalendar") >= 0) {
+//                actions[j].style.display = "block";
+//            }
+//        }
+//    }
+//};
 /**
  * Add current time and timezone offset to action link, then run it
  * @param {String} actions Action link string
@@ -485,6 +582,7 @@ UICalendarPortlet.prototype.switchLayout = function(layout){
             }
             break;
     }
+    if(eXo.core.Browser.isFF() && document.getElementById("UIWeekView")) eXo.calendar.UIWeekView.onResize();
 };
 /* for event */
 /**
@@ -633,6 +731,7 @@ UICalendarPortlet.prototype.adjustWidth = function(el, totalWidth){
     var width = "";
     for (var i = 0; i < inter.length; i++) {
         var totalWidth = (arguments.length > 1) ? arguments[1] : parseFloat(100);
+        totalWidth -= 2 ;
         var offsetLeft = parseFloat(0);
         var left = parseFloat(0);
         if (arguments.length > 2) {
@@ -677,6 +776,7 @@ UICalendarPortlet.prototype.adjustWidth = function(el, totalWidth){
 UICalendarPortlet.prototype.showEvent = function(){
     this.init();
     var EventDayContainer = eXo.core.DOMUtil.findAncestorByClass(this.viewer, "EventDayContainer");
+    this.setFocus(this.viewer, EventDayContainer);
     if (!this.init()) 
         return;
     this.viewType = "UIDayView";
@@ -694,7 +794,6 @@ UICalendarPortlet.prototype.showEvent = function(){
     }
     this.items = el;
     this.adjustWidth(this.items);
-    this.setFocus(this.viewer, el, EventDayContainer);
     this.items = null;
     this.viewer = null;
 };
@@ -1044,6 +1143,8 @@ UICalendarPortlet.prototype.showContextMenu = function(compid){
     UIContextMenu.attach("EventBoxes", "UIDayViewEventRightMenu");
     UIContextMenu.attach(["EventWeekContent", "EventAlldayContainer"], "UIWeekViewRightMenu");
     UIContextMenu.attach("UIListViewRow", "UIListViewEventRightMenu");
+    UIContextMenu.attach("CalendarItem", "CalendarPopupMenu");
+    UIContextMenu.attach("GroupItem", "CalendarGroupPopupMenu");
     if(document.getElementById("UIPageDesktop")) this.firstRun = false ;
     this.fixIE();
 };
@@ -1637,6 +1738,7 @@ UICalendarPortlet.prototype.swapMenu = function(oldmenu, clickobj){
         DOMUtil.removeElement(document.getElementById("tmpMenuElement"));
     var tmpMenuElement = oldmenu.cloneNode(true);
     tmpMenuElement.setAttribute("id", "tmpMenuElement");
+    tmpMenuElement.style.zIndex = 1 ;
     this.menuElement = tmpMenuElement;
     if (uiDesktop) {
         document.body.appendChild(this.menuElement);
@@ -1717,6 +1819,7 @@ UICalendarPortlet.prototype.showHideField = function(chk, fields){
     var len = fields.length;
     for (var i = 0; i < len; i++) {
         fields[i].style.visibility = display;
+        i
     }
 };
 
@@ -1767,7 +1870,7 @@ UISelection.prototype.start = function(evt){
         UISelection.block.style.left = UISelection.startX + "px";
         UISelection.block.style.top = UISelection.startY + "px";
         UISelection.block.style.height = UISelection.step + "px";
-        
+        UISelection.block.style.zIndex = 1; 
         eXo.calendar.UICalendarPortlet.resetZIndex(UISelection.block);
         document.onmousemove = UISelection.execute;
         document.onmouseup = UISelection.clear;
@@ -2121,6 +2224,7 @@ UICalendarPortlet.prototype.fixFirstLoad = function(){
         if (document.getElementById("UIWeekView")) {
             eXo.calendar.UICalendarMan.initWeek();
             eXo.calendar.UIWeekView.setSize();
+            eXo.calendar.UICalendarPortlet.setFocus();
             this.firstRun = true;
         }
     }

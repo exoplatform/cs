@@ -1,6 +1,3 @@
-/**
- * @author uocnb
- */
 
 // Create new method for special context
 DragDrop.prototype.findDropableTarget4Cal = function(dndEvent, dropableTargets, mouseEvent) {
@@ -35,6 +32,10 @@ DragDrop.prototype.findDropableTarget4Cal = function(dndEvent, dropableTargets, 
   return foundTarget ;
 } ;
 
+/**
+ * @author uocnb
+ * @constructor
+ */
 function UICalendarDragDrop() {
   this.scKey = 'background' ;
   this.scValue = '#c0c0c0' ;
@@ -113,7 +114,7 @@ UICalendarDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj,
     top = '0px';
     left = '0px';
   }
-  
+  tmpNode = this.getCheckedObject(clickBlock) ;
   with (UIMonthViewNode.style) {
     position = 'absolute';
     padding = '0px';
@@ -125,8 +126,10 @@ UICalendarDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj,
     padding = '0px';
     margin = '0px';
   }
-  
-  EventMonthContentNode.appendChild(tmpNode);
+  var len = tmpNode.length ;
+  while(len--){
+    EventMonthContentNode.appendChild(tmpNode[len]);    
+  }
   UIMonthViewNode.appendChild(EventMonthContentNode);
   if (document.getElementById("UIPageDesktop")) document.body.appendChild(UIMonthViewNode);
 	else document.getElementById("UIMonthView").appendChild(UIMonthViewNode);
@@ -195,6 +198,7 @@ UICalendarDragDrop.prototype.dragCallback = function(dndEvent) {
 } ;
 
 UICalendarDragDrop.prototype.dropCallback = function(dndEvent) {
+  var eventObj = eXo.core.DOMUtil.findDescendantsByClass(dndEvent.dragObject,"div","EventBoxes");
   if ((eXo.calendar.UICalendarDragDrop.pos.x == dndEvent.dragObject.offsetLeft) && (eXo.calendar.UICalendarDragDrop.pos.y == dndEvent.dragObject.offsetTop)) {
     eXo.calendar.UICalendarDragDrop.pos = null ;
     return ;
@@ -211,7 +215,7 @@ UICalendarDragDrop.prototype.dropCallback = function(dndEvent) {
   }
   this.foundTargetObjectCatch = dndEvent.foundTargetObject ;
   if (this.foundTargetObjectCatch) {
-    if (this.foundTargetObjectCatch.getAttribute('starttime') == dndEvent.clickObject.getAttribute('starttime')) {
+    if ((this.foundTargetObjectCatch.getAttribute('starttime') == dndEvent.clickObject.getAttribute('starttime')) && (eventObj.length == 1)) {
       return;
     }
     if (actionlink = this.foundTargetObjectCatch.getAttribute("actionLink")) {
@@ -230,4 +234,34 @@ UICalendarDragDrop.prototype.dropCallback = function(dndEvent) {
   }
 } ;
 
+UICalendarDragDrop.prototype.getCheckedObject = function(clickObj){
+  var eventContainer = eXo.core.DOMUtil.findAncestorByClass(clickObj,"RowContainerDay");
+  var evenObj = eXo.core.DOMUtil.findDescendantsByClass(eventContainer,"div", "EventBoxes");
+  var checkedObj = [];
+  var i = evenObj.length ;
+  var tmpNode = null ;
+  var top = 0 ;
+  if(!this.isCheckedObject(clickObj)) {
+    tmpNode = eXo.core.DOMUtil.findFirstDescendantByClass(clickObj, "input", "checkbox");
+    tmpNode.checked = true ;
+  }
+  while(i--){
+    if(!this.isCheckedObject(evenObj[i])) continue ;
+    tmpNode = evenObj[i].cloneNode(true) ;
+    eXo.core.Browser.setOpacity(tmpNode,50) ;
+    tmpNode.style.left = "absolute";
+    tmpNode.style.top = top + "px";
+    tmpNode.style.left = "0px";
+    top += 20 ;
+    checkedObj.push(tmpNode);
+  }
+  return checkedObj ;
+} ;
+
+UICalendarDragDrop.prototype.isCheckedObject = function(eventObj){
+  var checkbox = eXo.core.DOMUtil.findFirstDescendantByClass(eventObj, "input", "checkbox");
+  return checkbox.checked ;
+} ;
+
 eXo.calendar.UICalendarDragDrop = new UICalendarDragDrop();
+

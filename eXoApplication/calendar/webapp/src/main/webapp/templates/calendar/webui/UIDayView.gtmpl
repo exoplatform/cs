@@ -104,7 +104,7 @@
     </tbody>
     </table>
   </div>
-  <div class="EventDayContainer" style="position:relative; display: block;">
+  <div class="EventDayContainer" style="position:relative ;">
     <div class="EventDayContent">
       <table class="UIGrid" id="UIDayViewGrid" cellspacing="0" borderspacing="0" cellpadding="0" style="table-layout: fixed;">
         <tbody>
