@@ -27,6 +27,7 @@ import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.service.Utils;
 import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
@@ -206,7 +207,18 @@ public class UIContactForm extends UIFormTabPane {
         return ;
       }      
       contact.setJobTitle(profileTab.getFieldJobName());
-      contact.setEmailAddress(profileTab.getFieldEmail());
+      String EMAIL_REGEX = 
+        "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+";
+      String emails = profileTab.getFieldEmail() ;
+      for (String email : emails.split(Utils.SEMI_COLON)) {
+        if (!email.trim().matches(EMAIL_REGEX)) {
+          uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.invalid-email", null, 
+              ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
+      }
+      contact.setEmailAddress(emails);
       if(profileTab.getImage() != null) {
         ContactAttachment attachment = new ContactAttachment() ;
         attachment.setInputStream(new ByteArrayInputStream(profileTab.getImage())) ;

@@ -114,7 +114,7 @@ uiForm = uicomponent.getParentFrom() ;
 			              <td class="FieldComponent"><%uicomponent.renderUIComponent(field)%></td>
 			            </tr>
 			            <%								
-			      			  field = uicomponent.getChildById("email")
+			      			  field = uicomponent.getChildById("multiEmail")
 			      			  label = _ctx.appRes(uicomponent.getParent().id+ ".label." + field.getId()) ;
 							   	%>
 			            <tr>
