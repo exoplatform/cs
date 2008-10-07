@@ -198,11 +198,17 @@
           style="position: absolute;" eventcat="$event.eventCategoryId" caltype="$event.calType"
           eventid="$event.id" calid="$event.calendarId" actionlink="$actionLink" unselectable="on"
           starttime="$beginTime" endtime="$endTime">
-          <div class="<%=(uicomponent.getPriority(event.getPriority()) == null)? "" :  uicomponent.getPriority(event.getPriority())%>PriorityIcon"
-            style="float: left;">
-            <span></span>
-          </div>
-          <div class="EventContainerBar EventTitle" title="<%=uiform.getLabel('moveEvent')%>">
+          <%
+			      String icon = "" ;
+			      if(uicomponent.getPriority(event.getPriority()) != null) {
+			       icon = uicomponent.getPriority(event.getPriority()) ;
+			      }
+			     %>
+           <div class="<%=icon%>PriorityIcon"
+	            style="float: left;">
+	            <span></span>
+	          </div>
+          <div class="EventContainerBar EventTitle" title="<%=uiform.getLabel('moveEvent')%>" >
             <p unselectable="on">
               $begin - $end
             </p>

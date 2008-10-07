@@ -305,6 +305,7 @@
 	-moz-user-select : none ;
 	cursor: move ;
 	overflow:hidden;
+	_padding-left: 17px;
 }
 
 .UIWeekView .EventDayContent .EventContainer {
