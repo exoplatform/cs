@@ -753,7 +753,6 @@ public class MailServiceImpl implements MailService {
               t1 = System.currentTimeMillis();
               filterList = msgMap.get(msg);
               try {
-                System.out.println("======a==================================" + msg.getSubject());
                 saved = storage_.saveMessage(sProvider, username, account.getId(), msg,
                     folderId, spamFilter, filterList);
                 if (saved) {
