@@ -429,7 +429,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     att.setId("Attachment" + IdGenerator.generate());
     att.setName(msg.getSubject() + ".eml");
     att.setInputStream(inputStream);
-    att.setMimeType("eml");
+    att.setMimeType("message/rfc822");
     attachments_.add(att);
   }
 

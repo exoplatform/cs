@@ -21,7 +21,6 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
@@ -63,8 +62,6 @@ import javax.mail.util.ByteArrayDataSource;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.AccountData;
 import org.exoplatform.mail.service.Attachment;
@@ -756,6 +753,7 @@ public class MailServiceImpl implements MailService {
               t1 = System.currentTimeMillis();
               filterList = msgMap.get(msg);
               try {
+                System.out.println("======a==================================" + msg.getSubject());
                 saved = storage_.saveMessage(sProvider, username, account.getId(), msg,
                     folderId, spamFilter, filterList);
                 if (saved) {

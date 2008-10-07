@@ -968,6 +968,7 @@ public class JCRDataStorage {
       t1 = System.currentTimeMillis();
 
       for (int i = 0; i < folderIds.length; i++) {
+        System.out.println("===========================>>>> " + i);
         increaseFolderItem(sProvider, username, accId, folderIds[i]);
       }
       t2 = System.currentTimeMillis();
