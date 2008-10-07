@@ -150,6 +150,10 @@ MailServiceHandler.prototype.updateUI = function(status) {
     	this.checkMailInfobarNode.style.display = 'block';
     } 
   }
+  var stopingLabel = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'StopingCheckMail') ;
+  var stopLabel = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'StopCheckMail') ;
+  if (stopingLabel.style.display == 'none')
+	stopLabel.style.display = 'block' ;
   if (statusTxt != '') {
     statusTextNode.innerHTML = statusTxt;
   }
