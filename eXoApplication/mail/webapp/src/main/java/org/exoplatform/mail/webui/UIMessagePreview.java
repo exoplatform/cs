@@ -421,19 +421,18 @@ public class UIMessagePreview extends UIComponent {
 			String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
 			UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class) ;
 			Message msg = uiMsgPreview.getShowedMessageById(msgId) ;
+      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;  
 			if (msg != null) {
-				String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
-				UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;     
+				String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;   
 				UIMoveMessageForm uiMoveMessageForm = uiMsgPreview.createUIComponent(UIMoveMessageForm.class,null, null) ;
 				uiMoveMessageForm.init(accountId);
 				List<Message> msgList = new ArrayList<Message>() ;
 				msgList.add(msg) ;
 				uiMoveMessageForm.setMessageList(msgList);
 				uiPopupAction.activate(uiMoveMessageForm, 600, 0, true) ;
-				event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
 			}
 			uiMsgPreview.setMessage(null) ;
-			event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
 		}
 	}
 

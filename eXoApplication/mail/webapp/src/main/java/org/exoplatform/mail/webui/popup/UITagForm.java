@@ -201,13 +201,15 @@ public class UITagForm extends UIForm implements UIPopupComponent{
       List<String> tagIdList = new ArrayList<String>() ;
       for (Tag tag : tagList) tagIdList.add(tag.getId()) ;
       for (Message msg : uiTagForm.getMessageList()) {
-        if (msg.getTags() != null && msg.getTags().length > 0) {
-          for (int i=0 ; i < msg.getTags().length; i++) {
-            if (!tagIdList.contains(msg.getTags()[i])) tagIdList.add(msg.getTags()[i]) ;
+        if (uiMessageList.messageList_.containsKey(msg.getId())) {
+          if (msg.getTags() != null && msg.getTags().length > 0) {
+            for (int i=0 ; i < msg.getTags().length; i++) {
+              if (!tagIdList.contains(msg.getTags()[i])) tagIdList.add(msg.getTags()[i]) ;
+            }
           }
+          msg.setTags(tagIdList.toArray(new String[]{})) ;
+          uiMessageList.messageList_.put(msg.getId(), msg) ;
         }
-        msg.setTags(tagIdList.toArray(new String[]{})) ;
-        uiMessageList.messageList_.put(msg.getId(), msg) ;
       }
       uiPortlet.cancelAction() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class)) ;
