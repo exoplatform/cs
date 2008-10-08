@@ -261,7 +261,6 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
       String bodyCondition = uiAddFilter.getBodyCondition();
       String applyFolder = uiAddFilter.getApplyFolder();
       String applyTag = uiAddFilter.getApplyTag();
-      //boolean keepInbox = uiAddFilter.getKeepInInbox();
       boolean applyForAll = uiAddFilter.getApplyAll() ;
       // Verify
       UIApplication uiApp = uiAddFilter.getAncestorOfType(UIApplication.class) ;
@@ -300,11 +299,13 @@ public class UIAddMessageFilter extends UIForm implements UIPopupComponent{
       UIMessageFilter uiMsgFilter = uiPortlet.findFirstComponentOfType(UIMessageFilter.class);
       if (uiMsgFilter != null) {
         uiMsgFilter.setSelectedFilterId(filter.getId());
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiAddFilter.getAncestorOfType(UIPopupActionContainer.class));
       }
       
       UIPopupAction uiPopupAction = uiAddFilter.getAncestorOfType(UIPopupAction.class) ;
       uiPopupAction.deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+      
       if (filter.applyForAll()) {
         UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
         uiMessageList.updateList();
