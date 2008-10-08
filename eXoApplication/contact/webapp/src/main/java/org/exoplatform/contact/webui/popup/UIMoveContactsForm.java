@@ -79,8 +79,10 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
   public String getContactsName() {
     StringBuffer buffer = new StringBuffer() ;
     for (Contact contact : movedContacts.values()) {
-      if (buffer.length() == 0) buffer.append(ContactUtils.encodeHTML(contact.getFullName())) ;
-      else buffer.append(", " + ContactUtils.encodeHTML(contact.getFullName())) ;
+      String fullName = contact.getFullName() ;
+      if (buffer.length() > 0) buffer.append(", ") ;
+      if (ContactUtils.isEmpty(fullName)) buffer.append(ContactUtils.emptyName()) ;
+      else buffer.append(ContactUtils.encodeHTML(fullName)) ;
     }
     return buffer.toString() ;
   }
