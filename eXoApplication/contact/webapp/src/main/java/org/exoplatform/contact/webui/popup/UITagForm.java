@@ -104,7 +104,9 @@ public class UITagForm extends UIForm implements UIPopupComponent {
           }
         }
         if (ContactUtils.isEmpty(buffer.toString())) buffer.append(NO_TAG_INFO) ;
-        contactNames[i] = ContactUtils.encodeHTML(contact.getFullName()) ;
+        String fullName = contact.getFullName() ;
+        if (ContactUtils.isEmpty(fullName)) contactNames[i] = ContactUtils.emptyName() ;
+        else contactNames[i] = ContactUtils.encodeHTML(fullName) ;
         tagNames[i] = buffer.toString() ;
         i ++ ;
       }

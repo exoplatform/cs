@@ -93,7 +93,15 @@
 			                      </td>
                           </tr>
                           <% } %>
-                          <% if (!ContactUtils.isEmpty(contact.getEmailAddress())) { %>
+                          <% if (!ContactUtils.isEmpty(contact.getEmailAddress())) { 
+                          		email = contact.getEmailAddress() ;
+	  		  					String subEmail ;
+								if (ContactUtils.isEmpty(email)) subEmail = "_" ;
+	  		  					else {
+	  		  					  if (email.length() > 30) subEmail = email.substring(0, 30) + "..." ;
+  		  						  else subEmail = email ;	
+	  		  					}                          
+                          %>
                           <tr>
                             <td class="InfoLabel">
                               <div class="InfoLabel"><%=_ctx.appRes(uicomponent.getName() + ".label.email")%></div>
@@ -102,10 +110,10 @@
 			                        <table class="InfoTitle2" >
 			                          <tr>
 			                            <td>
-			                              <div class="InfoTitle3 Email">
+			                              <div class="InfoTitle3 Email" title="$email">
 			                              <% if (!uicomponent.isPrintForm) { %>
 				                              <a href="<%=uicomponent.event("SendEmail", contact.getEmailAddress())%>">
-				                                <%= contact.getEmailAddress()%>
+				                                <%= subEmail %>
 				                              </a>
 				                            <% } else { %>
 																		<%= contact.getEmailAddress()%>

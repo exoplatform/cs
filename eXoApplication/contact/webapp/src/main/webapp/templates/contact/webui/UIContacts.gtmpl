@@ -358,9 +358,18 @@
 										</a>
 									</div>
 								</td>
-								<td class="text">
+									<% 
+										email = contact.getEmailAddress() ;
+			  		  					String subEmail ;
+										if (ContactUtils.isEmpty(email)) subEmail = "_" ;
+			  		  					else {
+			  		  					  if (email.length() > 30) subEmail = email.substring(0, 30) + "..." ;
+		  		  						  else subEmail = email ;	
+			  		  					}
+									 %>
+								<td class="text" title="$email">
 									<a href="$actionLink">
-										<%=(ContactUtils.isEmpty(contact.getEmailAddress()) ? "_" : contact.getEmailAddress())%>
+										<%=subEmail%>
 									</a>
 								</td>
 								<td class="text">
@@ -439,13 +448,22 @@
 								
 									<div class="State $icon">
 										<a href="$actionLink">
-											<%=(ContactUtils.isEmpty(contact.getFullName()) ? "" : ContactUtils.encodeHTML(contact.getFullName()))%>
+											<%=(ContactUtils.isEmpty(contact.getFullName()) ? "_" : ContactUtils.encodeHTML(contact.getFullName()))%>
 										</a>
 									</div>
 								</td>
-								<td class="text">
+								<% 
+										email = contact.getEmailAddress() ;
+			  		  					String subEmail ;
+										if (ContactUtils.isEmpty(email)) subEmail = "_" ;
+			  		  					else {
+			  		  					  if (email.length() > 30) subEmail = email.substring(0, 30) + "..." ;
+		  		  						  else subEmail = email ;	
+			  		  					}
+									 %>
+								<td class="text" title="$email">
 									<a href="$actionLink">
-										<%=(ContactUtils.isEmpty(contact.getEmailAddress()) ? "_" : contact.getEmailAddress())%>
+										<%=subEmail%>
 									</a>
 								</td>
 								<td class="text">

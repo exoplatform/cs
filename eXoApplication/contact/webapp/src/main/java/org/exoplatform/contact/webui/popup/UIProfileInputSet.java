@@ -19,12 +19,14 @@ package org.exoplatform.contact.webui.popup;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.exoplatform.contact.ContactUtils;
+import org.exoplatform.contact.service.Utils;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -35,7 +37,6 @@ import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormRadioBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
-import org.exoplatform.webui.form.validator.EmailAddressValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 /**
@@ -59,9 +60,10 @@ public class UIProfileInputSet extends UIFormInputWithActions {
 //public static final String[] months = { "January", "February", "March", "April", "May", "June",
 //"July", "August", "September", "October", "November", "December" } ;
   private static final String FIELD_JOBTITLE_INPUT = "jobTitle";
-  private static final String FIELD_EMAIL_INPUT = "email" ;
   private static final String MALE = "male" ;
   private static final String FEMALE = "female" ;
+  private UIFormMultiValueInputSet uiFormMultiValue = new UIFormMultiValueInputSet(MULTI_EMAIL,MULTI_EMAIL) ;
+  private static final String MULTI_EMAIL = "multiEmail".intern() ;
   @SuppressWarnings("unused")
   private String gender = "male" ;
   private byte[] imageBytes = null;
@@ -108,8 +110,8 @@ public class UIProfileInputSet extends UIFormInputWithActions {
     addUIFormInput(new UIFormSelectBox(FIELD_YEAR, FIELD_YEAR, yearOptions)) ;
 
     addUIFormInput(new UIFormStringInput(FIELD_JOBTITLE_INPUT, FIELD_JOBTITLE_INPUT, null));
-    addUIFormInput(new UIFormStringInput(FIELD_EMAIL_INPUT, FIELD_EMAIL_INPUT, null)
-    .addValidator(EmailAddressValidator.class));
+    uiFormMultiValue.setType(UIFormStringInput.class) ;
+    addUIFormInput(uiFormMultiValue) ;
   }
 
   protected String getFieldFirstName() { return getUIStringInput(FIELD_FIRSTNAME_INPUT).getValue() ; }
@@ -172,8 +174,27 @@ public class UIProfileInputSet extends UIFormInputWithActions {
   protected String getFieldJobName() { return getUIStringInput(FIELD_JOBTITLE_INPUT).getValue() ; }
   protected void setFieldJobName(String s) { getUIStringInput(FIELD_JOBTITLE_INPUT).setValue(s); }
   protected UIForm getParentFrom() { return (UIForm)getParent() ; }
-  protected String getFieldEmail() { return getUIStringInput(FIELD_EMAIL_INPUT).getValue(); }
-  protected void setFieldEmail(String s) { getUIStringInput(FIELD_EMAIL_INPUT).setValue(s); }
+  @SuppressWarnings("unchecked")
+  protected String getFieldEmail() {
+    List<String> emails = (List<String>)uiFormMultiValue.getValue() ; 
+    StringBuffer email = new StringBuffer() ;
+    for (String item : emails){
+      if (ContactUtils.isEmpty(item)) continue ;
+      if (email.length() == 0) email.append(item) ;
+      else email.append(Utils.SEMI_COLON + item) ;
+    }
+    return email.toString();
+  }
+  protected void setFieldEmail(String s) throws Exception {
+    List<String> list = Arrays.asList(s.split(Utils.SEMI_COLON)) ;
+    if(uiFormMultiValue != null) removeChildById(MULTI_EMAIL);
+    uiFormMultiValue = createUIComponent(UIFormMultiValueInputSet.class, null, null) ;
+    uiFormMultiValue.setId(MULTI_EMAIL) ;
+    uiFormMultiValue.setName(MULTI_EMAIL) ;
+    uiFormMultiValue.setType(UIFormStringInput.class) ;
+    uiFormMultiValue.setValue(list) ;
+    addUIFormInput(uiFormMultiValue) ;
+  }
 
   protected void setImage(InputStream input) throws Exception{
     if (input != null) {

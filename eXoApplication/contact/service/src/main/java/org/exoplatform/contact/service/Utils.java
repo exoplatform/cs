@@ -30,6 +30,7 @@ import java.util.Date;
 
 public class Utils {
   final public static String SPLIT = "::".intern();
+  final public static String SEMI_COLON = ";".intern();
   
   public static String formatDate(String format, Date date) {
     Format formatter = new SimpleDateFormat(format);

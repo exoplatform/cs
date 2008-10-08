@@ -52,7 +52,7 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 /**
  * Created by The eXo Platform SARL
  * Author : Hung Nguyen <hung.nguyen@exoplatform.com>
- *          Phung Nam <phunghainam@gmail.com>
+ *          hung.hoang <hung.hoang@exoplatform.com>
  * Aus 01, 2007 2:48:18 PM 
  */
 @ComponentConfig(
@@ -97,26 +97,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   public int getComposeType() { return composeType_ ; }
   public void setComposeType(int t) { composeType_ = t; }
 
-  public List<ActionData> getUploadFileList() { 
-/*    List<ActionData> uploadedFiles = new ArrayList<ActionData>() ;
-    for(Attachment attachdata : attachments_) {
-      ActionData fileUpload = new ActionData() ;
-      fileUpload.setActionListener("Download") ;
-      fileUpload.setActionParameter(attachdata.getId());
-      fileUpload.setActionType(ActionData.TYPE_ICON) ;
-      fileUpload.setCssIconClass("AttachmentIcon") ; // "AttachmentIcon ZipFileIcon"
-      fileUpload.setActionName(attachdata.getName() + " ("+attachdata.getSize()+" Kb)" ) ;
-      fileUpload.setShowLabel(true) ;
-      uploadedFiles.add(fileUpload) ;
-      ActionData removeAction = new ActionData() ;
-      removeAction.setActionListener("RemoveAttachment") ;
-      removeAction.setActionName(ACT_REMOVE);
-      removeAction.setActionParameter(attachdata.getId());
-      removeAction.setCssIconClass("LabelLink");
-      removeAction.setActionType(ActionData.TYPE_LINK) ;
-      uploadedFiles.add(removeAction) ;
-    }
-    return uploadedFiles ;*/
+  public List<ActionData> getUploadFileList() {
     return null ;
   }
   
@@ -128,7 +109,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   public void init(List<Account> accs, String emails) throws Exception {
     fromOptions.clear() ;
     List<SelectItemOption<String>>  options = new ArrayList<SelectItemOption<String>>() ;
-    
     // improve later ;
     for(Account acc : accs) {
       String fromEmail = acc.getUserDisplayName() + " &lt;" + acc.getEmailAddress() + "&gt;" ;      
@@ -136,7 +116,11 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       fromOptions.put(acc.getId(), acc.getUserDisplayName() + " <" + acc.getEmailAddress() + ">") ;
     }
     addUIFormInput(new UIFormSelectBox(FIELD_FROM, FIELD_FROM, options)) ;
-    addUIFormInput(new UIFormStringInput(FIELD_TO, null, emails)) ;
+    List<SelectItemOption<String>>  fromOptions = new ArrayList<SelectItemOption<String>>() ;
+    for (String email : emails.split(org.exoplatform.contact.service.Utils.SEMI_COLON)) {
+      fromOptions.add(new SelectItemOption<String>(email, email)) ;
+    }
+    addUIFormInput(new UIFormSelectBox(FIELD_TO, FIELD_TO, fromOptions)) ;
     addUIFormInput(new UIFormStringInput(FIELD_SUBJECT, null, null)) ;
     UIFormInputWithActions inputSet = new UIFormInputWithActions(FIELD_FROM_INPUT);   
     inputSet.addUIFormInput(new UIFormInputInfo(FIELD_ATTACHMENTS, FIELD_ATTACHMENTS, null)) ;
@@ -149,23 +133,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       addUIFormInput(new UIFormTextAreaInput(FIELD_MESSAGECONTENT, null, null)) ;
     }
   }
-  
-  
-  
- /* public void addToUploadFileList(Attachment attachfile) {
-    attachments_.add(attachfile) ;
-  }
-  public void removeFromUploadFileList(Attachment attachfile) {
-    attachments_.remove(attachfile);
-  }  
-  public void removeUploadFileList() {
-    attachments_.clear() ;
-  }
-  public List<Attachment> getAttachFileList() {
-    return attachments_ ;
-  }
-*/
-
   
   public String getFieldFromValue() {
     return getUIFormSelectBox(FIELD_FROM).getValue() ;
@@ -181,11 +148,11 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     getUIStringInput(FIELD_SUBJECT).setValue(value) ;
   }
   public String getFieldToValue() {
-    return getUIStringInput(FIELD_TO).getValue() ;
+    return getUIFormSelectBox(FIELD_TO).getValue() ;
   }
   
   public void setFieldToValue(String value) {
-    getUIStringInput(FIELD_TO).setValue(value);
+    getUIFormSelectBox(FIELD_TO).setValue(value);
   }
 
   public String getFieldAttachmentsValue() {
@@ -220,17 +187,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
-      } /*else if (ContactUtils.isEmpty(subject)){
-        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.subject-field-empty", null,
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      } else if (ContactUtils.isEmpty(content)){
-        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.content-field-empty", null,
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }*/
+      }
       UIPopupAction uiChildPopup = uiForm.getAncestorOfType(UIPopupAction.class) ;
       Message message = new Message() ;
       message.setSendDate(new Date()) ;
@@ -273,17 +230,13 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         return ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-      
-      // add
       try {
         MailSetting setting = mailSvr.getMailSetting(SessionProviderFactory.createSystemProvider(), username);
         if (setting.saveMessageInSent()) {
           message.setFolders(new String[]{ Utils.createFolderId(accId, Utils.FD_SENT, false) }) ;
         }
         message.setReplyTo(message.getMessageTo()) ;
-        mailSvr.saveMessage(SessionProviderFactory.createSystemProvider(), username, accId, message.getPath(), message, true) ;  
-        
-
+        mailSvr.saveMessage(SessionProviderFactory.createSystemProvider(), username, accId, message.getPath(), message, true) ;
         uiChildPopup.deActivate() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
       } catch (Exception e) {
