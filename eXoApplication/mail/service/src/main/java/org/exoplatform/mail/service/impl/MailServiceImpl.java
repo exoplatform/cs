@@ -478,7 +478,9 @@ public class MailServiceImpl implements MailService {
     JobDetail job = loadCheckmailJob(username, accountId);
     
     // trigger now
-    schedulerService_.executeJob(job.getName(), job.getGroup(), job.getJobDataMap());
+    if (job != null) {
+      schedulerService_.executeJob(job.getName(), job.getGroup(), job.getJobDataMap());
+    }
   }
   
   public void stopCheckMail(String username, String accountId)  {
@@ -498,7 +500,7 @@ public class MailServiceImpl implements MailService {
 
     JobInfo info = CheckMailJob.getJobInfo(username, accountId);
     JobDetail job = findCheckmailJob(username, accountId);
-    
+
     // add job is it does not exist
     if (job == null) {
       JobDataMap jobData = new JobDataMap();
@@ -510,7 +512,7 @@ public class MailServiceImpl implements MailService {
       PeriodInfo periodInfo = new PeriodInfo(new GregorianCalendar().getTime(), null, 1, 24*60*60*1000);
       schedulerService_.addPeriodJob(info, periodInfo, jobData);
       
-      job = findCheckmailJob(username, accountId);
+      //job = findCheckmailJob(username, accountId);
     }
     return job;
   }
