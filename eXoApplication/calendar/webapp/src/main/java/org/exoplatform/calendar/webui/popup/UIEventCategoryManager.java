@@ -33,7 +33,6 @@ import org.exoplatform.calendar.webui.UISearchForm;
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -156,10 +155,12 @@ public class UIEventCategoryManager extends UIContainer implements UIPopupCompon
       UITaskDetailTab uiTaskDetailTab = calendarPortlet.findFirstComponentOfType(UITaskDetailTab.class) ;
       if(uiEventDetailTab != null) { 
         uiEventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).setOptions(UIEventForm.getCategory());
+        uiEventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).setValue(uiManager.categoryId_) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiEventDetailTab) ;
        }
       if(uiTaskDetailTab != null) {
         uiTaskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_CATEGORY).setOptions(UIEventForm.getCategory());
+        uiTaskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_CATEGORY).setValue(uiManager.categoryId_) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiTaskDetailTab) ;
       }
     }
