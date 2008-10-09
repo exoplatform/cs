@@ -2027,8 +2027,7 @@ public class JCRDataStorage {
       
       for (int i = 0; i< foldersMsgNode.length; i++) {
         for (int j = 0; j < foldersConverNode.length; j++) {
-          if (foldersConverNode[j].equals(Utils.createFolderId(accountId, Utils.FD_SENT, false)) ||
-              foldersConverNode[j].equals(foldersMsgNode[i])) {
+          if (foldersConverNode[j].equals(foldersMsgNode[i])) {
             isRoot = false;
           }
         }
