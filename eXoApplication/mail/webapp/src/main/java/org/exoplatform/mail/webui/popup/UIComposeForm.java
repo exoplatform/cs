@@ -924,14 +924,17 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   
   private boolean validateMessage(Event<UIComposeForm> event, Message msg) throws Exception {
     String msgWarning = null;
-    
-    if (!MailUtils.isValidEmailAddresses(msg.getMessageTo())) {
+    if (MailUtils.isFieldEmpty(msg.getMessageTo()) &&
+        MailUtils.isFieldEmpty(msg.getMessageCc()) &&
+        MailUtils.isFieldEmpty(msg.getMessageBcc())    ) {
+      msgWarning = "UIComposeForm.msg.select-at-least-recipient";
+    } else if (!MailUtils.isValidEmailAddresses(msg.getMessageTo())) {
       msgWarning = "UIComposeForm.msg.invalid-to-field";
     } else if (!MailUtils.isValidEmailAddresses(msg.getMessageCc())) {
       msgWarning = "UIComposeForm.msg.invalid-cc-field";
     } else if (!MailUtils.isValidEmailAddresses(msg.getMessageBcc())) {
       msgWarning = "UIComposeForm.msg.invalid-bcc-field";
-    }
+    } 
     
     if (msgWarning != null) {
       UIApplication uiApp = getAncestorOfType(UIApplication.class) ;
