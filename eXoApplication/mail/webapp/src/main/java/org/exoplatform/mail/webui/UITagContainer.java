@@ -136,6 +136,8 @@ public class UITagContainer extends UIForm {
       uiMessageList.setMessageFilter(filter);
       uiMessageList.setSelectedTagId(tagId);
       uiMessageList.setSelectedFolderId(null);
+      uiMessageList.viewing_ = uiMessageList.VIEW_ALL;
+      uiMessageList.viewMode = uiMessageList.MODE_LIST;
       uiMessagePreview.setMessage(null);
       uiPortlet.findFirstComponentOfType(UIFolderContainer.class).setSelectedFolder(null);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiTags);
