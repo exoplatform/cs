@@ -234,7 +234,7 @@ public class UIFolderContainer extends UIContainer {
       uiMsgList.updateList();
       Message msgPreview = uiMsgPreview.getMessage() ;
       if (msgPreview != null) {
-      	if (msgList.contains(msgPreview.getId()))
+      	if (!msgList.contains(msgPreview.getId()))
       		uiMsgPreview.setMessage(null);
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;
