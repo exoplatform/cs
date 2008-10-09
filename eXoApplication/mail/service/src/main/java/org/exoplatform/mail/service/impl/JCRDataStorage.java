@@ -30,6 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
@@ -428,13 +429,15 @@ public class JCRDataStorage {
     Node msgStoreNode = getDateStoreNode(sProvider, username, accountId, message.getReceivedDate());
     try {
       Node node = msgStoreNode.getNode(message.getId());
-      node = moveReference(accountId, node);
-      NodeType[] nts = node.getMixinNodeTypes();
-      for (int i = 0; i < nts.length; i++) {
-        node.removeMixin(nts[i].getName());
+      if (node != null) {
+        node = moveReference(accountId, node);
+        NodeType[] nts = node.getMixinNodeTypes();
+        for (int i = 0; i < nts.length; i++) {
+          node.removeMixin(nts[i].getName());
+        }
+        node.remove();
+        msgStoreNode.getSession().save();
       }
-      node.remove();
-      msgStoreNode.getSession().save();
     } catch (PathNotFoundException e) {
     }
   }
@@ -447,14 +450,16 @@ public class JCRDataStorage {
           .getReceivedDate());
       try {
         Node node = msgStoreNode.getNode(message.getId());
-        if (moveReference)
-          node = moveReference(accountId, node);
-        NodeType[] nts = node.getMixinNodeTypes();
-        //TODO should use for each
-        for (int i = 0; i < nts.length; i++) {
-          node.removeMixin(nts[i].getName());
+        if (node != null) {
+          if (moveReference)
+            node = moveReference(accountId, node);
+          NodeType[] nts = node.getMixinNodeTypes();
+          //TODO should use for each
+          for (int i = 0; i < nts.length; i++) {
+            node.removeMixin(nts[i].getName());
+          }
+          node.remove();
         }
-        node.remove();
       } catch (PathNotFoundException e) {
       }
     }
@@ -2051,11 +2056,18 @@ public class JCRDataStorage {
     for (int i = 0; i < values.length; i++) {
       Value value = values[i];
       String uuid = value.getString();
-      Node refNode = msgNode.getSession().getNodeByUUID(uuid);
-      msgNode = setIsRoot(accountId, msgNode, refNode);
-      if (!msgNode.getProperty(Utils.EXO_IS_ROOT).getBoolean()) {
-        refNode.save();
-        break;
+      Node refNode = null;
+      try {
+        refNode =msgNode.getSession().getNodeByUUID(uuid);
+      } catch(ItemNotFoundException e) {
+        // do nothing
+      }
+      if (refNode != null) {
+        msgNode = setIsRoot(accountId, msgNode, refNode);
+        if (!msgNode.getProperty(Utils.EXO_IS_ROOT).getBoolean()) {
+          refNode.save();
+          break;
+        }
       }
     }
     return msgNode;
