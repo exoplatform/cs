@@ -84,12 +84,12 @@ public class UIFolderForm extends UIForm implements UIPopupComponent {
       String folderId = Utils.KEY_FOLDERS + IdGenerator.generate() ;
       Folder folder = null ;
       try {
-        mailSvr.isExistFolder(SessionProviderFactory.createSystemProvider(), username, accountId, uiForm.getParentPath(), folderName) ;
-      } catch(Exception e) { 
-        uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.folder-exist", new Object[]{folderName})) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
+        if (mailSvr.isExistFolder(SessionProviderFactory.createSystemProvider(), username, accountId, uiForm.getParentPath(), folderName)) {
+          uiApp.addMessage(new ApplicationMessage("UIFolderForm.msg.folder-exist", new Object[]{folderName})) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
+      } catch(Exception e) { }
       folder = new Folder() ;
       folder.setId(folderId);
       folder.setName(folderName) ;
