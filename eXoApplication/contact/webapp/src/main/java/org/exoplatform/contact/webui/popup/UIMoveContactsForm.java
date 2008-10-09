@@ -149,6 +149,11 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
             String addressId = null ;
             for (String add : contact.getAddressBook())
               if (uiContacts.getSharedGroupMap().containsKey(add)) addressId = add ;
+          
+            // add to fix bug cs-1509
+            if (contact.getAttachment() != null) {
+              contact.getAttachment().setInputStream(contact.getAttachment().getInputStream()) ;
+            } 
             contactService.removeSharedContact(SessionProviderFactory.createSystemProvider(), username, addressId, id) ;
           } else {
             try {
