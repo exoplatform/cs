@@ -26,7 +26,6 @@ import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -144,11 +143,13 @@ public class UIEventCategoryForm extends UIForm {
           if(uiEventForm != null){ 
             uiEventForm.setSelectedTab(UIEventForm.TAB_EVENTDETAIL) ;
             uiEventForm.refreshCategory() ;
+            uiEventForm.setSelectedCategory(uiManager.categoryId_) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getChildById(UIEventForm.TAB_EVENTDETAIL)) ;
           }
           if(uiTaskForm != null) { 
             uiTaskForm.setSelectedTab(UITaskForm.TAB_TASKDETAIL) ;
             uiTaskForm.refreshCategory() ;
+            uiTaskForm.setSelectedCategory(uiManager.categoryId_) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiTaskForm.getChildById(UITaskForm.TAB_TASKDETAIL)) ;
           }
         }

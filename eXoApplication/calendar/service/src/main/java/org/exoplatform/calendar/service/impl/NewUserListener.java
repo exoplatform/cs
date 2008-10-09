@@ -16,11 +16,14 @@
  */
 package org.exoplatform.calendar.service.impl;
 
+import java.util.List;
+
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
+import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.User;
@@ -152,5 +155,25 @@ public class NewUserListener extends UserEventListener {
     sysProvider.close();
   }
 
-  public void preDelete(User user) throws Exception {}
+  @Override
+  public void postDelete(User user) throws Exception {
+    /*SessionProvider session = SessionProvider.createSystemProvider(); ;
+    String username = user.getUserName() ;
+    List<GroupCalendarData> gCalData = cservice_.getCalendarCategories(session, username, true) ;
+    if(!gCalData.isEmpty())
+      for (GroupCalendarData gCal : gCalData) {
+        cservice_.removeCalendarCategory(session, username, gCal.getId()) ;
+      }
+    List<EventCategory> eCats = cservice_.getEventCategories(session, username) ;
+    if(!eCats.isEmpty())
+      for(EventCategory ecat : eCats) {
+        cservice_.removeEventCategory(session, username, ecat.getName()) ;
+      }
+    GroupCalendarData   calData = cservice_.getSharedCalendars(session, username, true) ;
+    if(calData != null && !calData.getCalendars().isEmpty())
+      for(Calendar cal : calData.getCalendars()) {
+        cservice_.removeSharedCalendar(session, username, cal.getId()) ;
+      }*/
+    super.postDelete(user);
+  }
 }

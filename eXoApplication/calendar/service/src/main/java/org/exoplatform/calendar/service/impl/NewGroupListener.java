@@ -9,10 +9,12 @@ import java.util.List;
 
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.GroupEventListener;
+import org.hibernate.util.GetGeneratedKeysHelper;
 
 /**
  * Author : Huu-Dung Kieu huu-dung.kieu@bull.be 14 f�vr. 08
@@ -77,4 +79,17 @@ public class NewGroupListener extends GroupEventListener {
 		calendar.setEditPermission(perms.toArray(new String[perms.size()])) ;
 		calendarService_.savePublicCalendar(sProvider, calendar, isNew, null) ;
 	}
+  @Override
+  public void postDelete(Group group) throws Exception {
+    SessionProvider sProvider = SessionProvider.createSystemProvider();
+    List<GroupCalendarData> gCalData = calendarService_.getGroupCalendars(sProvider, new String[]{group.getId()}, true, null) ;
+    for (GroupCalendarData gc : gCalData) {
+      if(gc != null && !gc.getCalendars().isEmpty()) {
+       for(Calendar c : gc.getCalendars()) {
+         calendarService_.removePublicCalendar(sProvider, c.getId()) ;
+       }
+      }
+    }
+    super.postDelete(group);
+  }
 }

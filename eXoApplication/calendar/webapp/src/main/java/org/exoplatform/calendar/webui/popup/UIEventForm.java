@@ -57,7 +57,6 @@ import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
@@ -928,7 +927,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       UIEventForm uiForm = event.getSource() ;
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = uiContainer.getChild(UIPopupAction.class) ;
-      uiChildPopup.activate(UIEventCategoryManager.class, 470) ;
+      UIEventCategoryManager categoryMan =  uiChildPopup.activate(UIEventCategoryManager.class, 470) ;
+      categoryMan.categoryId_ = uiForm.getEventCategory() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
     }
   }
