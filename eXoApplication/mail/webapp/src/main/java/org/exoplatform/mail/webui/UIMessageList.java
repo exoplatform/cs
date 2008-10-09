@@ -306,8 +306,8 @@ public class UIMessageList extends UIForm {
       Message msg = uiMessageList.messageList_.get(msgId);
 
       if (msg != null) {
+        MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
         if (msg.hasAttachment()) {
-          MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
           msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, accountId, msg) ;
         }
         if (msg.isUnread()) {
@@ -332,7 +332,11 @@ public class UIMessageList extends UIForm {
         if (uiMessageList.viewMode == uiMessageList.MODE_CONVERSATION) {
           if (msg != null && msg.getGroupedMessageIds().size() > 0) {
             for (String id : msg.getGroupedMessageIds()) {
-              showedMessages.add(uiMessageList.messageList_.get(id)) ;
+              Message msgMem = uiMessageList.messageList_.get(id);
+              if (msgMem.hasAttachment()) {
+                msgMem = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, accountId, msgMem) ;
+              }
+              showedMessages.add(msgMem) ;
             }
           }
         }
