@@ -74,7 +74,7 @@
                   if (contact.getId().equals(uicomponent.getSelectedContact().getId())) classCss += " CheckItem";
                   String selectContact = uicomponent.event("SelectContact", contact.getId());
             %>
-                  <a href="$selectContact"><div class="$classCss"><%=contact.getFirstName()%>&nbsp;<%=contact.getLastName()%> </div></a>
+                  <a href="$selectContact"><div class="$classCss"><%= (MailUtils.isFieldEmpty(contact.getFullName()) ? "_" : MailUtils.encodeHTML(contact.getFullName()))%> </div></a>
             <% 
                 } 
               }
