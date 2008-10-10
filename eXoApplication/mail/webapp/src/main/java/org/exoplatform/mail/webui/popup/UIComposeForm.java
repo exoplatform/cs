@@ -275,6 +275,11 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
           for (Attachment att : msg.getAttachments()) {
             attachments_.add(att);
+          }
+          if (attachments_.size() > 0) {
+            for (ActionData actionData : getUploadFileList()) {
+              inputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(actionData.getActionParameter(), null, null).setChecked(true));
+            }
             refreshUploadFileList();
           }
         }
