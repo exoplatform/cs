@@ -488,7 +488,9 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       uiContactForm.setValues(contact);
       uiContactForm.setNew(false) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
-      //event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+      
+      // avoid cache id of edited old contact
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
     }
   }
   
@@ -547,9 +549,10 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         return ;
       }
       
+      // comment to fix bug cs- 1475
       // when select shared contacts 
-      if(ContactUtils.isEmpty(uiContacts.selectedGroup) && ContactUtils.isEmpty(uiContacts.selectedTag_)) {
-        List<Contact> contacts = new ArrayList<Contact>() ;
+     // if(ContactUtils.isEmpty(uiContacts.selectedGroup) && ContactUtils.isEmpty(uiContacts.selectedTag_)) {
+        //List<Contact> contacts = new ArrayList<Contact>() ;
         for (String contactId : contactIds) {
           Contact contact = uiContacts.contactMap.get(contactId) ;
           String[] tags = contact.getTags() ;
@@ -562,11 +565,11 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           else {
             contact.setTags(new String[] {tagId}) ;
           }
-          contacts.add(contact) ;
+          //contacts.add(contact) ;
         }
-        uiContacts.setContact(contacts, true) ;
-      }
-      uiContacts.updateList() ;
+        //uiContacts.setContact(contacts, true) ;
+     // }
+     // uiContacts.updateList() ; f
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
     }
   }
