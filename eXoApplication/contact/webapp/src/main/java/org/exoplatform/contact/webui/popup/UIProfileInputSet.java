@@ -186,7 +186,9 @@ public class UIProfileInputSet extends UIFormInputWithActions {
     return email.toString();
   }
   protected void setFieldEmail(String s) throws Exception {
-    List<String> list = Arrays.asList(s.split(Utils.SEMI_COLON)) ;
+    List<String> list ;
+    if (ContactUtils.isEmpty(s)) list = new ArrayList<String>() ;
+    else list = Arrays.asList(s.split(Utils.SEMI_COLON)) ;
     if(uiFormMultiValue != null) removeChildById(MULTI_EMAIL);
     uiFormMultiValue = createUIComponent(UIFormMultiValueInputSet.class, null, null) ;
     uiFormMultiValue.setId(MULTI_EMAIL) ;
