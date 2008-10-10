@@ -240,12 +240,16 @@ public class UIMessageList extends UIForm {
   }
 
   public List<Message> getCheckedMessage() throws Exception {
+    return getCheckedMessage(true);
+  }
+  
+  public List<Message> getCheckedMessage(boolean includeGroupedMsgs) throws Exception {
     List<Message> checkedList = new ArrayList<Message>();
     for (Message msg : getMessageList()) {
       UIFormCheckBoxInput uiCheckbox = getUIFormCheckBoxInput(msg.getId());
       if (uiCheckbox != null && uiCheckbox.isChecked()) {
         checkedList.add(msg);
-        if (viewMode == MODE_CONVERSATION) {
+        if (viewMode == MODE_CONVERSATION && includeGroupedMsgs) {
           Message childMsg ;
           for (String childMsgId : msg.getGroupedMessageIds()) {
             childMsg = messageList_.get(childMsgId);
@@ -663,10 +667,11 @@ public class UIMessageList extends UIForm {
 
       // Verify
       UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-      if(uiMessageList.getCheckedMessage().isEmpty()) {
+      List<Message> checkedMsgs = uiMessageList.getCheckedMessage(false);
+      if(checkedMsgs.isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
         return;
-      } else if (uiMessageList.getCheckedMessage().size() > 1){
+      } else if (checkedMsgs.size() > 1){
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-many-messages", null, ApplicationMessage.INFO)) ;
         return;
       }      
@@ -678,7 +683,7 @@ public class UIMessageList extends UIForm {
 
       Message message ;
       if (msgId != null) message = uiMessageList.messageList_.get(msgId) ;
-      else  message = uiMessageList.getCheckedMessage().get(0);
+      else  message = checkedMsgs.get(0);
       uiComposeForm.init(accId, message, uiComposeForm.MESSAGE_REPLY);
       uiPopupContainer.addChild(uiComposeForm) ;
 
@@ -696,10 +701,11 @@ public class UIMessageList extends UIForm {
 
       // Verify
       UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-      if(uiMessageList.getCheckedMessage().isEmpty()) {
+      List<Message> checkedMsgs = uiMessageList.getCheckedMessage(false);
+      if(checkedMsgs.isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
         return;
-      } else if (uiMessageList.getCheckedMessage().size() > 1){
+      } else if (checkedMsgs.size() > 1){
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-many-messages", null, ApplicationMessage.INFO)) ;
         return;
       }      
@@ -711,7 +717,7 @@ public class UIMessageList extends UIForm {
 
       Message message ;
       if (msgId != null) message = uiMessageList.messageList_.get(msgId) ; 
-      else  message = uiMessageList.getCheckedMessage().get(0);
+      else  message = checkedMsgs.get(0);
       uiComposeForm.init(accId, message, uiComposeForm.MESSAGE_REPLY_ALL);
       uiPopupContainer.addChild(uiComposeForm) ;
 
@@ -729,10 +735,11 @@ public class UIMessageList extends UIForm {
 
       // Verify
       UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-      if(uiMessageList.getCheckedMessage().isEmpty()) {
+      List<Message> checkedMsgs = uiMessageList.getCheckedMessage(false);
+      if(checkedMsgs.isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
         return;
-      } else if (uiMessageList.getCheckedMessage().size() > 1){
+      } else if (checkedMsgs.size() > 1){
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-many-messages", null, ApplicationMessage.INFO)) ;
         return;
       }      
@@ -744,7 +751,7 @@ public class UIMessageList extends UIForm {
 
       Message message ;
       if (msgId != null) message = uiMessageList.messageList_.get(msgId) ;
-      else  message = uiMessageList.getCheckedMessage().get(0);
+      else  message = checkedMsgs.get(0);
       uiComposeForm.init(accId, message, uiComposeForm.MESSAGE_FOWARD);
       uiPopupContainer.addChild(uiComposeForm) ;
 
@@ -761,7 +768,7 @@ public class UIMessageList extends UIForm {
       
       // Verify
       UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-      List<Message> checkedMsgs = uiMessageList.getCheckedMessage() ;
+      List<Message> checkedMsgs = uiMessageList.getCheckedMessage(false) ;
       if(checkedMsgs.isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -926,16 +933,17 @@ public class UIMessageList extends UIForm {
       UIMessageList uiMessageList = event.getSource();
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
-      if(uiMessageList.getCheckedMessage().isEmpty()) {
+      List<Message> checkedMsgs = uiMessageList.getCheckedMessage(false);
+      if(checkedMsgs.isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
         return;
-      } else if (uiMessageList.getCheckedMessage().size() > 1){
+      } else if (checkedMsgs.size() > 1){
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-many-messages", null, ApplicationMessage.INFO)) ;
         return;
       }
       Message message = null ;
       if (msgId != null) message = uiMessageList.messageList_.get(msgId) ;
-      else  message = uiMessageList.getCheckedMessage().get(0);
+      else  message = checkedMsgs.get(0);
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       if (message != null && message.hasAttachment()) {
         String username = MailUtils.getCurrentUser();
@@ -1174,7 +1182,7 @@ public class UIMessageList extends UIForm {
         return ;
       }
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
-      List<Message> checkedMsgs = uiMessageList.getCheckedMessage() ;
+      List<Message> checkedMsgs = uiMessageList.getCheckedMessage(false) ;
       if(checkedMsgs.isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -1185,7 +1193,7 @@ public class UIMessageList extends UIForm {
         return;
       }
       try {
-        Message msg = uiMessageList.getCheckedMessage().get(0) ;
+        Message msg = checkedMsgs.get(0) ;
         if (msg != null) {
           UIExportForm uiExportForm = uiPopup.activate(UIExportForm.class, 600);
           if(msg.hasAttachment()) {

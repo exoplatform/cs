@@ -59,8 +59,8 @@ public class MailSetting {
     periodCheckAuto = FIVE_MINS;
     useWysiwyg = true; 
     formatAsOriginal = true;
-    replyWithAtt = true; 
-    forwardWithAtt = true;
+    replyWithAtt = false; 
+    forwardWithAtt = false;
     prefixMsgWith = PREFIX_WITH_MINUS;
   }
   
