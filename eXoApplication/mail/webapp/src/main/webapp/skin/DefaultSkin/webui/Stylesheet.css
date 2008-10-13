@@ -1814,3 +1814,11 @@
 	float: left;
 	width: 16px;
 }
+
+.UIMailPortlet .UITagForm .UIForm .UIFormGrid td.FieldComponent {
+	white-space: normal;
+}
+
+.UIMailPortlet .UITagForm .UIForm .UIFormGrid td.FieldLabel {
+	white-space: normal;
+}
