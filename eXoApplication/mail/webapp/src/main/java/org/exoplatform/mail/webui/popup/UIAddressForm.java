@@ -18,9 +18,8 @@ package org.exoplatform.mail.webui.popup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.contact.service.Contact;
@@ -74,8 +73,9 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   public static final String CONTACT_SEARCH = "contact-search".intern();
   public static final String CONTACT_GROUP = "contact-group".intern();
 
-  public Map<String, Contact> checkedList_ = new HashMap<String, Contact>() ;
-  public Map<String, Contact> newCheckedList_ = new HashMap<String, Contact>() ;
+  public LinkedHashMap<String, Contact> checkedList_ = new LinkedHashMap<String, Contact>() ;
+  public LinkedHashMap<String, Contact> newCheckedList_ = new LinkedHashMap<String, Contact>() ;
+  private String avaiAddressStr = "";
 
   private String selectedAddressId_ = "" ;
   private String recipientsType_ = "";
@@ -88,7 +88,15 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   public String getRecipientType() {
     return recipientsType_;
   }
-
+  
+  public void setAvaiAddressStr(String str) {
+    avaiAddressStr = str ;
+  }
+  
+  public String getAvaiAddressStr() {
+    return avaiAddressStr;
+  }
+  
   public UIAddressForm() throws Exception {
     addUIFormInput(new UIFormStringInput(CONTACT_SEARCH, CONTACT_SEARCH, null)) ;
     UIFormSelectBoxWithGroups uiSelect = new UIFormSelectBoxWithGroups(CONTACT_GROUP, CONTACT_GROUP, getOptions()) ;
@@ -325,7 +333,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   static public class AddActionListener extends EventListener<UIAddressForm> {
     public void execute(Event<UIAddressForm> event) throws Exception {
       UIAddressForm uiAddressForm = event.getSource() ;
-      List<Contact> checkedContact = uiAddressForm.getCheckedContact();      
+      List<Contact> checkedContact = uiAddressForm.getCheckedContact();     
       if(checkedContact.size() <= 0) {
         UIApplication uiApp = uiAddressForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIAddressForm.msg.contact-email-required",null)) ;
@@ -333,10 +341,15 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         return ;
       }
       UIMailPortlet uiPortlet = uiAddressForm.getAncestorOfType(UIMailPortlet.class) ;
-      String toAddress = "";
+      
+      String toAddress = uiAddressForm.getAvaiAddressStr() != null ? uiAddressForm.getAvaiAddressStr() : "";
+      if (!toAddress.equals("") && !toAddress.endsWith(",")) {
+        toAddress = toAddress + "," ;
+      }
+      
       StringBuffer sb = new StringBuffer() ;
       for (Contact ct : checkedContact) {
-        uiAddressForm.newCheckedList_.put(ct.getId(), ct) ;
+        if (!uiAddressForm.checkedList_.containsKey(ct.getId())) uiAddressForm.newCheckedList_.put(ct.getId(), ct) ;
       }
       for (Contact contact : uiAddressForm.newCheckedList_.values()) {
         if(contact.getEmailAddress() != null)
