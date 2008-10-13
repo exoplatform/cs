@@ -16,6 +16,7 @@
  */
 package org.exoplatform.mail.webui.popup;
 
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
@@ -24,6 +25,7 @@ import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -58,7 +60,14 @@ public class UIPrintPreview extends UIForm implements UIPopupComponent {
   public void setPrintMessage(Message msg) throws Exception {
     printMessage_ = msg ;
   }
-  
+  public String getPortalName() {
+    PortalContainer pcontainer =  PortalContainer.getInstance() ;
+    return pcontainer.getPortalContainerInfo().getContainerName() ;  
+  }
+  public String getRepository() throws Exception {
+    RepositoryService rService = getApplicationComponent(RepositoryService.class) ;    
+    return rService.getCurrentRepository().getConfiguration().getName() ;
+  }
   public DownloadService getDownloadService() { 
     return getApplicationComponent(DownloadService.class) ; 
   }
