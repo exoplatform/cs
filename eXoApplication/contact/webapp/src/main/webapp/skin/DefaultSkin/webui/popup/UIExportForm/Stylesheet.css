@@ -26,7 +26,3 @@
 .UIContactPortlet .UIExportContactForm .ExportForm {
 	padding: 10px;
 }
-
-.UIContactPortlet .UIExportContactForm .UIGrid .text {
-	white-space: nowrap;
-}
