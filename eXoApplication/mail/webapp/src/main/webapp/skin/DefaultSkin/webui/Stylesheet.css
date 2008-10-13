@@ -1792,6 +1792,14 @@
 	white-space: normal;
 }
 
+.UIMailPortlet .UITagForm .UIForm .UIFormGrid td.FieldComponent {
+	white-space: normal;
+}
+
+.UIMailPortlet .UITagForm .UIForm .UIFormGrid td.FieldLabel {
+	white-space: normal;
+}
+
 .UIMailPortlet .UIForm .UIFormGrid td.FieldLabel {
 	white-space: nowrap;
 }
