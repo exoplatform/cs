@@ -506,8 +506,8 @@ public class VCardImportExport implements ContactImportExport {
           contact.setYahooId(ext.getValue());
 
       }
-
-      contact.setNote(pimContacts[index].getNote());
+      if (pimContacts[index].getNote() != null)
+        contact.setNote(pimContacts[index].getNote().replaceAll("\\\\n", "\n"));
       
       Date revisionDate = pimContacts[index].getCurrentRevisionDate();
       
