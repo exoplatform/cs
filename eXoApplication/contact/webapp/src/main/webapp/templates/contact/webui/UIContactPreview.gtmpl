@@ -647,7 +647,11 @@
 								<% 
 									String note ;
 									if (ContactUtils.isEmpty(contact.getNote())) note = "" ;
-									else note = ContactUtils.encodeHTML(contact.getNote()).replaceAll("\n", "<br>") ;								
+									else {
+										note = ContactUtils.encodeHTML(contact.getNote()).replaceAll("\n", "<br>") ;
+										// add to fix bug cs-1524
+										note = note.replaceAll("\\\\n", "<br>") ;	
+									}		
 								 %>
 								<div class="InfoContainer">
 									<div class="TitleInfo"><%=_ctx.appRes(uicomponent.getName() + ".label.note")%></div>
