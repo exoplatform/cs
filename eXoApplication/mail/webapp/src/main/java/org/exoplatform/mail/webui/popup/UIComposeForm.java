@@ -629,6 +629,14 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       Message message = composeForm.getNewMessage() ; 
       // validate message
       if (!composeForm.validateMessage(event, message)) return;
+      if (MailUtils.isFieldEmpty(message.getMessageTo()) &&
+          MailUtils.isFieldEmpty(message.getMessageCc()) &&
+          MailUtils.isFieldEmpty(message.getMessageBcc())    ) {
+        UIApplication uiApp = composeForm.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.select-at-least-recipient", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      } 
 
       try {
         mailSvr.sendMessage(session, usename, message) ;
@@ -929,11 +937,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   
   private boolean validateMessage(Event<UIComposeForm> event, Message msg) throws Exception {
     String msgWarning = null;
-    if (MailUtils.isFieldEmpty(msg.getMessageTo()) &&
-        MailUtils.isFieldEmpty(msg.getMessageCc()) &&
-        MailUtils.isFieldEmpty(msg.getMessageBcc())    ) {
-      msgWarning = "UIComposeForm.msg.select-at-least-recipient";
-    } else if (!MailUtils.isValidEmailAddresses(msg.getMessageTo())) {
+    if (!MailUtils.isValidEmailAddresses(msg.getMessageTo())) {
       msgWarning = "UIComposeForm.msg.invalid-to-field";
     } else if (!MailUtils.isValidEmailAddresses(msg.getMessageCc())) {
       msgWarning = "UIComposeForm.msg.invalid-cc-field";
