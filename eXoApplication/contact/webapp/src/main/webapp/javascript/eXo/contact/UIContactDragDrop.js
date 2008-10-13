@@ -89,6 +89,8 @@ UIContactDragDrop.prototype.regDnDItem = function() {
 
 UIContactDragDrop.prototype.dndTrigger = function(e){
   e = e ? e : window.event;
+	var menuItem = eXo.core.EventManager.getEventTargetByClass(e,"MenuItem");
+  if(menuItem) return ;
   if (e.button == 1 || e.button == 0 ||e.which == 1) {
     return eXo.contact.UIContactDragDrop.initDnD(eXo.contact.UIContactDragDrop.dropableSets, this, this, e);
   }
