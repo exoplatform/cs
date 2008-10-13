@@ -823,7 +823,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         }
         uiAddress.setAlreadyCheckedContact(contactList);
       }
-
+      uiAddress.setAvaiAddressStr(toAddressString);
+      
       event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
     }
   }
@@ -851,6 +852,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         uiAddress.setAlreadyCheckedContact(contactList);
       }
 
+      uiAddress.setAvaiAddressStr(ccAddressString);
+      
       event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
     }
   }
@@ -878,6 +881,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         uiAddress.setAlreadyCheckedContact(contactList);
       }
 
+      uiAddress.setAvaiAddressStr(bccAddressString);
+      
       event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
     }   
   }
