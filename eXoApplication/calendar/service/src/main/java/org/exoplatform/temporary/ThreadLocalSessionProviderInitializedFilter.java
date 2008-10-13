@@ -32,9 +32,8 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.organization.auth.AuthenticationService;
-import org.exoplatform.services.security.Identity ;
-
+//import org.exoplatform.services.organization.auth.AuthenticationService;
+import org.exoplatform.services.security.Identity;
 
 /**
  * Created by The eXo Platform SAS . <br/>
@@ -48,7 +47,8 @@ import org.exoplatform.services.security.Identity ;
 
 public class ThreadLocalSessionProviderInitializedFilter implements Filter {
 
-  private AuthenticationService authenticationService;
+//  private AuthenticationService authenticationService;
+  
 
   private ThreadLocalSessionProviderService providerService;
   
@@ -70,8 +70,8 @@ public class ThreadLocalSessionProviderInitializedFilter implements Filter {
       
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     
-    authenticationService = (AuthenticationService) container
-        .getComponentInstanceOfType(AuthenticationService.class);
+//    authenticationService = (AuthenticationService) container
+//        .getComponentInstanceOfType(AuthenticationService.class);
     providerService = (ThreadLocalSessionProviderService) container
         .getComponentInstanceOfType(ThreadLocalSessionProviderService.class);
 
@@ -85,7 +85,7 @@ public class ThreadLocalSessionProviderInitializedFilter implements Filter {
     if (user != null) {
       Identity identity = null;
       try {
-        identity = authenticationService.getIdentityBySessionId(user);
+//        identity = authenticationService.getIdentityBySessionId(user);
       } catch (Exception e) {
         throw new ServletException(e);
       }

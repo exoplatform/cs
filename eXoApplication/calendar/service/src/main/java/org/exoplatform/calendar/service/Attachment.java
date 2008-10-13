@@ -72,7 +72,7 @@ public class Attachment  {
       e.printStackTrace() ;
       return null ;
     }
-    return attachmentData.getNode("jcr:content").getPath() ;
+    return attachmentData.getPath() ;
   }
   private Session getSesison()throws Exception {
     RepositoryService repoService = (RepositoryService)PortalContainer.getInstance().getComponentInstanceOfType(RepositoryService.class) ;

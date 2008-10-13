@@ -7,7 +7,6 @@ import org.exoplatform.common.http.HTTPMethods;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.mail.service.CheckingInfo;
 import org.exoplatform.mail.service.MailService;
-import org.exoplatform.services.organization.auth.AuthenticationService;
 import org.exoplatform.services.rest.CacheControl;
 import org.exoplatform.services.rest.HTTPMethod;
 import org.exoplatform.services.rest.OutputTransformer;
@@ -26,8 +25,7 @@ public class MailWebservice implements ResourceContainer {
   public static final int MIN_SLEEP_TIMEOUT = 100;
   public static final int MAX_TIMEOUT  = 16;
 
-  public MailWebservice() {
-  }
+  public MailWebservice() {  }
 
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/cs/mail/checkmail/{username}/{accountId}/")
@@ -159,10 +157,10 @@ public class MailWebservice implements ResourceContainer {
     
     return Response.Builder.ok(buffer.toString(), "text/xml").cacheControl(cacheControl).build();
   }
-
-  public String getUserName() throws Exception {
-    AuthenticationService authService = (AuthenticationService) ExoContainerContext
-        .getCurrentContainer().getComponentInstanceOfType(AuthenticationService.class);
-    return authService.getCurrentIdentity().getUserId();
-  }
+//
+//  public String getUserName() throws Exception {
+//    AuthenticationService authService = (AuthenticationService) ExoContainerContext
+//        .getCurrentContainer().getComponentInstanceOfType(AuthenticationService.class);
+//    return authService.getCurrentIdentity().getUserId();
+//  }
 }
