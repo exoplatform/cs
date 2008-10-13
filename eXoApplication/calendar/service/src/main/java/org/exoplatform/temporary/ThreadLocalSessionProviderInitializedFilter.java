@@ -48,6 +48,7 @@ import org.exoplatform.services.security.Identity;
 public class ThreadLocalSessionProviderInitializedFilter implements Filter {
 
 //  private AuthenticationService authenticationService;
+  
 
   private ThreadLocalSessionProviderService providerService;
   

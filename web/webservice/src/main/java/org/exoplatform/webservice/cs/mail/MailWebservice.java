@@ -25,8 +25,7 @@ public class MailWebservice implements ResourceContainer {
   public static final int MIN_SLEEP_TIMEOUT = 100;
   public static final int MAX_TIMEOUT  = 16;
 
-  public MailWebservice() {
-  }
+  public MailWebservice() {  }
 
   @HTTPMethod(HTTPMethods.GET)
   @URITemplate("/cs/mail/checkmail/{username}/{accountId}/")
