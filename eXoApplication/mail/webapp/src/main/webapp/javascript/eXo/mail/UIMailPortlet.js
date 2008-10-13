@@ -104,7 +104,8 @@ UIMailPortlet.prototype.tagListPopupMenuCallback = function(evt) {
 UIMailPortlet.prototype.readMessage = function() {} ;
 
 UIMailPortlet.prototype.showPrintPreview = function(obj1) {
-	document.getElementById("UIPortalApplication").style.display = "none";
+	var uiPortalApplication = document.getElementById("UIPortalApplication");
+	uiPortalApplication.style.visibility = "hidden";	
 	var uiMailPortletNode = document.createElement('div') ;
 	uiMailPortletNode.className = 'UIMailPortlet' ;
 	var mailWorkingWorkspaceNode = document.createElement('div') ;
@@ -116,12 +117,17 @@ UIMailPortlet.prototype.showPrintPreview = function(obj1) {
 	var obj = obj1.cloneNode(true);
 	var printContent = eXo.core.DOMUtil.findFirstDescendantByClass(obj,"div","PrintContent");
 	var str = printContent.firstChild.value;
+	obj1.style.display = "none";
+	document.body.style.background = "white" ;
 	printContent.innerHTML = "" ;
 	printContent.appendChild(frame);
 	uiMessagePreviewNode.appendChild(obj) ;
 	mailWorkingWorkspaceNode.appendChild(uiMessagePreviewNode) ;
-	uiMailPortletNode.appendChild(mailWorkingWorkspaceNode) ;	
-	document.body.appendChild(uiMailPortletNode) ;
+	uiMailPortletNode.appendChild(mailWorkingWorkspaceNode) ;
+	uiMailPortletNode.style.width = "100%";
+	uiMailPortletNode.style.position = "absolute";
+	uiMailPortletNode.style.zIndex = 1;
+	document.body.insertBefore(uiMailPortletNode,uiPortalApplication) ;
 	frame.style.width = printContent.offsetWidth + "px";
 	var doc = frame.contentWindow.document ;
 	doc.open();
@@ -153,10 +159,12 @@ UIMailPortlet.prototype.printMessage = function() {
 UIMailPortlet.prototype.closePrint = function() {
 	var DOMUtil = eXo.core.DOMUtil ;
     var uiPortalApplication = document.getElementById("UIPortalApplication");
-    uiPortalApplication.style.display = "block" ;	
+    uiPortalApplication.style.display = "block" ;
+		uiPortalApplication.style.visibility = "visible";
 	for(var i = 0 ; i < document.body.childNodes.length ; i++) {
 		if(document.body.childNodes[i].className == "UIMailPortlet") DOMUtil.removeElement(document.body.childNodes[i]) ;		
 	}
+	if(document.body.style) document.body.removeAttribute("style");
 	window.scroll(0,0) ;
 } ;
 
