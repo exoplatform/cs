@@ -39,15 +39,16 @@ uiform.begin() ;
 						         	<%=CalendarUtils.convertSize(attachFile.size)%> 
 						         </div>
 						          <%if(attachFile.getMimeType().startsWith("image")) {
+						          String src = "/"+uicomponent.getPortalName()+"/rest/jcr/" +uicomponent.getRepository()+"/" + attachFile.getWorkspace()+attachFile.getDataPath() ;
 						         %>
-						         	  <img id="$attachFile.id" class="Img" style="display:none;" />
+						         	  <img id="$attachFile.id" src="$src" class="Img" style="display:none;" />
 						         <%}%>
 						         <div class="Actions" style="white-space: nowrap;">
 						         <%if(attachFile.getMimeType().startsWith("image")) {
 						         		 String rndString = String.valueOf(new Date().getTime());
-						         		 String src = uicomponent.getDownloadLink(attachFile) ;"/${uicomponent.getPortalName()}/jcr?workspace=${attachFile.workspace}&hash=${rndString}&path=${attachFile.getDataPath()}" ;
+						         		 //String src = uicomponent.getDownloadLink(attachFile) ;"/${uicomponent.getPortalName()}/jcr?workspace=${attachFile.workspace}&hash=${rndString}&path=${attachFile.getDataPath()}" ;
 						         %>
-							         <a imgSource="$src" onclick="javaScript:document.getElementById('$attachFile.id').src=this.getAttribute('imgSource');document.getElementById('$attachFile.id').style.display='block'" class="IconHolder ViewAttachmentIcon" style="cursor:pointer;padding-left:15px;"> 
+							         <a onclick="javaScript:current = document.getElementById('$attachFile.id'); if(current.style.display == 'none') {current.style.display='block';} else if(current.style.display == 'block') {current.style.display = 'none';} " class="IconHolder ViewAttachmentIcon" style="cursor:pointer;padding-left:15px;"> 
 							         <%=uiform.getLabel('View')%>
 							         </a> 
 						         <%}%>
