@@ -44,7 +44,7 @@
 	DateFormat tempFormat = new  SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss", Locale.ENGLISH) ;
 	tempFormat.setCalendar(uicomponent.getInstanceTempCalendar()) ;
 	%>
-	<div class="UIMonthView">
+	<div class="UIMonthView" >
 		<div class="TitleBar">
 			<table>
 				<body>
@@ -90,7 +90,7 @@
   			</div>
 				<div class="RowContainerDay" style="position:relative ;"  onresize="eXo.calendar.UICalendarMan.initMonth() ;" lastUpdatedId="<%=uicomponent.getLastUpdatedEventId()%>">
 					
-			<table class="UIGrid" id="UIMonthViewGrid" cellspacing="0" borderspacing="0" eXoCallback="eXo.calendar.UICalendarMan.GUIMan.callbackHighlighter() ;">
+			<table class="UIGrid"  style="table-layout: fixed;" id="UIMonthViewGrid" cellspacing="0" borderspacing="0" eXoCallback="eXo.calendar.UICalendarMan.GUIMan.callbackHighlighter() ;">
 				<col width="14%"><col width="14%"><col width="14%"><col width="14%"><col width="14%"><col width="14%"><col width="14%">
 				<tbody>
 				
