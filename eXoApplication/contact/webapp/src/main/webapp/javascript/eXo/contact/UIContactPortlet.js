@@ -364,24 +364,30 @@ UIContactPortlet.prototype.adddressPrint = function (){
 	var DOMUtil = eXo.core.DOMUtil ;
 	var UIPortalApplication = document.getElementById("UIPortalApplication") ;
 	var UIContactContainer = document.getElementById("UIContactContainer") ;
+	var uiControlWorkspace = document.getElementById("UIControlWorkspace") ;
 	var div = document.createElement("div") ;
 	div.className = "UIPrintContainer UIContactPortlet" ;
 	var printContainer = UIContactContainer.cloneNode(true) ;
+	DOMUtil.removeElement(UIContactContainer) ;
 	printContainer.removeAttribute("class") ;
 	div.appendChild(printContainer) ;
 	var uiAction = DOMUtil.findFirstDescendantByClass(div, "div", "UIAction") ;
 	DOMUtil.addClass(uiAction, "Printable") ;
-	UIPortalApplication.style.display = "none" ;
+	uiControlWorkspace.style.display = "none" ;
+	UIPortalApplication.style.visibility = "hidden" ;
 	eXo.contact.UIContactPortlet.pageBackground = document.body.style.background ;
 	document.body.style.background = "transparent" ;
-	document.body.appendChild(div) ;
+	document.body.insertBefore(div,UIPortalApplication) ;
 } ;
 
 UIContactPortlet.prototype.cancelPrint = function (obj){
 	var UIPrintContainer = eXo.core.DOMUtil.findAncestorByClass(obj, "UIPrintContainer") ;
 	var UIPortalApplication = document.getElementById("UIPortalApplication") ;
+	var uiControlWorkspace = document.getElementById("UIControlWorkspace") ;
 	eXo.core.DOMUtil.removeElement(UIPrintContainer) ;
+	if(uiControlWorkspace) uiControlWorkspace.style.display = "block" ;
 	UIPortalApplication.style.display = "block" ;
+	UIPortalApplication.style.visibility = "visible" ;
 	document.body.style.background = eXo.contact.UIContactPortlet.pageBackground ;
 	eXo.contact.UIContactPortlet.pageBackground = null ;
 } ;
@@ -389,14 +395,20 @@ UIContactPortlet.prototype.cancelPrint = function (obj){
 UIContactPortlet.prototype.cancelPrintList = function (){
 	var UIPrintContainer = eXo.core.DOMUtil.findFirstDescendantByClass(document.body,"div", "UIPrintContainer") ;
 	var UIPortalApplication = document.getElementById("UIPortalApplication") ;
+	var uiControlWorkspace = document.getElementById("UIControlWorkspace") ;
 	if(UIPrintContainer) eXo.core.DOMUtil.removeElement(UIPrintContainer) ;
+	if(uiControlWorkspace) uiControlWorkspace.style.display = "block" ;
 	UIPortalApplication.style.display = "block" ;
+	UIPortalApplication.style.visibility = "visible" ;
 } ;
 
 UIContactPortlet.prototype.printList = function (obj){
 	if(typeof(obj) == "string") obj = document.getElementById(obj) ;
 	obj = eXo.contact.UIContactPortlet.disableAction(obj) ;
+	var uiControlWorkspace = document.getElementById("UIControlWorkspace") ;
 	var printContainer = obj.cloneNode(true) ;
+	var uiPopupWindow = eXo.core.DOMUtil.findAncestorByClass(obj,"UIPopupWindow") ;
+	if(uiPopupWindow) uiPopupWindow.style.display = "none";
 	var UIAction = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div", "UIAction") ;
 	if(eXo.core.DOMUtil.findChildrenByClass(document.body, "div", "UIPrintContainer").length > 0) return ;
 	var div = document.createElement("div") ;
@@ -404,8 +416,11 @@ UIContactPortlet.prototype.printList = function (obj){
 	div.oncontextmenu = eXo.contact.UIContactPortlet.disableContextMenu ;
 	div.appendChild(printContainer) ;
 	var UIPortalApplication = document.getElementById("UIPortalApplication") ;
-	UIPortalApplication.style.display = "none" ;
-	document.body.appendChild(div) ;
+	UIPortalApplication.style.visibility = "hidden" ;
+	if(uiControlWorkspace) uiControlWorkspace.style.display = "none" ;
+	div.style.position = "absolute" ;
+	div.style.width = "100%" ;
+	document.body.insertBefore(div,UIPortalApplication) ;
 	eXo.core.DOMUtil.removeElement(UIAction) ;
 } ;
 
