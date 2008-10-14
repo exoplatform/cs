@@ -157,7 +157,7 @@ public class NewUserListener extends UserEventListener {
 
   @Override
   public void postDelete(User user) throws Exception {
-    /*SessionProvider session = SessionProvider.createSystemProvider(); ;
+    SessionProvider session = SessionProvider.createSystemProvider(); ;
     String username = user.getUserName() ;
     List<GroupCalendarData> gCalData = cservice_.getCalendarCategories(session, username, true) ;
     if(!gCalData.isEmpty())
@@ -173,7 +173,7 @@ public class NewUserListener extends UserEventListener {
     if(calData != null && !calData.getCalendars().isEmpty())
       for(Calendar cal : calData.getCalendars()) {
         cservice_.removeSharedCalendar(session, username, cal.getId()) ;
-      }*/
+      }
     super.postDelete(user);
   }
 }
