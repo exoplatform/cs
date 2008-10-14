@@ -111,6 +111,12 @@ public class ContactUtils {
     return groupIds ;
   }
   
+  public static String getPublicGroupName(String groupId) throws Exception {
+    OrganizationService organizationService = 
+      (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+    return organizationService.getGroupHandler().findGroupById(groupId).getGroupName() ;
+  }
+  
   public static String getImageSource(Contact contact, DownloadService dservice) throws Exception {    
     ContactAttachment contactAttachment = contact.getAttachment();
     if (contactAttachment != null) {
