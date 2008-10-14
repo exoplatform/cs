@@ -801,13 +801,8 @@ UICalendarPortlet.prototype.showEvent = function(){
 /**
  * Deal with incorrect event sorting when portlet loads in the first times
  */
-UICalendarPortlet.prototype.onLoad = function(){
-    if (this.runFirstTime == true) {		
-		eXo.calendar.UICalendarPortlet.checkFilter() ;
-		return;
-	}		
+UICalendarPortlet.prototype.onLoad = function(){	
     window.setTimeout("eXo.calendar.UICalendarPortlet.checkFilter() ;", 2000);
-    this.runFirstTime = true;
 };
 
 /**
