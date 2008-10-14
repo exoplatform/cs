@@ -2112,38 +2112,40 @@ public class JCRDataStorage {
     PropertyIterator iter = node.getReferences();
     Node msgNode;
     Node firstNode = null;
-    while (iter.hasNext()) {
-      msgNode = iter.nextProperty().getParent();
-      if (msgNode.isNodeType("exo:messageMixin")) {
-        values = msgNode.getProperty("exo:conversationId").getValues();
+    if (iter != null) {
+      while (iter.hasNext()) {
+        msgNode = iter.nextProperty().getParent();
+        if (msgNode.isNodeType("exo:messageMixin")) {
+          values = msgNode.getProperty("exo:conversationId").getValues();
 
-        for (int i = 0; i < values.length; i++)
-          valueList.add(values[i]);
+          for (int i = 0; i < values.length; i++)
+            valueList.add(values[i]);
 
-        Node parentNode = null;
-        try {
-          if (node.hasProperty("exo:conversationId")) {
-            Value[] currentValues = node.getProperty("exo:conversationId").getValues();
-            // TODO: get parent have the same folder with child message
-            if (currentValues.length > 0) {
-              parentNode = node.getSession().getNodeByUUID(currentValues[0].getString());
+          Node parentNode = null;
+          try {
+            if (node.hasProperty("exo:conversationId")) {
+              Value[] currentValues = node.getProperty("exo:conversationId").getValues();
+              // TODO: get parent have the same folder with child message
+              if (currentValues.length > 0) {
+                parentNode = node.getSession().getNodeByUUID(currentValues[0].getString());
+              }
             }
+          } catch(Exception e) {}
+
+          if (parentNode != null) {
+            valueList.add(msgNode.getSession().getValueFactory().createValue(parentNode));
+          } else if (firstNode != null) {
+            valueList.add(msgNode.getSession().getValueFactory().createValue(firstNode));
           }
-        } catch(Exception e) {}
 
-        if (parentNode != null) {
-          valueList.add(msgNode.getSession().getValueFactory().createValue(parentNode));
-        } else if (firstNode != null) {
-          valueList.add(msgNode.getSession().getValueFactory().createValue(firstNode));
+          if (firstNode == null)
+            firstNode = msgNode;
+          msgNode.save();
         }
-
-        if (firstNode == null)
-          firstNode = msgNode;
-        msgNode.save();
       }
+
+      node = setIsRoot(accountId, node);
     }
-    
-    node = setIsRoot(accountId, node);
     return node;
   }
 
