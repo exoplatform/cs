@@ -59,7 +59,7 @@ uiform.begin() ;
         							<div class="TaskDescription" style="font-weight: bold;"><%=task.getSummary()%></div>
         							<table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
 			        					<tr>
-			        						<td class="Text">
+			        						<td class="Text" style="width: 100px;">
 			        							<%=uiform.getLabel('Status')%>
 			        						</td>
 			        						<td class="Text"><%=(CalendarUtils.isEmpty(task.getEventState()))?"" : uicomponent.getLabel(task.getEventState())%></td>
