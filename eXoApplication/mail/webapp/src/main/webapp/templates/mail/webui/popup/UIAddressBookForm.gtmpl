@@ -1,7 +1,12 @@
 <%
- import org.exoplatform.contact.service.Contact;
- import org.exoplatform.mail.MailUtils;
+  import org.exoplatform.contact.service.Contact;
+  import org.exoplatform.mail.MailUtils;
   import org.exoplatform.download.DownloadService;
+  import org.exoplatform.webui.application.WebuiRequestContext;
+  import java.util.Locale;
+  
+  WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+  Locale locale = context.getParentAppRequestContext().getLocale() ;
 %>
 <% uiform.begin()%> 
 <div><div style="width: 600px;" ><span style="display: none;"></span></div></div>
@@ -184,14 +189,12 @@
                                   <tr>
                                     <td>
                                       <%
-                                        String birthday = null ; 
+                                        Date birthday = null ; 
                                         if (selectedContact.getBirthday() != null) {
-                                        String birth = selectedContact.getBirthday().toString() ;
-                                        String a = birth.substring(0, 10); String b = birth.substring(23,28) ;
-                                        birthday = a+ b;
+                                         birthday = selectedContact.getBirthday() ;
                                         }
                                        %>
-                                      <div class="InfoTitle3"><%= (birthday != null) ? birthday : "_"%></div>
+                                      <div class="InfoTitle3"><%= (birthday != null) ? MailUtils.formatDate(birthday, locale) : "_"%></div>
                                     </td>
                                   </tr>
                                 </table>
