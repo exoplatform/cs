@@ -40,7 +40,7 @@ import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 )
 public class UIMailPortlet extends UIPortletApplication {
   private boolean isRefreshed = false ;
-  public void setRefreshed(boolean b) { isRefreshed = b ; System.out.println("\n\n aa \n\n");}
+  public void setRefreshed(boolean b) { isRefreshed = b ;}
   public boolean isRefreshed() { return isRefreshed ; }
   
   public UIMailPortlet() throws Exception {
