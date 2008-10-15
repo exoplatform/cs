@@ -945,6 +945,7 @@
 }
 .UIMonthView .EventMonthContent .EventSummary{
 	margin: 0px 0px  0px 15px;
+	_margin: 0px;
 	padding-left:2px;
 }
 
@@ -956,6 +957,7 @@
 	overflow:hidden;
 	white-space: nowrap;
 	-moz-user-select : none ;
+	_padding-left: 17px;
 }
 
 .UICalendarPortlet .MoreEvent {
