@@ -97,7 +97,7 @@
   							<div class="CollapserFlatStyle"><span></span></div>
   							<div class="CheckBox"><input class="CalendarGroup" type="checkbox"/></div>
   							<div class="CalendarGroupIcon"><span title="$groupData.name">$groupData.name</span></div>
-  							<div class="DownArrow1Icon" title="<%=uiform.getLabel('groupActions')%>"  id="$groupData.id"><span></span></div>
+  							<!--<div class="DownArrow1Icon" title="<%=uiform.getLabel('groupActions')%>"  id="$groupData.id"><span></span></div>-->
   							<div style="clear: both;"><span></span></div>
   						</div>
   					</div>
@@ -114,7 +114,7 @@
   					<div class="CalendarItem $calendar.calendarColor" calColor="$calendar.calendarColor" id="$calId" calType="0" >
   							<div class="CheckBox"><%uiform.renderField(calId)%></div>
   							<div class="$icon" title="$calendar.name"><span>$calendar.name</span></div>
-  							<div class="DownArrow1Icon"><span></span></div>
+  							<!--<div class="DownArrow1Icon"><span></span></div>-->
   							<div style="clear: both"><span></span></div>
   					</div>
 				<% }
@@ -157,7 +157,7 @@
   					<div class="CalendarItem $color"  calColor="$color" id="$calId" calType="1" >
   							<div class="CheckBox"><%uiform.renderField(calendar.getId())%></div>
   							<div class="CalendarIcon" title="<%=owner + calendar.getName()%>"><span><%=owner + calendar.getName()%></span></div>
-  							<div class="DownArrow1Icon"><span></span></div>
+  							<!--<div class="DownArrow1Icon"><span></span></div>-->
   							<div style="clear:both;"><span></span></div>
   					</div>
 				<%
@@ -208,7 +208,7 @@
   					<div class="CalendarItem $calendar.calendarColor"  calColor="$calendar.calendarColor" canEdit="<%=uicomponent.canEdit(calendar.getEditPermission())%>" id="$calId" calType="2" >
   							<div class="CheckBox"><%uiform.renderField(calendar.getId())%></div>
   							<div class="CalendarIcon" title="<%=calendar.getName()%>"><span><%=calendar.getName()%></span></div>
-  							<div class="DownArrow1Icon"><span></span></div>
+  							<!--<div class="DownArrow1Icon"><span></span></div>-->
   							<div style="clear: both"><span></span></div>
   					</div>
 				<%

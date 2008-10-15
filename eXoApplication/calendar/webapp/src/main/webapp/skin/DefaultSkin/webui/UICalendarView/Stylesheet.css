@@ -950,6 +950,7 @@
 .UIMonthView .EventMonthContent .EventSummary{
 	margin: 0px 0px  0px 15px;
 	padding-left:2px;
+	_margin: 0px;
 }
 
 .UIMonthView .EventMonthContent .EventLabel {
