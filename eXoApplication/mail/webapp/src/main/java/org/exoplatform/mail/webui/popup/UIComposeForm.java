@@ -410,7 +410,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     if (isVisualEditor) {
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
       Locale locale = context.getParentAppRequestContext().getLocale() ;
-      content = "<br><br><div> On " + MailUtils.formatDate("MMM dd, yyyy HH:mm aaa", msg.getSendDate(), locale) + ", " + msg.getFrom() + " wrote: <br>" ;
+      content = "<br><br><div> On " + MailUtils.formatDate("MMM dd, yyyy HH:mm aaa", msg.getSendDate(), locale) + ", " + Utils.getAddresses(msg.getFrom())[0] + " wrote: <br>" ;
       content += "<blockquote style=\"border-left:1px #cccccc solid ; margin-left: 10px; padding-left: 5px;\">" + msgContent + "</blockquote></div>" ;
     }
     return content ;
