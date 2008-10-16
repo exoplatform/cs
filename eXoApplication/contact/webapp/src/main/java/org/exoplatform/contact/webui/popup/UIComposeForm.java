@@ -70,7 +70,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   final static public String FIELD_FROM_INPUT = "fromInput" ;
   final static public String FIELD_FROM = "from" ;
   
-  
   final static public String FIELD_SUBJECT = "subject" ;
   final static public String FIELD_TO = "to" ;
   final static public String FIELD_ATTACHMENTS = "attachments" ;
@@ -116,11 +115,15 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       fromOptions.put(acc.getId(), acc.getUserDisplayName() + " <" + acc.getEmailAddress() + ">") ;
     }
     addUIFormInput(new UIFormSelectBox(FIELD_FROM, FIELD_FROM, options)) ;
+    /*
     List<SelectItemOption<String>>  fromOptions = new ArrayList<SelectItemOption<String>>() ;
     for (String email : emails.split(org.exoplatform.contact.service.Utils.SEMI_COLON)) {
       fromOptions.add(new SelectItemOption<String>(email, email)) ;
     }
-    addUIFormInput(new UIFormSelectBox(FIELD_TO, FIELD_TO, fromOptions)) ;
+    addUIFormInput(new UIFormSelectBox(FIELD_TO, FIELD_TO, fromOptions)) ;*/
+    UIFormStringInput fieldTo = new UIFormStringInput(FIELD_TO, null, null) ;
+    fieldTo.setValue(emails.replaceAll(org.exoplatform.contact.service.Utils.SEMI_COLON, ",")) ;
+    addUIFormInput(fieldTo) ;
     addUIFormInput(new UIFormStringInput(FIELD_SUBJECT, null, null)) ;
     UIFormInputWithActions inputSet = new UIFormInputWithActions(FIELD_FROM_INPUT);   
     inputSet.addUIFormInput(new UIFormInputInfo(FIELD_ATTACHMENTS, FIELD_ATTACHMENTS, null)) ;
@@ -147,12 +150,13 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   public void setFieldSubjectValue(String value) {
     getUIStringInput(FIELD_SUBJECT).setValue(value) ;
   }
+  
   public String getFieldToValue() {
-    return getUIFormSelectBox(FIELD_TO).getValue() ;
+    return getUIStringInput(FIELD_TO).getValue() ;
   }
   
   public void setFieldToValue(String value) {
-    getUIFormSelectBox(FIELD_TO).setValue(value);
+    getUIStringInput(FIELD_TO).setValue(value);
   }
 
   public String getFieldAttachmentsValue() {

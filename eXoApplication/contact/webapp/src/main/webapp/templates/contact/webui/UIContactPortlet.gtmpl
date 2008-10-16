@@ -41,6 +41,6 @@
 <%
 	if (!uicomponent.isRefreshed()) {
 		uicomponent.setRefreshed(true) ;
-    rcontext.getJavascriptManager().addJavascript("if(eXo.core.Browser.isIE6()) {top.location.reload() };") ;
+    	rcontext.getJavascriptManager().addJavascript("if(eXo.core.Browser.isIE6()) {top.location.reload() };") ;
 	}
  %>
