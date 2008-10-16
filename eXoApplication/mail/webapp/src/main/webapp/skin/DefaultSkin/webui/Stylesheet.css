@@ -1666,25 +1666,37 @@
 }
 
 /******************************* UIFolderForm ******************************/
-.UIFolderForm {
+.UIImportForm {
 	background: #F3F3F3;
 	border: 1px solid #c9c9c9;
 	padding: 25px 10px;
 }
 
-.UIImportForm .UIForm .HorizontalLayout .UIFormGrid{
-	margin: 0px;
-	width: 100%;
-}
-
-.UIFolderForm .UIForm .HorizontalLayout {
+.UIImportForm .UIForm .HorizontalLayout {
 	border: none;
 }
 
-.UIFolderForm .UIForm .UIFormGrid td.FieldLabel {
+.UIImportForm .UIForm .UIFormGrid td.FieldLabel {
 	line-height: 20px;
 }
 
+.UIImportForm .UIForm .UIFormGrid td.FieldComponent .UIFormUploadInput {
+	padding-left: 6px;
+}
+
+.UIImportForm .UIForm .UIFormGrid .FieldComponent td.FieldLabel {
+	padding: 0px;
+	display: none;
+}
+
+.UIImportForm .UIForm .UIFormGrid .FieldComponent td.FieldComponent {
+	padding: 4px 6px;
+}
+
+.UIImportForm .UIForm .UIFormGrid .UIFormInputSet {
+	padding: 0px;
+	margin: 0px;
+}
 /******************************* UIComfirmPassword ******************************/
 .UIComfirmPassword {
 	padding: 10px;
