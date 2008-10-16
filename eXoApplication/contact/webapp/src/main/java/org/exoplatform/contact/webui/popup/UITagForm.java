@@ -171,6 +171,12 @@ public class UITagForm extends UIForm implements UIPopupComponent {
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return ;
           }
+        if (ContactUtils.isNameLong(inputTag)) {
+          uiApp.addMessage(new ApplicationMessage("UITagForm.msg.nameTooLong", null, 
+              ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
         Tag tag = new Tag();
         tag.setName(inputTag);
         tag.setColor(uiTagForm.getSelectedColor()) ;

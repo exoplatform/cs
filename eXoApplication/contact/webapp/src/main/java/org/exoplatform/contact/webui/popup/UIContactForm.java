@@ -193,6 +193,12 @@ public class UIContactForm extends UIFormTabPane {
       
       String firstName = profileTab.getFieldFirstName() ;
       String lastName = profileTab.getFieldLastName() ;
+      if (ContactUtils.isNameLong(firstName) || ContactUtils.isNameLong(lastName)) {
+        uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.nameTooLong", null, 
+            ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       contact.setFullName(firstName + " " + lastName);
       contact.setFirstName(firstName);
       contact.setLastName(lastName);
@@ -207,6 +213,12 @@ public class UIContactForm extends UIFormTabPane {
         return ;
       }      
       contact.setJobTitle(profileTab.getFieldJobName());
+      if (ContactUtils.isNameLong(profileTab.getFieldJobName())) {
+        uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.jobTooLong", null, 
+            ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       String EMAIL_REGEX = 
         "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+";
       String emails = profileTab.getFieldEmail() ;

@@ -50,6 +50,12 @@ public class ContactUtils {
     return sharedUserId + " - " + addressName ;
   }
   
+  public static boolean isNameLong(String text) {
+    if (text == null) return false ;
+    if (text.length() > 40) return true ;
+    return false ;
+  }
+  
   public static String encodeJCRText(String str) {
     return str.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").
     replaceAll("'", "&apos;").replaceAll("\"", "&quot;") ;
