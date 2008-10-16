@@ -1657,7 +1657,12 @@
 }
 
 .UIImportForm .UIForm .UIFormGrid .FieldComponent td.FieldComponent {
-	padding: 4px 0px;
+	padding: 4px 6px;
+}
+
+.UIImportForm .UIForm .UIFormGrid .UIFormInputSet {
+	padding: 0px;
+	margin: 0px;
 }
 
 /******************************* UIFolderForm ******************************/
