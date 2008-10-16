@@ -22,16 +22,7 @@ UIMailPortlet.prototype.showContextMenu = function(compid) {
 UIMailPortlet.prototype.msgPopupMenuCallback = function(evt) {
 	var UIContextMenuMail = eXo.webui.UIContextMenuMail ;
 	var DOMUtil = eXo.core.DOMUtil ;
-	var _e = window.event || evt ;
-	//_e.cancelBubble = true ;
-	var src = null ;
-	if (UIContextMenuMail.IE) {
-		src = _e.srcElement;
-	} else {
-		src = _e.target;
-	}
-	if (src.nodeName != "tr")
-		src = eXo.core.DOMUtil.findAncestorByTagName(src, "tr");
+	var src = eXo.core.EventManager.getEventTargetByTagName(evt,"tr");
 		
 	var check = DOMUtil.findDescendantsByClass(src, "input", "checkbox") ;
 	if (check[0].checked == false) {
@@ -69,35 +60,15 @@ UIMailPortlet.prototype.changeAction = function(menu,id){
 
 UIMailPortlet.prototype.defaultFolderPopupMenuCallback = function(evt) {
 	var UIContextMenuMail = eXo.webui.UIContextMenuMail ;
-	var _e = window.event || evt ;
-	//_e.cancelBubble = true ;
-	var src = null ;
-	if (UIContextMenuMail.IE) {
-		src = _e.srcElement;
-	} else {
-		src = _e.target;
-	}
-	if (src.nodeName != "A")
-		src = src.parentNode;
-		
-	folder = src.getAttribute("folder");
+	var src = eXo.core.EventManager.getEventTargetByTagName(evt,"a");
+	var folder = src.getAttribute("folder");
 	eXo.webui.UIContextMenuMail.changeAction(UIContextMenuMail.menuElement, folder) ;
 } ;
 
 UIMailPortlet.prototype.tagListPopupMenuCallback = function(evt) {
 	var UIContextMenuMail = eXo.webui.UIContextMenuMail ;
-	var _e = window.event || evt ;
-	//_e.cancelBubble = true ;
-	var src = null ;
-	if (UIContextMenuMail.IE) {
-		src = _e.srcElement;
-	} else {
-		src = _e.target;
-	}
-	if (src.nodeName != "A")
-		src = src.parentNode;
-		
-	tagName = src.getAttribute("tagId");
+	var src = eXo.core.EventManager.getEventTargetByTagName(evt,"a");
+	var tagName = src.getAttribute("tagId");
 	eXo.webui.UIContextMenuMail.changeAction(UIContextMenuMail.menuElement, tagName) ;
 } 
 
@@ -240,6 +211,8 @@ UIMailPortlet.prototype.checkLayoutCallback = function(layoutcookie){
 
 UIMailPortlet.prototype.resetLayoutCallback = function(){
 	eXo.mail.UIMailPortlet.changeMenuLabel("all", true);
+	document.getElementById("uiMessageGrid").style.overflowY = "auto" ;
+  document.getElementById("uiMessageGrid").style.height = "200px" ;
 };
 
 UIMailPortlet.prototype.checkLayout = function() {
@@ -335,22 +308,15 @@ UIMailPortlet.prototype.showHideMessageDetails = function(obj) {
 	}
 }
 
-UIMailPortlet.prototype.isAllday = function(form) {
-	try{
-		if (typeof(form) == "string") form = document.getElementById(form) ;		
-		if (form.tagName.toLowerCase() != "form") {
-			form = eXo.core.DOMUtil.findDescendantsByTagName(form, "form") ;
-		}
-		for(var i = 0 ; i < form.elements.length ; i ++) {
-			if(form.elements[i].getAttribute("name") == "allDay") {
-				eXo.mail.UIMailPortlet.showHideTime(form.elements[i]) ;
-				break ;
-			}
-		}
-	}catch(e){
-		
+UIMailPortlet.prototype.isAllday = function(form) {	
+	if (typeof(form) == "string") form = document.getElementById(form) ;		
+	if (form.tagName.toLowerCase() != "form") {
+		form = eXo.core.DOMUtil.findDescendantsByTagName(form, "form") ;
 	}
+	var element = eXo.core.DOMUtil.findFirstDescendantByClass(form,"input","checkbox");
+	eXo.mail.UIMailPortlet.showHideTime(element) ;	
 } ;
+
 UIMailPortlet.prototype.showHideTime = function(chk) {
 	var DOMUtil = eXo.core.DOMUtil ;
 	if(chk.tagName.toLowerCase() != "input") {
@@ -373,7 +339,7 @@ UIMailPortlet.prototype.showHideField = function(chk,fields) {
 	display = (chk.checked) ? "hidden" : "visible" ;
 	var len = fields.length ;
 	for(var i = 0 ; i < len ; i ++) {
-		fields[i].style.visibility = display ;i
+		fields[i].style.visibility = display ;
 	}
 } ;
 
@@ -412,7 +378,6 @@ UIMailPortlet.prototype.collapseExpandFolder = function(obj, folderState) {
     }
     collapseContainerNode = DOMUtil.findAncestorByClass(collapseContainerNode, 'Collapse');
   }
-    
   if (colExpContainerNode != null && 
   	  colExpContainerNode.className &&
   	  (colExpContainerNode.className.indexOf('Collapse') != -1 || colExpContainerNode.className.indexOf('Expand') != -1)) {
@@ -429,9 +394,6 @@ UIMailPortlet.prototype.updateFolderState = function(folderId, folderState) {
   if (!this.uiFolderContainerNode) {
     this.uiFolderContainerNode = document.getElementById('UIFolderContainer');
   }
-  // Save state to cookie
-  /*var dateExpire = new Date();
-  dateExpire.setYear(dateExpire.getYear() + 49);*/
   var dateExpire = 365 ;
   eXo.core.Browser.setCookie('cs.mail.lastfoldershow', folderId, dateExpire);
   eXo.core.Browser.setCookie('cs.mail.folderstate', folderState, dateExpire);
@@ -482,10 +444,7 @@ UIMailPortlet.prototype.resizeIframe = function(textAreaId, frameId, styleExpand
 	doc.open();
 	doc.write(str);
 	doc.close();
-//	if (false) {
-//		frame.style.height = "100%";
-//		if(!eXo.core.Browser.isFF()) frame.style.width = "96%";
-//	} else {
+
 		if (eXo.core.Browser.isFF()) {
 			doc.body.style.visibility = true;
 			frame.style.height = doc.body.offsetHeight  + 20 + "px" ;
@@ -502,7 +461,7 @@ UIMailPortlet.prototype.resizeIframe = function(textAreaId, frameId, styleExpand
 			frame.style.height = "auto"; 
 			frame.style.height = docHt + 20 + "px"; 
 		}
-//	}
+
 	expandMessage.style.display = styleExpand ;
 	previewArea.style.display = beforeDisplay ;
 } ;
@@ -565,7 +524,6 @@ UIMailPortlet.prototype.swapMenu = function(oldmenu, clickobj) {
 	var UIMailPortlet = eXo.mail.UIMailPortlet ;
   var uiDesktop = document.getElementById("UIPageDesktop") ;
   var uiWorkSpaceWidth = (document.getElementById("UIControlWorkspace"))? document.getElementById("UIControlWorkspace").offsetWidth : 0 ;
-	//uiWorkSpaceWidth = (document.all) ? 2*uiWorkSpaceWidth : uiWorkSpaceWidth ;
   uiWorkSpaceWidth = (eXo.core.Browser.isIE7()) ? 2*uiWorkSpaceWidth : uiWorkSpaceWidth ;
   var menuX = Browser.findPosX(clickobj) - uiWorkSpaceWidth ;
 	var menuY = Browser.findPosY(clickobj) + clickobj.offsetHeight ;
@@ -656,73 +614,41 @@ UIMailPortlet.prototype.expandCollapse = function(clickObj, clickBar) {
 		eXo.core.DOMUtil.replaceClass(clickObj,"FolderCollapseIcon","");
 	}
 } ;
-// Check all
-function CheckBox() {
-}
 
-CheckBox.prototype.init = function(cont) {
-	if (typeof(cont) == "string") cont =document.getElementById(cont) ;
-	this.table = eXo.core.DOMUtil.findDescendantsByTagName(cont, "tbody")[0] ;
-	var checkboxes = eXo.core.DOMUtil.findDescendantsByClass(cont, "input", "checkbox") ;
-	var len = checkboxes.length ;
-	if (len <= 0) return ;
-	this.checkall = checkboxes[0] ;
-	this.checkboxes = checkboxes.slice(1) ;
-	this.rows = new Array() ;
-	checkboxes[0].onclick = eXo.mail.CheckBox.checkAll ;
-	var isAll = 0 ;
-	for(var i = len - 1 ; i >= 1 ; i--) {
-		checkboxes[i].onclick = eXo.mail.CheckBox.check ;
-		this.rows.push(checkboxes[i].parentNode.parentNode) ;
-		if(checkboxes[i].checked == true) isAll++ ;
-	}
-	if(isAll == (len - 1)) checkboxes[0].checked = true ;
-} ;
-
-CheckBox.prototype.checkAll = function() {
-	var CheckBox = eXo.mail.CheckBox ;
-	var isChecked = CheckBox.checkall.checked ;
-	var items = CheckBox.checkboxes ;
-	var rows = CheckBox.rows ;
-	var len = items.length - 1 ;
-	for(var i = len ; i >= 0 ; i--) {
-		if(!isChecked) { 		
-			if (rows[i].className.indexOf("SelectedItem") > -1) {
-				rows[i].className = rows[i].className.replace("SelectedItem", "") ;
+eXo.mail.CheckBox = {
+	init : function(cont){
+		if(typeof(cont) == "string") cont = document.getElementById(cont) ;
+		var checkboxes = eXo.core.DOMUtil.findDescendantsByClass(cont, "input", "checkbox") ;
+		if(checkboxes.length <=0) return ;
+		checkboxes[0].onclick = this.checkAll ;
+		var len = checkboxes.length ;
+		for(var i = 1 ; i < len ; i ++) {
+			checkboxes[i].onclick = this.check ;
+		}
+	},
+	
+	check : function(){
+		eXo.cs.CheckBox.checkItem(this);
+		var row = eXo.core.DOMUtil.findAncestorByTagName(this,"tr");
+		if(this.checked) eXo.core.DOMUtil.addClass(row,"SelectedItem");
+		else eXo.core.DOMUtil.replaceClass(row,"SelectedItem","");
+	},
+	
+	checkAll : function(){
+		eXo.cs.CheckBox.checkAllItem(this);
+		var table = eXo.core.DOMUtil.findAncestorByTagName(this,"table");
+		var rows = eXo.core.DOMUtil.findDescendantsByClass(table,"tr","MessageItem");
+		var i = rows.length ;
+		if(this.checked){
+			while(i--) {
+				eXo.core.DOMUtil.addClass(rows[i],"SelectedItem");				
 			}
-		} else {
-			if (rows[i].className.indexOf("SelectedItem") < 0) {
-				rows[i].className += " SelectedItem" ;
+		} else{
+			while(i--){
+				eXo.core.DOMUtil.replaceClass(rows[i],"SelectedItem","");				
 			}
 		}
-		if(items[i].checked == isChecked) continue ;
-		items[i].checked = isChecked ;
 	}
 } ;
 
-CheckBox.prototype.check = function() {
-	var isChecked = this.checked ;
-	var tr = this.parentNode.parentNode ;
-	if(!isChecked) {
-		tr.removeAttribute("style") ;
-		tr.className = tr.className.replace("SelectedItem","") ;
-		eXo.mail.CheckBox.checkall.checked = false ;
-	} else {
-	    if (tr.className.indexOf("SelectedItem") < 0) {
-			tr.className += " SelectedItem";
-		}
-		eXo.mail.CheckBox.checkall.checked = eXo.mail.CheckBox.isAll() ;
-	}
-} ;
-
-CheckBox.prototype.isAll = function() {
-	var items = eXo.mail.CheckBox.checkboxes ;
-	var len = items.length ;
-	for(var i = 0 ; i < len ; i ++) {
-		if(!items[i].checked) return false ;
-	}
-	return true ;
-} ;
-
-eXo.mail.CheckBox = new CheckBox() ;
 eXo.mail.UIMailPortlet = new UIMailPortlet();

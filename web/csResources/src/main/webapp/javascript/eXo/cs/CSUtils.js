@@ -17,12 +17,7 @@ CheckBoxManager.prototype.init = function(cont) {
 } ;
 
 CheckBoxManager.prototype.checkAll = function() {
-	var checked = this.checked ;
-	var items = eXo.cs.CheckBox.getItems(this) ;
-	var len = items.length ;
-	for(var i = 1 ; i < len ; i ++) {
-		items[i].checked = checked ;
-	}	
+	eXo.cs.CheckBox.checkAllItem(this);
 } ;
 
 CheckBoxManager.prototype.getItems = function(obj) {
@@ -32,19 +27,32 @@ CheckBoxManager.prototype.getItems = function(obj) {
 } ;
 
 CheckBoxManager.prototype.check = function() {
-	var checkboxes = eXo.cs.CheckBox.getItems(this) ;
-	var len = checkboxes.length ;
-	var state = true ;
-	if (!this.checked) {
-		checkboxes[0].checked = false ;
-	} else {
-		for(var i = 1; i < len ;i++){
-			state = state && checkboxes[i].checked ;
-		}
-		checkboxes[0].checked = state ;
-	}
+	eXo.cs.CheckBox.checkItem(this);
 } ;
 
+CheckBoxManager.prototype.checkAllItem = function(obj){
+	var checked = obj.checked ;
+	var items = eXo.cs.CheckBox.getItems(obj) ;
+	var len = items.length ;
+	for(var i = 1 ; i < len ; i ++) {
+		items[i].checked = checked ;
+	}	
+} ;
+
+CheckBoxManager.prototype.checkItem = function(obj){
+	var checkboxes = eXo.cs.CheckBox.getItems(obj);
+	var len = checkboxes.length;
+	var state = true;
+	if (!obj.checked) {
+		checkboxes[0].checked = false;
+	}
+	else {
+		for (var i = 1; i < len; i++) {
+			state = state && checkboxes[i].checked;
+		}
+		checkboxes[0].checked = state;
+	}
+} ;
 eXo.cs.CheckBox = new CheckBoxManager() ;
 
 /********************* Pane Spliter ******************/
