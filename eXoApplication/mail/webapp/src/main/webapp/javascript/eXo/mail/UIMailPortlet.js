@@ -13,7 +13,7 @@ UIMailPortlet.prototype.showContextMenu = function(compid) {
 	UIContextMenuMail.attach('FolderLink', 'UIFolderListPopupMenu') ;
 	UIContextMenuMail.attach('IconTagHolder', 'UITagListPopupMenu') ;
 	UIContextMenuMail.attach('InboxIcon', 'UIDefaultFolderPopupMenu') ;
-	UIContextMenuMail.attach('DraftsIcon', 'UIDefaultFolderPopupMenu') ;
+	UIContextMenuMail.attach('DraftsIcon', 'UIDefaultFolderPopupMenu') ;	
 	UIContextMenuMail.attach('SentIcon', 'UIDefaultFolderPopupMenu') ;
 	UIContextMenuMail.attach('SpamIcon', 'UIDefaultFolderPopupMenu') ;
 	UIContextMenuMail.attach('TrashIcon', 'UITrashFolderPopupMenu') ;
@@ -23,28 +23,16 @@ UIMailPortlet.prototype.msgPopupMenuCallback = function(evt) {
 	var UIContextMenuMail = eXo.webui.UIContextMenuMail ;
 	var DOMUtil = eXo.core.DOMUtil ;
 	var src = eXo.core.EventManager.getEventTargetByTagName(evt,"tr");
-		
-	var check = DOMUtil.findDescendantsByClass(src, "input", "checkbox") ;
-	if (check[0].checked == false) {
+	if(!DOMUtil.hasClass(src,"SelectedItem")){
 		var tbody = DOMUtil.findAncestorByTagName(src, "tbody") ;
-		var checkboxes = DOMUtil.findDescendantsByClass(tbody, "input", "checkbox") ;
-		var len = checkboxes.length ;
-		for(var i = 0 ; i < len ; i++) {
-			if (checkboxes[i].checked) {
-				var tr = DOMUtil.findAncestorByTagName(checkboxes[i] , "tr");
-				if (tr.className.indexOf("SelectedItem") > -1) {
-					tr.className  = tr.className.replace("SelectedItem", "");
-				}
-				checkboxes[i].checked = false;
-			}
-		}
-		check[0].checked = true ;
-		var str = DOMUtil.findAncestorByTagName(check[0] , "tr");
-		str.className += " SelectedItem";
+		eXo.mail.CheckBox.uncheckAll(tbody);
 	}
-	id = src.getAttribute("msgId");
+	var check = DOMUtil.findFirstDescendantByClass(src, "input", "checkbox") ;
+	check.checked = true;
+	DOMUtil.addClass(src,"SelectedItem");
+	var id = src.getAttribute("msgId");
 	eXo.mail.UIMailPortlet.changeAction(UIContextMenuMail.menuElement, id) ;
-} ;
+};
 
 UIMailPortlet.prototype.changeAction = function(menu,id){
 	var actions = eXo.core.DOMUtil.findDescendantsByTagName(menu, "a") ;
@@ -257,7 +245,7 @@ UIMailPortlet.prototype.showHidePreviewPane = function(layout) {
 		Browser.setCookie("uiMessageListResizableArea", "block", 30)
 		Browser.setCookie("ResizeReadingPane", "block", 30)
 	}
-}
+};
 
 UIMailPortlet.prototype.showHideMessageHeader = function(obj) {
 	var DOMUtil = eXo.core.DOMUtil ;
@@ -306,7 +294,7 @@ UIMailPortlet.prototype.showHideMessageDetails = function(obj) {
 	    obj.style.display = "none";
 	    expand.style.display= "block";
 	}
-}
+};
 
 UIMailPortlet.prototype.isAllday = function(form) {	
 	if (typeof(form) == "string") form = document.getElementById(form) ;		
@@ -621,6 +609,17 @@ eXo.mail.CheckBox = {
 				eXo.core.DOMUtil.replaceClass(rows[i],"SelectedItem","");				
 			}
 		}
+	},
+	uncheckAll : function(cont){
+		var rows = eXo.core.DOMUtil.findDescendantsByClass(cont,"tr","MessageItem");
+		var checkboxes = eXo.core.DOMUtil.findDescendantsByClass(cont,"input","checkbox");
+		var i = checkboxes.length ;
+		while(i--){
+			if(!checkboxes[i].checked) continue;
+			checkboxes[i].checked = false ;
+			eXo.core.DOMUtil.replaceClass(rows[i],"SelectedItem","");	
+		}
 	}
 } ;
+
 eXo.mail.UIMailPortlet = new UIMailPortlet();
