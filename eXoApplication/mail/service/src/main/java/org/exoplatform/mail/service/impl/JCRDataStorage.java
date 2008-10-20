@@ -618,7 +618,11 @@ public class JCRDataStorage {
       mailHome.save();
       newAccount.setProperty(Utils.EXO_ID, accId);
     } else { // gets the specified account
-      newAccount = mailHome.getNode(accId);
+      try {
+        newAccount = mailHome.getNode(accId);
+      } catch (Exception e) {
+        return;
+      }
     }
     if (newAccount != null) {
       // add some properties
@@ -980,8 +984,11 @@ public class JCRDataStorage {
       return true;
 
     } catch (Exception e) {
-      e.printStackTrace();
-      msgHomeNode.refresh(true);
+      try {
+        msgHomeNode.refresh(true);
+      } catch(Exception ex) { 
+        logger.warn(" [WARNING] Can't refresh.");
+      }
       logger.warn(" [WARNING] Cancel saving message to JCR.");
       return false;
     }
