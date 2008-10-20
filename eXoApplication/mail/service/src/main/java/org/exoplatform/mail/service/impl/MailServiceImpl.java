@@ -148,6 +148,7 @@ public class MailServiceImpl implements MailService {
 
   public void removeAccount(SessionProvider sProvider, String username, String accountId)
   throws Exception {
+    stopAllJobs(sProvider, username, accountId);
     storage_.removeAccount(sProvider, username, accountId);
   }
 
@@ -489,6 +490,12 @@ public class MailServiceImpl implements MailService {
       checkingInfo.setRequestStop(true);
       System.out.println("Requested check loop to stop ");
     } 
+  }
+  
+  private void stopAllJobs(SessionProvider sProvider, String username, String accountId) throws Exception {
+    JobInfo info = CheckMailJob.getJobInfo(username, accountId);
+    stopCheckMail(username, accountId);
+    schedulerService_.removeJob(info);
   }
 
   /**
