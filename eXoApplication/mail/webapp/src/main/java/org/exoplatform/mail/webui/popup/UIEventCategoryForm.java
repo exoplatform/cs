@@ -58,6 +58,7 @@ public class UIEventCategoryForm extends UIForm {
   final private static String DESCRIPTION = "description" ;
   private boolean isAddNew_ = true ;
   private EventCategory eventCategory_ = null ;
+  protected String categoryName = null ;
   public UIEventCategoryForm() throws Exception{
     addUIFormInput(new UIFormStringInput(EVENT_CATEGORY_NAME, EVENT_CATEGORY_NAME, null).addValidator(MandatoryValidator.class)) ;
     addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, null)) ;
@@ -122,6 +123,7 @@ public class UIEventCategoryForm extends UIForm {
         UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class);
         uiEventForm.setSelectedTab(UIEventForm.TAB_EVENTDETAIL) ;
         uiEventForm.refreshCategory() ;
+        uiEventForm.setSelectedCategory(uiForm.categoryName);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
         uiPopupAction.deActivate() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm) ;
