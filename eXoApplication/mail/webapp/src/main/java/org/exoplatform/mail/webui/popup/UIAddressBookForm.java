@@ -18,10 +18,12 @@ package org.exoplatform.mail.webui.popup;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.contact.service.Contact;
+import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.download.DownloadService;
@@ -64,7 +66,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
   public final static String ALL_GROUP = "All group".intern();
   public final static String SELECT_GROUP = "select-group".intern();
   private Contact selectedContact ;
-  Map<String, Contact> contactMap_ = new HashMap<String, Contact>() ;
+  LinkedHashMap<String, Contact> contactMap_ = new LinkedHashMap<String, Contact>() ;
   List<Contact> contactList_ = new ArrayList<Contact>();
   
   public UIAddressBookForm() throws Exception {
@@ -112,12 +114,18 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
     String username = MailUtils.getCurrentUser();
     ContactService contactSrv = getApplicationComponent(ContactService.class);
     List<Contact> contactList = new ArrayList<Contact>();
-    //TODO should be check groupId.trim().length > 0 
-    if (groupId != null && groupId != "") contactList = contactSrv.getContactPageListByGroup(SessionProviderFactory.createSystemProvider(), username, groupId).getAll();
-    else contactList = contactSrv.getContactPageListByGroup(SessionProviderFactory.createSystemProvider(), username, contactSrv.getGroups(SessionProviderFactory.createSystemProvider(), username).get(0).getId()).getAll();
+    ContactFilter ctFilter = new ContactFilter() ;
+    ctFilter.setOrderBy("fullName");
+    ctFilter.setAscending(true);
+    if (groupId != null && groupId.trim().length() > 0 ) {
+      ctFilter.setCategories(new String[] {groupId});
+      contactList = contactSrv.searchContact(SessionProviderFactory.createSystemProvider(), username, ctFilter).getAll();
+    } else {
+      ctFilter.setCategories(new String[] {contactSrv.getGroups(SessionProviderFactory.createSystemProvider(), username).get(0).getId()});
+      contactList = contactSrv.searchContact(SessionProviderFactory.createSystemProvider(), username, ctFilter).getAll();
+    }
     contactMap_.clear();
     for (Contact ct : contactList) contactMap_.put(ct.getId(), ct);
-
     contactList_ = new ArrayList<Contact>(contactMap_.values());
     if (contactList_.size() > 0) selectedContact = contactList_.get(0);
     else selectedContact = null;
