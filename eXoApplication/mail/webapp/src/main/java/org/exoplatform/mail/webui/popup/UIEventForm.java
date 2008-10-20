@@ -563,6 +563,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
       UIPopupActionContainer uiPopupContainer = uiChildPopup.activate(UIPopupActionContainer.class, 470) ;
       UIEventCategoryForm uiEventCategoryForm = uiPopupContainer.createUIComponent(UIEventCategoryForm.class, null, null) ;
       uiPopupContainer.addChild(uiEventCategoryForm) ;
+      uiEventCategoryForm.categoryName = uiForm.getEventCategory() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
     }
   }

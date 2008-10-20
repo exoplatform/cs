@@ -958,7 +958,9 @@ public class JCRDataStorage{
     reminderNode.setProperty(Utils.EXO_EMAIL, reminder.getEmailAddress()) ;
     reminderNode.setProperty(Utils.EXO_IS_REPEAT, reminder.isRepeat()) ;
     reminderNode.setProperty(Utils.EXO_IS_OVER, false) ;
-    reminderNode.setProperty(Utils.EXO_OWNER, reminder.getReminderOwner()) ;
+    if(reminder.getReminderType().equals(Reminder.TYPE_POPUP)) {
+      reminderNode.setProperty(Utils.EXO_OWNER, reminder.getReminderOwner()) ;
+    }
     java.util.Calendar cal = new GregorianCalendar() ;
     if(reminder.getFromDateTime() != null) {
       cal.setTime(reminder.getFromDateTime()) ;
