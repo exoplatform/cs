@@ -638,6 +638,7 @@ public class JCRDataStorage {
       newAccount.setProperty(Utils.EXO_PLACESIGNATURE, account.getPlaceSignature());
       if (account.getLastCheckedDate() != null)
         newAccount.setProperty(Utils.EXO_LAST_CHECKED_TIME, account.getLastCheckedDate().getTime());
+      else newAccount.setProperty(Utils.EXO_LAST_CHECKED_TIME, new Date().getTime());
       Iterator<String> it = account.getServerProperties().keySet().iterator();
       ArrayList<String> values = new ArrayList<String>(account.getServerProperties().size());
       while (it.hasNext()) {
