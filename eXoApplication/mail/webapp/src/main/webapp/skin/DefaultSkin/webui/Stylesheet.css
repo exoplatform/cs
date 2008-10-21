@@ -1833,4 +1833,10 @@
 
 .UIMailPortlet .UITagForm .UIForm .UIFormGrid td.FieldLabel {
 	white-space: normal;
+}=======
+
+.UIMailPortlet .Actions .UIPopupCategory {
+	top: 18px;
+	left: -104px;	
+
 }

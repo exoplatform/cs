@@ -263,7 +263,7 @@
   									<div class="DownArrow1Icon"><span></span></div>
   									<div class="ShowHideTitle" onclick="javascript:eXo.mail.UIMailPortlet.showHideMessageHeader(this)" showhideheader="<%=_ctx.appRes(uicomponent.id+ '.label.show-details') %> ,<%=_ctx.appRes(uicomponent.id+ '.label.hide-details') %>"><%=_ctx.appRes(uicomponent.id+ ".label.show-details") %></div>
   									<div class="MonthDate"></div>
-  									<div class="Actions" title="<%=_ctx.appRes(uicomponent.id+ '.label.action-on-this-messge') %>" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+  									<div class="Actions" title="<%=_ctx.appRes(uicomponent.id+ '.label.action-on-this-messge') %>" onclick="eXo.mail.UIMailPortlet.showMessageAction(this, event);">
                     <% /*Begin Popup Menu*/ %>
                       <div style="position: relative;">
                         <div class="UIPopupCategory" style="display: none;">
