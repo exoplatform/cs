@@ -166,6 +166,7 @@ public class UITags extends UIComponent {
       ContactUtils.getContactService()
         .removeTag(SessionProviderFactory.createSystemProvider(), ContactUtils.getCurrentUser(), tagId) ;
       UIWorkingContainer uiWorkingContainer = uiTags.getAncestorOfType(UIWorkingContainer.class) ;
+      uiWorkingContainer.getAncestorOfType(UIContactPortlet.class).cancelAction() ;
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ;
       if (tagId.equals(uiTags.getSelectedTag())) {
         uiTags.setSelectedTag(null) ;
