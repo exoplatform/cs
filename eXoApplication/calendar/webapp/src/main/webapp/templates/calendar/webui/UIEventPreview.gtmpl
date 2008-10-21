@@ -91,7 +91,7 @@ uiform.begin() ;
 	              <tr>
 	               <td ></td>
 	               <td class="Text"><%=uiform.getLabel('Description')%></td>
-	               <td class="Text"><pre><%=(CalendarUtils.isEmpty(event.getDescription()))? "" : event.getDescription()%></pre></td>
+	               <td class="Text"><pre class="ViewDescription"><%=(CalendarUtils.isEmpty(event.getDescription()))? "" : event.getDescription()%></pre></td>
 	              </tr> 
 	              <tr>
 	               <td ></td>
