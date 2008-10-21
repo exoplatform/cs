@@ -1821,3 +1821,9 @@
 .UIMailPortlet .UIComposeForm .MessageAddress input.checkbox {
 	width: 16px;
 }
+
+.UIMailPortlet .Actions .UIPopupCategory {
+	top: 18px;
+	left: -104px;	
+
+}

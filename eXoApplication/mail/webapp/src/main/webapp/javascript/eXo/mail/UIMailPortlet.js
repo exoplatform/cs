@@ -295,6 +295,19 @@ UIMailPortlet.prototype.showHideMessageDetails = function(obj) {
 	    expand.style.display= "block";
 	}
 };
+UIMailPortlet.prototype.showMessageAction = function(obj,evt){
+	var DOMUtil = eXo.core.DOMUtil ;
+	eXo.webui.UIPopupSelectCategory.show(obj,evt) ;
+	var menu = DOMUtil.findFirstDescendantByClass(obj,"div","UIPopupCategory");
+	var uiResizableBlock = DOMUtil.findAncestorByClass(obj,"UIResizableBlock");
+	if(eXo.core.Browser.isIE6() && uiResizableBlock){
+		eXo.mail.UIMailPortlet.actionMenuTop = menu.offsetTop + uiResizableBlock.scrollTop ;
+		uiResizableBlock.onscroll = function(){
+			menu.style.top = (eXo.mail.UIMailPortlet.actionMenuTop - this.scrollTop) + "px";
+		}
+	}
+}
+eXo.webui.UIPopupSelectCategory.show
 
 UIMailPortlet.prototype.isAllday = function(form) {	
 	if (typeof(form) == "string") form = document.getElementById(form) ;		
