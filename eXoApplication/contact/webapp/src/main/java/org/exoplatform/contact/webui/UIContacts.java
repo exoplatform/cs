@@ -527,6 +527,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   static public class DNDContactsToTagActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource();
+      uiContacts.getAncestorOfType(UIContactPortlet.class).cancelAction() ;
       String tagId = event.getRequestContext().getRequestParameter(OBJECTID);   
       @SuppressWarnings("unused")
       String type = event.getRequestContext().getRequestParameter("contactType");
@@ -664,6 +665,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       String addressBookId = event.getRequestContext().getRequestParameter(OBJECTID);
       UIAddressBooks uiAddressBooks = uiContacts.getAncestorOfType(
           UIWorkingContainer.class).findFirstComponentOfType(UIAddressBooks.class) ; 
+      uiAddressBooks.getAncestorOfType(UIContactPortlet.class).cancelAction() ;
       UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
       ContactService contactService = ContactUtils.getContactService() ;
       String username = ContactUtils.getCurrentUser() ;
@@ -823,6 +825,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       List<String> contactIds = new ArrayList<String>();
       UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
       UIWorkingContainer uiWorkingContainer = uiContacts.getAncestorOfType(UIWorkingContainer.class) ;
+      uiWorkingContainer.getAncestorOfType(UIContactPortlet.class).cancelAction() ;
       UIAddressBooks addressBooks = uiWorkingContainer.findFirstComponentOfType(UIAddressBooks.class) ;
       if (!ContactUtils.isEmpty(contactId) && !contactId.toString().equals("null")) {
         contactIds.add(contactId) ;

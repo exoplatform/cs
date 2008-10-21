@@ -481,6 +481,7 @@ public class UIAddressBooks extends UIComponent {
     public void execute(Event<UIAddressBooks> event) throws Exception {
       UIAddressBooks uiAddressBook = event.getSource();
       UIWorkingContainer workingContainer = uiAddressBook.getAncestorOfType(UIWorkingContainer.class);
+      workingContainer.getAncestorOfType(UIContactPortlet.class).cancelAction() ;
       UIContacts uiContacts = workingContainer.findFirstComponentOfType(UIContacts.class) ;
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID);
       ContactService contactService = ContactUtils.getContactService();
