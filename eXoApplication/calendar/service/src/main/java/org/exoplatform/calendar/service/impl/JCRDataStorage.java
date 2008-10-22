@@ -56,6 +56,10 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.xml.PortalContainerInfo;
+import org.exoplatform.services.jcr.access.AccessControlEntry;
+import org.exoplatform.services.jcr.access.PermissionType;
+import org.exoplatform.services.jcr.access.SystemIdentity;
+import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 
@@ -1165,6 +1169,15 @@ public class JCRDataStorage{
   private void addAttachment(Node eventNode, Attachment attachment, boolean isNew) throws Exception {
     Node attachHome ;
     Node attachNode ;
+    //fix load image on IE6 UI
+    ExtendedNode extNode = (ExtendedNode)eventNode ;
+    if (extNode.canAddMixin("exo:privilegeable")) extNode.addMixin("exo:privilegeable");
+    String[] arrayPers = {PermissionType.READ, PermissionType.ADD_NODE, PermissionType.SET_PROPERTY, PermissionType.REMOVE} ;
+    extNode.setPermission(SystemIdentity.ANY, arrayPers) ;
+    List<AccessControlEntry> permsList = extNode.getACL().getPermissionEntries() ;   
+    for(AccessControlEntry accessControlEntry : permsList) {
+      extNode.setPermission(accessControlEntry.getIdentity(), arrayPers) ;      
+    } 
     try {
       attachHome = eventNode.getNode(Utils.ATTACHMENT_NODE) ;
     } catch (Exception e) {
