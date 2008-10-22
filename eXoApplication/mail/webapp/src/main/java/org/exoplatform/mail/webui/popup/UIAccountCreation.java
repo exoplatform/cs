@@ -16,7 +16,6 @@
  */
 package org.exoplatform.mail.webui.popup;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -311,7 +310,6 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       acc.setEmailReplyAddress(replyMail) ;
       acc.setSignature(signature) ;
       acc.setIncomingUser(incomingUserName);
-      acc.setLastCheckedDate(new Date());
       
       if (isSavePass || uiAccWs5.isGetmail()) acc.setIncomingPassword(incomingPassword);
       else acc.setIncomingPassword(null);
