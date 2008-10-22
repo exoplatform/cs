@@ -625,6 +625,7 @@ public class MailServiceImpl implements MailService {
           if (!folder.exists()) {
             logger.warn(" #### Folder " + incomingFolder + " is not exists !");
             info.setStatusMsg("Folder " + incomingFolder + " is not exists");
+            store.close();
             continue;
           } else {
             logger.warn(" #### Getting mails from folder " + incomingFolder + " !");
@@ -798,13 +799,11 @@ public class MailServiceImpl implements MailService {
           else
             info.setStatusMsg("Check mail finished !");
           
-          
-          info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);
-
-          logger.warn("/////////////////////////////////////////////////////////////");
-          logger.warn("/////////////////////////////////////////////////////////////");
-
         }
+        info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);
+
+        logger.warn("/////////////////////////////////////////////////////////////");
+        logger.warn("/////////////////////////////////////////////////////////////");
       } catch (Exception e) {
         logger.error("Error while checking emails for " + username + " on account " + accountId, e);
       }
