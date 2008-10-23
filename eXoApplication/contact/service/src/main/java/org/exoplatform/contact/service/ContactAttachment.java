@@ -41,6 +41,16 @@ public class ContactAttachment {
   private String workspace ;
   private byte[] imageBytes ;
   
+  public String getDataPath() throws Exception {
+    Node attachmentData ;
+    try{
+      attachmentData = (Node)getSesison().getItem(getId()) ;      
+    }catch (ItemNotFoundException e) {
+      e.printStackTrace() ;
+      return null ;
+    }
+    return attachmentData.getPath() ;
+  }
   public String getId() { return id ; }
   public void   setId(String s) { id = s ; }
   

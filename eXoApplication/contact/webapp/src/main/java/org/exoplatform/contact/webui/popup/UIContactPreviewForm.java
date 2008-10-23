@@ -22,8 +22,9 @@ import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
-import org.exoplatform.download.DownloadService;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.service.Account;
+import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -58,11 +59,15 @@ public class UIContactPreviewForm extends UIForm implements UIPopupComponent {
   public void setPrintForm(boolean isPrint) { isPrintForm = isPrint ; }
   public boolean isPrintForm() { return isPrintForm ; }
   
-  public String getImageSource() throws Exception {
-    DownloadService dservice = getApplicationComponent(DownloadService.class) ;
-    return ContactUtils.getImageSource(contact_, dservice) ; 
+  public String getPortalName() {
+    PortalContainer pcontainer =  PortalContainer.getInstance() ;
+    return pcontainer.getPortalContainerInfo().getContainerName() ;  
   }
-
+  public String getRepository() throws Exception {
+    RepositoryService rService = getApplicationComponent(RepositoryService.class) ;    
+    return rService.getCurrentRepository().getConfiguration().getName() ;
+  }
+  
   public String[] getActions() { return new String[] {"Cancel"} ; }
   public void activate() throws Exception { }
   public void deActivate() throws Exception { }

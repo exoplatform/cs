@@ -4,8 +4,6 @@
  **************************************************************************/
 package org.exoplatform.contact;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -14,16 +12,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-
-import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 
-import org.exoplatform.contact.service.Contact;
-import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.download.DownloadService;
-import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -35,8 +27,8 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 
 /**
  * Created by The eXo Platform SARL
- * Author : Hung Nguyen Quang
- *          hung.nguyen@exoplatform.com
+ * Author : Hung Hoang Quang
+ *          hung.hoang@exoplatform.com
  * Jul 11, 2007  
  */
 public class ContactUtils {
@@ -45,7 +37,8 @@ public class ContactUtils {
   public static final String HTTP = "http://" ; 
   public static String[] specialString = {"!", "#", "%", "&"
                                             , ":", ">", "<", "~", "`", "]", "'", "/", "-"} ;
-
+  public static String tempId = "temp" ;
+  
   public static String getDisplayAdddressShared(String sharedUserId, String addressName) {
     return sharedUserId + " - " + addressName ;
   }
@@ -123,27 +116,6 @@ public class ContactUtils {
     return organizationService.getGroupHandler().findGroupById(groupId).getGroupName() ;
   }
   
-  public static String getImageSource(Contact contact, DownloadService dservice) throws Exception {    
-    ContactAttachment contactAttachment = contact.getAttachment();
-    if (contactAttachment != null) {
-      try {
-        InputStream input = contactAttachment.getInputStream() ;
-        byte[] imageBytes = null ;
-        if (input != null) {
-          imageBytes = new byte[input.available()] ;
-          input.read(imageBytes) ;
-          ByteArrayInputStream byteImage = new ByteArrayInputStream(imageBytes) ;
-          InputStreamDownloadResource dresource = new InputStreamDownloadResource(byteImage, "image") ;
-          dresource.setDownloadName(contactAttachment.getFileName()) ;
-          return  dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;        
-        }
-      } catch (PathNotFoundException ex) {
-        return null ;
-      }
-    }
-    return null ;
-  }
-
   public static boolean isPublicGroup(String groupId) throws Exception {
     if (getUserGroups().contains(groupId)) return true ;
     return false ;

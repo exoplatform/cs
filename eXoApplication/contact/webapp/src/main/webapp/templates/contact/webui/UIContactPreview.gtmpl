@@ -4,6 +4,7 @@
 	import org.exoplatform.contact.ContactUtils;
 	String compId = uicomponent.getId() ;
 	Contact contact = uicomponent.getContact();
+	import org.exoplatform.contact.service.ContactAttachment;
 %>
 
 <div class="UIContactPreview" id="<%=uicomponent.getId()%>">
@@ -36,12 +37,16 @@
 						
 							<div class="ContactPreviewContainer"	>		
 								<% 
-								String img = uicomponent.getImageSource();
-			  					if (ContactUtils.isEmpty(img)) {
-			  						img = "/contact/skin/DefaultSkin/webui/background/Img2.gif" ;
-			  					}
+								String imageLink = "/contact/skin/DefaultSkin/webui/background/Img2.gif" ;
+								ContactAttachment att = contact.getAttachment() ;
+								if (att != null) {					
+								
+										
+									imageLink = "/"+uicomponent.getPortalName()+"/rest/jcr/" +uicomponent.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
+									imageLink = imageLink + "?rnd=" + System.currentTimeMillis();
+								}
 			  				%>
-								<img src="$img" width=63 height=81 class="Avatar"/>
+								<img src="$imageLink" width=63 height=81 class="Avatar"/>
 								<div class="Member">
 									<div class="State"><%= ContactUtils.encodeHTML(contact.getFullName()) %></div>
 									<% if (!ContactUtils.isEmpty(contact.getJobTitle())) { %>

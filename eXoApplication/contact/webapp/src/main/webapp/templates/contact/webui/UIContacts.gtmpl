@@ -1,4 +1,5 @@
  <%
+ 	import org.exoplatform.contact.service.ContactAttachment;
  	import org.exoplatform.contact.service.impl.JCRDataStorage;
 	import org.exoplatform.contact.service.ContactGroup;
 	import org.exoplatform.contact.service.Tag;
@@ -653,10 +654,16 @@
 			  	</div>
 			  	<div class="ContainerVCards">
 			  		<% 
-			  		dservice = uicomponent.getDownloadService() ;
-			  		imageLink = ContactUtils.getImageSource(contact, dservice) ;
+			  		String img = "/contact/skin/DefaultSkin/webui/background/Img2.gif" ;
+								ContactAttachment att = contact.getAttachment() ;
+								if (att != null) {					
+								
+										
+									img = "/"+uicomponent.getPortalName()+"/rest/jcr/" +uicomponent.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
+									img = img + "?rnd=" + System.currentTimeMillis();
+								}
 			  		%>
-						<img src="<%=(imageLink == null ? "/contact/skin/DefaultSkin/webui/background/Img2.gif": imageLink)%>" width=63 height=81 class="AvatasIcon"/>	
+						<img src="$img" width=63 height=81 class="AvatasIcon"/>	
 			  		<div class="WorkContainerVCards">
 			  		<% if (!ContactUtils.isEmpty(contact.getJobTitle())) { %>
 			  		  <div class="JobMember"><%= ContactUtils.encodeHTML(contact.getJobTitle())%></div>
@@ -808,10 +815,16 @@
 			  	</div>
 			  	<div class="ContainerVCards">
 			  		<% 
-			  		dservice = uicomponent.getDownloadService() ;
-			  		imageLink = ContactUtils.getImageSource(contact, dservice) ;
+			  		img = "/contact/skin/DefaultSkin/webui/background/Img2.gif" ;
+								att = contact.getAttachment() ;
+								if (att != null) {					
+								
+										
+									img = "/"+uicomponent.getPortalName()+"/rest/jcr/" +uicomponent.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
+									img = img + "?rnd=" + System.currentTimeMillis();
+								}
 			  		%>
-						<img src="<%=(ContactUtils.isEmpty(imageLink) ? "/contact/skin/DefaultSkin/webui/background/Img2.gif": imageLink)%>" width=63 height=81 class="AvatasIcon"/>
+						<img src="$img" width=63 height=81 class="AvatasIcon"/>
 			  		<div class="WorkContainerVCards">
 			  		<% if (!ContactUtils.isEmpty(contact.getJobTitle())) { %>
 			  		  <div class="JobMember"><%= ContactUtils.encodeHTML(contact.getJobTitle())%></div>

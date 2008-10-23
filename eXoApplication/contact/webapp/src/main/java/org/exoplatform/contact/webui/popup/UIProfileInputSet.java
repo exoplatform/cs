@@ -26,9 +26,12 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.exoplatform.contact.ContactUtils;
+import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.Utils;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
+import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.form.UIForm;
@@ -69,7 +72,11 @@ public class UIProfileInputSet extends UIFormInputWithActions {
   private byte[] imageBytes = null;
   private String fileName = null ;
   private String imageMimeType = null ;
+  private Contact contact_ = null ;
   
+  public void setContact(Contact contact) { contact_ = contact ;}
+  public Contact getContact() { return contact_ ; }
+
   public UIProfileInputSet(String id) throws Exception {
     super(id) ;  
     setComponentConfig(getClass(), null) ;  
@@ -213,6 +220,7 @@ public class UIProfileInputSet extends UIFormInputWithActions {
   protected void setFileName(String name) { fileName = name ; }
   protected String getFileName() {return fileName ;}
 
+  // delete
   protected String getImageSource() throws Exception {    
     if(imageBytes == null || imageBytes.length == 0) return null;
     ByteArrayInputStream byteImage = new ByteArrayInputStream(imageBytes) ;    

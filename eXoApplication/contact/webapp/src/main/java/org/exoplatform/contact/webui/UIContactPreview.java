@@ -22,8 +22,9 @@ import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.webui.popup.UIComposeForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
-import org.exoplatform.download.DownloadService;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.service.Account;
+import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -55,11 +56,16 @@ public class UIContactPreview extends UIComponent  {
 
   public void setIsMaximized(boolean isMaximize) { isMaximized_ = isMaximize ; }
   public boolean getIsMaximize() { return isMaximized_ ; }
-  
-  public String getImageSource() throws Exception {
-    return ContactUtils.getImageSource(contact_, getApplicationComponent(DownloadService.class)) ; 
-  }
 
+  public String getPortalName() {
+    PortalContainer pcontainer =  PortalContainer.getInstance() ;
+    return pcontainer.getPortalContainerInfo().getContainerName() ;  
+  }
+  public String getRepository() throws Exception {
+    RepositoryService rService = getApplicationComponent(RepositoryService.class) ;    
+    return rService.getCurrentRepository().getConfiguration().getName() ;
+  }
+  
   static public class SendEmailActionListener extends EventListener<UIContactPreview> {
     public void execute(Event<UIContactPreview> event) throws Exception {
       UIContactPreview uiContactPreview = event.getSource() ;

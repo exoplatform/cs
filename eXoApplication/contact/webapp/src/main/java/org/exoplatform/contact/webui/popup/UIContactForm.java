@@ -34,7 +34,9 @@ import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContactPreview;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UIWorkingContainer;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -96,6 +98,7 @@ public class UIContactForm extends UIFormTabPane {
   
   private Contact contact_ = null ;
   private boolean isNew_ = true;
+  public Contact getContact() { return contact_ ; }
   public UIContactForm() throws Exception {
     super("UIContactForm");
     UIProfileInputSet ProfileTab = new UIProfileInputSet(INPUT_PROFILETAB) ;
@@ -135,6 +138,16 @@ public class UIContactForm extends UIFormTabPane {
   public String[] getActions() { return new String[] {"Save", "Cancel"} ; }  
   public void setNew(boolean isNew) { isNew_ = isNew ; }
 
+  
+  public String getPortalName() {
+    PortalContainer pcontainer =  PortalContainer.getInstance() ;
+    return pcontainer.getPortalContainerInfo().getContainerName() ;  
+  }
+  public String getRepository() throws Exception {
+    RepositoryService rService = getApplicationComponent(RepositoryService.class) ;    
+    return rService.getCurrentRepository().getConfiguration().getName() ;
+  }
+  
   public void setValues(Contact contact) throws Exception {
     contact_ = contact ;
     UIProfileInputSet profileTab = getChildById(INPUT_PROFILETAB) ;
@@ -147,7 +160,10 @@ public class UIContactForm extends UIFormTabPane {
     profileTab.setFieldJobName(contact.getJobTitle());
     profileTab.setFieldEmail(contact.getEmailAddress());   
     ContactAttachment contactAttachment = contact.getAttachment();
-    if (contactAttachment != null) profileTab.setImage(contactAttachment.getInputStream()) ;
+    if (contactAttachment != null) {
+      profileTab.setContact(contact) ;
+      //profileTab.setImage(contactAttachment.getInputStream()) ;
+    }
     else profileTab.setImage(null) ;
     
     getUIStringInput(FIELD_WORKADDRESS_INPUT).setValue(contact.getWorkAddress());
@@ -289,7 +305,8 @@ public class UIContactForm extends UIFormTabPane {
         .getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class) ;
         if (uiAddressBooks.getSharedGroups().containsKey(category)) {
           if (uiAddressBooks.havePermission(category)) {
-            contactService.saveContactToSharedAddressBook(username, category, contact, true) ;          
+            contactService.saveContactToSharedAddressBook(username, category, contact, true) ;   
+            contact = contactService.getSharedContactAddressBook(username, contact.getId()) ;
             contact.setContactType(JCRDataStorage.SHARED) ;            
           } else {
             uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.removedPer", null, 
@@ -298,7 +315,8 @@ public class UIContactForm extends UIFormTabPane {
             return ;
           }          
         } else if (uiAddressBooks.getPrivateGroupMap().containsKey(category)){
-          contactService.saveContact(sessionProvider, username, contact, true);          
+          contactService.saveContact(sessionProvider, username, contact, true);  
+          contact = contactService.getContact(sessionProvider, username, contact.getId()) ;
           contact.setContactType(JCRDataStorage.PRIVATE) ;
         } else {
           uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.address-deleted", null,
@@ -311,12 +329,16 @@ public class UIContactForm extends UIFormTabPane {
           String contactType = contact.getContactType() ;
           if (contactType.equals(JCRDataStorage.PRIVATE)) {
             contactService.saveContact(sessionProvider, username, contact, false) ;
+            contact = contactService.getContact(sessionProvider, username, contact.getId()) ;
+            contact.setContactType(JCRDataStorage.PRIVATE) ;
           } else if (contactType.equals(JCRDataStorage.SHARED)) {
             UIAddressBooks uiAddressBooks = uiContactForm
               .getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class) ;
             if ( uiAddressBooks.getSharedGroups().containsKey(contact.getAddressBook()[0])) {
               if (uiAddressBooks.havePermission(contact.getAddressBook()[0]) || uiContacts.havePermission(contact)) {
-                contactService.saveContactToSharedAddressBook(username, contact.getAddressBook()[0], contact, false) ;                
+                contactService.saveContactToSharedAddressBook(username, contact.getAddressBook()[0], contact, false) ; 
+                contactService.getSharedContactAddressBook(username, contact.getId()) ;
+                contact.setContactType(JCRDataStorage.SHARED) ;
               } else {
                 uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.removedPer", null, 
                     ApplicationMessage.WARNING)) ;
@@ -327,7 +349,8 @@ public class UIContactForm extends UIFormTabPane {
               Contact sharedContact = contactService
                 .getSharedContact(SessionProvider.createSystemProvider(), username, contact.getId()) ;                
               if (uiContacts.havePermission(sharedContact)) {
-                contactService.saveSharedContact(username, contact) ;                              
+                contactService.saveSharedContact(username, contact) ;   
+                contact = contactService.getSharedContact(SessionProvider.createSystemProvider(), username, contact.getId()) ;
               } else {
                 uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.removedPer", null, 
                     ApplicationMessage.WARNING)) ;
@@ -343,6 +366,11 @@ public class UIContactForm extends UIFormTabPane {
           return ;
         }         
       }
+      List<String> tempContact = new ArrayList<String>() ;
+      tempContact.add(ContactUtils.tempId) ;
+      try {
+        contactService.removeContacts(sessionProvider, username, tempContact) ;
+      } catch (PathNotFoundException e) {}
       String selectedContact = uiContacts.getSelectedContact() ;
       //if(uiContacts.isDisplaySearchResult()) {
       List<Contact> contacts = new ArrayList<Contact>() ;
