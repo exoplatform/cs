@@ -430,11 +430,11 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       CalendarService calService = CalendarUtils.getCalendarService() ;
       String username = CalendarUtils.getCurrentUser() ;
       for (CalendarEvent ce : events) {
-        if(CalendarUtils.isEmpty(toCalendarId )) toCalendarId = ce.getCalendarId() ;
-        if(CalendarUtils.isEmpty(toType)) toType = ce.getCalType() ;
+        /*if(CalendarUtils.isEmpty(toCalendarId )) toCalendarId = ce.getCalendarId() ;
+        if(CalendarUtils.isEmpty(toType)) toType = ce.getCalType() ;*/
         List<CalendarEvent> list = new ArrayList<CalendarEvent>(){} ;
         list.add(ce) ;
-        calService.moveEvent(getSession(), ce.getCalendarId(), toCalendarId, ce.getCalType(), toType, list, username) ;
+        calService.moveEvent(getSession(), ce.getCalendarId(), ce.getCalendarId(), ce.getCalType(), ce.getCalType(), list, username) ;
       }
     }
     protected Calendar getBeginDay(Calendar cal) {
