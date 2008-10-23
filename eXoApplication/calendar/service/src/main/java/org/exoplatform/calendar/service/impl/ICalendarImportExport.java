@@ -37,6 +37,7 @@ import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.property.Attendee;
 import net.fortuna.ical4j.model.property.CalScale;
 import net.fortuna.ical4j.model.property.Categories;
+import net.fortuna.ical4j.model.property.Clazz;
 import net.fortuna.ical4j.model.property.Completed;
 import net.fortuna.ical4j.model.property.Description;
 import net.fortuna.ical4j.model.property.Due;
@@ -137,6 +138,9 @@ public class ICalendarImportExport implements CalendarImportExport{
           event.getProperties().getProperty(Property.STATUS).getParameters()
           .add(net.fortuna.ical4j.model.parameter.Value.TEXT);
         }
+        if(exoEvent.isPrivate()) event.getProperties().add(new Clazz(Clazz.PRIVATE.getValue())) ;
+        else event.getProperties().add(new Clazz(Clazz.PUBLIC.getValue())) ;
+        event.getProperties().getProperty(Property.CLASS).getParameters().add(net.fortuna.ical4j.model.parameter.Value.TEXT);
         String[] attendees = exoEvent.getInvitation() ;
         if(attendees != null && attendees.length > 0) {
           for(int i = 0; i < attendees.length; i++ ) {
@@ -309,7 +313,7 @@ public class ICalendarImportExport implements CalendarImportExport{
         if(event.getEndDate() != null) exoEvent.setToDateTime(event.getEndDate().getDate()) ;
         if(event.getLocation() != null) exoEvent.setLocation(event.getLocation().getValue()) ;
         if(event.getPriority() != null) exoEvent.setPriority(event.getPriority().getValue()) ;
-        exoEvent.setPrivate(true) ;
+        if(event.getClassification() != null) exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(event.getClassification().getValue())) ;
         PropertyList attendees = event.getProperties(Property.ATTENDEE) ;
         if(!attendees.isEmpty()) {
           String[] invitation = new String[attendees.size()] ;
