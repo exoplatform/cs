@@ -39,10 +39,7 @@ import org.exoplatform.ws.frameworks.cometd.ContinuationService;
    template = "app:/templates/mail/webui/UIMailPortlet.gtmpl"
 )
 public class UIMailPortlet extends UIPortletApplication {
-  private boolean isRefreshed = false ;
-  public void setRefreshed(boolean b) { isRefreshed = b ;}
-  public boolean isRefreshed() { return isRefreshed ; }
-  
+
   public UIMailPortlet() throws Exception {
 //    addChild(UIBannerContainer.class, null, null) ;
     addChild(UIActionBar.class, null, null) ;

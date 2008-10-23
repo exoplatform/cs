@@ -1,4 +1,8 @@
-<% uiform.begin() %>
+<% 
+	import org.exoplatform.contact.service.Contact;
+  import org.exoplatform.contact.service.ContactAttachment;
+	uiform.begin() 
+%>
 <div style="overflow-x: auto; width: 99%;">
 <div><div style="width: 620px;" ><span style="display: none;"></span></div></div>
 <div  style="_width: expression(this.previousSibling.offsetWidth - 22 + 'px'); !border: 1px solid white; _margin: auto;">
@@ -102,10 +106,18 @@
     <div class="AvatarContent">
       <div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.picture") %>:</div>
       <% 
-      	String imageLink = uicomponent.getImageSource() ; 
+      	String imageLink = "/contact/skin/DefaultSkin/webui/background/Img2.gif" ;
+				Contact contact = uicomponent.getTempContact() ;
+				if (contact != null) {
+					ContactAttachment att = contact.getAttachment() ;
+					if (att != null) {	
+						imageLink = "/"+uicomponent.getPortalName()+"/rest/jcr/" +uicomponent.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
+						imageLink = imageLink + "?rnd=" + System.currentTimeMillis();
+					}
+				}
       %>
       <div class="Avatar">
-        <img src="<%=(imageLink == null ? "/contact/skin/DefaultSkin/webui/background/Img2.gif": imageLink)%>" width=63 height=81 class="ImgAvatar"/>
+        <img src="$imageLink" width=63 height=81 class="ImgAvatar"/>
       </div>
       <div class="Action">  
         <a href="<%=uicomponent.event("ChangeImage")%>"><%=_ctx.appRes(uicomponent.id+ ".label.change") %> | </a>

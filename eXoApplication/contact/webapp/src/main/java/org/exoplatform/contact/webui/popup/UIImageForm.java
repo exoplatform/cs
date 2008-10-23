@@ -21,6 +21,7 @@ import java.io.ByteArrayInputStream;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
+import org.exoplatform.contact.service.Utils;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -93,7 +94,7 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
       UIContactForm uiContactForm =  uiPopupActionContainer.findFirstComponentOfType(UIContactForm.class) ;
       UIProfileInputSet uiProfileInputSet = uiContactForm.getChild(UIProfileInputSet.class) ;
       Contact contact = new Contact() ;
-      contact.setId(ContactUtils.tempId) ;
+      contact.setId(Utils.contactTempId) ;
       ContactAttachment attachment = new ContactAttachment() ;
       attachment.setInputStream(new ByteArrayInputStream(input.getUploadData())) ;
       attachment.setFileName(fileName) ;

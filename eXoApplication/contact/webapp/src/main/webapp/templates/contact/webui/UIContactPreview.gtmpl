@@ -39,9 +39,7 @@
 								<% 
 								String imageLink = "/contact/skin/DefaultSkin/webui/background/Img2.gif" ;
 								ContactAttachment att = contact.getAttachment() ;
-								if (att != null) {					
-								
-										
+								if (att != null) {	
 									imageLink = "/"+uicomponent.getPortalName()+"/rest/jcr/" +uicomponent.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
 									imageLink = imageLink + "?rnd=" + System.currentTimeMillis();
 								}

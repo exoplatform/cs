@@ -355,7 +355,7 @@ public class UIContactForm extends UIFormTabPane {
         }         
       }
       List<String> tempContact = new ArrayList<String>() ;
-      tempContact.add(ContactUtils.tempId) ;
+      tempContact.add(Utils.contactTempId) ;
       try {
         contactService.removeContacts(sessionProvider, username, tempContact) ;
       } catch (PathNotFoundException e) {}
