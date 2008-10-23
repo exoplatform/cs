@@ -25,18 +25,21 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
+import javax.jcr.PathNotFoundException;
+
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
-import org.exoplatform.download.DownloadService;
-import org.exoplatform.download.InputStreamDownloadResource;
+import org.exoplatform.contact.service.Utils;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.webui.SelectItem;
 import org.exoplatform.mail.webui.SelectOptionGroup;
 import org.exoplatform.mail.webui.UIFormSelectBoxWithGroups;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -90,6 +93,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
   private static final String MALE = "Male" ;
   private static final String FEMALE = "Female" ;
   private byte[] imageBytes_ = null;
+  private Contact tempContact = null ;
   private String fileName_ = null ;
   private String imageMimeType_ = null ;
   public boolean isEdited_ = false ;
@@ -142,6 +146,17 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
     .addValidator(EmailAddressValidator.class));
   }
   
+
+  public String getPortalName() {
+    PortalContainer pcontainer =  PortalContainer.getInstance() ;
+    return pcontainer.getPortalContainerInfo().getContainerName() ;  
+  }
+  public String getRepository() throws Exception {
+    RepositoryService rService = getApplicationComponent(RepositoryService.class) ;    
+    return rService.getCurrentRepository().getConfiguration().getName() ;
+  }  
+  public void setTempContact(Contact c) { tempContact = c ; }
+  public Contact getTempContact() { return tempContact ; }
   public List<SelectItem> getOptions() throws Exception {
     String username = MailUtils.getCurrentUser();
     ContactService contactSrv = getApplicationComponent(ContactService.class);
@@ -159,6 +174,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
     isEdited_ = true ;
     selectedGroup_ = groupId ;
     selectedContact_ = ct ;
+    tempContact = ct ;
     ((UIFormSelectBoxWithGroups)getChildById(SELECT_GROUP)).setSelectedValues(new String[] {groupId});
     ((UIFormSelectBoxWithGroups)getChildById(SELECT_GROUP)).setEditable(false) ;
     ((UIFormSelectBoxWithGroups)getChildById(SELECT_GROUP)).setEnable(false) ;
@@ -322,7 +338,8 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
           } else {
             uiAddress.refrestContactList(uiContact.selectedGroup_);
           }
-          uiAddress.setSelectedContact(contact);
+          uiAddress.setSelectedContact(contactSrv.getContact(
+            SessionProviderFactory.createSessionProvider(), uiPortlet.getCurrentUser(), contact.getId()));
           uiContact.getAncestorOfType(UIPopupAction.class).deActivate() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiAddress.getParent()) ;
         } else {
@@ -330,6 +347,11 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiContact.getAncestorOfType(UIPopupAction.class)) ;
         }
       } catch(Exception e) { e.printStackTrace() ; }
+      List<String> tempContact = new ArrayList<String>() ;
+      tempContact.add(Utils.contactTempId) ;
+      try {
+        contactSrv.removeContacts(SessionProviderFactory.createSessionProvider(), uiPortlet.getCurrentUser(), tempContact) ;
+      } catch (PathNotFoundException e) {}
     }
   }
   
@@ -394,7 +416,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
 
   protected void setFileName(String name) { fileName_ = name ; }
   protected String getFileName() {return fileName_ ;}
-
+/*
   protected String getImageSource() throws Exception {
     if(imageBytes_ == null || imageBytes_.length == 0) return null;
     ByteArrayInputStream byteImage = new ByteArrayInputStream(imageBytes_) ;    
@@ -402,5 +424,5 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
     InputStreamDownloadResource dresource = new InputStreamDownloadResource(byteImage, "image") ;
     dresource.setDownloadName(fileName_) ;
     return  dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;
-  }
+  }*/
 }

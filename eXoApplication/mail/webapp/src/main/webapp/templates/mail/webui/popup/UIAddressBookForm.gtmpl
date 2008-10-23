@@ -1,5 +1,6 @@
 <%
   import org.exoplatform.contact.service.Contact;
+  import org.exoplatform.contact.service.ContactAttachment;
   import org.exoplatform.mail.MailUtils;
   import org.exoplatform.download.DownloadService;
   import org.exoplatform.webui.application.WebuiRequestContext;
@@ -115,12 +116,14 @@
                     <%  if (selectedContact != null) {%>
                     <div class="ContactPreviewContainer">   
                     <% 
-                      DownloadService dservice ;  
-                      String imageLink ;  
-                      dservice = uicomponent.getDownloadService() ;
-                      imageLink = MailUtils.getImageSource(selectedContact, dservice) ;
+                      String imageLink = "/contact/skin/DefaultSkin/webui/background/Img2.gif" ;
+											ContactAttachment att = selectedContact.getAttachment() ;
+											if (att != null) {	
+												imageLink = "/"+uicomponent.getPortalName()+"/rest/jcr/" +uicomponent.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
+												imageLink = imageLink + "?rnd=" + System.currentTimeMillis();
+											}
                     %>
-                    <img src="<%=(imageLink == null ?  "/contact/skin/DefaultSkin/webui/background/Img2.gif": imageLink)%>" width=63 height=81  class="Avatar"/>         
+                    <img src="$imageLink" width=63 height=81  class="Avatar"/>         
                       <div class="Member">
                         <div class="State"><%=selectedContact.getFullName()%></div>
                         <div class="Job"><%= (selectedContact.getJobTitle() != null) ? selectedContact.getJobTitle() : "_"%></div>

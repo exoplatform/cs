@@ -37,7 +37,7 @@ public class ContactUtils {
   public static final String HTTP = "http://" ; 
   public static String[] specialString = {"!", "#", "%", "&"
                                             , ":", ">", "<", "~", "`", "]", "'", "/", "-"} ;
-  public static String tempId = "temp" ;
+  
   
   public static String getDisplayAdddressShared(String sharedUserId, String addressName) {
     return sharedUserId + " - " + addressName ;

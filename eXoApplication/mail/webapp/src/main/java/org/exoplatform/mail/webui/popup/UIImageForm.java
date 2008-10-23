@@ -18,9 +18,14 @@ package org.exoplatform.mail.webui.popup;
 
 import java.io.ByteArrayInputStream;
 
+import org.exoplatform.contact.service.Contact;
+import org.exoplatform.contact.service.ContactAttachment;
+import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
+import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.upload.UploadResource;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -95,6 +100,20 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
       uiContactForm.setImage(inputStream) ;
       uiContactForm.setMimeType(mimeType) ;
       uiContactForm.setFileName(fileName) ;
+      
+      Contact contact = new Contact() ;
+      contact.setId(org.exoplatform.contact.service.Utils.contactTempId) ;
+      ContactAttachment attachment = new ContactAttachment() ;
+      attachment.setInputStream(new ByteArrayInputStream(input.getUploadData())) ;
+      attachment.setFileName(fileName) ;
+      attachment.setMimeType(mimeType) ;
+      contact.setAttachment(attachment) ; 
+      ContactService contactSrv = uiForm.getApplicationComponent(ContactService.class);
+      
+      contactSrv.saveContact(SessionProviderFactory.createSessionProvider(), MailUtils.getCurrentUser(), contact, true) ;
+      uiContactForm.setTempContact(contactSrv
+        .getContact(SessionProviderFactory.createSessionProvider(), MailUtils.getCurrentUser(), contact.getId())) ; 
+      
       UIPopupAction popupAction = uiPopupActionContainer.getChild(UIPopupAction.class) ;
       popupAction.deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction.getParent()) ;
