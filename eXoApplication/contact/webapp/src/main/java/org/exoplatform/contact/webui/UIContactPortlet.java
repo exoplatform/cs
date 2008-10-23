@@ -38,11 +38,6 @@ import org.exoplatform.ws.frameworks.cometd.ContinuationService;
     template = "app:/templates/contact/webui/UIContactPortlet.gtmpl"
 )
 public class UIContactPortlet extends UIPortletApplication {
-  
-  // replace when portal fix bug show image
-  private boolean isRefreshed = false ;
-  public void setRefreshed(boolean b) { isRefreshed = b ; }
-  public boolean isRefreshed() { return isRefreshed ; }
 
   public UIContactPortlet() throws Exception {
     //addChild(UIBannerContainer.class, null, null) ;

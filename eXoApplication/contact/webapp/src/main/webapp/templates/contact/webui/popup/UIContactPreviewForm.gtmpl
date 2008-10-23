@@ -4,6 +4,7 @@
   rcontext.getJavascriptManager().importJavascript('eXo.contact.UIContactPortlet');
 	import org.exoplatform.contact.service.Contact;
 	import org.exoplatform.contact.ContactUtils;
+	import org.exoplatform.contact.service.ContactAttachment;
 %>
 
 <div class="UIContactPreview">
@@ -29,7 +30,14 @@
 							if(contact != null) {
 						%>
 							<div class="ContactPreviewContainer"	>		
-								<% String imageLink = uicomponent.getImageSource() ; %>
+								<% 
+									String imageLink = "/contact/skin/DefaultSkin/webui/background/Img2.gif" ;
+									ContactAttachment att = contact.getAttachment() ;
+									if (att != null) {									
+										imageLink = "/"+uicomponent.getPortalName()+"/rest/jcr/" +uicomponent.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
+										imageLink = imageLink + "?rnd=" + System.currentTimeMillis();
+									}
+								 %>
 								<img src="<%=(imageLink == null ? "/contact/skin/DefaultSkin/webui/background/Img2.gif": imageLink)%>" width=63 height=81 class="Avatar"/>						
 								<div class="Member">
 									<div class="State"><%=(ContactUtils.isEmpty(contact.getFullName()) ? "" : ContactUtils.encodeHTML(contact.getFullName()))%></div>

@@ -18,8 +18,12 @@ package org.exoplatform.contact.webui.popup;
 
 import java.io.ByteArrayInputStream;
 
+import org.exoplatform.contact.ContactUtils;
+import org.exoplatform.contact.service.Contact;
+import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
+import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.upload.UploadResource;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -88,6 +92,16 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
       UIPopupContainer uiPopupActionContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIContactForm uiContactForm =  uiPopupActionContainer.findFirstComponentOfType(UIContactForm.class) ;
       UIProfileInputSet uiProfileInputSet = uiContactForm.getChild(UIProfileInputSet.class) ;
+      Contact contact = new Contact() ;
+      contact.setId(ContactUtils.tempId) ;
+      ContactAttachment attachment = new ContactAttachment() ;
+      attachment.setInputStream(new ByteArrayInputStream(input.getUploadData())) ;
+      attachment.setFileName(fileName) ;
+      attachment.setMimeType(mimeType) ;
+      contact.setAttachment(attachment) ;   
+      ContactUtils.getContactService().saveContact(SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), contact, true) ;
+      uiProfileInputSet.setContact(ContactUtils.getContactService()
+        .getContact(SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), contact.getId())) ; 
       uiProfileInputSet.setImage(inputStream) ;
       uiProfileInputSet.setMimeType(mimeType) ;
       uiProfileInputSet.setFileName(fileName) ;

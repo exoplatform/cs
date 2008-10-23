@@ -1,7 +1,7 @@
 <%
-uiForm = uicomponent.getParentFrom() ;
-
-
+	uiForm = uicomponent.getParentFrom() ;
+	import org.exoplatform.contact.service.ContactAttachment;
+	import org.exoplatform.contact.service.Contact;
 %>
 <div class="Profile $uicomponent.id">
   <div class="FormContainer ProfileContainer">
@@ -131,12 +131,23 @@ uiForm = uicomponent.getParentFrom() ;
 	    </tbody>
 	  </table>
 	</div>
+	
 	<div class="AvatarContent">
 		<div class="Label"><%=_ctx.appRes(uicomponent.getParent().id + ".label.picture")%></div>
-		<% String imageLink = uicomponent.getImageSource() ; %>
-		<div class="Avatar">
-			<img src="<%=(imageLink == null ? "/contact/skin/DefaultSkin/webui/background/Img2.gif": imageLink)%>" width=63 height=81 class="ImgAvatar" />
-		</div>
+		<% 
+			String imageLink = "/contact/skin/DefaultSkin/webui/background/Img2.gif" ;
+			Contact contact = uicomponent.getContact() ;
+			if (contact != null) {
+				ContactAttachment att = contact.getAttachment() ;
+				if (att != null) {	
+					imageLink = "/"+uiForm.getPortalName()+"/rest/jcr/" +uiForm.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
+					imageLink = imageLink + "?rnd=" + System.currentTimeMillis();
+				}
+			}
+		%>
+		<img src='$imageLink' width="63px" height="81px" class="Avatar"/>
+			<!--<div class="Avatar"  style="background:transparent url('D:\\java\\exo-working\\exo-tomcat\\temp\\portal\\eXoUpload\\4020402.11copy2.jpg') no-repeat;width:53px; height:81px;"><span></span></div>-->
+		
 		<div class="Action">	
 			<a href="<%=uicomponent.getParent().event("ChangeImage")%>"><%=_ctx.appRes(uicomponent.getParent().id + ".label.change")%> | </a>
 			<a href="<%=uicomponent.getParent().event("DeleteImage")%>"><%=_ctx.appRes(uicomponent.getParent().id + ".label.delete")%></a>			
