@@ -37,6 +37,7 @@ import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.services.organization.impl.GroupImpl;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -222,7 +223,22 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
             newPerms.remove(remover + JCRDataStorage.HYPHEN) ;
             group.setEditPermissionUsers(newPerms.toArray(new String[newPerms.size()])) ;
           }        
-          contactService.removeUserShareAddressBook(SessionProviderFactory.createSessionProvider()
+          
+          // add to fix bug cs-1592
+          OrganizationService organizationService = 
+            (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+          boolean sharedByGroup = false ;
+          if (group.getViewPermissionGroups() != null) {
+            Object[] groups = organizationService.getGroupHandler().findGroupsOfUser(remover).toArray() ;
+            for (Object object : groups) {
+              if (Arrays.asList(group.getViewPermissionGroups()).contains(((GroupImpl)object).getId())) {
+                sharedByGroup = true ;
+                break ;
+              }               
+            }
+          }
+          if (!sharedByGroup)
+            contactService.removeUserShareAddressBook(SessionProviderFactory.createSessionProvider()
               , username, uiForm.groupId_, remover) ;
         }
         contactService.saveGroup(SessionProviderFactory.createSessionProvider(), username, group, false) ;
@@ -258,8 +274,22 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
         } else {
           removePerUser(contact, remover + JCRDataStorage.HYPHEN) ;
           try {
-            contactService.removeUserShareContact(SessionProviderFactory.createSystemProvider()
-                , username, uiForm.contactId_, remover) ;            
+//          add to fix bug cs-1592
+            OrganizationService organizationService = 
+              (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+            boolean sharedByGroup = false ;
+            if (contact.getViewPermissionGroups() != null) {
+              Object[] groups = organizationService.getGroupHandler().findGroupsOfUser(remover).toArray() ;
+              for (Object object : groups) {
+                if (Arrays.asList(contact.getViewPermissionGroups()).contains(((GroupImpl)object).getId())) {
+                  sharedByGroup = true ;
+                  break ;
+                }               
+              }
+            }
+            if (!sharedByGroup)
+              contactService.removeUserShareContact(SessionProviderFactory.createSystemProvider()
+                  , username, uiForm.contactId_, remover) ;            
           } catch (PathNotFoundException e) { }
         }        
         contactService.saveContact(SessionProviderFactory.createSessionProvider(), username, contact, false) ;
