@@ -847,6 +847,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-toDelete", null,
               ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
           return ;
         }
       }
