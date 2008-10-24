@@ -109,6 +109,17 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent {
         return ;        
       }
       
+      if (!ContactUtils.isNameValid(text, ContactUtils.specialString2) || !ContactUtils.isNameValid(fullName, ContactUtils.specialString2) ||
+          !ContactUtils.isNameValid(firstName, ContactUtils.specialString2) || !ContactUtils.isNameValid(lastName, ContactUtils.specialString2) ||
+          !ContactUtils.isNameValid(nickName, ContactUtils.specialString2) || !ContactUtils.isNameValid(jobTitle, ContactUtils.specialString2) ||
+          !ContactUtils.isNameValid(gender, ContactUtils.specialString2) || 
+          !ContactUtils.isNameValid(email, ContactUtils.specialString2)) {        
+        UIApplication uiApp = uiAdvancedSearchForm.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.text-search-error", null, ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;  
+      }
+      
       ContactFilter filter = new ContactFilter() ;
       if(!ContactUtils.isEmpty(text)) filter.setText(ContactUtils.filterString(text, true)) ;
       if(!ContactUtils.isEmpty(fullName)) filter.setFullName(ContactUtils.filterString(fullName, false)) ;   

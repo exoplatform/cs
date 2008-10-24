@@ -59,15 +59,22 @@ public class UISearchForm extends UIForm {
       String text = uiForm.getUIStringInput(UISearchForm.FIELD_SEARCHVALUE).getValue() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       if(ContactUtils.isEmpty(text)) {
-        uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.no-text-to-search", null)) ;
+        uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.no-text-to-search", null,
+          ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      String textFiltered = ContactUtils.filterString(text, true) ;
+      //String textFiltered = ContactUtils.filterString(text, true) ;
+      if(!ContactUtils.isNameValid(text, ContactUtils.specialString2)) {
+        uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.text-search-error", null,
+          ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       DataPageList resultPageList =  null ;
-      if (!ContactUtils.isEmpty(textFiltered)) {
+      if (!ContactUtils.isEmpty(text)) {
         ContactFilter filter = new ContactFilter() ;
-        filter.setText(textFiltered) ;
+        filter.setText(text) ;
         resultPageList = ContactUtils.getContactService()
           .searchContact(SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), filter) ;
       }
@@ -75,11 +82,12 @@ public class UISearchForm extends UIForm {
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class).setSelectedGroup(null) ;
       uiContactPortlet.findFirstComponentOfType(UITags.class).setSelectedTag(null) ;      
-      UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ; 
+      UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;    
       uiContacts.setSelectedGroupBeforeSearch(uiContacts.getSelectedGroup()) ;
       uiContacts.setSelectedTagBeforeSearch_(uiContacts.getSelectedTag()) ;
       uiContacts.setSelectSharedContactsBeforeSearch(uiContacts.isSelectSharedContacts()) ;
       uiContacts.setViewListBeforeSearch(uiContacts.viewContactsList) ;
+      
       uiContacts.setContacts(resultPageList) ;
       uiContacts.setDisplaySearchResult(true) ;
       uiContacts.setViewContactsList(true) ; 

@@ -7,6 +7,7 @@ package org.exoplatform.contact;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -37,7 +38,9 @@ public class ContactUtils {
   public static final String HTTP = "http://" ; 
   public static String[] specialString = {"!", "#", "%", "&"
                                             , ":", ">", "<", "~", "`", "]", "'", "/", "-"} ;
-  
+//can't use String.replaceAll() ;
+  public static String[] specialString2 = {"?", "[", "(", "|", ")", "*", "\\", "+", "}", "{", "^", "$", "\""
+    ,"!", "#", "%", "&", ":", ">", "<", "~", "`", "]", "'", "/", "-"} ;
   
   public static String getDisplayAdddressShared(String sharedUserId, String addressName) {
     return sharedUserId + " - " + addressName ;
@@ -67,18 +70,16 @@ public class ContactUtils {
     /*return str.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").
       replaceAll("'", "&apos;").replaceAll("\"", "&quot;") ;*/
   }
+//not use
   public static String filterString(String text, boolean isEmail) {
-	  if (text == null || text.trim().length() == 0) return "" ;
+    if (text == null || text.trim().length() == 0) return "" ;
     for (String str : specialString) {
       text = text.replaceAll(str, "") ;
     }
     if (!isEmail) text = text.replaceAll(AKONG, "") ;
     int i = 0 ;
     while (i < text.length()) {
-      if (text.charAt(i) == '?' || text.charAt(i) == '[' || text.charAt(i) == '(' || text.charAt(i) == '|'
-        || text.charAt(i) == ')' || text.charAt(i) == '*' || text.charAt(i) == '\\' || text.charAt(i) == '+'
-        || text.charAt(i) == '}' || text.charAt(i) == '{' || text.charAt(i) == '^' || text.charAt(i) == '$'
-        || text.charAt(i) == '"'  ) {
+      if (Arrays.asList(specialString2).contains(text.charAt(i) + "")) {
         text = text.replace((text.charAt(i)) + "", "") ;
       } else {
         i ++ ;
