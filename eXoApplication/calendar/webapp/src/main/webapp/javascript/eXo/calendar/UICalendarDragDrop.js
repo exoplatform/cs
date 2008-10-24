@@ -249,7 +249,7 @@ UICalendarDragDrop.prototype.getCheckedObject = function(clickObj){
     if(!this.isCheckedObject(evenObj[i])) continue ;
     tmpNode = evenObj[i].cloneNode(true) ;
     eXo.core.Browser.setOpacity(tmpNode,50) ;
-    tmpNode.style.left = "absolute";
+    tmpNode.style.position = "absolute";
     tmpNode.style.top = top + "px";
     tmpNode.style.left = "0px";
     top += 20 ;
