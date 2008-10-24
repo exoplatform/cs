@@ -345,6 +345,7 @@ UIContactPortlet.prototype.printpreview = function (obj){
 	obj.parentNode.appendChild(printButton) ;
 	DOMUtil.removeElement(obj) ;	
 	eXo.contact.UIContactPortlet.printList(form.id) ;
+	window.scroll(0,0);
 } ;
 
 UIContactPortlet.prototype.disableAction = function(cont){
@@ -373,11 +374,14 @@ UIContactPortlet.prototype.adddressPrint = function (){
 	div.appendChild(printContainer) ;
 	var uiAction = DOMUtil.findFirstDescendantByClass(div, "div", "UIAction") ;
 	DOMUtil.addClass(uiAction, "Printable") ;
-	uiControlWorkspace.style.display = "none" ;
+	if(uiControlWorkspace) uiControlWorkspace.style.display = "none" ;
 	UIPortalApplication.style.visibility = "hidden" ;
 	eXo.contact.UIContactPortlet.pageBackground = document.body.style.background ;
 	document.body.style.background = "transparent" ;
 	document.body.insertBefore(div,UIPortalApplication) ;
+	UIPortalApplication.style.height =  div.offsetHeight + "px";
+	UIPortalApplication.style.overflow =  "hidden";
+	window.scroll(0,0);
 } ;
 
 UIContactPortlet.prototype.cancelPrint = function (obj){
@@ -387,9 +391,12 @@ UIContactPortlet.prototype.cancelPrint = function (obj){
 	eXo.core.DOMUtil.removeElement(UIPrintContainer) ;
 	if(uiControlWorkspace) uiControlWorkspace.style.display = "block" ;
 	UIPortalApplication.style.display = "block" ;
+	UIPortalApplication.style.height =  "auto";
+	UIPortalApplication.style.overflow =  "auto";
 	UIPortalApplication.style.visibility = "visible" ;
 	document.body.style.background = eXo.contact.UIContactPortlet.pageBackground ;
 	eXo.contact.UIContactPortlet.pageBackground = null ;
+	window.scroll(0,0);
 } ;
 
 UIContactPortlet.prototype.cancelPrintList = function (){
@@ -399,7 +406,10 @@ UIContactPortlet.prototype.cancelPrintList = function (){
 	if(UIPrintContainer) eXo.core.DOMUtil.removeElement(UIPrintContainer) ;
 	if(uiControlWorkspace) uiControlWorkspace.style.display = "block" ;
 	UIPortalApplication.style.display = "block" ;
+	UIPortalApplication.style.height =  "auto";
+	UIPortalApplication.style.overflow =  "auto";
 	UIPortalApplication.style.visibility = "visible" ;
+	window.scroll(0,0);
 } ;
 
 UIContactPortlet.prototype.printList = function (obj){
@@ -422,6 +432,8 @@ UIContactPortlet.prototype.printList = function (obj){
 	div.style.width = "100%" ;
 	document.body.insertBefore(div,UIPortalApplication) ;
 	eXo.core.DOMUtil.removeElement(UIAction) ;
+	UIPortalApplication.style.height =  div.offsetHeight + "px";
+	UIPortalApplication.style.overflow =  "hidden";
 } ;
 
 UIContactPortlet.prototype.disableContextMenu = function(evt) {
