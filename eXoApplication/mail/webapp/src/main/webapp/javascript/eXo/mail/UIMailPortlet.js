@@ -64,7 +64,7 @@ UIMailPortlet.prototype.readMessage = function() {} ;
 
 UIMailPortlet.prototype.showPrintPreview = function(obj1) {
 	var uiPortalApplication = document.getElementById("UIPortalApplication");
-	uiPortalApplication.style.visibility = "hidden";	
+	uiPortalApplication.style.visibility = "hidden";
 	var uiMailPortletNode = document.createElement('div') ;
 	uiMailPortletNode.className = 'UIMailPortlet' ;
 	var mailWorkingWorkspaceNode = document.createElement('div') ;
@@ -93,22 +93,25 @@ UIMailPortlet.prototype.showPrintPreview = function(obj1) {
 	doc.write(str);
 	doc.close();
 	if (eXo.core.Browser.isFF()) {
-			doc.body.style.visibility = "visible";
-			frame.style.height = doc.documentElement.offsetHeight  + 20 + "px" ;
-			frame.style.width = doc.body.offsetWidth + "px";
-		} else {
-			var docHt = 0, sh, oh;
-			if (doc.height) {
-				docHt = doc.height;
-			} else if (doc.body) {
-				if (doc.body.scrollHeight) docHt = sh = doc.body.scrollHeight;
-				if (doc.body.offsetHeight) docHt = oh = doc.body.offsetHeight;
-				if (sh && oh) docHt = Math.max(sh, oh);
-			}
-			frame.style.width = doc.body.scrollWidth + "px";
-			frame.style.height = "auto"; 
-			frame.style.height = docHt + 20 + "px"; 
+		doc.body.style.visibility = "visible";
+		frame.style.height = doc.documentElement.offsetHeight  + 20 + "px" ;
+		frame.style.width = doc.body.offsetWidth + "px";
+	} else {
+		var docHt = 0, sh, oh;
+		if (doc.height) {
+			docHt = doc.height;
+		} else if (doc.body) {
+			if (doc.body.scrollHeight) docHt = sh = doc.body.scrollHeight;
+			if (doc.body.offsetHeight) docHt = oh = doc.body.offsetHeight;
+			if (sh && oh) docHt = Math.max(sh, oh);
 		}
+		frame.style.width = doc.body.scrollWidth + "px";
+		frame.style.height = "auto"; 
+		frame.style.height = docHt + 20 + "px"; 
+	}
+	uiPortalApplication.style.height =  printContent.offsetHeight + "px";
+	uiPortalApplication.style.overflow =  "hidden";
+	window.scroll(0,0) ;
 } ;
 
 UIMailPortlet.prototype.printMessage = function() {
@@ -117,9 +120,11 @@ UIMailPortlet.prototype.printMessage = function() {
 
 UIMailPortlet.prototype.closePrint = function() {
 	var DOMUtil = eXo.core.DOMUtil ;
-    var uiPortalApplication = document.getElementById("UIPortalApplication");
-    uiPortalApplication.style.display = "block" ;
-		uiPortalApplication.style.visibility = "visible";
+  var uiPortalApplication = document.getElementById("UIPortalApplication");
+  uiPortalApplication.style.display = "block" ;
+	uiPortalApplication.style.height =  "auto";
+	uiPortalApplication.style.overflow =  "auto";
+	uiPortalApplication.style.visibility = "visible";
 	for(var i = 0 ; i < document.body.childNodes.length ; i++) {
 		if(document.body.childNodes[i].className == "UIMailPortlet") DOMUtil.removeElement(document.body.childNodes[i]) ;		
 	}
@@ -588,6 +593,16 @@ UIMailPortlet.prototype.showHide = function(obj) {
 		obj.style.display = "none" ;
 	}
 } ;
+
+//UIMailPortlet.prototype.autoResize = function() {
+//	if(!eXo.core.Browser.isIE6()) return ; 
+//	var obj = document.getElementById("UIComposeForm");
+//	var uiPopupWindow = eXo.core.DOMUtil.findAncestorByClass(obj,"UIPopupWindow");
+//	uiPopupWindow.onresize = function(){
+//		var width = (this.offsetWidth < 850)? "800px":"99%" ;
+//		obj.style.width = width ;		
+//	}
+//} ;
 
 eXo.mail.CheckBox = {
 	init : function(cont){
