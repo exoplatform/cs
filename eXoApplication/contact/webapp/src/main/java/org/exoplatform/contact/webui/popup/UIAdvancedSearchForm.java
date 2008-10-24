@@ -16,7 +16,9 @@
  */
 package org.exoplatform.contact.webui.popup;
 
+import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.exoplatform.contact.ContactUtils;
@@ -104,20 +106,30 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent {
           ContactUtils.isEmpty(lastName) && ContactUtils.isEmpty(nickName) &&
           ContactUtils.isEmpty(jobTitle) && ContactUtils.isEmpty(email) && ContactUtils.isEmpty(gender)) {
         UIApplication uiApp = uiAdvancedSearchForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.no-text-to-search", null)) ;
+        uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.no-text-to-search", null, ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;        
       }
+      if (!ContactUtils.isNameValid(text, ContactUtils.specialString2) || !ContactUtils.isNameValid(fullName, ContactUtils.specialString2) ||
+          !ContactUtils.isNameValid(firstName, ContactUtils.specialString2) || !ContactUtils.isNameValid(lastName, ContactUtils.specialString2) ||
+          !ContactUtils.isNameValid(nickName, ContactUtils.specialString2) || !ContactUtils.isNameValid(jobTitle, ContactUtils.specialString2) ||
+          !ContactUtils.isNameValid(gender, ContactUtils.specialString2) || 
+          !ContactUtils.isNameValid(email, ContactUtils.specialString2)) {        
+        UIApplication uiApp = uiAdvancedSearchForm.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.text-search-error", null, ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;  
+      }
       
       ContactFilter filter = new ContactFilter() ;
-      if(!ContactUtils.isEmpty(text)) filter.setText(ContactUtils.filterString(text, true)) ;
-      if(!ContactUtils.isEmpty(fullName)) filter.setFullName(ContactUtils.filterString(fullName, false)) ;   
-      if(!ContactUtils.isEmpty(firstName)) filter.setFirstName(ContactUtils.filterString(firstName, false)) ;       
-      if(!ContactUtils.isEmpty(lastName)) filter.setLastName(ContactUtils.filterString(lastName, false)) ;
-      if(!ContactUtils.isEmpty(nickName)) filter.setNickName(ContactUtils.filterString(nickName, false)) ;      
-      if(!ContactUtils.isEmpty(jobTitle)) filter.setJobTitle(ContactUtils.filterString(jobTitle, false)) ;      
-      if(!ContactUtils.isEmpty(email)) filter.setEmailAddress(ContactUtils.filterString(email, true)) ;
-      if(!ContactUtils.isEmpty(gender)) filter.setGender(ContactUtils.filterString(gender, false)) ;
+      if(!ContactUtils.isEmpty(text)) filter.setText(text) ;
+      if(!ContactUtils.isEmpty(fullName)) filter.setFullName(fullName) ;   
+      if(!ContactUtils.isEmpty(firstName)) filter.setFirstName(firstName) ;       
+      if(!ContactUtils.isEmpty(lastName)) filter.setLastName(lastName) ;
+      if(!ContactUtils.isEmpty(nickName)) filter.setNickName(nickName) ;      
+      if(!ContactUtils.isEmpty(jobTitle)) filter.setJobTitle(jobTitle) ;      
+      if(!ContactUtils.isEmpty(email)) filter.setEmailAddress(email) ;
+      if(!ContactUtils.isEmpty(gender)) filter.setGender(gender) ;
 
       DataPageList resultPageList = null ;
       if (!ContactUtils.isEmpty(filter.getText()) || !ContactUtils.isEmpty(filter.getFullName()) || !ContactUtils.isEmpty(filter.getFirstName()) || 
