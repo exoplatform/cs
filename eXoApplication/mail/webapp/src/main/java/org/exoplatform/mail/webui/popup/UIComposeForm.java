@@ -319,15 +319,25 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         InternetAddress[] msgToAdds = Utils.getInternetAddress(msgTo) ;
   
         MailService mailSvr = this.getApplicationComponent(MailService.class) ;
-        Account account = mailSvr.getAccountById(SessionProviderFactory.createSystemProvider(), MailUtils.getCurrentUser(), this.getFieldFromValue());
+        Account account = mailSvr.getAccountById(SessionProviderFactory.createSystemProvider(), MailUtils.getCurrentUser(), accountId_);
         for (int i = 0 ; i < msgToAdds.length; i++) {
+          System.out.println(msgToAdds[i].getAddress() + "=========" + i + "===========" + account.getEmailAddress());
           if (msgToAdds[i] != null && !msgToAdds[i].getAddress().equalsIgnoreCase(account.getEmailAddress()) &&
               !msgToAdds[i].getAddress().equalsIgnoreCase(account.getIncomingUser())) {
             if (replyCc.trim().length() > 0) replyCc += ", ";
             replyCc += msgToAdds[i].toString();
           }
         }          
-        if (msg.getMessageCc() != null) replyCc += "," + msg.getMessageCc();
+        
+        String msgCc = (msg.getMessageCc() != null) ? msg.getMessageCc() : "" ;
+        InternetAddress[] msgCcAdds = Utils.getInternetAddress(msgCc) ;
+        for (int i = 0 ; i < msgCcAdds.length; i++) {
+          if (msgCcAdds[i] != null && !msgCcAdds[i].getAddress().equalsIgnoreCase(account.getEmailAddress()) &&
+              !msgCcAdds[i].getAddress().equalsIgnoreCase(account.getIncomingUser())) {
+            if (replyCc.trim().length() > 0) replyCc += ", ";
+            replyCc += msgCcAdds[i].toString();
+          }
+        }          
   
         if (replyCc.trim().length() > 0) {
           setFieldCcValue(replyCc);

@@ -127,7 +127,7 @@ public class UIFolderContainer extends UIContainer {
       }
       UIPopupAction uiPopup = uiFolder.getAncestorOfType(UIMailPortlet.class).getChild(UIPopupAction.class) ;
       uiPopup.activate(UIFolderForm.class, 450) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder.getAncestorOfType(UIMailPortlet.class)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
     }
   }
   
