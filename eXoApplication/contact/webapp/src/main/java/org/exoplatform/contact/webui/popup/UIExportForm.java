@@ -95,12 +95,23 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
     getChildren().clear() ;
     ObjectPageList objPageList = new ObjectPageList(contactList, 10) ;
     uiPageIterator_.setPageList(objPageList) ;
-    for (ContactData contact : contactList) {
+    if (contactList.size() == 1) {
+      ContactData contact = contactList.get(0) ;
       UIFormCheckBoxInput uiCheckbox = getUIFormCheckBoxInput(contact.getId()) ;
       if(uiCheckbox == null) {
         uiCheckbox = new UIFormCheckBoxInput<Boolean>(contact.getId(), contact.getId(), false) ;
+        uiCheckbox.setChecked(true) ;
+        uiCheckbox.setEnable(false) ;
         addUIFormInput(uiCheckbox);
       } 
+    } else {
+      for (ContactData contact : contactList) {
+        UIFormCheckBoxInput uiCheckbox = getUIFormCheckBoxInput(contact.getId()) ;
+        if(uiCheckbox == null) {
+          uiCheckbox = new UIFormCheckBoxInput<Boolean>(contact.getId(), contact.getId(), false) ;
+          addUIFormInput(uiCheckbox);
+        } 
+      }      
     }
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     for(String type : ContactUtils.getContactService().getImportExportType()) {

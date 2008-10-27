@@ -5,6 +5,7 @@
   uiform.begin();
 	def rcontext = _ctx.getRequestContext() ;
 	rcontext.getJavascriptManager().addJavascript('eXo.cs.CheckBox.init("'+uiform.id+'") ;') ;
+	ContactData[] contacts = uicomponent.getContacts();
 %>
 
 <div class="UIExportContactForm">
@@ -27,8 +28,12 @@
 			<div class="UIMessageList">
 				<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
 		  		<thead>
-		  			<tr>		  			
+		  			<tr>		
+		  			<% if (contacts.length == 1) { %>
+		  			<th style="width: 23px; padding-left: 3px;" class="text"><input type="checkbox" disabled checked class="checkbox" name="checkAll " title="<%=_ctx.appRes(uicomponent.getName() + ".label.checkAll")%>" value="4"/></th>
+		  			<% } else { %>  			
 		  		    <th style="width: 23px; padding-left: 3px;" class="text"><input type="checkbox" class="checkbox" name="checkAll " title="<%=_ctx.appRes(uicomponent.getName() + ".label.checkAll")%>" value="4"/></th>
+		  		    <% } %>
 		  		    <th style="width: 40%; padding-left: 2px;" class="text">
 		  		      	<div>  <%=_ctx.appRes(uicomponent.getName() + ".label.name")%> </div>
 		  		    </th>
@@ -39,7 +44,7 @@
 		  	 	</thead>
 		  	 	<tbody>
 		  	 		<%  
-							ContactData[] contacts = uicomponent.getContacts();
+							
 							for(contact in contacts) {
 								checkboxField = uicomponent.getChildById(contact.getId()) ;
 						%>
@@ -101,6 +106,17 @@
 		<table class="ActionContainer" align="center">
 		  <tr>
 		    <td align="center">		
+		  	  <%	if (contacts.length == 1) { %>
+		  	  	<a href="<%=uicomponent.event("Save", "all")%>" class="ActionButton LightBlueStyle">
+		        <div class="ButtonLeft">
+		          <div class="ButtonRight">
+		            <div class="ButtonMiddle">  <%=_ctx.appRes(uicomponent.getName() + ".label.export")%>  </div>
+		          </div>
+		        </div>
+		      </a>
+		  	 
+		  	  	<% } else { %>
+		  	  
 		  	  <a href="<%=uicomponent.event("Save", "all")%>" class="ActionButton LightBlueStyle">
 		        <div class="ButtonLeft">
 		          <div class="ButtonRight">
@@ -116,6 +132,7 @@
 		          </div>
 		        </div>
 		      </a>
+		      <% } %>
 		      <a href="<%=uicomponent.event("Cancel")%>" class="ActionButton LightBlueStyle">
 		        <div class="ButtonLeft">
 		          <div class="ButtonRight">
