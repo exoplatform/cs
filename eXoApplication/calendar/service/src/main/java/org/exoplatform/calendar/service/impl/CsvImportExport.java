@@ -181,18 +181,34 @@ public class CsvImportExport implements CalendarImportExport {
               eventObj.setDescription(l.get(dataMap.get(EV_DESCRIPTION)))  ;
             }
             if(!Utils.isEmpty(l.get(dataMap.get(EV_STATUS)))) {
-              eventObj.setEventState(l.get(dataMap.get(EV_STATUS)))  ;
+              String eventState = l.get(dataMap.get(EV_STATUS)) ;
+              // fix for csv export form outlook
+              try {
+                int value = Integer.parseInt(eventState) ;
+                if(value == 0 || value == 1) {
+                  eventState = CalendarEvent.ST_AVAILABLE ;
+                }
+                if(value == 2) {
+                  eventState = CalendarEvent.ST_BUSY ;
+                }
+                if(value == 3) {
+                  eventState = CalendarEvent.ST_OUTSIDE ;
+                }
+              } catch (Exception e) {
+
+              }
+              eventObj.setEventState(eventState)  ;
             }
             if(!Utils.isEmpty(l.get(dataMap.get(EV_PRIORITY)))) {
               for(int i = 0 ; i < CalendarEvent.PRIORITY.length ; i++ ) {
-                 if(CalendarEvent.PRIORITY[i].equals(l.get(dataMap.get(EV_PRIORITY)).toLowerCase())) {
-                   eventObj.setPriority(String.valueOf(i))  ;
-                   break ;
-                 }
+                if(CalendarEvent.PRIORITY[i].equals(l.get(dataMap.get(EV_PRIORITY)).toLowerCase())) {
+                  eventObj.setPriority(String.valueOf(i))  ;
+                  break ;
+                }
               }
             }
           } 
-         if(isValid) eventList.add(eventObj) ;
+          if(isValid) eventList.add(eventObj) ;
         }
       }
       lineCount ++ ;
@@ -279,8 +295,8 @@ public class CsvImportExport implements CalendarImportExport {
       }
     }
   }
-	public List<CalendarEvent> getEventObjects(InputStream icalInputStream)
-			throws Exception {
-		return null;
-	}
+  public List<CalendarEvent> getEventObjects(InputStream icalInputStream)
+  throws Exception {
+    return null;
+  }
 }
