@@ -46,7 +46,7 @@ import org.exoplatform.webui.form.UIForm;
 public class UIFeed extends UIForm implements UIPopupComponent{
   public UIFeed() {}
   
-  public List getFeeds() throws Exception {
+  public static List getFeeds() throws Exception {
     CalendarService calService = CalendarUtils.getCalendarService() ;
     return calService.getFeeds(SessionProviderFactory.createSessionProvider(), CalendarUtils.getCurrentUser()) ;
   }

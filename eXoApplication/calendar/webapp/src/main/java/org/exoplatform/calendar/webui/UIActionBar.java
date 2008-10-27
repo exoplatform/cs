@@ -166,15 +166,15 @@ public class UIActionBar extends UIContainer  {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ;
       UICalendarPortlet calendarPortlet = uiActionBar.getAncestorOfType(UICalendarPortlet.class) ;
-      UIPopupAction popupAction = calendarPortlet.getChild(UIPopupAction.class) ;
-      UIFeed feed = popupAction.activate(UIFeed.class, 600) ;
       UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
-      if(feed.getFeeds().isEmpty()) {
+      if(UIFeed.getFeeds().isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.feed-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
+      } else {
+        UIPopupAction popupAction = calendarPortlet.getChild(UIPopupAction.class) ;
+        popupAction.activate(UIFeed.class, 600) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ; 
       }
-      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
 }
