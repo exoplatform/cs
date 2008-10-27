@@ -51,8 +51,8 @@ import org.exoplatform.webui.form.UIFormStringInput;
 
 /**
  * Created by The eXo Platform SAS
- * Author : Ha Mai
- *          ha.mai@exoplatform.com
+ * Author : Hung Hoang
+ *          hung.hoang@exoplatform.com
  * Feb 27, 2008  
  */
 @ComponentConfig (
@@ -206,10 +206,24 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
           if (group.getViewPermissionUsers() != null) {
             viewUsers = Arrays.asList(group.getViewPermissionUsers()) ;
           }
-          for (User user : users)
-            if (!viewUsers.contains(user.getUserName() + JCRDataStorage.HYPHEN))
-              contactService.removeUserShareAddressBook(
-                SessionProviderFactory.createSessionProvider(), username, uiForm.groupId_, user.getUserName()) ;
+          // 
+          for (User user : users) {
+            boolean deleteShared = true ;
+            if (!viewUsers.contains(user.getUserName() + JCRDataStorage.HYPHEN)) {
+              Object[] groups = organizationService.getGroupHandler().findGroupsOfUser(user.getUserName()).toArray() ;
+              for (Object object : groups) {
+                if (Arrays.asList(group.getViewPermissionGroups()).contains(((GroupImpl)object).getId())) {
+                  deleteShared = false ;
+                  break ;
+                }               
+              } 
+              if (deleteShared) {
+                contactService.removeUserShareAddressBook(
+                  SessionProviderFactory.createSessionProvider(), username, uiForm.groupId_, user.getUserName()) ;
+              }
+            }
+          }
+   
         } else {
           if(group.getViewPermissionUsers() != null) {
             List<String> newPerms = new ArrayList<String>() ;
@@ -257,18 +271,30 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
           if (contact.getViewPermissionUsers() != null) {
             viewUsers = Arrays.asList(contact.getViewPermissionUsers()) ;
           }
+          
+//        
           for (User user : users) {
-            if (!viewUsers.contains(user.getUserName() + JCRDataStorage.HYPHEN)) {          	
-              try {
-            	contactService.removeUserShareContact(
-            	  SessionProviderFactory.createSystemProvider(), username, uiForm.contactId_, user.getUserName()) ;
-              } catch (PathNotFoundException e) {
-            	UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-            	uiApp.addMessage(new ApplicationMessage("UIAddEditPermission.msg.cannot-deleteShared", null,
-            	  ApplicationMessage.WARNING)) ;
-            	event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-            	return ;
-              }    
+            boolean deleteShared = true ;
+            if (!viewUsers.contains(user.getUserName() + JCRDataStorage.HYPHEN)) {
+              Object[] groups = organizationService.getGroupHandler().findGroupsOfUser(user.getUserName()).toArray() ;
+              for (Object object : groups) {
+                if (Arrays.asList(contact.getViewPermissionGroups()).contains(((GroupImpl)object).getId())) {
+                  deleteShared = false ;
+                  break ;
+                }               
+              } 
+              if (deleteShared) {
+                try {
+                  contactService.removeUserShareContact(
+                    SessionProviderFactory.createSystemProvider(), username, uiForm.contactId_, user.getUserName()) ;
+                  } catch (PathNotFoundException e) {
+                  UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+                  uiApp.addMessage(new ApplicationMessage("UIAddEditPermission.msg.cannot-deleteShared", null,
+                    ApplicationMessage.WARNING)) ;
+                  event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                  return ;
+                  }
+              }
             }
           }
         } else {
