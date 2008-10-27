@@ -538,24 +538,28 @@ public class JCRDataStorage {
       }
     }
     try {
-      currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(
-          Utils.EXO_UNREADMESSAGES).getLong() - deUnreadNumber));
-      destFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (destFolderNode.getProperty(
-          Utils.EXO_UNREADMESSAGES).getLong() + inUnreadNumber));
+      if (currentFolderNode != null)
+        currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(
+            Utils.EXO_UNREADMESSAGES).getLong() - deUnreadNumber));
+      if (destFolderNode != null)
+        destFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (destFolderNode.getProperty(
+            Utils.EXO_UNREADMESSAGES).getLong() + inUnreadNumber));
     } catch (Exception e) {
       e.printStackTrace() ;
     }
 
     try {
-      currentFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (currentFolderNode.getProperty(
-          Utils.EXO_TOTALMESSAGE).getLong() - deTotalMessage));
-      destFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (destFolderNode.getProperty(
-          Utils.EXO_TOTALMESSAGE).getLong() + inTotalMessage));
+      if (currentFolderNode != null)
+        currentFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (currentFolderNode.getProperty(
+            Utils.EXO_TOTALMESSAGE).getLong() - deTotalMessage));
+      if (destFolderNode != null)
+        destFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (destFolderNode.getProperty(
+            Utils.EXO_TOTALMESSAGE).getLong() + inTotalMessage));
     } catch (Exception e) {
       e.printStackTrace() ;
     }
-    currentFolderNode.save();
-    destFolderNode.save();
+    if (currentFolderNode != null) currentFolderNode.save();
+    if (destFolderNode != null) destFolderNode.save();
   }
 
   public void moveMessage(SessionProvider sProvider, String username, String accountId,
