@@ -339,27 +339,18 @@
 									String[] tagIds = contact.getTags() ;
 									StringBuffer tagsName = new StringBuffer() ;
 									if (tagIds != null && tagIds.length > 0) {
-										Tag tag = tagMap.get(tagIds[0]) ;
-										boolean hasComma = false ;
-										if (tag != null) {
-											tagsName.append(tag.getName()) ;
-											hasComma = true ;
-											iconTag = "Icon2 " + tag.getColor() + "Tag" ;
-										} else { hasComma = false ; }
-										i = 1 ;
-										while (i < tagIds.length) {
-											tag = tagMap.get(tagIds[i]) ;
-											if (tag != null && hasComma) {
-												tagsName.append(", " + tag.getName()) ;
-												if (ContactUtils.isEmpty(iconTag)) iconTag = "Icon2 " + tag.getColor() + "Tag" ;
-											}
-											else if (tag != null) {
-													tagsName.append(tag.getName()) ;
-													hasComma = true ;
-													if (ContactUtils.isEmpty(iconTag)) iconTag = "Icon2 " + tag.getColor() + "Tag" ;
-											}
-											i ++ ;
-										}		
+										List<String> listTags = Arrays.asList(tagIds) ;
+											for (String tagId : tagMap.keySet()) {
+												if (listTags.contains(tagId)) {
+													Tag tag = tagMap.get(tagId) ;
+													if (tagsName.length() == 0) {
+														tagsName.append(tag.getName()) ;
+														iconTag = "Icon2 " + tag.getColor() + "Tag" ;
+													} else {
+														tagsName.append(", " + tag.getName()) ;
+													}	
+												}												
+											}	
 									}		
   	 	    				cssClass = "Normal" ;
   	 	    				String selectedContact = uicomponent.getSelectedContact() ;
@@ -430,28 +421,19 @@
 										String[] tagIds = contact.getTags() ;
 										StringBuffer tagsName = new StringBuffer() ;
 										if (tagIds != null && tagIds.length > 0) {
-											Tag tag = tagMap.get(tagIds[0]) ;
-											boolean hasComma = false ;
-											if (tag != null) {
-												tagsName.append(tag.getName()) ;
-												hasComma = true ;
-												iconTag = "Icon2 " + tag.getColor() + "Tag" ;
-											} else { hasComma = false ; }
-											i = 1 ;
-											while (i < tagIds.length) {
-												tag = tagMap.get(tagIds[i]) ;
-												if (tag != null && hasComma) {
-													tagsName.append(", " + tag.getName()) ;
-													if (ContactUtils.isEmpty(iconTag)) iconTag = "Icon2 " + tag.getColor() + "Tag" ;
-												}
-												else if (tag != null) {
+											List<String> listTags = Arrays.asList(tagIds) ;
+											for (String tagId : tagMap.keySet()) {
+												if (listTags.contains(tagId)) {
+													Tag tag = tagMap.get(tagId) ;
+													if (tagsName.length() == 0) {
 														tagsName.append(tag.getName()) ;
-														hasComma = true ;
-														if (ContactUtils.isEmpty(iconTag)) iconTag = "Icon2 " + tag.getColor() + "Tag" ;
-												}
-												i ++ ;
-											}		
-										}	
+														iconTag = "Icon2 " + tag.getColor() + "Tag" ;
+													} else {
+														tagsName.append(", " + tag.getName()) ;
+													}	
+												}												
+											}
+										}
 										if (!ContactUtils.isEmpty(uicomponent.selectedTag_)) {
 											iconTag = "Icon2 " + tagMap.get(uicomponent.selectedTag_).getColor() + "Tag" ;
 										}
@@ -625,7 +607,9 @@
                             <div class="MiddleRightRightClickPopupMenu">
                               <div class="UIRightPopupMenuContainer">
                                 <%
-                                for (String tagId : tagIds) {
+                                List<String> listTags = Arrays.asList(tagIds) ;
+                                for (String tagId : tagMap.keySet()) {
+                                	if (!listTags.contains(tagId)) continue ;
                                   Tag tag = tagMap.get(tagId) ;
                                   if (tag != null) {
                                 %>
@@ -785,9 +769,11 @@
                           <div class="MiddleRightRightClickPopupMenu">
                             <div class="UIRightPopupMenuContainer">
                               <%
-                              for (String tagId : tagIds) {
-                                Tag tag = tagMap.get(tagId) ;
-                                if (tag != null) {
+                               List<String> listTags = Arrays.asList(tagIds) ;
+                                for (String tagId : tagMap.keySet()) {
+                                	if (!listTags.contains(tagId)) continue ;
+                                  Tag tag = tagMap.get(tagId) ;
+                                	if (tag != null) {
                               %>
                               <% if (!uicomponent.isPrintForm()) { %>
                                 <a class="MenuItem" href="<%=uicomponent.event("SelectTag", "$tagId")%>">

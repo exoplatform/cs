@@ -64,7 +64,7 @@ public class UITags extends UIComponent {
   
   public UITags() throws Exception { }
   private String selectedTag_ = null ;
-  private Map<String, Tag> tagMap_ = new HashMap<String, Tag>() ;
+  private Map<String, Tag> tagMap_ = new LinkedHashMap<String, Tag>() ;
   
   public List<Tag> getTags() throws Exception {
     ContactService contactService = ContactUtils.getContactService();
