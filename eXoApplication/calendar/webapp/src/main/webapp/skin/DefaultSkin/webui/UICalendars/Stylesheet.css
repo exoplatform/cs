@@ -106,7 +106,7 @@
   margin: 1px 3px 0px 0px;
   float: right;
   width: 16px;
-  cursor: pointer;
+	background: transparent ;
 }
 
 .UICalendarPortlet .UICalendars .CheckBox {
