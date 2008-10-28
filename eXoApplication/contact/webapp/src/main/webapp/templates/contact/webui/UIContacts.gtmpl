@@ -388,7 +388,7 @@
 									</div>
 								</td>
 									<% 
-										email = contact.getEmailAddress() ;
+										email = contact.getEmailAddress().replaceAll(";", "; ") ;
 			  		  					String subEmail ;
 										if (ContactUtils.isEmpty(email)) subEmail = "_" ;
 			  		  					else {
@@ -482,7 +482,7 @@
 									</div>
 								</td>
 								<% 
-										email = contact.getEmailAddress() ;
+										email = contact.getEmailAddress().replaceAll(";", "; ") ;
 			  		  					String subEmail ;
 										if (ContactUtils.isEmpty(email)) subEmail = "_" ;
 			  		  					else {
@@ -664,9 +664,7 @@
 			  		<% 
 			  		String img = "/contact/skin/DefaultSkin/webui/background/Img2.gif" ;
 								ContactAttachment att = contact.getAttachment() ;
-								if (att != null) {					
-								
-										
+								if (att != null) {		
 									img = "/"+uicomponent.getPortalName()+"/rest/jcr/" +uicomponent.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
 									img = img + "?rnd=" + System.currentTimeMillis();
 								}
@@ -681,7 +679,7 @@
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent"><%=_ctx.appRes(uicomponent.getName() + ".label.email")%> :</span>
 			  		  			<% 
-			  		  					String email = contact.getEmailAddress() ;
+			  		  					String email = contact.getEmailAddress().replaceAll(";", "; ") ;
 			  		  					String subEmail ;
 			  		  					if (email.length() > 20) subEmail = email.substring(0, 20) + "..." ;
 		  		  						else subEmail = email ;			  		  				
@@ -692,7 +690,7 @@
 			  		  					<%= subEmail %>
 			  		  					</a> 		  				
 			  		  			<% } else { %>
-			  		  					<%= subEmail %>
+			  		  					<%= email %>
 			  		  			<% } %>			  		  			
 			  		  		</span> 
 			  		  	</div>
@@ -825,9 +823,7 @@
 			  		<% 
 			  		img = "/contact/skin/DefaultSkin/webui/background/Img2.gif" ;
 								att = contact.getAttachment() ;
-								if (att != null) {					
-								
-										
+								if (att != null) {	
 									img = "/"+uicomponent.getPortalName()+"/rest/jcr/" +uicomponent.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
 									img = img + "?rnd=" + System.currentTimeMillis();
 								}
@@ -842,7 +838,7 @@
 			  		  	<div class="InfoMember">
 			  		  		<span class="LabelContent"><%=_ctx.appRes(uicomponent.getName() + ".label.email")%> :</span>
 			  		  			<% 
-			  		  					String email = contact.getEmailAddress() ;
+			  		  					String email = contact.getEmailAddress().replaceAll(";", "; ") ;
 			  		  					String subEmail ;
 			  		  					if (email.length() > 20) subEmail = email.substring(0, 20) + "..." ;
 		  		  						else subEmail = email ;			  		  				
@@ -853,7 +849,7 @@
 			  		  					<%= subEmail %>
 			  		  					</a> 		  				
 			  		  			<% } else { %>
-			  		  					<%= subEmail %>
+			  		  					<%= email %>
 			  		  			<% } %>			  		  			
 			  		  		</span> 
 			  		  	</div>

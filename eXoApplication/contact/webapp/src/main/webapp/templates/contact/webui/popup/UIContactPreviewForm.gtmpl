@@ -102,13 +102,13 @@
                           </tr>
                           <% } %>
                           <% if (!ContactUtils.isEmpty(contact.getEmailAddress())) { 
-                          		email = contact.getEmailAddress() ;
+                          		email = contact.getEmailAddress().replaceAll(";", "; ") ;
 	  		  					String subEmail ;
 								if (ContactUtils.isEmpty(email)) subEmail = "_" ;
 	  		  					else {
 	  		  					  if (email.length() > 30) subEmail = email.substring(0, 30) + "..." ;
   		  						  else subEmail = email ;	
-	  		  					}                          
+	  		  					}                       
                           %>
                           <tr>
                             <td class="InfoLabel">
@@ -124,7 +124,7 @@
 				                                <%= subEmail %>
 				                              </a>
 				                            <% } else { %>
-																		<%= contact.getEmailAddress()%>
+																		<%= email %>
 																		<% } %>
 				                             </div>
 			                            </td>

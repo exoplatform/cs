@@ -111,7 +111,7 @@
                           </tr>
                           <% } %>
                           <% if (!ContactUtils.isEmpty(contact.getEmailAddress())) {
-                          		email = contact.getEmailAddress() ;
+                          		email = contact.getEmailAddress().replaceAll(";", "; ") ;
 	  		  					String subEmail ;
 								if (ContactUtils.isEmpty(email)) subEmail = "_" ;
 	  		  					else {
