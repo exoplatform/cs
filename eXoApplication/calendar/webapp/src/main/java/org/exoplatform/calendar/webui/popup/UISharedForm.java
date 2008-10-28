@@ -103,7 +103,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
   public void setCalendarName(String value) {
     UISharedTab inputset = getChildById(SHARED_TAB) ;
     inputset.calendarName_ = value ;
-    if(!CalendarUtils.isEmpty(value) && value.trim().length() >= 30) value = value.substring(0, 35)+"..." ; 
+    if(!CalendarUtils.isEmpty(value) && value.trim().length() > 30) value = value.substring(0, 30)+"..." ; 
     inputset.getUIFormInputInfo(UISharedTab.FIELD_NAME).setValue(value) ;
   }
   protected void setCanEdit(boolean canEdit) {
