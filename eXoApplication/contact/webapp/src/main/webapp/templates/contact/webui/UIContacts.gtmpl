@@ -262,12 +262,12 @@
 	  	 	    			String groupName ;	
 	  	 	    			String groupDes ;  	 	    			
 	  	 	    			String[] addressBooks = contact.getAddressBook() ;
-	  	 	    			contactType = contact.getContactType() ;   			
+	  	 	    			contactType = contact.getContactType() ; 			
 	  	 	    			if (contactType.equals("2")) {
 		  	 	    			StringBuffer buffer = new StringBuffer("") ;
 		  	 	    			StringBuffer bufferDes = new StringBuffer("") ;	
 		  	 	    			for (String address : addressBooks) {
-		  	 	    				if (!address.contains(NewUserListener.DEFAULTGROUP) && publicAddress.contains(address)) {
+		  	 	    					if (!address.contains(NewUserListener.DEFAULTGROUP) && publicAddress.contains(address)) {
 		  	 	    					if(buffer.length() > 0) {
 		  	 	    						buffer.append(", ") ;
 		  	 	    						bufferDes.append(", ") ;
@@ -289,14 +289,22 @@
 								  	StringBuffer buffer = new StringBuffer("") ;
 								  	StringBuffer bufferDes = new StringBuffer("") ;
 								  	for (String address : addressBooks) {
-								  		if (privateGroupMap.containsKey(address)) address = privateGroupMap.get(address);
-								  		else if (!publicAddress.contains(address)) continue ;
-		  	 	    				if(buffer.length() > 0) {
-		  	 	    					buffer.append(", ") ;
-		  	 	    					bufferDes.append(", ") ;
-		  	 	    				}
-		  	 	    				buffer.append(ContactUtils.encodeHTML(address)) ;
-		  	 	    				bufferDes.append(ContactUtils.encodeHTML(address)) ;
+								  		if (privateGroupMap.containsKey(address)) {
+								  			address = privateGroupMap.get(address);
+								  			if(buffer.length() > 0) {
+		  	 	    						buffer.append(", ") ;
+		  	 	    						bufferDes.append(", ") ;
+		  	 	    					}
+		  	 	    					buffer.append(ContactUtils.encodeHTML(address)) ;
+		  	 	    					bufferDes.append(ContactUtils.encodeHTML(address)) ;
+								  		}	else if (publicAddress.contains(address)) {
+							  		    if(buffer.length() > 0) {
+	  	 	    							buffer.append(", ") ;
+	  	 	    							bufferDes.append(", ") ;
+	  	 	    						}
+	  	 	    						buffer.append(ContactUtils.getPublicGroupName(address)) ;
+	  	 	    						bufferDes.append(ContactUtils.encodeHTML(address)) ;						  			
+								  		}
 		  	 	    			}
 										groupName = buffer.toString() ;	
 										groupDes = bufferDes.toString() ;							  							  
