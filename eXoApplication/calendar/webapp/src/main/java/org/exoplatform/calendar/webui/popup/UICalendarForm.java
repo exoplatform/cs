@@ -444,7 +444,9 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
       }
       UIGroupSelector uiGroupSelector = uiForm.createUIComponent(UIGroupSelector.class, null, null);
       uiGroupSelector.setType(permType) ;
-      uiGroupSelector.setSelectedGroups(uiForm.getSelectedGroups(value.split(CalendarUtils.COLON)[1].split(PERMISSION_SUB)[0])) ;
+      String groupId = value.split(CalendarUtils.COLON)[1].split(PERMISSION_SUB)[0] ;
+      uiGroupSelector.setSelectedGroups(uiForm.getSelectedGroups(groupId)) ;
+      uiGroupSelector.changeGroup(groupId) ;
       uiGroupSelector.setComponent(uiForm, new String[] {value.split(CalendarUtils.COLON)[1]});
       UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       UIPopupAction uiChildPopup = uiPopupContainer.getChild(UIPopupAction.class) ;
