@@ -16,6 +16,8 @@
  */
 package org.exoplatform.contact.webui;
 
+import java.io.ByteArrayInputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -43,7 +45,6 @@ import org.exoplatform.contact.webui.popup.UIAddEditPermission;
 import org.exoplatform.contact.webui.popup.UICategorySelect;
 import org.exoplatform.contact.webui.popup.UIComposeForm;
 import org.exoplatform.contact.webui.popup.UIContactPreviewForm;
-import org.exoplatform.contact.webui.popup.UIExportForm;
 import org.exoplatform.contact.webui.popup.UIMoveContactsForm;
 import org.exoplatform.contact.webui.popup.UIPopupComponent;
 import org.exoplatform.contact.webui.popup.UISharedContactsForm;
@@ -51,9 +52,10 @@ import org.exoplatform.contact.webui.popup.UITagForm;
 import org.exoplatform.contact.webui.popup.UIContactForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.webui.popup.UIPopupContainer;
-import org.exoplatform.contact.webui.popup.UIExportForm.ContactData;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
+import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -964,7 +966,23 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   static public class ExportContactActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource();
-      String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
+      String contactId = event.getRequestContext().getRequestParameter(OBJECTID);      
+      String username = ContactUtils.getCurrentUser() ;
+      ContactService contactService = ContactUtils.getContactService() ;
+      List<Contact> contacts = new ArrayList<Contact>() ;
+      Contact contact = uiContacts.contactMap.get(contactId) ;
+      contacts.add(contact) ;
+      OutputStream out = contactService.getContactImportExports(contactService.getImportExportType()[0]).exportContact(username, contacts) ;
+      String contentType = null;
+      contentType = "text/x-vcard";
+      ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
+      DownloadResource dresource = new InputStreamDownloadResource(is, contentType) ;
+      DownloadService dservice = (DownloadService)PortalContainer.getInstance().getComponentInstanceOfType(DownloadService.class) ;
+      dresource.setDownloadName(contact.getFullName() + ".vcf");
+      String downloadLink = dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;
+      event.getRequestContext().getJavascriptManager()
+        .addJavascript("ajaxRedirect('" + downloadLink + "');") ;
+      /*
       UIContactPortlet uiContactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class);
       UIPopupAction uiPopupAction = uiContactPortlet.getChild(UIPopupAction.class);
       UIExportForm uiExportForm = uiPopupAction.activate(UIExportForm.class, 500) ;
@@ -980,7 +998,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       uiExportForm.setContactList(data);
       event.getRequestContext()
         .addUIComponentToUpdateByAjax(uiContactPortlet.findFirstComponentOfType(UIContactContainer.class));
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);*/
     }
   }
   

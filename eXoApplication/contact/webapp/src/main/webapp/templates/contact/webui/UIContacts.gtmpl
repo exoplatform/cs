@@ -259,30 +259,55 @@
 	  	 	    		Map sharedGroupMap = uicomponent.getSharedGroupMap() ;
 	  	 	    		List<String> publicAddress = uicomponent.getPublicContactGroups() ;
 	  	 	    		for(contact in contacts) {
-	  	 	    			String groupName ;	  	 	    			
+	  	 	    			String groupName ;	
+	  	 	    			String groupDes ;  	 	    			
 	  	 	    			String[] addressBooks = contact.getAddressBook() ;
-	  	 	    			contactType = contact.getContactType() ;   			
+	  	 	    			contactType = contact.getContactType() ; 			
 	  	 	    			if (contactType.equals("2")) {
-		  	 	    			StringBuffer buffer = new StringBuffer("") ;	
+		  	 	    			StringBuffer buffer = new StringBuffer("") ;
+		  	 	    			StringBuffer bufferDes = new StringBuffer("") ;	
 		  	 	    			for (String address : addressBooks) {
-		  	 	    				if (!address.contains(NewUserListener.DEFAULTGROUP) && publicAddress.contains(address)) {
-		  	 	    					if(buffer.length() > 0) buffer.append(", ").append(address) ;
-			  	 	    				else buffer.append(address) ;
+		  	 	    					if (!address.contains(NewUserListener.DEFAULTGROUP) && publicAddress.contains(address)) {
+		  	 	    					if(buffer.length() > 0) {
+		  	 	    						buffer.append(", ") ;
+		  	 	    						bufferDes.append(", ") ;
+		  	 	    					}
+			  	 	    				buffer.append(ContactUtils.getPublicGroupName(address)) ;
+			  	 	    				bufferDes.append(address) ;
 		  	 	    				} else if (address.equals(NewUserListener.DEFAULTGROUP + ContactUtils.getCurrentUser()) && privateGroupMap.containsKey(address)) {
-		  	 	    					if(buffer.length() > 0) buffer.append(", ").append(privateGroupMap.get(address)) ;
-			  	 	    				else buffer.append(privateGroupMap.get(address)) ;
+		  	 	    					if(buffer.length() > 0) {
+		  	 	    						buffer.append(", ") ;
+		  	 	    						bufferDes.append(", ") ;
+		  	 	    					}
+			  	 	    				buffer.append(privateGroupMap.get(address)) ;
+			  	 	    				bufferDes.append(privateGroupMap.get(address)) ;
 		  	 	    				}    				
 		  	 	    			}
 								    groupName = buffer.toString() ;
+								    groupDes = bufferDes.toString() ;
 								  } else if (contactType.equals("0")) {
 								  	StringBuffer buffer = new StringBuffer("") ;
+								  	StringBuffer bufferDes = new StringBuffer("") ;
 								  	for (String address : addressBooks) {
-								  		if (privateGroupMap.containsKey(address)) address = privateGroupMap.get(address);
-								  		else if (!publicAddress.contains(address)) continue ;
-		  	 	    				if(buffer.length() > 0) buffer.append(", ").append(ContactUtils.encodeHTML(address)) ;
-		  	 	    				else buffer.append(ContactUtils.encodeHTML(address)) ;
+								  		if (privateGroupMap.containsKey(address)) {
+								  			address = privateGroupMap.get(address);
+								  			if(buffer.length() > 0) {
+		  	 	    						buffer.append(", ") ;
+		  	 	    						bufferDes.append(", ") ;
+		  	 	    					}
+		  	 	    					buffer.append(ContactUtils.encodeHTML(address)) ;
+		  	 	    					bufferDes.append(ContactUtils.encodeHTML(address)) ;
+								  		}	else if (publicAddress.contains(address)) {
+							  		    if(buffer.length() > 0) {
+	  	 	    							buffer.append(", ") ;
+	  	 	    							bufferDes.append(", ") ;
+	  	 	    						}
+	  	 	    						buffer.append(ContactUtils.getPublicGroupName(address)) ;
+	  	 	    						bufferDes.append(ContactUtils.encodeHTML(address)) ;						  			
+								  		}
 		  	 	    			}
-										groupName = buffer.toString() ;								  							  
+										groupName = buffer.toString() ;	
+										groupDes = bufferDes.toString() ;							  							  
 								  } else if (contactType.equals("1")){
 									  	SharedAddressBook add = null ;							  	 
 									  	for (String address : addressBooks) {
@@ -297,12 +322,15 @@
 								  		else {
 								  			buffer = new StringBuffer(_ctx.appRes(uicomponent.getName() + ".label.sharedContacts")) ;
 								  		}
+								  		StringBuffer bufferDes = new StringBuffer(buffer.toString()) ;
 							  			for (String address : addressBooks) { 
 							  				if (publicAddress.contains(address)) {
-							  					buffer.append(", ").append(ContactUtils.encodeHTML(address)) ;
+							  					buffer.append(", ").append(ContactUtils.encodeHTML(ContactUtils.getPublicGroupName(address))) ;
+							  					bufferDes.append(", ").append(ContactUtils.encodeHTML(address)) ;
 							  				}
 							  			}
 								  		groupName = buffer.toString() ;
+								  		groupDes = bufferDes.toString() ;
 								  }
 								  
   	 	    				String actionLink  = uicomponent.event("SelectedContact", contact.getId()) ;
@@ -384,7 +412,7 @@
 									</a>
 								</td>
 								
-								<td class="text"><%=groupName%></td>
+								<td class="text" title="$groupDes"><%=groupName%></td>
 								
    			     	</tr>
    			     	<% } %>  

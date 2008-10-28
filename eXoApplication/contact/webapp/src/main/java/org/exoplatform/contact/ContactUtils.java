@@ -38,13 +38,18 @@ public class ContactUtils {
   public static final String HTTP = "http://" ; 
   public static String[] specialString = {"!", "#", "%", "&"
                                             , ":", ">", "<", "~", "`", "]", "'", "/", "-"} ;
-  
-  // can't use String.replaceAll() ;
+//can't use String.replaceAll() ;
   public static String[] specialString2 = {"?", "[", "(", "|", ")", "*", "\\", "+", "}", "{", "^", "$", "\""
     ,"!", "#", "%", "&", ":", ">", "<", "~", "`", "]", "'", "/", "-"} ;
   
   public static String getDisplayAdddressShared(String sharedUserId, String addressName) {
     return sharedUserId + " - " + addressName ;
+  }
+  
+  public static boolean isNameLong(String text) {
+    if (text == null) return false ;
+    if (text.length() > 40) return true ;
+    return false ;
   }
   
   public static String encodeJCRText(String str) {
@@ -53,7 +58,6 @@ public class ContactUtils {
   }
   
   public static boolean isNameValid(String name, String[] regex) {
-    if (name ==null || name.length() ==0 ) return true ; 
     for(String c : regex){ if(name.contains(c)) return false ;}
     return true ;
   }
@@ -66,10 +70,9 @@ public class ContactUtils {
     /*return str.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").
       replaceAll("'", "&apos;").replaceAll("\"", "&quot;") ;*/
   }
-  
-  // not use
+//not use
   public static String filterString(String text, boolean isEmail) {
-	  if (text == null || text.trim().length() == 0) return "" ;
+    if (text == null || text.trim().length() == 0) return "" ;
     for (String str : specialString) {
       text = text.replaceAll(str, "") ;
     }
@@ -108,27 +111,12 @@ public class ContactUtils {
     return groupIds ;
   }
   
-/*  public static String getImageSource(Contact contact, DownloadService dservice) throws Exception {    
-    ContactAttachment contactAttachment = contact.getAttachment();
-    if (contactAttachment != null) {
-      try {
-        InputStream input = contactAttachment.getInputStream() ;
-        byte[] imageBytes = null ;
-        if (input != null) {
-          imageBytes = new byte[input.available()] ;
-          input.read(imageBytes) ;
-          ByteArrayInputStream byteImage = new ByteArrayInputStream(imageBytes) ;
-          InputStreamDownloadResource dresource = new InputStreamDownloadResource(byteImage, "image") ;
-          dresource.setDownloadName(contactAttachment.getFileName()) ;
-          return  dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;        
-        }
-      } catch (PathNotFoundException ex) {
-        return null ;
-      }
-    }
-    return null ;
+  public static String getPublicGroupName(String groupId) throws Exception {
+    OrganizationService organizationService = 
+      (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
+    return organizationService.getGroupHandler().findGroupById(groupId).getGroupName() ;
   }
-*/
+  
   public static boolean isPublicGroup(String groupId) throws Exception {
     if (getUserGroups().contains(groupId)) return true ;
     return false ;

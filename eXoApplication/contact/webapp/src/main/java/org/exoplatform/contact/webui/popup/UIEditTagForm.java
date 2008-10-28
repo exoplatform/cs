@@ -97,6 +97,13 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       }
+      if (ContactUtils.isNameLong(tagName)) {
+        uiApp.addMessage(new ApplicationMessage("UIEditTagForm.msg.nameTooLong", null, 
+            ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ; 
+      }
+      
       UIContactPortlet uiContactPortlet = uiEditTagForm.getAncestorOfType(UIContactPortlet.class) ;
       UITags uiTags = uiContactPortlet.findFirstComponentOfType(UITags.class) ;
       if (uiEditTagForm.isNew) {
