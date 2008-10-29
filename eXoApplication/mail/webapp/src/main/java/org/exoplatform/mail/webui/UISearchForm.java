@@ -53,6 +53,14 @@ public class UISearchForm extends UIForm {
     addChild(new UIFormStringInput(FIELD_SEARCHVALUE, FIELD_SEARCHVALUE, null)) ;
   }
   
+  public void setTextSearch(String txt) throws Exception {
+    getUIStringInput(FIELD_SEARCHVALUE).setValue(txt);
+  }
+  
+  public String getTextSearch() throws Exception {
+    return getUIStringInput(FIELD_SEARCHVALUE).getValue();
+  }
+  
   static  public class SearchActionListener extends EventListener<UISearchForm> {
     public void execute(Event<UISearchForm> event) throws Exception {
       UISearchForm uiSearchForm = event.getSource();
