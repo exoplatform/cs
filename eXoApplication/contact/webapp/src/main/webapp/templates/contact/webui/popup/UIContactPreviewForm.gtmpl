@@ -101,14 +101,11 @@
 			                      </td>
                           </tr>
                           <% } %>
-                          <% if (!ContactUtils.isEmpty(contact.getEmailAddress())) { 
-                          		email = contact.getEmailAddress().replaceAll(";", "; ") ;
-	  		  					String subEmail ;
-								if (ContactUtils.isEmpty(email)) subEmail = "_" ;
-	  		  					else {
-	  		  					  if (email.length() > 30) subEmail = email.substring(0, 30) + "..." ;
-  		  						  else subEmail = email ;	
-	  		  					}                       
+                          <% 
+                          email = contact.getEmailAddress() ;
+                          if (!ContactUtils.isEmpty(email)){
+                            List<String> emails = new ArrayList<String>() ;
+                          	emails.addAll(Arrays.asList(email.split(";"))) ;
                           %>
                           <tr>
                             <td class="InfoLabel">
@@ -116,19 +113,39 @@
                             </td>
                             <td class="InfoTitle1">
 			                        <table class="InfoTitle2" >
+			                        <% 
+			                        for (String emailAdd : emails) {
+			                        %>
 			                          <tr>
 			                            <td>
-			                              <div class="InfoTitle3 Email" title="$email">
-			                              <% if (!uicomponent.isPrintForm) { %>
-				                              <a href="<%=uicomponent.event("SendEmail", contact.getEmailAddress())%>">
-				                                <%= subEmail %>
+			                              <div class="InfoTitle3 Email" title="$emailAdd">
+			                              <% if (!uicomponent.isPrintForm) {
+			                              		if (emailAdd.length() > 30) {
+			                              			int length = emailAdd.length() ;
+			                              			StringBuilder builder = new StringBuilder() ;
+			                              			int begin = 0 ;
+			                              			int end = 30 ;
+			                              			while (length > 30) {
+			                              				if (builder.length() > 0) builder.append("<br>") ;
+			                              				builder.append(emailAdd.substring(begin, end)) ;
+			                              				begin+=30 ; end +=30;
+			                              				length = length - 30 ;
+			                              			}
+			                              			builder.append("<br>" + emailAdd.substring(begin, emailAdd.length()-1)) ;
+			                              			emailAdd = builder.toString() ;                            			
+			                              		}
+			                              
+			                               %>
+				                              <a href="<%=uicomponent.event("SendEmail", emailAdd)%>">
+				                                <%= emailAdd %>
 				                              </a>
 				                            <% } else { %>
-																		<%= email %>
-																		<% } %>
+				                            <%= emailAdd %>
+				                            <% } %>
 				                             </div>
 			                            </td>
 			                          </tr>
+			                         <% } %>         
 			                        </table>
 			                      </td>
                           </tr>
