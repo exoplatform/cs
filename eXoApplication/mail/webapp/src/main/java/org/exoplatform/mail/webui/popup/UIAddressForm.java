@@ -352,8 +352,11 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         if (!uiAddressForm.checkedList_.containsKey(ct.getId())) uiAddressForm.newCheckedList_.put(ct.getId(), ct) ;
       }
       for (Contact contact : uiAddressForm.newCheckedList_.values()) {
-        if(contact.getEmailAddress() != null)
+        if(contact.getEmailAddress() != null) {
           toAddress += contact.getFullName() + "<" + contact.getEmailAddress() + "> ," ;
+        } else if (!MailUtils.isFieldEmpty(contact.getFullName())) {
+          toAddress += contact.getFullName()  + " ," ;
+        }
       }
       List<String> listMail = Arrays.asList( sb.toString().split(MailUtils.COMMA)) ; 
       String email = null ;
