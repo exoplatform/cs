@@ -17,14 +17,20 @@
 package org.exoplatform.contact.webui.popup;
 
 import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.jcr.PathNotFoundException;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
+import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.Utils;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.upload.UploadResource;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -99,10 +105,18 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
       attachment.setInputStream(new ByteArrayInputStream(input.getUploadData())) ;
       attachment.setFileName(fileName) ;
       attachment.setMimeType(mimeType) ;
-      contact.setAttachment(attachment) ;   
-      ContactUtils.getContactService().saveContact(SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), contact, true) ;
-      uiProfileInputSet.setContact(ContactUtils.getContactService()
-        .getContact(SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), contact.getId())) ; 
+      contact.setAttachment(attachment) ;
+      List<String> tempContact = new ArrayList<String>() ;
+      tempContact.add(Utils.contactTempId) ;
+      
+      ContactService service = ContactUtils.getContactService() ;
+      String username = ContactUtils.getCurrentUser() ;
+      SessionProvider session = SessionProviderFactory.createSessionProvider() ;
+      try {
+        service.removeContacts(session, username, tempContact) ;
+      } catch (PathNotFoundException e) {}
+      service.saveContact(session, username, contact, true) ;
+      uiProfileInputSet.setContact(service.getContact(session, username, contact.getId())) ; 
       uiProfileInputSet.setImage(inputStream) ;
       uiProfileInputSet.setMimeType(mimeType) ;
       uiProfileInputSet.setFileName(fileName) ;

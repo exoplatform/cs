@@ -415,6 +415,7 @@ public class UIContactForm extends UIFormTabPane {
       profileTab.setImage(null) ;
       profileTab.setFileName(null) ;
       profileTab.setMimeType(null) ;
+      if (profileTab.getContact() != null) profileTab.getContact().setAttachment(null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(
         uiContactForm.getAncestorOfType(UIPopupAction.class)) ;
     }
