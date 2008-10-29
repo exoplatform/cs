@@ -192,6 +192,19 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
+      String[] emails = to.split(",") ;
+      String EMAIL_REGEX = 
+        "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+";
+      for (String email : emails) {
+        if (!ContactUtils.isEmpty(email) && !email.trim().matches(EMAIL_REGEX)) {
+          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.invalid-email", null, 
+              ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
+      }
+      
+      
       UIPopupAction uiChildPopup = uiForm.getAncestorOfType(UIPopupAction.class) ;
       Message message = new Message() ;
       message.setSendDate(new Date()) ;
