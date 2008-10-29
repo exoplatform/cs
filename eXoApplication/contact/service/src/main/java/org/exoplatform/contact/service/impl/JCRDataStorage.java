@@ -318,7 +318,7 @@ public class JCRDataStorage {
     List<String> address = new ArrayList<String>();
     while (it.hasNext()){
       Node contact = it.nextNode();
-      if(contact.hasProperty("exo:emailAddress"))
+      if(contact.hasProperty("exo:emailAddress") && !Utils.isEmpty(contact.getProperty("exo:emailAddress").getString()))
         address.add(contact.getProperty("exo:emailAddress").getString());
     }
     return address ;
@@ -335,7 +335,7 @@ public class JCRDataStorage {
     List<String> address = new ArrayList<String>();
     while (it.hasNext()){
       Node contact = it.nextNode();
-      if(contact.hasProperty("exo:emailAddress"))
+      if(contact.hasProperty("exo:emailAddress") && !Utils.isEmpty(contact.getProperty("exo:emailAddress").getString()))
         address.add(contact.getProperty("exo:emailAddress").getString());
     }
     return address ;
@@ -356,7 +356,7 @@ public class JCRDataStorage {
         List<String> address = new ArrayList<String>();
         while (it.hasNext()){
           Node contact = it.nextNode();
-          if(contact.hasProperty("exo:emailAddress"))
+          if(contact.hasProperty("exo:emailAddress") && !Utils.isEmpty(contact.getProperty("exo:emailAddress").getString()))
             address.add(contact.getProperty("exo:emailAddress").getString());
         }
         return address ;         
