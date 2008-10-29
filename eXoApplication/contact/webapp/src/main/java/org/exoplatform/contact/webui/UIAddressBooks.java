@@ -451,29 +451,29 @@ public class UIAddressBooks extends UIComponent {
       } else {
         addresses = contactService.getAllEmailBySharedGroup(username, groupId) ;
       }
-      if (addresses == null || addresses.size() < 1) {
+      if (addresses == null || addresses.size() == 0) {
         UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.no-email-found", null,
           ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;        
-      } else {
-        StringBuffer buffer = new StringBuffer(addresses.get(0)) ;
-        for (int i = 1; i < addresses.size(); i ++) {
-          buffer.append(", " + addresses.get(i)) ;
-        }
-        List<Account> acc = ContactUtils.getAccounts() ;
-        if (acc == null || acc.size() < 1) {
-          UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.invalidAcc", null,
-              ApplicationMessage.WARNING)) ;
-          return ;
-        }
-        UIComposeForm uiComposeForm = uiPopupAction.activate(UIComposeForm.class, 850) ;
-        uiComposeForm.init(acc, buffer.toString()) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());
-      } 
+      }
+      StringBuffer buffer = new StringBuffer(addresses.get(0)) ;
+      for (int i = 1; i < addresses.size(); i ++) {
+        buffer.append(", " + addresses.get(i)) ;
+      }
+      List<Account> acc = ContactUtils.getAccounts() ;
+      if (acc == null || acc.size() < 1) {
+        UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.invalidAcc", null,
+            ApplicationMessage.WARNING)) ;
+        return ;
+      }
+      UIComposeForm uiComposeForm = uiPopupAction.activate(UIComposeForm.class, 850) ;
+      uiComposeForm.init(acc, buffer.toString()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());
+       
     }
   }
 
