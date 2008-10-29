@@ -61,9 +61,7 @@
 					</td>
 					<td>
 						<div class="Title $cssClass">
-							<a href="<%=uicomponent.event("GotoDate",monthViewAction)%>">
-							$currentDayName
-						</a>,
+							$currentDayName,
 						<a href="<%=uicomponent.event("GotoDate",monthViewAction)%>">
 							$currentMonthName
 						</a>, $currentDay, 
