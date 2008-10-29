@@ -110,15 +110,11 @@
 			                      </td>
                           </tr>
                           <% } %>
-                          <% if (!ContactUtils.isEmpty(contact.getEmailAddress())) {
-                          		email = contact.getEmailAddress().replaceAll(";", "; ") ;
-	  		  					String subEmail ;
-								if (ContactUtils.isEmpty(email)) subEmail = "_" ;
-	  		  					else {
-	  		  					  if (email.length() > 30) subEmail = email.substring(0, 30) + "..." ;
-  		  						  else subEmail = email ;	
-	  		  					}
-                          
+                          <% 
+                          email = contact.getEmailAddress() ;
+                          if (!ContactUtils.isEmpty(email)){
+                            List<String> emails = new ArrayList<String>() ;
+                          	emails.addAll(Arrays.asList(email.split(";"))) ;   
                            %>
                           <tr>
                             <td class="InfoLabel">
@@ -126,15 +122,21 @@
                             </td>
                             <td class="InfoTitle1">
 			                        <table class="InfoTitle2" >
+			                        <% 
+			                        for (String emailAdd : emails) {
+			                        	if (emailAdd.length() > 30) subEmail = emailAdd.substring(0, 30) + "..." ;	
+			                        	else subEmail = emailAdd ;	
+			                        %>
 			                          <tr>
 			                            <td>
-			                              <div class="InfoTitle3 Email" title="$email">
-				                              <a href="<%=uicomponent.event("SendEmail", contact.getEmailAddress())%>">
-				                                <%= ContactUtils.encodeHTML(subEmail)%>
+			                              <div class="InfoTitle3 Email" title="$emailAdd">
+				                              <a href="<%=uicomponent.event("SendEmail", emailAdd)%>">
+				                                <%= subEmail %>
 				                              </a>
 				                             </div>
 			                            </td>
 			                          </tr>
+			                         <% } %>    
 			                        </table>
 			                      </td>
                           </tr>
