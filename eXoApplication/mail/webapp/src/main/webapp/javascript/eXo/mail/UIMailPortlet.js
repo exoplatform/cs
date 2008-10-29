@@ -170,14 +170,19 @@ UIMailPortlet.prototype.changeMenuLabel = function(layout, layoutState){
 UIMailPortlet.prototype.switchLayoutCallback = function(layout,status){
 	var layoutMan = eXo.mail.LayoutManager ;
 	var workingarea = document.getElementById("UIMessageArea");
+	var actionReadingPane =  eXo.core.DOMUtil.findDescendantById(workingarea,"ActionReadingPane");
 	if(!status){
-		if(layout == 1) workingarea.style.marginLeft = "0px"
+		if(layout == 1) workingarea.style.marginLeft = "0px";
+		if(layout == 2) actionReadingPane.className = "MinimumReadingPane";
 		if (layout == 3) {
 			document.getElementById("uiMessageGrid").style.overflowY = "visible" ;
 			document.getElementById("uiMessageGrid").style.height = "auto" ;
 		}
+		
 	} else {
-		if(layout == 1) workingarea.style.marginLeft = "225px"
+		if(layout == 1) workingarea.style.marginLeft = "225px";
+		if(layout == 2) actionReadingPane.className = "MaximizeReadingPane";
+		
 		if (layout == 3) {
 			document.getElementById("uiMessageGrid").style.overflowY = "auto" ;
 			document.getElementById("uiMessageGrid").style.height = "200px" ;
@@ -231,25 +236,16 @@ UIMailPortlet.prototype.showHideAddMoreAddress = function(add) {
 	}
 } ; 
 
-UIMailPortlet.prototype.showHidePreviewPane = function(layout) {	
-	var Browser = eXo.core.Browser ;
-    var	uiMessageList = document.getElementById("uiMessageListResizableArea") ;
-	var	previewPane = document.getElementById("SpliterResizableArea") ;
-	var resizePane = document.getElementById("ResizeReadingPane");
-	var actionReadingPane = document.getElementById("ActionReadingPane");
-	if (uiMessageList.style.display == "block") {
-		uiMessageList.style.display = "none";
-		resizePane.style.display = "none";
-		actionReadingPane.className = "MinimumReadingPane";
-		Browser.setCookie("uiMessageListResizableArea", "none", 30)
-		Browser.setCookie("ResizeReadingPane", "none", 30)
-	} else {
-		uiMessageList.style.display = "block";
-		resizePane.style.display = "block";
-		actionReadingPane.className = "MaximizeReadingPane";
-		Browser.setCookie("uiMessageListResizableArea", "block", 30)
-		Browser.setCookie("ResizeReadingPane", "block", 30)
-	}
+UIMailPortlet.prototype.showHidePreviewPane = function(obj) {	
+	var DOMUtil = eXo.core.DOMUtil ;
+	this.switchLayout(2);
+	var actionButton = DOMUtil.findDescendantsByTagName(obj, "span")[0];
+	var spliterContainer = DOMUtil.findAncestorByClass(obj,"SpliterContainer");
+	var uiMessageArea = DOMUtil.findFirstDescendantByClass(spliterContainer,"div","UIMessageArea");
+	if(uiMessageArea.style.display == "none") 
+		actionButton.className = "MinimumReadingPane";
+	else
+		actionButton.className = "MaximizeReadingPane";
 };
 
 UIMailPortlet.prototype.showHideMessageHeader = function(obj) {
