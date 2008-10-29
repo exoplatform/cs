@@ -61,6 +61,7 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIFormInputWithActions;
+import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormTabPane;
 
 /**
@@ -178,11 +179,17 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
           isContains = eventCat.getName().toLowerCase().equals(eventCalendar.getEventCategoryId().toLowerCase()) ;
           if(isContains) break ;
         }
-        if(!isContains) {
+        if(!isContains && eventCalendar.getEventCategoryId() != null) {
           SelectItemOption<String> item = new SelectItemOption<String>(eventCalendar.getEventCategoryId(), eventCalendar.getEventCategoryId()) ;
-          taskDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).getOptions().add(item) ;
+          UIFormSelectBox uiSelectBox = taskDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY) ;
+          uiSelectBox.getOptions().add(item) ;
           newCategoryId_ = eventCalendar.getEventCategoryId() ;
-          taskDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).setValue(eventCalendar.getEventCategoryId());
+          uiSelectBox.setValue(eventCalendar.getEventCategoryId());
+          if(!isAddNew_ && String.valueOf(Calendar.TYPE_SHARED).equals(calType_)){
+            uiSelectBox.setDisabled(true) ;
+            taskDetailTab.getUIFormSelectBoxGroup(UITaskDetailTab.FIELD_CALENDAR).setDisabled(true) ;
+            taskDetailTab.setActionField(UIEventDetailTab.FIELD_CATEGORY, null) ;
+          }
         }
       }
     } else {
@@ -855,12 +862,12 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
             String fromType = uiForm.oldCalendarId_.split(CalendarUtils.COLON)[0].trim() ;
             String toType = uiForm.newCalendarId_.split(CalendarUtils.COLON)[0].trim() ;
 
-            if((uiForm.calType_.equals(CalendarUtils.SHARED_TYPE) || uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)) && uiForm.newCategoryId_ != null){
+            /*if((uiForm.calType_.equals(CalendarUtils.SHARED_TYPE) || uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)) && uiForm.newCategoryId_ != null){
               EventCategory evc = new EventCategory() ;
               evc.setName(uiForm.newCategoryId_ ) ;
               calService.saveEventCategory(uiForm.getSession(), username, evc, null, true) ;
               uiViewContainer.updateCategory() ;
-            }
+            }*/
 
             List<CalendarEvent> listEvent = new ArrayList<CalendarEvent>();
             listEvent.add(calendarEvent) ;

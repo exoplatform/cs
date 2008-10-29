@@ -233,9 +233,15 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       }
       if(!isContains && eventCalendar.getEventCategoryId() != null) {
         SelectItemOption<String> item = new SelectItemOption<String>(eventCalendar.getEventCategoryId(), eventCalendar.getEventCategoryId()) ;
-        eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).getOptions().add(item) ;
+        UIFormSelectBox uiSelectBox = eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY) ;
+        uiSelectBox.getOptions().add(item) ;
         newCategoryId_ = eventCalendar.getEventCategoryId() ;
-        eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).setValue(eventCalendar.getEventCategoryId());
+        uiSelectBox.setValue(eventCalendar.getEventCategoryId());
+        if(!isAddNew_ && String.valueOf(Calendar.TYPE_SHARED).equals(calType_)){
+          uiSelectBox.setDisabled(true) ;
+          eventDetailTab.getUIFormSelectBoxGroup(UIEventDetailTab.FIELD_CALENDAR).setDisabled(true) ;
+          eventDetailTab.setActionField(UIEventDetailTab.FIELD_CATEGORY, null) ;
+        }
       }      
       attenderTab.calendar_.setTime(eventCalendar.getFromDateTime()) ;
     } else {
@@ -1207,12 +1213,12 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
                 String toCal = uiForm.newCalendarId_.split(CalendarUtils.COLON)[1].trim() ;
                 String fromType = uiForm.oldCalendarId_.split(CalendarUtils.COLON)[0].trim() ;
                 String toType = uiForm.newCalendarId_.split(CalendarUtils.COLON)[0].trim() ;
-                if(uiForm.newCategoryId_ != null) {
+                /*if(uiForm.newCategoryId_ != null) {
                   EventCategory evc = new EventCategory() ;
                   evc.setName(uiForm.newCategoryId_ ) ;
                   calService.saveEventCategory(uiForm.getSession(), username, evc, null, true) ;
                   uiViewContainer.updateCategory() ;
-                }
+                }*/
                 List<CalendarEvent> listEvent = new ArrayList<CalendarEvent>();
                 listEvent.add(calendarEvent) ;
                 calService.moveEvent(uiForm.getSession(), fromCal, toCal, fromType, toType, listEvent, username) ;
