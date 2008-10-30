@@ -52,6 +52,7 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 /**
  * Author : Huu-Dung Kieu huu-dung.kieu@bull.be 16 oct. 07 
@@ -106,7 +107,7 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
     for(String type : ContactUtils.getContactService().getImportExportType()) {
       options.add(new SelectItemOption<String>(type, type)) ;
     }
-    addUIFormInput(new UIFormStringInput(NAME, NAME, null)) ;
+    addUIFormInput(new UIFormStringInput(NAME, NAME, null).addValidator(MandatoryValidator.class)) ;
     addUIFormInput(new UIFormSelectBox(TYPE, TYPE, options)) ;
   }
   @SuppressWarnings("unchecked")
@@ -177,12 +178,12 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
       
       String exportFormat = uiForm.getUIFormSelectBox(UIExportForm.TYPE).getValue() ;
       String fileName = uiForm.getUIStringInput(UIExportForm.NAME).getValue() ;
-      if (ContactUtils.isEmpty(fileName)) {
+    /*  if (ContactUtils.isEmpty(fileName)) {
         uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.filename-required", null, 
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
-      }
+      }*/
       List<Contact> contacts = new ArrayList<Contact>() ;
       if (!ContactUtils.isEmpty(uiForm.getSelectedGroup())) {
         String[] address = uiForm.selectedGroup.split(Utils.SPLIT) ;
