@@ -54,8 +54,8 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 
 /**
  * Created by The eXo Platform SARL
- * Author : Hung Nguyen
- *          hung.nguyen@exoplatform.com
+ * Author : Hung Hoang
+ *          hung.hoang@exoplatform.com
  * Aus 01, 2007 2:48:18 PM 
  */
 @ComponentConfig(
@@ -206,11 +206,8 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         }      
       }
       ContactService contactService = ContactUtils.getContactService() ;
-      SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
-      
+      SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;      
       Map<String, String>  receiveUsersByGroups = new LinkedHashMap<String, String>() ;
-      
-      // improve get user
       if (!ContactUtils.isEmpty(groups)) {
         String[] arrayGroups = groups.split(",") ; 
         for (String group : arrayGroups) {
@@ -249,6 +246,23 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
           for (String group : receiveGroups.keySet()) editMapGroups.put(group, group) ;
           contactGroup.setEditPermissionGroups(editMapGroups.keySet().toArray(new String[] {})) ; 
      
+        } else { // cs-1570
+          if (contactGroup.getEditPermissionUsers() != null) {
+            List<String> oldPers = new ArrayList<String>() ;
+            oldPers.addAll(Arrays.asList(contactGroup.getEditPermissionUsers())) ;
+            for (String user : receiveUsers.keySet()) {
+              oldPers.remove(user) ;              
+            }
+            contactGroup.setEditPermissionUsers(oldPers.toArray(new String[] {})) ;            
+          }
+          if (contactGroup.getEditPermissionGroups() != null) {
+            List<String> oldPers = new ArrayList<String>() ;
+            oldPers.addAll(Arrays.asList(contactGroup.getEditPermissionGroups())) ;
+            for (String group : receiveGroups.keySet()) {
+              oldPers.remove(group) ;              
+            }
+            contactGroup.setEditPermissionGroups(oldPers.toArray(new String[] {})) ;            
+          }
         }
         if (uiForm.isNew_) {
           String[] viewPerUsers = contactGroup.getViewPermissionUsers() ;
@@ -321,14 +335,32 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
           addPerUsers(contact, viewMapUsers, editMapUsers) ;
           addPerGroups(contact, viewMapGroups, editMapGroups) ;
           
+          if(!uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).isChecked()) { // cs-1570
+            if (contact.getEditPermissionUsers() != null) {
+              List<String> oldPers = new ArrayList<String>() ;
+              oldPers.addAll(Arrays.asList(contact.getEditPermissionUsers())) ;
+              for (String user : receiveUsers.keySet()) {
+                oldPers.remove(user) ;              
+              }
+              contact.setEditPermissionUsers(oldPers.toArray(new String[] {})) ;            
+            }
+            if (contact.getEditPermissionGroups() != null) {
+              List<String> oldPers = new ArrayList<String>() ;
+              oldPers.addAll(Arrays.asList(contact.getEditPermissionGroups())) ;
+              for (String group : receiveGroups.keySet()) {
+                oldPers.remove(group) ;              
+              }
+              contact.setEditPermissionGroups(oldPers.toArray(new String[] {})) ;            
+            }
+          }
+          
+          
           // add to fix bug cs-1300
           UIContacts uiContacts = uiForm.getAncestorOfType(
               UIContactPortlet.class).findFirstComponentOfType(UIContacts.class) ;
           if (uiContacts.getContactMap().get(contact.getId()) != null) {
             uiContacts.getContactMap().put(contact.getId(), contact) ;
           }
-     
-          
           try {
             contactService.saveContact(sessionProvider, username, contact, false) ;
           }  catch (PathNotFoundException e) {
@@ -336,9 +368,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
                 ApplicationMessage.WARNING)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return ;              
-          }
-          
-          
+          } 
           UIAddEditPermission uiAddEdit = uiForm.getParent() ;
           uiAddEdit.updateContactGrid(contact);
           event.getRequestContext().addUIComponentToUpdateByAjax(uiAddEdit) ; 

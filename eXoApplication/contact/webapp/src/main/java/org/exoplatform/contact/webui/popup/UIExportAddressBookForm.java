@@ -41,6 +41,7 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
@@ -55,7 +56,7 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
     template = "app:/templates/contact/webui/popup/UIExportAddressBookForm.gtmpl",
     events = {
       @EventConfig(listeners = UIExportAddressBookForm.SaveActionListener.class),      
-      @EventConfig(listeners = UIExportAddressBookForm.CancelActionListener.class)
+      @EventConfig(listeners = UIExportAddressBookForm.CancelActionListener.class, phase=Phase.DECODE)
     }
 )
 public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
