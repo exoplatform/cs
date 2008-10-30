@@ -48,6 +48,7 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
@@ -63,7 +64,7 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
     events = {
       @EventConfig(listeners = UIExportForm.SaveActionListener.class),  
       @EventConfig(listeners = UIExportForm.ShowPageActionListener.class),
-      @EventConfig(listeners = UIExportForm.CancelActionListener.class)
+      @EventConfig(listeners = UIExportForm.CancelActionListener.class, phase=Phase.DECODE)
     }
 )
 public class UIExportForm extends UIForm implements UIPopupComponent{
