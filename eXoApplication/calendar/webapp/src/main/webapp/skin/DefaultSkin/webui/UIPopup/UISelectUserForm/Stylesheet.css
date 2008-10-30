@@ -1,6 +1,11 @@
-.UICalendarPortlet .UISelectUserForm {
-	background: #f3f3f3;
-	width:630px;
+.UICalendarPortlet .UISelectUserForm .SelectUserContainer{
+ padding: 8px;
+}
+
+.UICalendarPortlet .UISelectUserForm .SelectUserContainer{
+ background: #f3f3f3;
+ padding: 16px;
+ border: 1px solid #b7b7b7;
 }
 
 .UICalendarPortlet .UISelectUserForm .InsertAddressContainer {

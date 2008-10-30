@@ -88,7 +88,18 @@ UIWeekView.prototype.setSize = function() {
 		UIWeekView.showInCol(UIWeekView.cols[i]) ;
 	}	
 } ;
-
+UIWeekView.prototype.showHideEvent = function(el,isVisible){
+	var i = el.length ;
+	if(isVisible){
+		while(i--){
+			el[i].style.visibility = "visible";
+		}
+	}else{
+		while(i--){
+			el[i].style.visibility = "hidden";
+		}
+	}
+}
 UIWeekView.prototype.adjustWidth = function(el) {
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
 	var inter = UICalendarPortlet.getInterval(el) ;
@@ -137,14 +148,14 @@ UIWeekView.prototype.showInCol = function(obj) {
 	var items = eXo.calendar.UICalendarPortlet.getElements(obj) ;
 	var len = items.length ;
 	if (len <= 0) return ;
+	//this.showHideEvent(items,false);
 	var UIWeekView = eXo.calendar.UIWeekView ;
 	var container = (eXo.core.Browser.isFF()) ? UIWeekView.container : items[0].offsetParent ;
 	var left = parseFloat((eXo.core.Browser.findPosXInContainer(obj, container) - 1)/container.offsetWidth)*100 ;
 	var width = parseFloat((obj.offsetWidth - 2)/container.offsetWidth)*100 ;
 	items = eXo.calendar.UICalendarPortlet.sortByAttribute(items, "starttime") ;
-//	if(eXo.core.Browser.browserType == "ie") UIWeekView.adjustWidth(items, obj.offsetWidth, eXo.core.Browser.findPosXInContainer(obj, container)) ;
-//	else eXo.calendar.UICalendarPortlet.adjustWidth(items, width, left) ;
 	UIWeekView.adjustWidth(items, obj.offsetWidth, eXo.core.Browser.findPosXInContainer(obj, container)) ;
+	this.showHideEvent(items,true);
 } ;
 
 UIWeekView.prototype.dragStart = function(evt) {

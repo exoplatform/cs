@@ -1487,11 +1487,21 @@ UICalendarPortlet.prototype.getFilterSelect = function(form){
  */
 UICalendarPortlet.prototype.setSelected = function(form){
     try {
-        eXo.calendar.UICalendarPortlet.getFilterSelect(form);
-        eXo.calendar.UICalendarPortlet.selectedCategory = eXo.calendar.UICalendarPortlet.filterSelect.options[eXo.calendar.UICalendarPortlet.filterSelect.selectedIndex].value;
-    } 
-    catch (e) {
-    }
+      this.getFilterSelect(form);
+      this.selectedCategory = eXo.calendar.UICalendarPortlet.filterSelect.options[eXo.calendar.UICalendarPortlet.filterSelect.selectedIndex].value;
+    	this.listViewDblClick(form);
+		} 
+    catch (e) {}
+};
+
+UICalendarPortlet.prototype.listViewDblClick = function(form){
+	form = (typeof(form) == "string")? document.getElementById(form):form ;
+	var tr = eXo.core.DOMUtil.findDescendantsByTagName(form,"tr");
+	var i = tr.length ;
+	eXo.calendar.UICalendarPortlet.viewType = "UIListView";
+	while(i--){
+		eXo.core.EventManager.addEvent(tr[i],"dblclick",this.ondblclickCallback);
+	}
 };
 
 /**
