@@ -663,12 +663,12 @@
 								if (!ContactUtils.isEmpty(contact.getEmailAddress())) { 
 									email = contact.getEmailAddress() ;
 	              	String[] emails = email.split(";") ;
-									int maxEmail = 2 ;
-									if (ContactUtils.isEmpty(contact.getJobTitle())) maxEmail ++ ;
-									if (ContactUtils.isEmpty(contact.getWorkPhone1()) && ContactUtils.isEmpty(contact.getWorkPhone2())) maxEmail ++ ;
-									if (ContactUtils.isEmpty(contact.getMobilePhone())) maxEmail ++ ;
-									if (ContactUtils.isEmpty(contact.getWebPage())) maxEmail ++ ;
-									for (int index =1; index <= emails.length && index <=maxEmail ; index ++) {
+									//int maxEmail = 2 ;
+									//if (ContactUtils.isEmpty(contact.getJobTitle())) maxEmail ++ ;
+									//if (ContactUtils.isEmpty(contact.getWorkPhone1()) && ContactUtils.isEmpty(contact.getWorkPhone2())) maxEmail ++ ;
+									//if (ContactUtils.isEmpty(contact.getMobilePhone())) maxEmail ++ ;
+									//if (ContactUtils.isEmpty(contact.getWebPage())) maxEmail ++ ;
+									for (int index =1; index <= emails.length ; index ++) {
 										emailAdd = emails[index-1].trim() ;
 	                	subEmail = emailAdd ;	
 	                	if (emailAdd.length() > 30) subEmail = emailAdd.substring(0, 30) + "..." ;
@@ -835,12 +835,12 @@
 								if (!ContactUtils.isEmpty(contact.getEmailAddress())) { 
 									email = contact.getEmailAddress() ;
 	              	String[] emails = email.split(";") ;
-									int maxEmail = 2 ;
-									if (ContactUtils.isEmpty(contact.getJobTitle())) maxEmail ++ ;
-									if (ContactUtils.isEmpty(contact.getWorkPhone1()) && ContactUtils.isEmpty(contact.getWorkPhone2())) maxEmail ++ ;
-									if (ContactUtils.isEmpty(contact.getMobilePhone())) maxEmail ++ ;
-									if (ContactUtils.isEmpty(contact.getWebPage())) maxEmail ++ ;
-									for (int index =1; index <= emails.length && index <=maxEmail ; index ++) {
+									//int maxEmail = 2 ;
+									//if (ContactUtils.isEmpty(contact.getJobTitle())) maxEmail ++ ;
+									//if (ContactUtils.isEmpty(contact.getWorkPhone1()) && ContactUtils.isEmpty(contact.getWorkPhone2())) maxEmail ++ ;
+									//if (ContactUtils.isEmpty(contact.getMobilePhone())) maxEmail ++ ;
+									//if (ContactUtils.isEmpty(contact.getWebPage())) maxEmail ++ ;
+									for (int index =1; index <= emails.length ; index ++) {
 										emailAdd = emails[index-1].trim() ;
 	                	subEmail = emailAdd ;	
 	                	if (emailAdd.length() > 30) subEmail = emailAdd.substring(0, 30) + "..." ;
