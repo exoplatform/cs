@@ -45,6 +45,7 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 /**
  * Author : Huu-Dung Kieu huu-dung.kieu@bull.be 16 oct. 07 
@@ -92,7 +93,7 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
     for(String type : ContactUtils.getContactService().getImportExportType()) {
       options.add(new SelectItemOption<String>(type, type)) ;
     }  
-    addUIFormInput(new UIFormStringInput(NAME, NAME, null)) ;
+    addUIFormInput(new UIFormStringInput(NAME, NAME, null).addValidator(MandatoryValidator.class)) ;
     addUIFormInput(new UIFormSelectBox(TYPE, TYPE, options)) ;
     for (String group : privateGroupMap_.keySet()) {
       addUIFormInput(new UIFormCheckBoxInput<Boolean>(group,privateGroupMap_.get(group), false));
@@ -141,12 +142,12 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
       } 
       String exportFormat = uiForm.getUIFormSelectBox(UIExportAddressBookForm.TYPE).getValue() ;
       String fileName = uiForm.getUIStringInput(UIExportAddressBookForm.NAME).getValue() ;
-      if (ContactUtils.isEmpty(fileName)) {
+      /*if (ContactUtils.isEmpty(fileName)) {
         uiApp.addMessage(new ApplicationMessage("UIExportAddressBookForm.fileName-required", null,
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
-      }
+      }*/
       OutputStream out = null ;
       try {
         out = ContactUtils.getContactService().getContactImportExports(exportFormat).exportContact(
