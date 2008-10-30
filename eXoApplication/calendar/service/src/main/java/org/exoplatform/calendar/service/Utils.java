@@ -45,7 +45,7 @@ public class Utils {
   public static final String EXO_REMINDER_TYPE = "exo:reminderType".intern() ;
   public static final String EXO_ALARM_BEFORE = "exo:alarmBefore".intern() ;
   public static final String EXO_EMAIL = "exo:email".intern() ;
-  public static final String EXO_OWNER = "exo:owner".intern() ;
+  public static final String EXO_OWNER = "exo:creater".intern() ;
   public static final String EXO_REMINDER = "exo:reminder".intern() ;
   public static final String EXO_FROM_DATE_TIME = "exo:fromDateTime".intern() ;
   public static final String EXO_TO_DATE_TIME = "exo:toDateTime".intern() ;
