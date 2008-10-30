@@ -17,7 +17,7 @@
 package org.exoplatform.contact.webui.popup;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
@@ -69,7 +69,7 @@ public class UIImportForm extends UIForm {
   
   //public static String[] Types = null ;
   private String[] Types = null ;
-  private Map<String, String> groups_ = new HashMap<String, String>() ;
+  private Map<String, String> groups_ = new LinkedHashMap<String, String>() ;
 
   public UIImportForm() { this.setMultiPart(true) ; }
   public void addConponent() throws Exception {
@@ -119,6 +119,11 @@ public class UIImportForm extends UIForm {
   public void setCategoryList(List<SelectItemOption<String>> options ) {
     UIFormInputWithActions iput = getChildById(INPUT_CATEGORY) ;
      iput.getUIFormSelectBox(FIELD_CATEGORY).setOptions(options) ;
+//   cs- 1628
+     groups_.clear() ;
+     for (SelectItemOption<String> option : options) {
+       groups_.put(option.getValue(), option.getLabel()) ;
+     }
   }
 
   public void setValues(String group) {
