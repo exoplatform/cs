@@ -742,8 +742,12 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           }    
         }
       }
+      
+//    cs- 1630
+      Map<String, Contact> copyedContacts = uiAddressBooks.getCopyContacts() ;      
       for(String contactId : contactIds) {
         Contact contact = uiContacts.contactMap.get(contactId) ;
+        if (!contact.getAddressBook()[0].equals(addressBookId)) copyedContacts.remove(contactId) ;
         if (contact.getContactType().equals(JCRDataStorage.SHARED)) {
           if (uiContacts.isSharedAddress(contact)) {
             String addressId = null ;
@@ -799,6 +803,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       }
       uiContacts.updateList() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBooks) ;
     }
   }
   
@@ -811,7 +816,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         contactIds.add(contactId) ;
       } else {
         contactIds =  uiContacts.getCheckedContacts() ;
-        if (contactIds.size() < 1) {
+        if (contactIds.size() == 0) {
           UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UIContacts.msg.checkContact-toCopy", null,
               ApplicationMessage.WARNING)) ;
@@ -822,15 +827,14 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIAddressBooks uiAddressBooks = uiContacts.getAncestorOfType(
           UIWorkingContainer.class).findFirstComponentOfType(UIAddressBooks.class) ;     
       uiAddressBooks.setCopyAddress(null) ;
-      List<Contact> copyContacts = new ArrayList<Contact>();
+      Map<String, Contact> copyContacts = new LinkedHashMap<String, Contact>();
       for (String id : contactIds)
-        copyContacts.add(uiContacts.contactMap.get(id)) ;
+        copyContacts.put(id, uiContacts.contactMap.get(id)) ;
       uiAddressBooks.setCopyContacts(copyContacts) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBooks) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
     }
   }
-  
-  
   static public class DeleteContactsActionListener extends EventListener<UIContacts> {
     @SuppressWarnings("unchecked")
   public void execute(Event<UIContacts> event) throws Exception {
@@ -892,9 +896,12 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       ContactService contactService = ContactUtils.getContactService() ;
       String username = ContactUtils.getCurrentUser() ;
       List <Contact> removedContacts = new ArrayList<Contact>() ;
+//    cs- 1630
+      Map<String, Contact> copyedContacts = addressBooks.getCopyContacts() ;
       
       // remove shared contacts
       for (String id : contactIds) {
+        copyedContacts.remove(id) ;
         Contact contact = uiContacts.contactMap.get(id) ;    
         if (contact.getContactType().equals(JCRDataStorage.SHARED)) {
           if (uiContacts.isSharedAddress(contact)) {
@@ -930,7 +937,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
               return ;
             }            
           }
-          removedContacts.add(contact) ;
+          removedContacts.add(contact) ;          
         }
       }
       if (!uiContacts.isSelectSharedContacts) {

@@ -31,6 +31,7 @@ import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.impl.JCRDataStorage;
+import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UIWorkingContainer;
@@ -135,8 +136,12 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       List<Contact> contacts = new ArrayList<Contact>() ;
       List<Contact> sharedContacts = new ArrayList<Contact>() ;
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
+      
+//    cs- 1630
+      Map<String, Contact> copyedContacts = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class).getCopyContacts() ;
       for(String id : uiMoveContactForm.getContactIds()) {
         Contact contact = uiMoveContactForm.movedContacts.get(id) ;
+        if (!contact.getAddressBook()[0].equals(addressBookId)) copyedContacts.remove(id) ;        
         if (contact.getContactType().equals(JCRDataStorage.SHARED)) {
           if (!uiContacts.havePermission(contact) && uiContacts.isSharedAddress(contact)) {
             UIApplication uiApp = uiMoveContactForm.getAncestorOfType(UIApplication.class) ;
