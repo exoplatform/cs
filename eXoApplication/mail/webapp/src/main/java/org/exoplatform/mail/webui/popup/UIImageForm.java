@@ -17,6 +17,10 @@
 package org.exoplatform.mail.webui.popup;
 
 import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.jcr.PathNotFoundException;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
@@ -26,6 +30,7 @@ import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.upload.UploadResource;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -109,11 +114,16 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
       attachment.setMimeType(mimeType) ;
       contact.setAttachment(attachment) ; 
       ContactService contactSrv = uiForm.getApplicationComponent(ContactService.class);
-      
-      contactSrv.saveContact(SessionProviderFactory.createSessionProvider(), MailUtils.getCurrentUser(), contact, true) ;
+      String username = MailUtils.getCurrentUser() ;
+      SessionProvider session = SessionProviderFactory.createSessionProvider() ;
+      List<String> tempContact = new ArrayList<String>() ;
+      tempContact.add(org.exoplatform.contact.service.Utils.contactTempId) ;
+      try {
+        contactSrv.removeContacts(session, username, tempContact) ;
+      } catch (PathNotFoundException e) {}
+      contactSrv.saveContact(session, username, contact, true) ;
       uiContactForm.setTempContact(contactSrv
-        .getContact(SessionProviderFactory.createSessionProvider(), MailUtils.getCurrentUser(), contact.getId())) ; 
-      
+        .getContact(session, username, contact.getId())) ;      
       UIPopupAction popupAction = uiPopupActionContainer.getChild(UIPopupAction.class) ;
       popupAction.deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction.getParent()) ;

@@ -397,6 +397,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
       uiContactForm.setImage(null) ;
       uiContactForm.setFileName(null) ;
       uiContactForm.setMimeType(null) ;
+      if (uiContactForm.getTempContact() != null) uiContactForm.getTempContact().setAttachment(null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContactForm.getAncestorOfType(UIPopupAction.class)) ;
     }
   }
