@@ -571,7 +571,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         for (String contactId : contactIds) {
           Contact contact = uiContacts.contactMap.get(contactId) ;
           String[] tags = contact.getTags() ;
-          if (tags != null && tags.length > 1) {
+          if (tags != null && tags.length > 0) {
             List<String> newTags = new ArrayList<String>() ;
             for (String tag : tags) newTags.add(tag) ;
             newTags.add(tagId) ;
@@ -586,6 +586,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
      // }
      // uiContacts.updateList() ; f
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts) ;
     }
   }
   
