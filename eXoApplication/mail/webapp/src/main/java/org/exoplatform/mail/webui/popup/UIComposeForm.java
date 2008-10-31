@@ -321,7 +321,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         MailService mailSvr = this.getApplicationComponent(MailService.class) ;
         Account account = mailSvr.getAccountById(SessionProviderFactory.createSystemProvider(), MailUtils.getCurrentUser(), accountId_);
         for (int i = 0 ; i < msgToAdds.length; i++) {
-          System.out.println(msgToAdds[i].getAddress() + "=========" + i + "===========" + account.getEmailAddress());
           if (msgToAdds[i] != null && !msgToAdds[i].getAddress().equalsIgnoreCase(account.getEmailAddress()) &&
               !msgToAdds[i].getAddress().equalsIgnoreCase(account.getIncomingUser())) {
             if (replyCc.trim().length() > 0) replyCc += ", ";

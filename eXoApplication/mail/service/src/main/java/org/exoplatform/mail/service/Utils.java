@@ -144,6 +144,8 @@ public class Utils {
   public static final String EXO_CONVERSATION = "exo:conversation".intern();
   public static final String EXO_CONVERSATIONID = "exo:conversationId".intern();
   public static final String EXO_LAST_CHECKED_TIME = "exo:lastCheckedTime".intern() ;
+  public static final String EXO_CHECK_ALL = "exo:checkAll".intern();
+  public static final String EXO_CHECK_FROM_DATE = "exo:checkFromDate".intern();
   public static final String EXO_IS_SAVE_PASSWORD  = "exo:isSavePassword".intern() ;
   public static final String EXO_MAIL_ATTACHMENT = "exo:mailAttachment".intern() ;
   public static final String EXO_ATT_NAME = "exo:fileName".intern() ;
@@ -323,7 +325,7 @@ public class Utils {
   }
   
   public static javax.mail.internet.MimeMessage mergeToMimeMessage(Message message, javax.mail.internet.MimeMessage mimeMessage) throws Exception {
-    InternetAddress addressFrom = new InternetAddress(message.getFrom());
+    InternetAddress addressFrom = null;
     if (message.getFrom() != null) { 
       addressFrom = new InternetAddress(message.getFrom());
     }
