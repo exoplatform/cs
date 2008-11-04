@@ -25,6 +25,7 @@ import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.UIFolderContainer;
+import org.exoplatform.mail.webui.UIFormDateTimePicker;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
@@ -94,8 +95,8 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     addUIFormInput(new UIFormStringInput(FIELD_FROM_SEARCH, null, null)) ;  
     addUIFormInput(new UIFormStringInput(FIELD_SUBJECT_SEARCH, null, null)) ;
     addUIFormInput(new UIFormStringInput(FIELD_CONTENT_SEARCH, null, null)) ;
-    UIFormDateTimeInput uiFormDateTimeInputBeforeDate = new UIFormDateTimeInput(FIELD_FROM_DATE, FIELD_FROM_DATE, null, false) ;
-    UIFormDateTimeInput uiFormDateTimeInputAfterDate = new UIFormDateTimeInput(FIELD_TO_DATE, FIELD_TO_DATE, null, false) ;
+    UIFormDateTimePicker uiFormDateTimeInputBeforeDate = new UIFormDateTimePicker(FIELD_FROM_DATE, FIELD_FROM_DATE, null, false) ;
+    UIFormDateTimePicker uiFormDateTimeInputAfterDate = new UIFormDateTimePicker(FIELD_TO_DATE, FIELD_TO_DATE, null, false) ;
     addUIFormInput(uiFormDateTimeInputBeforeDate) ;   
     addUIFormInput(uiFormDateTimeInputAfterDate) ;  
     
@@ -187,11 +188,13 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
   }
   
   public Calendar getFromDate() {
-    return getUIFormDateTimeInput(FIELD_FROM_DATE).getCalendar();
+    return getUIFormDateTimePicker(FIELD_FROM_DATE).getCalendar();
   } 
-  
+  public UIFormDateTimePicker getUIFormDateTimePicker(String id) {
+    return findComponentById(id) ;
+  }
   public Calendar getToDate() {
-    return getUIFormDateTimeInput(FIELD_TO_DATE).getCalendar();
+    return getUIFormDateTimePicker(FIELD_TO_DATE).getCalendar();
   } 
   
   public boolean hasStar() {
