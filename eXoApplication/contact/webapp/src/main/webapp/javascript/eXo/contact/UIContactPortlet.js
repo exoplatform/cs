@@ -29,21 +29,22 @@ UIContactPortlet.prototype.showContextMenu = function(compid) {
 } ;
 
 UIContactPortlet.prototype.contactCallback = function(evt) {
+	
+	
 	var UIContextMenuCon = eXo.webui.UIContextMenuCon ;
   var DOMUtil = eXo.core.DOMUtil ;
 	var _e = window.event || evt ;
 	_e.cancelBubble = true ;
 	var src = _e.srcElement || _e.target ;
-	var tr = DOMUtil.findAncestorByTagName(src, "tr") ;
 	var id = null ;
+	var tr = DOMUtil.findAncestorByClass(src, "VCardContent") ;
 	if(tr != null) {
-		var checkbox = DOMUtil.findFirstDescendantByClass(tr, "input", "checkbox") ;		
-		id = checkbox.name ;
-		//eXo.webui.UIContextMenuCon.changeAction(UIContextMenuCon.menuElement, id) ;
-	} else {
 		tr = DOMUtil.findAncestorByClass(src, "VCardContent") ;
 		id = tr.getAttribute("id") ;
-    //eXo.webui.UIContextMenuCon.changeAction(UIContextMenuCon.menuElement, id) ;
+	} else {
+		tr = DOMUtil.findAncestorByTagName(src, "tr") ;
+		var checkbox = DOMUtil.findFirstDescendantByClass(tr, "input", "checkbox") ;		
+		id = checkbox.name ;
 	}
   var type = tr.getAttribute("type").toLowerCase() ;
 	var isOwner = tr.getAttribute("isOwner").toLowerCase() ;  

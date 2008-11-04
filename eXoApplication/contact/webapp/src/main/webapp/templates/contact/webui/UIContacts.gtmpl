@@ -559,6 +559,7 @@
 	<div class="UIVCardsContent">
 	
 	  <div class="WorkVCardsContent">
+		<table class="UIGrid" style="table-layout: fixed; _width: auto; border: none;">
 				<% 		
 					DownloadService dservice ;	
 					String imageLink ;					
@@ -583,7 +584,9 @@
 						}
 		
 				%>	
-		  <div class="LeftVCardsContent">
+				
+					<tr>
+						<td style="border: none;">
 		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" havePermissionAdd="<%=uicomponent.havePermissionAdd(contact)%>" isSharedAddress = "<%=uicomponent.isSharedAddress(contact)%>" isOwner="<%=contact.isOwner()%>">
 			  	<div class="TitleVCards" >
 			  		<% 
@@ -663,12 +666,7 @@
 								if (!ContactUtils.isEmpty(contact.getEmailAddress())) { 
 									email = contact.getEmailAddress() ;
 	              	String[] emails = email.split(";") ;
-									//int maxEmail = 2 ;
-									//if (ContactUtils.isEmpty(contact.getJobTitle())) maxEmail ++ ;
-									//if (ContactUtils.isEmpty(contact.getWorkPhone1()) && ContactUtils.isEmpty(contact.getWorkPhone2())) maxEmail ++ ;
-									//if (ContactUtils.isEmpty(contact.getMobilePhone())) maxEmail ++ ;
-									//if (ContactUtils.isEmpty(contact.getWebPage())) maxEmail ++ ;
-									for (int index =1; index <= emails.length ; index ++) {
+									for (int index = 1; index <= emails.length; index ++) {
 										emailAdd = emails[index-1].trim() ;
 	                	subEmail = emailAdd ;	
 	                	if (emailAdd.length() > 30) subEmail = emailAdd.substring(0, 30) + "..." ;
@@ -735,7 +733,7 @@
 			  		<div style="clear: left;"><span></span></div>
 			  	</div>
 			  </div>
-		  </div>
+		  
 			<%
 			if (i < contacts.length) {
 				contact = contacts[i ++] ;
@@ -755,7 +753,8 @@
 			}	
 				
 			%>
-			<div class="RightVCardsContent">
+			</td>
+			<td style="border: none;">
 		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" havePermissionAdd="<%=uicomponent.havePermissionAdd(contact)%>" isSharedAddress = "<%=uicomponent.isSharedAddress(contact)%>"  isOwner="<%=contact.isOwner()%>">
 			  	<div class="TitleVCards" >
 			  	<% 
@@ -835,12 +834,7 @@
 								if (!ContactUtils.isEmpty(contact.getEmailAddress())) { 
 									email = contact.getEmailAddress() ;
 	              	String[] emails = email.split(";") ;
-									//int maxEmail = 2 ;
-									//if (ContactUtils.isEmpty(contact.getJobTitle())) maxEmail ++ ;
-									//if (ContactUtils.isEmpty(contact.getWorkPhone1()) && ContactUtils.isEmpty(contact.getWorkPhone2())) maxEmail ++ ;
-									//if (ContactUtils.isEmpty(contact.getMobilePhone())) maxEmail ++ ;
-									//if (ContactUtils.isEmpty(contact.getWebPage())) maxEmail ++ ;
-									for (int index =1; index <= emails.length ; index ++) {
+									for (int index =1; index <= emails.length; index ++) {
 										emailAdd = emails[index-1].trim() ;
 	                	subEmail = emailAdd ;	
 	                	if (emailAdd.length() > 30) subEmail = emailAdd.substring(0, 30) + "..." ;
@@ -905,12 +899,14 @@
 			  	</div>
 			  </div>	
 		  	
-		  </div>
+		  
 
+			</td>
+			</tr>
 			
 			  <% } } %>		
+		  </table>
 		  
-		  <div style="clear: both;"><span></span></div>
 		</div>
 		
 	</div>

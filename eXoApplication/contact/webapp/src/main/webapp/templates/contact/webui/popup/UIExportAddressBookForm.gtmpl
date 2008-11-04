@@ -24,63 +24,41 @@
   	 	      <tbody>
   	 	    <%  
 						Map contactGroups = uicomponent.getContactGroups();
-						for(group in contactGroups.keySet()) {
-							checkboxField = uicomponent.getChildById(group) ;
-							groupName = ContactUtils.encodeHTML(contactGroups.get(group)) ;
-					%>
-  						<tr class="UIContactList">
-  						  <td class="text" style="padding-left: 7px;">
-  						  	<%
-  						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
-  						  	%>
-  						  </td>
-							<td class="text" title="$groupName">
-									<%= groupName %>
-							</td>
-
-   			     	</tr>
-		     	<% } %>  
-		     	
-		     	<%  
 						Map sharedGroups = uicomponent.getSharedContactGroups();
-						for(group in sharedGroups.keySet()) {
-							checkboxField = uicomponent.getChildById(group) ;
-							groupName = ContactUtils.encodeHTML(ContactUtils.getDisplayAdddressShared(sharedGroups.get(group).getSharedUserId(), sharedGroups.get(group).getName())) ;
-					%>
-  						<tr class="UIContactList">
-  						  <td class="text" style="padding-left: 7px;">
-  						  	<%
-  						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
-  						  	%>
-  						  </td>
-							<td class="text" title="$groupName">
-									<%= groupName %>
-							</td>
-
-   			     	</tr>
-		     	<% } %> 
-		     	
-		     	<%  
 						Map publicGroups = uicomponent.getPublicContactGroup();
-						for(group in publicGroups.keySet()) {
+						for (String group : uicomponent.getAddress()) {
 							checkboxField = uicomponent.getChildById(group) ;
-							groupDes = publicGroups.get(group) ;
-							groupName = ContactUtils.getPublicGroupName(groupDes) ;
-					%>
-  						<tr class="UIContactList">
+							groupDes = "" ;
+							groupName = "" ;
+							if (contactGroups.containsKey(group)) {
+								groupName = ContactUtils.encodeHTML(contactGroups.get(group)) ;
+								groupDes = groupName ;
+							} else if (sharedGroups.containsKey(group)) {
+								groupName = ContactUtils.encodeHTML(ContactUtils.getDisplayAdddressShared(sharedGroups.get(group).getSharedUserId(), sharedGroups.get(group).getName())) ;
+								groupDes = groupName ;
+							} else {
+								groupDes = publicGroups.get(group) ;
+								groupName = ContactUtils.getPublicGroupName(groupDes) ;
+							}
+						%>	
+							<tr class="UIContactList">
   						  <td class="text" style="padding-left: 7px;">
   						  	<%
   						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
   						  	%>
   						  </td>
-							<td class="text" title="$groupDes" >
+								<td class="text" title="$groupDes">
 									<%= groupName %>
-							</td>
-
+								</td>
    			     	</tr>
-		     	<% } %> 	
+							
+					<% } %>
+						
+						
   	   			</tbody>
 				</table>
+				
+				<%_ctx.include("app:/templates/contact/webui/popup/UIPageIterator.gtmpl");%>
 			</div>
 
 			<div class="ExportForm">
@@ -101,11 +79,18 @@
         <table class="ActionContainer" align="center">
           <tr>
             <td align="center"> 
-          
-             <a href="<%=uicomponent.event("Save")%>" class="ActionButton LightBlueStyle">
+          	<a href="<%=uicomponent.event("Save", "all")%>" class="ActionButton LightBlueStyle">
                 <div class="ButtonLeft">
                   <div class="ButtonRight">
-                    <div class="ButtonMiddle"> <%=_ctx.appRes(uicomponent.getName() + ".label.ok")%> </div>
+                    <div class="ButtonMiddle"> <%=_ctx.appRes(uicomponent.getName() + ".label.exportAll")%> </div>
+                  </div>
+                </div>
+              </a>
+          
+             <a href="<%=uicomponent.event("Save", "selected")%>" class="ActionButton LightBlueStyle">
+                <div class="ButtonLeft">
+                  <div class="ButtonRight">
+                    <div class="ButtonMiddle"> <%=_ctx.appRes(uicomponent.getName() + ".label.exportSelected")%> </div>
                   </div>
                 </div>
               </a>
