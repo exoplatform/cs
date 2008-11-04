@@ -58,6 +58,7 @@ public class ContactUtils {
   }
   
   public static boolean isNameValid(String name, String[] regex) {
+    if (isEmpty(name)) return true ;
     for(String c : regex){ if(name.contains(c)) return false ;}
     return true ;
   }
