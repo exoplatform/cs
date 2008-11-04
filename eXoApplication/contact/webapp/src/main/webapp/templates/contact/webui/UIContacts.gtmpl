@@ -379,13 +379,14 @@
 									</div>
 								</td>
 									<% 
-										email = contact.getEmailAddress().replaceAll(";", "; ") ;
-			  		  					String subEmail ;
+										email = contact.getEmailAddress() ;
+			  		  			String subEmail ;
 										if (ContactUtils.isEmpty(email)) subEmail = "_" ;
-			  		  					else {
-			  		  					  if (email.length() > 30) subEmail = email.substring(0, 30) + "..." ;
-		  		  						  else subEmail = email ;	
-			  		  					}
+	  		  					else {
+	  		  						email = email.replaceAll(";", "; ") ;
+	  		  					  if (email.length() > 30) subEmail = email.substring(0, 30) + "..." ;
+  		  						  else subEmail = email ;	
+	  		  					}
 									 %>
 								<td class="text" title="$email">
 									<a href="$actionLink">
@@ -464,10 +465,11 @@
 									</div>
 								</td>
 								<% 
-										email = contact.getEmailAddress().replaceAll(";", "; ") ;
+										email = contact.getEmailAddress();
 			  		  					String subEmail ;
 										if (ContactUtils.isEmpty(email)) subEmail = "_" ;
 			  		  					else {
+			  		  						email = email.replaceAll(";", "; ") ;
 			  		  					  if (email.length() > 30) subEmail = email.substring(0, 30) + "..." ;
 		  		  						  else subEmail = email ;	
 			  		  					}
