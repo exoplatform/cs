@@ -16,9 +16,7 @@
  */
 package org.exoplatform.contact.webui.popup;
 
-import java.sql.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.exoplatform.contact.ContactUtils;
