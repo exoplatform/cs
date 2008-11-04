@@ -19,7 +19,7 @@ package org.exoplatform.contact.webui.popup;
 import java.io.ByteArrayInputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
@@ -63,7 +63,7 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
     template = "app:/templates/contact/webui/popup/UIExportForm.gtmpl",
     events = {
       @EventConfig(listeners = UIExportForm.SaveActionListener.class),  
-      @EventConfig(listeners = UIExportForm.ShowPageActionListener.class),
+      @EventConfig(listeners = UIExportForm.ShowPageActionListener.class, phase=Phase.DECODE),
       @EventConfig(listeners = UIExportForm.CancelActionListener.class, phase=Phase.DECODE)
     }
 )
@@ -73,7 +73,7 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
   private String selectedTag_     = null;
   private String selectedGroup = null;
   private UIPageIterator uiPageIterator_ ;
-  private Map<String, String> checkedContacts = new HashMap<String, String>() ;
+  private Map<String, String> checkedContacts = new LinkedHashMap<String, String>() ;
   private Map<String, Contact> contacts = null ;
 
   public UIExportForm() throws Exception {
