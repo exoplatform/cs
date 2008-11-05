@@ -103,7 +103,7 @@
 		  					<td><%uicomponent.renderField(uicomponent.getChildById(event.getId()))%></td>
 		  					<%}%>
 		  					<td style="padding: 1px;"><div class="$attachIcon">&nbsp;</div></td>
-								<td class="text"><div class="<%=(uicomponent.getPriority(event.getPriority()) == null)? "" :  uicomponent.getPriority(event.getPriority())%>PriorityIcon">&nbsp;</div></td>
+								<td class="text"><div class="<%=event.getPriority()%>PriorityIcon">&nbsp;</div></td>
 								<td class="text">
 									<a href="$actionLink" class="ControlButton" title="<%=event.summary%>">
 										<%=event.getSummary()%>

@@ -181,8 +181,8 @@
 								<div class="EventCheckbox">
 									<%uicomponent.renderField(uicomponent.getChildById(event.id))%>
 								</div>
-								<div class="EventSummary" <%=(uicomponent.getPriority(event.getPriority()) == null)? "":" style='_padding-left:12px;'" %>>
-									<div class="<%=(uicomponent.getPriority(event.getPriority()) == null)? "" :  uicomponent.getPriority(event.getPriority())%>PriorityIcon"><span></span></div>
+								<div class="EventSummary" <%= (event.getPriority() == "none")? "":" style='_padding-left:12px;'" %>>
+									<div class="<%=event.getPriority()%>PriorityIcon"><span></span></div>
 									<div class="EventLabel EventPriority" title="<%=event.summary%>" >$event.summary</div>
 								</div>
 							</div>

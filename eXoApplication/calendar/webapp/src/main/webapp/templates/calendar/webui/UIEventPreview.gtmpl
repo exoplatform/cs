@@ -49,7 +49,7 @@ uiform.begin() ;
 	         </div>
 	         <%for(attachFile in  event.getAttachment()){%>
 		         <div class="AttachmentIcon"  style="white-space: nowrap;">
-		          <a href="<%=uicomponent.event("Download",attachFile.getId())%>">$attachFile.name  </a>
+		          <a href="<%=uicomponent.event("Download",attachFile.getId())%>" title="<%=attachFile.name + '(' + CalendarUtils.convertSize(attachFile.size)+ ')'%> ">$attachFile.name  </a>
 		          <%=CalendarUtils.convertSize(attachFile.size)%> 
 		         </div>
 		          <%if(attachFile.getMimeType().startsWith("image"))  {
