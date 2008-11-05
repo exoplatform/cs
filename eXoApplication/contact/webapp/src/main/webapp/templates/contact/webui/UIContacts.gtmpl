@@ -576,15 +576,16 @@
 							for (String tagId : tagIds) { 
 								Tag tag = tagMap.get(tagId) ;
 								if (tag != null) {
-									iconTag = "Icon " + tag.getColor() + "Tag" ;
+									iconTag = "Icon2 " + tag.getColor() + "Tag" ;
 									break ;
 								}	
 							}
 						}
 						if (!ContactUtils.isEmpty(uicomponent.selectedTag_)) {
-							iconTag = "Icon " + tagMap.get(uicomponent.selectedTag_).getColor() + "Tag" ;
+							iconTag = "Icon2 " + tagMap.get(uicomponent.selectedTag_).getColor() + "Tag" ;
 						}
-		
+						
+						
 				%>	
 				
 					<tr>
@@ -745,13 +746,13 @@
 					for (String tagId : tagIds) { 
 						Tag tag = tagMap.get(tagId) ;
 						if (tag != null) {
-							iconTag = "Icon " + tag.getColor() + "Tag" ;
+							iconTag = "Icon2 " + tag.getColor() + "Tag" ;
 							break ;
 						}	
 					}
 				}
 			if (!ContactUtils.isEmpty(uicomponent.selectedTag_)) {
-				iconTag = "Icon " + tagMap.get(uicomponent.selectedTag_).getColor() + "Tag" ;
+				iconTag = "Icon2 " + tagMap.get(uicomponent.selectedTag_).getColor() + "Tag" ;
 			}	
 				
 			%>
