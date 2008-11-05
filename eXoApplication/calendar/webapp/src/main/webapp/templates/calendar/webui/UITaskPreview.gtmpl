@@ -110,7 +110,7 @@ uiform.begin() ;
 			        							<%=uiform.getLabel('Note')%>
 			        						</td>
 			        						<td class="Text">
-			        							<div>
+			        							<div class="ViewDescription">
 			        								 <%
 							                  String des = "" ;
 							                  if(!CalendarUtils.isEmpty(task.getDescription())) {
