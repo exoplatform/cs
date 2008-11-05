@@ -109,7 +109,17 @@ uiform.begin() ;
 			        						<td class="Text">
 			        							<%=uiform.getLabel('Note')%>
 			        						</td>
-			        						<td class="Text"><pre><%=(task.getDescription()==null)?"" : task.getDescription()%></pre></td>
+			        						<td class="Text">
+			        							<div>
+			        								 <%
+							                  String des = "" ;
+							                  if(!CalendarUtils.isEmpty(task.getDescription())) {
+							                   des = task.getDescription().replaceAll("\n","<br/>") ; ;
+							                  }
+							                  println des ; 
+							                 %>
+														</div>
+												  </td>
 			        					</tr>	
 				        			</table>
 				        			<%if(!uicomponent.isShowPopup()){%>
