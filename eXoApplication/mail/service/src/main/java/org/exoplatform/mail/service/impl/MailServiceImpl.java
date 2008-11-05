@@ -557,6 +557,11 @@ public class MailServiceImpl implements MailService {
       boolean isPop3 = account.getProtocol().equals(Utils.POP3);
       boolean isImap = account.getProtocol().equals(Utils.IMAP);
       Date lastCheckedDate = account.getLastCheckedDate();
+      if (!account.isCheckAll()) {
+        if (lastCheckedDate == null) {
+           lastCheckedDate = account.getCheckFromDate();
+        }
+      }
       /*ExoContainer container = RootContainer.getInstance();
     container = ((RootContainer)container).getPortalContainer("portal");
     ContinuationService continuation = (ContinuationService) container.getComponentInstanceOfType(ContinuationService.class);*/

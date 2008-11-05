@@ -285,11 +285,16 @@ public class Utils {
     return personal;
   }
   
-  public static String[] getAddresses(String addressList) throws Exception { 
-    InternetAddress[] internetAddresses = getInternetAddress(addressList);
-    String[] strs = new String[internetAddresses.length];
-    for (int i = 0; i < internetAddresses.length; i++ ) {
-      strs[i] = internetAddresses[i].getAddress();
+  public static String[] getAddresses(String addressList) throws Exception {
+    String[] strs = new String[1];
+    try {
+      InternetAddress[] internetAddresses = getInternetAddress(addressList);
+      strs = new String[internetAddresses.length];
+      for (int i = 0; i < internetAddresses.length; i++ ) {
+        strs[i] = internetAddresses[i].getAddress();
+      }
+    } catch(Exception e) {
+      strs[0] = "";
     }
     return strs;
   }

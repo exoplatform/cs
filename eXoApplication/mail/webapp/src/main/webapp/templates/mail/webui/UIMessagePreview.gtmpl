@@ -89,7 +89,7 @@
                             <td>
                               <div class="HeadlineText" title="<%=_ctx.appRes(uicomponent.id+ '.label.click-here-to-expand') %>">
                               <%
-                                String body = MailUtils.html2text(msg.getMessageBody()) ;
+                                String body = MailUtils.html2string(msg.getMessageBody()) ;
                                 if (body.length() > 90) body = body.substring(0, 90) ;
                                 print(body) ;
                               %> ...</div>

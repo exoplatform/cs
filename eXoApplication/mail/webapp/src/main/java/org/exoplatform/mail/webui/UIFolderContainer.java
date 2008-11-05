@@ -171,7 +171,15 @@ public class UIFolderContainer extends UIContainer {
         uiMessageList.viewing_ =  uiMessageList.VIEW_ALL;
         uiMsgPreview.setMessage(null);
       }
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;
+      
+      UISearchForm uiSearchForm = uiPortlet.findFirstComponentOfType(UISearchForm.class);
+      System.out.println("==========aaa============>>>>>> " + uiSearchForm.getTextSearch());
+      if (!MailUtils.isFieldEmpty(uiSearchForm.getTextSearch())) {
+        uiSearchForm.setTextSearch("");       
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder.getParent()) ;
+      } else {
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgArea) ;
     }
   }
