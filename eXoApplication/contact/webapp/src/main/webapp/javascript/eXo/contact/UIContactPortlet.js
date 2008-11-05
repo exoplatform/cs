@@ -430,7 +430,7 @@ UIContactPortlet.prototype.printList = function (obj){
 	UIPortalApplication.style.visibility = "hidden" ;
 	if(uiControlWorkspace) uiControlWorkspace.style.display = "none" ;
 	div.style.position = "absolute" ;
-	div.style.width = "100%" ;
+	div.style.width = "99%" ;
 	document.body.insertBefore(div,UIPortalApplication) ;
 	eXo.core.DOMUtil.removeElement(UIAction) ;
 	UIPortalApplication.style.height =  div.offsetHeight + "px";
