@@ -494,16 +494,18 @@ public class UIAddressBooks extends UIComponent {
       
       if (uiAddressBook.sharedAddressBookMap_.containsKey(groupId)) {
         //contactService.removeSharedAddressBook(SessionProviderFactory.createSystemProvider(), username, groupId) ;
-        if (uiContacts.isDisplaySearchResult())
-          removedContacts = contactService.getSharedContactsByAddressBook(SessionProviderFactory
+//      cs-1644
+        //if (uiContacts.isDisplaySearchResult())
+        removedContacts = contactService.getSharedContactsByAddressBook(SessionProviderFactory
             .createSystemProvider(), username, uiAddressBook.sharedAddressBookMap_.get(groupId)).getAll() ;
         try {
           contactService.removeUserShareAddressBook(SessionProviderFactory.createSystemProvider()
               , uiAddressBook.sharedAddressBookMap_.get(groupId).getSharedUserId(), groupId, username) ;          
         } catch (PathNotFoundException e) { }
       } else {
-        if (uiContacts.isDisplaySearchResult())
-          removedContacts = contactService.getContactPageListByGroup(
+//      cs-1644
+        //if (uiContacts.isDisplaySearchResult())
+        removedContacts = contactService.getContactPageListByGroup(
               sessionProvider, username, groupId).getAll() ;
         contactService.removeGroup(sessionProvider, username, groupId);
       }
@@ -522,10 +524,12 @@ public class UIAddressBooks extends UIComponent {
         uiContacts.setContact(removedContacts, false) ;
         uiContacts.updateList() ;
       }
-      
-      // add to fix bug 
       if (uiContacts.getSelectedGroup() != null && groupId.equals(uiContacts.getSelectedGroup()))
         uiContacts.setSelectedGroup(null) ;
+      
+      // cs-1644
+      for (Contact contact : removedContacts)
+        uiAddressBook.copyContacts.remove(contact.getId()) ;
       
       event.getRequestContext().addUIComponentToUpdateByAjax(workingContainer);     
     }
