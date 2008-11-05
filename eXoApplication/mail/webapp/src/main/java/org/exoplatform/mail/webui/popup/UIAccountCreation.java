@@ -16,6 +16,7 @@
  */
 package org.exoplatform.mail.webui.popup;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,6 +46,7 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormTabPane;
 /**
  * Created by The eXo Platform SARL
@@ -63,6 +65,7 @@ import org.exoplatform.webui.form.UIFormTabPane;
       @EventConfig(listeners = UIAccountCreation.NextActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIAccountCreation.BackActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIAccountCreation.FinishActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIAccountCreation.CheckFromDateActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIAccountCreation.CancelActionListener.class, phase = Phase.DECODE, confirm = "UIAccountCreation.msg.confirm-cancel") 
     }
 )
@@ -261,6 +264,23 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
     }
   }
 
+  public static class CheckFromDateActionListener extends EventListener<UIAccountCreation>{
+    public void execute(Event<UIAccountCreation> event) throws Exception {
+      UIAccountCreation uiAccCreation = event.getSource() ;
+      UIAccountWizardStep4 uiWs4 = uiAccCreation.getChildById(INPUT_STEP4) ;
+      UIFormDateTimeInput fromDateField = ((UIFormDateTimeInput) uiWs4.getChildById(UIAccountWizardStep4.FROM_DATE));
+      boolean checkAllMail = uiWs4.checkFromDate();
+      
+      if (!checkAllMail) {
+        fromDateField.setRendered(false);
+      } else {
+        fromDateField.setRendered(true);
+      }
+      
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAccCreation.getAncestorOfType(UIPopupAction.class)) ;
+    }
+  }
+  
   public static class FinishActionListener extends EventListener<UIAccountCreation>{
     public void execute(Event<UIAccountCreation> event) throws Exception {
       UIAccountCreation uiAccCreation = event.getSource() ;
@@ -323,7 +343,18 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       acc.setOutgoingHost(smtpHost);
       acc.setOutgoingPort(smtpPort);
       acc.setIsSavePassword(isSavePass) ;
-
+      
+      UIFormDateTimeInput fromDateField = ((UIFormDateTimeInput) uiAccWs4.getChildById(UIAccountWizardStep4.FROM_DATE));
+      acc.setCheckAll(!uiAccWs4.checkFromDate());
+      
+      if (!acc.isCheckAll()) {
+        try {
+          acc.setCheckFromDate(fromDateField.getCalendar().getTime());
+        } catch(Exception e) {
+          acc.setCheckFromDate(new Date());
+        }
+      }
+      
       UIApplication uiApp = uiAccCreation.getAncestorOfType(UIApplication.class) ;
       UINavigationContainer uiNavigation = uiPortlet.getChild(UINavigationContainer.class) ;
       try {

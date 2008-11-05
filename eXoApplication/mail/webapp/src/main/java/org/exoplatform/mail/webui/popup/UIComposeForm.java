@@ -524,7 +524,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       if (!MailUtils.isFieldEmpty(account.getSignature()) && !fromDrafts()) {value += "<br><br> -- <br >" + account.getSignature().replace("\n", "<br>") + "";}
       getChild(UIFormWYSIWYGInput.class).setValue(value);
     } else {
-      if (!MailUtils.isFieldEmpty(account.getSignature())) { value += "\n\n -- \n" + account.getSignature() ; }
+      if (!MailUtils.isFieldEmpty(account.getSignature())) { value = MailUtils.html2text(value) + "\n\n -- \n" + account.getSignature() ; }
       getUIFormTextAreaInput(FIELD_MESSAGECONTENT).setValue(value);
     }
   }
@@ -928,7 +928,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           content = uiForm.getChild(UIFormWYSIWYGInput.class).getValue() ;
           uiForm.removeChild(UIFormWYSIWYGInput.class) ;
           UIFormTextAreaInput textArea = new UIFormTextAreaInput(FIELD_MESSAGECONTENT, null, null);
-          textArea.setValue(content);
+          textArea.setValue(MailUtils.html2text(content));
           uiForm.addUIFormInput(textArea) ;
           uiForm.setVisualEditor(false) ;
         } catch (Exception e) { }

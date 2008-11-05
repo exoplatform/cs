@@ -1131,8 +1131,9 @@ public class UIMessageList extends UIForm {
       UIAddContactForm uiAddContactForm = uiPopupContainer.createUIComponent(UIAddContactForm.class, null, null);
       uiPopupContainer.addChild(uiAddContactForm);
       InternetAddress[] addresses  = Utils.getInternetAddress(msg.getFrom());
-      String personal = Utils.getPersonal(addresses[0]);
+      String personal = (addresses[0] != null) ? Utils.getPersonal(addresses[0]) : "";
       String firstName = personal;
+      String email = (addresses[0] != null) ? addresses[0].getAddress() : "";
       String lastName = "";
       if (personal.indexOf(" ") > 0) {
         firstName = personal.substring(0, personal.indexOf(" "));
@@ -1140,7 +1141,7 @@ public class UIMessageList extends UIForm {
       }
       uiAddContactForm.setFirstNameField(firstName);
       uiAddContactForm.setLastNameField(lastName);
-      uiAddContactForm.setEmailField(addresses[0].getAddress());
+      uiAddContactForm.setEmailField(email);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);    
     }
   }

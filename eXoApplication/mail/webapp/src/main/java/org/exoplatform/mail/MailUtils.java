@@ -240,12 +240,24 @@ public class MailUtils {
     return isInvalid ;
   }
   
-  public static String html2text(String str) throws Exception {
+  public static String html2string(String str) throws Exception {
     if (str != null) {
       str = str.replaceAll("<[^>]*>", "");
       str = str.replaceAll("&nbsp;", "");
       str = str.replaceAll("&quot;", "\"");
       str = str.replaceAll("\n", "");
+    } else {
+      str = "" ;
+    }
+    return str;
+  }
+  
+  public static String html2text(String str) throws Exception {
+    if (str != null) {
+      str = str.replaceAll("<br*/?>", "\n");
+      str = str.replaceAll("<[^>]*>", "");
+      str = str.replaceAll("&nbsp;", "");
+      str = str.replaceAll("&quot;", "\"");
     } else {
       str = "" ;
     }

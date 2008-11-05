@@ -52,7 +52,7 @@ import org.exoplatform.webui.form.UIForm;
         @EventConfig(listeners = UITagContainer.ChangeTagActionListener.class),
         @EventConfig(listeners = UITagContainer.AddTagActionListener.class),
         @EventConfig(listeners = UITagContainer.EditTagActionListener.class),
-        @EventConfig(listeners = UITagContainer.RemoveTagActionListener.class,confirm="UITagContainer.msg.confirm-remove-tag"),
+        @EventConfig(listeners = UITagContainer.RemoveTagActionListener.class, confirm="UITagContainer.msg.confirm-remove-tag"),
         @EventConfig(listeners = UITagContainer.EmptyTagActionListener.class),
         @EventConfig(listeners = UITagContainer.ChangeColorActionListener.class)
     }
@@ -140,8 +140,15 @@ public class UITagContainer extends UIForm {
       uiMessageList.viewMode = uiMessageList.MODE_LIST;
       uiMessagePreview.setMessage(null);
       uiPortlet.findFirstComponentOfType(UIFolderContainer.class).setSelectedFolder(null);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiTags);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
+      
+      UISearchForm uiSearchForm = uiPortlet.findFirstComponentOfType(UISearchForm.class);
+      if (!MailUtils.isFieldEmpty(uiSearchForm.getTextSearch())) {
+        uiSearchForm.setTextSearch("");       
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiTags.getParent()) ;
+      } else {
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiTags);
+      }
+      
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessagePreview.getAncestorOfType(UIMessageArea.class));
     }
   }

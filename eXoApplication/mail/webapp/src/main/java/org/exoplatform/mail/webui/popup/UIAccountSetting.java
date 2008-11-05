@@ -17,6 +17,8 @@
 package org.exoplatform.mail.webui.popup;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.exoplatform.mail.MailUtils;
@@ -42,6 +44,7 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
+import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
@@ -65,7 +68,8 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
         @EventConfig(listeners = UIAccountSetting.SaveActionListener.class),
         @EventConfig(listeners = UIAccountSetting.CancelActionListener.class, phase = Phase.DECODE),
         @EventConfig(listeners = UIAccountSetting.ChangeServerTypeActionListener.class, phase = Phase.DECODE),
-        @EventConfig(listeners = UIAccountSetting.ChangeSSLActionListener.class, phase = Phase.DECODE)
+        @EventConfig(listeners = UIAccountSetting.ChangeSSLActionListener.class, phase = Phase.DECODE),
+        @EventConfig(listeners = UIAccountSetting.CheckFromDateActionListener.class, phase = Phase.DECODE)
     }
 )
 
@@ -100,6 +104,8 @@ public class UIAccountSetting extends UIFormTabPane {
   UIFormCheckBoxInput<Boolean> leaveOnServer_ ;
 //  UIFormStringInput skipOverSize_;
   UIFormCheckBoxInput<Boolean> markAsDelete_;
+  public static final String CHECK_FROM_DATE = "checkFromDate";
+  public static final String FROM_DATE = "fromDate";
   
   
   public UIAccountSetting() throws Exception {
@@ -107,6 +113,10 @@ public class UIAccountSetting extends UIFormTabPane {
     UIFormInputWithActions accountInputSet = new UIFormInputWithActions(TAB_ACCOUNT);
     accountInputSet.addUIFormInput(new UIFormStringInput(FIELD_ACCOUNT_NAME, null, null).addValidator(MandatoryValidator.class)) ;
     accountInputSet.addUIFormInput(new UIFormTextAreaInput(FIELD_ACCOUNT_DESCRIPTION, null, null)) ;
+    UIFormCheckBoxInput<Boolean> checkFromDate = new UIFormCheckBoxInput<Boolean>(CHECK_FROM_DATE, CHECK_FROM_DATE, null);
+    checkFromDate.setOnChange("CheckFromDate");
+    accountInputSet.addUIFormInput(checkFromDate);
+    accountInputSet.addUIFormInput(new UIFormDateTimeInput(FROM_DATE, FROM_DATE, null, true));
     addUIFormInput(accountInputSet); 
     setSelectedTab(accountInputSet.getId()) ;
     UIFormInputWithActions  identityInputSet = new UIFormInputWithActions(TAB_IDENTITY_SETTINGS);
@@ -121,7 +131,6 @@ public class UIAccountSetting extends UIFormTabPane {
     UIFormSelectBox serverType = new UIFormSelectBox(FIELD_SERVER_TYPE, null, getServerTypeValues()) ;
     serverType.setEditable(false);
     serverType.setEnable(false);
-    //serverType.setOnChange("ChangeServerType");
     serverInputSet.addUIFormInput(serverType) ;
     
     serverInputSet.addUIFormInput(new UIFormStringInput(FIELD_INCOMING_SERVER, null, null).addValidator(MandatoryValidator.class));
@@ -162,6 +171,16 @@ public class UIAccountSetting extends UIFormTabPane {
   public String getFieldAccountNameValue() { 
     UIFormInputWithActions uiInput = getChildById(TAB_ACCOUNT);
     return uiInput.getUIStringInput(FIELD_ACCOUNT_NAME).getValue();
+  }
+  
+  public boolean getFieldCheckFromDate() {
+    UIFormInputWithActions uiInput = getChildById(TAB_ACCOUNT);
+    return uiInput.getUIFormCheckBoxInput(CHECK_FROM_DATE).isChecked();
+  }
+  
+  public Calendar getFieldCheckFrom() {
+    UIFormInputWithActions uiInput = getChildById(TAB_ACCOUNT);
+    return ((UIFormDateTimeInput) uiInput.getChildById(FROM_DATE)).getCalendar();
   }
   
   public String getDisplayName() { 
@@ -266,6 +285,11 @@ public class UIAccountSetting extends UIFormTabPane {
     UIFormInputWithActions uiAccountInput = getChildById(TAB_ACCOUNT) ;
     uiAccountInput.getUIStringInput(FIELD_ACCOUNT_NAME).setValue(account.getLabel()) ;
     uiAccountInput.getUIStringInput(FIELD_ACCOUNT_DESCRIPTION).setValue(account.getDescription()) ;
+    uiAccountInput.getUIFormCheckBoxInput(CHECK_FROM_DATE).setChecked(!account.isCheckAll()) ;
+    GregorianCalendar cal = new GregorianCalendar();
+    cal.setTimeInMillis(account.getCheckFromDate().getTime());
+    ((UIFormDateTimeInput) uiAccountInput.getChildById(FROM_DATE)).setCalendar(cal);
+    if (account.isCheckAll()) ((UIFormDateTimeInput) uiAccountInput.getChildById(FROM_DATE)).setRendered(false);
     
     UIFormInputWithActions uiIdentityInput = getChildById(TAB_IDENTITY_SETTINGS) ;
     uiIdentityInput.getUIStringInput(FIELD_DISPLAY_NAME).setValue(account.getUserDisplayName()) ;
@@ -469,6 +493,12 @@ public class UIAccountSetting extends UIFormTabPane {
       acc.setIsSavePassword(uiSetting.isSavePassword()) ;
       acc.setServerProperty(Utils.SVR_SMTP_USER, userName) ;
       
+      if (!acc.isCheckAll() && !uiSetting.getFieldCheckFromDate()) acc.setLastCheckedDate(null);
+      acc.setCheckAll(!uiSetting.getFieldCheckFromDate());
+      
+      if (acc.getCheckFromDate().after(uiSetting.getFieldCheckFrom().getTime())) acc.setLastCheckedDate(null);
+      acc.setCheckFromDate(uiSetting.getFieldCheckFrom().getTime());
+      
       if(uiSetting.getFieldProtocol().equals(Utils.POP3)){
         boolean leaveOnServer = uiSetting.getFieldLeaveOnServer() ;
         //String skipOverSize = uiSetting.getFieldSkipOverSize() ;
@@ -540,6 +570,23 @@ public class UIAccountSetting extends UIFormTabPane {
   		uiSetting.setDefaultValue(uiSetting.getFieldProtocol(),uiSetting.getFieldIsSSL());
       event.getRequestContext().addUIComponentToUpdateByAjax(uiSetting.getParent()) ;
   	}
+  }
+  
+  static  public class CheckFromDateActionListener extends EventListener<UIAccountSetting> {
+    public void execute(Event<UIAccountSetting> event) throws Exception {
+      UIAccountSetting uiSetting = event.getSource() ;
+      UIFormInputWithActions uiInput = uiSetting.getChildById(TAB_ACCOUNT);
+      boolean checkAllMail = !uiInput.getUIFormCheckBoxInput(CHECK_FROM_DATE).isChecked();
+      UIFormDateTimeInput fromDateField = ((UIFormDateTimeInput) uiInput.getChildById(FROM_DATE));
+      
+      if (checkAllMail) {
+        fromDateField.setRendered(false);
+      } else {
+        fromDateField.setRendered(true);
+      }
+      
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiSetting.getParent()) ;
+    }
   }
    
   static  public class CancelActionListener extends EventListener<UIAccountSetting> {
