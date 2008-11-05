@@ -40,7 +40,7 @@ public class CalendarEvent {
   final public static String COMPLETED = "completed".intern() ;
   final public static String IN_PROCESS = "in-process".intern() ;
 
-  final public static String PRIORITY_NONE = "".intern() ;
+  final public static String PRIORITY_NONE = "none".intern() ;
   final public static String PRIORITY_LOW = "low".intern() ;
   final public static String PRIORITY_NORMAL = "normal".intern() ;
   final public static String PRIORITY_HIGH = "high".intern() ;

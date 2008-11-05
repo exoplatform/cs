@@ -615,11 +615,11 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
 
   protected String getEventPriority() {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_TASKDETAIL) ;
-    return eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_PRIORITY).getValue() ;
+    return eventDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_PRIORITY).getValue() ;
   }
   protected void setSelectedEventPriority(String value) {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_TASKDETAIL) ;
-    eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_PRIORITY).setValue(value) ;
+    eventDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_PRIORITY).setValue(value) ;
   }
 
   public void update(String calType, List<SelectItem> options) throws Exception{
