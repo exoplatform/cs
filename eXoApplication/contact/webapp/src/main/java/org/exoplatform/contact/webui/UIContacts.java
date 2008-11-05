@@ -974,6 +974,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   static public class ExportContactActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource();
+      uiContacts.getAncestorOfType(UIContactPortlet.class).cancelAction() ;
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);      
       String username = ContactUtils.getCurrentUser() ;
       ContactService contactService = ContactUtils.getContactService() ;

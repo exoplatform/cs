@@ -736,7 +736,8 @@
 			  		<div style="clear: left;"><span></span></div>
 			  	</div>
 			  </div>
-		  
+		  </td>
+			<td style="border: none;">
 			<%
 			if (i < contacts.length) {
 				contact = contacts[i ++] ;
@@ -756,8 +757,7 @@
 			}	
 				
 			%>
-			</td>
-			<td style="border: none;">
+			
 		  	<div class="VCardContent NormalVCard" id="<%=contact.getId()%>" type="<%=contact.getContactType()%>" havePermission="<%=uicomponent.havePermission(contact)%>" havePermissionAdd="<%=uicomponent.havePermissionAdd(contact)%>" isSharedAddress = "<%=uicomponent.isSharedAddress(contact)%>"  isOwner="<%=contact.isOwner()%>">
 			  	<div class="TitleVCards" >
 			  	<% 
@@ -904,10 +904,13 @@
 		  	
 		  
 
-			</td>
-			</tr>
 			
-			  <% } } %>		
+			
+			  <% } %>
+			  
+			  </td>
+			</tr>
+			  <% } %>		
 		  </table>
 		  
 		</div>

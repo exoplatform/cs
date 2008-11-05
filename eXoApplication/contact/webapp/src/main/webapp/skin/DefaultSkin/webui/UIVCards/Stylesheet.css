@@ -62,7 +62,7 @@
 .UIContactPortlet .UIVCards .TitleVCards .StateIcon {
 	background-position: left center;
 	line-height: 25px; height: 25px;
-	width: 85%;
+	width: 70%;
 	white-space: nowrap;
 	overflow: hidden;
 	float: left;
