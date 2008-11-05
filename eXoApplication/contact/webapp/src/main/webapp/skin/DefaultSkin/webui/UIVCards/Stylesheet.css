@@ -1,6 +1,7 @@
 .UIContactPortlet .UIVCards {
 	border: 1px solid #c0c0c0;
 	padding: 1px;
+	margin-top: 4px;
 }
 
 .UIContactPortlet .UIVCards .VCardsBar {
@@ -61,7 +62,7 @@
 .UIContactPortlet .UIVCards .TitleVCards .StateIcon {
 	background-position: left center;
 	line-height: 25px; height: 25px;
-	width: 90%;
+	width: 85%;
 	white-space: nowrap;
 	overflow: hidden;
 	float: left;
@@ -80,7 +81,6 @@
 
 .UIContactPortlet .UIVCards .ContainerVCards  {
 	padding: 8px 10px 10px 10px;
-	height: 130px;
 }
 
 .UIContactPortlet .UIVCards .ContainerVCards .AvatasIcon {
