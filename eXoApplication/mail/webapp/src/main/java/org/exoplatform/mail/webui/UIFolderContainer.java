@@ -173,7 +173,6 @@ public class UIFolderContainer extends UIContainer {
       }
       
       UISearchForm uiSearchForm = uiPortlet.findFirstComponentOfType(UISearchForm.class);
-      System.out.println("==========aaa============>>>>>> " + uiSearchForm.getTextSearch());
       if (!MailUtils.isFieldEmpty(uiSearchForm.getTextSearch())) {
         uiSearchForm.setTextSearch("");       
         event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder.getParent()) ;
@@ -265,13 +264,15 @@ public class UIFolderContainer extends UIContainer {
       List<Message> messages = mailSrv.getMessages(SessionProviderFactory.createSystemProvider(), username, filter);
       mailSrv.toggleMessageProperty(SessionProviderFactory.createSystemProvider(), username, accountId, messages, Utils.EXO_ISUNREAD);
       UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
-      List<Message> msgList = new  ArrayList<Message>(uiMessageList.messageList_.values());
-      for (Message msg : msgList) {
-        msg.setUnread(false);
-        uiMessageList.messageList_.put(msg.getId(), msg);
+      if (folderId.equals(uiMessageList.getSelectedFolderId())) {
+        List<Message> msgList = new  ArrayList<Message>(uiMessageList.messageList_.values());
+        for (Message msg : msgList) {
+          msg.setUnread(false);
+          uiMessageList.messageList_.put(msg.getId(), msg);
+        }
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent()) ;
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet.findFirstComponentOfType(UIFolderContainer.class)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent()) ;
     }
   }
   
