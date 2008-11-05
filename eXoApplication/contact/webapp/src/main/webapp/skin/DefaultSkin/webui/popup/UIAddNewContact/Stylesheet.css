@@ -25,7 +25,7 @@
 .UIContactPortlet .AddNewContact .UIForm .UIFormInputSet {
 	width: 520px;
 	margin: 10px auto;
-	height: 280px;
+	height: auto;
 }
 
 .UIContactPortlet .AddNewContact .shareContactTab .AddIcon16x16 {
