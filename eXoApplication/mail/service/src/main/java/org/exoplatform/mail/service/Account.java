@@ -42,6 +42,8 @@ public class Account {
   private boolean isSavePassword_ ;
   private String placeSignature;
   private Date lastCheckedDate_ ;
+  private boolean checkAll_ = false;
+  private Date checkFromDate_;
   
   private Map<String, String> serverProperties ;  
   private Map<String, String> popServerProperties ;
@@ -124,6 +126,12 @@ public class Account {
   
   public Date getLastCheckedDate() { return lastCheckedDate_; }
   public void setLastCheckedDate(Date date) { lastCheckedDate_ = date ; }
+  
+  public boolean isCheckAll() { return checkAll_; }
+  public void setCheckAll(boolean b) { checkAll_ = b; }
+  
+  public Date getCheckFromDate() { return checkFromDate_; }
+  public void setCheckFromDate(Date date) { checkFromDate_ = date ; }
   
   /**
    * @return Return a mail server configuration of account

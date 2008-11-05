@@ -163,7 +163,19 @@ public class JCRDataStorage {
       cal.setTimeInMillis(accountNode.getProperty(Utils.EXO_LAST_CHECKED_TIME).getLong());
       account.setLastCheckedDate(cal.getTime());
     } catch (Exception e) {
+      account.setLastCheckedDate(null);
     }
+    try {
+      account.setCheckAll(accountNode.getProperty(Utils.EXO_CHECK_ALL).getBoolean());
+    } catch (Exception e) {
+    }
+    try {
+      GregorianCalendar cal = new GregorianCalendar();
+      cal.setTimeInMillis(accountNode.getProperty(Utils.EXO_CHECK_FROM_DATE).getLong());
+      account.setCheckFromDate(cal.getTime());
+    } catch (Exception e) {
+    }
+    
     try {
       Value[] properties = accountNode.getProperty(Utils.EXO_SERVERPROPERTIES).getValues();
       for (int i = 0; i < properties.length; i++) {
@@ -642,6 +654,13 @@ public class JCRDataStorage {
       newAccount.setProperty(Utils.EXO_PLACESIGNATURE, account.getPlaceSignature());
       if (account.getLastCheckedDate() != null)
         newAccount.setProperty(Utils.EXO_LAST_CHECKED_TIME, account.getLastCheckedDate().getTime());
+      else 
+        newAccount.setProperty(Utils.EXO_LAST_CHECKED_TIME, (Value) null);
+      
+      newAccount.setProperty(Utils.EXO_CHECK_ALL, account.isCheckAll());
+      if (account.getCheckFromDate() != null)
+        newAccount.setProperty(Utils.EXO_CHECK_FROM_DATE, account.getCheckFromDate().getTime());
+      
       Iterator<String> it = account.getServerProperties().keySet().iterator();
       ArrayList<String> values = new ArrayList<String>(account.getServerProperties().size());
       while (it.hasNext()) {
