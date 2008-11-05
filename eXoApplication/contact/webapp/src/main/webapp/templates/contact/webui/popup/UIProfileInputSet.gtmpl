@@ -145,8 +145,10 @@
 				}
 			}
 		%>
-		<img src='$imageLink' width="63px" height="81px" class="Avatar"/>
-			<!--<div class="Avatar"  style="background:transparent url('D:\\java\\exo-working\\exo-tomcat\\temp\\portal\\eXoUpload\\4020402.11copy2.jpg') no-repeat;width:53px; height:81px;"><span></span></div>-->
+		<div class="Avatar">
+			<img src='$imageLink' width="63px" height="81px" />
+				<!--<div class="Avatar"  style="background:transparent url('D:\\java\\exo-working\\exo-tomcat\\temp\\portal\\eXoUpload\\4020402.11copy2.jpg') no-repeat;width:53px; height:81px;"><span></span></div>-->
+		</div>
 		
 		<div class="Action">	
 			<a href="<%=uicomponent.getParent().event("ChangeImage")%>"><%=_ctx.appRes(uicomponent.getParent().id + ".label.change")%> | </a>
