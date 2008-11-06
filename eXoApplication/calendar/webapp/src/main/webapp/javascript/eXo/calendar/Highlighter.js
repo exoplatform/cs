@@ -35,8 +35,8 @@ Highlighter.prototype.isInCell = function(cell, _e) {
 	if(document.getElementById("UIPageDesktop")) {
 		mouseX = eXo.core.Browser.findMouseXInPage(_e) ;
 		mouseY = eXo.core.Browser.findMouseYInPage(_e) ;
-		cellX = eXo.core.Browser.findPosX(cell) - eXo.calendar.UICalendarPortlet.getScrollLeft(cell) ;
-		cellY = eXo.core.Browser.findPosY(cell) - eXo.calendar.UICalendarPortlet.getScrollTop(cell) ;
+		cellX = eXo.core.Browser.findPosX(cell) - eXo.cs.Utils.getScrollLeft(cell) ;
+		cellY = eXo.core.Browser.findPosY(cell) - eXo.cs.Utils.getScrollTop(cell) ;
 	}
 	var uiControlWorkspace = document.getElementById("UIControlWorkspace") ;
 	if(document.all && uiControlWorkspace && (!document.getElementById("UIPageDesktop") ||  eXo.core.Browser.isIE7())) cellX -= uiControlWorkspace.offsetWidth ;
@@ -276,8 +276,8 @@ UIHSelection.prototype.isInCell = function(cell, _e) {
 	if(document.getElementById("UIPageDesktop")) {
 		mouseX = eXo.core.Browser.findMouseXInPage(_e) ;
 		mouseY = eXo.core.Browser.findMouseYInPage(_e) ;
-		cellX = eXo.core.Browser.findPosX(cell) - eXo.calendar.UICalendarPortlet.getScrollLeft(cell) ;
-		cellY = eXo.core.Browser.findPosY(cell) - eXo.calendar.UICalendarPortlet.getScrollTop(cell) ;
+		cellX = eXo.core.Browser.findPosX(cell) - eXo.cs.Utils.getScrollLeft(cell) ;
+		cellY = eXo.core.Browser.findPosY(cell) - eXo.cs.Utils.getScrollTop(cell) ;
 	}
 	var uiControlWorkspace = document.getElementById("UIControlWorkspace") ;
 	if(document.all && uiControlWorkspace && (!document.getElementById("UIPageDesktop") || eXo.core.Browser.isIE7())) cellX -= uiControlWorkspace.offsetWidth ;
