@@ -599,10 +599,20 @@
 }
 
 .UIListView .highPriorityIcon {
+	_position:static;
  margin: auto;
  float: none;
 }
-
+.UIListView .normalPriorityIcon {
+	_position:static;
+ margin: auto;
+ float: none;
+}
+.UIListView .lowPriorityIcon {
+	_position:static;
+ margin: auto;
+ float: none;
+}
 .ListBar {
 	background: url('../background/CalendarBackground.gif') repeat-x center -79px;		
 	height: 26px;
