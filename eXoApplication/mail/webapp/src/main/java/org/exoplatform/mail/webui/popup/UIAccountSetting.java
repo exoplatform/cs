@@ -285,11 +285,18 @@ public class UIAccountSetting extends UIFormTabPane {
     UIFormInputWithActions uiAccountInput = getChildById(TAB_ACCOUNT) ;
     uiAccountInput.getUIStringInput(FIELD_ACCOUNT_NAME).setValue(account.getLabel()) ;
     uiAccountInput.getUIStringInput(FIELD_ACCOUNT_DESCRIPTION).setValue(account.getDescription()) ;
-    uiAccountInput.getUIFormCheckBoxInput(CHECK_FROM_DATE).setChecked(!account.isCheckAll()) ;
-    GregorianCalendar cal = new GregorianCalendar();
-    cal.setTimeInMillis(account.getCheckFromDate().getTime());
-    ((UIFormDateTimeInput) uiAccountInput.getChildById(FROM_DATE)).setCalendar(cal);
-    if (account.isCheckAll()) ((UIFormDateTimeInput) uiAccountInput.getChildById(FROM_DATE)).setRendered(false);
+    if(account.getProtocol().equals(Utils.IMAP)) {
+      uiAccountInput.getUIFormCheckBoxInput(CHECK_FROM_DATE).setChecked(!account.isCheckAll()) ;
+      GregorianCalendar cal = new GregorianCalendar();
+      if (account.getCheckFromDate() != null) {
+        cal.setTimeInMillis(account.getCheckFromDate().getTime());
+        ((UIFormDateTimeInput) uiAccountInput.getChildById(FROM_DATE)).setCalendar(cal);
+      }
+      if (account.isCheckAll()) ((UIFormDateTimeInput) uiAccountInput.getChildById(FROM_DATE)).setRendered(false);
+    } else {
+      uiAccountInput.removeChildById(CHECK_FROM_DATE);
+      uiAccountInput.removeChildById(FROM_DATE);
+    }
     
     UIFormInputWithActions uiIdentityInput = getChildById(TAB_IDENTITY_SETTINGS) ;
     uiIdentityInput.getUIStringInput(FIELD_DISPLAY_NAME).setValue(account.getUserDisplayName()) ;
@@ -493,11 +500,19 @@ public class UIAccountSetting extends UIFormTabPane {
       acc.setIsSavePassword(uiSetting.isSavePassword()) ;
       acc.setServerProperty(Utils.SVR_SMTP_USER, userName) ;
       
-      if (!acc.isCheckAll() && !uiSetting.getFieldCheckFromDate()) acc.setLastCheckedDate(null);
-      acc.setCheckAll(!uiSetting.getFieldCheckFromDate());
-      
-      if (acc.getCheckFromDate().after(uiSetting.getFieldCheckFrom().getTime())) acc.setLastCheckedDate(null);
-      acc.setCheckFromDate(uiSetting.getFieldCheckFrom().getTime());
+      if (acc.getProtocol().equals(Utils.IMAP)) {
+        if (!acc.isCheckAll() && !uiSetting.getFieldCheckFromDate()) acc.setLastCheckedDate(null);
+        acc.setCheckAll(!uiSetting.getFieldCheckFromDate());
+
+        if (uiSetting.getFieldCheckFrom() != null) {
+          if (acc.getCheckFromDate().after(uiSetting.getFieldCheckFrom().getTime())) acc.setLastCheckedDate(null);
+          acc.setCheckFromDate(uiSetting.getFieldCheckFrom().getTime());
+        } else if(!acc.isCheckAll()) {
+          uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.please-choose-specified-date", null)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return;
+        }
+      }
       
       if(uiSetting.getFieldProtocol().equals(Utils.POP3)){
         boolean leaveOnServer = uiSetting.getFieldLeaveOnServer() ;
@@ -582,6 +597,8 @@ public class UIAccountSetting extends UIFormTabPane {
       if (checkAllMail) {
         fromDateField.setRendered(false);
       } else {
+        GregorianCalendar cal = new GregorianCalendar();
+        if (fromDateField.getCalendar() == null) fromDateField.setCalendar(cal);
         fromDateField.setRendered(true);
       }
       
