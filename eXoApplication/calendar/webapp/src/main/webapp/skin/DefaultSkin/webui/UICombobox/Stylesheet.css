@@ -21,6 +21,7 @@
 	padding: 3px 5px ;
 	text-decoration: none ;
 	color: black ;
+	outline:none;
 }
 
 .UICalendarPortlet .UIComboboxList a:hover{
