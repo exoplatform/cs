@@ -71,7 +71,7 @@
 	  	      <a class="MenuItem" href="<%=uicomponent.event("EditTag", "id")%>">   
 	  	        <div class="ItemIcon RenameFolderIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.edit") %> </div>
 	  	      </a>
-	  	      <a class="MenuItem" href="<%=uicomponent.event("RemoveTag", "id")%>">   
+	  	      <a class="MenuItem" href="<%=uicomponent.event("RemoveTag", uicomponent.id,"id")%>">   
 	  	        <div class="ItemIcon RemoveFolderIcon"> <%=_ctx.appRes(uicomponent.id+ ".label.remove") %> </div>
 	  	      </a>
 	  	      <a class="MenuItem" href="<%=uicomponent.event("EmptyTag", "id")%>">   
