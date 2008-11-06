@@ -151,9 +151,9 @@
 	overflow-y:auto;
 	overflow-x: hidden;
 	height: 420px;
-	border-bottom: 1px solid #c7c7c7;
 	padding: 0px 0px 0px 1px;
 	*padding: 0px;
+	border-bottom: 1px solid #b7b7b7;
 }
 
 .UIWeekView .UIGrid th {
@@ -176,10 +176,6 @@
 	border: 0px;
 	background-color: white;
 	_width: auto;
-}
-
-.UIPageDesktop .UIWeekView .EventWeekBar {
-	*padding: 0px 19px 0px 0px;
 }
 
 .UIWeekView .EventWeekBar {
@@ -603,10 +599,20 @@
 }
 
 .UIListView .highPriorityIcon {
+	_position:static;
  margin: auto;
  float: none;
 }
-
+.UIListView .normalPriorityIcon {
+	_position:static;
+ margin: auto;
+ float: none;
+}
+.UIListView .lowPriorityIcon {
+	_position:static;
+ margin: auto;
+ float: none;
+}
 .ListBar {
 	background: url('../background/CalendarBackground.gif') repeat-x center -79px;		
 	height: 26px;
@@ -707,7 +713,7 @@
 }
 
 .UIListContainer .Result {
-  height: 22px;
+	height: 22px;
 	line-height: 22px;
 	text-align: center;
 	font-weight: bold;
@@ -955,8 +961,8 @@
 }
 .UIMonthView .EventMonthContent .EventSummary{
 	margin: 0px 0px  0px 15px;
-	padding-left:2px;
 	_margin: 0px;
+	padding-left:2px;
 }
 
 .UIMonthView .EventMonthContent .EventLabel {
@@ -967,6 +973,7 @@
 	overflow:hidden;
 	white-space: nowrap;
 	-moz-user-select : none ;
+	_padding-left: 17px;
 }
 
 .UICalendarPortlet .MoreEvent {
