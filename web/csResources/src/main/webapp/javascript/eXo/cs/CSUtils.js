@@ -176,7 +176,8 @@ Utils.prototype.confirmAction = function(obj,msg,parentId){
 	var i = checkboxes.length;
 	var actionLink = obj.getAttribute("actionLink");
 	var check = false ;
-	while(i--){
+	while(i>1){
+		i--;
 		if(checkboxes[i].checked) {
 			check = true;
 			break ;
@@ -184,6 +185,36 @@ Utils.prototype.confirmAction = function(obj,msg,parentId){
 	}
 	if(check) eval(actionLink);
 	else alert(msg);
+};
+
+/**
+ * Gets scrollTop property of DOM element
+ * @param {Object} obj DOM element
+ * @return scrollTop of element
+ */
+Utils.prototype.getScrollTop = function(obj){
+    var curtop = 0;
+    while (obj) {
+        if (obj.scrollTop) 
+            curtop += obj.scrollTop;
+        obj = obj.parentNode;
+    }
+    return curtop;
+};
+
+/**
+ * Gets scrollLeft property of DOM element
+ * @param {Object} obj DOM element
+ * @return scrollLeft of element
+ */
+Utils.prototype.getScrollLeft = function(obj){
+    var curleft = 0;
+    while (obj) {
+        if (obj.scrollLeft) 
+            curleft += obj.scrollLeft;
+        obj = obj.parentNode;
+    }
+    return curleft;
 };
 /*	This work is licensed under Creative Commons GNU LGPL License.
 

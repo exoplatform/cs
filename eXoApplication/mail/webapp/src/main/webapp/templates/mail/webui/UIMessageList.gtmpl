@@ -14,8 +14,8 @@
  rcontext.getJavascriptManager().addJavascript('eXo.mail.UIMailPortlet.checkLayout() ;') ;
  WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
  Locale locale = context.getParentAppRequestContext().getLocale() ;
+ def confirmMsg = _ctx.appRes("UIMessageList.msg.checkMessage-select-no-messages");
 %>
-
 <% /*Start Message Action Bar*/ %>
 <%uiform.begin()%>  
   <div class="UIMessageActionsBar">
@@ -29,7 +29,7 @@
     <div class="IconHolder ForwardIcon"><span></span></div>
   </a>
   <div class="SeparatorLine"><span></span></div>
-  <a href="<%=uicomponent.event("Delete", uicomponent.id, "id" )%>" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.delete") %>">
+  <a href="javascript:void(0);" onclick='eXo.cs.Utils.confirmAction(this,"$confirmMsg","<%=uiform.id%>") ;' actionLink="<%=uicomponent.event("Delete", uicomponent.id, "id" )%>" class="ControlButton" title="<%=_ctx.appRes(uicomponent.id+ ".label.delete") %>">
     <div class="IconHolder DeleteIcon"><span></span></div>
   </a>
   <% if (!uicomponent.selectedSpamFolder()) { %>

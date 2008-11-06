@@ -1592,36 +1592,6 @@ UICalendarPortlet.prototype.showView = function(obj, evt){
 };
 
 /**
- * Gets scrollTop property of DOM element
- * @param {Object} obj DOM element
- * @return scrollTop of element
- */
-UICalendarPortlet.prototype.getScrollTop = function(obj){
-    var curtop = 0;
-    while (obj) {
-        if (obj.scrollTop) 
-            curtop += obj.scrollTop;
-        obj = obj.parentNode;
-    }
-    return curtop;
-};
-
-/**
- * Gets scrollLeft property of DOM element
- * @param {Object} obj DOM element
- * @return scrollLeft of element
- */
-UICalendarPortlet.prototype.getScrollLeft = function(obj){
-    var curleft = 0;
-    while (obj) {
-        if (obj.scrollLeft) 
-            curleft += obj.scrollLeft;
-        obj = obj.parentNode;
-    }
-    return curleft;
-};
-
-/**
  * Swap menu in IE
  * @param {Object} menu Menu DOM element
  * @param {Object} clickobj Click DOM element
@@ -1629,8 +1599,8 @@ UICalendarPortlet.prototype.getScrollLeft = function(obj){
 UICalendarPortlet.prototype.swapIeMenu = function(menu, clickobj){
     var DOMUtil = eXo.core.DOMUtil;
     var Browser = eXo.core.Browser;
-    var x = Browser.findPosXInContainer(clickobj, menu.offsetParent) - this.getScrollLeft(clickobj);
-    var y = Browser.findPosYInContainer(clickobj, menu.offsetParent) - this.getScrollTop(clickobj) + clickobj.offsetHeight;
+    var x = Browser.findPosXInContainer(clickobj, menu.offsetParent) - eXo.cs.Utils.getScrollLeft(clickobj);
+    var y = Browser.findPosYInContainer(clickobj, menu.offsetParent) - eXo.cs.Utils.getScrollTop(clickobj) + clickobj.offsetHeight;
     var browserHeight = document.documentElement.clientHeight;
     var uiRightClickPopupMenu = (!DOMUtil.hasClass(menu, "UIRightClickPopupMenu")) ? DOMUtil.findFirstDescendantByClass(menu, "div", "UIRightClickPopupMenu") : menu;
     this.showHide(menu);
@@ -1815,7 +1785,7 @@ UISelection.prototype.execute = function(evt){
     var UISelection = eXo.calendar.UISelection;
     var _e = window.event || evt;
     var delta = null;
-    var scrollTop = eXo.calendar.UICalendarPortlet.getScrollTop(UISelection.block);
+    var scrollTop = eXo.cs.Utils.getScrollTop(UISelection.block);
     var mouseY = eXo.core.Browser.findMouseRelativeY(UISelection.container, _e) + UISelection.relativeObject.scrollTop;
     if (document.getElementById("UIPageDesktop")) 
         mouseY = eXo.core.Browser.findMouseRelativeY(UISelection.container, _e) + scrollTop;

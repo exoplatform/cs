@@ -208,9 +208,11 @@ UIMailPortlet.prototype.checkLayoutCallback = function(layoutcookie){
 };
 
 UIMailPortlet.prototype.resetLayoutCallback = function(){
+	var workingarea = document.getElementById("UIMessageArea");
 	eXo.mail.UIMailPortlet.changeMenuLabel("all", true);
 	document.getElementById("uiMessageGrid").style.overflowY = "auto" ;
   document.getElementById("uiMessageGrid").style.height = "200px" ;
+	workingarea.style.marginLeft = "225px";
 };
 
 UIMailPortlet.prototype.checkLayout = function() {
@@ -525,43 +527,20 @@ UIMailPortlet.prototype.swapMenu = function(oldmenu, clickobj) {
 	var Browser = eXo.core.Browser ;
 	var UIMailPortlet = eXo.mail.UIMailPortlet ;
   var uiDesktop = document.getElementById("UIPageDesktop") ;
-  var uiWorkSpaceWidth = (document.getElementById("UIControlWorkspace"))? document.getElementById("UIControlWorkspace").offsetWidth : 0 ;
-  uiWorkSpaceWidth = (eXo.core.Browser.isIE7()) ? 2*uiWorkSpaceWidth : uiWorkSpaceWidth ;
-  var menuX = Browser.findPosX(clickobj) - uiWorkSpaceWidth ;
-	var menuY = Browser.findPosY(clickobj) + clickobj.offsetHeight ;
-  if(uiDesktop) {
-  	var portlet = DOMUtil.findAncestorByClass(document.getElementById(eXo.webui.UIContextMenuMail.portletName), "UIResizableBlock") ;
-    var uiWindow = DOMUtil.findAncestorByClass(portlet, "UIWindow") ;
-    menuX = menuX - uiWindow.offsetLeft  -  portlet.scrollLeft ;
-    menuY = menuY - uiWindow.offsetTop  -  portlet.scrollTop ;
-  }
+  var menuX = Browser.findPosX(clickobj) - eXo.cs.Utils.getScrollLeft(clickobj);
+	var menuY = Browser.findPosY(clickobj) + clickobj.offsetHeight - eXo.cs.Utils.getScrollTop(clickobj);
+	if((Browser.browserType == "ie") && !document.getElementById("UIPageDesktop")){		
+		if(document.getElementById("UIControlWorkspace")) menuX -= document.getElementById("UIControlWorkspace").offsetWidth ;
+	}
   if(document.getElementById("tmpMenuElement")) DOMUtil.removeElement(document.getElementById("tmpMenuElement")) ;
 	var tmpMenuElement = oldmenu.cloneNode(true) ;
 	tmpMenuElement.setAttribute("id","tmpMenuElement") ;
+	DOMUtil.addClass(tmpMenuElement,"UIMailPortlet UIEmpty");
 	UIMailPortlet.menuElement = tmpMenuElement ;
-  document.getElementById(eXo.webui.UIContextMenuMail.portletName).appendChild(tmpMenuElement) ;	
-  if(arguments.length > 2) {
-    menuY -= arguments[2].scrollTop ;
-  }
+  document.body.appendChild(tmpMenuElement) ;
 	UIMailPortlet.menuElement.style.top = menuY + "px" ;
 	UIMailPortlet.menuElement.style.left = menuX + "px" ;	
 	UIMailPortlet.showHide(UIMailPortlet.menuElement) ;
-  if(uiDesktop) {    
-    var uiRightClick = (DOMUtil.findFirstDescendantByClass(UIMailPortlet.menuElement, "div", "UIRightClickPopupMenu")) ? DOMUtil.findFirstDescendantByClass(UIMailPortlet.menuElement, "div", "UIRightClickPopupMenu") : UIMailPortlet.menuElement ;
-    var mnuBottom = eXo.core.Browser.findPosYInContainer(UIMailPortlet.menuElement, uiDesktop) + uiRightClick.offsetHeight ;
-    var widBottom = uiWindow.offsetTop + uiWindow.offsetHeight ;
-    if(mnuBottom > widBottom) {
-      menuY -= (mnuBottom - widBottom - clickobj.offsetHeight - uiWindow.scrollTop) ;
-      UIMailPortlet.menuElement.style.top = menuY + "px" ;
-    }
-  } else {
-    var uiRightClick = (DOMUtil.findFirstDescendantByClass(UIMailPortlet.menuElement, "div", "UIRightClickPopupMenu")) ? DOMUtil.findFirstDescendantByClass(UIMailPortlet.menuElement, "div", "UIRightClickPopupMenu") : UIMailPortlet.menuElement ;
-    var mnuBottom = UIMailPortlet.menuElement.offsetTop +  uiRightClick.offsetHeight - window.document.documentElement.scrollTop ;
-    if(window.document.documentElement.clientHeight < mnuBottom) {
-      menuY += (window.document.documentElement.clientHeight - mnuBottom) ;
-      UIMailPortlet.menuElement.style.top = menuY + "px" ;      
-    }
-  }
 } ;
 
 UIMailPortlet.prototype.showPopupMenu = function(obj, event) {
