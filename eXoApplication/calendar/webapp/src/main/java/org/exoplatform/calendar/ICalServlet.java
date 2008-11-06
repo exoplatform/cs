@@ -93,6 +93,7 @@ public class ICalServlet extends HttpServlet {
     }finally{
       if(session != null) {
         session.logout() ;
+        PortalContainer.setInstance(null) ;
       }
     }    		
 	}  
@@ -101,4 +102,5 @@ public class ICalServlet extends HttpServlet {
     PortalContainer pcontainer =  RootContainer.getInstance().getPortalContainer(portalName) ;
     return pcontainer ;
   }
+  
 }

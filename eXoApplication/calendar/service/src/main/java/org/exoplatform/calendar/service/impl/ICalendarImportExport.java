@@ -119,7 +119,12 @@ public class ICalendarImportExport implements CalendarImportExport{
           .add(net.fortuna.ical4j.model.parameter.Value.TEXT);
         }
         if(exoEvent.getPriority() != null) {
-          event.getProperties().add(new Priority(Integer.parseInt(exoEvent.getPriority())));
+          for(int i = 0; i < CalendarEvent.PRIORITY.length; i++) {
+            if(exoEvent.getPriority().equals(CalendarEvent.PRIORITY[i])) {
+              event.getProperties().add(new Priority(i));
+              break ;
+            }
+          }
           event.getProperties().getProperty(Property.PRIORITY).getParameters()
           .add(net.fortuna.ical4j.model.parameter.Value.INTEGER);  
         }
@@ -206,7 +211,12 @@ public class ICalendarImportExport implements CalendarImportExport{
           .add(net.fortuna.ical4j.model.parameter.Value.TEXT);
         }
         if(exoEvent.getPriority() != null) {
-          event.getProperties().add(new Priority(Integer.parseInt(exoEvent.getPriority())));
+          for(int i = 0; i < CalendarEvent.PRIORITY.length; i++) {
+            if(exoEvent.getPriority().equals(CalendarEvent.PRIORITY[i])) {
+              event.getProperties().add(new Priority(i));
+              break ;
+            }
+          }
           event.getProperties().getProperty(Property.PRIORITY).getParameters()
           .add(net.fortuna.ical4j.model.parameter.Value.INTEGER);  
         }
