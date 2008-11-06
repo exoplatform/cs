@@ -170,6 +170,21 @@ Utils.prototype.cancelSubmit = function() {
   return false ;
 } ;
 
+Utils.prototype.confirmAction = function(obj,msg,parentId){
+	var	cont = eXo.core.DOMUtil.findAncestorById(obj,parentId);
+	var checkboxes = eXo.core.DOMUtil.findDescendantsByClass(cont,"input","checkbox");
+	var i = checkboxes.length;
+	var actionLink = obj.getAttribute("actionLink");
+	var check = false ;
+	while(i--){
+		if(checkboxes[i].checked) {
+			check = true;
+			break ;
+		}
+	}
+	if(check) eval(actionLink);
+	else alert(msg);
+};
 /*	This work is licensed under Creative Commons GNU LGPL License.
 
 	License: http://creativecommons.org/licenses/LGPL/2.1/
