@@ -227,3 +227,7 @@
 .UIContactPortlet .UIContactPreview .DecoratorBox .ViewBoxStyle .TopLeftViewBoxStyle {
 	height: 8px;
 }
+
+.UIContactPortlet .UIForm .SelectFileFrame {
+	width : 300px;
+}
