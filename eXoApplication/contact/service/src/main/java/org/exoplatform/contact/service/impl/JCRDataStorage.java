@@ -1920,10 +1920,21 @@ public class JCRDataStorage {
       dateTime.setTime(contact.getLastUpdated()) ;
       contactNode.setProperty("exo:lastUpdated", dateTime);
     }
+    
 //  save image to contact
     ContactAttachment attachment = contact.getAttachment() ;
     if (attachment != null) {
       if (attachment.getFileName() != null) {
+//      fix load image on IE6 UI
+        ExtendedNode extNode = (ExtendedNode)contactNode ;
+        if (extNode.canAddMixin("exo:privilegeable")) extNode.addMixin("exo:privilegeable");
+        String[] arrayPers = {PermissionType.READ, PermissionType.ADD_NODE, PermissionType.SET_PROPERTY, PermissionType.REMOVE} ;
+        extNode.setPermission(SystemIdentity.ANY, arrayPers) ;
+        List<AccessControlEntry> permsList = extNode.getACL().getPermissionEntries() ;   
+        for(AccessControlEntry accessControlEntry : permsList) {
+          extNode.setPermission(accessControlEntry.getIdentity(), arrayPers) ;      
+        }
+        
         Node nodeFile = null ;
         try {
           nodeFile = contactNode.getNode("image") ;
