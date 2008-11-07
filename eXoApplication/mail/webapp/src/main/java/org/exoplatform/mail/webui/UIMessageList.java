@@ -209,8 +209,8 @@ public class UIMessageList extends UIForm {
 
   //TODO check pageList_ null before getCurrentPage()
   public void updateList() throws Exception {
-    long page = pageList_.getCurrentPage();
-    if (pageList_ == null) page = 1 ;
+    long page = 1;
+    if (pageList_ != null) page = pageList_.getCurrentPage() ;
     updateList(page);
   }
 
@@ -381,11 +381,16 @@ public class UIMessageList extends UIForm {
       UIMailPortlet uiPortlet = uiMessageList.getAncestorOfType(UIMailPortlet.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
       if(Utils.isEmptyField(accountId)) {
-        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.account-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
+      }
+      if(uiMessageList.getCheckedMessage().isEmpty()) {
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.checkMessage-select-no-messages", null, ApplicationMessage.INFO)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return;
       }
       MailService mailSrv = uiPortlet.getApplicationComponent(MailService.class);
       Message msg = uiMessageList.messageList_.get(msgId);
