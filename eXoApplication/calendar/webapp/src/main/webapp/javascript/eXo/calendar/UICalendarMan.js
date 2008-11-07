@@ -794,6 +794,7 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
   // Draw invisible events (put all into more)
   if (dayObj.invisibleGroup.length > 0) {
     var moreNode = document.createElement('div');
+		moreNode.style.zIndex = 1;
     moreNode.className = 'MoreEvent';
     this.rowContainerDay.appendChild(moreNode);
     with (moreNode.style) {			
@@ -868,12 +869,15 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
 };
 
 GUIMan.prototype.hideMore = function(){
-	var ln = eXo.core.DOMUtil.hideElementList.length ;
+	var DOMUtil = eXo.core.DOMUtil;
+	var items = DOMUtil.hideElementList;
+	var ln = items.length ;
 	if (ln > 0) {
 		for (var i = 0; i < ln; i++) {
-			eXo.core.DOMUtil.hideElementList[i].style.display = "none" ;
+			if(DOMUtil.hasClass(items[i],"MoreEvent")) items[i].style.zIndex = 1 ;
+			items[i].style.display = "none" ;
 		}
-		eXo.core.DOMUtil.hideElementList.clear() ;
+		DOMUtil.hideElementList.clear() ;
 	}
 };
 
@@ -881,6 +885,8 @@ GUIMan.prototype.showMore = function(evt) {
   var moreNode = this;
 	var GUIMan = eXo.calendar.UICalendarMan.GUIMan;
   var moreContainerNode = eXo.core.DOMUtil.findNextElementByTagName(moreNode, 'div');
+	if(GUIMan.lastMore) GUIMan.lastMore.style.zIndex = 1;
+	moreContainerNode.parentNode.style.zIndex = 2;
 	eXo.core.EventManager.cancelBubble(evt);
 	GUIMan.hideMore();
   if (!moreContainerNode.style.display || moreContainerNode.style.display == 'none') {
@@ -906,6 +912,7 @@ GUIMan.prototype.showMore = function(evt) {
 		}
   }
 	GUIMan.moreNode = moreContainerNode ;
+	GUIMan.lastMore = moreContainerNode.parentNode;
 };
 
 /**
