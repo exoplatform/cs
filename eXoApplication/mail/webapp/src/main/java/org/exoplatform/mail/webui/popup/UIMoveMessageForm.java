@@ -19,6 +19,7 @@ package org.exoplatform.mail.webui.popup;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.webui.UIFolderContainer;
@@ -29,8 +30,10 @@ import org.exoplatform.mail.webui.UIMessagePreview;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.mail.webui.UISelectFolder;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -84,15 +87,23 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
       UIMessagePreview uiMsgPreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class);
       String username = uiPortlet.getCurrentUser() ;
       String accountId =  uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      String destFolder = uiMoveMessageForm.getChild(UISelectFolder.class).getSelectedValue();
+      String destFolderId = uiMoveMessageForm.getChild(UISelectFolder.class).getSelectedValue();
+      Folder destFolder =  mailSrv.getFolder(SessionProviderFactory.createSystemProvider(), username, accountId, destFolderId);
+      if (destFolder == null) {
+        UIApplication uiApp = uiMoveMessageForm.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIMoveMessageForm.msg.selected-folder-is-not-exits-any-more", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        uiPortlet.cancelAction();
+        return ;
+      }
       List<Message> appliedMsgList = uiMessageList.getCheckedMessage() ;
       UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class) ;
       String fromFolderId = uiFolderContainer.getSelectedFolder() ;
       if (fromFolderId != null) {
-        mailSrv.moveMessages(SessionProviderFactory.createSystemProvider(), username, accountId, uiMoveMessageForm.getMessageList(), fromFolderId, destFolder) ;
+        mailSrv.moveMessages(SessionProviderFactory.createSystemProvider(), username, accountId, uiMoveMessageForm.getMessageList(), fromFolderId, destFolderId) ;
       } else {
         for (Message message : uiMoveMessageForm.getMessageList()) {
-          mailSrv.moveMessage(SessionProviderFactory.createSystemProvider(), username, accountId, message, message.getFolders()[0], destFolder);
+          mailSrv.moveMessage(SessionProviderFactory.createSystemProvider(), username, accountId, message, message.getFolders()[0], destFolderId);
         }
       }
       uiMessageList.updateList(); 
