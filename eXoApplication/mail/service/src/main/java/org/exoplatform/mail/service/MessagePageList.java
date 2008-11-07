@@ -85,10 +85,15 @@ public class MessagePageList extends JCRPageList {
         currentNode = iter_.nextNode() ;
           Value[] values = {};
           boolean existRefNode = false ; 
-          String curMsgFolder = currentNode.getProperty(Utils.EXO_FOLDERS).getValues()[0].getString() ;
+          Value[] folders = currentNode.getProperty(Utils.EXO_FOLDERS).getValues();
           String accId = currentNode.getProperty(Utils.EXO_ACCOUNT).getString() ;
           String sentFolderId = Utils.createFolderId(accId, Utils.FD_SENT, false) ;
-          String[] refFolders = new String[] {sentFolderId, curMsgFolder} ;
+          String[] refFolders = new String[] {sentFolderId} ;
+          String curMsgFolder = "";
+          if (folders != null && folders.length > 0) {
+            curMsgFolder = currentNode.getProperty(Utils.EXO_FOLDERS).getValues()[0].getString() ;
+            refFolders = new String[] {sentFolderId, curMsgFolder} ;
+          }
           if (hasStructure_) {
             try {
               values = currentNode.getProperty(Utils.EXO_CONVERSATIONID).getValues();

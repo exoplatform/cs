@@ -98,10 +98,10 @@ public class UISearchForm extends UIForm {
       String username = uiPortlet.getCurrentUser();
       try {
         MailService mailService = uiPortlet.getApplicationComponent(MailService.class);
+        uiMessageList.setMessageFilter(filter);
         uiMessageList.setMessagePageList(mailService.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, filter));
         uiMessageList.setSelectedFolderId(null);
         uiMessageList.setSelectedTagId(null);
-        uiMessageList.setMessageFilter(filter);
         uiMessageList.viewMode = uiMessageList.MODE_LIST ;
         uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null);
         UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
@@ -129,8 +129,8 @@ public class UISearchForm extends UIForm {
       }
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
       UIAdvancedSearchForm uiAdvanceSearch = uiPopupAction.createUIComponent(UIAdvancedSearchForm.class, null, null);
-      uiAdvanceSearch.init(accId);
       uiPopupAction.activate(uiAdvanceSearch, 600, 0 , false);    
+      uiAdvanceSearch.init(accId);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;     
     }
   } 
