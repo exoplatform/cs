@@ -162,7 +162,7 @@ public class UIContactForm extends UIFormTabPane {
     ContactAttachment contactAttachment = contact.getAttachment();
     if (contactAttachment != null) {
       profileTab.setContact(contact) ;
-      //profileTab.setImage(contactAttachment.getInputStream()) ;
+      profileTab.setImage(contactAttachment.getInputStream()) ;
     }
     else profileTab.setImage(null) ;
     
