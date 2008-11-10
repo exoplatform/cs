@@ -427,6 +427,7 @@ public class UIAccountSetting extends UIFormTabPane {
           mailSvr.saveMailSetting(SessionProviderFactory.createSystemProvider(), username, mailSetting) ;
           event.getSource().getAncestorOfType(UIMailPortlet.class).cancelAction() ;
           uiMsgList.init(null);
+          uiMsgPreview.setMessage(null);
         }
         event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectAccount) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgList.getAncestorOfType(UIMessageArea.class)) ;
