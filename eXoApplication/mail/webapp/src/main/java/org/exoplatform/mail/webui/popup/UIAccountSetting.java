@@ -180,7 +180,9 @@ public class UIAccountSetting extends UIFormTabPane {
   
   public Calendar getFieldCheckFrom() {
     UIFormInputWithActions uiInput = getChildById(TAB_ACCOUNT);
-    return ((UIFormDateTimeInput) uiInput.getChildById(FROM_DATE)).getCalendar();
+    if (((UIFormDateTimeInput) uiInput.getChildById(FROM_DATE)) != null)
+      return ((UIFormDateTimeInput) uiInput.getChildById(FROM_DATE)).getCalendar();
+    else return null;
   }
   
   public String getDisplayName() { 
@@ -292,7 +294,7 @@ public class UIAccountSetting extends UIFormTabPane {
         cal.setTimeInMillis(account.getCheckFromDate().getTime());
         ((UIFormDateTimeInput) uiAccountInput.getChildById(FROM_DATE)).setCalendar(cal);
       }
-      if (account.isCheckAll()) ((UIFormDateTimeInput) uiAccountInput.getChildById(FROM_DATE)).setRendered(false);
+      if (account.isCheckAll()) uiAccountInput.removeChildById(FROM_DATE);
     } else {
       uiAccountInput.removeChildById(CHECK_FROM_DATE);
       uiAccountInput.removeChildById(FROM_DATE);
@@ -593,17 +595,18 @@ public class UIAccountSetting extends UIFormTabPane {
       UIAccountSetting uiSetting = event.getSource() ;
       UIFormInputWithActions uiInput = uiSetting.getChildById(TAB_ACCOUNT);
       boolean checkAllMail = !uiInput.getUIFormCheckBoxInput(CHECK_FROM_DATE).isChecked();
-      UIFormDateTimeInput fromDateField = ((UIFormDateTimeInput) uiInput.getChildById(FROM_DATE));
       
       if (checkAllMail) {
-        fromDateField.setRendered(false);
+        uiInput.removeChildById(FROM_DATE);
       } else {
         GregorianCalendar cal = new GregorianCalendar();
+        if (uiInput.getChildById(FROM_DATE) == null)
+          uiInput.addUIFormInput(new UIFormDateTimeInput(FROM_DATE, FROM_DATE, null, true));
+        UIFormDateTimeInput fromDateField = ((UIFormDateTimeInput) uiInput.getChildById(FROM_DATE));
         if (fromDateField.getCalendar() == null) fromDateField.setCalendar(cal);
-        fromDateField.setRendered(true);
       }
       
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiSetting.getParent()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiSetting) ;
     }
   }
    
