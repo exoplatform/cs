@@ -130,7 +130,7 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UIAttachFileForm> event) throws Exception {
       UIAttachFileForm uiAttach = event.getSource();
       int numberAttachFile = uiAttach.getNumberFile() + 1;
-      if (numberAttachFile <= 10) { 
+      if (numberAttachFile <= 50) { 
         UIFormUploadInput uiInput = new UIFormUploadInput(FIELD_UPLOAD + String.valueOf(numberAttachFile), FIELD_UPLOAD + String.valueOf(numberAttachFile)) ;
         uiAttach.addUIFormInput(uiInput) ;
         uiAttach.setNumberFile(numberAttachFile);
