@@ -46,6 +46,7 @@ import org.quartz.JobExecutionException;
 public class PopupReminderJob implements Job {
   private static Log log_ = ExoLogger.getLogger("job.PopupRecordsJob");
   public void execute(JobExecutionContext context) throws JobExecutionException {
+    SessionProvider provider = SessionProvider.createSystemProvider();
     try {
       if (log_.isDebugEnabled()) log_.debug("Calendar popup reminder service");
       java.util.Calendar fromCalendar = GregorianCalendar.getInstance() ;  
@@ -53,9 +54,11 @@ public class PopupReminderJob implements Job {
       ExoContainer container = RootContainer.getInstance();
       container = ((RootContainer)container).getPortalContainer(jdatamap.getString("portalName"));
       ContinuationService continuation = (ContinuationService) container.getComponentInstanceOfType(ContinuationService.class);
-      Node calendarHome = getPublicServiceHome();
+
+
+      Node calendarHome = getPublicServiceHome(provider);
       if(calendarHome == null) return ;
-      StringBuffer path = new StringBuffer(getReminderPath(fromCalendar));
+      StringBuffer path = new StringBuffer(getReminderPath(fromCalendar, provider));
       path.append("//element(*,exo:reminder)");
       path.append("[@exo:remindDateTime <= xs:dateTime('"	+ ISO8601.format(fromCalendar)
           + "') and @exo:isOver = 'false' and @exo:reminderType = 'popup' ]"); 
@@ -106,7 +109,7 @@ public class PopupReminderJob implements Job {
           for(String user : rmdObj.getReminderOwner().split(Utils.COMMA)) {
             JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
             JsonValue json = generatorImpl.createJsonObject(rmdObj);
-            continuation.sendMessage(user, "/eXo/Application/Calendar/messages", json);
+            continuation.sendMessage(user, "/eXo/Application/Calendar/messages", json, rmdObj.toString());
             System.out.println("\n\n " + user + " has a notify !");
           }
         }
@@ -114,25 +117,27 @@ public class PopupReminderJob implements Job {
     } catch (Exception e) {
       System.out.println("\n\n Error when run popup reminder job !");
       //e.printStackTrace();			
+    }  finally {
+      provider.close(); // release sessions
     }
     if (log_.isDebugEnabled()) log_.debug("File plan job done");
   }
-  private String getReminderPath(java.util.Calendar fromCalendar)
+  private String getReminderPath(java.util.Calendar fromCalendar, SessionProvider provider)
   throws Exception {
     String year = "Y" + String.valueOf(fromCalendar.get(java.util.Calendar.YEAR));
     String month = "M" + String.valueOf(fromCalendar.get(java.util.Calendar.MONTH) + 1);
     String day = "D" + String.valueOf(fromCalendar.get(java.util.Calendar.DATE));
     StringBuffer path = new StringBuffer("/jcr:root");
-    path.append(getPublicServiceHome().getPath());
+    path.append(getPublicServiceHome(provider).getPath());
     path.append(Utils.SLASH).append(year).append(Utils.SLASH).append(month).append(Utils.SLASH).append(day);
     path.append(Utils.SLASH).append(Utils.CALENDAR_REMINDER);
     return path.toString(); 
   }
-  private Node getPublicServiceHome() throws Exception {
+  private Node getPublicServiceHome(SessionProvider provider) throws Exception {
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     NodeHierarchyCreator nodeHierarchyCreator  = (NodeHierarchyCreator) container
     .getComponentInstanceOfType(NodeHierarchyCreator.class);
-    Node publicApp = nodeHierarchyCreator.getPublicApplicationNode(SessionProvider.createSystemProvider()) ;
+    Node publicApp = nodeHierarchyCreator.getPublicApplicationNode(provider) ;
     if(publicApp != null && publicApp.hasNode(Utils.CALENDAR_APP)) return publicApp.getNode(Utils.CALENDAR_APP) ;
     return null ;		
   }

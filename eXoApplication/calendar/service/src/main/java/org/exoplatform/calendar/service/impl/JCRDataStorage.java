@@ -271,7 +271,7 @@ public class JCRDataStorage{
       while(iter.hasNext()) {
         //Need to use system session
         Node eventNode = iter.nextNode() ;
-        Node eventFolder = getEventFolder(SessionProvider.createSystemProvider(), eventNode.getProperty(Utils.EXO_FROM_DATE_TIME).getDate().getTime()) ;
+        Node eventFolder = getEventFolder(sProvider, eventNode.getProperty(Utils.EXO_FROM_DATE_TIME).getDate().getTime()) ;
         syncRemoveEvent(eventFolder, eventNode.getName()) ;
         removeReminder(sProvider, eventNode) ;
       }
@@ -610,15 +610,24 @@ public class JCRDataStorage{
       for(CalendarEvent ce : getUserEventByCategory(sProvider, username, eventCategoryName)) {
         removeUserEvent(sProvider, username, ce.getCalendarId(), ce.getId()) ;
       }
+      
+     
+      SessionProvider sysProvider = SessionProvider.createSystemProvider();
+      try {
       for(CalendarEvent ce : getSharedEventByCategory(username, eventCategoryName)) {
-        removeSharedEvent(SessionProvider.createSystemProvider(), username, ce.getCalendarId(), ce.getId()) ;
+        removeSharedEvent(sysProvider, username, ce.getCalendarId(), ce.getId()) ;
       }
       for(CalendarEvent ce : getPublicEventByCategory(username, eventCategoryName)) {
-        removePublicEvent(SessionProvider.createSystemProvider(),ce.getCalendarId(), ce.getId()) ;
+        removePublicEvent(sysProvider,ce.getCalendarId(), ce.getId()) ;
+      }
+      } finally {
+        sysProvider.close();
       }
       eventCategoryNode.remove() ;
       eventCategoryHome.save() ;
-      eventCategoryHome.getSession().save() ;
+      eventCategoryHome.getSession().save() ;      
+      
+
     }
   }
 
@@ -1533,6 +1542,7 @@ public class JCRDataStorage{
     Query query ;
     QueryManager qm ;
     SessionProvider systemSession = SessionProvider.createSystemProvider() ; 
+    try {
     CalendarSetting calSetting = getCalendarSetting(sProvider, username)  ;
     // private events
     if(username != null && username.length() > 0) {
@@ -1568,6 +1578,9 @@ public class JCRDataStorage{
     NodeIterator it = query.execute().getNodes();
     mapData = updateMap(mapData, it, eventQuery.getFromDate(), eventQuery.getToDate(), calSetting.getFilterPublicCalendars()) ;  
     return mapData ;    
+    } finally {
+      systemSession.close();
+    }
   }
 
 
@@ -1882,10 +1895,16 @@ public class JCRDataStorage{
     filterList.addAll(Arrays.asList(calSetting.getFilterSharedCalendars())) ;
     eventQuery.setFilterCalendarIds(filterList.toArray(new String[]{})) ;
     events.addAll(getUserEvents(sProvider, username, eventQuery)) ;
-    events.addAll(getSharedEvents(SessionProvider.createSystemProvider(), username, eventQuery)) ;
+    
+    SessionProvider sysProvider = SessionProvider.createSystemProvider();
+    try {
+    events.addAll(getSharedEvents(sysProvider, username, eventQuery)) ;
     if(publicCalendarIds != null && publicCalendarIds.length > 0) { 
       eventQuery.setCalendarId(publicCalendarIds) ;
-      events.addAll(getPublicEvents(SessionProvider.createSystemProvider(), eventQuery)) ;
+      events.addAll(getPublicEvents(sysProvider, eventQuery)) ;
+    }
+    } finally {
+    	sysProvider.close();
     }
     return events ;
   }

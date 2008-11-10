@@ -17,14 +17,12 @@
 package org.exoplatform.contact.service.impl;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
-import javax.jcr.ReferentialIntegrityException;
 import javax.jcr.Value;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
@@ -32,13 +30,10 @@ import javax.jcr.query.QueryResult;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactService;
-import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.MembershipEventListener;
-import org.exoplatform.services.organization.OrganizationService;
-import org.exoplatform.services.organization.impl.GroupImpl;
 
 /**
  * Created by The eXo Platform SARL
@@ -57,7 +52,9 @@ public class NewMembershipListener extends MembershipEventListener {
   public void postSave(Membership m, boolean isNew) throws Exception {
   	cservice_.addGroupToPersonalContact(m.getUserName(), m.getGroupId()) ;
     JCRDataStorage storage_ = new JCRDataStorage(nodeHierarchyCreator_) ;
-    Node publicContactHome = storage_.getPublicContactHome(SessionProvider.createSystemProvider()) ;      
+    SessionProvider provider = SessionProvider.createSystemProvider();
+    try {
+    Node publicContactHome = storage_.getPublicContactHome(provider) ;      
     String usersPath = nodeHierarchyCreator_.getJcrPath(JCRDataStorage.USERS_PATH) ;
     QueryManager qm = publicContactHome.getSession().getWorkspace().getQueryManager();
     List<String> recievedUser = new ArrayList<String>() ;
@@ -69,7 +66,7 @@ public class NewMembershipListener extends MembershipEventListener {
     for (String group  : contact.getAddressBook()) groups.put(group, group) ;
     groups.put(m.getGroupId(), m.getGroupId()) ;
     contact.setAddressBook(groups.keySet().toArray(new String[] {})) ;
-    cservice_.saveContact(SessionProvider.createSystemProvider(), m.getUserName(), contact, false) ;
+    cservice_.saveContact(provider, m.getUserName(), contact, false) ;
     
     StringBuffer queryString = new StringBuffer("/jcr:root" + usersPath 
         + "//element(*,exo:contactGroup)[@exo:viewPermissionGroups='").append( m.getGroupId() + "']") ;        
@@ -78,7 +75,7 @@ public class NewMembershipListener extends MembershipEventListener {
     NodeIterator nodes = result.getNodes() ;
     while (nodes.hasNext()) {
       Node address = nodes.nextNode() ;
-      storage_.shareAddressBook(SessionProvider.createSystemProvider(), address.getProperty("exo:sharedUserId")
+      storage_.shareAddressBook(provider, address.getProperty("exo:sharedUserId")
           .getString(), address.getProperty("exo:id").getString(),recievedUser) ;
     }
     
@@ -93,8 +90,11 @@ public class NewMembershipListener extends MembershipEventListener {
       String split = "/" ;
       String temp = contactNode.getPath().split(usersPath)[1] ;
       String userId = temp.split(split)[1] ;
-      storage_.shareContact(SessionProvider.createSystemProvider(), userId,
+      storage_.shareContact(provider, userId,
           new String[] {contactNode.getProperty("exo:id").getString()}, recievedUser) ;
+    }
+    } finally {
+      provider.close();
     }
   }
   
@@ -109,9 +109,11 @@ public class NewMembershipListener extends MembershipEventListener {
     for (String group  : contact.getAddressBook()) groupIds.put(group, group) ;
     groupIds.remove(m.getGroupId()) ;
     contact.setAddressBook(groupIds.keySet().toArray(new String[] {})) ;
-    cservice_.saveContact(SessionProvider.createSystemProvider(), m.getUserName(), contact, false) ;
+    SessionProvider provider = SessionProvider.createSystemProvider();
+
     
     try {
+      cservice_.saveContact(provider, m.getUserName(), contact, false) ;
       JCRDataStorage storage_ = new JCRDataStorage(nodeHierarchyCreator_) ;
       Node publicContactHome = storage_.getPublicContactHome(SessionProvider.createSystemProvider()) ;      
       String usersPath = nodeHierarchyCreator_.getJcrPath(JCRDataStorage.USERS_PATH) ;
@@ -162,10 +164,11 @@ public class NewMembershipListener extends MembershipEventListener {
           }
         }        
       }      
-    } catch (ReferentialIntegrityException e) {
       
     } catch (Exception ex) {
       ex.printStackTrace();
+    } finally {
+      provider.close();
     }
   }
 }

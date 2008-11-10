@@ -42,10 +42,11 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 public class ReminderJob implements Job {
-  private static Log log_ = ExoLogger.getLogger("job.RecordsJob");
+  private static Log log_ = ExoLogger.getLogger(ReminderJob.class);
   public void execute(JobExecutionContext context) throws JobExecutionException {
     List<Message> messageList = new ArrayList<Message>();
     ExoContainer container = ExoContainerContext.getCurrentContainer();
+    SessionProvider provider = SessionProvider.createSystemProvider();
     try {
       MailService mailService = 
         (MailService) container.getComponentInstanceOfType(MailService.class);
@@ -58,9 +59,9 @@ public class ReminderJob implements Job {
       config.setSsl(jdatamap.getBooleanValueFromString("ssl"));
       config.setOutgoingHost(jdatamap.getString("outgoing"));
       config.setOutgoingPort(jdatamap.getString("port"));
-      Node calendarHome = getPublicServiceHome();
+      Node calendarHome = getPublicServiceHome(provider);
       if(calendarHome == null) return ;
-      StringBuffer path = new StringBuffer(getReminderPath(fromCalendar));
+      StringBuffer path = new StringBuffer(getReminderPath(fromCalendar, provider));
       path.append("//element(*,exo:reminder)");
       path.append("[@exo:remindDateTime <= xs:dateTime('"	+ ISO8601.format(fromCalendar)
           + "') and @exo:isOver = 'false' and @exo:reminderType = 'email' ]");
@@ -114,24 +115,26 @@ public class ReminderJob implements Job {
       System.out.println("\n\n Error when run email reminder job !");
       //e.printStackTrace();			
     }
-    if (log_.isDebugEnabled()) log_.debug("File plan job done");
+    finally {
+      provider.close();
+    }
   }
-  private String getReminderPath(java.util.Calendar fromCalendar)
+  private String getReminderPath(java.util.Calendar fromCalendar, SessionProvider provider)
   throws Exception {
     String year = "Y" + String.valueOf(fromCalendar.get(java.util.Calendar.YEAR));
     String month = "M" + String.valueOf(fromCalendar.get(java.util.Calendar.MONTH) + 1);
     String day = "D" + String.valueOf(fromCalendar.get(java.util.Calendar.DATE));
     StringBuffer path = new StringBuffer("/jcr:root");
-    path.append(getPublicServiceHome().getPath());
+    path.append(getPublicServiceHome(provider).getPath());
     path.append(Utils.SLASH).append(year).append(Utils.SLASH).append(month).append(Utils.SLASH).append(day);
     path.append(Utils.SLASH).append(Utils.CALENDAR_REMINDER);
     return path.toString(); 
   }
-  private Node getPublicServiceHome() throws Exception {
+  private Node getPublicServiceHome(SessionProvider provider) throws Exception {
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     NodeHierarchyCreator nodeHierarchyCreator  = (NodeHierarchyCreator) container
     .getComponentInstanceOfType(NodeHierarchyCreator.class);
-    Node publicApp = nodeHierarchyCreator.getPublicApplicationNode(SessionProvider.createSystemProvider()) ;
+    Node publicApp = nodeHierarchyCreator.getPublicApplicationNode(provider) ;
     if(publicApp != null && publicApp.hasNode(Utils.CALENDAR_APP)) return publicApp.getNode(Utils.CALENDAR_APP) ;
     return null ;		
   }

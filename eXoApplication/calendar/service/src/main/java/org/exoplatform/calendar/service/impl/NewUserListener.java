@@ -116,7 +116,11 @@ public class NewUserListener extends UserEventListener {
 
   public void postSave(User user, boolean isNew) throws Exception {
     if(!isNew) return ;
+
     SessionProvider sysProvider = SessionProvider.createSystemProvider();
+    
+    try {
+
     if (defaultEventCategories_ != null
         && defaultEventCategories_.length > 0) {
       for (String evCategory : defaultEventCategories_) {
@@ -152,7 +156,10 @@ public class NewUserListener extends UserEventListener {
     if(defaultCalendarSetting_ != null && user != null) {
       cservice_.saveCalendarSetting(sysProvider, user.getUserName(), defaultCalendarSetting_) ;
     }
-    sysProvider.close();
+    
+    } finally {
+      sysProvider.close(); // release sessions
+    }
   }
 
   @Override

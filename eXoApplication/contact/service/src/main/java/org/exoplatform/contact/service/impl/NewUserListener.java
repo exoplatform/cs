@@ -72,12 +72,17 @@ public class NewUserListener extends UserEventListener {
       Calendar cal = new GregorianCalendar() ;
       contact.setLastUpdated(cal.getTime()) ;
     }
+    
+    SessionProvider sysProvider = SessionProvider.createSystemProvider() ;
+    try {
+    
+    
   	if(isNew) {
   		ContactGroup group = new ContactGroup() ;
   		group.setId(DEFAULTGROUP+user.getUserName()) ;
     	group.setName(DEFAULTGROUPNAME) ;
     	group.setDescription(DEFAULTGROUPDES) ;
-    	SessionProvider sysProvider = SessionProvider.createSystemProvider() ;
+    	
     	cservice_.saveGroup(sysProvider, user.getUserName(), group, true) ;
 
     	contact.setId(user.getUserName()) ;
@@ -98,7 +103,7 @@ public class NewUserListener extends UserEventListener {
       
       // added 23-4
       JCRDataStorage storage_ = new JCRDataStorage(nodeHierarchyCreator_) ;
-      Node publicContactHome = storage_.getPublicContactHome(SessionProvider.createSystemProvider()) ;      
+      Node publicContactHome = storage_.getPublicContactHome(sysProvider) ;      
       String usersPath = nodeHierarchyCreator_.getJcrPath(JCRDataStorage.USERS_PATH) ;
       QueryManager qm = publicContactHome.getSession().getWorkspace().getQueryManager();
       List<String> recievedUser = new ArrayList<String>() ;
@@ -113,7 +118,7 @@ public class NewUserListener extends UserEventListener {
         NodeIterator nodes = result.getNodes() ;
         while (nodes.hasNext()) {
           Node address = nodes.nextNode() ;
-          storage_.shareAddressBook(SessionProvider.createSystemProvider(), address.getProperty("exo:sharedUserId")
+          storage_.shareAddressBook(sysProvider, address.getProperty("exo:sharedUserId")
               .getString(), address.getProperty("exo:id").getString(),recievedUser) ;
         }
         
@@ -128,23 +133,26 @@ public class NewUserListener extends UserEventListener {
           String split = "/" ;
           String temp = contactNode.getPath().split(usersPath)[1] ;
           String userId = temp.split(split)[1] ;
-          storage_.shareContact(SessionProvider.createSystemProvider(), userId,
+          storage_.shareContact(sysProvider, userId,
               new String[] {contactNode.getProperty("exo:id").getString()}, recievedUser) ;
         }
       }
 
-      Node userApp = nodeHierarchyCreator_.getUserApplicationNode(SessionProvider.createSystemProvider(), user.getUserName()) ;
+      Node userApp = nodeHierarchyCreator_.getUserApplicationNode(sysProvider, user.getUserName()) ;
       //reparePermissions(userApp, user.getUserName()) ;
       //reparePermissions(userApp.getNode("ContactApplication"), user.getUserName()) ;
       //reparePermissions(userApp.getNode("ContactApplication/contactGroup"), user.getUserName()) ;
       //reparePermissions(userApp.getNode("ContactApplication/contactGroup/" + group.getId()), user.getUserName()) ;
       userApp.getSession().save() ;   
       
-      sysProvider.close();
   	} else {
       if (contact != null) {
-        cservice_.saveContact(SessionProvider.createSystemProvider(), user.getUserName(), contact, false) ; 
+        cservice_.saveContact(sysProvider, user.getUserName(), contact, false) ; 
       }
+    }
+  	
+    } finally {
+      sysProvider.close(); // release sessions
     }
   }
 
