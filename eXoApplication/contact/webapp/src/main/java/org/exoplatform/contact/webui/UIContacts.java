@@ -464,13 +464,14 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         if (contact == null) {
           try {
             contact = service.getSharedContactAddressBook(username, contactId) ;            
-          } catch (NullPointerException e) {
+          } catch (NullPointerException e) { }
+          if (contact == null) {
             UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
             uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-deleted", null,
                 ApplicationMessage.WARNING)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return ;
-          }
+          }          
         }
       }
       UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
