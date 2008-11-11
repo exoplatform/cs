@@ -1755,7 +1755,7 @@ UISelection.prototype.start = function(evt){
         var UISelection = eXo.calendar.UISelection;
         var _e = window.event || evt;
         var src = _e.srcElement || _e.target;
-        if ((src == UISelection.block) || (_e.button == 2)) {
+        if ((src == UISelection.block) || (_e.button == 2) || (src.className == "TdTime")) {
             return;
         }
         

@@ -250,9 +250,9 @@
 					 			dtf.setCalendar(cl) ;
 					 			cl.setTime(dtf.parse(startTime)) ;
 					 			dayOfWeek = cl.get(Calendar.DAY_OF_WEEK) ;
-					 		  if(dayOfWeek == uicomponent.getDayOfWeek(currentYear, currentMonth, currentDay)){	
-					 		  	cssClass = "Today" ;
-					 		  } else if(dayOfWeek == 1 || dayOfWeek == 7){
+					 		  if(uicomponent.isCurrentDay(cl.get(Calendar.DATE), cl.get(Calendar.MONTH), cl.get(Calendar.YEAR))) {
+						  		cssClass = "Today" ;
+						  	  }else if(dayOfWeek == 1 || dayOfWeek == 7){
 					 				cssClass = "Weekend" ;
 					 		  } else {
 					 		  	cssClass = "Weekday" ;
