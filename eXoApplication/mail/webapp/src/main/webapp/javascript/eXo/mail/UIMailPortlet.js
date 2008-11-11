@@ -83,7 +83,7 @@ UIMailPortlet.prototype.showPrintPreview = function(obj1) {
 	uiMessagePreviewNode.appendChild(obj) ;
 	mailWorkingWorkspaceNode.appendChild(uiMessagePreviewNode) ;
 	uiMailPortletNode.appendChild(mailWorkingWorkspaceNode) ;
-	uiMailPortletNode.style.width = "100%";
+	uiMailPortletNode.style.width = "99%";
 	uiMailPortletNode.style.position = "absolute";
 	uiMailPortletNode.style.zIndex = 1;
 	document.body.insertBefore(uiMailPortletNode,uiPortalApplication) ;
@@ -531,7 +531,9 @@ UIMailPortlet.prototype.swapMenu = function(oldmenu, clickobj) {
 	var menuY = Browser.findPosY(clickobj) + clickobj.offsetHeight - eXo.cs.Utils.getScrollTop(clickobj);
 	if((Browser.browserType == "ie") && !document.getElementById("UIPageDesktop")){		
 		if(document.getElementById("UIControlWorkspace")) menuX -= document.getElementById("UIControlWorkspace").offsetWidth ;
+		
 	}
+	menuY += document.documentElement.scrollTop;
   if(document.getElementById("tmpMenuElement")) DOMUtil.removeElement(document.getElementById("tmpMenuElement")) ;
 	var tmpMenuElement = oldmenu.cloneNode(true) ;
 	tmpMenuElement.setAttribute("id","tmpMenuElement") ;
