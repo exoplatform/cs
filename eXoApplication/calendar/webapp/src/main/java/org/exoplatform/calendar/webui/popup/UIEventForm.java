@@ -231,13 +231,12 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         isContains = (eventCalendar.getEventCategoryId() == null || eventCat.getName().toLowerCase().equals(eventCalendar.getEventCategoryId().toLowerCase())) ;
         if(isContains) break ;
       }
-      if(!isContains && eventCalendar.getEventCategoryId() != null) {
+      if(eventCalendar.getEventCategoryId() != null) {
         SelectItemOption<String> item = new SelectItemOption<String>(eventCalendar.getEventCategoryId(), eventCalendar.getEventCategoryId()) ;
         UIFormSelectBox uiSelectBox = eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY) ;
         uiSelectBox.getOptions().add(item) ;
         newCategoryId_ = eventCalendar.getEventCategoryId() ;
         uiSelectBox.setValue(eventCalendar.getEventCategoryId());
-        System.out.println("\n\n isShared " + String.valueOf(Calendar.TYPE_SHARED).equals(calType_));
         if(!isAddNew_ && String.valueOf(Calendar.TYPE_SHARED).equals(calType_)){
           uiSelectBox.setDisabled(true) ;
           eventDetailTab.getUIFormSelectBoxGroup(UIEventDetailTab.FIELD_CALENDAR).setDisabled(true) ;
