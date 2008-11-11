@@ -117,42 +117,47 @@ public class NewUserListener extends UserEventListener {
   public void postSave(User user, boolean isNew) throws Exception {
     if(!isNew) return ;
     SessionProvider sysProvider = SessionProvider.createSystemProvider();
-    if (defaultEventCategories_ != null
-        && defaultEventCategories_.length > 0) {
-      for (String evCategory : defaultEventCategories_) {
-        EventCategory eventCategory = new EventCategory();
-        eventCategory.setName(evCategory);
-        eventCategory.setDataInit(true) ;
-        cservice_.saveEventCategory(sysProvider, user.getUserName(),
-            eventCategory, null, true);
-      }
-    }
-    if (defaultCalendarCategory_ != null && defaultCalendarCategory_.length() > 0) {
-      CalendarCategory calCategory = new CalendarCategory();
-      calCategory.setName(defaultCalendarCategory_);
-      calCategory.setDataInit(true) ;
-      cservice_.saveCalendarCategory(sysProvider, user.getUserName(),	calCategory, true);
-      if (defaultCalendar_ != null && defaultCalendar_.length > 0) {
-        for (String calendar : defaultCalendar_) {
-          Calendar cal = new Calendar();
-          cal.setName(calendar);
-          cal.setCategoryId(calCategory.getId());
-          cal.setDataInit(true) ;
-          cal.setCalendarOwner(user.getUserName()) ;
-          if(defaultCalendarSetting_ != null) {
-            if(defaultCalendarSetting_.getLocation() != null)
-              cal.setLocale(defaultCalendarSetting_.getLocation()) ;
-            if(defaultCalendarSetting_.getTimeZone() != null)
-              cal.setTimeZone(defaultCalendarSetting_.getTimeZone()) ;
-          }
-          cservice_.saveUserCalendar(sysProvider, user.getUserName(),	cal, true);
+    try {
+      if (defaultEventCategories_ != null
+          && defaultEventCategories_.length > 0) {
+        for (String evCategory : defaultEventCategories_) {
+          EventCategory eventCategory = new EventCategory();
+          eventCategory.setName(evCategory);
+          eventCategory.setDataInit(true) ;
+          cservice_.saveEventCategory(sysProvider, user.getUserName(),
+              eventCategory, null, true);
         }
       }
-    }    
-    if(defaultCalendarSetting_ != null && user != null) {
-      cservice_.saveCalendarSetting(sysProvider, user.getUserName(), defaultCalendarSetting_) ;
+      if (defaultCalendarCategory_ != null && defaultCalendarCategory_.length() > 0) {
+        CalendarCategory calCategory = new CalendarCategory();
+        calCategory.setName(defaultCalendarCategory_);
+        calCategory.setDataInit(true) ;
+        cservice_.saveCalendarCategory(sysProvider, user.getUserName(),	calCategory, true);
+        if (defaultCalendar_ != null && defaultCalendar_.length > 0) {
+          for (String calendar : defaultCalendar_) {
+            Calendar cal = new Calendar();
+            cal.setName(calendar);
+            cal.setCategoryId(calCategory.getId());
+            cal.setDataInit(true) ;
+            cal.setCalendarOwner(user.getUserName()) ;
+            if(defaultCalendarSetting_ != null) {
+              if(defaultCalendarSetting_.getLocation() != null)
+                cal.setLocale(defaultCalendarSetting_.getLocation()) ;
+              if(defaultCalendarSetting_.getTimeZone() != null)
+                cal.setTimeZone(defaultCalendarSetting_.getTimeZone()) ;
+            }
+            cservice_.saveUserCalendar(sysProvider, user.getUserName(),	cal, true);
+          }
+        }
+      }    
+      if(defaultCalendarSetting_ != null && user != null) {
+        cservice_.saveCalendarSetting(sysProvider, user.getUserName(), defaultCalendarSetting_) ;
+      }
+    } catch (Exception e) {
+      e.printStackTrace() ;
+    } finally {
+      sysProvider.close();
     }
-    sysProvider.close();
   }
 
   @Override
@@ -160,20 +165,26 @@ public class NewUserListener extends UserEventListener {
     SessionProvider session = SessionProvider.createSystemProvider(); ;
     String username = user.getUserName() ;
     List<GroupCalendarData> gCalData = cservice_.getCalendarCategories(session, username, true) ;
-    if(!gCalData.isEmpty())
-      for (GroupCalendarData gCal : gCalData) {
-        cservice_.removeCalendarCategory(session, username, gCal.getId()) ;
-      }
-    List<EventCategory> eCats = cservice_.getEventCategories(session, username) ;
-    if(!eCats.isEmpty())
-      for(EventCategory ecat : eCats) {
-        cservice_.removeEventCategory(session, username, ecat.getName()) ;
-      }
-    GroupCalendarData   calData = cservice_.getSharedCalendars(session, username, true) ;
-    if(calData != null && !calData.getCalendars().isEmpty())
-      for(Calendar cal : calData.getCalendars()) {
-        cservice_.removeSharedCalendar(session, username, cal.getId()) ;
-      }
+    try {
+      if(!gCalData.isEmpty())
+        for (GroupCalendarData gCal : gCalData) {
+          cservice_.removeCalendarCategory(session, username, gCal.getId()) ;
+        }
+      List<EventCategory> eCats = cservice_.getEventCategories(session, username) ;
+      if(!eCats.isEmpty())
+        for(EventCategory ecat : eCats) {
+          cservice_.removeEventCategory(session, username, ecat.getName()) ;
+        }
+      GroupCalendarData   calData = cservice_.getSharedCalendars(session, username, true) ;
+      if(calData != null && !calData.getCalendars().isEmpty())
+        for(Calendar cal : calData.getCalendars()) {
+          cservice_.removeSharedCalendar(session, username, cal.getId()) ;
+        }
+    } catch (Exception e) {
+      e.printStackTrace() ;
+    } finally {
+      session.close() ;
+    }
     super.postDelete(user);
   }
 }

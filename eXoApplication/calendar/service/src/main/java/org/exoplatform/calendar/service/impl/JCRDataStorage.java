@@ -268,16 +268,21 @@ public class JCRDataStorage{
       Node calNode = calendarHome.getNode(calendarId) ;
       Calendar calendar = getCalendar(new String[]{calendarId}, username, calNode, true) ;
       NodeIterator iter = calNode.getNodes() ;
-      while(iter.hasNext()) {
-        //Need to use system session
-        Node eventNode = iter.nextNode() ;
-        Node eventFolder = getEventFolder(SessionProvider.createSystemProvider(), eventNode.getProperty(Utils.EXO_FROM_DATE_TIME).getDate().getTime()) ;
-        syncRemoveEvent(eventFolder, eventNode.getName()) ;
-        removeReminder(sProvider, eventNode) ;
+      SessionProvider provider = SessionProvider.createSystemProvider() ;
+      try {
+        while(iter.hasNext()) {
+          Node eventNode = iter.nextNode() ;
+          Node eventFolder = getEventFolder(provider, eventNode.getProperty(Utils.EXO_FROM_DATE_TIME).getDate().getTime()) ;
+          syncRemoveEvent(eventFolder, eventNode.getName()) ;
+          removeReminder(sProvider, eventNode) ;
+        }
+        calNode.remove() ;
+        calendarHome.save() ;
+      } catch (Exception e) {
+        e.printStackTrace() ;
+      } finally {
+        provider.close() ;
       }
-      calNode.remove() ;
-      calendarHome.save() ;
-      //calendarHome.getSession().save() ;
       return calendar ;
     }
     return null ;

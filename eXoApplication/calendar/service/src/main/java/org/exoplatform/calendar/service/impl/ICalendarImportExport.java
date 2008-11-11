@@ -93,12 +93,13 @@ public class ICalendarImportExport implements CalendarImportExport{
 
   public OutputStream exportCalendar(SessionProvider sProvider, String username, List<String> calendarIds, String type) throws Exception {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>();
+    SessionProvider systemSession = SessionProvider.createSystemProvider() ;
     if(type.equals(PRIVATE_TYPE)) {
       events = storage_.getUserEventByCalendar(sProvider, username, calendarIds) ;
     }else if(type.equals(SHARED_TYPE)) {
-      events = storage_.getSharedEventByCalendars(SessionProvider.createSystemProvider(), username, calendarIds) ;
+      events = storage_.getSharedEventByCalendars(systemSession, username, calendarIds) ;
     }else if(type.equals(PUBLIC_TYPE)){
-      events = storage_.getGroupEventByCalendar(SessionProvider.createSystemProvider(), calendarIds) ;
+      events = storage_.getGroupEventByCalendar(systemSession, calendarIds) ;
     }
     if(events.isEmpty()) return null ;
     net.fortuna.ical4j.model.Calendar calendar = new net.fortuna.ical4j.model.Calendar();
@@ -227,7 +228,9 @@ public class ICalendarImportExport implements CalendarImportExport{
     }catch(ValidationException e) {
       //e.printStackTrace() ;
       return null ;
-    }    
+    }  finally {
+      systemSession.close() ;
+    }  
     return bout;
   }
 
