@@ -1893,14 +1893,16 @@ public class JCRDataStorage {
 
         Node currentFolderNode = getFolderNodeById(sProvider, username, accountId, msgNode
             .getProperty(Utils.EXO_FOLDERS).getValues()[0].getString());
-        if (isUnread) {
-          currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(
-              Utils.EXO_UNREADMESSAGES).getLong() - 1));
-        } else {
-          currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(
-              Utils.EXO_UNREADMESSAGES).getLong() + 1));
+        if (currentFolderNode != null) {
+          if (isUnread) {
+            currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(
+                Utils.EXO_UNREADMESSAGES).getLong() - 1));
+          } else {
+            currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(
+                Utils.EXO_UNREADMESSAGES).getLong() + 1));
+          }
+          currentFolderNode.save();
         }
-        currentFolderNode.save();
       }
     }
   }
