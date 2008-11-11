@@ -249,12 +249,23 @@ public class MailUtils {
     return str;
   }
   
+  //TODO : need to improve later
   public static String html2text(String str) throws Exception {
     if (str != null) {
       str = str.replaceAll("<br*/?>", "\n");
       str = str.replaceAll("<[^>]*>", "");
       str = str.replaceAll("&nbsp;", "");
       str = str.replaceAll("&quot;", "\"");
+    } else {
+      str = "" ;
+    }
+    return str;
+  }
+  
+  //TODO : need to improve later
+  public static String text2html(String str) throws Exception {
+    if (str != null) {
+      str = str.replaceAll("\n", "<br />");
     } else {
       str = "" ;
     }

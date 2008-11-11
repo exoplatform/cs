@@ -416,23 +416,26 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   private String getReplyContent(Message msg) throws Exception {
     String msgContent = formatContent(msg) ;
     String content = msgContent ;
+    WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+    Locale locale = context.getParentAppRequestContext().getLocale() ;
+    String from = "";
+    try {
+      from = Utils.getAddresses(msg.getFrom())[0];
+    } catch(Exception e) {}
     if (isVisualEditor) {
-      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
-      Locale locale = context.getParentAppRequestContext().getLocale() ;
-      String from = "";
-      try {
-        from = Utils.getAddresses(msg.getFrom())[0];
-      } catch(Exception e) {}
       content = "<br><br><div> On " + MailUtils.formatDate("MMM dd, yyyy HH:mm aaa", msg.getSendDate(), locale) + ", " + from + " wrote: <br>" ;
       content += "<blockquote style=\"border-left:1px #cccccc solid ; margin-left: 10px; padding-left: 5px;\">" + msgContent + "</blockquote></div>" ;
+    } else {
+      content = "\n\n On " + MailUtils.formatDate("MMM dd, yyyy HH:mm aaa", msg.getSendDate(), locale) + ", " + from + " wrote: \n\n" ;
+      content += msgContent;
     }
     return content ;
   }
 
   private String formatContent(Message msg) throws Exception {
     String msgContent = msg.getMessageBody();
-    if (msg.getContentType().indexOf("text/plain") > -1) {
-      msgContent = MailUtils.encodeHTML(msg.getMessageBody()).replace("\n", "<br>") ;
+    if (isVisualEditor && msg.getContentType().indexOf("text/plain") > -1) {
+      msgContent = MailUtils.encodeHTML(msg.getMessageBody()).replaceAll("\n", "<br />") ;
     } 
     return msgContent ;
   }
@@ -524,7 +527,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       if (!MailUtils.isFieldEmpty(account.getSignature()) && !fromDrafts()) {value += "<br><br> -- <br >" + account.getSignature().replace("\n", "<br>") + "";}
       getChild(UIFormWYSIWYGInput.class).setValue(value);
     } else {
-      if (!MailUtils.isFieldEmpty(account.getSignature())) { value = MailUtils.html2text(value) + "\n\n -- \n" + account.getSignature() ; }
+      if (!MailUtils.isFieldEmpty(account.getSignature())) { value = MailUtils.html2text(value).replaceAll("\n", "\n > ") + "\n\n -- \n" + account.getSignature() ; }
       getUIFormTextAreaInput(FIELD_MESSAGECONTENT).setValue(value);
     }
   }
@@ -920,7 +923,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           uiForm.removeChildById(FIELD_MESSAGECONTENT);
           UIFormWYSIWYGInput wysiwyg = new UIFormWYSIWYGInput(FIELD_MESSAGECONTENT, null, null, true) ;
           uiForm.addUIFormInput(wysiwyg) ;
-          wysiwyg.setValue(content);
+          wysiwyg.setValue(MailUtils.text2html(content));
           uiForm.setVisualEditor(true) ;
         } catch(Exception e) { }
       } else {
