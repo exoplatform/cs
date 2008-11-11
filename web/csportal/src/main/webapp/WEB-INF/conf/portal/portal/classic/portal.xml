@@ -42,7 +42,7 @@
 	  <page-body> </page-body>
 	  
 	  <application>
-	    <instance-id>portal#classic:/csResources/CSFooterPortlet/csfooter</instance-id>
+	    <instance-id>portal#classic:/web/FooterPortlet/footer</instance-id>
 	    <show-info-bar>false</show-info-bar>
 	  </application>
   </portal-layout>

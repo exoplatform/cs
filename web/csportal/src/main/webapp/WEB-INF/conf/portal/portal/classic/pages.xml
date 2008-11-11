@@ -10,12 +10,72 @@
 	  <access-permissions>Everyone</access-permissions>
 	  <edit-permission>*:/platform/administrators</edit-permission>
     <application>
-      <instance-id>portal#classic:/csResources/CSHomePagePortlet/homepageportlet</instance-id>
+      <instance-id>portal#classic:/web/HomePagePortlet/homepageportlet</instance-id>
       <title>Home Page</title>
       <show-info-bar>false</show-info-bar>
       <show-application-state>false</show-application-state>
       <show-application-mode>false</show-application-mode>
     </application>
   </page>
-  
+	<page>
+    <page-id>portal::classic::calendar</page-id>
+    <owner-type>portal</owner-type>
+    <owner-id>classic</owner-id>
+    <name>calendar</name>
+    <access-permissions>Everyone</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
+    <application>
+      <instance-id>portal#classic:/calendar/CalendarPortlet/calendar</instance-id>
+      <title>Calendar Portlet</title>
+      <show-info-bar>false</show-info-bar>
+      <show-application-state>false</show-application-state>
+      <show-application-mode>false</show-application-mode>
+    </application>
+  </page>
+  <page>
+    <page-id>portal::classic::mail</page-id>
+    <owner-type>portal</owner-type>
+    <owner-id>classic</owner-id>
+    <name>mail</name>
+    <access-permissions>Everyone</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
+    <application>
+      <instance-id>portal#classic:/mail/MailPortlet/mail</instance-id>
+      <title>Mail Portlet</title>
+      <show-info-bar>false</show-info-bar>
+      <show-application-state>false</show-application-state>
+      <show-application-mode>false</show-application-mode>
+    </application>
+  </page>
+	<page>
+    <page-id>portal::classic::contact</page-id>
+    <owner-type>portal</owner-type>
+    <owner-id>classic</owner-id>
+    <name>contact</name>
+    <access-permissions>Everyone</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
+    <application>
+      <instance-id>portal#classic:/contact/ContactPortlet/contact</instance-id>
+      <title>Contact Portlet</title>
+      <show-info-bar>false</show-info-bar>
+      <show-application-state>false</show-application-state>
+      <show-application-mode>false</show-application-mode>
+    </application>
+  </page>
+  <page>
+    <page-id>portal::classic::tour</page-id>
+    <owner-type>portal</owner-type>
+    <owner-id>classic</owner-id>
+    <name>tour</name>
+    <title>CS Tour</title>
+    <access-permissions>Everyone</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
+    <application>
+      <instance-id>portal#classic:/web/HomePagePortlet/tour</instance-id>
+      <title>Tour</title>
+      <show-info-bar>false</show-info-bar>
+      <show-application-state>false</show-application-state>
+      <show-application-mode>false</show-application-mode>
+    </application>
+  </page>  
 </page-set>
