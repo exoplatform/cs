@@ -39,7 +39,21 @@
 	  </application>
 	  
 	
-	  <page-body> </page-body>
+	  <container id="CS" template="system:/templates/groovy/webui/component/UITableColumnContainer.gtmpl">
+      <container id="pagebody" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+        <page-body>
+        </page-body>
+      </container>
+      <container id="sidebar" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
+        <application>
+          <instance-id>portal#classic:/web/HomePagePortlet/sidebar</instance-id>
+          <title>Sidebar</title>
+          <show-info-bar>false</show-info-bar>
+          <show-application-state>false</show-application-state>
+          <show-application-mode>false</show-application-mode>          
+        </application>
+      </container>
+    </container>   
 	  
 	  <application>
 	    <instance-id>portal#classic:/web/FooterPortlet/footer</instance-id>
