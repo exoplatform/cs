@@ -10,116 +10,269 @@
 
 .UIHomePagePortlet .PortletDecoration{	
 	padding: 7px 7px 10px 7px;
-	border: 1px solid #c6c6c6;
+	border: 1px solid #dedede;
 	background: #fff;
 }
 
 .UIHomePagePortlet .HomePortletAdBackround{	
-	background: #fff url('DefaultSkin/background/CSHomePortletBG.jpg') repeat-x top;
-	height: 220px;
+	background: #fff url('DefaultSkin/background/BgRepeat.jpg') repeat-x top;
 }
 
-.UIHomePagePortlet .AdImage {
-	background: url('DefaultSkin/background/HomePortletAd.jpg') no-repeat left top; 
-	padding: 0px 20px 0px 0px;
-	text-align: right;
-	height: 220px;
+.UIHomePagePortlet .LeftAdImage{	
+	background: transparent url('DefaultSkin/background/LeftHomePage.jpg') no-repeat left center;
 }
 
-.UIHomePagePortlet .AdImage .EmptyBlock{
-	height: 110px;
+.UIHomePagePortlet .RightAdImage {
+	background: transparent url('DefaultSkin/background/RightHomePage.jpg') no-repeat right top; 
+	height: 229px;
 }
 
-.UIHomePagePortlet .AdImage .ProductSlogan {
+.UIHomePagePortlet .HomePortletAdBackround .EmptyBlock{
+	height: 125px;
+}
+
+.UIHomePagePortlet .HomePortletAdBackround .ProductSlogan {
 	font-size: 22px;
-	font-style: italic;
-	height: 48px;
-	padding-right: 5%;
+	font-weight: bold;
+	height: 58px;
 	letter-spacing: 1px;
-	color: #696a6a;
+	color: #656669;
 }
 
-.UIHomePagePortlet .AdImage .ProductIntro {
-	font-size: 12px;
+.UIHomePagePortlet .HomePortletAdBackround .ProductIntro {
+	font-size: 13px;
 	letter-spacing: 1px;
-	color: #ec7500;
-	font-weight: bold;
+	color: #fff;
+	line-height: 14px;
+}
+
+.UIHomePagePortlet .HomePortletContainer {
+}
+
+.UIHomePagePortlet .HomePortletContainer .Mail {
+	background: transparent url('DefaultSkin/background/ProductsCS.jpg') no-repeat left top;
+	padding-left: 95px;
+	height: 89px; line-height: 89px;
+}
+
+.UIHomePagePortlet .HomePortletContainer .Calendar {
+	background: transparent url('DefaultSkin/background/ProductsCS.jpg') no-repeat left -178px;
+	padding-left: 95px;
+	height: 89px; line-height: 89px;
+}
+
+.UIHomePagePortlet .HomePortletContainer .Addressbook {
+	background: transparent url('DefaultSkin/background/ProductsCS.jpg') no-repeat left -267px;
+	padding-left: 95px;
+	height: 89px; line-height: 89px;
+}
+
+.UIHomePagePortlet .HomePortletContainer .BgReat {
+	background: url('DefaultSkin/background/ProductsCS.jpg') repeat-x left -89px;
+	
+}
+
+.UIHomePagePortlet .HomePortletContainer .LableProduct {
+	font-family: Arial;
+	font-size: 16px;
+	color: #454e56;
+}
+
+.UIHomePagePortlet .HomePortletContainer .ContentProductsCS {
+	background-color: #cacaca;
+	padding-left: 30px;
+	height: auto;
+}
+
+.UIHomePagePortlet .HomePortletContainer .ContentProductsCS .Bullet {
+	background: url('DefaultSkin/background/Bullet.gif') no-repeat;
+	padding-left: 25px;
+}
+
+.UIHomePagePortlet .HomePortletContainer .ContentProductsCS .Text {
+	font-size: 11px;
 	line-height: 16px;
 }
 
-.UIHomePagePortlet .HomePortletContent {
-	margin-top: 10px;
-}
-
-.UIHomePagePortlet .HomePortletContent .UserAccountsContainer {
-	height: 100px;
-	border: 1px solid #c7c7c7;
-	overflow: hidden;
-	padding: 0px 15px 0px 30px;
-	background: url('DefaultSkin/background/UserAccountsBG.gif') repeat-x center top;
-}
-
-.UIHomePagePortlet .HomePortletContent .AccountsContainerDeco {
-	height: 100px;
-	background: url('DefaultSkin/background/UserAccountsBG.gif') no-repeat right -709px;
-}
-
-.UIHomePagePortlet .HomePortletContent .InstructionTitle {
-	font-size: 16px;
-	font-style: italic;
-	height: 25px;
-	color: #333;
-}
-
-.UIHomePagePortlet .HomePortletContent .AdministratorUser {
-	height: 100px;
-	float: left;
-	padding: 0px 20px 0px 80px ;
-	background: url('DefaultSkin/background/UserAccountsBG.gif') no-repeat left -100px;
-}
-
-.UIHomePagePortlet .HomePortletContent .ManagerUser {
-	height: 100px;
-	float: left;
-	padding: 0px 20px 0px 80px ;
-	background: url('DefaultSkin/background/UserAccountsBG.gif') no-repeat left -300px;
-}
-
-.UIHomePagePortlet .HomePortletContent .NormalUser {
-	height: 100px;
-	float: left;
-	padding: 0px 20px 0px 80px ;
-	background: url('DefaultSkin/background/UserAccountsBG.gif') no-repeat left -400px;
-}
-
-.UIHomePagePortlet .HomePortletContent .DemoUser {
-	height: 100px;
-	float: left;
-	padding: 0px 20px 0px 80px ;
-	background: url('DefaultSkin/background/UserAccountsBG.gif') no-repeat left -500px;
-}
-
-.UIHomePagePortlet .HomePortletContent .SeparatorLine {
-	height: 100px;
-	width: 1px;
-	float: left;
-	padding: 0px 10px 0px 20px ;
-	background: url('DefaultSkin/background/UserAccountsBG.gif') no-repeat left -600px;
-}
-
-.UIHomePagePortlet .HomePortletContent .AccountInfos {
-	padding: 20px 0px 0px 0px ;
-}
-
-.UIHomePagePortlet span {
-	font-weight: bold;
-	color: #2c6fbd;
+.UIHomePagePortlet .HomePortletContainer .LeftBottom {
+	background: transparent url('DefaultSkin/background/BgBottom.gif') no-repeat left top;
 	padding-left: 3px;
-	line-height: 16px;
 }
 
-.UIHomePagePortlet .HomePortletContent .AccountTitle {
-	font-size: 16px;
-	color: #2c6fbd;
-	line-height: 25px;
+.UIHomePagePortlet .HomePortletContainer .RightBottom {
+	background: transparent url('DefaultSkin/background/BgBottom.gif') no-repeat right -7px;
+	padding-right: 3px;
+	height: 7px;
+}
+
+.UIHomePagePortlet .HomePortletContainer .CenterBottom {
+	background: url('DefaultSkin/background/BgBottom.gif') repeat-x center -14px;
+	
+}
+
+/*****************************************************sidebar**********************************************/
+
+.sidebarTDContainer {
+	width: 220px;
+}
+
+.SideBar {
+	padding: 8px 8px 22px 8px;
+	margin-top: 2px;
+	border: 1px solid #dedede;
+}
+
+
+.SideBar .DownloadButton{
+	background: #f1f1f1 url('DefaultSkin/background/DownloadButton.gif') no-repeat ;
+	width: 192px; height: 89px;
+	margin:18px 0px 0px 0px;
+}
+
+
+.SideBar .NormalText{
+	padding-left: 30px;
+	color: #3d3d3d;
+}
+
+.SideBar .DotLine{
+	background: url('DefaultSkin/background/DotLine.gif') repeat-x ;
+	height: 1px;
+	margin: 10px;
+}
+
+.SideBar .LeftButton {
+	background: url('DefaultSkin/background/LeftButton17x33.gif') no-repeat left;
+	padding-left: 17px;
+	margin: 10px;
+}
+
+.SideBar .RightButton {
+	background: url('DefaultSkin/background/RightButton17x33.gif') no-repeat right;
+	padding-right: 16px;
+}
+
+.SideBar .CenterButton {
+	background: url('DefaultSkin/background/CenterButton1x33.gif') repeat-x ;
+	line-height: 33px;
+	font-size: 18px;
+	font-family: tahoma;
+	font-weight: bold;
+	padding-left: 20px;
+	color: white;
+}
+
+.SideBar .SignUp {
+	font-size: 18px;
+	font-family: tahoma;
+	font-weight: bold;
+	padding-left: 70px;
+	color: #e63c00;
+}
+
+
+.SideBar .VersionIcon {
+	background: url('DefaultSkin/background/VersionIcon.gif') no-repeat ;
+	width: 58px; height: 72px;
+	margin: auto;
+	padding-bottom: 15px;
+}
+
+.SideBar .ProVersion {
+	font-family: tahoma;
+	font-weight: bold;
+	padding-left: 30px;
+	color: #5d8c18;
+	font-size: 12px;
+}
+
+/****************************************************UIBannerPortlet***********************************************/
+.UIBannerPortlet {
+	overflow: auto;
+}
+
+.UIBannerPortlet .LeftBannerCS {
+  background: url('DefaultSkin/background/BannerPortlet.gif') repeat-x left top;
+}
+
+.UIBannerPortlet .RightBannerCS {
+  background: url('DefaultSkin/background/Logo.gif') no-repeat left bottom;
+}
+
+.UIBannerPortlet .MiddleBannerCS {
+  height: 74px ;
+}
+
+.UIBannerPortlet .LeftLoginContainer {
+  background: url('DefaultSkin/background/Container.gif') no-repeat top left;
+  padding-left: 10px;
+  float: right;
+  margin-right: 5px;
+}
+
+.UIBannerPortlet .RightLoginContainer {
+  background: url('DefaultSkin/background/Container.gif') no-repeat top right;
+  padding-right: 5px;
+}
+
+.UIBannerPortlet .MiddleLoginContainer {
+  background: url('DefaultSkin/background/Container.gif') left -50px repeat-x;
+  padding: 5px 15px 7px 15px;
+}
+
+.UIBannerPortlet .Signin {
+  background: url('DefaultSkin/background/Container.gif') left -50px repeat-x;
+  padding: 15px 15px 20px 15px;
+}
+
+.UIBannerPortlet .MiddleLoginContainer a {
+  color: #0d62af;
+  display: block;
+}
+
+.UIBannerPortlet .MiddleLoginContainer a:hover {
+  color: #058ee6;
+}
+
+.UIBannerPortlet .MiddleLoginContainer .Name {
+	text-align: left;
+	color: #0d62af;
+	font-size: 10px;
+	margin-bottom: 6px;
+	line-height: 15px;
+}
+
+.UIBannerPortlet .MiddleLoginContainer .Logout {
+  background: url('DefaultSkin/background/Container.gif') no-repeat left -144px;
+  margin-right: 12px;
+  padding-left: 20px;
+  cursor: pointer;
+  float: left;
+  font-weight: bold;
+  font-size: 10px;
+  display: block;
+  line-height: 17px;
+}
+
+.UIBannerPortlet .MiddleLoginContainer .Login {
+  background: url('DefaultSkin/background/Container.gif') no-repeat left -124px;
+  margin-right: 12px;
+  padding-left: 20px;
+  cursor: pointer;
+  float: left;
+  font-weight: bold;
+  font-size: 10px;
+  display: block;
+  line-height: 17px;
+}
+ 
+.UIBannerPortlet .MiddleLoginContainer .Language {
+  background: url('DefaultSkin/background/Container.gif') no-repeat left -105px;
+  padding-left: 18px;
+  cursor: pointer;
+  font-weight: bold;
+  float: left;
+  display: block;
+  font-size: 10px;
+  line-height: 17px;
 }

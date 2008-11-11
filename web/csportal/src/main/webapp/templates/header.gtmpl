@@ -13,50 +13,32 @@
 	if(prContext.getAccessPath() == PortalRequestContext.PRIVATE_ACCESS) isLogin = true;
 	String userLogin =	Util.getPortalRequestContext().getRemoteUser();
 %>
-<div class="UIBannerPortlet UIApplication">
+<div id="$portletId" class="UIBannerPortlet UIApplication">
 	<div class="ApplicationMinWidth">
-
-		<div class="MiddleBanner_">
-		 	<div class="BannerTitle_"><span></span></div>
-			<div class="LoginContainer">
-				<div class="LeftContainer">
-					<div class="RightContainer">
-						<div class="CenterContainer">
-						<% if(isLogin){ %>
-							<div class="TextAcount">Welcome : <span style="font-weight: bold;">$userLogin</span></div>
-						<% }else { %>	
-							<div class="TextAcount">Demo account: <span style="font-weight: bold;">demo/exo</span></div>
-						<% } %>
-							<a class="ActionButton" onclick="$changeLanguageAction; return false;" href="#">
-								<div class="LeftButton">
-									<div class="RightButton">
-										<div class="CenterButton">Language Setting</div>
+	  <div class="InlineContainer">
+	    <div class="LeftBannerCS">
+	      <div class="RightBannerCS">
+	        <div class="MiddleBannerCS">
+	        	<div class="BannerTitleCS"><span></span></div>
+						<div class="LeftLoginContainer">
+							<div class="RightLoginContainer">
+								<div class="MiddleLoginContainer">
+									<div class="Name">Welcome
+										<span style="padding: 0px 10px 0px 2px; color: red; font-weight:bold;">
+											root 
+										</span>
 									</div>
-								</div>
-							</a>
-							<%if(isLogin) {%>	
-								<a class="ActionButton" href="$signOutAction">
-									<div class="LeftButton">
-										<div class="RightButton">
-											<div class="CenterButton">Sign out</div>
-										</div>
-									</div>
-								</a>
-							<% }else{ %>
-								<a class="ActionButton" onclick="$signInAction; return false;" href="#">
-									<div class="LeftButton">
-										<div class="RightButton">
-											<div class="CenterButton">Sign in</div>
-										</div>
-									</div>
-								</a>
-							<% } %>
+									<a class="Logout" onclick="eXo.portal.logout();">Sign out</a>
+									<a class="Language" onclick="$changeLanguageAction">Change Language</a>
+									<div style="clear: both;"><span></span></div>	
+								</div>			
+							</div>
+							<div style="clear:both"><span></span></div>
 						</div>
-					</div>
-					<div style="clear: right"><span></span></div>		 
-				</div>
-			</div>
-	 	</div>
+	        </div>
+	      </div>   
+	    </div>
+	  </div>
 	</div>
 </div>
 
