@@ -699,6 +699,7 @@ UICalendarPortlet.prototype.showEvent = function(){
     this.init();
     var EventDayContainer = eXo.core.DOMUtil.findAncestorByClass(this.viewer, "EventDayContainer");
     this.setFocus(this.viewer, EventDayContainer);
+    this.editAlldayEvent(EventDayContainer);
     if (!this.init()) 
         return;
     this.viewType = "UIDayView";
@@ -707,7 +708,7 @@ UICalendarPortlet.prototype.showEvent = function(){
     if (el.length <= 0) 
         return;
     var marker = null;
-    for (var i = 0; i < el.length; i++) {
+    for (var i = 0; i < el.length; i++) {s
         this.setSize(el[i]);
         el[i].onmousedown = eXo.calendar.UICalendarPortlet.initDND;
         el[i].ondblclick = eXo.calendar.UICalendarPortlet.ondblclickCallback;
@@ -719,6 +720,17 @@ UICalendarPortlet.prototype.showEvent = function(){
     this.items = null;
     this.viewer = null;
 };
+
+UICalendarPortlet.prototype.editAlldayEvent = function(cont){
+	cont = eXo.core.DOMUtil.findPreviousElementByTagName(cont,"div");
+	var events = eXo.core.DOMUtil.findDescendantsByClass(cont,"div","EventContainerBorder");
+	var i = events.length ;
+	if(!events || (i <= 0)) return ;
+	while(i--){
+		events[i].ondblclick = this.ondblclickCallback;
+	}
+}
+
 
 /**
  * Deal with incorrect event sorting when portlet loads in the first times

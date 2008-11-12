@@ -176,9 +176,10 @@ Utils.prototype.confirmAction = function(obj,msg,parentId){
 	var i = checkboxes.length;
 	var actionLink = obj.getAttribute("actionLink");
 	var check = false ;
-	while(i>1){
-		i--;
-		if(checkboxes[i].checked) {
+	var n = 1;
+	if(parentId == "UICalendarViewContainer") n = 0;
+	while(i>n){
+		i--;		if(checkboxes[i].checked) {
 			check = true;
 			break ;
 		}

@@ -75,9 +75,7 @@ UIWeekView.prototype.distributeEvent = function() {
 } ;
 
 UIWeekView.prototype.onResize = function() {
-	//if(eXo.core.Browser.browserType == "ie") {		
 		eXo.calendar.UIWeekView.setSize() ;
-	//}
 } ;
 
 UIWeekView.prototype.setSize = function() {
@@ -148,7 +146,6 @@ UIWeekView.prototype.showInCol = function(obj) {
 	var items = eXo.calendar.UICalendarPortlet.getElements(obj) ;
 	var len = items.length ;
 	if (len <= 0) return ;
-	//this.showHideEvent(items,false);
 	var UIWeekView = eXo.calendar.UIWeekView ;
 	var container = (eXo.core.Browser.isFF()) ? UIWeekView.container : items[0].offsetParent ;
 	var left = parseFloat((eXo.core.Browser.findPosXInContainer(obj, container) - 1)/container.offsetWidth)*100 ;
@@ -158,7 +155,7 @@ UIWeekView.prototype.showInCol = function(obj) {
 	this.showHideEvent(items,true);
 } ;
 
-UIWeekView.prototype.dragStart = function(evt) {
+UIWeekView.prototype.dragStart = function(evt) { alert("clear");
 	var _e = window.event || evt ;
 	_e.cancelBubble = true ;
 	if (_e.button == 2) return ;
@@ -193,8 +190,6 @@ UIWeekView.prototype.drag = function(evt) {
   }
 	if (UIWeekView.isCol(_e)) {
 		var posX = eXo.core.Browser.findPosXInContainer(UIWeekView.currentCol, UIWeekView.dragElement.offsetParent) ;
-//		var uiControlWorkspace = document.getElementById("UIControlWorkspace") ;
-//		if(uiControlWorkspace) posX += uiControlWorkspace.offsetWidth ;
 		UIWeekView.dragElement.style.left = posX + "px" ;
 	}
 } ;
@@ -404,7 +399,7 @@ UIWeekView.prototype.allDayInitCallback = function(evt) {
 	var UIWeekView = eXo.calendar.UIWeekView ;
 	var dragObject = evt.dragObject ;
 	UIWeekView.beforeStart = dragObject.offsetLeft ;
-	dragObject.style.left = UIWeekView.elementLeft + "px" ;
+	dragObject.style.left = dragObject.offsetLeft + "px" ;
 } ;
 
 UIWeekView.prototype.allDayDragCallback = function(evt) {
@@ -467,13 +462,12 @@ UIWeekView.prototype.initAllday = function() {
 		if (eXo.core.DOMUtil.hasClass(resizeMark[0], "ResizableSign")) resizeMark[0].onmousedown = UIWeekView.initAllDayLeftResize ;
 		if (eXo.core.DOMUtil.hasClass(resizeMark[2], "ResizableSign")) resizeMark[2].onmousedown = UIWeekView.initAllDayRightResize ; 
     eventAllday[i].onmousedown = eXo.calendar.UIWeekView.initAlldayDND ;
+    eventAllday[i].ondblclick = eXo.calendar.UICalendarPortlet.ondblclickCallback ;
 	}
 	var EventAlldayContainer = eXo.core.DOMUtil.findFirstDescendantByClass(uiWeekViewGridAllDay,"td","EventAllday") ;
-//	EventAlldayContainer.style.height = eventAllday.length * eventAllday[0].offsetHeight + "px" ;
 	this.weekdays = eXo.core.DOMUtil.findDescendantsByTagName(uiWeekViewGridAllDay, "th") ;
 	this.startWeek = 	UIWeekView.weekdays[1] ;
 	this.endWeek = 	UIWeekView.weekdays[UIWeekView.weekdays.length-1] ;
-//	this.setPosition(eventAllday) ;
 } ;
 
 UIWeekView.prototype.sortByWidth = function(obj) {
