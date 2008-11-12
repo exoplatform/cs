@@ -22,7 +22,7 @@
     </preference>
   </portlet-preferences-->  
   
-  <!--portlet-preferences>
+  <portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>classic</owner-id>
     <window-id>portal#classic:/web/HomePagePortlet/homepageportlet</window-id>
@@ -31,9 +31,9 @@
       <value>system:/templates/groovy/webui/component/UIHomePagePortlet.gtmpl</value>
       <read-only>false</read-only>
     </preference>
-  </portlet-preferences-->
+  </portlet-preferences>
 
-   <portlet-preferences>
+   <!--portlet-preferences>
     <owner-type>portal</owner-type>
     <owner-id>classic</owner-id>
     <window-id>portal#classic:/web/HomePagePortlet/sidebar</window-id>
@@ -42,7 +42,7 @@
       <value>system:/templates/sidebar.gtmpl</value>
       <read-only>false</read-only>
     </preference>
-  </portlet-preferences>
+  </portlet-preferences-->
 
 	<portlet-preferences>
     <owner-type>portal</owner-type>

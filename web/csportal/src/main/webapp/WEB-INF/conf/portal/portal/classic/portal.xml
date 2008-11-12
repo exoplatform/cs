@@ -37,9 +37,8 @@
 	    <instance-id>portal#classic:/web/BreadcumbsPortlet/breadcumbs</instance-id>
 	    <show-info-bar>false</show-info-bar>
 	  </application>
-	  
-	
-	  <container id="CS" template="system:/templates/groovy/webui/component/UITableColumnContainer.gtmpl">
+	  <page-body> </page-body>
+	  <!--container id="CS" template="system:/templates/groovy/webui/component/UITableColumnContainer.gtmpl">
       <container id="pagebody" template="system:/groovy/portal/webui/container/UIContainer.gtmpl">
         <page-body>
         </page-body>
@@ -53,7 +52,7 @@
           <show-application-mode>false</show-application-mode>          
         </application>
       </container>
-    </container>   
+    </container-->   
 	  
 	  <application>
 	    <instance-id>portal#classic:/web/FooterPortlet/footer</instance-id>

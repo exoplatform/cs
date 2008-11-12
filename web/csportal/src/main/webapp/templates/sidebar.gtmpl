@@ -20,7 +20,7 @@ String toururi = Util.getPortalRequestContext().getPortalURI() + "tour";
 		</div>		
 		<div class="LeftButton">
 			<div class="RightButton">
-				<div class="CenterButton"><a href="mailto:ks@exoplatform.com?subject=KS demo feedback" style="color: white;">Feedback</a></div>
+				<div class="CenterButton"><a href="mailto:cs@exoplatform.com?subject=CS demo feedback" style="color: white;">Feedback</a></div>
 			</div>
 		</div>	
 	</div>
