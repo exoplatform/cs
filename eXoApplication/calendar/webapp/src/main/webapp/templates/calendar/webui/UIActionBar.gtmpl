@@ -112,15 +112,20 @@
 				              		<div class="UIRightPopupMenuContainer">
 														<a class="MenuItem" href="javascript:eXo.calendar.UICalendarPortlet.switchLayout(0)" >   
 					                    <div class="ItemIcon HidenAllCalendar">
-					                       <%=_ctx.appRes(uicomponent.id + '.label.ShowHideAll')%>
+					                       <%=_ctx.appRes(uicomponent.id + '.label.DefaultLayout')%>
 					                    </div>
 				                    </a>
 				                    <a class="MenuItem" href="javascript:eXo.calendar.UICalendarPortlet.switchLayout(1)" >   
 					                    <div class="ItemIcon ShowMinicalendar">
+					                    	<%=_ctx.appRes(uicomponent.id + '.label.ShowHideAll')%>
+					                    </div>
+				                    </a>
+				                    <a class="MenuItem" href="javascript:eXo.calendar.UICalendarPortlet.switchLayout(2)" >   
+					                    <div class="ItemIcon ShowMinicalendar">
 					                    	<%=_ctx.appRes(uicomponent.id + '.label.ShowHideMinicalendar')%>
 					                    </div>
 				                    </a>
-				                    <a class="MenuItem" href="javascript:eXo.calendar.UICalendarPortlet.switchLayout(2)" >
+				                    <a class="MenuItem" href="javascript:eXo.calendar.UICalendarPortlet.switchLayout(3)" >
 					                    <div class="ItemIcon HidenMinicalendar">
 					                      <%=_ctx.appRes(uicomponent.id + '.label.ShowHideCalendarList')%>
 					                    </div>

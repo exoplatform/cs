@@ -409,28 +409,87 @@ UICalendarPortlet.prototype.runAction = function(obj){
     eval(actions);
 };
 
+UICalendarPortlet.prototype.switchLayoutCallback = function(layout,status){
+	var layoutMan = eXo.calendar.LayoutManager ;
+	var panelWorking = eXo.core.DOMUtil.findNextElementByTagName(layoutMan.layouts[0], "div");
+	var layoutcookie = eXo.core.Browser.getCookie(layoutMan.layoutId);
+	
+	if((layout == 2) || (layout == 3)){
+		if(layoutcookie.indexOf('1') >= 0) return ;
+	}
+	if(!status) {
+		layoutMan.layouts[layout-1].style.display = "none" ;
+		if(layout == 1){			
+			layoutMan.layouts[layout].style.display = "none" ;
+			layoutMan.layouts[layout+1].style.display = "none" ;
+			panelWorking.style.marginLeft = "0px" ;			
+			if(layoutcookie.indexOf('2') < 0) layoutcookie = layoutcookie.concat(2) ;
+			if(layoutcookie.indexOf('3') < 0) layoutcookie = layoutcookie.concat(3) ;
+			eXo.core.Browser.setCookie(layoutMan.layoutId,layoutcookie,1);
+		}
+		
+	} else {		
+		layoutMan.layouts[layout-1].style.display = "block" ;
+		if(layout == 1){			
+			layoutMan.layouts[layout].style.display = "block" ;
+			layoutMan.layouts[layout+1].style.display = "block" ;
+			panelWorking.style.marginLeft = "243px" ;
+			if(layoutcookie.indexOf('2') >= 0) layoutcookie = layoutcookie.replace('2','') ;
+			if(layoutcookie.indexOf('3') >= 0) layoutcookie = layoutcookie.replace('3','') ;
+			eXo.core.Browser.setCookie(layoutMan.layoutId,layoutcookie,1);
+		}
+	}
+	if(eXo.core.Browser.isFF() && document.getElementById("UIWeekView") && (layout == 1)) eXo.calendar.UIWeekView.onResize();
+};
+
+UICalendarPortlet.prototype.checkLayoutCallback = function(layoutcookie){
+	if (layoutcookie.indexOf("1") >=0) {
+		var workingarea = eXo.core.DOMUtil.findNextElementByTagName(eXo.calendar.LayoutManager.layouts[0], "div");
+		workingarea.style.marginLeft = "0px";
+	}
+};
+
+UICalendarPortlet.prototype.resetLayoutCallback = function(){
+	var workingarea = eXo.core.DOMUtil.findNextElementByTagName(eXo.calendar.LayoutManager.layouts[0], "div");
+	workingarea.style.marginLeft = "243px";
+	if(eXo.core.Browser.isFF() && document.getElementById("UIWeekView")) eXo.calendar.UIWeekView.onResize();
+};
+
 /**
  * Check layout configuration when page load to render a right layout
  */
 UICalendarPortlet.prototype.checkLayout = function(){
-    try {
-        var Browser = eXo.core.Browser;
-        var display = Browser.getCookie("displaymode");
-        var display0 = Browser.getCookie("displaymode0");
-        var display1 = Browser.getCookie("displaymode1");
-        var layout0 = document.getElementById("UIMiniCalendar");
-        var layout1 = document.getElementById("UICalendars").parentNode;
-        var layout3 = document.getElementById("UICalendarContainer");
-        var workingarea = eXo.core.DOMUtil.findNextElementByTagName(layout3, "div");
-    } 
-    catch (e) {
-        return;
-    }
-    layout3.style.display = display;
-    if (display == "none") 
-        workingarea.style.marginLeft = "0px";
-    layout0.style.display = display0;
-    layout1.style.display = display1;
+	eXo.calendar.LayoutManager = new LayoutManager("calendarlayout");
+	var	layout1 = document.getElementById("UICalendarContainer") ;
+	var	layout2 = document.getElementById("UIMiniCalendar") ;
+	var	layout3 = document.getElementById("UICalendars") ;
+	eXo.calendar.LayoutManager.layouts = [] ;
+	eXo.calendar.LayoutManager.layouts.push(layout1);
+	eXo.calendar.LayoutManager.layouts.push(layout2);
+	eXo.calendar.LayoutManager.layouts.push(layout3);
+	eXo.calendar.LayoutManager.switchCallback = eXo.calendar.UICalendarPortlet.switchLayoutCallback;
+	eXo.calendar.LayoutManager.callback = eXo.calendar.UICalendarPortlet.checkLayoutCallback;
+	eXo.calendar.LayoutManager.resetCallback = eXo.calendar.UICalendarPortlet.resetLayoutCallback;
+	eXo.calendar.LayoutManager.check();
+//	return ;
+//    try {
+//        var Browser = eXo.core.Browser;
+//        var display = Browser.getCookie("displaymode");
+//        var display0 = Browser.getCookie("displaymode0");
+//        var display1 = Browser.getCookie("displaymode1");
+//        var layout0 = document.getElementById("UIMiniCalendar");
+//        var layout1 = document.getElementById("UICalendars").parentNode;
+//        var layout3 = document.getElementById("UICalendarContainer");
+//        var workingarea = eXo.core.DOMUtil.findNextElementByTagName(layout3, "div");
+//    } 
+//    catch (e) {
+//        return;
+//    }
+//    layout3.style.display = display;
+//    if (display == "none") 
+//        workingarea.style.marginLeft = "0px";
+//    layout0.style.display = display0;
+//    layout1.style.display = display1;
 };
 
 /** 
@@ -438,73 +497,80 @@ UICalendarPortlet.prototype.checkLayout = function(){
  * @param {Int} layout Layout value in order number
  */
 UICalendarPortlet.prototype.switchLayout = function(layout){
-    var Browser = eXo.core.Browser;
-    layout = parseInt(layout);
-    var layout0 = document.getElementById("UIMiniCalendar");
-    var layout1 = document.getElementById("UICalendars");
-    var layout3 = document.getElementById("UICalendarContainer");
-    var workingarea = eXo.core.DOMUtil.findNextElementByTagName(layout3, "div");
-    
-    switch (layout) {
-        case 0:
-            if (layout3.style.display == "none") {
-                layout0.style.display = "block";
-                layout1.style.display = "block";
-                layout3.style.display = "block";
-                workingarea.style.marginLeft = "243px";
-                Browser.setCookie("displaymode", "block", 7);
-                Browser.setCookie("displaymode0", "block", 7);
-                Browser.setCookie("displaymode1", "block", 7);
-            }
-            else {
-                layout0.style.display = "none";
-                layout1.style.display = "none";
-                layout3.style.display = "none";
-                workingarea.style.marginLeft = "0px";
-                Browser.setCookie("displaymode", "none", 7);
-                Browser.setCookie("displaymode0", "none", 7);
-                Browser.setCookie("displaymode1", "none", 7);
-            }
-            break;
-        case 1:
-            if (layout0.style.display == "none") {
-                layout0.style.display = "block";
-                layout3.style.display = "block";
-                workingarea.style.marginLeft = "243px";
-                Browser.setCookie("displaymode", "block", 7);
-                Browser.setCookie("displaymode0", "block", 7);
-            }
-            else {
-                layout0.style.display = "none";
-                if (layout1.style.display == "none") {
-                    Browser.setCookie("displaymode", "none", 7);
-                    workingarea.style.marginLeft = "0px";
-                    layout3.style.display = "none";
-                }
-                Browser.setCookie("displaymode0", "none", 7);
-            }
-            break;
-        case 2:
-            if (layout1.style.display == "none") {
-                layout1.style.display = "block";
-                layout3.style.display = "block";
-                workingarea.style.marginLeft = "243px";
-                Browser.setCookie("displaymode", "block", 7);
-                Browser.setCookie("displaymode1", "block", 7);
-                
-            }
-            else {
-                layout1.style.display = "none";
-                if (layout0.style.display == "none") {
-                    Browser.setCookie("displaymode", "none", 7);
-                    workingarea.style.marginLeft = "0px";
-                    layout3.style.display = "none";
-                }
-                Browser.setCookie("displaymode1", "none", 7);
-            }
-            break;
-    }
-    if(eXo.core.Browser.isFF() && document.getElementById("UIWeekView")) eXo.calendar.UIWeekView.onResize();
+	var layoutMan = eXo.calendar.LayoutManager ;
+	if(layout == 0){
+		layoutMan.reset(); 
+		return ;
+	}
+	layoutMan.switchLayout(layout);
+//	return ;
+//    var Browser = eXo.core.Browser;
+//    layout = parseInt(layout);
+//    var layout0 = document.getElementById("UIMiniCalendar");
+//    var layout1 = document.getElementById("UICalendars");
+//    var layout3 = document.getElementById("UICalendarContainer");
+//    var workingarea = eXo.core.DOMUtil.findNextElementByTagName(layout3, "div");
+//    
+//    switch (layout) {
+//        case 0:
+//            if (layout3.style.display == "none") {
+//                layout0.style.display = "block";
+//                layout1.style.display = "block";
+//                layout3.style.display = "block";
+//                workingarea.style.marginLeft = "243px";
+//                Browser.setCookie("displaymode", "block", 7);
+//                Browser.setCookie("displaymode0", "block", 7);
+//                Browser.setCookie("displaymode1", "block", 7);
+//            }
+//            else {
+//                layout0.style.display = "none";
+//                layout1.style.display = "none";
+//                layout3.style.display = "none";
+//                workingarea.style.marginLeft = "0px";
+//                Browser.setCookie("displaymode", "none", 7);
+//                Browser.setCookie("displaymode0", "none", 7);
+//                Browser.setCookie("displaymode1", "none", 7);
+//            }
+//            break;
+//        case 1:
+//            if (layout0.style.display == "none") {
+//                layout0.style.display = "block";
+//                layout3.style.display = "block";
+//                workingarea.style.marginLeft = "243px";
+//                Browser.setCookie("displaymode", "block", 7);
+//                Browser.setCookie("displaymode0", "block", 7);
+//            }
+//            else {
+//                layout0.style.display = "none";
+//                if (layout1.style.display == "none") {
+//                    Browser.setCookie("displaymode", "none", 7);
+//                    workingarea.style.marginLeft = "0px";
+//                    layout3.style.display = "none";
+//                }
+//                Browser.setCookie("displaymode0", "none", 7);
+//            }
+//            break;
+//        case 2:
+//            if (layout1.style.display == "none") {
+//                layout1.style.display = "block";
+//                layout3.style.display = "block";
+//                workingarea.style.marginLeft = "243px";
+//                Browser.setCookie("displaymode", "block", 7);
+//                Browser.setCookie("displaymode1", "block", 7);
+//                
+//            }
+//            else {
+//                layout1.style.display = "none";
+//                if (layout0.style.display == "none") {
+//                    Browser.setCookie("displaymode", "none", 7);
+//                    workingarea.style.marginLeft = "0px";
+//                    layout3.style.display = "none";
+//                }
+//                Browser.setCookie("displaymode1", "none", 7);
+//            }
+//            break;
+//    }
+//    if(eXo.core.Browser.isFF() && document.getElementById("UIWeekView")) eXo.calendar.UIWeekView.onResize();
 };
 /* for event */
 /**
