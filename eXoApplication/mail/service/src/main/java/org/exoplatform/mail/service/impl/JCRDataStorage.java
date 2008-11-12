@@ -1038,7 +1038,7 @@ public class JCRDataStorage {
         Part bodyPart;
         for (int i = 0; i < multipart.getCount(); i++) {
           bodyPart = multipart.getBodyPart(i);
-          if (bodyPart.isMimeType("text/html")) {
+          if (bodyPart.isMimeType("text/html") || bodyPart.isMimeType("multipart/related")) {
             body = setPart(bodyPart, node, body);
             readText = false;
           }
