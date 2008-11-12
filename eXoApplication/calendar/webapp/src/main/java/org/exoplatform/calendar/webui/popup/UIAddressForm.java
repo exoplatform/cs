@@ -136,7 +136,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         if(value.lastIndexOf(Utils.SPLIT) > 0) {
           String fullName = value.substring(0,value.lastIndexOf(Utils.SPLIT)) ;
           String email = value.substring(value.lastIndexOf(Utils.SPLIT) + Utils.SPLIT.length()) ;
-          data.add(new ContactData(id, fullName, email)) ;
+          if(!CalendarUtils.isEmpty(email)) data.add(new ContactData(id, fullName, email)) ;
         }
       }
     }
@@ -154,7 +154,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         if(value.lastIndexOf(Utils.SPLIT) > 0) {
           String fullName = value.substring(0,value.lastIndexOf(Utils.SPLIT)) ;
           String email = value.substring(value.lastIndexOf(Utils.SPLIT) + Utils.SPLIT.length()) ;
-          data.add(new ContactData(id, fullName, email)) ;
+          if(!CalendarUtils.isEmpty(email)) data.add(new ContactData(id, fullName, email)) ;
         }
       }
     }
