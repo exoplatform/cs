@@ -43,7 +43,7 @@ public class NewUserListener extends UserEventListener {
   final static public String FD_SPAM = "Spam".intern() ;
   final static public String FD_TRASH = "Trash".intern() ;
   final static public String[] defaultFolders_ =  {FD_INBOX ,FD_DRAFTS, FD_SENT, FD_SPAM, FD_TRASH} ;
-  
+
   String protocol;
   boolean isSSL;
   String incomingHost;
@@ -51,12 +51,12 @@ public class NewUserListener extends UserEventListener {
   String incomingFolder;
   String outgoingHost;
   String outgoingPort;
-  
+
   public NewUserListener(MailService mservice, InitParams params) throws Exception {
-  	mservice_ = mservice ;
-    
+    mservice_ = mservice ;
+
     // parameters defined in the plugin configuration
-  	protocol       = params.getValueParam("protocol").getValue() ;
+    protocol       = params.getValueParam("protocol").getValue() ;
     String ssl     = params.getValueParam("ssl").getValue() ;
     isSSL          = (ssl != null) && ssl.equalsIgnoreCase("true");
     incomingHost   = params.getValueParam("incomingServer").getValue() ;
@@ -65,7 +65,7 @@ public class NewUserListener extends UserEventListener {
     outgoingHost   = params.getValueParam("outgoingServer").getValue() ;
     outgoingPort   = params.getValueParam("outgoingPort").getValue() ;
   }
-  
+
   @SuppressWarnings("deprecation")
   public void postSave(User user, boolean isNew) throws Exception {
     if(!isNew) return ;
@@ -73,9 +73,9 @@ public class NewUserListener extends UserEventListener {
     String email        = user.getEmail();
     // Once eXo is connected to LDAP users, the password will be correct !!!
     String password     = user.getPassword();
-    
+
     Account acc = new Account();
-    
+
     String incomingUserName = email;
 
     acc.setLabel(fullName) ;
@@ -96,28 +96,31 @@ public class NewUserListener extends UserEventListener {
     acc.setOutgoingHost(outgoingHost);
     acc.setOutgoingPort(outgoingPort);
 
-    
+
     SessionProvider sProvider = SessionProvider.createSystemProvider();
     String username = user.getUserName();
     String accId    = acc.getId();
     String folderId = null;
     Folder folder   = null;
-    
-    mservice_.createAccount(sProvider, username, acc);
-    
-    for(String folderName : defaultFolders_) {
-      folderId = Utils.createFolderId(accId, folderName, false);
-      folder = mservice_.getFolder(sProvider, username, accId, folderId) ;
-      if(folder == null) {
-        folder = new Folder() ;
-        folder.setId(folderId);
-        folder.setName(folderName) ;
-        folder.setLabel(folderName) ;
-        folder.setPersonalFolder(false) ;
-        mservice_.saveFolder(sProvider, username, accId, folder) ;
+    try {
+      mservice_.createAccount(sProvider, username, acc);
+      for(String folderName : defaultFolders_) {
+        folderId = Utils.createFolderId(accId, folderName, false);
+        folder = mservice_.getFolder(sProvider, username, accId, folderId) ;
+        if(folder == null) {
+          folder = new Folder() ;
+          folder.setId(folderId);
+          folder.setName(folderName) ;
+          folder.setLabel(folderName) ;
+          folder.setPersonalFolder(false) ;
+          mservice_.saveFolder(sProvider, username, accId, folder) ;
+        }
       }
+    } catch (Exception e) {
+      e.printStackTrace() ;
+    } finally {
+      sProvider.close();
     }
-    sProvider.close();
   }
 
 }

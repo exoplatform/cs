@@ -615,11 +615,18 @@ public class JCRDataStorage{
       for(CalendarEvent ce : getUserEventByCategory(sProvider, username, eventCategoryName)) {
         removeUserEvent(sProvider, username, ce.getCalendarId(), ce.getId()) ;
       }
-      for(CalendarEvent ce : getSharedEventByCategory(username, eventCategoryName)) {
-        removeSharedEvent(SessionProvider.createSystemProvider(), username, ce.getCalendarId(), ce.getId()) ;
-      }
-      for(CalendarEvent ce : getPublicEventByCategory(username, eventCategoryName)) {
-        removePublicEvent(SessionProvider.createSystemProvider(),ce.getCalendarId(), ce.getId()) ;
+      SessionProvider systemSession = SessionProvider.createSystemProvider() ;
+      try {
+        for(CalendarEvent ce : getSharedEventByCategory(username, eventCategoryName)) {
+          removeSharedEvent(systemSession, username, ce.getCalendarId(), ce.getId()) ;
+        }
+        for(CalendarEvent ce : getPublicEventByCategory(username, eventCategoryName)) {
+          removePublicEvent(systemSession,ce.getCalendarId(), ce.getId()) ;
+        }
+      } catch (Exception e) {
+        e.printStackTrace() ;
+      } finally {
+        systemSession.close() ;
       }
       eventCategoryNode.remove() ;
       eventCategoryHome.save() ;
@@ -658,44 +665,58 @@ public class JCRDataStorage{
     return events ;
   }
   private List<CalendarEvent> getPublicEventByCategory(String username, String eventCategoryId) throws Exception {
-    Node publicCalendarHome = getPublicCalendarHome(SessionProvider.createSystemProvider()) ;
+    SessionProvider systemSession = SessionProvider.createSystemProvider() ;
+    Node publicCalendarHome = getPublicCalendarHome(systemSession) ;
     QueryManager qm = publicCalendarHome.getSession().getWorkspace().getQueryManager();
     List<CalendarEvent> events = new ArrayList<CalendarEvent> () ;
-    Query query ;
-    QueryResult result ;
-    NodeIterator calIter = publicCalendarHome.getNodes() ;
-    while (calIter.hasNext()) {
-      StringBuffer queryString = new StringBuffer("/jcr:root" + calIter.nextNode().getPath() 
-          + "//element(*,exo:calendarEvent)[@exo:eventCategoryId='").
-          append(eventCategoryId).
-          append("']");
-      query = qm.createQuery(queryString.toString(), Query.XPATH);
-      result = query.execute();
-      NodeIterator it = result.getNodes();
-      while(it.hasNext()){
-        events.add(getEvent(SessionProvider.createSystemProvider(), it.nextNode())) ;
-      }
+    try {
+      Query query ;
+      QueryResult result ;
+      NodeIterator calIter = publicCalendarHome.getNodes() ;
+      while (calIter.hasNext()) {
+        StringBuffer queryString = new StringBuffer("/jcr:root" + calIter.nextNode().getPath() 
+            + "//element(*,exo:calendarEvent)[@exo:eventCategoryId='").
+            append(eventCategoryId).
+            append("']");
+        query = qm.createQuery(queryString.toString(), Query.XPATH);
+        result = query.execute();
+        NodeIterator it = result.getNodes();
+        while(it.hasNext()){
+          events.add(getEvent(systemSession, it.nextNode())) ;
+        }
+      } 
+    } catch (Exception e) {
+      e.printStackTrace() ;
+    } finally {
+      systemSession.close() ;
     }
     return events ;
   }
   private List<CalendarEvent> getSharedEventByCategory(String username, String eventCategoryId) throws Exception {
-    Node sharedCalendarHome = getSharedCalendarHome(SessionProvider.createSystemProvider()) ;
+    SessionProvider systemSession = SessionProvider.createSystemProvider() ;
+    Node sharedCalendarHome = getSharedCalendarHome(systemSession) ;
     QueryManager qm = sharedCalendarHome.getSession().getWorkspace().getQueryManager();
     List<CalendarEvent> events = new ArrayList<CalendarEvent> () ;
     Query query ;
     QueryResult result ;
     NodeIterator calIter = sharedCalendarHome.getNodes() ;
-    while (calIter.hasNext()) {
-      StringBuffer queryString = new StringBuffer("/jcr:root" + calIter.nextNode().getPath() 
-          + "//element(*,exo:calendarEvent)[@exo:eventCategoryId='").
-          append(eventCategoryId).
-          append("']");
-      query = qm.createQuery(queryString.toString(), Query.XPATH);
-      result = query.execute();
-      NodeIterator it = result.getNodes();
-      while(it.hasNext()){
-        events.add(getEvent(SessionProvider.createSystemProvider(), it.nextNode())) ;
+    try {
+      while (calIter.hasNext()) {
+        StringBuffer queryString = new StringBuffer("/jcr:root" + calIter.nextNode().getPath() 
+            + "//element(*,exo:calendarEvent)[@exo:eventCategoryId='").
+            append(eventCategoryId).
+            append("']");
+        query = qm.createQuery(queryString.toString(), Query.XPATH);
+        result = query.execute();
+        NodeIterator it = result.getNodes();
+        while(it.hasNext()){
+          events.add(getEvent(systemSession, it.nextNode())) ;
+        }
       }
+    } catch (Exception e) {
+      e.printStackTrace() ;
+    } finally {
+      systemSession.close() ;
     }
     return events ;
   }
@@ -742,8 +763,15 @@ public class JCRDataStorage{
     Node calendarNode = getUserCalendarHome(sProvider, username).getNode(calendarId);
     if(event.getReminders() != null && event.getReminders().size() > 0) {
       //Need to use system session
-      Node reminderFolder = getReminderFolder(SessionProvider.createSystemProvider(), event.getFromDateTime()) ;
-      saveEvent(calendarNode, event, reminderFolder, isNew) ;
+      SessionProvider systemSession = SessionProvider.createSystemProvider();
+      try {
+        Node reminderFolder = getReminderFolder(systemSession, event.getFromDateTime()) ;
+        saveEvent(calendarNode, event, reminderFolder, isNew) ;
+      } catch (Exception e) {
+        e.printStackTrace() ;
+      } finally {
+        systemSession.close() ;
+      }
     }else {
       saveEvent(calendarNode, event, null, isNew) ;
     }
@@ -755,8 +783,15 @@ public class JCRDataStorage{
       Node eventNode = calendarNode.getNode(eventId) ;
       CalendarEvent event = getEvent(sProvider, eventNode) ;
       //Need to use system session
-      Node eventFolder = getEventFolder(SessionProvider.createSystemProvider(), event.getFromDateTime()) ;
-      syncRemoveEvent(eventFolder, event.getId()) ;
+      SessionProvider systemSession = SessionProvider.createSystemProvider() ;
+      try {
+        Node eventFolder = getEventFolder(systemSession, event.getFromDateTime()) ;
+        syncRemoveEvent(eventFolder, event.getId()) ;
+      } catch (Exception e) {
+        e.printStackTrace() ;
+      } finally {
+        systemSession.close() ;
+      }
       removeReminder(sProvider, eventNode) ;
       eventNode.remove() ;
       calendarNode.save() ;
@@ -770,11 +805,18 @@ public class JCRDataStorage{
   private void removeReminder(SessionProvider sProvider, Node eventNode)throws Exception {
     // Need to use system session
     if(eventNode.hasProperty(Utils.EXO_FROM_DATE_TIME)) {
-      Node reminders = getReminderFolder(SessionProvider.createSystemProvider(), eventNode.getProperty(Utils.EXO_FROM_DATE_TIME).getDate().getTime()) ;
-      if(reminders.hasNode(eventNode.getName())) reminders.getNode(eventNode.getName()).remove() ;
-      Node events = reminders.getParent().getNode(Utils.CALENDAR_REMINDER) ;
-      if(events != null && events.hasNode(eventNode.getName())) events.getNode(eventNode.getName()).remove() ;
-      if(!reminders.isNew())reminders.save() ;
+      SessionProvider systemSession = SessionProvider.createSystemProvider() ;
+      try {
+        Node reminders = getReminderFolder(systemSession, eventNode.getProperty(Utils.EXO_FROM_DATE_TIME).getDate().getTime()) ;
+        if(reminders.hasNode(eventNode.getName())) reminders.getNode(eventNode.getName()).remove() ;
+        Node events = reminders.getParent().getNode(Utils.CALENDAR_REMINDER) ;
+        if(events != null && events.hasNode(eventNode.getName())) events.getNode(eventNode.getName()).remove() ;
+        if(!reminders.isNew())reminders.save() ;
+      }  catch (Exception e) {
+        e.printStackTrace() ;
+      } finally {
+        systemSession.close() ;
+      }
     }
   } 
 
@@ -829,8 +871,15 @@ public class JCRDataStorage{
       calendarNode.save() ;
       calendarNode.getSession().save() ;
       calendarNode.refresh(true) ;
-      Node eventFolder = getEventFolder(SessionProvider.createSystemProvider(), event.getFromDateTime()) ;
-      syncRemoveEvent(eventFolder, eventId) ;
+      SessionProvider systemSession = SessionProvider.createSystemProvider() ;
+      try {
+        Node eventFolder = getEventFolder(systemSession, event.getFromDateTime()) ;
+        syncRemoveEvent(eventFolder, eventId) ;
+      } catch (Exception e) {
+        e.printStackTrace() ;
+      } finally {
+        systemSession.close() ;
+      }
       return event;
     }
     return null ;
@@ -853,8 +902,14 @@ public class JCRDataStorage{
     if(eventNode.hasProperty(Utils.EXO_PRIORITY)) event.setPriority(eventNode.getProperty(Utils.EXO_PRIORITY).getString()) ;
     if(eventNode.hasProperty(Utils.EXO_IS_PRIVATE)) event.setPrivate(eventNode.getProperty(Utils.EXO_IS_PRIVATE).getBoolean()) ;
     if(eventNode.hasProperty(Utils.EXO_EVENT_STATE)) event.setEventState(eventNode.getProperty(Utils.EXO_EVENT_STATE).getString()) ;
-
-    event.setReminders(getReminders(SessionProvider.createSystemProvider(), eventNode)) ;
+    SessionProvider systemSession =  SessionProvider.createSystemProvider() ;
+    try {
+      event.setReminders(getReminders(systemSession, eventNode)) ;
+    }catch (Exception e) {
+      e.printStackTrace() ;
+    } finally {
+      systemSession.close() ;
+    }
     event.setAttachment(getAttachments(eventNode)) ;
     if(eventNode.hasProperty(Utils.EXO_INVITATION)){
       Value[] values = eventNode.getProperty(Utils.EXO_INVITATION).getValues() ;
@@ -896,7 +951,14 @@ public class JCRDataStorage{
         eventNode = calendarNode.addNode(event.getId(), Utils.EXO_CALENDAR_EVENT) ;
         eventNode.setProperty(Utils.EXO_ID, event.getId()) ;
       }
-      removeReminder(SessionProvider.createSystemProvider(), eventNode) ;
+      SessionProvider systemSession =  SessionProvider.createSystemProvider() ;
+      try {
+        removeReminder(systemSession, eventNode) ; 
+      }catch (Exception e) {
+        e.printStackTrace() ;
+      } finally {
+        systemSession.close() ;
+      }
     }
     eventNode.setProperty(Utils.EXO_SUMMARY, event.getSummary()) ;
     eventNode.setProperty(Utils.EXO_CALENDAR_ID, event.getCalendarId()) ;
@@ -1010,12 +1072,12 @@ public class JCRDataStorage{
   }
 
   private void addEvent(CalendarEvent event) throws Exception {
-    Node eventFolder = getEventFolder(SessionProvider.createSystemProvider(), event.getFromDateTime()) ;
+    SessionProvider provider = SessionProvider.createSystemProvider() ;
+    Node eventFolder = getEventFolder(provider, event.getFromDateTime()) ;
     Node publicEvent ;
     int fromDate ;
     int toDate ;
     syncRemoveEvent(eventFolder, event.getId()) ;
-
     CalendarEvent ev = new CalendarEvent() ;
     publicEvent = eventFolder.addNode(ev.getId(), Utils.EXO_CALENDAR_PUBLIC_EVENT) ;
     publicEvent.setProperty(Utils.EXO_ID, ev.getId()) ;
@@ -1041,7 +1103,6 @@ public class JCRDataStorage{
     }else {
       publicEvent.setProperty(Utils.EXO_TO_DATE_TIME, dateTime) ;
     }
-
     publicEvent.setProperty(Utils.EXO_PARTICIPANT, event.getParticipant()) ;
     try{
       if(!eventFolder.isNew()) eventFolder.save() ;
@@ -1050,31 +1111,40 @@ public class JCRDataStorage{
       eventFolder.getSession().refresh(true) ;
       eventFolder.getSession().save() ;
       e.printStackTrace() ;
+    } finally {
+      provider.close() ;
     }
-    if(toDate > fromDate) {
-      java.util.Calendar cal = Utils.getInstanceTempCalendar() ;
-      cal.setTime(event.getFromDateTime()) ;
-      cal.set(java.util.Calendar.HOUR_OF_DAY, 0) ;
-      cal.set(java.util.Calendar.MINUTE, 0) ;
-      cal.set(java.util.Calendar.SECOND, 0) ;
-      cal.set(java.util.Calendar.MILLISECOND, 0) ;
-      for(int i = fromDate + 1; i <= toDate ; i++) {
-        cal.roll(java.util.Calendar.DAY_OF_YEAR, true) ;
-        Node dateFolder = getEventFolder(SessionProvider.createSystemProvider(), cal.getTime()) ;
-        ev = new CalendarEvent() ;
-        eventFolder.getSession().getWorkspace().copy(publicEvent.getPath(), dateFolder.getPath() + Utils.SLASH + ev.getId()) ;
-        dateFolder.getSession().save() ;
-        if(i <= toDate) {
-          Node newEvent = dateFolder.getNode(ev.getId()) ;
-          newEvent.setProperty(Utils.EXO_ID, ev.getId()) ;
-          newEvent.setProperty(Utils.EXO_FROM_DATE_TIME, cal) ;
-          java.util.Calendar tmpCal = Utils.getInstanceTempCalendar() ;
-          if(i == toDate) tmpCal.setTime(event.getToDateTime()) ;
-          else tmpCal.setTimeInMillis(cal.getTimeInMillis() + (24 * 60 * 60 * 1000) - 1000) ;
-          newEvent.setProperty(Utils.EXO_TO_DATE_TIME, tmpCal) ;
-          newEvent.save() ;    			    			
-        }    		
+    try {
+      provider = SessionProvider.createSystemProvider() ;
+      if(toDate > fromDate) {
+        java.util.Calendar cal = Utils.getInstanceTempCalendar() ;
+        cal.setTime(event.getFromDateTime()) ;
+        cal.set(java.util.Calendar.HOUR_OF_DAY, 0) ;
+        cal.set(java.util.Calendar.MINUTE, 0) ;
+        cal.set(java.util.Calendar.SECOND, 0) ;
+        cal.set(java.util.Calendar.MILLISECOND, 0) ;
+        for(int i = fromDate + 1; i <= toDate ; i++) {
+          cal.roll(java.util.Calendar.DAY_OF_YEAR, true) ;
+          Node dateFolder = getEventFolder(provider, cal.getTime()) ;
+          ev = new CalendarEvent() ;
+          eventFolder.getSession().getWorkspace().copy(publicEvent.getPath(), dateFolder.getPath() + Utils.SLASH + ev.getId()) ;
+          dateFolder.getSession().save() ;
+          if(i <= toDate) {
+            Node newEvent = dateFolder.getNode(ev.getId()) ;
+            newEvent.setProperty(Utils.EXO_ID, ev.getId()) ;
+            newEvent.setProperty(Utils.EXO_FROM_DATE_TIME, cal) ;
+            java.util.Calendar tmpCal = Utils.getInstanceTempCalendar() ;
+            if(i == toDate) tmpCal.setTime(event.getToDateTime()) ;
+            else tmpCal.setTimeInMillis(cal.getTimeInMillis() + (24 * 60 * 60 * 1000) - 1000) ;
+            newEvent.setProperty(Utils.EXO_TO_DATE_TIME, tmpCal) ;
+            newEvent.save() ;    			    			
+          }    		
+        }
       }
+    } catch (Exception e) {
+      e.printStackTrace() ;
+    } finally {
+      provider.close() ;
     }
   }
 
@@ -1501,34 +1571,41 @@ public class JCRDataStorage{
 
   public EventPageList searchEvent(SessionProvider sProvider, String username, EventQuery eventQuery, String[] publicCalendarIds)throws Exception {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>(); 
-    if(eventQuery.getCalendarId() == null) {
-      events.addAll(getUserEvents(sProvider, username, eventQuery));
-      if(publicCalendarIds != null && publicCalendarIds.length > 0) {
-        eventQuery.setCalendarId(publicCalendarIds);
-        events.addAll(getPublicEvents(SessionProvider.createSystemProvider(), eventQuery));
-        eventQuery.setCalendarId(null) ;
-      }
-      events.addAll(getSharedEvents(SessionProvider.createSystemProvider(), username, eventQuery));
-    } else {
-      String calFullId = eventQuery.getCalendarId()[0] ;
-      if(calFullId.split(Utils.COLON).length > 0) {
-        String[] calId = new String[]{calFullId.split(Utils.COLON)[1]} ;
-        int type = Integer.parseInt(calFullId.split(Utils.COLON)[0]) ;
-        eventQuery.setCalendarId(calId) ;
-        switch (type) {
-        case Calendar.TYPE_PRIVATE:
-          events.addAll(getUserEvents(sProvider, username, eventQuery));
-          return new EventPageList(events, 10);    
-        case Calendar.TYPE_SHARED:
-          events.addAll(getSharedEvents(SessionProvider.createSystemProvider(), username, eventQuery));
-          return new EventPageList(events, 10);    
-        case Calendar.TYPE_PUBLIC:
-          events.addAll(getPublicEvents(SessionProvider.createSystemProvider(), eventQuery));
-          return new EventPageList(events, 10);    
-        default:
-          break;
+    SessionProvider systemSession = SessionProvider.createSystemProvider() ;
+    try {
+      if(eventQuery.getCalendarId() == null) {
+        events.addAll(getUserEvents(sProvider, username, eventQuery));
+        if(publicCalendarIds != null && publicCalendarIds.length > 0) {
+          eventQuery.setCalendarId(publicCalendarIds);
+          events.addAll(getPublicEvents(systemSession, eventQuery));
+          eventQuery.setCalendarId(null) ;
+        }
+        events.addAll(getSharedEvents(systemSession, username, eventQuery));
+      } else {
+        String calFullId = eventQuery.getCalendarId()[0] ;
+        if(calFullId.split(Utils.COLON).length > 0) {
+          String[] calId = new String[]{calFullId.split(Utils.COLON)[1]} ;
+          int type = Integer.parseInt(calFullId.split(Utils.COLON)[0]) ;
+          eventQuery.setCalendarId(calId) ;
+          switch (type) {
+          case Calendar.TYPE_PRIVATE:
+            events.addAll(getUserEvents(sProvider, username, eventQuery));
+            return new EventPageList(events, 10);    
+          case Calendar.TYPE_SHARED:
+            events.addAll(getSharedEvents(systemSession, username, eventQuery));
+            return new EventPageList(events, 10);    
+          case Calendar.TYPE_PUBLIC:
+            events.addAll(getPublicEvents(systemSession, eventQuery));
+            return new EventPageList(events, 10);    
+          default:
+            break;
+          }
         }
       }
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      systemSession.close() ;
     }
     return new EventPageList(events, 10);    
   }
@@ -1537,7 +1614,8 @@ public class JCRDataStorage{
     Map<Integer, String > mapData = new HashMap<Integer, String>() ;
     Query query ;
     QueryManager qm ;
-    SessionProvider systemSession = SessionProvider.createSystemProvider() ; 
+    SessionProvider systemSession = SessionProvider.createSystemProvider() ;
+    try {
     CalendarSetting calSetting = getCalendarSetting(sProvider, username)  ;
     // private events
     if(username != null && username.length() > 0) {
@@ -1571,7 +1649,12 @@ public class JCRDataStorage{
     eventQuery.setCalendarId(publicCalendarIds) ;
     query = qm.createQuery(eventQuery.getQueryStatement(), Query.XPATH) ;
     NodeIterator it = query.execute().getNodes();
-    mapData = updateMap(mapData, it, eventQuery.getFromDate(), eventQuery.getToDate(), calSetting.getFilterPublicCalendars()) ;  
+    mapData = updateMap(mapData, it, eventQuery.getFromDate(), eventQuery.getToDate(), calSetting.getFilterPublicCalendars()) ;
+    } catch (Exception e) {
+      e.printStackTrace() ;
+    } finally {
+      systemSession.close() ;
+    }
     return mapData ;    
   }
 
@@ -1620,14 +1703,11 @@ public class JCRDataStorage{
     } else {
       calendarNode.addMixin(Utils.EXO_SHARED_MIXIN);     
     }
-
-    SessionProvider spd = SessionProvider.createSystemProvider() ;
     Session systemSession = sharedCalendarHome.getSession() ;
     Node userNode ;
     List<Value> valueList = new ArrayList<Value>() ;
     for(String user : receiverUsers) {
-      CalendarSetting calSetting = getCalendarSetting(spd, user) ;
-
+      CalendarSetting calSetting = getCalendarSetting(sProvider, user) ;
       if(calSetting == null) calSetting = new CalendarSetting() ;
       Map<String, String> map = new HashMap<String, String> () ;
       for(String key : calSetting.getSharedCalendarsColors()) {
@@ -1647,7 +1727,7 @@ public class JCRDataStorage{
       }
       if(! sharedCaeldnars.contains(calendarId)) sharedCaeldnars.add(calendarId) ;
       calSetting.setDefaultSharedCalendars(sharedCaeldnars.toArray(new String[sharedCaeldnars.size()])) ;*/
-      saveCalendarSetting(spd, user, calSetting) ;
+      saveCalendarSetting(sProvider, user, calSetting) ;
       try {
         userNode = sharedCalendarHome.getNode(user) ;
       } catch (Exception e) {
@@ -1887,10 +1967,17 @@ public class JCRDataStorage{
     filterList.addAll(Arrays.asList(calSetting.getFilterSharedCalendars())) ;
     eventQuery.setFilterCalendarIds(filterList.toArray(new String[]{})) ;
     events.addAll(getUserEvents(sProvider, username, eventQuery)) ;
-    events.addAll(getSharedEvents(SessionProvider.createSystemProvider(), username, eventQuery)) ;
-    if(publicCalendarIds != null && publicCalendarIds.length > 0) { 
-      eventQuery.setCalendarId(publicCalendarIds) ;
-      events.addAll(getPublicEvents(SessionProvider.createSystemProvider(), eventQuery)) ;
+    SessionProvider systemSession = SessionProvider.createSystemProvider() ;
+    try {
+      events.addAll(getSharedEvents(systemSession, username, eventQuery)) ;
+      if(publicCalendarIds != null && publicCalendarIds.length > 0) { 
+        eventQuery.setCalendarId(publicCalendarIds) ;
+        events.addAll(getPublicEvents(systemSession, eventQuery)) ;
+      }
+    } catch (Exception e) {
+      e.printStackTrace() ;
+    } finally {
+      systemSession.close() ;
     }
     return events ;
   }
@@ -1964,177 +2051,190 @@ public class JCRDataStorage{
 
   public void moveEvent(SessionProvider sProvider, String formCalendar, String toCalendar, String fromType, String toType, List<CalendarEvent> calEvents, String username) throws Exception {
     SessionProvider systemSession = SessionProvider.createSystemProvider() ;
-    switch (Integer.parseInt(fromType)) {
-    case  Calendar.TYPE_PRIVATE :  
-      if(getUserCalendarHome(sProvider, username).hasNode(formCalendar)) {
-        switch (Integer.parseInt(toType)) {
-        case Calendar.TYPE_PRIVATE:
-          //move events in side private calendars
-          if(getUserCalendarHome(sProvider, username).hasNode(toCalendar)){
-            for(CalendarEvent calEvent : calEvents) {
-              if(!formCalendar.equals(toCalendar)) {
+    try {
+      switch (Integer.parseInt(fromType)) {
+      case  Calendar.TYPE_PRIVATE :  
+        if(getUserCalendarHome(sProvider, username).hasNode(formCalendar)) {
+          switch (Integer.parseInt(toType)) {
+          case Calendar.TYPE_PRIVATE:
+            //move events in side private calendars
+            if(getUserCalendarHome(sProvider, username).hasNode(toCalendar)){
+              for(CalendarEvent calEvent : calEvents) {
+                if(!formCalendar.equals(toCalendar)) {
+                  removeUserEvent(sProvider, username, formCalendar, calEvent.getId()) ;
+                  calEvent.setCalendarId(toCalendar) ;
+                  saveUserEvent(sProvider, username, toCalendar, calEvent, getUserCalendarHome(sProvider, username).getNode(toCalendar).hasNode(calEvent.getId())) ;
+                } else {
+                  saveUserEvent(sProvider, username, toCalendar, calEvent,  false) ;
+                }
+              }
+            }
+            break;
+          case Calendar.TYPE_SHARED:
+            //move events form private to shared calendar
+            if(getSharedCalendarHome(systemSession).hasNode(username)){
+              for(CalendarEvent calEvent : calEvents) {
                 removeUserEvent(sProvider, username, formCalendar, calEvent.getId()) ;
                 calEvent.setCalendarId(toCalendar) ;
-                saveUserEvent(sProvider, username, toCalendar, calEvent, getUserCalendarHome(sProvider, username).getNode(toCalendar).hasNode(calEvent.getId())) ;
-              } else {
-                saveUserEvent(sProvider, username, toCalendar, calEvent,  false) ;
-              }
-            }
-          }
-          break;
-        case Calendar.TYPE_SHARED:
-          //move events form private to shared calendar
-          if(getSharedCalendarHome(systemSession).hasNode(username)){
-            for(CalendarEvent calEvent : calEvents) {
-              removeUserEvent(sProvider, username, formCalendar, calEvent.getId()) ;
-              calEvent.setCalendarId(toCalendar) ;
-              saveEventToSharedCalendar(systemSession, username, toCalendar, calEvent, getSharedCalendarHome(systemSession).getNode(username).hasNode(calEvent.getId()));
-            }
-          }
-          break;
-        case Calendar.TYPE_PUBLIC:
-          //move events form private to public calendar
-          if(getPublicCalendarHome(systemSession).hasNode(toCalendar)){
-            for(CalendarEvent calEvent : calEvents) {
-              removeUserEvent(systemSession, username, formCalendar, calEvent.getId()) ;
-              calEvent.setCalendarId(toCalendar) ;
-              savePublicEvent(systemSession, toCalendar, calEvent, getPublicCalendarHome(systemSession).getNode(toCalendar).hasNode(calEvent.getId())) ;
-            }
-          }
-          break;
-        default:
-          break;
-        }
-      }
-      break;
-    case Calendar.TYPE_SHARED:
-      if(getSharedCalendarHome(systemSession).hasNode(username)) {
-        switch (Integer.parseInt(toType)) {
-        case Calendar.TYPE_PRIVATE:
-          //move events form share to private calendar
-          if(getUserCalendarHome(sProvider, username).hasNode(toCalendar)) {
-            for(CalendarEvent calEvent : calEvents) {
-              removeSharedEvent(systemSession, username, formCalendar, calEvent.getId()) ;
-              calEvent.setCalendarId(toCalendar) ;
-              saveUserEvent(sProvider, username, toCalendar, calEvent, getUserCalendarHome(sProvider, username).getNode(toCalendar).hasNode(calEvent.getId())) ;
-            }
-          }
-          break;
-        case Calendar.TYPE_SHARED:
-          //   move events in side shared calendars
-          if(getSharedCalendarHome(systemSession).hasNode(username)){
-            for(CalendarEvent calEvent : calEvents) {
-              if(!formCalendar.equals(toCalendar)) {
-                removeSharedEvent(systemSession, username, formCalendar, calEvent.getId()) ;
-                calEvent.setCalendarId(toCalendar) ;
                 saveEventToSharedCalendar(systemSession, username, toCalendar, calEvent, getSharedCalendarHome(systemSession).getNode(username).hasNode(calEvent.getId()));
-              } else {
-                saveEventToSharedCalendar(systemSession, username, toCalendar, calEvent, false);
               }
             }
-          }
-          break;
-        case Calendar.TYPE_PUBLIC:
-          //move events form share to public calendar
-          if(getPublicCalendarHome(systemSession).hasNode(toCalendar)) {
-            for(CalendarEvent calEvent : calEvents) {
-              removeSharedEvent(systemSession, username, formCalendar, calEvent.getId()) ;
-              calEvent.setCalendarId(toCalendar) ;
-              savePublicEvent(systemSession, toCalendar, calEvent, getPublicCalendarHome(systemSession).getNode(toCalendar).hasNode(calEvent.getId())) ;
-            }
-          }
-          break;
-        default:
-          break;
-        }
-      }
-      break;
-    case Calendar.TYPE_PUBLIC:
-      if(getPublicCalendarHome(systemSession).hasNode(formCalendar)) {
-        switch (Integer.parseInt(toType)) {
-        case Calendar.TYPE_PRIVATE:
-          //move events from public to private calendar
-          if(getUserCalendarHome(sProvider, username).hasNode(toCalendar)) {
-            for(CalendarEvent calEvent : calEvents) {
-              removePublicEvent(systemSession, formCalendar, calEvent.getId()) ;
-              calEvent.setCalendarId(toCalendar) ;
-              saveUserEvent(sProvider, username, toCalendar, calEvent, getUserCalendarHome(sProvider, username).getNode(toCalendar).hasNode(calEvent.getId())) ;
-            }
-          }
-          break;
-        case Calendar.TYPE_SHARED:
-          //move events from public to shared calendar
-          if(getSharedCalendarHome(systemSession).hasNode(username)){
-            for(CalendarEvent calEvent : calEvents) {
-              removePublicEvent(systemSession, formCalendar, calEvent.getId()) ;
-              calEvent.setCalendarId(toCalendar) ;
-              saveEventToSharedCalendar(systemSession, username, toCalendar, calEvent, true);
-            }
-          }
-          break;
-        case Calendar.TYPE_PUBLIC:
-          //move events in side public calendars
-          if(getPublicCalendarHome(systemSession).hasNode(toCalendar)){
-            for(CalendarEvent calEvent : calEvents) {
-              if(!formCalendar.equals(toCalendar)) {
-                removePublicEvent(systemSession, formCalendar, calEvent.getId()) ;
+            break;
+          case Calendar.TYPE_PUBLIC:
+            //move events form private to public calendar
+            if(getPublicCalendarHome(systemSession).hasNode(toCalendar)){
+              for(CalendarEvent calEvent : calEvents) {
+                removeUserEvent(systemSession, username, formCalendar, calEvent.getId()) ;
                 calEvent.setCalendarId(toCalendar) ;
                 savePublicEvent(systemSession, toCalendar, calEvent, getPublicCalendarHome(systemSession).getNode(toCalendar).hasNode(calEvent.getId())) ;
-              } else {
-                savePublicEvent(systemSession, toCalendar, calEvent,  false) ;
               }
             }
+            break;
+          default:
+            break;
           }
-          break;
-        default:
-          break;
         }
+        break;
+      case Calendar.TYPE_SHARED:
+        if(getSharedCalendarHome(systemSession).hasNode(username)) {
+          switch (Integer.parseInt(toType)) {
+          case Calendar.TYPE_PRIVATE:
+            //move events form share to private calendar
+            if(getUserCalendarHome(sProvider, username).hasNode(toCalendar)) {
+              for(CalendarEvent calEvent : calEvents) {
+                removeSharedEvent(systemSession, username, formCalendar, calEvent.getId()) ;
+                calEvent.setCalendarId(toCalendar) ;
+                saveUserEvent(sProvider, username, toCalendar, calEvent, getUserCalendarHome(sProvider, username).getNode(toCalendar).hasNode(calEvent.getId())) ;
+              }
+            }
+            break;
+          case Calendar.TYPE_SHARED:
+            //   move events in side shared calendars
+            if(getSharedCalendarHome(systemSession).hasNode(username)){
+              for(CalendarEvent calEvent : calEvents) {
+                if(!formCalendar.equals(toCalendar)) {
+                  removeSharedEvent(systemSession, username, formCalendar, calEvent.getId()) ;
+                  calEvent.setCalendarId(toCalendar) ;
+                  saveEventToSharedCalendar(systemSession, username, toCalendar, calEvent, getSharedCalendarHome(systemSession).getNode(username).hasNode(calEvent.getId()));
+                } else {
+                  saveEventToSharedCalendar(systemSession, username, toCalendar, calEvent, false);
+                }
+              }
+            }
+            break;
+          case Calendar.TYPE_PUBLIC:
+            //move events form share to public calendar
+            if(getPublicCalendarHome(systemSession).hasNode(toCalendar)) {
+              for(CalendarEvent calEvent : calEvents) {
+                removeSharedEvent(systemSession, username, formCalendar, calEvent.getId()) ;
+                calEvent.setCalendarId(toCalendar) ;
+                savePublicEvent(systemSession, toCalendar, calEvent, getPublicCalendarHome(systemSession).getNode(toCalendar).hasNode(calEvent.getId())) ;
+              }
+            }
+            break;
+          default:
+            break;
+          }
+        }
+        break;
+      case Calendar.TYPE_PUBLIC:
+        if(getPublicCalendarHome(systemSession).hasNode(formCalendar)) {
+          switch (Integer.parseInt(toType)) {
+          case Calendar.TYPE_PRIVATE:
+            //move events from public to private calendar
+            if(getUserCalendarHome(sProvider, username).hasNode(toCalendar)) {
+              for(CalendarEvent calEvent : calEvents) {
+                removePublicEvent(systemSession, formCalendar, calEvent.getId()) ;
+                calEvent.setCalendarId(toCalendar) ;
+                saveUserEvent(sProvider, username, toCalendar, calEvent, getUserCalendarHome(sProvider, username).getNode(toCalendar).hasNode(calEvent.getId())) ;
+              }
+            }
+            break;
+          case Calendar.TYPE_SHARED:
+            //move events from public to shared calendar
+            if(getSharedCalendarHome(systemSession).hasNode(username)){
+              for(CalendarEvent calEvent : calEvents) {
+                removePublicEvent(systemSession, formCalendar, calEvent.getId()) ;
+                calEvent.setCalendarId(toCalendar) ;
+                saveEventToSharedCalendar(systemSession, username, toCalendar, calEvent, true);
+              }
+            }
+            break;
+          case Calendar.TYPE_PUBLIC:
+            //move events in side public calendars
+            if(getPublicCalendarHome(systemSession).hasNode(toCalendar)){
+              for(CalendarEvent calEvent : calEvents) {
+                if(!formCalendar.equals(toCalendar)) {
+                  removePublicEvent(systemSession, formCalendar, calEvent.getId()) ;
+                  calEvent.setCalendarId(toCalendar) ;
+                  savePublicEvent(systemSession, toCalendar, calEvent, getPublicCalendarHome(systemSession).getNode(toCalendar).hasNode(calEvent.getId())) ;
+                } else {
+                  savePublicEvent(systemSession, toCalendar, calEvent,  false) ;
+                }
+              }
+            }
+            break;
+          default:
+            break;
+          }
+        }
+        break;
+      default:
+        break;
       }
-      break;
-    default:
-      break;
+    } catch (Exception e) {
+      e.printStackTrace() ;
+    } finally {
+      systemSession.close() ;
     }
   }
 
   public void confirmInvitation(String fromUserId, String toUserId,int calType, String calendarId, String eventId, int answer) throws Exception{
     SessionProvider session = SessionProvider.createSystemProvider() ;
-    Map<String, String> pars = new HashMap<String, String>() ;
-    CalendarEvent event = null ;
-    if( Calendar.TYPE_PRIVATE == calType) {
-      event = getUserEvent(session, fromUserId, calendarId, eventId) ;
-    } else  if(Calendar.TYPE_SHARED == calType)  {
-      List<String> calendarIds = new ArrayList<String>() ;
-      calendarIds.add(calendarId) ;
-      for(CalendarEvent calEvent : getSharedEventByCalendars(session, fromUserId, calendarIds)) {
-        if(calEvent.getId().equals(eventId)) {
-          event = calEvent ;
-          break ;
-        }
-      }
-    } else  if(Calendar.TYPE_PUBLIC == calType)  {
-      event = getGroupEvent(session, calendarId, eventId) ;
-    }
-    if(event != null) {
-      if(event.getParticipant() != null) {
-        for(String id : event.getParticipant()) {
-          pars.put(id, id) ;
-        }
-      } 
-      if( Utils.DENY == answer) {
-        pars.remove(toUserId) ;
-      } if (Utils.ACCEPT == answer || Utils.NOTSURE == answer) {
-        pars.put(toUserId, toUserId) ;
-      }
-      event.setParticipant(pars.values().toArray(new String[pars.values().size()]));
+    try {
+      Map<String, String> pars = new HashMap<String, String>() ;
+      CalendarEvent event = null ;
       if( Calendar.TYPE_PRIVATE == calType) {
-        saveUserEvent(session, fromUserId, calendarId, event, false) ;
+        event = getUserEvent(session, fromUserId, calendarId, eventId) ;
       } else  if(Calendar.TYPE_SHARED == calType)  {
-        saveEventToSharedCalendar(session, fromUserId, calendarId, event, false) ;
+        List<String> calendarIds = new ArrayList<String>() ;
+        calendarIds.add(calendarId) ;
+        for(CalendarEvent calEvent : getSharedEventByCalendars(session, fromUserId, calendarIds)) {
+          if(calEvent.getId().equals(eventId)) {
+            event = calEvent ;
+            break ;
+          }
+        }
       } else  if(Calendar.TYPE_PUBLIC == calType)  {
-        savePublicEvent(session, calendarId, event, false) ;
+        event = getGroupEvent(session, calendarId, eventId) ;
       }
+      if(event != null) {
+        if(event.getParticipant() != null) {
+          for(String id : event.getParticipant()) {
+            pars.put(id, id) ;
+          }
+        } 
+        if( Utils.DENY == answer) {
+          pars.remove(toUserId) ;
+        } if (Utils.ACCEPT == answer || Utils.NOTSURE == answer) {
+          pars.put(toUserId, toUserId) ;
+        }
+        event.setParticipant(pars.values().toArray(new String[pars.values().size()]));
+        if( Calendar.TYPE_PRIVATE == calType) {
+          saveUserEvent(session, fromUserId, calendarId, event, false) ;
+        } else  if(Calendar.TYPE_SHARED == calType)  {
+          saveEventToSharedCalendar(session, fromUserId, calendarId, event, false) ;
+        } else  if(Calendar.TYPE_PUBLIC == calType)  {
+          savePublicEvent(session, calendarId, event, false) ;
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace() ;
+    } finally {
+      session.close() ;
     }
   }
+
 }
 
 

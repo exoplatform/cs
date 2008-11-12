@@ -54,10 +54,10 @@ public class CheckMailJob implements Job, InterruptableJob {
 		  
 		  username = dataMap.getString(USERNAME);
 		  accountId = dataMap.getString(ACCOUNTID);
-		  
+		  SessionProvider systemSession = SessionProvider.createSystemProvider() ;
 	    try {
 		  if (username!= null && accountId !=null) {
-		    mailService.checkNewMessage(SessionProvider.createSystemProvider(), username, accountId) ;
+		    mailService.checkNewMessage(systemSession, username, accountId) ;
 		  }
 
     } catch (InterruptedException ie) {
@@ -65,6 +65,7 @@ public class CheckMailJob implements Job, InterruptableJob {
 	  } catch (Exception e) {
 		  log.error("Mail check failed for " + context.getJobDetail().getName(), e);
 	  } finally {
+      systemSession.close() ;
   	  if (log.isDebugEnabled()) {
         log.debug("\n\n####  Checking mail of " + context.getJobDetail().getName() + " finished ");
   	  }

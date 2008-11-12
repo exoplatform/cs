@@ -346,16 +346,23 @@ public class UIContactForm extends UIFormTabPane {
                 return ;
               }              
             } else {
+              SessionProvider systemSession = SessionProvider.createSystemProvider() ;
+              try {
               Contact sharedContact = contactService
-                .getSharedContact(SessionProvider.createSystemProvider(), username, contact.getId()) ;                
+                .getSharedContact(systemSession, username, contact.getId()) ;                
               if (uiContacts.havePermission(sharedContact)) {
                 contactService.saveSharedContact(username, contact) ;   
-                contact = contactService.getSharedContact(SessionProvider.createSystemProvider(), username, contact.getId()) ;
+                contact = contactService.getSharedContact(systemSession, username, contact.getId()) ;
               } else {
                 uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.removedPer", null, 
                     ApplicationMessage.WARNING)) ;
                 event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
                 return ;                
+              } 
+              } catch (Exception e) {
+                e.printStackTrace() ;
+              } finally {
+                systemSession.close();
               }
             }
           }
