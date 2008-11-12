@@ -26,6 +26,7 @@ import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.webui.UIFormDateTimePicker;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageArea;
 import org.exoplatform.mail.webui.UIMessageList;
@@ -44,7 +45,6 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
-import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
@@ -116,7 +116,7 @@ public class UIAccountSetting extends UIFormTabPane {
     UIFormCheckBoxInput<Boolean> checkFromDate = new UIFormCheckBoxInput<Boolean>(CHECK_FROM_DATE, CHECK_FROM_DATE, null);
     checkFromDate.setOnChange("CheckFromDate");
     accountInputSet.addUIFormInput(checkFromDate);
-    accountInputSet.addUIFormInput(new UIFormDateTimeInput(FROM_DATE, FROM_DATE, null, true));
+    accountInputSet.addUIFormInput(new UIFormDateTimePicker(FROM_DATE, FROM_DATE, null, true));
     addUIFormInput(accountInputSet); 
     setSelectedTab(accountInputSet.getId()) ;
     UIFormInputWithActions  identityInputSet = new UIFormInputWithActions(TAB_IDENTITY_SETTINGS);
@@ -180,8 +180,8 @@ public class UIAccountSetting extends UIFormTabPane {
   
   public Calendar getFieldCheckFrom() {
     UIFormInputWithActions uiInput = getChildById(TAB_ACCOUNT);
-    if (((UIFormDateTimeInput) uiInput.getChildById(FROM_DATE)) != null)
-      return ((UIFormDateTimeInput) uiInput.getChildById(FROM_DATE)).getCalendar();
+    if (((UIFormDateTimePicker) uiInput.getChildById(FROM_DATE)) != null)
+      return ((UIFormDateTimePicker) uiInput.getChildById(FROM_DATE)).getCalendar();
     else return null;
   }
   
@@ -292,7 +292,7 @@ public class UIAccountSetting extends UIFormTabPane {
       GregorianCalendar cal = new GregorianCalendar();
       if (account.getCheckFromDate() != null) {
         cal.setTimeInMillis(account.getCheckFromDate().getTime());
-        ((UIFormDateTimeInput) uiAccountInput.getChildById(FROM_DATE)).setCalendar(cal);
+        ((UIFormDateTimePicker) uiAccountInput.getChildById(FROM_DATE)).setCalendar(cal);
       }
       if (account.isCheckAll()) uiAccountInput.removeChildById(FROM_DATE);
     } else {
@@ -601,8 +601,8 @@ public class UIAccountSetting extends UIFormTabPane {
       } else {
         GregorianCalendar cal = new GregorianCalendar();
         if (uiInput.getChildById(FROM_DATE) == null)
-          uiInput.addUIFormInput(new UIFormDateTimeInput(FROM_DATE, FROM_DATE, null, true));
-        UIFormDateTimeInput fromDateField = ((UIFormDateTimeInput) uiInput.getChildById(FROM_DATE));
+          uiInput.addUIFormInput(new UIFormDateTimePicker(FROM_DATE, FROM_DATE, null, true));
+        UIFormDateTimePicker fromDateField = ((UIFormDateTimePicker) uiInput.getChildById(FROM_DATE));
         if (fromDateField.getCalendar() == null) fromDateField.setCalendar(cal);
       }
       

@@ -29,6 +29,7 @@ import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.mail.webui.Selector;
 import org.exoplatform.mail.webui.UIFolderContainer;
+import org.exoplatform.mail.webui.UIFormDateTimePicker;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UIMessagePreview;
@@ -46,7 +47,6 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
-import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormTabPane;
 /**
  * Created by The eXo Platform SARL
@@ -268,7 +268,7 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
     public void execute(Event<UIAccountCreation> event) throws Exception {
       UIAccountCreation uiAccCreation = event.getSource() ;
       UIAccountWizardStep4 uiWs4 = uiAccCreation.getChildById(INPUT_STEP4) ;
-      UIFormDateTimeInput fromDateField = ((UIFormDateTimeInput) uiWs4.getChildById(UIAccountWizardStep4.FROM_DATE));
+      UIFormDateTimePicker fromDateField = ((UIFormDateTimePicker) uiWs4.getChildById(UIAccountWizardStep4.FROM_DATE));
       boolean checkAllMail = uiWs4.checkFromDate();
       
       if (!checkAllMail) {
@@ -344,7 +344,7 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       acc.setOutgoingPort(smtpPort);
       acc.setIsSavePassword(isSavePass) ;
       
-      UIFormDateTimeInput fromDateField = ((UIFormDateTimeInput) uiAccWs4.getChildById(UIAccountWizardStep4.FROM_DATE));
+      UIFormDateTimePicker fromDateField = ((UIFormDateTimePicker) uiAccWs4.getChildById(UIAccountWizardStep4.FROM_DATE));
       acc.setCheckAll(!uiAccWs4.checkFromDate());
       
       if (!acc.isCheckAll()) {
