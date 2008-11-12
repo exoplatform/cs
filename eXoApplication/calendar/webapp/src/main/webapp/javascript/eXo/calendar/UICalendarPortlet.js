@@ -708,7 +708,7 @@ UICalendarPortlet.prototype.showEvent = function(){
     if (el.length <= 0) 
         return;
     var marker = null;
-    for (var i = 0; i < el.length; i++) {s
+    for (var i = 0; i < el.length; i++) {
         this.setSize(el[i]);
         el[i].onmousedown = eXo.calendar.UICalendarPortlet.initDND;
         el[i].ondblclick = eXo.calendar.UICalendarPortlet.ondblclickCallback;
