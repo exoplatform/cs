@@ -56,7 +56,7 @@
   <div class="VIEW-CONTAINER" >
     <div id="$uicomponent.id">    
       <table class="UITableColumnContainer" style="table-layout: fixed; width: 100%;_width: auto; $style">
-        <tr class="TRContainer" style="background:#ECEDEE;">
+        <tr class="TRContainer" style="background:#fff;">
           <% for(uiChild in uicomponent.getChildren()) { %>
           <% String cw = uiChild.getWidth();
              String cstyle = "";

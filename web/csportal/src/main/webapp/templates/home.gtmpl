@@ -23,19 +23,19 @@
 							</div>
 							<div class="ContentProductsCS">
 								<div class="Bullet">
-									<div class="Text">Calendar sharing</div>
+									<div class="Text">Mutiple accounts</div>
 								</div>
 								<div class="Bullet">
-									<div class="Text">CTags</div>
+									<div class="Text">Conversation, thread and list views</div>
 								</div>
 								<div class="Bullet">
-									<div class="Text">Invitations and reminders</div>
+									<div class="Text">Tags</div>
 								</div>
 								<div class="Bullet">
-									<div class="Text">Free/busy auto check</div>
+									<div class="Text">Tilters</div>
 								</div>
 								<div class="Bullet">
-									<div class="Text">Support for calDAV, iCall and RSS</div>
+									<div class="Text">Support for imap, pop and smtp</div>
 								</div>
 								<div class="Bullet">
 									<div class="Text">Advanced search</div>
@@ -54,20 +54,20 @@
 								<div class="Calendar LableProduct">Calendar</div>
 							</div>
 							<div class="ContentProductsCS">
-								<div class="Bullet">
-									<div class="Text">Mutiple accounts</div>
+							<div class="Bullet">
+									<div class="Text">Calendar sharing</div>
 								</div>
 								<div class="Bullet">
-									<div class="Text">Conversation, thread and list views</div>
+									<div class="Text">CTags</div>
 								</div>
 								<div class="Bullet">
-									<div class="Text">Tags</div>
+									<div class="Text">Invitations and reminders</div>
 								</div>
 								<div class="Bullet">
-									<div class="Text">Tilters</div>
+									<div class="Text">Free/busy auto check</div>
 								</div>
 								<div class="Bullet">
-									<div class="Text">Support for imap, pop and smtp</div>
+									<div class="Text">Support for calDAV, iCall and RSS</div>
 								</div>
 								<div class="Bullet">
 									<div class="Text">Advanced search</div>

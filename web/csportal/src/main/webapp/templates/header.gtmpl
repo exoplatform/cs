@@ -1,8 +1,7 @@
 <%
 	import org.exoplatform.portal.application.PortalRequestContext;
 	import org.exoplatform.portal.webui.util.Util;
-	def prContext = _ctx.getRequestContext().getParentAppRequestContext();
-	
+	def prContext = _ctx.getRequestContext().getParentAppRequestContext();	
 	String changeLanguageAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ChangeLanguage', true));" ;
 	String portletId = uicomponent.getId() ;	
 	String portalName = Util.getUIPortal().getName() ;
@@ -23,12 +22,22 @@
 						<div class="LeftLoginContainer">
 							<div class="RightLoginContainer">
 								<div class="MiddleLoginContainer">
+									<% if(isLogin){ %>
 									<div class="Name">Welcome
 										<span style="padding: 0px 10px 0px 2px; color: red; font-weight:bold;">
-											root 
+											$userLogin 
 										</span>
 									</div>
-									<a class="Logout" onclick="eXo.portal.logout();">Sign out</a>
+									<a class="Logout" href="$signOutAction" >Sign out</a>
+									<% } else {%>
+										<a class="ActionButton" onclick="$signInAction; return false;" href="#">
+										<div class="LeftButton">
+											<div class="RightButton">
+												<div class="CenterButton">Sign in</div>
+											</div>
+										</div>
+									</a>
+									<%}%>
 									<a class="Language" onclick="$changeLanguageAction">Change Language</a>
 									<div style="clear: both;"><span></span></div>	
 								</div>			
