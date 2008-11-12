@@ -709,6 +709,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       List<String> contactIds = uiContacts.getCheckedContacts() ;
       List<Contact> contacts = new ArrayList<Contact>();
       List<Contact> sharedContacts = new ArrayList<Contact>();
+      Map<String, String> copySharedContacts = new LinkedHashMap<String, String>() ;
       for(String contactId : contactIds) {
       	Contact contact = uiContacts.contactMap.get(contactId) ;
         if (contact.getId().equals(ContactUtils.getCurrentUser())){ 
@@ -746,7 +747,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       }
       
 //    cs- 1630
-      Map<String, Contact> copyedContacts = uiAddressBooks.getCopyContacts() ;      
+      Map<String, String> copyedContacts = uiAddressBooks.getCopyContacts() ;      
       for(String contactId : contactIds) {
         Contact contact = uiContacts.contactMap.get(contactId) ;
         if (!contact.getAddressBook()[0].equals(addressBookId)) copyedContacts.remove(contactId) ;
@@ -774,11 +775,14 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           }
         }
         contact.setAddressBook(new String[] { addressBookId }) ;
-        if (contact.getContactType().equals(JCRDataStorage.SHARED)) sharedContacts.add(contact) ;
+        if (contact.getContactType().equals(JCRDataStorage.SHARED)) {
+          sharedContacts.add(contact) ; 
+          copySharedContacts.put(contactId, JCRDataStorage.SHARED) ;
+        }
         else contacts.add(contact) ;      
       }
       if (sharedContacts.size() > 0 ) {
-        contactService.pasteContacts(sessionProvider, username, addressBookId, type, sharedContacts) ;
+        contactService.pasteContacts(sessionProvider, username, addressBookId, type, copySharedContacts) ;
       }
       if (contacts.size() > 0) {
         try {
@@ -829,9 +833,10 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIAddressBooks uiAddressBooks = uiContacts.getAncestorOfType(
           UIWorkingContainer.class).findFirstComponentOfType(UIAddressBooks.class) ;     
       uiAddressBooks.setCopyAddress(null) ;
-      Map<String, Contact> copyContacts = new LinkedHashMap<String, Contact>();
-      for (String id : contactIds)
-        copyContacts.put(id, uiContacts.contactMap.get(id)) ;
+      Map<String, String> copyContacts = new LinkedHashMap<String, String>();
+      for (String id : contactIds) {
+        copyContacts.put(id, uiContacts.contactMap.get(id).getContactType()) ;
+      }
       uiAddressBooks.setCopyContacts(copyContacts) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBooks) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
@@ -899,7 +904,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       String username = ContactUtils.getCurrentUser() ;
       List <Contact> removedContacts = new ArrayList<Contact>() ;
 //    cs- 1630
-      Map<String, Contact> copyedContacts = addressBooks.getCopyContacts() ;
+      Map<String, String> copyedContacts = addressBooks.getCopyContacts() ;
       
       // remove shared contacts
       for (String id : contactIds) {

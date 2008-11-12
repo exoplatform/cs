@@ -87,7 +87,7 @@ public class UIAddressBooks extends UIComponent {
   private String selectedGroup = null;
   private Map<String, String> privateAddressBookMap_ = new LinkedHashMap<String, String>() ;
   private Map<String, SharedAddressBook> sharedAddressBookMap_ = new LinkedHashMap<String, SharedAddressBook>() ;
-  private Map<String, Contact> copyContacts = new LinkedHashMap<String, Contact>() ;
+  private Map<String, String> copyContacts = new LinkedHashMap<String, String>() ;
   private String copyAddress = null ;
   public UIAddressBooks() throws Exception { }
   
@@ -168,8 +168,8 @@ public class UIAddressBooks extends UIComponent {
   public void setCopyAddress(String add) { copyAddress = add ; }
   public boolean isDefault(String groupId) throws Exception { return groupId.contains(NewUserListener.DEFAULTGROUP) ; }
   
-  public void setCopyContacts(Map<String, Contact> contacts) { copyContacts = contacts ; }
-  public Map<String, Contact> getCopyContacts() { return copyContacts ; }
+  public void setCopyContacts(Map<String, String> contacts) { copyContacts = contacts ; }
+  public Map<String, String> getCopyContacts() { return copyContacts ; }
   
   static public class AddAddressActionListener extends EventListener<UIAddressBooks> {
     public void execute(Event<UIAddressBooks> event) throws Exception {
@@ -227,10 +227,8 @@ public class UIAddressBooks extends UIComponent {
         ContactUtils.getContactService().pasteAddressBook(SessionProviderFactory.createSessionProvider()
             , username, srcAddress, srcType, destAddress, destType) ;
       } else {
-        List<Contact> contacts = new ArrayList<Contact>() ;
-        contacts.addAll(uiAddressBook.getCopyContacts().values()) ;
         ContactUtils.getContactService().pasteContacts(SessionProviderFactory.createSessionProvider()
-            , username, destAddress, destType, contacts) ;
+            , username, destAddress, destType, uiAddressBook.getCopyContacts()) ;
       }
       // bi update neu la shared contacts 
       UIContacts uiContacts = uiAddressBook
