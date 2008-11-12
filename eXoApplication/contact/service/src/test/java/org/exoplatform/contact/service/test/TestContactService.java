@@ -17,7 +17,10 @@
 package org.exoplatform.contact.service.test;
 
 import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
+import org.apache.commons.collections.map.HashedMap;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactGroup;
@@ -234,7 +237,9 @@ public class TestContactService extends BaseContactServiceTestCase{
     assertEquals(contactService_.getSharedContactsByAddressBook(sProvider_, userJohn_, sharedAddressBook).getAll().size(), 2);
     
   // paste contact:
-    contactService_.pasteContacts(sProvider_, userJohn_, shareGroup.getId(), JCRDataStorage.SHARED, Arrays.asList(new Contact[]{contact3}));
+    Map<String, String> contacts = new LinkedHashMap<String, String>() ;
+    contacts.put(contact3.getId(), contact3.getContactType()) ;
+    contactService_.pasteContacts(sProvider_, userJohn_, shareGroup.getId(), JCRDataStorage.SHARED, contacts);
     assertEquals(contactService_.getSharedContactsByAddressBook(sProvider_, userJohn_, sharedAddressBook).getAll().size(), 3);
     
 	/**
