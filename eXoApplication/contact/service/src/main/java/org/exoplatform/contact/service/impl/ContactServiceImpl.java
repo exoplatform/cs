@@ -228,8 +228,8 @@ public class ContactServiceImpl implements ContactService {
   	storage_.pasteAddressBook(sProvider, username, srcAddress, srcType, destAddress, destType) ;
   }
   
-  public void pasteContacts(SessionProvider sProvider, String username, String destAddress, String destType, List<Contact> contacts) throws Exception {
-    storage_.pasteContacts(sProvider, username, destAddress, destType, contacts) ;
+  public void pasteContacts(SessionProvider sProvider, String username, String destAddress, String destType, Map<String, String> contactsMap) throws Exception {
+    storage_.pasteContacts(sProvider, username, destAddress, destType, contactsMap) ;
   }
   
   public ContactImportExport getContactImportExports(String type) {

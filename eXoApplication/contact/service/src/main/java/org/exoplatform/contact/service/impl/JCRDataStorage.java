@@ -1926,7 +1926,22 @@ public class JCRDataStorage {
   }
   
   
-  public void pasteContacts(SessionProvider sProvider, String username, String destAddress, String destType, List<Contact> contacts) throws Exception {
+  public void pasteContacts(SessionProvider sProvider, String username, String destAddress, String destType,  Map<String, String> contactsMap) throws Exception {
+    List<Contact> contacts = new ArrayList<Contact>() ;
+    for (String contactId : contactsMap.keySet()) {
+      String type = contactsMap.get(contactId) ;
+      Contact contact = null ;
+      if (type.equals(PRIVATE)) {
+        contact = getContact(sProvider, username, contactId) ;
+      } else if (type.equals(PUBLIC)) {
+        contact = getPublicContact(contactId) ;
+      } else { // shared
+        contact = getSharedContact(sProvider, username, contactId) ;
+        if (contact ==  null) contact = getSharedContactAddressBook(username, contactId) ;
+      }        
+      if (contact != null) contacts.add(contact) ; 
+    }    
+    
     for (Contact contact : contacts) {
       if (destType.equals(PRIVATE)) {
         Node contactHomeNode = getUserContactHome(sProvider, username);

@@ -19,6 +19,7 @@ package org.exoplatform.contact.webui.popup;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
@@ -135,10 +136,11 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       UIContactPortlet uiContactPortlet = uiMoveContactForm.getAncestorOfType(UIContactPortlet.class);
       List<Contact> contacts = new ArrayList<Contact>() ;
       List<Contact> sharedContacts = new ArrayList<Contact>() ;
+      Map<String, String> copySharedContacts = new LinkedHashMap<String, String>() ;
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
       
 //    cs- 1630
-      Map<String, Contact> copyedContacts = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class).getCopyContacts() ;
+      Map<String, String> copyedContacts = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class).getCopyContacts() ;
       for(String id : uiMoveContactForm.getContactIds()) {
         Contact contact = uiMoveContactForm.movedContacts.get(id) ;
         if (!contact.getAddressBook()[0].equals(addressBookId)) copyedContacts.remove(id) ;        
@@ -174,13 +176,14 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
           }
           contact.setAddressBook(new String[] { addressBookId }) ;
           sharedContacts.add(contact) ;
+          copySharedContacts.put(id, JCRDataStorage.SHARED) ;
         } else {
           contact.setAddressBook(new String[] { addressBookId }) ;
           contacts.add(contact) ;
         }
       }
       if (sharedContacts.size() > 0 ) {
-        contactService.pasteContacts(sessionProvider, username, addressBookId, type, sharedContacts) ;
+        contactService.pasteContacts(sessionProvider, username, addressBookId, type, copySharedContacts) ;
       }
       if (contacts.size() > 0) {
         try {

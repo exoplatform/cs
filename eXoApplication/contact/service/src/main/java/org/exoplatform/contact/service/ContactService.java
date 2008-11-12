@@ -446,8 +446,9 @@ public interface ContactService {
    * @param destType type of address book (it's private, shared, public)
    * @throws Exception 
    */
-  public void pasteContacts(SessionProvider sProvider, String username, String destAddress, String destType, List<Contact> contacts) throws Exception ;
-  
+
+  public void pasteContacts(SessionProvider sProvider, String username, String destAddress, String destType, Map<String, String> contactsMap) throws Exception ;
+
   /**
    * this method allow get a object used to import, export contacts
    * @return a ContactImportExport object
