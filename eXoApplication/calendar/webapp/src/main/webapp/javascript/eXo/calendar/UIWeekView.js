@@ -155,7 +155,7 @@ UIWeekView.prototype.showInCol = function(obj) {
 	this.showHideEvent(items,true);
 } ;
 
-UIWeekView.prototype.dragStart = function(evt) { alert("clear");
+UIWeekView.prototype.dragStart = function(evt) {
 	var _e = window.event || evt ;
 	_e.cancelBubble = true ;
 	if (_e.button == 2) return ;
