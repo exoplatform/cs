@@ -474,6 +474,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           }          
         }
       }
+//    avoid cache id of edited old contact
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
       UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
       UIPopupContainer popupContainer =  popupAction.activate(UIPopupContainer.class, 800) ;
@@ -504,8 +506,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       uiContactForm.setNew(false) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       
-      // avoid cache id of edited old contact
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+      
     }
   }
   
@@ -526,6 +527,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           return ;
         }
       }    
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
       UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
       UITagForm uiTagForm = popupAction.activate(UITagForm.class, 600) ;
@@ -533,8 +535,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       for (String id : contactIds) {
         contacts.add(uiContacts.contactMap.get(id)) ;
       }
-      uiTagForm.setContacts(contacts) ;      
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+      uiTagForm.setContacts(contacts) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
@@ -595,6 +596,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource();
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent());
       List<String> contactIds = new ArrayList<String>();
       UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
       UIContactPortlet uiContactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
@@ -644,24 +646,6 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           }
           movedContacts.put(id, contact) ;
         }
-
-        /*for (String id : contactIds) {
-          Contact contact = uiContacts.contactMap.get(id) ;         
-          if (contact.getContactType().equals(JCRDataStorage.PUBLIC)
-                  || (contact.getContactType().equals(JCRDataStorage.SHARED) && uiContacts.isSharedAddress(
-                          contact) && (!uiContacts.havePermission(contact) || contact.isOwner()))) {
-            uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-move", null
-                , ApplicationMessage.WARNING)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-            return ;
-          } else if (contact.getId().equals(ContactUtils.getCurrentUser())) {
-            uiApp.addMessage(new ApplicationMessage("UIContacts.msg.cannot-move-ownerContact", null
-                , ApplicationMessage.WARNING)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-            return ;
-          }
-          movedContacts.put(id, contact) ;
-        }*/ 
       }  
       
       
@@ -678,10 +662,10 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   static public class DNDContactsActionListener extends EventListener<UIContacts> {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource();
+      uiContacts.getAncestorOfType(UIContactPortlet.class).cancelAction() ;
       String addressBookId = event.getRequestContext().getRequestParameter(OBJECTID);
       UIAddressBooks uiAddressBooks = uiContacts.getAncestorOfType(
           UIWorkingContainer.class).findFirstComponentOfType(UIAddressBooks.class) ; 
-      uiAddressBooks.getAncestorOfType(UIContactPortlet.class).cancelAction() ;
       UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
       ContactService contactService = ContactUtils.getContactService() ;
       String username = ContactUtils.getCurrentUser() ;
@@ -1060,6 +1044,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource();
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
+      // cs-1278
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;      
       UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
       UIPopupContainer uiPopupContainer = popupAction.activate(UIPopupContainer.class, 700) ;
@@ -1067,10 +1053,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIContactPreviewForm uiContactPreviewForm = uiPopupContainer.addChild(UIContactPreviewForm.class, null, null) ; 
       uiContactPreviewForm.setPrintForm(false) ;
       uiContactPreviewForm.setContact(uiContacts.contactMap.get(contactId)) ; 
-      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;  
-      
-      // add to fix bug cs-1278
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
   
@@ -1296,6 +1279,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;        
       }
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
       UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
       
@@ -1309,8 +1293,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       
       UIComposeForm uiComposeForm = popupAction.activate(UIComposeForm.class, 850) ;
       uiComposeForm.init(acc, emails) ;  
-      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;  
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
   
@@ -1331,6 +1314,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         mapContacts.put(contactId, contact) ;
       }
       String objectId = event.getRequestContext().getRequestParameter(OBJECTID);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent());  
       if (!ContactUtils.isEmpty(objectId) || uiContacts.getCheckedContacts().size() == 1) {
         if (ContactUtils.isEmpty(objectId)) objectId = uiContacts.getCheckedContacts().get(0) ; 
         UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
@@ -1350,7 +1334,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         uiSharedForm.init(mapContacts) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       }
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent());    
+        
     }
   }
   
