@@ -111,8 +111,16 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
     }
     
     UIGrid permissionList = getChild(UIGrid.class) ;
+    // cs-1702
+    int currentPage = 1 ;
+    try {
+      currentPage = permissionList.getUIPageIterator().getPageList().getCurrentPage() ;
+    } catch (NullPointerException e) { }
     ObjectPageList objPageList = new ObjectPageList(dataRow, 10) ;
     permissionList.getUIPageIterator().setPageList(objPageList) ;
+    if (currentPage > 1) {
+      permissionList.getUIPageIterator().setCurrentPage(currentPage) ;
+    }
     getChild(UISharedForm.class).setContact(contact) ;
   }
   
@@ -129,8 +137,16 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
       }
     }
     UIGrid permissionList = getChild(UIGrid.class) ;
+//  cs-1702
+    int currentPage = 1 ;
+    try {
+      currentPage = permissionList.getUIPageIterator().getPageList().getCurrentPage() ;
+    } catch (NullPointerException e) { }
     ObjectPageList objPageList = new ObjectPageList(dataRow, 10) ;
     permissionList.getUIPageIterator().setPageList(objPageList) ;
+    if (currentPage > 1) {
+      permissionList.getUIPageIterator().setCurrentPage(currentPage) ;
+    }
     getChild(UISharedForm.class).setGroup(group) ;
   }
 
