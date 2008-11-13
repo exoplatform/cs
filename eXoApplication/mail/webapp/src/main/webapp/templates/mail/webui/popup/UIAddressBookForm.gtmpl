@@ -215,7 +215,7 @@
                                       <div class="InfoTitle3 Email">
                                           <% 
                                             String emailAddress = selectedContact.getEmailAddress() ;
-                                            if (emailAddress != null) {
+                                            if (emailAddress != null && !emailAddress.equals("")) {
                                               print("<a href='mailto:" + emailAddress + "'>") ;
                                               print(emailAddress) ;
                                               print("</a>")

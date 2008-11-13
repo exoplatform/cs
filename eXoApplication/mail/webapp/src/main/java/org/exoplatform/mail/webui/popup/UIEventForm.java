@@ -36,6 +36,7 @@ import org.exoplatform.mail.webui.SelectItem;
 import org.exoplatform.mail.webui.SelectOption;
 import org.exoplatform.mail.webui.SelectOptionGroup;
 import org.exoplatform.mail.webui.Selector;
+import org.exoplatform.mail.webui.UIFormDateTimePicker;
 import org.exoplatform.mail.webui.UIFormSelectBoxWithGroups;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
@@ -50,7 +51,6 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
-import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormTabPane;
@@ -342,7 +342,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
 
   protected Date getEventFromDate() throws Exception {
     UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
-    UIFormDateTimeInput fromField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_FROM) ;
+    UIFormDateTimePicker fromField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_FROM) ;
     UIFormSelectBox timeField = eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_FROM_TIME) ;
     if(getEventAllDate()) {
       DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
@@ -353,12 +353,12 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
   }
   protected String getEventFormDateValue () {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
-    UIFormDateTimeInput fromField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_FROM) ;
+    UIFormDateTimePicker fromField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_FROM) ;
     return fromField.getValue() ;
   }
   protected void setEventFromDate(Date date) {
     UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
-    UIFormDateTimeInput fromField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_FROM) ;
+    UIFormDateTimePicker fromField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_FROM) ;
     UIFormSelectBox timeField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_FROM_TIME) ;
     DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     fromField.setValue(df.format(date)) ;
@@ -368,7 +368,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
 
   protected Date getEventToDate() throws Exception {
     UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
-    UIFormDateTimeInput toField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_TO) ;
+    UIFormDateTimePicker toField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_TO) ;
     UIFormSelectBox timeField = eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_TO_TIME) ;
     if(getEventAllDate()) {
       DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
@@ -380,7 +380,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
   }
   protected void setEventToDate(Date date) {
     UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
-    UIFormDateTimeInput toField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_TO) ;
+    UIFormDateTimePicker toField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_TO) ;
     UIFormSelectBox timeField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_TO_TIME) ;
     DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     toField.setValue(df.format(date)) ;
@@ -390,7 +390,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
 
   protected String getEventToDateValue () {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
-    UIFormDateTimeInput toField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_TO) ;
+    UIFormDateTimePicker toField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_TO) ;
     return toField.getValue() ;
   }
   protected boolean getEventAllDate() {
