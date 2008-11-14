@@ -94,7 +94,18 @@
   				%>
   	   	</tbody>
 		</table>
-	<%_ctx.include("app:/templates/calendar/webui/UIPageIterator.gtmpl");%>
+	 <%if(uicomponent.getEvents().size() <= 0) { %>
+		<table>
+			<tr>
+				<td class="Null">
+					<%=uiform.getLabel('noData')%> 
+				</td>
+			</tr>
+		</table>
+		<%} else { 
+		   _ctx.include("app:/templates/calendar/webui/UIPageIterator.gtmpl");
+		  }
+		%>
 	</div>
 		<% /*Begin Popup Menu*/ %>
 	<div class="UIRightClickPopupMenu" id="UIListViewEventRightMenu" exocallback="eXo.calendar.UICalendarPortlet.listViewCallack">
