@@ -28,9 +28,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.jcr.ItemExistsException;
-import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.PathNotFoundException;
 import javax.jcr.PropertyIterator;
 import javax.jcr.Session;
 import javax.jcr.Value;
@@ -39,6 +39,7 @@ import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
 import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
@@ -61,8 +62,10 @@ import org.exoplatform.services.jcr.access.AccessControlEntry;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.access.SystemIdentity;
 import org.exoplatform.services.jcr.core.ExtendedNode;
+import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.services.log.ExoLogger;
 
 import com.sun.syndication.feed.synd.SyndContent;
 import com.sun.syndication.feed.synd.SyndContentImpl;
@@ -81,6 +84,8 @@ import com.sun.syndication.io.SyndFeedOutput;
  */
 public class JCRDataStorage{
 
+  private static Log log = ExoLogger.getLogger(JCRDataStorage.class);
+  
   final private static String CALENDARS = "calendars".intern() ;
 
   final private static String SHARED_CALENDAR = "sharedCalendars".intern() ;
@@ -101,39 +106,84 @@ public class JCRDataStorage{
     nodeHierarchyCreator_ = nodeHierarchyCreator ; 
   }  
 
+  /**
+   * Get or create the storage root folder for the calendar application
+   * @param sProvider
+   * @return the jcr Node that serves as root for the Calendar application storage
+   * @throws Exception
+   */
   private Node getPublicCalendarServiceHome(SessionProvider sProvider) throws Exception {
-    Node publicApp = nodeHierarchyCreator_.getPublicApplicationNode(sProvider)  ;
-    try {
-      return publicApp.getNode(Utils.CALENDAR_APP) ;
-    } catch (Exception e) {
-      Node calendarApp = publicApp.addNode(Utils.CALENDAR_APP, Utils.NT_UNSTRUCTURED) ;
-      publicApp.getSession().save() ;
-      return calendarApp ;
-    }
+    Node publicApp = getPublicRoot(sProvider)  ;
+    return getApplicationPath(sProvider, Utils.CALENDAR_APP, publicApp);
   }
 
+  /**
+   * Get or create the root folder of shared calendars
+   * @param sProvider
+   * @return the jcr Node that contains all shared calendars
+   * @throws Exception
+   */
   private Node getSharedCalendarHome(SessionProvider sProvider) throws Exception {
-    Node calendarServiceHome = getPublicCalendarServiceHome(sProvider) ;
+    Node serviceHome = getPublicCalendarServiceHome(sProvider);
+    return getApplicationPath(sProvider, SHARED_CALENDAR, serviceHome);
+  }
+  
+  /**
+   * Get or create the root  folder of public calendars
+   * @param sProvider
+   * @return the jcr Node that contains all public calendars
+   * @throws Exception
+   */
+  private Node getPublicCalendarHome(SessionProvider sProvider) throws Exception {
+    Node serviceHome = getPublicCalendarServiceHome(sProvider);
+    return getApplicationPath(sProvider, CALENDARS, serviceHome);
+  }
+  
+  /**
+   * Get or create an application folder
+   * @param sessionProvider
+   * @param name path to get or create
+   * @param parent parent jcr node where the application node is retrieved or created
+   * @return
+   * @throws Exception
+   */
+  private Node getApplicationPath(SessionProvider sessionProvider, String name, Node parent) throws Exception {
+    if (parent == null) parent = getPublicCalendarServiceHome(sessionProvider) ;
     try {
-      return calendarServiceHome.getNode(SHARED_CALENDAR) ;
-    } catch (Exception e) {
-      Node sharedCal = calendarServiceHome.addNode(SHARED_CALENDAR, Utils.NT_UNSTRUCTURED) ;
-      calendarServiceHome.getSession().save() ; 
-      return sharedCal ; 
+      return parent.getNode(name) ;
+    } catch (PathNotFoundException pnfe) {
+      log.info("Application path not found " + parent.getPath() + "/" + name + ", attempting to create.");
+      Node result = parent.addNode(name, Utils.NT_UNSTRUCTURED) ;
+      parent.getSession().save() ; 
+      return result ; 
     }
   }
-
+  
+  /**
+   * Get the storage root folder for all applications
+   * @param sysProvider
+   * @return
+   * @throws Exception
+   */
   private Node getPublicRoot(SessionProvider sysProvider) throws Exception {
-    // sysProvider = SessionProvider.createSystemProvider() ;
     return nodeHierarchyCreator_.getPublicApplicationNode(sysProvider) ;
   }
 
+  /**
+   * Create the user data storage folder for calendar application
+   * Also creates the user settings node inside if needed.
+   * @param sProvider
+   * @param username
+   * @return
+   * @throws Exception
+   */
   private Node getUserCalendarServiceHome(SessionProvider sProvider, String username) throws Exception {
     Node userApp = nodeHierarchyCreator_.getUserApplicationNode(sProvider, username)  ;
     Node calendarRoot ; 
     try {
       return userApp.getNode(Utils.CALENDAR_APP) ;
-    } catch (Exception e) {
+    } catch (PathNotFoundException e) {
+      log.info("User calendar home not found, creating at "+ userApp.getPath() + "/" +Utils.CALENDAR_APP);
       calendarRoot = userApp.addNode(Utils.CALENDAR_APP, Utils.NT_UNSTRUCTURED) ;
       if(!calendarRoot.hasNode(CALENDAR_SETTING)) {
         addCalendarSetting(calendarRoot, new CalendarSetting()) ;
@@ -143,66 +193,79 @@ public class JCRDataStorage{
     }
   }
 
-  private Node getPublicCalendarHome(SessionProvider sProvider) throws Exception {
-    //sProvider = SessionProvider.createSystemProvider() ;
-    Node calendarServiceHome = getPublicCalendarServiceHome(sProvider) ;
-    try {
-      return calendarServiceHome.getNode(CALENDARS) ;
-    } catch (Exception e) {
-      Node cal = calendarServiceHome.addNode(CALENDARS, Utils.NT_UNSTRUCTURED) ;
-      calendarServiceHome.getSession().save() ;
-      return cal ; 
-    }
-  }
-
+  /**
+   * Get or create the folder of personal calendars
+   * @param sProvider
+   * @param username owner of the calendars
+   * @return
+   * @throws Exception
+   */
   private Node getUserCalendarHome(SessionProvider sProvider, String username) throws Exception {
-    Node calendarServiceHome = getUserCalendarServiceHome(sProvider, username) ;
-    try {
-      return calendarServiceHome.getNode(CALENDARS) ;
-    } catch (Exception e) {
-      Node calendars = calendarServiceHome.addNode(CALENDARS, Utils.NT_UNSTRUCTURED) ;
-      calendarServiceHome.getSession().save() ;
-      return calendars ; 
-    }
+    return getUserPath(sProvider, CALENDARS, username);
   }
 
+  /** 
+   * Get or create the storage folder for the RSS feeds
+   * @param sProvider
+   * @param username owner of the feeds
+   * @return
+   * @throws Exception
+   */
   public Node getRssHome(SessionProvider sProvider, String username) throws Exception {
-    Node calendarServiceHome = getUserCalendarServiceHome(sProvider, username) ;
-    try {
-      return calendarServiceHome.getNode(FEED) ;
-    } catch (Exception e) {
-      Node feed = calendarServiceHome.addNode(FEED, Utils.NT_UNSTRUCTURED) ;
-      calendarServiceHome.getSession().save() ;
-      return feed ;
-    }
+    return getUserPath(sProvider, FEED, username);
   }
 
+  /**
+   * Get or create the storage folder of the calendar categories
+   * @param sProvider
+   * @param username owner of the categories
+   * @return
+   * @throws Exception
+   */
   protected Node getCalendarCategoryHome(SessionProvider sProvider, String username) throws Exception {
-    Node calendarServiceHome = getUserCalendarServiceHome(sProvider, username) ;
-    try {
-      return calendarServiceHome.getNode(CALENDAR_CATEGORIES) ;
-    } catch (Exception e) {
-      Node calCat = calendarServiceHome.addNode(CALENDAR_CATEGORIES, Utils.NT_UNSTRUCTURED) ;
-      calendarServiceHome.getSession().save() ;
-      return calCat;
-    }
+    return getUserPath(sProvider, CALENDAR_CATEGORIES, username);
   }
 
+  /**
+   * Get or create the storage folder of the event categories
+   * @param sProvider
+   * @param username
+   * @return
+   * @throws Exception
+   */
   protected Node getEventCategoryHome(SessionProvider sProvider, String username) throws Exception {
-    Node calendarServiceHome = getUserCalendarServiceHome(sProvider, username) ;
-    try {
-      return calendarServiceHome.getNode(EVENT_CATEGORIES) ;
-    } catch (Exception e) {
-      Node eventCat = calendarServiceHome.addNode(EVENT_CATEGORIES, Utils.NT_UNSTRUCTURED) ;
-      calendarServiceHome.getSession().save() ;
-      return eventCat ; 
-    }
+    return getUserPath(sProvider, EVENT_CATEGORIES, username);
   }
+  
+  /**
+   * Get or create a user node within a user storage home
+   * @param sessionProvider
+   * @param name name of the folder
+   * @param username owner of the folder
+   * @return
+   * @throws Exception
+   */
+  private Node getUserPath(SessionProvider sessionProvider, String name, String username) throws Exception {
+    Node calendarUserHome = getUserCalendarServiceHome(sessionProvider, username) ;
+    try {
+      return calendarUserHome.getNode(name) ;
+    } catch (Exception e) {
+      log.info("User path not found" + calendarUserHome.getPath() + name + ", attempting to create.");
+      Node result = calendarUserHome.addNode(name, Utils.NT_UNSTRUCTURED) ;
+      calendarUserHome.getSession().save() ;
+      return result ; 
+    }   
+  }
+  
 
+  /**
+   * {@inheritDoc}
+   */
   public Calendar getUserCalendar(SessionProvider sProvider, String username, String calendarId) throws Exception {
     Node calendarNode = getUserCalendarHome(sProvider, username).getNode(calendarId) ;
     return getCalendar(new String[]{calendarId}, username, calendarNode, true) ;
   }
+  
   public List<Calendar> getUserCalendars(SessionProvider sProvider, String username, boolean isShowAll) throws Exception {
     NodeIterator iter = getUserCalendarHome(sProvider, username).getNodes() ;
     List<Calendar> calList = new ArrayList<Calendar>() ;
@@ -560,6 +623,8 @@ public class JCRDataStorage{
   }
 
   public void saveEventCategory(SessionProvider sProvider, String username, EventCategory eventCategory, String[] values, boolean isNew) throws Exception {
+    ThreadLocalSessionProviderService providerService = (ThreadLocalSessionProviderService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(ThreadLocalSessionProviderService.class);
+    SessionProvider sp = providerService.getSessionProvider(null);
     Node eventCategoryHome = getEventCategoryHome(sProvider, username) ;
     Node eventCategoryNode = null ;
     if(isNew){
@@ -2269,7 +2334,6 @@ public class JCRDataStorage{
       session.close() ;
     }
   }
-
 }
 
 
