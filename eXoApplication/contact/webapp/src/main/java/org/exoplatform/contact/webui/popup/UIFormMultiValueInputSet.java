@@ -150,6 +150,9 @@ public class UIFormMultiValueInputSet extends UIFormInputContainer<List> {
   static  public class AddActionListener extends EventListener<UIFormMultiValueInputSet> {
     public void execute(Event<UIFormMultiValueInputSet> event) throws Exception {
       UIFormMultiValueInputSet uiSet = event.getSource();
+      //cs-1739
+      UIProfileInputSet profileInputSet = (UIProfileInputSet)uiSet.getParent() ;
+      profileInputSet.setFieldGender(profileInputSet.getFieldGender()) ;      
       String id = event.getRequestContext().getRequestParameter(OBJECTID);  
       if(uiSet.getId().equals(id)){
         if (uiSet.getChildren().size() >= 5) {
@@ -168,6 +171,9 @@ public class UIFormMultiValueInputSet extends UIFormInputContainer<List> {
   static  public class RemoveActionListener extends EventListener<UIFormMultiValueInputSet> {
     public void execute(Event<UIFormMultiValueInputSet> event) throws Exception {
       UIFormMultiValueInputSet uiSet = event.getSource();
+//    cs-1739
+      UIProfileInputSet profileInputSet = (UIProfileInputSet)uiSet.getParent() ;
+      profileInputSet.setFieldGender(profileInputSet.getFieldGender()) ;
       String id = event.getRequestContext().getRequestParameter(OBJECTID);  
       uiSet.removeChildById(id);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiSet.getAncestorOfType(UIContactForm.class)) ;
