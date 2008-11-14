@@ -102,7 +102,7 @@
 		  					<%if(!isDisplaySearchResult) {%>
 		  					<td><%uicomponent.renderField(uicomponent.getChildById(event.getId()))%></td>
 		  					<%}%>
-		  					<td style="padding: 1px;"><div class="$attachIcon">&nbsp;</div></td>
+		  					<td style="padding-left: 7px;"><div class="$attachIcon">&nbsp;</div></td>
 								<td class="text"><div class="<%=event.getPriority()%>PriorityIcon">&nbsp;</div></td>
 								<td class="text">
 									<a href="$actionLink" class="ControlButton" title="<%=event.summary%>">
