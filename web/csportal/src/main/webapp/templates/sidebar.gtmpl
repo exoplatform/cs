@@ -1,0 +1,27 @@
+<%	import org.exoplatform.portal.webui.util.Util; 
+String toururi = Util.getPortalRequestContext().getPortalURI() + "tour";
+%>
+
+<div class="SideBar">	
+	<div class="SideBarContainer">
+		<div class="DownloadButton"><span></span></div>
+		<div class="DotLine"><span></span></div>
+		<div class="VersionIcon"><span></span></div>			
+		<div class="NormalText">Want to get serius about it? Learn about the </div>
+		<a href="http://www.exoplatform.com" class="ProVersion">professional version</a>
+		<div class="DotLine"><span></span></div>
+		<a href="/portal/public/classic/register" class="SignUp">Sign Up</a>
+		<div class="NormalText">Want to use own account ?</div>
+		<div class="DotLine"><span></span></div>
+		<div class="LeftButton">
+			<div class="RightButton">
+				<div class="CenterButton"><a href="$toururi" style="color: white;">Take a tour</a></div>
+			</div>
+		</div>		
+		<div class="LeftButton">
+			<div class="RightButton">
+				<div class="CenterButton"><a href="mailto:cs@exoplatform.com?subject=CS demo feedback" style="color: white;">Feedback</a></div>
+			</div>
+		</div>	
+	</div>
+</div>
