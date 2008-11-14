@@ -21,33 +21,32 @@
 	        	<div class="BannerTitleCS"><span></span></div>
 						<div class="LeftLoginContainer">
 							<div class="RightLoginContainer">
+								<% if(isLogin){ %>
 								<div class="MiddleLoginContainer">
-									<% if(isLogin){ %>
 									<div class="Name">Welcome
 										<span style="padding: 0px 10px 0px 2px; color: red; font-weight:bold;">
 											$userLogin 
 										</span>
 									</div>
 									<a class="Logout" href="$signOutAction" >Sign out</a>
-									<% } else {%>
-										<a class="ActionButton" onclick="$signInAction; return false;" href="#">
-										<div class="LeftButton">
-											<div class="RightButton">
-												<div class="CenterButton">Sign in</div>
-											</div>
-										</div>
-									</a>
-									<%}%>
 									<a class="Language" onclick="$changeLanguageAction">Change Language</a>
 									<div style="clear: both;"><span></span></div>	
-								</div>			
+								</div>
+								<% } else {%>
+								<div class="MiddleLoginContainer Signin">
+									<a class="Login" onclick="$signInAction">Sign in</a>								
+									<a class="Language" onclick="$changeLanguageAction">Change Language</a>
+									<div style="clear: both;"><span></span></div>	
+								</div>	
+								<%}%>
 							</div>
-							<div style="clear:both"><span></span></div>
 						</div>
-	        </div>
-	      </div>   
-	    </div>
-	  </div>
-	</div>
+						<div style="clear:both"><span></span></div>
+					</div>
+	       </div>
+	     </div>   
+	   </div>
+	 </div>
 </div>
+
 
