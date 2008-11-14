@@ -227,3 +227,11 @@
 .UIContactPortlet .UIContactPreview .DecoratorBox .ViewBoxStyle .TopLeftViewBoxStyle {
 	height: 8px;
 }
+
+.UIContactPortlet .UIForm .SelectFileFrame {
+	width : 360px;
+}
+
+.UIContactPortlet .UIImageForm .UIFormGrid td.FieldComponent {
+	white-space: normal;
+}
