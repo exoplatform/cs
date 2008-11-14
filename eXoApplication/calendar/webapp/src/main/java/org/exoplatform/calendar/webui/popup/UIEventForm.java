@@ -137,7 +137,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   private Map<String, User> participants_ = new LinkedHashMap<String, User>() ;
   private String oldCalendarId_ = null ;
   private String newCalendarId_ = null ;
-  private String newCategoryId_ = null ;
+  //private String newCategoryId_ = null ;
   public UIEventForm() throws Exception {
     super("UIEventForm");
     UIEventDetailTab eventDetailTab =  new UIEventDetailTab(TAB_EVENTDETAIL) ;
@@ -223,21 +223,23 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         }
       }
       setParticipant(pars.toString()) ;
-      boolean isContains = false ;
+      //boolean isContains = false ;
       CalendarService calService = CalendarUtils.getCalendarService();
-      List<EventCategory> listCategory = 
+      /*List<EventCategory> listCategory = 
         calService.getEventCategories(SessionProviderFactory.createSessionProvider(), CalendarUtils.getCurrentUser());
       for(EventCategory eventCat : listCategory) {
-        isContains = (eventCalendar.getEventCategoryId() == null || eventCat.getName().toLowerCase().equals(eventCalendar.getEventCategoryId().toLowerCase())) ;
+        isContains = (eventCalendar.getEventCategoryId() == null || eventCat.getName().equalsIgnoreCase(eventCalendar.getEventCategoryId())) ;
         if(isContains) break ;
-      }
+      }*/
       if(eventCalendar.getEventCategoryId() != null) {
-        SelectItemOption<String> item = new SelectItemOption<String>(eventCalendar.getEventCategoryId(), eventCalendar.getEventCategoryId()) ;
-        UIFormSelectBox uiSelectBox = eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY) ;
+        /*SelectItemOption<String> item = new SelectItemOption<String>(eventCalendar.getEventCategoryId(), eventCalendar.getEventCategoryId()) ;
         uiSelectBox.getOptions().add(item) ;
-        newCategoryId_ = eventCalendar.getEventCategoryId() ;
-        uiSelectBox.setValue(eventCalendar.getEventCategoryId());
-        if(!isAddNew_ && String.valueOf(Calendar.TYPE_SHARED).equals(calType_)){
+        newCategoryId_ = eventCalendar.getEventCategoryId() ;*/
+        UIFormSelectBox uiSelectBox = eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY) ;
+        if(!isAddNew_ && ! String.valueOf(Calendar.TYPE_PRIVATE).equalsIgnoreCase(calType_) ){
+          SelectItemOption<String> item = new SelectItemOption<String>(eventCalendar.getEventCategoryName(), eventCalendar.getEventCategoryId()) ;
+          uiSelectBox.getOptions().add(item) ;
+          uiSelectBox.setValue(eventCalendar.getEventCategoryId());
           uiSelectBox.setDisabled(true) ;
           eventDetailTab.getUIFormSelectBoxGroup(UIEventDetailTab.FIELD_CALENDAR).setDisabled(true) ;
           eventDetailTab.setActionField(UIEventDetailTab.FIELD_CATEGORY, null) ;
@@ -287,7 +289,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<EventCategory> eventCategories = calendarService.getEventCategories(SessionProviderFactory.createSessionProvider(),CalendarUtils.getCurrentUser()) ;
     for(EventCategory category : eventCategories) {
-      options.add(new SelectItemOption<String>(category.getName(), category.getName())) ;
+      options.add(new SelectItemOption<String>(category.getName(), category.getId())) ;
     }
     return options ;
   }
@@ -1191,6 +1193,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
             calendarEvent.setCalType(uiForm.calType_) ;
             calendarEvent.setCalendarId(calendarId) ;
             calendarEvent.setEventCategoryId(uiForm.getEventCategory()) ;
+            String eventCategoryName = calService.getEventCategory(uiForm.getSession(), username, uiForm.getEventCategory()).getName() ;
+            calendarEvent.setEventCategoryName(eventCategoryName) ;
             calendarEvent.setLocation(location) ;
             calendarEvent.setRepeatType(uiForm.getEventRepeat()) ;
             calendarEvent.setPriority(uiForm.getEventPriority()) ; 

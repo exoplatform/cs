@@ -75,6 +75,7 @@ public class CalendarEvent {
   private String location ;
   private String description ;
   private String eventCategoryId ;
+  private String eventCategoryName ;
   private String calendarId ;
   private String repeatType ;
   private Date fromDateTime ;
@@ -192,5 +193,13 @@ public class CalendarEvent {
 
   public String getCalType() {
     return calType;
+  }
+
+  public void setEventCategoryName(String eventCategoryName) {
+    this.eventCategoryName = eventCategoryName;
+  }
+
+  public String getEventCategoryName() {
+    return eventCategoryName;
   }
 }

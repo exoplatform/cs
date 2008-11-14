@@ -94,15 +94,15 @@ public class UIEventCategoryForm extends UIForm {
     public void execute(Event<UIEventCategoryForm> event) throws Exception {
       UIEventCategoryForm uiForm = event.getSource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-      String name = uiForm.getUIStringInput(UIEventCategoryForm.EVENT_CATEGORY_NAME).getValue() ;
-      String description = uiForm.getUIStringInput(UIEventCategoryForm.DESCRIPTION).getValue() ;
+      String name = uiForm.getUIStringInput(EVENT_CATEGORY_NAME).getValue() ;
+      String description = uiForm.getUIStringInput(DESCRIPTION).getValue() ;
       if(!CalendarUtils.isNameValid(name, CalendarUtils.EXTENDEDCHARACTER)) {
         uiApp.addMessage(new ApplicationMessage("UIEventCategoryForm.msg.name-invalid", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ; 
         return ;
       }
-      if(!CalendarUtils.isEmpty(name)) name = name.trim().toLowerCase() ;
-      if(!CalendarUtils.isEmpty(description)) description = name.trim().toLowerCase() ;
+      if(!CalendarUtils.isEmpty(name)) name = name.trim() ;
+      if(!CalendarUtils.isEmpty(description)) description = description.trim() ;
       UIEventCategoryManager uiManager = uiForm.getAncestorOfType(UIEventCategoryManager.class) ;
       CalendarService calendarService = CalendarUtils.getCalendarService();
       String username = CalendarUtils.getCurrentUser() ;
@@ -113,6 +113,8 @@ public class UIEventCategoryForm extends UIForm {
         if(uiForm.isAddNew_) calendarService.saveEventCategory(SessionProviderFactory.createSessionProvider(), username, eventCat, null, true) ;
         else { 
           eventCat = uiForm.getEventCategory() ;
+          eventCat.setName(name) ;
+          eventCat.setDescription(description) ;
           calendarService.saveEventCategory(SessionProviderFactory.createSessionProvider(), username, eventCat, new String[]{name, uiForm.getCategoryDescription()}, false) ; 
         }
         Long currentPage = uiManager.getCurrentPage() ;

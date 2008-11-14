@@ -34,6 +34,7 @@ public class Utils {
   public static final String EXO_DESCRIPTION = "exo:description".intern() ;
   public static final String EXO_EVENT_ID = "exo:eventId".intern() ;
   public static final String EXO_EVENT_CATEGORYID = "exo:eventCategoryId".intern() ;
+  public static final String EXO_EVENT_CATEGORY_NAME = "exo:eventCategoryName".intern() ;
   public static final String EXO_TASK_DELEGATOR = "exo:taskDelegator".intern() ;
   public static final String EXO_REPEAT = "exo:repeat".intern() ;
   public static final String EXO_EVENT_TYPE = "exo:eventType".intern() ;

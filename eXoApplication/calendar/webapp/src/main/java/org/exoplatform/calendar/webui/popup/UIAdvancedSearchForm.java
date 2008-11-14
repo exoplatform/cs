@@ -115,7 +115,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     options = new ArrayList<SelectItemOption<String>>() ;
     options.add(new SelectItemOption<String>("", "")) ;
     for(EventCategory cat : cservice.getEventCategories(getSession(), CalendarUtils.getCurrentUser())) {
-      options.add(new SelectItemOption<String>(cat.getName(), cat.getName())) ;
+      options.add(new SelectItemOption<String>(cat.getName(), cat.getId())) ;
     }
     addChild(new UIFormSelectBox(CATEGORY, CATEGORY, options)) ;
     addChild(new UIFormSelectBox(STATE, STATE, getStatus()).setRendered(false)) ;
@@ -164,9 +164,9 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
   private List<SelectItemOption<String>> getPriority() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     options.add(new SelectItemOption<String>("", "")) ;
-    options.add(new SelectItemOption<String>("normal", "2")) ;
-    options.add(new SelectItemOption<String>("high", "1")) ;
-    options.add(new SelectItemOption<String>("low", "3")) ;
+    options.add(new SelectItemOption<String>("normal", "normal")) ;
+    options.add(new SelectItemOption<String>("high", "high")) ;
+    options.add(new SelectItemOption<String>("low", "low")) ;
     return options ;
   }
 

@@ -250,7 +250,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     options.add(new SelectItemOption<String>("all", "all")) ;
     for(EventCategory category : eventCategories) {
-      options.add(new SelectItemOption<String>(category.getName(), category.getName())) ;
+      options.add(new SelectItemOption<String>(category.getName(), category.getId())) ;
     }
     UIFormSelectBox categoryInput =   new UIFormSelectBox(EVENT_CATEGORIES, EVENT_CATEGORIES, options) ;
     addUIFormInput(categoryInput) ;
@@ -323,7 +323,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
       options.add(new SelectItemOption<String>("all", "all")) ;
       for(EventCategory category : eventCategories) {
-        options.add(new SelectItemOption<String>(category.getName(), category.getName())) ;
+        options.add(new SelectItemOption<String>(category.getName(), category.getId())) ;
       }
       getUIFormSelectBox(EVENT_CATEGORIES).setOptions(options) ;
       getUIFormSelectBox(EVENT_CATEGORIES).setValue(null) ;

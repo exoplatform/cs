@@ -93,12 +93,13 @@ public class ICalendarImportExport implements CalendarImportExport{
 
   public OutputStream exportCalendar(SessionProvider sProvider, String username, List<String> calendarIds, String type) throws Exception {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>();
+    SessionProvider systemSession = SessionProvider.createSystemProvider() ;
     if(type.equals(PRIVATE_TYPE)) {
       events = storage_.getUserEventByCalendar(sProvider, username, calendarIds) ;
     }else if(type.equals(SHARED_TYPE)) {
-      events = storage_.getSharedEventByCalendars(SessionProvider.createSystemProvider(), username, calendarIds) ;
+      events = storage_.getSharedEventByCalendars(systemSession, username, calendarIds) ;
     }else if(type.equals(PUBLIC_TYPE)){
-      events = storage_.getGroupEventByCalendar(SessionProvider.createSystemProvider(), calendarIds) ;
+      events = storage_.getGroupEventByCalendar(systemSession, calendarIds) ;
     }
     if(events.isEmpty()) return null ;
     net.fortuna.ical4j.model.Calendar calendar = new net.fortuna.ical4j.model.Calendar();
@@ -132,8 +133,8 @@ public class ICalendarImportExport implements CalendarImportExport{
         event.getProperties().getProperty(Property.LOCATION).getParameters()
         .add(net.fortuna.ical4j.model.parameter.Value.TEXT);
 
-        if(exoEvent.getEventCategoryId() != null){
-          event.getProperties().add(new Categories(exoEvent.getEventCategoryId())) ;
+        if(exoEvent.getEventCategoryName() != null){
+          event.getProperties().add(new Categories(exoEvent.getEventCategoryName())) ;
           event.getProperties().getProperty(Property.CATEGORIES).getParameters()
           .add(net.fortuna.ical4j.model.parameter.Value.TEXT);
         }
@@ -227,7 +228,9 @@ public class ICalendarImportExport implements CalendarImportExport{
     }catch(ValidationException e) {
       //e.printStackTrace() ;
       return null ;
-    }    
+    }  finally {
+      systemSession.close() ;
+    }  
     return bout;
   }
 
@@ -264,8 +267,8 @@ public class ICalendarImportExport implements CalendarImportExport{
         event.getProperties().getProperty(Property.LOCATION).getParameters()
         .add(net.fortuna.ical4j.model.parameter.Value.TEXT);
 
-        if(exoEvent.getEventCategoryId() != null){
-          event.getProperties().add(new Categories(exoEvent.getEventCategoryId())) ;
+        if(exoEvent.getEventCategoryName() != null){
+          event.getProperties().add(new Categories(exoEvent.getEventCategoryName())) ;
           event.getProperties().getProperty(Property.CATEGORIES).getParameters()
           .add(net.fortuna.ical4j.model.parameter.Value.TEXT);
         }
@@ -388,22 +391,27 @@ public class ICalendarImportExport implements CalendarImportExport{
     for(Object obj : componentList) {
       if(obj instanceof VEvent){
         event = (VEvent)obj ;
-        String eventCategoryId = null ;
+        exoEvent = new CalendarEvent() ;
         if(event.getProperty(Property.CATEGORIES) != null) {
           EventCategory evCate = new EventCategory() ;
-          evCate.setName(event.getProperty(Property.CATEGORIES).getValue()) ;
+          evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim()) ;
           try{
             storage_.saveEventCategory(sProvider, username, evCate, null, true) ;
           }catch(Exception e){ 
+            for(EventCategory ev : storage_.getEventCategories(sProvider, username)) {
+              if(ev.getName().equalsIgnoreCase(evCate.getName())) {
+                evCate = ev ;
+                break ;
+              }
+            }
             e.printStackTrace() ;
             System.out.println("\n\n event category " + evCate.getName() + " existed !");
           }
-          eventCategoryId = evCate.getName() ;
+          exoEvent.setEventCategoryId(evCate.getId()) ;
+          exoEvent.setEventCategoryName(evCate.getName()) ;
         } 
-        exoEvent = new CalendarEvent() ;
         exoEvent.setCalType(String.valueOf(Calendar.TYPE_PRIVATE)) ;
         exoEvent.setCalendarId(exoCalendar.getId()) ;
-        if(!Utils.isEmpty(eventCategoryId)) exoEvent.setEventCategoryId(eventCategoryId) ;
         if(event.getSummary() != null) exoEvent.setSummary(event.getSummary().getValue()) ;
         if(event.getDescription() != null) exoEvent.setDescription(event.getDescription().getValue()) ;
         if(event.getStatus() != null) exoEvent.setStatus(event.getStatus().getValue()) ;
@@ -480,7 +488,7 @@ public class ICalendarImportExport implements CalendarImportExport{
           exoEvent.setId(event.getProperty(Property.UID).getValue()) ;
         }
         if(event.getProperty(Property.CATEGORIES) != null) {
-          exoEvent.setEventCategoryId(event.getProperty(Property.CATEGORIES).getValue().trim().toLowerCase()) ;
+          exoEvent.setEventCategoryName(event.getProperty(Property.CATEGORIES).getValue().trim()) ;
         }
         if(event.getSummary() != null) exoEvent.setSummary(event.getSummary().getValue()) ;
         if(event.getDescription() != null) exoEvent.setDescription(event.getDescription().getValue()) ;
