@@ -926,15 +926,7 @@
         <table class="ActionContainer" align="center">
         	<tr>
         		<td align="center">
-          		<a href="<%= uicomponent.event("Cancel") %>" class="ActionButton LightBlueStyle">
-                <div class="ButtonLeft">
-                  <div class="ButtonRight">
-                    <div class="ButtonMiddle">
-                      <%= _ctx.appRes(uicomponent.getName() + ".action.Cancel") %>
-                    </div>
-                  </div>
-                </div>
-           		</a>
+          		
           		<a href="#" onclick = "javascript:window.print()" class="ActionButton LightBlueStyle">
                 <div class="ButtonLeft">
                   <div class="ButtonRight">
@@ -944,7 +936,15 @@
                   </div>
                 </div>
            		</a>
-           		
+           		<a href="<%= uicomponent.event("Cancel") %>" class="ActionButton LightBlueStyle">
+                <div class="ButtonLeft">
+                  <div class="ButtonRight">
+                    <div class="ButtonMiddle">
+                      <%= _ctx.appRes(uicomponent.getName() + ".action.Cancel") %>
+                    </div>
+                  </div>
+                </div>
+           		</a>
           		        
           	</td>
           </tr>  

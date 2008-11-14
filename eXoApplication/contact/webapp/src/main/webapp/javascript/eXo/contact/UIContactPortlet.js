@@ -343,7 +343,7 @@ UIContactPortlet.prototype.printpreview = function (obj){
 	if(obj.getAttribute("onclick")) obj.removeAttribute("onclick") ;	
 	var printButton = obj.cloneNode(true) ;
 	printButton.href = "javascript:window.print() ;" ;
-	obj.parentNode.appendChild(printButton) ;
+	obj.parentNode.insertBefore(printButton,obj) ;
 	DOMUtil.removeElement(obj) ;	
 	eXo.contact.UIContactPortlet.printList(form.id) ;
 	window.scroll(0,0);
