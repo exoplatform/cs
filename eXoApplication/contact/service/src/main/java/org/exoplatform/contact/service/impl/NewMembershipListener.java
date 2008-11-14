@@ -139,7 +139,6 @@ public class NewMembershipListener extends MembershipEventListener {
           }
         }
       }
-
 //    lookup shared contacts
       queryString = new StringBuffer("/jcr:root" + usersPath 
           + "//element(*,exo:contact)[@exo:viewPermissionGroups='").append(m.getGroupId() + "']") ;        

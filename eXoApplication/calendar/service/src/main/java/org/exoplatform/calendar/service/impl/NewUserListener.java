@@ -173,7 +173,7 @@ public class NewUserListener extends UserEventListener {
       List<EventCategory> eCats = cservice_.getEventCategories(session, username) ;
       if(!eCats.isEmpty())
         for(EventCategory ecat : eCats) {
-          cservice_.removeEventCategory(session, username, ecat.getName()) ;
+          cservice_.removeEventCategory(session, username, ecat.getId()) ;
         }
       GroupCalendarData   calData = cservice_.getSharedCalendars(session, username, true) ;
       if(calData != null && !calData.getCalendars().isEmpty())

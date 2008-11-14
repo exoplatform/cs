@@ -62,7 +62,7 @@ public class UIEventCategoryManager extends UIContainer implements UIPopupCompon
   public UIEventCategoryManager() throws Exception {
     this.setName("UIEventCategoryManager") ;
     UIGrid categoryList = addChild(UIGrid.class, null , "UIEventCategoryList") ;
-    categoryList.configure("name", BEAN_FIELD, ACTION) ;
+    categoryList.configure("id", BEAN_FIELD, ACTION) ;
     categoryList.getUIPageIterator().setId("EventCategoryIterator");
     addChild(UIEventCategoryForm.class, null, null) ;
     updateGrid() ;

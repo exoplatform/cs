@@ -81,7 +81,7 @@
 	    <init-params>
         <value-param>
         	<name>defaultEventCategories</name>
-        	<value>Anniversary,Calls,Clients,Holiday,Meeting</value><!-- Multi value, use coma (,) to split values-->
+        	<value>Meeting,Calls,Clients,Holiday,Anniversary</value><!-- Multi value, use coma (,) to split values-->
         </value-param>
         <value-param>
         	<name>defaultCalendarCategory</name>

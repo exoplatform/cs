@@ -96,7 +96,6 @@ public class NewUserListener extends UserEventListener {
     acc.setOutgoingHost(outgoingHost);
     acc.setOutgoingPort(outgoingPort);
 
-
     SessionProvider sProvider = SessionProvider.createSystemProvider();
     String username = user.getUserName();
     String accId    = acc.getId();

@@ -133,7 +133,6 @@ public class NewUserListener extends UserEventListener {
                 new String[] {contactNode.getProperty("exo:id").getString()}, recievedUser) ;
           }
         }
-
         Node userApp = nodeHierarchyCreator_.getUserApplicationNode(sysProvider, user.getUserName()) ;
         //reparePermissions(userApp, user.getUserName()) ;
         //reparePermissions(userApp.getNode("ContactApplication"), user.getUserName()) ;

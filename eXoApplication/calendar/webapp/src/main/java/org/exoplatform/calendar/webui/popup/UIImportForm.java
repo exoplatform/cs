@@ -106,7 +106,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
         CalendarService calendarService = CalendarUtils.getCalendarService() ;
         List<Calendar> pCals = calendarService.getUserCalendars(SessionProviderFactory.createSessionProvider(), username, true) ;
         for(Calendar cal : pCals) {
-            if(cal.getName().trim().toLowerCase().equals(calendarName.toLowerCase())) {
+            if(cal.getName().trim().equalsIgnoreCase(calendarName)) {
               uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.name-exist", new Object[]{calendarName}, ApplicationMessage.WARNING)) ;
               event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
               return ;

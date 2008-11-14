@@ -59,7 +59,6 @@ public class CheckMailJob implements Job, InterruptableJob {
 		  if (username!= null && accountId !=null) {
 		    mailService.checkNewMessage(systemSession, username, accountId) ;
 		  }
-
     } catch (InterruptedException ie) {
       getMailService().stopCheckMail(username, accountId);
 	  } catch (Exception e) {

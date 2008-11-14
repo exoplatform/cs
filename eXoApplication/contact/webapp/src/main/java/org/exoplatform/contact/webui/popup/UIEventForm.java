@@ -214,7 +214,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<EventCategory> eventCategories = calendarService.getEventCategories(SessionProviderFactory.createSystemProvider(), Util.getPortalRequestContext().getRemoteUser()) ;
     for(EventCategory category : eventCategories) {
-      options.add(new SelectItemOption<String>(category.getName(), category.getName())) ;
+      options.add(new SelectItemOption<String>(category.getName(), category.getId())) ;
     }
     return options ;
   }
@@ -639,6 +639,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
         calendarEvent.setToDateTime(to);
         calendarEvent.setCalendarId(calendarId) ;
         calendarEvent.setEventCategoryId(uiForm.getEventCategory()) ;
+        String eventCategoryName = CalendarUtils.getCalendarService().getEventCategory(uiForm.getSession(), username, uiForm.getEventCategory()).getName() ;
+        calendarEvent.setEventCategoryName(eventCategoryName) ;
         calendarEvent.setLocation(eventPlace) ;
         calendarEvent.setRepeatType(uiForm.getEventRepeat()) ;
         calendarEvent.setPriority(uiForm.getEventPriority()) ; 

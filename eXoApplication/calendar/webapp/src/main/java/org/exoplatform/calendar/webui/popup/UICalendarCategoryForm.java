@@ -119,14 +119,14 @@ public class UICalendarCategoryForm extends UIForm {
         List<CalendarCategory> gData = calendarService.getCategories(SessionProviderFactory.createSessionProvider(), username) ;
         if(uiForm.isAddNew())  {
           for(CalendarCategory cal : gData) {
-            if (cal.getName().trim().toLowerCase().equals(categoryName.trim().toLowerCase())) {
+            if (cal.getName().trim().equalsIgnoreCase(categoryName.trim())) {
               existed = true ;
               break ;
             }
           }
         } else {
           for(CalendarCategory cal : gData) {
-            if (!cal.getId().equals(uiForm.getCategoryId()) &&  cal.getName().trim().toLowerCase().equals(categoryName.trim().toLowerCase())) {
+            if (!cal.getId().equals(uiForm.getCategoryId()) &&  cal.getName().trim().equalsIgnoreCase(categoryName.trim())) {
               existed = true ;
               break ;
             }
