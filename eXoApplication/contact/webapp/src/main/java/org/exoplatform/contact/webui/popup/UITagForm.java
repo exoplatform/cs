@@ -233,9 +233,16 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       String username = ContactUtils.getCurrentUser() ;
       List<String> contactIds = new ArrayList<String>() ;
       List<String> newContactIds = new ArrayList<String>() ;
+      
+      // cs-1653 
+      List<String> noTags = new ArrayList<String>() ;
+      noTags.addAll(checkedTags) ;
       for (Contact contact : uiForm.contacts_) {
         contactIds.add(contact.getId()) ;
         newContactIds.add(contact.getId() + JCRDataStorage.SPLIT + contact.getContactType()) ;
+        if (contact.getTags() != null) {
+          for (String tag : contact.getTags()) noTags.remove(tag) ;          
+        }
       }
       try {
         contactService.removeContactTag(
@@ -286,6 +293,18 @@ public class UITagForm extends UIForm implements UIPopupComponent {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPreview) ;
       }      
       contactPortlet.cancelAction() ; 
+      if (noTags.size() > 0) {
+        Map<String, Tag> tagMap = uiTags.getTagMap() ;
+        StringBuilder builder = new StringBuilder("") ;
+        for (String tag : noTags) {
+          if (builder.length() > 0) builder.append(" ,") ;
+          builder.append(tagMap.get(tag).getName()) ;
+        }
+        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UITagForm.msg.noTagRemoved", new Object[]{builder.toString()}, 
+            ApplicationMessage.INFO)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;       
+      }
     }
   }
 

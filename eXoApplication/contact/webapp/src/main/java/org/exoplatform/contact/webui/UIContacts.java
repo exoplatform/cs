@@ -574,10 +574,10 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           Contact contact = uiContacts.contactMap.get(contactId) ;
           String[] tags = contact.getTags() ;
           if (tags != null && tags.length > 0) {
-            List<String> newTags = new ArrayList<String>() ;
-            for (String tag : tags) newTags.add(tag) ;
-            newTags.add(tagId) ;
-            contact.setTags(newTags.toArray(new String[] {})) ;
+            Map<String, String> newTags = new LinkedHashMap<String, String>() ;
+            for (String tag : tags) newTags.put(tag, tag) ;
+            newTags.put(tagId, tagId) ;
+            contact.setTags(newTags.keySet().toArray(new String[] {})) ;
           }
           else {
             contact.setTags(new String[] {tagId}) ;
