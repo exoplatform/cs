@@ -31,6 +31,7 @@ public class MessageHeader {
   private String id_ ;
   private String accountId_;
   private long priority_; 
+  private String inReplyToHeader_;
   private Map<String, String> headers_ = new HashMap<String, String>();
   
   public MessageHeader() {
@@ -38,6 +39,9 @@ public class MessageHeader {
   }
   public String getId() { return id_ ; }
   public void setId(String id) { this.id_ = id; }
+  
+  public String getInReplyToHeader() { return inReplyToHeader_; }
+  public void setInReplyToHeader(String inReplyToHeader) { this.inReplyToHeader_ = inReplyToHeader; }
   
   public String getAccountId() { return accountId_ ; }
   public void setAccountId(String accountId) { this.accountId_ = accountId ; }

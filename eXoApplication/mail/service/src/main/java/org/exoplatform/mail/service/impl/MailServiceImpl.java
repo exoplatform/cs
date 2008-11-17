@@ -725,7 +725,7 @@ public class MailServiceImpl implements MailService {
             boolean deleteOnServer = (isPop3 && !leaveOnServer) || (isImap && markAsDelete);
 
             info.setTotalMsg(totalNew);
-            int i = 0;
+            int i = totalNew - 1;
             SpamFilter spamFilter = getSpamFilter(sProvider, username, account.getId());
             Folder storeFolder = storage_.getFolder(sProvider, username, account.getId(), folderId);
             if (storeFolder == null) {
@@ -745,7 +745,7 @@ public class MailServiceImpl implements MailService {
             javax.mail.Message msg;
             List<String> filterList;
             List<javax.mail.Message> msgList = new ArrayList<javax.mail.Message>(msgMap.keySet()) ;
-            while (i < totalNew) {
+            while (i >= 0) {
               
               if(info.isRequestStop()) {
                 if (logger.isDebugEnabled()) {
@@ -756,15 +756,15 @@ public class MailServiceImpl implements MailService {
               }
               
               msg = msgList.get(i);
-              logger.warn("Fetching message " + (i + 1) + " ...");
+              logger.warn("Fetching message " + (totalNew - i) + " ...");
               /* JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
             Reminder rmdObj = new Reminder() ;   
             rmdObj.setFromDateTime(new Date()) ;
             rmdObj.setSummary("Fetching message " + (i + 1) + "/" + totalNew) ;
             JsonValue json = generatorImpl.createJsonObject(rmdObj);
             continuation.sendMessage(username, "/eXo/Application/mail/messages", json);*/
-              checkingLog_.get(key).setFetching(i + 1);
-              checkingLog_.get(key).setStatusMsg("Fetching message " + (i + 1) + "/" + totalNew);
+              checkingLog_.get(key).setFetching(totalNew - i);
+              checkingLog_.get(key).setStatusMsg("Fetching message " + (totalNew - i) + "/" + totalNew);
               t1 = System.currentTimeMillis();
               filterList = msgMap.get(msg);
               try {
@@ -779,14 +779,14 @@ public class MailServiceImpl implements MailService {
                   account.setLastCheckedDate(MimeMessageParser.getReceivedDate(msg).getTime());
                 }
               } catch (Exception e) {
-                checkingLog_.get(key).setStatusMsg("An error occurs while fetching messsge " + i);
+                checkingLog_.get(key).setStatusMsg("An error occurs while fetching messsge " + (totalNew - i));
                 e.printStackTrace();
-                i++;
+                i--;
                 continue;
               }
-              i++;
+              i--;
               t2 = System.currentTimeMillis();
-              logger.warn("Message " + i + " saved : " + (t2 - t1) + " ms");
+              logger.warn("Message " + (totalNew - i) + " saved : " + (t2 - t1) + " ms");
             }
 
             tt2 = System.currentTimeMillis();
