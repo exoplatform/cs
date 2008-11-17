@@ -104,7 +104,7 @@ public class ReminderJob implements Job {
             reminder.setProperty(Utils.EXO_IS_OVER, true) ;
           }
           messageList.add(message);
-          reminder.save() ;
+          if(reminder.isNew()) reminder.save() ;
         }
       }  
       if(!messageList.isEmpty()) {

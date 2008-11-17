@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.jcr.ItemExistsException;
-import javax.jcr.ItemNotFoundException;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.PropertyIterator;
@@ -843,8 +842,12 @@ public class JCRDataStorage{
         Node reminders = getReminderFolder(systemSession, eventNode.getProperty(Utils.EXO_FROM_DATE_TIME).getDate().getTime()) ;
         if(reminders.hasNode(eventNode.getName())) reminders.getNode(eventNode.getName()).remove() ;
         Node events = reminders.getParent().getNode(Utils.CALENDAR_REMINDER) ;
-        if(events != null && events.hasNode(eventNode.getName())) events.getNode(eventNode.getName()).remove() ;
-        if(!reminders.isNew())reminders.save() ;
+        if(events != null && events.hasNode(eventNode.getName())) {
+          if(events.hasNode(eventNode.getName())) {
+            events.getNode(eventNode.getName()).remove() ;
+            if(!reminders.isNew())reminders.save() ;
+          }
+        }
       }  catch (Exception e) {
         e.printStackTrace() ;
       } finally {
@@ -1696,7 +1699,11 @@ public class JCRDataStorage{
 
   private Map<Integer, String> updateMap(Map<Integer, String> data, NodeIterator it, java.util.Calendar fromDate, java.util.Calendar toDate, String[] filterCalIds) throws Exception {
     int fromDayOfYear = fromDate.get(java.util.Calendar.DAY_OF_YEAR) ;
+    int daysOfyer = fromDate.getMaximum(java.util.Calendar.DAY_OF_YEAR) ;
     int toDayOfYear = toDate.get(java.util.Calendar.DAY_OF_YEAR) ;
+    if(toDate.get(java.util.Calendar.DAY_OF_YEAR ) > fromDate.get(java.util.Calendar.DAY_OF_YEAR)) {
+      toDayOfYear = toDayOfYear + daysOfyer ;
+    }
     boolean isVictory = false ;
     while(it.hasNext() && !isVictory) {
       Node eventNode = it.nextNode() ;

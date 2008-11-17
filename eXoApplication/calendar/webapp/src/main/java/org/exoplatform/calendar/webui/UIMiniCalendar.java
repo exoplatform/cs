@@ -68,7 +68,11 @@ public class UIMiniCalendar extends UICalendarView  {
     dataMap = calendarService.searchHightLightEvent(getSession(), CalendarUtils.getCurrentUser(), eventQuery, getPublicCalendars());
   }
   protected int getWeeksOfTheMonth(int year, int month, int day) {
-    return new GregorianCalendar(year, month, day).getActualMaximum(java.util.Calendar.WEEK_OF_MONTH) ;
+    Calendar cal = getInstanceTempCalendar() ;
+    cal.set(Calendar.YEAR, year);
+    cal.set(Calendar.MONTH, month);
+    cal.set(Calendar.DATE, day);
+    return cal.getActualMaximum(java.util.Calendar.WEEK_OF_MONTH) ;
   }
   @SuppressWarnings("unused")
   private Map<Integer, String> getData(){ return dataMap ; }
@@ -82,7 +86,7 @@ public class UIMiniCalendar extends UICalendarView  {
     return CalendarUtils.getBeginDay(temCal) ;
   }
   public java.util.Calendar getEndDateOfMonthView() throws Exception{
-    java.util.Calendar temCal = getEndDateOfMonth() ;
+    java.util.Calendar temCal = getBeginDateOfMonthView() ;
     temCal.setFirstDayOfWeek(java.util.Calendar.SUNDAY) ;
     temCal.add(java.util.Calendar.DATE, getWeeksOfTheMonth(getCurrentYear(), getCurrentMonth(), 1)*7) ;
     return getBeginDay(temCal) ;
@@ -110,11 +114,10 @@ public class UIMiniCalendar extends UICalendarView  {
   public void refresh() throws Exception {
     dataMap.clear() ;
     EventQuery eventQuery = new EventQuery() ;
-    /*if(categoryId_ != null && categoryId_.toLowerCase().equals("null")) {
-      eventQuery.setCategoryId(new String[]{categoryId_}) ;
-    } */
     eventQuery.setFromDate(getBeginDateOfMonth()) ;
-    eventQuery.setToDate(getEndDateOfMonth()) ;
+    Calendar cal = getEndDateOfMonth() ;
+    cal.add(java.util.Calendar.MILLISECOND, -1) ;
+    eventQuery.setToDate(cal) ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     dataMap = calendarService.searchHightLightEvent(getSession(), CalendarUtils.getCurrentUser(), eventQuery, getPublicCalendars());
   }
