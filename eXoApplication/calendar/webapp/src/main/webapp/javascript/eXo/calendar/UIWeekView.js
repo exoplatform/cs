@@ -398,6 +398,7 @@ UIWeekView.prototype.initAlldayDND = function(evt) {
 UIWeekView.prototype.allDayInitCallback = function(evt) {
 	var UIWeekView = eXo.calendar.UIWeekView ;
 	var dragObject = evt.dragObject ;
+	UIWeekView.beforePercentStart = parseFloat(dragObject.style.left) ;
 	UIWeekView.beforeStart = dragObject.offsetLeft ;
 	dragObject.style.left = dragObject.offsetLeft + "px" ;
 } ;
@@ -428,10 +429,11 @@ UIWeekView.prototype.allDayDropCallback = function(evt) {
 	var UIWeekView = eXo.calendar.UIWeekView ;
 	var totalWidth = dragObject.parentNode.offsetWidth ;
 	var delta = dragObject.offsetLeft - UIWeekView.beforeStart ;
-	if (delta == 0) dragObject.style.left = parseFloat(parseInt(dragObject.style.left)/dragObject.offsetParent.offsetWidth)*100 + "%" ;
+	if (delta == 0) dragObject.style.left = UIWeekView.beforePercentStart + "%" ;
 	UIWeekView.elementLeft = null ;
 	UIWeekView.elementTop = null ;
-	UIWeekView.beforeStart = null ;	
+	UIWeekView.beforeStart = null ;
+	UIWeekView.beforePercentStart = null ;
 	if (delta != 0) {
 		var weekdays = parseInt(document.getElementById("UIWeekViewGridAllDay").getAttribute("numberofdays"));
 		var UICalendarPortlet = eXo.calendar.UICalendarPortlet
