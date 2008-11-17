@@ -1574,7 +1574,7 @@ UICalendarPortlet.prototype.setSelected = function(form){
 
 UICalendarPortlet.prototype.listViewDblClick = function(form){
 	form = (typeof(form) == "string")? document.getElementById(form):form ;
-	var tr = eXo.core.DOMUtil.findDescendantsByTagName(form,"tr");
+	var tr = eXo.core.DOMUtil.findDescendantsByClass(form,"tr","UIListViewRow");
 	var i = tr.length ;
 	eXo.calendar.UICalendarPortlet.viewType = "UIListView";
 	while(i--){
@@ -2156,37 +2156,6 @@ eXo.calendar.UICalendarPortlet = new UICalendarPortlet();
 eXo.calendar.UIResizeEvent = new UIResizeEvent();
 eXo.calendar.UISelection = new UISelection();
 
-UIDesktop.prototype.showHideWindow = function(uiWindow, clickedElement){
-    if (typeof(uiWindow) == "string") 
-        this.object = document.getElementById(uiWindow);
-    else 
-        this.object = uiWindow;
-    this.object.maxIndex = eXo.desktop.UIDesktop.resetZIndex(this.object);
-    var numberOfFrame = 10;
-    if (this.object.style.display == "block") {
-        eXo.animation.ImplodeExplode.implode(this.object, clickedElement, "UIPageDesktop", numberOfFrame, false);
-        eXo.desktop.UIWindow.saveWindowProperties(this.object, "HIDE");
-        this.object.isShowed = false;
-    }
-    else {
-        this.object.isShowed = true;
-        var uiDockBar = document.getElementById("UIDockBar");
-        var uiPageDesktop = document.getElementById("UIPageDesktop");
-        eXo.desktop.UIDockbar.resetDesktopShowedStatus(uiPageDesktop, uiDockBar);
-        eXo.animation.ImplodeExplode.explode(this.object, clickedElement, "UIPageDesktop", numberOfFrame, false);
-        eXo.desktop.UIWindow.saveWindowProperties(this.object, "SHOW");
-        
-        if (eXo.core.Browser.isIE6()) {
-            this.object.style.filter = "";
-        }
-        //fix display scroll in first time.
-        var blockResizes = eXo.core.DOMUtil.findDescendantsByClass(this.object, "div", "UIResizableBlock");
-        if (blockResizes.length > 1) 
-            blockResizes[0].style.overflow = "hidden";
-        if(uiWindow.indexOf("calendar") >=0) eXo.calendar.UICalendarPortlet.delay = window.setTimeout("eXo.calendar.UICalendarPortlet.fixFirstLoad() ;", 2000);
-    }
-};
-
 UICalendarPortlet.prototype.fixFirstLoad = function(){
     if (this.firstRun){
 			if (this.delay) {
@@ -2312,6 +2281,39 @@ UICalendarPortlet.prototype.fixForMaximize = function(){
   }
 };
 
+if(typeof(UIDesktop) != "undefined"){
+
+UIDesktop.prototype.showHideWindow = function(uiWindow, clickedElement){
+    if (typeof(uiWindow) == "string") 
+        this.object = document.getElementById(uiWindow);
+    else 
+        this.object = uiWindow;
+    this.object.maxIndex = eXo.desktop.UIDesktop.resetZIndex(this.object);
+    var numberOfFrame = 10;
+    if (this.object.style.display == "block") {
+        eXo.animation.ImplodeExplode.implode(this.object, clickedElement, "UIPageDesktop", numberOfFrame, false);
+        eXo.desktop.UIWindow.saveWindowProperties(this.object, "HIDE");
+        this.object.isShowed = false;
+    }
+    else {
+        this.object.isShowed = true;
+        var uiDockBar = document.getElementById("UIDockBar");
+        var uiPageDesktop = document.getElementById("UIPageDesktop");
+        eXo.desktop.UIDockbar.resetDesktopShowedStatus(uiPageDesktop, uiDockBar);
+        eXo.animation.ImplodeExplode.explode(this.object, clickedElement, "UIPageDesktop", numberOfFrame, false);
+        eXo.desktop.UIWindow.saveWindowProperties(this.object, "SHOW");
+        
+        if (eXo.core.Browser.isIE6()) {
+            this.object.style.filter = "";
+        }
+        //fix display scroll in first time.
+        var blockResizes = eXo.core.DOMUtil.findDescendantsByClass(this.object, "div", "UIResizableBlock");
+        if (blockResizes.length > 1) 
+            blockResizes[0].style.overflow = "hidden";
+        if(uiWindow.indexOf("calendar") >=0) eXo.calendar.UICalendarPortlet.delay = window.setTimeout("eXo.calendar.UICalendarPortlet.fixFirstLoad() ;", 2000);
+    }
+};
+
 UIWindow.prototype.endResizeWindowEvt = function(evt){
     // Re initializes the scroll tabs managers on the page
     eXo.portal.UIPortalControl.initAllManagers();
@@ -2361,3 +2363,4 @@ UIWindow.prototype.maximizeWindowEvt = function(evt){
     eXo.portal.UIPortalControl.initAllManagers();
     eXo.calendar.UICalendarPortlet.fixForMaximize();
 };
+}
