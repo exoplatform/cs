@@ -323,6 +323,10 @@ public class JCRDataStorage {
     }
     msg.setPath(messageNode.getPath());
     try {
+      msg.setInReplyToHeader(messageNode.getProperty(Utils.EXO_IN_REPLY_TO_HEADER).getString());
+    } catch (Exception e) {
+    }
+    try {
       msg.setAccountId(messageNode.getProperty(Utils.EXO_ACCOUNT).getString());
     } catch (Exception e) {
     }
@@ -746,6 +750,7 @@ public class JCRDataStorage {
     if (nodeMsg != null) {
       // add some properties
       nodeMsg.setProperty(Utils.EXO_ID, message.getId());
+      nodeMsg.setProperty(Utils.EXO_IN_REPLY_TO_HEADER, message.getInReplyToHeader());
       nodeMsg.setProperty(Utils.EXO_ACCOUNT, accountId);
       nodeMsg.setProperty(Utils.EXO_PATH, message.getPath());
       nodeMsg.setProperty(Utils.EXO_FROM, message.getFrom());
@@ -886,6 +891,7 @@ public class JCRDataStorage {
       msgHomeNode.save();
       String[] folderIds = { folderId };
       node.setProperty(Utils.EXO_ID, msgId);
+      node.setProperty(Utils.EXO_IN_REPLY_TO_HEADER, MimeMessageParser.getInReplyToHeader(msg));
       node.setProperty(Utils.EXO_ACCOUNT, accId);
       node.setProperty(Utils.EXO_FROM, Utils.decodeText(InternetAddress.toString(msg.getFrom())));
       String to = ""; 
@@ -991,8 +997,7 @@ public class JCRDataStorage {
       logger.warn("Saved total message to JCR finished : " + (t4 - t1) + " ms");
       logger.warn("Adding message to thread ...");
       t1 = System.currentTimeMillis();
-      addMessageToThread(sProvider, username, accId, MimeMessageParser.getInReplyToHeader(msg),
-          node);
+      addMessageToThread(sProvider, username, accId,MimeMessageParser.getInReplyToHeader(msg), node);
       t2 = System.currentTimeMillis();
       logger.warn("Added message to thread finished : " + (t2 - t1) + " ms");
 
@@ -1999,7 +2004,29 @@ public class JCRDataStorage {
     }
   }
 
-  private Node getMatchingThread(SessionProvider sProvider, String username, String accountId,
+  private List<Node> getMatchingThreadAfter(SessionProvider sProvider, String username, String accountId, Node msg) throws Exception {
+    Node accountNode = getMailHomeNode(sProvider, username).getNode(accountId);
+    List<Node> converNodes = new ArrayList<Node>();
+    try {
+      if (msg.getName().equals(msg.getProperty(Utils.EXO_IN_REPLY_TO_HEADER).getString()))
+        return null;
+      Session sess = accountNode.getSession();
+      QueryManager qm = sess.getWorkspace().getQueryManager();
+      StringBuffer queryString = new StringBuffer("/jcr:root" + accountNode.getPath()
+          + "//element(*,exo:message)[@exo:inReplyToHeader='").append(msg.getName()).append("']");
+      Query query = qm.createQuery(queryString.toString(), Query.XPATH);
+      QueryResult result = query.execute();
+      NodeIterator it = result.getNodes();
+      while (it.hasNext()) {
+        converNodes.add(it.nextNode());
+      }
+    } catch (Exception e) {
+      // Invalid query
+    }
+    return converNodes;
+  }
+  
+  private Node getMatchingThreadBefore(SessionProvider sProvider, String username, String accountId,
       String inReplyToHeader, Node msg) throws Exception {
     Node accountNode = getMailHomeNode(sProvider, username).getNode(accountId);
     Node converNode = null;
@@ -2021,25 +2048,38 @@ public class JCRDataStorage {
     return converNode;
   }
 
-  public void addMessageToThread(SessionProvider sProvider, String username, String accountId,
-      String inReplyToHeader, Node msgNode) throws Exception {
-    Node converNode = getMatchingThread(sProvider, username, accountId, inReplyToHeader, msgNode);
+  public void addMessageToThread(SessionProvider sProvider, String username, String accountId,String inReplyToHeader, Node msgNode) throws Exception {
+    List<Node> converNodeChilds = getMatchingThreadAfter(sProvider, username, accountId, msgNode);
     try {
-      if (converNode != null && converNode.isNodeType("exo:message")) {
-        // TODO: add when save message
-        msgNode.addMixin("mix:referenceable");
-        createReference(msgNode, converNode);     
-        msgNode = setIsRoot(accountId, msgNode, converNode);
-        msgNode.save();
-        converNode.save();
+      msgNode.addMixin("mix:referenceable");
+      if (converNodeChilds != null && converNodeChilds.size() > 0) {
+        for (Node converChild : converNodeChilds) {
+          createReference(converChild, msgNode);        
+          converChild = setIsRoot(accountId, converChild, msgNode);
+          msgNode.setProperty(Utils.EXO_IS_ROOT, true);
+          converChild.save();
+          msgNode.save();
+        }
       } else {
-        msgNode.setProperty(Utils.EXO_IS_ROOT, true);
-        msgNode.addMixin("mix:referenceable");
-        msgNode.save();
-      }
+        Node converNodeParent = getMatchingThreadBefore(sProvider, username, accountId, inReplyToHeader, msgNode);
+        try {
+          if (converNodeParent != null && converNodeParent.isNodeType("exo:message")) {
+            createReference(msgNode, converNodeParent);     
+            msgNode = setIsRoot(accountId, msgNode, converNodeParent);
+            msgNode.save();
+            converNodeParent.save();
+          } else {
+            msgNode.setProperty(Utils.EXO_IS_ROOT, true);
+            msgNode.save();
+          }
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      } 
     } catch (Exception e) {
       e.printStackTrace();
     }
+    
   }
   
   private Node setIsRoot(String accountId, Node msgNode, Node converNode) throws Exception {

@@ -508,7 +508,9 @@ public class UIAccountSetting extends UIFormTabPane {
         acc.setCheckAll(!uiSetting.getFieldCheckFromDate());
 
         if (uiSetting.getFieldCheckFrom() != null) {
-          if (acc.getCheckFromDate() != null && acc.getCheckFromDate().after(uiSetting.getFieldCheckFrom().getTime())) acc.setLastCheckedDate(null);
+          if (acc.getCheckFromDate() != null && !acc.getCheckFromDate().equals(uiSetting.getFieldCheckFrom().getTime())) {
+            acc.setLastCheckedDate(null);
+          }
           acc.setCheckFromDate(uiSetting.getFieldCheckFrom().getTime());
         } else if(!acc.isCheckAll()) {
           uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.please-choose-specified-date", null)) ;

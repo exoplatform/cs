@@ -172,6 +172,10 @@ public class MessagePageList extends JCRPageList {
     Message msg = new Message();
     if (messageNode.hasProperty(Utils.EXO_ID)) msg.setId(messageNode.getProperty(Utils.EXO_ID).getString());
     msg.setPath(messageNode.getPath());
+    try {
+      msg.setInReplyToHeader(messageNode.getProperty(Utils.EXO_IN_REPLY_TO_HEADER).getString());
+    } catch (Exception e) {
+    }
     try { 
       msg.setAccountId(messageNode.getProperty(Utils.EXO_ACCOUNT).getString()) ;
     } catch(Exception e) { } 
