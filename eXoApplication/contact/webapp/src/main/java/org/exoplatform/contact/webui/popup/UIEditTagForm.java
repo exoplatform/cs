@@ -37,9 +37,11 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
+import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 
 /**
@@ -53,7 +55,7 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
     template = "system:/groovy/webui/form/UIForm.gtmpl", 
     events = {
       @EventConfig(listeners = UIEditTagForm.SaveActionListener.class),      
-      @EventConfig(listeners = UIEditTagForm.CancelActionListener.class)
+      @EventConfig(listeners = UIEditTagForm.CancelActionListener.class, phase = Phase.DECODE)
     }
 )
 public class UIEditTagForm extends UIForm implements UIPopupComponent {
@@ -63,8 +65,8 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
   public static final String FIELD_DESCRIPTION_INPUT = "description";
   private boolean isNew = true ;
   
-  public UIEditTagForm() {
-    addUIFormInput(new UIFormStringInput(FIELD_TAGNAME_INPUT, FIELD_TAGNAME_INPUT, null));
+  public UIEditTagForm() throws Exception {
+    addUIFormInput(new UIFormStringInput(FIELD_TAGNAME_INPUT, FIELD_TAGNAME_INPUT, null).addValidator(MandatoryValidator.class));
     addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION_INPUT, FIELD_DESCRIPTION_INPUT, null)) ;
     addUIFormInput(new UIFormColorPicker(FIELD_COLOR, FIELD_COLOR, Colors.COLORS)) ;   
   }
