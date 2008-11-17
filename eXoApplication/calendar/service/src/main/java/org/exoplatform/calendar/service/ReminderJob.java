@@ -42,7 +42,7 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 public class ReminderJob implements Job {
-  private static Log log_ = ExoLogger.getLogger(ReminderJob.class);
+  private static Log log_ = ExoLogger.getLogger("job.RecordsJob");
   public void execute(JobExecutionContext context) throws JobExecutionException {
     List<Message> messageList = new ArrayList<Message>();
     ExoContainer container = ExoContainerContext.getCurrentContainer();
@@ -104,7 +104,7 @@ public class ReminderJob implements Job {
             reminder.setProperty(Utils.EXO_IS_OVER, true) ;
           }
           messageList.add(message);
-          reminder.save() ;
+          if(reminder.isNew()) reminder.save() ;
         }
       }  
       if(!messageList.isEmpty()) {
@@ -114,10 +114,10 @@ public class ReminderJob implements Job {
     } catch (Exception e) {
       System.out.println("\n\n Error when run email reminder job !");
       //e.printStackTrace();			
+    } finally {
+      provider.close() ;
     }
-    finally {
-      provider.close();
-    }
+    if (log_.isDebugEnabled()) log_.debug("File plan job done");
   }
   private String getReminderPath(java.util.Calendar fromCalendar, SessionProvider provider)
   throws Exception {
