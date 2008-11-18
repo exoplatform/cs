@@ -736,6 +736,21 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         Contact contact = uiContacts.contactMap.get(contactId) ;
         if (!contact.getAddressBook()[0].equals(addressBookId)) copyedContacts.remove(contactId) ;  
         if (contact.getContactType().equals(JCRDataStorage.SHARED)) {
+//        check for existing contact
+          Contact tempContact = null ;
+          if (uiContacts.isSharedAddress(contact)) {
+            tempContact = contactService.getSharedContactAddressBook(username, contactId) ;
+          } else {
+            try {
+              tempContact = contactService.getSharedContact(SessionProviderFactory.createSystemProvider(), username, contactId) ;              
+            } catch (PathNotFoundException e) { }
+          }
+          if (tempContact == null) {
+            uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-not-existed", null
+                                                    , ApplicationMessage.WARNING)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return ;
+          }
           sharedContacts.add(contact) ; 
           copySharedContacts.put(contactId, JCRDataStorage.SHARED) ;
         }
@@ -759,15 +774,15 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           }  */          
           contactService.removeSharedContact(SessionProviderFactory.createSystemProvider(), username, addressId, contact.getId()) ;
         } else {
-          try {
+          //try {
             contactService.removeUserShareContact(
                 SessionProviderFactory.createSystemProvider(), contact.getPath(), contact.getId(), username) ;              
-          } catch (PathNotFoundException e) { 
+          /*} catch (PathNotFoundException e) { 
             uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-not-existed", null, 
                 ApplicationMessage.WARNING)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return ; 
-          }
+          }*/
         }
         contact.setAddressBook(new String[] { addressBookId }) ;
        }      
