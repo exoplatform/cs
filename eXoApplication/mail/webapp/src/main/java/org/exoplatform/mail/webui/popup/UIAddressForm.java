@@ -296,11 +296,18 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       
       StringBuffer sb = new StringBuffer() ;
       for (Contact contact : uiAddressForm.newCheckedList_.values()) {
-        if(contact.getEmailAddress() != null) { 
-          toAddress += contact.getFullName() + "<" + contact.getEmailAddress() + "> ," ;
-          if(sb.length() > 0) sb.append(MailUtils.COMMA) ;
-          sb.append(contact.getEmailAddress()) ;
-        }
+        String addresses = contact.getEmailAddress();
+        if(addresses != null && addresses.trim().length() > 0) {
+          String[] eAddresses = null;
+          if (addresses.contains(";")) eAddresses = addresses.split(";") ;
+          if (eAddresses != null) {
+            for (int i = 0; i < eAddresses.length; i++) {
+              toAddress += contact.getFullName() + "<" + eAddresses[i] + "> ," ;
+            }
+          } else {
+            toAddress += contact.getFullName() + "<" + contact.getEmailAddress() + "> ," ;
+          }
+        } 
       }
       /*List<String> listMail = Arrays.asList( sb.toString().split(MailUtils.COMMA)) ; 
       String email = null ;
@@ -391,8 +398,17 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
           if (!uiAddressForm.checkedList_.containsKey(ct.getId())) uiAddressForm.newCheckedList_.put(ct.getId(), ct) ;
         }
         for (Contact contact : uiAddressForm.newCheckedList_.values()) {
-          if(contact.getEmailAddress() != null) {
-            toAddress += contact.getFullName() + "<" + contact.getEmailAddress() + "> ," ;
+          String addresses = contact.getEmailAddress();
+          if(addresses != null && addresses.trim().length() > 0) {
+            String[] eAddresses = null;
+            if (addresses.contains(";")) eAddresses = addresses.split(";") ;
+            if (eAddresses != null) {
+              for (int i = 0; i < eAddresses.length; i++) {
+                toAddress += contact.getFullName() + "<" + eAddresses[i] + "> ," ;
+              }
+            } else {
+              toAddress += contact.getFullName() + "<" + contact.getEmailAddress() + "> ," ;
+            }
           } 
         }
         if (uiAddressForm.getRecipientType().equals("to")) {
