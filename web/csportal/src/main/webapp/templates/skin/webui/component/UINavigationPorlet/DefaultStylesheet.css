@@ -1,6 +1,4 @@
 /********************UINavigation********************/
-
-
 .UINavigationPortlet {
   !position: relative;
 }
@@ -18,20 +16,19 @@
 }
 
 .UINavigationPortlet .UINavigationBar .LeftNavigationBar {
-  line-height: 33px;
   background: url('DefaultSkin/background/Navigation.gif') repeat-x top center;
   padding-left: 3px;
+  border: 1px solid white;
 }
 
 .UINavigationPortlet .UINavigationBar .RightNavigationBar {
 	background: none;
-	line-height: 33px;
 }
 
 .UINavigationPortlet .UINavigationBar .MiddleNavigationBar {
-background: none;
-line-height: 33px;
-padding-right: 0px;
+	background: none;
+	line-height: 33px;
+	padding-right: 0px;
 }
 
 .UINavigationPortlet .UITab a.TabLabel {
