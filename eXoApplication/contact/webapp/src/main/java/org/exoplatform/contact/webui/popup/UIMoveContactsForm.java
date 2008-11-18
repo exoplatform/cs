@@ -146,6 +146,16 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
         if (!contact.getAddressBook()[0].equals(addressBookId)) copyedContacts.remove(id) ;  
         
         if (contact.getContactType().equals(JCRDataStorage.SHARED)) {
+          
+          // check for existing contact
+          Contact tempContact = null ;
+          if (uiContacts.isSharedAddress(contact)) {
+            tempContact = contactService.getSharedContactAddressBook(username, id) ;
+          } else {
+            try {
+              tempContact = contactService.getSharedContact(SessionProviderFactory.createSystemProvider(), username, id) ;              
+            } catch (PathNotFoundException e) { }
+          }  
           if (!uiContacts.havePermission(contact) && uiContacts.isSharedAddress(contact)) {
             UIApplication uiApp = uiMoveContactForm.getAncestorOfType(UIApplication.class) ;
             uiApp.addMessage(new ApplicationMessage("UIMoveContactsForm.msg.non-permission", null,
@@ -153,6 +163,14 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return ; 
           }
+          
+          if (tempContact == null) {
+            UIApplication uiApp = uiMoveContactForm.getAncestorOfType(UIApplication.class) ;
+            uiApp.addMessage(new ApplicationMessage("UIMoveContactsForm.msg.contact-not-existed", null, 
+                ApplicationMessage.WARNING)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return ; 
+          } 
           sharedContacts.add(contact) ;
           copySharedContacts.put(id, JCRDataStorage.SHARED) ;
         } else {
@@ -170,11 +188,6 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
             String addressId = null ;
             for (String add : contact.getAddressBook())
               if (uiContacts.getSharedGroupMap().containsKey(add)) addressId = add ;
-          /*
-            // add to fix bug cs-1509
-            if (contact.getAttachment() != null) {
-              contact.getAttachment().setInputStream(contact.getAttachment().getInputStream()) ;
-            } */
             contactService.removeSharedContact(SessionProviderFactory.createSystemProvider(), username, addressId, contact.getId()) ;
           } else {
             try {
@@ -188,13 +201,9 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
               return ; 
             }
           }
-          contact.setAddressBook(new String[] { addressBookId }) ;
-          
+          contact.setAddressBook(new String[] { addressBookId }) ; 
         } 
-      }      
-      
-      
-      
+      } 
       if (contacts.size() > 0) {
         try {
           contactService.moveContacts(sessionProvider, username, contacts, type) ;                  
