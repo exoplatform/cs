@@ -622,7 +622,7 @@ public class JCRDataStorage {
             Utils.EXO_TOTALMESSAGE).getLong() + 1));
       } catch (Exception e) {
       }
-      currentFolderNode.save();
+      if (currentFolderNode != null) currentFolderNode.save();
       destFolderNode.save();
     }
   }
