@@ -94,28 +94,3 @@ SkinService.addSkin(
     ServletContext,
     true
 ) ;
-
-/***************************UIBreadcumbsPortlet**************************************************/
-SkinService.addSkin(
-    "web/UIBreadcumbsPortlet",
-    "Default",
-    "/portal/templates/skin/webui/component/UIBreadcumbsPortlet/DefaultStylesheet.css",
-    ServletContext,
-    true
-) ;
-
-SkinService.addSkin(
-    "web/UIBreadcumbsPortlet",
-    "Vista",
-    "/portal/templates/skin/webui/component/UIBreadcumbsPortlet/DefaultStylesheet.css",
-    ServletContext,
-    true
-) ;
- 
-SkinService.addSkin(
-    "web/UIBreadcumbsPortlet",
-    "Mac",
-    "/portal/templates/skin/webui/component/UIBreadcumbsPortlet/DefaultStylesheet.css",
-    ServletContext,
-    true
-) ;
