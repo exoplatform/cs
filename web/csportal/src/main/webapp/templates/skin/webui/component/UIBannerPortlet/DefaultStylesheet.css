@@ -4,11 +4,11 @@
 }
 
 .UIBannerPortlet .LeftBannerCS {
-  background: url('DefaultSkin/background/BannerPortlet.gif') repeat-x left top;
+  background: url('DefaultSkin/background/BannerPortlet.gif') repeat-x left bottom;
 }
 
 .UIBannerPortlet .RightBannerCS {
-  background: url('DefaultSkin/background/Logo.gif') no-repeat left bottom;
+  background: url('DefaultSkin/background/Logo332x81.jpg') no-repeat left bottom;
 }
 
 .UIBannerPortlet .MiddleBannerCS {

@@ -9,7 +9,6 @@ body {
 
 .UIHomePagePortlet {	
 	margin: 0px 5px 5px 5px;
-	border: 1px solid #fff;
 }
 
 .UIHomePagePortlet .PortletDecoration{	
@@ -124,7 +123,6 @@ body {
 
 .SideBar {
 	padding: 8px 8px 22px 8px;
-	margin-top: 2px;
 	border: 1px solid #dedede;
 	background: white;
 }
@@ -147,18 +145,18 @@ body {
 }
 
 .SideBar .LeftButton {
-	background: url('DefaultSkin/background/LeftButton17x33.gif') no-repeat left;
+	background: url('DefaultSkin/background/Button.gif') no-repeat left -33px;
 	padding-left: 17px;
 	margin: 10px;
 }
 
 .SideBar .RightButton {
-	background: url('DefaultSkin/background/RightButton17x33.gif') no-repeat right;
+	background: url('DefaultSkin/background/Button.gif') no-repeat right -66px;
 	padding-right: 16px;
 }
 
 .SideBar .CenterButton {
-	background: url('DefaultSkin/background/CenterButton1x33.gif') repeat-x ;
+	background: url('DefaultSkin/background/Button.gif') repeat-x top;
 	line-height: 33px;
 	font-size: 18px;
 	font-family: tahoma;
