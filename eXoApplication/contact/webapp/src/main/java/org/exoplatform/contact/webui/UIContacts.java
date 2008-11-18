@@ -734,39 +734,43 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       Map<String, String> copyedContacts = uiAddressBooks.getCopyContacts() ;      
       for(String contactId : contactIds) {
         Contact contact = uiContacts.contactMap.get(contactId) ;
-        if (!contact.getAddressBook()[0].equals(addressBookId)) copyedContacts.remove(contactId) ;
-        if (contact.getContactType().equals(JCRDataStorage.SHARED)) {
-          if (uiContacts.isSharedAddress(contact)) {
-            String addressId = null ;
-            for (String add : contact.getAddressBook())
-              if (uiContacts.getSharedGroupMap().containsKey(add)) addressId = add ;
-            
-            // add to fix bug cs-1509
-            if (contact.getAttachment() != null) {
-              contact.getAttachment().setInputStream(contact.getAttachment().getInputStream()) ;
-            }            
-            contactService.removeSharedContact(SessionProviderFactory.createSystemProvider(), username, addressId, contactId) ;
-          } else {
-            try {
-              contactService.removeUserShareContact(
-                  SessionProviderFactory.createSystemProvider(), contact.getPath(), contact.getId(), username) ;              
-            } catch (PathNotFoundException e) { 
-              uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-not-existed", null, 
-                  ApplicationMessage.WARNING)) ;
-              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-              return ; 
-            }
-          }
-        }
-        contact.setAddressBook(new String[] { addressBookId }) ;
+        if (!contact.getAddressBook()[0].equals(addressBookId)) copyedContacts.remove(contactId) ;  
         if (contact.getContactType().equals(JCRDataStorage.SHARED)) {
           sharedContacts.add(contact) ; 
           copySharedContacts.put(contactId, JCRDataStorage.SHARED) ;
         }
-        else contacts.add(contact) ;      
+        else {
+          contact.setAddressBook(new String[] { addressBookId }) ;
+          contacts.add(contact) ;   
+        }  
       }
       if (sharedContacts.size() > 0 ) {
         contactService.pasteContacts(sessionProvider, username, addressBookId, type, copySharedContacts) ;
+        for (Contact contact : sharedContacts) {
+        
+        if (uiContacts.isSharedAddress(contact)) {
+          String addressId = null ;
+          for (String add : contact.getAddressBook())
+            if (uiContacts.getSharedGroupMap().containsKey(add)) addressId = add ;
+          /*
+          // add to fix bug cs-1509
+          if (contact.getAttachment() != null) {
+            contact.getAttachment().setInputStream(contact.getAttachment().getInputStream()) ;
+          }  */          
+          contactService.removeSharedContact(SessionProviderFactory.createSystemProvider(), username, addressId, contact.getId()) ;
+        } else {
+          try {
+            contactService.removeUserShareContact(
+                SessionProviderFactory.createSystemProvider(), contact.getPath(), contact.getId(), username) ;              
+          } catch (PathNotFoundException e) { 
+            uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-not-existed", null, 
+                ApplicationMessage.WARNING)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            return ; 
+          }
+        }
+        contact.setAddressBook(new String[] { addressBookId }) ;
+       }      
       }
       if (contacts.size() > 0) {
         try {
