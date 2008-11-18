@@ -128,9 +128,7 @@ EventObject.prototype.init = function(rootNode){
   this.eventIndex = this.rootNode.getAttribute('eventindex');
   this.calId = this.rootNode.getAttribute('calid');
   this.eventCat = this.rootNode.getAttribute('eventcat');
-//  this.startTime = parseInt(this.rootNode.getAttribute('starttime'));
   this.startTime = Date.parse(this.rootNode.getAttribute('starttimefull'));
-//  this.endTime = parseInt(this.rootNode.getAttribute('endtime'));
   this.endTime = Date.parse(this.rootNode.getAttribute('endtimefull'));
   if (this.rootNode.innerText) {
     this.name = (this.rootNode.innerText + '').trim();
@@ -179,17 +177,6 @@ EventObject.prototype.compare = function(event1, event2){
   } else {
       return -1;
   }
-};
-
-EventObject.prototype.toString = function(){
-  var objIdentify = 'name: ' + this.name +
-                    ' - start: ' + (new Date(parseInt(this.startTime))).toString() +
-                    ' - end: ' + (new Date(parseInt(this.endTime))).toString();
-  for (var i = 0; i < this.weekStartTimeIndex.length; i++) {
-    var weekStartTime = new Date(parseInt(this.weekStartTimeIndex[i]));
-    objIdentify += ' - week:' + i + ' day: ' + weekStartTime.getDay();
-  }
-  return objIdentify;
 };
 
 function DayMan(){
@@ -287,7 +274,7 @@ DayMan.prototype.reIndex = function() {
     }
     tmp[i] = eventTmp;
   }
-  this.visibleGroup = tmp;
+	this.visibleGroup = tmp;
 };
 
 function WeekMan(){
@@ -350,7 +337,8 @@ WeekMan.prototype.putEvents2Days = function(){
     // fix date
     var delta = (new Date(eventObj.endTime)) - (new Date(eventObj.startTime));
     delta /= (1000 * 60 * 60 * 24);
-    if (delta == 1) {
+    if (delta == 1 &&
+    		startDay == endDay) {
       endDay = startDay;
     }
     for (var j=startDay; j<=endDay; j++) {
@@ -627,7 +615,6 @@ GUIMan.prototype.paintWeek = function() {
     }
     dayInfo.pixelPerUnit = dayInfo.width / 100;
     dayInfo.left = dayInfo.width * i ;
-
     for (var j=0; j<dayObj.visibleGroup.length; j++) {
       var eventObj = dayObj.visibleGroup[j];
       if (!eventObj ||
@@ -955,7 +942,6 @@ GUIMan.prototype.drawEventByDay = function(eventObj, startTime, endTime, dayInfo
 GUIMan.prototype.setDynamicSize4Month = function() {
   var DOMUtil = eXo.core.DOMUtil;
   var events = eXo.calendar.UICalendarMan.EventMan.events;
-  //var cellWidth = (this.tableData[0])[0].offsetWidth - 1;
   var cellWidth = (this.tableData[0])[0].offsetWidth + (this.tableData[0])[1].offsetWidth + (this.tableData[0])[2].offsetWidth + (this.tableData[0])[3].offsetWidth + (this.tableData[0])[4].offsetWidth + (this.tableData[0])[5].offsetWidth + (this.tableData[0])[6].offsetWidth - 6 ;
   var totalWidth = (cellWidth >0)?cellWidth : 1 ;
   for (var i=0; i<events.length; i++) {
@@ -1020,14 +1006,6 @@ GUIMan.prototype.callbackHighlighter = function() {
   var currentTime = Highlighter.firstCell.getAttribute('startTime') ;
   eXo.webui.UIForm.submitEvent('UIMonthView' ,'QuickAdd','&objectId=Event&startTime=' + startTime + '&finishTime=' + endTime +'&ct='+currentTime+ '&tz=' + timezoneOffset); 
 } ;
-
-//GUIMan.prototype.callbackHighlighterDays = function() {
-//  var Highlighter = eXo.calendar.Highlighter ;
-//  Highlighter.block[0].style.display = "none" ;
-//  var startTime = parseInt(Highlighter.firstCell.getAttribute("startTime")) ;
-//  var endTime = parseInt(Highlighter.lastCell.getAttribute("startTime")) + 24*60*60*1000 - 1 ;
-//  eXo.webui.UIForm.submitEvent("UIWeekView" ,'QuickAdd','&objectId=Event&startTime=' + startTime + '&finishTime=' + endTime) ; 
-//} ;
 
 eXo.calendar.UICalendarMan = {
   initMonth : function(rootNode) {
