@@ -3,7 +3,7 @@
   String toururi = Util.getPortalRequestContext().getPortalURI() + "tour";
 %>
 <table style="table-layout: fixed; width: 100%;-width: auto;">
-	<tr style="background:#fff;">
+	<tr>
 		<td>
 			<div class="UIHomePagePortlet" id="$uicomponent.id">
 				<div class="PortletDecoration">
