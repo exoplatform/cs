@@ -302,7 +302,7 @@ public class MailServiceImpl implements MailService {
         transport.connect() ;
       } catch(Exception ex) {
         logger.warn("#### Can not connect to smtp server ...") ;
-        return null ;
+        throw ex;
       }
     }
     Message msg = send(session, transport, message);
@@ -458,14 +458,19 @@ public class MailServiceImpl implements MailService {
       status = "Mail Delivered !";
     } catch (AddressException e) {
       status = "There was an error parsing the addresses. Sending Failed !" + e.getMessage();
+      throw e;
     } catch (AuthenticationFailedException e) {
       status = "The Username or Password may be wrong. Sending Failed !" + e.getMessage();
+      throw e;
     } catch (SMTPSendFailedException e) {
-      status = "Sorry,There was an error sending the message. Sending Failed !" + e.getMessage();
+      status = "Sorry, There was an error sending the message. Sending Failed !" + e.getMessage();
+      throw e;
     } catch (MessagingException e) {
       status = "There was an unexpected error. Sending Failed ! " + e.getMessage();
+      throw e;
     } catch (Exception e) {
       status = "There was an unexpected error. Sending Falied !" + e.getMessage();
+      throw e;
     } finally {
       // logger.debug(" #### Info : " + status);
     }

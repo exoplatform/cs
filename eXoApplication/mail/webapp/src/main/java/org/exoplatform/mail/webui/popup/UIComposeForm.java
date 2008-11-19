@@ -24,6 +24,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+import javax.mail.AuthenticationFailedException;
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
 import org.exoplatform.contact.service.Contact;
@@ -67,6 +70,8 @@ import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.UIFormWYSIWYGInput;
 import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
+
+import com.sun.mail.smtp.SMTPSendFailedException;
 
 
 /**
@@ -654,13 +659,24 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         return ;
       } 
 
+      UIApplication uiApp = composeForm.getAncestorOfType(UIApplication.class) ;
       try {
         mailSvr.sendMessage(session, usename, message) ;
-      } catch(Exception e) {
-        UIApplication uiApp = composeForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-error", null)) ;
+      } catch (AddressException e) {
+        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.there-was-an-error-parsing-the-addresses-sending-failed", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        e.printStackTrace() ;
+        return;
+      } catch (AuthenticationFailedException e) {
+        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.the-username-or-password-may-be-wrong-sending-failed", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return;
+      } catch (SMTPSendFailedException e) {
+        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.sorry-there-was-an-error-sending-the-message-sending-failed", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return;
+      } catch (MessagingException e) {
+        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.there-was-an-unexpected-error-sending-falied", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
 
@@ -693,7 +709,6 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         uiChildPopup.deActivate() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
       } catch (Exception e) {
-        UIApplication uiApp = composeForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.save-sent-error", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         composeForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
