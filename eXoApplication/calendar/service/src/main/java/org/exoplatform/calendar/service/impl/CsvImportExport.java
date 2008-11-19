@@ -305,8 +305,30 @@ public class CsvImportExport implements CalendarImportExport {
   throws Exception {
     return null;
   }
-  public void importToCalendar(SessionProvider userSession, String username, InputStream icalInputStream, String calendarId) throws Exception {
-    // TODO Auto-generated method stub
-    
+  
+  public void importToCalendar(SessionProvider sProvider, String username, InputStream icalInputStream, String calendarId) throws Exception {
+    List<CalendarEvent> data = process(new BufferedReader(new InputStreamReader(icalInputStream))) ;
+    for(CalendarEvent exoEvent : data) {
+      if(!Utils.isEmpty(exoEvent.getEventCategoryName())) {
+        EventCategory evCate = new EventCategory() ;
+        evCate.setName(exoEvent.getEventCategoryName()) ;
+        try{
+          storage_.saveEventCategory(sProvider, username, evCate, null, true) ;
+        }catch(Exception e){ 
+          for(EventCategory ev : storage_.getEventCategories(sProvider, username)) {
+            if(evCate.getName().equalsIgnoreCase(ev.getName())) {
+              evCate = ev ;
+              break ;
+            }
+          }
+          //e.printStackTrace() ;
+          System.out.println("\n\n event category " + evCate.getName() + " existed !");
+        }
+        exoEvent.setEventCategoryId(evCate.getId()) ;
+        exoEvent.setEventCategoryName(evCate.getName()) ;
+      }
+      exoEvent.setCalendarId(calendarId) ;
+      storage_.saveUserEvent(sProvider, username, calendarId, exoEvent, true) ;
+    }
   }
 }

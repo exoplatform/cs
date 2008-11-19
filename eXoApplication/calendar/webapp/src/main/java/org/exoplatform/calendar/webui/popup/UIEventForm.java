@@ -116,6 +116,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   final public static String FIELD_MEETING = "meeting".intern() ;
   final public static String FIELD_PARTICIPANT = "participant".intern() ;
   final public static String FIELD_ISSENDMAIL = "isSendMail".intern() ;
+  final public static String FIELD_INVITATION_NOTE = "invitationNote".intern() ;
 
   final public static String ITEM_PUBLIC = "public".intern() ;
   final public static String ITEM_PRIVATE = "private".intern() ;
@@ -148,9 +149,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     List<ActionData> actions = new ArrayList<ActionData>() ;
     eventShareTab.addUIFormInput(new UIFormSelectBox(FIELD_SHARE, FIELD_SHARE, getShareValue()) ) ;
     eventShareTab.addUIFormInput(new UIFormSelectBox(FIELD_STATUS, FIELD_STATUS, getStatusValue()) ) ;
-    eventShareTab.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_ISSENDMAIL, FIELD_ISSENDMAIL, true)) ;
+    eventShareTab.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_ISSENDMAIL, FIELD_ISSENDMAIL, false)) ;
     eventShareTab.addUIFormInput(new UIFormTextAreaInput(FIELD_PARTICIPANT, FIELD_PARTICIPANT, null)) ;
     eventShareTab.addUIFormInput(new UIFormTextAreaInput(FIELD_MEETING, FIELD_MEETING, null)) ;
+    eventShareTab.addUIFormInput(new UIFormTextAreaInput(FIELD_INVITATION_NOTE, FIELD_INVITATION_NOTE, null)) ;
     actions = new ArrayList<ActionData>() ;
 
     ActionData addUser = new ActionData() ;
@@ -830,11 +832,15 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     UIFormInputWithActions uiShareTab = getChildById(TAB_EVENTSHARE) ;
     return uiShareTab.getUIFormCheckBoxInput(FIELD_ISSENDMAIL).isChecked() ;
   }
+  protected String getInvitationNote() {
+    UIFormInputWithActions uiShareTab = getChildById(TAB_EVENTSHARE) ;
+    return uiShareTab.getUIFormTextAreaInput(FIELD_INVITATION_NOTE).getValue() ;
+  }
 
   protected void sendMail(MailService svr, OrganizationService orSvr,CalendarSetting setting, Account acc, String fromId,  String toId, CalendarEvent event) throws Exception {
     Message message = new Message() ;
     DateFormat df = new SimpleDateFormat(setting.getDateFormat() + " " + setting.getTimeFormat()) ;
-    StringBuffer sbSubject = new StringBuffer("[invitation] ") ;
+    StringBuffer sbSubject = new StringBuffer("["+getLabel("invitation")+"] ") ;
     sbSubject.append(event.getSummary()) ;
     sbSubject.append(" ") ;
     sbSubject.append(df.format(event.getFromDateTime())) ;
@@ -844,22 +850,22 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     sbBody.append("<table style=\"margin: 0px; padding: 0px; border-collapse: collapse; border-spacing: 0px; width: 100%; line-height: 16px;\">") ;
     sbBody.append("<tbody>") ;
     sbBody.append("<tr>") ;
-    sbBody.append("<td colspan=\"2\" style=\"font-size: 12px; text-align: center;\">You are invited to</td>") ;
+    sbBody.append("<td colspan=\"2\" style=\"font-size: 12px; text-align: center;\">"+getLabel("invitedTo")+"</td>") ;
     sbBody.append("</tr>") ;
     sbBody.append("<tr>") ;
     sbBody.append("<td colspan=\"2\" style=\"font-weight: bold; text-align: center; font-size: 17px;\">"+event.getSummary()+"</td>") ;
     sbBody.append("</tr>") ;
     sbBody.append("<tr>") ;
     sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">When:</td>") ;
-    sbBody.append("<td style=\"padding: 4px;\"> <div>From: " +df.format(event.getFromDateTime())+"</div>");
-    sbBody.append("<div>To: "+df.format(event.getToDateTime())+"</div></td>") ;
+    sbBody.append("<td style=\"padding: 4px;\"> <div>" +getLabel(UIEventDetailTab.FIELD_FROM) +" : " +df.format(event.getFromDateTime())+"</div>");
+    sbBody.append("<div>"+getLabel(UIEventDetailTab.FIELD_TO) +" : "+df.format(event.getToDateTime())+"</div></td>") ;
     sbBody.append("</tr>") ;
     sbBody.append("<tr>") ;
-    sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">Where:</td>") ;
+    sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">"+getLabel(UIEventDetailTab.FIELD_PLACE)+":</td>") ;
     sbBody.append("<td>" + (event.getLocation() != null && event.getLocation().trim().length() > 0 ? event.getLocation(): " ") + "</td>") ;
     sbBody.append("</tr>") ;
     sbBody.append("<tr>") ;
-    sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">Who:</td>") ;
+    sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">"+getLabel("fromWho")+":</td>") ;
     sbBody.append("<td style=\"padding: 4px;\">" +toId+ "</td>") ;
     sbBody.append("</tr>");
     sbBody.append("<tr>");
@@ -869,6 +875,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     sbBody.append("</tbody>");
     sbBody.append("</table>");
     sbBody.append("</div>") ;
+    if(!CalendarUtils.isEmpty(getInvitationNote())) sbBody.append(toId +" - "+ getLabel(FIELD_INVITATION_NOTE)+ " : " + getInvitationNote()) ;
     message.setMessageBody(sbBody.toString()) ;
     StringBuffer sbAddress = new StringBuffer() ;
     for(String s : toId.split(CalendarUtils.COMMA)) {
@@ -912,6 +919,13 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       bf.setMimeType("text/calendar") ;
       List<org.exoplatform.mail.service.Attachment> attachments = new ArrayList<org.exoplatform.mail.service.Attachment>() ;
       attachments.add(bf) ;
+      for(Attachment att : getAttachments(null, false)) {
+        bf = new BufferAttachment() ;
+        bf.setInputStream(att.getInputStream()) ;
+        bf.setName(att.getName());
+        bf.setMimeType(att.getMimeType()) ;
+        attachments.add(bf) ;
+      }
       message.setAttachements(attachments) ;
     } catch (Exception e) {
       e.printStackTrace() ;
