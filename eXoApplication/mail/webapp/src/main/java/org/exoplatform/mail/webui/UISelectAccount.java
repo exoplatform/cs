@@ -175,6 +175,24 @@ public class UISelectAccount extends UIForm {
       try {
         String accId = uiSelectAcc.getSelectedValue() ;
         UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
+        UIMessagePreview uiMessagePreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class) ;
+        MailService mailSvr = uiSelectAcc.getApplicationComponent(MailService.class) ;
+        String username = uiPortlet.getCurrentUser();
+        if (mailSvr.getAccountById(SessionProviderFactory.createSystemProvider(), username, accId) == null) {
+          List<Account> accs = mailSvr.getAccounts(SessionProviderFactory.createSystemProvider(), username);
+          if (accs != null && accs.size() > 0) {
+            accId = accs.get(0).getId();
+            uiSelectAcc.refreshItems();
+          } else {
+            uiSelectAcc.setSelectedValue(null);
+            uiSelectAcc.refreshItems();
+            uiMessageList.init("");
+            uiMessagePreview.setMessage(null);
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
+            return; 
+          }
+        }
+        uiSelectAcc.setSelectedValue(accId);
         MessageFilter filter = new MessageFilter("Folder");
         filter.setAccountId(accId);
         filter.setFolder(new String[] {Utils.createFolderId(accId, Utils.FD_INBOX, false)}) ;
