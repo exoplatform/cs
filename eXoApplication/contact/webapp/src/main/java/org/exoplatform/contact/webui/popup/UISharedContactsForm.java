@@ -222,6 +222,16 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
           newEditMapGroups.putAll(editMapGroups) ;
           if (editPerGroup != null)
             for (String edit : editPerGroup) newEditMapGroups.put(edit, edit) ; 
+          
+          // cs-1777
+          if (!uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).isChecked()) {
+            for (String user : receiverUser) newEditMapUsers.remove(user) ;
+            if (!ContactUtils.isEmpty(groups)) {
+              String[] arrayGroups = groups.split(",") ;
+              for (String group : arrayGroups) newEditMapGroups.remove(group) ;
+            }
+          }            
+
           contact.setViewPermissionUsers(newViewMapUsers.keySet().toArray(new String[] {})) ;
           contact.setEditPermissionUsers(newEditMapUsers.keySet().toArray(new String[] {})) ;
           contact.setViewPermissionGroups(newViewMapGroups.keySet().toArray(new String[] {})) ;
