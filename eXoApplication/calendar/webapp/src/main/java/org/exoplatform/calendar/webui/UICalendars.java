@@ -28,6 +28,7 @@ import javax.jcr.PathNotFoundException;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.Colors;
 import org.exoplatform.calendar.service.Calendar;
+import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
@@ -359,14 +360,14 @@ public class UICalendars extends UIForm  {
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return;
           }
-          
+
           List<EventCategory> eventCategories = calService.getEventCategories(uiComponent.getSession(), CalendarUtils.getCurrentUser()) ;
           if(eventCategories.isEmpty()) {
             uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.event-category-list-empty", null)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return ;
           }  
-          
+
           String clientTime = event.getRequestContext().getRequestParameter(CURRENTTIME) ;
           String categoryId = event.getRequestContext().getRequestParameter("categoryId") ;
           UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
@@ -667,11 +668,21 @@ public class UICalendars extends UIForm  {
   static  public class ImportCalendarActionListener extends EventListener<UICalendars> {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiComponent = event.getSource() ;
-      UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
-      UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
-      popupAction.deActivate() ;
-      popupAction.activate(UIImportForm.class, 600) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+      String selectedCalendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      List<GroupCalendarData> calendarCategories = CalendarUtils.getCalendarService().getCalendarCategories(uiComponent.getSession(),  CalendarUtils.getCurrentUser(), true) ;
+      if(calendarCategories== null || calendarCategories.isEmpty()) {
+        UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.category-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      }  else {
+        UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
+        UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
+        popupAction.deActivate() ;
+        UIImportForm form = popupAction.activate(UIImportForm.class, 600) ;
+        form.init(selectedCalendarId) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+      }
     }
   }
 

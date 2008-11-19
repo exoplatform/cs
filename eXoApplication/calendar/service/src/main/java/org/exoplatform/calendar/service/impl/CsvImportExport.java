@@ -305,4 +305,8 @@ public class CsvImportExport implements CalendarImportExport {
   throws Exception {
     return null;
   }
+  public void importToCalendar(SessionProvider userSession, String username, InputStream icalInputStream, String calendarId) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
 }
