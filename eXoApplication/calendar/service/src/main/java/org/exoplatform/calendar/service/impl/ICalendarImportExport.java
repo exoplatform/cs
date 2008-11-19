@@ -520,7 +520,120 @@ public class ICalendarImportExport implements CalendarImportExport{
     }
 
     return eventList;
-  }  
+  }
+
+  public void importToCalendar(SessionProvider sProvider, String username, InputStream icalInputStream, String calendarId) throws Exception {
+      CalendarBuilder calendarBuilder = new CalendarBuilder() ;
+      net.fortuna.ical4j.model.Calendar iCalendar = calendarBuilder.build(icalInputStream) ;
+      
+      Map<String, VEvent> vEventData = new HashMap<String, VEvent>() ;
+      Map<String, VFreeBusy> vFreeBusyData = new HashMap<String, VFreeBusy>() ;
+      Map<String, VAlarm> vAlarmData = new HashMap<String, VAlarm>() ;
+    
+      ComponentList componentList = iCalendar.getComponents() ;
+      VEvent event ;
+      CalendarEvent exoEvent ;
+      for(Object obj : componentList) {
+        if(obj instanceof VEvent) {
+          VEvent v = (VEvent)obj ;
+          vEventData.put(v.getUid().getValue(), v) ;
+          if(!v.getAlarms().isEmpty()) {
+            for (Object o : v.getAlarms()) {
+              if (o instanceof VAlarm) {
+                VAlarm va = (VAlarm)o;
+                vAlarmData.put(v.getUid().getValue()+":"+ va.getProperty(Property.ACTION).getName(), va) ;
+              }
+            }
+          }
+
+        }
+        if(obj instanceof VFreeBusy) vFreeBusyData.put(((VFreeBusy)obj).getUid().getValue(), (VFreeBusy)obj) ;
+      }
+      for(Object obj : componentList) {
+        if(obj instanceof VEvent){
+          event = (VEvent)obj ;
+          exoEvent = new CalendarEvent() ;
+          if(event.getProperty(Property.CATEGORIES) != null) {
+            EventCategory evCate = new EventCategory() ;
+            evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim()) ;
+            try{
+              storage_.saveEventCategory(sProvider, username, evCate, null, true) ;
+            }catch(Exception e){ 
+              for(EventCategory ev : storage_.getEventCategories(sProvider, username)) {
+                if(ev.getName().equalsIgnoreCase(evCate.getName())) {
+                  evCate = ev ;
+                  break ;
+                }
+              }
+              e.printStackTrace() ;
+              System.out.println("\n\n event category " + evCate.getName() + " existed !");
+            }
+            exoEvent.setEventCategoryId(evCate.getId()) ;
+            exoEvent.setEventCategoryName(evCate.getName()) ;
+          } 
+          exoEvent.setCalType(String.valueOf(Calendar.TYPE_PRIVATE)) ;
+          exoEvent.setCalendarId(calendarId) ;
+          if(event.getSummary() != null) exoEvent.setSummary(event.getSummary().getValue()) ;
+          if(event.getDescription() != null) exoEvent.setDescription(event.getDescription().getValue()) ;
+          if(event.getStatus() != null) exoEvent.setStatus(event.getStatus().getValue()) ;
+          exoEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
+          if(event.getStartDate() != null) exoEvent.setFromDateTime(event.getStartDate().getDate()) ;
+          if(event.getEndDate() != null) exoEvent.setToDateTime(event.getEndDate().getDate()) ;
+          if(event.getLocation() != null) exoEvent.setLocation(event.getLocation().getValue()) ;
+          if(event.getPriority() != null) exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())] ) ;
+          if(vFreeBusyData.get(event.getUid().getValue()) != null) {
+            exoEvent.setStatus(CalendarEvent.ST_BUSY) ;
+          }
+          if(event.getClassification() != null) exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(event.getClassification().getValue())) ;
+          List<Reminder> list = null ;
+          /*if(!event.getAlarms().isEmpty()){
+            list = new ArrayList<Reminder>() ;
+            for(Object o : event.getAlarms()){
+              VAlarm reminder = (VAlarm)o ;
+              Reminder r = null ;
+              if( reminder.getAction().equals(Action.EMAIL)) {
+                r = new Reminder(Reminder.TYPE_EMAIL) ;
+              } else if( reminder.getAction().equals(Action.DISPLAY))  {
+                r = new Reminder(Reminder.TYPE_POPUP) ;
+              }
+              r.setFromDateTime(exoEvent.getFromDateTime()) ;
+              //r.setAlarmBefore(reminder.getDuration().getDuration().)
+              list.add(r) ;
+            }
+            if(!list.isEmpty()) {
+              exoEvent.setReminders(list) ;
+            }
+
+          }*/
+          PropertyList attendees = event.getProperties(Property.ATTENDEE) ;
+          if(!attendees.isEmpty()) {
+            String[] invitation = new String[attendees.size()] ;
+            for(int i = 0; i < attendees.size(); i ++) {
+              invitation[i] = ((Attendee)attendees.get(i)).getValue() ;
+            }
+            exoEvent.setInvitation(invitation) ;
+          }
+          try {
+            PropertyList dataList = event.getProperties(Property.ATTACH) ;
+            List<Attachment> attachments = new ArrayList<Attachment>() ;
+            for(Object o : dataList) {
+              Attach a = (Attach)o ;
+              Attachment att = new Attachment() ;
+              att.setName(a.getParameter(Parameter.CN).getValue())  ;
+              att.setMimeType(a.getParameter(Parameter.FMTTYPE).getValue()) ;
+              InputStream in = new ByteArrayInputStream(a.getBinary()) ;
+              att.setSize(in.available());
+              att.setInputStream(in) ;
+              attachments.add(att) ;
+            }
+            if(!attachments.isEmpty()) exoEvent.setAttachment(attachments) ;
+          } catch (Exception e) {
+            e.printStackTrace() ;
+          }
+          storage_.saveUserEvent(sProvider, username, calendarId, exoEvent, true) ;
+        }
+      }
+    }
 
 }
 
