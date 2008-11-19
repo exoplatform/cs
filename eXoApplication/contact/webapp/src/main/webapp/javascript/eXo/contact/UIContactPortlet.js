@@ -382,6 +382,7 @@ UIContactPortlet.prototype.adddressPrint = function (){
 	document.body.insertBefore(div,UIPortalApplication) ;
 	UIPortalApplication.style.height =  div.offsetHeight + "px";
 	UIPortalApplication.style.overflow =  "hidden";
+	if(document.getElementById("UIPageDesktop")) UIPortalApplication.style.display = "none";
 	window.scroll(0,0);
 } ;
 
@@ -395,6 +396,7 @@ UIContactPortlet.prototype.cancelPrint = function (obj){
 	UIPortalApplication.style.height =  "auto";
 	UIPortalApplication.style.overflow =  "auto";
 	UIPortalApplication.style.visibility = "visible" ;
+	if(document.getElementById("UIPageDesktop")) UIPortalApplication.style.display = "block";
 	document.body.style.background = eXo.contact.UIContactPortlet.pageBackground ;
 	eXo.contact.UIContactPortlet.pageBackground = null ;
 	window.scroll(0,0);
@@ -410,6 +412,7 @@ UIContactPortlet.prototype.cancelPrintList = function (){
 	UIPortalApplication.style.height =  "auto";
 	UIPortalApplication.style.overflow =  "auto";
 	UIPortalApplication.style.visibility = "visible" ;
+	if(document.getElementById("UIPageDesktop")) UIPortalApplication.style.display = "block";
 	window.scroll(0,0);
 } ;
 
@@ -431,10 +434,14 @@ UIContactPortlet.prototype.printList = function (obj){
 	if(uiControlWorkspace) uiControlWorkspace.style.display = "none" ;
 	div.style.position = "absolute" ;
 	div.style.width = "99%" ;
+	//div.style.zIndex =  1000;
 	document.body.insertBefore(div,UIPortalApplication) ;
 	eXo.core.DOMUtil.removeElement(UIAction) ;
 	UIPortalApplication.style.height =  div.offsetHeight + "px";
-	UIPortalApplication.style.overflow =  "hidden";
+	UIPortalApplication.style.overflow = "hidden";
+	if(document.getElementById("UIPageDesktop")) {
+		UIPortalApplication.style.display = "none";
+	}	
 } ;
 
 UIContactPortlet.prototype.disableContextMenu = function(evt) {

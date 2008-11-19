@@ -128,13 +128,19 @@ EventObject.prototype.init = function(rootNode){
   this.eventIndex = this.rootNode.getAttribute('eventindex');
   this.calId = this.rootNode.getAttribute('calid');
   this.eventCat = this.rootNode.getAttribute('eventcat');
-  this.startTime = Date.parse(this.rootNode.getAttribute('starttimefull'));
+  this.startTime = this.normalizeDate(this.rootNode.getAttribute('starttimefull'));//Date.parse(this.rootNode.getAttribute('starttimefull'));
   this.endTime = Date.parse(this.rootNode.getAttribute('endtimefull'));
   if (this.rootNode.innerText) {
     this.name = (this.rootNode.innerText + '').trim();
   } else {
     this.name = (this.rootNode.textContent + '').trim();
   }
+};
+
+EventObject.prototype.normalizeDate = function(dateStr){
+	var d = new Date(dateStr);
+	if(document.getElementById("UIWeekView")) return Date.parse(dateStr);
+	return (new Date(d.getFullYear(),d.getMonth(),d.getDate(),0,0,0,0)).getTime();
 };
 
 EventObject.prototype.updateIndicator = function(nodeObj, hasBefore, hasAfter) {
