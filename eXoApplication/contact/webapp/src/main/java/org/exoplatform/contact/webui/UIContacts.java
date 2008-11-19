@@ -1307,6 +1307,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.invalidAcc", null,
             ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
       
