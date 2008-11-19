@@ -786,7 +786,7 @@ public class MailServiceImpl implements MailService {
               }
               i--;
               t2 = System.currentTimeMillis();
-              logger.warn("Message " + (totalNew - i) + " saved : " + (t2 - t1) + " ms");
+              logger.warn("Message " + (totalNew - i - 1) + " saved : " + (t2 - t1) + " ms");
             }
 
             tt2 = System.currentTimeMillis();

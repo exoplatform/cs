@@ -1026,11 +1026,13 @@ public class JCRDataStorage {
       String folderId) throws Exception {
     try {
       Node node = getFolderNodeById(sProvider, username, accId, folderId);
-      node.setProperty(Utils.EXO_UNREADMESSAGES, node.getProperty(Utils.EXO_UNREADMESSAGES)
-          .getLong() + 1);
-      node.setProperty(Utils.EXO_TOTALMESSAGE,
-          node.getProperty(Utils.EXO_TOTALMESSAGE).getLong() + 1);
-      node.save();
+      if (node != null) {
+        node.setProperty(Utils.EXO_UNREADMESSAGES, node.getProperty(Utils.EXO_UNREADMESSAGES)
+            .getLong() + 1);
+        node.setProperty(Utils.EXO_TOTALMESSAGE,
+            node.getProperty(Utils.EXO_TOTALMESSAGE).getLong() + 1);
+        node.save();
+      }
     } catch (PathNotFoundException e) {
       e.printStackTrace();
     }
@@ -1448,7 +1450,9 @@ public class JCRDataStorage {
       } catch (Exception e) {
       }
       try {
-        filter.setApplyFolder(filterNode.getProperty(Utils.EXO_APPLY_FOLDER).getString());
+        String folder = filterNode.getProperty(Utils.EXO_APPLY_FOLDER).getString();
+        if (!Utils.isEmptyField(folder) && getFolder(sProvider, username, accountId, folder) != null) filter.setApplyFolder(folder);
+        else filter.setApplyFolder(Utils.createFolderId(accountId, Utils.FD_INBOX, false));
       } catch (Exception e) {
       }
       try {
@@ -1516,7 +1520,9 @@ public class JCRDataStorage {
       } catch (Exception e) {
       }
       try {
-        filter.setApplyFolder(filterNode.getProperty(Utils.EXO_APPLY_FOLDER).getString());
+        String folder = filterNode.getProperty(Utils.EXO_APPLY_FOLDER).getString();
+        if (!Utils.isEmptyField(folder) && getFolder(sProvider, username, accountId, folder) != null) filter.setApplyFolder(folder);
+        else filter.setApplyFolder(Utils.createFolderId(accountId, Utils.FD_INBOX, false));
       } catch (Exception e) {
       }
       try {
@@ -1555,7 +1561,9 @@ public class JCRDataStorage {
     filterNode.setProperty(Utils.EXO_SUBJECT_CONDITION, (long) filter.getSubjectCondition());
     filterNode.setProperty(Utils.EXO_BODY, filter.getBody());
     filterNode.setProperty(Utils.EXO_BODY_CONDITION, (long) filter.getBodyCondition());
-    filterNode.setProperty(Utils.EXO_APPLY_FOLDER, filter.getApplyFolder());
+    if (!Utils.isEmptyField(filter.getApplyFolder())) 
+      filterNode.setProperty(Utils.EXO_APPLY_FOLDER, filter.getApplyFolder());
+    else filterNode.setProperty(Utils.EXO_APPLY_FOLDER, Utils.createFolderId(accountId, Utils.FD_INBOX, false));
     filterNode.setProperty(Utils.EXO_APPLY_TAG, filter.getApplyTag());
     filterNode.setProperty(Utils.EXO_KEEP_IN_INBOX, filter.keepInInbox());
     filterNode.setProperty(Utils.EXO_APPLY_FOR_ALL, filter.applyForAll());
