@@ -1,5 +1,6 @@
 <div class="UISelectAccount">
 	<%uiform.begin();%>
+  <% uicomponent.updateAccount(); %>
 		<%uicomponent.renderChildren()%>
 		<div class="AddAccountIcon" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 		<% /*Begin Popup Menu*/ %>

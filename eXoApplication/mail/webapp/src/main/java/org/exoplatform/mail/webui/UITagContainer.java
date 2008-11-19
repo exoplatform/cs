@@ -103,11 +103,13 @@ public class UITagContainer extends UIForm {
   
   public List<Tag> getTags() throws Exception {
     List<Tag> tagList = new ArrayList<Tag>();
-    MailService mailService = MailUtils.getMailService() ;
-    UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
-    String username = uiPortlet.getCurrentUser() ;
-    String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
-    if (accountId != null && accountId != "") tagList = mailService.getTags(SessionProviderFactory.createSystemProvider(), username, accountId);
+    try {
+      MailService mailService = MailUtils.getMailService() ;
+      UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class);
+      String username = uiPortlet.getCurrentUser() ;
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
+      if (accountId != null && accountId != "") tagList = mailService.getTags(SessionProviderFactory.createSystemProvider(), username, accountId);
+    } catch (Exception e) { }
     return tagList;
   }
   
