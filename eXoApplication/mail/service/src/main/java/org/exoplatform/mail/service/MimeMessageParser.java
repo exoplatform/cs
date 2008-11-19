@@ -98,31 +98,25 @@ public class MimeMessageParser {
   }
        
   private static Date parseDate(String dateStr) throws ParseException {
-	    dateStr = dateStr.replaceAll("\r\n", "");
-	    SimpleDateFormat dateFormat ; 
-	    try {
-	      dateFormat = new SimpleDateFormat("EEE, d MMM yy HH:mm:ss Z", Locale.ENGLISH) ;
-	      return dateFormat.parse(dateStr);
-	    } catch(ParseException e) {
-	      try {
-	        dateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z", Locale.ENGLISH) ;
-	        return dateFormat.parse(dateStr);
-	      } catch(ParseException ex) {
-	        try {
-	          dateFormat = new SimpleDateFormat("d MMM yyyy HH:mm:ss Z", Locale.ENGLISH) ;
-	          return dateFormat.parse(dateStr);
-	        } catch(ParseException exx) {
-	          try {
-	            dateFormat = new SimpleDateFormat("EEE, d MMM yy HH:mm:ss", Locale.ENGLISH) ;
-	            return dateFormat.parse(dateStr.substring(0,dateStr.lastIndexOf(":") + 2));
-	          } catch(ParseException exxx) {
-	            System.out.println(" [WARNING] Cannot parse date time from message: " + dateStr) ;
-	            return null ;
-	          }
-	        }
-	      }
-	    }
-	  }
+    SimpleDateFormat dateFormat ; 
+    try {
+      dateFormat = new SimpleDateFormat("EEE, d MMM yy HH:mm:ss Z", Locale.ENGLISH) ;
+      return dateFormat.parse(dateStr);
+    } catch(ParseException e) {
+      try {
+        dateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z", Locale.ENGLISH) ;
+        return dateFormat.parse(dateStr);
+      } catch(ParseException ex) {
+        try {
+          dateFormat = new SimpleDateFormat("d MMM yyyy HH:mm:ss Z", Locale.ENGLISH) ;
+          return dateFormat.parse(dateStr);
+        } catch(ParseException exx) {
+          System.out.println(" [WARNING] Cannot parse date time from message: " + dateStr) ;
+          return null ;
+        }
+      }
+    }
+  }
 
   public static long getPriority(javax.mail.Message message) throws MessagingException {
       MimeMessage msg = (MimeMessage)message;

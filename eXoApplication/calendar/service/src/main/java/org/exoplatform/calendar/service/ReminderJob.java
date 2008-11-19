@@ -64,7 +64,7 @@ public class ReminderJob implements Job {
       ServerConfiguration config = new ServerConfiguration();
       config.setUserName(jdatamap.getString("account"));
       config.setPassword(jdatamap.getString("password"));
-      config.setSsl(jdatamap.getBooleanValueFromString("ssl"));
+      config.setSsl(true);
       config.setOutgoingHost(jdatamap.getString("outgoing"));
       config.setOutgoingPort(jdatamap.getString("port"));
 
@@ -165,7 +165,7 @@ public class ReminderJob implements Job {
         System.out.println("\n\n message has been sent !");
       }
     } catch (Exception e) {
-      e.printStackTrace();			
+      //e.printStackTrace();			
     }
     if (log_.isDebugEnabled()) log_.debug("File plan job done");
   }
