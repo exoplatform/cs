@@ -18,7 +18,7 @@
 .UINavigationPortlet .UINavigationBar .LeftNavigationBar {
   background: url('DefaultSkin/background/Navigation.gif') repeat-x top center;
   padding-left: 3px;
-  border: 1px solid white;
+  background-color: white;
 }
 
 .UINavigationPortlet .UINavigationBar .RightNavigationBar {
