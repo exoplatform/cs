@@ -36,6 +36,8 @@ import java.util.regex.Pattern;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 
+import net.fortuna.ical4j.data.CalendarBuilder;
+
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarImportExport;
@@ -329,6 +331,15 @@ public class CsvImportExport implements CalendarImportExport {
       }
       exoEvent.setCalendarId(calendarId) ;
       storage_.saveUserEvent(sProvider, username, calendarId, exoEvent, true) ;
+    }
+  }
+  public boolean isValidate(InputStream icalInputStream) throws Exception {
+    try {
+      process(new BufferedReader(new InputStreamReader(icalInputStream))) ;
+      return true ;
+    } catch (Exception e) {
+      e.printStackTrace() ;
+      return false ;
     }
   }
 }

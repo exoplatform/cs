@@ -38,7 +38,9 @@ import net.fortuna.ical4j.model.Parameter;
 import net.fortuna.ical4j.model.ParameterList;
 import net.fortuna.ical4j.model.Property;
 import net.fortuna.ical4j.model.PropertyList;
+import net.fortuna.ical4j.model.Recur;
 import net.fortuna.ical4j.model.ValidationException;
+import net.fortuna.ical4j.model.WeekDay;
 import net.fortuna.ical4j.model.component.VAlarm;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.component.VFreeBusy;
@@ -58,6 +60,7 @@ import net.fortuna.ical4j.model.property.Duration;
 import net.fortuna.ical4j.model.property.Location;
 import net.fortuna.ical4j.model.property.Priority;
 import net.fortuna.ical4j.model.property.ProdId;
+import net.fortuna.ical4j.model.property.RRule;
 import net.fortuna.ical4j.model.property.Repeat;
 import net.fortuna.ical4j.model.property.Status;
 import net.fortuna.ical4j.model.property.Summary;
@@ -202,7 +205,6 @@ public class ICalendarImportExport implements CalendarImportExport{
             calendar.getComponents().add(reminder) ;
           }
         }
-
         if(exoEvent.isPrivate()) event.getProperties().add(new Clazz(Clazz.PRIVATE.getValue())) ;
         else event.getProperties().add(new Clazz(Clazz.PUBLIC.getValue())) ;
         event.getProperties().getProperty(Property.CLASS).getParameters().add(net.fortuna.ical4j.model.parameter.Value.TEXT);
@@ -216,6 +218,42 @@ public class ICalendarImportExport implements CalendarImportExport{
           event.getProperties().getProperty(Property.ATTENDEE).getParameters()
           .add(net.fortuna.ical4j.model.parameter.Value.TEXT);
         } 
+        if(!Utils.isEmpty(exoEvent.getRepeatType())) {
+          Recur rc = null ;
+          if(CalendarEvent.RP_NOREPEAT.equalsIgnoreCase(exoEvent.getRepeatType())){
+          } else if(CalendarEvent.RP_WEEKEND.equalsIgnoreCase(exoEvent.getRepeatType())){
+            rc = new Recur(Recur.WEEKLY, 1) ;
+            rc.getDayList().add(WeekDay.SU);
+            rc.getDayList().add(WeekDay.SA);
+            rc.setInterval(1);
+          } else if(CalendarEvent.RP_WORKINGDAYS.equalsIgnoreCase(exoEvent.getRepeatType())){
+            rc = new Recur(Recur.WEEKLY, 1) ;
+            rc.getDayList().add(WeekDay.MO);
+            rc.getDayList().add(WeekDay.TU);
+            rc.getDayList().add(WeekDay.WE);
+            rc.getDayList().add(WeekDay.TH);
+            rc.getDayList().add(WeekDay.FR);
+            rc.setInterval(1);
+          } else if(CalendarEvent.RP_WEEKLY.equalsIgnoreCase(exoEvent.getRepeatType())){
+            rc = new Recur(Recur.WEEKLY, 1) ;
+            rc.getDayList().add(WeekDay.SU);
+            rc.getDayList().add(WeekDay.MO);
+            rc.getDayList().add(WeekDay.TU);
+            rc.getDayList().add(WeekDay.WE);
+            rc.getDayList().add(WeekDay.TH);
+            rc.getDayList().add(WeekDay.FR);
+            rc.getDayList().add(WeekDay.SA);
+            rc.setInterval(1);
+          } else {
+            rc = new Recur(exoEvent.getRepeatType().toUpperCase(), 1) ;
+            rc.setInterval(1);
+          }
+          if(rc != null) {
+            rc.setWeekStartDay(WeekDay.SU.getDay()) ;
+            RRule r = new RRule(rc) ;
+            event.getProperties().add(r);
+          }
+        }
         event.getProperties().add(id) ; 
         calendar.getComponents().add(event);
       }
@@ -226,7 +264,7 @@ public class ICalendarImportExport implements CalendarImportExport{
     try {
       output.output(calendar, bout) ;
     }catch(ValidationException e) {
-      //e.printStackTrace() ;
+      e.printStackTrace() ;
       return null ;
     }  finally {
       systemSession.close() ;
@@ -310,6 +348,42 @@ public class ICalendarImportExport implements CalendarImportExport{
             event.getProperties().add(attach) ;
           }
         } 
+        if(!Utils.isEmpty(exoEvent.getRepeatType())) {
+          Recur rc = null ;
+          if(CalendarEvent.RP_NOREPEAT.equalsIgnoreCase(exoEvent.getRepeatType())){
+          } else if(CalendarEvent.RP_WEEKEND.equalsIgnoreCase(exoEvent.getRepeatType())){
+            rc = new Recur(Recur.WEEKLY, 1) ;
+            rc.getDayList().add(WeekDay.SU);
+            rc.getDayList().add(WeekDay.SA);
+            rc.setInterval(1);
+          } else if(CalendarEvent.RP_WORKINGDAYS.equalsIgnoreCase(exoEvent.getRepeatType())){
+            rc = new Recur(Recur.WEEKLY, 1) ;
+            rc.getDayList().add(WeekDay.MO);
+            rc.getDayList().add(WeekDay.TU);
+            rc.getDayList().add(WeekDay.WE);
+            rc.getDayList().add(WeekDay.TH);
+            rc.getDayList().add(WeekDay.FR);
+            rc.setInterval(1);
+          } else if(CalendarEvent.RP_WEEKLY.equalsIgnoreCase(exoEvent.getRepeatType())){
+            rc = new Recur(Recur.WEEKLY, 1) ;
+            rc.getDayList().add(WeekDay.SU);
+            rc.getDayList().add(WeekDay.MO);
+            rc.getDayList().add(WeekDay.TU);
+            rc.getDayList().add(WeekDay.WE);
+            rc.getDayList().add(WeekDay.TH);
+            rc.getDayList().add(WeekDay.FR);
+            rc.getDayList().add(WeekDay.SA);
+            rc.setInterval(1);
+          } else {
+            rc = new Recur(exoEvent.getRepeatType().toUpperCase(), 1) ;
+            rc.setInterval(1);
+          }
+          if(rc != null) {
+            rc.setWeekStartDay(WeekDay.SU.getDay()) ;
+            RRule r = new RRule(rc) ;
+            event.getProperties().add(r);
+          }
+        }
         String[] attendees = exoEvent.getInvitation() ;
         if(attendees != null && attendees.length > 0) {
           for(int i = 0; i < attendees.length; i++ ) {
@@ -523,70 +597,70 @@ public class ICalendarImportExport implements CalendarImportExport{
   }
 
   public void importToCalendar(SessionProvider sProvider, String username, InputStream icalInputStream, String calendarId) throws Exception {
-      CalendarBuilder calendarBuilder = new CalendarBuilder() ;
-      net.fortuna.ical4j.model.Calendar iCalendar = calendarBuilder.build(icalInputStream) ;
-      
-      Map<String, VEvent> vEventData = new HashMap<String, VEvent>() ;
-      Map<String, VFreeBusy> vFreeBusyData = new HashMap<String, VFreeBusy>() ;
-      Map<String, VAlarm> vAlarmData = new HashMap<String, VAlarm>() ;
-    
-      ComponentList componentList = iCalendar.getComponents() ;
-      VEvent event ;
-      CalendarEvent exoEvent ;
-      for(Object obj : componentList) {
-        if(obj instanceof VEvent) {
-          VEvent v = (VEvent)obj ;
-          vEventData.put(v.getUid().getValue(), v) ;
-          if(!v.getAlarms().isEmpty()) {
-            for (Object o : v.getAlarms()) {
-              if (o instanceof VAlarm) {
-                VAlarm va = (VAlarm)o;
-                vAlarmData.put(v.getUid().getValue()+":"+ va.getProperty(Property.ACTION).getName(), va) ;
-              }
-            }
-          }
+    CalendarBuilder calendarBuilder = new CalendarBuilder() ;
+    net.fortuna.ical4j.model.Calendar iCalendar = calendarBuilder.build(icalInputStream) ;
 
-        }
-        if(obj instanceof VFreeBusy) vFreeBusyData.put(((VFreeBusy)obj).getUid().getValue(), (VFreeBusy)obj) ;
-      }
-      for(Object obj : componentList) {
-        if(obj instanceof VEvent){
-          event = (VEvent)obj ;
-          exoEvent = new CalendarEvent() ;
-          if(event.getProperty(Property.CATEGORIES) != null) {
-            EventCategory evCate = new EventCategory() ;
-            evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim()) ;
-            try{
-              storage_.saveEventCategory(sProvider, username, evCate, null, true) ;
-            }catch(Exception e){ 
-              for(EventCategory ev : storage_.getEventCategories(sProvider, username)) {
-                if(ev.getName().equalsIgnoreCase(evCate.getName())) {
-                  evCate = ev ;
-                  break ;
-                }
-              }
-              e.printStackTrace() ;
-              System.out.println("\n\n event category " + evCate.getName() + " existed !");
+    Map<String, VEvent> vEventData = new HashMap<String, VEvent>() ;
+    Map<String, VFreeBusy> vFreeBusyData = new HashMap<String, VFreeBusy>() ;
+    Map<String, VAlarm> vAlarmData = new HashMap<String, VAlarm>() ;
+
+    ComponentList componentList = iCalendar.getComponents() ;
+    VEvent event ;
+    CalendarEvent exoEvent ;
+    for(Object obj : componentList) {
+      if(obj instanceof VEvent) {
+        VEvent v = (VEvent)obj ;
+        vEventData.put(v.getUid().getValue(), v) ;
+        if(!v.getAlarms().isEmpty()) {
+          for (Object o : v.getAlarms()) {
+            if (o instanceof VAlarm) {
+              VAlarm va = (VAlarm)o;
+              vAlarmData.put(v.getUid().getValue()+":"+ va.getProperty(Property.ACTION).getName(), va) ;
             }
-            exoEvent.setEventCategoryId(evCate.getId()) ;
-            exoEvent.setEventCategoryName(evCate.getName()) ;
-          } 
-          exoEvent.setCalType(String.valueOf(Calendar.TYPE_PRIVATE)) ;
-          exoEvent.setCalendarId(calendarId) ;
-          if(event.getSummary() != null) exoEvent.setSummary(event.getSummary().getValue()) ;
-          if(event.getDescription() != null) exoEvent.setDescription(event.getDescription().getValue()) ;
-          if(event.getStatus() != null) exoEvent.setStatus(event.getStatus().getValue()) ;
-          exoEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
-          if(event.getStartDate() != null) exoEvent.setFromDateTime(event.getStartDate().getDate()) ;
-          if(event.getEndDate() != null) exoEvent.setToDateTime(event.getEndDate().getDate()) ;
-          if(event.getLocation() != null) exoEvent.setLocation(event.getLocation().getValue()) ;
-          if(event.getPriority() != null) exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())] ) ;
-          if(vFreeBusyData.get(event.getUid().getValue()) != null) {
-            exoEvent.setStatus(CalendarEvent.ST_BUSY) ;
           }
-          if(event.getClassification() != null) exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(event.getClassification().getValue())) ;
-          List<Reminder> list = null ;
-          /*if(!event.getAlarms().isEmpty()){
+        }
+
+      }
+      if(obj instanceof VFreeBusy) vFreeBusyData.put(((VFreeBusy)obj).getUid().getValue(), (VFreeBusy)obj) ;
+    }
+    for(Object obj : componentList) {
+      if(obj instanceof VEvent){
+        event = (VEvent)obj ;
+        exoEvent = new CalendarEvent() ;
+        if(event.getProperty(Property.CATEGORIES) != null) {
+          EventCategory evCate = new EventCategory() ;
+          evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim()) ;
+          try{
+            storage_.saveEventCategory(sProvider, username, evCate, null, true) ;
+          }catch(Exception e){ 
+            for(EventCategory ev : storage_.getEventCategories(sProvider, username)) {
+              if(ev.getName().equalsIgnoreCase(evCate.getName())) {
+                evCate = ev ;
+                break ;
+              }
+            }
+            e.printStackTrace() ;
+            System.out.println("\n\n event category " + evCate.getName() + " existed !");
+          }
+          exoEvent.setEventCategoryId(evCate.getId()) ;
+          exoEvent.setEventCategoryName(evCate.getName()) ;
+        } 
+        exoEvent.setCalType(String.valueOf(Calendar.TYPE_PRIVATE)) ;
+        exoEvent.setCalendarId(calendarId) ;
+        if(event.getSummary() != null) exoEvent.setSummary(event.getSummary().getValue()) ;
+        if(event.getDescription() != null) exoEvent.setDescription(event.getDescription().getValue()) ;
+        if(event.getStatus() != null) exoEvent.setStatus(event.getStatus().getValue()) ;
+        exoEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
+        if(event.getStartDate() != null) exoEvent.setFromDateTime(event.getStartDate().getDate()) ;
+        if(event.getEndDate() != null) exoEvent.setToDateTime(event.getEndDate().getDate()) ;
+        if(event.getLocation() != null) exoEvent.setLocation(event.getLocation().getValue()) ;
+        if(event.getPriority() != null) exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())] ) ;
+        if(vFreeBusyData.get(event.getUid().getValue()) != null) {
+          exoEvent.setStatus(CalendarEvent.ST_BUSY) ;
+        }
+        if(event.getClassification() != null) exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(event.getClassification().getValue())) ;
+        List<Reminder> list = null ;
+        /*if(!event.getAlarms().isEmpty()){
             list = new ArrayList<Reminder>() ;
             for(Object o : event.getAlarms()){
               VAlarm reminder = (VAlarm)o ;
@@ -605,35 +679,66 @@ public class ICalendarImportExport implements CalendarImportExport{
             }
 
           }*/
-          PropertyList attendees = event.getProperties(Property.ATTENDEE) ;
-          if(!attendees.isEmpty()) {
-            String[] invitation = new String[attendees.size()] ;
-            for(int i = 0; i < attendees.size(); i ++) {
-              invitation[i] = ((Attendee)attendees.get(i)).getValue() ;
-            }
-            exoEvent.setInvitation(invitation) ;
+        PropertyList attendees = event.getProperties(Property.ATTENDEE) ;
+        if(!attendees.isEmpty()) {
+          String[] invitation = new String[attendees.size()] ;
+          for(int i = 0; i < attendees.size(); i ++) {
+            invitation[i] = ((Attendee)attendees.get(i)).getValue() ;
           }
-          try {
-            PropertyList dataList = event.getProperties(Property.ATTACH) ;
-            List<Attachment> attachments = new ArrayList<Attachment>() ;
-            for(Object o : dataList) {
-              Attach a = (Attach)o ;
-              Attachment att = new Attachment() ;
-              att.setName(a.getParameter(Parameter.CN).getValue())  ;
-              att.setMimeType(a.getParameter(Parameter.FMTTYPE).getValue()) ;
-              InputStream in = new ByteArrayInputStream(a.getBinary()) ;
-              att.setSize(in.available());
-              att.setInputStream(in) ;
-              attachments.add(att) ;
-            }
-            if(!attachments.isEmpty()) exoEvent.setAttachment(attachments) ;
-          } catch (Exception e) {
-            e.printStackTrace() ;
-          }
-          storage_.saveUserEvent(sProvider, username, calendarId, exoEvent, true) ;
+          exoEvent.setInvitation(invitation) ;
         }
+        try {
+          RRule r = (RRule)event.getProperty(Property.RRULE) ;
+          if(r != null &&  r.getRecur() != null) {
+            Recur rc = r.getRecur() ;
+            rc.getFrequency();
+            if(Recur.WEEKLY.equalsIgnoreCase(rc.getFrequency())) {
+              if(rc.getDayList().size() == 2) {
+                exoEvent.setRepeatType(CalendarEvent.RP_WEEKEND) ;
+              } else if(rc.getDayList().size() == 5) {
+                exoEvent.setRepeatType(CalendarEvent.RP_WORKINGDAYS) ;
+              } if(rc.getDayList().size() == 7) {
+                exoEvent.setRepeatType(CalendarEvent.RP_WEEKLY) ;
+              }
+            } else {
+              exoEvent.setRepeatType(rc.getFrequency().toLowerCase()) ;
+            }
+          }
+          r.getRecur() ;
+        } catch (Exception e) {
+          e.printStackTrace() ;
+        }
+        try {
+          PropertyList dataList = event.getProperties(Property.ATTACH) ;
+          List<Attachment> attachments = new ArrayList<Attachment>() ;
+          for(Object o : dataList) {
+            Attach a = (Attach)o ;
+            Attachment att = new Attachment() ;
+            att.setName(a.getParameter(Parameter.CN).getValue())  ;
+            att.setMimeType(a.getParameter(Parameter.FMTTYPE).getValue()) ;
+            InputStream in = new ByteArrayInputStream(a.getBinary()) ;
+            att.setSize(in.available());
+            att.setInputStream(in) ;
+            attachments.add(att) ;
+          }
+          if(!attachments.isEmpty()) exoEvent.setAttachment(attachments) ;
+        } catch (Exception e) {
+          e.printStackTrace() ;
+        }
+        storage_.saveUserEvent(sProvider, username, calendarId, exoEvent, true) ;
       }
     }
+  }
 
+  public boolean isValidate(InputStream icalInputStream) throws Exception {
+    try {
+      CalendarBuilder calendarBuilder = new CalendarBuilder() ;
+      calendarBuilder.build(icalInputStream) ;
+      return true ;
+    } catch (Exception e) {
+      e.printStackTrace() ;
+      return false ;
+    }
+  }
 }
 

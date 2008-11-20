@@ -81,4 +81,12 @@ public interface CalendarImportExport {
    * @throws Exception
    */
   public List<CalendarEvent> getEventObjects(InputStream icalInputStream) throws Exception ;
+  
+  /**
+   * The method return true if the input stream is correct format 
+   * @param icalInputStream the input stream
+   * @throws Exception
+   */
+  public boolean isValidate(InputStream icalInputStream) throws Exception ;
+  
 }

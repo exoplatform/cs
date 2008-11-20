@@ -28,7 +28,6 @@ import javax.jcr.PathNotFoundException;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.Colors;
 import org.exoplatform.calendar.service.Calendar;
-import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
@@ -690,6 +689,20 @@ public class UICalendars extends UIForm  {
   static  public class GenerateRssActionListener extends EventListener<UICalendars> {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiComponent = event.getSource() ;
+      List<GroupCalendarData> calendarCategories = CalendarUtils.getCalendarService().getCalendarCategories(uiComponent.getSession(),  CalendarUtils.getCurrentUser(), true) ;
+      if(calendarCategories== null || calendarCategories.isEmpty()) {
+        UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.category-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }   
+      List<Calendar> list = CalendarUtils.getCalendarService().getUserCalendars(uiComponent.getSession(),  CalendarUtils.getCurrentUser(), true) ;
+      if(list == null || list.isEmpty()) {
+        UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      } 
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
       popupAction.deActivate() ;
@@ -701,6 +714,20 @@ public class UICalendars extends UIForm  {
   static  public class GenerateCalDavActionListener extends EventListener<UICalendars> {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiComponent = event.getSource() ;
+      List<GroupCalendarData> calendarCategories = CalendarUtils.getCalendarService().getCalendarCategories(uiComponent.getSession(),  CalendarUtils.getCurrentUser(), true) ;
+      if(calendarCategories== null || calendarCategories.isEmpty()) {
+        UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.category-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }   
+      List<Calendar> list = CalendarUtils.getCalendarService().getUserCalendars(uiComponent.getSession(),  CalendarUtils.getCurrentUser(), true) ;
+      if(list == null || list.isEmpty()) {
+        UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      } 
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
       popupAction.deActivate() ;

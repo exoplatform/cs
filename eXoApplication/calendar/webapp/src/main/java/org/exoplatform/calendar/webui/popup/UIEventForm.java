@@ -1211,8 +1211,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
             calendarEvent.setCalType(uiForm.calType_) ;
             calendarEvent.setCalendarId(calendarId) ;
             calendarEvent.setEventCategoryId(uiForm.getEventCategory()) ;
+            if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
             String eventCategoryName = calService.getEventCategory(uiForm.getSession(), username, uiForm.getEventCategory()).getName() ;
             calendarEvent.setEventCategoryName(eventCategoryName) ;
+            }
             calendarEvent.setLocation(location) ;
             calendarEvent.setRepeatType(uiForm.getEventRepeat()) ;
             calendarEvent.setPriority(uiForm.getEventPriority()) ; 
