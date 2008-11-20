@@ -669,6 +669,7 @@ public class UICalendars extends UIForm  {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiComponent = event.getSource() ;
       String selectedCalendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
       List<GroupCalendarData> calendarCategories = CalendarUtils.getCalendarService().getCalendarCategories(uiComponent.getSession(),  CalendarUtils.getCurrentUser(), true) ;
       if(calendarCategories== null || calendarCategories.isEmpty()) {
         UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
@@ -679,7 +680,7 @@ public class UICalendars extends UIForm  {
         UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
         popupAction.deActivate() ;
         UIImportForm form = popupAction.activate(UIImportForm.class, 600) ;
-        form.init(selectedCalendarId) ;
+        form.init(selectedCalendarId, calType) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       }
