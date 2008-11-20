@@ -53,18 +53,20 @@
 
 .UIContactPortlet .UIVCards .SelectedVCard .TitleVCards {
 	background: #bec0fd;
+	height: auto;
+	padding: 2px 7px 6px 7px;
 }
 
 .UIContactPortlet .UIVCards .NormalVCard .TitleVCards {
 	background: #d7ddfe;
+	height: auto;
+	padding: 2px 7px 6px 7px;
 }
 
 .UIContactPortlet .UIVCards .TitleVCards .StateIcon {
-	background-position: left center;
-	line-height: 25px; height: 25px;
+	background-position: left 2px;
+	line-height: 16px; height: auto;
 	width: 70%;
-	white-space: nowrap;
-	overflow: hidden;
 	float: left;
 	padding-left: 18px;
 	font-weight: bold; font-size: 13px;
