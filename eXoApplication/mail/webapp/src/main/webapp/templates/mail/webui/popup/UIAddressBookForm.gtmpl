@@ -210,23 +210,38 @@
                               </td>
                               <td class="InfoTitle1">
                                 <table class="InfoTitle2" >
+                                  <%
+                                  	String emailAddresses = selectedContact.getEmailAddress() ;
+                                  	if (emailAddresses != null && !emailAddresses.equals("")) {
+                                  		List<String> emails = new ArrayList<String>() ;
+                          						emails.addAll(Arrays.asList(emailAddresses.split(";"))) ;
+                                  		for (String emailAdd : emails) {
+			                        					if (emailAdd.length() > 30) subEmail = emailAdd.substring(0, 30) + "..." ;	
+			                        					else subEmail = emailAdd ;
+                                   %>                              
+                                  <tr>
+                                    <td>
+                                      <div class="InfoTitle3 Email">                
+                                          <%                         
+                                              print("<a href='mailto:" + emailAdd + "'>") ;
+                                              print(subEmail) ;
+                                              print("</a>")
+                                          %>                                
+                                       </div>
+                                    </td>
+                                  </tr>
+                                  <% } %>
+                                  <% } else { %>
                                   <tr>
                                     <td>
                                       <div class="InfoTitle3 Email">
                                           <% 
-                                            String emailAddress = selectedContact.getEmailAddress() ;
-                                            if (emailAddress != null && !emailAddress.equals("")) {
-                                              print("<a href='mailto:" + emailAddress + "'>") ;
-                                              print(emailAddress) ;
-                                              print("</a>")
-                                            } else {
                                               print("_") ;
-                                            }
                                           %>
-                                        </a>
                                        </div>
                                     </td>
                                   </tr>
+                                  <% } %>
                                 </table>
                                </td>
                             </tr>
