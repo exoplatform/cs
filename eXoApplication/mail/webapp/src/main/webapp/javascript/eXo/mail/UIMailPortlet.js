@@ -111,6 +111,7 @@ UIMailPortlet.prototype.showPrintPreview = function(obj1) {
 	}
 	uiPortalApplication.style.height =  printContent.offsetHeight + "px";
 	uiPortalApplication.style.overflow =  "hidden";
+	if(document.getElementById("UIPageDesktop")) uiPortalApplication.style.display = "none";
 	window.scroll(0,0) ;
 } ;
 
@@ -129,6 +130,7 @@ UIMailPortlet.prototype.closePrint = function() {
 		if(document.body.childNodes[i].className == "UIMailPortlet") DOMUtil.removeElement(document.body.childNodes[i]) ;		
 	}
 	if(document.body.style) document.body.removeAttribute("style");
+	if(document.getElementById("UIPageDesktop")) uiPortalApplication.style.display = "block";
 	window.scroll(0,0) ;
 } ;
 
