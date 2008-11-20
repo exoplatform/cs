@@ -868,6 +868,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">"+getLabel("fromWho")+":</td>") ;
     sbBody.append("<td style=\"padding: 4px;\">" +toId+ "</td>") ;
     sbBody.append("</tr>");
+    sbBody.append("<tr>") ;
+    sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">"+getLabel(UIEventDetailTab.FIELD_DESCRIPTION)+":</td>") ;
+    sbBody.append("<td style=\"padding: 4px;\">" + (event.getDescription() != null && event.getDescription().trim().length() > 0 ? event.getDescription(): " ") + "</td>") ;
+    sbBody.append("</tr>");
     sbBody.append("<tr>");
     sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">Link:</td>");  
     sbBody.append("<td style=\"padding: 4px;\"> </td>");
