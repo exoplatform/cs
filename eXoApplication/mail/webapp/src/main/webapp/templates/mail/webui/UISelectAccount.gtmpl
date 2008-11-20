@@ -1,6 +1,13 @@
 <div class="UISelectAccount">
 	<%uiform.begin();%>
-  <% uicomponent.updateAccount(); %>
+  <% 
+    String accId = uicomponent.getSelectedValue();
+    uicomponent.updateAccount(); 
+    try {
+      uicomponent.setSelectedValue(accId);
+    } catch(Exception e) {}
+  
+  %>
 		<%uicomponent.renderChildren()%>
 		<div class="AddAccountIcon" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 		<% /*Begin Popup Menu*/ %>
