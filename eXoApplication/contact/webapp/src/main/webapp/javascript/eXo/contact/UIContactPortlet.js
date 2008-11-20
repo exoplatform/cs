@@ -394,7 +394,7 @@ UIContactPortlet.prototype.cancelPrint = function (obj){
 	if(uiControlWorkspace) uiControlWorkspace.style.display = "block" ;
 	UIPortalApplication.style.display = "block" ;
 	UIPortalApplication.style.height =  "auto";
-	UIPortalApplication.style.overflow =  "auto";
+	UIPortalApplication.style.overflow =  "";
 	UIPortalApplication.style.visibility = "visible" ;
 	if(document.getElementById("UIPageDesktop")) UIPortalApplication.style.display = "block";
 	document.body.style.background = eXo.contact.UIContactPortlet.pageBackground ;
@@ -410,7 +410,7 @@ UIContactPortlet.prototype.cancelPrintList = function (){
 	if(uiControlWorkspace) uiControlWorkspace.style.display = "block" ;
 	UIPortalApplication.style.display = "block" ;
 	UIPortalApplication.style.height =  "auto";
-	UIPortalApplication.style.overflow =  "auto";
+	UIPortalApplication.style.overflow =  "";
 	UIPortalApplication.style.visibility = "visible" ;
 	if(document.getElementById("UIPageDesktop")) UIPortalApplication.style.display = "block";
 	window.scroll(0,0);

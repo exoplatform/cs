@@ -124,7 +124,7 @@ UIMailPortlet.prototype.closePrint = function() {
   var uiPortalApplication = document.getElementById("UIPortalApplication");
   uiPortalApplication.style.display = "block" ;
 	uiPortalApplication.style.height =  "auto";
-	uiPortalApplication.style.overflow =  "auto";
+	uiPortalApplication.style.overflow =  "none";
 	uiPortalApplication.style.visibility = "visible";
 	for(var i = 0 ; i < document.body.childNodes.length ; i++) {
 		if(document.body.childNodes[i].className == "UIMailPortlet") DOMUtil.removeElement(document.body.childNodes[i]) ;		
@@ -200,7 +200,7 @@ UIMailPortlet.prototype.checkLayoutCallback = function(layoutcookie){
 		uiMailPortlet.changeMenuLabel(parseInt(layoutcookie.charAt(i)),false) ;
 		if(parseInt(layoutcookie.charAt(i)) == 1) {
 			var workingarea = document.getElementById("UIMessageArea");
-			workingarea.style.marginLeft = "0px" ;			
+			workingarea.style.marginLeft = "0px" ;
 		}
 		if(parseInt(layoutcookie.charAt(i)) == 3) {
 			document.getElementById("uiMessageGrid").style.overflowY = "visible" ;
