@@ -578,6 +578,27 @@ public class ICalendarImportExport implements CalendarImportExport{
             e.printStackTrace();
           }
         }
+        try {
+          RRule r = (RRule)event.getProperty(Property.RRULE) ;
+          if(r != null &&  r.getRecur() != null) {
+            Recur rc = r.getRecur() ;
+            rc.getFrequency();
+            if(Recur.WEEKLY.equalsIgnoreCase(rc.getFrequency())) {
+              if(rc.getDayList().size() == 2) {
+                exoEvent.setRepeatType(CalendarEvent.RP_WEEKEND) ;
+              } else if(rc.getDayList().size() == 5) {
+                exoEvent.setRepeatType(CalendarEvent.RP_WORKINGDAYS) ;
+              } if(rc.getDayList().size() == 7) {
+                exoEvent.setRepeatType(CalendarEvent.RP_WEEKLY) ;
+              }
+            } else {
+              exoEvent.setRepeatType(rc.getFrequency().toLowerCase()) ;
+            }
+          }
+          r.getRecur() ;
+        } catch (Exception e) {
+          e.printStackTrace() ;
+        }
         exoEvent.setPrivate(true) ;
         PropertyList attendees = event.getProperties(Property.ATTENDEE) ;
         if(attendees.size() < 1) {
