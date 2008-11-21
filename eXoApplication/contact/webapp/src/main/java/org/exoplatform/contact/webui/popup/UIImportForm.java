@@ -25,6 +25,7 @@ import java.util.MissingResourceException;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.ContactImportExport;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.service.Utils;
 import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
@@ -189,7 +190,7 @@ public class UIImportForm extends UIForm {
         uploadService.removeUpload(uploadId) ;
         uiContacts.updateList() ; 
       } catch (IndexOutOfBoundsException e) {
-          uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.too-many-contact", null, 
+          uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.too-many-contact", new Object[]{Utils.limitExport + ""}, 
               ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;

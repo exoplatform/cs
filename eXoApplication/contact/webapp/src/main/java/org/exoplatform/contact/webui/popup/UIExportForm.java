@@ -201,16 +201,16 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
           } else {
             pageList = contactService.getPublicContactsByAddressBook(SessionProviderFactory.createSystemProvider(), address[1]) ;
           }
-          if (pageList.getAvailable() >= 150) {
-            uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.manyContacts", null, 
+          if (pageList.getAvailable() > Utils.limitExport) {
+            uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.manyContacts", new Object[]{Utils.limitExport + ""}, 
                 ApplicationMessage.WARNING)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return ;
           }
           contacts.addAll(pageList.getAll()) ;          
         } else {
-          if (contactIds.size() >= 150) {
-            uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.manyContacts", null, 
+          if (contactIds.size() > Utils.limitExport) {
+            uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.manyContacts", new Object[]{Utils.limitExport + ""}, 
                 ApplicationMessage.WARNING)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return ;
