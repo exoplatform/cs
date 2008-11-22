@@ -19,7 +19,6 @@ package org.exoplatform.contact.webui.popup;
 import java.io.ByteArrayInputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +28,7 @@ import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.Utils;
+import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadResource;
@@ -121,26 +121,14 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
   }
 
   public List<String> getCheckedGroups() throws Exception {
-/*    List<String> checked = new ArrayList<String>();
-    for (String group : privateGroupMap_.keySet()) {
-      UIFormCheckBoxInput uiCheckBox = getChildById(group);
-      if (uiCheckBox != null && uiCheckBox.isChecked()) {
-        checked.add(group);
-      }
+    // cs-1796
+    List<String> addresList = new ArrayList<String>() ;
+    for (String add : checkedAddress.keySet()) {
+      if(sharedGroupMap_.containsKey(add)) addresList.add(add+ JCRDataStorage.HYPHEN + sharedGroupMap_.get(add).getSharedUserId()) ;
+      else addresList.add(add) ;
     }
-    for (String group : sharedGroupMap_.keySet()) {
-      UIFormCheckBoxInput uiCheckBox = getChildById(group);
-      if (uiCheckBox != null && uiCheckBox.isChecked()) {
-        checked.add(group + JCRDataStorage.HYPHEN + sharedGroupMap_.get(group).getSharedUserId());
-      }
-    }
-    for (String group : publicGroupMap_.keySet()) {
-      UIFormCheckBoxInput uiCheckBox = getChildById(group);
-      if (uiCheckBox != null && uiCheckBox.isChecked()) {
-        checked.add(group);
-      }
-    }*/
-    return Arrays.asList(checkedAddress.keySet().toArray(new String[] {})) ;
+    return addresList ;
+    //return Arrays.asList(checkedAddress.keySet().toArray(new String[] {})) ;
   }
 
   @SuppressWarnings("unchecked")

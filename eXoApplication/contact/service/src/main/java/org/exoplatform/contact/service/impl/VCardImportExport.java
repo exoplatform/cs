@@ -92,21 +92,21 @@ public class VCardImportExport implements ContactImportExport {
   	  Node contactGroupHome = storage_.getUserContactGroupHome(sProvider, username) ;
       Node publicContactGroupHome = storage_.getPublicContactHome(sProvider);
   	  try {
-  		if(contactGroupHome.hasNode(address)) {
-    	  privateAddress.add(address) ;
-    	} else if (publicContactGroupHome.hasNode(address)){
-    	  publicAddress.add(address) ;
-    	} else {
-    	  String[] array = address.split(JCRDataStorage.HYPHEN) ;
-    	  if(array.length == 2) {
-            ContactPageList pageList = storage_.getSharedContactsByAddressBook(
-              sProvider, username, new SharedAddressBook(null, array[0], array[1])) ;
-    	    if (pageList.getAvailable() + contactList.size() > Utils.limitExport) throw new ArrayIndexOutOfBoundsException() ;
-            contactList.addAll(pageList.getAll()) ;
-    	  }    		  
-        }
+    		if(contactGroupHome.hasNode(address)) {
+      	  privateAddress.add(address) ;
+      	} else if (publicContactGroupHome.hasNode(address)){
+      	  publicAddress.add(address) ;
+      	} else {
+      	  String[] array = address.split(JCRDataStorage.HYPHEN) ;
+      	  if(array.length == 2) {
+              ContactPageList pageList = storage_.getSharedContactsByAddressBook(
+                sProvider, username, new SharedAddressBook(null, array[0], array[1])) ;
+      	    if (pageList.getAvailable() + contactList.size() > Utils.limitExport) throw new ArrayIndexOutOfBoundsException() ;
+              contactList.addAll(pageList.getAll()) ;
+      	  }    		  
+      	}
   	  } catch(RepositoryException re) {
-  		publicAddress.add(address) ;
+  	    publicAddress.add(address) ;
   	  }  		
   	}
   	if(privateAddress.size() > 0) {
