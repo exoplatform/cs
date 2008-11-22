@@ -508,7 +508,6 @@ public class UIAddressBooks extends UIComponent {
         contactService.removeGroup(sessionProvider, username, groupId);
       }
       if (groupId.equals(uiAddressBook.copyAddress)) uiAddressBook.copyAddress = null ;      
-      
       if (groupId.equals(uiAddressBook.selectedGroup)) {
         uiAddressBook.selectedGroup = null;
         uiContacts.setContacts(null);
@@ -518,8 +517,19 @@ public class UIAddressBooks extends UIComponent {
         uiContacts.setContacts(
             contactService.getContactPageListByTag(sessionProvider, username, selectedTag)) ;
       }
-      if (uiContacts.isDisplaySearchResult()) {
-        uiContacts.setContact(removedContacts, false) ;
+      
+      // cs-1795
+      if (uiContacts.isDisplaySearchResult()) {  
+        List<Contact> allContacts = uiContacts.getContactPageList().getAll() ;
+        for (Contact reContact : removedContacts) {
+          for (int i = 0; i < allContacts.size(); i++) {
+            if (allContacts.get(i).getId().equals(reContact.getId())) {
+              allContacts.remove(i) ;
+              break ;
+            }
+          }          
+        }        
+        //uiContacts.setContact(removedContacts, false) ;
         uiContacts.updateList() ;
       }
       if (uiContacts.getSelectedGroup() != null && groupId.equals(uiContacts.getSelectedGroup()))
@@ -528,7 +538,6 @@ public class UIAddressBooks extends UIComponent {
       // cs-1644
       for (Contact contact : removedContacts)
         uiAddressBook.copyContacts.remove(contact.getId()) ;
-      
       event.getRequestContext().addUIComponentToUpdateByAjax(workingContainer);     
     }
   }

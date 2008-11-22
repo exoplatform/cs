@@ -28,6 +28,7 @@ import java.util.MissingResourceException;
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.SharedAddressBook;
+import org.exoplatform.contact.service.Utils;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadResource;
@@ -197,7 +198,7 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
         out = ContactUtils.getContactService().getContactImportExports(exportFormat).exportContact(
             SessionProviderFactory.createSystemProvider(), ContactUtils.getCurrentUser(), groupIds.toArray(new String[]{})) ;        
       } catch (ArrayIndexOutOfBoundsException e) {
-        uiApp.addMessage(new ApplicationMessage("UIExportAddressBookForm.many-Contacts", null,
+        uiApp.addMessage(new ApplicationMessage("UIExportAddressBookForm.many-Contacts", new Object[]{Utils.limitExport + ""},
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
