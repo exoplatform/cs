@@ -74,6 +74,7 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
     UIFormInputWithActions inputset = new UIFormInputWithActions("UIInputUserSelect") ;
     sharedContacts = contacts ; 
     StringBuffer buffer = new StringBuffer() ;
+    // cs-1805
     int length = 0 ;    
     for (Contact contact : contacts.values()) {
       if (length > 50) {

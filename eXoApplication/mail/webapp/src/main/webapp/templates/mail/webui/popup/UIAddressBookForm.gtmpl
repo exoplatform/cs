@@ -79,8 +79,15 @@
                   String classCss = "NormalItem";
                   if (contact.getId().equals(uicomponent.getSelectedContact().getId())) classCss += " CheckItem";
                   String selectContact = uicomponent.event("SelectContact", contact.getId());
+                  String contactName=contact.getFullName() ;
+                  String subName = contactName ;
+                  if (MailUtils.isFieldEmpty(subName)) {
+                  	subName = "_";
+                  	contactName="";
+                  }
+                  else if (contactName.length() > 30) subName=MailUtils.encodeHTML(contactName.substring(0, 20)) + "...";
             %>
-                  <a href="$selectContact"><div class="$classCss"><%= (MailUtils.isFieldEmpty(contact.getFullName()) ? "_" : MailUtils.encodeHTML(contact.getFullName()))%> </div></a>
+                  <a href="$selectContact"><div class="$classCss" title="$contactName"><%= subName %> </div></a>
             <% 
                 } 
               }
