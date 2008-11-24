@@ -99,42 +99,29 @@ UICalendarDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj,
   var blockWidth = clickBlock.offsetWidth ;
   var blockHeight = clickBlock.offsetHeight ;
   var tmpNode = clickBlock.cloneNode(true);
-  with (tmpNode.style) {
-    background = "rgb(237,237,237)";
-    width = dropableObjs[0].offsetWidth + 'px';
-  }
+
+  tmpNode.style.background = "rgb(237,237,237)";
+  tmpNode.style.width = dropableObjs[0].offsetWidth + 'px';
+
   eXo.core.Browser.setOpacity(tmpNode, 50) ;
   var UIMonthViewNode = document.createElement('div');
   UIMonthViewNode.className = 'UIMonthView';
   var EventMonthContentNode = document.createElement('div');
   EventMonthContentNode.className = 'EventMonthContent';
   
-  with (tmpNode.style) {
-    position = 'absolute';
-    top = '0px';
-    left = '0px';
-  }
+	eXo.core.DOMUtil.addClass(UIMonthViewNode,"DummyDNDClass");
+	eXo.core.DOMUtil.addClass(EventMonthContentNode,"DummyDNDClass");
+	
   tmpNode = this.getCheckedObject(clickBlock) ;
-  with (UIMonthViewNode.style) {
-    position = 'absolute';
-    padding = '0px';
-    margin = '0px';
-  }
   
-  with (EventMonthContentNode.style) {
-    position = 'absolute';
-    padding = '0px';
-    margin = '0px';
-  }
   var len = tmpNode.length ;
   while(len--){
     EventMonthContentNode.appendChild(tmpNode[len]);    
   }
   UIMonthViewNode.appendChild(EventMonthContentNode);
-  if (document.getElementById("UIPageDesktop")) document.body.appendChild(UIMonthViewNode);
-	else document.getElementById("UIMonthView").appendChild(UIMonthViewNode);
-
-	
+//  if (document.getElementById("UIPageDesktop")) document.body.appendChild(UIMonthViewNode);
+//	else document.getElementById("UIMonthView").appendChild(UIMonthViewNode);
+	document.body.insertBefore(UIMonthViewNode,document.body.firstChild);
   this.DragDrop.initCallback = this.initCallback ;
   this.DragDrop.dragCallback = this.dragCallback ;
   this.DragDrop.dropCallback = this.dropCallback ;
@@ -158,10 +145,11 @@ UICalendarDragDrop.prototype.synDragObjectPos = function(dndEvent) {
 } ;
 
 UICalendarDragDrop.prototype.initCallback = function(dndEvent) {
-  dndEvent.dragObject.style.top = '-1000px';
+	var dragObj = dndEvent.dragObject;
+  dragObj.style.top = '-1000px';
   eXo.calendar.UICalendarDragDrop.pos = {
-    "x": dndEvent.dragObject.offsetLeft,
-    "y": dndEvent.dragObject.offsetTop
+    "x": dragObj.offsetLeft,
+    "y": dragObj.offsetTop
   } ;
 } ;
 
@@ -224,11 +212,13 @@ UICalendarDragDrop.prototype.dropCallback = function(dndEvent) {
       var eventId = clickObject.getAttribute("eventId") ;
       var calId = clickObject.getAttribute("calId") ;
       var calType = clickObject.getAttribute("calType") ;
+			
       actionlink = actionlink.replace(/objectId\s*=\s*[a-zA-Z0-9_]*(?=&|'|\")/,"objectId=" + currentDate) ;
       actionlink = actionlink.replace(/eventId\s*=\s*[a-zA-Z0-9_]*(?=&|'|\")/,"eventId=" + eventId) ;
       actionlink = actionlink.replace(/calendarId\s*=\s*[a-zA-Z0-9_]*(?=&|'|\")/,"calendarId=" + calId) ;
       actionlink = actionlink.replace(/calType\s*=\s*[a-zA-Z0-9_]*(?=&|'|\")/,"calType=" + calType) ;
       actionlink = actionlink.replace("javascript:","") ;
+			
       eval(actionlink) ;
     }
   }
@@ -241,17 +231,20 @@ UICalendarDragDrop.prototype.getCheckedObject = function(clickObj){
   var i = evenObj.length ;
   var tmpNode = null ;
   var top = 0 ;
-  if(!this.isCheckedObject(clickObj)) {
+  //if(!this.isCheckedObject(clickObj)) {
     tmpNode = eXo.core.DOMUtil.findFirstDescendantByClass(clickObj, "input", "checkbox");
     tmpNode.checked = true ;
-  }
+  //}
   while(i--){
     if(!this.isCheckedObject(evenObj[i])) continue ;
     tmpNode = evenObj[i].cloneNode(true) ;
     eXo.core.Browser.setOpacity(tmpNode,50) ;
-    tmpNode.style.position = "absolute";
+		//console.log(tmpNode.className);
+    //tmpNode.style.position = "absolute";
     tmpNode.style.top = top + "px";
-    tmpNode.style.left = "0px";
+    //tmpNode.style.left = "0px";
+    tmpNode.style.width = clickObj.offsetWidth + "px	";
+		
     top += 20 ;
     checkedObj.push(tmpNode);
   }

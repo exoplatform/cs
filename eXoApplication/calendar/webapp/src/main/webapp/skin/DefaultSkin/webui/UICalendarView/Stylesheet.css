@@ -16,6 +16,11 @@
 	width: auto;
 }
 
+.DummyDNDClass {
+	position :absolute;
+  padding : 0px;
+  margin : 0px;
+}
 /*======================== Day view ==========================*/
 .UIDayView  {
 	border-bottom: 1px solid #c7c7c7;
@@ -130,7 +135,7 @@
 }
 
 .UIDayView .UIGrid {
-	_width: auto;  /* fixed for IE */
+	*width: auto;  /* fixed for IE */
 	border-top: none;
 }
 
@@ -175,7 +180,7 @@
 .UIWeekView .UIGrid {
 	border: 0px;
 	background-color: white;
-	_width: auto;
+	*width: auto;
 }
 
 .UIWeekView .EventWeekBar {
@@ -319,6 +324,7 @@
 .UIWeekView .EventAlldayContainer {
 	height: 13px;
 	border: 1px solid #808080;
+	visibility:hidden;
 }
 
 .UIWeekView .EventAlldayContainer .LeftResizeEvent {
@@ -414,7 +420,8 @@
 .UIScheduleView .UIGrid {
 	border: 0px;
 	background-color: #ffffff;
-	*width: 97%;
+	*width: auto;
+	table-layout: fixed;
 }
 
 .UIScheduleView .TimeBusy{
@@ -484,8 +491,9 @@
 	border-bottom: 1px solid #c7c7c7;
 }
 
-*html .UIYearView .UIGrid {
-	width: 97%;
+.UIYearView .UIGrid {
+	table-layout: fixed;
+	*width: auto;
 }
 
 .UIYearView .UIGrid td {
@@ -858,7 +866,7 @@
 .UIMonthView .EventMonthContent .UIGrid{
 	padding-left: 0px;
 	border: none;
-	_width: auto;
+	*width: auto;
 }
 
 .UIMonthView .EventMonthContent .DayBox {
@@ -866,6 +874,42 @@
 	border-top: 1px solid #c7c7c7;
 	padding: 2px 6px;
 }
+
+
+.UIMonthView .EventMonthContent .highPriorityIcon {
+	background-position: -4px -804px;
+	_background-position: left -804px;
+	height: 16px;
+}
+
+
+.UIMonthView .EventMonthContent .normalPriorityIcon {
+	background-position: -4px -804px;
+	_background-position: left -804px;
+	height: 16px;
+}
+
+
+.UIMonthView .EventMonthContent .lowPriorityIcon {
+	background-position: -4px -804px;
+	_background-position: left -804px;
+	height: 16px;
+}
+
+.UIMonthView .MoreEvent .highPriorityIcon {
+	position:static;
+}
+
+
+.UIMonthView .MoreEvent .normalPriorityIcon {
+	position:static;
+}
+
+
+.UIMonthView .MoreEvent .lowPriorityIcon {
+	position:static;
+}
+
 
 .UIMonthView .EventMonthContent  .DisableDay {
 	text-align: right;
@@ -959,7 +1003,7 @@
 	 left:2px;
 }
 .UIMonthView .EventMonthContent .EventSummary{
-	margin: 0px 0px  0px 15px;
+	margin: 0px 0px  0px 18px;
 	_margin: 0px;
 	padding-left:2px;
 }
@@ -968,7 +1012,7 @@
 	line-height: 17px;
 	height:17px;
 	margin-left:2px;
-	_width:80%;
+	_width:60%;
 	overflow:hidden;
 	white-space: nowrap;
 	-moz-user-select : none ;
@@ -980,6 +1024,11 @@
 	cursor:pointer;
 	z-index:1;
 }
+
+.UIMonthView .MoreEvent .EventLabel {
+	_padding-left:0px;
+}
+
 
 .UICalendarPortlet .MoreEvent .MoreEventBar {
   background: url('../skinIcons/icons/CloseMore.gif') no-repeat right;
@@ -1002,6 +1051,27 @@
 	width:100%;
 	display:none;
 	_padding-left:1px;
+}
+
+.UICalendarPortlet  .MoreEvent .EventCheckbox {
+	position:static;
+	float:left;
+}
+
+.UIMonthView .DummyDNDClass .EventCheckbox {
+	position:static;
+	float:left;
+}
+
+.UIMonthView .RowContainerDay .EventBoxes {
+	position:absolute;
+	left:0px;
+}
+
+.UIMonthView .MoreEvent .EventBoxes {
+	position:static;
+	width:100%;
+	left:0px;
 }
 
 /*====================View Task List =====================*/

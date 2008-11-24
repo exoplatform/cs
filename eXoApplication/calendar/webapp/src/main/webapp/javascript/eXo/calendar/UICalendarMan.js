@@ -615,7 +615,7 @@ GUIMan.prototype.paintWeek = function() {
     var dayObj = weekObj.days[i];
     var dayNode = this.dayNodes[i];
     var dayInfo = {
-      width : dayNode.offsetWidth,
+      width : dayNode.offsetWidth ,
       top : 0,
       startTime : Date.parse(dayNode.getAttribute('starttimefull'))
     }
@@ -653,19 +653,20 @@ GUIMan.prototype.paintWeek = function() {
  * @param {Integer} endTime
  * @param {Object} dayInfo
  */
+
 GUIMan.prototype.drawEventByMiliseconds = function(eventObj, startTime, endTime, dayInfo) {
-  var eventNode = eventObj.rootNode;
+	var eventNode = eventObj.rootNode;
   var topPos = dayInfo.eventTop ;
   var leftPos = dayInfo.left;
   var delta = (new Date(endTime)) - (new Date(startTime));
   delta /= (1000 * 60 * 60 * 24);
-  var eventLen = parseFloat(delta * (dayInfo.width));
+  var eventLen = parseInt(delta * (dayInfo.width));
   var leftPos = dayInfo.left + parseFloat((dayInfo.eventShiftRightPercent * dayInfo.width) / 100) + 1;
 	if(!eXo.core.Browser.isIE6() || (document.getElementById("UIPageDesktop")))	leftPos += 55 ;
-  eventNode.style.position = 'absolute';
   eventNode.style.top = topPos + 'px';
   eventNode.style.left = leftPos + 'px';
-  eventNode.style.width = eventLen + 'px';
+  eventNode.style.width = eventLen - 2 + 'px';
+	eventNode.style.visibility = 'visible';
 };
 
 GUIMan.prototype.initSelectionDayEvent = function() { 
@@ -787,17 +788,16 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
   // Draw invisible events (put all into more)
   if (dayObj.invisibleGroup.length > 0) {
     var moreNode = document.createElement('div');
-		moreNode.style.zIndex = 1;
     moreNode.className = 'MoreEvent';
     this.rowContainerDay.appendChild(moreNode);
-    with (moreNode.style) {			
-      width = dayInfo.width + 'px';
-      left = dayInfo.left + 'px' ;
-      top = dayInfo.top + ((dayObj.MAX_EVENT_VISIBLE - 1) * this.EVENT_BAR_HEIGH) + 5 + 'px';
-    }
+	
+    moreNode.style.width = dayInfo.width + 'px';
+    moreNode.style.left = dayInfo.left + 'px' ;
+    moreNode.style.top = dayInfo.top + ((dayObj.MAX_EVENT_VISIBLE - 1) * this.EVENT_BAR_HEIGH) + 5 + 'px';
+
     var moreContainerNode = document.createElement('div');
 		var moreEventBar = document.createElement('div');
-		var moreEventList = document.createElement('div');
+		var moreEventList = document.createElement('div');		
 		moreEventBar.className = "MoreEventBar" ;
 		moreEventBar.innerHTML = "<span></span>" ;
 		moreEventBar.onclick = this.hideMore ;
@@ -839,19 +839,13 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
 			eventNode.ondblclick = eXo.calendar.UICalendarPortlet.ondblclickCallback ;
       moreEventList.appendChild(eventNode);
       var topPos = this.EVENT_BAR_HEIGH * i;
-
-      eventNode.style.display = 'block';
-      eventNode.style.position = 'absolute';
       eventNode.style.top = topPos + 16 + 'px';
-      eventNode.style.left = '0px';
-      eventNode.style.width = dayInfo.width + 'px';
-
       eventNode.setAttribute('used', 'true');
     }
+    this.setWidthForMoreEvent(moreEventList,i,dayNode);
     var moreLabel = document.createElement('div');
 		moreLabel.className = "MoreEventLabel";
     moreLabel.innerHTML = 'more ' + cnt + '+';
-		moreContainerNode.style.height = this.EVENT_BAR_HEIGH*cnt + 16 + "px";
 		moreLabel.onclick = this.showMore;
     moreNode.appendChild(moreLabel);
 		moreContainerNode.appendChild(moreEventBar);
@@ -859,6 +853,20 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
     moreNode.appendChild(moreContainerNode);
     dayObj.moreNode = moreNode;
   }
+};
+
+GUIMan.prototype.setWidthForMoreEvent = function(moreEventList,len,dayNode){
+	var eventNodes = eXo.core.DOMUtil.getChildrenByTagName(moreEventList,"div");
+	var i = eventNodes.length ;
+	if(len > 9){
+		moreEventList.style.height = "200px";
+		moreEventList.style.overflowY = "auto";
+		moreEventList.style.overflowX = "hidden";
+		while(i--){
+			if(eXo.core.Browser.isIE6()) eventNodes[i].style.width = dayNode.offsetWidth - 15 + "px";
+		    if(eXo.core.Browser.isIE7()) eventNodes[i].style.width = dayNode.offsetWidth - 17 + "px";
+		}		
+	}
 };
 
 GUIMan.prototype.hideMore = function(){
@@ -938,7 +946,8 @@ GUIMan.prototype.drawEventByDay = function(eventObj, startTime, endTime, dayInfo
     delta ++ ;
   }
   delta = (delta < 1) ? 1 : delta;
-  var eventLen = (Math.round(delta) * (dayInfo.width)) ;  
+  var eventLen = Math.round(delta) * (dayInfo.width) + (delta - 1);
+	//eventLen = ((delta > 5) && eXo.core.Browser.isIE6())?(eventLen - 2): eventLen; 
 	eventNode.style.top = topPos + 'px';
   eventNode.style.left = leftPos + 'px';
   eventNode.style.width = eventLen + 'px';
@@ -971,7 +980,7 @@ GUIMan.prototype.setDynamicSize4Month = function() {
           moreNode.style.width = parseFloat(parseInt(moreNode.style.width)/totalWidth)*100 + '%';
           moreNode.style.left = parseFloat(parseInt(moreNode.style.left)/totalWidth)*100 + '%';
           var moreContainer = DOMUtil.findFirstDescendantByClass(moreNode, 'div', 'MoreContainer');
-          moreContainer.style.width = 100 + '%';
+          moreContainer.style.width = '100%';
           var eventNodes = DOMUtil.findDescendantsByClass(moreContainer, 'div', 'DayContentContainer');
           for (var k=0; k<eventNodes.length; k++) {
             eventNodes[k].style.width = '100%';
@@ -983,13 +992,13 @@ GUIMan.prototype.setDynamicSize4Month = function() {
 };
 
 GUIMan.prototype.setDynamicSize4Week = function() {
-  var events = eXo.calendar.UICalendarMan.EventMan.week.events;
-  var totalWidth = (this.eventAlldayNode.offsetWidth > 0)?this.eventAlldayNode.offsetWidth : 1;
-  for (var i=0; i<events.length; i++) {
-    var eventNode = events[i].rootNode;
-    eventNode.style.width = parseFloat(eventNode.style.width)/totalWidth * 100 + '%';
-    eventNode.style.left = parseFloat(eventNode.style.left)/totalWidth * 100 + '%';
-  }
+//  var events = eXo.calendar.UICalendarMan.EventMan.week.events;
+//  var totalWidth = (this.eventAlldayNode.offsetWidth > 0)?this.eventAlldayNode.offsetWidth : 1;
+//  for (var i=0; i<events.length; i++) {
+//    var eventNode = events[i].rootNode;
+//    eventNode.style.width = parseFloat(eventNode.style.width)/totalWidth * 100 + '%';
+//    eventNode.style.left = parseFloat(eventNode.style.left)/totalWidth * 100 + '%';
+//  }
 };
 
 

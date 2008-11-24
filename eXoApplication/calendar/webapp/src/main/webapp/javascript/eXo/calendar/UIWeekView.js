@@ -76,6 +76,7 @@ UIWeekView.prototype.distributeEvent = function() {
 
 UIWeekView.prototype.onResize = function() {
 		eXo.calendar.UIWeekView.setSize() ;
+		eXo.calendar.UICalendarPortlet.checkFilter();
 } ;
 
 UIWeekView.prototype.setSize = function() {
@@ -340,19 +341,20 @@ UIWeekView.prototype.rightResizeCallback = function() {
 	var totalWidth = outer.parentNode.offsetWidth;
 	var delta = outer.offsetWidth - UIHorizontalResize.beforeWidth ;
 	if (delta != 0) {
-		var weekdays = parseInt(document.getElementById("UIWeekViewGridAllDay").getAttribute("numberofdays"));
-		var UICalendarPortlet = eXo.calendar.UICalendarPortlet
-		var delta = Math.round(delta*(24*weekdays*60*60*1000)/totalWidth) ;
-		var start =  parseInt(outer.getAttribute("startTime")) ;
-		var end = parseInt(outer.getAttribute("endTime")) + delta;
-		var calType = parseInt(outer.getAttribute("calType")) ;
-		var actionLink = UICalendarPortlet.adjustTime(start, end, outer) ;
-		actionLink = actionLink.toString().replace(/'\s*\)/,"&calType=" + calType + "')") ;
-		eval(actionLink) ;
-	} else{
-		outer.style.left = parseFloat(outer.offsetLeft/outer.offsetParent.offsetWidth)*100 + "%" ;
-		outer.style.width = parseFloat(outer.offsetWidth/outer.offsetParent.offsetWidth)*100 + "%" ;
-	}
+  	var weekdays = parseInt(document.getElementById("UIWeekViewGridAllDay").getAttribute("numberofdays"));
+  	var UICalendarPortlet = eXo.calendar.UICalendarPortlet
+  	var delta = Math.round(delta * (24 * weekdays * 60 * 60 * 1000) / totalWidth);
+  	var start = parseInt(outer.getAttribute("startTime"));
+  	var end = parseInt(outer.getAttribute("endTime")) + delta;
+  	var calType = parseInt(outer.getAttribute("calType"));
+  	var actionLink = UICalendarPortlet.adjustTime(start, end, outer);
+  	actionLink = actionLink.toString().replace(/'\s*\)/, "&calType=" + calType + "')");
+  	eval(actionLink);
+  }
+//	} else{
+//		outer.style.left = parseFloat(outer.offsetLeft/outer.offsetParent.offsetWidth)*100 + "%" ;
+//		outer.style.width = parseFloat(outer.offsetWidth/outer.offsetParent.offsetWidth)*100 + "%" ;
+//	}
 } ;
 
 UIWeekView.prototype.leftResizeCallback = function() {
@@ -362,19 +364,20 @@ UIWeekView.prototype.leftResizeCallback = function() {
 	var totalWidth = outer.parentNode.offsetWidth;
 	var delta = UIHorizontalResize.beforeWidth - outer.offsetWidth ;
 	if (delta != 0) {
-		var weekdays = parseInt(document.getElementById("UIWeekViewGridAllDay").getAttribute("numberofdays"));
-		var UICalendarPortlet = eXo.calendar.UICalendarPortlet
-		var delta = Math.round(delta*(24*weekdays*60*60*1000)/totalWidth) ;
-		var start =  parseInt(outer.getAttribute("startTime")) + delta ;
-		var end = parseInt(outer.getAttribute("endTime")) ;
-		var calType = parseInt(outer.getAttribute("calType")) ;
-		var actionLink = UICalendarPortlet.adjustTime(start, end, outer) ;
-		actionLink = actionLink.toString().replace(/'\s*\)/,"&calType=" + calType + "')") ;
-		eval(actionLink) ;
-	} else{
-		outer.style.left = parseFloat(outer.offsetLeft/outer.offsetParent.offsetWidth)*100 + "%" ;
-		outer.style.width = parseFloat(outer.offsetWidth/outer.offsetParent.offsetWidth)*100 + "%" ;
-	}	
+  	var weekdays = parseInt(document.getElementById("UIWeekViewGridAllDay").getAttribute("numberofdays"));
+  	var UICalendarPortlet = eXo.calendar.UICalendarPortlet
+  	var delta = Math.round(delta * (24 * weekdays * 60 * 60 * 1000) / totalWidth);
+  	var start = parseInt(outer.getAttribute("startTime")) + delta;
+  	var end = parseInt(outer.getAttribute("endTime"));
+  	var calType = parseInt(outer.getAttribute("calType"));
+  	var actionLink = UICalendarPortlet.adjustTime(start, end, outer);
+  	actionLink = actionLink.toString().replace(/'\s*\)/, "&calType=" + calType + "')");
+  	eval(actionLink);
+  }	
+//	} else{
+//		outer.style.left = parseFloat(outer.offsetLeft/outer.offsetParent.offsetWidth)*100 + "%" ;
+//		outer.style.width = parseFloat(outer.offsetWidth/outer.offsetParent.offsetWidth)*100 + "%" ;
+//	}	
 } ;
 
 // For all day event
@@ -621,8 +624,8 @@ UIHorizontalResize.prototype.start = function(evt, outer, inner) {
 	var _e = window.event || evt ;
 	this.outerElement = outer ;
 	this.innerElement = inner ;
-	this.outerElement.style.width = this.outerElement.offsetWidth - 2 + "px" ;
-	this.innerElement.style.width = this.innerElement.offsetWidth - 2 + "px" ;
+//	this.outerElement.style.width = this.outerElement.offsetWidth - 2 + "px" ;
+//	this.innerElement.style.width = this.innerElement.offsetWidth - 2 + "px" ;
 	if(arguments.length > 3) {
 		this.outerElement.style.left = this.outerElement.offsetLeft + "px" ;
 		this.isLeft = true ;
