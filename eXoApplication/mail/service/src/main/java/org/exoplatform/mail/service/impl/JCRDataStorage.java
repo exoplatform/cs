@@ -842,13 +842,7 @@ public class JCRDataStorage {
   }
 
   public boolean saveMessage(SessionProvider sProvider, String username, String accId,
-      javax.mail.Message msg, String folderId, SpamFilter spamFilter) throws Exception {
-    return saveMessage(sProvider, username, accId, msg, folderId, spamFilter, null);
-  }
-
-
-  public boolean saveMessage(SessionProvider sProvider, String username, String accId,
-      javax.mail.Message msg, String folderId, SpamFilter spamFilter, List<String> filterList)
+      javax.mail.Message msg, String folderIds[], List<String> tagList, SpamFilter spamFilter)
   throws Exception {
     long t1, t2, t3, t4;
     String msgId = MimeMessageParser.getMessageId(msg);
@@ -860,16 +854,19 @@ public class JCRDataStorage {
       Node msgNode = msgHomeNode.getNode(msgId);
       logger.warn("Check duplicate ......................................");
       // check duplicate
-      byte checkDuplicate = checkDuplicateStatus(sProvider, username, msgHomeNode, accId, msgNode, folderId); 
-      if (checkDuplicate == Utils.MAIL_DUPLICATE_IN_OTHER_FOLDER) {
-        // there is a duplicate but in another folder
-        return true;
-      }
+      for (int i = 0; i < folderIds.length; i ++) {
+        String folderId = folderIds[i];
+        byte checkDuplicate = checkDuplicateStatus(sProvider, username, msgHomeNode, accId, msgNode, folderId); 
+        if (checkDuplicate == Utils.MAIL_DUPLICATE_IN_OTHER_FOLDER) {
+          // there is a duplicate but in another folder
+          return true;
+        }
 
-      if (checkDuplicate == Utils.MAIL_DUPLICATE_IN_SAME_FOLDER) {
-        // will "never" come here
-        // but we need to make sure ...
-        return false ;
+        if (checkDuplicate == Utils.MAIL_DUPLICATE_IN_SAME_FOLDER) {
+          // will "never" come here
+          // but we need to make sure ...
+          return false ;
+        }
       }
 
     } catch(Exception e) {
@@ -889,7 +886,6 @@ public class JCRDataStorage {
     }
     try {
       msgHomeNode.save();
-      String[] folderIds = { folderId };
       node.setProperty(Utils.EXO_ID, msgId);
       node.setProperty(Utils.EXO_IN_REPLY_TO_HEADER, MimeMessageParser.getInReplyToHeader(msg));
       node.setProperty(Utils.EXO_ACCOUNT, accId);
@@ -944,24 +940,11 @@ public class JCRDataStorage {
 
       node.setProperty(Utils.EXO_PRIORITY, MimeMessageParser.getPriority(msg));
 
-      List<String> folderList = new ArrayList<String>();
-      List<String> tagList = new ArrayList<String>();
-      MessageFilter filter;
-      if (filterList != null) {
-        for (int i = 0; i < filterList.size(); i++) {
-          filter = getFilterById(sProvider, username, accId, filterList.get(i));
-          folderList.add(filter.getApplyFolder());
-          String tagId = filter.getApplyTag();
-          if (tagId != null && tagId.trim().length() > 0)
-            tagList.add(tagId);
-        }
-        folderIds = folderList.toArray(new String[] {});
-      }
-
       if (spamFilter != null && spamFilter.checkSpam(msg)) {
         folderIds = new String[] { Utils.createFolderId(accId, Utils.FD_SPAM, false) };
       }
       node.setProperty(Utils.EXO_FOLDERS, folderIds);
+      
       if (tagList.size() > 0)
         node.setProperty(Utils.EXO_TAGS, tagList.toArray(new String[] {}));
 
