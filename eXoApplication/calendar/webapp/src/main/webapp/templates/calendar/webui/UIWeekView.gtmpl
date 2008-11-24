@@ -165,7 +165,7 @@
 		</div>
 	  
     </div>
-    <div class="EventWeekContent" style="position: relative;" onresize="eXo.calendar.UIWeekView.setSize() ;">
+    <div class="EventWeekContent" style="position: relative;" onresize="eXo.calendar.UIWeekView.onResize() ;">
       <div class="EventBoard">
         <%
 				cl = uicomponent.getBeginDateOfWeek() ;				
