@@ -76,7 +76,11 @@
     }
   %>
   <a href="$actionLink"  class="Icon Folder $icon $cssClass" folder="$id"><%=_ctx.appRes(uicomponent.getName() + ".label." + name)%>
-    <% if(msgQuantity > 0) { print "<span class=\"MailQuantity\">($msgQuantity)</span>"}%>
+    <% 
+       print "<span id=\"" + id + "\" class=\"MailQuantity\">" ;
+       if(msgQuantity > 0) print "($msgQuantity)";
+       print "</span>" ;
+    %>
   </a>
   <%}%>
 </div>
@@ -218,7 +222,9 @@
           builder.append("<div title=\"$collapse \" titlefolder=\"$title\" class=\"IconFolder Folder $selectedClass $pCssClass\" onClick=\"javascript:eXo.mail.UIMailPortlet.collapseExpandFolder(this)\" folder=\"").append(pid).append("\">");
           builder.append("<a class=\"FolderLink\" title=\"$name\" href=\"$pActionLink\" onclick=\"event.cancelBubble = true;\" folder=\"").append(pid).append("\">");
           builder.append(name);
-          if(pUnreadMess > 0) builder.append("<span class=\"MailQuantity\">($pUnreadMess)</span>");
+          builder.append("<span id=\"" + pid + "\" class=\"MailQuantity\">")
+          if(pUnreadMess > 0) builder.append("($pUnreadMess)");
+          builder.append("</span>");
           builder.append("</a>");
           builder.append("</div>")
           println(builder.toString());
@@ -246,7 +252,9 @@
       builder.append("<div title=\"$collapse \" titlefolder=\"$title\" class=\"IconFolder Folder $selectedClass $pCssClass\" onClick=\"javascript:eXo.mail.UIMailPortlet.collapseExpandFolder(this)\" folder=\"").append(pid).append("\">");
       builder.append("<a class=\"FolderLink\" title=\"$name\"  href=\"$pActionLink\" onclick=\"event.cancelBubble = true;\" folder=\"").append(pid).append("\">");
       builder.append(name);
-      if(pUnreadMess > 0) builder.append("<span class=\"MailQuantity\">($pUnreadMess)</span>");
+      builder.append("<span id=\"" + pid + "\" class=\"MailQuantity\">")
+      if(pUnreadMess > 0) builder.append("($pUnreadMess)");
+      builder.append("</span>")
       builder.append("</a>");
       builder.append("</div>")
       println(builder.toString());

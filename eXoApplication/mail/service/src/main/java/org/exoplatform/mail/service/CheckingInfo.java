@@ -36,6 +36,7 @@ public class CheckingInfo {
   private int fetching_ = 0  ;
   private int statusCode_ ;
   private String statusMsg_;
+  private String fetchingToFolders_;
   private boolean hasChanged_ ;
   private boolean isRequestStop_ = false;
   
@@ -49,6 +50,11 @@ public class CheckingInfo {
   public void setFetching(int in) { 
     fetching_ = in ; 
     hasChanged_ = true ;
+  }
+  
+  public String getFetchingToFolders() { return fetchingToFolders_; } 
+  public void setFetchingToFolders(String fetchingToFolders) {
+    fetchingToFolders_ = fetchingToFolders;
   }
   
   public String getStatusMsg() { return statusMsg_ ; }

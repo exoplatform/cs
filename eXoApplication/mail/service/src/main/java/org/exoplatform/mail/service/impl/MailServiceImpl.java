@@ -756,7 +756,6 @@ public class MailServiceImpl implements MailService {
                 if (logger.isDebugEnabled()) {
                   logger.debug("Stop requested on checkmail for " + account.getId());
                 }
-                removeCheckingInfo(username, accountId);
                 break;
               }
               
@@ -773,15 +772,35 @@ public class MailServiceImpl implements MailService {
               t1 = System.currentTimeMillis();
               filterList = msgMap.get(msg);
               try {
+                String[] folderIds = { folderId };
+                List<String> folderList = new ArrayList<String>();
+                List<String> tagList = new ArrayList<String>();
+                MessageFilter filter;
+                if (filterList != null && filterList.size() > 0) {
+                  for (int j = 0; j < filterList.size(); j++) {
+                    filter = getFilterById(sProvider, username, accountId, filterList.get(j));
+                    folderList.add(filter.getApplyFolder());
+                    String tagId = filter.getApplyTag();
+                    if (tagId != null && tagId.trim().length() > 0)
+                      tagList.add(tagId);
+                  }
+                  folderIds = folderList.toArray(new String[] {});
+                }
+                
                 saved = storage_.saveMessage(sProvider, username, account.getId(), msg,
-                    folderId, spamFilter, filterList);
+                    folderIds, tagList, spamFilter);
                 if (saved) {
                   msg.setFlag(Flags.Flag.SEEN, true);
                   if (deleteOnServer)
                     msg.setFlag(Flags.Flag.DELETED, true);
                   
+                  String folderStr = "";
+                  for (int k = 0; k < folderIds.length; k++) {
+                    folderStr += folderIds[k] + ",";
+                  }
+                  checkingLog_.get(key).setFetchingToFolders(folderStr);
                   
-                  account.setLastCheckedDate(MimeMessageParser.getReceivedDate(msg).getTime());
+                  if (i == (totalNew - 1)) account.setLastCheckedDate(MimeMessageParser.getReceivedDate(msg).getTime());
                 }
               } catch (Exception e) {
                 checkingLog_.get(key).setStatusMsg("An error occurs while fetching messsge " + (totalNew - i));
@@ -811,10 +830,13 @@ public class MailServiceImpl implements MailService {
           
         }
         info.setStatusCode(CheckingInfo.FINISHED_CHECKMAIL_STATUS);
-
+        
+        removeCheckingInfo(username, accountId);
+        
         logger.warn("/////////////////////////////////////////////////////////////");
         logger.warn("/////////////////////////////////////////////////////////////");
       } catch (Exception e) {
+        e.printStackTrace();
         logger.error("Error while checking emails for " + username + " on account " + accountId, e);
       }
     }
