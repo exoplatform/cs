@@ -106,6 +106,9 @@ public class UISearchForm extends UIForm {
         uiPortlet.findFirstComponentOfType(UIMessagePreview.class).setMessage(null);
         UIFolderContainer uiFolderContainer = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
         uiFolderContainer.setSelectedFolder(null);
+        UITagContainer uiTagContainer = uiPortlet.findFirstComponentOfType(UITagContainer.class); 
+        uiTagContainer.setSelectedTagId(null);
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiTagContainer);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiFolderContainer);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
       } catch(Exception e) {

@@ -123,8 +123,10 @@
           String tagName = MailUtils.encodeHTML(tag.getName());
           String actionLink = uicomponent.event("ChangeTag", tagId);
           String colorClass = tag.getColor() + "Tag";
+          String boldStyle = "";
+          if (tagId.equals(uicomponent.getSelectedTagId())) boldStyle = "font-weight:bold;";
     %>
-		  <a href="$actionLink" class="IconTagHolder $colorClass" tagId="$tagId" title="<%=tag.getName()%>"><%=tagName%></a>		
+		  <a href="$actionLink" style="$boldStyle" class="IconTagHolder $colorClass" tagId="$tagId" title="<%=tag.getName()%>"><%=tagName%></a>		
 		<%  
 		    }
 	    }  
