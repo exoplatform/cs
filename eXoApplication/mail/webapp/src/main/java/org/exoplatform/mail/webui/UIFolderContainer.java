@@ -172,6 +172,9 @@ public class UIFolderContainer extends UIContainer {
         uiMsgPreview.setMessage(null);
       }
       
+      UITagContainer uiTagContainer = uiPortlet.findFirstComponentOfType(UITagContainer.class); 
+      uiTagContainer.setSelectedTagId(null);
+      
       UISearchForm uiSearchForm = uiPortlet.findFirstComponentOfType(UISearchForm.class);
       if (!MailUtils.isFieldEmpty(uiSearchForm.getTextSearch())) {
         uiSearchForm.setTextSearch("");       
@@ -179,6 +182,7 @@ public class UIFolderContainer extends UIContainer {
       } else {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;
       }
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiTagContainer) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgArea) ;
     }
   }

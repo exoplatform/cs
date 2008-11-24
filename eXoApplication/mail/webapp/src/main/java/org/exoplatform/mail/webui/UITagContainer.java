@@ -99,7 +99,12 @@ public class UITagContainer extends UIForm {
     SANDYBROWN,SEAGREEN,SEASHELL,SIANNA,SILVER,SKYBLUE,THISTLE,TOMATO,TURQUOISE,
     VIOLET,WHEAT,YELLOW } ;
   
+  private String selectedTagId_ ;
+  
   public UITagContainer() throws Exception {}
+  
+  public String getSelectedTagId() { return selectedTagId_; }
+  public void setSelectedTagId(String selectedTagId) { selectedTagId_ = selectedTagId; }
   
   public List<Tag> getTags() throws Exception {
     List<Tag> tagList = new ArrayList<Tag>();
@@ -141,7 +146,9 @@ public class UITagContainer extends UIForm {
       uiMessageList.viewing_ = uiMessageList.VIEW_ALL;
       uiMessageList.viewMode = uiMessageList.MODE_LIST;
       uiMessagePreview.setMessage(null);
-      uiPortlet.findFirstComponentOfType(UIFolderContainer.class).setSelectedFolder(null);
+      UIFolderContainer uiFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
+      uiFolder.setSelectedFolder(null);
+      uiTags.setSelectedTagId(tagId);
       
       UISearchForm uiSearchForm = uiPortlet.findFirstComponentOfType(UISearchForm.class);
       if (!MailUtils.isFieldEmpty(uiSearchForm.getTextSearch())) {
@@ -151,6 +158,7 @@ public class UITagContainer extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiTags);
       }
       
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessagePreview.getAncestorOfType(UIMessageArea.class));
     }
   }
