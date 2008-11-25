@@ -432,7 +432,7 @@ UIWeekView.prototype.allDayDropCallback = function(evt) {
 	var UIWeekView = eXo.calendar.UIWeekView ;
 	var totalWidth = dragObject.parentNode.offsetWidth ;
 	var delta = dragObject.offsetLeft - UIWeekView.beforeStart ;
-	if (delta == 0) dragObject.style.left = UIWeekView.beforePercentStart + "%" ;
+	//if (delta == 0) dragObject.style.left = UIWeekView.beforePercentStart + "%" ;
 	UIWeekView.elementLeft = null ;
 	UIWeekView.elementTop = null ;
 	UIWeekView.beforeStart = null ;
