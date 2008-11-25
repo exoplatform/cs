@@ -831,6 +831,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
 
   protected void sendMail(MailService svr, OrganizationService orSvr,CalendarSetting setting, Account acc, String fromId,  String toId, CalendarEvent event) throws Exception {
     Message message = new Message() ;
+    List<Attachment> atts = getAttachments(null, false);
     DateFormat df = new SimpleDateFormat(setting.getDateFormat() + " " + setting.getTimeFormat()) ;
     User invitor = orSvr.getUserHandler().findUserByName(CalendarUtils.getCurrentUser()) ;
     StringBuffer sbSubject = new StringBuffer("[invitation] ") ;
@@ -867,10 +868,17 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">Participants:</td>") ;
     sbBody.append("<td style=\"padding: 4px;\">" +toId+ (getInvitationEmail() != null && getInvitationEmail().trim().length() > 0 ? ","+getInvitationEmail(): " ") + "</td>") ;
     sbBody.append("</tr>");
-    sbBody.append("<tr>");
-    sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">Link:</td>");  
-    sbBody.append("<td style=\"padding: 4px;\"> </td>");
-    sbBody.append("</tr>");
+    if(!atts.isEmpty()){
+      sbBody.append("<tr>");
+      sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">"+getLabel(UIEventDetailTab.FIELD_ATTACHMENTS)+":</td>");  
+      StringBuffer sbf = new StringBuffer();
+      for(Attachment att : atts) {
+        if(sbf.length() > 0) sbf.append(",") ;
+        sbf.append(att.getName());
+      }
+      sbBody.append("<td style=\"padding: 4px;\"> "+sbf.toString()+" </td>");
+      sbBody.append("</tr>");
+    }
     sbBody.append("</tbody>");
     sbBody.append("</table>");
     sbBody.append("</div>") ;
@@ -917,7 +925,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       bf.setMimeType("text/calendar") ;
       List<org.exoplatform.mail.service.Attachment> attachments = new ArrayList<org.exoplatform.mail.service.Attachment>() ;
       attachments.add(bf) ;
-      for(Attachment att : getAttachments(null, true)) {
+      for(Attachment att : atts) {
     	  bf = new BufferAttachment() ;
           bf.setInputStream(att.getInputStream()) ;
           bf.setName(att.getName());
