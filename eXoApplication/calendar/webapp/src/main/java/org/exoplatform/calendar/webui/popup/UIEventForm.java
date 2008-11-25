@@ -832,6 +832,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   protected void sendMail(MailService svr, OrganizationService orSvr,CalendarSetting setting, Account acc, String fromId,  String toId, CalendarEvent event) throws Exception {
     Message message = new Message() ;
     DateFormat df = new SimpleDateFormat(setting.getDateFormat() + " " + setting.getTimeFormat()) ;
+    User invitor = orSvr.getUserHandler().findUserByName(CalendarUtils.getCurrentUser()) ;
     StringBuffer sbSubject = new StringBuffer("[invitation] ") ;
     sbSubject.append(event.getSummary()) ;
     sbSubject.append(" ") ;
@@ -842,10 +843,16 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     sbBody.append("<table style=\"margin: 0px; padding: 0px; border-collapse: collapse; border-spacing: 0px; width: 100%; line-height: 16px;\">") ;
     sbBody.append("<tbody>") ;
     sbBody.append("<tr>") ;
-    sbBody.append("<td colspan=\"2\" style=\"font-size: 12px; text-align: center;\">You are invited to</td>") ;
+    sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">Who invited:</td>") ;
+    sbBody.append("<td style=\"padding: 4px;\"> " + invitor.getUserName() +"("+invitor.getEmail()+")" + " </td>") ;
     sbBody.append("</tr>") ;
     sbBody.append("<tr>") ;
-    sbBody.append("<td colspan=\"2\" style=\"font-weight: bold; text-align: center; font-size: 17px;\">"+event.getSummary()+"</td>") ;
+    sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">Summary :</td>") ;
+    sbBody.append("<td style=\"padding: 4px;\">" + event.getSummary()+ "</td>") ;
+    sbBody.append("</tr>") ;
+    sbBody.append("<tr>") ;
+    sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">Description:</td>") ;
+    sbBody.append("<td style=\"padding: 4px;\">" + (event.getDescription() != null && event.getDescription().trim().length() > 0 ? event.getDescription() : " ") + "</td>") ;
     sbBody.append("</tr>") ;
     sbBody.append("<tr>") ;
     sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">When:</td>") ;
@@ -853,12 +860,12 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     sbBody.append("<div>To: "+df.format(event.getToDateTime())+"</div></td>") ;
     sbBody.append("</tr>") ;
     sbBody.append("<tr>") ;
-    sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">Where:</td>") ;
-    sbBody.append("<td>" + (event.getLocation() != null && event.getLocation().trim().length() > 0 ? event.getLocation(): " ") + "</td>") ;
+    sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">Location:</td>") ;
+    sbBody.append("<td style=\"padding: 4px;\">" + (event.getLocation() != null && event.getLocation().trim().length() > 0 ? event.getLocation(): " ") + "</td>") ;
     sbBody.append("</tr>") ;
     sbBody.append("<tr>") ;
-    sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">Who:</td>") ;
-    sbBody.append("<td style=\"padding: 4px;\">" +toId+ "</td>") ;
+    sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">Participants:</td>") ;
+    sbBody.append("<td style=\"padding: 4px;\">" +toId+ (getInvitationEmail() != null && getInvitationEmail().trim().length() > 0 ? ","+getInvitationEmail(): " ") + "</td>") ;
     sbBody.append("</tr>");
     sbBody.append("<tr>");
     sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">Link:</td>");  
@@ -910,6 +917,13 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       bf.setMimeType("text/calendar") ;
       List<org.exoplatform.mail.service.Attachment> attachments = new ArrayList<org.exoplatform.mail.service.Attachment>() ;
       attachments.add(bf) ;
+      for(Attachment att : getAttachments(null, true)) {
+    	  bf = new BufferAttachment() ;
+          bf.setInputStream(att.getInputStream()) ;
+          bf.setName(att.getName());
+          bf.setMimeType(att.getMimeType()) ;
+          attachments.add(bf) ;
+      }  
       message.setAttachements(attachments) ;
     } catch (Exception e) {
       e.printStackTrace() ;

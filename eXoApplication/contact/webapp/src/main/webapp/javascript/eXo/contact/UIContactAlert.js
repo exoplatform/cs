@@ -5,17 +5,13 @@ function UIContactAlert() {
 UIContactAlert.prototype.init = function(eXoUser, eXoToken){
   eXo.core.Cometd.exoId = eXoUser;
   eXo.core.Cometd.exoToken = eXoToken;
-  eXo.core.Cometd.addOnConnectionReadyCallback(this.initCometd);
+  eXo.core.Cometd.subscribe('/eXo/Application/Contact/messages', function(eventObj) {		
+		eXo.contact.UIContactAlert.alarm(eventObj) ;
+  });
 	if (!eXo.core.Cometd.isConnected()) {
      eXo.core.Cometd.init();
   }
 } ;
-
-UIContactAlert.prototype.initCometd = function() {
-	 eXo.core.Cometd.subscribe('/eXo/Application/Contact/messages', function(eventObj) {		
-		eXo.contact.UIContactAlert.alarm(eventObj) ;
-  });
-}
 
 UIContactAlert.prototype.alarm = function(eventObj){
 	var a = eXo.core.JSON.parse(eventObj.data);	

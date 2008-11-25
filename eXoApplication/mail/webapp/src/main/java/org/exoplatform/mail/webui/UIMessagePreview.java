@@ -454,6 +454,7 @@ public class UIMessagePreview extends UIComponent {
 					List<Attachment> attList = msg.getAttachments() ;
 					List<CalendarEvent> eventList = new ArrayList<CalendarEvent>() ;
 					for(Attachment att : attList) {
+						if("text/calendar".equalsIgnoreCase(att.getMimeType()))
 						eventList.addAll(calService.getCalendarImportExports(CalendarServiceImpl.ICALENDAR).getEventObjects(att.getInputStream())) ;	
 					}
 					CalendarEvent calEvent = null ;

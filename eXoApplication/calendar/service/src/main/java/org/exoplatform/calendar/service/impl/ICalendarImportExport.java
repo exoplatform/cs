@@ -21,6 +21,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -233,9 +234,14 @@ public class ICalendarImportExport implements CalendarImportExport{
 
   public OutputStream exportEventCalendar(SessionProvider sProvider, String username, String calendarId, String type, String eventId) throws Exception {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>();
+    List<String> calendarIds = Arrays.asList(new String[]{calendarId}) ;
     if(type.equals(PRIVATE_TYPE)) {
-      events.add(storage_.getUserEvent(sProvider, username, calendarId, eventId))  ;
-    } 
+        events = storage_.getUserEventByCalendar(sProvider, username, calendarIds) ;
+      }else if(type.equals(SHARED_TYPE)) {
+        events = storage_.getSharedEventByCalendars(SessionProvider.createSystemProvider(), username, calendarIds) ;
+      }else if(type.equals(PUBLIC_TYPE)){
+        events = storage_.getGroupEventByCalendar(SessionProvider.createSystemProvider(), calendarIds) ;
+      } 
     net.fortuna.ical4j.model.Calendar calendar = new net.fortuna.ical4j.model.Calendar();
     calendar.getProperties().add(new ProdId("-//Ben Fortuna//iCal4j 1.0//EN"));
     calendar.getProperties().add(Version.VERSION_2_0);

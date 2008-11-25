@@ -530,7 +530,7 @@ public class VCardImportExport implements ContactImportExport {
       re.setSummary(String.valueOf(index + 1) + " contacts imported ...") ;
       JsonValue json = generatorImpl.createJsonObject(re);
       ContinuationService continuation = getContinuationService() ;
-      continuation.sendMessage(username, "/eXo/Application/Contact/messages", json);
+      continuation.sendMessage(username, "/eXo/Application/Contact/messages", json.toString(), null);
     }
   }
 

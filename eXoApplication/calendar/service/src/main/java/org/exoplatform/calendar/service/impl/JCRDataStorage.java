@@ -768,8 +768,11 @@ public class JCRDataStorage{
       Node reminders = getReminderFolder(SessionProvider.createSystemProvider(), eventNode.getProperty(Utils.EXO_FROM_DATE_TIME).getDate().getTime()) ;
       if(reminders.hasNode(eventNode.getName())) reminders.getNode(eventNode.getName()).remove() ;
       Node events = reminders.getParent().getNode(Utils.CALENDAR_REMINDER) ;
-      if(events != null && events.hasNode(eventNode.getName())) events.getNode(eventNode.getName()).remove() ;
-      if(!reminders.isNew())reminders.save() ;
+      if(events.hasNode(eventNode.getName())) {
+        events.getNode(eventNode.getName()).remove() ;
+        if(!reminders.isNew())reminders.save() ;
+        else reminders.getSession().save() ;
+      }
     }
   } 
 

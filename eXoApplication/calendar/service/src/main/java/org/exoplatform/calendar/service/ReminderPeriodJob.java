@@ -38,7 +38,8 @@ public class ReminderPeriodJob extends  PeriodJob {
     String password = props.getProperty("password") ;
     String outgoingServer = props.getProperty("outgoing") ;
     String port = props.getProperty("port") ;
-    String isSsl = props.getProperty("ssl") ;
+    String isSsl ="false" ;
+    if(props.getProperty("ssl") != null) isSsl = props.getProperty("ssl") ;
     jdatamap_.put("timeZone", timeZone) ;
     jdatamap_.put("account", account) ;
     jdatamap_.put("password", password) ;
