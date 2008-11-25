@@ -46,7 +46,7 @@ QuickSortObject.prototype.swap = function(x, y){
 QuickSortObject.prototype.qSortRecursive = function(begin, end){
   if (!this.processArray || begin >= end - 1) 
     return;
-  var pivotIndex = begin + Math.floor(Math.random() * (end - begin - 1));
+  var pivotIndex = begin + Math.floor(0.5 * (end - begin - 1));
   var partionIndex = this.partitionProcess(begin, end, pivotIndex);
   this.qSortRecursive(begin, partionIndex);
   this.qSortRecursive(partionIndex + 1, end);
