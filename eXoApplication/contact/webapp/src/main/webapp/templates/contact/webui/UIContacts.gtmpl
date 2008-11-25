@@ -84,7 +84,7 @@
 					</div>
 					<% } %>
 					
-					<a href="<%=uicomponent.event("MoveContacts")%>" class="ControlButton">
+					<a href="javascript:void(0);" onclick='eXo.cs.Utils.confirmAction(this,"$msg","<%=uiform.id%>") ;' actionLink="<%=uicomponent.event("MoveContacts")%>" class="ControlButton">
 						<div class="Icon MoveIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.move")%>"><span></span></div>
 					</a>					
 					<!--<div class="SeparatorLine"><span></span></div>-->
@@ -93,22 +93,22 @@
 						<div class="Icon ChatIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.instantMessage")%>"><span></span></div>
 					</a>
 					-->
-					<a href="<%=uicomponent.event("Tag")%>" class="ControlButton">
+					<a href="javascript:void(0);" onclick='eXo.cs.Utils.confirmAction(this,"$msg","<%=uiform.id%>") ;' actionLink="<%=uicomponent.event("Tag")%>" class="ControlButton">
 						<div class="Icon SelectTagIcon"title="<%=_ctx.appRes(uicomponent.getName() + ".label.tag")%>"><span></span></div>
 					</a>
-					<a href="<%=uicomponent.event("SendEmail")%>" class="ControlButton">
+					<a href="javascript:void(0);" onclick='eXo.cs.Utils.confirmAction(this,"$msg","<%=uiform.id%>") ;' actionLink="<%=uicomponent.event("SendEmail")%>" class="ControlButton">
 						<div class="Icon MessageIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.email")%>"><span></span></div>
 					</a>
 				<!--	<div class="SeparatorLine"><span></span></div>-->
-					<a href="<%=uicomponent.event("DeleteContacts", uicomponent.id, "null")%>" class="ControlButton">
+					<a href="javascript:void(0);" onclick='eXo.cs.Utils.confirmAction(this,"$msg","<%=uiform.id%>") ;' actionLink="<%=uicomponent.event("DeleteContacts", uicomponent.id, "null")%>" class="ControlButton">
 						<div class="Icon DustBin16x16Icon " title="<%=_ctx.appRes(uicomponent.getName() + ".label.delete")%>"><span></span></div>
 					</a>
 					
-					<a href="<%= uicomponent.event("Print") %>" class="ControlButton">
+					<a href="javascript:void(0);" onclick='eXo.cs.Utils.confirmAction(this,"$msg","<%=uiform.id%>") ;' actionLink="<%= uicomponent.event("Print") %>" class="ControlButton">
 							<div class="Icon PrintIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.print")%>"><span></span></div>
 					</a>
 				
-					<a href="<%=uicomponent.event("CopyContact")%>" class="ControlButton">
+					<a href="javascript:void(0);" onclick='eXo.cs.Utils.confirmAction(this,"$msg","<%=uiform.id%>") ;' actionLink="<%=uicomponent.event("CopyContact")%>" class="ControlButton">
 							<div class="Icon CopyContactIcon" title="<%=_ctx.appRes(uicomponent.getName() + ".label.copyContacts")%>"><span></span></div>
 					</a>
 					<div style="clear: both;"><span></span></div>

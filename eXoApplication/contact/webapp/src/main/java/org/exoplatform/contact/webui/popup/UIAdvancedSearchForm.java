@@ -25,6 +25,7 @@ import org.exoplatform.contact.service.DataPageList;
 import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
+import org.exoplatform.contact.webui.UISearchForm;
 import org.exoplatform.contact.webui.UITags;
 import org.exoplatform.contact.webui.UIWorkingContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -121,15 +122,39 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent {
       }
       
       ContactFilter filter = new ContactFilter() ;
-      if(!ContactUtils.isEmpty(text)) filter.setText(ContactUtils.filterString(text, true)) ;
-      if(!ContactUtils.isEmpty(fullName)) filter.setFullName(ContactUtils.filterString(fullName, false)) ;   
-      if(!ContactUtils.isEmpty(firstName)) filter.setFirstName(ContactUtils.filterString(firstName, false)) ;       
-      if(!ContactUtils.isEmpty(lastName)) filter.setLastName(ContactUtils.filterString(lastName, false)) ;
-      if(!ContactUtils.isEmpty(nickName)) filter.setNickName(ContactUtils.filterString(nickName, false)) ;      
-      if(!ContactUtils.isEmpty(jobTitle)) filter.setJobTitle(ContactUtils.filterString(jobTitle, false)) ;      
-      if(!ContactUtils.isEmpty(email)) filter.setEmailAddress(ContactUtils.filterString(email, true)) ;
-      if(!ContactUtils.isEmpty(gender)) filter.setGender(ContactUtils.filterString(gender, false)) ;
-
+      UISearchForm.filter = new ContactFilter() ;
+      if(!ContactUtils.isEmpty(text)) {
+        filter.setText(text) ;
+        UISearchForm.filter.setText(text) ;
+      }
+      if(!ContactUtils.isEmpty(fullName)) {
+        filter.setFullName(fullName) ;   
+        UISearchForm.filter.setFullName(fullName) ;
+      }
+      if(!ContactUtils.isEmpty(firstName)) {
+        filter.setFirstName(firstName) ;   
+        UISearchForm.filter.setFirstName(firstName) ;
+      }
+      if(!ContactUtils.isEmpty(lastName)) {
+        filter.setLastName(lastName) ;
+        UISearchForm.filter.setLastName(lastName) ;
+      }
+      if(!ContactUtils.isEmpty(nickName)) {
+        filter.setNickName(nickName) ;     
+        UISearchForm.filter.setNickName(nickName) ; 
+      }
+      if(!ContactUtils.isEmpty(jobTitle)) {
+        filter.setJobTitle(jobTitle) ;  
+        UISearchForm.filter.setJobTitle(jobTitle) ; 
+      }
+      if(!ContactUtils.isEmpty(email)) {
+        filter.setEmailAddress(email) ;
+        UISearchForm.filter.setEmailAddress(email) ;
+      }
+      if(!ContactUtils.isEmpty(gender)) {
+        filter.setGender(gender) ;
+        UISearchForm.filter.setGender(gender) ;
+      }
       DataPageList resultPageList = null ;
       if (!ContactUtils.isEmpty(filter.getText()) || !ContactUtils.isEmpty(filter.getFullName()) || !ContactUtils.isEmpty(filter.getFirstName()) || 
           !ContactUtils.isEmpty(filter.getLastName()) || !ContactUtils.isEmpty(filter.getNickName()) || !ContactUtils.isEmpty(filter.getJobTitle()) || 

@@ -478,6 +478,7 @@ public class UIAddressBooks extends UIComponent {
   }
 
   static public class DeleteGroupActionListener extends EventListener<UIAddressBooks> {
+    @SuppressWarnings("static-access")
     public void execute(Event<UIAddressBooks> event) throws Exception {
       UIAddressBooks uiAddressBook = event.getSource();
       UIWorkingContainer workingContainer = uiAddressBook.getAncestorOfType(UIWorkingContainer.class);
@@ -518,26 +519,17 @@ public class UIAddressBooks extends UIComponent {
             contactService.getContactPageListByTag(sessionProvider, username, selectedTag)) ;
       }
       
-      // cs-1795
-      if (uiContacts.isDisplaySearchResult()) {  
-        List<Contact> allContacts = uiContacts.getContactPageList().getAll() ;
-        for (Contact reContact : removedContacts) {
-          for (int i = 0; i < allContacts.size(); i++) {
-            if (allContacts.get(i).getId().equals(reContact.getId())) {
-              allContacts.remove(i) ;
-              break ;
-            }
-          }          
-        }        
-        //uiContacts.setContact(removedContacts, false) ;
-        uiContacts.updateList() ;
+      if (uiContacts.isDisplaySearchResult()) {
+        //cs-1809 
+        uiContacts.setContacts(contactService.searchContact(SessionProviderFactory.createSessionProvider()
+          , username, workingContainer.findFirstComponentOfType(UISearchForm.class).filter)) ;
       }
       if (uiContacts.getSelectedGroup() != null && groupId.equals(uiContacts.getSelectedGroup()))
         uiContacts.setSelectedGroup(null) ;
       
       // cs-1644
       for (Contact contact : removedContacts)
-        uiAddressBook.copyContacts.remove(contact.getId()) ;
+        uiAddressBook.copyContacts.remove(contact.getId()) ; 
       event.getRequestContext().addUIComponentToUpdateByAjax(workingContainer);     
     }
   }
