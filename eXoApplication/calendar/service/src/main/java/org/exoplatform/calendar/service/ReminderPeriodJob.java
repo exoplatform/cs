@@ -32,6 +32,8 @@ public class ReminderPeriodJob extends  PeriodJob {
   public ReminderPeriodJob(InitParams params) throws Exception {
     super(params) ;
   	ExoProperties props =  params.getPropertiesParam("reminder.info").getProperties() ;
+  	String isSsl ="false" ;
+  	if(props.getProperty("ssl") != null) isSsl = props.getProperty("ssl") ;
     jdatamap_ = new JobDataMap() ;
     String timeZone = props.getProperty("timeZone") ;
     String account = props.getProperty("account") ;
@@ -43,6 +45,7 @@ public class ReminderPeriodJob extends  PeriodJob {
     jdatamap_.put("password", password) ;
     jdatamap_.put("outgoing", outgoingServer) ;
     jdatamap_.put("port", port) ;
+    jdatamap_.put("ssl", isSsl) ;
  }
   public JobDataMap  getJobDataMap() {  return jdatamap_ ;  }
 }

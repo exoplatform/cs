@@ -214,9 +214,9 @@ public class JCRDataStorage{
     Node calendarHome = getUserCalendarHome(sProvider, username) ;    
     QueryManager qm = calendarHome.getSession().getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + calendarHome.getPath() 
-        + "//element(*,exo:calendar)[@exo:categoryId='").
-        append(calendarCategoryId).
-        append("']");
+                                                + "//element(*,exo:calendar)[@exo:categoryId='").
+                                                append(calendarCategoryId).
+                                                append("']");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
     QueryResult result = query.execute();
     NodeIterator it = result.getNodes();
@@ -294,9 +294,9 @@ public class JCRDataStorage{
     for(String groupId : groupIds) {
       qm = calendarHome.getSession().getWorkspace().getQueryManager();
       StringBuffer queryString = new StringBuffer("/jcr:root" + calendarHome.getPath() 
-          + "//element(*,exo:calendar)[@exo:groups='").
-          append(groupId).
-          append("']");
+                                                  + "//element(*,exo:calendar)[@exo:groups='").
+                                                  append(groupId).
+                                                  append("']");
       Query query = qm.createQuery(queryString.toString(), Query.XPATH);
       QueryResult result = query.execute();
       NodeIterator it = result.getNodes();
@@ -455,7 +455,7 @@ public class JCRDataStorage{
       String categoryId = categoryNode.getProperty(Utils.EXO_ID).getString() ;     
       StringBuffer queryString = 
         new StringBuffer("/jcr:root" + calendarHome.getPath()  
-            + "//element(*,exo:calendar)[@exo:categoryId='").append(categoryId).append("']");
+                         + "//element(*,exo:calendar)[@exo:categoryId='").append(categoryId).append("']");
       Query query = qm.createQuery(queryString.toString(), Query.XPATH);
       QueryResult result = query.execute();
       NodeIterator it = result.getNodes();
@@ -579,9 +579,9 @@ public class JCRDataStorage{
           QueryResult result ;
           while (calIter.hasNext()) {
             StringBuffer queryString = new StringBuffer("/jcr:root" + calIter.nextNode().getPath() 
-                + "//element(*,exo:calendarEvent)[@exo:eventCategoryId='").
-                append(eventCategory.getName()).
-                append("']");
+                                                        + "//element(*,exo:calendarEvent)[@exo:eventCategoryId='").
+                                                        append(eventCategory.getName()).
+                                                        append("']");
             query = qm.createQuery(queryString.toString(), Query.XPATH);
             result = query.execute();
             NodeIterator it = result.getNodes();
@@ -657,9 +657,9 @@ public class JCRDataStorage{
     NodeIterator calIter = publicCalendarHome.getNodes() ;
     while (calIter.hasNext()) {
       StringBuffer queryString = new StringBuffer("/jcr:root" + calIter.nextNode().getPath() 
-          + "//element(*,exo:calendarEvent)[@exo:eventCategoryId='").
-          append(eventCategoryId).
-          append("']");
+                                                  + "//element(*,exo:calendarEvent)[@exo:eventCategoryId='").
+                                                  append(eventCategoryId).
+                                                  append("']");
       query = qm.createQuery(queryString.toString(), Query.XPATH);
       result = query.execute();
       NodeIterator it = result.getNodes();
@@ -678,9 +678,9 @@ public class JCRDataStorage{
     NodeIterator calIter = sharedCalendarHome.getNodes() ;
     while (calIter.hasNext()) {
       StringBuffer queryString = new StringBuffer("/jcr:root" + calIter.nextNode().getPath() 
-          + "//element(*,exo:calendarEvent)[@exo:eventCategoryId='").
-          append(eventCategoryId).
-          append("']");
+                                                  + "//element(*,exo:calendarEvent)[@exo:eventCategoryId='").
+                                                  append(eventCategoryId).
+                                                  append("']");
       query = qm.createQuery(queryString.toString(), Query.XPATH);
       result = query.execute();
       NodeIterator it = result.getNodes();
@@ -699,9 +699,9 @@ public class JCRDataStorage{
     NodeIterator calIter = calendarHome.getNodes() ;
     while (calIter.hasNext()) {
       StringBuffer queryString = new StringBuffer("/jcr:root" + calIter.nextNode().getPath() 
-          + "//element(*,exo:calendarEvent)[@exo:eventCategoryId='").
-          append(eventCategoryId).
-          append("']");
+                                                  + "//element(*,exo:calendarEvent)[@exo:eventCategoryId='").
+                                                  append(eventCategoryId).
+                                                  append("']");
       query = qm.createQuery(queryString.toString(), Query.XPATH);
       result = query.execute();
       NodeIterator it = result.getNodes();
@@ -764,8 +764,13 @@ public class JCRDataStorage{
       Node reminders = getReminderFolder(SessionProvider.createSystemProvider(), eventNode.getProperty(Utils.EXO_FROM_DATE_TIME).getDate().getTime()) ;
       if(reminders.hasNode(eventNode.getName())) reminders.getNode(eventNode.getName()).remove() ;
       Node events = reminders.getParent().getNode(Utils.CALENDAR_REMINDER) ;
-      if(events != null && events.hasNode(eventNode.getName())) events.getNode(eventNode.getName()).remove() ;
-      if(!reminders.isNew())reminders.save() ;
+      if(events != null && events.hasNode(eventNode.getName())){
+        if(events.hasNode(eventNode.getName())) {
+          events.getNode(eventNode.getName()).remove() ;
+          if(!reminders.isNew())reminders.save() ;
+          else reminders.getSession().save() ;
+        }
+      }
     }
   } 
 
@@ -956,8 +961,8 @@ public class JCRDataStorage{
     reminderNode.setProperty(Utils.EXO_IS_REPEAT, reminder.isRepeat()) ;
     reminderNode.setProperty(Utils.EXO_IS_OVER, false) ;
     StringBuffer sb = new StringBuffer() ;
-   
-   
+
+
     if(CalendarEvent.TYPE_EVENT.equals(eventNode.getProperty(Utils.EXO_EVENT_TYPE).getString())) {
       if(eventNode.hasProperty(Utils.EXO_PARTICIPANT)) {
         for(Value v : eventNode.getProperty(Utils.EXO_PARTICIPANT).getValues()) {
@@ -1092,9 +1097,9 @@ public class JCRDataStorage{
   private void syncRemoveEvent(Node eventFolder, String rootEventId) throws Exception{
     QueryManager qm = eventFolder.getSession().getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + eventFolder.getParent().getParent().getParent().getPath() 
-        + "//element(*,exo:calendarPublicEvent)[@exo:rootEventId='").
-        append(rootEventId).
-        append("']");
+                                                + "//element(*,exo:calendarPublicEvent)[@exo:rootEventId='").
+                                                append(rootEventId).
+                                                append("']");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
     QueryResult result = query.execute();
     NodeIterator it = result.getNodes();
@@ -1350,7 +1355,7 @@ public class JCRDataStorage{
   }
 
   public int generateRss(SessionProvider sProvider ,String username, List<String> calendarIds, RssData rssData, 
-      CalendarImportExport importExport) throws Exception {
+                         CalendarImportExport importExport) throws Exception {
     Node rssHomeNode = getRssHome(sProvider, username) ;
     Node iCalHome = null ;
     try {
@@ -1387,7 +1392,7 @@ public class JCRDataStorage{
           StringBuffer path = new StringBuffer("/") ;
           path.append(iCalHome.getName()).append("/").append(iCalHome.getNode(calendarId + ".ics").getName());        
           String url = getEntryUrl(portalName, rssHomeNode.getSession().getWorkspace().getName(), 
-              username, path.toString(), rssData.getUrl()) ;
+                                   username, path.toString(), rssData.getUrl()) ;
           Calendar exoCal = getUserCalendar(sProvider, username, calendarId) ;
           entry = new SyndEntryImpl();
           entry.setTitle(exoCal.getName());                
@@ -1421,7 +1426,7 @@ public class JCRDataStorage{
 
 
   public int generateCalDav(SessionProvider sProvider ,String username, List<String> calendarIds, RssData rssData, 
-      CalendarImportExport importExport) throws Exception {
+                            CalendarImportExport importExport) throws Exception {
     Node rssHomeNode = getRssHome(sProvider, username) ;
     Node WebDaveiCalHome = null ;
     try {
