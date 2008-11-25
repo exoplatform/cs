@@ -72,11 +72,10 @@ public class MailWebservice implements ResourceContainer {
         .getCurrentContainer().getComponentInstanceOfType(MailService.class);
     StringBuffer buffer = new StringBuffer();
     
-    mailService.stopCheckMail(userName, accountId);
+    //mailService.stopCheckMail(userName, accountId);
     
     CheckingInfo checkingInfo = mailService.getCheckingInfo(userName, accountId);   
     if (checkingInfo != null) {
-//      checkingInfo.setRequestStop(true);
 //      while (checkingInfo.getStatusCode() != CheckingInfo.FINISHED_CHECKMAIL_STATUS) {
 //        Thread.sleep(MailWebservice.MIN_SLEEP_TIMEOUT);
 //        continue;
@@ -88,7 +87,8 @@ public class MailWebservice implements ResourceContainer {
       buffer.append("    <statusmsg>" + checkingInfo.getStatusMsg() + "</statusmsg>");
       buffer.append("  </checkingmail>");
       buffer.append("</info>");
-      mailService.removeCheckingInfo(userName, accountId);
+      
+      checkingInfo.setRequestStop(true);
     } else {
       return Response.Builder.serverError().build();
     }
@@ -142,6 +142,7 @@ public class MailWebservice implements ResourceContainer {
         buffer.append("    <statusmsg>" + checkingInfo.getStatusMsg() + "</statusmsg>");
         buffer.append("    <total>" + checkingInfo.getTotalMsg() + "</total>");
         buffer.append("    <completed>" + checkingInfo.getFetching() + "</completed>");
+        buffer.append("    <fetchingtofolders>" + checkingInfo.getFetchingToFolders() + "</fetchingtofolders>");
         buffer.append("  </checkingmail>");
         buffer.append("</info>");
         checkingInfo.setHasChanged(false);
