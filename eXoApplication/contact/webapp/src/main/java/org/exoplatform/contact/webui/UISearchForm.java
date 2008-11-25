@@ -48,6 +48,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
 )
 public class UISearchForm extends UIForm {
   final static  private String FIELD_SEARCHVALUE = "inputValue" ;
+  public static ContactFilter filter ;
   
   public UISearchForm() {
     addChild(new UIFormStringInput(FIELD_SEARCHVALUE, FIELD_SEARCHVALUE, null)) ;
@@ -75,10 +76,11 @@ public class UISearchForm extends UIForm {
       if (!ContactUtils.isEmpty(text)) {
         ContactFilter filter = new ContactFilter() ;
         filter.setText(text) ;
+        UISearchForm.filter = new ContactFilter() ;
+        UISearchForm.filter.setText(text) ;        
         resultPageList = ContactUtils.getContactService()
           .searchContact(SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), filter) ;
-      }
-      
+      }      
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class).setSelectedGroup(null) ;
       uiContactPortlet.findFirstComponentOfType(UITags.class).setSelectedTag(null) ;      
