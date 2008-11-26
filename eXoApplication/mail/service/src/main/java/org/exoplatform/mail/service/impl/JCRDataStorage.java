@@ -945,7 +945,7 @@ public class JCRDataStorage {
       }
       node.setProperty(Utils.EXO_FOLDERS, folderIds);
       
-      if (tagList.size() > 0)
+      if (tagList != null && tagList.size() > 0)
         node.setProperty(Utils.EXO_TAGS, tagList.toArray(new String[] {}));
 
       ArrayList<String> values = new ArrayList<String>();
