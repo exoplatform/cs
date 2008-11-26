@@ -21,10 +21,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.services.organization.Group;
+import org.exoplatform.services.organization.MembershipHandler;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
@@ -232,8 +234,8 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
       OrganizationService service = uiForm.getApplicationComponent(OrganizationService.class) ;
       String keyword = uiForm.getUIStringInput(FIELD_KEYWORD).getValue();
       String filter = uiForm.getUIFormSelectBox(FIELD_FILTER).getValue() ;
-      uiForm.groupId_ = null ;  
-      uiForm.setSelectedGroup(null) ;
+      //uiForm.groupId_ = null ;  
+      //uiForm.setSelectedGroup(null) ;
       if(CalendarUtils.isEmpty(keyword)) {
         uiForm.init(uiForm.pars_) ;
       }  else {
@@ -251,8 +253,17 @@ public class UISelectUserForm extends UIForm implements UIPopupComponent {
         if(EMAIL.equals(filter)) {
           q.setEmail(keyword) ;
         }
-        List results = new ArrayList() ;
+        List results = new CopyOnWriteArrayList() ;
         results.addAll(service.getUserHandler().findUsers(q).getAll()) ;
+        MembershipHandler memberShipHandler = service.getMembershipHandler();
+        String groupId = uiForm.getSelectedGroup();
+        if(groupId != null && groupId.trim().length() != 0) {
+          for(Object user : results) {
+            if(memberShipHandler.findMembershipsByUserAndGroup(((User)user).getUserName(), groupId).size() == 0) {
+              results.remove(user);
+            }
+          }
+        }
         ObjectPageList objPageList = new ObjectPageList(results, 10) ;
         uiForm.uiIterator_.setPageList(objPageList);
       }
