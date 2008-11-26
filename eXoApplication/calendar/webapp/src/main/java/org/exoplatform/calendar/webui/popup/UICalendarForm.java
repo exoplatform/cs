@@ -93,6 +93,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
   public Calendar calendar_ = null ;
   public String calType_ =  CalendarUtils.PRIVATE_TYPE ;
   private boolean isAddNew_ = true ;
+  public String groupCalId_ = null ;
   public UICalendarForm() throws Exception{
     super("UICalendarForm");
     UIFormInputWithActions calendarDetail = new UIFormInputWithActions(INPUT_CALENDAR) ;
@@ -460,6 +461,12 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
     public void execute(Event<UICalendarForm> event) throws Exception {
       UICalendarForm uiForm = event.getSource() ;
       uiForm.resetField() ;
+      if(uiForm.isAddNew_) {
+        UICalendarPortlet uiCalendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
+        uiForm.setSelectedGroup(uiForm.groupCalId_) ;
+        uiForm.setTimeZone(uiCalendarPortlet.getCalendarSetting().getTimeZone()) ;
+        uiForm.setLocale(uiCalendarPortlet.getCalendarSetting().getLocation()) ;
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
     }
   }

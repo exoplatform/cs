@@ -263,6 +263,7 @@ public class UICalendars extends UIForm  {
       calendarForm.setTimeZone(uiCalendarPortlet.getCalendarSetting().getTimeZone()) ;
       calendarForm.setLocale(uiCalendarPortlet.getCalendarSetting().getLocation()) ;
       calendarForm.setSelectedGroup(categoryId) ;
+      calendarForm.groupCalId_ = categoryId ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }
