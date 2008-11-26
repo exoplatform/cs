@@ -42,6 +42,16 @@ public interface CalendarImportExport {
   public void importCalendar(SessionProvider userSession, String username, InputStream icalInputStream, String calendarName) throws Exception ;
   
   /**
+   * The method imports events form icalendar(.ics) or outlook calendar exported .csv file to the system
+   * @param userSession session of current user
+   * @param username current user name or id
+   * @param icalInputStream data input stream
+   * @param calendarId given  existed calendar id  
+   * @throws Exception
+   */
+  public void importToCalendar(SessionProvider userSession, String username, InputStream icalInputStream, String calendarId) throws Exception ;
+  
+  /**
    * The method exports events form calendar to icalendar file (.ics) or .csv file
    * @param userSession session of current user
    * @param username current user name or id
@@ -71,4 +81,12 @@ public interface CalendarImportExport {
    * @throws Exception
    */
   public List<CalendarEvent> getEventObjects(InputStream icalInputStream) throws Exception ;
+  
+  /**
+   * The method return true if the input stream is correct format 
+   * @param icalInputStream the input stream
+   * @throws Exception
+   */
+  public boolean isValidate(InputStream icalInputStream) throws Exception ;
+  
 }
