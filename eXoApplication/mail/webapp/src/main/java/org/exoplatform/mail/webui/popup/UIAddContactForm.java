@@ -19,6 +19,7 @@ package org.exoplatform.mail.webui.popup;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -55,7 +56,6 @@ import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormRadioBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
-import org.exoplatform.webui.form.validator.EmailAddressValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 /**
@@ -90,6 +90,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
   private static final String YEAR = "year" ; 
   private static final String JOBTITLE = "jobTitle";
   private static final String EMAIL = "email" ;
+  private UIFormMultiValueInputSet uiFormMultiValue = new UIFormMultiValueInputSet(EMAIL,EMAIL) ;
   private static final String MALE = "Male" ;
   private static final String FEMALE = "Female" ;
   private byte[] imageBytes_ = null;
@@ -142,8 +143,12 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
     addUIFormInput(new UIFormSelectBox(YEAR, YEAR, yearOptions)) ;
 
     addUIFormInput(new UIFormStringInput(JOBTITLE, JOBTITLE, null));
+    uiFormMultiValue.setType(UIFormStringInput.class) ;
+    addUIFormInput(uiFormMultiValue) ;
+    
+    /*
     addUIFormInput(new UIFormStringInput(EMAIL, EMAIL, null)
-    .addValidator(EmailAddressValidator.class));
+    .addValidator(EmailAddressValidator.class));*/
   }
   
 
@@ -184,12 +189,26 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
     getChild(UIFormRadioBoxInput.class).setValue(ct.getGender()) ;
     setFieldBirthday(ct.getBirthday());
     getUIStringInput(JOBTITLE).setValue(ct.getJobTitle());
-    getUIStringInput(EMAIL).setValue(ct.getEmailAddress());
+    
+    //getUIStringInput(EMAIL).setValue(ct.getEmailAddress());
+    List<String> list ;
+    String emails = ct.getEmailAddress() ;
+    if (MailUtils.isFieldEmpty(emails)) list = new ArrayList<String>() ;
+    else list = Arrays.asList(emails.split(Utils.SEMI_COLON)) ;
+    if(uiFormMultiValue != null) removeChildById(EMAIL);
+    uiFormMultiValue = createUIComponent(UIFormMultiValueInputSet.class, null, null) ;
+    uiFormMultiValue.setId(EMAIL) ;
+    uiFormMultiValue.setName(EMAIL) ;
+    uiFormMultiValue.setType(UIFormStringInput.class) ;
+    uiFormMultiValue.setValue(list) ;
+    addUIFormInput(uiFormMultiValue) ;
+    
+    
     if (ct != null && ct.getAttachment() != null){
       setImage(ct.getAttachment().getInputStream()) ;
     }
   }
-  
+
   public void setFieldBirthday(Date date) throws Exception {
     if (date != null) {
       Calendar cal = GregorianCalendar.getInstance() ;
@@ -224,8 +243,28 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
     return getUIStringInput(JOBTITLE).getValue();
   }
   
-  public void setEmailField(String email) throws Exception {
-    getUIStringInput(EMAIL).setValue(email);
+  public void setEmailField(String emails) throws Exception {
+    List<String> list ;
+    if (MailUtils.isFieldEmpty(emails)) list = new ArrayList<String>() ;
+    else list = Arrays.asList(emails.split(Utils.SEMI_COLON)) ;
+    if(uiFormMultiValue != null) removeChildById(EMAIL);
+    uiFormMultiValue = createUIComponent(UIFormMultiValueInputSet.class, null, null) ;
+    uiFormMultiValue.setId(EMAIL) ;
+    uiFormMultiValue.setName(EMAIL) ;
+    uiFormMultiValue.setType(UIFormStringInput.class) ;
+    uiFormMultiValue.setValue(list) ;
+    addUIFormInput(uiFormMultiValue) ;
+  }
+  @SuppressWarnings("unchecked")
+  protected String getFieldEmail() {
+    List<String> emails = (List<String>)uiFormMultiValue.getValue() ; 
+    StringBuffer email = new StringBuffer() ;
+    for (String item : emails){
+      if (MailUtils.isFieldEmpty(item)) continue ;
+      if (email.length() == 0) email.append(item) ;
+      else email.append(Utils.SEMI_COLON + item) ;
+    }
+    return email.toString();
   }
   
   protected String getFieldGender() { 
@@ -277,8 +316,17 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
       String groupId = ((UIFormSelectBoxWithGroups)uiContact.getChildById(SELECT_GROUP)).getValue();
       String firstName = uiContact.getUIStringInput(FIRST_NAME).getValue();
       String lastName = uiContact.getUIStringInput(LAST_NAME).getValue();
-      String email = uiContact.getUIStringInput(EMAIL).getValue();
       
+      
+      String emails = uiContact.getFieldEmail() ;
+
+      if (!MailUtils.isValidEmailAddresses(emails.replaceAll(Utils.SEMI_COLON, ","))) {
+        uiApp.addMessage(new ApplicationMessage("UIAddContactForm.msg.email-invalid", null, 
+            ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
+
       if (!uiContact.isEdited_ && MailUtils.isFieldEmpty(groupId)) {  
         uiApp.addMessage(new ApplicationMessage("UIAddContactForm.msg.group-required", null, ApplicationMessage.INFO)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -311,7 +359,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }      
-      contact.setEmailAddress(email);
+      contact.setEmailAddress(emails);
       if(uiContact.getImage() != null) {
         ContactAttachment attachment = new ContactAttachment() ;
         attachment.setInputStream(new ByteArrayInputStream(uiContact.getImage())) ;
@@ -417,13 +465,5 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
 
   protected void setFileName(String name) { fileName_ = name ; }
   protected String getFileName() {return fileName_ ;}
-/*
-  protected String getImageSource() throws Exception {
-    if(imageBytes_ == null || imageBytes_.length == 0) return null;
-    ByteArrayInputStream byteImage = new ByteArrayInputStream(imageBytes_) ;    
-    DownloadService dservice = getApplicationComponent(DownloadService.class) ;
-    InputStreamDownloadResource dresource = new InputStreamDownloadResource(byteImage, "image") ;
-    dresource.setDownloadName(fileName_) ;
-    return  dservice.getDownloadLink(dservice.addDownloadResource(dresource)) ;
-  }*/
+
 }

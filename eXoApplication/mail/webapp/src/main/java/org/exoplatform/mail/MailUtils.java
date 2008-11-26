@@ -230,6 +230,7 @@ public class MailUtils {
     boolean isInvalid = true ;
     try {
       InternetAddress[] iAdds = InternetAddress.parse(addressList, true);
+      
       String emailRegex = "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+\\.[A-Za-z]{2,5}" ;
       for (int i = 0 ; i < iAdds.length; i ++) {
         if(!iAdds[i].getAddress().toString().matches(emailRegex)) isInvalid = false;
