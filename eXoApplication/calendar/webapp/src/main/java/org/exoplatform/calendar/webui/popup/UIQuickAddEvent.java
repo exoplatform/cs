@@ -20,7 +20,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -54,7 +53,6 @@ import org.exoplatform.webui.form.UIFormSelectBoxWithGroups;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
-import org.jmock.core.constraint.IsAnything;
 
 /**
  * Created by The eXo Platform SARL
@@ -252,7 +250,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       String summary = uiForm.getEventSummary() ;
       if(!CalendarUtils.isNameValid(summary, CalendarUtils.SIMPLECHARACTER)){
-        uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.summary-invalid", CalendarUtils.SIMPLECHARACTER, ApplicationMessage.WARNING) ) ;
+        uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.summary-invalid", CalendarUtils.SIMPLECHARACTER, ApplicationMessage.WARNING) ) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }

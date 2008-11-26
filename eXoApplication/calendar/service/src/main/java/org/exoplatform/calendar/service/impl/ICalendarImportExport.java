@@ -21,6 +21,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -274,9 +275,17 @@ public class ICalendarImportExport implements CalendarImportExport{
 
   public OutputStream exportEventCalendar(SessionProvider sProvider, String username, String calendarId, String type, String eventId) throws Exception {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>();
-    if(type.equals(PRIVATE_TYPE)) {
+    List<String> calendarIds = Arrays.asList(new String[]{calendarId}) ;
+   /* if(type.equals(PRIVATE_TYPE)) {
       events.add(storage_.getUserEvent(sProvider, username, calendarId, eventId))  ;
-    } 
+    } */
+    if(type.equals(PRIVATE_TYPE)) {
+      events = storage_.getUserEventByCalendar(sProvider, username, calendarIds) ;
+    }else if(type.equals(SHARED_TYPE)) {
+      events = storage_.getSharedEventByCalendars(sProvider, username, calendarIds) ;
+    }else if(type.equals(PUBLIC_TYPE)){
+      events = storage_.getGroupEventByCalendar(sProvider, calendarIds) ;
+    }
     net.fortuna.ical4j.model.Calendar calendar = new net.fortuna.ical4j.model.Calendar();
     calendar.getProperties().add(new ProdId("-//Ben Fortuna//iCal4j 1.0//EN"));
     calendar.getProperties().add(Version.VERSION_2_0);
@@ -404,6 +413,7 @@ public class ICalendarImportExport implements CalendarImportExport{
     try {
       output.output(calendar, bout) ;
     }catch(ValidationException e) {
+      e.printStackTrace() ;
       return null ;
     }    
     return bout;
@@ -595,7 +605,6 @@ public class ICalendarImportExport implements CalendarImportExport{
               exoEvent.setRepeatType(rc.getFrequency().toLowerCase()) ;
             }
           }
-          r.getRecur() ;
         } catch (Exception e) {
           e.printStackTrace() ;
         }
@@ -725,7 +734,6 @@ public class ICalendarImportExport implements CalendarImportExport{
               exoEvent.setRepeatType(rc.getFrequency().toLowerCase()) ;
             }
           }
-          r.getRecur() ;
         } catch (Exception e) {
           e.printStackTrace() ;
         }
