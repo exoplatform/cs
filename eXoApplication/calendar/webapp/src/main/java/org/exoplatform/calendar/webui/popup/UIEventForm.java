@@ -892,7 +892,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         if(sbf.length() > 0) sbf.append(",") ;
         sbf.append(att.getName());
       }
-      sbBody.append("<td style=\"padding: 4px;\"> "+sbf.toString()+" </td>");
+      sbBody.append("<td style=\"padding: 4px;\"> ("+atts.size()+") " +sbf.toString()+" </td>");
       sbBody.append("</tr>");
     }
     sbBody.append("</tbody>");
