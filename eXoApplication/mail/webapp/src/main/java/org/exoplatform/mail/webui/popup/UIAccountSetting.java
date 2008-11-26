@@ -288,7 +288,12 @@ public class UIAccountSetting extends UIFormTabPane {
     uiAccountInput.getUIStringInput(FIELD_ACCOUNT_NAME).setValue(account.getLabel()) ;
     uiAccountInput.getUIStringInput(FIELD_ACCOUNT_DESCRIPTION).setValue(account.getDescription()) ;
     UIFormCheckBoxInput checkFromDate = uiAccountInput.getUIFormCheckBoxInput(CHECK_FROM_DATE);
-    if(account.getProtocol().equals(Utils.IMAP) && checkFromDate != null) {
+    if(account.getProtocol().equals(Utils.IMAP)) {
+      if (checkFromDate == null) {
+        checkFromDate = new UIFormCheckBoxInput<Boolean>(CHECK_FROM_DATE, CHECK_FROM_DATE, null);
+        checkFromDate.setOnChange("CheckFromDate");
+        uiAccountInput.addUIFormInput(checkFromDate);
+      }
       checkFromDate.setChecked(!account.isCheckAll()) ;
       GregorianCalendar cal = new GregorianCalendar();
       if (account.getCheckFromDate() != null) {
