@@ -325,56 +325,64 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   } 
 
   protected boolean isEventDetailValid(CalendarSetting calendarSetting) throws Exception{
+    String dateFormat = calendarSetting.getDateFormat() ;
+    String timeFormat = calendarSetting.getTimeFormat() ;
+    Date from = null ;
+    Date to = null ;
+
     if(CalendarUtils.isEmpty(getCalendarId())) {
-      errorMsg_ = "UIEventForm.msg.event-calendar-required" ;
+      errorMsg_ = getId() +  ".msg.event-calendar-required" ;
       return false ;
     } 
     if(CalendarUtils.isEmpty(getEventCategory())) {
-      errorMsg_ = "UIEventForm.msg.event-category-required" ;
+      errorMsg_ = getId() +  ".msg.event-category-required" ;
       return false ;
     }
     if(CalendarUtils.isEmpty(getEventFormDateValue())) {
-      errorMsg_ = "UIEventForm.msg.event-fromdate-required" ;
+      errorMsg_ = getId() +  ".msg.event-fromdate-required" ;
+      return false ;
+    }
+    if(CalendarUtils.isEmpty(getEventToDateValue())){
+      errorMsg_ = getId() +  ".msg.event-todate-required" ;
       return false ;
     }
     try {
-      getEventFromDate(calendarSetting.getDateFormat(), calendarSetting.getTimeFormat()) ;
-    } catch (Exception e) {
-      e.printStackTrace() ;
-      errorMsg_ = "UIEventForm.msg.event-fromdate-notvalid" ;
-      return false ;
-    }
-    try {
-      getEventToDate(calendarSetting.getDateFormat(), calendarSetting.getTimeFormat()) ;
+      from = getEventFromDate(dateFormat, timeFormat) ;
     } catch (Exception e) {
       e.printStackTrace() ;
       errorMsg_ = getId() +  ".msg.event-fromdate-notvalid" ;
       return false ;
     }
-    if(!getEventAllDate()) {
-      if(CalendarUtils.isEmpty(getEventToDateValue())){
+    try {
+      to = getEventToDate(dateFormat, timeFormat) ;
+    } catch (Exception e) {
+      e.printStackTrace() ;
+      errorMsg_ = getId() +  ".msg.event-fromdate-notvalid" ;
+      return false ;
+    }
+    //if(!getEventAllDate()) {
+    /*if(CalendarUtils.isEmpty(getEventToDateValue())){
         errorMsg_ = "UIEventForm.msg.event-todate-required" ;
         return false ;
-      } 
-      try {
-        getEventToDate(calendarSetting.getDateFormat(), calendarSetting.getTimeFormat()) ;
+      } */
+    /*try {
+        getEventToDate(dateFormat, timeFormat) ;
       } catch (Exception e) {
         e.printStackTrace() ;
         errorMsg_ =  "UIEventForm.msg.event-todate-notvalid" ;
         return false ;
-      }
-      try {
-        if(getEventFromDate(calendarSetting.getDateFormat(), calendarSetting.getTimeFormat()).after(getEventToDate(calendarSetting.getDateFormat(), calendarSetting.getTimeFormat())) || 
-            getEventFromDate(calendarSetting.getDateFormat(), calendarSetting.getTimeFormat()).equals(getEventToDate(calendarSetting.getDateFormat(), calendarSetting.getTimeFormat()))){
-          errorMsg_ = "UIEventForm.msg.event-date-time-logic" ;
-          return false ;
-        }
-      } catch (Exception e) {
+      }*/
+    //try {
+    if(from.after(to) || from.equals(to)){
+      errorMsg_ = "UIEventForm.msg.event-date-time-logic" ;
+      return false ;
+    }
+    /*} catch (Exception e) {
         e.printStackTrace() ;
         errorMsg_ = "UIEventForm.msg.event-date-time-getvalue" ;
         return false ;
-      }      
-    }
+      }    */  
+    // }
     errorMsg_ = null ;
     return true ;
   }

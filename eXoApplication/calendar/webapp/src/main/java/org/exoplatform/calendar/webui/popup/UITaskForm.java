@@ -262,48 +262,64 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   }
 
   protected boolean isEventDetailValid(CalendarSetting calendarSetting){
+    String dateFormat = calendarSetting.getDateFormat() ;
+    String timeFormat = calendarSetting.getTimeFormat() ;
+    Date from = null ;
+    Date to = null ;
+    
     if(CalendarUtils.isEmpty(getCalendarId())) {
-      errorMsg_ = getId() + ".msg.event-calendar-required" ;
+      errorMsg_ = getId() +  ".msg.event-calendar-required" ;
       return false ;
     } 
     if(CalendarUtils.isEmpty(getEventCategory())) {
-      errorMsg_ = getId() + ".msg.event-category-required" ;
+      errorMsg_ = getId() +  ".msg.event-category-required" ;
       return false ;
     }
     if(CalendarUtils.isEmpty(getEventFormDateValue())) {
-      errorMsg_ = getId() + ".msg.event-fromdate-required" ;
+      errorMsg_ = getId() +  ".msg.event-fromdate-required" ;
       return false ;
-    } 
-    if(!getEventAllDate()) {
-      if(CalendarUtils.isEmpty(getEventToDateValue())){
-        errorMsg_ = getId() + ".msg.event-todate-required" ;
-        return false ;
-      } 
+    }
+    if(CalendarUtils.isEmpty(getEventToDateValue())){
+      errorMsg_ = getId() +  ".msg.event-todate-required" ;
+      return false ;
     }
     try {
-      getEventFromDate(calendarSetting.getDateFormat(), calendarSetting.getTimeFormat()) ;
+      from = getEventFromDate(dateFormat, timeFormat) ;
     } catch (Exception e) {
       e.printStackTrace() ;
       errorMsg_ = getId() +  ".msg.event-fromdate-notvalid" ;
       return false ;
     }
     try {
-      getEventToDate(calendarSetting.getDateFormat(), calendarSetting.getTimeFormat()) ;
+      to = getEventToDate(dateFormat, timeFormat) ;
     } catch (Exception e) {
       e.printStackTrace() ;
       errorMsg_ = getId() +  ".msg.event-fromdate-notvalid" ;
       return false ;
     }
-    if(getEmailReminder()) {
-      if(CalendarUtils.isEmpty(getEmailAddress())) {
-        errorMsg_ = "UITaskForm.msg.event-email-required" ;
+    //if(!getEventAllDate()) {
+    /*if(CalendarUtils.isEmpty(getEventToDateValue())){
+        errorMsg_ = "UIEventForm.msg.event-todate-required" ;
         return false ;
-      }
-      else if(!CalendarUtils.isAllEmailValid(getEmailAddress())) {
-        errorMsg_ = "UITaskForm.msg.event-email-invalid" ;
+      } */
+    /*try {
+        getEventToDate(dateFormat, timeFormat) ;
+      } catch (Exception e) {
+        e.printStackTrace() ;
+        errorMsg_ =  "UIEventForm.msg.event-todate-notvalid" ;
         return false ;
-      } 
+      }*/
+    //try {
+    if(from.after(to) || from.equals(to)){
+      errorMsg_ = "UIEventForm.msg.event-date-time-logic" ;
+      return false ;
     }
+    /*} catch (Exception e) {
+        e.printStackTrace() ;
+        errorMsg_ = "UIEventForm.msg.event-date-time-getvalue" ;
+        return false ;
+      }    */  
+    // }
     errorMsg_ = null ;
     return true ;
   }
