@@ -38,6 +38,7 @@ import javax.jcr.NodeIterator;
 
 import net.fortuna.ical4j.data.CalendarBuilder;
 
+import org.apache.poi.hssf.record.PageBreakRecord.Break;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarImportExport;
@@ -124,7 +125,7 @@ public class CsvImportExport implements CalendarImportExport {
               } catch (Exception e) {
                 e.printStackTrace() ;
                 isValid = false ;
-                //break ;
+                break ;
               }
               if(!Utils.isEmpty(l.get(dataMap.get(EV_ALLDAY))) && isValid){
                 if(Boolean.parseBoolean(l.get(dataMap.get(EV_ALLDAY)))){ 
@@ -145,7 +146,8 @@ public class CsvImportExport implements CalendarImportExport {
               } catch (Exception e) {
                 e.printStackTrace() ;
                 isValid = false ;
-                //break ;
+                //throw new IOException() ;
+                break ;
               }
               if(!Utils.isEmpty(l.get(dataMap.get(EV_ALLDAY))) && isValid){
                 if(Boolean.parseBoolean(l.get(dataMap.get(EV_ALLDAY)))){ 
@@ -158,57 +160,60 @@ public class CsvImportExport implements CalendarImportExport {
             }
             //Event oner 9
             //Event Participants 10
-            if(!Utils.isEmpty(l.get(dataMap.get(EV_ATTENDEES)))) {
-              eventObj.setParticipant(l.get(dataMap.get(EV_ATTENDEES)).split(";")) ;
-            }
-            //Event Invitation 11
-            if(!Utils.isEmpty(l.get(dataMap.get(EV_INVITATION)))) {
-              eventObj.setInvitation(l.get(dataMap.get(EV_INVITATION)).split(";")) ;
-            }
-            //Event categories 14
-            if(!Utils.isEmpty(l.get(dataMap.get(EV_CATEGORIES)))) {
-              eventObj.setEventCategoryName(l.get(dataMap.get(EV_CATEGORIES))) ;
-              //eventObj.setEventCategoryId(l.get(dataMap.get(EV_CATEGORIES)).toLowerCase())  ;
-            } else {
-              eventObj.setEventCategoryName("csvimported") ;
-              //eventObj.setEventCategoryId("csvimported") ;
-            }
-            //Event Place
-            if(!Utils.isEmpty(l.get(dataMap.get(EV_LOCATION)))) {
-              eventObj.setLocation(l.get(dataMap.get(EV_LOCATION)))  ;
-            }
-            if(!Utils.isEmpty(l.get(dataMap.get(EV_DESCRIPTION)))) {
-              eventObj.setDescription(l.get(dataMap.get(EV_DESCRIPTION)))  ;
-            }
-            if(!Utils.isEmpty(l.get(dataMap.get(EV_STATUS)))) {
-              String eventState = l.get(dataMap.get(EV_STATUS)) ;
-              // fix for csv export form outlook
-              try {
-                int value = Integer.parseInt(eventState) ;
-                if(value == 0 || value == 1) {
-                  eventState = CalendarEvent.ST_AVAILABLE ;
-                }
-                if(value == 2) {
-                  eventState = CalendarEvent.ST_BUSY ;
-                }
-                if(value == 3) {
-                  eventState = CalendarEvent.ST_OUTSIDE ;
-                }
-              } catch (Exception e) {
-
+            if(isValid) {
+              if(!Utils.isEmpty(l.get(dataMap.get(EV_ATTENDEES)))) {
+                eventObj.setParticipant(l.get(dataMap.get(EV_ATTENDEES)).split(";")) ;
               }
-              eventObj.setEventState(eventState)  ;
-            }
-            if(!Utils.isEmpty(l.get(dataMap.get(EV_PRIORITY)))) {
-              for(int i = 0 ; i < CalendarEvent.PRIORITY.length ; i++ ) {
-                if(CalendarEvent.PRIORITY[i].equals(l.get(dataMap.get(EV_PRIORITY)).toLowerCase())) {
-                  eventObj.setPriority(String.valueOf(i))  ;
-                  break ;
+              //Event Invitation 11
+              if(!Utils.isEmpty(l.get(dataMap.get(EV_INVITATION)))) {
+                eventObj.setInvitation(l.get(dataMap.get(EV_INVITATION)).split(";")) ;
+              }
+              //Event categories 14
+              if(!Utils.isEmpty(l.get(dataMap.get(EV_CATEGORIES)))) {
+                eventObj.setEventCategoryName(l.get(dataMap.get(EV_CATEGORIES))) ;
+                //eventObj.setEventCategoryId(l.get(dataMap.get(EV_CATEGORIES)).toLowerCase())  ;
+              } else {
+                eventObj.setEventCategoryName("csvimported") ;
+                //eventObj.setEventCategoryId("csvimported") ;
+              }
+              //Event Place
+              if(!Utils.isEmpty(l.get(dataMap.get(EV_LOCATION)))) {
+                eventObj.setLocation(l.get(dataMap.get(EV_LOCATION)))  ;
+              }
+              if(!Utils.isEmpty(l.get(dataMap.get(EV_DESCRIPTION)))) {
+                eventObj.setDescription(l.get(dataMap.get(EV_DESCRIPTION)))  ;
+              }
+              if(!Utils.isEmpty(l.get(dataMap.get(EV_STATUS)))) {
+                String eventState = l.get(dataMap.get(EV_STATUS)) ;
+                // fix for csv export form outlook
+                try {
+                  int value = Integer.parseInt(eventState) ;
+                  if(value == 0 || value == 1) {
+                    eventState = CalendarEvent.ST_AVAILABLE ;
+                  }
+                  if(value == 2) {
+                    eventState = CalendarEvent.ST_BUSY ;
+                  }
+                  if(value == 3) {
+                    eventState = CalendarEvent.ST_OUTSIDE ;
+                  }
+                } catch (Exception e) {
+
+                }
+                eventObj.setEventState(eventState)  ;
+              }
+              if(!Utils.isEmpty(l.get(dataMap.get(EV_PRIORITY)))) {
+                for(int i = 0 ; i < CalendarEvent.PRIORITY.length ; i++ ) {
+                  if(CalendarEvent.PRIORITY[i].equals(l.get(dataMap.get(EV_PRIORITY)).toLowerCase())) {
+                    eventObj.setPriority(String.valueOf(i))  ;
+                    break ;
+                  }
                 }
               }
             }
           } 
           if(isValid) eventList.add(eventObj) ;
+          else break ;
         }
       }
       lineCount ++ ;
@@ -307,7 +312,7 @@ public class CsvImportExport implements CalendarImportExport {
   throws Exception {
     return null;
   }
-  
+
   public void importToCalendar(SessionProvider sProvider, String username, InputStream icalInputStream, String calendarId) throws Exception {
     List<CalendarEvent> data = process(new BufferedReader(new InputStreamReader(icalInputStream))) ;
     for(CalendarEvent exoEvent : data) {

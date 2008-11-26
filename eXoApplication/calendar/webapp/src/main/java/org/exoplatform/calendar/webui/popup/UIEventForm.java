@@ -87,23 +87,23 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
  * Aus 01, 2007 2:48:18 PM 
  */
 @ComponentConfig(
-    lifecycle = UIFormLifecycle.class,
-    template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", 
-    events = {
-      @EventConfig(listeners = UIEventForm.SaveActionListener.class),
-      @EventConfig(listeners = UIEventForm.AddCategoryActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UIEventForm.MoveNextActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UIEventForm.MovePreviousActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UIEventForm.DeleteUserActionListener.class, phase = Phase.DECODE),
+                 lifecycle = UIFormLifecycle.class,
+                 template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", 
+                 events = {
+                   @EventConfig(listeners = UIEventForm.SaveActionListener.class),
+                   @EventConfig(listeners = UIEventForm.AddCategoryActionListener.class, phase = Phase.DECODE),
+                   @EventConfig(listeners = UIEventForm.MoveNextActionListener.class, phase = Phase.DECODE),
+                   @EventConfig(listeners = UIEventForm.MovePreviousActionListener.class, phase = Phase.DECODE),
+                   @EventConfig(listeners = UIEventForm.DeleteUserActionListener.class, phase = Phase.DECODE),
 
-      @EventConfig(listeners = UIEventForm.AddEmailAddressActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UIEventForm.AddAttachmentActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UIEventForm.RemoveAttachmentActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UIEventForm.DownloadAttachmentActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UIEventForm.AddParticipantActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UIEventForm.OnChangeActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UIEventForm.CancelActionListener.class, phase = Phase.DECODE)
-    }
+                   @EventConfig(listeners = UIEventForm.AddEmailAddressActionListener.class, phase = Phase.DECODE),
+                   @EventConfig(listeners = UIEventForm.AddAttachmentActionListener.class, phase = Phase.DECODE),
+                   @EventConfig(listeners = UIEventForm.RemoveAttachmentActionListener.class, phase = Phase.DECODE),
+                   @EventConfig(listeners = UIEventForm.DownloadAttachmentActionListener.class, phase = Phase.DECODE),
+                   @EventConfig(listeners = UIEventForm.AddParticipantActionListener.class, phase = Phase.DECODE),
+                   @EventConfig(listeners = UIEventForm.OnChangeActionListener.class, phase = Phase.DECODE),
+                   @EventConfig(listeners = UIEventForm.CancelActionListener.class, phase = Phase.DECODE)
+                 }
 )
 public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISelector{
   final public static String TAB_EVENTDETAIL = "eventDetail".intern() ;
@@ -116,7 +116,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   final public static String FIELD_MEETING = "meeting".intern() ;
   final public static String FIELD_PARTICIPANT = "participant".intern() ;
   final public static String FIELD_ISSENDMAIL = "isSendMail".intern() ;
-  final public static String FIELD_INVITATION_NOTE = "invitationNote".intern() ;
+  //final public static String FIELD_INVITATION_NOTE = "invitationNote".intern() ;
 
   final public static String ITEM_PUBLIC = "public".intern() ;
   final public static String ITEM_PRIVATE = "private".intern() ;
@@ -152,7 +152,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     eventShareTab.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_ISSENDMAIL, FIELD_ISSENDMAIL, false)) ;
     eventShareTab.addUIFormInput(new UIFormTextAreaInput(FIELD_PARTICIPANT, FIELD_PARTICIPANT, null)) ;
     eventShareTab.addUIFormInput(new UIFormTextAreaInput(FIELD_MEETING, FIELD_MEETING, null)) ;
-    eventShareTab.addUIFormInput(new UIFormTextAreaInput(FIELD_INVITATION_NOTE, FIELD_INVITATION_NOTE, null)) ;
+    //eventShareTab.addUIFormInput(new UIFormTextAreaInput(FIELD_INVITATION_NOTE, FIELD_INVITATION_NOTE, null)) ;
     actions = new ArrayList<ActionData>() ;
 
     ActionData addUser = new ActionData() ;
@@ -716,7 +716,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
           sb.append(s);
         }
       }
-      
+
       if(!isExist) {
         if(sb.length() >0) sb.append(CalendarUtils.COMMA);
         sb.append(CalendarUtils.getCurrentUser());
@@ -832,14 +832,16 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     UIFormInputWithActions uiShareTab = getChildById(TAB_EVENTSHARE) ;
     return uiShareTab.getUIFormCheckBoxInput(FIELD_ISSENDMAIL).isChecked() ;
   }
-  protected String getInvitationNote() {
+  /*protected String getInvitationNote() {
     UIFormInputWithActions uiShareTab = getChildById(TAB_EVENTSHARE) ;
     return uiShareTab.getUIFormTextAreaInput(FIELD_INVITATION_NOTE).getValue() ;
-  }
+  }*/
 
   protected void sendMail(MailService svr, OrganizationService orSvr,CalendarSetting setting, Account acc, String fromId,  String toId, CalendarEvent event) throws Exception {
     Message message = new Message() ;
+    List<Attachment> atts = getAttachments(null, false);
     DateFormat df = new SimpleDateFormat(setting.getDateFormat() + " " + setting.getTimeFormat()) ;
+    User invitor = orSvr.getUserHandler().findUserByName(CalendarUtils.getCurrentUser()) ;
     StringBuffer sbSubject = new StringBuffer("["+getLabel("invitation")+"] ") ;
     sbSubject.append(event.getSummary()) ;
     sbSubject.append(" ") ;
@@ -850,37 +852,46 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     sbBody.append("<table style=\"margin: 0px; padding: 0px; border-collapse: collapse; border-spacing: 0px; width: 100%; line-height: 16px;\">") ;
     sbBody.append("<tbody>") ;
     sbBody.append("<tr>") ;
-    sbBody.append("<td colspan=\"2\" style=\"font-size: 12px; text-align: center;\">"+getLabel("invitedTo")+"</td>") ;
+    sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">"+getLabel("fromWho")+":</td>") ;
+    sbBody.append("<td style=\"padding: 4px;\"> " + invitor.getUserName() +"("+invitor.getEmail()+")" + " </td>") ;
     sbBody.append("</tr>") ;
     sbBody.append("<tr>") ;
-    sbBody.append("<td colspan=\"2\" style=\"font-weight: bold; text-align: center; font-size: 17px;\">"+event.getSummary()+"</td>") ;
+    sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">"+getLabel(UIEventDetailTab.FIELD_EVENT)+":</td>") ;
+    sbBody.append("<td style=\"padding: 4px;\">" + event.getSummary()+ "</td>") ;
     sbBody.append("</tr>") ;
     sbBody.append("<tr>") ;
-    sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">When:</td>") ;
-    sbBody.append("<td style=\"padding: 4px;\"> <div>" +getLabel(UIEventDetailTab.FIELD_FROM) +" : " +df.format(event.getFromDateTime())+"</div>");
-    sbBody.append("<div>"+getLabel(UIEventDetailTab.FIELD_TO) +" : "+df.format(event.getToDateTime())+"</div></td>") ;
+    sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">"+getLabel(UIEventDetailTab.FIELD_DESCRIPTION)+":</td>") ;
+    sbBody.append("<td style=\"padding: 4px;\">" + (event.getDescription() != null && event.getDescription().trim().length() > 0 ? event.getDescription() : " ") + "</td>") ;
+    sbBody.append("</tr>") ;
+    sbBody.append("<tr>") ;
+    sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">"+getLabel("when")+":</td>") ;
+    sbBody.append("<td style=\"padding: 4px;\"> <div>"+getLabel(UIEventDetailTab.FIELD_FROM)+": " +df.format(event.getFromDateTime())+"</div>");
+    sbBody.append("<div>"+getLabel(UIEventDetailTab.FIELD_TO)+": "+df.format(event.getToDateTime())+"</div></td>") ;
     sbBody.append("</tr>") ;
     sbBody.append("<tr>") ;
     sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">"+getLabel(UIEventDetailTab.FIELD_PLACE)+":</td>") ;
-    sbBody.append("<td>" + (event.getLocation() != null && event.getLocation().trim().length() > 0 ? event.getLocation(): " ") + "</td>") ;
+    sbBody.append("<td style=\"padding: 4px;\">" + (event.getLocation() != null && event.getLocation().trim().length() > 0 ? event.getLocation(): " ") + "</td>") ;
     sbBody.append("</tr>") ;
     sbBody.append("<tr>") ;
-    sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">"+getLabel("fromWho")+":</td>") ;
-    sbBody.append("<td style=\"padding: 4px;\">" +toId+ "</td>") ;
+    sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">"+getLabel(FIELD_PARTICIPANT)+"</td>") ;
+    sbBody.append("<td style=\"padding: 4px;\">" +toId+ (getInvitationEmail() != null && getInvitationEmail().trim().length() > 0 ? ","+getInvitationEmail(): " ") + "</td>") ;
     sbBody.append("</tr>");
-    sbBody.append("<tr>") ;
-    sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">"+getLabel(UIEventDetailTab.FIELD_DESCRIPTION)+":</td>") ;
-    sbBody.append("<td style=\"padding: 4px;\">" + (event.getDescription() != null && event.getDescription().trim().length() > 0 ? event.getDescription(): " ") + "</td>") ;
-    sbBody.append("</tr>");
-    sbBody.append("<tr>");
-    sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">Link:</td>");  
-    sbBody.append("<td style=\"padding: 4px;\"> </td>");
-    sbBody.append("</tr>");
+    if(!atts.isEmpty()){
+      sbBody.append("<tr>");
+      sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top;\">"+getLabel(UIEventDetailTab.FIELD_ATTACHMENTS)+":</td>");  
+      StringBuffer sbf = new StringBuffer();
+      for(Attachment att : atts) {
+        if(sbf.length() > 0) sbf.append(",") ;
+        sbf.append(att.getName());
+      }
+      sbBody.append("<td style=\"padding: 4px;\"> "+sbf.toString()+" </td>");
+      sbBody.append("</tr>");
+    }
     sbBody.append("</tbody>");
     sbBody.append("</table>");
     sbBody.append("</div>") ;
-    if(!CalendarUtils.isEmpty(getInvitationNote())) sbBody.append(toId +" - "+ getLabel(FIELD_INVITATION_NOTE)+ " : " + getInvitationNote()) ;
     message.setMessageBody(sbBody.toString()) ;
+
     StringBuffer sbAddress = new StringBuffer() ;
     for(String s : toId.split(CalendarUtils.COMMA)) {
       s = s.trim() ;
@@ -923,7 +934,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       bf.setMimeType("text/calendar") ;
       List<org.exoplatform.mail.service.Attachment> attachments = new ArrayList<org.exoplatform.mail.service.Attachment>() ;
       attachments.add(bf) ;
-      for(Attachment att : getAttachments(null, false)) {
+      for(Attachment att : atts) {
         bf = new BufferAttachment() ;
         bf.setInputStream(att.getInputStream()) ;
         bf.setName(att.getName());
@@ -1212,8 +1223,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
             calendarEvent.setCalendarId(calendarId) ;
             calendarEvent.setEventCategoryId(uiForm.getEventCategory()) ;
             if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
-            String eventCategoryName = calService.getEventCategory(uiForm.getSession(), username, uiForm.getEventCategory()).getName() ;
-            calendarEvent.setEventCategoryName(eventCategoryName) ;
+              String eventCategoryName = calService.getEventCategory(uiForm.getSession(), username, uiForm.getEventCategory()).getName() ;
+              calendarEvent.setEventCategoryName(eventCategoryName) ;
             }
             calendarEvent.setLocation(location) ;
             calendarEvent.setRepeatType(uiForm.getEventRepeat()) ;
