@@ -298,7 +298,14 @@ public class UIAccountSetting extends UIFormTabPane {
       GregorianCalendar cal = new GregorianCalendar();
       if (account.getCheckFromDate() != null) {
         cal.setTimeInMillis(account.getCheckFromDate().getTime());
-        ((UIFormDateTimePicker) uiAccountInput.getChildById(FROM_DATE)).setCalendar(cal);
+        UIFormDateTimePicker uiDate = ((UIFormDateTimePicker) uiAccountInput.getChildById(FROM_DATE));
+        if (uiDate != null) {
+          uiDate.setCalendar(cal) ;
+        } else {
+          uiDate = new UIFormDateTimePicker(FROM_DATE, FROM_DATE, null, true); 
+          uiDate.setCalendar(cal) ;
+          uiAccountInput.addUIFormInput(uiDate);
+        }
       }
       if (account.isCheckAll()) uiAccountInput.removeChildById(FROM_DATE);
     } else {
