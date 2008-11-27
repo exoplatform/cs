@@ -344,7 +344,7 @@ public class ICalendarImportExport implements CalendarImportExport{
           event.getProperties().getProperty(Property.STATUS).getParameters()
           .add(net.fortuna.ical4j.model.parameter.Value.TEXT);
         }
-        if(!exoEvent.getAttachment().isEmpty()) {
+        /*if(!exoEvent.getAttachment().isEmpty()) {
           for(Attachment att : exoEvent.getAttachment()) {
             byte bytes[] = new byte[att.getInputStream().available()] ; 
             att.getInputStream().read(bytes) ;
@@ -356,7 +356,7 @@ public class ICalendarImportExport implements CalendarImportExport{
             Attach attach = new Attach(plist, bytes);
             event.getProperties().add(attach) ;
           }
-        } 
+        } */
         if(!Utils.isEmpty(exoEvent.getRepeatType())) {
           Recur rc = null ;
           if(CalendarEvent.RP_NOREPEAT.equalsIgnoreCase(exoEvent.getRepeatType())){
