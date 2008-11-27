@@ -43,6 +43,7 @@ abstract public class JCRPageList {
     setAvailablePage(available_) ;
   }
   
+  public void setCurrentPage(long page) { currentPage_ = page ; }
   public long getCurrentPage() { return currentPage_ ; }
   public long getAvailable() { return available_ ; }
   
@@ -68,8 +69,7 @@ abstract public class JCRPageList {
     			break ;
     		}
     	}
-  	}
-  	
+  	}  	
   }
   
   abstract protected void populateCurrentPage(long page, String username) throws Exception   ;
