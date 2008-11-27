@@ -49,7 +49,7 @@ public class ContactPageList extends JCRPageList {
 
   // add to fix bug 1484
   private long pageReturn = 0 ;
-  
+
   public ContactPageList(String username, NodeIterator iter, long pageSize, String value, boolean isQuery, String type ) throws Exception{
     super(pageSize) ;
     username_ = username;
@@ -63,7 +63,7 @@ public class ContactPageList extends JCRPageList {
   protected void populateCurrentPage(long page, String username) throws Exception  {
     if(iter_ == null) {
       Session session = getJCRSession(username) ;
-      if(isQuery_) {
+      if(isQuery_) { 
         QueryManager qm = session.getWorkspace().getQueryManager() ;
         Query query = qm.createQuery(value_, Query.XPATH);
         QueryResult result = query.execute();
@@ -85,8 +85,9 @@ public class ContactPageList extends JCRPageList {
         try {
           iter_.skip(position - 1) ;
         } catch (Exception e) { System.out.println("\n iter exception");}        
-      } else iter_.skip(position) ;
-      
+      } else {
+        iter_.skip(position) ;
+      }      
     }
     boolean containDefault = false ;
     currentListPage_ = new ArrayList<Contact>() ;
@@ -108,8 +109,7 @@ public class ContactPageList extends JCRPageList {
       } else {
         break ;
       }
-    }
-    
+    }   
 //  add to take default contact to first of list
     if (page == 1 && !containDefault && contactType_.equals(JCRDataStorage.PRIVATE) 
         && value_.contains(NewUserListener.DEFAULTGROUP + username_) && iter_ != null) {
@@ -126,7 +126,7 @@ public class ContactPageList extends JCRPageList {
         }
       }
     }
-    iter_ = null ;    
+     iter_ = null ;    
   }
   
   private Contact getContact(Node contactNode, String type) throws Exception {

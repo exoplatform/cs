@@ -306,7 +306,7 @@ public class JCRDataStorage {
     StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
                                                 + "//element(*,exo:contact)[@exo:categories='").
                                                 append(groupId).
-                                                append("']").append("order by @exo:fullName ascending");
+                                                append("']").append("order by @exo:fullName,@exo:id ascending");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
     QueryResult result = query.execute();
     ContactPageList pageList = new ContactPageList(username, result.getNodes(), 10, queryString.toString(), true, PRIVATE) ;
@@ -949,7 +949,7 @@ public class JCRDataStorage {
     StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
                                                 + "//element(*,exo:contact)[(@exo:categories='").
                                                 append(addressBook.getId()).append("')]")
-                                                .append(" order by @exo:fullName ascending");
+                                                .append(" order by @exo:fullName,@exo:id ascending");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
     QueryResult result = query.execute();
     return new ContactPageList(username, result.getNodes(), 10, queryString.toString(), true, SHARED) ;
@@ -982,7 +982,7 @@ public class JCRDataStorage {
     StringBuffer queryString = new StringBuffer("/jcr:root" + usersPath 
                                                 + "//element(*,exo:contact)[@exo:categories='")
                                                 .append(groupId).append("' and @exo:isOwner='true'] ")
-                                                .append("order by @exo:fullName ascending");
+                                                .append("order by @exo:fullName,@exo:id ascending");
     Query query = qm.createQuery(queryString.toString(), Query.XPATH);
     QueryResult result = query.execute();
     return new ContactPageList(null, result.getNodes(), 10, queryString.toString(), true, PUBLIC) ;
