@@ -669,7 +669,7 @@ public class ICalendarImportExport implements CalendarImportExport{
                 break ;
               }
             }
-            e.printStackTrace() ;
+            //e.printStackTrace() ;
             System.out.println("\n\n event category " + evCate.getName() + " existed !");
           }
           exoEvent.setEventCategoryId(evCate.getName()) ;
