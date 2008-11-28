@@ -386,6 +386,7 @@ public class UIContactForm extends UIFormTabPane {
       //}
       uiContacts.updateList() ;
       if (!ContactUtils.isEmpty(selectedContact) && selectedContact.equals(contact.getId())) {
+        //cs-1835        
         String type = contact.getContactType() ;
         if (type.equals(JCRDataStorage.PRIVATE)) {
           contact = contactService.getContact(sessionProvider, username, contact.getId()) ;
