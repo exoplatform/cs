@@ -328,7 +328,7 @@ UIMailPortlet.prototype.showHideTime = function(chk) {
 	if(chk.tagName.toLowerCase() != "input") {
 		chk = DOMUtil.findFirstDescendantByClass(chk, "input", "checkbox") ;
 	}
-	var selectboxes = DOMUtil.findDescendantsByTagName(chk.form, "select") ;
+	var selectboxes = DOMUtil.findDescendantsByTagName(chk.form, "input") ;
 	var fields = new Array() ;
 	var len = selectboxes.length ;
 	for(var i = 0 ; i < len ; i ++) {
@@ -573,32 +573,15 @@ UIMailPortlet.prototype.showHide = function(obj) {
 	}
 } ;
 
-UIMailPortlet.prototype.initNavigationAction = function(navId) {
-	var nav = document.getElementById(navId);
-	var titleBars = eXo.core.DOMUtil.findDescendantsByClass(nav,"div","TitleBar");
-	var i = titleBars.length ;
-	while(i--){
-		eXo.core.EventManager.addEvent(titleBars[i],"click",this.titleBarCallback);
-	}
-} ;
-
-UIMailPortlet.prototype.titleBarCallback = function(evt){
-	var DOMUtil = eXo.core.DOMUtil ;
-	var target = eXo.core.EventManager.getEventTarget(evt);
-	if(DOMUtil.hasClass(target,"DownArrow3Icon")) eXo.mail.UIMailPortlet.expandCollapse(target, this);
-	if(DOMUtil.hasClass(target,"ActionIcon")) eXo.webui.UIPopupSelectCategory.show(target,evt);
-} ;
-
-UIMailPortlet.prototype.expandCollapse = function(clickObj, clickBar) {
-	var obj = eXo.core.DOMUtil.findNextElementByTagName(clickBar,"div");
-	if (obj.style.display != "none") {
-		obj.style.display = "none" ;
-		eXo.core.DOMUtil.addClass(clickObj,"FolderCollapseIcon");
-	} else {
-		obj.style.display = "block" ;
-		eXo.core.DOMUtil.replaceClass(clickObj,"FolderCollapseIcon","");
-	}
-} ;
+//UIMailPortlet.prototype.autoResize = function() {
+//	if(!eXo.core.Browser.isIE6()) return ; 
+//	var obj = document.getElementById("UIComposeForm");
+//	var uiPopupWindow = eXo.core.DOMUtil.findAncestorByClass(obj,"UIPopupWindow");
+//	uiPopupWindow.onresize = function(){
+//		var width = (this.offsetWidth < 850)? "800px":"99%" ;
+//		obj.style.width = width ;		
+//	}
+//} ;
 
 eXo.mail.CheckBox = {
 	init : function(cont){

@@ -24,6 +24,7 @@ import java.util.Map;
 
 import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.CalendarEvent;
+import org.exoplatform.mail.webui.UIFormComboBox;
 import org.exoplatform.mail.webui.UIFormDateTimePicker;
 import org.exoplatform.mail.webui.UIFormSelectBoxWithGroups;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -88,9 +89,9 @@ public class UIEventDetailTab extends UIFormInputWithActions {
     setActionField(FIELD_CATEGORY, addCategoryActions) ;
 
     addUIFormInput(new UIFormDateTimePicker(FIELD_FROM, FIELD_FROM, new Date(), false));
-    addUIFormInput(new UIFormSelectBox(FIELD_FROM_TIME, FIELD_FROM_TIME, options));
+    addUIFormInput(new UIFormComboBox(FIELD_FROM_TIME, FIELD_FROM_TIME, options));
     addUIFormInput(new UIFormDateTimePicker(FIELD_TO, FIELD_TO, new Date(), false));
-    addUIFormInput(new UIFormSelectBox(FIELD_TO_TIME, FIELD_TO_TIME,  options));
+    addUIFormInput(new UIFormComboBox(FIELD_TO_TIME, FIELD_TO_TIME,  options));
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_CHECKALL, FIELD_CHECKALL, null));
     addUIFormInput(new UIFormStringInput(FIELD_PLACE, FIELD_PLACE, null));
     addUIFormInput(new UIFormSelectBox(FIELD_REPEAT, FIELD_REPEAT, getRepeater())) ;
@@ -134,6 +135,10 @@ public class UIEventDetailTab extends UIFormInputWithActions {
   @Override
   public void processRender(WebuiRequestContext arg0) throws Exception {
     super.processRender(arg0);
+  }
+  
+  public UIFormComboBox getUIFormComboBox (String id) {
+    return findComponentById(id);
   }
 
 }

@@ -36,6 +36,7 @@ import org.exoplatform.mail.webui.SelectItem;
 import org.exoplatform.mail.webui.SelectOption;
 import org.exoplatform.mail.webui.SelectOptionGroup;
 import org.exoplatform.mail.webui.Selector;
+import org.exoplatform.mail.webui.UIFormComboBox;
 import org.exoplatform.mail.webui.UIFormDateTimePicker;
 import org.exoplatform.mail.webui.UIFormSelectBoxWithGroups;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -126,8 +127,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
     UIEventDetailTab eventDetailTab = getChildById(TAB_EVENTDETAIL) ;
     List<SelectItemOption<String>> fromTimes = CalendarUtils.getTimesSelectBoxOptions(calSetting.getTimeFormat()) ;
     List<SelectItemOption<String>> toTimes = CalendarUtils.getTimesSelectBoxOptions(calSetting.getTimeFormat()) ;
-    eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_FROM_TIME).setOptions(fromTimes) ;
-    eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_TO_TIME).setOptions(toTimes) ;
+    eventDetailTab.getUIFormComboBox(UIEventDetailTab.FIELD_FROM_TIME).setOptions(fromTimes) ;
+    eventDetailTab.getUIFormComboBox(UIEventDetailTab.FIELD_TO_TIME).setOptions(toTimes) ;
     if(eventCalendar != null) {
       isAddNew_ = false ;
       setEventSumary(eventCalendar.getSummary()) ;
@@ -233,6 +234,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
   public void updateValue(String selectField, String value) { }
 
   protected boolean isEventDetailValid(){
+    Date from = null ;
+    Date to = null ;
     if(CalendarUtils.isEmpty(getEventSumary())) {
       errorMsg_ = "UIEventForm.msg.event-summary-required" ;
       return false ;
@@ -250,14 +253,20 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
       return false ;
     }
     try {
-      getEventFromDate() ;
+      from = getEventFromDate() ;
     } catch (Exception e) {
       e.printStackTrace() ;
       errorMsg_ = "UIEventForm.msg.event-fromdate-notvalid" ;
       return false ;
     }
-
-    if(!getEventAllDate()) {
+    try {
+     to = getEventToDate() ;
+    } catch (Exception e) {
+      e.printStackTrace() ;
+      errorMsg_ =  "UIEventForm.msg.event-todate-notvalid" ;
+      return false ;
+    }
+    /*if(!getEventAllDate()) {
       if(CalendarUtils.isEmpty(getEventToDateValue())){
         errorMsg_ = "UIEventForm.msg.event-todate-required" ;
         return false ;
@@ -279,6 +288,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
         errorMsg_ = "UIEventForm.msg.event-date-time-getvalue" ;
         return false ;
       }      
+    }*/
+    if(from.after(to) || from.equals(to)){
+      errorMsg_ = "UIEventForm.msg.event-date-time-logic" ;
+      return false ;
     }
     errorMsg_ = null ;
     return true ;
@@ -343,7 +356,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
   protected Date getEventFromDate() throws Exception {
     UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     UIFormDateTimePicker fromField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_FROM) ;
-    UIFormSelectBox timeField = eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_FROM_TIME) ;
+    UIFormComboBox timeField = eventDetailTab.getUIFormComboBox(UIEventDetailTab.FIELD_FROM_TIME) ;
     if(getEventAllDate()) {
       DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
       return CalendarUtils.getBeginDay(df.parse(fromField.getValue())).getTime();
@@ -359,7 +372,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
   protected void setEventFromDate(Date date) {
     UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     UIFormDateTimePicker fromField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_FROM) ;
-    UIFormSelectBox timeField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_FROM_TIME) ;
+    UIFormComboBox timeField = eventDetailTab.getUIFormComboBox(UIEventDetailTab.FIELD_FROM_TIME) ;
     DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     fromField.setValue(df.format(date)) ;
     df = new SimpleDateFormat(CalendarUtils.TIMEFORMAT) ;
@@ -369,7 +382,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
   protected Date getEventToDate() throws Exception {
     UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     UIFormDateTimePicker toField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_TO) ;
-    UIFormSelectBox timeField = eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_TO_TIME) ;
+    UIFormComboBox timeField = eventDetailTab.getUIFormComboBox(UIEventDetailTab.FIELD_TO_TIME) ;
     if(getEventAllDate()) {
       DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
       df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
@@ -381,7 +394,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
   protected void setEventToDate(Date date) {
     UIEventDetailTab eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
     UIFormDateTimePicker toField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_TO) ;
-    UIFormSelectBox timeField = eventDetailTab.getChildById(UIEventDetailTab.FIELD_TO_TIME) ;
+    UIFormComboBox timeField = eventDetailTab.getUIFormComboBox(UIEventDetailTab.FIELD_TO_TIME) ;
     DateFormat df = new SimpleDateFormat(CalendarUtils.DATEFORMAT) ;
     toField.setValue(df.format(date)) ;
     df = new SimpleDateFormat(CalendarUtils.TIMEFORMAT) ;

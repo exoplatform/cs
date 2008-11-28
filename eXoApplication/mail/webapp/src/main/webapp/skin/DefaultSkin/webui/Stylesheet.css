@@ -11,6 +11,7 @@
 @import url("UIMessageFilter/Stylesheet.css");
 @import url("UIAddNewEvent/Stylesheet.css");
 @import url("UIColorPicker/Stylesheet.css");
+@import url("UICombobox/Stylesheet.css");
 @import url("UINotification/Stylesheet.css");
 
 /**
@@ -27,7 +28,7 @@
 	background: white;
 	border: 1px solid #b7b7b7;
 	margin: 5px;
-	min-width: 950px;
+	min-width: 950px;	
 }
 
 .UIWindow .UIEmpty {
@@ -204,6 +205,7 @@
 	background: white;
 	border: 1px solid #a5a5a5;
 	margin: 0px 0px 7px 0px;
+	padding: 0px 0px 30px 0px;
 }
 
 /**************************************UIFolderContainer*********************************/
@@ -275,11 +277,7 @@
 }
 
 .UIMailPortlet .MyFolder .MyFolderContent {
-	padding: 5px 0px 30px 20px;
-}
-
-.UIMailPortlet .UINavigationContainer .FolderCollapseIcon{
-	background: url('background/ExpanIcon.gif') no-repeat right; 
+	padding: 5px 0px 0px 20px;
 }
 
 .UIMailPortlet .UIFolderContainer .NormalLabel {
@@ -1415,7 +1413,6 @@
 }
 
 .UIMailPortlet .UIContactsPopup .ContactContainer .ListContact {
-	padding: 10px;
 	overflow: auto;
 	background: #fff;
 	height:200px;
@@ -1428,7 +1425,7 @@
 	padding-left: 24px;
 	overflow: hidden;
 	white-space: nowrap;
-	width:160px;
+	width:150px;
 }
 
 .UIMailPortlet .UIContactsPopup .RightContacts .ContactContainer {
@@ -1584,7 +1581,6 @@
 	height: 28px;
 }
 
-
 .UIMailPortlet .UIAddNewContact .ProfileContent {
 	margin-top: 10px;
 }
@@ -1662,34 +1658,6 @@
 }
 
 .UIImportForm .UIForm .UIFormGrid .FieldComponent td.FieldComponent {
-	padding: 4px 0px;
-}
-
-/******************************* UIFolderForm ******************************/
-.UIImportForm {
-	background: #F3F3F3;
-	border: 1px solid #c9c9c9;
-	padding: 25px 10px;
-}
-
-.UIImportForm .UIForm .HorizontalLayout {
-	border: none;
-}
-
-.UIImportForm .UIForm .UIFormGrid td.FieldLabel {
-	line-height: 20px;
-}
-
-.UIImportForm .UIForm .UIFormGrid td.FieldComponent .UIFormUploadInput {
-	padding-left: 6px;
-}
-
-.UIImportForm .UIForm .UIFormGrid .FieldComponent td.FieldLabel {
-	padding: 0px;
-	display: none;
-}
-
-.UIImportForm .UIForm .UIFormGrid .FieldComponent td.FieldComponent {
 	padding: 4px 6px;
 }
 
@@ -1697,6 +1665,27 @@
 	padding: 0px;
 	margin: 0px;
 }
+
+/******************************* UIFolderForm ******************************/
+.UIFolderForm {
+	background: #F3F3F3;
+	border: 1px solid #c9c9c9;
+	padding: 25px 10px;
+}
+
+.UIImportForm .UIForm .HorizontalLayout .UIFormGrid{
+	margin: 0px;
+	width: 100%;
+}
+
+.UIFolderForm .UIForm .HorizontalLayout {
+	border: none;
+}
+
+.UIFolderForm .UIForm .UIFormGrid td.FieldLabel {
+	line-height: 20px;
+}
+
 /******************************* UIComfirmPassword ******************************/
 .UIComfirmPassword {
 	padding: 10px;
@@ -1810,6 +1799,14 @@
 	white-space: normal;
 }
 
+.UIMailPortlet .UITagForm .UIForm .UIFormGrid td.FieldComponent {
+	white-space: normal;
+}
+
+.UIMailPortlet .UITagForm .UIForm .UIFormGrid td.FieldLabel {
+	white-space: normal;
+}
+
 .UIMailPortlet .UIForm .UIFormGrid td.FieldLabel {
 	white-space: nowrap;
 }
@@ -1822,18 +1819,9 @@
 	white-space: normal;
 }
 
-
 .UIMailPortlet .UIComposeForm .MessageAddress input.checkbox {
 	width: 16px;
 }
-
-.UIMailPortlet .UITagForm .UIForm .UIFormGrid td.FieldComponent {
-	white-space: normal;
-}
-
-.UIMailPortlet .UITagForm .UIForm .UIFormGrid td.FieldLabel {
-	white-space: normal;
-}=======
 
 .UIMailPortlet .Actions .UIPopupCategory {
 	top: 18px;

@@ -2271,7 +2271,8 @@ public class JCRDataStorage{
         }
       }
     } catch (Exception e) {
-      e.printStackTrace() ;
+      System.out.println("\n\n confirmInvitation " + e.getClass().toString()) ;
+      //e.printStackTrace() ;
     } finally {
       session.close() ;
     }
