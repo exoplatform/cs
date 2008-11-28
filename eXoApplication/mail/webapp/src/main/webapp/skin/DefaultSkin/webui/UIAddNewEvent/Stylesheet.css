@@ -90,3 +90,6 @@
 	padding: 0px;
 	margin-left: 4px; 
 }
+.UIAddNewEvent .UIFormGrid .FieldComponent .Time .UIComboboxInput{
+	width: 120px;
+}

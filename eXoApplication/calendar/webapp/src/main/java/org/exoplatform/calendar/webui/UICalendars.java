@@ -70,27 +70,27 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
  */
 
 @ComponentConfig(
-    lifecycle = UIFormLifecycle.class,
-    template =  "app:/templates/calendar/webui/UICalendars.gtmpl",
-    events = {
-      @EventConfig(listeners = UICalendars.AddCalendarActionListener.class),
-      @EventConfig(listeners = UICalendars.AddEventCategoryActionListener.class),
-      @EventConfig(listeners = UICalendars.EditGroupActionListener.class),
-      @EventConfig(phase=Phase.DECODE, listeners = UICalendars.DeleteGroupActionListener.class, confirm="UICalendars.msg.confirm-delete-group"), 
-      @EventConfig(listeners = UICalendars.ExportCalendarActionListener.class), 
-      @EventConfig(listeners = UICalendars.ExportCalendarsActionListener.class), 
-      @EventConfig(listeners = UICalendars.ImportCalendarActionListener.class),
-      @EventConfig(listeners = UICalendars.GenerateRssActionListener.class), 
-      @EventConfig(listeners = UICalendars.GenerateCalDavActionListener.class), 
-      @EventConfig(listeners = UICalendars.AddEventActionListener.class),
-      @EventConfig(listeners = UICalendars.AddTaskActionListener.class),
-      @EventConfig(listeners = UICalendars.EditCalendarActionListener.class),
-      @EventConfig(phase=Phase.DECODE, listeners = UICalendars.RemoveCalendarActionListener.class, confirm="UICalendars.msg.confirm-delete-calendar"),
-      @EventConfig(listeners = UICalendars.AddCalendarCategoryActionListener.class),
-      @EventConfig(listeners = UICalendars.ShareCalendarActionListener.class),
-      @EventConfig(listeners = UICalendars.ChangeColorActionListener.class),
-      @EventConfig(listeners = UICalendars.CalendarSettingActionListener.class)
-    }
+                 lifecycle = UIFormLifecycle.class,
+                 template =  "app:/templates/calendar/webui/UICalendars.gtmpl",
+                 events = {
+                   @EventConfig(listeners = UICalendars.AddCalendarActionListener.class),
+                   @EventConfig(listeners = UICalendars.AddEventCategoryActionListener.class),
+                   @EventConfig(listeners = UICalendars.EditGroupActionListener.class),
+                   @EventConfig(phase=Phase.DECODE, listeners = UICalendars.DeleteGroupActionListener.class, confirm="UICalendars.msg.confirm-delete-group"), 
+                   @EventConfig(listeners = UICalendars.ExportCalendarActionListener.class), 
+                   @EventConfig(listeners = UICalendars.ExportCalendarsActionListener.class), 
+                   @EventConfig(listeners = UICalendars.ImportCalendarActionListener.class),
+                   @EventConfig(listeners = UICalendars.GenerateRssActionListener.class), 
+                   @EventConfig(listeners = UICalendars.GenerateCalDavActionListener.class), 
+                   @EventConfig(listeners = UICalendars.AddEventActionListener.class),
+                   @EventConfig(listeners = UICalendars.AddTaskActionListener.class),
+                   @EventConfig(listeners = UICalendars.EditCalendarActionListener.class),
+                   @EventConfig(phase=Phase.DECODE, listeners = UICalendars.RemoveCalendarActionListener.class, confirm="UICalendars.msg.confirm-delete-calendar"),
+                   @EventConfig(listeners = UICalendars.AddCalendarCategoryActionListener.class),
+                   @EventConfig(listeners = UICalendars.ShareCalendarActionListener.class),
+                   @EventConfig(listeners = UICalendars.ChangeColorActionListener.class),
+                   @EventConfig(listeners = UICalendars.CalendarSettingActionListener.class)
+                 }
 )
 
 public class UICalendars extends UIForm  {
@@ -659,10 +659,17 @@ public class UICalendars extends UIForm  {
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
       popupAction.deActivate() ;
-      UIExportForm exportForm = popupAction.activate(UIExportForm.class, 500) ;
       String username = CalendarUtils.getCurrentUser() ;
-      exportForm.initCheckBox(CalendarUtils.getCalendarService().getUserCalendarsByCategory(uiComponent.getSession(), username, groupId), null) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+      List<Calendar> list = CalendarUtils.getCalendarService().getUserCalendarsByCategory(uiComponent.getSession(), username, groupId) ;
+      if(list.isEmpty()){
+        UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UICalendars.msg.calendar-require", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      } else {
+        UIExportForm exportForm = popupAction.activate(UIExportForm.class, 500) ;
+        exportForm.initCheckBox(list, null) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+      }
     }
   }
   static  public class ImportCalendarActionListener extends EventListener<UICalendars> {

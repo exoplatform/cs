@@ -17,6 +17,9 @@
 package org.exoplatform.calendar.webui.popup;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -25,6 +28,7 @@ import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendars;
+import org.exoplatform.calendar.webui.popup.UIAddressForm.ContactData;
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -74,6 +78,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
     calendarId_ = cal.getId() ;
   }
 
+  @SuppressWarnings("unchecked")
   public void updateGrid(Calendar cal) throws Exception {
     List<data> dataRow = new ArrayList<data>() ;
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
@@ -91,6 +96,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
         dataRow.add(new data(username,  editPerm)) ;
       }
     }
+    Collections.sort(dataRow, new UserDataComparator()) ;
     UIGrid permissionList = getChild(UIGrid.class) ;
     ObjectPageList objPageList = new ObjectPageList(dataRow, 10) ;
     permissionList.getUIPageIterator().setPageList(objPageList) ;   
@@ -140,6 +146,14 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
       addEdit.updateGrid(cal);
       event.getRequestContext().addUIComponentToUpdateByAjax(addEdit) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(addEdit.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UICalendars.class)) ;
+    }
+  }
+  
+  static public class UserDataComparator implements Comparator{
+    public int compare(Object o1, Object o2) throws ClassCastException {
+      String name1 = ((data) o1).getViewPermission() ;
+      String name2 = ((data) o2).getViewPermission() ;
+      return name1.compareToIgnoreCase(name2) ;
     }
   }
   public class data {
