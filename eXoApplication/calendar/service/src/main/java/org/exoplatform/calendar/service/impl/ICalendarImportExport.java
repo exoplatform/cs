@@ -144,13 +144,13 @@ public class ICalendarImportExport implements CalendarImportExport{
         }
         if(exoEvent.getPriority() != null) {
           for(int i = 0 ; i < CalendarEvent.PRIORITY.length; i++) {
-            if(exoEvent.getPriority().equals(CalendarEvent.PRIORITY[i])) {
+            if(exoEvent.getPriority().equalsIgnoreCase(CalendarEvent.PRIORITY[i])) {
               event.getProperties().add(new Priority(i));
+              event.getProperties().getProperty(Property.PRIORITY).getParameters()
+              .add(net.fortuna.ical4j.model.parameter.Value.INTEGER);  
               break ;
             }
           }
-          event.getProperties().getProperty(Property.PRIORITY).getParameters()
-          .add(net.fortuna.ical4j.model.parameter.Value.INTEGER);  
         }
 
         if(exoEvent.getEventType().equals(CalendarEvent.TYPE_TASK)) {
