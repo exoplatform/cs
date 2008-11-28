@@ -379,6 +379,16 @@ public class UIContactForm extends UIFormTabPane {
       //}
       uiContacts.updateList() ;
       if (!ContactUtils.isEmpty(selectedContact) && selectedContact.equals(contact.getId())) {
+        String type = contact.getContactType() ;
+        if (type.equals(JCRDataStorage.PRIVATE)) {
+          contact = contactService.getContact(sessionProvider, username, contact.getId()) ;
+        } else {
+          if (uiContacts.isSharedAddress(contact)) {
+            contact = contactService.getSharedContactAddressBook(username, contact.getId()) ;
+          } else {
+            contact = contactService.getSharedContact(SessionProviderFactory.createSystemProvider(), username, contact.getId()) ;
+          }
+        }        
         uiContactPortlet.findFirstComponentOfType(UIContactPreview.class).setContact(contact) ;
         uiContacts.setSelectedContact(selectedContact) ;
       }        
