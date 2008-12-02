@@ -42,6 +42,7 @@ import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.webui.popup.UIEventCategoryManager;
 import org.exoplatform.calendar.webui.popup.UIEventForm;
+import org.exoplatform.calendar.webui.popup.UIExportForm;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.calendar.webui.popup.UIPopupContainer;
 import org.exoplatform.calendar.webui.popup.UIQuickAddEvent;
@@ -1100,4 +1101,67 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         }
       }
     }
+   static public class ExportEventActionListener extends EventListener<UICalendarView>{
+	   public void execute(Event<UICalendarView> event) throws Exception{
+		   UICalendarView uiComponent = event.getSource() ;
+		   UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
+		      String currentUser = CalendarUtils.getCurrentUser() ;
+		      CalendarService calService = CalendarUtils.getCalendarService() ;
+		      String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+		      String selectedCalendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
+		      String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
+		      UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
+		      org.exoplatform.calendar.service.Calendar calendar = null;
+          CalendarEvent instanceEvent = new CalendarEvent();
+          instanceEvent.setId(eventId);
+          if(instanceEvent.getEventType().equalsIgnoreCase("Task")){
+            uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar" + "aaa", null, 1)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarPortlet) ;
+          }
+		      if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
+		        calendar = calService.getUserCalendar(uiComponent.getSession(), currentUser, selectedCalendarId) ;
+		      } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
+		        GroupCalendarData gCalendarData = calService.getSharedCalendars(uiComponent.getSystemSession(), currentUser, true) ;
+		        if(gCalendarData != null) { 
+		          calendar = gCalendarData.getCalendarById(selectedCalendarId) ;
+		          if(calendar != null && !CalendarUtils.isEmpty(calendar.getCalendarOwner())) calendar.setName(calendar.getCalendarOwner() + "-" + calendar.getName()) ;
+		        }
+		      } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
+		        try {
+		          calendar = calService.getGroupCalendar(uiComponent.getSystemSession(), selectedCalendarId) ;
+		        } catch (PathNotFoundException e) {
+		          System.out.println("\n\n calendar has been removed !");
+		        }
+		      }  
+		      if(calendar == null) {
+		        uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
+		        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+		        event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarPortlet) ;
+		      } else {
+		        boolean canEdit = false ;
+		        if(calType.equals(CalendarUtils.SHARED_TYPE)) {
+		          canEdit = CalendarUtils.canEdit(null, calendar.getEditPermission(), currentUser) ;
+		        } else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
+		          canEdit = CalendarUtils.canEdit(CalendarUtils.getOrganizationService(), calendar.getEditPermission(), currentUser) ;
+		        }
+		        if(!calType.equals(CalendarUtils.PRIVATE_TYPE) && !canEdit) {
+		          uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-permission-to-edit", null)) ;
+		          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+		          return ;
+		        }
+		        List<org.exoplatform.calendar.service.Calendar> list = new ArrayList<org.exoplatform.calendar.service.Calendar>() ;
+		        list.add(calendar) ;
+		        UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
+		        popupAction.deActivate() ;
+		        
+		        UIExportForm exportForm = popupAction.activate(UIExportForm.class, 500) ;
+		        exportForm.eventId = eventId ;
+		        exportForm.update(calType, list, selectedCalendarId) ;
+		        event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+		        event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
+		      }
+		   
+	   }
+   }
 }

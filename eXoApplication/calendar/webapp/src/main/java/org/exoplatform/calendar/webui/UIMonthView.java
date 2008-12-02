@@ -65,6 +65,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
       @EventConfig(listeners = UICalendarView.MoveNextActionListener.class), 
       @EventConfig(listeners = UICalendarView.MovePreviousActionListener.class),
       @EventConfig(listeners = UICalendarView.SwitchViewActionListener.class),
+      @EventConfig(listeners = UICalendarView.ExportEventActionListener.class),
       @EventConfig(listeners = UIMonthView.UpdateEventActionListener.class)
     }
 )

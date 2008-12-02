@@ -71,7 +71,7 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
   final static private String TYPE = "type".intern() ;
   private String calType = "0" ;
   private Map<String,String> names_ = new HashMap<String, String>() ;
-
+  public String eventId = null ;
   public UIExportForm() throws Exception {
     addUIFormInput(new UIFormStringInput(NAME, NAME, null)) ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ; 
@@ -95,7 +95,9 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
     for(Calendar calendar : calendars) {
       UIFormCheckBoxInput checkBox = new UIFormCheckBoxInput<Boolean>(calendar.getId(), calendar.getId(), false);
       if(calendar.getId().equals(selectedCalendarId)) checkBox.setChecked(true) ; 
-      else checkBox.setChecked(false) ;       
+      else checkBox.setChecked(false) ;
+      if(eventId != null) checkBox.setEnable(false) ;
+      else checkBox.setEnable(true) ;
       addUIFormInput(checkBox) ;
       names_.put(calendar.getId(), calendar.getName()) ;
     }
@@ -135,7 +137,9 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
       CalendarImportExport importExport = calendarService.getCalendarImportExports(type) ;
       OutputStream out = null ;
       try {
-        out = importExport.exportCalendar(SessionProviderFactory.createSystemProvider(), CalendarUtils.getCurrentUser(), calendarIds, uiForm.calType) ;        
+        if(uiForm.eventId != null)
+           out = importExport.exportEventCalendar(SessionProviderFactory.createSystemProvider(), CalendarUtils.getCurrentUser(), calendarIds.get(0), uiForm.calType, uiForm.eventId) ;
+        else out = importExport.exportCalendar(SessionProviderFactory.createSystemProvider(), CalendarUtils.getCurrentUser(), calendarIds, uiForm.calType) ;
         ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
         DownloadResource dresource = new InputStreamDownloadResource(is, "text/iCalendar") ;
         DownloadService dservice = (DownloadService)PortalContainer.getInstance().getComponentInstanceOfType(DownloadService.class) ;
