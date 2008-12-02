@@ -298,11 +298,17 @@
             </div>
           </a>
           <%}%>
+					<a  class="EventActionMenu" href="<%=uicomponent.event("ExportEvent","id&$uicomponent.CALENDARID=calId&$uicomponent.CALTYPE=caltype")%>">
+            <div class="ItemIcon ExportCalendarIcon">
+              <%=_ctx.appRes("ContextMenu.label.ExportEvent")%>
+            </div>
+          </a>
           <a href="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_EVENT&startTime=beginTime")%>">
             <div class="ItemIcon QuickAddEvent">
               <%=_ctx.appRes("ContextMenu.label.addEvent")%>
             </div>
-          </a><a href="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_TASK&startTime=beginTime")%>">
+          </a>
+					<a href="<%=uicomponent.event("QuickAdd","$uicomponent.TYPE_TASK&startTime=beginTime")%>">
             <div class="ItemIcon QuickAddTask">
               <%=_ctx.appRes("ContextMenu.label.addTask")%>
             </div>

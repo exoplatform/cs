@@ -56,6 +56,7 @@ import org.exoplatform.webui.form.UIFormSelectBox;
       @EventConfig(listeners = UICalendarView.MoveNextActionListener.class), 
       @EventConfig(listeners = UICalendarView.MovePreviousActionListener.class), 
       @EventConfig(listeners = UIListView.ShowPageActionListener.class ),
+      @EventConfig(listeners = UICalendarView.ExportEventActionListener.class),
       @EventConfig(listeners = UIListView.OnchangeActionListener.class )   
 
     }

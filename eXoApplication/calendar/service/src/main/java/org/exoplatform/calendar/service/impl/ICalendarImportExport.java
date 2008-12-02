@@ -276,7 +276,7 @@ public class ICalendarImportExport implements CalendarImportExport{
   public OutputStream exportEventCalendar(SessionProvider sProvider, String username, String calendarId, String type, String eventId) throws Exception {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>();
     List<String> calendarIds = Arrays.asList(new String[]{calendarId}) ;
-   /* if(type.equals(PRIVATE_TYPE)) {
+    /* if(type.equals(PRIVATE_TYPE)) {
       events.add(storage_.getUserEvent(sProvider, username, calendarId, eventId))  ;
     } */
     if(type.equals(PRIVATE_TYPE)) {
@@ -291,121 +291,126 @@ public class ICalendarImportExport implements CalendarImportExport{
     calendar.getProperties().add(Version.VERSION_2_0);
     calendar.getProperties().add(CalScale.GREGORIAN);
     for(CalendarEvent exoEvent : events) {
-      if(exoEvent.getEventType().equals(CalendarEvent.TYPE_EVENT)){
-        long start = exoEvent.getFromDateTime().getTime() ;
-        long end = exoEvent.getToDateTime().getTime() ;
-        String summary = exoEvent.getSummary() ;
-        VEvent event ;
-        if(end > 0) {
-          event = new VEvent(new DateTime(start), new DateTime(end), summary);
-          event.getProperties().getProperty(Property.DTEND).getParameters()
-          .add(net.fortuna.ical4j.model.parameter.Value.DATE_TIME);
-        }else {
-          event = new VEvent(new DateTime(start), summary);            
-        }
-        event.getProperties().getProperty(Property.DTSTART).getParameters()
-        .add(net.fortuna.ical4j.model.parameter.Value.DATE_TIME); 
+      if(exoEvent.getId().equals(eventId)) {
+        if(exoEvent.getEventType().equals(CalendarEvent.TYPE_EVENT)){
 
-        event.getProperties().add(new Description(exoEvent.getDescription()));
-        event.getProperties().getProperty(Property.DESCRIPTION).getParameters()
-        .add(net.fortuna.ical4j.model.parameter.Value.TEXT);
+          long start = exoEvent.getFromDateTime().getTime() ;
+          long end = exoEvent.getToDateTime().getTime() ;
+          String summary = exoEvent.getSummary() ;
+          VEvent event ;
+          if(end > 0) {
+            event = new VEvent(new DateTime(start), new DateTime(end), summary);
+            event.getProperties().getProperty(Property.DTEND).getParameters()
+            .add(net.fortuna.ical4j.model.parameter.Value.DATE_TIME);
+          }else {
+            event = new VEvent(new DateTime(start), summary);            
+          }
+          event.getProperties().getProperty(Property.DTSTART).getParameters()
+          .add(net.fortuna.ical4j.model.parameter.Value.DATE_TIME); 
 
-        event.getProperties().add(new Location(exoEvent.getLocation()));
-        event.getProperties().getProperty(Property.LOCATION).getParameters()
-        .add(net.fortuna.ical4j.model.parameter.Value.TEXT);
-
-        if(exoEvent.getEventCategoryName() != null){
-          event.getProperties().add(new Categories(exoEvent.getEventCategoryName())) ;
-          event.getProperties().getProperty(Property.CATEGORIES).getParameters()
+          event.getProperties().add(new Description(exoEvent.getDescription()));
+          event.getProperties().getProperty(Property.DESCRIPTION).getParameters()
           .add(net.fortuna.ical4j.model.parameter.Value.TEXT);
-        }
-        if(exoEvent.getPriority() != null) {
-          for(int i = 0 ; i < CalendarEvent.PRIORITY.length; i++) {
-            if(exoEvent.getPriority().equals(CalendarEvent.PRIORITY[i])) {
-              event.getProperties().add(new Priority(i));
-              break ;
+
+          event.getProperties().add(new Location(exoEvent.getLocation()));
+          event.getProperties().getProperty(Property.LOCATION).getParameters()
+          .add(net.fortuna.ical4j.model.parameter.Value.TEXT);
+
+          if(exoEvent.getEventCategoryName() != null){
+            event.getProperties().add(new Categories(exoEvent.getEventCategoryName())) ;
+            event.getProperties().getProperty(Property.CATEGORIES).getParameters()
+            .add(net.fortuna.ical4j.model.parameter.Value.TEXT);
+          }
+          if(exoEvent.getPriority() != null) {
+            for(int i = 0 ; i < CalendarEvent.PRIORITY.length; i++) {
+              if(exoEvent.getPriority().equals(CalendarEvent.PRIORITY[i])) {
+                event.getProperties().add(new Priority(i));
+                break ;
+              }
+            }
+            event.getProperties().getProperty(Property.PRIORITY).getParameters()
+            .add(net.fortuna.ical4j.model.parameter.Value.INTEGER);  
+          }
+
+          if(exoEvent.getEventType().equals(CalendarEvent.TYPE_TASK)) {
+            long completed = exoEvent.getCompletedDateTime().getTime() ;
+            event.getProperties().add(new Completed(new DateTime(completed)));
+            event.getProperties().getProperty(Property.COMPLETED).getParameters()
+            .add(net.fortuna.ical4j.model.parameter.Value.DATE_TIME);
+
+            event.getProperties().add(new Due(new DateTime(end)));
+            event.getProperties().getProperty(Property.DUE).getParameters()
+            .add(net.fortuna.ical4j.model.parameter.Value.DATE_TIME);
+
+            event.getProperties().add(new Status(exoEvent.getStatus()));
+            event.getProperties().getProperty(Property.STATUS).getParameters()
+            .add(net.fortuna.ical4j.model.parameter.Value.TEXT);
+          }
+          if(!exoEvent.getAttachment().isEmpty()) {
+            for(Attachment att : exoEvent.getAttachment()) {
+              byte bytes[] = new byte[att.getInputStream().available()] ; 
+              att.getInputStream().read(bytes) ;
+              ParameterList plist = new ParameterList() ;
+              plist.add(new XParameter(Parameter.CN, att.getName())) ;
+              plist.add(new XParameter(Parameter.FMTTYPE, att.getMimeType())) ;
+              plist.add(Encoding.BASE64) ;
+              plist.add(Value.BINARY) ;
+              Attach attach = new Attach(plist, bytes);
+              event.getProperties().add(attach) ;
+            }
+          } 
+          if(!Utils.isEmpty(exoEvent.getRepeatType())) {
+            Recur rc = null ;
+            if(CalendarEvent.RP_NOREPEAT.equalsIgnoreCase(exoEvent.getRepeatType())){
+            } else if(CalendarEvent.RP_WEEKEND.equalsIgnoreCase(exoEvent.getRepeatType())){
+              rc = new Recur(Recur.WEEKLY, 1) ;
+              rc.getDayList().add(WeekDay.SU);
+              rc.getDayList().add(WeekDay.SA);
+              rc.setInterval(1);
+            } else if(CalendarEvent.RP_WORKINGDAYS.equalsIgnoreCase(exoEvent.getRepeatType())){
+              rc = new Recur(Recur.WEEKLY, 1) ;
+              rc.getDayList().add(WeekDay.MO);
+              rc.getDayList().add(WeekDay.TU);
+              rc.getDayList().add(WeekDay.WE);
+              rc.getDayList().add(WeekDay.TH);
+              rc.getDayList().add(WeekDay.FR);
+              rc.setInterval(1);
+            } else if(CalendarEvent.RP_WEEKLY.equalsIgnoreCase(exoEvent.getRepeatType())){
+              rc = new Recur(Recur.WEEKLY, 1) ;
+              rc.getDayList().add(WeekDay.SU);
+              rc.getDayList().add(WeekDay.MO);
+              rc.getDayList().add(WeekDay.TU);
+              rc.getDayList().add(WeekDay.WE);
+              rc.getDayList().add(WeekDay.TH);
+              rc.getDayList().add(WeekDay.FR);
+              rc.getDayList().add(WeekDay.SA);
+              rc.setInterval(1);
+            } else {
+              rc = new Recur(exoEvent.getRepeatType().toUpperCase(), 1) ;
+              rc.setInterval(1);
+            }
+            if(rc != null) {
+              rc.setWeekStartDay(WeekDay.SU.getDay()) ;
+              RRule r = new RRule(rc) ;
+              event.getProperties().add(r);
             }
           }
-          event.getProperties().getProperty(Property.PRIORITY).getParameters()
-          .add(net.fortuna.ical4j.model.parameter.Value.INTEGER);  
-        }
-
-        if(exoEvent.getEventType().equals(CalendarEvent.TYPE_TASK)) {
-          long completed = exoEvent.getCompletedDateTime().getTime() ;
-          event.getProperties().add(new Completed(new DateTime(completed)));
-          event.getProperties().getProperty(Property.COMPLETED).getParameters()
-          .add(net.fortuna.ical4j.model.parameter.Value.DATE_TIME);
-
-          event.getProperties().add(new Due(new DateTime(end)));
-          event.getProperties().getProperty(Property.DUE).getParameters()
-          .add(net.fortuna.ical4j.model.parameter.Value.DATE_TIME);
-
-          event.getProperties().add(new Status(exoEvent.getStatus()));
-          event.getProperties().getProperty(Property.STATUS).getParameters()
-          .add(net.fortuna.ical4j.model.parameter.Value.TEXT);
-        }
-        if(!exoEvent.getAttachment().isEmpty()) {
-          for(Attachment att : exoEvent.getAttachment()) {
-            byte bytes[] = new byte[att.getInputStream().available()] ; 
-            att.getInputStream().read(bytes) ;
-            ParameterList plist = new ParameterList() ;
-            plist.add(new XParameter(Parameter.CN, att.getName())) ;
-            plist.add(new XParameter(Parameter.FMTTYPE, att.getMimeType())) ;
-            plist.add(Encoding.BASE64) ;
-            plist.add(Value.BINARY) ;
-            Attach attach = new Attach(plist, bytes);
-            event.getProperties().add(attach) ;
-          }
-        } 
-        if(!Utils.isEmpty(exoEvent.getRepeatType())) {
-          Recur rc = null ;
-          if(CalendarEvent.RP_NOREPEAT.equalsIgnoreCase(exoEvent.getRepeatType())){
-          } else if(CalendarEvent.RP_WEEKEND.equalsIgnoreCase(exoEvent.getRepeatType())){
-            rc = new Recur(Recur.WEEKLY, 1) ;
-            rc.getDayList().add(WeekDay.SU);
-            rc.getDayList().add(WeekDay.SA);
-            rc.setInterval(1);
-          } else if(CalendarEvent.RP_WORKINGDAYS.equalsIgnoreCase(exoEvent.getRepeatType())){
-            rc = new Recur(Recur.WEEKLY, 1) ;
-            rc.getDayList().add(WeekDay.MO);
-            rc.getDayList().add(WeekDay.TU);
-            rc.getDayList().add(WeekDay.WE);
-            rc.getDayList().add(WeekDay.TH);
-            rc.getDayList().add(WeekDay.FR);
-            rc.setInterval(1);
-          } else if(CalendarEvent.RP_WEEKLY.equalsIgnoreCase(exoEvent.getRepeatType())){
-            rc = new Recur(Recur.WEEKLY, 1) ;
-            rc.getDayList().add(WeekDay.SU);
-            rc.getDayList().add(WeekDay.MO);
-            rc.getDayList().add(WeekDay.TU);
-            rc.getDayList().add(WeekDay.WE);
-            rc.getDayList().add(WeekDay.TH);
-            rc.getDayList().add(WeekDay.FR);
-            rc.getDayList().add(WeekDay.SA);
-            rc.setInterval(1);
-          } else {
-            rc = new Recur(exoEvent.getRepeatType().toUpperCase(), 1) ;
-            rc.setInterval(1);
-          }
-          if(rc != null) {
-            rc.setWeekStartDay(WeekDay.SU.getDay()) ;
-            RRule r = new RRule(rc) ;
-            event.getProperties().add(r);
-          }
-        }
-        String[] attendees = exoEvent.getInvitation() ;
-        if(attendees != null && attendees.length > 0) {
-          for(int i = 0; i < attendees.length; i++ ) {
-            if(attendees[i] != null) {
-              event.getProperties().add(new Attendee(attendees[i]));          
+          String[] attendees = exoEvent.getInvitation() ;
+          if(attendees != null && attendees.length > 0) {
+            for(int i = 0; i < attendees.length; i++ ) {
+              if(attendees[i] != null) {
+                event.getProperties().add(new Attendee(attendees[i]));          
+              }
             }
-          }
-          event.getProperties().getProperty(Property.ATTENDEE).getParameters()
-          .add(net.fortuna.ical4j.model.parameter.Value.TEXT);
-        } 
-        Uid id = new Uid(exoEvent.getId()) ; 
-        event.getProperties().add(id) ; 
-        calendar.getComponents().add(event);
+            event.getProperties().getProperty(Property.ATTENDEE).getParameters()
+            .add(net.fortuna.ical4j.model.parameter.Value.TEXT);
+          } 
+          Uid id = new Uid(exoEvent.getId()) ; 
+          event.getProperties().add(id) ; 
+          calendar.getComponents().add(event);
+        }
+
+        break ;
       }
     }
     ByteArrayOutputStream bout = new ByteArrayOutputStream();

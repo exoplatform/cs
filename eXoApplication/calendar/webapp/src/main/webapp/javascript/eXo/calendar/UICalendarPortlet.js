@@ -1009,6 +1009,7 @@ UICalendarPortlet.prototype.resetZIndex = function(obj){
 UICalendarPortlet.prototype.initDND = function(evt){
     var _e = window.event || evt;
     _e.cancelBubble = true;
+		if(eXo.core.EventManager.getMouseButton(evt) == 2) return ;
     var UICalendarPortlet = eXo.calendar.UICalendarPortlet;
     UICalendarPortlet.dragObject = this;
     UICalendarPortlet.resetZIndex(UICalendarPortlet.dragObject);

@@ -63,6 +63,7 @@ import org.exoplatform.webui.event.EventListener;
       @EventConfig(listeners = UICalendarView.QuickAddActionListener.class), 
       @EventConfig(listeners = UICalendarView.MoveNextActionListener.class), 
       @EventConfig(listeners = UICalendarView.MovePreviousActionListener.class), 
+      @EventConfig(listeners = UICalendarView.ExportEventActionListener.class),
       @EventConfig(listeners = UIDayView.SaveEventActionListener.class)
     }
 )

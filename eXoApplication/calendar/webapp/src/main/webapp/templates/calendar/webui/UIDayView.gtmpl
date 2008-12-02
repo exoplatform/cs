@@ -265,6 +265,11 @@
 	          </div>
 	        </a>
 	        <%}%>
+					<a href="<%=uicomponent.event("ExportEvent","id&$uicomponent.CALENDARID=calId&$uicomponent.CALTYPE=caltype")%>">
+            <div class="ItemIcon ExportCalendarIcon">
+            	<%=_ctx.appRes("ContextMenu.label.ExportEvent")%>
+            </div>
+          </a>
 	      </div>
 	    </div>
 	  </div>
