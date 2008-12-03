@@ -62,7 +62,11 @@ uiform.begin() ;
 		         		String rndString = String.valueOf(new Date().getTime());
 		         		//String src = uicomponent.getDownloadLink(attachFile) ; 
 		         %>
-		         	 <a onclick="javaScript:current = document.getElementById('$attachFile.id'); if(current.style.display == 'none') {current.style.display='block';} else if(current.style.display == 'block') {current.style.display = 'none';} " class="IconHolder ViewAttachmentIcon">
+		         <% 
+		         		String View = uiform.getLabel('View') ;
+		         		String Close = uiform.getLabel('Close') ;
+		          %>		         
+		         	 <a viewLable="&View" closeLable="&Close" onclick="javaScript:current = document.getElementById('$attachFile.id'); if(current.style.display == 'none') {current.style.display='block';} else if(current.style.display == 'block') {current.style.display = 'none';} " class="IconHolder ViewAttachmentIcon">
 			         	<%=uiform.getLabel('View')%>
 			         </a> 
 		         <%}%>
