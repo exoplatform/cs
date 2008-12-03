@@ -46,7 +46,7 @@ QuickSortObject.prototype.swap = function(x, y){
 QuickSortObject.prototype.qSortRecursive = function(begin, end){
   if (!this.processArray || begin >= end - 1) 
     return;
-  var pivotIndex = begin + Math.floor(0.5 * (end - begin - 1));
+  var pivotIndex = begin + Math.floor(Math.random() * (end - begin - 1));
   var partionIndex = this.partitionProcess(begin, end, pivotIndex);
   this.qSortRecursive(begin, partionIndex);
   this.qSortRecursive(partionIndex + 1, end);
@@ -179,7 +179,8 @@ EventObject.prototype.compare = function(event1, event2){
       event1.startTime > event2.startTime) {
     return 1;
   } else if (event1.startTime == event2.startTime && event1.endTime == event2.endTime) {
-      return 0;
+		if(event1.name < event2.name) return 1;
+		return 0 ;
   } else {
       return -1;
   }

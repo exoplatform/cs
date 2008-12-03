@@ -105,7 +105,7 @@ UICalendarDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj,
 
   eXo.core.Browser.setOpacity(tmpNode, 50) ;
   var UIMonthViewNode = document.createElement('div');
-  UIMonthViewNode.className = 'UIMonthView';
+  UIMonthViewNode.className = 'UICalendarPortlet UIMonthView';
   var EventMonthContentNode = document.createElement('div');
   EventMonthContentNode.className = 'EventMonthContent';
   
