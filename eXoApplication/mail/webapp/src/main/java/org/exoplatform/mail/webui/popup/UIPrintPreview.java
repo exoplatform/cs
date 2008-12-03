@@ -103,7 +103,6 @@ public class UIPrintPreview extends UIForm implements UIPopupComponent {
       context.getJavascriptManager().addJavascript("eXo.mail.UIMailPortlet.closePrint() ;");
       uiPrintPreview.getAncestorOfType(UIMailPortlet.class).cancelAction();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPrintPreview.getAncestorOfType(UIPopupAction.class)) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPrintPreview.getAncestorOfType(UIMailPortlet.class)) ;
     }
   }
 }

@@ -369,7 +369,6 @@ public class UIMessagePreview extends UIComponent {
         uiAddContactForm.setEmailField(email);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);
       }
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview);
     }
   }
 
@@ -388,7 +387,6 @@ public class UIMessagePreview extends UIComponent {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup);
         }
       } catch (Exception e) { }  
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview);
     }
   }
 
@@ -412,7 +410,6 @@ public class UIMessagePreview extends UIComponent {
         uiTagForm.setTagList(listTags) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
       }
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgPreview);
     }
   }
 
