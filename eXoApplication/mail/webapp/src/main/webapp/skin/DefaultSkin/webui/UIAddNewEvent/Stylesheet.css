@@ -5,6 +5,7 @@
 .UIMailPortlet .UIAddNewEvent .ReminderByEmail {
 	background: url('background/ReminderTabHeader1x24.gif') repeat-x top ;
 	padding: 4px;
+	*padding-top: 0px;
 }
 
 .UIMailPortlet .UIAddNewEvent .ReminderByEmail input.checkbox{
@@ -21,6 +22,7 @@
 
 .UIMailPortlet .UIAddNewEvent .ReminderByEmail .FieldLabel{
 	padding-top: 2px;
+	*padding-top: 6px;
 	padding-left: 2px;
 }
 
