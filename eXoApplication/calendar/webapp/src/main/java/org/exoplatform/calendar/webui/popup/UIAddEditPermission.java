@@ -17,7 +17,6 @@
 package org.exoplatform.calendar.webui.popup;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -28,7 +27,6 @@ import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendars;
-import org.exoplatform.calendar.webui.popup.UIAddressForm.ContactData;
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -74,12 +72,17 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
   public void init(String username, Calendar cal, boolean isAddNew) throws Exception{
     UISharedForm shareForm = getChild(UISharedForm.class) ;
     shareForm.init(username, cal, isAddNew) ; 
-    updateGrid(cal) ;
+    updateGrid(cal, 1) ;
     calendarId_ = cal.getId() ;
   }
 
+  public int getCurrentPage() throws Exception {
+    UIGrid permissionList = getChild(UIGrid.class);
+    return permissionList.getUIPageIterator().getCurrentPage();
+  }
+  
   @SuppressWarnings("unchecked")
-  public void updateGrid(Calendar cal) throws Exception {
+  public void updateGrid(Calendar cal, int currentPage) throws Exception {
     List<data> dataRow = new ArrayList<data>() ;
     WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
     ResourceBundle res = context.getApplicationResourceBundle() ;   
@@ -99,7 +102,9 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
     Collections.sort(dataRow, new UserDataComparator()) ;
     UIGrid permissionList = getChild(UIGrid.class) ;
     ObjectPageList objPageList = new ObjectPageList(dataRow, 10) ;
-    permissionList.getUIPageIterator().setPageList(objPageList) ;   
+    permissionList.getUIPageIterator().setPageList(objPageList) ;  
+    permissionList.getUIPageIterator().setCurrentPage(currentPage);
+    
   }
 
   static public class EditActionListener extends EventListener<UIAddEditPermission> {
@@ -143,7 +148,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
       }
       calService.removeSharedCalendar(SessionProviderFactory.createSystemProvider(), resiceUser, addEdit.calendarId_) ;
       calService.saveUserCalendar(SessionProviderFactory.createSessionProvider(), username, cal, false) ;
-      addEdit.updateGrid(cal);
+      addEdit.updateGrid(cal, addEdit.getCurrentPage());
       event.getRequestContext().addUIComponentToUpdateByAjax(addEdit) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(addEdit.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UICalendars.class)) ;
     }
