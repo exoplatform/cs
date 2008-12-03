@@ -206,6 +206,7 @@ public class EventQuery {
         if(hasConjuntion) stringBuffer.append(" and (") ;
         else stringBuffer.append("(") ;
         stringBuffer.append("(") ;
+        /*
         stringBuffer.append("@exo:fromDateTime >= xs:dateTime('"+ISO8601.format(fromDate)+"') and ") ;
         stringBuffer.append("@exo:toDateTime <= xs:dateTime('"+ISO8601.format(toDate)+"')") ;
         stringBuffer.append(") or (") ;
@@ -219,29 +220,41 @@ public class EventQuery {
         stringBuffer.append("@exo:fromDateTime >= xs:dateTime('"+ISO8601.format(fromDate)+"') and ") ;
         stringBuffer.append("@exo:fromDateTime < xs:dateTime('"+ISO8601.format(toDate)+"') and ") ;
         stringBuffer.append("@exo:toDateTime > xs:dateTime('"+ISO8601.format(toDate)+"')") ;
+        */
+        
+        stringBuffer.append("@exo:fromDateTime <= xs:dateTime('"+ISO8601.format(fromDate)+"') and ") ;
+        stringBuffer.append("@exo:toDateTime >= xs:dateTime('"+ISO8601.format(toDate)+"')") ;
+        stringBuffer.append(") or (") ;
+        stringBuffer.append("@exo:fromDateTime >= xs:dateTime('"+ISO8601.format(fromDate)+"') and ") ;
+        stringBuffer.append("@exo:fromDateTime <= xs:dateTime('"+ISO8601.format(toDate)+"')") ;
+        stringBuffer.append(") or (") ;
+        stringBuffer.append("@exo:toDateTime >= xs:dateTime('"+ISO8601.format(fromDate)+"') and ") ;
+        stringBuffer.append("@exo:toDateTime <= xs:dateTime('"+ISO8601.format(toDate)+"')") ;
+        
         stringBuffer.append(")") ;
-        stringBuffer.append(")") ;  
+        stringBuffer.append(")") ; 
         hasConjuntion = true ;
       }else if(fromDate != null) {
         if(hasConjuntion) stringBuffer.append(" and (") ;
         else stringBuffer.append("(") ;
-        stringBuffer.append("(") ;
-        stringBuffer.append("@exo:fromDateTime >= xs:dateTime('"+ISO8601.format(fromDate)+"')") ;
-        stringBuffer.append(") or (") ;
-        stringBuffer.append("@exo:fromDateTime < xs:dateTime('"+ISO8601.format(fromDate)+"') and ") ;
-        stringBuffer.append("@exo:toDateTime > xs:dateTime('"+ISO8601.format(fromDate)+"')") ;
-        stringBuffer.append(")") ;
+        //stringBuffer.append("(") ;
+        //stringBuffer.append("@exo:fromDateTime >= xs:dateTime('"+ISO8601.format(fromDate)+"')") ;
+        //stringBuffer.append(") or (") ;
+        //stringBuffer.append("@exo:fromDateTime < xs:dateTime('"+ISO8601.format(fromDate)+"') and ") ;
+        stringBuffer.append("@exo:toDateTime >= xs:dateTime('"+ISO8601.format(fromDate)+"')") ;
+        //stringBuffer.append(")") ;
         stringBuffer.append(")") ;
         hasConjuntion = true ;
       }else if(toDate != null) {
         if(hasConjuntion) stringBuffer.append(" and (") ;
         else stringBuffer.append("(") ;
-        stringBuffer.append("(") ;
-        stringBuffer.append("@exo:toDateTime <= xs:dateTime('"+ISO8601.format(toDate)+"')") ;
-        stringBuffer.append(") or (") ;
-        stringBuffer.append("@exo:fromDateTime < xs:dateTime('"+ISO8601.format(toDate)+"') and ") ;
-        stringBuffer.append("@exo:toDateTime > xs:dateTime('"+ISO8601.format(toDate)+"')") ;
-        stringBuffer.append(")") ;
+//        stringBuffer.append("(") ;
+//        stringBuffer.append("@exo:toDateTime <= xs:dateTime('"+ISO8601.format(toDate)+"')") ;
+//        stringBuffer.append(") or (") ;
+//        stringBuffer.append("@exo:fromDateTime < xs:dateTime('"+ISO8601.format(toDate)+"') and ") ;
+//        stringBuffer.append("@exo:toDateTime > xs:dateTime('"+ISO8601.format(toDate)+"')") ;
+//        stringBuffer.append(")") ;
+        stringBuffer.append("@exo:fromDateTime <= xs:dateTime('"+ISO8601.format(toDate)+ "')") ;
         stringBuffer.append(")") ;
         hasConjuntion = true ;
       }

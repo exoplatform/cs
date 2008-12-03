@@ -335,9 +335,14 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       }
       Contact[] array = contactMap.values().toArray(new Contact[]{}) ;
       if (array.length > 0) {
-        Contact firstContact = array[0] ;
-        contactPreview.setContact(firstContact) ;
-        selectedContact = firstContact.getId() ;
+        //cs-1823
+        if (!ContactUtils.isEmpty(selectedContact) && contactMap.containsKey(selectedContact)) {
+          contactPreview.setContact(contactMap.get(selectedContact)) ;
+        } else {
+          Contact firstContact = array[0] ;
+          contactPreview.setContact(firstContact) ;
+          selectedContact = firstContact.getId() ;          
+        }
       } else contactPreview.setContact(null) ;
     } else contactPreview.setContact(null) ;
   }
