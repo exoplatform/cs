@@ -206,7 +206,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       calendarService.saveUserCalendar(sProvider, username, cal, false) ;
       calendarService.shareCalendar(SessionProviderFactory.createSystemProvider(), username, uiForm.calendarId_, newUsers) ;
       UIAddEditPermission uiAddEdit = uiForm.getParent() ;
-      uiAddEdit.updateGrid(cal);
+      uiAddEdit.updateGrid(cal, uiAddEdit.getCurrentPage());
       uiForm.setCanEdit(false) ;
       uiForm.setSharedUser(null) ;
       uiForm.permission_.clear() ;
