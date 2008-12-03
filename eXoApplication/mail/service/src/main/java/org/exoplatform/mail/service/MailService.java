@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
+import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 
@@ -42,6 +43,8 @@ public interface MailService {
    * @throws Exception
    */
   public List<Account> getAccounts(SessionProvider sProvider, String username) throws Exception ;
+  
+  public String getMailHierarchyNode(SessionProvider sProvider) throws Exception ;
   
   /**
    * This method should:
@@ -577,4 +580,6 @@ public interface MailService {
    * @throws Exception
    */
   public Message loadAttachments(SessionProvider sProvider, String username, String accountId, Message msg) throws Exception ;
+  
+  public void addListenerPlugin(ComponentPlugin listener) throws Exception ;
 }

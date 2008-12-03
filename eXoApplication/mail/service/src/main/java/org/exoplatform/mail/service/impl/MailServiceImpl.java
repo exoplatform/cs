@@ -62,6 +62,7 @@ import javax.mail.util.ByteArrayDataSource;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.AccountData;
 import org.exoplatform.mail.service.Attachment;
@@ -70,6 +71,7 @@ import org.exoplatform.mail.service.CheckingInfo;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
+import org.exoplatform.mail.service.MailUpdateStorageEventListener;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.MessageFilter;
 import org.exoplatform.mail.service.MessagePageList;
@@ -83,6 +85,7 @@ import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.scheduler.JobInfo;
 import org.exoplatform.services.scheduler.JobSchedulerService;
 import org.exoplatform.services.scheduler.PeriodInfo;
+import org.picocontainer.Startable;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
 
@@ -92,7 +95,7 @@ import com.sun.mail.smtp.SMTPSendFailedException;
  * Created by The eXo Platform SARL Author : Tuan Nguyen
  * tuan.nguyen@exoplatform.com Jun 23, 2007
  */
-public class MailServiceImpl implements MailService {
+public class MailServiceImpl implements MailService, Startable {
 
   private static final Log          logger = LogFactory.getLog(MailServiceImpl.class);
 
@@ -112,6 +115,10 @@ public class MailServiceImpl implements MailService {
     this.schedulerService_ = schedulerService;
   }
 
+  public String getMailHierarchyNode(SessionProvider sProvider) throws Exception {
+    return storage_.getMailHierarchyNode(sProvider);
+  }
+  
   public void removeCheckingInfo(String username, String accountId) throws Exception {
     String key = username + ":" + accountId;
     checkingLog_.remove(key);
@@ -1073,5 +1080,21 @@ public class MailServiceImpl implements MailService {
     return storage_.loadAttachments(sProvider, username, accountId, msg);
   }
 
+  public List<MailUpdateStorageEventListener> listeners_ = new ArrayList<MailUpdateStorageEventListener>();
+  
+  public void start() {
+    for (MailUpdateStorageEventListener updateListener : listeners_) {
+      updateListener.preUpdate() ;
+    }
+  }
 
+  public void stop() {
+    
+  }
+
+  public synchronized void addListenerPlugin(ComponentPlugin listener) throws Exception {
+    if(listener instanceof MailUpdateStorageEventListener ) {
+      listeners_.add((MailUpdateStorageEventListener)listener) ;
+    }
+  }
 }
