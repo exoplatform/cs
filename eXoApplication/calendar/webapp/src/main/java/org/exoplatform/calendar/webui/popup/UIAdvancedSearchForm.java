@@ -80,7 +80,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
   final static  private String TODATE = "toDate" ;
 
   public UIAdvancedSearchForm() throws Exception{
-    addChild(new UIFormStringInput(TEXT, TEXT, null)) ;
+    addChild(new UIFormStringInput(TEXT, TEXT, "")) ;
     List<SelectItemOption<String>> types = new ArrayList<SelectItemOption<String>>() ;
     types.add(new SelectItemOption<String>("", "")) ;
     types.add(new SelectItemOption<String>(CalendarEvent.TYPE_EVENT, CalendarEvent.TYPE_EVENT)) ;
@@ -204,20 +204,35 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
   public String[] getActions() {
     return new String[]{"Search","Cancel"} ;
   }
+  public Boolean isValidate(){
+    String value = getUIStringInput(TEXT).getValue();
+    if(value == null) value = "" ;
+    String formData = "";
+    formData += value;
+    formData += getUIFormSelectBox(TYPE).getValue();
+    formData += getUIFormSelectBox(CALENDAR).getValue();
+    formData += getUIFormSelectBox(CATEGORY).getValue();
+    formData += getUIFormSelectBox(PRIORITY).getValue();
+    formData += getFromDateValue() ;
+    formData += getToDateValue() ;
+    return !CalendarUtils.isEmpty(formData);
+  }
   static  public class SearchActionListener extends EventListener<UIAdvancedSearchForm> {
     public void execute(Event<UIAdvancedSearchForm> event) throws Exception {
       UIAdvancedSearchForm uiForm = event.getSource() ;
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;   
+      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       if(!CalendarUtils.isEmpty(uiForm.getFromDateValue()) && uiForm.getFromDate() == null){
         uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.from-date-time-invalid", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
-      }  
+      } 
+      
       if(!CalendarUtils.isEmpty(uiForm.getToDateValue()) && uiForm.getToDate() == null)  {
         uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.to-date-time-invalid", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
+      
       if(uiForm.getFromDate() != null && uiForm.getToDate() != null) {
         if(uiForm.getFromDate().after(uiForm.getToDate())){
           uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.date-time-invalid", null)) ;
@@ -232,6 +247,11 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return ;
         }
+      }      
+      if(!uiForm.isValidate()){
+        uiApp.addMessage(new ApplicationMessage("UISearchForm.msg.no-text-to-search", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
       }
       try {
         EventQuery query = new EventQuery() ;
