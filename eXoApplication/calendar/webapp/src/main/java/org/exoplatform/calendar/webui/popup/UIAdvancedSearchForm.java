@@ -224,9 +224,8 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
       if(!CalendarUtils.isEmpty(uiForm.getFromDateValue()) && uiForm.getFromDate() == null){
         uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.from-date-time-invalid", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      } 
-      
+        return ; 
+      }
       if(!CalendarUtils.isEmpty(uiForm.getToDateValue()) && uiForm.getToDate() == null)  {
         uiApp.addMessage(new ApplicationMessage("UIAdvancedSearchForm.msg.to-date-time-invalid", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -272,10 +271,10 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
         } else if (uiForm.getFromDate() !=null) {
           cal.setTime(uiForm.getFromDate()) ;
           query.setFromDate(CalendarUtils.getBeginDay(cal)) ;
-          query.setToDate(CalendarUtils.getEndDay(cal)) ;
+          //query.setToDate(CalendarUtils.getEndDay(cal)) ;
         } else if (uiForm.getToDate() !=null) {
           cal.setTime(uiForm.getToDate()) ;
-          query.setFromDate(CalendarUtils.getBeginDay(cal)) ;
+          //query.setFromDate(CalendarUtils.getBeginDay(cal)) ;
           query.setToDate(CalendarUtils.getEndDay(cal)) ;
         }
         String priority = uiForm.getUIFormSelectBox(UIAdvancedSearchForm.PRIORITY).getValue() ;
