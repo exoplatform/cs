@@ -80,6 +80,10 @@ public class JCRDataStorage {
   public JCRDataStorage(NodeHierarchyCreator nodeHierarchyCreator) {
     nodeHierarchyCreator_ = nodeHierarchyCreator;
   }
+  
+  public String getMailHierarchyNode(SessionProvider sProvider) throws Exception {
+    return nodeHierarchyCreator_.getJcrPath("usersPath") ;
+  }
 
   private Node getMailHomeNode(SessionProvider sProvider, String username) throws Exception {
     Node userApp = nodeHierarchyCreator_.getUserApplicationNode(sProvider, username);

@@ -216,4 +216,32 @@
 	    </init-params>    
 	  </component-plugin-->
   </external-component-plugins>   
+  
+  <external-component-plugins>
+   	  <target-component>org.exoplatform.mail.service.MailService</target-component>
+      <component-plugin>
+        <name>mail.update.version</name>
+     	<set-method>addListenerPlugin</set-method>
+     	<type>org.exoplatform.mail.service.MailUpdateStorage</type>
+     	<description>Update mail data version 1.0 to 1.1</description>     
+     	<init-params>
+     	  <properties-param>
+     	    <name>mail.update.param</name>
+     		<property name="isUpdate" value="false"/>
+    	  </properties-param>
+    	  
+    	  <properties-param>
+     	    <name>mail.account.param</name>
+     		<property name="action" value="add"/>
+     		<property name="newProperty" value="exo:checkAll, true; exo:checkFromDate, null"/>
+    	  </properties-param>
+    	  
+    	  <properties-param>
+     	    <name>mail.message.param</name>    
+     		<property name="action" value="add"/>
+     		<property name="newProperty" value="exo:isRoot, true"/>
+    	  </properties-param>
+        </init-params>    
+      </component-plugin>
+    </external-component-plugins>
 </configuration>
