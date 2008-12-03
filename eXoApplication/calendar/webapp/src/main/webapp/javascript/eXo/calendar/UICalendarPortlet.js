@@ -71,7 +71,7 @@ UICalendarPortlet.prototype.minToTime = function(min, timeFormat){
  * @return date object Date object
  */
 UICalendarPortlet.prototype.getBeginDay = function(millis){
-    var d = new Date(millis);
+    var d = new Date(parseInt(millis));
     var date = d.getDate();
     var month = d.getMonth() + 1;
     var year = d.getFullYear();
@@ -1229,6 +1229,8 @@ UICalendarPortlet.prototype.weekViewCallback = function(evt){
     var map = null;
     var obj = null;
     var items = DOMUtil.findDescendantsByTagName(UIContextMenu.menuElement, "a");
+		var container = DOMUtil.findAncestorByClass(src,"EventWeekContent");
+		var mouseY = (eXo.core.Browser.findMouseRelativeY(container,evt) + container.scrollTop)*60000;
     if (DOMUtil.findAncestorByClass(src, "WeekViewEventBoxes") || DOMUtil.hasClass(src, "WeekViewEventBoxes")) {
         var obj = (DOMUtil.findAncestorByClass(src, "WeekViewEventBoxes")) ? DOMUtil.findAncestorByClass(src, "WeekViewEventBoxes") : src;
         var eventId = obj.getAttribute("eventid");
@@ -1245,7 +1247,7 @@ UICalendarPortlet.prototype.weekViewCallback = function(evt){
                 "calType\s*=\s*[A-Za-z0-9_]*(?=&|'|\")": "calType=" + calType
             };
         }
-        obj = (DOMUtil.findAncestorByTagName(src, "td"))? DOMUtil.findAncestorByTagName(src, "td").getAttribute("startTime"):null;
+        obj = parseInt(DOMUtil.findAncestorByTagName(src, "td").getAttribute("startTime")) + mouseY;
         for (var i = 0; i < items.length; i++) {
             if (items[i].className == "EventActionMenu") {
                 items[i].style.display = "block";
@@ -1258,7 +1260,7 @@ UICalendarPortlet.prototype.weekViewCallback = function(evt){
     }
     else {
         obj = (DOMUtil.findAncestorByTagName(src, "td")) ? DOMUtil.findAncestorByTagName(src, "td") : src;
-        map = obj.getAttribute("startTime");
+        map = eXo.calendar.UICalendarPortlet.getBeginDay(obj.getAttribute("startTime")) + mouseY;
         for (var i = 0; i < items.length; i++) {
             if (items[i].style.display == "block") {
                 items[i].style.display = "none";
