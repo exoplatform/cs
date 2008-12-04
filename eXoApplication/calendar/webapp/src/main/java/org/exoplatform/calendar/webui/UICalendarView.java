@@ -433,7 +433,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       for (CalendarEvent ce : events) {
         /*if(CalendarUtils.isEmpty(toCalendarId )) toCalendarId = ce.getCalendarId() ;
         if(CalendarUtils.isEmpty(toType)) toType = ce.getCalType() ;*/
-        List<CalendarEvent> list = new ArrayList<CalendarEvent>(){} ;
+        List<CalendarEvent> list = new ArrayList<CalendarEvent>() ;
         list.add(ce) ;
         calService.moveEvent(getSession(), ce.getCalendarId(), ce.getCalendarId(), ce.getCalType(), ce.getCalType(), list, username) ;
       }

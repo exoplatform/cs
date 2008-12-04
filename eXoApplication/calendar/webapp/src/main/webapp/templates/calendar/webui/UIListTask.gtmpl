@@ -1,4 +1,5 @@
 <%
+  import org.exoplatform.calendar.webui.UIListView.CalendarEventComparator;
 	uiform.begin();
 	
 	int currentDay = uicomponent.getCurrentDay() ;
@@ -50,8 +51,24 @@
   		   <tr>
 						<th style="width: 30px; padding-left: 4px;"><input style="float: left; margin-top: 2px;" type="checkbox" class="checkbox" title="<%=uiform.getLabel('CheckAll')%>" value="4"/></th>
   			    <th style="width: 24px;"><div class="AttachmentIcon">&nbsp;</div></th>
-  		      <th style="width: 46px;"><%=uiform.getLabel('Priority')%></th>
-  		      <th ><%=uiform.getLabel('Task')%></th>
+            <%
+              String sortLink = uicomponent.event("Sort", CalendarEventComparator.EVENT_PRIORITY.toString()) ;   
+              String classCss = "";
+              if (uicomponent.getSortedField() == CalendarEventComparator.EVENT_PRIORITY) {
+                if (uicomponent.isAscending()) classCss = "UpArrow1Icon";
+                else classCss = "DownArrow1Icon";
+              }
+             %>
+  		      <th style="width: 46px;"><a href="$sortLink" ><div class="$classCss"><%=uiform.getLabel('Priority')%></div></a></th>
+            <%
+              sortLink = uicomponent.event("Sort", CalendarEventComparator.EVENT_SUMMARY.toString()) ;
+              classCss = "";
+              if (uicomponent.getSortedField() == CalendarEventComparator.EVENT_SUMMARY) {
+                if (uicomponent.isAscending()) classCss = "UpArrow1Icon";
+                else classCss = "DownArrow1Icon";
+            }
+            %>
+  		      <th ><a href="$sortLink" ><div class="$classCss"><%=uiform.getLabel('Task')%></div></a></th>
   		      <th ><%=uiform.getLabel('Status')%></th>
   		      <th ><%=uiform.getLabel('DueDate')%></th>
  	      	  <th ><%=uiform.getLabel('TaskDelegation')%></th>

@@ -17,6 +17,8 @@
 package org.exoplatform.calendar.webui;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -57,7 +59,8 @@ import org.exoplatform.webui.form.UIFormSelectBox;
       @EventConfig(listeners = UICalendarView.MovePreviousActionListener.class), 
       @EventConfig(listeners = UIListView.ShowPageActionListener.class ),
       @EventConfig(listeners = UICalendarView.ExportEventActionListener.class),
-      @EventConfig(listeners = UIListView.OnchangeActionListener.class )   
+      @EventConfig(listeners = UIListView.OnchangeActionListener.class ),   
+      @EventConfig(listeners = UIListView.SortActionListener.class )
 
     }
 )
@@ -71,6 +74,10 @@ public class UIListView extends UICalendarView {
   private String categoryId_ = null ;
   private String keyWords_ = null ;
   private int currentPage_ = 0 ;
+  public CalendarEventComparator ceCompare_ = new CalendarEventComparator();
+  private int sortedField_ = ceCompare_.getCompareField();
+  private boolean isAscending_ = ceCompare_.getRevertOrder();
+  
   public UIListView() throws Exception{
     if(getEvents().length > 0 ) {
       selectedEvent_ = getEvents()[0].getId() ;
@@ -86,6 +93,23 @@ public class UIListView extends UICalendarView {
       return "app:/templates/calendar/webui/UIListView.gtmpl" ;
     }
   }
+  
+  public void setSortedField(int field) {
+    sortedField_ = field;
+  }
+  
+  public int getSortedField() {
+    return sortedField_;
+  }
+  
+  public boolean isAscending() {
+    return isAscending_;
+  }
+  
+  public void setIsAscending(boolean b) {
+    isAscending_ = b;
+  }
+  
   public void refresh() throws Exception{
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = CalendarUtils.getCurrentUser() ;
@@ -154,7 +178,9 @@ public class UIListView extends UICalendarView {
       for(CalendarEvent calendarEvent : pageList_.getPage(page ,CalendarUtils.getCurrentUser())) {
         UIFormCheckBoxInput<Boolean> checkbox = new UIFormCheckBoxInput<Boolean>(calendarEvent.getId(),calendarEvent.getId(), false) ;
         addUIFormInput(checkbox);
-        if(getViewType().equals(TYPE_BOTH)) eventMap_.put(calendarEvent.getId(), calendarEvent) ;
+        if(getViewType().equals(TYPE_BOTH)){
+          eventMap_.put(calendarEvent.getId(), calendarEvent) ;
+        }
         else if(getViewType().equals(calendarEvent.getEventType())) {
           eventMap_.put(calendarEvent.getId(), calendarEvent) ;
         }
@@ -284,6 +310,91 @@ public class UIListView extends UICalendarView {
 
   public String getKeyWords() {
     return keyWords_;
+  }
+  
+  static  public class SortActionListener extends EventListener<UIListView> {
+    public void execute(Event<UIListView> event) throws Exception {
+      UIListView uiListView = event.getSource() ;
+      List<CalendarEvent> events = new ArrayList<CalendarEvent>(uiListView.pageList_.getAll());
+      long currentPage = uiListView.getCurrentPage();
+      CalendarEventComparator ceCompare = uiListView.ceCompare_ ;
+      String fieldId =  event.getRequestContext().getRequestParameter(OBJECTID) ;
+      ceCompare.setCompareField(Integer.parseInt(fieldId));
+      uiListView.setSortedField(Integer.parseInt(fieldId));
+      boolean order = !ceCompare.getRevertOrder();
+      ceCompare.setRevertOrder(order);
+      uiListView.setIsAscending(order);
+      Collections.sort(uiListView.pageList_.getAll(), ceCompare);
+      uiListView.updateCurrentPage(currentPage);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiListView); 
+    }
+  }
+  
+  public static class CalendarEventComparator implements Comparator {
+    public static final int EVENT_SUMMARY = 0;
+    public static final int EVENT_PRIORITY = 1;
+    public static final int EVENT_DESCRIPTION = 2;
+    public static final int EVENT_START = 3;
+    public static final int EVENT_END = 4;
+    
+    private int compareField_ = EVENT_SUMMARY;
+    private boolean revertOrder_ = false;
+    
+    public void setCompareField(int compareField) {
+      compareField_ = compareField;
+    }
+    
+    public int getCompareField() {
+      return compareField_;
+    }
+    
+    public void setRevertOrder(boolean b) {
+      revertOrder_ = b;
+    }
+    
+    public boolean getRevertOrder() {
+      return revertOrder_;
+    }
+    
+    public int getPriority(String priority) {
+      if (priority != null) {
+        if (priority.equalsIgnoreCase("low"))
+          return 1;
+        else if (priority.equalsIgnoreCase("normal")) 
+          return 2;
+        else if (priority.equalsIgnoreCase("high"))
+          return 3;
+      }
+      return 0;
+    } 
+    
+    public int compare(Object o1, Object o2) throws ClassCastException {
+      CalendarEvent event1 = ((CalendarEvent) o1);
+      CalendarEvent event2 = ((CalendarEvent) o2);
+      int result = 0 ;
+      switch (getCompareField()) {
+        case EVENT_SUMMARY :
+          result = event1.getSummary().compareToIgnoreCase(event2.getSummary());
+          break;
+        case EVENT_PRIORITY :
+          result = getPriority(event1.getPriority()) - getPriority(event2.getPriority());
+          break;
+        case EVENT_START :
+          result = event1.getFromDateTime().compareTo(event2.getFromDateTime());
+          break;
+        case EVENT_END :
+          result = event1.getToDateTime().compareTo(event2.getToDateTime());
+          break;
+        case EVENT_DESCRIPTION :
+          String des1 = event1.getDescription() != null ? event1.getDescription() : "";
+          String des2 = event2.getDescription() != null ? event2.getDescription() : "";
+          result = des1.compareToIgnoreCase(des2);
+          break;
+      }
+      if (getRevertOrder()) result = 0 - result;
+      
+      return result ;
+    }
   }
 }
 

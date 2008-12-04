@@ -3,6 +3,10 @@
 	background: url('icons/CalendarIcons.gif') no-repeat -1172px;
 }
 
+.UICalendarPortlet .UpArrow1Icon {
+	background: url('icons/BlueUpArrow.gif') no-repeat right;
+}
+
 .UICalendarPortlet .FindIcon {
 	background: url('icons/CalendarIcons.gif') no-repeat 484px;
 }
