@@ -1226,18 +1226,15 @@ UICalendarPortlet.prototype.dayViewCallback = function(evt){
  * @param {Object} evt Mouse event
  */
 UICalendarPortlet.prototype.weekViewCallback = function(evt){
-    var _e = window.event || evt;
-    var src = _e.srcElement || _e.target;
+    var src = eXo.core.EventManager.getEventTarget(evt);
     var DOMUtil = eXo.core.DOMUtil;
     var UIContextMenu = eXo.webui.UIContextMenu;
     var map = null;
-    var obj = null;
+    var obj = eXo.core.EventManager.getEventTargetByClass(evt,"WeekViewEventBoxes");
     var items = DOMUtil.findDescendantsByTagName(UIContextMenu.menuElement, "a");
-		var container = DOMUtil.findAncestorByClass(src,"EventWeekContent");
-		var mouseY = (eXo.core.Browser.findMouseRelativeY(container,evt) + container.scrollTop)*60000;
-    if (DOMUtil.findAncestorByClass(src, "WeekViewEventBoxes") || DOMUtil.hasClass(src, "WeekViewEventBoxes")) {
-        var obj = (DOMUtil.findAncestorByClass(src, "WeekViewEventBoxes")) ? DOMUtil.findAncestorByClass(src, "WeekViewEventBoxes") : src;
-        var eventId = obj.getAttribute("eventid");
+    if (obj) {
+        //var obj = (DOMUtil.findAncestorByClass(src, "WeekViewEventBoxes")) ? DOMUtil.findAncestorByClass(src, "WeekViewEventBoxes") : src;
+				var eventId = obj.getAttribute("eventid");
         var calendarId = obj.getAttribute("calid");
         var calType = obj.getAttribute("calType");
         map = {
@@ -1251,7 +1248,11 @@ UICalendarPortlet.prototype.weekViewCallback = function(evt){
                 "calType\s*=\s*[A-Za-z0-9_]*(?=&|'|\")": "calType=" + calType
             };
         }
-        obj = parseInt(DOMUtil.findAncestorByTagName(src, "td").getAttribute("startTime")) + mouseY;
+				if(!DOMUtil.hasClass(obj,"EventAlldayContainer")){
+					var container = DOMUtil.findAncestorByClass(src,"EventWeekContent");
+					var mouseY = (eXo.core.Browser.findMouseRelativeY(container,evt) + container.scrollTop)*60000;
+					obj =parseInt(DOMUtil.findAncestorByTagName(src, "td").getAttribute("startTime")) + mouseY;
+				} else obj = null;
         for (var i = 0; i < items.length; i++) {
             if (items[i].className == "EventActionMenu") {
                 items[i].style.display = "block";
@@ -1263,7 +1264,9 @@ UICalendarPortlet.prototype.weekViewCallback = function(evt){
         }
     }
     else {
-        obj = (DOMUtil.findAncestorByTagName(src, "td")) ? DOMUtil.findAncestorByTagName(src, "td") : src;
+				var container = DOMUtil.findAncestorByClass(src,"EventWeekContent");
+				var mouseY = (eXo.core.Browser.findMouseRelativeY(container,evt) + container.scrollTop)*60000;
+        obj = eXo.core.EventManager.getEventTargetByTagName(evt,"td"); //(DOMUtil.findAncestorByTagName(src, "td")) ? DOMUtil.findAncestorByTagName(src, "td") : src;
         map = eXo.calendar.UICalendarPortlet.getBeginDay(obj.getAttribute("startTime")) + mouseY;
         for (var i = 0; i < items.length; i++) {
             if (items[i].style.display == "block") {
