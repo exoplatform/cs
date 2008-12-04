@@ -48,7 +48,12 @@ uiform.begin() ;
 						         		 String rndString = String.valueOf(new Date().getTime());
 						         		 //String src = uicomponent.getDownloadLink(attachFile) ;"/${uicomponent.getPortalName()}/jcr?workspace=${attachFile.workspace}&hash=${rndString}&path=${attachFile.getDataPath()}" ;
 						         %>
-							         <a onclick="javaScript:current = document.getElementById('$attachFile.id'); if(current.style.display == 'none') {current.style.display='block';} else if(current.style.display == 'block') {current.style.display = 'none';} " class="IconHolder ViewAttachmentIcon" style="cursor:pointer;padding-left:15px;"> 
+						         
+						         <% 
+		  			       		String View = uiform.getLabel('View') ;
+					         		String Close = uiform.getLabel('Close') ;
+		          				%>
+							         <a viewLabel="$View" closeLabel="$Close" onclick="eXo.calendar.UICalendarPortlet.showImagePreview(this);" class="IconHolder ViewAttachmentIcon" style="cursor:pointer;padding-left:15px;"> 
 							         <%=uiform.getLabel('View')%>
 							         </a> 
 						         <%}%>
