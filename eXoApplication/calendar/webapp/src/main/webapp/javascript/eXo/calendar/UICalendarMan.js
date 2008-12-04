@@ -710,6 +710,7 @@ GUIMan.prototype.initDND = function() {
     var checkbox = eXo.core.DOMUtil.findFirstDescendantByClass(eventNode, "input", "checkbox") ;
     if (checkbox) {
       checkbox.onmousedown = this.cancelEvent;
+			checkbox.onclick = eXo.core.EventManager.cancelBubble;
     }
     eventNode.ondblclick = eXo.calendar.UICalendarPortlet.ondblclickCallback ;
   }
@@ -797,11 +798,20 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
     moreNode.style.top = dayInfo.top + ((dayObj.MAX_EVENT_VISIBLE - 1) * this.EVENT_BAR_HEIGH) + 5 + 'px';
 
     var moreContainerNode = document.createElement('div');
-		var moreEventBar = document.createElement('div');
-		var moreEventList = document.createElement('div');		
+		var moreEventBar = moreContainerNode.cloneNode(true);
+		var moreEventList = moreContainerNode.cloneNode(true);
+		var moreEventTitleBar = moreContainerNode.cloneNode(true);
 		moreEventBar.className = "MoreEventBar" ;
 		moreEventBar.innerHTML = "<span></span>" ;
 		moreEventBar.onclick = this.hideMore ;
+		moreEventTitleBar.innerHTML = "&nbsp;";
+		moreEventTitleBar.className = "MoreEventTitleBar";
+		moreEventTitleBar.onclick = eXo.core.EventManager.cancelBubble ;
+		moreEventTitleBar.onmousedown = function(evt){
+			eXo.core.EventManager.cancelBubble(evt);
+			eXo.core.DragDrop.init(null,this,moreContainerNode,evt);
+		} ;
+		moreEventBar.appendChild(moreEventTitleBar);
     moreContainerNode.className = 'MoreEventContainer' ;
     // Create invisible event
     var cnt = 0
@@ -870,7 +880,7 @@ GUIMan.prototype.setWidthForMoreEvent = function(moreEventList,len,dayNode){
 	}
 };
 
-GUIMan.prototype.hideMore = function(){
+GUIMan.prototype.hideMore = function(evt){
 	var DOMUtil = eXo.core.DOMUtil;
 	var items = DOMUtil.hideElementList;
 	var ln = items.length ;
@@ -881,6 +891,11 @@ GUIMan.prototype.hideMore = function(){
 		}
 		DOMUtil.hideElementList.clear() ;
 	}
+	var src = eXo.core.EventManager.getEventTarget(evt);
+	var	moreContainerNode = DOMUtil.findAncestorByClass(src,"MoreEventContainer");
+	if(!moreContainerNode) moreContainerNode = DOMUtil.findNextElementByTagName(src,"div");
+	moreContainerNode.style.top = '0px';
+	moreContainerNode.style.left = '0px';
 };
 
 GUIMan.prototype.showMore = function(evt) {
@@ -890,10 +905,9 @@ GUIMan.prototype.showMore = function(evt) {
 	if(GUIMan.lastMore) GUIMan.lastMore.style.zIndex = 1;
 	moreContainerNode.parentNode.style.zIndex = 2;
 	eXo.core.EventManager.cancelBubble(evt);
-	GUIMan.hideMore();
+	GUIMan.hideMore(evt);
   if (!moreContainerNode.style.display || moreContainerNode.style.display == 'none') {
     moreContainerNode.style.display = 'block';
-		moreContainerNode.style.top = '0px';
 		var currentHeight = moreContainerNode.offsetParent.offsetParent.offsetHeight + moreContainerNode.offsetParent.offsetParent.scrollTop ;
 		var currentTop = moreContainerNode.parentNode.offsetTop + moreContainerNode.offsetHeight;
 		if(currentTop > currentHeight){

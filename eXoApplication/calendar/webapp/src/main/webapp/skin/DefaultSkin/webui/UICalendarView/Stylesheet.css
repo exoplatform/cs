@@ -1,6 +1,5 @@
 /*====================View Calendar =====================*/
 .UICalendarViewContainer {
-
 	margin-left: 243px;
 	padding-bottom: 8px;
 }
@@ -1037,6 +1036,12 @@
   margin-right: 1px;
 	_margin-right: 0px;
 	color:#00f;
+}
+
+.UICalendarPortlet .MoreEvent .MoreEventTitleBar {
+ _width: 90%;
+ margin: 0px 16px 0px 0px;
+ cursor:move;
 }
 
 .UICalendarPortlet .MoreEvent .MoreEventLabel {

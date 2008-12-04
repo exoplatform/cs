@@ -116,6 +116,7 @@ UICalendarDragDrop.prototype.initDnD = function(dropableObjs, clickObj, dragObj,
   
   var len = tmpNode.length ;
   while(len--){
+		tmpNode[len].style.width = dropableObjs[0].offsetWidth + 'px';
     EventMonthContentNode.appendChild(tmpNode[len]);    
   }
   UIMonthViewNode.appendChild(EventMonthContentNode);
@@ -243,8 +244,7 @@ UICalendarDragDrop.prototype.getCheckedObject = function(clickObj){
     //tmpNode.style.position = "absolute";
     tmpNode.style.top = top + "px";
     //tmpNode.style.left = "0px";
-    tmpNode.style.width = clickObj.offsetWidth + "px	";
-		
+    //tmpNode.style.width = clickObj.offsetWidth + "px	";		
     top += 20 ;
     checkedObj.push(tmpNode);
   }
