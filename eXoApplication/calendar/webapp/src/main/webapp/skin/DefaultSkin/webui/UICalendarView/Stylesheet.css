@@ -620,6 +620,19 @@
  margin: auto;
  float: none;
 }
+
+.UIListView .UIGrid .DownArrow1Icon {
+	padding-right: 20px;
+	background-position: no-repeat right;
+	line-height: 16px;
+}
+
+.UIListView .UIGrid .UpArrow1Icon {
+	padding-right: 20px;
+	background-position: no-repeat right;
+	line-height: 16px;
+}
+
 .ListBar {
 	background: url('../background/CalendarBackground.gif') repeat-x center -79px;		
 	height: 26px;
