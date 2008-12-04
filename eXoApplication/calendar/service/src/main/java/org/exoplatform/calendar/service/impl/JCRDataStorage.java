@@ -100,7 +100,7 @@ public class JCRDataStorage{
     nodeHierarchyCreator_ = nodeHierarchyCreator ; 
   }  
 
-  private Node getPublicCalendarServiceHome(SessionProvider sProvider) throws Exception {
+  public Node getPublicCalendarServiceHome(SessionProvider sProvider) throws Exception {
     Node publicApp = nodeHierarchyCreator_.getPublicApplicationNode(sProvider)  ;
     try {
       return publicApp.getNode(Utils.CALENDAR_APP) ;
@@ -2261,6 +2261,7 @@ public class JCRDataStorage{
         } if (Utils.ACCEPT == answer || Utils.NOTSURE == answer) {
           pars.put(toUserId, toUserId) ;
         }
+        //TODO this make duplicate
         event.setParticipant(pars.values().toArray(new String[pars.values().size()]));
         if( Calendar.TYPE_PRIVATE == calType) {
           saveUserEvent(session, fromUserId, calendarId, event, false) ;
@@ -2277,7 +2278,6 @@ public class JCRDataStorage{
       session.close() ;
     }
   }
-
 }
 
 

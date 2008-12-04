@@ -204,7 +204,7 @@ public class CsvImportExport implements CalendarImportExport {
               }
               if(!Utils.isEmpty(l.get(dataMap.get(EV_PRIORITY)))) {
                 for(int i = 0 ; i < CalendarEvent.PRIORITY.length ; i++ ) {
-                  if(CalendarEvent.PRIORITY[i].equals(l.get(dataMap.get(EV_PRIORITY)).toLowerCase())) {
+                  if(CalendarEvent.PRIORITY[i].equalsIgnoreCase(l.get(dataMap.get(EV_PRIORITY)).toLowerCase())) {
                     eventObj.setPriority(String.valueOf(i))  ;
                     break ;
                   }

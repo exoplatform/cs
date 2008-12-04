@@ -17,11 +17,13 @@
 package org.exoplatform.calendar.service.impl;
 
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.jcr.Node;
+import javax.jcr.Session;
 
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
@@ -29,14 +31,18 @@ import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarImportExport;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
+import org.exoplatform.calendar.service.CalendarUpdateEventListener;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.EventPageList;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.FeedData;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.RssData;
+import org.exoplatform.container.component.ComponentPlugin;
+import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.picocontainer.Startable;
 
 /**
  * Created by The eXo Platform SARL
@@ -44,13 +50,15 @@ import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
  *          hung.nguyen@exoplatform.com
  * Jul 11, 2007  
  */
-public class CalendarServiceImpl implements CalendarService{
+public class CalendarServiceImpl implements CalendarService, Startable {
 
   final public static String ICALENDAR = "ICalendar(.ics)".intern() ;
   final public static String EXPORTEDCSV = "ExportedCsv(.csv)".intern() ;
 
+  private RepositoryService repositorySerivce_ ;
   private JCRDataStorage storage_ ;
   private Map<String, CalendarImportExport> calendarImportExport_ = new LinkedHashMap<String, CalendarImportExport>() ;
+  protected List<CalendarUpdateEventListener> listeners_ = new ArrayList<CalendarUpdateEventListener>(3);
 
   public CalendarServiceImpl(NodeHierarchyCreator nodeHierarchyCreator) throws Exception {
     storage_ = new JCRDataStorage(nodeHierarchyCreator) ;
@@ -225,5 +233,22 @@ public class CalendarServiceImpl implements CalendarService{
 
   public void confirmInvitation(String fromUserId, String toUserId,int calType,String calendarId, String eventId, int answer) throws Exception {
     storage_.confirmInvitation(fromUserId, toUserId, calType, calendarId, eventId, answer) ;
+  }
+
+  public void start() {
+    for (CalendarUpdateEventListener updateListener : listeners_) {
+      updateListener.preUpdate() ;
+    }
+  }
+
+  public void stop() {
+    // TODO Auto-generated method stub
+
+  }
+
+  public synchronized void addListenerPlugin(ComponentPlugin listener) throws Exception {
+    if(listener instanceof CalendarUpdateEventListener ) {
+      listeners_.add((CalendarUpdateEventListener)listener) ;
+    }
   }
 }

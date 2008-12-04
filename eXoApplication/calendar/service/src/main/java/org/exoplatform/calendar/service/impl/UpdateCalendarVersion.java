@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
  */
-package org.exoplatform.mail.service;
+package org.exoplatform.calendar.service.impl;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -25,11 +25,17 @@ import javax.jcr.PropertyType;
 import javax.jcr.Session;
 import javax.jcr.Value;
 import javax.jcr.ValueFactory;
+import javax.jcr.nodetype.NodeType;
 import javax.jcr.nodetype.PropertyDefinition;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
+import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.CalendarUpdateEventListener;
+import org.exoplatform.calendar.service.CsNodeTypeMapping;
+import org.exoplatform.calendar.service.CsObjectParam;
+import org.exoplatform.calendar.service.CsPropertyMapping;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.nodetype.ExtendedNodeType;
@@ -37,20 +43,23 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 /**
  * Created by The eXo Platform SAS
- * Author : Phung Hai Nam
- *          phunghainam@gmail.com
+ * Author : eXoPlatform
+ *          exo@exoplatform.com
  * Dec 1, 2008  
  */
-public class MailUpdateStorage extends MailUpdateStorageEventListener {
-  private MailService service_ ;
-  private RepositoryService repositorySerivce_;
+public class UpdateCalendarVersion extends CalendarUpdateEventListener {
+
+  private CalendarService cservice_ ;
+  private RepositoryService repositorySerivce_ ;
   CsObjectParam csObj_ ;
-  public MailUpdateStorage(MailService service, InitParams params, RepositoryService repositorySerivce) throws Exception {
-    service_ = service;
+  public UpdateCalendarVersion(CalendarService cservice, InitParams params, RepositoryService repositorySerivce)
+  throws Exception {
+    cservice_ = cservice;
     repositorySerivce_ = repositorySerivce ;
-    csObj_ = (CsObjectParam)params.getObjectParam("cs.mail.update.object").getObject();
+    csObj_ = (CsObjectParam)params.getObjectParam("cs.calendar.update.object").getObject();
   }
-  
+   
+  @Override
   public void preUpdate() {
     if(csObj_ != null)
     try {
@@ -147,7 +156,6 @@ public class MailUpdateStorage extends MailUpdateStorageEventListener {
      e.printStackTrace() ;
     }
   }
-
   private void setValue(int propertyType, boolean isMultiple, NodeIterator it,String proName, String value) throws Exception {
     // Check type when set value
     while (it.hasNext()) {
@@ -272,9 +280,13 @@ public class MailUpdateStorage extends MailUpdateStorageEventListener {
       node.save() ;
     }
   }
+  public void updateReminderDataBase(){}
+  public void updateEventCategoryDataBase(){}
+  public void updateCalendarEventDataBase(){}
   @Override
   public void postUpdate() {
     super.postUpdate();
     //Run update data base
   }
+
 }
