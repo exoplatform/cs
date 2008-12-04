@@ -379,6 +379,7 @@ UICalendarPortlet.prototype.calendarMenuCallback = function(evt){
       var actions = DOMUtil.findDescendantsByTagName(menu, "a");
       for (var j = 0; j < actions.length; j++) {
           if ((actions[j].href.indexOf("EditCalendar") >= 0) ||
+          (actions[j].href.indexOf("RemoveCalendar") >= 0) ||
           (actions[j].href.indexOf("ShareCalendar") >= 0) ||
           (actions[j].href.indexOf("ChangeColorCalendar") >= 0)) {
               actions[j].style.display = "none";
@@ -387,11 +388,14 @@ UICalendarPortlet.prototype.calendarMenuCallback = function(evt){
   }
   if (canEdit && (canEdit == "true")) {
       for (var j = 0; j < actions.length; j++) {
-          if (actions[j].href.indexOf("EditCalendar") >= 0) {
+          if (actions[j].href.indexOf("EditCalendar") >= 0 || actions[j].href.indexOf("RemoveCalendar") >= 0) {
               actions[j].style.display = "block";
           }
       }
   }
+  
+  
+  
 } ;
 
 /**
