@@ -53,7 +53,7 @@ uiform.begin() ;
 		  			       		String View = uiform.getLabel('View') ;
 					         		String Close = uiform.getLabel('Close') ;
 		          				%>
-							         <a viewLable="&View" closeLable="&Close" onclick="javaScript:current = document.getElementById('$attachFile.id'); if(current.style.display == 'none') {current.style.display='block';} else if(current.style.display == 'block') {current.style.display = 'none';} " class="IconHolder ViewAttachmentIcon" style="cursor:pointer;padding-left:15px;"> 
+							         <a viewLabel="$View" closeLabel="$Close" onclick="eXo.calendar.UICalendarPortlet.showImagePreview(this);" class="IconHolder ViewAttachmentIcon" style="cursor:pointer;padding-left:15px;"> 
 							         <%=uiform.getLabel('View')%>
 							         </a> 
 						         <%}%>

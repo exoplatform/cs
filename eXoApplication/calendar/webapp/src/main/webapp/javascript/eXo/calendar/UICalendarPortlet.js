@@ -2155,6 +2155,22 @@ UICalendarPortlet.prototype.showHideWorkingSetting = function(){
     }
 };
 
+UICalendarPortlet.prototype.showImagePreview = function(obj){
+	var DOMUtil = eXo.core.DOMUtil ;
+	var img = DOMUtil.findPreviousElementByTagName(obj.parentNode,"img");	
+	var viewLabel = obj.getAttribute("viewLabel");
+	var closeLabel = obj.getAttribute("closeLabel");
+	if(img.style.display == "none"){
+		img.style.display = "block";
+		obj.innerHTML = closeLabel ;
+		if(DOMUtil.hasClass(obj,"ViewAttachmentIcon")) DOMUtil.replaceClass(obj,"ViewAttachmentIcon","CloseAttachmentIcon") ;
+	}else {
+		img.style.display = "none";
+		obj.innerHTML = viewLabel ;
+		if(DOMUtil.hasClass(obj,"CloseAttachmentIcon")) DOMUtil.replaceClass(obj,"CloseAttachmentIcon","ViewAttachmentIcon") ;
+	}
+}
+
 eXo.calendar.UICalendarPortlet = new UICalendarPortlet();
 eXo.calendar.UIResizeEvent = new UIResizeEvent();
 eXo.calendar.UISelection = new UISelection();

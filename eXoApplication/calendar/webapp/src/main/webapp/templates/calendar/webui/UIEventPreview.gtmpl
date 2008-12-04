@@ -15,8 +15,7 @@ df.setCalendar(CalendarUtils.getInstanceTempCalendar()) ;
 CalendarEvent event = uicomponent.getEvent() ;		
 color = uicomponent.getColors().get(event.getCalType() + CalendarUtils.COLON + event.getCalendarId()) ;
  	
-uiform.begin() ;
-%>
+uiform.begin() %>
 <div class="UIPreview">
 	<%if(!uicomponent.isShowPopup()){%>
 		<div class="ViewBar">
@@ -66,7 +65,7 @@ uiform.begin() ;
 		         		String View = uiform.getLabel('View') ;
 		         		String Close = uiform.getLabel('Close') ;
 		          %>		         
-		         	 <a viewLable="&View" closeLable="&Close" onclick="javaScript:current = document.getElementById('$attachFile.id'); if(current.style.display == 'none') {current.style.display='block';} else if(current.style.display == 'block') {current.style.display = 'none';} " class="IconHolder ViewAttachmentIcon">
+		         	 <a viewLabel="$View" closeLabel="$Close" onclick="eXo.calendar.UICalendarPortlet.showImagePreview(this);" class="IconHolder ViewAttachmentIcon">
 			         	<%=uiform.getLabel('View')%>
 			         </a> 
 		         <%}%>

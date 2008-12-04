@@ -107,7 +107,14 @@
 
 .UICalendarPortlet .ViewAttachmentIcon {
 	background: url('icons/CalendarIcons.gif') no-repeat left -1405px;
-	cursor:pointer; padding-left:16px;
+	cursor:pointer;
+	padding-left:16px;
+}
+
+.UICalendarPortlet .CloseAttachmentIcon {
+	background: url('icons/CloseMore.gif') no-repeat;
+	cursor:pointer; 
+	padding-left:16px;
 }
 
 .UICalendarPortlet .DownLoadAttachmentIcon {
