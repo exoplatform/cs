@@ -1267,7 +1267,8 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
                 calService.moveEvent(uiForm.getSession(), fromCal, toCal, fromType, toType, listEvent, username) ;
               }
               CalendarView calendarView = (CalendarView)uiViewContainer.getRenderedChild() ;
-              if(calendarView instanceof UIListContainer)((UIListContainer)calendarView).setDisplaySearchResult(false) ;
+              // hung.hoang
+              // if(calendarView instanceof UIListContainer)((UIListContainer)calendarView).setDisplaySearchResult(false) ;
               uiViewContainer.refresh() ;
               calendarView.setLastUpdatedEventId(eventId) ;
               event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
