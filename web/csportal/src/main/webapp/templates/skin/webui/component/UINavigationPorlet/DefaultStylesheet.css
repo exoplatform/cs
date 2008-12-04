@@ -82,6 +82,11 @@
   height: 24px; width: auto;
 }
 
+.UINavigationPortlet .MenuItemContainer .PageNodeIcon {
+  padding-right:20px;
+  background: url('DefaultSkin/background/DefaultPageIcon.gif') no-repeat right center;
+}
+
 .UINavigationPortlet .MenuItemContainer .MenuItem .ArrowIcon {
   height: 24px; 
   width: auto;
