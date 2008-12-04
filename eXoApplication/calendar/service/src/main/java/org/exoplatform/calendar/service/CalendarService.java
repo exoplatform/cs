@@ -21,6 +21,7 @@ import java.util.Map;
 
 import javax.jcr.Node;
 
+import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 /**
@@ -525,4 +526,6 @@ public interface CalendarService {
    * @throws Exception
    */
   public void confirmInvitation(String fromUserId, String toUserId,int calType,String calendarId, String eventId, int answer) throws Exception ;
+  
+  public void addListenerPlugin(ComponentPlugin listener) throws Exception ;
 }
