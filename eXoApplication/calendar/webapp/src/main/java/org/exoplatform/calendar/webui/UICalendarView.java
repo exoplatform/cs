@@ -759,8 +759,11 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           UIListContainer listContainer = uiCalendarView.getAncestorOfType(UIListContainer.class) ;
           UIListView uiListView = listContainer.findFirstComponentOfType(UIListView.class) ;
           long pageNum = uiListView.getCurrentPage() ;
-          listContainer.refresh() ;
-          uiListView.updateCurrentPage(pageNum) ; 
+          // hung.hoang
+          if (!listContainer.isDisplaySearchResult()) {
+            listContainer.refresh() ;
+            uiListView.updateCurrentPage(pageNum) ;             
+          }          
           uiListView.setSelectedEvent(eventId) ;
           eventCalendar = uiListView.getDataMap().get(eventId) ;
           uiPreview.setEvent(eventCalendar) ;
@@ -770,7 +773,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
         String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
         if(uiCalendarView.getDataMap() != null && uiCalendarView.getDataMap().get(eventId) != null) {
-          eventCalendar = uiCalendarView.getDataMap().get(eventId) ;
+          if (eventCalendar == null) {
+            eventCalendar = uiCalendarView.getDataMap().get(eventId) ;
+          }
           CalendarService calendarService = CalendarUtils.getCalendarService() ;
           boolean canEdit = false ;
           if(CalendarUtils.PRIVATE_TYPE.equals(calType)) {
