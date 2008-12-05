@@ -754,8 +754,9 @@ GUIMan.prototype.drawDay = function(weekObj, dayIndex) {
   // Pre-calculate event position
   var dayNode = (this.tableData[weekObj.weekIndex])[dayIndex];
   var dayInfo = {
-    width : dayNode.offsetWidth - 1,
+    width : dayNode.offsetWidth,
     left : dayNode.offsetLeft,
+		dayIndex : dayIndex,
     top : dayNode.offsetTop + 17
   }
   // Draw visible events
@@ -939,6 +940,27 @@ GUIMan.prototype.showMore = function(evt) {
  * @param {Integer} weekIndex
  * @param {Object} dayInfo
  */
+
+GUIMan.prototype.getExtraWidth = function(dayIndex,delta){
+	var userAgent = navigator.userAgent ;
+	var extraWidth = 0 ;
+	if(eXo.core.Browser.isIE7() || (userAgent.indexOf("Linux") >= 0)) return extraWidth;
+	if(dayIndex%2== 0){
+		if(delta%2== 0){
+			extraWidth = - delta/2;
+		} else if ((delta%2 != 0) && (delta != 1)){
+			extraWidth = 2 - delta;
+		}
+	} else{
+		if(delta%2== 0){
+			extraWidth = delta/2;
+		} else if ((delta%2 != 0) && (delta != 1)){
+			extraWidth = delta - 2;
+		}
+	}
+	return extraWidth;	
+};
+
 GUIMan.prototype.drawEventByDay = function(eventObj, startTime, endTime, dayInfo){
   var eventNode = eventObj.rootNode;
   if (eventNode.getAttribute('used') == 'true') {
@@ -961,7 +983,8 @@ GUIMan.prototype.drawEventByDay = function(eventObj, startTime, endTime, dayInfo
     delta ++ ;
   }
   delta = (delta < 1) ? 1 : delta;
-  var eventLen = Math.round(delta) * (dayInfo.width) + (delta - 1);
+	var extraWidth = this.getExtraWidth(dayInfo.dayIndex,delta);
+  var eventLen = Math.round(delta) * (dayInfo.width) + extraWidth;
 	//eventLen = ((delta > 5) && eXo.core.Browser.isIE6())?(eventLen - 2): eventLen; 
 	eventNode.style.top = topPos + 'px';
   eventNode.style.left = leftPos + 'px';
