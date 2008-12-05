@@ -245,53 +245,58 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
         return ;
       }
       SessionProvider userSession = SessionProviderFactory.createSessionProvider() ;
-      if(calendarService.getCalendarImportExports(importFormat).isValidate(input.getUploadDataAsStream())) {
-        if(uiForm.isNew()) {
-          if(CalendarUtils.isEmpty(calendarName)) {
-            calendarName = resource.getFileName() ;
-          } 
-          if(!CalendarUtils.isNameValid(calendarName, CalendarUtils.SPECIALCHARACTER)) {
-            uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.file-name-invalid", null));
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-            return ;
-          }
-          List<Calendar> pCals = calendarService.getUserCalendars(userSession, username, true) ;
-          for(Calendar cal : pCals) {
-            if(cal.getName().trim().equalsIgnoreCase(calendarName)) {
-              uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.name-exist", new Object[]{calendarName}, ApplicationMessage.WARNING)) ;
+      try {
+        if(calendarService.getCalendarImportExports(importFormat).isValidate(input.getUploadDataAsStream())) {
+          if(uiForm.isNew()) {
+            if(CalendarUtils.isEmpty(calendarName)) {
+              calendarName = resource.getFileName() ;
+            } 
+            if(!CalendarUtils.isNameValid(calendarName, CalendarUtils.SPECIALCHARACTER)) {
+              uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.file-name-invalid", null));
               event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
               return ;
             }
+            List<Calendar> pCals = calendarService.getUserCalendars(userSession, username, true) ;
+            for(Calendar cal : pCals) {
+              if(cal.getName().trim().equalsIgnoreCase(calendarName)) {
+                uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.name-exist", new Object[]{calendarName}, ApplicationMessage.WARNING)) ;
+                event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                return ;
+              }
+            }
+            Calendar calendar = new Calendar() ;
+            calendar.setName(calendarName) ;
+            calendar.setDescription(uiForm.getDescription()) ;
+            calendar.setLocale(uiForm.getLocale()) ;
+            calendar.setTimeZone(uiForm.getTimeZone()) ;
+            calendar.setCalendarColor(uiForm.getSelectedColor()) ;
+            calendar.setCalendarOwner(username) ;
+            calendar.setPublic(false) ;
+            calendar.setCategoryId(uiForm.getSelectedGroup()) ;
+            calendarService.saveUserCalendar(userSession, username, calendar, true) ;
+            calendarService.getCalendarImportExports(importFormat).importToCalendar(userSession, username, input.getUploadDataAsStream(), calendar.getId()) ;
+          } else {
+            String calendarId = uiForm.getUIFormSelectBox(FIELD_TO_CALENDAR).getValue() ;
+            calendarService.getCalendarImportExports(importFormat).importToCalendar(userSession, username, input.getUploadDataAsStream(), calendarId) ;
           }
-          Calendar calendar = new Calendar() ;
-          calendar.setName(calendarName) ;
-          calendar.setDescription(uiForm.getDescription()) ;
-          calendar.setLocale(uiForm.getLocale()) ;
-          calendar.setTimeZone(uiForm.getTimeZone()) ;
-          calendar.setCalendarColor(uiForm.getSelectedColor()) ;
-          calendar.setCalendarOwner(username) ;
-          calendar.setPublic(false) ;
-          calendar.setCategoryId(uiForm.getSelectedGroup()) ;
-          calendarService.saveUserCalendar(userSession, username, calendar, true) ;
-          calendarService.getCalendarImportExports(importFormat).importToCalendar(userSession, username, input.getUploadDataAsStream(), calendar.getId()) ;
+          UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
+          UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;
+          UICalendarViewContainer uiCalendarViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+          uiCalendarViewContainer.refresh() ;
+          calendarPortlet.setCalendarSetting(null) ;
+          uploadService.removeUpload(input.getUploadId()) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(calendarPortlet.findFirstComponentOfType(UIMiniCalendar.class)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendars) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarViewContainer) ;
+          calendarPortlet.cancelAction() ;
         } else {
-          String calendarId = uiForm.getUIFormSelectBox(FIELD_TO_CALENDAR).getValue() ;
-          calendarService.getCalendarImportExports(importFormat).importToCalendar(userSession, username, input.getUploadDataAsStream(), calendarId) ;
-        }
-        UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
-        UICalendars uiCalendars = calendarPortlet.findFirstComponentOfType(UICalendars.class) ;
-        UICalendarViewContainer uiCalendarViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
-        uiCalendarViewContainer.refresh() ;
-        calendarPortlet.setCalendarSetting(null) ;
-        uploadService.removeUpload(input.getUploadId()) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(calendarPortlet.findFirstComponentOfType(UIMiniCalendar.class)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendars) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarViewContainer) ;
-        calendarPortlet.cancelAction() ;
-      } else {
+          uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.file-type-error", null));
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        } 
+      } catch(Exception e) {
         uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.file-type-error", null));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-      } 
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;  
+      }
     }
   }
   static  public class OnChangeActionListener extends EventListener<UIImportForm> {

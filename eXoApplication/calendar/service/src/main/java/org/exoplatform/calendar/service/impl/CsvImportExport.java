@@ -36,9 +36,6 @@ import java.util.regex.Pattern;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 
-import net.fortuna.ical4j.data.CalendarBuilder;
-
-import org.apache.poi.hssf.record.PageBreakRecord.Break;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarImportExport;
@@ -98,11 +95,12 @@ public class CsvImportExport implements CalendarImportExport {
     }
   }
   /** Process one file. Delegates to parse() a line at a time */
-  public List<CalendarEvent> process(BufferedReader in) throws IOException {
+  public List<CalendarEvent> process(BufferedReader in) throws Exception {
     String line;
     // For each line...
     int lineCount = 0 ;
     List<CalendarEvent> eventList = new ArrayList<CalendarEvent>() ;
+    
     while ((line = in.readLine()) != null) {
       String tempLine = line ;
       if(!line.endsWith("\"")) line = tempLine + in.readLine() ;
@@ -123,9 +121,8 @@ public class CsvImportExport implements CalendarImportExport {
               try {
                 cal.setTime(df.parse(l.get(dataMap.get(EV_STARTDATE)) + " " + l.get(dataMap.get(EV_STARTTIME)))) ;
               } catch (Exception e) {
-                e.printStackTrace() ;
                 isValid = false ;
-                break ;
+                throw e;
               }
               if(!Utils.isEmpty(l.get(dataMap.get(EV_ALLDAY))) && isValid){
                 if(Boolean.parseBoolean(l.get(dataMap.get(EV_ALLDAY)))){ 
@@ -144,10 +141,9 @@ public class CsvImportExport implements CalendarImportExport {
               try {
                 cal.setTime(df.parse(l.get(dataMap.get(EV_ENDDATE)) + " " + l.get(dataMap.get(EV_ENDTIME)))) ;
               } catch (Exception e) {
-                e.printStackTrace() ;
                 isValid = false ;
                 //throw new IOException() ;
-                break ;
+                throw e ;
               }
               if(!Utils.isEmpty(l.get(dataMap.get(EV_ALLDAY))) && isValid){
                 if(Boolean.parseBoolean(l.get(dataMap.get(EV_ALLDAY)))){ 
