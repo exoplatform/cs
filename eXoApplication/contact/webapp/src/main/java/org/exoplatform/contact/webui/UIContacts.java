@@ -34,6 +34,7 @@ import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactGroup;
+import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.DataPageList;
 import org.exoplatform.contact.service.JCRPageList;
@@ -162,23 +163,30 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   @SuppressWarnings({ "unchecked", "unused" })
   private void refreshData() throws Exception {
     if (isDisplaySearchResult() || isPrintForm) return ;
-    if (selectedGroup != null) {
+    
+    // cs-1823
+    long currentPage = 1 ;
+    if (selectedGroup != null) {      
+      if (pageList_ != null) currentPage = pageList_.getCurrentPage() ;
+      ContactPageList pageList = null ;
       if (getPrivateGroupMap().containsKey(selectedGroup)) {
-        setContacts(ContactUtils.getContactService().getContactPageListByGroup(
-            SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), selectedGroup));
+        pageList = ContactUtils.getContactService().getContactPageListByGroup(
+            SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), selectedGroup);
       } else if (ContactUtils.getUserGroups().contains(selectedGroup)) {
-        setContacts(ContactUtils.getContactService()
-            .getPublicContactsByAddressBook(SessionProviderFactory.createSystemProvider(), selectedGroup));
+        pageList = ContactUtils.getContactService()
+            .getPublicContactsByAddressBook(SessionProviderFactory.createSystemProvider(), selectedGroup);
       } else if (getSharedGroupMap().containsKey(selectedGroup)) {
         UIAddressBooks uiAddressBooks = getAncestorOfType(
             UIWorkingContainer.class).findFirstComponentOfType(UIAddressBooks.class) ;       
-        setContacts(ContactUtils.getContactService().getSharedContactsByAddressBook(SessionProviderFactory
-            .createSystemProvider(),ContactUtils.getCurrentUser(), uiAddressBooks.getSharedGroups().get(selectedGroup))); 
+        pageList = ContactUtils.getContactService().getSharedContactsByAddressBook(SessionProviderFactory
+            .createSystemProvider(),ContactUtils.getCurrentUser(), uiAddressBooks.getSharedGroups().get(selectedGroup)); 
       } else {
         selectedGroup = null ;
-        setContacts(null) ;
       }
+      pageList.setCurrentPage(currentPage) ;
+      setContacts(pageList) ;
     } else if (selectedTag_ != null) {
+      if (pageList_ != null) currentPage = pageList_.getCurrentPage() ;
       DataPageList pageList =ContactUtils.getContactService().getContactPageListByTag(
           SessionProviderFactory.createSystemProvider(), ContactUtils.getCurrentUser(), selectedTag_) ;
       if (pageList != null) {
@@ -191,7 +199,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         } else if (getSortedBy().equals(UIContacts.jobTitle)) {
           Collections.sort(contacts, new JobTitleComparator()) ;
         }
-        pageList.setList(contacts) ;     
+        pageList.setList(contacts) ; 
+        pageList.setCurrentPage(currentPage) ;
       }
       setContacts(pageList) ;
     } else if (isSelectSharedContacts) {
