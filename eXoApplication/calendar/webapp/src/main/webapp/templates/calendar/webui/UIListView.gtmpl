@@ -70,7 +70,7 @@
   		<thead>
   			<tr>
   				<%if(!isDisplaySearchResult) {
-  					//uicomponent.refresh() ;  					 
+  					uicomponent.refresh() ;  					 
   				%>
   				<th style="width: 30px; padding-left: 4px;" ><input style="float: left; margin-top: 2px;" type="checkbox" class="checkbox" title="<%=uiform.getLabel('CheckAll')%>" value="4"/></th>
   				<%}%>

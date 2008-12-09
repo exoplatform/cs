@@ -32,6 +32,7 @@ import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
+import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.webui.CalendarView;
@@ -41,7 +42,9 @@ import org.exoplatform.calendar.webui.UICalendars;
 import org.exoplatform.calendar.webui.UIFormComboBox;
 import org.exoplatform.calendar.webui.UIFormDateTimePicker;
 import org.exoplatform.calendar.webui.UIListContainer;
+import org.exoplatform.calendar.webui.UIListView;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
+import org.exoplatform.calendar.webui.UIPreview;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
@@ -903,10 +906,41 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
             List<CalendarEvent> listEvent = new ArrayList<CalendarEvent>();
             listEvent.add(calendarEvent) ;
             calService.moveEvent(uiForm.getSession(), fromCal, toCal, fromType, toType, listEvent, username) ;
+            
+            // hung.hoang
+            CalendarView calendarView = (CalendarView)uiViewContainer.getRenderedChild() ;
+            if(calendarView instanceof UIListContainer) {
+              UIListContainer uiListContainer = (UIListContainer)calendarView ;
+              if (uiListContainer.isDisplaySearchResult() && calendarEvent.getAttachment() != null) {
+                UIPreview uiPreview = uiListContainer.getChild(UIPreview.class) ;
+                EventQuery eventQuery = new EventQuery() ;
+                eventQuery.setCalendarId(new String[] {calendarEvent.getCalendarId()}) ;
+                eventQuery.setEventType(calendarEvent.getEventType()) ;
+                eventQuery.setCategoryId(new String[] {calendarEvent.getEventCategoryId()}) ;
+                
+                UIListView listView = uiListContainer.getChild(UIListView.class) ;
+                List<CalendarEvent> list = calService. getEvents(
+                    uiForm.getSession(), username, eventQuery, listView.getPublicCalendars()) ;
+                for (CalendarEvent ev : list) {
+                  if (ev.getId().equals(calendarEvent.getId())) {
+                    if (listView.getDataMap().containsKey(ev.getId())) {
+                      listView.getDataMap().put(ev.getId(), ev) ;
+                      if (uiPreview.getEvent().getId().equals(ev.getId())) {
+                        uiPreview.setEvent(ev) ; 
+                      }
+                    }                        
+                    break ;
+                  }
+                }                    
+              }
+            }
+            
           }
 
           CalendarView calendarView = (CalendarView)uiViewContainer.getRenderedChild() ;
-          if (calendarView instanceof UIListContainer)((UIListContainer)calendarView).setDisplaySearchResult(false) ;
+          
+          // hung.hoang
+          // if (calendarView instanceof UIListContainer)((UIListContainer)calendarView).setDisplaySearchResult(false) ;
           uiViewContainer.refresh() ;
           calendarView.setLastUpdatedEventId(calendarEvent.getId()) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;

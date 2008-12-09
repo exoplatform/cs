@@ -1302,12 +1302,12 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
               // if(calendarView instanceof UIListContainer)((UIListContainer)calendarView).setDisplaySearchResult(false) ;   
               if(calendarView instanceof UIListContainer) {
                 UIListContainer uiListContainer = (UIListContainer)calendarView ;
-                if (!uiListContainer.isDisplaySearchResult()) uiViewContainer.refresh() ;
+                if (!uiListContainer.isDisplaySearchResult()) {
+                  uiViewContainer.refresh() ;
+                }
               } else {
                 uiViewContainer.refresh() ;
-              }
-              
-              
+              }  
               calendarView.setLastUpdatedEventId(eventId) ;
               event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
               UIMiniCalendar uiMiniCalendar = calendarPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;

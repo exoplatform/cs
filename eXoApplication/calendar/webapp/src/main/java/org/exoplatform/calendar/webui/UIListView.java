@@ -111,6 +111,8 @@ public class UIListView extends UICalendarView {
   }
   
   public void refresh() throws Exception{
+    UIListContainer uiListContainer = getParent() ;
+    if (uiListContainer.isDisplaySearchResult()) return ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = CalendarUtils.getCurrentUser() ;
     EventQuery eventQuery = new EventQuery() ;
@@ -122,7 +124,7 @@ public class UIListView extends UICalendarView {
     if(!getViewType().equals(TYPE_BOTH)) {
       eventQuery.setEventType(getViewType()) ;
     }
-    UIListContainer uiListContainer = getParent() ;
+    
     if(uiListContainer.isDisplaySearchResult())  { update(pageList_) ;
     } else update(new EventPageList(calendarService.getEvents(getSession(), username, eventQuery, getPublicCalendars()), 10)) ;
     if(currentPage_ > 0 && currentPage_ <= pageList_.getAvailablePage()) {
