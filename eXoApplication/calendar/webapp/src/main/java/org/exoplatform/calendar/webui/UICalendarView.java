@@ -541,6 +541,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
     }
 
     public String getLabel(String arg) {
+      if (CalendarUtils.isEmpty(arg)) return "" ;
       try {
         return super.getLabel(arg) ;
       } catch (Exception e) {
@@ -751,8 +752,11 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           UIListContainer listContainer = uiCalendarView.getAncestorOfType(UIListContainer.class) ;
           UIListView uiListView = listContainer.findFirstComponentOfType(UIListView.class) ;
           long pageNum = uiListView.getCurrentPage() ;
-          listContainer.refresh() ;
-          uiListView.updateCurrentPage(pageNum) ; 
+          // hung.hoang
+          if (!listContainer.isDisplaySearchResult()) {
+            listContainer.refresh() ;
+            uiListView.updateCurrentPage(pageNum) ; 
+          }          
           uiListView.setSelectedEvent(eventId) ;
         } else if( uiCalendarView instanceof UIPreview) {
           UIPreview uiPreview = (UIPreview)uiCalendarView ;
@@ -767,7 +771,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           uiListView.setSelectedEvent(eventId) ;
           eventCalendar = uiListView.getDataMap().get(eventId) ;
           uiPreview.setEvent(eventCalendar) ;
-          uiPreview.refresh() ;
+          if (!listContainer.isDisplaySearchResult()) uiPreview.refresh() ;
         } else uiCalendarView.refresh() ;
         String username = CalendarUtils.getCurrentUser() ;
         String calendarId = event.getRequestContext().getRequestParameter(CALENDARID) ;
@@ -872,9 +876,26 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
             UICalendarViewContainer uiContainer = uiCalendarView.getAncestorOfType(UICalendarViewContainer.class) ;
             UIMiniCalendar uiMiniCalendar = uiPortlet.findFirstComponentOfType(UIMiniCalendar.class) ;
             uiCalendarView.setLastUpdatedEventId(null) ;
+            // hung.hoang
+            
             if(uiContainer.getRenderedChild() instanceof UIListContainer) {
-              ((UIListContainer)uiContainer.getRenderedChild()).getChild(UIListView.class).setDisplaySearchResult(false) ;
+              UIListView uiListView = ((UIListContainer)uiContainer.getRenderedChild()).getChild(UIListView.class) ;
+              if (uiListView.isDisplaySearchResult()) {
+                if (uiListView.getDataMap().containsKey(eventId)){
+                  uiListView.getDataMap().remove(eventId) ;
+                  try {
+                    UIPreview preview = ((UIListContainer)uiContainer.getRenderedChild()).findFirstComponentOfType(UIPreview.class) ;
+                    if (preview.getEvent() != null && preview.getEvent().getId().equals(eventId)) {
+                      preview.setEvent(null) ;
+                    }
+                  } catch (Exception ex) { }  
+                }
+                event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;
+                return ;
+              }              
             } 
+            
+            
             if(event.getSource() instanceof UIListView) {
               UIListView listView = (UIListView) event.getSource() ;
               long currentPage = listView.getCurrentPage() ;
