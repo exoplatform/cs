@@ -65,6 +65,7 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -139,8 +140,10 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   private String selectedGroupBeforeSearch = null ;
   private boolean isSelectSharedContactsBeforeSearch = false ;
   private boolean viewListBeforeSearch = true ;
+  private String checkedAll = "" ;
   public UIContacts() throws Exception { }
 
+  public String isCheckAll() { return checkedAll ; }
   public void setListBeforePrint(List<Contact> contacts) { listBeforePrint = contacts ; }  
   public String[] getActions() { return new String[] {"Cancel"} ; }
   public void activate() throws Exception { }
@@ -328,6 +331,15 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     if (pageList_ != null) pageList_.setContact(contacts, isUpdate) ;
   }
   public void updateList() throws Exception {
+    List<String> checkedList = new ArrayList<String>() ;
+    for (UIComponent com : getChildren())
+      if (com instanceof UIFormCheckBoxInput) {
+        UIFormCheckBoxInput checkbox = (UIFormCheckBoxInput)com ;
+        if(checkbox.isChecked()) {
+          checkedList.add(checkbox.getId()) ;
+        }
+      }
+    
     getChildren().clear() ;
     contactMap.clear();
     UIContactPreview contactPreview = 
@@ -339,9 +351,12 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       }
       for(Contact contact : contactList) {
         UIFormCheckBoxInput<Boolean> checkbox = new UIFormCheckBoxInput<Boolean>(contact.getId(),contact.getId(), false) ;
+        if(checkedList.contains(checkbox.getId())) checkbox.setChecked(true) ;
         addUIFormInput(checkbox);
         contactMap.put(contact.getId(), contact) ;
       }
+      checkedAll = "" ;
+      if (checkedList.size() == contactMap.size()) checkedAll="checked" ;
       Contact[] array = contactMap.values().toArray(new Contact[]{}) ;
       if (array.length > 0) {
         //cs-1823
@@ -1470,6 +1485,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
     public void execute(Event<UIContacts> event) throws Exception {
       UIContacts uiContacts = event.getSource() ;
       uiContacts.refreshData() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
     }
   }
  
