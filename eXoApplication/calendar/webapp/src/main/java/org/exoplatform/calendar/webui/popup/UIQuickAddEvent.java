@@ -48,6 +48,7 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
+import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormSelectBoxWithGroups;
 import org.exoplatform.webui.form.UIFormStringInput;
@@ -318,8 +319,15 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
           calEvent.setEventState(CalendarEvent.NEEDS_ACTION) ;
         }
         calEvent.setEventCategoryId(uiForm.getEventCategory());
-        String eventCategoryName = CalendarUtils.getCalendarService().getEventCategory(SessionProviderFactory.createSessionProvider(), username, uiForm.getEventCategory()).getName() ;
-        calEvent.setEventCategoryName(eventCategoryName) ;
+        //String eventCategoryName = CalendarUtils.getCalendarService().getEventCategory(SessionProviderFactory.createSessionProvider(), username, uiForm.getEventCategory()).getName() ;
+        //calEvent.setEventCategoryName(eventCategoryName) ;
+        UIFormSelectBox selectBox = (UIFormSelectBox)uiForm.getChildById(FIELD_CATEGORY) ;
+        for (SelectItemOption<String> o : selectBox.getOptions()) {
+          if (o.getValue().equals(selectBox.getValue())) {
+            calEvent.setEventCategoryName(o.getLabel()) ;
+            break ;
+          }
+        }
         
         calEvent.setFromDateTime(from);
         calEvent.setToDateTime(to) ;
