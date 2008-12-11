@@ -332,14 +332,12 @@ public class UIContacts extends UIForm implements UIPopupComponent {
   }
   public void updateList() throws Exception {
     List<String> checkedList = new ArrayList<String>() ;
-    for (UIComponent com : getChildren())
-      if (com instanceof UIFormCheckBoxInput) {
-        UIFormCheckBoxInput checkbox = (UIFormCheckBoxInput)com ;
-        if(checkbox.isChecked()) {
-          checkedList.add(checkbox.getId()) ;
-        }
-      }
-    
+    for (String contactId : contactMap.keySet()) {
+      UIFormCheckBoxInput uiCheckBox = getChildById(contactId) ;
+      if(uiCheckBox != null && uiCheckBox.isChecked()) {
+        checkedList.add(contactId) ;
+      } 
+    }
     getChildren().clear() ;
     contactMap.clear();
     UIContactPreview contactPreview = 
@@ -351,7 +349,9 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       }
       for(Contact contact : contactList) {
         UIFormCheckBoxInput<Boolean> checkbox = new UIFormCheckBoxInput<Boolean>(contact.getId(),contact.getId(), false) ;
-        if(checkedList.contains(checkbox.getId())) checkbox.setChecked(true) ;
+        if(checkedList.contains(contact.getId())) {
+          checkbox.setChecked(true) ;
+        }
         addUIFormInput(checkbox);
         contactMap.put(contact.getId(), contact) ;
       }
