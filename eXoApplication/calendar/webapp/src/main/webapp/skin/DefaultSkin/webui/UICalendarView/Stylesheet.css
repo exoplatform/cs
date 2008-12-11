@@ -356,7 +356,7 @@
 }
 
 .UIWeekView .EventAlldayContainer .RightContinueEvent {
-	background: url('../background/CalendarBackground.gif') no-repeat left -142px;	
+	background: url('../background/CalendarBackground.gif') no-repeat left -292px;	
 	width: 8px;
 	height: 9px;
 	margin: 2px 0px 0px 0px ;
@@ -366,7 +366,7 @@
 }
 
 .UIWeekView .EventAlldayContainer .LeftContinueEvent {
-	background: url('../background/CalendarBackground.gif') no-repeat left -152px;	
+	background: url('../background/CalendarBackground.gif') no-repeat left -308px;	
 	width: 8px;
 	height: 9px;
 	margin: 2px 0px 0px 0px ;
@@ -887,6 +887,9 @@
 	padding: 2px 6px;
 }
 
+.UIMonthView .EventMonthContent .PriorityIcon {
+	padding-left: 15px;
+}
 
 .UIMonthView .EventMonthContent .highPriorityIcon {
 	background-position: -4px -804px;
@@ -1010,25 +1013,36 @@
 }
 
 .UIMonthView .EventMonthContent .EventCheckbox{
-	 position:absolute;
-	 top:3px;
-	 left:2px;
+	 float: left;
 }
+
+.UIMonthView .EventMonthContent .EventCheckbox .checkbox{
+	 margin: 3px 4px 0px 2px;
+	 *margin: 0px 0px 0px 0px;
+}
+
 .UIMonthView .EventMonthContent .EventSummary{
-	margin: 0px 0px  0px 18px;
-	_margin: 0px;
+	margin: 0px 0px  0px 8px;
 	padding-left:2px;
+}
+
+.UIMonthView .EventMonthContent .RightContinueEvent {
+	background: url('../background/CalendarBackground.gif') no-repeat right -287px;	
+	padding-right: 9px;
+}
+
+.UIMonthView .EventMonthContent .LeftContinueEvent {
+	background: url('../background/CalendarBackground.gif') no-repeat left -303px;	
+	padding-left: 9px;
 }
 
 .UIMonthView .EventMonthContent .EventLabel {
 	line-height: 17px;
 	height:17px;
-	margin-left:2px;
 	_width:60%;
 	overflow:hidden;
 	white-space: nowrap;
-	-moz-user-select : none ;
-	_padding-left: 17px;
+	-moz-user-select : none ;	
 }
 
 .UICalendarPortlet .MoreEvent {

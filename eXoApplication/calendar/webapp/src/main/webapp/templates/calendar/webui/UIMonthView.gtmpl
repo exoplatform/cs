@@ -12,7 +12,7 @@
 	def rcontext = _ctx.getRequestContext() ;
   rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarDragDrop','/calendar/javascript/') ;
   rcontext.getJavascriptManager().importJavascript('eXo.calendar.UICalendarMan','/calendar/javascript/') ;
-	rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.onLoad();') ;
+	rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.onLoad() ;') ;
   //rcontext.getJavascriptManager().addOnLoadJavascript('eXo.calendar.UICalendarPortlet.onLoad') ;
   //rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.checkFilter() ;') ;
 	rcontext.getJavascriptManager().addOnResizeJavascript('eXo.calendar.UICalendarPortlet.onLoad') ;
@@ -178,12 +178,16 @@
 					startTime="$startTime" endTime="$endTime" >
 						<div class="EventOnDayBorder $color">
 							<div class="EventOnDayContent">
-								<div class="EventCheckbox">
-									<%uicomponent.renderField(uicomponent.getChildById(event.id))%>
-								</div>
-								<div class="EventSummary" <%= (event.getPriority() == "none")? "":" style='_padding-left:12px;'" %>>
-									<div class="<%=event.getPriority()%>PriorityIcon"><span></span></div>
-									<div class="EventLabel EventPriority" title="<%=event.summary%>" >$event.summary</div>
+								<div>
+									<div class="EventCheckbox">
+										<%uicomponent.renderField(uicomponent.getChildById(event.id))%>
+									</div>
+									<div class="EventSummary">
+										<div class="<%=event.getPriority()%>PriorityIcon  <%= (event.getPriority() != null)? " PriorityIcon":"" %>">
+											<div class="EventLabel EventPriority" title="<%=event.summary%>" >$event.summary</div>
+										</div>
+									</div>
+									<div style="clear:left;"><span></span></div>
 								</div>
 							</div>
 						</div>
