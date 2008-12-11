@@ -65,7 +65,6 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -355,8 +354,15 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         addUIFormInput(checkbox);
         contactMap.put(contact.getId(), contact) ;
       }
-      checkedAll = "" ;
-      if (checkedList.size() == contactMap.size()) checkedAll="checked" ;
+      checkedAll = "checked" ;      
+      if (checkedList.size() != contactMap.size()) checkedAll="" ;
+      else {
+        for (String id : contactMap.keySet())
+          if (!checkedList.contains(id)) {
+            checkedAll="" ;
+            break ;
+          }
+      }
       Contact[] array = contactMap.values().toArray(new Contact[]{}) ;
       if (array.length > 0) {
         //cs-1823
