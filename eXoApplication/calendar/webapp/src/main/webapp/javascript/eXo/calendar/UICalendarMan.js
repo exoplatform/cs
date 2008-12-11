@@ -603,7 +603,6 @@ GUIMan.prototype.initWeek = function() {
   this.eventAlldayNode = EventMan.rootNode ;//DOMUtil.findFirstDescendantByClass(EventMan.rootNode, 'td', 'EventAllday');
 	this.dayNodes = EventMan.dayNodes;
   this.paintWeek();
-  this.setDynamicSize4Week();
   this.initSelectionDayEvent();
   this.initSelectionDaysEvent();
 };
