@@ -197,6 +197,8 @@ public class UIListView extends UICalendarView {
   public long getAvailablePage(){
     return pageList_.getAvailablePage() ; 
   }
+  
+  public void setCurrentPage(int page) { currentPage_ = page ;} 
   public long getCurrentPage() { return pageList_.getCurrentPage();}
   protected boolean isShowEvent() {return isShowEvent_ ;}
 
@@ -294,6 +296,8 @@ public class UIListView extends UICalendarView {
       UIMiniCalendar uiMiniCalendar = uiListView.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UIMiniCalendar.class) ;
       uiMiniCalendar.setCategoryId(categoryId) ;
       UIPreview uiPreview = uiListView.getAncestorOfType(UIListContainer.class).getChild(UIPreview.class) ;
+      
+      System.out.println("\n\n 33 \n\n");
       if(uiListView.getEvents().length >0) {
         uiPreview.setEvent(uiListView.getEvents()[0]) ;
       } else {
