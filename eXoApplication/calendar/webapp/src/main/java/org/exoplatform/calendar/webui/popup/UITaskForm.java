@@ -875,8 +875,21 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
         calendarEvent.setToDateTime(to);
         calendarEvent.setCalendarId(calendarId) ;
         calendarEvent.setEventCategoryId(uiForm.getEventCategory()) ;
-        String eventCategoryName = CalendarUtils.getCalendarService().getEventCategory(uiForm.getSession(), username, uiForm.getEventCategory()).getName() ;
-        calendarEvent.setEventCategoryName(eventCategoryName) ;
+        //String eventCategoryName = CalendarUtils.getCalendarService().getEventCategory(uiForm.getSession(), username, uiForm.getEventCategory()).getName() ;
+        //calendarEvent.setEventCategoryName(eventCategoryName) ;
+        UIFormInputWithActions taskDetailTab =  uiForm.getChildById(TAB_TASKDETAIL) ;
+        UIFormSelectBox uiSelectBox = taskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_CATEGORY) ;
+        
+        System.out.println("\n\n aa \n\n");
+        for (SelectItemOption<String> o : uiSelectBox.getOptions()) {
+          if (o.getValue().equals(uiSelectBox.getValue())) {
+            
+            System.out.println("\n\n hi \n\n");
+            calendarEvent.setEventCategoryName(o.getLabel()) ;
+            break ;
+          }
+        }  
+        
         calendarEvent.setEventState(uiForm.getStatus()) ;
         calendarEvent.setPriority(uiForm.getEventPriority()) ; 
         calendarEvent.setAttachment(uiForm.getAttachments(calendarEvent.getId(), uiForm.isAddNew_)) ;
