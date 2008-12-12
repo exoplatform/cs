@@ -959,6 +959,7 @@ GUIMan.prototype.drawEventByDay = function(eventObj, startTime, endTime, dayInfo
   if (eventNode.getAttribute('used') == 'true') {
 		eventNode = eventNode.cloneNode(true);
     eventNode.setAttribute('eventclone', 'true');
+		eventNode.ondblclick = eXo.calendar.UICalendarPortlet.ondblclickCallback ;
     // Remove checkbox on clone event
     try {
       var checkBoxTmp = eventNode.getElementsByTagName('input')[0];
@@ -1009,7 +1010,8 @@ GUIMan.prototype.removeContinueClass = function(eventClones){
 GUIMan.prototype.isMultiWeek = function(eventObj){
 	var startIndex = (new Date(eventObj.startTime)).getDay();
 	var diff = eXo.calendar.UICalendarPortlet.dateDiff(eventObj.startTime,eventObj.endTime) - 1;
-	if(diff > (7 - startIndex)) return true ;
+	var weekIndex = parseInt(eventObj.rootNode.getAttribute("startIndex"));
+	if((diff > (7 - startIndex)) && (weekIndex < this.tableData.length) && (weekIndex != 1)) return true ;
 	return false;
 }	;
 
