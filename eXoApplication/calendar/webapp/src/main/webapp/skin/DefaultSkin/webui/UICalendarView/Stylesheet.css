@@ -889,6 +889,7 @@
 
 .UIMonthView .EventMonthContent .PriorityIcon {
 	padding-left: 15px;
+	width: auto;
 }
 
 .UIMonthView .EventMonthContent .highPriorityIcon {
@@ -1024,11 +1025,13 @@
 .UIMonthView .EventMonthContent .EventSummary{
 	margin: 0px 0px  0px 8px;
 	padding-left:2px;
+	overflow: hidden;
 }
 
 .UIMonthView .EventMonthContent .RightContinueEvent {
 	background: url('../background/CalendarBackground.gif') no-repeat right -287px;	
 	padding-right: 9px;
+	height: 17px;
 }
 
 .UIMonthView .EventMonthContent .LeftContinueEvent {
@@ -1039,7 +1042,7 @@
 .UIMonthView .EventMonthContent .EventLabel {
 	line-height: 17px;
 	height:17px;
-	_width:60%;
+	_width: 97%;
 	overflow:hidden;
 	white-space: nowrap;
 	-moz-user-select : none ;	
