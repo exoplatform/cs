@@ -4,44 +4,36 @@
 
 - Introduction
 ** eXo Collaboration Suite provides a rich, Web 2.0 browser-based interface with comprehensive
-messaging and indexing; archival and search capabilities; shared calendars, address books,
-and much more features soon.
-*eXo Address Book manages your private and public contacts in your organization. A contact
+messaging, shared calendars, address books,  indexing, archival and search capabilities.
+
+*eXo Address Book manages private and public contacts in your organization. A contact
 lets you keep precious information such as personal or professional address and other
 reaching information such as telephone, fax, email or IM. We support VCard format
 import/export so that you can consolidate your existing contacts into a single place.
-Additionally, you can refer your contacts from other applications such as eXo Calendar, eXo
-Web Mail.... 
+Additionally, you can refer your contacts from other applications such as eXo Calendar, eXo Mail.
 
-*eXo Calendar helps you to organize and order time in your life more easily and reasonably. It
-also manages your private and public agendas in your organization. eXo Calendar provides
-iCal support that you can use to exchange event/task information with other applications,
-with a variety of new features designed to make your eXo Calendar experience more
-productive and convenience. User can easy do all helpful actions on pop up menu or do some
-actions with drag and drop event/task. Searching for events/tasks in calendars also very
-convenient with full text search and advanced search with many criteria.
+*eXo Calendar helps you to organize and order time in your life more easily and efficiently. It
+also manages your shared and public agendas in your organization. eXo Calendar provides
+iCal support that you can use to exchange event/task information with other applications.
+Searching for events/tasks in calendars also very convenient with full text search and advanced search with many criteria.
 
-*eXo Mail is an open-source mail client that is built on foundation of eXo WebOS with variety of
-new features designed to make your e-mail experience more productive and convenient, as a
-new way to view your mails inbox and conversation and help to reduce risks and annoyances
-such as phishing and junk e-mail. Easy to approach the basics as writing, reading, finding and
-much more...
+*eXo Mail is a mail client that is built with a variety of features designed to make your e-mail 
+experience more productive. It offers several ways to to view and organize your mails inbox and conversation. 
 
 - System Requirements
-        Web Browser: IE6, IE7, FF2, FF3, Safari. Best for Frirefox.
+        Web Browser: IE6, IE7, FF2, FF3 (recommanded), Safari. 
         JVM: version 1.5.0_xx only
         Application Server : Tomcat, JBoss
         Building Tools: Maven 2.0.6 and up
 
 
 - What is new in eXo-CS Version 1.1 Beta4
-  ** Upload event(s) to existed calendar
+  ** Upload event(s) to existing calendar
   ** Add attachments, description on invitation by email
   ** Check emails in reverse time order
   ** Customize the import event
   ** Export event with attach file
-  ** Update version plug-in (more detail visit here http://wiki.exoplatform.org/xwiki/bin/view/CS/CS+version+update+instruction)
-  ** Close all unclosed session
+  ** New upgrade plug-in (more detail visit here http://wiki.exoplatform.org/xwiki/bin/view/CS/CS+version+update+instruction)
   
 
 - Complete list of issues fixed in eXo-CS Version 1.1 Beta4
@@ -191,6 +183,5 @@ much more...
      Community JIRA      http://jira.exoplatform.org
      Community site      http://www.exoplatform.org
      Developers wiki     http://wiki.exoplatform.org
-     Documentation       http://docs.exoplatform.org 
 
 
