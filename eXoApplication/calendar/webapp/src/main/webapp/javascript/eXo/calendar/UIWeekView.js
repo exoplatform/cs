@@ -220,8 +220,10 @@ UIWeekView.prototype.drop = function(evt) {
 	var sourceCol = UIWeekView.dragElement.parentNode ;
   var eventY = UIWeekView.eventY ;
 	currentCol.appendChild(UIWeekView.dragElement) ;
-	UIWeekView.showInCol(sourceCol) ;	
-	UIWeekView.showInCol(currentCol) ;
+	if(UIWeekView.mouseY != _e.clientY){
+		UIWeekView.showInCol(sourceCol) ;	
+		UIWeekView.showInCol(currentCol) ;		
+	}
   UIWeekView.title = null ;
   UIWeekView.offset = null ;
   UIWeekView.mouseY = null ;
