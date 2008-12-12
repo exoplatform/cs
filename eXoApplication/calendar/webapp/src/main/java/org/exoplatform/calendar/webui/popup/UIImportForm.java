@@ -93,12 +93,15 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
     }
     addUIFormInput(new UIFormSelectBox(TYPE, TYPE, options)) ;
     addUIFormInput(new UIFormUploadInput(FIELD_UPLOAD, FIELD_UPLOAD));
-
+    
     UIFormCheckBoxInput<Boolean> isAddNew = new UIFormCheckBoxInput<Boolean>(FIELD_ISADD, FIELD_ISADD, false) ; 
     addUIFormInput(isAddNew);
+    
     UIFormSelectBox privateCal = new UIFormSelectBox(FIELD_TO_CALENDAR, FIELD_TO_CALENDAR, getPrivateCalendars()) ; 
     if(privateCal.getOptions() != null && !privateCal.getOptions().isEmpty()) {
       isAddNew.setOnChange(ONCHANGE) ;
+    } else {
+      isAddNew.setRendered(false) ;
     }
     addUIFormInput(privateCal);
 
@@ -114,11 +117,14 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
   public void init(String calId, String calType) {
     if(!CalendarUtils.isEmpty(calId) && calType.equalsIgnoreCase(String.valueOf(Calendar.TYPE_PRIVATE))) {
       UIFormSelectBox selectBox = getUIFormSelectBox(FIELD_TO_CALENDAR) ;
+      UIFormCheckBoxInput isAddNew = getUIFormCheckBoxInput(FIELD_ISADD) ;
       if(selectBox.getOptions()!= null && !selectBox.getOptions().isEmpty()) {
         switchMode(UPDATE_EXIST);
+        isAddNew.setRendered(true) ;
         getUIFormCheckBoxInput(FIELD_ISADD).setChecked(true) ;
         selectBox.setValue(calId) ;
       } else {
+        isAddNew.setRendered(false) ;
         switchMode(ADD_NEW);
         getUIFormCheckBoxInput(FIELD_ISADD).setChecked(false) ;
       }
