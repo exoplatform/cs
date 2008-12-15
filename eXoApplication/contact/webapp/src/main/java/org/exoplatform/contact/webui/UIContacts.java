@@ -1341,16 +1341,18 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
       
       List<Account> acc = ContactUtils.getAccounts() ;
-      if (acc == null || acc.size() < 1) {
-        UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
+      UIComposeForm uiComposeForm = popupAction.activate(UIComposeForm.class, 850) ;
+      uiComposeForm.init(acc, emails) ;
+     /* if (acc != null && acc.size() > 1) {
+        uiComposeForm.init(acc, emails) ;
+      } else {
+        uiComposeForm.initPortalMail(emails) ;
+      }*/
+        /*UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.invalidAcc", null,
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
-      
-      UIComposeForm uiComposeForm = popupAction.activate(UIComposeForm.class, 850) ;
-      uiComposeForm.init(acc, emails) ;  
+        return ;*/  
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
     }
   }

@@ -463,12 +463,12 @@ public class UIAddressBooks extends UIComponent {
         buffer.append(", " + addresses.get(i)) ;
       }
       List<Account> acc = ContactUtils.getAccounts() ;
-      if (acc == null || acc.size() < 1) {
+    /*  if (acc == null || acc.size() < 1) {
         UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.invalidAcc", null,
             ApplicationMessage.WARNING)) ;
         return ;
-      }
+      }*/
       UIComposeForm uiComposeForm = uiPopupAction.activate(UIComposeForm.class, 850) ;
       uiComposeForm.init(acc, buffer.toString()) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);

@@ -24,6 +24,7 @@ import java.util.Map;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
+import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
@@ -83,7 +84,8 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   private Boolean isVisualEditor = true;
   private int composeType_;  
   public List<Contact> toContacts = new ArrayList<Contact>();
-  
+  private boolean isCSMail = false ;
+
   public boolean isVisualEditor() { return isVisualEditor; }
   public void setVisualEditor(boolean b) { isVisualEditor = b; }
   
@@ -105,14 +107,30 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     inputSet.setActionField(FIELD_ATTACHMENTS, getUploadFileList()) ;
   }
   
-  public void init(List<Account> accs, String emails) throws Exception {
+  
+  public void init(List<Account> accs, String toEmails) throws Exception {
     fromOptions.clear() ;
     List<SelectItemOption<String>>  options = new ArrayList<SelectItemOption<String>>() ;
-    // improve later ;
-    for(Account acc : accs) {
-      String fromEmail = acc.getUserDisplayName() + " &lt;" + acc.getEmailAddress() + "&gt;" ;      
+    if (accs != null && accs.size() > 0) { // use mail Cs
+      isCSMail = true ;
+//    improve later ;
+      for(Account acc : accs) {
+        String fromEmail = acc.getUserDisplayName() + " &lt;" + acc.getEmailAddress() + "&gt;" ;      
+        options.add(new SelectItemOption<String>(fromEmail, fromEmail)) ;
+        fromOptions.put(acc.getId(), acc.getUserDisplayName() + " <" + acc.getEmailAddress() + ">") ;
+      }
+    } else { // use mail portal
+      isCSMail = false ;
+      String email = "" ;
+      String name = "" ;
+      String userName = ContactUtils.getCurrentUser() ;
+      if(!ContactUtils.isEmpty(userName)){
+        name = ContactUtils.getFullName(userName) ;
+        email = ContactUtils.getEmailUser(userName) ;
+      }
+      String fromEmail = name+ " &lt;" + email + "&gt;" ;      
       options.add(new SelectItemOption<String>(fromEmail, fromEmail)) ;
-      fromOptions.put(acc.getId(), acc.getUserDisplayName() + " <" + acc.getEmailAddress() + ">") ;
+      fromOptions.put(userName, name + " <" + email + ">") ;
     }
     addUIFormInput(new UIFormSelectBox(FIELD_FROM, FIELD_FROM, options)) ;
     /*
@@ -122,7 +140,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     }
     addUIFormInput(new UIFormSelectBox(FIELD_TO, FIELD_TO, fromOptions)) ;*/
     UIFormStringInput fieldTo = new UIFormStringInput(FIELD_TO, null, null) ;
-    fieldTo.setValue(emails.replaceAll(org.exoplatform.contact.service.Utils.SEMI_COLON, ",")) ;
+    fieldTo.setValue(toEmails.replaceAll(org.exoplatform.contact.service.Utils.SEMI_COLON, ",")) ;
     addUIFormInput(fieldTo) ;
     addUIFormInput(new UIFormStringInput(FIELD_SUBJECT, null, null)) ;
     UIFormInputWithActions inputSet = new UIFormInputWithActions(FIELD_FROM_INPUT);   
@@ -136,7 +154,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
       addUIFormInput(new UIFormTextAreaInput(FIELD_MESSAGECONTENT, null, null)) ;
     }
   }
-  
+
   public String getFieldFromValue() {
     return getUIFormSelectBox(FIELD_FROM).getValue() ;
   }
@@ -184,18 +202,17 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     public void execute(Event<UIComposeForm> event) throws Exception {
       UIComposeForm uiForm = event.getSource() ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-      String to = uiForm.getFieldToValue() ;
-      
+      String to = uiForm.getFieldToValue() ;      
       if (ContactUtils.isEmpty(to)) {
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.to-field-empty", null,
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      String[] emails = to.split(",") ;
+      to = to.replaceAll(";", ",") ;
       String EMAIL_REGEX = 
         "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+";
-      for (String email : emails) {
+      for (String email : to.split(",")) {
         if (!ContactUtils.isEmpty(email) && !email.trim().matches(EMAIL_REGEX)) {
           uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.invalid-email", null, 
               ApplicationMessage.WARNING)) ;
@@ -203,65 +220,83 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           return ;
         }
       }
-      
-      
-      UIPopupAction uiChildPopup = uiForm.getAncestorOfType(UIPopupAction.class) ;
-      Message message = new Message() ;
-      message.setSendDate(new Date()) ;
-      String contentType = Utils.MIMETYPE_TEXTHTML;
-      message.setContentType(contentType);
-      message.setSubject(uiForm.getFieldSubjectValue()) ;
-      message.setMessageTo(to) ;
-
-      if (message.getReceivedDate() == null) {
-        message.setReceivedDate(new Date());
-      }
-      message.setHasStar(false);
-
-      //message.setAttachements(this.getAttachFileList()) ;
-      String body = uiForm.getFieldContentValue() ;
-      message.setMessageBody(body) ;
-      message.setUnread(false);
-      message.setSize(body.getBytes().length);
-      String fieldFrom = uiForm.getFieldFromValue() ;
-      message.setFrom(fieldFrom) ;
-      
-      //String accId = uiForm.fromOptions.keySet().toArray(new String[] {})[0] ;
-      
-      String accId = null ;
-      for (String key : uiForm.fromOptions.keySet()) {
-        if (uiForm.fromOptions.get(key).equals(fieldFrom))
-            accId = key ;
-      }
-      MailService mailSvr = uiForm.getApplicationComponent(MailService.class) ; 
-      String username = ContactUtils.getCurrentUser() ;
-      try {
-        mailSvr.sendMessage(SessionProviderFactory.createSessionProvider(), username, accId, message) ;
-        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-succsessfuly", null)) ;
-        uiChildPopup.deActivate() ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
-      }catch (Exception e) {
-        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-error", null,
-            ApplicationMessage.WARNING)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      }
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-      try {
-        MailSetting setting = mailSvr.getMailSetting(SessionProviderFactory.createSystemProvider(), username);
-        if (setting.saveMessageInSent()) {
-          message.setFolders(new String[]{ Utils.createFolderId(accId, Utils.FD_SENT, false) }) ;
+      if (uiForm.isCSMail) {
+        UIPopupAction uiChildPopup = uiForm.getAncestorOfType(UIPopupAction.class) ;
+        Message message = new Message() ;
+        message.setSendDate(new Date()) ;
+        String contentType = Utils.MIMETYPE_TEXTHTML;
+        message.setContentType(contentType);
+        message.setSubject(uiForm.getFieldSubjectValue()) ;
+        message.setMessageTo(to) ;
+  
+        if (message.getReceivedDate() == null) {
+          message.setReceivedDate(new Date());
         }
-        message.setReplyTo(message.getMessageTo()) ;
-        mailSvr.saveMessage(SessionProviderFactory.createSystemProvider(), username, accId, message.getPath(), message, true) ;
-        uiChildPopup.deActivate() ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
-      } catch (Exception e) {
-        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.save-sent-error", null)) ;
+        message.setHasStar(false);
+  
+        //message.setAttachements(this.getAttachFileList()) ;
+        String body = uiForm.getFieldContentValue() ;
+        message.setMessageBody(body) ;
+        message.setUnread(false);
+        message.setSize(body.getBytes().length);
+        String fieldFrom = uiForm.getFieldFromValue() ;
+        message.setFrom(fieldFrom) ;
+//      String accId = uiForm.fromOptions.keySet().toArray(new String[] {})[0] ;      
+        String accId = null ;
+        for (String key : uiForm.fromOptions.keySet()) {
+          if (uiForm.fromOptions.get(key).equals(fieldFrom))
+              accId = key ;
+        }
+        MailService mailSvr = uiForm.getApplicationComponent(MailService.class) ; 
+        String username = ContactUtils.getCurrentUser() ;
+        try {
+          mailSvr.sendMessage(SessionProviderFactory.createSessionProvider(), username, accId, message) ;
+          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-succsessfuly", null)) ;
+          uiChildPopup.deActivate() ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
+        }catch (Exception e) {
+          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-error", null,
+              ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        uiChildPopup.deActivate() ;
+        try {
+          MailSetting setting = mailSvr.getMailSetting(SessionProviderFactory.createSystemProvider(), username);
+          if (setting.saveMessageInSent()) {
+            message.setFolders(new String[]{ Utils.createFolderId(accId, Utils.FD_SENT, false) }) ;
+          }
+          message.setReplyTo(message.getMessageTo()) ;
+          mailSvr.saveMessage(SessionProviderFactory.createSystemProvider(), username, accId, message.getPath(), message, true) ;
+          uiChildPopup.deActivate() ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
+        } catch (Exception e) {
+          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.save-sent-error", null)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          uiChildPopup.deActivate() ;
+        }
+      } else { // portal send mail
+        try {
+          org.exoplatform.services.mail.Message  message = new org.exoplatform.services.mail.Message(); 
+          message.setMimeType(Utils.MIMETYPE_TEXTHTML) ;
+          message.setFrom(uiForm.getFieldFromValue()) ;
+          message.setTo(to) ;
+          message.setSubject(uiForm.getFieldSubjectValue()) ;
+          message.setBody(uiForm.getFieldContentValue()) ;
+          ContactUtils.sendMessage(message) ;
+          /*uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-succsessfuly", null, ApplicationMessage.INFO)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;*/
+          UIContactPortlet portlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
+          UIPopupAction popupAction = portlet.getChild(UIPopupAction.class) ;
+          popupAction.deActivate() ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
+        } catch(Exception e) {
+          uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-error", null, ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          e.printStackTrace() ;
+          return ;
+        } 
       }
-      
     }
   }
   

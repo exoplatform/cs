@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import javax.jcr.RepositoryException;
+import java.net.UnknownHostException;
 
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.container.PortalContainer;
@@ -21,7 +22,9 @@ import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.mail.Message;
 import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.impl.GroupImpl;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.model.SelectItemOption;
@@ -157,5 +160,27 @@ public class ContactUtils {
       return "(empty name)" ;
     }
   }  
+ 
+  static public String getEmailUser(String userName) throws Exception {
+    OrganizationService organizationService = (OrganizationService) PortalContainer.getComponent(OrganizationService.class);
+    User user = organizationService.getUserHandler().findUserByName(userName) ;
+    String email = user.getEmail() ;
+    return email;
+  }
+
+  static public String getFullName(String userName) throws Exception {
+    OrganizationService organizationService = (OrganizationService) PortalContainer.getComponent(OrganizationService.class);
+    User user = organizationService.getUserHandler().findUserByName(userName) ;
+    String fullName = user.getFullName() ;
+    return fullName ;
+  }
+  
+  public static void sendMessage(Message message) throws Exception {
+    org.exoplatform.services.mail.MailService mService = (org.exoplatform.services.mail.MailService)PortalContainer.getComponent(org.exoplatform.services.mail.MailService.class) ;
+    mService.sendMessage(message) ;
+  }
+  
+  
+  
   
 }
