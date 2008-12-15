@@ -91,12 +91,12 @@ public class UIContactPreviewForm extends UIForm implements UIPopupComponent {
         UIPopupContainer popupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
         UIPopupAction popupAction = popupContainer.getChild(UIPopupAction.class) ;
         List<Account> acc = ContactUtils.getAccounts() ;
-        if (acc == null || acc.size() < 1) {
+      /*  if (acc == null || acc.size() < 1) {
           UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.invalidAcc", null,
               ApplicationMessage.WARNING)) ;
           return ;
-        }
+        }*/
         UIComposeForm uiComposeForm = popupAction.activate(UIComposeForm.class, 850) ;
         uiComposeForm.init(acc, email) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;       

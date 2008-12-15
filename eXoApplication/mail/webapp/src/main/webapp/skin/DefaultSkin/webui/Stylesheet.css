@@ -1478,11 +1478,12 @@
 }
 
 .UIMailPortlet .UIContactsPopup .ContactPreviewContainer .State {
-	background: url(skinIcons/16x16/icons/OnlineIcon.gif) no-repeat left center;
 	padding-left: 20px;
 	line-height: 25px;
 	font-size: 14px;
 	font-weight: bold;
+	width: auto;
+	height: auto;
 }
 
 .UIMailPortlet .UIContactsPopup .ContactPreviewContainer .Job {

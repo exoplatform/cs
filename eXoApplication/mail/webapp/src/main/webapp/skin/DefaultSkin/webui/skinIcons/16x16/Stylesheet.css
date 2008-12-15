@@ -395,3 +395,12 @@
 	height: 16px;
 	margin: 0px 2px 0px 0px;
 }
+.UIMailPortlet .OwnerIcon {
+	background: url('icons/OwnerIcon.gif') no-repeat;
+	height: 16px; width: 17px;
+}
+
+.UIMailPortlet .OfflineIcon {
+	background: url('icons/OffLineIcon.png') no-repeat;
+	height: 16px; width: 17px;
+}

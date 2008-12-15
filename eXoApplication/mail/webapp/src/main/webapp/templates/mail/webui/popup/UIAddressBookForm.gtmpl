@@ -132,7 +132,11 @@
                     %>
                     <img src="$imageLink" width=63 height=81  class="Avatar"/>         
                       <div class="Member">
-                        <div class="State"><%=selectedContact.getFullName()%></div>
+                      <% 
+												icon = "OfflineIcon"
+												if (selectedContact.getContactType().equals("0") && selectedContact.isOwner()&& selectedContact.getOwnerId().equals(MailUtils.getCurrentUser())) icon = "OwnerIcon" ; 	
+								  		%>
+                        <div class="State $icon"><%=selectedContact.getFullName()%></div>
                         <div class="Job"><%= (selectedContact.getJobTitle() != null) ? selectedContact.getJobTitle() : "_"%></div>
                       </div>
                       <div style="clear: left;"><span></span></div>

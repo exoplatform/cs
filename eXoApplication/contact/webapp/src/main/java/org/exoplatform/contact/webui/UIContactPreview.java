@@ -75,12 +75,12 @@ public class UIContactPreview extends UIComponent  {
         UIPopupAction popupAction = contactPortlet.getChild(UIPopupAction.class) ;
          
         List<Account> acc = ContactUtils.getAccounts() ;
-        if (acc == null || acc.size() < 1) {
+      /*  if (acc == null || acc.size() < 1) {
           UIApplication uiApp = uiContactPreview.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.invalidAcc", null,
               ApplicationMessage.WARNING)) ;
           return ;
-        }
+        }*/
         UIComposeForm uiComposeForm = popupAction.activate(UIComposeForm.class, 850) ; 
         uiComposeForm.init(acc,email) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;  
