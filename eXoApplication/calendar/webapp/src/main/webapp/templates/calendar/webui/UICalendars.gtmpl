@@ -154,7 +154,7 @@
 							owner = calendar.getCalendarOwner() + "- " ;
 						}
 				%>
-  					<div class="CalendarItem $color"  calColor="$color" id="$calId" calType="1" >
+  					<div class="CalendarItem $color"  calColor="$color" id="$calId" calType="1"  canEdit="true">
   							<div class="CheckBox"><%uiform.renderField(calendar.getId())%></div>
   							<div class="CalendarIcon" title="<%=owner + calendar.getName()%>"><span><%=owner + calendar.getName()%></span></div>
   							<!--<div class="DownArrow1Icon"><span></span></div>-->
