@@ -5,6 +5,7 @@
  * @constructor
  */
 function UICalendarPortlet(){
+	this.clickone = 0 ;
 }
 
 /**
@@ -1592,6 +1593,24 @@ UICalendarPortlet.prototype.listViewDblClick = function(form){
 	}
 };
 
+UICalendarPortlet.prototype.doClick = function(){
+	eval(eXo.calendar.UICalendarPortlet.listViewAction);
+};
+
+UICalendarPortlet.prototype.listViewClickCallback = function(obj){
+	eXo.calendar.UICalendarPortlet.listViewAction = obj.getAttribute("actionLink");
+	eXo.calendar.UICalendarPortlet.clickone = setTimeout(this.doClick,200);
+	return false ;
+};
+
+UICalendarPortlet.prototype.listViewDblClickCallback = function(){
+	if(eXo.calendar.UICalendarPortlet.clickone && eXo.calendar.UICalendarPortlet.clickone != 0){
+		window.clearTimeout(eXo.calendar.UICalendarPortlet.clickone);
+		eXo.calendar.UICalendarPortlet.clickone = 0 ;
+		eXo.calendar.UICalendarPortlet.listViewAction = null ;
+	}
+	eXo.calendar.UICalendarPortlet.ondblclickCallback();
+};
 /**
  * Filter event when page load
  */

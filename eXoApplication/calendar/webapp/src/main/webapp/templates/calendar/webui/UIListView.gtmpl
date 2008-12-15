@@ -130,20 +130,20 @@
   					attachIcon = "" ;
   					if(!event.getAttachment().isEmpty()) {attachIcon = "AttachmentIcon" ;}
   					%>
-  						<tr class="UIListViewRow" style="$rowStyle" eventid="<%=event.getId()%>" calid="<%=event.getCalendarId()%>" calType=<%=event.getCalType()%>>
 		  					<%
 		  						String classIcon = event.getEventType() + "Icon" ;
 		  						String actionLink = uicomponent.event("ViewDetail", event.getId()+"&calendarId="+event.getCalendarId()+"&calType="+event.getCalType()) ;		  
 		  					%>
+  						<tr actionLink="$actionLink" onclick="return eXo.calendar.UICalendarPortlet.listViewClickCallback(this);" class="UIListViewRow" style="$rowStyle" eventid="<%=event.getId()%>" calid="<%=event.getCalendarId()%>" calType=<%=event.getCalType()%>>
 		  					<%if(!isDisplaySearchResult) {%>
 		  					<td><%uicomponent.renderField(uicomponent.getChildById(event.getId()))%></td>
 		  					<%}%>
 		  					<td style="padding-left: 7px;"><div class="$attachIcon">&nbsp;</div></td>
 								<td class="text"><div class="<%=event.getPriority()%>PriorityIcon">&nbsp;</div></td>
 								<td class="text">
-									<a href="$actionLink" class="ControlButton" title="<%=event.summary%>">
+									<span class="ControlButton" title="<%=event.summary%>">
 										<%=event.getSummary()%>
-									</a>	
+									</span>	
 								</td>
 								<td class="text"><%=df.format(event.getFromDateTime())%></td>
 								<td class="text"><%=df.format(event.getToDateTime())%></td>

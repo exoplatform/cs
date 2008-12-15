@@ -76,8 +76,6 @@ LayoutSpliter.prototype.doResize = function(e , markerobj) {
   if((areas.length < 2) || (areas[0].style.display=="none")) return ;
   this.beforeArea = areas[0] ;
   this.afterArea = areas[1] ;
-//  this.beforeArea.style.height = this.beforeArea.offsetHeight + "px" ;
-//  this.afterArea.style.height = this.afterArea.offsetHeight + "px" ;
   this.beforeArea.style.overflowY = "auto" ;
   this.afterArea.style.overflowY = "auto" ;
   this.beforeY = this.beforeArea.offsetHeight ;
@@ -94,7 +92,7 @@ LayoutSpliter.prototype.adjustHeight = function(evt) {
   var beforeHeight = Spliter.beforeY + delta ;
   if (beforeHeight <= 0  || afterHeight <= 0) return ;
   Spliter.beforeArea.style.height =  beforeHeight + "px" ;
-  Spliter.afterArea.style.height =  afterHeight + "px" ;
+  if(Spliter.afterY > 0) Spliter.afterArea.style.height =  afterHeight + "px" ;
 } ;
 
 LayoutSpliter.prototype.clear = function() {
@@ -122,14 +120,12 @@ Utils.prototype.showHidePane = function(clickobj, beforeobj, afterobj) {
   var uiPreview = eXo.core.DOMUtil.findAncestorByClass(areas[1], "UIPreview") ;
   if(areas.length < 2) return ;
 	if(areas[0].style.display != "none") {
-		clickobj.className = "MinimizeButton"
-    //uiGrid.style.height = (uiGrid.offsetHeight + areas[0].offsetHeight - 4) + "px" ;
+		clickobj.className = "MinimizeButton";
     areas[1].style.height = (areas[1].offsetHeight  + areas[0].offsetHeight - 4) + "px" ;
 		areas[0].style.display = "none" ;
 	} else {
 		areas[0].style.display = "block" ;
-		clickobj.className = "MaximizeButton"
-    //uiGrid.style.height = (uiGrid.offsetHeight - areas[0].offsetHeight + 4) + "px" ;
+		clickobj.className = "MaximizeButton";
     areas[1].style.height = (areas[1].offsetHeight - areas[0].offsetHeight + 4 ) + "px" ;
 	}
 } ;
