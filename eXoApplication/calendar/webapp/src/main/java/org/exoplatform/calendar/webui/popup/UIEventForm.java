@@ -229,7 +229,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       }
       setParticipant(pars.toString()) ;
       //boolean isContains = false ;
-      CalendarService calService = CalendarUtils.getCalendarService();
+      //CalendarService calService = CalendarUtils.getCalendarService();
       /*List<EventCategory> listCategory = 
         calService.getEventCategories(SessionProviderFactory.createSessionProvider(), CalendarUtils.getCurrentUser());
       for(EventCategory eventCat : listCategory) {
@@ -849,7 +849,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   }*/
 
   protected void sendMail(MailService svr, OrganizationService orSvr,CalendarSetting setting, Account acc, String fromId,  String toId, CalendarEvent event) throws Exception {
-    Message message = new Message() ;
     List<Attachment> atts = getAttachments(null, false);
     DateFormat df = new SimpleDateFormat(setting.getDateFormat() + " " + setting.getTimeFormat()) ;
     User invitor = orSvr.getUserHandler().findUserByName(CalendarUtils.getCurrentUser()) ;
@@ -857,7 +856,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     sbSubject.append(event.getSummary()) ;
     sbSubject.append(" ") ;
     sbSubject.append(df.format(event.getFromDateTime())) ;
-    message.setSubject(sbSubject.toString()) ;
+    
     StringBuffer sbBody = new StringBuffer() ;
     sbBody.append("<div style=\"margin: 20px auto; padding: 8px; background: rgb(224, 236, 255) none repeat scroll 0%; -moz-background-clip: -moz-initial; -moz-background-origin: -moz-initial; -moz-background-inline-policy: -moz-initial; width: 400px;\">") ;
     sbBody.append("<table style=\"margin: 0px; padding: 0px; border-collapse: collapse; border-spacing: 0px; width: 100%; line-height: 16px;\">") ;
@@ -900,8 +899,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     }
     sbBody.append("</tbody>");
     sbBody.append("</table>");
-    sbBody.append("</div>") ;
-    message.setMessageBody(sbBody.toString()) ;
+    sbBody.append("</div>") ;    
 
     StringBuffer sbAddress = new StringBuffer() ;
     for(String s : toId.split(CalendarUtils.COMMA)) {
@@ -917,12 +915,11 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         if(sbAddress.length() > 0) sbAddress.append(",") ;
         sbAddress.append(s) ;
       }
-    }
-    message.setMessageTo(sbAddress.toString()) ;
-    message.setContentType(Utils.MIMETYPE_TEXTHTML) ;
+    }    
+    
     StringBuffer values = new StringBuffer(fromId) ; 
     User user = orSvr.getUserHandler().findUserByName(fromId) ;
-    message.setFrom(user.getEmail()) ;
+    
     values.append(CalendarUtils.SEMICOLON + " ") ; 
     values.append(toId) ;
     values.append(CalendarUtils.SEMICOLON + " ") ;
@@ -931,32 +928,57 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     values.append(event.getCalendarId()) ;
     values.append(CalendarUtils.SEMICOLON + " ") ;
     values.append(event.getId()) ;
-    message.setHeader(CalendarUtils.EXO_INVITATION , values.toString()) ;
-    message.setSendDate(new Date()) ;
-    try {
-      CalendarService calService = CalendarUtils.getCalendarService() ;
-      //List<String> calendarIds = new ArrayList<String>() ;
-      //calendarIds.add(event.getCalendarId()) ;
-      OutputStream out = calService.getCalendarImportExports(CalendarServiceImpl.ICALENDAR).exportEventCalendar(getSystemSession(), fromId, event.getCalendarId(), event.getCalType(), event.getId()) ;
-      ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
-      BufferAttachment bf = new BufferAttachment() ;
-      bf.setInputStream(is) ;
-      bf.setName("icalendar.ics");
-      bf.setMimeType("text/calendar") ;
+    if (acc != null) { // use cs-mail service
+      Message message = new Message() ;
+      message.setSubject(sbSubject.toString()) ;
+      message.setMessageBody(sbBody.toString()) ;
+      message.setMessageTo(sbAddress.toString()) ;
+      message.setContentType(Utils.MIMETYPE_TEXTHTML) ;
+      message.setFrom(user.getEmail()) ;
+      message.setHeader(CalendarUtils.EXO_INVITATION , values.toString()) ;
+      message.setSendDate(new Date()) ;
       List<org.exoplatform.mail.service.Attachment> attachments = new ArrayList<org.exoplatform.mail.service.Attachment>() ;
-      attachments.add(bf) ;
-      for(Attachment att : atts) {
-        bf = new BufferAttachment() ;
-        bf.setInputStream(att.getInputStream()) ;
-        bf.setName(att.getName());
-        bf.setMimeType(att.getMimeType()) ;
+      try {
+        CalendarService calService = CalendarUtils.getCalendarService() ;
+        //List<String> calendarIds = new ArrayList<String>() ;
+        //calendarIds.add(event.getCalendarId()) ;
+        OutputStream out = calService.getCalendarImportExports(CalendarServiceImpl.ICALENDAR).exportEventCalendar(getSystemSession(), fromId, event.getCalendarId(), event.getCalType(), event.getId()) ;
+        ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
+        BufferAttachment bf = new BufferAttachment() ;
+        bf.setInputStream(is) ;
+        bf.setName("icalendar.ics");
+        bf.setMimeType("text/calendar") ;
+        
         attachments.add(bf) ;
+        for(Attachment att : atts) {
+          bf = new BufferAttachment() ;
+          bf.setInputStream(att.getInputStream()) ;
+          bf.setName(att.getName());
+          bf.setMimeType(att.getMimeType()) ;
+          attachments.add(bf) ;
+        }
+      } catch (Exception e) {
+        e.printStackTrace() ;
       }
-      message.setAttachements(attachments) ;
-    } catch (Exception e) {
-      e.printStackTrace() ;
+      message.setAttachements(attachments) ;      
+      svr.sendMessage(getSession(), user.getUserName(), acc.getId(), message) ;
+    } else { // use kernel service
+      org.exoplatform.services.mail.Message  message = new org.exoplatform.services.mail.Message(); 
+      message.setSubject(sbSubject.toString()) ;
+      message.setBody(sbBody.toString()) ;
+      message.setTo(sbAddress.toString()) ;
+      message.setMimeType(Utils.MIMETYPE_TEXTHTML) ;
+      message.setFrom(user.getEmail()) ;
+      if(!atts.isEmpty()){      
+        org.exoplatform.services.mail.Attachment att = new org.exoplatform.services.mail.Attachment() ;
+        att.setInputStream(atts.get(0).getInputStream()) ;
+        att.setMimeType(atts.get(0).getMimeType()) ;
+        message.addAttachment(att) ;
+      }
+      org.exoplatform.services.mail.MailService mService = (org.exoplatform.services.mail.MailService)PortalContainer.getComponent(org.exoplatform.services.mail.MailService.class) ;
+      mService.sendMessage(message) ;
+      
     }
-    svr.sendMessage(getSession(), user.getUserName(), acc.getId(), message) ;
   }
 
 
@@ -1329,7 +1351,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
             }
             if(calendarEvent != null && uiForm.isSendMail()) {
               Account acc = CalendarUtils.getMailService().getDefaultAccount(uiForm.getSession(), username);
-              if(acc != null) {
+              //if(acc != null) {
                 try {
                   StringBuffer recive = new StringBuffer() ; 
                   for(String rc : uiForm.getParticipants()) {
@@ -1343,10 +1365,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
                   event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
                   e.printStackTrace() ;
                 }
-              } else {
+             /* } else {
                 uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.cant-send-email", null));
                 event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-              }
+              }*/
             }
           }
         }
