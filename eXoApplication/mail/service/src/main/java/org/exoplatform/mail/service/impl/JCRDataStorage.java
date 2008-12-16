@@ -170,6 +170,13 @@ public class JCRDataStorage {
       account.setLastCheckedDate(null);
     }
     try {
+      GregorianCalendar cal = new GregorianCalendar();
+      cal.setTimeInMillis(accountNode.getProperty(Utils.EXO_LAST_START_CHECKING_TIME).getLong());
+      account.setLastStartCheckingTime(cal.getTime());
+    } catch (Exception e) {
+      account.setLastStartCheckingTime(null);
+    }
+    try {
       account.setCheckAll(accountNode.getProperty(Utils.EXO_CHECK_ALL).getBoolean());
     } catch (Exception e) {
     }
@@ -664,6 +671,11 @@ public class JCRDataStorage {
         newAccount.setProperty(Utils.EXO_LAST_CHECKED_TIME, account.getLastCheckedDate().getTime());
       else 
         newAccount.setProperty(Utils.EXO_LAST_CHECKED_TIME, (Value) null);
+      
+      if (account.getLastStartCheckingTime() != null)
+        newAccount.setProperty(Utils.EXO_LAST_START_CHECKING_TIME, account.getLastStartCheckingTime().getTime());
+      else 
+        newAccount.setProperty(Utils.EXO_LAST_START_CHECKING_TIME, (Value) null);
       
       newAccount.setProperty(Utils.EXO_CHECK_ALL, account.isCheckAll());
       if (account.getCheckFromDate() != null)
