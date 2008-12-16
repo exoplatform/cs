@@ -85,7 +85,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
                    @EventConfig(listeners = UICalendars.AddEventActionListener.class),
                    @EventConfig(listeners = UICalendars.AddTaskActionListener.class),
                    @EventConfig(listeners = UICalendars.EditCalendarActionListener.class),
-                   @EventConfig(phase=Phase.DECODE, listeners = UICalendars.RemoveCalendarActionListener.class),
+                   @EventConfig(phase=Phase.DECODE, listeners = UICalendars.RemoveCalendarActionListener.class, confirm="UICalendars.msg.confirm-delete-calendar"),
                    @EventConfig(listeners = UICalendars.AddCalendarCategoryActionListener.class),
                    @EventConfig(listeners = UICalendars.ShareCalendarActionListener.class),
                    @EventConfig(listeners = UICalendars.ChangeColorActionListener.class),
