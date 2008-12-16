@@ -268,6 +268,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
     String username = MailUtils.getCurrentUser();
     MailSetting mailSetting = mailSrv.getMailSetting(SessionProviderFactory.createSystemProvider(), MailUtils.getCurrentUser());
     UIComposeInput inputSet = getChildById(FIELD_TO_SET) ;
+    String subject = "";
     String replyContent = "";
     switch (getComposeType()) {
       case MESSAGE_IN_DRAFT :
@@ -291,7 +292,9 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         break;
       case MESSAGE_REPLY :
         setFieldToValue(msg.getReplyTo());
-        setFieldSubjectValue("Re: " + msg.getSubject());
+        subject = msg.getSubject();
+        if (!subject.toLowerCase().startsWith("re:")) subject = "Re: " + subject ;
+        setFieldSubjectValue(subject);
         if (msg != null && msg.hasAttachment()) {
           if (msg.getAttachments() == null) {
             msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
@@ -314,7 +317,9 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         }
         break ;
       case MESSAGE_REPLY_ALL :
-        setFieldSubjectValue("Re: " + msg.getSubject());
+        subject = msg.getSubject();
+        if (!subject.toLowerCase().startsWith("re:")) subject = "Re: " + subject ;
+        setFieldSubjectValue(subject);
         String replyTo = msg.getReplyTo();
         setFieldToValue(replyTo);
   
@@ -371,7 +376,9 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         break;
       case MESSAGE_FOWARD : 
         String toAddress = msg.getMessageTo() != null ? msg.getMessageTo() : "" ;
-        setFieldSubjectValue("Fwd: " + msg.getSubject());
+        subject = msg.getSubject();
+        if (!subject.toLowerCase().startsWith("fwd:")) subject = "Fwd: " + subject ;
+        setFieldSubjectValue(subject);
         
         setFieldToValue("");
         if (msg != null && msg.hasAttachment()) {
