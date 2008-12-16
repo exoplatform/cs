@@ -592,7 +592,7 @@ public class MailServiceImpl implements MailService, Startable {
       if (filteredMsgNumber > 0) {
         getFrom = 0;
         if (fromDate != null) {
-          for (int k = 0; k < messages.length ; k++) { 
+          for (int k = 0; k < filteredMsgNumber ; k++) { 
             if (MimeMessageParser.getReceivedDate(filteredMsg[k]).getTime().before(fromDate)) {
               getFrom++ ;
             } else {
@@ -904,7 +904,8 @@ public class MailServiceImpl implements MailService, Startable {
                   
                   receivedDate = MimeMessageParser.getReceivedDate(msg).getTime();
                   if (i == 0) lastFromDate = receivedDate;                  
-                  account.setLastCheckedDate(receivedDate);  
+                  account.setLastCheckedDate(receivedDate);
+                  if (i == (totalNew - 1)) account.setCheckFromDate(lastFromDate);
                 }
                 
                 if (lastFromDate != null && (account.getLastStartCheckingTime() == null || account.getLastStartCheckingTime().before(lastFromDate))) {
