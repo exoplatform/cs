@@ -517,13 +517,8 @@ public class UIAccountSetting extends UIFormTabPane {
       acc.setServerProperty(Utils.SVR_SMTP_USER, userName) ;
       
       if (acc.getProtocol().equals(Utils.IMAP)) {
-        if (!acc.isCheckAll() && !uiSetting.getFieldCheckFromDate()) acc.setLastCheckedDate(null);
         acc.setCheckAll(!uiSetting.getFieldCheckFromDate());
-
         if (uiSetting.getFieldCheckFrom() != null) {
-          if (acc.getCheckFromDate() != null && !acc.getCheckFromDate().equals(uiSetting.getFieldCheckFrom().getTime())) {
-            acc.setLastCheckedDate(null);
-          }
           acc.setCheckFromDate(uiSetting.getFieldCheckFrom().getTime());
         } else if(!acc.isCheckAll()) {
           uiApp.addMessage(new ApplicationMessage("UIAccountSetting.msg.please-choose-specified-date", null)) ;

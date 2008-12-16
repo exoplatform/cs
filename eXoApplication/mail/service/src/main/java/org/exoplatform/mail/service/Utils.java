@@ -144,6 +144,7 @@ public class Utils {
   public static final String EXO_SPAM_FILTER = "exo:spamFilter".intern();
   public static final String EXO_CONVERSATION = "exo:conversation".intern();
   public static final String EXO_CONVERSATIONID = "exo:conversationId".intern();
+  public static final String EXO_LAST_START_CHECKING_TIME = "exo:lastStartCheckingTime".intern();
   public static final String EXO_LAST_CHECKED_TIME = "exo:lastCheckedTime".intern() ;
   public static final String EXO_CHECK_ALL = "exo:checkAll".intern();
   public static final String EXO_CHECK_FROM_DATE = "exo:checkFromDate".intern();

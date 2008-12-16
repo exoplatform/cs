@@ -42,6 +42,7 @@ public class Account {
   private boolean isSavePassword_ ;
   private String placeSignature;
   private Date lastCheckedDate_ ;
+  private Date lastStartCheckingTime_;
   private boolean checkAll_ = false;
   private Date checkFromDate_;
   
@@ -126,6 +127,9 @@ public class Account {
   
   public Date getLastCheckedDate() { return lastCheckedDate_; }
   public void setLastCheckedDate(Date date) { lastCheckedDate_ = date ; }
+  
+  public Date getLastStartCheckingTime() { return lastStartCheckingTime_; }
+  public void setLastStartCheckingTime(Date date) { lastStartCheckingTime_ = date ; }
   
   public boolean isCheckAll() { return checkAll_; }
   public void setCheckAll(boolean b) { checkAll_ = b; }
