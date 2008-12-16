@@ -127,6 +127,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
     ContactFilter ctFilter = new ContactFilter() ;
     ctFilter.setOrderBy("fullName");
     ctFilter.setAscending(true);
+    ctFilter.setType("0") ;
     if (groupId != null && groupId.trim().length() > 0 ) {
       ctFilter.setCategories(new String[] {groupId});
       contactList = contactSrv.searchContact(SessionProviderFactory.createSystemProvider(), username, ctFilter).getAll();
@@ -136,7 +137,6 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
     }
     contactMap_.clear();
     for (Contact ct : contactList) contactMap_.put(ct.getId(), ct);
-
     contactList_ = new ArrayList<Contact>(contactMap_.values());
     if (contactList_.size() > 0) selectedContact = contactList_.get(0);
     else selectedContact = null;

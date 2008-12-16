@@ -42,11 +42,15 @@ public class ContactFilter {
   private String emailAddress ;
   private String isOwner = null ;
   private String username = null ;
+  private String type = null ;
   
   public ContactFilter() { isAscending = true ; }
   
   public String getUsername()  { return username ; }
   public void   setUsername(String s) { username = s ; }
+  
+  public void setType(String type) { this.type = type ; }
+  public String getType() { return type ; }
   
   public void setText(String fullTextSearch) { this.text = fullTextSearch ; }
   public String getText() { return text ; }

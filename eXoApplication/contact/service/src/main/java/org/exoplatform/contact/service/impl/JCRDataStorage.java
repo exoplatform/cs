@@ -1532,99 +1532,106 @@ public class JCRDataStorage {
   public DataPageList searchContact(SessionProvider sysProvider, String username, ContactFilter filter)throws Exception {
     Map<String, Contact> contacts = new LinkedHashMap<String, Contact>() ;
     filter.setUsername(username) ;
-    
-    //public contacts
-    Node publicContactHome = getPublicContactHome(SessionProvider.createSystemProvider()) ; 
+    QueryManager qm = null ;
+    Query query = null ;
     String usersPath = nodeHierarchyCreator_.getJcrPath(USERS_PATH) ;
-    filter.setAccountPath(usersPath) ;
-    // minus shared contacts
-    filter.setOwner("true") ; 
-    QueryManager qm = publicContactHome.getSession().getWorkspace().getQueryManager() ;
-    Query query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
-    NodeIterator itpublic = query.execute().getNodes();
-    while(itpublic.hasNext()) {
-      Contact contact = getContact(itpublic.nextNode(), PUBLIC) ;
-      contacts.put(contact.getId(), contact) ;
+    //public contacts
+    if (filter.getType() == null || filter.getType().equals(PUBLIC)) {
+      Node publicContactHome = getPublicContactHome(SessionProvider.createSystemProvider()) ;      
+      filter.setAccountPath(usersPath) ;
+      // minus shared contacts
+      filter.setOwner("true") ; 
+      qm = publicContactHome.getSession().getWorkspace().getQueryManager() ;
+      query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
+      NodeIterator itpublic = query.execute().getNodes();
+      while(itpublic.hasNext()) {
+        Contact contact = getContact(itpublic.nextNode(), PUBLIC) ;
+        contacts.put(contact.getId(), contact) ;
+      }
     }
     filter.setOwner(null) ;
     // private contacts
-    if(username != null && username.length() > 0) {
-      Node contactHome = getUserContactHome(sysProvider, username) ;
-      filter.setAccountPath(contactHome.getPath()) ;      
-      qm = contactHome.getSession().getWorkspace().getQueryManager() ;
-      query = qm.createQuery(filter.getStatement(), Query.XPATH) ;      
-      NodeIterator it = query.execute().getNodes() ; 
-      while(it.hasNext()) {
-        Contact contact = getContact(it.nextNode(), PRIVATE) ;
-        contacts.put(contact.getId(), contact) ; 
-        
-        // need test remove usershare contact 
-/*        String[] adds = contact.getAddressBook() ;
-        if (adds == null || (adds.length == 1 && !adds[0].contains("ContactGroup"))) {
-          List<String> contactIds = new ArrayList<String>() ;
-          contactIds.add(contact.getId()) ;
-          removeContacts(sysProvider, username, contactIds) ;
-        } else {
-          contacts.put(contact.getId(), contact) ;          
-        }*/
+    if (filter.getType() == null || filter.getType().equals(PRIVATE)) {
+      if(username != null && username.length() > 0) {
+        Node contactHome = getUserContactHome(sysProvider, username) ;
+        filter.setAccountPath(contactHome.getPath()) ;      
+        qm = contactHome.getSession().getWorkspace().getQueryManager() ;
+        query = qm.createQuery(filter.getStatement(), Query.XPATH) ;      
+        NodeIterator it = query.execute().getNodes() ; 
+        while(it.hasNext()) {
+          Contact contact = getContact(it.nextNode(), PRIVATE) ;
+          contacts.put(contact.getId(), contact) ; 
+          
+          // need test remove usershare contact 
+  /*        String[] adds = contact.getAddressBook() ;
+          if (adds == null || (adds.length == 1 && !adds[0].contains("ContactGroup"))) {
+            List<String> contactIds = new ArrayList<String>() ;
+            contactIds.add(contact.getId()) ;
+            removeContacts(sysProvider, username, contactIds) ;
+          } else {
+            contacts.put(contact.getId(), contact) ;          
+          }*/
+        }
       }
     }
     //share contacts
-    try {
-      Node sharedContact = getSharedContact(username) ;      
-      PropertyIterator iter = sharedContact.getReferences() ;
-      List<Contact> sharedContacts = getSharedContacts(username).getAll() ;
-      List<String> sharedContactIds = new ArrayList<String>() ;
-      for (Contact contact : sharedContacts) sharedContactIds.add(contact.getId()) ;      
-      while(iter.hasNext()) {
-        try{
-          Node sharedContactHomeNode = iter.nextProperty().getParent().getParent() ;
-          filter.setAccountPath(sharedContactHomeNode.getPath()) ;
-          
-          // add
-          String split = "/" ;
-          String temp = sharedContactHomeNode.getPath().split(usersPath)[1] ;
-          String userId = temp.split(split)[1] ;
-          filter.setUsername(userId) ;
-          
-          qm = sharedContactHomeNode.getSession().getWorkspace().getQueryManager() ;      
-          query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
-          NodeIterator it = query.execute().getNodes() ;
-          while(it.hasNext()) {
-            Node contactNode = it.nextNode() ;
-            if (sharedContactIds.contains(contactNode.getProperty("exo:id").getString())) {
-              Contact contact = getContact(contactNode, SHARED) ;
-              
-              // add
-              if (!contacts.containsKey(contact.getId())) {
-                contacts.put(contact.getId(), contact) ;
-              } else {
-                contacts.get(contact.getId()).setContactType(JCRDataStorage.SHARED) ;
-              }
-              sharedContactIds.remove(contact.getId()) ;
-            } 
+    if (filter.getType() == null || filter.getType().equals(SHARED)) {
+      try {
+        Node sharedContact = getSharedContact(username) ;      
+        PropertyIterator iter = sharedContact.getReferences() ;
+        List<Contact> sharedContacts = getSharedContacts(username).getAll() ;
+        List<String> sharedContactIds = new ArrayList<String>() ;
+        for (Contact contact : sharedContacts) sharedContactIds.add(contact.getId()) ;      
+        while(iter.hasNext()) {
+          try{
+            Node sharedContactHomeNode = iter.nextProperty().getParent().getParent() ;
+            filter.setAccountPath(sharedContactHomeNode.getPath()) ;
+            
+            // add
+            String split = "/" ;
+            String temp = sharedContactHomeNode.getPath().split(usersPath)[1] ;
+            String userId = temp.split(split)[1] ;
+            filter.setUsername(userId) ;
+            
+            qm = sharedContactHomeNode.getSession().getWorkspace().getQueryManager() ;      
+            query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
+            NodeIterator it = query.execute().getNodes() ;
+            while(it.hasNext()) {
+              Node contactNode = it.nextNode() ;
+              if (sharedContactIds.contains(contactNode.getProperty("exo:id").getString())) {
+                Contact contact = getContact(contactNode, SHARED) ;
+                
+                // add
+                if (!contacts.containsKey(contact.getId())) {
+                  contacts.put(contact.getId(), contact) ;
+                } else {
+                  contacts.get(contact.getId()).setContactType(JCRDataStorage.SHARED) ;
+                }
+                sharedContactIds.remove(contact.getId()) ;
+              } 
+            }
+          }catch(Exception e){
+            e.printStackTrace() ;
           }
-        }catch(Exception e){
-          e.printStackTrace() ;
         }
-      }
-    } catch (PathNotFoundException e) { }
-    
-    Node sharedAddressBookMock = getSharedAddressBook(username) ;
-    PropertyIterator iter = sharedAddressBookMock.getReferences() ;
-    Node addressBook ;      
-    while(iter.hasNext()) {
-      addressBook = iter.nextProperty().getParent() ;
-      Node contactHomeNode = addressBook.getParent().getParent().getNode(CONTACTS) ;
-      filter.setAccountPath(contactHomeNode.getPath()) ;
-      filter.setCategories(new String[] {addressBook.getName()}) ;
-      filter.setUsername(addressBook.getProperty("exo:sharedUserId").getString()) ;
-      qm = contactHomeNode.getSession().getWorkspace().getQueryManager() ;      
-      query = qm.createQuery(filter.getStatement(), Query.XPATH) ;  
-      NodeIterator it = query.execute().getNodes() ;
-      while(it.hasNext()) {
-        Contact contact = getContact(it.nextNode(), SHARED) ;
-        contacts.put(contact.getId(), contact) ;
+      } catch (PathNotFoundException e) { }
+      
+      Node sharedAddressBookMock = getSharedAddressBook(username) ;
+      PropertyIterator iter = sharedAddressBookMock.getReferences() ;
+      Node addressBook ;      
+      while(iter.hasNext()) {
+        addressBook = iter.nextProperty().getParent() ;
+        Node contactHomeNode = addressBook.getParent().getParent().getNode(CONTACTS) ;
+        filter.setAccountPath(contactHomeNode.getPath()) ;
+        filter.setCategories(new String[] {addressBook.getName()}) ;
+        filter.setUsername(addressBook.getProperty("exo:sharedUserId").getString()) ;
+        qm = contactHomeNode.getSession().getWorkspace().getQueryManager() ;      
+        query = qm.createQuery(filter.getStatement(), Query.XPATH) ;  
+        NodeIterator it = query.execute().getNodes() ;
+        while(it.hasNext()) {
+          Contact contact = getContact(it.nextNode(), SHARED) ;
+          contacts.put(contact.getId(), contact) ;
+        }
       }
     }
     List<Contact> contactList = new ArrayList<Contact>() ;
