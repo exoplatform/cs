@@ -319,7 +319,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   }
 
   public String[] getActions() {
-    return new String[]{"AddAttachment","Save", "Cancel"} ;
+    return new String[]{"Save", "Cancel"} ;
   }
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
