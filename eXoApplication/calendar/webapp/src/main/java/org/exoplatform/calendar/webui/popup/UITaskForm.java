@@ -248,7 +248,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     uiTaskDetailTab.getUIFormSelectBox(UITaskDetailTab.FIELD_STATUS).setValue(value) ;
   }
   public String[] getActions() {
-    return new String[]{"AddAttachment","Save", "Cancel"} ;
+    return new String[]{"Save", "Cancel"} ;
   }
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
