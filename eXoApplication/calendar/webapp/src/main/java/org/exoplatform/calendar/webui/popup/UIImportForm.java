@@ -59,10 +59,11 @@ import org.exoplatform.webui.form.UIFormUploadInput;
  */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
-    template = "system:/groovy/webui/form/UIForm.gtmpl", 
+    template = "app:/templates/calendar/webui/UIPopup/UIImportForm.gtmpl",
     events = {
       @EventConfig(listeners = UIImportForm.SaveActionListener.class),  
       @EventConfig(listeners = UIImportForm.OnChangeActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIImportForm.AddActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIImportForm.CancelActionListener.class, phase = Phase.DECODE)
     }
 )
@@ -320,6 +321,16 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
     }
   }  
+  
+  static  public class AddActionListener extends EventListener<UIImportForm> {
+    public void execute(Event<UIImportForm> event) throws Exception {
+      UIImportForm uiForm = event.getSource() ;
+      uiForm.getUIFormCheckBoxInput(FIELD_ISADD).setChecked(false) ;
+      uiForm.switchMode(ADD_NEW) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
+    }
+  } 
+  
   static  public class CancelActionListener extends EventListener<UIImportForm> {
     public void execute(Event<UIImportForm> event) throws Exception {
       UIImportForm uiForm = event.getSource() ;
