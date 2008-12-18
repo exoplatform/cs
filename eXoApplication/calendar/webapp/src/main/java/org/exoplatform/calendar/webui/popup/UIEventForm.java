@@ -1221,7 +1221,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
             if(currentCalendar == null) {
               uiPopupAction.deActivate() ;
               event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-              event.getRequestContext().addUIComponentToUpdateByAjax(calendarPortlet) ;
+              //event.getRequestContext().addUIComponentToUpdateByAjax(calendarPortlet) ;
               uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1));
               event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
               return ;
@@ -1340,9 +1340,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
                   }
                 }
               }
-              
-              // hung.hoang
-              // if(calendarView instanceof UIListContainer)((UIListContainer)calendarView).setDisplaySearchResult(false) ;   
+                
               if(calendarView instanceof UIListContainer) {
                 UIListContainer uiListContainer = (UIListContainer)calendarView ;
                 if (!uiListContainer.isDisplaySearchResult()) {
