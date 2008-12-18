@@ -121,29 +121,30 @@ body {
 	width: 220px;
 }
 
-.SideBar {
-	padding: 8px 8px 22px 8px;
-	border: 1px solid #dedede;
-	background: white;
+.SideBar { 
+background:white none repeat scroll 0 0;
+border:1px solid #DEDEDE;
+padding:14px 8px 22px;
 }
-
+.SideBarContainer {
+  text-align: center;
+}
 .SideBar .DownloadButton{
 	background: #f1f1f1 url('DefaultSkin/background/DownloadButton.gif') no-repeat ;
 	width: 192px; height: 89px;
 	margin:18px 0px 0px 0px;
 }
 
-.SideBar .NormalText{
-	padding-left: 30px;
-	color: #3d3d3d;
+.SideBar .NormalText { 
+    color:#3D3D3D;
+    line-height:16px;
 }
 
-.SideBar .DotLine{
-	background: url('DefaultSkin/background/DotLine.gif') repeat-x ;
-	height: 1px;
-	margin: 10px;
+.SideBar .DotLine {
+   background:transparent url(DefaultSkin/background/DotLine.gif) repeat-x scroll 0 0;
+   height:1px;
+   margin:12px 10px;
 }
-
 .SideBar .LeftButton {
 	background: url('DefaultSkin/background/Button.gif') no-repeat left -33px;
 	padding-left: 17px;
@@ -161,16 +162,15 @@ body {
 	font-size: 18px;
 	font-family: tahoma;
 	font-weight: bold;
-	padding-left: 20px;
 	color: white;
 }
 
 .SideBar .SignUp {
-	font-size: 18px;
-	font-family: tahoma;
-	font-weight: bold;
-	padding-left: 70px;
-	color: #e63c00;
+   color:#E63C00;
+   font-family:tahoma;
+   font-size:18px;
+   font-weight:bold;
+   line-height:30px;
 }
 
 
@@ -181,12 +181,12 @@ body {
 	padding-bottom: 15px;
 }
 
-.SideBar .ProVersion {
-	font-family: tahoma;
-	font-weight: bold;
-	padding-left: 30px;
-	color: #5d8c18;
-	font-size: 12px;
+.SideBar .ProVersion { 
+   color:#5D8C18;
+   font-family:tahoma;
+   font-size:12px;
+   font-weight:bold;
+   line-height:18px;
 }
 
 /***************************UIBreadcumbsPortlet**************************/
