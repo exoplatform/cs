@@ -1588,8 +1588,11 @@ UICalendarPortlet.prototype.listViewDblClick = function(form){
 	var tr = eXo.core.DOMUtil.findDescendantsByClass(form,"tr","UIListViewRow");
 	var i = tr.length ;
 	eXo.calendar.UICalendarPortlet.viewType = "UIListView";
+	var chk = null ;
 	while(i--){
+		chk = eXo.core.DOMUtil.findFirstDescendantByClass(tr[i],"input","checkbox");
 		eXo.core.EventManager.addEvent(tr[i],"dblclick",this.ondblclickCallback);
+		chk.onclick = eXo.core.EventManager.cancelBubble;
 	}
 };
 
