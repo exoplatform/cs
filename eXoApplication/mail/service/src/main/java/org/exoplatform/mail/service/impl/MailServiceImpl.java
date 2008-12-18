@@ -603,9 +603,13 @@ public class MailServiceImpl implements MailService, Startable {
         for (int k = filteredMsgNumber - 1; k >= 0; k--) {
           if (msgMap.containsKey(filteredMsg[k])) {
             filterList = msgMap.get(filteredMsg[k]);
+            msgMap.remove(filteredMsg[k]);
           } else {
             filterList = new ArrayList<String>();
           }
+          
+          if (filterList == null) filterList = new ArrayList<String>();
+          
           filterList.add(filter.getId());
           if (fromDate != null && toDate != null) {
             if (betweenTime || (!(isImap && !MimeMessageParser.getReceivedDate(filteredMsg[k]).getTime().before(toDate)))) {
@@ -792,12 +796,11 @@ public class MailServiceImpl implements MailService, Startable {
           Date lastCheckedDate = account.getLastCheckedDate();
           Date lastCheckedFromDate = account.getLastStartCheckingTime();
           Date checkFromDate = account.getCheckFromDate();
-          boolean isCheckAll = account.isCheckAll();
           
           List<MessageFilter> filters = getFilters(sProvider, username, accountId);
           LinkedHashMap<javax.mail.Message, List<String>> msgMap = new LinkedHashMap<javax.mail.Message, List<String>>();
           
-          if (isCheckAll) {
+          if (checkFromDate == null) {
             if (lastCheckedDate != null && lastCheckedFromDate != null) {
               msgMap = getMessages(msgMap, folder, isImap, lastCheckedFromDate, null, filters);
               msgMap = getMessages(msgMap, folder, isImap, null, lastCheckedDate, filters);
@@ -808,7 +811,7 @@ public class MailServiceImpl implements MailService, Startable {
             }  else {
               msgMap = getMessages(msgMap, folder, isImap, null, null, filters);
             }
-          } else if (checkFromDate != null) {
+          } else {
             if (lastCheckedDate != null && lastCheckedFromDate != null) {
               msgMap = getMessages(msgMap, folder, isImap, lastCheckedFromDate, null, filters);
               msgMap = getMessages(msgMap, folder, isImap, checkFromDate, lastCheckedDate, filters);
@@ -882,6 +885,7 @@ public class MailServiceImpl implements MailService, Startable {
                 if (filterList != null && filterList.size() > 0) {
                   String tagId;
                   for (int j = 0; j < filterList.size(); j++) {
+                    System.out.println("===============dddd====>>>>>>>>>>>" + filterList.size());
                     filter = getFilterById(sProvider, username, accountId, filterList.get(j));
                     folderList.add(filter.getApplyFolder());
                     tagId = filter.getApplyTag();
@@ -901,12 +905,12 @@ public class MailServiceImpl implements MailService, Startable {
                     folderStr += folderIds[k] + ",";
                   }
                   checkingLog_.get(key).setFetchingToFolders(folderStr);
-                  
-                  receivedDate = MimeMessageParser.getReceivedDate(msg).getTime();
-                  if (i == 0) lastFromDate = receivedDate;                  
-                  account.setLastCheckedDate(receivedDate);
-                  if (i == (totalNew - 1)) account.setCheckFromDate(lastFromDate);
                 }
+                
+                receivedDate = MimeMessageParser.getReceivedDate(msg).getTime();
+                if (i == 0) lastFromDate = receivedDate;                  
+                account.setLastCheckedDate(receivedDate);
+                if ((i == (totalNew - 1))) account.setCheckFromDate(lastFromDate);
                 
                 if (lastFromDate != null && (account.getLastStartCheckingTime() == null || account.getLastStartCheckingTime().before(lastFromDate))) {
                   account.setLastStartCheckingTime(lastFromDate);
