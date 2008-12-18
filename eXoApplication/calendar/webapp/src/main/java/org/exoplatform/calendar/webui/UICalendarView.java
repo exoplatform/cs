@@ -747,7 +747,10 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         UIPopupContainer uiPopupContainer = uiPortlet.createUIComponent(UIPopupContainer.class, null, null) ;
         CalendarEvent eventCalendar = null ;
         String eventId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
+
+        // cs-1825
+        //event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView.getParent()) ;
         if(uiCalendarView instanceof UIListView ) {
           UIListContainer listContainer = uiCalendarView.getAncestorOfType(UIListContainer.class) ;
           UIListView uiListView = listContainer.findFirstComponentOfType(UIListView.class) ;
@@ -924,7 +927,9 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         CalendarSetting setting = calendarService.getCalendarSetting(uiCalendarView.getSession(), username) ;
         uiViewContainer.refresh() ;
         uiPortlet.setCalendarSetting(setting) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
+        
+        //cs-1825
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiViewContainer) ;
       }
     }
     static public class TaskViewActionListener extends EventListener<UICalendarView> {
