@@ -600,17 +600,18 @@ public class MailServiceImpl implements MailService, Startable {
             }
           }
         }
+    
         for (int k = filteredMsgNumber - 1; k >= 0; k--) {
           if (msgMap.containsKey(filteredMsg[k])) {
             filterList = msgMap.get(filteredMsg[k]);
-            msgMap.remove(filteredMsg[k]);
           } else {
             filterList = new ArrayList<String>();
           }
           
           if (filterList == null) filterList = new ArrayList<String>();
           
-          filterList.add(filter.getId());
+          if (!filterList.contains(filter.getId())) filterList.add(filter.getId());
+          
           if (fromDate != null && toDate != null) {
             if (betweenTime || (!(isImap && !MimeMessageParser.getReceivedDate(filteredMsg[k]).getTime().before(toDate)))) {
               betweenTime = true ;
@@ -885,7 +886,6 @@ public class MailServiceImpl implements MailService, Startable {
                 if (filterList != null && filterList.size() > 0) {
                   String tagId;
                   for (int j = 0; j < filterList.size(); j++) {
-                    System.out.println("===============dddd====>>>>>>>>>>>" + filterList.size());
                     filter = getFilterById(sProvider, username, accountId, filterList.get(j));
                     folderList.add(filter.getApplyFolder());
                     tagId = filter.getApplyTag();
