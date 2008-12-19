@@ -32,7 +32,7 @@ UIContactPortlet.prototype.showContextMenu = function(compid) {
 UIContactPortlet.prototype.fixForIE = function(cpid) {
 	var comp = document.getElementById(cpid);
 	var uiReiszableBlock = eXo.core.DOMUtil.findAncestorByClass(comp,"UIResizableBlock");
-	uiReiszableBlock.onscroll = eXo.webui.UIContextMenu.hide ;
+	if(uiReiszableBlock) uiReiszableBlock.onscroll = eXo.webui.UIContextMenu.hide ;
 };
 
 UIContactPortlet.prototype.contactCallback = function(evt) {	
