@@ -26,11 +26,16 @@ UIContactPortlet.prototype.showContextMenu = function(compid) {
   UIContextMenuCon.attach('ShareAddressBook', 'UIAddressBookPopupMenu1') ;
   UIContextMenuCon.attach('PublicAddressBook', 'UIAddressBookPopupMenu2') ;
 	UIContextMenuCon.attach('TagList', 'UITagPopupMenu') ;
+	this.fixForIE(compid);
 } ;
 
-UIContactPortlet.prototype.contactCallback = function(evt) {
-	
-	
+UIContactPortlet.prototype.fixForIE = function(cpid) {
+	var comp = document.getElementById(cpid);
+	var uiReiszableBlock = eXo.core.DOMUtil.findAncestorByClass(comp,"UIResizableBlock");
+	uiReiszableBlock.onscroll = eXo.webui.UIContextMenu.hide ;
+};
+
+UIContactPortlet.prototype.contactCallback = function(evt) {	
 	var UIContextMenuCon = eXo.webui.UIContextMenuCon ;
   var DOMUtil = eXo.core.DOMUtil ;
 	var _e = window.event || evt ;
