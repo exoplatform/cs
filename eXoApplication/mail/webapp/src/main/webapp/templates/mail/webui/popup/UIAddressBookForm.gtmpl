@@ -137,7 +137,7 @@
 												if (selectedContact.getContactType().equals("0") && selectedContact.isOwner()&& selectedContact.getOwnerId().equals(MailUtils.getCurrentUser())) icon = "OwnerIcon" ; 	
 								  		%>
                         <div class="State $icon"><%=selectedContact.getFullName()%></div>
-                        <div class="Job"><%= (selectedContact.getJobTitle() != null) ? selectedContact.getJobTitle() : "_"%></div>
+                        <div class="Job"><%= (selectedContact.getJobTitle() != null) ? selectedContact.getJobTitle() : ""%></div>
                       </div>
                       <div style="clear: left;"><span></span></div>
                       <div class="InfoContainer">
@@ -178,6 +178,8 @@
                               </td>
                             </tr>
                             <% } %>
+                            
+                      <!--      // cs-2012
                             <% if (!MailUtils.isFieldEmpty(selectedContact.getJobTitle())) { %>
                             <tr>
                               <td class="InfoLabel">
@@ -194,6 +196,8 @@
                               </td>
                             </tr>
                             <% } %>
+                            -->
+                            
                           </table>
                          </div>
                          <div class="RightContent">
