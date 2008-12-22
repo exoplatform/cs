@@ -455,7 +455,7 @@ public class JCRDataStorage {
     Node privateContactHome = getUserContactHome(sysProvider, username);
     for(Contact contact : contacts) {
       if(addressType.equals(PRIVATE)) {        
-        saveContact(sysProvider, username, contact, false) ; // ? why false
+        saveContact(sysProvider, username, contact, false) ;
       }else if(addressType.equals(SHARED)) {
        saveContactToSharedAddressBook(username, contact.getAddressBook()[0], contact, true) ;
        if (privateContactHome.hasNode(contact.getId()))
@@ -1424,8 +1424,11 @@ public class JCRDataStorage {
             addressBook = iter1.nextProperty().getParent() ;
             Node contacts = addressBook.getParent().getParent().getNode(CONTACTS) ;
             // loop all shared address books; faster if parameter is : List<contact>
+            //cs-1962            
             if(contacts.hasNode(contactId)) {
               contactNode = contacts.getNode(contactId) ;
+              if (!Arrays.asList(ValuesToStrings(contactNode.getProperty("exo:categories").getValues()))
+                  .contains(contacts.getProperty("exo:id").getString())) contactNode = null ;      
               break ;
             }
           }
@@ -1498,7 +1501,7 @@ public class JCRDataStorage {
       query = qm.createQuery(queryString.toString(), Query.XPATH);
       removeTagInContacts(query.execute().getNodes(), tagId) ;
       } finally {
-        sysProvider.close();
+        //sysProvider.close();
       }
       
       // query on shared contacts
