@@ -134,7 +134,7 @@
 		  						String classIcon = event.getEventType() + "Icon" ;
 		  						String actionLink = uicomponent.event("ViewDetail", event.getId()+"&calendarId="+event.getCalendarId()+"&calType="+event.getCalType()) ;		  
 		  					%>
-  						<tr actionLink="$actionLink" onclick="return eXo.calendar.UICalendarPortlet.listViewClickCallback(this);" class="UIListViewRow" style="$rowStyle" eventid="<%=event.getId()%>" calid="<%=event.getCalendarId()%>" calType=<%=event.getCalType()%>>
+  						<tr actionLink="$actionLink" onclick="eXo.calendar.UICalendarPortlet.listViewClickCallback(this);" class="UIListViewRow" style="$rowStyle" eventid="<%=event.getId()%>" calid="<%=event.getCalendarId()%>" calType=<%=event.getCalType()%>>
 		  					<%if(!isDisplaySearchResult) {%>
 		  					<td><%uicomponent.renderField(uicomponent.getChildById(event.getId()))%></td>
 		  					<%}%>

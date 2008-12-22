@@ -481,7 +481,7 @@ EventManager.prototype.cancelBubble = function(evt) {
 };
 
 EventManager.prototype.cancelEvent = function(evt) {
-	this.cancelBubble(evt) ;
+	eXo.core.EventManager.cancelBubble(evt) ;
   if(eXo.core.Browser.browserType == 'ie')
     window.event.returnValue = true ;
   else
