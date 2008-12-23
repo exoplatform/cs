@@ -21,7 +21,6 @@ import java.io.OutputStream;
 import java.util.List;
 
 import org.exoplatform.container.component.ComponentPlugin;
-import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 
@@ -413,6 +412,8 @@ public interface MailService {
    * @throws Exception
    */
   public void sendMessages(List<Message> msgList, ServerConfiguration serverConfig) throws Exception ;
+  
+  public Message sendMessage(SessionProvider sProvider, String username, Account acc, Message message) throws Exception ;
   
   public Message sendMessage(SessionProvider sProvider, String username, String accId, Message message) throws Exception ;
   

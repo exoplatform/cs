@@ -674,8 +674,15 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
       } catch (AuthenticationFailedException e) {
-        uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.the-username-or-password-may-be-wrong-sending-failed", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        UIPopupActionContainer uiActionContainer = composeForm.getAncestorOfType(UIPopupActionContainer.class) ;
+        UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
+        UIEnterPasswordDialog enterPasswordDialog =  uiChildPopup.createUIComponent(UIEnterPasswordDialog.class, null, null);
+        enterPasswordDialog.setAccountId(accountId);
+        enterPasswordDialog.setSendMessage(message);
+        uiChildPopup.activate(enterPasswordDialog, 600, 0) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
+        //uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.the-username-or-password-may-be-wrong-sending-failed", null)) ;
+        //event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return;
       } catch (SMTPSendFailedException e) {
         uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.sorry-there-was-an-error-sending-the-message-sending-failed", null)) ;
@@ -689,24 +696,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
 
       // save to Sent folder and update the number of total messages in Sent folder
       try {
-        MailSetting setting = mailSvr.getMailSetting(session, usename);
-        boolean isSaved = setting.saveMessageInSent();
-        boolean fromDrafts = composeForm.fromDrafts();
-        if (!fromDrafts && isSaved) {
-          message.setReplyTo(message.getMessageTo()) ;
-          message.setFolders(new String[]{ Utils.createFolderId(accountId, Utils.FD_SENT, false) }) ;
-          mailSvr.saveMessage(session, usename, accountId, composeForm.parentPath_, message, true) ;
-        } else if (fromDrafts) {
-          Folder drafts = mailSvr.getFolder(session, usename, accountId, Utils.createFolderId(accountId, Utils.FD_DRAFTS, false));
-          if (isSaved) {
-            message.setFolders(new String[]{ Utils.createFolderId(accountId, Utils.FD_SENT, false) }) ;
-            mailSvr.saveMessage(session, usename, accountId, composeForm.parentPath_, message, false) ;
-          } else {
-            mailSvr.removeMessage(session, usename, accountId, message);
-          }
-          drafts.setTotalMessage(drafts.getTotalMessage() - 1);
-          mailSvr.saveFolder(session, usename, accountId, drafts);
-        }
+        composeForm.saveToSentFolder(usename, accountId, message);
         // update ui
         UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
         uiMessageList.updateList();
@@ -720,6 +710,29 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         composeForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
       }
+    }
+  }
+  
+  public void saveToSentFolder(String usename, String accountId, Message message) throws Exception {
+    SessionProvider session = SessionProviderFactory.createSystemProvider();
+    MailService mailSvr = getApplicationComponent(MailService.class) ;
+    MailSetting setting = mailSvr.getMailSetting(session, usename);
+    boolean isSaved = setting.saveMessageInSent();
+    boolean fromDrafts = fromDrafts();
+    if (!fromDrafts && isSaved) {
+      message.setReplyTo(message.getMessageTo()) ;
+      message.setFolders(new String[]{ Utils.createFolderId(accountId, Utils.FD_SENT, false) }) ;
+      mailSvr.saveMessage(session, usename, accountId, parentPath_, message, true) ;
+    } else if (fromDrafts) {
+      Folder drafts = mailSvr.getFolder(session, usename, accountId, Utils.createFolderId(accountId, Utils.FD_DRAFTS, false));
+      if (isSaved) {
+        message.setFolders(new String[]{ Utils.createFolderId(accountId, Utils.FD_SENT, false) }) ;
+        mailSvr.saveMessage(session, usename, accountId, parentPath_, message, false) ;
+      } else {
+        mailSvr.removeMessage(session, usename, accountId, message);
+      }
+      drafts.setTotalMessage(drafts.getTotalMessage() - 1);
+      mailSvr.saveFolder(session, usename, accountId, drafts);
     }
   }
 

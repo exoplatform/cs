@@ -19,6 +19,7 @@ package org.exoplatform.mail.webui;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.webui.popup.UIAccountSetting;
 import org.exoplatform.mail.webui.popup.UIAddressBookForm;
 import org.exoplatform.mail.webui.popup.UIComposeForm;
 import org.exoplatform.mail.webui.popup.UIEventForm;
@@ -50,7 +51,8 @@ import org.exoplatform.webui.event.EventListener;
         @EventConfig(listeners = UIActionBar.AddressActionListener.class),
         @EventConfig(listeners = UIActionBar.AddEventActionListener.class),
         @EventConfig(listeners = UIActionBar.FilterActionListener.class),
-        @EventConfig(listeners = UIActionBar.MailSettingsActionListener.class)
+        @EventConfig(listeners = UIActionBar.MailSettingsActionListener.class),
+        @EventConfig(listeners = UIActionBar.AccountSettingsActionListener.class)
     }
 )
 
@@ -173,4 +175,25 @@ public class UIActionBar extends UIContainer {
     }
   }
 
+  static public class AccountSettingsActionListener extends EventListener<UIActionBar> {
+    public void execute(Event<UIActionBar> event) throws Exception {
+      UIActionBar uiForm = event.getSource() ;
+      UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
+      UISelectAccount uiSelectAcc = uiPortlet.findFirstComponentOfType(UISelectAccount.class);
+      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      if(Utils.isEmptyField(uiSelectAcc.getSelectedValue())) {
+        uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty", null)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      } 
+      UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
+      UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 800) ;
+      uiPopupContainer.setId("UIAccountPopupSetting");
+      UIAccountSetting uiAccountSetting = uiPopupContainer.createUIComponent(UIAccountSetting.class, null, null);
+      uiPopupContainer.addChild(uiAccountSetting) ; 
+      uiAccountSetting.setSelectedAccountId(uiSelectAcc.getSelectedValue());
+      uiAccountSetting.fillField();     
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+    }
+  }
 }
