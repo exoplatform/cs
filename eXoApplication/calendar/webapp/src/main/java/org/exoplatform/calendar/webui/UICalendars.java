@@ -462,14 +462,21 @@ public class UICalendars extends UIForm  {
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
       popupAction.deActivate() ;
       CalendarService calService = CalendarUtils.getCalendarService() ;
+      if(CalendarUtils.SHARED_TYPE.equalsIgnoreCase(calType)) {
+        UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UICalendars.msg.not-support-edit-share-calendar", null, 1)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarPortlet) ;
+        return ;
+      }
       try {
         Calendar calendar = null ;
         if(CalendarUtils.PRIVATE_TYPE.equals(calType)) { 
           calendar = calService.getUserCalendar(uiComponent.getSession(), username, calendarId) ;
-        } else if(CalendarUtils.SHARED_TYPE.equals(calType)) {
-          if(calService.getSharedCalendars(uiComponent.getSystemSession(), username, true) != null)
+        }/* else if(CalendarUtils.SHARED_TYPE.equals(calType)) {
+           if(calService.getSharedCalendars(uiComponent.getSystemSession(), username, true) != null)
             calendar = calService.getSharedCalendars(uiComponent.getSystemSession(), username, true).getCalendarById(calendarId) ;
-        } else if (CalendarUtils.PUBLIC_TYPE.equals(calType)) {
+        }*/ else if (CalendarUtils.PUBLIC_TYPE.equals(calType)) {
           calendar = calService.getGroupCalendar(uiComponent.getSystemSession(), calendarId) ;
         }
         if(calendar == null){
