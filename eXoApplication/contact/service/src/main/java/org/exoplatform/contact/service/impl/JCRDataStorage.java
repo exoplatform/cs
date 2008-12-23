@@ -1301,7 +1301,8 @@ public class JCRDataStorage {
       it = result.getNodes();    
       while (it.hasNext()) {
         Contact contact = getContact(it.nextNode(), SHARED);
-        contacts.put(contact.getId(), contact) ;
+        if (Arrays.asList(contact.getAddressBook()).contains(addressBook.getProperty("exo:id").getString()))
+          contacts.put(contact.getId(), contact) ;
       }
     }
     return new DataPageList(Arrays.asList(contacts.values().toArray(new Contact[] {})), 10, null, false) ;
@@ -1348,6 +1349,8 @@ public class JCRDataStorage {
             // loop all shared address books; faster if parameter is : List<contact>
             if(contacts.hasNode(contactId)) {
               contactNode = contacts.getNode(contactId) ;
+              if (!Arrays.asList(ValuesToStrings(contactNode.getProperty("exo:categories").getValues()))
+                  .contains(addressBook.getProperty("exo:id").getString())) contactNode = null ;
               break ;
             }
           }
@@ -1368,7 +1371,7 @@ public class JCRDataStorage {
       }
     }
        } finally {
-        if (sysProvider == null) sysProvider.close();
+        if (sysProvider != null) sysProvider.close();
       }   
     
   }
@@ -1428,7 +1431,7 @@ public class JCRDataStorage {
             if(contacts.hasNode(contactId)) {
               contactNode = contacts.getNode(contactId) ;
               if (!Arrays.asList(ValuesToStrings(contactNode.getProperty("exo:categories").getValues()))
-                  .contains(contacts.getProperty("exo:id").getString())) contactNode = null ;      
+                  .contains(addressBook.getProperty("exo:id").getString())) contactNode = null ;      
               break ;
             }
           }
@@ -1577,6 +1580,8 @@ public class JCRDataStorage {
             // loop all shared address books; faster if parameter is : List<contact>
             if(contacts.hasNode(contactId)) {
               contactNode = contacts.getNode(contactId) ;
+              if (!Arrays.asList(ValuesToStrings(contactNode.getProperty("exo:categories").getValues()))
+                  .contains(addressBook.getProperty("exo:id").getString())) contactNode = null ;
               break ;
             }
           }

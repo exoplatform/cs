@@ -140,8 +140,10 @@
 			if (contact != null) {
 				ContactAttachment att = contact.getAttachment() ;
 				if (att != null) {	
-					imageLink = "/"+uiForm.getPortalName()+"/rest/jcr/" +uiForm.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
-					imageLink = imageLink + "?rnd=" + System.currentTimeMillis();
+					try {
+						imageLink = "/"+uiForm.getPortalName()+"/rest/jcr/" +uiForm.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
+						imageLink = imageLink + "?rnd=" + System.currentTimeMillis();
+					} catch (Exception e) {}
 				}
 			}
 		%>

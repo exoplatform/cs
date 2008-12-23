@@ -656,9 +656,11 @@
 			  		<% 
 			  		String img = "/contact/skin/DefaultSkin/webui/background/Img2.gif" ;
 								ContactAttachment att = contact.getAttachment() ;
-								if (att != null) {		
-									img = "/"+uicomponent.getPortalName()+"/rest/jcr/" +uicomponent.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
-									img = img + "?rnd=" + System.currentTimeMillis();
+								if (att != null) {	
+									try {	
+										img = "/"+uicomponent.getPortalName()+"/rest/jcr/" +uicomponent.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
+										img = img + "?rnd=" + System.currentTimeMillis();
+									} catch (Exception e) {}
 								}
 			  		%>
 						<img src="$img" width=63 height=81 class="AvatasIcon"/>	
@@ -825,8 +827,10 @@
 			  		img = "/contact/skin/DefaultSkin/webui/background/Img2.gif" ;
 								att = contact.getAttachment() ;
 								if (att != null) {	
-									img = "/"+uicomponent.getPortalName()+"/rest/jcr/" +uicomponent.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
-									img = img + "?rnd=" + System.currentTimeMillis();
+									try {
+										img = "/"+uicomponent.getPortalName()+"/rest/jcr/" +uicomponent.getRepository()+"/" + att.getWorkspace()+att.getDataPath() ;
+										img = img + "?rnd=" + System.currentTimeMillis();
+									} catch (Exception e) {}
 								}
 			  		%>
 						<img src="$img" width=63 height=81 class="AvatasIcon"/>
