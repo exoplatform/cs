@@ -196,15 +196,16 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       } 
       List<String> contactIds = new ArrayList<String>() ;
       UIContacts uiContacts = uiContactPortlet.findFirstComponentOfType(UIContacts.class) ;
-      for (Contact contact : uiTagForm.contacts_) {
-        Map<String, String> newTagIds = new LinkedHashMap<String, String>() ;
-        for (String key : tagIds.keySet()) newTagIds.put(key, key) ;
-        if (contact.getTags() != null)
-          for (String tagId : contact.getTags()) newTagIds.put(tagId, tagId) ;
-        contact.setTags(newTagIds.keySet().toArray(new String[] {})) ;
-        contactIds.add(contact.getId() + JCRDataStorage.SPLIT + contact.getContactType()) ;
-      }
       try {
+        for (Contact contact : uiTagForm.contacts_) {
+          if (contact == null) throw new PathNotFoundException() ;
+          Map<String, String> newTagIds = new LinkedHashMap<String, String>() ;
+          for (String key : tagIds.keySet()) newTagIds.put(key, key) ;
+          if (contact.getTags() != null)
+            for (String tagId : contact.getTags()) newTagIds.put(tagId, tagId) ;
+          contact.setTags(newTagIds.keySet().toArray(new String[] {})) ;
+          contactIds.add(contact.getId() + JCRDataStorage.SPLIT + contact.getContactType()) ;
+        }      
         contactService.addTag(sessionProvider, username, contactIds, tags);
       } catch (PathNotFoundException e) {
         uiApp.addMessage(new ApplicationMessage("UITagForm.msg.contact-not-existed", null, 

@@ -29,9 +29,11 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.jcr.PathNotFoundException;
+import javax.jcr.RepositoryException;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
+import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactPageList;
@@ -484,11 +486,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         try {
           contact = service.getContact(SessionProviderFactory.createSessionProvider(), username, contactId) ;
         } catch (NullPointerException e) {
-          UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
-          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-deleted", null,
-              ApplicationMessage.WARNING)) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          return ;
+          contact = null ;
         }        
       } else  {// shared
         try {
@@ -499,16 +497,18 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         if (contact == null) {
           try {
             contact = service.getSharedContactAddressBook(username, contactId) ;            
-          } catch (NullPointerException e) { }
-          if (contact == null) {
-            UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
-            uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-deleted", null,
-                ApplicationMessage.WARNING)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-            return ;
-          }          
+          } catch (NullPointerException e) { }          
         }
       }
+      if (contact == null) {
+        UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-deleted", null,
+            ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
+     
+      
 //    avoid cache id of edited old contact
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
       UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
