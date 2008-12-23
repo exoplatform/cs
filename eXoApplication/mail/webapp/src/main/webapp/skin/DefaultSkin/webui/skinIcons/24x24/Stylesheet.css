@@ -58,6 +58,10 @@
 	background: url('icons/SettingsIcon.gif') no-repeat left center;
 }
 
+.UIMailPortlet .AccountSettingIcon {
+	background: url('icons/AccountSetting.gif') no-repeat left;
+}
+
 .UIMailPortlet .AddEventIcon {
 	background: url('icons/AddEvent.gif') no-repeat left;
 }

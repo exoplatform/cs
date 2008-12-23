@@ -268,6 +268,11 @@ public class MailServiceImpl implements MailService, Startable {
   public Message sendMessage(SessionProvider sProvider, String username, String accId,
       Message message) throws Exception {
     Account acc = getAccountById(sProvider, username, accId);
+    return sendMessage(sProvider, username, acc, message);
+  }
+  
+  public Message sendMessage(SessionProvider sProvider, String username, Account acc,
+      Message message) throws Exception {   
     String smtpUser = acc.getIncomingUser();
     String outgoingHost = acc.getOutgoingHost();
     String outgoingPort = acc.getOutgoingPort();
