@@ -19,6 +19,7 @@ package org.exoplatform.calendar.webui.popup;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -45,6 +46,10 @@ import org.exoplatform.calendar.webui.UIListContainer;
 import org.exoplatform.calendar.webui.UIListView;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
 import org.exoplatform.calendar.webui.UIPreview;
+import org.exoplatform.contact.service.Contact;
+import org.exoplatform.contact.service.ContactFilter;
+import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.service.DataPageList;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
@@ -738,6 +743,25 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
         UIPopupAction uiPopupAction  = uiPopupContainer.getChild(UIPopupAction.class) ;
         UIAddressForm uiAddressForm = uiPopupAction.activate(UIAddressForm.class, 640) ;
         uiAddressForm.setContactList("") ;
+        String oldAddress = uiForm.getEmailAddress() ;
+        List<Contact> allContact = new ArrayList<Contact>() ;
+        ContactService contactService = uiAddressForm.getApplicationComponent(ContactService.class) ;
+        String username = CalendarUtils.getCurrentUser() ;
+        DataPageList dataList = contactService.searchContact(SessionProviderFactory.createSessionProvider(), username,new ContactFilter()) ;
+        allContact = dataList.getAll() ;
+        if(!allContact.isEmpty()) {
+          if(!CalendarUtils.isEmpty(oldAddress)) {
+            for(String address : oldAddress.split(",")) {
+              for(Contact c : allContact){
+                if(!CalendarUtils.isEmpty(c.getEmailAddress())) {
+                  if(Arrays.asList(c.getEmailAddress().split(";")).contains(address.trim())) {
+                    uiAddressForm.checkedList_.put(c.getId(), c) ;
+                  }
+                }
+              }
+            }
+          }
+        }
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       }
     }

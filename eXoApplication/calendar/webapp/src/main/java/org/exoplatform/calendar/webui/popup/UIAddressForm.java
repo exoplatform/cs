@@ -53,7 +53,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
     template =  "app:/templates/calendar/webui/UIPopup/UIAddressForm.gtmpl",
     events = {
       @EventConfig(listeners = UIAddressForm.AddActionListener.class), 
-      @EventConfig(listeners = UIAddressForm.ReplaceActionListener.class),
+      @EventConfig(listeners = UIAddressForm.ReplaceActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIAddressForm.SearchActionListener.class), 
       @EventConfig(listeners = UIAddressForm.ShowPageActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIAddressForm.ChangeGroupActionListener.class, phase = Phase.DECODE),
@@ -175,7 +175,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   }
   public List<ContactData> getCheckedContact() throws Exception {
     List<ContactData> contactList = new ArrayList<ContactData>();  
-    for (ContactData contact : getContacts()) {
+    for (ContactData contact : new ArrayList<ContactData>(uiPageIterator_.getCurrentPageData())) {
       UIFormCheckBoxInput<Boolean> uiCheckbox = getChildById(contact.getId());
       if (uiCheckbox!=null && uiCheckbox.isChecked()) {
         contactList.add(contact);
