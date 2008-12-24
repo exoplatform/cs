@@ -480,6 +480,13 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIContacts uiContacts = event.getSource();
       String contactId = event.getRequestContext().getRequestParameter(OBJECTID);
       Contact contact = uiContacts.contactMap.get(contactId) ;
+      if (contact == null) {
+        UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-deleted", null, ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+        return ;
+      }
       ContactService service = ContactUtils.getContactService() ;
       String username = ContactUtils.getCurrentUser() ;
       if (contact.getContactType().equalsIgnoreCase(JCRDataStorage.PRIVATE)) {
@@ -505,6 +512,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-deleted", null,
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
         return ;
       }
      
@@ -539,9 +547,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UIContactForm uiContactForm = popupContainer.addChild(UIContactForm.class, null, null) ;
       uiContactForm.setValues(contact);
       uiContactForm.setNew(false) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
-      
-      
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;      
     }
   }
   
@@ -598,6 +604,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-deleted", null,
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
         return ;
       }
       
@@ -785,6 +792,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
             uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-not-existed", null
                                                     , ApplicationMessage.WARNING)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
             return ;
           }
           sharedContacts.add(contact) ; 
@@ -830,6 +838,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-deleted", null, 
               ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
           return ;          
         }
       }
@@ -874,7 +883,15 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       uiAddressBooks.setCopyAddress(null) ;
       Map<String, String> copyContacts = new LinkedHashMap<String, String>();
       for (String id : contactIds) {
-        copyContacts.put(id, uiContacts.contactMap.get(id).getContactType()) ;
+        Contact contact = uiContacts.contactMap.get(id) ;
+        if (contact == null) {
+          UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-deleted", null, ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+          return ; 
+        }
+        copyContacts.put(id, contact.getContactType()) ;
       }
       uiAddressBooks.setCopyContacts(copyContacts) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBooks) ;
