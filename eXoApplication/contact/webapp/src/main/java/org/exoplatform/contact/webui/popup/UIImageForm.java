@@ -122,7 +122,8 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
       uiProfileInputSet.setFileName(fileName) ;
       UIPopupAction popupAction = uiPopupActionContainer.getChild(UIPopupAction.class) ;
       popupAction.deActivate() ;
-
+      event.getRequestContext().addUIComponentToUpdateByAjax(popupAction);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContactForm.getChildById(UIContactForm.INPUT_PROFILETAB)) ;
     }
   }
 
@@ -131,6 +132,7 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
       UIImageForm uiForm = event.getSource() ;
       UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
       uiPopupAction.deActivate() ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
      }
   }  
 }
