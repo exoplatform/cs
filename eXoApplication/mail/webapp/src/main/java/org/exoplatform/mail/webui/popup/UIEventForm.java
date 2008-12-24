@@ -606,8 +606,10 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
           if(!CalendarUtils.isEmpty(oldAddress)) {
             for(String address : oldAddress.split(",")) {
               for(Contact c :allContact){
-                if(Arrays.asList(c.getEmailAddress().split(";")).contains(address.trim())) {
-                  AddressForm.checkedList_.put(c.getId(), c) ;
+                if(!CalendarUtils.isEmpty(c.getEmailAddress())) {
+                  if(Arrays.asList(c.getEmailAddress().split(";")).contains(address.trim())) {
+                    AddressForm.checkedList_.put(c.getId(), c) ;
+                  }
                 }
               }
             }

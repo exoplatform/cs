@@ -45,11 +45,11 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.UIFormUploadInput;
+import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 /**
  * Created by The eXo Platform SARL
@@ -58,14 +58,14 @@ import org.exoplatform.webui.form.UIFormUploadInput;
  * Aus 01, 2007 2:48:18 PM 
  */
 @ComponentConfig(
-    lifecycle = UIFormLifecycle.class,
-    template = "app:/templates/calendar/webui/UIPopup/UIImportForm.gtmpl",
-    events = {
-      @EventConfig(listeners = UIImportForm.SaveActionListener.class),  
-      @EventConfig(listeners = UIImportForm.OnChangeActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UIImportForm.AddActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UIImportForm.CancelActionListener.class, phase = Phase.DECODE)
-    }
+                 lifecycle = UIFormLifecycle.class,
+                 template = "app:/templates/calendar/webui/UIPopup/UIImportForm.gtmpl",
+                 events = {
+                   @EventConfig(listeners = UIImportForm.SaveActionListener.class),  
+                   @EventConfig(listeners = UIImportForm.ImportActionListener.class, phase = Phase.DECODE),
+                   @EventConfig(listeners = UIImportForm.AddActionListener.class, phase = Phase.DECODE),
+                   @EventConfig(listeners = UIImportForm.CancelActionListener.class, phase = Phase.DECODE)
+                 }
 )
 public class UIImportForm extends UIForm implements UIPopupComponent{
 
@@ -78,7 +78,6 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
 
   final static public String TYPE = "type".intern() ;
   final static public String FIELD_UPLOAD = "upload".intern() ;
-  final static public String FIELD_ISADD = "isAddTo".intern() ;
   final static public String FIELD_TO_CALENDAR = "impotTo".intern() ;
   final static public String ONCHANGE = "OnChange".intern() ;
   final static public int UPDATE_EXIST = 1 ;
@@ -94,44 +93,27 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
     }
     addUIFormInput(new UIFormSelectBox(TYPE, TYPE, options)) ;
     addUIFormInput(new UIFormUploadInput(FIELD_UPLOAD, FIELD_UPLOAD));
-    
-    UIFormCheckBoxInput<Boolean> isAddNew = new UIFormCheckBoxInput<Boolean>(FIELD_ISADD, FIELD_ISADD, false) ; 
-    addUIFormInput(isAddNew);
-    
     UIFormSelectBox privateCal = new UIFormSelectBox(FIELD_TO_CALENDAR, FIELD_TO_CALENDAR, getPrivateCalendars()) ; 
-    if(privateCal.getOptions() != null && !privateCal.getOptions().isEmpty()) {
-      isAddNew.setOnChange(ONCHANGE) ;
-    } else {
-      isAddNew.setRendered(false) ;
-    }
     addUIFormInput(privateCal);
-
-    addUIFormInput(new UIFormStringInput(DISPLAY_NAME, DISPLAY_NAME, null));
+    addUIFormInput(new UIFormStringInput(DISPLAY_NAME, DISPLAY_NAME, null).addValidator(MandatoryValidator.class));
     addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, null));
     addUIFormInput(new UIFormSelectBox(CATEGORY, CATEGORY, getCategory()));
     addUIFormInput(new UIFormSelectBox(LOCALE, LOCALE, getLocales()));
     addUIFormInput(new UIFormSelectBox(TIMEZONE, TIMEZONE, getTimeZones()));
     addUIFormInput(new UIFormColorPicker(SELECT_COLOR, SELECT_COLOR, Colors.COLORS));
-
   }
 
   public void init(String calId, String calType) {
     if(!CalendarUtils.isEmpty(calId) && calType.equalsIgnoreCase(String.valueOf(Calendar.TYPE_PRIVATE))) {
       UIFormSelectBox selectBox = getUIFormSelectBox(FIELD_TO_CALENDAR) ;
-      UIFormCheckBoxInput isAddNew = getUIFormCheckBoxInput(FIELD_ISADD) ;
       if(selectBox.getOptions()!= null && !selectBox.getOptions().isEmpty()) {
         switchMode(UPDATE_EXIST);
-        isAddNew.setRendered(true) ;
-        getUIFormCheckBoxInput(FIELD_ISADD).setChecked(true) ;
         selectBox.setValue(calId) ;
       } else {
-        isAddNew.setRendered(false) ;
         switchMode(ADD_NEW);
-        getUIFormCheckBoxInput(FIELD_ISADD).setChecked(false) ;
       }
     } else {
       switchMode(ADD_NEW);
-      getUIFormCheckBoxInput(FIELD_ISADD).setChecked(false) ;
     } 
   }
   private  List<SelectItemOption<String>> getCategory() throws Exception {
@@ -161,15 +143,12 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
       return id ;
     }
   }
-
   private List<SelectItemOption<String>> getLocales() {
     return CalendarUtils.getLocaleSelectBoxOptions(java.util.Calendar.getAvailableLocales()) ;
   }
-
   public String[] getActions(){
     return new String[]{"Save", "Cancel"} ;
   }
-
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
   public List<SelectItemOption<String>> getPrivateCalendars() {
@@ -183,7 +162,6 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
     }
     return options ;
   }
-
   public boolean isNew() {
     return flag_ == ADD_NEW ;
   }
@@ -205,22 +183,18 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
   protected String getLocale() {
     return getUIFormSelectBox(LOCALE).getValue() ;
   }
-
   public void switchMode(int flag) {
     flag_ = flag ;
     if(flag == UPDATE_EXIST) {
       getUIFormSelectBox(FIELD_TO_CALENDAR).setRendered(true);
-
       getUIStringInput(DISPLAY_NAME).setRendered(false);
       getUIFormTextAreaInput(DESCRIPTION).setRendered(false);
       getUIFormSelectBox(CATEGORY).setRendered(false);
       getUIFormSelectBox(TIMEZONE).setRendered(false);
       getUIFormSelectBox(LOCALE).setRendered(false);
       getChild(UIFormColorPicker.class).setRendered(false);
-
     } else if(flag == ADD_NEW) {
       getUIFormSelectBox(FIELD_TO_CALENDAR).setRendered(false);
-
       getUIStringInput(DISPLAY_NAME).setRendered(true);
       getUIFormTextAreaInput(DESCRIPTION).setRendered(true);
       getUIFormSelectBox(CATEGORY).setRendered(true);
@@ -230,12 +204,10 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
     } else {
       System.out.println("Wrong flag(" +flag+ ") only UPDATE_EXIST(1) or ADD_NEW(0) accept ");
     }
-
   }
 
   static  public class SaveActionListener extends EventListener<UIImportForm> {
     public void execute(Event<UIImportForm> event) throws Exception {
-
       String username = CalendarUtils.getCurrentUser() ;
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
       UIImportForm uiForm = event.getSource() ;
@@ -245,7 +217,6 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
       UploadService uploadService = (UploadService)PortalContainer.getComponent(UploadService.class) ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       UploadResource resource = uploadService.getUploadResource(input.getUploadId()) ;
-
       if(resource == null) {
         uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.file-name-error", null));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -306,31 +277,26 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
       }
     }
   }
-  static  public class OnChangeActionListener extends EventListener<UIImportForm> {
+  static  public class ImportActionListener extends EventListener<UIImportForm> {
     public void execute(Event<UIImportForm> event) throws Exception {
       UIImportForm uiForm = event.getSource() ;
-      UIFormCheckBoxInput isAdd = uiForm.getUIFormCheckBoxInput(FIELD_ISADD) ;
-      UIFormSelectBox select = uiForm.getUIFormSelectBox(FIELD_TO_CALENDAR) ;
-      if(!isAdd.isChecked()) {
-        uiForm.switchMode(ADD_NEW) ;
-      } else if(select.getOptions()!= null && !select.getOptions().isEmpty()) {
-        uiForm.switchMode(UPDATE_EXIST) ;
+      if(uiForm.getPrivateCalendars().isEmpty()) {
+        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar",null, ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;  
       } else {
-        uiForm.switchMode(ADD_NEW) ;
+        uiForm.switchMode(UPDATE_EXIST) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
       }
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
     }
   }  
-  
   static  public class AddActionListener extends EventListener<UIImportForm> {
     public void execute(Event<UIImportForm> event) throws Exception {
       UIImportForm uiForm = event.getSource() ;
-      uiForm.getUIFormCheckBoxInput(FIELD_ISADD).setChecked(false) ;
       uiForm.switchMode(ADD_NEW) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
     }
   } 
-  
   static  public class CancelActionListener extends EventListener<UIImportForm> {
     public void execute(Event<UIImportForm> event) throws Exception {
       UIImportForm uiForm = event.getSource() ;
