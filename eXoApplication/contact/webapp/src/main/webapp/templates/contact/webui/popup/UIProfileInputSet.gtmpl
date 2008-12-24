@@ -3,7 +3,8 @@
 	import org.exoplatform.contact.service.ContactAttachment;
 	import org.exoplatform.contact.service.Contact;
 %>
-<div class="Profile $uicomponent.id">
+<div id="$uicomponent.id" >
+<div class="Profile">
   <div class="FormContainer ProfileContainer">
 	  <table class="UIFormGrid">
       <tbody>
@@ -159,4 +160,5 @@
 	</div>
 	
 	<div style="clear: left;"><span></span></div>
-</div>        
+</div> 
+</div>       
