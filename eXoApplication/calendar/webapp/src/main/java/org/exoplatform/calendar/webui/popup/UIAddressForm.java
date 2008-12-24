@@ -18,11 +18,13 @@ package org.exoplatform.calendar.webui.popup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.commons.utils.ObjectPageList;
+import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactGroup;
 import org.exoplatform.contact.service.ContactService;
@@ -46,12 +48,6 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
-/**
- * Created by The eXo Platform SARL
- * Author : Pham Tuan
- *          phamtuanchip@gmail.com
- * Nov 06, 2007  
- */
 @ComponentConfig(
     lifecycle = UIFormLifecycle.class,
     template =  "app:/templates/calendar/webui/UIPopup/UIAddressForm.gtmpl",
@@ -71,6 +67,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   private String recipientsType = "";
   protected String selectedAddressId_ = "" ;
   private UIPageIterator uiPageIterator_ ;
+  public LinkedHashMap<String, Contact> checkedList_ = new LinkedHashMap<String, Contact>() ;
   public void setRecipientsType(String type)  {
     recipientsType=type;
   }
@@ -118,6 +115,10 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   public void deActivate() throws Exception {} 
   @SuppressWarnings("unchecked")
   public List<ContactData> getContacts() throws Exception { 
+    for(Contact c : checkedList_.values()) {
+      UIFormCheckBoxInput uiInput = getUIFormCheckBoxInput(c.getId()) ;
+      if(uiInput != null) uiInput.setChecked(true) ;
+    } 
     return new ArrayList<ContactData>(uiPageIterator_.getCurrentPageData());
   }
   @SuppressWarnings("unchecked")
@@ -214,10 +215,17 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       List<String> listMail = Arrays.asList( sb.toString().split(CalendarUtils.COMMA)) ; 
       String email = null ;
       for(ContactData c : uiForm.getCheckedContact()) {
+        if(!uiForm.checkedList_.containsKey(c.getId())){
+          Contact con = new Contact() ;
+          con.setId(c.getId()) ;
+          con.setEmailAddress(c.getEmail()) ;
+          con.setFullName(c.getFullName()) ;
+          uiForm.checkedList_.put(c.getId(), con) ;
+        }
         email = c.getEmail() ;
         if(!CalendarUtils.isEmpty(email) && !listMail.contains(email)) {
           if(sb != null && sb.length() > 0) sb.append(CalendarUtils.COMMA) ;
-          if(email != null) sb.append(email) ;
+          if(email != null) sb.append(email.replace(";", ",")) ;
         }
       }
       if(uiTaskForm != null) {
@@ -248,7 +256,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       for(ContactData c : uiForm.getCheckedContact()) {
         if(!CalendarUtils.isEmpty(c.getEmail())) {
           if(sb != null && sb.length() > 0) sb.append(CalendarUtils.COMMA) ;
-          sb.append(c.getEmail()) ;
+          sb.append(c.getEmail().replace(";", ",")) ;
         }
       }
       if(uiTaskForm != null) {

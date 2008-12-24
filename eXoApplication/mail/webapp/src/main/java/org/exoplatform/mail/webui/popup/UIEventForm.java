@@ -19,6 +19,7 @@ package org.exoplatform.mail.webui.popup;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -30,7 +31,12 @@ import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.Reminder;
+import org.exoplatform.contact.service.Contact;
+import org.exoplatform.contact.service.ContactFilter;
+import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.contact.service.DataPageList;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.webui.CalendarUtils;
 import org.exoplatform.mail.webui.SelectItem;
 import org.exoplatform.mail.webui.SelectOption;
@@ -53,7 +59,6 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIFormInputWithActions;
-import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormTabPane;
 
 
@@ -67,14 +72,14 @@ import org.exoplatform.webui.form.UIFormTabPane;
  * Aus 01, 2007 2:48:18 PM 
  */
 @ComponentConfig(
-    lifecycle = UIFormLifecycle.class,
-    template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", 
-    events = {
-      @EventConfig(listeners = UIEventForm.SaveActionListener.class),
-      @EventConfig(listeners = UIEventForm.AddCategoryActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UIEventForm.AddEmailAddressActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UIEventForm.CancelActionListener.class, phase = Phase.DECODE)
-    }
+                 lifecycle = UIFormLifecycle.class,
+                 template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", 
+                 events = {
+                   @EventConfig(listeners = UIEventForm.SaveActionListener.class),
+                   @EventConfig(listeners = UIEventForm.AddCategoryActionListener.class, phase = Phase.DECODE),
+                   @EventConfig(listeners = UIEventForm.AddEmailAddressActionListener.class, phase = Phase.DECODE),
+                   @EventConfig(listeners = UIEventForm.CancelActionListener.class, phase = Phase.DECODE)
+                 }
 )
 public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Selector{
   final public static String TAB_EVENTDETAIL = "eventDetail".intern() ;
@@ -223,7 +228,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
   protected void refreshCategory()throws Exception {
     UIFormInputWithActions eventDetailTab = getChildById(TAB_EVENTDETAIL) ;
     eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).setOptions(getCategory()) ;
-//  eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).setValue(selectedCategory) ;
+    //  eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).setValue(selectedCategory) ;
 
   }
 
@@ -260,7 +265,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
       return false ;
     }
     try {
-     to = getEventToDate() ;
+      to = getEventToDate() ;
     } catch (Exception e) {
       e.printStackTrace() ;
       errorMsg_ =  "UIEventForm.msg.event-todate-notvalid" ;
@@ -590,7 +595,24 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
       } else {
         UIPopupActionContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupActionContainer.class) ;
         UIPopupAction uiPopupAction  = uiPopupContainer.getChild(UIPopupAction.class) ;
-        uiPopupAction.activate(UIAddressForm.class, 650) ;
+        UIAddressForm AddressForm = uiPopupAction.activate(UIAddressForm.class, 650) ;
+        String oldAddress = uiForm.getEmailAddress() ;
+        List<Contact> allContact = new ArrayList<Contact>() ;
+        ContactService contactService = AddressForm.getApplicationComponent(ContactService.class) ;
+        String username = MailUtils.getCurrentUser() ;
+        DataPageList dataList = contactService.searchContact(SessionProviderFactory.createSessionProvider(), username,new ContactFilter()) ;
+        allContact = dataList.getAll() ;
+        if(!allContact.isEmpty()) {
+          if(!CalendarUtils.isEmpty(oldAddress)) {
+            for(String address : oldAddress.split(",")) {
+              for(Contact c :allContact){
+                if(Arrays.asList(c.getEmailAddress().split(";")).contains(address.trim())) {
+                  AddressForm.checkedList_.put(c.getId(), c) ;
+                }
+              }
+            }
+          }
+        }
         event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
       }
     }
@@ -702,7 +724,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
           }else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)){
             CalendarUtils.getCalendarService().savePublicEvent(SessionProviderFactory.createSystemProvider(), calendarId, calendarEvent, uiForm.isAddNew_) ;          
           }
-         /* ActionResponse actResponse = event.getRequestContext().getResponse() ;
+          /* ActionResponse actResponse = event.getRequestContext().getResponse() ;
           actResponse.setEvent(new QName("RefreshCalendar"), null) ;*/
           uiPopupAction.deActivate() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
