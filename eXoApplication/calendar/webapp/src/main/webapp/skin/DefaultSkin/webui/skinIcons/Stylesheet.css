@@ -311,3 +311,7 @@
 .UICalendarPortlet .AdvancedSearch {
   background: url('icons/CalendarIcons.gif') no-repeat left -729px;	
 }
+
+.UICalendarPortlet .BlueCircleMinus {
+	background: url('icons/BlueCircleMinus.gif') repeat scroll 0 0;
+}

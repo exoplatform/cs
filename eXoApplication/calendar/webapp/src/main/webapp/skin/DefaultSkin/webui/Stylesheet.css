@@ -285,3 +285,8 @@
 	margin: 0px;
 	font-family: Tahoma,Verdana,Arial;
 }
+
+.UICalendarPortlet .BlueCircleMinus { 
+    height:16px;
+    width:16px;
+}
