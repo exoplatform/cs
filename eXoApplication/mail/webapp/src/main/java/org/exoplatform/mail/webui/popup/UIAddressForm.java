@@ -59,8 +59,8 @@ import org.exoplatform.webui.form.UIFormStringInput;
  * Sep 25, 2007
  */
 @ComponentConfig(lifecycle = UIFormLifecycle.class, 
-    template = "app:/templates/mail/webui/popup/UIAddressForm.gtmpl", 
-    events = {
+                 template = "app:/templates/mail/webui/popup/UIAddressForm.gtmpl", 
+                 events = {
   @EventConfig(listeners = UIAddressForm.ChangeGroupActionListener.class, phase = Phase.DECODE),
   @EventConfig(listeners = UIAddressForm.SearchContactActionListener.class),
   @EventConfig(listeners = UIAddressForm.AddActionListener.class),
@@ -88,15 +88,15 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   public String getRecipientType() {
     return recipientsType_;
   }
-  
+
   public void setAvaiAddressStr(String str) {
     avaiAddressStr = str ;
   }
-  
+
   public String getAvaiAddressStr() {
     return avaiAddressStr;
   }
-  
+
   public UIAddressForm() throws Exception {
     addUIFormInput(new UIFormStringInput(CONTACT_SEARCH, CONTACT_SEARCH, null)) ;
     UIFormSelectBoxWithGroups uiSelect = new UIFormSelectBoxWithGroups(CONTACT_GROUP, CONTACT_GROUP, getOptions()) ;
@@ -164,12 +164,15 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     List<Contact> contacts = new ArrayList<Contact>(uiPageList_.getCurrentPageData()) ;
     for(Contact c : contacts) {
       UIFormCheckBoxInput uiInput = getUIFormCheckBoxInput(c.getId()) ;
-      if(uiInput == null) addUIFormInput(new UIFormCheckBoxInput<Boolean>(c.getId(),c.getId(), null)) ;
+      if(uiInput == null){
+        uiInput = new UIFormCheckBoxInput<Boolean>(c.getId(),c.getId(), null);
+        addUIFormInput(uiInput) ;
+      }
     }
     for(Contact c : checkedList_.values()) {
       UIFormCheckBoxInput uiInput = getUIFormCheckBoxInput(c.getId()) ;
       if(uiInput != null) uiInput.setChecked(true) ;
-    }
+    } 
     return contacts ;
   }
 
@@ -281,7 +284,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       uiAddressForm.checkedList_.clear() ;
       uiAddressForm.newCheckedList_.clear() ;
       String toAddress = "";
-      
+
       for (Contact contact : checkedContact) {
         if(MailUtils.isFieldEmpty(contact.getEmailAddress())) {
           UIApplication uiApp = uiAddressForm.getAncestorOfType(UIApplication.class) ;
@@ -293,21 +296,29 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       for (Contact ct : checkedContact) {
         uiAddressForm.newCheckedList_.put(ct.getId(), ct) ;
       }
-      
+
+      UIComposeForm uiComposeForm = uiPopupContainer.getChild(UIComposeForm.class) ;
+      UIEventForm uiEventForm = uiPopupContainer.getChild(UIEventForm.class) ;
       StringBuffer sb = new StringBuffer() ;
       for (Contact contact : uiAddressForm.newCheckedList_.values()) {
         String addresses = contact.getEmailAddress();
         if(addresses != null && addresses.trim().length() > 0) {
-          String[] eAddresses = null;
-          if (addresses.contains(";")) eAddresses = addresses.split(";") ;
-          if (eAddresses != null) {
-            for (int i = 0; i < eAddresses.length; i++) {
-              toAddress += contact.getFullName() + "<" + eAddresses[i] + "> ," ;
+          String add = contact.getEmailAddress().replace(";", ",") ;
+          if(uiEventForm != null) {
+           if(sb.length() > 0) sb.append(",") ;
+            sb.append(add) ;
+          } else {  
+            String[] eAddresses = null;
+            if (addresses.contains(";")) eAddresses = addresses.split(";") ;
+            if (eAddresses != null) {
+              for (int i = 0; i < eAddresses.length; i++) {
+                toAddress += contact.getFullName() + "<" + eAddresses[i] + "> ," ;
+              }
+            } else {
+              toAddress += contact.getFullName() + "<" + contact.getEmailAddress() + "> ," ;
             }
-          } else {
-            toAddress += contact.getFullName() + "<" + contact.getEmailAddress() + "> ," ;
           }
-        } 
+        }
       }
       /*List<String> listMail = Arrays.asList( sb.toString().split(MailUtils.COMMA)) ; 
       String email = null ;
@@ -318,8 +329,6 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
           if(email != null) sb.append(email) ;
         }
       }*/
-      UIComposeForm uiComposeForm = uiPopupContainer.getChild(UIComposeForm.class) ;
-      UIEventForm uiEventForm = uiPopupContainer.getChild(UIEventForm.class) ;
       if(uiEventForm != null) {
         uiEventForm.setSelectedTab(UIEventForm.TAB_EVENTREMINDER) ;
         uiEventForm.setEmailAddress(sb.toString()) ;
@@ -358,7 +367,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         return ;
       }
       UIMailPortlet uiPortlet = uiAddressForm.getAncestorOfType(UIMailPortlet.class) ;
-      
+
       UIComposeForm uiComposeForm = uiPortlet.findFirstComponentOfType(UIComposeForm.class) ;
       UIEventForm uiEventForm = uiPortlet.findFirstComponentOfType(UIEventForm.class) ;
       for (Contact contact : checkedContact) {
@@ -369,6 +378,9 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
           return ;
         }
       }
+      for (Contact ct : checkedContact) {
+        if (!uiAddressForm.checkedList_.containsKey(ct.getId())) uiAddressForm.newCheckedList_.put(ct.getId(), ct) ;
+      }
       if(uiEventForm != null) {
         StringBuffer sb = new StringBuffer() ;
         if(uiEventForm.getEmailAddress() != null && uiEventForm.getEmailAddress().trim().length() > 0) {
@@ -376,11 +388,11 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         }
         List<String> listMail = Arrays.asList( sb.toString().split(MailUtils.COMMA)) ; 
         String email = null ;
-        for(Contact c : checkedContact) {
+        for(Contact c : uiAddressForm.newCheckedList_.values()) {
           email = c.getEmailAddress() ;
           if(!listMail.contains(email)) {
             if(sb != null && sb.length() > 0) sb.append(MailUtils.COMMA) ;
-            if(email != null) sb.append(email) ;
+            if(email != null) sb.append(email.replace(";", ",")) ;
           }
         }
         uiEventForm.setSelectedTab(UIEventForm.TAB_EVENTREMINDER) ;
@@ -393,7 +405,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         if (!toAddress.equals("") && !toAddress.endsWith(",")) {
           toAddress = toAddress + "," ;
         }
-        
+
         for (Contact ct : checkedContact) {
           if (!uiAddressForm.checkedList_.containsKey(ct.getId())) uiAddressForm.newCheckedList_.put(ct.getId(), ct) ;
         }
