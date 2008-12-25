@@ -1861,10 +1861,9 @@ function UISelection(){
 UISelection.prototype.start = function(evt){
     try {
         var UISelection = eXo.calendar.UISelection;
-        var _e = window.event || evt;
-        var src = _e.srcElement || _e.target;
-        if ((src == UISelection.block) || (_e.button == 2) || (src.className == "TdTime")) {
-            return;
+        var src = eXo.core.EventManager.getEventTarget(evt);
+        if ((src == UISelection.block) || (eXo.core.EventManager.getMouseButton(evt) == 2) || (eXo.core.DOMUtil.hasClass(src,"TdTime"))) {
+						return;
         }
         
         UISelection.startTime = src.getAttribute("startTime");
@@ -1881,7 +1880,7 @@ UISelection.prototype.start = function(evt){
         document.onmouseup = UISelection.clear;
     } 
     catch (e) {
-        //alert(e.message) ;
+        window.status = e.message ;
     }
 };
 
@@ -1893,6 +1892,7 @@ UISelection.prototype.execute = function(evt){
     var UISelection = eXo.calendar.UISelection;
     var _e = window.event || evt;
     var delta = null;
+		var containerHeight = UISelection.container.offsetHeight;
     var scrollTop = eXo.cs.Utils.getScrollTop(UISelection.block);
     var mouseY = eXo.core.Browser.findMouseRelativeY(UISelection.container, _e) + UISelection.relativeObject.scrollTop;
     if (document.getElementById("UIPageDesktop")) 
@@ -1900,25 +1900,25 @@ UISelection.prototype.execute = function(evt){
     var posY = UISelection.block.offsetTop;
     var height = UISelection.block.offsetHeight;
     delta = posY + height - mouseY;
-    if ((UISelection.startY - mouseY) < 0) {
+    if (UISelection.startY < mouseY) {
         UISelection.block.style.top = UISelection.startY + "px";
         if (delta >= UISelection.step) {
-            UISelection.block.style.height = parseInt(UISelection.block.style.height) - UISelection.step + "px";
+            UISelection.block.style.height = height - UISelection.step + "px";
         }
-        if (mouseY >= (posY + height)) {
-            UISelection.block.style.height = parseInt(UISelection.block.style.height) + UISelection.step + "px";
+        if ((mouseY >= (posY + height)) && ((posY + height)< containerHeight) ) {
+            UISelection.block.style.height = height + UISelection.step + "px";
         }
     }
     else {
         delta = mouseY - posY;
         UISelection.block.style.bottom = UISelection.startY - UISelection.step + "px";
-        if (mouseY <= posY) {
-            UISelection.block.style.top = parseInt(UISelection.block.style.top) - UISelection.step + "px";
-            UISelection.block.style.height = parseInt(UISelection.block.style.height) + UISelection.step + "px";
+        if ((mouseY <= posY) && (posY > 0)) {
+            UISelection.block.style.top = posY - UISelection.step + "px";
+            UISelection.block.style.height = height + UISelection.step + "px";
         }
         if (delta >= UISelection.step) {
-            UISelection.block.style.top = parseInt(UISelection.block.style.top) + UISelection.step + "px";
-            UISelection.block.style.height = parseInt(UISelection.block.style.height) - UISelection.step + "px";
+            UISelection.block.style.top = posY + UISelection.step + "px";
+            UISelection.block.style.height = height - UISelection.step + "px";
         }
     }
     
@@ -1931,12 +1931,17 @@ UISelection.prototype.clear = function(){
     var UISelection = eXo.calendar.UISelection;
     var endTime = UISelection.block.offsetHeight * 60 * 1000 + parseInt(UISelection.startTime);
     var startTime = UISelection.startTime;
+		var bottom = UISelection.block.offsetHeight + UISelection.block.offsetTop;
     if (UISelection.block.offsetTop < UISelection.startY) {
         startTime = parseInt(UISelection.startTime) - UISelection.block.offsetHeight * 60 * 1000 + UISelection.step * 60 * 1000;
         endTime = parseInt(UISelection.startTime) + UISelection.step * 60 * 1000;
     }
+		if(bottom >= UISelection.container.offsetHeight) endTime -= 1;
     eXo.webui.UIForm.submitEvent(UISelection.viewType, 'QuickAdd', '&objectId=Event&startTime=' + startTime + '&finishTime=' + endTime);
     eXo.core.DOMUtil.listHideElements(UISelection.block);
+		UISelection.startTime = null;
+		UISelection.startY = null;
+		UISelection.startX = null;
     document.onmousemove = null;
     document.onmouseup = null;
 };
