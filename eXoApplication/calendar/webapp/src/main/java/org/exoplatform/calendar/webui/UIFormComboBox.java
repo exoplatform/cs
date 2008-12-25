@@ -144,20 +144,24 @@ public class UIFormComboBox extends UIFormInputBase<String>  {
   public void processRender(WebuiRequestContext context) throws Exception {
     context.getJavascriptManager().addJavascript("eXo.calendar.UICombobox.init('" + getId()+ "');") ;  
     Writer w =  context.getWriter() ;
-      w.write("<div class='UIComboboxList'><div class='UIComboboxContainer'>") ;
+    String options = "[";
+    String text = "<div class='UIComboboxComponent'><div class='UIComboboxList'><div class='UIComboboxContainer'><div class='UIComboboxItemContainer'>" ;
         for(SelectItemOption item : options_) {
-          w.write("<a href='javascript:void(0);' value='" + item.getValue()+ "' class='UIComboboxItem'>") ;
-            w.write("<div class='UIComboboxIcon'>") ;
-              w.write("<div class='UIComboboxLabel'>" + item.getLabel() + "</div>") ;
-            w.write("</div>");
-          w.write("</a>") ;
+          options += "'"+item.getValue()+"',";
+          text += "<a href='javascript:void(0);' onclick='eXo.calendar.UICombobox.getValue(this);' value='" + item.getValue()+ "' class='UIComboboxItem'>" ;
+          text += "<div class='UIComboboxIcon'>" ;
+          text += "<div class='UIComboboxLabel'>" + item.getLabel() + "</div>" ;
+          text += "</div>";
+          text += "</a>" ;
         }
-      w.write("</div></div>") ;
-      w.write("<input class='UIComboboxInput' name='"+getName()+"' type='text'" + " id='"+getId()+"' " + renderJsActions());
+      text += "</div></div></div>" ;
+      options = options.substring(0,options.length() - 1) + "]";
+      text += "<input class='UIComboboxInput' options=\"" + options + "\" onkeyup='eXo.calendar.UICombobox.complete(this,event);' name='"+getName()+"' type='text'" + " id='"+getId()+"' " + renderJsActions();
       if(value_ != null && value_.trim().length() > 0) {      
-        w.write(" value='"+encodeValue(value_).toString()+"'");
+        text += " value='"+encodeValue(value_).toString()+"'";
       }
-      w.write(" \\>") ;
+      text += " /></div>" ;
+      w.write(text);
   }
 
   private StringBuilder encodeValue(String value){
