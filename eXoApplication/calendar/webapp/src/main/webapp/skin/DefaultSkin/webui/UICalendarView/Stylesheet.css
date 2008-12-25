@@ -74,6 +74,13 @@
 	*height: 29px ; /* fixed for IE */
 }
 
+.UIDayView .EventDayContent .UIGrid td{ /* fix for Safari */
+	[
+		height:29px;
+		height:29px;
+	]
+}
+
 .UIDayView .EventDayContent .HourPoint {
 	height: 60px ;
 	border: 1px solid white ;
@@ -246,6 +253,13 @@
 .UIWeekView .UIGrid td {
 	padding: 0px;
 	height: 30px ;
+}
+
+.UIWeekView .UIGrid td { /* fix for Safari */
+	[
+	height: 29px ;
+	height: 29px ;
+	]
 }
 
 .UIWeekView .EventAllday {
