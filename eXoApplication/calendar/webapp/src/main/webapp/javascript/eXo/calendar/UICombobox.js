@@ -13,69 +13,99 @@ UICombobox.prototype.init = function(textbox) {
 } ;
 
 UICombobox.prototype.show = function(evt) {
-	var UICombobox = eXo.calendar.UICombobox ;	
-	var _e = window.event || evt ;
-	_e.cancelBubble = true ;
-	UICombobox.defaultValue = this.value ;
-	var src = _e.target || _e.srcElement ;
-	if(UICombobox.list) UICombobox.list.style.display = "none" ;
-	UICombobox.list = eXo.core.DOMUtil.findPreviousElementByTagName(src, "div") ;
-	UICombobox.items = eXo.core.DOMUtil.findDescendantsByTagName(UICombobox.list, "a") ;		
-	var len = UICombobox.items.length ;
-	
-	for(var i = 0 ; i < len ; i ++ ) {
-		UICombobox.items[i].onclick = UICombobox.getValue ; 
-	}
-	if (len <= 0) return ;
-	UICombobox.list.onmousedown = UICombobox.cancelBubbe ;
-	UICombobox.list.style.width = (this.offsetWidth - 2) + "px" ;	
-	UICombobox.list.style.overflowX = "hidden" ;
-	UICombobox.list.style.display = "block" ;
-	var top = eXo.core.Browser.findPosYInContainer(this, UICombobox.list.offsetParent) + this.offsetHeight ;
-	var left = eXo.core.Browser.findPosXInContainer(this, UICombobox.list.offsetParent) ;
-	UICombobox.list.style.top = top + "px" ;	
-	UICombobox.list.style.left = left + "px" ;
-  UICombobox.fixForIE6() ;
-	document.onmousedown = eXo.calendar.UICombobox.hide ;
+	var uiCombo = eXo.calendar.UICombobox;
+	uiCombo.items = eXo.core.DOMUtil.findDescendantsByTagName(this.parentNode,"a");
+	if(uiCombo.list) uiCombo.list.style.display = "none";
+	uiCombo.list = eXo.core.DOMUtil.findFirstDescendantByClass(this.parentNode,"div","UIComboboxContainer");
+	uiCombo.list.parentNode.style.position = "absolute";
+	uiCombo.fixForIE6(this);
+	uiCombo.list.style.display = "block";	
+	uiCombo.list.style.top = this.offsetHeight + "px";
+	uiCombo.list.style.width = this.offsetWidth + "px";
+	uiCombo.setSelectedItem(this);
+	uiCombo.list.onmousedown = eXo.core.EventManager.cancelEvent;
+	document.onmousedown = uiCombo.hide;
 } ;
-UICombobox.prototype.fixForIE6 = function() {
+
+UICombobox.prototype.getSelectedItem = function(textbox){
+	var val = textbox.value;
+	var data = eval(textbox.getAttribute("options"));
+	var len = data.length;
+	for(var i = 0; i<len; i++) {
+		if(val == data[i]) return i;
+	}
+	return false;
+};
+
+UICombobox.prototype.setSelectedItem = function(textbox){
+	if(this.lastSelectedItem) eXo.core.DOMUtil.replaceClass(this.lastSelectedItem,"UIComboboxSelectedItem","");
+	var selectedIndex = this.getSelectedItem(textbox);
+	if(selectedIndex) {
+		eXo.core.DOMUtil.addClass(this.items[selectedIndex],"UIComboboxSelectedItem");
+		this.lastSelectedItem = this.items[selectedIndex];
+		var y = eXo.core.Browser.findPosYInContainer(this.lastSelectedItem,this.list);
+		this.list.firstChild.scrollTop = y ; 
+	}
+};
+
+UICombobox.prototype.fixForIE6 = function(obj) {
   if(!eXo.core.Browser.isIE6()) return ;
-  if(eXo.core.DOMUtil.getChildrenByTagName(eXo.calendar.UICombobox.list,"iframe").length > 0) return ;
+  if(eXo.core.DOMUtil.getChildrenByTagName(this.list,"iframe").length > 0) return ;
 	var iframe = document.createElement("iframe") ;
   iframe.frameBorder = 0 ;
-  iframe.style.position = "absolute" ;
-  iframe.style.top = "0px" ;
-  iframe.style.left = "0px" ;  
-  iframe.style.width = "100%" ;
-  iframe.style.zIndex = -1 ;
-  iframe.style.height = eXo.calendar.UICombobox.list.firstChild.offsetHeight + "px" ;
-  eXo.calendar.UICombobox.list.appendChild(iframe) ;
+	iframe.style.width = obj.offsetWidth+ "px" ;
+  this.list.appendChild(iframe) ;
 } ;
+
 UICombobox.prototype.cancelBubbe = function(evt) {
 	var _e = window.event || evt ;
 	_e.cancelBubble = true ;
 } ;
 
-UICombobox.prototype.hide = function() {
-	eXo.calendar.UICombobox.list.style.display = "none" ;
+UICombobox.prototype.complete = function(obj,evt) {
+	if(evt.keyCode == 16 ) return;
+	if(evt.keyCode == 13 ) {
+		obj.blur();
+		this.correct(evt);
+		this.hide();
+		return;
+	}
+	var sVal = obj.value.toLowerCase();
+	if(evt.keyCode == 8 )	sVal = sVal.substring( 0, sVal.length - 1 )
+	if( sVal.length < 1 ) return ;
+	var data = eval(obj.getAttribute("options").trim());
+	var len = data.length;
+	var tmp = null;
+	for( var i = 0; i < data.length; i++ )	{
+		tmp = data[i].trim();
+		var idx = tmp.toLowerCase().indexOf( sVal, 0);
+		if( idx == 0 && tmp.length > sVal.length )	{
+			obj.value = data[i];
+			if( obj.createTextRange )	{
+				hRange = obj.createTextRange();
+				hRange.findText( data[i].substr( sVal.length ) );
+				hRange.select();
+			}
+			else	{
+				obj.setSelectionRange( sVal.length, tmp.length );
+			}
+			break;
+		}
+	}
+	this.setSelectedItem(obj);
 } ;
 
-UICombobox.prototype.getValue = function(evt) {
-	var _e = window.event || evt ;
-	_e.cancelBubble = true ;
+UICombobox.prototype.hide = function() {
+	eXo.calendar.UICombobox.list.style.display = "none" ;
+	document.onmousedown = null ;
+} ;
+
+UICombobox.prototype.getValue = function(obj) {
 	var UICombobox = eXo.calendar.UICombobox ;
-	var val = this.getAttribute("value") ;
-	var textbox = eXo.core.DOMUtil.findNextElementByTagName(UICombobox.list,"input") ;
+	var val = obj.getAttribute("value") ;
+	var textbox = eXo.core.DOMUtil.findNextElementByTagName(UICombobox.list.parentNode,"input") ;
 	textbox.value = val ;
-	var len = UICombobox.items.length ;
-	var icon = null ;
-	var selectedIcon = null ;
-	for(var i = 0 ; i < len ; i ++ ) {
-		icon = eXo.core.DOMUtil.findFirstDescendantByClass(UICombobox.items[i],"div", "UIComboboxIcon") ;
-		icon.className = "UIComboboxIcon" ;
-	}
-	selectedIcon = eXo.core.DOMUtil.findFirstDescendantByClass(this,"div", "UIComboboxIcon") ;
-	eXo.core.DOMUtil.addClass(selectedIcon, "UIComboboxSelectedIcon") ;
+	this.setSelectedItem(textbox);
 	UICombobox.list.style.display = "none" ;
 	UICombobox.synchronize(textbox) ;
 } ;
