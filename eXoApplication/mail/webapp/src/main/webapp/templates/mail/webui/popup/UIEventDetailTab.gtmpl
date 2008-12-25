@@ -8,19 +8,27 @@
 	    	if(actionLabel.equals("action." + action.actionName)) {
 	    		actionLabel = action.actionName ;
 	    	}
-	    	String actionLink ="#";
+	    	String actionLink ="";
 	      if(action.actionParameter != null) {
 	        actionLink = (uiForm.event(action.actionListener, action.actionParameter)) ;
 	      }else {
 	        actionLink = (uiForm.event(action.actionListener)) ;
 	      }
-		    println "<a title=\"" + actionLabel + "\" href=\"" + actionLink +"\">";
+	      if(actionLabel.lastIndexOf("-(") > 0)
+	      {
+	        String temp = actionLabel.substring(0, actionLabel.lastIndexOf("-(")) ;
+	        String sizeLabel = actionLabel.substring(actionLabel.lastIndexOf("-(")) ;
+	        if(temp.length() > 30) {
+	        actionLabel = temp.substring(0, 30) + "..." + sizeLabel ;}
+	      }
+		    println "<a title=\"" + action.actionName + "\" href=\"" + actionLink +"\">";
 	      if(action.actionType == action.TYPE_ICON) {
 	        println "<img src=\"/eXoResources/skin/DefaultSkin/background/Blank.gif\" class=\"" + action.cssIconClass +"\"/>" ;
 	        if(action.isShowLabel) { println  actionLabel  ;}
 	      }else if(action.actionType == action.TYPE_LINK){
 	       println actionLabel ;
 	      }
+	      
 	      println  "</a>";
 	      println "&nbsp;"; 
 	      if(action.isBreakLine) { println "<br/>" ;} 
@@ -30,7 +38,7 @@
 	def rcontext = _ctx.getRequestContext() ;	
   rcontext.getJavascriptManager().addJavascript('eXo.mail.UIMailPortlet.isAllday("UIEventForm") ;') ;	
 %>
-<div class="UIAddNewEvent">
+<div id="$uicomponent.id" class="UIAddNewEvent">
   <table class="UIFormGrid">
     <tbody>
       <tr>
@@ -87,7 +95,7 @@
         <td class="FieldLabel">
           <%=uiForm.getLabel(uicomponent.FIELD_CHECKALL)%>
         </td>
-        <td class="FieldComponent" onclick="eXo.mail.UIMailPortlet.showHideTime(this) ;" ><!--check all -->
+        <td class="FieldComponent" onclick="eXo.mail.UIMailPortlet.showHideTime(this) ;" ><!-- check all -->
           <%uiForm.renderField(uicomponent.FIELD_CHECKALL)%>
         </td>
       </tr>
@@ -115,6 +123,7 @@
           <%uiForm.renderField(uicomponent.FIELD_CALENDAR)%>
         </td>
       </tr>
+      <%if(uicomponent.getChildById(uicomponent.FIELD_CATEGORY) != null && uicomponent.getChildById(uicomponent.FIELD_CATEGORY).isRendered()){%>
       <tr>
         <td class="FieldLabel">
           <%=uiForm.getLabel(uicomponent.FIELD_CATEGORY)%>
@@ -124,6 +133,24 @@
   	        uiForm.renderField(uicomponent.FIELD_CATEGORY) ;
 				    renderActions(uicomponent.FIELD_CATEGORY) ;
           %>
+        </td>
+      </tr>
+      <%}%>
+      <tr>
+        <td class="FieldLabel">
+          <%=uiForm.getLabel(uicomponent.FIELD_ATTACHMENTS)%>
+        </td>
+        <td class="FieldComponent" >
+        	<div style="float:left; width:242px;">
+          <%uiForm.renderField(uicomponent.FIELD_ATTACHMENTS) ;%>
+          <%renderActions(uicomponent.FIELD_ATTACHMENTS) ;%>
+          </div>
+          <div style="float:left;" >
+	          <a href="<%= uicomponent.getParent().event("AddAttachment") %>" title="<%=_ctx.appRes(uicomponent.getParent().getName() + ".action.AddAttachment")%>">
+  	          <img class="AddNewNodeIcon" src="/eXoResources/skin/DefaultSkin/background/Blank.gif"/>
+  	        </a>          
+          </div>
+          <div style="clear:both;"><span></span></div>
         </td>
       </tr>
     </tbody>
