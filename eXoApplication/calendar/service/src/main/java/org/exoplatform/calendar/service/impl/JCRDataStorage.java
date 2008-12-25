@@ -600,6 +600,25 @@ public class JCRDataStorage{
           eventNode.setProperty(Utils.EXO_EVENT_CATEGORY_NAME, eventCategory.getName()) ;
         }
       }
+      
+      // cs-2020      
+      if(getSharedCalendarHome(sProvider).hasNode(username)) {
+        PropertyIterator iterPro = getSharedCalendarHome(sProvider).getNode(username).getReferences() ;
+        while(iterPro.hasNext()) {
+          try{
+            Node calendar = iterPro.nextProperty().getParent() ;
+              NodeIterator it = calendar.getNodes();
+              while(it.hasNext()){
+                Node eventNode = it.nextNode() ;
+                if (eventNode.getProperty(Utils.EXO_EVENT_CATEGORYID).getString().equals(eventCategory.getId()))
+                    eventNode.setProperty(Utils.EXO_EVENT_CATEGORY_NAME, eventCategory.getName()) ;
+              }
+            
+          }catch (Exception e) {
+            e.printStackTrace() ;
+          }
+        }
+      }
 
       /*if(eventCategory.getName().equalsIgnoreCase(values[0])) {
         name = eventCategory.getName().toLowerCase() ;
@@ -724,14 +743,30 @@ public class JCRDataStorage{
     }
     return events ;
   }
+  
   private List<CalendarEvent> getSharedEventByCategory(String username, String eventCategoryId) throws Exception {
     SessionProvider systemSession = SessionProvider.createSystemProvider() ;
-    Node sharedCalendarHome = getSharedCalendarHome(systemSession) ;
-    QueryManager qm = sharedCalendarHome.getSession().getWorkspace().getQueryManager();
-    List<CalendarEvent> events = new ArrayList<CalendarEvent> () ;
-    Query query ;
-    QueryResult result ;
-    NodeIterator calIter = sharedCalendarHome.getNodes() ;
+    List<CalendarEvent> events = new ArrayList<CalendarEvent> () ;    
+    try {
+    if(getSharedCalendarHome(systemSession).hasNode(username)) {
+      PropertyIterator iterPro = getSharedCalendarHome(systemSession).getNode(username).getReferences() ;
+      while(iterPro.hasNext()) {
+        try {
+          Node calendar = iterPro.nextProperty().getParent() ;
+            NodeIterator it = calendar.getNodes();
+            while(it.hasNext()){
+              Node eventNode = it.nextNode() ;
+              if (eventNode.getProperty(Utils.EXO_EVENT_CATEGORYID).getString().equals(eventCategoryId)) {
+                events.add(getEvent(systemSession, eventNode)) ;
+              }
+            }
+          
+        }catch (Exception e) {
+          e.printStackTrace() ;
+        }
+      }
+    }
+/*    
     try {
       while (calIter.hasNext()) {
         StringBuffer queryString = new StringBuffer("/jcr:root" + calIter.nextNode().getPath() 
@@ -744,7 +779,7 @@ public class JCRDataStorage{
         while(it.hasNext()){
           events.add(getEvent(systemSession, it.nextNode())) ;
         }
-      }
+      }*/
     } catch (Exception e) {
       e.printStackTrace() ;
     } finally {
@@ -752,6 +787,7 @@ public class JCRDataStorage{
     }
     return events ;
   }
+  
   public List<CalendarEvent> getUserEventByCategory(SessionProvider sProvider, String username, String eventCategoryId) throws Exception {
     Node calendarHome = getUserCalendarHome(sProvider, username) ;
     QueryManager qm = calendarHome.getSession().getWorkspace().getQueryManager();
