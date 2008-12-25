@@ -42,13 +42,13 @@ import org.exoplatform.webui.form.UIFormUploadInput;
  * Aug 24, 2007  
  */
 @ComponentConfig(
-    lifecycle = UIFormLifecycle.class,
-    template =  "app:/templates/mail/webui/popup/UIAttachFileForm.gtmpl",
-    events = {
-      @EventConfig(listeners = UIAttachFileForm.AddMoreActionListener.class), 
-      @EventConfig(listeners = UIAttachFileForm.SaveActionListener.class), 
-      @EventConfig(listeners = UIAttachFileForm.CancelActionListener.class, phase = Phase.DECODE)
-    }
+                 lifecycle = UIFormLifecycle.class,
+                 template =  "app:/templates/mail/webui/popup/UIAttachFileForm.gtmpl",
+                 events = {
+                   @EventConfig(listeners = UIAttachFileForm.AddMoreActionListener.class), 
+                   @EventConfig(listeners = UIAttachFileForm.SaveActionListener.class), 
+                   @EventConfig(listeners = UIAttachFileForm.CancelActionListener.class, phase = Phase.DECODE)
+                 }
 )
 
 public class UIAttachFileForm extends UIForm implements UIPopupComponent {
@@ -56,6 +56,7 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
   public static final String FIELD_UPLOAD = "upload" ;  
   public int numberFile = 5 ;
   public static final int MAX_SIZE = 10*1024*1024 ;
+  private long attSize = 0;
 
   public UIAttachFileForm() throws Exception {
     setMultiPart(true) ;
@@ -64,21 +65,24 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
       addUIFormInput(uiInput) ;
     }
   }
-  
+
   public void setNumberFile(int nb) { numberFile = nb; }
-  
+
   public int  getNumberFile() { return numberFile; }
 
   public String[] getActions() { return new String[]{ "Save", "Cancel" } ;} 
-  
+
   public void activate() throws Exception {}
-  
+
   public void deActivate() throws Exception {}
+  public long getAttSize() {return attSize ;}
+  public void setAttSize(long value) { attSize = value ;}
 
   static  public class SaveActionListener extends EventListener<UIAttachFileForm> {
     public void execute(Event<UIAttachFileForm> event) throws Exception {
       UIAttachFileForm uiForm = event.getSource();
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+      UIPopupActionContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupActionContainer.class) ;
       List<BufferAttachment> attachList = new ArrayList<BufferAttachment>();
       long attSize = 0;
       try {
@@ -114,14 +118,33 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
       } else {
         UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
         UIComposeForm uiComposeForm = uiPortlet.findFirstComponentOfType(UIComposeForm.class);
-        for (Attachment att : attachList) {
-          uiComposeForm.addToUploadFileList(att) ;
+        UIEventForm uiEventForm =  uiPortlet.findFirstComponentOfType(UIEventForm.class);
+        if(uiComposeForm != null) {
+          for (Attachment att : attachList) {
+            uiComposeForm.addToUploadFileList(att) ;
+          }
+          uiComposeForm.refreshUploadFileList() ;
+          UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
+          uiPopupAction.deActivate();
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiComposeForm.getChildById(UIComposeForm.FIELD_TO_SET)) ;
+        } else if (uiEventForm != null) {
+          uiEventForm.setSelectedTab(UIEventForm.TAB_EVENTDETAIL) ;
+          UIEventDetailTab uiEventDetailTab = uiEventForm.getChild(UIEventDetailTab.class) ;
+          for(Attachment att :  attachList){
+            org.exoplatform.calendar.service.Attachment a = new org.exoplatform.calendar.service.Attachment() ;
+            a.setInputStream(att.getInputStream());
+            a.setMimeType(att.getMimeType()) ;
+            a.setName(att.getName());
+            a.setSize(att.getSize());
+            uiEventDetailTab.addToUploadFileList(a) ;
+          }
+          uiEventDetailTab.refreshUploadFileList() ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiEventDetailTab) ;
+          UIPopupAction uiPopupAction = uiPopupContainer.getChild(UIPopupAction.class) ;
+          uiPopupAction.deActivate() ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
         }
-        uiComposeForm.refreshUploadFileList() ;
-        UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
-        uiPopupAction.deActivate();
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiComposeForm.getChildById(UIComposeForm.FIELD_TO_SET)) ;
       } 
     }
   }
@@ -138,7 +161,7 @@ public class UIAttachFileForm extends UIForm implements UIPopupComponent {
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAttach);
     }
   }
-  
+
   static  public class CancelActionListener extends EventListener<UIAttachFileForm> {
     public void execute(Event<UIAttachFileForm> event) throws Exception {
       UIAttachFileForm uiAttach = event.getSource();

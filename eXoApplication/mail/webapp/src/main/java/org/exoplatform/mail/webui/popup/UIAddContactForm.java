@@ -35,9 +35,6 @@ import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.Utils;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.MailUtils;
-import org.exoplatform.mail.webui.SelectItem;
-import org.exoplatform.mail.webui.SelectOptionGroup;
-import org.exoplatform.mail.webui.UIFormSelectBoxWithGroups;
 import org.exoplatform.mail.webui.UIMailPortlet;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -47,7 +44,10 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.core.model.SelectItem;
 import org.exoplatform.webui.core.model.SelectItemOption;
+import org.exoplatform.webui.core.model.SelectOption;
+import org.exoplatform.webui.core.model.SelectOptionGroup;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
@@ -55,6 +55,7 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormRadioBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
+import org.exoplatform.webui.form.UIFormSelectBoxWithGroups;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 
@@ -168,7 +169,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
     List<SelectItem> options = new ArrayList<SelectItem>() ;
     SelectOptionGroup personalContacts = new SelectOptionGroup("personal-contacts");
     for(ContactGroup pcg : contactSrv.getGroups(SessionProviderFactory.createSystemProvider(), username)) {
-      personalContacts.addOption(new org.exoplatform.mail.webui.SelectOption(pcg.getName(), pcg.getId())) ;
+      personalContacts.addOption(new SelectOption(pcg.getName(), pcg.getId())) ;
     }
     options.add(personalContacts);
        

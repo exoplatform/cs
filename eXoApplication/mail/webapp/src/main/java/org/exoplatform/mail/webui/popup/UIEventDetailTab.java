@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (C) 2003-2007 eXo Platform SAS.
  *
  * This program is free software; you can redistribute it and/or
@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see<http://www.gnu.org/licenses/>.
- */
+ **/
 package org.exoplatform.mail.webui.popup;
 
 import java.util.ArrayList;
@@ -22,18 +22,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.exoplatform.calendar.service.Attachment;
+import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.calendar.service.CalendarEvent;
+import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.webui.UIFormComboBox;
 import org.exoplatform.mail.webui.UIFormDateTimePicker;
-import org.exoplatform.mail.webui.UIFormSelectBoxWithGroups;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
+import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormSelectBox;
+import org.exoplatform.webui.form.UIFormSelectBoxWithGroups;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
@@ -42,13 +44,11 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
  * Created by The eXo Platform SARL
  * Author : Pham Tuan
  *          tuan.pham@exoplatform.com
- *          Nam Phung
- *          phunghainam@gmail.com
  * Aug 29, 2007  
  */
 
 @ComponentConfig(
-    template = "app:/templates/mail/webui/popup/UIEventDetailTab.gtmpl"
+   template = "app:/templates/mail/webui/popup/UIEventDetailTab.gtmpl"
 ) 
 public class UIEventDetailTab extends UIFormInputWithActions {
 
@@ -67,7 +67,7 @@ public class UIEventDetailTab extends UIFormInputWithActions {
   final public static String FIELD_DESCRIPTION = "description".intern() ;
   final static public String FIELD_ATTACHMENTS = "attachments".intern() ;
 
-  protected List<Attachment> attachments_ = new ArrayList<Attachment>() ;
+  protected List<org.exoplatform.calendar.service.Attachment> attachments_ = new ArrayList<org.exoplatform.calendar.service.Attachment>() ;
   private Map<String, List<ActionData>> actionField_ ;
 
   public UIEventDetailTab(String id) throws Exception {
@@ -79,7 +79,6 @@ public class UIEventDetailTab extends UIFormInputWithActions {
     addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION, FIELD_DESCRIPTION, null)) ;
     addUIFormInput(new UIFormSelectBoxWithGroups(FIELD_CALENDAR, FIELD_CALENDAR, null)) ;
     addUIFormInput(new UIFormSelectBox(FIELD_CATEGORY, FIELD_CATEGORY, UIEventForm.getCategory())) ;
-
     ActionData addCategoryAction = new ActionData() ;
     addCategoryAction.setActionType(ActionData.TYPE_ICON) ;
     addCategoryAction.setActionName(UIEventForm.ACT_ADDCATEGORY) ;
@@ -87,11 +86,12 @@ public class UIEventDetailTab extends UIFormInputWithActions {
     List<ActionData> addCategoryActions = new ArrayList<ActionData>() ;
     addCategoryActions.add(addCategoryAction) ;
     setActionField(FIELD_CATEGORY, addCategoryActions) ;
-
-    addUIFormInput(new UIFormDateTimePicker(FIELD_FROM, FIELD_FROM, new Date(), false));
+    addUIFormInput(new UIFormInputInfo(FIELD_ATTACHMENTS, FIELD_ATTACHMENTS, null)) ;
+    setActionField(FIELD_ATTACHMENTS, getUploadFileList()) ;
     addUIFormInput(new UIFormComboBox(FIELD_FROM_TIME, FIELD_FROM_TIME, options));
-    addUIFormInput(new UIFormDateTimePicker(FIELD_TO, FIELD_TO, new Date(), false));
     addUIFormInput(new UIFormComboBox(FIELD_TO_TIME, FIELD_TO_TIME,  options));
+    addUIFormInput(new UIFormDateTimePicker(FIELD_FROM, FIELD_FROM, new Date(), false));
+    addUIFormInput(new UIFormDateTimePicker(FIELD_TO, FIELD_TO, new Date(), false));
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_CHECKALL, FIELD_CHECKALL, null));
     addUIFormInput(new UIFormStringInput(FIELD_PLACE, FIELD_PLACE, null));
     addUIFormInput(new UIFormSelectBox(FIELD_REPEAT, FIELD_REPEAT, getRepeater())) ;
@@ -100,14 +100,51 @@ public class UIEventDetailTab extends UIFormInputWithActions {
     addEmailAddress.setActionType(ActionData.TYPE_ICON) ;
     addEmailAddress.setActionName(UIEventForm.ACT_ADDEMAIL) ;
     addEmailAddress.setActionListener(UIEventForm.ACT_ADDEMAIL) ;
-
     List<ActionData> addMailActions = new ArrayList<ActionData>() ;
     addMailActions.add(addEmailAddress) ;
-
   }
   protected UIForm getParentFrom() {
     return (UIForm)getParent() ;
   }
+
+  public List<ActionData> getUploadFileList() throws Exception { 
+    List<ActionData> uploadedFiles = new ArrayList<ActionData>() ;
+    for(org.exoplatform.calendar.service.Attachment attachdata : attachments_) {
+      ActionData fileUpload = new ActionData() ;
+      fileUpload.setActionListener(UIEventForm.ACT_DOWNLOAD) ;
+      fileUpload.setActionParameter(attachdata.getId()) ;
+      fileUpload.setActionType(ActionData.TYPE_LINK) ;
+      fileUpload.setCssIconClass("AttachmentIcon ZipFileIcon") ;
+      fileUpload.setActionName(attachdata.getName() + "-(" + MailUtils.convertSize(attachdata.getSize()) + ")" ) ;
+      fileUpload.setShowLabel(true) ;
+      uploadedFiles.add(fileUpload) ;
+      ActionData removeAction = new ActionData() ;
+      removeAction.setActionListener(UIEventForm.ACT_REMOVE) ;
+      removeAction.setActionName(UIEventForm.ACT_REMOVE);
+      removeAction.setActionParameter(attachdata.getId());
+      removeAction.setActionType(ActionData.TYPE_LINK) ;
+      removeAction.setBreakLine(true) ;
+      uploadedFiles.add(removeAction) ;
+    }
+    return uploadedFiles ;
+  }
+
+  public void addToUploadFileList(org.exoplatform.calendar.service.Attachment attachfile) {
+    attachments_.add(attachfile) ;
+  }
+  public void removeFromUploadFileList(org.exoplatform.calendar.service.Attachment attachfile) {
+    attachments_.remove(attachfile);
+  }  
+  public void refreshUploadFileList() throws Exception {
+    setActionField(FIELD_ATTACHMENTS, getUploadFileList()) ;
+  }
+  protected List<org.exoplatform.calendar.service.Attachment> getAttachments() { 
+    return attachments_ ;
+  }
+  protected void setAttachments(List<org.exoplatform.calendar.service.Attachment> attachment) { 
+    attachments_ = attachment ;
+  }
+
 
   private List<SelectItemOption<String>> getPriority() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
@@ -117,7 +154,6 @@ public class UIEventDetailTab extends UIFormInputWithActions {
     options.add(new SelectItemOption<String>("low", "low")) ;
     return options ;
   }
-  
   private List<SelectItemOption<String>> getRepeater() {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     for(String s : CalendarEvent.REPEATTYPES) {
@@ -125,20 +161,29 @@ public class UIEventDetailTab extends UIFormInputWithActions {
     }
     return options ;
   }
-
+  /*private List<SelectItemOption<String>> getReminder() {
+    List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
+    for(String rmdType : Reminder.REMINDER_TYPES) {
+      options.add(new SelectItemOption<String>(rmdType, rmdType)) ;
+    }
+    return options ;
+  }*/
   public void setActionField(String fieldName, List<ActionData> actions) throws Exception {
     actionField_.put(fieldName, actions) ;
   }
-  
   public List<ActionData> getActionField(String fieldName) {return actionField_.get(fieldName) ;}
-  
   @Override
   public void processRender(WebuiRequestContext arg0) throws Exception {
     super.processRender(arg0);
   }
-  
   public UIFormComboBox getUIFormComboBox (String id) {
     return findComponentById(id);
   }
-
+  public UIFormDateTimePicker getUIFormDateTimePicker (String id) {
+    return findComponentById(id) ;
+  }
+  public UIFormSelectBoxWithGroups getUIFormSelectBoxGroup(String id) {
+    return findComponentById(id) ;
+  }
+  
 }

@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
@@ -36,15 +37,14 @@ import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.DataPageList;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.download.DownloadResource;
+import org.exoplatform.download.DownloadService;
+import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.webui.CalendarUtils;
-import org.exoplatform.mail.webui.SelectItem;
-import org.exoplatform.mail.webui.SelectOption;
-import org.exoplatform.mail.webui.SelectOptionGroup;
 import org.exoplatform.mail.webui.Selector;
 import org.exoplatform.mail.webui.UIFormComboBox;
 import org.exoplatform.mail.webui.UIFormDateTimePicker;
-import org.exoplatform.mail.webui.UIFormSelectBoxWithGroups;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
@@ -54,11 +54,16 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.core.model.SelectItem;
 import org.exoplatform.webui.core.model.SelectItemOption;
+import org.exoplatform.webui.core.model.SelectOption;
+import org.exoplatform.webui.core.model.SelectOptionGroup;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIFormInputWithActions;
+import org.exoplatform.webui.form.UIFormSelectBox;
+import org.exoplatform.webui.form.UIFormSelectBoxWithGroups;
 import org.exoplatform.webui.form.UIFormTabPane;
 
 
@@ -78,7 +83,10 @@ import org.exoplatform.webui.form.UIFormTabPane;
                    @EventConfig(listeners = UIEventForm.SaveActionListener.class),
                    @EventConfig(listeners = UIEventForm.AddCategoryActionListener.class, phase = Phase.DECODE),
                    @EventConfig(listeners = UIEventForm.AddEmailAddressActionListener.class, phase = Phase.DECODE),
-                   @EventConfig(listeners = UIEventForm.CancelActionListener.class, phase = Phase.DECODE)
+                   @EventConfig(listeners = UIEventForm.CancelActionListener.class, phase = Phase.DECODE),
+                   @EventConfig(listeners = UIEventForm.AddAttachmentActionListener.class, phase = Phase.DECODE),
+                   @EventConfig(listeners = UIEventForm.RemoveAttachmentActionListener.class, phase = Phase.DECODE),
+                   @EventConfig(listeners = UIEventForm.DownloadAttachmentActionListener.class, phase = Phase.DECODE)
                  }
 )
 public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Selector{
@@ -101,6 +109,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
   final public static String ITEM_UNREPEAT = "false".intern() ;
 
   final public static String ACT_REMOVE = "RemoveAttachment".intern() ;
+  final public static String ACT_DOWNLOAD = "DownloadAttachment".intern() ;
   final public static String ACT_ADDEMAIL = "AddEmailAddress".intern() ;
   final public static String ACT_ADDCATEGORY = "AddCategory".intern() ;
   public boolean isAddNew_ = true ;
@@ -141,12 +150,31 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
       setEventAllDate(CalendarUtils.isAllDayEvent(eventCalendar)) ;
       setEventFromDate(eventCalendar.getFromDateTime()) ;
       setEventToDate(eventCalendar.getToDateTime()) ;
-      if(eventCalendar.getCalendarId() != null) setSelectedCalendarId(eventCalendar.getCalendarId()) ;
-      setSelectedCategory(eventCalendar.getEventCategoryId()) ;
+      UIFormSelectBox selectBox = eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY) ;
+      boolean hasEventCategory = false ;
+      String eventCategoryName= eventCalendar.getEventCategoryName() ;
+      for (SelectItemOption<String> o : selectBox.getOptions()) {
+        if (o.getLabel().equalsIgnoreCase(eventCategoryName)) {
+          hasEventCategory = true ;
+          break ;
+        }
+      }
+      if (!hasEventCategory){
+        CalendarService calService = getApplicationComponent(CalendarService.class) ;
+        EventCategory eventCategory = new EventCategory() ;
+        eventCategory.setName(eventCategoryName);
+        calService.saveEventCategory(SessionProviderFactory.createSessionProvider(), MailUtils.getCurrentUser(), eventCategory, null, true) ;
+        selectBox.getOptions().add(new SelectItemOption<String>(eventCategory.getName(), eventCategory.getId())) ;
+        setSelectedCategory(eventCategory.getId()) ;
+      }
+
+      /*if(eventCalendar.getCalendarId() != null) setSelectedCalendarId(eventCalendar.getCalendarId()) ;
+      setSelectedCategory(eventCalendar.getEventCategoryId()) ;*/
       setEventPlace(eventCalendar.getLocation()) ;
       setEventRepeat(eventCalendar.getRepeatType()) ;
       setSelectedEventPriority(eventCalendar.getPriority()) ;
       setEventReminders(eventCalendar.getReminders()) ;
+      setAttachments(eventCalendar.getAttachment()) ;
       //((UIEventDetailTab)getChildById(TAB_EVENTDETAIL)).getUIFormSelectBox(UIEventDetailTab.FIELD_CALENDAR).setEnable(false) ;
     } else {
       java.util.Calendar cal = GregorianCalendar.getInstance() ;
@@ -572,6 +600,34 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
     eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_PRIORITY).setValue(value) ;
   }
 
+  protected long getTotalAttachment() {
+    UIEventDetailTab uiEventDetailTab = getChild(UIEventDetailTab.class) ;
+    long attSize = 0 ; 
+    for(org.exoplatform.calendar.service.Attachment att : uiEventDetailTab.getAttachments()) {
+      attSize = attSize + att.getSize() ;
+    }
+    return attSize ;
+  }
+
+  public org.exoplatform.calendar.service.Attachment getAttachment(String attId) {
+    UIEventDetailTab uiDetailTab = getChildById(TAB_EVENTDETAIL) ;
+    for (org.exoplatform.calendar.service.Attachment att : uiDetailTab.getAttachments()) {
+      if(att.getId().equals(attId)) {
+        return att ;
+      }
+    }
+    return null;
+  }
+  protected List<Attachment>  getAttachments() {
+    UIEventDetailTab uiEventDetailTab = getChild(UIEventDetailTab.class) ;
+    return uiEventDetailTab.getAttachments() ;
+  }
+  protected void setAttachments(List<org.exoplatform.calendar.service.Attachment> attachment) throws Exception {
+    UIEventDetailTab uiEventDetailTab = getChild(UIEventDetailTab.class) ;
+    uiEventDetailTab.setAttachments(attachment) ;
+    uiEventDetailTab.refreshUploadFileList() ;
+  }
+
 
   static  public class AddCategoryActionListener extends EventListener<UIEventForm> {
     public void execute(Event<UIEventForm> event) throws Exception {
@@ -683,6 +739,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
         calendarEvent.setRepeatType(uiForm.getEventRepeat()) ;
         calendarEvent.setPriority(uiForm.getEventPriority()) ; 
         calendarEvent.setReminders(uiForm.getEventReminders(from, calendarEvent.getReminders())) ;
+        calendarEvent.setAttachment(uiForm.getAttachments());
         try {
           Calendar currentCalendar = null ;
           CalendarService calService = CalendarUtils.getCalendarService() ;
@@ -745,6 +802,52 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
       UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class);
       uiPopupAction.deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
+    }
+  }
+
+  static  public class AddAttachmentActionListener extends EventListener<UIEventForm> {
+    public void execute(Event<UIEventForm> event) throws Exception {
+      UIEventForm uiForm = event.getSource() ;
+      UIPopupActionContainer uiContainer = uiForm.getAncestorOfType(UIPopupActionContainer.class) ;
+      UIPopupAction uiChildPopup = uiContainer.getChild(UIPopupAction.class) ;
+      UIAttachFileForm uiAttachFileForm = uiChildPopup.activate(UIAttachFileForm.class, 500) ;
+      uiAttachFileForm.setAttSize(uiForm.getTotalAttachment()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
+    }
+  }
+  static  public class RemoveAttachmentActionListener extends EventListener<UIEventForm> {
+    public void execute(Event<UIEventForm> event) throws Exception {
+      UIEventForm uiForm = event.getSource() ;
+      UIPopupActionContainer uiContainer = uiForm.getAncestorOfType(UIPopupActionContainer.class) ;
+      if(uiContainer != null) uiContainer.deActivate() ;
+      UIEventDetailTab uiEventDetailTab = uiForm.getChild(UIEventDetailTab.class) ;
+      String attFileId = event.getRequestContext().getRequestParameter(OBJECTID);
+      org.exoplatform.calendar.service.Attachment attachfile = new org.exoplatform.calendar.service.Attachment();
+      for (org.exoplatform.calendar.service.Attachment att : uiEventDetailTab.attachments_) {
+        if (att.getId().equals(attFileId)) {
+          attachfile = (org.exoplatform.calendar.service.Attachment) att;
+        }
+      }
+      uiEventDetailTab.removeFromUploadFileList(attachfile);
+      uiEventDetailTab.refreshUploadFileList() ;
+      uiForm.setSelectedTab(TAB_EVENTDETAIL) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
+    }
+  }
+  static  public class DownloadAttachmentActionListener extends EventListener<UIEventForm> {
+    public void execute(Event<UIEventForm> event) throws Exception {
+      UIEventForm uiForm = event.getSource() ;
+      String attId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      org.exoplatform.calendar.service.Attachment attach = uiForm.getAttachment(attId) ;
+      if(attach != null) {
+        String mimeType = attach.getMimeType().substring(attach.getMimeType().indexOf("/")+1) ;
+        DownloadResource dresource = new InputStreamDownloadResource(attach.getInputStream(), mimeType);
+        DownloadService dservice = (DownloadService)PortalContainer.getInstance().getComponentInstanceOfType(DownloadService.class);
+        dresource.setDownloadName(attach.getName());
+        String downloadLink = dservice.getDownloadLink(dservice.addDownloadResource(dresource));
+        event.getRequestContext().getJavascriptManager().addJavascript("ajaxRedirect('" + downloadLink + "');");
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getChildById(TAB_EVENTDETAIL)) ;
+      }
     }
   }
 }

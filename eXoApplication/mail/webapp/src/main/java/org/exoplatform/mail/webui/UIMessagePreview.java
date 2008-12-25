@@ -449,10 +449,19 @@ public class UIMessagePreview extends UIComponent {
       try {
         if(	Integer.parseInt(answer) == 3 ){
           List<Attachment> attList = msg.getAttachments() ;
+          List<org.exoplatform.calendar.service.Attachment> attachment = new ArrayList<org.exoplatform.calendar.service.Attachment>() ;
           List<CalendarEvent> eventList = new ArrayList<CalendarEvent>() ;
           for(Attachment att : attList) {
             if(att.getMimeType()!= null && att.getMimeType().equalsIgnoreCase("TEXT/CALENDAR")) {
               eventList.addAll(calService.getCalendarImportExports(CalendarServiceImpl.ICALENDAR).getEventObjects(att.getInputStream())) ;
+            } else {
+              org.exoplatform.calendar.service.Attachment a = new org.exoplatform.calendar.service.Attachment() ;
+              a.setId(att.getId()) ;
+              a.setInputStream(att.getInputStream());
+              a.setMimeType(att.getMimeType()) ;
+              a.setName(att.getName());
+              a.setSize(att.getSize());
+              attachment.add(a) ;  
             }
           }
           CalendarEvent calEvent = null ;
@@ -463,6 +472,7 @@ public class UIMessagePreview extends UIComponent {
             }
           }
           if(calEvent != null) {
+            calEvent.setAttachment(attachment) ;
             UIMailPortlet uiPortlet = uiMsgPreview.getAncestorOfType(UIMailPortlet.class) ;
             UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
             UIPopupActionContainer uiPopupContainer = uiPopupAction.createUIComponent(UIPopupActionContainer.class, null, "UIPopupActionEventContainer");
