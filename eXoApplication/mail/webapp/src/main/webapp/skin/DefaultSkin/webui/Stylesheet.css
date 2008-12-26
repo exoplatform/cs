@@ -1478,7 +1478,6 @@
 }
 
 .UIMailPortlet .UIContactsPopup .ContactPreviewContainer .State {
-	padding-left: 20px;
 	line-height: 25px;
 	font-size: 14px;
 	font-weight: bold;
@@ -1488,7 +1487,6 @@
 
 .UIMailPortlet .UIContactsPopup .ContactPreviewContainer .Job {
 	font-size: 12px;
-	padding-left: 20px;
 }
 
 .UIMailPortlet .UIContactsPopup .ContactPreviewContainer .InfoContainer {
