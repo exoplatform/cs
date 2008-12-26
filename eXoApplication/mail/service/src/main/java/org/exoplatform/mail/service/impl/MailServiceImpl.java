@@ -574,7 +574,8 @@ public class MailServiceImpl implements MailService, Startable {
           dateTerm = new SentDateTerm(ComparisonTerm.LE, toDate);
         }
       }
-      searchTerm = new OrTerm(searchTerm, dateTerm);
+      if (!isImap) searchTerm = new OrTerm(searchTerm, dateTerm);
+      else searchTerm = dateTerm ;
       messages = folder.search(searchTerm);
     }
     
@@ -586,6 +587,7 @@ public class MailServiceImpl implements MailService, Startable {
     
     SearchTerm st;
     javax.mail.Message[] filteredMsg;
+    javax.mail.Message msg;
     
     for (MessageFilter filter : filters) {
       beforeTime = false;
@@ -607,8 +609,9 @@ public class MailServiceImpl implements MailService, Startable {
         }
     
         for (int k = filteredMsgNumber - 1; k >= 0; k--) {
-          if (msgMap.containsKey(filteredMsg[k])) {
-            filterList = msgMap.get(filteredMsg[k]);
+          msg = filteredMsg[k];
+          if (msgMap.containsKey(msg)) {
+            filterList = msgMap.get(msg);
           } else {
             filterList = new ArrayList<String>();
           }
@@ -618,25 +621,25 @@ public class MailServiceImpl implements MailService, Startable {
           if (!filterList.contains(filter.getId())) filterList.add(filter.getId());
           
           if (fromDate != null && toDate != null) {
-            if (betweenTime || (!(isImap && !MimeMessageParser.getReceivedDate(filteredMsg[k]).getTime().before(toDate)))) {
+            if (betweenTime || (!(isImap && !MimeMessageParser.getReceivedDate(msg).getTime().before(toDate)))) {
               betweenTime = true ;
               if (!(isImap && !(k > getFrom))) {
-                msgMap.put(filteredMsg[k], filterList);
+                msgMap.put(msg, filterList);
               } else { 
                 betweenTime = false;
               }
             } 
           } else if (fromDate != null) {
             if (!(isImap && !(k > getFrom))) {
-              msgMap.put(filteredMsg[k], filterList);
+              msgMap.put(msg, filterList);
             }
           } else if (toDate != null) {
-            if (beforeTime || !(isImap && !MimeMessageParser.getReceivedDate(filteredMsg[k]).getTime().before(toDate))) {
+            if (beforeTime || !(isImap && !MimeMessageParser.getReceivedDate(msg).getTime().before(toDate))) {
               beforeTime = true;
-              msgMap.put(filteredMsg[k], filterList);
+              msgMap.put(msg, filterList);
             } 
           } else {
-            msgMap.put(filteredMsg[k], filterList);
+            msgMap.put(msg, filterList);
           }
         }
       }
@@ -658,32 +661,33 @@ public class MailServiceImpl implements MailService, Startable {
       
       
       for (int l = messages.length - 1; l >= 0; l--) {
-        if (!msgMap.containsKey(messages[l])) {
+        msg = messages[l];
+        if (!msgMap.containsKey(msg)) {
           if (fromDate != null && toDate != null) {
-            if (betweenTime || (!(isImap && !MimeMessageParser.getReceivedDate(messages[l]).getTime().before(toDate)))) {
+            if (betweenTime || (!(isImap && !MimeMessageParser.getReceivedDate(msg).getTime().before(toDate)))) {
               betweenTime = true ;
               if (!(isImap && !(l > getFrom))) {
-                msgMap.put(messages[l], null);
+                msgMap.put(msg, null);
               } else { 
                 betweenTime = false;
               }
             } 
           } else if (fromDate != null) {
             if (!(isImap && !(l > getFrom))) {
-              msgMap.put(messages[l], null);
+              msgMap.put(msg, null);
             } 
           } else if (toDate != null) {
-            if (beforeTime || !(isImap && !MimeMessageParser.getReceivedDate(messages[l]).getTime().before(toDate))) {
+            if (beforeTime || !(isImap && !MimeMessageParser.getReceivedDate(msg).getTime().before(toDate))) {
               beforeTime = true;
-              msgMap.put(messages[l], null);
+              msgMap.put(msg, null);
             } 
           } else {
-            msgMap.put(messages[l], null);
+            msgMap.put(msg, null);
           }
         } else {
-          List<String> temp = msgMap.get(messages[l]);
-          msgMap.remove(messages[l]);
-          msgMap.put(messages[l], temp);
+          List<String> temp = msgMap.get(msg);
+          msgMap.remove(msg);
+          msgMap.put(msg, temp);
         }
       }
     }

@@ -680,7 +680,8 @@ public class JCRDataStorage {
       newAccount.setProperty(Utils.EXO_CHECK_ALL, account.isCheckAll());
       if (account.getCheckFromDate() != null)
         newAccount.setProperty(Utils.EXO_CHECK_FROM_DATE, account.getCheckFromDate().getTime());
-      
+      else 
+        newAccount.setProperty(Utils.EXO_CHECK_FROM_DATE, (Value) null);
       Iterator<String> it = account.getServerProperties().keySet().iterator();
       ArrayList<String> values = new ArrayList<String>(account.getServerProperties().size());
       while (it.hasNext()) {
