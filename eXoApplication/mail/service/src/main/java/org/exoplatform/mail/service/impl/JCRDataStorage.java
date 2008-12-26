@@ -42,10 +42,12 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 import javax.mail.Header;
+import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Part;
 import javax.mail.internet.ContentType;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 import org.apache.commons.logging.Log;
@@ -976,15 +978,30 @@ public class JCRDataStorage {
       logger.warn("Saved body and attachment of message .... size : " + Math.abs(msg.getSize())
           + " B");
       t2 = System.currentTimeMillis();
-      Object obj = msg.getContent();
+      
+      MimeMessage cmsg = (MimeMessage) msg;
+      Object obj = new Object();
+      try {
+        obj = msg.getContent();
+      } catch(MessagingException mex) {
+        // Use the MimeMessage copy constructor to make a copy
+        // of the entire message, which will fetch the entire
+        // message from the server and parse it on the client:
+        cmsg = new MimeMessage((MimeMessage) msg);
+        try {
+          obj = cmsg.getContent();
+        } catch(MessagingException mex1) {
+          System.out.println("##### Error when fetch message body");
+        }
+      } 
       String contentType = "text/plain";
-      if (msg.isMimeType("text/html") || msg.isMimeType("multipart/alternative"))
+      if (cmsg.isMimeType("text/html") || cmsg.isMimeType("multipart/alternative"))
         contentType = "text/html";
       String body = "";
       if (obj instanceof Multipart) {
         body = setMultiPart((Multipart) obj, node, body);
       } else {
-        body = setPart(msg, node, body);
+        body = setPart(cmsg, node, body);
       }
       node.setProperty(Utils.EXO_CONTENT_TYPE, contentType);
       node.setProperty(Utils.EXO_BODY, Utils.decodeText(body));
@@ -1014,7 +1031,8 @@ public class JCRDataStorage {
     } catch (Exception e) {
       try {
         msgHomeNode.refresh(true);
-      } catch(Exception ex) { 
+      } catch(Exception ex) {
+        e.printStackTrace();
         logger.warn(" [WARNING] Can't refresh.");
       }
       logger.warn(" [WARNING] Cancel saving message to JCR.");
