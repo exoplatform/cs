@@ -525,6 +525,9 @@ public class UIAccountSetting extends UIFormTabPane {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           return;
         }
+        if (acc.isCheckAll()) {
+          acc.setCheckFromDate(null);
+        }
       }
       
       if(uiSetting.getFieldProtocol().equals(Utils.POP3)){
