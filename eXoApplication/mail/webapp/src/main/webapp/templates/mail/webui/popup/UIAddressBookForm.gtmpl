@@ -38,11 +38,19 @@
                     <div class="Label"> <%=_ctx.appRes(uicomponent.id+ ".label.edit-contact") %> </div>
                   </div>
                 </a>
-                <a class="ControlButton" href="<%=uicomponent.event("DeleteContact",uicomponent.id,"id")%>">
-                  <div class="IconHolder DeleteContact">
-                    <div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.delete-contact") %></div>
-                  </div>
-                </a>
+                 <% 
+                	 if (uicomponent.getContacts().size() > 0) {
+                 %>
+                 		<a class="ControlButton" href="<%=uicomponent.event("DeleteContact",uicomponent.id,"id")%>">
+                 <% 
+                 } else {                 
+                 %>
+	                <a href="javascript:void(0);" onclick="alert('<%=_ctx.appRes(uicomponent.id+ ".msg.no-selected-contact-to-delete") %>') ;" class="ControlButton">               
+                 <% } %>                
+	                  <div class="IconHolder DeleteContact">
+	                    <div class="Label"><%=_ctx.appRes(uicomponent.id+ ".label.delete-contact") %></div>
+	                  </div>
+                	</a>
                
                 <!--  
                 <div class="SearchForm">
