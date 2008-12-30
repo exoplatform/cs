@@ -22,6 +22,8 @@
     <module>web/csResources</module>    
     <module>web/csportal</module>
     <module>web/csdemo</module>
+    <module>web/rest</module>
+    <module>server/tomcat/patch</module>
   </modules>
 
   <build>

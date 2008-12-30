@@ -1,0 +1,27 @@
+<project>
+  <parent>
+    <groupId>org.exoplatform.cs</groupId>
+    <artifactId>config</artifactId>
+    <version>1.1-SNAPSHOT</version>
+  </parent> 
+
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>exo.cs.server.tomcat.patch</artifactId>
+  <version>${org.exoplatform.cs.version}</version>
+  <packaging>jar</packaging>
+  <name>eXo Tomcat Server</name>
+  <url>http://www.exoplatform.org</url>
+  <description>eXo Tomcat Server</description>
+
+  <build>
+    <resources>
+		<resource>
+			<directory>${exo.projects.directory.src}/portal/tags/2.2.1/server/tomcat/patch/src/main/tomcat</directory>
+		</resource>
+      <resource>
+        <directory>src/main/tomcat</directory>
+        <includes><include>**/*</include></includes>
+      </resource>
+    </resources>
+  </build>
+</project>

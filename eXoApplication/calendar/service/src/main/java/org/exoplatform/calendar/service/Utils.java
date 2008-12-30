@@ -111,6 +111,7 @@ public class Utils {
 
 
   public static final String MIMETYPE_TEXTPLAIN = "text/plain".intern() ;
+  public static final String MIMETYPE_ICALENDAR = "TEXT/CALENDAR".intern() ;
   public static final String ATTACHMENT = "ATTACHMENT".intern();
   public static final String INLINE = "INLINE".intern();
 

@@ -156,6 +156,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
       for (SelectItemOption<String> o : selectBox.getOptions()) {
         if (o.getLabel().equalsIgnoreCase(eventCategoryName)) {
           hasEventCategory = true ;
+          setSelectedCategory(o.getValue()) ;
           break ;
         }
       }
