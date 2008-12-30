@@ -175,7 +175,16 @@ public class JCRDataStorage{
       return feed ;
     }
   }
-
+  public Node getCalDavHome(SessionProvider sProvider) throws Exception {
+    Node calendarServiceHome = getPublicCalendarHome(sProvider) ;
+    try {
+      return calendarServiceHome.getNode(FEED) ;
+    } catch (Exception e) {
+      Node feed = calendarServiceHome.addNode(FEED, Utils.NT_UNSTRUCTURED) ;
+      calendarServiceHome.getSession().save() ;
+      return feed ;
+    }
+  }
   protected Node getCalendarCategoryHome(SessionProvider sProvider, String username) throws Exception {
     Node calendarServiceHome = getUserCalendarServiceHome(sProvider, username) ;
     try {
@@ -1515,9 +1524,7 @@ public class JCRDataStorage{
       String portalName = containerInfo.getContainerName() ; 
       List<String> ids = new ArrayList<String>();
       for(String calendarId : calendarIds) {        
-        ids.clear() ;
-        ids.add(calendarId) ;
-        OutputStream out = importExport.exportCalendar(sProvider, username, ids, "0") ;
+        OutputStream out = importExport.exportCalendar(sProvider, username, Arrays.asList(new String[]{calendarId}), "0") ;
         if(out != null) {
           ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
           try {
@@ -1535,7 +1542,7 @@ public class JCRDataStorage{
           entry.setTitle(exoCal.getName());                
           entry.setLink(url);        
           description = new SyndContentImpl();
-          description.setType("text/plain");
+          description.setType(Utils.MIMETYPE_TEXTPLAIN);
           description.setValue(exoCal.getDescription());
           entry.setDescription(description);        
           entries.add(entry);
@@ -1570,6 +1577,7 @@ public class JCRDataStorage{
       WebDaveiCalHome = rssHomeNode.getNode("WebDavCalendars") ;
     } catch (Exception e) {
       WebDaveiCalHome = rssHomeNode.addNode("WebDavCalendars", Utils.NT_UNSTRUCTURED) ;
+      rssHomeNode.save();
     }
     try {         
       SyndFeed feed = new SyndFeedImpl();      
@@ -1580,26 +1588,30 @@ public class JCRDataStorage{
       List<SyndEntry> entries = new ArrayList<SyndEntry>();
       SyndEntry entry;
       SyndContent description;
-      List<String> ids = new ArrayList<String>();
       for(String calendarId : calendarIds) {        
-        ids.clear() ;
-        ids.add(calendarId) ;
-        OutputStream out = importExport.exportCalendar(sProvider, username, ids, "0") ;
+        OutputStream out = importExport.exportCalendar(sProvider, username, Arrays.asList(new String[]{calendarId}), "0") ;
         if(out != null) {
           ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
+          Node ical = null ;
+          Node nodeContent = null ;
           try {
-            WebDaveiCalHome.getNode(calendarId + ".ics").setProperty("exo:data", is) ;         
+            ical = WebDaveiCalHome.getNode(calendarId + ".ics") ;
+            nodeContent = ical.getNode(Utils.JCR_CONTENT);
           } catch (Exception e) {
-            Node ical = WebDaveiCalHome.addNode(calendarId + ".ics", "exo:iCalData") ;
-            ical.setProperty("exo:data", is) ;
+            ical = WebDaveiCalHome.addNode(calendarId + ".ics", Utils.NT_FILE) ; 
+            nodeContent = ical.addNode(Utils.JCR_CONTENT, Utils.NT_RESOURCE);
           }
-          String link = rssData.getLink() + WebDaveiCalHome.getPath()+"/"+calendarId + ".ics" ;
+          nodeContent.setProperty(Utils.JCR_LASTMODIFIED, java.util.Calendar.getInstance().getTimeInMillis()) ;
+          nodeContent.setProperty(Utils.JCR_MIMETYPE, Utils.MIMETYPE_ICALENDAR);
+          nodeContent.setProperty(Utils.JCR_DATA, is);
+          WebDaveiCalHome.save() ;
+          String link = rssData.getLink() + ical.getPath() ;
           Calendar exoCal = getUserCalendar(sProvider, username, calendarId) ;
           entry = new SyndEntryImpl();
           entry.setTitle(exoCal.getName());                
           entry.setLink(link);     
           description = new SyndContentImpl();
-          description.setType("text/plain");
+          description.setType(Utils.MIMETYPE_TEXTPLAIN);
           description.setValue(exoCal.getDescription());
           entry.setDescription(description);        
           entries.add(entry);
