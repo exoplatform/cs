@@ -715,7 +715,8 @@ public class JCRDataStorage {
                                                                                          .getImapServerProperties().size()]));
       }
       // saves changes
-      mailHome.getSession().save();
+      if (isNew) mailHome.getSession().save();
+      else mailHome.save();
     }
   }
 
@@ -1406,8 +1407,7 @@ public class JCRDataStorage {
     node.getSession().save();
   }
 
-  public Node getFilterHome(SessionProvider sProvider, String username, String accountId)
-  throws Exception {
+  public Node getFilterHome(SessionProvider sProvider, String username, String accountId) throws Exception {
     Node accountHome = getMailHomeNode(sProvider, username).getNode(accountId);
     if (accountHome.hasNode(Utils.KEY_FILTER))
       return accountHome.getNode(Utils.KEY_FILTER);
