@@ -46,6 +46,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.MimeUtility;
 import javax.mail.internet.MimeMessage.RecipientType;
 import javax.mail.search.AndTerm;
 import javax.mail.search.BodyTerm;
@@ -384,10 +385,12 @@ public class MailServiceImpl implements MailService, Startable {
   }
 
   private Message send(Session session, Transport transport, Message message) throws Exception {
-    javax.mail.Message mimeMessage = new MimeMessage(session);
+    MimeMessage mimeMessage = new MimeMessage(session);
     String status = "";
     InternetAddress addressFrom;
     mimeMessage.setHeader("Message-ID", message.getId());
+    mimeMessage.setHeader("Content-Transfer-Encoding", "utf-8");
+    
     if (message.getFrom() != null)
       addressFrom = new InternetAddress(message.getFrom());
     else
@@ -409,7 +412,7 @@ public class MailServiceImpl implements MailService, Startable {
     if (message.getReplyTo() != null)
       mimeMessage.setReplyTo(Utils.getInternetAddress(message.getReplyTo()));
 
-    mimeMessage.setSubject(message.getSubject());
+    mimeMessage.setSubject(message.getSubject(), "UTF-8");
     mimeMessage.setSentDate(message.getSendDate());
 
     MimeMultipart multipPartRoot = new MimeMultipart("mixed");
@@ -419,7 +422,10 @@ public class MailServiceImpl implements MailService, Startable {
     List<Attachment> attachList = message.getAttachments();
     if (attachList != null && attachList.size() != 0) {
       MimeBodyPart contentPartRoot = new MimeBodyPart();
-      contentPartRoot.setContent(multipPartContent);
+      if (message.getContentType() != null && message.getContentType().indexOf("text/plain") > -1)
+        contentPartRoot.setContent(message.getMessageBody(), "text/plain; charset=utf-8");
+      else
+        contentPartRoot.setContent(message.getMessageBody(), "text/html; charset=utf-8");
 
       MimeBodyPart mimeBodyPart1 = new MimeBodyPart();
       mimeBodyPart1.setContent(message.getMessageBody(), message.getContentType());
@@ -433,15 +439,15 @@ public class MailServiceImpl implements MailService, Startable {
         mimeBodyPart.setDataHandler(new DataHandler(byteArrayDataSource));
 
         mimeBodyPart.setDisposition(Part.ATTACHMENT);
-        mimeBodyPart.setFileName(att.getName());
+        mimeBodyPart.setFileName(MimeUtility.encodeText(att.getName(), "utf-8", null));
         multipPartRoot.addBodyPart(mimeBodyPart);
       }
       mimeMessage.setContent(multipPartRoot);
     } else {
       if (message.getContentType() != null && message.getContentType().indexOf("text/plain") > -1)
-        mimeMessage.setText(message.getMessageBody());
+        mimeMessage.setContent(message.getMessageBody(), "text/plain; charset=utf-8");
       else
-        mimeMessage.setContent(message.getMessageBody(), "text/html");
+        mimeMessage.setContent(message.getMessageBody(), "text/html; charset=utf-8");
     }
     mimeMessage.setHeader("X-Priority", String.valueOf(message.getPriority()));
     String priority = "Normal";
