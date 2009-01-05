@@ -19,6 +19,7 @@ package org.exoplatform.mail.webui;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Utils;
+import org.exoplatform.mail.webui.popup.UIAccountCreation;
 import org.exoplatform.mail.webui.popup.UIAccountSetting;
 import org.exoplatform.mail.webui.popup.UIAddressBookForm;
 import org.exoplatform.mail.webui.popup.UIComposeForm;
@@ -179,20 +180,21 @@ public class UIActionBar extends UIContainer {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiForm = event.getSource() ;
       UIMailPortlet uiPortlet = uiForm.getAncestorOfType(UIMailPortlet.class) ;
-      UISelectAccount uiSelectAcc = uiPortlet.findFirstComponentOfType(UISelectAccount.class);
-      UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-      if(Utils.isEmptyField(uiSelectAcc.getSelectedValue())) {
-        uiApp.addMessage(new ApplicationMessage("UIActionBar.msg.account-list-empty", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
-      } 
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
-      UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 800) ;
-      uiPopupContainer.setId("UIAccountPopupSetting");
-      UIAccountSetting uiAccountSetting = uiPopupContainer.createUIComponent(UIAccountSetting.class, null, null);
-      uiPopupContainer.addChild(uiAccountSetting) ; 
-      uiAccountSetting.setSelectedAccountId(uiSelectAcc.getSelectedValue());
-      uiAccountSetting.fillField();     
+      UISelectAccount uiSelectAcc = uiPortlet.findFirstComponentOfType(UISelectAccount.class);
+      if(Utils.isEmptyField(uiSelectAcc.getSelectedValue())) {
+        UIPopupActionContainer uiAccContainer = uiPortlet.createUIComponent(UIPopupActionContainer.class, null, null) ;
+        uiAccContainer.setId("UIAccountPopupCreation");
+        uiAccContainer.addChild(UIAccountCreation.class, null, null) ;
+        uiPopupAction.activate(uiAccContainer, 700, 0, true) ;
+      } else {
+        UIPopupActionContainer uiPopupContainer = uiPopupAction.activate(UIPopupActionContainer.class, 800) ;
+        uiPopupContainer.setId("UIAccountPopupSetting");
+        UIAccountSetting uiAccountSetting = uiPopupContainer.createUIComponent(UIAccountSetting.class, null, null);
+        uiPopupContainer.addChild(uiAccountSetting) ; 
+        uiAccountSetting.setSelectedAccountId(uiSelectAcc.getSelectedValue());
+        uiAccountSetting.fillField();
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
