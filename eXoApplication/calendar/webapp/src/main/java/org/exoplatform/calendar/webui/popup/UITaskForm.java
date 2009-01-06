@@ -39,7 +39,6 @@ import org.exoplatform.calendar.service.Reminder;
 import org.exoplatform.calendar.webui.CalendarView;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
-import org.exoplatform.calendar.webui.UICalendars;
 import org.exoplatform.calendar.webui.UIFormComboBox;
 import org.exoplatform.calendar.webui.UIFormDateTimePicker;
 import org.exoplatform.calendar.webui.UIListContainer;
@@ -186,7 +185,15 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
         selectBox.getOptions().add(new SelectItemOption<String>(eventCalendar.getEventCategoryName(), eventCalendar.getEventCategoryId())) ;
       }
       selectBox.setValue(eventCalendar.getEventCategoryId()) ;
-      setEventDelegation(eventCalendar.getTaskDelegator()) ;
+      // cs-1911
+      StringBuilder delegator = new StringBuilder("") ;      
+      if (eventCalendar.getTaskDelegator() != null)
+        for (String user : eventCalendar.getTaskDelegator().split(CalendarUtils.COMMA))
+          if (CalendarUtils.getOrganizationService().getUserHandler().findUserByName(user) != null) {
+            if(delegator.length() > 0) delegator.append(CalendarUtils.COMMA) ;
+            delegator.append(user) ;
+          }
+      setEventDelegation(delegator.toString()) ;
       setSelectedEventPriority(eventCalendar.getPriority()) ;
       setEventReminders(eventCalendar.getReminders()) ;
       setAttachments(eventCalendar.getAttachment()) ;
