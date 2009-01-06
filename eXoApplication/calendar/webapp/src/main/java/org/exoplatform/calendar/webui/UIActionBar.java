@@ -16,9 +16,7 @@
  **/
 package org.exoplatform.calendar.webui;
 
-import java.util.Calendar;
 import java.util.List;
-import java.util.TimeZone;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
@@ -150,9 +148,11 @@ public class UIActionBar extends UIContainer  {
           listContainer.setDisplaySearchResult(false) ;
           UIListView uiListView = listContainer.getChild(UIListView.class) ;
           uiViewContainer.initView(uiListView.getLastViewId()) ;
+          uiActionBar.setCurrentView(uiListView.getLastViewId()) ;
           uiListView.setLastViewId(null) ;
         } 
       }
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
       renderedChild.setCurrentCalendar(CalendarUtils.getInstanceTempCalendar()) ;
       renderedChild.refresh() ;
       uiMiniCalendar.setCurrentCalendar(CalendarUtils.getInstanceTempCalendar()) ;
