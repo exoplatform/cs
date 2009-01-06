@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.jcr.PathNotFoundException;
 
@@ -98,8 +99,8 @@ public class UICalendars extends UIForm  {
   public static String CALTYPE = "calType".intern() ;
   public static String CALNAME = "calName".intern() ;
   public static String CALCOLOR = "calColor".intern() ;
-  public static String CURRENTTIME = "ct".intern() ;
-  public static String TIMEZONE = "tz".intern() ;
+//  public static String CURRENTTIME = "ct".intern() ;
+//  public static String TIMEZONE = "tz".intern() ;
 
   private boolean isShowTaskList_ = false ;
   private String[] publicCalendarIds = {} ;
@@ -249,11 +250,6 @@ public class UICalendars extends UIForm  {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiComponent = event.getSource() ;
       String categoryId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      String clientTime = event.getRequestContext().getRequestParameter(CURRENTTIME) ;
-      java.util.Calendar cal = new GregorianCalendar() ;
-      try {
-        cal.setTimeInMillis(Long.parseLong(clientTime)) ;
-      } catch (Exception e) {}
       UICalendarPortlet uiCalendarPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
       popupAction.deActivate() ;
@@ -367,8 +363,9 @@ public class UICalendars extends UIForm  {
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return ;
           }  
-
-          String clientTime = event.getRequestContext().getRequestParameter(CURRENTTIME) ;
+         
+          String clientTime = CalendarUtils.getCurrentTime(uiComponent) ;
+          //String clientTime = event.getRequestContext().getRequestParameter(CURRENTTIME) ;
           String categoryId = event.getRequestContext().getRequestParameter("categoryId") ;
           UIPopupAction popupAction = uiCalendarPortlet.getChild(UIPopupAction.class) ;
           popupAction.deActivate() ;
@@ -400,8 +397,9 @@ public class UICalendars extends UIForm  {
       String currentUser = CalendarUtils.getCurrentUser() ;
       try {
         UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
-        String calendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;
-        String clientTime = event.getRequestContext().getRequestParameter(CURRENTTIME) ;
+        String calendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;        
+        String clientTime = CalendarUtils.getCurrentTime(uiComponent) ;
+        //String clientTime = event.getRequestContext().getRequestParameter(CURRENTTIME) ;
         String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
         String categoryId = event.getRequestContext().getRequestParameter("categoryId") ;
         Calendar calendar = null;

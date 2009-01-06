@@ -16,7 +16,9 @@
  **/
 package org.exoplatform.calendar.webui;
 
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarEvent;
@@ -56,8 +58,8 @@ import org.exoplatform.webui.event.EventListener;
 )
 public class UIActionBar extends UIContainer  {
 
-  final static String CURRENTTIME = "ct".intern() ;
-  final static String TIMEZONE = "tz".intern() ;
+//  final static String CURRENTTIME = "ct".intern() ;
+//  final static String TIMEZONE = "tz".intern() ;
   final static String CATEGORYID = "categoryId".intern() ;
   private boolean isShowPane_ = true ;
   private String currentView_ = null ;
@@ -85,9 +87,10 @@ public class UIActionBar extends UIContainer  {
         uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.event-category-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
-      }  
+      }
       String type = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      String formTime = event.getRequestContext().getRequestParameter(CURRENTTIME) ;
+      String formTime = CalendarUtils.getCurrentTime(uiActionBar) ;//event.getRequestContext().getRequestParameter(CURRENTTIME) ;
+      //System.out.println(TimeZone.getTimeZone(calset.getTimeZone()) + "-" + calset.getTimeZone());
       String categoryId = event.getRequestContext().getRequestParameter(CATEGORYID) ;
       UICalendarPortlet uiPortlet = uiActionBar.getAncestorOfType(UICalendarPortlet.class) ;
       UIPopupAction uiPopupAction = uiPortlet.getChild(UIPopupAction.class) ;
