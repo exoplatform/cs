@@ -335,9 +335,9 @@ UICalendarPortlet.prototype.calendarMenuCallback = function(evt){
   var calColor = obj.getAttribute("calColor");
   var canEdit = String(obj.getAttribute("canedit")).toLowerCase();
   var menu = eXo.webui.UIContextMenu.menuElement ;
-  var d = new Date();
-  var currentTime = d.getTime();
-  var timezoneOffset = d.getTimezoneOffset();
+//  var d = new Date();
+//  var currentTime = d.getTime();
+//  var timezoneOffset = d.getTimezoneOffset();
   var selectedCategory = (eXo.calendar.UICalendarPortlet.selectedCategory) ? eXo.calendar.UICalendarPortlet.selectedCategory : null;
   if(!menu || !obj.id) {
     eXo.webui.UIContextMenu.menuElement = null ;
@@ -368,13 +368,13 @@ UICalendarPortlet.prototype.calendarMenuCallback = function(evt){
       }
       items[i].href = String(items[i].href).replace(/objectId\s*=.*(?='|")/, value);
   }
-  items[0].href = String(items[0].href).replace("')", "&ct=" + currentTime + "&tz=" + timezoneOffset + "')");
-  if (DOMUtil.findAncestorByClass(obj, "CalendarItem")) {
-      items[1].href = String(items[1].href).replace("')", "&ct=" + currentTime + "&tz=" + timezoneOffset + "')");
-      items[0].href = String(items[0].href).replace("')", "&categoryId=" + selectedCategory + "')");
-      items[1].href = String(items[1].href).replace("')", "&categoryId=" + selectedCategory + "')");
-      
-  }
+//  items[0].href = String(items[0].href).replace("')", "&ct=" + currentTime + "&tz=" + timezoneOffset + "')");
+//  if (DOMUtil.findAncestorByClass(obj, "CalendarItem")) {
+//      items[1].href = String(items[1].href).replace("')", "&ct=" + currentTime + "&tz=" + timezoneOffset + "')");
+//      items[0].href = String(items[0].href).replace("')", "&categoryId=" + selectedCategory + "')");
+//      items[1].href = String(items[1].href).replace("')", "&categoryId=" + selectedCategory + "')");
+//      
+//  }
   if (calType && (calType != "0")) {
   
       var actions = DOMUtil.findDescendantsByTagName(menu, "a");
@@ -411,7 +411,8 @@ UICalendarPortlet.prototype.runAction = function(obj){
     var timeZoneOffset = d.getTimezoneOffset();
     actions = actions.replace(/javascript:/, "");
     actions = actions.replace(/\'\)/, "&ct=" + currentTime + "&tz=" + timeZoneOffset + "&categoryId=" + selectedCategroy + "')");
-    eval(actions);
+    //alert(actions);return;
+		eval(actions);
 };
 
 UICalendarPortlet.prototype.switchLayoutCallback = function(layout,status){
@@ -1937,6 +1938,7 @@ UISelection.prototype.clear = function(){
         endTime = parseInt(UISelection.startTime) + UISelection.step * 60 * 1000;
     }
 		if(bottom >= UISelection.container.offsetHeight) endTime -= 1;
+		alert(startTime + " -- " + endTime);
     eXo.webui.UIForm.submitEvent(UISelection.viewType, 'QuickAdd', '&objectId=Event&startTime=' + startTime + '&finishTime=' + endTime);
     eXo.core.DOMUtil.listHideElements(UISelection.block);
 		UISelection.startTime = null;

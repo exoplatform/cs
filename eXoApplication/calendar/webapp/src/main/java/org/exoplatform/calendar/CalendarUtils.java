@@ -39,7 +39,9 @@ import javax.mail.internet.InternetAddress;
 import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.GroupCalendarData;
+import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.popup.UIAddressForm.ContactData;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
@@ -53,10 +55,13 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.impl.GroupImpl;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.model.SelectItem;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.core.model.SelectOption;
 import org.exoplatform.webui.core.model.SelectOptionGroup;
+import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormCheckBoxInput;
 
 
 /**
@@ -618,5 +623,16 @@ public class CalendarUtils {
       e.printStackTrace() ;
       return false ;
     }
+  }
+  public static String getCurrentTime(UIComponent uiCompo) throws Exception {
+    UICalendarPortlet calPortlet = uiCompo.getAncestorOfType(UICalendarPortlet.class) ;
+    CalendarSetting conf = calPortlet.getCalendarSetting();
+    java.util.Calendar cal = java.util.Calendar.getInstance();
+    TimeZone confTimeZone = TimeZone.getTimeZone(conf.getTimeZone());
+    Integer tz = (cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET));
+    if(tz == confTimeZone.getRawOffset()) return String.valueOf(cal.getTimeInMillis());
+    Long time = cal.getTimeInMillis() - tz ;
+    time += confTimeZone.getRawOffset();
+    return String.valueOf(time);
   }
 }
