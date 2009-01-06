@@ -1938,7 +1938,6 @@ UISelection.prototype.clear = function(){
         endTime = parseInt(UISelection.startTime) + UISelection.step * 60 * 1000;
     }
 		if(bottom >= UISelection.container.offsetHeight) endTime -= 1;
-		alert(startTime + " -- " + endTime);
     eXo.webui.UIForm.submitEvent(UISelection.viewType, 'QuickAdd', '&objectId=Event&startTime=' + startTime + '&finishTime=' + endTime);
     eXo.core.DOMUtil.listHideElements(UISelection.block);
 		UISelection.startTime = null;
