@@ -183,8 +183,10 @@
 										<%uicomponent.renderField(uicomponent.getChildById(event.id))%>
 									</div>
 									<div class="EventSummary">
-										<div class="<%=event.getPriority()%>PriorityIcon  <%= (event.getPriority() != null)? " PriorityIcon":"" %>">
-											<div class="EventLabel EventPriority" title="<%=event.summary%>" >$event.summary</div>
+										<div class="InsideIcon">
+											<div class="<%=event.getPriority()%>PriorityIcon  <%= (event.getPriority() != null)? " PriorityIcon":"" %>">
+												<div class="EventLabel EventPriority" title="<%=event.summary%>" >$event.summary</div>
+											</div>
 										</div>
 									</div>
 									<div style="clear:left;"><span></span></div>

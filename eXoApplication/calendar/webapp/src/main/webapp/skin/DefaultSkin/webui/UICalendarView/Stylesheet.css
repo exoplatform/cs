@@ -121,6 +121,7 @@
 	padding: 0px 2px;
 	font-size: 10px;
 	_padding-left: 17px;
+	overflow: hidden;
 }
 
 .UIDayView .EventDayContent .EventContainer{
@@ -157,6 +158,16 @@
 
 .UIDayView .WorkOffTime {
 	background-color: #f3f3f3;
+}
+
+.UIDayView .EventDayContainer .InsideIcon {
+	padding-left: 20px;
+	width: auto;
+}
+
+.UIDayView .EventDayContainer .OutsideIcon {
+	padding-left: 20px;
+	width: auto;
 }
 /*====================Week View============================*/
 
@@ -396,6 +407,17 @@
 .UIWeekView .WorkOffTime {
 	background-color: #f3f3f3;
 }
+
+.UIWeekView .EventWeekContainer .InsideIcon {
+	padding-left: 20px;
+	width: auto;
+}
+
+.UIWeekView .EventWeekContainer .OutsideIcon {
+	padding-left: 20px;
+	width: auto;
+}
+
 /*====================Schedule View============================*/
 
 .UIScheduleView .ScheduleViewBar {
@@ -1127,6 +1149,17 @@
 	left:0px;
 }
 
+.UIMonthView .EventMonthContent .InsideIcon {
+	background-position: left -1864px;
+	padding-left: 20px;
+	width: auto;
+}
+
+.UIMonthView .EventMonthContent .OutsideIcon {
+	background-position: left -1888px;
+	padding-left: 20px;
+	width: auto;
+}
 /*====================View Task List =====================*/
 
 .UITaskView .TaskListContainer {
@@ -1282,19 +1315,10 @@
 	border-bottom: none;
 }
 
-.EventTitle{
+.EventTitle {
 	background-color:black ;
 	opacity: 0.3 ;
 	
-}
-.EventTitle p{
-	font-weight:bold;
-	color:white;
-	padding: 0px ;
-	margin: 0px ;
-	white-space:nowrap ;
-	font-size: 10px;
-	line-height: 10px;
 }
 
 .UserSelectionBlock {

@@ -80,14 +80,14 @@ uiform.begin() %>
 	             
 	             <table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
 	              <tr>
-	               <td style="width: 26px;"></td>
+	               <td style="width: 26px;"><div class="highPriorityIcon"><span></span></div></td>
 	               <td class="Text" style="width: 100px;">
 	               		<%=uiform.getLabel('Place')%>
 	               </td>
 	               <td class="Text"><%=(CalendarUtils.isEmpty(event.getLocation()))? "" : event.getLocation()%></td>
 	              </tr> 
 	              <tr>
-	               <td ></td>
+	               <td ><div class="OutsideIcon"><span></span></div></td>
 	               <td class="Text"><%=uiform.getLabel('RepeatEvent')%></td>
 	               <td class="Text"><%=(CalendarUtils.isEmpty(event.getRepeatType()))? "" : uicomponent.getLabel(event.getRepeatType())%></td>
 	              </tr> 

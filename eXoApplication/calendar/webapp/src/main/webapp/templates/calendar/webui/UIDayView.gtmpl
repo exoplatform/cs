@@ -149,7 +149,9 @@
 								 	actionLink =  uicomponent.event("SaveEvent",ce.id+"&calendarId="+ce.calendarId+"&startTime=beginTime&finishTime=endTime") ;
                   %>
                   <div class="EventContainerBorder EventBoxes $color" calType="$ce.calType" eventCat="$ce.eventCategoryId" eventid="$ce.id" calid="$ce.calendarId" actionlink="$actionLink"  starttime="$beginTime" endtime="$endTime">
-                    <div class="<%=ce.getPriority()%>PriorityIcon" style="float:left;"><span></span></div>
+                    <div class="InsideIcon">
+                    	<div class="<%=ce.getPriority()%>PriorityIcon" style="float:left;"><span></span></div>
+                    </div>
                     <div unselectable="on" class="EventContainerBar EventTitle" title="<%=uiform.getLabel('moveEvent')%>">
                     	
                     	<p>
