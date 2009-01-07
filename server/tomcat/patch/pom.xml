@@ -16,7 +16,7 @@
   <build>
     <resources>
 		<resource>
-			<directory>${exo.projects.directory.src}/portal/tags/2.2.1/server/tomcat/patch/src/main/tomcat</directory>
+			<directory>${exo.projects.directory.src}/portal/tags/2.2.2/server/tomcat/patch/src/main/tomcat</directory>
 		</resource>
       <resource>
         <directory>src/main/tomcat</directory>
