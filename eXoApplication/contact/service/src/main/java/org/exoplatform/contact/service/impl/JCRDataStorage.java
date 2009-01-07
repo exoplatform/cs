@@ -1097,7 +1097,8 @@ public class JCRDataStorage {
     if (birthday != null) {
       dateTime.setTime(birthday) ;    
       contactNode.setProperty("exo:birthday", dateTime) ;
-    }
+    } else try { contactNode.getProperty("exo:birthday").remove() ; } catch (PathNotFoundException e) {} // cs-2021
+    
     contactNode.setProperty("exo:jobTitle", contact.getJobTitle());
     contactNode.setProperty("exo:emailAddress", contact.getEmailAddress());
     
