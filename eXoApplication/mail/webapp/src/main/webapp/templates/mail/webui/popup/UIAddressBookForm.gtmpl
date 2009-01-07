@@ -228,7 +228,7 @@
                                          birthday = selectedContact.getBirthday() ;
                                         }
                                        %>
-                                      <div class="InfoTitle3"><%= (birthday != null) ? MailUtils.formatDate(birthday, locale) : "_"%></div>
+                                      <div class="InfoTitle3"><%= (birthday != null) ? MailUtils.formatDate("MM/dd/yyyy",birthday, locale) : "_"%></div>
                                     </td>
                                   </tr>
                                   
