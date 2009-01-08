@@ -315,12 +315,12 @@
 	background: url('icons/CalendarIcons.gif') no-repeat left -1659px;
 }
 
-.UICalendarPortlet .InsideIcon {
+.UICalendarPortlet .busyIcon {
 	float:left;
 	background: url('icons/CalendarIcons.gif') no-repeat left -1868px;
 }
 
-.UICalendarPortlet .OutsideIcon {
+.UICalendarPortlet .outsideIcon {
 	float:left;
 	background: url('icons/CalendarIcons.gif') no-repeat left -1892px;
 }

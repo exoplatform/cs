@@ -291,12 +291,12 @@
     width:16px;
 }
 
-.UICalendarPortlet .InsideIcon {
+.UICalendarPortlet .busyIcon {
 	 width: 16px;
 	 height: 16px;
 }
 
-.UICalendarPortlet .OutsideIcon {
+.UICalendarPortlet .outsideIcon {
 	 width: 16px;
 	 height: 16px;
 }
