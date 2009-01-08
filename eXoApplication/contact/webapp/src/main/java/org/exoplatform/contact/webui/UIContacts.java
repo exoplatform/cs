@@ -26,6 +26,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 import javax.jcr.PathNotFoundException;
@@ -64,6 +66,7 @@ import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -539,6 +542,19 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           continue ;
         }
       }
+      //cs-1899
+      if (categories.size() == 0) {
+        WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+        ResourceBundle res = context.getApplicationResourceBundle() ;
+        String sharedLabel = "Shared Contact" ;
+        try {
+          sharedLabel = res.getString("UIContacts.label.sharedContacts");        
+        } catch (MissingResourceException e) {      
+          e.printStackTrace() ;
+        }
+        categories.add(new SelectItemOption<String>(sharedLabel, sharedLabel)) ;
+      }
+
       UIFormInputWithActions input = new UIFormInputWithActions(UICategorySelect.INPUT_CATEGORY) ;
       UIFormSelectBox uiSelectBox = new UIFormSelectBox(UICategorySelect.FIELD_CATEGORY, UICategorySelect.FIELD_CATEGORY, categories) ;
       uiSelectBox.setEnable(false) ;
