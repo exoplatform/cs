@@ -934,7 +934,10 @@ public class JCRDataStorage {
       addressBook = iter.nextProperty().getParent() ;
       Node contactHomeNode = addressBook.getParent().getParent().getNode(CONTACTS) ;
       try {
-        return getContact(contactHomeNode.getNode(contactId), JCRDataStorage.SHARED) ;
+        // cs-2073
+        Node contactNode = contactHomeNode.getNode(contactId) ;
+        if (Arrays.asList(ValuesToStrings(contactNode.getProperty("exo:categories").getValues()))
+            .contains(addressBook.getProperty("exo:id").getString())) return getContact(contactNode, JCRDataStorage.SHARED) ;
       } catch (PathNotFoundException e) { }
     }
     return null ;
