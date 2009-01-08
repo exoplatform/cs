@@ -194,9 +194,10 @@
           style="position: absolute;visibility:hidden;" eventcat="$event.eventCategoryId" caltype="$event.calType"
           eventid="$event.id" calid="$event.calendarId" actionlink="$actionLink" unselectable="on"
           starttime="$beginTime" endtime="$endTime">
-           <div class="<%=event.getPriority()%>PriorityIcon"
-	            style="float: left;">
-	            <span></span>
+           <div class="<%=event.eventState%>Icon">
+	           <div class="<%=event.getPriority()%>PriorityIcon" style="float: left;">
+		            <span></span>
+		          </div>
 	          </div>
           <div class="EventContainerBar EventTitle" title="<%=uiform.getLabel('moveEvent')%>" >
             <p unselectable="on">

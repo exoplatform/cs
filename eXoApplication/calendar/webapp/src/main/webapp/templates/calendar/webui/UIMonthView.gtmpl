@@ -45,7 +45,7 @@
 	DateFormat tempFormat = new  SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss", Locale.ENGLISH) ;
 	tempFormat.setCalendar(uicomponent.getInstanceTempCalendar()) ;
 	%>
-	<div class="UIMonthView" >
+	<div class="UIMonthView">
 		<div class="TitleBar">
 			<table>
 				<body>
@@ -183,8 +183,10 @@
 										<%uicomponent.renderField(uicomponent.getChildById(event.id))%>
 									</div>
 									<div class="EventSummary">
-										<div class="<%=event.getPriority()%>PriorityIcon  <%= (event.getPriority() != null)? " PriorityIcon":"" %>">
-											<div class="EventLabel EventPriority" title="<%=event.summary%>" >$event.summary</div>
+										<div class="<%=event.eventState%>Icon">
+											<div class="<%=event.getPriority()%>PriorityIcon  <%= (event.getPriority() != null)? " PriorityIcon":"" %>">
+												<div class="EventLabel EventPriority" title="<%=event.summary%>" >$event.summary</div>
+											</div>
 										</div>
 									</div>
 									<div style="clear:left;"><span></span></div>
@@ -273,3 +275,4 @@
 	      	</div>
 
   		<% /*End Popup Menu*/ %>
+  		

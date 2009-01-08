@@ -220,17 +220,17 @@
 .Wheat {background-color: #F5DEB3;}    
 .Yellow {background-color: #FFFF00;}    
 
-.EventTitle{
+.EventTitle {
 	background-color:#000000 ;
 	filter:alpha(opacity=30);
 	-moz-opacity:0.3;
 	opacity:0.3;
 }
 
-.EventTitle p{
+.EventTitle p {
 	font-weight:bold;
 	color:white;
-	padding: 0px ;
+	padding-left: 2px ;
 	margin: 0px ;
 	white-space:nowrap ;
 	font-size: 10px;
@@ -289,4 +289,14 @@
 .UICalendarPortlet .BlueCircleMinus { 
     height:16px;
     width:16px;
+}
+
+.UICalendarPortlet .busyIcon {
+	 width: 16px;
+	 height: 16px;
+}
+
+.UICalendarPortlet .outsideIcon {
+	 width: 16px;
+	 height: 16px;
 }
