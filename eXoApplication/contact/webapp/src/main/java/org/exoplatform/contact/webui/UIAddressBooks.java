@@ -353,7 +353,7 @@ public class UIAddressBooks extends UIComponent {
       uiImportForm.addConponent() ;      
       if (!ContactUtils.isEmpty(addressBookId)) uiImportForm.setValues(addressBookId) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction); 
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());
     }
   }
 
