@@ -1415,8 +1415,17 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         UIPopupContainer uiPopupContainer = popupAction.activate(UIPopupContainer.class, 400) ;
         uiPopupContainer.setId("UIPermissionContactForm") ;
         UIAddEditPermission uiAddNewEditPermission = uiPopupContainer.addChild(UIAddEditPermission.class, null, null); 
-        uiAddNewEditPermission.initContact(ContactUtils.getContactService().getContact
-            (SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(),objectId)) ;
+        //cs-2153 
+        Contact contact = ContactUtils.getContactService().getContact
+          (SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(),objectId) ;
+        if (contact == null) {
+          UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-deleted", null, ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
+          return ;
+        }
+        uiAddNewEditPermission.initContact(contact) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;  
       } else {        
         UIContactPortlet contactPortlet = uiContacts.getAncestorOfType(UIContactPortlet.class) ;
