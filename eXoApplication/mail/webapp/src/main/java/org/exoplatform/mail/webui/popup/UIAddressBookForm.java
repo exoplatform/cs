@@ -170,7 +170,11 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
       UIPopupAction uiChildPopup = uiActionContainer.getChild(UIPopupAction.class) ;
       UIPopupActionContainer uiPopupContainer = uiChildPopup.activate(UIPopupActionContainer.class, 730) ;
       uiPopupContainer.setId("UIPopupAddContactForm") ;
-      uiPopupContainer.addChild(UIAddContactForm.class, null, null) ;
+      UIAddContactForm uiContactForm = uiPopupContainer.addChild(UIAddContactForm.class, null, null) ;
+//    cs-2082
+      String groupId = ((UIFormSelectBoxWithGroups)uiAddressBookForm.getChildById(SELECT_GROUP)).getValue();
+      UIFormSelectBoxWithGroups e = ((UIFormSelectBoxWithGroups)uiContactForm.getChildById(SELECT_GROUP)) ;
+      e.setSelectedValues(new String[] {groupId});
       event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopup) ;
     }
   }
