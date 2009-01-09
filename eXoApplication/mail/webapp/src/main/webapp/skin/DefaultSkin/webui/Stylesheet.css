@@ -1828,3 +1828,6 @@
 	left: -104px;	
 
 }
+.UIMailPortlet .UIPopupActionEventContainer .SelectFileFrame {
+	width: 300px;
+}
