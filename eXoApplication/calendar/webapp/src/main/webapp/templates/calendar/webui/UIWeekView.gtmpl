@@ -299,7 +299,7 @@
             </div>
           </a>
           <%}%>
-					<a  class="EventActionMenu" href="<%=uicomponent.event("ExportEvent","id&$uicomponent.CALENDARID=calId&$uicomponent.CALTYPE=caltype")%>">
+					<a  class="EventActionMenu" style="display: none;" href="<%=uicomponent.event("ExportEvent","id&$uicomponent.CALENDARID=calId&$uicomponent.CALTYPE=caltype")%>">
             <div class="ItemIcon ExportCalendarIcon">
               <%=_ctx.appRes("ContextMenu.label.ExportEvent")%>
             </div>

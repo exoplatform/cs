@@ -717,7 +717,7 @@ UICalendarPortlet.prototype.ondblclickCallback = function(){
     var eventId = this.getAttribute("eventId");
     var calendarId = this.getAttribute("calid");
     var calendarType = this.getAttribute("caltype");
-    eXo.webui.UIForm.submitEvent('calendar#' + eXo.calendar.UICalendarPortlet.viewType, 'Edit', '&subComponentId=' + eXo.calendar.UICalendarPortlet.viewType + '&objectId=' + eventId + '&calendarId=' + calendarId + '&calType=' + calendarType)
+    eXo.webui.UIForm.submitEvent('calendar#' + eXo.calendar.UICalendarPortlet.viewType, 'Edit', '&subComponentId=' + eXo.calendar.UICalendarPortlet.viewType + '&objectId=' + eventId + '&calendarId=' + calendarId + '&calType=' + calendarType);
 }
 
 /**
@@ -1125,7 +1125,6 @@ UICalendarPortlet.prototype.weekViewCallback = function(evt){
     var obj = eXo.core.EventManager.getEventTargetByClass(evt,"WeekViewEventBoxes");
     var items = DOMUtil.findDescendantsByTagName(UIContextMenu.menuElement, "a");
     if (obj) {
-        //var obj = (DOMUtil.findAncestorByClass(src, "WeekViewEventBoxes")) ? DOMUtil.findAncestorByClass(src, "WeekViewEventBoxes") : src;
 				var eventId = obj.getAttribute("eventid");
         var calendarId = obj.getAttribute("calid");
         var calType = obj.getAttribute("calType");
@@ -1432,7 +1431,8 @@ UICalendarPortlet.prototype.getFilterSelect = function(form){
     if (typeof(form) == "string") 
         form = document.getElementById(form);
     var eventCategory = eXo.core.DOMUtil.findFirstDescendantByClass(form, "div", "EventCategory");
-    select = eXo.core.DOMUtil.findDescendantsByTagName(eventCategory, "select")[0];
+		if (!eventCategory) return ;
+    var select = eXo.core.DOMUtil.findDescendantsByTagName(eventCategory, "select")[0];
     var onchange = select.getAttribute("onchange");
     if (!onchange) 
         select.onchange = eXo.calendar.UICalendarPortlet.filterByCategory;
@@ -1446,40 +1446,55 @@ UICalendarPortlet.prototype.getFilterSelect = function(form){
 UICalendarPortlet.prototype.setSelected = function(form){
     try {
       this.getFilterSelect(form);
-      this.selectedCategory = eXo.calendar.UICalendarPortlet.filterSelect.options[eXo.calendar.UICalendarPortlet.filterSelect.selectedIndex].value;
+			if(!this.filterSelect) {
+				this.listViewDblClick(form);
+				return;
+			}
+      this.selectedCategory = this.filterSelect.options[this.filterSelect.selectedIndex].value;
     	this.listViewDblClick(form);
 		} 
-    catch (e) {}
+    catch (e) {
+			alert("Error : " + e.message);
+		}
 };
 
 UICalendarPortlet.prototype.listViewDblClick = function(form){
 	form = (typeof(form) == "string")? document.getElementById(form):form ;
+	if(!form) return ;
 	var tr = eXo.core.DOMUtil.findDescendantsByClass(form,"tr","UIListViewRow");
 	var i = tr.length ;
 	eXo.calendar.UICalendarPortlet.viewType = "UIListView";
 	var chk = null ;
 	while(i--){
-		eXo.core.EventManager.addEvent(tr[i],"dblclick",this.ondblclickCallback);
+		eXo.core.EventManager.addEvent(tr[i],"dblclick",this.listViewDblClickCallback);
 	}
 };
 
 UICalendarPortlet.prototype.doClick = function(){
+	if(eXo.calendar.UICalendarPortlet.dblDone){
+		delete eXo.calendar.UICalendarPortlet.dblDone;
+		window.clearTimeout(eXo.calendar.UICalendarPortlet.clickone);
+		return ;
+	}
 	eval(eXo.calendar.UICalendarPortlet.listViewAction);
 };
 
 UICalendarPortlet.prototype.listViewClickCallback = function(obj){
-	eXo.calendar.UICalendarPortlet.listViewAction = obj.getAttribute("actionLink");
-	eXo.calendar.UICalendarPortlet.clickone = setTimeout(this.doClick,200);
+	this.listViewAction = obj.getAttribute("actionLink");
+	this.clickone = setTimeout(this.doClick,200);
 	return false ;
 };
 
+UICalendarPortlet.prototype.ondblclickCallbackInListView = function(obj){
+	var eventId = obj.getAttribute("eventId");
+	var calendarId = obj.getAttribute("calid");
+	var calendarType = obj.getAttribute("caltype");
+	eXo.webui.UIForm.submitEvent('calendar#' + eXo.calendar.UICalendarPortlet.viewType, 'Edit', '&subComponentId=' + eXo.calendar.UICalendarPortlet.viewType + '&objectId=' + eventId + '&calendarId=' + calendarId + '&calType=' + calendarType);
+};
+
 UICalendarPortlet.prototype.listViewDblClickCallback = function(){
-	if(eXo.calendar.UICalendarPortlet.clickone && eXo.calendar.UICalendarPortlet.clickone != 0){
-		window.clearTimeout(eXo.calendar.UICalendarPortlet.clickone);
-		eXo.calendar.UICalendarPortlet.clickone = 0 ;
-		eXo.calendar.UICalendarPortlet.listViewAction = null ;
-	}
-	eXo.calendar.UICalendarPortlet.ondblclickCallback();
+	eXo.calendar.UICalendarPortlet.dblDone = true;
+	eXo.calendar.UICalendarPortlet.ondblclickCallbackInListView(this);
 };
 /**
  * Filter event when page load
