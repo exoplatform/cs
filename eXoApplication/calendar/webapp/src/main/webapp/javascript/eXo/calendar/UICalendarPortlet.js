@@ -423,6 +423,7 @@ UICalendarPortlet.prototype.switchLayoutCallback = function(layout,status){
 		}
 	}
 	if(eXo.core.Browser.isFF() && document.getElementById("UIWeekView") && (layout == 1)) eXo.calendar.UIWeekView.onResize();
+	if(eXo.core.Browser.isFF() && document.getElementById("UIMonthView") && (layout == 1)) eXo.calendar.UICalendarMan.initMonth();
 };
 
 UICalendarPortlet.prototype.checkLayoutCallback = function(layoutcookie){
@@ -436,6 +437,7 @@ UICalendarPortlet.prototype.resetLayoutCallback = function(){
 	var workingarea = eXo.core.DOMUtil.findNextElementByTagName(eXo.calendar.LayoutManager.layouts[0], "div");
 	workingarea.style.marginLeft = "243px";
 	if(eXo.core.Browser.isFF() && document.getElementById("UIWeekView")) eXo.calendar.UIWeekView.onResize();
+	if(eXo.core.Browser.isFF() && document.getElementById("UIMonthView")) eXo.calendar.UICalendarMan.initMonth();
 };
 
 /**
@@ -1033,7 +1035,7 @@ UICalendarPortlet.prototype.showContextMenu = function(compid){
     UIContextMenu.attach("EventOnDayContent", "UIMonthViewEventRightMenu");
     UIContextMenu.attach("TimeRule", "UIDayViewRightMenu");
     UIContextMenu.attach("EventBoxes", "UIDayViewEventRightMenu");
-    UIContextMenu.attach(["EventWeekContent", "EventAlldayContainer"], "UIWeekViewRightMenu");
+    UIContextMenu.attach(["Weekday", "EvEventWeekContententAlldayContainer"], "UIWeekViewRightMenu");
     UIContextMenu.attach("UIListViewRow", "UIListViewEventRightMenu");
     UIContextMenu.attach("CalendarItemPrivate", "CalendarPopupMenu");
     UIContextMenu.attach("CalendarItemPublic", "CalendarPopupMenu");
@@ -1291,7 +1293,7 @@ UICalendarPortlet.prototype.runFilterByCalendar = function(calid, checked){
                 events[i].style.display = "none";
             }
         }
-    }    
+    } 
 };
 
 /**
@@ -1403,6 +1405,13 @@ UICalendarPortlet.prototype.runFilterByCategory = function(selectobj){
             else 
                 events[i].style.display = "none";
     }
+};
+
+UICalendarPortlet.prototype.runAction = function(obj){
+	var actionLink = obj.getAttribute("actionLink");
+	var categoryId = this.filterSelect.options[this.filterSelect.selectedIndex].value;
+	actionLink = actionLink.replace("')","&categoryId="+categoryId+"')");
+	eval(actionLink);
 };
 
 /**
