@@ -35,6 +35,7 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
@@ -145,13 +146,16 @@ public class UIEventCategoryForm extends UIForm {
           if(uiEventForm != null){ 
             uiEventForm.setSelectedTab(UIEventForm.TAB_EVENTDETAIL) ;
             uiEventForm.refreshCategory() ;
+            // cs-1905          
             uiEventForm.setSelectedCategory(uiManager.categoryId_) ;
+            uiEventForm.setSelectedCategory(eventCat.getId()) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm.getChildById(UIEventForm.TAB_EVENTDETAIL)) ;
           }
           if(uiTaskForm != null) { 
             uiTaskForm.setSelectedTab(UITaskForm.TAB_TASKDETAIL) ;
             uiTaskForm.refreshCategory() ;
-            uiTaskForm.setSelectedCategory(uiManager.categoryId_) ;
+//          cs-1905
+            uiTaskForm.setSelectedCategory(eventCat.getName()) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiTaskForm.getChildById(UITaskForm.TAB_TASKDETAIL)) ;
           }
         }

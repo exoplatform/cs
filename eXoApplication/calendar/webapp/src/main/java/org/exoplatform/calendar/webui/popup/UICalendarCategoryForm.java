@@ -24,7 +24,6 @@ import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendars;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -145,6 +144,8 @@ public class UICalendarCategoryForm extends UIForm {
         UICalendarForm uiCalendarForm = calendarPortlet.findFirstComponentOfType(UICalendarForm.class) ;
         if(uiCalendarForm != null) {
           uiCalendarForm.reloadCategory() ;
+          //cs-1905
+          uiCalendarForm.setSelectedGroup(category.getId()) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarForm.getChildById(UICalendarForm.INPUT_CALENDAR)) ;
         }
         uiManager.updateGrid() ;
