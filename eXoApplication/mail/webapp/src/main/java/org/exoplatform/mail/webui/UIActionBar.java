@@ -65,6 +65,7 @@ public class UIActionBar extends UIContainer {
     public void execute(Event<UIActionBar> event) throws Exception {
       UIActionBar uiActionBar = event.getSource() ;
       UIMailPortlet uiPortlet = uiActionBar.getAncestorOfType(UIMailPortlet.class) ;
+      UIMessageList uiMsgList = uiPortlet.findFirstComponentOfType(UIMessageList.class);
       String username =  MailUtils.getCurrentUser() ;
       UIApplication uiApp = uiActionBar.getAncestorOfType(UIApplication.class) ;
       String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
@@ -81,6 +82,7 @@ public class UIActionBar extends UIContainer {
         context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.checkMail(true) ;");
         context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.showStatusBox() ;");        
       }
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgList) ;
     }
   }
 
