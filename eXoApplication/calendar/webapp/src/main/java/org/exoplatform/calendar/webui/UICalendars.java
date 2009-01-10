@@ -17,12 +17,10 @@
 package org.exoplatform.calendar.webui;
 
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
 import javax.jcr.PathNotFoundException;
 
@@ -77,7 +75,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
                    @EventConfig(listeners = UICalendars.AddCalendarActionListener.class),
                    @EventConfig(listeners = UICalendars.AddEventCategoryActionListener.class),
                    @EventConfig(listeners = UICalendars.EditGroupActionListener.class),
-                   @EventConfig(phase=Phase.DECODE, listeners = UICalendars.DeleteGroupActionListener.class, confirm="UICalendars.msg.confirm-delete-group"), 
+                   @EventConfig(phase=Phase.DECODE, listeners = UICalendars.DeleteGroupActionListener.class, confirm="UICalendars.msg.confirm-delete-group"),
                    @EventConfig(listeners = UICalendars.ExportCalendarActionListener.class), 
                    @EventConfig(listeners = UICalendars.ExportCalendarsActionListener.class), 
                    @EventConfig(listeners = UICalendars.ImportCalendarActionListener.class),
@@ -87,6 +85,7 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
                    @EventConfig(listeners = UICalendars.AddTaskActionListener.class),
                    @EventConfig(listeners = UICalendars.EditCalendarActionListener.class),
                    @EventConfig(phase=Phase.DECODE, listeners = UICalendars.RemoveCalendarActionListener.class, confirm="UICalendars.msg.confirm-delete-calendar"),
+                   @EventConfig(phase=Phase.DECODE, listeners = UICalendars.RemoveSharedCalendarActionListener.class, confirm="UICalendars.msg.confirm-delete-sharedCalendar"),
                    @EventConfig(listeners = UICalendars.AddCalendarCategoryActionListener.class),
                    @EventConfig(listeners = UICalendars.ShareCalendarActionListener.class),
                    @EventConfig(listeners = UICalendars.ChangeColorActionListener.class),
@@ -326,7 +325,6 @@ public class UICalendars extends UIForm  {
     }
   }
 
-
   static  public class AddEventActionListener extends EventListener<UICalendars> {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiComponent = event.getSource() ;
@@ -528,16 +526,6 @@ public class UICalendars extends UIForm  {
           } else {
             calService.removeUserCalendar(uiComponent.getSession(), username, calendarId) ;
           }
-        }else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
-          if(calService.getSharedCalendars(uiComponent.getSystemSession(), username, true) != null)
-            calendar = calService.getSharedCalendars(uiComponent.getSystemSession(), username, true).getCalendarById(calendarId) ;
-          if(calendar == null) {
-            UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
-            uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          } else {
-            calService.removeSharedCalendar(uiComponent.getSystemSession(), username, calendarId) ;
-          }
         }else if(calType.equals(CalendarUtils.PUBLIC_TYPE)) {
           calendar = calService.getGroupCalendar(uiComponent.getSystemSession(), calendarId) ;
           if(calendar == null) {
@@ -565,6 +553,53 @@ public class UICalendars extends UIForm  {
             }
           }
         }
+      } catch (PathNotFoundException e) {
+        UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+      }
+      UICalendarPortlet uiPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
+      uiPortlet.cancelAction() ;
+      UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
+      if(uiViewContainer.getRenderedChild()  instanceof UIListContainer) {
+        UIListContainer list = (UIListContainer)uiViewContainer.getRenderedChild() ;
+        UIListView uiListView = list.getChild(UIListView.class) ;
+        if(uiListView.isDisplaySearchResult()) {
+          uiListView.setDisplaySearchResult(false) ;
+          uiListView.setCategoryId(null) ;
+          uiListView.refresh() ;
+          uiListView.setLastViewId(null) ;
+          UISearchForm uiSearchForm = uiPortlet.findFirstComponentOfType(UISearchForm.class) ;
+          uiSearchForm.reset() ;
+          UIActionBar uiActionBar = uiPortlet.findFirstComponentOfType(UIActionBar.class) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiSearchForm) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
+        }
+      }
+      CalendarSetting setting = calService.getCalendarSetting(uiComponent.getSession(), username) ;
+      uiViewContainer.refresh() ;
+      uiPortlet.setCalendarSetting(setting) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
+    }
+  }
+  
+  static  public class RemoveSharedCalendarActionListener extends EventListener<UICalendars> {
+    public void execute(Event<UICalendars> event) throws Exception {
+      UICalendars uiComponent = event.getSource() ;
+      String username = CalendarUtils.getCurrentUser() ;
+      String calendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      CalendarService calService = CalendarUtils.getCalendarService() ;
+      Calendar calendar = null ;
+      try {
+        if(calService.getSharedCalendars(uiComponent.getSystemSession(), username, true) != null)
+          calendar = calService.getSharedCalendars(uiComponent.getSystemSession(), username, true).getCalendarById(calendarId) ;
+        if(calendar == null) {
+          UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        } else {
+          calService.removeSharedCalendar(uiComponent.getSystemSession(), username, calendarId) ;
+        }      
       } catch (PathNotFoundException e) {
         UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
