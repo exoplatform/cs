@@ -1035,7 +1035,9 @@ UICalendarPortlet.prototype.showContextMenu = function(compid){
     UIContextMenu.attach("EventBoxes", "UIDayViewEventRightMenu");
     UIContextMenu.attach(["EventWeekContent", "EventAlldayContainer"], "UIWeekViewRightMenu");
     UIContextMenu.attach("UIListViewRow", "UIListViewEventRightMenu");
-    UIContextMenu.attach("CalendarItem", "CalendarPopupMenu");
+    UIContextMenu.attach("CalendarItemPrivate", "CalendarPopupMenu");
+    UIContextMenu.attach("CalendarItemPublic", "CalendarPopupMenu");
+    UIContextMenu.attach("CalendarItemShared", "CalendarPopupMenu2");
     UIContextMenu.attach("GroupItem", "CalendarGroupPopupMenu");
     if(document.getElementById("UIPageDesktop")) this.firstRun = false ;
     this.fixIE();
