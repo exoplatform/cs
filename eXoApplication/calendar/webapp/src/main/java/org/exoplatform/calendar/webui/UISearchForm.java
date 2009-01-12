@@ -16,14 +16,18 @@
  **/
 package org.exoplatform.calendar.webui;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.calendar.CalendarUtils;
+import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.EventPageList;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.GroupCalendarData;
+import org.exoplatform.calendar.webui.UIListView.CalendarEventComparator;
 import org.exoplatform.calendar.webui.popup.UIAdvancedSearchForm;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
@@ -93,8 +97,9 @@ public class UISearchForm extends UIForm {
         //eventQuery.setQueryType(Query.SQL) ;
         String username = CalendarUtils.getCurrentUser() ;
         UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
-        EventPageList resultPageList = 
-          CalendarUtils.getCalendarService().searchEvent(SessionProviderFactory.createSessionProvider(), username, eventQuery,uiForm.getPublicCalendars()) ;
+//      cs-1953
+        List<CalendarEvent> resultList = 
+          CalendarUtils.getCalendarService().searchEvent(SessionProviderFactory.createSessionProvider(), username, eventQuery,uiForm.getPublicCalendars()).getAll() ;
         UICalendarViewContainer calendarViewContainer = 
           calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
         String currentView = calendarViewContainer.getRenderedChild().getId() ;
@@ -104,7 +109,16 @@ public class UISearchForm extends UIForm {
         calendarViewContainer.initView(UICalendarViewContainer.LIST_VIEW) ;
         UIListView uiListView = calendarViewContainer.findFirstComponentOfType(UIListView.class) ;
         if(!uiListView.isDisplaySearchResult()) uiListView.setLastViewId(currentView) ;
-        uiListView.update(resultPageList) ;
+        CalendarEventComparator ceCompare = uiListView.ceCompare_ ;
+        ceCompare.setCompareField(CalendarEventComparator.EVENT_SUMMARY);
+        uiListView.setSortedField(CalendarEventComparator.EVENT_SUMMARY);
+        boolean order = false ;
+        ceCompare.setRevertOrder(order);
+        uiListView.setIsAscending(order);
+        Collections.sort(resultList, ceCompare);
+        
+        EventPageList pageList = new EventPageList(resultList ,10) ;
+        uiListView.update(pageList) ;
         uiListView.setViewType(UIListView.TYPE_BOTH) ;
         uiListView.setDisplaySearchResult(true) ;
         uiListView.setSelectedEvent(null) ;
