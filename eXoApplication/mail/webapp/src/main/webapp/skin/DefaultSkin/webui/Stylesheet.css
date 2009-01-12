@@ -992,28 +992,29 @@
 
 .UIMailPortlet .UIMessagePageList .MailIteratorContainer {
 	line-height: 29px;
-	padding: 0px 10px 0px 15px;
+	padding: 0px 5px 0px 15px;
 }
 
 .UIMailPortlet .UIMessagePageList .MailIteratorContainer .RightPageIteratorBlock {
-	float:right;
+	float: right;
 }
 
 .UIMailPortlet .UIMessagePageList .MailIteratorContainer .LeftPageIteratorBlock {
-	float:right;
-	margin-right:15px;
+	float: right;
+	margin-right: 10px;
 }
 
 .UIMailPortlet .UIMessagePageList .TotalPages {
-	float:left;
-	line-height:25px;
-	vertical-align:middle;
+	float: left;
+	line-height: 25px;
+	vertical-align: middle;
+	white-space: nowrap;
 }
 
 .UIMailPortlet .UIMessagePageList .Number {
 	float:left;
 	line-height: 25px;
-	vertical-align:middle;
+	vertical-align: middle;
 	font-weight: bold;
 	margin: 0px 2px;
 }
@@ -1826,4 +1827,7 @@
 	top: 18px;
 	left: -104px;	
 
+}
+.UIMailPortlet .UIPopupActionEventContainer .SelectFileFrame {
+	width: 300px;
 }
