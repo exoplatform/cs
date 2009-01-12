@@ -1035,7 +1035,7 @@ UICalendarPortlet.prototype.showContextMenu = function(compid){
     UIContextMenu.attach("EventOnDayContent", "UIMonthViewEventRightMenu");
     UIContextMenu.attach("TimeRule", "UIDayViewRightMenu");
     UIContextMenu.attach("EventBoxes", "UIDayViewEventRightMenu");
-    UIContextMenu.attach(["Weekday", "EvEventWeekContententAlldayContainer"], "UIWeekViewRightMenu");
+    UIContextMenu.attach(["Weekday","Weekend","Today", "EvEventWeekContententAlldayContainer"], "UIWeekViewRightMenu");
     UIContextMenu.attach("UIListViewRow", "UIListViewEventRightMenu");
     UIContextMenu.attach("CalendarItemPrivate", "CalendarPopupMenu");
     UIContextMenu.attach("CalendarItemPublic", "CalendarPopupMenu");
