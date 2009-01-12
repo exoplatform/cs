@@ -1465,7 +1465,8 @@ UICalendarPortlet.prototype.setSelected = function(form){
     	this.listViewDblClick(form);
 		} 
     catch (e) {
-			alert("Error : " + e.message);
+			//TODO: Need to find reason to cause bug in IE
+			//alert("Error : " + e.message);
 		}
 };
 
