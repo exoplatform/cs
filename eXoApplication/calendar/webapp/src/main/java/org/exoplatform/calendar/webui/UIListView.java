@@ -94,21 +94,21 @@ public class UIListView extends UICalendarView {
     }
   }
   
-  public void setSortedField(int field) {
+  /*public void setSortedField(int field) {
     sortedField_ = field;
   }
+  public void setIsAscending(boolean b) {
+    isAscending_ = b;
+  }*/
   
   public int getSortedField() {
-    return sortedField_;
+    return ceCompare_.getCompareField();
   }
   
   public boolean isAscending() {
-    return isAscending_;
+    return ceCompare_.getRevertOrder();
   }
   
-  public void setIsAscending(boolean b) {
-    isAscending_ = b;
-  }
   
   public void refresh() throws Exception{
     UIListContainer uiListContainer = getParent() ;
@@ -176,6 +176,7 @@ public class UIListView extends UICalendarView {
     uiCategory.setValue(categoryId_) ;
     uiCategory.setOnChange("Onchange") ;
     eventMap_.clear();
+    Collections.sort(pageList_.getAll(), ceCompare_);
     if(pageList_ != null) {
       for(CalendarEvent calendarEvent : pageList_.getPage(page ,CalendarUtils.getCurrentUser())) {
         UIFormCheckBoxInput<Boolean> checkbox = new UIFormCheckBoxInput<Boolean>(calendarEvent.getId(),calendarEvent.getId(), false) ;
@@ -319,16 +320,18 @@ public class UIListView extends UICalendarView {
   static  public class SortActionListener extends EventListener<UIListView> {
     public void execute(Event<UIListView> event) throws Exception {
       UIListView uiListView = event.getSource() ;
-      List<CalendarEvent> events = new ArrayList<CalendarEvent>(uiListView.pageList_.getAll());
+      //List<CalendarEvent> events = new ArrayList<CalendarEvent>(uiListView.pageList_.getAll());
       long currentPage = uiListView.getCurrentPage();
-      CalendarEventComparator ceCompare = uiListView.ceCompare_ ;
+      //CalendarEventComparator ceCompare = uiListView.ceCompare_ ;
       String fieldId =  event.getRequestContext().getRequestParameter(OBJECTID) ;
-      ceCompare.setCompareField(Integer.parseInt(fieldId));
-      uiListView.setSortedField(Integer.parseInt(fieldId));
-      boolean order = !ceCompare.getRevertOrder();
-      ceCompare.setRevertOrder(order);
-      uiListView.setIsAscending(order);
-      Collections.sort(uiListView.pageList_.getAll(), ceCompare);
+      //ceCompare.setCompareField(Integer.parseInt(fieldId));
+      //uiListView.setSortedField(Integer.parseInt(fieldId));
+       uiListView.ceCompare_.setRevertOrder(!uiListView.ceCompare_.getRevertOrder());
+      //ceCompare.setRevertOrder(order);
+      //uiListView.setIsAscending(order);
+       uiListView.ceCompare_.setCompareField(Integer.parseInt(fieldId)) ;
+      //uiListView.ceCompare_ = ceCompare ;
+      //Collections.sort(uiListView.pageList_.getAll(), ceCompare);
       uiListView.updateCurrentPage(currentPage);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiListView); 
     }
