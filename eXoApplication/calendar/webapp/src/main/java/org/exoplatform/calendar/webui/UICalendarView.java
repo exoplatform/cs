@@ -752,7 +752,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
 
         // cs-1825
         //event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
-        //event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView.getParent()) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarView.getParent()) ;
         if(uiCalendarView instanceof UIListView ) {
           UIListContainer listContainer = uiCalendarView.getAncestorOfType(UIListContainer.class) ;
           UIListView uiListView = listContainer.findFirstComponentOfType(UIListView.class) ;
@@ -1201,7 +1201,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
 		        exportForm.eventId = eventId ;
 		        exportForm.update(calType, list, selectedCalendarId) ;
 		        event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
-		        //event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
+		        event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent.getParent()) ;
 		      }
 		   
 	   }
