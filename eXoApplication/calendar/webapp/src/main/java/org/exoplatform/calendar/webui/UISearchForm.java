@@ -111,10 +111,15 @@ public class UISearchForm extends UIForm {
         if(!uiListView.isDisplaySearchResult()) uiListView.setLastViewId(currentView) ;
         CalendarEventComparator ceCompare = uiListView.ceCompare_ ;
         ceCompare.setCompareField(CalendarEventComparator.EVENT_SUMMARY);
+        
+        uiListView.ceCompare_.setCompareField(CalendarEventComparator.EVENT_SUMMARY) ;
+        boolean order = false ;
+        uiListView.ceCompare_.setRevertOrder(order) ;
+        /*
         uiListView.setSortedField(CalendarEventComparator.EVENT_SUMMARY);
         boolean order = false ;
         ceCompare.setRevertOrder(order);
-        uiListView.setIsAscending(order);
+        uiListView.setIsAscending(order);*/
         Collections.sort(resultList, ceCompare);
         
         EventPageList pageList = new EventPageList(resultList ,10) ;
