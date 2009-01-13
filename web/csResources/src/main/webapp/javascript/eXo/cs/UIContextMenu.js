@@ -106,8 +106,8 @@ UIContextMenu.prototype.getSource = function(evt) {
 
 UIContextMenu.prototype.autoHide = function(evt) {
 	var _e = window.event || evt ;
-	var eventType = _e.type ;	
-	if (eventType == 'mouseout') {
+	var eventType = _e.type ;
+	if (eventType == 'mouseout' && (this.style.display != "none")) {
 		eXo.cs.Utils.contextMenuTimeout = window.setTimeout("document.getElementById('" + this.id + "').style.display='none'", 5000) ;
 	} else {
 		if (eXo.cs.Utils.contextMenuTimeout) {
