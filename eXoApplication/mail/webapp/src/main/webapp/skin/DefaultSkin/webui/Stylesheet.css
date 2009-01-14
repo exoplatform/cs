@@ -193,7 +193,7 @@
 }
 
 .UIMailPortlet .UISelectAccount .AddAccountIcon {
-	background: url('/mail/skin/DefaultSkin/webui/skinIcons/24x24/icons/EditSelectAccount.gif') no-repeat left top;
+	background: url('/mail/skin/DefaultSkin/webui/skinIcons/24x24/icons/ManagerAccount.gif') no-repeat left top;
 	cursor: pointer;
 	float: right; margin: 8px 0px 0px 0px;
 	height: 22px; width: 21px;
