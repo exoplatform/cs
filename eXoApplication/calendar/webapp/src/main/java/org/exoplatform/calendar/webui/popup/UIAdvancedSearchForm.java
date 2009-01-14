@@ -299,11 +299,15 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
         
         CalendarEventComparator ceCompare = uiListView.ceCompare_ ;
         ceCompare.setCompareField(CalendarEventComparator.EVENT_SUMMARY);
-        uiListView.setSortedField(CalendarEventComparator.EVENT_SUMMARY);
+        
+        uiListView.ceCompare_.setCompareField(CalendarEventComparator.EVENT_SUMMARY) ;
         boolean order = false ;
+        uiListView.ceCompare_.setRevertOrder(order) ;
+        /*uiListView.setSortedField(CalendarEventComparator.EVENT_SUMMARY);
+        
         ceCompare.setRevertOrder(order);
-        uiListView.setIsAscending(order);
-        Collections.sort(resultList, ceCompare);
+        uiListView.setIsAscending(order);*/
+        Collections.sort(resultList, uiListView.ceCompare_);
         
         EventPageList pageList = new EventPageList(resultList ,10) ;
         uiListView.update(pageList) ;
