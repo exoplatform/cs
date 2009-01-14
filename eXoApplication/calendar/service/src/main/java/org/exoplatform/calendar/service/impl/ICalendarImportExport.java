@@ -599,7 +599,7 @@ public class ICalendarImportExport implements CalendarImportExport{
           e.printStackTrace() ;
         }
         storage_.saveUserEvent(sProvider, username, exoCalendar.getId(), exoEvent, true) ;
-      } else if (obj instanceof VToDo) { 
+      } else if (obj instanceof VToDo) {
         VToDo event = (VToDo)obj ;
         exoEvent = new CalendarEvent() ;
         if(event.getProperty(Property.CATEGORIES) != null) {
@@ -625,7 +625,7 @@ public class ICalendarImportExport implements CalendarImportExport{
         if(event.getSummary() != null) exoEvent.setSummary(event.getSummary().getValue()) ;
         if(event.getDescription() != null) exoEvent.setDescription(event.getDescription().getValue()) ;
         if(event.getStatus() != null) exoEvent.setStatus(event.getStatus().getValue()) ;
-        exoEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
+        exoEvent.setEventType(CalendarEvent.TYPE_TASK) ;
         if(event.getStartDate() != null) exoEvent.setFromDateTime(event.getStartDate().getDate()) ;
         if(event.getDue() != null) exoEvent.setToDateTime(event.getDue().getDate()) ;
         //if(event.getEndDate() != null) exoEvent.setToDateTime(event.getEndDate().getDate()) ;
@@ -904,7 +904,7 @@ public class ICalendarImportExport implements CalendarImportExport{
         if(event.getSummary() != null) exoEvent.setSummary(event.getSummary().getValue()) ;
         if(event.getDescription() != null) exoEvent.setDescription(event.getDescription().getValue()) ;
         if(event.getStatus() != null) exoEvent.setStatus(event.getStatus().getValue()) ;
-        exoEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
+        exoEvent.setEventType(CalendarEvent.TYPE_TASK) ;
         if(event.getStartDate() != null) exoEvent.setFromDateTime(event.getStartDate().getDate()) ;
         if (event.getDue() != null) exoEvent.setToDateTime(event.getDue().getDate()) ;
         if(event.getLocation() != null) exoEvent.setLocation(event.getLocation().getValue()) ;
