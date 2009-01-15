@@ -940,15 +940,15 @@
 
 
 .UIMonthView .EventMonthContent .normalPriorityIcon {
-	background-position: -4px -804px;
-	_background-position: left -804px;
+	background-position: -4px -1013pxpx;
+	_background-position: left -1013pxpx;
 	height: 16px;
 }
 
 
 .UIMonthView .EventMonthContent .lowPriorityIcon {
-	background-position: -4px -804px;
-	_background-position: left -804px;
+	background-position: -4px -935px;
+	_background-position: left -935px;
 	height: 16px;
 }
 

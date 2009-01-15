@@ -6,32 +6,32 @@
 }
 
 .UIMailPortlet .CheckMailIcon {
-	background: url('icons/CheckMailIcon.gif') no-repeat ;
+	background: url('icons/CheckMailIcon.gif') no-repeat;
 }
 .UIMailPortlet .StopCheckMailIcon {
-	background: url('icons/StopCheckMailIcon.gif') no-repeat ;
+	background: url('icons/StopCheckMailIcon.gif') no-repeat;
 }
 .UIMailPortlet .InboxIcon {
-	background: url('icons/InboxIcon.gif') no-repeat left center ;
+	background: url('icons/InboxIcon.gif') no-repeat left center;
 }
 .UIMailPortlet .inboxIcon {
-	background: url('icons/InboxIcon.gif') no-repeat left center ;
+	background: url('icons/InboxIcon.gif') no-repeat left center;
 }
 
 .UIMailPortlet .DraftsIcon {
-	background: url('icons/DraftsIcon.gif') no-repeat left center ;
+	background: url('icons/DraftsIcon.gif') no-repeat left center;
 }
 
 .UIMailPortlet .SentIcon {
-	background: url('icons/SentIcon.gif') no-repeat left center ;
+	background: url('icons/SentIcon.gif') no-repeat left center;
 }
 
 .UIMailPortlet .SpamIcon {
-	background: url('icons/SpamIcon.gif') no-repeat left center ;
+	background: url('icons/SpamIcon.gif') no-repeat left center;
 }
 
 .UIMailPortlet .TrashIcon {
-	background: url('icons/TrashIcon.gif') no-repeat left center ;
+	background: url('icons/TrashIcon.gif') no-repeat left center;
 }
 
 .UIMailPortlet .OpenFolder {

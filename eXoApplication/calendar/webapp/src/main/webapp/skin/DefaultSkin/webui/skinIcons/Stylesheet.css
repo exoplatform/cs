@@ -150,7 +150,7 @@
 }
 
 .UICalendarPortlet .AdvancedSearch {
-  background: url('icons/CalendarIcons.gif') no-repeat left -729px;	
+	background: url('icons/CalendarIcons.gif') no-repeat left -729px;	
 }
 
 .UICalendarPortlet .GenerateRssIcon {
@@ -206,7 +206,7 @@
 .UICalendarPortlet .normalPriorityIcon {
 	_position:absolute;
 	float:left;
-	background: url('icons/CalendarIcons.gif') no-repeat left -1016px;
+	background: url('icons/CalendarIcons.gif') no-repeat left -1013px;
 }
 
 .UICalendarPortlet .PasteGroupIcon {
@@ -317,9 +317,9 @@
 
 .UICalendarPortlet .busyIcon {
 	float:left;
-	background: url('icons/CalendarIcons.gif') no-repeat left -1868px;
+	background: url('icons/CalendarIcons.gif') no-repeat left -1865px;
 }
-
+	
 .UICalendarPortlet .outsideIcon {
 	float:left;
 	background: url('icons/CalendarIcons.gif') no-repeat left -1892px;
