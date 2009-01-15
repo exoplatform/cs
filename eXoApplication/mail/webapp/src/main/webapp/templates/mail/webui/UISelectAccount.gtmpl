@@ -9,7 +9,7 @@
   
   %>
 		<%uicomponent.renderChildren()%>
-		<div class="AddAccountIcon" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
+		<div class="AddAccountIcon" title="<%=_ctx.appRes(uicomponent.id+ ".label.manage-accounts")%>" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 		<% /*Begin Popup Menu*/ %>
 	      <div style="position: relative;">
 		      <div class="UIPopupCategory" style="display: none;">
