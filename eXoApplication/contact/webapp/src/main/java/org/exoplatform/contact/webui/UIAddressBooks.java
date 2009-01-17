@@ -336,8 +336,10 @@ public class UIAddressBooks extends UIComponent {
       } else {
         uiPopupContainer.setId("ImportAddress") ;
       }
-      UIImportForm uiImportForm = uiPopupContainer.addChild(UIImportForm.class, null, null) ;      
-      Map<String, String> addresses = uiAddressBook.privateAddressBookMap_ ;
+      UIImportForm uiImportForm = uiPopupContainer.addChild(UIImportForm.class, null, null) ;
+      //cs-2188
+      Map<String, String> addresses = new LinkedHashMap<String, String>() ;
+      addresses.putAll(uiAddressBook.privateAddressBookMap_) ;
       for (SharedAddressBook address : uiAddressBook.sharedAddressBookMap_.values())
         if (uiAddressBook.havePermission(address.getId())) {
           addresses.put(address.getId(), ContactUtils
@@ -352,7 +354,7 @@ public class UIAddressBooks extends UIComponent {
       uiImportForm.setGroup(addresses) ;
       uiImportForm.addConponent() ;      
       if (!ContactUtils.isEmpty(addressBookId)) uiImportForm.setValues(addressBookId) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction); 
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
       //event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());
     }
   }
