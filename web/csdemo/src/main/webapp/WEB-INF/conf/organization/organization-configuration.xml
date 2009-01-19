@@ -183,7 +183,7 @@
                 <value>
                   <object type="org.exoplatform.services.organization.OrganizationConfig$User">
                     <field  name="userName"><string>root</string></field>
-                    <field  name="password"><string>its!2EAsy</string></field>
+                    <field  name="password"><string>exo</string></field>
                     <field  name="firstName"><string>CS Demo</string></field>
                     <field  name="lastName"><string>Admin</string></field>
                     <field  name="email"><string>cs@exoplatform.com</string></field>
