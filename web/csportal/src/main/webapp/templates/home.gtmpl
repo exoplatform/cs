@@ -11,8 +11,8 @@
 							<div class="LeftAdImage">
 								<div class="RightAdImage">
 									<div class="EmptyBlock"><span></span></div>
-									<div class="ProductSlogan">eXo Collaboration Suite 1.1 <br> Live Demo</div>
-									<div class="ProductIntro">beta version</div>
+									<div class="ProductSlogan">eXo Collaboration Suite 1.1 <br></div>
+									<div class="ProductIntro">Live Demo</div>
 								</div>
 							</div>
 						</div>
@@ -128,7 +128,7 @@
 					<a href="/portal/public/classic/register" class="SignUp">Sign Up Now</a>
 								
 
-					<a href="http://download.forge.objectweb.org/exoplatform/exo-eXoCS-1.1Beta4-tomcat.zip">
+					<a href="http://download.forge.objectweb.org/exoplatform/exo-eXoCS-1.1-RC1-tomcat.zip">
 					<div class="DownloadButton"><span></span></div></a>
 					
 					<div class="DotLine"><span></span></div>

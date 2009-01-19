@@ -4,7 +4,7 @@ String toururi = Util.getPortalRequestContext().getPortalURI() + "tour";
 
 <div class="SideBar">	
 	<div class="SideBarContainer">
-		<a href="http://download.forge.objectweb.org/exoplatform/exo-eXoCS-1.1Beta4-tomcat.zip"><div class="DownloadButton"><span></span></div></a>
+		<a href="http://download.forge.objectweb.org/exoplatform/exo-eXoCS-1.1-RC1-tomcat.zip"><div class="DownloadButton"><span></span></div></a>
 		<div class="DotLine"><span></span></div>
 		<div class="VersionIcon"><span></span></div>			
 		<div class="NormalText">For support, check our </div></div>
