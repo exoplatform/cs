@@ -361,18 +361,18 @@ public class UIAccountSetting extends UIFormTabPane {
     if(serverType.equals(Utils.POP3)) {
       if(isSSL) {
         getUIStringInput(FIELD_INCOMING_PORT).setValue(UIAccountCreation.DEFAULT_POPSSL_PORT) ;
-        getUIStringInput(FIELD_OUTGOING_PORT).setValue(UIAccountCreation.DEFAULT_SMTPSSL_PORT) ;
+        //getUIStringInput(FIELD_OUTGOING_PORT).setValue(UIAccountCreation.DEFAULT_SMTP_PORT) ;
       } else {
         getUIStringInput(FIELD_INCOMING_PORT).setValue(UIAccountCreation.DEFAULT_POP_PORT) ;
-        getUIStringInput(FIELD_OUTGOING_PORT).setValue(UIAccountCreation.DEFAULT_SMTP_PORT) ;
+        //getUIStringInput(FIELD_OUTGOING_PORT).setValue(UIAccountCreation.DEFAULT_SMTP_PORT) ;
       }
     } else {
       if(isSSL) {
         getUIStringInput(FIELD_INCOMING_PORT).setValue(UIAccountCreation.DEFAULT_IMAPSSL_PORT) ;
-        getUIStringInput(FIELD_OUTGOING_PORT).setValue(UIAccountCreation.DEFAULT_SMTP_PORT) ;
+        //getUIStringInput(FIELD_OUTGOING_PORT).setValue(UIAccountCreation.DEFAULT_SMTP_PORT) ;
       } else {
         getUIStringInput(FIELD_INCOMING_PORT).setValue(UIAccountCreation.DEFAULT_IMAP_PORT) ;
-        getUIStringInput(FIELD_OUTGOING_PORT).setValue(UIAccountCreation.DEFAULT_SMTP_PORT) ;
+        //getUIStringInput(FIELD_OUTGOING_PORT).setValue(UIAccountCreation.DEFAULT_SMTP_PORT) ;
       }
     }
   }
@@ -595,7 +595,7 @@ public class UIAccountSetting extends UIFormTabPane {
   	}
   }
   
-  static	public class ChangeSSLActionListener extends EventListener<UIAccountSetting> {
+  static public class ChangeSSLActionListener extends EventListener<UIAccountSetting> {
   	public void execute(Event<UIAccountSetting> event) throws Exception {
   		UIAccountSetting uiSetting = event.getSource() ; 
   		uiSetting.setDefaultValue(uiSetting.getFieldProtocol(),uiSetting.getFieldIsSSL());
