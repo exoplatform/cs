@@ -1323,7 +1323,7 @@ UICalendarPortlet.prototype.filterByCalendar = function(){
             }
         }
     }
-    UICalendarPortlet.runFilterByCategory(UICalendarPortlet.filterSelect);
+    UICalendarPortlet.runFilterByCategory();
     try { //TODO: review order javascript file 
         if (document.getElementById("UIMonthView")) 
             eXo.calendar.UICalendarMan.initMonth();
@@ -1383,8 +1383,8 @@ UICalendarPortlet.prototype.filterByCategory = function(){
  */
 UICalendarPortlet.prototype.runFilterByCategory = function(selectobj){
     var uiCalendarViewContainer = document.getElementById("UICalendarViewContainer");
-    if (!uiCalendarViewContainer) 
-        return;
+		selectobj = eXo.core.DOMUtil.findFirstDescendantByClass(uiCalendarViewContainer,"div","selectbox");
+    if (!selectobj) return;
     var category = selectobj.options[selectobj.selectedIndex].value;
     var className = "EventBoxes";
     if (document.getElementById("UIWeekViewGrid")) 
@@ -1457,16 +1457,11 @@ UICalendarPortlet.prototype.getFilterSelect = function(form){
 UICalendarPortlet.prototype.setSelected = function(form){
     try {
       this.getFilterSelect(form);
-			if(!this.filterSelect) {
-				this.listViewDblClick(form);
-				return;
-			}
       this.selectedCategory = this.filterSelect.options[this.filterSelect.selectedIndex].value;
     	this.listViewDblClick(form);
 		} 
     catch (e) {
-			//TODO: Need to find reason to cause bug in IE
-			//alert("Error : " + e.message);
+			this.listViewDblClick(form);
 		}
 };
 
@@ -1498,7 +1493,7 @@ UICalendarPortlet.prototype.listViewClickCallback = function(obj){
 };
 
 UICalendarPortlet.prototype.ondblclickCallbackInListView = function(obj){
-	var eventId = obj.getAttribute("eventId");
+	var eventId = obj.getAttribute("eventid");
 	var calendarId = obj.getAttribute("calid");
 	var calendarType = obj.getAttribute("caltype");
 	eXo.webui.UIForm.submitEvent('calendar#' + eXo.calendar.UICalendarPortlet.viewType, 'Edit', '&subComponentId=' + eXo.calendar.UICalendarPortlet.viewType + '&objectId=' + eventId + '&calendarId=' + calendarId + '&calType=' + calendarType);
@@ -1540,7 +1535,7 @@ UICalendarPortlet.prototype.checkCalendarFilter = function(){
     for (var i = 0; i < len; i++) {
         this.runFilterByCalendar(checkbox[i].name, checkbox[i].checked);
     }
-    this.runFilterByCategory(this.filterSelect);
+    this.runFilterByCategory();
 };
 
 /**
@@ -1548,7 +1543,7 @@ UICalendarPortlet.prototype.checkCalendarFilter = function(){
  */
 UICalendarPortlet.prototype.checkCategoryFilter = function(){
     if (this.filterSelect) 
-        eXo.calendar.UICalendarPortlet.runFilterByCategory(this.filterSelect);
+        eXo.calendar.UICalendarPortlet.runFilterByCategory();
 };
 
 /* EOF filter */
