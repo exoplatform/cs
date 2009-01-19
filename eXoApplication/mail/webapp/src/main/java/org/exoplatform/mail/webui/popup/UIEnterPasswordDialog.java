@@ -36,9 +36,11 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 import com.sun.mail.smtp.SMTPSendFailedException;
 
@@ -54,7 +56,7 @@ import com.sun.mail.smtp.SMTPSendFailedException;
     template = "app:/templates/mail/webui/popup/UIEnterPasswordDialog.gtmpl",
     events = {
       @EventConfig(listeners = UIEnterPasswordDialog.OkActionListener.class), 
-      @EventConfig(listeners = UIEnterPasswordDialog.CancelActionListener.class)
+      @EventConfig(listeners = UIEnterPasswordDialog.CancelActionListener.class, phase = Phase.DECODE)
     }
 )
 public class UIEnterPasswordDialog extends UIForm implements UIPopupComponent{
@@ -65,8 +67,11 @@ public class UIEnterPasswordDialog extends UIForm implements UIPopupComponent{
   private Message sendMessage_ ;
   private String accId_;
   
-  public UIEnterPasswordDialog() { 
-    addUIFormInput(new UIFormStringInput(FIELD_PASSWORD, FIELD_PASSWORD, null).setType(UIFormStringInput.PASSWORD_TYPE));
+  public UIEnterPasswordDialog() throws Exception { 
+    UIFormStringInput uiPassword = new UIFormStringInput(FIELD_PASSWORD, FIELD_PASSWORD, null);
+    uiPassword.addValidator(MandatoryValidator.class);
+    uiPassword.setType(UIFormStringInput.PASSWORD_TYPE);
+    addUIFormInput(uiPassword);
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_SAVED_PASSWORD, FIELD_SAVED_PASSWORD, null));
   }
   
