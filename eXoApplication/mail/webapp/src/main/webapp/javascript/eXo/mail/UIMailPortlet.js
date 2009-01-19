@@ -5,7 +5,7 @@ UIMailPortlet.prototype.showContextMenu = function(compid) {
 	var UIContextMenuMail = eXo.webui.UIContextMenuMail ; //eXo.contact.ContextMenu ;
 	UIContextMenuMail.portletName = compid ;
 	var config = {
-		'preventDefault':false, 
+		'preventDefault':false,
 		'preventForms':false
 	} ;	
 	UIContextMenuMail.init(config) ;
@@ -124,7 +124,7 @@ UIMailPortlet.prototype.closePrint = function() {
   var uiPortalApplication = document.getElementById("UIPortalApplication");
   uiPortalApplication.style.display = "block" ;
 	uiPortalApplication.style.height =  "auto";
-	uiPortalApplication.style.overflow =  "none";
+	uiPortalApplication.style.overflow =  "";
 	uiPortalApplication.style.visibility = "visible";
 	for(var i = 0 ; i < document.body.childNodes.length ; i++) {
 		if(document.body.childNodes[i].className == "UIMailPortlet") DOMUtil.removeElement(document.body.childNodes[i]) ;		
