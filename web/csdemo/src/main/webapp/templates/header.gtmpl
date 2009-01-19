@@ -37,7 +37,7 @@
 							
 						
 								<div class="MiddleLoginContainer Signin">
-									<a class="Login" onclick="$signInAction">log in to demo</a>								
+									<a class="Login" onclick="$signInAction">Log in</a>								
 
 									<div style="clear: both;"><span></span></div>	
 								</div>	
