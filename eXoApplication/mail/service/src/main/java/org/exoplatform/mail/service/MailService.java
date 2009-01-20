@@ -405,6 +405,7 @@ public interface MailService {
    */
   public void moveMessage(SessionProvider sProvider, String username,String accountId, Message msg, String currentFolderId, String destFolderId) throws Exception ;
 
+  public void moveMessage(SessionProvider sProvider, String username,String accountId, Message msg, String currentFolderId, String destFolderId, boolean updateReference) throws Exception ;
   /**
    * Use smtp to send message with given server configuration
    * @param msgList

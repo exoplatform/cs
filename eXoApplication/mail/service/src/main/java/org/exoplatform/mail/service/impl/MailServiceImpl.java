@@ -227,7 +227,12 @@ public class MailServiceImpl implements MailService, Startable {
 
   public void moveMessage(SessionProvider sProvider, String username, String accountId,
       Message msg, String currentFolderId, String destFolderId) throws Exception {
-    storage_.moveMessage(sProvider, username, accountId, msg, currentFolderId, destFolderId);
+    moveMessage(sProvider, username, accountId, msg, currentFolderId, destFolderId, true);
+  }
+  
+  public void moveMessage(SessionProvider sProvider, String username, String accountId,
+	Message msg, String currentFolderId, String destFolderId, boolean updateReference) throws Exception {
+	storage_.moveMessage(sProvider, username, accountId, msg, currentFolderId, destFolderId, updateReference);
   }
 
   public MessagePageList getMessagePageList(SessionProvider sProvider, String username,
@@ -920,6 +925,7 @@ public class MailServiceImpl implements MailService, Startable {
                     folderStr += folderIds[k] + ",";
                   }
                   checkingLog_.get(key).setFetchingToFolders(folderStr);
+                  checkingLog_.get(key).setMsgId(MimeMessageParser.getMessageId(msg));
                 }
                 
                 receivedDate = MimeMessageParser.getReceivedDate(msg).getTime();
