@@ -1184,7 +1184,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       UICalendarViewContainer uiViewContainer = calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
       CalendarSetting calSetting = calendarPortlet.getCalendarSetting() ;
       CalendarService calService = CalendarUtils.getCalendarService() ;
-      String summary = uiForm.getEventSumary() ;
+      String summary = uiForm.getEventSumary().trim() ;
       if(!CalendarUtils.isNameValid(summary, CalendarUtils.SIMPLECHARACTER)){
         uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.summary-invalid", CalendarUtils.SIMPLECHARACTER, ApplicationMessage.WARNING) ) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

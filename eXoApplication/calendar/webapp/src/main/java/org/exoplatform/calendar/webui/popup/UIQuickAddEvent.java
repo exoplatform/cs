@@ -249,7 +249,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
       UIQuickAddEvent uiForm = event.getSource() ;
       UICalendarPortlet uiPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-      String summary = uiForm.getEventSummary() ;
+      String summary = uiForm.getEventSummary().trim() ;
       if(!CalendarUtils.isNameValid(summary, CalendarUtils.SIMPLECHARACTER)){
         uiApp.addMessage(new ApplicationMessage(uiForm.getId() + ".msg.summary-invalid", CalendarUtils.SIMPLECHARACTER, ApplicationMessage.WARNING) ) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
