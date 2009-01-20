@@ -31,7 +31,7 @@ UIWeekView.prototype.init = function() {
 		if(allEvents[i].style.display != "none") this.items.push(allEvents[i]) ;
 	}
 	var len = UIWeekView.items.length ;
-  UICalendarPortlet.setFocus() ;
+  //UICalendarPortlet.setFocus() ;
 	if (len <= 0) {
   	this.initAllday() ;
 		return;
@@ -57,7 +57,7 @@ UIWeekView.prototype.init = function() {
 	this.distributeEvent() ;
 	this.setSize() ;
 	this.initAllday() ;
-	UICalendarPortlet.setFocus() ;
+	//UICalendarPortlet.setFocus() ;
 } ;
 
 UIWeekView.prototype.distributeEvent = function() {
@@ -153,7 +153,7 @@ UIWeekView.prototype.showInCol = function(obj) {
 	var width = parseFloat((obj.offsetWidth - 2)/container.offsetWidth)*100 ;
 	items = eXo.calendar.UICalendarPortlet.sortByAttribute(items, "starttime") ;
 	UIWeekView.adjustWidth(items, obj.offsetWidth, eXo.core.Browser.findPosXInContainer(obj, container)) ;
-	this.showHideEvent(items,true);
+	//this.showHideEvent(items,true);
 } ;
 
 UIWeekView.prototype.dragStart = function(evt) {
