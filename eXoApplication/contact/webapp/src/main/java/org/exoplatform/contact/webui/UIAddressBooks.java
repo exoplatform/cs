@@ -320,7 +320,7 @@ public class UIAddressBooks extends UIComponent {
         uiExportForm.updateList();
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());
+      //event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());
     }
   }
   
