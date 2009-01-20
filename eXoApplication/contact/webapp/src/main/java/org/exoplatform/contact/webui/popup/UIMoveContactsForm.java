@@ -179,9 +179,9 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
         }
       }
       
-      
+      List<Contact> pastedContact = new ArrayList<Contact>() ;
       if (sharedContacts.size() > 0 ) {
-        contactService.pasteContacts(sessionProvider, username, addressBookId, type, copySharedContacts) ;
+        pastedContact = contactService.pasteContacts(sessionProvider, username, addressBookId, type, copySharedContacts) ;
         
         for (Contact contact : sharedContacts) {
           if (uiContacts.isSharedAddress(contact)) {
@@ -222,6 +222,11 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
           contact.setViewPermissionGroups(null) ;
           contact.setViewPermissionUsers(null) ;
         }
+//      cs-2157 
+        if (pastedContact.size() > 0) {
+          uiContacts.setContact(sharedContacts, false) ;
+          uiContacts.getContactPageList().getAll().addAll(pastedContact) ;
+        } 
       } else if (ContactUtils.isEmpty(uiContacts.getSelectedGroup()) && 
           ContactUtils.isEmpty(uiContacts.getSelectedTag())) {
 
@@ -231,8 +236,7 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       }
       uiContacts.updateList() ;
       uiContactPortlet.cancelAction() ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(
-          uiContactPortlet.getChild(UIWorkingContainer.class)) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet.getChild(UIWorkingContainer.class)) ;
     }
   }
 
