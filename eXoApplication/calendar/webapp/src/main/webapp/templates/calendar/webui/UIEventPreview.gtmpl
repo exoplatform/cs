@@ -52,8 +52,8 @@ uiform.begin() %>
 		          (<%=CalendarUtils.convertSize(attachFile.size)%>) 
 		         </div>
 		          <%if(attachFile.getMimeType().startsWith("image"))  {
-		          String src = "/"+uicomponent.getPortalName()+"/rest/jcr/" +uicomponent.getRepository()+"/" + attachFile.getWorkspace()+attachFile.getDataPath() ;
-		        	%> 	
+		          String src = uicomponent.getImageSource(attachFile) ;
+		          %> 	
 		        	 	<img id="$attachFile.id" src="$src" class="Img" style="display:none;"/>
 		          <%}%>
 		         <div class="Actions" style="white-space: nowrap;">

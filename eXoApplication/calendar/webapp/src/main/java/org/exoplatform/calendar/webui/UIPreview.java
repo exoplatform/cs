@@ -94,6 +94,13 @@ public class UIPreview extends UICalendarView implements UIPopupComponent {
     DownloadService dservice = getApplicationComponent(DownloadService.class) ;
     return CalendarUtils.getDataSource(attach, dservice) ;
   } 
+  public String getImageSource(Attachment attach) throws Exception {
+    try {
+    return "/"+ getPortalName()+"/rest/jcr/" + getRepository()+"/" + attach.getWorkspace()+attach.getDataPath() ;
+    } catch (Exception e) {
+     return getDownloadLink(attach) ;
+    }
+  }
   @Override
   LinkedHashMap<String, CalendarEvent> getDataMap() {
     LinkedHashMap<String, CalendarEvent> dataMap = new LinkedHashMap<String, CalendarEvent>() ;
