@@ -29,7 +29,8 @@
   rcontext.getJavascriptManager().importJavascript('eXo.calendar.UIWeekView','/calendar/javascript/') ;
   int defaultTimeInterval = uicomponent.getDefaultTimeInterval() ;
   rcontext.getJavascriptManager().addJavascript('eXo.calendar.UICalendarPortlet.getWorkingdays('+numberOfDays+') ;') ;
-	rcontext.getJavascriptManager().addOnLoadJavascript('eXo.calendar.UICalendarPortlet.onLoad') ;
+	//rcontext.getJavascriptManager().addOnLoadJavascript('eXo.calendar.UICalendarPortlet.onLoad') ;
+	rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.calendar.UICalendarPortlet.checkFilter();') ;
 	rcontext.getJavascriptManager().addOnResizeJavascript('eXo.calendar.UIWeekView.onResize') ;
  	monthViewAction = uicomponent.TYPE_MONTH +"&currentTime="+ uicomponent.getCurrentCalendar().getTimeInMillis();
 	yearViewAction = uicomponent.TYPE_YEAR +"&currentTime="+ uicomponent.getCurrentCalendar().getTimeInMillis();
@@ -191,7 +192,7 @@
 						actionLink =  uicomponent.event("UpdateEvent",event.getId()+"&calendarId="+event.getCalendarId()+"&startTime=beginTime&finishTime=endTime") ;
         %>
         <div class="EventContainerBorder WeekViewEventBoxes $color" eventindex="$dayOfWeek"
-          style="position: absolute;visibility:hidden;" eventcat="$event.eventCategoryId" caltype="$event.calType"
+          style="position: absolute;" eventcat="$event.eventCategoryId" caltype="$event.calType"
           eventid="$event.id" calid="$event.calendarId" actionlink="$actionLink" unselectable="on"
           starttime="$beginTime" endtime="$endTime">
            <div class="<%=event.eventState%>Icon">

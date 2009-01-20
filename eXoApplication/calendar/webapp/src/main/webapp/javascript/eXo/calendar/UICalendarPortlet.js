@@ -24,8 +24,7 @@ UICalendarPortlet.prototype.setStyle = function(object, styles){
  * @param {Int} Milliseconds Milliseconds
  */
 UICalendarPortlet.prototype.timeToMin = function(milliseconds){
-    if (typeof(milliseconds) == "string") 
-        milliseconds = parseInt(milliseconds);
+    if (typeof(milliseconds) == "string") milliseconds = parseInt(milliseconds);
     var d = new Date(milliseconds);
     var hour = d.getHours();
     var min = d.getMinutes();
@@ -217,16 +216,17 @@ UICalendarPortlet.prototype.setting = function(){
  */
 UICalendarPortlet.prototype.setFocus = function(){
   if(document.getElementById("UIWeekView")){
-    var obj = eXo.calendar.UIWeekView.container ;
+    var obj = document.getElementById("UIWeekViewGrid") ;
     var container = eXo.core.DOMUtil.findAncestorByClass(obj,"EventWeekContent") ;
   }
-  if(document.getElementById("UIDayView")){
-    var obj = this.viewer ;
+  else if(document.getElementById("UIDayView")){
+    var obj = document.getElementById("UIDayView") ;
+		obj = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div", "EventBoardContainer");
     var container = eXo.core.DOMUtil.findAncestorByClass(obj, "EventDayContainer");
-  }
+  } else return ;
   var events = eXo.core.DOMUtil.findDescendantsByClass(obj,"div", "EventContainerBorder");
 	events = this.getBlockElements(events);
-    var len = events.length;
+  var len = events.length;
 	var scrollTop =  this.timeToMin((new Date()).getTime());
 	if(this.workingStart){
 		if(len == 0) scrollTop = this.workingStart ;
@@ -662,7 +662,7 @@ UICalendarPortlet.prototype.adjustWidth = function(el, totalWidth){
 UICalendarPortlet.prototype.showEvent = function(){
     this.init();
     var EventDayContainer = eXo.core.DOMUtil.findAncestorByClass(this.viewer, "EventDayContainer");
-    this.setFocus(this.viewer, EventDayContainer);
+//    this.setFocus(this.viewer, EventDayContainer);
     this.editAlldayEvent(EventDayContainer);
     if (!this.init()) 
         return;
@@ -1506,14 +1506,20 @@ UICalendarPortlet.prototype.listViewDblClickCallback = function(){
 /**
  * Filter event when page load
  */
-UICalendarPortlet.prototype.checkFilter = function(){
+UICalendarPortlet.prototype.checkFilter = function(){	
+		var w = document.getElementById("UICalendarViewContainer");
+		if(w.offsetParent && ((w.offsetParent.offsetWidth - w.offsetWidth) < 10)) {
+			eXo.calendar.UICalendarPortlet.firstLoadTimeout = window.setTimeout(eXo.calendar.UICalendarPortlet.checkFilter,0);
+			return ;
+		}
+		
     var UICalendarPortlet = eXo.calendar.UICalendarPortlet;
     for (var i = 0; i < UICalendarPortlet.filterSelect.options.length; i++) {
         if (UICalendarPortlet.filterSelect.options[i].value == UICalendarPortlet.selectedCategory) {
             UICalendarPortlet.filterSelect.options[i].selected = true;
         }
     }
-    this.checkCalendarFilter();
+    UICalendarPortlet.checkCalendarFilter();
 		if (document.getElementById("UIMonthView")) 
         eXo.calendar.UICalendarMan.initMonth();
     if (document.getElementById("UIDayViewGrid")) 
@@ -1522,6 +1528,8 @@ UICalendarPortlet.prototype.checkFilter = function(){
         eXo.calendar.UICalendarMan.initWeek();
         eXo.calendar.UIWeekView.init();
     }
+		UICalendarPortlet.setFocus();
+		if(eXo.calendar.UICalendarPortlet.firstLoadTimeout) delete eXo.calendar.UICalendarPortlet.firstLoadTimeout;
 };
 
 /**
