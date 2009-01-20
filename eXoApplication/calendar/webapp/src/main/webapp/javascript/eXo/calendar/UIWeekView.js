@@ -187,12 +187,12 @@ UIWeekView.prototype.drag = function(evt) {
 	deltaY = _e.clientY - UIWeekView.mouseY ;
 	if (deltaY % eXo.calendar.UICalendarPortlet.interval == 0) {
     UIWeekView.dragElement.style.top = UIWeekView.mousePos(_e).y - UIWeekView.offset.y - UIWeekView.containerOffset.y + "px" ;
-    eXo.calendar.UICalendarPortlet.updateTitle(UIWeekView.dragElement, posY) ;
   }
 	if (UIWeekView.isCol(_e)) {
 		var posX = eXo.core.Browser.findPosXInContainer(UIWeekView.currentCol, UIWeekView.dragElement.offsetParent) ;
 		UIWeekView.dragElement.style.left = posX + "px" ;
 	}
+  eXo.calendar.UICalendarPortlet.updateTitle(UIWeekView.dragElement, posY) ;
 } ;
 
 UIWeekView.prototype.dropCallback = function() {
