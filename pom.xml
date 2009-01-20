@@ -24,6 +24,7 @@
     <module>web/csdemo</module>
     <module>web/rest</module>
     <module>server/tomcat/patch</module>
+    <module>server/tomcat/plugin</module>
   </modules>
 
   <build>
@@ -74,7 +75,7 @@
           <systemProperties>
             <property>
               <name>mock.portal.dir</name>
-              <value>${exo.projects.directory.src}/portal/tags/2.2.2/web/portal/src/main/webapp</value>
+              <value>${exo.projects.directory.src}/portal/tags/2.2/web/portal/src/main/webapp</value>
             </property>
           </systemProperties>
         </configuration>
@@ -118,7 +119,7 @@
       	<org.exoplatform.ws.version>1.2.1</org.exoplatform.ws.version>
         <org.exoplatform.jcr.version>1.9.3</org.exoplatform.jcr.version>
         <org.exoplatform.pc.version>2.0.2</org.exoplatform.pc.version>		
-        <org.exoplatform.portal.version>2.2.2</org.exoplatform.portal.version>
+        <org.exoplatform.portal.version>2.2</org.exoplatform.portal.version>
         <org.exoplatform.cs.version>1.1-SNAPSHOT</org.exoplatform.cs.version>
         <test.classes>Test</test.classes>
         <test.skip>true</test.skip>
