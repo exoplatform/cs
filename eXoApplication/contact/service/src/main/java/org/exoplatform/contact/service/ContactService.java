@@ -447,7 +447,7 @@ public interface ContactService {
    * @throws Exception 
    */
 
-  public void pasteContacts(SessionProvider sProvider, String username, String destAddress, String destType, Map<String, String> contactsMap) throws Exception ;
+  public List<Contact> pasteContacts(SessionProvider sProvider, String username, String destAddress, String destType, Map<String, String> contactsMap) throws Exception ;
 
   /**
    * this method allow get a object used to import, export contacts

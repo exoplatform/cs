@@ -819,8 +819,10 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           contacts.add(contact) ;   
         }  
       }
+      List<Contact> pastedContact = new ArrayList<Contact>() ;
+      
       if (sharedContacts.size() > 0 ) {
-        contactService.pasteContacts(sessionProvider, username, addressBookId, type, copySharedContacts) ;
+        pastedContact = contactService.pasteContacts(sessionProvider, username, addressBookId, type, copySharedContacts) ;
         for (Contact contact : sharedContacts) {
         
         if (uiContacts.isSharedAddress(contact)) {
@@ -867,6 +869,11 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           contact.setViewPermissionUsers(null) ;
           contact.setViewPermissionGroups(null) ;          
         }
+        //cs-2157 
+        if (pastedContact.size() > 0) {
+          uiContacts.setContact(sharedContacts, false) ;
+          uiContacts.pageList_.getAll().addAll(pastedContact) ;
+        }        
       } else if (uiContacts.isSelectSharedContacts  && !ContactUtils.isEmpty(addressBookId)) { //select shared contacts        
         if (contacts.size() > 0) uiContacts.setContact(contacts, false) ;
         if (sharedContacts.size() > 0) uiContacts.setContact(sharedContacts, false) ;

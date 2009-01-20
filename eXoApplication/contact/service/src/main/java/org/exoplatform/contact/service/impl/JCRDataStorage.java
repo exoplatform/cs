@@ -1948,8 +1948,9 @@ public class JCRDataStorage {
   }
   
   
-  public void pasteContacts(SessionProvider sProvider, String username, String destAddress, String destType,  Map<String, String> contactsMap) throws Exception {
+  public List<Contact> pasteContacts(SessionProvider sProvider, String username, String destAddress, String destType,  Map<String, String> contactsMap) throws Exception {
     List<Contact> contacts = new ArrayList<Contact>() ;
+    List<Contact> pastedContacts = new ArrayList<Contact>() ;
     for (String contactId : contactsMap.keySet()) {
       String type = contactsMap.get(contactId) ;
       Contact contact = null ;
@@ -1967,7 +1968,7 @@ public class JCRDataStorage {
     for (Contact contact : contacts) {
       if (destType.equals(PRIVATE)) {
         Node contactHomeNode = getUserContactHome(sProvider, username);
-        saveCopyContact(contactHomeNode, contact, destAddress, destType) ; 
+        pastedContacts.add(getContact(saveCopyContact(contactHomeNode, contact, destAddress, destType), destType)) ; 
       } else if (destType.equals(SHARED)) {
         Node sharedAddressBookMock = getSharedAddressBook(username) ;
         PropertyIterator iter = sharedAddressBookMock.getReferences() ;
@@ -1976,15 +1977,16 @@ public class JCRDataStorage {
           addressBook = iter.nextProperty().getParent() ;
           if(addressBook.getName().equals(destAddress)) {
             Node contactHomeNode = addressBook.getParent().getParent().getNode(CONTACTS) ;
-            saveCopyContact(contactHomeNode, contact, destAddress, destType) ;   
+            pastedContacts.add(getContact(saveCopyContact(contactHomeNode, contact, destAddress, destType), destType)) ;   
             break ;
           }
         }
       }       
     }
+    return pastedContacts ;
   }
   
-  private void saveCopyContact(Node contactHomeNode, Contact contact, String destAddress, String destType) throws Exception {
+  private Node saveCopyContact(Node contactHomeNode, Contact contact, String destAddress, String destType) throws Exception {
     String newId = "Contact" + IdGenerator.generate() ;
     Node contactNode = contactHomeNode.addNode(newId, "exo:contact"); 
     contactNode.setProperty("exo:id", newId);
@@ -2080,6 +2082,7 @@ public class JCRDataStorage {
       if(contactNode.hasNode("image")) contactNode.getNode("image").remove() ;
     }
     contactHomeNode.getSession().save() ;
+    return contactNode ;
   }
   
 }
