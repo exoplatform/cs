@@ -1,6 +1,7 @@
 <%
-	import org.exoplatform.mail.webui.UIMessageList ;
-	import org.exoplatform.mail.webui.UIMessagePreview ;
+  import org.exoplatform.mail.webui.UIMessageList ;
+  import org.exoplatform.mail.webui.UIMessagePreview ;
+  import org.exoplatform.mail.webui.UIFetchingBar ;
   
   def rcontext = _ctx.getRequestContext() ;
   rcontext.getJavascriptManager().importJavascript('eXo.mail.UIMailDragDrop','/mail/javascript/');
@@ -15,6 +16,8 @@
 %>
 
 <div class="MailWorkingDetails SpliterContainer" id="<%=uicomponent.getId()%>">
+	<%uicomponent.renderChild(UIFetchingBar.class);%>
+
 	<div class="UIMessageArea" id="uiMessageListResizableArea" style="border-top:0px">		
 		<%uicomponent.renderChild(UIMessageList.class);%>
 	</div>

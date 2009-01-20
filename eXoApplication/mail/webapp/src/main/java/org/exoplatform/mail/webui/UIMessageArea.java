@@ -18,6 +18,7 @@ package org.exoplatform.mail.webui;
 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
+import org.exoplatform.mail.webui.UIFetchingBar ;
 
 /**
  * Created by The eXo Platform SARL
@@ -34,6 +35,7 @@ public class UIMessageArea extends UIContainer  {
   public UIMessageArea() throws Exception {}
   
   public void init(String accId) throws Exception {
+	addChild(UIFetchingBar.class, null, null);
     UIMessageList uiMessageList = createUIComponent(UIMessageList.class, null, null);
     uiMessageList.init(accId);
     addChild(uiMessageList);

@@ -157,6 +157,12 @@ MailServiceHandler.prototype.updateUI = function(status) {
   if (statusTxt != '') {
     statusTextNode.innerHTML = statusTxt;
   }
+  
+  var updateListLabel = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'UpdateList');
+    if (this.serverData.info.checkingmail.messageid && updateListLabel) {
+    	eval(eXo.core.DOMUtil.findDescendantsByTagName(updateListLabel, 'a')[0].href.replace("%20", "").replace("msgId", this.serverData.info.checkingmail.messageid));
+  	}
+  
   var status = parseInt(this.serverData.info.checkingmail.status);
   if (status == this.DOWNLOADING_MAIL_STATUS) {
   	var folderIds = this.serverData.info.checkingmail.fetchingtofolders;

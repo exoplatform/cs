@@ -284,10 +284,10 @@ public class UIFolderContainer extends UIContainer {
 	public void execute(Event<UIFolderContainer> event) throws Exception {
 	  UIFolderContainer uiFolderContainer = event.getSource() ;
 	  String folderId = event.getRequestContext().getRequestParameter(OBJECTID) ;		  
-    UIMailPortlet uiPortlet = uiFolderContainer.getAncestorOfType(UIMailPortlet.class) ;
-    UIFolderContainer uiFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class) ;
+      UIMailPortlet uiPortlet = uiFolderContainer.getAncestorOfType(UIMailPortlet.class) ;
+      UIFolderContainer uiFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class) ;
 	  UIMessageArea uiMsgArea = uiPortlet.findFirstComponentOfType(UIMessageArea.class) ;	
-    UIMessageList uiMsgList = uiMsgArea.getChild(UIMessageList.class) ;
+      UIMessageList uiMsgList = uiMsgArea.getChild(UIMessageList.class) ;
 	  UIMessagePreview uiMsgPreview = uiMsgArea.getChild(UIMessagePreview.class) ;
 	  String username = uiPortlet.getCurrentUser() ;
 	  String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue() ;
@@ -295,10 +295,10 @@ public class UIFolderContainer extends UIContainer {
 	  List<Message> msgList = mailSrv.getMessagesByFolder(SessionProviderFactory.createSystemProvider(), username, accountId, folderId) ;
 	  boolean containPreview = false ;
 	  Message msgPre = uiMsgPreview.getMessage() ;
+	  String trashFolderId = Utils.createFolderId(accountId, Utils.FD_TRASH, false) ;
 	  for (Message msg : msgList) {
 	    if (msgPre != null && msg.getId().equals(msgPre.getId())) containPreview = true ;
-	    String trashFolderId = Utils.createFolderId(accountId, Utils.FD_TRASH, false) ;
-	    mailSrv.moveMessage(SessionProviderFactory.createSystemProvider(), username, accountId, msg, folderId, trashFolderId) ;
+	    mailSrv.moveMessage(SessionProviderFactory.createSystemProvider(), username, accountId, msg, folderId, trashFolderId, false) ;
 	  }	      		 
 	  uiMsgList.updateList() ;
 	  if (containPreview) uiMsgPreview.setMessage(null);

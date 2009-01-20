@@ -39,6 +39,7 @@ public class CheckingInfo {
   private String fetchingToFolders_;
   private boolean hasChanged_ ;
   private boolean isRequestStop_ = false;
+  private String msgId_ ;
   
   public int getTotalMsg() {  return totalMsg_ ; } ;
   public void setTotalMsg(int totalMsg) { 
@@ -74,4 +75,9 @@ public class CheckingInfo {
   
   public boolean isRequestStop() { return isRequestStop_ ; }
   public void setRequestStop(boolean b) { isRequestStop_ = b ; }
+  
+  public String getMsgId() { return msgId_ ; }
+  public void setMsgId(String msgId) { 
+    msgId_ = msgId; 
+  }
 }

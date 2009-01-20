@@ -101,7 +101,8 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
       @EventConfig(listeners = UIMessageList.ExportActionListener.class),
       @EventConfig(listeners = UIMessageList.SortActionListener.class),
       @EventConfig(listeners = UIMessageList.RefreshActionListener.class),
-      @EventConfig(listeners = UIMessageList.ComfirmPasswordActionListener.class)
+      @EventConfig(listeners = UIMessageList.ComfirmPasswordActionListener.class),
+      @EventConfig(listeners = UIMessageList.UpdateListActionListener.class)
     }
 )
 
@@ -1341,6 +1342,22 @@ public class UIMessageList extends UIForm {
       UIComfirmPassword uiComfirmPassword = uiMessageList.createUIComponent(UIComfirmPassword.class,null, null);
       uiPopupAction.activate(uiComfirmPassword, 600, 0, true);             
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction);   
+    }
+  }
+  
+  static public class UpdateListActionListener extends EventListener<UIMessageList> {
+    public void execute(Event<UIMessageList> event) throws Exception {
+      UIMessageList uiMsgList = event.getSource() ;    
+      String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      UIMailPortlet uiPortlet = uiMsgList.getAncestorOfType(UIMailPortlet.class);
+      MailService mailSrv = uiMsgList.getApplicationComponent(MailService.class);
+      String username = uiPortlet.getCurrentUser();
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      Message msg = mailSrv.getMessageById(SessionProviderFactory.createSystemProvider(), username, accountId, msgId);
+      UIFormCheckBoxInput<Boolean> uiCheckBox = new UIFormCheckBoxInput<Boolean>(msg.getId(), msg.getId(), false);
+      uiMsgList.addUIFormInput(uiCheckBox);
+      uiMsgList.messageList_.put(msg.getId(), msg);
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgList);   
     }
   }
 }
