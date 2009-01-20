@@ -185,7 +185,7 @@ public class UIProfileInputSet extends UIFormInputWithActions {
     StringBuffer email = new StringBuffer() ;
     for (String item : emails){
       if (ContactUtils.isEmpty(item)) continue ;
-      if (email.length() == 0) email.append(item) ;
+      if (email.length() == 0) email.append(item.trim()) ;
       else email.append(Utils.SEMI_COLON + item) ;
     }
     return email.toString();

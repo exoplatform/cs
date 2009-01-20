@@ -834,7 +834,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       if(uiForm.isEventDetailValid(calendarPortlet.getCalendarSetting())) {
         String username = CalendarUtils.getCurrentUser() ;
         String calendarId = uiForm.getCalendarId() ;
-        String summary = uiForm.getEventSumary() ;
+        String summary = uiForm.getEventSumary().trim() ;
         if(!CalendarUtils.isNameValid(summary, CalendarUtils.SIMPLECHARACTER)){
           uiApp.addMessage(new ApplicationMessage("UITaskForm.msg.summary-invalid", CalendarUtils.SIMPLECHARACTER, ApplicationMessage.WARNING) ) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

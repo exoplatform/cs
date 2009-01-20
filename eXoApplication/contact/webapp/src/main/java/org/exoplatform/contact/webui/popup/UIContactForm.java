@@ -206,9 +206,8 @@ public class UIContactForm extends UIFormTabPane {
       Contact contact ;
       if (uiContactForm.isNew_) contact = new Contact() ;
       else contact = uiContactForm.contact_ ;
-      
-      String firstName = profileTab.getFieldFirstName() ;
-      String lastName = profileTab.getFieldLastName() ;
+      String firstName = profileTab.getFieldFirstName().trim() ;
+      String lastName = profileTab.getFieldLastName().trim() ;
       if (ContactUtils.isNameLong(firstName) || ContactUtils.isNameLong(lastName)) {
         uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.nameTooLong", null, 
             ApplicationMessage.WARNING)) ;
