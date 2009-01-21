@@ -18,6 +18,7 @@ package org.exoplatform.contact.webui.popup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -36,6 +37,9 @@ import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UIWorkingContainer;
+import org.exoplatform.contact.webui.UIContacts.EmailComparator;
+import org.exoplatform.contact.webui.UIContacts.FullNameComparator;
+import org.exoplatform.contact.webui.UIContacts.JobTitleComparator;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -143,10 +147,8 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       Map<String, String> copyedContacts = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class).getCopyContacts() ;
       for(String id : uiMoveContactForm.getContactIds()) {
         Contact contact = uiMoveContactForm.movedContacts.get(id) ;
-        if (!contact.getAddressBook()[0].equals(addressBookId)) copyedContacts.remove(id) ;  
-        
-        if (contact.getContactType().equals(JCRDataStorage.SHARED)) {
-          
+        if (!contact.getAddressBook()[0].equals(addressBookId)) copyedContacts.remove(id) ;
+        if (contact.getContactType().equals(JCRDataStorage.SHARED)) {          
           // check for existing contact
           Contact tempContact = null ;
           if (uiContacts.isSharedAddress(contact)) {
@@ -162,8 +164,7 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
               ApplicationMessage.WARNING)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return ; 
-          }
-          
+          }          
           if (tempContact == null) {
             UIApplication uiApp = uiMoveContactForm.getAncestorOfType(UIApplication.class) ;
             uiApp.addMessage(new ApplicationMessage("UIMoveContactsForm.msg.contact-not-existed", null, 
@@ -226,7 +227,20 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
         if (pastedContact.size() > 0) {
           uiContacts.setContact(sharedContacts, false) ;
           uiContacts.getContactPageList().getAll().addAll(pastedContact) ;
-        } 
+        }
+        if (contacts.size() >0 && type.equals(JCRDataStorage.SHARED)) {
+          uiContacts.getContactPageList().getAll().removeAll(contacts) ;
+          for (Contact contact : contacts) {
+            uiContacts.getContactPageList().getAll().add(contactService.getSharedContactAddressBook(username, contact.getId())) ;
+          }
+        }
+        if (uiContacts.getSortedBy().equals(UIContacts.fullName)) {
+          Collections.sort(uiContacts.getContactPageList().getAll(), new FullNameComparator()) ;
+        } else if (uiContacts.getSortedBy().equals(UIContacts.emailAddress)) {
+          Collections.sort(uiContacts.getContactPageList().getAll(), new EmailComparator()) ;
+        } else if (uiContacts.getSortedBy().equals(UIContacts.jobTitle)) {
+          Collections.sort(uiContacts.getContactPageList().getAll(), new JobTitleComparator()) ;
+        }
       } else if (ContactUtils.isEmpty(uiContacts.getSelectedGroup()) && 
           ContactUtils.isEmpty(uiContacts.getSelectedTag())) {
 

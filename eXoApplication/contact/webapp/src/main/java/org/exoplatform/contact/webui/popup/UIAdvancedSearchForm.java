@@ -176,6 +176,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent {
       uiContacts.setDisplaySearchResult(true) ;
       uiContacts.setSelectedGroup(null) ;
       uiContacts.setSelectedTag(null) ;
+      uiContacts.setSortedBy(UIContacts.fullName) ;
       event.getRequestContext()
         .addUIComponentToUpdateByAjax(uiContactPortlet.getChild(UIWorkingContainer.class)) ;
       uiContactPortlet.cancelAction() ;

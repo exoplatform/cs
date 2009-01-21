@@ -808,7 +808,6 @@ public class UIContacts extends UIForm implements UIPopupComponent {
             uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-not-existed", null
                                                     , ApplicationMessage.WARNING)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
             return ;
           }
           sharedContacts.add(contact) ; 
@@ -823,8 +822,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       
       if (sharedContacts.size() > 0 ) {
         pastedContact = contactService.pasteContacts(sessionProvider, username, addressBookId, type, copySharedContacts) ;
-        for (Contact contact : sharedContacts) {
-        
+        for (Contact contact : sharedContacts) {        
         if (uiContacts.isSharedAddress(contact)) {
           String addressId = null ;
           for (String add : contact.getAddressBook())
@@ -856,7 +854,6 @@ public class UIContacts extends UIForm implements UIPopupComponent {
           uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-deleted", null, 
               ApplicationMessage.WARNING)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-          event.getRequestContext().addUIComponentToUpdateByAjax(uiContacts.getParent()) ;
           return ;          
         }
       }
@@ -873,7 +870,20 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         if (pastedContact.size() > 0) {
           uiContacts.setContact(sharedContacts, false) ;
           uiContacts.pageList_.getAll().addAll(pastedContact) ;
-        }        
+        }
+        if (contacts.size() >0 && type.equals(JCRDataStorage.SHARED)) {
+          uiContacts.pageList_.getAll().removeAll(contacts) ;
+          for (Contact contact : contacts) {
+            uiContacts.pageList_.getAll().add(contactService.getSharedContactAddressBook(username, contact.getId())) ;
+          }
+        }
+        if (uiContacts.getSortedBy().equals(UIContacts.fullName)) {
+          Collections.sort(uiContacts.pageList_.getAll(), new FullNameComparator()) ;
+        } else if (uiContacts.getSortedBy().equals(UIContacts.emailAddress)) {
+          Collections.sort(uiContacts.pageList_.getAll(), new EmailComparator()) ;
+        } else if (uiContacts.getSortedBy().equals(UIContacts.jobTitle)) {
+          Collections.sort(uiContacts.pageList_.getAll(), new JobTitleComparator()) ;
+        }
       } else if (uiContacts.isSelectSharedContacts  && !ContactUtils.isEmpty(addressBookId)) { //select shared contacts        
         if (contacts.size() > 0) uiContacts.setContact(contacts, false) ;
         if (sharedContacts.size() > 0) uiContacts.setContact(sharedContacts, false) ;
