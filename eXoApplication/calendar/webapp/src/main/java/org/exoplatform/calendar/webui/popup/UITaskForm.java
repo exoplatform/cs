@@ -351,6 +351,21 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     errorMsg_ = null ;
     return true ;
   }
+  
+  private boolean isReminderValid() throws Exception {
+    if(getEmailReminder()) {
+      if(CalendarUtils.isEmpty(getEmailAddress())) {
+        errorMsg_ = "UIEventForm.msg.event-email-required" ;
+        return false ;
+      }
+      else if(!CalendarUtils.isAllEmailValid(getEmailAddress())) {
+        errorMsg_ = "UIEventForm.msg.event-email-invalid" ;
+        return false ;
+      } 
+    } 
+    errorMsg_ = null ;
+    return true ;
+  }
 
   protected String getEventSumary() {
     UITaskDetailTab taskDetailTab =  getChildById(TAB_TASKDETAIL) ;
@@ -913,7 +928,13 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
             return ;
           }
         }
-
+        if(!uiForm.isReminderValid()) {
+          uiApp.addMessage(new ApplicationMessage(uiForm.errorMsg_, null));
+          uiForm.setSelectedTab(TAB_TASKREMINDER) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
         calendarEvent.setCalType(uiForm.calType_) ;
         calendarEvent.setFromDateTime(from) ;
         calendarEvent.setToDateTime(to);
