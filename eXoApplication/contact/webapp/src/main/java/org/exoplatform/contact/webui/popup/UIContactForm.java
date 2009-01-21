@@ -227,7 +227,7 @@ public class UIContactForm extends UIFormTabPane {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }      
-      contact.setJobTitle(profileTab.getFieldJobName());
+      if (!ContactUtils.isEmpty(profileTab.getFieldJobName())) contact.setJobTitle(profileTab.getFieldJobName().trim());
       if (ContactUtils.isNameLong(profileTab.getFieldJobName())) {
         uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.jobTooLong", null, 
             ApplicationMessage.WARNING)) ;

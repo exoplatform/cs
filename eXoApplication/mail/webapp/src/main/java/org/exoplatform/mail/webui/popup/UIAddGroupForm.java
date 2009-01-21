@@ -30,6 +30,7 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormSelectBoxWithGroups;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 
@@ -93,6 +94,8 @@ public class UIAddGroupForm extends UIForm implements UIPopupComponent{
         if (uiAddContact != null) {
           uiAddContact.refreshGroupList() ;
           uiAddContact.setAddedNewGroup(true);
+          //cs-2170
+          ((UIFormSelectBoxWithGroups)(uiAddContact.getChildById(UIAddContactForm.SELECT_GROUP))).setValue(group.getId()) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiAddContact.getParent()) ;
         } else if (uiAddressBook != null) {
           uiAddressBook.updateGroup(group.getId()) ;

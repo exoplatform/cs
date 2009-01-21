@@ -154,20 +154,23 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
       if (popupContainer != null) {
         UICategorySelect uiCategorySelect = popupContainer.findFirstComponentOfType(UICategorySelect.class);
         if (uiCategorySelect != null) {
-          String selectedGroup = uiCategorySelect.getSelectedCategory();          
+          //String selectedGroup = uiCategorySelect.getSelectedCategory();          
           List<SelectItemOption<String>> ls = uiCategorySelect.getCategoryList();
           ls.add(new SelectItemOption<String>(groupName, group.getId())) ;
           uiCategorySelect.setCategoryList(ls);
-          if (ContactUtils.isEmpty(selectedGroup)) uiCategorySelect.setValue(group.getId()) ;
-          else uiCategorySelect.setValue(selectedGroup) ;
+          //cs-2170
+          uiCategorySelect.setValue(group.getId()) ;
+          //if (ContactUtils.isEmpty(selectedGroup)) uiCategorySelect.setValue(group.getId()) ;
+          //else uiCategorySelect.setValue(selectedGroup) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiCategorySelect) ;          
         } else {
           UIImportForm importForm = popupContainer.findFirstComponentOfType(UIImportForm.class) ;
-          String category = importForm.getUIFormSelectBox(UIImportForm.FIELD_CATEGORY).getValue() ; 
+          //String category = importForm.getUIFormSelectBox(UIImportForm.FIELD_CATEGORY).getValue() ; 
           List<SelectItemOption<String>> ls = importForm.getCategoryList();
           ls.add(new SelectItemOption<String>(groupName, group.getId())) ;
           importForm.setCategoryList(ls);
-          importForm.setValues(category) ;
+          // cs-2170
+          importForm.setValues(group.getId()) ;
           //event.getRequestContext().addUIComponentToUpdateByAjax(importForm) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(importForm.getChild(UIFormInputWithActions.class)) ;
         }        
