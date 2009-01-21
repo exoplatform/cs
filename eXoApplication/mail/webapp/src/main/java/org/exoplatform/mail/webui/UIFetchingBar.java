@@ -81,7 +81,14 @@ public class UIFetchingBar extends UIForm {
       Message msg = mailSrv.getMessageById(SessionProviderFactory.createSystemProvider(), username, accountId, msgId);
       UIFormCheckBoxInput<Boolean> uiCheckBox = new UIFormCheckBoxInput<Boolean>(msg.getId(), msg.getId(), false);
       uiMsgList.addUIFormInput(uiCheckBox);
-      uiMsgList.messageList_.put(msg.getId(), msg);
+      boolean updateList = false ;
+      if (msg.getFolders() != null && msg.getFolders().length >= 1) {
+        for (int i = 0; i < msg.getFolders().length; i++) {
+          if (uiMsgList.getSelectedFolderId() != null && msg.getFolders()[i].equals(uiMsgList.getSelectedFolderId())) 
+            updateList = true ;
+        }
+      }
+      if (updateList) uiMsgList.messageList_.put(msg.getId(), msg);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgList);   
     }
   }
