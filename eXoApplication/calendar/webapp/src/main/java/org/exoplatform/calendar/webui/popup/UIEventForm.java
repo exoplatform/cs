@@ -257,7 +257,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
         isContains = (eventCalendar.getEventCategoryId() == null || eventCat.getName().equalsIgnoreCase(eventCalendar.getEventCategoryId())) ;
         if(isContains) break ;
       }*/
-      if(eventCalendar.getEventCategoryId() != null) {
+      if(eventCategoryId != null) {
         /*SelectItemOption<String> item = new SelectItemOption<String>(eventCalendar.getEventCategoryId(), eventCalendar.getEventCategoryId()) ;
         uiSelectBox.getOptions().add(item) ;
         newCategoryId_ = eventCalendar.getEventCategoryId() ;*/
