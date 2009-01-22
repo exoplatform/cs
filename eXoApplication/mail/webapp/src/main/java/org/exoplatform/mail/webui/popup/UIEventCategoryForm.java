@@ -125,7 +125,9 @@ public class UIEventCategoryForm extends UIForm {
         UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class);
         uiEventForm.setSelectedTab(UIEventForm.TAB_EVENTDETAIL) ;
         uiEventForm.refreshCategory() ;
-        uiEventForm.setSelectedCategory(uiForm.categoryName);
+        //cs-2170
+        //uiEventForm.setSelectedCategory(uiForm.categoryName);
+        uiEventForm.setSelectedCategory(eventCat.getId());
         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
         uiPopupAction.deActivate() ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiEventForm) ;
