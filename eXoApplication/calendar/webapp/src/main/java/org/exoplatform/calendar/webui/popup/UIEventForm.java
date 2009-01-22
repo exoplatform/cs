@@ -214,18 +214,21 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       setSelectedCalendarId(eventCalendar.getCalendarId()) ;
 
       // cs-1790
-      UIFormSelectBox selectBox = eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY) ;
-      boolean hasEventCategory = false ;
-      for (SelectItemOption<String> o : selectBox.getOptions()) {
-        if (o.getValue().equals(eventCalendar.getEventCategoryId())) {
-          hasEventCategory = true ;
-          break ;
+      String eventCategoryId = eventCalendar.getEventCategoryId() ;
+      if(!CalendarUtils.isEmpty(eventCategoryId)) {
+        UIFormSelectBox selectBox = eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY) ;
+        boolean hasEventCategory = false ;
+        for (SelectItemOption<String> o : selectBox.getOptions()) {
+          if (o.getValue().equals(eventCategoryId)) {
+            hasEventCategory = true ;
+            break ;
+          }
         }
+        if (!hasEventCategory){
+          selectBox.getOptions().add(new SelectItemOption<String>(eventCalendar.getEventCategoryName(), eventCategoryId)) ;
+        }
+        setSelectedCategory(eventCategoryId) ;
       }
-      if (!hasEventCategory){
-        selectBox.getOptions().add(new SelectItemOption<String>(eventCalendar.getEventCategoryName(), eventCalendar.getEventCategoryId())) ;
-      }
-      setSelectedCategory(eventCalendar.getEventCategoryId()) ;
       setEventPlace(eventCalendar.getLocation()) ;
       setEventRepeat(eventCalendar.getRepeatType()) ;
       setSelectedEventPriority(eventCalendar.getPriority()) ;
@@ -468,7 +471,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   }
   public void setSelectedCategory(String value) {
     UIFormInputWithActions eventDetailTab =  getChildById(TAB_EVENTDETAIL) ;
-    eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).setValue(value) ;
+    eventDetailTab.getUIFormSelectBox(UIEventDetailTab.FIELD_CATEGORY).setValue(value);
   }
 
   protected Date getEventFromDate(String dateFormat,String timeFormat) throws Exception {
