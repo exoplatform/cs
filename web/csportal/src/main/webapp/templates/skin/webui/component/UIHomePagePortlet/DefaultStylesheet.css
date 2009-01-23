@@ -133,6 +133,7 @@ padding:14px 8px 22px;
 	background: #f1f1f1 url('DefaultSkin/background/DownloadButton.gif') no-repeat ;
 	width: 192px; height: 89px;
 	margin:18px 0px 0px 0px;
+	display: block;
 }
 
 .SideBar .NormalText { 
