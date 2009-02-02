@@ -17,7 +17,7 @@
     <resources>
 		<resource>
 		 <directory>${exo.projects.directory.src}/portal/tags/2.2/server/tomcat/plugin/src/main/java/</directory>		 
-		 <excludes><exclude>conf/portal/configuration</exclude></excludes>
+		 <excludes><exclude>conf/portal/configuration.xml</exclude></excludes>
 		</resource>
         <resource>
          <directory>src/main/java</directory>
