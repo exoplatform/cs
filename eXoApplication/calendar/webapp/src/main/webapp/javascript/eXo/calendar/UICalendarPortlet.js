@@ -933,7 +933,7 @@ UICalendarPortlet.prototype.dragStart = function(evt){
     if (mouseY <= posY) {
         UICalendarPortlet.dragObject.style.top = parseInt(UICalendarPortlet.dragObject.style.top) - UICalendarPortlet.interval + "px";
     }
-    else 
+    else {
         if (mouseY >= (posY + height)) {
             UICalendarPortlet.dragObject.style.top = parseInt(UICalendarPortlet.dragObject.style.top) + UICalendarPortlet.interval + "px";
         }
@@ -944,6 +944,7 @@ UICalendarPortlet.prototype.dragStart = function(evt){
                 UICalendarPortlet.dragObject.style.top = top + "px";
             }
         }
+		}
     UICalendarPortlet.updateTitle(UICalendarPortlet.dragObject, posY);
 };
 /**
@@ -1035,7 +1036,7 @@ UICalendarPortlet.prototype.showContextMenu = function(compid){
     UIContextMenu.attach("EventOnDayContent", "UIMonthViewEventRightMenu");
     UIContextMenu.attach("TimeRule", "UIDayViewRightMenu");
     UIContextMenu.attach("EventBoxes", "UIDayViewEventRightMenu");
-    UIContextMenu.attach(["Weekday","Weekend","Today", "EvEventWeekContententAlldayContainer"], "UIWeekViewRightMenu");
+    UIContextMenu.attach(["Weekday","Weekend","Today", "EventAlldayContainer"], "UIWeekViewRightMenu");
     UIContextMenu.attach("UIListViewRow", "UIListViewEventRightMenu");
     UIContextMenu.attach("CalendarItemPrivate", "CalendarPopupMenu");
     UIContextMenu.attach("CalendarItemPublic", "CalendarPopupMenu");

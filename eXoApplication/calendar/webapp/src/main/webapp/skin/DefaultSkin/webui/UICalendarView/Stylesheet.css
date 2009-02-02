@@ -78,8 +78,6 @@
 	[
 		height:29px;
 		height:29px;
-		#
-		height:30px;
 	]
 }
 
@@ -396,6 +394,15 @@
 .UIWeekView .WorkOffTime {
 	background-color: #f3f3f3;
 }
+.UIEventTooltip {
+	position:absolute;
+	background:yellow;
+	border:#cccccc 1px solid;
+	padding:2px;
+	overflow:visible;
+	white-space:nowrap;
+}
+
 /*====================Schedule View============================*/
 
 .UIScheduleView .ScheduleViewBar {
