@@ -9,13 +9,13 @@ UIWeekView.prototype.mousePos = function(evt){
 	} ;
 } ;
 
-UIWeekView.prototype.onLoad = function(){
-	if(eXo.core.Browser.browserType != "ie") {
-		window.setTimeout("eXo.calendar.UICalendarPortlet.checkFilter() ;", 1500) ;
-		return ;
-	}
-	eXo.calendar.UICalendarPortlet.checkFilter() ;	
-} ;
+//UIWeekView.prototype.onLoad = function(){
+//	if(eXo.core.Browser.browserType != "ie") {
+//		window.setTimeout("eXo.calendar.UICalendarPortlet.checkFilter() ;", 1500) ;
+//		return ;
+//	}
+//	eXo.calendar.UICalendarPortlet.checkFilter() ;	
+//} ;
 
 UIWeekView.prototype.init = function() {
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
@@ -87,18 +87,19 @@ UIWeekView.prototype.setSize = function() {
 		UIWeekView.showInCol(UIWeekView.cols[i]) ;
 	}	
 } ;
-UIWeekView.prototype.showHideEvent = function(el,isVisible){
-	var i = el.length ;
-	if(isVisible){
-		while(i--){
-			el[i].style.visibility = "visible";
-		}
-	}else{
-		while(i--){
-			el[i].style.visibility = "hidden";
-		}
-	}
-}
+
+//UIWeekView.prototype.showHideEvent = function(el,isVisible){
+//	var i = el.length ;
+//	if(isVisible){
+//		while(i--){
+//			el[i].style.visibility = "visible";
+//		}
+//	}else{
+//		while(i--){
+//			el[i].style.visibility = "hidden";
+//		}
+//	}
+//};
 UIWeekView.prototype.adjustWidth = function(el) {
 	var UICalendarPortlet = eXo.calendar.UICalendarPortlet ;
 	var inter = UICalendarPortlet.getInterval(el) ;
@@ -266,6 +267,37 @@ UIWeekView.prototype.isCol = function(evt) {
 
 // for resize
 
+UIWeekView.prototype.createTooltip = function(){
+	var tooltip = document.createElement("div");
+	tooltip.className = "UIEventTooltip";
+	eXo.calendar.UIWeekView.tooltip = tooltip;
+	var app = document.getElementById("UIPortalApplication");
+	app.appendChild(tooltip);
+};
+
+UIWeekView.prototype.showTooltip = function(outer,delta,evt,dir){	
+	var totalWidth = outer.parentNode.offsetWidth;
+	var weekdays = parseInt(document.getElementById("UIWeekViewGridAllDay").getAttribute("numberofdays"));
+	delta = parseInt(delta * (24 * weekdays * 60 * 60 * 1000) / totalWidth);
+	if(dir) delta = parseInt(outer.getAttribute("startTime")) + delta;
+	else delta = parseInt(outer.getAttribute("endTime")) + delta;
+	var unit = 15*60*1000;
+	delta = parseInt(delta/unit)*unit;
+	var tooltip = eXo.calendar.UIWeekView.tooltip;
+	var extraLeft = eXo.core.Browser.getBrowserWidth() - eXo.core.Browser.findMouseXInPage(evt);
+	extraLeft = (extraLeft < tooltip.offsetWidth)? (tooltip.offsetWidth - extraLeft):0;
+	tooltip.style.left = eXo.core.Browser.findMouseXInPage(evt) - extraLeft + "px";
+	tooltip.style.top = eXo.core.Browser.findMouseYInPage(evt) + 20 + "px";
+	tooltip.innerHTML = eXo.cs.DateTimeFormater.format((new Date(delta)),"ddd, dd/mmm hh:MM TT");
+};
+
+UIWeekView.prototype.removeTooltip = function(){
+	if(eXo.calendar.UIWeekView.tooltip){
+		eXo.core.DOMUtil.removeElement(eXo.calendar.UIWeekView.tooltip);
+		delete eXo.calendar.UIWeekView.tooltip;
+	}
+};
+
 UIWeekView.prototype.initResize = function(evt) {
 	var _e = window.event || evt ;
 	_e.cancelBubble = true ;
@@ -304,6 +336,7 @@ UIWeekView.prototype.initAllDayRightResize = function(evt) {
 	UIHorizontalResize.start(_e, outerElement, innerElement) ;
 	UIHorizontalResize.dragCallback = eXo.calendar.UIWeekView.rightDragResizeCallback ;
 	UIHorizontalResize.callback = eXo.calendar.UIWeekView.rightResizeCallback ;
+	eXo.calendar.UIWeekView.createTooltip();
 } ;
 
 UIWeekView.prototype.initAllDayLeftResize = function(evt) {
@@ -316,24 +349,44 @@ UIWeekView.prototype.initAllDayLeftResize = function(evt) {
 	UIHorizontalResize.start(_e, outerElement, innerElement, true) ;
 	UIHorizontalResize.dragCallback = eXo.calendar.UIWeekView.leftDragResizeCallback ;
 	UIHorizontalResize.callback = eXo.calendar.UIWeekView.leftResizeCallback ;
+	eXo.calendar.UIWeekView.createTooltip();
 } ;
 
-UIWeekView.prototype.rightDragResizeCallback = function() {
+UIWeekView.prototype.rightDragResizeCallback = function(evt) {
 	var outer = eXo.calendar.UIHorizontalResize.outerElement ;
-	var totalWidth = eXo.core.DOMUtil.findAncestorByClass(outer, "EventAllday") ;
-	totalWidth = totalWidth.offsetWidth ;
+	var inner = eXo.calendar.UIHorizontalResize.innerElement ;
+	var totalWidth = outer.parentNode.offsetWidth;
 	var posX = outer.offsetLeft ;
-	var width = parseInt(outer.style.width) ;
+	var width = outer.offsetWidth;
 	var maxX = posX + width ;
-	if (maxX >= totalWidth) outer.style.width = (totalWidth - posX - 2) + "px" ;	
+	var extraWidth = 0;
+	if (document.getElementById("UIPageDesktop") || !eXo.core.Browser.isIE6()) {
+  	maxX -= 55;
+		extraWidth = 55;
+  }
+	if (maxX >= totalWidth) {
+		outer.style.width = (totalWidth - posX - 2 + extraWidth) + "px" ;
+		inner.style.width = (totalWidth - posX - 8 + extraWidth) + "px" ;
+	}
+	var delta = outer.offsetWidth - eXo.calendar.UIHorizontalResize.beforeWidth ;
+	eXo.calendar.UIWeekView.showTooltip(outer,delta,evt);
 } ;
 
-UIWeekView.prototype.leftDragResizeCallback = function() {
+UIWeekView.prototype.leftDragResizeCallback = function(evt) {
 	var outer = eXo.calendar.UIHorizontalResize.outerElement ;
-	var left = parseInt(outer.style.left) ;
+	var left = outer.offsetLeft ;
+	var extraWidth = 0;
+	if (document.getElementById("UIPageDesktop") || !eXo.core.Browser.isIE6()) {
+		left -= 55;
+		extraWidth = 55;
+  }
+	if(left == 0) eXo.calendar.UIWeekView.extraWidth = outer.offsetWidth - 2;
 	if (left < 0 ) {		
-		outer.style.left = "0px" ;
+		outer.style.left = extraWidth + "px" ;
+		outer.style.width = eXo.calendar.UIWeekView.extraWidth + "px" ;
 	}
+	var delta = eXo.calendar.UIHorizontalResize.beforeWidth - outer.offsetWidth ;
+	eXo.calendar.UIWeekView.showTooltip(outer,delta,evt,true);
 } ;
 
 UIWeekView.prototype.rightResizeCallback = function() {
@@ -345,7 +398,7 @@ UIWeekView.prototype.rightResizeCallback = function() {
 	if (delta != 0) {
   	var weekdays = parseInt(document.getElementById("UIWeekViewGridAllDay").getAttribute("numberofdays"));
   	var UICalendarPortlet = eXo.calendar.UICalendarPortlet
-  	var delta = Math.round(delta * (24 * weekdays * 60 * 60 * 1000) / totalWidth);
+  	var delta = parseInt(delta * (24 * weekdays * 60 * 60 * 1000) / totalWidth);
   	var start = parseInt(outer.getAttribute("startTime"));
   	var end = parseInt(outer.getAttribute("endTime")) + delta;
   	var calType = parseInt(outer.getAttribute("calType"));
@@ -353,10 +406,7 @@ UIWeekView.prototype.rightResizeCallback = function() {
   	actionLink = actionLink.toString().replace(/'\s*\)/, "&calType=" + calType + "')");
   	eval(actionLink);
   }
-//	} else{
-//		outer.style.left = parseFloat(outer.offsetLeft/outer.offsetParent.offsetWidth)*100 + "%" ;
-//		outer.style.width = parseFloat(outer.offsetWidth/outer.offsetParent.offsetWidth)*100 + "%" ;
-//	}
+	eXo.calendar.UIWeekView.removeTooltip();
 } ;
 
 UIWeekView.prototype.leftResizeCallback = function() {
@@ -375,11 +425,9 @@ UIWeekView.prototype.leftResizeCallback = function() {
   	var actionLink = UICalendarPortlet.adjustTime(start, end, outer);
   	actionLink = actionLink.toString().replace(/'\s*\)/, "&calType=" + calType + "')");
   	eval(actionLink);
-  }	
-//	} else{
-//		outer.style.left = parseFloat(outer.offsetLeft/outer.offsetParent.offsetWidth)*100 + "%" ;
-//		outer.style.width = parseFloat(outer.offsetWidth/outer.offsetParent.offsetWidth)*100 + "%" ;
-//	}	
+  }
+	if(eXo.calendar.UIWeekView.extraWidth) delete eXo.calendar.UIWeekView.extraWidth;
+	eXo.calendar.UIWeekView.removeTooltip();
 } ;
 
 // For all day event
@@ -626,8 +674,6 @@ UIHorizontalResize.prototype.start = function(evt, outer, inner) {
 	var _e = window.event || evt ;
 	this.outerElement = outer ;
 	this.innerElement = inner ;
-//	this.outerElement.style.width = this.outerElement.offsetWidth - 2 + "px" ;
-//	this.innerElement.style.width = this.innerElement.offsetWidth - 2 + "px" ;
 	if(arguments.length > 3) {
 		this.outerElement.style.left = this.outerElement.offsetLeft + "px" ;
 		this.isLeft = true ;
@@ -647,7 +693,6 @@ UIHorizontalResize.prototype.execute = function(evt) {
 	var _e = window.event || evt ;
 	var	UIHorizontalResize = eXo.calendar.UIHorizontalResize ;
 	var delta = _e.clientX - UIHorizontalResize.mouseX ;
-	//window.status = "Delta : " + delta + " Event : " + eXoP ;
 	if(UIHorizontalResize.isLeft == true) {
 		UIHorizontalResize.outerElement.style.left = UIHorizontalResize.beforeLeft + delta + "px" ;
 		if (parseInt(UIHorizontalResize.outerElement.style.left) > 0){
@@ -659,7 +704,7 @@ UIHorizontalResize.prototype.execute = function(evt) {
 		UIHorizontalResize.innerElement.style.width = UIHorizontalResize.innerBeforeWidth + delta + "px" ;		
 	}
 	if(typeof(UIHorizontalResize.dragCallback) == "function") {
-		UIHorizontalResize.dragCallback() ;
+		UIHorizontalResize.dragCallback(_e) ;
 	}
 } ;
 

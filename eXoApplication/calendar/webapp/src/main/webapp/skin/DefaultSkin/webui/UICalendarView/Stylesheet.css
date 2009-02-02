@@ -78,8 +78,6 @@
 	[
 		height:29px;
 		height:29px;
-		#
-		height:30px;
 	]
 }
 
@@ -416,6 +414,15 @@
 .UIWeekView .EventWeekContainer .OutsideIcon {
 	padding-left: 20px;
 	width: auto;
+}
+
+.UIEventTooltip {
+	position:absolute;
+	background:yellow;
+	border:#cccccc 1px solid;
+	padding:2px;
+	overflow:visible;
+	white-space:nowrap;
 }
 
 /*====================Schedule View============================*/
