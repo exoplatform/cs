@@ -142,7 +142,7 @@
 }
 
 .UIMessageCompose .UIForm .HorizontalLayout input {
-	width: 90%;
+	width: 550px;
 }
 
 .UIMessageCompose .UIForm .HorizontalLayout select {
