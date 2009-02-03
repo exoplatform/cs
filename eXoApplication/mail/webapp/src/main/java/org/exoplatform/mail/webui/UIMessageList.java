@@ -152,7 +152,12 @@ public class UIMessageList extends UIForm {
       } else {
         selectedFolderId_ = filter.getFolder()[0];
       }
-      setMessagePageList(mailSrv.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, filter));
+      // cs-2253
+      long currentPage = 1 ;
+      if (pageList_ != null) currentPage = pageList_.getCurrentPage() ;
+      MessagePageList currentPageList = mailSrv.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, filter) ;
+      currentPageList.checkAndSetPage(currentPage) ;
+      setMessagePageList(currentPageList);
     } else {
       messageList_.clear();
     }
