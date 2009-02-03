@@ -1382,9 +1382,9 @@ UICalendarPortlet.prototype.filterByCategory = function(){
  * Filters event by event category
  * @param {Object} selectobj Select element
  */
-UICalendarPortlet.prototype.runFilterByCategory = function(selectobj){
+UICalendarPortlet.prototype.runFilterByCategory = function(){
     var uiCalendarViewContainer = document.getElementById("UICalendarViewContainer");
-		selectobj = eXo.core.DOMUtil.findFirstDescendantByClass(uiCalendarViewContainer,"div","selectbox");
+		selectobj = eXo.core.DOMUtil.findFirstDescendantByClass(uiCalendarViewContainer,"select","selectbox");
     if (!selectobj) return;
     var category = selectobj.options[selectobj.selectedIndex].value;
     var className = "EventBoxes";
