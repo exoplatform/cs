@@ -277,9 +277,10 @@ public class MailUtils {
     if (isFieldEmpty(s)) return "" ;
     s = decodeHTML(s);
     // for external link with form http:// , https://, ftp://
+    s = s.replaceAll("(\r?\n?)(https?|ftp)", "<br /> $2");
     s = s.replaceAll("([^((href|src)=\")])(https?|ftp)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]", "<a target=\"_blank\" href=\"$0\"> $0 </a>") ;
     // for email 
-    s = s.replaceAll("[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+\\.[A-Za-z]{2,5}", "<a target=\"_blank\" href=\"mailto:$0\"> $0 </a>") ;
+    s = s.replaceAll("(\\s)([_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+\\.[A-Za-z]{2,5})", "$1<a target=\"_blank\" href=\"mailto:$2\"> $2 </a>") ;
     return s ;
   }
   
