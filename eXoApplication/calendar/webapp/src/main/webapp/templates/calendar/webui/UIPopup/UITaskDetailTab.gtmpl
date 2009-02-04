@@ -24,7 +24,9 @@
 		    println "<a title=\"" + actionLabel + "\" href=\"" + actionLink +"\">";
 	      if(action.actionType == action.TYPE_ICON) {
 	        println "<img src=\"/eXoResources/skin/DefaultSkin/background/Blank.gif\" class=\"" + action.cssIconClass +"\"/>" ;
-	        if(action.isShowLabel) { println  actionLabel  ;}
+	        if(action.isShowLabel) { 
+	        	println  actionLabel  ;
+	        }
 	      }else if(action.actionType == action.TYPE_LINK){
 	       println actionLabel ;
 	      }
@@ -144,16 +146,9 @@
           <%=uiForm.getLabel(uicomponent.FIELD_ATTACHMENTS)%>
         </td>
         <td class="FieldComponent" >
-          <div style="float:left; width:242px;">
           <%uiForm.renderField(uicomponent.FIELD_ATTACHMENTS) ;%>
           <%renderActions(uicomponent.FIELD_ATTACHMENTS) ;%>
-          </div>
-          <div style="float:right; margin-right:6px;">
-	          <a href="<%= uicomponent.getParent().event("AddAttachment") %>" title="<%=_ctx.appRes(uicomponent.getParent().getName() + ".action.AddAttachment")%>">
-  	          <img class="AddNewNodeIcon" src="/eXoResources/skin/DefaultSkin/background/Blank.gif"/>
-  	        </a>          
-          </div>
-          <div style="clear:both;"><span></span></div>
+  	      <img onclick="<%= uicomponent.getParent().event("AddAttachment") %>" title="<%=_ctx.appRes(uicomponent.getParent().getName() + ".action.AddAttachment")%>" class="AddNewNodeIcon" src="/eXoResources/skin/DefaultSkin/background/Blank.gif"/>
         </td>
       </tr>
     </tbody>

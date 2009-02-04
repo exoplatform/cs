@@ -270,10 +270,6 @@
 	white-space: nowrap;
 }
 
-.UICalendarPortlet .UIAttachFileForm .UIForm .UIFormGrid td.FieldComponent {
-	white-space: normal;
-}
-
 .UICalendarPortlet .UIAttachFileForm .SelectFileFrame {
 	width: 350px;
 }
