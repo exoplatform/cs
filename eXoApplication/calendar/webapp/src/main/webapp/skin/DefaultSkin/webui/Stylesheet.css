@@ -290,9 +290,11 @@
 .UICalendarPortlet .busyIcon {
 	width: 16px;
 	padding-left: 20px;
+	height: 16px;
 }
 
 .UICalendarPortlet .outsideIcon {
 	 width: 16px;
 	 height: 16px;
+	 padding-left: 20px;
 }
