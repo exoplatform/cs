@@ -25,6 +25,7 @@ import org.exoplatform.calendar.Colors;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
 import org.exoplatform.calendar.service.CalendarService;
+import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendarViewContainer;
 import org.exoplatform.calendar.webui.UICalendars;
@@ -98,8 +99,15 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
     addUIFormInput(new UIFormStringInput(DISPLAY_NAME, DISPLAY_NAME, null).addValidator(MandatoryValidator.class));
     addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, null));
     addUIFormInput(new UIFormSelectBox(CATEGORY, CATEGORY, getCategory()));
-    addUIFormInput(new UIFormSelectBox(LOCALE, LOCALE, getLocales()));
-    addUIFormInput(new UIFormSelectBox(TIMEZONE, TIMEZONE, getTimeZones()));
+    //cs-2163
+    CalendarSetting calendarSetting = CalendarUtils.getCalendarService()
+      .getCalendarSetting(SessionProviderFactory.createSessionProvider(), CalendarUtils.getCurrentUser()) ;
+    UIFormSelectBox locale = new UIFormSelectBox(LOCALE, LOCALE, getLocales()) ;
+    locale.setValue(calendarSetting.getLocation()) ;
+    addUIFormInput(locale);    
+    UIFormSelectBox timeZones = new UIFormSelectBox(TIMEZONE, TIMEZONE, getTimeZones()) ;
+    timeZones.setValue(calendarSetting.getTimeZone()) ;
+    addUIFormInput(timeZones);
     addUIFormInput(new UIFormColorPicker(SELECT_COLOR, SELECT_COLOR, Colors.COLORS));
   }
 
