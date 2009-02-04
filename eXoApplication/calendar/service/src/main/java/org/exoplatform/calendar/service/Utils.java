@@ -92,6 +92,8 @@ public class Utils {
   public static final String EXO_ROOT_EVENT_ID = "exo:rootEventId".intern() ;
   public static final String EXO_RSS_DATA = "exo:rssData".intern() ;
   public static final String EXO_BASE_URL = "exo:baseUrl".intern() ;
+  public static final String X_STATUS = "X-STATUS".intern() ;
+  
 
   public static final String ATTACHMENT_NODE = "attachment".intern() ; ;
   public static final String REMINDERS_NODE = "reminders".intern() ; ;

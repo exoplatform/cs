@@ -68,6 +68,7 @@ import net.fortuna.ical4j.model.property.Status;
 import net.fortuna.ical4j.model.property.Summary;
 import net.fortuna.ical4j.model.property.Uid;
 import net.fortuna.ical4j.model.property.Version;
+import net.fortuna.ical4j.model.property.XProperty;
 
 import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.Calendar;
@@ -238,6 +239,10 @@ public class ICalendarImportExport implements CalendarImportExport{
         event.getProperties().add(r);
       }
     }
+    if(!Utils.isEmpty(exoEvent.getEventState())) {
+      XProperty xProperty = new XProperty(Utils.X_STATUS, exoEvent.getEventState()) ;
+      event.getProperties().add(xProperty) ;
+    }
     event.getProperties().add(id) ;
     calendar.getComponents().add(event);
     return calendar ;
@@ -385,6 +390,10 @@ public class ICalendarImportExport implements CalendarImportExport{
         RRule r = new RRule(rc) ;
         event.getProperties().add(r);
       }
+    }
+    if(!Utils.isEmpty(exoEvent.getEventState())) {
+      XProperty xProperty = new XProperty(Utils.X_STATUS, exoEvent.getEventState()) ;
+      event.getProperties().add(xProperty) ;
     }
     event.getProperties().add(id) ;
     calendar.getComponents().add(event);
@@ -549,8 +558,11 @@ public class ICalendarImportExport implements CalendarImportExport{
         if(event.getEndDate() != null) exoEvent.setToDateTime(event.getEndDate().getDate()) ;
         if(event.getLocation() != null) exoEvent.setLocation(event.getLocation().getValue()) ;
         if(event.getPriority() != null) exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())] ) ;
-        if(vFreeBusyData.get(event.getUid().getValue()) != null) {
+        /*if(vFreeBusyData.get(event.getUid().getValue()) != null) {
           exoEvent.setStatus(CalendarEvent.ST_BUSY) ;
+        }*/
+        if(event.getProperty(Utils.X_STATUS) != null) {
+          exoEvent.setEventState(event.getProperty(Utils.X_STATUS).getValue()) ;
         }
         if(event.getClassification() != null) exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(event.getClassification().getValue())) ;
         //List<Reminder> list = null ;
@@ -633,6 +645,9 @@ public class ICalendarImportExport implements CalendarImportExport{
         if(event.getPriority() != null) exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())] ) ;
         if(vFreeBusyData.get(event.getUid().getValue()) != null) {
           exoEvent.setStatus(CalendarEvent.ST_BUSY) ;
+        }
+        if(event.getProperty(Utils.X_STATUS) != null) {
+          exoEvent.setEventState(event.getProperty(Utils.X_STATUS).getValue()) ;
         }
         if(event.getClassification() != null) exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(event.getClassification().getValue())) ;
         //List<Reminder> list = null ;
@@ -809,7 +824,10 @@ public class ICalendarImportExport implements CalendarImportExport{
         if(event.getLocation() != null) exoEvent.setLocation(event.getLocation().getValue()) ;
         if(event.getPriority() != null) exoEvent.setPriority(CalendarEvent.PRIORITY[Integer.parseInt(event.getPriority().getValue())] ) ;
         if(vFreeBusyData.get(event.getUid().getValue()) != null) {
-          exoEvent.setStatus(CalendarEvent.ST_BUSY) ;
+          exoEvent.setEventState(CalendarEvent.ST_BUSY) ;
+        }
+        if(event.getProperty(Utils.X_STATUS) != null) {
+          exoEvent.setEventState(event.getProperty(Utils.X_STATUS).getValue()) ;
         }
         if(event.getClassification() != null) exoEvent.setPrivate(Clazz.PRIVATE.getValue().equals(event.getClassification().getValue())) ;
         //List<Reminder> list = null ;
