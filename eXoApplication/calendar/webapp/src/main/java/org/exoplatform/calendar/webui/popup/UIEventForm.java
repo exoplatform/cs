@@ -961,8 +961,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       List<org.exoplatform.mail.service.Attachment> attachments = new ArrayList<org.exoplatform.mail.service.Attachment>() ;
       try {
         CalendarService calService = CalendarUtils.getCalendarService() ;
-        //List<String> calendarIds = new ArrayList<String>() ;
-        //calendarIds.add(event.getCalendarId()) ;
         OutputStream out = calService.getCalendarImportExports(CalendarServiceImpl.ICALENDAR).exportEventCalendar(getSystemSession(), fromId, event.getCalendarId(), event.getCalType(), event.getId()) ;
         ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
         BufferAttachment bf = new BufferAttachment() ;
@@ -990,15 +988,27 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       message.setTo(sbAddress.toString()) ;
       message.setMimeType(Utils.MIMETYPE_TEXTHTML) ;
       message.setFrom(user.getEmail()) ;
-      if(!atts.isEmpty()){      
-        org.exoplatform.services.mail.Attachment att = new org.exoplatform.services.mail.Attachment() ;
-        att.setInputStream(atts.get(0).getInputStream()) ;
-        att.setMimeType(atts.get(0).getMimeType()) ;
-        message.addAttachment(att) ;
+      org.exoplatform.services.mail.Attachment attachmentCal = new org.exoplatform.services.mail.Attachment() ;
+      try {
+        CalendarService calService = CalendarUtils.getCalendarService() ;
+        OutputStream out = calService.getCalendarImportExports(CalendarServiceImpl.ICALENDAR).exportEventCalendar(getSystemSession(), fromId, event.getCalendarId(), event.getCalType(), event.getId()) ;
+        ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
+        attachmentCal.setInputStream(is) ;
+        attachmentCal.setMimeType("text/calendar") ;
+        message.addAttachment(attachmentCal) ;
+      } catch (Exception e) {
+        e.printStackTrace() ;
+      }
+      if(!atts.isEmpty()){
+        for(Attachment att : atts) {
+          org.exoplatform.services.mail.Attachment attachment = new org.exoplatform.services.mail.Attachment() ;
+          attachment.setInputStream(att.getInputStream()) ;
+          attachment.setMimeType(att.getMimeType()) ;
+          message.addAttachment(attachment) ;
+        }
       }
       org.exoplatform.services.mail.MailService mService = (org.exoplatform.services.mail.MailService)PortalContainer.getComponent(org.exoplatform.services.mail.MailService.class) ;
       mService.sendMessage(message) ;
-
     }
   }
 
