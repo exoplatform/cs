@@ -120,19 +120,35 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
       }    
       ContactService contactService = ContactUtils.getContactService() ;
       String username = ContactUtils.getCurrentUser() ;
-      
       ContactGroup group = new ContactGroup() ;
       if (!uiCategoryForm.isNew_) {
         ContactGroup oldGroup = contactService.getGroup(
             SessionProviderFactory.createSessionProvider(), username,uiCategoryForm.groupId_) ;
         if (oldGroup == null) {
           oldGroup = contactService.getSharedGroup(username, uiCategoryForm.groupId_) ;
-          if (oldGroup != null && !uiAddressBook.havePermission(oldGroup.getId())) {
-            uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.non-permission", null,
-                ApplicationMessage.WARNING)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-            return ; 
-          }              
+          if (oldGroup != null) { 
+            if (!uiAddressBook.havePermission(oldGroup.getId())) {
+              uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.non-permission", null,
+                  ApplicationMessage.WARNING)) ;
+              event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+              return ; 
+            } else { //cs-2017
+              try {
+                String shredUser = uiAddressBook.getSharedGroups().get(uiCategoryForm.groupId_).getSharedUserId() ;
+                List<ContactGroup> groups = contactService.getGroups(SessionProviderFactory.createSystemProvider(), shredUser) ;
+                for (ContactGroup contactGroup : groups) 
+                  if (contactGroup.getName().equals(groupName) && uiCategoryForm.editedAddName != null 
+                      && !groupName.equals(uiCategoryForm.editedAddName)) {
+                    uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.userExisted-categoryName", new String[] {shredUser}, ApplicationMessage.WARNING)) ;
+                    event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                    return ;
+                  }                
+              } catch (Exception e) {
+                e.printStackTrace() ;
+              }
+              
+            }
+          }
         }
         if (oldGroup == null) {
           uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.category-deleted", null,
