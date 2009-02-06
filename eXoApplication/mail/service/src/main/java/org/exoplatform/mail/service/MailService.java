@@ -394,6 +394,8 @@ public interface MailService {
    */
   public void moveMessages(SessionProvider sProvider, String username, String accountId, List<Message> msgList, String currentFolderId, String destFolderId) throws Exception ;
   
+  public void moveMessages(SessionProvider sProvider, String username, String accountId, List<Message> msgList, String currentFolderId, String destFolderId, boolean updateReference) throws Exception ;
+  
   /**
    * Move a message from the current folder to the given folder
    * @param username

@@ -295,11 +295,13 @@ public class UIFolderContainer extends UIContainer {
 	  List<Message> msgList = mailSrv.getMessagesByFolder(SessionProviderFactory.createSystemProvider(), username, accountId, folderId) ;
 	  boolean containPreview = false ;
 	  Message msgPre = uiMsgPreview.getMessage() ;
-	  String trashFolderId = Utils.createFolderId(accountId, Utils.FD_TRASH, false) ;
-	  for (Message msg : msgList) {
-	    if (msgPre != null && msg.getId().equals(msgPre.getId())) containPreview = true ;
-	    mailSrv.moveMessage(SessionProviderFactory.createSystemProvider(), username, accountId, msg, folderId, trashFolderId, false) ;
-	  }	      		 
+	  String trashFolderId = Utils.createFolderId(accountId, Utils.FD_TRASH, false) ;     		 
+    
+    mailSrv.moveMessages(SessionProviderFactory.createSystemProvider(), username, accountId, msgList, folderId, trashFolderId, false) ;
+    
+    for (Message msg : msgList) {
+      if (msgPre != null && msg.getId().equals(msgPre.getId())) containPreview = true ;
+    }  
 	  uiMsgList.updateList() ;
 	  if (containPreview) uiMsgPreview.setMessage(null);
 	  event.getRequestContext().addUIComponentToUpdateByAjax(uiFolder) ;
