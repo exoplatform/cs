@@ -224,6 +224,11 @@ public class MailServiceImpl implements MailService, Startable {
       List<Message> msgList, String currentFolderId, String destFolderId) throws Exception {
     storage_.moveMessages(sProvider, username, accountId, msgList, currentFolderId, destFolderId);
   }
+  
+  public void moveMessages(SessionProvider sProvider, String username, String accountId,
+                          List<Message> msgList, String currentFolderId, String destFolderId, boolean updateReference) throws Exception {
+    storage_.moveMessages(sProvider, username, accountId, msgList, currentFolderId, destFolderId, updateReference);
+  }
 
   public void moveMessage(SessionProvider sProvider, String username, String accountId,
       Message msg, String currentFolderId, String destFolderId) throws Exception {

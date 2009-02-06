@@ -590,51 +590,70 @@ public class JCRDataStorage {
     if (currentFolderNode != null) currentFolderNode.save();
     if (destFolderNode != null) destFolderNode.save();
   }
-
+  
   public void moveMessage(SessionProvider sProvider, String username, String accountId,
-      Message msg, String currentFolderId, String destFolderId, boolean updateReference) throws Exception {
+                           Message msg, String currentFolderId, String destFolderId, boolean updateReference) throws Exception {
+    List<Message> msgList = new ArrayList<Message>();
+    msgList.add(msg);
+    moveMessages(sProvider, username, accountId, msgList, currentFolderId, destFolderId, updateReference);
+  }
+
+  public void moveMessages(SessionProvider sProvider, String username, String accountId,
+      List<Message> msgList, String currentFolderId, String destFolderId, boolean updateReference) throws Exception {
     Node messageHome = getMessageHome(sProvider, username, accountId);
-    Node msgNode = (Node) messageHome.getSession().getItem(msg.getPath());
-    if (updateReference) msgNode = moveReference(accountId, msgNode);
-    try {
-      Boolean isUnread = msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean();
-      Node currentFolderNode = getFolderNodeById(sProvider, username, accountId, currentFolderId);
-      Node destFolderNode = getFolderNodeById(sProvider, username, accountId, destFolderId);
-      Value[] propFolders = msgNode.getProperty(Utils.EXO_FOLDERS).getValues();
-      String[] folderIds = new String[propFolders.length];
-      String folderId ;
-      for (int i = 0; i < propFolders.length; i++) {
-        folderId = propFolders[i].getString();
-        if (currentFolderId.equals(folderId)) folderIds[i] = destFolderId;
-        else folderIds[i] = folderId;
+    Node currentFolderNode = getFolderNodeById(sProvider, username, accountId, currentFolderId);
+    Node destFolderNode = getFolderNodeById(sProvider, username, accountId, destFolderId);
+    int inUnreadNumber = 0, inTotalMessage = 0;
+    Value[] propFolders ;
+    String[] folderIds;
+    String folderId ;
+    Node msgNode;
+    for (Message msg : msgList) {
+      msgNode = (Node) messageHome.getSession().getItem(msg.getPath());
+      if (updateReference) msgNode = moveReference(accountId, msgNode);
+      try {
+        Boolean isUnread = msgNode.getProperty(Utils.EXO_ISUNREAD).getBoolean();
+        propFolders = msgNode.getProperty(Utils.EXO_FOLDERS).getValues();
+        folderIds = new String[propFolders.length];
+        for (int i = 0; i < propFolders.length; i++) {
+          folderId = propFolders[i].getString();
+          if (currentFolderId.equals(folderId)) folderIds[i] = destFolderId;
+          else folderIds[i] = folderId;
+        }
+        msgNode.setProperty(Utils.EXO_FOLDERS, folderIds);
+        if (isUnread) inUnreadNumber++;
+        inTotalMessage++;
+        
+        msgNode.save();
+      } catch(Exception e) {
+        System.out.println("Unknow error when move message that with subject " + msg.getSubject()); 
+        e.printStackTrace();
       }
-      msgNode.setProperty(Utils.EXO_FOLDERS, folderIds);
-      msgNode.save();
+    } 
       
-      if (isUnread) {
-        try {
-          currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(
-              Utils.EXO_UNREADMESSAGES).getLong() - 1));
-        } catch (Exception e) { }
-        try {
-          destFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (destFolderNode.getProperty(
-              Utils.EXO_UNREADMESSAGES).getLong() + 1));
-        } catch (Exception e) { }
-      }
-      try {
-        currentFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (currentFolderNode.getProperty(
-            Utils.EXO_TOTALMESSAGE).getLong() - 1));
-      } catch (Exception e) { }
-      try {
-        destFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (destFolderNode.getProperty(
-            Utils.EXO_TOTALMESSAGE).getLong() + 1));
-      } catch (Exception e) { }
-      if (currentFolderNode != null) currentFolderNode.save();
-      destFolderNode.save();
-    } catch(Exception e) {
-      System.out.println("Unknow error when move message "); 
-      e.printStackTrace();
+    try {
+      if (currentFolderNode != null)
+        currentFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (currentFolderNode.getProperty(
+            Utils.EXO_UNREADMESSAGES).getLong() - inUnreadNumber));
+      if (destFolderNode != null)
+        destFolderNode.setProperty(Utils.EXO_UNREADMESSAGES, (destFolderNode.getProperty(
+            Utils.EXO_UNREADMESSAGES).getLong() + inUnreadNumber));
+    } catch (Exception e) {
+      e.printStackTrace() ;
     }
+
+    try {
+      if (currentFolderNode != null)
+        currentFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (currentFolderNode.getProperty(
+            Utils.EXO_TOTALMESSAGE).getLong() - inTotalMessage));
+      if (destFolderNode != null)
+        destFolderNode.setProperty(Utils.EXO_TOTALMESSAGE, (destFolderNode.getProperty(
+            Utils.EXO_TOTALMESSAGE).getLong() + inTotalMessage));
+    } catch (Exception e) {
+      e.printStackTrace() ;
+    }
+    if (currentFolderNode != null) currentFolderNode.save();
+    if (destFolderNode != null) destFolderNode.save();
   }
 
   public void saveAccount(SessionProvider sProvider, String username, Account account, boolean isNew)
