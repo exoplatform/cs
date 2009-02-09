@@ -35,7 +35,7 @@ public interface CalendarService {
 
   /**
    * The method gets all calendar category of current user from data base
-   * @param username current user name(or user id)
+   * @param username current user name
    * @return List of CalendarCategory object
    * @throws Exception
    * @see CalendarCategory
@@ -43,9 +43,8 @@ public interface CalendarService {
   public List<CalendarCategory> getCategories(String username) throws Exception ;
 
   /**
-   * The method gets all groups of private calendar, and each GroupCalendar containts List of Calendar object
-   * @param userSession The session of current user this will be create after user login
-   * @param username current user name(or user id)
+   * The method gets all groups of private calendar, and each GroupCalendar contains List of Calendar object
+   * @param username current user name
    * @param isShowAll The parameter to make sure that the user want to show all calendar or not, if it is <b>true</b> then 
    * it gets all calendars, if <b>false</b> it will check from calendar setting to know which calendar will be shown
    * @return List<GroupCalendarData> List of GroupCalendarData
@@ -56,24 +55,22 @@ public interface CalendarService {
 
   /**
    * The method gets the calendar category by given id
-   * @param userSession The session of current logedin user
-   * @param username current user name(or user id)
+   * @param username current user name 
    * @param calendarCategoryId id of calendar category
    * @return CalendarCategory
    * @throws Exception
    * @see CalendarCategory
    */
-  public CalendarCategory getCalendarCategory(SessionProvider userSession, String username, String calendarCategoryId) throws Exception ;
+  public CalendarCategory getCalendarCategory(String username, String calendarCategoryId) throws Exception ;
 
   /**
-   * Save details of category to data
-   * @param userSession The session of current logedin user
+   * Save details of category for a user
    * @param username current user name(or user id)
-   * @param calendarCategory the object that contants infomations about the category
+   * @param calendarCategory the object that contains category details
    * @param isNew the boolean value to point out that add new category or update
    * @throws Exception
    */
-  public void saveCalendarCategory(SessionProvider userSession, String username, CalendarCategory calendarCategory, boolean isNew) throws Exception ; 
+  public void saveCalendarCategory(String username, CalendarCategory calendarCategory, boolean isNew) throws Exception ; 
 
   /**
    * The method used for removing one category by id

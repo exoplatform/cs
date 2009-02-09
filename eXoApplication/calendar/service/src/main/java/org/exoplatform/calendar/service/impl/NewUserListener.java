@@ -136,7 +136,7 @@ public class NewUserListener extends UserEventListener {
         CalendarCategory calCategory = new CalendarCategory();
         calCategory.setName(defaultCalendarCategory_);
         calCategory.setDataInit(true) ;
-        cservice_.saveCalendarCategory(sysProvider, user.getUserName(),	calCategory, true);
+        cservice_.saveCalendarCategory(user.getUserName(),	calCategory, true);
         if (defaultCalendar_ != null && defaultCalendar_.length > 0) {
           for (String calendar : defaultCalendar_) {
             Calendar cal = new Calendar();

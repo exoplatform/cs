@@ -71,7 +71,7 @@ public class UICalendarCategoryForm extends UIForm {
     setAddNew(false) ;
     CalendarService calService = getApplicationComponent(CalendarService.class) ;
     String username = CalendarUtils.getCurrentUser() ;
-    CalendarCategory category = calService.getCalendarCategory(SessionProviderFactory.createSessionProvider(), username, categoryId) ;
+    CalendarCategory category = calService.getCalendarCategory(username, categoryId) ;
     setCategoryId(category.getId()) ;
     setCategoryName(category.getName()) ;
     setCategoryDescription(category.getDescription()) ;
@@ -141,7 +141,7 @@ public class UICalendarCategoryForm extends UIForm {
         if(!uiForm.isAddNew()) category.setId(uiForm.getCategoryId()) ; 
         category.setName(categoryName.trim()) ;
         category.setDescription(description) ;
-        calendarService.saveCalendarCategory(SessionProviderFactory.createSessionProvider(), username, category, uiForm.isAddNew()) ;
+        calendarService.saveCalendarCategory(username, category, uiForm.isAddNew()) ;
         UICalendarForm uiCalendarForm = calendarPortlet.findFirstComponentOfType(UICalendarForm.class) ;
         if(uiCalendarForm != null) {
           uiCalendarForm.reloadCategory() ;

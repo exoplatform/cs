@@ -71,11 +71,11 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   public List<GroupCalendarData> getCalendarCategories(String username, boolean isShowAll) throws Exception {
     return storage_.getCalendarCategories(username, isShowAll);
   }
-  public CalendarCategory getCalendarCategory(SessionProvider sProvider, String username, String calendarCategoryId) throws Exception {
-    return storage_.getCalendarCategory(sProvider, username, calendarCategoryId) ;
+  public CalendarCategory getCalendarCategory(String username, String calendarCategoryId) throws Exception {
+    return storage_.getCalendarCategory(username, calendarCategoryId) ;
   }
-  public void saveCalendarCategory(SessionProvider sProvider, String username, CalendarCategory calendarCategory, boolean isNew) throws Exception {
-    storage_.saveCalendarCategory(sProvider, username, calendarCategory, isNew) ;
+  public void saveCalendarCategory(String username, CalendarCategory calendarCategory, boolean isNew) throws Exception {
+    storage_.saveCalendarCategory(username, calendarCategory, isNew) ;
   }
   public CalendarCategory removeCalendarCategory(SessionProvider sProvider, String username, String calendarCategoryId) throws Exception {
     return storage_.removeCalendarCategory(sProvider, username, calendarCategoryId);

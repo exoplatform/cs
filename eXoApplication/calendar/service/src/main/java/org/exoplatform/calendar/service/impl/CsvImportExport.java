@@ -268,7 +268,7 @@ public class CsvImportExport implements CalendarImportExport {
         calendarCate.setDescription("Imported icalendar category") ;
         calendarCate.setName("Imported") ;
         categoryId = calendarCate.getId() ;
-        storage_.saveCalendarCategory(sProvider, username, calendarCate, true) ;
+        storage_.saveCalendarCategory(username, calendarCate, true) ;
       }else {
         categoryId = cat.getProperty(Utils.EXO_ID).getString() ;
       }

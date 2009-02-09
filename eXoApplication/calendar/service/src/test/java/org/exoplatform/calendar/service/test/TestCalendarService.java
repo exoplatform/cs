@@ -67,7 +67,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     CalendarCategory calCategory = new CalendarCategory() ;
     calCategory.setName("categoryName") ;
     calCategory.setDescription("Description") ;
-    calendarService_.saveCalendarCategory(sProvider_, "root", calCategory, true) ;
+    calendarService_.saveCalendarCategory("root", calCategory, true) ;
 
     //create/get calendar in private folder
     Calendar cal = new Calendar() ;
@@ -138,7 +138,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
   public void testSharedCalendar() throws Exception {
     CalendarCategory calCategory = new CalendarCategory() ;
     calCategory.setName("categoryName") ;
-    calendarService_.saveCalendarCategory(sProvider_, "root", calCategory, true) ;
+    calendarService_.saveCalendarCategory("root", calCategory, true) ;
 
     Calendar cal = new Calendar() ;
     cal.setName("myCalendar") ;
@@ -184,19 +184,19 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     calCategory.setName("categoryName") ;
     calCategory.setDescription("Description") ;
     //calCategory.setCalendars(new String [] {"calendar1", "calendar2"}) ;
-    calendarService_.saveCalendarCategory(sProvider_, username, calCategory, true) ;
+    calendarService_.saveCalendarCategory(username, calCategory, true) ;
     List<GroupCalendarData> categories = calendarService_.getCalendarCategories(username, true) ;
     assertEquals(categories.size(), 1) ;
     assertEquals(1, calendarService_.getCategories(username).size()) ;
     
     
     //get calendar category
-    calCategory = calendarService_.getCalendarCategory(sProvider_, username, calCategory.getId()) ;
+    calCategory = calendarService_.getCalendarCategory(username, calCategory.getId()) ;
     assertEquals(calCategory.getName(), "categoryName") ;
     
     // update calendar category
     calCategory.setName("categoryNameUpdated") ;
-    calendarService_.saveCalendarCategory(sProvider_, username, calCategory, false) ;
+    calendarService_.saveCalendarCategory(username, calCategory, false) ;
     
     //remove calendar category
     CalendarCategory removeCate = calendarService_.removeCalendarCategory(sProvider_, username, calCategory.getId()) ;
@@ -208,7 +208,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     calCategory.setName("categoryName") ;
     calCategory.setDescription("Description") ;
     //calCategory.setCalendars(new String [] {""}) ;
-    calendarService_.saveCalendarCategory(sProvider_, username, calCategory, true) ;
+    calendarService_.saveCalendarCategory(username, calCategory, true) ;
     
     Calendar cal = new Calendar() ;
     cal.setName("myCalendar") ;
@@ -273,7 +273,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     CalendarCategory calCategory = new CalendarCategory();
     calCategory.setName("CalendarCategoryName");
     calCategory.setDescription("CaldendarCategoryDescription");
-    calendarService_.saveCalendarCategory(sProvider_, username, calCategory, true);
+    calendarService_.saveCalendarCategory(username, calCategory, true);
     
     Calendar cal = new Calendar();
     cal.setName("CalendarName") ;
@@ -308,7 +308,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     CalendarCategory calCategory = new CalendarCategory();
     calCategory.setName("CalendarCategoryName");
     calCategory.setDescription("CaldendarCategoryDescription");
-    calendarService_.saveCalendarCategory(sProvider_, username, calCategory, true);
+    calendarService_.saveCalendarCategory(username, calCategory, true);
     
     Calendar cal = new Calendar();
     cal.setName("CalendarName") ;

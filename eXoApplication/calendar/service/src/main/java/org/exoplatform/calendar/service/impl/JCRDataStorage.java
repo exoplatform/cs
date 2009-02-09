@@ -132,18 +132,23 @@ public class JCRDataStorage{
     return nodeHierarchyCreator_.getPublicApplicationNode(sysProvider) ;
   }
 
-  private Node getUserCalendarServiceHome(SessionProvider sProvider, String username) throws Exception {
-    Node userApp = nodeHierarchyCreator_.getUserApplicationNode(sProvider, username)  ;
-    Node calendarRoot ; 
+  private Node getUserCalendarServiceHome(SessionProvider removeme, String username) throws Exception {
+    SessionProvider sProvider = createSessionProvider();
     try {
-      return userApp.getNode(Utils.CALENDAR_APP) ;
-    } catch (Exception e) {
-      calendarRoot = userApp.addNode(Utils.CALENDAR_APP, Utils.NT_UNSTRUCTURED) ;
-      if(!calendarRoot.hasNode(CALENDAR_SETTING)) {
-        addCalendarSetting(calendarRoot, new CalendarSetting()) ;
+      Node userApp = nodeHierarchyCreator_.getUserApplicationNode(sProvider, username);
+      Node calendarRoot;
+      try {
+        return userApp.getNode(Utils.CALENDAR_APP);
+      } catch (Exception e) {
+        calendarRoot = userApp.addNode(Utils.CALENDAR_APP, Utils.NT_UNSTRUCTURED);
+        if (!calendarRoot.hasNode(CALENDAR_SETTING)) {
+          addCalendarSetting(calendarRoot, new CalendarSetting());
+        }
+        userApp.getSession().save();
+        return calendarRoot;
       }
-      userApp.getSession().save();
-      return calendarRoot ;
+    } finally {
+      closeSessionProvider(sProvider);
     }
   }
 
@@ -191,7 +196,7 @@ public class JCRDataStorage{
     }
   }
   protected Node getCalendarCategoryHome(SessionProvider sProvider, String username) throws Exception {
-    Node calendarServiceHome = getUserCalendarServiceHome(sProvider, username) ;
+    Node calendarServiceHome = getUserCalendarServiceHome(null, username) ;
     try {
       return calendarServiceHome.getNode(CALENDAR_CATEGORIES) ;
     } catch (Exception e) {
@@ -517,13 +522,13 @@ public class JCRDataStorage{
     }
   }
 
-  public CalendarCategory getCalendarCategory(SessionProvider sProvider, String username, String calendarCategoryId) throws Exception {
-    Node calendarCategoryHome = getCalendarCategoryHome(sProvider, username) ;
+  public CalendarCategory getCalendarCategory(String username, String calendarCategoryId) throws Exception {
+    Node calendarCategoryHome = getCalendarCategoryHome(null, username) ;
     return getCalendarCategory(calendarCategoryHome.getNode(calendarCategoryId)) ;
   }
 
-  public void saveCalendarCategory(SessionProvider sProvider, String username, CalendarCategory calendarCategory, boolean isNew) throws Exception {
-    Node calCategoryHome = getCalendarCategoryHome(sProvider, username) ;
+  public void saveCalendarCategory(String username, CalendarCategory calendarCategory, boolean isNew) throws Exception {
+    Node calCategoryHome = getCalendarCategoryHome(null, username) ;
     Node calCategoryNode ;
     if(isNew) {
       if(calCategoryHome.hasNode(calendarCategory.getId())) throw new Exception("This calendar category is already exists! ") ;
@@ -2371,7 +2376,7 @@ public class JCRDataStorage{
     SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
     SessionProvider provider = service.getSessionProvider(null);
     if (provider == null) {
-      log.debug("No user session provider was available, trying to use a system session provider");
+      log.info("No user session provider was available, trying to use a system session provider");
       provider = service.getSystemSessionProvider(null);
     }
     return provider;
