@@ -52,7 +52,7 @@ public interface CalendarService {
    * @throws Exception
    * @see GroupCalendarData
    */
-  public List<GroupCalendarData> getCalendarCategories(SessionProvider userSession, String username, boolean isShowAll) throws Exception ;
+  public List<GroupCalendarData> getCalendarCategories(String username, boolean isShowAll) throws Exception ;
 
   /**
    * The method gets the calendar category by given id

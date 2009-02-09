@@ -185,7 +185,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     calCategory.setDescription("Description") ;
     //calCategory.setCalendars(new String [] {"calendar1", "calendar2"}) ;
     calendarService_.saveCalendarCategory(sProvider_, username, calCategory, true) ;
-    List<GroupCalendarData> categories = calendarService_.getCalendarCategories(sProvider_, username, true) ;
+    List<GroupCalendarData> categories = calendarService_.getCalendarCategories(username, true) ;
     assertEquals(categories.size(), 1) ;
     assertEquals(1, calendarService_.getCategories(username).size()) ;
     

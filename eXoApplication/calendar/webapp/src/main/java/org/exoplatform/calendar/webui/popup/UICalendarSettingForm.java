@@ -172,7 +172,8 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
     return SessionProviderFactory.createSystemProvider() ;
   }
   protected List<Calendar> getPrivateCalendars(CalendarService calendarService, String username) throws Exception{
-    List<GroupCalendarData> groupCalendars = calendarService.getCalendarCategories(getSession(), username, true) ;
+    boolean showAll = true;
+    List<GroupCalendarData> groupCalendars = calendarService.getCalendarCategories(username, showAll) ;
     List<Calendar> calendars = new ArrayList<Calendar>() ;
     for(GroupCalendarData group : groupCalendars) {
       calendars.addAll(group.getCalendars()) ;

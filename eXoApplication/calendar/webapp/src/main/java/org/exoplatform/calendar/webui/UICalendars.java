@@ -164,7 +164,8 @@ public class UICalendars extends UIForm  {
   protected List<GroupCalendarData> getPrivateCalendars() throws Exception{
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     String username = CalendarUtils.getCurrentUser() ;
-    List<GroupCalendarData> groupCalendars = calendarService.getCalendarCategories(getSession(), username, false) ;
+    boolean dontShowAll = false;
+    List<GroupCalendarData> groupCalendars = calendarService.getCalendarCategories(username, dontShowAll) ;
     for(GroupCalendarData group : groupCalendars) {
       List<Calendar> calendars = group.getCalendars() ;
       if(calendars != null) {
@@ -717,7 +718,9 @@ public class UICalendars extends UIForm  {
       UICalendars uiComponent = event.getSource() ;
       String selectedCalendarId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
-      List<GroupCalendarData> calendarCategories = CalendarUtils.getCalendarService().getCalendarCategories(uiComponent.getSession(),  CalendarUtils.getCurrentUser(), true) ;
+      boolean showAll = true;
+      String user = CalendarUtils.getCurrentUser();
+      List<GroupCalendarData> calendarCategories = CalendarUtils.getCalendarService().getCalendarCategories(user, showAll) ;
       if(calendarCategories== null || calendarCategories.isEmpty()) {
         UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.category-empty", null)) ;
@@ -737,14 +740,16 @@ public class UICalendars extends UIForm  {
   static  public class GenerateRssActionListener extends EventListener<UICalendars> {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiComponent = event.getSource() ;
-      List<GroupCalendarData> calendarCategories = CalendarUtils.getCalendarService().getCalendarCategories(uiComponent.getSession(),  CalendarUtils.getCurrentUser(), true) ;
+      boolean showAll = true;
+      String user = CalendarUtils.getCurrentUser();
+      List<GroupCalendarData> calendarCategories = CalendarUtils.getCalendarService().getCalendarCategories(user, showAll);
       if(calendarCategories== null || calendarCategories.isEmpty()) {
         UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.category-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }   
-      List<Calendar> list = CalendarUtils.getCalendarService().getUserCalendars(uiComponent.getSession(),  CalendarUtils.getCurrentUser(), true) ;
+      List<Calendar> list = CalendarUtils.getCalendarService().getUserCalendars(uiComponent.getSession(),  user, showAll) ;
       if(list == null || list.isEmpty()) {
         UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null)) ;
@@ -762,14 +767,16 @@ public class UICalendars extends UIForm  {
   static  public class GenerateCalDavActionListener extends EventListener<UICalendars> {
     public void execute(Event<UICalendars> event) throws Exception {
       UICalendars uiComponent = event.getSource() ;
-      List<GroupCalendarData> calendarCategories = CalendarUtils.getCalendarService().getCalendarCategories(uiComponent.getSession(),  CalendarUtils.getCurrentUser(), true) ;
+      String user = CalendarUtils.getCurrentUser();
+      boolean showAll = true;
+      List<GroupCalendarData> calendarCategories = CalendarUtils.getCalendarService().getCalendarCategories(user, showAll) ;
       if(calendarCategories== null || calendarCategories.isEmpty()) {
         UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.category-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }   
-      List<Calendar> list = CalendarUtils.getCalendarService().getUserCalendars(uiComponent.getSession(),  CalendarUtils.getCurrentUser(), true) ;
+      List<Calendar> list = CalendarUtils.getCalendarService().getUserCalendars(uiComponent.getSession(),  user, showAll) ;
       if(list == null || list.isEmpty()) {
         UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null)) ;

@@ -168,7 +168,7 @@ public class NewUserListener extends UserEventListener {
   public void postDelete(User user) throws Exception {
     SessionProvider session = SessionProvider.createSystemProvider(); ;
     String username = user.getUserName() ;
-    List<GroupCalendarData> gCalData = cservice_.getCalendarCategories(session, username, true) ;
+    List<GroupCalendarData> gCalData = cservice_.getCalendarCategories(username, true) ; // should use a system session
     try {
       if(!gCalData.isEmpty())
         for (GroupCalendarData gCal : gCalData) {

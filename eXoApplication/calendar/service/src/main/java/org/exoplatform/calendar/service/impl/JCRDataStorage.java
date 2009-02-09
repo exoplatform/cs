@@ -38,6 +38,7 @@ import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
 import org.exoplatform.calendar.service.Attachment;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
@@ -63,6 +64,7 @@ import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.services.log.ExoLogger;
 
 import com.sun.syndication.feed.synd.SyndContent;
 import com.sun.syndication.feed.synd.SyndContentImpl;
@@ -96,6 +98,8 @@ public class JCRDataStorage{
   private final static String VALUE = "value".intern() ; 
 
   private NodeHierarchyCreator nodeHierarchyCreator_ ;
+  
+  private static final Log log = ExoLogger.getLogger(JCRDataStorage.class);
 
   public JCRDataStorage(NodeHierarchyCreator nodeHierarchyCreator)throws Exception {
     nodeHierarchyCreator_ = nodeHierarchyCreator ; 
@@ -457,37 +461,45 @@ public class JCRDataStorage{
     return calendar ;
   }  
 
-  public List<GroupCalendarData> getCalendarCategories(SessionProvider sProvider, String username, boolean isShowAll) throws Exception {
-    Node calendarHome = getUserCalendarHome(sProvider, username) ;
-    NodeIterator iter = getCalendarCategoryHome(sProvider, username).getNodes() ;
-    List<GroupCalendarData> calendarCategories = new ArrayList<GroupCalendarData> () ;
-    List<Calendar> calendars ;
-    calendarHome.getSession().refresh(false) ;
-    QueryManager qm = calendarHome.getSession().getWorkspace().getQueryManager();
-    String[] defaultCalendars = null ;
-    CalendarSetting calSetting = getCalendarSetting(sProvider, username) ;
-    if(calSetting != null) {
-      defaultCalendars = calSetting.getFilterPrivateCalendars() ;
-    }
-    while(iter.hasNext()){      
-      Node categoryNode =  iter.nextNode() ;
-      String categoryId = categoryNode.getProperty(Utils.EXO_ID).getString() ;     
-      StringBuffer queryString = 
-        new StringBuffer("/jcr:root" + calendarHome.getPath()  
-                         + "//element(*,exo:calendar)[@exo:categoryId='").append(categoryId).append("']");
-      Query query = qm.createQuery(queryString.toString(), Query.XPATH);
-      QueryResult result = query.execute();
-      NodeIterator it = result.getNodes();
-      calendars = new ArrayList<Calendar> () ;
-      if(it.hasNext()) {
-        while(it.hasNext()){
-          Calendar cal = getCalendar(defaultCalendars, username, it.nextNode(), isShowAll) ;
-          if(cal != null) calendars.add(cal) ;
-        }        
+  public List<GroupCalendarData> getCalendarCategories(String username, boolean isShowAll) throws Exception {
+    SessionProvider sProvider = createSessionProvider();
+    try {
+      Node calendarHome = getUserCalendarHome(sProvider, username);
+      NodeIterator iter = getCalendarCategoryHome(sProvider, username).getNodes();
+      List<GroupCalendarData> calendarCategories = new ArrayList<GroupCalendarData>();
+      List<Calendar> calendars;
+      calendarHome.getSession().refresh(false);
+      QueryManager qm = calendarHome.getSession().getWorkspace().getQueryManager();
+      String[] defaultCalendars = null;
+      CalendarSetting calSetting = getCalendarSetting(sProvider, username);
+      if (calSetting != null) {
+        defaultCalendars = calSetting.getFilterPrivateCalendars();
       }
-      calendarCategories.add(new GroupCalendarData(categoryId, categoryNode.getProperty(Utils.EXO_NAME).getString(), calendars)) ;
+      while (iter.hasNext()) {
+        Node categoryNode = iter.nextNode();
+        String categoryId = categoryNode.getProperty(Utils.EXO_ID).getString();
+        StringBuffer queryString = new StringBuffer("/jcr:root" + calendarHome.getPath()
+            + "//element(*,exo:calendar)[@exo:categoryId='").append(categoryId).append("']");
+        Query query = qm.createQuery(queryString.toString(), Query.XPATH);
+        QueryResult result = query.execute();
+        NodeIterator it = result.getNodes();
+        calendars = new ArrayList<Calendar>();
+        if (it.hasNext()) {
+          while (it.hasNext()) {
+            Calendar cal = getCalendar(defaultCalendars, username, it.nextNode(), isShowAll);
+            if (cal != null)
+              calendars.add(cal);
+          }
+        }
+        calendarCategories.add(new GroupCalendarData(categoryId,
+                                                     categoryNode.getProperty(Utils.EXO_NAME)
+                                                                 .getString(),
+                                                     calendars));
+      }
+      return calendarCategories;
+    } finally {
+      closeSessionProvider(sProvider);
     }
-    return calendarCategories;
   }
 
   public List<CalendarCategory> getCategories(String username) throws Exception {
@@ -2349,15 +2361,34 @@ public class JCRDataStorage{
 
 
   /**
-   * Create a normal session provider for current context
+   * Create a session provider for current context. The method first try to get a normal session provider, 
+   * then attempts to create a system provider if the first one was not available.
    * @return a SessionProvider initialized by current SessionProviderService
    * @see SessionProviderService#getSessionProvider(null)
    */
   private SessionProvider createSessionProvider() {
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
-    return service.getSessionProvider(null);
+    SessionProvider provider = service.getSessionProvider(null);
+    if (provider == null) {
+      log.debug("No user session provider was available, trying to use a system session provider");
+      provider = service.getSystemSessionProvider(null);
+    }
+    return provider;
   }
+  
+  private SessionProvider createUserProvider() {
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
+    return service.getSessionProvider(null) ;    
+  }  
+  
+  private SessionProvider createSystemProvider() {
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
+    return service.getSystemSessionProvider(null) ;    
+  }
+  
 
   /**
    * Safely closes JCR session provider. Call this method in finally to clean any provider initialized by createSessionProvider()
@@ -2369,5 +2400,7 @@ public class JCRDataStorage{
       sessionProvider.close();
     }
   }
+  
+ 
 
 }
