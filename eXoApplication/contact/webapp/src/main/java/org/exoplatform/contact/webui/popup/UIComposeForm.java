@@ -25,6 +25,7 @@ import java.util.Map;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.webui.UIContactPortlet;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
@@ -32,6 +33,7 @@ import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.web.command.handler.GetApplicationHandler;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -283,7 +285,9 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
           message.setTo(to) ;
           message.setSubject(uiForm.getFieldSubjectValue()) ;
           message.setBody(uiForm.getFieldContentValue()) ;
-          ContactUtils.sendMessage(message) ;
+          org.exoplatform.services.mail.MailService mService = uiForm.getApplicationComponent(org.exoplatform.services.mail.impl.MailServiceImpl.class) ;
+          mService.sendMessage(message) ;
+          //ContactUtils.sendMessage(message) ;
           /*uiApp.addMessage(new ApplicationMessage("UIComposeForm.msg.send-mail-succsessfuly", null, ApplicationMessage.INFO)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;*/
           UIContactPortlet portlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
