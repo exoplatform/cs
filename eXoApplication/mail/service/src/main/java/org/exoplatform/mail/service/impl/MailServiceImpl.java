@@ -768,7 +768,7 @@ public class MailServiceImpl implements MailService, Startable {
           props.setProperty("mail.imap.socketFactory.class", socketFactoryClass);
         }
 
-        Session session = Session.getDefaultInstance(props);
+        Session session = Session.getInstance(props, null);
         String[] incomingFolders = account.getIncomingFolder().split(",");
 
         // Later : the part inside of this loop should be in a separated method
