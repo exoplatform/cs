@@ -77,8 +77,8 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   public void saveCalendarCategory(String username, CalendarCategory calendarCategory, boolean isNew) throws Exception {
     storage_.saveCalendarCategory(username, calendarCategory, isNew) ;
   }
-  public CalendarCategory removeCalendarCategory(SessionProvider sProvider, String username, String calendarCategoryId) throws Exception {
-    return storage_.removeCalendarCategory(sProvider, username, calendarCategoryId);
+  public CalendarCategory removeCalendarCategory(String username, String calendarCategoryId) throws Exception {
+    return storage_.removeCalendarCategory(username, calendarCategoryId);
   }
 
   public Calendar getUserCalendar(SessionProvider sProvider, String username, String calendarId) throws Exception {
@@ -88,7 +88,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     return storage_.getUserCalendars(sProvider, username, isShowAll) ;
   }
   public List<Calendar> getUserCalendarsByCategory(SessionProvider sProvider, String username, String calendarCategoryId) throws Exception {
-    return storage_.getUserCalendarsByCategory(sProvider, username, calendarCategoryId);
+    return storage_.getUserCalendarsByCategory(username, calendarCategoryId);
   }
   public void saveUserCalendar(SessionProvider sProvider, String username, Calendar calendar, boolean isNew) throws Exception {
     storage_.saveUserCalendar(sProvider, username, calendar, isNew) ;
@@ -162,7 +162,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   }
 
   public CalendarSetting getCalendarSetting(SessionProvider sProvider, String username) throws Exception {
-    return storage_.getCalendarSetting(sProvider, username) ;
+    return storage_.getCalendarSetting(username) ;
   }
 
   public int generateRss(SessionProvider sProvider, String username, List<String> calendarIds, RssData rssData) throws Exception {

@@ -74,14 +74,13 @@ public interface CalendarService {
 
   /**
    * The method used for removing one category by id
-   * @param userSession The session of current logedin user
    * @param username current user name(or user id)
    * @param calendarCategoryId given category id
    * @return
    * @throws Exception
    * @see CalendarCategory
    */
-  public CalendarCategory removeCalendarCategory(SessionProvider userSession, String username, String calendarCategoryId) throws Exception ;
+  public CalendarCategory removeCalendarCategory(String username, String calendarCategoryId) throws Exception ;
 
   /**
    * The method get private calendar by given calendarId, and all calendar related to this category will be removed

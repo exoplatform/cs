@@ -302,7 +302,7 @@ public class UICalendars extends UIForm  {
       uiPortlet.cancelAction() ;
       CalendarService calService = uiComponent.getApplicationComponent(CalendarService.class) ;
       String username = CalendarUtils.getCurrentUser() ;
-      calService.removeCalendarCategory(uiComponent.getSession(), username, calendarCategoryId) ;
+      calService.removeCalendarCategory(username, calendarCategoryId) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent) ; 
       UICalendarWorkingContainer uiWorkingContainer = uiPortlet.findFirstComponentOfType(UICalendarWorkingContainer.class) ;
       UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;

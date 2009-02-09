@@ -124,7 +124,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     assertEquals(removeCal.getName(), "myCalendar") ;
     
     //remove private calendar category
-    assertNotNull(calendarService_.removeCalendarCategory(sProvider_, username, calCategory.getId())) ;
+    assertNotNull(calendarService_.removeCalendarCategory(username, calCategory.getId())) ;
     
     // calendar setting
     CalendarSetting setting = new CalendarSetting() ;
@@ -176,7 +176,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     
     calendarService_.removeSharedCalendar(sProvider_, "sharedUser", cal.getId()) ;
     assertNull(calendarService_.getSharedCalendars(sProvider_, "sharedUser", true)) ;
-    calendarService_.removeCalendarCategory(sProvider_, username, calCategory.getId()) ;
+    calendarService_.removeCalendarCategory(username, calCategory.getId()) ;
   }
 
   public void testCalendarCategory() throws Exception {
@@ -199,7 +199,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     calendarService_.saveCalendarCategory(username, calCategory, false) ;
     
     //remove calendar category
-    CalendarCategory removeCate = calendarService_.removeCalendarCategory(sProvider_, username, calCategory.getId()) ;
+    CalendarCategory removeCate = calendarService_.removeCalendarCategory(username, calCategory.getId()) ;
     assertEquals(removeCate.getName(), "categoryNameUpdated") ;
   }
 
@@ -266,7 +266,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     calendarService_.removeEventCategory(sProvider_, username, eventCategory.getName()) ;
 
     assertNotNull(calendarService_.removeUserCalendar(sProvider_, username, newCalendarIds.get(0))) ;
-    assertNotNull(calendarService_.removeCalendarCategory(sProvider_, username, calCategory.getId())) ;
+    assertNotNull(calendarService_.removeCalendarCategory(username, calCategory.getId())) ;
   }
   
   public void testPublicEvent() throws Exception {
@@ -301,7 +301,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     
     calendarService_.removeEventCategory(sProvider_, username, eventCategory.getName()) ;
     calendarService_.removeUserCalendar(sProvider_, username, cal.getId()) ;
-    calendarService_.removeCalendarCategory(sProvider_, username, calCategory.getId()) ;
+    calendarService_.removeCalendarCategory(username, calCategory.getId()) ;
   }
   
   public void testPrivateEvent() throws Exception {
@@ -339,6 +339,6 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     
     calendarService_.removeEventCategory(sProvider_, username, eventCategory.getName()) ;
     calendarService_.removeUserCalendar(sProvider_, username, cal.getId()) ;
-    calendarService_.removeCalendarCategory(sProvider_, username, calCategory.getId()) ;
+    calendarService_.removeCalendarCategory(username, calCategory.getId()) ;
   }
 }
