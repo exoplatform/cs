@@ -237,7 +237,7 @@ public class JCRDataStorage{
     Node calendarNode = getUserCalendarHome(username).getNode(calendarId) ;
     return getCalendar(new String[]{calendarId}, username, calendarNode, true) ;
   }
-  public List<Calendar> getUserCalendars(SessionProvider sProvider, String username, boolean isShowAll) throws Exception {
+  public List<Calendar> getUserCalendars(String username, boolean isShowAll) throws Exception {
     NodeIterator iter = getUserCalendarHome(username).getNodes() ;
     List<Calendar> calList = new ArrayList<Calendar>() ;
     String[] defaultCalendars = null ;     

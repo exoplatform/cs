@@ -94,7 +94,6 @@ public interface CalendarService {
 
   /**
    * The method queries all private calendars of current user
-   * @param userSession The session of current logedin user
    * @param username current user name(or user id)
    * @param isShowAll boolean value if equals <b>true</b> will get all private calendars, equals <b>false</b> it will take only 
    * the calendars in current user's setting
@@ -102,7 +101,7 @@ public interface CalendarService {
    * @throws Exception
    * @see Calendar
    */
-  public List<Calendar> getUserCalendars(SessionProvider userSession, String username, boolean isShowAll) throws Exception ;
+  public List<Calendar> getUserCalendars(String username, boolean isShowAll) throws Exception ;
 
   /**
    * The method look up all private calendars by given category id

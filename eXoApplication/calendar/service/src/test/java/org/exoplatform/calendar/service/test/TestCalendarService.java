@@ -250,7 +250,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     
     calendarService_.getCalendarImportExports(CalendarServiceImpl.ICALENDAR)
      .importCalendar(sProvider_, username, is, "importedCalendar") ;
-    List<Calendar> cals = calendarService_.getUserCalendars(sProvider_, username, true) ;
+    List<Calendar> cals = calendarService_.getUserCalendars(username, true) ;
     List<String> newCalendarIds = new ArrayList<String>() ;
     for (Calendar calendar : cals) newCalendarIds.add(calendar.getId()) ;
     List<CalendarEvent> events = calendarService_.getUserEventByCalendar(sProvider_, username, newCalendarIds) ;

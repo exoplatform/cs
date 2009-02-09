@@ -749,7 +749,7 @@ public class UICalendars extends UIForm  {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }   
-      List<Calendar> list = CalendarUtils.getCalendarService().getUserCalendars(uiComponent.getSession(),  user, showAll) ;
+      List<Calendar> list = CalendarUtils.getCalendarService().getUserCalendars(user,  showAll) ;
       if(list == null || list.isEmpty()) {
         UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null)) ;
@@ -776,7 +776,7 @@ public class UICalendars extends UIForm  {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }   
-      List<Calendar> list = CalendarUtils.getCalendarService().getUserCalendars(uiComponent.getSession(),  user, showAll) ;
+      List<Calendar> list = CalendarUtils.getCalendarService().getUserCalendars(user,  showAll) ;
       if(list == null || list.isEmpty()) {
         UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null)) ;

@@ -162,7 +162,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
   public List<SelectItemOption<String>> getPrivateCalendars() {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     try {
-      for(Calendar c : CalendarUtils.getCalendarService().getUserCalendars(SessionProviderFactory.createSessionProvider(), CalendarUtils.getCurrentUser(),true)){
+      for(Calendar c : CalendarUtils.getCalendarService().getUserCalendars(CalendarUtils.getCurrentUser(), true)){
         options.add(new SelectItemOption<String>(c.getName(), c.getId())) ;
       }
     } catch (Exception e) {
@@ -242,7 +242,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
               event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
               return ;
             }
-            List<Calendar> pCals = calendarService.getUserCalendars(userSession, username, true) ;
+            List<Calendar> pCals = calendarService.getUserCalendars(username, true) ;
             for(Calendar cal : pCals) {
               if(cal.getName().trim().equalsIgnoreCase(calendarName)) {
                 uiApp.addMessage(new ApplicationMessage("UICalendarForm.msg.name-exist", new Object[]{calendarName}, ApplicationMessage.WARNING)) ;

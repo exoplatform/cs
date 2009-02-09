@@ -503,7 +503,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
             return ;
           }
           calendar.setCategoryId(calendarCategoryId) ;
-          List<Calendar> pCals = calendarService.getUserCalendars(uiForm.getSession(), username, true) ;
+          List<Calendar> pCals = calendarService.getUserCalendars(username, true) ;
           for(Calendar cal : pCals) {
             if(uiForm.isAddNew_) {
               if(cal.getName().trim().equalsIgnoreCase(displayName.trim())) {

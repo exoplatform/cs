@@ -197,7 +197,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   public  List<String> getPrivateCalendars() throws Exception{
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     List<String> list = new ArrayList<String>() ;
-    for(org.exoplatform.calendar.service.Calendar c : calendarService.getUserCalendars(SessionProviderFactory.createSessionProvider() , CalendarUtils.getCurrentUser(), true)) {
+    for(org.exoplatform.calendar.service.Calendar c : calendarService.getUserCalendars(CalendarUtils.getCurrentUser() , true)) {
       list.add(c.getId()) ;
     }
     return list ;
