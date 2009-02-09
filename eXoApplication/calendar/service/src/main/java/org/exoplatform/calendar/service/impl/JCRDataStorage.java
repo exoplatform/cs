@@ -233,7 +233,7 @@ public class JCRDataStorage{
     }
   }
 
-  public Calendar getUserCalendar(SessionProvider sProvider, String username, String calendarId) throws Exception {
+  public Calendar getUserCalendar(String username, String calendarId) throws Exception {
     Node calendarNode = getUserCalendarHome(username).getNode(calendarId) ;
     return getCalendar(new String[]{calendarId}, username, calendarNode, true) ;
   }
@@ -1588,7 +1588,7 @@ public class JCRDataStorage{
           path.append(iCalHome.getName()).append("/").append(iCalHome.getNode(calendarId + ".ics").getName());        
           String url = getEntryUrl(portalName, rssHomeNode.getSession().getWorkspace().getName(), 
                                    username, path.toString(), rssData.getUrl()) ;
-          Calendar exoCal = getUserCalendar(sProvider, username, calendarId) ;
+          Calendar exoCal = getUserCalendar(username, calendarId) ;
           entry = new SyndEntryImpl();
           entry.setTitle(exoCal.getName());                
           entry.setLink(url);        
@@ -1657,7 +1657,7 @@ public class JCRDataStorage{
           nodeContent.setProperty(Utils.JCR_DATA, is);
           WebDaveiCalHome.save() ;
           String link = rssData.getLink() + ical.getPath() ;
-          Calendar exoCal = getUserCalendar(sProvider, username, calendarId) ;
+          Calendar exoCal = getUserCalendar(username, calendarId) ;
           entry = new SyndEntryImpl();
           entry.setTitle(exoCal.getName());                
           entry.setLink(link);     

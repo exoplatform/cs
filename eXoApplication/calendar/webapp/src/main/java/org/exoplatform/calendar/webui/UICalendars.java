@@ -338,7 +338,7 @@ public class UICalendars extends UIForm  {
         String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
         Calendar calendar = null;
         if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
-          calendar = calService.getUserCalendar(uiComponent.getSession(), currentUser, calendarId) ;
+          calendar = calService.getUserCalendar(currentUser, calendarId) ;
         } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
           GroupCalendarData gCalendarData = calService.getSharedCalendars(uiComponent.getSystemSession(), currentUser, true) ;
           if(gCalendarData != null) calendar = gCalendarData.getCalendarById(calendarId) ;
@@ -403,7 +403,7 @@ public class UICalendars extends UIForm  {
         String categoryId = event.getRequestContext().getRequestParameter("categoryId") ;
         Calendar calendar = null;
         if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
-          calendar = calService.getUserCalendar(uiComponent.getSession(), currentUser, calendarId) ;
+          calendar = calService.getUserCalendar(currentUser, calendarId) ;
         } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
           GroupCalendarData gCalendarData = calService.getSharedCalendars(uiComponent.getSystemSession(), currentUser, true) ;
           if(gCalendarData != null) calendar = gCalendarData.getCalendarById(calendarId) ;
@@ -469,7 +469,7 @@ public class UICalendars extends UIForm  {
       try {
         Calendar calendar = null ;
         if(CalendarUtils.PRIVATE_TYPE.equals(calType)) { 
-          calendar = calService.getUserCalendar(uiComponent.getSession(), username, calendarId) ;
+          calendar = calService.getUserCalendar(username, calendarId) ;
         }/* else if(CalendarUtils.SHARED_TYPE.equals(calType)) {
            if(calService.getSharedCalendars(uiComponent.getSystemSession(), username, true) != null)
             calendar = calService.getSharedCalendars(uiComponent.getSystemSession(), username, true).getCalendarById(calendarId) ;
@@ -519,7 +519,7 @@ public class UICalendars extends UIForm  {
       Calendar calendar = null ;
       try {
         if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
-          calendar = calService.getUserCalendar(uiComponent.getSession(), username, calendarId) ;
+          calendar = calService.getUserCalendar(username, calendarId) ;
           if(calendar == null) {
             UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
             uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;
@@ -653,7 +653,7 @@ public class UICalendars extends UIForm  {
       UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
       Calendar calendar = null;
       if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
-        calendar = calService.getUserCalendar(uiComponent.getSession(), currentUser, selectedCalendarId) ;
+        calendar = calService.getUserCalendar(currentUser, selectedCalendarId) ;
       } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
         GroupCalendarData gCalendarData = calService.getSharedCalendars(uiComponent.getSystemSession(), currentUser, true) ;
         if(gCalendarData != null) { 
@@ -803,7 +803,7 @@ public class UICalendars extends UIForm  {
       UIAddEditPermission uiAddNewEditPermission = uiPopupContainer.addChild(UIAddEditPermission.class, null, null);
       CalendarService calService = CalendarUtils.getCalendarService() ;
       String username = CalendarUtils.getCurrentUser() ;
-      Calendar cal = calService.getUserCalendar(uiComponent.getSession(), username, selectedCalendarId) ;
+      Calendar cal = calService.getUserCalendar(username, selectedCalendarId) ;
       uiAddNewEditPermission.init(null, cal, true) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiComponent) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
@@ -823,7 +823,7 @@ public class UICalendars extends UIForm  {
       try{
         Calendar calendar = null ;
         if(CalendarUtils.PRIVATE_TYPE.equals(calType)) {
-          calendar = calService.getUserCalendar(session, username, calendarId) ;
+          calendar = calService.getUserCalendar(username, calendarId) ;
           if(calendar == null) {
             UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
             uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar", null, 1)) ;

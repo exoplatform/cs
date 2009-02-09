@@ -184,7 +184,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         return ;
       }
 
-      Calendar cal = calendarService.getUserCalendar(sProvider, username, uiForm.calendarId_) ;
+      Calendar cal = calendarService.getUserCalendar(username, uiForm.calendarId_) ;
       Map<String, String> perms = new HashMap<String, String>() ;
       if(cal.getViewPermission() != null) {
         for(String v : cal.getViewPermission()) {

@@ -178,7 +178,7 @@ public class UIMonthView extends UICalendarView {
           if(ce != null) {
             org.exoplatform.calendar.service.Calendar calendar = null ;
             if(ce.getCalType().equals(CalendarUtils.PRIVATE_TYPE)) {
-              calendar = calService.getUserCalendar(calendarview.getSession(), username, calendarId) ;
+              calendar = calService.getUserCalendar(username, calendarId) ;
             } else if(ce.getCalType().equals(CalendarUtils.SHARED_TYPE)){
               if(calService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true) != null)
                 calendar = calService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true).getCalendarById(calendarId) ;

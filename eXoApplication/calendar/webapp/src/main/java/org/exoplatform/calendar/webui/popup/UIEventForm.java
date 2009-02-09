@@ -1248,7 +1248,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
 
             Calendar currentCalendar = null ;
             if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
-              currentCalendar = calService.getUserCalendar(uiForm.getSession(), username, calendarId) ; 
+              currentCalendar = calService.getUserCalendar(username, calendarId) ; 
             } else if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)) {
               GroupCalendarData gCalendarData = calService.getSharedCalendars(uiForm.getSystemSession(), username, true) ;
               if( gCalendarData!= null && gCalendarData.getCalendarById(calendarId) != null) currentCalendar = gCalendarData.getCalendarById(calendarId) ;

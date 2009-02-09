@@ -851,7 +851,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         org.exoplatform.calendar.service.Calendar calendar = null ;
         try {
           if(CalendarUtils.PRIVATE_TYPE.equals(calType)) {
-            calendar = calendarService.getUserCalendar(uiCalendarView.getSession(), username, calendarId) ;
+            calendar = calendarService.getUserCalendar(username, calendarId) ;
           } else if (CalendarUtils.SHARED_TYPE.equals(calType)) {
             GroupCalendarData calendarData = calendarService.getSharedCalendars(uiCalendarView.getSystemSession(), CalendarUtils.getCurrentUser(), true)  ;
             if(calendarData != null) calendar = calendarData.getCalendarById(calendarId) ;
@@ -1162,7 +1162,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
             event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarPortlet) ;
           }
 		      if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
-		        calendar = calService.getUserCalendar(uiComponent.getSession(), currentUser, selectedCalendarId) ;
+		        calendar = calService.getUserCalendar(currentUser, selectedCalendarId) ;
 		      } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
 		        GroupCalendarData gCalendarData = calService.getSharedCalendars(uiComponent.getSystemSession(), currentUser, true) ;
 		        if(gCalendarData != null) { 

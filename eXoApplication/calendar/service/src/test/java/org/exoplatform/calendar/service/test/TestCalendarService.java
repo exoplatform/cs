@@ -76,7 +76,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     cal.setCategoryId(calCategory.getId()) ;
     cal.setPublic(true) ;
     calendarService_.saveUserCalendar(sProvider_, username, cal, true) ;
-    Calendar myCal = calendarService_.getUserCalendar(sProvider_,username, cal.getId()) ;
+    Calendar myCal = calendarService_.getUserCalendar(username,cal.getId()) ;
     assertNotNull(myCal) ;
     assertEquals(myCal.getName(), "myCalendar") ;
     
@@ -217,7 +217,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     cal.setPublic(true) ;
     //create/get calendar in private folder
     calendarService_.saveUserCalendar(sProvider_, username, cal, true) ;
-    Calendar myCal = calendarService_.getUserCalendar(sProvider_, username, cal.getId()) ;
+    Calendar myCal = calendarService_.getUserCalendar(username, cal.getId()) ;
     assertNotNull(myCal) ;
     assertEquals(myCal.getName(), "myCalendar") ;
 

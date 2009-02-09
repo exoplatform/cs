@@ -116,7 +116,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
       CalendarService calService = CalendarUtils.getCalendarService() ;
       String username = CalendarUtils.getCurrentUser() ;
       shareForm.setSharedUser(resiceUser) ;
-      Calendar cal = calService.getUserCalendar(SessionProviderFactory.createSessionProvider(), username, addEdit.calendarId_) ;
+      Calendar cal = calService.getUserCalendar(username, addEdit.calendarId_) ;
       checkBox.setChecked((cal.getEditPermission() != null) && Arrays.asList(cal.getEditPermission()).contains(resiceUser)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(shareForm) ;
     }
@@ -127,7 +127,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
       String resiceUser = event.getRequestContext().getRequestParameter(OBJECTID);
       CalendarService calService = CalendarUtils.getCalendarService() ;
       String username = CalendarUtils.getCurrentUser() ;
-      Calendar cal = calService.getUserCalendar(SessionProviderFactory.createSessionProvider(), username, addEdit.calendarId_) ;
+      Calendar cal = calService.getUserCalendar(username, addEdit.calendarId_) ;
       if(cal.getViewPermission() != null) {
         List<String> newPerms = new ArrayList<String>() ;
         for(String s : cal.getViewPermission()) {

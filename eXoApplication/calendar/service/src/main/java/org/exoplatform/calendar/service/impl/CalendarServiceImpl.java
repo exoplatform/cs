@@ -81,8 +81,8 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     return storage_.removeCalendarCategory(username, calendarCategoryId);
   }
 
-  public Calendar getUserCalendar(SessionProvider sProvider, String username, String calendarId) throws Exception {
-    return storage_.getUserCalendar(sProvider, username, calendarId);
+  public Calendar getUserCalendar(String username, String calendarId) throws Exception {
+    return storage_.getUserCalendar(username, calendarId);
   }
   public List<Calendar> getUserCalendars(SessionProvider sProvider, String username, boolean isShowAll) throws Exception {
     return storage_.getUserCalendars(sProvider, username, isShowAll) ;

@@ -84,14 +84,13 @@ public interface CalendarService {
 
   /**
    * The method get private calendar by given calendarId, and all calendar related to this category will be removed
-   * @param userSession The session of current logedin user
    * @param username current user name(or user id)
    * @param calendarId given calendar id
    * @return Calendar object returned contants details of a calendar
    * @throws Exception
    * @see Calendar
    */
-  public Calendar getUserCalendar(SessionProvider userSession, String username, String calendarId) throws Exception ;
+  public Calendar getUserCalendar(String username, String calendarId) throws Exception ;
 
   /**
    * The method queries all private calendars of current user
