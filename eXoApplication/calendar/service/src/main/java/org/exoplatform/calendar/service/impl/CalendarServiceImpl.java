@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.jcr.Node;
-import javax.jcr.Session;
 
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarCategory;
@@ -38,7 +37,6 @@ import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.service.FeedData;
 import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.service.RssData;
-import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
@@ -66,8 +64,8 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     calendarImportExport_.put(EXPORTEDCSV, new CsvImportExport(storage_)) ;
   }
 
-  public List<CalendarCategory> getCategories(SessionProvider sProvider, String username) throws Exception {
-    return storage_.getCategories(sProvider, username) ;
+  public List<CalendarCategory> getCategories(String username) throws Exception {
+    return storage_.getCategories(username) ;
   }
 
   public List<GroupCalendarData> getCalendarCategories(SessionProvider sProvider, String username, boolean isShowAll) throws Exception {
@@ -246,9 +244,7 @@ public class CalendarServiceImpl implements CalendarService, Startable {
 
   }
 
-  public synchronized void addListenerPlugin(ComponentPlugin listener) throws Exception {
-    if(listener instanceof CalendarUpdateEventListener ) {
-      listeners_.add((CalendarUpdateEventListener)listener) ;
-    }
+  public synchronized void addListenerPlugin(CalendarUpdateEventListener listener) throws Exception {
+	  listeners_.add(listener) ;
   }
 }

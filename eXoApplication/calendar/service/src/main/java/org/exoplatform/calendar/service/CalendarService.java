@@ -21,7 +21,7 @@ import java.util.Map;
 
 import javax.jcr.Node;
 
-import org.exoplatform.container.component.ComponentPlugin;
+
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 /**
@@ -35,13 +35,12 @@ public interface CalendarService {
 
   /**
    * The method gets all calendar category of current user from data base
-   * @param userSession The session of current user this will be create after user login
    * @param username current user name(or user id)
    * @return List of CalendarCategory object
    * @throws Exception
    * @see CalendarCategory
    */
-  public List<CalendarCategory> getCategories(SessionProvider userSession, String username) throws Exception ;
+  public List<CalendarCategory> getCategories(String username) throws Exception ;
 
   /**
    * The method gets all groups of private calendar, and each GroupCalendar containts List of Calendar object
@@ -527,5 +526,5 @@ public interface CalendarService {
    */
   public void confirmInvitation(String fromUserId, String toUserId,int calType,String calendarId, String eventId, int answer) throws Exception ;
   
-  public void addListenerPlugin(ComponentPlugin listener) throws Exception ;
+  public void addListenerPlugin(CalendarUpdateEventListener listener) throws Exception ;
 }

@@ -127,7 +127,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
   private  List<SelectItemOption<String>> getCategory() throws Exception {
     String username = CalendarUtils.getCurrentUser() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    List<CalendarCategory> categories = calendarService.getCategories(getSession(), username) ;
+    List<CalendarCategory> categories = calendarService.getCategories(username) ;
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     for(CalendarCategory category : categories) {
       options.add(new SelectItemOption<String>(category.getName(), category.getId())) ;

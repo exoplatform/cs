@@ -54,6 +54,12 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     SessionProviderService sessionProviderService = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class) ;
     sProvider_ = sessionProviderService.getSystemSessionProvider(null) ;
   }
+	
+	public void tearDown() throws Exception {
+	  super.tearDown();
+	  SessionProviderService sessionProviderService = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class) ;
+	  sessionProviderService.removeSessionProvider(null);
+	}
   
   public void testCalendarService() throws Exception { }
   
@@ -181,7 +187,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     calendarService_.saveCalendarCategory(sProvider_, username, calCategory, true) ;
     List<GroupCalendarData> categories = calendarService_.getCalendarCategories(sProvider_, username, true) ;
     assertEquals(categories.size(), 1) ;
-    assertEquals(1, calendarService_.getCategories(sProvider_, username).size()) ;
+    assertEquals(1, calendarService_.getCategories(username).size()) ;
     
     
     //get calendar category

@@ -115,7 +115,8 @@ public class UICalendarCategoryForm extends UIForm {
         CalendarService calendarService = CalendarUtils.getCalendarService() ;
         String username = CalendarUtils.getCurrentUser() ;
         boolean existed = false ;
-        List<CalendarCategory> gData = calendarService.getCategories(SessionProviderFactory.createSessionProvider(), username) ;
+                       
+        List<CalendarCategory> gData = calendarService.getCategories(username) ;
         if(uiForm.isAddNew())  {
           for(CalendarCategory cal : gData) {
             if (cal.getName().trim().equalsIgnoreCase(categoryName.trim())) {

@@ -24,7 +24,9 @@ import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.calendar.service.GroupCalendarData;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.services.jcr.ext.app.ThreadLocalSessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserEventListener;
@@ -117,6 +119,8 @@ public class NewUserListener extends UserEventListener {
   public void postSave(User user, boolean isNew) throws Exception {
     if(!isNew) return ;
     SessionProvider sysProvider = SessionProvider.createSystemProvider();
+    ThreadLocalSessionProviderService sessionProviderService = (ThreadLocalSessionProviderService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(ThreadLocalSessionProviderService.class);
+    sessionProviderService.setSessionProvider(null, sysProvider);
     try {
       if (defaultEventCategories_ != null
           && defaultEventCategories_.length > 0) {
@@ -156,7 +160,7 @@ public class NewUserListener extends UserEventListener {
     } catch (Exception e) {
       e.printStackTrace() ;
     } finally {
-      sysProvider.close();
+      sessionProviderService.removeSessionProvider(null);
     }
   }
 

@@ -60,6 +60,7 @@ import org.exoplatform.services.jcr.access.AccessControlEntry;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.access.SystemIdentity;
 import org.exoplatform.services.jcr.core.ExtendedNode;
+import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 
@@ -489,7 +490,9 @@ public class JCRDataStorage{
     return calendarCategories;
   }
 
-  public List<CalendarCategory> getCategories(SessionProvider sProvider, String username) throws Exception {
+  public List<CalendarCategory> getCategories(String username) throws Exception {
+    SessionProvider sProvider = createSessionProvider();
+    try {
     Node calendarCategoryHome = getCalendarCategoryHome(sProvider, username) ;
     NodeIterator iter = calendarCategoryHome.getNodes() ;
     List<CalendarCategory> calendarCategories = new ArrayList<CalendarCategory> () ;
@@ -497,6 +500,9 @@ public class JCRDataStorage{
       calendarCategories.add(getCalendarCategory(iter.nextNode())) ;
     }
     return calendarCategories;
+    } finally {
+      closeSessionProvider(sProvider);
+    }
   }
 
   public CalendarCategory getCalendarCategory(SessionProvider sProvider, String username, String calendarCategoryId) throws Exception {
@@ -2340,6 +2346,28 @@ public class JCRDataStorage{
       session.close() ;
     }
   }
+
+
+  /**
+   * Create a normal session provider for current context
+   * @return a SessionProvider initialized by current SessionProviderService
+   * @see SessionProviderService#getSessionProvider(null)
+   */
+  private SessionProvider createSessionProvider() {
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
+    return service.getSessionProvider(null);
+  }
+
+  /**
+   * Safely closes JCR session provider. Call this method in finally to clean any provider initialized by createSessionProvider()
+   * @param sessionProvider the sessionProvider to close
+   * @see SessionProvider#close();
+   */
+  private void closeSessionProvider(SessionProvider sessionProvider) {
+    if (sessionProvider != null) {
+      sessionProvider.close();
+    }
+  }
+
 }
-
-
