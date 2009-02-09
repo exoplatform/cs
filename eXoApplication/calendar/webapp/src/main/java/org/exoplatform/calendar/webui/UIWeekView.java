@@ -201,7 +201,7 @@ public class UIWeekView extends UICalendarView {
               calendar = 
                 calService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true).getCalendarById(calendarId) ;
           } else if(eventCalendar.getCalType().equals(CalendarUtils.PUBLIC_TYPE)) {
-            calendar = calService.getGroupCalendar(SessionProviderFactory.createSystemProvider(), calendarId) ;
+            calendar = calService.getGroupCalendar(calendarId) ;
           }
           if(calendar == null) {
             UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;
@@ -298,7 +298,7 @@ public class UIWeekView extends UICalendarView {
               calendar = 
                 calendarService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true).getCalendarById(calendarId) ;
           } else if(CalendarUtils.PUBLIC_TYPE.equals(calType)) {
-            calendar = calendarService.getGroupCalendar(SessionProviderFactory.createSystemProvider(), calendarId) ;
+            calendar = calendarService.getGroupCalendar(calendarId) ;
           }
           if(calendar == null) {
             UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;

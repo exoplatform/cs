@@ -97,7 +97,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     for(Calendar cal : cservice.getUserCalendars(username, true)) {
       options.add(new SelectItemOption<String>(cal.getName(), Calendar.TYPE_PRIVATE + CalendarUtils.COLON + cal.getId())) ;
     }
-    List<GroupCalendarData> groupCals  = cservice.getGroupCalendars(getSystemSession(), CalendarUtils.getUserGroups(username), true, username) ;
+    List<GroupCalendarData> groupCals  = cservice.getGroupCalendars(CalendarUtils.getUserGroups(username), true, username) ;
     for(GroupCalendarData groupData : groupCals) {
       if(groupData != null) {
         for(Calendar cal : groupData.getCalendars()) {
@@ -116,7 +116,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     addChild(new UIFormSelectBox(CALENDAR, CALENDAR, options)) ;
     options = new ArrayList<SelectItemOption<String>>() ;
     options.add(new SelectItemOption<String>("", "")) ;
-    for(EventCategory cat : cservice.getEventCategories(getSession(), CalendarUtils.getCurrentUser())) {
+    for(EventCategory cat : cservice.getEventCategories(CalendarUtils.getCurrentUser())) {
       options.add(new SelectItemOption<String>(cat.getName(), cat.getId())) ;
     }
     addChild(new UIFormSelectBox(CATEGORY, CATEGORY, options)) ;
@@ -184,7 +184,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
     String[] groups = CalendarUtils.getUserGroups(CalendarUtils.getCurrentUser()) ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     Map<String, String> map = new HashMap<String, String> () ;    
-    for(GroupCalendarData group : calendarService.getGroupCalendars(getSystemSession(), groups, true, CalendarUtils.getCurrentUser())) {
+    for(GroupCalendarData group : calendarService.getGroupCalendars(groups, true, CalendarUtils.getCurrentUser())) {
       for(org.exoplatform.calendar.service.Calendar calendar : group.getCalendars()) {
         map.put(calendar.getId(), calendar.getId()) ;          
       }

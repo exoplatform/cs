@@ -80,7 +80,7 @@ public class UIActionBar extends UIContainer  {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      List<EventCategory> eventCategories = CalendarUtils.getCalendarService().getEventCategories(uiActionBar.getSession(), CalendarUtils.getCurrentUser()) ;
+      List<EventCategory> eventCategories = CalendarUtils.getCalendarService().getEventCategories(CalendarUtils.getCurrentUser()) ;
       if(eventCategories.isEmpty()) {
         uiApp.addMessage(new ApplicationMessage("UICalendarView.msg.event-category-list-empty", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

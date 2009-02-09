@@ -92,7 +92,7 @@ public class UIEventCategoryManager extends UIContainer implements UIPopupCompon
   public void updateGrid() throws Exception {
     CalendarService calService = getApplicationComponent(CalendarService.class) ;
     String username = CalendarUtils.getCurrentUser() ;
-    List<EventCategory>  categories = calService.getEventCategories(getSession(), username) ;
+    List<EventCategory>  categories = calService.getEventCategories(username) ;
     UIGrid uiGrid = getChild(UIGrid.class) ; 
     ObjectPageList objPageList = new ObjectPageList(categories, 10) ;
     uiGrid.getUIPageIterator().setPageList(objPageList) ;   

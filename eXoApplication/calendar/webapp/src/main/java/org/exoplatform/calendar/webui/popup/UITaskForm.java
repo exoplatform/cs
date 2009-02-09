@@ -256,7 +256,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   public static List<SelectItemOption<String>> getCategory() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    List<EventCategory> eventCategories = calendarService.getEventCategories(SessionProviderFactory.createSessionProvider(), CalendarUtils.getCurrentUser()) ;
+    List<EventCategory> eventCategories = calendarService.getEventCategories(CalendarUtils.getCurrentUser()) ;
     for(EventCategory category : eventCategories) {
       options.add(new SelectItemOption<String>(category.getName(), category.getName())) ;
     }
@@ -907,7 +907,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
           GroupCalendarData gCalendarData = calService.getSharedCalendars(uiForm.getSystemSession(), username, true) ;
           if( gCalendarData!= null && gCalendarData.getCalendarById(calendarId) != null) currentCalendar = gCalendarData.getCalendarById(calendarId) ;
         } else  if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)) {
-          currentCalendar = calService.getGroupCalendar(uiForm.getSystemSession(), calendarId) ;
+          currentCalendar = calService.getGroupCalendar(calendarId) ;
         }
         if(currentCalendar == null) {
           uiPopupAction.deActivate() ;

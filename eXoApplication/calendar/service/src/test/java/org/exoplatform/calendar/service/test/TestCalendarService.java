@@ -75,7 +75,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     cal.setDescription("Desscription") ;
     cal.setCategoryId(calCategory.getId()) ;
     cal.setPublic(true) ;
-    calendarService_.saveUserCalendar(sProvider_, username, cal, true) ;
+    calendarService_.saveUserCalendar(username, cal, true) ;
     Calendar myCal = calendarService_.getUserCalendar(username,cal.getId()) ;
     assertNotNull(myCal) ;
     assertEquals(myCal.getName(), "myCalendar") ;
@@ -85,42 +85,42 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     cal.setGroups(new String[] {"users", "admin"}) ;
     cal.setViewPermission(new String [] {"member:/users", "member:/admin"}) ;
     cal.setEditPermission(new String [] {"admin"}) ;
-    calendarService_.savePublicCalendar(sProvider_, cal, true, username) ;
-    Calendar publicCal = calendarService_.getGroupCalendar(sProvider_, cal.getId()) ;
+    calendarService_.savePublicCalendar(cal, true, username) ;
+    Calendar publicCal = calendarService_.getGroupCalendar(cal.getId()) ;
     assertNotNull(publicCal) ;
     assertEquals(publicCal.getName(), "myCalendar") ;
     
     //get calendar in private folder by categoryID
-    List<Calendar> calendares = calendarService_.getUserCalendarsByCategory(sProvider_, username, calCategory.getId()) ;
+    List<Calendar> calendares = calendarService_.getUserCalendarsByCategory(username, calCategory.getId()) ;
     assertNotNull(calendares);
     assertEquals(calendares.size(), 1) ;
     
     //get calendar in public folder by groupId
-    List<GroupCalendarData> groupCalendarList = calendarService_.getGroupCalendars(sProvider_, new String[] {"users"}, true, username) ;
+    List<GroupCalendarData> groupCalendarList = calendarService_.getGroupCalendars(new String[] {"users"}, true, username) ;
     assertNotNull(groupCalendarList);
     assertEquals(groupCalendarList.size(), 1) ;
     
-    groupCalendarList = calendarService_.getGroupCalendars(sProvider_, new String[] {"admin"}, true, username);
+    groupCalendarList = calendarService_.getGroupCalendars(new String[] {"admin"}, true, username);
     assertNotNull(groupCalendarList);
     assertEquals(groupCalendarList.size(), 1) ;
     
-    groupCalendarList = calendarService_.getGroupCalendars(sProvider_, new String[] {"admin1"}, true, username) ;
+    groupCalendarList = calendarService_.getGroupCalendars(new String[] {"admin1"}, true, username) ;
     assertNotNull(groupCalendarList);
     assertEquals(groupCalendarList.size(), 0) ;
     
     //update public calendar 
     cal.setPublic(false) ;
     cal.setName("myCalendarUpdated") ;
-    calendarService_.savePublicCalendar(sProvider_, cal, false, username) ;
-    myCal = calendarService_.getGroupCalendar(sProvider_, cal.getId()) ;
+    calendarService_.savePublicCalendar(cal, false, username) ;
+    myCal = calendarService_.getGroupCalendar(cal.getId()) ;
     assertEquals(myCal.getName(),"myCalendarUpdated") ;
     
     //remove public calendar
-    Calendar removeCal = calendarService_.removePublicCalendar(sProvider_,cal.getId()) ;
+    Calendar removeCal = calendarService_.removePublicCalendar(cal.getId()) ;
     assertEquals(removeCal.getName(), "myCalendarUpdated") ;
     
     //remove private calendar
-    removeCal = calendarService_.removeUserCalendar(sProvider_, username, cal.getId()) ;
+    removeCal = calendarService_.removeUserCalendar(username, cal.getId()) ;
     assertEquals(removeCal.getName(), "myCalendar") ;
     
     //remove private calendar category
@@ -144,7 +144,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     cal.setName("myCalendar") ;
     cal.setCategoryId(calCategory.getId()) ;
     cal.setPublic(true) ;    
-    calendarService_.saveUserCalendar(sProvider_, username, cal, true) ;
+    calendarService_.saveUserCalendar(username, cal, true) ;
 
     List<String> receiverUser = new ArrayList<String>() ;
     receiverUser.add("sharedUser") ;
@@ -216,7 +216,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     cal.setCategoryId(calCategory.getId()) ;
     cal.setPublic(true) ;
     //create/get calendar in private folder
-    calendarService_.saveUserCalendar(sProvider_, username, cal, true) ;
+    calendarService_.saveUserCalendar(username, cal, true) ;
     Calendar myCal = calendarService_.getUserCalendar(username, cal.getId()) ;
     assertNotNull(myCal) ;
     assertEquals(myCal.getName(), "myCalendar") ;
@@ -226,7 +226,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     eventCategory.setName(name) ;
     eventCategory.setDescription("description") ;
     calendarService_.saveEventCategory(sProvider_, username, eventCategory, null, true) ;
-    assertEquals(1, calendarService_.getEventCategories(sProvider_, username).size()) ;
+    assertEquals(1, calendarService_.getEventCategories(username).size()) ;
     assertNotNull(calendarService_.getEventCategory(sProvider_, username, name.toLowerCase())) ;
 
     // import, export calendar
@@ -246,7 +246,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     
     assertNotNull(calendarService_.removeUserEvent(sProvider_, username, cal.getId(), calendarEvent.getId())) ;
     assertEquals(0, calendarService_.getUserEventByCalendar(sProvider_, username, calendarIds).size()) ;
-    assertNotNull(calendarService_.removeUserCalendar(sProvider_, username, cal.getId())) ;
+    assertNotNull(calendarService_.removeUserCalendar(username, cal.getId())) ;
     
     calendarService_.getCalendarImportExports(CalendarServiceImpl.ICALENDAR)
      .importCalendar(sProvider_, username, is, "importedCalendar") ;
@@ -265,7 +265,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     //remove Event category
     calendarService_.removeEventCategory(sProvider_, username, eventCategory.getName()) ;
 
-    assertNotNull(calendarService_.removeUserCalendar(sProvider_, username, newCalendarIds.get(0))) ;
+    assertNotNull(calendarService_.removeUserCalendar(username, newCalendarIds.get(0))) ;
     assertNotNull(calendarService_.removeCalendarCategory(username, calCategory.getId())) ;
   }
   
@@ -280,7 +280,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     cal.setDescription("CalendarDesscription") ;
     cal.setCategoryId(calCategory.getId()) ;
     cal.setPublic(true) ;
-    calendarService_.savePublicCalendar(sProvider_, cal, true, username) ;
+    calendarService_.savePublicCalendar(cal, true, username) ;
     
     EventCategory eventCategory = new EventCategory();
     eventCategory.setName("EventCategoryName1");
@@ -300,7 +300,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     assertNotNull(calendarService_.getGroupEvent(sProvider_, cal.getId(), calEvent.getId()));
     
     calendarService_.removeEventCategory(sProvider_, username, eventCategory.getName()) ;
-    calendarService_.removeUserCalendar(sProvider_, username, cal.getId()) ;
+    calendarService_.removeUserCalendar(username, cal.getId()) ;
     calendarService_.removeCalendarCategory(username, calCategory.getId()) ;
   }
   
@@ -315,7 +315,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     cal.setDescription("CalendarDesscription") ;
     cal.setCategoryId(calCategory.getId()) ;
     cal.setPublic(false) ;
-    calendarService_.saveUserCalendar(sProvider_, username, cal, true) ;
+    calendarService_.saveUserCalendar(username, cal, true) ;
     
     EventCategory eventCategory = new EventCategory();
     eventCategory.setName("EventCategoryName2");
@@ -338,7 +338,7 @@ public class TestCalendarService extends BaseCalendarServiceTestCase{
     assertEquals(calendarService_.getUserEvents(sProvider_, username, query).size(), 1);
     
     calendarService_.removeEventCategory(sProvider_, username, eventCategory.getName()) ;
-    calendarService_.removeUserCalendar(sProvider_, username, cal.getId()) ;
+    calendarService_.removeUserCalendar(username, cal.getId()) ;
     calendarService_.removeCalendarCategory(username, calCategory.getId()) ;
   }
 }

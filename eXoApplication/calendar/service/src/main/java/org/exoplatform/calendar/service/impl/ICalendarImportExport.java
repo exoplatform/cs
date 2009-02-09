@@ -507,7 +507,7 @@ public class ICalendarImportExport implements CalendarImportExport{
     exoCalendar.setCategoryId(categoryId) ;
     exoCalendar.setPublic(false) ;
     exoCalendar.setCalendarOwner(username) ;
-    storage_.saveUserCalendar(sProvider, username, exoCalendar, true) ;   
+    storage_.saveUserCalendar(username, exoCalendar, true) ;   
     ComponentList componentList = iCalendar.getComponents() ;
     CalendarEvent exoEvent ;
     for(Object obj : componentList) {
@@ -536,7 +536,7 @@ public class ICalendarImportExport implements CalendarImportExport{
           try{
             storage_.saveEventCategory(sProvider, username, evCate, null, true) ;
           }catch(Exception e){ 
-            for(EventCategory ev : storage_.getEventCategories(sProvider, username)) {
+            for(EventCategory ev : storage_.getEventCategories(username)) {
               if(ev.getName().equalsIgnoreCase(evCate.getName())) {
                 evCate = ev ;
                 break ;
@@ -620,7 +620,7 @@ public class ICalendarImportExport implements CalendarImportExport{
           try{
             storage_.saveEventCategory(sProvider, username, evCate, null, true) ;
           }catch(Exception e){ 
-            for(EventCategory ev : storage_.getEventCategories(sProvider, username)) {
+            for(EventCategory ev : storage_.getEventCategories(username)) {
               if(ev.getName().equalsIgnoreCase(evCate.getName())) {
                 evCate = ev ;
                 break ;
@@ -801,7 +801,7 @@ public class ICalendarImportExport implements CalendarImportExport{
           try{
             storage_.saveEventCategory(sProvider, username, evCate, null, true) ;
           }catch(Exception e){ 
-            for(EventCategory ev : storage_.getEventCategories(sProvider, username)) {
+            for(EventCategory ev : storage_.getEventCategories(username)) {
               if(ev.getName().equalsIgnoreCase(evCate.getName())) {
                 evCate = ev ;
                 break ;
@@ -905,7 +905,7 @@ public class ICalendarImportExport implements CalendarImportExport{
           try{
             storage_.saveEventCategory(sProvider, username, evCate, null, true) ;
           }catch(Exception e){ 
-            for(EventCategory ev : storage_.getEventCategories(sProvider, username)) {
+            for(EventCategory ev : storage_.getEventCategories(username)) {
               if(ev.getName().equalsIgnoreCase(evCate.getName())) {
                 evCate = ev ;
                 break ;

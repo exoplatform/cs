@@ -519,7 +519,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
               }
             }
           }
-          calendarService.saveUserCalendar(SessionProviderFactory.createSessionProvider(), username, calendar, uiForm.isAddNew_) ;    
+          calendarService.saveUserCalendar(username, calendar, uiForm.isAddNew_) ;    
         } else if(CalendarUtils.SHARED_TYPE.equals(uiForm.calType_)) {
           calendarService.saveSharedCalendar(uiForm.getSystemSession(), username, calendar) ;
         }else if (CalendarUtils.PUBLIC_TYPE.equals(uiForm.calType_)) {
@@ -586,7 +586,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
             }
           }        
           calendar.setEditPermission(listPermission.toArray(new String[listPermission.size()])) ;
-          calendarService.savePublicCalendar(uiForm.getSystemSession(), calendar, uiForm.isAddNew_, username) ;
+          calendarService.savePublicCalendar(calendar, uiForm.isAddNew_, username) ;
         } 
         UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
         calendarPortlet.setCalendarSetting(null) ;

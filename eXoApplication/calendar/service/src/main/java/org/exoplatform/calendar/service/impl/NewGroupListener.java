@@ -78,7 +78,7 @@ public class NewGroupListener extends GroupEventListener {
 		calendar.setEditPermission(perms.toArray(new String[perms.size()])) ;
     SessionProvider sProvider = SessionProvider.createSystemProvider();
     try {
-      calendarService_.savePublicCalendar(sProvider, calendar, isNew, null) ;
+      calendarService_.savePublicCalendar(calendar, isNew, null) ;
     } finally {
       sProvider.close();// release sessions
     }
@@ -87,11 +87,11 @@ public class NewGroupListener extends GroupEventListener {
   public void postDelete(Group group) throws Exception {
     SessionProvider sProvider = SessionProvider.createSystemProvider();
     try {
-      List<GroupCalendarData> gCalData = calendarService_.getGroupCalendars(sProvider, new String[]{group.getId()}, true, null) ;
+      List<GroupCalendarData> gCalData = calendarService_.getGroupCalendars(new String[]{group.getId()}, true, null) ;
       for (GroupCalendarData gc : gCalData) {
         if(gc != null && !gc.getCalendars().isEmpty()) {
          for(Calendar c : gc.getCalendars()) {
-           calendarService_.removePublicCalendar(sProvider, c.getId()) ;
+           calendarService_.removePublicCalendar(c.getId()) ;
          }
         }
       }

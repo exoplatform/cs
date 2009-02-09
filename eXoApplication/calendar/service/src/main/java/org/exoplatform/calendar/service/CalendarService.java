@@ -105,34 +105,31 @@ public interface CalendarService {
 
   /**
    * The method look up all private calendars by given category id
-   * @param userSession The session of current logedin user
    * @param username current user name(or user id)
    * @param calendarCategoryId given calendar category id
    * @return List calendar object
    * @throws Exception
    * @see Calendar
    */
-  public List<Calendar> getUserCalendarsByCategory(SessionProvider userSession, String username, String calendarCategoryId) throws Exception ;
+  public List<Calendar> getUserCalendarsByCategory(String username, String calendarCategoryId) throws Exception ;
 
   /**
    * The method saves private calendar infomations in to data base
-   * @param userSession The session of current logedin user
    * @param username current user name(or user id)
    * @param calendar object contants infomations
    * @param isNew Boolean value to know add new calendar or update infomations only
    * @throws Exception
    */
-  public void saveUserCalendar(SessionProvider userSession, String username, Calendar calendar, boolean isNew) throws Exception ;
+  public void saveUserCalendar(String username, Calendar calendar, boolean isNew) throws Exception ;
 
   /**
    * Remove private calendar by given id, all events and tasks belong to this calendar will be removed
-   * @param userSession The session of current logedin user
    * @param username current user name(or user id)
    * @param calendarId given calendar id
    * @return
    * @throws Exception
    */
-  public Calendar removeUserCalendar(SessionProvider userSession, String username, String calendarId) throws Exception ;
+  public Calendar removeUserCalendar(String username, String calendarId) throws Exception ;
 
   /**
    * The method save all infomations about shared calendar, it will be updated original calendar
@@ -146,18 +143,16 @@ public interface CalendarService {
   /**
    * The method  gets all calendar of a group user, we called it is group calendar
    * it means the calendar for group of users and depen on the permission the user will have right to view or edit that calendar
-   * @param systemSession Sessesion to access the public data
    * @param calendarId given calendar id
    * @return Calendar object contants infomations
    * @throws Exception
    * @see Calendar
    */
-  public Calendar getGroupCalendar(SessionProvider systemSession, String calendarId) throws Exception ;  
+  public Calendar getGroupCalendar(String calendarId) throws Exception ;  
 
   /**
    * The method  gets all the group calendar data of current user and list of calendars belong to that group
    * with group calendar data it will classify calendar to each group
-   * @param systemSession Sessesion to access the public data
    * @param groupIds The group ids that current user belong
    * @param isShowAll Gets all calendar or use setting from calendar setting
    * @param username current user name(or user id)
@@ -165,36 +160,33 @@ public interface CalendarService {
    * @throws Exception
    * @see GroupCalendarData
    */
-  public List<GroupCalendarData> getGroupCalendars(SessionProvider systemSession, String[] groupIds, boolean isShowAll, String username) throws Exception ;  
+  public List<GroupCalendarData> getGroupCalendars(String[] groupIds, boolean isShowAll, String username) throws Exception ;  
 
   /**
    * The method save calendar to public area (group calendar)
-   * @param systemSession Sessesion to access the public data
    * @param calendar
    * @param isNew Boolean value will be checked is it add new or update infomations only
    * @param username current user name(or user id)
    * @throws Exception
    */
-  public void savePublicCalendar(SessionProvider systemSession, Calendar calendar, boolean isNew, String username) throws Exception ;  
+  public void savePublicCalendar(Calendar calendar, boolean isNew, String username) throws Exception ;  
 
   /**
    * Remove the group calendar form data base, every events, tasks inside this calendar will be removed too
-   * @param systemSession Sessesion to access the public data
    * @param calendarId
    * @return
    * @throws Exception
    */
-  public Calendar removePublicCalendar(SessionProvider systemSession, String calendarId) throws Exception ;
+  public Calendar removePublicCalendar(String calendarId) throws Exception ;
 
   /**
    * The method gets all categories of event
-   * @param userSession The session of current logedin user
    * @param username current user name(or user id)
    * @return List event category object
    * @throws Exception
    * @see EventCategory
    */
-  public List<EventCategory> getEventCategories(SessionProvider userSession, String username) throws Exception ;
+  public List<EventCategory> getEventCategories(String username) throws Exception ;
 
   /**
    * Save event category to data base, every user will have their own category to classify events, and it will use unique name in data base

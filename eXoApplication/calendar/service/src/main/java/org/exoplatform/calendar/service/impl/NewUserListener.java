@@ -150,7 +150,7 @@ public class NewUserListener extends UserEventListener {
               if(defaultCalendarSetting_.getTimeZone() != null)
                 cal.setTimeZone(defaultCalendarSetting_.getTimeZone()) ;
             }
-            cservice_.saveUserCalendar(sysProvider, user.getUserName(),	cal, true);
+            cservice_.saveUserCalendar(user.getUserName(), cal,	true);
           }
         }
       }    
@@ -174,7 +174,7 @@ public class NewUserListener extends UserEventListener {
         for (GroupCalendarData gCal : gCalData) {
           cservice_.removeCalendarCategory(username, gCal.getId()) ;
         }
-      List<EventCategory> eCats = cservice_.getEventCategories(session, username) ;
+      List<EventCategory> eCats = cservice_.getEventCategories(username) ;
       if(!eCats.isEmpty())
         for(EventCategory ecat : eCats) {
           cservice_.removeEventCategory(session, username, ecat.getId()) ;

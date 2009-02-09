@@ -134,7 +134,7 @@ public class UIDayView extends UICalendarView {
             if(calService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true) != null)
               calendar = calService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true).getCalendarById(calendarId) ;
           } else if(ce.getCalType().equals(CalendarUtils.PUBLIC_TYPE)) {
-            calendar = calService.getGroupCalendar(SessionProviderFactory.createSystemProvider(), calendarId) ;
+            calendar = calService.getGroupCalendar(calendarId) ;
           }
           if(calendar == null) {
             UIApplication uiApp = calendarview.getAncestorOfType(UIApplication.class) ;

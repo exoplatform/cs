@@ -147,7 +147,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
         cal.setEditPermission(newPerms.toArray(new String[newPerms.size()])) ;
       }
       calService.removeSharedCalendar(SessionProviderFactory.createSystemProvider(), resiceUser, addEdit.calendarId_) ;
-      calService.saveUserCalendar(SessionProviderFactory.createSessionProvider(), username, cal, false) ;
+      calService.saveUserCalendar(username, cal, false) ;
       addEdit.updateGrid(cal, addEdit.getCurrentPage());
       event.getRequestContext().addUIComponentToUpdateByAjax(addEdit) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(addEdit.getAncestorOfType(UICalendarPortlet.class).findFirstComponentOfType(UICalendars.class)) ;

@@ -68,7 +68,7 @@ public class UISearchForm extends UIForm {
       String[] groups = CalendarUtils.getUserGroups(CalendarUtils.getCurrentUser()) ;
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
       Map<String, String> map = new HashMap<String, String> () ;    
-      for(GroupCalendarData group : calendarService.getGroupCalendars(SessionProviderFactory.createSystemProvider(), groups, true, CalendarUtils.getCurrentUser())) {
+      for(GroupCalendarData group : calendarService.getGroupCalendars(groups, true, CalendarUtils.getCurrentUser())) {
         for(org.exoplatform.calendar.service.Calendar calendar : group.getCalendars()) {
           map.put(calendar.getId(), calendar.getId()) ;          
         }

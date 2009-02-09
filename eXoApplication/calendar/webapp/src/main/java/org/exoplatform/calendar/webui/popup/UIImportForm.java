@@ -259,7 +259,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
             calendar.setCalendarOwner(username) ;
             calendar.setPublic(false) ;
             calendar.setCategoryId(uiForm.getSelectedGroup()) ;
-            calendarService.saveUserCalendar(userSession, username, calendar, true) ;
+            calendarService.saveUserCalendar(username, calendar, true) ;
             calendarService.getCalendarImportExports(importFormat).importToCalendar(userSession, username, input.getUploadDataAsStream(), calendar.getId()) ;
           } else {
             String calendarId = uiForm.getUIFormSelectBox(FIELD_TO_CALENDAR).getValue() ;
