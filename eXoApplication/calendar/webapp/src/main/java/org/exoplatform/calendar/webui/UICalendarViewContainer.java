@@ -20,7 +20,6 @@ import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.portal.webui.container.UIContainer;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -57,7 +56,7 @@ public class UICalendarViewContainer extends UIContainer  {
     }catch (Exception e) {
       CalendarService cservice = CalendarUtils.getCalendarService() ;
       String username = CalendarUtils.getCurrentUser() ;
-      calendarSetting =  cservice.getCalendarSetting(SessionProviderFactory.createSessionProvider(), username) ;
+      calendarSetting =  cservice.getCalendarSetting(username) ;
     }
     if(viewType == null) viewType = TYPES[Integer.parseInt(calendarSetting.getViewType())] ;
     if(DAY_VIEW.equals(viewType)) {

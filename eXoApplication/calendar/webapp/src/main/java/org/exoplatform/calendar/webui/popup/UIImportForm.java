@@ -101,7 +101,7 @@ public class UIImportForm extends UIForm implements UIPopupComponent{
     addUIFormInput(new UIFormSelectBox(CATEGORY, CATEGORY, getCategory()));
     //cs-2163
     CalendarSetting calendarSetting = CalendarUtils.getCalendarService()
-      .getCalendarSetting(SessionProviderFactory.createSessionProvider(), CalendarUtils.getCurrentUser()) ;
+      .getCalendarSetting(CalendarUtils.getCurrentUser()) ;
     UIFormSelectBox locale = new UIFormSelectBox(LOCALE, LOCALE, getLocales()) ;
     locale.setValue(calendarSetting.getLocation()) ;
     addUIFormInput(locale);    

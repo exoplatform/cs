@@ -178,7 +178,7 @@ public class UIDayView extends UICalendarView {
               return ;
             }
             if(ce.getCalType().equals(CalendarUtils.PRIVATE_TYPE)) {
-              CalendarUtils.getCalendarService().saveUserEvent(calendarview.getSession(), username, calendarId, ce, false) ;
+              CalendarUtils.getCalendarService().saveUserEvent(username, calendarId, ce, false) ;
             }else if(ce.getCalType().equals(CalendarUtils.SHARED_TYPE)){
               CalendarUtils.getCalendarService().saveEventToSharedCalendar(calendarview.getSystemSession(), username, calendarId, ce, false) ;
             }else if(ce.getCalType().equals(CalendarUtils.PUBLIC_TYPE)){
@@ -196,7 +196,7 @@ public class UIDayView extends UICalendarView {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         }
         UICalendarViewContainer uiViewContainer = uiCalendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
-        CalendarSetting setting = calService.getCalendarSetting(calendarview.getSession(), username) ;
+        CalendarSetting setting = calService.getCalendarSetting(username) ;
         uiViewContainer.refresh() ;
         uiCalendarPortlet.setCalendarSetting(setting) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarPortlet) ;

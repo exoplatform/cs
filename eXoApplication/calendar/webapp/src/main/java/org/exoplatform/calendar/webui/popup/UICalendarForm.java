@@ -521,7 +521,7 @@ public class UICalendarForm extends UIFormTabPane implements UIPopupComponent, U
           }
           calendarService.saveUserCalendar(username, calendar, uiForm.isAddNew_) ;    
         } else if(CalendarUtils.SHARED_TYPE.equals(uiForm.calType_)) {
-          calendarService.saveSharedCalendar(uiForm.getSystemSession(), username, calendar) ;
+          calendarService.saveSharedCalendar(username, calendar) ;
         }else if (CalendarUtils.PUBLIC_TYPE.equals(uiForm.calType_)) {
           Object[] groupList = uiForm.getPublicGroups() ;
           List<String> selected = new ArrayList<String>() ;

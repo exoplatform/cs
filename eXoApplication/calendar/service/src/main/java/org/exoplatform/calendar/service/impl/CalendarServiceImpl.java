@@ -112,11 +112,11 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   public List<EventCategory> getEventCategories(String username) throws Exception {
     return storage_.getEventCategories(username) ;
   }
-  public void saveEventCategory(SessionProvider sProvider, String username, EventCategory eventCategory, String[] values, boolean isNew) throws Exception {
-    storage_.saveEventCategory(sProvider, username, eventCategory, values, isNew) ;
+  public void saveEventCategory(String username, EventCategory eventCategory, String[] values, boolean isNew) throws Exception {
+    storage_.saveEventCategory(username, eventCategory, values, isNew) ;
   }
-  public void removeEventCategory(SessionProvider sProvider, String username, String eventCategoryName) throws Exception {
-    storage_.removeEventCategory(sProvider, username,eventCategoryName);
+  public void removeEventCategory(String username, String eventCategoryName) throws Exception {
+    storage_.removeEventCategory(username, eventCategoryName);
   }  
   public List<CalendarEvent> getUserEventByCalendar(SessionProvider sProvider, String username, List<String> calendarIds) throws Exception {
     return storage_.getUserEventByCalendar(sProvider, username, calendarIds);
@@ -124,11 +124,11 @@ public class CalendarServiceImpl implements CalendarService, Startable {
   public List<CalendarEvent> getUserEvents(SessionProvider sProvider, String username, EventQuery eventQuery) throws Exception {
     return storage_.getUserEvents(sProvider, username, eventQuery) ;
   }
-  public void saveUserEvent(SessionProvider sProvider, String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception {
-    storage_.saveUserEvent(sProvider, username, calendarId, event, isNew) ;
+  public void saveUserEvent(String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception {
+    storage_.saveUserEvent(username, calendarId, event, isNew) ;
   }
-  public CalendarEvent removeUserEvent(SessionProvider sProvider, String username, String calendarId, String eventId) throws Exception {
-    return storage_.removeUserEvent(sProvider, username, calendarId, eventId);
+  public CalendarEvent removeUserEvent(String username, String calendarId, String eventId) throws Exception {
+    return storage_.removeUserEvent(username, calendarId, eventId);
   }
 
 
@@ -156,12 +156,12 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     return calendarImportExport_.keySet().toArray(new String[]{}) ;
   }
 
-  public void saveCalendarSetting(SessionProvider sProvider, String username, CalendarSetting setting) throws Exception {
-    storage_.saveCalendarSetting(sProvider, username, setting) ;
+  public void saveCalendarSetting(String username, CalendarSetting setting) throws Exception {
+    storage_.saveCalendarSetting(username, setting) ;
 
   }
 
-  public CalendarSetting getCalendarSetting(SessionProvider sProvider, String username) throws Exception {
+  public CalendarSetting getCalendarSetting(String username) throws Exception {
     return storage_.getCalendarSetting(username) ;
   }
 
@@ -211,22 +211,22 @@ public class CalendarServiceImpl implements CalendarService, Startable {
     storage_.saveEventToSharedCalendar(sProvider, username, calendarId, event, isNew) ;
   }
 
-  public Map<String, String> checkFreeBusy(SessionProvider sysProvider, EventQuery eventQuery) throws Exception {
-    return storage_.checkFreeBusy(sysProvider, eventQuery) ;
+  public Map<String, String> checkFreeBusy(EventQuery eventQuery) throws Exception {
+    return storage_.checkFreeBusy(eventQuery) ;
   }
 
-  public void saveSharedCalendar(SessionProvider sProvider, String username, Calendar calendar) throws Exception {
-    storage_.saveSharedCalendar(sProvider, username, calendar) ;
-
-  }
-
-  public void removeSharedEvent(SessionProvider sessionProvider, String username, String calendarId, String eventId)throws Exception  {
-    storage_.removeSharedEvent(sessionProvider, username, calendarId, eventId) ;
+  public void saveSharedCalendar(String username, Calendar calendar) throws Exception {
+    storage_.saveSharedCalendar(username, calendar) ;
 
   }
 
-  public void moveEvent(SessionProvider sProvider, String formCalendar, String toCalendar,String fromType, String toType, List<CalendarEvent> calEvents, String username) throws Exception {
-    storage_.moveEvent(sProvider, formCalendar,toCalendar, fromType, toType, calEvents, username)  ;
+  public void removeSharedEvent(String username, String calendarId, String eventId)throws Exception  {
+    storage_.removeSharedEvent(username, calendarId, eventId) ;
+
+  }
+
+  public void moveEvent(String formCalendar, String toCalendar, String fromType,String toType, List<CalendarEvent> calEvents, String username) throws Exception {
+    storage_.moveEvent(formCalendar,toCalendar, fromType, toType, calEvents, username)  ;
   }
 
   public void confirmInvitation(String fromUserId, String toUserId,int calType,String calendarId, String eventId, int answer) throws Exception {

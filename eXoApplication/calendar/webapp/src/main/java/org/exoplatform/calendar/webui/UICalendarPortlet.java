@@ -21,7 +21,6 @@ import java.util.TimeZone;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPopupMessages;
@@ -42,7 +41,7 @@ import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 public class UICalendarPortlet extends UIPortletApplication {
   private CalendarSetting calendarSetting_ ;
   public UICalendarPortlet() throws Exception {
-    calendarSetting_ = CalendarUtils.getCalendarService().getCalendarSetting(SessionProviderFactory.createSessionProvider(), CalendarUtils.getCurrentUser()) ;
+    calendarSetting_ = CalendarUtils.getCalendarService().getCalendarSetting(CalendarUtils.getCurrentUser()) ;
     UIActionBar uiActionBar = addChild(UIActionBar.class, null, null) ;
     uiActionBar.setCurrentView(UICalendarViewContainer.TYPES[Integer.parseInt(getCalendarSetting().getViewType())]) ;
     addChild(UICalendarWorkingContainer.class, null, null) ;
@@ -52,7 +51,7 @@ public class UICalendarPortlet extends UIPortletApplication {
   }
   public CalendarSetting getCalendarSetting() throws Exception{
     if(calendarSetting_ != null ) return calendarSetting_ ;
-    calendarSetting_ = CalendarUtils.getCalendarService().getCalendarSetting(SessionProviderFactory.createSessionProvider(), CalendarUtils.getCurrentUser()) ; 
+    calendarSetting_ = CalendarUtils.getCalendarService().getCalendarSetting(CalendarUtils.getCurrentUser()) ; 
     return calendarSetting_ ; 
   }
   public void setCalendarSetting(CalendarSetting setting) throws Exception{

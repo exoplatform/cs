@@ -133,12 +133,11 @@ public interface CalendarService {
 
   /**
    * The method save all infomations about shared calendar, it will be updated original calendar
-   * @param systemSession Sessesion to access the public data
    * @param username current user name(or user id)
    * @param calendar the oject contants infomations
    * @throws Exception
    */
-  public void saveSharedCalendar(SessionProvider systemSession, String username, Calendar calendar) throws Exception ;
+  public void saveSharedCalendar(String username, Calendar calendar) throws Exception ;
 
   /**
    * The method  gets all calendar of a group user, we called it is group calendar
@@ -190,23 +189,21 @@ public interface CalendarService {
 
   /**
    * Save event category to data base, every user will have their own category to classify events, and it will use unique name in data base
-   * @param userSession The session of current logedin user
    * @param username current user name(or user id)
    * @param eventCategory
    * @param values 
    * @param isNew
    * @throws Exception
    */
-  public void saveEventCategory(SessionProvider userSession, String username, EventCategory eventCategory, String[] values, boolean isNew) throws Exception ;
+  public void saveEventCategory(String username, EventCategory eventCategory, String[] values, boolean isNew) throws Exception ;
 
   /**
    * Remove event category, all events and tasks belong to this category will be destroyed
-   * @param userSession The session of current logedin user
    * @param username current user name(or user id)
    * @param eventCategoryName The unique name of category
    * @throws Exception
    */
-  public void removeEventCategory(SessionProvider userSession, String username, String eventCategoryName) throws Exception ;  
+  public void removeEventCategory(String username, String eventCategoryName) throws Exception ;  
 
   /**
    * The method gets category of event by given id
@@ -242,25 +239,23 @@ public interface CalendarService {
 
   /**
    * The method save infomation to an event or a task by given private calendar id to data
-   * @param userSession The session of current logedin user
    * @param username current user name(or user id)
    * @param calendarId given calendar id
    * @param event object contants infomations
    * @param isNew boolean value, is update or add new event
    * @throws Exception
    */
-  public void saveUserEvent(SessionProvider userSession, String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception ;
+  public void saveUserEvent(String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception ;
 
   /**
    * Remove given event or task in private calendar with calendar id, all attachments and reminders will be removed
-   * @param userSession The session of current logedin user
    * @param username current user name(or user id)
    * @param calendarId given calendar id
    * @param eventId given event id
    * @return
    * @throws Exception
    */
-  public CalendarEvent removeUserEvent(SessionProvider userSession, String username, String calendarId, String eventId) throws Exception ;
+  public CalendarEvent removeUserEvent(String username, String calendarId, String eventId) throws Exception ;
 
   /**
    * The menthod gets event or task form group calendar by given calendar id
@@ -315,22 +310,20 @@ public interface CalendarService {
   /**
    * This menthod stores individual setting of each user, with setting you can configue many things like Default view
    * date, time formating, time inteval 
-   * @param userSession The session of current logedin user
    * @param username current user name(or user id)
    * @param setting Obicject containts infomations about setting
    * @throws Exception
    */
-  public void saveCalendarSetting(SessionProvider userSession, String username, CalendarSetting setting) throws Exception ;
+  public void saveCalendarSetting(String username, CalendarSetting setting) throws Exception ;
 
   /**
    * This method gets infomations of current user's setting
-   * @param userSession The session of current logedin user
    * @param username current user name(or user id)
    * @return
    * @throws Exception
    * @see CalendarSetting
    */
-  public CalendarSetting getCalendarSetting(SessionProvider userSession, String username) throws Exception ;
+  public CalendarSetting getCalendarSetting(String username) throws Exception ;
 
   /**
    * The method  gets Import/Export implement class to import or export ics,csv
@@ -457,13 +450,12 @@ public interface CalendarService {
   /**
    * The method  will check the time free or busy of the user, it depents on events and tasks of this user 
    * now it only check on one day and if the events and tasks marked with busy, out side status will be checked 
-   * @param systemSession We use system session here because the data store at public area
    * @param eventQuery The query object it containts query statement to look up the data 
    * @return Map data with key is user name (or user id), and value is the a pair of <i>from time</i> and <i>to time</i> by miliseconds and sperate by coma(,)
    * @throws Exception 
    * @see EventQuery
    */
-  public Map<String, String> checkFreeBusy(SessionProvider systemSession, EventQuery eventQuery) throws Exception  ;
+  public Map<String, String> checkFreeBusy(EventQuery eventQuery) throws Exception  ;
 
   /**
    * The method genarete links to access calendar throw WEBDAV, it will require user name and password when access
@@ -478,17 +470,15 @@ public interface CalendarService {
 
   /**
    * The method removes the events or tasks form shared calendar, orloginal item will be removed
-   * @param systemSession Sessesion to access the public data
    * @param username current user name(or user id)
    * @param calendarId given calendar id
    * @param eventId given event id
    * @throws Exception
    */
-  public void removeSharedEvent(SessionProvider systemSession, String username, String calendarId, String eventId) throws Exception ;
+  public void removeSharedEvent(String username, String calendarId, String eventId) throws Exception ;
 
   /**
    * The method  move and save events form private calendars share calendars public calendars each other
-   * @param userSession session of current user
    * @param formCalendar the source calendar id
    * @param toCalendar  destination calendar id
    * @param formType type of source calendar
@@ -497,7 +487,7 @@ public interface CalendarService {
    * @param username current user name(or user id)
    * @throws Exception
    */
-  public void moveEvent(SessionProvider userSession, String formCalendar, String toCalendar, String formType, String toType, List<CalendarEvent> calEvents, String username) throws Exception ;
+  public void moveEvent(String formCalendar, String toCalendar, String formType, String toType, List<CalendarEvent> calEvents, String username) throws Exception ;
 
   /**
    * The method calls when the user use exomail product only, when user receives an invitation (in the same data system), the user will 

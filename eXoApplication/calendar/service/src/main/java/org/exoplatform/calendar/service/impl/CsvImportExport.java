@@ -17,7 +17,6 @@
 package org.exoplatform.calendar.service.impl;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -285,7 +284,7 @@ public class CsvImportExport implements CalendarImportExport {
           EventCategory evCate = new EventCategory() ;
           evCate.setName(exoEvent.getEventCategoryName()) ;
           try{
-            storage_.saveEventCategory(sProvider, username, evCate, null, true) ;
+            storage_.saveEventCategory(username, evCate, null, true) ;
           }catch(Exception e){ 
             for(EventCategory ev : storage_.getEventCategories(username)) {
               if(evCate.getName().equalsIgnoreCase(ev.getName())) {
@@ -300,7 +299,7 @@ public class CsvImportExport implements CalendarImportExport {
           exoEvent.setEventCategoryName(evCate.getName()) ;
         }
         exoEvent.setCalendarId(exoCalendar.getId()) ;
-        storage_.saveUserEvent(sProvider, username, exoCalendar.getId(), exoEvent, true) ;
+        storage_.saveUserEvent(username, exoCalendar.getId(), exoEvent, true) ;
       }
     }
   }
@@ -316,7 +315,7 @@ public class CsvImportExport implements CalendarImportExport {
         EventCategory evCate = new EventCategory() ;
         evCate.setName(exoEvent.getEventCategoryName()) ;
         try{
-          storage_.saveEventCategory(sProvider, username, evCate, null, true) ;
+          storage_.saveEventCategory(username, evCate, null, true) ;
         }catch(Exception e){ 
           for(EventCategory ev : storage_.getEventCategories(username)) {
             if(evCate.getName().equalsIgnoreCase(ev.getName())) {
@@ -331,7 +330,7 @@ public class CsvImportExport implements CalendarImportExport {
         exoEvent.setEventCategoryName(evCate.getName()) ;
       }
       exoEvent.setCalendarId(calendarId) ;
-      storage_.saveUserEvent(sProvider, username, calendarId, exoEvent, true) ;
+      storage_.saveUserEvent(username, calendarId, exoEvent, true) ;
     }
   }
   public boolean isValidate(InputStream icalInputStream) throws Exception {

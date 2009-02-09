@@ -32,7 +32,6 @@ import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventQuery;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UIFormComboBox;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -99,7 +98,7 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
       eventQuery.setParticipants(newPars.toArray(new String[]{})) ;
       eventQuery.setNodeType("exo:calendarPublicEvent") ;
       Map<String, String> parsMap = 
-        CalendarUtils.getCalendarService().checkFreeBusy(SessionProviderFactory.createSystemProvider(), eventQuery) ;
+        CalendarUtils.getCalendarService().checkFreeBusy(eventQuery) ;
       parMap_.putAll(parsMap) ;
     }
   }
@@ -182,7 +181,7 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
     super.processRender(arg0);
   }
   public String getUserTimeZone(String username) throws Exception {
-    String timeZone = CalendarUtils.getCalendarService().getCalendarSetting(SessionProviderFactory.createSystemProvider(), CalendarUtils.getCurrentUser()).getTimeZone() ;
+    String timeZone = CalendarUtils.getCalendarService().getCalendarSetting(CalendarUtils.getCurrentUser()).getTimeZone() ;
     return CalendarUtils.getTimeZone(timeZone) ;
   }
 

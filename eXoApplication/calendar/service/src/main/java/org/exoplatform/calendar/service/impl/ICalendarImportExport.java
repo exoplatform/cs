@@ -534,7 +534,7 @@ public class ICalendarImportExport implements CalendarImportExport{
           EventCategory evCate = new EventCategory() ;
           evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim()) ;
           try{
-            storage_.saveEventCategory(sProvider, username, evCate, null, true) ;
+            storage_.saveEventCategory(username, evCate, null, true) ;
           }catch(Exception e){ 
             for(EventCategory ev : storage_.getEventCategories(username)) {
               if(ev.getName().equalsIgnoreCase(evCate.getName())) {
@@ -610,7 +610,7 @@ public class ICalendarImportExport implements CalendarImportExport{
         } catch (Exception e) {
           e.printStackTrace() ;
         }
-        storage_.saveUserEvent(sProvider, username, exoCalendar.getId(), exoEvent, true) ;
+        storage_.saveUserEvent(username, exoCalendar.getId(), exoEvent, true) ;
       } else if (obj instanceof VToDo) {
         VToDo event = (VToDo)obj ;
         exoEvent = new CalendarEvent() ;
@@ -618,7 +618,7 @@ public class ICalendarImportExport implements CalendarImportExport{
           EventCategory evCate = new EventCategory() ;
           evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim()) ;
           try{
-            storage_.saveEventCategory(sProvider, username, evCate, null, true) ;
+            storage_.saveEventCategory(username, evCate, null, true) ;
           }catch(Exception e){ 
             for(EventCategory ev : storage_.getEventCategories(username)) {
               if(ev.getName().equalsIgnoreCase(evCate.getName())) {
@@ -695,7 +695,7 @@ public class ICalendarImportExport implements CalendarImportExport{
         } catch (Exception e) {
           e.printStackTrace() ;
         }
-        storage_.saveUserEvent(sProvider, username, exoCalendar.getId(), exoEvent, true) ;
+        storage_.saveUserEvent(username, exoCalendar.getId(), exoEvent, true) ;
       }
     }
   }
@@ -799,7 +799,7 @@ public class ICalendarImportExport implements CalendarImportExport{
           EventCategory evCate = new EventCategory() ;
           evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim()) ;
           try{
-            storage_.saveEventCategory(sProvider, username, evCate, null, true) ;
+            storage_.saveEventCategory(username, evCate, null, true) ;
           }catch(Exception e){ 
             for(EventCategory ev : storage_.getEventCategories(username)) {
               if(ev.getName().equalsIgnoreCase(evCate.getName())) {
@@ -895,7 +895,7 @@ public class ICalendarImportExport implements CalendarImportExport{
         } catch (Exception e) {
           e.printStackTrace() ;
         }
-        storage_.saveUserEvent(sProvider, username, calendarId, exoEvent, true) ;
+        storage_.saveUserEvent(username, calendarId, exoEvent, true) ;
       }else if(obj instanceof VToDo){ 
         VToDo event = (VToDo)obj ;
         exoEvent = new CalendarEvent() ;
@@ -903,7 +903,7 @@ public class ICalendarImportExport implements CalendarImportExport{
           EventCategory evCate = new EventCategory() ;
           evCate.setName(event.getProperty(Property.CATEGORIES).getValue().trim()) ;
           try{
-            storage_.saveEventCategory(sProvider, username, evCate, null, true) ;
+            storage_.saveEventCategory(username, evCate, null, true) ;
           }catch(Exception e){ 
             for(EventCategory ev : storage_.getEventCategories(username)) {
               if(ev.getName().equalsIgnoreCase(evCate.getName())) {
@@ -996,7 +996,7 @@ public class ICalendarImportExport implements CalendarImportExport{
         } catch (Exception e) {
           e.printStackTrace() ;
         }
-        storage_.saveUserEvent(sProvider, username, calendarId, exoEvent, true) ;
+        storage_.saveUserEvent(username, calendarId, exoEvent, true) ;
        }      
     }
   }

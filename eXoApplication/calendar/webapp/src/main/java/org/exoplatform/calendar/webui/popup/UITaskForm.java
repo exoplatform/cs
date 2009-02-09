@@ -961,7 +961,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
         try {
           if(uiForm.isAddNew_){
             if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
-              CalendarUtils.getCalendarService().saveUserEvent(uiForm.getSession(), username, calendarId, calendarEvent, uiForm.isAddNew_) ;
+              CalendarUtils.getCalendarService().saveUserEvent(username, calendarId, calendarEvent, uiForm.isAddNew_) ;
             }else if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)){
               CalendarUtils.getCalendarService().saveEventToSharedCalendar(uiForm.getSystemSession(), username, calendarId, calendarEvent, uiForm.isAddNew_) ;
             }else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)){
@@ -982,7 +982,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
 
             List<CalendarEvent> listEvent = new ArrayList<CalendarEvent>();
             listEvent.add(calendarEvent) ;
-            calService.moveEvent(uiForm.getSession(), fromCal, toCal, fromType, toType, listEvent, username) ;
+            calService.moveEvent(fromCal, toCal, fromType, toType, listEvent, username) ;
 
             // hung.hoang
             CalendarView calendarView = (CalendarView)uiViewContainer.getRenderedChild() ;

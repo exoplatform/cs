@@ -1329,7 +1329,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
             try {
               if(uiForm.isAddNew_){
                 if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
-                  calService.saveUserEvent(uiForm.getSession(), username, calendarId, calendarEvent, uiForm.isAddNew_) ;
+                  calService.saveUserEvent(username, calendarId, calendarEvent, uiForm.isAddNew_) ;
                 }else if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)){
                   calService.saveEventToSharedCalendar(uiForm.getSystemSession() , username, calendarId, calendarEvent, uiForm.isAddNew_) ;
                 }else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)){
@@ -1348,7 +1348,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
                 }*/
                 List<CalendarEvent> listEvent = new ArrayList<CalendarEvent>();
                 listEvent.add(calendarEvent) ;
-                calService.moveEvent(uiForm.getSession(), fromCal, toCal, fromType, toType, listEvent, username) ;
+                calService.moveEvent(fromCal, toCal, fromType, toType, listEvent, username) ;
 
                 // hung.hoang
                 if(calendarView instanceof UIListContainer) {

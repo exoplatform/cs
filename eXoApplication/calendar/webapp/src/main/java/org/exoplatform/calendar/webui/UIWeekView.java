@@ -245,7 +245,7 @@ public class UIWeekView extends UICalendarView {
               return ;
             }
             if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
-              calendarService.saveUserEvent(calendarview.getSession(), username, calendarId, eventCalendar, false) ;
+              calendarService.saveUserEvent(username, calendarId, eventCalendar, false) ;
             }else if(calType.equals(CalendarUtils.SHARED_TYPE)){
               calendarService.saveEventToSharedCalendar(calendarview.getSystemSession(), username, calendarId, eventCalendar, false) ;
             }else if(calType.equals(CalendarUtils.PUBLIC_TYPE)){
@@ -314,7 +314,7 @@ public class UIWeekView extends UICalendarView {
               return ;
             }
             if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
-              calendarService.saveUserEvent(calendarview.getSession(), username, calendarId, eventCalendar, false) ;
+              calendarService.saveUserEvent(username, calendarId, eventCalendar, false) ;
             }else if(calType.equals(CalendarUtils.SHARED_TYPE)){
               calendarService.saveEventToSharedCalendar(calendarview.getSystemSession(), username, calendarId, eventCalendar, false) ;
             }else if(calType.equals(CalendarUtils.PUBLIC_TYPE)){

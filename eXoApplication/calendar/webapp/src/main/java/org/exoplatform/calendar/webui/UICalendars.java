@@ -203,7 +203,7 @@ public class UICalendars extends UIForm  {
   protected GroupCalendarData getSharedCalendars() throws Exception{
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
     GroupCalendarData groupCalendars = calendarService.getSharedCalendars(getSystemSession(), CalendarUtils.getCurrentUser(), false) ;
-    CalendarSetting setting = calendarService.getCalendarSetting(getSession(), CalendarUtils.getCurrentUser()) ;
+    CalendarSetting setting = calendarService.getCalendarSetting(CalendarUtils.getCurrentUser()) ;
     Map<String, String> map = new HashMap<String, String>() ;
     for(String key : setting.getSharedCalendarsColors()) {
       map.put(key.split(CalendarUtils.COLON)[0], key.split(CalendarUtils.COLON)[1]) ;
@@ -503,7 +503,7 @@ public class UICalendars extends UIForm  {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
       }
       UICalendarViewContainer uiViewContainer = uiCalendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
-      CalendarSetting setting = calService.getCalendarSetting(uiComponent.getSession(), username) ;
+      CalendarSetting setting = calService.getCalendarSetting(username) ;
       uiViewContainer.refresh() ;
       uiCalendarPortlet.setCalendarSetting(setting) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarPortlet) ;
@@ -577,7 +577,7 @@ public class UICalendars extends UIForm  {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
         }
       }
-      CalendarSetting setting = calService.getCalendarSetting(uiComponent.getSession(), username) ;
+      CalendarSetting setting = calService.getCalendarSetting(username) ;
       uiViewContainer.refresh() ;
       uiPortlet.setCalendarSetting(setting) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
@@ -624,7 +624,7 @@ public class UICalendars extends UIForm  {
           event.getRequestContext().addUIComponentToUpdateByAjax(uiActionBar) ;
         }
       }
-      CalendarSetting setting = calService.getCalendarSetting(uiComponent.getSession(), username) ;
+      CalendarSetting setting = calService.getCalendarSetting(username) ;
       uiViewContainer.refresh() ;
       uiPortlet.setCalendarSetting(setting) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;
@@ -841,7 +841,7 @@ public class UICalendars extends UIForm  {
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
           } else {
             calendar.setCalendarColor(color) ;
-            calService.saveSharedCalendar(systemSession, username, calendar) ;
+            calService.saveSharedCalendar(username, calendar) ;
           }
         } else if(CalendarUtils.PUBLIC_TYPE.equals(calType)){
           calendar = calService.getGroupCalendar(calendarId) ;
@@ -865,7 +865,7 @@ public class UICalendars extends UIForm  {
       }
       UICalendarPortlet uiPortlet = uiComponent.getAncestorOfType(UICalendarPortlet.class) ;
       UICalendarViewContainer uiViewContainer = uiPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
-      CalendarSetting setting = calService.getCalendarSetting(uiComponent.getSession(), username) ;
+      CalendarSetting setting = calService.getCalendarSetting(username) ;
       uiViewContainer.refresh() ;
       uiPortlet.setCalendarSetting(setting) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ;

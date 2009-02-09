@@ -80,7 +80,7 @@ public class UICalDavForm extends UIFormTabPane implements UIPopupComponent{
     String username = CalendarUtils.getCurrentUser() ;
     UIFormInputWithActions rssInfo = new UIFormInputWithActions(INFO_TAB) ;
     rssInfo.addUIFormInput(new UIFormStringInput(TITLE, TITLE, "eXoCalendarCalDav").addValidator(MandatoryValidator.class)) ;
-    String url = calendarService.getCalendarSetting(SessionProviderFactory.createSessionProvider(), username).getBaseURL();
+    String url = calendarService.getCalendarSetting(username).getBaseURL();
     if(CalendarUtils.isEmpty(url)) url = CalendarUtils.getServerBaseUrl() + "calendar/iCalRss" ;
     rssInfo.addUIFormInput(new UIFormStringInput(URL, URL, url).addValidator(MandatoryValidator.class)) ;
     rssInfo.addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, null).addValidator(MandatoryValidator.class)) ;

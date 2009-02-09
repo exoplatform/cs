@@ -333,7 +333,7 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         calEvent.setToDateTime(to) ;
         calEvent.setCalType(uiForm.calType_) ;
         if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
-          CalendarUtils.getCalendarService().saveUserEvent(SessionProviderFactory.createSessionProvider(), username, calEvent.getCalendarId(), calEvent, true) ;
+          CalendarUtils.getCalendarService().saveUserEvent(username, calEvent.getCalendarId(), calEvent, true) ;
         }else if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)){
           CalendarUtils.getCalendarService().saveEventToSharedCalendar(SessionProviderFactory.createSystemProvider(), username, calEvent.getCalendarId(), calEvent, true) ;
         }else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)){

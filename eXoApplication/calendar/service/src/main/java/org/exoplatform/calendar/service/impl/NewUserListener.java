@@ -128,8 +128,8 @@ public class NewUserListener extends UserEventListener {
           EventCategory eventCategory = new EventCategory();
           eventCategory.setName(evCategory);
           eventCategory.setDataInit(true) ;
-          cservice_.saveEventCategory(sysProvider, user.getUserName(),
-              eventCategory, null, true);
+          cservice_.saveEventCategory(user.getUserName(), eventCategory,
+              null, true);
         }
       }
       if (defaultCalendarCategory_ != null && defaultCalendarCategory_.length() > 0) {
@@ -155,7 +155,7 @@ public class NewUserListener extends UserEventListener {
         }
       }    
       if(defaultCalendarSetting_ != null && user != null) {
-        cservice_.saveCalendarSetting(sysProvider, user.getUserName(), defaultCalendarSetting_) ;
+        cservice_.saveCalendarSetting(user.getUserName(), defaultCalendarSetting_) ;
       }
     } catch (Exception e) {
       e.printStackTrace() ;
@@ -177,7 +177,7 @@ public class NewUserListener extends UserEventListener {
       List<EventCategory> eCats = cservice_.getEventCategories(username) ;
       if(!eCats.isEmpty())
         for(EventCategory ecat : eCats) {
-          cservice_.removeEventCategory(session, username, ecat.getId()) ;
+          cservice_.removeEventCategory(username, ecat.getId()) ;
         }
       GroupCalendarData   calData = cservice_.getSharedCalendars(session, username, true) ;
       if(calData != null && !calData.getCalendars().isEmpty())
