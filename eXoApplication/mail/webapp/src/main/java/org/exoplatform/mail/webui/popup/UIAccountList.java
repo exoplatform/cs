@@ -136,6 +136,7 @@ public class UIAccountList extends UIGrid  implements UIPopupComponent{
           uiMessagePreview.setMessage(null);
           event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet) ; 
         } else {
+          uiSelectAccount.setSelectedValue(currAccountId);
           event.getRequestContext().addUIComponentToUpdateByAjax(uiAccountList.getAncestorOfType(UIPopupAction.class)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiSelectAccount);
         }
