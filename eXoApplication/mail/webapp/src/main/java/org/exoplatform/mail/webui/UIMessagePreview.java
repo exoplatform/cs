@@ -115,7 +115,7 @@ public class UIMessagePreview extends UIComponent {
       List<String> calIds = new ArrayList<String>() ;
       calIds.add(MailUtils.getCalendarId(msg)) ;
       Iterator<CalendarEvent> iter =
-        calendarSrv.getUserEventByCalendar(SessionProviderFactory.createSessionProvider(), MailUtils.getEventFrom(msg), calIds).iterator() ;
+        calendarSrv.getUserEventByCalendar(MailUtils.getEventFrom(msg), calIds).iterator() ;
       while (iter.hasNext()) {
         calEvent = iter.next() ;
         if(MailUtils.getCalendarEventId(msg).equals(calEvent.getId())) ;
@@ -125,7 +125,7 @@ public class UIMessagePreview extends UIComponent {
       //calendarSrv.get
     }
     else if(Calendar.TYPE_PUBLIC == Integer.parseInt(MailUtils.getEventType(msg))) {
-      calEvent = calendarSrv.getGroupEvent(SessionProviderFactory.createSystemProvider(), MailUtils.getCalendarId(msg), MailUtils.getCalendarEventId(msg)) ; 
+      calEvent = calendarSrv.getGroupEvent(MailUtils.getCalendarId(msg), MailUtils.getCalendarEventId(msg)) ; 
     }
     return calEvent ;
   }
@@ -479,7 +479,7 @@ public class UIMessagePreview extends UIComponent {
             uiPopupAction.activate(uiPopupContainer, 600, 0, true) ;
             UIEventForm uiEventForm = uiPopupContainer.createUIComponent(UIEventForm.class, null, null);
             uiPopupContainer.addChild(uiEventForm) ;
-            uiEventForm.initForm(calService.getCalendarSetting(SessionProviderFactory.createSystemProvider() ,MailUtils.getCurrentUser()), calEvent) ;
+            uiEventForm.initForm(calService.getCalendarSetting(MailUtils.getCurrentUser()), calEvent) ;
             uiEventForm.isAddNew_ = true ;
             uiEventForm.update(CalendarUtils.PRIVATE_TYPE, null) ;
             calService.confirmInvitation(fromUserId, toUserId, calType, calendarId, eventId, 1) ;

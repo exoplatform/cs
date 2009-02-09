@@ -34,7 +34,6 @@ import org.exoplatform.calendar.webui.UIFormComboBox;
 import org.exoplatform.calendar.webui.UIFormDateTimePicker;
 import org.exoplatform.calendar.webui.UIListContainer;
 import org.exoplatform.calendar.webui.UIMiniCalendar;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -335,9 +334,9 @@ public class UIQuickAddEvent extends UIForm implements UIPopupComponent{
         if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
           CalendarUtils.getCalendarService().saveUserEvent(username, calEvent.getCalendarId(), calEvent, true) ;
         }else if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)){
-          CalendarUtils.getCalendarService().saveEventToSharedCalendar(SessionProviderFactory.createSystemProvider(), username, calEvent.getCalendarId(), calEvent, true) ;
+          CalendarUtils.getCalendarService().saveEventToSharedCalendar(username, calEvent.getCalendarId(), calEvent, true) ;
         }else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)){
-          CalendarUtils.getCalendarService().savePublicEvent(SessionProviderFactory.createSystemProvider(), calEvent.getCalendarId(), calEvent, true) ;          
+          CalendarUtils.getCalendarService().savePublicEvent(calEvent.getCalendarId(), calEvent, true) ;          
         }
         UIPopupAction uiPopupAction = uiForm.getAncestorOfType(UIPopupAction.class) ;
         uiPopupAction.deActivate() ;

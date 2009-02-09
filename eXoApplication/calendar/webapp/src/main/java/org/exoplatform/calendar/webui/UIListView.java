@@ -126,7 +126,7 @@ public class UIListView extends UICalendarView {
     }
     
     if(uiListContainer.isDisplaySearchResult())  { update(pageList_) ;
-    } else update(new EventPageList(calendarService.getEvents(getSession(), username, eventQuery, getPublicCalendars()), 10)) ;
+    } else update(new EventPageList(calendarService.getEvents(username, eventQuery, getPublicCalendars()), 10)) ;
     if(currentPage_ > 0 && currentPage_ <= pageList_.getAvailablePage()) {
       updateCurrentPage(currentPage_) ;
     }

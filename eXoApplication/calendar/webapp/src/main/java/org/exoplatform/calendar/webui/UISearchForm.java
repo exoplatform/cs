@@ -30,7 +30,6 @@ import org.exoplatform.calendar.service.GroupCalendarData;
 import org.exoplatform.calendar.webui.UIListView.CalendarEventComparator;
 import org.exoplatform.calendar.webui.popup.UIAdvancedSearchForm;
 import org.exoplatform.calendar.webui.popup.UIPopupAction;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -99,7 +98,7 @@ public class UISearchForm extends UIForm {
         UICalendarPortlet calendarPortlet = uiForm.getAncestorOfType(UICalendarPortlet.class) ;
 //      cs-1953
         List<CalendarEvent> resultList = 
-          CalendarUtils.getCalendarService().searchEvent(SessionProviderFactory.createSessionProvider(), username, eventQuery,uiForm.getPublicCalendars()).getAll() ;
+          CalendarUtils.getCalendarService().searchEvent(username, eventQuery, uiForm.getPublicCalendars()).getAll() ;
         UICalendarViewContainer calendarViewContainer = 
           calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
         String currentView = calendarViewContainer.getRenderedChild().getId() ;

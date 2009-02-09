@@ -192,7 +192,7 @@ public class UICalendarSettingForm extends UIFormTabPane implements UIPopupCompo
   }
 
   protected List<Calendar> getSharedCalendars(CalendarService calendarService, String username) throws Exception{
-    GroupCalendarData groupCalendars = calendarService.getSharedCalendars(getSystemSession(), username, true) ;
+    GroupCalendarData groupCalendars = calendarService.getSharedCalendars(username, true) ;
     if(groupCalendars != null) return groupCalendars.getCalendars() ;
     return new ArrayList<Calendar>()  ;
   }

@@ -29,7 +29,6 @@ import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventQuery;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -88,7 +87,7 @@ public class UIMonthView extends UICalendarView {
     EventQuery eventQuery = new EventQuery() ;
     eventQuery.setFromDate(getBeginDateOfMonthView()) ;
     eventQuery.setToDate(getEndDateOfMonthView()) ;
-    List<CalendarEvent> allEvents = calendarService.getEvents(getSystemSession(), username, eventQuery, getPublicCalendars()) ;
+    List<CalendarEvent> allEvents = calendarService.getEvents(username, eventQuery, getPublicCalendars()) ;
     Iterator childIter = getChildren().iterator() ;
     while(childIter.hasNext()) {
       UIComponent comp = (UIComponent)childIter.next() ;
@@ -180,8 +179,8 @@ public class UIMonthView extends UICalendarView {
             if(ce.getCalType().equals(CalendarUtils.PRIVATE_TYPE)) {
               calendar = calService.getUserCalendar(username, calendarId) ;
             } else if(ce.getCalType().equals(CalendarUtils.SHARED_TYPE)){
-              if(calService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true) != null)
-                calendar = calService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true).getCalendarById(calendarId) ;
+              if(calService.getSharedCalendars(username, true) != null)
+                calendar = calService.getSharedCalendars(username, true).getCalendarById(calendarId) ;
             } else if(ce.getCalType().equals(CalendarUtils.PUBLIC_TYPE)) {
               calendar = calService.getGroupCalendar(calendarId) ;
             }

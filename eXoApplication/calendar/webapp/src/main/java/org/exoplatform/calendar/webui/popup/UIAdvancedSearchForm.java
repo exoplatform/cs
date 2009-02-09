@@ -105,7 +105,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
         }
       }
     }
-    GroupCalendarData sharedData  = cservice.getSharedCalendars(getSystemSession(), CalendarUtils.getCurrentUser(), true) ;
+    GroupCalendarData sharedData  = cservice.getSharedCalendars(CalendarUtils.getCurrentUser(), true) ;
     if(sharedData != null) {
       for(Calendar cal : sharedData.getCalendars()) {
         String owner = "" ;
@@ -286,7 +286,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent{
         
         // cs-1953
         List<CalendarEvent> resultList =  
-          CalendarUtils.getCalendarService().searchEvent(uiForm.getSession(), username, query, uiForm.getPublicCalendars()).getAll() ;
+          CalendarUtils.getCalendarService().searchEvent(username, query, uiForm.getPublicCalendars()).getAll() ;
         UICalendarViewContainer calendarViewContainer = 
           calendarPortlet.findFirstComponentOfType(UICalendarViewContainer.class) ;
         String currentView = calendarViewContainer.getRenderedChild().getId() ;

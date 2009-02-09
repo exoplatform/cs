@@ -53,14 +53,13 @@ public interface CalendarImportExport {
   
   /**
    * The method exports events form calendar to icalendar file (.ics) or .csv file
-   * @param userSession session of current user
    * @param username current user name or id
    * @param calendarIds the group calendar ids, if you want to export events from public calendars
    * @param type The type of calendar will be exported
    * @return data output stream
    * @throws Exception
    */
-  public OutputStream exportCalendar(SessionProvider userSession, String username, List<String> calendarIds, String type) throws Exception ;
+  public OutputStream exportCalendar(String username, List<String> calendarIds, String type) throws Exception ;
   
   /**
    * The method export calendar event to output stream by given event id

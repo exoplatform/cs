@@ -206,7 +206,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
   public List<String> getSharedCalendars() throws Exception{
     List<String> list = new ArrayList<String>() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ; 
-    GroupCalendarData gcd =  calendarService.getSharedCalendars(SessionProviderFactory.createSystemProvider() , CalendarUtils.getCurrentUser(), true) ;
+    GroupCalendarData gcd =  calendarService.getSharedCalendars(CalendarUtils.getCurrentUser() , true) ;
     if(gcd != null)
       for(org.exoplatform.calendar.service.Calendar cal : gcd.getCalendars()) {
         list.add(cal.getId()) ;
@@ -335,17 +335,17 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
       CalendarService calendarService = CalendarUtils.getCalendarService() ;
       List<CalendarEvent> events = new ArrayList<CalendarEvent>() ;
       if(privateCalendarIds.size() > 0) {
-        events = calendarService.getUserEventByCalendar(getSession(), CalendarUtils.getCurrentUser(), privateCalendarIds)  ;
+        events = calendarService.getUserEventByCalendar(CalendarUtils.getCurrentUser(), privateCalendarIds)  ;
       }
       if(publicCalendarIds.size() > 0) {
         if(events.size() > 0) {
           List<CalendarEvent> publicEvents = 
-            calendarService.getGroupEventByCalendar(getSystemSession(), publicCalendarIds) ;
+            calendarService.getGroupEventByCalendar(publicCalendarIds) ;
           for(CalendarEvent event : publicEvents) {
             events.add(event) ;
           }
         }else {
-          events = calendarService.getGroupEventByCalendar(getSystemSession(), publicCalendarIds)  ;
+          events = calendarService.getGroupEventByCalendar(publicCalendarIds)  ;
         }
       }
       return events ;
@@ -412,14 +412,14 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         if(CalendarUtils.PUBLIC_TYPE.equals(ce.getCalType())){
           cal = calService.getGroupCalendar(ce.getCalendarId());
           if(cal.getEditPermission() != null && CalendarUtils.canEdit(orService, cal.getEditPermission(), username)) {
-            calService.removePublicEvent(getSystemSession(), ce.getCalendarId(), ce.getId()) ;
+            calService.removePublicEvent(ce.getCalendarId(), ce.getId()) ;
           } else {
             allDelete_ = false ;
           }
         } else if(CalendarUtils.PRIVATE_TYPE.equals(ce.getCalType())) {
           calService.removeUserEvent(username, ce.getCalendarId(), ce.getId()) ;
         } else if(CalendarUtils.SHARED_TYPE.equals(ce.getCalType())){
-          cal = calService.getSharedCalendars(getSystemSession(), username, true).getCalendarById(ce.getCalendarId());
+          cal = calService.getSharedCalendars(username, true).getCalendarById(ce.getCalendarId());
           if(cal.getEditPermission() != null && CalendarUtils.canEdit(null, cal.getEditPermission(), username)) {
             calService.removeSharedEvent(username, ce.getCalendarId(), ce.getId()) ;
           } else {
@@ -790,7 +790,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           if(CalendarUtils.PRIVATE_TYPE.equals(calType)) {
             canEdit = true ;
           } else if (CalendarUtils.SHARED_TYPE.equals(calType)) {
-            GroupCalendarData calendarData = calendarService.getSharedCalendars(uiCalendarView.getSystemSession(), CalendarUtils.getCurrentUser(), true)  ;
+            GroupCalendarData calendarData = calendarService.getSharedCalendars(CalendarUtils.getCurrentUser(), true)  ;
             if(calendarData != null && calendarData.getCalendarById(calendarId) != null)
               canEdit = CalendarUtils.canEdit(null, calendarData.getCalendarById(calendarId).getEditPermission(), username) ;
           } else if (CalendarUtils.PUBLIC_TYPE.equals(calType)) {
@@ -853,7 +853,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           if(CalendarUtils.PRIVATE_TYPE.equals(calType)) {
             calendar = calendarService.getUserCalendar(username, calendarId) ;
           } else if (CalendarUtils.SHARED_TYPE.equals(calType)) {
-            GroupCalendarData calendarData = calendarService.getSharedCalendars(uiCalendarView.getSystemSession(), CalendarUtils.getCurrentUser(), true)  ;
+            GroupCalendarData calendarData = calendarService.getSharedCalendars(CalendarUtils.getCurrentUser(), true)  ;
             if(calendarData != null) calendar = calendarData.getCalendarById(calendarId) ;
           } else if (CalendarUtils.PUBLIC_TYPE.equals(calType)) {
             calendar = calendarService.getGroupCalendar(calendarId) ;
@@ -872,7 +872,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
               return ;
             }
             if(CalendarUtils.PUBLIC_TYPE.equals(calType)){
-              calendarService.removePublicEvent(uiCalendarView.getSystemSession(), calendarId, eventId) ;
+              calendarService.removePublicEvent(calendarId, eventId) ;
             } else if(CalendarUtils.PRIVATE_TYPE.equals(calType)){
               calendarService.removeUserEvent(username, calendarId, eventId) ;
             } else if(CalendarUtils.SHARED_TYPE.equals(calType)) {
@@ -948,7 +948,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
         eventQuery.setFromDate(fromcalendar) ;
         java.util.Calendar tocalendar = uiListView.getEndDay(new GregorianCalendar(uiListView.getCurrentYear(), uiListView.getCurrentMonth(), uiListView.getCurrentDay())) ;
         eventQuery.setToDate(tocalendar) ;
-        uiListView.update(new EventPageList(calendarService.getEvents(uiCalendarView.getSystemSession(), username, eventQuery, uiCalendarView.getPublicCalendars()), 10)) ; 
+        uiListView.update(new EventPageList(calendarService.getEvents(username, eventQuery, uiCalendarView.getPublicCalendars()), 10)) ; 
         uiListView.setShowEventAndTask(false) ;
         uiListView.setDisplaySearchResult(false) ;
         uiListView.isShowEvent_ = false ;
@@ -1164,7 +1164,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
 		      if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
 		        calendar = calService.getUserCalendar(currentUser, selectedCalendarId) ;
 		      } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {
-		        GroupCalendarData gCalendarData = calService.getSharedCalendars(uiComponent.getSystemSession(), currentUser, true) ;
+		        GroupCalendarData gCalendarData = calService.getSharedCalendars(currentUser, true) ;
 		        if(gCalendarData != null) { 
 		          calendar = gCalendarData.getCalendarById(selectedCalendarId) ;
 		          if(calendar != null && !CalendarUtils.isEmpty(calendar.getCalendarOwner())) calendar.setName(calendar.getCalendarOwner() + "-" + calendar.getName()) ;

@@ -108,7 +108,7 @@ public class UIEventCategoryManager extends UIContainer implements UIPopupCompon
       String categoryId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       CalendarService calService = uiManager.getApplicationComponent(CalendarService.class) ;
       String username = CalendarUtils.getCurrentUser() ;
-      EventCategory category = calService.getEventCategory(uiManager.getSession(), username, categoryId) ;
+      EventCategory category = calService.getEventCategory(username, categoryId) ;
       uiForm.setEventCategory(category) ;
       uiForm.setCategoryName(category.getName()) ;
       uiForm.setCategoryDescription(category.getDescription()) ;

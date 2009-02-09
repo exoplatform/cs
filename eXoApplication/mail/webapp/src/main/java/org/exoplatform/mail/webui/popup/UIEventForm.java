@@ -164,7 +164,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
         CalendarService calService = getApplicationComponent(CalendarService.class) ;
         EventCategory eventCategory = new EventCategory() ;
         eventCategory.setName(eventCategoryName);
-        calService.saveEventCategory(SessionProviderFactory.createSessionProvider(), MailUtils.getCurrentUser(), eventCategory, null, true) ;
+        calService.saveEventCategory(MailUtils.getCurrentUser(), eventCategory, null, true) ;
         selectBox.getOptions().add(new SelectItemOption<String>(eventCategory.getName(), eventCategory.getId())) ;
         setSelectedCategory(eventCategory.getId()) ;
       }
@@ -208,13 +208,13 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
 
     // private calendars group
     SelectOptionGroup privGrp = new SelectOptionGroup("privateCalendar");
-    List<org.exoplatform.calendar.service.Calendar> calendars = calendarService.getUserCalendars(SessionProviderFactory.createSessionProvider(), username, true) ;
+    List<org.exoplatform.calendar.service.Calendar> calendars = calendarService.getUserCalendars(username, true) ;
     for(org.exoplatform.calendar.service.Calendar c : calendars) {
       privGrp.addOption(new SelectOption(c.getName(), CalendarUtils.PRIVATE_TYPE + CalendarUtils.COLON + c.getId())) ;
     }
     options.add(privGrp);
     // shared calendars group
-    GroupCalendarData gcd = calendarService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true);
+    GroupCalendarData gcd = calendarService.getSharedCalendars(username, true);
     if(gcd != null) {
       SelectOptionGroup sharedGrp = new SelectOptionGroup("sharedCalendar");
       for(org.exoplatform.calendar.service.Calendar c : gcd.getCalendars()) {
@@ -227,7 +227,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
       options.add(sharedGrp);
     }
     // public calendars group
-    List<GroupCalendarData> lgcd = calendarService.getGroupCalendars(SessionProviderFactory.createSystemProvider(), CalendarUtils.getUserGroups(username), true, username) ;
+    List<GroupCalendarData> lgcd = calendarService.getGroupCalendars(CalendarUtils.getUserGroups(username), true, username) ;
     if(lgcd != null) {
       OrganizationService oService = (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
       SelectOptionGroup pubGrp = new SelectOptionGroup("publicCalendar");
@@ -247,7 +247,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
   public static List<SelectItemOption<String>> getCategory() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    List<EventCategory> eventCategories = calendarService.getEventCategories(SessionProviderFactory.createSystemProvider(), Util.getPortalRequestContext().getRemoteUser()) ;
+    List<EventCategory> eventCategories = calendarService.getEventCategories(Util.getPortalRequestContext().getRemoteUser()) ;
     for(EventCategory category : eventCategories) {
       options.add(new SelectItemOption<String>(category.getName(), category.getId())) ;
     }
@@ -734,7 +734,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
         calendarEvent.setToDateTime(to);
         calendarEvent.setCalendarId(calendarId) ;
         calendarEvent.setEventCategoryId(uiForm.getEventCategory()) ;
-        String eventCategoryName = CalendarUtils.getCalendarService().getEventCategory(uiForm.getSession(), username, uiForm.getEventCategory()).getName() ;
+        String eventCategoryName = CalendarUtils.getCalendarService().getEventCategory(username, uiForm.getEventCategory()).getName() ;
         calendarEvent.setEventCategoryName(eventCategoryName) ;
         calendarEvent.setLocation(eventPlace) ;
         calendarEvent.setRepeatType(uiForm.getEventRepeat()) ;
@@ -745,12 +745,12 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
           Calendar currentCalendar = null ;
           CalendarService calService = CalendarUtils.getCalendarService() ;
           if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
-            currentCalendar = calService.getUserCalendar(uiForm.getSession(), username, calendarId) ; 
+            currentCalendar = calService.getUserCalendar(username, calendarId) ; 
           } else if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)) {
-            GroupCalendarData gCalendarData = calService.getSharedCalendars(uiForm.getSystemSession(), username, true) ;
+            GroupCalendarData gCalendarData = calService.getSharedCalendars(username, true) ;
             if( gCalendarData!= null && gCalendarData.getCalendarById(calendarId) != null) currentCalendar = gCalendarData.getCalendarById(calendarId) ;
           } else  if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)) {
-            currentCalendar = calService.getGroupCalendar(uiForm.getSystemSession(), calendarId) ;
+            currentCalendar = calService.getGroupCalendar(calendarId) ;
           }
           if(currentCalendar == null) {
             uiPopupAction.deActivate() ;
@@ -778,11 +778,11 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
             }
           }
           if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
-            CalendarUtils.getCalendarService().saveUserEvent(SessionProviderFactory.createSystemProvider(), username, calendarId, calendarEvent, uiForm.isAddNew_) ;
+            CalendarUtils.getCalendarService().saveUserEvent(username, calendarId, calendarEvent, uiForm.isAddNew_) ;
           }else if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)){
-            CalendarUtils.getCalendarService().saveEventToSharedCalendar(SessionProviderFactory.createSystemProvider(), username, calendarId, calendarEvent, uiForm.isAddNew_) ;
+            CalendarUtils.getCalendarService().saveEventToSharedCalendar(username, calendarId, calendarEvent, uiForm.isAddNew_) ;
           }else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)){
-            CalendarUtils.getCalendarService().savePublicEvent(SessionProviderFactory.createSystemProvider(), calendarId, calendarEvent, uiForm.isAddNew_) ;          
+            CalendarUtils.getCalendarService().savePublicEvent(calendarId, calendarEvent, uiForm.isAddNew_) ;          
           }
           /* ActionResponse actResponse = event.getRequestContext().getResponse() ;
           actResponse.setEvent(new QName("RefreshCalendar"), null) ;*/

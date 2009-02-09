@@ -47,7 +47,6 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.service.MailService;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.Membership;
@@ -495,7 +494,7 @@ public class CalendarUtils {
     }
     if(privGrp.getOptions().size() > 0) options.add(privGrp);
     // shared calendars group
-    GroupCalendarData gcd = calendarService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true);
+    GroupCalendarData gcd = calendarService.getSharedCalendars(username, true);
     if(gcd != null) {
       SelectOptionGroup sharedGrp = new SelectOptionGroup(CalendarUtils.SHARED_CALENDARS);
       for(org.exoplatform.calendar.service.Calendar c : gcd.getCalendars()) {
@@ -533,7 +532,7 @@ public class CalendarUtils {
     for(org.exoplatform.calendar.service.Calendar c : calendars) {
       list.add(c) ;
     }
-    GroupCalendarData gcd = calendarService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true);
+    GroupCalendarData gcd = calendarService.getSharedCalendars(username, true);
     if(gcd != null) {
       for(org.exoplatform.calendar.service.Calendar c : gcd.getCalendars()) {
         if(CalendarUtils.canEdit(null, c.getEditPermission(), username)){

@@ -28,7 +28,6 @@ import org.exoplatform.mail.webui.popup.UIMailSettings;
 import org.exoplatform.mail.webui.popup.UIMessageFilter;
 import org.exoplatform.mail.webui.popup.UIPopupAction;
 import org.exoplatform.mail.webui.popup.UIPopupActionContainer;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -133,7 +132,7 @@ public class UIActionBar extends UIContainer {
       uiPopupAction.activate(uiPopupContainer, 600, 0, true) ;
       UIEventForm uiEventForm = uiPopupContainer.createUIComponent(UIEventForm.class, null, null);
       uiPopupContainer.addChild(uiEventForm) ;
-      uiEventForm.initForm(calendarService.getCalendarSetting(SessionProviderFactory.createSystemProvider() ,MailUtils.getCurrentUser()), null) ;
+      uiEventForm.initForm(calendarService.getCalendarSetting(MailUtils.getCurrentUser()), null) ;
       uiEventForm.update(CalendarUtils.PRIVATE_TYPE, null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }

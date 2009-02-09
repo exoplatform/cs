@@ -22,7 +22,6 @@ import java.util.Map;
 import javax.jcr.Node;
 
 
-import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 /**
  * Created by The eXo Platform SARL
@@ -214,7 +213,7 @@ public interface CalendarService {
    * @throws Exception
    * @see EventCategory
    */
-  public EventCategory getEventCategory(SessionProvider userSession, String username, String eventCategoryId) throws Exception ;
+  public EventCategory getEventCategory(String username, String eventCategoryId) throws Exception ;
 
   /**
    * The method gets list events and tasks of given private calendar ids 
@@ -224,7 +223,7 @@ public interface CalendarService {
    * @return List of events and tasks
    * @throws Exception
    */
-  public List<CalendarEvent> getUserEventByCalendar(SessionProvider userSession, String username, List<String> calendarIds) throws Exception ;
+  public List<CalendarEvent> getUserEventByCalendar(String username, List<String> calendarIds) throws Exception ;
 
   /**
    * The method gets all events and tasks by given conditions in event query
@@ -235,7 +234,7 @@ public interface CalendarService {
    * @throws Exception
    * @see CalendarEvent
    */
-  public List<CalendarEvent> getUserEvents(SessionProvider userSession, String username, EventQuery eventQuery) throws Exception ;
+  public List<CalendarEvent> getUserEvents(String username, EventQuery eventQuery) throws Exception ;
 
   /**
    * The method save infomation to an event or a task by given private calendar id to data
@@ -259,53 +258,48 @@ public interface CalendarService {
 
   /**
    * The menthod gets event or task form group calendar by given calendar id
-   * @param systemSession Sessesion to access the public data
    * @param calendarId given calendar id
    * @param eventId given event id
    * @return CalendarEvent object containts infomations and attachments, reminders
    * @throws Exception
    * @see CalendarEvent
    */
-  public CalendarEvent getGroupEvent(SessionProvider systemSession, String calendarId, String eventId) throws Exception ;
+  public CalendarEvent getGroupEvent(String calendarId, String eventId) throws Exception ;
 
   /**
    * The method gets events and tasks by given public calendar ids  
-   * @param systemSession Sessesion to access the public data
    * @param calendarIds public calendar ids
    * @return List calendar event object
    * @throws Exception
    * @see CalendarEvent
    */
-  public List<CalendarEvent> getGroupEventByCalendar(SessionProvider systemSession, List<String> calendarIds) throws Exception ;
+  public List<CalendarEvent> getGroupEventByCalendar(List<String> calendarIds) throws Exception ;
 
   /**
    * The method gets events and tasks by given event query
-   * @param systemSession Sessesion to access the public data
    * @param eventQuery object contants given conditions 
    * @return List calendar event object
    * @throws Exception
    * @see CalendarEvent
    */
-  public List<CalendarEvent> getPublicEvents(SessionProvider systemSession, EventQuery eventQuery) throws Exception ;
+  public List<CalendarEvent> getPublicEvents(EventQuery eventQuery) throws Exception ;
   /**
    * Save event or task by given group calendar id
-   * @param systemSession Sessesion to access the public data
    * @param calendarId given calendar id
    * @param event object contants infomation about event
    * @param isNew boolean value to check update or add new event
    * @throws Exception
    */
-  public void savePublicEvent(SessionProvider systemSession, String calendarId, CalendarEvent event, boolean isNew) throws Exception ;
+  public void savePublicEvent(String calendarId, CalendarEvent event, boolean isNew) throws Exception ;
 
   /**
    * Remove event or task, all attachments and reminders item will be removed
-   * @param systemSession Sessesion to access the public data
    * @param calendarId given calendar id
    * @param eventId given event or task id
    * @return
    * @throws Exception
    */
-  public CalendarEvent removePublicEvent(SessionProvider systemSession, String calendarId, String eventId) throws Exception ;
+  public CalendarEvent removePublicEvent(String calendarId, String eventId) throws Exception ;
 
   /**
    * This menthod stores individual setting of each user, with setting you can configue many things like Default view
@@ -342,7 +336,6 @@ public interface CalendarService {
 
   /**
    * The menthod uses to make url to contants links to subcribe calendar folows RSS stand
-   * @param systemSession Sessesion to access the public data
    * @param username current user name(or user id)
    * @param calendarIds
    * @param rssData object contants infomations about the rss feed
@@ -350,7 +343,7 @@ public interface CalendarService {
    * @throws Exception
    * @see RssData
    */
-  public int generateRss(SessionProvider systemSession, String username, List<String> calendarIds, RssData rssData) throws Exception ;
+  public int generateRss(String username, List<String> calendarIds, RssData rssData) throws Exception ;
 
   /**
    * It gets data form server and show the url to view contents of RSS
@@ -360,16 +353,15 @@ public interface CalendarService {
    * @throws Exception
    * @see FeedData
    */
-  public List<FeedData> getFeeds(SessionProvider systemSession, String username) throws Exception  ;
+  public List<FeedData> getFeeds(String username) throws Exception  ;
 
   /**
    * The method return root of rss data store area
-   * @param systemSession Sessesion to access the public data
    * @param username current user name(or user id)
    * @return
    * @throws Exception
    */
-  public Node getRssHome(SessionProvider systemSession, String username) throws Exception ;
+  public Node getRssHome(String username) throws Exception ;
 
   /**
    * The method query events and tasks form given coditions, the coditions know by set value for eventquery
@@ -381,7 +373,7 @@ public interface CalendarService {
    * @throws Exception
    * @see EventPageList
    */
-  public EventPageList searchEvent(SessionProvider userSession, String username, EventQuery eventQuery, String[] publicCalendarIds)throws Exception ;
+  public EventPageList searchEvent(String username, EventQuery eventQuery, String[] publicCalendarIds)throws Exception ;
 
   /**
    * The method query all events, tasks and mark to hightlight the date have events or tasks 
@@ -392,7 +384,7 @@ public interface CalendarService {
    * @return
    * @throws Exception
    */
-  public Map<Integer, String > searchHightLightEvent(SessionProvider userSession, String username, EventQuery eventQuery, String[] publicCalendarIds)throws Exception ; 
+  public Map<Integer, String > searchHightLightEvent(String username, EventQuery eventQuery, String[] publicCalendarIds)throws Exception ; 
 
   /**
    * The method share the private calendar to other user, it can share for one or many users
@@ -402,7 +394,7 @@ public interface CalendarService {
    * @param receiverUsers List receive user username or id
    * @throws Exception
    */
-  public void shareCalendar(SessionProvider systemSession, String username, String calendarId, List<String> receiverUsers) throws Exception ;
+  public void shareCalendar(String username, String calendarId, List<String> receiverUsers) throws Exception ;
 
   /**
    * The method gets all shared calendars of the current user
@@ -413,11 +405,10 @@ public interface CalendarService {
    * @throws Exception
    * @see GroupCalendarData
    */
-  public GroupCalendarData getSharedCalendars(SessionProvider systemSession, String username, boolean isShowAll) throws Exception ;
+  public GroupCalendarData getSharedCalendars(String username, boolean isShowAll) throws Exception ;
 
   /**
    * The method selects all the events and tasks by given conditions, it includes events of private, public and share calendars
-   * @param userSession The session of current logedin user
    * @param username current user name(or user id)
    * @param eventQuery given coditions
    * @param publicCalendarIds public calendar ids
@@ -425,27 +416,25 @@ public interface CalendarService {
    * @throws Exception
    * @see CalendarEvent
    */
-  public List<CalendarEvent> getEvents(SessionProvider userSession, String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception ;
+  public List<CalendarEvent> getEvents(String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception ;
 
   /**
    * Removed shared calendar, but not the orloginal calendar
-   * @param systemSesssion Sessesion to access the public data
    * @param username current user name(or user id)
    * @param calendarId given calendar id
    * @throws Exception
    */
-  public void removeSharedCalendar(SessionProvider systemSesssion, String username, String calendarId) throws Exception  ;
+  public void removeSharedCalendar(String username, String calendarId) throws Exception  ;
 
   /**
    * Add event to shared calendar, mean add event to orloginal calendar too
-   * @param systemSession Sessesion to access the public data
    * @param username current user name(or user id)
    * @param calendarId given calendar id
    * @param event object contants infomations about event
    * @param isNew boolean value to check that add new or update event
    * @throws Exception
    */
-  public void saveEventToSharedCalendar(SessionProvider systemSession, String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception  ;
+  public void saveEventToSharedCalendar(String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception  ;
 
   /**
    * The method  will check the time free or busy of the user, it depents on events and tasks of this user 
@@ -459,14 +448,13 @@ public interface CalendarService {
 
   /**
    * The method genarete links to access calendar throw WEBDAV, it will require user name and password when access
-   * @param systemSession Sessesion to access the public data
    * @param username current user name(or user id)
    * @param calendarIds List calendar ids will look up and publicing
    * @param rssData Object contants infomations about rss feed
    * @return
    * @throws Exception
    */
-  public int generateCalDav(SessionProvider systemSession, String username, List<String> calendarIds, RssData rssData) throws Exception ;
+  public int generateCalDav(String username, List<String> calendarIds, RssData rssData) throws Exception ;
 
   /**
    * The method removes the events or tasks form shared calendar, orloginal item will be removed

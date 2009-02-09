@@ -31,7 +31,6 @@ import org.exoplatform.calendar.service.CalendarEvent;
 import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.CalendarSetting;
 import org.exoplatform.calendar.service.EventQuery;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -88,7 +87,7 @@ public class UIDayView extends UICalendarView {
     EventQuery eventQuery = new EventQuery() ;
     eventQuery.setFromDate(begin) ;
     eventQuery.setToDate(end) ;
-    events = calendarService.getEvents(getSystemSession(), username, eventQuery, getPublicCalendars()) ;
+    events = calendarService.getEvents(username, eventQuery, getPublicCalendars()) ;
     Iterator<CalendarEvent> iter = events.iterator() ;
     while (iter.hasNext()) {
       CalendarEvent ce = iter.next() ;
@@ -131,8 +130,8 @@ public class UIDayView extends UICalendarView {
           if(ce.getCalType().equals(CalendarUtils.PRIVATE_TYPE)) {
             calendar = calService.getUserCalendar(username, calendarId) ;
           } else if(ce.getCalType().equals(CalendarUtils.SHARED_TYPE)){
-            if(calService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true) != null)
-              calendar = calService.getSharedCalendars(SessionProviderFactory.createSystemProvider(), username, true).getCalendarById(calendarId) ;
+            if(calService.getSharedCalendars(username, true) != null)
+              calendar = calService.getSharedCalendars(username, true).getCalendarById(calendarId) ;
           } else if(ce.getCalType().equals(CalendarUtils.PUBLIC_TYPE)) {
             calendar = calService.getGroupCalendar(calendarId) ;
           }
@@ -180,9 +179,9 @@ public class UIDayView extends UICalendarView {
             if(ce.getCalType().equals(CalendarUtils.PRIVATE_TYPE)) {
               CalendarUtils.getCalendarService().saveUserEvent(username, calendarId, ce, false) ;
             }else if(ce.getCalType().equals(CalendarUtils.SHARED_TYPE)){
-              CalendarUtils.getCalendarService().saveEventToSharedCalendar(calendarview.getSystemSession(), username, calendarId, ce, false) ;
+              CalendarUtils.getCalendarService().saveEventToSharedCalendar(username, calendarId, ce, false) ;
             }else if(ce.getCalType().equals(CalendarUtils.PUBLIC_TYPE)){
-              CalendarUtils.getCalendarService().savePublicEvent(calendarview.getSystemSession(), calendarId, ce, false) ;          
+              CalendarUtils.getCalendarService().savePublicEvent(calendarId, ce, false) ;          
             }
             calendarview.setLastUpdatedEventId(eventId) ;
             calendarview.refresh() ;

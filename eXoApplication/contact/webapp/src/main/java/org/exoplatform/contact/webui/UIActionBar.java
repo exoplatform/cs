@@ -32,7 +32,6 @@ import org.exoplatform.contact.webui.popup.UIExportAddressBookForm;
 import org.exoplatform.contact.webui.popup.UIImportForm;
 import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.webui.popup.UIPopupContainer;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -169,7 +168,7 @@ public class UIActionBar extends UIContainer  {
       uiPopupAction.activate(uiPopupContainer, 600, 0, true) ;
       UIEventForm uiEventForm = uiPopupContainer.createUIComponent(UIEventForm.class, null, null);
       uiPopupContainer.addChild(uiEventForm) ;
-      uiEventForm.initForm(calendarService.getCalendarSetting(SessionProviderFactory.createSystemProvider() ,ContactUtils.getCurrentUser()), null) ;
+      uiEventForm.initForm(calendarService.getCalendarSetting(ContactUtils.getCurrentUser()), null) ;
       uiEventForm.update(CalendarUtils.PRIVATE_TYPE, null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }

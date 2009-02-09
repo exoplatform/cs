@@ -29,7 +29,6 @@ import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UICalendars;
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.portal.webui.container.UIContainer;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -146,7 +145,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
         }
         cal.setEditPermission(newPerms.toArray(new String[newPerms.size()])) ;
       }
-      calService.removeSharedCalendar(SessionProviderFactory.createSystemProvider(), resiceUser, addEdit.calendarId_) ;
+      calService.removeSharedCalendar(resiceUser, addEdit.calendarId_) ;
       calService.saveUserCalendar(username, cal, false) ;
       addEdit.updateGrid(cal, addEdit.getCurrentPage());
       event.getRequestContext().addUIComponentToUpdateByAjax(addEdit) ;

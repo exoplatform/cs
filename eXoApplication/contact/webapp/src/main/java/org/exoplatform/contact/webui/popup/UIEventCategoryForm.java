@@ -23,7 +23,6 @@ import org.exoplatform.calendar.service.EventCategory;
 import org.exoplatform.contact.CalendarUtils;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.webui.UIContactPortlet;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -112,12 +111,12 @@ public class UIEventCategoryForm extends UIForm {
       eventCat.setName(name) ;
       eventCat.setDescription(description) ;
       try {
-        if(uiForm.isAddNew_) calendarService.saveEventCategory(SessionProviderFactory.createSessionProvider(), username, eventCat, null, true) ;
+        if(uiForm.isAddNew_) calendarService.saveEventCategory(username, eventCat, null, true) ;
         else { 
           eventCat = uiForm.getEventCategory() ;
           eventCat.setName(name) ;
           eventCat.setDescription(description) ;
-          calendarService.saveEventCategory(SessionProviderFactory.createSessionProvider(), username, eventCat, new String[]{name, uiForm.getCategoryDescription()}, false) ; 
+          calendarService.saveEventCategory(username, eventCat, new String[]{name, uiForm.getCategoryDescription()}, false) ; 
         }
         /*ActionResponse actResponse = event.getRequestContext().getResponse() ;
         actResponse.setEvent(new QName("RefreshCalendar"), null) ;*/

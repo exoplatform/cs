@@ -240,7 +240,7 @@ public class CsvImportExport implements CalendarImportExport {
     return list;
   }
 
-  public OutputStream exportCalendar(SessionProvider sProvider, String username, List<String> calendarIds, String type) throws Exception {
+  public OutputStream exportCalendar(String username, List<String> calendarIds, String type) throws Exception {
     return null;
   }
   public OutputStream exportEventCalendar(SessionProvider sProvider, String username, String calendarId, String type, String eventId) throws Exception {

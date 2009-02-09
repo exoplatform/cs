@@ -904,7 +904,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
         if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
           currentCalendar = calService.getUserCalendar(username, calendarId) ; 
         } else if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)) {
-          GroupCalendarData gCalendarData = calService.getSharedCalendars(uiForm.getSystemSession(), username, true) ;
+          GroupCalendarData gCalendarData = calService.getSharedCalendars(username, true) ;
           if( gCalendarData!= null && gCalendarData.getCalendarById(calendarId) != null) currentCalendar = gCalendarData.getCalendarById(calendarId) ;
         } else  if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)) {
           currentCalendar = calService.getGroupCalendar(calendarId) ;
@@ -963,9 +963,9 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
             if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
               CalendarUtils.getCalendarService().saveUserEvent(username, calendarId, calendarEvent, uiForm.isAddNew_) ;
             }else if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)){
-              CalendarUtils.getCalendarService().saveEventToSharedCalendar(uiForm.getSystemSession(), username, calendarId, calendarEvent, uiForm.isAddNew_) ;
+              CalendarUtils.getCalendarService().saveEventToSharedCalendar(username, calendarId, calendarEvent, uiForm.isAddNew_) ;
             }else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)){
-              CalendarUtils.getCalendarService().savePublicEvent(uiForm.getSystemSession(), calendarId, calendarEvent, uiForm.isAddNew_) ;          
+              CalendarUtils.getCalendarService().savePublicEvent(calendarId, calendarEvent, uiForm.isAddNew_) ;          
             }
           } else {
             String fromCal = uiForm.oldCalendarId_.split(CalendarUtils.COLON)[1].trim() ;
@@ -997,7 +997,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
 
                 UIListView listView = uiListContainer.getChild(UIListView.class) ;
                 List<CalendarEvent> list = calService. getEvents(
-                                                                 uiForm.getSession(), username, eventQuery, listView.getPublicCalendars()) ;
+                                                                 username, eventQuery, listView.getPublicCalendars()) ;
                 for (CalendarEvent ev : list) {
                   if (ev.getId().equals(calendarEvent.getId())) {
                     if (listView.getDataMap().containsKey(ev.getId())) {

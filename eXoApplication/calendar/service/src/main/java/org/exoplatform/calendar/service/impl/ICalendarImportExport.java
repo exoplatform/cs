@@ -401,15 +401,15 @@ public class ICalendarImportExport implements CalendarImportExport{
   }
   
   
-  public OutputStream exportCalendar(SessionProvider sProvider, String username, List<String> calendarIds, String type) throws Exception {
+  public OutputStream exportCalendar(String username, List<String> calendarIds, String type) throws Exception {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>();
     SessionProvider systemSession = SessionProvider.createSystemProvider() ;
     if(type.equals(PRIVATE_TYPE)) {
-      events = storage_.getUserEventByCalendar(sProvider, username, calendarIds) ;
+      events = storage_.getUserEventByCalendar(username, calendarIds) ;
     }else if(type.equals(SHARED_TYPE)) {
-      events = storage_.getSharedEventByCalendars(systemSession, username, calendarIds) ;
+      events = storage_.getSharedEventByCalendars(username, calendarIds) ;
     }else if(type.equals(PUBLIC_TYPE)){
-      events = storage_.getGroupEventByCalendar(systemSession, calendarIds) ;
+      events = storage_.getGroupEventByCalendar(calendarIds) ;
     }
     if(events.isEmpty()) return null ;
     net.fortuna.ical4j.model.Calendar calendar = new net.fortuna.ical4j.model.Calendar();
@@ -443,11 +443,11 @@ public class ICalendarImportExport implements CalendarImportExport{
       events.add(storage_.getUserEvent(sProvider, username, calendarId, eventId))  ;
     } */
     if(type.equals(PRIVATE_TYPE)) {
-      events = storage_.getUserEventByCalendar(sProvider, username, calendarIds) ;
+      events = storage_.getUserEventByCalendar(username, calendarIds) ;
     }else if(type.equals(SHARED_TYPE)) {
-      events = storage_.getSharedEventByCalendars(sProvider, username, calendarIds) ;
+      events = storage_.getSharedEventByCalendars(username, calendarIds) ;
     }else if(type.equals(PUBLIC_TYPE)){
-      events = storage_.getGroupEventByCalendar(sProvider, calendarIds) ;
+      events = storage_.getGroupEventByCalendar(calendarIds) ;
     }
     net.fortuna.ical4j.model.Calendar calendar = new net.fortuna.ical4j.model.Calendar();
     calendar.getProperties().add(new ProdId("-//Ben Fortuna//iCal4j 1.0//EN"));

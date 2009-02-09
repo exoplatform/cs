@@ -26,7 +26,6 @@ import org.exoplatform.calendar.service.CalendarService;
 import org.exoplatform.calendar.service.RssData;
 import org.exoplatform.calendar.webui.UICalendarPortlet;
 import org.exoplatform.calendar.webui.UIFormDateTimePicker;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -155,7 +154,7 @@ public class UIRssForm extends UIFormTabPane implements UIPopupComponent{
       rssData.setVersion("rss_2.0") ;
       if(uiForm.getUIDateTimePicker(PUBLIC_DATE).getCalendar() != null)
         rssData.setPubDate(uiForm.getUIDateTimePicker(PUBLIC_DATE).getCalendar().getTime()) ;
-      int result = calendarService.generateRss(SessionProviderFactory.createSystemProvider(), CalendarUtils.getCurrentUser(), calendarIds, rssData) ;
+      int result = calendarService.generateRss(CalendarUtils.getCurrentUser(), calendarIds, rssData) ;
       if(result < 0) {
         uiForm.setSelectedTab(INPUT_RSSINFO) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent()) ;
