@@ -1007,7 +1007,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
           message.addAttachment(attachment) ;
         }
       }
-      org.exoplatform.services.mail.MailService mService = (org.exoplatform.services.mail.MailService)PortalContainer.getComponent(org.exoplatform.services.mail.MailService.class) ;
+      org.exoplatform.services.mail.MailService mService = getApplicationComponent(org.exoplatform.services.mail.impl.MailServiceImpl.class) ;
       mService.sendMessage(message) ;
     }
   }

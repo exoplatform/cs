@@ -869,7 +869,7 @@ public class JCRDataStorage{
       } finally {
         systemSession.close() ;
       }
-      removeReminder(sProvider, eventNode) ;
+      //removeReminder(sProvider, eventNode) ;
       eventNode.remove() ;
       calendarNode.save() ;
       calendarNode.getSession().save() ;
