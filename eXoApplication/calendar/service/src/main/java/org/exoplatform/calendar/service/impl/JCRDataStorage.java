@@ -969,11 +969,10 @@ public class JCRDataStorage{
         Node eventFolder = getEventFolder(systemSession, event.getFromDateTime()) ;
         syncRemoveEvent(eventFolder, event.getId()) ;
       } catch (Exception e) {
-        e.printStackTrace() ;
-      } finally {
-        systemSession.close() ;
+        e.printStackTrace() ;        
       }
-      //removeReminder(sProvider, eventNode) ;
+      removeReminder(eventNode) ;
+      systemSession.close() ;
       eventNode.remove() ;
       calendarNode.save() ;
       calendarNode.getSession().save() ;
