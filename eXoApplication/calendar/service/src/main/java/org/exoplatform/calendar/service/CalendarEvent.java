@@ -94,7 +94,7 @@ public class CalendarEvent {
   private String priority ;
 
   private boolean isPrivate = true ;
-  private String eventState ;
+  private String eventState = ST_BUSY;
   /**
    *Status:
    *-for event: TENTATIVE, CONFIRMED, CANCELLED. 
