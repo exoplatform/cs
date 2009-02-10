@@ -1,7 +1,3 @@
-body {
-	background: #ebedf2;
-}
-	
 .UIWindow .UIHomePagePortlet {	
 	margin: 0px;
 	padding: 10px;
@@ -190,52 +186,3 @@ padding:14px 8px 22px;
    line-height:18px;
 }
 
-/***************************UIBreadcumbsPortlet**************************/
-
-.UIWindow .UIBreadcumbsPortlet {
-  margin: 0px;
-}
-
-.UIBreadcumbsPortlet {
-  margin: 0 0 3px 0;
-}
-
-.UIBreadcumbs {
-  line-height: 25px ;
-}
-
-.UIBreadcumbs a {
-  float: left ;
-  color: #6d7fa1 ; 
-}
-
-.UIBreadcumbs a.Selected {
-  color: black;
-}
-
-.UIBreadcumbs .HomeIcon {
-  float: left;
-  margin: 4px 5px 0 0 ;
-}
-
-.UIBreadcumbs .LeftBreadcumbsBar {
-  background: url('DefaultSkin/background/BreadcumbBG.gif') repeat-x left top;
-  height: 25px;
-}
-
-.UIBreadcumbs .RightBreadcumbsBar {
-  height: 25px;
-  background: none;
-}
-
-.UIBreadcumbs .BreadcumbsInfoBar {
-  height: 25px; 
-  line-height: 25px;
-  padding-left: 10px; 
-  background: none;
-}
-
-.UIBreadcumbs .RightBlackGridArrowIcon {
-  float: left;
-  margin: 5px 0px 0px 0px;
-}
