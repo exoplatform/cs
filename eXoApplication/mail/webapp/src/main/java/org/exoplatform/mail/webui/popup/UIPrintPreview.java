@@ -18,13 +18,9 @@ package org.exoplatform.mail.webui.popup;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
-import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
-import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
 import org.exoplatform.mail.webui.UIMailPortlet;
-import org.exoplatform.mail.webui.UISelectAccount;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -50,6 +46,7 @@ import org.exoplatform.webui.form.UIForm;
 )
 public class UIPrintPreview extends UIForm implements UIPopupComponent {
   private Message printMessage_ ;
+  Account acc_ = null ;
   
   public UIPrintPreview() { }
   
@@ -72,16 +69,8 @@ public class UIPrintPreview extends UIForm implements UIPopupComponent {
     return getApplicationComponent(DownloadService.class) ; 
   }
   
-  public Account getAccount() throws Exception {
-    String username = MailUtils.getCurrentUser();
-    String accountId = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-    MailService mailSrv = MailUtils.getMailService();
-    try {
-      return mailSrv.getAccountById(SessionProviderFactory.createSystemProvider(), username, accountId);
-    } catch(Exception e) {
-      return null ;
-    }
-  }
+  public void setAcc(Account a) { acc_ = a ; }  
+  public Account getAccount() throws Exception {  return acc_ ; }
   
   public String[] getAction() { return new String[] {"print", "cancel"}; }
   

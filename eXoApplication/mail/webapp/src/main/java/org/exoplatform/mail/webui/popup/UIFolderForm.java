@@ -16,6 +16,8 @@
  */
 package org.exoplatform.mail.webui.popup;
 
+import javax.jcr.PathNotFoundException;
+
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
@@ -97,7 +99,13 @@ public class UIFolderForm extends UIForm implements UIPopupComponent {
       if (uiForm.getParentPath() != null && !"".equals(uiForm.getParentPath().trim())) {
         mailSvr.saveFolder(SessionProviderFactory.createSystemProvider(), username, accountId, uiForm.getParentPath(), folder) ;
       } else {
-        mailSvr.saveFolder(SessionProviderFactory.createSystemProvider(), username, accountId, folder) ;
+        try {
+          mailSvr.saveFolder(SessionProviderFactory.createSystemProvider(), username, accountId, folder) ;
+        } catch (PathNotFoundException e) {
+          uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
       }
       uiForm.getAncestorOfType(UIPopupAction.class).deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
