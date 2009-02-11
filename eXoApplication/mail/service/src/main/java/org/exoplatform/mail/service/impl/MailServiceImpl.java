@@ -665,9 +665,11 @@ public class MailServiceImpl implements MailService, Startable {
       beforeTime = false;
       betweenTime = false;
       getFrom = 0;
-      if (fromDate != null) {
+      Date date ;
+      if (fromDate != null) { 
         for (int l = 0; l < messages.length ; l++) { 
-          if (MimeMessageParser.getReceivedDate(messages[l]).getTime().before(fromDate)) {
+          date = MimeMessageParser.getReceivedDate(messages[l]).getTime();
+          if (date.before(fromDate) || date.equals(fromDate)) {
             getFrom++ ;
           } else {
             break;
@@ -675,9 +677,8 @@ public class MailServiceImpl implements MailService, Startable {
         }
       }
       
-      
-      for (int l = messages.length - 1; l >= 0; l--) {
-        msg = messages[l];
+      for (int l = messages.length ; l > 0; l--) {
+        msg = messages[l-1];
         if (!msgMap.containsKey(msg)) {
           if (fromDate != null && toDate != null) {
             if (betweenTime || (!(isImap && !MimeMessageParser.getReceivedDate(msg).getTime().before(toDate)))) {
