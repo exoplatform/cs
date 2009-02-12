@@ -18,6 +18,8 @@ package org.exoplatform.mail.webui.popup;
 
 import java.util.List;
 
+import javax.jcr.PathNotFoundException;
+
 import org.exoplatform.mail.Colors;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.MailService;
@@ -120,8 +122,18 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
       String description = editTagForm.getUIFormTextAreaInput(DESCRIPTION).getValue() ;
       String color = editTagForm.getSelectedColor(); 
       UIApplication uiApp = editTagForm.getAncestorOfType(UIApplication.class) ;
-
-      List<Tag> tagList = mailService.getTags(SessionProviderFactory.createSystemProvider(), username, accountId);
+      List<Tag> tagList = null ;
+      try {
+        tagList = mailService.getTags(SessionProviderFactory.createSystemProvider(), username, accountId);
+      } catch (PathNotFoundException e) {
+        uiPortlet.findFirstComponentOfType(UIMessageList.class).setMessagePageList(null) ;
+        uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet); 
+        
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       for (Tag tag : tagList) {
         if(tag.getName().equals(newTagName) && !tag.getId().equals(tagId)) {
           uiApp.addMessage(new ApplicationMessage("UIEditTagForm.msg.tag-already-exists", new Object[]{newTagName})) ;
