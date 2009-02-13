@@ -115,8 +115,8 @@ public class JCRDataStorage{
   
  
   public Node getPublicCalendarServiceHome() throws Exception {
-    SessionProvider sProvider = createSessionProvider();
-    try {
+    SessionProvider sProvider = createSystemProvider();
+    //try {
       Node publicApp = nodeHierarchyCreator_.getPublicApplicationNode(sProvider);
       try {
         return publicApp.getNode(Utils.CALENDAR_APP);
@@ -125,9 +125,9 @@ public class JCRDataStorage{
         publicApp.getSession().save();
         return calendarApp;
       }
-    } finally {
+    /*} finally {
       closeSessionProvider(sProvider);
-    }
+    }*/
   }
   
 
@@ -141,7 +141,7 @@ public class JCRDataStorage{
   
   private Node getSharedCalendarHome() throws Exception {
     SessionProvider sProvider = createSessionProvider();
-    try {
+//    /try {
       Node calendarServiceHome = getPublicCalendarServiceHome(sProvider);
       try {
         return calendarServiceHome.getNode(SHARED_CALENDAR);
@@ -150,9 +150,9 @@ public class JCRDataStorage{
         calendarServiceHome.getSession().save();
         return sharedCal;
       }
-    } finally {
+    /*} finally {
       closeSessionProvider(sProvider);
-    }
+    }*/
   }
 
   /**
@@ -164,11 +164,11 @@ public class JCRDataStorage{
   
   private Node getPublicRoot() throws Exception {
     SessionProvider sProvider = createSessionProvider();
-    try {
+    //try {
       return nodeHierarchyCreator_.getPublicApplicationNode(sProvider);
-    } finally {
+    /*} finally {
       closeSessionProvider(sProvider);
-    }
+    }*/
   }  
   
 
@@ -189,7 +189,7 @@ public class JCRDataStorage{
    */
   private Node getUserCalendarServiceHome(String username) throws Exception {
     SessionProvider sProvider = createSessionProvider();
-    try {
+    //try {
       Node userApp = nodeHierarchyCreator_.getUserApplicationNode(sProvider, username);
       Node calendarRoot;
       try {
@@ -202,9 +202,9 @@ public class JCRDataStorage{
         userApp.getSession().save();
         return calendarRoot;
       }
-    } finally {
+    /*} finally {
       closeSessionProvider(sProvider);
-    }
+    }*/
   }
   
   /**
@@ -217,9 +217,10 @@ public class JCRDataStorage{
   
 
   private Node getPublicCalendarHome() throws Exception {
-    SessionProvider sProvider = createSessionProvider();
-    try {
+    SessionProvider sProvider = createSystemProvider();
+    /*try {
     //sProvider = SessionProvider.createSystemProvider() ;
+*/    
     Node calendarServiceHome = getPublicCalendarServiceHome(sProvider) ;
     try {
       return calendarServiceHome.getNode(CALENDARS) ;
@@ -228,10 +229,10 @@ public class JCRDataStorage{
       calendarServiceHome.getSession().save() ;
       return cal ; 
     }
-    }
+    /*}
     finally {
       closeSessionProvider(sProvider);
-    }
+    }*/
   }
   
 
@@ -549,7 +550,7 @@ public class JCRDataStorage{
 
   public List<GroupCalendarData> getCalendarCategories(String username, boolean isShowAll) throws Exception {
     SessionProvider sProvider = createSessionProvider();
-    try {
+    //try {
       Node calendarHome = getUserCalendarHome(username);
       NodeIterator iter = getCalendarCategoryHome(sProvider, username).getNodes();
       List<GroupCalendarData> calendarCategories = new ArrayList<GroupCalendarData>();
@@ -583,9 +584,9 @@ public class JCRDataStorage{
                                                      calendars));
       }
       return calendarCategories;
-    } finally {
+    /*} finally {
       closeSessionProvider(sProvider);
-    }
+    }*/
   }
 
   public List<CalendarCategory> getCategories(String username) throws Exception {
