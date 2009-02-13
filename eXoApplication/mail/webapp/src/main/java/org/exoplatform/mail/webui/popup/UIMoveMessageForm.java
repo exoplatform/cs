@@ -19,6 +19,8 @@ package org.exoplatform.mail.webui.popup;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jcr.PathNotFoundException;
+
 import org.exoplatform.mail.service.Folder;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
@@ -88,7 +90,10 @@ public class UIMoveMessageForm extends UIForm implements UIPopupComponent {
       String username = uiPortlet.getCurrentUser() ;
       String accountId =  uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
       String destFolderId = uiMoveMessageForm.getChild(UISelectFolder.class).getSelectedValue();
-      Folder destFolder =  mailSrv.getFolder(SessionProviderFactory.createSystemProvider(), username, accountId, destFolderId);
+      Folder destFolder =  null ;
+      try {
+        destFolder =  mailSrv.getFolder(SessionProviderFactory.createSystemProvider(), username, accountId, destFolderId);
+      } catch (PathNotFoundException e) { }
       if (destFolder == null) {
         UIApplication uiApp = uiMoveMessageForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UIMoveMessageForm.msg.selected-folder-is-not-exits-any-more", null)) ;

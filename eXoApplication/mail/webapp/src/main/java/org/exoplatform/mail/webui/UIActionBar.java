@@ -195,7 +195,17 @@ public class UIActionBar extends UIContainer {
         UIAccountSetting uiAccountSetting = uiPopupContainer.createUIComponent(UIAccountSetting.class, null, null);
         uiPopupContainer.addChild(uiAccountSetting) ; 
         uiAccountSetting.setSelectedAccountId(uiSelectAcc.getSelectedValue());
-        uiAccountSetting.fillField();
+        try {
+          uiAccountSetting.fillField();
+        } catch (NullPointerException e) {
+          uiPortlet.findFirstComponentOfType(UIMessageList.class).setMessagePageList(null) ;
+          uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
+          UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
       }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }

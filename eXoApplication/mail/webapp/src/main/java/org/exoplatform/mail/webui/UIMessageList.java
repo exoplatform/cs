@@ -508,7 +508,17 @@ public class UIMessageList extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      uiMessageList.filterMessage("");
+      try {
+        uiMessageList.filterMessage("");
+      } catch (PathNotFoundException e) {
+        uiMessageList.setMessagePageList(null) ;
+        uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
+        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       uiMessageList.viewing_ = uiMessageList.VIEW_ALL ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
@@ -536,7 +546,17 @@ public class UIMessageList extends UIForm {
       String username = uiPortlet.getCurrentUser();
       MessageFilter filter = uiMessageList.getMessageFilter() ;
       filter.setHasStructure(false) ;
-      uiMessageList.setMessagePageList(mailSrv.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, filter)) ;
+      try {
+        uiMessageList.setMessagePageList(mailSrv.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, filter)) ;
+      } catch (PathNotFoundException e) {
+        uiMessageList.setMessagePageList(null) ;
+        uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
+        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       uiMessageList.viewMode = uiMessageList.MODE_LIST ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
     }
@@ -564,7 +584,17 @@ public class UIMessageList extends UIForm {
         String username = uiPortlet.getCurrentUser();
         MessageFilter filter = uiMessageList.getMessageFilter() ;
         filter.setHasStructure(true) ;
-        uiMessageList.setMessagePageList(mailSrv.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, filter)) ;
+        try {
+          uiMessageList.setMessagePageList(mailSrv.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, filter)) ;
+        } catch (PathNotFoundException e) {
+          uiMessageList.setMessagePageList(null) ;
+          uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
+          UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
       }
       uiMessageList.viewMode = uiMessageList.MODE_THREAD ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
@@ -599,7 +629,17 @@ public class UIMessageList extends UIForm {
         String username = uiPortlet.getCurrentUser();
         MessageFilter filter = uiMessageList.getMessageFilter() ;
         filter.setHasStructure(true) ;
-        uiMessageList.setMessagePageList(mailSrv.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, filter)) ;
+        try {
+          uiMessageList.setMessagePageList(mailSrv.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, filter)) ;
+        } catch (PathNotFoundException e) {
+          uiMessageList.setMessagePageList(null) ;
+          uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
+          UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
       }
       uiMessageList.viewMode = uiMessageList.MODE_CONVERSATION ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
@@ -617,7 +657,17 @@ public class UIMessageList extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      uiMessageList.filterMessage("@" + Utils.EXO_STAR + "='true'");
+      try {
+        uiMessageList.filterMessage("@" + Utils.EXO_STAR + "='true'");
+      } catch (PathNotFoundException e) {
+        uiMessageList.setMessagePageList(null) ;
+        uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
+        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       uiMessageList.viewing_ = uiMessageList.VIEW_STARRED ;
       uiMessageList.viewMode = uiMessageList.MODE_LIST;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
@@ -635,7 +685,17 @@ public class UIMessageList extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
+      try {
       uiMessageList.filterMessage("@" + Utils.EXO_STAR + "='false'");
+      } catch (PathNotFoundException e) {
+        uiMessageList.setMessagePageList(null) ;
+        uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
+        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       uiMessageList.viewing_ = uiMessageList.VIEW_UNSTARRED ;
       uiMessageList.viewMode = uiMessageList.MODE_LIST;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
@@ -653,7 +713,17 @@ public class UIMessageList extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
+      try {
       uiMessageList.filterMessage("@" + Utils.EXO_ISUNREAD + "='true'");
+      } catch (PathNotFoundException e) {
+        uiMessageList.setMessagePageList(null) ;
+        uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
+        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       uiMessageList.viewing_ = uiMessageList.VIEW_UNREAD ;
       uiMessageList.viewMode = uiMessageList.MODE_LIST;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
@@ -671,7 +741,17 @@ public class UIMessageList extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      uiMessageList.filterMessage("@" + Utils.EXO_ISUNREAD + "='false'");
+      try {
+        uiMessageList.filterMessage("@" + Utils.EXO_ISUNREAD + "='false'");
+      } catch (PathNotFoundException e) {
+        uiMessageList.setMessagePageList(null) ;
+        uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
+        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       uiMessageList.viewing_ = uiMessageList.VIEW_READ ;
       uiMessageList.viewMode = uiMessageList.MODE_LIST;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
@@ -689,7 +769,17 @@ public class UIMessageList extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       }
-      uiMessageList.filterMessage("@" + Utils.EXO_HASATTACH + "='true'");
+      try {
+        uiMessageList.filterMessage("@" + Utils.EXO_HASATTACH + "='true'");
+      } catch (PathNotFoundException e) {
+        uiMessageList.setMessagePageList(null) ;
+        uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
+        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       uiMessageList.viewing_ = uiMessageList.VIEW_ATTACHMENT ;
       uiMessageList.viewMode = uiMessageList.MODE_LIST;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getAncestorOfType(UIMessageArea.class));
@@ -1002,9 +1092,17 @@ public class UIMessageList extends UIForm {
       } else {
         checkedMessageList = uiMessageList.getCheckedMessage();
       }    
-
-      SpamFilter spamFilter = mailSrv.getSpamFilter(SessionProviderFactory.createSystemProvider(), username, accountId);
-
+      SpamFilter spamFilter = null ;
+      try {
+        spamFilter = mailSrv.getSpamFilter(SessionProviderFactory.createSystemProvider(), username, accountId);
+      } catch (PathNotFoundException e) {
+        uiMessageList.setMessagePageList(null) ;
+        uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return; 
+      }
       for(Message message: checkedMessageList) {
         mailSrv.moveMessage(SessionProviderFactory.createSystemProvider(), username, accountId, message, message.getFolders()[0], Utils.createFolderId(accountId, Utils.FD_SPAM, false));
         spamFilter.reportSpam(message);
@@ -1044,7 +1142,17 @@ public class UIMessageList extends UIForm {
         checkedMessageList = uiMessageList.getCheckedMessage();
       }    
 
-      SpamFilter spamFilter = mailSrv.getSpamFilter(SessionProviderFactory.createSystemProvider(), username, accountId);
+      SpamFilter spamFilter = null ;
+      try {
+        spamFilter = mailSrv.getSpamFilter(SessionProviderFactory.createSystemProvider(), username, accountId);
+      } catch (PathNotFoundException e) {
+        uiMessageList.setMessagePageList(null) ;
+        uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return; 
+      }
 
       for(Message message: checkedMessageList) {
         mailSrv.moveMessage(SessionProviderFactory.createSystemProvider(), username, accountId, message, message.getFolders()[0], Utils.createFolderId(accountId, Utils.FD_INBOX, false));
