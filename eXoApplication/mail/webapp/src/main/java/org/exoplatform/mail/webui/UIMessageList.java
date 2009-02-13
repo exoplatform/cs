@@ -387,7 +387,17 @@ public class UIMessageList extends UIForm {
       uiPopupAction.activate(uiPopupContainer, 850, 0, true);
 
       UIComposeForm uiComposeForm = uiPopupContainer.createUIComponent(UIComposeForm.class, null, null);
-      uiComposeForm.init(accountId, msg, uiComposeForm.MESSAGE_IN_DRAFT);
+      try {
+        uiComposeForm.init(accountId, msg, uiComposeForm.MESSAGE_IN_DRAFT);
+      } catch (PathNotFoundException e) {
+        uiMessageList.setMessagePageList(null) ;
+        uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
+        UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+        uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        return ;
+      }
       uiPopupContainer.addChild(uiComposeForm) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;  
       event.getRequestContext().addUIComponentToUpdateByAjax(uiMessageList.getParent());
