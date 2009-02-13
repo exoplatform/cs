@@ -19,6 +19,8 @@ package org.exoplatform.mail.webui.popup;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jcr.PathNotFoundException;
+
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.MailService;
@@ -29,9 +31,11 @@ import org.exoplatform.mail.webui.UIMessageList;
 import org.exoplatform.mail.webui.UISelectAccount;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
@@ -169,7 +173,17 @@ public class UIMailSettings extends UIForm implements UIPopupComponent {
         uiSelectAccount.setSelectedValue(accountId);
         uiMessageList.setMessagePageList(mailSrv.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, filter));
       } else {
+        try {
         uiMessageList.setMessagePageList(mailSrv.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, filter));
+        } catch (PathNotFoundException e) {
+          uiMessageList.setMessagePageList(null) ;
+          uiPortlet.findFirstComponentOfType(UISelectAccount.class).refreshItems();
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
+          UIApplication uiApp = uiMessageList.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UIMessageList.msg.deleted_account", null, ApplicationMessage.WARNING)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
       }
       uiSetting.getAncestorOfType(UIPopupAction.class).deActivate();
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPortlet);
