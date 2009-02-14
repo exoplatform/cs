@@ -251,7 +251,7 @@ public class Utils {
         props.setProperty("mail.imap.socketFactory.fallback", "false");
         props.setProperty("mail.imap.socketFactory.class", socketFactoryClass);
       }
-      Session session = Session.getDefaultInstance(props);
+      Session session = Session.getInstance(props, null) ;
       URLName url = new URLName(acc.getProtocol(), acc.getIncomingHost(), Integer.valueOf(acc.getIncomingPort()), null, acc.getIncomingUser(), acc.getIncomingPassword());
       Store store = session.getStore(url) ;
       store.connect();
