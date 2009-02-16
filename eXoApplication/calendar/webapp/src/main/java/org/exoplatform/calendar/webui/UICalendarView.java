@@ -29,7 +29,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
 
 import javax.jcr.PathNotFoundException;
 
@@ -1154,13 +1153,6 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
 		      String calType = event.getRequestContext().getRequestParameter(CALTYPE) ;
 		      UIApplication uiApp = uiComponent.getAncestorOfType(UIApplication.class) ;
 		      org.exoplatform.calendar.service.Calendar calendar = null;
-          CalendarEvent instanceEvent = new CalendarEvent();
-          instanceEvent.setId(eventId);
-          if(instanceEvent.getEventType().equalsIgnoreCase("Task")){
-            uiApp.addMessage(new ApplicationMessage("UICalendars.msg.have-no-calendar" + "aaa", null, 1)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiCalendarPortlet) ;
-          }
 		      if(calType.equals(CalendarUtils.PRIVATE_TYPE)) {
 		        calendar = calService.getUserCalendar(uiComponent.getSession(), currentUser, selectedCalendarId) ;
 		      } else if(calType.equals(CalendarUtils.SHARED_TYPE)) {

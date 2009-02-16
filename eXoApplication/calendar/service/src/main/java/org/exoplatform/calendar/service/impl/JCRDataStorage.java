@@ -611,8 +611,10 @@ public class JCRDataStorage{
       }
 
       // cs-2020      
-      if(getSharedCalendarHome(sProvider).hasNode(username)) {
-        PropertyIterator iterPro = getSharedCalendarHome(sProvider).getNode(username).getReferences() ;
+      SessionProvider systemSession = SessionProvider.createSystemProvider() ; 
+      try {
+      if(getSharedCalendarHome(systemSession).hasNode(username)) {
+        PropertyIterator iterPro = getSharedCalendarHome(systemSession).getNode(username).getReferences() ;
         while(iterPro.hasNext()) {
           try{
             Node calendar = iterPro.nextProperty().getParent() ;
@@ -628,7 +630,9 @@ public class JCRDataStorage{
           }
         }
       }
-
+      } finally {
+        systemSession.close() ;
+      }
       /*if(eventCategory.getName().equalsIgnoreCase(values[0])) {
         name = eventCategory.getName().toLowerCase() ;
         description = values[1] ;
