@@ -48,5 +48,11 @@
       <version>${org.exoplatform.ws.version}</version>
     </dependency> 
     
+    <dependency>
+      <groupId>javax.mail</groupId>
+      <artifactId>mail</artifactId>
+      <version>1.4.1</version>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
 </project>
