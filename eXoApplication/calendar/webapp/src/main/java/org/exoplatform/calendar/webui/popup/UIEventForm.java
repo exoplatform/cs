@@ -71,8 +71,10 @@ import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItem;
 import org.exoplatform.webui.core.model.SelectItemOption;
@@ -85,6 +87,7 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormTabPane;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
+import org.exoplatform.webui.organization.account.UIUserSelector;
 
 /**
  * Created by The eXo Platform SARL
@@ -94,24 +97,37 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
  *          tuan.pham@exoplatform.com
  * Aus 01, 2007 2:48:18 PM 
  */
-@ComponentConfig(
-                 lifecycle = UIFormLifecycle.class,
-                 template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", 
-                 events = {
-                   @EventConfig(listeners = UIEventForm.SaveActionListener.class),
-                   @EventConfig(listeners = UIEventForm.AddCategoryActionListener.class, phase = Phase.DECODE),
-                   @EventConfig(listeners = UIEventForm.MoveNextActionListener.class, phase = Phase.DECODE),
-                   @EventConfig(listeners = UIEventForm.MovePreviousActionListener.class, phase = Phase.DECODE),
-                   @EventConfig(listeners = UIEventForm.DeleteUserActionListener.class, phase = Phase.DECODE),
+@ComponentConfigs ( {
+  @ComponentConfig(
+                   lifecycle = UIFormLifecycle.class,
+                   template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", 
+                   events = {
+                     @EventConfig(listeners = UIEventForm.SaveActionListener.class),
+                     @EventConfig(listeners = UIEventForm.AddCategoryActionListener.class, phase = Phase.DECODE),
+                     @EventConfig(listeners = UIEventForm.MoveNextActionListener.class, phase = Phase.DECODE),
+                     @EventConfig(listeners = UIEventForm.MovePreviousActionListener.class, phase = Phase.DECODE),
+                     @EventConfig(listeners = UIEventForm.DeleteUserActionListener.class, phase = Phase.DECODE),
 
-                   @EventConfig(listeners = UIEventForm.AddEmailAddressActionListener.class, phase = Phase.DECODE),
-                   @EventConfig(listeners = UIEventForm.AddAttachmentActionListener.class, phase = Phase.DECODE),
-                   @EventConfig(listeners = UIEventForm.RemoveAttachmentActionListener.class, phase = Phase.DECODE),
-                   @EventConfig(listeners = UIEventForm.DownloadAttachmentActionListener.class, phase = Phase.DECODE),
-                   @EventConfig(listeners = UIEventForm.AddParticipantActionListener.class, phase = Phase.DECODE),
-                   @EventConfig(listeners = UIEventForm.OnChangeActionListener.class, phase = Phase.DECODE),
-                   @EventConfig(listeners = UIEventForm.CancelActionListener.class, phase = Phase.DECODE)
-                 }
+                     @EventConfig(listeners = UIEventForm.AddEmailAddressActionListener.class, phase = Phase.DECODE),
+                     @EventConfig(listeners = UIEventForm.AddAttachmentActionListener.class, phase = Phase.DECODE),
+                     @EventConfig(listeners = UIEventForm.RemoveAttachmentActionListener.class, phase = Phase.DECODE),
+                     @EventConfig(listeners = UIEventForm.DownloadAttachmentActionListener.class, phase = Phase.DECODE),
+                     @EventConfig(listeners = UIEventForm.AddParticipantActionListener.class, phase = Phase.DECODE),
+                     @EventConfig(listeners = UIEventForm.OnChangeActionListener.class, phase = Phase.DECODE),
+                     @EventConfig(listeners = UIEventForm.CancelActionListener.class, phase = Phase.DECODE)
+                   }
+  ),
+    @ComponentConfig(
+                   id = "UIPopupWindowUserSelect",
+                   type = UIPopupWindow.class,
+                   template =  "system:/groovy/webui/core/UIPopupWindow.gtmpl",
+                   events = {
+                     @EventConfig(listeners = UIPopupWindow.CloseActionListener.class, name = "ClosePopup")  ,
+                     @EventConfig(listeners = UIEventForm.AddActionListener.class),
+                     @EventConfig(listeners = UIEventForm.CloseActionListener.class, phase = Phase.DECODE)
+                   }
+  )
+}
 )
 public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISelector{
   final public static String TAB_EVENTDETAIL = "eventDetail".intern() ;
@@ -1122,12 +1138,35 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       tabAttender.updateParticipants(values) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(tabAttender) ;
       String tabId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-      UIPopupAction uiChildPopupAction = uiContainer.getChild(UIPopupAction.class) ;
+      UIPopupWindow uiPopupWindow = uiContainer.addChild(UIPopupWindow.class, "UIPopupWindowUserSelect", "UIPopupWindowUserSelect") ;
+      UIUserSelector uiUserSelector = uiContainer.createUIComponent(UIUserSelector.class, null, null) ;
+      uiUserSelector.setShowSearch(true);
+      uiUserSelector.setShowSearchUser(true) ;
+      uiUserSelector.setShowSearchGroup(true);
+      uiPopupWindow.setUIComponent(uiUserSelector);
+      uiPopupWindow.setShow(true);
+      uiPopupWindow.setWindowSize(700, 400) ;
+      /*UIPopupAction uiChildPopupAction = uiContainer.getChild(UIPopupAction.class) ;
       UISelectUserForm uiSelectUserForm = uiChildPopupAction.activate(UISelectUserForm.class, 680) ;
       uiSelectUserForm.init(((UIEventAttenderTab)uiForm.getChildById(TAB_EVENTATTENDER)).parMap_.keySet()) ;
-      uiSelectUserForm.tabId_ = tabId ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiChildPopupAction) ;      
+      uiSelectUserForm.tabId_ = tabId ;*/
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;      
+    }
+  }
+  
+  static  public class AddActionListener extends EventListener<UIPopupWindow> {
+    public void execute(Event<UIPopupWindow> event) throws Exception {
+      UIPopupWindow uiPoupPopupWindow = event.getSource() ;
+       System.out.println("\n\n add");
+    }
+  }
+  
+  static  public class CloseActionListener extends EventListener<UIPopupWindow> {
+    public void execute(Event<UIPopupWindow> event) throws Exception {
+      UIPopupWindow uiPoupPopupWindow = event.getSource() ;
+      System.out.println("\n\n Close");
     }
   }
   static  public class MoveNextActionListener extends EventListener<UIEventForm> {

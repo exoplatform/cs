@@ -163,7 +163,7 @@ public class JCRDataStorage{
   }
   
   private Node getPublicRoot() throws Exception {
-    SessionProvider sProvider = createSessionProvider();
+    SessionProvider sProvider = createSystemProvider();
     //try {
       return nodeHierarchyCreator_.getPublicApplicationNode(sProvider);
     /*} finally {
