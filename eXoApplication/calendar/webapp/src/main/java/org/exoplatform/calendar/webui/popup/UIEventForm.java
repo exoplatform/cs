@@ -123,8 +123,8 @@ import org.exoplatform.webui.organization.account.UIUserSelector;
                    template =  "system:/groovy/webui/core/UIPopupWindow.gtmpl",
                    events = {
                      @EventConfig(listeners = UIPopupWindow.CloseActionListener.class, name = "ClosePopup")  ,
-                     @EventConfig(listeners = UIEventForm.AddActionListener.class),
-                     @EventConfig(listeners = UIEventForm.CloseActionListener.class, phase = Phase.DECODE)
+                     @EventConfig(listeners = UIEventForm.AddActionListener.class, name = "Add", phase = Phase.DECODE),
+                     @EventConfig(listeners = UIEventForm.CloseActionListener.class, name = "Close", phase = Phase.DECODE)
                    }
   )
 }
@@ -1136,11 +1136,11 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       UIEventAttenderTab tabAttender = uiForm.getChildById(TAB_EVENTATTENDER) ;
       String values = uiForm.getParticipantValues() ;
       tabAttender.updateParticipants(values) ;
-      event.getRequestContext().addUIComponentToUpdateByAjax(tabAttender) ;
-      String tabId = event.getRequestContext().getRequestParameter(OBJECTID) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(tabAttender) ;       
       
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-      UIPopupWindow uiPopupWindow = uiContainer.addChild(UIPopupWindow.class, "UIPopupWindowUserSelect", "UIPopupWindowUserSelect") ;
+      UIPopupWindow uiPopupWindow = uiContainer.getChild(UIPopupWindow.class) ;
+      if(uiPopupWindow == null)uiPopupWindow = uiContainer.addChild(UIPopupWindow.class, "UIPopupWindowUserSelect", "UIPopupWindowUserSelect") ;
       UIUserSelector uiUserSelector = uiContainer.createUIComponent(UIUserSelector.class, null, null) ;
       uiUserSelector.setShowSearch(true);
       uiUserSelector.setShowSearchUser(true) ;
@@ -1156,17 +1156,31 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     }
   }
   
-  static  public class AddActionListener extends EventListener<UIPopupWindow> {
-    public void execute(Event<UIPopupWindow> event) throws Exception {
-      UIPopupWindow uiPoupPopupWindow = event.getSource() ;
-       System.out.println("\n\n add");
+  static  public class AddActionListener extends EventListener<UIUserSelector> {
+    public void execute(Event<UIUserSelector> event) throws Exception {
+      UIUserSelector uiUserSelector = event.getSource();
+      String values = uiUserSelector.getSelectedUsers();
+      UIPopupContainer uiContainer = uiUserSelector.getAncestorOfType(UIPopupContainer.class) ;
+      UIEventForm uiEventForm = uiContainer.getChild(UIEventForm.class);
+      UIEventAttenderTab tabAttender = uiEventForm.getChildById(TAB_EVENTATTENDER) ;
+      tabAttender.updateParticipants(values)  ;
+      //UIPopupWindow uiPoupPopupWindow = uiUserSelector.getParent() ;
+      //uiPoupPopupWindow.setUIComponent(null) ;
+      //uiPoupPopupWindow.setShow(false) ;   
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer);
+//      
+        
     }
   }
   
-  static  public class CloseActionListener extends EventListener<UIPopupWindow> {
-    public void execute(Event<UIPopupWindow> event) throws Exception {
-      UIPopupWindow uiPoupPopupWindow = event.getSource() ;
-      System.out.println("\n\n Close");
+  static  public class CloseActionListener extends EventListener<UIUserSelector> {
+    public void execute(Event<UIUserSelector> event) throws Exception {
+      UIUserSelector uiUseSelector = event.getSource() ;
+      UIPopupWindow uiPoupPopupWindow = uiUseSelector.getParent() ;
+      UIPopupContainer uiContainer = uiPoupPopupWindow.getAncestorOfType(UIPopupContainer.class) ;
+      uiPoupPopupWindow.setUIComponent(null) ;
+      uiPoupPopupWindow.setShow(false) ;      
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;  
     }
   }
   static  public class MoveNextActionListener extends EventListener<UIEventForm> {
