@@ -46,35 +46,48 @@ UpdateList.prototype.update = function(obj){
 		  tr.className = "MessageItem";
 		  tr.msgid = data.msgId;
 		  
-		  var str = "<td>";
-		 	str +=    "  <input class='checkbox' type='checkbox' name='" + data.msgId + "'>";
-		 	str +=    "</td>";
-		  str +=    "<td style='padding: 0px auto ;'>";
-		  str +=    "  <a " + href + "><div class='UnStarredIcon'><span></span></div></a>";
-		  str +=    "</td>";
-		  str +=    "<td class='UnreadItem'>";
-		  str +=    "  <a " + href + "> " + data.from + "</a>";
-		  str +=    "</td>";	  
-		  str +=    "<td class='UnreadItem'>";
-		  str +=    "  <a " + href + "> </a>";
-		  str +=    "</td>";	  		
-		  str +=    "<td class='UnreadItem'>";
-		  str +=    "  <a " + href + "> " + data.subject + "</a>";
-		  str +=    "</td>";			  
-		  str +=    "<td>";
-		  str +=    "  <a " + href + "> ( 1 )</a>";
-		  str +=    "</td>";		  
-		  str +=    "<td class='UnreadItem'>";
-		  str +=    "  <a " + href + "> " + data.date + "</a>";
-		  str +=    "</td>";	  
-		  str +=    "<td class='UnreadItem'>";
-		  str +=    "  <a " + href + "> " + data.size + " B </a>";
-		  str +=    "</td>";	  
-		  str +=    "<td class='UnreadItem'>";
-		  str +=    "  <a " + href + "> </a>";
-		  str +=    "</td>";
 		  
-		  tr.innerHTML = str;
+		  var td = document.createElement("td");
+		  td.innerHTML =  "  <input class='checkbox' type='checkbox' name='" + data.msgId + "'/>";
+		  tr.appendChild(td);
+		  
+		  td = document.createElement("td");
+		  td.style.padding = "0px auto";
+		  td.innerHTML = "<a " + href + "><div class='UnStarredIcon'><span></span></div></a>";
+		  tr.appendChild(td);
+		  		
+		  td = document.createElement("td");
+		  td.className = "UnreadItem";
+		  td.innerHTML = "<a " + href + "> " + data.from + "</a>";
+		  tr.appendChild(td);
+		  
+		  td = document.createElement("td");
+		  td.className = "UnreadItem";
+		  td.innerHTML = "<a " + href + "> </a>";
+		  tr.appendChild(td);
+		  
+		  td = document.createElement("td");
+		  td.className = "UnreadItem";
+		  td.innerHTML = "<a " + href + "> " + data.subject + "</a>";
+		  tr.appendChild(td);
+		  
+		  td = document.createElement("td");
+		  td.innerHTML = "<a " + href + "> ( 1 ) </a>";
+		  tr.appendChild(td);
+		  
+		  td = document.createElement("td");
+		  td.className = "UnreadItem";
+		  td.innerHTML = "<a " + href + ">" + data.date + " </a>";
+		  tr.appendChild(td);
+		  
+		  td = document.createElement("td");
+		  td.className = "UnreadItem";
+		  td.innerHTML = "<a " + href + "> " + data.size + " </a>";
+		  tr.appendChild(td);
+		  
+		  td = document.createElement("td");
+		  td.innerHTML = "<a " + href + ">  </a>";
+		  tr.appendChild(td);
 		 
 		  if (preTr) {
 		  	if (tr.className) {
