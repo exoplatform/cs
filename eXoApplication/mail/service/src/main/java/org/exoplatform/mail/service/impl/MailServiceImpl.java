@@ -63,6 +63,8 @@ import javax.mail.util.ByteArrayDataSource;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.RootContainer;
 import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.AccountData;
@@ -70,6 +72,7 @@ import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.CheckMailJob;
 import org.exoplatform.mail.service.CheckingInfo;
 import org.exoplatform.mail.service.Folder;
+import org.exoplatform.mail.service.Info;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.MailUpdateStorageEventListener;
@@ -86,6 +89,7 @@ import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.scheduler.JobInfo;
 import org.exoplatform.services.scheduler.JobSchedulerService;
 import org.exoplatform.services.scheduler.PeriodInfo;
+import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 import org.picocontainer.Startable;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
@@ -881,6 +885,10 @@ public class MailServiceImpl implements MailService, Startable {
             List<javax.mail.Message> msgList = new ArrayList<javax.mail.Message>(msgMap.keySet()) ;
             SpamFilter spamFilter = getSpamFilter(sProvider, username, account.getId());
             String folderId = makeStoreFolder(sProvider, username, accountId, incomingFolder);
+            ExoContainer container = RootContainer.getInstance();
+            container = ((RootContainer)container).getPortalContainer("portal");
+            ContinuationService continuation = (ContinuationService) container.getComponentInstanceOfType(ContinuationService.class);
+            Info infoObj = new Info();
             
             while (i < totalNew) {
               if(info.isRequestStop()) {
@@ -920,7 +928,13 @@ public class MailServiceImpl implements MailService, Startable {
                   folderIds = folderList.toArray(new String[] {});
                 }
                 
-                saved = storage_.saveMessage(sProvider, username, accountId, msg, folderIds, tagList, spamFilter);
+                folderStr = "";
+                for (int k = 0; k < folderIds.length; k++) {
+                  folderStr += folderIds[k] + ",";
+                }
+                infoObj.setFolders(folderStr);
+                
+                saved = storage_.saveMessage(sProvider, username, accountId, msg, folderIds, tagList, spamFilter, infoObj, continuation);
                 
                 if (saved) {
                   msg.setFlag(Flags.Flag.SEEN, true);
@@ -929,9 +943,7 @@ public class MailServiceImpl implements MailService, Startable {
                   folderStr = "";
                   for (int k = 0; k < folderIds.length; k++) {
                     folderStr += folderIds[k] + ",";
-                  }
-                  checkingLog_.get(key).setFetchingToFolders(folderStr);
-                  checkingLog_.get(key).setMsgId(MimeMessageParser.getMessageId(msg));
+                  }                
                 }
                 
                 receivedDate = MimeMessageParser.getReceivedDate(msg).getTime();

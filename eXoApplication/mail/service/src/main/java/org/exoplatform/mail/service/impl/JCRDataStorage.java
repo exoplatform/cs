@@ -55,6 +55,7 @@ import org.apache.commons.logging.LogFactory;
 import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.Folder;
+import org.exoplatform.mail.service.Info;
 import org.exoplatform.mail.service.JCRMessageAttachment;
 import org.exoplatform.mail.service.MailSetting;
 import org.exoplatform.mail.service.Message;
@@ -67,6 +68,9 @@ import org.exoplatform.mail.service.Utils;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.jcr.util.IdGenerator;
+import org.exoplatform.ws.frameworks.cometd.ContinuationService;
+import org.exoplatform.ws.frameworks.json.impl.JsonGeneratorImpl;
+import org.exoplatform.ws.frameworks.json.value.JsonValue;
 
 /**
  * Created by The eXo Platform SARL Author : Tuan Nguyen
@@ -180,14 +184,12 @@ public class JCRDataStorage {
     }
     try {
       account.setCheckAll(accountNode.getProperty(Utils.EXO_CHECK_ALL).getBoolean());
-    } catch (Exception e) {
-    }
+    } catch (Exception e) { }
     try {
       GregorianCalendar cal = new GregorianCalendar();
       cal.setTimeInMillis(accountNode.getProperty(Utils.EXO_CHECK_FROM_DATE).getLong());
       account.setCheckFromDate(cal.getTime());
-    } catch (Exception e) {
-    }
+    } catch (Exception e) { }
     
     try {
       Value[] properties = accountNode.getProperty(Utils.EXO_SERVERPROPERTIES).getValues();
@@ -197,8 +199,7 @@ public class JCRDataStorage {
         if (index != -1)
           account.setServerProperty(property.substring(0, index), property.substring(index + 1));
       }
-    } catch (Exception e) {
-    }
+    } catch (Exception e) { }
 
     try {
       Value[] properties = accountNode.getProperty(Utils.EXO_POPSERVERPROPERTIES).getValues();
@@ -876,11 +877,17 @@ public class JCRDataStorage {
     }
     return nodeMsg;
   }
+  
+  public boolean saveMessage(SessionProvider sProvider, String username, String accId,
+      javax.mail.Message msg, String folderIds[], List<String> tagList, SpamFilter spamFilter) throws Exception {
+    return saveMessage(sProvider, username, accId, msg, folderIds, tagList, spamFilter, null, null);
+  }
 
   public boolean saveMessage(SessionProvider sProvider, String username, String accId,
-      javax.mail.Message msg, String folderIds[], List<String> tagList, SpamFilter spamFilter)
+      javax.mail.Message msg, String folderIds[], List<String> tagList, SpamFilter spamFilter, Info infoObj, ContinuationService continuation)
   throws Exception {
     long t1, t2, t3, t4;
+    String from ;
     String msgId = MimeMessageParser.getMessageId(msg);
     logger.warn("MessageId = " + msgId);
     Calendar gc = MimeMessageParser.getReceivedDate(msg);
@@ -904,7 +911,6 @@ public class JCRDataStorage {
           return false ;
         }
       }
-
     } catch(Exception e) {
 
     }
@@ -925,56 +931,31 @@ public class JCRDataStorage {
       node.setProperty(Utils.EXO_ID, msgId);
       node.setProperty(Utils.EXO_IN_REPLY_TO_HEADER, MimeMessageParser.getInReplyToHeader(msg));
       node.setProperty(Utils.EXO_ACCOUNT, accId);
-      node.setProperty(Utils.EXO_FROM, Utils.decodeText(InternetAddress.toString(msg.getFrom())));
-      String to = ""; 
-      try {
-        to = InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.TO));
-      } catch (Exception e) { 
-        String[] tos = msg.getHeader("To") ;
-        for (int i = 0 ; i < tos.length; i++) {
-          to += tos[i] + "," ; 
-        }
-      }
-      node.setProperty(Utils.EXO_TO, Utils.decodeText(to));
-      String cc = ""; 
-      try {
-        cc = InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.CC));
-      } catch (Exception e) { 
-        String[] ccs = msg.getHeader("Cc") ;
-        for (int i = 0 ; i < ccs.length; i++) {
-          cc += ccs[i] + "," ; 
-        }
-      }
-      node.setProperty(Utils.EXO_CC, Utils.decodeText(cc));
-      String bcc = ""; 
-      try {
-        bcc = InternetAddress.toString(msg.getRecipients(javax.mail.Message.RecipientType.BCC));
-      } catch (Exception e) { 
-        String[] bccs = msg.getHeader("Cc") ;
-        for (int i = 0 ; i < bccs.length; i++) {
-          bcc += bccs[i] + "," ; 
-        }
-      }
-      node.setProperty(Utils.EXO_BCC, Utils.decodeText(bcc));
-      node.setProperty(Utils.EXO_REPLYTO, Utils.decodeText(InternetAddress.toString(msg
-          .getReplyTo())));
+      from = Utils.decodeText(InternetAddress.toString(msg.getFrom()));
+      node.setProperty(Utils.EXO_FROM, from);
+
+      node.setProperty(Utils.EXO_TO, getAddresses(msg, javax.mail.Message.RecipientType.TO));      
+      node.setProperty(Utils.EXO_CC, getAddresses(msg, javax.mail.Message.RecipientType.CC));
+      node.setProperty(Utils.EXO_BCC, getAddresses(msg, javax.mail.Message.RecipientType.BCC));
+      
+      node.setProperty(Utils.EXO_REPLYTO, Utils.decodeText(InternetAddress.toString(msg.getReplyTo())));
       String subject = msg.getSubject();
       if (subject != null ) subject = Utils.decodeText(msg.getSubject());
       else subject = "";
       node.setProperty(Utils.EXO_SUBJECT, subject);
       node.setProperty(Utils.EXO_RECEIVEDDATE, gc);
+      
       Calendar sc = GregorianCalendar.getInstance();
-      if (msg.getSentDate() != null)
-        sc.setTime(msg.getSentDate());
-      else
-        sc = gc;
+      if (msg.getSentDate() != null) sc.setTime(msg.getSentDate());
+      else sc = gc;
       node.setProperty(Utils.EXO_SENDDATE, sc);
-
+      
       node.setProperty(Utils.EXO_SIZE, Math.abs(msg.getSize()));
       node.setProperty(Utils.EXO_ISUNREAD, true);
       node.setProperty(Utils.EXO_STAR, false);
 
-      node.setProperty(Utils.EXO_PRIORITY, MimeMessageParser.getPriority(msg));
+      long priority = MimeMessageParser.getPriority(msg);
+      node.setProperty(Utils.EXO_PRIORITY, priority);
 
       if (spamFilter != null && spamFilter.checkSpam(msg)) {
         folderIds = new String[] { Utils.createFolderId(accId, Utils.FD_SPAM, false) };
@@ -1026,6 +1007,21 @@ public class JCRDataStorage {
       logger.warn("Saved body (and attachments) of message finished : " + (t3 - t2) + " ms");
 
       node.save();
+      
+      if (infoObj != null && continuation != null) {
+        infoObj.setFrom(from);
+        infoObj.setMsgId(msgId);
+        infoObj.setSubject(subject);
+        infoObj.setSize(Utils.convertSize(Math.abs(msg.getSize())));
+        infoObj.setAccountId(accId);
+        if (gc != null) infoObj.setDate(gc.getTime().toString());
+        else if (sc != null) infoObj.setDate(sc.getTime().toString());
+        else  infoObj.setDate(new Date().toString()); 
+        
+        JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();                  
+        JsonValue json = generatorImpl.createJsonObject(infoObj);
+        continuation.sendMessage(username, "/eXo/Application/mail/messages", json);
+      }
 
       t4 = System.currentTimeMillis();
       logger.warn("Saved total message to JCR finished : " + (t4 - t1) + " ms");
@@ -1055,6 +1051,20 @@ public class JCRDataStorage {
       logger.warn(" [WARNING] Cancel saving message to JCR.");
       return false;
     }
+  }
+  
+  private String getAddresses(javax.mail.Message msg, javax.mail.Message.RecipientType type) throws Exception {
+    String recipients = ""; 
+    String t = "To";
+    if (type.equals(javax.mail.Message.RecipientType.CC)) t = "Cc";
+    else if (type.equals(javax.mail.Message.RecipientType.BCC)) t = "Bcc";
+    try {
+      recipients = InternetAddress.toString(msg.getRecipients(type));
+    } catch (Exception e) { 
+      String[] ccs = msg.getHeader(t) ;
+      for (int i = 0 ; i < ccs.length; i++) recipients += ccs[i] + "," ; 
+    }
+    return Utils.decodeText(recipients);
   }
 
   private void increaseFolderItem(SessionProvider sProvider, String username, String accId,

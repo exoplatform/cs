@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.quartz.JobExecutionContext;
 
 
 /**

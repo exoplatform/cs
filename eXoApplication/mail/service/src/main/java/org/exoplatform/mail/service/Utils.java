@@ -19,6 +19,7 @@ package org.exoplatform.mail.service;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.text.DecimalFormat;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -251,7 +252,7 @@ public class Utils {
         props.setProperty("mail.imap.socketFactory.fallback", "false");
         props.setProperty("mail.imap.socketFactory.class", socketFactoryClass);
       }
-      Session session = Session.getDefaultInstance(props);
+      Session session = Session.getInstance(props, null) ;
       URLName url = new URLName(acc.getProtocol(), acc.getIncomingHost(), Integer.valueOf(acc.getIncomingPort()), null, acc.getIncomingUser(), acc.getIncomingPassword());
       Store store = session.getStore(url) ;
       store.connect();
@@ -474,4 +475,12 @@ public class Utils {
     return schedulerService_;
   }
 
+  public static String convertSize(long size) throws Exception {
+    String str = "";
+    DecimalFormat df = new DecimalFormat("0.00");
+    if (size > 1024 * 1024) str += df.format(((double) size)/(1024 * 1024)) + " MB" ;
+    else if (size > 1024) str += df.format(((double) size)/(1024)) + " KB" ;
+    else str += size + " B" ;
+    return str ;
+  } 
 }

@@ -18,7 +18,6 @@ package org.exoplatform.mail;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.text.DecimalFormat;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -40,6 +39,7 @@ import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.MailService;
 import org.exoplatform.mail.service.Message;
+import org.exoplatform.mail.service.Utils;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.scheduler.JobSchedulerService;
@@ -103,12 +103,7 @@ public class MailUtils {
   }
   
   public static String convertSize(long size) throws Exception {
-    String str = "";
-    DecimalFormat df = new DecimalFormat("0.00");
-    if (size > 1024 * 1024) str += df.format(((double) size)/(1024 * 1024)) + " MB" ;
-    else if (size > 1024) str += df.format(((double) size)/(1024)) + " KB" ;
-    else str += size + " B" ;
-    return str ;
+    return Utils.convertSize(size);
   }
   
   public static String getImageSource(Attachment attach, DownloadService dservice) throws Exception {      
@@ -132,13 +127,16 @@ public class MailUtils {
   }
   
   public static boolean isChecking(String username, String accountId) throws Exception {
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
-    JobSchedulerService schedulerService = 
-      (JobSchedulerService) container.getComponentInstanceOfType(JobSchedulerService.class);
-    List allJobs = schedulerService.getAllJobs() ;
-    for(Object obj : allJobs) {
-      if(((JobDetail)obj).getName().equals(username + ":" + accountId)) return true ; 
-    }
+    try {
+      ExoContainer container = ExoContainerContext.getCurrentContainer();
+      JobSchedulerService schedulerService = 
+        (JobSchedulerService) container.getComponentInstanceOfType(JobSchedulerService.class);
+      List allJobs = schedulerService.getAllJobs() ;
+      for(Object obj : allJobs) {
+        if(((JobDetail)obj).getName().equals(username + ":" + accountId)) return true ; 
+      }
+    } catch(Exception e) { }
+    
     return false ;
   }
   

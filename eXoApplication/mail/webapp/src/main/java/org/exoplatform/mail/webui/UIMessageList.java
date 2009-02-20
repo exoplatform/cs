@@ -1608,7 +1608,7 @@ public class UIMessageList extends UIForm {
   
   static public class UpdateListActionListener extends EventListener<UIMessageList> {
     public void execute(Event<UIMessageList> event) throws Exception {
-      UIMessageList uiMsgList = event.getSource() ;    
+      UIMessageList uiMsgList = event.getSource() ;  
       String msgId = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIMailPortlet uiPortlet = uiMsgList.getAncestorOfType(UIMailPortlet.class);
       MailService mailSrv = uiMsgList.getApplicationComponent(MailService.class);
@@ -1617,8 +1617,7 @@ public class UIMessageList extends UIForm {
       Message msg = mailSrv.getMessageById(SessionProviderFactory.createSystemProvider(), username, accountId, msgId);
       UIFormCheckBoxInput<Boolean> uiCheckBox = new UIFormCheckBoxInput<Boolean>(msg.getId(), msg.getId(), false);
       uiMsgList.addUIFormInput(uiCheckBox);
-      uiMsgList.messageList_.put(msg.getId(), msg);
-      event.getRequestContext().addUIComponentToUpdateByAjax(uiMsgList);   
+      uiMsgList.messageList_.put(msg.getId(), msg); 
     }
   }
 }

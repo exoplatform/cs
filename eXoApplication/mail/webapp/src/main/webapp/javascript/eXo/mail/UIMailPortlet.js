@@ -629,4 +629,31 @@ eXo.mail.CheckBox = {
 	}
 } ;
 
+UIMailPortlet.prototype.initNavigationAction = function(navId) {
+	var nav = document.getElementById(navId);
+	var titleBars = eXo.core.DOMUtil.findDescendantsByClass(nav,"div","TitleBar");
+	var i = titleBars.length ;
+	while(i--){
+		eXo.core.EventManager.addEvent(titleBars[i],"click",this.titleBarCallback);
+	}
+} ;
+
+UIMailPortlet.prototype.titleBarCallback = function(evt){
+	var DOMUtil = eXo.core.DOMUtil ;
+	var target = eXo.core.EventManager.getEventTarget(evt);
+	if(DOMUtil.hasClass(target,"DownArrow3Icon")) eXo.mail.UIMailPortlet.expandCollapse(target, this);
+	if(DOMUtil.hasClass(target,"ActionIcon")) eXo.webui.UIPopupSelectCategory.show(target,evt);
+} ;
+
+UIMailPortlet.prototype.expandCollapse = function(clickObj, clickBar) {
+	var obj = eXo.core.DOMUtil.findNextElementByTagName(clickBar,"div");
+	if (obj.style.display != "none") {
+		obj.style.display = "none" ;
+		eXo.core.DOMUtil.addClass(clickObj,"FolderCollapseIcon");
+	} else {
+		obj.style.display = "block" ;
+		eXo.core.DOMUtil.replaceClass(clickObj,"FolderCollapseIcon","");
+	}
+} ;
+
 eXo.mail.UIMailPortlet = new UIMailPortlet();

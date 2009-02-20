@@ -51,14 +51,14 @@ public class UIFetchingBar extends UIForm {
   public UIFetchingBar() throws Exception {}
 	
   public boolean isUpdate() throws Exception {
-	UIMessageList uiMsgList = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UIMessageList.class);
-	if(uiMsgList.getMessagePageList() != null) {
-	  if (uiMsgList.getMessagePageList().getCurrentPage() > 1 
-			|| uiMsgList.getMessagePageList().getAvailablePage() > 1) {
-	    return false;
-	  }
-	} 
-	return true;
+  	UIMessageList uiMsgList = getAncestorOfType(UIMailPortlet.class).findFirstComponentOfType(UIMessageList.class);
+  	if(uiMsgList.getMessagePageList() != null) {
+  	  if (uiMsgList.getMessagePageList().getCurrentPage() > 1 
+  			|| uiMsgList.getMessagePageList().getAvailablePage() > 1) {
+  	    return false;
+  	  }
+  	} 
+  	return true;
   }
 	
   static public class RefreshActionListener extends EventListener<UIFetchingBar> {
@@ -89,6 +89,7 @@ public class UIFetchingBar extends UIForm {
 	
   static public class UpdateListActionListener extends EventListener<UIFetchingBar> {
     public void execute(Event<UIFetchingBar> event) throws Exception {
+      System.out.println("hksdfsdfsdkf");
       UIFetchingBar uiFetchingBar = event.getSource();
       UIMailPortlet uiPortlet = uiFetchingBar.getAncestorOfType(UIMailPortlet.class);
       UIMessageList uiMsgList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;    

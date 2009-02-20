@@ -391,7 +391,7 @@
     		  	<a href = "$sortedBySubject"><div class="$classArrowSubject" title="<%=_ctx.appRes(uicomponent.id+ '.label.sort-by-subject') %>" style="width: 95%; cursor: pointer; margin-top: 3px;"><%=_ctx.appRes(uicomponent.id+ ".label.subject") %></div></a>
     		  </th>
    	      <th style="width: 24px;"><div class="TotalMessageIcon" title="<%=_ctx.appRes(uicomponent.id+ '.label.total-messages-in-conversation') %>"><span></span></div></th>
-   	      <th style="width: 80px; padding-left: 8px; border-right: none;">
+   	      <th style="width: 80px; padding-left: 8px; border-right: none;" >
          	  <%
          	     String sortedByReceivedDate = uicomponent.event("Sort",Utils.EXO_RECEIVEDDATE);
              	  String classArrowDate = "";
@@ -400,7 +400,7 @@
                   else classArrowDate = "DownArrow1Icon"
                 }
             %>
-    		    <a href = "$sortedByReceivedDate"><div class="$classArrowDate" title="<%=_ctx.appRes(uicomponent.id+ '.label.sort-by-date-time') %>" ><%=_ctx.appRes(uicomponent.id+ ".label.date-time") %></div></a>
+    		      <a href = "$sortedByReceivedDate"><div class="$classArrowDate" title="<%=_ctx.appRes(uicomponent.id+ '.label.sort-by-date-time') %>" ><%=_ctx.appRes(uicomponent.id+ ".label.date-time") %></div></a>
    	      </th>
    	      <th style="width: 50px; padding-left: 8px; border-left: 1px solid #d2d4dc;">
        	    <%
@@ -572,7 +572,7 @@
       <%/* End of function show*/%>
       
       <% if (uicomponent.getMessageList().size() > 0) { %>
-        <tbody class="MessageContainer">
+        <tbody id="TbodyMessageList" class="MessageContainer">
         <%
           int i = 0 ;
           int l = 0 ;
@@ -585,7 +585,7 @@
       <% 
         } else {
       %>
-          <tbody><tr><td colspan="9">
+          <tbody id="TbodyMessageList"><tr><td colspan="9">
             <div class="MessageNotice">
             <%=_ctx.appRes(uicomponent.id+ ".label.there-are-no-messages") %>
           </div>

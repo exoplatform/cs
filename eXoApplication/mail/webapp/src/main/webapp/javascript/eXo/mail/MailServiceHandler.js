@@ -157,28 +157,6 @@ MailServiceHandler.prototype.updateUI = function(status) {
   if (statusTxt != '') {
     statusTextNode.innerHTML = statusTxt;
   }
-  
-  var updateListLabel = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'UpdateList');
-    if (this.serverData.info.checkingmail.messageid && updateListLabel) {
-    	eval(eXo.core.DOMUtil.findDescendantsByTagName(updateListLabel, 'a')[0].href.replace("%20", "").replace("msgId", this.serverData.info.checkingmail.messageid));
-  	}
-  
-  var status = parseInt(this.serverData.info.checkingmail.status);
-  if (status == this.DOWNLOADING_MAIL_STATUS) {
-  	var folderIds = this.serverData.info.checkingmail.fetchingtofolders;
-  	var folders = folderIds.split(","); 
-  	var folderNumberCountNode ;
-  	var numberStr;
-  	for (var i = 0; i < folders.length; i++) {
-  	  folderNumberCountNode = document.getElementById(folders[i]);
-  	  if (folderNumberCountNode != null) {
-  	  	numberStr = folderNumberCountNode.innerHTML;
-  	  	numberStr = numberStr.substring(numberStr.indexOf("(") + 1, numberStr.indexOf(")"));
-      	if (numberStr.length == 0) numberStr = "0";
-  	  	folderNumberCountNode.innerHTML = "(" + (parseInt(numberStr) + 1) + ")";
-  	  }
-  	}
-  }
 };
 
 MailServiceHandler.prototype.destroy = function() {
