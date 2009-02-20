@@ -24,11 +24,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
+import java.util.Set;
 import javax.mail.internet.InternetAddress;
 
 import org.exoplatform.calendar.CalendarUtils;
@@ -854,19 +855,19 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     return eventDetailTab.getUIFormTextAreaInput(FIELD_PARTICIPANT).getValue() ; 
   } 
   public void setParticipant(String values) throws Exception{
-    participants_.clear() ;
-    OrganizationService orgService = CalendarUtils.getOrganizationService() ;
-    StringBuffer sb = new StringBuffer() ;
-    for(String s : values.split(CalendarUtils.COMMA)) {
-      User user = orgService.getUserHandler().findUserByName(s) ; 
-      if(user != null) {
-        participants_.put(s.trim(), user) ;
-        if(!CalendarUtils.isEmpty(sb.toString())) sb.append(CalendarUtils.COMMA) ;
-        sb.append(s.trim()) ;
-      }
-    }
-    ((UIFormInputWithActions)getChildById(TAB_EVENTSHARE)).getUIFormTextAreaInput(FIELD_PARTICIPANT).setValue(sb.toString()) ;
-    ((UIEventAttenderTab)getChildById(TAB_EVENTATTENDER)).updateParticipants(values) ;
+	  participants_.clear() ;
+	    OrganizationService orgService = CalendarUtils.getOrganizationService() ;
+	    StringBuffer sb = new StringBuffer() ;
+	    for(String s : values.split(CalendarUtils.COMMA)) {
+	      User user = orgService.getUserHandler().findUserByName(s) ; 
+	      if(user != null) {
+	        participants_.put(s.trim(), user) ;
+	        if(!CalendarUtils.isEmpty(sb.toString())) sb.append(CalendarUtils.COMMA) ;
+	        sb.append(s.trim()) ;
+	      }
+	    }
+	    ((UIFormInputWithActions)getChildById(TAB_EVENTSHARE)).getUIFormTextAreaInput(FIELD_PARTICIPANT).setValue(sb.toString()) ;
+	    ((UIEventAttenderTab)getChildById(TAB_EVENTATTENDER)).updateParticipants(values) ;
   }
 
   protected SessionProvider getSession() {
@@ -1148,10 +1149,6 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       uiPopupWindow.setUIComponent(uiUserSelector);
       uiPopupWindow.setShow(true);
       uiPopupWindow.setWindowSize(700, 400) ;
-      /*UIPopupAction uiChildPopupAction = uiContainer.getChild(UIPopupAction.class) ;
-      UISelectUserForm uiSelectUserForm = uiChildPopupAction.activate(UISelectUserForm.class, 680) ;
-      uiSelectUserForm.init(((UIEventAttenderTab)uiForm.getChildById(TAB_EVENTATTENDER)).parMap_.keySet()) ;
-      uiSelectUserForm.tabId_ = tabId ;*/
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;      
     }
   }
@@ -1159,17 +1156,11 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   static  public class AddActionListener extends EventListener<UIUserSelector> {
     public void execute(Event<UIUserSelector> event) throws Exception {
       UIUserSelector uiUserSelector = event.getSource();
-      String values = uiUserSelector.getSelectedUsers();
       UIPopupContainer uiContainer = uiUserSelector.getAncestorOfType(UIPopupContainer.class) ;
       UIEventForm uiEventForm = uiContainer.getChild(UIEventForm.class);
-      UIEventAttenderTab tabAttender = uiEventForm.getChildById(TAB_EVENTATTENDER) ;
-      tabAttender.updateParticipants(values)  ;
-      //UIPopupWindow uiPoupPopupWindow = uiUserSelector.getParent() ;
-      //uiPoupPopupWindow.setUIComponent(null) ;
-      //uiPoupPopupWindow.setShow(false) ;   
+      String values = uiUserSelector.getSelectedUsers();
+      uiEventForm.setParticipant(values) ;   
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer);
-//      
-        
     }
   }
   
