@@ -140,6 +140,7 @@ public class JCRDataStorage{
   }
   
   private Node getSharedCalendarHome() throws Exception {
+    //TODO have to use system session 
     SessionProvider sProvider = createSessionProvider();
 //    /try {
       Node calendarServiceHome = getPublicCalendarServiceHome(sProvider);
