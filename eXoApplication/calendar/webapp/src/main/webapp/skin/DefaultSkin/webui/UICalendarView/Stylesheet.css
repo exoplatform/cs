@@ -327,8 +327,6 @@
 	width: 20%;
 	height: 2px;
 	margin:auto;
-	border-top: solid 1px gray ;
-	border-bottom: solid 1px gray ;
 	cursor: n-resize;
 }
 
