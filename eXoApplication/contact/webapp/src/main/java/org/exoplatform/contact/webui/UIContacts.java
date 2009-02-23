@@ -494,7 +494,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       String username = ContactUtils.getCurrentUser() ;
       if (contact.getContactType().equalsIgnoreCase(JCRDataStorage.PRIVATE)) {
         try {
-          contact = service.getContact(SessionProviderFactory.createSessionProvider(), username, contactId) ;
+          contact = service.getContact(username, contactId) ;
         } catch (NullPointerException e) {
           contact = null ;
         }        
@@ -1116,7 +1116,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       ContactService service = ContactUtils.getContactService() ;
       String username = ContactUtils.getCurrentUser() ;      
       if (oldContact.getContactType().equals(JCRDataStorage.PRIVATE)) {
-        newContact = service.getContact(SessionProviderFactory.createSessionProvider(), username, contactId) ;
+        newContact = service.getContact(username, contactId) ;
       } else if(oldContact.getContactType().equals(JCRDataStorage.SHARED)) {
         newContact = service.getSharedContactAddressBook( username, contactId) ;
         if (newContact == null) newContact = service
@@ -1434,7 +1434,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         UIAddEditPermission uiAddNewEditPermission = uiPopupContainer.addChild(UIAddEditPermission.class, null, null); 
         //cs-2153 
         Contact contact = ContactUtils.getContactService().getContact
-          (SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(),objectId) ;
+          (ContactUtils.getCurrentUser(), objectId) ;
         if (contact == null) {
           UIApplication uiApp = uiContacts.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UIContacts.msg.contact-deleted", null, ApplicationMessage.WARNING)) ;

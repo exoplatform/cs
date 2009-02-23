@@ -526,7 +526,7 @@ public class VCardImportExport implements ContactImportExport {
         storage_.saveContactToSharedAddressBook(username, newGroupId, contact, true) ;
       } else {
         contact.setAddressBook(new String[] { groupId }) ;
-        storage_.saveContact(sProvider, username, contact, true);
+        storage_.saveContact(username, contact, true);
       }
       re.setSummary(String.valueOf(index + 1) + " contacts imported ...") ;
       JsonValue json = generatorImpl.createJsonObject(re);

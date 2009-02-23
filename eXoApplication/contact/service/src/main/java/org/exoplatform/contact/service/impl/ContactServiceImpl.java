@@ -80,12 +80,12 @@ public class ContactServiceImpl implements ContactService {
   public List<String> getAllEmailAddressByGroup(SessionProvider sProvider, String username, String groupId) throws Exception {
     return storage_.getAllEmailAddressByGroup(sProvider, username, groupId);
   }
-  public Contact getContact(SessionProvider sProvider, String username, String contactId) throws Exception {
-    return storage_.getContact(sProvider, username, contactId);
+  public Contact getContact(String username, String contactId) throws Exception {
+    return storage_.getContact(username, contactId);
   }
   
   public void saveContact(SessionProvider sProvider, String username, Contact contact, boolean isNew) throws Exception {
-    storage_.saveContact(sProvider, username, contact, isNew);    
+    storage_.saveContact(username, contact, isNew);    
   }
   
   public List<Contact> removeContacts(SessionProvider sProvider, String username, List<String> contactIds) throws Exception {
@@ -112,8 +112,8 @@ public class ContactServiceImpl implements ContactService {
     storage_.saveGroup(username, group, isNew);    
   }
   
-  public ContactGroup removeGroup(SessionProvider sProvider, String username, String groupId) throws Exception {
-    return storage_.removeGroup(sProvider, username, groupId);
+  public ContactGroup removeGroup(String username, String groupId) throws Exception {
+    return storage_.removeGroup(username, groupId);
   }
 
   /*public List<GroupContactData> getPublicContacts(SessionProvider sProvider, String[] groupIds) throws Exception {

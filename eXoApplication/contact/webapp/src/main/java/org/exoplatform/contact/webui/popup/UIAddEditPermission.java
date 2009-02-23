@@ -176,7 +176,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
         }
       } else {
         Contact contact = ContactUtils.getContactService().getContact(
-            SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), addEdit.contactId_) ;        
+            ContactUtils.getCurrentUser(), addEdit.contactId_) ;        
         shareForm.setContact(contact) ;
         if (contact.getViewPermissionGroups() != null && Arrays.asList(contact.getViewPermissionGroups()).contains(reciever)) {
           shareForm.getUIStringInput(UISharedForm.FIELD_GROUP).setValue(reciever) ;
@@ -275,7 +275,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
             uiForm.getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class)) ;
       } else {
         Contact contact = contactService.getContact(
-            SessionProviderFactory.createSessionProvider(), username, uiForm.contactId_) ;
+            username, uiForm.contactId_) ;
         if (contact.getViewPermissionGroups() != null && Arrays.asList(contact.getViewPermissionGroups()).contains(remover)) {
           removePerGroup(contact, remover) ;
           OrganizationService organizationService = 

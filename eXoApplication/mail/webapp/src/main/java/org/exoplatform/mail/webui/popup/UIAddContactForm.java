@@ -388,7 +388,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
             uiAddress.refrestContactList(uiContact.selectedGroup_);
           }
           uiAddress.setSelectedContact(contactSrv.getContact(
-            SessionProviderFactory.createSessionProvider(), uiPortlet.getCurrentUser(), contact.getId()));
+            uiPortlet.getCurrentUser(), contact.getId()));
           uiContact.getAncestorOfType(UIPopupAction.class).deActivate() ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiAddress.getParent()) ;
         } else {

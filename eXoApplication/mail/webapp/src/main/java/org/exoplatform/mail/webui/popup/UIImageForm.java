@@ -123,7 +123,7 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
       } catch (PathNotFoundException e) {}
       contactSrv.saveContact(session, username, contact, true) ;
       uiContactForm.setTempContact(contactSrv
-        .getContact(session, username, contact.getId())) ;      
+        .getContact(username, contact.getId())) ;      
       UIPopupAction popupAction = uiPopupActionContainer.getChild(UIPopupAction.class) ;
       popupAction.deActivate() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction.getParent()) ;

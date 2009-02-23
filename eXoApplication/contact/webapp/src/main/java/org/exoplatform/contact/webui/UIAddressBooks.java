@@ -508,7 +508,7 @@ public class UIAddressBooks extends UIComponent {
         //if (uiContacts.isDisplaySearchResult())
         removedContacts = contactService.getContactPageListByGroup(
               sessionProvider, username, groupId).getAll() ;
-        contactService.removeGroup(sessionProvider, username, groupId);
+        contactService.removeGroup(username, groupId);
       }
       if (groupId.equals(uiAddressBook.copyAddress)) uiAddressBook.copyAddress = null ;      
       if (groupId.equals(uiAddressBook.selectedGroup)) {

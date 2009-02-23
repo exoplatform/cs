@@ -299,12 +299,18 @@ public class JCRDataStorage {
   }
   
   
-  public Contact getContact(SessionProvider sProvider, String username, String contactId) throws Exception {
-    Node contactHomeNode = getUserContactHome(sProvider, username);
+  public Contact getContact(String username, String contactId) throws Exception {
+    SessionProvider sProvider = null;
     try {
-      return getContact(contactHomeNode.getNode(contactId), PRIVATE);
-    } catch (PathNotFoundException ex) {
-      return null;
+      sProvider = createSessionProvider();
+      Node contactHomeNode = getUserContactHome(sProvider, username);
+      try {
+        return getContact(contactHomeNode.getNode(contactId), PRIVATE);
+      } catch (PathNotFoundException ex) {
+        return null;
+      }
+    } finally {
+      closeSessionProvider(sProvider);
     }
   }
 
@@ -451,7 +457,7 @@ public class JCRDataStorage {
     List<Contact> contacts = new ArrayList<Contact>() ;
     for (String contactId : contactIds) {
       if (contactHomeNode.hasNode(contactId)) {
-        Contact contact = getContact(sysProvider, username, contactId);
+        Contact contact = getContact(username, contactId);
         contactHomeNode.getNode(contactId).remove();
         contactHomeNode.getSession().save(); 
         contacts.add(contact) ;
@@ -469,7 +475,7 @@ public class JCRDataStorage {
     Node privateContactHome = getUserContactHome(sysProvider, username);
     for(Contact contact : contacts) {
       if(addressType.equals(PRIVATE)) {        
-        saveContact(sysProvider, username, contact, false) ;
+        saveContact(username, contact, false) ;
       }else if(addressType.equals(SHARED)) {
        saveContactToSharedAddressBook(username, contact.getAddressBook()[0], contact, true) ;
        if (privateContactHome.hasNode(contact.getId()))
@@ -494,26 +500,38 @@ public class JCRDataStorage {
     return contactIds ;
   }
   
-  public ContactGroup removeGroup(SessionProvider sProvider, String username, String groupId) throws Exception {
-    Node contactGroupHomeNode = getUserContactGroupHome(sProvider, username);
-    if (contactGroupHomeNode.hasNode(groupId)) {
-      ContactGroup contactGroup = getGroup(username, groupId);
-      contactGroupHomeNode.getNode(groupId).remove();
-      contactGroupHomeNode.save();
-      contactGroupHomeNode.getSession().save();
-      //Can not call removeContacts(...) here!!!
-      
-      List<String> contactIds = getUserContactNodesByGroup(sProvider, username, groupId) ;
-      removeContacts(sProvider, username, contactIds) ;
-      return contactGroup;
+  public ContactGroup removeGroup(String username, String groupId) throws Exception {
+    SessionProvider sProvider = null;
+    try {
+      sProvider = createSessionProvider();
+      Node contactGroupHomeNode = getUserContactGroupHome(sProvider, username);
+      if (contactGroupHomeNode.hasNode(groupId)) {
+        ContactGroup contactGroup = getGroup(username, groupId);
+        contactGroupHomeNode.getNode(groupId).remove();
+        contactGroupHomeNode.save();
+        contactGroupHomeNode.getSession().save();
+        // Can not call removeContacts(...) here!!!
+
+        List<String> contactIds = getUserContactNodesByGroup(sProvider, username, groupId);
+        removeContacts(sProvider, username, contactIds);
+        return contactGroup;
+      }
+      return null;
+    } finally {
+      closeSessionProvider(sProvider);
     }
-    return null;
   }
   
-  public void saveContact(SessionProvider sProvider, String username, Contact contact, boolean isNew) throws Exception {
-    Node contactHomeNode = getUserContactHome(sProvider, username);
-    saveContact(contactHomeNode, contact, isNew) ;
-    contactHomeNode.getSession().save();    
+  public void saveContact(String username, Contact contact, boolean isNew) throws Exception {
+    SessionProvider sProvider = null;
+    try {
+      sProvider = createSessionProvider();
+      Node contactHomeNode = getUserContactHome(sProvider, username);
+      saveContact(contactHomeNode, contact, isNew);
+      contactHomeNode.getSession().save();
+    } finally {
+      closeSessionProvider(sProvider);
+    }
   }
 
   public void saveGroup(String username, ContactGroup group, boolean isNew) throws Exception {
@@ -1964,7 +1982,7 @@ public class JCRDataStorage {
       String type = contactsMap.get(contactId) ;
       Contact contact = null ;
       if (type.equals(PRIVATE)) {
-        contact = getContact(sProvider, username, contactId) ;
+        contact = getContact(username, contactId) ;
       } else if (type.equals(PUBLIC)) {
         contact = getPublicContact(contactId) ;
       } else { // shared

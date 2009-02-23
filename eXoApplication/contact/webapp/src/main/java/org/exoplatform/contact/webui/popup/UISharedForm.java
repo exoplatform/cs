@@ -330,7 +330,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
             for (String user : receiveGroups.keySet()) editMapGroups.put(user, user) ;
           }
           // add to fix bug cs-1326
-          Contact contact = contactService.getContact(sessionProvider, username, uiForm.contact_.getId()) ;
+          Contact contact = contactService.getContact(username, uiForm.contact_.getId()) ;
           //Contact contact = uiForm.contact_ ;
           addPerUsers(contact, viewMapUsers, editMapUsers) ;
           addPerGroups(contact, viewMapGroups, editMapGroups) ;

@@ -217,7 +217,7 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
           }          
           if (address[0].equals(JCRDataStorage.PRIVATE)) {
             for(String contactId : contactIds.keySet()) {
-              contacts.add(contactService.getContact(SessionProviderFactory.createSessionProvider(), username, contactId)) ;              
+              contacts.add(contactService.getContact(username, contactId)) ;              
             }            
           } else if (address[0].equals(JCRDataStorage.SHARED)) {
             for(String contactId : contactIds.keySet()) {

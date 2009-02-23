@@ -315,7 +315,7 @@ public class UIContactForm extends UIFormTabPane {
           }          
         } else if (uiAddressBooks.getPrivateGroupMap().containsKey(category)){
           contactService.saveContact(sessionProvider, username, contact, true);  
-          contact = contactService.getContact(sessionProvider, username, contact.getId()) ;
+          contact = contactService.getContact(username, contact.getId()) ;
           contact.setContactType(JCRDataStorage.PRIVATE) ;
         } else {
           uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.address-deleted", null,
@@ -328,7 +328,7 @@ public class UIContactForm extends UIFormTabPane {
           String contactType = contact.getContactType() ;
           if (contactType.equals(JCRDataStorage.PRIVATE)) {
             contactService.saveContact(sessionProvider, username, contact, false) ;
-            contact = contactService.getContact(sessionProvider, username, contact.getId()) ;
+            contact = contactService.getContact(username, contact.getId()) ;
             contact.setContactType(JCRDataStorage.PRIVATE) ;
           } else if (contactType.equals(JCRDataStorage.SHARED)) {
             UIAddressBooks uiAddressBooks = uiContactForm
@@ -381,7 +381,7 @@ public class UIContactForm extends UIFormTabPane {
         //cs-1835        
         String type = contact.getContactType() ;
         if (type.equals(JCRDataStorage.PRIVATE)) {
-          contact = contactService.getContact(sessionProvider, username, contact.getId()) ;
+          contact = contactService.getContact(username, contact.getId()) ;
         } else {
           if (uiContacts.isSharedAddress(contact)) {
             contact = contactService.getSharedContactAddressBook(username, contact.getId()) ;

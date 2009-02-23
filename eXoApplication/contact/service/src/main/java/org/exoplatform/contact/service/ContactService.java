@@ -60,13 +60,12 @@ public interface ContactService {
   
   /**
    * get personal contact base on id of contact
-   * @return object Contact has specific id   
-   * @param sProvider session of current user
    * @param username current user
    * @param contactId id of contact is getted
+   * @return object Contact has specific id   
    * @throws Exception 
    */
-  public Contact getContact(SessionProvider sProvider, String username, String contactId) throws Exception ;
+  public Contact getContact(String username, String contactId) throws Exception ;
   
   /**
    * save a contact to personal address book
@@ -215,12 +214,11 @@ public interface ContactService {
   
   /**
    * remove a personal address book of specific user
-   * @return removed ContactGroup object 
-   * @param sProvider session of user
    * @param username userId of user
+   * @return removed ContactGroup object 
    * @throws Exception 
    */
-  public ContactGroup removeGroup(SessionProvider sProvider, String username, String groupId) throws Exception ;
+  public ContactGroup removeGroup(String username, String groupId) throws Exception ;
   
   
   /**
