@@ -115,7 +115,7 @@ public class UIAddressBooks extends UIComponent {
           group.setName(groupName) ;
           group.setDescription(des) ;          
           ContactUtils.getContactService().saveGroup(
-              SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), group, false) ;
+              ContactUtils.getCurrentUser(), group, false) ;
         } catch (MissingResourceException e) {      
           e.printStackTrace() ;
         }
@@ -429,7 +429,7 @@ public class UIAddressBooks extends UIComponent {
       ContactService contactService = ContactUtils.getContactService();
       String username = ContactUtils.getCurrentUser();
       SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;  
-      uiAddNewEditPermission.initGroup(contactService.getGroup(sessionProvider, username, groupId)) ;
+      uiAddNewEditPermission.initGroup(contactService.getGroup(username, groupId)) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(popupAction) ;
       //event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressBook.getParent());
     }

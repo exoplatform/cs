@@ -161,7 +161,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
       uiStringInput.setEditable(false) ;
       if (addEdit.isSharedGroup) {
         ContactGroup group = ContactUtils.getContactService().getGroup(
-            SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), addEdit.groupId_) ;        
+            ContactUtils.getCurrentUser(), addEdit.groupId_) ;        
         shareForm.setGroup(group) ;
         if (group.getViewPermissionGroups() != null && Arrays.asList(group.getViewPermissionGroups()).contains(reciever)) {
           shareForm.getUIStringInput(UISharedForm.FIELD_GROUP).setValue(reciever) ;
@@ -202,7 +202,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
       String username = ContactUtils.getCurrentUser() ;      
       if (uiForm.isSharedGroup) {
         ContactGroup group = contactService.getGroup(
-            SessionProviderFactory.createSessionProvider(), username, uiForm.groupId_) ;
+            username, uiForm.groupId_) ;
         if (group.getViewPermissionGroups() != null && Arrays.asList(group.getViewPermissionGroups()).contains(remover)) {
           List<String> newPerms = new ArrayList<String>() ;
           newPerms.addAll(Arrays.asList(group.getViewPermissionGroups())) ;
@@ -269,7 +269,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
             contactService.removeUserShareAddressBook(SessionProviderFactory.createSessionProvider()
               , username, uiForm.groupId_, remover) ;
         }
-        contactService.saveGroup(SessionProviderFactory.createSessionProvider(), username, group, false) ;
+        contactService.saveGroup(username, group, false) ;
         uiForm.updateGroupGrid(group); 
         event.getRequestContext().addUIComponentToUpdateByAjax(
             uiForm.getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class)) ;

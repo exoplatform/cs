@@ -104,12 +104,12 @@ public class ContactServiceImpl implements ContactService {
     return storage_.getGroups(sProvider, username);
   }
   
-  public ContactGroup getGroup(SessionProvider sProvider, String username, String groupId) throws Exception {
-    return storage_.getGroup(sProvider, username, groupId);
+  public ContactGroup getGroup(String username, String groupId) throws Exception {
+    return storage_.getGroup(username, groupId);
   }
   
-  public void saveGroup(SessionProvider sProvider, String username, ContactGroup group, boolean isNew) throws Exception {
-    storage_.saveGroup(sProvider, username, group, isNew);    
+  public void saveGroup(String username, ContactGroup group, boolean isNew) throws Exception {
+    storage_.saveGroup(username, group, isNew);    
   }
   
   public ContactGroup removeGroup(SessionProvider sProvider, String username, String groupId) throws Exception {

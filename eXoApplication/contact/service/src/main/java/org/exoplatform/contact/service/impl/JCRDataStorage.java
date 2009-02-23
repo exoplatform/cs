@@ -37,6 +37,7 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
+import org.apache.commons.logging.Log;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.contact.service.ContactFilter;
@@ -47,13 +48,17 @@ import org.exoplatform.contact.service.GroupContactData;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.service.Utils;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.jcr.access.AccessControlEntry;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.access.SystemIdentity;
 import org.exoplatform.services.jcr.core.ExtendedNode;
+import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.jcr.util.IdGenerator;
+import org.exoplatform.services.log.ExoLogger;
 
 /**
  * Created by The eXo Platform SARL
@@ -79,6 +84,9 @@ public class JCRDataStorage {
   final public static String PUBLIC = "2".intern();
   final public static String SPLIT = "::".intern();
   final public static String HYPHEN = "shared_".intern();
+  
+  private static final Log log = ExoLogger.getLogger(JCRDataStorage.class);
+  
   private NodeHierarchyCreator nodeHierarchyCreator_ ;
   
   public JCRDataStorage(NodeHierarchyCreator nodeHierarchyCreator)throws Exception {
@@ -399,13 +407,19 @@ public class JCRDataStorage {
     return contactGroup;
   }
 
-  public ContactGroup getGroup(SessionProvider sProvider, String username, String groupId) throws Exception {
-    if (groupId == null) return null ;
-    Node contactGroupHomeNode = getUserContactGroupHome(sProvider, username);
-    //String str = groupId.replaceAll("/", "") ;
-    if (contactGroupHomeNode.hasNode(groupId))
-      return getGroup(contactGroupHomeNode.getNode(groupId)) ;
-    return null;
+  public ContactGroup getGroup(String username, String groupId) throws Exception {
+    SessionProvider sProvider = null;
+    try {
+      sProvider = createSessionProvider();
+      if (groupId == null)
+        return null;
+      Node contactGroupHomeNode = getUserContactGroupHome(sProvider, username);
+      if (contactGroupHomeNode.hasNode(groupId))
+        return getGroup(contactGroupHomeNode.getNode(groupId));
+      return null;
+    } finally {
+      closeSessionProvider(sProvider);
+    }
   }
   
   public ContactGroup getSharedGroup(String username, String groupId) throws Exception {
@@ -483,7 +497,7 @@ public class JCRDataStorage {
   public ContactGroup removeGroup(SessionProvider sProvider, String username, String groupId) throws Exception {
     Node contactGroupHomeNode = getUserContactGroupHome(sProvider, username);
     if (contactGroupHomeNode.hasNode(groupId)) {
-      ContactGroup contactGroup = getGroup(sProvider, username, groupId);
+      ContactGroup contactGroup = getGroup(username, groupId);
       contactGroupHomeNode.getNode(groupId).remove();
       contactGroupHomeNode.save();
       contactGroupHomeNode.getSession().save();
@@ -502,50 +516,45 @@ public class JCRDataStorage {
     contactHomeNode.getSession().save();    
   }
 
-  public void saveGroup(SessionProvider sProvider, String username, ContactGroup group, boolean isNew) throws Exception {
-    Node groupNode = null ;
-    if (isNew) {
-      groupNode = getUserContactGroupHome(sProvider, username).addNode(group.getId(), "exo:contactGroup");
-      groupNode.setProperty("exo:id", group.getId());
-    } else {
-      try {
-        groupNode = getUserContactGroupHome(sProvider, username).getNode(group.getId());
-      } catch (PathNotFoundException e) {
-        Node sharedAddressBookMock = getSharedAddressBook(username) ;
-        PropertyIterator iter = sharedAddressBookMock.getReferences() ;
-        Node addressBook ;      
-        while(iter.hasNext()) {
-          addressBook = iter.nextProperty().getParent() ;
-          if(addressBook.getName().equals(group.getId())) {
-            groupNode = addressBook ;
-            break ;
-          }
-        }
-      } 
-    }
-    
-    if (groupNode == null && !isNew) throw new PathNotFoundException() ;
-    groupNode.setProperty("exo:name", group.getName());
-    groupNode.setProperty("exo:description", group.getDescription());
-    groupNode.setProperty("exo:editPermissionUsers", group.getEditPermissionUsers()) ;
-    groupNode.setProperty("exo:viewPermissionUsers", group.getViewPermissionUsers()) ;
-    groupNode.setProperty("exo:editPermissionGroups", group.getEditPermissionGroups()) ;
-    groupNode.setProperty("exo:viewPermissionGroups", group.getViewPermissionGroups()) ;
-    if (isNew) groupNode.getSession().save() ;
-    else groupNode.save() ;
-  }
-  /*
-  private Node getSharedAddressBookHome(SessionProvider sProvider) throws Exception {
-    Node contactServiceHome = getPublicContactServiceHome(SessionProvider.createSystemProvider()) ;
+  public void saveGroup(String username, ContactGroup group, boolean isNew) throws Exception {
+    SessionProvider sProvider = null;
     try {
-      return contactServiceHome.getNode(SHARED_CONTACT) ;
-    } catch (PathNotFoundException ex) {
-      Node sharedHome = contactServiceHome.addNode(SHARED_CONTACT, NT_UNSTRUCTURED) ;
-      contactServiceHome.save() ;
-      return sharedHome ;
-    }S
+      sProvider = createSessionProvider();
+      Node groupNode = null ;
+      if (isNew) {
+        groupNode = getUserContactGroupHome(sProvider, username).addNode(group.getId(), "exo:contactGroup");
+        groupNode.setProperty("exo:id", group.getId());
+      } else {
+        try {
+          groupNode = getUserContactGroupHome(sProvider, username).getNode(group.getId());
+        } catch (PathNotFoundException e) {
+          Node sharedAddressBookMock = getSharedAddressBook(username) ;
+          PropertyIterator iter = sharedAddressBookMock.getReferences() ;
+          Node addressBook ;      
+          while(iter.hasNext()) {
+            addressBook = iter.nextProperty().getParent() ;
+            if(addressBook.getName().equals(group.getId())) {
+              groupNode = addressBook ;
+              break ;
+            }
+          }
+        } 
+      }
+      
+      if (groupNode == null && !isNew) throw new PathNotFoundException() ;
+      groupNode.setProperty("exo:name", group.getName());
+      groupNode.setProperty("exo:description", group.getDescription());
+      groupNode.setProperty("exo:editPermissionUsers", group.getEditPermissionUsers()) ;
+      groupNode.setProperty("exo:viewPermissionUsers", group.getViewPermissionUsers()) ;
+      groupNode.setProperty("exo:editPermissionGroups", group.getEditPermissionGroups()) ;
+      groupNode.setProperty("exo:viewPermissionGroups", group.getViewPermissionGroups()) ;
+      if (isNew) groupNode.getSession().save() ;
+      else groupNode.save() ;
+    } finally {
+      closeSessionProvider(sProvider);
+    } 
   }
-  */
+
   private Node getSharedAddressBook(String userId) throws Exception {
     SessionProvider provider = SessionProvider.createSystemProvider();
     try {
@@ -2084,5 +2093,48 @@ public class JCRDataStorage {
     contactHomeNode.getSession().save() ;
     return contactNode ;
   }
+  
+  /**
+   * Create a session provider for current context. The method first try to get a normal session provider, 
+   * then attempts to create a system provider if the first one was not available.
+   * @return a SessionProvider initialized by current SessionProviderService
+   * @see SessionProviderService#getSessionProvider(null)
+   */
+  private SessionProvider createSessionProvider() {
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
+    SessionProvider provider = service.getSessionProvider(null);
+    if (provider == null) {
+      log.info("No user session provider was available, trying to use a system session provider");
+      provider = service.getSystemSessionProvider(null);
+    }
+    return provider;
+  }
+  
+  private SessionProvider createUserProvider() {
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
+    return service.getSessionProvider(null) ;    
+  }  
+  
+  private SessionProvider createSystemProvider() {
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
+    return service.getSystemSessionProvider(null) ;    
+  }
+  
+
+  /**
+   * Safely closes JCR session provider. Call this method in finally to clean any provider initialized by createSessionProvider()
+   * @param sessionProvider the sessionProvider to close
+   * @see SessionProvider#close();
+   */
+  private void closeSessionProvider(SessionProvider sessionProvider) {
+    if (sessionProvider != null) {
+      sessionProvider.close();
+    }
+  }
+  
+  
   
 }

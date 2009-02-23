@@ -197,23 +197,21 @@ public interface ContactService {
   public List<ContactGroup> getGroups(SessionProvider sProvider, String username) throws Exception ;
   
   /**
-   * get personal address book of user base on id of address book
-   * @return object ContactGroup has id equals input id
-   * @param sProvider session provider of user
-   * @param username userId of a user
-   * @param groupId id of group will be getted
+   * Get a personal address book by ID
+   * @param owner user ID of the owning user
+   * @param addressBookID ID of the address book to retrieve.
+   * @return object ContactGroup for the given ID
    * @throws Exception 
    */
-  public ContactGroup getGroup(SessionProvider sProvider, String username, String groupId) throws Exception ;
+  public ContactGroup getGroup(String owner, String addressBookID) throws Exception ;
   
   /**
-   * save a personal address book of specific user
-   * @param sProvider session of user
-   * @param username userId of user
-   * @param isNew true if save a new address book and false if save a editted  address book
+   * Save a personal address book of specific user
+   * @param username user ID of the owning user
+   * @param isNew true if save a new address book and false to update an existing address book
    * @throws Exception 
    */
-  public void saveGroup(SessionProvider sProvider, String username, ContactGroup group, boolean isNew) throws Exception ;
+  public void saveGroup(String username, ContactGroup group, boolean isNew) throws Exception ;
   
   /**
    * remove a personal address book of specific user

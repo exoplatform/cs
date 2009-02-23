@@ -86,7 +86,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
     if (isShared) {
       contactGroup = contactService.getSharedGroup(username, groupId) ;
     } else {
-      contactGroup = contactService.getGroup(sessionProvider, username, groupId) ;       
+      contactGroup = contactService.getGroup(username, groupId) ;       
     }  
     if (contactGroup != null) {
       groupId_ = groupId ;
@@ -123,7 +123,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
       ContactGroup group = new ContactGroup() ;
       if (!uiCategoryForm.isNew_) {
         ContactGroup oldGroup = contactService.getGroup(
-            SessionProviderFactory.createSessionProvider(), username,uiCategoryForm.groupId_) ;
+            username, uiCategoryForm.groupId_) ;
         if (oldGroup == null) {
           oldGroup = contactService.getSharedGroup(username, uiCategoryForm.groupId_) ;
           if (oldGroup != null) { 
@@ -165,7 +165,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
       group.setName(groupName) ;
       group.setDescription(uiCategoryForm.getUIFormTextAreaInput(FIELD_DESCRIPTION_INPUT).getValue()) ;
       contactService.saveGroup(
-          SessionProviderFactory.createSessionProvider(), username, group, uiCategoryForm.isNew_) ;
+          username, group, uiCategoryForm.isNew_) ;
       UIPopupContainer popupContainer = uiCategoryForm.getAncestorOfType(UIPopupContainer.class) ;
       if (popupContainer != null) {
         UICategorySelect uiCategorySelect = popupContainer.findFirstComponentOfType(UICategorySelect.class);
