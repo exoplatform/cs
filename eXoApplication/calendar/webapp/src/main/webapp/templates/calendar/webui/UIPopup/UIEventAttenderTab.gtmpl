@@ -71,7 +71,7 @@
           <table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0" dateValue="<%=uicomponent.getDateValue()%>" exocallback="eXo.calendar.UICalendarPortlet.callbackSelectionX() ;">
             <tbody>
               <tr class="TitleBar">
-                <td>
+                <td style="width:28%;">
                   <div class="LeftSide">
                     <a href="<%=uiForm.event("MovePrevious")%>">
                       <img src="/eXoResources/skin/sharedImages/Blank.gif" class="BackIcon" title="<%=_ctx.appRes('UIDayView.label.previousDay')%>"></a>
