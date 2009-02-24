@@ -26,7 +26,7 @@ import javax.jcr.PathNotFoundException;
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
-import org.exoplatform.contact.service.ContactGroup;
+import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.webui.UIAddressBooks;
@@ -80,7 +80,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
   public void activate() throws Exception { }
   public void deActivate() throws Exception { }
 
-  public void initGroup(ContactGroup group) throws Exception{
+  public void initGroup(AddressBook group) throws Exception{
     UISharedForm shareForm = getChild(UISharedForm.class) ;
     shareForm.setGroup(group) ;
     shareForm.init() ; 
@@ -124,7 +124,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
     getChild(UISharedForm.class).setContact(contact) ;
   }
   
-  public void updateGroupGrid(ContactGroup group) throws Exception {
+  public void updateGroupGrid(AddressBook group) throws Exception {
     List<data> dataRow = new ArrayList<data>() ;
     if(group.getViewPermissionUsers() != null) {
       for(String username : group.getViewPermissionUsers() ) {
@@ -160,7 +160,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
       uiStringInput.setValue(reciever) ;
       uiStringInput.setEditable(false) ;
       if (addEdit.isSharedGroup) {
-        ContactGroup group = ContactUtils.getContactService().getGroup(
+        AddressBook group = ContactUtils.getContactService().getGroup(
             ContactUtils.getCurrentUser(), addEdit.groupId_) ;        
         shareForm.setGroup(group) ;
         if (group.getViewPermissionGroups() != null && Arrays.asList(group.getViewPermissionGroups()).contains(reciever)) {
@@ -201,7 +201,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
       ContactService contactService = ContactUtils.getContactService();
       String username = ContactUtils.getCurrentUser() ;      
       if (uiForm.isSharedGroup) {
-        ContactGroup group = contactService.getGroup(
+        AddressBook group = contactService.getGroup(
             username, uiForm.groupId_) ;
         if (group.getViewPermissionGroups() != null && Arrays.asList(group.getViewPermissionGroups()).contains(remover)) {
           List<String> newPerms = new ArrayList<String>() ;

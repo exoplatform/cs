@@ -26,7 +26,7 @@ import javax.jcr.PathNotFoundException;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
-import org.exoplatform.contact.service.ContactGroup;
+import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.webui.UIAddressBooks;
@@ -75,7 +75,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
   final static public String FIELD_EDIT_PERMISSION = "canEdit".intern() ;
   private Map<String, String> permissionUser_ = new LinkedHashMap<String, String>() ;
   private Map<String, String> permissionGroup_ = new LinkedHashMap<String, String>() ;
-  private ContactGroup group_ = null ;
+  private AddressBook group_ = null ;
   private Contact contact_ = null ;
   private boolean isSharedGroup ;
   private boolean isNew_ = true ;
@@ -85,7 +85,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     isSharedGroup = false ;
     contact_ = contact ;
   }
-  public void setGroup(ContactGroup group) {
+  public void setGroup(AddressBook group) {
     isSharedGroup = true ;
     group_ = group ; 
   }
@@ -230,7 +230,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       
       // xong phan xu ly recieve users
       if (uiForm.isSharedGroup) {
-        ContactGroup contactGroup = uiForm.group_ ;
+        AddressBook contactGroup = uiForm.group_ ;
         if(uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).isChecked()) {
           String[] editPerUsers = contactGroup.getEditPermissionUsers() ;
           Map<String, String> editMapUsers = new LinkedHashMap<String, String>() ; 

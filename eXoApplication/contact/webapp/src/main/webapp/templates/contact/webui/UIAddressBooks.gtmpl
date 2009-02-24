@@ -1,5 +1,5 @@
 <% 
-	import org.exoplatform.contact.service.ContactGroup;
+	import org.exoplatform.contact.service.AddressBook;
 	import java.util.Map;
 	import org.exoplatform.services.organization.OrganizationService;
 	import org.exoplatform.contact.ContactUtils;
@@ -60,7 +60,7 @@
 		</div>
 		<%
 				
-			ContactGroup[] contactGroups = uicomponent.getGroups();
+			AddressBook[] contactGroups = uicomponent.getGroups();
 			for(contactGroup in contactGroups) {
 				String groupId = contactGroup.getId() ;
 				String actionLink  = uicomponent.event("SelectGroup", groupId) ;	

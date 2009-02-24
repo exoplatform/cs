@@ -1,5 +1,5 @@
 <%
-  import org.exoplatform.contact.service.ContactGroup;
+  import org.exoplatform.contact.service.AddressBook;
   import org.exoplatform.contact.ContactUtils;
 	uiform.begin()
 	def rcontext = _ctx.getRequestContext() ;

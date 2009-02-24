@@ -30,7 +30,7 @@ import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
 import org.exoplatform.contact.service.Contact;
-import org.exoplatform.contact.service.ContactGroup;
+import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.access.AccessControlEntry;
@@ -75,7 +75,7 @@ public class NewUserListener extends UserEventListener {
     SessionProvider sysProvider = SessionProvider.createSystemProvider() ;
     try {
       if(isNew) {
-        ContactGroup group = new ContactGroup() ;
+        AddressBook group = new AddressBook() ;
         group.setId(DEFAULTGROUP+user.getUserName()) ;
         group.setName(DEFAULTGROUPNAME) ;
         group.setDescription(DEFAULTGROUPDES) ;

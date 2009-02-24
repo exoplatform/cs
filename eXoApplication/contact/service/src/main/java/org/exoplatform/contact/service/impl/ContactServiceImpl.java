@@ -22,7 +22,7 @@ import java.util.Map;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
-import org.exoplatform.contact.service.ContactGroup;
+import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactImportExport;
 import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.ContactService;
@@ -100,19 +100,19 @@ public class ContactServiceImpl implements ContactService {
   	storage_.addGroupToPersonalContact(userId, groupId) ;
   }
   
-  public List<ContactGroup> getGroups(SessionProvider sProvider, String username) throws Exception {
+  public List<AddressBook> getGroups(SessionProvider sProvider, String username) throws Exception {
     return storage_.getGroups(sProvider, username);
   }
   
-  public ContactGroup getGroup(String username, String groupId) throws Exception {
+  public AddressBook getGroup(String username, String groupId) throws Exception {
     return storage_.getGroup(username, groupId);
   }
   
-  public void saveGroup(String username, ContactGroup group, boolean isNew) throws Exception {
+  public void saveGroup(String username, AddressBook group, boolean isNew) throws Exception {
     storage_.saveGroup(username, group, isNew);    
   }
   
-  public ContactGroup removeGroup(String username, String groupId) throws Exception {
+  public AddressBook removeGroup(String username, String groupId) throws Exception {
     return storage_.removeGroup(username, groupId);
   }
 
@@ -243,7 +243,7 @@ public class ContactServiceImpl implements ContactService {
   public DataPageList searchContact(SessionProvider sProvider, String username, ContactFilter filter) throws Exception {
     return storage_.searchContact(sProvider, username, filter) ;
   }
-  public ContactGroup getSharedGroup(String username, String groupId) throws Exception {
+  public AddressBook getSharedGroup(String username, String groupId) throws Exception {
     return storage_.getSharedGroup(username, groupId) ;
   }
   public List<String> getAllEmailBySharedGroup(String username, String addressBookId) throws Exception {

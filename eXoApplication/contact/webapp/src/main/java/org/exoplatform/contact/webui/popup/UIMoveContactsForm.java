@@ -29,7 +29,7 @@ import javax.jcr.PathNotFoundException;
 
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
-import org.exoplatform.contact.service.ContactGroup;
+import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.impl.JCRDataStorage;
@@ -119,7 +119,7 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       String username = ContactUtils.getCurrentUser() ;
       SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
       if (uiMoveContactForm. sharedGroupMap_.containsKey(addressBookId)) {
-        ContactGroup group = contactService.getSharedGroup(username, addressBookId) ;        
+        AddressBook group = contactService.getSharedGroup(username, addressBookId) ;        
         if (group.getEditPermissionUsers() == null || 
             !Arrays.asList(group.getEditPermissionUsers()).contains(username + JCRDataStorage.HYPHEN)) {
           boolean canEdit = false ;

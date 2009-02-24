@@ -37,7 +37,7 @@ import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.contact.service.ContactFilter;
-import org.exoplatform.contact.service.ContactGroup;
+import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.DataPageList;
@@ -731,7 +731,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
 
       if (uiAddressBooks.getSharedGroups().containsKey(addressBookId)) {
-        ContactGroup group = contactService.getSharedGroup(username, addressBookId) ;
+        AddressBook group = contactService.getSharedGroup(username, addressBookId) ;
         if (group.getEditPermissionUsers() == null || 
             !Arrays.asList(group.getEditPermissionUsers()).contains(username + JCRDataStorage.HYPHEN)) {
           boolean canEdit = false ;

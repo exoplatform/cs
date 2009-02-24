@@ -1,7 +1,7 @@
  <%
  	import org.exoplatform.contact.service.ContactAttachment;
  	import org.exoplatform.contact.service.impl.JCRDataStorage;
-	import org.exoplatform.contact.service.ContactGroup;
+	import org.exoplatform.contact.service.AddressBook;
 	import org.exoplatform.contact.service.Tag;
 	import org.exoplatform.contact.service.ContactService;
 	import org.exoplatform.contact.ContactUtils;

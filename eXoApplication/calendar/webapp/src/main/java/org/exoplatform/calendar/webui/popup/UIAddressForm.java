@@ -26,7 +26,7 @@ import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
-import org.exoplatform.contact.service.ContactGroup;
+import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.Utils;
@@ -88,7 +88,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     ContactService contactService = getApplicationComponent(ContactService.class) ;
     options.add(new SelectItemOption<String>("all", "")) ;
     SessionProvider sessionPro = SessionProviderFactory.createSessionProvider() ;
-    for( ContactGroup cg : contactService.getGroups(sessionPro, CalendarUtils.getCurrentUser())) {
+    for( AddressBook cg : contactService.getGroups(sessionPro, CalendarUtils.getCurrentUser())) {
       options.add(new SelectItemOption<String>(cg.getName(), cg.getId())) ;
     }
     List<SharedAddressBook> addressList = contactService

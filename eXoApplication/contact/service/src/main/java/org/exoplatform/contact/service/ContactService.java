@@ -193,7 +193,7 @@ public interface ContactService {
    * @param username username of user get groups
    * @throws Exception 
    */
-  public List<ContactGroup> getGroups(SessionProvider sProvider, String username) throws Exception ;
+  public List<AddressBook> getGroups(SessionProvider sProvider, String username) throws Exception ;
   
   /**
    * Get a personal address book by ID
@@ -202,7 +202,7 @@ public interface ContactService {
    * @return object ContactGroup for the given ID
    * @throws Exception 
    */
-  public ContactGroup getGroup(String owner, String addressBookID) throws Exception ;
+  public AddressBook getGroup(String owner, String addressBookID) throws Exception ;
   
   /**
    * Save a personal address book of specific user
@@ -210,7 +210,7 @@ public interface ContactService {
    * @param isNew true if save a new address book and false to update an existing address book
    * @throws Exception 
    */
-  public void saveGroup(String username, ContactGroup group, boolean isNew) throws Exception ;
+  public void saveGroup(String username, AddressBook group, boolean isNew) throws Exception ;
   
   /**
    * remove a personal address book of specific user
@@ -218,7 +218,7 @@ public interface ContactService {
    * @return removed ContactGroup object 
    * @throws Exception 
    */
-  public ContactGroup removeGroup(String username, String groupId) throws Exception ;
+  public AddressBook removeGroup(String username, String groupId) throws Exception ;
   
   
   /**
@@ -275,7 +275,7 @@ public interface ContactService {
    * @param groupId id of shared group user want to get
    * @throws Exception 
    */
-  public ContactGroup getSharedGroup(String username, String groupId) throws Exception ;
+  public AddressBook getSharedGroup(String username, String groupId) throws Exception ;
   
   /**
    * get all address books were shared by another users

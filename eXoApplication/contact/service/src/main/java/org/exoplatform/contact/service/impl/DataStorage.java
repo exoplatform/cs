@@ -20,7 +20,7 @@ import java.util.List;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
-import org.exoplatform.contact.service.ContactGroup;
+import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.GroupContactData;
 import org.exoplatform.contact.service.Tag;
@@ -53,10 +53,10 @@ public interface DataStorage {
   public void saveSharedContact(Contact contact, boolean isNew) throws Exception ;
   public Contact removeSharedContact(String contactId) throws Exception ;
   
-  public List<ContactGroup> getGroups(String username) throws Exception ;
-  public ContactGroup getGroup(String username, String groupId) throws Exception ;
-  public void saveGroup(String username, ContactGroup group, boolean isNew) throws Exception ;
-  public ContactGroup removeGroup(String username, String groupId) throws Exception ;
+  public List<AddressBook> getGroups(String username) throws Exception ;
+  public AddressBook getGroup(String username, String groupId) throws Exception ;
+  public void saveGroup(String username, AddressBook group, boolean isNew) throws Exception ;
+  public AddressBook removeGroup(String username, String groupId) throws Exception ;
   
   public List<Contact> shareContacts(String username, List<String> contactIds, String[] groupIds) throws Exception ;
   public List<GroupContactData> getPublicContacts(String[] groupIds) throws Exception ;

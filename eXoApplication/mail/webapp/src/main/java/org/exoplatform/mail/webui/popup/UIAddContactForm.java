@@ -30,7 +30,7 @@ import javax.jcr.PathNotFoundException;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
-import org.exoplatform.contact.service.ContactGroup;
+import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.Utils;
 import org.exoplatform.container.PortalContainer;
@@ -168,7 +168,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
     ContactService contactSrv = getApplicationComponent(ContactService.class);
     List<SelectItem> options = new ArrayList<SelectItem>() ;
     SelectOptionGroup personalContacts = new SelectOptionGroup("personal-contacts");
-    for(ContactGroup pcg : contactSrv.getGroups(SessionProviderFactory.createSystemProvider(), username)) {
+    for(AddressBook pcg : contactSrv.getGroups(SessionProviderFactory.createSystemProvider(), username)) {
       personalContacts.addOption(new SelectOption(pcg.getName(), pcg.getId())) ;
     }
     options.add(personalContacts);

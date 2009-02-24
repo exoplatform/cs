@@ -41,7 +41,7 @@ import org.apache.commons.logging.Log;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.contact.service.ContactFilter;
-import org.exoplatform.contact.service.ContactGroup;
+import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.DataPageList;
 import org.exoplatform.contact.service.GroupContactData;
@@ -389,8 +389,8 @@ public class JCRDataStorage {
     return null ;
   }
   
-  private ContactGroup getGroup(Node contactGroupNode) throws Exception {
-    ContactGroup contactGroup = new ContactGroup();
+  private AddressBook getGroup(Node contactGroupNode) throws Exception {
+    AddressBook contactGroup = new AddressBook();
     if (contactGroupNode.hasProperty("exo:id")) 
       contactGroup.setId(contactGroupNode.getProperty("exo:id").getString());
     if (contactGroupNode.hasProperty("exo:name")) 
@@ -413,7 +413,7 @@ public class JCRDataStorage {
     return contactGroup;
   }
 
-  public ContactGroup getGroup(String username, String groupId) throws Exception {
+  public AddressBook getGroup(String username, String groupId) throws Exception {
     SessionProvider sProvider = null;
     try {
       sProvider = createSessionProvider();
@@ -428,7 +428,7 @@ public class JCRDataStorage {
     }
   }
   
-  public ContactGroup getSharedGroup(String username, String groupId) throws Exception {
+  public AddressBook getSharedGroup(String username, String groupId) throws Exception {
     Node sharedAddressBookMock = getSharedAddressBook(username) ;
     PropertyIterator iter = sharedAddressBookMock.getReferences() ;
     Node addressBook ;      
@@ -441,9 +441,9 @@ public class JCRDataStorage {
     return null ;
   }
 
-  public List<ContactGroup> getGroups(SessionProvider sProvider, String username) throws Exception {
+  public List<AddressBook> getGroups(SessionProvider sProvider, String username) throws Exception {
     Node contactGroupHomeNode = getUserContactGroupHome(sProvider, username);
-    List<ContactGroup> contactGroups = new ArrayList<ContactGroup>();
+    List<AddressBook> contactGroups = new ArrayList<AddressBook>();
     NodeIterator iter = contactGroupHomeNode.getNodes();
     while (iter.hasNext()) {
       Node contactGroupNode = iter.nextNode();
@@ -500,13 +500,13 @@ public class JCRDataStorage {
     return contactIds ;
   }
   
-  public ContactGroup removeGroup(String username, String groupId) throws Exception {
+  public AddressBook removeGroup(String username, String groupId) throws Exception {
     SessionProvider sProvider = null;
     try {
       sProvider = createSessionProvider();
       Node contactGroupHomeNode = getUserContactGroupHome(sProvider, username);
       if (contactGroupHomeNode.hasNode(groupId)) {
-        ContactGroup contactGroup = getGroup(username, groupId);
+        AddressBook contactGroup = getGroup(username, groupId);
         contactGroupHomeNode.getNode(groupId).remove();
         contactGroupHomeNode.save();
         contactGroupHomeNode.getSession().save();
@@ -534,7 +534,7 @@ public class JCRDataStorage {
     }
   }
 
-  public void saveGroup(String username, ContactGroup group, boolean isNew) throws Exception {
+  public void saveGroup(String username, AddressBook group, boolean isNew) throws Exception {
     SessionProvider sProvider = null;
     try {
       sProvider = createSessionProvider();

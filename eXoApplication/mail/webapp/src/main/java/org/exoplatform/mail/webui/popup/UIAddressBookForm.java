@@ -22,7 +22,7 @@ import java.util.List;
 
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
-import org.exoplatform.contact.service.ContactGroup;
+import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
@@ -91,7 +91,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
     ContactService contactSrv = getApplicationComponent(ContactService.class);
     List<SelectItem> options = new ArrayList<SelectItem>() ;
     SelectOptionGroup personalContacts = new SelectOptionGroup("personal-contacts");
-    for(ContactGroup pcg : contactSrv.getGroups(SessionProviderFactory.createSystemProvider(), username)) {
+    for(AddressBook pcg : contactSrv.getGroups(SessionProviderFactory.createSystemProvider(), username)) {
       personalContacts.addOption(new SelectOption(pcg.getName(), pcg.getId())) ;
     }
     options.add(personalContacts);

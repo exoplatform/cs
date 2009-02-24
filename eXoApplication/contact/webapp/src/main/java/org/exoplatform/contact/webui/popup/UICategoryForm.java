@@ -19,7 +19,7 @@ package org.exoplatform.contact.webui.popup;
 import java.util.List;
 
 import org.exoplatform.contact.ContactUtils;
-import org.exoplatform.contact.service.ContactGroup;
+import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
@@ -82,7 +82,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
     ContactService contactService = ContactUtils.getContactService();
     String username = ContactUtils.getCurrentUser() ;
     SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
-    ContactGroup contactGroup ;
+    AddressBook contactGroup ;
     if (isShared) {
       contactGroup = contactService.getSharedGroup(username, groupId) ;
     } else {
@@ -120,9 +120,9 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
       }    
       ContactService contactService = ContactUtils.getContactService() ;
       String username = ContactUtils.getCurrentUser() ;
-      ContactGroup group = new ContactGroup() ;
+      AddressBook group = new AddressBook() ;
       if (!uiCategoryForm.isNew_) {
-        ContactGroup oldGroup = contactService.getGroup(
+        AddressBook oldGroup = contactService.getGroup(
             username, uiCategoryForm.groupId_) ;
         if (oldGroup == null) {
           oldGroup = contactService.getSharedGroup(username, uiCategoryForm.groupId_) ;
@@ -135,8 +135,8 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
             } else { //cs-2017
               try {
                 String shredUser = uiAddressBook.getSharedGroups().get(uiCategoryForm.groupId_).getSharedUserId() ;
-                List<ContactGroup> groups = contactService.getGroups(SessionProviderFactory.createSystemProvider(), shredUser) ;
-                for (ContactGroup contactGroup : groups) 
+                List<AddressBook> groups = contactService.getGroups(SessionProviderFactory.createSystemProvider(), shredUser) ;
+                for (AddressBook contactGroup : groups) 
                   if (contactGroup.getName().equals(groupName) && uiCategoryForm.editedAddName != null 
                       && !groupName.equals(uiCategoryForm.editedAddName)) {
                     uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.userExisted-categoryName", new String[] {shredUser}, ApplicationMessage.WARNING)) ;

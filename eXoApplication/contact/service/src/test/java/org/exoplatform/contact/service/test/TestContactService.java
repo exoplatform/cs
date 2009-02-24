@@ -25,7 +25,7 @@ import org.apache.commons.collections.map.HashedMap;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.contact.service.ContactFilter;
-import org.exoplatform.contact.service.ContactGroup;
+import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.impl.JCRDataStorage;
@@ -59,17 +59,17 @@ public class TestContactService extends BaseContactServiceTestCase{
   
   public void testGetSaveGroup() throws Exception {
     // test the get operation on a non existent address book
-    ContactGroup shouldBeNull = contactService_.getGroup(root, "nonexistent");
+    AddressBook shouldBeNull = contactService_.getGroup(root, "nonexistent");
     assertNull("A non existent address book should be null", shouldBeNull);
 
-    ContactGroup newAB = new ContactGroup();
+    AddressBook newAB = new AddressBook();
     newAB.setName("AB1");
     newAB.setDescription("Desc AB1");
     contactService_.saveGroup(root, newAB, true); // test the create operation
     assertNotNull("Saved addressBook has no ID", newAB.getId());
     
     // test get by ID operation
-    ContactGroup savedAB = contactService_.getGroup(root, newAB.getId());
+    AddressBook savedAB = contactService_.getGroup(root, newAB.getId());
     
     assertEquals("Saved adressBook name differs", newAB.getName(), savedAB.getName());
     assertEquals("Saved adressBook description differs", newAB.getDescription(), savedAB.getDescription());
@@ -94,7 +94,7 @@ public class TestContactService extends BaseContactServiceTestCase{
     assertEquals("AdressBook should have same ID before and after save", beforeId, newAB.getId());
     
     // test get by ID operation
-    ContactGroup loadedAB = contactService_.getGroup(root, savedAB.getId());
+    AddressBook loadedAB = contactService_.getGroup(root, savedAB.getId());
     assertEquals("Loaded adressBook name differs", savedAB.getName(), loadedAB.getName());
     assertEquals("Loaded adressBook description differs", savedAB.getDescription(), loadedAB.getDescription());
     assertEquals("Loaded and Saved addressBooks should have same IDs",savedAB.getId(), loadedAB.getId());
@@ -106,8 +106,8 @@ public class TestContactService extends BaseContactServiceTestCase{
   
   public void testSaveContact() throws Exception {
     Contact contact = createContact() ; 
-    ContactGroup ab1 = createAddressBook("save1", "group1", root);
-    ContactGroup ab2 = createAddressBook("save2", "group2", root);    
+    AddressBook ab1 = createAddressBook("save1", "group1", root);
+    AddressBook ab2 = createAddressBook("save2", "group2", root);    
     setContactInAddressBooks(contact, ab1, ab2);
     
     contactService_.saveContact(sProvider_, root, contact, true);
@@ -158,9 +158,9 @@ public class TestContactService extends BaseContactServiceTestCase{
   }
   
   public void testRemoveGroup() throws Exception {
-    ContactGroup tobeRemoved = createAddressBook("tobeRemoved", "will be removed", root);
+    AddressBook tobeRemoved = createAddressBook("tobeRemoved", "will be removed", root);
     contactService_.saveGroup(root, tobeRemoved, true);
-    ContactGroup removed = contactService_.removeGroup(root, tobeRemoved.getId());
+    AddressBook removed = contactService_.removeGroup(root, tobeRemoved.getId());
     assertNotNull("Removed addressBook should not be null", removed);
     assertNotNull("Removed addressBook should still exist", contactService_.getGroup(root, removed.getId()));
   }
@@ -189,11 +189,11 @@ public class TestContactService extends BaseContactServiceTestCase{
    * Test AddressBook
    */
   // create new address book:
-    ContactGroup rootBook1 = createAddressBook("group1", "group1", root);
-    ContactGroup rootBook2 = createAddressBook("group2", "group2", root);
-    ContactGroup sharedBook = createAddressBook("shareGroup", "shareGroup", root);
+    AddressBook rootBook1 = createAddressBook("group1", "group1", root);
+    AddressBook rootBook2 = createAddressBook("group2", "group2", root);
+    AddressBook sharedBook = createAddressBook("shareGroup", "shareGroup", root);
     //ContactGroup marryGroup_ = createContactGroup("group3", "group3", userMarry_);
-    ContactGroup johnBook = createAddressBook("group3", "group3", john);
+    AddressBook johnBook = createAddressBook("group3", "group3", john);
     
   // get AddressBook:
     //assertNotNull(contactService_.getGroup(root, rootBook1.getId()));
@@ -440,24 +440,24 @@ public class TestContactService extends BaseContactServiceTestCase{
   }
 
   private void setContactInAddressBooks(Contact contact,
-                                        ContactGroup... groups) {
+                                        AddressBook... groups) {
     String [] groupIds = new String [groups.length];
     int i = 0;
-    for (ContactGroup group : groups) {
+    for (AddressBook group : groups) {
       groupIds[i++] = group.getId();
     }
     contact.setAddressBook(groupIds);
   }
   
-  private ContactGroup createAddressBook(String name, String description, String owner) throws Exception{
-    ContactGroup contactGroup = new ContactGroup();
+  private AddressBook createAddressBook(String name, String description, String owner) throws Exception{
+    AddressBook contactGroup = new AddressBook();
     contactGroup.setName(name);
     contactGroup.setDescription(description);
     contactService_.saveGroup(owner, contactGroup, true);
     return contactGroup;
   }
   
-  private SharedAddressBook createShareAddressbook(ContactGroup contactGroup, String userId) throws Exception{
+  private SharedAddressBook createShareAddressbook(AddressBook contactGroup, String userId) throws Exception{
     SharedAddressBook sharedAddressBook = new SharedAddressBook(contactGroup.getName(), contactGroup.getId(), userId);
     sharedAddressBook.setEditPermissionGroups(contactGroup.getEditPermissionGroups());
     sharedAddressBook.setEditPermissionUsers(contactGroup.getEditPermissionUsers());

@@ -27,7 +27,7 @@ import org.exoplatform.contact.CalendarUtils;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactFilter;
-import org.exoplatform.contact.service.ContactGroup;
+import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.DataPageList;
 import org.exoplatform.contact.service.SharedAddressBook;
@@ -98,7 +98,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     uiPageList_.setId("UIMailAddressPage") ;
     String username = ContactUtils.getCurrentUser();
     ContactService contactSrv = getApplicationComponent(ContactService.class);
-    List<ContactGroup> groups = contactSrv.getGroups(SessionProviderFactory.createSystemProvider(), username) ;
+    List<AddressBook> groups = contactSrv.getGroups(SessionProviderFactory.createSystemProvider(), username) ;
     if (groups != null && groups.size() > 0) {
       String category = groups.get(0).getId() ;
       setContactList(category) ;
@@ -109,10 +109,10 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     String username = ContactUtils.getCurrentUser();
     ContactService contactSrv = getApplicationComponent(ContactService.class);
     List<SelectItem> options = new ArrayList<SelectItem>() ;
-    List<ContactGroup> contactGroup = contactSrv.getGroups(SessionProviderFactory.createSystemProvider(), username);
+    List<AddressBook> contactGroup = contactSrv.getGroups(SessionProviderFactory.createSystemProvider(), username);
     if(!contactGroup.isEmpty()) {
       SelectOptionGroup personalContacts = new SelectOptionGroup("personal-contacts");
-      for(ContactGroup pcg : contactGroup) {
+      for(AddressBook pcg : contactGroup) {
         personalContacts.addOption(new SelectOption(pcg.getName(), pcg.getId())) ;
       }
       options.add(personalContacts);

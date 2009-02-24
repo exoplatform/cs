@@ -16,7 +16,7 @@
  */
 package org.exoplatform.mail.webui.popup;
 
-import org.exoplatform.contact.service.ContactGroup;
+import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.webui.UIMailPortlet;
@@ -78,14 +78,14 @@ public class UIAddGroupForm extends UIForm implements UIPopupComponent{
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       } else {
-        for (ContactGroup group : contactSrv.getGroups(SessionProviderFactory.createSessionProvider(), username))
+        for (AddressBook group : contactSrv.getGroups(SessionProviderFactory.createSessionProvider(), username))
           if (group.getName().equalsIgnoreCase(groupName.trim())) {
             uiApp.addMessage(new ApplicationMessage("UIAddGroupForm.msg.group-name-exist", null,
                 ApplicationMessage.WARNING)) ;
               event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return ;
           }
-        ContactGroup group = new ContactGroup();
+        AddressBook group = new AddressBook();
         group.setName(groupName);
         group.setDescription(groupDescription);
         contactSrv.saveGroup(username, group, true);
