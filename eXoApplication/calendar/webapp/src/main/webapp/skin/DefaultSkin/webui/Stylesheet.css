@@ -292,7 +292,7 @@
 }
 
 .UICalendarPortlet .busyIcon {
-	 width: 16px;
+	padding-left:20px;
 	 height: 16px;
 }
 

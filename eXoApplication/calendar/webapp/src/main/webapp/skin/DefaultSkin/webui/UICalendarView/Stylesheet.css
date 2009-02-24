@@ -911,27 +911,21 @@
 }
 
 .UIMonthView .EventMonthContent .PriorityIcon {
-	padding-left: 15px;
 	width: auto;
 }
 
-.UIMonthView .EventMonthContent .highPriorityIcon {
-	background-position: -4px -804px;
-	_background-position: left -804px;
-	height: 16px;
-}
-
-
 .UIMonthView .EventMonthContent .normalPriorityIcon {
-	background-position: -4px -804px;
-	_background-position: left -804px;
+
 	height: 16px;
 }
 
+.UIMonthView .EventMonthContent .highPriorityIcon {
+
+	height: 16px;
+}
 
 .UIMonthView .EventMonthContent .lowPriorityIcon {
-	background-position: -4px -804px;
-	_background-position: left -804px;
+
 	height: 16px;
 }
 
@@ -1066,7 +1060,6 @@
 	line-height: 17px;
 	height:17px;
 	_width: 85%;
-	overflow:hidden;
 	white-space: nowrap;
 	-moz-user-select : none ;	
 }

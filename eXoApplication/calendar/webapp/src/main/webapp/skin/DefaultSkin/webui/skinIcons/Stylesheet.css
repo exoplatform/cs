@@ -165,6 +165,8 @@
 	_position:absolute;
 	float:left;
 	background: url('icons/CalendarIcons.gif') no-repeat left -808px;
+	padding-left: 20px;
+	width: auto;
 }
 
 .UICalendarPortlet .HidenAllCalendar {
@@ -187,6 +189,8 @@
 	_position:absolute;
 	float:left;
 	background: url('icons/CalendarIcons.gif') no-repeat left -938px;
+	padding-left: 20px;
+	width: auto;
 }
 
 .UICalendarPortlet .MaximizeButton {
@@ -207,6 +211,8 @@
 	_position:absolute;
 	float:left;
 	background: url('icons/CalendarIcons.gif') no-repeat left -1016px;
+	padding-left:20px;
+	width:auto;
 }
 
 .UICalendarPortlet .PasteGroupIcon {
