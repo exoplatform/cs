@@ -836,26 +836,35 @@ public class JCRDataStorage {
     }   
   }
   
-  public List<SharedAddressBook> getSharedAddressBooks(SessionProvider sProvider, String username) throws Exception {
-    List<SharedAddressBook> addressBooks = new ArrayList<SharedAddressBook>() ;
-      Node sharedAddress = getSharedAddressBookHome(username) ;      
-      PropertyIterator iter = sharedAddress.getReferences() ;
-      while(iter.hasNext()) {
-        try{
-          Node addressNode = iter.nextProperty().getParent() ;
-          SharedAddressBook sharedAddressBook = new SharedAddressBook(addressNode.getProperty("exo:name").getString(), 
+  public List<SharedAddressBook> getSharedAddressBooks(String username) throws Exception {
+    SessionProvider sp = null;
+    try {
+      List<SharedAddressBook> addressBooks = new ArrayList<SharedAddressBook>();
+      Node sharedAddress = getSharedAddressBookHome(username);
+      PropertyIterator iter = sharedAddress.getReferences();
+      while (iter.hasNext()) {
+        try {
+          Node addressNode = iter.nextProperty().getParent();
+          SharedAddressBook sharedAddressBook = new SharedAddressBook(addressNode.getProperty("exo:name")
+                                                                                 .getString(),
                                                                       addressNode.getName(),
-                                                                      addressNode.getProperty("exo:sharedUserId").getString()) ;
+                                                                      addressNode.getProperty("exo:sharedUserId")
+                                                                                 .getString());
           if (addressNode.hasProperty("exo:editPermissionUsers"))
-            sharedAddressBook.setEditPermissionUsers(ValuesToStrings(addressNode.getProperty("exo:editPermissionUsers").getValues())) ;
+            sharedAddressBook.setEditPermissionUsers(ValuesToStrings(addressNode.getProperty("exo:editPermissionUsers")
+                                                                                .getValues()));
           if (addressNode.hasProperty("exo:editPermissionGroups"))
-            sharedAddressBook.setEditPermissionGroups(ValuesToStrings(addressNode.getProperty("exo:editPermissionGroups").getValues())) ;
-          addressBooks.add(sharedAddressBook) ;          
-        }catch(Exception e){
-          e.printStackTrace() ;
+            sharedAddressBook.setEditPermissionGroups(ValuesToStrings(addressNode.getProperty("exo:editPermissionGroups")
+                                                                                 .getValues()));
+          addressBooks.add(sharedAddressBook);
+        } catch (Exception e) {
+          e.printStackTrace();
         }
-      }      
-    return addressBooks ;
+      }
+      return addressBooks;
+    } finally {
+      closeSessionProvider(sp);
+    }
   }
   
   

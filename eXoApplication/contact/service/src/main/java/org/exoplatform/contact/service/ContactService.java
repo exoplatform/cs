@@ -294,16 +294,18 @@ public interface ContactService {
   public AddressBook getSharedGroup(String username, String groupId) throws Exception ;
   
   /**
-   * get all address books were shared by another users
-   * @return SharedAddressBook list contains some information about address books like name, shared user
-   * @param sProvider should use system provider
+   * Get address books that are shared (by others) to a given user
    * @param username userId of current user
+   * @return SharedAddressBook list contains some information about address books like name, shared user
    * @throws Exception 
    */
-  public List<SharedAddressBook> getSharedAddressBooks(SessionProvider sProvider, String username) throws Exception ;
+  public List<SharedAddressBook> getAddressBooksSharedToUser(String username) throws Exception ;
   
- // public void removeSharedAddressBook(SessionProvider sProvider, String username, String addressBookId) throws Exception ;
-  
+  /**
+   * @deprecated use {@link #getAddressBooksSharedToUser(String)}
+   */
+  public List<SharedAddressBook> getSharedAddressBooks(String username) throws Exception ;
+
   /**
    * if user has edit permission on a shared address book then this user can save a contact to this address book
    * @param username userId of current user
