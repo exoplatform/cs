@@ -114,8 +114,8 @@ public class NewUserListener extends UserEventListener {
           NodeIterator nodes = result.getNodes() ;
           while (nodes.hasNext()) {
             Node address = nodes.nextNode() ;
-            storage_.shareAddressBook(sysProvider, address.getProperty("exo:sharedUserId")
-                .getString(), address.getProperty("exo:id").getString(),recievedUser) ;
+            storage_.shareAddressBook(address.getProperty("exo:sharedUserId")
+                .getString(), address.getProperty("exo:id").getString(), recievedUser) ;
           }
 
           // lookup shared contacts

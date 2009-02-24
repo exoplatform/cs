@@ -266,14 +266,13 @@ public interface ContactService {
   public DataPageList getSharedContacts(String username) throws Exception ;
   
   /**
-   * shared a personal address book of current user to  another users
-   * @param sProvider should use system provider
-   * @param username userId of user has address book to share
-   * @param receiverUsers userIds of users will be shared
-   * @param addressBookId id of address books will be shared
+   * Share a personal address book with other users.
+   * @param username user ID of the owner of the address book to share
+   * @param addressBookId ID of the address book to share
+   * @param receiverUsers user IDs of users that will receive the shared address book
    * @throws Exception 
    */
-  public void shareAddressBook(SessionProvider sProvider, String username, String addressBookId, List<String> receiverUsers) throws Exception ;
+  public void shareAddressBook(String username, String addressBookId, List<String> receiverUsers) throws Exception ;
   
   /**
    * remove view permission of users are shared address book

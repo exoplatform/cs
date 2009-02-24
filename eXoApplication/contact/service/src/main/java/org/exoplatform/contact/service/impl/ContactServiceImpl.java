@@ -159,8 +159,8 @@ public class ContactServiceImpl implements ContactService {
   public DataPageList getSharedContacts(String username) throws Exception {
   	return storage_.getSharedContacts(username) ;
   }
-  public void shareAddressBook(SessionProvider sProvider, String username, String addressBookId, List<String> receiverUsers) throws Exception {
-  	storage_.shareAddressBook(sProvider, username, addressBookId, receiverUsers) ;
+  public void shareAddressBook(String username, String addressBookId, List<String> receiverUsers) throws Exception {
+  	storage_.shareAddressBook(username, addressBookId, receiverUsers) ;
   }
   public void removeUserShareAddressBook(SessionProvider sProvider, String username, String addressBookId, String removedUser) throws Exception {
     storage_.removeUserShareAddressBook(sProvider, username, addressBookId, removedUser) ;
@@ -269,7 +269,7 @@ public class ContactServiceImpl implements ContactService {
     return storage_.searchContact(sProvider, username, filter) ;
   }
   public AddressBook getSharedGroup(String username, String groupId) throws Exception {
-    return storage_.getSharedGroup(username, groupId) ;
+    return storage_.getSharedAddressBook(username, groupId) ;
   }
   public List<String> getAllEmailBySharedGroup(String username, String addressBookId) throws Exception {
     return storage_.getAllEmailBySharedGroup(username, addressBookId) ;

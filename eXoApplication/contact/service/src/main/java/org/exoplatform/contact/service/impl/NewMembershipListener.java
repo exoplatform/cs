@@ -76,8 +76,8 @@ public class NewMembershipListener extends MembershipEventListener {
       NodeIterator nodes = result.getNodes() ;
       while (nodes.hasNext()) {
         Node address = nodes.nextNode() ;
-        storage_.shareAddressBook(systemSession, address.getProperty("exo:sharedUserId")
-            .getString(), address.getProperty("exo:id").getString(),recievedUser) ;
+        storage_.shareAddressBook(address.getProperty("exo:sharedUserId")
+            .getString(), address.getProperty("exo:id").getString(), recievedUser) ;
       }
 
 //    lookup shared contacts
@@ -134,7 +134,7 @@ public class NewMembershipListener extends MembershipEventListener {
           if (groupIds.keySet().contains(groupShared.getString())) {
             List<String> reciever = new ArrayList<String>() ;
             reciever.add(m.getUserName()) ;
-            storage_.shareAddressBook(systemSession, address.getProperty("exo:sharedUserId")
+            storage_.shareAddressBook(address.getProperty("exo:sharedUserId")
                 .getString(), address.getProperty("exo:id").getString(), reciever) ;
           }
         }

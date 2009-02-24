@@ -19,6 +19,7 @@ package org.exoplatform.contact.service.test;
 import java.io.ByteArrayInputStream;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.contact.service.AddressBook;
@@ -192,6 +193,30 @@ public class TestContactService extends BaseContactServiceTestCase{
     assertNotNull("Removed addressBook should still exist", contactService.getPersonalAddressBook(root, removed.getId()));
   }
   
+  public void testShareAddressBook() throws Exception {
+    
+    // share root address book to john and demo
+    AddressBook shared = createAddressBook("ToBeShared", "will be shared with john and demo", root);
+    shared.setEditPermissionUsers(new String[]{john});
+    contactService.shareAddressBook(root, shared.getId(), Arrays.asList(new String[]{john}));
+    
+    // verify is was NOT shared to demo
+    List<SharedAddressBook> sharedList2 = contactService.getSharedAddressBooks(sProvider_, demo);
+    assertEquals("Shared address books list size was wrong", 0, sharedList2.size());
+
+    // verify is was shared to john
+    List<SharedAddressBook> sharedList = contactService.getSharedAddressBooks(sProvider_, john);
+    assertEquals("Shared address books list size was wrong", 1, sharedList.size());
+    String sharedId = sharedList.get(0).getId();
+    assertEquals("Shared and initial address books ids differ", shared.getId(), sharedId);
+  
+
+    // demo should not be able to write
+    
+    // john should be able to write
+    
+  }
+  
 
 
   /**
@@ -246,10 +271,10 @@ public class TestContactService extends BaseContactServiceTestCase{
     
   // share group:
     sharedBook.setEditPermissionUsers(new String[]{john});
-    contactService.shareAddressBook(sProvider_, root, sharedBook.getId(), Arrays.asList(new String[]{john, demo}));
+    contactService.shareAddressBook(root, sharedBook.getId(), Arrays.asList(new String[]{john, demo}));
     
     johnBook.setEditPermissionGroups(new String[]{root});
-    contactService.shareAddressBook(sProvider_, john, johnBook.getId(), Arrays.asList(new String[]{root}));
+    contactService.shareAddressBook(john, johnBook.getId(), Arrays.asList(new String[]{root}));
   
   // get shared addressbooks:
     assertEquals(contactService.getSharedAddressBooks(sProvider_, john).size(), 1);
