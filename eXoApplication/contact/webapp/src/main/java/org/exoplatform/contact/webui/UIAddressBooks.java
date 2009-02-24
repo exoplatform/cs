@@ -135,7 +135,7 @@ public class UIAddressBooks extends UIComponent {
   public Map<String, SharedAddressBook> getSharedGroups() throws Exception { 
     sharedAddressBookMap_.clear() ;
     List<SharedAddressBook> addressList = ContactUtils.getContactService()
-      .getSharedAddressBooks(SessionProviderFactory.createSystemProvider(), ContactUtils.getCurrentUser()) ;
+      .getAddressBooksSharedToUser(ContactUtils.getCurrentUser()) ;
     for (SharedAddressBook address : addressList) {
       sharedAddressBookMap_.put(address.getId(), address) ;  
     }
