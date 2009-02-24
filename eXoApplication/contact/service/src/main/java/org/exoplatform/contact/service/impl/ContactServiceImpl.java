@@ -279,9 +279,21 @@ public class ContactServiceImpl implements ContactService {
   public DataPageList searchContact(SessionProvider sProvider, String username, ContactFilter filter) throws Exception {
     return storage_.searchContact(sProvider, username, filter) ;
   }
-  public AddressBook getSharedGroup(String username, String groupId) throws Exception {
-    return storage_.getSharedAddressBook(username, groupId) ;
+  
+  /**
+   * {@inheritDoc}
+   */
+  public AddressBook getSharedAddressBook(String username, String addressBookId) throws Exception {
+    return storage_.getSharedAddressBookById(username, addressBookId) ;
   }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public AddressBook getSharedGroup(String username, String groupId) throws Exception {
+    return getSharedAddressBook(username, groupId);
+  }
+  
   public List<String> getAllEmailBySharedGroup(String username, String addressBookId) throws Exception {
     return storage_.getAllEmailBySharedGroup(username, addressBookId) ;
   }

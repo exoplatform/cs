@@ -277,7 +277,7 @@ public class JCRDataStorage {
       filter.setAccountPath(usersPath) ;
       qm = publicContactHomeNode.getSession().getWorkspace().getQueryManager();
     } else if (type.equals(SHARED)) {
-      Node sharedAddressBookMock = getSharedAddressBookHome(username) ;
+      Node sharedAddressBookMock = getSharedAddressBooksNode(username) ;
       PropertyIterator iter = sharedAddressBookMock.getReferences() ;
       Node addressBook ;      
       while(iter.hasNext()) {
@@ -366,7 +366,7 @@ public class JCRDataStorage {
   }
   
   public List<String> getAllEmailBySharedGroup(String username, String addressBookId) throws Exception {
-    Node sharedAddressBookMock = getSharedAddressBookHome(username) ;
+    Node sharedAddressBookMock = getSharedAddressBooksNode(username) ;
     PropertyIterator iter = sharedAddressBookMock.getReferences() ;
     Node addressBook ;      
     while(iter.hasNext()) {
@@ -428,13 +428,13 @@ public class JCRDataStorage {
     }
   }
   
-  public AddressBook getSharedAddressBook(String username, String groupId) throws Exception {
-    Node sharedAddressBookMock = getSharedAddressBookHome(username) ;
-    PropertyIterator iter = sharedAddressBookMock.getReferences() ;
+  public AddressBook getSharedAddressBookById(String username, String addressBookId) throws Exception {
+    Node sharedAddressBookNode = getSharedAddressBooksNode(username) ;
+    PropertyIterator iter = sharedAddressBookNode.getReferences() ;
     Node addressBook ;      
     while(iter.hasNext()) {
       addressBook = iter.nextProperty().getParent() ;
-      if(addressBook.getName().equals(groupId)) {
+      if(addressBook.getName().equals(addressBookId)) {
         return toAddressBook(addressBook) ;
       }
     }
@@ -575,7 +575,7 @@ public class JCRDataStorage {
         try {
           groupNode = getUserAddressBooksHome(sProvider, username).getNode(id);
         } catch (PathNotFoundException e) {
-          Node sharedAddressBookMock = getSharedAddressBookHome(username) ;
+          Node sharedAddressBookMock = getSharedAddressBooksNode(username) ;
           PropertyIterator iter = sharedAddressBookMock.getReferences() ;
           Node addressBook ;      
           while(iter.hasNext()) {
@@ -602,30 +602,66 @@ public class JCRDataStorage {
     } 
   }
 
-  private Node getSharedAddressBookHome(String userId) throws Exception {
-    SessionProvider provider = SessionProvider.createSystemProvider();
-    try {
-    Node contactHome = getUserContactServiceHome(provider, userId);
-    Node sharedHome ;
-    try {
-      sharedHome = contactHome.getNode(SHARED_HOME) ;
-    } catch (PathNotFoundException ex) {
-      sharedHome = contactHome.addNode(SHARED_HOME, NT_UNSTRUCTURED) ;
-      contactHome.save() ;
-    }
-    try{
-      return sharedHome.getNode(SHARED_ADDRESSBOOK) ;
-    }catch(PathNotFoundException ex) {
-      Node sharedAddress = sharedHome.addNode(SHARED_ADDRESSBOOK, NT_UNSTRUCTURED) ;
-      if(sharedAddress.canAddMixin("mix:referenceable")) {
-        sharedAddress.addMixin("mix:referenceable") ;
+  /**
+   * get the node that holds references to all address books shared to a given user.
+   * @param userId
+   * @return
+   * @throws Exception
+   */
+  private Node getSharedAddressBooksNode(SessionProvider provider, String userId) throws Exception {
+      Node contactHome = getUserContactServiceHome(provider, userId);
+      Node sharedHome;
+      if (!contactHome.hasNode(SHARED_HOME)) {
+        sharedHome = contactHome.addNode(SHARED_HOME, NT_UNSTRUCTURED);
+        contactHome.save();
+      } else {
+        sharedHome = contactHome.getNode(SHARED_HOME);
       }
-      sharedHome.save() ;
-      return sharedAddress ;
-    }
+
+      Node sharedAddress = null;
+      if (!sharedHome.hasNode(SHARED_ADDRESSBOOK)) {
+        sharedAddress = sharedHome.addNode(SHARED_ADDRESSBOOK, NT_UNSTRUCTURED);
+        if (sharedAddress.canAddMixin("mix:referenceable")) {
+          sharedAddress.addMixin("mix:referenceable");
+        }
+        sharedHome.save();        
+      } else {
+        sharedAddress = sharedHome.getNode(SHARED_ADDRESSBOOK);
+      }
+      return sharedAddress;
+
+  }
+  
+/**
+ * @deprecated use {@link #getSharedAddressBooksNode(SessionProvider, String) and provide an appropriate SessionProvider
+ * this method does leaves a system SessionProvider open.
+ */
+  private Node getSharedAddressBooksNode(String userId) throws Exception {
+    SessionProvider provider = null;
+    try {
+      provider = createSystemProvider();
+      Node contactHome = getUserContactServiceHome(provider, userId);
+      Node sharedHome;
+      try {
+        sharedHome = contactHome.getNode(SHARED_HOME);
+      } catch (PathNotFoundException ex) {
+        sharedHome = contactHome.addNode(SHARED_HOME, NT_UNSTRUCTURED);
+        contactHome.save();
+      }
+      try {
+        return sharedHome.getNode(SHARED_ADDRESSBOOK);
+      } catch (PathNotFoundException ex) {
+        Node sharedAddress = sharedHome.addNode(SHARED_ADDRESSBOOK, NT_UNSTRUCTURED);
+        if (sharedAddress.canAddMixin("mix:referenceable")) {
+          sharedAddress.addMixin("mix:referenceable");
+        }
+        sharedHome.save();
+        return sharedAddress;
+      }
     } finally {
-      //provider.close();
+      // we can't close because receiving code may want to call Node.getSession() on result
     }
+
   }  
   
   private Node getSharedContact(String userId) throws Exception {
@@ -702,7 +738,7 @@ public class JCRDataStorage {
     List<String> values = new ArrayList<String>(
         Arrays.asList(ValuesToStrings(addressBookNode.getProperty(SHARED_PROP).getValues())));
     List<String> newValues = new ArrayList<String>(values) ;
-    Node sharedAddress = getSharedAddressBookHome(removedUser) ;
+    Node sharedAddress = getSharedAddressBooksNode(removedUser) ;
     for (String value : values) {
       Node refNode = sharedAddress.getSession().getNodeByUUID(value);
       if(refNode.getPath().equals(sharedAddress.getPath())) {
@@ -749,7 +785,7 @@ public class JCRDataStorage {
 
       List<Value> valueList = new ArrayList<Value>();
       for (String userId : receiveUsers) {
-        Node sharedAddress = getSharedAddressBookHome(userId.replaceFirst(JCRDataStorage.HYPHEN, ""));
+        Node sharedAddress = getSharedAddressBooksNode(userId.replaceFirst(JCRDataStorage.HYPHEN, ""));
         boolean isExist = false;
         for (int i = 0; i < values.length; i++) {
           Value value = values[i];
@@ -840,7 +876,7 @@ public class JCRDataStorage {
     SessionProvider sp = null;
     try {
       List<SharedAddressBook> addressBooks = new ArrayList<SharedAddressBook>();
-      Node sharedAddress = getSharedAddressBookHome(username);
+      Node sharedAddress = getSharedAddressBooksNode(username);
       PropertyIterator iter = sharedAddress.getReferences();
       while (iter.hasNext()) {
         try {
@@ -903,7 +939,7 @@ public class JCRDataStorage {
     sharedContactMock.getSession().save() ;
     */
     
-    Node sharedAddressBookMock = getSharedAddressBookHome(username) ;
+    Node sharedAddressBookMock = getSharedAddressBooksNode(username) ;
     PropertyIterator iter2 = sharedAddressBookMock.getReferences() ;
     Node addressBook ;      
     while(iter2.hasNext()) {
@@ -987,7 +1023,7 @@ public class JCRDataStorage {
   }
 
   public void saveContactToSharedAddressBook(String username, String addressBookId, Contact contact, boolean isNew) throws Exception  {
-    Node sharedAddressBookMock = getSharedAddressBookHome(username) ;
+    Node sharedAddressBookMock = getSharedAddressBooksNode(username) ;
     PropertyIterator iter = sharedAddressBookMock.getReferences() ;
     Node addressBook ;      
     while(iter.hasNext()) {
@@ -1003,7 +1039,7 @@ public class JCRDataStorage {
   }
   
   public Contact getSharedContactAddressBook(String username, String contactId) throws Exception {
-    Node sharedAddressBookMock = getSharedAddressBookHome(username) ;
+    Node sharedAddressBookMock = getSharedAddressBooksNode(username) ;
     PropertyIterator iter = sharedAddressBookMock.getReferences() ;
     Node addressBook ;      
     while(iter.hasNext()) {
@@ -1366,7 +1402,7 @@ public class JCRDataStorage {
       }
     } catch (PathNotFoundException e) { }
 
-    Node sharedAddressBookMock = getSharedAddressBookHome(username) ;
+    Node sharedAddressBookMock = getSharedAddressBooksNode(username) ;
     PropertyIterator iter = sharedAddressBookMock.getReferences() ;
     Node addressBook ;      
     while(iter.hasNext()) {
@@ -1421,7 +1457,7 @@ public class JCRDataStorage {
           }
         }
         if (contactNode == null) {
-          Node sharedAddressBookMock = getSharedAddressBookHome(username) ;
+          Node sharedAddressBookMock = getSharedAddressBooksNode(username) ;
           PropertyIterator iter1 = sharedAddressBookMock.getReferences() ;
           Node addressBook ;      
           while(iter1.hasNext()) {
@@ -1501,7 +1537,7 @@ public class JCRDataStorage {
           }
         }
         if (contactNode == null) {
-          Node sharedAddressBookMock = getSharedAddressBookHome(username) ;
+          Node sharedAddressBookMock = getSharedAddressBooksNode(username) ;
           PropertyIterator iter1 = sharedAddressBookMock.getReferences() ;
           Node addressBook ;      
           while(iter1.hasNext()) {
@@ -1609,7 +1645,7 @@ public class JCRDataStorage {
         }
       } catch (PathNotFoundException e) { }
 
-      Node sharedAddressBookMock = getSharedAddressBookHome(username) ;
+      Node sharedAddressBookMock = getSharedAddressBooksNode(username) ;
       PropertyIterator iter = sharedAddressBookMock.getReferences() ;
       Node addressBook ;      
       while(iter.hasNext()) {
@@ -1652,7 +1688,7 @@ public class JCRDataStorage {
           }
         }
         if (contactNode == null) {
-          Node sharedAddressBookMock = getSharedAddressBookHome(username) ;
+          Node sharedAddressBookMock = getSharedAddressBooksNode(username) ;
           PropertyIterator iter1 = sharedAddressBookMock.getReferences() ;
           Node addressBook ;      
           while(iter1.hasNext()) {
@@ -1780,7 +1816,7 @@ public class JCRDataStorage {
         }
       } catch (PathNotFoundException e) { }
       
-      Node sharedAddressBookMock = getSharedAddressBookHome(username) ;
+      Node sharedAddressBookMock = getSharedAddressBooksNode(username) ;
       PropertyIterator iter = sharedAddressBookMock.getReferences() ;
       Node addressBook ;      
       while(iter.hasNext()) {
@@ -1871,7 +1907,7 @@ public class JCRDataStorage {
         }
       }
     } catch (PathNotFoundException e) { }
-    Node sharedAddressBookMock = getSharedAddressBookHome(username) ;
+    Node sharedAddressBookMock = getSharedAddressBooksNode(username) ;
     PropertyIterator iter = sharedAddressBookMock.getReferences() ;
     Node addressBook ;
     
@@ -1940,7 +1976,7 @@ public class JCRDataStorage {
       }
       contactHomeNode.getSession().save() ;
     } else if (destType.equals(SHARED)) {
-      Node sharedAddressBookMock = getSharedAddressBookHome(username) ;
+      Node sharedAddressBookMock = getSharedAddressBooksNode(username) ;
       PropertyIterator proIter = sharedAddressBookMock.getReferences() ;
       Node addressBook ;
       while(proIter.hasNext()) {
@@ -1985,7 +2021,7 @@ public class JCRDataStorage {
       NodeIterator iter = result.getNodes() ;
       copyNodes(sProvider, username, contactHome, iter, destAddress, destType) ;      
     } else if (srcType.equals(SHARED)) {
-      Node sharedAddressBookMock = getSharedAddressBookHome(username) ;
+      Node sharedAddressBookMock = getSharedAddressBooksNode(username) ;
       PropertyIterator proIter = sharedAddressBookMock.getReferences() ;
       Node addressBook ;      
       while(proIter.hasNext()) {
@@ -2047,7 +2083,7 @@ public class JCRDataStorage {
         Node contactHomeNode = getUserContactHome(sProvider, username);
         pastedContacts.add(getContact(saveCopyContact(contactHomeNode, contact, destAddress, destType), destType)) ; 
       } else if (destType.equals(SHARED)) {
-        Node sharedAddressBookMock = getSharedAddressBookHome(username) ;
+        Node sharedAddressBookMock = getSharedAddressBooksNode(username) ;
         PropertyIterator iter = sharedAddressBookMock.getReferences() ;
         Node addressBook ;      
         while(iter.hasNext()) {

@@ -55,6 +55,7 @@ public class TestContactService extends BaseContactServiceTestCase{
     contactService = (ContactService) container.getComponentInstanceOfType(ContactService.class) ;
     SessionProviderService sessionProviderService = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class) ;
     sProvider_ = sessionProviderService.getSystemSessionProvider(null) ;
+
   }
   
   public void testGetSaveAddressBook() throws Exception {
@@ -210,10 +211,14 @@ public class TestContactService extends BaseContactServiceTestCase{
     String sharedId = sharedList.get(0).getId();
     assertEquals("Shared and initial address books ids differ", shared.getId(), sharedId);
   
+    // test getSharedAddressBook
+    AddressBook loaded = contactService.getSharedAddressBook(john, shared.getId());
+    assertEquals("Loaded and Shared address books don't match", loaded.getName(), shared.getName());
 
-    // demo should not be able to write
+    // TODO : demo should not be able to write
     
-    // john should be able to write
+    // TODO : john should be able to write
+    
     
   }
   
@@ -280,7 +285,7 @@ public class TestContactService extends BaseContactServiceTestCase{
     //assertEquals(contactService.getAddressBooksSharedToUser(john).size(), 1);
     
   // get shared group:
-    assertEquals(contactService.getSharedGroup(john, sharedBook.getId()).getName(), "shareGroup");
+    assertEquals(contactService.getSharedAddressBook(john, sharedBook.getId()).getName(), "shareGroup");
     
   // remove User Share Address Book
     assertEquals(contactService.getAddressBooksSharedToUser(demo).size(), 1);

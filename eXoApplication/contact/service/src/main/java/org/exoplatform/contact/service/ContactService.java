@@ -285,11 +285,16 @@ public interface ContactService {
   public void removeUserShareAddressBook(SessionProvider sProvider, String username, String addressBookId, String removedUser) throws Exception ;
   
   /**
-   * get a shared address book specific by id of address
+   * Get a shared address book by ID for a given user
    * @return a shared address book object
-   * @param username userId of current user
-   * @param groupId id of shared group user want to get
+   * @param username user ID to whom the address book is shared
+   * @param addressBookId ID of address group to retrieve for user
    * @throws Exception 
+   */
+  public AddressBook getSharedAddressBook(String username, String addressBookId) throws Exception ;
+  
+  /**
+   * @deprecated use {@link #getSharedAddressBook(String, String)}
    */
   public AddressBook getSharedGroup(String username, String groupId) throws Exception ;
   
