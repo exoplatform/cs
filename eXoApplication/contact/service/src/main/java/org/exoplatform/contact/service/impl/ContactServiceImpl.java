@@ -132,17 +132,22 @@ public class ContactServiceImpl implements ContactService {
     saveAddressBook(username,group, isNew);    
   }
   
-  public AddressBook removeGroup(String username, String groupId) throws Exception {
-    return storage_.removeGroup(username, groupId);
+  public AddressBook removeAddressBook(String username, String addressBookId) throws Exception {
+    // step 1 : remove content
+    storage_.clearAddressBook(username, addressBookId);
+    
+    // step 2 : remove address book
+    AddressBook removed =  storage_.removePersonalAddressBook(username, addressBookId);
+    
+    return removed;
   }
-
-  /*public List<GroupContactData> getPublicContacts(SessionProvider sProvider, String[] groupIds) throws Exception {
-    return storage_.getPublicContacts(sProvider, groupIds);
-  }*/
-
-  /*public List<Contact> shareContacts(SessionProvider sProvider, String username, List<String> contactIds, String[] groupIds) throws Exception {
-    return storage_.shareContacts(sProvider, username, contactIds, groupIds) ;
-  }*/
+  
+  /**
+   * {@inheritDoc}
+   */
+  public AddressBook removeGroup(String username, String groupId) throws Exception {
+    return removeAddressBook(username, groupId);
+  }
   
   public void removeUserShareContact(SessionProvider sProvider, String username, String contactId, String removedUser) throws Exception {
     storage_.removeUserShareContact(sProvider, username, contactId, removedUser) ;

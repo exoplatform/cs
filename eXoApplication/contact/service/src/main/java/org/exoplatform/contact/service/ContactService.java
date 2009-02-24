@@ -211,8 +211,8 @@ public interface ContactService {
   
   /**
    * Save a personal or shared address book.
-   * @param username user ID of the owning user
-   * @param addressBook the address bok to save
+   * @param username user ID of the owner
+   * @param addressBook the address book to save
    * @param isNew true if save a new address book and false to update an existing address book
    * @throws Exception 
    */
@@ -224,10 +224,16 @@ public interface ContactService {
   public void saveGroup(String username, AddressBook addressBook, boolean isNew) throws Exception ;
   
   /**
-   * remove a personal address book of specific user
-   * @param username userId of user
-   * @return removed ContactGroup object 
+   * Remove a personal address book
+   * @param username user ID of address book owner
+   * @param addressBookId ID of the address book to remove
+   * @return the removed address book
    * @throws Exception 
+   */
+  public AddressBook removeAddressBook(String username, String addressBookId) throws Exception ;
+  
+  /**
+   * @deprecated use {@link #removeAddressBook(String, String)}
    */
   public AddressBook removeGroup(String username, String groupId) throws Exception ;
   

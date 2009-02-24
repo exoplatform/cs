@@ -90,7 +90,7 @@ public class VCardImportExport implements ContactImportExport {
     List<String> privateAddress = new ArrayList<String> () ;
     List<String> publicAddress = new ArrayList<String> () ;
     for(String address : addressBookIds){
-      Node contactGroupHome = storage_.getUserContactGroupHome(sProvider, username) ;
+      Node contactGroupHome = storage_.getUserAddressBooksHome(sProvider, username) ;
       Node publicContactGroupHome = storage_.getPublicContactHome(sProvider);
       try {
       if(contactGroupHome.hasNode(address)) {

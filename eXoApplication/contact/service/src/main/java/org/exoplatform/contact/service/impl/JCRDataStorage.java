@@ -126,7 +126,7 @@ public class JCRDataStorage {
     }
   }
   
-  protected Node getUserContactGroupHome(SessionProvider sProvider, String username) throws Exception {
+  protected Node getUserAddressBooksHome(SessionProvider sProvider, String username) throws Exception {
     Node contactServiceHome = getUserContactServiceHome(sProvider, username) ;
     try {
       return contactServiceHome.getNode(ADDRESS_BOOK) ;
@@ -419,7 +419,7 @@ public class JCRDataStorage {
       sProvider = createSessionProvider();
       if (groupId == null)
         return null;
-      Node contactGroupHomeNode = getUserContactGroupHome(sProvider, username);
+      Node contactGroupHomeNode = getUserAddressBooksHome(sProvider, username);
       if (contactGroupHomeNode.hasNode(groupId))
         return getGroup(contactGroupHomeNode.getNode(groupId));
       return null;
@@ -442,7 +442,7 @@ public class JCRDataStorage {
   }
 
   public List<AddressBook> getGroups(SessionProvider sProvider, String username) throws Exception {
-    Node contactGroupHomeNode = getUserContactGroupHome(sProvider, username);
+    Node contactGroupHomeNode = getUserAddressBooksHome(sProvider, username);
     List<AddressBook> contactGroups = new ArrayList<AddressBook>();
     NodeIterator iter = contactGroupHomeNode.getNodes();
     while (iter.hasNext()) {
@@ -500,20 +500,29 @@ public class JCRDataStorage {
     return contactIds ;
   }
   
-  public AddressBook removeGroup(String username, String groupId) throws Exception {
+  /**
+   * Remove a personal addressBook. Does not clean the contacts it contains
+   * @param username
+   * @param addressBookId
+   * @return
+   * @throws Exception
+   */
+  public AddressBook removePersonalAddressBook(String username, String addressBookId) throws Exception {
     SessionProvider sProvider = null;
     try {
       sProvider = createSessionProvider();
-      Node contactGroupHomeNode = getUserContactGroupHome(sProvider, username);
-      if (contactGroupHomeNode.hasNode(groupId)) {
-        AddressBook contactGroup = loadPersonalAddressBook(username, groupId);
-        contactGroupHomeNode.getNode(groupId).remove();
-        contactGroupHomeNode.save();
-        contactGroupHomeNode.getSession().save();
+      Node addressBooksHomeNode = getUserAddressBooksHome(sProvider, username);
+      if (addressBooksHomeNode.hasNode(addressBookId)) {
+        // load before removing
+        AddressBook contactGroup = loadPersonalAddressBook(username, addressBookId);
+       
+        // remove the address book
+        addressBooksHomeNode.getNode(addressBookId).remove();
+        addressBooksHomeNode.save();
+        addressBooksHomeNode.getSession().save();
         // Can not call removeContacts(...) here!!!
+        
 
-        List<String> contactIds = getUserContactNodesByGroup(sProvider, username, groupId);
-        removeContacts(sProvider, username, contactIds);
         return contactGroup;
       }
       return null;
@@ -521,6 +530,25 @@ public class JCRDataStorage {
       closeSessionProvider(sProvider);
     }
   }
+
+  /**
+   * Remove all contacts contained in an address book
+   * @param username
+   * @param addressBookId
+   * @throws Exception
+   */
+  public void clearAddressBook(String username, String addressBookId) throws Exception {
+    SessionProvider sProvider = null;
+    try {
+      sProvider = createSessionProvider();
+      List<String> contactIds = getUserContactNodesByGroup(sProvider, username, addressBookId);
+      removeContacts(sProvider, username, contactIds);
+    } finally {
+      closeSessionProvider(sProvider);
+    }
+  }
+  
+  
   
   public void saveContact(String username, Contact contact, boolean isNew) throws Exception {
     SessionProvider sProvider = null;
@@ -534,24 +562,25 @@ public class JCRDataStorage {
     }
   }
 
-  public void savePersonalOrSharedAddressBook(String username, AddressBook group, boolean isNew) throws Exception {
+  public void savePersonalOrSharedAddressBook(String username, AddressBook addressbook, boolean isNew) throws Exception {
     SessionProvider sProvider = null;
     try {
       sProvider = createSessionProvider();
       Node groupNode = null ;
+      String id = addressbook.getId();
       if (isNew) {
-        groupNode = getUserContactGroupHome(sProvider, username).addNode(group.getId(), "exo:contactGroup");
-        groupNode.setProperty("exo:id", group.getId());
+        groupNode = getUserAddressBooksHome(sProvider, username).addNode(id, "exo:contactGroup");
+        groupNode.setProperty("exo:id", id);
       } else {
         try {
-          groupNode = getUserContactGroupHome(sProvider, username).getNode(group.getId());
+          groupNode = getUserAddressBooksHome(sProvider, username).getNode(id);
         } catch (PathNotFoundException e) {
           Node sharedAddressBookMock = getSharedAddressBook(username) ;
           PropertyIterator iter = sharedAddressBookMock.getReferences() ;
           Node addressBook ;      
           while(iter.hasNext()) {
             addressBook = iter.nextProperty().getParent() ;
-            if(addressBook.getName().equals(group.getId())) {
+            if(addressBook.getName().equals(id)) {
               groupNode = addressBook ;
               break ;
             }
@@ -560,12 +589,12 @@ public class JCRDataStorage {
       }
       
       if (groupNode == null && !isNew) throw new PathNotFoundException() ;
-      groupNode.setProperty("exo:name", group.getName());
-      groupNode.setProperty("exo:description", group.getDescription());
-      groupNode.setProperty("exo:editPermissionUsers", group.getEditPermissionUsers()) ;
-      groupNode.setProperty("exo:viewPermissionUsers", group.getViewPermissionUsers()) ;
-      groupNode.setProperty("exo:editPermissionGroups", group.getEditPermissionGroups()) ;
-      groupNode.setProperty("exo:viewPermissionGroups", group.getViewPermissionGroups()) ;
+      groupNode.setProperty("exo:name", addressbook.getName());
+      groupNode.setProperty("exo:description", addressbook.getDescription());
+      groupNode.setProperty("exo:editPermissionUsers", addressbook.getEditPermissionUsers()) ;
+      groupNode.setProperty("exo:viewPermissionUsers", addressbook.getViewPermissionUsers()) ;
+      groupNode.setProperty("exo:editPermissionGroups", addressbook.getEditPermissionGroups()) ;
+      groupNode.setProperty("exo:viewPermissionGroups", addressbook.getViewPermissionGroups()) ;
       if (isNew) groupNode.getSession().save() ;
       else groupNode.save() ;
     } finally {
@@ -669,7 +698,7 @@ public class JCRDataStorage {
   }
   
   public void removeUserShareAddressBook(SessionProvider sProvider, String username, String addressBookId, String removedUser) throws Exception {
-    Node addressBookNode = getUserContactGroupHome(sProvider, username).getNode(addressBookId);
+    Node addressBookNode = getUserAddressBooksHome(sProvider, username).getNode(addressBookId);
     List<String> values = new ArrayList<String>(
         Arrays.asList(ValuesToStrings(addressBookNode.getProperty(SHARED_PROP).getValues())));
     List<String> newValues = new ArrayList<String>(values) ;
@@ -706,7 +735,7 @@ public class JCRDataStorage {
   }
 
   public void shareAddressBook(SessionProvider sProvider, String username, String addressBookId, List<String> receiveUsers) throws Exception {
-    Node addressBookNode = getUserContactGroupHome(sProvider, username).getNode(addressBookId);
+    Node addressBookNode = getUserAddressBooksHome(sProvider, username).getNode(addressBookId);
     Value[] values = {};
     if (addressBookNode.isNodeType(SHARED_MIXIN)) {
       values = addressBookNode.getProperty(SHARED_PROP).getValues();
