@@ -534,7 +534,7 @@ public class JCRDataStorage {
     }
   }
 
-  public void saveGroup(String username, AddressBook group, boolean isNew) throws Exception {
+  public void savePersonalOrSharedAddressBook(String username, AddressBook group, boolean isNew) throws Exception {
     SessionProvider sProvider = null;
     try {
       sProvider = createSessionProvider();

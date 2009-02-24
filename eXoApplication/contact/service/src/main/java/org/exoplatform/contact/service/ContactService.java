@@ -210,12 +210,18 @@ public interface ContactService {
   public AddressBook getGroup(String owner, String addressBookID) throws Exception ;
   
   /**
-   * Save a personal address book of specific user
+   * Save a personal or shared address book.
    * @param username user ID of the owning user
+   * @param addressBook the address bok to save
    * @param isNew true if save a new address book and false to update an existing address book
    * @throws Exception 
    */
-  public void saveGroup(String username, AddressBook group, boolean isNew) throws Exception ;
+  public void saveAddressBook(String username, AddressBook addressBook, boolean isNew) throws Exception ;
+  
+  /**
+   * @deprecated use {@link #saveAddressBook(String, AddressBook, boolean)}
+   */
+  public void saveGroup(String username, AddressBook addressBook, boolean isNew) throws Exception ;
   
   /**
    * remove a personal address book of specific user

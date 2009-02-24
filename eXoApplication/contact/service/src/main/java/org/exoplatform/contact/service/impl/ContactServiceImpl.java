@@ -118,8 +118,18 @@ public class ContactServiceImpl implements ContactService {
     return getPersonalAddressBook(username, groupId);
   }
   
+  /**
+   * {@inheritDoc}
+   */  
+  public void saveAddressBook(String username, AddressBook group, boolean isNew) throws Exception {
+    storage_.savePersonalOrSharedAddressBook(username, group, isNew);    
+  } 
+  
+  /**
+   * {@inheritDoc}
+   */
   public void saveGroup(String username, AddressBook group, boolean isNew) throws Exception {
-    storage_.saveGroup(username, group, isNew);    
+    saveAddressBook(username,group, isNew);    
   }
   
   public AddressBook removeGroup(String username, String groupId) throws Exception {

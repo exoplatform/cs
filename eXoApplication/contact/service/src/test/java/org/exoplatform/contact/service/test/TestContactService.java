@@ -21,17 +21,16 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.commons.collections.map.HashedMap;
+import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.contact.service.ContactFilter;
-import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.SharedAddressBook;
+import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.contact.service.Tag;
 
 
 /**
@@ -65,7 +64,7 @@ public class TestContactService extends BaseContactServiceTestCase{
     AddressBook newAB = new AddressBook();
     newAB.setName("AB1");
     newAB.setDescription("Desc AB1");
-    contactService_.saveGroup(root, newAB, true); // test the create operation
+    contactService_.saveAddressBook(root, newAB, true); // test the create operation
     assertNotNull("Saved addressBook has no ID", newAB.getId());
     
     // test get by ID operation
@@ -90,7 +89,7 @@ public class TestContactService extends BaseContactServiceTestCase{
     savedAB.setViewPermissionGroups(new String []{"/platform/users"});
     savedAB.setEditPermissionGroups(new String []{"/platform/administrators"});
     String beforeId = savedAB.getId();
-    contactService_.saveGroup(root, savedAB, false);
+    contactService_.saveAddressBook(root, savedAB, false);
     assertEquals("AdressBook should have same ID before and after save", beforeId, newAB.getId());
     
     // test get by ID operation
@@ -159,7 +158,7 @@ public class TestContactService extends BaseContactServiceTestCase{
   
   public void testRemoveGroup() throws Exception {
     AddressBook tobeRemoved = createAddressBook("tobeRemoved", "will be removed", root);
-    contactService_.saveGroup(root, tobeRemoved, true);
+    contactService_.saveAddressBook(root, tobeRemoved, true);
     AddressBook removed = contactService_.removeGroup(root, tobeRemoved.getId());
     assertNotNull("Removed addressBook should not be null", removed);
     assertNotNull("Removed addressBook should still exist", contactService_.getPersonalAddressBook(root, removed.getId()));
@@ -453,7 +452,7 @@ public class TestContactService extends BaseContactServiceTestCase{
     AddressBook contactGroup = new AddressBook();
     contactGroup.setName(name);
     contactGroup.setDescription(description);
-    contactService_.saveGroup(owner, contactGroup, true);
+    contactService_.saveAddressBook(owner, contactGroup, true);
     return contactGroup;
   }
   
