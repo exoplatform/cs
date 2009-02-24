@@ -15,7 +15,7 @@
 				<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
   				<thead>
   					<tr>
-  			      <th style="text-align: left; padding-left: 7px;" class="text"><input type="checkbox" class="checkbox" title="<%=_ctx.appRes(uicomponent.getName() + ".label.checkAll")%>" value="4"/></th>
+  			      <th style="text-align: left; padding-left:2px;" class="text"><input type="checkbox" class="checkbox" title="<%=_ctx.appRes(uicomponent.getName() + ".label.checkAll")%>" value="4"/></th>
   		        <th style="width: 91%; padding-left: 7px;" class="text">
   		        	<div> <%=_ctx.appRes(uicomponent.getName() + ".label.name")%> </div>
   		        </th>
@@ -42,7 +42,7 @@
 							}
 						%>	
 							<tr class="UIContactList">
-  						  <td class="text" style="padding-left: 7px;">
+  						  <td class="text" style="padding-left:2px;">
   						  	<%
   						  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
   						  	%>
