@@ -104,8 +104,18 @@ public class ContactServiceImpl implements ContactService {
     return storage_.getGroups(sProvider, username);
   }
   
+  /**
+   * {@inheritDoc}
+   */
+  public AddressBook getPersonalAddressBook(String username, String addressBookId) throws Exception {
+    return storage_.loadPersonalAddressBook(username, addressBookId);
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
   public AddressBook getGroup(String username, String groupId) throws Exception {
-    return storage_.getGroup(username, groupId);
+    return getPersonalAddressBook(username, groupId);
   }
   
   public void saveGroup(String username, AddressBook group, boolean isNew) throws Exception {

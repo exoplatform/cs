@@ -413,7 +413,7 @@ public class JCRDataStorage {
     return contactGroup;
   }
 
-  public AddressBook getGroup(String username, String groupId) throws Exception {
+  public AddressBook loadPersonalAddressBook(String username, String groupId) throws Exception {
     SessionProvider sProvider = null;
     try {
       sProvider = createSessionProvider();
@@ -506,7 +506,7 @@ public class JCRDataStorage {
       sProvider = createSessionProvider();
       Node contactGroupHomeNode = getUserContactGroupHome(sProvider, username);
       if (contactGroupHomeNode.hasNode(groupId)) {
-        AddressBook contactGroup = getGroup(username, groupId);
+        AddressBook contactGroup = loadPersonalAddressBook(username, groupId);
         contactGroupHomeNode.getNode(groupId).remove();
         contactGroupHomeNode.save();
         contactGroupHomeNode.getSession().save();

@@ -202,6 +202,11 @@ public interface ContactService {
    * @return object ContactGroup for the given ID
    * @throws Exception 
    */
+  public AddressBook getPersonalAddressBook(String owner, String addressBookID) throws Exception ;
+  
+  /**
+   * @deprecated use {@link #getPersonalAddressBook(String, String)}
+   */
   public AddressBook getGroup(String owner, String addressBookID) throws Exception ;
   
   /**

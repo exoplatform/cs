@@ -57,9 +57,9 @@ public class TestContactService extends BaseContactServiceTestCase{
     sProvider_ = sessionProviderService.getSystemSessionProvider(null) ;
   }
   
-  public void testGetSaveGroup() throws Exception {
+  public void testGetSaveAddressBook() throws Exception {
     // test the get operation on a non existent address book
-    AddressBook shouldBeNull = contactService_.getGroup(root, "nonexistent");
+    AddressBook shouldBeNull = contactService_.getPersonalAddressBook(root, "nonexistent");
     assertNull("A non existent address book should be null", shouldBeNull);
 
     AddressBook newAB = new AddressBook();
@@ -69,7 +69,7 @@ public class TestContactService extends BaseContactServiceTestCase{
     assertNotNull("Saved addressBook has no ID", newAB.getId());
     
     // test get by ID operation
-    AddressBook savedAB = contactService_.getGroup(root, newAB.getId());
+    AddressBook savedAB = contactService_.getPersonalAddressBook(root, newAB.getId());
     
     assertEquals("Saved adressBook name differs", newAB.getName(), savedAB.getName());
     assertEquals("Saved adressBook description differs", newAB.getDescription(), savedAB.getDescription());
@@ -94,7 +94,7 @@ public class TestContactService extends BaseContactServiceTestCase{
     assertEquals("AdressBook should have same ID before and after save", beforeId, newAB.getId());
     
     // test get by ID operation
-    AddressBook loadedAB = contactService_.getGroup(root, savedAB.getId());
+    AddressBook loadedAB = contactService_.getPersonalAddressBook(root, savedAB.getId());
     assertEquals("Loaded adressBook name differs", savedAB.getName(), loadedAB.getName());
     assertEquals("Loaded adressBook description differs", savedAB.getDescription(), loadedAB.getDescription());
     assertEquals("Loaded and Saved addressBooks should have same IDs",savedAB.getId(), loadedAB.getId());
@@ -162,7 +162,7 @@ public class TestContactService extends BaseContactServiceTestCase{
     contactService_.saveGroup(root, tobeRemoved, true);
     AddressBook removed = contactService_.removeGroup(root, tobeRemoved.getId());
     assertNotNull("Removed addressBook should not be null", removed);
-    assertNotNull("Removed addressBook should still exist", contactService_.getGroup(root, removed.getId()));
+    assertNotNull("Removed addressBook should still exist", contactService_.getPersonalAddressBook(root, removed.getId()));
   }
   
   private Contact createContact(String id) throws Exception {
@@ -196,11 +196,11 @@ public class TestContactService extends BaseContactServiceTestCase{
     AddressBook johnBook = createAddressBook("group3", "group3", john);
     
   // get AddressBook:
-    //assertNotNull(contactService_.getGroup(root, rootBook1.getId()));
-    //assertNotNull(contactService_.getGroup(root, rootBook2.getId()));
+    //assertNotNull(contactService_.getPersonalAdressBook(root, rootBook1.getId()));
+    //assertNotNull(contactService_.getPersonalAdressBook(root, rootBook2.getId()));
     
   // get Groups:
-    //assertEquals(contactService_.getGroups(sProvider_, root).size(), 3);
+    //assertEquals(contactService_.getPersonalAdressBooks(sProvider_, root).size(), 3);
     
   // update addressBook:
     //rootBook1.setName("newName");
@@ -219,7 +219,7 @@ public class TestContactService extends BaseContactServiceTestCase{
     
   //  remove group:
     //assertNotNull(contactService_.removeGroup(sProvider_, root, rootBook2.getId()));
-    //assertNull(contactService_.getGroup(root, rootBook2.getId()));
+    //assertNull(contactService_.getPersonalAdressBook(root, rootBook2.getId()));
     
   // share group:
     sharedBook.setEditPermissionUsers(new String[]{john});
