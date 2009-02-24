@@ -24,12 +24,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 import javax.mail.internet.InternetAddress;
 
 import org.exoplatform.calendar.CalendarUtils;
@@ -1140,6 +1138,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       event.getRequestContext().addUIComponentToUpdateByAjax(tabAttender) ;       
       
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+      System.out.println(uiContainer);
       UIPopupWindow uiPopupWindow = uiContainer.getChild(UIPopupWindow.class) ;
       if(uiPopupWindow == null)uiPopupWindow = uiContainer.addChild(UIPopupWindow.class, "UIPopupWindowUserSelect", "UIPopupWindowUserSelect") ;
       UIUserSelector uiUserSelector = uiContainer.createUIComponent(UIUserSelector.class, null, null) ;
@@ -1148,7 +1147,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       uiUserSelector.setShowSearchGroup(true);
       uiPopupWindow.setUIComponent(uiUserSelector);
       uiPopupWindow.setShow(true);
-      uiPopupWindow.setWindowSize(700, 400) ;
+      uiPopupWindow.setWindowSize(740, 400) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;      
     }
   }
