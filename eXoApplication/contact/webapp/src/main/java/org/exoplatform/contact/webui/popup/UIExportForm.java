@@ -33,6 +33,7 @@ import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.Utils;
 import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.webui.UIAddressBooks;
+import org.exoplatform.contact.webui.UIContactContainer;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadResource;
@@ -201,6 +202,16 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
           } else {
             pageList = contactService.getPublicContactsByAddressBook(SessionProviderFactory.createSystemProvider(), address[1]) ;
           }
+          if (pageList == null) {
+            uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.deletedPer", new Object[]{Utils.limitExport + ""}, 
+                ApplicationMessage.WARNING)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(
+              uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class)) ;
+            event.getRequestContext().addUIComponentToUpdateByAjax(
+              uiContactPortlet.findFirstComponentOfType(UIContactContainer.class)) ;
+            return ;
+          }          
           if (pageList.getAvailable() > Utils.limitExport) {
             uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.manyContacts", new Object[]{Utils.limitExport + ""}, 
                 ApplicationMessage.WARNING)) ;
@@ -221,7 +232,10 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
             }            
           } else if (address[0].equals(JCRDataStorage.SHARED)) {
             for(String contactId : contactIds.keySet()) {
-              contacts.add(contactService.getSharedContactAddressBook(username, contactId)) ;
+              //cs-2326
+              Contact contact = contactService.getSharedContactAddressBook(username, contactId) ;
+              if (contact != null)
+                contacts.add(contactService.getSharedContactAddressBook(username, contactId)) ;
             }
           } else {
             for(String contactId : contactIds.keySet()) {
@@ -237,7 +251,18 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
             contacts.add(uiForm.contacts.get(contactId)) ;
           }          
         }
+      }      
+      if (contacts.size() == 0) {
+        uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.deletedPer", new Object[]{Utils.limitExport + ""}, 
+            ApplicationMessage.WARNING)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(
+          uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class)) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(
+          uiContactPortlet.findFirstComponentOfType(UIContactContainer.class)) ;
+        return ;
       }
+      
       OutputStream out = contactService.getContactImportExports(exportFormat).exportContact(username, contacts) ;
       String contentType = null;
       String extension = null;

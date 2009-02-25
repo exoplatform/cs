@@ -39,8 +39,10 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -51,6 +53,7 @@ import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
+import org.exoplatform.webui.organization.account.UIUserSelector;
 
 /**
  * Created by The eXo Platform SARL
@@ -58,22 +61,33 @@ import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
  *          hung.hoang@exoplatform.com
  * Aus 01, 2007 2:48:18 PM 
  */
-@ComponentConfig(
-    lifecycle = UIFormLifecycle.class,
-    template = "system:/groovy/webui/form/UIForm.gtmpl",
-    events = {
-      @EventConfig(listeners = UISharedForm.SaveActionListener.class),    
-      @EventConfig(listeners = UISharedForm.SelectPermissionActionListener.class, phase = Phase.DECODE),  
-      @EventConfig(listeners = UISharedForm.CancelActionListener.class, phase = Phase.DECODE)
-    }
-)
+@ComponentConfigs ( {
+  @ComponentConfig(
+      lifecycle = UIFormLifecycle.class,
+      template = "system:/groovy/webui/form/UIForm.gtmpl",
+      events = {
+        @EventConfig(listeners = UISharedForm.SaveActionListener.class),    
+        @EventConfig(listeners = UISharedForm.SelectPermissionActionListener.class, phase = Phase.DECODE),  
+        @EventConfig(listeners = UISharedForm.CancelActionListener.class, phase = Phase.DECODE)
+      }
+  ),
+  @ComponentConfig(
+                   id = "UIPopupWindowUserSelect",
+                   type = UIPopupWindow.class,
+                   template =  "system:/groovy/webui/core/UIPopupWindow.gtmpl",
+                   events = {
+                     @EventConfig(listeners = UIPopupWindow.CloseActionListener.class, name = "ClosePopup")  ,
+                     @EventConfig(listeners = UISharedForm.AddActionListener.class, name = "Add", phase = Phase.DECODE),
+                     @EventConfig(listeners = UISharedForm.CloseActionListener.class, name = "Close", phase = Phase.DECODE)
+                   }
+  )
+})
 public class UISharedForm extends UIForm implements UIPopupComponent, UISelector{
   final static public String FIELD_ADDRESS = "addressName".intern() ;
   final static public String FIELD_CONTACT = "contactName".intern() ;
   final static public String FIELD_USER = "user".intern() ;
   final static public String FIELD_GROUP = "group".intern() ;  
   final static public String FIELD_EDIT_PERMISSION = "canEdit".intern() ;
-  private Map<String, String> permissionUser_ = new LinkedHashMap<String, String>() ;
   private Map<String, String> permissionGroup_ = new LinkedHashMap<String, String>() ;
   private AddressBook group_ = null ;
   private Contact contact_ = null ;
@@ -146,24 +160,17 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
 
   public void updateSelect(String selectField, String value) throws Exception {
     UIFormStringInput fieldInput = getUIStringInput(selectField) ;
-    Map<String, String> permission ;
     if (selectField.equals(FIELD_USER)) {
-      // add to fix bug 902
-      if (!ContactUtils.isEmpty(fieldInput.getValue()))
-        for (String user : fieldInput.getValue().split(","))
-          permissionUser_.put(user.trim(), user.trim()) ;
-      permissionUser_.put(value, value) ;
-      permission = permissionUser_ ;
+      fieldInput.setValue(value) ;
     } else {
       permissionGroup_.put(value, value) ;
-      permission = permissionGroup_ ;
-    }  
-    StringBuilder sb = new StringBuilder() ;
-    for(String s : permission.values()) {      
-      if(sb != null && sb.length() > 0) sb.append(", ") ;
-      sb.append(s) ;
+      StringBuilder sb = new StringBuilder() ;
+      for(String s : permissionGroup_.values()) {
+        if(sb != null && sb.length() > 0) sb.append(", ") ;
+        sb.append(s) ;
+      }
+      fieldInput.setValue(sb.toString()) ;
     }    
-    fieldInput.setValue(sb.toString()) ;
   } 
   
   static  public class SaveActionListener extends EventListener<UISharedForm> {
@@ -431,7 +438,6 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       uiForm.getUIStringInput(UISharedForm.FIELD_USER).setValue(null) ;
       uiForm.getUIStringInput(UISharedForm.FIELD_GROUP).setValue(null) ;
       uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).setChecked(false) ;
-      uiForm.permissionUser_.clear() ;
       uiForm.permissionGroup_.clear() ;        
   
       uiForm.isNew_ = true ;
@@ -462,6 +468,28 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
     }
   }
   
+  static  public class AddActionListener extends EventListener<UIUserSelector> {
+    public void execute(Event<UIUserSelector> event) throws Exception {
+      UIUserSelector uiUserSelector = event.getSource();
+      UIPopupContainer uiContainer = uiUserSelector.getAncestorOfType(UIPopupContainer.class) ;
+      UISharedForm uiForm = uiContainer.findFirstComponentOfType(UISharedForm.class);
+      String values = uiUserSelector.getSelectedUsers();
+      uiForm.updateSelect(FIELD_USER, values) ; 
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer);
+    }
+  }
+  
+  static  public class CloseActionListener extends EventListener<UIUserSelector> {
+    public void execute(Event<UIUserSelector> event) throws Exception {
+      UIUserSelector uiUseSelector = event.getSource() ;
+      UIPopupWindow uiPoupPopupWindow = uiUseSelector.getParent() ;
+      UIPopupContainer uiContainer = uiPoupPopupWindow.getAncestorOfType(UIPopupContainer.class) ;
+      uiPoupPopupWindow.setUIComponent(null) ;
+      uiPoupPopupWindow.setShow(false) ;      
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;  
+    }
+  }
+
   static  public class SelectPermissionActionListener extends EventListener<UISharedForm> {
     public void execute(Event<UISharedForm> event) throws Exception {
       UISharedForm uiForm = event.getSource() ;
@@ -473,31 +501,48 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
         return ;
       } 
       String permType = event.getRequestContext().getRequestParameter(OBJECTID) ;
-      UIPopupAction childPopup = uiForm.getAncestorOfType(UIPopupContainer.class).getChild(UIPopupAction.class) ;
-      UIGroupSelector uiGroupSelector = childPopup.activate(UIGroupSelector.class, 500) ;
-      uiGroupSelector.setType(permType) ;
-      uiGroupSelector.setSelectedGroups(null) ;
-      
-      if (permType.equals(UISelectComponent.TYPE_USER)) {
-        // add to fix bug cs 997
-        String users = uiForm.getUIStringInput(FIELD_USER).getValue() ;
-        uiForm.permissionUser_.clear() ;
-        if (!ContactUtils.isEmpty(users)) {
-          if (users.indexOf(",") < 0) uiForm.permissionUser_.put(users.trim(), users.trim()) ;
-          else {
-            for (String user : users.split(",")) uiForm.permissionUser_.put(user.trim(), user.trim()) ;              
-          }          
+      UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
+      /*try {
+        if (uiContainer.findFirstComponentOfType(UIGroupSelector.class) != null) {
+          System.out.println("\n\n 11 :" + uiContainer.findFirstComponentOfType(UIGroupSelector.class).getParent().getName() + "\n\n") ;
+          System.out.println("\n\n 22 :" + uiContainer.getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIGroupSelector.class).getParent().getName() + "\n\n") ;
+          System.out.println("\n\n 33 remove :" + uiContainer.removeChild(UIPopupWindow.class) + "\n\n") ;
+          System.out.println("\n\n 33 :" + uiContainer.getChild(UIGroupSelector.class) + "\n\n") ;
+          System.out.println("\n\n 35 :" + uiContainer.getChild(UIPopupAction.class).getChild(UIGroupSelector.class) + "\n\n") ;
         }
-        
-        uiGroupSelector.setId("UIUserSelector") ;
-        uiGroupSelector.setComponent(uiForm, new String[]{UISharedForm.FIELD_USER}) ;
+        if (uiContainer.findFirstComponentOfType(org.exoplatform.webui.organization.UIGroupSelector.class) != null) {
+          System.out.println("\n\n 44 :" + uiContainer.findFirstComponentOfType(org.exoplatform.webui.organization.UIGroupSelector.class).getParent().getName() + "\n\n") ;
+          
+        }
+      } catch (Exception e) {
+        e.printStackTrace() ;
+      }*/
+      if (permType.equals(UISelectComponent.TYPE_USER)) {
+        UIPopupWindow uiPopupWindow = uiContainer.getChild(UIPopupWindow.class) ;
+        if (uiPopupWindow == null) uiPopupWindow = uiContainer.addChild(UIPopupWindow.class, "UIPopupWindowUserSelect", "UIPopupWindowUserSelect") ;
+        UIUserSelector uiUserSelector = uiContainer.createUIComponent(UIUserSelector.class, null, null) ;
+        uiUserSelector.setShowSearch(true);
+        uiUserSelector.setShowSearchUser(true) ;
+        uiUserSelector.setShowSearchGroup(true);
+
+        uiPopupWindow.setUIComponent(uiUserSelector);
+        uiPopupWindow.setShow(true);
+        uiPopupWindow.setWindowSize(700, 400) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;        
       } else {
+        UIPopupAction childPopup = uiContainer.getChild(UIPopupAction.class) ;
+        UIGroupSelector uiGroupSelector = childPopup.activate(UIGroupSelector.class, 500) ;
+
+        uiGroupSelector.setType(permType) ;
+        uiGroupSelector.setSelectedGroups(null) ;
         uiGroupSelector.setId("UIGroupSelector") ;
         uiGroupSelector.setComponent(uiForm, new String[]{UISharedForm.FIELD_GROUP}) ;
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;  
       }
-      event.getRequestContext().addUIComponentToUpdateByAjax(childPopup) ;  
     }
   }
+  
+  
   
   static  public class CancelActionListener extends EventListener<UISharedForm> {
     public void execute(Event<UISharedForm> event) throws Exception {
