@@ -99,7 +99,7 @@ public class NewUserListener extends UserEventListener {
 
         // added 23-4
         JCRDataStorage storage_ = new JCRDataStorage(nodeHierarchyCreator_) ;
-        Node publicContactHome = storage_.getPublicContactHome(sysProvider) ;      
+        Node publicContactHome = storage_.getPublicContactsHome(sysProvider) ;      
         String usersPath = nodeHierarchyCreator_.getJcrPath(JCRDataStorage.USERS_PATH) ;
         QueryManager qm = publicContactHome.getSession().getWorkspace().getQueryManager();
         List<String> recievedUser = new ArrayList<String>() ;

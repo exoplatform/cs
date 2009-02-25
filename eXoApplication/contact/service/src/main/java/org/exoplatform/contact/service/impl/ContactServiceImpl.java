@@ -52,9 +52,13 @@ public class ContactServiceImpl implements ContactService {
       contactImportExport_.put(VCARD, new VCardImportExport(storage_)) ;
   }
   
-  public List<Contact> getAllContact(SessionProvider sProvider, String username) throws Exception {
-    return storage_.getAllContact(sProvider, username);
+  /**
+   * {@inheritDoc}
+   */
+  public List<Contact> getPersonalContacts(String username) throws Exception {
+    return storage_.findAllContactsByOwner(username);
   }
+
   
   public Contact getPersonalContact(String userId) throws Exception {
     return storage_.getPersonalContact(userId) ;
@@ -201,18 +205,7 @@ public class ContactServiceImpl implements ContactService {
   public List<GroupContactData> getPublicContacts(SessionProvider sProvider, String[] groupIds) throws Exception {
     return storage_.getPublicContacts(sProvider, groupIds);
   }
-/*  
-  public List<String> getPublicAddressBookContacts(SessionProvider sProvider, String[] groupIds) throws Exception{
-    return storage_.getPublicAddressBookContacts(sProvider, groupIds);
-  }*/
-/*  public Contact removePublicContact(SessionProvider sProvider, String contactId) throws Exception {
-    return storage_.removePublicContact(sProvider, contactId);
-  }*/
-/*
-  public void savePublicContact(Contact contact, boolean isNew) throws Exception {
-    storage_.savePublicContact(contact, isNew);
-  } 
-  */
+
   public Tag getTag(SessionProvider sProvider, String username, String tagName) throws Exception {
     return storage_.getTag(sProvider, username, tagName) ;
   }
@@ -275,11 +268,10 @@ public class ContactServiceImpl implements ContactService {
     return storage_.getSharedAddressBookById(username, addressBookId) ;
   }
   
-
-  
   public List<String> getAllEmailBySharedGroup(String username, String addressBookId) throws Exception {
     return storage_.getAllEmailBySharedGroup(username, addressBookId) ;
   }
+  
   public List<String> getAllEmailByPublicGroup(String username, String groupId) throws Exception { 
     return storage_.getAllEmailByPublicGroup(username, groupId) ;
   }
@@ -341,5 +333,13 @@ public class ContactServiceImpl implements ContactService {
   public void saveContact(SessionProvider sProvider, String username, Contact contact, boolean isNew) throws Exception {
     storage_.saveContact(username, contact, isNew);    
   } 
+  
+  /**
+   * {@inheritDoc}
+   */
+  public List<Contact> getAllContacts(SessionProvider sProvider, String username) throws Exception {
+    return getPersonalContacts(username);
+  }
+  
   
 }

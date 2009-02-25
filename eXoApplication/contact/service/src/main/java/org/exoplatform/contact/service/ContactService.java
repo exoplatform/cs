@@ -30,13 +30,12 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 public interface ContactService extends ContactServiceLegacy {
   
   /**
-   * get all contacts in all private address books belong to current user
-   * @return list contacts belong current user
-   * @param sProvider session of current user
-   * @param username current user
+   * get all contacts in all personal address books that belong to current user
+   * @param username current user ID
+   * @return list of contacts of the user
    * @throws Exception
    */
-  public List<Contact> getAllContact(SessionProvider sProvider, String username) throws Exception ;
+  public List<Contact> getPersonalContacts(String username) throws Exception ;
   
   /**
    * get contact page list in a specific personal addressbook

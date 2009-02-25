@@ -55,7 +55,7 @@ public class NewMembershipListener extends MembershipEventListener {
     JCRDataStorage storage_ = new JCRDataStorage(nodeHierarchyCreator_) ;
     SessionProvider systemSession = SessionProvider.createSystemProvider() ;
     try {
-      Node publicContactHome = storage_.getPublicContactHome(systemSession) ;      
+      Node publicContactHome = storage_.getPublicContactsHome(systemSession) ;      
       String usersPath = nodeHierarchyCreator_.getJcrPath(JCRDataStorage.USERS_PATH) ;
       QueryManager qm = publicContactHome.getSession().getWorkspace().getQueryManager();
       List<String> recievedUser = new ArrayList<String>() ;
@@ -115,7 +115,7 @@ public class NewMembershipListener extends MembershipEventListener {
     try {
       cservice_.saveContact(m.getUserName(), contact, false) ;
       JCRDataStorage storage_ = new JCRDataStorage(nodeHierarchyCreator_) ;
-      Node publicContactHome = storage_.getPublicContactHome(systemSession) ;      
+      Node publicContactHome = storage_.getPublicContactsHome(systemSession) ;      
       String usersPath = nodeHierarchyCreator_.getJcrPath(JCRDataStorage.USERS_PATH) ;
       QueryManager qm = publicContactHome.getSession().getWorkspace().getQueryManager();
       StringBuffer queryString = new StringBuffer("/jcr:root" + usersPath 

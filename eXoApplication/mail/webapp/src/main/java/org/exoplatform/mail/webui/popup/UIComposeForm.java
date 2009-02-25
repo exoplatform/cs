@@ -547,7 +547,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
   public List<Contact> getContacts() throws Exception {
     ContactService contactSrv = getApplicationComponent(ContactService.class);
     String username = MailUtils.getCurrentUser();
-    return contactSrv.getAllContact(SessionProviderFactory.createSystemProvider(), username);
+    return contactSrv.getPersonalContacts(username);
   }
 
   public void resetFields() { reset() ; }

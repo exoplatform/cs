@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <configuration>
+
+  <component>
+    <type>org.exoplatform.contact.service.impl.JCRDataStorage</type>
+  </component>
+  
   <component>
     <key>org.exoplatform.services.log.LogConfigurationInitializer</key>
     <type>org.exoplatform.services.log.LogConfigurationInitializer</type>

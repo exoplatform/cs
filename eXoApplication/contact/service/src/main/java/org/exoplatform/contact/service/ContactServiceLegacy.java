@@ -66,9 +66,14 @@ public interface ContactServiceLegacy {
   public List<SharedAddressBook> getSharedAddressBooks(SessionProvider sProvider, String username) throws Exception;
 
   /**
-   * @deprecated user
+   * @deprecated use
    *             {@link ContactService#saveContact(String, Contact, boolean)}
    */
   public void saveContact(SessionProvider sProvider, String username, Contact contact, boolean isNew) throws Exception;
 
+  /**
+   * @deprecated use {@link ContactService#getPersonalContacts(String)}
+   */
+  public List<Contact> getAllContacts(SessionProvider sProvider, String username) throws Exception ;
+  
 }
