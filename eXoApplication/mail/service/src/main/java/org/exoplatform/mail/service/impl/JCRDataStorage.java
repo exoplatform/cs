@@ -892,7 +892,7 @@ public class JCRDataStorage {
     logger.warn("MessageId = " + msgId);
     Calendar gc = MimeMessageParser.getReceivedDate(msg);
     Node msgHomeNode = getDateStoreNode(sProvider, username, accId, gc.getTime());
-
+    if (msgHomeNode == null) return false;
     try {
       Node msgNode = msgHomeNode.getNode(msgId);
       logger.warn("Check duplicate ......................................");
