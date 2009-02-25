@@ -67,7 +67,7 @@ public class NewMembershipListener extends MembershipEventListener {
       for (String group  : contact.getAddressBook()) groups.put(group, group) ;
       groups.put(m.getGroupId(), m.getGroupId()) ;
       contact.setAddressBook(groups.keySet().toArray(new String[] {})) ;
-      cservice_.saveContact(systemSession, m.getUserName(), contact, false) ;
+      cservice_.saveContact(m.getUserName(), contact, false) ;
 
       StringBuffer queryString = new StringBuffer("/jcr:root" + usersPath 
           + "//element(*,exo:contactGroup)[@exo:viewPermissionGroups='").append( m.getGroupId() + "']") ;        
@@ -113,7 +113,7 @@ public class NewMembershipListener extends MembershipEventListener {
     contact.setAddressBook(groupIds.keySet().toArray(new String[] {})) ;
     SessionProvider systemSession = SessionProvider.createSystemProvider();
     try {
-      cservice_.saveContact(systemSession, m.getUserName(), contact, false) ;
+      cservice_.saveContact(m.getUserName(), contact, false) ;
       JCRDataStorage storage_ = new JCRDataStorage(nodeHierarchyCreator_) ;
       Node publicContactHome = storage_.getPublicContactHome(systemSession) ;      
       String usersPath = nodeHierarchyCreator_.getJcrPath(JCRDataStorage.USERS_PATH) ;

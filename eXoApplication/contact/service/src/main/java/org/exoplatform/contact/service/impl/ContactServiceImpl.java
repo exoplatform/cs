@@ -84,7 +84,10 @@ public class ContactServiceImpl implements ContactService {
     return storage_.getContact(username, contactId);
   }
   
-  public void saveContact(SessionProvider sProvider, String username, Contact contact, boolean isNew) throws Exception {
+  /**
+   * {@inheritDoc}
+   */
+  public void saveContact(String username, Contact contact, boolean isNew) throws Exception {
     storage_.saveContact(username, contact, isNew);    
   }
   
@@ -332,6 +335,11 @@ public class ContactServiceImpl implements ContactService {
     unshareAddressBook(username, addressBookId,removedUser);
   }  
     
-  
+  /**
+   * {@inheritDoc}
+   */
+  public void saveContact(SessionProvider sProvider, String username, Contact contact, boolean isNew) throws Exception {
+    storage_.saveContact(username, contact, isNew);    
+  } 
   
 }

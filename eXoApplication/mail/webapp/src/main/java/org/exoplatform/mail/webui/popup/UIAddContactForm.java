@@ -375,9 +375,9 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
       try {
         if(!uiContact.isEdited_) {
           contact.setAddressBook(new String[] {groupId}) ;
-          contactSrv.saveContact(SessionProviderFactory.createSystemProvider(), uiPortlet.getCurrentUser(), contact, true);
+          contactSrv.saveContact(uiPortlet.getCurrentUser(), contact, true);
         } else {
-          contactSrv.saveContact(SessionProviderFactory.createSystemProvider(), uiPortlet.getCurrentUser(), contact, false);
+          contactSrv.saveContact(uiPortlet.getCurrentUser(), contact, false);
         }
         UIAddressBookForm uiAddress = uiPortlet.findFirstComponentOfType(UIAddressBookForm.class);
         if (uiAddress != null) {

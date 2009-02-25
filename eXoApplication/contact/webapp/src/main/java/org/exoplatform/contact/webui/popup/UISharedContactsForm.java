@@ -248,7 +248,7 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
           contact.setEditPermissionUsers(newEditMapUsers.keySet().toArray(new String[] {})) ;
           contact.setViewPermissionGroups(newViewMapGroups.keySet().toArray(new String[] {})) ;
           contact.setEditPermissionGroups(newEditMapGroups.keySet().toArray(new String[] {})) ;
-          contactService.saveContact(SessionProviderFactory.createSessionProvider(), username, contact, false) ;
+          contactService.saveContact(username, contact, false) ;
         }
       	String[] contactIds = uiForm.sharedContacts.keySet().toArray(new String[]{}) ;
         

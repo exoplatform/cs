@@ -68,14 +68,13 @@ public interface ContactService extends ContactServiceLegacy {
   public Contact getContact(String username, String contactId) throws Exception ;
   
   /**
-   * save a contact to personal address book
-   * @param sProvider session of current user
+   * Save a contact to a personal address book
    * @param username current user
-   * @param  contact contact is saved
+   * @param  contact contact to save
    * @param isNew is true if save a new contact and false if save an edited contact
    * @throws Exception 
    */
-  public void saveContact(SessionProvider sProvider, String username, Contact contact, boolean isNew) throws Exception ;
+  public void saveContact(String username, Contact contact, boolean isNew) throws Exception ;
   
   /**
    * remove some personal contacts belong current user

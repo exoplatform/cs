@@ -53,7 +53,7 @@ public class TestContactService extends BaseContactServiceTestCase{
   }
   
 
-  public void testGetSaveAddressBook() throws Exception {
+  public void testSaveGetAddressBook() throws Exception {
     // test the get operation on a non existent address book
     AddressBook shouldBeNull = contactService.getPersonalAddressBook(root, "nonexistent");
     assertNull("A non existent address book should be null", shouldBeNull);
@@ -128,13 +128,13 @@ public class TestContactService extends BaseContactServiceTestCase{
     
   }
   
-  public void testSaveContact() throws Exception {
+  public void testSaveGetContact() throws Exception {
     Contact contact = createContact() ; 
     AddressBook ab1 = createAddressBook("save1", "group1", root);
     AddressBook ab2 = createAddressBook("save2", "group2", root);    
     setContactInAddressBooks(contact, ab1, ab2);
     
-    contactService.saveContact(sessionProvider, root, contact, true);
+    contactService.saveContact(root, contact, true);
 
     assertNotNull("Saved contact must have an ID", contact.getId());
     Contact saved = contactService.getContact(root, contact.getId());
@@ -225,6 +225,9 @@ public class TestContactService extends BaseContactServiceTestCase{
     
   }
 
+  
+
+  
   public void _testContactService() throws Exception {
   /**
    * Test AddressBook
@@ -297,11 +300,11 @@ public class TestContactService extends BaseContactServiceTestCase{
  
     
   //  save contact
-    contactService.saveContact(sessionProvider, root, contact1, true);
-    contactService.saveContact(sessionProvider, root, contact2, true);
-    contactService.saveContact(sessionProvider, root, contact4, true);
+    contactService.saveContact(root, contact1, true);
+    contactService.saveContact(root, contact2, true);
+    contactService.saveContact(root, contact4, true);
     
-    contactService.saveContact(sessionProvider, john, contact3, true);
+    contactService.saveContact(john, contact3, true);
     //contactService_.saveContact(sProvider_, userMarry_, contact3, true);
     
     assertNotNull(contact1);
@@ -346,7 +349,7 @@ public class TestContactService extends BaseContactServiceTestCase{
     // update contact:
     contact1.setFirstName("new first name");
     contact1.setOwner(true);
-    contactService.saveContact(sessionProvider, root, contact1, false);
+    contactService.saveContact(root, contact1, false);
     assertEquals("new first name", contact1.getFirstName());
     
   // share contact to user:
@@ -378,7 +381,7 @@ public class TestContactService extends BaseContactServiceTestCase{
   // get Shared Contacts By AddressBook
     Contact shareContact = createContact();;
     shareContact.setAddressBook(new String[]{sharedBook.getId()});
-    contactService.saveContact(sessionProvider, root, shareContact, true);
+    contactService.saveContact(root, shareContact, true);
     
     assertEquals(contactService.getContactPageListByGroup(sessionProvider, root, sharedBook.getId()).getAll().size(), 1);
     SharedAddressBook sharedAddressBook = createShareAddressbook(sharedBook, root);
@@ -387,7 +390,7 @@ public class TestContactService extends BaseContactServiceTestCase{
   // get all email by shared group:
     shareContact.setEmailAddress("maivanha1610@gmail.com");
     shareContact.setFullName("Mai Van Ha");
-    contactService.saveContact(sessionProvider, root, shareContact, false);
+    contactService.saveContact(root, shareContact, false);
     assertEquals(contactService.getAllEmailBySharedGroup(john, sharedBook.getId()).get(0), "maivanha1610@gmail.com");
     
   // remove contact in shared address book 

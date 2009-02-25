@@ -369,7 +369,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
             uiContacts.getContactMap().put(contact.getId(), contact) ;
           }
           try {
-            contactService.saveContact(sessionProvider, username, contact, false) ;
+            contactService.saveContact(username, contact, false) ;
           }  catch (PathNotFoundException e) {
             uiApp.addMessage(new ApplicationMessage("UISharedForm.msg.contact-not-existed", null, 
                 ApplicationMessage.WARNING)) ;
@@ -415,7 +415,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
                 if (!receiveGroups.keySet().contains(edit)) newEditPerGroups.add(edit) ; 
             contact.setEditPermissionGroups(newEditPerGroups.toArray(new String[] {})) ;
           }
-          contactService.saveContact(sessionProvider, username, contact, false) ;
+          contactService.saveContact(username, contact, false) ;
           UIAddEditPermission uiAddEdit = uiForm.getParent() ;
           uiAddEdit.updateContactGrid(contact);
           event.getRequestContext().addUIComponentToUpdateByAjax(uiAddEdit) ;

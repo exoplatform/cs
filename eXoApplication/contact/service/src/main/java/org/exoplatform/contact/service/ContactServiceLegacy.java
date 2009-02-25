@@ -27,12 +27,17 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 public interface ContactServiceLegacy {
 
   /**
-   * @deprecated use {@link ContactService#saveAddressBook(String, AddressBook, boolean)}
+   * @deprecated use
+   *             {@link ContactService#saveAddressBook(String, AddressBook, boolean)}
    */
-  public void saveGroup(SessionProvider sProvider, String username, AddressBook addressBook, boolean isNew) throws Exception;
+  public void saveGroup(SessionProvider sProvider,
+                        String username,
+                        AddressBook addressBook,
+                        boolean isNew) throws Exception;
 
   /**
-   * @deprecated use {@link ContactService#getPersonalAddressBook(String, String)}
+   * @deprecated use
+   *             {@link ContactService#getPersonalAddressBook(String, String)}
    */
   public AddressBook getGroup(SessionProvider sProvider, String owner, String addressBookID) throws Exception;
 
@@ -40,13 +45,13 @@ public interface ContactServiceLegacy {
    * @deprecated use {@link ContactService#removeAddressBook(String, String)}
    */
   public AddressBook removeGroup(SessionProvider sProvider, String username, String groupId) throws Exception;
-  
 
   /**
    * @deprecated use
    *             {@link ContactService#unshareAddressBook(String, String, String)}
    */
-  public void removeUserShareAddressBook(SessionProvider sProvider, String username,
+  public void removeUserShareAddressBook(SessionProvider sProvider,
+                                         String username,
                                          String addressBookId,
                                          String removedUser) throws Exception;
 
@@ -54,10 +59,16 @@ public interface ContactServiceLegacy {
    * @deprecated use {@link ContactService#getSharedAddressBook(String, String)}
    */
   public AddressBook getSharedGroup(SessionProvider sProvider, String username, String groupId) throws Exception;
-// 
+
   /**
    * @deprecated use {@link ContactService#getSharedAddressBooks(String)}
    */
   public List<SharedAddressBook> getSharedAddressBooks(SessionProvider sProvider, String username) throws Exception;
+
+  /**
+   * @deprecated user
+   *             {@link ContactService#saveContact(String, Contact, boolean)}
+   */
+  public void saveContact(SessionProvider sProvider, String username, Contact contact, boolean isNew) throws Exception;
 
 }

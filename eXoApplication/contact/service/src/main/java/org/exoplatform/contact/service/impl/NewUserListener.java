@@ -94,7 +94,7 @@ public class NewUserListener extends UserEventListener {
         contact.setAddressBook(groupIds.keySet().toArray(new String[] {})) ;
         contact.setOwner(true) ;
         contact.setOwnerId(user.getUserName()) ;
-        cservice_.saveContact(sysProvider, user.getUserName(), contact, true) ;
+        cservice_.saveContact(user.getUserName(), contact, true) ;
 
 
         // added 23-4
@@ -141,7 +141,7 @@ public class NewUserListener extends UserEventListener {
         userApp.getSession().save() ;   
       } else {
         if (contact != null) {
-          cservice_.saveContact(sysProvider, user.getUserName(), contact, false) ; 
+          cservice_.saveContact(user.getUserName(), contact, false) ; 
         }
       }
     } catch (Exception e) {

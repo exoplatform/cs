@@ -314,7 +314,7 @@ public class UIContactForm extends UIFormTabPane {
             return ;
           }          
         } else if (uiAddressBooks.getPrivateGroupMap().containsKey(category)){
-          contactService.saveContact(sessionProvider, username, contact, true);  
+          contactService.saveContact(username, contact, true);  
           contact = contactService.getContact(username, contact.getId()) ;
           contact.setContactType(JCRDataStorage.PRIVATE) ;
         } else {
@@ -327,7 +327,7 @@ public class UIContactForm extends UIFormTabPane {
         try {
           String contactType = contact.getContactType() ;
           if (contactType.equals(JCRDataStorage.PRIVATE)) {
-            contactService.saveContact(sessionProvider, username, contact, false) ;
+            contactService.saveContact(username, contact, false) ;
             contact = contactService.getContact(username, contact.getId()) ;
             contact.setContactType(JCRDataStorage.PRIVATE) ;
           } else if (contactType.equals(JCRDataStorage.SHARED)) {

@@ -553,7 +553,13 @@ public class JCRDataStorage {
   public void saveContact(String username, Contact contact, boolean isNew) throws Exception {
     SessionProvider sProvider = null;
     try {
-      sProvider = createSessionProvider();
+      boolean systemPrivilege = false;
+      if (systemPrivilege) {
+        sProvider = createSessionProvider();  
+      } else {
+        sProvider = createSystemProvider();
+      }
+      
       Node contactHomeNode = getUserContactHome(sProvider, username);
       saveContact(contactHomeNode, contact, isNew);
       contactHomeNode.getSession().save();
