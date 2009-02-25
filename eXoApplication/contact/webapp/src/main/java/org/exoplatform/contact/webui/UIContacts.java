@@ -190,7 +190,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       } else {
         selectedGroup = null ;
       }
-      pageList.setCurrentPage(currentPage) ;
+      if (pageList != null) pageList.setCurrentPage(currentPage) ;
       setContacts(pageList) ;
     } else if (selectedTag_ != null) {
       if (pageList_ != null) currentPage = pageList_.getCurrentPage() ;
