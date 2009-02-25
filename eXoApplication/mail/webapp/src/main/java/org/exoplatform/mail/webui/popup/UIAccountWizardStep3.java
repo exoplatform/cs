@@ -38,7 +38,7 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
  * Aug 16, 2007  
  */
 
-public class UIAccountWizardStep3 extends UIFormInputSet  implements WizardStep{
+public class UIAccountWizardStep3 extends UIFormInputSet implements WizardStep{
   
   public static final String FIELD_SERVERTYPE = "serverType" ;
   public static final String FIELD_INCOMING_SERVER = "incomingServer" ;
@@ -46,6 +46,7 @@ public class UIAccountWizardStep3 extends UIFormInputSet  implements WizardStep{
   public static final String FIELD_OUTGOING_SERVER = "outgoingServer" ;
   public static final String FIELD_OUTGOINGPORT = "outgoingPort" ;
   public static final String FIELD_USESSL = "isSsl".intern() ;
+  public static final String FIELD_OUTGOING_SSL = "outgoingSsl".intern();
   public static final String FIELD_STOREFOLDER = "storeFolder" ;
   
   public boolean isValid_ = false ;
@@ -58,13 +59,16 @@ public class UIAccountWizardStep3 extends UIFormInputSet  implements WizardStep{
     addChild(new UIFormSelectBox(FIELD_SERVERTYPE, null, getServerTypeValues())) ;
     UIFormSelectBox uiSelect = getUIFormSelectBox(FIELD_SERVERTYPE) ;
     uiSelect.setOnChange(UIAccountCreation.ACT_CHANGE_TYPE) ;
+    addChild(new UIFormStringInput(FIELD_INCOMING_SERVER, null, null).addValidator(MandatoryValidator.class)) ;
+    addChild(new UIFormStringInput(FIELD_INCOMINGPORT, null, null).addValidator(MandatoryValidator.class)) ;
     addChild(new UIFormCheckBoxInput<Boolean>(FIELD_USESSL, null,null)) ;
     UIFormCheckBoxInput uiCheckBox = getUIFormCheckBoxInput(FIELD_USESSL) ;
     uiCheckBox.setOnChange(UIAccountCreation.ACT_CHANGE_SSL) ;
-    addChild(new UIFormStringInput(FIELD_INCOMING_SERVER, null, null).addValidator(MandatoryValidator.class)) ;
-    addChild(new UIFormStringInput(FIELD_INCOMINGPORT, null, null).addValidator(MandatoryValidator.class)) ;
     addChild(new UIFormStringInput(FIELD_OUTGOING_SERVER, null, null).addValidator(MandatoryValidator.class)) ;
     addChild(new UIFormStringInput(FIELD_OUTGOINGPORT, null, null).addValidator(MandatoryValidator.class)) ;
+    addChild(new UIFormCheckBoxInput<Boolean>(FIELD_OUTGOING_SSL, null,null)) ;
+    UIFormCheckBoxInput outgoingSsl = getUIFormCheckBoxInput(FIELD_OUTGOING_SSL) ;
+    outgoingSsl.setOnChange(UIAccountCreation.ACT_CHANGE_OUTGOINGSSL) ;
     addChild(new UIFormStringInput(FIELD_STOREFOLDER, null,null).addValidator(MandatoryValidator.class)) ;
     setDefaultValue(uiSelect.getValue(), uiCheckBox.isChecked()) ;
     resetFields() ;
@@ -82,19 +86,19 @@ public class UIAccountWizardStep3 extends UIFormInputSet  implements WizardStep{
       getUIStringInput(FIELD_INCOMING_SERVER).setValue(UIAccountCreation.DEFAULT_POP_SERVER) ;
       if(isSSL) {
         getUIStringInput(FIELD_INCOMINGPORT).setValue(UIAccountCreation.DEFAULT_POPSSL_PORT) ;
-        getUIStringInput(FIELD_OUTGOINGPORT).setValue(UIAccountCreation.DEFAULT_SMTPSSL_PORT) ;
+        //getUIStringInput(FIELD_OUTGOINGPORT).setValue(UIAccountCreation.DEFAULT_SMTPSSL_PORT) ;
       } else {
         getUIStringInput(FIELD_INCOMINGPORT).setValue(UIAccountCreation.DEFAULT_POP_PORT) ;
-        getUIStringInput(FIELD_OUTGOINGPORT).setValue(UIAccountCreation.DEFAULT_SMTP_PORT) ;
+        //getUIStringInput(FIELD_OUTGOINGPORT).setValue(UIAccountCreation.DEFAULT_SMTP_PORT) ;
       }
     } else {
       getUIStringInput(FIELD_INCOMING_SERVER).setValue(UIAccountCreation.DEFAULT_IMAP_SERVER) ;
       if(isSSL) {
         getUIStringInput(FIELD_INCOMINGPORT).setValue(UIAccountCreation.DEFAULT_IMAPSSL_PORT) ;
-        getUIStringInput(FIELD_OUTGOINGPORT).setValue(UIAccountCreation.DEFAULT_SMTPSSL_PORT) ;
+        //getUIStringInput(FIELD_OUTGOINGPORT).setValue(UIAccountCreation.DEFAULT_SMTPSSL_PORT) ;
       } else {
         getUIStringInput(FIELD_INCOMINGPORT).setValue(UIAccountCreation.DEFAULT_IMAP_PORT) ;
-        getUIStringInput(FIELD_OUTGOINGPORT).setValue(UIAccountCreation.DEFAULT_SMTP_PORT) ;
+        //getUIStringInput(FIELD_OUTGOINGPORT).setValue(UIAccountCreation.DEFAULT_SMTP_PORT) ;
       }
     }
   }
@@ -146,12 +150,13 @@ public class UIAccountWizardStep3 extends UIFormInputSet  implements WizardStep{
     setOutgoingPort(UIAccountCreation.DEFAULT_SMTP_PORT) ;
     setStoreFolder(UIAccountCreation.DEFAULT_SERVER_FOLDER) ;
   }
-  protected void fillFields(String serverType, boolean isSsl, String incomingServer, String popPort,String outgoingServer, String smtpPort, String storeFolder){
+  protected void fillFields(String serverType, boolean isSsl, String incomingServer, String popPort,String outgoingServer, String smtpPort, boolean outgoingSsl, String storeFolder){
     setServerType(serverType) ;
     setIncomingServer(incomingServer) ;
     setIncomingPort(popPort) ;
     setOutgoingServer(outgoingServer) ;
     setOutgoingPort(smtpPort) ;
+    setOutgoingSsl(outgoingSsl);
     setStoreFolder(storeFolder) ;
     setIsSSL(isSsl) ;
   }
@@ -184,6 +189,9 @@ public class UIAccountWizardStep3 extends UIFormInputSet  implements WizardStep{
   protected String getOutgoingPort() {
     return getUIStringInput(FIELD_OUTGOINGPORT).getValue() ;
   }
+  protected boolean getOutgoingSsl() {
+	return  getUIFormCheckBoxInput(FIELD_OUTGOING_SSL).isChecked(); 
+  }
   protected void setOutgoingPort(String value) {
     getUIStringInput(FIELD_OUTGOINGPORT).setValue(value) ;
   }
@@ -192,6 +200,9 @@ public class UIAccountWizardStep3 extends UIFormInputSet  implements WizardStep{
   }
   protected void setIsSSL(boolean value) {
     getUIFormCheckBoxInput(FIELD_USESSL).setChecked(value) ;
+  }
+  protected void setOutgoingSsl(boolean value) {
+	getUIFormCheckBoxInput(FIELD_OUTGOING_SSL).setChecked(value) ;
   }
   protected String getStoreFolder() {
     return getUIStringInput(FIELD_STOREFOLDER).getValue() ;
@@ -209,14 +220,15 @@ public class UIAccountWizardStep3 extends UIFormInputSet  implements WizardStep{
   }
   public void fillFields(Account acc) {
     String serverType, incomingServer, popPort, outgoingServer, smtpPort, storeFolder ;
-    boolean isSSL = false ;
+    boolean isSSL = false, isOutgoingSsl = false;
     serverType = acc.getProtocol() ;
     storeFolder = acc.getIncomingFolder() ;
     isSSL = Boolean.parseBoolean(acc.getServerProperties().get(Utils.SVR_INCOMING_SSL)) ;
     incomingServer = acc.getServerProperties().get(Utils.SVR_INCOMING_HOST) ;
     popPort = acc.getServerProperties().get(Utils.SVR_INCOMING_PORT) ;
     outgoingServer = acc.getServerProperties().get(Utils.SVR_SMTP_HOST) ;
+    isOutgoingSsl = Boolean.parseBoolean(acc.getServerProperties().get(Utils.SVR_OUTGOING_SSL)) ;
     smtpPort = acc.getServerProperties().get(Utils.SVR_SMTP_PORT) ;
-    fillFields(serverType, isSSL, incomingServer, popPort, outgoingServer, smtpPort, storeFolder) ;
+    fillFields(serverType, isSSL, incomingServer, popPort, outgoingServer, smtpPort, isOutgoingSsl, storeFolder) ;
   }
 }

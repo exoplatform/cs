@@ -83,6 +83,7 @@ public class Utils {
   public static final String SVR_OUTGOING_PORT = "outgoing.port".intern() ;
    
   public static final String SVR_INCOMING_SSL = "ssl".intern() ;
+  public static final String SVR_OUTGOING_SSL = "outgoing.ssl".intern() ;
   
   public static final String SVR_POP_LEAVE_ON_SERVER = "leave.on.server".intern() ;
   public static final String SVR_POP_SKIP_OVER_SIZE = "skip.over.size".intern() ;

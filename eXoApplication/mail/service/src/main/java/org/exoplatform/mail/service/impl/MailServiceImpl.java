@@ -95,6 +95,7 @@ import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
 
 import com.sun.mail.smtp.SMTPSendFailedException;
+import com.sun.mail.smtp.SMTPTransport;
 
 /**
  * Created by The eXo Platform SARL Author : Tuan Nguyen
@@ -291,23 +292,31 @@ public class MailServiceImpl implements MailService, Startable {
     String smtpUser = acc.getIncomingUser();
     String outgoingHost = acc.getOutgoingHost();
     String outgoingPort = acc.getOutgoingPort();
-    String isSSl = acc.getServerProperties().get(Utils.SVR_INCOMING_SSL);
+    String isSSl = acc.getServerProperties().get(Utils.SVR_OUTGOING_SSL);
     Properties props = new Properties();
+    props.put(Utils.SVR_SMTP_USER, smtpUser);
     props.put(Utils.SVR_SMTP_HOST, outgoingHost);
     props.put(Utils.SVR_SMTP_PORT, outgoingPort);
+    props.put("mail.smtp.socketFactory.port", outgoingPort);
     props.put(Utils.SVR_SMTP_AUTH, "true");
-    props.put(Utils.SVR_SMTP_SOCKET_FACTORY_FALLBACK, "false");
+    props.put(Utils.SVR_SMTP_SOCKET_FACTORY_FALLBACK, "true");
+    props.put("mail.smtp.connectiontimeout", "0" );
+    props.put("mail.smtp.timeout", "0" );
+    props.put("mail.debug", "true");
     String socketFactoryClass = "javax.net.SocketFactory";
-    if (Boolean.valueOf(isSSl))
+    if (Boolean.valueOf(isSSl)) {
+    	System.out.println("===============================================" + isSSl);
       socketFactoryClass = Utils.SSL_FACTORY;
+      props.put(Utils.SVR_SMTP_STARTTLS_ENABLE, "true");
+      props.put("mail.smtp.ssl.protocols","SSLv3 TLSv1");
+    } else {
+    	System.out.println("=====================dddddddddddd==========================" + isSSl);
+      props.put(Utils.SVR_SMTP_STARTTLS_ENABLE, "false");
+    }
     props.put(Utils.SVR_SMTP_SOCKET_FACTORY_CLASS, socketFactoryClass);
-    props.put(Utils.SVR_SMTP_SOCKET_FACTORY_PORT, outgoingPort);
     props.put(Utils.SVR_SMTP_USER, smtpUser);
-    props.put(Utils.SVR_SMTP_STARTTLS_ENABLE, "true");
-    props.put(Utils.SVR_INCOMING_SSL, isSSl);
 
-    props.put(Utils.SVR_INCOMING_USERNAME, acc.getIncomingUser());
-    props.put(Utils.SVR_INCOMING_PASSWORD, acc.getIncomingPassword());
+ 
 
     // TODO : add authenticator
     /*
@@ -319,10 +328,10 @@ public class MailServiceImpl implements MailService, Startable {
      */
     Session session = Session.getInstance(props, null);
     logger.debug(" #### Sending email ... ");
-    Transport transport = session.getTransport(Utils.SVR_SMTP);
+    SMTPTransport transport = (SMTPTransport)session.getTransport(Utils.SVR_SMTP);
     // khdung
     try {
-      transport.connect(outgoingHost, smtpUser, acc.getIncomingPassword());
+      transport.connect(outgoingHost, Integer.parseInt(outgoingPort), smtpUser, acc.getIncomingPassword());
     } catch (Exception e) {
       // do nothing ... if there is an exception, keep continuing
       try {
@@ -359,7 +368,7 @@ public class MailServiceImpl implements MailService, Startable {
     props.put(Utils.SVR_SMTP_PORT, serverConfig.getOutgoingPort());
     props.put(Utils.SVR_SMTP_AUTH, "true");
     props.put(Utils.SVR_SMTP_SOCKET_FACTORY_PORT, serverConfig.getOutgoingPort());
-    if (serverConfig.isSsl()) {
+    if (serverConfig.isOutgoingSsl()) {
       props.put(Utils.SVR_INCOMING_SSL, String.valueOf(serverConfig.isSsl()));
       props.put(Utils.SVR_SMTP_STARTTLS_ENABLE, "true");
       props.put(Utils.SVR_SMTP_SOCKET_FACTORY_CLASS, "javax.net.ssl.SSLSocketFactory");

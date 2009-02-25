@@ -198,6 +198,11 @@ public class Account {
     setServerProperty(Utils.SVR_INCOMING_SSL, String.valueOf(b)); 
   }
   
+  public boolean isOutgoingSsl()  { return serverProperties.get(Utils.SVR_OUTGOING_SSL).equalsIgnoreCase("true");  }
+  public void setOutgoingSsl(boolean b) { 
+    setServerProperty(Utils.SVR_OUTGOING_SSL, String.valueOf(b)); 
+  }
+  
   public void setPopServerProperty(String key, String value) {
     if (popServerProperties == null) popServerProperties = new HashMap<String, String>();
     popServerProperties.put(key, value) ;

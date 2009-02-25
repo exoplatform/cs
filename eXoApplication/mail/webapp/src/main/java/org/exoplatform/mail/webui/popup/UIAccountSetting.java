@@ -69,6 +69,7 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
         @EventConfig(listeners = UIAccountSetting.CancelActionListener.class, phase = Phase.DECODE),
         @EventConfig(listeners = UIAccountSetting.ChangeServerTypeActionListener.class, phase = Phase.DECODE),
         @EventConfig(listeners = UIAccountSetting.ChangeSSLActionListener.class, phase = Phase.DECODE),
+        @EventConfig(listeners = UIAccountSetting.ChangeOutgoingSSLActionListener.class, phase = Phase.DECODE),
         @EventConfig(listeners = UIAccountSetting.CheckFromDateActionListener.class, phase = Phase.DECODE)
     }
 )
@@ -94,6 +95,7 @@ public class UIAccountSetting extends UIFormTabPane {
   public static final String FIELD_OUTGOING_PORT = "outgoingPort";
   public static final String FIELD_INCOMING_FOLDER = "messageComeInFolder";
   public static final String FIELD_IS_INCOMING_SSL = "isSSL";
+  public static final String FIELD_IS_OUTGOING_SSL = "isOutgoingSsl";
   public static final String FIELD_CHECKMAIL_AUTO = "checkMailAutomatically";
   public static final String FIELD_LEAVE_ON_SERVER = "leaveMailOnServer";
 //  public static final String FIELD_SKIP_OVER_SIZE = "skipMessageOverMaxSize";
@@ -140,13 +142,17 @@ public class UIAccountSetting extends UIFormTabPane {
     passwordField.setType(UIFormStringInput.PASSWORD_TYPE) ;
     passwordField.addValidator(MandatoryValidator.class) ;
     serverInputSet.addUIFormInput(passwordField);
-    serverInputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_IS_SAVE_PASSWORD, null, null));
     UIFormCheckBoxInput<Boolean> ssl = new UIFormCheckBoxInput<Boolean>(FIELD_IS_INCOMING_SSL, null, null);//getFieldIsSSL()
     ssl.setOnChange("ChangeSSL"); 
     serverInputSet.addUIFormInput(ssl);
+    serverInputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_IS_SAVE_PASSWORD, null, null));
     
     serverInputSet.addUIFormInput(new UIFormStringInput(FIELD_OUTGOING_SERVER, null, null).addValidator(MandatoryValidator.class));
     serverInputSet.addUIFormInput(new UIFormStringInput(FIELD_OUTGOING_PORT, null, null).addValidator(MandatoryValidator.class));
+    
+    UIFormCheckBoxInput<Boolean> outgoingssl = new UIFormCheckBoxInput<Boolean>(FIELD_IS_OUTGOING_SSL, null, null);
+    outgoingssl.setOnChange("ChangeOutgoingSSL"); 
+    serverInputSet.addUIFormInput(outgoingssl);
     
     serverInputSet.addUIFormInput(new UIFormStringInput(FIELD_INCOMING_FOLDER, null, null).addValidator(MandatoryValidator.class));
     serverInputSet.addUIFormInput(new UIFormCheckBoxInput<Boolean>(FIELD_CHECKMAIL_AUTO, null, null));
@@ -260,6 +266,11 @@ public class UIAccountSetting extends UIFormTabPane {
     return uiInput.getUIFormCheckBoxInput(FIELD_IS_INCOMING_SSL).isChecked();
   }
   
+  public boolean getFieldOutgoingSSL() {
+    UIFormInputWithActions uiInput = getChildById(TAB_SERVER_SETTINGS);
+    return uiInput.getUIFormCheckBoxInput(FIELD_IS_OUTGOING_SSL).isChecked();
+  }
+  
   public boolean getFieldCheckMailAuto() {
     UIFormInputWithActions uiInput = getChildById(TAB_SERVER_SETTINGS);
     return uiInput.getUIFormCheckBoxInput(FIELD_CHECKMAIL_AUTO).isChecked();
@@ -322,16 +333,16 @@ public class UIAccountSetting extends UIFormTabPane {
     UIFormInputWithActions uiServerInput = getChildById(TAB_SERVER_SETTINGS) ;
     uiServerInput.getUIStringInput(FIELD_INCOMING_SERVER).setValue(account.getIncomingHost()) ;
     uiServerInput.getUIStringInput(FIELD_INCOMING_PORT).setValue(account.getIncomingPort()) ;
+    uiServerInput.getUIFormCheckBoxInput(FIELD_IS_INCOMING_SSL).setChecked(account.isIncomingSsl()) ;
     uiServerInput.getUIStringInput(FIELD_INCOMING_ACCOUNT).setValue(account.getIncomingUser()) ;
     uiServerInput.getUIStringInput(FIELD_INCOMING_PASSWORD).setValue(account.getIncomingPassword()) ;
     uiServerInput.getUIFormCheckBoxInput(FIELD_IS_SAVE_PASSWORD).setChecked(account.isSavePassword()) ;
     
     uiServerInput.getUIStringInput(FIELD_OUTGOING_SERVER).setValue(account.getOutgoingHost()) ;
     uiServerInput.getUIStringInput(FIELD_OUTGOING_PORT).setValue(account.getOutgoingPort()) ;
-    
+    uiServerInput.getUIFormCheckBoxInput(FIELD_IS_OUTGOING_SSL).setChecked(account.isOutgoingSsl()) ;
     uiServerInput.getUIStringInput(FIELD_INCOMING_FOLDER).setValue(account.getIncomingFolder()) ;
     uiServerInput.getUIFormSelectBox(FIELD_SERVER_TYPE).setValue(account.getProtocol()) ;
-    uiServerInput.getUIFormCheckBoxInput(FIELD_IS_INCOMING_SSL).setChecked(account.isIncomingSsl()) ;
     uiServerInput.getUIFormCheckBoxInput(FIELD_CHECKMAIL_AUTO).setChecked(account.checkedAuto()) ;
     if(getFieldProtocol().equals(Utils.POP3)) {
       if(uiServerInput.getChildById(FIELD_LEAVE_ON_SERVER) == null)
@@ -510,6 +521,7 @@ public class UIAccountSetting extends UIFormTabPane {
       acc.setIncomingHost(uiSetting.getFieldIncomingServer()) ;
       acc.setIncomingPort(incomingPort) ;  
       acc.setIncomingSsl(uiSetting.getFieldIsSSL()) ;
+      acc.setOutgoingSsl(uiSetting.getFieldOutgoingSSL());
       acc.setIncomingFolder(uiSetting.getFieldIncomingFolder()) ;
       acc.setOutgoingHost(uiSetting.getFieldOutgoingServer()) ;
       acc.setOutgoingPort(outgoingPort) ;
@@ -601,6 +613,19 @@ public class UIAccountSetting extends UIFormTabPane {
   		uiSetting.setDefaultValue(uiSetting.getFieldProtocol(),uiSetting.getFieldIsSSL());
       event.getRequestContext().addUIComponentToUpdateByAjax(uiSetting.getParent()) ;
   	}
+  }
+  
+  static public class ChangeOutgoingSSLActionListener extends EventListener<UIAccountSetting> {
+    public void execute(Event<UIAccountSetting> event) throws Exception {
+      UIAccountSetting uiSetting = event.getSource() ; 
+      boolean isOutgoingSsl = uiSetting.getFieldOutgoingSSL();
+      if (isOutgoingSsl) {
+        uiSetting.getUIStringInput(FIELD_OUTGOING_PORT).setValue(UIAccountCreation.DEFAULT_SMTPSSL_PORT) ;
+      } else {
+        uiSetting.getUIStringInput(FIELD_OUTGOING_PORT).setValue(UIAccountCreation.DEFAULT_SMTP_PORT) ;
+      }
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiSetting.getParent()) ;
+    }
   }
   
   static  public class CheckFromDateActionListener extends EventListener<UIAccountSetting> {

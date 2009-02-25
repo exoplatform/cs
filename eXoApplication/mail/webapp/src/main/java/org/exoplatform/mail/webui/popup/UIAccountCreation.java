@@ -62,6 +62,7 @@ import org.exoplatform.webui.form.UIFormTabPane;
       @EventConfig(listeners = UIAccountCreation.ViewStepActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIAccountCreation.ChangeServerTypeActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIAccountCreation.ChangeCheckedActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIAccountCreation.ChangeOutgoingSslActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIAccountCreation.NextActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIAccountCreation.BackActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIAccountCreation.FinishActionListener.class, phase = Phase.DECODE),
@@ -92,6 +93,7 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
   final static public String ACT_CHANGE_TYPE = "ChangeServerType".intern()  ;
   final static public String ACT_CHANGE_ACT = "ChangeType".intern()  ;
   final static public String ACT_CHANGE_SSL =  "ChangeChecked".intern()  ;
+  final static public String ACT_CHANGE_OUTGOINGSSL =  "ChangeOutgoingSsl".intern()  ;
   final static public String FD_INBOX = "Inbox".intern();
   final static public String FD_DRAFTS = "Drafts".intern() ;
   final static public String FD_SENT = "Sent".intern() ;
@@ -303,7 +305,7 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       UIAccountWizardStep5 uiAccWs5 = uiAccCreation.getChildById(UIAccountCreation.INPUT_STEP5) ;
       String accname, description, displayName, email, replyMail, signature, protocol, popHost, 
       popPort, smtpHost, smtpPort, storeFolder, incomingUserName, incomingPassword ;
-      boolean isSSL, isSavePass ;
+      boolean isSSL, isOutgoingSsl, isSavePass ;
       accname = uiAccWs1.getAccName() ;
       description = uiAccWs1.getAccDescription() ;
       displayName = uiAccWs2.getOutgoingName() ;
@@ -317,6 +319,7 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       smtpPort = uiAccWs3.getOutgoingPort() ;
       storeFolder = uiAccWs3.getStoreFolder() ;
       isSSL = uiAccWs3.getIsSSL() ;
+      isOutgoingSsl = uiAccWs3.getOutgoingSsl();
       incomingUserName = uiAccWs4.getUserName() ;
       incomingPassword = uiAccWs4.getPassword() ;
       isSavePass = uiAccWs4.getIsSavePass() ;
@@ -338,6 +341,7 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       acc.setIncomingPort(popPort);  
       acc.setProtocol(protocol);  
       acc.setIncomingSsl(isSSL);
+      acc.setOutgoingSsl(isOutgoingSsl);
       acc.setIncomingFolder(storeFolder) ;
       acc.setServerProperty(Utils.SVR_SMTP_USER, incomingUserName);
       acc.setOutgoingHost(smtpHost);
@@ -468,6 +472,18 @@ public class UIAccountCreation extends UIFormTabPane implements UIPopupComponent
       UIAccountCreation uiAccCreation = event.getSource() ;
       UIAccountWizardStep3 uiWs3 = uiAccCreation.getChildById(INPUT_STEP3) ;
       uiWs3.setDefaultValue(uiWs3.getServerType(), uiWs3.getIsSSL()) ;
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAccCreation.getParent()) ;
+    } 
+  }
+  public static class ChangeOutgoingSslActionListener extends EventListener<UIAccountCreation> {
+    public void execute(Event<UIAccountCreation> event) throws Exception { 
+      UIAccountCreation uiAccCreation = event.getSource() ;
+      UIAccountWizardStep3 uiWs3 = uiAccCreation.getChildById(INPUT_STEP3) ;
+      if (uiWs3.getOutgoingSsl()) {
+        uiWs3.getUIStringInput(UIAccountWizardStep3.FIELD_OUTGOINGPORT).setValue(UIAccountCreation.DEFAULT_SMTPSSL_PORT) ;
+      } else {
+        uiWs3.getUIStringInput(UIAccountWizardStep3.FIELD_OUTGOINGPORT).setValue(UIAccountCreation.DEFAULT_SMTP_PORT) ;
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAccCreation.getParent()) ;
     } 
   }

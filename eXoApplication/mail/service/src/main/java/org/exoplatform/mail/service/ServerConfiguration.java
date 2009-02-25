@@ -34,6 +34,7 @@ public class ServerConfiguration extends HashMap<String, String> {
   private String username ;
   private String password ;
   private boolean ssl_;
+  private boolean outgoingSsl_;
   
   /**
    * The protocol_ supported by mail server ex: pop3, imap
@@ -65,5 +66,8 @@ public class ServerConfiguration extends HashMap<String, String> {
   
   public boolean isSsl() {  return ssl_;  }
   public void setSsl(boolean ssl) { this.ssl_ = ssl; }
+  
+  public boolean isOutgoingSsl() {  return outgoingSsl_;  }
+  public void setOutgoingSsl(boolean ssl) { this.outgoingSsl_ = ssl; }
   
 }
