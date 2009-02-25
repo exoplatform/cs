@@ -30,7 +30,6 @@ import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.SharedAddressBook;
 import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.service.impl.JCRDataStorage;
-import org.exoplatform.services.jcr.ext.app.SessionProviderService;
 
 
 /**
@@ -215,10 +214,8 @@ public class TestContactService extends BaseContactServiceTestCase{
     assertEquals("Shared address books list size was wrong", 0, sharedList3.size());
     
     // demo unshare himself
-    contactService.unshareAddressBook(root, shared.getId(), demo);
-    
     startSessionAs(demo);
-  
+    contactService.unshareAddressBook(root, shared.getId(), demo);
     endSession();
     
     // TODO : demo should not be able to write

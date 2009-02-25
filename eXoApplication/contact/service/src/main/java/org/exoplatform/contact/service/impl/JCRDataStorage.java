@@ -733,27 +733,23 @@ public class JCRDataStorage {
     contactNode.getSession().save();
   }
   
-  public void unshareAddressBook(String username , String addressBookId, String removedUser) throws Exception {
-    SessionProvider sProvider = null;
+  public void unshareAddressBook(String username, String addressBookId, String removedUser) throws Exception {
+    SessionProvider sysProvider = null;
     try {
-      sProvider = createSessionProvider();
-      Node addressBookNode = getUserAddressBooksHome(sProvider, username).getNode(addressBookId);
+      sysProvider = createSystemProvider();// current user may not be the owner, so we require a system provider
+      Node addressBookNode = getUserAddressBooksHome(sysProvider, username).getNode(addressBookId);
       List<String> values = new ArrayList<String>(Arrays.asList(ValuesToStrings(addressBookNode.getProperty(SHARED_PROP)
                                                                                                .getValues())));
       List<String> newValues = new ArrayList<String>(values);
-      SessionProvider sysProvider = null;
-      try {
-        sysProvider = createSystemProvider(); // reading on shared address book node requires system session (?)
-        Node sharedAddress = getSharedAddressBooksNode(sysProvider, removedUser);
-        for (String value : values) {
-          Node refNode = sharedAddress.getSession().getNodeByUUID(value);
-          if (refNode.getPath().equals(sharedAddress.getPath())) {
-            newValues.remove(value);
-          }
+
+      Node sharedAddress = getSharedAddressBooksNode(sysProvider, removedUser);
+      for (String value : values) {
+        Node refNode = sharedAddress.getSession().getNodeByUUID(value);
+        if (refNode.getPath().equals(sharedAddress.getPath())) {
+          newValues.remove(value);
         }
-      } finally {
-        closeSessionProvider(sysProvider);
       }
+
       String[] viewPer = null;
       try {
         viewPer = ValuesToStrings(addressBookNode.getProperty("exo:viewPermissionUsers")
@@ -784,7 +780,7 @@ public class JCRDataStorage {
       addressBookNode.getSession().save();
 
     } finally {
-      closeSessionProvider(sProvider);
+      closeSessionProvider(sysProvider);
     }
   }
 
