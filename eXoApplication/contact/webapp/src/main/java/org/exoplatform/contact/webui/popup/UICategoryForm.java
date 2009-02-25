@@ -84,9 +84,9 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
     SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
     AddressBook contactGroup ;
     if (isShared) {
-      contactGroup = contactService.getSharedGroup(username, groupId) ;
+      contactGroup = contactService.getSharedAddressBook(username, groupId) ;
     } else {
-      contactGroup = contactService.getGroup(username, groupId) ;       
+      contactGroup = contactService.getPersonalAddressBook(username, groupId) ;       
     }  
     if (contactGroup != null) {
       groupId_ = groupId ;
@@ -122,10 +122,10 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
       String username = ContactUtils.getCurrentUser() ;
       AddressBook group = new AddressBook() ;
       if (!uiCategoryForm.isNew_) {
-        AddressBook oldGroup = contactService.getGroup(
+        AddressBook oldGroup = contactService.getPersonalAddressBook(
             username, uiCategoryForm.groupId_) ;
         if (oldGroup == null) {
-          oldGroup = contactService.getSharedGroup(username, uiCategoryForm.groupId_) ;
+          oldGroup = contactService.getSharedAddressBook(username, uiCategoryForm.groupId_) ;
           if (oldGroup != null) { 
             if (!uiAddressBook.havePermission(oldGroup.getId())) {
               uiApp.addMessage(new ApplicationMessage("UICategoryForm.msg.non-permission", null,
@@ -164,7 +164,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
       }
       group.setName(groupName) ;
       group.setDescription(uiCategoryForm.getUIFormTextAreaInput(FIELD_DESCRIPTION_INPUT).getValue()) ;
-      contactService.saveGroup(
+      contactService.saveAddressBook(
           username, group, uiCategoryForm.isNew_) ;
       UIPopupContainer popupContainer = uiCategoryForm.getAncestorOfType(UIPopupContainer.class) ;
       if (popupContainer != null) {

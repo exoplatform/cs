@@ -92,7 +92,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       options.add(new SelectItemOption<String>(cg.getName(), cg.getId())) ;
     }
     List<SharedAddressBook> addressList = contactService
-    .getAddressBooksSharedToUser(CalendarUtils.getCurrentUser()) ;
+    .getSharedAddressBooks(CalendarUtils.getCurrentUser()) ;
     for(SharedAddressBook sa : addressList) {
       String name = "" ;
       if(!CalendarUtils.isEmpty(sa.getSharedUserId())) name = sa.getSharedUserId() + "-" ;

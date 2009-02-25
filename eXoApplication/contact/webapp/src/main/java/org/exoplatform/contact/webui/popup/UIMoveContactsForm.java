@@ -119,7 +119,7 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       String username = ContactUtils.getCurrentUser() ;
       SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
       if (uiMoveContactForm. sharedGroupMap_.containsKey(addressBookId)) {
-        AddressBook group = contactService.getSharedGroup(username, addressBookId) ;        
+        AddressBook group = contactService.getSharedAddressBook(username, addressBookId) ;        
         if (group.getEditPermissionUsers() == null || 
             !Arrays.asList(group.getEditPermissionUsers()).contains(username + JCRDataStorage.HYPHEN)) {
           boolean canEdit = false ;

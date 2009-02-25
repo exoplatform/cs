@@ -111,12 +111,7 @@ public class ContactServiceImpl implements ContactService {
     return storage_.loadPersonalAddressBook(username, addressBookId);
   }
   
-  /**
-   * {@inheritDoc}
-   */
-  public AddressBook getGroup(String username, String groupId) throws Exception {
-    return getPersonalAddressBook(username, groupId);
-  }
+
   
   /**
    * {@inheritDoc}
@@ -127,11 +122,7 @@ public class ContactServiceImpl implements ContactService {
   
   /**
    * {@inheritDoc}
-   */
-  public void saveGroup(String username, AddressBook group, boolean isNew) throws Exception {
-    saveAddressBook(username,group, isNew);    
-  }
-  
+   */  
   public AddressBook removeAddressBook(String username, String addressBookId) throws Exception {
     // step 1 : remove content
     storage_.clearAddressBook(username, addressBookId);
@@ -142,12 +133,6 @@ public class ContactServiceImpl implements ContactService {
     return removed;
   }
   
-  /**
-   * {@inheritDoc}
-   */
-  public AddressBook removeGroup(String username, String groupId) throws Exception {
-    return removeAddressBook(username, groupId);
-  }
   
   public void removeUserShareContact(SessionProvider sProvider, String username, String contactId, String removedUser) throws Exception {
     storage_.removeUserShareContact(sProvider, username, contactId, removedUser) ;
@@ -162,23 +147,23 @@ public class ContactServiceImpl implements ContactService {
   public void shareAddressBook(String username, String addressBookId, List<String> receiverUsers) throws Exception {
   	storage_.shareAddressBook(username, addressBookId, receiverUsers) ;
   }
-  public void removeUserShareAddressBook(SessionProvider sProvider, String username, String addressBookId, String removedUser) throws Exception {
-    storage_.removeUserShareAddressBook(sProvider, username, addressBookId, removedUser) ;
-  }
   
   /**
    * {@inheritDoc}
    */
-  public List<SharedAddressBook> getSharedAddressBooks(String username) throws Exception  {
-   return getAddressBooksSharedToUser(username);
+  public void unshareAddressBook(String owner,
+                                 String addressBookId,
+                                 String unsharedUser) throws Exception {
+    storage_.unshareAddressBook(owner, addressBookId, unsharedUser) ;
   }
-  
+
   /**
    * {@inheritDoc}
    */
-  public List<SharedAddressBook> getAddressBooksSharedToUser(String username) throws Exception {
-    return storage_.getSharedAddressBooks(username) ;
+  public List<SharedAddressBook> getSharedAddressBooks(String username) throws Exception {
+    return storage_.findSharedAddressBooksByUser(username) ;
   }
+  
   public ContactPageList getSharedContactsByAddressBook(SessionProvider sProvider, String username, SharedAddressBook addressBook) throws Exception {
   	return storage_.getSharedContactsByAddressBook(sProvider, username, addressBook) ;
   }
@@ -287,12 +272,7 @@ public class ContactServiceImpl implements ContactService {
     return storage_.getSharedAddressBookById(username, addressBookId) ;
   }
   
-  /**
-   * {@inheritDoc}
-   */
-  public AddressBook getSharedGroup(String username, String groupId) throws Exception {
-    return getSharedAddressBook(username, groupId);
-  }
+
   
   public List<String> getAllEmailBySharedGroup(String username, String addressBookId) throws Exception {
     return storage_.getAllEmailBySharedGroup(username, addressBookId) ;
@@ -300,4 +280,58 @@ public class ContactServiceImpl implements ContactService {
   public List<String> getAllEmailByPublicGroup(String username, String groupId) throws Exception { 
     return storage_.getAllEmailByPublicGroup(username, groupId) ;
   }
+
+  
+
+   
+  
+  ////// LEGACY API //////
+  
+
+  
+  /**
+   * {@inheritDoc}
+   */
+  public void saveGroup(SessionProvider sProvider, String username, AddressBook group, boolean isNew) throws Exception {
+    saveAddressBook(username,group, isNew);    
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public AddressBook getGroup(SessionProvider sProvider, String username, String groupId) throws Exception {
+    return getPersonalAddressBook(username, groupId);
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public AddressBook removeGroup(SessionProvider sProvider, String username, String groupId) throws Exception {
+    return removeAddressBook(username, groupId);
+  }
+    
+  /**
+   * {@inheritDoc}
+   */
+  public AddressBook getSharedGroup(SessionProvider sProvider, String username, String groupId) throws Exception {
+    return getSharedAddressBook(username, groupId);
+  }  
+  
+  
+  /**
+   * {@inheritDoc}
+   */
+  public List<SharedAddressBook> getSharedAddressBooks(SessionProvider sProvider, String username) throws Exception  {
+   return getSharedAddressBooks(username);
+  }  
+  
+  /**
+   * {@inheritDoc}
+   */
+  public void removeUserShareAddressBook(SessionProvider sProvider, String username, String addressBookId, String removedUser) throws Exception {
+    unshareAddressBook(username, addressBookId,removedUser);
+  }  
+    
+  
+  
 }

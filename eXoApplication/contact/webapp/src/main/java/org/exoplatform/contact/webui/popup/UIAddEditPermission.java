@@ -160,7 +160,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
       uiStringInput.setValue(reciever) ;
       uiStringInput.setEditable(false) ;
       if (addEdit.isSharedGroup) {
-        AddressBook group = ContactUtils.getContactService().getGroup(
+        AddressBook group = ContactUtils.getContactService().getPersonalAddressBook(
             ContactUtils.getCurrentUser(), addEdit.groupId_) ;        
         shareForm.setGroup(group) ;
         if (group.getViewPermissionGroups() != null && Arrays.asList(group.getViewPermissionGroups()).contains(reciever)) {
@@ -201,7 +201,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
       ContactService contactService = ContactUtils.getContactService();
       String username = ContactUtils.getCurrentUser() ;      
       if (uiForm.isSharedGroup) {
-        AddressBook group = contactService.getGroup(
+        AddressBook group = contactService.getPersonalAddressBook(
             username, uiForm.groupId_) ;
         if (group.getViewPermissionGroups() != null && Arrays.asList(group.getViewPermissionGroups()).contains(remover)) {
           List<String> newPerms = new ArrayList<String>() ;
@@ -234,8 +234,8 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
                 }               
               } 
               if (deleteShared) {
-                contactService.removeUserShareAddressBook(
-                  SessionProviderFactory.createSessionProvider(), username, uiForm.groupId_, user.getUserName()) ;
+                contactService.unshareAddressBook(
+                  username, uiForm.groupId_, user.getUserName()) ;
               }
             }
           }
@@ -266,10 +266,10 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
             }
           }
           if (!sharedByGroup)
-            contactService.removeUserShareAddressBook(SessionProviderFactory.createSessionProvider()
-              , username, uiForm.groupId_, remover) ;
+            contactService.unshareAddressBook(username
+              , uiForm.groupId_, remover) ;
         }
-        contactService.saveGroup(username, group, false) ;
+        contactService.saveAddressBook(username, group, false) ;
         uiForm.updateGroupGrid(group); 
         event.getRequestContext().addUIComponentToUpdateByAjax(
             uiForm.getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIAddressBooks.class)) ;

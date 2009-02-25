@@ -79,7 +79,7 @@ public class NewUserListener extends UserEventListener {
         group.setId(DEFAULTGROUP+user.getUserName()) ;
         group.setName(DEFAULTGROUPNAME) ;
         group.setDescription(DEFAULTGROUPDES) ;
-        cservice_.saveGroup(user.getUserName(), group, true) ;
+        cservice_.saveAddressBook(user.getUserName(), group, true) ;
 
         contact.setId(user.getUserName()) ;
         Map<String, String> groupIds = new LinkedHashMap<String, String>() ;

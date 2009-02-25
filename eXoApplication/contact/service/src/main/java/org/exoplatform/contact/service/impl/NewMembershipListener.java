@@ -125,8 +125,8 @@ public class NewMembershipListener extends MembershipEventListener {
       NodeIterator nodes = result.getNodes() ;
       while (nodes.hasNext()) {
         Node address = nodes.nextNode() ;
-        storage_.removeUserShareAddressBook(
-            systemSession, address.getProperty("exo:sharedUserId")
+        storage_.unshareAddressBook(
+            address.getProperty("exo:sharedUserId")
             .getString(), address.getProperty("exo:id").getString(), m.getUserName()) ;
 
 //      user shared if belong another groups shared

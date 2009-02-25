@@ -316,7 +316,7 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
           }
           uiForm.getUIStringInput(UISharedForm.FIELD_USER).setEditable(true) ;
         }
-        contactService.saveGroup(username, contactGroup, false) ;
+        contactService.saveAddressBook(username, contactGroup, false) ;
         UIAddEditPermission uiAddEdit = uiForm.getParent() ;          
         uiAddEdit.updateGroupGrid(contactGroup);
         event.getRequestContext().addUIComponentToUpdateByAjax(uiAddEdit) ;          

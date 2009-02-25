@@ -27,7 +27,7 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
  *          hung.nguyen@exoplatform.com
  * Jul 11, 2007  
  */
-public interface ContactService {
+public interface ContactService extends ContactServiceLegacy {
   
   /**
    * get all contacts in all private address books belong to current user
@@ -204,11 +204,7 @@ public interface ContactService {
    */
   public AddressBook getPersonalAddressBook(String owner, String addressBookID) throws Exception ;
   
-  /**
-   * @deprecated use {@link #getPersonalAddressBook(String, String)}
-   */
-  public AddressBook getGroup(String owner, String addressBookID) throws Exception ;
-  
+
   /**
    * Save a personal or shared address book.
    * @param username user ID of the owner
@@ -218,10 +214,8 @@ public interface ContactService {
    */
   public void saveAddressBook(String username, AddressBook addressBook, boolean isNew) throws Exception ;
   
-  /**
-   * @deprecated use {@link #saveAddressBook(String, AddressBook, boolean)}
-   */
-  public void saveGroup(String username, AddressBook addressBook, boolean isNew) throws Exception ;
+
+    
   
   /**
    * Remove a personal address book
@@ -232,11 +226,7 @@ public interface ContactService {
    */
   public AddressBook removeAddressBook(String username, String addressBookId) throws Exception ;
   
-  /**
-   * @deprecated use {@link #removeAddressBook(String, String)}
-   */
-  public AddressBook removeGroup(String username, String groupId) throws Exception ;
-  
+
   
   /**
    * remove view permission of user shared contact
@@ -274,15 +264,15 @@ public interface ContactService {
    */
   public void shareAddressBook(String username, String addressBookId, List<String> receiverUsers) throws Exception ;
   
+
   /**
-   * remove view permission of users are shared address book
-   * @param sProvider should use system provider
-   * @param username userId has shared address book
-   * @param removedUser userId of shared user 
+   * Unshare an address book with another user
+   * @param owner user ID of the address book owner
    * @param addressBookId id of shared address book 
+   * @param unsharedUser user ID of the user that looses sharing to this address book
    * @throws Exception
    */
-  public void removeUserShareAddressBook(SessionProvider sProvider, String username, String addressBookId, String removedUser) throws Exception ;
+  public void unshareAddressBook(String owner, String addressBookId, String unsharedUser) throws Exception ;
   
   /**
    * Get a shared address book by ID for a given user
@@ -293,23 +283,15 @@ public interface ContactService {
    */
   public AddressBook getSharedAddressBook(String username, String addressBookId) throws Exception ;
   
-  /**
-   * @deprecated use {@link #getSharedAddressBook(String, String)}
-   */
-  public AddressBook getSharedGroup(String username, String groupId) throws Exception ;
-  
+
   /**
    * Get address books that are shared (by others) to a given user
    * @param username userId of current user
    * @return SharedAddressBook list contains some information about address books like name, shared user
    * @throws Exception 
    */
-  public List<SharedAddressBook> getAddressBooksSharedToUser(String username) throws Exception ;
-  
-  /**
-   * @deprecated use {@link #getAddressBooksSharedToUser(String)}
-   */
   public List<SharedAddressBook> getSharedAddressBooks(String username) throws Exception ;
+  
 
   /**
    * if user has edit permission on a shared address book then this user can save a contact to this address book

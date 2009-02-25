@@ -731,7 +731,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       SessionProvider sessionProvider = SessionProviderFactory.createSessionProvider() ;
 
       if (uiAddressBooks.getSharedGroups().containsKey(addressBookId)) {
-        AddressBook group = contactService.getSharedGroup(username, addressBookId) ;
+        AddressBook group = contactService.getSharedAddressBook(username, addressBookId) ;
         if (group.getEditPermissionUsers() == null || 
             !Arrays.asList(group.getEditPermissionUsers()).contains(username + JCRDataStorage.HYPHEN)) {
           boolean canEdit = false ;

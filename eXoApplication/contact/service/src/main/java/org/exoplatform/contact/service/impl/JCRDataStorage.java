@@ -733,41 +733,59 @@ public class JCRDataStorage {
     contactNode.getSession().save();
   }
   
-  public void removeUserShareAddressBook(SessionProvider sProvider, String username, String addressBookId, String removedUser) throws Exception {
-    Node addressBookNode = getUserAddressBooksHome(sProvider, username).getNode(addressBookId);
-    List<String> values = new ArrayList<String>(
-        Arrays.asList(ValuesToStrings(addressBookNode.getProperty(SHARED_PROP).getValues())));
-    List<String> newValues = new ArrayList<String>(values) ;
-    Node sharedAddress = getSharedAddressBooksNode(removedUser) ;
-    for (String value : values) {
-      Node refNode = sharedAddress.getSession().getNodeByUUID(value);
-      if(refNode.getPath().equals(sharedAddress.getPath())) {
-        newValues.remove(value) ;
-      }
-    }
-    String[] viewPer = null ;
+  public void unshareAddressBook(String username , String addressBookId, String removedUser) throws Exception {
+    SessionProvider sProvider = null;
     try {
-      viewPer = ValuesToStrings(addressBookNode.getProperty("exo:viewPermissionUsers").getValues()) ;
-    } catch (PathNotFoundException e) { }
-    if (viewPer != null) {
-      List<String> newViewPer = new ArrayList<String>() ;
-      newViewPer.addAll(Arrays.asList(viewPer)) ;
-      newViewPer.remove(removedUser + HYPHEN) ; 
-      addressBookNode.setProperty("exo:viewPermissionUsers", newViewPer.toArray(new String [] {})) ;      
-      String[] editPer = null ;
+      sProvider = createSessionProvider();
+      Node addressBookNode = getUserAddressBooksHome(sProvider, username).getNode(addressBookId);
+      List<String> values = new ArrayList<String>(Arrays.asList(ValuesToStrings(addressBookNode.getProperty(SHARED_PROP)
+                                                                                               .getValues())));
+      List<String> newValues = new ArrayList<String>(values);
+      SessionProvider sysProvider = null;
       try {
-        editPer = ValuesToStrings(addressBookNode.getProperty("exo:editPermissionUsers").getValues()) ;
-      } catch (PathNotFoundException e) { }
-      if (editPer != null) {
-        List<String> newEditPer = new ArrayList<String>() ;
-        newEditPer.addAll(Arrays.asList(editPer)) ;
-        newEditPer.remove(removedUser + HYPHEN) ;
-        addressBookNode.setProperty("exo:editPermissionUsers", newEditPer.toArray(new String [] {})) ;
+        sysProvider = createSystemProvider(); // reading on shared address book node requires system session (?)
+        Node sharedAddress = getSharedAddressBooksNode(sysProvider, removedUser);
+        for (String value : values) {
+          Node refNode = sharedAddress.getSession().getNodeByUUID(value);
+          if (refNode.getPath().equals(sharedAddress.getPath())) {
+            newValues.remove(value);
+          }
+        }
+      } finally {
+        closeSessionProvider(sysProvider);
       }
+      String[] viewPer = null;
+      try {
+        viewPer = ValuesToStrings(addressBookNode.getProperty("exo:viewPermissionUsers")
+                                                 .getValues());
+      } catch (PathNotFoundException e) {
+      }
+      if (viewPer != null) {
+        List<String> newViewPer = new ArrayList<String>();
+        newViewPer.addAll(Arrays.asList(viewPer));
+        newViewPer.remove(removedUser + HYPHEN);
+        addressBookNode.setProperty("exo:viewPermissionUsers", newViewPer.toArray(new String[] {}));
+        String[] editPer = null;
+        try {
+          editPer = ValuesToStrings(addressBookNode.getProperty("exo:editPermissionUsers")
+                                                   .getValues());
+        } catch (PathNotFoundException e) {
+        }
+        if (editPer != null) {
+          List<String> newEditPer = new ArrayList<String>();
+          newEditPer.addAll(Arrays.asList(editPer));
+          newEditPer.remove(removedUser + HYPHEN);
+          addressBookNode.setProperty("exo:editPermissionUsers",
+                                      newEditPer.toArray(new String[] {}));
+        }
+      }
+      addressBookNode.setProperty(SHARED_PROP, newValues.toArray(new String[] {}));
+      addressBookNode.save();
+      addressBookNode.getSession().save();
+
+    } finally {
+      closeSessionProvider(sProvider);
     }
-    addressBookNode.setProperty(SHARED_PROP, newValues.toArray(new String[] {}));
-    addressBookNode.save() ;
-    addressBookNode.getSession().save(); 
   }
 
   public void shareAddressBook(String username, String addressBookId, List<String> receiveUsers) throws Exception {
@@ -872,11 +890,12 @@ public class JCRDataStorage {
     }   
   }
   
-  public List<SharedAddressBook> getSharedAddressBooks(String username) throws Exception {
-    SessionProvider sp = null;
+  public List<SharedAddressBook> findSharedAddressBooksByUser(String username) throws Exception {
+    SessionProvider sysProvider = null;
     try {
+      sysProvider = createSystemProvider(); // reading shared address books requires a system session
       List<SharedAddressBook> addressBooks = new ArrayList<SharedAddressBook>();
-      Node sharedAddress = getSharedAddressBooksNode(username);
+      Node sharedAddress = getSharedAddressBooksNode(sysProvider, username);
       PropertyIterator iter = sharedAddress.getReferences();
       while (iter.hasNext()) {
         try {
@@ -899,7 +918,7 @@ public class JCRDataStorage {
       }
       return addressBooks;
     } finally {
-      closeSessionProvider(sp);
+      closeSessionProvider(sysProvider);
     }
   }
   
