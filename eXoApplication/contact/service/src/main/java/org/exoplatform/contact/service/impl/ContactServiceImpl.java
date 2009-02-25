@@ -73,9 +73,13 @@ public class ContactServiceImpl implements ContactService {
     return storage_.getContactPageListByTag(username, filter);
   }*/
   
-  public ContactPageList getContactPageListByGroup(SessionProvider sProvider, String username, String groupId) throws Exception {
-    return storage_.getContactPageListByGroup(sProvider, username, groupId);
+  /**
+   * {@inheritDoc}
+   */
+  public ContactPageList getContactsByAddressBook(String username, String groupId) throws Exception {
+    return storage_.getContactPageListByGroup(username, groupId);
   }
+  
 
   public ContactPageList getContactPageListByGroup(SessionProvider sProvider, String username, ContactFilter filter, String type) throws Exception {
     return storage_.getContactPageListByGroup(sProvider, username, filter, type) ;
@@ -282,7 +286,12 @@ public class ContactServiceImpl implements ContactService {
   
   ////// LEGACY API //////
   
-
+  /**
+   * {@inheritDoc}
+   */
+  public ContactPageList getContactPageListByGroup(SessionProvider sProvider, String username, String groupId) throws Exception {
+    return getContactsByAddressBook(username, groupId);
+  }
   
   /**
    * {@inheritDoc}

@@ -76,4 +76,9 @@ public interface ContactServiceLegacy {
    */
   public List<Contact> getAllContacts(SessionProvider sProvider, String username) throws Exception ;
   
+  /**
+   * @deprecated use {@link ContactService#getContactsByAddressBook(String, String)}
+   */
+  public ContactPageList getContactPageListByGroup(SessionProvider sProvider, String username, String groupId) throws Exception ;
+  
 }

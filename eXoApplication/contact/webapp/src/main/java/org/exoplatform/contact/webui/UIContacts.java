@@ -177,8 +177,8 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       if (pageList_ != null) currentPage = pageList_.getCurrentPage() ;
       ContactPageList pageList = null ;
       if (getPrivateGroupMap().containsKey(selectedGroup)) {
-        pageList = ContactUtils.getContactService().getContactPageListByGroup(
-            SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), selectedGroup);
+        pageList = ContactUtils.getContactService().getContactsByAddressBook(
+            ContactUtils.getCurrentUser(), selectedGroup);
       } else if (ContactUtils.getUserGroups().contains(selectedGroup)) {
         pageList = ContactUtils.getContactService()
             .getPublicContactsByAddressBook(SessionProviderFactory.createSystemProvider(), selectedGroup);
@@ -492,7 +492,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       }
       ContactService service = ContactUtils.getContactService() ;
       String username = ContactUtils.getCurrentUser() ;
-      if (contact.getContactType().equalsIgnoreCase(JCRDataStorage.PRIVATE)) {
+      if (contact.getContactType().equalsIgnoreCase(JCRDataStorage.PERSONAL)) {
         try {
           contact = service.getContact(username, contactId) ;
         } catch (NullPointerException e) {
@@ -1115,7 +1115,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       Contact newContact = null ;
       ContactService service = ContactUtils.getContactService() ;
       String username = ContactUtils.getCurrentUser() ;      
-      if (oldContact.getContactType().equals(JCRDataStorage.PRIVATE)) {
+      if (oldContact.getContactType().equals(JCRDataStorage.PERSONAL)) {
         newContact = service.getContact(username, contactId) ;
       } else if(oldContact.getContactType().equals(JCRDataStorage.SHARED)) {
         newContact = service.getSharedContactAddressBook( username, contactId) ;
@@ -1248,7 +1248,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         String type = null;
         UIAddressBooks addressBooks = uiContacts.getAncestorOfType(
             UIWorkingContainer.class).findFirstComponentOfType(UIAddressBooks.class) ;
-        if (addressBooks.getPrivateGroupMap().containsKey(group)) type = JCRDataStorage.PRIVATE ;
+        if (addressBooks.getPrivateGroupMap().containsKey(group)) type = JCRDataStorage.PERSONAL ;
         else if (addressBooks.getSharedGroups().containsKey(group)) type = JCRDataStorage.SHARED ;
         else type = JCRDataStorage.PUBLIC ;
         

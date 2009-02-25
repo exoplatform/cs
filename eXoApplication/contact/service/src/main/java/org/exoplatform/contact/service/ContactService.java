@@ -39,13 +39,12 @@ public interface ContactService extends ContactServiceLegacy {
   
   /**
    * get contact page list in a specific personal addressbook
-   * @return a contact page list contains contact nodes 
-   * @param sProvider session of current user
    * @param username current user
-   * @param groupId id of address book getted
+   * @param addressBookId id of address book getted
+   * @return a contact page list 
    * @throws Exception 
    */
-  public ContactPageList getContactPageListByGroup(SessionProvider sProvider, String username, String groupId) throws Exception ;
+  public ContactPageList getContactsByAddressBook(String username, String addressBookId) throws Exception ;
   
   /**
    * get all email addresses in a specific personal addressbook

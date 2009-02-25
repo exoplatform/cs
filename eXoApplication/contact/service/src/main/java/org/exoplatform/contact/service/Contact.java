@@ -77,7 +77,7 @@ public class Contact {
    *  0: Private
    *  1: Shared
    *  2: Public */
-  private String contactType = JCRDataStorage.PRIVATE ;  
+  private String contactType = JCRDataStorage.PERSONAL ;  
   private String[] addressBook ;
   private String[] tags ;
   private String[] editPermissionUsers ;

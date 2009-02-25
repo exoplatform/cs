@@ -191,9 +191,9 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
         String[] address = uiForm.selectedGroup.split(Utils.SPLIT) ;
         if (isExportAll) {
           ContactPageList pageList = null ;          
-          if (address[0].equals(JCRDataStorage.PRIVATE)) {
-            pageList = contactService.getContactPageListByGroup(
-                SessionProviderFactory.createSessionProvider(), username, address[1]) ;  
+          if (address[0].equals(JCRDataStorage.PERSONAL)) {
+            pageList = contactService.getContactsByAddressBook(
+                username, address[1]) ;  
           } else if (address[0].equals(JCRDataStorage.SHARED)) {
             SharedAddressBook sharedAddress = uiContactPortlet.findFirstComponentOfType(
                 UIAddressBooks.class).getSharedGroups().get(address[1]) ;
@@ -223,7 +223,7 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return ;
           }          
-          if (address[0].equals(JCRDataStorage.PRIVATE)) {
+          if (address[0].equals(JCRDataStorage.PERSONAL)) {
             for(String contactId : contactIds.keySet()) {
               contacts.add(contactService.getContact(username, contactId)) ;              
             }            

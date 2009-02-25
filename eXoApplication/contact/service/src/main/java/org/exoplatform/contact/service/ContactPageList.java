@@ -96,7 +96,7 @@ public class ContactPageList extends JCRPageList {
         currentNode = iter_.nextNode() ;
         if(currentNode.isNodeType("exo:contact")) {
           Contact contact = getContact(currentNode, contactType_) ;
-          if (contact.getId().equalsIgnoreCase(username_) && (contactType_.equals(JCRDataStorage.PRIVATE))) {
+          if (contact.getId().equalsIgnoreCase(username_) && (contactType_.equals(JCRDataStorage.PERSONAL))) {
             if (page > 1) {
               i -- ;
               continue ;
@@ -111,7 +111,7 @@ public class ContactPageList extends JCRPageList {
       }
     }   
 //  add to take default contact to first of list
-    if (page == 1 && !containDefault && contactType_.equals(JCRDataStorage.PRIVATE) 
+    if (page == 1 && !containDefault && contactType_.equals(JCRDataStorage.PERSONAL) 
         && value_.contains(NewUserListener.DEFAULTGROUP + username_) && iter_ != null) {
       iter_.skip(0) ;
       while (iter_.hasNext()) {
