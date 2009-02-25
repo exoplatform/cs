@@ -203,13 +203,10 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
             pageList = contactService.getPublicContactsByAddressBook(SessionProviderFactory.createSystemProvider(), address[1]) ;
           }
           if (pageList == null) {
-            uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.deletedPer", new Object[]{Utils.limitExport + ""}, 
-                ApplicationMessage.WARNING)) ;
+            uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.deletedPer", null, ApplicationMessage.WARNING)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(
               uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class)) ;
-            event.getRequestContext().addUIComponentToUpdateByAjax(
-              uiContactPortlet.findFirstComponentOfType(UIContactContainer.class)) ;
             return ;
           }          
           if (pageList.getAvailable() > Utils.limitExport) {
@@ -253,8 +250,7 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
         }
       }      
       if (contacts.size() == 0) {
-        uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.deletedPer", new Object[]{Utils.limitExport + ""}, 
-            ApplicationMessage.WARNING)) ;
+        uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.deletedPer", null, ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(
           uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class)) ;
