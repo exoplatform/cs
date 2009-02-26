@@ -119,6 +119,7 @@
 	padding: 0px 2px;
 	font-size: 10px;
 	_padding-left: 17px;
+	overflow:hidden;
 }
 
 .UIDayView .EventDayContent .EventContainer{
