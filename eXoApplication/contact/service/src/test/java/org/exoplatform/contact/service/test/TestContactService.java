@@ -18,6 +18,7 @@ package org.exoplatform.contact.service.test;
 
 import java.io.ByteArrayInputStream;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -327,7 +328,7 @@ public class TestContactService extends BaseContactServiceTestCase {
     
   }
   
-  public void testGetContactPageListByGroup() throws Exception {
+  public void testgetContactsByAddressBook() throws Exception {
 
     AddressBook rootBook1 = createAddressBook("group1", "group1", root);
     contactService.saveContact(root, createContact(rootBook1), true);
@@ -336,6 +337,35 @@ public class TestContactService extends BaseContactServiceTestCase {
     ContactPageList pageList = contactService.getContactsByAddressBook(root, rootBook1.getId());
     assertEquals("PageList size", pageList.getAll().size(), 3);
   }
+  
+  public void testGetEmailsByAddressbook() throws Exception {
+    
+    AddressBook rootBook1 = createAddressBook("ab1", "", root);
+    AddressBook rootBook2 = createAddressBook("ab2", "", root);
+    Contact contact1 = createContact(rootBook1);
+    contact1.setEmailAddress("sample@example.org");
+    contactService.saveContact(root, contact1, true);
+    
+    Contact contact2 = createContact(rootBook1);
+    contact2.setEmailAddress("sample2@example.org");
+    contactService.saveContact(root, contact2, true);
+
+
+    List<String> emails = contactService.getEmailsByAddressBook(root, rootBook1.getId());
+    List<String> expected = Arrays.asList(new String[] {contact1.getEmailAddress(), contact2.getEmailAddress()});
+    assertContainsAll("Email addresses don't match", expected, emails);
+
+    
+    Contact contact3 = createContact(rootBook2);
+    contact3.setEmailAddress(null);
+    contactService.saveContact(root, contact3, true);    
+    List<String> emails2 = contactService.getEmailsByAddressBook(root, rootBook2.getId());
+    List<String> expected2 = Collections.emptyList();
+    assertContainsAll("Email addresses don't match", expected2, emails2);
+    
+  }
+
+
 
   public void _testContactService() throws Exception {
     /**
@@ -436,9 +466,8 @@ public class TestContactService extends BaseContactServiceTestCase {
 
 
     // get all email address by group:
-    assertNotNull(contactService.getAllEmailAddressByGroup(sessionProvider, root, rootBook1.getId()));
-    assertEquals(contactService.getAllEmailAddressByGroup(sessionProvider, root, rootBook1.getId())
-                               .size(), 3);
+    //assertNotNull(contactService.getAllEmailAddressByGroup(sessionProvider, root, rootBook1.getId()));
+    //assertEquals(contactService.getAllEmailAddressByGroup(sessionProvider, root, rootBook1.getId()).size(), 3);
 
     // move contact:
     assertEquals(contactService.getContactsByAddressBook(root, rootBook2.getId())

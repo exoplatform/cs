@@ -16,6 +16,9 @@
  */
 package org.exoplatform.contact.service.test;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.jcr.Node;
 import javax.jcr.Session;
 
@@ -80,6 +83,19 @@ public abstract class BaseContactServiceTestCase extends BasicTestCase {
     sessionProviderService.removeSessionProvider(null);
     startSystemSession();
   }
+  
+  
+  /**
+   * All elements of a list should be contained in the expected array of String
+   * @param message
+   * @param expected
+   * @param actual
+   */
+  public static void assertContainsAll(String message, List<String> expected, List<String> actual) {
+    assertEquals(message, expected.size(), actual.size());
+    assertTrue(message,expected.containsAll(actual));
+  } 
+  
   /**
    * Assertion method on string arrays
    * @param message

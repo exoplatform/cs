@@ -81,4 +81,19 @@ public interface ContactServiceLegacy {
    */
   public ContactPageList getContactPageListByGroup(SessionProvider sProvider, String username, String groupId) throws Exception ;
   
+  /**
+   * @deprecated use {@link ContactService#getEmailsByAddressBook(String, String)}
+   */
+  public List<String>  getAllEmailAddressByGroup(SessionProvider sProvider, String username, String groupId) throws Exception ;
+  
+  /**
+   * @deprecated use {@link ContactService#getEmailsByAddressBook(String, String)}
+   */
+  public List<String> getAllEmailBySharedGroup(String username, String addressBookId) throws Exception ;
+  
+  /**
+   * @deprecated use {@link ContactService#getEmailsByAddressBook(String, String)}
+   */
+  public List<String> getAllEmailByPublicGroup(String username, String groupId) throws Exception ;  
+  
 }

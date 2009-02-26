@@ -416,20 +416,26 @@ public class JCRDataStorage {
     }
   }
   
-  public List<String>  getAllEmailAddressByGroup(SessionProvider sProvider, String username, String groupId) throws Exception {
-    Node contactHome = getPersonalContactsHome(sProvider, username);
-    QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
-    StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath() 
-                                                + "//element(*,exo:contact)[@exo:categories='")
-                                                .append(groupId).append("']");                                                
-    NodeIterator it = qm.createQuery(queryString.toString(), Query.XPATH).execute().getNodes();
-    List<String> address = new ArrayList<String>();
-    while (it.hasNext()){
-      Node contact = it.nextNode();
-      if(contact.hasProperty("exo:emailAddress") && !Utils.isEmpty(contact.getProperty("exo:emailAddress").getString()))
-        address.add(contact.getProperty("exo:emailAddress").getString());
+  public List<String> getAllEmailAddressByGroup(String username, String groupId) throws Exception {
+    SessionProvider sProvider = null;
+    try {
+      sProvider = createSessionProvider();
+      Node contactHome = getPersonalContactsHome(sProvider, username);
+      QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
+      StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath()
+          + "//element(*,exo:contact)[@exo:categories='").append(groupId).append("']");
+      NodeIterator it = qm.createQuery(queryString.toString(), Query.XPATH).execute().getNodes();
+      List<String> address = new ArrayList<String>();
+      while (it.hasNext()) {
+        Node contact = it.nextNode();
+        if (contact.hasProperty("exo:emailAddress")
+            && !Utils.isEmpty(contact.getProperty("exo:emailAddress").getString()))
+          address.add(contact.getProperty("exo:emailAddress").getString());
+      }
+      return address;
+    } finally {
+      closeSessionProvider(sProvider);
     }
-    return address ;
   }
   
   public List<String> getAllEmailByPublicGroup(String username, String groupId) throws Exception {

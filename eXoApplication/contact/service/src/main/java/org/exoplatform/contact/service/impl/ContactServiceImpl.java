@@ -85,9 +85,15 @@ public class ContactServiceImpl implements ContactService {
     return storage_.getContactPageListByGroup(sProvider, username, filter, type) ;
   }
   
-  public List<String> getAllEmailAddressByGroup(SessionProvider sProvider, String username, String groupId) throws Exception {
-    return storage_.getAllEmailAddressByGroup(sProvider, username, groupId);
+  /**
+   * {@inheritDoc}
+   */
+  public List<String> getEmailsByAddressBook(String username, String groupId) throws Exception {
+    return storage_.getAllEmailAddressByGroup(username, groupId);
   }
+  
+
+  
   public Contact getContact(String username, String contactId) throws Exception {
     return storage_.getContact(username, contactId);
   }
@@ -272,10 +278,16 @@ public class ContactServiceImpl implements ContactService {
     return storage_.getSharedAddressBookById(username, addressBookId) ;
   }
   
+  /**
+   * {@inheritDoc}
+   */
   public List<String> getAllEmailBySharedGroup(String username, String addressBookId) throws Exception {
     return storage_.getAllEmailBySharedGroup(username, addressBookId) ;
   }
   
+  /**
+   * {@inheritDoc}
+   */
   public List<String> getAllEmailByPublicGroup(String username, String groupId) throws Exception { 
     return storage_.getAllEmailByPublicGroup(username, groupId) ;
   }
@@ -349,6 +361,12 @@ public class ContactServiceImpl implements ContactService {
   public List<Contact> getAllContacts(SessionProvider sProvider, String username) throws Exception {
     return getPersonalContacts(username);
   }
-  
+
+  /**
+   * {@inheritDoc}
+   */
+  public List<String> getAllEmailAddressByGroup(SessionProvider sProvider, String username, String groupId) throws Exception {
+    return getEmailsByAddressBook(username, groupId);
+  } 
   
 }

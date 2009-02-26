@@ -447,7 +447,7 @@ public class UIAddressBooks extends UIComponent {
       List<String> addresses = null ;      
       if (uiAddressBook.privateAddressBookMap_.containsKey(groupId)) {
         addresses = contactService
-        .getAllEmailAddressByGroup(SessionProviderFactory.createSessionProvider(), username, groupId);
+        .getEmailsByAddressBook(username, groupId);
       } else if (ContactUtils.getUserGroups().contains(groupId)) {
         addresses = contactService.getAllEmailByPublicGroup(username, groupId) ;
       } else {

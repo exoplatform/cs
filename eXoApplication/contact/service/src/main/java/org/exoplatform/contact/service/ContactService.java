@@ -40,26 +40,26 @@ public interface ContactService extends ContactServiceLegacy {
   /**
    * get contact page list in a specific personal addressbook
    * @param username current user
-   * @param addressBookId id of address book getted
+   * @param addressBookId id of address book to get
    * @return a contact page list 
    * @throws Exception 
    */
   public ContactPageList getContactsByAddressBook(String username, String addressBookId) throws Exception ;
   
   /**
-   * get all email addresses in a specific personal addressbook
-   * @return emails list in this address book
+   * Get all email addresses of contacts in a personal address book
+   * @return email list in this address book
    * @param sProvider session of current user
    * @param username current user
    * @param groupId id of address book
    * @throws Exception 
    */
-  public List<String>  getAllEmailAddressByGroup(SessionProvider sProvider, String username, String groupId) throws Exception ;
+  public List<String>  getEmailsByAddressBook(String username, String groupId) throws Exception ;
   
   /**
    * get personal contact base on id of contact
    * @param username current user
-   * @param contactId id of contact is getted
+   * @param contactId id of contact is to get
    * @return object Contact has specific id   
    * @throws Exception 
    */
@@ -156,15 +156,7 @@ public interface ContactService extends ContactServiceLegacy {
    */
   public Contact getPublicContact(String contactId) throws Exception ;  
 
-  /**
-   * get all email addresses in a specific public addressbook
-   * @return emails list in this address book
-   * @param sProvider use system provider to perform this action
-   * @param username current user
-   * @param groupId id of address book
-   * @throws Exception 
-   */
-  public List<String> getAllEmailByPublicGroup(String username, String groupId) throws Exception ;
+
   
   /**
    * the default contact (owner contact) is added a new address book
@@ -328,14 +320,7 @@ public interface ContactService extends ContactServiceLegacy {
    */
   public void saveSharedContact(String username, Contact contact) throws Exception ;  
   
-  /**
-   * user can get all emails of all contacts in a shared address book
-   * @return list emails in this address book
-   * @param username userId of current user
-   * @param addressBookId id of address book user wants to get emails
-   * @throws Exception 
-   */
-  public List<String> getAllEmailBySharedGroup(String username, String addressBookId) throws Exception ;
+  
   
   /**
    * user can get a contact in a shared address book by id of contact
