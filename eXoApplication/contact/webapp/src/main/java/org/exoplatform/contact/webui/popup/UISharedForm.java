@@ -43,6 +43,7 @@ import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIPopupWindow;
+import org.exoplatform.webui.core.UITree;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -502,24 +503,30 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
       } 
       String permType = event.getRequestContext().getRequestParameter(OBJECTID) ;
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
-      /*try {
+     /* try {
         if (uiContainer.findFirstComponentOfType(UIGroupSelector.class) != null) {
-          System.out.println("\n\n 11 :" + uiContainer.findFirstComponentOfType(UIGroupSelector.class).getParent().getName() + "\n\n") ;
-          System.out.println("\n\n 22 :" + uiContainer.getAncestorOfType(UIContactPortlet.class).findFirstComponentOfType(UIGroupSelector.class).getParent().getName() + "\n\n") ;
-          System.out.println("\n\n 33 remove :" + uiContainer.removeChild(UIPopupWindow.class) + "\n\n") ;
-          System.out.println("\n\n 33 :" + uiContainer.getChild(UIGroupSelector.class) + "\n\n") ;
-          System.out.println("\n\n 35 :" + uiContainer.getChild(UIPopupAction.class).getChild(UIGroupSelector.class) + "\n\n") ;
-        }
-        if (uiContainer.findFirstComponentOfType(org.exoplatform.webui.organization.UIGroupSelector.class) != null) {
-          System.out.println("\n\n 44 :" + uiContainer.findFirstComponentOfType(org.exoplatform.webui.organization.UIGroupSelector.class).getParent().getName() + "\n\n") ;
+          //System.out.println("\n\n 11 :" + uiContainer.findFirstComponentOfType(UIGroupSelector.class).getParent().getName() + "\n\n") ;
           
+          System.out.println("\n\n 33 remove :" + uiContainer.findFirstComponentOfType(UIGroupSelector.class).removeChild(UITree.class) + "\n\n") ;
+
         }
+        if (uiContainer.findFirstComponentOfType(org.exoplatform.webui.organization.account.UIGroupSelector.class) != null) {
+          //System.out.println("\n\n 44 :" + uiContainer.findFirstComponentOfType(org.exoplatform.webui.organization.account.UIGroupSelector.class).getParent().getName() + "\n\n") ;
+          uiContainer.findFirstComponentOfType(org.exoplatform.webui.organization.account.UIGroupSelector.class).removeChild(UITree.class) ;
+        }
+        
       } catch (Exception e) {
         e.printStackTrace() ;
       }*/
+      uiContainer.removeChild(UIPopupWindow.class) ;
+      
       if (permType.equals(UISelectComponent.TYPE_USER)) {
         UIPopupWindow uiPopupWindow = uiContainer.getChild(UIPopupWindow.class) ;
-        if (uiPopupWindow == null) uiPopupWindow = uiContainer.addChild(UIPopupWindow.class, "UIPopupWindowUserSelect", "UIPopupWindowUserSelect") ;
+        
+        if (uiPopupWindow == null) {
+          //System.out.println("\n\n nulll \n\n");
+          uiPopupWindow = uiContainer.addChild(UIPopupWindow.class, "UIPopupWindowUserSelect", "UIPopupWindowUserSelect") ;
+        }
         UIUserSelector uiUserSelector = uiContainer.createUIComponent(UIUserSelector.class, null, null) ;
         uiUserSelector.setShowSearch(true);
         uiUserSelector.setShowSearchUser(true) ;

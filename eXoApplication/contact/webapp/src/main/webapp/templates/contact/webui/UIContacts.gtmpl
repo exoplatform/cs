@@ -372,7 +372,7 @@
 								
 									<% 
 										icon = "OfflineIcon"
-										if (contact.getContactType().equals(JCRDataStorage.PRIVATE) && contact.isOwner()&& contact.getOwnerId().equals(ContactUtils.getCurrentUser())) icon = "OwnerIcon" ; 	
+										if (contact.getContactType().equals(JCRDataStorage.PERSONAL) && contact.isOwner()&& contact.getOwnerId().equals(ContactUtils.getCurrentUser())) icon = "OwnerIcon" ; 	
 								  %>
 									<div class="State $icon">
 										<a href="$actionLink">
@@ -456,7 +456,7 @@
 								<td class="text">
 									<% 
 										icon = "OfflineIcon"
-										if (contact.getContactType().equals(JCRDataStorage.PRIVATE) && contact.isOwner()&& contact.getOwnerId().equals(ContactUtils.getCurrentUser()))
+										if (contact.getContactType().equals(JCRDataStorage.PERSONAL) && contact.isOwner()&& contact.getOwnerId().equals(ContactUtils.getCurrentUser()))
 										  icon = "OwnerIcon" ; 	
 								  %>
 								
@@ -596,7 +596,7 @@
 			  	<div class="TitleVCards" >
 			  		<% 
 				  		icon = "OfflineIcon"
-						if (contact.getContactType().equals(JCRDataStorage.PRIVATE) && contact.isOwner()&& contact.getOwnerId().equals(ContactUtils.getCurrentUser())) icon = "OwnerIcon" ;
+						if (contact.getContactType().equals(JCRDataStorage.PERSONAL) && contact.isOwner()&& contact.getOwnerId().equals(ContactUtils.getCurrentUser())) icon = "OwnerIcon" ;
 						%>
 				  	<div class="StateIcon $icon"><%= ContactUtils.encodeHTML(contact.getFullName()) %></div>
 			  		<% if (tagIds != null && tagIds.length > 0) { %>
@@ -766,7 +766,7 @@
 			  	<div class="TitleVCards" >
 			  	<% 
 				  	icon = "OfflineIcon"
-					if (contact.getContactType().equals(JCRDataStorage.PRIVATE) && contact.isOwner()&& contact.getOwnerId().equals(ContactUtils.getCurrentUser())) icon = "OwnerIcon" ;					
+					if (contact.getContactType().equals(JCRDataStorage.PERSONAL) && contact.isOwner()&& contact.getOwnerId().equals(ContactUtils.getCurrentUser())) icon = "OwnerIcon" ;					
 					%>
 			  	
 				  	<div class="StateIcon $icon"><%=(contact.getFullName()==null ? "_" : contact.getFullName())%></div>
