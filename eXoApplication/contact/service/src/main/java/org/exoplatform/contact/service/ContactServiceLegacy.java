@@ -96,4 +96,9 @@ public interface ContactServiceLegacy {
    */
   public List<String> getAllEmailByPublicGroup(String username, String groupId) throws Exception ;  
   
+  /**
+   * @deprecated use {@link ContactService#addUserContactInAddressBook(String, String)}
+   */
+  public void addGroupToPersonalContact(String userId, String groupId) throws Exception ;
+  
 }

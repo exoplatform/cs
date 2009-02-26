@@ -247,11 +247,28 @@ public class TestContactService extends BaseContactServiceTestCase {
   }
 
   public void testAddGroupToPersonalContact() throws Exception {
-    // Contact contact = createContact() ;
-    // ContactGroup johnBook = createAddressBook("group3", "group3", john);
-    // contactService_.addGroupToPersonalContact(root, johnBook.getId());
-    // contact = contactService_.getContact(john, contact.getId());
-    // assertEquals(contact.getAddressBook().length, 3);
+    // first initialize root's self contact
+   
+    
+    AddressBook ab2 = createAddressBook("defaultroot", "group2", root);
+    Contact contact = createNewContactInAddressBooks(ab2);
+    contact.setId(root); // self contact have id = username
+    contact.setOwner(true) ;
+    contact.setOwnerId(root) ;
+    contactService.saveContact(root, contact, true) ;
+
+    assertNotNull("root's public contact was not created properly", contactService.getPublicContact(root));
+    
+    
+    String groupId = "/organization/operations";
+    int oldSize = contactService.getPublicContactsByAddressBook(sessionProvider, groupId).getAll().size();
+    
+    contactService.addUserContactInAddressBook(root, groupId);
+
+    int newSize = contactService.getPublicContactsByAddressBook(sessionProvider, groupId).getAll().size();
+    
+    assertEquals("public addressbook size don't match", oldSize+1, newSize);
+
   }
 
   public void testRemoveAddressBook() throws Exception {
@@ -303,9 +320,9 @@ public class TestContactService extends BaseContactServiceTestCase {
   public void testGetPersonalContacts() throws Exception {
     AddressBook rootBook1 = createAddressBook("group1", "group1", root);
     AddressBook johnBook = createAddressBook("johnbook", " ", root);
-    Contact contact1 = createContact(rootBook1);
-    Contact contact2 = createContact(rootBook1);
-    Contact contact3 = createContact(rootBook1);
+    Contact contact1 = createNewContactInAddressBooks(rootBook1);
+    Contact contact2 = createNewContactInAddressBooks(rootBook1);
+    Contact contact3 = createNewContactInAddressBooks(rootBook1);
 
     // save contacts
     contactService.saveContact(root, contact1, true);
@@ -328,12 +345,12 @@ public class TestContactService extends BaseContactServiceTestCase {
     
   }
   
-  public void testgetContactsByAddressBook() throws Exception {
+  public void testGetContactsByAddressBook() throws Exception {
 
     AddressBook rootBook1 = createAddressBook("group1", "group1", root);
-    contactService.saveContact(root, createContact(rootBook1), true);
-    contactService.saveContact(root, createContact(rootBook1), true);
-    contactService.saveContact(root, createContact(rootBook1), true);
+    contactService.saveContact(root, createNewContactInAddressBooks(rootBook1), true);
+    contactService.saveContact(root, createNewContactInAddressBooks(rootBook1), true);
+    contactService.saveContact(root, createNewContactInAddressBooks(rootBook1), true);
     ContactPageList pageList = contactService.getContactsByAddressBook(root, rootBook1.getId());
     assertEquals("PageList size", pageList.getAll().size(), 3);
   }
@@ -342,11 +359,11 @@ public class TestContactService extends BaseContactServiceTestCase {
     
     AddressBook rootBook1 = createAddressBook("ab1", "", root);
     AddressBook rootBook2 = createAddressBook("ab2", "", root);
-    Contact contact1 = createContact(rootBook1);
+    Contact contact1 = createNewContactInAddressBooks(rootBook1);
     contact1.setEmailAddress("sample@example.org");
     contactService.saveContact(root, contact1, true);
     
-    Contact contact2 = createContact(rootBook1);
+    Contact contact2 = createNewContactInAddressBooks(rootBook1);
     contact2.setEmailAddress("sample2@example.org");
     contactService.saveContact(root, contact2, true);
 
@@ -356,7 +373,7 @@ public class TestContactService extends BaseContactServiceTestCase {
     assertContainsAll("Email addresses don't match", expected, emails);
 
     
-    Contact contact3 = createContact(rootBook2);
+    Contact contact3 = createNewContactInAddressBooks(rootBook2);
     contact3.setEmailAddress(null);
     contactService.saveContact(root, contact3, true);    
     List<String> emails2 = contactService.getEmailsByAddressBook(root, rootBook2.getId());
@@ -717,7 +734,7 @@ public class TestContactService extends BaseContactServiceTestCase {
     sharedAddressBook.setEditPermissionUsers(contactGroup.getEditPermissionUsers());
     return sharedAddressBook;
   }
-private Contact createContact(AddressBook... addressBooks) throws Exception {
+private Contact createNewContactInAddressBooks(AddressBook... addressBooks) throws Exception {
   Contact contact = createContact();
   setContactInAddressBooks(contact, addressBooks);
   return contact;

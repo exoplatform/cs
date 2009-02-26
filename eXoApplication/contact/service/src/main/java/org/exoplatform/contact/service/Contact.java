@@ -78,7 +78,7 @@ public class Contact {
    *  1: Shared
    *  2: Public */
   private String contactType = JCRDataStorage.PERSONAL ;  
-  private String[] addressBook ;
+  private String[] addressBookIds ;
   private String[] tags ;
   private String[] editPermissionUsers ;
   private String[] viewPermissionUsers ;
@@ -210,8 +210,18 @@ public class Contact {
   public String getContactType()  { return contactType ; }
   public void   setContactType(String s) { contactType = s ; }
   
-  public String[] getAddressBook() { return addressBook ; }
-  public void   setAddressBook(String[] s) { addressBook = s ; }
+  /**
+   * @deprecated use {@link #getAddressBookIds()}
+   */
+  public String[] getAddressBook() { return addressBookIds ; }
+  
+  /**
+   * @deprecated use {@link #setAddressBookIds(String[])}
+   */
+  public void   setAddressBook(String[] s) { addressBookIds = s ; }
+  
+  public String[] getAddressBookIds() { return addressBookIds ; }
+  public void   setAddressBookIds(String[] addressBookIds) { this.addressBookIds = addressBookIds ; }
   
   public String[] getTags() { return tags ; }
   public void   setTags(String[] s) { tags = s ; }

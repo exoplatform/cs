@@ -692,6 +692,18 @@
         </object-param>
       </init-params>
     </component-plugin>
+	  <component-plugin>
+	    <name>contact.new.user.event.listener</name>
+	    <set-method>addListenerPlugin</set-method>
+	    <type>org.exoplatform.contact.service.impl.NewUserListener</type>
+	    <description>description</description>	    
+	  </component-plugin>
+	  <component-plugin>
+	    <name>contact.new.membership.event.listener</name>
+	    <set-method>addListenerPlugin</set-method>
+	    <type>org.exoplatform.contact.service.impl.NewMembershipListener</type>
+	    <description>description</description>	    
+	  </component-plugin>   
   <!-- 
     <component-plugin>
       <name>new.user.event.listener</name>
@@ -726,6 +738,9 @@
       </init-params>
     </component-plugin>
 -->
+
+  
+
   </external-component-plugins>
   <remove-configuration>org.exoplatform.services.scheduler.JobSchedulerService</remove-configuration>    
   <remove-configuration>org.exoplatform.services.transaction.ExoTransactionService</remove-configuration>  

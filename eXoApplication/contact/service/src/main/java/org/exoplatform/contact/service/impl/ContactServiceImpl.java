@@ -113,8 +113,11 @@ public class ContactServiceImpl implements ContactService {
     storage_.moveContacts(sysProvider, username, contacts, addressType) ;
   }
   
-  public void addGroupToPersonalContact(String userId, String groupId) throws Exception {
-  	storage_.addGroupToPersonalContact(userId, groupId) ;
+  /**
+   * {@inheritDoc}
+   */
+  public void addUserContactInAddressBook(String userId, String addressBookId) throws Exception {
+  	storage_.addUserContactInAddressBook(userId, addressBookId) ;
   }
   
   public List<AddressBook> getGroups(SessionProvider sProvider, String username) throws Exception {
@@ -369,4 +372,10 @@ public class ContactServiceImpl implements ContactService {
     return getEmailsByAddressBook(username, groupId);
   } 
   
+  /**
+   * {@inheritDoc}
+   */
+  public void addGroupToPersonalContact(String userId, String groupId) throws Exception {
+    addUserContactInAddressBook(userId, groupId);
+  }
 }

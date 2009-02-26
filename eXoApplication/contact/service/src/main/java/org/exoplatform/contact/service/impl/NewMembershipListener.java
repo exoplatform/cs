@@ -51,7 +51,7 @@ public class NewMembershipListener extends MembershipEventListener {
   }
 
   public void postSave(Membership m, boolean isNew) throws Exception {
-    cservice_.addGroupToPersonalContact(m.getUserName(), m.getGroupId()) ;
+    cservice_.addUserContactInAddressBook(m.getUserName(), m.getGroupId()) ;
     JCRDataStorage storage_ = new JCRDataStorage(nodeHierarchyCreator_) ;
     SessionProvider systemSession = SessionProvider.createSystemProvider() ;
     try {

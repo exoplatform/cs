@@ -32,6 +32,8 @@ import javax.jcr.query.QueryResult;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactService;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.access.AccessControlEntry;
 import org.exoplatform.services.jcr.access.PermissionType;
@@ -83,11 +85,12 @@ public class NewUserListener extends UserEventListener {
 
         contact.setId(user.getUserName()) ;
         Map<String, String> groupIds = new LinkedHashMap<String, String>() ;
-        groupIds.put(group.getId(), group.getId()) ;      
+        groupIds.put(group.getId(), group.getId()) ;   
+        ExoContainer container = ExoContainerContext.getCurrentContainer();
         OrganizationService organizationService = 
-          (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
-        Object[] objGroupIds = organizationService.getGroupHandler().findGroupsOfUser(user.getUserName()).toArray() ;
-        for (Object object : objGroupIds) {
+          (OrganizationService)container.getComponentInstanceOfType(OrganizationService.class) ;
+        Object[] groupsOfUser = organizationService.getGroupHandler().findGroupsOfUser(user.getUserName()).toArray() ;
+        for (Object object : groupsOfUser) {
           String id = ((GroupImpl)object).getId() ;
           groupIds.put(id, id) ;
         }
@@ -105,20 +108,23 @@ public class NewUserListener extends UserEventListener {
         List<String> recievedUser = new ArrayList<String>() ;
         recievedUser.add(user.getUserName()) ;
 
-        for (Object object : objGroupIds) {  
+        
+        for (Object object : groupsOfUser) {  
           String groupId = ((GroupImpl)object).getId() ;
+          // get all address books that current user can see thank to his groups
           StringBuffer queryString = new StringBuffer("/jcr:root" + usersPath 
               + "//element(*,exo:contactGroup)[@exo:viewPermissionGroups='").append(groupId + "']") ;        
           Query query = qm.createQuery(queryString.toString(), Query.XPATH);
           QueryResult result = query.execute();
           NodeIterator nodes = result.getNodes() ;
           while (nodes.hasNext()) {
-            Node address = nodes.nextNode() ;
-            storage_.shareAddressBook(address.getProperty("exo:sharedUserId")
-                .getString(), address.getProperty("exo:id").getString(), recievedUser) ;
+            Node addressBook = nodes.nextNode() ;
+            //share between adressbook owner and current user
+            storage_.shareAddressBook(addressBook.getProperty("exo:sharedUserId")
+                .getString(), addressBook.getProperty("exo:id").getString(), recievedUser) ;
           }
 
-          // lookup shared contacts
+          // lookup shared contacts that user can see thank to his groups
           queryString = new StringBuffer("/jcr:root" + usersPath 
               + "//element(*,exo:contact)[@exo:viewPermissionGroups='").append(groupId + "']") ;        
           query = qm.createQuery(queryString.toString(), Query.XPATH);

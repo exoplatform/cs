@@ -68,6 +68,7 @@ import org.exoplatform.services.log.ExoLogger;
  */
 public class JCRDataStorage {
   
+  private static final String PROP_ADDRESSBOOK_REFS = "exo:categories";
   final private static String CONTACTS = "contacts".intern() ;
   final private static String PERSONAL_ADDRESS_BOOKS = "contactGroup".intern() ;
   final private static String TAGS = "tags".intern() ;
@@ -297,7 +298,7 @@ public class JCRDataStorage {
     if(contactNode.hasProperty("exo:mobilePhone"))contact.setMobilePhone(contactNode.getProperty("exo:mobilePhone").getString());
     if(contactNode.hasProperty("exo:webPage"))contact.setWebPage(contactNode.getProperty("exo:webPage").getString());
     if(contactNode.hasProperty("exo:note"))contact.setNote(contactNode.getProperty("exo:note").getString());
-    if(contactNode.hasProperty("exo:categories"))contact.setAddressBook(ValuesToStrings(contactNode.getProperty("exo:categories").getValues()));
+    if(contactNode.hasProperty(PROP_ADDRESSBOOK_REFS))contact.setAddressBook(ValuesToStrings(contactNode.getProperty(PROP_ADDRESSBOOK_REFS).getValues()));
     if(contactNode.hasProperty("exo:tags")) contact.setTags(ValuesToStrings(contactNode.getProperty("exo:tags").getValues()));
     if(contactNode.hasProperty("exo:editPermissionUsers")) contact.setEditPermissionUsers(ValuesToStrings(contactNode.getProperty("exo:editPermissionUsers").getValues()));
     if(contactNode.hasProperty("exo:viewPermissionUsers")) contact.setViewPermissionUsers(ValuesToStrings(contactNode.getProperty("exo:viewPermissionUsers").getValues()));
@@ -1104,7 +1105,7 @@ public class JCRDataStorage {
       try {
         // cs-2073
         Node contactNode = contactHomeNode.getNode(contactId) ;
-        if (Arrays.asList(ValuesToStrings(contactNode.getProperty("exo:categories").getValues()))
+        if (Arrays.asList(ValuesToStrings(contactNode.getProperty(PROP_ADDRESSBOOK_REFS).getValues()))
             .contains(addressBook.getProperty("exo:id").getString())) return getContact(contactNode, JCRDataStorage.SHARED) ;
       } catch (PathNotFoundException e) { }
     }
@@ -1212,20 +1213,20 @@ public class JCRDataStorage {
     contactHomeNode.getSession().save(); 
   }
   */
-  public void addGroupToPersonalContact(String userId, String groupId) throws Exception {
+  public void addUserContactInAddressBook(String userId, String addressBookId) throws Exception {
     SessionProvider provider = SessionProvider.createSystemProvider();
     try {
       Node contactHome = getPersonalContactsHome(provider, userId);
       Node contactNode = contactHome.getNode(userId);
-      Value[] values = contactNode.getProperty("exo:categories").getValues();
+      Value[] values = contactNode.getProperty(PROP_ADDRESSBOOK_REFS).getValues();
       List<String> ls = new ArrayList<String>();
       for (Value vl : values) {
-        if (vl.getString().equals(groupId))
+        if (vl.getString().equals(addressBookId))
           return;
         ls.add(vl.getString());
       }
-      ls.add(groupId);
-      contactNode.setProperty("exo:categories", ls.toArray(new String[] {}));
+      ls.add(addressBookId);
+      contactNode.setProperty(PROP_ADDRESSBOOK_REFS, ls.toArray(new String[] {}));
       contactNode.save();
     } finally {
       provider.close();
@@ -1305,7 +1306,7 @@ public class JCRDataStorage {
     contactNode.setProperty("exo:webPage", contact.getWebPage());
     
     contactNode.setProperty("exo:note", contact.getNote());
-    contactNode.setProperty("exo:categories", contact.getAddressBook());
+    contactNode.setProperty(PROP_ADDRESSBOOK_REFS, contact.getAddressBookIds());
     contactNode.setProperty("exo:tags", contact.getTags());
     contactNode.setProperty("exo:editPermissionUsers", contact.getEditPermissionUsers());
     contactNode.setProperty("exo:viewPermissionUsers", contact.getViewPermissionUsers());    
@@ -1522,7 +1523,7 @@ public class JCRDataStorage {
             // loop all shared address books; faster if parameter is : List<contact>
             if(contacts.hasNode(contactId)) {
               contactNode = contacts.getNode(contactId) ;
-              if (!Arrays.asList(ValuesToStrings(contactNode.getProperty("exo:categories").getValues()))
+              if (!Arrays.asList(ValuesToStrings(contactNode.getProperty(PROP_ADDRESSBOOK_REFS).getValues()))
                   .contains(addressBook.getProperty("exo:id").getString())) contactNode = null ;
               break ;
             }
@@ -1603,7 +1604,7 @@ public class JCRDataStorage {
             //cs-1962            
             if(contacts.hasNode(contactId)) {
               contactNode = contacts.getNode(contactId) ;
-              if (!Arrays.asList(ValuesToStrings(contactNode.getProperty("exo:categories").getValues()))
+              if (!Arrays.asList(ValuesToStrings(contactNode.getProperty(PROP_ADDRESSBOOK_REFS).getValues()))
                   .contains(addressBook.getProperty("exo:id").getString())) contactNode = null ;      
               break ;
             }
@@ -1753,7 +1754,7 @@ public class JCRDataStorage {
             // loop all shared address books; faster if parameter is : List<contact>
             if(contacts.hasNode(contactId)) {
               contactNode = contacts.getNode(contactId) ;
-              if (!Arrays.asList(ValuesToStrings(contactNode.getProperty("exo:categories").getValues()))
+              if (!Arrays.asList(ValuesToStrings(contactNode.getProperty(PROP_ADDRESSBOOK_REFS).getValues()))
                   .contains(addressBook.getProperty("exo:id").getString())) contactNode = null ;
               break ;
             }
@@ -2019,7 +2020,7 @@ public class JCRDataStorage {
         extNode.save() ;
         
         Node newNode = contactHomeNode.getNode(newId) ;
-        newNode.setProperty("exo:categories", new String [] {destAddress}) ;
+        newNode.setProperty(PROP_ADDRESSBOOK_REFS, new String [] {destAddress}) ;
         newNode.setProperty("exo:id", newId) ;          
         newNode.setProperty("exo:isOwner", false) ;
 
@@ -2045,7 +2046,7 @@ public class JCRDataStorage {
             contactHomeNode.getSession().getWorkspace().copy(srcHomeNode.getPath() + "/"
                 + oldNode.getProperty("exo:id").getString(), contactHomeNode.getPath() + "/" + newId) ;            
             Node newNode = contactHomeNode.getNode(newId) ;
-            newNode.setProperty("exo:categories", new String [] {destAddress}) ;  
+            newNode.setProperty(PROP_ADDRESSBOOK_REFS, new String [] {destAddress}) ;  
             newNode.setProperty("exo:id", newId) ;
             newNode.setProperty("exo:isOwner", false) ;
             
@@ -2206,7 +2207,7 @@ public class JCRDataStorage {
     
     contactNode.setProperty("exo:note", contact.getNote());
     contactNode.setProperty("exo:tags", contact.getTags());
-    contactNode.setProperty("exo:categories", new String[] {destAddress}); 
+    contactNode.setProperty(PROP_ADDRESSBOOK_REFS, new String[] {destAddress}); 
     /*contactNode.setProperty("exo:editPermissionUsers", contact.getEditPermissionUsers());
     contactNode.setProperty("exo:viewPermissionUsers", contact.getViewPermissionUsers());    
     contactNode.setProperty("exo:editPermissionGroups", contact.getEditPermissionGroups());

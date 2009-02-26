@@ -159,13 +159,13 @@ public interface ContactService extends ContactServiceLegacy {
 
   
   /**
-   * the default contact (owner contact) is added a new address book
-   * @param userId username of user 
-   * @param groupId id of group will be added to contact
+   * Add a user's own contact to an address book
+   * @param userId user ID for the user whose contact will be added to the address book
+   * @param addressBookId id of the address book where the contact is added
    * @throws Exception 
    */
-  public void addGroupToPersonalContact(String userId, String groupId) throws Exception ;
-  
+  public void addUserContactInAddressBook(String userId, String addressBookId) throws Exception ;
+
   /**
    * get contact information of current user : by default, when init new user a default contact was 
    * being inited, this contact contains info of new user 
