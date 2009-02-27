@@ -259,6 +259,13 @@
 	cursor: pointer;
 }
 
+.UIMailPortlet .WarningAttachmentIcon {
+	background: url('icons/WarningAttachmentIcon.gif') no-repeat;
+	width: 16px; height: 16px;
+	cursor: pointer;
+}
+
+
 .UIMailPortlet .NomalReadingPane {
 	background: url('icons/NomalReadingPane.gif') no-repeat;
 	width: 17px; height: 16px;

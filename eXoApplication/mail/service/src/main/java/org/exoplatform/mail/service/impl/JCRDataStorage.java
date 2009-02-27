@@ -17,6 +17,7 @@
 package org.exoplatform.mail.service.impl;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -442,6 +443,11 @@ public class JCRDataStorage {
       msg.setSendDate(cal.getTime());
     } catch (Exception e) {
     }
+    
+    try { 
+      msg.setAttIsLoadedProperly(messageNode.getProperty(Utils.ATT_IS_LOADED_PROPERLY).getBoolean());
+    } catch(Exception e) { }
+    
     return msg;
   }
 
@@ -804,6 +810,7 @@ public class JCRDataStorage {
       nodeMsg.setProperty(Utils.EXO_ISUNREAD, message.isUnread());
       nodeMsg.setProperty(Utils.EXO_IS_ROOT, message.isRootConversation());
       nodeMsg.setProperty(Utils.EXO_CONTENT_TYPE, message.getContentType());
+      nodeMsg.setProperty(Utils.ATT_IS_LOADED_PROPERLY, message.attIsLoadedProperly());
       if (message.getSendDate() != null)
         nodeMsg.setProperty(Utils.EXO_SENDDATE, message.getSendDate().getTime());
       if (message.getReceivedDate() != null)
@@ -1157,8 +1164,7 @@ public class JCRDataStorage {
         } catch (PathNotFoundException e) {
           attHome = node.addNode(Utils.KEY_ATTACHMENT, Utils.NT_UNSTRUCTURED);
         }
-        Node nodeFile = attHome.addNode("attachment" + IdGenerator.generate(),
-            Utils.EXO_MAIL_ATTACHMENT);
+        Node nodeFile = attHome.addNode("attachment" + IdGenerator.generate(), Utils.EXO_MAIL_ATTACHMENT);
         nodeFile.setProperty(Utils.EXO_ATT_NAME, Utils.decodeText(part.getFileName()));
         Node nodeContent = nodeFile.addNode(Utils.JCR_CONTENT, Utils.NT_RESOURCE);
         if (ct.indexOf(";") > 0) {
@@ -1167,7 +1173,14 @@ public class JCRDataStorage {
         } else {
           nodeContent.setProperty(Utils.JCR_MIMETYPE, ct);
         }
-        nodeContent.setProperty(Utils.JCR_DATA, part.getInputStream());
+        try {
+           nodeContent.setProperty(Utils.JCR_DATA, part.getInputStream());
+           nodeFile.setProperty(Utils.ATT_IS_LOADED_PROPERLY, true);
+        } catch (Exception e) {
+          nodeContent.setProperty(Utils.JCR_DATA, new ByteArrayInputStream("".getBytes()));
+          nodeFile.setProperty(Utils.ATT_IS_LOADED_PROPERLY, false);
+          node.setProperty(Utils.ATT_IS_LOADED_PROPERLY, false);
+        }
         nodeContent.setProperty(Utils.JCR_LASTMODIFIED, Calendar.getInstance().getTimeInMillis());
         node.setProperty(Utils.EXO_HASATTACH, true);
       }
@@ -2288,8 +2301,7 @@ public class JCRDataStorage {
     return msgList;
   }
 
-  public Message loadAttachments(SessionProvider sProvider, String username, String accountId,
-      Message msg) throws Exception {
+  public Message loadAttachments(SessionProvider sProvider, String username, String accountId, Message msg) throws Exception {
     try {
       Node messageNode = getDateStoreNode(sProvider, username, accountId, msg.getReceivedDate())
       .getNode(msg.getId());
@@ -2303,6 +2315,7 @@ public class JCRDataStorage {
           file.setMimeType(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_MIMETYPE)
               .getString());
           file.setName(node.getProperty(Utils.EXO_ATT_NAME).getString());
+          file.setIsLoadedProperly(node.getProperty(Utils.ATT_IS_LOADED_PROPERLY).getBoolean());
           file.setWorkspace(node.getSession().getWorkspace().getName());
           file.setSize(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_DATA).getLength());
           file.setPath("/" + file.getWorkspace() + node.getPath()) ;
@@ -2311,8 +2324,9 @@ public class JCRDataStorage {
       }
       msg.setAttachements(attachments);
     } catch (PathNotFoundException e) {
+      e.printStackTrace();
+      System.out.println("[EXO WARNING] PathNotFoundException when load attachment");
     }
-
     return msg;
   }
 

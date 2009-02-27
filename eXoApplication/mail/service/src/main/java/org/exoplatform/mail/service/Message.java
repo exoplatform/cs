@@ -54,6 +54,7 @@ public class Message extends MessageHeader {
   private List<String> referedMessageIds = new ArrayList<String>() ;
   private List<String> groupedMessageIds = new ArrayList<String>() ;
   private boolean isRootConversation = true ;
+  private boolean attIsLoadedProperly = true;
   
   public Message() {super() ;}
   
@@ -130,4 +131,7 @@ public class Message extends MessageHeader {
     properties.put(key, value) ;
   }
   public Map<String, String> getProperties() { return properties ; }
+  
+  public boolean attIsLoadedProperly() { return attIsLoadedProperly; }
+  public void setAttIsLoadedProperly(boolean b) { attIsLoadedProperly = b;}
 }

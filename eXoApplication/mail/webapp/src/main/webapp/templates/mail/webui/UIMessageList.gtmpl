@@ -465,10 +465,14 @@
               </td>
               <td style="padding: 0px auto;">
                 <% 
-                  if (msg.hasAttachment()) {
+                  if (msg.hasAttachment() && msg.attIsLoadedProperly()) {
                 %>
-                <a href="$actionLink"><div class="AttachmentIcon"><span></span></div></a>
-                <%}%>
+                	<a href="$actionLink"><div class="AttachmentIcon"><span></span></div></a>
+                <%} else if (!msg.attIsLoadedProperly()) { %>
+                	<a href="$actionLink"><div class="WarningAttachmentIcon" title="<%=_ctx.appRes(uicomponent.id+ '.label.there-are-attachments-could-not-be-loaded-properly') %>"><span></span></div></a>
+                <%	
+                  }
+                %>
               </td>
 
               <td class="$readStatus"><div style="_width: 600%;">

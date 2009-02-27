@@ -30,6 +30,7 @@ abstract public class Attachment {
   private String mimeType ;
   private long size ;
   private String path ;
+  private boolean isLoadedProperly = true;
   
   public String getId() { return id ; }
   public void setId(String id) { this.id = id ; }
@@ -50,4 +51,7 @@ abstract public class Attachment {
   public String getPath() {
     return path;
   }
+  
+  public boolean isLoadedProperly() { return isLoadedProperly; }
+  public void setIsLoadedProperly(boolean b) { isLoadedProperly = b; } 
 }

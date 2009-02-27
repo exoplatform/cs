@@ -153,9 +153,12 @@ public class MimeMessageParser {
   }
   
   public static String getMessageId(javax.mail.Message message) throws Exception {
-    String[] msgIdHeaders = message.getHeader("Message-ID");
-    if (msgIdHeaders != null && msgIdHeaders[0]!= null)
-      return msgIdHeaders[0] ;
+    String[] msgIdHeaders ;
+    try {
+      msgIdHeaders = message.getHeader("Message-ID");
+      if (msgIdHeaders != null && msgIdHeaders[0]!= null)
+        return msgIdHeaders[0] ;
+    } catch(Exception e) { }
     return "" ;
   }
   

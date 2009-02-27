@@ -386,6 +386,7 @@
                       DownloadService dservice = uicomponent.getDownloadService() ;
                       String attLink ;
                       for (Attachment attach : msg.getAttachments()) {
+                        if (attach.isLoadedProperly()) {
                         String downloadAction = uicomponent.event("DownloadAttachment", msg.getId() + "&attachId=" + attach.getId());
                     %>
       						  	<div class="AttachmentContent">
@@ -437,6 +438,15 @@
       						  		<div style="clear: left;"><span></span></div>
       						  	</div>
                     <% 
+                      } else {
+                    %>
+                      <div class="AttachmentContent">
+                        <div class="AttachmentBox">
+                          <div class="WarningAttachmentIcon" style="float:left;"></div><span style="padding-left:10px;"><%=_ctx.appRes(uicomponent.id+ ".label.this-attachment-could-not-be-loaded-properly") %></span>
+                        </div>
+                      </div>
+                    <%
+                        }
                       }
                     %>
     						  </div>

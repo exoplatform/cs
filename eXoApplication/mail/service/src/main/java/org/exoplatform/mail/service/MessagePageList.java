@@ -255,6 +255,10 @@ public class MessagePageList extends JCRPageList {
       msg.setSendDate(cal.getTime());
     } catch(Exception e) { }
     
+    try { 
+      msg.setAttIsLoadedProperly(messageNode.getProperty(Utils.ATT_IS_LOADED_PROPERLY).getBoolean());
+    } catch(Exception e) { }
+    
     if (hasStructure_) {
       if (refFolders == null) refFolders = new String[]{ msg.getFolders()[0] } ;
       List<String> referedMessageIds = getReferedMessageIds(messageNode, refFolders) ;

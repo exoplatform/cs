@@ -280,7 +280,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
         if (msg != null && msg.hasAttachment()) {
           msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
           for (Attachment att : msg.getAttachments()) {
-            attachments_.add(att);
+            if (att.isLoadedProperly()) attachments_.add(att);
           }
           if (attachments_.size() > 0) {
             for (ActionData actionData : getUploadFileList()) {
@@ -300,7 +300,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
             msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
           }
           for (Attachment att : msg.getAttachments()) {
-            attachments_.add(att);
+            if (att.isLoadedProperly()) attachments_.add(att);
           }
         }
         if (mailSetting.replyWithAttach()) addOriginalMessageAsAttach(msg);
@@ -358,7 +358,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
             msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
           }
           for (Attachment att : msg.getAttachments()) {
-            attachments_.add(att);
+            if (att.isLoadedProperly())  attachments_.add(att);
           }
         }
         if (mailSetting.replyWithAttach()) addOriginalMessageAsAttach(msg);
@@ -386,7 +386,7 @@ public class UIComposeForm extends UIForm implements UIPopupComponent {
             msg = mailSrv.loadAttachments(SessionProviderFactory.createSystemProvider(), username, this.accountId_, msg) ;
           }
           for (Attachment att : msg.getAttachments()) {
-            attachments_.add(att);
+            if (att.isLoadedProperly()) attachments_.add(att);
           }
         }
         

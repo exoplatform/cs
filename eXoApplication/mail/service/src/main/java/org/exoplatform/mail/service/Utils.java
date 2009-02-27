@@ -123,6 +123,7 @@ public class Utils {
   public static final String EXO_STAR = "exo:star".intern() ;
   public static final String EXO_PRIORITY = "exo:priority".intern() ;
   public static final String EXO_HASATTACH = "exo:hasAttach".intern();
+  public static final String ATT_IS_LOADED_PROPERLY = "exo:isLoadedProperly".intern();
   public static final String EXO_TAGS = "exo:tags".intern() ;
   public static final String EXO_FOLDERS = "exo:folders".intern() ;
   public static final String EXO_HEADERS = "exo:headers".intern() ;

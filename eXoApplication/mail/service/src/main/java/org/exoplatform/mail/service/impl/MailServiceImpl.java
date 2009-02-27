@@ -302,16 +302,12 @@ public class MailServiceImpl implements MailService, Startable {
     props.put(Utils.SVR_SMTP_SOCKET_FACTORY_FALLBACK, "true");
     props.put("mail.smtp.connectiontimeout", "0" );
     props.put("mail.smtp.timeout", "0" );
-    props.put("mail.debug", "true");
+    //props.put("mail.debug", "true");
     String socketFactoryClass = "javax.net.SocketFactory";
     if (Boolean.valueOf(isSSl)) {
-    	System.out.println("===============================================" + isSSl);
       socketFactoryClass = Utils.SSL_FACTORY;
       props.put(Utils.SVR_SMTP_STARTTLS_ENABLE, "true");
       props.put("mail.smtp.ssl.protocols","SSLv3 TLSv1");
-    } else {
-    	System.out.println("=====================dddddddddddd==========================" + isSSl);
-      props.put(Utils.SVR_SMTP_STARTTLS_ENABLE, "false");
     }
     props.put(Utils.SVR_SMTP_SOCKET_FACTORY_CLASS, socketFactoryClass);
     props.put(Utils.SVR_SMTP_USER, smtpUser);
