@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
@@ -38,6 +39,7 @@ import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -103,12 +105,15 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
     }
   }
   public String getLabel(String id) throws Exception {
-    try {
-      return  super.getLabel(id) ;
-    } catch (MissingResourceException mre) {
-      if( names_.get(id) != null) return  names_.get(id) ;
+      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
+      ResourceBundle res = context.getApplicationResourceBundle() ;     
+      String label = getId() + ".label." + id;
+      try {
+        return res.getString(label);      
+      } catch (MissingResourceException e) {
+        if( names_.get(id) != null) return  names_.get(id) ;
+      }
       return id ;
-    }
   } 
 
   public void activate() throws Exception {}
