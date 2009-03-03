@@ -189,7 +189,9 @@ public class JCRDataStorage{
    * @throws Exception
    */
   private Node getUserCalendarServiceHome(String username) throws Exception {
-    SessionProvider sProvider = createSessionProvider();
+    // cs- 2356
+    //SessionProvider sProvider = createSessionProvider();
+    SessionProvider sProvider = createSystemProvider();
     //try {
       Node userApp = nodeHierarchyCreator_.getUserApplicationNode(sProvider, username);
       Node calendarRoot;
