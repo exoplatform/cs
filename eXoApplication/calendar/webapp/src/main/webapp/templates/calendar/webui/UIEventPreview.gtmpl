@@ -80,7 +80,10 @@ uiform.begin() %>
 	             
 	             <table class="UIGrid" id="RowContainerDay" cellspacing="0" borderspacing="0">
 	              <tr>
-	               <td style="width: 26px;"><div class="highPriorityIcon"><span></span></div></td>
+	              <% 
+	              	prio = event.getPriority() + "PriorityIcon" ;
+	               %>
+	               <td style="width: 26px;"><div class="$prio"><span></span></div></td>
 	               <td class="Text" style="width: 100px;">
 	               		<%=uiform.getLabel('Place')%>
 	               </td>
