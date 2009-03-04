@@ -417,6 +417,11 @@ UIContactPortlet.prototype.cancelPrintList = function (){
 	UIPortalApplication.style.height =  "auto";
 	UIPortalApplication.style.overflow =  "";
 	UIPortalApplication.style.visibility = "visible" ;
+	//cs-2327 
+	var UIWindowContact = document.getElementById("UIWindow-contact") ;
+	if (UIWindowContact) {
+		UIWindowContact.style.visibility = "visible" ;
+	}
 	if(document.getElementById("UIPageDesktop")) UIPortalApplication.style.display = "block";
 	window.scroll(0,0);
 } ;
@@ -436,7 +441,14 @@ UIContactPortlet.prototype.printList = function (obj){
 	div.appendChild(printContainer) ;
 	var UIPortalApplication = document.getElementById("UIPortalApplication") ;
 	UIPortalApplication.style.visibility = "hidden" ;
-	if(uiControlWorkspace) uiControlWorkspace.style.display = "none" ;
+	// cs-2327
+	var UIWindowContact = document.getElementById("UIWindow-contact") ;
+	if (UIWindowContact) {
+		UIWindowContact.style.visibility = "hidden" ;
+	}
+	if(uiControlWorkspace) {
+		uiControlWorkspace.style.display = "none" ;
+	}
 	div.style.position = "absolute" ;
 	div.style.width = "99%" ;
 	//div.style.zIndex =  1000;
