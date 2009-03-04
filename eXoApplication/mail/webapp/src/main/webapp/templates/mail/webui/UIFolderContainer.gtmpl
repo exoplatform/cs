@@ -105,9 +105,9 @@
 	        <a class="MenuItem" href="<%=uicomponent.event("MarkRead", "id")%>">   
 	          <div class="ItemIcon MarkAll"> <%=_ctx.appRes(uicomponent.id+ ".label.mark-all-read") %> </div>
 	        </a>
-	        <a class="MenuItem" href="<%=uicomponent.event("MoveToTrash", "id")%>">   
+	        <!--<a class="MenuItem" href="<%=uicomponent.event("MoveToTrash", "id")%>">   
 	          <div class="ItemIcon MoveToTrash"> <%=_ctx.appRes(uicomponent.id+ ".label.move-all-to-trash") %> </div>
-	        </a>
+	        </a>-->
 	      </div>
 	    </div>
 	  </div>
@@ -182,9 +182,9 @@
           <a class="MenuItem" href="<%=uicomponent.event("MarkRead", "id")%>">   
             <div class="ItemIcon MarkAll"> <%=_ctx.appRes(uicomponent.id+ ".label.mark-all-read") %> </div>
           </a>
-          <a class="MenuItem" href="<%=uicomponent.event("MoveToTrash", "id")%>">   
+          <!--<a class="MenuItem" href="<%=uicomponent.event("MoveToTrash", "id")%>">   
           <div class="ItemIcon MoveToTrash"> <%=_ctx.appRes(uicomponent.id+ ".label.move-all-to-trash") %> </div>
-        </a>
+        </a>-->
 	      </div>
 	    </div>
 	  </div>
