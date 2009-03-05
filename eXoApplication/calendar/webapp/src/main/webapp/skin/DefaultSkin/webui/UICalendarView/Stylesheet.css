@@ -333,6 +333,7 @@
 
 .UIWeekView .EventContainerBorder .EventContainer {
 	overflow: hidden;
+	line-height: 11px;
 }
 
 .UIWeekView .EventAlldayContainer {
