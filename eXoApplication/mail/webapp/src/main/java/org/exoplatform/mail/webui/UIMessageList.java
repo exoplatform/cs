@@ -1614,10 +1614,14 @@ public class UIMessageList extends UIForm {
       MailService mailSrv = uiMsgList.getApplicationComponent(MailService.class);
       String username = uiPortlet.getCurrentUser();
       String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
-      Message msg = mailSrv.getMessageById(SessionProviderFactory.createSystemProvider(), username, accountId, msgId);
-      UIFormCheckBoxInput<Boolean> uiCheckBox = new UIFormCheckBoxInput<Boolean>(msg.getId(), msg.getId(), false);
-      uiMsgList.addUIFormInput(uiCheckBox);
-      uiMsgList.messageList_.put(msg.getId(), msg); 
+      try {
+        Message msg = mailSrv.getMessageById(SessionProviderFactory.createSystemProvider(), username, accountId, msgId);
+        UIFormCheckBoxInput<Boolean> uiCheckBox = new UIFormCheckBoxInput<Boolean>(msg.getId(), msg.getId(), false);
+        uiMsgList.addUIFormInput(uiCheckBox);
+        uiMsgList.messageList_.put(msg.getId(), msg);
+      } catch(Exception e) { 
+        // do nothing
+      }
     }
   }
 }

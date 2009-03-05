@@ -1113,7 +1113,7 @@ public class JCRDataStorage {
       e.printStackTrace();
     }
     return body;
-  }
+  }   
 
   private String setPart(Part part, Node node, String body) {
     try {
@@ -1165,7 +1165,6 @@ public class JCRDataStorage {
           attHome = node.addNode(Utils.KEY_ATTACHMENT, Utils.NT_UNSTRUCTURED);
         }
         Node nodeFile = attHome.addNode("attachment" + IdGenerator.generate(), Utils.EXO_MAIL_ATTACHMENT);
-        nodeFile.setProperty(Utils.EXO_ATT_NAME, Utils.decodeText(part.getFileName()));
         Node nodeContent = nodeFile.addNode(Utils.JCR_CONTENT, Utils.NT_RESOURCE);
         if (ct.indexOf(";") > 0) {
           String[] type = ct.split(";");
@@ -1173,6 +1172,13 @@ public class JCRDataStorage {
         } else {
           nodeContent.setProperty(Utils.JCR_MIMETYPE, ct);
         }
+        
+        try {
+          nodeFile.setProperty(Utils.EXO_ATT_NAME, Utils.decodeText(part.getFileName()));
+        } catch(Exception e) {
+          nodeFile.setProperty(Utils.EXO_ATT_NAME, "Corrupted attachment");
+        }
+        
         try {
            nodeContent.setProperty(Utils.JCR_DATA, part.getInputStream());
            nodeFile.setProperty(Utils.ATT_IS_LOADED_PROPERLY, true);
@@ -2128,24 +2134,19 @@ public class JCRDataStorage {
         }
       } else {
         Node converNodeParent = getMatchingThreadBefore(sProvider, username, accountId, inReplyToHeader, msgNode);
-        try {
-          if (converNodeParent != null && converNodeParent.isNodeType("exo:message")) {
-            createReference(msgNode, converNodeParent);     
-            msgNode = setIsRoot(accountId, msgNode, converNodeParent);
-            msgNode.save();
-            converNodeParent.save();
-          } else {
-            msgNode.setProperty(Utils.EXO_IS_ROOT, true);
-            msgNode.save();
-          }
-        } catch (Exception e) {
-          e.printStackTrace();
+        if (converNodeParent != null && converNodeParent.isNodeType("exo:message")) {
+          createReference(msgNode, converNodeParent);     
+          msgNode = setIsRoot(accountId, msgNode, converNodeParent);
+          msgNode.save();
+          converNodeParent.save();
+        } else {
+          msgNode.setProperty(Utils.EXO_IS_ROOT, true);
+          msgNode.save();
         }
       } 
     } catch (Exception e) {
       e.printStackTrace();
-    }
-    
+    }   
   }
   
   private Node setIsRoot(String accountId, Node msgNode, Node converNode) throws Exception {
