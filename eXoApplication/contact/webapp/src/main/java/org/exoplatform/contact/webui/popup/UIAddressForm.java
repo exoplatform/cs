@@ -182,7 +182,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       filter.setCategories(new String[]{ groupId }) ;
     }  
     DataPageList resultPageList = 
-      contactSrv.searchContact(SessionProviderFactory.createSystemProvider(), ContactUtils.getCurrentUser(), filter) ;
+      contactSrv.searchContactSys(ContactUtils.getCurrentUser(), filter) ;
     setContactList(resultPageList.getAll()); 
   }
 
@@ -221,7 +221,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         filter.setCategories(new String[]{ uiAddressForm.selectedAddressId_ }) ;
       }
       DataPageList resultPageList = 
-        contactService.searchContact(SessionProviderFactory.createSystemProvider(), ContactUtils.getCurrentUser(), filter) ;
+        contactService.searchContactSys(ContactUtils.getCurrentUser(), filter) ;
       uiAddressForm.setContactList(resultPageList.getAll()) ;
       uiAddressForm.getUIStringInput(UIAddressForm.CONTACT_SEARCH).setValue(null) ;
       ((UIFormSelectBoxWithGroups)uiAddressForm.getChildById(UIAddressForm.CONTACT_GROUP)).setValue(uiAddressForm.selectedAddressId_) ;
@@ -245,7 +245,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
         if(!ContactUtils.isEmpty(text))
           filter.setText(ContactUtils.encodeJCRText(text)) ;
         DataPageList resultPageList = 
-          contactService.searchContact(SessionProviderFactory.createSystemProvider(), event.getRequestContext().getRemoteUser(), filter) ;
+          contactService.searchContactSys(event.getRequestContext().getRemoteUser(), filter) ;
         uiForm.setContactList(resultPageList.getAll()) ;
         ((UIFormSelectBoxWithGroups)uiForm.getChildById(UIAddressForm.CONTACT_GROUP)).setValue(category) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;

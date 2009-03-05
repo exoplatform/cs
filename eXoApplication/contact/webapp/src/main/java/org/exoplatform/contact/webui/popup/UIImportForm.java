@@ -32,6 +32,7 @@ import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UIWorkingContainer;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.upload.UploadResource;
 import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -165,8 +166,10 @@ public class UIImportForm extends UIForm {
       String importFormat = uiForm.getUIFormSelectBox(UIImportForm.FIELD_TYPE).getValue() ;
 
       ContactImportExport service = ContactUtils.getContactService().getContactImportExports(importFormat) ;
+      SessionProvider sp = SessionProviderFactory.createSessionProvider();
       try {
         UIAddressBooks uiAddressBooks = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class) ;
+        
         if (uiAddressBooks.getSharedGroups().containsKey(category)) {
           if (!uiAddressBooks.havePermission(category)) {
             uiApp.addMessage(new ApplicationMessage("UIAddressBooks.msg.removedPer", null,
@@ -174,10 +177,10 @@ public class UIImportForm extends UIForm {
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
             return ;            
           }
-          service.importContact(SessionProviderFactory.createSessionProvider()
+          service.importContact(sp
               , ContactUtils.getCurrentUser(), uiformInput.getUploadDataAsStream(), category + JCRDataStorage.HYPHEN) ;            
         } else if (uiAddressBooks.getPrivateGroupMap().containsKey(category)){
-          service.importContact(SessionProviderFactory.createSessionProvider()
+          service.importContact(sp
               , ContactUtils.getCurrentUser(), uiformInput.getUploadDataAsStream(), category) ;
         } else {
           uiApp.addMessage(new ApplicationMessage("UIImportForm.msg.address-deleted", null, 
@@ -198,6 +201,8 @@ public class UIImportForm extends UIForm {
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;        
+      } finally {
+    	  if (sp != null) sp.close();
       }
       uiContactPortlet.cancelAction() ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContactPortlet.getChild(UIWorkingContainer.class)) ;

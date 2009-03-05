@@ -31,18 +31,24 @@ public interface ContactService {
   
   public List<Contact> getAllContact(SessionProvider sProvider, String username) throws Exception ;
   public ContactPageList getContactPageListByGroup(SessionProvider sProvider, String username, String groupId) throws Exception ;
+  public ContactPageList getContactPageListByGroupSys(String username, String groupId) throws Exception ;
   public List<String>  getAllEmailAddressByGroup(SessionProvider sProvider, String username, String groupId) throws Exception ;
   public Contact getContact(SessionProvider sProvider, String username, String contactId) throws Exception ;
   public void saveContact(SessionProvider sProvider, String username, Contact contact, boolean isNew) throws Exception ;
+  public void saveContactSys(String username, Contact contact, boolean isNew) throws Exception ;
   public List<Contact> removeContacts(SessionProvider sProvider, String username, List<String> contactIds) throws Exception ;
+  public List<Contact> removeContactsSys(String username, List<String> contactIds) throws Exception ;
   public void moveContacts(SessionProvider sysProvider, String username, List<Contact> contacts, String addressType ) throws Exception ;
   //public ContactPageList getContactPageListByTag(SessionProvider sProvider, String username, ContactFilter filter) throws Exception ;
   public ContactPageList getContactPageListByGroup(SessionProvider sProvider, String username, ContactFilter filter, String type) throws Exception;
   public DataPageList searchContact(SessionProvider sProvider, String username, ContactFilter filter) throws Exception ;
+  public DataPageList searchContactSys(String username, ContactFilter filter) throws Exception ;
   public void removeSharedContact(SessionProvider sProvider, String username, String addressBookId, String contactId) throws Exception ;
+  
   public Map<String, String> searchEmails(SessionProvider sysProvider, String username, ContactFilter filter)throws Exception ;
   
   public ContactPageList getPublicContactsByAddressBook(SessionProvider sProvider, String addressBookId) throws Exception ;
+  public ContactPageList getPublicContactsByAddressBookSys(String addressBookId) throws Exception ;
   public List<GroupContactData> getPublicContacts(SessionProvider sProvider, String[] groupIds) throws Exception ;
   public List<String> getPublicAddressBookContacts(SessionProvider sProvider, String[] groupIds) throws Exception ;
   public Contact getPublicContact(String contactId) throws Exception ;  
@@ -55,20 +61,25 @@ public interface ContactService {
   public List<ContactGroup> getGroups(SessionProvider sProvider, String username) throws Exception ;
   public ContactGroup getGroup(SessionProvider sProvider, String username, String groupId) throws Exception ;
   public void saveGroup(SessionProvider sProvider, String username, ContactGroup group, boolean isNew) throws Exception ;
+  public void saveGroupSys(String username, ContactGroup group, boolean isNew) throws Exception ;
   public ContactGroup removeGroup(SessionProvider sProvider, String username, String groupId) throws Exception ;
   
   public void removeUserShareContact(SessionProvider sProvider, String username, String contactId, String removedUser) throws Exception ;
   public void shareContact(SessionProvider sProvider, String username, String[] contactIds, List<String> receiveUsers) throws Exception ;
+  public void shareContactSys(String username, String[] contactIds, List<String> receiveUsers) throws Exception ;
   public DataPageList getSharedContacts(String username) throws Exception ;
   public void shareAddressBook(SessionProvider sProvider, String username, String addressBookId, List<String> receiverUsers) throws Exception ;
   public void removeUserShareAddressBook(SessionProvider sProvider, String username, String addressBookId, String removedUser) throws Exception ;
+  public void removeUserShareAddressBookSys(String username, String addressBookId, String removedUser) throws Exception ;
   public ContactGroup getSharedGroup(String username, String groupId) throws Exception ;
   public List<SharedAddressBook> getSharedAddressBooks(SessionProvider sProvider, String username) throws Exception ;
   
  // public void removeSharedAddressBook(SessionProvider sProvider, String username, String addressBookId) throws Exception ;
   public void saveContactToSharedAddressBook(String username, String addressBookId, Contact contact, boolean isNew) throws Exception ;
   public ContactPageList getSharedContactsByAddressBook(SessionProvider sProvider, String username, SharedAddressBook addressBook) throws Exception ;
+  public ContactPageList getSharedContactsByAddressBookSys(String username, SharedAddressBook addressBook) throws Exception ;
   public Contact getSharedContact(SessionProvider sProvider, String username, String contactId) throws Exception ;
+  public Contact getSharedContactSys(String username, String contactId) throws Exception ;
   public void saveSharedContact(String username, Contact contact) throws Exception ;  
   public List<String> getAllEmailBySharedGroup(String username, String addressBookId) throws Exception ;
   public Contact getSharedContactAddressBook(String username, String contactId) throws Exception ;
@@ -76,6 +87,7 @@ public interface ContactService {
   public List<Tag> getTags(SessionProvider sProvider, String username) throws Exception ;
   public Tag getTag(SessionProvider sProvider, String username, String tagId) throws Exception ;
   public DataPageList getContactPageListByTag(SessionProvider sProvider, String username, String tagId) throws Exception ;
+  public DataPageList getContactPageListByTagSys(String username, String tagId) throws Exception ;
   public void addTag(SessionProvider sProvider, String username, List<String> contactIds, List<Tag> tags) throws Exception ;
   public void addTag(SessionProvider sProvider, String username, List<String> contactIds, String tagId) throws Exception ;
   public Tag removeTag(SessionProvider sProvider, String username, String tagName) throws Exception ;

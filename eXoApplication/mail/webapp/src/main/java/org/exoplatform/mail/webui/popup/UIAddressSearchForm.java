@@ -89,7 +89,7 @@ public class UIAddressSearchForm extends UIForm implements UIPopupComponent {
     if (groupId == null || groupId == "") {
       contacts = contactSrv.getAllContact(SessionProviderFactory.createSystemProvider(), username);
     } else {
-      contacts = contactSrv.getContactPageListByGroup(SessionProviderFactory.createSystemProvider(), username, groupId).getAll();
+      contacts = contactSrv.getContactPageListByGroupSys(username, groupId).getAll();
     }
     setContactList(contacts);
   }

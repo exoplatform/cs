@@ -117,6 +117,7 @@ public class NewUserListener extends UserEventListener {
   public void postSave(User user, boolean isNew) throws Exception {
     if(!isNew) return ;
     SessionProvider sysProvider = SessionProvider.createSystemProvider();
+    try {
     if (defaultEventCategories_ != null
         && defaultEventCategories_.length > 0) {
       for (String evCategory : defaultEventCategories_) {
@@ -152,12 +153,16 @@ public class NewUserListener extends UserEventListener {
     if(defaultCalendarSetting_ != null && user != null) {
       cservice_.saveCalendarSetting(sysProvider, user.getUserName(), defaultCalendarSetting_) ;
     }
-    sysProvider.close();
+    }
+    finally {
+    	if (sysProvider!=null) sysProvider.close();
+    }
   }
 
   @Override
   public void postDelete(User user) throws Exception {
-    SessionProvider session = SessionProvider.createSystemProvider(); ;
+    SessionProvider session = SessionProvider.createSystemProvider();
+    try {
     String username = user.getUserName() ;
     List<GroupCalendarData> gCalData = cservice_.getCalendarCategories(session, username, true) ;
     if(!gCalData.isEmpty())
@@ -175,5 +180,8 @@ public class NewUserListener extends UserEventListener {
         cservice_.removeSharedCalendar(session, username, cal.getId()) ;
       }
     super.postDelete(user);
+    } finally {
+    	if (session != null) session.close();
+    }
   }
 }

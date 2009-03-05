@@ -98,6 +98,7 @@ public class NewUserListener extends UserEventListener {
 
     
     SessionProvider sProvider = SessionProvider.createSystemProvider();
+    try {
     String username = user.getUserName();
     String accId    = acc.getId();
     String folderId = null;
@@ -117,7 +118,9 @@ public class NewUserListener extends UserEventListener {
         mservice_.saveFolder(sProvider, username, accId, folder) ;
       }
     }
+    } finally {
     sProvider.close();
+    }
   }
 
 }

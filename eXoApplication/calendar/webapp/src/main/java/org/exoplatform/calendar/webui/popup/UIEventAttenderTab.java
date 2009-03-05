@@ -182,7 +182,7 @@ public class UIEventAttenderTab extends UIFormInputWithActions {
     super.processRender(arg0);
   }
   public String getUserTimeZone(String username) throws Exception {
-    String timeZone = CalendarUtils.getCalendarService().getCalendarSetting(SessionProviderFactory.createSystemProvider(), CalendarUtils.getCurrentUser()).getTimeZone() ;
+    String timeZone = CalendarUtils.getCalendarService().getCalendarSettingSys(CalendarUtils.getCurrentUser()).getTimeZone() ;
     return CalendarUtils.getTimeZone(timeZone) ;
   }
 

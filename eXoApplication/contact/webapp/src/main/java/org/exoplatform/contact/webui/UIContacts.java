@@ -168,19 +168,17 @@ public class UIContacts extends UIForm implements UIPopupComponent {
             SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), selectedGroup));
       } else if (ContactUtils.getUserGroups().contains(selectedGroup)) {
         setContacts(ContactUtils.getContactService()
-            .getPublicContactsByAddressBook(SessionProviderFactory.createSystemProvider(), selectedGroup));
+            .getPublicContactsByAddressBookSys( selectedGroup));
       } else if (getSharedGroupMap().containsKey(selectedGroup)) {
         UIAddressBooks uiAddressBooks = getAncestorOfType(
             UIWorkingContainer.class).findFirstComponentOfType(UIAddressBooks.class) ;       
-        setContacts(ContactUtils.getContactService().getSharedContactsByAddressBook(SessionProviderFactory
-            .createSystemProvider(),ContactUtils.getCurrentUser(), uiAddressBooks.getSharedGroups().get(selectedGroup))); 
+        setContacts(ContactUtils.getContactService().getSharedContactsByAddressBookSys(ContactUtils.getCurrentUser(), uiAddressBooks.getSharedGroups().get(selectedGroup))); 
       } else {
         selectedGroup = null ;
         setContacts(null) ;
       }
     } else if (selectedTag_ != null) {
-      DataPageList pageList =ContactUtils.getContactService().getContactPageListByTag(
-          SessionProviderFactory.createSystemProvider(), ContactUtils.getCurrentUser(), selectedTag_) ;
+      DataPageList pageList =ContactUtils.getContactService().getContactPageListByTagSys(ContactUtils.getCurrentUser(), selectedTag_) ;
       if (pageList != null) {
         List<Contact> contacts = new ArrayList<Contact>() ;
         contacts = pageList.getAll() ;
@@ -942,7 +940,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         }
       }
       if (!uiContacts.isSelectSharedContacts) {
-        removedContacts.addAll(contactService.removeContacts(SessionProviderFactory.createSessionProvider(), username, contactIds)) ;          
+        removedContacts.addAll(contactService.removeContactsSys(username, contactIds)) ;          
       }      
       if (ContactUtils.isEmpty(uiContacts.selectedGroup) && ContactUtils.isEmpty(uiContacts.selectedTag_)) {
         uiContacts.setContact(removedContacts, false) ;
@@ -950,7 +948,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       if (uiContacts.getSelectedTag() != null) {
     	  String tagId = uiWorkingContainer.findFirstComponentOfType(UITags.class).getSelectedTag() ;
           DataPageList pageList = contactService
-            .getContactPageListByTag(SessionProviderFactory.createSystemProvider(), username, tagId) ;
+            .getContactPageListByTagSys(username, tagId) ;
           if (pageList != null) {
             List<Contact> contacts = new ArrayList<Contact>() ;
             contacts = pageList.getAll() ;
@@ -1025,7 +1023,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       } else if(oldContact.getContactType().equals(JCRDataStorage.SHARED)) {
         newContact = service.getSharedContactAddressBook( username, contactId) ;
         if (newContact == null) newContact = service
-          .getSharedContact(SessionProviderFactory.createSystemProvider(), username, contactId) ;
+          .getSharedContactSys(username, contactId) ;
       } else {
         newContact = service.getPublicContact(contactId) ;
       }
@@ -1246,7 +1244,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       UITags tags = uiWorkingContainer.findFirstComponentOfType(UITags.class) ;
       tags.setSelectedTag(tagId) ;
       uiContacts.setContacts(ContactUtils.getContactService()
-        .getContactPageListByTag(SessionProviderFactory.createSystemProvider(), ContactUtils.getCurrentUser(), tagId)) ;
+        .getContactPageListByTagSys(ContactUtils.getCurrentUser(), tagId)) ;
       uiContacts.setSelectedGroup(null) ;
       uiContacts.setSelectedTag(tagId) ;
       uiContacts.setDisplaySearchResult(false) ;

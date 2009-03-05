@@ -87,7 +87,7 @@ public class UIMonthView extends UICalendarView {
     EventQuery eventQuery = new EventQuery() ;
     eventQuery.setFromDate(getBeginDateOfMonthView()) ;
     eventQuery.setToDate(getEndDateOfMonthView()) ;
-    List<CalendarEvent> allEvents = calendarService.getEvents(getSystemSession(), username, eventQuery, getPublicCalendars()) ;
+    List<CalendarEvent> allEvents = calendarService.getEventsSys( username, eventQuery, getPublicCalendars()) ;
     Iterator childIter = getChildren().iterator() ;
     while(childIter.hasNext()) {
       UIComponent comp = (UIComponent)childIter.next() ;

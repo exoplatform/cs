@@ -34,6 +34,7 @@ import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -193,14 +194,17 @@ public class UIExportAddressBookForm extends UIForm implements UIPopupComponent{
         return ;
       }*/
       OutputStream out = null ;
+      SessionProvider sysp = SessionProviderFactory.createSystemProvider();
       try {
         out = ContactUtils.getContactService().getContactImportExports(exportFormat).exportContact(
-            SessionProviderFactory.createSystemProvider(), ContactUtils.getCurrentUser(), groupIds.toArray(new String[]{})) ;        
+            sysp, ContactUtils.getCurrentUser(), groupIds.toArray(new String[]{})) ;        
       } catch (ArrayIndexOutOfBoundsException e) {
         uiApp.addMessage(new ApplicationMessage("UIExportAddressBookForm.many-Contacts", null,
             ApplicationMessage.WARNING)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
+      } finally {
+    	  if (sysp != null) sysp.close();
       }
       if(out == null) {
       	 uiApp.addMessage(new ApplicationMessage("UIExportAddressBookForm.msg.there-is-not-contacts-exists", null,

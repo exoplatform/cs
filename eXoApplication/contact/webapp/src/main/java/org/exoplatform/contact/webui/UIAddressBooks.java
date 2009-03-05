@@ -496,11 +496,9 @@ public class UIAddressBooks extends UIComponent {
         //contactService.removeSharedAddressBook(SessionProviderFactory.createSystemProvider(), username, groupId) ;
 //      cs-1644
         //if (uiContacts.isDisplaySearchResult())
-        removedContacts = contactService.getSharedContactsByAddressBook(SessionProviderFactory
-            .createSystemProvider(), username, uiAddressBook.sharedAddressBookMap_.get(groupId)).getAll() ;
+        removedContacts = contactService.getSharedContactsByAddressBookSys(username, uiAddressBook.sharedAddressBookMap_.get(groupId)).getAll() ;
         try {
-          contactService.removeUserShareAddressBook(SessionProviderFactory.createSystemProvider()
-              , uiAddressBook.sharedAddressBookMap_.get(groupId).getSharedUserId(), groupId, username) ;          
+          contactService.removeUserShareAddressBookSys(uiAddressBook.sharedAddressBookMap_.get(groupId).getSharedUserId(), groupId, username) ;          
         } catch (PathNotFoundException e) { }
       } else {
 //      cs-1644
@@ -564,7 +562,7 @@ public class UIAddressBooks extends UIComponent {
       uiAddressBook.selectedGroup = groupId;
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class);
       uiContacts.setContacts(ContactUtils.getContactService()
-          .getPublicContactsByAddressBook(SessionProviderFactory.createSystemProvider(), groupId));
+          .getPublicContactsByAddressBookSys(groupId));
       uiContacts.setSortedBy(UIContacts.fullName) ;
       uiContacts.setSelectedGroup(groupId);
       uiContacts.setSelectedTag(null);
@@ -602,8 +600,7 @@ public class UIAddressBooks extends UIComponent {
       uiAddressBook.selectedGroup = groupId ;
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class);
       uiContacts.setContacts(ContactUtils.getContactService().
-      		                      getSharedContactsByAddressBook( SessionProviderFactory.createSystemProvider(),
-      		                      		                            ContactUtils.getCurrentUser(), 
+      		                      getSharedContactsByAddressBookSys(ContactUtils.getCurrentUser(), 
       		                      		                            uiAddressBook.sharedAddressBookMap_.get(groupId)));
       uiContacts.setSortedBy(UIContacts.fullName) ;
       uiContacts.setSelectedGroup(groupId);

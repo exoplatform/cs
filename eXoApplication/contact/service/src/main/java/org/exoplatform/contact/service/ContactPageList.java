@@ -63,6 +63,7 @@ public class ContactPageList extends JCRPageList {
   protected void populateCurrentPage(long page, String username) throws Exception  {
     if(iter_ == null) {
       Session session = getJCRSession(username) ;
+      try {
       if(isQuery_) {
         QueryManager qm = session.getWorkspace().getQueryManager() ;
         Query query = qm.createQuery(value_, Query.XPATH);
@@ -72,7 +73,9 @@ public class ContactPageList extends JCRPageList {
         Node node = (Node)session.getItem(value_) ;
         iter_ = node.getNodes() ;
       }
-      session.logout() ;
+      } finally {
+      if (session != null) session.logout() ;
+      }
     }
     setAvailablePage(iter_.getSize()) ;
     Node currentNode ;
@@ -212,6 +215,7 @@ public class ContactPageList extends JCRPageList {
   public List<Contact> getAll() throws Exception {    
     if(iter_ == null) {
       Session session = getJCRSession(username_) ;
+      try {
       if(isQuery_) {
         QueryManager qm = session.getWorkspace().getQueryManager() ;
         Query query = qm.createQuery(value_, Query.XPATH);
@@ -221,7 +225,9 @@ public class ContactPageList extends JCRPageList {
         Node node = (Node)session.getItem(value_) ;
         iter_ = node.getNodes() ;
       }
-      session.logout() ;
+      } finally {
+      if (session != null) session.logout() ;
+      }
     }
     List<Contact> contacts = new ArrayList<Contact>();
     while (iter_.hasNext()) {
@@ -234,6 +240,7 @@ public class ContactPageList extends JCRPageList {
   public Map<String, String> getEmails() throws Exception {
     if(iter_ == null) {
       Session session = getJCRSession(username_) ;
+      try {
       if(isQuery_) {
         QueryManager qm = session.getWorkspace().getQueryManager() ;
         Query query = qm.createQuery(value_, Query.XPATH);
@@ -244,6 +251,9 @@ public class ContactPageList extends JCRPageList {
         iter_ = node.getNodes() ;
       }
       session.logout() ;
+      } finally {
+    	  if (session != null) session.logout();
+      }
     }
     NodeIterator inter = iter_ ;
     Map<String, String> emails = new LinkedHashMap<String, String>() ;

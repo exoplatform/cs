@@ -87,8 +87,7 @@ public class UITags extends UIComponent {
       UIWorkingContainer uiWorkingContainer = uiForm.getAncestorOfType(UIWorkingContainer.class) ;
       uiWorkingContainer.findFirstComponentOfType(UIAddressBooks.class).setSelectedGroup(null) ;
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class) ;
-      DataPageList pageList =ContactUtils.getContactService().getContactPageListByTag(
-          SessionProviderFactory.createSystemProvider(), ContactUtils.getCurrentUser(), tagId) ;
+      DataPageList pageList =ContactUtils.getContactService().getContactPageListByTagSys( ContactUtils.getCurrentUser(), tagId) ;
       FullNameComparator.isAsc = true ;
       uiContacts.setSortedBy(UIContacts.fullName) ;
       uiContacts.setContacts(pageList) ;
@@ -133,8 +132,7 @@ public class UITags extends UIComponent {
       if (!ContactUtils.isEmpty(uiContacts.getSelectedTag()) && uiContacts.getSelectedTag().equals(tagId)) {
         contacts = uiContacts.getContactPageList().getAll() ;
       } else {
-        contacts = ContactUtils.getContactService().getContactPageListByTag(
-            SessionProviderFactory.createSystemProvider(), ContactUtils.getCurrentUser(), tagId).getAll();
+        contacts = ContactUtils.getContactService().getContactPageListByTagSys(ContactUtils.getCurrentUser(), tagId).getAll();
       }
       if (contacts == null || contacts.size() == 0) {
         UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;

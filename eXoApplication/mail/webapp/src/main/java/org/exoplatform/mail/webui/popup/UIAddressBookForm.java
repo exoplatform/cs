@@ -129,10 +129,10 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
     ctFilter.setAscending(true);
     if (groupId != null && groupId.trim().length() > 0 ) {
       ctFilter.setCategories(new String[] {groupId});
-      contactList = contactSrv.searchContact(SessionProviderFactory.createSystemProvider(), username, ctFilter).getAll();
+      contactList = contactSrv.searchContactSys( username, ctFilter).getAll();
     } else {
       ctFilter.setCategories(new String[] {contactSrv.getGroups(SessionProviderFactory.createSystemProvider(), username).get(0).getId()});
-      contactList = contactSrv.searchContact(SessionProviderFactory.createSystemProvider(), username, ctFilter).getAll();
+      contactList = contactSrv.searchContactSys(username, ctFilter).getAll();
     }
     contactMap_.clear();
     for (Contact ct : contactList) contactMap_.put(ct.getId(), ct);
@@ -235,7 +235,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
           // hung edit
           if (!contact.getId().equals(MailUtils.getCurrentUser())) {
             contactIds.add(contact.getId()) ;
-            contactServ.removeContacts(SessionProviderFactory.createSystemProvider(), username, contactIds);
+            contactServ.removeContactsSys(username, contactIds);
             uiAddressBook.refrestContactList(((UIFormSelectBoxWithGroups)uiAddressBook.getChildById(SELECT_GROUP)).getValue());
           } else {
             uiApp.addMessage(new ApplicationMessage("UIAddressBookForm.msg.cannot-delete-this-contact", null)) ;

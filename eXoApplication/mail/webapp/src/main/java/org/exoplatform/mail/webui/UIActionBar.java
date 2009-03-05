@@ -128,7 +128,7 @@ public class UIActionBar extends UIContainer {
       uiPopupAction.activate(uiPopupContainer, 600, 0, true) ;
       UIEventForm uiEventForm = uiPopupContainer.createUIComponent(UIEventForm.class, null, null);
       uiPopupContainer.addChild(uiEventForm) ;
-      uiEventForm.initForm(calendarService.getCalendarSetting(SessionProviderFactory.createSystemProvider() ,MailUtils.getCurrentUser()), null) ;
+      uiEventForm.initForm(calendarService.getCalendarSettingSys(MailUtils.getCurrentUser()), null) ;
       uiEventForm.update(CalendarUtils.PRIVATE_TYPE, null) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }

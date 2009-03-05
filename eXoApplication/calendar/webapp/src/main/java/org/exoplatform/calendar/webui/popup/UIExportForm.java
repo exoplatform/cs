@@ -37,6 +37,7 @@ import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.portal.webui.util.SessionProviderFactory;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -134,8 +135,9 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
       String name = uiForm.getUIStringInput(NAME).getValue() ;
       CalendarImportExport importExport = calendarService.getCalendarImportExports(type) ;
       OutputStream out = null ;
+      SessionProvider sysp = SessionProviderFactory.createSystemProvider();
       try {
-        out = importExport.exportCalendar(SessionProviderFactory.createSystemProvider(), CalendarUtils.getCurrentUser(), calendarIds, uiForm.calType) ;        
+        out = importExport.exportCalendar(sysp, CalendarUtils.getCurrentUser(), calendarIds, uiForm.calType) ;        
         ByteArrayInputStream is = new ByteArrayInputStream(out.toString().getBytes()) ;
         DownloadResource dresource = new InputStreamDownloadResource(is, "text/iCalendar") ;
         DownloadService dservice = (DownloadService)PortalContainer.getInstance().getComponentInstanceOfType(DownloadService.class) ;
@@ -154,6 +156,8 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
         uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.event-does-not-existing", null)) ;
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
+      } finally {
+    	  sysp.close();
       }
     }
   }

@@ -256,8 +256,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       //comment to fix bug 215
       //if(uiContacts.isDisplaySearchResult()) uiContacts.setContact(uiForm.contacts_, false) ;      
       if (!ContactUtils.isEmpty(selectedTag)) {
-        uiContacts.setContacts(contactService.getContactPageListByTag(
-            SessionProviderFactory.createSystemProvider(), username, selectedTag)) ;
+        uiContacts.setContacts(contactService.getContactPageListByTagSys(username, selectedTag)) ;
       }
       if(uiContacts.isDisplaySearchResult() || 
           (ContactUtils.isEmpty(uiContacts.getSelectedGroup()) && ContactUtils.isEmpty(uiContacts.getSelectedTag()))) {

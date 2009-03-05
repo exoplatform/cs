@@ -212,7 +212,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
   public static List<SelectItemOption<String>> getCategory() throws Exception {
     List<SelectItemOption<String>> options = new ArrayList<SelectItemOption<String>>() ;
     CalendarService calendarService = CalendarUtils.getCalendarService() ;
-    List<EventCategory> eventCategories = calendarService.getEventCategories(SessionProviderFactory.createSystemProvider(), Util.getPortalRequestContext().getRemoteUser()) ;
+    List<EventCategory> eventCategories = calendarService.getSysEventCategories(Util.getPortalRequestContext().getRemoteUser()) ;
     for(EventCategory category : eventCategories) {
       options.add(new SelectItemOption<String>(category.getName(), category.getName())) ;
     }
@@ -680,7 +680,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
             }
           }
           if(uiForm.calType_.equals(CalendarUtils.PRIVATE_TYPE)) {
-            CalendarUtils.getCalendarService().saveUserEvent(SessionProviderFactory.createSystemProvider(), username, calendarId, calendarEvent, uiForm.isAddNew_) ;
+            CalendarUtils.getCalendarService().saveUserEventSys(username, calendarId, calendarEvent, uiForm.isAddNew_) ;
           }else if(uiForm.calType_.equals(CalendarUtils.SHARED_TYPE)){
             CalendarUtils.getCalendarService().saveEventToSharedCalendar(SessionProviderFactory.createSystemProvider(), username, calendarId, calendarEvent, uiForm.isAddNew_) ;
           }else if(uiForm.calType_.equals(CalendarUtils.PUBLIC_TYPE)){

@@ -326,7 +326,9 @@ public class JCRDataStorage {
   
   public List<String> getAllEmailByPublicGroup(String username, String groupId) throws Exception {
     String usersPath = nodeHierarchyCreator_.getJcrPath(USERS_PATH) ;
-    Node publicContactHome = getPublicContactHome(SessionProvider.createSystemProvider()) ;
+    SessionProvider sysp = SessionProvider.createSystemProvider();
+    try {
+    Node publicContactHome = getPublicContactHome(sysp) ;
     QueryManager qm = publicContactHome.getSession().getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + usersPath 
                                                 + "//element(*,exo:contact)[@exo:categories='")
@@ -339,6 +341,9 @@ public class JCRDataStorage {
         address.add(contact.getProperty("exo:emailAddress").getString());
     }
     return address ;
+    } finally {
+    	if (sysp != null) sysp.close();
+    }
   }
   
   public List<String> getAllEmailBySharedGroup(String username, String addressBookId) throws Exception {
@@ -1008,7 +1013,9 @@ public class JCRDataStorage {
   }
   */
   public void addGroupToPersonalContact(String userId, String groupId) throws Exception {
-  	Node contactHome = getUserContactHome(SessionProvider.createSystemProvider(), userId) ;
+	  SessionProvider sysp = SessionProvider.createSystemProvider();
+	  try {
+  	Node contactHome = getUserContactHome(sysp, userId) ;
   	Node contactNode = contactHome.getNode(userId) ;
   	Value[] values = contactNode.getProperty("exo:categories").getValues() ;
   	List<String> ls = new ArrayList<String>() ;
@@ -1019,6 +1026,9 @@ public class JCRDataStorage {
   	ls.add(groupId) ;
   	contactNode.setProperty("exo:categories", ls.toArray(new String[]{})) ;
   	contactNode.save() ;
+	  } finally {
+		  if (sysp!=null) sysp.close();
+	  }
   }
   
   private void reparePermissions(Node node, String owner) throws Exception {
@@ -1269,6 +1279,8 @@ public class JCRDataStorage {
   public void addTag(SessionProvider sysProvider, String username, List<String> contactIds, String tagId) throws Exception {
     Map<String, String> tagMap = new HashMap<String, String> () ;
     tagMap.put(tagId, tagId) ;
+    SessionProvider sysp = SessionProvider.createSystemProvider();
+    try {
     for(String contact : contactIds) {  
       Node contactNode = null ;
       String contactId = contact.split(SPLIT)[0] ;
@@ -1276,7 +1288,7 @@ public class JCRDataStorage {
       if (contactType.equals(PRIVATE)) {
         contactNode = getUserContactHome(sysProvider, username).getNode(contactId) ;
       } else if (contactType.equals(PUBLIC)) {
-        contactNode = getUserContactHome(SessionProvider.createSystemProvider(), contactId).getNode(contactId);
+        contactNode = getUserContactHome(sysp, contactId).getNode(contactId);
       } else {
         Node sharedContactMock = getSharedContact(username) ;      
         PropertyIterator iter = sharedContactMock.getReferences() ;
@@ -1320,6 +1332,12 @@ public class JCRDataStorage {
         contactNode.save() ;
       }
     }
+    
+    } finally {
+    	if (sysp != null) {
+    		sysp.close();
+    	}
+    }
   }
 
   public void addTag(SessionProvider sysProvider, String username, List<String> contactIds, List<Tag> tags) throws Exception {
@@ -1339,6 +1357,8 @@ public class JCRDataStorage {
       tagMap.put(tag.getId(), tag.getId()) ;
     }
     if (contactIds == null || contactIds.size() == 0) return ;
+    SessionProvider sysp = SessionProvider.createSystemProvider();
+    try {
     for(String contact : contactIds) {
       Node contactNode = null ;
       String contactId = contact.split(SPLIT)[0] ;
@@ -1346,7 +1366,7 @@ public class JCRDataStorage {
       if (contactType.equals(PRIVATE)) {
         contactNode = getUserContactHome(sysProvider, username).getNode(contactId) ;
       } else if (contactType.equals(PUBLIC)) {
-        contactNode = getUserContactHome(SessionProvider.createSystemProvider(), contactId).getNode(contactId);
+        contactNode = getUserContactHome(sysp, contactId).getNode(contactId);
       } else {
         Node sharedContactMock = getSharedContact(username) ;      
         PropertyIterator iter = sharedContactMock.getReferences() ;
@@ -1393,7 +1413,11 @@ public class JCRDataStorage {
         contactNode.setProperty("exo:tags", thisTagMap.values().toArray(new String[]{})) ;   
         contactNode.save() ;
       }
-    } 
+    }
+    } finally {
+    	if (sysp != null) sysp.close();
+    }
+    
   }
 
   private void removeTagInContacts (NodeIterator it, String tagId) throws Exception {
@@ -1727,21 +1751,24 @@ public class JCRDataStorage {
   private void copyNodes(SessionProvider sProvider, String username,Node srcHomeNode, NodeIterator iter, String destAddress, String destType ) throws Exception {
     if (destType.equals(PRIVATE)) {        
       Node contactHomeNode = getUserContactHome(sProvider, username);
+      SessionProvider sysp = SessionProvider.createSystemProvider();
+      try {
       while (iter.hasNext()) {
         Node oldNode = iter.nextNode() ;
         String newId = "Contact" + IdGenerator.generate() ;
         try {
           contactHomeNode.getSession().getWorkspace().copy(oldNode.getPath(), contactHomeNode.getPath() + "/" + newId) ;        
         } catch (AccessDeniedException ex) {
+        	
           Node userContactHome = getUserContactHome(
-              SessionProvider.createSystemProvider(), oldNode.getProperty("exo:id").getString()) ;
+              sysp, oldNode.getProperty("exo:id").getString()) ;
           userContactHome.getSession().getWorkspace().copy(oldNode.getPath(), contactHomeNode.getPath() + "/" + newId) ; 
         }        
         ExtendedNode extNode ;
         try{
           extNode = (ExtendedNode)contactHomeNode.getNode(newId) ;
         }catch (Exception e) {          
-          extNode = (ExtendedNode)getUserContactHome(SessionProvider.createSystemProvider(), username).getNode(newId) ;
+          extNode = (ExtendedNode)getUserContactHome(sysp, username).getNode(newId) ;
         }
         if (extNode.canAddMixin("exo:privilegeable")) extNode.addMixin("exo:privilegeable");
         String[] arrayPers = {PermissionType.READ, PermissionType.ADD_NODE, PermissionType.SET_PROPERTY, PermissionType.REMOVE} ;
@@ -1759,7 +1786,15 @@ public class JCRDataStorage {
         newNode.setProperty("exo:viewPermissionGroups", new String[] {});
 
         //newNode.setProperty("exo:tags", new String [] {}) ;
+
+        
       }
+    } finally {
+    	if (sysp != null)
+    		sysp.close();
+    	
+      }
+      
       contactHomeNode.getSession().save() ;
     } else if (destType.equals(SHARED)) {
       Node sharedAddressBookMock = getSharedAddressBook(username) ;

@@ -131,8 +131,13 @@ public class ReminderJob implements Job {
     ExoContainer container = ExoContainerContext.getCurrentContainer();
     NodeHierarchyCreator nodeHierarchyCreator  = (NodeHierarchyCreator) container
     .getComponentInstanceOfType(NodeHierarchyCreator.class);
-    Node publicApp = nodeHierarchyCreator.getPublicApplicationNode(SessionProvider.createSystemProvider()) ;
+    SessionProvider sp = SessionProvider.createSystemProvider();
+    try {
+    Node publicApp = nodeHierarchyCreator.getPublicApplicationNode(sp) ;
     if(publicApp != null && publicApp.hasNode(Utils.CALENDAR_APP)) return publicApp.getNode(Utils.CALENDAR_APP) ;
     return null ;		
+    } finally {
+    	if (sp!=null) sp.close();
+    }
   }
 }

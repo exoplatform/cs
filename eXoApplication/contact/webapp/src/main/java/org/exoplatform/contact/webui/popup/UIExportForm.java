@@ -196,10 +196,9 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
           } else if (address[0].equals(JCRDataStorage.SHARED)) {
             SharedAddressBook sharedAddress = uiContactPortlet.findFirstComponentOfType(
                 UIAddressBooks.class).getSharedGroups().get(address[1]) ;
-            pageList = contactService.getSharedContactsByAddressBook(
-                SessionProviderFactory.createSystemProvider(), username, sharedAddress) ;
+            pageList = contactService.getSharedContactsByAddressBookSys(username, sharedAddress) ;
           } else {
-            pageList = contactService.getPublicContactsByAddressBook(SessionProviderFactory.createSystemProvider(), address[1]) ;
+            pageList = contactService.getPublicContactsByAddressBookSys( address[1]) ;
           }
           if (pageList.getAvailable() >= 150) {
             uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.manyContacts", null, 

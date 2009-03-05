@@ -201,6 +201,7 @@ public interface CalendarService {
    * @see EventCategory
    */
   public List<EventCategory> getEventCategories(SessionProvider userSession, String username) throws Exception ;
+  public List<EventCategory> getSysEventCategories(String username) throws Exception ;
 
   /**
    * Save event category to data base, every user will have their own category to classify events, and it will use unique name in data base
@@ -264,6 +265,7 @@ public interface CalendarService {
    * @throws Exception
    */
   public void saveUserEvent(SessionProvider userSession, String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception ;
+  public void saveUserEventSys(String username, String calendarId, CalendarEvent event, boolean isNew) throws Exception ;
 
   /**
    * Remove given event or task in private calendar with calendar id, all attachments and reminders will be removed
@@ -345,7 +347,8 @@ public interface CalendarService {
    * @see CalendarSetting
    */
   public CalendarSetting getCalendarSetting(SessionProvider userSession, String username) throws Exception ;
-
+  public CalendarSetting getCalendarSettingSys(String username) throws Exception ;
+  
   /**
    * The method  gets Import/Export implement class to import or export ics,csv
    * @param type type of import, export, it supports two types, ICS and CSV 
@@ -447,7 +450,7 @@ public interface CalendarService {
    * @see CalendarEvent
    */
   public List<CalendarEvent> getEvents(SessionProvider userSession, String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception ;
-
+  public List<CalendarEvent> getEventsSys(String username, EventQuery eventQuery, String[] publicCalendarIds) throws Exception;
   /**
    * Removed shared calendar, but not the orloginal calendar
    * @param systemSesssion Sessesion to access the public data

@@ -374,11 +374,9 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
           event.getRequestContext().addUIComponentToUpdateByAjax(uiAddEdit) ; 
           
           if (receiveUsers.size() > 0)
-            contactService.shareContact(SessionProviderFactory
-              .createSystemProvider(), username, new String[] {contact.getId()}, Arrays.asList(receiveUsers.keySet().toArray(new String[] {}))) ;
+            contactService.shareContactSys( username, new String[] {contact.getId()}, Arrays.asList(receiveUsers.keySet().toArray(new String[] {}))) ;
           if (receiveUsersByGroups.size() > 0)
-            contactService.shareContact(SessionProviderFactory
-              .createSystemProvider(), username, new String[] {contact.getId()}, Arrays.asList(receiveUsersByGroups.keySet().toArray(new String[] {}))) ; 
+            contactService.shareContactSys(username, new String[] {contact.getId()}, Arrays.asList(receiveUsersByGroups.keySet().toArray(new String[] {}))) ; 
           
         } else {
           Contact contact = uiForm.contact_ ;

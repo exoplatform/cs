@@ -98,6 +98,7 @@ public class ICalendarImportExport implements CalendarImportExport{
   public OutputStream exportCalendar(SessionProvider sProvider, String username, List<String> calendarIds, String type) throws Exception {
     List<CalendarEvent> events = new ArrayList<CalendarEvent>();
     SessionProvider systemSession = SessionProvider.createSystemProvider() ;
+    try {
     if(type.equals(PRIVATE_TYPE)) {
       events = storage_.getUserEventByCalendar(sProvider, username, calendarIds) ;
     }else if(type.equals(SHARED_TYPE)) {
@@ -267,10 +268,11 @@ public class ICalendarImportExport implements CalendarImportExport{
     }catch(ValidationException e) {
       e.printStackTrace() ;
       return null ;
-    }  finally {
-      systemSession.close() ;
-    }  
+    }
     return bout;
+    }  finally {
+        if (systemSession!=null) systemSession.close() ;
+      }  
   }
 
   public OutputStream exportEventCalendar(SessionProvider sProvider, String username, String calendarId, String type, String eventId) throws Exception {

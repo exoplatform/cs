@@ -57,6 +57,7 @@ public class MessagePageList extends JCRPageList {
   protected void populateCurrentPage(long page, String username) throws Exception  {
     if(iter_ == null) {
       Session session = getJCRSession(username) ;
+      try {
       if(isQuery_) {
         QueryManager qm = session.getWorkspace().getQueryManager() ;
         Query query = qm.createQuery(value_, Query.XPATH);
@@ -66,7 +67,10 @@ public class MessagePageList extends JCRPageList {
         Node node = (Node)session.getItem(value_) ;
         iter_ = node.getNodes() ;
       }
-      session.logout() ;
+
+      } finally {
+          session.logout() ;
+      }
     }
     setAvailablePage(iter_.getSize()) ;
     Node currentNode ;

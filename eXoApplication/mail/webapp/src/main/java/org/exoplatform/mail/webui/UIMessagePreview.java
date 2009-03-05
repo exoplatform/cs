@@ -471,7 +471,7 @@ public class UIMessagePreview extends UIComponent {
 						uiPopupAction.activate(uiPopupContainer, 600, 0, true) ;
 						UIEventForm uiEventForm = uiPopupContainer.createUIComponent(UIEventForm.class, null, null);
 						uiPopupContainer.addChild(uiEventForm) ;
-						uiEventForm.initForm(calService.getCalendarSetting(SessionProviderFactory.createSystemProvider() ,MailUtils.getCurrentUser()), calEvent) ;
+						uiEventForm.initForm(calService.getCalendarSettingSys(MailUtils.getCurrentUser()), calEvent) ;
 						uiEventForm.isAddNew_ = true ;
 						uiEventForm.update(CalendarUtils.PRIVATE_TYPE, null) ;
 						calService.confirmInvitation(fromUserId, toUserId, calType, calendarId, eventId, 1) ;
