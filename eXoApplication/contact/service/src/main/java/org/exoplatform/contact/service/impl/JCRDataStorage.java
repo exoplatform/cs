@@ -941,11 +941,14 @@ public class JCRDataStorage {
   
   public Contact getPublicContact(String contactId) throws Exception {
     //Node contactHomeNode = getPublicContactHome(SessionProvider.createSystemProvider());
-    Node contactHomeNode = getUserContactHome(SessionProvider.createSystemProvider(), contactId) ;
-    try {
+	  SessionProvider sysp = SessionProvider.createSystemProvider();
+	  try {
+    Node contactHomeNode = getUserContactHome(sysp, contactId) ;
       return getContact(contactHomeNode.getNode(contactId), PUBLIC);
     } catch (PathNotFoundException e) {
       return null ;
+    } finally {
+    	if (sysp != null) sysp.close();
     }
   }
 

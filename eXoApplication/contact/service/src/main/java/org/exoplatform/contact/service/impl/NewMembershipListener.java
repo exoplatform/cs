@@ -57,7 +57,9 @@ public class NewMembershipListener extends MembershipEventListener {
   public void postSave(Membership m, boolean isNew) throws Exception {
   	cservice_.addGroupToPersonalContact(m.getUserName(), m.getGroupId()) ;
     JCRDataStorage storage_ = new JCRDataStorage(nodeHierarchyCreator_) ;
-    Node publicContactHome = storage_.getPublicContactHome(SessionProvider.createSystemProvider()) ;      
+    SessionProvider sysp = SessionProvider.createSystemProvider();
+    try {
+    Node publicContactHome = storage_.getPublicContactHome(sysp) ;      
     String usersPath = nodeHierarchyCreator_.getJcrPath(JCRDataStorage.USERS_PATH) ;
     QueryManager qm = publicContactHome.getSession().getWorkspace().getQueryManager();
     List<String> recievedUser = new ArrayList<String>() ;
@@ -78,7 +80,7 @@ public class NewMembershipListener extends MembershipEventListener {
     NodeIterator nodes = result.getNodes() ;
     while (nodes.hasNext()) {
       Node address = nodes.nextNode() ;
-      storage_.shareAddressBook(SessionProvider.createSystemProvider(), address.getProperty("exo:sharedUserId")
+      storage_.shareAddressBook(sysp, address.getProperty("exo:sharedUserId")
           .getString(), address.getProperty("exo:id").getString(),recievedUser) ;
     }
     
@@ -93,8 +95,11 @@ public class NewMembershipListener extends MembershipEventListener {
       String split = "/" ;
       String temp = contactNode.getPath().split(usersPath)[1] ;
       String userId = temp.split(split)[1] ;
-      storage_.shareContact(SessionProvider.createSystemProvider(), userId,
+      storage_.shareContact(sysp, userId,
           new String[] {contactNode.getProperty("exo:id").getString()}, recievedUser) ;
+    }
+    } finally {
+    	if (sysp != null) sysp.close();
     }
   }
   
@@ -102,7 +107,8 @@ public class NewMembershipListener extends MembershipEventListener {
     /*OrganizationService organizationService = 
       (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
     Object[] objGroupIds = organizationService.getGroupHandler().findGroupsOfUser(m.getUserName()).toArray() ;*/
-
+	    SessionProvider sysp = SessionProvider.createSystemProvider();
+	    try {
     //  remove group of public contact
     Contact contact = cservice_.getPublicContact(m.getUserName()) ;
     Map<String, String> groupIds = new LinkedHashMap<String, String>() ;
@@ -113,7 +119,7 @@ public class NewMembershipListener extends MembershipEventListener {
     
     try {
       JCRDataStorage storage_ = new JCRDataStorage(nodeHierarchyCreator_) ;
-      Node publicContactHome = storage_.getPublicContactHome(SessionProvider.createSystemProvider()) ;      
+      Node publicContactHome = storage_.getPublicContactHome(sysp) ;      
       String usersPath = nodeHierarchyCreator_.getJcrPath(JCRDataStorage.USERS_PATH) ;
       QueryManager qm = publicContactHome.getSession().getWorkspace().getQueryManager();
       StringBuffer queryString = new StringBuffer("/jcr:root" + usersPath 
@@ -123,8 +129,7 @@ public class NewMembershipListener extends MembershipEventListener {
       NodeIterator nodes = result.getNodes() ;
       while (nodes.hasNext()) {
         Node address = nodes.nextNode() ;
-        storage_.removeUserShareAddressBook(
-            SessionProvider.createSystemProvider(), address.getProperty("exo:sharedUserId")
+        storage_.removeUserShareAddressBook(sysp, address.getProperty("exo:sharedUserId")
             .getString(), address.getProperty("exo:id").getString(), m.getUserName()) ;
         
 //      user shared if belong another groups shared
@@ -132,7 +137,7 @@ public class NewMembershipListener extends MembershipEventListener {
           if (groupIds.keySet().contains(groupShared.getString())) {
             List<String> reciever = new ArrayList<String>() ;
             reciever.add(m.getUserName()) ;
-            storage_.shareAddressBook( SessionProvider.createSystemProvider(), address.getProperty("exo:sharedUserId")
+            storage_.shareAddressBook(sysp, address.getProperty("exo:sharedUserId")
             .getString(), address.getProperty("exo:id").getString(), reciever) ;
           }
         }
@@ -149,15 +154,14 @@ public class NewMembershipListener extends MembershipEventListener {
         String split = "/" ;
         String temp = contactNode.getPath().split(usersPath)[1] ;
         String userId = temp.split(split)[1] ;
-        storage_.removeUserShareContact(SessionProvider.createSystemProvider()
-            , userId, contactNode.getProperty("exo:id").getString(), m.getUserName()) ;
+        storage_.removeUserShareContact(sysp, userId, contactNode.getProperty("exo:id").getString(), m.getUserName()) ;
 
         // user shared if belong another groups shared
         for (Value groupShared : contactNode.getProperty("exo:viewPermissionGroups").getValues()) {
           if (groupIds.keySet().contains(groupShared.getString())) {
             List<String> reciever = new ArrayList<String>() ;
             reciever.add(m.getUserName()) ;
-            storage_.shareContact(SessionProvider.createSystemProvider(), 
+            storage_.shareContact(sysp, 
                 userId, new String [] {contactNode.getProperty("exo:id").getString()}, reciever) ;
           }
         }        
@@ -167,5 +171,9 @@ public class NewMembershipListener extends MembershipEventListener {
     } catch (Exception ex) {
       ex.printStackTrace();
     }
+
+  } finally {
+  	if (sysp != null) sysp.close();
+  }
   }
 }
