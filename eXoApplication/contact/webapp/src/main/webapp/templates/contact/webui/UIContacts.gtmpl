@@ -19,7 +19,6 @@
   rcontext.getJavascriptManager().importJavascript("eXo.cs.FormHelper","/csResources/javascript") ;
 	rcontext.getJavascriptManager().importJavascript("eXo.contact.UIContactDragDrop","/contact/javascript") ;
 	rcontext.getJavascriptManager().addJavascript("eXo.contact.UIContactDragDrop.init() ;") ;
-  rcontext.getJavascriptManager().addOnLoadJavascript('eXo.cs.CheckBox.init("' + uiform.id + '")') ;
 	rcontext.getJavascriptManager().addJavascript('eXo.contact.UIContactPortlet.checkView();') ;
   rcontext.getJavascriptManager().addOnLoadJavascript('eXo.contact.UIContactPortlet.checkLayout()') ;
   rcontext.getJavascriptManager().addJavascript('eXo.contact.UIContactPortlet.refreshData();') ;
@@ -65,6 +64,7 @@
 	def msg = _ctx.appRes("UIContacts.msg.have-no-item");
 	
 	if(uicomponent.getViewContactsList()) {
+		rcontext.getJavascriptManager().addCustomizedOnLoadScript('eXo.cs.CheckBox.init("' + uiform.id + '");') ;
 		if(isDisplaySearchResult) {
 %>
 				<div class="Result">

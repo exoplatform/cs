@@ -339,6 +339,7 @@ UIContactPortlet.prototype.tagCallback = function(evt) {
 } ;
 
 UIContactPortlet.prototype.printpreview = function (obj){
+
 	var DOMUtil = eXo.core.DOMUtil ;
 	var UIPortalApplication = document.getElementById("UIPortalApplication") ;
 	var UIContactPreview = DOMUtil.findAncestorByClass(obj, "UIContactPreview") ;
@@ -417,11 +418,14 @@ UIContactPortlet.prototype.cancelPrintList = function (){
 	UIPortalApplication.style.height =  "auto";
 	UIPortalApplication.style.overflow =  "";
 	UIPortalApplication.style.visibility = "visible" ;
+	
+
 	//cs-2327 
 	var UIWindowContact = document.getElementById("UIWindow-contact") ;
 	if (UIWindowContact) {
-		UIWindowContact.style.visibility = "visible" ;
+		UIWindowContact.style.display = "block" ;
 	}
+	
 	if(document.getElementById("UIPageDesktop")) UIPortalApplication.style.display = "block";
 	window.scroll(0,0);
 } ;
@@ -444,7 +448,7 @@ UIContactPortlet.prototype.printList = function (obj){
 	// cs-2327
 	var UIWindowContact = document.getElementById("UIWindow-contact") ;
 	if (UIWindowContact) {
-		UIWindowContact.style.visibility = "hidden" ;
+		UIWindowContact.style.display = "none" ;
 	}
 	if(uiControlWorkspace) {
 		uiControlWorkspace.style.display = "none" ;
