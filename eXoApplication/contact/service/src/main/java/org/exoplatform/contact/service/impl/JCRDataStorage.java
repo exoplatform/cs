@@ -38,10 +38,10 @@ import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
 import org.apache.commons.logging.Log;
+import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.Contact;
 import org.exoplatform.contact.service.ContactAttachment;
 import org.exoplatform.contact.service.ContactFilter;
-import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactPageList;
 import org.exoplatform.contact.service.DataPageList;
 import org.exoplatform.contact.service.GroupContactData;
@@ -241,19 +241,26 @@ public class JCRDataStorage {
     return Str;
   }
   
-  public Contact getPersonalContact(String userId) throws Exception {
+
+  /**
+   * Load the public contact for a given username
+   * @param userId username for which the corresponding contact will be loaded
+   * @return the contact or null if the contact could not be loaded
+   * @throws Exception
+   */
+  public Contact loadPublicContactByUser(String userId) throws Exception {
     SessionProvider provider = SessionProvider.createSystemProvider();
     try {
-    Node contactHome = getPersonalContactsHome(provider, userId) ;
-    try {
-      return getContact(contactHome.getNode(userId), JCRDataStorage.PUBLIC) ;
+      // public contact is stored under the corresponding user application data
+      Node contactHomeNode = getPersonalContactsHome(provider, userId) ;
+      return getContact(contactHomeNode.getNode(userId), PUBLIC);
     } catch (PathNotFoundException e) {
+      log.error("Public contact " + userId + " not found");
       return null ;
-    } 
     } finally {
       provider.close();
     }
-  }
+  }  
   
   private Contact getContact(Node contactNode, String contactType) throws Exception {
     Contact contact = new Contact();
@@ -298,7 +305,7 @@ public class JCRDataStorage {
     if(contactNode.hasProperty("exo:mobilePhone"))contact.setMobilePhone(contactNode.getProperty("exo:mobilePhone").getString());
     if(contactNode.hasProperty("exo:webPage"))contact.setWebPage(contactNode.getProperty("exo:webPage").getString());
     if(contactNode.hasProperty("exo:note"))contact.setNote(contactNode.getProperty("exo:note").getString());
-    if(contactNode.hasProperty(PROP_ADDRESSBOOK_REFS))contact.setAddressBook(ValuesToStrings(contactNode.getProperty(PROP_ADDRESSBOOK_REFS).getValues()));
+    if(contactNode.hasProperty(PROP_ADDRESSBOOK_REFS))contact.setAddressBookIds(ValuesToStrings(contactNode.getProperty(PROP_ADDRESSBOOK_REFS).getValues()));
     if(contactNode.hasProperty("exo:tags")) contact.setTags(ValuesToStrings(contactNode.getProperty("exo:tags").getValues()));
     if(contactNode.hasProperty("exo:editPermissionUsers")) contact.setEditPermissionUsers(ValuesToStrings(contactNode.getProperty("exo:editPermissionUsers").getValues()));
     if(contactNode.hasProperty("exo:viewPermissionUsers")) contact.setViewPermissionUsers(ValuesToStrings(contactNode.getProperty("exo:viewPermissionUsers").getValues()));
@@ -377,11 +384,11 @@ public class JCRDataStorage {
   }
   
   
-  public Contact getContact(String username, String contactId) throws Exception {
+  public Contact loadPersonalContact(String ownerUserId, String contactId) throws Exception {
     SessionProvider sProvider = null;
     try {
       sProvider = createSessionProvider();
-      Node contactHomeNode = getPersonalContactsHome(sProvider, username);
+      Node contactHomeNode = getPersonalContactsHome(sProvider, ownerUserId);
       try {
         return getContact(contactHomeNode.getNode(contactId), PERSONAL);
       } catch (PathNotFoundException ex) {
@@ -417,14 +424,67 @@ public class JCRDataStorage {
     }
   }
   
-  public List<String> getAllEmailAddressByGroup(String username, String groupId) throws Exception {
+  enum AddressBookType {Personal, Shared, Public};
+  
+ public List<String> findEmailsByAddressBook(String username, String addressBookId) throws AddressBookNotFoundException, Exception {
+   AddressBookType type = getAddressBookType(username, addressBookId);
+
+   if (type == AddressBookType.Personal) {
+     return findEmailsInPersonalAddressBook(username, addressBookId);
+   } else if (type == AddressBookType.Shared) {
+     return findEmailsInPersonalAddressBook(username, addressBookId);
+   } else if (type == AddressBookType.Public) {
+     return findEmailsInPublicAddressBook(username, addressBookId);
+   }
+   throw new AddressBookNotFoundException(addressBookId);
+ }
+  
+  private AddressBookType getAddressBookType(String username, String addressBookId) throws Exception {
+    AddressBook shared = getSharedAddressBookById(username, addressBookId);
+    if (shared != null) {
+      return AddressBookType.Shared;
+    }
+    
+    AddressBook personal = findPersonalAddressBookById(username, addressBookId);
+    if (personal != null) {
+      return AddressBookType.Personal;
+    }
+    
+    AddressBook publicAb = findPublicAddressBookById(username, addressBookId);
+    if (publicAb != null) {
+      return AddressBookType.Public;
+    }
+    
+    return null;
+    
+
+
+  }
+
+
+
+
+
+  private AddressBook findPublicAddressBookById(String username, String addressBookId) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+
+  private AddressBook findPersonalAddressBookById(String username, String addressBookId) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+
+  public List<String> findEmailsInPersonalAddressBook(String username, String addressBookId) throws Exception {
     SessionProvider sProvider = null;
     try {
       sProvider = createSessionProvider();
       Node contactHome = getPersonalContactsHome(sProvider, username);
       QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
       StringBuffer queryString = new StringBuffer("/jcr:root" + contactHome.getPath()
-          + "//element(*,exo:contact)[@exo:categories='").append(groupId).append("']");
+          + "//element(*,exo:contact)[@exo:categories='").append(addressBookId).append("']");
       NodeIterator it = qm.createQuery(queryString.toString(), Query.XPATH).execute().getNodes();
       List<String> address = new ArrayList<String>();
       while (it.hasNext()) {
@@ -439,7 +499,7 @@ public class JCRDataStorage {
     }
   }
   
-  public List<String> getAllEmailByPublicGroup(String username, String groupId) throws Exception {
+  public List<String> findEmailsInPublicAddressBook(String username, String groupId) throws Exception {
     String usersPath = nodeHierarchyCreator_.getJcrPath(USERS_PATH) ;
     SessionProvider provider = SessionProvider.createSystemProvider();
     try {
@@ -537,15 +597,15 @@ public class JCRDataStorage {
     return null ;
   }
 
-  public List<AddressBook> getGroups(SessionProvider sProvider, String username) throws Exception {
-    Node contactGroupHomeNode = getPersonalAddressBooksHome(sProvider, username);
-    List<AddressBook> contactGroups = new ArrayList<AddressBook>();
-    NodeIterator iter = contactGroupHomeNode.getNodes();
+  public List<AddressBook> findPersonalAddressBooksByOwner(SessionProvider sProvider, String username) throws Exception {
+    Node addressBooksHome = getPersonalAddressBooksHome(sProvider, username);
+    List<AddressBook> addressBooks = new ArrayList<AddressBook>();
+    NodeIterator iter = addressBooksHome.getNodes();
     while (iter.hasNext()) {
-      Node contactGroupNode = iter.nextNode();
-      contactGroups.add(toAddressBook(contactGroupNode));
+      Node addressBook = iter.nextNode();
+      addressBooks.add(toAddressBook(addressBook));
     }
-    return contactGroups;
+    return addressBooks;
   }
 
   public List<Contact> removeContacts(SessionProvider sysProvider, String username, List<String> contactIds) throws Exception {
@@ -553,7 +613,7 @@ public class JCRDataStorage {
     List<Contact> contacts = new ArrayList<Contact>() ;
     for (String contactId : contactIds) {
       if (contactHomeNode.hasNode(contactId)) {
-        Contact contact = getContact(username, contactId);
+        Contact contact = loadPersonalContact(username, contactId);
         contactHomeNode.getNode(contactId).remove();
         contactHomeNode.getSession().save(); 
         contacts.add(contact) ;
@@ -573,7 +633,7 @@ public class JCRDataStorage {
       if(addressType.equals(PERSONAL)) {        
         saveContact(username, contact, false) ;
       }else if(addressType.equals(SHARED)) {
-       saveContactToSharedAddressBook(username, contact.getAddressBook()[0], contact, true) ;
+       saveContactToSharedAddressBook(username, contact.getAddressBookIds()[0], contact, true) ;
        if (privateContactHome.hasNode(contact.getId()))
          privateContactHome.getNode(contact.getId()).remove() ;
       }         
@@ -657,7 +717,7 @@ public class JCRDataStorage {
       }
       
       Node contactHomeNode = getPersonalContactsHome(sProvider, username);
-      saveContact(contactHomeNode, contact, isNew);
+      contactToNode(contactHomeNode, contact, isNew);
       contactHomeNode.getSession().save();
     } finally {
       closeSessionProvider(sProvider);
@@ -689,8 +749,8 @@ public class JCRDataStorage {
           }
         } 
       }
-      
-      if (groupNode == null && !isNew) throw new PathNotFoundException() ;
+   // TODO : should throw a business exception instead of PathNotFoundException
+      if (groupNode == null && !isNew) throw new PathNotFoundException("No personal or shared address book for user " + username + " was found with ID " + addressbook) ; 
       groupNode.setProperty("exo:name", addressbook.getName());
       groupNode.setProperty("exo:description", addressbook.getDescription());
       groupNode.setProperty("exo:editPermissionUsers", addressbook.getEditPermissionUsers()) ;
@@ -1068,7 +1128,7 @@ public class JCRDataStorage {
         Node contactNode = iter.nextProperty().getParent() ;
         if(contactNode.getName().equals(contact.getId())) {
           isEdit = true ;
-          saveContact(contactNode.getParent(), contact, false) ;
+          contactToNode(contactNode.getParent(), contact, false) ;
           contactNode.getParent().getSession().save() ;
           return ;
         }
@@ -1088,7 +1148,7 @@ public class JCRDataStorage {
       if(addressBook.getName().equals(addressBookId)) {
         Node contactHomeNode = addressBook.getParent().getParent().getNode(CONTACTS) ;
         contact.setOwner(false) ;
-        saveContact(contactHomeNode, contact, isNew) ;
+        contactToNode(contactHomeNode, contact, isNew) ;
         contactHomeNode.getSession().save() ;   
         return ;
       }
@@ -1130,20 +1190,7 @@ public class JCRDataStorage {
     }
   }
   
-  
-  public Contact getPublicContact(String contactId) throws Exception {
-    //Node contactHomeNode = getPublicContactHome(SessionProvider.createSystemProvider());
-    SessionProvider provider = SessionProvider.createSystemProvider();
 
-    try {
-      Node contactHomeNode = getPersonalContactsHome(provider, contactId) ;
-      return getContact(contactHomeNode.getNode(contactId), PUBLIC);
-    } catch (PathNotFoundException e) {
-      return null ;
-    } finally {
-      provider.close();
-    }
-  }
 
   public ContactPageList getPublicContactsByAddressBook(SessionProvider sProvider, String groupId) throws Exception {   
     String usersPath = nodeHierarchyCreator_.getJcrPath(USERS_PATH) ;
@@ -1246,19 +1293,19 @@ public class JCRDataStorage {
     
   }
   
-  private void saveContact(Node contactHomeNode, Contact contact, boolean isNew) throws Exception {
+  private void contactToNode(Node contactsHome, Contact contact, boolean isNew) throws Exception {
     Node contactNode;
     if (isNew) {
-      contactNode = contactHomeNode.addNode(contact.getId(), "exo:contact"); 
+      contactNode = contactsHome.addNode(contact.getId(), "exo:contact"); 
       contactNode.setProperty("exo:id", contact.getId());
       if(contact.isOwner()) {
         contactNode.setProperty("exo:isOwner", true) ;
         contactNode.setProperty("exo:ownerId", contact.getOwnerId()) ;
-        reparePermissions(contactHomeNode, contact.getOwnerId()) ;
+        reparePermissions(contactsHome, contact.getOwnerId()) ;
         reparePermissions(contactNode, contact.getOwnerId()) ;
       }
     } else {
-      contactNode = contactHomeNode.getNode(contact.getId());
+      contactNode = contactsHome.getNode(contact.getId());
     }
     contactNode.setProperty("exo:fullName", contact.getFullName());
     contactNode.setProperty("exo:firstName", contact.getFirstName());
@@ -1475,7 +1522,7 @@ public class JCRDataStorage {
       it = result.getNodes();    
       while (it.hasNext()) {
         Contact contact = getContact(it.nextNode(), SHARED);
-        if (Arrays.asList(contact.getAddressBook()).contains(addressBook.getProperty("exo:id").getString()))
+        if (Arrays.asList(contact.getAddressBookIds()).contains(addressBook.getProperty("exo:id").getString()))
           contacts.put(contact.getId(), contact) ;
       }
     }
@@ -1899,7 +1946,7 @@ public class JCRDataStorage {
     }
   }
   
-  public Map<String, String> searchEmails(SessionProvider provider, String username, ContactFilter filter)throws Exception {
+  public Map<String, String> findEmailsByFilter(String username, ContactFilter filter)throws Exception {
     Map<String, String> emails = new LinkedHashMap<String, String>() ;
     filter.setUsername(username) ;
     SessionProvider sysProvider = SessionProvider.createSystemProvider();
@@ -1911,7 +1958,7 @@ public class JCRDataStorage {
     // minus shared contacts
     filter.setOwner("true") ; 
     QueryManager qm = publicContactHome.getSession().getWorkspace().getQueryManager() ;
-    Query query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
+    Query query = qm.createQuery(filter.getStatement(), Query.XPATH) ; // TODO add criteria on emailAddress not null to lower number of results
     NodeIterator itpublic = query.execute().getNodes();
     while(itpublic.hasNext()) {
       Node contactNode = itpublic.nextNode() ;
@@ -1923,10 +1970,10 @@ public class JCRDataStorage {
 
     // private contacts
     if(username != null && username.length() > 0) {
-      Node contactHome = getPersonalContactsHome(provider, username) ;
+      Node contactHome = getPersonalContactsHome(sysProvider, username) ;
       filter.setAccountPath(contactHome.getPath()) ;      
       qm = contactHome.getSession().getWorkspace().getQueryManager() ;
-      query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
+      query = qm.createQuery(filter.getStatement(), Query.XPATH) ;// TODO add criteria on emailAddress not null to lower number of results
       NodeIterator it = query.execute().getNodes() ;
       while(it.hasNext()) {
         Node contactNode = it.nextNode() ;
@@ -1951,7 +1998,7 @@ public class JCRDataStorage {
           filter.setUsername(userId) ;
           
           qm = sharedContactHomeNode.getSession().getWorkspace().getQueryManager() ;      
-          query = qm.createQuery(filter.getStatement(), Query.XPATH) ;
+          query = qm.createQuery(filter.getStatement(), Query.XPATH) ;// TODO add criteria on emailAddress not null to lower number of results
           NodeIterator it = query.execute().getNodes() ;
           while(it.hasNext()) {
             Node contactNode = it.nextNode() ;
@@ -1964,7 +2011,7 @@ public class JCRDataStorage {
         }
       }
     } catch (PathNotFoundException e) { }
-    Node sharedAddressBookMock = getSharedAddressBooksHome(username) ;
+    Node sharedAddressBookMock = getSharedAddressBooksHome(sysProvider, username) ;
     PropertyIterator iter = sharedAddressBookMock.getReferences() ;
     Node addressBook ;
     
@@ -1977,7 +2024,7 @@ public class JCRDataStorage {
       if (!hasGroup) filter.setCategories(new String[] {addressBook.getName()}) ;
       filter.setUsername(addressBook.getProperty("exo:sharedUserId").getString()) ;
       qm = contactHomeNode.getSession().getWorkspace().getQueryManager() ;      
-      query = qm.createQuery(filter.getStatement(), Query.XPATH) ;  
+      query = qm.createQuery(filter.getStatement(), Query.XPATH) ;  // TODO add criteria on emailAddress not null to lower number of results
       NodeIterator it = query.execute().getNodes() ;
       while(it.hasNext()) {
         Node contactNode = it.nextNode() ;
@@ -2125,9 +2172,9 @@ public class JCRDataStorage {
       String type = contactsMap.get(contactId) ;
       Contact contact = null ;
       if (type.equals(PERSONAL)) {
-        contact = getContact(username, contactId) ;
+        contact = loadPersonalContact(username, contactId) ;
       } else if (type.equals(PUBLIC)) {
-        contact = getPublicContact(contactId) ;
+        contact = loadPublicContactByUser(contactId) ;
       } else { // shared
         contact = getSharedContact(sProvider, username, contactId) ;
         if (contact ==  null) contact = getSharedContactAddressBook(username, contactId) ;

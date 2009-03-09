@@ -17,6 +17,7 @@
 package org.exoplatform.contact.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
@@ -74,31 +75,52 @@ public interface ContactServiceLegacy {
   /**
    * @deprecated use {@link ContactService#getPersonalContacts(String)}
    */
-  public List<Contact> getAllContacts(SessionProvider sProvider, String username) throws Exception ;
-  
+  public List<Contact> getAllContacts(SessionProvider sProvider, String username) throws Exception;
+
   /**
-   * @deprecated use {@link ContactService#getContactsByAddressBook(String, String)}
+   * @deprecated use
+   *             {@link ContactService#getContactsByAddressBook(String, String)}
    */
-  public ContactPageList getContactPageListByGroup(SessionProvider sProvider, String username, String groupId) throws Exception ;
-  
+  public ContactPageList getContactPageListByGroup(SessionProvider sProvider,
+                                                   String username,
+                                                   String groupId) throws Exception;
+
   /**
-   * @deprecated use {@link ContactService#getEmailsByAddressBook(String, String)}
+   * @deprecated use
+   *             {@link ContactService#getEmailsByAddressBook(String, String)}
    */
-  public List<String>  getAllEmailAddressByGroup(SessionProvider sProvider, String username, String groupId) throws Exception ;
-  
+  public List<String> getAllEmailAddressByGroup(SessionProvider sProvider,
+                                                String username,
+                                                String groupId) throws Exception;
+
   /**
-   * @deprecated use {@link ContactService#getEmailsByAddressBook(String, String)}
+   * @deprecated use
+   *             {@link ContactService#getEmailsByAddressBook(String, String)}
    */
-  public List<String> getAllEmailBySharedGroup(String username, String addressBookId) throws Exception ;
-  
+  public List<String> getAllEmailBySharedGroup(String username, String addressBookId) throws Exception;
+
   /**
-   * @deprecated use {@link ContactService#getEmailsByAddressBook(String, String)}
+   * @deprecated use
+   *             {@link ContactService#getEmailsByAddressBook(String, String)}
    */
-  public List<String> getAllEmailByPublicGroup(String username, String groupId) throws Exception ;  
-  
+  public List<String> getAllEmailByPublicGroup(String username, String groupId) throws Exception;
+
   /**
-   * @deprecated use {@link ContactService#addUserContactInAddressBook(String, String)}
+   * @deprecated use
+   *             {@link ContactService#addUserContactInAddressBook(String, String)}
    */
-  public void addGroupToPersonalContact(String userId, String groupId) throws Exception ;
-  
+  public void addGroupToPersonalContact(String userId, String groupId) throws Exception;
+
+  /**
+   * @deprecated use {@link ContactService#getPublicContact(String)}
+   */
+  public Contact getPersonalContact(String userId) throws Exception;
+
+  /**
+   * @deprecated use {@link ContactService#searchEmails(String, ContactFilter)}
+   */
+  public Map<String, String> searchEmails(SessionProvider sysProvider,
+                                          String username,
+                                          ContactFilter filter) throws Exception;
+
 }

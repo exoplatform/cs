@@ -51,28 +51,28 @@ public interface ContactService extends ContactServiceLegacy {
    * @return email list in this address book
    * @param sProvider session of current user
    * @param username current user
-   * @param groupId id of address book
+   * @param addressBookId id of address book
    * @throws Exception 
    */
-  public List<String>  getEmailsByAddressBook(String username, String groupId) throws Exception ;
+  public List<String>  getEmailsByAddressBook(String username, String addressBookId) throws Exception ;
   
   /**
-   * get personal contact base on id of contact
-   * @param username current user
-   * @param contactId id of contact is to get
-   * @return object Contact has specific id   
+   * Get a personal contact for a given owner
+   * @param owner user id of the contact owner
+   * @param contactId id of contact to get
+   * @return Contact in the personal contacts of owner 
    * @throws Exception 
    */
-  public Contact getContact(String username, String contactId) throws Exception ;
+  public Contact getContact(String owner, String contactId) throws Exception ;
   
   /**
    * Save a contact to a personal address book
-   * @param username current user
+   * @param owner owner of the contact
    * @param  contact contact to save
    * @param isNew is true if save a new contact and false if save an edited contact
    * @throws Exception 
    */
-  public void saveContact(String username, Contact contact, boolean isNew) throws Exception ;
+  public void saveContact(String owner, Contact contact, boolean isNew) throws Exception ;
   
   /**
    * remove some personal contacts belong current user
@@ -128,13 +128,15 @@ public interface ContactService extends ContactServiceLegacy {
   
   /**
    * get id, name, email of contacts base on properties of ContactFilter
-   * @return a map contains id, name, email of contacts.
-   * @param sProvider should use system provider
    * @param username current user 
    * @param filter setted some properties to filter contacts.
+   * @param sProvider should use system provider
+   * @return a map contains id, name, email of contacts.
    * @throws Exception 
    */
-  public Map<String, String> searchEmails(SessionProvider sysProvider, String username, ContactFilter filter)throws Exception ;
+  public Map<String, String> searchEmails(String username, ContactFilter filter)throws Exception ;
+  
+  
   
   /**
    * get contact page list of public address book specific by id of address book
@@ -149,12 +151,12 @@ public interface ContactService extends ContactServiceLegacy {
  // public List<String> getPublicAddressBookContacts(SessionProvider sProvider, String[] groupIds) throws Exception ;
   
   /**
-   * get public contact base on id of contact
-   * @return object contact has id equals input id
-   * @param contactId id of contact will be getted
+   * Get the public contact for a given user Id
+   * @param userId User ID whose corresponding contact will be retrieved
+   * @return The self contact for the iven user
    * @throws Exception 
    */
-  public Contact getPublicContact(String contactId) throws Exception ;  
+  public Contact getPublicContact(String userId) throws Exception ;  
 
 
   
@@ -165,15 +167,6 @@ public interface ContactService extends ContactServiceLegacy {
    * @throws Exception 
    */
   public void addUserContactInAddressBook(String userId, String addressBookId) throws Exception ;
-
-  /**
-   * get contact information of current user : by default, when init new user a default contact was 
-   * being inited, this contact contains info of new user 
-   * @return default contact object
-   * @param userId userId of user want to get default Contact
-   * @throws Exception
-   */
-  public Contact getPersonalContact(String userId) throws Exception ;
   
   /**
    * get all personal address books of user

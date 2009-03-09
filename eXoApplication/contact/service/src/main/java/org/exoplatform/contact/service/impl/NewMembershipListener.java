@@ -17,6 +17,7 @@
 package org.exoplatform.contact.service.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,38 +52,43 @@ public class NewMembershipListener extends MembershipEventListener {
   }
 
   public void postSave(Membership m, boolean isNew) throws Exception {
-    cservice_.addUserContactInAddressBook(m.getUserName(), m.getGroupId()) ;
+    
+    String username = m.getUserName();
+    String groupId = m.getGroupId();
+    cservice_.addUserContactInAddressBook(username, groupId) ;
     JCRDataStorage storage_ = new JCRDataStorage(nodeHierarchyCreator_) ;
     SessionProvider systemSession = SessionProvider.createSystemProvider() ;
     try {
       Node publicContactHome = storage_.getPublicContactsHome(systemSession) ;      
       String usersPath = nodeHierarchyCreator_.getJcrPath(JCRDataStorage.USERS_PATH) ;
       QueryManager qm = publicContactHome.getSession().getWorkspace().getQueryManager();
-      List<String> recievedUser = new ArrayList<String>() ;
-      recievedUser.add(m.getUserName()) ;
 
-      // add new group for public contact
-      Contact contact = cservice_.getPublicContact(m.getUserName()) ;
+
+      // Add the user's contact to the public address book for the group
+      Contact contact = cservice_.getPublicContact(username) ;
       Map<String, String> groups = new LinkedHashMap<String, String>() ;
-      for (String group  : contact.getAddressBook()) groups.put(group, group) ;
-      groups.put(m.getGroupId(), m.getGroupId()) ;
-      contact.setAddressBook(groups.keySet().toArray(new String[] {})) ;
-      cservice_.saveContact(m.getUserName(), contact, false) ;
+      for (String group  : contact.getAddressBookIds()) groups.put(group, group) ;
+      groups.put(groupId, groupId) ;
+      contact.setAddressBookIds(groups.keySet().toArray(new String[] {})) ;
+      cservice_.saveContact(username, contact, false) ;
 
+      // lookup address books to this group
       StringBuffer queryString = new StringBuffer("/jcr:root" + usersPath 
-          + "//element(*,exo:contactGroup)[@exo:viewPermissionGroups='").append( m.getGroupId() + "']") ;        
+          + "//element(*,exo:contactGroup)[@exo:viewPermissionGroups='").append( groupId + "']") ;        
       Query query = qm.createQuery(queryString.toString(), Query.XPATH);
       QueryResult result = query.execute();
       NodeIterator nodes = result.getNodes() ;
+      List<String> to = Arrays.asList(new String []{username});
       while (nodes.hasNext()) {
         Node address = nodes.nextNode() ;
-        storage_.shareAddressBook(address.getProperty("exo:sharedUserId")
-            .getString(), address.getProperty("exo:id").getString(), recievedUser) ;
+        String from = address.getProperty("exo:sharedUserId").getString();
+        String addressBookId = address.getProperty("exo:id").getString();
+        storage_.shareAddressBook(from, addressBookId, to) ;
       }
 
-//    lookup shared contacts
+      // lookup single contacts shared to this group
       queryString = new StringBuffer("/jcr:root" + usersPath 
-          + "//element(*,exo:contact)[@exo:viewPermissionGroups='").append(m.getGroupId() + "']") ;        
+          + "//element(*,exo:contact)[@exo:viewPermissionGroups='").append(groupId + "']") ;        
       query = qm.createQuery(queryString.toString(), Query.XPATH);
       result = query.execute();
       nodes = result.getNodes() ;
@@ -91,7 +97,8 @@ public class NewMembershipListener extends MembershipEventListener {
         String split = "/" ;
         String temp = contactNode.getPath().split(usersPath)[1] ;
         String userId = temp.split(split)[1] ;
-        storage_.shareContact(systemSession, userId, new String[] {contactNode.getProperty("exo:id").getString()}, recievedUser) ;
+        String [] addressBookIds = new String[] {contactNode.getProperty("exo:id").getString()};
+        storage_.shareContact(systemSession, userId, addressBookIds, to) ;
       }
     } catch (Exception e) {
       e.printStackTrace() ;

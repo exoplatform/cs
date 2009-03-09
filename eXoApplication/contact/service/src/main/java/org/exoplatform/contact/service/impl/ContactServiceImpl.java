@@ -59,15 +59,14 @@ public class ContactServiceImpl implements ContactService {
     return storage_.findAllContactsByOwner(username);
   }
 
-  
-  public Contact getPersonalContact(String userId) throws Exception {
-    return storage_.getPersonalContact(userId) ;
+  /**
+   * {@inheritDoc}
+   */  
+  public Map<String, String> searchEmails(String username, ContactFilter filter)throws Exception {
+    return storage_.findEmailsByFilter(username, filter) ;
   }
   
-  public Map<String, String> searchEmails(SessionProvider sysProvider, String username, ContactFilter filter)throws Exception {
-    return storage_.searchEmails(sysProvider, username, filter) ;
-  }
-  
+
   /*
   public ContactPageList getContactPageListByTag(String username, ContactFilter filter) throws Exception {
     return storage_.getContactPageListByTag(username, filter);
@@ -89,13 +88,13 @@ public class ContactServiceImpl implements ContactService {
    * {@inheritDoc}
    */
   public List<String> getEmailsByAddressBook(String username, String groupId) throws Exception {
-    return storage_.getAllEmailAddressByGroup(username, groupId);
+    return storage_.findEmailsInPersonalAddressBook(username, groupId);
   }
   
 
   
   public Contact getContact(String username, String contactId) throws Exception {
-    return storage_.getContact(username, contactId);
+    return storage_.loadPersonalContact(username, contactId);
   }
   
   /**
@@ -121,7 +120,7 @@ public class ContactServiceImpl implements ContactService {
   }
   
   public List<AddressBook> getGroups(SessionProvider sProvider, String username) throws Exception {
-    return storage_.getGroups(sProvider, username);
+    return storage_.findPersonalAddressBooksByOwner(sProvider, username);
   }
   
   /**
@@ -212,8 +211,9 @@ public class ContactServiceImpl implements ContactService {
   }
   
   public Contact getPublicContact(String contactId) throws Exception {
-    return storage_.getPublicContact(contactId);
+    return storage_.loadPublicContactByUser(contactId);
   }
+  
 
   public List<GroupContactData> getPublicContacts(SessionProvider sProvider, String[] groupIds) throws Exception {
     return storage_.getPublicContacts(sProvider, groupIds);
@@ -292,7 +292,7 @@ public class ContactServiceImpl implements ContactService {
    * {@inheritDoc}
    */
   public List<String> getAllEmailByPublicGroup(String username, String groupId) throws Exception { 
-    return storage_.getAllEmailByPublicGroup(username, groupId) ;
+    return storage_.findEmailsInPublicAddressBook(username, groupId) ;
   }
 
   
@@ -378,4 +378,20 @@ public class ContactServiceImpl implements ContactService {
   public void addGroupToPersonalContact(String userId, String groupId) throws Exception {
     addUserContactInAddressBook(userId, groupId);
   }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public Contact getPersonalContact(String userId) throws Exception {
+    return getPublicContact(userId) ;
+  }  
+  
+  /**
+   * {@inheritDoc}
+   */  
+  public Map<String, String> searchEmails(SessionProvider sessionProvider,  String username, ContactFilter filter)throws Exception {
+    return searchEmails(username, filter) ;
+  }
+    
+
 }

@@ -147,7 +147,7 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       Map<String, String> copyedContacts = uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class).getCopyContacts() ;
       for(String id : uiMoveContactForm.getContactIds()) {
         Contact contact = uiMoveContactForm.movedContacts.get(id) ;
-        if (!contact.getAddressBook()[0].equals(addressBookId)) copyedContacts.remove(id) ;
+        if (!contact.getAddressBookIds()[0].equals(addressBookId)) copyedContacts.remove(id) ;
         if (contact.getContactType().equals(JCRDataStorage.SHARED)) {          
           // check for existing contact
           Contact tempContact = null ;

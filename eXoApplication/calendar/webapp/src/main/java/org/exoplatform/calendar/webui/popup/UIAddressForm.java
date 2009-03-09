@@ -128,7 +128,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     if(!CalendarUtils.isEmpty(groupId)) {
       filter.setCategories(new String[]{groupId}) ;
     }  
-    Map<String, String> resultMap = contactSrv.searchEmails(SessionProviderFactory.createSystemProvider(), CalendarUtils.getCurrentUser(), filter) ;
+    Map<String, String> resultMap = contactSrv.searchEmails(CalendarUtils.getCurrentUser(), filter) ;
     List<ContactData> data = new ArrayList<ContactData>() ;
     for(String ct : resultMap.keySet()) {
       String id  = ct ;
@@ -146,7 +146,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   @SuppressWarnings("unchecked")
   public void setContactList(ContactFilter filter) throws Exception {
     ContactService contactSrv = getApplicationComponent(ContactService.class);
-    Map<String, String> resultMap = contactSrv.searchEmails(SessionProviderFactory.createSystemProvider(), CalendarUtils.getCurrentUser(), filter) ;
+    Map<String, String> resultMap = contactSrv.searchEmails(CalendarUtils.getCurrentUser(), filter) ;
     List<ContactData> data = new ArrayList<ContactData>() ;
     for(String ct : resultMap.keySet()) {
       String id  = ct ;
