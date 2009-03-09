@@ -79,7 +79,7 @@ public interface ContactServiceLegacy {
 
   /**
    * @deprecated use
-   *             {@link ContactService#getContactsByAddressBook(String, String)}
+   *             {@link ContactService#getPersonalContactsByAddressBook(String, String)}
    */
   public ContactPageList getContactPageListByGroup(SessionProvider sProvider,
                                                    String username,
@@ -122,5 +122,11 @@ public interface ContactServiceLegacy {
   public Map<String, String> searchEmails(SessionProvider sysProvider,
                                           String username,
                                           ContactFilter filter) throws Exception;
+  
+  /**
+   * @deprecated use {@link ContactService#getPersonalContactsByFilter(String, ContactFilter)}
+   * or {@link ContactService#getSharedContactsByFilter(String, ContactFilter)} or {@link ContactService#getPublicContactsByFilter(String, ContactFilter)}
+   */
+  public ContactPageList getContactPageListByGroup(SessionProvider sProvider, String username, ContactFilter filter, String type) throws Exception;
 
 }

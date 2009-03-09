@@ -32,9 +32,7 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.PropertyIterator;
-import javax.jcr.RepositoryException;
 import javax.jcr.Value;
-import javax.jcr.ValueFormatException;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
@@ -198,8 +196,60 @@ public class JCRDataStorage {
         sharedAddressBooksHome = sharedHome.getNode(SHARED_ADDRESSBOOK);
       }
       return sharedAddressBooksHome;
-
   }
+  
+  
+  public Node getSharedContactsHome(SessionProvider provider, String userId) throws Exception {
+    Node userData = getContactUserDataHome(provider, userId);
+    Node sharedHome;
+    if (!userData.hasNode(SHARED_HOME)) {
+      sharedHome = userData.addNode(SHARED_HOME, NT_UNSTRUCTURED);
+      userData.save();
+    } else {
+      sharedHome = userData.getNode(SHARED_HOME);
+    }
+
+    Node sharedContactsHome = null;
+    if (!sharedHome.hasNode(SHARED_CONTACT)) {
+      sharedContactsHome = sharedHome.addNode(SHARED_CONTACT, NT_UNSTRUCTURED);
+      if (sharedContactsHome.canAddMixin("mix:referenceable")) {
+        sharedContactsHome.addMixin("mix:referenceable");
+      }
+      sharedHome.save();        
+    } else {
+      sharedContactsHome = sharedHome.getNode(SHARED_CONTACT);
+    }
+    return sharedContactsHome;
+} 
+  
+  /**
+   * @deprecated use {@link #getSharedContactsHome(SessionProvider, String)}
+   */
+  private Node getSharedContact(String userId) throws Exception {
+    SessionProvider provider = SessionProvider.createSystemProvider();
+    try {
+    Node contactHome = getContactUserDataHome(provider, userId);
+    Node sharedHome ;
+    try {
+      sharedHome = contactHome.getNode(SHARED_HOME) ;
+    } catch (PathNotFoundException ex) {
+      sharedHome = contactHome.addNode(SHARED_HOME, NT_UNSTRUCTURED) ;
+      contactHome.save() ;
+    }    
+    try{
+      return sharedHome.getNode(SHARED_CONTACT) ;
+    }catch(PathNotFoundException ex) {
+      Node sharedContact = sharedHome.addNode(SHARED_CONTACT, NT_UNSTRUCTURED) ;
+      if(sharedContact.canAddMixin("mix:referenceable")) {
+        sharedContact.addMixin("mix:referenceable") ;
+      }
+      sharedHome.save() ;
+      return sharedContact ;
+    }
+    } finally {
+      //provider.close();
+    }
+  }  
   
 /**
  * @deprecated use {@link #getSharedAddressBooksHome(SessionProvider, String) and provide an appropriate SessionProvider
@@ -352,37 +402,52 @@ public class JCRDataStorage {
     }
   }
 
-  public ContactPageList getContactPageListByGroup(SessionProvider sProvider, String username, ContactFilter filter, String type) throws Exception {
-    QueryManager qm = null ;
-    if (type.equals(PERSONAL)) {
-      Node contactHomeNode = getPersonalContactsHome(sProvider, username);
-      filter.setAccountPath(contactHomeNode.getPath()) ;
-      qm = contactHomeNode.getSession().getWorkspace().getQueryManager();
-    } else if (type.equals(PUBLIC)) {
-      Node publicContactHomeNode = getPublicContactsHome(sProvider) ;
-      String usersPath = nodeHierarchyCreator_.getJcrPath(USERS_PATH) ;
-      filter.setAccountPath(usersPath) ;
-      qm = publicContactHomeNode.getSession().getWorkspace().getQueryManager();
-    } else if (type.equals(SHARED)) {
-      Node sharedAddressBookMock = getSharedAddressBooksHome(username) ;
-      PropertyIterator iter = sharedAddressBookMock.getReferences() ;
-      Node addressBook ;      
-      while(iter.hasNext()) {
-        addressBook = iter.nextProperty().getParent() ;
-        if(addressBook.getName().equals(filter.getCategories()[0])) {
-          Node contacts = addressBook.getParent().getParent().getNode(CONTACTS) ;
-          filter.setAccountPath(contacts.getPath()) ;
-          qm = contacts.getSession().getWorkspace().getQueryManager() ;
-          break ;
+  public ContactPageList findContactsByFilter(String username,
+                                                   ContactFilter filter,
+                                                   String type) throws Exception {
+    QueryManager qm = null;
+    SessionProvider sysp = createSystemProvider();
+    try {
+      if (type.equals(PERSONAL)) {
+        // look in user home
+        Node contactHomeNode = getPersonalContactsHome(sysp, username);
+        filter.setAccountPath(contactHomeNode.getPath());
+        qm = contactHomeNode.getSession().getWorkspace().getQueryManager();
+      } else if (type.equals(PUBLIC)) {
+        // look in all users
+        Node publicContactHomeNode = getPublicContactsHome(sysp);
+        String usersPath = nodeHierarchyCreator_.getJcrPath(USERS_PATH);
+        filter.setAccountPath(usersPath);
+        qm = publicContactHomeNode.getSession().getWorkspace().getQueryManager();
+      } else if (type.equals(SHARED)) {
+        // look in contacts shared to username
+        Node sharedAddressBookHolder = getSharedAddressBooksHome(sysp,username);
+        PropertyIterator iter = sharedAddressBookHolder.getReferences();
+        Node addressBook;
+        while (iter.hasNext()) {
+          addressBook = iter.nextProperty().getParent();
+          if (addressBook.getName().equals(filter.getCategories()[0])) {
+            Node contacts = addressBook.getParent().getParent().getNode(CONTACTS);
+            filter.setAccountPath(contacts.getPath());
+            qm = contacts.getSession().getWorkspace().getQueryManager();
+            break;
+          }
         }
       }
-    }      
-    if (qm != null) {
-      Query query = qm.createQuery(filter.getStatement(), Query.XPATH);
-      QueryResult result = query.execute();      
-      return new ContactPageList(username, result.getNodes(), 10, filter.getStatement(), true, type) ; 
+      if (qm != null) {
+        Query query = qm.createQuery(filter.getStatement(), Query.XPATH);
+        QueryResult result = query.execute();
+        return new ContactPageList(username,
+                                   result.getNodes(),
+                                   10,
+                                   filter.getStatement(),
+                                   true,
+                                   type);
+      }
+      return null;
+    } finally {
+      closeSessionProvider(sysp);
     }
-    return null ;
   }
   
   
@@ -401,20 +466,20 @@ public class JCRDataStorage {
     }
   }
 
-  public ContactPageList getContactPageListByGroup(String username, String groupId) throws Exception {
+  public ContactPageList findPersonalContactsByAddressBook(String owner, String addressBookId) throws Exception {
     SessionProvider sProvider = null;
     try {
       sProvider = createSessionProvider();
-      Node contactHome = getPersonalContactsHome(sProvider, username);
-      QueryManager qm = contactHome.getSession().getWorkspace().getQueryManager();
-      String queryString = new StringBuffer("/jcr:root" + contactHome.getPath()
-          + "//element(*,exo:contact)[@exo:categories='").append(groupId)
+      Node userContactsHome = getPersonalContactsHome(sProvider, owner);
+      QueryManager qm = userContactsHome.getSession().getWorkspace().getQueryManager();
+      String queryString = new StringBuffer("/jcr:root" + userContactsHome.getPath()
+          + "//element(*,exo:contact)[@exo:categories='").append(addressBookId)
                                                          .append("']")
                                                          .append("order by @exo:fullName,@exo:id ascending")
                                                          .toString();
       Query query = qm.createQuery(queryString.toString(), Query.XPATH);
       QueryResult result = query.execute();
-      ContactPageList pageList = new ContactPageList(username,
+      ContactPageList pageList = new ContactPageList(owner,
                                                      result.getNodes(),
                                                      10,
                                                      queryString,
@@ -768,31 +833,7 @@ public class JCRDataStorage {
 
 
   
-  private Node getSharedContact(String userId) throws Exception {
-    SessionProvider provider = SessionProvider.createSystemProvider();
-    try {
-    Node contactHome = getContactUserDataHome(provider, userId);
-    Node sharedHome ;
-    try {
-      sharedHome = contactHome.getNode(SHARED_HOME) ;
-    } catch (PathNotFoundException ex) {
-      sharedHome = contactHome.addNode(SHARED_HOME, NT_UNSTRUCTURED) ;
-      contactHome.save() ;
-    }    
-    try{
-      return sharedHome.getNode(SHARED_CONTACT) ;
-    }catch(PathNotFoundException ex) {
-      Node sharedContact = sharedHome.addNode(SHARED_CONTACT, NT_UNSTRUCTURED) ;
-      if(sharedContact.canAddMixin("mix:referenceable")) {
-        sharedContact.addMixin("mix:referenceable") ;
-      }
-      sharedHome.save() ;
-      return sharedContact ;
-    }
-    } finally {
-      //provider.close();
-    }
-  }
+
 
   public void removeUserShareContact(SessionProvider sProvider, String username, String contactId, String removedUser) throws Exception {
     Node contactNode ;

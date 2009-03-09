@@ -19,6 +19,7 @@ package org.exoplatform.contact.service;
 import java.util.List;
 import java.util.Map;
 
+import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 /**
@@ -44,7 +45,7 @@ public interface ContactService extends ContactServiceLegacy {
    * @return a contact page list 
    * @throws Exception 
    */
-  public ContactPageList getContactsByAddressBook(String username, String addressBookId) throws Exception ;
+  public ContactPageList getPersonalContactsByAddressBook(String username, String addressBookId) throws Exception ;
   
   /**
    * Get all email addresses of contacts in a personal address book
@@ -96,15 +97,28 @@ public interface ContactService extends ContactServiceLegacy {
   //public ContactPageList getContactPageListByTag(SessionProvider sProvider, String username, ContactFilter filter) throws Exception ;
   
   /**
-   * get contact page list base on id of address book was setted into a ContactFilter and type of this address book
-   * @return a contact page list in address book was setted into ContactFilter 
-   * @param sProvider should use system provider
-   * @param username current user
-   * @param filter setted some properties like : address book, sorted by, is Ascending...
-   * @param type type of address book : private or shared or public 
-   * @throws Exception 
+   * Get personal contacts by filter
+   * @param username owner user ID
+   * @param filter used to restrict results
+   * @return List of contacts
    */
-  public ContactPageList getContactPageListByGroup(SessionProvider sProvider, String username, ContactFilter filter, String type) throws Exception;
+  public ContactPageList getPersonalContactsByFilter(String username, ContactFilter filter) throws Exception  ;
+  
+  /**
+   * Get shared contacts by filter
+   * @param username owner user ID
+   * @param filter used to restrict results
+   * @return List of contacts
+   */
+  public ContactPageList getSharedContactsByFilter(String username, ContactFilter filter) throws Exception ;
+  
+  /**
+   * Get public contacts by filter
+   * @param username owner user ID
+   * @param filter used to restrict results
+   * @return List of contacts
+   */
+  public ContactPageList getPublicContactsByFilter(String username, ContactFilter filter) throws Exception  ;
   
   /**
    * search all contacts with some properties equals ContactFilter properties.

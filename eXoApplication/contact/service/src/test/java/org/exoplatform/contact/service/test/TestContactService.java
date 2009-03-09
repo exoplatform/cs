@@ -23,8 +23,16 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.jcr.AccessDeniedException;
+import javax.jcr.InvalidItemStateException;
+import javax.jcr.ItemExistsException;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.RepositoryException;
+import javax.jcr.lock.LockException;
+import javax.jcr.nodetype.ConstraintViolationException;
+import javax.jcr.nodetype.NoSuchNodeTypeException;
+import javax.jcr.version.VersionException;
 
 import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.Contact;
@@ -69,13 +77,30 @@ public class TestContactService extends BaseContactServiceTestCase {
   }
 
   private void clearUserData(String user) throws Exception {
-    Node userData = datastorage.getContactUserDataHome(sessionProvider, user);
-    NodeIterator it = userData.getNodes();
+    Node personalContactsHome = datastorage.getPersonalContactsHome(sessionProvider, user);
+    cleanChildren(personalContactsHome);
+    
+    Node addressBooksHome =  datastorage.getPersonalAddressBooksHome(sessionProvider, user);
+    cleanChildren(addressBooksHome);
+    
+    Node tagsHome =  datastorage.getTagsHome(sessionProvider, user);
+    cleanChildren(tagsHome);
+    
+    Node sharedAddressBooksHome = datastorage.getSharedAddressBooksHome(sessionProvider, user);
+    cleanChildren(sharedAddressBooksHome);
+    
+    Node sharedContactsHome = datastorage.getSharedContactsHome(sessionProvider, user);
+    cleanChildren(sharedContactsHome);   
+    
+  }
+
+  private void cleanChildren(Node parent) throws Exception {
+    NodeIterator it = parent.getNodes();
     while (it.hasNext()) {
       Node node = (Node) it.next();
       node.remove();
     }
-    userData.getSession().save();
+    parent.getSession().save();
   }
 
   public void testSaveGetAddressBook() throws Exception {
@@ -349,7 +374,7 @@ public class TestContactService extends BaseContactServiceTestCase {
     contactService.saveContact(root, createNewContactInAddressBooks(rootBook1), true);
     contactService.saveContact(root, createNewContactInAddressBooks(rootBook1), true);
     contactService.saveContact(root, createNewContactInAddressBooks(rootBook1), true);
-    ContactPageList pageList = contactService.getContactsByAddressBook(root, rootBook1.getId());
+    ContactPageList pageList = contactService.getPersonalContactsByAddressBook(root, rootBook1.getId());
     assertEquals("PageList size", pageList.getAll().size(), 3);
   }
   
@@ -458,6 +483,71 @@ public class TestContactService extends BaseContactServiceTestCase {
     
   }
 
+public void testGetPersonalContactByFilter() throws Exception {
+  AddressBook ab = createAddressBook("john's", "", john);
+  String addressBookId = ab.getId();
+  
+  // 2 contacts in john's address book
+  Contact contact1 = createNewContactInAddressBooks(ab);
+  contactService.saveContact(john, contact1, true);
+  Contact contact2 = createNewContactInAddressBooks(ab);
+  contactService.saveContact(john, contact2, true);
+  contactService.shareAddressBook(john, addressBookId, Arrays.asList(new String[]{root}));
+
+  // contact3 in root's contacts 
+  AddressBook rootsBook = createAddressBook("roots", "", root);
+  Contact contact3 = createNewContactInAddressBooks(rootsBook);
+  contactService.saveContact(root, contact3, true);
+  
+  ContactFilter filter = new ContactFilter();
+  filter.setCategories(new String[]{rootsBook.getId()}); // condition on addressbook
+  List<Contact> contacts = contactService.getPersonalContactsByFilter(root, filter).getAll();
+  
+  // verify only contacts 1 and 2 are listed
+  List<String> actual = new ArrayList<String>();
+  for (Contact contact : contacts) {
+    actual.add(contact.getId());
+  }
+  List<String> expected = Arrays.asList(new String[]{contact3.getId()});
+  assertContainsAll("Shared contacts don't match", expected, actual);
+  
+}
+
+public void testGetSharedContactsByFilter() throws Exception {
+ 
+  
+  AddressBook ab = createAddressBook("john's", "", john);
+  String addressBookId = ab.getId();
+  
+  // 2 contacts in john's address book
+  Contact contact1 = createNewContactInAddressBooks(ab);
+  contactService.saveContact(john, contact1, true);
+  Contact contact2 = createNewContactInAddressBooks(ab);
+  contactService.saveContact(john, contact2, true);
+  contactService.shareAddressBook(john, addressBookId, Arrays.asList(new String[]{root}));
+
+  // contact3 in root's contacts 
+  Contact contact3 = createNewContactInAddressBooks(createAddressBook("roots", "", root));
+  contactService.saveContact(root, contact3, true);
+  
+  ContactFilter filter = new ContactFilter();
+  filter.setCategories(new String[]{addressBookId}); // condition on addressbook
+  List<Contact> contacts = contactService.getSharedContactsByFilter(root, filter).getAll();
+  
+  // verify only contacts 1 and 2 are listed
+  List<String> actual = new ArrayList<String>();
+  for (Contact contact : contacts) {
+    actual.add(contact.getId());
+  }
+  List<String> expected = Arrays.asList(new String[]{contact1.getId(), contact2.getId()});
+  assertContainsAll("Shared contacts don't match", expected, actual);
+  
+}
+
+public void testGetPublicContactsByFilter() throws Exception {
+  // TODO : need to create self contact for several users then query them with getPublicContactsByFilter()
+}
+  
   public void _testContactService() throws Exception {
     /**
      * Test AddressBook
@@ -561,7 +651,7 @@ public class TestContactService extends BaseContactServiceTestCase {
     //assertEquals(contactService.getAllEmailAddressByGroup(sessionProvider, root, rootBook1.getId()).size(), 3);
 
     // move contact:
-    assertEquals(contactService.getContactsByAddressBook(root, rootBook2.getId())
+    assertEquals(contactService.getPersonalContactsByAddressBook(root, rootBook2.getId())
                                .getAll()
                                .size(), 1);
     contact4.setAddressBook(new String[] { rootBook2.getId() });
@@ -571,7 +661,7 @@ public class TestContactService extends BaseContactServiceTestCase {
                                 root,
                                 Arrays.asList(new Contact[] { contact4 }),
                                 JCRDataStorage.PERSONAL);
-    assertEquals(contactService.getContactsByAddressBook(root, rootBook2.getId())
+    assertEquals(contactService.getPersonalContactsByAddressBook(root, rootBook2.getId())
                                .getAll()
                                .size(), 2);
 
@@ -634,7 +724,7 @@ public class TestContactService extends BaseContactServiceTestCase {
     shareContact.setAddressBook(new String[] { sharedBook.getId() });
     contactService.saveContact(root, shareContact, true);
 
-    assertEquals(contactService.getContactsByAddressBook(root, sharedBook.getId())
+    assertEquals(contactService.getPersonalContactsByAddressBook(root, sharedBook.getId())
                                .getAll()
                                .size(),
                  1);
@@ -656,14 +746,14 @@ public class TestContactService extends BaseContactServiceTestCase {
                                        john,
                                        sharedBook.getId(),
                                        shareContact.getId());
-    assertEquals(contactService.getContactsByAddressBook(root, sharedBook.getId())
+    assertEquals(contactService.getPersonalContactsByAddressBook(root, sharedBook.getId())
                                .getAll()
                                .size(),
                  0);
 
     // save contact to share addressbook:
     contactService.saveContactToSharedAddressBook(john, sharedBook.getId(), shareContact, true);
-    assertEquals(contactService.getContactsByAddressBook(root, sharedBook.getId())
+    assertEquals(contactService.getPersonalContactsByAddressBook(root, sharedBook.getId())
                                .getAll()
                                .size(),
                  1);

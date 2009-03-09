@@ -192,7 +192,7 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
         if (isExportAll) {
           ContactPageList pageList = null ;          
           if (address[0].equals(JCRDataStorage.PERSONAL)) {
-            pageList = contactService.getContactsByAddressBook(
+            pageList = contactService.getPersonalContactsByAddressBook(
                 username, address[1]) ;  
           } else if (address[0].equals(JCRDataStorage.SHARED)) {
             SharedAddressBook sharedAddress = uiContactPortlet.findFirstComponentOfType(

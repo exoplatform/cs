@@ -177,7 +177,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
       if (pageList_ != null) currentPage = pageList_.getCurrentPage() ;
       ContactPageList pageList = null ;
       if (getPrivateGroupMap().containsKey(selectedGroup)) {
-        pageList = ContactUtils.getContactService().getContactsByAddressBook(
+        pageList = ContactUtils.getContactService().getPersonalContactsByAddressBook(
             ContactUtils.getCurrentUser(), selectedGroup);
       } else if (ContactUtils.getUserGroups().contains(selectedGroup)) {
         pageList = ContactUtils.getContactService()
@@ -1245,19 +1245,20 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         filter.setOrderBy(sortedBy);
         filter.setCategories(new String[] { group } ) ;
 
-        String type = null;
-        UIAddressBooks addressBooks = uiContacts.getAncestorOfType(
-            UIWorkingContainer.class).findFirstComponentOfType(UIAddressBooks.class) ;
-        if (addressBooks.getPrivateGroupMap().containsKey(group)) type = JCRDataStorage.PERSONAL ;
-        else if (addressBooks.getSharedGroups().containsKey(group)) type = JCRDataStorage.SHARED ;
-        else type = JCRDataStorage.PUBLIC ;
+
+        UIAddressBooks addressBooks = uiContacts.getAncestorOfType(UIWorkingContainer.class)
+                                                .findFirstComponentOfType(UIAddressBooks.class);
+        if (addressBooks.getPrivateGroupMap().containsKey(group))
+          pageList = ContactUtils.getContactService()
+                                 .getPersonalContactsByFilter(ContactUtils.getCurrentUser(), filter);
+        else if (addressBooks.getSharedGroups().containsKey(group))
+          pageList = ContactUtils.getContactService()
+                                 .getSharedContactsByFilter(ContactUtils.getCurrentUser(), filter);
+        else
+          pageList = ContactUtils.getContactService()
+                                 .getPublicContactsByFilter(ContactUtils.getCurrentUser(), filter);
         
-        //else if (addressBooks.getPublicGroupMap().containsKey(group)) type = JCRDataStorage.PUBLIC ;
-        
-        if(type != null)
-          pageList = ContactUtils.getContactService().getContactPageListByGroup(
-            SessionProviderFactory.createSystemProvider(),ContactUtils.getCurrentUser(), filter, type) ;
-        
+
       } else {      //selected group = null ;
           pageList = uiContacts.pageList_ ;
           if (pageList != null) {

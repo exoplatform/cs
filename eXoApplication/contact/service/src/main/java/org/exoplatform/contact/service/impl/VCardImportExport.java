@@ -113,14 +113,14 @@ public class VCardImportExport implements ContactImportExport {
     if(privateAddress.size() > 0) {
       ContactFilter filter = new ContactFilter() ;
       filter.setCategories(privateAddress.toArray(new String[]{})) ;
-      ContactPageList pageList = storage_.getContactPageListByGroup(sProvider, username, filter, JCRDataStorage.PERSONAL) ;
+      ContactPageList pageList = storage_.findContactsByFilter(username, filter, JCRDataStorage.PERSONAL) ;
       if (pageList.getAvailable() + contactList.size() >= Utils.limitExport) throw new ArrayIndexOutOfBoundsException() ;
       contactList.addAll(pageList.getAll()) ;
     }
     if(publicAddress.size() > 0) {
       ContactFilter filter = new ContactFilter() ;
       filter.setCategories(publicAddress.toArray(new String[]{})) ;
-      ContactPageList pageList = storage_.getContactPageListByGroup(sProvider, username, filter, JCRDataStorage.PUBLIC) ;
+      ContactPageList pageList = storage_.findContactsByFilter(username, filter, JCRDataStorage.PUBLIC) ;
       if (pageList.getAvailable() + contactList.size() >= Utils.limitExport) throw new ArrayIndexOutOfBoundsException() ;
       contactList.addAll(pageList.getAll()) ;
     }

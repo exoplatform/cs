@@ -41,6 +41,6 @@ public class UIContactContainer extends UIContainer  {
   public void setSeletedGroup(String group) throws Exception{
     ContactService contactService = ContactUtils.getContactService() ;
     getChild(UIContacts.class)
-    .setContacts(contactService.getContactsByAddressBook(ContactUtils.getCurrentUser(), group)) ;
+    .setContacts(contactService.getPersonalContactsByAddressBook(ContactUtils.getCurrentUser(), group)) ;
   }
 }

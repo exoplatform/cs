@@ -48,7 +48,6 @@ public class ContactServiceImpl implements ContactService {
   
   public ContactServiceImpl(NodeHierarchyCreator nodeHierarchyCreator) throws Exception {
       storage_ = new JCRDataStorage(nodeHierarchyCreator) ;
-      
       contactImportExport_.put(VCARD, new VCardImportExport(storage_)) ;
   }
   
@@ -62,33 +61,44 @@ public class ContactServiceImpl implements ContactService {
   /**
    * {@inheritDoc}
    */  
-  public Map<String, String> searchEmails(String username, ContactFilter filter)throws Exception {
+  public Map<String, String> searchEmails(String username, ContactFilter filter) throws Exception {
     return storage_.findEmailsByFilter(username, filter) ;
   }
   
-
-  /*
-  public ContactPageList getContactPageListByTag(String username, ContactFilter filter) throws Exception {
-    return storage_.getContactPageListByTag(username, filter);
-  }*/
-  
   /**
    * {@inheritDoc}
    */
-  public ContactPageList getContactsByAddressBook(String username, String groupId) throws Exception {
-    return storage_.getContactPageListByGroup(username, groupId);
+  public ContactPageList getPersonalContactsByAddressBook(String ownerId, String addressBookId) throws Exception {
+    return storage_.findPersonalContactsByAddressBook(ownerId, addressBookId);
   }
-  
+ 
 
-  public ContactPageList getContactPageListByGroup(SessionProvider sProvider, String username, ContactFilter filter, String type) throws Exception {
-    return storage_.getContactPageListByGroup(sProvider, username, filter, type) ;
+  /**
+   * {@inheritDoc}
+   */
+  public ContactPageList getPersonalContactsByFilter(String username, ContactFilter filter) throws Exception {
+    return storage_.findContactsByFilter(username, filter, JCRDataStorage.PERSONAL) ;
   }
   
   /**
    * {@inheritDoc}
    */
-  public List<String> getEmailsByAddressBook(String username, String groupId) throws Exception {
-    return storage_.findEmailsInPersonalAddressBook(username, groupId);
+  public ContactPageList getSharedContactsByFilter(String username, ContactFilter filter) throws Exception {
+    return storage_.findContactsByFilter(username, filter, JCRDataStorage.SHARED) ;
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public ContactPageList getPublicContactsByFilter(String username, ContactFilter filter) throws Exception {
+    return storage_.findContactsByFilter(username, filter, JCRDataStorage.PUBLIC) ;
+  }  
+  
+  /**
+   * {@inheritDoc}
+   */
+  public List<String> getEmailsByAddressBook(String username, String addressBookId) throws Exception {
+    return storage_.findEmailsInPersonalAddressBook(username, addressBookId);
   }
   
 
@@ -305,7 +315,7 @@ public class ContactServiceImpl implements ContactService {
    * {@inheritDoc}
    */
   public ContactPageList getContactPageListByGroup(SessionProvider sProvider, String username, String groupId) throws Exception {
-    return getContactsByAddressBook(username, groupId);
+    return getPersonalContactsByAddressBook(username, groupId);
   }
   
   /**
@@ -393,5 +403,11 @@ public class ContactServiceImpl implements ContactService {
     return searchEmails(username, filter) ;
   }
     
-
+  /**
+   * {@inheritDoc}
+   */
+  public ContactPageList getContactPageListByGroup(SessionProvider sProvider, String username, ContactFilter filter, String type) throws Exception {
+    return storage_.findContactsByFilter(username, filter, type);
+  }
+  
 }

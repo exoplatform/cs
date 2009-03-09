@@ -262,7 +262,7 @@ public class UIAddressBooks extends UIComponent {
         if (privateGroup.containsKey(addressBookId)) {
           uiExportForm.setSelectedGroup(JCRDataStorage.PERSONAL + Utils.SPLIT +
               addressBookId + Utils.SPLIT + privateGroup.get(addressBookId)) ;
-          contacts = contactService.getContactsByAddressBook(username, addressBookId) ;
+          contacts = contactService.getPersonalContactsByAddressBook(username, addressBookId) ;
         } else if (ContactUtils.getUserGroups().contains(addressBookId)){        
           uiExportForm.setSelectedGroup(JCRDataStorage.PUBLIC + Utils.SPLIT +
               addressBookId + Utils.SPLIT + addressBookId) ;
@@ -506,7 +506,7 @@ public class UIAddressBooks extends UIComponent {
       } else {
 //      cs-1644
         //if (uiContacts.isDisplaySearchResult())
-        removedContacts = contactService.getContactsByAddressBook(
+        removedContacts = contactService.getPersonalContactsByAddressBook(
               username, groupId).getAll() ;
         contactService.removeAddressBook(username, groupId);
       }
@@ -544,7 +544,7 @@ public class UIAddressBooks extends UIComponent {
       String groupId = event.getRequestContext().getRequestParameter(OBJECTID);
       uiAddressBook.selectedGroup = groupId ;
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class);
-      uiContacts.setContacts(ContactUtils.getContactService().getContactsByAddressBook(
+      uiContacts.setContacts(ContactUtils.getContactService().getPersonalContactsByAddressBook(
           ContactUtils.getCurrentUser(), groupId));
       uiContacts.setSortedBy(UIContacts.fullName) ;
       uiContacts.setSelectedGroup(groupId);
@@ -635,7 +635,7 @@ public class UIAddressBooks extends UIComponent {
       SessionProvider provide = SessionProviderFactory.createSessionProvider() ;
       ContactPageList pageList = null ;
       if (uiAddressBook.privateAddressBookMap_.containsKey(groupId)) {
-        pageList = service.getContactsByAddressBook(username, groupId) ;
+        pageList = service.getPersonalContactsByAddressBook(username, groupId) ;
       } else if (uiAddressBook.sharedAddressBookMap_.containsKey(groupId)){
          pageList = service.getSharedContactsByAddressBook(
             provide, username, uiAddressBook.sharedAddressBookMap_.get(groupId)) ;
