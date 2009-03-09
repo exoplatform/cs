@@ -3,6 +3,7 @@
 	import org.exoplatform.contact.service.Contact;
 	import org.exoplatform.contact.ContactUtils;
 	import org.exoplatform.contact.service.ContactAttachment;
+	def rcontext = _ctx.getRequestContext() ;
 %>
 
 <div class="UIContactPreview">
