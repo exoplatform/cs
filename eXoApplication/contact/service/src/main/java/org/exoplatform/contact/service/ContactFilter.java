@@ -43,6 +43,7 @@ public class ContactFilter {
   private String isOwner = null ;
   private String username = null ;
   private String type = null ;
+  private boolean hasEmails = false;
   
   public ContactFilter() { isAscending = true ; }
   
@@ -102,6 +103,10 @@ public class ContactFilter {
   
   public boolean isAscending() { return isAscending; }
   public void setAscending(boolean b) { this.isAscending = b; } 
+  
+  public void setHasEmails( boolean hasEmails) {
+    this.hasEmails = hasEmails;
+  }
   
   public String getStatement() throws Exception {
     StringBuffer queryString = new StringBuffer("/jcr:root" + (accountPath == null ? "" : accountPath) + "//element(*,exo:contact)") ;
@@ -229,6 +234,15 @@ public class ContactFilter {
       stringBuffer.append(")") ;
       hasConjuntion = true ;
     }
+    
+    if (hasEmails) {
+      if (hasConjuntion) stringBuffer.append(" and (");
+      else stringBuffer.append("(") ;
+      stringBuffer.append("@exo:emailAddress");
+      stringBuffer.append(")") ;
+      hasConjuntion = true;
+    }
+    
     if (isOwner != null && isOwner.trim().length() > 0) {
       if(hasConjuntion) stringBuffer.append(" and (") ;
       else stringBuffer.append("(") ;

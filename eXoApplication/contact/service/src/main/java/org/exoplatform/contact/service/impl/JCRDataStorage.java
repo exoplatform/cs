@@ -32,7 +32,9 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.PropertyIterator;
+import javax.jcr.RepositoryException;
 import javax.jcr.Value;
+import javax.jcr.ValueFormatException;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
@@ -1949,6 +1951,7 @@ public class JCRDataStorage {
   public Map<String, String> findEmailsByFilter(String username, ContactFilter filter)throws Exception {
     Map<String, String> emails = new LinkedHashMap<String, String>() ;
     filter.setUsername(username) ;
+    filter.setHasEmails(true); // contact must have emails
     SessionProvider sysProvider = SessionProvider.createSystemProvider();
     try {
     //public contacts
@@ -1962,9 +1965,8 @@ public class JCRDataStorage {
     NodeIterator itpublic = query.execute().getNodes();
     while(itpublic.hasNext()) {
       Node contactNode = itpublic.nextNode() ;
-      if (contactNode.hasProperty("exo:emailAddress"))
-        emails.put(contactNode.getProperty("exo:id").getString(), contactNode.getProperty("exo:fullName").getString() 
-          + Utils.SPLIT + contactNode.getProperty("exo:emailAddress").getString()) ;
+      //if (contactNode.hasProperty("exo:emailAddress"))
+        feedEmailResult(emails, contactNode);
     }
     filter.setOwner(null) ;
 
@@ -1977,9 +1979,8 @@ public class JCRDataStorage {
       NodeIterator it = query.execute().getNodes() ;
       while(it.hasNext()) {
         Node contactNode = it.nextNode() ;
-        if (contactNode.hasProperty("exo:emailAddress"))
-          emails.put(contactNode.getProperty("exo:id").getString(), contactNode.getProperty("exo:fullName").getString() 
-            + Utils.SPLIT + contactNode.getProperty("exo:emailAddress").getString()) ;        
+        //if (contactNode.hasProperty("exo:emailAddress"))
+          feedEmailResult(emails, contactNode);        
       }
     }
 
@@ -2002,9 +2003,8 @@ public class JCRDataStorage {
           NodeIterator it = query.execute().getNodes() ;
           while(it.hasNext()) {
             Node contactNode = it.nextNode() ;
-            if (contactNode.hasProperty("exo:emailAddress"))
-              emails.put(contactNode.getProperty("exo:id").getString(), contactNode.getProperty("exo:fullName").getString() 
-                + Utils.SPLIT + contactNode.getProperty("exo:emailAddress").getString()) ;  
+            //if (contactNode.hasProperty("exo:emailAddress"))
+              feedEmailResult(emails, contactNode);  
           }
         }catch(Exception e){
           e.printStackTrace() ;
@@ -2028,15 +2028,22 @@ public class JCRDataStorage {
       NodeIterator it = query.execute().getNodes() ;
       while(it.hasNext()) {
         Node contactNode = it.nextNode() ;
-        if (contactNode.hasProperty("exo:emailAddress"))
-          emails.put(contactNode.getProperty("exo:id").getString(), contactNode.getProperty("exo:fullName").getString() 
-            + Utils.SPLIT + contactNode.getProperty("exo:emailAddress").getString()) ; 
+        //if (contactNode.hasProperty("exo:emailAddress"))
+          feedEmailResult(emails, contactNode); 
       }
     }
     return emails ;
     } finally {
       if (sysProvider != null) sysProvider.close();
     }
+  }
+
+
+  private void feedEmailResult(Map<String, String> emails, Node contactNode) throws Exception {
+    String id = contactNode.getProperty("exo:id").getString();
+    String fullName = contactNode.getProperty("exo:fullName").getString() ;
+    String emailAddresses = contactNode.getProperty("exo:emailAddress").getString();
+    emails.put(id, fullName + Utils.SPLIT + emailAddresses) ;
   }
   
   
