@@ -16,7 +16,6 @@
  */
 package org.exoplatform.contact.service.test;
 
-import java.util.Arrays;
 import java.util.List;
 
 import javax.jcr.Node;

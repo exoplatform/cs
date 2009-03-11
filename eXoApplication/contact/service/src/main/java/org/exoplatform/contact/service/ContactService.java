@@ -19,7 +19,6 @@ package org.exoplatform.contact.service;
 import java.util.List;
 import java.util.Map;
 
-import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 
 /**
