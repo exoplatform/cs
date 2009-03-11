@@ -6,6 +6,7 @@
  */
 function UICalendarPortlet(){
 	this.clickone = 0 ;
+	this.portletId = "calendars";
 }
 
 /**
@@ -719,7 +720,7 @@ UICalendarPortlet.prototype.ondblclickCallback = function(){
     var eventId = this.getAttribute("eventId");
     var calendarId = this.getAttribute("calid");
     var calendarType = this.getAttribute("caltype");
-    eXo.webui.UIForm.submitEvent('calendar#' + eXo.calendar.UICalendarPortlet.viewType, 'Edit', '&subComponentId=' + eXo.calendar.UICalendarPortlet.viewType + '&objectId=' + eventId + '&calendarId=' + calendarId + '&calType=' + calendarType);
+    eXo.webui.UIForm.submitEvent(eXo.calendar.UICalendarPortlet.portletId + '#' + eXo.calendar.UICalendarPortlet.viewType, 'Edit', '&subComponentId=' + eXo.calendar.UICalendarPortlet.viewType + '&objectId=' + eventId + '&calendarId=' + calendarId + '&calType=' + calendarType);
 }
 
 /**
@@ -1497,7 +1498,7 @@ UICalendarPortlet.prototype.ondblclickCallbackInListView = function(obj){
 	var eventId = obj.getAttribute("eventid");
 	var calendarId = obj.getAttribute("calid");
 	var calendarType = obj.getAttribute("caltype");
-	eXo.webui.UIForm.submitEvent('calendar#' + eXo.calendar.UICalendarPortlet.viewType, 'Edit', '&subComponentId=' + eXo.calendar.UICalendarPortlet.viewType + '&objectId=' + eventId + '&calendarId=' + calendarId + '&calType=' + calendarType);
+	eXo.webui.UIForm.submitEvent(eXo.calendar.UICalendarPortlet.portletId+'#' + eXo.calendar.UICalendarPortlet.viewType, 'Edit', '&subComponentId=' + eXo.calendar.UICalendarPortlet.viewType + '&objectId=' + eventId + '&calendarId=' + calendarId + '&calType=' + calendarType);
 };
 
 UICalendarPortlet.prototype.listViewDblClickCallback = function(){
