@@ -68,6 +68,7 @@ import org.exoplatform.mail.service.Tag;
 import org.exoplatform.mail.service.Utils;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.services.jcr.impl.core.query.QueryImpl;
 import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.ws.frameworks.cometd.ContinuationService;
 import org.exoplatform.ws.frameworks.json.impl.JsonGeneratorImpl;
@@ -232,18 +233,24 @@ public class JCRDataStorage {
   public Message getMessageById(SessionProvider sProvider, String username, String accountId,
       String msgId) throws Exception {
     Node accountNode = getMailHomeNode(sProvider, username).getNode(accountId);
-    Session sess = accountNode.getSession();
-    QueryManager qm = sess.getWorkspace().getQueryManager();
     StringBuffer queryString = new StringBuffer("/jcr:root" + accountNode.getPath()
         + "//element(*,exo:message)[@exo:id='").append(msgId).append("']");
-    Query query = qm.createQuery(queryString.toString(), Query.XPATH);
-    QueryResult result = query.execute();
+    QueryImpl queryImpl = createXPathQuery(sProvider, username, accountId, queryString.toString());
+    queryImpl.setOffset(0);
+    queryImpl.setLimit(1);
+    QueryResult result = queryImpl.execute();
     NodeIterator it = result.getNodes();
     Node node = null;
-    if (it.hasNext())
-      node = it.nextNode();
+    if (it.hasNext()) node = it.nextNode();
     Message msg = getMessage(node);
     return msg;
+  }
+  
+  private QueryImpl createXPathQuery(SessionProvider sProvider, String username, String accountId, String xpath) throws Exception {
+    Node accountNode = getMailHomeNode(sProvider, username).getNode(accountId);
+    Session sess = accountNode.getSession();
+    QueryManager queryManager = sess.getWorkspace().getQueryManager();
+    return (QueryImpl) queryManager.createQuery(xpath, Query.XPATH);
   }
 
   public MailSetting getMailSetting(SessionProvider sProvider, String username) throws Exception {
@@ -300,22 +307,14 @@ public class JCRDataStorage {
     return setting;
   }
 
-  public MessagePageList getMessagePageList(SessionProvider sProvider, String username,
-      MessageFilter filter) throws Exception {
+  public MessagePageList getMessagePageList(SessionProvider sProvider, String username, MessageFilter filter) throws Exception {
     Node homeMsg = getMessageHome(sProvider, username, filter.getAccountId());
     filter.setAccountPath(homeMsg.getPath());
-    QueryManager qm = homeMsg.getSession().getWorkspace().getQueryManager();
-    String queryString = filter.getStatement();
     long pageSize = getMailSetting(sProvider, username).getNumberMsgPerPage();
-    Query query = qm.createQuery(queryString, Query.XPATH);
-    QueryResult result = query.execute();
-    MessagePageList pageList = new MessagePageList(result.getNodes(), pageSize, queryString, true,
-        filter.hasStructure());
-    return pageList;
+    return new MessagePageList(pageSize, filter.getStatement(), filter.hasStructure());
   }
 
-  public List<Message> getMessages(SessionProvider sProvider, String username, MessageFilter filter)
-  throws Exception {
+  public List<Message> getMessages(SessionProvider sProvider, String username, MessageFilter filter) throws Exception {
     Node homeMsg = getMessageHome(sProvider, username, filter.getAccountId());
     filter.setAccountPath(homeMsg.getPath());
     QueryManager qm = homeMsg.getSession().getWorkspace().getQueryManager();
