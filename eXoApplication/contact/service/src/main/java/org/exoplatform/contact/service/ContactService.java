@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.organization.User;
 
 /**
  * Created by The eXo Platform SARL
@@ -452,5 +453,12 @@ public interface ContactService extends ContactServiceLegacy {
    * @throws Exception 
    */
   public String[] getImportExportType() throws Exception ;
+  
+  /**
+   * save default address and default contact of new user
+   * @throws Exception 
+   */
+  public void registerNewUser(User user, boolean isNew) throws Exception ;
+  
   
 }

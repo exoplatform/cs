@@ -59,6 +59,9 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.jcr.util.IdGenerator;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.User;
+import org.exoplatform.services.organization.impl.GroupImpl;
 
 /**
  * Created by The eXo Platform SARL
@@ -2391,6 +2394,107 @@ public class JCRDataStorage {
     }
   }
   
-  
+  public void registerNewUser(User user, boolean isNew) throws Exception {
+    Contact contact = null ;
+    if (isNew) contact = new Contact() ;
+    else contact = loadPublicContactByUser(user.getUserName()) ;
+    if (contact != null) {
+      contact.setFullName(user.getFirstName() + " " + user.getLastName()) ;
+      contact.setFirstName(user.getFirstName()) ;
+      contact.setLastName(user.getLastName()) ;
+      contact.setEmailAddress(user.getEmail()) ;    
+      Calendar cal = new GregorianCalendar() ;
+      contact.setLastUpdated(cal.getTime()) ;
+    }
+    SessionProvider sysProvider = createSystemProvider() ;
+    try {
+      if(isNew) {
+        AddressBook addressbook = new AddressBook() ;
+        addressbook.setId(NewUserListener.DEFAULTGROUP+user.getUserName()) ;
+        addressbook.setName(NewUserListener.DEFAULTGROUPNAME) ;
+        addressbook.setDescription(NewUserListener.DEFAULTGROUPDES) ;
+        Node groupNode = getPersonalAddressBooksHome(sysProvider, user.getUserName()).addNode(addressbook.getId(), "exo:contactGroup");
+        groupNode.setProperty("exo:id", addressbook.getId()); 
+        groupNode.setProperty("exo:name", addressbook.getName());
+        groupNode.setProperty("exo:description", addressbook.getDescription());
+        groupNode.setProperty("exo:editPermissionUsers", addressbook.getEditPermissionUsers()) ;
+        groupNode.setProperty("exo:viewPermissionUsers", addressbook.getViewPermissionUsers()) ;
+        groupNode.setProperty("exo:editPermissionGroups", addressbook.getEditPermissionGroups()) ;
+        groupNode.setProperty("exo:viewPermissionGroups", addressbook.getViewPermissionGroups()) ;
+        groupNode.getSession().save() ;
+        
+        // save contact
+        contact.setId(user.getUserName()) ;
+        Map<String, String> groupIds = new LinkedHashMap<String, String>() ;
+        groupIds.put(addressbook.getId(), addressbook.getId()) ;   
+        ExoContainer container = ExoContainerContext.getCurrentContainer();
+        OrganizationService organizationService = 
+          (OrganizationService)container.getComponentInstanceOfType(OrganizationService.class) ;
+        Object[] groupsOfUser = organizationService.getGroupHandler().findGroupsOfUser(user.getUserName()).toArray() ;
+        for (Object object : groupsOfUser) {
+          String id = ((GroupImpl)object).getId() ;
+          groupIds.put(id, id) ;
+        }
+        
+        contact.setAddressBookIds(groupIds.keySet().toArray(new String[] {})) ;
+        contact.setOwner(true) ;
+        contact.setOwnerId(user.getUserName()) ;
+        saveContact(user.getUserName(), contact, true) ;
+
+        JCRDataStorage storage_ = new JCRDataStorage(nodeHierarchyCreator_) ;
+        Node publicContactHome = storage_.getPublicContactsHome(sysProvider) ;      
+        String usersPath = nodeHierarchyCreator_.getJcrPath(JCRDataStorage.USERS_PATH) ;
+        QueryManager qm = publicContactHome.getSession().getWorkspace().getQueryManager();
+        List<String> recievedUser = new ArrayList<String>() ;
+        recievedUser.add(user.getUserName()) ;
+
+        
+        for (Object object : groupsOfUser) {  
+          String groupId = ((GroupImpl)object).getId() ;
+          // get all address books that current user can see thank to his groups
+          StringBuffer queryString = new StringBuffer("/jcr:root" + usersPath 
+              + "//element(*,exo:contactGroup)[@exo:viewPermissionGroups='").append(groupId + "']") ;        
+          Query query = qm.createQuery(queryString.toString(), Query.XPATH);
+          QueryResult result = query.execute();
+          NodeIterator nodes = result.getNodes() ;
+          while (nodes.hasNext()) {
+            Node addressBook = nodes.nextNode() ;
+            //share between adressbook owner and current user
+            storage_.shareAddressBook(addressBook.getProperty("exo:sharedUserId")
+                .getString(), addressBook.getProperty("exo:id").getString(), recievedUser) ;
+          }
+
+          // lookup shared contacts that user can see thank to his groups
+          queryString = new StringBuffer("/jcr:root" + usersPath 
+              + "//element(*,exo:contact)[@exo:viewPermissionGroups='").append(groupId + "']") ;        
+          query = qm.createQuery(queryString.toString(), Query.XPATH);
+          result = query.execute();
+          nodes = result.getNodes() ;
+          while (nodes.hasNext()) {
+            Node contactNode = nodes.nextNode() ;
+            String split = "/" ;
+            String temp = contactNode.getPath().split(usersPath)[1] ;
+            String userId = temp.split(split)[1] ;
+            storage_.shareContact(sysProvider, userId,
+                new String[] {contactNode.getProperty("exo:id").getString()}, recievedUser) ;
+          }
+        }
+        Node userApp = nodeHierarchyCreator_.getUserApplicationNode(sysProvider, user.getUserName()) ;
+        //reparePermissions(userApp, user.getUserName()) ;
+        //reparePermissions(userApp.getNode("ContactApplication"), user.getUserName()) ;
+        //reparePermissions(userApp.getNode("ContactApplication/contactGroup"), user.getUserName()) ;
+        //reparePermissions(userApp.getNode("ContactApplication/contactGroup/" + group.getId()), user.getUserName()) ;
+        userApp.getSession().save() ;   
+      } else {
+        if (contact != null) {
+          saveContact(user.getUserName(), contact, false) ; 
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace() ;
+    } finally {
+      sysProvider.close();
+    }
+  }
   
 }

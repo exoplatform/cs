@@ -32,6 +32,7 @@ import org.exoplatform.contact.service.Tag;
 import org.exoplatform.contact.service.DataPageList;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
+import org.exoplatform.services.organization.User;
 
 /**
  * Created by The eXo Platform SARL
@@ -408,6 +409,10 @@ public class ContactServiceImpl implements ContactService {
    */
   public ContactPageList getContactPageListByGroup(SessionProvider sProvider, String username, ContactFilter filter, String type) throws Exception {
     return storage_.findContactsByFilter(username, filter, type);
+  }
+
+  public void registerNewUser(User user, boolean isNew) throws Exception {
+    storage_.registerNewUser(user, isNew) ;
   }
   
 }
