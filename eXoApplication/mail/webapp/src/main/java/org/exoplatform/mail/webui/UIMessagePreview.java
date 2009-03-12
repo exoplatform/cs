@@ -31,6 +31,7 @@ import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.JCRMessageAttachment;
 import org.exoplatform.mail.service.MailService;
@@ -336,7 +337,14 @@ public class UIMessagePreview extends UIComponent {
       Message msg = uiMsgPreview.getShowedMessageById(msgId) ;
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
       UIPrintPreview uiPrintPreview = uiPopup.activate(UIPrintPreview.class, 700) ;
-      uiPrintPreview.setPrintMessage(msg) ;
+      String username = MailUtils.getCurrentUser();
+      MailService mailSrv = MailUtils.getMailService();
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      Account acc = mailSrv.getAccountById(SessionProviderFactory.createSystemProvider(), username, accountId);
+      if (acc != null) {
+        uiPrintPreview.setAcc(acc) ; 
+        uiPrintPreview.setPrintMessage(msg) ;
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
     }
   }
