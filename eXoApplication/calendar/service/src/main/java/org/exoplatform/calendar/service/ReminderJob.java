@@ -57,6 +57,7 @@ public class ReminderJob implements Job {
       config.setUserName(jdatamap.getString("account"));
       config.setPassword(jdatamap.getString("password"));
       config.setSsl(jdatamap.getBooleanValueFromString("ssl"));
+      config.setOutgoingSsl(jdatamap.getBooleanValueFromString("ssl")) ;
       config.setOutgoingHost(jdatamap.getString("outgoing"));
       config.setOutgoingPort(jdatamap.getString("port"));
       Node calendarHome = getPublicServiceHome(provider);
