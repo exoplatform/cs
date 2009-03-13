@@ -10,7 +10,7 @@
 	    <uri>collaboration</uri>
 	    <name>collaboration</name>
 	    <label>#{platform.users.collaboration}</label>
-	    <page-reference>group::platform/users::collaboration</page-reference>
+	    <!--page-reference>group::platform/users::collaboration</page-reference-->
 	    	    
 	    <node>
 		    <uri>collaboration/content</uri>
