@@ -1,3 +1,4 @@
+
 <nodeTypes xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0">
   	<nodeType	name="exo:reminder" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
   		<supertypes>
@@ -10,13 +11,16 @@
 	  		<propertyDefinition name="exo:eventId" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   				<valueConstraints/>
 	  		</propertyDefinition>
+			<propertyDefinition name="exo:creator" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>
 	  		<propertyDefinition name="exo:alarmBefore" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   				<valueConstraints/>
 	  		</propertyDefinition>
 	  		<propertyDefinition name="exo:email" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   				<valueConstraints/>
 	  		</propertyDefinition>
-	  		<propertyDefinition name="exo:repeatInterval" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  		<propertyDefinition name="exo:timeInterval" requiredType="Long" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   				<valueConstraints/>
 	  		</propertyDefinition>	  		
 	  		<propertyDefinition name="exo:reminderType" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
@@ -34,7 +38,10 @@
 	  		<propertyDefinition name="exo:isOver" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   				<valueConstraints/>
 	  		</propertyDefinition>
-	  		<propertyDefinition name="exo:eventSummary" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  		<propertyDefinition name="exo:summary" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>
+				<propertyDefinition name="exo:description" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   				<valueConstraints/>
 	  		</propertyDefinition>
 	  	</propertyDefinitions>	
@@ -74,7 +81,10 @@
 	  		</propertyDefinition>	  		
 	  		<propertyDefinition name="exo:eventCategoryId" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   				<valueConstraints/>
-	  		</propertyDefinition>	  		
+	  		</propertyDefinition>	  
+				<propertyDefinition name="exo:eventCategoryName" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  				<valueConstraints/>
+	  		</propertyDefinition>	  			
 	  		<propertyDefinition name="exo:calendarId" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   				<valueConstraints/>
 	  		</propertyDefinition>	  		
@@ -304,7 +314,7 @@
 	  		<propertyDefinition name="exo:workingTimeEnd" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   				<valueConstraints/>
 	  		</propertyDefinition>
-	  		<propertyDefinition name="exo:baseURL" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+	  		<propertyDefinition name="exo:baseUrl" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   				<valueConstraints/>
 	  		</propertyDefinition>	  					
 	  		<propertyDefinition name="exo:defaultPrivateCalendars" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
@@ -329,11 +339,5 @@
 	      </propertyDefinition>        
 	    </propertyDefinitions>
 	  </nodeType>  	 	
-</nodeTypes>  
-  
-   
-  
-
-
-
+</nodeTypes>
   
