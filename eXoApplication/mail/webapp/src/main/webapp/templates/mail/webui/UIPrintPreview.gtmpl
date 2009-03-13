@@ -12,7 +12,7 @@
   def rcontext = _ctx.getRequestContext() ;
   JavascriptManager jsmanager = rcontext.getJavascriptManager();
   jsmanager.importJavascript('eXo.mail.UIMailPortlet');
-  jsmanager.addJavascript("eXo.mail.UIMailPortlet.showPrintPreview(document.getElementById('printWrapper'));");
+  jsmanager.addCustomizedOnLoadScript("eXo.mail.UIMailPortlet.showPrintPreview(document.getElementById('printWrapper'));");
   WebuiRequestContext context = WebuiRequestContext.getCurrentInstance() ;
   Locale locale = context.getParentAppRequestContext().getLocale() ;
 %>

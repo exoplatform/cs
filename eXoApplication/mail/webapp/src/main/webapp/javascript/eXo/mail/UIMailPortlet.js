@@ -86,6 +86,7 @@ UIMailPortlet.prototype.showPrintPreview = function(obj1) {
 	uiMailPortletNode.style.width = "99%";
 	uiMailPortletNode.style.position = "absolute";
 	uiMailPortletNode.style.zIndex = 1;
+	if(eXo.core.Browser.browserType == "ie") uiMailPortletNode.style.height = document.documentElement.scrollHeight + "px";
 	document.body.insertBefore(uiMailPortletNode,uiPortalApplication) ;
 	frame.style.width = printContent.offsetWidth + "px";
 	var doc = frame.contentWindow.document ;

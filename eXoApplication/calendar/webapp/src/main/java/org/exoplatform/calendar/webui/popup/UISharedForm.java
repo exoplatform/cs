@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.poi.hssf.record.formula.functions.Var;
 import org.exoplatform.calendar.CalendarUtils;
 import org.exoplatform.calendar.service.Calendar;
 import org.exoplatform.calendar.service.CalendarService;
@@ -143,7 +144,21 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
   public void activate() throws Exception {}
   public void deActivate() throws Exception {}
 
-  public void updateSelect(String selectField, String value) throws Exception {
+  public String cleanValue(String values) throws Exception{
+	  String[] tmpArr = values.split(",");
+      List<String> list = Arrays.asList(tmpArr);
+      java.util.Set<String> set = new java.util.HashSet<String>(list);
+      String[] result = new String[set.size()];
+      set.toArray(result);
+      String data = "";
+      for (String s : result) {
+          data += "," + s;
+      }
+      data = data.substring(1);
+	  return data;
+  }
+
+public void updateSelect(String selectField, String value) throws Exception {
     UISharedTab inputset = getChildById(SHARED_TAB) ;
     UIFormStringInput fieldInput = inputset.getUIStringInput(selectField) ;
     permission_.put(value.substring(value.lastIndexOf(":/") + 2), value.substring(value.lastIndexOf(":/") + 2)) ;
@@ -263,15 +278,17 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
 //      event.getRequestContext().addUIComponentToUpdateByAjax(childPopup) ;
     }
   }
-  
   static  public class AddActionListener extends EventListener<UIUserSelector> {
     public void execute(Event<UIUserSelector> event) throws Exception {
       UIUserSelector uiUserSelector = event.getSource();
       UIPopupContainer uiContainer = uiUserSelector.getAncestorOfType(UIPopupContainer.class) ;
       UISharedForm uiShareForm = uiContainer.findFirstComponentOfType(UISharedForm.class);
-      String values = uiUserSelector.getSelectedUsers();
       UISharedTab uiSharedTab = uiShareForm.getChild(UISharedTab.class);
       UIFormStringInput uiInput = uiSharedTab.getUIStringInput(UISharedTab.FIELD_USER);
+      String currentValues = uiInput.getValue();
+      String values = uiUserSelector.getSelectedUsers();
+      values += ","+currentValues;
+      values = uiShareForm.cleanValue(values);
       uiInput.setValue(values);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer);
     }

@@ -117,7 +117,7 @@ import org.exoplatform.webui.organization.account.UIUserSelector;
                    }
   ),
     @ComponentConfig(
-                   id = "UIPopupWindowUserSelect",
+                   id = "UIPopupWindowUserSelectEventForm",
                    type = UIPopupWindow.class,
                    template =  "system:/groovy/webui/core/UIPopupWindow.gtmpl",
                    events = {
@@ -1028,7 +1028,20 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   }
 
 
-  public Attachment getAttachment(String attId) {
+  public String cleanValue(String values) throws Exception{
+	  String[] tmpArr = values.split(",");
+      List<String> list = Arrays.asList(tmpArr);
+      java.util.Set<String> set = new java.util.HashSet<String>(list);
+      String[] result = new String[set.size()];
+      set.toArray(result);
+      String data = "";
+      for (String s : result) {
+          data += "," + s;
+      }
+      data = data.substring(1);
+	  return data;
+  }
+public Attachment getAttachment(String attId) {
     UIEventDetailTab uiDetailTab = getChildById(TAB_EVENTDETAIL) ;
     for (Attachment att : uiDetailTab.getAttachments()) {
       if(att.getId().equals(attId)) {
@@ -1140,7 +1153,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       UIPopupContainer uiContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
       System.out.println(uiContainer);
       UIPopupWindow uiPopupWindow = uiContainer.getChild(UIPopupWindow.class) ;
-      if(uiPopupWindow == null)uiPopupWindow = uiContainer.addChild(UIPopupWindow.class, "UIPopupWindowUserSelect", "UIPopupWindowUserSelect") ;
+      if(uiPopupWindow == null)uiPopupWindow = uiContainer.addChild(UIPopupWindow.class, "UIPopupWindowUserSelectEventForm", "UIPopupWindowUserSelectEventForm") ;
       UIUserSelector uiUserSelector = uiContainer.createUIComponent(UIUserSelector.class, null, null) ;
       uiUserSelector.setShowSearch(true);
       uiUserSelector.setShowSearchUser(true) ;
@@ -1151,14 +1164,16 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer) ;      
     }
   }
-  
   static  public class AddActionListener extends EventListener<UIUserSelector> {
     public void execute(Event<UIUserSelector> event) throws Exception {
       UIUserSelector uiUserSelector = event.getSource();
       UIPopupContainer uiContainer = uiUserSelector.getAncestorOfType(UIPopupContainer.class) ;
       UIEventForm uiEventForm = uiContainer.getChild(UIEventForm.class);
+      String currentValues = uiEventForm.getParticipantValues();
       String values = uiUserSelector.getSelectedUsers();
-      uiEventForm.setParticipant(values) ;   
+      values += ","+currentValues;
+      values = uiEventForm.cleanValue(values);
+      uiEventForm.setParticipant(values) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer);
     }
   }
