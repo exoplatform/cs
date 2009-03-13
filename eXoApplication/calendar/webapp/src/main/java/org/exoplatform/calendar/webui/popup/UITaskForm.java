@@ -97,7 +97,7 @@ import org.exoplatform.webui.organization.account.UIUserSelector;
 	        }
 	),
 	@ComponentConfig(
-			id = "UIPopupWindowUserSelect",
+			id = "UIPopupWindowUserSelectTaskForm",
             type = UIPopupWindow.class,
             template =  "system:/groovy/webui/core/UIPopupWindow.gtmpl",
             events = {
@@ -736,7 +736,20 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     return attSize ;
   }
 
-  public Attachment getAttachment(String attId) {
+  public String cleanValue(String values) throws Exception{
+	  String[] tmpArr = values.split(",");
+      List<String> list = Arrays.asList(tmpArr);
+      java.util.Set<String> set = new java.util.HashSet<String>(list);
+      String[] result = new String[set.size()];
+      set.toArray(result);
+      String data = "";
+      for (String s : result) {
+          data += "," + s;
+      }
+      data = data.substring(1);
+	  return data;
+  }
+public Attachment getAttachment(String attId) {
     UITaskDetailTab uiDetailTab = getChildById(TAB_TASKDETAIL) ;
     for (Attachment att : uiDetailTab.getAttachments()) {
       if(att.getId().equals(attId)) {
@@ -849,7 +862,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
     	uiForm.setEventDelegation(value) ;
     	UIPopupContainer uiPopupContainer = uiForm.getAncestorOfType(UIPopupContainer.class) ;
     	UIPopupWindow uiPopupWindow = uiPopupContainer.getChild(UIPopupWindow.class) ;
-        if(uiPopupWindow == null)uiPopupWindow = uiPopupContainer.addChild(UIPopupWindow.class, "UIPopupWindowUserSelect", "UIPopupWindowUserSelect") ;
+        if(uiPopupWindow == null)uiPopupWindow = uiPopupContainer.addChild(UIPopupWindow.class, "UIPopupWindowUserSelectTaskForm", "UIPopupWindowUserSelectTaskForm") ;
         UIUserSelector uiUserSelector = uiPopupContainer.createUIComponent(UIUserSelector.class, null, null) ;
         uiUserSelector.setShowSearch(true);
         uiUserSelector.setShowSearchUser(true) ;
@@ -871,15 +884,17 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
 //      event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupAction) ;
     }
   }
-  
   static  public class AddActionListener extends EventListener<UIUserSelector> {
     public void execute(Event<UIUserSelector> event) throws Exception {
       UIUserSelector uiUserSelector = event.getSource();
       UIPopupContainer uiContainer = uiUserSelector.getAncestorOfType(UIPopupContainer.class) ;
       UITaskForm uiTaskForm = uiContainer.getChild(UITaskForm.class);
-      String values = uiUserSelector.getSelectedUsers();
       UITaskDetailTab uiTaskDetailTab  = uiTaskForm.getChild(UITaskDetailTab.class); 
       UIFormStringInput uiInput = uiTaskDetailTab.getUIStringInput(UITaskDetailTab.FIELD_DELEGATION);
+      String currentValues = uiInput.getValue();
+      String values = uiUserSelector.getSelectedUsers();
+      if(!CalendarUtils.isEmpty(currentValues) && currentValues != "null") values += ","+ currentValues;
+      values = uiTaskForm.cleanValue(values);
       uiInput.setValue(values);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer);
     }

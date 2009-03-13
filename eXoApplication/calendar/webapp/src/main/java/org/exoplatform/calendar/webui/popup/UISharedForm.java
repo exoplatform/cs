@@ -287,7 +287,8 @@ public void updateSelect(String selectField, String value) throws Exception {
       UIFormStringInput uiInput = uiSharedTab.getUIStringInput(UISharedTab.FIELD_USER);
       String currentValues = uiInput.getValue();
       String values = uiUserSelector.getSelectedUsers();
-      values += ","+currentValues;
+      System.out.println(values + "-" + currentValues);
+      if(!CalendarUtils.isEmpty(currentValues) && currentValues != "null") values += ","+ currentValues; 
       values = uiShareForm.cleanValue(values);
       uiInput.setValue(values);
       event.getRequestContext().addUIComponentToUpdateByAjax(uiContainer);
