@@ -30,7 +30,7 @@ import javax.jcr.Node;
  * Jul 11, 2007  
  */
 
-public interface CalendarService {
+public interface CalendarService extends CalendarServiceLegacy {
 
   /**
    * The method gets all calendar category of current user from data base
