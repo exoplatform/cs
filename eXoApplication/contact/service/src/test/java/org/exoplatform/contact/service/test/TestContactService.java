@@ -538,10 +538,34 @@ public void testGetSharedContactsByFilter() throws Exception {
   
 }
 
-public void testGetPublicContactsByFilter() throws Exception {
-  // TODO : need to create self contact for several users then query them with getPublicContactsByFilter()
-}
-  
+  public void testGetPublicContactsByFilter() throws Exception {
+    // TODO : need to create self contact for several users then query them with
+    // getPublicContactsByFilter()
+  }
+
+  public void testRemoveContacts() throws Exception {
+    AddressBook ab = createAddressBook("roots", "", root);
+    Contact contact1 = createNewContactInAddressBooks(ab);
+    contactService.saveContact(root, contact1, true);
+    Contact contact2 = createNewContactInAddressBooks(ab);
+    contactService.saveContact(root, contact2, true);
+    Contact contact3 = createNewContactInAddressBooks(ab);
+    contactService.saveContact(root, contact3, true);
+
+    List<String> expected = Arrays.asList(new String[] { contact1.getId(), contact2.getId() });
+
+    List<Contact> contacts = contactService.removeContacts(root, expected);
+    List<String> actual = new ArrayList<String>();
+    for (Contact contact : contacts) {
+      actual.add(contact.getId());
+    }
+    assertContainsAll("Returned removed contacts don't match", expected, actual);
+
+    assertNull("contact has not been removed ", contactService.getContact(root, contact1.getId()));
+    assertNull("contact has not been removed ", contactService.getContact(root, contact2.getId()));
+    assertNotNull("contact has been removed ", contactService.getContact(root, contact3.getId()));
+  }
+
   public void _testContactService() throws Exception {
     /**
      * Test AddressBook
@@ -758,8 +782,7 @@ public void testGetPublicContactsByFilter() throws Exception {
     assertNotNull(contactService.getEmailsByAddressBook(root, rootBook2.getId()));
 
     // remove contact:
-    assertNotNull(contactService.removeContacts(sessionProvider,
-                                                root,
+    assertNotNull(contactService.removeContacts(root,
                                                 Arrays.asList(new String[] { contact2.getId() })));
     assertNull(contactService.getContact(root, contact2.getId()));
 

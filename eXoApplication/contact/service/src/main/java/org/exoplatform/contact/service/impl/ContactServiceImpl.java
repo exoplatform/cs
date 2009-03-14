@@ -114,9 +114,12 @@ public class ContactServiceImpl implements ContactService {
   public void saveContact(String username, Contact contact, boolean isNew) throws Exception {
     storage_.saveContact(username, contact, isNew);    
   }
-  
-  public List<Contact> removeContacts(SessionProvider sProvider, String username, List<String> contactIds) throws Exception {
-    return storage_.removeContacts(sProvider, username, contactIds);
+
+  /**
+   * {@inheritDoc}
+   */
+  public List<Contact> removeContacts(String username, List<String> contactIds) throws Exception {
+    return storage_.removeContacts(username, contactIds);
   }
   
   public void moveContacts(SessionProvider sysProvider, String username, List<Contact> contacts, String addressType ) throws Exception {
@@ -307,7 +310,9 @@ public class ContactServiceImpl implements ContactService {
   }
 
   
-
+  public void registerNewUser(User user, boolean isNew) throws Exception {
+    storage_.registerNewUser(user, isNew) ;
+  }
    
   
   ////// LEGACY API //////
@@ -410,9 +415,12 @@ public class ContactServiceImpl implements ContactService {
   public ContactPageList getContactPageListByGroup(SessionProvider sProvider, String username, ContactFilter filter, String type) throws Exception {
     return storage_.findContactsByFilter(username, filter, type);
   }
-
-  public void registerNewUser(User user, boolean isNew) throws Exception {
-    storage_.registerNewUser(user, isNew) ;
+  
+  /**
+   * {@inheritDoc}
+   */
+  public List<Contact> removeContacts(SessionProvider sProvider, String username, List<String> contactIds) throws Exception {
+    return removeContacts(username, contactIds);
   }
   
 }

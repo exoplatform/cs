@@ -68,7 +68,7 @@ public interface ContactService extends ContactServiceLegacy {
   
   /**
    * Save a contact to a personal address book
-   * @param owner owner of the contact
+   * @param owner user ID of the owner of the contact
    * @param  contact contact to save
    * @param isNew is true if save a new contact and false if save an edited contact
    * @throws Exception 
@@ -76,14 +76,13 @@ public interface ContactService extends ContactServiceLegacy {
   public void saveContact(String owner, Contact contact, boolean isNew) throws Exception ;
   
   /**
-   * remove some personal contacts belong current user
-   * @return contacts list were deleted
-   * @param sProvider session of current user
-   * @param username current user
-   * @param contactIds id of contacts will be removed
+   * Remove several personal contacts
+   * @param owner user ID of the owner of the contacts
+   * @param contactIds IDs of contacts will be removed
+   * @return contacts list of deleted contacts
    * @throws Exception 
    */
-  public List<Contact> removeContacts(SessionProvider sProvider, String username, List<String> contactIds) throws Exception ;
+  public List<Contact> removeContacts(String owner, List<String> contactIds) throws Exception ;
   
   /**
    * move contacts to another address books
@@ -94,7 +93,6 @@ public interface ContactService extends ContactServiceLegacy {
    * @throws Exception 
    */
   public void moveContacts(SessionProvider sysProvider, String username, List<Contact> contacts, String addressType ) throws Exception ;
-  //public ContactPageList getContactPageListByTag(SessionProvider sProvider, String username, ContactFilter filter) throws Exception ;
   
   /**
    * Get personal contacts by filter

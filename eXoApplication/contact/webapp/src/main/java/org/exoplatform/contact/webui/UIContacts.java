@@ -1037,7 +1037,7 @@ public class UIContacts extends UIForm implements UIPopupComponent {
         }
       }
       if (!uiContacts.isSelectSharedContacts) {
-        removedContacts.addAll(contactService.removeContacts(SessionProviderFactory.createSessionProvider(), username, contactIds)) ;          
+        removedContacts.addAll(contactService.removeContacts(username, contactIds)) ;          
       }      
       if (ContactUtils.isEmpty(uiContacts.selectedGroup) && ContactUtils.isEmpty(uiContacts.selectedTag_)) {
         uiContacts.setContact(removedContacts, false) ;

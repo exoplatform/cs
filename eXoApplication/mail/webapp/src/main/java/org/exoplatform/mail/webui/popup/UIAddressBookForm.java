@@ -239,7 +239,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
           // hung edit
           if (!contact.getId().equals(MailUtils.getCurrentUser())) {
             contactIds.add(contact.getId()) ;
-            contactServ.removeContacts(SessionProviderFactory.createSystemProvider(), username, contactIds);
+            contactServ.removeContacts(username, contactIds); // do we require a system provider here ?
             uiAddressBook.refrestContactList(((UIFormSelectBoxWithGroups)uiAddressBook.getChildById(SELECT_GROUP)).getValue());
           } else {
             uiApp.addMessage(new ApplicationMessage("UIAddressBookForm.msg.cannot-delete-this-contact", null)) ;

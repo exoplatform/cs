@@ -129,4 +129,8 @@ public interface ContactServiceLegacy {
    */
   public ContactPageList getContactPageListByGroup(SessionProvider sProvider, String username, ContactFilter filter, String type) throws Exception;
 
+  /** 
+   * @deprecated use {@link ContactService#removeContacts(String, List)}
+   */
+  public List<Contact> removeContacts(SessionProvider sProvider, String username, List<String> contactIds) throws Exception ;
 }

@@ -678,24 +678,27 @@ public class JCRDataStorage {
     return addressBooks;
   }
 
-  public List<Contact> removeContacts(SessionProvider sysProvider, String username, List<String> contactIds) throws Exception {
-    Node contactHomeNode = getPersonalContactsHome(sysProvider, username);
-    List<Contact> contacts = new ArrayList<Contact>() ;
-    for (String contactId : contactIds) {
-      if (contactHomeNode.hasNode(contactId)) {
-        Contact contact = loadPersonalContact(username, contactId);
-        contactHomeNode.getNode(contactId).remove();
-        contactHomeNode.getSession().save(); 
-        contacts.add(contact) ;
-      }  
+  public List<Contact> removeContacts(String username,
+                                      List<String> contactIds) throws Exception {
+    SessionProvider sp = null;
+    try {
+      sp = createSessionProvider();
+      Node contactHomeNode = getPersonalContactsHome(sp, username);
+      List<Contact> contacts = new ArrayList<Contact>();
+      for (String contactId : contactIds) {
+        if (contactHomeNode.hasNode(contactId)) {
+          Contact contact = loadPersonalContact(username, contactId);
+          contactHomeNode.getNode(contactId).remove();
+          contactHomeNode.getSession().save();
+          contacts.add(contact);
+        }
+      }
+      return contacts;
+    } finally {
+      closeSessionProvider(sp);
     }
-    return contacts ;
   }
-  /*
-  private boolean canRemove(String username, Contact contact) {
-    return true ;
-  }
-  */
+
   
   public void moveContacts(SessionProvider sysProvider, String username, List<Contact> contacts, String addressType ) throws Exception {
     Node privateContactHome = getPersonalContactsHome(sysProvider, username);
@@ -768,7 +771,7 @@ public class JCRDataStorage {
     try {
       sProvider = createSessionProvider();
       List<String> contactIds = getUserContactNodesByGroup(sProvider, username, addressBookId);
-      removeContacts(sProvider, username, contactIds);
+      removeContacts(username, contactIds);
     } finally {
       closeSessionProvider(sProvider);
     }
@@ -2353,47 +2356,6 @@ public class JCRDataStorage {
     return contactNode ;
   }
   
-  /**
-   * Create a session provider for current context. The method first try to get a normal session provider, 
-   * then attempts to create a system provider if the first one was not available.
-   * @return a SessionProvider initialized by current SessionProviderService
-   * @see SessionProviderService#getSessionProvider(null)
-   */
-  private SessionProvider createSessionProvider() {
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
-    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
-    SessionProvider provider = service.getSessionProvider(null);
-    if (provider == null) {
-      log.info("No user session provider was available, using a system session provider");
-      provider = service.getSystemSessionProvider(null);
-    }
-    return provider;
-  }
-  
-  private SessionProvider createUserProvider() {
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
-    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
-    return service.getSessionProvider(null) ;    
-  }  
-  
-  private SessionProvider createSystemProvider() {
-    ExoContainer container = ExoContainerContext.getCurrentContainer();
-    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
-    return service.getSystemSessionProvider(null) ;    
-  }
-  
-
-  /**
-   * Safely closes JCR session provider. Call this method in finally to clean any provider initialized by createSessionProvider()
-   * @param sessionProvider the sessionProvider to close
-   * @see SessionProvider#close();
-   */
-  private void closeSessionProvider(SessionProvider sessionProvider) {
-    if (sessionProvider != null) {
-      sessionProvider.close();
-    }
-  }
-  
   public void registerNewUser(User user, boolean isNew) throws Exception {
     Contact contact = null ;
     if (isNew) contact = new Contact() ;
@@ -2493,8 +2455,52 @@ public class JCRDataStorage {
     } catch (Exception e) {
       e.printStackTrace() ;
     } finally {
-      sysProvider.close();
+      closeSessionProvider(sysProvider);
+    }
+  }  
+  
+  
+  /**
+   * Create a session provider for current context. The method first try to get a normal session provider, 
+   * then attempts to create a system provider if the first one was not available.
+   * @return a SessionProvider initialized by current SessionProviderService
+   * @see SessionProviderService#getSessionProvider(null)
+   */
+  private SessionProvider createSessionProvider() {
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
+    SessionProvider provider = service.getSessionProvider(null);
+    if (provider == null) {
+      log.info("No user session provider was available, using a system session provider");
+      provider = service.getSystemSessionProvider(null);
+    }
+    return provider;
+  }
+  
+  private SessionProvider createUserProvider() {
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
+    return service.getSessionProvider(null) ;    
+  }  
+  
+  private SessionProvider createSystemProvider() {
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    SessionProviderService service = (SessionProviderService) container.getComponentInstanceOfType(SessionProviderService.class);
+    return service.getSystemSessionProvider(null) ;    
+  }
+  
+
+  /**
+   * Safely closes JCR session provider. Call this method in finally to clean any provider initialized by createSessionProvider()
+   * @param sessionProvider the sessionProvider to close
+   * @see SessionProvider#close();
+   */
+  private void closeSessionProvider(SessionProvider sessionProvider) {
+    if (sessionProvider != null) {
+      sessionProvider.close();
     }
   }
+  
+ 
   
 }

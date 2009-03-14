@@ -113,7 +113,7 @@ public class UIImageForm extends UIForm implements UIPopupComponent{
       String username = ContactUtils.getCurrentUser() ;
       SessionProvider session = SessionProviderFactory.createSessionProvider() ;
       try {
-        service.removeContacts(session, username, tempContact) ;
+        service.removeContacts(username, tempContact) ;
       } catch (PathNotFoundException e) {}
       service.saveContact(username, contact, true) ;
       uiProfileInputSet.setContact(service.getContact(username, contact.getId())) ; 
