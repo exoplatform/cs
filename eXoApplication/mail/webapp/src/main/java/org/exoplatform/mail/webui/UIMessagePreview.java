@@ -108,6 +108,20 @@ public class UIMessagePreview extends UIComponent {
   public void setShowedMessages(List<Message> msgList) throws Exception {
     showedMsgs = msgList ;
   }
+  
+  public boolean isShowBcc(Message msg) throws Exception {
+    UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class) ;
+    String selectedFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class).getSelectedFolder();
+    String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+    String username = MailUtils.getCurrentUser();
+    MailService mailServ = uiPortlet.getApplicationComponent(MailService.class);
+    Account account = mailServ.getAccountById(SessionProviderFactory.createSystemProvider(), username, accId);
+    InternetAddress[] fromAddress = Utils.getInternetAddress(msg.getFrom());
+    InternetAddress from = fromAddress[0];
+    return (!MailUtils.isFieldEmpty(selectedFolder) &&  selectedFolder.equals(Utils.createFolderId(accId, Utils.FD_SENT, false))
+        && !MailUtils.isFieldEmpty(msg.getMessageBcc()) 
+        && (account != null) && from.getAddress().equalsIgnoreCase(account.getEmailAddress()));
+  }
 
   public CalendarEvent getEvent(Message msg) throws Exception {
     CalendarService calendarSrv = getApplicationComponent(CalendarService.class) ;

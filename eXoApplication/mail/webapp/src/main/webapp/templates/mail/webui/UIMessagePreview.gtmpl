@@ -251,6 +251,31 @@
                         <div style="clear: left;"><span></span></div>
                       </div>
                   <%} %>
+                  <%
+                  if (uicomponent.isShowBcc(msg)) {  
+                %>
+                    <div class="FieldContainer">
+                      <div class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.bcc") %>:</div>
+                      <div class="LinkAddress"> 
+                      <%
+                        try { 
+                        InternetAddress[] toAddress = InternetAddress.parse(msg.getMessageBcc());
+                          for (i in 0..(toAddress.length-1)) {
+                            InternetAddress address = toAddress[i];
+                            if (i > 0 && i < (toAddress.length)) print ", <br>";
+                      %>
+                            <span><%=Utils.getPersonal(address)%> </span> <% print((address !=null) ? ("&lt; " + address.getAddress() + " &gt;") : "")%> 
+                      <%
+                          } 
+                        } catch (Exception e) { 
+                          if (msg.getMessageBcc() != null) {
+                      %>   
+                        <%=msg.getMessageBcc()%>
+                      <% } }%>
+                      </div>  
+                      <div style="clear: left;"><span></span></div>
+                    </div>
+                <%} %>
                   <div class="FieldContainer">
                     <div class="Title"><%=_ctx.appRes(uicomponent.id+ ".label.date-time") %>:</div>
                     <div class="Address"><%=MailUtils.formatDate('EEEE, dd MMMM, yyyy HH:mm:ss aaa', msg.getReceivedDate(), locale)%></div>
