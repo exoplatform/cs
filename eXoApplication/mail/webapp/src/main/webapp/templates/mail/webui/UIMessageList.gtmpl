@@ -390,7 +390,9 @@
            %>
     		  	<a href = "$sortedBySubject"><div class="$classArrowSubject" title="<%=_ctx.appRes(uicomponent.id+ '.label.sort-by-subject') %>" style="width: 95%; cursor: pointer; margin-top: 3px;"><%=_ctx.appRes(uicomponent.id+ ".label.subject") %></div></a>
     		  </th>
-   	      <th style="width: 24px;"><div class="TotalMessageIcon" title="<%=_ctx.appRes(uicomponent.id+ '.label.total-messages-in-conversation') %>"><span></span></div></th>
+          <% if (uicomponent.viewMode != uicomponent.MODE_LIST) {%>
+   	        <th style="width: 24px;"><div class="TotalMessageIcon" title="<%=_ctx.appRes(uicomponent.id+ '.label.total-messages-in-conversation') %>"><span></span></div></th>
+          <%}%>
    	      <th style="width: 80px; padding-left: 8px; border-right: none;" >
          	  <%
          	     String sortedByReceivedDate = uicomponent.event("Sort",Utils.EXO_RECEIVEDDATE);
@@ -517,24 +519,26 @@
                 </a>
                 <div style="clear: left;"><span></span></div>
                 </div>
-              </td>                     
-              <td class="text">
-                <% 
-                  if (uicomponent.viewMode == uicomponent.MODE_LIST) {
-                %>
-                  ( 1 )
-                <% 
-                  } else if (msg.isRootConversation()){
-                %>
-                  ( <% 
-                      int nom = 1 ;
-                      for (String id : msg.getGroupedMessageIds()) if (uicomponent.messageList_.containsKey(id)) nom++ ;
-                      print(nom);
-                    %> )
-                <%
-                  }
-                %>
-              </td>
+              </td>          
+              <% if (uicomponent.viewMode != uicomponent.MODE_LIST) {%>
+                <td class="text">
+                  <% 
+                    if (uicomponent.viewMode == uicomponent.MODE_LIST) {
+                  %>
+                    ( 1 )
+                  <% 
+                    } else if (msg.isRootConversation()){
+                  %>
+                    ( <% 
+                        int nom = 1 ;
+                        for (String id : msg.getGroupedMessageIds()) if (uicomponent.messageList_.containsKey(id)) nom++ ;
+                        print(nom);
+                      %> )
+                  <%
+                    }
+                  %>
+                </td>
+              <%}%>
               <td class="$readStatus">
                 <a href="$actionLink">
                   <%if (msg.getReceivedDate() != null) { %>
