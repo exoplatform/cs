@@ -131,10 +131,11 @@
 	float: left;
 	margin: 8px 0px 0px 0px;
 	width: 194px;
-	line-height: 20px;
+	line-height:14px;
 	height: 20px;
 	border: 1px solid #A5A5A5;
 	font-size: 11px;
+
 }
 /*
 .UIMailPortlet .UISelectAccount .UIRightClickPopupMenu {
