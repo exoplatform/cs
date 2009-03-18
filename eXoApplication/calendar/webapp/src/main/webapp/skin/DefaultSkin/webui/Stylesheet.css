@@ -287,16 +287,16 @@
 }
 
 .UICalendarPortlet .BlueCircleMinus { 
-    height:16px;
-    width:16px;
+	height:16px;
+	width:16px;
 }
 
 .UICalendarPortlet .busyIcon {
 	padding-left:20px;
-	 height: 16px;
+	height: 16px;
 }
 
 .UICalendarPortlet .outsideIcon {
-	 width: 16px;
+	 padding-left:20px;
 	 height: 16px;
 }
