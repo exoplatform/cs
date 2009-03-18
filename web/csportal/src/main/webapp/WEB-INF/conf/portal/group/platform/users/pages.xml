@@ -27,7 +27,7 @@
     <edit-permission>*:/platform/administrators</edit-permission>
     
     <application>
-      <instance-id>group#platform/users:/calendar/CalendarPortlet/calendar</instance-id>    
+      <instance-id>group#platform/users:/calendar/CalendarPortlet/calendars</instance-id>    
       <title>Calendar Portlet</title>
       <show-info-bar>false</show-info-bar>      
     </application>  

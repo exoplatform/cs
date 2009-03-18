@@ -5,15 +5,27 @@ function UIDateTimePicker() {
   this.selectedDate = null ; //Datetime value of input date&time field
   this.months = ['January','February','March','April','May','June','July','August','September','October','November','December'] ;
   this.weekdays = ['S','M','T','W','T','F','S'] ;
+  this.tooltip = ['Previous Year', 'Previous Month', 'Next Month', 'Next Year'];
+  this.pathResource = "/csResources/javascript/eXo/cs/lang/";
 } ;
 
 UIDateTimePicker.prototype = eXo.webui.UICalendar ;
 
 UIDateTimePicker.prototype.getLang = function() {
-	var weekdays = String(this.dateField.getAttribute("daysname")).trim() ;
-	var months = String(this.dateField.getAttribute("monthsname")).trim() ;
-	this.weekdays = weekdays.split(",") ;
-	this.months = months.split(",") ;
+	try {
+		var lang = this.dateField.lang;
+		if (this.lang == lang) 
+			return;
+		this.lang = lang;
+		var languages = eval(ajaxAsyncGetRequest(this.pathResource + this.lang.toLowerCase() + ".js", false));
+		if (!languages || (typeof(languages) != "object")) 
+			return;
+	
+	this.months = languages[0];
+	this.weekdays = languages[1];
+	this.tooltip = languages[2];
+	} 
+	catch (e) {}
 } ;
 
 UIDateTimePicker.prototype.show = function() {
@@ -147,11 +159,11 @@ UIDateTimePicker.prototype.renderCalendar = function() {
 	table += 		'<div class="UICalendar" onmousedown="event.cancelBubble = true">' ;
 	table += 		'	<table class="MonthYearBox">' ;
 	table += 		'	  <tr>' ;
-	table += 		'			<td class="MonthButton"><a class="PreviousMonth" href="javascript:eXo.cs.UIDateTimePicker.changeMonth(-1);"></a></td>' ;
-	table += 		'			<td class="YearButton"><a class="PreviousYear" href="javascript:eXo.cs.UIDateTimePicker.changeYear(-1);"></a></td>' ;
+	table += 		'			<td class="MonthButton"><a class="PreviousMonth" title="' + this.tooltip[0]+ '" href="javascript:eXo.cs.UIDateTimePicker.changeMonth(-1);"></a></td>' ;
+	table += 		'			<td class="YearButton"><a class="PreviousYear" title="' + this.tooltip[1]+ '" href="javascript:eXo.cs.UIDateTimePicker.changeYear(-1);"></a></td>' ;
 	table += 		'			<td><span style="color:#f89302;">' + this.months[this.currentDate.getMonth()] + '</span> - <span>' + this.currentDate.getFullYear() + '</span></td>' ;
-	table += 		'			<td class="YearButton"><a class="NextYear" href="javascript:eXo.cs.UIDateTimePicker.changeYear(1);"></a></td>' ;
-	table += 		'			<td class="MonthButton"><a class="NextMonth" href="javascript:eXo.cs.UIDateTimePicker.changeMonth(1);"></a></td>' ;
+	table += 		'			<td class="YearButton"><a class="NextYear" title="' + this.tooltip[2]+ '"  href="javascript:eXo.cs.UIDateTimePicker.changeYear(1);"></a></td>' ;
+	table += 		'			<td class="MonthButton"><a class="NextMonth" title="' + this.tooltip[3]+ '" href="javascript:eXo.cs.UIDateTimePicker.changeMonth(1);"></a></td>' ;
 	table += 		'		</tr>' ;
 	table += 		'	</table>' ;
 	table += 		'	<div style="margin-top: 6px;padding: 0px 5px;">' ;
