@@ -35,7 +35,7 @@
 				<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
 		  		<thead>
 		  			<tr>		  			
-		  		    <th style="width: 23px; padding-left: 3px;" class="text"><input type="checkbox" class="checkbox" name="checkAll " title="<%=_ctx.appRes(uicomponent.getName() + ".label.checkAll")%>" value="4"/></th>
+		  		    <th style="width: 25px; padding-left: 1px;" class="text"><input type="checkbox" class="checkbox" name="checkAll " title="<%=_ctx.appRes(uicomponent.getName() + ".label.checkAll")%>" value="4"/></th>
 		  		    <th style="width: 40%; padding-left: 2px;" class="text">
 		  		      	<div>  <%=_ctx.appRes(uicomponent.getName() + ".label.name")%> </div>
 		  		    </th>
@@ -51,10 +51,10 @@
 								checkboxField = uicomponent.getChildById(contact.getId()) ;
 						%>
 		  			<tr class="UIContactList" selectedTag="<%=uicomponent.getSelectedTag()%>">
-		  			  <td class="text" style="padding-left: 7px;">
-		  			  	<%
-		  			  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
-		  			  	%>
+		  			  <td class="text" style="padding-left: 2px;">
+			  			  	<%
+			  			  		if(checkboxField != null) uicomponent.renderField(checkboxField) ;
+			  			  	%>
 		  			  </td>
 							<td class="text">
 								<div class="State OfflineIcon" title="Available"> 

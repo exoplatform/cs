@@ -173,7 +173,7 @@
 					<table cellspacing="0" borderspacing="0" id="UIListUsers" class="UIGrid">
 	  				<thead>
 	  					<tr>
-	  			      <th style="width: 23px; padding-left: 7px;" class="text">
+	  			      <th style="width: 30px; padding-left: 11px;" class="text">
 	  			      	<input style="margin: 2px 0px 0px 0px; height: auto;" type="checkbox" class="checkbox" <%= uicomponent.isCheckAll() %> title="<%=_ctx.appRes(uicomponent.getName() + ".label.checkAll")%>" value="4"/>
 	  			      </th>
 	  						<th style="width: 24px;" class="text"><div class="Icon BlueTagIcon"><span></span></div></th>
