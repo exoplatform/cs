@@ -110,6 +110,7 @@ public class ReminderJob implements Job {
         mailService.sendMessages(messageList, config);
         System.out.println("\n\n message has been sent !");
       }
+      calendarHome.getSession().logout() ;
     } catch (Exception e) {
       System.out.println("\n\n Error when run email reminder job !");
       //e.printStackTrace();			
@@ -132,12 +133,12 @@ public class ReminderJob implements Job {
     NodeHierarchyCreator nodeHierarchyCreator  = (NodeHierarchyCreator) container
     .getComponentInstanceOfType(NodeHierarchyCreator.class);
     SessionProvider sp = SessionProvider.createSystemProvider();
-    try {
+    //try {
     Node publicApp = nodeHierarchyCreator.getPublicApplicationNode(sp) ;
     if(publicApp != null && publicApp.hasNode(Utils.CALENDAR_APP)) return publicApp.getNode(Utils.CALENDAR_APP) ;
     return null ;		
-    } finally {
+   /* } finally {
     	if (sp!=null) sp.close();
-    }
+    }*/
   }
 }

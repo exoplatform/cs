@@ -47,13 +47,13 @@ public class PopupReminderJob implements Job {
   private static Log log_ = ExoLogger.getLogger("job.PopupRecordsJob");
   public void execute(JobExecutionContext context) throws JobExecutionException {
     try {
+      Node calendarHome = getPublicServiceHome();
       if (log_.isDebugEnabled()) log_.debug("Calendar popup reminder service");
       java.util.Calendar fromCalendar = GregorianCalendar.getInstance() ;  
       JobDataMap jdatamap = context.getJobDetail().getJobDataMap();
       ExoContainer container = RootContainer.getInstance();
       container = ((RootContainer)container).getPortalContainer(jdatamap.getString("portalName"));
       ContinuationService continuation = (ContinuationService) container.getComponentInstanceOfType(ContinuationService.class);
-      Node calendarHome = getPublicServiceHome();
       if(calendarHome == null) return ;
       StringBuffer path = new StringBuffer(getReminderPath(fromCalendar));
       path.append("//element(*,exo:reminder)");
@@ -111,10 +111,11 @@ public class PopupReminderJob implements Job {
           }
         }
       }
+      calendarHome.getSession().logout() ;
     } catch (Exception e) {
       System.out.println("\n\n Error when run popup reminder job !");
       //e.printStackTrace();			
-    }
+    }  
     if (log_.isDebugEnabled()) log_.debug("File plan job done");
   }
   private String getReminderPath(java.util.Calendar fromCalendar)
