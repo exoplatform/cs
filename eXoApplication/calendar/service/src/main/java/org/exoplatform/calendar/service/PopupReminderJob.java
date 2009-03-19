@@ -133,12 +133,13 @@ public class PopupReminderJob implements Job {
     NodeHierarchyCreator nodeHierarchyCreator  = (NodeHierarchyCreator) container
     .getComponentInstanceOfType(NodeHierarchyCreator.class);
     SessionProvider sp = SessionProvider.createSystemProvider();
-    try {
+   /// try {
     Node publicApp = nodeHierarchyCreator.getPublicApplicationNode(sp) ;
     if(publicApp != null && publicApp.hasNode(Utils.CALENDAR_APP)) return publicApp.getNode(Utils.CALENDAR_APP) ;
     return null ;	
-    } finally {
-    	if (sp!=null) sp.close();
-    }
+    //} finally {
+      //TODO you can not close session here, because after that you call session to make query ;
+    	//if (sp!=null) sp.close();
+    //}
   }
 }
