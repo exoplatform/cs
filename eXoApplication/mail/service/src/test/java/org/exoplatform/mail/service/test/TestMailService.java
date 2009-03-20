@@ -38,6 +38,11 @@ import org.exoplatform.services.jcr.ext.common.SessionProvider;
  * July 3, 2007  
  */
 public class TestMailService extends BaseMailTestCase{
+  public TestMailService() throws Exception {
+    super();
+    // TODO Auto-generated constructor stub
+  }
+
   private MailService mailService_ ;
   private SessionProvider sProvider ;
   private  String username = "root" ;
@@ -224,6 +229,7 @@ public class TestMailService extends BaseMailTestCase{
   public void testSaveMessage() throws Exception {
     Account accPop = createAccountObj(Utils.POP3) ;
     mailService_.createAccount(sProvider, username, accPop) ;
+    System.out.println("account " + username + " has been saved!");
     StringBuffer sbBody = new StringBuffer("") ;
     Message message = new Message() ;
     message.setContentType(TEXT_HTML) ;

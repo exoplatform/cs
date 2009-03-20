@@ -83,7 +83,16 @@
   		<propertyDefinition name="exo:imapServerProperties" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
   			<valueConstraints/>
   		</propertyDefinition> 
+  		<propertyDefinition name="exo:lastStartCheckingTime" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  			<valueConstraints/>
+  		</propertyDefinition>
   		<propertyDefinition name="exo:lastCheckedTime" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  			<valueConstraints/>
+  		</propertyDefinition> 
+  		<propertyDefinition name="exo:checkAll" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+  			<valueConstraints/>
+  		</propertyDefinition> 
+  		<propertyDefinition name="exo:checkFromDate" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   			<valueConstraints/>
   		</propertyDefinition> 
   		<propertyDefinition name="exo:isSavePassword" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
@@ -105,7 +114,11 @@
       <supertype>nt:base</supertype>      
     </supertypes>
     <propertyDefinitions>
-    	<propertyDefinition name="exo:id" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
+      <propertyDefinition name="exo:id" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
+        protected="false" multiple="false">
+        <valueConstraints/>      
+      </propertyDefinition>
+      <propertyDefinition name="exo:inReplyToHeader" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY"
         protected="false" multiple="false">
         <valueConstraints/>      
       </propertyDefinition>
@@ -189,6 +202,14 @@
       	protected="false" multiple="true">
   	    <valueConstraints/>
   	  </propertyDefinition> 
+  	  <propertyDefinition name="exo:isRoot" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" 
+      	protected="false" multiple="false">
+  	    <valueConstraints/>
+  	  </propertyDefinition>
+  	  <propertyDefinition name="exo:isLoadedProperly" requiredType="Boolean" autoCreated="true" mandatory="false" onParentVersion="COPY" 
+      	protected="false" multiple="false">
+  	    <valueConstraints/>
+  	  </propertyDefinition>  
     </propertyDefinitions>    
     <childNodeDefinitions>
 	  <childNodeDefinition name="*" defaultPrimaryType="" autoCreated="false" mandatory="false"
@@ -208,6 +229,10 @@
   	  <propertyDefinition name="exo:fileName" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
   		<valueConstraints/>
   	  </propertyDefinition>	  		
+      <propertyDefinition name="exo:isLoadedProperly" requiredType="Boolean" autoCreated="true" mandatory="false" onParentVersion="COPY" 
+      	protected="false" multiple="false">
+  	    <valueConstraints/>
+  	  </propertyDefinition> 
   	</propertyDefinitions>	
   </nodeType>	  
   
