@@ -185,6 +185,10 @@
     <type>org.exoplatform.services.organization.hibernate.OrganizationServiceImpl</type>
   </component>
 
+	<component>
+    <key>org.exoplatform.container.xml.PortalContainer</key>
+    <type>org.exoplatform.container.xml.PortalContainerInfo</type>
+  </component>
 
   <external-component-plugins>
     <target-component>org.exoplatform.services.database.HibernateService</target-component>

@@ -135,7 +135,7 @@ public class TestMailService extends BaseMailTestCase{
   }
 
   //Send mail
-  public void testSendMail() throws Exception {
+   public void testSendMail() throws Exception {
     Account accPop = createAccountObj(Utils.POP3) ;
     mailService_.createAccount(sProvider, username, accPop) ;
 
@@ -150,8 +150,8 @@ public class TestMailService extends BaseMailTestCase{
     message.setMessageTo(accImap.getEmailAddress()) ;
     sbBody.append("<b>Hello "+accImap.getIncomingUser()+"</b>").append("<br/>").append(Calendar.getInstance().getTime().toString()) ;
     message.setMessageBody(sbBody.toString()) ;
-    mailService_.sendMessage(sProvider, username, accPop.getId(), message) ;
-    System.out.println("\n\n Message has been sent use POP !");
+    /*mailService_.sendMessage(sProvider, username, accPop.getId(), message) ;
+    System.out.println("\n\n Message has been sent use POP !");*/
     
     message.setContentType(TEXT_HTML) ;
     message.setSubject("This message has been sent form "+accImap.getEmailAddress()) ;
@@ -159,9 +159,9 @@ public class TestMailService extends BaseMailTestCase{
     message.setMessageTo(accPop.getEmailAddress()) ;
     sbBody.append("<b>Hello "+accPop.getIncomingUser()+"</b>").append("<br/>").append(Calendar.getInstance().getTime().toString()) ;
     message.setMessageBody(sbBody.toString()) ;
-    mailService_.sendMessage(sProvider, username, accImap.getId(), message) ;
+    /*mailService_.sendMessage(sProvider, username, accImap.getId(), message) ;
     
-    System.out.println("\n\n Message has been sent use IMAP !");
+    System.out.println("\n\n Message has been sent use IMAP !");*/
     
     mailService_.removeAccount(sProvider, username, accPop.getId()) ;
     mailService_.removeAccount(sProvider, username, accImap.getId()) ;
