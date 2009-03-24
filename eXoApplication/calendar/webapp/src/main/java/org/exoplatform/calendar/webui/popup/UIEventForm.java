@@ -928,7 +928,13 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     sbBody.append("</tr>") ;
     sbBody.append("<tr>") ;
     sbBody.append("<td style=\"padding: 4px; width: 60px; text-align: right; vertical-align: top; white-space:nowrap;\">"+getLabel(FIELD_PARTICIPANT)+"</td>") ;
-    sbBody.append("<td style=\"padding: 4px;\">" +toId+ (getInvitationEmail() != null && getInvitationEmail().trim().length() > 0 ? ","+getInvitationEmail(): " ") + "</td>") ;
+    //cs-2407
+    if (CalendarUtils.isEmpty(getInvitationEmail())) {
+      sbBody.append("<td style=\"padding: 4px;\">" +toId + "</td>") ;
+    } else {
+      String newInvi = getInvitationEmail().replace(",", ", ") ;
+      sbBody.append("<td style=\"padding: 4px;\">" +toId + ", " + newInvi + "</td>") ;
+    }    
     sbBody.append("</tr>");
     if(!atts.isEmpty()){
       sbBody.append("<tr>");
