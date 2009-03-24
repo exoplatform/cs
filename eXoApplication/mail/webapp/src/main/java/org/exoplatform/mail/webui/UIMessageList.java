@@ -154,13 +154,15 @@ public class UIMessageList extends UIForm {
       } else {
         selectedFolderId_ = filter.getFolder()[0];
       }
-      // cs-2253
+      // CS-2253
       long currentPage = 1 ;
       if (pageList_ != null) currentPage = pageList_.getCurrentPage() ;
       MessagePageList currentPageList = mailSrv.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, filter) ;
-      
-      currentPageList.checkAndSetPage(currentPage) ;
+      //TODO why we need check this ? why don't we check after the update list ?
+      //currentPageList.checkAndSetPage(currentPage) ;
+      // CS-2493
       setMessagePageList(currentPageList);
+      updateList(currentPage) ;
     } else {
       messageList_.clear();
     }
