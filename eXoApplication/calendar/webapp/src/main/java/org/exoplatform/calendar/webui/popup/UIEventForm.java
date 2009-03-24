@@ -439,10 +439,18 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
     errorMsg_ = null ;
     return true ;
   }
-  private boolean isParticipantValid() {
+  private boolean isParticipantValid() throws Exception {
     if(isSendMail() && CalendarUtils.isEmpty(getParticipantValues())) {
       errorMsg_ = "UIEventForm.msg.error-particimant-email-required" ;
       return false ;
+    }else if (isSendMail()) {
+      //getParticipants() ;
+      for (String par : getParticipantValues().split(CalendarUtils.COMMA)) {
+        if (CalendarUtils.getOrganizationService().getUserHandler().findUserByName(par) == null) {
+          errorMsg_ = "UIEventForm.msg.invalid-username" ;
+          return false ;
+        }
+      }      
     }
     errorMsg_ = null ;
     return true ;
@@ -1335,7 +1343,7 @@ public Attachment getAttachment(String attId) {
                 return ;
               }
             }
-            CalendarEvent calendarEvent  = null ;
+            CalendarEvent calendarEvent  = null ; 
             String[] pars = uiForm.getParticipants() ;
             String eventId = null ;
             if(uiForm.isAddNew_){
@@ -1355,6 +1363,12 @@ public Attachment getAttachment(String attId) {
                   emails.add(ia.getAddress()) ;
                 }
                 if(!emails.isEmpty()) calendarEvent.setInvitation(emails.toArray(new String[emails.size()])) ;
+              } else {
+                uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.event-email-invalid", null));
+                uiForm.setSelectedTab(TAB_EVENTSHARE) ;
+                event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
+                event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+                return ;
               }
             calendarEvent.setCalendarId(uiForm.getCalendarId()) ;
             calendarEvent.setEventType(CalendarEvent.TYPE_EVENT) ;
@@ -1461,7 +1475,7 @@ public Attachment getAttachment(String attId) {
               try {
                 StringBuffer recive = new StringBuffer() ; 
                 for(String rc : uiForm.getParticipants()) {
-                  rc = rc.trim() ;
+                  rc = rc.trim() ;                                 
                   if(recive.length() > 0) recive.append(CalendarUtils.COMMA) ;
                   recive.append(rc) ;
                 }
