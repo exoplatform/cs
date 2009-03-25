@@ -24,15 +24,22 @@ package tool.org.exoplatform.cs;
  */
 public class CsPropertyMapping {
   
-  private String propertyName  ;
-  private String replaceName  ;
-  private String defaultValue  ;
+  private String propertyName;
+  private String replaceName;
+  private String defaultValue;
+  private String propertyType;
   
   public void setPropertyName(String propertyName) {
     this.propertyName = propertyName;
   }
   public String getPropertyName() {
     return propertyName;
+  }
+  public void setPropertyType(String propertyName) {
+    this.propertyType = propertyName;
+  }
+  public String getPropertyType() {
+    return propertyType;
   }
   public void setDefaultValue(String defaultValue) {
     this.defaultValue = defaultValue;

@@ -54,6 +54,7 @@
 												<value>
 													<object type="tool.org.exoplatform.cs.CsPropertyMapping">
 														<field name="propertyName"><string>exo:isLoadedProperly</string></field>
+														<field name="propertyType"><string>boolean</string></field>
 														<field name="defaultValue"><string>true</string></field>
 													</object>
 												</value>
@@ -71,6 +72,7 @@
 												<value>
 													<object type="tool.org.exoplatform.cs.CsPropertyMapping">
 														<field name="propertyName"><string>exo:isLoadedProperly</string></field>
+														<field name="propertyType"><string>boolean</string></field>
 														<field name="defaultValue"><string>true</string></field>
 													</object>
 												</value>
@@ -79,7 +81,7 @@
 									</object>
 								</value>
 							  
-							  <!--  Upgrate from 1.0 to 1.1RC2
+							  <!--  Upgrate from 1.0 to 1.1RC2 -->
 								<value>
 									<object type="tool.org.exoplatform.cs.CsNodeTypeMapping">
 										<field name="nodeTypeName">
@@ -90,18 +92,21 @@
 												<value>
 													<object type="tool.org.exoplatform.cs.CsPropertyMapping">
 														<field name="propertyName"><string>exo:lastStartCheckingTime</string></field>
+														<field name="propertyType"><string>long</string></field>
 														<field name="defaultValue"><string></string></field>
 													</object>
 												</value>
 												<value>
 													<object type="tool.org.exoplatform.cs.CsPropertyMapping">
 														<field name="propertyName"><string>exo:checkAll</string></field>
-														<field name="defaultValue"><string></string></field>
+														<field name="propertyType"><string>boolean</string></field>
+														<field name="defaultValue"><string>true</string></field>
 													</object>
 												</value>
 												<value>
 													<object type="tool.org.exoplatform.cs.CsPropertyMapping">
 														<field name="propertyName"><string>exo:checkFromDate</string></field>
+														<field name="propertyType"><string>long</string></field>
 														<field name="defaultValue"><string></string></field>
 													</object>
 												</value>
@@ -119,20 +124,22 @@
 												<value>
 													<object type="tool.org.exoplatform.cs.CsPropertyMapping">
 														<field name="propertyName"><string>exo:inReplyToHeader</string></field>
+														<field name="propertyType"><string>boolean</string></field>
 														<field name="defaultValue"><string></string></field>
 													</object>
 												</value>
 												<value>
 													<object type="tool.org.exoplatform.cs.CsPropertyMapping">
 														<field name="propertyName"><string>exo:isRoot</string></field>
-														<field name="defaultValue"><string></string></field>
+														<field name="propertyType"><string>boolean</string></field>
+														<field name="defaultValue"><string>true</string></field>
 													</object>
 												</value>
 											</collection>
 										</field>
 									</object>
 								</value>	
-							  -->
+							  
 							</collection>
 						</field>
 					</object>
@@ -166,13 +173,15 @@
 												<value>
 													<object type="tool.org.exoplatform.cs.CsPropertyMapping">
 														<field name="propertyName"><string>exo:creator</string></field>
-														<field name="defaultValue"><string>true</string></field>
+														<field name="propertyType"><string>string</string></field>
+														<field name="defaultValue"><string></string></field>
 													</object>
 												</value>
 												<value>
 													<object type="tool.org.exoplatform.cs.CsPropertyMapping">
 														<field name="propertyName"><string>exo:description</string></field>
-														<field name="defaultValue"><string>true</string></field>
+														<field name="propertyType"><string>string</string></field>
+														<field name="defaultValue"><string></string></field>
 													</object>
 												</value>
 											</collection>
@@ -207,7 +216,8 @@
 												<value>
 													<object type="tool.org.exoplatform.cs.CsPropertyMapping">
 														<field name="propertyName"><string>exo:eventCategoryName</string></field>
-														<field name="defaultValue"><string>true</string></field>
+														<field name="propertyType"><string>string</string></field>
+														<field name="defaultValue"><string></string></field>
 													</object>
 												</value>
 											</collection>
@@ -224,7 +234,8 @@
 												<value>
 													<object type="tool.org.exoplatform.cs.CsPropertyMapping">
 														<field name="propertyName"><string>exo:baseUrl</string></field>
-														<field name="defaultValue"><string>true</string></field>
+														<field name="propertyType"><string>string</string></field>
+														<field name="defaultValue"><string></string></field>
 													</object>
 												</value>
 											</collection>

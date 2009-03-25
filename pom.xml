@@ -17,6 +17,7 @@
     <module>web/csportal</module>
     <module>web/csResources</module>
     <module>web/webservice</module>
+    <module>tool/migration</module>
     
     <module>eXoApplication/mail/webapp</module>
     <module>eXoApplication/mail/service</module>

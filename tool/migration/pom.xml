@@ -9,7 +9,7 @@
   <artifactId>exo.cs.tool.migration</artifactId>
   <packaging>jar</packaging>
   <version>${org.exoplatform.cs.version}</version>
-  <name>Migration Tool</name>
+  <name>migration tool</name>
   <url>http://www.exoplatform.org</url>
   <description>Migration Tool</description>
 

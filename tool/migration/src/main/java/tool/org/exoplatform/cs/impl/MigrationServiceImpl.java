@@ -251,7 +251,13 @@ public List<UpdateStorageEventListener> listeners_ = new ArrayList<UpdateStorage
           // processing for added properties
           for (CsPropertyMapping prop : getAddedProperty(nt)) {
             try {
-              setPropertyIfAbsent(node, prop.getPropertyName(), prop.getDefaultValue());
+              if (prop.getDefaultValue().trim().equalsIgnoreCase("boolean")) {
+                setPropertyIfAbsent(node, prop.getPropertyName(), Boolean.valueOf(prop.getDefaultValue()));
+              } else if (prop.getDefaultValue().trim().equalsIgnoreCase("string")) {
+                setPropertyIfAbsent(node, prop.getPropertyName(), prop.getDefaultValue());
+              } else if (prop.getDefaultValue().trim().equalsIgnoreCase("long")) {
+                setPropertyIfAbsent(node, prop.getPropertyName(), Long.valueOf(prop.getDefaultValue()));
+              }
             } catch (Exception e) {
               System.out.println("Failed to upgrade forum category: "
                   + node.getPath() + ": " + e.getMessage());
@@ -397,12 +403,12 @@ public List<UpdateStorageEventListener> listeners_ = new ArrayList<UpdateStorage
 //		System.out.println("<<<<<< End forum user profiles upgrade");
 //	}
 
-	private void setPropertyIfAbsent(Node node, String propertyName, double value) throws Exception {
-		if (!node.hasProperty(propertyName)) {
-			node.setProperty(propertyName, value);
-			System.out.println("Set " + propertyName + "=" + value + " on " + node.getPath());
-		}
-	}
+//	private void setPropertyIfAbsent(Node node, String propertyName, double value) throws Exception {
+//		if (!node.hasProperty(propertyName)) {
+//			node.setProperty(propertyName, value);
+//			System.out.println("Set " + propertyName + "=" + value + " on " + node.getPath());
+//		}
+//	}
 		
 	
 	private void setPropertyIfAbsent(Node node, String propertyName, long value) throws Exception {
@@ -550,7 +556,7 @@ public List<UpdateStorageEventListener> listeners_ = new ArrayList<UpdateStorage
 		public void visitNode(Node n) throws Exception;
 	}
 
-	private void renameStringProperty(Node node, String oldName, String newName)
+	public void renameStringProperty(Node node, String oldName, String newName)
 			throws Exception {
 		if (node.hasProperty(oldName)) {
 			String value = node.getProperty(oldName).getString();
