@@ -245,123 +245,157 @@ public List<UpdateStorageEventListener> listeners_ = new ArrayList<UpdateStorage
     System.out.println(">>>>>> Start " + nt.getNodeTypeName() + " upgrade");
     traverseNodes("select * from " + nt.getNodeTypeName() + " ", new NodeVisitor() {
       public void visitNode(Node node) throws Exception {
-        
+        List<CsNodeTypeMapping> modifiedNodeType = getMailCsNoteTypeMapping();
+        modifiedNodeType.addAll(getCalendarCsNoteTypeMapping());
+        for (CsNodeTypeMapping nt : modifiedNodeType) {
+          // processing for added properties
+          for (CsPropertyMapping prop : getAddedProperty(nt)) {
+            try {
+              setPropertyIfAbsent(node, prop.getPropertyName(), prop.getDefaultValue());
+            } catch (Exception e) {
+              System.out.println("Failed to upgrade forum category: "
+                  + node.getPath() + ": " + e.getMessage());
+            }
+            
+          }
+          
+          // processing for removed properties
+          for (CsPropertyMapping prop : getRemovedProperty(nt)) {
+            try {
+              deleteProperty(node, prop.getPropertyName());
+            } catch (Exception e) {
+              System.out.println("Failed to upgrade forum category: "
+                  + node.getPath() + ": " + e.getMessage());
+            }
+          }
+          
+          // processing for renamed properties
+          for (CsPropertyMapping prop : getUpdatedProperty(nt)) {
+            try {
+              copyStringProperty(node, prop.getPropertyName(), prop.getReplaceName());
+            } catch (Exception e) {
+              System.out.println("Failed to upgrade " + nt.getNodeTypeName() + " : "
+                  + node.getPath() + ": " + e.getMessage());
+            }
+          }
+        }
       }
     });
     System.out.println("<<<<<< End " + nt.getNodeTypeName() + " upgrade");
   }
   
-	/**
-	 * in forum, remove exo:viewForumRole and exo:replyTopicRole
-	 * @throws Exception
-	 */
-	private void fixForums() throws Exception {
-		System.out.println(">>>>>> start forums upgrade");
-		traverseNodes("select * from exo:forum", new NodeVisitor() {
-			public void visitNode(Node node) throws Exception {
-				try {
-					deleteProperty(node, "exo:viewForumRole");
-					deleteProperty(node, "exo:replyTopicRole");
-					
-				} catch (Exception e) {
-					System.out.println("Failed to upgrade forum : "
-							+ node.getPath() + ": " + e.getMessage());
-				}
-			}
-		});
-		System.out.println("<<<<<< End forums upgrade");
-	}
-	
-	/**
-	 * in exo:forumCategory remove exo:userPrivate
-	 * @throws Exception
-	 */
-	private void fixForumCategories() throws Exception {
-		System.out.println(">>>>>> start forum categories upgrade");
-		traverseNodes("select * from exo:forumCategory", new NodeVisitor() {
-
-			public void visitNode(Node node) throws Exception {
-				try {
-					deleteProperty(node, "exo:userPrivate");
-
-					
-				} catch (Exception e) {
-					System.out.println("Failed to upgrade forum category: "
-							+ node.getPath() + ": " + e.getMessage());
-				}
-			}
-		});
-		System.out.println("<<<<<< End forums categories upgrade");
-	}
-	
-	
-	/**
-	 * in calendar, exo:reminder old property : exo:owner new property :
-	 * exo:creator (rename property)
-	 */
-	private void fixReminders() throws Exception {
-		System.out.println(">>>>>> start calendar reminders upgrade");
-		traverseNodes("select * from exo:reminder", new NodeVisitor() {
-
-			public void visitNode(Node node) throws Exception {
-				try {
-					copyStringProperty(node, "exo:owner", "exo:creator");
-				} catch (Exception e) {
-					System.out.println("Failed to upgrade reminder : "
-							+ node.getPath() + ": " + e.getMessage());
-				}
-			}
-		});
-		System.out.println("<<<<<< End calendar reminders upgrade");
-	}
-
-	/**
-	 * in forum, exo:userProfile remove property exo:moderateTopics remove
-	 * property exo:totalMessage
-	 */
-	private void fixProfiles() throws Exception {
-		System.out.println(">>>>>> start forum user profiles upgrade");
-
-		traverseNodes("select * from exo:userProfile", new NodeVisitor() {
-
-			public void visitNode(Node node) throws Exception {
-				try {
-					deleteProperty(node, "exo:moderateTopics");
-					deleteProperty(node, "exo:totalMessage");
-					setPropertyIfAbsent(node, "exo:newMessage", 0L);
-					setPropertyIfAbsent(node, "exo:userTitle", "User");
-					setPropertyIfAbsent(node, "exo:fullName", " ");
-					setPropertyIfAbsent(node, "exo:firstName", " ");
-					setPropertyIfAbsent(node, "exo:email", " ");
-					setPropertyIfAbsent(node, "exo:lastName", " ");
-					setPropertyIfAbsent(node, "exo:userRole", 2L);
-					setPropertyIfAbsent(node, "exo:signature", " ");
-					setPropertyIfAbsent(node, "exo:totalPost", 0L);
-					setPropertyIfAbsent(node, "exo:totalTopic", 0L);
-					setPropertyIfAbsent(node, "exo:moderateForums", " ");
-					setPropertyIfAbsent(node, "exo:readTopic", " ");
-					setPropertyIfAbsent(node, "exo:isDisplaySignature", false);
-					setPropertyIfAbsent(node, "exo:isDisplayAvatar", false);
-					setPropertyIfAbsent(node, "exo:timeZone", 0.0);
-					setPropertyIfAbsent(node, "exo:timeFormat", "hh:mm a");
-					setPropertyIfAbsent(node, "exo:shortDateformat", "MM/dd/yyyy"); 
-					setPropertyIfAbsent(node, "exo:longDateformat", "DDD,MMM dd,yyyy"); 
-					setPropertyIfAbsent(node, "exo:maxPost", 10L);
-					setPropertyIfAbsent(node, "exo:maxTopic", 10L);
-					setPropertyIfAbsent(node, "exo:isShowForumJump", true);
-					setPropertyIfAbsent(node, "exo:isBanned", false);
-					
-				} catch (Exception e) {
-					System.out.println("Failed to fix userProfile : "
-							+ node.getPath() + ": " + e.getMessage());
-				}
-			}
-	
-
-		});
-
-		System.out.println("<<<<<< End forum user profiles upgrade");
-	}
+//	/**
+//	 * in forum, remove exo:viewForumRole and exo:replyTopicRole
+//	 * @throws Exception
+//	 */
+//	private void fixForums() throws Exception {
+//		System.out.println(">>>>>> start forums upgrade");
+//		traverseNodes("select * from exo:forum", new NodeVisitor() {
+//			public void visitNode(Node node) throws Exception {
+//				try {
+//					deleteProperty(node, "exo:viewForumRole");
+//					deleteProperty(node, "exo:replyTopicRole");
+//					
+//				} catch (Exception e) {
+//					System.out.println("Failed to upgrade forum : "
+//							+ node.getPath() + ": " + e.getMessage());
+//				}
+//			}
+//		});
+//		System.out.println("<<<<<< End forums upgrade");
+//	}
+//	
+//	/**
+//	 * in exo:forumCategory remove exo:userPrivate
+//	 * @throws Exception
+//	 */
+//	private void fixForumCategories() throws Exception {
+//		System.out.println(">>>>>> start forum categories upgrade");
+//		traverseNodes("select * from exo:forumCategory", new NodeVisitor() {
+//
+//			public void visitNode(Node node) throws Exception {
+//				try {
+//					deleteProperty(node, "exo:userPrivate");
+//
+//					
+//				} catch (Exception e) {
+//					System.out.println("Failed to upgrade forum category: "
+//							+ node.getPath() + ": " + e.getMessage());
+//				}
+//			}
+//		});
+//		System.out.println("<<<<<< End forums categories upgrade");
+//	}
+//	
+//	
+//	/**
+//	 * in calendar, exo:reminder old property : exo:owner new property :
+//	 * exo:creator (rename property)
+//	 */
+//	private void fixReminders() throws Exception {
+//		System.out.println(">>>>>> start calendar reminders upgrade");
+//		traverseNodes("select * from exo:reminder", new NodeVisitor() {
+//
+//			public void visitNode(Node node) throws Exception {
+//				try {
+//					copyStringProperty(node, "exo:owner", "exo:creator");
+//				} catch (Exception e) {
+//					System.out.println("Failed to upgrade reminder : "
+//							+ node.getPath() + ": " + e.getMessage());
+//				}
+//			}
+//		});
+//		System.out.println("<<<<<< End calendar reminders upgrade");
+//	}
+//
+//  
+//	/**
+//	 * in forum, exo:userProfile remove property exo:moderateTopics remove
+//	 * property exo:totalMessage
+//	 */
+//  private void fixProfiles() throws Exception {
+//		System.out.println(">>>>>> start forum user profiles upgrade");
+//
+//		traverseNodes("select * from exo:userProfile", new NodeVisitor() {
+//
+//			public void visitNode(Node node) throws Exception {
+//				try {
+//					deleteProperty(node, "exo:moderateTopics");
+//					deleteProperty(node, "exo:totalMessage");
+//					setPropertyIfAbsent(node, "exo:newMessage", 0L);
+//					setPropertyIfAbsent(node, "exo:userTitle", "User");
+//					setPropertyIfAbsent(node, "exo:fullName", " ");
+//					setPropertyIfAbsent(node, "exo:firstName", " ");
+//					setPropertyIfAbsent(node, "exo:email", " ");
+//					setPropertyIfAbsent(node, "exo:lastName", " ");
+//					setPropertyIfAbsent(node, "exo:userRole", 2L);
+//					setPropertyIfAbsent(node, "exo:signature", " ");
+//					setPropertyIfAbsent(node, "exo:totalPost", 0L);
+//					setPropertyIfAbsent(node, "exo:totalTopic", 0L);
+//					setPropertyIfAbsent(node, "exo:moderateForums", " ");
+//					setPropertyIfAbsent(node, "exo:readTopic", " ");
+//					setPropertyIfAbsent(node, "exo:isDisplaySignature", false);
+//					setPropertyIfAbsent(node, "exo:isDisplayAvatar", false);
+//					setPropertyIfAbsent(node, "exo:timeZone", 0.0);
+//					setPropertyIfAbsent(node, "exo:timeFormat", "hh:mm a");
+//					setPropertyIfAbsent(node, "exo:shortDateformat", "MM/dd/yyyy"); 
+//					setPropertyIfAbsent(node, "exo:longDateformat", "DDD,MMM dd,yyyy"); 
+//					setPropertyIfAbsent(node, "exo:maxPost", 10L);
+//					setPropertyIfAbsent(node, "exo:maxTopic", 10L);
+//					setPropertyIfAbsent(node, "exo:isShowForumJump", true);
+//					setPropertyIfAbsent(node, "exo:isBanned", false);
+//					
+//				} catch (Exception e) {
+//					System.out.println("Failed to fix userProfile : "
+//							+ node.getPath() + ": " + e.getMessage());
+//				}
+//			}
+//	
+//
+//		});
+//
+//		System.out.println("<<<<<< End forum user profiles upgrade");
+//	}
 
 	private void setPropertyIfAbsent(Node node, String propertyName, double value) throws Exception {
 		if (!node.hasProperty(propertyName)) {
