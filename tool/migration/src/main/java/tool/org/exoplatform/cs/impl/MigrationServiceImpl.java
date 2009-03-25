@@ -65,15 +65,33 @@ public List<UpdateStorageEventListener> listeners_ = new ArrayList<UpdateStorage
   public void initUpdatedData() {
     for (UpdateStorageEventListener updateListener : listeners_) {
       if (updateListener instanceof MailUpdateStoragePlugin) {
-        System.out.println("==============>>>>>>  MailUpdateStoragePlugin" ); 
         MailUpdateStoragePlugin mailPlugin = (MailUpdateStoragePlugin) updateListener;
         mailCsObj_ = mailPlugin.getCsObjectParam();
-      } else if (updateListener instanceof CalendarUpdateStoragePlugin) {
-        System.out.println("==============>>>>>>  CalendarUpdateStoragePlugin"); 
+      } else if (updateListener instanceof CalendarUpdateStoragePlugin) { 
         CalendarUpdateStoragePlugin calendarPlugin = (CalendarUpdateStoragePlugin) updateListener;
         calendarCsObj_ = calendarPlugin.getCsObjectParam();
       }  
     }
+  }
+  
+  public List<CsNodeTypeMapping> getMailCsNoteTypeMapping() {
+    return mailCsObj_.getNodeTypes();
+  }
+  
+  public List<CsNodeTypeMapping> getCalendarCsNoteTypeMapping() {
+    return calendarCsObj_.getNodeTypes();
+  }
+  
+  public List<CsPropertyMapping> getAddedProperty(CsNodeTypeMapping nt) {
+    return nt.getAddedProperties();
+  }
+  
+  public List<CsPropertyMapping> getUpdatedProperty(CsNodeTypeMapping nt) {
+    return nt.getUpdatedProperties();
+  }
+  
+  public List<CsPropertyMapping> getRemovedProperty(CsNodeTypeMapping nt) {
+    return nt.getRemovedProperties();
   }
   
 	public void start() {
