@@ -45,7 +45,7 @@ import org.exoplatform.webui.form.UIFormSelectBox;
  */
 
 @ComponentConfig(
-    template = "app:/templates/calendar/webui/UIPopup/UICalendarSettingTab.gtmpl"
+                 template = "app:/templates/calendar/webui/UIPopup/UICalendarSettingTab.gtmpl"
 ) 
 public class UICalendarSettingTab extends UIFormInputWithActions {
   final public static String VIEW_TYPE = "viewType".intern() ;
@@ -91,15 +91,15 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     addUIFormInput(new UIFormSelectBox(WEEK_START_ON, WEEK_START_ON, weekStartOn)) ;
 
     List<SelectItemOption<String>> dateFormat = new ArrayList<SelectItemOption<String>>() ;
-    dateFormat.add(new SelectItemOption<String>("dd/MM/yyyy", "dd/MM/yyyy")) ;
-    dateFormat.add(new SelectItemOption<String>("dd-MM-yyyy", "dd-MM-yyyy")) ;
-    dateFormat.add(new SelectItemOption<String>("MM/dd/yyyy", "MM/dd/yyyy")) ;
-    dateFormat.add(new SelectItemOption<String>("MM-dd-yyyy", "MM-dd-yyyy")) ;
+    dateFormat.add(new SelectItemOption<String>(CalendarUtils.DATEFORMAT1, CalendarUtils.DATEFORMAT1)) ;
+    dateFormat.add(new SelectItemOption<String>(CalendarUtils.DATEFORMAT2, CalendarUtils.DATEFORMAT2)) ;
+    dateFormat.add(new SelectItemOption<String>(CalendarUtils.DATEFORMAT3, CalendarUtils.DATEFORMAT3)) ;
+    dateFormat.add(new SelectItemOption<String>(CalendarUtils.DATEFORMAT4, CalendarUtils.DATEFORMAT4)) ;
     addUIFormInput(new UIFormSelectBox(DATE_FORMAT, DATE_FORMAT, dateFormat)) ;
 
     List<SelectItemOption<String>> timeFormat = new ArrayList<SelectItemOption<String>>() ;
-    timeFormat.add(new SelectItemOption<String>("AM/PM", "AM/PM")) ;
-    timeFormat.add(new SelectItemOption<String>("24-Hours", "24-Hours")) ;
+    timeFormat.add(new SelectItemOption<String>(CalendarUtils.TWELVE_HOURS, CalendarUtils.TWELVE_HOURS)) ;
+    timeFormat.add(new SelectItemOption<String>(CalendarUtils.TWENTY_FOUR_HOURS, CalendarUtils.TWENTY_FOUR_HOURS)) ;
     addUIFormInput(new UIFormSelectBox(TIME_FORMAT, TIME_FORMAT, timeFormat)) ;
     UIFormSelectBox localeSelect = new UIFormSelectBox(LOCATION, LOCATION, getLocales()) ;
     addUIFormInput(localeSelect) ;
@@ -144,19 +144,25 @@ public class UICalendarSettingTab extends UIFormInputWithActions {
     getUIFormSelectBox(WEEK_START_ON).setValue(value) ;
   }
   protected String getDateFormat() {
-    return getUIFormSelectBox(DATE_FORMAT).getValue() ;
+    String value = getUIFormSelectBox(DATE_FORMAT).getValue() ;
+    return CalendarUtils.FORMATPATTERNS[Integer.parseInt(value.substring(value.length() -1))] ;
   }
   protected void setDateFormat(String value) {
-    getUIFormSelectBox(DATE_FORMAT).setValue(value) ;
+    if(!CalendarUtils.isEmpty(value)) {
+      for(int i = 0; i < CalendarUtils.FORMATPATTERNS.length ; i++ ) {
+        if(value.equalsIgnoreCase(CalendarUtils.FORMATPATTERNS[i])) 
+          getUIFormSelectBox(DATE_FORMAT).setValue(CalendarUtils.DATEFORMATS[i]) ;
+      }
+    }
   }
   protected String getTimeFormat() {
-    if("AM/PM".equals(getUIFormSelectBox(TIME_FORMAT).getValue()))
-      return "hh:mm a" ;
-    else return "HH:mm" ;
+    if(CalendarUtils.TWELVE_HOURS.equals(getUIFormSelectBox(TIME_FORMAT).getValue()))
+      return CalendarUtils.TIMEFORMATPATTERNS[0] ;
+    else return CalendarUtils.TIMEFORMATPATTERNS[1] ;
   }
   protected void setTimeFormat(String value) {
-    if("hh:mm a".endsWith(value)) getUIFormSelectBox(TIME_FORMAT).setValue("AM/PM") ;
-    else getUIFormSelectBox(TIME_FORMAT).setValue("24-Hours") ;
+    if(CalendarUtils.TIMEFORMATPATTERNS[0].endsWith(value)) getUIFormSelectBox(TIME_FORMAT).setValue(CalendarUtils.TWELVE_HOURS) ;
+    else getUIFormSelectBox(TIME_FORMAT).setValue(CalendarUtils.TWENTY_FOUR_HOURS) ;
   }
   protected String getLocale() {
     return getUIFormSelectBox(LOCATION).getValue() ;

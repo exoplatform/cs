@@ -111,6 +111,20 @@ public class CalendarUtils {
   public static final String DOT = ".".intern();
   public static final String TIMEFORMAT  = "HH:mm".intern();
   public static final String DATEFORMAT = "MM/dd/yyyy".intern();
+  public static final String[] TIMEFORMATPATTERNS = {"hh:mm a","HH:mm"} ;
+  public static final String DATEFORMAT1 = "dfm0".intern();
+  public static final String DATEFORMAT2 = "dfm1".intern();
+  public static final String DATEFORMAT3 = "dfm2".intern();
+  public static final String DATEFORMAT4 = "dfm3".intern();
+  public static final String[] DATEFORMATS = {DATEFORMAT1,DATEFORMAT2,DATEFORMAT3,DATEFORMAT4} ;
+  public static final String FORMATPATTERN1 = "dd/MM/yyyy".intern();
+  public static final String FORMATPATTERN2 = "dd-MM-yyyy".intern();
+  public static final String FORMATPATTERN3 = "MM/dd/yyyy".intern();
+  public static final String FORMATPATTERN4 = "MM-dd-yyyy".intern();
+  public static final String[] FORMATPATTERNS = {FORMATPATTERN1,FORMATPATTERN2,FORMATPATTERN3,FORMATPATTERN4} ;
+  public static final String TWELVE_HOURS  = "12-Hours".intern() ;
+  public static final String TWENTY_FOUR_HOURS  = "24-Hours".intern() ;
+  
   public static final String DATETIMEFORMAT = DATEFORMAT +" " +TIMEFORMAT;   
   public static final int DEFAULT_TIMEITERVAL = 15;
   public static final long MILISECONS_OF_DAY = 24*60*59*1000;
