@@ -59,9 +59,6 @@ import org.exoplatform.webui.core.model.SelectItem;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.core.model.SelectOption;
 import org.exoplatform.webui.core.model.SelectOptionGroup;
-import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormCheckBoxInput;
-
 
 /**
  * Created by The eXo Platform SARL
@@ -590,6 +587,21 @@ public class CalendarUtils {
       return false ;
     }
     return isInvalid ;
+  }
+  
+  public static String invalidEmailAddresses(String addressList) {
+    StringBuilder invalidEmails = new StringBuilder("") ;
+    try {
+      InternetAddress[] iAdds = InternetAddress.parse(addressList, true);
+      String emailRegex = "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+\\.[A-Za-z]{2,5}" ;
+      for (int i = 0 ; i < iAdds.length; i ++) {
+        if(!iAdds[i].getAddress().toString().matches(emailRegex)) {
+          if (invalidEmails.length() > 0) invalidEmails.append(", ") ;
+          invalidEmails.append(iAdds[i].getAddress().toString()) ;
+        }
+      }
+    } catch(AddressException e) { }
+    return invalidEmails.toString() ;
   }
 
   public static String parseEmailAddress(String address) {

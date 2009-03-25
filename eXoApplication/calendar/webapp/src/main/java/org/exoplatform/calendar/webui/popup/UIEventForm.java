@@ -158,6 +158,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
   private CalendarEvent calendarEvent_ = null ;
   protected String calType_ = "0" ;
   private String errorMsg_ = null ;
+  private String errorValues = null ;
   private Map<String, User> participants_ = new LinkedHashMap<String, User>() ;
   private String oldCalendarId_ = null ;
   private String newCalendarId_ = null ;
@@ -444,13 +445,20 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       errorMsg_ = "UIEventForm.msg.error-particimant-email-required" ;
       return false ;
     }else if (isSendMail()) {
+      errorValues = null ;
       //getParticipants() ;
+      StringBuilder buider = new StringBuilder("") ;
       for (String par : getParticipantValues().split(CalendarUtils.COMMA)) {
         if (CalendarUtils.getOrganizationService().getUserHandler().findUserByName(par) == null) {
-          errorMsg_ = "UIEventForm.msg.invalid-username" ;
-          return false ;
+          if (buider.length() > 0) buider.append(", ") ; 
+          buider.append(par) ;
         }
-      }      
+      }
+      if (buider.length() > 0) {
+        errorMsg_ = "UIEventForm.msg.invalid-username" ;
+        errorValues = buider.toString() ;
+        return false ;
+      }
     }
     errorMsg_ = null ;
     return true ;
@@ -1294,7 +1302,7 @@ public Attachment getAttachment(String attId) {
           return ;
         } else {
           if(!uiForm.isParticipantValid()) {
-            uiApp.addMessage(new ApplicationMessage(uiForm.errorMsg_, null));
+            uiApp.addMessage(new ApplicationMessage(uiForm.errorMsg_, new String[] { uiForm.errorValues }));
             uiForm.setSelectedTab(TAB_EVENTSHARE) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
@@ -1370,7 +1378,8 @@ public Attachment getAttachment(String attId) {
                 }
                 if(!emails.isEmpty()) calendarEvent.setInvitation(emails.toArray(new String[emails.size()])) ;
               } else {
-                uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.event-email-invalid", null));
+                uiApp.addMessage(new ApplicationMessage("UIEventForm.msg.event-email-invalid"
+                  , new String[] { CalendarUtils.invalidEmailAddresses(uiForm.getInvitationEmail())}));
                 uiForm.setSelectedTab(TAB_EVENTSHARE) ;
                 event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
                 event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
