@@ -232,13 +232,25 @@ public List<UpdateStorageEventListener> listeners_ = new ArrayList<UpdateStorage
 	 */
 	public void arrangeData() throws Exception {
 		System.out.println("######### Begin arrange nodes #########");
-		fixReminders();
-		fixProfiles();
-		fixForums();
-		fixForumCategories();
+    for (CsNodeTypeMapping nt : getMailCsNoteTypeMapping()) {
+      fixNodeType(nt);
+    }
+    for (CsNodeTypeMapping nt : getCalendarCsNoteTypeMapping()) {
+      fixNodeType(nt);
+    }
 		System.out.println("######### End arrange nodes #########");
 	}
 
+  private void fixNodeType(CsNodeTypeMapping nt) throws Exception {
+    System.out.println(">>>>>> Start " + nt.getNodeTypeName() + " upgrade");
+    traverseNodes("select * from " + nt.getNodeTypeName() + " ", new NodeVisitor() {
+      public void visitNode(Node node) throws Exception {
+        
+      }
+    });
+    System.out.println("<<<<<< End " + nt.getNodeTypeName() + " upgrade");
+  }
+  
 	/**
 	 * in forum, remove exo:viewForumRole and exo:replyTopicRole
 	 * @throws Exception
