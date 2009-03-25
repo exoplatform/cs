@@ -98,23 +98,6 @@ public List<UpdateStorageEventListener> listeners_ = new ArrayList<UpdateStorage
 		System.out.println("######### Start MigrationService #########");
     
     initUpdatedData();    
-    
-    if (mailCsObj_ != null) {
-      for(CsNodeTypeMapping nt : mailCsObj_.getNodeTypes()) {
-        for(CsPropertyMapping addedProperty : nt.getAddedProperties()) {
-          System.out.println("==============>>>>>>  " + addedProperty.getPropertyName()); 
-        }
-      }
-    }
-    
-    if (calendarCsObj_ != null) {
-      for(CsNodeTypeMapping nt : calendarCsObj_.getNodeTypes()) {
-        for(CsPropertyMapping addedProperty : nt.getAddedProperties()) {
-          System.out.println("==============>>>>>>  " + addedProperty.getPropertyName()); 
-        }
-      }
-    }
-    
 		try {
 			initService();	
 				
@@ -217,10 +200,12 @@ public List<UpdateStorageEventListener> listeners_ = new ArrayList<UpdateStorage
 	 */
 	public void removeNT() throws Exception {
 		System.out.println("######### Begin remove nodetypes #########");
-		removeNodeType("exo:reminder");
-		removeNodeType("exo:userProfile");
-		removeNodeType("exo:forum");
-		removeNodeType("exo:forumCategory");
+		for (CsNodeTypeMapping nt : getMailCsNoteTypeMapping()) {
+      removeNodeType(nt.getNodeTypeName());
+    }
+    for (CsNodeTypeMapping nt : getCalendarCsNoteTypeMapping()) {
+      removeNodeType(nt.getNodeTypeName());
+    }
 		System.out.println("######### End remove nodetypes #########");
 
 	}
