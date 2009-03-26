@@ -11,6 +11,7 @@
   //rcontext.getJavascriptManager().addOnLoadJavascript('eXo.mail.AutoComplete.ACMain.init("autoComplete", ["to", "cc", "bcc"])');
 %>
 <% uiform.begin() %>
+<div class="UIConfirmMessage" style="display:none;"><%=_ctx.appRes(uicomponent.id+".msg.no-subject") %></div>
 <div style="overflow-x: auto; width: 99%;">
 <div><div style="width: 680px;" ><span style="display: none;"></span></div></div>
 <div  style="_width: expression(this.previousSibling.offsetWidth - 22 + 'px'); !border: 1px solid white; _margin: auto;">

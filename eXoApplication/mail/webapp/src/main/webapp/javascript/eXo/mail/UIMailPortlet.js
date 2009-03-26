@@ -658,3 +658,26 @@ UIMailPortlet.prototype.expandCollapse = function(clickObj, clickBar) {
 } ;
 
 eXo.mail.UIMailPortlet = new UIMailPortlet();
+// Override submit method of UIForm to add a comfirm message
+UIForm.prototype.tmpMethod = eXo.webui.UIForm.submitForm ;
+UIForm.prototype.submitForm = function(formId, action, useAjax, callback) {
+	var form = this.getFormElemt(formId) ;
+	if(formId.indexOf("mail#UIComposeForm") >= 0){
+		var to = form["to"].value;
+		var subject = form["subject"].value;
+		var confirmMessage = eXo.core.DOMUtil.findFirstDescendantByClass(form,"div","UIConfirmMessage").innerHTML;
+		if(this.isEmpty(subject) && this.isEmail(to) && !confirm(confirmMessage)) return ;
+	}
+	this.tmpMethod(formId, action, useAjax, callback)
+};
+UIForm.prototype.isEmail = function(email){
+	if(this.isEmpty(email)) return false;
+	var pattern =  /^\w+([\.-]?\w+)*@(([\-\w]+)\.?)+\.[a-zA-Z]{2,4}$/;
+	return pattern.test(email);
+}
+
+UIForm.prototype.isEmpty = function(str){
+	str = str.toString().trim();
+	if(str == '' || str == null) return true;
+	return false;
+}
