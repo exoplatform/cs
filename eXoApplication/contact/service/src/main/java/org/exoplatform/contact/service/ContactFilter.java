@@ -44,8 +44,12 @@ public class ContactFilter {
   private String username = null ;
   private String type = null ;
   private boolean hasEmails = false;
+  private boolean isSearchSharedContacts = false ;
   
   public ContactFilter() { isAscending = true ; }
+  
+  public boolean isSearchSharedContacts()  { return isSearchSharedContacts ; }
+  public void   setSearchSharedContacts(boolean isSearchSharedContacts) { this.isSearchSharedContacts = isSearchSharedContacts ; }
   
   public String getUsername()  { return username ; }
   public void   setUsername(String s) { username = s ; }

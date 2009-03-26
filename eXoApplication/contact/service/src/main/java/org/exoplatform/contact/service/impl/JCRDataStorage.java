@@ -1926,7 +1926,7 @@ public class JCRDataStorage {
         }
       }
     }
-    
+
     if (filter.getType() == null || filter.getType().equals(SHARED)) {
     //share contacts
       try {
@@ -1968,22 +1968,27 @@ public class JCRDataStorage {
           }
         }
       } catch (PathNotFoundException e) { }
-      
-      Node sharedAddressBookMock = getSharedAddressBooksHome(username) ;
-      PropertyIterator iter = sharedAddressBookMock.getReferences() ;
-      Node addressBook ;      
-      while(iter.hasNext()) {
-        addressBook = iter.nextProperty().getParent() ;
-        Node contactHomeNode = addressBook.getParent().getParent().getNode(CONTACTS) ;
-        filter.setAccountPath(contactHomeNode.getPath()) ;
-        filter.setCategories(new String[] {addressBook.getName()}) ;
-        filter.setUsername(addressBook.getProperty("exo:sharedUserId").getString()) ;
-        qm = contactHomeNode.getSession().getWorkspace().getQueryManager() ;
-        query = qm.createQuery(filter.getStatement(), Query.XPATH) ;  
-        NodeIterator it = query.execute().getNodes() ;
-        while(it.hasNext()) {
-          Contact contact = getContact(it.nextNode(), SHARED) ;
-          contacts.put(contact.getId(), contact) ;
+      if (filter.isSearchSharedContacts() == false) {
+        Node sharedAddressBookMock = getSharedAddressBooksHome(username) ;
+        PropertyIterator iter = sharedAddressBookMock.getReferences() ;
+        Node addressBook ;      
+        boolean searchByAddress = false ;
+        if (filter.getCategories() != null && filter.getCategories().length >0) searchByAddress = true ; 
+        while(iter.hasNext()) {
+          addressBook = iter.nextProperty().getParent() ;
+          Node contactHomeNode = addressBook.getParent().getParent().getNode(CONTACTS) ;
+          filter.setAccountPath(contactHomeNode.getPath()) ;
+          
+          // avoid getAllContacts from contactHomeNode of another user. 
+          if (!searchByAddress) filter.setCategories(new String[] {addressBook.getName()}) ;
+          filter.setUsername(addressBook.getProperty("exo:sharedUserId").getString()) ;
+          qm = contactHomeNode.getSession().getWorkspace().getQueryManager() ;
+          query = qm.createQuery(filter.getStatement(), Query.XPATH) ;  
+          NodeIterator it = query.execute().getNodes() ;
+          while(it.hasNext()) {
+            Contact contact = getContact(it.nextNode(), SHARED) ;
+            contacts.put(contact.getId(), contact) ;
+          }
         }
       }
     }

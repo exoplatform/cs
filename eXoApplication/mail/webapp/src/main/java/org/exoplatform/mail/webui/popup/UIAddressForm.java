@@ -28,6 +28,7 @@ import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.DataPageList;
 import org.exoplatform.contact.service.SharedAddressBook;
+import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.service.impl.NewUserListener;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.MailUtils;
@@ -80,7 +81,9 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
   private String selectedAddressId_ = "" ;
   private String recipientsType_ = "";
   private UIPageIterator uiPageList_ ;
-
+  private String all = "all";
+  private String sharedContacts_ = "sharedContacts";
+  
   public void setRecipientsType(String type) {
     recipientsType_ = type;
   }
@@ -102,21 +105,25 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     UIFormSelectBoxWithGroups uiSelect = new UIFormSelectBoxWithGroups(CONTACT_GROUP, CONTACT_GROUP, getOptions()) ;
     uiSelect.setOnChange("ChangeGroup") ;
     addUIFormInput(uiSelect) ;
+    uiSelect.setValue(NewUserListener.DEFAULTGROUP + MailUtils.getCurrentUser()) ;
     uiPageList_ = new UIPageIterator() ;
     uiPageList_.setId("UIMailAddressPage") ;
-    String username = MailUtils.getCurrentUser();
+    // cs-1267
+    /* String username = MailUtils.getCurrentUser();
     ContactService contactSrv = getApplicationComponent(ContactService.class);
     List<AddressBook> groups = contactSrv.getGroups(SessionProviderFactory.createSystemProvider(), username) ;
     if (groups != null && groups.size() > 0) {
       String category = groups.get(0).getId() ;
       setContactList(category) ;
-    }
+    }*/
+    setContactList(NewUserListener.DEFAULTGROUP + MailUtils.getCurrentUser()) ;
   }
 
   public List<SelectItem> getOptions() throws Exception {
     String username = MailUtils.getCurrentUser();
     ContactService contactSrv = getApplicationComponent(ContactService.class);
     List<SelectItem> options = new ArrayList<SelectItem>() ;
+    options.add(new SelectOption(all, all)) ;
     List<AddressBook> contactGroup = contactSrv.getGroups(SessionProviderFactory.createSystemProvider(), username);
     if(!contactGroup.isEmpty()) {
       SelectOptionGroup personalContacts = new SelectOptionGroup("personal-contacts");
@@ -125,15 +132,18 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       }
       options.add(personalContacts);
     }
-    List<SharedAddressBook> sharedAdd = contactSrv.getSharedAddressBooks(username);
-    if(!sharedAdd.isEmpty()) {
-      SelectOptionGroup sharedContacts = new SelectOptionGroup("shared-contacts");
-      for(SharedAddressBook scg : sharedAdd) {
+    
+    DataPageList sharedContacts = contactSrv.getSharedContacts(username) ;    
+    List<SharedAddressBook> sharedAdds = contactSrv.getSharedAddressBooks(username);
+    if(!sharedAdds.isEmpty() || sharedContacts.getAll().size() > 0) {
+      SelectOptionGroup sharedAddress = new SelectOptionGroup("shared");
+      for(SharedAddressBook scg : sharedAdds) {
         String name = "" ;
         if(!CalendarUtils.isEmpty(scg.getSharedUserId())) name = scg.getSharedUserId() + "-" ;
-        sharedContacts.addOption(new SelectOption(name + scg.getName(), scg.getId())) ;
+        sharedAddress.addOption(new SelectOption(name + scg.getName(), scg.getId())) ;
       }
-      options.add(sharedContacts);
+      sharedAddress.addOption(new SelectOption(sharedContacts_, sharedContacts_));
+      options.add(sharedAddress);
     }
     OrganizationService organizationService = 
       (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
@@ -225,17 +235,24 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       UIAddressForm uiAddressForm = event.getSource();  
       ContactService contactService = uiAddressForm.getApplicationComponent(ContactService.class) ;
       String category = ((UIFormSelectBoxWithGroups)uiAddressForm.getChildById(UIAddressForm.CONTACT_GROUP)).getValue() ;
-      if(category.equals(NewUserListener.DEFAULTGROUP)) category = category + MailUtils.getCurrentUser() ;
-      uiAddressForm.selectedAddressId_ = category ;
-      ContactFilter filter = new ContactFilter() ;
-      if(!MailUtils.isFieldEmpty(uiAddressForm.selectedAddressId_)) {
-        filter.setCategories(new String[]{ uiAddressForm.selectedAddressId_ }) ;
+      if (category.equals(uiAddressForm.all)) {
+        ContactFilter filter = new ContactFilter() ;
+        uiAddressForm.setContactList(contactService.searchContact(
+          SessionProviderFactory.createSystemProvider(), MailUtils.getCurrentUser(), filter).getAll()) ;
+      } else if (category.equals(uiAddressForm.sharedContacts_)) {
+        uiAddressForm.setContactList(contactService.getSharedContacts(MailUtils.getCurrentUser()).getAll()) ;
+      } else {
+        if(category.equals(NewUserListener.DEFAULTGROUP)) category = category + MailUtils.getCurrentUser() ;
+        uiAddressForm.selectedAddressId_ = category ;
+        ContactFilter filter = new ContactFilter() ;
+        if(!MailUtils.isFieldEmpty(uiAddressForm.selectedAddressId_)) {
+          filter.setCategories(new String[]{ uiAddressForm.selectedAddressId_ }) ;
+        }
+        uiAddressForm.setContactList(contactService.searchContact(
+          SessionProviderFactory.createSystemProvider(), MailUtils.getCurrentUser(), filter).getAll()) ;
       }
-      DataPageList resultPageList = 
-        contactService.searchContact(SessionProviderFactory.createSystemProvider(), MailUtils.getCurrentUser(), filter) ;
-      uiAddressForm.setContactList(resultPageList.getAll()) ;
       uiAddressForm.getUIStringInput(UIAddressForm.CONTACT_SEARCH).setValue(null) ;
-      ((UIFormSelectBoxWithGroups)uiAddressForm.getChildById(UIAddressForm.CONTACT_GROUP)).setValue(uiAddressForm.selectedAddressId_) ;
+      //((UIFormSelectBoxWithGroups)uiAddressForm.getChildById(UIAddressForm.CONTACT_GROUP)).setValue(uiAddressForm.selectedAddressId_) ;
       event.getRequestContext().addUIComponentToUpdateByAjax(uiAddressForm) ;
     }
   }
@@ -246,26 +263,37 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
       ContactService contactService = uiForm.getApplicationComponent(ContactService.class) ;
       String text = uiForm.getUIStringInput(UIAddressForm.CONTACT_SEARCH).getValue() ;
       String category = ((UIFormSelectBoxWithGroups)uiForm.getChildById(UIAddressForm.CONTACT_GROUP)).getValue() ;
-      if(category.equals(NewUserListener.DEFAULTGROUP)) category = category + MailUtils.getCurrentUser() ;
-      uiForm.selectedAddressId_ = category ;
-      try {
-        ContactFilter filter = new ContactFilter() ;
-        if(!MailUtils.isFieldEmpty(uiForm.selectedAddressId_)) {
-          filter.setCategories(new String[]{uiForm.selectedAddressId_}) ;
-        } 
-        if(!MailUtils.isFieldEmpty(text))
-          filter.setText(MailUtils.encodeJCRText(text)) ;
-        DataPageList resultPageList = 
-          contactService.searchContact(SessionProviderFactory.createSystemProvider(), event.getRequestContext().getRemoteUser(), filter) ;
-        uiForm.setContactList(resultPageList.getAll()) ;
-        ((UIFormSelectBoxWithGroups)uiForm.getChildById(UIAddressForm.CONTACT_GROUP)).setValue(category) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
-      } catch (Exception e) {
-        UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
-        uiApp.addMessage(new ApplicationMessage("UIAddressForm.msg.search-error-keyword", null)) ;
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
-        return ;
+      ContactFilter filter = new ContactFilter() ;
+      if(!MailUtils.isFieldEmpty(text))
+        filter.setText(MailUtils.encodeJCRText(text)) ;
+      if (category.equals(uiForm.all)) {       
+        uiForm.setContactList(contactService.searchContact(
+          SessionProviderFactory.createSystemProvider(), MailUtils.getCurrentUser(), filter).getAll()) ;
+      } else if(category.equals(uiForm.sharedContacts_)) {
+        filter.setType(JCRDataStorage.SHARED);
+        filter.setSearchSharedContacts(true) ;
+        uiForm.setContactList(contactService.searchContact(
+          SessionProviderFactory.createSystemProvider(), MailUtils.getCurrentUser(), filter).getAll());
+      } else {
+        if(category.equals(NewUserListener.DEFAULTGROUP)) category = category + MailUtils.getCurrentUser() ;
+        uiForm.selectedAddressId_ = category ;
+        try {
+          if(!MailUtils.isFieldEmpty(uiForm.selectedAddressId_)) {
+            filter.setCategories(new String[]{uiForm.selectedAddressId_}) ;
+          }
+          DataPageList resultPageList = 
+            contactService.searchContact(SessionProviderFactory.createSystemProvider(), event.getRequestContext().getRemoteUser(), filter) ;
+          uiForm.setContactList(resultPageList.getAll()) ;
+          ((UIFormSelectBoxWithGroups)uiForm.getChildById(UIAddressForm.CONTACT_GROUP)).setValue(category) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
+        } catch (Exception e) {
+          UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
+          uiApp.addMessage(new ApplicationMessage("UIAddressForm.msg.search-error-keyword", null)) ;
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
+          return ;
+        }
       }
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiForm) ;
     }
   }
 

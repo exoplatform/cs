@@ -434,6 +434,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, UISe
       }
       else if(!CalendarUtils.isAllEmailValid(getEmailAddress())) {
         errorMsg_ = "UIEventForm.msg.event-email-invalid" ;
+        errorValues = CalendarUtils.invalidEmailAddresses(getEmailAddress()) ;
         return false ;
       } 
     } 
@@ -1295,7 +1296,7 @@ public Attachment getAttachment(String attId) {
         return ;
       } else {
         if(!uiForm.isReminderValid()) {
-          uiApp.addMessage(new ApplicationMessage(uiForm.errorMsg_, null));
+          uiApp.addMessage(new ApplicationMessage(uiForm.errorMsg_, new String[] {uiForm.errorValues} ));
           uiForm.setSelectedTab(TAB_EVENTREMINDER) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;

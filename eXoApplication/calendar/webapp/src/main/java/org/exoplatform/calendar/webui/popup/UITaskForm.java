@@ -125,8 +125,9 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
   private boolean isAddNew_ = true ;
   private CalendarEvent calendarEvent_ = null ;
   private String errorMsg_ = null ;
+  private String errorValues = null ;
   private String calType_ = "0" ;
-
+  
   private String oldCalendarId_ = null ;
   private String newCalendarId_ = null ;
   private String newCategoryId_ = null ;
@@ -380,6 +381,7 @@ public class UITaskForm extends UIFormTabPane implements UIPopupComponent, UISel
       }
       else if(!CalendarUtils.isAllEmailValid(getEmailAddress())) {
         errorMsg_ = "UIEventForm.msg.event-email-invalid" ;
+        errorValues = CalendarUtils.invalidEmailAddresses(getEmailAddress()) ;
         return false ;
       } 
     } 
@@ -1002,7 +1004,7 @@ public Attachment getAttachment(String attId) {
           }
         }
         if(!uiForm.isReminderValid()) {
-          uiApp.addMessage(new ApplicationMessage(uiForm.errorMsg_, null));
+          uiApp.addMessage(new ApplicationMessage(uiForm.errorMsg_, new String[] {uiForm.errorValues }));
           uiForm.setSelectedTab(TAB_TASKREMINDER) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getAncestorOfType(UIPopupAction.class)) ;
           event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
