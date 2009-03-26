@@ -176,6 +176,7 @@ public class UISelectAccount extends UIForm {
         String accId = uiSelectAcc.getSelectedValue() ;
         UIMessageList uiMessageList = uiPortlet.findFirstComponentOfType(UIMessageList.class) ;
         UIMessagePreview uiMessagePreview = uiPortlet.findFirstComponentOfType(UIMessagePreview.class) ;
+        UIFolderContainer uiFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class);
         MailService mailSvr = uiSelectAcc.getApplicationComponent(MailService.class) ;
         String username = uiPortlet.getCurrentUser();
         if (mailSvr.getAccountById(SessionProviderFactory.createSystemProvider(), username, accId) == null) {
@@ -193,6 +194,7 @@ public class UISelectAccount extends UIForm {
           }
         }
         uiSelectAcc.setSelectedValue(accId);
+        uiFolder.setSelectedFolder(Utils.createFolderId(accId, Utils.FD_INBOX, false));
         MessageFilter filter = new MessageFilter("Folder");
         filter.setAccountId(accId);
         filter.setFolder(new String[] {Utils.createFolderId(accId, Utils.FD_INBOX, false)}) ;
