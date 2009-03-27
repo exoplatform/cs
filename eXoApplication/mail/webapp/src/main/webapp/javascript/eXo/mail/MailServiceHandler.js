@@ -126,12 +126,13 @@ MailServiceHandler.prototype.stopCheckMail = function() {
 };
 
 
-MailServiceHandler.prototype.showStatusBox = function() {
+MailServiceHandler.prototype.showStatusBox = function(status) {
   this.checkMailInfobarNode = document.getElementById(this.uiId);
   var statusTextNode = eXo.core.DOMUtil.findFirstDescendantByClass(this.checkMailInfobarNode, 'div', 'StatusText');
   if (this.checkMailInfobarNode.style.display == 'none') {
 	  this.checkMailInfobarNode.style.display = 'block';
   }
+   if (statusTextNode && status) statusTextNode.innerHTML = status;
 };
 
 /**

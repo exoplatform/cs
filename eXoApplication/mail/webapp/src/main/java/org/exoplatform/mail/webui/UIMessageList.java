@@ -158,8 +158,6 @@ public class UIMessageList extends UIForm {
       long currentPage = 1 ;
       if (pageList_ != null) currentPage = pageList_.getCurrentPage() ;
       MessagePageList currentPageList = mailSrv.getMessagePageList(SessionProviderFactory.createSystemProvider(), username, filter) ;
-      //TODO why we need check this ? why don't we check after the update list ?
-      //currentPageList.checkAndSetPage(currentPage) ;
       // CS-2493
       setMessagePageList(currentPageList);
       updateList(currentPage) ;

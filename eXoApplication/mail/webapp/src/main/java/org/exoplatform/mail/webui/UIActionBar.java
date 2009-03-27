@@ -74,8 +74,8 @@ public class UIActionBar extends UIContainer {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ;
       } if (MailUtils.isChecking(username, accId)) {
-        System.out.println("####  You are checking mail ");
-        context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.showStatusBox() ;");
+        System.out.println("####  You are already checking mail... ");
+        context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.showStatusBox(\"You are already checking mail\") ;");
         return ;
       } else {
         context.getJavascriptManager().addJavascript("eXo.mail.MailServiceHandler.checkMail(true) ;");
