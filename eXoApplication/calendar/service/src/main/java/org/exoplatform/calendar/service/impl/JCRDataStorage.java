@@ -1013,9 +1013,11 @@ public class JCRDataStorage{
         }
       }  catch (Exception e) {
         e.printStackTrace() ;
-      } finally {
-        closeSessionProvider(systemSession);
       }
+      //TODO should not close session here, after remove reminder we have use session to sync event
+      /* finally {
+        closeSessionProvider(systemSession);
+      }*/
     }
   } 
 

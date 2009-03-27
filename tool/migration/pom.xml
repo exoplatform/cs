@@ -9,17 +9,17 @@
   <artifactId>exo.cs.tool.migration</artifactId>
   <packaging>jar</packaging>
   <version>${org.exoplatform.cs.version}</version>
-  <name>migration tool</name>
+  <name>exo cs migration tool</name>
   <url>http://www.exoplatform.org</url>
-  <description>Migration Tool</description>
+  <description>CS migration tool to update cs versions</description>
 
   <dependencies>
-    <dependency>
+    <!--dependency>
 	  <groupId>org.exoplatform.kernel</groupId>
 	  <artifactId>exo.kernel.container</artifactId>
 	  <version>${org.exoplatform.kernel.version}</version>
 	  <scope>provided</scope>
-	</dependency>
+	</dependency -->
       <dependency>
 	  <groupId>org.exoplatform.jcr</groupId>
 	  <artifactId>exo.jcr.component.core</artifactId>
