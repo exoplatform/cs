@@ -662,7 +662,7 @@ eXo.mail.UIMailPortlet = new UIMailPortlet();
 UIForm.prototype.tmpMethod = eXo.webui.UIForm.submitForm ;
 UIForm.prototype.submitForm = function(formId, action, useAjax, callback) {
 	var form = this.getFormElemt(formId) ;
-	if(formId.indexOf("mail#UIComposeForm") >= 0){
+	if((formId.indexOf("mail#UIComposeForm")>= 0) && (action.indexOf("Send") >= 0 )){
 		var to = form["to"].value;
 		var subject = form["subject"].value;
 		var confirmMessage = eXo.core.DOMUtil.findFirstDescendantByClass(form,"div","UIConfirmMessage").innerHTML;
