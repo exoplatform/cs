@@ -10,7 +10,7 @@
   <groupId>org.exoplatform.cs</groupId>
   <artifactId>config</artifactId>
   <name>eXo Collaboration Suite Config</name>
-  <version>1.2-SNAPSHOT</version>
+  <version>1.3-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <modules>
@@ -21,10 +21,7 @@
     
     <module>eXoApplication/mail/webapp</module>
     <module>eXoApplication/mail/service</module>
-    
-    <!--module>eXoApplication/forum/webapp</module>
-    <module>eXoApplication/forum/service</module-->
-    
+   
     <module>eXoApplication/calendar/webapp</module>
     <module>eXoApplication/calendar/service</module>
     
@@ -33,6 +30,15 @@
     
     <module>eXoApplication/content/webapp</module>
     <module>eXoApplication/content/service</module>
+    
+    <module>eXoApplication/chat/service</module>
+    <module>eXoApplication/chat/webapp</module>
+    
+    <module>eXoApplication/organization/client</module>
+    <module>eXoApplication/organization/service</module>
+    <module>eXoApplication/organization/webapp</module>
+    
+    <module>server/tomcat/patch</module>
   </modules>
 
   <build>
@@ -128,7 +134,7 @@
         <org.exoplatform.jcr.version>1.10.1</org.exoplatform.jcr.version>
         <org.exoplatform.pc.version>2.0.4</org.exoplatform.pc.version>
         <org.exoplatform.portal.version>2.5</org.exoplatform.portal.version>
-        <org.exoplatform.cs.version>1.2-SNAPSHOT</org.exoplatform.cs.version>
+        <org.exoplatform.cs.version>1.3-SNAPSHOT</org.exoplatform.cs.version>
         <test.classes>Test</test.classes>
         <test.skip>true</test.skip>
       </properties>

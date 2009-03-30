@@ -1,0 +1,574 @@
+/**
+ * @author Uoc Nguyen Ba
+ */
+function XMPPCommunicator() {
+  this.SERVICE_URL       = '/chat/messengerservlet';
+  this.TRANSPORT_XMPP    = 'xmpp';
+  this.TRANSPORT_YAHOO   = 'yahoo';
+  this.TRANSPORT_GTALK   = 'gtalk';
+  this.TRANSPORT_ICQ     = 'icq';
+  this.TRANSPORT_AIM     = 'aim';
+  this.TRANSPORT_MSN     = 'msn';
+}
+
+XMPPCommunicator.prototype.encodeParam = function(param) {
+  //return window.escape(param);
+  return window.encodeURIComponent(param);
+};
+
+XMPPCommunicator.prototype.encodeRoomName = function(roomName) {
+  if (roomName.indexOf('@') == -1) {
+    return roomName;
+  }
+  var roomNameParts = roomName.split('@');
+  roomNameParts[0] = this.encodeParam(roomNameParts[0]);
+  return roomNameParts.join('@');
+};
+
+XMPPCommunicator.prototype.ajaxProcessOverwrite = function(manualMode, ajaxRequest) {
+  if (ajaxRequest.request == null) return ;
+  ajaxRequest.request.open(ajaxRequest.method, ajaxRequest.url, true) ;   
+  if (!manualMode) {
+    if (ajaxRequest.method == "POST") {
+      ajaxRequest.request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8") ;
+    } else {
+      ajaxRequest.request.setRequestHeader("Content-Type", "text/plain;charset=UTF-8") ;
+    }
+  } else {
+    ajaxRequest.request.setRequestHeader("Content-Type", "text/xml;charset=UTF-8") ;
+  }
+  
+  if (ajaxRequest.timeout > 0) setTimeout(ajaxRequest.onTimeoutInternal, ajaxRequest.timeout) ;
+  
+  ajaxRequest.request.send(ajaxRequest.queryString) ;
+};
+
+/**
+ * 
+ * @param {AjaxRequest} ajaxRequest
+ * @param {Object} handler
+ */
+XMPPCommunicator.prototype.initRequest = function(ajaxRequest, handler) {
+  ajaxRequest.onSuccess = handler.onSuccess ;
+  ajaxRequest.onLoading = handler.onLoading ;
+  ajaxRequest.onTimeout = handler.onTimeout ;
+  ajaxRequest.onError = handler.onError ;
+  ajaxRequest.callBack = handler.callBack ;
+  ajaxRequest.handler = handler;
+  this.currentRequest = ajaxRequest ;
+};
+
+// --- Organization service
+
+/**
+ * @HTTPMethod(HTTPMethods.GET)
+ * @URITemplate("/user/find-user-in-range/?question=question-content&from=x&to=y")
+ * @param {String} question
+ * @param {Integer} from Begin of range
+ * @param {Integer} to End of range
+ * @param {AjaxHandler} handler
+ */
+XMPPCommunicator.prototype.orgFuzzySearchUser = function(question, from, to, handler) {
+  var url = '/rest/organization/json/user/find-user-in-range/?question=' + question + '&from=' + from + '&to=' + to;
+  var request = new eXo.portal.AjaxRequest('GET', url, null);
+  this.initRequest(request, handler);
+  request.process() ;
+};
+
+/**
+ * @HTTPMethod(HTTPMethods.GET)
+ * @URITemplate("/user/find-all/")
+ * @param {String} username
+ * @param {String} firstname
+ * @param {String} lastname
+ * @param {String} email
+ * @param {AjaxHandler} handler
+ */
+XMPPCommunicator.prototype.orgSearchUser = function(userName, handler) {
+  var url = '/rest/organization/json/user/find-all/?username=' + userName;
+  var request = new eXo.portal.AjaxRequest('GET', url, null);
+  this.initRequest(request, handler);
+  request.process() ;
+};
+
+// -/-
+
+// --- File Exchange
+XMPPCommunicator.prototype.acceptSendFile = function(userName, uuid, transportName, handler) {
+  return (this.SERVICE_URL + '/' + transportName + '/fileexchange/accept/' + userName + '/' + uuid + '/');
+};
+
+XMPPCommunicator.prototype.denieSendFile = function(userName, uuid, transportName, handler) {
+  var url = this.SERVICE_URL + '/' + transportName + '/fileexchange/reject/' + userName + '/' + uuid + '/';
+  var request = new eXo.portal.AjaxRequest('GET', url, null);
+  this.initRequest(request, handler);
+  request.process() ;
+};
+// -/-
+
+/**
+ * 
+ * @param {Element} formNode
+ * @param {String} transportName
+ * @param {AjaxHandler} handler
+ */
+XMPPCommunicator.prototype.addTransportForm = function(formNode, transportName, handler) {
+  var url = this.SERVICE_URL + '/' + transportName + '/login';
+  var data = eXo.webui.UIForm.serializeForm(formNode) ;
+  var request = new eXo.portal.AjaxRequest('POST', url, data);
+  this.initRequest(request, handler);
+  request.process() ;
+};
+
+/**
+ * 
+ * @param {Element} formNode
+ * @param {String} transportName
+ * @param {AjaxHandler} handler
+ */
+XMPPCommunicator.prototype.addTransportDirect = function(userName, password, transportName, handler) {
+  var url = this.SERVICE_URL + '/' + transportName + '/login';
+  var data = 'username=' + userName + '&password=' + password;
+  var request = new eXo.portal.AjaxRequest('POST', url, data);
+  this.initRequest(request, handler);
+  request.process() ;
+};
+
+/**
+ * 
+ * @param {Element} formNode
+ * @param {String} transportName
+ * @param {AjaxHandler} handler
+ */
+XMPPCommunicator.prototype.addTransport = function(transportName, handler) {
+  var url = this.SERVICE_URL + '/' + transportName + '/login2/' + (new Date()).getTime() + '/';
+  //var url = this.SERVICE_URL + '/' + transportName + '/login2';
+  var request = new eXo.portal.AjaxRequest('GET', url, null);
+  this.initRequest(request, handler);
+  request.process() ;
+};
+
+/**
+ * 
+ * @param {String} userName
+ * @param {String} transportName
+ * @param {AjaxHandler} handler
+ */
+XMPPCommunicator.prototype.removeTransport = function(userName, transportName, handler) {
+  var url = this.SERVICE_URL + '/' + transportName + '/logout/' + userName;
+  var request = new eXo.portal.AjaxRequest('GET', url, null);
+  this.initRequest(request, handler);
+  request.process() ;
+};
+
+/**
+ * 
+ * @param {String} userName
+ * @param {String} askUser
+ * @param {String} transportName
+ * @param {AjaxHandler} handler
+ */
+XMPPCommunicator.prototype.askForSubscription = function(userName, askUser, transportName, handler) {
+  var url = this.SERVICE_URL + '/' + transportName + '/askforsubscription/' + userName + '/' + askUser;
+  var request = new eXo.portal.AjaxRequest('GET', url, null);
+  this.initRequest(request, handler);
+  request.process() ;
+};
+
+/**
+ * url: /xmpp/roster/add/{username}/{adduser}
+ * @param {String} userName
+ * @param {String} addUser
+ * @param {String} transportName
+ * @param {AjaxHandler} handler
+ */
+XMPPCommunicator.prototype.addUser = function(userName, addUser, transportName, handler) {
+  var url = this.SERVICE_URL + '/' + transportName + '/roster/add/' + userName + '/' + addUser;
+  var request = new eXo.portal.AjaxRequest('GET', url, null);
+  this.initRequest(request, handler);
+  request.process() ;
+};
+
+/**
+ * 
+ * @param {String} userName
+ * @param {String} subUser
+ * @param {String} transportName
+ * @param {AjaxHandler} handler
+ */
+XMPPCommunicator.prototype.subscribeUser = function(userName, subUser, transportName, handler) {
+  var url = this.SERVICE_URL + '/' + transportName + '/subscribeuser/' + userName + '/' + subUser;
+  var request = new eXo.portal.AjaxRequest('GET', url, null);
+  this.initRequest(request, handler);
+  request.process() ;
+};
+
+/**
+ * 
+ * @param {String} userName
+ * @param {String} subUser
+ * @param {String} transportName
+ * @param {AjaxHandler} handler
+ */
+XMPPCommunicator.prototype.removeUser = function(userName, subUser, transportName, handler) {
+  var url = this.SERVICE_URL + '/' + transportName + '/roster/del/' + userName + '/' + subUser;
+  var request = new eXo.portal.AjaxRequest('GET', url, null);
+  this.initRequest(request, handler);
+  request.process() ;
+};
+
+/**
+ * 
+ * @param {String} userName
+ * @param {String} subUser
+ * @param {String} transportName
+ * @param {AjaxHandler} handler
+ */
+XMPPCommunicator.prototype.unSubscribeUser = function(userName, subUser, transportName, handler) {
+  var url = this.SERVICE_URL + '/' + transportName + '/unsubscribeuser/' + userName + '/' + subUser;
+  var request = new eXo.portal.AjaxRequest('GET', url, null);
+  this.initRequest(request, handler);
+  request.process() ;
+};
+
+/**
+ * 
+ * @param {String} userName
+ * @param {String} transportName
+ * @param {AjaxHandler} handler
+ */
+XMPPCommunicator.prototype.getSubscriptionRequests = function(userName, transportName, handler) {
+  var url = this.SERVICE_URL + '/' + transportName + '/getsubscriptionrequests/' + userName;
+  var request = new eXo.portal.AjaxRequest('GET', url, null);
+  this.initRequest(request, handler);
+  request.process() ;
+};
+
+/**
+ * 
+ * @param {String} userName
+ * @param {String} transportName
+ * @param {AjaxHandler} handler
+ */
+XMPPCommunicator.prototype.cleanBuddyList = function(userName, transportName, handler) {
+  var url = this.SERVICE_URL + '/' + transportName + '/rosterclean/' + userName;
+  var request = new eXo.portal.AjaxRequest('GET', url, null);
+  this.initRequest(request, handler);
+  request.process() ;
+};
+
+/**
+ * 
+ * @param {String} userName
+ * @param {String} transportName
+ * @param {AjaxHandler} handler
+ */
+XMPPCommunicator.prototype.getBuddyList = function(userName, transportName, handler) {
+  var url = this.SERVICE_URL + '/' + transportName + '/roster/' + userName;
+  var request = new eXo.portal.AjaxRequest('GET', url, null);
+  this.initRequest(request, handler);
+  request.process() ;
+};
+
+/**
+ * 
+ * @param {String} userName
+ * @param {String} transportName
+ * @param {AjaxHandler} handler
+ * @param {String} statusMsg
+ */
+XMPPCommunicator.prototype.sendStatus = function(userName, transportName, handler, statusMsg) {
+  var url = this.SERVICE_URL + '/' + transportName + '/sendstatus/' + userName + '/' + statusMsg;
+  var request = new eXo.portal.AjaxRequest('GET', url, null);
+  this.initRequest(request, handler);
+  request.process();
+};
+
+/**
+ * url: /xmpp/muc/createroom/{username}/{room}/[?nickname=]
+ * 
+ * @param {String} userName
+ * @param {String} nickName
+ * @param {String} roomName
+ * @param {String} transportName
+ * @param {AjaxHandler} handler
+ */
+XMPPCommunicator.prototype.createRoomchat = function(userName, nickName, roomName, transportName, handler) {
+  roomName = encodeURIComponent(roomName);
+  var url = this.SERVICE_URL + '/' + transportName + '/muc/createroom/' + userName + '/' + roomName + '/?nickname=' + nickName;
+  var request = new eXo.portal.AjaxRequest('GET', url, null);
+  this.initRequest(request, handler);
+  request.process();
+};
+
+/**
+ * url: /xmpp/muc/configroom/{username}/{room}/
+ * 
+ * @param {String} userName
+ * @param {String} roomName
+ * @param {String} roomConfigJson
+ * @param {String} transportName
+ * @param {AjaxHandler} handler
+ */
+XMPPCommunicator.prototype.sendConfigRoom = function(userName, roomName, roomConfigJson, transportName, handler) {
+  var url = this.SERVICE_URL + '/' + transportName + '/muc/configroom/' + userName + '/' + roomName + '/';
+  var request = new eXo.portal.AjaxRequest('POST', url, roomConfigJson);
+  this.initRequest(request, handler);
+  this.ajaxProcessOverwrite(true, request);
+};
+
+/**
+ * url: /xmpp/muc/getroominfo/{username}/{room}/
+ * 
+ * @param {String} userName
+ * @param {String} roomName
+ * @param {String} transportName
+ * @param {AjaxHandler} handler
+ */
+XMPPCommunicator.prototype.getRoomInfo = function(userName, roomName, transportName, handler) {
+  var url = this.SERVICE_URL + '/' + transportName + '/muc/getroominfo/' + userName + '/' + roomName + '/';
+  var request = new eXo.portal.AjaxRequest('GET', url, null);
+  this.initRequest(request, handler);
+  request.process();
+};
+
+/**
+ * url: /xmpp/muc/getroomconfig/{username}/{room}/
+ * 
+ * @param {String} userName
+ * @param {String} roomName
+ * @param {String} transportName
+ * @param {AjaxHandler} handler
+ */
+XMPPCommunicator.prototype.getRoomConfig = function(userName, roomName, transportName, handler) {
+  var url = this.SERVICE_URL + '/' + transportName + '/muc/getroomconfig/' + userName + '/' + roomName + '/';
+  var request = new eXo.portal.AjaxRequest('GET', url, null);
+  this.initRequest(request, handler);
+  request.process();
+};
+
+/**
+ * url: /xmpp/muc/rooms/{username}
+ * 
+ * @param {String} userName
+ * @param {String} transportName
+ * @param {AjaxHandler} handler
+ */
+XMPPCommunicator.prototype.getRoomList = function(userName, transportName, handler) {
+  var url = this.SERVICE_URL + '/' + transportName + '/muc/rooms/' + userName + '/';
+  var request = new eXo.portal.AjaxRequest('GET', url, null);
+  this.initRequest(request, handler);
+  request.process();
+};
+
+/**
+ * url: /xmpp/muc/rooms/{username}
+ * 
+ * @param {String} userName
+ * @param {String} transportName
+ * @param {AjaxHandler} handler
+ */
+XMPPCommunicator.prototype.getJoinedRoomList = function(userName, transportName, handler) {
+  var url = this.SERVICE_URL + '/' + transportName + '/muc/joinedrooms/' + userName + '/';
+  var request = new eXo.portal.AjaxRequest('GET', url, null);
+  this.initRequest(request, handler);
+  request.process();
+};
+
+/**
+ * For manage role of participant
+ * url: /xmpp/muc/managerole/{username}/{room}/{nickname}/
+ * @param {String} username
+ * @param {String} nickName: nickname that role need change
+ * @param {String} role: it can be: "moderator","participant"
+ * @param {String} command: it can be : "grand" or "revoke"
+ * @param {String} roomName
+ * @param {String} transportName
+ * @param {AjaxHandler} handler
+ */
+XMPPCommunicator.prototype.setRoleForRoom = function(username, nickName, roomName, role, command, transportName, handler) {
+  var url = this.SERVICE_URL + '/' + transportName + '/managerole/' + 
+              userName + '/' + roomName + '/' + nickName + '/?role=' + role + '&command=' + command;
+  var request = new eXo.portal.AjaxRequest('GET', url, null);
+  this.initRequest(request, handler);
+  request.process();
+};
+
+/**
+ * For kick user from room
+ * url: /xmpp/muc/kick/{username}/{room}/{nickname}/
+ *
+ * @param {String} username
+ * @param {String} nickname
+ * @param {String} roomName
+ * @param {String} roomName
+ * @param {AjaxHandler} handler
+ */
+XMPPCommunicator.prototype.kickUserFromRoom = function(username, nickname, roomName, reason, transportName, handler) {
+  var url = this.SERVICE_URL + '/' + transportName + '/muc/kick/' + userName + '/' + roomName + '/' + nickName + '/?reason=' + reason;
+  var request = new eXo.portal.AjaxRequest('GET', url, null);
+  this.initRequest(request, handler);
+  request.process();
+};
+
+/**
+ * For ban user
+ * url: /xmpp/muc/ban/{username}/{room}/{name}/
+ *
+ * @param {String} userName
+ * @param {String} name: it must be not nickname in room but real exo username
+ * @param {String} roomName
+ * @param {String} reason
+ * @param {String} transportName
+ * @param {AjaxHandler} handler
+ */
+XMPPCommunicator.prototype.banUserFromRoom = function(userName, name, roomName, reason, transportName, handler) {
+  var url = this.SERVICE_URL + '/' + transportName + '/muc/ban/' + userName + '/' + roomName + '/' + name + '/?reason=' + reason;
+  var request = new eXo.portal.AjaxRequest('GET', url, null);
+  this.initRequest(request, handler);
+  request.process();
+};
+
+/**
+ * 
+ * @param {String} userName
+ * @param {String} inviter
+ * @param {String} roomName
+ * @param {String} transportName
+ * @param {AjaxHandler} handler
+ */
+XMPPCommunicator.prototype.inviteJoinRoom = function(userName, inviter, roomName, transportName, handler) {
+  var url = this.SERVICE_URL + '/' + transportName + '/muc/invite/' + userName + '/' + inviter + '/' + roomName + '/'; 
+  var request = new eXo.portal.AjaxRequest('GET', url, null);
+  this.initRequest(request, handler);
+  request.process();
+};
+
+/**
+ * 
+ * @param {String} userName
+ * @param {String} nickName
+ * @param {String} transportName
+ * @param {AjaxHandler} handler
+ */
+XMPPCommunicator.prototype.declineInviteJoinRoom = function(userName, inviter, roomName, transportName, handler) {
+  var url = this.SERVICE_URL + '/' + transportName + '/muc/decline/' + userName + '/' + inviter + '/' + roomName + '/';
+  var request = new eXo.portal.AjaxRequest('GET', url, null);
+  this.initRequest(request, handler);
+  request.process();
+};
+
+/**
+ * url: /xmpp/muc/join/{username}/{room}/
+ * @param {String} userName
+ * @param {String} roomName
+ * @param {String} password
+ * @param {String} transportName
+ * @param {AjaxHandler} handler
+ */
+XMPPCommunicator.prototype.joinToRoom = function(userName, roomName, password, transportName, handler) {
+  var url = this.SERVICE_URL + '/' + transportName + '/muc/join/' + userName + '/' + roomName + '/?password=' + password;
+  var request = new eXo.portal.AjaxRequest('GET', url, null);
+  this.initRequest(request, handler);
+  request.process();
+};
+
+/**
+ * url: /xmpp/muc/leaveroom/{username}/{room}/
+ * @param {String} userName
+ * @param {String} transportName
+ * @param {AjaxHandler} handler
+ */
+XMPPCommunicator.prototype.leaveFromRoom = function(userName, roomName, transportName, handler) {
+  var url = this.SERVICE_URL + '/' + transportName + '/muc/leaveroom/' + userName + '/' + roomName + '/';
+  var request = new eXo.portal.AjaxRequest('GET', url, null);
+  this.initRequest(request, handler);
+  request.process();
+};
+
+/**
+ * 
+ * @param {String} userName
+ * @param {String} transportName
+ * @param {AjaxHandler} handler
+ * @param {Object} msgObj
+ */
+XMPPCommunicator.prototype.sendMessage = function(userName, transportName, handler, msgObj) {
+  var url = this.SERVICE_URL + '/' + transportName + '/sendmessage/' + userName + '/';
+  var data = msgObj;
+  var request = new eXo.portal.AjaxRequest('POST', url, data);
+  this.initRequest(request, handler);
+  this.ajaxProcessOverwrite(true, request);
+};
+
+/**
+ * 
+ * @param {String} userName
+ * @param {String} transportName
+ * @param {AjaxHandler} handler
+ * @param {String} targetPerson
+ * @param {String} dateFormat
+ * @param {String} dateFrom
+ * @param {String} dateTo
+ * @param {Boolean} isGroupChat
+ *
+ */
+XMPPCommunicator.prototype.getMessageHistory = function(userName, transportName, handler, targetPerson, dateFormat, dateFrom, dateTo, isGroupChat) {
+  var url = this.SERVICE_URL + '/' + transportName + '/history/getmessages/' + userName + '/' + targetPerson + '/' + isGroupChat + '/';
+  if (dateFormat) {
+    url += dateFormat + '/';
+  }
+  if (dateFrom) {
+    url += dateFrom + '/';
+  }
+  if (dateFrom &&
+      dateTo) {
+    url += dateTo + '/';
+  }
+  var request = new eXo.portal.AjaxRequest('GET', url, null);
+  this.initRequest(request, handler);
+  request.process() ;
+};
+
+/**
+ * 
+ * @param {String} userName
+ * @param {String} transportName
+ * @param {AjaxHandler} handler
+ * @param {Object} msgObj
+ */
+XMPPCommunicator.prototype.sendRoomMessage = function(userName, transportName, handler, msgObj) {
+  var url = this.SERVICE_URL + '/' + transportName + '/muc/sendmessage/' + userName + '/';
+  var data = msgObj;
+  var request = new eXo.portal.AjaxRequest('POST', url, data);
+  this.initRequest(request, handler);
+  this.ajaxProcessOverwrite(true, request);
+};
+
+/**
+ * 
+ * @param {String} userName
+ * @param {String} transportName
+ * @param {AjaxHandler} handler
+ */
+XMPPCommunicator.prototype.getSubscriptionrequests = function(userName, transportName, handler) {
+  var url = this.SERVICE_URL + '/' + transportName + '/getsubscriptionrequests/' + userName;
+  var request = new eXo.portal.AjaxRequest('GET', url, null);
+  this.initRequest(request, handler);
+  request.process() ;
+};
+
+/**
+ * 
+ * @param {String} userName
+ * @param {String} transportName
+ * @param {AjaxHandler} handler
+ */
+XMPPCommunicator.prototype.removeTransport = function(userName, transportName, handler) {
+  var url = this.SERVICE_URL + '/' + transportName + '/logout/' + userName;
+  var request = new eXo.portal.AjaxRequest('GET', url, null);
+  this.initRequest(request, handler);
+  request.process() ;
+};
+
+eXo.communication.chat.core.XMPPCommunicator = new XMPPCommunicator();
