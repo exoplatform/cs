@@ -34,6 +34,7 @@ import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smackx.Form;
 import org.jivesoftware.smackx.ReportedData;
 import org.jivesoftware.smackx.muc.MultiUserChat;
+import org.jivesoftware.smackx.muc.RoomInfo;
 
 /**
  * Created by The eXo Platform SAS.
@@ -76,7 +77,7 @@ public interface XMPPSession {
    * @param nickname the nickname
    * @throws XMPPException the XMPPException
    */
-  void askForSubscription(String username, String nickname) throws XMPPException;
+  void askForSubscription(String username, String nickname);
 
   /**
    * Return the roster entry by the name of user.
@@ -128,7 +129,7 @@ public interface XMPPSession {
    * @return new MultiUserChat
    * @throws XMPPException the XMPPException
    */
-  MultiUserChat createRoom(String room, String nickname) throws XMPPException;
+  FormBean createRoom(String room, String nickname) throws XMPPException;
 
   /**
    * get configuration form for group chat.
@@ -177,7 +178,7 @@ public interface XMPPSession {
    * @return the fullRoomInfoBean
    * @throws XMPPException the XMPPException
    */
-  FullRoomInfoBean getRoomInfo(String room) throws XMPPException;
+  FullRoomInfoBean getRoomInfoBean(String room) throws XMPPException;
 
   /**
    * Leave the room.
@@ -196,7 +197,7 @@ public interface XMPPSession {
    * @param reason the reason
    * @throws XMPPException the XMPPException
    */
-  void declineRoom(String room, String inviter, String reason) throws XMPPException;
+  void declineRoom(String room, String inviter, String reason);
 
   /**
    * Invite to the room.
@@ -315,7 +316,7 @@ public interface XMPPSession {
    * 
    * @param message the message
    */
-  void sendMessage(Message message) throws XMPPException;
+  void sendMessage(Message message);
 
   /**
    * Send message to the room.
@@ -477,5 +478,7 @@ public interface XMPPSession {
    * @throws XMPPException the XMPPException
    */
   void changeNickname(String room, String nickname) throws XMPPException;
+  
+  RoomInfo getRoomInfo(String room) throws XMPPException;
 
 }

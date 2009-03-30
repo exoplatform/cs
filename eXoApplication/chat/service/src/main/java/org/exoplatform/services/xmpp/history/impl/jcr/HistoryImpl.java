@@ -24,6 +24,7 @@ import java.util.UUID;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.query.Query;
@@ -38,13 +39,14 @@ import org.exoplatform.services.jcr.access.SystemIdentity;
 import org.exoplatform.services.jcr.config.RepositoryConfigurationException;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.exoplatform.services.jcr.ext.registry.RegistryService;
 import org.exoplatform.services.jcr.impl.core.NodeImpl;
 import org.exoplatform.services.xmpp.history.HistoricalMessage;
 import org.exoplatform.services.xmpp.history.Interlocutor;
-import org.exoplatform.services.xmpp.util.StringUtils;
+import org.exoplatform.services.xmpp.util.CodingUtils;
 import org.jcrom.Jcrom;
 import org.jivesoftware.smack.packet.Message;
+import org.jivesoftware.smack.util.StringUtils;
+import org.picocontainer.Startable;
 
 /**
  * Created by The eXo Platform SAS.
@@ -52,7 +54,7 @@ import org.jivesoftware.smack.packet.Message;
  * @author <a href="mailto:vitaly.parfonov@gmail.com">Vitaly Parfonov</a>
  * @version $Id: $
  */
-public class HistoryImpl {
+public class HistoryImpl implements Startable{
 
   /**
    * 
@@ -112,17 +114,17 @@ public class HistoryImpl {
   /**
    * 
    */
-  private String              HISTORY_PATH;
+  private String              historyPath;
 
   /**
    * 
    */
-  private String              WS_NAME;
+  private String              wsName;
 
   /**
    * 
    */
-  private String              REPOSITORY;
+  private String              repositopryName;
 
   /**
    * 
@@ -133,18 +135,10 @@ public class HistoryImpl {
    * 
    */
   private Jcrom               jcrom;
-
-  /**
-   * @param initParams the initParams
-   * @param registryService the registryService 
-   */
-  public HistoryImpl(InitParams initParams, RegistryService registryService) {
-    this.repositoryService = registryService.getRepositoryService();
-    try {
-      HISTORY_PATH = initParams.getValueParam("path").getValue();
-      WS_NAME = initParams.getValueParam("workspace").getValue();
-      REPOSITORY = initParams.getValueParam("repository").getValue();
-      Session sysSession = repositoryService.getRepository(REPOSITORY).getSystemSession(WS_NAME);
+  
+  public void start() {
+    try{
+      Session sysSession = this.repositoryService.getRepository(repositopryName).getSystemSession(wsName);
       initNodes(sysSession);
       jcrom = new Jcrom();
       jcrom.map(HistoricalMessageImpl.class);
@@ -155,7 +149,23 @@ public class HistoryImpl {
       e.printStackTrace();
     }
   }
+    
+  
+  
+  public void stop() {
+  }
 
+  /**
+   * @param initParams the initParams
+   * @param registryService the registryService 
+   */
+  public HistoryImpl(InitParams initParams, RepositoryService repositoryService) {
+    this.repositoryService = repositoryService;
+    historyPath = initParams.getValueParam("path").getValue();
+    wsName = initParams.getValueParam("workspace").getValue();
+    repositopryName = initParams.getValueParam("repository").getValue();
+  }
+  
   /**
    * @param sysSession the session
    * @throws RepositoryException
@@ -164,10 +174,11 @@ public class HistoryImpl {
   private void initNodes(Session sysSession) throws RepositoryException,
                                             RepositoryConfigurationException {
     Node node = sysSession.getRootNode();
-    if (!node.hasNode(HISTORY_PATH)) {
+    if (!node.hasNode(historyPath)) {
       Node tmpNode;
-      String[] path = HISTORY_PATH.split("/");
+      String[] path = historyPath.split("/");
       for (int i = 0; i < path.length - 1; i++) {
+        System.out.println("HistoryImpl.initNodes()" + path[i]);
         if (node.hasNode(path[i]))
           tmpNode = node.getNode(path[i]);
         else
@@ -175,6 +186,7 @@ public class HistoryImpl {
         node = tmpNode;
       }
       Node fNode = node.addNode(path[path.length - 1], HISTORY_NT);
+      System.out.println("HistoryImpl.initNodes() " + fNode.getPath());
       NodeImpl cNode = (NodeImpl) fNode.addNode(CONVERSATIONS, CONVERSATIONS_NT);
       if (cNode.canAddMixin("exo:privilegeable")) {
         cNode.addMixin("exo:privilegeable");
@@ -189,9 +201,26 @@ public class HistoryImpl {
       pNode.setPermission(SystemIdentity.ANY, PermissionType.ALL);
       sysSession.save();
     }
+    
     sysSession.logout();
   }
 
+  /**
+   * @return
+   * @throws RepositoryException
+   * @throws RepositoryConfigurationException
+   */
+  public ManageableRepository getRepository() throws RepositoryException,RepositoryConfigurationException{
+    return repositoryService.getRepository(repositopryName);
+  }
+  
+  /**
+   * @return
+   */
+  public String getWorkspace(){
+    return wsName; 
+  }
+  
   
   /**
    * @param message the message add to history 
@@ -202,8 +231,8 @@ public class HistoryImpl {
       try {
         HistoricalMessageImpl historicalMessage = (HistoricalMessageImpl) message;
         Date date = Calendar.getInstance().getTime();
-        String usernameTo = StringUtils.getUsernameFromJID(historicalMessage.getTo());
-        String usernameFrom = StringUtils.getUsernameFromJID(historicalMessage.getFrom());
+        String usernameTo = StringUtils.parseName(historicalMessage.getTo());
+        String usernameFrom = StringUtils.parseName(historicalMessage.getFrom());
         String conversationId = new String();
         Boolean isGroupChat = historicalMessage.getType().equals(Message.Type.groupchat.name());
         Node conversationNode = getConversationsNode(sessionProvider);
@@ -219,7 +248,7 @@ public class HistoryImpl {
           conversation.setLastActiveDate(date);
           updateConversation(conversationNode, conversation, usernameTo);
         } else {
-          conversationId = StringUtils.encodeToHex(UUID.randomUUID().toString());
+          conversationId = CodingUtils.encodeToHex(UUID.randomUUID().toString());
           createNewConversation(conversationNode,
                                 participantsNode,
                                 conversationId,
@@ -227,7 +256,6 @@ public class HistoryImpl {
                                 historicalMessage);
         }
         conversationNode.getSession().save();
-        conversationNode.getSession().logout();
       } catch (Exception e) {
         e.printStackTrace();
       }
@@ -258,7 +286,6 @@ public class HistoryImpl {
                                                   true);
       if (conversation != null) {
         list.addAll(conversation.getMessageList());
-        conversationsNode.getSession().logout();
         return list;
       }
     } catch (Exception e) {
@@ -361,7 +388,6 @@ public class HistoryImpl {
           Node msgNode = (Node) nodeIterator.next();
           list.add(jcrom.fromNode(HistoricalMessageImpl.class, msgNode));
         }
-        conversationsNode.getSession().logout();
         return list;
       }
     } catch (Exception e) {
@@ -380,7 +406,7 @@ public class HistoryImpl {
     List<Interlocutor> list = new ArrayList<Interlocutor>();
     try {
       Node participantsNode = getParticipantsNode(sessionProvider);
-      Participant participant = getParticipant(participantsNode, participantName);
+      Participant participant = getParticipant(participantsNode, CodingUtils.encodeToHex(participantName));
       if (participant != null) {
         if (participant.getInterlocutorList() != null) {
           list.addAll(participant.getInterlocutorList());
@@ -388,7 +414,6 @@ public class HistoryImpl {
         if (participant.getGroupChatList() != null) {
           list.addAll(participant.getGroupChatList());
         }
-        participantsNode.getSession().logout();
         return list;
       }
     } catch (Exception e) {
@@ -417,7 +442,6 @@ public class HistoryImpl {
         jcrom.updateNode(nodeMsg, msg);
       }
       node.getSession().save();
-      node.getSession().logout();
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -446,7 +470,6 @@ public class HistoryImpl {
         HistoricalMessageImpl msg = jcrom.fromNode(HistoricalMessageImpl.class, nodeMsg);
         list.add(msg);
       }
-      node.getSession().logout();
       return list;
     } catch (Exception e) {
       e.printStackTrace();
@@ -458,11 +481,10 @@ public class HistoryImpl {
    * Load object from repository.
    * 
    * @param participantsNode the node
-   * @param username the username
+   * @param jid the username
    * @return the participant
    */
-  private Participant getParticipant(Node participantsNode, String username) {
-    String hexName = StringUtils.encodeToHex(username);
+  private Participant getParticipant(Node participantsNode, String hexName) {
     try {
       if (participantsNode.hasNode(hexName)) {
         Node node = participantsNode.getNode(hexName);
@@ -483,7 +505,7 @@ public class HistoryImpl {
    */
   private void updateParticipant(Node participantsNode, Participant participant) {
     try {
-      String hexName = StringUtils.encodeToHex(participant.getUsername());
+      String hexName = CodingUtils.encodeToHex(participant.getUsername());
       if (participantsNode.hasNode(hexName)) {
         Node node = participantsNode.getNode(hexName);
         jcrom.updateNode(node, participant);
@@ -512,7 +534,7 @@ public class HistoryImpl {
                                        Boolean isRoom,
                                        Boolean withMessages) {
     try {
-      Participant participant = getParticipant(participantsNode, usernameTo);
+      Participant participant = getParticipant(participantsNode, CodingUtils.encodeToHex(usernameTo));
       String conversationId = null;
       if (participant != null) {
         InterlocutorImpl interlocutor;
@@ -554,11 +576,11 @@ public class HistoryImpl {
                                              String conversationId,
                                              Date date,
                                              HistoricalMessageImpl message) {
-    String nameTo = StringUtils.getUsernameFromJID(message.getTo());
-    String nameFrom = StringUtils.getUsernameFromJID(message.getFrom());
+    String jidTo = message.getTo();
+    String jidFrom = message.getFrom();
     Boolean isGroupChat = message.getType().equals(Message.Type.groupchat.name());
-    Participant participantTo = getParticipant(participantsNode, nameTo);
-    InterlocutorImpl interlocutorFrom = new InterlocutorImpl(nameFrom, conversationId, isGroupChat);
+    Participant participantTo = getParticipant(participantsNode, CodingUtils.encodeToHex(StringUtils.parseName(jidTo)));
+    InterlocutorImpl interlocutorFrom = new InterlocutorImpl(jidFrom, conversationId, isGroupChat);
     if (!isGroupChat) {
       if (participantTo != null) {
         if (participantTo.getInterlocutorList() != null) {
@@ -572,11 +594,11 @@ public class HistoryImpl {
       } else {
         List<InterlocutorImpl> list = new ArrayList<InterlocutorImpl>();
         list.add(interlocutorFrom);
-        participantTo = new Participant(nameTo, list, new ArrayList<InterlocutorImpl>());
+        participantTo = new Participant(jidTo, list, new ArrayList<InterlocutorImpl>());
         addParticipant(participantsNode, participantTo);
       }
-      Participant participantFrom = getParticipant(participantsNode, nameFrom);
-      InterlocutorImpl interlocutorTo = new InterlocutorImpl(nameTo, conversationId, isGroupChat);
+      Participant participantFrom = getParticipant(participantsNode, CodingUtils.encodeToHex(StringUtils.parseName(jidFrom)));
+      InterlocutorImpl interlocutorTo = new InterlocutorImpl(jidTo, conversationId, isGroupChat);
       if (participantFrom != null) {
         if (participantFrom.getInterlocutorList() != null) {
           participantFrom.addInterlocutor(interlocutorTo);
@@ -589,7 +611,7 @@ public class HistoryImpl {
       } else {
         List<InterlocutorImpl> list = new ArrayList<InterlocutorImpl>();
         list.add(interlocutorTo);
-        participantFrom = new Participant(nameFrom, list, new ArrayList<InterlocutorImpl>());
+        participantFrom = new Participant(jidFrom, list, new ArrayList<InterlocutorImpl>());
         addParticipant(participantsNode, participantFrom);
       }
     } else {
@@ -605,7 +627,7 @@ public class HistoryImpl {
       } else {
         List<InterlocutorImpl> list = new ArrayList<InterlocutorImpl>();
         list.add(interlocutorFrom);
-        participantTo = new Participant(nameTo, new ArrayList<InterlocutorImpl>(), list);
+        participantTo = new Participant(jidTo, new ArrayList<InterlocutorImpl>(), list);
         addParticipant(participantsNode, participantTo);
       }
     }
@@ -624,6 +646,7 @@ public class HistoryImpl {
   private void addParticipant(Node participantsNode, Participant participant) {
     try {
       jcrom.addNode(participantsNode, participant);
+      participantsNode.getSession().save();
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -638,6 +661,7 @@ public class HistoryImpl {
   private void addConversation(Node conversationsNode, Conversation conversation) {
     try {
       jcrom.addNode(conversationsNode, conversation);
+      conversationsNode.getSession().save();
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -655,6 +679,7 @@ public class HistoryImpl {
       if (conversationsNode.hasNode(conversation.getConversationId())) {
         Node node = conversationsNode.getNode(conversation.getConversationId());
         jcrom.updateNode(node, conversation);
+        node.getSession().save();
       }
     } catch (Exception e) {
       e.printStackTrace();
@@ -667,9 +692,9 @@ public class HistoryImpl {
    */
   private Node getConversationsNode(SessionProvider sessionProvider) {
     try {
-      ManageableRepository repository = repositoryService.getRepository(REPOSITORY);
-      Session session = sessionProvider.getSession(WS_NAME, repository);
-      return session.getRootNode().getNode(HISTORY_PATH + "/" + CONVERSATIONS);
+      ManageableRepository repository = repositoryService.getRepository(repositopryName);
+      Session session = sessionProvider.getSession(wsName, repository);
+      return session.getRootNode().getNode(historyPath + "/" + CONVERSATIONS);
     } catch (Exception e) {
       e.printStackTrace();
       return null;
@@ -682,9 +707,9 @@ public class HistoryImpl {
    */
   private Node getParticipantsNode(SessionProvider sessionProvider) {
     try {
-      ManageableRepository repository = repositoryService.getRepository(REPOSITORY);
-      Session session = sessionProvider.getSession(WS_NAME, repository);
-      return session.getRootNode().getNode(HISTORY_PATH + "/" + PARTICIPANTS);
+      ManageableRepository repository = repositoryService.getRepository(repositopryName);
+      Session session = sessionProvider.getSession(wsName, repository);
+      return session.getRootNode().getNode(historyPath + "/" + PARTICIPANTS);
     } catch (Exception e) {
       e.printStackTrace();
       return null;

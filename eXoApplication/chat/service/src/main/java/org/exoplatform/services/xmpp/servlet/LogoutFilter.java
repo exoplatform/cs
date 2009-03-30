@@ -55,6 +55,7 @@ public class LogoutFilter implements Filter {
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
                                                                                            ServletException {
     chain.doFilter(request, response);
+    System.out.println("LogoutFilter.doFilter()--------------------------------------------");
     HttpServletRequest httpRequest = (HttpServletRequest) request;
     javax.servlet.http.HttpSession session = httpRequest.getSession(false);
     if (session != null) {

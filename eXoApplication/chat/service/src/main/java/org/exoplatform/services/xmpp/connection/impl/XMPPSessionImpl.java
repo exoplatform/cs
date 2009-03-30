@@ -17,17 +17,29 @@
 package org.exoplatform.services.xmpp.connection.impl;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.text.DateFormat;
+import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.UUID;
 
+import javax.jcr.RepositoryException;
+
+import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.logging.Log;
+import org.exoplatform.services.jcr.config.RepositoryConfigurationException;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.security.ConversationState;
@@ -35,11 +47,14 @@ import org.exoplatform.services.xmpp.bean.ChangeNickBean;
 import org.exoplatform.services.xmpp.bean.ConfigRoomBean;
 import org.exoplatform.services.xmpp.bean.DeclineBean;
 import org.exoplatform.services.xmpp.bean.EventsBean;
+import org.exoplatform.services.xmpp.bean.FieldBean;
 import org.exoplatform.services.xmpp.bean.FileTransferEventBean;
 import org.exoplatform.services.xmpp.bean.FileTransferRequestBean;
 import org.exoplatform.services.xmpp.bean.FileTransferResponseBean;
 import org.exoplatform.services.xmpp.bean.FormBean;
 import org.exoplatform.services.xmpp.bean.FullRoomInfoBean;
+import org.exoplatform.services.xmpp.bean.HostedRoomBean;
+import org.exoplatform.services.xmpp.bean.InitInfoBean;
 import org.exoplatform.services.xmpp.bean.InviteBean;
 import org.exoplatform.services.xmpp.bean.KickedBannedBean;
 import org.exoplatform.services.xmpp.bean.MUCPacketBean;
@@ -49,6 +64,7 @@ import org.exoplatform.services.xmpp.bean.PrivilegeChangeBean;
 import org.exoplatform.services.xmpp.bean.SubjectChangeBean;
 import org.exoplatform.services.xmpp.connection.XMPPSession;
 import org.exoplatform.services.xmpp.ext.transport.Transport;
+import org.exoplatform.services.xmpp.filter.ErrorMessageFilter;
 import org.exoplatform.services.xmpp.filter.MessageFilter;
 import org.exoplatform.services.xmpp.filter.SubscriptionFilter;
 import org.exoplatform.services.xmpp.groupchat.MultiUserChatManager;
@@ -62,7 +78,7 @@ import org.exoplatform.services.xmpp.util.HistoryUtils;
 import org.exoplatform.services.xmpp.util.MUCConstants;
 import org.exoplatform.services.xmpp.util.PresenceUtil;
 import org.exoplatform.services.xmpp.util.SearchFormFields;
-import org.exoplatform.services.xmpp.util.StringUtils;
+import org.exoplatform.services.xmpp.util.CodingUtils;
 import org.exoplatform.services.xmpp.util.TransformUtils;
 import org.exoplatform.services.xmpp.util.XMPPConnectionUtils;
 import org.exoplatform.ws.frameworks.cometd.transport.ContinuationServiceDelegate;
@@ -77,8 +93,10 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
+import org.jivesoftware.smack.packet.PacketExtension;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.packet.XMPPError;
+import org.jivesoftware.smack.packet.Presence.Type;
 import org.jivesoftware.smackx.Form;
 import org.jivesoftware.smackx.FormField;
 import org.jivesoftware.smackx.ReportedData;
@@ -91,6 +109,7 @@ import org.jivesoftware.smackx.filetransfer.FileTransfer.Status;
 import org.jivesoftware.smackx.muc.Affiliate;
 import org.jivesoftware.smackx.muc.DefaultParticipantStatusListener;
 import org.jivesoftware.smackx.muc.DefaultUserStatusListener;
+import org.jivesoftware.smackx.muc.HostedRoom;
 import org.jivesoftware.smackx.muc.InvitationListener;
 import org.jivesoftware.smackx.muc.InvitationRejectionListener;
 import org.jivesoftware.smackx.muc.MultiUserChat;
@@ -99,7 +118,10 @@ import org.jivesoftware.smackx.muc.RoomInfo;
 import org.jivesoftware.smackx.muc.SubjectUpdatedListener;
 import org.jivesoftware.smackx.packet.DiscoverInfo;
 import org.jivesoftware.smackx.packet.DiscoverItems;
+import org.jivesoftware.smackx.packet.MUCUser;
+import org.jivesoftware.smackx.packet.Time;
 import org.jivesoftware.smackx.packet.DiscoverItems.Item;
+import org.jivesoftware.smackx.packet.MUCUser.Invite;
 import org.jivesoftware.smackx.search.UserSearchManager;
 
 /**
@@ -147,7 +169,7 @@ public class XMPPSessionImpl implements XMPPSession {
   /**
    * 
    */
-  private final FileTransferManager         fileTransferManager;
+  private FileTransferManager         fileTransferManager;
 
   /**
    * Logger.
@@ -168,21 +190,40 @@ public class XMPPSessionImpl implements XMPPSession {
    * 
    */
   private final ContinuationServiceDelegate delegate;
+  
+  /**
+   * 
+   */
+  private final ResourceBundle rb;
+  
+  /**
+   * 
+   */
+  private final static String   DESCENDING        = "desc";
+
+  private final static String   ASCENDING         = "asc";
+  
+  private final DateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
+  
+  
+  /**
+   * It's value not from spec. I add it myself for sending real JID of room to UI client.
+   */
+  private final static String   ROOM_JID_VALUE    = "muc#roomconfig_roomjid";
 
   protected XMPPSessionImpl(String username,
                             String password,
                             final UserInfoService organization,
                             final ContinuationServiceDelegate delegate,
-                            final HistoryImpl history) throws XMPPException {
+                            final HistoryImpl history,
+                            final ResourceBundle rb) throws XMPPException {
     XMPPConnection.DEBUG_ENABLED = true;
     this.delegate = delegate;
     this.history = history;
     this.organization = organization;
-
+    this.rb = rb;
     this.connection_ = new XMPPConnection(XMPPMessenger.getConnectionConfiguration());
     this.username_ = username;
-
-    sessionProvider = new SessionProvider(ConversationState.getCurrent());
     try {
       connection_.connect();
       connection_.login(username, password, null, false);
@@ -220,9 +261,9 @@ public class XMPPSessionImpl implements XMPPSession {
         public void processPacket(Packet packet) {
           try {
             JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
-            packet.setPacketID(StringUtils.encodeToHex(UUID.randomUUID().toString()));
+            packet.setPacketID(CodingUtils.encodeToHex(UUID.randomUUID().toString()));
             MessageBean message = TransformUtils.messageToBean((Message) packet);
-            message.setDateSend(Calendar.getInstance().getTime().toString());
+            message.setDateSend(dateFormat.format(new Date()));
             history.addHistoricalMessage(HistoryUtils.messageToHistoricalMessage((Message) packet),
                                          sessionProvider);
             EventsBean eventsBean = new EventsBean();
@@ -246,12 +287,14 @@ public class XMPPSessionImpl implements XMPPSession {
             PresenceBean subscription = TransformUtils.presenceToBean((Presence) packet);
             EventsBean eventsBean = new EventsBean();
             eventsBean.addSubscription(subscription);
+            if (subscription.getType().equals(Type.subscribed.name())){
+              Presence presence = connection_.getRoster().getPresence(packet.getFrom());
+              eventsBean.addPresence(TransformUtils.presenceToBean(presence));
+            }
             eventsBean.setEventId(Packet.nextID());
             JsonValue json = generatorImpl.createJsonObject(eventsBean);
             delegate.sendMessage(username_, CometdChannels.SUBSCRIPTION, json.toString(), null);
-            if (log.isDebugEnabled())
-              log.debug(json.toString());
-          } catch (Exception e) {
+           } catch (Exception e) {
             if (log.isDebugEnabled())
               e.printStackTrace();
           }
@@ -283,6 +326,45 @@ public class XMPPSessionImpl implements XMPPSession {
 
         }
       });
+      
+      ErrorMessageFilter errorMessageFilter = new ErrorMessageFilter();
+      connection_.addPacketListener(new PacketListener(){
+        public void processPacket(Packet packet) {
+          try {
+            final Message message = (Message)packet;       
+            String errorMessage = "";                                                                                       
+            if (message.getError().getCode() == 403 && message.getSubject() != null) {                                          
+                errorMessage = rb.getString("chat.message.subject.change.error");                                                   
+            }                                                                                                                   
+            else if (message.getError().getCode() == 403) {                                                          
+               errorMessage = rb.getString("chat.message.forbidden.error");
+               MUCUser packetExtension = (MUCUser) packet.getExtension("x",  "http://jabber.org/protocol/muc#user"); 
+               if (packetExtension != null){
+                 Invite invite = packetExtension.getInvite();
+                 if (invite != null){
+                   errorMessage = rb.getString("chat.message.room.invite.forbidden.error");
+                   Object values []  = { invite.getTo(), message.getFrom() }; 
+                   errorMessage = MessageFormat.format(errorMessage, values);
+                 }
+               }
+             }
+            JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
+            String id = CodingUtils.encodeToHex(UUID.randomUUID().toString());
+            MessageBean messageBean = new MessageBean(id,message.getFrom(),message.getTo(),message.getType().name(),errorMessage);
+            messageBean.setDateSend(Calendar.getInstance().getTime().toString());
+            EventsBean eventsBean = new EventsBean();
+            eventsBean.addMessage(messageBean);
+            eventsBean.setEventId(Packet.nextID());
+            JsonValue json = generatorImpl.createJsonObject(eventsBean);
+            delegate.sendMessage(username_, CometdChannels.MESSAGE, json.toString(), null);
+            if (log.isDebugEnabled())
+              log.debug(json.toString());
+          } catch (Exception e) {
+            if (log.isDebugEnabled())
+              e.printStackTrace();
+          }
+         }
+      },errorMessageFilter);
 
       connection_.getRoster().addRosterListener(new RosterListener() {
         public void entriesAdded(java.util.Collection<String> arg0) {
@@ -350,33 +432,25 @@ public class XMPPSessionImpl implements XMPPSession {
         };
       });
 
-      // PresenceFilter presenceFilter = new PresenceFilter();
-      // connection_.addPacketListener(new PacketListener() {
-      // public void processPacket(Packet packet) {
-      // try {
-      // JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
-      // PresenceBean presence = TransformUtils.presenceToBean((Presence)
-      // packet);
-      // EventsBean eventsBean = new EventsBean();
-      // eventsBean.addPresence(presence);
-      // eventsBean.setEventId(Packet.nextID());
-      // JsonValue json = generatorImpl.createJsonObject(eventsBean);
-      // delegate.sendMessage(username_, CometdChannels.PRESENCE,
-      // json.toString(), null);
-      // // if (log.isDebugEnabled())
-      // log.debug(json.toString());
-      // } catch (Exception e) {
-      // e.printStackTrace();
-      // }
-      // }
-      // }, presenceFilter);
+      sessionProvider = new SessionProvider(ConversationState.getCurrent());
+      //for keeping session in cache 
+      sessionProvider.getSession(history.getWorkspace(), history.getRepository());
 
-    } catch (Exception e) {
+    } catch (XMPPException e) {
       throw new XMPPException("Create XMPP connection for user '" + username + "' failed. ", e);
+    } catch (RepositoryException e) {
+      if (log.isDebugEnabled())
+        e.printStackTrace();
+    } catch (RepositoryConfigurationException  e) {
+      if (log.isDebugEnabled())
+        e.printStackTrace();
     }
     if (log.isDebugEnabled())
       log.debug("finish initialize for the user:'" + username + "'.");
   }
+  
+  
+  
 
   /**
    * {@inheritDoc}
@@ -419,7 +493,7 @@ public class XMPPSessionImpl implements XMPPSession {
   /**
    * {@inheritDoc}
    */
-  public void askForSubscription(String username, String nickname) throws XMPPException {
+  public void askForSubscription(String username, String nickname) {
     String jid = username + "@" + connection_.getServiceName();
     Presence precense = new Presence(Presence.Type.subscribe);
     precense.setTo(jid);
@@ -479,6 +553,7 @@ public class XMPPSessionImpl implements XMPPSession {
    * {@inheritDoc}
    */
   public void close() {
+    sessionProvider.close();
     connection_.disconnect(new Presence(Presence.Type.unavailable));
     if (log.isDebugEnabled())
       log.info("Client '" + username_ + "' logged out.");
@@ -728,7 +803,7 @@ public class XMPPSessionImpl implements XMPPSession {
   /**
    * {@inheritDoc}
    */
-  public void sendMessage(Message message) throws XMPPException {
+  public void sendMessage(Message message) {
     if (connection_.isConnected()) {
       connection_.sendPacket(message);
     }
@@ -810,17 +885,15 @@ public class XMPPSessionImpl implements XMPPSession {
    * {@inheritDoc}
    */
   public MultiUserChat getMultiUserChat(String room) throws XMPPException {
-    String mucService = MultiUserChat.getServiceNames(connection_).toArray()[0].toString();
-    String roomJID = room + "@" + mucService;
+    String roomJID = validateRoomJID(room);
     return multiUserChatManager.getMultiUserChat(roomJID);
   }
 
   /**
    * {@inheritDoc}
    */
-  public MultiUserChat createRoom(String room, String nickname) throws XMPPException {
-    String mucService = MultiUserChat.getServiceNames(connection_).toArray()[0].toString();
-    String roomJID = room + "@" + mucService;
+  public FormBean createRoom(String room, String nickname) throws XMPPException {
+    String roomJID = validateRoomJID(room);
     MultiUserChat chat = new MultiUserChat(connection_, roomJID);
     if (nickname == null)
       nickname = username_;
@@ -830,9 +903,12 @@ public class XMPPSessionImpl implements XMPPSession {
     MUCPacketBean bean = new MUCPacketBean();
     bean.setAction(MUCConstants.Action.CREATED);
     bean.setRoom(roomJID);
-    bean.setCreatedRoom(getRoomInfo(roomJID));
+    bean.setCreatedRoom(getRoomInfoBean(roomJID));
     sendGroupChatEvent(bean);
-    return chat;
+    Form form = chat.getConfigurationForm();
+    // Tricks, add one more field to configuration form for sending real JID to UI client
+    form = addRoomIDField(form, chat.getRoom());  
+    return TransformUtils.formToFormBean(form);
   }
 
   /**
@@ -843,6 +919,8 @@ public class XMPPSessionImpl implements XMPPSession {
     if (chat != null) {
       Form form = chat.getConfigurationForm();
       if (form != null) {
+        // Tricks, add one more field to configuration form for sending real JID to UI client
+        form = addRoomIDField(form, chat.getRoom());
         FormBean formBean = TransformUtils.formToFormBean(form);
         List<String> users = new ArrayList<String>();
         Iterator<String> occupants = chat.getOccupants();
@@ -856,7 +934,17 @@ public class XMPPSessionImpl implements XMPPSession {
     }
     return null;
   }
-
+  
+  
+  private Form addRoomIDField(Form form, String roomJID){
+    FormField formField = new FormField(ROOM_JID_VALUE);
+    formField.addValue(roomJID);
+    formField.setDescription("A fully qualified xmpp ID, e.g. roomName@service");
+    formField.setLabel("Room JID");
+    formField.setType(FormField.TYPE_JID_SINGLE);
+    form.addField(formField);
+    return form;
+  }
   /**
    * {@inheritDoc}
    */
@@ -902,8 +990,10 @@ public class XMPPSessionImpl implements XMPPSession {
     MultiUserChat chat = getMultiUserChat(room);
     if (chat != null) {
       Form answerform = chat.getConfigurationForm().createAnswerForm();
-      // answerform.setAnswer("muc#roomconfig_roomname", room + "@" +
-      // mucService);
+      if (configRoom.getRoomname() != null)
+        answerform.setAnswer("muc#roomconfig_roomname", configRoom.getRoomname());
+      else 
+        answerform.setDefaultAnswer("muc#roomconfig_roomname");
       if (configRoom.getRoomdesc() != null)
         answerform.setAnswer("muc#roomconfig_roomdesc", configRoom.getRoomdesc());
       else
@@ -992,9 +1082,10 @@ public class XMPPSessionImpl implements XMPPSession {
    * @param roomJID the room id
    * @return true if password required
    */
-  public boolean isPasswordRequired(String roomJID) {
-    ServiceDiscoveryManager discover = new ServiceDiscoveryManager(connection_);
+  public boolean isPasswordRequired(String room) {
     try {
+      String roomJID = validateRoomJID(room);
+      ServiceDiscoveryManager discover = new ServiceDiscoveryManager(connection_);
       DiscoverInfo info = discover.discoverInfo(roomJID);
       return info.containsFeature("muc_passwordprotected");
     } catch (XMPPException e) {
@@ -1007,23 +1098,81 @@ public class XMPPSessionImpl implements XMPPSession {
    * {@inheritDoc}
    */
   public void joinRoom(String room, String nickname, String password) throws XMPPException {
-    String mucService = MultiUserChat.getServiceNames(connection_).toArray()[0].toString();
-    String roomJID = room + "@" + mucService;
     if (nickname == null)
       nickname = username_;
-    MultiUserChat chat = multiUserChatManager.getMultiUserChat(roomJID);
+    MultiUserChat chat = getMultiUserChat(room);
     if (chat == null) {
+      String roomJID = validateRoomJID(room);
       chat = new MultiUserChat(connection_, roomJID);
       multiUserChatManager.addMultiUserChat(chat);
     }
     if (!chat.isJoined()) {
-      if (isPasswordRequired(roomJID)) {
+      if (isPasswordRequired(room)) {
         chat.join(nickname, password);
       } else
         chat.join(nickname);
     }
     addListeners(chat);
   }
+  
+  
+  public InitInfoBean getRooms(Integer from, Integer to, String sort) throws XMPPException{
+    Collection<String> collectionMUCService = MultiUserChat.getServiceNames(connection_);
+    String mucService = collectionMUCService.toArray()[0].toString();
+    List<HostedRoom> hr = new ArrayList<HostedRoom>();
+    List<HostedRoomBean> rooms = new ArrayList<HostedRoomBean>();
+    Collection<HostedRoom> hostedRoomsAll = MultiUserChat.getHostedRooms(connection_, mucService);
+    for (HostedRoom hostedRoom : hostedRoomsAll) {
+      hr.add(hostedRoom);
+    }
+    if (sort == null)
+      sort = ASCENDING;
+    if (sort.equalsIgnoreCase(DESCENDING))
+      Collections.sort(hr, new RoomNameComparatorDesc());
+    else 
+      Collections.sort(hr, new RoomNameComparatorAsc());
+    
+    if (from == null || from < 0 || from > hr.size())
+      from = 0;
+    if (to == null || from > to || to < 0 || to > hr.size())
+      to = hr.size();
+    List<HostedRoom> hrp = hr.subList(from, to);
+    for (HostedRoom hostedRoom : hrp) {
+      HostedRoomBean roomBean = new HostedRoomBean();
+      RoomInfo roomInfo = MultiUserChat.getRoomInfo(connection_, hostedRoom.getJid());
+      if (roomInfo != null) {
+        roomBean = new HostedRoomBean(roomInfo);
+      }
+      roomBean.setJid(hostedRoom.getJid());
+      roomBean.setName(hostedRoom.getName());
+      rooms.add(roomBean);
+    }
+    InitInfoBean infoBean = new InitInfoBean();
+    infoBean.setHostedRooms(rooms);
+    infoBean.setTotalRooms(hostedRoomsAll.size());
+    return infoBean;
+  }
+  
+  private class RoomNameComparatorAsc implements Comparator<HostedRoom>{
+    public int compare(HostedRoom room1, HostedRoom room2) {
+      if (room1.getName().length() == room2.getName().length()) {
+        return room1.getName().compareTo(room2.getName());
+      } else {
+        return room1.getName().length() > room2.getName().length()?1:-1;
+      }
+    }
+  }
+  
+  private class RoomNameComparatorDesc implements Comparator<HostedRoom>{
+    public int compare(HostedRoom room1, HostedRoom room2) {
+      if (room1.getName().length() == room2.getName().length()) {
+        return room2.getName().compareTo(room1.getName());
+      } else {
+        return room2.getName().length() > room1.getName().length()?1:-1;
+      }
+    }
+  }
+  
 
   /**
    * {@inheritDoc}
@@ -1068,17 +1217,10 @@ public class XMPPSessionImpl implements XMPPSession {
   /**
    * {@inheritDoc}
    */
-  public FullRoomInfoBean getRoomInfo(String room) throws XMPPException {
-    String roomJID;
-    if (!room.contains("@")) {
-      String mucService = MultiUserChat.getServiceNames(connection_).toArray()[0].toString();
-      roomJID = room + "@" + mucService;
-    } else {
-      roomJID = room;
-    }
-    MultiUserChat chat = multiUserChatManager.getMultiUserChat(roomJID);
+  public FullRoomInfoBean getRoomInfoBean(String room) throws XMPPException {
+    MultiUserChat chat = getMultiUserChat(room);
     if (chat != null) {
-      RoomInfo roomInfo = MultiUserChat.getRoomInfo(connection_, roomJID);
+      RoomInfo roomInfo = MultiUserChat.getRoomInfo(connection_, chat.getRoom());
       Collection<Occupant> occupants = new ArrayList<Occupant>();
       Iterator<String> occ = chat.getOccupants();
       while (occ.hasNext()) {
@@ -1087,16 +1229,20 @@ public class XMPPSessionImpl implements XMPPSession {
       }
       FullRoomInfoBean infoBean = new FullRoomInfoBean(occupants, roomInfo);
       return infoBean;
-    }
+    } 
     return null;
+  }
+  
+  public RoomInfo getRoomInfo(String room) throws XMPPException {
+    String roomJID = validateRoomJID(room);
+    return MultiUserChat.getRoomInfo(connection_, roomJID);
   }
 
   /**
    * {@inheritDoc}
    */
-  public void declineRoom(String room, String inviter, String reason) throws XMPPException {
-    String mucService = MultiUserChat.getServiceNames(connection_).toArray()[0].toString();
-    String roomJID = room + "@" + mucService;
+  public void declineRoom(String room, String inviter, String reason) {
+    String roomJID = validateRoomJID(room);
     String inviterJID = inviter + "@" + connection_.getServiceName();
     MultiUserChat.decline(connection_, roomJID, inviterJID, reason);
   }
@@ -1105,10 +1251,8 @@ public class XMPPSessionImpl implements XMPPSession {
    * {@inheritDoc}
    */
   public Boolean inviteToRoom(String room, String invitee, String reason) throws XMPPException {
-    String mucService = MultiUserChat.getServiceNames(connection_).toArray()[0].toString();
-    String roomJID = room + "@" + mucService;
     String inviteeJID = invitee + "@" + connection_.getServiceName();
-    MultiUserChat chat = multiUserChatManager.getMultiUserChat(roomJID);
+    MultiUserChat chat = getMultiUserChat(room);
     if (chat != null) {
       if (chat.isJoined()) {
         chat.invite(inviteeJID, reason);
@@ -1122,9 +1266,7 @@ public class XMPPSessionImpl implements XMPPSession {
    * {@inheritDoc}
    */
   public Boolean leaveRoom(String room) throws XMPPException {
-    String mucService = MultiUserChat.getServiceNames(connection_).toArray()[0].toString();
-    String roomJID = room + "@" + mucService;
-    MultiUserChat chat = multiUserChatManager.getMultiUserChat(roomJID);
+    MultiUserChat chat = getMultiUserChat(room);
     if (chat != null) {
       if (chat.isJoined())
         chat.leave();
@@ -1204,10 +1346,8 @@ public class XMPPSessionImpl implements XMPPSession {
    * {@inheritDoc}
    */
   public Boolean destroyRoom(String room, String reason, String altRoom) throws XMPPException {
-    String mucService = MultiUserChat.getServiceNames(connection_).toArray()[0].toString();
-    String roomJID = room + "@" + mucService;
-    String alternateJID = altRoom + "@" + mucService;
-    MultiUserChat chat = multiUserChatManager.getMultiUserChat(roomJID);
+    String alternateJID = validateRoomJID(altRoom);
+    MultiUserChat chat = getMultiUserChat(room);
     if (chat != null) {
       chat.destroy(reason, alternateJID);
       return true;
@@ -1274,17 +1414,14 @@ public class XMPPSessionImpl implements XMPPSession {
    * @param description the description
    * @param isRoom true if file send to the group chat
    */
-  public void sendFile(String requestor, String path, String description, boolean isRoom) {
-    try {
+  public void sendFile(String requestor, String path, String description, boolean isRoom) throws Exception{
       if (!isRoom) {
         contFileTransfers = 1;
         String fullJID = connection_.getRoster().getPresence(requestor + "@"
             + connection_.getServiceName()).getFrom();
         sendFile(fullJID, path, description);
       } else {
-        String mucService = MultiUserChat.getServiceNames(connection_).toArray()[0].toString();
-        String roomJID = requestor + "@" + mucService;
-        MultiUserChat chat = multiUserChatManager.getMultiUserChat(roomJID);
+        MultiUserChat chat = getMultiUserChat(requestor);
         Iterator<String> occ = chat.getOccupants();
         List<String> reqs = new ArrayList<String>();
         while (occ.hasNext()) {
@@ -1299,9 +1436,6 @@ public class XMPPSessionImpl implements XMPPSession {
           sendFile(jid, path, description);
         }
       }
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
   }
 
   /**
@@ -1309,19 +1443,15 @@ public class XMPPSessionImpl implements XMPPSession {
    * @param path the apth
    * @param description the description
    */
-  private void sendFile(String fullJID, String path, String description) {
-    try {
-      // Create the file transfer manager
-      FileTransferManager manager = new FileTransferManager(connection_);
-      // Create the outgoing file transfer
-      OutgoingFileTransfer transfer = manager.createOutgoingFileTransfer(fullJID);
-      // Send the file
-      transfer.sendFile(new File(path), description);
-      CheckStatusFileTransfer check = new CheckStatusFileTransfer(transfer);
-      check.start();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+  private void sendFile(String fullJID, String path, String description) throws Exception{
+    // Create the file transfer manager
+    FileTransferManager manager = new FileTransferManager(connection_);
+    // Create the outgoing file transfer
+    OutgoingFileTransfer transfer = manager.createOutgoingFileTransfer(fullJID);
+    // Send the file
+    transfer.sendFile(new File(path), description);
+    CheckStatusFileTransfer check = new CheckStatusFileTransfer(transfer);
+    check.start();
   }
 
   /**
@@ -1738,6 +1868,27 @@ public class XMPPSessionImpl implements XMPPSession {
     });
 
   }
+  
+  public void sendErrorMessage(String msg, String sender){
+    try{ 
+      JsonGeneratorImpl generatorImpl = new JsonGeneratorImpl();
+      String id = CodingUtils.encodeToHex(UUID.randomUUID().toString());
+      MessageBean messageBean = new MessageBean();
+      messageBean.setBody(msg);
+      messageBean.setFrom(sender);
+      messageBean.setId(id);
+      messageBean.setTo(connection_.getUser());
+      messageBean.setType(Message.Type.error.name());
+      messageBean.setDateSend(Calendar.getInstance().getTime().toString());
+      EventsBean eventsBean = new EventsBean();
+      eventsBean.addMessage(messageBean);
+      eventsBean.setEventId(Packet.nextID());
+      JsonValue json = generatorImpl.createJsonObject(eventsBean);
+      delegate.sendMessage(username_, CometdChannels.MESSAGE, json.toString(), null);
+    }catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
 
   /**
    * Send group chat events.
@@ -1755,6 +1906,22 @@ public class XMPPSessionImpl implements XMPPSession {
       e.printStackTrace();
     }
 
+  }
+  
+  private String validateRoomJID(String room){
+    String roomJID = new String();
+    try {
+      if (room.contains("@"))
+        roomJID = room;
+      else {
+        String mucService = MultiUserChat.getServiceNames(connection_).toArray()[0].toString();
+        roomJID = room + "@" + mucService;
+      }
+    }catch (Exception e) {
+      if (log.isDebugEnabled())
+        e.printStackTrace();
+    }
+    return roomJID;
   }
 
 }

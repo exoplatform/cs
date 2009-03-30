@@ -175,5 +175,22 @@ public class TransformUtils {
     }
     return new SearchResultsBean(list);
   }
+  
+  
+  public static FormBean changeFieldForm(FormBean form, String variable, List<String> values){
+    List<FieldBean> list = form.getFields();
+    List<FieldBean> lfb = new ArrayList<FieldBean>();
+    for (FieldBean fb : list) {
+      if (fb.getVariable() != null){
+        if (fb.getVariable().trim().equals(variable)){
+          fb.setValues(values);
+        }
+      }
+      lfb.add(fb);
+    }
+    form.setFields(lfb);
+    return form;
+  }
+
 
 }

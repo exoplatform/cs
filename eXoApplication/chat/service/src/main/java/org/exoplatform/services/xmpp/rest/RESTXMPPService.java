@@ -27,12 +27,15 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.UUID;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.common.http.HTTPMethods;
 import org.exoplatform.common.http.HTTPStatus;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.resources.ResourceBundleService;
 import org.exoplatform.services.rest.CacheControl;
 import org.exoplatform.services.rest.HTTPMethod;
 import org.exoplatform.services.rest.InputTransformer;
@@ -63,7 +66,6 @@ import org.exoplatform.services.xmpp.ext.transport.YahooTransport;
 import org.exoplatform.services.xmpp.history.HistoricalMessage;
 import org.exoplatform.services.xmpp.history.impl.jcr.HistoryImpl;
 import org.exoplatform.services.xmpp.userinfo.UserInfoService;
-import org.exoplatform.services.xmpp.util.CheckUtils;
 import org.exoplatform.services.xmpp.util.PresenceUtil;
 import org.exoplatform.services.xmpp.util.SearchFormFields;
 import org.exoplatform.services.xmpp.util.TransformUtils;
@@ -117,6 +119,10 @@ public class RESTXMPPService implements ResourceContainer {
   
   private final ContinuationServiceDelegate delegate;
   
+  private final ResourceBundleService rbs;
+  
+  private final ResourceBundle rb;
+  
   private final HistoryImpl history;
   
   private static final CacheControl cc;
@@ -130,11 +136,14 @@ public class RESTXMPPService implements ResourceContainer {
   public RESTXMPPService(XMPPMessenger messenger,
                          UserInfoService organization,
                          ContinuationServiceDelegate delegate,
-                         HistoryImpl history) {
+                         HistoryImpl history,
+                         ResourceBundleService rbs) {
     this.messenger = messenger;
     this.organization = organization;
     this.delegate = delegate;
     this.history = history;
+    this.rbs = rbs;                  
+    this.rb = rbs.getResourceBundle("locale.message.chat.serverMessage", Locale.getDefault());
   }
 
   // //////////// Group chat //////////////////
@@ -144,57 +153,71 @@ public class RESTXMPPService implements ResourceContainer {
    * @return
    */
   @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/xmpp/muc/createroom/{username}/{room}/")
+  @URITemplate("/xmpp/muc/createroom/{username}/")
   @OutputTransformer(Bean2JsonOutputTransformer.class)
   public Response createRoom(@URIParam("username") String username,
-                             @URIParam("room") String room,
+                             @QueryParam("room") String room,
                              @QueryParam("nickname") String nickname) {
-    if (!CheckUtils.isNodeValide(room)) {
-      if (log.isDebugEnabled())
-        log.debug("Room name can't contain these characters: " + CheckUtils.notAllowedCharacters());
-      return Response.Builder.badRequest()
-                             .errorMessage("Room name can't contain these characters: "
-                                 + CheckUtils.notAllowedCharacters())
+    if (room == null)
+      return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
+                             .errorMessage(rb.getString("chat.message.roomid.null"))
                              .build();
-    }
     XMPPSession session = messenger.getSession(username);
     if (session != null) {
+      String roomEscape = StringUtils.escapeNode(room.toLowerCase());
       try {
-        session.createRoom(room, nickname);
-        FormBean formBean = session.getConfigFormRoom(room);
-        return Response.Builder.ok(formBean, JSON_CONTENT_TYPE).cacheControl(cc).build();
+        RoomInfo roomInfo = session.getRoomInfo(roomEscape);
+        if (roomInfo != null) 
+          return joinRoom(username, room, nickname, null);
+        } catch (XMPPException e) {
+          //nothing to do         
+        }
+       try { 
+          FormBean formBean = session.createRoom(roomEscape, nickname);
+          List<String> values = new ArrayList<String>();
+          values.add(room);
+          // Tricks, add change field to configuration form for sending to UI client name of room that entered user. 
+          formBean = TransformUtils.changeFieldForm(formBean, "muc#roomconfig_roomname", values);
+          formBean = TransformUtils.changeFieldForm(formBean, "muc#roomconfig_roomdesc", values);
+          return Response.Builder.ok(formBean, JSON_CONTENT_TYPE).cacheControl(cc).build();
       } catch (Exception e) {
         e.printStackTrace();
         return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
-                               .errorMessage("Thrown exception : " + e)
+                               .errorMessage(rb.getString("chat.message.room.creation.error") + "\n" + e.getMessage())
                                .build();
       }
     } else {
       if (log.isDebugEnabled())
-        log.debug("XMPPSesion is null");
+        log.debug(rb.getString("chat.message.room.xmppsession.null"));
       return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
-                             .errorMessage("XMPPSesion is null!")
+                             .errorMessage(rb.getString("chat.message.room.xmppsession.null"))
                              .build();
     }
   }
 
+  
   @HTTPMethod(HTTPMethods.POST)
-  @URITemplate("/xmpp/muc/configroom/{username}/{room}/")
+  @URITemplate("/xmpp/muc/configroom/{username}/")
   @InputTransformer(Json2BeanInputTransformer.class)
   public Response configRoom(@URIParam("username") String username,
-                             @URIParam("room") String room,
+                             @QueryParam("room") String room,
                              ConfigRoomBean configRoom) {
+    if (room == null)
+      return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
+                             .errorMessage(rb.getString("chat.message.roomid.null"))
+                             .build();
     try {
       XMPPSession session = messenger.getSession(username);
       if (session != null) {
+        room = StringUtils.escapeNode(room.toLowerCase());
         if (session.getMultiUserChat(room) != null)
           session.configRoom(room, configRoom);
         return Response.Builder.ok().cacheControl(cc).build();
       } else {
         if (log.isDebugEnabled())
-          log.debug("XMPPSesion is null");
+          log.debug(rb.getString("chat.message.room.xmppsession.null"));
         return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
-                               .errorMessage("XMPPSesion is null!")
+                               .errorMessage(rb.getString("chat.message.room.xmppsession.null"))
                                .build();
       }
     } catch (XMPPException e) {
@@ -202,16 +225,21 @@ public class RESTXMPPService implements ResourceContainer {
         e.printStackTrace();
       XMPPError error = e.getXMPPError();
       return Response.Builder.withStatus(error.getCode())
-                             .errorMessage(error.getMessage())
+                             .errorMessage(rb.getString("chat.message.conference.configuration.error")
+                                                        + "\n" + error.getMessage())
                              .build();
     }
   }
 
   @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/xmpp/muc/getroomconfig/{username}/{room}/")
+  @URITemplate("/xmpp/muc/getroomconfig/{username}/")
   @OutputTransformer(Bean2JsonOutputTransformer.class)
   public Response getRoomConfigForm(@URIParam("username") String username,
-                                    @URIParam("room") String room) {
+                                    @QueryParam("room") String room) {
+    if (room == null)
+      return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
+                             .errorMessage(rb.getString("chat.message.roomid.null"))
+                             .build();
     XMPPSession session = messenger.getSession(username);
     if (session != null) {
       try {
@@ -229,12 +257,13 @@ public class RESTXMPPService implements ResourceContainer {
           e.printStackTrace();
         XMPPError error = e.getXMPPError();
         return Response.Builder.withStatus(error.getCode())
-                               .errorMessage(error.getMessage())
-                               .build();
+                       .errorMessage(rb.getString("chat.message.conference.configuration.error")
+                                   + "\n" + error.getMessage())
+                       .build();
       }
     }
     return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
-                           .errorMessage("XMPPSesion is null!")
+                           .errorMessage(rb.getString("chat.message.room.xmppsession.null"))
                            .build();
   }
 
@@ -244,13 +273,18 @@ public class RESTXMPPService implements ResourceContainer {
    * @return
    */
   @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/xmpp/muc/getroominfo/{username}/{room}/")
+  @URITemplate("/xmpp/muc/getroominfo/{username}/")
   @OutputTransformer(Bean2JsonOutputTransformer.class)
-  public Response getRoomInfo(@URIParam("username") String username, @URIParam("room") String room) {
+  public Response getRoomInfo(@URIParam("username") String username,
+                              @QueryParam("room") String room) {
+    if (room == null)
+      return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
+                             .errorMessage(rb.getString("chat.message.roomid.null"))
+                             .build();
     XMPPSession session = messenger.getSession(username);
     if (session != null) {
       try {
-        FullRoomInfoBean infoBean = session.getRoomInfo(room);
+        FullRoomInfoBean infoBean = session.getRoomInfoBean(room.toLowerCase());
         if (infoBean != null)
           return Response.Builder.ok(infoBean, JSON_CONTENT_TYPE)
                                  .cacheControl(cc)
@@ -263,12 +297,12 @@ public class RESTXMPPService implements ResourceContainer {
           e.printStackTrace();
         XMPPError error = e.getXMPPError();
         return Response.Builder.withStatus(error.getCode())
-                               .errorMessage(error.getMessage())
+                               .errorMessage(rb.getString("chat.message.conference.info.error") + "\n" + error.getMessage())
                                .build();
       }
     }
     return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
-                           .errorMessage("XMPPSesion is null!")
+                           .errorMessage(rb.getString("chat.message.room.xmppsession.null"))
                            .build();
   }
 
@@ -286,27 +320,29 @@ public class RESTXMPPService implements ResourceContainer {
         List<FullRoomInfoBean> joinedRooms = new ArrayList<FullRoomInfoBean>();
         List<String> list = session.getJoinedRooms();
         for (String room : list) {
-          joinedRooms.add(session.getRoomInfo(room));
+          joinedRooms.add(session.getRoomInfoBean(room));
         }
         InitInfoBean bean = new InitInfoBean();
         bean.setJoinedRooms(joinedRooms);
+        bean.setTotalJoinedRooms(list.size());
         return Response.Builder.ok(bean, JSON_CONTENT_TYPE).cacheControl(cc).build();
       } catch (XMPPException e) {
         if (log.isDebugEnabled()) 
           e.printStackTrace();
         XMPPError error = e.getXMPPError();
         return Response.Builder.withStatus(error.getCode())
-                               .errorMessage(error.getMessage())
+                               .errorMessage(rb.getString("chat.message.conference.info.error") + "\n" + error.getMessage())
                                .build();
       }
     }
     return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
-                           .errorMessage("XMPPSesion is null!")
+                           .errorMessage(rb.getString("chat.message.room.xmppsession.null"))
                            .build();
   }
-
+  
+  @Deprecated
   @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/xmpp/muc/rooms/{username}/")
+  @URITemplate("/xmpp/muc/rooms-old/{username}/")
   @OutputTransformer(Bean2JsonOutputTransformer.class)
   public Response getRooms(@URIParam("username") String username) {
     XMPPSession session = messenger.getSession(username);
@@ -327,7 +363,6 @@ public class RESTXMPPService implements ResourceContainer {
           roomBean.setName(hostedRoom.getName());
           rooms.add(roomBean);
         }
-
         InitInfoBean infoBean = new InitInfoBean();
         infoBean.setHostedRooms(rooms);
         return Response.Builder.ok(infoBean, JSON_CONTENT_TYPE).cacheControl(cc).build();
@@ -341,7 +376,34 @@ public class RESTXMPPService implements ResourceContainer {
       }
     }
     return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
-                           .errorMessage("XMPPSesion is null!")
+                           .errorMessage(rb.getString("chat.message.room.xmppsession.null"))
+                           .build();
+  }
+  
+  
+  
+  @HTTPMethod(HTTPMethods.GET)
+  @URITemplate("/xmpp/muc/rooms/{username}/")
+  @OutputTransformer(Bean2JsonOutputTransformer.class)
+  public Response getRooms(@URIParam("username") String username,
+                           @QueryParam("from") Integer from,
+                           @QueryParam("to") Integer to,
+                           @QueryParam("sort") String sort) {
+    XMPPSessionImpl session = (XMPPSessionImpl) messenger.getSession(username);
+    if (session != null) {
+      try {
+        return Response.Builder.ok(session.getRooms(from, to,sort), JSON_CONTENT_TYPE).cacheControl(cc).build();
+      } catch (XMPPException e) {
+        if (log.isDebugEnabled()) 
+          e.printStackTrace();
+        XMPPError error = e.getXMPPError();
+        return Response.Builder.withStatus(error.getCode())
+                               .errorMessage(rb.getString("chat.message.conference.info.error") + "\n" + error.getMessage())
+                               .build();
+      }
+    }
+    return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
+                           .errorMessage(rb.getString("chat.message.room.xmppsession.null"))
                            .build();
   }
 
@@ -352,39 +414,38 @@ public class RESTXMPPService implements ResourceContainer {
    * @return
    */
   @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/xmpp/muc/decline/{username}/{inviter}/{room}/")
+  @URITemplate("/xmpp/muc/decline/{username}/{inviter}/")
   public Response declineToRoom(@URIParam("username") String username,
                                 @URIParam("inviter") String inviter,
-                                @URIParam("room") String room,
+                                @QueryParam("room") String room,
                                 @QueryParam("reason") String reason) {
+    if (room == null)
+      return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
+                             .errorMessage(rb.getString("chat.message.roomid.null"))
+                             .build();
     XMPPSession session = messenger.getSession(username);
     if (session != null) {
-      try {
-        session.declineRoom(room, inviter, reason);
-        return Response.Builder.ok().cacheControl(cc).build();
-      } catch (XMPPException e) {
-        if (log.isDebugEnabled()) 
-          e.printStackTrace();
-        XMPPError error = e.getXMPPError();
-        return Response.Builder.withStatus(error.getCode())
-                               .errorMessage(error.getMessage())
-                               .build();
-      }
+      session.declineRoom(room, inviter, reason);
+      return Response.Builder.ok().cacheControl(cc).build();
     } else {
       if (log.isDebugEnabled())
-        log.debug("XMPPSesion is null");
+        log.debug(rb.getString("chat.message.room.xmppsession.null"));
       return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
-                             .errorMessage("XMPPSesion is null!")
+                             .errorMessage(rb.getString("chat.message.room.xmppsession.null"))
                              .build();
     }
   }
 
   @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/xmpp/muc/destroy/{username}/{room}/")
+  @URITemplate("/xmpp/muc/destroy/{username}/")
   public Response destroyRoom(@URIParam("username") String username,
-                              @URIParam("room") String room,
+                              @QueryParam("room") String room,
                               @QueryParam("reason") String reason,
                               @QueryParam("altroom") String altRoom) {
+    if (room == null)
+      return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
+                             .errorMessage(rb.getString("chat.message.roomid.null"))
+                             .build();
     XMPPSession session = messenger.getSession(username);
     if (session != null) {
       try {
@@ -392,7 +453,7 @@ public class RESTXMPPService implements ResourceContainer {
           return Response.Builder.ok().cacheControl(cc).build();
         else
           return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
-                                 .errorMessage("Chat is null")
+                                 .errorMessage(rb.getString("chat.message.room.not.found"))
                                  .cacheControl(cc)
                                  .build();
       } catch (XMPPException e) {
@@ -400,14 +461,14 @@ public class RESTXMPPService implements ResourceContainer {
           e.printStackTrace();
         XMPPError error = e.getXMPPError();
         return Response.Builder.withStatus(error.getCode())
-                               .errorMessage(error.getMessage())
+                               .errorMessage(rb.getString("chat.message.room.destroy.error") + "\n" + error.getMessage())
                                .build();
       }
     } else {
       if (log.isDebugEnabled())
-        log.debug("XMPPSesion is null");
+        log.debug(rb.getString("chat.message.room.xmppsession.null"));
       return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
-                             .errorMessage("XMPPSesion is null!")
+                             .errorMessage(rb.getString("chat.message.room.xmppsession.null"))
                              .build();
     }
   }
@@ -419,31 +480,35 @@ public class RESTXMPPService implements ResourceContainer {
    * @return
    */
   @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/xmpp/muc/invite/{username}/{invitee}/{room}/")
+  @URITemplate("/xmpp/muc/invite/{username}/{invitee}/")
   public Response inviteToRoom(@URIParam("username") String username,
                                @URIParam("invitee") String invitee,
-                               @URIParam("room") String room,
-                               @QueryParam("raeson") String reason) {
+                               @QueryParam("room") String room,
+                               @QueryParam("reason") String reason) {
+    if (room == null)
+      return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
+                             .errorMessage(rb.getString("chat.message.roomid.null"))
+                             .build();
     XMPPSession session = messenger.getSession(username);
     if (session != null) {
       try {
         if (session.inviteToRoom(room, invitee, reason))
           return Response.Builder.ok().cacheControl(cc).build();
-        return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
+        return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)//.errorMessage()
                                .cacheControl(cc)
                                .build();
       } catch (XMPPException e) {
-        if (log.isDebugEnabled()) 
+//        if (log.isDebugEnabled()) 
           e.printStackTrace();
         XMPPError error = e.getXMPPError();
         return Response.Builder.withStatus(error.getCode())
-                               .errorMessage(error.getMessage())
+                               .errorMessage(rb.getString("chat.message.conference.service.error"))
                                .build();
       }
     }
     return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
                            .cacheControl(cc)
-                           .errorMessage("XMPPSsession null!")
+                           .errorMessage(rb.getString("chat.message.room.xmppsession.null"))
                            .build();
   }
 
@@ -453,12 +518,16 @@ public class RESTXMPPService implements ResourceContainer {
    * @return
    */
   @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/xmpp/muc/join/{username}/{room}/")
+  @URITemplate("/xmpp/muc/join/{username}/")
   @OutputTransformer(Bean2JsonOutputTransformer.class)
   public Response joinRoom(@URIParam("username") String username,
-                           @URIParam("room") String room,
+                           @QueryParam("room") String room,
                            @QueryParam("nickname") String nickname,
                            @QueryParam("password") String password) {
+    if (room == null)
+      return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
+                             .errorMessage(rb.getString("chat.message.roomid.null"))
+                             .build();
     XMPPSession session = messenger.getSession(username);
     if (session != null) {
       try {
@@ -468,13 +537,33 @@ public class RESTXMPPService implements ResourceContainer {
         if (log.isDebugEnabled()) 
           e.printStackTrace();
         XMPPError error = e.getXMPPError();
+        String em = new String();
+        switch (error.getCode()) {
+        case 401:
+          em = rb.getString("chat.message.password.private.room.error");
+          break;
+        case 403:
+          em = rb.getString("chat.message.you.have.been.banned");
+          break;
+        case 404:
+          em = rb.getString("chat.message.no.room.to.join.error");
+          break;
+        case 407:
+          em = rb.getString("chat.message.room.user.not.member");
+          break;
+        case 409:
+          em = rb.getString("chat.message.room.nickname.already.exist");
+        default:
+          em = rb.getString("chat.message.default.error");
+          break;
+        }
         return Response.Builder.withStatus(error.getCode())
-                               .errorMessage(error.getMessage())
+                               .errorMessage(em)
                                .build();
       }
     }
     return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
-                           .errorMessage("XMPPSession is null")
+                           .errorMessage(rb.getString("chat.message.room.xmppsession.null"))
                            .cacheControl(cc)
                            .build();
   }
@@ -485,8 +574,13 @@ public class RESTXMPPService implements ResourceContainer {
    * @return
    */
   @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/xmpp/muc/leaveroom/{username}/{room}/")
-  public Response leftRoom(@URIParam("username") String username, @URIParam("room") String room) {
+  @URITemplate("/xmpp/muc/leaveroom/{username}/")
+  public Response leftRoom(@URIParam("username") String username,
+                           @QueryParam("room") String room) {
+    if (room == null)
+      return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
+                             .errorMessage(rb.getString("chat.message.roomid.null"))
+                             .build();
     XMPPSession session = messenger.getSession(username);
     if (session != null) {
       try {
@@ -500,12 +594,12 @@ public class RESTXMPPService implements ResourceContainer {
           e.printStackTrace();
         XMPPError error = e.getXMPPError();
         return Response.Builder.withStatus(error.getCode())
-                               .errorMessage(error.getMessage())
+                               .errorMessage(rb.getString("chat.message.default.error"))
                                .build();
       }
     }
     return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
-                           .errorMessage("XMPPSession is null")
+                           .errorMessage(rb.getString("chat.message.room.xmppsession.null"))
                            .cacheControl(cc)
                            .build();
   }
@@ -517,10 +611,14 @@ public class RESTXMPPService implements ResourceContainer {
    * @return
    */
   @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/xmpp/muc/changenickname/{username}/{room}/{nickname}/")
+  @URITemplate("/xmpp/muc/changenickname/{username}/{nickname}/")
   public Response changeNickname(@URIParam("username") String username,
-                                 @URIParam("room") String room,
-                                 @URIParam("nickname") String nickname) {
+                                 @QueryParam("nickname") String nickname,
+                                 @QueryParam("room") String room) {
+    if (room == null || nickname == null)
+      return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
+                             .errorMessage(rb.getString("chat.message.roomid.null"))
+                             .build();
     XMPPSession session = messenger.getSession(username);
     if (session != null) {
       try {
@@ -530,13 +628,22 @@ public class RESTXMPPService implements ResourceContainer {
         if (log.isDebugEnabled()) 
           e.printStackTrace();
         XMPPError error = e.getXMPPError();
+        String em = new String();
+        switch (error.getCode()) {
+        case 409:
+          em = rb.getString("chat.message.room.nickname.already.exist");
+          break;
+        default:
+          em = rb.getString("chat.message.default.error");
+          break;
+        }
         return Response.Builder.withStatus(error.getCode())
-                               .errorMessage(error.getMessage())
+                               .errorMessage(em)
                                .build();
       }
     }
     return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
-                           .errorMessage("XMPPSession is null")
+                           .errorMessage(rb.getString("chat.message.room.xmppsession.null"))
                            .cacheControl(cc)
                            .build();
   }
@@ -549,11 +656,15 @@ public class RESTXMPPService implements ResourceContainer {
    * @return
    */
   @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/xmpp/muc/changestatus/{username}/{room}/{mode}/")
+  @URITemplate("/xmpp/muc/changestatus/{username}/{mode}/")
   public Response changeAvailabilityStatusInRoom(@URIParam("username") String username,
-                                                 @URIParam("room") String room,
                                                  @URIParam("mode") String mode,
+                                                 @QueryParam("room") String room,
                                                  @QueryParam("status") String status) {
+    if (room == null)
+      return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
+                             .errorMessage(rb.getString("chat.message.roomid.null"))
+                             .build();
     XMPPSession session = messenger.getSession(username);
     if (session != null) {
       try {
@@ -564,11 +675,11 @@ public class RESTXMPPService implements ResourceContainer {
           e.printStackTrace();
         XMPPError error = e.getXMPPError();
         return Response.Builder.withStatus(error.getCode())
-                               .errorMessage(error.getMessage())
+                               .errorMessage(rb.getString("chat.message.default.error"))
                                .build();
       }
     }
-    return Response.Builder.notFound().errorMessage("XMPPSession is null").build();
+    return Response.Builder.notFound().errorMessage(rb.getString("chat.message.room.xmppsession.null")).build();
   }
 
   /**
@@ -578,10 +689,14 @@ public class RESTXMPPService implements ResourceContainer {
    * @return
    */
   @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/xmpp/muc/changesubject/{username}/{room}/{subject}/")
+  @URITemplate("/xmpp/muc/changesubject/{username}/")
   public Response changeSubject(@URIParam("username") String username,
-                                @URIParam("room") String room,
-                                @URIParam("subject") String subject) {
+                                @QueryParam("room") String room,
+                                @QueryParam("subject") String subject) {
+    if (room == null || subject == null)
+      return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
+                             .errorMessage(rb.getString("chat.message.roomid.null"))
+                             .build();
     XMPPSession session = messenger.getSession(username);
     if (session != null) {
       try {
@@ -591,12 +706,21 @@ public class RESTXMPPService implements ResourceContainer {
         if (log.isDebugEnabled()) 
           e.printStackTrace();
         XMPPError error = e.getXMPPError();
+        String em= new String();
+        switch (error.getCode()) {
+        case 403:
+          em = rb.getString("chat.message.subject.change.error");
+          break;
+        default:
+          em = rb.getString("chat.message.default.error");
+          break;
+        }
         return Response.Builder.withStatus(error.getCode())
                                .errorMessage(error.getMessage())
                                .build();
       }
     }
-    return Response.Builder.notFound().errorMessage("XMPPSession is null").build();
+    return Response.Builder.notFound().errorMessage(rb.getString("chat.message.room.xmppsession.null")).build();
   }
 
   /**
@@ -608,12 +732,16 @@ public class RESTXMPPService implements ResourceContainer {
    * @return
    */
   @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/xmpp/muc/managerole/{username}/{room}/{nickname}/")
+  @URITemplate("/xmpp/muc/managerole/{username}/")
   public Response manageRoleRoom(@URIParam("username") String username,
-                                 @URIParam("room") String room,
-                                 @URIParam("nickname") String nickname,
+                                 @QueryParam("room") String room,
+                                 @QueryParam("nickname") String nickname,
                                  @QueryParam("role") String role,
                                  @QueryParam("command") String command) {
+    if (room == null || nickname == null)
+      return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
+                             .errorMessage(rb.getString("chat.message.roomid.null"))
+                             .build();
     XMPPSession session = messenger.getSession(username);
     if (session != null) {
       try {
@@ -623,15 +751,27 @@ public class RESTXMPPService implements ResourceContainer {
         if (log.isDebugEnabled()) 
           e.printStackTrace();
         XMPPError error = e.getXMPPError();
+        String em= new String();
+        switch (error.getCode()) {
+        case 403:
+          em = rb.getString("chat.message.forbidden.error");
+          break;
+        case 400:
+          em = rb.getString("chat.message.user.not.found");
+          break;
+        default:
+          em = rb.getString("chat.message.default.error");
+          break;
+        }
         return Response.Builder.withStatus(error.getCode())
-                               .errorMessage(error.getMessage())
+                               .errorMessage(em)
                                .build();
       }
     } else {
       if (log.isDebugEnabled())
         log.debug("Sesion is null");
-      return Response.Builder.withStatus(HTTPStatus.NOT_FOUND)
-                             .errorMessage("Session is null")
+      return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
+                             .errorMessage(rb.getString("chat.message.room.xmppsession.null"))
                              .cacheControl(cc)
                              .build();
     }
@@ -646,12 +786,16 @@ public class RESTXMPPService implements ResourceContainer {
    * @return
    */
   @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/xmpp/muc/manageaffiliation/{username}/{room}/{name}/")
+  @URITemplate("/xmpp/muc/manageaffiliation/{username}/")
   public Response manageAffilationRoom(@URIParam("username") String username,
-                                       @URIParam("room") String room,
-                                       @URIParam("name") String nickname,
+                                       @QueryParam("room") String room,
+                                       @QueryParam("nickname") String nickname,
                                        @QueryParam("affiliation") String affiliation,
                                        @QueryParam("command") String command) {
+    if (room == null || nickname == null)
+      return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
+                             .errorMessage(rb.getString("chat.message.roomid.null"))
+                             .build();
     XMPPSession session = messenger.getSession(username);
     if (session != null) {
       try {
@@ -661,15 +805,27 @@ public class RESTXMPPService implements ResourceContainer {
         if (log.isDebugEnabled()) 
           e.printStackTrace();
         XMPPError error = e.getXMPPError();
+        String em = new String();
+        switch (error.getCode()) {
+        case 403:
+          em = rb.getString("chat.message.forbidden.error");
+          break;
+        case 400:
+          em = rb.getString("chat.message.user.not.found");
+          break;
+        default:
+          em = rb.getString("chat.message.default.error");
+          break;
+        }
         return Response.Builder.withStatus(error.getCode())
-                               .errorMessage(error.getMessage())
+                               .errorMessage(em)
                                .build();
       }
     } else {
       if (log.isDebugEnabled())
         log.debug("Sesion is null");
       return Response.Builder.withStatus(HTTPStatus.NOT_FOUND)
-                             .errorMessage("Session is null")
+                             .errorMessage(rb.getString("chat.message.room.xmppsession.null"))
                              .cacheControl(cc)
                              .build();
     }
@@ -683,11 +839,15 @@ public class RESTXMPPService implements ResourceContainer {
    * @return
    */
   @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/xmpp/muc/kick/{username}/{room}/{nickname}/")
+  @URITemplate("/xmpp/muc/kick/{username}/")
   public Response kickUserFromRoom(@URIParam("username") String username,
-                                   @URIParam("room") String room,
-                                   @URIParam("nickname") String nickname,
+                                   @QueryParam("room") String room,
+                                   @QueryParam("nickname") String nickname,
                                    @QueryParam("reason") String reason) {
+    if (room == null || nickname == null)
+      return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
+                             .errorMessage(rb.getString("chat.message.roomid.null"))
+                             .build();
     XMPPSession session = messenger.getSession(username);
     if (session != null) {
       try {
@@ -697,15 +857,29 @@ public class RESTXMPPService implements ResourceContainer {
         if (log.isDebugEnabled()) 
           e.printStackTrace();
         XMPPError error = e.getXMPPError();
+        String em = new String();
+        switch (error.getCode()) {
+        case 405:
+          em = rb.getString("chat.message.not.allowed.error");
+        case 403:
+          em = rb.getString("chat.message.forbidden.error");
+          break;
+        case 400:
+          em = rb.getString("chat.message.user.not.found");
+          break;
+        default:
+          em = rb.getString("chat.message.default.error");
+          break;
+        }
         return Response.Builder.withStatus(error.getCode())
-                               .errorMessage(error.getMessage())
+                               .errorMessage(em)
                                .build();
       }
     } else {
       if (log.isDebugEnabled())
         log.debug("Sesion is null");
       return Response.Builder.withStatus(HTTPStatus.NOT_FOUND)
-                             .errorMessage("Session is null")
+                             .errorMessage(rb.getString("chat.message.room.xmppsession.null"))
                              .cacheControl(cc)
                              .build();
     }
@@ -714,37 +888,52 @@ public class RESTXMPPService implements ResourceContainer {
   /**
    * @param username
    * @param room
-   * @param nickname
+   * @param name
    * @param reason
    * @return
    */
   @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/xmpp/muc/ban/{username}/{room}/{name}/")
+  @URITemplate("/xmpp/muc/ban/{username}/")
   public Response banUserFromRoom(@URIParam("username") String username,
-                                  @URIParam("room") String room,
-                                  @URIParam("name") String nickname,
+                                  @QueryParam("room") String room,
+                                  @QueryParam("name") String name,
                                   @QueryParam("reason") String reason) {
-    CacheControl cacheControl = new CacheControl();
-    cacheControl.setNoCache(true);
-    cacheControl.setNoStore(true);
+    if (room == null || name ==null)
+      return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
+                             .errorMessage(rb.getString("chat.message.roomid.null"))
+                             .build();
     XMPPSession session = messenger.getSession(username);
     if (session != null) {
       try {
-          session.banUser(room, nickname, reason);
+          session.banUser(room, name, reason);
           return Response.Builder.ok().cacheControl(cc).build();
       } catch (XMPPException e) {
         if (log.isDebugEnabled()) 
           e.printStackTrace();
         XMPPError error = e.getXMPPError();
+        String em = new String();
+        switch (error.getCode()) {
+        case 405:
+          em = rb.getString("chat.message.not.allowed.error");
+        case 403:
+          em = rb.getString("chat.message.forbidden.error");
+          break;
+        case 400:
+          em = rb.getString("chat.message.user.not.found");
+          break;
+        default:
+          em = rb.getString("chat.message.default.error");
+          break;
+        }
         return Response.Builder.withStatus(error.getCode())
-                               .errorMessage(error.getMessage())
+                               .errorMessage(em)
                                .build();
       }
     } else {
       if (log.isDebugEnabled())
-        log.debug("XMPPSesion is null");
+        log.debug(rb.getString("chat.message.room.xmppsession.null"));
       return Response.Builder.withStatus(HTTPStatus.NOT_FOUND)
-                             .errorMessage("Session is null")
+                             .errorMessage(rb.getString("chat.message.room.xmppsession.null"))
                              .cacheControl(cc)
                              .build();
     }
@@ -790,9 +979,9 @@ public class RESTXMPPService implements ResourceContainer {
         return Response.Builder.ok().cacheControl(cc).build();
       } else {
         if (log.isDebugEnabled())
-          log.debug("XMPPSesion is null");
+          log.debug(rb.getString("chat.message.room.xmppsession.null"));
         return Response.Builder.withStatus(HTTPStatus.FORBIDDEN)
-                               .errorMessage("XMPPSession is null")
+                               .errorMessage(rb.getString("chat.message.room.xmppsession.null"))
                                .build();
       }
     } catch (Exception e) {
@@ -819,7 +1008,7 @@ public class RESTXMPPService implements ResourceContainer {
         return Response.Builder.ok().cacheControl(cc).build();
       } else {
         if (log.isDebugEnabled())
-          log.debug("XMPPSession is null");
+          log.debug(rb.getString("chat.message.room.xmppsession.null"));
         return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR).build();
       }
     } catch (XMPPException e) {
@@ -827,7 +1016,7 @@ public class RESTXMPPService implements ResourceContainer {
         e.printStackTrace();
       XMPPError error = e.getXMPPError();
       return Response.Builder.withStatus(error.getCode())
-                             .errorMessage(error.getMessage())
+                             .errorMessage(rb.getString("chat.message.default.error"))
                              .build();
     }
   }
@@ -860,7 +1049,7 @@ public class RESTXMPPService implements ResourceContainer {
         e.printStackTrace();
       XMPPError error = e.getXMPPError();
       return Response.Builder.withStatus(error.getCode())
-                             .errorMessage(error.getMessage())
+                             .errorMessage(rb.getString("chat.message.default.error"))
                              .build();
     }
   }
@@ -894,30 +1083,21 @@ public class RESTXMPPService implements ResourceContainer {
                                      @URIParam("askuser") String askuser,
                                      @QueryParam("nickname") String nickname) {
     XMPPSession session = messenger.getSession(username);
-    try {
-      if (session != null) {
-        if (session.getBuddy(askuser) == null)
-          return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
-                                 .errorMessage("Not found contact")
-                                 .build();
+    if (session != null) {
+      if (session.getBuddy(askuser) == null)
+        return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
+                               .errorMessage(rb.getString("chat.message.user.not.found"))
+                               .build();
         if (nickname == null)
           nickname = askuser;
         session.askForSubscription(askuser, nickname);
         return Response.Builder.ok().cacheControl(cc).build();
       } else {
         if (log.isDebugEnabled())
-          log.debug("XMPPSesion is null");
+          log.debug(rb.getString("chat.message.room.xmppsession.null"));
         return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR).build();
       }
-    } catch (XMPPException e) {
-      if (log.isDebugEnabled()) 
-        e.printStackTrace();
-      XMPPError error = e.getXMPPError();
-      return Response.Builder.withStatus(error.getCode())
-                             .errorMessage(error.getMessage())
-                             .build();
-    }
-  }
+   }
 
   /**
    * @param username
@@ -933,9 +1113,9 @@ public class RESTXMPPService implements ResourceContainer {
         return Response.Builder.ok().cacheControl(cc).build();
       } else {
         if (log.isDebugEnabled())
-          log.debug("XMPPSesion is null");
+          log.debug(rb.getString("chat.message.room.xmppsession.null"));
         return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
-                               .errorMessage("XMPPSesion is null")
+                               .errorMessage(rb.getString("chat.message.room.xmppsession.null"))
                                .build();
       }
     } catch (XMPPException e) {
@@ -943,7 +1123,7 @@ public class RESTXMPPService implements ResourceContainer {
         e.printStackTrace();
       XMPPError error = e.getXMPPError();
       return Response.Builder.withStatus(error.getCode())
-                             .errorMessage(error.getMessage())
+                             .errorMessage(rb.getString("chat.message.default.error"))
                              .build();
     }
   }
@@ -954,11 +1134,15 @@ public class RESTXMPPService implements ResourceContainer {
    * @return
    */
   @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/xmpp/history/getmessages/{usernameto}/{usernamefrom}/{isGroupChat}/")
+  @URITemplate("/xmpp/history/getmessages/{usernameto}/{isGroupChat}/")
   @OutputTransformer(Bean2JsonOutputTransformer.class)
   public Response getAllHistory(@URIParam("usernameto") String usernameto,
-                                @URIParam("usernamefrom") String usernamefrom,
-                                @URIParam("isGroupChat") Boolean isGroupChat) {
+                                @URIParam("isGroupChat") Boolean isGroupChat,
+                                @QueryParam("usernamefrom") String usernamefrom) {
+    if (usernamefrom == null || usernamefrom.length() == 0)
+      return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
+                              .errorMessage(rb.getString("chat.message.history.participant.name.not.set"))
+                              .build();
     try {
       XMPPSession session = messenger.getSession(usernameto);
       if (session != null) {
@@ -991,14 +1175,18 @@ public class RESTXMPPService implements ResourceContainer {
    * @return
    */
   @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/xmpp/history/getmessages/{usernameto}/{usernamefrom}/{isGroupChat}/{dateformat}/{from}/{to}/")
+  @URITemplate("/xmpp/history/getmessages/{usernameto}/{isGroupChat}/{dateformat}/{from}/{to}/")
   @OutputTransformer(Bean2JsonOutputTransformer.class)
   public Response getHistoryBetweenDate(@URIParam("usernameto") String usernameto,
-                                        @URIParam("usernamefrom") String usernamefrom,
                                         @URIParam("isGroupChat") Boolean isGroupChat,
                                         @URIParam("dateformat") String dateformat,
                                         @URIParam("from") String from,
-                                        @URIParam("to") String to) {
+                                        @URIParam("to") String to,
+                                        @QueryParam("usernamefrom") String usernamefrom) {
+    if (usernamefrom == null || usernamefrom.length() == 0)
+      return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
+                              .errorMessage(rb.getString("chat.message.history.participant.name.not.set"))
+                              .build();
     try {
       XMPPSession session = messenger.getSession(usernameto);
       if (session != null) {
@@ -1041,13 +1229,17 @@ public class RESTXMPPService implements ResourceContainer {
    * @return
    */
   @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/xmpp/history/getmessages/{usernameto}/{usernamefrom}/{isGroupChat}/{dateformat}/{from}/")
+  @URITemplate("/xmpp/history/getmessages/{usernameto}/{isGroupChat}/{dateformat}/{from}/")
   @OutputTransformer(Bean2JsonOutputTransformer.class)
   public Response getHistoryFromDateToNow(@URIParam("usernameto") String usernameto,
-                                          @URIParam("usernamefrom") String usernamefrom,
                                           @URIParam("isGroupChat") Boolean isGroupChat,
                                           @URIParam("dateformat") String dateformat,
-                                          @URIParam("from") String from) {
+                                          @URIParam("from") String from,
+                                          @QueryParam("usernamefrom") String usernamefrom) {
+    if (usernamefrom == null || usernamefrom.length() == 0)
+      return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
+                              .errorMessage(rb.getString("chat.message.history.participant.name.not.set"))
+                              .build();
     try {
       XMPPSession session = messenger.getSession(usernameto);
       if (session != null) {
@@ -1105,11 +1297,15 @@ public class RESTXMPPService implements ResourceContainer {
    * @return
    */
   @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/xmpp/history/file/getmessages/{usernameto}/{usernamefrom}/{isGroupChat}/")
+  @URITemplate("/xmpp/history/file/getmessages/{usernameto}/{isGroupChat}/")
   @OutputTransformer(PassthroughOutputTransformer.class)
   public Response getAllHistoryFile(@URIParam("usernameto") String usernameto,
-                                    @URIParam("usernamefrom") String usernamefrom,
-                                    @URIParam("isGroupChat") Boolean isGroupChat) {
+                                    @URIParam("isGroupChat") Boolean isGroupChat,
+                                    @QueryParam("usernamefrom") String usernamefrom) {
+    if (usernamefrom == null || usernamefrom.length() == 0)
+      return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
+                              .errorMessage(rb.getString("chat.message.history.participant.name.not.set"))
+                              .build();
     try {
       XMPPSession session = messenger.getSession(usernameto);
       if (session != null) {
@@ -1139,13 +1335,13 @@ public class RESTXMPPService implements ResourceContainer {
    * @return
    */
   @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/xmpp/history/file/getmessages/{usernameto}/{usernamefrom}/{isGroupChat}/{dateformat}/{from}/")
+  @URITemplate("/xmpp/history/file/getmessages/{usernameto}/{isGroupChat}/{dateformat}/{from}/")
   @OutputTransformer(PassthroughOutputTransformer.class)
   public Response getHistoryFromDateToNowFile(@URIParam("usernameto") String usernameto,
-                                              @URIParam("usernamefrom") String usernamefrom,
                                               @URIParam("isGroupChat") Boolean isGroupChat,
                                               @URIParam("dateformat") String dateformat,
-                                              @URIParam("from") String from) {
+                                              @URIParam("from") String from,
+                                              @QueryParam("usernamefrom") String usernamefrom) {
     try {
       XMPPSession session = messenger.getSession(usernameto);
       if (session != null) {
@@ -1182,14 +1378,14 @@ public class RESTXMPPService implements ResourceContainer {
    * @return
    */
   @HTTPMethod(HTTPMethods.GET)
-  @URITemplate("/xmpp/history/file/getmessages/{usernameto}/{usernamefrom}/{isGroupChat}/{dateformat}/{from}/{to}/")
+  @URITemplate("/xmpp/history/file/getmessages/{usernameto}/{isGroupChat}/{dateformat}/{from}/{to}/")
   @OutputTransformer(PassthroughOutputTransformer.class)
   public Response getHistoryBetweenDateFile(@URIParam("usernameto") String usernameto,
-                                            @URIParam("usernamefrom") String usernamefrom,
                                             @URIParam("isGroupChat") Boolean isGroupChat,
                                             @URIParam("dateformat") String dateformat,
                                             @URIParam("from") String from,
-                                            @URIParam("to") String to) {
+                                            @URIParam("to") String to,
+                                            @QueryParam("usernamefrom") String usernamefrom) {
     try {
       XMPPSession session = messenger.getSession(usernameto);
       if (session != null) {
@@ -1265,14 +1461,14 @@ public class RESTXMPPService implements ResourceContainer {
       }
       return Response.Builder.withStatus(HTTPStatus.FORBIDDEN)
                              .cacheControl(cc)
-                             .errorMessage("session null!")
+                             .errorMessage(rb.getString("chat.message.xmppsession.null"))
                              .build();
     } catch (XMPPException e) {
       if (log.isDebugEnabled()) 
         e.printStackTrace();
       XMPPError error = e.getXMPPError();
       return Response.Builder.withStatus(error.getCode())
-                             .errorMessage(error.getMessage())
+                             .errorMessage(rb.getString("chat.message.default.error"))
                              .build();
     }
   }
@@ -1298,7 +1494,7 @@ public class RESTXMPPService implements ResourceContainer {
     } catch (Exception e) {
       if (log.isDebugEnabled()) 
         e.printStackTrace();
-      return Response.Builder.badRequest().errorMessage(e.getMessage()).build();
+      return Response.Builder.badRequest().errorMessage(rb.getString("chat.message.default.error")).build();
     }
   }
 
@@ -1322,7 +1518,7 @@ public class RESTXMPPService implements ResourceContainer {
                                     .getUserHandler()
                                     .findUserByName(username)
                                     .getPassword();
-      messenger.login(username, password, organization, delegate, history);
+      messenger.login(username, password, organization, delegate, history,rb);
       XMPPSession session = messenger.getSession(username);
       XMPPConnection connection = session.getConnection();
       String mainServiceName = session.getConnection().getServiceName();
@@ -1354,6 +1550,7 @@ public class RESTXMPPService implements ResourceContainer {
       initInfoBean.setRoster(TransformUtils.rosterToRosterBean(buddyList));
       initInfoBean.setSearchServicesNames(services);
       initInfoBean.setHostedRooms(rooms);
+      initInfoBean.setTotalRooms(rooms.size());
       // TODO: temper temporarily comment until we not have confirmation about
       // receive messages
       // initInfoBean.setMessages(session.getNotRecieveMessages());
@@ -1438,12 +1635,12 @@ public class RESTXMPPService implements ResourceContainer {
           return Response.Builder.ok().cacheControl(cc).build();
         } else {
           return Response.Builder.withStatus(HTTPStatus.NOT_FOUND)
-                                 .errorMessage("Buddy not found")
+                                 .errorMessage(rb.getString("chat.message.user.not.found"))
                                  .build();
         }
       } else {
         return Response.Builder.withStatus(HTTPStatus.FORBIDDEN)
-                               .errorMessage("Sesion is null")
+                               .errorMessage(rb.getString("chat.message.xmppsession.null"))
                                .build();
       }
     } catch (XMPPException e) {
@@ -1451,7 +1648,7 @@ public class RESTXMPPService implements ResourceContainer {
         e.printStackTrace();
       XMPPError error = e.getXMPPError();
       return Response.Builder.withStatus(error.getCode())
-                             .errorMessage(error.getMessage())
+                             .errorMessage(rb.getString("chat.message.default.error"))
                              .build();
     }
   }
@@ -1542,7 +1739,7 @@ public class RESTXMPPService implements ResourceContainer {
         e.printStackTrace();
       XMPPError error = e.getXMPPError();
       return Response.Builder.withStatus(error.getCode())
-                             .errorMessage(error.getMessage())
+                             .errorMessage(rb.getString("chat.message.default.error"))
                              .build();
     }
   }
@@ -1556,7 +1753,6 @@ public class RESTXMPPService implements ResourceContainer {
   @URITemplate("/xmpp/sendmessage/{username}/")
   @InputTransformer(Json2BeanInputTransformer.class)
   public Response sendMessage(@URIParam("username") String username, MessageBean messageBean) {
-    try {
       XMPPSession session = messenger.getSession(username);
       if (session != null) {
         String from = session.getUsername().split("/")[0];
@@ -1567,18 +1763,9 @@ public class RESTXMPPService implements ResourceContainer {
         return Response.Builder.ok().cacheControl(cc).build();
       } else {
         return Response.Builder.withStatus(HTTPStatus.BAD_REQUEST)
-                               .errorMessage("XMPPSesion is null!")
+                               .errorMessage(rb.getString("chat.message.room.xmppsession.null"))
                                .build();
       }
-    } catch (XMPPException e) {
-      if (log.isDebugEnabled()) 
-        e.printStackTrace();
-      XMPPError error = e.getXMPPError();
-      return Response.Builder.withStatus(error.getCode())
-                             .errorMessage(error.getMessage())
-                             .build();
-    }
-
   }
 
   /**
@@ -1589,7 +1776,8 @@ public class RESTXMPPService implements ResourceContainer {
   @HTTPMethod(HTTPMethods.POST)
   @URITemplate("/xmpp/muc/sendmessage/{username}/")
   @InputTransformer(Json2BeanInputTransformer.class)
-  public Response sendMUCMessage(@URIParam("username") String username, MessageBean messageBean) {
+  public Response sendMUCMessage(@URIParam("username") String username, 
+                                 MessageBean messageBean) {
     try {
       String room = messageBean.getTo();
       String body = messageBean.getBody();
@@ -1605,7 +1793,7 @@ public class RESTXMPPService implements ResourceContainer {
         e.printStackTrace();
       XMPPError error = e.getXMPPError();
       return Response.Builder.withStatus(error.getCode())
-                             .errorMessage(error.getMessage())
+                             .errorMessage(rb.getString("chat.message.default.error"))
                              .build();
     }
 
@@ -1645,7 +1833,7 @@ public class RESTXMPPService implements ResourceContainer {
       return Response.Builder.ok().cacheControl(cc).build();
     } else {
       return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
-                             .errorMessage("XMPPSession is null")
+                             .errorMessage(rb.getString("chat.message.room.xmppsession.null"))
                              .build();
     }
   }
@@ -1665,7 +1853,7 @@ public class RESTXMPPService implements ResourceContainer {
       return Response.Builder.ok().cacheControl(cc).build();
     } else {
       return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
-                             .errorMessage("Session is null")
+                             .errorMessage(rb.getString("chat.message.room.xmppsession.null"))
                              .build();
     }
   }
@@ -1681,19 +1869,30 @@ public class RESTXMPPService implements ResourceContainer {
   public Response acceptFile(@URIParam("username") String username, @URIParam("uuid") String uuid) {
     try {
       XMPPSessionImpl session = (XMPPSessionImpl) messenger.getSession(username);
+      String sender;
       if (session != null) {
         FileTransferRequest request = session.getFileTransferRequest(uuid);
-        IncomingFileTransfer fileTransfer = request.accept();
-        return Response.Builder.ok(fileTransfer.recieveFile(), DEFAULT_CONTENT_TYPE)
-                               .header("Content-disposition",
-                                       "attachment; filename=\"" + fileTransfer.getFileName()
-                                           + "\"")
-                               .contentLenght(fileTransfer.getFileSize())
-                               .cacheControl(cc)
-                               .build();
+        sender =  request.getRequestor();
+        Presence presence = session.getConnection().getRoster().getPresence(sender);
+        if (presence.getType().equals(Presence.Type.available)) {
+          IncomingFileTransfer fileTransfer = request.accept();
+          return Response.Builder.ok(fileTransfer.recieveFile(), DEFAULT_CONTENT_TYPE)
+                                   .header("Content-disposition",
+                                           "attachment; filename=\"" + fileTransfer.getFileName()
+                                               + "\"")
+                                   .contentLenght(fileTransfer.getFileSize())
+                                   .cacheControl(cc)
+                                   .build();
+        } else {
+          String errorMessage = rb.getString("chat.message.filetransfer.sender.accept.offline");
+          session.sendErrorMessage(errorMessage.trim(),sender);
+          return Response.Builder.withStatus(HTTPStatus.NOT_FOUND)
+                                 .errorMessage(rb.getString("chat.message.filetransfer.sender.accept.offline"))
+                                 .build();
+        }
       } else {
         return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
-                               .errorMessage("XMPPSession is null")
+                               .errorMessage(rb.getString("chat.message.room.xmppsession.null"))
                                .build();
       }
     } catch (Exception e) {
@@ -1716,12 +1915,24 @@ public class RESTXMPPService implements ResourceContainer {
   public Response rejectFile(@URIParam("username") String username,
                              @URIParam("uuid") String uuid) {
     XMPPSessionImpl session = (XMPPSessionImpl) messenger.getSession(username);
+    String sender;
     if (session != null) {
-      session.rejectFile(uuid);
-      return Response.Builder.ok().cacheControl(cc).build();
+      FileTransferRequest request = session.getFileTransferRequest(uuid);
+      sender = request.getRequestor();
+      Presence presence = session.getConnection().getRoster().getPresence(sender);
+      if (presence.getType().equals(Presence.Type.available)) {
+        request.reject();
+        return Response.Builder.ok().cacheControl(cc).build();
+      } else {
+        String errorMessage = rb.getString("chat.message.filetransfer.sender.reject.offline");
+        session.sendErrorMessage(errorMessage.trim(),sender);
+        return Response.Builder.withStatus(HTTPStatus.NOT_FOUND)
+                               .errorMessage(rb.getString("chat.message.filetransfer.sender.reject.offline"))
+                               .build();
+      }
     } else {
       return Response.Builder.withStatus(HTTPStatus.INTERNAL_ERROR)
-                             .errorMessage("Session is null")
+                             .errorMessage(rb.getString("chat.message.room.xmppsession.null"))
                              .build();
     }
   }

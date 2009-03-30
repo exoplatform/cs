@@ -38,6 +38,8 @@ import org.jivesoftware.smackx.packet.DiscoverItems.Item;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.xmpp.bean.FieldBean;
+import org.exoplatform.services.xmpp.bean.FormBean;
 import org.exoplatform.services.xmpp.ext.transport.AIMTransport;
 import org.exoplatform.services.xmpp.ext.transport.GtalkTransport;
 import org.exoplatform.services.xmpp.ext.transport.ICQTransport;
@@ -236,5 +238,7 @@ public class XMPPConnectionUtils {
       return sb.toString();
     }
   }
-
+  
+  
+  
 }

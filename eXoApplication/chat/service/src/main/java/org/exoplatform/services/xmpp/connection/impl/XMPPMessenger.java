@@ -19,6 +19,7 @@ package org.exoplatform.services.xmpp.connection.impl;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import org.apache.commons.logging.Log;
 import org.exoplatform.container.xml.InitParams;
@@ -176,7 +177,8 @@ public class XMPPMessenger {
                                  String password,
                                  UserInfoService userInfoService,
                                  ContinuationServiceDelegate delegate,
-                                 HistoryImpl history) throws XMPPException {
+                                 HistoryImpl history,
+                                 ResourceBundle rb) throws XMPPException {
     try {
       XMPPSession session = sessions_.get(username);
       if (session != null && session.getConnection().isConnected()
@@ -189,7 +191,8 @@ public class XMPPMessenger {
                                                           password,
                                                           userInfoService,
                                                           delegate,
-                                                          history);
+                                                          history,
+                                                          rb);
         sessions_.put(username, sessionImpl);
       }
     } catch (XMPPException e) {

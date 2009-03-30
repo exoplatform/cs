@@ -18,12 +18,13 @@ package org.exoplatform.services.xmpp.history.impl.jcr;
 
 import java.util.List;
 
-import org.exoplatform.services.xmpp.util.StringUtils;
+import org.exoplatform.services.xmpp.util.CodingUtils;
 import org.jcrom.annotations.JcrChildNode;
 import org.jcrom.annotations.JcrName;
 import org.jcrom.annotations.JcrNode;
 import org.jcrom.annotations.JcrPath;
 import org.jcrom.annotations.JcrProperty;
+import org.jivesoftware.smack.util.StringUtils;
 
 /**
  * Created by The eXo Platform SAS.
@@ -38,7 +39,7 @@ public class Participant {
    * 
    */
   @JcrName
-  private String                 hexJid;
+  private String                 hexName;
 
   /**
    * 
@@ -89,8 +90,9 @@ public class Participant {
     this.jid = jid;
     this.interlocutorList = interlocutorList;
     this.groupChatList = groupChatList;
-    this.hexJid = StringUtils.encodeToHex(jid);
-    this.username = StringUtils.getUsernameFromJID(jid);
+    this.username = StringUtils.parseName(jid);
+    this.hexName = CodingUtils.encodeToHex(this.username);
+    
   }
 
   /**
@@ -110,18 +112,18 @@ public class Participant {
   /**
    * @return the hexJid
    */
-  public String getHexJid() {
-    return hexJid;
+  public String getHexName() {
+    return hexName;
   }
 
   /**
-   * @param jid the jid
+   * @param name the jid
    * @return the interlocutor
    */
-  public InterlocutorImpl getInterlocutor(String jid) {
+  public InterlocutorImpl getInterlocutor(String name) {
     if (interlocutorList != null) {
       for (InterlocutorImpl interlocutor : interlocutorList) {
-        if (interlocutor.getJid().equals(jid))
+        if (interlocutor.getInterlocutorName().equals(name))
           return interlocutor;
       }
     }
@@ -129,13 +131,13 @@ public class Participant {
   }
 
   /**
-   * @param jid the group chat jid
+   * @param name the group chat jid
    * @return interlocutor
    */
-  public InterlocutorImpl getGroupChat(String jid) {
+  public InterlocutorImpl getGroupChat(String name) {
     if (groupChatList != null) {
       for (InterlocutorImpl interlocutor : groupChatList) {
-        if (interlocutor.getJid().equals(jid))
+        if (interlocutor.getInterlocutorName().equals(name))
           return interlocutor;
       }
     }
@@ -180,8 +182,8 @@ public class Participant {
   /**
    * @param hexJid the hexJid to set
    */
-  public void setHexJid(String hexJid) {
-    this.hexJid = hexJid;
+  public void setHexName(String hexName) {
+    this.hexName = hexName;
   }
 
   /**

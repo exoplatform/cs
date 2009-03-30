@@ -34,6 +34,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.logging.Log;
+import org.exoplatform.common.http.HTTPStatus;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.RootContainer;
 import org.exoplatform.services.log.ExoLogger;
@@ -131,7 +132,9 @@ public class FileExchangeServlet extends HttpServlet implements Connector {
           }
         }
       } catch (Exception e) {
-        e.printStackTrace();
+        if (log.isDebugEnabled())
+         e.printStackTrace();
+        resp.sendError(HTTPStatus.BAD_REQUEST, e.getMessage());
       }
     }
   }

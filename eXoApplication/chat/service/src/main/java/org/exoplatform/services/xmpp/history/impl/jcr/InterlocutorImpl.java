@@ -17,11 +17,12 @@
 package org.exoplatform.services.xmpp.history.impl.jcr;
 
 import org.exoplatform.services.xmpp.history.Interlocutor;
-import org.exoplatform.services.xmpp.util.StringUtils;
+import org.exoplatform.services.xmpp.util.CodingUtils;
 import org.jcrom.annotations.JcrName;
 import org.jcrom.annotations.JcrNode;
 import org.jcrom.annotations.JcrPath;
 import org.jcrom.annotations.JcrProperty;
+import org.jivesoftware.smack.util.StringUtils;
 
 /**
  * Created by The eXo Platform SAS.
@@ -36,7 +37,7 @@ public class InterlocutorImpl implements Interlocutor {
    * 
    */
   @JcrName
-  private String  hexJid;
+  private String  hexName;
 
   /**
    * 
@@ -84,8 +85,8 @@ public class InterlocutorImpl implements Interlocutor {
     super();
     this.jid = jid;
     this.conversationId = conversationId;
-    this.hexJid = StringUtils.encodeToHex(jid);
-    this.interlocutorName = StringUtils.getUsernameFromJID(jid);
+    this.interlocutorName = StringUtils.parseName(jid);
+    this.hexName = CodingUtils.encodeToHex(this.interlocutorName);
     this.isRoom = isRoom;
   }
 
@@ -96,12 +97,12 @@ public class InterlocutorImpl implements Interlocutor {
     return conversationId;
   }
 
-  /**
-   * @return the hexJid
-   */
-  public String getHexJid() {
-    return hexJid;
-  }
+ /**
+ * @return
+ */
+public String getHexName() {
+  return hexName;
+}
 
   
   /**
@@ -149,8 +150,8 @@ public class InterlocutorImpl implements Interlocutor {
   /**
    * @param hexJid the hexJid to set
    */
-  public void setHexJid(String hexJid) {
-    this.hexJid = hexJid;
+  public void setHexName(String hexName) {
+    this.hexName = hexName;
   }
 
   /**

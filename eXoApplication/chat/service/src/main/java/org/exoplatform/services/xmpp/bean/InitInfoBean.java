@@ -33,6 +33,16 @@ public class InitInfoBean {
    * 
    */
   private String                  mainServiceName;
+  
+  /**
+   * 
+   */
+  private Integer                 totalRooms;
+  
+  /**
+   * 
+   */
+  private Integer                 totalJoinedRooms;
 
   /**
    * 
@@ -181,5 +191,35 @@ public class InitInfoBean {
   public void setJoinedRooms(List<FullRoomInfoBean> joinedRooms) {
     this.joinedRooms = joinedRooms;
   }
+
+  /**
+   * @return the totalRooms
+   */
+  public Integer getTotalRooms() {
+    return totalRooms;
+  }
+
+  /**
+   * @param totalRooms the totalRooms to set
+   */
+  public void setTotalRooms(Integer totalRooms) {
+    this.totalRooms = totalRooms;
+  }
+
+  /**
+   * @return the totalJoinedRooms
+   */
+  public Integer getTotalJoinedRooms() {
+    return totalJoinedRooms;
+  }
+
+  /**
+   * @param totalJoinedRooms the totalJoinedRooms to set
+   */
+  public void setTotalJoinedRooms(Integer totalJoinedRooms) {
+    this.totalJoinedRooms = totalJoinedRooms;
+  }
+  
+  
 
 }
