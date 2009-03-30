@@ -206,7 +206,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
           contact.setTags(newTagIds.keySet().toArray(new String[] {})) ;
           contactIds.add(contact.getId() + JCRDataStorage.SPLIT + contact.getContactType()) ;
         }      
-        contactService.addTag(sessionProvider, username, contactIds, tags);
+        contactService.addTag(username, contactIds, tags);
       } catch (PathNotFoundException e) {
         uiApp.addMessage(new ApplicationMessage("UITagForm.msg.contact-not-existed", null, 
             ApplicationMessage.WARNING)) ;
@@ -247,7 +247,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       }
       try {
         contactService.removeContactTag(
-            SessionProviderFactory.createSystemProvider(), username, newContactIds, checkedTags) ;
+            username, newContactIds, checkedTags) ;
       } catch (PathNotFoundException e) {
         UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
         uiApp.addMessage(new ApplicationMessage("UITagForm.msg.contact-not-exist-remove", null, 
@@ -265,7 +265,7 @@ public class UITagForm extends UIForm implements UIPopupComponent {
       //if(uiContacts.isDisplaySearchResult()) uiContacts.setContact(uiForm.contacts_, false) ;      
       if (!ContactUtils.isEmpty(selectedTag)) {
         uiContacts.setContacts(contactService.getContactPageListByTag(
-            SessionProviderFactory.createSystemProvider(), username, selectedTag)) ;
+            username, selectedTag)) ;
       }
       if(uiContacts.isDisplaySearchResult() || 
           (ContactUtils.isEmpty(uiContacts.getSelectedGroup()) && ContactUtils.isEmpty(uiContacts.getSelectedTag()))) {

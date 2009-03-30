@@ -133,4 +133,97 @@ public interface ContactServiceLegacy {
    * @deprecated use {@link ContactService#removeContacts(String, List)}
    */
   public List<Contact> removeContacts(SessionProvider sProvider, String username, List<String> contactIds) throws Exception ;
+  
+  // hung.hoang 
+  /** 
+   * @deprecated use {@link ContactService#moveContacts(String, List)}
+   */
+  public void moveContacts(SessionProvider sysProvider, String username, List<Contact> contacts, String addressType ) throws Exception ;
+  
+  /** 
+   * @deprecated use {@link ContactService#searchContact(String, List)}
+   */
+  public DataPageList searchContact(SessionProvider sProvider, String username, ContactFilter filter) throws Exception ;
+
+  /** 
+   * @deprecated use {@link ContactService#removeSharedContact(String, List)}
+   */
+  public void removeSharedContact(SessionProvider sProvider, String username, String addressBookId, String contactId) throws Exception ;
+
+  /** 
+   * @deprecated use {@link ContactService#getPublicContactsByAddressBook(String, List)}
+   */
+  public ContactPageList getPublicContactsByAddressBook(SessionProvider sProvider, String addressBookId) throws Exception ;
+
+  /** 
+   * @deprecated use {@link ContactService#getGroups(String, List)}
+   */
+  public List<AddressBook> getGroups(SessionProvider sProvider, String username) throws Exception ;
+
+  /** 
+   * @deprecated use {@link ContactService#removeUserShareContact(String, List)}
+   */
+  public void removeUserShareContact(SessionProvider sProvider, String username, String contactId, String removedUser) throws Exception ;
+
+  /** 
+   * @deprecated use {@link ContactService#shareContact(String, List)}
+   */
+  public void shareContact(SessionProvider sProvider, String username, String[] contactIds, List<String> receiveUsers) throws Exception ;
+
+  /** 
+   * @deprecated use {@link ContactService#getSharedContactsByAddressBook(String, List)}
+   */
+  public ContactPageList getSharedContactsByAddressBook(SessionProvider sProvider, String username, SharedAddressBook addressBook) throws Exception ;
+
+  /** 
+   * @deprecated use {@link ContactService#getSharedContact(String, List)}
+   */
+  public Contact getSharedContact(SessionProvider sProvider, String username, String contactId) throws Exception ;
+
+  /** 
+   * @deprecated use {@link ContactService#getTags(String, List)}
+   */
+  public List<Tag> getTags(SessionProvider sProvider, String username) throws Exception ;
+
+  /** 
+   * @deprecated use {@link ContactService#getTag(String, List)}
+   */
+  public Tag getTag(SessionProvider sProvider, String username, String tagId) throws Exception ;
+
+  /** 
+   * @deprecated use {@link ContactService#getContactPageListByTag(String, List)}
+   */
+  public DataPageList getContactPageListByTag(SessionProvider sProvider, String username, String tagId) throws Exception ;
+
+  /** 
+   * @deprecated use {@link ContactService#addTag(String, List)}
+   */
+  public void addTag(SessionProvider sProvider, String username, List<String> contactIds, List<Tag> tags) throws Exception ;
+
+  /** 
+   * @deprecated use {@link ContactService#removeTag(String, List)}
+   */
+  public Tag removeTag(SessionProvider sProvider, String username, String tagId) throws Exception ;
+
+  /** 
+   * @deprecated use {@link ContactService#removeContactTag(String, List)}
+   */
+  public void removeContactTag(SessionProvider sProvider, String username, List<String> contactIds, List<String> tags) throws Exception ;
+
+  /** 
+   * @deprecated use {@link ContactService#updateTag(String, List)}
+   */
+  public void updateTag(SessionProvider sProvider, String username,Tag tag) throws Exception ;
+
+  /** 
+   * @deprecated use {@link ContactService#pasteAddressBook(String, List)}
+   */
+  public void pasteAddressBook(SessionProvider sProvider, String username, String srcAddress, String srcType, String destAddress, String destType) throws Exception ;
+
+  /** 
+   * @deprecated use {@link ContactService#pasteContacts(String, List)}
+   */
+  public List<Contact> pasteContacts(SessionProvider sProvider, String username, String destAddress, String destType, Map<String, String> contactsMap) throws Exception ;
+
+  
 }

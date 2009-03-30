@@ -34,7 +34,6 @@ import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.webui.container.UIContainer;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.impl.GroupImpl;
@@ -299,7 +298,7 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
               if (deleteShared) {
                 try {
                   contactService.removeUserShareContact(
-                    SessionProviderFactory.createSystemProvider(), username, uiForm.contactId_, user.getUserName()) ;
+                    username, uiForm.contactId_, user.getUserName()) ;
                   } catch (PathNotFoundException e) {
                   UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
                   uiApp.addMessage(new ApplicationMessage("UIAddEditPermission.msg.cannot-deleteShared", null,
@@ -327,8 +326,8 @@ public class UIAddEditPermission extends UIContainer implements UIPopupComponent
               }
             }
             if (!sharedByGroup)
-              contactService.removeUserShareContact(SessionProviderFactory.createSystemProvider()
-                  , username, uiForm.contactId_, remover) ;            
+              contactService.removeUserShareContact(username
+                  , uiForm.contactId_, remover) ;            
           } catch (PathNotFoundException e) { }
         }        
         contactService.saveContact(username, contact, false) ;

@@ -28,7 +28,6 @@ import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UISearchForm;
 import org.exoplatform.contact.webui.UITags;
 import org.exoplatform.contact.webui.UIWorkingContainer;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -160,7 +159,7 @@ public class UIAdvancedSearchForm extends UIForm implements UIPopupComponent {
           !ContactUtils.isEmpty(filter.getLastName()) || !ContactUtils.isEmpty(filter.getNickName()) || !ContactUtils.isEmpty(filter.getJobTitle()) || 
           !ContactUtils.isEmpty(filter.getEmailAddress()) || !ContactUtils.isEmpty(filter.getText()) || !ContactUtils.isEmpty(filter.getGender()))
       resultPageList = ContactUtils.getContactService()
-        .searchContact(SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), filter) ;
+        .searchContact(ContactUtils.getCurrentUser(), filter) ;
       UIContactPortlet uiContactPortlet = uiAdvancedSearchForm.getAncestorOfType(UIContactPortlet.class) ;
       uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class).setSelectedGroup(null) ;
       uiContactPortlet.findFirstComponentOfType(UITags.class).setSelectedTag(null) ;      

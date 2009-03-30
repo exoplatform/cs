@@ -1100,7 +1100,7 @@ public Attachment getAttachment(String attId) {
         List<Contact> allContact = new ArrayList<Contact>() ;
         ContactService contactService = uiAddressForm.getApplicationComponent(ContactService.class) ;
         String username = CalendarUtils.getCurrentUser() ;
-        DataPageList dataList = contactService.searchContact(SessionProviderFactory.createSessionProvider(), username,new ContactFilter()) ;
+        DataPageList dataList = contactService.searchContact(username, new ContactFilter()) ;
         allContact = dataList.getAll() ;
         if(!allContact.isEmpty()) {
           if(!CalendarUtils.isEmpty(oldAddress)) {

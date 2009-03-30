@@ -36,7 +36,6 @@ import org.exoplatform.contact.service.Utils;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.webui.UIMailPortlet;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -168,7 +167,7 @@ public class UIAddContactForm extends UIForm implements UIPopupComponent {
     ContactService contactSrv = getApplicationComponent(ContactService.class);
     List<SelectItem> options = new ArrayList<SelectItem>() ;
     SelectOptionGroup personalContacts = new SelectOptionGroup("personal-contacts");
-    for(AddressBook pcg : contactSrv.getGroups(SessionProviderFactory.createSystemProvider(), username)) {
+    for(AddressBook pcg : contactSrv.getGroups(username)) {
       personalContacts.addOption(new SelectOption(pcg.getName(), pcg.getId())) ;
     }
     options.add(personalContacts);

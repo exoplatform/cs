@@ -346,10 +346,10 @@ public class UIContactForm extends UIFormTabPane {
               }              
             } else {
               Contact sharedContact = contactService
-                .getSharedContact(SessionProvider.createSystemProvider(), username, contact.getId()) ;                
+                .getSharedContact(username, contact.getId()) ;                
               if (uiContacts.havePermission(sharedContact)) {
                 contactService.saveSharedContact(username, contact) ;   
-                contact = contactService.getSharedContact(SessionProvider.createSystemProvider(), username, contact.getId()) ;
+                contact = contactService.getSharedContact(username, contact.getId()) ;
               } else {
                 uiApp.addMessage(new ApplicationMessage("UIContactForm.msg.removedPer", null, 
                     ApplicationMessage.WARNING)) ;
@@ -386,7 +386,7 @@ public class UIContactForm extends UIFormTabPane {
           if (uiContacts.isSharedAddress(contact)) {
             contact = contactService.getSharedContactAddressBook(username, contact.getId()) ;
           } else {
-            contact = contactService.getSharedContact(SessionProviderFactory.createSystemProvider(), username, contact.getId()) ;
+            contact = contactService.getSharedContact(username, contact.getId()) ;
           }
         }        
         uiContactPortlet.findFirstComponentOfType(UIContactPreview.class).setContact(contact) ;

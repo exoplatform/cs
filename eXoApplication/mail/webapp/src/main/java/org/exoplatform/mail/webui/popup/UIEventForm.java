@@ -657,7 +657,7 @@ public class UIEventForm extends UIFormTabPane implements UIPopupComponent, Sele
         List<Contact> allContact = new ArrayList<Contact>() ;
         ContactService contactService = AddressForm.getApplicationComponent(ContactService.class) ;
         String username = MailUtils.getCurrentUser() ;
-        DataPageList dataList = contactService.searchContact(SessionProviderFactory.createSessionProvider(), username,new ContactFilter()) ;
+        DataPageList dataList = contactService.searchContact(username, new ContactFilter()) ;
         allContact = dataList.getAll() ;
         if(!allContact.isEmpty()) {
           if(!CalendarUtils.isEmpty(oldAddress)) {

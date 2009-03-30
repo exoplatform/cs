@@ -21,7 +21,6 @@ import org.exoplatform.contact.webui.popup.UIPopupAction;
 import org.exoplatform.contact.ContactUtils;
 import org.exoplatform.contact.service.ContactFilter;
 import org.exoplatform.contact.service.DataPageList;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -79,7 +78,7 @@ public class UISearchForm extends UIForm {
         UISearchForm.filter = new ContactFilter() ;
         UISearchForm.filter.setText(text) ;        
         resultPageList = ContactUtils.getContactService()
-          .searchContact(SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), filter) ;
+          .searchContact(ContactUtils.getCurrentUser(), filter) ;
       }      
       UIContactPortlet uiContactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;
       uiContactPortlet.findFirstComponentOfType(UIAddressBooks.class).setSelectedGroup(null) ;

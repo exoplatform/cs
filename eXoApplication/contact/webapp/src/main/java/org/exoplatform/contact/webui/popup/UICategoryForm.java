@@ -135,7 +135,7 @@ public class UICategoryForm extends UIForm implements UIPopupComponent {
             } else { //cs-2017
               try {
                 String shredUser = uiAddressBook.getSharedGroups().get(uiCategoryForm.groupId_).getSharedUserId() ;
-                List<AddressBook> groups = contactService.getGroups(SessionProviderFactory.createSystemProvider(), shredUser) ;
+                List<AddressBook> groups = contactService.getGroups(shredUser) ;
                 for (AddressBook contactGroup : groups) 
                   if (contactGroup.getName().equals(groupName) && uiCategoryForm.editedAddName != null 
                       && !groupName.equals(uiCategoryForm.editedAddName)) {

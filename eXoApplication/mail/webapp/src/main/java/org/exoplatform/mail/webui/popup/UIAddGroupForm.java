@@ -20,7 +20,6 @@ import org.exoplatform.contact.service.AddressBook;
 import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.webui.UIMailPortlet;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -78,7 +77,7 @@ public class UIAddGroupForm extends UIForm implements UIPopupComponent{
         event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages()) ;
         return ; 
       } else {
-        for (AddressBook group : contactSrv.getGroups(SessionProviderFactory.createSessionProvider(), username))
+        for (AddressBook group : contactSrv.getGroups(username))
           if (group.getName().equalsIgnoreCase(groupName.trim())) {
             uiApp.addMessage(new ApplicationMessage("UIAddGroupForm.msg.group-name-exist", null,
                 ApplicationMessage.WARNING)) ;

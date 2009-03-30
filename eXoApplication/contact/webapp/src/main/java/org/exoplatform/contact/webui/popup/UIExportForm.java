@@ -39,7 +39,6 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -198,9 +197,9 @@ public class UIExportForm extends UIForm implements UIPopupComponent{
             SharedAddressBook sharedAddress = uiContactPortlet.findFirstComponentOfType(
                 UIAddressBooks.class).getSharedGroups().get(address[1]) ;
             pageList = contactService.getSharedContactsByAddressBook(
-                SessionProviderFactory.createSystemProvider(), username, sharedAddress) ;
+                username, sharedAddress) ;
           } else {
-            pageList = contactService.getPublicContactsByAddressBook(SessionProviderFactory.createSystemProvider(), address[1]) ;
+            pageList = contactService.getPublicContactsByAddressBook(address[1]) ;
           }
           if (pageList == null) {
             uiApp.addMessage(new ApplicationMessage("UIExportForm.msg.deletedPer", null, ApplicationMessage.WARNING)) ;

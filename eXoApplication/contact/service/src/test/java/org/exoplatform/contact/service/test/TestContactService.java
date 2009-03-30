@@ -286,13 +286,13 @@ public class TestContactService extends BaseContactServiceTestCase {
     
     // get contacts  in a public addressbook
     String groupId = "/organization/operations";
-    int oldSize = contactService.getPublicContactsByAddressBook(sessionProvider, groupId).getAll().size();
+    int oldSize = contactService.getPublicContactsByAddressBook(groupId).getAll().size();
     
     // add root's contact to the public addressbook
     contactService.addUserContactInAddressBook(root, groupId);
 
     // verify root has been added
-    int newSize = contactService.getPublicContactsByAddressBook(sessionProvider, groupId).getAll().size();
+    int newSize = contactService.getPublicContactsByAddressBook(groupId).getAll().size();
     assertEquals("public addressbook size don't match", oldSize+1, newSize);
 
   }
@@ -676,8 +676,7 @@ public void testGetSharedContactsByFilter() throws Exception {
     //contact4.setAddressBook(new String[] { rootBook2.getId() });
     // move contact4 from contactGroup1 to contactGroup4, contactGroup1 and
     // contactGroup4 is userRoot_'s --> type is PRIVATE
-    contactService.moveContacts(sessionProvider,
-                                root,
+    contactService.moveContacts(root,
                                 Arrays.asList(new Contact[] { contact4 }),
                                 JCRDataStorage.PERSONAL);
     assertEquals(contactService.getPersonalContactsByAddressBook(root, rootBook2.getId())
@@ -685,8 +684,8 @@ public void testGetSharedContactsByFilter() throws Exception {
                                .size(), 2);
 
     // get public contact:
-    assertNotNull(contactService.getPublicContactsByAddressBook(sessionProvider, "/platform/users"));
-    assertEquals(contactService.getPublicContactsByAddressBook(sessionProvider, "/platform/users")
+    assertNotNull(contactService.getPublicContactsByAddressBook("/platform/users"));
+    assertEquals(contactService.getPublicContactsByAddressBook("/platform/users")
                                .getAll()
                                .size(), 0);
 
@@ -709,8 +708,7 @@ public void testGetSharedContactsByFilter() throws Exception {
     // contactService_.shareContact(sProvider_, userRoot_, new
     // String[]{contact1.getId()}, Arrays.asList(new String[]{userMarry_}));
     contact2.setEditPermissionUsers(new String[] { john });
-    contactService.shareContact(sessionProvider,
-                                root,
+    contactService.shareContact(root,
                                 new String[] { contact2.getId() },
                                 Arrays.asList(new String[] { john, demo }));
 
@@ -730,11 +728,11 @@ public void testGetSharedContactsByFilter() throws Exception {
     assertNotNull(contactService.getSharedContacts(john));
     assertNotNull(contactService.getSharedContacts(demo));
     // get shared contact:
-    assertNotNull(contactService.getSharedContact(sessionProvider, john, contact2.getId()));
+    assertNotNull(contactService.getSharedContact(john, contact2.getId()));
 
     // remove shared contact (remove viewed contact):
     assertEquals(contactService.getSharedContacts(john).getAll().size(), 1);
-    contactService.removeUserShareContact(sessionProvider, root, contact2.getId(), john);
+    contactService.removeUserShareContact(root, contact2.getId(), john);
     assertEquals(contactService.getSharedContacts(john).getAll().size(), 0);
 
     // get Shared Contacts By AddressBook
@@ -748,8 +746,7 @@ public void testGetSharedContactsByFilter() throws Exception {
                                .size(),
                  1);
     SharedAddressBook sharedAddressBook = createShareAddressbook(sharedBook, root);
-    assertEquals(contactService.getSharedContactsByAddressBook(sessionProvider,
-                                                               john,
+    assertEquals(contactService.getSharedContactsByAddressBook(john,
                                                                sharedAddressBook).getAll().size(),
                  1);
 
@@ -761,8 +758,7 @@ public void testGetSharedContactsByFilter() throws Exception {
                  "maivanha1610@gmail.com");
 
     // remove contact in shared address book
-    contactService.removeSharedContact(sessionProvider,
-                                       john,
+    contactService.removeSharedContact(john,
                                        sharedBook.getId(),
                                        shareContact.getId());
     assertEquals(contactService.getPersonalContactsByAddressBook(root, sharedBook.getId())
@@ -787,27 +783,23 @@ public void testGetSharedContactsByFilter() throws Exception {
     assertNull(contactService.getContact(root, contact2.getId()));
 
     // paste AddressBook
-    contactService.pasteAddressBook(sessionProvider,
-                                    john,
+    contactService.pasteAddressBook(john,
                                     johnBook.getId(),
                                     JCRDataStorage.PERSONAL,
                                     sharedBook.getId(),
                                     JCRDataStorage.SHARED);
-    assertEquals(contactService.getSharedContactsByAddressBook(sessionProvider,
-                                                               john,
+    assertEquals(contactService.getSharedContactsByAddressBook(john,
                                                                sharedAddressBook).getAll().size(),
                  2);
 
     // paste contact:
     Map<String, String> contacts = new LinkedHashMap<String, String>();
     contacts.put(contact3.getId(), contact3.getContactType());
-    contactService.pasteContacts(sessionProvider,
-                                 john,
+    contactService.pasteContacts(john,
                                  sharedBook.getId(),
                                  JCRDataStorage.SHARED,
                                  contacts);
-    assertEquals(contactService.getSharedContactsByAddressBook(sessionProvider,
-                                                               john,
+    assertEquals(contactService.getSharedContactsByAddressBook(john,
                                                                sharedAddressBook).getAll().size(),
                  3);
 
@@ -825,7 +817,7 @@ public void testGetSharedContactsByFilter() throws Exception {
                                                       new String(),
                                                       new String(),
                                                       new String());
-    assertEquals(contactService.searchContact(sessionProvider, root, contactFilter)
+    assertEquals(contactService.searchContact(root, contactFilter)
                                .getAll()
                                .get(0)
                                .getEmailAddress(), shareContact.getEmailAddress());
@@ -840,45 +832,44 @@ public void testGetSharedContactsByFilter() throws Exception {
      */
     Tag tag = createTag("tag1");
     // add new and get tag:
-    contactService.addTag(sessionProvider, root, Arrays.asList(new String[] {
+    contactService.addTag(root, Arrays.asList(new String[] {
         contact1.getId() + "::" + JCRDataStorage.PERSONAL,
         contact4.getId() + "::" + JCRDataStorage.PERSONAL }), Arrays.asList(new Tag[] { tag }));
-    assertNotNull(contactService.getTag(sessionProvider, root, tag.getId()));
+    assertNotNull(contactService.getTag(root, tag.getId()));
 
     // update tag:
     tag.setName("Mai Van Ha");
-    contactService.updateTag(sessionProvider, root, tag);
-    assertEquals(contactService.getTag(sessionProvider, root, tag.getId()).getName(), "Mai Van Ha");
+    contactService.updateTag(root, tag);
+    assertEquals(contactService.getTag(root, tag.getId()).getName(), "Mai Van Ha");
 
     // getTags:
-    assertEquals(contactService.getTags(sessionProvider, root).size(), 1);
+    assertEquals(contactService.getTags(root).size(), 1);
 
     // getContactPageListByTag
-    assertEquals(contactService.getContactPageListByTag(sessionProvider, root, tag.getId())
+    assertEquals(contactService.getContactPageListByTag(root, tag.getId())
                                .getAll()
                                .size(), 2);
 
     // removeContactTag
-    contactService.removeContactTag(sessionProvider,
-                                    root,
+    contactService.removeContactTag(root,
                                     Arrays.asList(new String[] { contact4.getId() + "::"
                                         + JCRDataStorage.PERSONAL }),
                                     Arrays.asList(new String[] { tag.getId() }));
-    assertEquals(contactService.getContactPageListByTag(sessionProvider, root, tag.getId())
+    assertEquals(contactService.getContactPageListByTag(root, tag.getId())
                                .getAll()
                                .size(), 1);
 
     // add tag:
-    contactService.addTag(sessionProvider, root, Arrays.asList(new String[] {
+    contactService.addTag(root, Arrays.asList(new String[] {
         contact1.getId() + "::" + JCRDataStorage.PERSONAL,
         contact4.getId() + "::" + JCRDataStorage.PERSONAL }), tag.getId());
-    assertEquals(contactService.getContactPageListByTag(sessionProvider, root, tag.getId())
+    assertEquals(contactService.getContactPageListByTag(root, tag.getId())
                                .getAll()
                                .size(), 2);
 
     // remove tag:
-    contactService.removeTag(sessionProvider, root, tag.getId());
-    assertNull(contactService.getTag(sessionProvider, root, tag.getId()));
+    contactService.removeTag(root, tag.getId());
+    assertNull(contactService.getTag(root, tag.getId()));
 
     /**
      * test export/ import:

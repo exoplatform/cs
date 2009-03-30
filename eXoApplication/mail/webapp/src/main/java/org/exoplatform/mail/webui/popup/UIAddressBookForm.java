@@ -28,7 +28,6 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.mail.MailUtils;
 import org.exoplatform.mail.webui.UIMailPortlet;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -91,7 +90,7 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
     ContactService contactSrv = getApplicationComponent(ContactService.class);
     List<SelectItem> options = new ArrayList<SelectItem>() ;
     SelectOptionGroup personalContacts = new SelectOptionGroup("personal-contacts");
-    for(AddressBook pcg : contactSrv.getGroups(SessionProviderFactory.createSystemProvider(), username)) {
+    for(AddressBook pcg : contactSrv.getGroups(username)) {
       personalContacts.addOption(new SelectOption(pcg.getName(), pcg.getId())) ;
     }
     options.add(personalContacts);
@@ -130,10 +129,10 @@ public class UIAddressBookForm extends UIForm implements UIPopupComponent{
     ctFilter.setType("0") ;
     if (groupId != null && groupId.trim().length() > 0 ) {
       ctFilter.setCategories(new String[] {groupId});
-      contactList = contactSrv.searchContact(SessionProviderFactory.createSystemProvider(), username, ctFilter).getAll();
+      contactList = contactSrv.searchContact(username, ctFilter).getAll();
     } else {
-      ctFilter.setCategories(new String[] {contactSrv.getGroups(SessionProviderFactory.createSystemProvider(), username).get(0).getId()});
-      contactList = contactSrv.searchContact(SessionProviderFactory.createSystemProvider(), username, ctFilter).getAll();
+      ctFilter.setCategories(new String[] {contactSrv.getGroups(username).get(0).getId()});
+      contactList = contactSrv.searchContact(username, ctFilter).getAll();
     }
     contactMap_.clear();
     for (Contact ct : contactList) contactMap_.put(ct.getId(), ct);

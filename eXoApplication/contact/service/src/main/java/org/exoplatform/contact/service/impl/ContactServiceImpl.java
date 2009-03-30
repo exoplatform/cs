@@ -123,7 +123,11 @@ public class ContactServiceImpl implements ContactService {
   }
   
   public void moveContacts(SessionProvider sysProvider, String username, List<Contact> contacts, String addressType ) throws Exception {
-    storage_.moveContacts(sysProvider, username, contacts, addressType) ;
+    moveContacts(username, contacts, addressType);
+  }
+
+  public void moveContacts(String username, List<Contact> contacts, String addressType ) throws Exception {
+    storage_.moveContacts(username, contacts, addressType) ;
   }
   
   /**
@@ -134,7 +138,11 @@ public class ContactServiceImpl implements ContactService {
   }
   
   public List<AddressBook> getGroups(SessionProvider sProvider, String username) throws Exception {
-    return storage_.findPersonalAddressBooksByOwner(sProvider, username);
+    return getGroups(username);
+  }
+
+  public List<AddressBook> getGroups(String username) throws Exception {
+    return storage_.findPersonalAddressBooksByOwner(username);
   }
   
   /**
@@ -168,11 +176,19 @@ public class ContactServiceImpl implements ContactService {
   
   
   public void removeUserShareContact(SessionProvider sProvider, String username, String contactId, String removedUser) throws Exception {
-    storage_.removeUserShareContact(sProvider, username, contactId, removedUser) ;
+    removeUserShareContact(username, contactId, removedUser);
+  }
+
+  public void removeUserShareContact(String username, String contactId, String removedUser) throws Exception {
+    storage_.removeUserShareContact(username, contactId, removedUser) ;
   }
   
   public void shareContact(SessionProvider sProvider, String username, String[] contactIds, List<String> receiveUsers) throws Exception {
-  	storage_.shareContact(sProvider, username, contactIds, receiveUsers) ;
+    shareContact(username, contactIds, receiveUsers);
+  }
+
+  public void shareContact(String username, String[] contactIds, List<String> receiveUsers) throws Exception {
+  	storage_.shareContact(username, contactIds, receiveUsers) ;
   }
   public DataPageList getSharedContacts(String username) throws Exception {
   	return storage_.getSharedContacts(username) ;
@@ -198,14 +214,25 @@ public class ContactServiceImpl implements ContactService {
   }
   
   public ContactPageList getSharedContactsByAddressBook(SessionProvider sProvider, String username, SharedAddressBook addressBook) throws Exception {
-  	return storage_.getSharedContactsByAddressBook(sProvider, username, addressBook) ;
+    return getSharedContactsByAddressBook(username, addressBook);
+  }
+  /*public void removeSharedAddressBook(SessionProvider sProvider, String username, String addressBookId) throws Exception {
+  	storage_.removeSharedAddressBook(sProvider, username, addressBookId) ;
+  }*/
+
+  public ContactPageList getSharedContactsByAddressBook(String username, SharedAddressBook addressBook) throws Exception {
+  	return storage_.getSharedContactsByAddressBook(username, addressBook) ;
   }
   /*public void removeSharedAddressBook(SessionProvider sProvider, String username, String addressBookId) throws Exception {
   	storage_.removeSharedAddressBook(sProvider, username, addressBookId) ;
   }*/
   
-  public void removeSharedContact(SessionProvider sProvider, String username, String addressBookId, String contactId) throws Exception { 
-    storage_.removeSharedContact(sProvider, username, addressBookId, contactId) ;
+  public void removeSharedContact(SessionProvider sProvider, String username, String addressBookId, String contactId) throws Exception {
+    removeSharedContact(username, addressBookId, contactId);
+  }
+
+  public void removeSharedContact(String username, String addressBookId, String contactId) throws Exception { 
+    storage_.removeSharedContact(username, addressBookId, contactId) ;
   }
   
   public void saveContactToSharedAddressBook(String username, String addressBookId, Contact contact, boolean isNew) throws Exception {
@@ -221,7 +248,11 @@ public class ContactServiceImpl implements ContactService {
   }
   
   public Contact getSharedContact(SessionProvider sProvider, String username, String contactId) throws Exception {
-    return storage_.getSharedContact(sProvider, username, contactId) ;
+    return getSharedContact(username, contactId);
+  }
+
+  public Contact getSharedContact(String username, String contactId) throws Exception {
+    return storage_.getSharedContact(username, contactId) ;
   }
   
   public Contact getPublicContact(String contactId) throws Exception {
@@ -234,46 +265,90 @@ public class ContactServiceImpl implements ContactService {
   }
 
   public Tag getTag(SessionProvider sProvider, String username, String tagName) throws Exception {
-    return storage_.getTag(sProvider, username, tagName) ;
+    return getTag(username, tagName);
+  }
+
+  public Tag getTag(String username, String tagName) throws Exception {
+    return storage_.getTag(username, tagName) ;
   }
   
   public List<Tag> getTags(SessionProvider sProvider, String username) throws Exception {
-    return storage_.getTags(sProvider, username);
+    return getTags(username);
+  }
+
+  public List<Tag> getTags(String username) throws Exception {
+    return storage_.getTags(username);
   }
   public DataPageList getContactPageListByTag(SessionProvider sProvider, String username, String tagName) throws Exception {
-    return storage_.getContactPageListByTag(sProvider, username, tagName);
+    return getContactPageListByTag(username, tagName);
+  }
+
+  public DataPageList getContactPageListByTag(String username, String tagName) throws Exception {
+    return storage_.getContactPageListByTag(username, tagName);
   }
   
   public void addTag(SessionProvider sProvider, String username, List<String> contactIds, List<Tag> tags) throws Exception {
-    storage_.addTag(sProvider, username, contactIds, tags);
+    addTag(username, contactIds, tags);
+  }
+
+  public void addTag(String username, List<String> contactIds, List<Tag> tags) throws Exception {
+    storage_.addTag(username, contactIds, tags);
   }
   
   public void addTag(SessionProvider sProvider, String username, List<String> contactIds, String tagId) throws Exception {
-	  storage_.addTag(sProvider, username, contactIds, tagId);
+    addTag(username, contactIds, tagId);
+  }
+
+  public void addTag(String username, List<String> contactIds, String tagId) throws Exception {
+	  storage_.addTag(username, contactIds, tagId);
   }
   
   public Tag removeTag(SessionProvider sProvider, String username, String tagName) throws Exception {
-    return storage_.removeTag(sProvider, username, tagName);
+    return removeTag(username, tagName);
+  }
+
+  public Tag removeTag(String username, String tagName) throws Exception {
+    return storage_.removeTag(username, tagName);
   }
   
   public void updateTag(SessionProvider sProvider, String username,Tag tag) throws Exception {
-    storage_.updateTag(sProvider, username, tag) ;
+    updateTag(username, tag);
+  }
+
+  public void updateTag(String username, Tag tag) throws Exception {
+    storage_.updateTag(username, tag) ;
   }
   
   public void removeContactTag(SessionProvider sProvider, String username, List<String> contactIds, List<String> tags) throws Exception {
-    storage_.removeContactTag(sProvider, username, contactIds, tags) ;
+    removeContactTag(username, contactIds, tags);
+  }
+
+  public void removeContactTag(String username, List<String> contactIds, List<String> tags) throws Exception {
+    storage_.removeContactTag(username, contactIds, tags) ;
   }
   
   public ContactPageList getPublicContactsByAddressBook(SessionProvider sProvider, String groupId) throws Exception {
-    return storage_.getPublicContactsByAddressBook(sProvider, groupId) ;
+    return getPublicContactsByAddressBook(groupId);
+  }
+
+  public ContactPageList getPublicContactsByAddressBook(String groupId) throws Exception {
+    return storage_.getPublicContactsByAddressBook(groupId) ;
   }
   
   public void pasteAddressBook(SessionProvider sProvider, String username, String srcAddress, String srcType, String destAddress, String destType) throws Exception {
-  	storage_.pasteAddressBook(sProvider, username, srcAddress, srcType, destAddress, destType) ;
+    pasteAddressBook(username, srcAddress, srcType, destAddress, destType);
+  }
+
+  public void pasteAddressBook(String username, String srcAddress, String srcType, String destAddress, String destType) throws Exception {
+  	storage_.pasteAddressBook(username, srcAddress, srcType, destAddress, destType) ;
   }
   
   public List<Contact> pasteContacts(SessionProvider sProvider, String username, String destAddress, String destType, Map<String, String> contactsMap) throws Exception {
-    return storage_.pasteContacts(sProvider, username, destAddress, destType, contactsMap) ;
+    return pasteContacts(username, destAddress, destType, contactsMap);
+  }
+
+  public List<Contact> pasteContacts(String username, String destAddress, String destType, Map<String, String> contactsMap) throws Exception {
+    return storage_.pasteContacts(username, destAddress, destType, contactsMap) ;
   }
   
   public ContactImportExport getContactImportExports(String type) {
@@ -285,7 +360,11 @@ public class ContactServiceImpl implements ContactService {
   }
 
   public DataPageList searchContact(SessionProvider sProvider, String username, ContactFilter filter) throws Exception {
-    return storage_.searchContact(sProvider, username, filter) ;
+    return searchContact(username, filter);
+  }
+  
+  public DataPageList searchContact(String username, ContactFilter filter) throws Exception {
+    return storage_.searchContact(username, filter) ;
   }
   
   /**

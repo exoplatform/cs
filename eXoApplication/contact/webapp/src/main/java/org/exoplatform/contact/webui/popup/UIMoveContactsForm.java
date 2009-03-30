@@ -155,7 +155,7 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
             tempContact = contactService.getSharedContactAddressBook(username, id) ;
           } else {
             try {
-              tempContact = contactService.getSharedContact(SessionProviderFactory.createSystemProvider(), username, id) ;              
+              tempContact = contactService.getSharedContact(username, id) ;              
             } catch (PathNotFoundException e) { }
           }  
           if (!uiContacts.havePermission(contact) && uiContacts.isSharedAddress(contact)) {
@@ -182,18 +182,18 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       
       List<Contact> pastedContact = new ArrayList<Contact>() ;
       if (sharedContacts.size() > 0 ) {
-        pastedContact = contactService.pasteContacts(sessionProvider, username, addressBookId, type, copySharedContacts) ;
+        pastedContact = contactService.pasteContacts(username, addressBookId, type, copySharedContacts) ;
         
         for (Contact contact : sharedContacts) {
           if (uiContacts.isSharedAddress(contact)) {
             String addressId = null ;
             for (String add : contact.getAddressBook())
               if (uiContacts.getSharedGroupMap().containsKey(add)) addressId = add ;
-            contactService.removeSharedContact(SessionProviderFactory.createSystemProvider(), username, addressId, contact.getId()) ;
+            contactService.removeSharedContact(username, addressId, contact.getId()) ;
           } else {
             try {
               contactService.removeUserShareContact(
-                  SessionProviderFactory.createSystemProvider(), contact.getPath(), contact.getId(), username) ;              
+                  contact.getPath(), contact.getId(), username) ;              
             } catch (PathNotFoundException e) {
               UIApplication uiApp = uiMoveContactForm.getAncestorOfType(UIApplication.class) ;
               uiApp.addMessage(new ApplicationMessage("UIMoveContactsForm.msg.contact-not-existed", null, 
@@ -207,7 +207,7 @@ public class UIMoveContactsForm extends UIForm implements UIPopupComponent {
       } 
       if (contacts.size() > 0) {
         try {
-          contactService.moveContacts(sessionProvider, username, contacts, type) ;                  
+          contactService.moveContacts(username, contacts, type) ;                  
         } catch (PathNotFoundException e) {
           UIApplication uiApp = uiMoveContactForm.getAncestorOfType(UIApplication.class) ;
           uiApp.addMessage(new ApplicationMessage("UIMoveContactsForm.msg.contact-deleted", null, 

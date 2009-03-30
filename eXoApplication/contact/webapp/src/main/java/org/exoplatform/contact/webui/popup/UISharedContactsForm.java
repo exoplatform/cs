@@ -17,6 +17,7 @@
 package org.exoplatform.contact.webui.popup;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +28,6 @@ import org.exoplatform.contact.service.ContactService;
 import org.exoplatform.contact.service.impl.JCRDataStorage;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -175,8 +175,8 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
       UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class) ;
       String names = uiForm.getUIStringInput(FIELD_USER).getValue() ;
       String groups = uiForm.getUIStringInput(FIELD_GROUP).getValue() ;
-      List<String> receiverUserByGroup = new ArrayList<String>() ;
-      List<String> receiverUser = new ArrayList<String>() ;
+      Map<String, String> receiverUserByGroup = new LinkedHashMap<String, String>() ;
+      Map<String, String> receiverUser = new LinkedHashMap<String, String>() ;
       if(ContactUtils.isEmpty(names) && ContactUtils.isEmpty(groups)) {        
         uiApp.addMessage(new ApplicationMessage("UISharedContactsForm.msg.empty-username", null,
             ApplicationMessage.WARNING)) ;
@@ -190,7 +190,7 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
           String[] array = names.split(",") ;
           for(String name : array) {
             organizationService.getUserHandler().findUserByName(name.trim()).getFullName();
-            receiverUser.add(name.trim() + JCRDataStorage.HYPHEN) ;
+            receiverUser.put(name.trim() + JCRDataStorage.HYPHEN, name.trim() + JCRDataStorage.HYPHEN) ;
           }         
         } catch (NullPointerException e) {
           uiApp.addMessage(new ApplicationMessage("UISharedContactsForm.msg.not-exist-username", null,
@@ -210,7 +210,7 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
                 (OrganizationService)PortalContainer.getComponent(OrganizationService.class) ;
           List<User> users = organizationService.getUserHandler().findUsersByGroup(group.trim()).getAll() ;
           for (User user : users) {
-            receiverUserByGroup.add(user.getUserName() + JCRDataStorage.HYPHEN) ;
+            receiverUserByGroup.put(user.getUserName() + JCRDataStorage.HYPHEN, user.getUserName() + JCRDataStorage.HYPHEN) ;
           }
         }        
       } 
@@ -218,12 +218,12 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
       receiverUserByGroup.remove(username + JCRDataStorage.HYPHEN) ;
       if (receiverUser.size() > 0 || !ContactUtils.isEmpty(groups)) {
         Map<String, String> viewMapUsers = new LinkedHashMap<String, String>() ;
-        for (String user : receiverUser) viewMapUsers.put(user, user) ;
+        for (String user : receiverUser.keySet()) viewMapUsers.put(user, user) ;
         
         Map<String, String> editMapUsers = new LinkedHashMap<String, String>() ; 
         Map<String, String> editMapGroups = new LinkedHashMap<String, String>() ;
         if (uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).isChecked()) {
-          for (String user : receiverUser) editMapUsers.put(user, user) ;          
+          for (String user : receiverUser.keySet()) editMapUsers.put(user, user) ;          
           editMapGroups.putAll(viewMapGroups) ;
         }
         for (Contact contact : uiForm.sharedContacts.values()) {
@@ -251,7 +251,7 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
           
           // cs-1777
           if (!uiForm.getUIFormCheckBoxInput(UISharedForm.FIELD_EDIT_PERMISSION).isChecked()) {
-            for (String user : receiverUser) newEditMapUsers.remove(user) ;
+            for (String user : receiverUser.keySet()) newEditMapUsers.remove(user) ;
             if (!ContactUtils.isEmpty(groups)) {
               String[] arrayGroups = groups.split(",") ;
               for (String group : arrayGroups) newEditMapGroups.remove(group) ;
@@ -265,9 +265,8 @@ public class UISharedContactsForm extends UIForm implements UIPopupComponent, UI
           contactService.saveContact(username, contact, false) ;
         }
       	String[] contactIds = uiForm.sharedContacts.keySet().toArray(new String[]{}) ;
-        
-        receiverUser.addAll(receiverUserByGroup) ;
-        contactService.shareContact(SessionProviderFactory.createSessionProvider(), username, contactIds, receiverUser) ; 
+        for (String user : receiverUserByGroup.keySet()) receiverUser.put(user, user) ;
+        contactService.shareContact(username, contactIds, Arrays.asList(receiverUser.keySet().toArray(new String[] {}))) ; 
         //contactService.shareContact(SessionProviderFactory.createSessionProvider(), username, contactIds, receiverUserByGroup) ;
         uiApp.addMessage(new ApplicationMessage("UISharedContactsForm.msg.contacts-shared", null)) ;
         UIContactPortlet contactPortlet = uiForm.getAncestorOfType(UIContactPortlet.class) ;

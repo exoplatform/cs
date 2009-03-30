@@ -88,7 +88,7 @@ public class UIAddressForm extends UIForm implements UIPopupComponent {
     ContactService contactService = getApplicationComponent(ContactService.class) ;
     options.add(new SelectItemOption<String>("all", "")) ;
     SessionProvider sessionPro = SessionProviderFactory.createSessionProvider() ;
-    for( AddressBook cg : contactService.getGroups(sessionPro, CalendarUtils.getCurrentUser())) {
+    for( AddressBook cg : contactService.getGroups(CalendarUtils.getCurrentUser())) {
       options.add(new SelectItemOption<String>(cg.getName(), cg.getId())) ;
     }
     List<SharedAddressBook> addressList = contactService

@@ -86,13 +86,13 @@ public interface ContactService extends ContactServiceLegacy {
   
   /**
    * move contacts to another address books
-   * @param sProvider session of current user
    * @param username current user
    * @param contacts contacts will be moved
    * @param addressType type of address book which contacts will be moved to . type is personal or shared.
+   * @param sProvider session of current user
    * @throws Exception 
    */
-  public void moveContacts(SessionProvider sysProvider, String username, List<Contact> contacts, String addressType ) throws Exception ;
+  public void moveContacts(String username, List<Contact> contacts, String addressType ) throws Exception ;
   
   /**
    * Get personal contacts by filter
@@ -127,6 +127,15 @@ public interface ContactService extends ContactServiceLegacy {
    * @throws Exception 
    */
   public DataPageList searchContact(SessionProvider sProvider, String username, ContactFilter filter) throws Exception ;
+
+  /**
+   * search all contacts with some properties equals ContactFilter properties.
+   * @param username current user
+   * @param filter setted some properties to filter contacts
+   * @return a data page list contains list of contacts
+   * @throws Exception 
+   */
+  public DataPageList searchContact(String username, ContactFilter filter) throws Exception ;
   
   /**
    * remove contact in a address book which was shared for current user
@@ -137,6 +146,15 @@ public interface ContactService extends ContactServiceLegacy {
    * @throws Exception 
    */
   public void removeSharedContact(SessionProvider sProvider, String username, String addressBookId, String contactId) throws Exception ;
+
+  /**
+   * remove contact in a address book which was shared for current user
+   * @param username current user
+   * @param addressBookId id of address book shared, this address books contains contact will be removed.
+   * @param contactId id of contact will be removed
+   * @throws Exception 
+   */
+  public void removeSharedContact(String username, String addressBookId, String contactId) throws Exception ;
   
   /**
    * get id, name, email of contacts base on properties of ContactFilter
@@ -158,6 +176,15 @@ public interface ContactService extends ContactServiceLegacy {
    * @throws Exception 
    */
   public ContactPageList getPublicContactsByAddressBook(SessionProvider sProvider, String addressBookId) throws Exception ;
+  //public List<GroupContactData> getPublicContacts(SessionProvider sProvider, String[] groupIds) throws Exception ;
+
+  /**
+   * get contact page list of public address book specific by id of address book
+   * @param addressBookId id of address book want to get contacts
+   * @return a ContactPageList contains contact nodes
+   * @throws Exception 
+   */
+  public ContactPageList getPublicContactsByAddressBook(String addressBookId) throws Exception ;
   //public List<GroupContactData> getPublicContacts(SessionProvider sProvider, String[] groupIds) throws Exception ;
   
  // public List<String> getPublicAddressBookContacts(SessionProvider sProvider, String[] groupIds) throws Exception ;
@@ -188,6 +215,14 @@ public interface ContactService extends ContactServiceLegacy {
    * @throws Exception 
    */
   public List<AddressBook> getGroups(SessionProvider sProvider, String username) throws Exception ;
+
+  /**
+   * get all personal address books of user
+   * @param username username of user get groups
+   * @return list all groups of user 
+   * @throws Exception 
+   */
+  public List<AddressBook> getGroups(String username) throws Exception ;
   
   /**
    * Get a personal address book by ID
@@ -231,6 +266,15 @@ public interface ContactService extends ContactServiceLegacy {
    * @throws Exception 
    */
   public void removeUserShareContact(SessionProvider sProvider, String username, String contactId, String removedUser) throws Exception ;
+
+  /**
+   * remove view permission of user shared contact
+   * @param username userId of user has contact
+   * @param contactId id of contact shared
+   * @param removedUser userId of user has permission view contact
+   * @throws Exception 
+   */
+  public void removeUserShareContact(String username, String contactId, String removedUser) throws Exception ;
   
   /**
    * share some contacts to another users
@@ -240,6 +284,14 @@ public interface ContactService extends ContactServiceLegacy {
    * @throws Exception 
    */
   public void shareContact(SessionProvider sProvider, String username, String[] contactIds, List<String> receiveUsers) throws Exception ;
+
+  /**
+   * share some contacts to another users
+   * @param username userId of current user
+   * @param contactIds id of contacts will be shared
+   * @throws Exception 
+   */
+  public void shareContact(String username, String[] contactIds, List<String> receiveUsers) throws Exception ;
   
   /**
    * get all contacts shared by any user for current user
@@ -306,6 +358,15 @@ public interface ContactService extends ContactServiceLegacy {
    * @throws Exception 
    */
   public ContactPageList getSharedContactsByAddressBook(SessionProvider sProvider, String username, SharedAddressBook addressBook) throws Exception ;
+
+  /**
+   * when a user has a shared address book from another user then shared user can view contacts in this shared address book
+   * @param username userId of current user
+   * @param addressBook shared address book that user wants to get contacts
+   * @return a contact page list contains list of contacts in specific address book
+   * @throws Exception 
+   */
+  public ContactPageList getSharedContactsByAddressBook(String username, SharedAddressBook addressBook) throws Exception ;
   
   /**
    * when a user is shared contact by another user then this user can get contact info base on id of shared contact
@@ -316,6 +377,15 @@ public interface ContactService extends ContactServiceLegacy {
    * @throws Exception 
    */
   public Contact getSharedContact(SessionProvider sProvider, String username, String contactId) throws Exception ;
+
+  /**
+   * when a user is shared contact by another user then this user can get contact info base on id of shared contact
+   * @param username userId of current user
+   * @param contactId id of shared contact that user wants to get  
+   * @return shared contact object 
+   * @throws Exception 
+   */
+  public Contact getSharedContact(String username, String contactId) throws Exception ;
   
   /**
    * user can edit a shared contact and save to database
@@ -344,6 +414,14 @@ public interface ContactService extends ContactServiceLegacy {
    * @throws Exception 
    */
   public List<Tag> getTags(SessionProvider sProvider, String username) throws Exception ;
+
+  /**
+   * this method will get all tags that user has been added
+   * @param username userId of current user
+   * @return a tags list contains all tags belong this user
+   * @throws Exception 
+   */
+  public List<Tag> getTags(String username) throws Exception ;
   
   /**
    * user can get a specific tag base on id of tag
@@ -354,6 +432,15 @@ public interface ContactService extends ContactServiceLegacy {
    * @throws Exception 
    */
   public Tag getTag(SessionProvider sProvider, String username, String tagId) throws Exception ;
+
+  /**
+   * user can get a specific tag base on id of tag
+   * @param username userId of current user
+   * @param tagId id of tag that user wants to get
+   * @return tag object has id same input id 
+   * @throws Exception 
+   */
+  public Tag getTag(String username, String tagId) throws Exception ;
   
   /**
    * this method will get contacts by a specific tag
@@ -364,6 +451,15 @@ public interface ContactService extends ContactServiceLegacy {
    * @throws Exception 
    */
   public DataPageList getContactPageListByTag(SessionProvider sProvider, String username, String tagId) throws Exception ;
+
+  /**
+   * this method will get contacts by a specific tag
+   * @param username userId of current user
+   * @param tagId is of tag that user wants to get contacts
+   * @return DataPageList object contains contacts list
+   * @throws Exception 
+   */
+  public DataPageList getContactPageListByTag(String username, String tagId) throws Exception ;
   
   /**
    * this method allow add some tags for some contacts
@@ -374,6 +470,15 @@ public interface ContactService extends ContactServiceLegacy {
    * @throws Exception 
    */
   public void addTag(SessionProvider sProvider, String username, List<String> contactIds, List<Tag> tags) throws Exception ;
+
+  /**
+   * this method allow add some tags for some contacts
+   * @param username userId of current user
+   * @param contactIds id of contacts that user wants to add tags
+   * @param tags tags that user wants to add to contacts 
+   * @throws Exception 
+   */
+  public void addTag(String username, List<String> contactIds, List<Tag> tags) throws Exception ;
   
   /**
    * this method allow add an exist tag to some contacts
@@ -384,6 +489,15 @@ public interface ContactService extends ContactServiceLegacy {
    * @throws Exception 
    */
   public void addTag(SessionProvider sProvider, String username, List<String> contactIds, String tagId) throws Exception ;
+
+  /**
+   * this method allow add an exist tag to some contacts
+   * @param username userId of current user
+   * @param contactIds is of contacts that user wants to add tag
+   * @param tagId id of tag will be added to contacts
+   * @throws Exception 
+   */
+  public void addTag(String username, List<String> contactIds, String tagId) throws Exception ;
   
   /**
    * user can remove an exist tag base on tagId
@@ -394,6 +508,15 @@ public interface ContactService extends ContactServiceLegacy {
    * @throws Exception 
    */
   public Tag removeTag(SessionProvider sProvider, String username, String tagId) throws Exception ;
+
+  /**
+   * user can remove an exist tag base on tagId
+   * @param username userId of current user
+   * @param tagId id of tag that user wants to remove
+   * @return removed tag object  
+   * @throws Exception 
+   */
+  public Tag removeTag(String username, String tagId) throws Exception ;
   
   /**
    * this method allow remove tags info in some contacts but don't remove tags
@@ -404,6 +527,15 @@ public interface ContactService extends ContactServiceLegacy {
    * @throws Exception 
    */
   public void removeContactTag(SessionProvider sProvider, String username, List<String> contactIds, List<String> tags) throws Exception ;
+
+  /**
+   * this method allow remove tags info in some contacts but don't remove tags
+   * @param username userId of current user
+   * @param contactIds id of contacts that user wants to remove tags information
+   * @param tags list tags id will be removed in contacts
+   * @throws Exception 
+   */
+  public void removeContactTag(String username, List<String> contactIds, List<String> tags) throws Exception ;
   
   /**
    * user can edit a tag and save to database 
@@ -413,6 +545,14 @@ public interface ContactService extends ContactServiceLegacy {
    * @throws Exception 
    */
   public void updateTag(SessionProvider sProvider, String username,Tag tag) throws Exception ;
+
+  /**
+   * user can edit a tag and save to database 
+   * @param username userId of current user
+   * @param tag tag object will be saved
+   * @throws Exception 
+   */
+  public void updateTag(String username, Tag tag) throws Exception ;
   
   
   /**
@@ -425,17 +565,26 @@ public interface ContactService extends ContactServiceLegacy {
    * @throws Exception 
    */
   public void pasteAddressBook(SessionProvider sProvider, String username, String srcAddress, String srcType, String destAddress, String destType) throws Exception ;
+
+  /**
+   * user can copy all contacts in a address book and paste them to another address book 
+   * @param username userId of current user
+   * @param srcAddress id of copied address book
+   * @param srcType type of copied address book (it's private, shared, public)
+   * @param destAddress id of  
+   * @throws Exception 
+   */
+  public void pasteAddressBook(String username, String srcAddress, String srcType, String destAddress, String destType) throws Exception ;
   
   /**
    * this method allow add contacts list to a address book
-   * @param sProvider session of current user
    * @param username userId of current user
    * @param destAddress id of address book that user wants to add contacts
    * @param destType type of address book (it's private, shared, public)
    * @throws Exception 
    */
 
-  public List<Contact> pasteContacts(SessionProvider sProvider, String username, String destAddress, String destType, Map<String, String> contactsMap) throws Exception ;
+  public List<Contact> pasteContacts(String username, String destAddress, String destType, Map<String, String> contactsMap) throws Exception ;
 
   /**
    * this method allow get a object used to import, export contacts

@@ -98,7 +98,7 @@ public class NewMembershipListener extends MembershipEventListener {
         String temp = contactNode.getPath().split(usersPath)[1] ;
         String userId = temp.split(split)[1] ;
         String [] addressBookIds = new String[] {contactNode.getProperty("exo:id").getString()};
-        storage_.shareContact(systemSession, userId, addressBookIds, to) ;
+        storage_.shareContact(userId, addressBookIds, to) ;
       }
     } catch (Exception e) {
       e.printStackTrace() ;
@@ -157,16 +157,14 @@ public class NewMembershipListener extends MembershipEventListener {
         String split = "/" ;
         String temp = contactNode.getPath().split(usersPath)[1] ;
         String userId = temp.split(split)[1] ;
-        storage_.removeUserShareContact(systemSession
-            , userId, contactNode.getProperty("exo:id").getString(), m.getUserName()) ;
+        storage_.removeUserShareContact(userId, contactNode.getProperty("exo:id").getString(), m.getUserName()) ;
 
         // user shared if belong another groups shared
         for (Value groupShared : contactNode.getProperty("exo:viewPermissionGroups").getValues()) {
           if (groupIds.keySet().contains(groupShared.getString())) {
             List<String> reciever = new ArrayList<String>() ;
             reciever.add(m.getUserName()) ;
-            storage_.shareContact(systemSession, 
-                userId, new String [] {contactNode.getProperty("exo:id").getString()}, reciever) ;
+            storage_.shareContact(userId, new String [] {contactNode.getProperty("exo:id").getString()}, reciever) ;
           }
         }        
       }      

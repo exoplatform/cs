@@ -99,7 +99,7 @@ public class UIAddressBooks extends UIComponent {
   
   public List<AddressBook> getGroups() throws Exception {
     List<AddressBook> groupList = ContactUtils.getContactService()
-      .getGroups(SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser());
+      .getGroups(ContactUtils.getCurrentUser());
     privateAddressBookMap_.clear() ;
     for (AddressBook group : groupList) {
       
@@ -224,11 +224,11 @@ public class UIAddressBooks extends UIComponent {
         if (uiAddressBook.privateAddressBookMap_.containsKey(srcAddress)) srcType = JCRDataStorage.PERSONAL ;
         else if (uiAddressBook.sharedAddressBookMap_.containsKey(srcAddress)) srcType = JCRDataStorage.SHARED ;
         else srcType = JCRDataStorage.PUBLIC ;
-        ContactUtils.getContactService().pasteAddressBook(SessionProviderFactory.createSessionProvider()
-            , username, srcAddress, srcType, destAddress, destType) ;
+        ContactUtils.getContactService().pasteAddressBook(username
+            , srcAddress, srcType, destAddress, destType) ;
       } else {
-        ContactUtils.getContactService().pasteContacts(SessionProviderFactory.createSessionProvider()
-            , username, destAddress, destType, uiAddressBook.getCopyContacts()) ;
+        ContactUtils.getContactService().pasteContacts(username
+            , destAddress, destType, uiAddressBook.getCopyContacts()) ;
       }
       // bi update neu la shared contacts 
       UIContacts uiContacts = uiAddressBook
@@ -266,13 +266,13 @@ public class UIAddressBooks extends UIComponent {
         } else if (ContactUtils.getUserGroups().contains(addressBookId)){        
           uiExportForm.setSelectedGroup(JCRDataStorage.PUBLIC + Utils.SPLIT +
               addressBookId + Utils.SPLIT + addressBookId) ;
-          contacts = contactService.getPublicContactsByAddressBook(sessionProvider, addressBookId);
+          contacts = contactService.getPublicContactsByAddressBook(addressBookId);
         } else {
           SharedAddressBook address = uiAddressBook.sharedAddressBookMap_.get(addressBookId) ;
           uiExportForm.setSelectedGroup(JCRDataStorage.SHARED + Utils.SPLIT + 
               addressBookId + Utils.SPLIT + ContactUtils.getDisplayAdddressShared(address.getSharedUserId(), address.getName())) ;
           contacts = contactService.getSharedContactsByAddressBook(
-              sessionProvider, username, address) ;
+              username, address) ;
         }
         if (contacts == null || contacts.getAvailable() == 0) {
           UIApplication uiApp = uiAddressBook.getAncestorOfType(UIApplication.class) ;
@@ -497,8 +497,7 @@ public class UIAddressBooks extends UIComponent {
         //contactService.removeSharedAddressBook(SessionProviderFactory.createSystemProvider(), username, groupId) ;
 //      cs-1644
         //if (uiContacts.isDisplaySearchResult())
-        removedContacts = contactService.getSharedContactsByAddressBook(SessionProviderFactory
-            .createSystemProvider(), username, uiAddressBook.sharedAddressBookMap_.get(groupId)).getAll() ;
+        removedContacts = contactService.getSharedContactsByAddressBook(username, uiAddressBook.sharedAddressBookMap_.get(groupId)).getAll() ;
         try {
           contactService.unshareAddressBook(uiAddressBook.sharedAddressBookMap_.get(groupId).getSharedUserId()
               , groupId, username) ;          
@@ -518,13 +517,13 @@ public class UIAddressBooks extends UIComponent {
       String selectedTag = uiContacts.getSelectedTag() ;
       if (!ContactUtils.isEmpty(selectedTag)) {
         uiContacts.setContacts(
-            contactService.getContactPageListByTag(sessionProvider, username, selectedTag)) ;
+            contactService.getContactPageListByTag(username, selectedTag)) ;
       }
       
       if (uiContacts.isDisplaySearchResult()) {
         //cs-1809 
-        uiContacts.setContacts(contactService.searchContact(SessionProviderFactory.createSessionProvider()
-          , username, workingContainer.findFirstComponentOfType(UISearchForm.class).filter)) ;
+        uiContacts.setContacts(contactService.searchContact(username
+          , workingContainer.findFirstComponentOfType(UISearchForm.class).filter)) ;
       }
       if (uiContacts.getSelectedGroup() != null && groupId.equals(uiContacts.getSelectedGroup()))
         uiContacts.setSelectedGroup(null) ;
@@ -565,7 +564,7 @@ public class UIAddressBooks extends UIComponent {
       uiAddressBook.selectedGroup = groupId;
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class);
       uiContacts.setContacts(ContactUtils.getContactService()
-          .getPublicContactsByAddressBook(SessionProviderFactory.createSystemProvider(), groupId));
+          .getPublicContactsByAddressBook(groupId));
       uiContacts.setSortedBy(UIContacts.fullName) ;
       uiContacts.setSelectedGroup(groupId);
       uiContacts.setSelectedTag(null);
@@ -603,8 +602,7 @@ public class UIAddressBooks extends UIComponent {
       uiAddressBook.selectedGroup = groupId ;
       UIContacts uiContacts = uiWorkingContainer.findFirstComponentOfType(UIContacts.class);
       uiContacts.setContacts(ContactUtils.getContactService().
-                                getSharedContactsByAddressBook( SessionProviderFactory.createSystemProvider(),
-                                                                ContactUtils.getCurrentUser(), 
+                                getSharedContactsByAddressBook( ContactUtils.getCurrentUser(),
                                                                 uiAddressBook.sharedAddressBookMap_.get(groupId)));
       uiContacts.setSortedBy(UIContacts.fullName) ;
       uiContacts.setSelectedGroup(groupId);
@@ -638,10 +636,10 @@ public class UIAddressBooks extends UIComponent {
         pageList = service.getPersonalContactsByAddressBook(username, groupId) ;
       } else if (uiAddressBook.sharedAddressBookMap_.containsKey(groupId)){
          pageList = service.getSharedContactsByAddressBook(
-            provide, username, uiAddressBook.sharedAddressBookMap_.get(groupId)) ;
+            username, uiAddressBook.sharedAddressBookMap_.get(groupId)) ;
 
       } else {
-         pageList = service.getPublicContactsByAddressBook(provide, groupId) ;
+         pageList = service.getPublicContactsByAddressBook(groupId) ;
       }
       LinkedHashMap<String, Contact> contactMap = new LinkedHashMap<String, Contact> () ;
       

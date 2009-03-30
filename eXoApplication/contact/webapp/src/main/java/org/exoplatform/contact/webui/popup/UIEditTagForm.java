@@ -28,7 +28,6 @@ import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.contact.webui.UIFormColorPicker;
 import org.exoplatform.contact.webui.UITags;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -122,8 +121,8 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
         tag.setColor(uiEditTagForm.getChild(UIFormColorPicker.class).getValue()) ;
         List<Tag> tags = new ArrayList<Tag>() ;
         tags.add(tag) ;
-        ContactUtils.getContactService().addTag(SessionProviderFactory.createSessionProvider()
-            , ContactUtils.getCurrentUser(), null, tags) ;        
+        ContactUtils.getContactService().addTag(ContactUtils.getCurrentUser()
+            , null, tags) ;        
       } else {
         Tag tag = uiEditTagForm.tag_ ;
         if (!tag.getName().equals(tagName))
@@ -139,7 +138,7 @@ public class UIEditTagForm extends UIForm implements UIPopupComponent {
         tag.setColor(uiEditTagForm.getChild(UIFormColorPicker.class).getValue()) ;
         try {
           ContactUtils.getContactService().updateTag(
-              SessionProviderFactory.createSessionProvider(), ContactUtils.getCurrentUser(), tag) ;
+              ContactUtils.getCurrentUser(), tag) ;
         } catch (PathNotFoundException e) {
           uiApp.addMessage(new ApplicationMessage("UIEditTagForm.msg.tag-deleted", null, 
               ApplicationMessage.WARNING)) ;

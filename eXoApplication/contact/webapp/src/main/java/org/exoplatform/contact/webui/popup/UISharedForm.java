@@ -33,7 +33,6 @@ import org.exoplatform.contact.webui.UIAddressBooks;
 import org.exoplatform.contact.webui.UIContactPortlet;
 import org.exoplatform.contact.webui.UIContacts;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.portal.webui.util.SessionProviderFactory;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -380,11 +379,9 @@ public class UISharedForm extends UIForm implements UIPopupComponent, UISelector
           event.getRequestContext().addUIComponentToUpdateByAjax(uiAddEdit) ; 
           
           if (receiveUsers.size() > 0)
-            contactService.shareContact(SessionProviderFactory
-              .createSystemProvider(), username, new String[] {contact.getId()}, Arrays.asList(receiveUsers.keySet().toArray(new String[] {}))) ;
+            contactService.shareContact(username, new String[] {contact.getId()}, Arrays.asList(receiveUsers.keySet().toArray(new String[] {}))) ;
           if (receiveUsersByGroups.size() > 0)
-            contactService.shareContact(SessionProviderFactory
-              .createSystemProvider(), username, new String[] {contact.getId()}, Arrays.asList(receiveUsersByGroups.keySet().toArray(new String[] {}))) ; 
+            contactService.shareContact(username, new String[] {contact.getId()}, Arrays.asList(receiveUsersByGroups.keySet().toArray(new String[] {}))) ; 
           
         } else {
           Contact contact = uiForm.contact_ ;

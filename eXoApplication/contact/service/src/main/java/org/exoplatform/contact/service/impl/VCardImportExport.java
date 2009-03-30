@@ -101,7 +101,7 @@ public class VCardImportExport implements ContactImportExport {
         String[] array = address.split(JCRDataStorage.HYPHEN) ;
         if(array.length == 2) {
             ContactPageList pageList = storage_.getSharedContactsByAddressBook(
-              sProvider, username, new SharedAddressBook(null, array[0], array[1])) ;
+              username, new SharedAddressBook(null, array[0], array[1])) ;
     	    if (pageList.getAvailable() + contactList.size() > Utils.limitExport) throw new ArrayIndexOutOfBoundsException() ;
             contactList.addAll(pageList.getAll()) ;
         }         
