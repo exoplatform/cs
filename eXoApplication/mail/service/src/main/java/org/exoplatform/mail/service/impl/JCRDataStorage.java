@@ -2315,6 +2315,8 @@ public class JCRDataStorage {
           file.setMimeType(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_MIMETYPE)
               .getString());
           file.setName(node.getProperty(Utils.EXO_ATT_NAME).getString());
+          //TODO fix last minute bug CS-2530
+          if(node.hasNode(Utils.ATT_IS_LOADED_PROPERLY))
           file.setIsLoadedProperly(node.getProperty(Utils.ATT_IS_LOADED_PROPERLY).getBoolean());
           file.setWorkspace(node.getSession().getWorkspace().getName());
           file.setSize(node.getNode(Utils.JCR_CONTENT).getProperty(Utils.JCR_DATA).getLength());

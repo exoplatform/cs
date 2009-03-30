@@ -1,5 +1,5 @@
 ==============================================
-    Release Notes - exo-cs - Version 1.1 Beta4
+    Release Notes - exo-cs - Version 1.2
 ==============================================
 
 - Introduction
@@ -23,161 +23,52 @@ experience more productive. It offers several ways to to view and organize your 
 - System Requirements
         Web Browser: IE6, IE7, FF2, FF3 (recommanded), Safari. 
         JVM: version 1.5.0_xx only
-        Application Server : Tomcat, JBoss
+        Application Server : Tomcat 
         Building Tools: Maven 2.0.6 and up
+- Portal 2.5 not support jboss
 
-
-- What is new in eXo-CS Version 1.1 Beta4
-  ** Upload event(s) to existing calendar
-  ** Add attachments, description on invitation by email
-  ** Check emails in reverse time order
-  ** Customize the import event
-  ** Export event with attach file
-  ** New upgrade plug-in (more detail visit here http://wiki.exoplatform.org/xwiki/bin/view/CS/CS+version+update+instruction)
+- What is new in eXo-CS Version 1.2 
+  Complete update cs to use portal 2.5
+  UI user selector 
   
 
-- Complete list of issues fixed in eXo-CS Version 1.1 Beta4
+
+Release Notes - exo-cs - Version cs-12
 
 ** Bug
-    * [CS-1003] - Unable to stop server while fetching mails
-    * [CS-1320] - Session timeout when select account in special case
-    * [CS-1637] - Last message of conversation always show although hidden in special case.
-    * [CS-1650] - Event category is wrong when add some from Add/edit events form
-    * [CS-1659] - In view events by month, don't view all events in a top day.
-    * [CS-1668] - can not generate rss, caldav, export calendar and send invitation by email
-    * [CS-1675] - Attach file form: Error UI when attach a file with name is long too. see file attach
-    * [CS-1684] - Show gray background in no current date when view by week and work week
+    * [CS-2334] - Small typo in home page (at least on cd demo site)
+    * [CS-2393] - Message list is not updated in special case
+    * [CS-2399] - after sending a message , can't know who is at BCC field
+    * [CS-2403] - lost the path of uploaded file when click on Import to new calendar Icon or  import to existed calendar Icon at  Import calendar form
+    * [CS-2407] - UI error when have many address mail in participans to invite field  when view invitation mail
+    * [CS-2487] - event time: rework the minute treatment
+    * [CS-2489] - Event Schedule: Status of participants is always empty
+    * [CS-2493] - Unknow error when execute function when standing at last page (page number > 1)
+    * [CS-2499] - Can't delete calendar which belong to calendar group in case the calendar has event(s)
 
-    * [CS-1685] - Add event from time space with default date and time when by week and work week
-    * [CS-1686] - Unclosed SessionProviders
-    * [CS-1688] - Error display when input event category by Upper case
-    * [CS-1689] - Occur Unknown error when Delete account in special case
-    * [CS-1690] - " Check mails after specified date" function is executed incorrectly in special case
-    * [CS-1695] - Don't search by priority when advanced search
-    * [CS-1697] - Don't view Today from Search list
-    * [CS-1698] - Content of message is double in special case
-    * [CS-1699] - UI error when show menu of 'More Action" and "View"  
-    * [CS-1700] - Error message when delete an event in a special case
-    * [CS-1701] - unknown when edit shared contact in special case
-    * [CS-1703] - Don't disable event category when share calendar
-    * [CS-1704] - UI error: Right border of print form is lost
-    * [CS-1705] - Unknown error when Mark message as unread in special case
-    * [CS-1706] - IE6: Week view, left click in multi-day event, this is moved to the right
-    * [CS-1707] - Don't show add/edit events form when double click in an multi-day event
-    * [CS-1708] - Priority of event is not shown when import event from invitation mail 
-    * [CS-1709] - Error copy/paste contact in a special case
-    * [CS-1712] - FF2: Don't show mini calendar to choose date to get mail since this date 
-    * [CS-1713] - Default event category is not identical in all add event form.
-    * [CS-1714] - View contacts without email address in reminders tab in add/edit events form
-    * [CS-1716] - View custom layout is wrong in a special case
-    * [CS-1718] - UI error when compose mail in Rich text in special case
-    * [CS-1719] - Do Search participant incorrectly 
-    * [CS-1721] - FF2: Reply Mail: The first empty line of body message is lost when change priority
-    * [CS-1723] - In event list view, show wrong message when click on columns name
-    * [CS-1726] - UI error when import calendars in a special case. See attachment
-    * [CS-1730] - Don't show selected priority in calendar when add event from webmail
-    * [CS-1731] - week view and work view,moth view: Occur UI error when Create more than two events/task  in special case
-    * [CS-1732] - Month view: UI error when create event in day which don't belong to current month
-    * [CS-1733] - Days of next month in mini calendar is not bold if these days have events/tasks
-    * [CS-1735] - Lost email icon in contact from webmail portlet when edit contact in a special case
-    * [CS-1736] - Don't show warning message when To date time is less than From date time in special case
-    * [CS-1737] - Don't show mini calendar when add event from webmail portlet
-    * [CS-1738] - Occur UI error of Upload image form when Name of upload file is so long
-    * [CS-1739] - Gender is changed automatically in special case
-    * [CS-1742] - Change Country and Time zone when reset a calendar form
-    * [CS-1743] - Filter is executed incorrectly and occur unknown error when open mail which is filtered in special case
-    * [CS-1748] - Error message when input task with «,»
-    * [CS-1749] - Account use IMAP server type : Can't fetch mail with specific date
-    * [CS-1752] - Don't edit event from shared user
-    * [CS-1753] - Filter incorrectly in special case
-    * [CS-1755] - Don't show current time when add new event/task from existed event/task
-    * [CS-1758] - Don't send mail when choose a contact which has many address mail
-    * [CS-1759] - Don't show fully addresses mails of a contact in  case the contact has many address mails
-    * [CS-1760] - broken Share contact to other users form when first name and last name of contact is so long
-    * [CS-1762] - The contact is lost when move from shared address book to personal address book
-    * [CS-1763] - occur warning message when edit event of shared calendar
-    * [CS-1766] - Wrong when add star in message
-    * [CS-1768] - After creating event: Participant is lost when it is inputted in special case
-    * [CS-1770] - IE 7/Web OS : occur UI error when search with keyword which don't match any contact
-    * [CS-1771] - Wrong bread crumb list in all porlets (include home and desktop). See attachment
-    * [CS-1772] - IE 7/Web OS: occur some fails when print contact 
-    * [CS-1773] - IE 7: UI error of advanced search form
-    * [CS-1774] - Change sort event when refresh browser in month view
-    * [CS-1775] - Don't show message when import wrong format file
-    * [CS-1776] - Don't show repeat status when import calendar
-    * [CS-1777] - don't update status for shared contact in special case
-    * [CS-1778] - Import calendar when select wrong file format in a special case
-    * [CS-1780] - IE 7: Don't show Notification when import contact  for user who don't belong to  administrator group
-    * [CS-1781] - Show import form when import shared calendar without edit permission
-    * [CS-1782] - Always report  : Fetching message a/a when check mail in case finished  checking  mail
-    * [CS-1785] - Index of Inbox is not  increased when get mails which have empty body
-    * [CS-1787] - Wrong message when no existed calendar to import
-    * [CS-1789] - Error message when generate calendar
-    * [CS-1792] - Reply/forward a message which has background , background is not displayed
-    * [CS-1798] - fetching mail is incorrect in special case
-    * [CS-1799] - show unknown error message when add Page Wizard Creation
-    * [CS-1801] - occur wrong message  when import an event which has attachment ,  from exo mail 
-    * [CS-1802] - Don't import event from exo mail in case event is shared and shared user send invitation mail to other user
-    * [CS-1803] - Don't show warning message when import a file under .csv format but wrong data
-    * [CS-1811] - Don't update information for account when view many accounts in special case
-    * [CS-1812] - work week view/ week view: Event in all day is lost when click on
-    * [CS-1817] - Unknown error when Edit account in special case
-    * [CS-1818] - Month view, wrong sort events when drag and drop imported events
-    * [CS-1826] - Don't leave message on server when unchecked leave message on server check box of edit account form
-    * [CS-1827] - Can't import mail
-    * [CS-1828] - Don't import events from exo mail when send invitation from group calendars
-    * [CS-1829] - Wrong message when delete tasks
-    * [CS-1909] - week/work week View: Can't right-click on event which is over one day to show menu
 
+** Doc
+    * [CS-2400] - Apply wiki homepage guidelines
+    * [CS-2406] - Add wiki about the org.exoplatform.mail.service.AuthenticationLogoutListener plugin
+    * [CS-2423] - Integration HOW TO
+    * [CS-2424] - Install Guide
 
 
 ** Improvement
-    * [CS-779] - Folder count doesn't refresh wile fetching
-    * [CS-780] - Fetch emails in reverse time order
-    * [CS-1564] - Should change title from "Public" to "Group" to more exactly.
-    * [CS-1623] - Change pop up position when view detail contacts by vcard
-    * [CS-1639] - Show message when search blank in Advanced Search
-    * [CS-1641] - Wrong message when no check any event in search list and select Delete checked
-    * [CS-1643] - Need message when show list without any event or task
-    * [CS-1648] - Should be change position  of some buttons in some form
-    * [CS-1651] - Need to some improve for view image attach in Event/Task.
-    * [CS-1653] - Should has warning message when remove tag from contact in case this tag was not added to contact
-    * [CS-1660] - In view events by month, link More+ of next day is displayed in list all events of next day. See attachment
-    * [CS-1662] - Should show bold text or add background color for Tag name when click on its name to view.
-    * [CS-1666] - In Edit account: should disable "Get only mails since" filed when unchecked at "Check mails after the specified date" option
-    * [CS-1676] - Unnecessary message when delete a group calendar without edit permission
-    * [CS-1678] - Disable event category when add new events from shared user
-    * [CS-1681] - In IE 6/ WebOS: remove scroll bar which unnecessary at bottom porlet 
-    * [CS-1691] - View by month, don't view all events when events is displayed up in the day
-    * [CS-1692] - Error message when export a group without calendar
-    * [CS-1696] - Reply mail in plain text: Content of original message and current message is not clear 
-    * [CS-1702] - Don't jump to page 1 after Editing permission of an user is in page 2 of ' Share address book to other users ' form
-    * [CS-1711] - Put size of attachment in brackets when view events
-    * [CS-1717] - UI error when view event list. See attachment
-    * [CS-1720] - UI error when hide custom layout
-    * [CS-1722] - View users by selected order in share calendar form
-    * [CS-1724] - Don't order by fields when view event list
-    * [CS-1725] - Don't view current page when edit a shared calendar
-    * [CS-1729] - Don't have None status in Priority when add event form webmail
-    * [CS-1734] - Wrong UI when add new contact from webmail
-    * [CS-1745] - Include event description in invitation email
-    * [CS-1750] - Don't show message when add event without event category
-    * [CS-1751] - add MandatoryValidator
-    * [CS-1756] - Unnecessary blank in mini calendar when add new event. See attachment
-    * [CS-1757] - Should show warning message when move message in special case
-    * [CS-1761] - Should show tool-tip for name of contact in Vcard in case the name is so long
-    * [CS-1764] - Show many message when send with the same subject
-    * [CS-1767] - Should show alert message when import a file that name of it include special character
-    * [CS-1791] - When number of contact are exported so much, Should show warning message with exact  number of contact that is allowed to export in one time
-    * [CS-1831] - Display the number of attached files in the invitation
-
-** New Feature
-    * [CS-1386] - add more option to import calendar form, let user can select group calendar, calendar, calendar color  , event category to import event 
-    * [CS-1746] - Import inside existing calendar
-
+    * [CS-293] - Do not display image in Preview an Event/Task when click ''Download'' button
+    * [CS-521] - Warning on empty subject email
+    * [CS-784] - Conversation column in List View
+    * [CS-1267] - Show All addressbooks option
+    * [CS-1385] - Calendar is checked again after reload browser although unchecked 
+    * [CS-1421] - Tooltips on minicalendar
+ 
 ** Task
-    * [CS-1338] - Upgrade instructions and scripts
-
+    
+    * [CS-2405] - Remove duplicate class SelectOptionGroup, SelectItem,SelectOption (on Contact porlet) and use it form portal
+    * [CS-2418] - Backport menu from 1.1
+    * [CS-2442] - Change bundle keys to be compliant with xml format     
+     
+  
 - Other resources and links
      Company site        http://www.exoplatform.com
      Community JIRA      http://jira.exoplatform.org
