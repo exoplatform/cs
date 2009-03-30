@@ -123,7 +123,7 @@ UICombobox.prototype.setValue = function(value) {
 	var time = UICombobox.digitToTime(value) ;
 	var hour = Number(time.hour) ;
 	var min = Number(time.minutes) ;
-	if (min > 60) min = "00" ;
+	if (min > 59) min = "00" ;
 	else min = time.minutes ;
 	var timeFormat = UICombobox.getTimeFormat() ;
 	if (timeFormat.am) {
