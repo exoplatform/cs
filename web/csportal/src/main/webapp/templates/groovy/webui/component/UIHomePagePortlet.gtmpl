@@ -11,8 +11,8 @@
 							<div class="LeftAdImage">
 								<div class="RightAdImage">
 									<div class="EmptyBlock"><span></span></div>
-									<div class="ProductSlogan">eXo Collaboration Suite 1.2<br />Live Demo</div>
-									<div class="ProductIntro">beta version</div>
+									<div class="ProductSlogan">eXo Collaboration Suite<br />Live Demo</div>
+									<div class="ProductIntro">version 1.2 RC1</div>
 								</div>
 							</div>
 						</div>
@@ -85,7 +85,7 @@
 								<td>
 									<div class="HomePortletContainer" style="margin: 10px 0px 0px 0px">
 										<div class="BgReat">
-											<div class="Addressbook LableProduct">Addressbook</div>
+											<div class="Addressbook LableProduct">Address Book</div>
 										</div>
 										<div class="ContentProductsCS">
 											<div class="Bullet">
@@ -124,24 +124,36 @@
 				<div class="SideBarContainer">
 
 					<div class="DotLine"><span></span></div>		
-					<div class="NormalText">Want to play with it? That's easy you just need to <a href="/portal/public/classic/register">a demo account</a>.</div>
-					<a href="/portal/public/classic/register" class="SignUp">Sign Up Now</a>
+					<div class="NormalText">To use this free demo, that's easy you just need to <a href="/portal/public/classic/register">register a demo account</a>:</div>
+					<a href="/portal/public/classic/register" class="SignUp">Create your Account</a>
 								
-
-					<a class="DownloadButton" href="http://download.forge.objectweb.org/exoplatform/exo-eXoCS-1.1Beta4-tomcat.zip"></a>
+					<div class="DotLine"><span></span></div>
+					<div class="NormalText">Did you like ? Did you hate ? Say it! </div>
+					<a href="mailto:cs@exoplatform.com?subject=CS demo feedback" class="ProVersion">Send Feedback</a>
+					
+					<div class="DotLine"><span></span></div>
+					<a class="DownloadButton" href="http://download.forge.objectweb.org/exoplatform/exo-eXoCS-1.2-RC1-tomcat.zip"></a>
 					
 					<div class="DotLine"><span></span></div>
 					<!--div class="VersionIcon"><span></span></div-->		
 					<div class="NormalText">For production support, we strongly suggest eXo Platform's</div>
-					<a href="http://www.exoplatform.com/portal/public/en/download/dl_compare" class="ProVersion">professional version</a>
+					<a href="http://www.exoplatform.com/portal/public/en/download/dl_compare" class="ProVersion">Professional Persion</a>
 					
+					<!--
 					<div class="DotLine"><span></span></div>
 					<div class="NormalText">CS also works within eXo WebOS, try it!</div>
 					<div class="LeftButton">
 						<div class="RightButton">
 							<div class="CenterButton">CS on WebOS</div>
 						</div>
-					</div>		
+					</div>	
+					-->	
+					
+					<div class="DotLine"><span></span></div>
+					<div class="NormalText">For more information, visit our </div>
+					<a href="http://wiki.exoplatform.org/xwiki/bin/view/CS/" class="ProVersion">Wiki</a> and <a href="http://www.exoplatform.com/portal/public/en/forum?portal:componentId=forum&portal:type=action&portal:isSecure=false&uicomponent=UIBreadcumbs&op=ChangePath&objectId=forumCategory88afa455c0a8020100a6752323da4b60" class="ProVersion">Forums</a>					
+					
+					<div class="DotLine"><span></span></div>				
 					<!--
 					<div class="DotLine"><span></span></div>
 					<div class="LeftButton">
@@ -150,11 +162,7 @@
 						</div>
 					</div>		
 					-->
-					<div class="DotLine"><span></span></div>
-					<div class="NormalText">Tell us how we are doing</div>
-					
-					<a href="mailto:cs@exoplatform.com?subject=CS demo feedback" class="ProVersion">Send Feedback</a>
-					
+
 					<!--
 					<div class="LeftButton">
 						<div class="RightButton">
