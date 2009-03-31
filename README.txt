@@ -1,32 +1,32 @@
-Actually, no branch exists for Collaboration Suite.
-So if you want to use CS trunk for a 2.0 version of portal, ecm ..., you have to modify some thinks for update CS dependancies.
+What new in Collaboration Suite 1.2 version
 
-1) In cs/trunk/pom.xml :
-Change component version in "profiles" part, for example :
-<profiles>
-    <profile>
-      <id>default</id>  
-      <activation>
-        <property><name>default</name></property>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <properties>
-        <org.exoplatform.kernel.version>2.0</org.exoplatform.kernel.version>
-        <org.exoplatform.core.version>2.0</org.exoplatform.core.version>
-        <org.exoplatform.jcr.version>1.8</org.exoplatform.jcr.version>
-        <org.exoplatform.pc.version>trunk</org.exoplatform.pc.version>
-        <org.exoplatform.portal.version>2.0</org.exoplatform.portal.version>
-        <org.exoplatform.cs.version>trunk</org.exoplatform.cs.version>
+Dependencies
+ + kernel 2.0.5
+ + core 2.1.3
+ + ws 1.3.1
+ + jcr 1.10.1
+ + pc 2.0.4
+ + portal 2.5
+ 
+What is change ?
++ Simplifier contacts API for developing users
++ Update fully to portal 2.5
++ Better when select-user with UISelectUser component from portal 2.5
++ Better session manager, avoid of memory leak.
++ Faster fetching mail job
++ Smarter get attachment when checking attach corrupted
++ Faster when jumping on message list
++ Easier to use calendar with adding more tool-tip
++ Support "Select all" in select address book component in mail, and calendar
++ Fix flick-flick ui when modify or add new event/task
++ Fix cannot print mail, contact detail in IE7
 
-        <test.classes>Test</test.classes>
-        <test.skip>true</test.skip>
+What is not supported ?
+- Not support jboss server version (will support in 1.3 with portal 2.5.3)
+- Not integrate Desktop mode (can customize by users)
+ 
+How to integrate to the existing product ?
+http://wiki.exoplatform.org/xwiki/bin/view/CS/Integration+HOW+TO
 
-      </properties>
-    </profile>
-  </profiles>
-
-
-2) in cs/trunk/web/csportal/pom.xml,
-Change each time ".../portal/trunk/..." by ".../portal/branches/2.0/..." if you use portal 2.0 version.
-
-
+How to update from older version ?
+http://wiki.exoplatform.org/xwiki/bin/view/CS/Upgrade+Instructions
