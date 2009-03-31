@@ -2497,14 +2497,12 @@ public class JCRDataStorage {
         //reparePermissions(userApp.getNode("ContactApplication"), user.getUserName()) ;
         //reparePermissions(userApp.getNode("ContactApplication/contactGroup"), user.getUserName()) ;
         //reparePermissions(userApp.getNode("ContactApplication/contactGroup/" + group.getId()), user.getUserName()) ;
-        userApp.getSession().save() ;   
+        userApp.getSession().save() ;
       } else {
         if (contact != null) {
           saveContact(user.getUserName(), contact, false) ; 
         }
       }
-    } catch (Exception e) {
-      e.printStackTrace() ;
     } finally {
       closeSessionProvider(sysProvider);
     }
