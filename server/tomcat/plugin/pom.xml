@@ -9,7 +9,7 @@
   <artifactId>exo.cs.server.tomcat.plugin</artifactId>
   <version>${org.exoplatform.cs.version}</version>
   <packaging>jar</packaging>
-  <name>eXo Tomcat Server</name>
+  <name>eXo Tomcat Server Plugin</name>
   <url>http://www.exoplatform.org</url>
   <description>eXo Tomcat Server Plugin</description>
   

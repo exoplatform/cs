@@ -112,11 +112,13 @@ public class JCRDataStorage {
   public List<Account> getAccounts(SessionProvider sProvider, String username) throws Exception {
     List<Account> accounts = new ArrayList<Account>();
     Node homeNode = getMailHomeNode(sProvider, username);
+    if (homeNode == null) return accounts ;
     NodeIterator it = homeNode.getNodes();
     while (it.hasNext()) {
       Node node = it.nextNode();
       if (node.isNodeType("exo:account"))
         accounts.add(getAccount(node));
+      System.out.println("\n\n get account");
     }
     return accounts;
   }

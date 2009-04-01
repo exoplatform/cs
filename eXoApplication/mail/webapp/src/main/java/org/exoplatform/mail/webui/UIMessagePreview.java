@@ -31,6 +31,7 @@ import org.exoplatform.download.DownloadResource;
 import org.exoplatform.download.DownloadService;
 import org.exoplatform.download.InputStreamDownloadResource;
 import org.exoplatform.mail.MailUtils;
+import org.exoplatform.mail.service.Account;
 import org.exoplatform.mail.service.Attachment;
 import org.exoplatform.mail.service.JCRMessageAttachment;
 import org.exoplatform.mail.service.MailService;
@@ -67,23 +68,23 @@ import org.exoplatform.webui.event.EventListener;
  */
 
 @ComponentConfig(
-    template =  "app:/templates/mail/webui/UIMessagePreview.gtmpl",
-    events = {
-        @EventConfig(listeners = UIMessagePreview.DownloadAttachmentActionListener.class),
-        @EventConfig(listeners = UIMessagePreview.AddStarActionListener.class),
-        @EventConfig(listeners = UIMessagePreview.ReplyActionListener.class),
-        @EventConfig(listeners = UIMessagePreview.ReplyAllActionListener.class),
-        @EventConfig(listeners = UIMessagePreview.DeleteActionListener.class, confirm="UIMessagePreview.msg.confirm-remove-message"),
-        @EventConfig(listeners = UIMessagePreview.ForwardActionListener.class), 
-        @EventConfig(listeners = UIMessagePreview.CreateFilterActionListener.class),
-        @EventConfig(listeners = UIMessagePreview.PrintActionListener.class),
-        @EventConfig(listeners = UIMessagePreview.ExportActionListener.class),
-        @EventConfig(listeners = UIMessagePreview.AddTagActionListener.class),
-        @EventConfig(listeners = UIMessagePreview.AddContactActionListener.class),
-        @EventConfig(listeners = UIMessagePreview.MoveMessagesActionListener.class),
-        @EventConfig(listeners = UIMessagePreview.AnswerInvitationActionListener.class),
-        @EventConfig(listeners = UIMessagePreview.ViewAllHeadersActionListener.class)
-    }
+                 template =  "app:/templates/mail/webui/UIMessagePreview.gtmpl",
+                 events = {
+                     @EventConfig(listeners = UIMessagePreview.DownloadAttachmentActionListener.class),
+                     @EventConfig(listeners = UIMessagePreview.AddStarActionListener.class),
+                     @EventConfig(listeners = UIMessagePreview.ReplyActionListener.class),
+                     @EventConfig(listeners = UIMessagePreview.ReplyAllActionListener.class),
+                     @EventConfig(listeners = UIMessagePreview.DeleteActionListener.class, confirm="UIMessagePreview.msg.confirm-remove-message"),
+                     @EventConfig(listeners = UIMessagePreview.ForwardActionListener.class), 
+                     @EventConfig(listeners = UIMessagePreview.CreateFilterActionListener.class),
+                     @EventConfig(listeners = UIMessagePreview.PrintActionListener.class),
+                     @EventConfig(listeners = UIMessagePreview.ExportActionListener.class),
+                     @EventConfig(listeners = UIMessagePreview.AddTagActionListener.class),
+                     @EventConfig(listeners = UIMessagePreview.AddContactActionListener.class),
+                     @EventConfig(listeners = UIMessagePreview.MoveMessagesActionListener.class),
+                     @EventConfig(listeners = UIMessagePreview.AnswerInvitationActionListener.class),
+                     @EventConfig(listeners = UIMessagePreview.ViewAllHeadersActionListener.class)
+                 }
 )
 
 public class UIMessagePreview extends UIComponent {
@@ -107,6 +108,21 @@ public class UIMessagePreview extends UIComponent {
   public void setShowedMessages(List<Message> msgList) throws Exception {
     showedMsgs = msgList ;
   }
+  
+  public boolean isShowBcc(Message msg) throws Exception {
+    UIMailPortlet uiPortlet = getAncestorOfType(UIMailPortlet.class) ;
+    String selectedFolder = uiPortlet.findFirstComponentOfType(UIFolderContainer.class).getSelectedFolder();
+    String accId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+    String username = MailUtils.getCurrentUser();
+    MailService mailServ = uiPortlet.getApplicationComponent(MailService.class);
+    Account account = mailServ.getAccountById(SessionProviderFactory.createSystemProvider(), username, accId);
+    InternetAddress[] fromAddress = Utils.getInternetAddress(msg.getFrom());
+    InternetAddress from = fromAddress[0];
+    return (!MailUtils.isFieldEmpty(selectedFolder) &&  selectedFolder.equals(Utils.createFolderId(accId, Utils.FD_SENT, false))
+        && !MailUtils.isFieldEmpty(msg.getMessageBcc()) 
+        && (account != null) && from.getAddress().equalsIgnoreCase(account.getEmailAddress()));
+  }
+
 
   public CalendarEvent getEvent(Message msg) throws Exception {
     CalendarService calendarSrv = getApplicationComponent(CalendarService.class) ;
@@ -337,6 +353,14 @@ public class UIMessagePreview extends UIComponent {
       UIPopupAction uiPopup = uiPortlet.getChild(UIPopupAction.class);
       UIPrintPreview uiPrintPreview = uiPopup.activate(UIPrintPreview.class, 700) ;
       uiPrintPreview.setPrintMessage(msg) ;
+      String username = MailUtils.getCurrentUser();
+      MailService mailSrv = MailUtils.getMailService();
+      String accountId = uiPortlet.findFirstComponentOfType(UISelectAccount.class).getSelectedValue();
+      Account acc = mailSrv.getAccountById(SessionProviderFactory.createSystemProvider(), username, accountId);
+      if (acc != null) {
+        uiPrintPreview.setAcc(acc) ;
+        uiPrintPreview.setPrintMessage(msg) ;
+      }
       event.getRequestContext().addUIComponentToUpdateByAjax(uiPopup) ;
     }
   }

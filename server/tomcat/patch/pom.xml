@@ -9,9 +9,9 @@
   <artifactId>exo.cs.server.tomcat.patch</artifactId>
   <version>${org.exoplatform.cs.version}</version>
   <packaging>jar</packaging>
-  <name>eXo Tomcat Server</name>
+  <name>eXo Tomcat Server Patch</name>
   <url>http://www.exoplatform.org</url>
-  <description>eXo Tomcat Server</description>
+  <description>eXo Tomcat Server Patch</description>
 
   <build>
     <resources>
