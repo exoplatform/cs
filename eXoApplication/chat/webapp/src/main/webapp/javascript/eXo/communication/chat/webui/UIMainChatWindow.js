@@ -51,6 +51,7 @@ function UIMainChatWindow() {
   this.UNSUBSCRIPT_BUDDY_ACTION           = 'Unsubscript buddy';
   this.ORG_GET_ALL_CONTACT_ACTION         = 'Org Service get all contact';
   this.DENIAL_SEND_FILE_ACTION            = 'Denial file exchange';
+  this.ACEPT_SEND_FILE_ACTION             = 'Acept file exchange';
   this.ORG_FUZZY_SEARCH_USER_ACTION       = 'Org Service fuzzy contact search';
   this.ORG_COUNT_USER_ACTION              = 'Org Service count user';
   this.CREATE_ROOM_ACTION                 = 'Create room';
@@ -124,7 +125,6 @@ function UIMainChatWindow() {
   this.debugLevel = 0;
   this.serverInfo = false;
   this.buddyItemActionStack = false;
-  this.hostedRoomList = false;
   this.joinedRooms = [];
   this.serverDataStack = false;
   this.actionHandler = {};
@@ -152,6 +152,7 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName) {
   this.UIRoomConfigPopupWindow    = eXo.communication.chat.webui.UIRoomConfigPopupWindow;
   this.UIJoinRoomPopupWindow      = eXo.communication.chat.webui.UIJoinRoomPopupWindow;
   this.UIChatResize               = eXo.communication.chat.webui.UIChatResize;
+  this.UISlideAlert               = eXo.communication.chat.webui.UISlideAlert;
 
   // ----- Specified to used with desktop page----
   this.chatWindowsContainerNode = document.getElementById('UIPageDesktop');
@@ -193,6 +194,9 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName) {
   this.buddyListNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', 'BuddyList');
   this.buddyItemActionMenuNode = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'BuddyItemActionMenu');
   //this.buddyItemActionMenuNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', 'BuddyItemActionMenu');
+  
+  // Notification template
+  this.notificationNode = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'UINotification');
 
   // Windows and popups.
   this.chatPopupNode = DOMUtil.findFirstDescendantByClass(this.chatWindowsContainerNode, 'div', 'ChatPopup');
@@ -206,6 +210,8 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName) {
   this.UICreateNewRoomPopupWindow.init(this.createNewRoomPopupNode, this);
   this.UIRoomConfigPopupWindow.init(this.roomConfigPopupNode, this);
   this.UIJoinRoomPopupWindow.init(this.joinRoomPopupNode, this);
+  
+  this.UISlideAlert.init(this, this.notificationNode);
 
   this.UIPopupManager = eXo.communication.chat.webui.UIPopupManager;
   this.UIPopupManager.init();
@@ -228,7 +234,6 @@ UIMainChatWindow.prototype.init = function(rootNode, userToken, userName) {
   this.userToken = userToken;
   this.userName = userName;
   this.buddyItemActionStack = {};
-  this.hostedRoomList = {};
   this.serverDataStack = {};
   var component = eXo.communication.chat.webui.component;
   this.buddyListControlObj =
@@ -265,8 +270,8 @@ UIMainChatWindow.prototype.loginWrapper = function() {
     return;
   }
   window.jsconsole.warn('Connection is ready, try to login now.');
-  var that = eXo.communication.chat.webui.UIMainChatWindow;
-  that.jabberLogin(that.userNames[that.XMPPCommunicator.TRANSPORT_XMPP]);
+  var thys = eXo.communication.chat.webui.UIMainChatWindow;
+  thys.jabberLogin(thys.userNames[thys.XMPPCommunicator.TRANSPORT_XMPP]);
 };
 
 UIMainChatWindow.prototype.unsubscribeCometdTopics = function() {
@@ -327,10 +332,10 @@ UIMainChatWindow.prototype.destroyAll = function() {
   if (eXo.core.Cometd.isConnected()) {
     eXo.core.Cometd.disconnect();
   }
-  var that = eXo.communication.chat.webui.UIMainChatWindow;
-  var logoutUrl = that.XMPPCommunicator.SERVICE_URL +
-                    '/' + that.XMPPCommunicator.TRANSPORT_XMPP +
-                    '/logout/' + that.userNames[that.XMPPCommunicator.TRANSPORT_XMPP];
+  var thys = eXo.communication.chat.webui.UIMainChatWindow;
+  var logoutUrl = thys.XMPPCommunicator.SERVICE_URL +
+                    '/' + thys.XMPPCommunicator.TRANSPORT_XMPP +
+                    '/logout/' + thys.userNames[thys.XMPPCommunicator.TRANSPORT_XMPP];
   var iframeNode = document.createElement('iframe');
   window.document.body.appendChild(iframeNode);
   iframeNode.src = logoutUrl;
@@ -338,7 +343,7 @@ UIMainChatWindow.prototype.destroyAll = function() {
     if (eXo.core.Cometd.isConnected()) {
       eXo.core.Cometd.disconnect();
     }
-    that.jabberLogout();
+    thys.jabberLogout();
   } catch (e) {}
 };
 
@@ -464,7 +469,7 @@ UIMainChatWindow.prototype.processSuccessAction = function(action, eventId) {
     case this.GET_ROOM_LIST_ACTION:
       if (serverData &&
           serverData.hostedRooms) {
-        this.UIJoinRoomPopupWindow.updateRoomList(serverData.hostedRooms);
+        this.UIJoinRoomPopupWindow.updateRoomList(serverData);
       }
       break;
 
@@ -513,8 +518,7 @@ UIMainChatWindow.prototype.processErrorAction = function(requestObj, action){
   }
   switch (action) {
     case this.JOIN_TO_ROOM_ACTION:
-      window.alert('Your secret key to join room is not valid/You are trying to join private room!\nPlease try again later');
-      break;
+      //window.alert('Your secret key to join room is not valid/You are trying to join private room!\nPlease try again later');
     //case this.LOGIN_ACTION:
     //case this.LOGOUT_ACTION:
     //case this.SEND_STATUS_ACTION:
@@ -537,10 +541,11 @@ UIMainChatWindow.prototype.processErrorAction = function(requestObj, action){
     case this.GET_ROOM_CONFIG_ACTION:
     //case this.GET_ROOM_INFO_ACTION:
     case this.GET_ROOM_LIST_ACTION:
-    case this.GET_JOINED_ROOM_LIST_ACTION:
+    //case this.GET_JOINED_ROOM_LIST_ACTION:
     case this.INVITE_JOIN_ROOM_ACTION:
     case this.DECLINE_JOIN_ROOM_ACTION:
     case this.LEAVE_FROM_ROOM_ACTION:
+    case this.ACEPT_SEND_FILE_ACTION:
       if (requestObj.responseText) {
         window.alert('Service message: ' + requestObj.responseText);
       }
@@ -731,9 +736,9 @@ UIMainChatWindow.prototype.processGroupChat = function(eventId) {
         case this.MUC_ACTION_CREATED_ROOM: 
           var createdRoom = mucEvent.createdRoom;
           var roomName = createdRoom.roomInfo.room;
-          this.UIChatWindow.createNewTab(roomName, true);
+          var uiTabControlObj = this.UIChatWindow.createNewTab(roomName, true);
           window.jsconsole.info('Room @ ' + roomName + ' has been created.');
-          this.UIRoomConfigPopupWindow.setVisible(true, roomName, true);
+          this.UIRoomConfigPopupWindow.setVisible(true, uiTabControlObj.tabId, true);
           if (createdRoom.occupants &&
               createdRoom.occupants.length > 0) {
             this.UIChatWindow.updateRoster(createdRoom.occupants);
@@ -849,7 +854,7 @@ UIMainChatWindow.prototype.postChangeStatus = function(status, eventId) {
       if (!serverData) {
         break;
       }
-      this.sessionKeeperId = window.setInterval(this.sessionKeeper, this.PORTAL_SESSION_KEEPER_TIME_STEP);
+      //this.sessionKeeperId = window.setInterval(this.sessionKeeper, this.PORTAL_SESSION_KEEPER_TIME_STEP);
       this.serverInfo = serverData;
       this.UIChatWindow.initSession();
       this.timeoutCount = 0;
@@ -939,7 +944,6 @@ UIMainChatWindow.prototype.setChangeStatusMenuVisibleWrapper = function(event) {
 };
 
 UIMainChatWindow.prototype.createRoomChat = function(roomInfo) {
-  this.hostedRoomList[roomInfo.id] = roomInfo;
   this.jabberCreateRoom(roomInfo.name);
 };
 
@@ -1131,6 +1135,7 @@ UIMainChatWindow.prototype.orgSearchUser = function(userName) {
 
 // --- File Exchange ----
 UIMainChatWindow.prototype.acceptSendFile = function(uuid) {
+  this.activeAction = this.ACEPT_SEND_FILE_ACTION;
   var userName = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
   return this.XMPPCommunicator.acceptSendFile(userName, uuid, this.XMPPCommunicator.TRANSPORT_XMPP);
 };
@@ -1172,6 +1177,11 @@ UIMainChatWindow.prototype.jabberCleanBuddyList = function() {
 
 UIMainChatWindow.prototype.jabberRemoveUser = function(buddyId) {
   this.activeAction = this.REMOVE_USER_ACTION;
+  try {
+    var tabId = this.UIChatWindow.getTabId(buddyId + '@' + this.serverInfo.mainServiceName);
+    this.UIChatWindow.closeTab(tabId.id);
+  } catch (e) {
+  }
   this.XMPPCommunicator.removeUser(this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP], buddyId, this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
 };
 
@@ -1266,11 +1276,11 @@ UIMainChatWindow.prototype.jabberGetRoomConfig = function(roomName) {
   this.XMPPCommunicator.getRoomConfig(userName, roomName, this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
 };
 
-UIMainChatWindow.prototype.jabberGetRoomList = function() {
+UIMainChatWindow.prototype.jabberGetRoomList = function(from, to, sort) {
   this.jabberGetJoinedRoomList();
   this.activeAction = this.GET_ROOM_LIST_ACTION;
   var userName = this.userNames[this.XMPPCommunicator.TRANSPORT_XMPP];
-  this.XMPPCommunicator.getRoomList(userName, this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
+  this.XMPPCommunicator.getRoomList(userName, from, to, sort, this.XMPPCommunicator.TRANSPORT_XMPP, this.getAjaxHandler());
 };
 
 UIMainChatWindow.prototype.jabberGetJoinedRoomList = function() {

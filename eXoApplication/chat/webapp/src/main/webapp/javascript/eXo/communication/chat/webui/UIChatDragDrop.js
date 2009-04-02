@@ -40,7 +40,7 @@ UIChatDragDrop.prototype.regDnDItem = function(rootNode, dragableNodeInfos) {
 UIChatDragDrop.prototype.mouseDownTrigger = function(event) {
   event = event ? event : window.event ;
   var srcElement = event.srcElement || event.target;
-  if (srcElement.className.toLowerCase().indexOf('minimizedicon') != -1) {
+  if (srcElement.className.toLowerCase().indexOf('controlicon') != -1) {
     window.jsconsole.info('Invalid element: ' + srcElement.className);
     return;
   }

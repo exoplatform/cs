@@ -1,5 +1,5 @@
 /**
- * @author Uoc Nguyen Ba
+e* @author Uoc Nguyen Ba
  */
 function XMPPCommunicator() {
   this.SERVICE_URL       = '/chat/messengerservlet';
@@ -285,7 +285,7 @@ XMPPCommunicator.prototype.sendStatus = function(userName, transportName, handle
 };
 
 /**
- * url: /xmpp/muc/createroom/{username}/{room}/[?nickname=]
+ * url: /xmpp/muc/createroom/{username}/?room={room}&nickname={nickname}
  * 
  * @param {String} userName
  * @param {String} nickName
@@ -294,15 +294,15 @@ XMPPCommunicator.prototype.sendStatus = function(userName, transportName, handle
  * @param {AjaxHandler} handler
  */
 XMPPCommunicator.prototype.createRoomchat = function(userName, nickName, roomName, transportName, handler) {
-  roomName = encodeURIComponent(roomName);
-  var url = this.SERVICE_URL + '/' + transportName + '/muc/createroom/' + userName + '/' + roomName + '/?nickname=' + nickName;
+  roomName = this.encodeParam(roomName);
+  var url = this.SERVICE_URL + '/' + transportName + '/muc/createroom/' + userName + '/?room=' + roomName + '&nickname=' + nickName;
   var request = new eXo.portal.AjaxRequest('GET', url, null);
   this.initRequest(request, handler);
   request.process();
 };
 
 /**
- * url: /xmpp/muc/configroom/{username}/{room}/
+ * url: /xmpp/muc/configroom/{username}/?room={room}
  * 
  * @param {String} userName
  * @param {String} roomName
@@ -311,14 +311,15 @@ XMPPCommunicator.prototype.createRoomchat = function(userName, nickName, roomNam
  * @param {AjaxHandler} handler
  */
 XMPPCommunicator.prototype.sendConfigRoom = function(userName, roomName, roomConfigJson, transportName, handler) {
-  var url = this.SERVICE_URL + '/' + transportName + '/muc/configroom/' + userName + '/' + roomName + '/';
+  roomName = this.encodeParam(roomName);
+  var url = this.SERVICE_URL + '/' + transportName + '/muc/configroom/' + userName + '/?room=' + roomName;
   var request = new eXo.portal.AjaxRequest('POST', url, roomConfigJson);
   this.initRequest(request, handler);
   this.ajaxProcessOverwrite(true, request);
 };
 
 /**
- * url: /xmpp/muc/getroominfo/{username}/{room}/
+ * url: /xmpp/muc/getroominfo/{username}/?room={room}
  * 
  * @param {String} userName
  * @param {String} roomName
@@ -326,14 +327,15 @@ XMPPCommunicator.prototype.sendConfigRoom = function(userName, roomName, roomCon
  * @param {AjaxHandler} handler
  */
 XMPPCommunicator.prototype.getRoomInfo = function(userName, roomName, transportName, handler) {
-  var url = this.SERVICE_URL + '/' + transportName + '/muc/getroominfo/' + userName + '/' + roomName + '/';
+  roomName = this.encodeRoomName(roomName);
+  var url = this.SERVICE_URL + '/' + transportName + '/muc/getroominfo/' + userName + '/?room=' + roomName;
   var request = new eXo.portal.AjaxRequest('GET', url, null);
   this.initRequest(request, handler);
   request.process();
 };
 
 /**
- * url: /xmpp/muc/getroomconfig/{username}/{room}/
+ * url: /xmpp/muc/getroomconfig/{username}/?room={room}
  * 
  * @param {String} userName
  * @param {String} roomName
@@ -341,7 +343,8 @@ XMPPCommunicator.prototype.getRoomInfo = function(userName, roomName, transportN
  * @param {AjaxHandler} handler
  */
 XMPPCommunicator.prototype.getRoomConfig = function(userName, roomName, transportName, handler) {
-  var url = this.SERVICE_URL + '/' + transportName + '/muc/getroomconfig/' + userName + '/' + roomName + '/';
+  roomName = this.encodeParam(roomName);
+  var url = this.SERVICE_URL + '/' + transportName + '/muc/getroomconfig/' + userName + '/?room=' + roomName;
   var request = new eXo.portal.AjaxRequest('GET', url, null);
   this.initRequest(request, handler);
   request.process();
@@ -351,11 +354,20 @@ XMPPCommunicator.prototype.getRoomConfig = function(userName, roomName, transpor
  * url: /xmpp/muc/rooms/{username}
  * 
  * @param {String} userName
+ * @param {Integer} from
+ * @param {Integer} to
+ * @param {String} sort desc for descending, anything else for ascending.
  * @param {String} transportName
  * @param {AjaxHandler} handler
  */
-XMPPCommunicator.prototype.getRoomList = function(userName, transportName, handler) {
-  var url = this.SERVICE_URL + '/' + transportName + '/muc/rooms/' + userName + '/';
+XMPPCommunicator.prototype.getRoomList = function(userName, from, to, sort, transportName, handler) {
+  if (isNaN(from)) {
+    from = 1;
+  }
+  if (isNaN(to)) {
+    to = -1;
+  }
+  var url = this.SERVICE_URL + '/' + transportName + '/muc/rooms/' + userName + '/?from=' + from + '&to=' + to + '&sort=' + sort;
   var request = new eXo.portal.AjaxRequest('GET', url, null);
   this.initRequest(request, handler);
   request.process();
@@ -387,8 +399,9 @@ XMPPCommunicator.prototype.getJoinedRoomList = function(userName, transportName,
  * @param {AjaxHandler} handler
  */
 XMPPCommunicator.prototype.setRoleForRoom = function(username, nickName, roomName, role, command, transportName, handler) {
+  roomName = this.encodeParam(roomName);
   var url = this.SERVICE_URL + '/' + transportName + '/managerole/' + 
-              userName + '/' + roomName + '/' + nickName + '/?role=' + role + '&command=' + command;
+              userName + '/?room=' + roomName + '&nickname=' + nickName + '&role=' + role + '&command=' + command;
   var request = new eXo.portal.AjaxRequest('GET', url, null);
   this.initRequest(request, handler);
   request.process();
@@ -405,7 +418,8 @@ XMPPCommunicator.prototype.setRoleForRoom = function(username, nickName, roomNam
  * @param {AjaxHandler} handler
  */
 XMPPCommunicator.prototype.kickUserFromRoom = function(username, nickname, roomName, reason, transportName, handler) {
-  var url = this.SERVICE_URL + '/' + transportName + '/muc/kick/' + userName + '/' + roomName + '/' + nickName + '/?reason=' + reason;
+  roomName = this.encodeParam(roomName);
+  var url = this.SERVICE_URL + '/' + transportName + '/muc/kick/' + userName + '/?room=' + roomName + '&nickname=' + nickName + '&reason=' + reason;
   var request = new eXo.portal.AjaxRequest('GET', url, null);
   this.initRequest(request, handler);
   request.process();
@@ -423,7 +437,8 @@ XMPPCommunicator.prototype.kickUserFromRoom = function(username, nickname, roomN
  * @param {AjaxHandler} handler
  */
 XMPPCommunicator.prototype.banUserFromRoom = function(userName, name, roomName, reason, transportName, handler) {
-  var url = this.SERVICE_URL + '/' + transportName + '/muc/ban/' + userName + '/' + roomName + '/' + name + '/?reason=' + reason;
+  roomName = this.encodeParam(roomName);
+  var url = this.SERVICE_URL + '/' + transportName + '/muc/ban/' + userName + '/?room=' + roomName + '&name=' + name + '&reason=' + reason;
   var request = new eXo.portal.AjaxRequest('GET', url, null);
   this.initRequest(request, handler);
   request.process();
@@ -438,7 +453,8 @@ XMPPCommunicator.prototype.banUserFromRoom = function(userName, name, roomName, 
  * @param {AjaxHandler} handler
  */
 XMPPCommunicator.prototype.inviteJoinRoom = function(userName, inviter, roomName, transportName, handler) {
-  var url = this.SERVICE_URL + '/' + transportName + '/muc/invite/' + userName + '/' + inviter + '/' + roomName + '/'; 
+  roomName = this.encodeParam(roomName);
+  var url = this.SERVICE_URL + '/' + transportName + '/muc/invite/' + userName + '/' + inviter + '/?room=' + roomName; 
   var request = new eXo.portal.AjaxRequest('GET', url, null);
   this.initRequest(request, handler);
   request.process();
@@ -452,7 +468,8 @@ XMPPCommunicator.prototype.inviteJoinRoom = function(userName, inviter, roomName
  * @param {AjaxHandler} handler
  */
 XMPPCommunicator.prototype.declineInviteJoinRoom = function(userName, inviter, roomName, transportName, handler) {
-  var url = this.SERVICE_URL + '/' + transportName + '/muc/decline/' + userName + '/' + inviter + '/' + roomName + '/';
+  roomName = this.encodeParam(roomName);
+  var url = this.SERVICE_URL + '/' + transportName + '/muc/decline/' + userName + '/' + inviter + '/?room=' + roomName;
   var request = new eXo.portal.AjaxRequest('GET', url, null);
   this.initRequest(request, handler);
   request.process();
@@ -467,7 +484,8 @@ XMPPCommunicator.prototype.declineInviteJoinRoom = function(userName, inviter, r
  * @param {AjaxHandler} handler
  */
 XMPPCommunicator.prototype.joinToRoom = function(userName, roomName, password, transportName, handler) {
-  var url = this.SERVICE_URL + '/' + transportName + '/muc/join/' + userName + '/' + roomName + '/?password=' + password;
+  roomName = this.encodeParam(roomName);
+  var url = this.SERVICE_URL + '/' + transportName + '/muc/join/' + userName + '/?room=' + roomName + '&password=' + password;
   var request = new eXo.portal.AjaxRequest('GET', url, null);
   this.initRequest(request, handler);
   request.process();
@@ -480,7 +498,8 @@ XMPPCommunicator.prototype.joinToRoom = function(userName, roomName, password, t
  * @param {AjaxHandler} handler
  */
 XMPPCommunicator.prototype.leaveFromRoom = function(userName, roomName, transportName, handler) {
-  var url = this.SERVICE_URL + '/' + transportName + '/muc/leaveroom/' + userName + '/' + roomName + '/';
+  roomName = this.encodeParam(roomName);
+  var url = this.SERVICE_URL + '/' + transportName + '/muc/leaveroom/' + userName + '/?room=' + roomName;
   var request = new eXo.portal.AjaxRequest('GET', url, null);
   this.initRequest(request, handler);
   request.process();
@@ -514,7 +533,8 @@ XMPPCommunicator.prototype.sendMessage = function(userName, transportName, handl
  *
  */
 XMPPCommunicator.prototype.getMessageHistory = function(userName, transportName, handler, targetPerson, dateFormat, dateFrom, dateTo, isGroupChat) {
-  var url = this.SERVICE_URL + '/' + transportName + '/history/getmessages/' + userName + '/' + targetPerson + '/' + isGroupChat + '/';
+  //targetPerson = this.encodeParam(targetPerson);
+  var url = this.SERVICE_URL + '/' + transportName + '/history/getmessages/' + userName + '/' + isGroupChat + '/';
   if (dateFormat) {
     url += dateFormat + '/';
   }
@@ -525,6 +545,7 @@ XMPPCommunicator.prototype.getMessageHistory = function(userName, transportName,
       dateTo) {
     url += dateTo + '/';
   }
+  url += '?usernamefrom=' + targetPerson;
   var request = new eXo.portal.AjaxRequest('GET', url, null);
   this.initRequest(request, handler);
   request.process() ;

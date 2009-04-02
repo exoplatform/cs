@@ -1,4 +1,5 @@
 function UIRoomConfigPopupWindow() {
+  this.tabId = false;
   this.roomName = false;
   this.ANIMATION_SPEED = 30;
   this.ANIMATION_TIME_STEP = 0.02*1000;
@@ -26,21 +27,21 @@ UIRoomConfigPopupWindow.prototype.init = function(rootNode, UIMainChatWindow) {
 UIRoomConfigPopupWindow.prototype.focusGroupOptions = function(event) {
   event = event || window.event;
   var srcElement = event.srcElement || event.target;
-  var that  = eXo.communication.chat.webui.UIRoomConfigPopupWindow;
+  var thys  = eXo.communication.chat.webui.UIRoomConfigPopupWindow;
   var DOMUtil = eXo.core.DOMUtil;
   var fieldsetNode = DOMUtil.findAncestorByTagName(srcElement, 'fieldset');
   if (fieldsetNode &&
       fieldsetNode.state != 'open') {
-    for (var i=0; i<that.fieldsetList.length; i++) {
-      var tmpFieldsetNode = that.fieldsetList[i];
+    for (var i=0; i<thys.fieldsetList.length; i++) {
+      var tmpFieldsetNode = thys.fieldsetList[i];
       if (tmpFieldsetNode &&
           tmpFieldsetNode != fieldsetNode) {
         var fieldsetContentNode = DOMUtil.findFirstDescendantByClass(tmpFieldsetNode, 'table', 'UIFormGrid');
         if (fieldsetContentNode &&
             fieldsetContentNode.style.display != 'none') {
-          that.closingNode = tmpFieldsetNode;
-          if (!that.closingNode.maxHeight) {
-            that.closingNode.maxHeight = that.closingNode.offsetHeight;
+          thys.closingNode = tmpFieldsetNode;
+          if (!thys.closingNode.maxHeight) {
+            thys.closingNode.maxHeight = thys.closingNode.offsetHeight;
           }
           break;
         }
@@ -50,10 +51,10 @@ UIRoomConfigPopupWindow.prototype.focusGroupOptions = function(event) {
     var fieldsetContentNode = DOMUtil.findFirstDescendantByClass(fieldsetNode, 'table', 'UIFormGrid');
     if (fieldsetContentNode &&
         fieldsetContentNode.style.display != 'block') {
-      that.openingNode = fieldsetNode;
+      thys.openingNode = fieldsetNode;
       fieldsetContentNode.style.display = 'block';
-      if (!that.openingNode.maxHeight) {
-        that.openingNode.maxHeight = fieldsetContentNode.offsetHeight + 6 + 
+      if (!thys.openingNode.maxHeight) {
+        thys.openingNode.maxHeight = fieldsetContentNode.offsetHeight + 6 + 
                                         DOMUtil.getStyle(fieldsetNode, 'padding-top', true) +
                                         DOMUtil.getStyle(fieldsetNode, 'padding-bottom', true) +
                                         DOMUtil.getStyle(fieldsetNode, 'margin-top', true) +
@@ -61,7 +62,7 @@ UIRoomConfigPopupWindow.prototype.focusGroupOptions = function(event) {
       }
     }
   }
-  that.playAnimation();
+  thys.playAnimation();
   eXo.communication.chat.core.AdvancedDOMEvent.cancelEvent(event);
 };
 
@@ -76,55 +77,55 @@ UIRoomConfigPopupWindow.prototype.playAnimation = function() {
 };
 
 UIRoomConfigPopupWindow.prototype.switchGroupOptionsAnimate = function() {
-  that = eXo.communication.chat.webui.UIRoomConfigPopupWindow;
+  thys = eXo.communication.chat.webui.UIRoomConfigPopupWindow;
   var DOMUtil = eXo.core.DOMUtil;
-  var closingContentNode = DOMUtil.findFirstDescendantByClass(that.closingNode, 'table', 'UIFormGrid');
-  var openingContentNode = DOMUtil.findFirstDescendantByClass(that.openingNode, 'table', 'UIFormGrid');
-  if (that.openingNode.offsetHeight < that.openingNode.maxHeight &&
-      that.openingNode.maxHeight > 0) {
-    var percent = that.openingNode.percent || 0;
-    percent += that.ANIMATION_SPEED;
-    var openingHeight = percent * (that.openingNode.maxHeight/100);
-    that.openingNode.style.height = openingHeight + 'px';
+  var closingContentNode = DOMUtil.findFirstDescendantByClass(thys.closingNode, 'table', 'UIFormGrid');
+  var openingContentNode = DOMUtil.findFirstDescendantByClass(thys.openingNode, 'table', 'UIFormGrid');
+  if (thys.openingNode.offsetHeight < thys.openingNode.maxHeight &&
+      thys.openingNode.maxHeight > 0) {
+    var percent = thys.openingNode.percent || 0;
+    percent += thys.ANIMATION_SPEED;
+    var openingHeight = percent * (thys.openingNode.maxHeight/100);
+    thys.openingNode.style.height = openingHeight + 'px';
     openingContentNode.style.opacity = (percent / 100) + '';
     openingContentNode.style.filter = 'alpha(opacity=' + percent + ')';
 
-    var closingHeight = (100 - percent) * (that.closingNode.maxHeight/100);
+    var closingHeight = (100 - percent) * (thys.closingNode.maxHeight/100);
     closingHeight = (closingHeight < 0) ? 0 : closingHeight;
-    that.closingNode.style.height = closingHeight + 'px';
+    thys.closingNode.style.height = closingHeight + 'px';
     closingContentNode.style.opacity = ((100 - percent) / 100) + '';
     openingContentNode.style.filter = 'alpha(opacity=' + (100 - percent) + ')';
 
-    that.openingNode.percent = percent;
+    thys.openingNode.percent = percent;
   } else {
-    var openLegendNode = that.openingNode.getElementsByTagName('legend')[0];
+    var openLegendNode = thys.openingNode.getElementsByTagName('legend')[0];
     openLegendNode.innerHTML = openLegendNode.innerHTML.replace(/^Show\s/, '');
     openingContentNode.style.opacity = '';
     openingContentNode.style.filter = '';
     openingContentNode.style.display = 'block';
-    that.openingNode.style.height = '';
-    that.openingNode.state = 'open';
-    that.openingNode.percent = false;
+    thys.openingNode.style.height = '';
+    thys.openingNode.state = 'open';
+    thys.openingNode.percent = false;
     openingContentNode.style.zIndex = '1';
-    that.openingNode = null;
+    thys.openingNode = null;
 
-    var closeLegendNode = that.closingNode.getElementsByTagName('legend')[0];
+    var closeLegendNode = thys.closingNode.getElementsByTagName('legend')[0];
     closeLegendNode.innerHTML = 'Show ' + closeLegendNode.innerHTML;
     closingContentNode.style.opacity = '';
     closingContentNode.style.filter = '';
     closingContentNode.style.display = 'none';
     if (eXo.core.Browser.browserType == 'ie') {
-      that.closingNode.style.height = '20px';
+      thys.closingNode.style.height = '20px';
     } else {
-      that.closingNode.style.height = '0px';
+      thys.closingNode.style.height = '0px';
     }
-    that.closingNode.state = 'close';
-    that.closingNode.percent = false;
+    thys.closingNode.state = 'close';
+    thys.closingNode.percent = false;
     closingContentNode.style.zIndex = '0';
-    that.closingNode = null;
+    thys.closingNode = null;
 
-    window.clearInterval(that.animationId);
-    that.animationId = false;
+    window.clearInterval(thys.animationId);
+    thys.animationId = false;
   }
 };
 
@@ -355,10 +356,17 @@ UIRoomConfigPopupWindow.prototype.okAction = function(keepWindowState) {
 
 UIRoomConfigPopupWindow.prototype.fakeConfigCommit = function(keepWindowState) {
   this.okAction(keepWindowState);
-  eXo.communication.chat.webui.UIChatWindow.insertSystemMsg('You just cancel the room configuration. The default config still sent.');
+  eXo.communication.chat.webui.UIChatWindow.insertCustomMsg('You just cancel the room configuration. The default config still sent.', this.tabId);
 };
 
-UIRoomConfigPopupWindow.prototype.setVisible = function(visible, roomName, mustSubmit) {
+UIRoomConfigPopupWindow.prototype.relateClose = function(tabId) {
+  if (this.tabId.id == tabId.id) {
+    this.mustSubmit = false;
+    this.setVisible(false);
+  }
+}
+
+UIRoomConfigPopupWindow.prototype.setVisible = function(visible, tabId, mustSubmit) {
   if (!this.UIMainChatWindow.userStatus ||
       this.UIMainChatWindow.userStatus == this.UIMainChatWindow.OFFLINE_STATUS) {
     return;
@@ -367,11 +375,13 @@ UIRoomConfigPopupWindow.prototype.setVisible = function(visible, roomName, mustS
     this.fakeConfigCommit(visible);
   }
   if (visible) {
-    if (roomName) {
+    if (tabId &&
+        tabId.targetPerson) {
       var chatRoomServiceName = this.UIMainChatWindow.serverInfo.mucServicesNames[0];
-      this.roomName = roomName;
-      if (roomName.indexOf('@' + chatRoomServiceName) != -1) {
-        this.roomName = roomName.substr(0, roomName.indexOf('@' + chatRoomServiceName));
+      this.tabId = tabId;
+      this.roomName = this.tabId.targetPerson;
+      if (this.roomName.indexOf('@' + chatRoomServiceName) != -1) {
+        this.roomName = this.roomName.substr(0, this.roomName.indexOf('@' + chatRoomServiceName));
       }
       this.UIMainChatWindow.jabberGetRoomConfig(this.roomName);
       if (!this.updatedMaxHeight) {

@@ -4,6 +4,9 @@
 function UIJoinRoomPopupWindow() {
   this.MAX_ROOM_NAME_DISPLAY = 12;
   this.MAX_ROOM_DESC_DISPLAY = 55;
+  this.CSS_CLASS = {
+    uiPageIterator   : 'UIPageIterator'
+  };
 }
 
 UIJoinRoomPopupWindow.prototype.init = function(rootNode, UIMainChatWindow) {
@@ -19,27 +22,22 @@ UIJoinRoomPopupWindow.prototype.init = function(rootNode, UIMainChatWindow) {
   this.joinRoomButtonNode = eXo.core.DOMUtil.findFirstDescendantByClass(this.rootNode, 'a', 'JoinRoomButton');
   this.joinRoomButtonNode.hrefBk = this.joinRoomButtonNode.href;
   this.LocalTemplateEngine = this.UIMainChatWindow.LocalTemplateEngine;
+  this.pageIteratorNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', this.CSS_CLASS.uiPageIterator);
+  this.uiPageIterator = new eXo.communication.chat.webui.UIPageIterator(this.pageIteratorNode);
+  this.uiPageIterator.setGotoPageCallback(this.gotoPage);
 };
 
-UIJoinRoomPopupWindow.prototype.setVisible = function(visible) {
-  if (!this.UIMainChatWindow.userStatus ||
-      this.UIMainChatWindow.userStatus == this.UIMainChatWindow.OFFLINE_STATUS) {
-    return;
-  }
-  if (visible) {
-    this.UIMainChatWindow.jabberGetRoomList();
-    if (this.rootNode.style.display != 'block') {
-      this.rootNode.style.display = 'block'; 
-    }
-    this.UIPopupManager.focusEventFire(this);
-  } else {
-    if (this.rootNode.style.display != 'none') {
-      this.rootNode.style.display = 'none'; 
-    }
-  }
+UIJoinRoomPopupWindow.prototype.reloadRoomList = function() {
+  this.uiPageIterator.reload();
 };
 
-UIJoinRoomPopupWindow.prototype.updateRoomList = function(roomList) {
+UIJoinRoomPopupWindow.prototype.gotoPage = function(from, to) {
+  eXo.communication.chat.webui.UIMainChatWindow.jabberGetRoomList(from, to);
+};
+
+UIJoinRoomPopupWindow.prototype.updateRoomList = function(serverData) {
+  roomList = serverData.hostedRooms;
+
   // Fix bug table innerHTML for ie
   var tmpNode = this.roomListContainerNode.parentNode;
   tmpNode.removeChild(this.roomListContainerNode);
@@ -50,6 +48,8 @@ UIJoinRoomPopupWindow.prototype.updateRoomList = function(roomList) {
     roomInfo.enabled4Add = true;
     this.roomListContainerNode.appendChild(this.createRoomNode(roomInfo, (i%2)));
   }
+  this.uiPageIterator.totalItem = serverData.totalRooms
+  this.uiPageIterator.renderPageIterator(serverData);
 };
 
 UIJoinRoomPopupWindow.prototype.createRoomNode = function(roomInfo, isAlternate) {
@@ -133,6 +133,24 @@ UIJoinRoomPopupWindow.prototype.joinRoomAction = function() {
       this.UIMainChatWindow.jabberJoinToRoom(currentNode.value, roomInfo.isPasswordProtected);
       this.setVisible(false);
       return;
+    }
+  }
+};
+
+UIJoinRoomPopupWindow.prototype.setVisible = function(visible) {
+  if (!this.UIMainChatWindow.userStatus ||
+      this.UIMainChatWindow.userStatus == this.UIMainChatWindow.OFFLINE_STATUS) {
+    return;
+  }
+  if (visible) {
+    this.uiPageIterator.reload();
+    if (this.rootNode.style.display != 'block') {
+      this.rootNode.style.display = 'block'; 
+    }
+    this.UIPopupManager.focusEventFire(this);
+  } else {
+    if (this.rootNode.style.display != 'none') {
+      this.rootNode.style.display = 'none'; 
     }
   }
 };

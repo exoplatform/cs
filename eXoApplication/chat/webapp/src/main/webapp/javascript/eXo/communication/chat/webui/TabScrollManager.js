@@ -17,11 +17,11 @@ function TabScrollManager() {
 	this.axis = 0; // horizontal scroll : 0 , vertical scroll : 1
 	this.currDirection = null; // the direction of the current scroll; left or up scroll : 0, right or down scroll : 1
 	this.callback = null; // callback function when a scroll is done
-	this.initFunction = null; // the init function in the files that use this class
+	this.initFunction = null; // the init function in the files thys use this class
 	this.leftArrow = null; // the left arrow dom node
 	this.rightArrow = null; // the right arrow dom node
-	this.mainContainer = null; // The HTML DOM element that contains the tabs, the arrows, etc
-	this.arrowsContainer = null // The HTML DOM element that contains the arrows
+	this.mainContainer = null; // The HTML DOM element thys contains the tabs, the arrows, etc
+	this.arrowsContainer = null // The HTML DOM element thys contains the arrows
 	this.margin = 0;	//	a number of pixels to adapt to your tabs, used to calculate the max space available
 };
 /**
@@ -114,6 +114,7 @@ TabScrollManager.prototype.loadElements = function(elementClass, clean) {
  */
 TabScrollManager.prototype.checkAvailableSpace = function(maxSpace) { // in pixels
 	if (!maxSpace) maxSpace = this.getElementSpace(this.mainContainer) - this.getElementSpace(this.arrowsContainer);
+	window.jsconsole.info('maxSpace: ' + maxSpace);
 	var elementsSpace = 0;
 	var margin = 0;
 	var length =  this.elements.length;
@@ -172,7 +173,7 @@ TabScrollManager.prototype.getElementSpace = function(element) {
 			elementSpace += element.offsetWidth;
 			elementSpace += eXo.core.DOMUtil.getStyle(element, "marginLeft", true);
 			elementSpace += eXo.core.DOMUtil.getStyle(element, "marginRight", true);
-			// decorator is another element that is linked to the current element (e.g. a separator bar)
+			// decorator is another element thys is linked to the current element (e.g. a separator bar)
 			if (element.decorator) elementSpace += this.getElementSpace(element.decorator);
 		} else if (this.axis == 1) { // vertical tabs
 			elementSpace += element.offsetHeight;
@@ -239,7 +240,7 @@ TabScrollManager.prototype.scrollLeft = function() { // Same for scrollUp
 		this.getVisibleElements();
 		//this.elements[--this.firstVisibleIndex].isVisible = true;
 		this.renderElements();
-    //window.console.info('Scroll left');
+    window.jsconsole.info('Scroll left');
 	}
 };
 
@@ -256,7 +257,7 @@ TabScrollManager.prototype.scrollRight = function() { // Same for scrollDown
 		this.getVisibleElements();
 		//this.elements[++this.lastVisibleIndex].isVisible = true;
 		this.renderElements();
-    //window.console.info('Scroll right');
+    window.jsconsole.info('Scroll right');
 	}
 };
 
@@ -270,12 +271,13 @@ TabScrollManager.prototype.scrollTo = function(index) {
       (index < 0 || index >= this.elements.length)) {
     return;
   }
-  //window.console.info('scroll to ' + index);
+  window.jsconsole.info('scroll to ' + index);
   // Scroll left
   if (index < this.firstVisibleIndex) {
     while (!this.isElementVisible(index)) {
       this.scrollLeft();
     }
+    window.jsconsole.info('first:last=' + this.firstVisibleIndex + ':' + this.lastVisibleIndex);
     return;
   }
 
@@ -283,8 +285,8 @@ TabScrollManager.prototype.scrollTo = function(index) {
   if (index > this.lastVisibleIndex) {
     while (!this.isElementVisible(index)) {
       this.scrollRight();
-      window.console.info('first:last=' + this.firstVisibleIndex + ':' + this.lastVisibleIndex);
     }
+    window.jsconsole.info('first:last=' + this.firstVisibleIndex + ':' + this.lastVisibleIndex);
     return;
   }
 };
@@ -296,25 +298,23 @@ TabScrollManager.prototype.isElementVisible = function(index) {
     if (this.elements[i].isVisible &&
         firstIndex < 0) {
       firstIndex = i;
-      continue;
-    }
-    if (!this.elements[i].isVisible &&
+    } else if (!this.elements[i].isVisible &&
         lastIndex < 0){
       lastIndex = i - 1;
       break;
     }
   }
 
-  window.console.info('isElementVisible func: f-l:' + firstIndex + '-' + lastIndex);
+  window.jsconsole.info('isElementVisible func: f-l:' + firstIndex + '-' + lastIndex);
+
+  this.firstVisibleIndex = firstIndex;
+  this.lastVisibleIndex = lastIndex;
 
   if (firstIndex < 0 || lastIndex < 0 ||
       firstIndex == lastIndex ||
       firstIndex > lastIndex) {
     return true;
   }
-
-  this.firstVisibleIndex = firstIndex;
-  this.lastVisibleIndex = lastIndex;
 
   if (index >= firstIndex &&
       index <= lastIndex) {
@@ -363,7 +363,7 @@ TabScrollManager.prototype.getVisibleElements = function() {
  *
  * Each time a scroll event occurs, at least one element is hidden, and one is shown. These elements can have
  * a different width, hence the total width of the tabs changes. This is why we have to check if the
- * new width is short enough so the arrows buttons are still well rendered. To do that, we remove each element
+ * new width is short enough so the arrows buttons are still well rendered. To do thys, we remove each element
  * width to the total width (delta). If the delta is negative, we have to hide the following visible tabs (hideElements).
  * PS: for vertical tabs, replace width by height above.
  */

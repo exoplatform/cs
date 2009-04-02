@@ -8,20 +8,8 @@ function UIAddContactPopupWindow() {
     uiGrid           : 'UIGrid',
     toggleSelect     : 'ToggleSelect',
     uiPageIterator   : 'UIPageIterator',
-    pagesTotal       : 'PagesTotalNumber',
-    previousTopPage  : 'LastTopPageIcon',
-    previousPage     : 'LastPageIcon',
-    nextPage         : 'NextPageIcon',
-    nextTopPage      : 'NextTopPageIcon',
-    disabledPrefix   : 'Disable',
-    pageList         : 'Number',
-    selectedPage     : 'PageSelected',
     addContactButton : 'AddContactButton'
   };
-  this.currentPageNo = 0;
-  this.totalPage = 0;
-  this.NUM_PER_PAGE = 10;
-  this.MAX_PAGE_NUM = 5;
 }
 
 UIAddContactPopupWindow.prototype.init = function(rootNode, UIMainChatWindow) {
@@ -35,34 +23,29 @@ UIAddContactPopupWindow.prototype.init = function(rootNode, UIMainChatWindow) {
   this.LocalTemplateEngine = this.UIMainChatWindow.LocalTemplateEngine;
   this.filterFieldNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'input', this.CSS_CLASS.searchField);
   this.pageIteratorNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', this.CSS_CLASS.uiPageIterator);
-  this.pageIteratorNode.UIWindow = this;
-  this.pageListNode = DOMUtil.findFirstDescendantByClass(this.pageIteratorNode, 'div', this.CSS_CLASS.pageList);
-  this.totalPageNode = DOMUtil.findFirstDescendantByClass(this.pageIteratorNode, 'div', this.CSS_CLASS.pagesTotal);
   this.addContactButtonNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'a', this.CSS_CLASS.addContactButton);
   this.addContactButtonNode.hrefBk = this.addContactButtonNode.href;
-  var doSearchContactWrapper = function() {
-    eXo.communication.chat.webui.UIAddContactPopupWindow.doSearchContact();
-  }
-  /*
-  if (window.addEventListener) {
-    this.filterFieldNode.addEventListener('keyup', doSearchContactWrapper, false);
-  } else {
-    this.filterFieldNode.attachEvent('onkeyup', doSearchContactWrapper, false);
-  }
-  */
-  eXo.communication.chat.core.AdvancedDOMEvent.addEventListener(this.filterFieldNode, 'keyup', doSearchContactWrapper, false);
+  eXo.communication.chat.core.AdvancedDOMEvent.addEventListener(this.filterFieldNode, 'keyup', this.doSearchContactWrapper, false);
+  this.uiPageIterator = new eXo.communication.chat.webui.UIPageIterator(this.pageIteratorNode);
+  this.uiPageIterator.setGotoPageCallback(this.doSearchContact);
 };
 
-UIAddContactPopupWindow.prototype.doSearchContact = function(keyword, from, to) {
-  keyword = keyword || this.filterFieldNode.value;
+UIAddContactPopupWindow.prototype.doSearchContactWrapper = function(event) {
+  event = event || window.event;
+  eXo.communication.chat.webui.UIAddContactPopupWindow.doSearchContact();
+};
+
+UIAddContactPopupWindow.prototype.doSearchContact = function(from, to, keyword) {
+  var thys = eXo.communication.chat.webui.UIAddContactPopupWindow;
+  keyword = keyword || thys.filterFieldNode.value;
   keyword = keyword || '*';
   if (keyword.indexOf('*') != (keyword.length - 1)) {
     keyword += '*';
   }
-  if (keyword != this.keywordbk) {
-    this.currentPageNo = 0;
+  if (keyword != thys.keywordbk) {
+    thys.uiPageIterator.currentPageNo = 0;
   }
-  this.keywordbk = keyword;
+  thys.keywordbk = keyword;
   from = from || 0;
   to = to || 10;
   eXo.communication.chat.webui.UIMainChatWindow.orgFuzzySearchUser(keyword , from, to);
@@ -94,12 +77,17 @@ UIAddContactPopupWindow.prototype.updateContactList = function(serverData) {
     }
     this.contactListContainerNode.appendChild(this.createContactNode(contact, (i%2)));
   }
-  this.renderPageIterator(serverData);
+  this.uiPageIterator.totalItem = serverData.totalUser;
+  this.uiPageIterator.renderPageIterator();
   if (this.rootNode.style.display != 'block') {
     this.rootNode.style.display = 'block';
   }
   this.filterFieldNode.focus();
   this.UIPopupManager.focusEventFire(this);
+};
+
+UIAddContactPopupWindow.prototype.reload = function() {
+  this.uiPageIterator.reload();
 };
 
 /**
@@ -222,145 +210,6 @@ UIAddContactPopupWindow.prototype.selectAllContacts = function(selectMode) {
   checkboxNode.checked = selectMode;
 };
 
-UIAddContactPopupWindow.prototype.renderPageIterator = function(serverData) {
-  this.totalPage = Math.ceil(serverData.totalUser/this.NUM_PER_PAGE);
-  //debugger;
-  if (this.totalPage > 1) {
-    this.totalPageNode.innerHTML = this.totalPage + '';
-    this.toggleNavButtons();
-    
-    this.pageListNode.innerHTML = '';
-    // Calculate pageStart and pageEnd
-    var pageStart = this.currentPageNo;
-    var pageEnd = this.currentPageNo + this.MAX_PAGE_NUM;
-    if (pageEnd > this.totalPage) {
-      var delta = pageEnd - this.totalPage;
-      pageEnd = this.totalPage;
-      pageStart = pageStart - delta;
-      pageStart = (pageStart < 0) ? 0 : pageStart;
-    }
-    for (var i=pageStart; i<pageEnd; i++) {
-      var pageNode = document.createElement('a');
-      if (i == this.currentPageNo) {
-        pageNode.className = this.CSS_CLASS.selectedPage;
-      }
-      pageNode.innerHTML = (i + 1);
-      pageNode.pageNo = i;
-      pageNode.style.cursor = 'pointer';
-      pageNode.onclick = this.gotoPageWrapper;
-
-      this.pageListNode.appendChild(pageNode);
-    }
-
-    if (this.pageIteratorNode.style.display != 'block') {
-      this.pageIteratorNode.style.display = 'block';
-    }
-  } else {
-    if (this.pageIteratorNode.style.display != 'none') {
-      this.pageIteratorNode.style.display = 'none';
-    }
-  }
-};
-
-UIAddContactPopupWindow.prototype.enableNavButton = function(buttonNode, enable, disabledClass, enabledClass) {
-  if (!buttonNode) {
-    window.jsconsole.debug('buttonNode = ' + buttonNode + ' - args=', arguments);
-  }
-  window.jsconsole.debug('enable: ' + enable, buttonNode);
-  var className = buttonNode.className;
-  if (enable) {
-    buttonNode.className = 'Icon ' + enabledClass;
-    buttonNode.onclick = buttonNode.onclickbk || buttonNode.onclick;
-  } else {
-    buttonNode.className = 'Icon ' + disabledClass;
-    buttonNode.onclickbk = buttonNode.onclick;
-    buttonNode.onclick = null;
-  }
-};
-
-UIAddContactPopupWindow.prototype.reload = function() {
-  this.gotoPage(this.currentPageNo, true, true);
-};
-
-UIAddContactPopupWindow.prototype.gotoPageWrapper = function() {
-  var uiPageIterator = eXo.core.DOMUtil.findAncestorsByClass(this, 'UIPageIterator');
-  if (uiPageIterator &&
-      uiPageIterator[0]) {
-    uiPageIterator[0].UIWindow.gotoPage(this.pageNo, true);
-  } else {
-    window.jsconsole.error('Can not find UIPageIterator');
-  }
-};
-
-UIAddContactPopupWindow.prototype.gotoPage = function(pageNum, isAbsolutePage, forceReload) {
-  var targetPageNo = parseInt(this.currentPageNo) + parseInt(pageNum);
-  if (isAbsolutePage) {
-    targetPageNo = pageNum;
-  }
-  if (targetPageNo < 0) {
-    targetPageNo = 0;
-  }
-  if (targetPageNo >= this.totalPage) {
-    targetPageNo = this.totalPage - 1;
-  }
-  if (!forceReload &&
-      targetPageNo == this.currentPageNo) {
-    return;
-  }
-  window.jsconsole.warn('Go to page: ' + targetPageNo);
-  var from = targetPageNo * this.NUM_PER_PAGE;
-  from = (from >= 0) ? from : 0;
-  var to = from + this.NUM_PER_PAGE;
-  var keyword = this.filterFieldNode.value;
-  this.doSearchContact(keyword, from, to);
-  this.currentPageNo = targetPageNo;
-};
-
-UIAddContactPopupWindow.prototype.toggleNavButtons = function() {
-  // Navigator button toggle
-  var DOMUtil = eXo.core.DOMUtil;
-  var previousPageNode = 
-        DOMUtil.findFirstDescendantByClass(this.pageIteratorNode, 'a', this.CSS_CLASS.previousPage) ||
-        DOMUtil.findFirstDescendantByClass(this.pageIteratorNode, 'a', this.CSS_CLASS.disabledPrefix + this.CSS_CLASS.previousPage);
-  var nextPageNode = 
-        DOMUtil.findFirstDescendantByClass(this.pageIteratorNode, 'a', this.CSS_CLASS.nextPage) ||
-        DOMUtil.findFirstDescendantByClass(this.pageIteratorNode, 'a', this.CSS_CLASS.disabledPrefix + this.CSS_CLASS.nextPage);
-  var nextTopPageNode = 
-        DOMUtil.findFirstDescendantByClass(this.pageIteratorNode, 'a', this.CSS_CLASS.nextTopPage) ||
-        DOMUtil.findFirstDescendantByClass(this.pageIteratorNode, 'a', this.CSS_CLASS.disabledPrefix + this.CSS_CLASS.nextTopPage);
-  var previousTopPageNode = 
-        DOMUtil.findFirstDescendantByClass(this.pageIteratorNode, 'a', this.CSS_CLASS.previousTopPage) ||
-        DOMUtil.findFirstDescendantByClass(this.pageIteratorNode, 'a', this.CSS_CLASS.disabledPrefix + this.CSS_CLASS.previousTopPage);
-  var isPreviousEnable = false;
-  var isNextEnable = false;
-  var isFirstEnable = false;
-  var isLastEnable = false;
-  if (this.isPageValid(this.currentPageNo - 1)) {
-    isPreviousEnable = true;
-  }
-  if (this.isPageValid(this.currentPageNo + 1)) {
-    isNextEnable = true;
-  }
-  if (this.isPageValid(this.currentPageNo - 10)) {
-    isFirstEnable = true;
-  }
-  if (this.isPageValid(this.currentPageNo + 10)) {
-    isLastEnable = true;
-  }
-  this.enableNavButton(previousTopPageNode, isFirstEnable, this.CSS_CLASS.disabledPrefix + this.CSS_CLASS.previousTopPage, this.CSS_CLASS.previousTopPage);
-  this.enableNavButton(previousPageNode, isPreviousEnable, this.CSS_CLASS.disabledPrefix + this.CSS_CLASS.previousPage, this.CSS_CLASS.previousPage);
-  this.enableNavButton(nextPageNode, isNextEnable, this.CSS_CLASS.disabledPrefix + this.CSS_CLASS.nextPage, this.CSS_CLASS.nextPage);
-  this.enableNavButton(nextTopPageNode, isLastEnable, this.CSS_CLASS.disabledPrefix + this.CSS_CLASS.nextTopPage, this.CSS_CLASS.nextTopPage);
-};
-
-UIAddContactPopupWindow.prototype.isPageValid = function(pageNo) {
-  var valid = false;
-  if (pageNo >= 0 && pageNo <= (this.totalPage - 1)) {
-    valid = true;
-  }
-  window.jsconsole.warn('check pageno: ' + pageNo + ' valid:' + valid);
-  return valid;
-};
 
 UIAddContactPopupWindow.prototype.setVisible = function(visible, handler){
   if (!this.UIMainChatWindow.userStatus ||
@@ -376,8 +225,7 @@ UIAddContactPopupWindow.prototype.setVisible = function(visible, handler){
     this.toggleSelectAllNode.checked = false;
     //this.filterFieldNode.focus();
     this.handler = handler;
-    this.totalPage = 0;
-    this.currentPageNo = 0;
+    this.uiPageIterator.destroy();
   } else {
     if (this.rootNode.style.display != 'none') {
       this.rootNode.style.display = 'none';

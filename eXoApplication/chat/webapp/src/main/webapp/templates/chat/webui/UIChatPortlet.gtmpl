@@ -7,6 +7,49 @@
   jsManager.addJavascript("eXo.communication.chat.eXoChat.applicationId = '" + uicomponent.getId() + "';");
   jsManager.addOnLoadJavascript("eXo.communication.chat.eXoChat.init");
 %>
+
+<!-- Begin Notification -->
+<div class="UINotification" style="display: none;position: relative;">
+	<div style="position: absolute;top: 0px;right: 5px;width: 250px;">
+		<div class="BoxNote">
+			<div class="LeftBoxNote">
+				<div class="RightBoxNote">
+					<div class="CenterBoxNote">
+						<div class="IconBoxNote">(<span>1</span>)</div>
+					</div>
+				</div>
+			</div>
+			<div style="clear:both"><span></span></div>
+		</div>
+		<div class="UIPopupNotification">
+		<div class="TLPopupNotification">
+			<div class="TRPopupNotification">
+				<div class="TCPopupNotification"><span></span></div>
+			</div>
+		</div>
+		<div class="MLPopupNotification">
+			<div class="MRPopupNotification">
+				<div class="MCPopupNotification">
+					<div class="TitleNotification">
+						<a class="ItemTitle" href="#">Notification</a>
+						<a class="Close" href="#"><span></span></a>
+					</div>
+					<div class="UINotificationContent">
+						<div class="Item">You have 3 new messages</div>
+					</div>			
+				</div>
+			</div>
+		</div>
+		<div class="BLPopupNotification">
+			<div class="BRPopupNotification">
+				<div class="BCPopupNotification"><span></span></div>
+			</div>
+		</div>
+	</div>
+	</div>
+</div>
+<!-- End Notification -->
+
 <!-- Begin UIChat -->
 <div class="UIChat ChatSharedIcons" id="UIChat" oncontextmenu="return false;"
   eXoToken="<%=uicomponent.getUserToken();%>" userName="<%=Util.getPortalRequestContext().getRemoteUser();%>">
@@ -114,26 +157,22 @@
 <!-- Start MiniBoxChat -->
 <div class="MiniBoxChat" style="display: none">
 	<div class="NormalMiniBoxChat">
-		<div class="BgMiniBoxChat LeftMiniBoxChat">
-			<div class="BgMiniBoxChat RightMiniBoxChat">
-				<div class="BgMiniBoxChat CenterMiniBoxChat">
+		<div class="LeftMiniBoxChat">
+			<div class="RightMiniBoxChat">
+				<div class="CenterMiniBoxChat">
 					<div class="FixHeight">
-						<div class="ControlMiniBoxChat">
-							<div class="ControlIconChat RestoreIcon" title="Restore conversation window."
-	                 onclick="eXo.communication.chat.webui.UIChatWindow.setVisible(true, event, true)"><span></span></div>
-							<div class="ControlIconChat CloseIcon" title="Close all conversations."
-	                 onclick="eXo.communication.chat.webui.UIChatWindow.closeAllWindow()"><span></span></div>
-							<div style="clear: left"><span></span></div>
-						</div>
-						<div class="InfoMiniBoxChat">
-							<div class="InfoIcon"><span></span></div>
-							<div class="NameChat">
+											
+							<div class="InfoIcon">
                 <span class="UnreadMessage" style="color: red;"></span>
                 <span>Conversation window</span>
-              </div>
-							<div style="clear: left"><span></span></div>
-						</div>
-						<div style="clear: right"><span></span></div>
+	            </div>  
+						
+							<div class="ControlIconChat CloseIcon" title="Close all conversations."
+	                 onclick="eXo.communication.chat.webui.UIChatWindow.closeAllWindow()"><span></span></div>
+							<div class="ControlIconChat RestoreIcon" title="Restore conversation window."
+	                 onclick="eXo.communication.chat.webui.UIChatWindow.setVisible(true, event, true)"><span></span></div>
+						
+						<div style="clear: both"><span></span></div>
 					</div>
 				</div>
 			</div>
@@ -176,7 +215,7 @@
 <!-- End of BuddyItem action popup menu -->
 
 <!-- Chat window with tab -->
-<div style="position: absolute; top: 115px; left: 255px;width: 650px; height: 230px; display: none;"
+<div style="position: absolute; top: 115px; left: 255px;width: 655px; height: 230px; display: none;"
    class="UIWindow DefaultTheme UIDragObject UIResizeObject ChatPopup ChatSharedIcons" minwidth="545" minheight="245">
   <div class="WindowBarLeft">
     <div class="WindowBarRight">
@@ -330,18 +369,14 @@
                       <div class="UIPageIterator" style="display: none">
                         <div class="PageIteratorContainer">
                           <div class="RightPageIteratorBlock">
-                            <a class="Icon LastTopPageIcon" title="Back 10 pages"
-                               onclick="eXo.communication.chat.webui.UIAddContactPopupWindow.gotoPage(-10);"><span></span></a>
-                            <a class="Icon LastPageIcon" title="Previous Page"
-                               onclick="eXo.communication.chat.webui.UIAddContactPopupWindow.gotoPage(-1);"><span></span></a>
+                            <a class="Icon LastTopPageIcon" title="Back 10 pages"><span></span></a>
+                            <a class="Icon LastPageIcon" title="Previous Page"><span></span></a>
                             <div class="Number">
                               <a href="" class="PageSelected">1</a>
                               <a href="">2</a>
                             </div>
-                            <a class="Icon NextPageIcon" title="Next Page"
-                               onclick="eXo.communication.chat.webui.UIAddContactPopupWindow.gotoPage(+1);"><span></span></a>
-                            <a class="Icon NextTopPageIcon" title="Next 10 pages"
-                               onclick="eXo.communication.chat.webui.UIAddContactPopupWindow.gotoPage(+10);"><span></span></a>
+                            <a class="Icon NextPageIcon" title="Next Page"><span></span></a>
+                            <a class="Icon NextTopPageIcon" title="Next 10 pages"><span></span></a>
                             <div style="clear: left;"><span></span></div>
                           </div>
                           <div class="LeftPageIteratorBlock">
@@ -463,6 +498,27 @@
                         </thead>
                         <tbody><span></span></tbody>
                       </table>
+                      <div class="UIPageIterator" style="display: none">
+                        <div class="PageIteratorContainer">
+                          <div class="RightPageIteratorBlock">
+                            <a class="Icon LastTopPageIcon" title="Back 10 pages"><span></span></a>
+                            <a class="Icon LastPageIcon" title="Previous Page"><span></span></a>
+                            <div class="Number">
+                              <a href="" class="PageSelected">1</a>
+                              <a href="">2</a>
+                            </div>
+                            <a class="Icon NextPageIcon" title="Next Page"><span></span></a>
+                            <a class="Icon NextTopPageIcon" title="Next 10 pages"><span></span></a>
+                            <div style="clear: left;"><span></span></div>
+                          </div>
+                          <div class="LeftPageIteratorBlock">
+                            <div class="TotalPages">Total pages:</div>
+                            <div class="PagesTotalNumber">2</div>
+                            <div style="clear: left;"><span></span></div>
+                          </div>
+                        </div>
+                        <div style="clear: right;"><span></span></div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -470,7 +526,7 @@
                   <table class="ActionContainer" align="center">
                     <tr>
                       <td align="center">
-                      	<a href="javascript:eXo.communication.chat.webui.UIMainChatWindow.jabberGetRoomList()" class="ActionButton LightBlueStyle">
+                      	<a href="javascript:eXo.communication.chat.webui.UIJoinRoomPopupWindow.reloadRoomList()" class="ActionButton LightBlueStyle">
                           <div class="ButtonLeft">
                             <div class="ButtonRight">
                               <div class="ButtonMiddle"> Refresh </div>
@@ -617,7 +673,7 @@
         	<form method="post" class="ContainerForm">
         		<div class="BoxForm">
         			<div class="BorderForm">
-							  <fieldset style=" margin-bottom: 10px; overflow: hidden: height: 100%; border: 1px solid #b7b7b7;" maxHeight="350">
+							  <fieldset style="color: #333; margin-bottom: 10px; overflow: hidden: height: 100%;" maxHeight="350">
 							    <legend class="StyleLegend">General</legend>
 							    <table class="UIFormGrid" style="visibility: visible;">
 							      <tr>
@@ -693,7 +749,7 @@
 							    </table>
 							  </fieldset>
 					
-							  <fieldset style="overflow: hidden; height: 20px;border: 1px solid #b7b7b7;" maxHeight="350" state="closed">
+							  <fieldset style="overflow: hidden; height: 20px;" maxHeight="350" state="closed">
 							    <legend class="StyleLegend">Show Security</legend>
 							     <table class="UIFormGrid" style="visibility: visible; opacity: 0;">
 							      <tr>

@@ -172,7 +172,8 @@ UITabControl.prototype.fileTransportRequestEventFire = function(FTReqEvent) {
   // Create file transport node
   var fileTransportNode = this.LocalTemplateEngine.getTemplateByClassName(this.CSS_CLASS.sendFile);
   var labelNode = DOMUtil.findFirstDescendantByClass(fileTransportNode, 'div', this.CSS_CLASS.sendFileLabel);
-  labelNode.innerHTML = this.tabId.targetPerson + ' want to send you ' + FTReqEvent.filename;
+  var alertContent = this.tabId.targetPerson + ' want to send you [' + FTReqEvent.filename + ']';
+  labelNode.innerHTML = alertContent;
   var fileNameNode = DOMUtil.findFirstDescendantByClass(fileTransportNode, 'div', this.CSS_CLASS.sendFileName);
   fileNameNode.innerHTML = FTReqEvent.filename + ' (' + fileSize.size + ' ' + fileSize.unit + ')<br>'
                             + (FTReqEvent.description || '') ;
@@ -181,18 +182,22 @@ UITabControl.prototype.fileTransportRequestEventFire = function(FTReqEvent) {
   this.messagesBoxNode.appendChild(fileTransportNode);
   this.fileTransportRequestIncoming = true;
   this.scrollMessageBox();
-
+  
+  this.showAlert(alertContent);
+  
   if (FTReqEvent.responseTimeout) {
     this.fileEventTimeoutId = window.setTimeout(this.fileEventTimeout, FTReqEvent.responseTimeout, fileTransportNode, this);
   }
 };
 
 UITabControl.prototype.fileTransportResponseEventFire = function(FTResEvent) {
+  var msgContent = '';
   if (FTResEvent.status == 'complete') {
-    eXo.communication.chat.webui.UIChatWindow.insertSystemMsg('Sent file: [' + FTResEvent.fileName + '] completed.', this.tabId);
+    msgContent = 'File exchange: [' + FTResEvent.fileName + '] completed.';
   } else {
-    eXo.communication.chat.webui.UIChatWindow.insertSystemMsg('Sent file: [' + FTResEvent.fileName + '] denied.', this.tabId);
+    msgContent = 'File exchange: [' + FTResEvent.fileName + '] denied.';
   }
+  eXo.communication.chat.webui.UIChatWindow.insertCustomMsg(msgContent, this.tabId);
 };
 
 UITabControl.prototype.getFuzzyFileSize = function(size) {
@@ -206,7 +211,7 @@ UITabControl.prototype.getFuzzyFileSize = function(size) {
   return {size: size, unit: unit};
 };
 
-UITabControl.prototype.downloadCompleteCallBack = function(uuid) {
+UITabControl.prototype.downloadCompleteCallBack = function(uuid, responseText) {
   var DOMUtil = eXo.core.DOMUtil;
   var fileExchangeList = DOMUtil.findDescendantsByClass(this.messageContainerNode, 'div', this.CSS_CLASS.sendFile);
   for (var i=0; i < fileExchangeList.length; i++) {
@@ -215,6 +220,9 @@ UITabControl.prototype.downloadCompleteCallBack = function(uuid) {
       loadingIcon.style.display = 'none';
     }
   };
+  if (responseText) {
+    this.UIMainChatWindow.UIChatWindow.insertCustomMsg(responseText, this.tabId);
+  }
 };
 
 UITabControl.prototype.acceptFileExchange = function(acceptNode) {
@@ -227,6 +235,8 @@ UITabControl.prototype.acceptFileExchange = function(acceptNode) {
   loadingIcon.style.display = 'block';
   var uploadIframe = this.UIMainChatWindow.UIChatWindow.uploadIframe;
   uploadIframe.onload = function () {
+    //var responseText = this.contentDocument.body.firstChild.innerHTML;
+    //this.callBackObj.downloadCompleteCallBack(uuid, responseText);
     this.callBackObj.downloadCompleteCallBack(uuid);
   };
   uploadIframe.callBackObj = this;
@@ -245,13 +255,13 @@ UITabControl.prototype.denieFileExchange = function(denieNode) {
   this.removeActionFileButtons(fileTransportNode, this);
 };
 
-UITabControl.prototype.removeActionFileButtons = function(fileTransportNode, that) {
+UITabControl.prototype.removeActionFileButtons = function(fileTransportNode, thys) {
   var DOMUtil = eXo.core.DOMUtil;
   var actionFileList = DOMUtil.findDescendantsByClass(fileTransportNode, 'div', this.CSS_CLASS.actionFile);
   for (var i=0; i < actionFileList.length; i++) {
     DOMUtil.removeElement(actionFileList[i]);
   };
-  if (that && this.fileEventTimeoutId) {
+  if (thys && this.fileEventTimeoutId) {
     try {
       window.clearTimeout(this.fileEventTimeoutId);
       this.fileEventTimeoutId = null;
@@ -262,9 +272,9 @@ UITabControl.prototype.removeActionFileButtons = function(fileTransportNode, tha
 
 UITabControl.prototype.initUI = function(buddyId) {
   var DOMUtil = eXo.core.DOMUtil;
-  this.uiTabNode = this.LocalTemplateEngine.getTemplateByClassName(this.CSS_CLASS.uiTab);
+  this.tabNode = this.LocalTemplateEngine.getTemplateByClassName(this.CSS_CLASS.uiTab);
   // Customize new UITab node
-  this.tabNameNode = DOMUtil.findFirstDescendantByClass(this.uiTabNode, 'div', this.CSS_CLASS.tabName);
+  this.tabNameNode = DOMUtil.findFirstDescendantByClass(this.tabNode, 'div', this.CSS_CLASS.tabName);
   var tabContactNameNode = DOMUtil.findFirstDescendantByClass(this.tabNameNode, 'span', this.CSS_CLASS.tabContactName);
   if (this.tabId.targetPerson.length > this.MAX_TAB_TITLE_LEN) {
     tabContactNameNode.innerHTML = this.tabId.targetPerson.substr(0, this.MAX_TAB_TITLE_LEN - 3) + '...';
@@ -272,34 +282,34 @@ UITabControl.prototype.initUI = function(buddyId) {
     tabContactNameNode.innerHTML = this.tabId.targetPerson;
   }
   this.tabNameNode.setAttribute('title', this.tabId.targetPerson);
-  this.tabNameNode.tabcontentid = this.tabId.id;
+  this.tabNameNode.tabId = this.tabId.id;
   this.tabNameNode.className = this.tabNameNode.className;
   this.tabNameNode.onclick = this.focusTabWrapper;
-  this.uiTabNode.style.display = 'block';
+  this.tabNode.style.display = 'block';
 
-  var closeTabButtonNode = DOMUtil.findFirstDescendantByClass(this.uiTabNode, 'div', this.CSS_CLASS.closeTabButton);
+  var closeTabButtonNode = DOMUtil.findFirstDescendantByClass(this.tabNode, 'div', this.CSS_CLASS.closeTabButton);
   closeTabButtonNode.onclick = this.closeTabWrapper;
 
   var tabContentCSSClass = this.CSS_CLASS.uiTabContent;
   if (this.isGroupChat) {
     tabContentCSSClass = this.CSS_CLASS.uiGroupChatTabContent;
   }
-  this.uiTabContentNode = this.LocalTemplateEngine.getTemplateByClassName(tabContentCSSClass);
+  this.tabPaneNode = this.LocalTemplateEngine.getTemplateByClassName(tabContentCSSClass);
   // Customize new UITabContent node
-  var chatSessionNode = DOMUtil.findFirstDescendantByClass(this.uiTabContentNode, 'div', this.CSS_CLASS.chatSession);
+  var chatSessionNode = DOMUtil.findFirstDescendantByClass(this.tabPaneNode, 'div', this.CSS_CLASS.chatSession);
   chatSessionNode.className = chatSessionNode.className + ' ' + this.tabId.id;
-  var msgBoxNode = DOMUtil.findFirstDescendantByClass(this.uiTabContentNode, 'textarea', this.CSS_CLASS.messageBox);
+  var msgBoxNode = DOMUtil.findFirstDescendantByClass(this.tabPaneNode, 'textarea', this.CSS_CLASS.messageBox);
   msgBoxNode.onkeypress = this.msgBoxKBHandler;
   this.msgTypingBox = msgBoxNode;
-  var sendButtonNode = DOMUtil.findFirstDescendantByClass(this.uiTabContentNode, 'div', this.CSS_CLASS.sendMessageButton);
+  var sendButtonNode = DOMUtil.findFirstDescendantByClass(this.tabPaneNode, 'div', this.CSS_CLASS.sendMessageButton);
   sendButtonNode.onclick = this.sendMessageWrapper;
-  this.uiTabContentNode.style.display = 'block';
-  this.messageContainerNode = DOMUtil.findFirstDescendantByClass(this.uiTabContentNode, 'div', this.CSS_CLASS.messagesContainer);
-  this.messagesBoxNode = DOMUtil.findFirstDescendantByClass(this.uiTabContentNode, 'div', this.CSS_CLASS.messagesBox);
+  this.tabPaneNode.style.display = 'block';
+  this.messageContainerNode = DOMUtil.findFirstDescendantByClass(this.tabPaneNode, 'div', this.CSS_CLASS.messagesContainer);
+  this.messagesBoxNode = DOMUtil.findFirstDescendantByClass(this.tabPaneNode, 'div', this.CSS_CLASS.messagesBox);
   
-  this.buddyListNode = DOMUtil.findFirstDescendantByClass(this.uiTabContentNode, 'div', this.CSS_CLASS.nicksGroupChat);
+  this.buddyListNode = DOMUtil.findFirstDescendantByClass(this.tabPaneNode, 'div', this.CSS_CLASS.nicksGroupChat);
 
-  this.uiTabContentNode.startTime = (new Date()).getTime();
+  this.tabPaneNode.startTime = (new Date()).getTime();
 
   // TODO: Remove room option if current user is not owner or moderatored of the room.
 };
@@ -325,10 +335,19 @@ UITabControl.prototype.updateUnreadMessage = function() {
       myParent._isVisible()) {
     tabUnreadMessageNode.innerHTML = '';
     this.unreadMessageCnt = 0;
+    this.UIMainChatWindow.UISlideAlert.removeMessageByTabId(this.tabId.id);
   } else if (this.unreadMessageCnt > 0) {
     tabUnreadMessageNode.innerHTML = '*[' + this.unreadMessageCnt + ']&nbsp;';
   }
   myParent.updateUnreadMessage();
+};
+
+UITabControl.prototype.showAlert = function(msgContent) {
+  if (!this.visible ||
+      !this.UIMainChatWindow.UIChatWindow.visible) {
+    this.UIMainChatWindow.UISlideAlert.addMessage(msgContent, this.tabId.id);
+    this.UIMainChatWindow.UISlideAlert.setVisible(true);
+  }
 };
 
 UITabControl.prototype.writeMsg = function(buddyId ,msgObj) {
@@ -339,7 +358,11 @@ UITabControl.prototype.writeMsg = function(buddyId ,msgObj) {
   } else {
     this.unreadMessageCnt ++;
   }
-  this.updateUnreadMessage();
+  if (msgObj &&
+      msgObj.type == 'error') {
+    buddyId = this.UIMainChatWindow.UIChatWindow.SYSTEM_INFO;
+    msgObj = msgObj.body;
+  }this.updateUnreadMessage();
   var buddyIdTmp = buddyId;
   // Detect dupplicated message
   if (this.isGroupChat &&
@@ -372,9 +395,19 @@ UITabControl.prototype.writeMsg = function(buddyId ,msgObj) {
   var contextChatNode = DOMUtil.findFirstDescendantByClass(msgNode, 'div', this.CSS_CLASS.contextChat);
   var msgTmpNode = document.createElement('div');
   var msgContent = msgObj['body'] || msgObj;
+  msgContent = msgContent + '';
+  
+  var msgContentTmp = '';
+  if (buddyIdTmp != this.UIMainChatWindow.UIChatWindow.SYSTEM_INFO) {
+    msgContentTmp = buddyIdTmp + ': ' + msgContent;
+  } else {
+    msgContentTmp = msgContent;
+  }
+  this.showAlert(msgContentTmp);
 
   if (!this.roomConfigured &&
-      msgContent.toLowerCase().indexOf('this room is now unlocked.') != -1) {
+      (msgContent.toLowerCase().indexOf('this room is now unlocked.') != -1) ||
+      (msgContent.toLowerCase().indexOf('this room is not anonymous.') != -1)) {
     this.roomConfigured = true;
   }
 
@@ -393,18 +426,51 @@ UITabControl.prototype.writeMsg = function(buddyId ,msgObj) {
 };
 
 UITabControl.prototype.messageFilter = function(msg) {
-  // Replace all special charactors by html entities.
+  // Encode all html entities.
   msg = eXo.core.HTMLUtil.entitiesEncode(msg);
+
+  msg = msg.replace(/(&\w+;)/gi, ';;$1;;');
+
   // Treat all url format as link.
-  var urlRegex = /(http|https|ftp|mail|news|yahoo|skype|msn|apt):\/\/([\w\d_\.]+@)?((w{3})\.)?[\w\d_\-\.]+\.\w{1,3}(\/[^\s]+)?/gi;
-  msg = msg.replace(urlRegex, this.makeLink);
+  var urlRegex = /((http|https|ftp|mail|news|yahoo|skype|msn|apt):\/\/([\w\d_\.]+@)?((w{3})\.)?[\w\d_\-\.]+\.\w{1,3}(:\d{1,5})?\/?([^\s<>"';]+)?)/gi;
+  msg = msg.replace(urlRegex, '<a href="$1" title="Go to $1" target="_blank">$1</a>');
+  //msg = msg.replace(urlRegex, this.linkFactory);
+  
+  msg = msg.replace(/(;{2}&\w+;{3})/gi, function(text) { return text.replace(/;;/g, '');});
+  
   // Treat all \n as <br> 
   msg = msg.replace(/(\n|\\n)/g, '<br>');
+  // Put msg to DOM node then process only text node :)
+  var tmpNode = document.createElement('div');
+  tmpNode.innerHTML = msg;
+  tmpNode.style.display = 'none';
+  document.body.appendChild(tmpNode);
+  this.textNodeBreakable(tmpNode);
+  msg = tmpNode.innerHTML;
+  tmpNode.parentNode.removeChild(tmpNode);
   return msg;
 };
 
-UITabControl.prototype.makeLink = function(m) {
-  return ('<a href="' + m + '" title="Go to ' + m + '" target="_blank">' + m + '</a>');
+UITabControl.prototype.textNodeBreakable = function(node) {
+  var nodeList = node.childNodes;
+  for (var i=0; i<nodeList.length; i++) {
+    if (nodeList[i].childNodes) {
+      this.textNodeBreakable(nodeList[i]);
+    }
+  }
+  if (node.nodeName == '#text') {
+    var newNode = document.createElement('span');
+    newNode.innerHTML = node.nodeValue.replace(/(.)/g, '$1<wbr>');
+    node.parentNode.insertBefore(newNode, node);
+    node.parentNode.removeChild(node);
+  }
+};
+
+UITabControl.prototype.linkFactory = function(txt) {
+  // Insert wbr tag to get line break supported by browser.
+  var htmlTxt = txt.replace(/(.)/g, '$1<wbr>');
+  txt = '<a href="' + txt + '" title="Click to go: ' + txt + '" target="_blank">' + htmlTxt + '</a>';
+  return txt;
 };
 
 UITabControl.prototype.scrollMessageBox = function() {
@@ -438,9 +504,11 @@ UITabControl.prototype.createNewMsgNode = function(buddyId, msgObj) {
   if (!timeStamp) {
     timeStamp = new Date();
     //timeStamp = timeStamp.getHours() + ':' + timeStamp.getMinutes() + ':' + timeStamp.getSeconds();
-    timeStamp = timeStamp.format('HH:MM:ss');
+    timeStamp = timeStamp.format('dd/mm/yyyy - HH:MM:ss');
   } else {
+    window.jsconsole.warn('timeStamp before process: ' + timeStamp);
     timeStamp = timeStamp.replace('ICT', ''); // Remove ICT if exist
+    window.jsconsole.warn('timeStamp after process: ' + timeStamp);
     var regexObj = /GMT(\+|\-)?\d{2}:\d{2}/g;
     timeStamp = timeStamp.replace(regexObj, function(m) {return m.replace(/:\d{2}/, '');});
     timeStamp = new Date(timeStamp);
@@ -492,48 +560,48 @@ UITabControl.prototype.sendMessage = function() {
 };
 
 UITabControl.prototype.focusTabWrapper = function() {
-  return eXo.communication.chat.webui.UIChatWindow.focusTab(this.tabcontentid, true);
+  return eXo.communication.chat.webui.UIChatWindow.focusTab(this.tabId, true);
 };
 
 UITabControl.prototype.closeTabWrapper = function() {
   var tabNameNode = eXo.core.DOMUtil.findPreviousElementByTagName(this, 'div');
   if (tabNameNode) {
-    return eXo.communication.chat.webui.UIChatWindow.closeTab(tabNameNode.tabcontentid);
+    return eXo.communication.chat.webui.UIChatWindow.closeTab(tabNameNode.tabId);
   }
 };
 
 UITabControl.prototype.setVisible = function(visible) {
-  if (!this.uiTabContentNode ||
-      !this.uiTabNode) {
+  if (!this.tabPaneNode ||
+      !this.tabNode) {
     return;
   }
   var DOMUtil = eXo.core.DOMUtil;
   this.visible = visible;
   if (visible) {
     this.updateUnreadMessage();
-    var normalTabNode = DOMUtil.findFirstDescendantByClass(this.uiTabNode, 'div', 'NormalTab');
+    var normalTabNode = DOMUtil.findFirstDescendantByClass(this.tabNode, 'div', 'NormalTab');
     if (normalTabNode) {
       normalTabNode.className = 'SelectedTab';
     }
-    if (this.uiTabContentNode.style.display != 'block') {
-      this.uiTabContentNode.style.display = 'block';
+    if (this.tabPaneNode.style.display != 'block') {
+      this.tabPaneNode.style.display = 'block';
     }
     /*
     if (!this.isFixedSize) {
-      var resizableObjectList = DOMUtil.findDescendantsByClass(this.uiTabContentNode, 'div', 'UIResizableBlock');
+      var resizableObjectList = DOMUtil.findDescendantsByClass(this.tabPaneNode, 'div', 'UIResizableBlock');
       for (var i=0; i<resizableObjectList.length; i++) {
         resizableObjectList[i].style.width = resizableObjectList[i].offsetWidth + 'px';
         resizableObjectList[i].style.height = resizableObjectList[i].offsetHeight + 'px';
       }
       // Fix for room chat tab
       if (this.isGroupChat) {
-        var totalWidth = DOMUtil.findFirstDescendantByClass(this.uiTabContentNode, 'div', 'ChatContainer').offsetWidth;
-        var leftPaneList = DOMUtil.findFirstDescendantByClass(this.uiTabContentNode, 'div', 'MessagesContainer');
+        var totalWidth = DOMUtil.findFirstDescendantByClass(this.tabPaneNode, 'div', 'ChatContainer').offsetWidth;
+        var leftPaneList = DOMUtil.findFirstDescendantByClass(this.tabPaneNode, 'div', 'MessagesContainer');
         var leftPaneWidth = DOMUtil.getStyle(leftPaneList, 'width', true);
-        leftPaneList = DOMUtil.findDescendantsByClass(this.uiTabContentNode, 'div', 'LeftPane');
-        var rightPaneList = DOMUtil.findFirstDescendantByClass(this.uiTabContentNode, 'div', 'RightPane');
+        leftPaneList = DOMUtil.findDescendantsByClass(this.tabPaneNode, 'div', 'LeftPane');
+        var rightPaneList = DOMUtil.findFirstDescendantByClass(this.tabPaneNode, 'div', 'RightPane');
         var rightPaneWidth = DOMUtil.getStyle(rightPaneList, 'width', true);
-        rightPaneList = DOMUtil.findDescendantsByClass(this.uiTabContentNode, 'div', 'RightPane');
+        rightPaneList = DOMUtil.findDescendantsByClass(this.tabPaneNode, 'div', 'RightPane');
 
         var delta = ((totalWidth - (leftPaneWidth + rightPaneWidth)) / 2) - 10;
 
@@ -550,12 +618,12 @@ UITabControl.prototype.setVisible = function(visible) {
     */
     this.scrollMessageBox();
   } else {
-    var selectedTabNode = DOMUtil.findFirstDescendantByClass(this.uiTabNode, 'div', 'SelectedTab');
+    var selectedTabNode = DOMUtil.findFirstDescendantByClass(this.tabNode, 'div', 'SelectedTab');
     if (selectedTabNode) {
       selectedTabNode.className = 'NormalTab';
     }
-    if (this.uiTabContentNode.style.display != 'none') {
-      this.uiTabContentNode.style.display = 'none';
+    if (this.tabPaneNode.style.display != 'none') {
+      this.tabPaneNode.style.display = 'none';
     }
   }
 };
@@ -597,8 +665,8 @@ UIChatWindow.prototype.init = function(rootNode, UIMainChatWindow) {
   this.UIMainChatWindow = UIMainChatWindow;
   var DOMUtil = eXo.core.DOMUtil;
   this.miniBoxChatNode = DOMUtil.findFirstDescendantByClass(this.UIMainChatWindow.chatWindowsContainerNode, 'div', this.CSS_CLASS.miniBoxChat);
-  this.tabsContainerNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', this.CSS_CLASS.tabsContainer);
-  this.uiTabContentContainerNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', this.CSS_CLASS.tabContentContainer);
+  this.tabContainerNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', this.CSS_CLASS.tabsContainer);
+  this.tabPaneContainerNode = DOMUtil.findFirstDescendantByClass(this.rootNode, 'div', this.CSS_CLASS.tabContentContainer);
   // Register resizearea to for resizeable window.
   var resizeArea = DOMUtil.findFirstDescendantByClass(this.rootNode, "div", "ResizeArea") ;
   this.UIMainChatWindow.UIChatResize.register(resizeArea, this.resizeCallback, true);
@@ -607,7 +675,7 @@ UIChatWindow.prototype.init = function(rootNode, UIMainChatWindow) {
     width   = '18px';
     height  = '18px';
   };
-  this.tabsContainerNode.style.overflow = 'hidden';
+  this.tabContainerNode.style.overflow = 'hidden';
   this.fileChooserNode = false;
   this.initFileExchange();
   this.initSession();
@@ -617,14 +685,14 @@ UIChatWindow.prototype.init = function(rootNode, UIMainChatWindow) {
 };
 
 UIChatWindow.prototype.firstCheck = function() {
-  var that = eXo.communication.chat.webui.UIChatWindow;
-  that.checkScroll(true);
-  eXo.communication.chat.core.AdvancedDOMEvent.removeEventListener(that.rootNode, 'mousemove', that.firstCheck);
+  var thys = eXo.communication.chat.webui.UIChatWindow;
+  thys.reloadScrollMgr(true);
+  eXo.communication.chat.core.AdvancedDOMEvent.removeEventListener(thys.rootNode, 'mousemove', thys.firstCheck);
 };
 
 UIChatWindow.prototype.resizeCallback = function(delta) {
-  var that = eXo.communication.chat.webui.UIChatWindow;
-  that.checkScroll(true);
+  var thys = eXo.communication.chat.webui.UIChatWindow;
+  thys.reloadScrollMgr(true);
 };
 
 UIChatWindow.prototype.registerEventCallback = function() {
@@ -632,40 +700,40 @@ UIChatWindow.prototype.registerEventCallback = function() {
 };
 
 UIChatWindow.prototype.onReload = function(eventData) {
-  var that = eXo.communication.chat.webui.UIChatWindow;
-  that._isOnLoading = true;
-  var visible = that._isVisible();
-  that.initSession();
-  var tabList = that._getOption('tabs');
+  var thys = eXo.communication.chat.webui.UIChatWindow;
+  thys._isOnLoading = true;
+  var visible = thys._isVisible();
+  thys.initSession();
+  var tabList = thys._getOption('tabs');
   if (tabList) {
     for ( var i = 0; i < tabList.length; i++) {
       var tab = tabList[i];
       if (tab.targetPerson) {
-        that.createNewTab(tab.targetPerson, tab.isGroupChat);
+        thys.createNewTab(tab.targetPerson, tab.isGroupChat);
       }
     }
   }
-  that._setVisible(visible);
-  that.checkScroll(true);
+  thys._setVisible(visible);
+  thys.reloadScrollMgr(true);
   if (tabList && tabList.length > 0) {
-    window.jsconsole.warn('Focus tab: ' + that._getOption('activeTabId'));
-    var activeTabId = that._getOption('activeTabId');
+    window.jsconsole.warn('Focus tab: ' + thys._getOption('activeTabId'));
+    var activeTabId = thys._getOption('activeTabId');
     if (!activeTabId ||
-        !that.tabControlList[that.getTabId(activeTabId)]) {
-      activeTabId = that.getTabId(tabList[tabList.length - 1].targetPerson).id;
+        !thys.tabControlList[thys.getTabId(activeTabId)]) {
+      activeTabId = thys.getTabId(tabList[tabList.length - 1].targetPerson).id;
     }
-    if (that.rootNode.offsetHeight > 0) {
-      var focusTabIndex = that.focusTab(activeTabId, true);
+    if (thys.rootNode.offsetHeight > 0) {
+      var focusTabIndex = thys.focusTab(activeTabId, true);
       window.setTimeout(function() {
-        that.autoScroll(focusTabIndex);
-        eXo.communication.chat.core.AdvancedDOMEvent.removeEventListener(that.rootNode, 'mousemove', that.firstCheck);
+        thys.autoScroll(focusTabIndex);
+        eXo.communication.chat.core.AdvancedDOMEvent.removeEventListener(thys.rootNode, 'mousemove', thys.firstCheck);
       }, 100);
-      that.updateTabList();
+      thys.updateTabList();
     } else {
-      that.focusTab(activeTabId, true);
+      thys.focusTab(activeTabId, true);
     }
   }
-  that._isOnLoading = false;
+  thys._isOnLoading = false;
 };
 
 UIChatWindow.prototype.initSession = function() {
@@ -706,7 +774,7 @@ UIChatWindow.prototype.createNewTab = function(targetPerson, isGroupChat) {
   var uiTabControlObj = this.getUITabControl(tabId, isGroupChat, true);
   this.setVisible(true);
   if (!this._isOnLoading) {
-    this.checkScroll();
+    this.reloadScrollMgr();
     this.focusTab(tabId.id, true);
     this.updateTabList();
   }
@@ -779,7 +847,6 @@ UIChatWindow.prototype.updatePresence = function(presences) {
     }
   }
 };
-//
 
 /**
  *
@@ -831,24 +898,24 @@ UIChatWindow.prototype.updateUnreadMessage = function() {
       unreadMessageNode.innerHTML = '*[' + unreadMessageCnt + ']&nbsp;';
     }
   }
-  this.checkScroll();
+  this.reloadScrollMgr();
 };
 
 UIChatWindow.prototype.blinkMiniBoxChat = function(styleClass) {
-  var that = eXo.communication.chat.webui.UIChatWindow;
+  var thys = eXo.communication.chat.webui.UIChatWindow;
   var DOMUtil = eXo.core.DOMUtil;
   styleClass = ((styleClass + '').indexOf('MiniBoxChat') == -1) ? '' : styleClass;
-  var styleNode = DOMUtil.findFirstDescendantByClass(that.miniBoxChatNode, 'div', 'NormalMiniBoxChat');
+  var styleNode = DOMUtil.findFirstDescendantByClass(thys.miniBoxChatNode, 'div', 'NormalMiniBoxChat');
   if (styleNode) {
     styleClass = styleClass || 'HightLightMiniBoxChat';
   } else {
-    styleNode = DOMUtil.findFirstDescendantByClass(that.miniBoxChatNode, 'div', 'HightLightMiniBoxChat');
+    styleNode = DOMUtil.findFirstDescendantByClass(thys.miniBoxChatNode, 'div', 'HightLightMiniBoxChat');
     styleClass = styleClass || 'NormalMiniBoxChat';
   }
   styleNode.className = styleClass;
 };
 
-UIChatWindow.prototype.insertSystemMsg = function(msg, tabId) {
+UIChatWindow.prototype.insertCustomMsg = function(msg, tabId, from) {
   var uiTabControlObj = false;
   if (tabId) {
     uiTabControlObj = this.getUITabControl(tabId);
@@ -856,7 +923,11 @@ UIChatWindow.prototype.insertSystemMsg = function(msg, tabId) {
     uiTabControlObj = this.getActiveTabControl();
   }
   if (uiTabControlObj) {
-    uiTabControlObj.writeMsg(this.SYSTEM_INFO,msg);
+    if (!from) {
+      uiTabControlObj.writeMsg(this.SYSTEM_INFO,msg);
+    } else {
+      uiTabControlObj.writeMsg(from,msg);
+    }
   }
 };
 
@@ -880,14 +951,13 @@ UIChatWindow.prototype.getTabId = function(targetPerson) {
  * @return {UITabControl}
  */
 UIChatWindow.prototype.getUITabControl = function(tabId, isGroupChat, forceCreate) {
-  if (!tabId.owner) {
+  if (!tabId ||
+      !tabId.owner) {
     window.jsconsole.error('Get UITabControl object with invalid tabId');
     return null;
   }
   var uiTabControlObj = this.tabControlList[tabId.id];
-
-  if (!(uiTabControlObj instanceof UITabControl) &&
-      forceCreate) {
+  if (!(uiTabControlObj instanceof UITabControl) && forceCreate) {
     uiTabControlObj = this.createUITabControl(tabId, isGroupChat);
   }
   return uiTabControlObj;
@@ -900,8 +970,8 @@ UIChatWindow.prototype.createUITabControl = function(tabId, isGroupChat) {
   }
   var uiTabControlObj = new UITabControl(tabId, isGroupChat, this.UIMainChatWindow);
   uiTabControlObj.setVisible(false);
-  this.tabsContainerNode.appendChild(uiTabControlObj.uiTabNode);
-  this.uiTabContentContainerNode.appendChild(uiTabControlObj.uiTabContentNode);
+  this.tabContainerNode.appendChild(uiTabControlObj.tabNode);
+  this.tabPaneContainerNode.appendChild(uiTabControlObj.tabPaneNode);
   this.tabControlList[tabId.id] = uiTabControlObj;
   this.totalTab ++;
   return uiTabControlObj;
@@ -963,8 +1033,8 @@ UIChatWindow.prototype.closeTab = function(id) {
     var uiTabObj = this.tabControlList[item];
     if (uiTabObj instanceof UITabControl) {
       if (item == id) {
-        eXo.core.DOMUtil.removeElement(uiTabObj.uiTabNode);
-        eXo.core.DOMUtil.removeElement(uiTabObj.uiTabContentNode);
+        eXo.core.DOMUtil.removeElement(uiTabObj.tabNode);
+        eXo.core.DOMUtil.removeElement(uiTabObj.tabPaneNode);
         this.tabControlList[id] = null;
         tabRemoved = true;
         this.totalTab --;
@@ -979,8 +1049,11 @@ UIChatWindow.prototype.closeTab = function(id) {
       cnt ++;
     }
   }
+  if (!tabRemoved) {
+    return;
+  }
   this.activeTabId = false;
-  this.checkScroll(true);
+  this.reloadScrollMgr(true);
   // Focus previousTab if exist
   if (this.tabControlList[lastTabId]) {
     this.focusTab(lastTabId);
@@ -1000,6 +1073,7 @@ UIChatWindow.prototype.setVisible = function(visible, event, requestCancelEvent)
     eXo.communication.chat.core.AdvancedDOMEvent.cancelEvent(event);
   }
   this._setOption('visible', visible);
+  this.visible = visible;
   if (visible) {
     var activeTabControl = this.getActiveTabControl();
     if (activeTabControl) {
@@ -1008,7 +1082,7 @@ UIChatWindow.prototype.setVisible = function(visible, event, requestCancelEvent)
     if (this.rootNode.style.display != 'block') {
       this.rootNode.style.display = 'block';
     }
-    this.UIPopupManager.focusEventFire(this);
+    //this.UIPopupManager.focusEventFire(this);
     this._initUIOptions();
   } else {
     this.updateUnreadMessage();
@@ -1062,6 +1136,7 @@ UIChatWindow.prototype.leaveRoomChat = function(event) {
   var activeTabControl = this.getActiveTabControl();
   var roomName = activeTabControl.tabId.targetPerson;
   roomName = roomName.substr(0, roomName.indexOf('@'));
+  this.UIMainChatWindow.UIRoomConfigPopupWindow.relateClose(activeTabControl.tabId);
   this.UIMainChatWindow.jabberLeaveFromRoom(roomName);
   this.closeTab(activeTabControl.tabId.id);
 };
@@ -1070,7 +1145,7 @@ UIChatWindow.prototype.configRoom = function(event) {
   event = event || window.event;
   eXo.communication.chat.core.AdvancedDOMEvent.cancelEvent(event);
   var activeTabControl = this.getActiveTabControl();
-  this.UIMainChatWindow.UIRoomConfigPopupWindow.setVisible(true, activeTabControl.tabId.targetPerson);
+  this.UIMainChatWindow.UIRoomConfigPopupWindow.setVisible(true, activeTabControl.tabId);
 };
 
 UIChatWindow.prototype.roomInfoEventFired = function(roomInfoData) {
@@ -1111,7 +1186,9 @@ UIChatWindow.prototype.fileExchangeEventFire = function(fileEvents) {
         var tabId = this.getTabId(fileTransportRequest.requestor);
         var uiTabControlObj = this.getUITabControl(tabId, false, true);
         if (uiTabControlObj) {
-          this.focusTab(uiTabControlObj.tabId.id);
+          if (this.totalTab == 1) {
+            this.focusTab(uiTabControlObj.tabId.id);
+          }
           uiTabControlObj.fileTransportRequestEventFire(fileTransportRequest);
         }
       }
@@ -1121,6 +1198,9 @@ UIChatWindow.prototype.fileExchangeEventFire = function(fileEvents) {
         var tabId = this.getTabId(fileTransportResponse.receiver);
         var uiTabControlObj = this.getUITabControl(tabId, false, true);
         if (uiTabControlObj) {
+          if (this.totalTab == 1) {
+            this.focusTab(uiTabControlObj.tabId.id);
+          }
           uiTabControlObj.fileTransportResponseEventFire(fileTransportResponse);
         }
       }
@@ -1152,9 +1232,11 @@ UIChatWindow.prototype.sendFile = function(fileChooserNode, event) {
 	uploadForm.action = '/chat/fileexchange?username=' + userName + '&requestor=' + targetUser + '&description=' + description;
 	this.uploadIframe.onload = function() {
   	window.jsconsole.warn('upload completed');
+    eXo.communication.chat.webui.UIChatWindow.insertCustomMsg('File exchange: Waiting for authorize...', activeTabControl.tabId);
   	this.onload = null;
   };
 	uploadForm.submit();
+  eXo.communication.chat.webui.UIChatWindow.insertCustomMsg('File exchange: Uploading file to server...', activeTabControl.tabId);
 	fileChooserNode.value = '';
 };
 // --/--
@@ -1171,7 +1253,7 @@ UIChatWindow.prototype.updateMessageHistory = function(messageList) {
 UIChatWindow.prototype.getMessageHistory = function(event, timeNo) {
   var activeTabControl = this.getActiveTabControl();
   if (!activeTabControl) return;
-  var historyStatus = activeTabControl.uiTabContentNode.historyStatus;
+  var historyStatus = activeTabControl.tabPaneNode.historyStatus;
   if (historyStatus == timeNo) {
     return;
   } else {
@@ -1202,7 +1284,7 @@ UIChatWindow.prototype.getMessageHistory = function(event, timeNo) {
   targetPerson = targetPerson.substr(0, targetPerson.indexOf('@'));
   this.UIMainChatWindow.jabberGetMessageHistory(targetPerson, javaTimeFormat, startDate, endDate, activeTabControl.isGroupChat);
   historyStatus = timeNo;
-  activeTabControl.uiTabContentNode.historyStatus = historyStatus;
+  activeTabControl.tabPaneNode.historyStatus = historyStatus;
   /*
   // Remove link who clicked
   event = event || window.event;
@@ -1233,8 +1315,8 @@ UIChatWindow.prototype.getMessageHistory = function(event, timeNo) {
 UIChatWindow.prototype.exportHistory = function() {
   var historyStatus = false;
   var activeTabControl = this.getActiveTabControl();
-  if (activeTabControl.uiTabContentNode.historyStatus) {
-    historyStatus = activeTabControl.uiTabContentNode.historyStatus;
+  if (activeTabControl.tabPaneNode.historyStatus) {
+    historyStatus = activeTabControl.tabPaneNode.historyStatus;
   } else {
     historyStatus = this.CURRENT_CONVERSATION_MESSAGE;
   }
@@ -1244,7 +1326,7 @@ UIChatWindow.prototype.exportHistory = function() {
     
   switch (historyStatus) {
     case this.CURRENT_CONVERSATION_MESSAGE:
-      startDate = new Date(activeTabControl.uiTabContentNode.startTime);
+      startDate = new Date(activeTabControl.tabPaneNode.startTime);
       break;
     case this.THIS_WEEK_MESSAGE:
       startDate.setDate(endDate.getDate() - endDate.getDay());
@@ -1268,7 +1350,7 @@ UIChatWindow.prototype.exportHistory = function() {
   var targetPerson = activeTabControl.tabId.targetPerson;
   targetPerson = targetPerson.substr(0, targetPerson.indexOf('@'));
   var currentUser = this.UIMainChatWindow.userNames[this.UIMainChatWindow.XMPPCommunicator.TRANSPORT_XMPP];
-  var url = '/chat/messengerservlet/' + this.UIMainChatWindow.XMPPCommunicator.TRANSPORT_XMPP + '/history/file/getmessages/' + currentUser + '/' + targetPerson + '/' + activeTabControl.isGroupChat + '/';
+  var url = '/chat/messengerservlet/' + this.UIMainChatWindow.XMPPCommunicator.TRANSPORT_XMPP + '/history/file/getmessages/' + targetPerson + '/' + activeTabControl.isGroupChat + '/';
   if (javaTimeFormat) {
     url += javaTimeFormat + '/';
   }
@@ -1279,6 +1361,7 @@ UIChatWindow.prototype.exportHistory = function() {
       endDate) {
     url += endDate + '/';
   }
+  url += '?usernamefrom=' + currentUser; 
   this.uploadIframe.src = url;
 };
 
@@ -1291,16 +1374,31 @@ UIChatWindow.prototype.exportHistory = function() {
  *  . Creates the scroll manager with id UIChatWindowTopContainer
  *  . Adds the tabs to the scroll manager
  *  . Configures the arrows
- *  . Calls the initScroll function
  */
 UIChatWindow.prototype.loadScroll = function() {
+  
+  /*/ ---
+  // New scroll tab pane manager
+  var DOMUtil = eXo.core.DOMUtil;  
+  this.arrowsContainerNode = eXo.core.DOMUtil.findFirstDescendantByClass(this.tabContainerNode, "div", "ScrollButtons");
+  var previousButton = DOMUtil.findFirstDescendantByClass(this.arrowsContainerNode, 'div', 'ScrollLeftButton');
+  var nextButton = DOMUtil.findFirstDescendantByClass(this.arrowsContainerNode, 'div', 'ScrollRightButton');
+  
+  var klazzOption = {tab:'ChatTab', tabPane: 'ChatTabContent'};
+  
+  this.scrollMgr = new this.UIMainChatWindow.UITabSlide();
+  this.scrollMgr.callback = this.scrollCallback;
+  this.scrollMgr.init(this.tabContainerNode, this.tabPaneContainerNode, nextButton, previousButton, klazzOption);
+  return;
+  
+  // -/-*/
+  
   // Creates new ScrollManager and initializes it
   if (!this.scrollMgr) {
     this.scrollMgr = new eXo.communication.chat.webui.TabScrollManager("UIChatWindow");
-    this.scrollMgr.initFunction = this.initScroll;
     // Adds the tab elements to the manager
-    this.scrollMgr.mainContainer = this.tabsContainerNode;
-    this.scrollMgr.arrowsContainer = eXo.core.DOMUtil.findFirstDescendantByClass(this.tabsContainerNode, "div", "ScrollButtons");
+    this.scrollMgr.mainContainer = this.tabContainerNode;
+    this.scrollMgr.arrowsContainer = eXo.core.DOMUtil.findFirstDescendantByClass(this.tabContainerNode, "div", "ScrollButtons");
     this.scrollMgr.loadElements("UITab");
     // Configures the arrow buttons
     var arrowButtons = eXo.core.DOMUtil.findDescendantsByTagName(this.scrollMgr.arrowsContainer, "div");
@@ -1310,24 +1408,12 @@ UIChatWindow.prototype.loadScroll = function() {
     }
     // Finish initialization
     this.scrollMgr.callback = this.scrollCallback;
+    this.reloadScrollMgr();
     this.scrollManagerLoaded = true;
-    this.initScroll();
+    this.scrollMgr.init();
   }
 };
 
-/**
- * Init function for the scroll manager
- *  . Calls the init function of the scroll manager
- *  . Calculates the available space to render the tabs
- *  . Renders the tabs
- */
-UIChatWindow.prototype.initScroll = function(e) {
-  if (!this.scrollManagerLoaded) this.loadScroll();
-  var scrollMgr = this.scrollMgr;
-  scrollMgr.init();
-  // Gets the maximum width available for the tabs
-  this.checkScroll();
-};
 /**
  * A callback function to call after a scroll event occurs (and the elements are rendered)
  * Is empty so far.
@@ -1349,20 +1435,23 @@ UIChatWindow.prototype.scrollCallback = function() {
   this.lastVisibleIndex = lastIndex;*/
 };
 
-UIChatWindow.prototype.checkScroll = function(isReset) {
+UIChatWindow.prototype.reloadScrollMgr = function(isReset) {
   if (this.rootNode.offsetHeight <= 0) {
     return;
   }
   // Reset somethings.
   if (isReset) {
+    /*
     if (this.scrollMgr.arrowsContainer.style.display != 'none') {
       this.scrollMgr.arrowsContainer.style.display = 'none';
     }
     this.scrollMgr.mainContainer.space = null;
+    */
   }
 
   this.scrollMgr.loadElements("UITab", true);
   this.scrollMgr.checkAvailableSpace();
+  
   this.scrollMgr.renderElements();
 };
 

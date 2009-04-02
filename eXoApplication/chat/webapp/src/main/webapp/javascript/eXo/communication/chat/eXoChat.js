@@ -6,7 +6,6 @@ eXo.require("eXo.core.Cometd");
 eXo.require("eXo.core.HTMLUtil");
 eXo.require("eXo.core.Resize");
 eXo.require("eXo.webui.UIHorizontalTabs");
-//eXo.require("eXo.desktop.UIWindow");
 
 eXo.communication = {
   chat : {
@@ -29,7 +28,9 @@ eXo.require("eXo.communication.chat.core.XMPPCommunicator", "/chat/javascript/")
 eXo.require("eXo.communication.chat.core.Utils", "/chat/javascript/");
 eXo.require("eXo.communication.chat.core.LocalTemplateEngine", "/chat/javascript/");
 eXo.require("eXo.communication.chat.webui.UIWindow", "/chat/javascript/");
+eXo.require("eXo.communication.chat.webui.UIPageIterator", "/chat/javascript/");
 eXo.require("eXo.communication.chat.webui.TabScrollManager", "/chat/javascript/");
+eXo.require("eXo.communication.chat.webui.UISlideAlert", "/chat/javascript/");
 eXo.require("eXo.communication.chat.webui.component.BuddyListControl", "/chat/javascript/");
 eXo.require("eXo.communication.chat.webui.component.JSUIBean", "/chat/javascript/");
 eXo.require("eXo.communication.chat.webui.component.JSUIBeanListener", "/chat/javascript/");
@@ -47,12 +48,12 @@ eXo.require("eXo.communication.chat.webui.UIJoinRoomPopupWindow", "/chat/javascr
 eXo.communication.chat.eXoChat = {
   init : function() {
     try {
-      var that = eXo.communication.chat.eXoChat;
+      var thys = eXo.communication.chat.eXoChat;
       var UIChatNode = document.getElementById('UIChat');
       var eXoToken = UIChatNode.getAttribute('eXoToken');
       var userName = UIChatNode.getAttribute('userName');
       eXo.communication.chat.core.LocalTemplateEngine.init('templateArea');
-      eXo.communication.chat.webui.UIMainChatWindow.init(that.applicationId, eXoToken, userName);
+      eXo.communication.chat.webui.UIMainChatWindow.init(thys.applicationId, eXoToken, userName);
       eXo.communication.chat.webui.UIChatDragDrop.init(
         eXo.communication.chat.webui.UIMainChatWindow.chatWindowsContainerNode,
         [{className:'WindowBarLeft', tagName: 'div'}, {className: 'PopupTitle', tagName: 'div'}]);

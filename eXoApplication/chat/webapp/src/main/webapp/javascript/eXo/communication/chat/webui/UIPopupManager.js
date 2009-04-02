@@ -48,8 +48,8 @@ UIPopupManager.prototype.requestFocus = function(event) {
 };
 
 UIPopupManager.prototype.focusEventFire = function(popupWindowObj) {
-  that = eXo.communication.chat.webui.UIPopupManager;
-  if (!that.initialized) {
+  thys = eXo.communication.chat.webui.UIPopupManager;
+  if (!thys.initialized) {
     return;
   }
   window.jsconsole.debug('popup window request focus: ', popupWindowObj);
@@ -60,19 +60,19 @@ UIPopupManager.prototype.focusEventFire = function(popupWindowObj) {
     for ( var i = 0; i < uiWindowList.length; i++) {
       var uiWindow = uiWindowList[i];
       if (uiWindow != popupWindowObj.rootNode &&
-          (!uiWindow.style.zIndex || uiWindow.style.zIndex >= that.TOP_INDEX)) {
-        uiWindow.style.zIndex = that.TOP_INDEX - 1;
+          (!uiWindow.style.zIndex || uiWindow.style.zIndex >= thys.TOP_INDEX)) {
+        uiWindow.style.zIndex = thys.TOP_INDEX - 1;
       }
     }
   }
-  for (var item in that.popupList) {
-    if (that.popupList[item] == popupWindowObj) {
-      if (popupWindowObj.rootNode.style.zIndex < that.TOP_INDEX) {
-        popupWindowObj.rootNode.style.zIndex = that.TOP_INDEX;
+  for (var item in thys.popupList) {
+    if (thys.popupList[item] == popupWindowObj) {
+      if (popupWindowObj.rootNode.style.zIndex < thys.TOP_INDEX) {
+        popupWindowObj.rootNode.style.zIndex = thys.TOP_INDEX;
       }
     } else {
-      if (that.popupList[item].rootNode.style.zIndex >= that.TOP_INDEX) {
-        that.popupList[item].rootNode.style.zIndex = that.TOP_INDEX - 1;
+      if (thys.popupList[item].rootNode.style.zIndex >= thys.TOP_INDEX) {
+        thys.popupList[item].rootNode.style.zIndex = thys.TOP_INDEX - 1;
       }
     }
   }

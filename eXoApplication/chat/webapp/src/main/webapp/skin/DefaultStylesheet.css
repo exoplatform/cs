@@ -1,5 +1,9 @@
-#chat #PORTLET-FRAGMENT {
-  overflow-y: auto;
+.UIResizableBlock {
+	overflow: auto;
+}
+
+.UIPageDesktop .UIChat {
+	overflow: hidden;
 }
 
 .UIChat {
@@ -204,9 +208,9 @@
 }
 
 .UIChat .MainWindow .HorizontalLayout {
-  min-height: 365px;
+  min-height: 341px;
   height:auto !important;
-  height: 365px;
+  height: 341px;
 }
 
 /* Down menu status */
@@ -262,6 +266,134 @@
 .UIChat .UIAction {
   overflow: hidden;
 }
+
+/*************** UINotification **************/
+.UINotification  {
+	
+}
+
+.UINotification .BoxNote {
+	right: 0px;
+}
+
+.UINotification .BoxNote .LeftBoxNote {
+  background: url('DefaultSkin/background/BoxNote.gif') no-repeat left top;
+  padding-left: 5px;
+  float: right;
+}
+
+.UINotification .BoxNote .RightBoxNote {
+  background: url('DefaultSkin/background/BoxNote.gif') no-repeat right top;
+  padding-right: 5px;
+}
+
+.UINotification .BoxNote .CenterBoxNote {
+  background: url('DefaultSkin/background/BoxNote.gif') repeat-x left -26px;
+  line-height: 26px;
+  padding: 0px 5px;
+}
+
+.UINotification .BoxNote .IconBoxNote {
+  background: url('DefaultSkin/background/Icon.gif') no-repeat left 2px;
+  line-height: 26px;
+  padding: 0px 5px 0px 25px;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.UINotification .BoxNote .IconBoxNote  span{
+  color: red;
+}
+
+.UINotification .UIPopupNotification {
+}
+
+.UINotification .UIPopupNotification  .TLPopupNotification {
+  background: url('DefaultSkin/background/Popup.gif') no-repeat left top;
+  padding-left:4px;
+}
+
+.UINotification .UIPopupNotification  .TCPopupNotification {
+  height:13px;
+  background: url('DefaultSkin/background/Popup.gif') repeat-x left -13px;
+}
+
+.UINotification .UIPopupNotification  .TRPopupNotification {
+  background: url('DefaultSkin/background/PopupTR.png') no-repeat right top;
+  padding-right: 45px;
+}
+
+.UINotification .UIPopupNotification  .TitleNotification {
+  background: url('DefaultSkin/background/Popup.gif') repeat-x left -50px ;
+  height: 16px;
+  padding-left:10px;
+}
+
+.UINotification .UIPopupNotification  .MLPopupNotification {
+  background: url('DefaultSkin/background/PopupML.gif') repeat-y left;
+  padding-left: 2px;
+}
+
+.UINotification .UIPopupNotification  .MCPopupNotification {
+  background: #feffcf;
+}
+
+.UINotification .UIPopupNotification  .MRPopupNotification {
+  background: url('DefaultSkin/background/PopupMR.gif') repeat-y right;
+  padding-right: 2px;
+}
+
+.UINotification .UIPopupNotification  .BLPopupNotification {
+  background: url('DefaultSkin/background/Popup.gif') no-repeat left -26px;
+  padding-left: 4px;
+}
+
+.UINotification .UIPopupNotification  .BCPopupNotification {
+  height: 4px;
+  background: url('DefaultSkin/background/Popup.gif') repeat-x left -30px;
+}
+
+.UINotification .UIPopupNotification  .BRPopupNotification {
+  background: url('DefaultSkin/background/Popup.gif') no-repeat right -26px;
+  padding-right: 4px;
+}
+
+.UINotification .UIPopupNotification  .ItemTitle {
+  color: black;
+  display: block;
+  font-size: 12px;
+  font-weight: bold;
+  float: left;
+}
+
+.UINotification .UIPopupNotification  .Close {
+  background: url('DefaultSkin/background/Popup.gif') left -66px no-repeat;
+  display: block;
+  height: 7px; width: 7px;
+  float: right;
+  margin: 3px 5px;
+  cursor: pointer;
+}
+
+.UINotification .UIPopupNotification  .Item {
+	overflow:hidden;
+  border-bottom: 1px dotted #b7b7b7;
+  margin: 0px 5px;
+	padding: 5px 0px 0px 11px;
+  display: block;
+	line-height: 22px;
+  color: #ff3329;
+  background: url('DefaultSkin/background/Popup.gif') no-repeat 3px -74px;
+}
+
+.UINotification .UIPopupNotification  .Item:hover {
+  color: #353535;
+	font-weight: bold;
+}
+
+
+
+
 
 /* For normal page */
 .ResizeArea {
@@ -510,6 +642,10 @@ form {
 	border: 1px solid #fff;
 	background: #F7F7F7;
 	padding: 8px;
+}
+
+.UINewForm .BorderForm fieldset {
+	border: 1px solid #b7b7b7;
 }
 
 .UINewForm .UIFormGrid td {
@@ -762,7 +898,7 @@ form {
 .ChatContainer .ChatTime {
 	float: right;
 	padding-top: 5px;
-	width: 120px;
+	width: 155px;
 	text-align: right;
 }
 
@@ -956,7 +1092,7 @@ form {
 
 .UIConversation .UIAction .SendButton {
 	float: right; width: 6%;
-	border: 1px solid #ACACAC
+	border: 1px solid #ACACAC;
 }
 
 .UIConversation .UIAction .SendButton .Button {
@@ -981,54 +1117,40 @@ form {
 	width: 215px;
 }
 
-.MiniBoxChat .BgMiniBoxChat {
-	background-image: url('DefaultSkin/background/BgMiniBoxChat.gif');
-}
-
 .MiniBoxChat .NormalMiniBoxChat .LeftMiniBoxChat {
-	background-repeat: no-repeat;
-	background-position: left top;
+	background: url('DefaultSkin/background/BgMiniBoxChat.gif') no-repeat left top;
 	padding-left: 3px;
 }
 
 .MiniBoxChat .NormalMiniBoxChat .RightMiniBoxChat {
-	background-repeat: no-repeat;
-	background-position: right -25px;
+	background: url('DefaultSkin/background/BgMiniBoxChat.gif') no-repeat right -25px;
 	padding-right: 3px;
 }
 
 .MiniBoxChat .NormalMiniBoxChat .CenterMiniBoxChat {
-	background-repeat: repeat-x;
-	background-position: left -50px;
+	background: url('DefaultSkin/background/BgMiniBoxChat.gif') repeat-x left -50px;
 }
 		
 .MiniBoxChat .HightLightMiniBoxChat .LeftMiniBoxChat {
-	background-repeat: no-repeat;
-	background-position: left -75px;
+	background: url('DefaultSkin/background/BgMiniBoxChat.gif') no-repeat left -75px;
 	padding-left: 3px;
 }
 
 .MiniBoxChat .HightLightMiniBoxChat .RightMiniBoxChat {
-	background-repeat: no-repeat;
-	background-position: right -100px;
+	background: url('DefaultSkin/background/BgMiniBoxChat.gif') no-repeat right -100px;
 	padding-right: 3px;
 }
 
 .MiniBoxChat .HightLightMiniBoxChat .CenterMiniBoxChat {
-	background-repeat: repeat-x;
-	background-position: left -125px;
+	background: url('DefaultSkin/background/BgMiniBoxChat.gif') repeat-x left -125px;
 }
 
 .MiniBoxChat .FixHeight {
 	height: 23px; line-height: 23px;
 }
 
-.MiniBoxChat .ControlMiniBoxChat {
+.MiniBoxChat .ControlIconChat {
 	float: right;
-}
-
-.MiniBoxChat .ControlMiniBoxChat .ControlIconChat {
-	float: left;
 	background-image: url('DefaultSkin/skinIcons/ControlIcon.gif');
 	background-repeat: no-repeat;
 	width: 16px;
@@ -1037,34 +1159,31 @@ form {
   cursor: pointer;
 }
 
-.MiniBoxChat .ControlMiniBoxChat .RestoreIcon {
+.MiniBoxChat .RestoreIcon {
 	background-position: left top;
 }
 
-.MiniBoxChat .ControlMiniBoxChat .OverRestoreIcon {
+.MiniBoxChat .OverRestoreIcon {
 	background-position: right top;
 }
 
-.MiniBoxChat .ControlMiniBoxChat .CloseIcon {
+.MiniBoxChat .CloseIcon {
 	background-position: left -16px;
 }
 
-.MiniBoxChat .ControlMiniBoxChat .OverCloseIcon {
+.MiniBoxChat .OverCloseIcon {
 	background-position: right -16px;
 }
 
-.MiniBoxChat .InfoMiniBoxChat .InfoIcon {
+.MiniBoxChat .InfoIcon {
 	float: left;
-	background: url('DefaultSkin/skinIcons/Chat.gif') no-repeat center;
-	width: 16px; height: 16px;
-	margin: 3px 4px 0px 4px;
-}
-
-.MiniBoxChat .InfoMiniBoxChat .NameChat {
-	float: left;
-	font-size: 10px;
+	background: url('DefaultSkin/skinIcons/Chat.gif') no-repeat left center;
+	line-height: 23px;
+	margin: 0px 4px;
 	font-weight: bold;
+	font-size: 10px;
 	font-family: tahoma;
+	padding-left: 20px;
 }
 
 /**************************** HistoryList*****************************/
