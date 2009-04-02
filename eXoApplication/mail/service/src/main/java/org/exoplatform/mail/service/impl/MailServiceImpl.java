@@ -519,10 +519,8 @@ public class MailServiceImpl implements MailService, Startable {
   
   public void stopCheckMail(String username, String accountId)  {
     CheckingInfo checkingInfo = getCheckingInfo(username, accountId);
-    System.out.println("\n\n goes here when stop ");
     if (checkingInfo != null) {
       checkingInfo.setRequestStop(true);
-      System.out.println("Requested check loop to stop ");
     } 
   }
   

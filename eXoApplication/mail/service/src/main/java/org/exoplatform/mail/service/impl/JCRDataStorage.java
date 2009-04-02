@@ -118,7 +118,6 @@ public class JCRDataStorage {
       Node node = it.nextNode();
       if (node.isNodeType("exo:account"))
         accounts.add(getAccount(node));
-      System.out.println("\n\n get account");
     }
     return accounts;
   }

@@ -46,9 +46,9 @@ public class AuthenticationLogoutListener extends Listener<ConversationRegistry,
     MailService mService = (MailService)container.getComponentInstanceOfType(MailService.class) ;
     String username = event.getData().getIdentity().getUserId();
     List<Account> accList = mService.getAccounts(SessionProvider.createSystemProvider(), username);
-    System.out.println("\n\n goes here when log out");
     for (Account acc : accList) {
       mService.stopCheckMail(username, acc.getId());
     }    
   } 
+  
  }
