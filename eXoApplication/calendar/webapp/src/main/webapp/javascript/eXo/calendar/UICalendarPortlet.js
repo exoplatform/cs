@@ -2102,7 +2102,20 @@ UICalendarPortlet.prototype.showImagePreview = function(obj){
 		obj.innerHTML = viewLabel ;
 		if(DOMUtil.hasClass(obj,"CloseAttachmentIcon")) DOMUtil.replaceClass(obj,"CloseAttachmentIcon","ViewAttachmentIcon") ;
 	}
-}
+};
+
+UICalendarPortlet.prototype.showHideSetting = function(obj){
+	var checkbox = eXo.core.DOMUtil.findFirstDescendantByClass(obj,"input","checkbox");
+	var uiFormGrid = eXo.core.DOMUtil.findFirstDescendantByClass(obj.parentNode.parentNode,"table","UIFormGrid");
+	if(checkbox.checked) {
+		checkbox.checked = true;
+		uiFormGrid.style.display = "";
+	}
+	else{
+		checkbox.checked = false;
+		uiFormGrid.style.display = "none";
+	}	
+};
 
 eXo.calendar.UICalendarPortlet = new UICalendarPortlet();
 eXo.calendar.UIResizeEvent = new UIResizeEvent();

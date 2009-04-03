@@ -595,7 +595,7 @@ public abstract class UICalendarView extends UIForm  implements CalendarView {
           uiEventForm.setEmailAddress(CalendarUtils.getOrganizationService().getUserHandler().findUserByName(username).getEmail()) ;
           uiEventForm.setEmailRemindBefore(String.valueOf(5));
           uiEventForm.setEmailReminder(true) ;
-          uiEventForm.setEmailRepeat(String.valueOf(false)) ;
+          uiEventForm.setEmailRepeat(false) ;
           if(CalendarUtils.isEmpty(value)) uiEventForm.setSelectedCategory("Meeting") ;  
           else  uiEventForm.setSelectedCategory(value) ;
         }

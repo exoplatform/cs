@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.exoplatform.calendar.webui.UIEmailInput;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.model.SelectItemOption;
@@ -28,7 +29,6 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormSelectBox;
-import org.exoplatform.webui.form.UIFormTextAreaInput;
 
 /**
  * Created by The eXo Platform SARL
@@ -59,20 +59,14 @@ public class UIEventReminderTab extends UIFormInputWithActions {
     super(arg0);
     setComponentConfig(getClass(), null) ;
     actionField_ = new HashMap<String, List<ActionData>>() ;
-    List<SelectItemOption<String>> isPopupRepeatOptions = new ArrayList<SelectItemOption<String>>() ;
-    isPopupRepeatOptions.add(new SelectItemOption<String>("no-repeat", "no-repeat")) ;
-    isPopupRepeatOptions.add(new SelectItemOption<String>("repeat", "repeat")) ;
-
-    List<SelectItemOption<String>> isMailRepeatOptions = new ArrayList<SelectItemOption<String>>() ;
-    isMailRepeatOptions.add(new SelectItemOption<String>("no-repeat", "no-repeat")) ;
-    isMailRepeatOptions.add(new SelectItemOption<String>("repeat", "repeat")) ;
 
     List<SelectItemOption<String>> emailRemindRepeatOptions = getReminderTimes(5,60) ;
     List<SelectItemOption<String>> emailRemindBeforeOptions = getReminderTimes(5,60) ;
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(REMIND_BY_EMAIL, REMIND_BY_EMAIL, false)) ;
     addUIFormInput(new UIFormSelectBox(EMAIL_REMIND_BEFORE, EMAIL_REMIND_BEFORE, emailRemindBeforeOptions));
-    addUIFormInput(new UIFormTextAreaInput(FIELD_EMAIL_ADDRESS, FIELD_EMAIL_ADDRESS, null)) ;
-    addUIFormInput(new UIFormSelectBox(EMAIL_IS_REPEAT, EMAIL_IS_REPEAT, isMailRepeatOptions));
+    //addUIFormInput(new UIFormTextAreaInput(FIELD_EMAIL_ADDRESS, FIELD_EMAIL_ADDRESS, null)) ;
+    addUIFormInput(new UIEmailInput(FIELD_EMAIL_ADDRESS, FIELD_EMAIL_ADDRESS, null)) ;
+    addUIFormInput(new UIFormCheckBoxInput<Boolean>(EMAIL_IS_REPEAT, EMAIL_IS_REPEAT, false));
     addUIFormInput(new UIFormSelectBox(EMAIL_REPEAT_INTERVAL, EMAIL_REPEAT_INTERVAL, emailRemindRepeatOptions));
     ActionData addEmailAddress = new ActionData() ;
     addEmailAddress.setActionType(ActionData.TYPE_ICON) ;
@@ -87,7 +81,7 @@ public class UIEventReminderTab extends UIFormInputWithActions {
     List<SelectItemOption<String>> popupRemindBeforeOptions = getReminderTimes(5,60) ;
     addUIFormInput(new UIFormCheckBoxInput<Boolean>(REMIND_BY_POPUP, REMIND_BY_POPUP, false)) ;
     addUIFormInput(new UIFormSelectBox(POPUP_REMIND_BEFORE, POPUP_REMIND_BEFORE, popupRemindBeforeOptions));
-    addUIFormInput(new UIFormSelectBox(POPUP_IS_REPEAT, POPUP_IS_REPEAT, isPopupRepeatOptions));
+    addUIFormInput(new UIFormCheckBoxInput<Boolean>(POPUP_IS_REPEAT, POPUP_IS_REPEAT, false));
     addUIFormInput(new UIFormSelectBox(POPUP_REPEAT_INTERVAL, POPUP_REPEAT_INTERVAL, popupRemindRepeatOptions));
 
   }
